@@ -333,6 +333,8 @@ else
 }
 
 
+#ifdef UNUSED
+#endif /* UNUSED */
 static void drawVertLine(struct linkedFeatures *lf, struct hvGfx *hvg,
                          int chromStart, int xOff, int y,
 			 int height, double scale, Color color)
@@ -354,8 +356,6 @@ if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
     }
 hvGfxBox(hvg, thisX-2, thisY, 4, thisHeight, color);
 }
-#ifdef UNUSED
-#endif /* UNUSED */
 
 static void drawMidNumber(struct linkedFeatures *lf, struct hvGfx *hvg,
                          int chromStart, int xOff, int y,
@@ -372,6 +372,33 @@ drawScaledBoxLabel(hvg,  chromStart-1, chromStart+1,
     scale, xOff, y, height, color, font, sizeString);
 }
 
+#ifdef SOON
+static void drawLeftNumber(struct linkedFeatures *lf, struct hvGfx *hvg,
+                         int chromStart, int xOff, int y,
+			 int height, double scale, Color color, MgFont *font, int size)
+/* Draw a short string encoding size around chromStart */
+/* Draw a 1-pixel wide vertical line at the given chromosomal coord.
+ * The line is 0 bases wide (chromStart==chromEnd) but that doesn't
+ * matter if we're zoomed out to >1base/pixel, so this is OK for diffs
+ * when zoomed way out and for insertion points at any scale. */
+{
+drawMidNumber(lf, hvg, chromStart+1, xOff, y, height, scale, color, font, size);
+}
+#endif /* SOON */
+
+#ifdef SOON
+static void drawRightNumber(struct linkedFeatures *lf, struct hvGfx *hvg,
+                         int chromStart, int xOff, int y,
+			 int height, double scale, Color color, MgFont *font, int size)
+/* Draw a short string encoding size around chromStart */
+/* Draw a 1-pixel wide vertical line at the given chromosomal coord.
+ * The line is 0 bases wide (chromStart==chromEnd) but that doesn't
+ * matter if we're zoomed out to >1base/pixel, so this is OK for diffs
+ * when zoomed way out and for insertion points at any scale. */
+{
+drawMidNumber(lf, hvg, chromStart-1, xOff, y, height, scale, color, font, size);
+}
+#endif /* SOON */
 
 
 static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
@@ -1902,7 +1929,7 @@ if (indelShowQInsert)
 				      psl->tStarts[0];
         Color color = cdsColor[CDS_QUERY_INSERTION_AT_END];
 	drawVertLine(lf, hvg, s, xOff, y, heightPer, scale, color);
-	drawMidNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, qStart);
+	// drawLeftNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, qStart);
 	}
     for (i = 1;  i < psl->blockCount;  i++)
 	{
@@ -1939,8 +1966,8 @@ if (indelShowQInsert)
 	    (psl->tSize - (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk])) :
 	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk]);
         Color color = cdsColor[CDS_QUERY_INSERTION_AT_END];
+	// drawRightNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, missingAtEnd);
 	drawVertLine(lf, hvg, s, xOff, y, heightPer, scale, color);
-	drawMidNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, missingAtEnd);
 	}
     }
 }
