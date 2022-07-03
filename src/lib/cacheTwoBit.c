@@ -16,7 +16,8 @@ struct cacheTwoBitSeq
     char *seqName;	// Name of sequence
     int seqSize;	// Size of sequence
     struct twoBitFile *tbf;  // Associated twoBit file;
-    boolean doRc;	// If set, cache reverse complement
+    bool doRc;	// If set, cache reverse complement
+    bool doUpper; // If set sequence is upper cased before caching
     struct rbTree *rangeTree;	// Values of this range tree are DNA seqs 
     long basesQueried;	// Total bases read from cache
     long basesRead;	// Total bases read by cache
@@ -34,17 +35,19 @@ struct cacheTwoBitUrl
     struct hash *rcSeqHash;	    /* Hash of reverse-complemented cacheTwoBitSeq */
     struct cacheTwoBitSeq *seqList;   /* List of sequences accessed */
     };
-struct cacheTwoBitRanges *cacheTwoBitRangesNew()
+
+struct cacheTwoBitRanges *cacheTwoBitRangesNew(boolean doUpper)
 /* Create a new cache for ranges or complete sequence in two bit files */
 {
 struct cacheTwoBitRanges *cache;
 AllocVar(cache);
 cache->urlHash = hashNew(0);
+cache->doUpper = doUpper;
 return cache;
 }
 
 struct cacheTwoBitSeq *cacheTwoBitSeqNew(struct cacheTwoBitUrl *cacheUrl, 
-    char *seqName, boolean doRc)
+    char *seqName, boolean doRc, boolean doUpper)
 /* Create a new cacheTwoBitSeq structure */
 {
 struct cacheTwoBitSeq *ctbSeq;
@@ -52,6 +55,7 @@ AllocVar(ctbSeq);
 ctbSeq->seqName = cloneString(seqName);
 ctbSeq->seqSize = twoBitSeqSize(cacheUrl->tbf, seqName);
 ctbSeq->doRc = doRc;
+ctbSeq->doUpper = doUpper;
 ctbSeq->tbf = cacheUrl->tbf;
 ctbSeq->rangeTree = rangeTreeNew();
 return ctbSeq;
@@ -63,6 +67,9 @@ static struct dnaSeq *cacheTwoBitSeqFetch(struct cacheTwoBitSeq *ctbSeq,
     int start, int end, int *retOffset)
 /* Get dna sequence from file */
 {
+if (start == 0 && end == 0)  /* Spacial case, we read whole seq */
+    end = twoBitSeqSize(ctbSeq->tbf, ctbSeq->seqName);
+
 int size = end-start;
 if (size <= 0)
    errAbort("start >= end in cacheTwoBitSeqFetch. start %d, end %d\n", start, end);
@@ -70,14 +77,13 @@ long offset = 0;
 struct dnaSeq *seq = NULL;
 ctbSeq->basesQueried += size;
 ctbSeq->queryCount += 1;
-if (ctbSeq->doRc)
-    reverseIntRange(&start, &end, ctbSeq->seqSize);
 struct rbTree *rangeTree = ctbSeq->rangeTree;
 struct range *enclosing = rangeTreeFindEnclosing(rangeTree, start, end);
 if (enclosing != NULL)
     {
     seq = enclosing->val;
     offset = enclosing->start;
+    // fprintf(stderr,  "reusing %d %s:%d+%d\n", ctbSeq->doRc, ctbSeq->seqName, start, size);
     }
 else
     {
@@ -90,23 +96,34 @@ else
 	if (start > range->start) start = range->start;
 	if (end < range->end) end = range->end;
 	}
-    seq = twoBitReadSeqFrag(ctbSeq->tbf, ctbSeq->seqName, start, end);
+
+    // fprintf(stderr,  "fetching new %d %s:%d+%d\n", ctbSeq->doRc, ctbSeq->seqName, start, size); 
+    int rcStart = start, rcEnd = end;
+    if (ctbSeq->doRc)
+	{
+	reverseIntRange(&rcStart, &rcEnd, ctbSeq->seqSize);
+	}
+    seq = twoBitReadSeqFrag(ctbSeq->tbf, ctbSeq->seqName, rcStart, rcEnd);
     if (seq != NULL)
 	{
+	if (ctbSeq->doUpper)
+	    toUpperN(seq->dna, seq->size);
 	if (ctbSeq->doRc)
+	    {
 	    reverseComplement(seq->dna, seq->size);
+	    }
 	rangeTreeAddVal(rangeTree, start, end, seq, NULL);
+	ctbSeq->basesRead += size;
+	offset = start;
 	}
-    ctbSeq->basesRead += size;
-    offset = start;
     }
 *retOffset = offset;
 return seq;
 }
 
 
-struct dnaSeq *cacheTwoBitRangesFetch(struct cacheTwoBitRanges *cacheAll, char *url, char *seqName, 
-    int start, int end, boolean doRc, int *retOffset)
+static struct dnaSeq *cacheTwoBitRangesFetchOrNot(struct cacheTwoBitRanges *cacheAll, 
+    char *url, char *seqName, int start, int end, boolean doRc, boolean missOk, int *retOffset)
 /* fetch a sequence from a 2bit.  Caches open two bit files and sequence in 
  * both forward and reverse strand */
 {
@@ -124,17 +141,41 @@ if (cacheUrl == NULL)
     hashAdd(urlHash, url, cacheUrl);
     slAddHead(&cacheAll->urlList, cacheUrl);
     }
+if (missOk && !twoBitHasSeq(cacheUrl->tbf, seqName))
+   {
+   return NULL;
+   }
 struct hash *seqHash = (doRc ? cacheUrl->rcSeqHash : cacheUrl->seqHash);
 struct cacheTwoBitSeq *ctbSeq = hashFindVal(seqHash, seqName);
 
 if (ctbSeq == NULL)
     {
-    ctbSeq = cacheTwoBitSeqNew(cacheUrl, seqName, doRc);
+    ctbSeq = cacheTwoBitSeqNew(cacheUrl, seqName, doRc, cacheAll->doUpper);
     hashAdd(seqHash, seqName, ctbSeq);
     slAddHead(&cacheUrl->seqList, ctbSeq);
     }
-struct dnaSeq *seq = cacheTwoBitSeqFetch(ctbSeq, start, end, retOffset);
+struct dnaSeq *seq = NULL;
+if (start < end || !missOk)
+    seq = cacheTwoBitSeqFetch(ctbSeq, start, end, retOffset);
 return seq;
+}
+
+struct dnaSeq *cacheTwoBitRangesFetch(struct cacheTwoBitRanges *cacheAll, 
+    char *url, char *seqName, int start, int end, boolean doRc, int *retOffset)
+/* fetch a sequence from a 2bit.  Caches open two bit files and sequence in 
+ * both forward and reverse strand */
+{
+return cacheTwoBitRangesFetchOrNot(cacheAll, url, seqName, start, end, doRc, FALSE, retOffset);
+}
+
+struct dnaSeq *cacheTwoBitRangesMayFetch(struct cacheTwoBitRanges *cacheAll, 
+	char *url, char *seqName, int start, int end, boolean doRc, int *retOffset)
+/* Fetch a sequence from a twoBit cache. The result in retOffset is where the return dnaSeq
+ * sits within the named sequence, the whole of which is stored in the subtracted 
+ * associated twoBit file. Do not free the returned sequence. Returns NULL if sequence not
+ * found */
+{
+return cacheTwoBitRangesFetchOrNot(cacheAll, url, seqName, start, end, doRc, TRUE, retOffset);
 }
 
 
