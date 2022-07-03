@@ -1,5 +1,6 @@
 /* cds.c - code for coloring of bases, codons, or alignment differences. */
 
+
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
@@ -19,6 +20,7 @@
 #include "cds.h"
 #include "genbank.h"
 #include "twoBit.h"
+#include "cacheTwoBit.h"
 #include "hgTracks.h"
 #include "cdsSpec.h"
 #include "axt.h"
@@ -56,6 +58,60 @@ assert(index < CDS_NUM_COLORS);
 return cdsColor[index];
 }
 
+boolean pslTargetToQueryRangeMap(struct psl *psl, int tStart, int tEnd, 
+    int *retQStart, int *retQEnd)
+/* Comes up with qStart/qEnd that corresponds to tStart/tEnd in psl. Returns
+ * FALSE if there's no corresponding part for target in query */
+{
+if (rangeIntersection(tStart, tEnd, psl->tStart, psl->tEnd) <= 0)
+    return FALSE;
+int qStart = psl->qStart, qEnd = psl->qEnd;
+boolean foundStart = FALSE, foundEnd = FALSE;
+int lastBqEnd = psl->qStart;
+int i;
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int bSize = psl->blockSizes[i];
+    int bqStart = psl->qStarts[i];
+    int bqEnd = bqStart + bSize;
+    int btStart = psl->tStarts[i];
+    int btEnd = btStart + bSize;
+    if (!foundStart)
+	{
+	if (btStart <= tStart && tStart < btEnd)
+	    {
+	    qStart = bqStart + (tStart - btStart);
+	    foundStart = TRUE;
+	    }
+	else if (btStart >= tStart)
+	    {
+	    qStart = bqStart;
+	    foundStart = TRUE;
+	    }
+	}
+    if (!foundEnd)
+        {
+	if (btStart < tEnd && tEnd <= btEnd)
+	    {
+	    qEnd = bqStart + (tEnd - btStart);
+	    foundEnd = TRUE;
+	    break;
+	    }
+	else if (btStart >= tEnd)
+	    {
+	    qEnd = lastBqEnd;
+	    foundEnd = TRUE;
+	    break;
+	    }
+	}
+    lastBqEnd = bqEnd;
+    }
+*retQStart = qStart;
+*retQEnd = qEnd;
+return TRUE;
+}
+
+
 static void drawScaledBoxWithText(struct hvGfx *hvg, 
                                         int chromStart, int chromEnd,
                                         double scale, int xOff, int y,
@@ -65,7 +121,6 @@ static void drawScaledBoxWithText(struct hvGfx *hvg,
 /* Draw a box scaled from chromosome to window coordinates with
    a codon or set of 3 or less bases drawn in the box. */
 {
-
 /*first draw the box itself*/
 drawScaledBox(hvg, chromStart, chromEnd, scale, xOff, y, height, 
 		    color);
@@ -432,11 +487,16 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
       continue;
     if (e > s)
 	{
-	int mrnaS = -1;
+	int mrnaS = -1, mrnaE = 0;
 	if (psl)
-	    mrnaS = convertCoordUsingPsl(s, psl);
+	    {
+	    // mrnaS = convertCoordUsingPsl(s, psl);
+	    pslTargetToQueryRangeMap(psl, s, e, &mrnaS, &mrnaE);
+	    }
 	else
+	    {
 	    mrnaS = sf->qStart + (s - sf->start);
+	    }
 	if(mrnaS >= 0)
 	    {
 	    int i;
@@ -451,17 +511,19 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 }
 
 
-static void maskDiffString( char *retStr, char *s1, char *s2, char mask )
+static void maskDiffString( char *retStr, char *s1, char *s2, char mask, int size)
 /*copies s1, masking off similar characters, and returns result into retStr.
  *if strings are of different size it stops after s1 is done.*/
 {
-int s1Len = strlen(s1);
-memset(retStr, mask, s1Len);
+memset(retStr, mask, size);
 int i;
-for (i=0; i < s1Len; i++)
+for (i=0; i < size; i++)
     {
-    if (s1[i] != s2[i])
-	retStr[i] = s1[i];
+    char c = s1[i];
+    if (c != s2[i])
+	{
+	retStr[i] = c;
+	}
     }
 retStr[i] = '\0';
 }
@@ -992,48 +1054,21 @@ return hDnaSeqGet(database, name, words[1], words[2]);
 }
 
 
-static struct dnaSeq *fetchCachedTwoBitSeq(char *url, char *seqName, boolean doRc)
+static struct dnaSeq *fetchCachedTwoBitSeq(char *url, char *seqName, 
+    int seqStart, int seqEnd, boolean doRc, int *retSeqOffset)
 /* fetch a sequence from a 2bit.  Caches open two bit files and sequence in 
  * both forward and reverse strand */
 {
-/* Init static url hash */
-static struct hash *urlHash = NULL;  // hash of open files
-if (urlHash == NULL)
-    urlHash = hashNew(0);
-
-/* Get cache for a particular two bit URL */
-struct twoBitCache
-/* An open two bit file and a hash of sequences in it */
-    {
-    struct twoBitFile *tbf;
-    struct hash *seqHash;
-    struct hash *rcSeqHash;
-    };
-struct twoBitCache *cache = hashFindVal(urlHash, url);
+/* Init static url cache */
+static struct cacheTwoBitRanges *cache = NULL;  // hash of open files
 if (cache == NULL)
-    {
-    AllocVar(cache);
-    cache->tbf = twoBitOpen(url);
-    cache->seqHash = hashNew(0);
-    cache->rcSeqHash = hashNew(0);
-    hashAdd(urlHash, url, cache);
-    }
-struct hash *seqHash = (doRc ? cache->rcSeqHash : cache->seqHash);
-struct dnaSeq *seq = hashFindVal(seqHash, seqName);
-
-if (seq == NULL)
-    {
-    seq = twoBitReadSeqFrag(cache->tbf, seqName, 0, 0);
-    touppers(seq->dna);
-    if (doRc)
-        reverseComplement(seq->dna, seq->size);
-    hashAdd(seqHash, seqName, seq);
-    }
-return seq;
+    cache = cacheTwoBitRangesNew(TRUE);
+return cacheTwoBitRangesMayFetch(cache, url, seqName, seqStart, seqEnd, doRc, retSeqOffset);
 }
 
-static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf, char *mrnaName,
-				       char *tableName, struct track *tg, boolean doRc)
+static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf, 
+		    char *mrnaName, int mrnaStart, int mrnaEnd,
+		    char *tableName, struct track *tg, boolean doRc, int *retMrnaOffset)
 /* Look up the sequence in genbank tables (hGenBankGetMrna also searches 
  * seq if it can't find it in GB tables) or user's blat sequence, 
  * uppercase and return it if we find it, return NULL if we don't find it. */
@@ -1088,7 +1123,7 @@ else
 	    char *url = trackDbSetting(tg->tdb, "otherTwoBitUrl");
 	    if (url == NULL)
 		errAbort("missing otherTwoBitUrl in baseColorUseSequence 2bit trackDb setting");
-	    mrnaSeq = fetchCachedTwoBitSeq(url, name, doRc);
+	    mrnaSeq = fetchCachedTwoBitSeq(url, name, mrnaStart, mrnaEnd, doRc, retMrnaOffset);
 	    doRc = FALSE;	    // Handled it already
 	    doUpper = FALSE;    // Handled it already
 	    }
@@ -1489,7 +1524,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 }
 
 
-static void getMrnaBases(struct psl *psl, struct dnaSeq *mrnaSeq,
+static void getMrnaBases(struct psl *psl, struct dnaSeq *mrnaSeq, int mrnaOffset,
 			 int mrnaS, int s, int e, boolean isRc,
 			 char retMrnaBases[4], boolean *retQueryInsertion)
 /* Get mRNA bases for the current mRNA codon triplet.  If this is a split
@@ -1535,13 +1570,13 @@ if(size < 3)
 	if (!appendAtStart)
             {
 	    newIdx = mrnaS + size;
-	    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS], size);
-	    memcpy(retMrnaBases+size, &mrnaSeq->dna[newIdx], 3-size);
+	    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS - mrnaOffset], size);
+	    memcpy(retMrnaBases+size, &mrnaSeq->dna[newIdx - mrnaOffset], 3-size);
             }
 	else
             {
 	    newIdx = mrnaS - (3 - size);
-	    memcpy(retMrnaBases, &mrnaSeq->dna[newIdx], 3);
+	    memcpy(retMrnaBases, &mrnaSeq->dna[newIdx - mrnaOffset], 3);
             }
         }
     else
@@ -1550,7 +1585,7 @@ if(size < 3)
 	}
     }
 else
-    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS], 3);
+    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS - mrnaOffset], 3);
 retMrnaBases[3] = '\0';
 if (isRc)
     reverseComplement(retMrnaBases, strlen(retMrnaBases));
@@ -1559,17 +1594,26 @@ if (isRc)
 static void drawDiffTextBox(struct hvGfx *hvg, int xOff, int y, 
         double scale, int heightPer, MgFont *font, Color color, 
         char *chrom, unsigned s, unsigned e, struct simpleFeature *sf, struct psl *psl, 
-        struct dnaSeq *mrnaSeq, struct linkedFeatures *lf,
+        struct dnaSeq *mrnaSeq, int mrnaOffset, struct linkedFeatures *lf,
         int grayIx, enum baseColorDrawOpt drawOpt,
         int maxPixels, Color *trackColors, Color ixColor)
 {
-int mrnaS = -1;
+int mrnaS = -1, mrnaE = -1;
+/* Clip s and e to what is actually visible */
+if (s < winStart) s = winStart;
+if (e > winEnd) e = winEnd;
 if (psl)
-    mrnaS = convertCoordUsingPsl( s, psl ); 
+    pslTargetToQueryRangeMap(psl, max(psl->tStart, s), min(psl->tEnd, e), 
+	&mrnaS, &mrnaE);
 else if (sf)
     mrnaS = sf->qStart;
-if(mrnaS >= 0)
+if (mrnaS >= 0)
     {
+    if (mrnaS < mrnaOffset)
+         {
+	 warn("curious mrnaS %d < mrnaOffest %d\n", mrnaS, mrnaOffset);
+	 mrnaS = mrnaOffset;
+	 }
     struct dyString *dyMrnaSeq = dyStringNew(256);
     char mrnaBases[4];
     char genomicCodon[2];
@@ -1579,12 +1623,12 @@ if(mrnaS >= 0)
 
     mrnaBases[0] = '\0';
     if (psl && isCoding)
-	getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
+	getMrnaBases(psl, mrnaSeq, mrnaOffset, mrnaS, s, e, (lf->orientation == -1),
 		    mrnaBases, &queryInsertion);
     if (queryInsertion && isCoding)
 	color = cdsColor[CDS_QUERY_INSERTION];
 
-    dyStringAppendN(dyMrnaSeq, (char*)&mrnaSeq->dna[mrnaS], e-s);
+    dyStringAppendN(dyMrnaSeq, (char*)&mrnaSeq->dna[mrnaS - mrnaOffset], e-s);
 
     if (drawOpt == baseColorDrawItemBases)
 	{
@@ -1622,7 +1666,8 @@ if(mrnaS >= 0)
 	char *diffStr = NULL;
 	char *genoDna = getCachedDna(s, e);
 	diffStr = needMem(sizeof(char) * (e - s + 1));
-	maskDiffString(diffStr, dyMrnaSeq->string, genoDna, ' ');
+	maskDiffString(diffStr, dyMrnaSeq->string, genoDna, ' ', dyMrnaSeq->stringSize);
+	// fprintf(stderr, "drawOpt =- diffBases. %d %d %d %d\n", (int)strlen(genoDna), (int)strlen(dyMrnaSeq->string), (int)dyMrnaSeq->stringSize, e-s);
 	if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(diffStr, strlen(diffStr));
 	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
@@ -1664,10 +1709,13 @@ if(mrnaS >= 0)
     }
 else
     {
-    /*show we have an error by coloring entire exon block yellow*/
-    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
-    // FIXME: this shouldn't ever happen, should be an errAbort
-    warn("Bug: drawDiffTextBox: convertCoordUsingPsl failed<br>\n");
+    if (s < e)
+	{
+	/*show we have an error by coloring entire exon block yellow*/
+	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
+	// FIXME: this shouldn't ever happen, should be an errAbort
+	warn("Bug: drawDiffTextBox: convertCoordUsingPsl failed<br>\n");
+	}
     }
 }
 
@@ -1675,7 +1723,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 		       int grayIx, struct hvGfx *hvg, int xOff, 
                        int y, double scale, MgFont *font, int s, int e, 
                        int heightPer, boolean zoomedToCodonLevel, 
-                       struct dnaSeq *mrnaSeq, int qOffset, struct simpleFeature *sf, struct psl *psl, 
+                       struct dnaSeq *qSeq, int qOffset, struct simpleFeature *sf, struct psl *psl, 
 		       enum baseColorDrawOpt drawOpt,
                        int maxPixels, int winStart, 
                        Color originalColor)
@@ -1709,7 +1757,7 @@ if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
 				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
 	}
     }
-else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
+else if (qSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
 	 drawOpt != baseColorDrawGenomicCodons && drawOpt != baseColorDrawOff)
     {
     if (lf->highlightColor)
@@ -1717,14 +1765,14 @@ else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProce
 	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, 
 			    lf->highlightColor);
 	drawDiffTextBox(hvg, xOff+1, y+1, scale, heightPer-2, font, 
-			color, chromName, s, e, sf, psl, mrnaSeq, lf,
+			color, chromName, s, e, sf, psl, qSeq, qOffset, lf,
 			grayIx, drawOpt, maxPixels,
 			tg->colorShades, originalColor);
 	}
     else
 	{
 	drawDiffTextBox(hvg, xOff, y, scale, heightPer, font, 
-			color, chromName, s, e, sf, psl, mrnaSeq, lf,
+			color, chromName, s, e, sf, psl, qSeq, qOffset, lf,
 			grayIx, drawOpt, maxPixels,
 			tg->colorShades, originalColor);
 	}
@@ -1741,8 +1789,7 @@ else
 	}
     else
 	{
-	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, 
-			    color);
+	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
 	}
     }
 }
@@ -1782,7 +1829,7 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 	    char genomicCodon[2], mrnaCodon;
 	    boolean queryInsertion = FALSE;
 	    Color color = cdsColor[CDS_STOP];
-	    getMrnaBases(psl, qSeq, mrnaS, s, e, (lf->orientation == -1),
+	    getMrnaBases(psl, qSeq, qOffset, mrnaS, s, e, (lf->orientation == -1),
 			 mrnaBases, &queryInsertion);
 	    if (queryInsertion)
 		color = cdsColor[CDS_QUERY_INSERTION];
@@ -2122,6 +2169,7 @@ checkTrackInited(tg, "calling baseColorDrawSetup");
 struct psl *psl = NULL;
 struct dnaSeq *mrnaSeq = NULL;
 int mrnaOffset = 0;
+int mrnaStart = 0, mrnaEnd = 0;
 if (indelShowQueryInsert || indelShowPolyA || drawOpt > baseColorDrawOff)
     {
     char *type = tg->tdb->type;
@@ -2149,7 +2197,11 @@ if (indelShowQueryInsert || indelShowPolyA || drawOpt > baseColorDrawOff)
         if (psl == NULL)
 	    drawOpt = baseColorDrawOff;
 	else
+	    {
 	    doRc = (psl->strand[0] == '-' || psl->strand[1] == '-');
+	    pslTargetToQueryRangeMap(psl, max(psl->tStart, winStart), min(psl->tEnd, winEnd),
+		&mrnaStart, &mrnaEnd);
+	    }
 	}
     /* Do we need the sequence for display, if so get it */
     if (drawOpt == baseColorDrawItemBases ||
@@ -2157,9 +2209,11 @@ if (indelShowQueryInsert || indelShowPolyA || drawOpt > baseColorDrawOff)
 	drawOpt == baseColorDrawItemCodons ||
 	drawOpt == baseColorDrawDiffCodons || indelShowPolyA)
 	{
-	mrnaSeq = maybeGetSeqUpper(lf, qName, tg->table, tg, doRc);
+	mrnaSeq = maybeGetSeqUpper(lf, qName, mrnaStart, mrnaEnd, tg->table, tg, doRc, &mrnaOffset);
 	if (mrnaSeq == NULL) 
+	    {
 	    drawOpt = baseColorDrawOff;
+	    }
 	}
     }
 *retPsl = psl;
