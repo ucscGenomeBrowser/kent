@@ -233,9 +233,9 @@ idInUrlSql altGraphX genePred chain factorSource bed  bigChain
 idXref genePred psl bigGenePred
 iframeUrl *
 iframeOptions *
-indelDoubleInsert psl bam bigBed bigPsl
-indelPolyA psl bam bigPsl
-indelQueryInsert psl bam bigBed bigPsl
+indelDoubleInsert psl bam chain bigBed bigPsl bigChain
+indelPolyA psl bam bigPsl 
+indelQueryInsert psl bam chain bigBed bigPsl bigChain
 informant genePred
 initialPos customTracks
 inputFieldMetaTables *
@@ -466,8 +466,8 @@ seqTable bed
 settingsByView *
 sepFields bigBed bigPsl bigGenePred
 shortLabel *
-showCdsAllScales psl bigPsl
-showCdsMaxZoom psl bigPsl
+showCdsAllScales psl bigPsl chain bigChain
+showCdsMaxZoom psl bigPsl chain bigChain
 showCfg *
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
