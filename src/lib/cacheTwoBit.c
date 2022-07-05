@@ -179,10 +179,10 @@ return cacheTwoBitRangesFetchOrNot(cacheAll, url, seqName, start, end, doRc, TRU
 }
 
 
-void cacheTwoBitRangesPrintStats(struct cacheTwoBitRanges *cache)
+void cacheTwoBitRangesPrintStats(struct cacheTwoBitRanges *cache, FILE *f)
 /* print cache statistics - Debugging routine */
 {
-printf("caching %d twoBit files\n", slCount(cache->urlList));
+fprintf(f, "caching %d twoBit files\n", slCount(cache->urlList));
 struct cacheTwoBitUrl *cachedUrl;
 int totalSeq = 0;
 int totalRanges = 0;
@@ -191,12 +191,12 @@ long basesRead = 0;	// Total bases read by cache
 int queryCount = 0;
 for (cachedUrl = cache->urlList; cachedUrl != NULL; cachedUrl = cachedUrl->next)
     {
-    printf("%s has %d + strand, %d minus strand sequences cached\n",
+    fprintf(f, "%s has %d + strand, %d minus strand sequences cached\n",
 	cachedUrl->url, cachedUrl->seqHash->elCount, cachedUrl->rcSeqHash->elCount);
     struct cacheTwoBitSeq *ctbSeq;
     for (ctbSeq = cachedUrl->seqList; ctbSeq != NULL; ctbSeq = ctbSeq->next)
 	{
-	printf("  %s %c strand\n", ctbSeq->seqName, ctbSeq->doRc ? '=' : '+');
+	fprintf(f, "  %s %c strand\n", ctbSeq->seqName, ctbSeq->doRc ? '-' : '+');
 	totalSeq += 1;
 	totalRanges += ctbSeq->rangeTree->n;
 	basesQueried += ctbSeq->basesQueried;
@@ -205,12 +205,12 @@ for (cachedUrl = cache->urlList; cachedUrl != NULL; cachedUrl = cachedUrl->next)
 	struct range *range = rangeTreeList(ctbSeq->rangeTree);
 	for ( ; range != NULL; range = range->next)
 	    {
-	    printf("    %d %d\n", range->start, range->end);
+	    fprintf(f, "    %d start %d size\n", range->start, range->end - range->start);
 	    }
 	}
     }
-printf("total sequences cached %d in %d ranges covering %d queries\n", 
+fprintf(f, "total sequences cached %d in %d ranges covering %d queries\n", 
     totalSeq, totalRanges, queryCount);
-printf("basesRead %ld bases queried %ld\n", basesRead, basesQueried);
+fprintf(f, "basesRead %ld bases queried %ld\n", basesRead, basesQueried);
 }
 

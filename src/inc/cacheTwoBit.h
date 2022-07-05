@@ -16,7 +16,7 @@ struct cacheTwoBitRanges
 struct cacheTwoBitRanges *cacheTwoBitRangesNew(boolean doUpper);
 /* Create a new cache for ranges or complete sequence in two bit files */
 
-void cacheTwoBitRangesPrintStats(struct cacheTwoBitRanges *cache);
+void cacheTwoBitRangesPrintStats(struct cacheTwoBitRanges *cache, FILE *f);
 /* print cache statistics - Debugging routine */
 
 struct dnaSeq *cacheTwoBitRangesFetch(struct cacheTwoBitRanges *cacheAll, 
