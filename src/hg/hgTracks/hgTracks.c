@@ -74,6 +74,8 @@
 #include "customComposite.h"
 #include "chromAlias.h"
 #include "jsonWrite.h"
+#include "cds.h"
+#include "cacheTwoBit.h"
 
 //#include "bed3Sources.h"
 
@@ -11040,6 +11042,8 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     notify(buf);
     }
+if (cdsQueryCache != NULL)
+    cacheTwoBitRangesPrintStats(cdsQueryCache, stderr);
 }
 
 void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)

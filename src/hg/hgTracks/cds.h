@@ -98,6 +98,8 @@
 
 #define CDS_NUM_COLORS 15
 
+extern struct cacheTwoBitRanges *cdsQueryCache;  /* Cache of querie sequences in alignments */
+
 Color getCdsColor(int index);
 /* return color from index of types of colors */
 

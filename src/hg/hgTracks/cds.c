@@ -1054,16 +1054,17 @@ return hDnaSeqGet(database, name, words[1], words[2]);
 }
 
 
+struct cacheTwoBitRanges *cdsQueryCache = NULL;
+
 static struct dnaSeq *fetchCachedTwoBitSeq(char *url, char *seqName, 
     int seqStart, int seqEnd, boolean doRc, int *retSeqOffset)
 /* fetch a sequence from a 2bit.  Caches open two bit files and sequence in 
  * both forward and reverse strand */
 {
 /* Init static url cache */
-static struct cacheTwoBitRanges *cache = NULL;  // hash of open files
-if (cache == NULL)
-    cache = cacheTwoBitRangesNew(TRUE);
-return cacheTwoBitRangesMayFetch(cache, url, seqName, seqStart, seqEnd, doRc, retSeqOffset);
+if (cdsQueryCache == NULL)
+    cdsQueryCache = cacheTwoBitRangesNew(TRUE);
+return cacheTwoBitRangesMayFetch(cdsQueryCache, url, seqName, seqStart, seqEnd, doRc, retSeqOffset);
 }
 
 static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf, 
