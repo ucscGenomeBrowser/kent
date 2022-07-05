@@ -2,7 +2,7 @@ GCA_905333045.1_ilLysBell1.1	Adonis blue
 GCF_000005575.2_AgamP3	African malaria mosquito
 GCF_000220905.1_MROT_1.0	alfalfa leafcutting bee
 GCF_003710045.1_USU_Nmel_1.2	Alkali bee
-# GCF_021461395.2_iqSchAmer2.1	American grasshopper (TAMUIC-IGC-003095 2022)
+GCF_021461395.2_iqSchAmer2.1	American grasshopper (TAMUIC-IGC-003095 2022)
 GCF_020809275.1_ASM2080927v1	American house dust mite (JKM2019 2021)
 GCF_018991925.1_GMGI_Hamer_2.0	American lobster
 GCF_000764305.2_Hazt_2.0.2	amphipods H.azteca (HAZT.00-mixed v2.0.2 2019)
@@ -85,7 +85,7 @@ GCF_001856805.1_P_rapae_3842_assembly_v2	cabbage white
 GCF_905147795.1_ilPieRapa1.1	cabbage white (refseq 2021)
 GCF_000002075.1_AplCal3.0	California sea hare
 GCF_003426905.1_ASM342690v1	cat flea
-# GCF_021461385.2_iqSchPice1.1	Central American locust (TAMUIC-IGC-003096 2022)
+GCF_021461385.2_iqSchPice1.1	Central American locust (TAMUIC-IGC-003096 2022)
 GCF_001194135.1_Octopus_bimaculoides_v2_0	cephalopods
 GCF_003672135.1_Obir_v5.4	clonal raider ant
 GCF_905220415.1_ilColCroc2.1	clouded yellow (refseq 2021)
@@ -185,7 +185,7 @@ GCF_014743375.2_RU_Dsub_v1.1	fly D.subpulchrella
 GCF_013340165.1_LBDM_Dsuz_2.1.pri	fly D.suzukii
 GCF_000224235.1_Dtak_2.0	fly D.takahashii (BCM 2013)
 GCF_018152695.1_ASM1815269v1	fly D.takahashii (Stanford 2021)
-# GCF_016746235.2_Prin_Dtei_1.1	fly D.teissieri
+GCF_016746235.2_Prin_Dtei_1.1	fly D.teissieri
 GCF_003285735.1_DvirRS2	fly D.virilis
 GCA_007989325.2_ASM798932v2	fly D.virilis (160 2020)
 GCF_000005925.1_dwil_caf1	fly D.willistoni

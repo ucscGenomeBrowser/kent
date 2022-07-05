@@ -116,7 +116,7 @@ indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
 color 72,167,38
-searchIndex name
+searchIndex name,ncbiAcc
 
 track gad
 shortLabel GAD View
@@ -4146,7 +4146,8 @@ searchPriority 50
 searchTable lrg
 searchMethod exact
 searchType bigBed
-termRegex LRG_[0-9]+
+termRegex (LRG_[0-9]+)|(NG_[0-9]+\.[0-9]+)
+#termRegex NG_[0-9]+\.[0-9]+
 semiShortCircuit 1
 searchPriority 49
 release alpha

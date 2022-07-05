@@ -1,13 +1,13 @@
 track varskip
-type bigBed 6
+shortLabel NEB VarSkip Primers
+longLabel New England Biolabs (NEB) VarSkip Primers
+type bed 6
 group map
-compositeTrack on
-shortLabel VarSkip Primers
-longLabel NEB VarSkip Primers
+visibility hide
 priority 7
+compositeTrack on
 noScoreFilter on
 
-        parent varskip
         track varskip1a
         bigDataUrl /gbdb/wuhCor1/varskip/neb_vss1a.primer.bb
         type bigBed 6
@@ -15,8 +15,8 @@ noScoreFilter on
         longLabel NEB VarSkip V1a
         visibility pack
         priority 1
-
         parent varskip
+
         track varskipVsl1a
         bigDataUrl /gbdb/wuhCor1/varskip/neb_vsl1a.primer.bb
         shortLabel VarSkip Long 1a
@@ -24,8 +24,8 @@ noScoreFilter on
         visibility pack
         priority 2
         type bigBed 6
-        
         parent varskip
+        
         track varskip2
         bigDataUrl /gbdb/wuhCor1/varskip/neb_vss2a.primer.bb
         shortLabel VarSkip 2
@@ -33,8 +33,8 @@ noScoreFilter on
         visibility pack
         priority 3
         type bigBed 6
-        
         parent varskip
+        
         track varskip2b
         bigDataUrl /gbdb/wuhCor1/varskip/neb_vss2b.primer.bb
         shortLabel VarSkip 2b
@@ -42,3 +42,4 @@ noScoreFilter on
         visibility pack
         priority 4
         type bigBed 6
+        parent varskip

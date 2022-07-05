@@ -36,7 +36,7 @@ do
 
     printf "Creating lrg.bb for %s\n" $db
     bedToBigBed lrg.bed /hive/data/genomes/$db/chrom.sizes lrg.bb \
-        -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+        -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name,ncbiAcc
 
     ~/bin/x86_64/lrgToPsl lrg.bed /hive/data/genomes/$db/chrom.sizes lrg.psl
     set +e

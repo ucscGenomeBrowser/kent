@@ -41,6 +41,14 @@ The algorithms included in this track are:
     Observed/Expected ratio is defined as the HMC score. Missense variants
     disrupting the amino-acid positions with HMC&lt;0.8 are predicted to be
     likely deleterious.
+
+    <li><b><a href="https://stuart.radboudumc.nl/metadome/" target="_blank">
+    MetaDome - Tolerance Landscape Score</a> (hg19 only)</b>:
+    MetaDome Tolerance Landscape scores are computed as a missense over synonymous 
+    variant count ratio, which is calculated in a sliding window manner to provide 
+    a per-position indication of regional tolerance to missense variation. The 
+    variants are based on gnomAD and corrected for codon composition. Scores 
+    &lt;0.7 are considered intolerant.
    
     <li><b><a href="http://biosig.unimelb.edu.au/mtr-viewer/" target="_blank">
     MTR - Missense Tolerance Ratio</a> (hg19 only)</b>:
@@ -92,6 +100,36 @@ A protein residue with HMC score &lt;1 indicates that missense variants affectin
 the homologous residues are significantly under negative selection (P-value &lt;
 0.05) and likely to be deleterious. A more stringent score threshold of HMC&lt;0.8
 is recommended to prioritize predicted disease-associated variants.
+</p>
+
+<h3>MetaDome</h3>
+</p>
+MetaDome data can be found on two tracks, <b>MetaDome</b> and <b>MetaDome All Data</b>.
+The <b>MetaDome</b> track should be used by default for data exploration. In this track
+the raw data containing the MetaDome tolerance scores were converted into a signal ("wiggle")
+track. Since this data was computed on the proteome, there was a small amount of coordinate
+overlap, roughly 0.42%. In these regions the lowest possible score was chosen for display
+in the track to maintain sensitivity. For this reason, if a protein variant is being evaluated,
+the <b>MetaDome All Data</b> track can be used to validate the score. More information
+on this data can be found in the <a target="_blank"
+href="https://stuart.radboudumc.nl/metadome/faq">MetaDome FAQ</a>.</p>
+<p>
+<b>Interpretation:</b> The authors suggest the following guidelines for evaluating
+intolerance. By default, the <b>MetaDome</b> track displays a horizontal line at 0.7 which 
+signifies the first intolerant bin. For more information see the <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/31116477/">MetaDome publication</a>.</p>
+
+<p>
+<table class="stdTbl">
+    <tr align=left>
+        <th>Classification</th><th>MetaDome Tolerance Score</th></tr>
+    <tr align=left>
+        <td>Highly intolerant</td><td>&le; 0.175</td></tr>
+    <tr align=left>
+        <td>Intolerant</td><td>&le; 0.525</td></tr>
+    <tr align=left>
+        <td>Slightly intolerant</td><td>&le; 0.7</td></tr>
+</table>
 </p>
 
 <h3>MTR</h3>
@@ -151,6 +189,19 @@ script. The bedGraph files were then converted to bigWig files, as documented in
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" 
 target=_blank>makeDoc</a> hg19 build log.</p>
 
+<h3>MetaDome</h3>
+<p>
+The authors provided a bed file containing codon coordinates along with the scores. 
+This file was parse with a python script to create the two tracks. For the first track
+the scores were aggregated for each coordinate, then the lowest score chosen for any
+overlaps and the result written out to bedGraph format. The file was then converted
+to bigWig with the <code>bedGraphToBigWig</code> utility. For the second track the file
+was reorganized into a bed 4+3 and conveted to bigBed with the <code>bedToBigBed</code>
+utility.</p>
+<p>
+See the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
+target=_blank>hg19 makeDoc</a> for details including the build script.</p>
+
 <h3>MTR</h3> 
 <p>
 <a href="http://biosig.unimelb.edu.au/mtr-viewer/downloads" target="_blank">V2
@@ -179,7 +230,7 @@ or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tools can also be used to obtain features confined to a given range, e.g.,
-<br>
+<br><br>
 <tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/hmc/hmc.bw stdout</tt>
 <br>
 </p>
@@ -194,7 +245,8 @@ for more information.
 <h2>Credits</h2>
 
 <p>
-Thanks to Jean-Madeleine Desainteagathe (APHP Paris, France) for suggesting the JARVIS, MTR, HMC tracks. Thanks to Xialei Zhang for providing the HMC data file and to Dimitrios Vitsios and Slavé Petrovski for helping clean up the hg38 JARVIS files for providing guidance on interpretation. 
+Thanks to Jean-Madeleine Desainteagathe (APHP Paris, France) for suggesting the JARVIS, MTR, HMC tracks. Thanks to Xialei Zhang for providing the HMC data file and to Dimitrios Vitsios and Slave Petrovski for helping clean up the hg38 JARVIS files for providing guidance on interpretation. Additional
+thanks to Laurens van de Wiel for providing the MetaDome data as well as guidance on the track development and interpretation. 
 </p>
 
 <h2>References</h2>
@@ -214,6 +266,16 @@ Xiaolei Zhang, Pantazis I. Theotokis, Nicholas Li, the SHaRe Investigators, Caro
 <a href="https://doi.org/10.1101/2022.02.16.22271023" target="_blank">
 Genetic constraint at single amino acid resolution improves missense variant prioritisation and gene discovery</a>.
 <em>Medrxiv</em> 2022.02.16.22271023
+</p>
+
+<p>
+Wiel L, Baakman C, Gilissen D, Veltman JA, Vriend G, Gilissen C.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31116477" target="_blank">
+MetaDome: Pathogenicity analysis of genetic variants through aggregation of homologous human protein
+domains</a>.
+<em>Hum Mutat</em>. 2019 Aug;40(8):1030-1038.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31116477" target="_blank">31116477</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6772141/" target="_blank">PMC6772141</a>
 </p>
 
 <p>

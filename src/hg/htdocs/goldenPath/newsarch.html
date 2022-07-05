@@ -52,6 +52,53 @@
 <!-- ============= 2022 archived news ============= -->
 <a name="2022"></a>
 
+<a name="063022"></a>
+<h2>June 30, 2022 &nbsp;&nbsp; New gnomAD Constraint Metrics track on GRCh38/hg38</h2>
+<p>
+We are pleased to announce the <a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadPLI">Genome
+Aggregation Database (gnomAD) Constraint Metrics</a> track, previously only on hg19,
+is now also available on the human GRCh38/hg38 genome assembly.</p>
+<p>
+These data show various metrics of pathogenicity per-gene as predicted for gnomAD v2.1.1 and
+identifies genes subject to strong selection against various classes of mutation. It is comprised
+of four subtracks:</p>
+<ul>
+  <li><b>Gene LoF</b> &ndash; gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI)
+  <li><b>Gene Missense</b> &ndash; gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores)
+  <li><b>Transcript LoF</b> &ndash; gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI)
+  <li><b>Transcript Missense</b> &ndash; gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores)
+</ul>
+<p>
+More information on this track can be found in the <a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadPLI#TRACK_HTML"
+>track description page</a>, as well as the <a href="https://gnomad.broadinstitute.org/faq" target="_blank">
+gnomAD</a> site. We would like to thank the <a href="https://gnomad.broadinstitute.org/" target="_blank">
+Genome Aggregation Database Consortium</a> for making these data available. We would also like to thank Lou
+Nassar, Maximilian Haeussler, Anna Benet-Pages, and Gerardo Perez for their work in creating and releasing these
+tracks.</p>
+
+<a name="062822"></a>
+<h2>June 28, 2022 &nbsp;&nbsp; Update to GTEx cis-eQTL for hg38</h2>
+<p>
+We are happy to announce an update to the
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=gtexEqtlHighConf">GTEx cis-eQTL</a> track for the human
+assembly (GRCh38/hg38). The track shows genetic variants likely affecting proximal gene expression
+in 49 human tissues from the <a href="https://gtexportal.org/home/"
+target="_blank">Genotype-Tissue Expression (GTEx)</a> V8 data release. With this update, we are
+introducing the <a href="https://github.com/xqwen/dap" target="_blank">DAP-G</a> 95% credible set
+alongside the <a href="http://genetics.cs.ucla.edu/caviar/" target="_blank">CAVIAR</a>
+high-confidence set.</p>
+<p>
+Hovering over items in the track display will show the variant ID (often a dbSNP rsID), the target
+gene, tissue, and posterior probablity (Causal Posterior Probability (CPP) for CAVIAR; SNP Posterior
+Inclusion Probability (PIP) for DAP-G). Clicking an item will show the details of that interaction
+with link outs to view more details on the GTEx website.</p>
+<p>
+Track configuration supports filtering by tissue, gene, or posterior probability.</p>
+<p>
+We would like to thank the GTEx investigators, analysts, and portal team for providing this data.
+We also want to thank Matt Speir, Max Haeussler, and Jairo Navarro for the creation and release of
+these tracks.</p>
+
 <a name="062722"></a>
 <h2>June 27, 2022 &nbsp;&nbsp; New dynseq &quot;logo on&quot; display for bigWigs</h2>
 <p>

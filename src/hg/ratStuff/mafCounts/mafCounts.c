@@ -33,7 +33,7 @@ errAbort(
   "   mafCounts mafIn wigPrefix\n"
   "WARNING:  requires a maf with only a single target sequence\n"
   "options:\n"
-  "   -scale=file.bw     scale logo by bigWig value\n"
+  "   -scale=file.bw     scale each wiggle by the bigWig value at that base.  This might be something like a phyloP score.\n"
   );
 }
 

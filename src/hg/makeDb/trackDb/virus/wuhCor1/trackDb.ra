@@ -582,20 +582,6 @@ type vcfTabix
 release alpha
 bigDataUrl /hive/data/outside/otto/sarscov2phylo/26-10-20/danishMink.vcf.gz
 
-track lineageB_1_1_7_US
-shortLabel B.1.1.7 in USA
-longLabel Early Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
-type vcfTabix
-bigDataUrl /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.vcf.gz
-hapClusterEnabled on
-hapClusterMethod treeFile /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.nwk
-hapClusterHeight 160
-hapClusterColorBy function
-geneTrack ncbiGeneBGP
-vcfDoQual off
-vcfDoFilter off
-group varRep
-
 track spikeMuts
 shortLabel Spike Mutations
 longLabel Spike protein mutations from community annotation (Feb 2021)
@@ -618,9 +604,9 @@ searchMethod fuzzy
 padding 5
 
 track resist
-pennantIcon Updated red ../goldenPath/newsarch.html#022522 "Updated June 20, 2022"
+pennantIcon Updated red ../goldenPath/newsarch.html#022522 "Updated July 1, 2022"
 shortLabel Drug Resistance Mutations
-longLabel Mutations that confer drug resistance 
+longLabel Mutations that confer drug resistance (Anna Nieviadomska, BV-BRC)
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/resist/resist.bb
 itemRgb on
@@ -629,6 +615,7 @@ urls urls=$$
 mouseOver $comments
 noScoreFilter on
 group varRep
+visibility dense
 
 track resistPred
 shortLabel Predicted Resistance

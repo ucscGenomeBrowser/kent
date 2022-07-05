@@ -672,18 +672,6 @@ href="/cgi-bin/hgTracks?hgTracksConfigPage=configure"><em>Configure</em></a>.
 Once you have made your selection, which can also include <em>style</em> click <em>submit</em>.
 The text size is set to &quot;12&quot; and &quot;Helvetica&quot; by default.</p>
 
-<h3>Hiding the annotation track labels</h3>
-<p>
-The track and element labels displayed above and to the left of the tracks in the annotation tracks 
-image may be hidden from view by unchecking the <em>Display track descriptions above each track</em>
-and <em>Display labels to the left of items in tracks</em> boxes, respectively, on the Track 
-Configuration page.</p>
-
-<h3>Hiding the display grid on the annotation tracks image</h3>
-<p>
-The light blue vertical guidelines on the annotation tracks image may be removed by unchecking the 
-<em>Show light blue vertical guidelines</em> box on the Track Configuration page.</p>
-
 <h3>Hiding the chromosome ideogram</h3>
 <p>
 The chromosome ideogram, located just above the annotation tracks image, provides a graphical 
@@ -692,7 +680,19 @@ centromere, and an indication of the region currently displayed in the annotatio
 hide the ideogram, uncheck the <em>Display chromosome ideogram above main graphic</em> box on the 
 Tracks Configuration page.</p>
 
-<h3>Enabling item and exon navigation</h3>
+<h3>Hiding the light blue vertical guidelines</h3>
+<p>
+The light blue vertical guidelines on the annotation tracks image may be removed by unchecking the
+<em>Show light blue vertical guidelines</em> box on the Track Configuration page.</p>
+
+<h3>Hiding the annotation track labels and description</h3>
+<p>
+The track and element labels displayed above and to the left of the tracks in the annotation tracks
+image may be hidden from view by unchecking the <em>Display track descriptions above each track</em>
+and <em>Display labels to the left of items in tracks</em> boxes, respectively, on the Track
+Configuration page.</p>
+
+<h3 id="nextItem">Enabling next/previous item and exon navigation</h3>
 <p>
 When the <em>Next/previous item navigation</em> configuration option is toggled on, on the Track 
 Configuration page,  gray double-headed arrows display in the Genome Browser tracks image on both 
@@ -705,6 +705,12 @@ window to the next exon in the indicated direction, unless the image window inte
 which case the window shifts to the edge of the current exon. If the image window happens to be 
 within a 5' or 3' UTR, then clicking the arrows shifts the image window towards the start or end of 
 the next coding region, not the end of the exon.</p>
+<div class="text-center">
+  <a href ="/cgi-bin/hgTracks?db=hg38&position=chr10:67,881,992-67,890,592&hideTracks=1&knownGene=pack&omimAvSnp=pack&nextItemArrows=1">
+  <img src="../../images/nextItem.png" alt="Ex. white/gray arrows for next/previous exon/item" width="700"></a>
+  <p class="gbsCaption text-center">Gray arrows jump to the next item,
+  while white arrows advance to the next exon.</p>
+</div>
 
 <a name="RIGHT_CLICK_NAV"></a>
 <h3>Using the right-click navigation feature</h3>
@@ -713,7 +719,7 @@ Several of the common display and navigation operations offered on the Genome Br
 may be quickly accessed by right-clicking on a feature on the tracks image and selecting an option 
 from the displayed popup menu.</p>
 <div class="text-center">
-  <a href ="/cgi-bin/hgTracks?db=hg38&position=chr21%3A31657975-31667213&hgt.reset=1&hgFind.matches=ENST00000270142.11&knownGene.show.noncoding=0&knownGene.show.spliceVariants=0">
+  <a target="_blank" href="/cgi-bin/hgTracks?db=hg38&position=chr21%3A31657975-31667213&hgt.reset=1&hgFind.matches=ENST00000270142.11&knownGene.show.noncoding=0&knownGene.show.spliceVariants=0">
   <img src="../../images/right_click_example.png" alt="Example right-click to highlight a gene" width="700">
   </a>
 </div>
@@ -1439,7 +1445,10 @@ Browser Track Hub User Guide</a>. For specific information on configuring your t
 refer to the <a href="trackDb/trackDbHub.html">Track Database Definition Document</a>. See also the 
 <a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a>, 
 <a href="hubQuickStartGroups.html" target="_blank">Quick Start Guide to Organizing Track Hubs into 
-Groupings</a>, <a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs</a> and <a href="hubQuickStartSearch.html" target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
+Groupings</a>, <a href="https://genome-blog.soe.ucsc.edu/blog/2022/06/28/track-hub-settings/"
+target="_blank">Track hub settings blog post</a>, <a href="hubQuickStartAssembly.html"
+target="_blank">Quick Start Guide to Assembly Hubs</a> and <a href="hubQuickStartSearch.html"
+target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
 
 <a name="UseOneFile"></a>
 <h2>Track Hubs in a single file</h2>
