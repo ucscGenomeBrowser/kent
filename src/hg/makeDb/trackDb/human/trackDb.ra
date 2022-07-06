@@ -41,7 +41,7 @@ include cadd.ra
 include revel.ra
 
 # constraint scores
-include constraintSuper.ra alpha
+include constraintSuper.ra
 
 # GenCC
 include genCC.ra
