@@ -364,21 +364,27 @@ rgbColor.b = (rgbColor.b+128)/2;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
+boolean winTooBigDoWiggle(struct cart *cart, struct track *tg)
+/* return true if we wiggle because the window size exceeds a certain threshold? */
+{
+boolean doWiggle = FALSE;
+char *setting = trackDbSetting(tg->tdb, "maxWindowCoverage" );
+if (setting)
+    {
+    unsigned size = sqlUnsigned(setting);
+    if ((size > 0) && ((winEnd - winStart) > size))
+        doWiggle = TRUE;
+    }
+return doWiggle;
+}
+
 boolean checkIfWiggling(struct cart *cart, struct track *tg)
 /* Check to see if a track should be drawing as a wiggle. */
 {
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 
 if (!doWiggle)
-    {
-    char *setting = trackDbSetting(tg->tdb, "maxWindowCoverage" );
-    if (setting)
-        {
-        unsigned size = sqlUnsigned(setting);
-        if ((size > 0) && ((winEnd - winStart) > size))
-            doWiggle = TRUE;
-        }
-    }
+    doWiggle = winTooBigDoWiggle(cart, tg);
 
 if (doWiggle && isEmpty(tg->networkErrMsg))
     {

@@ -1634,6 +1634,9 @@ int tgCmpPriority(const void *va, const void *vb);
 void printMenuBar();
 /* Put up the menu bar. */
 
+boolean winTooBigDoWiggle(struct cart *cart, struct track *tg);
+/* return true if we wiggle because the window size exceeds a certain threshold */
+
 boolean checkIfWiggling(struct cart *cart, struct track *tg);
 /* Check to see if a track should be drawing as a wiggle. */
 
@@ -1711,6 +1714,12 @@ void labelTrackAsFiltered(struct track *tg);
 
 void labelTrackAsHideEmpty(struct track *tg);
 /* add text to track long label to indicate empty subtracks are hidden */
+
+void labelTrackAsDensity(struct track *tg);
+/* Add text to track long label to indicate density mode */
+
+void labelTrackAsDensityWindowSize(struct track *tg);
+/* Add text to track long label to indicate density mode because window size exceeds some threshold */
 
 void setupHotkeys(boolean gotExtTools);
 /* setup keyboard shortcuts and a help dialog for it */
