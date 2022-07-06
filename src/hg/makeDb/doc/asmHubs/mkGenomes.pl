@@ -83,7 +83,7 @@ sub singleFileHub($$$$$$$$$$$$) {
     printf $fh "genome %s\n", $accessionId;
     printf $fh "taxId %s\n", $taxId if (length($taxId) > 1);
     printf $fh "groups groups.txt\n";
-    printf $fh "description %s %s\n", $assemblyName, $asmDate;
+    printf $fh "description %s\n", $orgName;
     printf $fh "twoBitPath %s.2bit\n", $accessionId;
     printf $fh "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
     printf $fh "chromSizes %s.chrom.sizes.txt\n", $accessionId;
@@ -92,7 +92,7 @@ sub singleFileHub($$$$$$$$$$$$) {
     } else {
       printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
     }
-    printf $fh "organism %s\n", $commonName{$asmId};
+    printf $fh "organism %s %s\n", $assemblyName, $asmDate;
     printf $fh "defaultPos %s\n", $defPos;
     printf $fh "scientificName %s\n", $descr;
     printf $fh "htmlPath html/%s.description.html\n", $asmId;
@@ -219,7 +219,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf "taxId %s\n", $taxId if (length($taxId) > 1);
   printf "trackDb ../%s/%s/trackDb.txt\n", $accessionDir, $accessionId;
   printf "groups groups.txt\n";
-  printf "description %s %s\n", $assemblyName, $asmDate;
+  printf "description %s\n", $orgName;
   printf "twoBitPath ../%s/%s/%s.2bit\n", $accessionDir, $accessionId, $accessionId;
   printf "twoBitBptUrl ../%s/%s/%s.2bit.bpt\n", $accessionDir, $accessionId, $accessionId;
   printf "chromSizes ../%s/%s/%s.chrom.sizes.txt\n", $accessionDir, $accessionId, $accessionId;
@@ -231,7 +231,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   } else {
     printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
   }
-  printf "organism %s\n", $commonName{$asmId};
+  printf "organism %s %s\n", $assemblyName, $asmDate;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
   my $bigChrom=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$NF}'`;
@@ -284,7 +284,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf GF "taxId %s\n", $taxId if (length($taxId) > 1);
   printf GF "trackDb trackDb.txt\n";
   printf GF "groups groups.txt\n";
-  printf GF "description %s %s\n", $assemblyName, $asmDate;
+  printf GF "description %s\n", $orgName;
   printf GF "twoBitPath %s.2bit\n", $accessionId;
   printf GF "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
   printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
@@ -293,7 +293,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   } else {
     printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
   }
-  printf GF "organism %s\n", $commonName{$asmId};
+  printf GF "organism %s %s\n", $assemblyName, $asmDate;
   printf GF "defaultPos %s\n", $defPos;
   printf GF "scientificName %s\n", $descr;
   printf GF "htmlPath html/%s.description.html\n", $asmId;
