@@ -25,6 +25,7 @@ GCF_001305755.1_ASM130575v1	ass (Maral har 2015 refseq)
 GCF_015852505.1_mTacAcu1.pri	Australian echidna
 GCF_000767855.1_Ca_bactrianus_MBC_1.0	Bactrian camel (Alxa 2014 refseq)
 GCA_004023785.1_MunMun_v1_BIUU	banded mongoose
+GCF_902806735.1_Bank_vole1_10x	bank vole
 GCF_019054845.1_ASM1905484v1	banner-tailed kangaroo rat
 GCF_002288925.2_ASM228892v3	beluga whale
 GCF_000308155.1_EptFus1.0	big brown bat
@@ -48,7 +49,7 @@ GCA_004027415.1_HipGal_v1_BIUU	Cantor's roundleaf bat
 GCF_000299155.1_EleEdw1.0	Cape elephant shrew
 GCF_000296735.1_ChrAsi1.0	Cape golden mole (2012 Broad)
 GCA_004027455.1_HydHyd_v1_BIUU	capybara
-GCF_002263795.1_ARS-UCD1.2	cattle (Hereford 2018 USDA)
+GCF_002263795.2_ARS-UCD1.3	cattle (Hereford L1 Dominette 01449 42190680 v3 2018 USDA)
 GCA_004024745.2_CatWag_v2_BIUU_UCD	Chacoan peccary
 GCF_003709585.1_Aci_jub_2	cheetah (Rico 2018)
 GCF_003668045.3_CriGri-PICRH-1.0	Chinese hamster (17A/GY CHO 2020)
@@ -295,7 +296,7 @@ GCA_004027655.1_GraMur_v1_BIUU	woodland dormouse
 GCF_004785775.1_NIH_TR_1.0	woodland thicket rat
 GCF_003031525.2_Neophocaena_asiaeorientalis_V1	Yangtze finless porpoise (v2)
 GCF_000442215.1_Lipotes_vexillifer_v1	Yangtze River dolphin (BGI 2013 refseq)
-GCF_003676075.2_GSC_YBM_2.0	yellow-bellied marmot
+GCF_003676075.3_GSC_YBM_2.1	yellow-bellied marmot (SJ_83 v2.1 2019)
 GCA_016432865.1_AdamAnt	yellow-footed antechinus
 GCA_004026845.1_HetBruBak_v1_BIUU	yellow-spotted hyrax
 GCF_000247795.1_Bos_indicus_1.0	zebu cattle (Nelore 2014 refseq)
