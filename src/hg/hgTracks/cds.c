@@ -409,7 +409,7 @@ if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
     thisY += height/4;
     thisHeight = height - height/2;
     }
-hvGfxBox(hvg, thisX-2, thisY, 4, thisHeight, color);
+hvGfxBox(hvg, thisX-1, thisY, 2, thisHeight, color);
 }
 
 static void drawMidNumber(struct linkedFeatures *lf, struct hvGfx *hvg,
