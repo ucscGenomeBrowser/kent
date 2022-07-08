@@ -162,8 +162,10 @@ return seq;
 
 struct dnaSeq *cacheTwoBitRangesFetch(struct cacheTwoBitRanges *cacheAll, 
     char *url, char *seqName, int start, int end, boolean doRc, int *retOffset)
-/* fetch a sequence from a 2bit.  Caches open two bit files and sequence in 
- * both forward and reverse strand */
+/* Fetch a sequence from a twoBit cache. The result in retOffset is where the return dnaSeq
+ * sits within the named sequence, the whole of which is stored in the subtracted 
+ * associated twoBit file. Do not free the returned sequence. Complains and aborts if
+ * url not found, or if seqName not found in URL */
 {
 return cacheTwoBitRangesFetchOrNot(cacheAll, url, seqName, start, end, doRc, FALSE, retOffset);
 }
@@ -173,7 +175,7 @@ struct dnaSeq *cacheTwoBitRangesMayFetch(struct cacheTwoBitRanges *cacheAll,
 /* Fetch a sequence from a twoBit cache. The result in retOffset is where the return dnaSeq
  * sits within the named sequence, the whole of which is stored in the subtracted 
  * associated twoBit file. Do not free the returned sequence. Returns NULL if sequence not
- * found */
+ * found in any of the files we are caching without complaint. */
 {
 return cacheTwoBitRangesFetchOrNot(cacheAll, url, seqName, start, end, doRc, TRUE, retOffset);
 }
@@ -211,6 +213,7 @@ for (cachedUrl = cache->urlList; cachedUrl != NULL; cachedUrl = cachedUrl->next)
     }
 fprintf(f, "total sequences cached %d in %d ranges covering %d queries\n", 
     totalSeq, totalRanges, queryCount);
-fprintf(f, "basesRead %ld bases queried %ld\n", basesRead, basesQueried);
+fprintf(f, "basesRead %ld %3.1f%% of bases queried %ld\n", basesRead, 
+    100.0*basesRead/basesQueried, basesQueried);
 }
 

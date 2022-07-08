@@ -23,13 +23,14 @@ struct dnaSeq *cacheTwoBitRangesFetch(struct cacheTwoBitRanges *cacheAll,
 	char *url, char *seqName, int start, int end, boolean doRc, int *retOffset);
 /* Fetch a sequence from a twoBit cache. The result in retOffset is where the return dnaSeq
  * sits within the named sequence, the whole of which is stored in the subtracted 
- * associated twoBit file. Do not free the returned sequence. */
+ * associated twoBit file. Do not free the returned sequence. Complains and aborts if
+ * url not found, or if seqName not found in URL */
 
 struct dnaSeq *cacheTwoBitRangesMayFetch(struct cacheTwoBitRanges *cacheAll, 
 	char *url, char *seqName, int start, int end, boolean doRc, int *retOffset);
 /* Fetch a sequence from a twoBit cache. The result in retOffset is where the return dnaSeq
  * sits within the named sequence, the whole of which is stored in the subtracted 
  * associated twoBit file. Do not free the returned sequence. Returns NULL if sequence not
- * found */
+ * found in any of the files we are caching without complaint. */
 
 #endif /* CACHETWOBIT_H */
