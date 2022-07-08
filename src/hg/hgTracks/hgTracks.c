@@ -11042,8 +11042,10 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     notify(buf);
     }
+#ifdef DEBUG
 if (cdsQueryCache != NULL)
     cacheTwoBitRangesPrintStats(cdsQueryCache, stderr);
+#endif /* DEBUG */
 }
 
 void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
