@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use File::Basename;
 
+my %commonName;	# key is asmId, value is common name
+my @monthNumber = qw( Zero Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sep. Oct. Nov. Dec. );
+
 my $argc = scalar(@ARGV);
 if ($argc != 3) {
   printf STDERR "mkGenomes.pl blatHost blatPort [two column name list] > .../hub/genomes.txt\n";
@@ -27,8 +30,8 @@ my $blatHostDomain = ".soe.ucsc.edu";
 my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
 ################### writing out hub.txt file, twice ##########################
-sub singleFileHub($$$$$$$$$$$) {
-  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $defPos, $taxId, $trackDb, $accessionDir, $buildDir) = @_;
+sub singleFileHub($$$$$$$$$$$$) {
+  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $asmDate, $defPos, $taxId, $trackDb, $accessionDir, $buildDir) = @_;
   my @fhN;
   push @fhN, $fh1;
   push @fhN, $fh2;
@@ -64,6 +67,11 @@ sub singleFileHub($$$$$$$$$$$) {
      push @tdbLines, $tdbLine;
   }
   close (TD);
+  my $trimmedOrgName = $orgName;
+  $trimmedOrgName =~ s/$commonName{$asmId}//i;
+  $trimmedOrgName = $orgName if (length($trimmedOrgName) < 1);
+  my $assemblyName = $asmId;
+  $assemblyName =~ s/${accessionId}_//;
   foreach my $fh (@fhN) {
     printf $fh "hub %s genome assembly\n", $accessionId;
     printf $fh "shortLabel %s\n", $orgName;
@@ -84,7 +92,7 @@ sub singleFileHub($$$$$$$$$$$) {
     } else {
       printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
     }
-    printf $fh "organism %s\n", $orgName;
+    printf $fh "organism %s %s\n", $assemblyName, $asmDate;
     printf $fh "defaultPos %s\n", $defPos;
     printf $fh "scientificName %s\n", $descr;
     printf $fh "htmlPath html/%s.description.html\n", $asmId;
@@ -117,7 +125,6 @@ if ( ! -s "$orderList" ) {
   $orderList = $toolsDir/$inputList;
 }
 
-my %commonName;	# key is asmId, value is common name
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
 my $assemblyCount = 0;
@@ -187,13 +194,26 @@ foreach my $asmId (@orderList) {
 printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessionId;
   my $taxId=`grep -i "taxid:" $asmReport | head -1 | awk '{printf \$(NF)}' | tr -d \$'\\r'`;
   chomp $taxId;
-  my $descr=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
+  my $descr=`grep -i "organism name:" $asmReport | head -1 | tr -d \$'\\r' | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
   chomp $descr;
-  my $orgName=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.* name: .* (##; s#).*##;'`;
+  my $orgName=`grep -i "organism name:" $asmReport | head -1 | tr -d \$'\\r' | sed -e 's#.* name: .* (##; s#).*##;'`;
   chomp $orgName;
+  my $asmDate=`grep -i "Date" $asmReport | head -1 | tr -d \$'\\r'`;
+  chomp $asmDate;
+  $asmDate =~ s/.*Date:\s+//;
+  my ($year, $month, $day) = split('-', $asmDate);
+  $asmDate = sprintf("%s %s", $monthNumber[$month], $year);
+
   if (defined($commonName{$asmId})) {
      $orgName = $commonName{$asmId};
   }
+  my $trimmedOrgName = $orgName;
+  $trimmedOrgName =~ s/$commonName{$asmId}//i;
+  $trimmedOrgName =~ s/^\s+//;
+  $trimmedOrgName =~ s/\s+$//;
+  $trimmedOrgName = $orgName if (length($trimmedOrgName) < 1);
+  my $assemblyName = $asmId;
+  $assemblyName =~ s/${accessionId}_//;
 
   printf "genome %s\n", $accessionId;
   printf "taxId %s\n", $taxId if (length($taxId) > 1);
@@ -211,7 +231,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   } else {
     printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
   }
-  printf "organism %s\n", $orgName;
+  printf "organism %s %s\n", $assemblyName, $asmDate;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
   my $bigChrom=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$NF}'`;
@@ -255,7 +275,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   $localHubTxt = "$buildDir/${asmId}.singleFile.hub.txt";
   open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
 
-  singleFileHub(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId,
+  singleFileHub(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId, $asmDate,
 	$defPos, $taxId, $trackDb, $accessionDir, $buildDir);
 
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
@@ -273,7 +293,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   } else {
     printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
   }
-  printf GF "organism %s\n", $orgName;
+  printf GF "organism %s %s\n", $assemblyName, $asmDate;
   printf GF "defaultPos %s\n", $defPos;
   printf GF "scientificName %s\n", $descr;
   printf GF "htmlPath html/%s.description.html\n", $asmId;

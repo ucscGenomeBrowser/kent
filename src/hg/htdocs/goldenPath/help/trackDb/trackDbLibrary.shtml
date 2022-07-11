@@ -668,6 +668,14 @@
     <P>This example sets the second assembly in the alignment to the mouse mm10 assembly.</P>
 </DIV>
 
+<DIV class="otherTwoBitUrl"><span class="types chain bigChain psl bigPsl"></span>
+<div class="format"><code>otherTwoBitUrl &lt;url/relativePath&gt;</code></div>
+    <P>For pairwise alignment tracks this can specify where to find the query sequence
+    This setting can be used in psl, bigPsl, chain, and bigChain tracks.</P>
+    <P><B>Example:</B></P>
+    <pre>   otherTwoBitUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit</pre>
+</DIV>
+
 <DIV class="origAssembly"><span class="types all"></span>
 <div class="format"><code>origAssembly &lt;db&gt;</code></div>
     <P><I>NOT FOR HUBS.</I></P>
@@ -1218,7 +1226,7 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="bigDataUrl2"><span class="types bigBed bigWig bam vcfTabix"></span>
 <div class="format">
-    <code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+    <code>bigDataUrl2 &lt;url/relativePath&gt;</code></div>
     <P>This setting is for remote data file type
     tracks (e.g. bigWig) and is fully described in the "<A HREF="#bigDataUrl">Common
     trackDb settings</A>" portion of this document.</P>
@@ -2130,9 +2138,8 @@ There are no extra options that can appear on the type hic line.
 </DIV>
 
 <DIV class="baseColorUseSequence"><span class="types all"></span>
-<div class="format"><I>Related settings:</I><BR>
-    <code>baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; /
-                        hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
+<div class="format"><code>baseColorUseSequence  &lt;extFile {seqTable} /
+                  hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss / 2bit &gt;</code></div>
     <!-- DONNA -- redo -->
     <P>Specifies where
     item sequence can be found (if any) so that item sequence, or
@@ -2161,6 +2168,8 @@ There are no extra options that can appear on the type hic line.
     hg/lib/encode/pairedTagAlign.as)</LI>
     <LI>If <code>ss</code> is specified then a
     user-provided blat sequence is looked for.</LI>
+    <LI>If <code>2bit</code> is specified then looks for sequence in the file specified
+    by the <code>otherTwoBitUrl</code> tag.
     </UL>
 </DIV>
 

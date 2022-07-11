@@ -74,6 +74,8 @@
 #include "customComposite.h"
 #include "chromAlias.h"
 #include "jsonWrite.h"
+#include "cds.h"
+#include "cacheTwoBit.h"
 
 //#include "bed3Sources.h"
 
@@ -11040,6 +11042,10 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     notify(buf);
     }
+#ifdef DEBUG
+if (cdsQueryCache != NULL)
+    cacheTwoBitRangesPrintStats(cdsQueryCache, stderr);
+#endif /* DEBUG */
 }
 
 void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
@@ -11080,6 +11086,18 @@ if (parentTdb)
     parentTdb->longLabel = labelAddNote(parentTdb->longLabel, EMPTY_SUBTRACKS_HIDDEN);
 else
     tg->longLabel = labelAddNote(tg->longLabel, EMPTY_SUBTRACKS_HIDDEN);
+}
+
+void labelTrackAsDensity(struct track *tg)
+/* Add text to track long label to indicate density mode */
+{
+tg->longLabel = labelAddNote(tg->longLabel, "item density");
+}
+
+void labelTrackAsDensityWindowSize(struct track *tg)
+/* Add text to track long label to indicate density mode because window size exceeds some threshold */
+{
+tg->longLabel = labelAddNote(tg->longLabel, "item density shown - zoom in for individual items");
 }
 
 

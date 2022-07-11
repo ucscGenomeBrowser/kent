@@ -555,6 +555,21 @@ for (;;)
     }
 }
 
+boolean twoBitHasSeq(struct twoBitFile *tbf, char *name)
+/* Return TRUE if sequence of given name exists in two bit file */
+{
+if (tbf->bpt)
+    {
+    bits64 offset;
+    return bptFileFind(tbf->bpt, name, strlen(name), &offset, sizeof(offset));
+    }
+else
+    {
+    struct twoBitIndex *index = hashFindVal(tbf->hash, name);
+    return index != NULL;
+    }
+}
+
 static void twoBitSeekTo(struct twoBitFile *tbf, char *name)
 /* Seek to start of named record.  Abort if can't find it. */
 {

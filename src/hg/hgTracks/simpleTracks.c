@@ -364,21 +364,27 @@ rgbColor.b = (rgbColor.b+128)/2;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
+boolean winTooBigDoWiggle(struct cart *cart, struct track *tg)
+/* return true if we wiggle because the window size exceeds a certain threshold? */
+{
+boolean doWiggle = FALSE;
+char *setting = trackDbSetting(tg->tdb, "maxWindowCoverage" );
+if (setting)
+    {
+    unsigned size = sqlUnsigned(setting);
+    if ((size > 0) && ((winEnd - winStart) > size))
+        doWiggle = TRUE;
+    }
+return doWiggle;
+}
+
 boolean checkIfWiggling(struct cart *cart, struct track *tg)
 /* Check to see if a track should be drawing as a wiggle. */
 {
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 
 if (!doWiggle)
-    {
-    char *setting = trackDbSetting(tg->tdb, "maxWindowCoverage" );
-    if (setting)
-        {
-        unsigned size = sqlUnsigned(setting);
-        if ((size > 0) && ((winEnd - winStart) > size))
-            doWiggle = TRUE;
-        }
-    }
+    doWiggle = winTooBigDoWiggle(cart, tg);
 
 if (doWiggle && isEmpty(tg->networkErrMsg))
     {
@@ -3749,7 +3755,8 @@ boolean exonArrows = (tg->exonArrows &&
 		      (vis != tvDense || exonArrowsEvenWhenDense));
 boolean exonArrowsAlways = tg->exonArrowsAlways;
 struct psl *psl = NULL;
-struct dnaSeq *mrnaSeq = NULL;
+struct dnaSeq *qSeq = NULL;
+int qOffset = 0;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 Color saveColor = color;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
@@ -3774,7 +3781,7 @@ if (indelShowDoubleInsert && !hideLine)
   by codon, and setup if so.*/
 if (vis != tvDense)
     {
-    drawOpt = baseColorDrawSetup(hvg, tg, lf, &mrnaSeq, &psl);
+    drawOpt = baseColorDrawSetup(hvg, tg, lf, &qSeq, &qOffset, &psl);
     if (drawOpt > baseColorDrawOff)
 	exonArrows = FALSE;
     }
@@ -3904,7 +3911,7 @@ for (sf = components; sf != NULL; sf = sf->next)
         &&  s - 6 <  winEnd
         &&  (e-s <= 3 || !baseColorNeedsCodons))
             baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
-                              zoomedToCodonLevel, mrnaSeq, sf, psl, drawOpt, MAXPIXELS, winStart,
+                              zoomedToCodonLevel, qSeq, qOffset, sf, psl, drawOpt, MAXPIXELS, winStart,
                               color);
         else
             {
@@ -3964,12 +3971,12 @@ if (vis != tvDense)
     /* If highlighting differences between aligned sequence and genome when
      * zoomed way out, this must be done in a separate pass after exons are
      * drawn so that exons sharing the pixel don't overdraw differences. */
+    baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
+			  qSeq, qOffset, psl, winStart, drawOpt);
     if (indelShowQueryInsert || indelShowPolyA)
 	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
-				 mrnaSeq, psl, winStart, drawOpt,
+				 qSeq, qOffset, psl, font, winStart, drawOpt,
 				 indelShowQueryInsert, indelShowPolyA);
-    baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
-			  mrnaSeq, psl, winStart, drawOpt);
     }
 }
 

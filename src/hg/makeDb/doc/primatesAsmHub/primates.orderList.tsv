@@ -4,7 +4,7 @@ GCA_004363605.1_IndInd_v1_BIUU	babakoto
 GCF_001698545.2_ASM169854v2	black snub-nosed monkey (Rb0 v2 refseq 2016)
 GCA_004024785.1_AteGeo_v1_BIUU	black-handed spider monkey
 GCA_004027715.1_CalDon_v1_BIUU	Bolivian titi
-GCF_016699345.1_BCM_Sbol_2.0	Bolivian squirrel monkey (2021)
+GCF_016699345.2_BCM_Sbol_2.1	Bolivian squirrel monkey (100643 v2.1 BCM 2021)
 GCA_004027275.1_EulFul_v1_BIUU	brown lemur
 GCF_002880755.1_Clint_PTRv2	chimpanzee
 GCA_004024645.1_MizCoq_v1_BIUU	Coquerel's mouse lemur
@@ -21,6 +21,7 @@ GCF_000409795.2_Chlorocebus_sabeus_1.1	green monkey 1994-021 (2014 refseq)
 GCF_015252025.1_Vero_WHO_p1.0	green monkey WHO RCB 10-87
 GCA_004025065.1_SemEnt_v1_BIUU	Hanuman langur
 GCF_000001405.39_GRCh38.p13	human
+# GCF_000001405.40_GRCh38.p14	human
 # GCA_009914755.4_CHM13_T2T_v2.0	human CHM13 T2T v2.0
 # GCA_009914755.4_T2T-CHM13v2.0	human T2T CHM13 v2.0
 GCA_021951015.1_HG002.mat.cur.20211005	human HG002 maternal
@@ -47,8 +48,11 @@ GCF_000955945.1_Caty_1.0	sooty mangabey
 GCF_002880775.1_Susie_PABv2	Sumatran orangutan (2018 refseq)
 GCA_004024885.1_SagImp_v1_BIUU	tamarin
 GCF_009761245.1_GSC_monkey_1.0	tufted capuchin
-GCF_002776525.3_ASM277652v3	Ugandan red Colobus
+GCF_002776525.4_ASM277652v4	Ugandan red Colobus (RC106 v4 2019)
 GCF_008122165.1_Kamilah_GGO_v0	western lowland gorilla (Kamilah 2019)
 GCA_004026645.1_PitPit_v1_BIUU	white-faced saki
 GCA_004027755.1_CebAlb_v1_BIUU	white-fronted capuchin
 GCF_009663435.1_Callithrix_jacchus_cj1700_1.1	white-tufted-ear marmoset (cj1700 2020)
+GCA_011078405.1_mCalJac1.mat	white-tufted-ear marmoset (maternal 2020 VGP)
+GCA_011100535.1_mCalJac1.pat	white-tufted-ear marmoset (paternal 2020 VGP)
+GCA_011100555.1_mCalJac1.pat.X	white-tufted-ear marmoset (paternal X 2020 VGP)
