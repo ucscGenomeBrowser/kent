@@ -4149,7 +4149,6 @@ searchType bigBed
 termRegex (LRG_[0-9]+)|(NG_[0-9]+\.[0-9]+)
 semiShortCircuit 1
 searchPriority 49
-release alpha
 
 searchTable lrgBigPsl
 searchMethod exact
