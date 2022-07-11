@@ -52,6 +52,7 @@
 <li><a href="#download39">'Permisssion denied' error when trying to use command-line utilities</a></li>
 <li><a href="#download40">Restricted Track Data</a></li>
 <li><a href="#downloadAnalysis">What is the genome analysis set?</a></li>
+<li><a href="#downloadGenArk">How do I download GenArk data?</li>
 </ul>
 <hr>
 <p>
@@ -1183,6 +1184,33 @@ FAQ</a>. Information on what is contained in each specific assembly analysis set
 found in the README by clicking the <strong>Genome sequence files</strong> link for the 
 assembly of interest in our 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads page</a>.
+</p>
+
+<a name="downloadGenArk"></a>
+<h2>GenArk Downloads</h2>
+<h6>How do I download GenArk assembly hub data for my species?</h6>
+<p>
+For 2000+ GenArk genomes, we visualize them in assembly hubs instead of native 
+assemblies like hg38 and mm39. These Genome Browsers can be accessed from our 
+<a href="../cgi-bin/hgGateway">Genomes page</a> by searching common name or GCA/GCF
+number. You can also access the browsers for these species directly with links in the
+following format:</p>
+<pre><a href="https://genome.ucsc.edu/h/GCF_000951035.1">https://genome.ucsc.edu/h/GCF_000951035.1</a></pre>
+<p>
+The downloads data for these assemblies is stored in a different location
+than our goldenPath, SQL, or gbdb file directories. There are two ways to access 
+this data for download. First, you can go to the 
+<a href="https://hgdownload.soe.ucsc.edu/hubs">GenArk page</a>
+and select your clade (primates, mammals, birds, etc.) and then
+you will be brought to a page with a table of species and 
+GCA/GCF assembly identifiers. Find your genome and click on the third column, 
+labeled "Scientific name and data download", which will take you to the download 
+directory for that species. 
+</p><p>
+Alternatively, you can enter your GCA/GCF identifier 
+in the URL in groups of three characters, seperated by slashes. For example, the 
+identifier "GCA_004027835.1" has data in the following directory:
+<pre>https://hgdownload.soe.ucsc.edu/hubs/GCA/004/027/835/</pre>
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
