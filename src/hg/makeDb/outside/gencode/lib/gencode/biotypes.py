@@ -71,8 +71,7 @@ class BioType(SymEnum):
     vault_RNA = auto()
     protein_coding_LoF = auto()
     artifact = auto()
-    artefactual_duplication = auto()
-
+    artifactual_duplication = auto()
 
 GencodeFunction = SymEnum("GencodeFunction", ("pseudo", "coding", "nonCoding", "problem"))
 
@@ -137,7 +136,7 @@ bioTypesProblem = frozenset([BioType.retained_intron,
                              BioType.disrupted_domain,
                              BioType.ambiguous_orf,
                              BioType.artifact,
-                             BioType.artefactual_duplication])
+                             BioType.artifactual_duplication])
 
 assert((bioTypesCoding | bioTypesNonCoding | bioTypesProblem | bioTypesPseudo) == frozenset(BioType))
 
