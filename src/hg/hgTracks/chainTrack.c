@@ -132,7 +132,7 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 }
 
-static void chainDraw(struct track *tg, int seqStart, int seqEnd,
+void chainDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chained features. This loads up the simple features from
@@ -143,7 +143,10 @@ struct linkedFeatures *lf;
 struct simpleFeature *sf;
 struct lm *lm;
 struct hash *hash;	/* Hash of chain ids. */
+#ifdef OLD
 double scale = ((double)(winEnd - winStart))/width;
+#endif /* OLD */
+
 char fullName[64];
 int start, end, extra;
 struct simpleFeature *lastSf = NULL;
@@ -190,8 +193,10 @@ hash = newHash(0);
  * since these would always appear solid. */
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
+#ifdef OLD
     double pixelWidth = (lf->end - lf->start) / scale;
     if (pixelWidth >= 2.5)
+#endif /* OLD */
 	{
 	hashAdd(hash, lf->extra, lf);
 	overRight = lf->end - seqEnd;
@@ -201,6 +206,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 	if (overLeft > maxOverLeft)
 	    maxOverLeft = overLeft;
 	}
+#ifdef OLD
     else
 	{
 	lmAllocVar(lm, sf);
@@ -209,9 +215,10 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 	sf->grayIx = lf->grayIx;
 	lf->components = sf;
 	}
+#endif /* OLD */
     }
 
-/* if some chains are bigger than 3 pixels */
+/* if some chains are actually loaded */
 if (hash->size)
     {
     boolean isSplit = TRUE;
@@ -452,6 +459,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     AllocVar(lf);
     lf->start = lf->tallStart = chain.tStart;
     lf->end = lf->tallEnd = chain.tEnd;
+    lf->qSize = chain.qSize;
     lf->grayIx = maxShade;
     if (chainCart->chainColor == chainColorScoreColors)
 	{

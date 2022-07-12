@@ -3755,7 +3755,8 @@ boolean exonArrows = (tg->exonArrows &&
 		      (vis != tvDense || exonArrowsEvenWhenDense));
 boolean exonArrowsAlways = tg->exonArrowsAlways;
 struct psl *psl = NULL;
-struct dnaSeq *mrnaSeq = NULL;
+struct dnaSeq *qSeq = NULL;
+int qOffset = 0;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 Color saveColor = color;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
@@ -3780,7 +3781,7 @@ if (indelShowDoubleInsert && !hideLine)
   by codon, and setup if so.*/
 if (vis != tvDense)
     {
-    drawOpt = baseColorDrawSetup(hvg, tg, lf, &mrnaSeq, &psl);
+    drawOpt = baseColorDrawSetup(hvg, tg, lf, &qSeq, &qOffset, &psl);
     if (drawOpt > baseColorDrawOff)
 	exonArrows = FALSE;
     }
@@ -3910,7 +3911,7 @@ for (sf = components; sf != NULL; sf = sf->next)
         &&  s - 6 <  winEnd
         &&  (e-s <= 3 || !baseColorNeedsCodons))
             baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
-                              zoomedToCodonLevel, mrnaSeq, sf, psl, drawOpt, MAXPIXELS, winStart,
+                              zoomedToCodonLevel, qSeq, qOffset, sf, psl, drawOpt, MAXPIXELS, winStart,
                               color);
         else
             {
@@ -3970,12 +3971,12 @@ if (vis != tvDense)
     /* If highlighting differences between aligned sequence and genome when
      * zoomed way out, this must be done in a separate pass after exons are
      * drawn so that exons sharing the pixel don't overdraw differences. */
+    baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
+			  qSeq, qOffset, psl, winStart, drawOpt);
     if (indelShowQueryInsert || indelShowPolyA)
 	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
-				 mrnaSeq, psl, winStart, drawOpt,
+				 qSeq, qOffset, psl, font, winStart, drawOpt,
 				 indelShowQueryInsert, indelShowPolyA);
-    baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
-			  mrnaSeq, psl, winStart, drawOpt);
     }
 }
 

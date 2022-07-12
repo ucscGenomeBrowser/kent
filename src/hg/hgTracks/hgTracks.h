@@ -405,6 +405,7 @@ struct linkedFeatures
 #endif
     boolean isBigGenePred;
     char *label;                        /* Label for bigBeds. */
+    int qSize;				/* Query size for chain/bigChain */
     };
 
 struct linkedFeaturesSeries
@@ -1286,6 +1287,13 @@ void bamLinkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis);
 /* Draw BAM linked features series items. */
+
+void chainDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis);
+/* Draw chained features. This loads up the simple features from
+ * the chainLink table, calls linkedFeaturesDraw, and then
+ * frees the simple features again. */
 
 void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,

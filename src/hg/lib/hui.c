@@ -1344,12 +1344,13 @@ if (isNotEmpty(setting))
 	sameString(setting, "ss") || startsWith("extFile", setting) ||
 	sameString(setting, "hgPcrResult") || sameString(setting, "nameIsSequence") ||
 	sameString(setting, "seq1Seq2") || sameString(setting, "lfExtra") ||
-	sameString(setting, "lrg") || startsWith("table ", setting) || startsWithWord("db", setting))
+	sameString(setting, "lrg") || sameString(setting, "2bit") ||
+	startsWith("table ", setting) || startsWithWord("db", setting))
 	gotIt = TRUE;
     else if (differentString(setting, "none"))
 	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
 		 "must be one of {none, genbank, seq, ss, extFile, nameIsSequence, seq1Seq2,"
-		 "hgPcrResult, lfExtra, lrg, table <em>table</em>}.",
+		 "hgPcrResult, lfExtra, lrg, 2bit, table <em>table</em>}.",
 		 tdb->track, BASE_COLOR_USE_SEQUENCE, setting);
     }
 return gotIt;
@@ -1453,8 +1454,9 @@ return alreadySet;
 static boolean indelAppropriate(struct trackDb *tdb)
 /* Return true if it makes sense to offer indel display options for tdb. */
 {
-return (tdb && (startsWith("psl", tdb->type) ||startsWith("bigPsl", tdb->type) || sameString("bam", tdb->type) ||
-		sameString("lrg", tdb->track)));
+return (tdb && (startsWith("psl", tdb->type) || startsWith("bigPsl", tdb->type) || 
+    startsWithWord("chain", tdb->type) || startsWithWord("bigChain", tdb->type) ||
+    sameString("bam", tdb->type) || sameString("lrg", tdb->track)));
 }
 
 static void indelEnabledByName(struct cart *cart, struct trackDb *tdb, char *name,
