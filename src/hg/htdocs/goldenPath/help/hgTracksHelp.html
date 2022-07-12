@@ -639,13 +639,14 @@ you may also replace a section of the reference genome with an alternate haploty
 order to view annotations upstream and downstream of the sequence. For more information about the 
 multi-region feature see the <a href="./multiRegionHelp.html">multi-region help</a> page.</p>
 
+<h3 id="config">Configuration panel</h3>
 <div class="text-center">
   <a href ="/cgi-bin/hgTracks?hgTracksConfigPage=configure">
     <img src="../../images/configureMenu.png" alt="Configuration menu options" width="700">
   </a>
 </div>
 
-<h3>Changing the width of the annotation track window</h3>
+<h4>Changing the width of the annotation track window</h4>
 <p>
 The first time the annotation track window is displayed, or after the Genome Browser has been reset,
 the size of the track window is set by default to the width that best fits your Internet browser 
@@ -655,14 +656,14 @@ manually override the default width, enter a new value in the <em>image width</e
 Track Configuration page, then click the <em>submit</em> button. The maximum supported width is 5000
 pixels.</p>
 
-<h3>Changing the width of the label area to the left of the image</h3>
+<h4>Changing the width of the label area to the left of the image</h4>
 <p>
 The item labels (or track label, when viewed in dense mode) are displayed to the left of the 
 annotation image. The width of this area is set to 17 characters by default. To change the width, 
 edit the value in the <em>label area width</em> text box on the Track Configuration page, then click
 <em>Submit</em>.</p>
 
-<h3>Changing the text size, font, in the annotation track image</h3>
+<h4>Changing the text size, font, in the annotation track image</h4>
 <p>
 The annotation track image may be adjusted to display text in a range of fonts from
 AvantGarde, Courier, and Times. To change the size of the text, select an option from
@@ -672,7 +673,7 @@ href="/cgi-bin/hgTracks?hgTracksConfigPage=configure"><em>Configure</em></a>.
 Once you have made your selection, which can also include <em>style</em> click <em>submit</em>.
 The text size is set to &quot;12&quot; and &quot;Helvetica&quot; by default.</p>
 
-<h3>Hiding the chromosome ideogram</h3>
+<h4>Hiding the chromosome ideogram</h4>
 <p>
 The chromosome ideogram, located just above the annotation tracks image, provides a graphical 
 overview of the features on the selected chromosome, including its bands, the position of the 
@@ -680,19 +681,25 @@ centromere, and an indication of the region currently displayed in the annotatio
 hide the ideogram, uncheck the <em>Display chromosome ideogram above main graphic</em> box on the 
 Tracks Configuration page.</p>
 
-<h3>Hiding the light blue vertical guidelines</h3>
+<h4>Hiding the light blue vertical guidelines</h4>
 <p>
 The light blue vertical guidelines on the annotation tracks image may be removed by unchecking the
 <em>Show light blue vertical guidelines</em> box on the Track Configuration page.</p>
 
-<h3>Hiding the annotation track labels and description</h3>
+<h4>Hiding the annotation track labels and description</h4>
 <p>
 The track and element labels displayed above and to the left of the tracks in the annotation tracks
 image may be hidden from view by unchecking the <em>Display track descriptions above each track</em>
 and <em>Display labels to the left of items in tracks</em> boxes, respectively, on the Track
 Configuration page.</p>
 
-<h3 id="nextItem">Enabling next/previous item and exon navigation</h3>
+<h4 id="nextItem">Enabling next/previous item and exon navigation</h4>
+<div class="text-center">
+  <a href ="/cgi-bin/hgTracks?db=hg38&position=chr10:67,881,992-67,890,592&hideTracks=1&knownGene=pack&omimAvSnp=pack&nextItemArrows=1">
+  <img src="../../images/nextItem.png" alt="Ex. white/gray arrows for next/previous exon/item" width="700"></a>
+  <p class="gbsCaption text-center">Gray arrows jump to the next item,
+  while white arrows advance to the next exon.</p>
+</div>
 <p>
 When the <em>Next/previous item navigation</em> configuration option is toggled on, on the Track 
 Configuration page,  gray double-headed arrows display in the Genome Browser tracks image on both 
@@ -705,12 +712,6 @@ window to the next exon in the indicated direction, unless the image window inte
 which case the window shifts to the edge of the current exon. If the image window happens to be 
 within a 5' or 3' UTR, then clicking the arrows shifts the image window towards the start or end of 
 the next coding region, not the end of the exon.</p>
-<div class="text-center">
-  <a href ="/cgi-bin/hgTracks?db=hg38&position=chr10:67,881,992-67,890,592&hideTracks=1&knownGene=pack&omimAvSnp=pack&nextItemArrows=1">
-  <img src="../../images/nextItem.png" alt="Ex. white/gray arrows for next/previous exon/item" width="700"></a>
-  <p class="gbsCaption text-center">Gray arrows jump to the next item,
-  while white arrows advance to the next exon.</p>
-</div>
 
 <a name="RIGHT_CLICK_NAV"></a>
 <h3>Using the right-click navigation feature</h3>
@@ -719,7 +720,7 @@ Several of the common display and navigation operations offered on the Genome Br
 may be quickly accessed by right-clicking on a feature on the tracks image and selecting an option 
 from the displayed popup menu.</p>
 <div class="text-center">
-  <a href ="/cgi-bin/hgTracks?db=hg38&position=chr21%3A31657975-31667213&hgt.reset=1&hgFind.matches=ENST00000270142.11&knownGene.show.noncoding=0&knownGene.show.spliceVariants=0">
+  <a target="_blank" href="/cgi-bin/hgTracks?db=hg38&position=chr21%3A31657975-31667213&hgt.reset=1&hgFind.matches=ENST00000270142.11&knownGene.show.noncoding=0&knownGene.show.spliceVariants=0">
   <img src="../../images/right_click_example.png" alt="Example right-click to highlight a gene" width="700">
   </a>
 </div>
@@ -1261,7 +1262,9 @@ assemblies.
 <h3>Command-line coordinate lifting</h3>
 <p>
 The command-line version of liftOver offers the increased flexibility and performance gained by 
-running the tool on your local server. This utility requires access to a Linux platform. The 
+running the tool on your local server. See an example of
+<a href="../../FAQ/FAQdownloads.html#liftOver">running the liftOver tool</a> on the command line.
+This utility requires access to a Linux platform. The
 executable file may be downloaded <a href="https://genome-store.ucsc.edu">here</a>.
 Command-line liftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated 
 files for a given assembly can be accessed from the assembly's &quot;LiftOver files&quot; link on 

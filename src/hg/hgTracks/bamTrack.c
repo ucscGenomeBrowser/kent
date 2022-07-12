@@ -612,7 +612,8 @@ char *exonArrowsDense = trackDbSettingClosestToHome(tg->tdb, "exonArrowsDense");
 boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL && SETTING_IS_ON(exonArrowsDense));
 boolean exonArrows = (tg->exonArrows &&
 		      (vis != tvDense || exonArrowsEvenWhenDense));
-struct dnaSeq *mrnaSeq = NULL;
+struct dnaSeq *qSeq = NULL;
+int qOffset = 0;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 struct psl *psl = (struct psl *)(lf->original);
@@ -620,10 +621,10 @@ char *colorMode = cartOrTdbString(cart, tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_
 char *grayMode = cartOrTdbString(cart, tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
 bool baseQualMode = (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
 		     sameString(grayMode, BAM_GRAY_MODE_BASE_QUAL));
-char *qSeq = lf->extra;
-if (vis != tvDense && isNotEmpty(qSeq) && !sameString(qSeq, "*"))
+char *qSeqName = lf->extra;
+if (vis != tvDense && isNotEmpty(qSeqName) && !sameString(qSeqName, "*"))
     {
-    drawOpt = baseColorDrawSetup(hvg, tg, lf, &mrnaSeq, &psl);
+    drawOpt = baseColorDrawSetup(hvg, tg, lf, &qSeq, &qOffset, &psl);
     if (drawOpt > baseColorDrawOff)
 	exonArrows = FALSE;
     }
@@ -659,7 +660,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (baseQualMode)
 	color = tg->colorShades[sf->grayIx];
     baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
-		      zoomedToCodonLevel, mrnaSeq, sf, psl, drawOpt, MAXPIXELS, winStart, color);
+		      zoomedToCodonLevel, qSeq, qOffset, sf, psl, drawOpt, MAXPIXELS, winStart, color);
     if (tg->exonArrowsAlways ||
 	(exonArrows &&
 	 (sf->start <= winStart || sf->start == lf->start) &&
@@ -686,9 +687,9 @@ if (vis != tvDense)
      * zoomed way out, this must be done in a separate pass after exons are
      * drawn so that exons sharing the pixel don't overdraw differences. */
     if ((indelShowQueryInsert || indelShowPolyA) && psl)
-	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer, mrnaSeq, psl, winStart,
+	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer, qSeq, qOffset, psl, font, winStart,
 				 drawOpt, indelShowQueryInsert, indelShowPolyA);
-    baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer, mrnaSeq, psl, winStart, drawOpt);
+    baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer, qSeq, qOffset, psl, winStart, drawOpt);
     }
 }
 

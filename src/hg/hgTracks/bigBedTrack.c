@@ -638,6 +638,11 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 if (filtered)
    labelTrackAsFilteredNumber(track, filtered);
 
+if (cartOrTdbBoolean(cart, track->tdb, "doWiggle", FALSE))
+    labelTrackAsDensity(track);
+else if (winTooBigDoWiggle(cart, track))
+    labelTrackAsDensityWindowSize(track);
+    
 if (doWindowSizeFilter)
     // add the number of merged items to the track longLabel
     {

@@ -45,7 +45,8 @@ The algorithms included in this track are:
     <li><b><a href="https://stuart.radboudumc.nl/metadome/" target="_blank">
     MetaDome - Tolerance Landscape Score</a> (hg19 only)</b>:
     MetaDome Tolerance Landscape scores are computed as a missense over synonymous 
-    variant count ratio, which is calculated in a sliding window manner to provide 
+    variant count ratio, which is calculated in a sliding window (with a size of 21 
+    codons/residues) manner to provide 
     a per-position indication of regional tolerance to missense variation. The 
     variants are based on gnomAD and corrected for codon composition. Scores 
     &lt;0.7 are considered intolerant.
@@ -201,6 +202,9 @@ utility.</p>
 <p>
 See the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
 target=_blank>hg19 makeDoc</a> for details including the build script.</p>
+<p>
+The raw MetaDome data can also be accessed via their <a target="_blank" 
+href="https://zenodo.org/record/6625251">Zenodo handle</a>.</p>
 
 <h3>MTR</h3> 
 <p>

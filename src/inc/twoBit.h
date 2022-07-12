@@ -95,6 +95,9 @@ struct twoBitFile *twoBitOpenExternalBptIndex(char *twoBitName, char *bptName);
 void twoBitClose(struct twoBitFile **pTbf);
 /* Free up resources associated with twoBitFile. */
 
+boolean twoBitHasSeq(struct twoBitFile *tbf, char *name);
+/* Return TRUE if sequence of given name exists in two bit file */
+
 int twoBitSeqSize(struct twoBitFile *tbf, char *name);
 /* Return size of sequence in two bit file in bases. */
 

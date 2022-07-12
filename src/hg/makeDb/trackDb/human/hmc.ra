@@ -16,3 +16,4 @@ viewLimitsMax 0:2
 yLineMark 0.8
 yLineOnOff on
 priority 2
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 5, 2022"
