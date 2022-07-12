@@ -1036,3 +1036,30 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
     jkmake alpha DBS=hg19
 
 ##############################################################################
+2022-07-12: import of UCSC GENCODE group processing of GENCODE V41lift37 release (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV41lift37/hgcImport
+    pushd /hive/data/genomes/hg19/bed/gencodeV41lift37/hgcImport
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbs hg19 41lift37 107 'July 2022'
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+    jkmake DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV41lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV41lift37/hgcImport
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+    jkmake alpha DBS=hg19
+
+##############################################################################
