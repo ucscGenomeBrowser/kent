@@ -269,5 +269,5 @@
 
     # check tracks in browser sandbox
     # commit all
-    make DBS=mm39 alpha
+    jkmake DBS=mm39 alpha
 ##############################################################################
