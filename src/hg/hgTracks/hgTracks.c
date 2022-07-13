@@ -11091,7 +11091,7 @@ else
 void labelTrackAsDensity(struct track *tg)
 /* Add text to track long label to indicate density mode */
 {
-tg->longLabel = labelAddNote(tg->longLabel, "item density");
+tg->longLabel = labelAddNote(tg->longLabel, "item density shown");
 }
 
 void labelTrackAsDensityWindowSize(struct track *tg)
