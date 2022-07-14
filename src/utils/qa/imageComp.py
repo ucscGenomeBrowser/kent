@@ -94,7 +94,7 @@ def imageCompare(imageFiles,serverDir2,serverDir1,diffImagesDir):
                 noDiffImages.append(image)
     return(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages)
         
-def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages):
+def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages,diffImagesDir,publicHtmlDirToSave,publicHtmlDirToView,serverUrl1,sessionUser1,sessionName1,serverUrl2,sessionUser2,sessionName2):
     '''Report findings, if differences found create symlinks to public html'''
     if noDiffImages != []:
         print("No differences seen in the following session(s):")
@@ -142,6 +142,6 @@ def main():
     if diffImages == []: #Check if there is anything to report - that way cron does not output
         pass
     else:
-        reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages)
+        reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages,diffImagesDir,publicHtmlDirToSave,publicHtmlDirToView,serverUrl1,sessionUser1,sessionName1,serverUrl2,sessionUser2,sessionName2)
     
 main()
