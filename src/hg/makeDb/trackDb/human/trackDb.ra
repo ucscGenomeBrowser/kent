@@ -4150,21 +4150,12 @@ termRegex (LRG_[0-9]+)|(NG_[0-9]+\.[0-9]+)
 semiShortCircuit 1
 searchPriority 49
 
-searchTable lrgBigPsl
+searchTable lrgTranscriptAli
 searchMethod exact
 searchType bigBed
 termRegex LRG_[0-9]+t[0-9]+
 semiShortCircuit 1
 searchPriority 50
-release alpha
-
-searchTable lrgTranscriptAli
-searchMethod exact
-searchType psl
-termRegex LRG_[0-9]+t[0-9]+
-semiShortCircuit 1
-searchPriority 50
-release beta,public
 
 searchName lrgTranscriptAliNoTNum
 searchTable lrgTranscriptAli
