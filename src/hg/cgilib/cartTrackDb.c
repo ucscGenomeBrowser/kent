@@ -47,7 +47,7 @@ for (tdb = list;  tdb != NULL;  tdb = nextTdb)
 
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (useAC && tbOff != NULL &&
-        (startsWithWord("off", tbOff) || startsWithWord("noGenome", tbOff)))
+        (startsWithWord("off", tbOff) || startsWithWord("noGenome", tbOff) || startsWithWord("tbNoGenome", tbOff)))
         {
         slAddHead(&accessControlTrackRefList, slRefNew(tdb));
         if (! startsWithWord("off", tbOff))
@@ -268,9 +268,14 @@ for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     if (isEmpty(tbOff))
         errAbort("accessControlInit bug: tdb for %s does not have tableBrowser setting",
                  tdb->track);
-    // First word is "off" or "noGenome":
+    // First word is "off" or "noGenome" or "tbNoGenome":
     char *type = nextWord(&tbOff);
+
     boolean isNoGenome = sameString(type, "noGenome");
+    if (!isNoGenome)
+        isNoGenome = sameString(type, "tbNoGenome"); // like 'noGenome' but only in the table browser, not the API 
+        // since the API does not use this function
+
     // Add track table to acHash:
     acHashAddOneTable(acHash, tdb->table, NULL, isNoGenome);
     // Remaining words are additional table names to add:
