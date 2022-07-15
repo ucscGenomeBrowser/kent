@@ -12,6 +12,9 @@ for db in allDbs:
     if db == 'mm9':
         if '  0 hgw1.only' not in str(checkSyncResults) and '  4 hgwbeta.only' not in str(checkSyncResults):
             troubleDbs.append(db)
+    elif db == 'mm39':
+        if '  2 hgw1.only' not in str(checkSyncResults) and '  2 hgwbeta.only' not in str(checkSyncResults):
+            troubleDbs.append(db)
     elif db == 'hg18':
         if '  0 hgw1.only' not in str(checkSyncResults) and '  4 hgwbeta.only' not in str(checkSyncResults):
             troubleDbs.append(db)
@@ -19,7 +22,7 @@ for db in allDbs:
         if '  0 hgw1.only' not in str(checkSyncResults) and '  5 hgwbeta.only' not in str(checkSyncResults):
             troubleDbs.append(db)
     elif db == 'hg38':
-        if '  0 hgw1.only' not in str(checkSyncResults) and '  3 hgwbeta.only' not in str(checkSyncResults):
+        if '  3 hgw1.only' not in str(checkSyncResults) and '  3 hgwbeta.only' not in str(checkSyncResults):
             troubleDbs.append(db)
     else:
         if '  0 hgw1.only' not in str(checkSyncResults) and '  2 hgwbeta.only' not in str(checkSyncResults):
