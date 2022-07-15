@@ -67,9 +67,6 @@ sub singleFileHub($$$$$$$$$$$$) {
      push @tdbLines, $tdbLine;
   }
   close (TD);
-  my $trimmedOrgName = $orgName;
-  $trimmedOrgName =~ s/$commonName{$asmId}//i;
-  $trimmedOrgName = $orgName if (length($trimmedOrgName) < 1);
   my $assemblyName = $asmId;
   $assemblyName =~ s/${accessionId}_//;
   foreach my $fh (@fhN) {
@@ -198,20 +195,19 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   chomp $descr;
   my $orgName=`grep -i "organism name:" $asmReport | head -1 | tr -d \$'\\r' | sed -e 's#.* name: .* (##; s#).*##;'`;
   chomp $orgName;
-  my $asmDate=`grep -i "Date" $asmReport | head -1 | tr -d \$'\\r'`;
+  my $asmDate=`grep -i "Date:" $asmReport | head -1 | tr -d \$'\\r'`;
   chomp $asmDate;
   $asmDate =~ s/.*Date:\s+//;
   my ($year, $month, $day) = split('-', $asmDate);
-  $asmDate = sprintf("%s %s", $monthNumber[$month], $year);
+  if (defined($month)) {
+    $asmDate = sprintf("%s %s", $monthNumber[$month], $year);
+  } else {
+    printf STDERR "# error: can not find month in $asmDate in $asmReport\n";
+  }
 
   if (defined($commonName{$asmId})) {
      $orgName = $commonName{$asmId};
   }
-  my $trimmedOrgName = $orgName;
-  $trimmedOrgName =~ s/$commonName{$asmId}//i;
-  $trimmedOrgName =~ s/^\s+//;
-  $trimmedOrgName =~ s/\s+$//;
-  $trimmedOrgName = $orgName if (length($trimmedOrgName) < 1);
   my $assemblyName = $asmId;
   $assemblyName =~ s/${accessionId}_//;
 

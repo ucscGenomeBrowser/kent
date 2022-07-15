@@ -1908,6 +1908,8 @@ if (sepFields)
     slFreeList(sepFields);
 
 if (embeddedTblFields)
+    printf("<br><table class='bedExtraTbl'>\n");
+    printf("</table>\n");
     {
     struct embeddedTbl *thisTbl;
     struct dyString *tableLabelsDy = dyStringNew(0);
@@ -1915,9 +1917,12 @@ if (embeddedTblFields)
         {
         if (thisTbl->encodedTbl)
             {
+            dyStringPrintf(tableLabelsDy, "var _jsonHgcLabels = [");
             printEmbeddedTable(tdb, thisTbl, tableLabelsDy);
+            dyStringPrintf(tableLabelsDy, "];\n");
             }
         }
+
     jsInline(dyStringCannibalize(&tableLabelsDy));
     }
 
