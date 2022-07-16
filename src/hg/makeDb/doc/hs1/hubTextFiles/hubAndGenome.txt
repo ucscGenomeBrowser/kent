@@ -1,25 +1,25 @@
-hub hs1  genome assembly
-shortLabel hs1
-longLabel hs1
-email hclawson@ucsc.edu
+hub hs1 genome assembly
+shortLabel Human T2T-CHM13 v2.0
+longLabel Human T2T-CHM13 v2.0 (Jan. 2022/hs1/GCA_009914755.4)
+email genome-www@soe.ucsc.edu
 descriptionUrl html/description.html
 useOneFile on
 
 genome hs1
 taxId 9606
 groups ../groups.txt
-description hs1 T2T-CHM13 v2.0
+description T2T-CHM13 v2.0
 twoBitPath ../../hs1.2bit
 #twoBitBptUrl GCA_009914755.4.2bit.bpt
 chromSizes GCA_009914755.4.chrom.sizes.txt
 chromAliasBb ../chromAlias.bb
-organism human
+organism human/chm13
 defaultPos chr1:145458455-145495201
 scientificName Homo sapiens
 htmlPath html/GCA_009914755.4_T2T-CHM13v2.0.description.html
-blat dynablat-01.soe.ucsc.edu 4040 dynamic GCA/009/914/755/GCA_009914755.4
-transBlat dynablat-01.soe.ucsc.edu 4040 dynamic GCA/009/914/755/GCA_009914755.4
-isPcr dynablat-01.soe.ucsc.edu 4040 dynamic GCA/009/914/755/GCA_009914755.4
+blat dynablat-01.soe.ucsc.edu 4040 dynamic hs1
+transBlat dynablat-01.soe.ucsc.edu 4040 dynamic hs1
+isPcr dynablat-01.soe.ucsc.edu 4040 dynamic hs1
 liftOver.GCA_021950905.1 liftOver/GCA_009914755.4ToGCA_021950905.1.over.chain.gz
 liftOver.GCA_021951015.1 liftOver/GCA_009914755.4ToGCA_021951015.1.over.chain.gz
 liftOver.hg19 liftOver/GCA_009914755.4ToHg19.over.chain.gz
