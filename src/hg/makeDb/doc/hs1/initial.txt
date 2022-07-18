@@ -42,3 +42,16 @@ make DBS=hs1
 insert into dbDb values('hs1','hs1 - t2t chm13','hub:/gbdb/hs1/hubs','Human','chrX:15,177,876-15,185,140',1,2003, 'Human','','',0,0,'',1);
 
 # fix paths to chromAlias.bb and twoBitPath and groups
+
+# 2022-07-15 markd:
+# convert bbi and ixIxx to real directories:
+
+  mkdir bbi.new/
+  for f in bbi/* ; do ln -s $(realpath $f) bbi.new/$(basename $f) ;done
+  rm bbi
+  mv bbi.new bbi
+
+  mkdir ixIxx.new
+  for f in ixIxx/* ; do ln -s $(realpath $f) ixIxx.new/$(basename $f) ;done
+  rm ixIxx
+  mv ixIxx.new ixIxx

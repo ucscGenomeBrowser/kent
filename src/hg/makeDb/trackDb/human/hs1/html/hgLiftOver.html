@@ -113,6 +113,12 @@ For the minimap2-based pipeline, the initial chain file was generated using
 Full commands with parameters used were:
 </p>
 <pre><code>
+    nextflow run main.nf --source GRCh38.fa --target chm13v2.0.fasta --outdir dir -profile local --aligner minimap2
+    python chaintools/src/split.py -c input.chain -o input-split.chain
+    python chaintools/src/to_paf.py -c input-split.chain -t target.fa -q query.fa -o input-split.paf
+    awk '$$1==$$6' input-split.paf | rb break-paf --max-size 10000  | rb trim-paf -r | rb invert | rb trim-paf -r | rb invert > out.paf
+    paf2chain -i out.paf > out.chain
+    python chaintools/src/invert.py -c out.chain -o out_inverted.chain
 </code></pre>
 
 <p>
