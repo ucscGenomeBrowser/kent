@@ -46,6 +46,12 @@ track tRNAs override
 track gap override
 visibility hide
 
+track decipher override
+pennantIcon snowflake.png https://www.deciphergenomics.org/about/faqs "This track on hg19 has been frozen in its current state and will receive no further updates. The hg38 version of this track is regularly updated to reflect the most recent DECIPHER release."
+
+track decipherSnvs override
+pennantIcon snowflake.png https://www.deciphergenomics.org/about/faqs "This track on hg19 has been frozen in its current state and will receive no further updates. The hg38 version of this track is regularly updated to reflect the most recent DECIPHER release."
+
 track patSeq override
 url https://www.lens.org/lens/bio/patseqanalyzer#psa/homo_sapiens/latest/chromosome/$s/${-$}?appInClaims=1
 
