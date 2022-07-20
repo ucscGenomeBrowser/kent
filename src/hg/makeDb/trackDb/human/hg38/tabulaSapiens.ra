@@ -45,3 +45,4 @@ pennantIcon New red ../goldenPath/newsarch.html#033122 "Released Mar. 31, 2022"
     barChartFacets tissue,subtissue,cell_class,cell_type,sex,donor,assay
     maxWindowToDraw 10000000
     barChartStretchToItem on
+    barChartMerge on

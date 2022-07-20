@@ -11,6 +11,7 @@
 #include "bigBed.h"
 #include "asParse.h"
 #include "obscure.h"
+#include "bigBedCmdSupport.h"
 
 
 char *clChrom = NULL;
@@ -47,30 +48,13 @@ static struct optionSpec options[] = {
 };
 
 
-void writeHeader(struct bbiFile *bbi, FILE *f)
-/* output a header from the autoSql in the file */
-{
-char *asText = bigBedAutoSqlText(bbi);
-if (asText == NULL)
-    errAbort("bigBed files does not contain an autoSql schema");
-struct asObject *asObj = asParseText(asText);
-char sep = '#';
-for (struct asColumn *asCol = asObj->columnList; asCol != NULL; asCol = asCol->next)
-    {
-    fputc(sep, f);
-    fputs(asCol->name, f);
-    sep = '\t';
-    }
-fputc('\n', f);
-}
-
 void bigBedToBed(char *inFile, char *outFile)
 /* bigBedToBed - Convert from bigBed to ascii bed format.. */
 {
 struct bbiFile *bbi = bigBedFileOpen(inFile);
 FILE *f = mustOpen(outFile, "w");
 if (header)
-    writeHeader(bbi, f);
+    bigBedCmdOutputHeader(bbi, f);
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
 int itemCount = 0;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
