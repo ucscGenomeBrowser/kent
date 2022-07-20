@@ -16,7 +16,7 @@ visibility hide
 	parent multiz30Logo
         type bigWig -10 10
 	priority 1
-	bigDataUrl /gbdb/hg38/multiz30way/multiz30Logo.A.bw
+	bigDataUrl /gbdb/hg38/multiz30way/logo/multiz30Logo.A.bw
 	color 255,0,0
 
 	track multiz30LogoC
@@ -25,7 +25,7 @@ visibility hide
 	parent multiz30Logo
         type bigWig -10 10
 	priority 2
-	bigDataUrl /gbdb/hg38/multiz30way/multiz30Logo.C.bw
+	bigDataUrl /gbdb/hg38/multiz30way/logo/multiz30Logo.C.bw
 	color 160, 0,160
 
 	track multiz30LogoG
@@ -34,7 +34,7 @@ visibility hide
 	parent multiz30Logo
         type bigWig -10 10
 	priority 3
-	bigDataUrl /gbdb/hg38/multiz30way/multiz30Logo.G.bw
+	bigDataUrl /gbdb/hg38/multiz30way/logo/multiz30Logo.G.bw
 	color 0, 0,255
 
 	track multiz30LogoT
@@ -43,6 +43,6 @@ visibility hide
 	parent multiz30Logo
         type bigWig -10 10
 	priority 4
-	bigDataUrl /gbdb/hg38/multiz30way/multiz30Logo.T.bw
+	bigDataUrl /gbdb/hg38/multiz30way/logo/multiz30Logo.T.bw
 	color  0,255,0
 

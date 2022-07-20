@@ -1,0 +1,10 @@
+track t2tRepeatMasker
+shortLabel RepeatMasker
+longLabel RepeatMasker Repetitive Elements
+type bigRmsk 9 + 
+visibility hide
+group varRep
+bigDataUrl /gbdb/hs1/bbi/t2tRepeatMasker/chm13v2.0_rmsk.bb
+xrefDataUrl /gbdb/hs1/bbi/t2tRepeatMasker/chm13v2.0_rmsk.align.bb
+html html/t2tRepeatMasker.html
+

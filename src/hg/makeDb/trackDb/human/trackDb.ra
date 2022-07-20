@@ -4146,26 +4146,16 @@ searchPriority 50
 searchTable lrg
 searchMethod exact
 searchType bigBed
-termRegex (LRG_[0-9]+t[0-9]+)|(NG_[0-9]+\.[0-9]+)
+termRegex (LRG_[0-9]+)|(NG_[0-9]+\.[0-9]+)
 semiShortCircuit 1
 searchPriority 49
-release alpha
 
-searchTable lrgBigPsl
+searchTable lrgTranscriptAli
 searchMethod exact
 searchType bigBed
 termRegex LRG_[0-9]+t[0-9]+
 semiShortCircuit 1
 searchPriority 50
-release alpha
-
-searchTable lrgTranscriptAli
-searchMethod exact
-searchType psl
-termRegex LRG_[0-9]+t[0-9]+
-semiShortCircuit 1
-searchPriority 50
-release beta,public
 
 searchName lrgTranscriptAliNoTNum
 searchTable lrgTranscriptAli
@@ -4796,7 +4786,7 @@ subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
 sortOrder class=+ level=+ view=+
 type bed 3
-pennantIcon Deprecated red /goldenPath/newsarch.html#093020b "Track no longer updated, see news archive for details"
+pennantIcon snowflake.png /goldenPath/newsarch.html#093020b "ClinGen CNV data now updated on ClinVar Variants track. See news archive for details."
 
     track iscaViewTotal
     shortLabel Coverage (Graphical)

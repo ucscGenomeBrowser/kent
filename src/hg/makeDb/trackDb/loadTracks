@@ -16,6 +16,7 @@ release=''
 settings=''
 local=''
 strict=''
+noHtmlCheck=''
 raName=''
 grpSql=''
 gbdbList=''
@@ -122,7 +123,7 @@ loadDbTracks() {
     cmd="hgFindSpec $fopts $org $db $hgFindSpec ${sqlDir}/hgFindSpec.sql ."
     echo $cmd
     eval $cmd
-    if [ -z "$strict" -a -f $dbpath/description.html ] ; then
+    if [ -n "$noHtmlCheck" -a -f $dbpath/description.html ] ; then
 	if [ "X${UNAME_N}Y" = "XhgwdevY" ]; then
 	    if [ ! -L /gbdb/$db/html -a -d /hive/data/genomes/$db/html ]; then
 		rm -f /gbdb/$db/html/description.html

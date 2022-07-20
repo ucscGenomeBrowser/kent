@@ -29,5 +29,5 @@ include wgEncodeGencodeV37.ra
 include wgEncodeGencodeV38.ra
 include wgEncodeGencodeV39.ra
 include wgEncodeGencodeV40.ra
-include wgEncodeGencodeV41.ra alpha
+include wgEncodeGencodeV41.ra
 

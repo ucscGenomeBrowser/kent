@@ -1627,6 +1627,7 @@ if (thisNodeStr)   // if geo-mirroring is enabled
 		oldUri, oldDomain );
 	    printf("</div></TD></TR>\n");
 	    jsInlineFinish();
+            cartCheckout(&cart);
             exit(0);
             }
         hDisconnectCentral(&centralConn);

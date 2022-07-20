@@ -89,10 +89,18 @@
 73324	GCA_014839755.1_bSylBor1.pri	birds
 118200	GCA_014839835.1_bDryPub1.pri	birds
 488313	GCA_015220805.1_bPogPus1.pri	birds
+10116	GCA_015244455.1_mRatBN7.1_alternate_haplotype	mammals
+8790	GCA_016128335.1_ZJU1.0	birds
 57068	GCA_016904835.1_bAcaChl1.pri	birds
 670352	GCA_017639485.1_bPluApr1.pri	birds
 52777	GCA_017639555.1_bCicMag1.pri	birds
 55661	GCA_017976375.1_bCucCan1.pri	birds
+8895	GCA_020740795.1_bApuApu2.pri.cur	birds
+243314	GCA_020745705.1_bHemCom1.pri.cur	birds
+1118847	GCA_020745775.1_bTheCae1.pri.cur	birds
+297711	GCA_020746105.1_bTroSur1.pri.cur	birds
+439704	GCA_020800305.1_bPorHoc1.mat.Z.cur	birds
+439704	GCA_020801775.1_bPorHoc1.pat.decon	birds
 64144	GCA_900324465.2_fAnaTes1.2	fish
 56716	GCA_900634415.1_fCotGob3.1	fish
 56716	GCA_900634435.1_fCotGob3.1_alternate_haplotype	fish
@@ -110,6 +118,7 @@
 31033	GCA_901000745.3_fTakRub1.2_alternate_haplotype	fish
 194408	GCA_901001175.1_aRhiBiv1.1_alternate_haplotype	amphibians
 177155	GCA_901699155.1_bStrTur1.1	birds
+177155	GCA_901699155.2_bStrTur1.2	birds
 177155	GCA_901699165.1_bStrTur1.1_alternate_haplotype	birds
 161584	GCA_901709675.1_fSynAcu1.1	fish
 161584	GCA_901709685.1_fSynAcu1.1_alternate_haplotype	fish
@@ -150,6 +159,7 @@
 9704	GCF_009762305.2_mZalCal1.pri.v2	mammals
 1203425	GCF_009762535.1_fNotCel1.pri	fish
 27794	GCF_009764565.2_rDerCor1.pri.v3	reptiles
+27794	GCF_009764565.3_rDerCor1.pri.v4	reptiles
 35005	GCF_009769535.1_rThaEle1.pri	reptiles
 8103	GCF_009769545.1_fCycLum1.pri	fish
 8869	GCF_009769625.2_bCygOlo1.pri.v2	birds
@@ -157,6 +167,7 @@
 8267	GCF_009819705.1_fHipHip1.pri	fish
 219594	GCF_009819795.1_bAytFul2.pri	birds
 91951	GCF_009819885.1_bCatUst1.pri	birds
+91951	GCF_009819885.2_bCatUst1.pri.v2	birds
 409849	GCF_009829125.1_fPerMag1.pri	fish
 296741	GCF_009829145.1_bChiLan1.pri	birds
 36723	GCF_009829155.1_mMusErm1.Pri	mammals
@@ -185,9 +196,11 @@
 8469	GCF_015237465.1_rCheMyd1.pri	reptiles
 8469	GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 2021)
 8839	GCF_015476345.1_ZJU1.0	birds
+8839	GCF_015476345.1_ZJU1.0	birds
 9261	GCF_015852505.1_mTacAcu1.pri	mammals
 9031	GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b	birds
 9031	GCF_016700215.1_bGalGal1.pat.whiteleghornlayer.GRCg7w	birds
+9031	GCF_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w	birds
 13397	GCF_017639515.1_sCarCar2.pri	sharks
 148594	GCF_017639655.1_bFalNau1.pat	birds
 148594	GCF_017639655.2_bFalNau1.pat	birds
@@ -195,6 +208,12 @@
 109905	GCF_017976325.1_fCheRos1.pri	fish
 941984	GCF_017976425.1_fToxJac2.pri	fish
 34773	GCF_018492685.1_fAloSap1.pri	fish
+33562	GCF_019393635.1_mDroGli1.pri	mammals
+75038	GCF_020382885.2_fScaArg1.pri	fish
+9447	GCF_020740605.2_mLemCat1.pri	mammals
+51337	GCF_020740685.1_mJacJac1.mat.Y.cur	mammals
+134902	GCF_020740725.1_bCorHaw1.pri.cur	birds
+208333	GCF_021462225.1_DD_fGirMul_XY1	fish
 8154	GCF_900246225.1_fAstCal1.2	fish
 64144	GCF_900324465.2_fAnaTes1.2	fish
 205130	GCF_900324485.2_fMasArm1.2	fish
@@ -224,6 +243,8 @@
 260995	GCF_902459505.1_aGeoSer1.1	amphibians
 390379	GCF_902500255.1_fThaAma1.1	fish
 6579	GCF_902652985.1_xPecMax1.1	molluscs
+9657	GCF_902655055.1_mLutLut1.2	mammals
+30640	GCF_902686445.1_mSciCar1.2	mammals
 7906	GCF_902713435.1_fAciRut3.1_paternal_haplotype	fish
 1047088	GCF_903992535.1_mArvAmp1.1	mammals
 1047088	GCF_903992535.2_mArvAmp1.2	mammals
@@ -233,3 +254,6 @@
 116150	GCF_905163445.1_ilParAegt1.1	insects
 8384	GCF_905171765.1_aBufBuf1.1	amphibians
 8407	GCF_905171775.1_aRanTem1.1	amphibians
+9860	GCF_910594005.1_mCerEla1.1	mammals
+8240	GCF_910596095.1_fThuMac1.1	fish
+8236	GCF_914725855.1_fThuAlb1.1	fish

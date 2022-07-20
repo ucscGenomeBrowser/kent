@@ -94,7 +94,9 @@ def imageCompare(imageFiles,serverDir2,serverDir1,diffImagesDir):
                 noDiffImages.append(image)
     return(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages)
         
-def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages):
+def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages,\
+                 diffImagesDir,publicHtmlDirToSave,publicHtmlDirToView,serverUrl1,\
+                 sessionUser1,sessionName1,serverUrl2,sessionUser2,sessionName2):
     '''Report findings, if differences found create symlinks to public html'''
     if noDiffImages != []:
         print("No differences seen in the following session(s):")
@@ -106,11 +108,13 @@ def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImag
             print(image)
             run(["ln", "-sf", diffImagesDir+image, publicHtmlDirToSave+image])
             print("Link: "+publicHtmlDirToView+image)
-            print("session 1: "+serverUrl1+"/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName="+sessionUser1+"&hgS_otherUserSessionName="+sessionName1)
-            print("session 1: "+serverUrl2+"/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName="+sessionUser2+"&hgS_otherUserSessionName="+sessionName2)
-    print("\nNumber of empty session files created: "+str(emptyFiles))
-    print("Total number of images compared: "+str(imagesCompared))
-    print("Different images found: "+str(differentImages)) 
+            print("session 1: %s/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s"
+                   %(serverUrl1,sessionUser1,sessionName1))
+            print("session 1: %s/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s" 
+                   %(serverUrl2,sessionUser2,sessionName2))
+    print("\nNumber of empty session files created: %s" % emptyFiles)
+    print("Total number of images compared: %s" % imagesCompared)
+    print("Different images found: %s" % differentImages)
     
 ###########
 #To be used when extracting all session data
@@ -142,6 +146,8 @@ def main():
     if diffImages == []: #Check if there is anything to report - that way cron does not output
         pass
     else:
-        reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages)
+        reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages,\
+                     diffImagesDir,publicHtmlDirToSave,publicHtmlDirToView,serverUrl1,\
+                     sessionUser1,sessionName1,serverUrl2,sessionUser2,sessionName2)
     
 main()

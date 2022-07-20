@@ -1,18 +1,17 @@
 track kimNp
-shortLabel Kim RNA Brkpts
-longLabel Kim 2020 RNA-seq: Nanopore and MGISeq Breakpoints
+shortLabel Subgenomic Breakpts
+longLabel Subgenomic Transcript Breakpoints from Kim et al 2020: Nanopore and MGISeq
 type bigWig
 visibility hide
-group regulation
+group genes
 compositeTrack on
 autoScale on
-priority 2
+priority 3.6
 
         track kimNpLdr3pBreak
         type bigWig
         shortLabel Nanop Ld2Bd 3'
         longLabel Nanopore Leader-to-body 3' Breakpoints
-        group expression
         visibility dense
         color 25,113,194
         graphTypeDefault bar
@@ -28,7 +27,6 @@ priority 2
         type bigWig
         shortLabel Nanop NC-Brkpt 5'
         longLabel Nanopore Noncanonical 5' Breakpoints
-        group expression
         visibility dense
         color 240,140,0
         graphTypeDefault bar
@@ -44,7 +42,6 @@ priority 2
         type bigWig
         shortLabel Nanop NC-Brkpt 3'
         longLabel Nanopore Noncanonical 3' Breakpoints
-        group expression
         visibility dense
         color 102,168,15
         graphTypeDefault bar
@@ -76,7 +73,6 @@ priority 2
         type bigWig
         shortLabel MGI NC-Brkpt 5'
         longLabel Kim et al. MGISEQ Noncanonical 5' Breakpoints
-        group expression
         visibility dense
         color 102,168,15
         graphTypeDefault bar
@@ -106,12 +102,12 @@ priority 2
 
 track kimRnaMod
 type bigBarChart
-shortLabel Kim RNA Modific.
-longLabel Kim et al. Nanopore RNA Modifications: gRNA S 3a E M 6 7a 7b 8 N
+shortLabel Subgenomic RNA Modif.
+longLabel Subgenomic RNA Modifications from Kim et al. 2020: gRNA S 3a E M 6 7a 7b 8 N
 barChartBars gRNA S ORF3a E M ORF6 ORF7a ORF7b ORF8 N
 barChartMetric median 
 bedNameLabel Position on genome
-group regulation
+group genes
 visibility hide
 color 224,49,49
 bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-modifications.bb
@@ -121,21 +117,21 @@ bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-modifications.bb
 barChartUnit frac
 maxLimit 1
 barChartSizeWindows 500 8000
-priority 3
+priority 3.95
 
 track transcriptome
-shortLabel Transcriptome Kim
-longLabel SARS-CoV-2 Transcriptome tracks from the Kim lab
+shortLabel Subgenomic Canonical
+longLabel Canonical Subgenomic Transcripts
 visibility hide
 group genes
 type bigBed 12
-priority 5
+priority 3.1
 compositeTrack on
 
         track TRS_sites
         parent transcriptome
         shortLabel TRS sites
-        longLabel Transcription Regulatory Sequences (TRS)
+        longLabel Transcription Regulatory Sequences (TRS) of Canonical Subgenomic Transcripts
         type bigBed 6
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/TRS.bb
         priority 1
@@ -143,24 +139,24 @@ compositeTrack on
         track mRNAs
         parent transcriptome
         shortLabel Known Transcripts (gRNA and mRNA)
-        longLabel Canonical SARS-CoV-2 Transcripts (gRNA and mRNA)
+        longLabel Canonical Subgenomic Transcripts (gRNA and mRNA)
         type bigBed 12
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/transcripts.bb
         priority 2
         
 track kimTranscripts
-shortLabel Kim Transcripts
-longLabel Canonical SARS-CoV-2 Transcript Information from Kim et al. 2020
+shortLabel Subgenomic Observed
+longLabel Subgenomic Transcripts found in long-read sequences by Kim et al. 2020
 visibility hide
-group regulation
+group genes
 type bigBed 12
-priority 1
+priority 3.8
 compositeTrack on
 
         track Kim_RNAs 
         parent kimTranscripts
         shortLabel Kim recomb. trans.
-        longLabel All recombined transcripts from Kim et al. 2020
+        longLabel Subgenomic Trans.: All recombined transcripts from Kim et al. 2020
         type bigBed 12 .
         scoreFilter 900
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_recombination.bb
@@ -169,7 +165,7 @@ compositeTrack on
         track Kim_TRS_sgmRNAs 
         parent kimTranscripts
         shortLabel Kim recomb. TRS trans.
-        longLabel Recombined transcripts from Kim et al. 2020 with a TRS
+        longLabel Subgenomic Trans.: Recombined transcripts from Kim et al. 2020 with a TRS
         scoreFilter 900
         type bigBed 12 .
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_TRS.bb
@@ -178,19 +174,19 @@ compositeTrack on
         track Kim_non-TRS_sgmRNAs 
         parent kimTranscripts
         shortLabel Kim Recomb. Novel transcripts
-        longLabel Recombined transcripts from Kim et al. 2020 without a TRS
+        longLabel Recombined Subgenomic Trans.: Transcripts from Kim et al. 2020 without a TRS
         scoreFilter 900
         type bigBed 12 .
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_notTRS.bb
         priority 5
 
 track kimIvtCov
-shortLabel Kim IVT Cov
-longLabel Kim 2020 in-vitro-transcribed RNA seq + PCR: Nanopore coverage
+shortLabel Nanopore coverage
+longLabel Nanopore coverage of in-vitro-transcribed RNA seq + PCR, Kim et al 2020
 type bigWig
 visibility hide
 group map
 autoScale on
-priority 4
+priority 3.9
 bigDataUrl /gbdb/wuhCor1/bbi/IVT.bw
 
