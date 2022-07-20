@@ -20,6 +20,7 @@
 <li><a href="#release6">Frequency of GenBank data updates</a></li>
 <li><a href="#release7">Coordinate changes between assemblies</a></li>
 <li><a href="#release8">Converting positions between assembly versions</a></li>
+<li><a href="#snpConversion">Converting SNPs between assembly versions</a></li>
 <li><a href="#release9">Missing annotation tracks</a></li>
 <li><a href="#release10">What next with the human genome?</a></li>
 <li><a href="#release11">Mouse strain used for mouse genome sequence</a></li>
@@ -486,6 +487,35 @@ assembly?</h6>
 <p> 
 See the section on <a href="FAQdownloads.html#download28">converting coordinates</a> for 
 information on assembly migration tools.</p>
+
+<a name="snpConversion"></a>
+<h2>Converting SNPs between assembly versions</h2>
+<h6>How can I convert SNP annotation coordinates between assembly versions</h6>
+<p>
+While the LiftOver tool exists to convert coordinates between assemblies, it is not recommended to
+use the tool to convert SNPs between two assembly versions. Using LiftOver to convert a very small
+region, especially a single base SNP, is not always a trivial task as the alignment may not get a
+high enough score to be considered a successful conversion.</p>
+<p>
+Instead, the recommended process to convert a SNP's coordinates between assemblies is to use the
+dbSNP track to search for each rsID on the target genome assembly. For bulk conversions, the
+<a href="/cgi-bin/hgTables">Table Browser</a> can be used to extract the coordinates for the rsIDs
+on the target assembly. More information about performing batch queries on the Table Browser can be
+found on the following
+<a href="/goldenPath/help/hgTablesHelp.html#BatchQuery">Table Browser help page</a>. An example of
+using the Table Browser to convert SNP between assemblies can be found on a previously answered
+question available on the
+<a href="https://groups.google.com/a/soe.ucsc.edu/g/genome/c/SM0Ae7NMf4k/m/oh4_M8DeAgAJ"
+target="_blank">mailing list archive</a>.
+</p>
+<p>
+If you are using verions dbSNP 153 and above, the data are formatted as bigBed files. For very large
+queries, this may cause the Table Browser to timeout as dbSNP has grown to include over 700 million
+variants. If you find that your Table Browser query timesout for your list of rsIDs, you can use the
+<code>bigBedNamedItems</code> command-line tool to extract the coordinates. More information and
+examples using the <code>bigBedNamedItems</code> utility can be found on the following
+<a href="FAQdownloads.html#snp">FAQ entry</a>.
+</p>
 
 <a name="release9"></a>
 <h2>Missing annotation tracks</h2>

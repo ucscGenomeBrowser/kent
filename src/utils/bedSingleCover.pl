@@ -55,5 +55,7 @@ while (my $line = <FH>) {
     }
 }
 $size = $end - $start;
-printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
+if ($size > 0) {
+  printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
+}
 close (FH);
