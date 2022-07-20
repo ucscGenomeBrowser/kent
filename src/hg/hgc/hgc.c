@@ -1908,9 +1908,10 @@ if (sepFields)
     slFreeList(sepFields);
 
 if (embeddedTblFields)
+    {
     printf("<br><table class='bedExtraTbl'>\n");
     printf("</table>\n");
-    {
+
     struct embeddedTbl *thisTbl;
     struct dyString *tableLabelsDy = dyStringNew(0);
     for (thisTbl = embeddedTblList; thisTbl != NULL; thisTbl = thisTbl->next)
