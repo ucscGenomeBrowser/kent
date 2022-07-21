@@ -224,9 +224,12 @@ bigDataUrl bbi/%s.rmsk.bb\n" "${asmId}"
 if [ -s "$buildDir/bbi/${asmId}.rmsk.align.bb" ]; then
 printf "xrefDataUrl bbi/%s.rmsk.align.bb\n" "${asmId}"
 fi
-printf "html html/%s.repeatMasker\n\n" "${asmId}"
-$scriptDir/asmHubRmskJoinAlign.pl $asmId $buildDir > $buildDir/html/$asmId.repeatMasker.html
+export rmskClassProfile="$buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt"
+if [ -s "${rmskClassProfile}" ]; then
+  printf "html html/%s.repeatMasker\n\n" "${asmId}"
+  $scriptDir/asmHubRmskJoinAlign.pl $asmId $buildDir > $buildDir/html/$asmId.repeatMasker.html
 
+fi
 else	#	if [ "${newRmsk}" -eq 2 ]; then
 
 printf "track repeatMasker
