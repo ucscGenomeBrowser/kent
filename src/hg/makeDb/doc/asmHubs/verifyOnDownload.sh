@@ -18,8 +18,15 @@ export host=$1
 export orderList=$2
 export successCount=0
 export doneCount=0
+export fileName=`basename $orderList`
+export subset=${fileName%.orderList.tsv}
 
 export minTrackCount=12
+if [ "${subset}" == "viral" ]; then
+  minTrackCount=7
+fi
+
+# printf "# DBG subset '%s' min: %d\n" "${subset}" "${minTrackCount}" 1>&2
 
 export dbHost="localhost"
 export hubSource="hgdownload-test.gi.ucsc.edu"
