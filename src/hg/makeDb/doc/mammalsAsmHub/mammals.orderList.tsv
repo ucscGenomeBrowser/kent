@@ -30,13 +30,14 @@ GCF_000767855.1_Ca_bactrianus_MBC_1.0	Bactrian camel (Alxa 2014 refseq)
 GCA_004023785.1_MunMun_v1_BIUU	banded mongoose
 GCF_902806735.1_Bank_vole1_10x	bank vole
 GCF_019054845.1_ASM1905484v1	banner-tailed kangaroo rat
-GCF_002288925.2_ASM228892v3	beluga whale
+GCF_002288925.2_ASM228892v3	beluga whale (GAN/ISIS: 26980492/103006 v3 2019)
 GCF_000308155.1_EptFus1.0	big brown bat
 GCA_004026945.1_OviCan_v1_BIUU	bighorn sheep
 GCF_000325575.1_ASM32557v1	black flying fox
 GCF_011064425.1_Rrattus_CSIRO_v1	black rat
 GCA_004023925.1_FelNig_v1_BIUU	black-footed cat
 GCF_017591425.1_NIBS_Ocur_1.0	black-lipped pika
+GCA_004027315.1_DicBicMic_v1_BIUU	black rhinoceros (BS38 2019 Broad)
 GCA_008658375.1_mBalMus1_alternate	blue whale (alt pseudohaplotype JJ_BM4_2016_0621 2019 VGP)
 GCF_009873245.2_mBalMus1.pri.v3	blue whale (JJ_BM4_2016_0621 v3 2020 VGP)
 GCF_022079265.1_mLynRuf1.p	bobcat (2022 UCLA)
@@ -56,9 +57,10 @@ GCF_007474595.2_mLynCan4.pri.v2	Canada lynx (LIC74 v2 2020 VGP)
 GCA_004027415.1_HipGal_v1_BIUU	Cantor's roundleaf bat
 GCF_000299155.1_EleEdw1.0	Cape elephant shrew
 GCF_000296735.1_ChrAsi1.0	Cape golden mole (2012 Broad)
+GCA_004026925.1_ProCapCap_v1_BIUU	Cape rock hyrax (US060 2019 Broad)
 GCA_004027455.1_HydHyd_v1_BIUU	capybara
 GCF_002263795.2_ARS-UCD1.3	cattle (Hereford L1 Dominette 01449 42190680 v3 2018 USDA)
-GCA_004024745.2_CatWag_v2_BIUU_UCD	Chacoan peccary
+GCA_004024745.2_CatWag_v2_BIUU_UCD	Chacoan peccary (BS20 v2 2019 Broad)
 GCF_003709585.1_Aci_jub_2	cheetah (Rico 2018)
 GCF_003668045.3_CriGri-PICRH-1.0	Chinese hamster (17A/GY CHO 2020)
 GCF_000223135.1_CriGri_1.0	Chinese hamster (CHO v1 2011 BGI)
@@ -114,6 +116,7 @@ GCF_902655055.1_mLutLut1.2	Eurasian river otter
 GCF_903992535.2_mArvAmp1.2	Eurasian water vole (v2 2021)
 GCF_000181275.1_SorAra2.0	European shrew
 GCA_004027185.1_GliGli_v1_BIUU	fat dormouse
+GCA_002215935.1_ASM221593v1	fat sand rat
 GCF_022837055.1_UM_Priviv_1.0	fishing cat (Anna 2022 U Missouri)
 GCF_000243295.1_TriManLat1.0	Florida manatee (Lorelei 2012 refseq)
 GCA_004023885.1_CryFer_v1_BIUU	fossa
@@ -144,7 +147,8 @@ GCA_004363495.1_PhoPho_v1_BIUU	harbor porpoise
 GCF_004348235.1_GSC_HSeal_1.0	harbor seal
 GCF_002201575.2_ASM220157v2	Hawaiian monk seal (2021 Johns Hopkins U)
 GCA_004027005.1_MusAve_v1_BIUU	hazel dormouse
-GCA_002995585.1_ASM299558v1	hippopotamus
+GCA_002995585.1_ASM299558v1	hippopotamus (HIP001 2018)
+GCA_004027065.1_HipAmp_v1_BIUU	hippopotamus (BS01 2019 Broad)
 GCA_004027495.1_BeaHun_v1_BIUU	hirola (BS46 2019 Broad)
 GCA_004363575.1_SolPar_v1_BIUU	Hispaniolan solenodon
 GCA_004025045.1_SigHis_v1_BIUU	hispid cotton rat
@@ -178,6 +182,7 @@ GCA_004363435.1_PlaMin_v1_BIUU	Indus River dolphin
 GCA_004023805.1_PanOnc_v1_BIUU	jaguar
 GCF_014898765.1_PumYag	jaguarundi
 GCF_014825515.1_WHU_Ajam_v2	Jamaican fruit-eating bat (1a 2020 Wuhan U)
+GCA_004024965.1_TraJav_v1_BIUU	Java mouse-deer (US108 2019 Broad)
 GCF_000331955.2_Oorc_1.1	killer whale
 GCF_002099425.1_phaCin_unsw_v4.1	koala
 GCF_014108245.1_mPipKuh1.p	Kuhl's pipistrelle (2020 VGP)
@@ -252,7 +257,7 @@ GCF_017311325.1_ASM1731132v1	polar bear (UCSC 2021)
 GCF_000500345.1_Pman_1.0	prairie deer mouse (Baylor 2013)
 GCF_003704035.1_HU_Pman_2.1.3	prairie deer mouse (Harvard 2020)
 GCF_000317375.1_MicOch1.0	prairie vole
-GCA_021018645.1_ASM2101864v1	pronghorn
+GCA_021018645.1_ASM2101864v1	pronghorn (PH2016 2021)
 GCF_000696695.1_Burgud	Przewalski's horse (Burgud 2014 refseq)
 GCF_003327715.1_PumCon1.0	puma (SC36_Marlon 2018 refseq)
 GCA_004363535.1_DasPun_v1_BIUU	punctate agouti
@@ -276,6 +281,7 @@ GCF_002288905.1_ASM228890v2	sea otter (GAN:26980312 2017 refseq)
 GCA_004027735.1_CarPer_v1_BIUU	Seba's short-tailed bat
 GCA_000298735.2_Oar_v4.0	sheep
 GCF_900095145.1_PAHARI_EIJ_v1.1	shrew mouse
+GCA_004024705.1_MosMos_v1_BIUU	Siberian musk deer (BS20 2019 Broad)
 GCF_000313985.2_ASM31398v2	small Madagascar hedgehog
 GCA_004026855.1_LepAme_v1_BIUU	snowshoe hare
 GCA_004027165.1_CteSoc_v1_BIUU	social tuco-tuco
@@ -296,7 +302,9 @@ GCA_000465285.1_ASM46528v1	straw-colored fruit bat
 GCA_004024845.1_TonSau_v1_BIUU	stripe-headed round-eared bat
 GCA_004023945.1_HyaHya_v1_BIUU	striped hyena (BS54 2019 Broad)
 GCF_003009895.1_ASM300989v1	striped hyena (Hyena2069 2018 Potsdam U)
-GCF_000696425.1_G_variegatus-3.0.2	Sunda flying lemur
+GCA_002844835.1_ASM284483v1	Sumatran rhinoceros (Ipuh 2017)
+GCF_000696425.1_G_variegatus-3.0.2	Sunda flying lemur (2014 WashU)
+GCA_004027255.1_GalVar_v1_BIUU	Sunda flying lemur (US047 2019 Broad)
 GCA_004027475.1_AnoCau_v1_BIUU	tailed tailless bat
 GCA_004026705.1_MicTal_v1_BIUU	Talazac's shrew tenrec
 GCF_902635505.1_mSarHar1.11	Tasmanian devil

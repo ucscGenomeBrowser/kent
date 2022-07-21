@@ -28,27 +28,37 @@ export RepeatMaskerPath="/hive/data/staging/data/RepeatMasker210401"
 if [ -d "${destDir}" ]; then
   cd "${destDir}"
   
+  # might already be gzipped
   if [ ! -s "${faAlign}" ]; then
      faAlign="${faAlign}.gz"
   fi
   # align file only exists when RM has been run locally, not for NCBI version
+  # it is OK if it is missing, can do this anyway without it
   if [ -s "${faAlign}" ]; then
-  $RepeatMaskerPath/util/rmToTrackHub.pl -out "${rmOutFile}" -align "${faAlign}"
+    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
+    $RepeatMaskerPath/util/rmToTrackHub.pl -out "${rmOutFile}" -align "${faAlign}"
     # in place same file sort using the -o output option
     sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
-    sort -k1,1 -k2,2n -o "${asmId}.sorted.fa.join.tsv" "${asmId}.sorted.fa.join.tsv"
-    wait
+  else
+    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -out \"${rmOutFile}\"\n" 1>&2
+    $RepeatMaskerPath/util/rmToTrackHub.pl -out "${rmOutFile}"
+  fi
+  sort -k1,1 -k2,2n -o "${asmId}.sorted.fa.join.tsv" "${asmId}.sorted.fa.join.tsv" &
+  wait
+  bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskBed.as -type=bed9+5 \
+    "${asmId}.sorted.fa.join.tsv" "${chrSizes}" \
+      "${asmId}.rmsk.bb" &
+  if [ -s "${asmId}.fa.align.tsv" ]; then
     bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskAlignBed.as \
       -type=bed3+14 "${asmId}.fa.align.tsv" "${chrSizes}" \
         "${asmId}.rmsk.align.bb" &
-    bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskBed.as -type=bed9+5 \
-      "${asmId}.sorted.fa.join.tsv" "${chrSizes}" \
-        "${asmId}.rmsk.bb"
-    wait
-    gzip "${asmId}.fa.align.tsv" &
-    gzip "${asmId}.sorted.fa.join.tsv"
-    wait
   fi
+  wait
+  if [ -s "${asmId}.fa.align.tsv" ]; then
+    gzip "${asmId}.fa.align.tsv" &
+  fi
+  gzip "${asmId}.sorted.fa.join.tsv" &
+  wait
   rm -fr classBed rmskClass ${asmId}.rmsk.tab bbi/*.rmsk.*.bb \
        bbi/*.rmsk.*.bb
   mkdir classBed rmskClass
@@ -63,6 +73,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
   zcat "${rmOutFile}" | headRest 3 stdin >> "${rmOutTmp}"
   hgLoadOut -verbose=2 -tabFile=${asmId}.rmsk.tab -table=rmsk -nosplit test "${rmOutTmp}" 2> rmsk.bad.records.txt
   dateStamp=`date "+%FT%T %s"`
+  if [ -s ${asmId}.rmsk.tab ]; then
   printf "# %s splitting into categories %s\n" "${dateStamp}" "${asmId}.rmsk.tab" 1>&2
   sort -k12,12 ${asmId}.rmsk.tab \
     | splitFileByColumn -ending=tab  -col=12 -tab stdin rmskClass
@@ -77,9 +88,10 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
         | sort -k1,1 -k2,2n > classBed/${asmId}.rmsk.${T}.bed
        bedToBigBed -tab -type=bed6+10 -as=$HOME/kent/src/hg/lib/rmskBed6+10.as \
          classBed/${asmId}.rmsk.${T}.bed "${chrSizes}" \
-           bbi/${asmId}.rmsk.${T}.bb
+           bbi/${asmId}.rmsk.${T}.bb &
     fi
   done
+  wait
   fileCount=`(ls rmskClass/*RNA.tab 2> /dev/null || true) | wc -l`
   if [ "$fileCount" -gt 0 ]; then
     dateStamp=`date "+%FT%T %s"`
@@ -118,6 +130,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
   wc -l classBed/*.bed > ${asmId}.rmsk.class.profile.txt
   wc -l rmskClass/*.tab >> ${asmId}.rmsk.class.profile.txt
   rm -fr rmskClass classBed ${asmId}.rmsk.tab
+  fi
   rm -f "${rmOutTmp}"
 else
   printf "ERROR: can not find destination directory '%s'\n" "${destDir}" 1>&2
