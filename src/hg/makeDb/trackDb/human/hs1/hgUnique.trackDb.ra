@@ -16,7 +16,7 @@ html html/hgUnique.html
     group compGeno
     type bigBed 3
     color 100,0,200
-    bigDataUrl /gbdb/hs1/bbi/hgUnique/hgUnique.hg38.bb
+    bigDataUrl /gbdb/hs1/hgUnique/hgUnique.hg38.bb
 
     track hgUniquehg19
     parent hgUnique off
@@ -26,7 +26,7 @@ html html/hgUnique.html
     group compGeno
     type bigBed 3
     color 200,0,100
-    bigDataUrl /gbdb/hs1/bbi/hgUnique/hgUnique.hg19.bb
+    bigDataUrl /gbdb/hs1/hgUnique/hgUnique.hg19.bb
     
 
 
