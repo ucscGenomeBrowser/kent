@@ -216,13 +216,17 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
         errCatchFree(&errCatch);
 	}
 
-    // now search for the raw id's
-    struct slName *oneIndex=indexList;
-    for (; oneIndex; oneIndex = oneIndex->next)
-	{
-	posList2 = getPosFromBigBed(cart, tdb, bbi, oneIndex->name, term, NULL, hfs);
-	posList1 = slCat(posList1, posList2);
-	}
+    // if no trix file or we didn't find anything from a trix search
+    if (!posList1)
+        {
+        // now search for the raw id's
+        struct slName *oneIndex=indexList;
+        for (; oneIndex; oneIndex = oneIndex->next)
+            {
+            posList2 = getPosFromBigBed(cart, tdb, bbi, oneIndex->name, term, NULL, hfs);
+            posList1 = slCat(posList1, posList2);
+            }
+        }
 
     if (posList1 != NULL)
 	{
