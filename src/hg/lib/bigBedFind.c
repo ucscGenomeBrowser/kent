@@ -126,6 +126,24 @@ for ( ; tsList != NULL; tsList = tsList->next)
 return posList;
 }
 
+int posListCompare(const void *va, const void *vb)
+/* Compare to sort based on name and then position. */
+{
+const struct hgPos *a = *((struct hgPos **)va);
+const struct hgPos *b = *((struct hgPos **)vb);
+int diff = strcmp(a->name, b->name);
+if (diff == 0)
+    {
+    diff = strcmp(a->chrom, b->chrom);
+    if (diff == 0)
+        {
+        diff = a->chromStart - b->chromStart;
+        if (diff == 0)
+            diff = a->chromEnd - b->chromEnd;
+        }
+    }
+return diff;
+}
 
 boolean findBigBedPosInTdbList(struct cart *cart, char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp, struct hgFindSpec *hfs)
 /* Given a list of trackDb entries, check each of them for a searchIndex */
@@ -216,17 +234,15 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
         errCatchFree(&errCatch);
 	}
 
-    // if no trix file or we didn't find anything from a trix search
-    if (!posList1)
+    // now search for the raw id's
+    struct slName *oneIndex=indexList;
+    for (; oneIndex; oneIndex = oneIndex->next)
         {
-        // now search for the raw id's
-        struct slName *oneIndex=indexList;
-        for (; oneIndex; oneIndex = oneIndex->next)
-            {
-            posList2 = getPosFromBigBed(cart, tdb, bbi, oneIndex->name, term, NULL, hfs);
-            posList1 = slCat(posList1, posList2);
-            }
+        posList2 = getPosFromBigBed(cart, tdb, bbi, oneIndex->name, term, NULL, hfs);
+        posList1 = slCat(posList1, posList2);
         }
+    // the trix search and the id search may have found the same item so uniqify:
+    slUniqify(&posList1, posListCompare, hgPosFree);
 
     if (posList1 != NULL)
 	{

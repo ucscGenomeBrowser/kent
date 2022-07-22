@@ -70,6 +70,8 @@ struct hgPos
      char *highlight;		/* If non-empty, new value for highlight cart variable */
      };
 
+void hgPosFree(struct hgPos **pEl);
+/* Free up hgPos. */
 
 void hgPositionsHelpHtmlCart(struct cart *cart, char *organism, char *database);
 /* Display contents of dbDb.htmlPath for database, or print an HTML comment 
