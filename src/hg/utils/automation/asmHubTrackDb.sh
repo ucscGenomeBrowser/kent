@@ -5,7 +5,6 @@ set -beEu -o pipefail
 if [ $# -ne 2 ]; then
   printf "usage: trackDb.sh <asmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
   printf "expecting to find *.ucsc.2bit and bbi/ files at given path\n" 1>&2
-  printf "the ncbi|ucsc selects the naming scheme\n" 1>&2
   exit 255
 fi
 
@@ -195,6 +194,19 @@ if [ ! -s "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz" ]; then
   exit 255
 fi
 
+# see if there are actually rmsk items in the track, this has to be > 3
+export rmskItemCount=`zcat $buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.g | head | wc -l`
+
+# clean up garbage from previous errors here
+if [ "${rmskItemCount}" -lt 4 ]; then
+  rm -f $buildDir/$asmId.repeatMasker.out.gz
+  rm -f "$buildDir/${asmId}.repeatMasker.version.txt"
+  rm -f $buildDir/bbi/${asmId}.rmsk.align.bb
+  rm -f $buildDir/bbi/${asmId}.rmsk.bb
+  rm -f $buildDir/${asmId}.fa.align.tsv.gz
+  rm -f $buildDir/${asmId}.fa.join.tsv.gz
+else
+
 rm -f $buildDir/$asmId.repeatMasker.out.gz
 ln -s trackData/repeatMasker/$asmId.sorted.fa.out.gz $buildDir/$asmId.repeatMasker.out.gz
 if [ -s "$buildDir/trackData/repeatMasker/versionInfo.txt" ]; then
@@ -222,15 +234,17 @@ visibility pack
 group varRep
 bigDataUrl bbi/%s.rmsk.bb\n" "${asmId}"
 if [ -s "$buildDir/bbi/${asmId}.rmsk.align.bb" ]; then
-printf "xrefDataUrl bbi/%s.rmsk.align.bb\n" "${asmId}"
+  printf "xrefDataUrl bbi/%s.rmsk.align.bb\n" "${asmId}"
 fi
 export rmskClassProfile="$buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt"
 if [ -s "${rmskClassProfile}" ]; then
   printf "html html/%s.repeatMasker\n\n" "${asmId}"
   $scriptDir/asmHubRmskJoinAlign.pl $asmId $buildDir > $buildDir/html/$asmId.repeatMasker.html
-
+else
+  printf "\n"
 fi
-else	#	if [ "${newRmsk}" -eq 2 ]; then
+
+else	#	else clause of if [ "${newRmsk}" -gt 0 ]
 
 printf "track repeatMasker
 compositeTrack on
@@ -354,7 +368,8 @@ printf "    track repeatMaskerOther
     bigDataUrl bbi/%s.rmsk.Other.bb\n\n" "${asmId}"
 fi
 
-fi	#	if [ "${newRmsk}" -eq 2 ]; then
+fi	#	else clause of if [ "${newRmsk}" -gt 0 ]; then
+fi	#	else clause of if [ "${rmskItemCount}" -lt 4 ]
 fi      #       if [ "${newRmsk}" -eq 2 -o "${rmskCount}" -gt 0 ]; then
 
 if [ -s ${buildDir}/trackData/simpleRepeat/simpleRepeat.bb ]; then
