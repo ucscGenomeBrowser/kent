@@ -215,7 +215,7 @@ print '<table class="sortable" border="1">
   print '<th class="sorttable_numeric">ncbiRefSeq</th>
 ' if ("viral" ne $asmHubName);
 
-print "  <th class=\"sorttable_numeric\">ncbiGene</th>\n" if ($testOutput);
+print "  <th class=\"sorttable_numeric\">ncbiGene</th>\n" if ($testOutput || ("viral" eq $asmHubName));
 
 print '  <th class="sorttable_numeric">xenoRefGene</th>
   <th class="sorttable_numeric">augustus<br>genes</th>
@@ -359,7 +359,7 @@ sub tableContents() {
     splice @trackList, 2, 1;
     splice @trackList, 1, 1;
   }
-  if ($testOutput) {  # add extra columns during 'test' output
+  if ($testOutput || ("viral" eq $asmHubName)) {  # add extra columns during 'test' output
     splice @trackList, 1, 0, "ncbiGene";
   }
   if ("viral" eq $asmHubName) {
