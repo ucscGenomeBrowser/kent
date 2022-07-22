@@ -12,5 +12,5 @@ searchIndex name,name2,txId,geneName,sourceGene,sourceTranscript,alignmentId
 labelFields name,name2,txId,geneName,sourceGene,sourceTranscript,alignmentId
 defaultLabelFields name
 labelSeparator " "
-bigDataUrl /gbdb/hs1/bbi/catLiftOffGenesV1/catLiftOffGenesV1.bb
+bigDataUrl /gbdb/hs1/catLiftOffGenesV1/catLiftOffGenesV1.bb
 html html/catLiftOffGenesV1.html

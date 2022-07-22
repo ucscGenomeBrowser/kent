@@ -5,4 +5,4 @@ longLabel Cytobands Mapped from hg38/GRCh38
 group map
 visibility dense
 type bigBed 4 +
-bigDataUrl /gbdb/hs1/bbi/cytoBandMapped/cytoBandMapped.bb
+bigDataUrl /gbdb/hs1/cytoBandMapped/cytoBandMapped.bb

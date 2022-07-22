@@ -7,5 +7,5 @@ type bigBed 4
 visibility pack
 itemRgb on
 maxItems 100000
-bigDataUrl /gbdb/hs1/bbi/rdnaModel/rdnaModel.bb
+bigDataUrl /gbdb/hs1/rdnaModel/rdnaModel.bb
 html html/rdnaModel.html

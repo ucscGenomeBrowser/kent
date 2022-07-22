@@ -27,7 +27,7 @@ html  html/hgCactus.html
         visibility full
         parent cactusAlignments on
         priority 1
-        bigDataUrl /gbdb/hs1/bbi/hgCactus/t2tChm13.v2.0.hal
+        bigDataUrl /gbdb/hs1/hgCactus/t2tChm13.v2.0.hal
         type halSnake
         group compGeno
         subGroups view=Snake orgs=hg38
@@ -39,7 +39,7 @@ html  html/hgCactus.html
         visibility hide
         parent cactusAlignments off
         priority 2
-        bigDataUrl /gbdb/hs1/bbi/hgCactus/t2tChm13.v2.0.hal
+        bigDataUrl /gbdb/hs1/hgCactus/t2tChm13.v2.0.hal
         type halSnake
         group compGeno
         subGroups view=Snake orgs=hs1

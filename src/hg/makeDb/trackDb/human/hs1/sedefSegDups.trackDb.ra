@@ -2,9 +2,9 @@ track sedefSegDups
 shortLabel SEDEF Segmental Dups
 longLabel SEDEF Segmental Duplications
 group varRep
-type bigBed 9 35
+type bigBed 9 +
 visibility hide
 itemRgb on
 maxItems 100000
-bigDataUrl /gbdb/hs1/bbi/sedefSegDups/sedefSegDups.bb
+bigDataUrl /gbdb/hs1/sedefSegDups/sedefSegDups.bb
 html html/sedefSegDups.html
