@@ -25,7 +25,7 @@ sub otherHubLinks($$) {
   my ($vgpIndex, $asmHubName) = @_;
 
 my %asmCounts;	# key is hubName, value is number of assemblies
-my @hubList = qw(primates mammals birds fish vertebrate invertebrate plants fungi);
+my @hubList = qw(primates mammals birds fish vertebrate invertebrate plants fungi viral);
 foreach my $hubName (@hubList) {
   my $asmCount = `grep -v "^#" ../${hubName}AsmHub/${hubName}.orderList.tsv | wc -l`;
   chomp $asmCount;
@@ -40,7 +40,7 @@ $asmCounts{'legacy'} = $legacyCount;
 
 # different table output for VGP index
 
-if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
+if ((0 == $vgpIndex)) {
   printf "<p>\n<table border='1' style='margin-left:auto; margin-right:auto;'><thead>\n";
   printf "<tr><th colspan=4 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
   printf "<tr><th>Collection</th>\n";
@@ -55,6 +55,8 @@ if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
       printf "<tr><th>Fishes</th>\n";
     } elsif ($hubName =~ m/invertebrate/) {
       printf "<tr><th>Invertebrates</th>\n";
+    } elsif ($hubName =~ m/viral/) {
+      printf "<tr><th>Viruses</th>\n";
     } else {
       printf "<tr><th>%s</th>\n", ucfirst($hubName);
     }

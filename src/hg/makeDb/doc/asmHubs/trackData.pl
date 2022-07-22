@@ -198,6 +198,8 @@ END
 # order of columns in the table
 # eliminated the ncbiGene track
 my @trackList = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base allGaps assembly rmsk simpleRepeat windowMasker cpgIslandExtUnmasked);
+### XXX beware, this trackList is going to be edited below to add or
+###             remove elements depending upon the situation
 
 ##############################################################################
 ### start the table output
@@ -209,15 +211,18 @@ sub startTable() {
 print '<table class="sortable" border="1">
 <thead><tr><th>count</th>
   <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
-  <th class="sorttable_numeric">ncbiRefSeq</th>
 ';
+  print '<th class="sorttable_numeric">ncbiRefSeq</th>
+' if ("viral" ne $asmHubName);
 
 print "  <th class=\"sorttable_numeric\">ncbiGene</th>\n" if ($testOutput);
 
 print '  <th class="sorttable_numeric">xenoRefGene</th>
   <th class="sorttable_numeric">augustus<br>genes</th>
   <th class="sorttable_numeric">Ensembl<br>genes</th>
-  <th class="sorttable_numeric">gc5 base</th>
+' if ("viral" ne $asmHubName);
+
+print '  <th class="sorttable_numeric">gc5 base</th>
 ';
 
 if ($testOutput) {
@@ -348,7 +353,17 @@ sub tableContents() {
     splice @trackList, 10, 0, "tandemDups";
     splice @trackList, 10, 0, "gapOverlap";
     splice @trackList, 5, 0, "gap";
+  }
+  if ("viral" eq $asmHubName) {
+    splice @trackList, 3, 1;
+    splice @trackList, 2, 1;
+    splice @trackList, 1, 1;
+  }
+  if ($testOutput) {  # add extra columns during 'test' output
     splice @trackList, 1, 0, "ncbiGene";
+  }
+  if ("viral" eq $asmHubName) {
+    splice @trackList, 0, 1;
   }
   foreach my $asmId (@orderList) {
     my $gcPrefix = "GCx";

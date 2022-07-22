@@ -32,6 +32,7 @@ my $orderList = $inputList;
 if ( ! -s "$orderList" ) {
   $orderList = $toolsDir/$inputList;
 }
+my %cladeId;	# value is asmId, value is clade, useful for 'legacy' index page
 
 printf STDERR "# mkHubIndex %s %s %s %s\n", $Name, $asmHubName, $defaultAssembly, $orderList;
 my $vgpIndex = 0;
@@ -200,9 +201,17 @@ print '
   <th>common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
-  <th>BioSample</th><th>BioProject</th>
-  <th>assembly&nbsp;date,<br>source&nbsp;link</th>
+  <th>BioSample</th>
 ';
+if ("viral" ne $asmHubName) {
+  printf "  <th>BioProject</th>\n";
+}
+
+printf "<th>assembly&nbsp;date,<br>source&nbsp;link</th>\n";
+
+if ("legacy" eq $asmHubName) {
+  printf "<th>clade</th>\n";
+}
 
 if ($vgpIndex) {
   printf "<th>class<br>VGP&nbsp;link</th>\n";
@@ -366,10 +375,13 @@ sub tableContents() {
     } else {
       printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
     }
-    if ( $bioSample ne "notFound" ) {
-    printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
-    } else {
-    printf "    <td align=left>n/a</td>\n";
+    # viruses do not appear to have BioSample
+    if ($asmHubName ne "viral") {
+      if ( $bioSample ne "notFound" ) {
+        printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
+      } else {
+      printf "    <td align=left>n/a</td>\n";
+      }
     }
     # one broken assembly_report
     $bioProject= "PRJEB25768" if ($accessionId eq "GCA_900324465.2");
@@ -379,6 +391,9 @@ sub tableContents() {
       printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
     }
     printf "    <td align=center><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
+    if ("legacy" eq $asmHubName) {
+      printf "    <td align=center>%s</td>\n", $cladeId{$asmId};
+    }
     if ($vgpIndex) {
       my $sciNameUnderscore = $sciName;
       $sciNameUnderscore =~ s/ /_/g;
@@ -418,6 +433,17 @@ if ( -s "${promotedList}" ) {
      push @promotedList, $asmId;
   }
   $promotedIndex = 0;
+}
+
+my $cladeList = dirname(${orderList}) . "/$asmHubName.clade.txt";
+if ( -s "${cladeList}" ) {
+  open (FH, "<$cladeList") or die "can not read ${cladeList}";
+  while (my $clade = <FH>) {
+    chomp $clade;
+    my @a = split('\t', $clade);
+    $cladeId{$a[0]} = $a[1];
+  }
+  close (FH);
 }
 
 open (FH, "<${orderList}") or die "can not read ${orderList}";
