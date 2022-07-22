@@ -6,6 +6,6 @@ visibility pack
 itemRgb on
 maxItems 100000
 type bigBed 9 +
-bigDataUrl /gbdb/hs1/bbi/censat/censat.bb
+bigDataUrl /gbdb/hs1/censat/censat.bb
 html html/censat.html
 mouseOverField component
