@@ -57,7 +57,7 @@ static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL };
 static char *mrnaLabels[] = { "mRNAs", "Other mRNAs", NULL };
 static struct dyString *hgpMatchNames = NULL;
 
-static void hgPosFree(struct hgPos **pEl)
+void hgPosFree(struct hgPos **pEl)
 /* Free up hgPos. */
 {
 struct hgPos *el;

@@ -1,21 +1,32 @@
 T2T project supplied tracks for T2T-CHM13v2.0
 
 Note that some of these instructions were originally done for the GenArk
-promoted hub.  These files were then copied over.  This maybe result in some
-of the file paths being incorrect.
+promoted hub.  These files were then copied over and this text edited.
+However, they were not rebuilt, so this maybe result in some of the file paths
+being incorrect.
+
+T2T CHM13 track spreadsheet:
+
+   https://docs.google.com/spreadsheets/d/13BXuEFB904aje6zWXyZ0znZnXvQiu1qxKADA2uV2JU4/
+
 
 The following bash function is used to link files to /gbdb/hs1/bbi that include
 that track directory.  Must call in the form
- lngbdb censat/censat.bb 
+
+   lngbdb censat/censat.bb 
 
 lngbdb() {
    local bb gdir
    for bb in $* ; do
-      gdir=/gbdb/hs1/bbi/$(dirname $bb)
+      gdir=/gbdb/hs1/$(dirname $bb)
       mkdir -p $gdir
       ln -s $(realpath $bb) $gdir/
     done
 }
+
+# to use hubCheck
+
+   hubCheck /gbdb/hs1/hubs/$USER/hub.txt 
 
 ================================================================
 proseq (2022-02-21 markd)
@@ -378,4 +389,8 @@ This makes page independent of location installed.
 
 lngbdb t2tRepeatMasker/*.bb
 
+================================================================
+Problems:
+- hub groups doesn't have phenDis, so put clinvar and GWAS in varRep
+  FIX THIS
 ================================================================

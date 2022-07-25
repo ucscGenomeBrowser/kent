@@ -16,7 +16,7 @@ html html/rnaseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl /gbdb/hs1/bbi/rnaseq/RNAseq_default.bw
+    bigDataUrl /gbdb/hs1/rnaseq/RNAseq_default.bw
 
     track rnaseq_k100
     parent rnaseq
@@ -25,7 +25,7 @@ html html/rnaseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl /gbdb/hs1/bbi/rnaseq/RNAseq_k100.bw
+    bigDataUrl /gbdb/hs1/rnaseq/RNAseq_k100.bw
 
     track rnaseq_k100-21mer
     parent rnaseq
@@ -34,7 +34,7 @@ html html/rnaseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl /gbdb/hs1/bbi/rnaseq/RNAseq_k100_21mer.bw
+    bigDataUrl /gbdb/hs1/rnaseq/RNAseq_k100_21mer.bw
     
     track rnaseq_k100-dual-21mer
     parent rnaseq
@@ -43,4 +43,4 @@ html html/rnaseq.html
     type bigWig 
     visibility dense
     negateValues off
-    bigDataUrl /gbdb/hs1/bbi/rnaseq/RNAseq_k100_dual_21mer.bw
+    bigDataUrl /gbdb/hs1/rnaseq/RNAseq_k100_dual_21mer.bw
