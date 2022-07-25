@@ -1078,10 +1078,16 @@ var hgGateway = (function() {
         var newPosComma = addCommasToPosition(newPos);
         var settings;
         $('#positionDisplay').text(newPosComma);
+        function onSuccess(jqXHR, textStatus) {
+            goToHgTracks();
+        }
+        function onFail(jqXHR, textStatus) {
+            cart.defaultErrorCallback(jqXHR, textStatus);
+        }
         if (uiState.suggestTrack) {
             settings = { 'hgFind.matches': item.internalId };
             settings[uiState.suggestTrack] = 'pack';
-            cart.send({ cgiVar: settings });
+            cart.send({ cgiVar: settings }, onSuccess , onFail);
             cart.flush();
         }
         function overwriteWithGene() {
