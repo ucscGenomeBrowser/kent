@@ -300,18 +300,18 @@
 <DIV class="html"><span class="types all"></span>
 <div class="format"><code>html</code></div>
     <P class="isRequired">Required: No</P>
-    <p>To help users understand your data we request you provide
-    a web page that explains what your Track Hub is presenting.
-    Adding an html page for your Track Hub is also useful so you
-    can instruct people on how to cite your data.</p>
     <p>Use the <code>html path/to/explain.html</code> to specify the file
     that contains the complete description of a track in HTML format.
     The path of this file name is relative to the path of the trackDb file, or it
-    can be a full URL. It is also possible to have the &quot.html&quot; suffix implied,
+    can be a full URL. It is also possible to have the &quot;.html&quot; suffix implied,
     for instance just have <code>html explainFile</code>. To further simplify trackDb,
     if there is a file, <code>nameOfTrack.html</code>, in the same directory as the
     trackDb matching the name of the track, <code>track nameOfTrack</code>,
     then the html file does not need to be declared.
+    <p>To help users understand Public Hub data, we request you provide
+    a web page that explains what your Track Hub is presenting.
+    Adding an html page for your Track Hub is also useful to instruct people 
+    on how to cite your data.</p>
     <p>To be consistent with standard Genome Browser track descriptions, html for tracks
     should contain several sections as seen below. Here is a link to an 
     <a href="../examples/hubExamples/templatePage.html" 
