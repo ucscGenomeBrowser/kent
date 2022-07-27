@@ -6,7 +6,7 @@
   from the kent source tree.  This is not the genome browser install.
   For the genome browser install, see the mirror instructions:
 
-    http://genome.ucsc.edu/goldenPath/help/mirror.html
+  [http://genome.ucsc.edu/goldenPath/help/mirror.html](http://genome.ucsc.edu/goldenPath/help/mirror.html)
 
 ========================================================================
 
@@ -36,15 +36,15 @@ to enable execute bits on files in a directory:  `chmod +x ./*`
 ## System Requirements:
 
 * Linux/Ubuntu/CentOS/Unix/MacOSX operating system
-* gnu gcc - C code development system - http://www.gnu.org/software/gcc/
-* gnu make - http://www.gnu.org/software/make/
-* MySQL development system and libraries - http://dev.mysql.com/
-* libpng runtime and development packages - http://www.libpng.org/
-* libssl runtime and development packages - http://www.openssl.org/
-* libuuid-devel - https://rpmfind.net/linux/rpm2html/search.php?query=libuuid-devel
+* gnu gcc - C code development system - [http://www.gnu.org/software/gcc/](http://www.gnu.org/software/gcc/)
+* gnu make - [http://www.gnu.org/software/make/](http://www.gnu.org/software/make/)
+* MySQL development system and libraries - [http://dev.mysql.com/](http://dev.mysql.com/)
+* libpng runtime and development packages - [http://www.libpng.org/](http://www.libpng.org/)
+* libssl runtime and development packages - [http://www.openssl.org/](http://www.openssl.org/)
+* libuuid-devel - [https://rpmfind.net/linux/rpm2html/search.php?query=libuuid-devel](https://rpmfind.net/linux/rpm2html/search.php?query=libuuid-devel)
 
 Optional:
-'git' source code management: http://git-scm.com/downloads
+'git' source code management: [http://git-scm.com/downloads](http://git-scm.com/downloads)
 
 It is best to install these packages with your standard operating
 system package management tools.
@@ -54,17 +54,17 @@ system package management tools.
 
 1. Fetch the userApps directory:
 
-   Alternative to 'git' command, a gzipped tar file is available
+   Alternative to `git` command, a gzipped tar file is available
    with all the source, via FTP or HTTP:
 
         ftp://hgdownload.soe.ucsc.edu/apache/htdocs/admin/exe/userApps.src.tgz
         http://hgdownload.soe.ucsc.edu/admin/exe/userApps.src.tgz
 
    Unpacking that file (tar xvzf userApps.src.tgz)
-   creates a directory: ./userApps/
+   creates a directory: `./userApps/`
    with all the source.  Proceed to step 2 to build this directory.
 
-   Using 'git' to fetch the source, creates a directory ./userApps/
+   Using `git` to fetch the source, creates a directory `./userApps/`
 
         git archive --format=zip -9 \
            --remote=git://genome-source.soe.ucsc.edu/kent.git \
@@ -82,7 +82,7 @@ system package management tools.
       kent source code, and constructs about 223 command binaries
       of approximate size near 600 Mb.
 
-   The resulting binaries are in ./userApps/bin/
+   The resulting binaries are in `./userApps/bin/`
 
    Note: there are no required shell environment settings as discussed
          in the genome browser build instructions.  In fact, this build
@@ -91,40 +91,40 @@ system package management tools.
 
 3. Install utilities
 
-   The binaries are built into ./userApps/bin/
+   The binaries are built into `./userApps/bin/`
    To install them in a global bin/ directory, copy them
    to a desired location, e.g.:
 
         sudo rsync -a -P ./userApps/bin/ /usr/local/bin/kentUtils/
 
-   The destination bin/kentUtils/ should be its own unique directory
-   to avoid overwriting same-named binaries in a standard bin/ directory.
+   The destination `bin/kentUtils/` should be its own unique directory
+   to avoid overwriting same-named binaries in a standard `bin/` directory.
 
-   Users add '/usr/local/bin/kentUtils' to their shell PATH
+   Users add `/usr/local/bin/kentUtils` to their shell PATH
    to access the commands.
 
 4. Update utilities
 
-   This procedure expects the 'git' command to be available.
-   Without the 'git' command, run a 'make clean' to clean up the
+   This procedure expects the `git` command to be available.
+   Without the `git` command, run a `make clean` to clean up the
    existing source tree, then repeat the fetch and unpack of the
    userApps.src.tgz file as mentioned in step 1.
 
-   With the 'git' command available, the 'make update' will refresh
+   With the `git` command available, the `make update` will refresh
    the source tree and rebuild:
    
         cd userApps
         make update
 
-   This runs a 'make clean' in the source tree, fetches all
+   This runs a `make clean` in the source tree, fetches all
    the source again, unpacks it to overlay the existing source tree,
-   then runs a 'make utils' to rebuild everything.
+   then runs a `make utils` to rebuild everything.
 
-5. There are 'parasol' binaries built into ./userApps/kent/src/parasol/bin/
+5. There are `parasol` binaries built into `./userApps/kent/src/parasol/bin/`
    Use these binaries to set up a job control system on a compute cluster
    or large machine with many CPU cores.  See also:
 
-        http://genecats.soe.ucsc.edu/eng/parasol.html
+   [http://genecats.soe.ucsc.edu/eng/parasol.html](http://genecats.soe.ucsc.edu/eng/parasol.html)
 
    for more information.  The usage messages from each command will help
    with the setup.
@@ -154,15 +154,15 @@ Please note: kent commands use the special keywords:
 
 Many of the commands can use the UCSC public MySQL server, or
 your own local MySQL server with UCSC data formats.  Add these three
-lines to a file in your HOME directory called '.hg.conf' and set
-its permissions to: 'chmod 600 .hg.conf'
+lines to a file in your HOME directory called `.hg.conf` and set
+its permissions to: `chmod 600 .hg.conf`
 
     db.host=genome-mysql.soe.ucsc.edu
     db.user=genomep
     db.password=password
     central.db=hgcentral
 
-This '.hg.conf' file is used by the kent commands to determine the
+This `.hg.conf` file is used by the kent commands to determine the
 MySQL host and user/password to the database.  For your local MySQL
 installation, use your host name and your read-only user/password names.
 
@@ -172,11 +172,11 @@ installation, use your host name and your read-only user/password names.
 
 On a MacOS system, you will need the XCode system installed:
 
-    https://developer.apple.com/xcode/
+[https://developer.apple.com/xcode/](https://developer.apple.com/xcode/)
 
 And the Mac Ports install system:
 
-    http://www.macports.org/
+[http://www.macports.org/](http://www.macports.org/)
 
 With the Mac ports and XCode systems installed, you can install
 the additional packages required (and helpful):
@@ -184,11 +184,11 @@ the additional packages required (and helpful):
     sudo port install git-core gnutls rsync libpng mysql55 openssl curl wget
 
 You may need to install ossp-uuid if the system does not already have
-the /usr/include/uuid/ directory install:
+the `/usr/include/uuid/` directory install:
 
     sudo port install ossp-uuid
 
-On a typical Linux system, for example Ubuntu, use the apt-get command
+On a typical Linux system, for example Ubuntu, use the `apt-get` command
 to install additional packages:
 
     sudo apt-get install git libssl-dev openssl mysql-client-5.5 \
@@ -198,13 +198,14 @@ Depending upon the version of your Linux/Ubuntu/CentOS operating system,
 the specific version of packages you need may be different than this example.
 
 Please use your standard operating system package management
-install system (e.g. 'yum' on CentOS) to obtain correct versions of
+install system (e.g. `yum` on CentOS) to obtain correct versions of
 these packages for your specific operating system version.
 
 See also:
 
-    https://help.ubuntu.com/8.04/serverguide/apt-get.html
-    http://www.centos.org/docs/5/html/yum/
+[https://help.ubuntu.com/8.04/serverguide/apt-get.html](https://help.ubuntu.com/8.04/serverguide/apt-get.html)
+
+[http://www.centos.org/docs/5/html/yum/](http://www.centos.org/docs/5/html/yum/)
 
 ========================================================================
 
@@ -212,9 +213,7 @@ See also:
 
    Please advise UCSC if you have the recommended installed libraries
    and development system and this build will not function.
-   email to:
-
-       genome-www@soe.ucsc.edu
+   email to: [genome-www@soe.ucsc.edu](genome-www@soe.ucsc.edu)
 
 1. These procedures will not work as-is on sparc or alpha machines or
    with the Sun Solaris operating system.
