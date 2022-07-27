@@ -13,7 +13,7 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.cpgIslands
     longLabel CpG Islands (Islands < 300 Bases are Light Green)
     type bigBed 4 +
     priority 1
-    bigDataUrl  /gbdb/hs1/bbi/GCA_009914755.4_T2T-CHM13v2.0.cpgIslandExt.bb
+    bigDataUrl  /gbdb/hs1/bbi/cpgIslandExt.bb
 
     track cpgIslandExtUnmasked
     parent cpgIslands on
@@ -21,5 +21,5 @@ html html/GCA_009914755.4_T2T-CHM13v2.0.cpgIslands
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
     type bigBed 4 +
     priority 2
-    bigDataUrl  /gbdb/hs1/bbi/GCA_009914755.4_T2T-CHM13v2.0.cpgIslandExtUnmasked.bb
+    bigDataUrl  /gbdb/hs1/bbi/cpgIslandExtUnmasked.bb
 
