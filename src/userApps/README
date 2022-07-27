@@ -92,7 +92,7 @@ system package management tools.
 3. Install utilities
 
    The binaries are built into `./userApps/bin/`
-   To install them in a global bin/ directory, copy them
+   To install them in a global `bin/` directory, copy them
    to a desired location, e.g.:
 
         sudo rsync -a -P ./userApps/bin/ /usr/local/bin/kentUtils/
