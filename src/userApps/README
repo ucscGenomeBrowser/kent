@@ -15,18 +15,18 @@
 These binaries built at UCSC may already work in your linux/Mac
 environment.  Please access via rsync:
 
-    rsync -a -P rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/linux.x86\_64/ ./
-    rsync -a -P rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/macOSX.x86\_64/ ./
+    rsync -a -P rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/linux.x86_64/ ./
+    rsync -a -P rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/macOSX.x86_64/ ./
 
 Or via HTTP:
 
-    http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86\_64/
-    http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86\_64/
+    http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/
+    http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/
 
 Or via FTP:
 
-    ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86\_64/
-    ftp://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86\_64/
+    ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/
+    ftp://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/
 
 Note: access via HTTP or FTP does not copy with the 'execute' bits on,
 to enable execute bits on files in a directory:  `chmod +x ./*`
@@ -57,8 +57,8 @@ system package management tools.
    Alternative to 'git' command, a gzipped tar file is available
    with all the source, via FTP or HTTP:
 
-       ftp://hgdownload.soe.ucsc.edu/apache/htdocs/admin/exe/userApps.src.tgz
-       http://hgdownload.soe.ucsc.edu/admin/exe/userApps.src.tgz
+        ftp://hgdownload.soe.ucsc.edu/apache/htdocs/admin/exe/userApps.src.tgz
+        http://hgdownload.soe.ucsc.edu/admin/exe/userApps.src.tgz
 
    Unpacking that file (tar xvzf userApps.src.tgz)
    creates a directory: ./userApps/
@@ -66,17 +66,17 @@ system package management tools.
 
    Using 'git' to fetch the source, creates a directory ./userApps/
 
-       git archive --format=zip -9 \
-          --remote=git://genome-source.soe.ucsc.edu/kent.git \
-          beta src/userApps > userApps.zip
-       unzip -d userApps -j userApps.zip
-       cd userApps
-       make fetchSource
+        git archive --format=zip -9 \
+           --remote=git://genome-source.soe.ucsc.edu/kent.git \
+           beta src/userApps > userApps.zip
+        unzip -d userApps -j userApps.zip
+        cd userApps
+        make fetchSource
 
 2. Build the utilities:
 
-       cd userApps
-       make
+        cd userApps
+        make
 
    This build fetches (with git) approximately 200 Mb/7,800 files of
       kent source code, and constructs about 223 command binaries
@@ -95,7 +95,7 @@ system package management tools.
    To install them in a global bin/ directory, copy them
    to a desired location, e.g.:
 
-       sudo rsync -a -P ./userApps/bin/ /usr/local/bin/kentUtils/
+        sudo rsync -a -P ./userApps/bin/ /usr/local/bin/kentUtils/
 
    The destination bin/kentUtils/ should be its own unique directory
    to avoid overwriting same-named binaries in a standard bin/ directory.
@@ -113,8 +113,8 @@ system package management tools.
    With the 'git' command available, the 'make update' will refresh
    the source tree and rebuild:
    
-       cd userApps
-       make update
+        cd userApps
+        make update
 
    This runs a 'make clean' in the source tree, fetches all
    the source again, unpacks it to overlay the existing source tree,
@@ -124,7 +124,7 @@ system package management tools.
    Use these binaries to set up a job control system on a compute cluster
    or large machine with many CPU cores.  See also:
 
-     http://genecats.soe.ucsc.edu/eng/parasol.html
+        http://genecats.soe.ucsc.edu/eng/parasol.html
 
    for more information.  The usage messages from each command will help
    with the setup.
