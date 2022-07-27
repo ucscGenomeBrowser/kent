@@ -202,6 +202,11 @@ var cart = (function() {
     // Return cart object with public methods.
     return {
 
+        defaultErrorCallback: function (jqXHR, textStatus) {
+            defaultErrorCallback(jqXHR, textStatus);
+        },
+
+
         setCgi: function(newCgi) {
             // Sets the name of the CGI (e.g. hgIntegrator, hgChooseDb etc).
             // This must be called before cart.send.
@@ -216,7 +221,7 @@ var cart = (function() {
             // If this request contained only cgiVars (empty cmdObjNoCgiVar) then let those
             // go out with other requests.  Below, flush will make sure that at least one request
             // is sent out if there are cgiVars.
-            if (! _.isEmpty(cmdObjNoCgiVar)) {
+            if (! _.isEmpty(cmdObjNoCgiVar) || successCallback || errorCallback) {
                 requestQueue.push({ commandObj: cmdObjNoCgiVar,
                                     successCallback: successCallback,
                                     errorCallback: errorCallback });
