@@ -335,7 +335,7 @@ Therefore, we recommend working with the NCBI annotations and when an assembly h
 </p>
 <p>The UCSC alignments can differ from the NCBI alignments for two reasons:</p>
 
-<p><b>Very similar transcripts:</b> 
+<p><b>Very similar transcripts resulting in transcript location swaps or duplicated transcripts:</b> 
 Let's take the case of two almost-identical transcripts sequences in RefSeq,
 with two genes in the genome where they could be placed.
 NCBI has a rule to place every transcript only once, and transcripts
@@ -343,15 +343,15 @@ are manually tied to a chromosome band or location by NCBI, so each gene will ge
 and only one transcript of two. NCBI RefSeq will have two genes with one transcript each.
 UCSC RefSeq though places all
 transcripts where they align at very high identity, so both genes will get
-annotated with both transcripts. For example, 
+annotated with both transcripts, creating duplicates. For example, 
 the transcript NM_001012276 has three almost-identical possible
-placements to the genome in the UCSC RefSeq track, as it is entirely alignment-based without any manual filtering,
-but NM_001012276.3 is shown at a single location in the NCBI RefSeq track, as the NCBI
-software will only retain the alignment at the manually annotated location. It
-may be good to know about almost-identical alignments when doing genomic
-analysis or manual inspection of NGS read alignments, but for clinical
-reporting purposes or other automated analyses, we strongly recommend to use
-the NCBI RefSeq track.
+placements to the genome in the UCSC RefSeq track, as it is entirely alignment-based without any manual filtering.
+The same transcript NM_001012276.3 is shown at a single location in the NCBI
+RefSeq track, as the NCBI software will only retain the alignment at the
+manually annotated location. It may be good to know about almost-identical
+alignments when doing genomic analysis or manual inspection of NGS read
+alignments, but for clinical reporting purposes or other automated analyses, we
+strongly recommend to use the NCBI RefSeq track.
 </p>
 
 <p>

@@ -375,6 +375,12 @@ This makes page independent of location installed.
   cd /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/trackData/t2tRepeatMasker
   bigBedToBed chm13v2.0_rmsk.align.bb stdout |  awk -f addItemRgb.awk >chm13v2.0_rmsk.align.rgb.bed
 
+================================================================
+2022-07-21 methylationFreq
+================================================================
+Methylation Frequency  (Paul Hook & Ariel Gershman )
+
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/regulation/chm13v2.0_CpG_methylationFrequency.bw
 
 ================================================================
 pending:
@@ -436,7 +442,10 @@ pending:
 
 * Gene GFF3/GTF downloads
   http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.gff3
-  
+
+
+
+
 ================================================================
 Problems:
 - hub groups doesn't have phenDis, so put clinvar and GWAS in varRep

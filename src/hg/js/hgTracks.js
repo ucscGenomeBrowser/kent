@@ -387,12 +387,21 @@ var genomePos = {
                 && (selection.event.pageY <  (imgOfs.top + imgHeight + slop)));
     },
 
-    pixelsToBases: function (img, selStart, selEnd, winStart, winEnd)
+    pixelsToBases: function (img, selStart, selEnd, winStart, winEnd, addHalfBp)
     {   // Convert image coordinates to chromosome coordinates
         var imgWidth = jQuery(img).width() - hgTracks.insideX;
         var width = hgTracks.winEnd - hgTracks.winStart;
         var mult = width / imgWidth;   // mult is bp/pixel multiplier
-        var halfBpWidth = (imgWidth / width) / 2; // how many pixels does one bp take up;
+ 
+        // where does a bp position start on the screen?
+        // For things like drag-select, if the user ends just before the nucleotide itself, do not count
+        // the nucleotide itself as selected. But for things like clicks onto
+        // a selection, if the user right-clicks just before the middle of the
+        // nucleotide, we certainly want to use this position.
+        var halfBpWidth = 0;
+        if (addHalfBp)
+            halfBpWidth = (imgWidth / width) / 2; // how many pixels does one bp take up;
+
         var startDelta;   // startDelta is how many bp's to the right/left
         var x1;
 
@@ -471,13 +480,13 @@ var genomePos = {
     selectionPixelsToBases: function (img, selection)
     {   // Convert selection x1/x2 coordinates to chromStart/chromEnd.
         return genomePos.pixelsToBases(img, selection.x1, selection.x2,
-                                        hgTracks.winStart, hgTracks.winEnd);
+                                        hgTracks.winStart, hgTracks.winEnd, true);
     },
 
     update: function (img, selection, singleClick)
     {
         var pos = genomePos.pixelsToBases(img, selection.x1, selection.x2,
-                                            hgTracks.winStart, hgTracks.winEnd);
+                                            hgTracks.winStart, hgTracks.winEnd, true);
         // singleClick is true when the mouse hasn't moved (or has only moved a small amount).
         if (singleClick) {
             var center = (pos.chromStart + pos.chromEnd)/2;
@@ -3072,7 +3081,7 @@ var rightClick = {
                 // find the highlight that was clicked
                 var imageX = (imageV2.imgTbl[0].getBoundingClientRect().left) + imageV2.LEFTADD;
                 var xDiff = (e.clientX) - imageX;
-                var clickPos = genomePos.pixelsToBases(img, xDiff, xDiff+1, hgTracks.winStart, hgTracks.winEnd);
+                var clickPos = genomePos.pixelsToBases(img, xDiff, xDiff+1, hgTracks.winStart, hgTracks.winEnd, false);
                 rightClick.clickedHighlightIdx = dragSelect.findHighlightIdxForPos(clickPos);
 
                 // XXXX? posting.blockUseMap = true;

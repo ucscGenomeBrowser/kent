@@ -52,7 +52,7 @@ html html/encode.html
     track T2T_Encode_Coverage_22Rv1.CTCF
     shortLabel 22Rv1 CTCF
     longLabel 22Rv1 CTCF Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/22Rv1.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/22Rv1.CTCF.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=22Rv1 ab=CTCF view=coverage
     type bigWig
@@ -60,7 +60,7 @@ html html/encode.html
     track T2T_Encode_Coverage_22Rv1.Control
     shortLabel 22Rv1 Control
     longLabel 22Rv1 Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/22Rv1.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/22Rv1.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=22Rv1 ab=Control view=coverage
     type bigWig
@@ -68,7 +68,7 @@ html html/encode.html
     track T2T_Encode_Coverage_22Rv1.H3K27ac
     shortLabel 22Rv1 H3K27ac
     longLabel 22Rv1 H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/22Rv1.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/22Rv1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=22Rv1 ab=H3K27ac view=coverage
     type bigWig
@@ -76,7 +76,7 @@ html html/encode.html
     track T2T_Encode_Coverage_BE2C.Control
     shortLabel BE2C Control
     longLabel BE2C Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/BE2C.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/BE2C.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=BE2C ab=Control view=coverage
     type bigWig
@@ -84,7 +84,7 @@ html html/encode.html
     track T2T_Encode_Coverage_BE2C.H3K27me3
     shortLabel BE2C H3K27me3
     longLabel BE2C H3K27me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/BE2C.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/BE2C.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=BE2C ab=H3K27me3 view=coverage
     type bigWig
@@ -92,7 +92,7 @@ html html/encode.html
     track T2T_Encode_Coverage_BE2C.H3K36me3
     shortLabel BE2C H3K36me3
     longLabel BE2C H3K36me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/BE2C.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/BE2C.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=BE2C ab=H3K36me3 view=coverage
     type bigWig
@@ -100,7 +100,7 @@ html html/encode.html
     track T2T_Encode_Coverage_BE2C.H3K4me1
     shortLabel BE2C H3K4me1
     longLabel BE2C H3K4me1 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/BE2C.H3K4me1.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/BE2C.H3K4me1.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=BE2C ab=H3K4me1 view=coverage
     type bigWig
@@ -108,7 +108,7 @@ html html/encode.html
     track T2T_Encode_Coverage_BE2C.H3K9me3
     shortLabel BE2C H3K9me3
     longLabel BE2C H3K9me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/BE2C.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/BE2C.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=BE2C ab=H3K9me3 view=coverage
     type bigWig
@@ -116,7 +116,7 @@ html html/encode.html
     track T2T_Encode_Coverage_C4-2B.CTCF
     shortLabel C4-2B CTCF
     longLabel C4-2B CTCF Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/C4-2B.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/C4-2B.CTCF.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=C4-2B ab=CTCF view=coverage
     type bigWig
@@ -124,7 +124,7 @@ html html/encode.html
     track T2T_Encode_Coverage_C4-2B.Control
     shortLabel C4-2B Control
     longLabel C4-2B Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/C4-2B.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/C4-2B.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=C4-2B ab=Control view=coverage
     type bigWig
@@ -132,7 +132,7 @@ html html/encode.html
     track T2T_Encode_Coverage_C4-2B.H3K27ac
     shortLabel C4-2B H3K27ac
     longLabel C4-2B H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/C4-2B.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/C4-2B.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=C4-2B ab=H3K27ac view=coverage
     type bigWig
@@ -140,7 +140,7 @@ html html/encode.html
     track T2T_Encode_Coverage_Caco-2.Control
     shortLabel Caco-2 Control
     longLabel Caco-2 Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/Caco-2.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/Caco-2.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=Caco-2 ab=Control view=coverage
     type bigWig
@@ -148,7 +148,7 @@ html html/encode.html
     track T2T_Encode_Coverage_Caco-2.H3K4me1
     shortLabel Caco-2 H3K4me1
     longLabel Caco-2 H3K4me1 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/Caco-2.H3K4me1.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/Caco-2.H3K4me1.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=Caco-2 ab=H3K4me1 view=coverage
     type bigWig
@@ -156,7 +156,7 @@ html html/encode.html
     track T2T_Encode_Coverage_Caco-2.H3K9me3
     shortLabel Caco-2 H3K9me3
     longLabel Caco-2 H3K9me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/Caco-2.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/Caco-2.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=Caco-2 ab=H3K9me3 view=coverage
     type bigWig
@@ -164,7 +164,7 @@ html html/encode.html
     track T2T_Encode_Coverage_HAP-1.Control
     shortLabel HAP-1 Control
     longLabel HAP-1 Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/HAP-1.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/HAP-1.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=HAP-1 ab=Control view=coverage
     type bigWig
@@ -172,7 +172,7 @@ html html/encode.html
     track T2T_Encode_Coverage_HAP-1.H3K27ac
     shortLabel HAP-1 H3K27ac
     longLabel HAP-1 H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/HAP-1.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/HAP-1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=HAP-1 ab=H3K27ac view=coverage
     type bigWig
@@ -180,7 +180,7 @@ html html/encode.html
     track T2T_Encode_Coverage_HAP-1.H3K27me3
     shortLabel HAP-1 H3K27me3
     longLabel HAP-1 H3K27me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/HAP-1.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/HAP-1.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=HAP-1 ab=H3K27me3 view=coverage
     type bigWig
@@ -188,7 +188,7 @@ html html/encode.html
     track T2T_Encode_Coverage_HAP-1.H3K36me3
     shortLabel HAP-1 H3K36me3
     longLabel HAP-1 H3K36me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/HAP-1.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/HAP-1.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=HAP-1 ab=H3K36me3 view=coverage
     type bigWig
@@ -196,7 +196,7 @@ html html/encode.html
     track T2T_Encode_Coverage_HAP-1.H3K4me1
     shortLabel HAP-1 H3K4me1
     longLabel HAP-1 H3K4me1 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/HAP-1.H3K4me1.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/HAP-1.H3K4me1.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=HAP-1 ab=H3K4me1 view=coverage
     type bigWig
@@ -204,7 +204,7 @@ html html/encode.html
     track T2T_Encode_Coverage_HAP-1.H3K4me3
     shortLabel HAP-1 H3K4me3
     longLabel HAP-1 H3K4me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/HAP-1.H3K4me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/HAP-1.H3K4me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=HAP-1 ab=H3K4me3 view=coverage
     type bigWig
@@ -212,7 +212,7 @@ html html/encode.html
     track T2T_Encode_Coverage_HAP-1.H3K9me3
     shortLabel HAP-1 H3K9me3
     longLabel HAP-1 H3K9me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/HAP-1.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/HAP-1.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=HAP-1 ab=H3K9me3 view=coverage
     type bigWig
@@ -220,7 +220,7 @@ html html/encode.html
     track T2T_Encode_Coverage_HL-60.Control
     shortLabel HL-60 Control
     longLabel HL-60 Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/HL-60.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/HL-60.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=HL-60 ab=Control view=coverage
     type bigWig
@@ -228,7 +228,7 @@ html html/encode.html
     track T2T_Encode_Coverage_HL-60.H3K27ac
     shortLabel HL-60 H3K27ac
     longLabel HL-60 H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/HL-60.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/HL-60.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=HL-60 ab=H3K27ac view=coverage
     type bigWig
@@ -236,7 +236,7 @@ html html/encode.html
     track T2T_Encode_Coverage_MG63.Control
     shortLabel MG63 Control
     longLabel MG63 Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/MG63.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/MG63.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=MG63 ab=Control view=coverage
     type bigWig
@@ -244,7 +244,7 @@ html html/encode.html
     track T2T_Encode_Coverage_MG63.H3K27me3
     shortLabel MG63 H3K27me3
     longLabel MG63 H3K27me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/MG63.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/MG63.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=MG63 ab=H3K27me3 view=coverage
     type bigWig
@@ -252,7 +252,7 @@ html html/encode.html
     track T2T_Encode_Coverage_MG63.H3K36me3
     shortLabel MG63 H3K36me3
     longLabel MG63 H3K36me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/MG63.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/MG63.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=MG63 ab=H3K36me3 view=coverage
     type bigWig
@@ -260,7 +260,7 @@ html html/encode.html
     track T2T_Encode_Coverage_MG63.H3K4me3
     shortLabel MG63 H3K4me3
     longLabel MG63 H3K4me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/MG63.H3K4me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/MG63.H3K4me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=MG63 ab=H3K4me3 view=coverage
     type bigWig
@@ -268,7 +268,7 @@ html html/encode.html
     track T2T_Encode_Coverage_MG63.H3K9me3
     shortLabel MG63 H3K9me3
     longLabel MG63 H3K9me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/MG63.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/MG63.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=MG63 ab=H3K9me3 view=coverage
     type bigWig
@@ -276,7 +276,7 @@ html html/encode.html
     track T2T_Encode_Coverage_RWPE1.CTCF
     shortLabel RWPE1 CTCF
     longLabel RWPE1 CTCF Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/RWPE1.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/RWPE1.CTCF.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=RWPE1 ab=CTCF view=coverage
     type bigWig
@@ -284,7 +284,7 @@ html html/encode.html
     track T2T_Encode_Coverage_RWPE1.Control
     shortLabel RWPE1 Control
     longLabel RWPE1 Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/RWPE1.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/RWPE1.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=RWPE1 ab=Control view=coverage
     type bigWig
@@ -292,7 +292,7 @@ html html/encode.html
     track T2T_Encode_Coverage_RWPE1.H3K27ac
     shortLabel RWPE1 H3K27ac
     longLabel RWPE1 H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/RWPE1.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/RWPE1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=RWPE1 ab=H3K27ac view=coverage
     type bigWig
@@ -300,7 +300,7 @@ html html/encode.html
     track T2T_Encode_Coverage_RWPE2.CTCF
     shortLabel RWPE2 CTCF
     longLabel RWPE2 CTCF Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/RWPE2.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/RWPE2.CTCF.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=RWPE2 ab=CTCF view=coverage
     type bigWig
@@ -308,7 +308,7 @@ html html/encode.html
     track T2T_Encode_Coverage_RWPE2.Control
     shortLabel RWPE2 Control
     longLabel RWPE2 Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/RWPE2.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/RWPE2.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=RWPE2 ab=Control view=coverage
     type bigWig
@@ -316,7 +316,7 @@ html html/encode.html
     track T2T_Encode_Coverage_RWPE2.H3K27ac
     shortLabel RWPE2 H3K27ac
     longLabel RWPE2 H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/RWPE2.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/RWPE2.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=RWPE2 ab=H3K27ac view=coverage
     type bigWig
@@ -324,7 +324,7 @@ html html/encode.html
     track T2T_Encode_Coverage_RWPE2.H3K36me3
     shortLabel RWPE2 H3K36me3
     longLabel RWPE2 H3K36me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/RWPE2.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/RWPE2.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=RWPE2 ab=H3K36me3 view=coverage
     type bigWig
@@ -332,7 +332,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJCRH30.Control
     shortLabel SJCRH30 Control
     longLabel SJCRH30 Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJCRH30.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJCRH30.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJCRH30 ab=Control view=coverage
     type bigWig
@@ -340,7 +340,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJCRH30.H3K27ac
     shortLabel SJCRH30 H3K27ac
     longLabel SJCRH30 H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJCRH30.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJCRH30.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJCRH30 ab=H3K27ac view=coverage
     type bigWig
@@ -348,7 +348,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJCRH30.H3K27me3
     shortLabel SJCRH30 H3K27me3
     longLabel SJCRH30 H3K27me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJCRH30.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJCRH30.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJCRH30 ab=H3K27me3 view=coverage
     type bigWig
@@ -356,7 +356,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJCRH30.H3K36me3
     shortLabel SJCRH30 H3K36me3
     longLabel SJCRH30 H3K36me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJCRH30.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJCRH30.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJCRH30 ab=H3K36me3 view=coverage
     type bigWig
@@ -364,7 +364,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJCRH30.H3K4me1
     shortLabel SJCRH30 H3K4me1
     longLabel SJCRH30 H3K4me1 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJCRH30.H3K4me1.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJCRH30.H3K4me1.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJCRH30 ab=H3K4me1 view=coverage
     type bigWig
@@ -372,7 +372,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJCRH30.H3K4me3
     shortLabel SJCRH30 H3K4me3
     longLabel SJCRH30 H3K4me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJCRH30.H3K4me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJCRH30.H3K4me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJCRH30 ab=H3K4me3 view=coverage
     type bigWig
@@ -380,7 +380,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJCRH30.H3K9me3
     shortLabel SJCRH30 H3K9me3
     longLabel SJCRH30 H3K9me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJCRH30.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJCRH30.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJCRH30 ab=H3K9me3 view=coverage
     type bigWig
@@ -388,7 +388,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJSA1.Control
     shortLabel SJSA1 Control
     longLabel SJSA1 Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJSA1.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJSA1.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJSA1 ab=Control view=coverage
     type bigWig
@@ -396,7 +396,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJSA1.H3K27ac
     shortLabel SJSA1 H3K27ac
     longLabel SJSA1 H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJSA1.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJSA1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJSA1 ab=H3K27ac view=coverage
     type bigWig
@@ -404,7 +404,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJSA1.H3K27me3
     shortLabel SJSA1 H3K27me3
     longLabel SJSA1 H3K27me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJSA1.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJSA1.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJSA1 ab=H3K27me3 view=coverage
     type bigWig
@@ -412,7 +412,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJSA1.H3K36me3
     shortLabel SJSA1 H3K36me3
     longLabel SJSA1 H3K36me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJSA1.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJSA1.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJSA1 ab=H3K36me3 view=coverage
     type bigWig
@@ -420,7 +420,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJSA1.H3K4me3
     shortLabel SJSA1 H3K4me3
     longLabel SJSA1 H3K4me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJSA1.H3K4me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJSA1.H3K4me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJSA1 ab=H3K4me3 view=coverage
     type bigWig
@@ -428,7 +428,7 @@ html html/encode.html
     track T2T_Encode_Coverage_SJSA1.H3K9me3
     shortLabel SJSA1 H3K9me3
     longLabel SJSA1 H3K9me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/SJSA1.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/SJSA1.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=SJSA1 ab=H3K9me3 view=coverage
     type bigWig
@@ -436,7 +436,7 @@ html html/encode.html
     track T2T_Encode_Coverage_VCaP.CTCF
     shortLabel VCaP CTCF
     longLabel VCaP CTCF Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/VCaP.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/VCaP.CTCF.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=VCaP ab=CTCF view=coverage
     type bigWig
@@ -444,7 +444,7 @@ html html/encode.html
     track T2T_Encode_Coverage_VCaP.Control
     shortLabel VCaP Control
     longLabel VCaP Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/VCaP.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/VCaP.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=VCaP ab=Control view=coverage
     type bigWig
@@ -452,7 +452,7 @@ html html/encode.html
     track T2T_Encode_Coverage_VCaP.H3K27ac
     shortLabel VCaP H3K27ac
     longLabel VCaP H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/VCaP.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/VCaP.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=VCaP ab=H3K27ac view=coverage
     type bigWig
@@ -460,7 +460,7 @@ html html/encode.html
     track T2T_Encode_Coverage_brain_microvascular_endothelial_cell.Control
     shortLabel bmec Control
     longLabel brain_microvascular_endothelial_cell Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/brain_microvascular_endothelial_cell.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/brain_microvascular_endothelial_cell.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=bmec ab=Control view=coverage
     type bigWig
@@ -468,7 +468,7 @@ html html/encode.html
     track T2T_Encode_Coverage_brain_microvascular_endothelial_cell.H3K27ac
     shortLabel bmec H3K27ac
     longLabel brain_microvascular_endothelial_cell H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/brain_microvascular_endothelial_cell.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/brain_microvascular_endothelial_cell.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=bmec ab=H3K27ac view=coverage
     type bigWig
@@ -476,7 +476,7 @@ html html/encode.html
     track T2T_Encode_Coverage_brain_microvascular_endothelial_cell.H3K27me3
     shortLabel bmec H3K27me3
     longLabel brain_microvascular_endothelial_cell H3K27me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/brain_microvascular_endothelial_cell.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/brain_microvascular_endothelial_cell.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=bmec ab=H3K27me3 view=coverage
     type bigWig
@@ -484,7 +484,7 @@ html html/encode.html
     track T2T_Encode_Coverage_brain_microvascular_endothelial_cell.H3K36me3
     shortLabel bmec H3K36me3
     longLabel brain_microvascular_endothelial_cell H3K36me3 Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/brain_microvascular_endothelial_cell.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/brain_microvascular_endothelial_cell.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=bmec ab=H3K36me3 view=coverage
     type bigWig
@@ -492,7 +492,7 @@ html html/encode.html
     track T2T_Encode_Coverage_epithelial_cell_of_prostate_male.CTCF
     shortLabel ecopm CTCF
     longLabel epithelial_cell_of_prostate_male CTCF Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/epithelial_cell_of_prostate_male.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/epithelial_cell_of_prostate_male.CTCF.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=ecopm ab=CTCF view=coverage
     type bigWig
@@ -500,7 +500,7 @@ html html/encode.html
     track T2T_Encode_Coverage_epithelial_cell_of_prostate_male.Control
     shortLabel ecopm Control
     longLabel epithelial_cell_of_prostate_male Control Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/epithelial_cell_of_prostate_male.Control.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/epithelial_cell_of_prostate_male.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=ecopm ab=Control view=coverage
     type bigWig
@@ -508,7 +508,7 @@ html html/encode.html
     track T2T_Encode_Coverage_epithelial_cell_of_prostate_male.H3K27ac
     shortLabel ecopm H3K27ac
     longLabel epithelial_cell_of_prostate_male H3K27ac Coverage
-    bigDataUrl /gbdb/hs1/bbi/encode/coverage/epithelial_cell_of_prostate_male.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/coverage/epithelial_cell_of_prostate_male.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
     subGroups cell=ecopm ab=H3K27ac view=coverage
     type bigWig
@@ -527,7 +527,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_22Rv1.CTCF
     shortLabel 22Rv1 CTCF
     longLabel 22Rv1 CTCF Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/22Rv1.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/22Rv1.CTCF.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=22Rv1 ab=CTCF view=enrichment
     type bigWig
@@ -535,7 +535,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_22Rv1.H3K27ac
     shortLabel 22Rv1 H3K27ac
     longLabel 22Rv1 H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/22Rv1.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/22Rv1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=22Rv1 ab=H3K27ac view=enrichment
     type bigWig
@@ -543,7 +543,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_BE2C.H3K27me3
     shortLabel BE2C H3K27me3
     longLabel BE2C H3K27me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/BE2C.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/BE2C.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=BE2C ab=H3K27me3 view=enrichment
     type bigWig
@@ -551,7 +551,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_BE2C.H3K36me3
     shortLabel BE2C H3K36me3
     longLabel BE2C H3K36me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/BE2C.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/BE2C.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=BE2C ab=H3K36me3 view=enrichment
     type bigWig
@@ -559,7 +559,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_BE2C.H3K4me1
     shortLabel BE2C H3K4me1
     longLabel BE2C H3K4me1 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/BE2C.H3K4me1.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/BE2C.H3K4me1.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=BE2C ab=H3K4me1 view=enrichment
     type bigWig
@@ -567,7 +567,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_BE2C.H3K9me3
     shortLabel BE2C H3K9me3
     longLabel BE2C H3K9me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/BE2C.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/BE2C.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=BE2C ab=H3K9me3 view=enrichment
     type bigWig
@@ -575,7 +575,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_C4-2B.CTCF
     shortLabel C4-2B CTCF
     longLabel C4-2B CTCF Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/C4-2B.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/C4-2B.CTCF.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=C4-2B ab=CTCF view=enrichment
     type bigWig
@@ -583,7 +583,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_C4-2B.H3K27ac
     shortLabel C4-2B H3K27ac
     longLabel C4-2B H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/C4-2B.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/C4-2B.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=C4-2B ab=H3K27ac view=enrichment
     type bigWig
@@ -591,7 +591,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_Caco-2.H3K4me1
     shortLabel Caco-2 H3K4me1
     longLabel Caco-2 H3K4me1 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/Caco-2.H3K4me1.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/Caco-2.H3K4me1.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=Caco-2 ab=H3K4me1 view=enrichment
     type bigWig
@@ -599,7 +599,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_Caco-2.H3K9me3
     shortLabel Caco-2 H3K9me3
     longLabel Caco-2 H3K9me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/Caco-2.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/Caco-2.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=Caco-2 ab=H3K9me3 view=enrichment
     type bigWig
@@ -607,7 +607,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_HAP-1.H3K27ac
     shortLabel HAP-1 H3K27ac
     longLabel HAP-1 H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/HAP-1.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/HAP-1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=HAP-1 ab=H3K27ac view=enrichment
     type bigWig
@@ -615,7 +615,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_HAP-1.H3K27me3
     shortLabel HAP-1 H3K27me3
     longLabel HAP-1 H3K27me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/HAP-1.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/HAP-1.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=HAP-1 ab=H3K27me3 view=enrichment
     type bigWig
@@ -623,7 +623,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_HAP-1.H3K36me3
     shortLabel HAP-1 H3K36me3
     longLabel HAP-1 H3K36me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/HAP-1.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/HAP-1.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=HAP-1 ab=H3K36me3 view=enrichment
     type bigWig
@@ -631,7 +631,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_HAP-1.H3K4me1
     shortLabel HAP-1 H3K4me1
     longLabel HAP-1 H3K4me1 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/HAP-1.H3K4me1.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/HAP-1.H3K4me1.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=HAP-1 ab=H3K4me1 view=enrichment
     type bigWig
@@ -639,7 +639,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_HAP-1.H3K4me3
     shortLabel HAP-1 H3K4me3
     longLabel HAP-1 H3K4me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/HAP-1.H3K4me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/HAP-1.H3K4me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=HAP-1 ab=H3K4me3 view=enrichment
     type bigWig
@@ -647,7 +647,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_HAP-1.H3K9me3
     shortLabel HAP-1 H3K9me3
     longLabel HAP-1 H3K9me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/HAP-1.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/HAP-1.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=HAP-1 ab=H3K9me3 view=enrichment
     type bigWig
@@ -655,7 +655,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_HL-60.H3K27ac
     shortLabel HL-60 H3K27ac
     longLabel HL-60 H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/HL-60.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/HL-60.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=HL-60 ab=H3K27ac view=enrichment
     type bigWig
@@ -663,7 +663,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_MG63.H3K27me3
     shortLabel MG63 H3K27me3
     longLabel MG63 H3K27me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/MG63.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/MG63.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=MG63 ab=H3K27me3 view=enrichment
     type bigWig
@@ -671,7 +671,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_MG63.H3K36me3
     shortLabel MG63 H3K36me3
     longLabel MG63 H3K36me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/MG63.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/MG63.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=MG63 ab=H3K36me3 view=enrichment
     type bigWig
@@ -679,7 +679,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_MG63.H3K4me3
     shortLabel MG63 H3K4me3
     longLabel MG63 H3K4me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/MG63.H3K4me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/MG63.H3K4me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=MG63 ab=H3K4me3 view=enrichment
     type bigWig
@@ -687,7 +687,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_MG63.H3K9me3
     shortLabel MG63 H3K9me3
     longLabel MG63 H3K9me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/MG63.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/MG63.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=MG63 ab=H3K9me3 view=enrichment
     type bigWig
@@ -695,7 +695,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_RWPE1.CTCF
     shortLabel RWPE1 CTCF
     longLabel RWPE1 CTCF Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/RWPE1.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/RWPE1.CTCF.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=RWPE1 ab=CTCF view=enrichment
     type bigWig
@@ -703,7 +703,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_RWPE1.H3K27ac
     shortLabel RWPE1 H3K27ac
     longLabel RWPE1 H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/RWPE1.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/RWPE1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=RWPE1 ab=H3K27ac view=enrichment
     type bigWig
@@ -711,7 +711,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_RWPE2.CTCF
     shortLabel RWPE2 CTCF
     longLabel RWPE2 CTCF Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/RWPE2.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/RWPE2.CTCF.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=RWPE2 ab=CTCF view=enrichment
     type bigWig
@@ -719,7 +719,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_RWPE2.H3K27ac
     shortLabel RWPE2 H3K27ac
     longLabel RWPE2 H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/RWPE2.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/RWPE2.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=RWPE2 ab=H3K27ac view=enrichment
     type bigWig
@@ -727,7 +727,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_RWPE2.H3K36me3
     shortLabel RWPE2 H3K36me3
     longLabel RWPE2 H3K36me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/RWPE2.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/RWPE2.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=RWPE2 ab=H3K36me3 view=enrichment
     type bigWig
@@ -735,7 +735,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJCRH30.H3K27ac
     shortLabel SJCRH30 H3K27ac
     longLabel SJCRH30 H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJCRH30.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJCRH30.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJCRH30 ab=H3K27ac view=enrichment
     type bigWig
@@ -743,7 +743,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJCRH30.H3K27me3
     shortLabel SJCRH30 H3K27me3
     longLabel SJCRH30 H3K27me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJCRH30.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJCRH30.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJCRH30 ab=H3K27me3 view=enrichment
     type bigWig
@@ -751,7 +751,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJCRH30.H3K36me3
     shortLabel SJCRH30 H3K36me3
     longLabel SJCRH30 H3K36me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJCRH30.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJCRH30.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJCRH30 ab=H3K36me3 view=enrichment
     type bigWig
@@ -759,7 +759,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJCRH30.H3K4me1
     shortLabel SJCRH30 H3K4me1
     longLabel SJCRH30 H3K4me1 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJCRH30.H3K4me1.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJCRH30.H3K4me1.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJCRH30 ab=H3K4me1 view=enrichment
     type bigWig
@@ -767,7 +767,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJCRH30.H3K4me3
     shortLabel SJCRH30 H3K4me3
     longLabel SJCRH30 H3K4me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJCRH30.H3K4me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJCRH30.H3K4me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJCRH30 ab=H3K4me3 view=enrichment
     type bigWig
@@ -775,7 +775,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJCRH30.H3K9me3
     shortLabel SJCRH30 H3K9me3
     longLabel SJCRH30 H3K9me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJCRH30.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJCRH30.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJCRH30 ab=H3K9me3 view=enrichment
     type bigWig
@@ -783,7 +783,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJSA1.H3K27ac
     shortLabel SJSA1 H3K27ac
     longLabel SJSA1 H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJSA1.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJSA1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJSA1 ab=H3K27ac view=enrichment
     type bigWig
@@ -791,7 +791,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJSA1.H3K27me3
     shortLabel SJSA1 H3K27me3
     longLabel SJSA1 H3K27me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJSA1.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJSA1.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJSA1 ab=H3K27me3 view=enrichment
     type bigWig
@@ -799,7 +799,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJSA1.H3K36me3
     shortLabel SJSA1 H3K36me3
     longLabel SJSA1 H3K36me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJSA1.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJSA1.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJSA1 ab=H3K36me3 view=enrichment
     type bigWig
@@ -807,7 +807,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJSA1.H3K4me3
     shortLabel SJSA1 H3K4me3
     longLabel SJSA1 H3K4me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJSA1.H3K4me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJSA1.H3K4me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJSA1 ab=H3K4me3 view=enrichment
     type bigWig
@@ -815,7 +815,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_SJSA1.H3K9me3
     shortLabel SJSA1 H3K9me3
     longLabel SJSA1 H3K9me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/SJSA1.H3K9me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/SJSA1.H3K9me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=SJSA1 ab=H3K9me3 view=enrichment
     type bigWig
@@ -823,7 +823,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_VCaP.CTCF
     shortLabel VCaP CTCF
     longLabel VCaP CTCF Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/VCaP.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/VCaP.CTCF.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=VCaP ab=CTCF view=enrichment
     type bigWig
@@ -831,7 +831,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_VCaP.H3K27ac
     shortLabel VCaP H3K27ac
     longLabel VCaP H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/VCaP.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/VCaP.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=VCaP ab=H3K27ac view=enrichment
     type bigWig
@@ -839,7 +839,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_brain_microvascular_endothelial_cell.H3K27ac
     shortLabel bmec H3K27ac
     longLabel brain_microvascular_endothelial_cell H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/brain_microvascular_endothelial_cell.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/brain_microvascular_endothelial_cell.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=bmec ab=H3K27ac view=enrichment
     type bigWig
@@ -847,7 +847,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_brain_microvascular_endothelial_cell.H3K27me3
     shortLabel bmec H3K27me3
     longLabel brain_microvascular_endothelial_cell H3K27me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/brain_microvascular_endothelial_cell.H3K27me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/brain_microvascular_endothelial_cell.H3K27me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=bmec ab=H3K27me3 view=enrichment
     type bigWig
@@ -855,7 +855,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_brain_microvascular_endothelial_cell.H3K36me3
     shortLabel bmec H3K36me3
     longLabel brain_microvascular_endothelial_cell H3K36me3 Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/brain_microvascular_endothelial_cell.H3K36me3.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/brain_microvascular_endothelial_cell.H3K36me3.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=bmec ab=H3K36me3 view=enrichment
     type bigWig
@@ -863,7 +863,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_epithelial_cell_of_prostate_male.CTCF
     shortLabel ecopm CTCF
     longLabel epithelial_cell_of_prostate_male CTCF Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/epithelial_cell_of_prostate_male.CTCF.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/epithelial_cell_of_prostate_male.CTCF.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=ecopm ab=CTCF view=enrichment
     type bigWig
@@ -871,7 +871,7 @@ html html/encode.html
     track T2T_Encode_Enrichment_epithelial_cell_of_prostate_male.H3K27ac
     shortLabel ecopm H3K27ac
     longLabel epithelial_cell_of_prostate_male H3K27ac Enrichment
-    bigDataUrl /gbdb/hs1/bbi/encode/enrichment/epithelial_cell_of_prostate_male.H3K27ac.chm13v2.0.bw
+    bigDataUrl /gbdb/hs1/encode/enrichment/epithelial_cell_of_prostate_male.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
     subGroups cell=ecopm ab=H3K27ac view=enrichment
     type bigWig
@@ -887,7 +887,7 @@ html html/encode.html
     track T2T_Encode_Peaks_22Rv1.CTCF
     shortLabel 22Rv1 CTCF
     longLabel 22Rv1 CTCF Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/22Rv1.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/22Rv1.CTCF.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=22Rv1 ab=CTCF view=peaks
     type bigBed 6 +
@@ -895,7 +895,7 @@ html html/encode.html
     track T2T_Encode_Peaks_22Rv1.H3K27ac
     shortLabel 22Rv1 H3K27ac
     longLabel 22Rv1 H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/22Rv1.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/22Rv1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=22Rv1 ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -903,7 +903,7 @@ html html/encode.html
     track T2T_Encode_Peaks_BE2C.H3K27me3
     shortLabel BE2C H3K27me3
     longLabel BE2C H3K27me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/BE2C.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/BE2C.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=BE2C ab=H3K27me3 view=peaks
     type bigBed 6 +
@@ -911,7 +911,7 @@ html html/encode.html
     track T2T_Encode_Peaks_BE2C.H3K36me3
     shortLabel BE2C H3K36me3
     longLabel BE2C H3K36me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/BE2C.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/BE2C.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=BE2C ab=H3K36me3 view=peaks
     type bigBed 6 +
@@ -919,7 +919,7 @@ html html/encode.html
     track T2T_Encode_Peaks_BE2C.H3K4me1
     shortLabel BE2C H3K4me1
     longLabel BE2C H3K4me1 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/BE2C.H3K4me1.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/BE2C.H3K4me1.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=BE2C ab=H3K4me1 view=peaks
     type bigBed 6 +
@@ -927,7 +927,7 @@ html html/encode.html
     track T2T_Encode_Peaks_BE2C.H3K9me3
     shortLabel BE2C H3K9me3
     longLabel BE2C H3K9me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/BE2C.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/BE2C.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=BE2C ab=H3K9me3 view=peaks
     type bigBed 6 +
@@ -935,7 +935,7 @@ html html/encode.html
     track T2T_Encode_Peaks_C4-2B.CTCF
     shortLabel C4-2B CTCF
     longLabel C4-2B CTCF Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/C4-2B.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/C4-2B.CTCF.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=C4-2B ab=CTCF view=peaks
     type bigBed 6 +
@@ -943,7 +943,7 @@ html html/encode.html
     track T2T_Encode_Peaks_C4-2B.H3K27ac
     shortLabel C4-2B H3K27ac
     longLabel C4-2B H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/C4-2B.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/C4-2B.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=C4-2B ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -951,7 +951,7 @@ html html/encode.html
     track T2T_Encode_Peaks_Caco-2.H3K4me1
     shortLabel Caco-2 H3K4me1
     longLabel Caco-2 H3K4me1 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/Caco-2.H3K4me1.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/Caco-2.H3K4me1.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=Caco-2 ab=H3K4me1 view=peaks
     type bigBed 6 +
@@ -959,7 +959,7 @@ html html/encode.html
     track T2T_Encode_Peaks_Caco-2.H3K9me3
     shortLabel Caco-2 H3K9me3
     longLabel Caco-2 H3K9me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/Caco-2.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/Caco-2.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=Caco-2 ab=H3K9me3 view=peaks
     type bigBed 6 +
@@ -967,7 +967,7 @@ html html/encode.html
     track T2T_Encode_Peaks_HAP-1.H3K27ac
     shortLabel HAP-1 H3K27ac
     longLabel HAP-1 H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/HAP-1.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/HAP-1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=HAP-1 ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -975,7 +975,7 @@ html html/encode.html
     track T2T_Encode_Peaks_HAP-1.H3K27me3
     shortLabel HAP-1 H3K27me3
     longLabel HAP-1 H3K27me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/HAP-1.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/HAP-1.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=HAP-1 ab=H3K27me3 view=peaks
     type bigBed 6 +
@@ -983,7 +983,7 @@ html html/encode.html
     track T2T_Encode_Peaks_HAP-1.H3K36me3
     shortLabel HAP-1 H3K36me3
     longLabel HAP-1 H3K36me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/HAP-1.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/HAP-1.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=HAP-1 ab=H3K36me3 view=peaks
     type bigBed 6 +
@@ -991,7 +991,7 @@ html html/encode.html
     track T2T_Encode_Peaks_HAP-1.H3K4me1
     shortLabel HAP-1 H3K4me1
     longLabel HAP-1 H3K4me1 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/HAP-1.H3K4me1.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/HAP-1.H3K4me1.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=HAP-1 ab=H3K4me1 view=peaks
     type bigBed 6 +
@@ -999,7 +999,7 @@ html html/encode.html
     track T2T_Encode_Peaks_HAP-1.H3K4me3
     shortLabel HAP-1 H3K4me3
     longLabel HAP-1 H3K4me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/HAP-1.H3K4me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/HAP-1.H3K4me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=HAP-1 ab=H3K4me3 view=peaks
     type bigBed 6 +
@@ -1007,7 +1007,7 @@ html html/encode.html
     track T2T_Encode_Peaks_HAP-1.H3K9me3
     shortLabel HAP-1 H3K9me3
     longLabel HAP-1 H3K9me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/HAP-1.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/HAP-1.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=HAP-1 ab=H3K9me3 view=peaks
     type bigBed 6 +
@@ -1015,7 +1015,7 @@ html html/encode.html
     track T2T_Encode_Peaks_HL-60.H3K27ac
     shortLabel HL-60 H3K27ac
     longLabel HL-60 H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/HL-60.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/HL-60.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=HL-60 ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -1023,7 +1023,7 @@ html html/encode.html
     track T2T_Encode_Peaks_MG63.H3K27me3
     shortLabel MG63 H3K27me3
     longLabel MG63 H3K27me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/MG63.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/MG63.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=MG63 ab=H3K27me3 view=peaks
     type bigBed 6 +
@@ -1031,7 +1031,7 @@ html html/encode.html
     track T2T_Encode_Peaks_MG63.H3K36me3
     shortLabel MG63 H3K36me3
     longLabel MG63 H3K36me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/MG63.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/MG63.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=MG63 ab=H3K36me3 view=peaks
     type bigBed 6 +
@@ -1039,7 +1039,7 @@ html html/encode.html
     track T2T_Encode_Peaks_MG63.H3K4me3
     shortLabel MG63 H3K4me3
     longLabel MG63 H3K4me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/MG63.H3K4me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/MG63.H3K4me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=MG63 ab=H3K4me3 view=peaks
     type bigBed 6 +
@@ -1047,7 +1047,7 @@ html html/encode.html
     track T2T_Encode_Peaks_MG63.H3K9me3
     shortLabel MG63 H3K9me3
     longLabel MG63 H3K9me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/MG63.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/MG63.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=MG63 ab=H3K9me3 view=peaks
     type bigBed 6 +
@@ -1055,7 +1055,7 @@ html html/encode.html
     track T2T_Encode_Peaks_RWPE1.CTCF
     shortLabel RWPE1 CTCF
     longLabel RWPE1 CTCF Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/RWPE1.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/RWPE1.CTCF.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=RWPE1 ab=CTCF view=peaks
     type bigBed 6 +
@@ -1063,7 +1063,7 @@ html html/encode.html
     track T2T_Encode_Peaks_RWPE1.H3K27ac
     shortLabel RWPE1 H3K27ac
     longLabel RWPE1 H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/RWPE1.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/RWPE1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=RWPE1 ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -1071,7 +1071,7 @@ html html/encode.html
     track T2T_Encode_Peaks_RWPE2.CTCF
     shortLabel RWPE2 CTCF
     longLabel RWPE2 CTCF Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/RWPE2.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/RWPE2.CTCF.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=RWPE2 ab=CTCF view=peaks
     type bigBed 6 +
@@ -1079,7 +1079,7 @@ html html/encode.html
     track T2T_Encode_Peaks_RWPE2.H3K27ac
     shortLabel RWPE2 H3K27ac
     longLabel RWPE2 H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/RWPE2.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/RWPE2.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=RWPE2 ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -1087,7 +1087,7 @@ html html/encode.html
     track T2T_Encode_Peaks_RWPE2.H3K36me3
     shortLabel RWPE2 H3K36me3
     longLabel RWPE2 H3K36me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/RWPE2.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/RWPE2.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=RWPE2 ab=H3K36me3 view=peaks
     type bigBed 6 +
@@ -1095,7 +1095,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJCRH30.H3K27ac
     shortLabel SJCRH30 H3K27ac
     longLabel SJCRH30 H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJCRH30.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJCRH30.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJCRH30 ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -1103,7 +1103,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJCRH30.H3K27me3
     shortLabel SJCRH30 H3K27me3
     longLabel SJCRH30 H3K27me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJCRH30.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJCRH30.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJCRH30 ab=H3K27me3 view=peaks
     type bigBed 6 +
@@ -1111,7 +1111,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJCRH30.H3K36me3
     shortLabel SJCRH30 H3K36me3
     longLabel SJCRH30 H3K36me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJCRH30.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJCRH30.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJCRH30 ab=H3K36me3 view=peaks
     type bigBed 6 +
@@ -1119,7 +1119,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJCRH30.H3K4me1
     shortLabel SJCRH30 H3K4me1
     longLabel SJCRH30 H3K4me1 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJCRH30.H3K4me1.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJCRH30.H3K4me1.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJCRH30 ab=H3K4me1 view=peaks
     type bigBed 6 +
@@ -1127,7 +1127,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJCRH30.H3K4me3
     shortLabel SJCRH30 H3K4me3
     longLabel SJCRH30 H3K4me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJCRH30.H3K4me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJCRH30.H3K4me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJCRH30 ab=H3K4me3 view=peaks
     type bigBed 6 +
@@ -1135,7 +1135,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJCRH30.H3K9me3
     shortLabel SJCRH30 H3K9me3
     longLabel SJCRH30 H3K9me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJCRH30.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJCRH30.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJCRH30 ab=H3K9me3 view=peaks
     type bigBed 6 +
@@ -1143,7 +1143,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJSA1.H3K27ac
     shortLabel SJSA1 H3K27ac
     longLabel SJSA1 H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJSA1.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJSA1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJSA1 ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -1151,7 +1151,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJSA1.H3K27me3
     shortLabel SJSA1 H3K27me3
     longLabel SJSA1 H3K27me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJSA1.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJSA1.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJSA1 ab=H3K27me3 view=peaks
     type bigBed 6 +
@@ -1159,7 +1159,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJSA1.H3K36me3
     shortLabel SJSA1 H3K36me3
     longLabel SJSA1 H3K36me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJSA1.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJSA1.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJSA1 ab=H3K36me3 view=peaks
     type bigBed 6 +
@@ -1167,7 +1167,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJSA1.H3K4me3
     shortLabel SJSA1 H3K4me3
     longLabel SJSA1 H3K4me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJSA1.H3K4me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJSA1.H3K4me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJSA1 ab=H3K4me3 view=peaks
     type bigBed 6 +
@@ -1175,7 +1175,7 @@ html html/encode.html
     track T2T_Encode_Peaks_SJSA1.H3K9me3
     shortLabel SJSA1 H3K9me3
     longLabel SJSA1 H3K9me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/SJSA1.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/SJSA1.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=SJSA1 ab=H3K9me3 view=peaks
     type bigBed 6 +
@@ -1183,7 +1183,7 @@ html html/encode.html
     track T2T_Encode_Peaks_VCaP.CTCF
     shortLabel VCaP CTCF
     longLabel VCaP CTCF Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/VCaP.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/VCaP.CTCF.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=VCaP ab=CTCF view=peaks
     type bigBed 6 +
@@ -1191,7 +1191,7 @@ html html/encode.html
     track T2T_Encode_Peaks_VCaP.H3K27ac
     shortLabel VCaP H3K27ac
     longLabel VCaP H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/VCaP.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/VCaP.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=VCaP ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -1199,7 +1199,7 @@ html html/encode.html
     track T2T_Encode_Peaks_brain_microvascular_endothelial_cell.H3K27ac
     shortLabel bmec H3K27ac
     longLabel brain_microvascular_endothelial_cell H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/brain_microvascular_endothelial_cell.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/brain_microvascular_endothelial_cell.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=bmec ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -1207,7 +1207,7 @@ html html/encode.html
     track T2T_Encode_Peaks_brain_microvascular_endothelial_cell.H3K27me3
     shortLabel bmec H3K27me3
     longLabel brain_microvascular_endothelial_cell H3K27me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/brain_microvascular_endothelial_cell.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/brain_microvascular_endothelial_cell.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=bmec ab=H3K27me3 view=peaks
     type bigBed 6 +
@@ -1215,7 +1215,7 @@ html html/encode.html
     track T2T_Encode_Peaks_brain_microvascular_endothelial_cell.H3K36me3
     shortLabel bmec H3K36me3
     longLabel brain_microvascular_endothelial_cell H3K36me3 Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/brain_microvascular_endothelial_cell.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/brain_microvascular_endothelial_cell.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=bmec ab=H3K36me3 view=peaks
     type bigBed 6 +
@@ -1223,7 +1223,7 @@ html html/encode.html
     track T2T_Encode_Peaks_epithelial_cell_of_prostate_male.CTCF
     shortLabel ecopm CTCF
     longLabel epithelial_cell_of_prostate_male CTCF Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/epithelial_cell_of_prostate_male.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/epithelial_cell_of_prostate_male.CTCF.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=ecopm ab=CTCF view=peaks
     type bigBed 6 +
@@ -1231,7 +1231,7 @@ html html/encode.html
     track T2T_Encode_Peaks_epithelial_cell_of_prostate_male.H3K27ac
     shortLabel ecopm H3K27ac
     longLabel epithelial_cell_of_prostate_male H3K27ac Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/peaks/epithelial_cell_of_prostate_male.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/peaks/epithelial_cell_of_prostate_male.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
     subGroups cell=ecopm ab=H3K27ac view=peaks
     type bigBed 6 +
@@ -1247,7 +1247,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_22Rv1.CTCF
     shortLabel 22Rv1 CTCF hg38LO
     longLabel 22Rv1 CTCF hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/22Rv1.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/22Rv1.CTCF.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=22Rv1 ab=CTCF view=LOpeaks
     type bigBed 6 +
@@ -1255,7 +1255,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_22Rv1.H3K27ac
     shortLabel 22Rv1 H3K27ac hg38LO
     longLabel 22Rv1 H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/22Rv1.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/22Rv1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=22Rv1 ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1263,7 +1263,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_BE2C.H3K27me3
     shortLabel BE2C H3K27me3 hg38LO
     longLabel BE2C H3K27me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/BE2C.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/BE2C.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=BE2C ab=H3K27me3 view=LOpeaks
     type bigBed 6 +
@@ -1271,7 +1271,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_BE2C.H3K36me3
     shortLabel BE2C H3K36me3 hg38LO
     longLabel BE2C H3K36me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/BE2C.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/BE2C.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=BE2C ab=H3K36me3 view=LOpeaks
     type bigBed 6 +
@@ -1279,7 +1279,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_BE2C.H3K4me1
     shortLabel BE2C H3K4me1 hg38LO
     longLabel BE2C H3K4me1 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/BE2C.H3K4me1.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/BE2C.H3K4me1.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=BE2C ab=H3K4me1 view=LOpeaks
     type bigBed 6 +
@@ -1287,7 +1287,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_BE2C.H3K9me3
     shortLabel BE2C H3K9me3 hg38LO
     longLabel BE2C H3K9me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/BE2C.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/BE2C.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=BE2C ab=H3K9me3 view=LOpeaks
     type bigBed 6 +
@@ -1295,7 +1295,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_C4-2B.CTCF
     shortLabel C4-2B CTCF hg38LO
     longLabel C4-2B CTCF hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/C4-2B.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/C4-2B.CTCF.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=C4-2B ab=CTCF view=LOpeaks
     type bigBed 6 +
@@ -1303,7 +1303,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_C4-2B.H3K27ac
     shortLabel C4-2B H3K27ac hg38LO
     longLabel C4-2B H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/C4-2B.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/C4-2B.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=C4-2B ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1311,7 +1311,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_Caco-2.H3K4me1
     shortLabel Caco-2 H3K4me1 hg38LO
     longLabel Caco-2 H3K4me1 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/Caco-2.H3K4me1.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/Caco-2.H3K4me1.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=Caco-2 ab=H3K4me1 view=LOpeaks
     type bigBed 6 +
@@ -1319,7 +1319,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_Caco-2.H3K9me3
     shortLabel Caco-2 H3K9me3 hg38LO
     longLabel Caco-2 H3K9me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/Caco-2.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/Caco-2.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=Caco-2 ab=H3K9me3 view=LOpeaks
     type bigBed 6 +
@@ -1327,7 +1327,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_HAP-1.H3K27ac
     shortLabel HAP-1 H3K27ac hg38LO
     longLabel HAP-1 H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/HAP-1.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/HAP-1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=HAP-1 ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1335,7 +1335,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_HAP-1.H3K27me3
     shortLabel HAP-1 H3K27me3 hg38LO
     longLabel HAP-1 H3K27me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/HAP-1.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/HAP-1.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=HAP-1 ab=H3K27me3 view=LOpeaks
     type bigBed 6 +
@@ -1343,7 +1343,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_HAP-1.H3K36me3
     shortLabel HAP-1 H3K36me3 hg38LO
     longLabel HAP-1 H3K36me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/HAP-1.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/HAP-1.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=HAP-1 ab=H3K36me3 view=LOpeaks
     type bigBed 6 +
@@ -1351,7 +1351,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_HAP-1.H3K4me1
     shortLabel HAP-1 H3K4me1 hg38LO
     longLabel HAP-1 H3K4me1 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/HAP-1.H3K4me1.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/HAP-1.H3K4me1.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=HAP-1 ab=H3K4me1 view=LOpeaks
     type bigBed 6 +
@@ -1359,7 +1359,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_HAP-1.H3K4me3
     shortLabel HAP-1 H3K4me3 hg38LO
     longLabel HAP-1 H3K4me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/HAP-1.H3K4me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/HAP-1.H3K4me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=HAP-1 ab=H3K4me3 view=LOpeaks
     type bigBed 6 +
@@ -1367,7 +1367,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_HAP-1.H3K9me3
     shortLabel HAP-1 H3K9me3 hg38LO
     longLabel HAP-1 H3K9me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/HAP-1.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/HAP-1.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=HAP-1 ab=H3K9me3 view=LOpeaks
     type bigBed 6 +
@@ -1375,7 +1375,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_HL-60.H3K27ac
     shortLabel HL-60 H3K27ac hg38LO
     longLabel HL-60 H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/HL-60.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/HL-60.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=HL-60 ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1383,7 +1383,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_MG63.H3K27me3
     shortLabel MG63 H3K27me3 hg38LO
     longLabel MG63 H3K27me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/MG63.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/MG63.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=MG63 ab=H3K27me3 view=LOpeaks
     type bigBed 6 +
@@ -1391,7 +1391,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_MG63.H3K36me3
     shortLabel MG63 H3K36me3 hg38LO
     longLabel MG63 H3K36me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/MG63.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/MG63.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=MG63 ab=H3K36me3 view=LOpeaks
     type bigBed 6 +
@@ -1399,7 +1399,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_MG63.H3K4me3
     shortLabel MG63 H3K4me3 hg38LO
     longLabel MG63 H3K4me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/MG63.H3K4me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/MG63.H3K4me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=MG63 ab=H3K4me3 view=LOpeaks
     type bigBed 6 +
@@ -1407,7 +1407,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_MG63.H3K9me3
     shortLabel MG63 H3K9me3 hg38LO
     longLabel MG63 H3K9me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/MG63.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/MG63.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=MG63 ab=H3K9me3 view=LOpeaks
     type bigBed 6 +
@@ -1415,7 +1415,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_RWPE1.CTCF
     shortLabel RWPE1 CTCF hg38LO
     longLabel RWPE1 CTCF hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/RWPE1.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/RWPE1.CTCF.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=RWPE1 ab=CTCF view=LOpeaks
     type bigBed 6 +
@@ -1423,7 +1423,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_RWPE1.H3K27ac
     shortLabel RWPE1 H3K27ac hg38LO
     longLabel RWPE1 H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/RWPE1.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/RWPE1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=RWPE1 ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1431,7 +1431,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_RWPE2.CTCF
     shortLabel RWPE2 CTCF hg38LO
     longLabel RWPE2 CTCF hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/RWPE2.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/RWPE2.CTCF.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=RWPE2 ab=CTCF view=LOpeaks
     type bigBed 6 +
@@ -1439,7 +1439,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_RWPE2.H3K27ac
     shortLabel RWPE2 H3K27ac hg38LO
     longLabel RWPE2 H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/RWPE2.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/RWPE2.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=RWPE2 ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1447,7 +1447,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_RWPE2.H3K36me3
     shortLabel RWPE2 H3K36me3 hg38LO
     longLabel RWPE2 H3K36me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/RWPE2.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/RWPE2.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=RWPE2 ab=H3K36me3 view=LOpeaks
     type bigBed 6 +
@@ -1455,7 +1455,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJCRH30.H3K27ac
     shortLabel SJCRH30 H3K27ac hg38LO
     longLabel SJCRH30 H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJCRH30.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJCRH30.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJCRH30 ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1463,7 +1463,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJCRH30.H3K27me3
     shortLabel SJCRH30 H3K27me3 hg38LO
     longLabel SJCRH30 H3K27me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJCRH30.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJCRH30.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJCRH30 ab=H3K27me3 view=LOpeaks
     type bigBed 6 +
@@ -1471,7 +1471,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJCRH30.H3K36me3
     shortLabel SJCRH30 H3K36me3 hg38LO
     longLabel SJCRH30 H3K36me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJCRH30.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJCRH30.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJCRH30 ab=H3K36me3 view=LOpeaks
     type bigBed 6 +
@@ -1479,7 +1479,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJCRH30.H3K4me1
     shortLabel SJCRH30 H3K4me1 hg38LO
     longLabel SJCRH30 H3K4me1 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJCRH30.H3K4me1.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJCRH30.H3K4me1.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJCRH30 ab=H3K4me1 view=LOpeaks
     type bigBed 6 +
@@ -1487,7 +1487,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJCRH30.H3K4me3
     shortLabel SJCRH30 H3K4me3 hg38LO
     longLabel SJCRH30 H3K4me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJCRH30.H3K4me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJCRH30.H3K4me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJCRH30 ab=H3K4me3 view=LOpeaks
     type bigBed 6 +
@@ -1495,7 +1495,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJCRH30.H3K9me3
     shortLabel SJCRH30 H3K9me3 hg38LO
     longLabel SJCRH30 H3K9me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJCRH30.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJCRH30.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJCRH30 ab=H3K9me3 view=LOpeaks
     type bigBed 6 +
@@ -1503,7 +1503,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJSA1.H3K27ac
     shortLabel SJSA1 H3K27ac hg38LO
     longLabel SJSA1 H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJSA1.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJSA1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJSA1 ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1511,7 +1511,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJSA1.H3K27me3
     shortLabel SJSA1 H3K27me3 hg38LO
     longLabel SJSA1 H3K27me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJSA1.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJSA1.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJSA1 ab=H3K27me3 view=LOpeaks
     type bigBed 6 +
@@ -1519,7 +1519,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJSA1.H3K36me3
     shortLabel SJSA1 H3K36me3 hg38LO
     longLabel SJSA1 H3K36me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJSA1.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJSA1.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJSA1 ab=H3K36me3 view=LOpeaks
     type bigBed 6 +
@@ -1527,7 +1527,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJSA1.H3K4me3
     shortLabel SJSA1 H3K4me3 hg38LO
     longLabel SJSA1 H3K4me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJSA1.H3K4me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJSA1.H3K4me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJSA1 ab=H3K4me3 view=LOpeaks
     type bigBed 6 +
@@ -1535,7 +1535,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_SJSA1.H3K9me3
     shortLabel SJSA1 H3K9me3 hg38LO
     longLabel SJSA1 H3K9me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/SJSA1.H3K9me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/SJSA1.H3K9me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=SJSA1 ab=H3K9me3 view=LOpeaks
     type bigBed 6 +
@@ -1543,7 +1543,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_VCaP.CTCF
     shortLabel VCaP CTCF hg38LO
     longLabel VCaP CTCF hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/VCaP.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/VCaP.CTCF.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=VCaP ab=CTCF view=LOpeaks
     type bigBed 6 +
@@ -1551,7 +1551,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_VCaP.H3K27ac
     shortLabel VCaP H3K27ac hg38LO
     longLabel VCaP H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/VCaP.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/VCaP.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=VCaP ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1559,7 +1559,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_brain_microvascular_endothelial_cell.H3K27ac
     shortLabel bmec H3K27ac hg38LO
     longLabel brain_microvascular_endothelial_cell H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/brain_microvascular_endothelial_cell.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/brain_microvascular_endothelial_cell.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=bmec ab=H3K27ac view=LOpeaks
     type bigBed 6 +
@@ -1567,7 +1567,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_brain_microvascular_endothelial_cell.H3K27me3
     shortLabel bmec H3K27me3 hg38LO
     longLabel brain_microvascular_endothelial_cell H3K27me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/brain_microvascular_endothelial_cell.H3K27me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/brain_microvascular_endothelial_cell.H3K27me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=bmec ab=H3K27me3 view=LOpeaks
     type bigBed 6 +
@@ -1575,7 +1575,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_brain_microvascular_endothelial_cell.H3K36me3
     shortLabel bmec H3K36me3 hg38LO
     longLabel brain_microvascular_endothelial_cell H3K36me3 hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/brain_microvascular_endothelial_cell.H3K36me3.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/brain_microvascular_endothelial_cell.H3K36me3.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=bmec ab=H3K36me3 view=LOpeaks
     type bigBed 6 +
@@ -1583,7 +1583,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_epithelial_cell_of_prostate_male.CTCF
     shortLabel ecopm CTCF hg38LO
     longLabel epithelial_cell_of_prostate_male CTCF hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/epithelial_cell_of_prostate_male.CTCF.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/epithelial_cell_of_prostate_male.CTCF.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=ecopm ab=CTCF view=LOpeaks
     type bigBed 6 +
@@ -1591,7 +1591,7 @@ html html/encode.html
     track T2T_Encode_LOPeaks_epithelial_cell_of_prostate_male.H3K27ac
     shortLabel ecopm H3K27ac hg38LO
     longLabel epithelial_cell_of_prostate_male H3K27ac hg38 liftover Macs2 Peaks
-    bigDataUrl /gbdb/hs1/bbi/encode/LO_peaks/epithelial_cell_of_prostate_male.H3K27ac.chm13v2.0.bb
+    bigDataUrl /gbdb/hs1/encode/LO_peaks/epithelial_cell_of_prostate_male.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
     subGroups cell=ecopm ab=H3K27ac view=LOpeaks
     type bigBed 6 +
