@@ -5,11 +5,11 @@ visibility hide
 colorByStrand 150,100,30 230,170,40
 color 150,100,30
 altColor 230,170,40
-bigDataUrl  /gbdb/hs1/bbi/GCA_009914755.4_T2T-CHM13v2.0.assembly.bb
+bigDataUrl  /gbdb/hs1/bbi/assembly.bb
 type bigBed 6
 html html/GCA_009914755.4_T2T-CHM13v2.0.assembly
 searchIndex name
-searchTrix  /gbdb/hs1/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.assembly.ix
+searchTrix  /gbdb/hs1/ixIxx/assembly.ix
 url https://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI Nucleotide database
 group map

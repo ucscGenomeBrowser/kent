@@ -112,14 +112,15 @@ $(document).ready(function() {
         // <input type="hidden" value="https://hgwdev-kent.gi.ucsc.edu/~kent/t2t/hub/hub2.txt">
         // <svg class="pasteIcon">...</svg>    <--- this is e.target of the click handler
         // </td>
-        var link = e.target.parentElement.getElementsByClassName("hgTracksLink")[0].href;
-        var inputEl = e.target.parentElement.getElementsByTagName("input")[0];
+        var inputEl = e.target.previousSibling;
+        var connectUrl = e.target.previousSibling.previousSibling.href;
 
         // the url is in the <input> element just before the SVG
         var oldVal = inputEl.value;
-        // display:none does not work, see https://stackoverflow.com/questions/31593297/using-execcommand-javascript-to-copy-hidden-text-to-clipboard
+        // display:none does not work,
+        // see https://stackoverflow.com/questions/31593297/using-execcommand-javascript-to-copy-hidden-text-to-clipboard
         inputEl.style = "position: absolute; left: -1000px; top: -1000px";
-        inputEl.value = link;
+        inputEl.value = connectUrl;
         inputEl.type = 'text';
         inputEl.select();
         inputEl.setSelectionRange(0, 99999); /* For mobile devices */
@@ -129,6 +130,16 @@ $(document).ready(function() {
         inputEl.value = oldVal;
         alert("Copied Genome Browser hub connection URL to clipboard");
     });
+
+    $('.shortPlus').bind('click', function(ev) {
+        ev.target.parentElement.style.display = 'none';
+        ev.target.parentElement.nextSibling.style.display = 'inline';
+    });
+    $('.fullMinus').bind('click', function(ev) {
+        ev.target.parentElement.style.display = 'none';
+        ev.target.parentElement.previousSibling.style.display = 'inline';
+    });
+
 
 });
 

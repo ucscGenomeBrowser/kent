@@ -12,6 +12,6 @@ color 0,0,0
 altColor 128,128,128
 viewLimits 30:70
 type bigWig 0 100
-bigDataUrl  /gbdb/hs1/bbi/GCA_009914755.4_T2T-CHM13v2.0.gc5Base.bw
+bigDataUrl  /gbdb/hs1/bbi/gc5Base.bw
 html html/GCA_009914755.4_T2T-CHM13v2.0.gc5Base
 

@@ -19,8 +19,8 @@ priority 2
         type bigGenePred
         labelFields name,geneName,geneName2
         searchIndex name
-        searchTrix  /gbdb/hs1/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeq.ix
-        bigDataUrl  /gbdb/hs1/bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeq.bb
+        searchTrix  /gbdb/hs1/ixIxx/ncbiRefSeq.ix
+        bigDataUrl  /gbdb/hs1/bbi/ncbiRefSeq.bb
         longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
@@ -35,9 +35,9 @@ priority 2
         type bigGenePred
         labelFields name,geneName,geneName2
         searchIndex name
-        searchTrix  /gbdb/hs1/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqCurated.ix
+        searchTrix  /gbdb/hs1/ixIxx/ncbiRefSeqCurated.ix
         idXref ncbiRefSeqLink mrnaAcc name
-        bigDataUrl  /gbdb/hs1/bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqCurated.bb
+        bigDataUrl  /gbdb/hs1/bbi/ncbiRefSeqCurated.bb
         baseColorUseCds given
         baseColorDefault genomicCodons
         priority 2
@@ -50,9 +50,9 @@ priority 2
         type bigGenePred
         labelFields name,geneName,geneName2
         searchIndex name
-        searchTrix  /gbdb/hs1/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqPredicted.ix
+        searchTrix  /gbdb/hs1/ixIxx/ncbiRefSeqPredicted.ix
         idXref ncbiRefSeqLink mrnaAcc name
-        bigDataUrl  /gbdb/hs1/bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqPredicted.bb
+        bigDataUrl  /gbdb/hs1/bbi/ncbiRefSeqPredicted.bb
         baseColorUseCds given
         baseColorDefault genomicCodons
         priority 3
@@ -64,8 +64,8 @@ priority 2
         longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
         priority 4
         searchIndex name
-        searchTrix  /gbdb/hs1/ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqOther.ix
-        bigDataUrl  /gbdb/hs1/bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqOther.bb
+        searchTrix  /gbdb/hs1/ixIxx/ncbiRefSeqOther.ix
+        bigDataUrl  /gbdb/hs1/bbi/ncbiRefSeqOther.bb
         type bigBed 12 +
         labelFields gene
         skipEmptyFields on
@@ -78,7 +78,7 @@ priority 2
         longLabel RefSeq Alignments of RNAs
         type bigPsl
         searchIndex name
-        bigDataUrl  /gbdb/hs1/bbi/GCA_009914755.4_T2T-CHM13v2.0.bigPsl.bb
+        bigDataUrl  /gbdb/hs1/bbi/bigPsl.bb
         indelDoubleInsert on
         indelQueryInsert on
         showDiffBasesAllScales .
