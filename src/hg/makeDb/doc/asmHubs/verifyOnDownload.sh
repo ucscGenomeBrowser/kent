@@ -22,7 +22,9 @@ export fileName=`basename $orderList`
 export subset=${fileName%.orderList.tsv}
 
 export minTrackCount=12
-if [ "${subset}" == "viral" ]; then
+if [ "${subset}" == "invertebrate" ]; then
+  minTrackCount=10
+elif [ "${subset}" == "viral" ]; then
   minTrackCount=7
 fi
 
