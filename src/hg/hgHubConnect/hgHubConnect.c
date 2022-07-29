@@ -254,8 +254,11 @@ struct hubConnectStatus *hub, *nextHub;
 for(hub = hubList; hub; hub = nextHub)
     {
     nextHub = hub->next;
-    unlistedHubCount++;
-    slAddHead(&unlistedHubList, hub);
+    if (!startsWith("/gbdb", hub->hubUrl))
+        {
+        unlistedHubCount++;
+        slAddHead(&unlistedHubList, hub);
+        }
     }
 
 hubList = NULL;  // hubList no longer valid
