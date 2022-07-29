@@ -137,7 +137,7 @@ else
     jsonWriteString(jw, "genome", genome);
     struct slPair *dbOptions = NULL;
     char genomeLabel[PATH_LEN*4];
-    if (isNotEmpty(hubUrl))
+    if (isNotEmpty(hubUrl) && !startsWith("/gbdb", hubUrl))
         {
         struct trackHub *hub = hubConnectGetHub(hubUrl);
         if (hub == NULL)
@@ -152,7 +152,7 @@ else
         }
     else
         {
-        dbOptions = hGetDbOptionsForGenome(genome);
+        dbOptions = hGetDbOptionsForGenome(trackHubSkipHubName(genome));
         safecpy(genomeLabel, sizeof(genomeLabel), genome);
         }
     jsonWriteValueLabelList(jw, "dbOptions", dbOptions);

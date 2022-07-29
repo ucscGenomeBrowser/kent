@@ -25,7 +25,9 @@ if dbExists $db ; then
         #rm -rf $hubDir
 
         trackDbToTxt $db $trackDb $hubDir
-        cat $hubParent/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
+        # creates $hubDir/hubAndGenome.txt 
+        ./dbDbToHubTxt $db $hubDir
+        cat $hubDir/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
     fi
 fi
 

@@ -305,20 +305,27 @@ var speciesTree = (function() {
         // "Hub Genomes" link instead of a tree.
         var y = yIn;
         var hub, i, textX, textY, lineX1, lineY, lineX2;
+        var countNonCurated = 0;
         if (hubList && hubList.length) {
             for (i = 0;  i < hubList.length;  i++) {
                 hub = hubList[i];
-                addHubLabel(svg, hub, y);
+                // is this a curated assembly hub? If so, don't list it
+                if (!hub.hubUrl.startsWith("/gbdb")) {
+                    addHubLabel(svg, hub, y);
+                    y += cfg.labelLineHeight;
+                    countNonCurated++;
+                }
+            }
+            if (countNonCurated) {
+                textX = cfg.labelRightX + cfg.speciesLineOffsetX;
+                textY = (yIn + y - cfg.labelLineHeight) / 2;
+                addTrackHubsLink(svg, textX, textY);
+                lineX1 = cfg.hubLineOffset;
+                lineY = y - cfg.halfTextHeight;
+                lineX2 = cfg.containerWidth - cfg.speciesLineOffsetX;
+                addLine(svg, lineX1, lineY, lineX2, lineY);
                 y += cfg.labelLineHeight;
             }
-            textX = cfg.labelRightX + cfg.speciesLineOffsetX;
-            textY = (yIn + y - cfg.labelLineHeight) / 2;
-            addTrackHubsLink(svg, textX, textY);
-            lineX1 = cfg.hubLineOffset;
-            lineY = y - cfg.halfTextHeight;
-            lineX2 = cfg.containerWidth - cfg.speciesLineOffsetX;
-            addLine(svg, lineX1, lineY, lineX2, lineY);
-            y += cfg.labelLineHeight;
         }
         return y;
     }
