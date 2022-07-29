@@ -59,6 +59,7 @@ struct blatServerTable
     char *host;		/* Name of machine hosting server. */
     char *port;		/* Port that hosts server. */
     char *nibDir;	/* Directory of sequence files. */
+    boolean isDynamic;  /* Is this a dynamic server? */
 };
 
 struct hTableInfo

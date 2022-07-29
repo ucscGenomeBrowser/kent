@@ -5029,7 +5029,7 @@ if (!sqlExists(conn, query))
 /* Do a little join to get data to fit into the blatServerTable. */
 sqlSafef(query, sizeof(query),
                "select d.name,d.description,blatServers.isTrans"
-               ",blatServers.host,blatServers.port,d.nibPath "
+               ",blatServers.host,blatServers.port,d.nibPath, blatServers.dynamic "
 	       "from %s d,blatServers where blatServers.isTrans = %d and "
 	       "d.name = '%s' and d.name = blatServers.db",
 	        dbDbTable(), isTrans, db);
@@ -5045,6 +5045,7 @@ st.isTrans = atoi(row[2]);
 st.host = cloneString(row[3]);
 st.port = cloneString(row[4]);
 st.nibDir = cloneString(row[5]);
+st.isDynamic = atoi(row[6]);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;

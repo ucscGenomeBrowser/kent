@@ -26,7 +26,7 @@ if dbExists $db ; then
 
         trackDbToTxt $db $trackDb $hubDir
         # creates $hubDir/hubAndGenome.txt 
-        ./dbDbToHubTxt $db $hubDir
+        dbDbToHubTxt $db genome-www@soe.ucsc.edu ../groups.txt $hubDir/hubAndGenome.txt
         cat $hubDir/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
     fi
 fi
