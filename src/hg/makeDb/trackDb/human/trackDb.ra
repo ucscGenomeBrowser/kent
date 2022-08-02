@@ -4786,7 +4786,7 @@ subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
 sortOrder class=+ level=+ view=+
 type bed 3
-pennantIcon snowflake.png /goldenPath/newsarch.html#093020b "ClinGen CNV data in now updated on ClinVar Variants track. See news archive for details."
+pennantIcon snowflake.png /goldenPath/newsarch.html#093020b "ClinGen CNV data are now updated on ClinVar Variants track. See news archive for details."
 
     track iscaViewTotal
     shortLabel Coverage (Graphical)
