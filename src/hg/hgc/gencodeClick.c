@@ -522,7 +522,7 @@ while ((pdb != NULL) || (rowCnt == 0))
         printf("<td width=\"33.33%%\">");
         if (pdb != NULL)
             {
-            printf("<a href=\"http://www.rcsb.org/pdb/cgi/explore.cgi?job=graphics&pdbId=%s\" target=_blank>%s</a>", pdb->pdbId, pdb->pdbId);
+            printf("<a href=\"https://www.rcsb.org/structure/%s\" target=_blank>%s</a>", pdb->pdbId, pdb->pdbId);
             pdb = pdb->next;
             }
         }
