@@ -195,7 +195,7 @@ if [ ! -s "$buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz" ]; then
 fi
 
 # see if there are actually rmsk items in the track, this has to be > 3
-export rmskItemCount=`zcat $buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.g | head | wc -l`
+export rmskItemCount=`zcat $buildDir/trackData/repeatMasker/$asmId.sorted.fa.out.gz | head | wc -l`
 
 # clean up garbage from previous errors here
 if [ "${rmskItemCount}" -lt 4 ]; then

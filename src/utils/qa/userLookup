@@ -1,0 +1,24 @@
+#!/bin/bash
+echo "This command gives you a user account based on email or username"
+
+if [[ $# -ne 1 ]]; then
+    echo "Usage: userEmailLookup email@youGetThePoint.com"
+    exit 2
+fi
+input="$1"
+
+printf "\nDEV's gbMembers (=Beta):\n"
+hgsql -e "select * from gbMembers where email='$input' union all select * from gbMembers where userName='$input'\G" hgcentraltest
+printf "\nRR's gbMembers (=Euro/Asia):\n"
+hgsql -h genome-centdb -e "select * from gbMembers where email='$input' union all select * from gbMembers where userName='$input'\G" hgcentral
+
+printf "\nGo here to see their previous ML questions:\n"
+printf "http://redmine.soe.ucsc.edu/projects/maillists/search?q=$input"
+
+userNameRR=`hgsql -h genome-centdb -e "select userName from gbMembers where email='$input' union all select userName from gbMembers where userName='$input'" hgcentral`
+printf "Here is their userNameRR(s):"
+echo "$userNameRR"
+
+printf "\nHere is the command to update an email:\n"
+echo "hgsql -h genome-centdb -e \"update gbMembers set email='NEW_EMAIL' where userName='USERNAME'\" hgcentral"
+
