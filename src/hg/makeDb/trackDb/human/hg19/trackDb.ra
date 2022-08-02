@@ -1,7 +1,6 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
-include problematic-public.ra public
-include problematic.ra alpha,beta
+include problematic.ra
 
 track cosmicRegions
 shortLabel COSMIC Regions
