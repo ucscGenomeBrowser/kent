@@ -1,6 +1,6 @@
 track wgEncodeGencodeV40
-compositeTrack off
-superTrack wgEncodeGencodeSuper pack
+compositeTrack on
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V40
 longLabel All GENCODE annotations from V40 (Ensembl 106)
 group genes

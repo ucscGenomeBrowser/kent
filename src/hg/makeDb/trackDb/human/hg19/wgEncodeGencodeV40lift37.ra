@@ -1,6 +1,6 @@
 track wgEncodeGencodeV40lift37
-compositeTrack off
-superTrack wgEncodeGencodeSuper pack
+compositeTrack on
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE V40lift37
 longLabel GENCODE lifted annotations from V40lift37 (Ensembl 106)
 group genes

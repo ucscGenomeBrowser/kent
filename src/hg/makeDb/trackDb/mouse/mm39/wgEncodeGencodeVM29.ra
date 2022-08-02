@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM29
-compositeTrack off
-superTrack wgEncodeGencodeSuper pack
+compositeTrack on
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM29
 longLabel All GENCODE annotations from VM29 (Ensembl 106)
 group genes
