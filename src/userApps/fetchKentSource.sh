@@ -295,6 +295,8 @@ src/hg/pslToChain \
 src/hg/makeDb/outside \
 src/hg/makeDb/trackDbRaFormat \
 src/hg/makeDb/trackDbPatch \
+src/hg/makeDb/dbDbToHubTxt \
+src/hg/makeDb/trackDbToTxt \
 src/hg/mouseStuff \
 src/hg/ratStuff \
 src/hg/nci60 \
