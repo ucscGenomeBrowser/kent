@@ -55,8 +55,8 @@ static char *gencodeTagsUrl = "http://www.gencodegenes.org/pages/tags.html";
 static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
 static char *hgncUrl = " https://www.genenames.org/data/gene-symbol-report/#!/symbol/%s";
 static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s";
-static char *apprisHomeUrl = "http://appris-tools.org/";
-static char *apprisGeneUrl = "http://appris-tools.org/#/database/id/%s/%s?sc=ensembl";
+static char *apprisHomeUrl = "https://appris.bioinfo.cnio.es/#/";
+static char *apprisGeneUrl = "https://appris.bioinfo.cnio.es/#/database/id/%s/%s?sc=ensembl";
 
 static char* UNKNOWN = "unknown";
 
