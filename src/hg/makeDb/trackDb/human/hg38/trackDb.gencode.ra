@@ -4,7 +4,7 @@ trackHandler wgEncodeGencode
 group genes
 shortLabel All GENCODE
 longLabel All GENCODE transcripts, including comprehensive set and previous version
-pennantIcon New red ../goldenPath/newsarch.html#051122 "Updated May 11, 2022"
+pennantIcon New red ../goldenPath/newsarch.html#080222 "Updated Aug. 02, 2022"
 # don't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 include wgEncodeGencodeV19.ra
