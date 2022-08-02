@@ -1,5 +1,5 @@
 track wgEncodeGencodeV40lift37
-compositeTrack on
+compositeTrack off
 superTrack wgEncodeGencodeSuper pack
 shortLabel GENCODE V40lift37
 longLabel GENCODE lifted annotations from V40lift37 (Ensembl 106)

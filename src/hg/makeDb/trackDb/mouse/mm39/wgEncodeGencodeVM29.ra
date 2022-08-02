@@ -1,5 +1,5 @@
 track wgEncodeGencodeVM29
-compositeTrack on
+compositeTrack off
 superTrack wgEncodeGencodeSuper pack
 shortLabel All GENCODE VM29
 longLabel All GENCODE annotations from VM29 (Ensembl 106)

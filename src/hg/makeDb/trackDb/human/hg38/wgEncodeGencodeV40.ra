@@ -1,5 +1,5 @@
 track wgEncodeGencodeV40
-compositeTrack on
+compositeTrack off
 superTrack wgEncodeGencodeSuper pack
 shortLabel All GENCODE V40
 longLabel All GENCODE annotations from V40 (Ensembl 106)
