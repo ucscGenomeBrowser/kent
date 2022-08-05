@@ -49,7 +49,7 @@ To operate this locally, you will need the <b>hs1.4.2bit</b> file from:
 </pre>
 Which can be obtained with rsync via:
 <pre>
-  rsync -a -P
+  rsync -a -P \
     rsync://hgdownload.soe.ucsc.edu/goldenPath/hs1/bigZips/hs1.2bit ./
 </pre>
 With that <b>hs1.2bit</b> file in your working directory where you run
@@ -57,13 +57,13 @@ this command, for example, a DNA query with your DNA sequence in
 the file: <b>someDna.fa</b>
 with result in the file: <b>hs1.someDna.psl</b>
 <pre>
-gfClient -t=dna -q=dna -genome=hs1 -genomeDataDir=hs1
+gfClient -t=dna -q=dna -genome=hs1 -genomeDataDir=hs1 \
     dynablat-01.soe.ucsc.edu 4040 ./ someDna.fa hs1.someDna.psl
 </pre>
 For a protein fasta query with your protein sequence in the file: <b>someProtein.faa</b>
 with result in the file: <b>hs1.someProtein.psl</b>
 <pre>
-gfClient -t=dnax -q=prot  -genome=hs1 -genomeDataDir=hs1
+gfClient -t=dnax -q=prot  -genome=hs1 -genomeDataDir=hs1 \
     dynablat-01.soe.ucsc.edu 4040 ./ someProtein.faa hs1.someProtein.psl
 </pre>
 </p>
