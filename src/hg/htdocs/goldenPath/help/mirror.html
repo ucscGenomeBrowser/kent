@@ -246,14 +246,14 @@ and Linux, as long as Docker is installed:
 
 <pre><code>mkdir browserDocker &amp;&amp; cd browserDocker
 wget https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/docker/Dockerfile
-docker build . -t gbImage</code></pre>
+docker build . -t gbimage</code></pre>
 
 <p>
-You can then run the gbImage image that you just built as a new container in daemon mode (-d) and
+You can then run the gbimage image that you just built as a new container in daemon mode (-d) and
 export its port to localhost:
 </p>
 
-<pre><code>docker run -d --name genomeBrowser -p 8080:80 gbImage</code></pre>
+<pre><code>docker run -d --name genomeBrowser -p 8080:80 gbimage</code></pre>
 
 <p>
 The Apache server is running on port 8080 then and you should be able to access it via
