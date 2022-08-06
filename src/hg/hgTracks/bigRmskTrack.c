@@ -32,6 +32,7 @@
  *            Should be responsible for layout calculations
  *            that determine the totalHeight of the track at the
  *            current scale and/or visual style ( 'pack', 'full' etc. )
+ *            NOTE: This doesn't include the track center label (if present)
  *      3. tg->preDrawItems:
  *            Not sure the use case for this. 
  *      4. tg->drawItems:
@@ -664,13 +665,14 @@ if (tg->isBigBed)
 
 int bigRmskItemHeight(struct track *tg, void *item)
 {
-if (tg->limitedVis == tvDense) 
+enum trackVisibility vis = tg->visibility;
+if (vis == tvDense) 
     tg->heightPer = tl.fontHeight;
-else if (tg->limitedVis == tvPack)
+else if (vis == tvPack)
     tg->heightPer = tl.fontHeight;
-else if (tg->limitedVis == tvSquish)
+else if (vis == tvSquish)
     tg->heightPer = tl.fontHeight/2;
-else if (tg->limitedVis == tvFull )
+else if (vis == tvFull )
     {
     if ( winBaseCount <= DETAIL_VIEW_MAX_SCALE)
         tg->heightPer = max(tl.fontHeight, MINHEIGHT);
@@ -687,6 +689,7 @@ int bigRmskTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 boolean origPackViz = cartUsualBoolean(cart, BIGRMSK_ORIG_PACKVIZ, BIGRMSK_ORIG_PACKVIZ_DEFAULT);
 
+// Ensure that lineHeight is set correctly
 bigRmskItemHeight(tg, (void *)NULL);
 
 int count = slCount(tg->items);
@@ -709,7 +712,7 @@ else
 
     if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
         {
-        tg->height = numLevels * max(tg->heightPer, MINHEIGHT);
+        tg->height = numLevels * max(tg->lineHeight, MINHEIGHT);
         }
     else 
         {
@@ -1125,8 +1128,9 @@ static void drawNormalBox(struct hvGfx *hvg, int x1, int y1,
            int width, int height, Color fillColor, Color outlineColor)
 {
 struct gfxPoly *poly = gfxPolyNew();
-int y2 = y1 + height;
-int x2 = x1 + width;
+// RMH: Fixed 8/4/22 : One-off error in height/width to x/y calcs
+int y2 = y1 + height - 1;
+int x2 = x1 + width - 1;
   /*
    *     1,5--------------2
    *       |              |
@@ -1153,7 +1157,7 @@ drawNormalBox(hvg, x1, y1, width, height, fillColor, outlineColor);
 static Color white = 0xffffffff;
 int dir = (strand == '+' ? 1 : -1);
 int midY = y1 + ((height) >> 1);
-clippedBarbs(hvg, x1 + 1, midY, width, ((height >> 1) - 2), 5,
+clippedBarbs(hvg, x1 + 1, midY, width - 2, ((height >> 1) - 2), 5,
           dir, white, TRUE);
 }
 
@@ -1215,6 +1219,8 @@ static void drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
 int idx;
 int lx1, lx2;
 int cx1, cx2;
+int end;
+char lenLabel[20];
 int w;
 struct classRecord *ri;
 // heightPer is the God given height of a single
@@ -1419,16 +1425,14 @@ for (idx = 0; idx < rm->blockCount; idx++)
                               stringWidth, fontHeight, MG_BLACK, font,
                               rm->name);
                     rm->leftLabel = 0;
-                    }
-                else
+                    }else
                     { 
-                    int end = rm->alignEnd;
+                    end = rm->alignEnd;
 
                     if ( showUnalignedExtents )
                         {
                         if ((rm->blockSizes[rm->blockCount - 1] * pixelsPerBase) > MAX_UNALIGNED_PIXEL_LEN)
                             {
-                            char lenLabel[20];
                             safef(lenLabel, sizeof(lenLabel), "%d",
                                   rm->blockSizes[rm->blockCount - 1]);
                             end += (int) (MAX_UNALIGNED_PIXEL_LEN / pixelsPerBase) +
@@ -1441,7 +1445,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
                             }
                         }
 
-                    int endx = roundingScale(rm->chromEnd - winStart,
+                    int endx = roundingScale(rm->visualEnd - winStart,
                                         width, baseWidth);
                     if ( endx > 0 ) 
                         rm->leftLabel = 1;
@@ -1671,7 +1675,7 @@ if (vis == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     int level;
     for (rm = tg->items; rm != NULL; rm = rm->next)
         {
-        level = yOff + (rm->layoutLevel * heightPer);
+        level = yOff + (rm->layoutLevel * tg->lineHeight);
         drawRMGlyph(hvg, level, heightPer, width, baseWidth, 
                     xOff, rm, vis, showUnalignedExtents, showLabels );
         char statusLine[128];
@@ -1730,12 +1734,14 @@ void bigRmskLeftLabels(struct track *tg, int seqStart, int seqEnd,
 /* draw the labels on the left margin */
 {
 boolean origPackViz = cartUsualBoolean(cart, BIGRMSK_ORIG_PACKVIZ, BIGRMSK_ORIG_PACKVIZ_DEFAULT);
-int y;
 Color labelColor = tg->labelColor;
 labelColor = maybeDarkerLabels(tg, hvg, labelColor);
-int fontHeight = tl.fontHeight+1;
 int heightPer = bigRmskItemHeight(tg, NULL);
-y = yOff + fontHeight;
+int titleFontHeight = tl.fontHeight;
+int labelFontHeight = mgFontLineHeight(font);
+int yOffAfterTitle = yOff + titleFontHeight;
+int fontOffset = heightPer - labelFontHeight;
+int y = yOffAfterTitle;
 
 if (vis == tvDense)
     {
@@ -1748,7 +1754,7 @@ else if ( vis == tvPack && origPackViz )
     int numClasses = ArraySize(rptClasses);
     for (i = 0; i < numClasses; ++i)
         {
-        hvGfxTextRight(hvg, xOff, y, width - 1,
+        hvGfxTextRight(hvg, xOff, y + fontOffset, width - 1,
                        heightPer, labelColor, font, rptClassNames[i]);
         y += heightPer;
         }
@@ -1756,8 +1762,11 @@ else if ( vis == tvPack && origPackViz )
 else 
     {
     struct bigRmskRecord *cr;
+int highestLevel = 0;
     for (cr = tg->items; cr != NULL; cr = cr->next)
         {
+if ( cr->layoutLevel > highestLevel )
+  highestLevel = cr->layoutLevel;
         if ( cr->leftLabel ) 
             {
             // Break apart the name and get the class of the
@@ -1772,10 +1781,10 @@ else
                 poundPtr = index(family, '#');
                 *poundPtr = '\0';
                 }
-            y = yOff + ((cr->layoutLevel+1) * tg->lineHeight);
+            y = yOffAfterTitle + (cr->layoutLevel * tg->lineHeight) + fontOffset;
             hvGfxSetClip(hvgSide, leftLabelX, y, insideWidth, tg->height);
-            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->lineHeight,
-                           color, font, family);
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, 
+                           heightPer-fontOffset, color, font, family);
             hvGfxUnclip(hvgSide);
             }
         }
