@@ -22039,6 +22039,8 @@ else if (sameWord(type, "bigDbSnp"))
     doBigDbSnp(ct->tdb, item);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred") || sameWord(type, "bigLolly"))
     bigBedCustomClick(ct->tdb);
+else if (startsWith("bigRmsk", type))
+    doBigRmskRepeat(ct->tdb, item);
 else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
     doBarChartDetails(ct->tdb, item);
 else if (sameWord(type, "bigInteract") || sameWord(type, "interact"))
