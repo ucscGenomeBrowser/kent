@@ -2209,6 +2209,7 @@
 ./runBuild GCF_900074925.1 GCF_900074925.1_version_1 fungi Ramularia_collo-cygni
 ./runBuild GCF_900079805.1 GCF_900079805.1_Fusarium_fujikuroi_IMI58289_V2 fungi Fusarium_fujikuroi_IMI_58289
 ./runBuild GCF_900080235.1 GCF_900080235.1_BallGen_V1 vertebrate_other Labrus_bergylta
+./runBuild GCF_900090045.1 GCF_900090045.1_PmUG01 bacteria Plasmodium_malariae
 ./runBuild GCF_900094665.1 GCF_900094665.1_CAROLI_EIJ_v1.1 vertebrate_mammalian Mus_caroli
 ./runBuild GCF_900095145.1 GCF_900095145.1_PAHARI_EIJ_v1.1 vertebrate_mammalian Mus_pahari
 ./runBuild GCF_900239965.1 GCF_900239965.1_Bicyclus_anynana_v1.2 invertebrate Bicyclus_anynana
