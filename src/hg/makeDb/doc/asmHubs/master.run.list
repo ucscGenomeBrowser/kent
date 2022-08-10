@@ -104,6 +104,7 @@
 ./runBuild GCA_002880775.3 GCA_002880775.3_Susie_PABv2 primates Pongo_abelii
 ./runBuild GCA_002940915.2 GCA_002940915.2_ASM294091v2 mammals Desmodus_rotundus
 ./runBuild GCA_002995585.1 GCA_002995585.1_ASM299558v1 mammals Hippopotamus_amphibius
+./runBuild GCA_003013265.1 GCA_003013265.1_ASM301326v1 invertebrates Trypanosoma_congolense_IL3000
 ./runBuild GCA_003031525.1 GCA_003031525.1_Neophocaena_asiaeorientalis_V1 mammals Neophocaena_asiaeorientalis_asiaeorientalis
 ./runBuild GCA_003327715.1 GCA_003327715.1_PumCon1.0 mammals Puma_concolor
 ./runBuild GCA_003342835.1 GCA_003342835.1_rhePen1 birds Rhea_pennata
@@ -247,6 +248,7 @@
 ./runBuild GCA_007364275.2 GCA_007364275.2_fArcCen1 vertebrate Archocentrus_centrarchus
 ./runBuild GCA_007399395.1 GCA_007399395.1_rGopEvg1_v1.alt vertebrate Gopherus_evgoodei
 ./runBuild GCA_007474575.1 GCA_007474575.1_mLynCan4_v1.alt mammals Lynx_canadensis
+./runBuild GCA_007844835.1 GCA_007844835.1_NRC_Mithun_1 mammals Bos_frontalis
 ./runBuild GCA_007989325.2 GCA_007989325.2_ASM798932v2 invertebrate Drosophila_virilis
 ./runBuild GCA_008131255.1 GCA_008131255.1_ASM813125v1 mammals Meriones_unguiculatus
 ./runBuild GCA_008658355.1 GCA_008658355.1_bAlcTor1_alternate birds Alca_torda
@@ -346,6 +348,7 @@
 ./runBuild GCA_016432865.1 GCA_016432865.1_AdamAnt mammals Antechinus_flavipes
 ./runBuild GCA_016647715.1 GCA_016647715.1_ASM1664771v1 birds Pavo_muticus
 ./runBuild GCA_016904835.1 GCA_016904835.1_bAcaChl1.pri birds Acanthisitta_chloris
+./runBuild GCA_017311355.1 GCA_017311355.1_CVASU_Gayal_001 mammals Bos_frontalis
 ./runBuild GCA_017562165.1 GCA_017562165.1_ASM1756216v1 invertebrates Ectropis_grisescens
 ./runBuild GCA_017639245.1 GCA_017639245.1_MMon_1.0 birds Myiopsitta_monachus
 ./runBuild GCA_017639485.1 GCA_017639485.1_bPluApr1.pri birds Pluvialis_apricaria
@@ -578,6 +581,7 @@
 ./runBuild GCF_000006295.1 GCF_000006295.1_JCVI_LOUSE_1.0 invertebrate Pediculus_humanus_corporis
 ./runBuild GCF_000006335.3 GCF_000006335.3_ASM633v3 fungi Candida_tropicalis_MYA-3404
 ./runBuild GCF_000006445.2 GCF_000006445.2_ASM644v2 fungi Debaryomyces_hansenii_CBS767
+./runBuild GCF_000006765.1 GCF_000006765.1_ASM676v1 bacteria Pseudomonas_aeruginosa_PAO1
 ./runBuild GCF_000009045.1 GCF_000009045.1_ASM904v1 bacteria Bacillus_subtilis_subsp._subtilis_str._168
 ./runBuild GCF_000009225.2 GCF_000009225.2_ASM922v1 bacteria Pseudomonas_fluorescens_SBW25
 ./runBuild GCF_000026365.1 GCF_000026365.1_ASM2636v1 fungi Zygosaccharomyces_rouxii
@@ -950,6 +954,7 @@
 ./runBuild GCF_000696155.1 GCF_000696155.1_ZooNev1.0 invertebrate Zootermopsis_nevadensis
 ./runBuild GCF_000696425.1 GCF_000696425.1_G_variegatus-3.0.2 vertebrate_mammalian Galeopterus_variegatus
 ./runBuild GCF_000696695.1 GCF_000696695.1_Burgud vertebrate_mammalian Equus_przewalskii
+./runBuild GCF_000696715.1 GCF_000696715.1_Maq_reference_guided_assembly bacteria Mycobacterium_avium_subsp_hominissuis_A5
 ./runBuild GCF_000696795.2 GCF_000696795.2_Hhal_2.0 invertebrate Halyomorpha_halys
 ./runBuild GCF_000696875.1 GCF_000696875.1_ASM69687v1 vertebrate_other Nestor_notabilis
 ./runBuild GCF_000697945.2 GCF_000697945.2_Focc_2.1 invertebrate Frankliniella_occidentalis
