@@ -648,6 +648,7 @@ while ((ra = raNextRecord(lf)) != NULL)
     el->trackDbFile = trackHubRelativeUrl(url, trackDb);
     el->trackHub = hub;
     hashAdd(hash, el->name, el);
+    hashAdd(hash, hubConnectSkipHubPrefix(el->name), el);
     slAddHead(&list, el);
     char *orderKey = hashFindVal(ra, "orderKey");
     if (orderKey != NULL)

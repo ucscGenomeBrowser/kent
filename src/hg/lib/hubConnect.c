@@ -375,6 +375,8 @@ struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database,
 unsigned hubId = hubIdFromTrackName(trackName);
 struct hubConnectStatus *hub = hubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
+if (hubGenome == NULL)
+    errAbort("Cannot find genome %s in hub %s", database, hub->hubUrl);
 struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
