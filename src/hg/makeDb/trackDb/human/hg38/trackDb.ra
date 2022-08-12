@@ -845,7 +845,7 @@ compositeTrack on
     parent genotypeArrays on
     shortLabel CytoSNP 850k
     longLabel Illumina 850k CytoSNP Array
-    type bigBed 6+15
+    type bigBed 6 +
     bigDataUrl /gbdb/hg38/bbi/cytoSnp/cytoSnp850k.bb
     visibility pack
     urls rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
