@@ -1642,6 +1642,7 @@ url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 subGroup1 view Views variants=Variants errs=Mapping_Errors
 priority 0.8
+pennantIcon Note green ../goldenPath/newsarch.html "dbSNP 155 is now available, and dbSNP 153 will be nested into the dbSNP archive soon."
 
     track dbSnp153ViewVariants
     view variants
