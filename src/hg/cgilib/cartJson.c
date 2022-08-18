@@ -80,7 +80,8 @@ for (table = hgp->tableList; table != NULL; table = table->next)
         char *trackName = table->name, *tableName = table->name;
         struct trackDb *tdb = NULL;
         // clear the tdb cache if this track is a hub track
-        if (! (sameString("trackDb", tableName) || sameString("helpDocs", tableName) || sameString("publicHubs", tableName)))
+        if (! (sameString("trackDb", tableName) || sameString("helpDocs", tableName) ||
+                sameString("publicHubs", tableName)))
             {
             if (isHubTrack(tableName))
                 tdbList = NULL;
@@ -133,7 +134,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
             jsonWriteObjectEnd(jw); // end one match
             }
         jsonWriteListEnd(jw); // end matches
-        if (table->searchTime != 0)
+        if (table->searchTime >= 0)
             jsonWriteNumber(jw, "searchTime", table->searchTime);
         jsonWriteObjectEnd(jw); // end one table
 	}

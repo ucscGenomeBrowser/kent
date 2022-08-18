@@ -67,6 +67,8 @@
 #define argEnd	"end"
 #define argMaxItemsOutput	"maxItemsOutput"
 #define argJsonOutputArrays	"jsonOutputArrays"
+#define argCategories "categories"
+#define argSearchTerm "search"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c
@@ -79,6 +81,7 @@ extern char *argListChromosomes[];
 extern char *argListSchema[];
 extern char *argGetDataTrack[];
 extern char *argGetDataSequence[];
+extern char *argSearch[];
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
@@ -237,5 +240,11 @@ void apiGetData(char *words[MAX_PATH_INFO]);
 
 void apiList(char *words[MAX_PATH_INFO]);
 /* 'list' function words[1] is the subCommand */
+
+/* ######################################################################### */
+/*  functions in search.c */
+
+void apiSearch(char *words[MAX_PATH_INFO]);
+/* search function */
 
 #endif	/*	 DATAAPH_H	*/

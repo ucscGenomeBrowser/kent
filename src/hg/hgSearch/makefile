@@ -5,10 +5,10 @@ L += $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgapcgi.a $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = searchExample
-O = searchExample.o
+A = hgSearch
+O = hgSearch.o
 
-A = searchExample
+A = hgSearch
 
 include ../../inc/cgi_build_rules.mk
 

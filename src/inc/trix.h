@@ -104,5 +104,11 @@ char *skipToWord(char *s);
 char *skipOutWord(char *start);
 /* Skip to next non-word character.  Returns empty string at end. */
 
+void addSnippetForResult(struct trixSearchResult *tsr, struct trix *trix);
+/* Find the snippet for a search result */
+
+void initSnippetIndex(struct trix *trix);
+/* Setup what we need to obtain snippets */
+
 void addSnippetsToSearchResults(struct trixSearchResult *tsrList, struct trix *trix);
 #endif //ndef TRIX_H

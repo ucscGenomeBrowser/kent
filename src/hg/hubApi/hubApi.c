@@ -49,6 +49,7 @@ char *argListChromosomes[] = { argGenome, argHubUrl, argTrack, NULL };
 char *argListSchema[] = { argGenome, argHubUrl, argTrack, NULL };
 char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argMaxItemsOutput, argJsonOutputArrays, NULL };
 char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, NULL };
+char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -967,6 +968,7 @@ if (apiFunctionHash)
 apiFunctionHash = hashNew(0);
 hashAdd(apiFunctionHash, "list", &apiList);
 hashAdd(apiFunctionHash, "getData", &apiGetData);
+hashAdd(apiFunctionHash, "search", &apiSearch);
 }
 
 static struct hashEl *parsePathInfo(char *pathInfo, char *words[MAX_PATH_INFO])

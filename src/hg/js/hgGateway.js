@@ -1533,7 +1533,7 @@ var hgGateway = (function() {
             // User has entered a search term with no suggestion, go to the disambiguation
             // page so the user can choose a position
             $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
-            window.location.assign("../cgi-bin/searchExample?hgsid="+ window.hgsid + "&search=" + searchTerm);
+            window.location.assign("../cgi-bin/hgSearch?hgsid="+ window.hgsid + "&search=" + searchTerm);
         }
     }
 

@@ -259,7 +259,7 @@ struct searchTestCase *morphOutput = NULL;
 while (testCaseList)
     {
     verbose(1, "database = %s, searchTerm = %s\n", testCaseList->database, testCaseList->searchTerm);
-    hgpList = hgPositionsFind(testCaseList->database, testCaseList->searchTerm, "", "hgTracks", cart, FALSE);
+    hgpList = hgPositionsFind(testCaseList->database, testCaseList->searchTerm, "", "hgTracks", cart, FALSE, FALSE, NULL);
     /* handle cases where there are no expected matches */
     if (testCaseList->posCount == 0)
         {

@@ -12,6 +12,7 @@
 #include "udc.h"
 #include "net.h"
 #include "rangeTree.h"
+#include "portable.h"
 
 /* Some local structures for the search. */
 struct trixHitPos 
@@ -870,7 +871,7 @@ for (i = 0; i < len; i++)
 return rt;
 }
 
-static void addSnippetForResult(struct trixSearchResult *tsr, struct trix *trix)
+void addSnippetForResult(struct trixSearchResult *tsr, struct trix *trix)
 /* Find the snippet for a search result */
 {
 struct snippetIndex *snippetIndex = trix->snippetIndex;
@@ -941,12 +942,18 @@ while (ourReadLine(trix, snippetIndex->textIndex, &snippetIxLine))
     }
 }
 
-void addSnippetsToSearchResults(struct trixSearchResult *tsrList, struct trix *trix)
-/* Add a snippet to the search result */
+void initSnippetIndex(struct trix *trix)
+/* Setup what we need to obtain snippets */
 {
 trixPrefixSize = 15;
 initCharTables();
 openSnippetIndex(trix);
+}
+
+void addSnippetsToSearchResults(struct trixSearchResult *tsrList, struct trix *trix)
+/* Add snippets to each search result in tsrList */
+{
+initSnippetIndex(trix);
 struct trixSearchResult *tsr;
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     addSnippetForResult(tsr, trix);

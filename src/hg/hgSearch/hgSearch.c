@@ -1,4 +1,4 @@
-/* searchExample - Example search page using sphinx. */
+/* hgSearch - User interface to explore hgFind search results */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -25,61 +25,62 @@
 #include "cartTrackDb.h"
 
 // name of the searchBar form variable from the HTML
-#define SEARCH_TERM_VAR "searchString"
+#define SEARCH_TERM_VAR "search"
 #define SEARCH_LIMIT 100
 
-/* Global Variables */
+/* Standard CGI Global Variables */
 struct cart *cart;             /* CGI and other variables */
 struct hash *oldVars = NULL;
-static struct hash *hubLabelHash = NULL;
 boolean measureTiming = FALSE;
 
-struct trackDb *tdbList = NULL;
-struct grp *grpList = NULL;
-struct hash *trackHash = NULL;
-struct hash *groupHash = NULL;
+/* These globals are for creating the category tree interface */
+struct trackDb *hgFindTdbList = NULL;
+struct grp *hgFindGrpList = NULL;
 
-/* struct hubLabel: a helper struct for making links to hubs in the search result list */
-struct hubLabel
-    {
-    char *shortLabel;
-    char *longLabel;
-    char *hubId;
-    };
+struct dbDbHelper
+/* A struct dbDb with an extra field for whether the assembly is the default */
+{
+struct dbDbHelper *next;
+struct dbDb *dbDb;
+boolean isDefault;
+};
 
 /* Helper functions for cart handlers */
-
-static void getLabelsForHubs()
-/* Hash up the shortLabels, longLabels and hub_id for a hubUrl */
+static struct dbDbHelper *getDbDbWithDefault()
+/* Grab rows from dbDb along with whether assembly is the default or not */
 {
-if (hubLabelHash != NULL)
-    return;
-hubLabelHash = hashNew(0);
+struct dbDbHelper *ret = NULL;
 struct sqlConnection *conn = hConnectCentral();
-char **row;
 struct sqlResult *sr;
-char query[2048];
-sqlSafef(query, sizeof(query), "select hp.hubUrl, hp.shortLabel, hp.longLabel, concat('hub_',id) from hubPublic hp join hubStatus hs on hp.hubUrl=hs.hubUrl");
-sr = sqlGetResult(conn, query);
-while ( (row = sqlNextRow(sr)) != NULL)
-    {
-    struct hubLabel *label = NULL;
-    AllocVar(label);
-    label->shortLabel = cloneString(row[1]);
-    label->longLabel = cloneString(row[2]);
-    label->hubId = cloneString(row[3]);
-    char *hubUrl = cloneString(row[0]);
-    hashAdd(hubLabelHash, hubUrl, label);
-    }
-hDisconnectCentral(&conn);
-}
+char **row;
+struct dbDb *db;
+struct hash *hash = sqlHashOfDatabases();
 
-static struct hubLabel *getLabelForHub(char *hubUrl)
-/* Look up the shortLabel, longLabel, and hub_id for a hubUrl */
-{
-if (!hubLabelHash)
-    getLabelsForHubs();
-return (struct hubLabel *)hashFindVal(hubLabelHash, hubUrl);
+char query[1024];
+sqlSafef(query, sizeof query,  "select dbDb.*,defaultDb.name from %s "
+        "join %s on %s.genome=%s.genome where active=1 order by orderKey,dbDb.name desc",
+        dbDbTable(), defaultDbTable(), dbDbTable(), defaultDbTable());
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct dbDbHelper *this;
+    db = dbDbLoad(row);
+    boolean isGenarkHub = sameOk(db->nibPath, "genark");
+    if (isGenarkHub || hashLookup(hash, db->name))
+        {
+        AllocVar(this);
+        this->dbDb = db;
+        this->isDefault = sameString(row[14],row[0]);
+        slAddTail(&ret, this);
+        }
+    else
+        dbDbFree(&db);
+    }
+sqlFreeResult(&sr);
+hashFree(&hash);
+hDisconnectCentral(&conn);
+slReverse(&ret);
+return ret;
 }
 
 static struct trackDb *addSupers(struct trackDb *trackList)
@@ -110,7 +111,7 @@ slReverse(&newList);
 return newList;
 }
 
-void hashTdbNames(struct trackDb *tdb, struct hash *trackHash)
+static void hashTdbNames(struct trackDb *tdb, struct hash *trackHash)
 /* Store the track names for lookup, except for knownGene which gets its own special
  * category in the UI */
 {
@@ -131,143 +132,27 @@ void hashTracksAndGroups(struct cart *cart, char *db)
  * in the trackList struct, which means we get item search for connected
  * hubs for free */
 {
-if (tdbList != NULL && grpList != NULL)
+if (hgFindTdbList != NULL && hgFindGrpList != NULL)
     return;
 
-if (!trackHash)
-    trackHash = hashNew(0);
-if (!groupHash)
-    groupHash = hashNew(0);
-cartTrackDbInit(cart, &tdbList, &grpList, FALSE);
-if (!tdbList)
+if (!hgFindTrackHash)
+    hgFindTrackHash = hashNew(0);
+if (!hgFindGroupHash)
+    hgFindGroupHash = hashNew(0);
+cartTrackDbInit(cart, &hgFindTdbList, &hgFindGrpList, FALSE);
+if (!hgFindTdbList)
     errAbort("Error getting tracks for %s", db);
-if (!grpList)
+if (!hgFindGrpList)
     errAbort("Error getting groups for %s", db);
-struct trackDb *superList = addSupers(tdbList);
-tdbList = superList;
-hashTdbNames(superList, trackHash);
+struct trackDb *superList = addSupers(hgFindTdbList);
+hgFindTdbList = superList;
+hashTdbNames(superList, hgFindTrackHash);
 struct grp *g;
-for (g = grpList; g != NULL; g = g->next)
+for (g = hgFindGrpList; g != NULL; g = g->next)
     if (!sameString(g->name, "allTracks") && !sameString(g->name, "allTables"))
-        hashStore(groupHash, g->name);
+        hashStore(hgFindGroupHash, g->name);
 }
 
-boolean doTrixQuery(struct searchCategory *category, char *searchTerm, struct hgPositions *hgp, char *database, boolean measureTiming)
-/* Get a trix search result and snippets for a trix index.
- * TODO: return an error message if there is a problem with the trix index or snippet index */
-{
-long startTime = clock1000();
-boolean ret = FALSE;
-char *lowered = cloneString(searchTerm);
-char *keyWords[16];
-int keyCount;
-tolowers(lowered);
-keyCount = chopLine(lowered, keyWords);
-// TODO: let the user control this:
-int maxReturn = SEARCH_LIMIT;
-struct trixSearchResult *tsrList = NULL;
-if (category->trix)
-    tsrList = trixSearch(category->trix, keyCount, keyWords, tsmExpand);
-struct trixSearchResult *dbTsrList = NULL;
-if (sameString(category->name, "publicHubs"))
-    {
-    int len = 0;
-    struct trixSearchResult *tsr, *next;
-    for (tsr = tsrList; tsr != NULL; tsr = next)
-        {
-        next = tsr->next;
-        char *itemId[5];
-        int numItems = chopString(cloneString(tsr->itemId), ":", itemId, ArraySize(itemId));
-        if (numItems <= 2 || isEmpty(itemId[2]) || !sameString(itemId[2], database))
-            continue;
-        else
-            {
-            slAddHead(&dbTsrList, tsr);
-            len++;
-            }
-        if (len > SEARCH_LIMIT)
-            break;
-        }
-    }
-else
-    dbTsrList = tsrList;
-
-if (slCount(dbTsrList) > SEARCH_LIMIT)
-    {
-    struct trixSearchResult *tsr = slElementFromIx(dbTsrList, maxReturn-1);
-    tsr->next = NULL;
-    }
-if (dbTsrList != NULL)
-    {
-    struct errCatch *errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-        addSnippetsToSearchResults(dbTsrList, category->trix);
-    errCatchEnd(errCatch);
-    // silently return if there was a problem
-    if (errCatch->gotError || errCatch->gotWarning)
-        return FALSE;
-    errCatchFree(&errCatch);
-    struct trixSearchResult *tsr = NULL;
-    struct hgPosTable *table = NULL;
-    AllocVar(table);
-    table->name = category->name;
-    table->description = category->description;
-    slReverse(&hgp->tableList);
-    slAddHead(&hgp->tableList, table);
-    slReverse(&hgp->tableList);
-    for (tsr = dbTsrList; tsr != NULL; tsr = tsr->next)
-        {
-        struct hgPos *this = NULL;
-        AllocVar(this);
-        this->name = tsr->itemId;
-        this->description = tsr->snippet;
-        if (startsWith(category->name, "trackDb"))
-            {
-            struct trackDb *tdb = (struct trackDb *)hashFindVal(trackHash, this->name);
-            struct dyString *tdbLabels = dyStringNew(0);
-            dyStringPrintf(tdbLabels, "%s:%s:%s", tsr->itemId, tdb->shortLabel, tdb->longLabel);
-            this->name = dyStringCannibalize(&tdbLabels);
-            }
-        if (sameString(category->name, "publicHubs"))
-            {
-            char *itemId[5];
-            int numItems = chopString(tsr->itemId, ":", itemId, ArraySize(itemId));
-            struct dyString *hubLabel = dyStringNew(0);
-            char hubUrl[PATH_LEN];
-            safef(hubUrl, sizeof(hubUrl), "%s:%s", itemId[0], itemId[1]);
-            struct hubLabel *label = getLabelForHub(hubUrl);
-            if (!label)
-                continue;
-            char *db = "";
-            struct dyString *track = dyStringNew(0);
-            if (numItems > 2)
-                db = itemId[2] != NULL ? itemId[2] : "";
-            if (numItems > 3)
-                dyStringPrintf(track, "%s_%s", label->hubId, itemId[3]);
-            dyStringPrintf(hubLabel, "%s:%s:%s:%s:%s", hubUrl, db, dyStringCannibalize(&track), label->shortLabel, label->longLabel);
-            this->name = dyStringCannibalize(&hubLabel);
-            }
-        slAddHead(&table->posList, this);
-        }
-    slReverse(&table->posList);
-    if (measureTiming)
-        table->searchTime = clock1000() - startTime;
-    ret = TRUE;
-    }
-return ret;
-}
-
-boolean addHubsAndDocsToHgp(struct hgPositions *hgp, struct searchCategory *categoryList, char *searchTerm, char *database, boolean measureTiming)
-/* Go out and get any results from the public hubs search or help docs search
- * and make a fake hgp for them */
-{
-struct searchCategory *category= NULL;
-boolean found = FALSE;
-getLabelsForHubs();
-for (category = categoryList; category != NULL; category = category->next)
-    found |= doTrixQuery(category, searchTerm, hgp, database, measureTiming);
-return found;
-}
 
 void doQuery(struct jsonWrite *jw, char *db, struct searchCategory *categories, char *searchTerms, boolean measureTiming)
 /* Fire off a query. If the query results in a single position and we came from another CGI,
@@ -275,84 +160,39 @@ void doQuery(struct jsonWrite *jw, char *db, struct searchCategory *categories, 
  * otherwise return the position list as JSON */
 {
 struct hgPositions *hgp = NULL;
-struct searchCategory *category, *trackCategories = NULL, *nonTrackCategories = NULL;
-struct searchCategory *next = NULL;
-for (category = categories; category != NULL; category = next)
-    {
-    next = category->next;
-    if (!startsWith("trackDb", category->id) && !sameString(category->id, "helpDocs") && !sameString(category->id, "publicHubs"))
-        slAddHead(&trackCategories, category);
-    else
-        slAddHead(&nonTrackCategories, category);
-    }
-if (trackCategories)
-    hgp = hgPositionsFind(db, searchTerms, "", "searchExample", cart, FALSE, measureTiming, trackCategories);
-if (nonTrackCategories)
-    {
-    if (!hgp)
-        AllocVar(hgp);
-    (void)addHubsAndDocsToHgp(hgp, nonTrackCategories, searchTerms, db, measureTiming);
-    }
+hgp = hgPositionsFind(db, searchTerms, "", "hgSearch", cart, FALSE, measureTiming, categories);
 if (hgp)
     {
-    // check if user entered a plain position range, in which case we have to write the
-    // json ourselves
+    // if we got an hgvs match to chromInfo (example: chrX:g.31500000_31600000del),
+    // or just a plain position range was searched, we have to create the json
+    // manually, cause the tdb lookups in hgPositionsJson() won't work
     if (hgp->singlePos && hgp->posCount == 1 && hgp->tableList != NULL &&
             sameString(hgp->tableList->name, "chromInfo"))
         {
+        struct hgPosTable *table = hgp->tableList;
         jsonWriteListStart(jw, "positionMatches");
         jsonWriteObjectStart(jw, NULL);
         jsonWriteString(jw, "name", "chromInfo");
-        jsonWriteString(jw, "chrom", hgp->singlePos->chrom);
-        jsonWriteNumber(jw, "chromStart", hgp->singlePos->chromStart);
-        jsonWriteNumber(jw, "chromEnd", hgp->singlePos->chromEnd);
+        jsonWriteString(jw, "description", table->description);
+        if (table->searchTime >= 0)
+            jsonWriteNumber(jw, "searchTime", table->searchTime);
+        jsonWriteListStart(jw, "matches");
+
+        jsonWriteObjectStart(jw, NULL);
+        char position[512];
+        safef(position, sizeof(position), "%s:%d-%d", hgp->singlePos->chrom, hgp->singlePos->chromStart, hgp->singlePos->chromEnd);
+        jsonWriteString(jw, "position", position);
+        jsonWriteString(jw, "posName", hgp->query);
         jsonWriteObjectEnd(jw);
-        jsonWriteListEnd(jw);
+
+        jsonWriteListEnd(jw); // end matches
+        jsonWriteObjectEnd(jw); // end one table
+        jsonWriteListEnd(jw); // end positionMatches
         }
     else
         hgPositionsJson(jw, db, hgp, cart);
     }
 }
-
-//static struct searchCategory *getCategsFromResults(struct jsonElement *results, char *db)
-/* From the list of search results, figure out what categories were
- * included, and make them default selected */
-/*
-{
-// first parse the results for all the trackNames:
-struct hash *searchedCategs = hashNew(0);
-struct hash *wrapperObj = results->val.jeHash;
-struct slRef *result, *resultList = ((struct jsonElement *)hashFindVal(wrapperObj, "positionMatches"))->val.jeList;
-for (result = resultList; result != NULL; result = result->next)
-    {
-    struct jsonElement *resultObject = (struct jsonElement *)result->val;
-    char *categName = jsonStringField(resultObject, "trackName");
-    if (categName)
-        hashStoreName(searchedCategs, categName);
-    }
-
-// now change the visibility-ness in the final categ list from what
-// we already searched:
-struct searchCategory *categ, *ret = getCategsForDatabase(cart, db, trackHash, groupHash);
-for (categ = ret; categ != NULL; categ = categ->next)
-    {
-    if (hashLookup(searchedCategs, categ->id) != NULL)
-        categ->visibility = 1;
-    }
-struct searchCategory *next, *nonTrackCategs = getCategsForNonDb(cart, db, trackHash, groupHash);
-for (categ = nonTrackCategs; categ != NULL; categ = next)
-    {
-    next = categ->next;
-    categ->next = NULL;
-    if (hashLookup(searchedCategs, categ->id) != NULL)
-        categ->visibility = 1;
-    else
-        categ->visibility = 0;
-    slAddHead(&ret, categ);
-    }
-return ret;
-}
-*/
 
 static void addCategoryFieldsToHash(struct hash *elementHash, struct searchCategory *category)
 {
@@ -368,10 +208,10 @@ hashAdd(elementHash, "priority", newJsonDouble(category->priority));
 
 static boolean nonTrackCateg(struct searchCategory *categ)
 {
-if (startsWith("publicHubs", categ->id) ||
-        startsWith("helpDocs", categ->id) ||
+if (sameString("publicHubs", categ->id) ||
+        sameString("helpDocs", categ->id) ||
         startsWith("trackDb", categ->id) ||
-        startsWith("knownGene", categ->id))
+        sameString("knownGene", categ->id))
     return TRUE;
 return FALSE;
 }
@@ -411,7 +251,7 @@ struct jsonElement *makeTrackGroupsJson(char *db)
 hashTracksAndGroups(cart, db);
 struct jsonElement *retObj = newJsonObject(hashNew(0));
 struct grp *grp;
-for (grp = grpList; grp != NULL; grp = grp->next)
+for (grp = hgFindGrpList; grp != NULL; grp = grp->next)
     {
     if (!sameString(grp->name, "allTracks") && !sameString(grp->name, "allTables"))
         {
@@ -458,25 +298,17 @@ safef(name, sizeof(name), "%s Track Data", db);
 jsonObjectAdd(trackContainerEle, "name", newJsonString(name));
 jsonObjectAdd(trackContainerEle, "tracks", trackList);
 jsonObjectAdd(trackContainerEle, "label", newJsonString(name));
-jsonObjectAdd(trackContainerEle, "priority", newJsonDouble(5.0));
+jsonObjectAdd(trackContainerEle, "priority", newJsonDouble(2.0));
 jsonObjectAdd(trackContainerEle, "description", newJsonString("Search for track data items"));
 jsonListAdd(nonTrackList, trackContainerEle);
 return nonTrackList;
-}
-
-int cmpCategories(const void *a, const void *b)
-/* Compare two categories for uniquifying */
-{
-struct searchCategory *categA = *(struct searchCategory **)a;
-struct searchCategory *categB = *(struct searchCategory **)b;
-return strcmp(categA->id, categB->id);
 }
 
 struct searchCategory *makeCategsFromJson(struct jsonElement *searchCategs, char *db)
 /* User has selected some categories, parse the JSON into a struct searchCategory */
 {
 if (searchCategs == NULL)
-    return NULL;
+    return getAllCategories(cart, db, hgFindGroupHash);
 struct searchCategory *ret = NULL;
 struct slRef *jsonVal = NULL;
 for (jsonVal= searchCategs->val.jeList; jsonVal != NULL; jsonVal = jsonVal->next)
@@ -487,16 +319,21 @@ for (jsonVal= searchCategs->val.jeList; jsonVal != NULL; jsonVal = jsonVal->next
     char *categName = val->val.jeString;
     struct searchCategory *category = NULL;
     if (!sameString(categName, "allTracks"))
-        category = makeCategory(cart, categName, NULL, db, trackHash, groupHash);
+        category = makeCategory(cart, categName, NULL, db, hgFindGroupHash);
     else
         {
-        struct hashEl *hel, *helList = hashElListHash(trackHash);
+        struct hashEl *hel, *helList = hashElListHash(hgFindTrackHash);
         for (hel = helList; hel != NULL; hel = hel->next)
             {
             struct trackDb *tdb = hel->val;
             if (!sameString(tdb->track, "knownGene") && !sameString(tdb->table, "knownGene"))
-                slAddHead(&category, makeCategory(cart, tdb->track, NULL, db, trackHash, groupHash));
+                slAddHead(&category, makeCategory(cart, tdb->track, NULL, db, hgFindGroupHash));
             }
+        // the hgFindTrackHash can contain both a composite track (where makeCategory would make categories
+        // for each of the subtracks, and a subtrack, where makeCategory just makes a single
+        // category, which means our final list can contain duplicate categories, so do a
+        // uniqify here so we only have one category for each category
+        slUniqify(&category, cmpCategories, searchCategoryFree);
         }
     if (category != NULL)
         {
@@ -506,11 +343,6 @@ for (jsonVal= searchCategs->val.jeList; jsonVal != NULL; jsonVal = jsonVal->next
             ret = category;
         }
     }
-// the trackHash can contain both a composite track (where makeCategory would make categories
-// for each of the subtracks, and a subtrack, where makeCategory just makes a single
-// category, which means our final list can contain duplicate categories, so do a
-// uniqify here so we only have one category for each category
-slUniqify(&ret, cmpCategories, searchCategoryFree);
 return ret;
 }
 
@@ -537,10 +369,11 @@ static void writeDefaultForDb(struct jsonWrite *jw, char *database)
 /* Put up the default view when entering this page for the first time, which basically
  * means return the list of searchable stuff. */
 {
-struct searchCategory *defaultCategories = getAllCategories(cart, database, trackHash, groupHash);
+struct searchCategory *defaultCategories = getAllCategories(cart, database, hgFindGroupHash);
 struct jsonElement *categsJsonElement = jsonElementFromSearchCategory(defaultCategories, database);
 struct jsonElement *selectedCategsJsonList = jsonElementFromVisibleCategs(defaultCategories);
 jsonElementSaveCategoriesToCart(database,selectedCategsJsonList);
+dyStringPrintf(jw->dy, ", \"db\": \"%s\"", database);
 dyStringPrintf(jw->dy, ", \"categs\": ");
 jsonDyStringPrint(jw->dy, categsJsonElement, NULL, -1);
 dyStringPrintf(jw->dy, ", \"trackGroups\": ");
@@ -562,10 +395,10 @@ jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 jsIncludeFile("cart.js", NULL);
-jsIncludeFile("searchExample.js", NULL);
+jsIncludeFile("hgSearch.js", NULL);
 
 // Write the skeleton HTML, which will get filled out by the javascript
-webIncludeFile("inc/searchExample.html");
+webIncludeFile("inc/hgSearch.html");
 }
 
 /* End handler helper functions */
@@ -574,7 +407,8 @@ webIncludeFile("inc/searchExample.html");
 static void getSearchResults(struct cartJson *cj, struct hash *paramHash)
 /* User has entered a term to search, search this term against the selected categories */
 {
-char *db = cartUsualString(cj->cart, "db", hDefaultDb());
+char *db = cartJsonRequiredParam(paramHash, "db", cj->jw, "getSearchResults");
+cartSetString(cj->cart, "db", db);
 initGenbankTableNames(db);
 hashTracksAndGroups(cj->cart, db);
 char *searchTerms = cartJsonRequiredParam(paramHash, SEARCH_TERM_VAR, cj->jw, "getSearchResults");
@@ -588,10 +422,69 @@ fprintf(stderr, "performed query on %s\n", searchTerms);
 static void getUiState(struct cartJson *cj, struct hash *paramHash)
 /* We haven't seen this database before, return list of all searchable stuff */
 {
-char *db = cartUsualString(cj->cart, "db", hDefaultDb());
+char *db = cartJsonRequiredParam(paramHash, "db", cj->jw, "getUiState");
+cartSetString(cj->cart, "db", db);
 initGenbankTableNames(db);
 hashTracksAndGroups(cj->cart, db);
 writeDefaultForDb(cj->jw, db);
+}
+
+static struct jsonElement *getGenomes()
+/* Return a string that the javascript can use to put up a species and db select. */
+{
+struct jsonElement *genomesObj = newJsonObject(hashNew(0));
+struct dbDbHelper *localDbs = getDbDbWithDefault();
+struct dbDbHelper *temp;
+for (temp = localDbs; temp != NULL; temp = temp->next)
+    {
+    // fill out the dbDb fields into a struct
+    struct jsonElement *genomeObj = newJsonObject(hashNew(0));
+    jsonObjectAdd(genomeObj, "organism", newJsonString(temp->dbDb->organism));
+    jsonObjectAdd(genomeObj, "name", newJsonString(temp->dbDb->name));
+    jsonObjectAdd(genomeObj, "genome", newJsonString(temp->dbDb->genome));
+    jsonObjectAdd(genomeObj, "description", newJsonString(temp->dbDb->description));
+    jsonObjectAdd(genomeObj, "orderKey", newJsonNumber(temp->dbDb->orderKey));
+    jsonObjectAdd(genomeObj, "isDefault", newJsonBoolean(temp->isDefault));
+
+    // finally add the dbDb object to the hash on species, either create a new
+    // list if this is the first time seeing this species or append to the end
+    // of the list to keep things in the right order
+    struct jsonElement *genomeList = NULL;
+    if ( (genomeList = jsonFindNamedField(genomesObj, temp->dbDb->genome, temp->dbDb->genome)) != NULL)
+        jsonListAdd(genomeList, genomeObj);
+    else
+        {
+        genomeList = newJsonList(NULL);
+        jsonListAdd(genomeList, genomeObj);
+        jsonObjectAdd(genomesObj, temp->dbDb->genome, genomeList);
+        }
+    }
+
+struct dbDb *trackHubDbs = trackHubGetDbDbs(NULL);
+struct dbDb *dbDb;
+for (dbDb = trackHubDbs; dbDb != NULL; dbDb = dbDb->next)
+    {
+    // fill out the dbDb fields into a struct
+    struct jsonElement *genomeObj = newJsonObject(hashNew(0));
+    jsonObjectAdd(genomeObj, "organism", newJsonString(dbDb->organism));
+    jsonObjectAdd(genomeObj, "name", newJsonString(dbDb->name));
+    jsonObjectAdd(genomeObj, "genome", newJsonString(dbDb->genome));
+    jsonObjectAdd(genomeObj, "description", newJsonString(dbDb->description));
+
+    // finally add the dbDb object to the hash on species, either create a new
+    // list if this is the first time seeing this species or append to the end
+    // of the list to keep things in the right order
+    struct jsonElement *genomeList = NULL;
+    if ( (genomeList = jsonFindNamedField(genomesObj, dbDb->genome, dbDb->genome)) != NULL)
+        jsonListAdd(genomeList, genomeObj);
+    else
+        {
+        genomeList = newJsonList(NULL);
+        jsonListAdd(genomeList, genomeObj);
+        jsonObjectAdd(genomesObj, dbDb->genome, genomeList);
+        }
+    }
+return genomesObj;
 }
 
 /* End Handlers */
@@ -631,14 +524,20 @@ char *genome = NULL;
 getDbAndGenome(cart, &database, &genome, oldVars);
 webStartGbNoBanner(cart, database, "Search Disambiguation");
 printMainPageIncludes();
-// Call our init function
 jsInlineF("var hgsid='%s';\n", cartSessionId(cart));
-jsInline("searchExample.init();\n");
+struct jsonElement *cartJson = newJsonObject(hashNew(0));
+jsonObjectAdd(cartJson, "db", newJsonString(database));
+jsonObjectAdd(cartJson, "genomes", getGenomes());
+struct dyString *cartJsonDy = dyStringNew(0);
+jsonDyStringPrint(cartJsonDy, cartJson, "cartJson", -1);
+jsInlineF("%s;\n", dyStringCannibalize(&cartJsonDy));
+// Call our init function to fill out the page
+jsInline("hgSearch.init();\n");
 webEndGb();
 }
 
 void doSearchOnly()
-/* Send back search results specified in the CGI arguments */
+/* Send back search results along with whatever we need to make the UI */
 {
 char *db = NULL;
 char *genome = NULL;
@@ -651,21 +550,21 @@ if (userSearch == NULL || isEmpty(userSearch))
     }
 initGenbankTableNames(db);
 hashTracksAndGroups(cart, db);
-struct searchCategory *allCategories = getAllCategories(cart, db, trackHash, groupHash);
-struct searchCategory *defaultCategories = getVisibleCategories(allCategories);
+struct searchCategory *allCategories = getAllCategories(cart, db, hgFindGroupHash);
 struct jsonElement *categsJsonElement = jsonElementFromSearchCategory(allCategories, db);
-struct jsonElement *selectedCategsJsonList = jsonElementFromVisibleCategs(defaultCategories);
 
 struct cartJson *cj = cartJsonNew(cart);
-jsonElementSaveCategoriesToCart(db,selectedCategsJsonList);
-dyStringPrintf(cj->jw->dy, "\"categs\": ");
+dyStringPrintf(cj->jw->dy, "\"db\": '%s'", db);
+dyStringPrintf(cj->jw->dy, ", \"categs\": ");
 jsonDyStringPrint(cj->jw->dy, categsJsonElement, NULL,-1);
 dyStringPrintf(cj->jw->dy, ", \"trackGroups\": ");
 jsonDyStringPrint(cj->jw->dy, makeTrackGroupsJson(db), NULL, -1);
+dyStringPrintf(cj->jw->dy, ", \"genomes\": ");
+jsonDyStringPrint(cj->jw->dy, getGenomes(), NULL, -1);
 dyStringPrintf(cj->jw->dy, ", ");
 
 measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
-doQuery(cj->jw, db, defaultCategories, userSearch, measureTiming);
+doQuery(cj->jw, db, allCategories, userSearch, measureTiming);
 // Now we need to actually spit out the page + json
 webStartGbNoBanner(cart, db, "Search Disambiguation");
 printMainPageIncludes();
@@ -673,7 +572,7 @@ jsInlineF("var hgsid='%s';\n", cartSessionId(cart));
 jsInline("var cartJson = {");
 jsInline(cj->jw->dy->string);
 jsInline("};\n");
-jsInline("searchExample.init();\n");
+jsInline("hgSearch.init();\n");
 webEndGb();
 }
 /* End do commands */
@@ -690,7 +589,7 @@ else if (cgiOptionalString("search"))
     //   1. changing the URL arguments
     //   2. a back button reload
     // regardless, we can just put up the whole page with search results already
-    // included in the returned HTML
+    // included in the returned json
     doSearchOnly();
 else
     doMainPage();

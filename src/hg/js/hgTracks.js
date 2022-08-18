@@ -4510,7 +4510,7 @@ var imageV2 = {
             var singleMatch = newPos.match(singleBaseExp);
             var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
             if (positionMatch === null) {
-                window.location.assign("../cgi-bin/searchExample?hgsid=" + getHgsid() + "&search=" + newPos);
+                window.location.assign("../cgi-bin/hgSearch?hgsid=" + getHgsid() + "&search=" + newPos);
                 return false;
             }
                 

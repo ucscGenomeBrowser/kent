@@ -110,19 +110,33 @@ void hgPosFree(struct hgPos **pEl);
 void searchCategoryFree(struct searchCategory **el);
 /* Free a searchCategory */
 
-struct searchCategory *makeCategory(struct cart *cart, char *categName, struct searchableTrack *searchTrack, char *db, struct hash *trackHash, struct hash *groupHash);
+#define hgFixedTrix "/gbdb/hgFixed/search/"
+#define publicHubsTrix "hubSearchTextRows"
+#define helpDocsTrix "searchableDocs"
+
+int cmpCategories(const void *a, const void *b);
+/* Compare two categories for uniquifying */
+
+struct trix *openStaticTrix(char *trixName);
+/* Open up a trix file in hgFixed */
+
+/* Caches used by various searching routines */
+extern struct hash *hgFindTrackHash;
+extern struct hash *hgFindGroupHash;
+
+struct searchCategory *makeCategory(struct cart *cart, char *categName, struct searchableTrack *searchTrack, char *db, struct hash *groupHash);
 /* Make a single searchCategory, unless the requested categName is a container
  * track or track group (for example all phenotype tracks), in which case we make
  * categories for each subtrack */
 
-struct searchCategory *getCategsForNonDb(struct cart *cart, char *db, struct hash *trackHash, struct hash *groupHash);
+struct searchCategory *getCategsForNonDb(struct cart *cart, char *db, struct hash *groupHash);
 /* Return the default categories for all databases */
 
-struct searchCategory *getCategsForDatabase(struct cart *cart, char *db, struct hash *trackHash, struct hash *groupHash);
+struct searchCategory *getCategsForDatabase(struct cart *cart, char *db, struct hash *groupHash);
 /* Get the default categories to search if user has not selected any before.
  * By default we search for gene loci (knownGene), track names, and track items */
 
-struct searchCategory *getAllCategories(struct cart *cart, char *db, struct hash *trackHash, struct hash *groupHash);
+struct searchCategory *getAllCategories(struct cart *cart, char *db, struct hash *groupHash);
 /* If we have saved categories for this database from the last search, return those,
  * otherwise return the default selection */
 
