@@ -102,7 +102,7 @@ type bed 3
 
 track lrg
 shortLabel LRG Regions
-longLabel Locus Reference Genomic (LRG) Sequences Mapped to $date Assembly
+longLabel Locus Reference Genomic (LRG) / RefSeqGene Sequences Mapped to $date Assembly
 group map
 visibility hide
 type bigBed 12 +
@@ -3262,7 +3262,7 @@ dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
 track lrgTranscriptAli
 shortLabel LRG Transcripts
-longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
+longLabel Locus Reference Genomic (LRG) / RefSeqGene Fixed Transcript Annotations
 group genes
 visibility hide
 type bigPsl
