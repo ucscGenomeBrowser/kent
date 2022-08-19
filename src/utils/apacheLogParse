@@ -272,20 +272,25 @@ def inOutTab(outDir):
 
     years = os.listdir(baseLogDir)
     years = [x for x in years if x.isdigit()]
+    years.sort()
+    logging.info("Processing years %s" % years)
 
     for year in years:
         yearDir = join(baseLogDir, year)
         for servName in servNames:
             servDir = join(yearDir, servName)
             inFnames = glob.glob(join(servDir, "access_log.*.gz"))
+            logging.info("Found %d infiles in %s" % (len(inFnames), servDir))
             for inFname in inFnames:
                 # access_log.20130317.gz
                 day =os.path.basename(inFname).split(".")[1]
-                outFname = "%s_%s.botIps.txt" % (day, servName) # this is also used a flag file. job writes most data to <day>_<server>_<realWeekDate>.tab.gz
+                outFname = "%s_%s.botIps.txt" % (day, servName) # this has data, but is also used a flag file. 
+                # jobs writes most data to <day>_<server>_<realWeekDate>.tab.gz, not to this file
                 outFname = join(outDir, outFname)
                 fnames.append ( (inFname, outFname) )
+            logging.info("Found %d logfiles in %s" % (len(inFnames), yearDir))
 
-    print "Found %d logfiles in %s" % (len(fnames), yearDir)
+    logging.info("Found %d input/output file pairs" % len(fnames))
     return fnames
 
 def inOutCount(catDir, outDir):
@@ -746,7 +751,6 @@ def apacheToTab(inFname, outBotIpsFname):
 
         log = parseApacheLine(row)
         if log==None:
-            #logging.info("parse error: %s" % row)
             continue
 
         weekDate = dateToWeek(log.time)
