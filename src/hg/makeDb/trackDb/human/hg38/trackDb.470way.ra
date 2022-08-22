@@ -1,0 +1,76 @@
+track cons470way
+compositeTrack on
+shortLabel Multiz 470-way
+longLabel Vertebrate Multiz Alignment & Conservation (470 Species)
+subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
+subGroup2 clade Clade primate=Primates euarchontoglires=Euarchontoglires laurasiatheria=Laurasiatheria xenarthra=Xenarthra carnivora=Carnivora cetartiodactyla=Cetartiodactyla chiroptera=Chiroptera artiodactyla=Artiodactyla afrotheria=Afrotheria glires=lires metatheria=etatheria monotremata=Monotremata
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility hide
+type bed 4
+group compGeno
+
+    track cons470wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons470way
+
+        track multiz470way
+        subTrack cons470wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 470 mammals (plus 2)
+        subGroups view=align clade=primate
+        configurable on
+        type bigMaf
+        viewUi on
+        speciesCodonDefault hg38
+        speciesGroups Primates Euarchontoglires Laurasiatheria Xenarthra Carnivora Cetartiodactyla Chiroptera Artiodactyla Afrotheria Glires Metatheria Monotremata
+
+#        frames https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470wayFrames.bb
+        bigDataUrl /gbdb/hg38/multiz470way/hg38.470way.bb
+        summary /gbdb/hg38/multiz470way/hg38.470waySummary.bb
+        sGroup_Primates panTro6 panPan3 gorGor6 ponAbe3 HLnomLeu4 HLhylMol2 macNem1 HLtheGel1 HLmacFas6 HLcerMon1 HLpilTep2 colAng1 manLeu1 cerAty1 HLpapAnu5 HLmanSph1 HLsemEnt1 rheMac10 HLmacFus1 HLtraFra1 rhiBie1 HLrhiRox2 HLpygNem1 HLcerNeg1 nasLar1 HLallNig1 chlSab2 HLeryPat1 HLpitPit1 HLateGeo1 aotNan1 HLpleDon1 HLaloPal1 HLsaiBol1 HLsagImp1 saiBol1 HLcalJac4 HLcalPym1 HLsapApe1 cebCap1 HLcebAlb1 HLdauMad1 proCoq1 HLindInd1 HLeulFul1 eulFla1 HLlemCat1 HLproSim1 HLeulMon1 HLcheMed1 eulMac1 tarSyr2 micMur3 HLmirZaz1 HLmirCoq1 HLmicSpe31 HLmicTav1 HLnycCou1 otoGar3
+        sGroup_Euarchontoglires HLgalVar2 tupChi1 tupBel1
+        sGroup_Laurasiatheria HLtapTer1 HLrhiUni1 HLtapInd2 HLdicBic1 HLdicSum1 HLcerSimCot1 cerSim1 HLequQuaBoe1 equCab3 equPrz1 HLequAsi1 HLequAsiAsi2 HLphaTri2 manPen1 HLmanJav2 HLsolPar1 HLscaAqu1 HLtalOcc1 HLuroGra1 conCri1 eriEur2 sorAra2
+        sGroup_Xenarthra HLchoHof3 HLchoDid2 dasNov3 HLmyrTri1 HLtamTet1 HLtolMat1
+        sGroup_Carnivora HLpumCon1 panTig1 HLneoNeb1 HLpanPar1 HLeriBar1 HLphoVit1 HLaciJub2 HLhalGry1 neoSch1 lepWed1 HLpanOnc2 HLpriBen1 HLursThi1 HLlynPar1 HLmirLeo1 HLlynCan1 HLmirAng2 HLpanLeo1 HLodoRos1 HLcalUrs1 odoRosDiv1 HLailMel2 HLzalCal1 HLeumJub1 felCat9 HLpumYag1 HLursArc1 ursMar1 HLarcGaz2 HLursAme2 HLfelNig1 HLcryFer2 HLvulVul1 HLvulLag1 HLlycPic3 HLcanLupDin1 canFam5 HLpotFla1 HLailFul2 HLcroCro1 HLhyaHya1 HLparHer1 HLnasNar1 HLmarZib1 HLgulGul1 HLproLot1 HLbasSum1 HLspiGra1 HLtaxTax1 HLmelCap1 HLsurSur2 HLmunMug1 HLhelPar1 HLlonCan1 HLpteBra2 enhLutNer1 enhLutKen1 HLlutLut1 HLmusErm1 HLneoVis1 HLmusPut1 HLmusFur2
+        sGroup_Cetartiodactyla HLbalBon1 HLescRob1 phyCat1 lipVex1 HLdelLeu2 HLhipAmp3 HLphoPho2 HLcamFer3 orcOrc1 HLcamBac1 HLsouChi1 HLcamDro2 vicPac2 HLturAdu2 turTru2 susScr11 HLokaJoh2 HLgirTip1 HLbubBub2 HLbosInd2 bosTau9 HLbosMut2 HLtraStr1 HLammLer1 HLcapHir2 HLcapAeg1 panHod1 HLodoVir3 HLoviCan2 HLoviAri5 HLelaDav1 HLoviAmm1
+        sGroup_Chiroptera HLrhiSin1 HLhipArm1 pteAle1 HLrhiFer5 HLptePse1 HLtadBra1 HLpteVam2 HLpteRuf1 HLpteGig1 HLeidDup1 HLeidHel2 HLhipGal1 HLcynBra1 HLeonSpe1 HLrouLes1 HLrouAeg4 HLrouMad1 HLmegLyr2 HLmolMol2 HLmacSob1 HLminSch1 HLminNat1 HLcraTho1 HLmorBla1 ptePar1 eptFus1 HLmyoMyo6 myoBra1 HLdesRot2 HLmacCal1 HLmyoSep1 myoLuc2 HLlepYer1 myoDav1 HLmicHir1 HLanoCau1 HLmurAurFea1 HLnocLep1 HLcarPer3 HLphyDis3 HLtonSau1 HLartJam2 HLstuHon1 HLaeoCin1 HLantPal1 HLnycHum2 HLlasBor1 HLpipKuh2 HLpipPip2
+        sGroup_Artiodactyla HLeubGla1 HLeubJap1 balAcu1 HLmegNov1 HLbalPhy1 HLbalMys1 HLbalMus1 HLbalEde1 HLmesBid1 HLplaMin1 HLzipCav1 HLlniGeo1 HLmonMon1 HLneoAsi1 HLkogBre1 HLphoSin1 HLponBla1 HLvicPacHua3 HLlamGla1 HLpepEle1 HLgloMel1 HLlagObl1 HLvicVicMen1 HLlamGuaCac1 HLlamGlaCha1 HLcatWag1 HLgirCam2 HLsynCaf1 bisBis1 HLmosBer1 HLmosMos1 HLmosChr1 HLcerHanYar1 HLbosGau1 HLbosFro1 HLprzAlb1 HLhipEqu1 HLcepHar1 HLhipNig1 HLbosGru1 HLoryDam1 HLsylGri1 HLphiMax1 HLoryGaz1 HLantAme1 HLmunRee1 HLmunCri1 HLcerEla1 HLtraImb1 HLconTau2 HLtraScr1 HLkobEll1 HLmunMun1 HLdamLun1 HLoviCan1 HLkobLecLec1 HLcapPyg1 HLalcAlc1 HLbeaHun1 HLaepMel1 HLodoHem1 HLredRed1 HLcapSib1 HLranTarGra2 HLranTar1 HLoreOre1 HLhydIne1 HLoviNivLyd1 HLneoMos1 HLodoVir1 HLhemHyl1 HLoviOri1 HLneoPyg1 HLnanGra1 HLproPrz1 HLrapCam1 HLeudTho1 HLantMar1 HLlitWal1 HLmadKir1 HLaxiPor1 HLtraJav1 HLtraKan1 HLoreAme1 HLsaiTat1 HLcapIbe1
+        sGroup_Afrotheria HLdugDug1 triMan1 HLeleMax1 HLloxAfr4 oryAfe1 HLhydGig1 chrAsi1 HLhetBru1 HLproCap3 eleEdw1 echTel2 HLmicTal1
+        sGroup_Glires HLsciCar1 HLsciVul1 HLxerIna1 HLaplRuf1 HLmarFla1 HLmarMar1 HLmarVan1 HLmarHim1 HLspeDau1 HLmarMon2 HLuroPar1 HLcynGun1 speTri2 HLgliGli1 HLpedCap1 HLcasCan3 HLgraMur1 HLlepTim1 HLlepAme1 HLoryCunCun4 oryCun2 HLsylBac1 HLhysCri1 HLereDor1 HLcoePre1 HLmusAve1 hetGla2 HLfukDam2 nanGal1 chiLan1 HLdasPun1 HLcteGun1 HLallBul1 HLdipSte1 dipOrd2 HLrhiPru1 HLdinBra1 jacJac1 HLzapHud1 HLdolPat1 HLperLonPac1 HLhydHyd1 ochPri3 cavApe1 HLpetTyp1 HLcavTsc1 cavPor3 HLthrSwi1 octDeg1 HLcriGam1 HLneoLep1 HLcteSoc1 HLmyoCoy1 HLperNas1 HLcriGri3 HLperCri1 HLondZib1 HLperCal2 HLperEre1 HLonyTor1 mesAur1 HLperLeu1 HLellTal1 HLperPol1 HLperManBai2 HLsigHis1 HLellLut1 HLmyoGla2 HLarvAmp1 HLpsaObe1 HLacoRus1 HLgraSur1 HLarvNil1 HLmicOec1 HLmicAgr2 HLmicFor1 HLacoCah1 HLmicArv1 micOch1 HLrhoOpi1 HLmasCou1 HLmerUng1 HLratRat7 rn6 HLmusPah1 HLmusCar1 HLmusSpi1 mm39 HLmusSpr1 HLapoSyl1
+        sGroup_Metatheria HLvomUrs1 HLphaCin1 HLgraAgi1 HLtriVul1 HLdidVir1 HLphaGym1 monDom5 HLgymLea1 HLthyCyn1 HLpseCup1 HLmacGig1 HLpseCor1 HLmacFul1 HLospRuf1 HLpseOcc1 macEug2 HLantFla1 HLsarHar2
+        sGroup_Monotremata HLornAna3 HLtacAcu1
+        speciesDefaultOff panTro6 panPan3 gorGor6 ponAbe3 HLnomLeu4 HLhylMol2 macNem1 HLtheGel1 HLmacFas6 HLcerMon1 HLpilTep2 colAng1 manLeu1 cerAty1 HLpapAnu5 HLmanSph1 HLsemEnt1 rheMac10 HLmacFus1 HLtraFra1 rhiBie1 HLrhiRox2 HLpygNem1 HLcerNeg1 nasLar1 HLallNig1 chlSab2 HLeryPat1 HLpitPit1 HLateGeo1 aotNan1 HLpleDon1 HLaloPal1 HLsaiBol1 HLsagImp1 saiBol1 HLcalJac4 HLcalPym1 HLsapApe1 cebCap1 HLcebAlb1 HLdauMad1 proCoq1 HLgalVar2 HLindInd1 HLeulFul1 eulFla1 HLlemCat1 HLproSim1 HLeulMon1 HLeulFla1 HLcheMed1 eulMac1 tarSyr2 micMur3 HLmirZaz1 HLmirCoq1 HLmicSpe31 HLmicTav1 HLnycCou1 otoGar3 HLtapTer1 HLrhiUni1 HLtapInd1 HLtapInd2 HLdicBic1 HLdicSum1 HLcerSimCot1 cerSim1 HLequQuaBoe1 equCab3 equPrz1 HLequAsi1 HLequAsiAsi2 HLeubGla1 HLsciCar1 HLeubJap1 HLsciVul1 balAcu1 HLbalBon1 HLxerIna1 HLmegNov1 HLbalPhy1 HLbalMys1 HLbalMus1 tupChi1 HLbalEde1 HLaplRuf1 HLescRob1 HLmarFla1 phyCat1 HLphyCat2 HLmarMar1 HLmesBid1 HLchoHof3 HLchoDid2 HLmarVan1 HLplaMin1 HLmarHim1 HLspeDau1 HLmarMon1 HLmarMon2 HLzipCav1 HLuroPar1 lipVex1 HLdelLeu2 HLlniGeo1 HLcynGun1 HLmonMon1 HLhipAmp3 HLhipAmp1 speTri2 HLneoAsi1 HLpumCon1 panTig1 HLkogBre1 HLneoNeb1 HLpanPar1 HLphoSin1 HLeriBar1 HLmanTri1 HLgliGli1 HLdugDug1 HLphaTri2 HLpanOnc1 HLphoVit1 HLaciJub2 HLhalGry1 HLchoDid1 HLpedCap1 HLphoPho2 HLphoPho1 neoSch1 lepWed1 HLpanOnc2 HLponBla1 HLpriBen1 HLcamFer3 orcOrc1 HLmanPen2 HLcasCan3 HLursThi1 HLrhiSin1 HLlynPar1 HLmirLeo1 HLlynCan1 HLmirAng2 HLpanLeo1 HLcamBac1 HLsouChi1 manPen1 HLodoRos1 HLcalUrs1 odoRosDiv1 HLvicPacHua3 HLhipArm1 HLlamGla1 HLailMel2 HLzalCal1 HLeumJub1 felCat9 HLpumYag1 pteAle1 HLursArc1 ursMar1 HLpepEle1 HLgloMel1 HLrhiFer5 HLarcGaz2 HLcamDro2 HLlagObl1 HLptePse1 HLmanJav1 HLmanJav2 vicPac2 HLvicVicMen1 HLlamGuaCac1 HLlamGlaCha1 HLturTru4 dasNov3 HLturAdu1 HLturAdu2 HLursAme1 HLursAme2 triMan1 HLtadBra1 HLpteVam2 turTru2 HLpteRuf1 HLpteGig1 HLturTru3 HLfelNig1 HLeidDup1 HLeidHel2 HLeleMax1 HLhipGal1 HLloxAfr4 tupBel1 HLcynBra1 HLeonSpe1 HLcryFer2 HLgraMur1 HLmyrTri1 oryAfe1 HLrouLes1 HLrouAeg4 HLrouMad1 HLvulVul1 canFam4 HLvulLag1 HLlycPic3 HLtamTet1 HLcanLupDin1 canFam5 HLpotFla1 HLhydGig1 HLmegLyr2 HLlycPic2 HLailFul2 HLmolMol2 HLcroCro1 HLmacSob1 HLhyaHya1 HLlepTim1 susScr11 HLminSch1 HLparHer1 HLminNat1 HLlepAme1 HLcraTho1 HLcatWag1 HLmorBla1 HLoryCunCun4 ptePar1 oryCun2 HLoryCun3 HLsylBac1 HLnasNar1 HLhysCri1 HLereDor1 HLcoePre1 HLmarZib1 HLsolPar1 HLgulGul1 HLproLot1 HLbasSum1 HLspiGra1 HLtaxTax1 HLmelCap1 HLmusAve1 HLsurSur2 HLsurSur1 HLmunMug1 HLhelPar1 HLscaAqu1 HLlonCan1 eptFus1 HLpteBra2 HLpteBra1 enhLutNer1 enhLutKen1 HLlutLut1 HLmyoMyo6 hetGla2 myoBra1 HLdesRot2 HLtalOcc1 HLgirCam1 HLokaJoh2 HLmacCal1 HLmusErm1 HLmyoSep1 HLneoVis1 HLgirCam2 HLgirTip1 HLmyoLuc1 myoLuc2 HLmusPut1 HLmusFur2 HLlepYer1 myoDav1 HLsynCaf1 HLbubBub2 bisBis1 HLmosBer1 HLmosMos1 HLmosChr1 HLcerHanYar1 HLmicHir1 HLbosInd2 bosTau9 chrAsi1 HLbosGau1 HLanoCau1 HLbosFro1 HLbosMut2 HLprzAlb1 HLmurAurFea1 HLnocLep1 HLhipEqu1 HLcepHar1 HLhipNig1 HLbosGru1 HLoryDam1 HLsylGri1 HLphiMax1 HLoryGaz1 HLtraStr1 HLantAme1 HLmunRee1 HLmunCri1 HLcerEla1 HLtraImb1 HLconTau2 HLtraScr1 HLkobEll1 HLmunMun1 HLammLer1 HLdamLun1 HLoviCan1 HLkobLecLec1 HLcapPyg1 HLcapHir2 HLcapAeg1 panHod1 HLalcAlc1 HLbeaHun1 HLaepMel1 HLodoHem1 HLredRed1 HLfukDam2 HLcapSib1 HLodoVir3 HLranTarGra2 HLranTar1 HLoreOre1 HLhydIne1 HLoviCan2 HLoviNivLyd1 HLneoMos1 HLodoVir2 HLodoVir1 HLhemHyl1 HLoviOri1 HLoviAri5 HLneoPyg1 nanGal1 HLnanGra1 HLproPrz1 HLrapCam1 HLeudTho1 HLantMar1 chiLan1 HLdasPun1 HLcteGun1 HLlitWal1 HLmadKir1 HLcarPer3 HLaxiPor1 HLphyDis3 HLtonSau1 HLtraJav1 HLartJam1 HLartJam2 HLhetBru1 HLproCap3 HLuroGra1 HLtraKan1 conCri1 HLstuHon1 HLoreAme1 HLallBul1 HLelaDav1 HLsaiTat1 HLaeoCin1 HLdipSte1 dipOrd2 HLtolMat1 HLantPal1 HLrhiPru1 HLnycHum2 HLoviAmm1 HLcapIbe1 HLdinBra1 jacJac1 HLzapHud1 HLdolPat1 HLlasBor1 HLpipKuh2 HLperLonPac1 HLhydHyd1 HLpipPip1 HLpipPip2 ochPri3 eleEdw1 cavApe1 HLpetTyp1 HLcavTsc1 cavPor3 HLthrSwi1 octDeg1 HLcriGam1 HLneoLep1 HLcteSoc1 HLmyoCoy1 echTel2 eriEur2 HLperNas1 HLcriGri3 HLperCri1 HLondZib1 HLperCal2 HLperEre1 HLonyTor1 mesAur1 HLperLeu1 HLellTal1 HLperPol1 HLperManBai2 HLsigHis1 HLellLut1 HLmyoGla2 HLarvAmp1 HLpsaObe1 HLacoRus1 HLgraSur1 HLarvNil1 HLmicOec1 HLmicTal1 HLmicAgr2 HLmicFor1 HLacoCah1 HLmicArv1 micOch1 HLrhoOpi1 HLmasCou1 HLmerUng1 HLratRat7 HLratNor7 rn6 HLmusPah1 HLmusCar1 HLmusSpi1 mm39 mm10 HLmusSpr1 HLapoSyl1 sorAra2 HLvomUrs1 HLphaCin1 HLgraAgi1 HLtriVul1 HLdidVir1 HLphaGym1 monDom5 HLgymLea1 HLthyCyn1 HLpseCup1 HLmacGig1 HLpseCor1 HLmacFul1 HLnotEug3 HLospRuf1 HLpseOcc1 macEug2 HLantFla1 HLsarHar2 HLornAna3
+        speciesDefaultOn hg38 HLtacAcu1
+        itemFirstCharCase noChange
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+
+#     # PhyloP conservation
+#     track cons470wayViewphyloP
+#     shortLabel Basewise Conservation (phyloP)
+#     view phyloP
+#     visibility full
+#     subTrack cons470way
+#     viewLimits -20.0:9.869
+#     viewLimitsMax -20:0.869
+# 
+#         track phyloP470wayBW
+#         subTrack cons470wayViewphyloP
+#         subGroups view=phyloP clade=primate
+#         shortLabel Basewise Cons
+#         longLabel PhyloP Basewise Conservation of Zoonomia 470 Placental Mammals
+#         configurable on
+#         type bigWig -20 9.28
+#         bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.phyloP.bw
+#         maxHeightPixels 100:50:11
+#         viewLimits -4.5:7.5
+#         autoScale off
+#         spanList 1
+#         windowingFunction mean
+#         color 60,60,140
+#         altColor 140,60,60
