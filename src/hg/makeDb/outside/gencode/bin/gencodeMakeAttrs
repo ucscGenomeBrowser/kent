@@ -54,7 +54,7 @@ def _writeAttrsTblRow(tr, fh):
                    tr.id, tr.name, tr.bioType, unused,
                    gn.havanaId, tr.havanaId, emptyIfNone(tr.ccdsId), tr.level,
                    tr.transcriptClass, emptyIfNone(tr.proteinId),
-                   -1)  # TMP: set transcriptRank to -1 until it is in GFF
+                   tr.transcriptRank)
 
 def writeAttrsTbl(gencode, fh):
     for transcript in gencode.getTranscriptsSortById():
