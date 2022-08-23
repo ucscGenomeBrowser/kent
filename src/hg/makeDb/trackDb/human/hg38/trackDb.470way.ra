@@ -25,8 +25,8 @@ group compGeno
         noInherit on
         type bigMaf
         viewUi on
-        bigDataUrl /gbdb/hg38/multiz470way/hg38.470way.bb
-        summary /gbdb/hg38/multiz470way/hg38.470waySummary.bb
+        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf
+        summary https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470waySummary.bb
         itemFirstCharCase noChange
         group compGeno
         color 0, 10, 100
