@@ -1,4 +1,4 @@
-table hgnc
+table hgncBig62
 "A cross-reference table between HUGO Gene Nomenclature Committee (HGNC) IDs and other database IDs."
     (
     string chrom;      "Chromosome (or contig, scaffold, etc.)"
