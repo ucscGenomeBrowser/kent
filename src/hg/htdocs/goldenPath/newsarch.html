@@ -52,6 +52,45 @@
 <!-- ============= 2022 archived news ============= -->
 <a name="2022"></a>
 
+<a name="082222"></a>
+<h2>Aug. 22, 2022 &nbsp;&nbsp; dbSNP build 155 tracks for hg19 and hg38</h2>
+<p>
+We are pleased to announce the release of
+<a href="https://www.ncbi.nlm.nih.gov/SNP/" target="_blank">NCBI's dbSNP</a> build 155 data for
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=dbSnp155Composite" target="_blank">GRCh38/hg38</a> and
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=dbSnp155Composite" target="_blank">GRCh37/hg19</a>  human
+assemblies. The release reaches a new milestone of over 1 billion RefSNP (rs) records. For hg38
+(GRCh38), approximately 998 million distinct variants (RefSNP clusters with rs# ids) have been
+mapped to more than 1.06 billion genomic locations including alternate haplotype and fix patch
+sequences. dbSNP remapped variants from hg38 to hg19 (GRCh37); approximately 981 million distinct
+variants were mapped to more than 1.02 billion genomic locations including alternate haplotype and
+fix patch sequences (not all of which are included in UCSC's hg19).</p>
+
+<p>
+dbSNP build 155 is composed of 5 subtracks:
+<ul>
+  <li><b>Common dbSNP(155)</b> - Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants</li>
+  <li><b> ClinVar dbSNP(155)</b> - Short Genetic Variants in ClinVar</li>
+  <li><b>Mult. dbSNP(155)</b> - Short Genetic Variants that map to multiple genomic loci</li>
+  <li><b>All dbSNP(155)</b> - All Short Genetic Variants</li>
+  <li><b>Map Err dbSnp(155)</b> - Mappings with Inconsistent Coordinates</li>
+</ul></p>
+
+<h3>Data Access</h3>
+<p>
+The complete data can be found across two separate directories in our download server, a bigBed file
+(bigDbSnp) for <a target="_blank" href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/">hg19</a>
+and <a target="_blank" href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/">hg38</a>, and a
+<a target="_blank" href="http://hgdownload.soe.ucsc.edu/gbdb/hgFixed/dbSnp/">shared secondary
+details file</a> which holds additional variant details.<p>
+</p>
+
+<p>
+We would like to thank the dbSNP group at NCBI for providing access to these data. We would also
+like to thank Galt Barber, Angie Hinrichs, and Gerardo Perez for their efforts on this release.
+</p>
+
+
 <a name="080222"></a>
 <h2>Aug. 08, 2022 &nbsp;&nbsp; New GENCODE gene tracks: Human V41 (hg19/hg38) - Mouse VM30
 (mm39)</h2>

@@ -373,7 +373,8 @@ vcfChildSample vcfPhasedTrio
 vcfParentSamples vcfPhasedTrio
 vcfUseAltSampleNames vcfPhasedTrio
 saturationScore hic
-sGroup_Afrotheria wigMaf
+sGroup_Afrotheria wigMaf bigMaf
+sGroup_Artiodactyla bigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
 sGroup_Birds wigMaf
@@ -393,19 +394,21 @@ sGroup_Deuterostomia wigMaf
 sGroup_Dorylaimia wigMaf
 sGroup_Drosophila wigMaf
 sGroup_Ebola_2014 wigMaf
-sGroup_Euarchontoglires wigMaf
+sGroup_Euarchontoglires wigMaf bigMaf
 sGroup_fish wigMaf
 sGroup_Fish wigMaf
 sGroup_Gabon wigMaf
-sGroup_Glires wigMaf
+sGroup_Glires wigMaf bigMaf
 sGroup_hiv wigMafProt wigMaf
 sGroup_Holometabola wigMaf
 sGroup_Human wigMaf
-sGroup_Laurasiatheria wigMaf
+sGroup_Laurasiatheria wigMaf bigMaf
 sGroup_Mammal wigMaf
 sGroup_mammal wigMaf
 sGroup_Mammals wigMaf bigMaf
 sGroup_Marburg_1987 wigMaf
+sGroup_Metatheria bigMaf
+sGroup_Monotremata bigMaf
 sGroup_Nematocera wigMaf
 sGroup_Nematode wigMaf
 sGroup_Nematodes wigMaf
@@ -428,9 +431,8 @@ sGroup_Placental_Mammals wigMaf
 sGroup_Platyhelminthes wigMaf
 sGroup_Plectida wigMaf
 sGroup_Primate wigMaf bigMaf
-sGroup_Primates wigMaf
+sGroup_Primates wigMaf bigMaf
 sGroup_primate wigMaf
-sGroup_Primates wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
@@ -445,6 +447,7 @@ sGroup_Vertebrate wigMaf
 sGroup_Vertebrates wigMaf
 sGroup_Virus wigMaf
 sGroup_worm wigMaf
+sGroup_Xenarthra bigMaf
 sGroup_Zaire wigMaf
 sGroup_Zaire(DRC)_1976-7 wigMaf
 *Filter bed narrowPeak broadPeak

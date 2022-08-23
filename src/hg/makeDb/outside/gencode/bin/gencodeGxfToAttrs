@@ -43,8 +43,9 @@ class Transcript:
     havanaTranscriptId: str
     ccdsId: str
     level: int
-    transcriptSupportLevel: str
     proteinId: str
+    transcriptRank: int
+    transcriptSupportLevel: str
     tags: set
 
 class GencodeGxfToAttrs(object):
@@ -79,6 +80,7 @@ class GencodeGxfToAttrs(object):
                                level=attrs.level,
                                transcriptSupportLevel=attrs.transcript_support_level,
                                proteinId=attrs.protein_id,
+                               transcriptRank=-1, # TMP: set transcriptRank to -1 until it is in GFF
                                tags=set())
             self.transcripts[attrs.transcript_id] = trans
         # due to PAR, we have to handle multiple tags for the same
@@ -128,7 +130,7 @@ class GencodeGxfToAttrs(object):
                        tr.source, tr.havanaGeneId, tr.havanaTranscriptId,
                        emptyIfNone(tr.ccdsId), tr.level,
                        tr.transcriptClass, emptyIfNone(tr.proteinId),
-                       tr.transcriptSupportLevel,
+                       tr.transcriptRank, tr.transcriptSupportLevel,
                        ",".join(map(str, sorted(tr.tags))))
 
     def writeAttrsTsv(self, fh):
@@ -136,7 +138,7 @@ class GencodeGxfToAttrs(object):
                        "transcriptId", "transcriptName", "transcriptType",
                        "source", "havanaGeneId", "havanaTranscriptId",
                        "ccdsId", "level", "transcriptClass", "proteinId",
-                       "tsl", "tags")
+                       "transcriptRank", "tsl", "tags")
         for transcript in sorted(self.transcripts.values(),
                                  key=lambda t: (t.geneId, t.transcriptId)):
             self._writeAttrsTsvRow(transcript, fh)
