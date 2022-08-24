@@ -490,18 +490,23 @@ information on assembly migration tools.</p>
 
 <a name="snpConversion"></a>
 <h2>Converting SNPs between assembly versions</h2>
-<h6>How can I convert SNP annotation coordinates between assembly versions</h6>
+<h6>How can I convert SNP annotation coordinates between assembly versions?</h6>
 <p>
-While the LiftOver tool exists to convert coordinates between assemblies, it is not recommended to
-use the tool to convert SNPs between two assembly versions. Using LiftOver to convert a very small
-region, especially a single base SNP, is not always a trivial task as the alignment may not get a
-high enough score to be considered a successful conversion.</p>
+While the LiftOver tool exists to convert coordinates between assemblies, <b>it is NOT recommended
+to use LiftOver</b> to convert SNPs between two assembly versions. Using LiftOver to
+convert a very small region, especially a single base SNP, is not always a trivial task as the
+alignment may not get a high enough score to be considered a successful conversion.</p>
 <p>
-Instead, the recommended process to convert a SNP's coordinates between assemblies is to use the
-dbSNP track to search for each rsID on the target genome assembly. For bulk conversions, the
-<a href="/cgi-bin/hgTables">Table Browser</a> can be used to extract the coordinates for the rsIDs
-on the target assembly. More information about performing batch queries on the Table Browser can be
-found on the following
+<b>Instead, the recommended process</b> to convert a SNP's coordinates between assemblies is to use
+a SNP track to search for each rsID on the target genome assembly. For example, after creating a
+list of rsIDs for your conversion, you would then search for each rsID on the target's Genome
+Browser using the dbSNP track for human assemblies (i.e. hg19 or hg38) or the EVA SNP track on mouse
+assemblies (i.e. mm10 or mm39) to perform the conversion.
+</p>
+<p>
+For bulk conversions, the <a href="/cgi-bin/hgTables">Table Browser</a> can be used to extract the
+coordinates for the rsIDs on the target assembly. More information about performing batch queries on
+the Table Browser can be found on the following
 <a href="/goldenPath/help/hgTablesHelp.html#BatchQuery">Table Browser help page</a>. An example of
 using the Table Browser to convert SNP between assemblies can be found on a previously answered
 question available on the
@@ -509,12 +514,15 @@ question available on the
 target="_blank">mailing list archive</a>.
 </p>
 <p>
-If you are using verions dbSNP 153 and above, the data are formatted as bigBed files. For very large
-queries, this may cause the Table Browser to timeout as dbSNP has grown to include over 700 million
-variants. If you find that your Table Browser query timesout for your list of rsIDs, you can use the
-<code>bigBedNamedItems</code> command-line tool to extract the coordinates. More information and
-examples using the <code>bigBedNamedItems</code> utility can be found on the following
-<a href="FAQdownloads.html#snp">FAQ entry</a>.
+If you are using versions dbSNP 153 and above, the data are formatted as bigBed files instead of
+being stored as a MariaDb table. For very large queries, this may cause the Table Browser to timeout
+before the query finishes as dbSNP has grown to include over 700 million variants. If you find that
+your Table Browser query timesout for your list of rsIDs, you can use the
+<code>bigBedNamedItems</code> command-line tool to extract the rsID coordinates directly from the
+bigBed file instead of using the Table Browser. More information and examples using the
+<code>bigBedNamedItems</code> utility can be found on the following
+<a href="FAQdownloads.html#snp">FAQ entry</a>. As a reminder, you can run any Kent command-line tool
+without arguments to get the usage statement.
 </p>
 
 <a name="release9"></a>
