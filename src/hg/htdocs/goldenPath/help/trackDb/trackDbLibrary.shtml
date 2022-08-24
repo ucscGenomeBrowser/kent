@@ -771,13 +771,19 @@
 </DIV>
 
 <DIV class="tableBrowser"><span class="types all"></span>
-<div class="format"><code>tableBrowser &lt;off/on/noGenome&gt; [table1 ...]</code></div>
-    <P>The Table Browser typically allows querying and downloading of some or all 
-    of the raw data for a track. The <code>off</code> value blocks Table Browser access to datasets 
-    with restrictions (for example, those with confidentiality or licensing limitations).  
-    The <code>noGenome</code> value allows queries within specific genomic regions,
-    but not genome-wide.
-    By naming additional tables in this setting, access to those 
+<div class="format"><code>tableBrowser &lt;off/on/noGenome/tbNoGenome&gt; [table1 ...]</code></div>
+    <P>The Table Browser (and <a href=../api.html target=_blank>REST API</a>)
+    typically allow querying and downloading of
+    some or all of the raw data for a track. The <code>off</code> value blocks
+    all API getData operations and Table Browser access to datasets with
+    restrictions
+    (for example, those with confidentiality or licensing limitations).  
+    The <code>tbNoGenome</code> value allows unrestricted API getData
+    operations, while limiting the table browser queries within specific
+    genomic regions, but not genome-wide.
+    The <code>noGenome</code> value prohibits API getData operations, while
+    allowing table browser queries within specific genomic regions, but not
+    genome-wide.  By naming additional tables in this setting, access to those 
     tables can be denied as well.</P>
     <P><B>Examples:</B></P>
     <pre>   tableBrowser off decipherRaw knownToDecipher</pre>

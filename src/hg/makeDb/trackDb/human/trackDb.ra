@@ -102,7 +102,7 @@ type bed 3
 
 track lrg
 shortLabel LRG Regions
-longLabel Locus Reference Genomic (LRG) Sequences Mapped to $date Assembly
+longLabel Locus Reference Genomic (LRG) / RefSeqGene Sequences Mapped to $date Assembly
 group map
 visibility hide
 type bigBed 12 +
@@ -1637,11 +1637,11 @@ shortLabel dbSNP 153
 longLabel Short Genetic Variants from dbSNP release 153
 type bed 3
 group varRep
-visibility pack
+visibility hide
 url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 subGroup1 view Views variants=Variants errs=Mapping_Errors
-priority 0.8
+priority 1
 pennantIcon Note green ../goldenPath/newsarch.html "dbSNP 155 is now available, and dbSNP 153 will be nested into the dbSNP archive soon."
 
     track dbSnp153ViewVariants
@@ -1765,6 +1765,7 @@ url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 subGroup1 view Views variants=Variants errs=Mapping_Errors
 priority 0.8
+pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
 
     track dbSnp155ViewVariants
     view variants
@@ -3262,7 +3263,7 @@ dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
 track lrgTranscriptAli
 shortLabel LRG Transcripts
-longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
+longLabel Locus Reference Genomic (LRG) / RefSeqGene Fixed Transcript Annotations
 group genes
 visibility hide
 type bigPsl
@@ -5613,4 +5614,20 @@ filterValues.assnType Biomarker tested in,Candidate gene tested in,Disease-causi
 filterValues.inheritance Autosomal dominant,Autosomal recessive,Mitochondrial inheritance,Multigenic/multifactorial,No data available,Not applicable,Oligogenic,Semi-dominant,Unknown,X-linked dominant,X-linked recessive,Y-linked
 filterValues.onsetList Adolescent,Adult,All ages,Antenatal,Childhood,Elderly,Infancy,Neonatal,No data available
 itemRgb on
+
+track hgnc
+shortLabel HGNC
+longLabel HGNC
+bigDataUrl /gbdb/$D/hgnc/hgnc.bb
+type bigBed 9 +
+labelFields symbol, geneName, name, uniprot_ids, ensembl_gene_id, ucsc_id, refseq_accession, alias_symbol, prev_symbol
+defaultLabelFields symbol
+filterValues.locus_type RNA Y,RNA cluster,RNA long non-coding,RNA micro,RNA misc,RNA ribosomal,RNA small nuclear,RNA small nucleolar,RNA transfer,RNA vault,T cell receptor gene,T cell receptor pseudogene,complex locus constituent,endogenous retrovirus,fragile site,gene with protein product,immunoglobulin gene,immunoglobulin pseudogene,locus_type,protocadherin,pseudogene,readthrough,region,unknown,virus integration site,
+group genes
+searchIndex name
+searchTrix /gbdb/$D/hgnc/search.ix
+
+searchTable hgnc
+searchMethod exact
+searchType bigBed
 

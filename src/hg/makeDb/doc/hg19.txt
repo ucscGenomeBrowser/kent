@@ -34971,3 +34971,61 @@ cp cytoSnp.bb /hive/data/genomes/hg19/bed/cytoSnp/cytoSnp850k.bb
 ln -s /hive/data/genomes/hg19/bed/cytoSnp/cytoSnp850k.bb /gbdb/hg19/bbi/cytoSnp/cytoSnp850k.bb
 
 #############################################################################
+# hgnc
+
+mkdir -p /cluster/data/hg19/bed/hgnc
+cd /cluster/data/hg19/bed/hgnc
+
+# get the data
+wget "http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/tsv/hgnc_complete_set.txt"
+
+# generate trix file with symbol, alias, and previos values
+tail -n +2 hgnc_complete_set.txt | tawk '{print $1, $2 " " $9 " " $11;}' | tr -d '"' | tr '|' ' ' > trixInput.txt
+ixIxx trixInput.txt search.hg19.ix search.hg19.ixx
+
+# look at field names and create proto AS file
+#tawk '{for(ii=1;  ii <= NF; ii++) print ii, $ii; exit}' hgnc_complete_set.txt
+#tawk '{for(ii=1;  ii <= NF; ii++) printf "\tstring %s; \"%s\"\n", $ii,$ii; exit}' *comple* > asSkeleton.as
+
+# create input file without header and sorted by first field ( HGNC:### )
+tail -n +2 hgnc_complete_set.txt | sort -k 1b,1 > input.txt
+
+# put black for every type for the moment.  This should be based on GENCODE colors
+tawk '{print $5}' input.txt | sort -u | awk '{printf "s/%s/0,0,0/\n", $0}' > color.sed.txt
+tawk '{print $1,$5}' input.txt | sed -f color.sed.txt | sort -k 1b,1 > id.color.txt
+join -j 1 -t $'\t' input.txt id.color.txt > inputColor.txt
+
+# put refseq ID as first field for joins
+tawk '{if ($24 != "")  print $24,$0}' inputColor.txt | sort -k 1b,1 > refSeq.hgnc.txt
+
+# get NG_* positions from LRG track
+bigBedToBed /gbdb/hg19/bbi/lrg.bb stdout | tawk '{split($18,a,"."); print a[1],$1,$2,$3}' | sort -k 1b,1 > refSeqGene.hg19.txt
+
+# get NM, NR, XR, XM, YP, etc from ncbiRefSeq track
+hgsql hg19 -Ne "select * from ncbiRefSeq" | tawk '{split($2,a,"."); print a[1],$3,$5,$6}' | sort -k 1b,1 > refSeq.hg19.txt
+
+# merge positions
+sort -k 1b,1 refSeqGene.hg19.txt refSeq.hg19.txt > refSeq.all.hg19.txt
+
+# add position information to HGNC information
+join -j 1 -t $'\t' refSeq.all.hg19.txt refSeq.hgnc.txt | cut -f 2- > positioned.hg19.txt
+
+# build first nine fields of bigbed
+tawk '{print $1, $2, $3, $4, 0, "+", 0,0, $58}' positioned.hg19.txt > tmp1
+
+# add the rest of the HGNC fields as extra fields except the id and color which are in the first nine
+tawk '{for(ii=5; ii <= 56; ii++) printf("%s\t", $ii); print $ii}' positioned.hg19.txt > tmp2
+paste tmp1 tmp2 | sort -k1,1 -k2,2n > input.bed
+
+# let's do this thing!
+bedToBigBed -extraIndex=name -tab -type=bed9+53 input.bed /cluster/data/hg19/chrom.sizes hgnc.hg19.bb -as=$HOME/kent/src/hg/lib/hgncBig62.as
+
+# put the files into /gbdb
+mkdir -p /gbdb/hg19/hgnc
+rm -rf /gbdb/hg19/hgnc/hgnc.bb
+ln -s `pwd`/hgnc.hg19.bb /gbdb/hg19/hgnc/hgnc.bb 
+
+rm -rf /gbdb/hg19/hgnc/search.ix /gbdb/hg19/hgnc/search.ixx
+ln -s `pwd`/search.hg19.ix /gbdb/hg19/hgnc/search.ix
+ln -s `pwd`/search.hg19.ixx /gbdb/hg19/hgnc/search.ixx
+

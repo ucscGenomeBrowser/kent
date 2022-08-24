@@ -139,7 +139,8 @@ class GencodeTranscriptLocus(object):
 
 class GencodeTranscript(object):
     "object for a single transcript"
-    __slots__ = ("id", "name", "bioType", "havanaId", "ccdsId", "proteinId", "source", "tags", "gene", "level", "extendedMethod", "transcriptSupportLevel", "transcriptLoci")
+    __slots__ = ("id", "name", "bioType", "havanaId", "ccdsId", "proteinId", "transcriptRank",
+                 "source", "tags", "gene", "level", "extendedMethod", "transcriptSupportLevel", "transcriptLoci")
 
     def __init__(self, transcriptId):
         self.id = transcriptId
@@ -148,6 +149,7 @@ class GencodeTranscript(object):
         self.havanaId = None
         self.ccdsId = None
         self.proteinId = None
+        self.transcriptRank = None
         self.source = None
         self.tags = BioTags()
         self.level = None
@@ -223,7 +225,7 @@ class GencodeTranscript(object):
 
     def toInfoRow(self):
         return [self.gene.id, self.gene.name, self.gene.bioType, self.id, self.name, self.bioType, _emptyIfNone(self.ccdsId), self.level, self.transcriptClass, _emptyIfNone(self.proteinId),
-                str(BioTags(self.tags | self.gene.tags))]
+                self.transcriptRank, str(BioTags(self.tags | self.gene.tags))]
 
 class GencodeGeneLocus(object):
     """object to group all of the GencodeTranscriptLocus objects for a given
@@ -465,6 +467,7 @@ class GencodeGenes(object):
         trans.level = info.level
         trans.transcriptSupportLevel = info.tsl
         trans.proteinId = info.proteinId
+        trans.transcriptRank = info.transcriptRank
 
     def _linkTranscriptToGene(self, gene, trans):
         trans.gene = gene

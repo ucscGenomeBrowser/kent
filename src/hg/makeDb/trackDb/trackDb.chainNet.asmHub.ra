@@ -71,7 +71,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.net.summary.bb
         speciesOrder GCA_009914755.4
-        html chainNet
+        speciesLabels GCA_009914755.4="CHM13 T2T"
 
         track synNetGCA_009914755.4
         parent mafNetGCA_009914755.4Viewnet
@@ -82,6 +82,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.synNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.synNet.summary.bb
         speciesOrder GCA_009914755.4
+        speciesLabels GCA_009914755.4="CHM13 T2T"
 
         track rbestNetGCA_009914755.4
         parent mafNetGCA_009914755.4Viewnet
@@ -92,6 +93,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.rbestNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.rbestNet.summary.bb
         speciesOrder GCA_009914755.4
+        speciesLabels GCA_009914755.4="CHM13 T2T"
 
 ##############################################################################
 # GCA_901343595v1_MONAX5 - woodchuck - Marmota monax - mammal
@@ -131,7 +133,6 @@ html chainNet
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain GCA_901343595v1
-        html chainNet
 
     track chainNetGCA_901343595v1Viewnet
     shortLabel Net
@@ -145,7 +146,6 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign GCA_901343595v1 chainGCA_901343595v1_MONAX5
-        html chainNet
 
 ##############################################################################
 # GCF_003668045.3 - Chinese hamster - Cricetulus griseus - taxId: 10029 - mammal
@@ -186,7 +186,6 @@ html chainNet
         type bigChain GCF_003668045.3
         bigDataUrl /gbdb/$D/bbi/chainNet/chainGCF_003668045.3.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/chainGCF_003668045.3Link.bb
-        html chainNet
 
     track mafNetGCF_003668045.3Viewnet
     shortLabel Net
@@ -203,7 +202,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_003668045.3.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_003668045.3.net.summary.bb
         speciesOrder GCF_003668045.3
-        html chainNet
+        speciesLabels GCF_003668045.3="Chinese hamster"
 
 ##############################################################################
 # GCF_009829145.1 - lance-tailed manakin - Chiroxiphia lanceolata - taxId: 296741 - birds
@@ -244,7 +243,6 @@ html chainNet
         type bigChain GCF_009829145.1
         bigDataUrl /gbdb/$D/bbi/chainNet/chainGCF_009829145.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/chainGCF_009829145.1Link.bb
-        html chainNet
 
     track mafNetGCF_009829145.1Viewnet
     shortLabel Net
@@ -261,7 +259,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_009829145.1.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_009829145.1.net.summary.bb
         speciesOrder GCF_009829145.1
-        html chainNet
+        speciesLabels GCF_009829145.1="lance-tailed manakin"
 
 ##############################################################################
 # GCF_002742125.1 - Rambouillet sheep - Ovis aries - taxId: 9940 - mammal
@@ -336,7 +334,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.summary.bb
         speciesOrder GCF_002742125.1
-        html chainNet
+        speciesLabels GCF_002742125.1="Rambouillet sheep"
 
         track synNetGCF_002742125.1
         parent mafNetGCF_002742125.1Viewnet
@@ -347,6 +345,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.synNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.synNet.summary.bb
         speciesOrder GCF_002742125.1
+        speciesLabels GCF_002742125.1="Rambouillet sheep"
 
         track rbestNetGCF_002742125.1
         parent mafNetGCF_002742125.1Viewnet
@@ -357,6 +356,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.rbestNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.rbestNet.summary.bb
         speciesOrder GCF_002742125.1
+        speciesLabels GCF_002742125.1="Rambouillet sheep"
 
 ##############################################################################
 # GCA_018400075.1 - Zebrafish T5D - Danio rerio - taxId: 7955 - fish
@@ -397,7 +397,6 @@ html chainNet
         type bigChain GCA_018400075.1
         bigDataUrl /gbdb/$D/bbi/chainNet/chainGCA_018400075.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/chainGCA_018400075.1Link.bb
-        html chainNet
 
     track mafNetGCA_018400075.1Viewnet
     shortLabel Net
@@ -414,7 +413,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_018400075.1.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCA_018400075.1.net.summary.bb
         speciesOrder GCA_018400075.1
-        html chainNet
+        speciesLabels GCA_018400075.1="Zebrafish T5D"
 
 ##############################################################################
 # GCF_016699485.2 - chicken (matMap) - Gallus gallus - taxId: 9031 - birds
@@ -489,6 +488,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.net.summary.bb
         speciesOrder GCF_016699485.2
+        speciesLabels GCF_016699485.2="Chicken/GRCg7b"
 
         track synNetGCF_016699485.2
         parent mafNetGCF_016699485.2Viewnet
@@ -499,6 +499,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.synNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.synNet.summary.bb
         speciesOrder GCF_016699485.2
+        speciesLabels GCF_016699485.2="Chicken/GRCg7b"
 
         track rbestNetGCF_016699485.2
         parent mafNetGCF_016699485.2Viewnet
@@ -509,6 +510,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.rbestNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_016699485.2.rbestNet.summary.bb
         speciesOrder GCF_016699485.2
+        speciesLabels GCF_016699485.2="Chicken/GRCg7b"
 
 ##############################################################################
 # GCF_000349665.1 - golden hamster - Gallus gallus - taxId: 9031 - birds
@@ -583,6 +585,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.net.summary.bb
         speciesOrder GCF_000349665.1
+        speciesLabels GCF_000349665.1="Golden hamster"
 
         track synNetGCF_000349665.1
         parent mafNetGCF_000349665.1iewnet
@@ -593,6 +596,7 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.synNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.synNet.summary.bb
         speciesOrder GCF_000349665.1
+        speciesLabels GCF_000349665.1="Golden hamster"
 
         track rbestNetGCF_000349665.1
         parent mafNetGCF_000349665.1iewnet
@@ -603,3 +607,103 @@ html chainNet
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.rbestNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_000349665.1.rbestNet.summary.bb
         speciesOrder GCF_000349665.1
+        speciesLabels GCF_000349665.1="Golden hamster"
+
+##############################################################################
+# GCF_024166365.1 - Asiatic elephant - Elephas maximus indicus - taxId: 99487 - mammal
+##############################################################################
+track chainNetGCF_024166365.1
+compositeTrack on
+shortLabel Asiatic elephant Chain/Net
+longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCF_024166365.1
+html chainNet
+
+    track chainNetGCF_024166365.1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_024166365.1
+    spectrum on
+
+        track chainGCF_024166365.1
+        parent chainNetGCF_024166365.1Viewchain
+        subGroups view=chain
+        shortLabel Asiatic elephant Chain
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Chained Alignments
+        type bigChain GCF_024166365.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_024166365.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_024166365.1Link.bb
+
+        track chainSynGCF_024166365.1
+        parent chainNetGCF_024166365.1Viewchain
+        subGroups view=chain
+        shortLabel Asiatic elephant Chain
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Syntenic Chained Alignments
+        type bigChain GCF_024166365.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_024166365.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_024166365.1Link.bb
+
+        track chainRBestGCF_024166365.1
+        parent chainNetGCF_024166365.1Viewchain
+        subGroups view=chain
+        shortLabel Asiatic elephant Chain
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Reciprocal Best Chained Alignments
+        type bigChain GCF_024166365.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_024166365.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_024166365.1Link.bb
+
+    track mafNetGCF_024166365.1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_024166365.1
+
+        track netGCF_024166365.1
+        parent mafNetGCF_024166365.1Viewnet
+        subGroups view=net
+        shortLabel Asiatic elephant mafNet
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.net.summary.bb
+        speciesOrder GCF_024166365.1
+        speciesLabels GCF_024166365.1="Asiatic elephant"
+
+        track synNetGCF_024166365.1
+        parent mafNetGCF_024166365.1Viewnet
+        subGroups view=net
+        shortLabel Asiatic elephant mafNet
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.synNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.synNet.summary.bb
+        speciesOrder GCF_024166365.1
+        speciesLabels GCF_024166365.1="Asiatic elephant"
+
+        track rbestNetGCF_024166365.1
+        parent mafNetGCF_024166365.1Viewnet
+        subGroups view=net
+        shortLabel Asiatic elephant mafNet
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.rbestNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.rbestNet.summary.bb
+        speciesOrder GCF_024166365.1
+        speciesLabels GCF_024166365.1="Asiatic elephant"
+
+##############################################################################
