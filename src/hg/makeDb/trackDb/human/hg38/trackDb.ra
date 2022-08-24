@@ -862,7 +862,7 @@ pennantIcon New red ../goldenPath/newsarch.html#041522 "Released Apr. 15, 2022"
 
 include hprcChain.ra
 
-include trackDb.470way.ra
+include trackDb.470way.ra alpha
 
 track michaelMaf
 release alpha
