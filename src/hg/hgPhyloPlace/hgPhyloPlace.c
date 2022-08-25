@@ -1,4 +1,4 @@
-/* hgPhyloPlace - Upload SARS-CoV-2 sequence for placement in phylo tree. */
+/* hgPhyloPlace - Upload SARS-CoV-2 or MPXV sequence for placement in phylo tree. */
 
 /* Copyright (C) 2020 The Regents of the University of California */
 
@@ -69,6 +69,54 @@ else if (isNotEmpty(fileBinaryCoords))
     lf = lineFileDecompressMem(TRUE, mem, size);
     }
 return lf;
+}
+
+static char *labelForDb(char *db)
+/* The assembly hub name is just the accession; make a special label for hMPXV.  Otherwise just
+ * return hGenome(db). */
+{
+char *label = NULL;
+if (sameString(trackHubSkipHubName(db), "GCF_014621545.1"))
+    label = cloneString("hMPXV");
+else
+    label = hGenome(db);
+return label;
+}
+
+static void selectDb(char **pDb, char **pLabel)
+/* Search for assembly config.ra files in hgPhyloPlaceData.  If there is more than one
+ * supported assembly, then make a menu / select input for supported  assemblies;
+ * reload the page on change. */
+{
+struct slName *supportedDbs = phyloPlaceDbList();
+if (supportedDbs == NULL)
+    errAbort("Sorry, this server is not configured to perform phylogenetic placement.");
+if (!slNameInList(supportedDbs, *pDb))
+    {
+    *pDb = cloneString(supportedDbs->name);
+    }
+*pLabel = labelForDb(*pDb);
+int supportedDbCount = slCount(supportedDbs);
+if (supportedDbCount > 1)
+    {
+    char *labels[supportedDbCount];
+    char *values[supportedDbCount];
+    struct slName *sDb;
+    int i;
+    for (sDb = supportedDbs, i = 0;  i < supportedDbCount;  sDb = sDb->next, i++)
+        {
+        values[i] = sDb->name;
+        labels[i] = labelForDb(values[i]);
+        }
+    char *selectVar = "db";
+    struct dyString *dy = jsOnChangeStart();
+    jsDropDownCarryOver(dy, selectVar);
+    char *js = jsOnChangeEnd(&dy);
+    puts("<p>Choose your pathogen: ");
+    cgiMakeDropListFull(selectVar, labels, values, supportedDbCount, *pDb, "change", js);
+    puts("</p>");
+    }
+slNameFreeList(&supportedDbs);
 }
 
 static void newPageStartStuff()
@@ -183,18 +231,20 @@ webEndJWest();
     "     return false; " \
     "   } else { loadingImage.run(); return true; } }"
 
-static void inputForm()
+static void inputForm(char *db)
 /* Ask the user for FASTA or VCF. */
 {
 printf("<form action='%s' name='mainForm' method=POST enctype='multipart/form-data'>\n\n",
        "hgPhyloPlace");
 cartSaveSession(cart);
-char *db = "wuhCor1";
-cgiMakeHiddenVar("db", db);
 puts("<div class='readableWidth'>");
 puts("  <div class='gbControl col-md-12'>");
 puts("<div style='font-size: 20px; font-weight: 500; margin-top: 15px; margin-bottom: 10px;'>"
-     "Place your SARS-CoV-2 sequences in a global phylogenetic tree</div>");
+     "Place your sequences in a global phylogenetic tree</div>");
+// If db is not a supported db then switch to the default supported db, and if multiple dbs are
+// supported then make a menu so the user can select.
+char *label = NULL;
+selectDb(&db, &label);
 printf("<p>Select your FASTA, VCF or list of sequence names/IDs: ");
 printf("<input type='file' id='%s' name='%s'>",
        seqFileVar, seqFileVar);
@@ -218,11 +268,18 @@ cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
 puts("</p><p>");
 cgiMakeOnClickSubmitButton(CHECK_FILE_OR_PASTE_INPUT_JS(seqFileVar, pastedIdVar),
                            "submit", "Upload");
-puts("&nbsp;&nbsp;");
-cgiMakeOnClickSubmitButton("{ loadingImage.run(); return true; }",
-                           "exampleButton", "Upload Example File");
-puts("&nbsp;&nbsp;");
-puts("<a href='https://github.com/russcd/USHER_DEMO/' target=_blank>More example files</a>");
+char *exampleFile = phyloPlaceDbSettingPath(db, "exampleFile");
+if (isNotEmpty(exampleFile))
+    {
+    puts("&nbsp;&nbsp;");
+    cgiMakeOnClickSubmitButton("{ loadingImage.run(); return true; }",
+                               "exampleButton", "Upload Example File");
+    if (sameString(db, "wuhCor1"))
+        {
+        puts("&nbsp;&nbsp;");
+        puts("<a href='https://github.com/russcd/USHER_DEMO/' target=_blank>More example files</a>");
+        }
+    }
 puts("</p>");
 // Add a loading image to reassure people that we're working on it when they upload a big file
 printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
@@ -238,19 +295,31 @@ puts("</div>");
 puts("<div class='readableWidth'>");
 puts("  <div class='gbControl col-md-12'>");
 puts("<h2>More information</h2>");
-puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most similar\n"
-     "complete, high-coverage samples from \n"
-     "<a href='https://www.gisaid.org/' target='_blank'>GISAID</a>\n"
-     "or from public sequence databases ("
-     "<a href='https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049' "
-     "target=_blank>NCBI Virus / GenBank</a>,\n"
-     "<a href='https://www.cogconsortium.uk/data/' target=_blank>COG-UK</a> and the\n"
-     "<a href='https://bigd.big.ac.cn/ncov/release_genome' "
-     "target=_blank>China National Center for Bioinformation</a>), "
-     "and your sequence's placement in the phylogenetic tree generated by the\n"
-     "<a href='https://github.com/roblanf/sarscov2phylo' target='_blank'>sarscov2phylo</a>\n"
-     "pipeline.\n"
-     "Placement is performed by\n"
+printf("<p>Upload your %s sequence (FASTA or VCF file) to find the most similar\n"
+       "complete, high-coverage samples from \n", label);
+if (sameString(db, "wuhCor1"))
+    {
+    puts("<a href='https://www.gisaid.org/' target='_blank'>GISAID</a>\n"
+         "or from public sequence databases (INSDC: GenBank/ENA/DDBJ accessed using "
+         "<a href='https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049' "
+         "target=_blank>NCBI Virus</a>,\n"
+         "<a href='https://www.cogconsortium.uk/data/' target=_blank>COG-UK</a> and the\n"
+         "<a href='https://bigd.big.ac.cn/ncov/release_genome' "
+         "target=_blank>China National Center for Bioinformation</a>), "
+         "and your sequence's placement in the phylogenetic tree generated by the\n"
+         "<a href='https://github.com/roblanf/sarscov2phylo' target='_blank'>sarscov2phylo</a>\n"
+         "pipeline.\n");
+    }
+else
+    {
+    //#*** TODO get NCBI link from db not hardcoded
+    puts("public sequence databases (INSDC: GenBank/ENA/DDBJ accessed using "
+         "<a href='https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=Monkeypox%20virus%20(monkeypox),%20taxid:10244' "
+         "target=_blank>NCBI Virus</a>)\n"
+         "and your sequence's placement in a global phylogenetic tree.\n"
+         );
+    }
+puts("Placement is performed by\n"
      "<a href='https://github.com/yatisht/usher' target=_blank>"
      "Ultrafast Sample placement on Existing tRee (UShER)</a> "
      "(<a href='https://www.nature.com/articles/s41588-021-00862-7' target=_blank>"
@@ -261,15 +330,18 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "which supports "
      "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' "
      "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
-puts("<p>\n"
-     "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
-     "<a href='https://www.gisaid.org/registration/terms-of-use/' target=_blank>"
-     "Terms and Conditions</a>.\n"
-     "SARS-CoV-2 genome sequences and metadata are available for download from\n"
-     "<a href='https://gisaid.org' target=_blank>GISAID</a> EpiCoV&trade;.\n"
-     "</p>");
-puts("<p>\n"
-     "<a href='/covid19.html'>COVID-19 Pandemic Resources at UCSC</a></p>\n");
+if (sameString(db, "wuhCor1"))
+    {
+    puts("<p>\n"
+         "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
+         "<a href='https://www.gisaid.org/registration/terms-of-use/' target=_blank>"
+         "Terms and Conditions</a>.\n"
+         "SARS-CoV-2 genome sequences and metadata are available for download from\n"
+         "<a href='https://gisaid.org' target=_blank>GISAID</a> EpiCoV&trade;.\n"
+         "</p>");
+    puts("<p>\n"
+         "<a href='/covid19.html'>COVID-19 Pandemic Resources at UCSC</a></p>\n");
+    }
 puts("</div>");
 puts("</div>");
 puts("<div class='readableWidth'>");
@@ -285,15 +357,16 @@ puts("<h3>Please do not upload "
      "<p>We do not store your information "
      "(aside from the information necessary to display results)\n"
      "and will not share it with others unless you choose to share your Genome Browser view.</p>\n"
-     "<p>In order to enable rapid progress in SARS-CoV-2 research and genomic contact tracing,\n"
-     "please share your SARS-CoV-2 sequences by submitting them to an "
+     "<p>In order to enable rapid progress in pandemic research and genomic contact tracing,\n"
+     "please share your sequences by submitting them to an "
      "<a href='https://ncbiinsights.ncbi.nlm.nih.gov/2020/08/17/insdc-covid-data-sharing/' "
      "target=_blank>INSDC</a> member institution\n"
      "(<a href='https://submit.ncbi.nlm.nih.gov/sarscov2/' target=_blank>NCBI</a>,\n"
      "<a href='https://www.covid19dataportal.org/submit-data' target=_blank>EMBL-EBI</a>\n"
-     "or <a href='https://www.ddbj.nig.ac.jp/ddbj/websub.html' target=_blank>DDBJ</a>)\n"
-     "and <a href='https://www.gisaid.org/' target=_blank>GISAID</a>.\n"
-     "</p>\n");
+     "or <a href='https://www.ddbj.nig.ac.jp/ddbj/websub.html' target=_blank>DDBJ</a>)\n");
+if (sameString(db, "wuhCor1"))
+    puts("and <a href='https://www.gisaid.org/' target=_blank>GISAID</a>\n");
+puts(".</p>\n");
 puts("</div>");
 puts("  </div>");
 puts("<div class='readableWidth'>");
@@ -317,9 +390,14 @@ static void mainPage(char *db)
 {
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "UShER: Upload");
+jsInit();
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
+
+// Hidden form for reloading page when db select is changed
+static char *saveVars[] = { "db" };
+jsCreateHiddenForm(cart, cgiScriptName(), saveVars, ArraySize(saveVars));
 
 puts("<div class='row'>"
      "  <div class='row gbSectionBannerLarge'>\n"
@@ -330,7 +408,7 @@ puts("<div class='row'>"
      "<div class='row'>\n");
 if (hgPhyloPlaceEnabled())
     {
-    inputForm();
+    inputForm(db);
     }
 else
     {
@@ -401,7 +479,7 @@ if (lf != NULL)
         puts("  </div>");
         puts("</form>");
         // Let the user upload something else and try again:
-        inputForm();
+        inputForm(db);
         }
     }
 else
@@ -411,7 +489,7 @@ else
     // Let the user try again:
     puts("  </div>");
     puts("</form>");
-    inputForm();
+    inputForm(db);
     }
 puts("</div>\n");
 
@@ -422,8 +500,9 @@ static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 cart = theCart;
-char *db = NULL, *genome = NULL, *clade = NULL;
-getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+char *db = NULL, *genome = NULL;
+// Get the current db from the cart
+getDbAndGenome(cart, &db, &genome, oldVars);
 
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)

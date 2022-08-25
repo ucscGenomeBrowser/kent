@@ -71,6 +71,42 @@ if (regexMatchSubstr(sncStr, "^([ACGT])([0-9]+)([ACGT])$", substrs, ArraySize(su
 return snc;
 }
 
+static struct baseVal *bvListFromSemiColonSep(char *mutStr)
+/* Parse a string of ;-sep'd position:allele & return a list of struct baseVal. */
+{
+char *muts[strlen(mutStr) / 4];
+int mutCount = chopString(mutStr, ";", muts, ArraySize(muts));
+struct baseVal *bvList = NULL;
+int i;
+for (i = 0;  i < mutCount;  i++)
+    {
+    boolean problem = FALSE;
+    char *colon = strchr(muts[i], ':');
+    if (colon)
+        {
+        int pos = atoi(muts[i]);
+        char *val = cloneString(colon+1);
+        if (pos < 1)
+            problem = TRUE;
+        else if (!isAllNt(val, strlen(val)))
+            problem = TRUE;
+        else
+            {
+            struct baseVal *bv;
+            AllocVar(bv);
+            bv->chromStart = pos - 1;
+            bv->val = val;
+            slAddHead(&bvList, bv);
+            }
+        }
+    if (problem)
+        errAbort("Problem parsing stderr output of usher: "
+                 "expected imputed mutation to be number:base, but got '%s'", muts[i]);
+    }
+slReverse(&bvList);
+return bvList;
+}
+
 static boolean parseImputedMutations(char **words, struct placementInfo *info)
 /* If words[] looks like it defines imputed mutations of the most recently named sample,
  * then parse out the list and add to info->imputedBases and return TRUE. */
@@ -82,37 +118,7 @@ boolean matches = FALSE;
 if (stringIn(imputedMutsPrefix, words[0]))
     {
     matches = TRUE;
-    char *muts[strlen(words[1]) / 4];
-    int mutCount = chopString(words[1], ";", muts, ArraySize(muts));
-    struct baseVal *bvList = NULL;
-    int i;
-    for (i = 0;  i < mutCount;  i++)
-        {
-        boolean problem = FALSE;
-        char *colon = strchr(muts[i], ':');
-        if (colon)
-            {
-            int pos = atoi(muts[i]);
-            char *val = cloneString(colon+1);
-            if (pos < 1)
-                problem = TRUE;
-            else if (!isAllNt(val, strlen(val)))
-                problem = TRUE;
-            else
-                {
-                struct baseVal *bv;
-                AllocVar(bv);
-                bv->chromStart = pos - 1;
-                bv->val = val;
-                slAddHead(&bvList, bv);
-                }
-            }
-        if (problem)
-            errAbort("Problem parsing stderr output of usher: "
-                     "expected imputed mutation to be number:base, but got '%s'", muts[i]);
-        }
-    slReverse(&bvList);
-    info->imputedBases = bvList;
+    info->imputedBases = bvListFromSemiColonSep(words[1]);
     }
 return matches;
 }
@@ -147,6 +153,36 @@ while (lineFileNext(lf, &line, &size))
         parseImputedMutations(words, info);
         }
     }
+}
+
+static void parsePlacements(char *outDirName, char *stderrName, struct hash *samplePlacements)
+/* If usher created the file outdir/placement_stats.tsv then parse its contents into
+ * samplePlacements; otherwise parse the same info out of the stderr output. */
+{
+char placementsFileName[PATH_LEN];
+safef(placementsFileName, sizeof placementsFileName, "%s/placement_stats.tsv", outDirName);
+if (fileExists(placementsFileName))
+    {
+    struct lineFile *lf = lineFileOpen(placementsFileName, TRUE);
+    char *line;
+    while (lineFileNext(lf, &line, NULL))
+        {
+        char *words[5];
+        int wordCount = chopTabs(line, words);
+        lineFileExpectAtLeast(lf, 4, wordCount);
+        char *sampleId = words[0];
+        struct placementInfo *info;
+        AllocVar(info);
+        hashAdd(samplePlacements, sampleId, info);
+        info->sampleId = cloneString(sampleId);
+        info->parsimonyScore = atoi(words[1]);
+        info->bestNodeCount = atoi(words[2]);
+        info->imputedBases = bvListFromSemiColonSep(words[3]);
+        }
+    lineFileClose(&lf);
+    }
+else
+    parseStderr(stderrName, samplePlacements);
 }
 
 static void parseVariantPaths(char *filename, struct hash *samplePlacements)
@@ -732,11 +768,10 @@ struct usherResults *runUsher(char *usherPath, char *usherAssignmentsPath, char 
 struct usherResults *results = usherResultsNew();
 char subtreeSizeStr[16];
 safef(subtreeSizeStr, sizeof subtreeSizeStr, "%d", subtreeSize);
-char *numThreadsStr = "16";
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "usher_outdir", ".dir");
 char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOutDir.forCgi,
-                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr, "-u",
+                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-T", USHER_NUM_THREADS, "-u",
                 NULL };
 char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;
@@ -748,8 +783,9 @@ parseStderr(tnStderr.forCgi, results->samplePlacements);
 
 struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
-int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
-                                      subtreeTns, subtreeMuts, MAX_SUBTREES);
+parsePlacements(tnOutDir.forCgi, tnStderr.forCgi, results->samplePlacements);
+int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn,
+                                      &singleSubtreeMuts, subtreeTns, subtreeMuts, MAX_SUBTREES);
 if (singleSubtreeTn == NULL)
     {
     warn("Sorry, there was a problem running usher.  "
