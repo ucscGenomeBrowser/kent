@@ -2,43 +2,35 @@
 Downloads for data in this track are available:
 <ul>
 <li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus241way/">Cactus alignments</a> (MAF format), and phylogenetic trees, and PhyloP conservation (WIG and bigWig format)
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/">Multiz alignments</a> (MAF format), and phylogenetic trees, and PhyloP conservation (WIG and bigWig format)
 </ul>
 
 <h2>Description</h2>
 
-<p><b>Warning:</b> Unlike other alignment tracks on the genome browser, this one does not show
-insertions in the query genomes. Also, all other alignment tracks show one query
-genome sequence for target target genome sequence, but in this track, each
-target genome sequence can be aligned to multiple query genome sequences.
-Only the first sequence is shown on the genome browser itself, the others are shown on the details page,
-when one clicks on the alignment. If you are interested in this track and want
-these shortcomings to be fixed, please contact us.
-</p>
-
 <p>
-This track shows multiple alignments of 241 vertebrate
+This track shows multiple alignments of 470 mammal
 species and measurements of evolutionary conservation
-from the <a href="https://zoonomiaproject.org/the-project/">Zoonomia Project</a>.
+from the <a href="https://tbg.senckenberg.de/hillerlab/">Michael Hiller Lab</a>.
 </p>
 
 <p>
-The multiple alignments were generated using the
-<a href="https://github.com/ComparativeGenomicsToolkit/cactus/" target=_blank>Cactus</a> comparative genomics alignment system.
-Cactus produces reference-free, whole-genome multiple alignments.
+The multiple alignments were generated using multiz and
+other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics</a>
+comparative genomics alignment pipeline.
 <p>
-
 
 <p>
 The base-wise conservation scores are computed using <em>phyloP</em> from the
 <a href="http://compgen.cshl.edu/phast/" target="_BLANK"> PHAST package</a>, for all species.
-This version was prepared by Michael Dong (Uppsala U) with an improved neutral
-model incorporating better versions of ancestral repeats.
 </p>
 
 <p>
-For genome assemblies not available in the genome browser, there are
-alternative assembly hub genome browsers.  Missing sequence in any assembly is
+The genome assemblies are from a variety of sources.  Some are equivalent
+to UCSC genome browser assemblies, some are from NCBI Genbank assemblies,
+and some are from the <a href='https://www.dnazoo.org/' target=_blank>DNA Zoo</a>.
+When available in the UCSC browser system, links are provided in the table
+below.  Missing sequence in any assembly is
 highlighted in the track display by regions of yellow when zoomed out and by
 Ns when displayed at base level (see <em>Gap Annotation</em>, below).</p>
 <p>
@@ -48,7 +40,7 @@ Ns when displayed at base level (see <em>Gap Annotation</em>, below).</p>
     <th>common<br>name</th>
     <th>clade</th>
     <th>scientific<br>name</th>
-    <th>assembly</th>
+    <th>assembly<br>link to browser or source</th>
     <th>taxon&nbsp;id</th>
 </tr>
 <tr><th>1</th>
@@ -3342,8 +3334,7 @@ Ns when displayed at base level (see <em>Gap Annotation</em>, below).</p>
     <th style='text-align:right;'><a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9261' target=_blank>9261</a></th>
 </tr>
 </table><br>
-<b>Table 1.</b> <em>Genome assemblies included in the 241-way Conservation track.</em><br>
-<b>Species status:</b>LC = Least Concern; NT = Near threatened; VU = Vulnerable; EN = Endangered; CR = Critically endangered<br>
+<b>Table 1.</b> <em>Genome assemblies included in the 370-way Conservation track.</em>
 </blockquote></p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -3449,37 +3440,26 @@ species are translated using the default species annotation.
 Codon translation uses the following gene tracks as the basis for translation:
 <blockquote><table class="stdTbl">
 <tr align=left><td><b>Gene Track</b></td><td><b>Species</b></td></tr>
-<tr align=left><td>UCSC Genes</td><td>Human</td></tr>
-<tr align=left><td>Ensembl Genes v104</td><td>Brazilian guinea pig, gibbon</td></tr>
-<tr align=left><td>RefSeq Genes</td><td>Angolan colobus, Balaenoptera acutorostrata, Bison bison, Black flying-fox, Brandt's myotis (bat), Bushbaby, Camelus bactrianus, Camelus ferus, Canis lupus familiaris, Cape elephant shrew, Capra hircus, Cavia porcellus, Ceratotherium simum, Cercocebus atys, Chinchilla, Chinese tree shrew, Chlorocebus sabaeus, Condylura cristata, Damara mole rat, Dasypus novemcinctus, David's myotis (bat), Delphinapterus leucas, Echinops telfairi, Enhydra lutris, Eptesicus fuscus, Equus asinus, Equus przewalskii, Erinaceus europaeus, Felis catus, Heterocephalus glaber, Jaculus jaculus, Kangaroo rat, Killer whale, Leptonychotes weddellii, Lipotes vexillifer, Little brown bat, Loxodonta africana, Macaca fascicularis, Macaca nemestrina, Mandrillus leucophaeus, Manis javanica, Marmota marmota, Mesocricetus auratus, Miniopterus natalensis, Mus musculus, Nannospalax galili, Ochotona princeps, Octodon degus, Oryctolagus cuniculus, Pacific walrus, Pan paniscus, Panthera tigris, Peromyscus maniculatus, Prairie vole, Propithecus coquereli, Pteropus vampyrus, Puma concolor, Rattus norvegicus, Rhinopithecus bieti, Shrew, Squirrel monkey, Squirrel, Sus scrofa, Trichechus manatus, Ursus maritimus, White-faced sapajou, Wild yak</td></tr>
-<tr align=left><td>no annotation</td><td>Acinonyx jubatus, Acomys cahirinus, Ailuropoda melanoleuca, Ailurus fulgens, Allactaga bullata, Alouatta palliata, Ammotragus lervia, Anoura caudifer, Antilocapra americana, Aotus nancymaae, Aplodontia rufa, Artibeus jamaicensis, Ateles geoffroyi, Balaenoptera bonaerensis, Beatragus hunteri, Bos indicus, Bos taurus, Bubalus bubalis, Callicebus donacophilus, Callithrix jacchus, Camelus dromedarius, Canis lupus, Capra aegagrus, Capromys pilorides, Carollia perspicillata, Castor canadensis, Catagonus wagneri, Cavia tschudii, Cebus albifrons, Ceratotherium simum cottoni, Cercopithecus neglectus, Chaetophractus vellerosus, Cheirogaleus medius, Choloepus didactylus, Choloepus hoffmanni, Chrysochloris asiatica, Craseonycteris thonglongyai, Cricetomys gambianus, Cricetulus griseus, Crocidura indochinensis, Cryptoprocta ferox, Ctenodactylus gundi, Ctenomys sociabilis, Cuniculus paca, Dasyprocta punctata, Daubentonia madagascariensis, Desmodus rotundus, Dicerorhinus sumatrensis, Diceros bicornis, Dinomys branickii, Dipodomys stephensi, Dolichotis patagonum, Elaphurus davidianus, Ellobius lutescens, Ellobius talpinus, Equus caballus, Erythrocebus patas, Eschrichtius robustus, Eubalaena japonica, Eulemur flavifrons, Eulemur fulvus, Felis nigripes, Galeopterus variegatus, Giraffa tippelskirchi, Glis glis, Gorilla gorilla, Graphiurus murinus, Helogale parvula, Hemitragus hylocrius, Heterohyrax brucei, Hippopotamus amphibius, Hipposideros armiger, Hipposideros galeritus, Hyaena hyaena, Hydrochoerus hydrochaeris, Hystrix cristata, Indri indri, Inia geoffrensis, Kogia breviceps, Lasiurus borealis, Lemur catta, Lepus americanus, Lycaon pictus, Macaca mulatta, Macroglossus sobrinus, Manis pentadactyla, Megaderma lyra, Mellivora capensis, Meriones unguiculatus, Mesoplodon bidens, Microcebus murinus, Microgale talazaci, Micronycteris hirsuta, Miniopterus schreibersii, Mirounga angustirostris, Mirza coquereli, Monodon monoceros, Mormoops blainvillei, Moschus moschiferus, Mungos mungo, Murina feae, Mus caroli, Mus pahari, Mus spretus, Muscardinus avellanarius, Mustela putorius, Myocastor coypus, Myotis myotis, Myrmecophaga tridactyla, Nasalis larvatus, Neomonachus schauinslandi, Neophocaena asiaeorientalis, Noctilio leporinus, Nycticebus coucang, Odocoileus virginianus, Okapia johnstoni, Ondatra zibethicus, Onychomys torridus, Orycteropus afer, Ovis aries, Ovis canadensis, Pan troglodytes, Panthera onca, Panthera pardus, Pantholops hodgsonii, Papio anubis, Paradoxurus hermaphroditus</td></tr>
+<tr align=left><td>RefSeq Genes</td><td>aardvark, American pika, Amur tiger, Angolan colobus, big brown bat, black flying fox, black snub-nosed monkey, Bolivian squirrel monkey, Brandt's bat, Cape elephant shrew, Cape golden mole, cattle, chimpanzee, Chinese tree shrew, Coquerel's sifaka, degu, dog, domestic cat, domestic guinea pig, drill, European shrew, Florida manatee, golden hamster, gray mouse lemur, green monkey, Hawaiian monk seal, horse, house mouse, house mouse, human, killer whale, lesser Egyptian jerboa, little brown bat, long-tailed chinchilla, Ma's night monkey, minke whale, naked mole-rat, nine-banded armadillo, Northern sea otter, Norway rat, Ord's kangaroo rat, Pacific walrus, Panamanian white-faced capuchin, Philippine tarsier, pig, pig-tailed macaque, polar bear, prairie vole, Przewalski's horse, pygmy chimpanzee, rabbit, Rhesus monkey, small Madagascar hedgehog, small-eared galago, sooty mangabey, southern white rhinoceros, star-nosed mole, Sumatran orangutan, thirteen-lined ground squirrel, Upper Galilee mountains blind mole rat, Vespertilio Davidii, Weddell seal, western European hedgehog, western lowland gorilla, Yangtze River dolphin</td></tr>
+<tr align=left><td>Ensembl Genes</td><td>Bos bison bison, Brazilian guinea pig, dog, gray short-tailed opossum, northern tree shrew</td></tr>
+<tr align=left><td>Xeno RefGene</td><td>alpaca, black lemur, Chinese pangolin, common bottlenose dolphin, proboscis monkey, Sclater's lemur, Southern sea otter, tammar wallaby</td></tr>
+<tr align=left><td>no annotation</td><td>African buffalo, African grass rat, African hunting dog, African hunting dog, African savanna elephant, African woodland thicket rat, Agile Gracile Mouse Opossum, Allen's swamp monkey, Alpine ibex, Alpine marmot, alpine musk deer, American beaver, American black bear, American black bear, American mink, Amur leopard cat, antarctic fur seal, Antarctic minke whale, Antillean ghost-faced bat, aoudad, Arabian camel, Arctic fox, Arctic ground squirrel, argali, Asian black bear, Asian palm civet, Asiatic elephant, Asiatic mouflon, Asiatic tapir, Asiatic tapir, ass, Australian echidna, aye-aye, babakoto, Bactrian camel, banded mongoose, Bank vole, bearded seal, beluga whale, bighorn sheep, bighorn sheep, black muntjac, black rat, black rhinoceros, black-footed cat, black-handed spider monkey, Blue whale, Bohar reedbuck, Bolivian squirrel monkey, Bolivian titi, Bonin flying fox, boutu, bowhead whale, Brazilian free-tailed bat, Brazilian porcupine, Brazilian tapir, brindled gnu, brown lemur, brush rabbit, bush duiker, bushbuck, Cacomistle, cactus mouse, California big-eared bat, California sea lion, Canada lynx, Cantor's roundleaf bat, Cape rock hyrax, capybara, Central European red deer, Chacoan peccary, cheetah, Chinese forest musk deer, Chinese hamster, Chinese pangolin, Chinese rufous horseshoe bat, Chinese water deer, chiru, Clouded leopard, Cobus hunteri, common bottlenose dolphin, common bottlenose dolphin, common brushtail, common pipistrelle, common pipistrelle, common vampire bat, Common vole, common wombat, coppery ringtail possum, Coquerel's mouse lemur, crab-eating macaque, crested porcupine, Cuvier's beaked whale, Damara mole-rat, dassie-rat, Daurian ground squirrel, De Brazza's monkey, desert woodrat, dingo, domestic ferret, domestic yak, donkey, dugong, dwarf mongoose, eastern gray kangaroo, eastern mole, Eastern roe deer, Egyptian rousette, Egyptian spiny mouse, Equus burchelli boehmi, ermine, Eurasian elk, Eurasian red squirrel, Eurasian river otter, Eurasian water vole, European polecat, European rabbit, European woodmouse, evening bat, Fat dormouse, fat sand rat, Fin whale, fossa, franciscana, Francois's langur, Gambian giant pouched rat, gaur, gayal, gelada, gemsbok, gerenuk, giant anteater, giant otter, giant otter, giant panda, giraffe, giraffe, goat, Gobi jerboa, golden ringtail possum, golden snub-nosed monkey, golden spiny mouse, gracile shrew mole, Grant's gazelle, gray seal, gray squirrel, great gerbil, great roundleaf bat, greater bamboo lemur, greater bulldog bat, Greater cane rat, greater horseshoe bat, greater Indian rhinoceros, greater kudu, greater mouse-eared bat, grey whale, grizzly bear, ground cuscus, guanaco, Gunnison's prairie dog, Hanuman langur, harbor porpoise, harbor porpoise, harbor seal, Harvey's duiker, hazel dormouse, Hesperomys crinitus, Himalayan marmot, hippopotamus, hippopotamus, Hispaniolan solenodon, hispid cotton rat, hoary bamboo rat, hoary bat, Hoffmann's two-fingered sloth, Hog deer, hog-nosed bat, Honduran yellow-shouldered bat, humpback whale, Iberian mole, impala, Indian false vampire, Indian flying fox, Indo-pacific bottlenose dolphin, Indo-pacific bottlenose dolphin, Indo-pacific humpbacked dolphin, Indus River dolphin, jaguar, jaguar, jaguarundi, Jamaican fruit-eating bat, Jamaican fruit-eating bat, Japanese macaque, Java mouse-deer, kinkajou, Kirk's dik-dik, klipspringer, koala, Kuhl's pipistrelle, Lama pacos huacaya, large flying fox, Leadbeater's possum, lechwe, leopard, Leschenault's rousette, lesser dawn bat, Lesser dwarf lemur, lesser kudu, Lesser long-nosed bat, lesser mouse-deer, lesser panda, lesser short-nosed fruit bat, lion, little brown bat, llama, llama, long-finned pilot whale, long-tongued fruit bat, Madagascan rousette, Malagasy flying fox, Malagasy straw-colored fruit bat, Malayan pangolin, Malayan pangolin, mandrill, mantled howler monkey, Masai giraffe, Maxwell's duiker, meadow jumping mouse, meerkat, meerkat, melon-headed whale, Miniopterus schreibersii natalensis, Mona monkey, Mongolian gerbil, mongoose lemur, Montane guinea pig, mountain beaver, mountain goat, Mountain hare, mouse lemur, mule deer, muntjak, Murina feae, muskrat, narwhal, Nilgiri tahr, North American badger, North American opossum, North American porcupine, North Atlantic right whale, North Pacific right whale, Northern American river otter, Northern elephant seal, northern fur seal, Northern giant mouse lemur, northern gundi, Northern long-eared myotis, Northern mole vole, northern rock mouse, Northern rufous mouse lemur, northern white rhinoceros, northern white-cheeked gibbon, Norway rat, nutria, okapi, oldfield mouse, olive baboon, pacarana, Pacific pocket mouse, Pacific white-sided dolphin, pale spear-nosed bat, Pallas's mastiff bat, pallid bat, Parnell's mustached bat, Patagonian cavy, Pere David's deer, Peromyscus californicus subsp. insignis, platypus, porcupine caribou, prairie deer mouse, pronghorn, Przewalski's gazelle, puma, punctate agouti, pygmy Bryde's whale, pygmy marmoset, pygmy sperm whale, rabbit, raccoon, ratel, red bat, red fox, red guenon, red kangaroo, Red shanked douc langur, reed vole, Reeves' muntjac, reindeer, Ring-tailed lemur, roan antelope, root vole, royal antelope, Ryukyu mouse, sable, sable antelope, saiga antelope, Schizostoma hirsutum, Schreibers' long-fingered bat, scimitar-horned oryx, Sclater's lemur, Seba's short-tailed bat, sheep, short-tailed field vole, shrew mouse, Siberian ibex, Siberian musk deer, silvery gibbon, slow loris, snow sheep, snowshoe hare, social tuco-tuco, South African ground squirrel, Southern elephant seal, southern grasshopper mouse, southern multimammate mouse, southern tamandua, Southern three-banded armadillo, southern two-toed sloth, southern two-toed sloth, Sowerby's beaked whale, Spanish lynx, sperm whale, sperm whale, spotted hyena, springbok, springhare, steenbok, Steller sea lion, Steller's sea cow, Stephens's kangaroo rat, steppe mouse, straw-colored fruit bat, stripe-headed round-eared bat, striped hyena, Sumatran rhinoceros, Sunda flying lemur, suni, tailed tailless bat, Talazac's shrew tenrec, tamarin, tammar wallaby, Tasmanian devil, Tasmanian wolf, Thomson's gazelle, topi, Transcaucasian mole vole, Tree pangolin, Tree pangolin, tufted capuchin, Ugandan red Colobus, Vancouver Island marmot, vaquita, Vicugna mensalis, walrus, water buffalo, waterbuck, western gray kangaroo, Western ringtail oppossum, western spotted skunk, western wild mouse, white-faced saki, white-footed mouse, white-fronted capuchin, white-lipped deer, White-nosed coati, white-tailed deer, white-tailed deer, white-tailed deer, white-tufted-ear marmoset, Wild Bactrian camel, wild goat, wild yak, wolverine, woodchuck, woodchuck, woodland dormouse, Yangtze finless porpoise, Yarkand deer, yellow-bellied marmot, yellow-footed antechinus, yellow-spotted hyrax, zebu cattle,
+</td></tr>
 </table>
 <b>Table 2.</b> <em>Gene tracks used for codon translation.</em>
 </blockquote></p>
 
 <h2>Methods</h2>
 <p>
-The Zoonomia alignment was composed of two sets of mammalian genomes: newly
-assembled DISCOVAR assemblies and GenBank assemblies. The DISCOVAR genomes
-were masked with RepeatMasker (commit 2d947604), using Repbase version
-20170127 as the repeat library and CrossMatch as the alignment engine. The
-pipeline used is available at
-<a href="https://github.com/joelarmstrong/repeatMaskerPipeline">repeatMaskerPipeline</a>
-(commit a6ad966). The
-guide-tree topology was taken from the TimeTree database (using release
-current in October 2018), and the branch lengths were estimated using the
-least-squares-fit mode of <a href="https://evolution.genetics.washington.edu/phylip/getme-new1.html">PHYLIP</a>, version
-3.695. The distance matrix used was largely based on distances from the 4d
-site trees from the UCSC browser. To add those species not present in the
-UCSC tree, approximate distances estimated by <a href="https://github.com/marbl/Mash">Mash</a> (commit 541971b)
-to the closest UCSC species
-were added to the distance between the two closest UCSC species. We used the
-<a href="https://github.com/ComparativeGenomicsToolkit/hal">HAL package</a>  (commit 68db41d)
-produce the HAL file.
-</p>
-<p>
-</p>
-<p>
+Pairwise alignments with the $organism genome were generated for
+each species using lastz from repeat-masked genomic sequence.
+Pairwise alignments were then linked into chains using a dynamic programming
+algorithm that finds maximally scoring chains of gapless subsections
+of the alignments organized in a kd-tree.
+The scoring matrix and parameters for pairwise alignment and chaining
+were tuned for each species based on phylogenetic distance from the reference.
+High-scoring chains were then placed along the genome, with
+gaps filled by lower-scoring chains, to produce an alignment net.
 </p>
 
 <h3> Phylogenetic Tree Model</h3>
@@ -3489,11 +3469,11 @@ on a tree model containing the tree topology, branch lengths representing
 evolutionary distance at neutrally evolving sites, the background distribution
 of nucleotides, and a substitution rate matrix.
 The
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons241way/hg38.phastCons241way.mod"
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons470way/hg38.phastCons470way.mod"
 target=_blank>all-species tree model</a> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package
 (REV model, EM algorithm, medium precision) using multiple alignments of
-4-fold degenerate sites extracted from the 241-way alignment
+4-fold degenerate sites extracted from the 470-way alignment
 (msa_view).  The 4d sites were derived from the RefSeq (Reviewed+Coding) gene
 set, filtered to select single-coverage long transcripts.
 </p>
@@ -3501,7 +3481,7 @@ set, filtered to select single-coverage long transcripts.
 This same tree model was used in the phyloP calculations; however, the
 background frequencies were modified to maintain reversibility.
 The resulting tree model:
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP241way/hg38.phyloP241way.mod"
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP470way/hg38.phyloP470way.mod"
 target=_blank>all species</a>.
 </p>
 <h3> PhyloP Conservation </h3>
@@ -3518,43 +3498,27 @@ and scores for both conservation and acceleration were produced (--mode
 CONACC).
 </p>
 
+<h2>Credits</h2>
+<p> This track was created using the following programs:
+<ul>
+<li> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz and Webb
+Miller of the <a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics Group</a>
+<li> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<li> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by
+<a href="http://siepellab.labsites.cshl.edu/"
+target=_blank>Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
+done at the Haussler lab at UCSC).
+<li> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<li> Tree image generator: phyloPng by Galt Barber, UCSC
+<li> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
+display), and Brian Raney (gap annotation and codon framing) at UCSC
+</ul>
+</p>
+
 <h2>References</h2>
-
-
-<h3>Zoonomia:</h3>
-<p>
-Zoonomia Consortium..
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/33177664" target="_blank">
-A comparative genomics multitool for scientific discovery and conservation</a>.
-<em>Nature</em>. 2020 Nov;587(7833):240-245.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33177664" target="_blank">33177664</a>;
-PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7759459/" target="_blank">PMC7759459</a>;
-DOI: <a href="https://doi.org/10.1038/s41586-020-2876-6" target="_blank">10.1038/s41586-020-2876-6</a>
-</p>
-
-
-<h3>Cactus:</h3>
-<p>
-Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q, Xie D, Feng S, Stiller J
-<em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">
-Progressive Cactus is a multiple-genome aligner for the thousand-genome era</a>.
-<em>Nature</em>. 2020 Nov;587(7833):246-251.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">33177663</a>;
-PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7673649/" target="_blank">PMC7673649</a>;
-DOI: <a href="https://doi.org/10.1038/s41586-020-2871-y" target="_blank">10.1038/s41586-020-2871-y</a>
-</p>
-
-<p>
-Paten B, Earl D, Nguyen N, Diekhans M, Zerbino D, Haussler D.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">
-Cactus: Algorithms for genome multiple sequence alignment</a>.
-<em>Genome Res</em>. 2011 Sep;21(9):1512-28.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">21665927</a>;
-PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166836/" target="_blank">PMC3166836</a>;
-DOI: <a href="https://doi.org/10.1101/gr.123356.111" target="_blank">10.1101/gr.123356.111</a>
-</p>
-
 <p>
 Harris RS.
 <a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
