@@ -65,8 +65,8 @@ alphaNode=$(grep Italy/TAA-1900553896/2021 $samplePaths \
             | awk '{print $(NF-1);}' | sed -re 's/:.*//;')
 betaNode=$(grep SouthAfrica/CERI-KRISP-K012031/2021 $samplePaths \
            | awk '{print $NF;}' | sed -re 's/:.*//;')
-gammaNode=$(grep France/PAC-IHU-5193-N1/2021 $samplePaths | awk '{print $NF;}' | sed -re 's/:.*//;')
-BA2Node=$(grep Germany/RP-RKI-I-517345/2022 $samplePaths \
+gammaNode=$(grep FRA/IHUCOVID-005193-N1/2021 $samplePaths | awk '{print $NF;}' | sed -re 's/:.*//;')
+BA2Node=$(grep India/KA-CBR-1402HAV021/2022 $samplePaths \
           | awk '{print $(NF-1);}' | sed -re 's/:.*//;')
 set +x
 for node in $alphaNode $betaNode $gammaNode $BA2Node; do
@@ -91,11 +91,13 @@ done >> $maskFile
 for ((i=21765;  $i <= 21770;  i++)); do
     echo -e "N${i}N\t$BA1Node"
 done >> $maskFile
-# There's a deletion 21987-21995 and then an insertion after 22204 and more messy bases after that.
-for ((i=21988;  $i <= 22217;  i++)); do
+for ((i=21988;  $i <= 21995;  i++)); do
     echo -e "N${i}N\t$BA1Node"
 done >> $maskFile
-for ((i=22194;  $i <= 22198;  i++)); do
+# There's a deletion at 22194-22196 and then an insertion after 22204.  The entire region
+# between the deletion & insertion is riddled with noisy bases, and the noise continues
+# well after the insertion point.  So mask from 22194 to 22217.
+for ((i=22194;  $i <= 22217;  i++)); do
     echo -e "N${i}N\t$BA1Node"
 done >> $maskFile
 for ((i=28362;  $i <= 28370;  i++)); do
@@ -105,7 +107,7 @@ done >> $maskFile
 # BA.1 has a lot of amplicon dropout / Delta contam noise at these sites, but so far they
 # don't affect the Delta/Omicron recombinants identified to date which all have Omicron spike,
 # so mask these out in BA.1:
-for i in 22813 22898 22882 22917 23854; do
+for i in 22813 22898 22882 23854; do
     echo -e "N${i}N\t$BA1Node"
 done >> $maskFile
 
@@ -114,11 +116,33 @@ for ((i=21633;  $i <= 21641;  i++)); do
     echo -e "N${i}N\t$BA2Node"
 done >> $maskFile
 for ((i=28362;  $i <= 28370;  i++)); do
-    echo -e "N${i}N\t$BA1Node"
+    echo -e "N${i}N\t$BA2Node"
 done >> $maskFile
 for ((i=29734;  $i <= 29759;  i++)); do
-    echo -e "N${i}N\t$BA1Node"
+    echo -e "N${i}N\t$BA2Node"
 done >> $maskFile
+
+
+# BA.2 also has some amplicon dropout problematic sites *** that hopefully won't mess up recombinants but I had better check ***
+for i in 22786 22882 23854; do
+    echo -e "N${i}N\t$BA2Node"
+done >> $maskFile
+
+# BA.2 has a lot of noise in these sites (some sites also noisy in Delta & BA.1 but no time for those)
+# I would include 210 but that's important for Delta/BA.2 recombinants.  I would include 212 too,
+# but will leave it in as a red flag that 210 may be bogus.
+# 29766 seems to be found exclusively by Luxembourg and makes a mini-BA.2.
+for i in 197 198 199 200 201 203 204 206 207 214 216 217 218 219 221 222 223 224 225 228 230 231 232 233 239 241 242 243 245 246 29766 ; do
+    echo -e "N${i}N\t$BA2Node"
+done >> $maskFile
+
+# BA.5 has this deletion like BA.1:
+BA5Node=$(grep England/PHEP-YYFJPAM/2022 $samplePaths \
+          | awk '{print $NF;}' | sed -re 's/:.*//;')
+for ((i=21765;  $i <= 21770;  i++)); do
+    echo -e "N${i}N\t$BA5Node"
+done >> $maskFile
+
 set -x
 
 time $matUtils mask -i $treeInPb \
