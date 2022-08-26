@@ -144,7 +144,7 @@ ifeq (${IS_HGWDEV},yes)
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
 else
    ifeq (${CONDA_BUILD},1)
-       L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a
+       L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
    else
      ifneq ($(wildcard /opt/local/lib/libssl.a),)
          L+=/opt/local/lib/libssl.a
