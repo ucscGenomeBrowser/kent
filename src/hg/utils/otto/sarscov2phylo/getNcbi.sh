@@ -21,6 +21,7 @@ maxAttempts=5
 retryDelay=300
 #*** From Eric Cox 1/25/22 when download failed and they were debugging firewall issues:
 #             --proxy https://www.st-va.ncbi.nlm.nih.gov/datasets/v1 \
+#*** From Mirian Tsuchiya 6/3/22: add --debug; if there's a problem send Ncbi-Phid.
 while [[ $((++attempt)) -le $maxAttempts ]]; do
     echo "datasets attempt $attempt"
     if datasets download virus genome taxon 2697049 \
@@ -29,8 +30,9 @@ while [[ $((++attempt)) -le $maxAttempts ]]; do
             --exclude-gpff \
             --exclude-pdb \
             --filename ncbi_dataset.zip \
-        |& tail -50 \
-            > datasets.log.$attempt; then
+            --no-progressbar \
+            --debug \
+            >& datasets.log.$attempt; then
         break;
     else
         echo "FAILED; will try again after $retryDelay seconds"
@@ -49,7 +51,7 @@ unzip -o ncbi_dataset.zip
 # Creates ./ncbi_dataset/
 
 # This makes something just like ncbi.datasets.tsv from the /table/ API query:
-jq -c -r '[.accession, .biosample, .isolate.collectionDate, .location.geographicLocation, .host.sciName, .isolate.name, .completeness, (.length|tostring)] | join("\t")' \
+time jq -c -r '[.accession, .biosample, .isolate.collectionDate, .location.geographicLocation, .host.sciName, .isolate.name, .completeness, (.length|tostring)] | join("\t")' \
     ncbi_dataset/data/data_report.jsonl \
 | sed -e 's/COMPLETE/complete/; s/PARTIAL/partial/;' \
 | sort -u \
@@ -61,6 +63,13 @@ time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample.jsonl | uniq >
 # sample collection dates:
 $scriptDir/gbMetadataAddBioSample.pl gb.bioSample.tab ncbi_dataset.tsv \
     > ncbi_dataset.plusBioSample.tsv 2>gbMetadataAddBioSample.log
+
+# Manually patch some GB-to-BioSample associations that somehow got mangled at ENA, until
+# they fix them and the fix percolates through to NCBI...
+grep -vFwf <(cut -f 1 $ottoDir/ncbi.2022-06-25/gbToBioSample.changes.tsv) \
+    ncbi_dataset.plusBioSample.tsv > tmp
+sort tmp $ottoDir/ncbi.2022-06-25/gbToBioSample.patch.tsv > ncbi_dataset.plusBioSample.tsv
+rm tmp
 
 # Make a file for joining collection date with ID:
 tawk '$3 != "" {print $1, $3;}' ncbi_dataset.plusBioSample.tsv \
@@ -77,6 +86,8 @@ time faUniqify genbank.maybeDups.fa stdout \
     > genbank.fa.xz
 
 # Run pangolin and nextclade on sequences that are new since yesterday
+# TODO: remove the split, nextclade can handle big inputs now -- but truncate fasta names to
+# just the accession in a pipe to nextclade.
 export TMPDIR=/dev/shm
 fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | grep -vx pdb | sort -u > gb.names
 splitDir=splitForNextclade
@@ -87,32 +98,32 @@ cp ../ncbi.latest/nextalign.fa.xz .
 comm -23 gb.names <(cut -f 1 nextclade.full.tsv | sort -u) > nextclade.names
 if [ -s nextclade.names ]; then
     faSomeRecords <(xzcat genbank.fa.xz) nextclade.names stdout \
-    | faSplit about stdin 30000000 $splitDir/chunk
+    | faSplit about stdin 300000000 $splitDir/chunk
     nDataDir=~angie/github/nextclade/data/sars-cov-2
-    outDir=$(mktemp -d)
     outTsv=$(mktemp)
+    outFa=$(mktemp)
     for chunkFa in $splitDir/chunk*.fa; do
-        nextclade -j 50 -i $chunkFa \
+        nextclade run -j 50 $chunkFa \
             --input-dataset $nDataDir \
-            --output-dir $outDir \
-            --output-basename out \
+            --output-fasta $outFa \
             --output-tsv $outTsv >& nextclade.log
         tail -n+2 $outTsv | sed -re 's/"//g;' >> nextclade.full.tsv
-        xz -T 20 < $outDir/out.aligned.fasta >> nextalign.fa.xz
-        rm $outTsv
+        xz -T 20 < $outFa >> nextalign.fa.xz
+        rm $outTsv $outFa
     done
-    rm -rf $outDir
 fi
 wc -l nextclade.full.tsv
 pigz -f -p 8 nextclade.full.tsv
 rm -rf $splitDir
 
+set +x
 conda activate pangolin
+set -x
 runPangolin() {
     fa=$1
     out=$fa.pangolin.csv
     logfile=$(mktemp)
-    pangolin $fa --outfile $out > $logfile 2>&1
+    pangolin $fa --analysis-mode pangolearn --outfile $out > $logfile 2>&1
     rm $logfile
 }
 export -f runPangolin
@@ -122,7 +133,7 @@ if [ -e ../ncbi.latest/lineage_report.csv ]; then
         > pangolin.prev.names
     comm -23 gb.names pangolin.prev.names > pangolin.names
     faSomeRecords <(xzcat genbank.fa.xz) pangolin.names pangolin.fa
-    pangolin pangolin.fa >& pangolin.log
+    pangolin --analysis-mode pangolearn pangolin.fa >& pangolin.log
     tail -n+2 lineage_report.csv >> linRepYesterday
     mv linRepYesterday lineage_report.csv
     rm -f pangolin.fa
@@ -155,4 +166,4 @@ rm -f ~angie/public_html/sarscov2phylo/ncbi.$today
 ln -s $ottoDir/ncbi.$today ~angie/public_html/sarscov2phylo/ncbi.$today
 
 # Clean up
-rm -r ncbi_dataset
+rm -r ncbi_dataset genbank.maybeDups.fa
