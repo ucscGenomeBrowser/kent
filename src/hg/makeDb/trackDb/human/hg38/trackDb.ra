@@ -858,6 +858,7 @@ compositeTrack on
     html genotypeArrays
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 6
+    noScoreFilter on
     release alpha
 
 track decipher override
