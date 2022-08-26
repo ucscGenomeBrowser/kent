@@ -1582,6 +1582,7 @@ visibility hide
 noScoreFilter .
 noInherit on
 type bed 3 .
+pennantIcon Updated red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
 
     track snpArrayAffy6
     parent genotypeArrays
@@ -1808,6 +1809,7 @@ type bed 3 .
     type bigBed 4
     priority 24
     bigDataUrl /gbdb/hg19/bbi/illumina/illumina450K.bb
+    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     release alpha
 
     track snpArrayIllumina850k
@@ -1817,6 +1819,7 @@ type bed 3 .
     type bigBed 4
     priority 25
     bigDataUrl /gbdb/hg19/bbi/illumina/epic850K.bb
+    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     release alpha
 
     track snpArrayCytoSnp850k
@@ -1824,12 +1827,13 @@ type bed 3 .
     shortLabel CytoSNP 850k
     longLabel Illumina 850k CytoSNP Array
     type bigBed 6 +
+    priority 26
     bigDataUrl /gbdb/hg19/bbi/cytoSnp/cytoSnp850k.bb
     visibility pack
     urls rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
     colorByStrand 255,0,0 0,0,255
     html genotypeArrays
-    pennantIcon New red
+    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     release alpha
 
 track tfbsConsSites
