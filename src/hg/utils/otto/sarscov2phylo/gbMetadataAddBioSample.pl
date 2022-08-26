@@ -54,6 +54,7 @@ while (<$BIOSAMPLE>) {
 close($BIOSAMPLE);
 
 my $missingCount = 0;
+my $maxMissing = 1000000;
 while (<>) {
   my ($gbAcc, $bAcc, $gbDate, $gbGeo, $host, $gbName, $completeness, $len) = split("\t");
   if ($bAcc) {
@@ -81,8 +82,8 @@ while (<>) {
       # BioSample file doesn't have info for this BioSample accession
       print STDERR "Missing BioSample info for $bAcc\n";
       $missingCount++;
-      if ($missingCount >= 100000) {
-        die "Too many missing BioSamples, quitting.\n";
+      if ($missingCount > $maxMissing) {
+        die "Too many missing BioSamples (> $maxMissing), quitting.\n";
       }
       # Pass through as-is
       print;
