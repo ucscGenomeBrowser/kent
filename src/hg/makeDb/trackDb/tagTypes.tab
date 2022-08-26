@@ -252,7 +252,7 @@ interactDirectional interact bigInteract
 interactUp interact bigInteract
 interactMultiRegion interact bigInteract
 intronGap psl genePred bigPsl bigGenePred
-irows wigMaf
+irows wigMaf bigMaf
 isGencode3 genePred bigGenePred
 isGencode2 genePred bigGenePred
 isGencode genePred
