@@ -830,7 +830,7 @@ compositeTrack on
     html genotypeArrays
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 5
-    release alpha
+    release alpha,beta
 
     track snpArrayIllumina450k
     parent genotypeArrays on
@@ -844,7 +844,7 @@ compositeTrack on
     html genotypeArrays
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 4
-    release alpha
+    release alpha,beta
 
     track snpArrayCytoSnp850k
     parent genotypeArrays on
@@ -859,7 +859,7 @@ compositeTrack on
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 6
     noScoreFilter on
-    release alpha
+    release alpha,beta
 
 track decipher override
 pennantIcon New red ../goldenPath/newsarch.html#041522 "Released Apr. 15, 2022"

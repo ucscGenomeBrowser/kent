@@ -1810,7 +1810,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 24
     bigDataUrl /gbdb/hg19/bbi/illumina/illumina450K.bb
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
-    release alpha
+    release alpha,beta
 
     track snpArrayIllumina850k
     parent genotypeArrays
@@ -1820,7 +1820,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 25
     bigDataUrl /gbdb/hg19/bbi/illumina/epic850K.bb
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
-    release alpha
+    release alpha,beta
 
     track snpArrayCytoSnp850k
     parent genotypeArrays on
@@ -1834,7 +1834,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     colorByStrand 255,0,0 0,0,255
     html genotypeArrays
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
-    release alpha
+    release alpha,beta
 
 track tfbsConsSites
 shortLabel TFBS Conserved
