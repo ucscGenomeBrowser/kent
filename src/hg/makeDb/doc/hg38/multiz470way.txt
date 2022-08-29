@@ -178,11 +178,12 @@ time $HOME/bin/x86_64/gnusort -S1024G --parallel=64 -k1,1 -k2,2n allOne.maf \
 
     # and run bedToBigBed on it:
 time (bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 -as=$HOME/kent/src/hg/lib/bigMaf.as -tab hg38.470way.bigMaf /hive/data/genomes/hg38/chrom.sizes hg38.470way.bb) >> toBb.log 2>&1
+    # pid=227524: VmPeak:    5221776 kB
+    # real    3441m36.866s
 
-   XXX #### the bedToBigBed is running Thu Aug 18 12:52:16 PDT 2022
 
     # obtained a phylo tree from Michael Hiller with 508 species
--rw-rw-r-- 1         22483 Aug 18 10:42 tree508.nh
+# -rw-rw-r-- 1         22483 Aug 18 10:42 tree508.nh
     ~/kent/src/hg/utils/phyloTrees/speciesList.sh tree508.nh \
        | sort > 508.species
     join -v2 nameLists/native.470.list 508.species > not.in.maf.list
@@ -216,7 +217,6 @@ time (bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 -as=$HOME/kent/src/hg/
 #       HLsarHar2       0.826368
 #       HLornAna3       1.011442
 #       HLtacAcu1       1.023432
-
 
 
     #	what that looks like:
@@ -274,37 +274,31 @@ done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
      | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
        | sed -e "s#_x_#'#g;" > hg38.470way.scientificNames.nh
 
-    cat hg38.470way.commonNames.nh | sed -e 's/^/# /;'
-# ((((((((((((Human:0.00655,
-#            Chimp:0.00684):0.00122,
-#           Bonobo:0.00784):0.003,
-#          Gorilla:0.008964):0.009693,
-#         Orangutan:0.01894):0.003471,
-#        Gibbon:0.02227):0.01204,
-#       (((((Rhesus:0.003991,
-#           (Crab_eating_macaque:0.002991,
-#           Pig_tailed_macaque:0.005):0.001):0.001,
-#          Sooty_mangabey:0.008):0.005,
-#         Baboon:0.010042):0.01061,
-#        (Green_monkey:0.027,
-#        Drill:0.03):0.002):0.003,
-#       ((Proboscis_monkey:0.0007,
-#        Angolan_colobus:0.0008):0.0008,
-#       (Golden_snub:0.0007,
-#       Black_snub:0.0007):0.0008):0.018):0.02):0.02183,
-#      (((Marmoset:0.03,
-#        Squirrel_monkey:0.01035):0.00865,
-#       White_faced_sapajou:0.04):0.006,
-#      Ma's_night_monkey:0.04):0.005):0.05209,
-#     Tarsier:0.1114):0.02052,
-#    (((Mouse_lemur:0.0556,
-#      Coquerel's_sifaka:0.05):0.015,
-#     (Black_lemur:0.01,
-#     Sclater's_lemur:0.01):0.015):0.015,
-#    Bushbaby:0.1194):0.02052):0.015494,
-#   Mouse:0.356483):0.020593,
-#  Dog:0.165928):0.023664,
-# Armadillo:0.176526);
+    head hg38.470way.commonNames.nh | sed -e 's/^/# /;'
+# ((((((((((((((((human:0.005962,
+#                (pygmy_chimpanzee:0.001895,
+#                chimpanzee:0.001859):0.004087):0.002083,
+#               western_lowland_gorilla:0.00958):0.008775,
+#              Sumatran_orangutan:0.017185):0.002844,
+#             (silvery_gibbon:0.00707,
+#             northern_white_cheeked_gibbon:0.006838):0.013694):0.010338,
+#            ((((((Rhesus_monkey:0.001889,
+#                 Japanese_macaque:0.002063):0.001806,
+#                crab_eating_macaque:0.00211):0.001812,
+
+    tail hg38.470way.commonNames.nh | sed -e 's/^/# /;'
+#     (golden_ringtail_possum:0.017988,
+#     coppery_ringtail_possum:0.017013):0.023448):0.016208):0.028312):0.010708):0.01957,
+#    (Tasmanian_wolf:0.042212,
+#    (yellow_footed_antechinus:0.026702,
+#    Tasmanian_devil:0.027977):0.032656):0.070372):0.030736,
+#   (North_American_opossum:0.053914,
+#   (gray_short_tailed_opossum:0.055461,
+#   Agile_Gracile_Mouse_Opossum:0.042801):0.004824):0.079265):0.23872):0.526739,
+#  Australian_echidna:0.070786):0.029398,
+# platypus:0.029398);
+
+     # this tree is too large to make a convenient image
 
 #	Use this specification in the phyloGif tool:
 #	http://genome.ucsc.edu/cgi-bin/phyloGif
@@ -315,71 +309,56 @@ done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
        | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
           > hg38.470way.scientificNames.nh
     rm -f t.nh
-    cat hg38.470way.scientificNames.nh | sed -e 's/^/# /;'
-# ((((((((((((Homo_sapiens:0.00655,
-#            Pan_troglodytes:0.00684):0.00122,
-#           Pan_paniscus:0.00784):0.003,
-#          Gorilla_gorilla_gorilla:0.008964):0.009693,
-#         Pongo_pygmaeus_abelii:0.01894):0.003471,
-#        Nomascus_leucogenys:0.02227):0.01204,
-#       (((((Macaca_mulatta:0.003991,
-#           (Macaca_fascicularis:0.002991,
-#           Macaca_nemestrina:0.005):0.001):0.001,
-#          Cercocebus_atys:0.008):0.005,
-#         Papio_anubis:0.010042):0.01061,
-#        (Chlorocebus_sabaeus:0.027,
-#        Mandrillus_leucophaeus:0.03):0.002):0.003,
-#       ((Nasalis_larvatus:0.0007,
-#        Colobus_angolensis_palliatus:0.0008):0.0008,
-#       (Rhinopithecus_roxellana:0.0007,
-#       Rhinopithecus_bieti:0.0007):0.0008):0.018):0.02):0.02183,
-#      (((Callithrix_jacchus:0.03,
-#        Saimiri_boliviensis:0.01035):0.00865,
-#       Cebus_capucinus_imitator:0.04):0.006,
-#      Aotus_nancymaae:0.04):0.005):0.05209,
-#     Tarsius_syrichta:0.1114):0.02052,
-#    (((Microcebus_murinus:0.0556,
-#      Propithecus_coquereli:0.05):0.015,
-#     (Eulemur_macaco:0.01,
-#     Eulemur_flavifrons:0.01):0.015):0.015,
-#    Otolemur_garnettii:0.1194):0.02052):0.015494,
-#   Mus_musculus:0.356483):0.020593,
-#  Canis_lupus_familiaris:0.165928):0.023664,
-# Dasypus_novemcinctus:0.176526);
+    head hg38.470way.scientificNames.nh | sed -e 's/^/# /;'
+# ((((((((((((((((Homo_sapiens:0.005962,
+#                (Pan_paniscus:0.001895,
+#                Pan_troglodytes:0.001859):0.004087):0.002083,
+#               Gorilla_gorilla_gorilla:0.00958):0.008775,
+#              Pongo_abelii:0.017185):0.002844,
+#             (Hylobates_moloch:0.00707,
+#             Nomascus_leucogenys:0.006838):0.013694):0.010338,
+#            ((((((Macaca_mulatta:0.001889,
+#                 Macaca_fuscata:0.002063):0.001806,
+#                Macaca_fascicularis:0.00211):0.001812,
+
+    tail hg38.470way.scientificNames.nh | sed -e 's/^/# /;'
+#     (Pseudochirops_corinnae:0.017988,
+#     Pseudochirops_cupreus:0.017013):0.023448):0.016208):0.028312):0.010708):0.01957,
+#    (Thylacinus_cynocephalus:0.042212,
+#    (Antechinus_flavipes:0.026702,
+#    Sarcophilus_harrisii:0.027977):0.032656):0.070372):0.030736,
+#   (Didelphis_virginiana:0.053914,
+#   (Monodelphis_domestica:0.055461,
+#   Gracilinanus_agilis:0.042801):0.004824):0.079265):0.23872):0.526739,
+#  Tachyglossus_aculeatus:0.070786):0.029398,
+# Ornithorhynchus_anatinus:0.029398);
 
     /cluster/bin/phast/all_dists hg38.470way.nh | grep hg38 \
         | sed -e "s/hg38.//" | sort -k2n > 470way.distances.txt
     #	Use this output to create the table below
-    cat 470way.distances.txt | sed -e 's/^/# /;'
-# panTro5       0.013390
-# panPan2       0.015610
-# gorGor5       0.019734
-# ponAbe2       0.039403
-# nomLeu3       0.046204
-# nasLar1       0.075474
-# rhiBie1       0.075474
-# rhiRox1       0.075474
-# colAng1       0.075574
-# macFas5       0.079575
-# rheMac8       0.079575
-# papAnu3       0.079626
-# macNem1       0.081584
-# cerAty1       0.082584
-# saiBol1       0.087804
-# chlSab2       0.087974
-# manLeu1       0.090974
-# aotNan1       0.102804
-# calJac3       0.107454
-# cebCap1       0.108804
-# eulFla1       0.190934
-# eulMac1       0.190934
-# tarSyr2       0.221294
-# proCoq1       0.2470934
-# micMur3       0.236534
-# otoGar3       0.270334
-# canFam3       0.332429
-# dasNov3       0.366691
-# mm10  0.502391
+    head 470way.distances.txt | sed -e 's/^/# /;'
+# panTro6       0.011908
+# panPan3       0.011944
+# gorGor6       0.017625
+# ponAbe3       0.034005
+# HLnomLeu4     0.040196
+# HLhylMol2     0.040428
+# macNem1       0.066302
+# HLtheGel1     0.066537
+# HLmacFas6     0.066886
+# HLcerMon1     0.067960
+
+    tail 470way.distances.txt | sed -e 's/^/# /;'
+# HLpseCor1     0.811597
+# HLmacFul1     0.812234
+# HLnotEug3     0.815561
+# HLospRuf1     0.815802
+# HLpseOcc1     0.819866
+# macEug2       0.821901
+# HLantFla1     0.825093
+# HLsarHar2     0.826368
+# HLornAna3     1.011442
+# HLtacAcu1     1.023432
 
     printf '#!/usr/bin/env perl
 
@@ -742,7 +721,9 @@ runOne $(root1) {check out exists ../maf/$(root1).maf}
     rm multiz470way*.tab
 
 #######################################################################
-# GAP ANNOTATE MULTIZ470WAY MAF AND LOAD TABLES (DONE - 2017-11-03 - Hiram)
+# GAP ANNOTATE MULTIZ470WAY MAF AND LOAD TABLES (DONE - 2022-08-01 - Hiram)
+    # XXX the files received from Michael Hiller already had the iRows installed
+
     # mafAddIRows has to be run on single chromosome maf files, it does not
     #	function correctly when more than one reference sequence
     #	are in a single file.
@@ -834,7 +815,7 @@ mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/hg38/hg38.2bit {check out l
     rm multiz470way*.tab
 
 ##############################################################################
-# MULTIZ7WAY MAF FRAMES (DONE - 2017-11-03 - Hiram)
+# MULTIZ7WAY MAF FRAMES (DONE - 2022-08-26 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/hg38/bed/multiz470way/frames
     cd /hive/data/genomes/hg38/bed/multiz470way/frames
@@ -1125,7 +1106,7 @@ done | sort -k1,1 -k2,2n > multiz470wayFrames.bed
     hgsql hg38 -e 'drop table multiz470wayFrames;'
 
 #########################################################################
-# Phylogenetic tree from 470-way (DONE - 2013-09-13 - Hiram)
+# Phylogenetic tree from 470-way (DONE - 2022-08-26 - Hiram)
     mkdir /hive/data/genomes/hg38/bed/multiz470way/4d
     cd /hive/data/genomes/hg38/bed/multiz470way/4d
 
@@ -1723,18 +1704,18 @@ rm -f $2.running
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACK ../../4d/all.mod
-    #   BACKGROUND: 0.207173 0.3284701 0.237184 0.227343
+    #   BACKGROUND: 0.226533 0.344573 0.178804 0.250090 
 
     grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.565
-    /cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin/modFreqs \
-	../../4d/all.mod 0.565 > all.mod
+    #	0.523
+    /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin/modFreqs \
+	../../4d/all.mod 0.523 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.217500 0.282500 0.282500 0.217500
+    #   BACKGROUND: 0.238500 0.261500 0.261500 0.238500 
 
     printf '#!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin
 set f = $1
 set ssFile = $1:t
 set out = $2
@@ -1768,7 +1749,7 @@ sleep 4
     find ../ss -type f | sed -e "s/.ss$//; s#../ss/##;" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	34708 ss.list
+    #	3468 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -1781,16 +1762,15 @@ sleep 4
     # setup run for all species
     mkdir /hive/data/genomes/hg38/bed/multiz470way/consPhyloP/all
     cd /hive/data/genomes/hg38/bed/multiz470way/consPhyloP/all
-    rm -fr wigFix
     mkdir wigFix
 
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
     # beware overloading the cluster with these quick and high I/O jobs
-    para -ram=32g create jobList
+    para -ram=16g create jobList
     para try ... check ...
     para -maxJob=16 push
     para time > run.time
-
+XXX some of the jobs fail with an error in phyloP
 # Completed: 34708 of 34708 jobs
 # CPU time in finished jobs:     647954s   10799.23m   179.99h    7.50d  0.021 y
 # IO & Wait Time:                 22374s     372.90m     6.22h    0.26d  0.001 y
@@ -1809,94 +1789,94 @@ done
     #   real    48m50.219s
 
     du -hsc downloads
-    #   4.6G    downloads
+    #   5.8G    downloads
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/*.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/hg38/chrom.sizes \
 	phyloP470way.bw) > bigWig.log 2>&1
 
-
     egrep "real|VmPeak" bigWig.log
     # pid=66292: VmPeak:    33751268 kB
     #  real    43m40.194s
 
-
-    bigWigInfo phyloP470way.bw  | sed -e 's/^/# /;'
+    bigWigInfo phyloP470way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 6,4704,076,591
-# primaryIndexSize: 93,404,704
+# primaryDataSize: 8,691,460,678
+# primaryIndexSize: 135,762,716
 # zoomLevels: 10
-# chromCount: 355
-# basesCovered: 2,955,660,581
-# mean: 0.097833
+# chromCount: 466
+# basesCovered: 2,828,476,393
+# mean: -0.004698
 # min: -20.000000
-# max: 1.312000
-# std: 0.727453
+# max: 11.936000
+# std: 1.758256
+
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phyloP470way.wig phyloP470way.wib)
+XXX - running - Mon Aug 29 15:28:59 PDT 2022
+# Converted stdin, upper limit 11.94, lower limit -20.00
+# real    8m32.643s
 
-# Converted stdin, upper limit 1.31, lower limit -20.00
-# real    17m36.880s
-# -rw-rw-r--   1 2955660581 Nov  6 14:10 phyloP470way.wib
-# -rw-rw-r--   1  4704274846 Nov  6 14:10 phyloP470way.wig
+# -rw-rw-r--   1  2828476393 Aug 29 15:37 phyloP470way.wib
+# -rw-rw-r--   1   446336215 Aug 29 15:37 phyloP470way.wig
 
     du -hsc *.wi?
-    # 2.8G    phyloP470way.wib
-    # 291M    phyloP470way.wig
+    # 2.7G    phyloP470way.wib
+    # 426M    phyloP470way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP470way.wib /gbdb/hg38/multiz470way/phyloP470way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz470way hg38 \
 	phyloP470way phyloP470way.wig
-    # real    0m470.538s
+    # real    0m51.154s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh hg38 phyloP470way
 # db.table          min   max     mean       count     sumData
-# hg38.phyloP470way  -20 1.312 0.0978331 2955660581 2.89162e+08
+# hg38.phyloP470way -20 11.936 -0.00469849 2828476393 -1.32896e+07
+#      1.75826 viewLimits=-8.79598:8.78658
 #       stdDev viewLimits
-#     0.727453 viewLimits=-3.53943:1.312
 
-    #	that range is: 20+1.312= 21.312 for hBinSize=0.021312
+    #	that range is: 20+11.936= 31.936 for hBinSize=0.031936
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.021312 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
+	-hBinSize=0.031936 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
 	    -db=hg38 phyloP470way > histogram.data 2>&1
-    #   real    2m43.313s
+    #   real    1m31.526s
 
     # xaxis range:
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
 	| sed -e 's/^/# /;'
-# Q1 -10.9547050
-# median -6.861155
-# Q3 -2.769245
-# average -6.875971
+# Q1 -9.157730
+# median -2.115840
+# Q3 4.894110
+# average -2.132855
 # min -20.000000
-# max 1.312000
-# count 768
-# total -5280.745380
-# standard deviation 4.757034
+# max 11.936000
+# count 883
+# total -1883.311115
+# standard deviation 8.140902
 
     # find out the range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
       | sed -e 's/^/# /;'
-# Q1 0.000000
-# median 0.000001
-# Q3 0.000140
-# average 0.0014702
+# Q1 0.000014
+# median 0.000064
+# Q3 0.000437
+# average 0.001133
 # min 0.000000
-# max 0.023556
-# count 768
-# total 0.999975
-# standard deviation 0.003490
+# max 0.020000
+# count 883
+# total 1.000052
+# standard deviation 0.003053
 
     #	create plot of histogram:
     printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
@@ -2574,29 +2554,35 @@ XXX - working - Tue Oct 26 12:43:42 PDT 2021
 # standard deviation 0.003490
 
     #	create plot of histogram:
-    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
-
-    printf 'set terminal pngcairo size 900,400 background "#000000" \\
-font "/usr/share/fonts/default/Type1/n022004l.pfb"
-set size 1.4, 0.8
-set key left box
+    # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
+    printf 'set terminal pngcairo size 1200,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "hg38.phyloP470.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
 set grid noxtics
-set grid ytics
-set title " Human hg38 Histogram phyloPSSREV470way track"
-set xlabel " phyloPSSREV470way score"
-set ylabel " Relative Frequency"
-set y2label " Cumulative Relative Frequency (CRF)"
-set y2range [0:1]
-set y2tics
-set xrange [-5:1.5]
+set grid ytics ls 4
+set y2tics border nomirror out tc rgb "#ffffff"
+set ytics border nomirror out tc rgb "#ffffff"
+set title " human/hg38 Histogram phyloP470way track" tc rgb "#ffffff"
+set xlabel " hg38.phyloP470way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set xrange [-4:2.5]
 set yrange [0:0.04]
+set y2range [0:1]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
-' | gnuplot > histo.png
+plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
 
     # verify it looks sane
-    display histo.png &
+    display hg38phyloP470.histo.png &
 
 #############################################################################
 # sequence logo
