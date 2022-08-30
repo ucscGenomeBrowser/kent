@@ -25,6 +25,7 @@ group compGeno
         noInherit on
         type bigMaf
         viewUi on
+        treeImage phylo/hg38_470way.png
         bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf
         summary https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470waySummary.bb
         frames https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470wayFrames.bb

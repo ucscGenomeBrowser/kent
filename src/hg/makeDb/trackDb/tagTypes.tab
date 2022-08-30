@@ -536,7 +536,7 @@ transMapSrc psl bigPsl
 transMapTypeDesc psl bigPsl
 transMapSrcSet psl bigPsl
 transformFunc bed bigBed bedGraph wig bigWig barChart bigBarChart
-treeImage wigMaf
+treeImage wigMaf bigMaf
 txInfo genePred
 type *
 url *
