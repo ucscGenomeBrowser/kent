@@ -3,10 +3,7 @@ compositeTrack on
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (100 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
-# subGroup2 clade Clade glires=Glires euarchontoglires=Euarchontoglires placental=Placental all=All_species
-subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate all=All_species
 dragAndDrop subTracks
-dimensions dimensionX=clade
 visibility full
 type bed 4
 group compGeno
@@ -23,7 +20,7 @@ priority 1
         subTrack cons100wayViewalign on
         shortLabel Multiz Align
         longLabel Multiz Alignments of 100 Vertebrates
-        subGroups view=align clade=vert
+        subGroups view=align
         noInherit on
         irows on
         summary multiz100waySummary
@@ -60,7 +57,7 @@ priority 1
 
         track phyloP100way
         subTrack cons100wayViewphyloP on
-        subGroups view=phyloP clade=all
+        subGroups view=phyloP
         shortLabel Cons 100 Verts
         longLabel 100 vertebrates Basewise Conservation by PhyloP
         noInherit on
@@ -84,7 +81,7 @@ priority 1
 
         track phastCons100way
         subTrack cons100wayViewphastcons off
-        subGroups view=phastcons clade=all
+        subGroups view=phastcons
         shortLabel Cons 100 Verts
         longLabel 100 vertebrates conservation by PhastCons
         noInherit on
@@ -107,7 +104,7 @@ priority 1
 
         track phastConsElements100way
         subTrack cons100wayViewelements off
-        subGroups view=elements clade=all
+        subGroups view=elements
         shortLabel 100 Vert. El
         longLabel 100 vertebrates Conserved Elements
         noInherit on
