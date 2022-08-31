@@ -9,7 +9,7 @@ FILES = omimWrapper.sh omim.tables checkOmim.sh validateOmim.sh parseGeneMap.pl 
 
 # any changes must be committed (and this is checked).
 install: check-prefix installSub
-	cp omimWrapper.sh omim.tables checkOmim.sh validateOmim.sh parseGeneMap.pl omimUploadWrapper.sh checkOmimUpload.sh doOmimPhenotypeNew buildOmimTracks.sh flagOmimGene.py ${PREFIX}
+	cp doOmimGene2.sh omimWrapper.sh omim.tables checkOmim.sh validateOmim.sh parseGeneMap.pl omimUploadWrapper.sh checkOmimUpload.sh doOmimPhenotypeNew buildOmimTracks.sh flagOmimGene.py ${PREFIX}
 	cp ../../../lib/{omimGeneMap,omimGeneMap2,omim2gene,omimGeneSymbol,omimPhenotype,omimAv}.sql ${PREFIX}
 
 installSub: ${SUBDIRS:%=%.install}
