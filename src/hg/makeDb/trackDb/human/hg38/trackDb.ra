@@ -724,7 +724,6 @@ include affyArchive.ra
 include genePredArchive.ra
 include tgpArchive.ra
 include spliceAi.ra
-<<<<<<< HEAD
 
 track panelApp
 shortLabel PanelApp
