@@ -1,0 +1,152 @@
+<h2>
+Description</h2>
+<p>
+This track collection shows data from 
+<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9383269/"
+target="_blank"><em>Single-nucleus cross-tissue molecular reference maps toward
+understanding disease gene function</em></a>. The dataset covers ~200,000 single nuclei
+from a total of 16 human donors across 25 samples, using 4 different sample preparation
+protocols followed by droplet based single-cell RNA-seq. The samples were obtained from
+frozen tissue obtained as part of the Genotype-Tissue Expression (GTEx) project.
+Samples were taken from the esophagus, skeletal muscle, heart, lung, prostate, breast
+and skin. The dataset includes 43 broad cell classes, some specific to certain tissues
+and some shared across all tissue types.
+</p>
+
+<p>
+There are 8 tracks in this collection. The first track,
+<a href="hgTrackUi?g=atlasCombined" target="_blank">GTEx Atlas Combined Tissue-Cell Type</a>
+allows cells to be grouped together and faceted on up 2 categories: tissue and broad cell type.
+The rest of the tracks show cells binned into one of the following categories:
+<ul>
+  <li>Age</li>
+  <li>Broad Cell Type</li>
+  <li>Granular Cell Type</li>
+  <li>Prep</li>
+  <li>Sample Ischemic Time</li>
+  <li>Sex</li>
+  <li>Tissue Site</li>
+</ul>
+</p>
+
+<p>
+Please see 
+<a href="https://gtexportal.org/home/singleCellOverviewPage" target="_blank">the GTEx portal</a> 
+for further interactive displays and additional data. </p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Tissue-cell type combinations in the Combined track are colored by which cell type they
+belong to according to Figure 1 in Eraslan <em>et al</em>:
+<p>
+<table cellpadding='2'>
+  <thead>
+    <tr>
+      <th style="border-bottom: 2px solid;">Color</th>
+      <th style="border-bottom: 2px solid;">Cell Type</th>
+    </tr>
+  </thead>
+  <tr><td style="background-color: rgb(91,57,27);"></td><td>Adipocyte</td></tr>
+  <tr><td style="background-color: rgb(92,138,73);"></td><td>Endothelial cell (lymphatic)</td></tr>
+  <tr><td style="background-color: rgb(47,64,32);"></td><td>Endothelial cell (vascular)</td></tr>
+  <tr><td style="background-color: rgb(240,142,60);"></td><td>Epithelial cell (Hillock)</td></tr>
+  <tr><td style="background-color: rgb(196,170,153);"></td><td>Epithelial cell (alveolar type I)</td></tr>
+  <tr><td style="background-color: rgb(182,50,47);"></td><td>Epithelial cell (alveolar type II)</td></tr>
+  <tr><td style="background-color: rgb(233,148,134);"></td><td>Epithelial cell (basal keratinocyte)</td></tr>
+  <tr><td style="background-color: rgb(222,88,50);"></td><td>Epithelial cell (basal)</td></tr>
+  <tr><td style="background-color: rgb(243,203,72);"></td><td>Epithelial cell (ciliated)</td></tr>
+  <tr><td style="background-color: rgb(188,160,118);"></td><td>Epithelial cell (club)</td></tr>
+  <tr><td style="background-color: rgb(123,79,36);"></td><td>Epithelial cell (cornified keratinocyte)</td></tr>
+  <tr><td style="background-color: rgb(192,120,48);"></td><td>Epithelial cell (luminal)</td></tr>
+  <tr><td style="background-color: rgb(242,192,152);"></td><td>Epithelial cell (mature keratinocyte)</td></tr>
+  <tr><td style="background-color: rgb(188,158,70);"></td><td>Epithelial cell (squamous)</td></tr>
+  <tr><td style="background-color: rgb(240,220,203);"></td><td>Epithelial cell (suprabasal keratinocyte)</td></tr>
+  <tr><td style="background-color: rgb(132,94,87);"></td><td>Epithelial cell (suprabasal)</td></tr>
+  <tr><td style="background-color: rgb(63,41,120);"></td><td>Fibroblast</td></tr>
+  <tr><td style="background-color: rgb(246,245,159);"></td><td>ICCs</td></tr>
+  <tr><td style="background-color: rgb(54,125,118);"></td><td>Immune (B cell)</td></tr>
+  <tr><td style="background-color: rgb(73,164,154);"></td><td>Immune (DC)</td></tr>
+  <tr><td style="background-color: rgb(123,197,203);"></td><td>Immune (DC/macrophage)</td></tr>
+  <tr><td style="background-color: rgb(121,197,205);"></td><td>Immune (Langerhans)</td></tr>
+  <tr><td style="background-color: rgb(79,131,166);"></td><td>Immune (NK cell)</td></tr>
+  <tr><td style="background-color: rgb(148,179,202);"></td><td>Immune (T cell)</td></tr>
+  <tr><td style="background-color: rgb(33,84,118);"></td><td>Immune (alveolar macrophage)</td></tr>
+  <tr><td style="background-color: rgb(207,234,249);"></td><td>Immune (mast cell)</td></tr>
+  <tr><td style="background-color: rgb(0,0,0);"></td><td>Melanocyte</td></tr>
+  <tr><td style="background-color: rgb(149,149,149);"></td><td>Mucous cell</td></tr>
+  <tr><td style="background-color: rgb(160,50,132);"></td><td>Myocyte (NMJ-rich)</td></tr>
+  <tr><td style="background-color: rgb(187,146,185);"></td><td>Myocyte (cardiac)</td></tr>
+  <tr><td style="background-color: rgb(93,76,153);"></td><td>Myocyte (cardiac, cytoplasmic)</td></tr>
+  <tr><td style="background-color: rgb(215,86,148);"></td><td>Myocyte (sk. muscle)</td></tr>
+  <tr><td style="background-color: rgb(229,153,188);"></td><td>Myocyte (sk. muscle, cytoplasmic)</td></tr>
+  <tr><td style="background-color: rgb(218,204,225);"></td><td>Myocyte (smooth muscle)</td></tr>
+  <tr><td style="background-color: rgb(211,129,85);"></td><td>Myoepithelial (basal)</td></tr>
+  <tr><td style="background-color: rgb(155,166,105);"></td><td>Myofibroblast</td></tr>
+  <tr><td style="background-color: rgb(150,192,147);"></td><td>Neuroendocrine</td></tr>
+  <tr><td style="background-color: rgb(99,141,65);"></td><td>Neuronal</td></tr>
+  <tr><td style="background-color: rgb(104,121,83);"></td><td>Pericyte/SMC</td></tr>
+  <tr><td style="background-color: rgb(211,224,147);"></td><td>Satellite cell</td></tr>
+  <tr><td style="background-color: rgb(89,194,59);"></td><td>Schwann cell</td></tr>
+  <tr><td style="background-color: rgb(184,83,88);"></td><td>Sebaceous gland cell</td></tr>
+  <tr><td style="background-color: rgb(138,62,66);"></td><td>Sweat gland cell</td></tr>
+  <tr><td style="background-color: rgb(249,249,249);"></td><td>Unknown</td></tr>
+</table>
+</p>
+
+<h2>Methods</h2>
+<p>
+Using the previously collected tissue samples from the Genotype-Tissue Expression
+project, nuclei were isolated using four different protocols, and sequenced
+using droplet based single cell RNA-seq. CellBender v2.1 and other standard quality
+control techniques were applied, resulting in 209,126 nuclei profiles across eight
+tissues, with a mean of 918 genes and 1519 transcripts per profile.
+</p>
+
+<p>
+Data from all samples was integrated with a conditional variation autoencoder
+in order to correct for multiple sources of variation like sex, and protocol
+while preserving tissue and cell type specific effects.
+</p>
+
+<p>
+For detailed methods please refer to Eraslan <em>et al</em>, or the 
+<a href="">GTEx portal</a> website.
+</p>
+
+<h3>UCSC Methods</h3>
+<p>
+The gene expression files were downloaded from the
+<a href="https://gtexportal.org/home/datasets">
+GTEx portal</a>. The UCSC command line utilities <code>matrixClusterColumns</code>,
+<code>matrixToBarChartBed</code>, and <code>bedToBigBed</code> were used to transform
+these into a bar chart format bigBed file that can be visualized.
+The UCSC utilities can be found on
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">our download server</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw <a href="/goldenPath/help/barChart.html">bar chart</a> data can be
+explored interactively with the <a href="../cgi-bin/hgTables">Table
+Browser</a>, or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a
+href="/goldenPath/help/api.html">REST API</a>. Please refer to our <a
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing
+list archives</a> for questions, or our <a
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.</p>
+
+<h2>Credits</h2>
+<p>Thanks to the GTEx Consortium for creating and analyzing these data.</p>
+
+<h2>References</h2>
+<p>
+Eraslan G, Drokhlyansky E, Anand S, Fiskin E, Subramanian A, Slyper M, Wang J, Van Wittenberghe N,
+Rouhana JM, Waldman J <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35549429" target="_blank">
+Single-nucleus cross-tissue molecular reference maps toward understanding disease gene function</a>.
+<em>Science</em>. 2022 May 13;376(6594):eabl4290.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35549429" target="_blank">35549429</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9383269/" target="_blank">PMC9383269</a>
+</p>
