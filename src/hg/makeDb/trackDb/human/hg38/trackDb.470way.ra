@@ -1,11 +1,9 @@
 track cons470way
 compositeTrack on
 shortLabel Multiz 470-way
-longLabel Vertebrate Multiz Alignment & Conservation (470 mammals)
+longLabel Multiz Alignment & Conservation (470 mammals)
 subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
-subGroup2 clade Clade primate=Primates euarchontoglires=Euarchontoglires laurasiatheria=Laurasiatheria xenarthra=Xenarthra carnivore=Carnivora cetartiodactyla=Cetartiodactyla chiroptera=Chiroptera artiodactyla=Artiodactyla afrotheria=Afrotheria glires=Glires metatheria=Metatheria monotremata=Monotremata
 dragAndDrop subTracks
-dimensions dimensionX=clade
 visibility hide
 type bed 4
 group compGeno
@@ -19,9 +17,10 @@ group compGeno
 
         track multiz470way
         subTrack cons470wayViewalign on
+        priority 100
         shortLabel Multiz 470-way
         longLabel Multiz Alignments of 470 mammals
-        subGroups view=align clade=primate
+        subGroups view=align
         noInherit on
         type bigMaf
         viewUi on
@@ -63,9 +62,9 @@ group compGeno
 
         track phyloP470wayBW
         subTrack cons470wayViewphyloP
-        subGroups view=phyloP clade=primate
-        shortLabel Basewise Cons
-        longLabel PhyloP Basewise Conservation 470 Mammals
+        subGroups view=phyloP
+        shortLabel 470 phyloP
+        longLabel 470 mammals Basewise Conservation by PhyloP
         configurable on
         type bigWig -20 11.936
         bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP470way/hg38.phyloP470way.bw
@@ -76,3 +75,46 @@ group compGeno
         windowingFunction mean
         color 60,60,140
         altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons470wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons470way
+
+        track phastCons470way
+        subTrack cons470wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel Cons 470 Mammals
+        longLabel 470 mammals conservation by PhastCons
+        noInherit on
+        configurable on
+        type bigWig 0 1
+        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons470way/hg38.phastCons470way.bw
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons470wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons470way
+
+        track phastConsElements470way
+        subTrack cons470wayViewelements off
+        subGroups view=elements
+        shortLabel 470 Mamm. El
+        longLabel 470 mammals Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bigBed 5 .
+        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons470way/hg38.phastConsElements470way.bb
+        priority 23
