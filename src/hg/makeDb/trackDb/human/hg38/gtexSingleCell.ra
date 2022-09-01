@@ -7,6 +7,8 @@ visibility pack
 type bigBarChart
 group singleCell
 pennantIcon New red
+url https://cells.ucsc.edu/?ds=cross-tissue-maps+all-tissues&gene=$$
+urlLabel View on the UCSC Cell Browser
 
     track atlasCombined
     parent gtexSnAtlas
