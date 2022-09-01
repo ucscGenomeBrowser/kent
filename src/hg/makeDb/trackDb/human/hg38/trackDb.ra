@@ -788,7 +788,7 @@ longLabel Microarray Probesets
 type bigBed 4
 visibility hide
 group varRep
-pennantIcon Updated red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
+pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
 compositeTrack on
 
     track genetiSureCytoCghSnp

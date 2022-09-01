@@ -1582,7 +1582,7 @@ visibility hide
 noScoreFilter .
 noInherit on
 type bed 3 .
-pennantIcon Updated red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
+pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
 
     track snpArrayAffy6
     parent genotypeArrays
