@@ -3,15 +3,20 @@
 Downloads for data in this track are available:
 <ul>
 <li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/" target=_blank>Multiz alignments</a> (MAF format), and phylogenetic trees, and PhyloP conservation (WIG and bigWig format)
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/" target=_blank>Multiz alignments</a> (bigMaf and MAF format), and phylogenetic trees</li>
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP470way/" target=_blank>PhyloP conservation</a> (bigWig and WIG format)</li>
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons470way/" target=_blank>PhastCons conservation</a> (bigWig and WIG format)</li>
 </ul>
 
 <h2>Description</h2>
 
 <p>
 This track shows multiple alignments of 470 mammal
-species and measurements of evolutionary conservation
-from the <a href="https://tbg.senckenberg.de/hillerlab/" target=_blank>Michael Hiller Lab</a>.
+assemblies and measurements of evolutionary conservation
+from the <a href="https://tbg.senckenberg.de/hillerlab/" target=_blank>Michael Hiller Lab</a>.  There is some duplication of different assemblies for the
+same species, hence there are 431 distinct species in this collection.
 </p>
 
 <p>
@@ -19,11 +24,31 @@ The multiple alignments were generated using multiz and
 other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
 target=_blank>Penn State Bioinformatics</a>
 comparative genomics alignment pipeline.
+Conserved elements identified by phastCons are also displayed in
+this track.
 <p>
 
 <p>
-The base-wise conservation scores are computed using <em>phyloP</em> from the
-<a href="http://compgen.cshl.edu/phast/" target="_blank"> PHAST package</a>, for all species.
+The base-wise conservation scores are computed using two methods
+<em>phastCons</em> and <em>phyloP</em> from the
+<a href="http://compgen.cshl.edu/phast/" target="_blank"> PHAST package</a>,
+for all species.
+</p>
+
+<p>
+PhastCons (which has been used in previous Conservation tracks) is a hidden
+Markov model-based method that estimates the probability that each
+nucleotide belongs to a conserved element, based on the multiple alignment.
+It considers not just each individual alignment column, but also its
+flanking columns.  By contrast, phyloP separately measures conservation at
+individual columns, ignoring the effects of their neighbors.  As a
+consequence, the phyloP plots have a less smooth appearance than the
+phastCons plots, with more "texture" at individual sites.  The two methods
+have different strengths and weaknesses.  PhastCons is sensitive to "runs"
+of conserved sites, and is therefore effective for picking out conserved
+elements.  PhyloP, on the other hand, is more appropriate for evaluating
+signatures of selection at particular nucleotides or classes of nucleotides
+(e.g., third codon positions, or first positions of miRNA target sites).
 </p>
 
 <p>
@@ -31,7 +56,7 @@ The genome assemblies are from a variety of sources.  Some are equivalent
 to UCSC genome browser assemblies, some are from NCBI Genbank assemblies,
 and some are from the <a href='https://www.dnazoo.org/' target=_blank>DNA Zoo</a>.
 When available in the UCSC browser system, links are provided in the table
-below.
+below.  Otherwise, links are provided to source locations for the assemblies.
 </p>
 <p>
 <blockquote>
