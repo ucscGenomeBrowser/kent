@@ -783,7 +783,7 @@ html ../panelApp
     html ../panelApp
 
 track genotypeArrays
-shortLabel Array Probsets
+shortLabel Array Probesets
 longLabel Microarray Probesets
 type bigBed 4
 visibility hide
