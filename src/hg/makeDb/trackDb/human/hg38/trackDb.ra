@@ -783,12 +783,12 @@ html ../panelApp
     html ../panelApp
 
 track genotypeArrays
-shortLabel Array Probsets
+shortLabel Array Probesets
 longLabel Microarray Probesets
 type bigBed 4
 visibility hide
 group varRep
-pennantIcon Updated red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
+pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
 compositeTrack on
 
     track genetiSureCytoCghSnp
@@ -831,7 +831,6 @@ compositeTrack on
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 5
     noScoreFilter on
-    release alpha,beta
 
     track snpArrayIllumina450k
     parent genotypeArrays on
@@ -846,7 +845,6 @@ compositeTrack on
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 4
     noScoreFilter on
-    release alpha,beta
 
     track snpArrayCytoSnp850k
     parent genotypeArrays on
@@ -861,7 +859,6 @@ compositeTrack on
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 6
     noScoreFilter on
-    release alpha,beta
 
 track decipher override
 pennantIcon New red ../goldenPath/newsarch.html#041522 "Released Apr. 15, 2022"

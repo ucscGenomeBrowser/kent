@@ -37,6 +37,7 @@ UTILS_APPLIST = \
 	genePredFilter \
 	genePredToBigGenePred \
 	genePredToProt \
+	gencodeVersionForGenes \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \

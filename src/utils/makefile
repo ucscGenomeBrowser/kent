@@ -72,6 +72,7 @@ UTILS_APPLIST = \
 	matrixClusterColumns \
 	matrixMarketToTsv \
 	matrixNormalize \
+	matrixToBarChartBed \
 	newProg \
 	newPythonProg \
 	nibFrag \

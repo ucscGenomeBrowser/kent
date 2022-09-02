@@ -42,6 +42,22 @@ var autocompleteCat = (function() {
                }
              });
 
+    function toggleSpinner(add, options) {
+        if (options.baseUrl.startsWith("hgGateway")) {
+            // change the species select loading image
+            if (add)
+                $("#speciesSearch").after("<i id='speciesSpinner' class='fa fa-spin fa-spinner'></i>");
+            else
+                $("#speciesSpinner").remove();
+        } else if (options.baseUrl.startsWith("hgSuggest")) {
+            // change the position input loading spinner
+            if (add)
+                $("#positionInput").after("<i id='suggestSpinner' class='fa fa-spin fa-spinner'></i>");
+            else
+                $("#suggestSpinner").remove();
+        }
+    }
+
     function init($input, options) {
         // Set up an autocomplete and watermark for $input, with a callback options.onSelect
         // for when the user chooses a result.
@@ -63,11 +79,15 @@ var autocompleteCat = (function() {
             // Look up term in searchObj and by sending an ajax request
             var timestamp = new Date().getTime();
             var url = options.baseUrl + encodeURIComponent(term) + '&_=' + timestamp;
+            // put up a loading icon so users know something is happening
+            toggleSpinner(true, options);
             $.getJSON(url)
                .done(function(results) {
                 if (_.isFunction(options.onServerReply)) {
                     results = options.onServerReply(results, term);
                 }
+                // remove the loading icon
+                toggleSpinner(false, options);
                 cache[term] = results;
                 acCallback(results);
             });
