@@ -5821,9 +5821,10 @@ boolean doNegative = wigFetchDoNegativeWithCart(cart,tdb,tdb->track, (char **) N
 
 printf("<TABLE BORDER=0>");
 
+boolean isLogo = ((tdb->parent != NULL) && trackDbSetting(tdb->parent, "logo") != NULL);
 boolean parentLevel = isNameAtParentLevel(tdb, name);
 boolean didAggregate = FALSE;
-if (parentLevel)
+if (parentLevel && !isLogo)
     {
     assert(tdb->parent != NULL);
     char *aggregate = trackDbSetting(tdb->parent, "aggregate");
@@ -5873,15 +5874,18 @@ if (parentLevel)
         }
     }
 
-printf("<TR valign=center><th align=right>Type of graph:</th><td align=left>");
-safef( option, sizeof(option), "%s.%s", name, LINEBAR );
-wiggleGraphDropDown(option, lineBar);
-if (boxed)
+if (!isLogo)
     {
-    printf("</td><td align=right colspan=2>");
-    printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
+    printf("<TR valign=center><th align=right>Type of graph:</th><td align=left>");
+    safef( option, sizeof(option), "%s.%s", name, LINEBAR );
+    wiggleGraphDropDown(option, lineBar);
+    if (boxed)
+        {
+        printf("</td><td align=right colspan=2>");
+        printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
+        }
+    puts("</td></TR>");
     }
-puts("</td></TR>");
 
 printf("<TR valign=center><th align=right>Track height:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, HEIGHTPER );
@@ -5897,10 +5901,14 @@ if (tdb->parent || tdb->subtracks)
 else
     wiggleScaleDropDown(option, autoScale);
 wiggleScaleDropDownJavascript(name);
-safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
-printf("Always include zero:&nbsp");
-wiggleAlwaysZeroDropDown(option, alwaysZero);
-puts("</TD></TR>");
+
+if (!isLogo)
+    {
+    safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
+    printf("Always include zero:&nbsp");
+    wiggleAlwaysZeroDropDown(option, alwaysZero);
+    puts("</TD></TR>");
+    }
 
 printf("<TR class=\"%sAutoScaleDesc\" valign=center><th align=right>Vertical viewing range:</th>"
        "<td align=left>&nbsp;min:&nbsp;", name);
@@ -5919,36 +5927,40 @@ safef(option, sizeof(option), "%s.%s", name, TRANSFORMFUNC);
 printf("Transform data points by:&nbsp");
 wiggleTransformFuncDropDown(option, transformFunc);
 
-printf("<TR valign=center><th align=right>Windowing function:</th><td align=left>");
-safef(option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
-wiggleWindowingDropDown(option, windowingFunction);
+if (!isLogo)
+    {
+    printf("<TR valign=center><th align=right>Windowing function:</th><td align=left>");
+    safef(option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
+    wiggleWindowingDropDown(option, windowingFunction);
 
-printf("<th align=right>Smoothing window:</th><td align=left>");
-safef(option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
-wiggleSmoothingDropDown(option, smoothingWindow);
-puts("&nbsp;pixels</TD></TR>");
+    printf("<th align=right>Smoothing window:</th><td align=left>");
+    safef(option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
+    wiggleSmoothingDropDown(option, smoothingWindow);
+    puts("&nbsp;pixels</TD></TR>");
 
-printf("<th align=right>Negate values:</th><td align=left>");
-safef(option, sizeof(option), "%s.%s", name, DONEGATIVEMODE );
-cgiMakeCheckBox(option, doNegative);
+    printf("<th align=right>Negate values:</th><td align=left>");
+    safef(option, sizeof(option), "%s.%s", name, DONEGATIVEMODE );
+    cgiMakeCheckBox(option, doNegative);
 
-printf("<TR valign=center><td align=right><b>Draw y indicator lines:</b>"
-       "<td align=left colspan=2>");
-printf("at y = 0.0:");
-safef(option, sizeof(option), "%s.%s", name, HORIZGRID );
-wiggleGridDropDown(option, horizontalGrid);
-printf("&nbsp;&nbsp;&nbsp;at y =");
-safef(option, sizeof(option), "%s.%s", name, YLINEMARK );
-cgiMakeDoubleVarInRange(option, yLineMark, "Indicator at Y", 0, NULL, NULL);
-safef(option, sizeof(option), "%s.%s", name, YLINEONOFF );
-wiggleYLineMarkDropDown(option, yLineMarkOnOff);
-printf("</td>");
+    printf("<TR valign=center><td align=right><b>Draw y indicator lines:</b>"
+           "<td align=left colspan=2>");
+    printf("at y = 0.0:");
+    safef(option, sizeof(option), "%s.%s", name, HORIZGRID );
+    wiggleGridDropDown(option, horizontalGrid);
+    printf("&nbsp;&nbsp;&nbsp;at y =");
+    safef(option, sizeof(option), "%s.%s", name, YLINEMARK );
+    cgiMakeDoubleVarInRange(option, yLineMark, "Indicator at Y", 0, NULL, NULL);
+    safef(option, sizeof(option), "%s.%s", name, YLINEONOFF );
+    wiggleYLineMarkDropDown(option, yLineMarkOnOff);
+    printf("</td>");
+    }
 if (boxed)
     puts("</TD></TR></TABLE>");
 else
     {
     puts("</TD></TR></TABLE>");
-    printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
+    if (!isLogo)
+        printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
     }
 
 // add a little javascript call to make sure we don't get whiskers with stacks in multiwigs
@@ -6162,10 +6174,8 @@ char *getScoreNameAdd(struct trackDb *tdb, char *scoreName, char *add)
 char scoreLimitName[1024];
 char *name = cloneString(scoreName);
 char *dot = strchr(name, '.');
-if (dot == NULL)
-    return name;
 
-if (isNewFilterType(tdb, dot+1) != NULL)
+if ((dot != NULL) && (isNewFilterType(tdb, dot+1) != NULL))
     {
     *dot++ = 0;
     safef(scoreLimitName, sizeof(scoreLimitName), "%s%s.%s", name, add, dot);

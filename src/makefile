@@ -94,6 +94,7 @@ userApps: topLibs hgLib destBin
 	@for P in ${BLAT_APPLIST}; do \
 	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
 	done
+	cd tabFile && echo tabFile && ${MAKE} userApps
 	cd utils/userApps && echo utils/userApps && ${MAKE}
 
 destBin:

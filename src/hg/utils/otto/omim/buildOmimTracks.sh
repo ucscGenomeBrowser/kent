@@ -55,7 +55,12 @@ hgLoadSqlTab -verbose=0 -warn $db omim2geneNew $SQLDIR/omim2gene.sql stdin
 # Not sure what this file is created for.  Can probably remove this?
 tawk '{print $1, $3, $2}' mim2gene.updated.txt > mim2gene.tab
 
-../../doOmimGene2 $db stdout | sort -u > omimGene2.tab
+if [ $db != "hg18" ]
+then
+    ../../doOmimGene2.sh $db omimGene2.tab
+else
+    ../../doOmimGene2 $db stdout | sort -u > omimGene2.tab
+fi
 
 hgLoadBed -verbose=0 $db omimGene2New omimGene2.tab
 

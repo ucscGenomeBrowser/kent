@@ -340,17 +340,6 @@ slFreeList(&fields);
 return isGenePredX;
 }
 
-static boolean attrsHasProteinId(struct track *tg)
-/* determine if the attributes table has the proteinId field.. */
-{
-struct sqlConnection *conn = hAllocConn(database);
-struct slName *fields = sqlFieldNames(conn, trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs"));
-hFreeConn(&conn);
-boolean hasProteinId = slNameInList(fields, "proteinId");
-slFreeList(&fields);
-return hasProteinId;
-}
-
 static void geneQueryAddGenePredCols(struct track *tg,
                                      struct gencodeQuery *gencodeQuery)
 /* add genePred columns to query */
@@ -366,30 +355,37 @@ if (gencodeQuery->isGenePredX)
     }
 }
 
-static void geneQueryAddAttrsCols(struct track *tg,
+static void geneQueryAddAttrsCols(struct track *tg, struct sqlConnection *conn,
                                   struct gencodeQuery *gencodeQuery)
 /* add attributes columns to query */
 {
+struct slName *fields = sqlFieldNames(conn, trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs"));
 
 sqlDyStringPrintf(gencodeQuery->fields, ", ");
 sqlDyStringPrintf(gencodeQuery->fields, "attrs.geneId, attrs.geneName, attrs.geneType, attrs.geneStatus, attrs.transcriptId, attrs.transcriptName, attrs.transcriptType, attrs.transcriptStatus, attrs.havanaGeneId, attrs.havanaTranscriptId, attrs.ccdsId, attrs.level, attrs.transcriptClass");
-gencodeQuery->attrsNumColumns = WGENCODEGENCODEATTRS_NO_PROTEIN_ID_NUM_COLS;
-if (attrsHasProteinId(tg))
+gencodeQuery->attrsNumColumns = WGENCODEGENCODEATTRS_MIM_NUM_COLS;
+if (slNameInList(fields, "proteinId"))
     {
     sqlDyStringPrintf(gencodeQuery->fields, ", attrs.proteinId");
+    gencodeQuery->attrsNumColumns++;
+    }
+if (slNameInList(fields, "transcriptRank"))
+    {
+    sqlDyStringPrintf(gencodeQuery->fields, ", attrs.transcriptRank");
     gencodeQuery->attrsNumColumns = WGENCODEGENCODEATTRS_NUM_COLS;
     }
 gencodeQuery->joinAttrs = TRUE;
 }
 
 static struct gencodeQuery *geneQueryConstruct(struct track *tg,
+                                               struct sqlConnection *conn,
                                                boolean includeAttrs)
 /* construct the query for a GENCODE records, which includes filters. */
 {
 struct gencodeQuery *gencodeQuery = gencodeQueryNew();
 geneQueryAddGenePredCols(tg, gencodeQuery);
 if (includeAttrs)
-    geneQueryAddAttrsCols(tg, gencodeQuery);
+    geneQueryAddAttrsCols(tg, conn, gencodeQuery);
 addQueryCommon(tg, filterBySetGet, gencodeQuery);
 return gencodeQuery;
 }
@@ -550,7 +546,7 @@ boolean needAttrs = (enabledLabels & ITEM_LABEL_GENE_ID) != 0;  // only for cert
 struct hash *highlightIds = NULL;
 if (anyFilterBy(tg, highlightBySetGet))
     highlightIds = loadHighlightIds(conn, tg);
-struct gencodeQuery *gencodeQuery = geneQueryConstruct(tg, needAttrs);
+struct gencodeQuery *gencodeQuery = geneQueryConstruct(tg, conn, needAttrs);
 struct sqlResult *sr = executeQuery(conn, gencodeQuery);
 struct linkedFeatures *lfList = NULL;
 unsigned highlightColor = getHighlightColor(tg);

@@ -22,9 +22,11 @@
 
 // For usher's -K option (single subtree):
 #define SINGLE_SUBTREE_SIZE "2000"
+#define USHER_NUM_THREADS "16"
 
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
 #define OUTBREAK_INFO_URLBASE "https://outbreak.info/situation-reports?pango="
+#define PANGO_DESIGNATION_ISSUE_URLBASE "https://github.com/cov-lineages/pango-designation/issues/"
 
 // usher now preprends "node_" to node numbers when parsing protobuf, although they're still stored
 // numeric in the protobuf.
@@ -136,6 +138,9 @@ struct sampleMetadata
     char *region;       // Continent on which sample was collected
     char *nCladeUsher;  // Nextstrain clade according to annotated tree
     char *lineageUsher; // Pango lineage according to annotated tree
+    char *authors;      // Sequence submitters/authors
+    char *pubs;         // PubMed ID numbers of publications associated with sequences
+    char *nLineage;     // Nextstrain letter-dot-numbers lineage assigned by nextclade
     };
 
 struct geneInfo
@@ -183,10 +188,10 @@ void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneI
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
-struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
+struct tempName *writeCustomTracks(char *db, struct tempName *vcfTn, struct usherResults *ur,
                                    struct slName *sampleIds, struct mutationAnnotatedTree *bigTree,
-                                   char *source, int fontHeight, struct phyloTree **retSampleTree,
-                                   int *pStartTime);
+                                   char *source, int fontHeight,
+                                   struct phyloTree **retSampleTree, int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 
 
@@ -195,6 +200,11 @@ struct sampleMetadata *metadataForSample(struct hash *sampleMetadata, char *samp
 
 struct phyloTree *phyloPruneToIds(struct phyloTree *node, struct slName *sampleIds);
 /* Prune all descendants of node that have no leaf descendants in sampleIds. */
+
+struct slName *phyloPlaceDbList();
+/* Each subdirectory of PHYLOPLACE_DATA_DIR that contains a config.ra file is a supported db
+ * or track hub name (without the hub_number_ prefix).  Return a list of them, or NULL if none
+ * are found. */
 
 char *phyloPlaceDbSetting(char *db, char *settingName);
 /* Return a setting from hgPhyloPlaceData/<db>/config.ra or NULL if not found. */

@@ -24,6 +24,8 @@ export subset=${fileName%.orderList.tsv}
 export minTrackCount=12
 if [ "${subset}" == "invertebrate" ]; then
   minTrackCount=10
+elif [ "${subset}" == "bacteria" ]; then
+  minTrackCount=9
 elif [ "${subset}" == "mammals" ]; then
   minTrackCount=9
 elif [ "${subset}" == "viral" ]; then

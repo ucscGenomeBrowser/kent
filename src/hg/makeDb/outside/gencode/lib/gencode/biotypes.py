@@ -72,6 +72,7 @@ class BioType(SymEnum):
     protein_coding_LoF = auto()
     artifact = auto()
     artifactual_duplication = auto()
+    protein_coding_CDS_not_defined = auto()
 
 GencodeFunction = SymEnum("GencodeFunction", ("pseudo", "coding", "nonCoding", "problem"))
 
@@ -88,7 +89,8 @@ bioTypesCoding = frozenset([BioType.IG_C_gene,
                             BioType.TR_J_gene,
                             BioType.TR_V_gene,
                             BioType.non_stop_decay,
-                            BioType.protein_coding_LoF])
+                            BioType.protein_coding_LoF,
+                            BioType.protein_coding_CDS_not_defined])
 bioTypesNonCoding = frozenset([BioType.antisense,
                                BioType.lincRNA,
                                BioType.lncRNA,

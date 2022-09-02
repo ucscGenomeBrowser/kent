@@ -30,6 +30,7 @@ errAbort(
   "options:\n"
   "   -makeIndex=index.tsv - output index tsv file with <matrix-col1><input-file-pos><line-len>\n"
   "   -median if set ouput median rather than mean cluster value\n"
+  "   -excludeZeros if set exclude zeros when calculating mean/median\n"
   );
 }
 
@@ -37,6 +38,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"makeIndex", OPTION_STRING},
    {"median", OPTION_BOOLEAN},
+   {"excludeZeros", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -136,6 +138,7 @@ struct clustering
     struct hash *clusterSizeHash;   /* Keyed by cluster, int value is elements in cluster */
     char **clusterNames;	    /* Holds name of each cluster */
     int *clusterSizes;	    /* An array that holds size of each cluster */
+    boolean excludeZeros; /* If true exclude zero vals from calc */
 
     /* Things needed by median handling */
     boolean doMedian;	/* If true we calculate median */
@@ -148,7 +151,7 @@ struct clustering
 
 
 struct clustering *clusteringNew(char *clusterField, char *outMatrixFile, char *outStatsFile,
-    struct fieldedTable *metaTable, struct ccMatrix *v, boolean doMedian)
+    struct fieldedTable *metaTable, struct ccMatrix *v, boolean doMedian, boolean excludeZeros)
 /* Make up a new clustering structure */
 {
 /* Check that all column names in matrix are unique */
@@ -237,6 +240,8 @@ if (doMedian)
 	clustering->clusterSamples[clusterIx] = samples;
 	}
     }
+
+clustering->excludeZeros = excludeZeros;
 
 
 /* Make up array that has -1 where no cluster available, otherwise output index, also
@@ -344,6 +349,8 @@ for (i=0; i<colCount; ++i)
 	{
 	double val = a[i];
 	int valCount = clusterElements[clusterIx];
+        if (clustering->excludeZeros && val == 0.0)
+            continue;
 	clusterElements[clusterIx] = valCount+1;
 	clusterTotal[clusterIx] += val;
 	if (doMedian)
@@ -455,7 +462,7 @@ for (clustering = lii->clusteringList; clustering != NULL; clustering = clusteri
 
 void matrixClusterColumns(char *matrixFile, char *metaFile, char *sampleField,
     int outputCount, char **clusterFields, char **outMatrixFiles, char **outStatsFiles,
-    char *outputIndex, boolean doMedian)
+    char *outputIndex, boolean doMedian, boolean excludeZeros)
 /* matrixClusterColumns - Group the columns of a matrix into clusters, and output a matrix 
  * the with same number of rows and generally much fewer columns.. */
 {
@@ -479,7 +486,7 @@ int i;
 for (i=0; i<outputCount; ++i)
     {
     clustering = clusteringNew(clusterFields[i], outMatrixFiles[i], outStatsFiles[i], 
-			metaTable, v, doMedian);
+			metaTable, v, doMedian, excludeZeros);
     slAddTail(&clusteringList, clustering);
     }
 
@@ -587,6 +594,6 @@ for (i=0; i<outputCount; ++i)
     triples += 3;
     }
 matrixClusterColumns(argv[1], argv[2], argv[3], 
-    outputCount, clusterFields, outMatrixFiles, outStatsFiles, makeIndex, optionExists("median"));
+    outputCount, clusterFields, outMatrixFiles, outStatsFiles, makeIndex, optionExists("median"), optionExists("excludeZeros"));
 return 0;
 }

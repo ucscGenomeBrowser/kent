@@ -1603,7 +1603,7 @@ graphRange = graphUpperLimit - graphLowerLimit;
 wigTrackSetGraphOutputDefault(tg, xOff, yOff, width, hvg);
 
 struct wigMouseOver *mouseOverData = NULL;
-if (zoomedToCodonLevel && trackDbSettingOn(tg->tdb, "logo"))
+if (zoomedToCodonLevel && trackDbSettingOn(tg->tdb, "logo") && vis != tvDense)
 //if (zoomedToBaseLevel && trackDbSettingOn(tg->tdb, "logo"))
     mouseOverData = logoPreDrawContainer(preContainer,
         preDrawZero, width, tg, hvg, xOff, yOff,

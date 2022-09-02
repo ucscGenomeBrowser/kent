@@ -1418,7 +1418,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
                 int stringWidth =
                      mgFontStringWidth(font, rm->name) + LABEL_PADDING;
 
-                if ( lx1-stringWidth-xOff > 0 ) 
+                if ( lx1-stringWidth-xOff >= -(LABEL_PADDING/2) ) 
                     {
                     hvGfxTextCentered(hvg, lx1 - stringWidth,
                               heightPer - fontHeight + y,
@@ -1445,9 +1445,12 @@ for (idx = 0; idx < rm->blockCount; idx++)
                             }
                         }
 
-                    int endx = roundingScale(rm->visualEnd - winStart,
-                                        width, baseWidth);
-                    if ( endx > 0 ) 
+                    // RMH: Should be no need to scale this.  Both numbers are
+                    //      in bp coordinates.
+                    //int endx = roundingScale(rm->visualEnd - winStart,
+                    //                    width, baseWidth);
+                    //if ( endx > 0 ) 
+                    if ( rm->visualEnd >= winStart )
                         rm->leftLabel = 1;
                     }
                 }
@@ -1774,13 +1777,16 @@ if ( cr->layoutLevel > highestLevel )
             char family[256];
             // Simplify repClass for lookup: strip trailing '?',
             // simplify *RNA to RNA:
-            char *poundPtr = index(cr->name, '#');
             safecpy(family, sizeof(family), cr->name);
-            if (poundPtr)
-                {
-                poundPtr = index(family, '#');
-                *poundPtr = '\0';
-                }
+            // RMH: For now allow the full name to show in left column.
+            //      If this ends up being too wide we can make it an option
+            //      to only show the identifier as was originally coded:
+            //char *poundPtr = index(cr->name, '#');
+            //if (poundPtr)
+            //    {
+            //    poundPtr = index(family, '#');
+            //    *poundPtr = '\0';
+            //    }
             y = yOffAfterTitle + (cr->layoutLevel * tg->lineHeight) + fontOffset;
             hvGfxSetClip(hvgSide, leftLabelX, y, insideWidth, tg->height);
             hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, 

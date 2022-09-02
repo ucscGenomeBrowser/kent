@@ -1574,7 +1574,7 @@ noInherit on
 #include jkExperiments.ra
 
 track genotypeArrays
-shortLabel Array Probsets
+shortLabel Array Probesets
 longLabel Microarray Probesets
 compositeTrack on
 group varRep
@@ -1582,6 +1582,7 @@ visibility hide
 noScoreFilter .
 noInherit on
 type bed 3 .
+pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
 
     track snpArrayAffy6
     parent genotypeArrays
@@ -1808,7 +1809,7 @@ type bed 3 .
     type bigBed 4
     priority 24
     bigDataUrl /gbdb/hg19/bbi/illumina/illumina450K.bb
-    release alpha
+    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
 
     track snpArrayIllumina850k
     parent genotypeArrays
@@ -1817,20 +1818,20 @@ type bed 3 .
     type bigBed 4
     priority 25
     bigDataUrl /gbdb/hg19/bbi/illumina/epic850K.bb
-    release alpha
+    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
 
     track snpArrayCytoSnp850k
     parent genotypeArrays on
     shortLabel CytoSNP 850k
     longLabel Illumina 850k CytoSNP Array
-    type bigBed 6+15
+    type bigBed 6 +
+    priority 26
     bigDataUrl /gbdb/hg19/bbi/cytoSnp/cytoSnp850k.bb
     visibility pack
     urls rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
     colorByStrand 255,0,0 0,0,255
     html genotypeArrays
-    pennantIcon New red
-    release alpha
+    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
 
 track tfbsConsSites
 shortLabel TFBS Conserved

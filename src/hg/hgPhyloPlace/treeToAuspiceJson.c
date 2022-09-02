@@ -13,9 +13,6 @@
 #include "phyloTree.h"
 #include "variantProjector.h"
 
-// Globals
-extern char *chrom;
-extern int chromSize;
 
 static void writeAuspiceMeta(FILE *outF, struct slName *subtreeUserSampleIds, char *source)
 /* Write metadata to configure Auspice display. */
@@ -268,7 +265,7 @@ static boolean changesProtein(struct singleNucChange *snc, struct geneInfo *gi,
 boolean isCodingChange = FALSE;
 if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
     {
-    struct bed3 gBed3 = { NULL, chrom, snc->chromStart, snc->chromStart+1 };
+    struct bed3 gBed3 = { NULL, gSeqWin->seqName, snc->chromStart, snc->chromStart+1 };
     char gAlt[2];
     safef(gAlt, sizeof(gAlt), "%c", snc->newBase);
     if (!sameString(gi->psl->strand, "+"))
@@ -562,10 +559,11 @@ if (isNotEmpty(bigGenePredFile) && fileExists(bigGenePredFile))
     {
     struct bbiFile *bbi = bigBedFileOpen(bigGenePredFile);
     struct lm *lm = lmInit(0);
-    struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, 0, chromSize, 0, lm);
+    struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, refGenome->name, 0,
+                                                             refGenome->size, 0, lm);
     for (bb = bbList;  bb != NULL;  bb = bb->next)
         {
-        struct genePredExt *gp = genePredFromBigGenePred(chrom, bb);
+        struct genePredExt *gp = genePredFromBigGenePred(refGenome->name, bb);
         if (gp->strand[0] != '+')
             errAbort("getGeneInfoList: strand must be '+' but got '%s' for gene %s",
                      gp->strand, gp->name);
@@ -583,7 +581,7 @@ if (isNotEmpty(bigGenePredFile) && fileExists(bigGenePredFile))
             }
         struct geneInfo *gi;
         AllocVar(gi);
-        gi->psl = genePredToPsl((struct genePred *)gp, chromSize, txLen);
+        gi->psl = genePredToPsl((struct genePred *)gp, refGenome->size, txLen);
         gi->txSeq = newDnaSeq(seq, txLen, gp->name2);
         slAddHead(&geneInfoList, gi);
         }

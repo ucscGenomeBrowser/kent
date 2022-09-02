@@ -203,6 +203,9 @@ void trackHubAddOneDescription(char *trackDbFile, struct trackDb *tdb);
 struct trackHubGenome *trackHubGetGenome(char *database);
 /* get genome structure for an assembly in a trackHub */
 
+struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
+/* Get the genome structure for an undecorated genome name. */
+
 boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost,
     char **pPort, char **pGenomeDataDir);
 /* get "blat" and "transBlat" entries (if any) for an assembly hub */

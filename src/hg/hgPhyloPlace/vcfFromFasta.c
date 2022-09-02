@@ -11,12 +11,6 @@
 #include "psl.h"
 #include "trashDir.h"
 
-// Globals
-extern int chromSize;
-
-// wuhCor1-specific:
-int minSeqSize = 10000;
-int maxSeqSize = 35000;
 double maxNs = 0.5;
 
 // Using blat defaults for these:
@@ -37,7 +31,7 @@ int gfIMinMatch = 30;
 
 
 static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct hash *treeNames,
-                                      struct slPair **retFailedSeqs)
+                                      int minSeqSize, int maxSeqSize, struct slPair **retFailedSeqs)
 /* Return a list of sequences that pass basic QC checks (appropriate size etc).
  * If any sequences have names that are already in the tree, add a prefix so usher doesn't
  * reject them.
@@ -148,7 +142,7 @@ hashFree(&uniqNames);
 return filteredSeqs;
 }
 
-static struct psl *alignSequences(char *db, struct dnaSeq *refGenome, struct seqInfo *seqs,
+static struct psl *alignSequences(struct dnaSeq *refGenome, struct seqInfo *seqs,
                                   int *pStartTime)
 /* Use BLAT server to align seqs to reference; keep only the best alignment for each seq.
  * (In normal usage, there should be one very good alignment per seq.) */
@@ -439,7 +433,7 @@ for (psl = psls;  psl != NULL;  psl = psl->next)
             }
         }
     // Add no-calls for unaligned bases after last block
-    for (tStart = psl->tEnd;  tStart < chromSize;  tStart++)
+    for (tStart = psl->tEnd;  tStart < ref->size;  tStart++)
         {
         if (informativeBases[tStart])
             {
@@ -600,11 +594,24 @@ struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refG
 struct tempName *tn = NULL;
 struct slName *sampleIds = NULL;
 struct dnaSeq *allSeqs = faReadAllMixedInLf(lf);
-struct seqInfo *filteredSeqs = checkSequences(allSeqs, treeNames, retFailedSeqs);
+int minSeqSize = 0, maxSeqSize = 0;
+// Default to SARS-CoV-2 or hMPXV values if setting is missing from config.ra.
+char *minSeqSizeSetting = phyloPlaceDbSetting(db, "minSeqSize");
+if (isEmpty(minSeqSizeSetting))
+    minSeqSize = sameString(db, "wuhCor1") ? 10000 : 100000;
+else
+    minSeqSize = atoi(minSeqSizeSetting);
+char *maxSeqSizeSetting = phyloPlaceDbSetting(db, "maxSeqSize");
+if (isEmpty(maxSeqSizeSetting))
+    maxSeqSize = sameString(db, "wuhCor1") ? 35000 : 220000;
+else
+    maxSeqSize = atoi(maxSeqSizeSetting);
+struct seqInfo *filteredSeqs = checkSequences(allSeqs, treeNames, minSeqSize, maxSeqSize,
+                                              retFailedSeqs);
 reportTiming(pStartTime, "read and check uploaded FASTA");
 if (filteredSeqs)
     {
-    struct psl *alignments = alignSequences(db, refGenome, filteredSeqs, pStartTime);
+    struct psl *alignments = alignSequences(refGenome, filteredSeqs, pStartTime);
     struct psl *filteredAlignments = checkAlignments(alignments, filteredSeqs, retFailedPsls);
     removeUnalignedSeqs(&filteredSeqs, filteredAlignments, retFailedSeqs);
     if (filteredAlignments)
