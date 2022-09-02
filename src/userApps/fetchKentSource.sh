@@ -290,6 +290,7 @@ echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --remote=git://genome-source.soe.ucsc.edu/kent.git \
 --prefix=kent/ ${branch} \
 src/parasol \
+src/tabFile \
 src/htslib \
 src/hg/pslToChain \
 src/hg/makeDb/outside \
