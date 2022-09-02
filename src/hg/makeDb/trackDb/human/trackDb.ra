@@ -5617,7 +5617,7 @@ itemRgb on
 
 track hgnc
 shortLabel HGNC
-longLabel HGNC
+longLabel HUGO Gene Nomenclature 
 bigDataUrl /gbdb/$D/hgnc/hgnc.bb
 type bigBed 9 +
 labelFields symbol, geneName, name, uniprot_ids, ensembl_gene_id, ucsc_id, refseq_accession
@@ -5627,6 +5627,9 @@ filterValues.locus_type RNA Y,RNA cluster,RNA long non-coding,RNA micro,RNA misc
 group genes
 searchIndex name
 searchTrix /gbdb/$D/hgnc/search.ix
+skipEmptyFields on
+itemRgb on
+noScoreFilter on
 
 searchTable hgnc
 searchMethod exact
