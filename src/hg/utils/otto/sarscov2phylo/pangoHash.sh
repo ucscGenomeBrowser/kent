@@ -19,7 +19,7 @@ tmpSam=$(mktemp)
 tmpLog=$(mktemp)
 tmpAliMaskedFasta=$(mktemp)
 
-minimap2 -a -x asm5 --sam-hit-only --secondary=no  -t $threads \
+minimap2 -a -x asm20 --sam-hit-only --secondary=no --score-N=0 -t $threads \
     $pangoReference $inputFasta -o $tmpSam &> $tmpLog
 gofasta sam toMultiAlign \
     -s $tmpSam \

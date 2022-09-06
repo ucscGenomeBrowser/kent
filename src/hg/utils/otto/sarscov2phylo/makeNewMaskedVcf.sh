@@ -9,7 +9,7 @@ usage() {
     echo "This assumes that ncbi.latest and cogUk.latest links/directories have been updated."
 }
 
-if [ $# != 3 && $# != 4]; then
+if [ $# != 3 && $# != 4 ]; then
   usage
   exit 1
 fi
@@ -37,7 +37,13 @@ source $scriptDir/util.sh
 mkdir -p $ottoDir/$today
 cd $ottoDir/$today
 
-prevProtobufMasked=$ottoDir/$prevDate/gisaidAndPublic.$prevDate.masked.pb
+# If there's a version that I didn't want to push out to the main site, but wanted to be used
+# as the basis for the next day's build (for example with some extra pruning), use that:
+if [ -e $ottoDir/$prevDate/gisaidAndPublic.$prevDate.masked.useMe.pb ]; then
+    prevProtobufMasked=$ottoDir/$prevDate/gisaidAndPublic.$prevDate.masked.useMe.pb
+else
+    prevProtobufMasked=$ottoDir/$prevDate/gisaidAndPublic.$prevDate.masked.pb
+fi
 
 usherDir=~angie/github/usher
 usher=$usherDir/build/usher
@@ -174,13 +180,13 @@ cut -f 1 *.dropoutContam \
 | awk -F\| '{ if ($3 == "") { print $1; } else { print $2; } }' \
     > dropoutContam.ids
 # Also exclude sequences with unbelievably low numbers of mutations given sampling dates.
-zcat $gisaidDir/chunks/nextclade.full.tsv.gz | cut -f 1,5 \
+zcat $gisaidDir/chunks/nextclade.full.tsv.gz | cut -f 1,6 \
 | awk -F\| '{ if ($3 == "") { print $1 "\t" $2; } else { print $2 "\t" $3; } }' \
 | $scriptDir/findRefBackfill.pl > gisaid.refBackfill
-zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,5 | sort \
+zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,6 | sort \
 | join -t $'\t' <(cut -f 1,3 $ncbiDir/ncbi_dataset.plusBioSample.tsv | sort) - \
 | $scriptDir/findRefBackfill.pl > gb.refBackfill
-zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,5 | sort \
+zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,6 | sort \
 | join -t $'\t' <(cut -d, -f 1,5 $cogUkDir/cog_metadata.csv | tr , $'\t' | sort) - \
 | $scriptDir/findRefBackfill.pl > cog.refBackfill
 cut -f 1 *.refBackfill > refBackfill.ids

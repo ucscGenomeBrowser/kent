@@ -71,6 +71,14 @@ join -t$'\t' ncovEpiToGb latestEpiToGb \
           latestNoDot = substr($3, 0, index($3, ".")-1);
           if (ncovNoDot != latestNoDot) {print $3, $2;} }' \
     > latestToNcov.sub
+# But watch out for name mismatches which indicate bad name matches; get rid of those.
+tawk '{print $1, $1, $2, $2;}' latestToNcov.sub \
+| subColumn -skipMiss 2 stdin <(cut -f 1,6 $ncbiDir/ncbi_dataset.plusBioSample.tsv) stdout \
+| subColumn -skipMiss 4 stdin <(cut -f 1,6 $ncbiDir/ncbi_dataset.plusBioSample.tsv) stdout \
+| tawk '$2 != $4' > latestToNcov.nameMismatch
+grep -vFwf <(cut -f 1 latestToNcov.nameMismatch) latestToNcov.sub > tmp
+mv tmp latestToNcov.sub
+
 subColumn -miss=/dev/null 2 epiToPublicAndDate.$today latestToNcov.sub tmp
 mv tmp epiToPublicAndDate.$today
 
@@ -89,6 +97,6 @@ zcat $nextmeta \
 | sort \
     >> tmp
 wc -l tmp
-gzip tmp
+pigz -p 8 tmp
 mv tmp.gz $nextmeta
 zcat $nextmeta | cut -f 4 | grep ... | wc -l

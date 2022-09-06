@@ -124,12 +124,18 @@ if (sameOk(dbBase, configDb))
 return NULL;
 }
 
+// TODO: libify
+INLINE boolean isUrl(char *url)
+{
+return (startsWith("http://", url) || startsWith("https://", url) || startsWith("ftp://", url));
+}
+
 char *phyloPlaceDbSettingPath(char *db, char *settingName)
 /* Return path to a file named by a setting from hgPhyloPlaceData/<db>/config.ra,
  * or NULL if not found.  (Append hgPhyloPlaceData/<db>/ to the beginning of relative path) */
 {
 char *fileName = phyloPlaceDbSetting(db, settingName);
-if (isNotEmpty(fileName) && fileName[0] != '/' && !fileExists(fileName))
+if (isNotEmpty(fileName) && fileName[0] != '/' && !isUrl(fileName) && !fileExists(fileName))
     {
     struct dyString *dy = dyStringCreate(PHYLOPLACE_DATA_DIR "/%s/%s",
                                          trackHubSkipHubName(db), fileName);
