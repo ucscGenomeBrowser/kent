@@ -783,7 +783,7 @@ function installRedhat () {
         mysqlStrictModeOff
 
         # start mysql now
-        /sbin/service $MYSQLD start
+        startMysql
 
         secureMysql
         SET_MYSQL_ROOT=1
@@ -1043,7 +1043,7 @@ function installDebian ()
         apt-get --assume-yes install mariadb-server
 
         mysqlStrictModeOff
-        service mariadb restart
+        startMysql
         # flag so script will set mysql root password later to a random value
         SET_MYSQL_ROOT=1
     fi
@@ -1668,7 +1668,7 @@ function stopMysql
             # at least seen in Fedora 17
             systemctl stop mysql
     else
-        echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
+        echo2 Could not find mysql nor mysqld file in /etc/init.d nor a systemd command. Please email genome-mirror@soe.ucsc.edu.
     fi
 }
 
@@ -1686,7 +1686,7 @@ function startMysql
             # at least seen in Fedora 17
             systemctl start mysql
     else
-        echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
+        echo2 Could not find mysql nor mysqld file in /etc/init.d nor a systemd command. Please email genome-mirror@soe.ucsc.edu.
     fi
 }
 
