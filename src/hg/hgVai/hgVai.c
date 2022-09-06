@@ -2418,8 +2418,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	for (i = 0;  i < altAlCount;  i++)
 	    {
 	    if (i > 0)
-		sqlDyStringPrintf(dyAltAlStr, ",");
-            sqlDyStringPrintf(dyAltAlStr, "%c%s", leftBase, altAls[i]);
+		dyStringPrintf(dyAltAlStr, ",");
+            dyStringPrintf(dyAltAlStr, "%c%s", leftBase, altAls[i]);
 	    }
 	}
     else
@@ -2428,12 +2428,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	for (i = 0;  i < altAlCount;  i++)
 	    {
 	    if (i > 0)
-		sqlDyStringPrintf(dyAltAlStr, ",");
-	    sqlDyStringPrintf(dyAltAlStr, "%s", altAls[i]);
+		dyStringPrintf(dyAltAlStr, ",");
+	    dyStringPrintf(dyAltAlStr, "%s", altAls[i]);
 	    }
 	}
     if (altAlCount == 0)
-        sqlDyStringPrintf(dyAltAlStr, ".");
+        dyStringPrintf(dyAltAlStr, ".");
     char vcfStartStr[64];
     safef(vcfStartStr, sizeof(vcfStartStr), "%d", vcfStart);
     vcfRow[0] = chrom;
