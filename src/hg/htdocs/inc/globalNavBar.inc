@@ -64,6 +64,7 @@
 	<li><a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
+	<li class="last"><a href="../goldenPath/help/cloud.html">Cloud Access</a></li>
 	<li class="last"><a href="../goldenPath/help/api.html">REST API</a></li>
 	</ul>
 </li>

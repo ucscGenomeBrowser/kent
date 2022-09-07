@@ -311,8 +311,11 @@ if (haveInserts)
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
 	chrom = chopPrefix(dbOnly);
 
-	if ((org = hOrganism(dbOnly)) == NULL)
-	    org = dbOnly;
+        if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
+            {
+            if ((org = hOrganism(dbOnly)) == NULL)
+                org = dbOnly;
+            }
 
 	if (mc->rightStatus == MAF_INSERT_STATUS)
 	    {

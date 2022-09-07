@@ -178,84 +178,74 @@ time $HOME/bin/x86_64/gnusort -S1024G --parallel=64 -k1,1 -k2,2n allOne.maf \
 
     # and run bedToBigBed on it:
 time (bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 -as=$HOME/kent/src/hg/lib/bigMaf.as -tab hg38.470way.bigMaf /hive/data/genomes/hg38/chrom.sizes hg38.470way.bb) >> toBb.log 2>&1
+    # pid=227524: VmPeak:    5221776 kB
+    # real    3441m36.866s
 
-   XXX #### the bedToBigBed is running Thu Aug 18 12:52:16 PDT 2022
 
-    # obtained a phylo tree from Michael Hiller
-    # from the 218-way in the source tree, select out the 470 used here:
+    # obtained a phylo tree from Michael Hiller with 508 species
+# -rw-rw-r-- 1         22483 Aug 18 10:42 tree508.nh
+    ~/kent/src/hg/utils/phyloTrees/speciesList.sh tree508.nh \
+       | sort > 508.species
+    join -v2 nameLists/native.470.list 508.species > not.in.maf.list
+
     /cluster/bin/phast/tree_doctor \
-        --prune-all-but aotNan1,calJac3,cebCap1,cerAty1,chlSab2,colAng1,eulFla1,eulMac1,gorGor5,hg38,macFas5,macNem1,manLeu1,micMur3,nasLar1,nomLeu3,otoGar3,panPan2,panTro5,papAnu3,ponAbe2,proCoq1,rheMac8,rhiBie1,rhiRox1,saiBol1,tarSyr2,canFam3,dasNov3,mm10 \
-        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/218way.nh \
-          > t.nh
+        --prune `cat not.in.maf.list | xargs echo | tr ' ' ','` \
+            tree508.nh | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl \
+              /dev/stdin > hg38.470way.nh
 
     # using TreeGraph2 tree editor on the Mac, rearrange to get hg38
     # at the top, and attempt to get the others in phylo order:
-    /cluster/bin/phast/all_dists t.nh | grep hg38 \
-        | sed -e "s/hg38.//" | sort -k2n | sed -e 's/^/#\t/;'
-#       panTro5 0.013390
-#       panPan2 0.015610
-#       gorGor5 0.019734
-#       ponAbe2 0.039403
-#       nomLeu3 0.046204
-#       nasLar1 0.075474
-#       rhiBie1 0.075474
-#       rhiRox1 0.075474
-#       colAng1 0.075574
-#       macFas5 0.079575
-#       rheMac8 0.079575
-#       papAnu3 0.079626
-#       macNem1 0.081584
-#       cerAty1 0.082584
-#       saiBol1 0.087804
-#       chlSab2 0.087974
-#       manLeu1 0.090974
-#       aotNan1 0.102804
-#       calJac3 0.107454
-#       cebCap1 0.108804
-#       eulFla1 0.190934
-#       eulMac1 0.190934
-#       tarSyr2 0.221294
-#       proCoq1 0.2470934
-#       micMur3 0.236534
-#       otoGar3 0.270334
-#       canFam3 0.332429
-#       dasNov3 0.366691
-#       mm10    0.502391
+    /cluster/bin/phast/all_dists hg38.470way.nh | grep hg38 \
+        | sed -e "s/hg38.//" | sort -k2n | sed -e 's/^/#\t/;' | head
+#       panTro6 0.011908
+#       panPan3 0.011944
+#       gorGor6 0.017625
+#       ponAbe3 0.034005
+#       HLnomLeu4       0.040196
+#       HLhylMol2       0.040428
+#       macNem1 0.066302
+#       HLtheGel1       0.066537
+#       HLmacFas6       0.066886
+... tail 
+#       HLpseCor1       0.811597
+#       HLmacFul1       0.812234
+#       HLnotEug3       0.815561
+#       HLospRuf1       0.815802
+#       HLpseOcc1       0.819866
+#       macEug2 0.821901
+#       HLantFla1       0.825093
+#       HLsarHar2       0.826368
+#       HLornAna3       1.011442
+#       HLtacAcu1       1.023432
+
 
     #	what that looks like:
-~/kent/src/hg/utils/phyloTrees/asciiTree.pl t.nh > hg38.470way.nh
-~/kent/src/hg/utils/phyloTrees/asciiTree.pl hg38.470way.nh | sed -e 's/^/# /;'
+    head hg38.470way.nh | sed -e 's/^/# /;'
 
-# ((((((((((((hg38:0.00655,
-#            panTro5:0.00684):0.00122,
-#           panPan2:0.00784):0.003,
-#          gorGor5:0.008964):0.009693,
-#         ponAbe2:0.01894):0.003471,
-#        nomLeu3:0.02227):0.01204,
-#       (((((rheMac8:0.003991,
-#           (macFas5:0.002991,
-#           macNem1:0.005000):0.001000):0.001000,
-#          cerAty1:0.008):0.005,
-#         papAnu3:0.010042):0.01061,
-#        (chlSab2:0.027,
-#        manLeu1:0.0470000):0.002000):0.0047000,
-#       ((nasLar1:0.0007,
-#        colAng1:0.0008):0.0008,
-#       (rhiRox1:0.0007,
-#       rhiBie1:0.000700):0.000800):0.018000):0.020000):0.0218470,
-#      (((calJac3:0.03,
-#        saiBol1:0.01035):0.00865,
-#       cebCap1:0.04):0.006,
-#      aotNan1:0.040000):0.005000):0.052090,
-#     tarSyr2:0.1114):0.02052,
-#    (((micMur3:0.0556,
-#      proCoq1:0.05):0.015,
-#     (eulMac1:0.01,
-#     eulFla1:0.010000):0.015000):0.015000,
-#    otoGar3:0.119400):0.020520):0.015494,
-#   mm10:0.356483):0.020593,
-#  canFam3:0.165928):0.023664,
-# dasNov3:0.176526);
+# ((((((((((((((((hg38:0.005962,
+#                (panPan3:0.001895,
+#                panTro6:0.001859):0.004087):0.002083,
+#               gorGor6:0.00958):0.008775,
+#              ponAbe3:0.017185):0.002844,
+#             (HLhylMol2:0.00707,
+#             HLnomLeu4:0.006838):0.013694):0.010338,
+#            ((((((rheMac10:0.001889,
+#                 HLmacFus1:0.002063):0.001806,
+#                HLmacFas6:0.00211):0.001812,
+
+       tail hg38.470way.nh | sed -e 's/^/# /;'
+
+#     (HLpseCor1:0.017988,
+#     HLpseCup1:0.017013):0.023448):0.016208):0.028312):0.010708):0.019570,
+#    (HLthyCyn1:0.042212,
+#    (HLantFla1:0.026702,
+#    HLsarHar2:0.027977):0.032656):0.070372):0.030736,
+#   (HLdidVir1:0.053914,
+#   (monDom5:0.055461,
+#   HLgraAgi1:0.042801):0.004824):0.079265):0.238720):0.526739,
+#  HLtacAcu1:0.070786):0.029398,
+# HLornAna3:0.029398);
+
 
     # extract species list from that .nh file
     sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
@@ -263,7 +253,7 @@ time (bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 -as=$HOME/kent/src/hg/
         | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
 
     # construct db to name translation list:
-    cat species.list.txt | while read DB
+    grep -v HL species.list.txt | while read DB
 do
 hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
 done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
@@ -273,42 +263,42 @@ done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
 # e.g. Crab-eating -> Crab_eating,
 # the Crab-eating didn't survive the tree_doctor
 
-/cluster/bin/phast/tree_doctor --rename "`cat db.to.name.txt`" hg38.470way.nh \
+/cluster/bin/phast/tree_doctor --rename "`cat db.comName.txt`" hg38.470way.nh \
    | sed -e 's/0\+)/)/g; s/0\+,/,/g' \
      | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
        | sed -e "s#_x_#'#g;" > hg38.470way.commonNames.nh
 
-    cat hg38.470way.commonNames.nh | sed -e 's/^/# /;'
-# ((((((((((((Human:0.00655,
-#            Chimp:0.00684):0.00122,
-#           Bonobo:0.00784):0.003,
-#          Gorilla:0.008964):0.009693,
-#         Orangutan:0.01894):0.003471,
-#        Gibbon:0.02227):0.01204,
-#       (((((Rhesus:0.003991,
-#           (Crab_eating_macaque:0.002991,
-#           Pig_tailed_macaque:0.005):0.001):0.001,
-#          Sooty_mangabey:0.008):0.005,
-#         Baboon:0.010042):0.01061,
-#        (Green_monkey:0.027,
-#        Drill:0.03):0.002):0.003,
-#       ((Proboscis_monkey:0.0007,
-#        Angolan_colobus:0.0008):0.0008,
-#       (Golden_snub:0.0007,
-#       Black_snub:0.0007):0.0008):0.018):0.02):0.02183,
-#      (((Marmoset:0.03,
-#        Squirrel_monkey:0.01035):0.00865,
-#       White_faced_sapajou:0.04):0.006,
-#      Ma's_night_monkey:0.04):0.005):0.05209,
-#     Tarsier:0.1114):0.02052,
-#    (((Mouse_lemur:0.0556,
-#      Coquerel's_sifaka:0.05):0.015,
-#     (Black_lemur:0.01,
-#     Sclater's_lemur:0.01):0.015):0.015,
-#    Bushbaby:0.1194):0.02052):0.015494,
-#   Mouse:0.356483):0.020593,
-#  Dog:0.165928):0.023664,
-# Armadillo:0.176526);
+/cluster/bin/phast/tree_doctor --rename "`cat nameLists/db.to.sciName.txt`" \
+  hg38.470way.nh \
+   | sed -e 's/0\+)/)/g; s/0\+,/,/g' \
+     | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+       | sed -e "s#_x_#'#g;" > hg38.470way.scientificNames.nh
+
+    head hg38.470way.commonNames.nh | sed -e 's/^/# /;'
+# ((((((((((((((((human:0.005962,
+#                (pygmy_chimpanzee:0.001895,
+#                chimpanzee:0.001859):0.004087):0.002083,
+#               western_lowland_gorilla:0.00958):0.008775,
+#              Sumatran_orangutan:0.017185):0.002844,
+#             (silvery_gibbon:0.00707,
+#             northern_white_cheeked_gibbon:0.006838):0.013694):0.010338,
+#            ((((((Rhesus_monkey:0.001889,
+#                 Japanese_macaque:0.002063):0.001806,
+#                crab_eating_macaque:0.00211):0.001812,
+
+    tail hg38.470way.commonNames.nh | sed -e 's/^/# /;'
+#     (golden_ringtail_possum:0.017988,
+#     coppery_ringtail_possum:0.017013):0.023448):0.016208):0.028312):0.010708):0.01957,
+#    (Tasmanian_wolf:0.042212,
+#    (yellow_footed_antechinus:0.026702,
+#    Tasmanian_devil:0.027977):0.032656):0.070372):0.030736,
+#   (North_American_opossum:0.053914,
+#   (gray_short_tailed_opossum:0.055461,
+#   Agile_Gracile_Mouse_Opossum:0.042801):0.004824):0.079265):0.23872):0.526739,
+#  Australian_echidna:0.070786):0.029398,
+# platypus:0.029398);
+
+     # this tree is too large to make a convenient image
 
 #	Use this specification in the phyloGif tool:
 #	http://genome.ucsc.edu/cgi-bin/phyloGif
@@ -319,71 +309,56 @@ done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
        | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
           > hg38.470way.scientificNames.nh
     rm -f t.nh
-    cat hg38.470way.scientificNames.nh | sed -e 's/^/# /;'
-# ((((((((((((Homo_sapiens:0.00655,
-#            Pan_troglodytes:0.00684):0.00122,
-#           Pan_paniscus:0.00784):0.003,
-#          Gorilla_gorilla_gorilla:0.008964):0.009693,
-#         Pongo_pygmaeus_abelii:0.01894):0.003471,
-#        Nomascus_leucogenys:0.02227):0.01204,
-#       (((((Macaca_mulatta:0.003991,
-#           (Macaca_fascicularis:0.002991,
-#           Macaca_nemestrina:0.005):0.001):0.001,
-#          Cercocebus_atys:0.008):0.005,
-#         Papio_anubis:0.010042):0.01061,
-#        (Chlorocebus_sabaeus:0.027,
-#        Mandrillus_leucophaeus:0.03):0.002):0.003,
-#       ((Nasalis_larvatus:0.0007,
-#        Colobus_angolensis_palliatus:0.0008):0.0008,
-#       (Rhinopithecus_roxellana:0.0007,
-#       Rhinopithecus_bieti:0.0007):0.0008):0.018):0.02):0.02183,
-#      (((Callithrix_jacchus:0.03,
-#        Saimiri_boliviensis:0.01035):0.00865,
-#       Cebus_capucinus_imitator:0.04):0.006,
-#      Aotus_nancymaae:0.04):0.005):0.05209,
-#     Tarsius_syrichta:0.1114):0.02052,
-#    (((Microcebus_murinus:0.0556,
-#      Propithecus_coquereli:0.05):0.015,
-#     (Eulemur_macaco:0.01,
-#     Eulemur_flavifrons:0.01):0.015):0.015,
-#    Otolemur_garnettii:0.1194):0.02052):0.015494,
-#   Mus_musculus:0.356483):0.020593,
-#  Canis_lupus_familiaris:0.165928):0.023664,
-# Dasypus_novemcinctus:0.176526);
+    head hg38.470way.scientificNames.nh | sed -e 's/^/# /;'
+# ((((((((((((((((Homo_sapiens:0.005962,
+#                (Pan_paniscus:0.001895,
+#                Pan_troglodytes:0.001859):0.004087):0.002083,
+#               Gorilla_gorilla_gorilla:0.00958):0.008775,
+#              Pongo_abelii:0.017185):0.002844,
+#             (Hylobates_moloch:0.00707,
+#             Nomascus_leucogenys:0.006838):0.013694):0.010338,
+#            ((((((Macaca_mulatta:0.001889,
+#                 Macaca_fuscata:0.002063):0.001806,
+#                Macaca_fascicularis:0.00211):0.001812,
+
+    tail hg38.470way.scientificNames.nh | sed -e 's/^/# /;'
+#     (Pseudochirops_corinnae:0.017988,
+#     Pseudochirops_cupreus:0.017013):0.023448):0.016208):0.028312):0.010708):0.01957,
+#    (Thylacinus_cynocephalus:0.042212,
+#    (Antechinus_flavipes:0.026702,
+#    Sarcophilus_harrisii:0.027977):0.032656):0.070372):0.030736,
+#   (Didelphis_virginiana:0.053914,
+#   (Monodelphis_domestica:0.055461,
+#   Gracilinanus_agilis:0.042801):0.004824):0.079265):0.23872):0.526739,
+#  Tachyglossus_aculeatus:0.070786):0.029398,
+# Ornithorhynchus_anatinus:0.029398);
 
     /cluster/bin/phast/all_dists hg38.470way.nh | grep hg38 \
         | sed -e "s/hg38.//" | sort -k2n > 470way.distances.txt
     #	Use this output to create the table below
-    cat 470way.distances.txt | sed -e 's/^/# /;'
-# panTro5       0.013390
-# panPan2       0.015610
-# gorGor5       0.019734
-# ponAbe2       0.039403
-# nomLeu3       0.046204
-# nasLar1       0.075474
-# rhiBie1       0.075474
-# rhiRox1       0.075474
-# colAng1       0.075574
-# macFas5       0.079575
-# rheMac8       0.079575
-# papAnu3       0.079626
-# macNem1       0.081584
-# cerAty1       0.082584
-# saiBol1       0.087804
-# chlSab2       0.087974
-# manLeu1       0.090974
-# aotNan1       0.102804
-# calJac3       0.107454
-# cebCap1       0.108804
-# eulFla1       0.190934
-# eulMac1       0.190934
-# tarSyr2       0.221294
-# proCoq1       0.2470934
-# micMur3       0.236534
-# otoGar3       0.270334
-# canFam3       0.332429
-# dasNov3       0.366691
-# mm10  0.502391
+    head 470way.distances.txt | sed -e 's/^/# /;'
+# panTro6       0.011908
+# panPan3       0.011944
+# gorGor6       0.017625
+# ponAbe3       0.034005
+# HLnomLeu4     0.040196
+# HLhylMol2     0.040428
+# macNem1       0.066302
+# HLtheGel1     0.066537
+# HLmacFas6     0.066886
+# HLcerMon1     0.067960
+
+    tail 470way.distances.txt | sed -e 's/^/# /;'
+# HLpseCor1     0.811597
+# HLmacFul1     0.812234
+# HLnotEug3     0.815561
+# HLospRuf1     0.815802
+# HLpseOcc1     0.819866
+# macEug2       0.821901
+# HLantFla1     0.825093
+# HLsarHar2     0.826368
+# HLornAna3     1.011442
+# HLtacAcu1     1.023432
 
     printf '#!/usr/bin/env perl
 
@@ -746,7 +721,9 @@ runOne $(root1) {check out exists ../maf/$(root1).maf}
     rm multiz470way*.tab
 
 #######################################################################
-# GAP ANNOTATE MULTIZ470WAY MAF AND LOAD TABLES (DONE - 2017-11-03 - Hiram)
+# GAP ANNOTATE MULTIZ470WAY MAF AND LOAD TABLES (DONE - 2022-08-01 - Hiram)
+    # XXX the files received from Michael Hiller already had the iRows installed
+
     # mafAddIRows has to be run on single chromosome maf files, it does not
     #	function correctly when more than one reference sequence
     #	are in a single file.
@@ -838,14 +815,16 @@ mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/hg38/hg38.2bit {check out l
     rm multiz470way*.tab
 
 ##############################################################################
-# MULTIZ7WAY MAF FRAMES (DONE - 2017-11-03 - Hiram)
+# MULTIZ7WAY MAF FRAMES (DONE - 2022-08-26 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/hg38/bed/multiz470way/frames
     cd /hive/data/genomes/hg38/bed/multiz470way/frames
+    mkdir genes
+
 #   survey all the genomes to find out what kinds of gene tracks they have
 
     printf '#!/bin/csh -fe
-foreach db (`cat ../species.list`)
+foreach db (`grep -v HL ../species.list.txt`)
     echo -n "# ${db}: "
     set tables = `hgsql $db -N -e "show tables" | egrep "Gene|ncbiRefSeq"`
     foreach table ($tables)
@@ -861,60 +840,50 @@ end
 ' > showGenes.csh
 
     chmod +x ./showGenes.csh
-    time ./showGenes.csh
-# hg38: ensGene: 208239, knownGene: 196838, mgcGenes: 35312, ncbiRefSeq: 159322, refGene: 74391, xenoRefGene: 186565,
-# panTro5: refGene: 2901, xenoRefGene: 232448,
-# panPan2: ncbiRefSeq: 59356, refGene: 1470, xenoRefGene: 222742,
-# gorGor5: refGene: 444, xenoRefGene: 3150470,
-# ponAbe2: ensGene: 29447, refGene: 3572, xenoRefGene: 329566,
-# nomLeu3: xenoRefGene: 220286,
-# rheMac8: ensGene: 56743, refGene: 6481, xenoRefGene: 223255,
-# macFas5: refGene: 2164, xenoRefGene: 314695,
-# macNem1: refGene: 64, xenoRefGene: 316886,
-# cerAty1: refGene: 450, xenoRefGene: 492070,
-# papAnu3: ensGene: 31109, refGene: 513, xenoRefGene: 324140,
-# chlSab2: ensGene: 28078, xenoRefGene: 245054,
-# manLeu1: refGene: 3, xenoRefGene: 456179,
-# nasLar1: xenoRefGene: 360558,
-# colAng1: ncbiRefSeq: 47349, refGene: 3, xenoRefGene: 332184,
-# rhiRox1: xenoRefGene: 364268,
-# rhiBie1: xenoRefGene: 342566,
-# calJac3: ensGene: 55116, refGene: 228, xenoRefGene: 346395,
-# saiBol1: xenoRefGene: 506909,
-# cebCap1: refGene: 293, xenoRefGene: 457440,
-# aotNan1: refGene: 17, xenoRefGene: 471455,
-# tarSyr2: xenoRefGene: 349126,
-# micMur3: xenoRefGene: 224817,
-# proCoq1: xenoRefGene: 449845,
-# eulMac1: xenoRefGene: 427352,
-# eulFla1: xenoRefGene: 434365,
-# otoGar3: ensGene: 28565, xenoRefGene: 470891,
-# mm10: ensGene: 103734, knownGene: 63759, mgcGenes: 27612, ncbiRefSeq: 106520, refGene: 38421, xenoRefGene: 183274,
-# canFam3: ensGene: 39074, refGene: 2297, xenoRefGene: 268480,
-# dasNov3: ensGene: 37723, xenoRefGene: 500914,
+    ./showGenes.csh > gene.survey.txt 2>&1 &
+    # most of them have ncbiRefSeq
+    grep ncbiRefSeq
+    grep ncbiRefSeq gene.survey.txt | cut -d' ' -f2 \
+       | sed -e 's/://;' | sort | xargs echo
+aotNan1 balAcu1 bosTau9 canFam4 cavPor3 cebCap1 cerAty1 cerSim1 chiLan1 chlSab2 chrAsi1 colAng1 conCri1 dasNov3 dipOrd2 echTel2 eleEdw1 enhLutKen1 eptFus1 equCab3 equPrz1 eriEur2 felCat9 gorGor6 hetGla2 hg38 jacJac1 lepWed1 lipVex1 macNem1 manLeu1 mesAur1 micMur3 micOch1 mm10 mm39 myoBra1 myoDav1 myoLuc2 nanGal1 neoSch1 ochPri3 octDeg1 odoRosDiv1 orcOrc1 oryAfe1 oryCun2 otoGar3 panPan3 panTig1 panTro6 ponAbe3 proCoq1 pteAle1 rheMac10 rhiBie1 rn6 saiBol1 sorAra2 speTri2 susScr11 tarSyr2 triMan1 tupChi1 ursMar1
+    # of the remaining, a few have ensGene:
+    grep -v ncbiRefSeq gene.survey.txt | grep ensGene | cut -d' ' -f2 \
+       | sed -e 's/://;' | sort | xargs echo
+bisBis1 canFam5 cavApe1 monDom5 tupBel1
+    # and finally xenoRefGene
+    grep -v ncbiRefSeq gene.survey.txt | grep -v ensGene | grep xenoRefGene \
+      | cut -d' ' -f2 | sed -e 's/://;' | sort | xargs echo
+enhLutNer1 eulFla1 eulMac1 macEug2 manPen1 nasLar1 turTru2 vicPac2
 
-# real    0m1.505s
-
-    # from that summary, use these gene sets:
-    # knownGene - hg38 mm10
-    # ensGene - ponAbe2 rheMac8 papAnu3 chlSab2 calJac3 otoGar3 canFam3 dasNov3
-    # xenoRefGene -  panTro5 panPan2 gorGor5 nomLeu3 macFas5 macNem1 cerAty1 manLeu1 nasLar1 colAng1 rhiRox1 rhiBie1 saiBol1 cebCap1 aotNan1 tarSyr2 micMur3 proCoq1 eulMac1 eulFla1
-
-    mkdir genes
-
-    #   1. knownGene: hg38 mm10
-    for DB in hg38 mm10
+    #   1. ncbiRefSeq
+    for DB in aotNan1 balAcu1 bosTau9 canFam4 cavPor3 cebCap1 cerAty1 cerSim1 chiLan1 chlSab2 chrAsi1 colAng1 conCri1 dasNov3 dipOrd2 echTel2 eleEdw1 enhLutKen1 eptFus1 equCab3 equPrz1 eriEur2 felCat9 gorGor6 hetGla2 hg38 jacJac1 lepWed1 lipVex1 macNem1 manLeu1 mesAur1 micMur3 micOch1 mm10 mm39 myoBra1 myoDav1 myoLuc2 nanGal1 neoSch1 ochPri3 octDeg1 odoRosDiv1 orcOrc1 oryAfe1 oryCun2 otoGar3 panPan3 panTig1 panTro6 ponAbe3 proCoq1 pteAle1 rheMac10 rhiBie1 rn6 saiBol1 sorAra2 speTri2 susScr11 tarSyr2 triMan1 tupChi1 ursMar1
 do
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > genes/${DB}.gp.gz
-    genePredCheck -db=${DB} genes/${DB}.gp.gz 2>&1 | sed -e 's/^/    # /;'
+    echo -n "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-    # checked: 21554 failed: 0
-    # checked: 21100 failed: 0
+# aotNan1: checked: 20395 failed: 0
+# balAcu1: checked: 18776 failed: 0
+# bosTau9: checked: 21001 failed: 0
+# canFam4: checked: 21143 failed: 0
+# cavPor3: checked: 19940 failed: 0
+# cebCap1: checked: 21482 failed: 0
+# cerAty1: checked: 20534 failed: 0
+...
+# rn6: checked: 22857 failed: 0
+# saiBol1: checked: 19670 failed: 0
+# sorAra2: checked: 19160 failed: 0
+# speTri2: checked: 19892 failed: 0
+# susScr11: checked: 20624 failed: 0
+# tarSyr2: checked: 19968 failed: 0
+# triMan1: checked: 19066 failed: 0
+# tupChi1: checked: 21047 failed: 0
+# ursMar1: checked: 19344 failed: 0
 
-    #   2. ensGene: ponAbe2 rheMac8 papAnu3 chlSab2 calJac3 otoGar3 canFam3 dasNov3
-    for DB in ponAbe2 rheMac8 papAnu3 chlSab2 calJac3 otoGar3 canFam3 dasNov3
+    #   2. ensGene
+    for DB in bisBis1 canFam5 cavApe1 monDom5 tupBel1
 do
 hgsql -N -e "select
 name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
@@ -925,18 +894,15 @@ from ensGene" ${DB} \
     echo -n "# ${DB}: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# ponAbe2: checked: 20220 failed: 0
-# rheMac8: checked: 20859 failed: 0
-# papAnu3: checked: 19113 failed: 0
-# chlSab2: checked: 19080 failed: 0
-# calJac3: checked: 20827 failed: 0
-# otoGar3: checked: 19472 failed: 0
-# canFam3: checked: 19507 failed: 0
-# dasNov3: checked: 22586 failed: 0
+# bisBis1: checked: 20102 failed: 0
+# canFam5: checked: 20102 failed: 0
+# cavApe1: checked: 14182 failed: 0
+# monDom5: checked: 21033 failed: 0
+# tupBel1: checked: 29256 failed: 0
 
-    #   3. xenoRefGene for panTro5 panPan2 gorGor5 nomLeu3 macFas5 macNem1 cerAty1 manLeu1 nasLar1 colAng1 rhiRox1 rhiBie1 saiBol1 cebCap1 aotNan1 tarSyr2 micMur3 proCoq1 eulMac1 eulFla1
+    #   3. xenoRefGene
 
-    for DB in panTro5 panPan2 gorGor5 nomLeu3 macFas5 macNem1 cerAty1 manLeu1 nasLar1 colAng1 rhiRox1 rhiBie1 saiBol1 cebCap1 aotNan1 tarSyr2 micMur3 proCoq1 eulMac1 eulFla1
+    for DB in enhLutNer1 eulFla1 eulMac1 macEug2 manPen1 nasLar1 turTru2 vicPac2
 do
     hgsql -N -e "select
 name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
@@ -947,64 +913,80 @@ from xenoRefGene" ${DB} \
     echo -n "# ${DB}: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# panTro5: checked: 21593 failed: 0
-# panPan2: checked: 20031 failed: 0
-# gorGor5: checked: 24721 failed: 0
-# nomLeu3: checked: 20028 failed: 0
-# macFas5: checked: 24291 failed: 0
-# macNem1: checked: 24281 failed: 0
-# cerAty1: checked: 27975 failed: 0
-# manLeu1: checked: 27196 failed: 0
-# nasLar1: checked: 29765 failed: 0
-# colAng1: checked: 24558 failed: 0
-# rhiRox1: checked: 26354 failed: 0
-# rhiBie1: checked: 269470 failed: 0
-# saiBol1: checked: 26867 failed: 0
-# cebCap1: checked: 29673 failed: 0
-# aotNan1: checked: 470988 failed: 0
-# tarSyr2: checked: 29235 failed: 0
-# micMur3: checked: 20083 failed: 0
-# proCoq1: checked: 25577 failed: 0
-# eulMac1: checked: 26918 failed: 0
-# eulFla1: checked: 27223 failed: 0
-
+# enhLutNer1: checked: 23677 failed: 0
+# eulFla1: checked: 27321 failed: 0
+# eulMac1: checked: 27021 failed: 0
+# macEug2: checked: 44827 failed: 0
+# manPen1: checked: 30879 failed: 0
+# nasLar1: checked: 29627 failed: 0
+# turTru2: checked: 36500 failed: 0
+# vicPac2: checked: 22733 failed: 0
+-
     # verify counts for genes are reasonable:
     for T in genes/*.gz
 do
     echo -n "# $T: "
     zcat $T | cut -f1 | sort | uniq -c | wc -l
 done
-# genes/aotNan1.gp.gz: 26592
-# genes/calJac3.gp.gz: 20827
-# genes/canFam3.gp.gz: 19507
-# genes/cebCap1.gp.gz: 25680
-# genes/cerAty1.gp.gz: 24658
-# genes/chlSab2.gp.gz: 19080
-# genes/colAng1.gp.gz: 22290
-# genes/dasNov3.gp.gz: 22586
-# genes/eulFla1.gp.gz: 24120
-# genes/eulMac1.gp.gz: 23994
-# genes/gorGor5.gp.gz: 22552
-# genes/hg38.gp.gz: 21554
-# genes/macFas5.gp.gz: 22206
-# genes/macNem1.gp.gz: 22243
-# genes/manLeu1.gp.gz: 24280
-# genes/micMur3.gp.gz: 19472
-# genes/mm10.gp.gz: 21100
-# genes/nasLar1.gp.gz: 25793
-# genes/nomLeu3.gp.gz: 19509
-# genes/otoGar3.gp.gz: 19472
-# genes/panPan2.gp.gz: 19596
-# genes/panTro5.gp.gz: 20327
-# genes/papAnu3.gp.gz: 19113
-# genes/ponAbe2.gp.gz: 20220
-# genes/proCoq1.gp.gz: 23134
-# genes/rheMac8.gp.gz: 20859
-# genes/rhiBie1.gp.gz: 23979
-# genes/rhiRox1.gp.gz: 23570
-# genes/saiBol1.gp.gz: 23863
-# genes/tarSyr2.gp.gz: 25017
+...
+# genes/susScr11.gp.gz: 20623
+# genes/tarSyr2.gp.gz: 19968
+# genes/triMan1.gp.gz: 19066
+# genes/tupBel1.gp.gz: 15407
+# genes/tupChi1.gp.gz: 21047
+# genes/turTru2.gp.gz: 29711
+# genes/ursMar1.gp.gz: 19344
+# genes/vicPac2.gp.gz: 21475
 
+# And, can pick up ncbiRefSeq for GCF equivalent assemblies for those
+# outside the UCSC database set of genomes
+# Turns out this doesn't work since the HL* assemblies, even though claimed
+# to be equivalent to a GCF assembly, does not have the same sequence names
+# as the GCF assembly here.
+
+grep -h GCF ../nameLists/listOfAss*.tsv | grep ^HL \
+  | awk '{print $1,$3}' | while read dbGCF
+do
+  asmName=`echo $dbGCF | awk '{print $1}'`
+  GCF=`echo $dbGCF | awk '{print $2}'`
+  GCx="${GCF:0:3}"
+  d0="${GCF:4:3}"
+  d1="${GCF:7:3}"
+  d2="${GCF:10:3}"
+  C=`ls -d /hive/data/genomes/asmHubs/refseqBuild/$GCx/$d0/$d1/$d2/${GCF}_* | wc -l`
+  if [ "${C}" -eq 1 ]; then
+     buildDir=`ls -d /hive/data/genomes/asmHubs/refseqBuild/$GCx/$d0/$d1/$d2/${GCF}_*`
+  else
+     printf "NG %s\n" "${GCF}"
+     ls -d /hive/data/genomes/asmHubs/refseqBuild/$GCx/$d0/$d1/$d2/${GCF}_*
+  fi
+  B=`basename $buildDir`
+  ncbiRefSeqGp="${buildDir}/trackData/ncbiRefSeq/process/${B}.ncbiRefSeq.gp"
+  sizes="${buildDir}/${B}.chrom.sizes"
+  if [ -s "${ncbiRefSeqGp}" ]; then
+    genePredSingleCover "${ncbiRefSeqGp}" stdout | gzip -c > genes/${asmName}.gp.gz
+    printf "# %s: " "${asmName}"
+    genePredCheck -chromSizes="${sizes}" genes/${asmName}.gp.gz
+  else
+    printf "MISSING: ${ncbiRefSeqGp}\n" 1>&2
+  fi
+  
+done 
+
+# HLcalAnn5: checked: 14661 failed: 0
+# HLcalPug1: checked: 16472 failed: 0
+# HLcenUro1: checked: 14662 failed: 0
+# HLcorKub1: checked: 15422 failed: 0
+# HLfalNau1: checked: 16037 failed: 0
+# HLlagLeu1: checked: 15959 failed: 0
+# HLonyTac1: checked: 15692 failed: 0
+# HLparMaj1: checked: 15207 failed: 0
+# HLpyrRuf1: checked: 15981 failed: 0
+# HLtytAlb3: checked: 16193 failed: 0
+# HLaciJub2: checked: 19459 failed: 0
+# HLbalMus2: checked: 19616 failed: 0
+# HLchoDid2: checked: 23472 failed: 0
+# HLmarMar1: checked: 20897 failed: 0
 
     # kluster job to annotate each maf file
     screen -S hg38      # manage long running procedure with screen
@@ -1016,13 +998,13 @@ done
 set C = $1
 set G = $2
 
-cat ../maf/${C}.maf | genePredToMafFrames hg38 stdin stdout \
+cat ../perChrom/${C}.maf | genePredToMafFrames hg38 stdin stdout \
         ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
 ' > runOne
 
     chmod +x runOne
 
-    ls ../maf | sed -e "s/.maf//" > chr.list
+    ls ../perChrom | sed -e "s/.maf//" > chr.list
     ls genes | sed -e "s/.gp.gz//" > gene.list
 
     printf '#LOOP
@@ -1034,12 +1016,13 @@ runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz
     gensub2 chr.list gene.list template jobList
     para -ram=64g create jobList
     para try ... check ... push
-# Completed: 10740 of 10740 jobs
-# CPU time in finished jobs:      39407s     656.78m    10.95h    0.46d  0.001 y
-# IO & Wait Time:                 27424s     457.07m     7.62h    0.32d  0.001 y
-# Average job time:                   6s       0.10m     0.00h    0.00d
-# Longest finished job:             360s       6.00m     0.10h    0.00d
-# Submission to last job:           881s      14.68m     0.24h    0.01d
+# Completed: 45908 of 45908 jobs
+# CPU time in finished jobs:    6565924s  109432.07m  1823.87h   75.99d  0.208 y
+# IO & Wait Time:               1499216s   24986.93m   416.45h   17.35d  0.048 y
+# Average job time:                 176s       2.93m     0.05h    0.00d
+# Longest finished job:           12729s     212.15m     3.54h    0.15d
+# Submission to last job:        152183s    2536.38m    42.27h    1.76d
+
 
     # collect all results into one file:
     cd /hive/data/genomes/hg38/bed/multiz470way/frames
@@ -1048,118 +1031,125 @@ do
     echo "${F}" 1>&2
     zcat ${F}
 done | sort -k1,1 -k2,2n > multiz470wayFrames.bed
-    # real    2m4.953s
+    # real    6m6.130s
 
-    # -rw-rw-r-- 1 468491708 Nov  3 10:470 multiz470wayFrames.bed
+    # -rw-rw-r-- 1 1690933130 Aug 26 08:18 multiz470wayFrames.bed
+
+    bedToBigBed -type=bed3+7 -as=$HOME/kent/src/hg/lib/mafFrames.as \
+      -tab multiz470wayFrames.bedz ../../../chrom.sizes multiz470wayFrames.bb
+    bigBedInfo multiz470wayFrames.bb | sed -e 's/^/#    /;'
+#    version: 4
+#    fieldCount: 11
+#    hasHeaderExtension: yes
+#    isCompressed: yes
+#    isSwapped: 0
+#    extraIndexCount: 0
+#    itemCount: 25,276,150
+#    primaryDataSize: 215,184,987
+#    primaryIndexSize: 1,595,876
+#    zoomLevels: 10
+#    chromCount: 450
+#    basesCovered: 87,979,395
+#    meanDepth (of bases covered): 33.307628
+#    minDepth: 1.000000
+#    maxDepth: 78.000000
+#    std of depth: 33.148581
 
     gzip multiz470wayFrames.bed
 
-    # verify there are frames on everything, should be 46 species:
-    # (count from: ls genes | wc)
+    # verify there are frames on everything expected.  Since the
+    #  frames on the HL* asemblies did not work due to sequence name
+    #  differences, this won't be everything.
+    # (ls genes | wc shows 92 'expected')
     zcat multiz470wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
         | sed -e 's/^/# /;' > species.check.list
     wc -l species.check.list
-    # 470
+    # 78
+    # only 78 became annotated
 
-#  256062 aotNan1
-#  246852 calJac3
-#  274139 canFam3
-#  251294 cebCap1
-#  258355 cerAty1
-#  214185 chlSab2
-#  244719 colAng1
-#  264484 dasNov3
-#  210815 eulFla1
-#  213386 eulMac1
-#  287686 gorGor5
-#  209184 hg38
-#  253170 macFas5
-#  257891 macNem1
-#  248164 manLeu1
-#  215472 micMur3
-#  260934 mm10
-#  187651 nasLar1
-#  2470776 nomLeu3
-#  249009 otoGar3
-#  223118 panPan2
-#  223812 panTro5
-#  193979 papAnu3
-#  200343 ponAbe2
-#  210398 proCoq1
-#  228189 rheMac8
-#  239047 rhiBie1
-#  223257 rhiRox1
-#  248138 saiBol1
-#  222251 tarSyr2
+#  289293 aotNan1
+#  358199 balAcu1
+#  295653 bisBis1
+#  386561 bosTau9
+#  398384 canFam4
+#     ...
+#  313412 tupBel1
+#  336028 tupChi1
+#  323796 turTru2
+#  379790 ursMar1
+#  306666 vicPac2
 
-    #   load the resulting file
+    #   load the resulting file, merely for measurement purposes here
     ssh hgwdev
     cd /hive/data/genomes/hg38/bed/multiz470way/frames
     time hgLoadMafFrames hg38 multiz470wayFrames multiz470wayFrames.bed.gz
     #   real    1m13.122s
 
     hgsql -e 'select count(*) from multiz470wayFrames;' hg38
-    # +----------+
-    # | count(*) |
-    # +----------+
-    # |  7046760 |
-    # +----------+
+    #  +----------+
+    #  | count(*) |
+    #  +----------+
+    #  | 25276150 |
+    #  +----------+
 
     time featureBits -countGaps hg38 multiz470wayFrames
-    # 55160112 bases of 3209286105 (1.719%) in intersection
-    # real    0m44.816s
+    # 87979395 bases of 3272116950 (2.689%) in intersection
+    # real    2m42.946s
 
     #   enable the trackDb entries:
-# frames multiz470wayFrames
+# frames https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470wayFrames.bb
 # irows on
     #   zoom to base level in an exon to see codon displays
     #	appears to work OK
 
+    # do not need this loaded table:
+    hgsql hg38 -e 'drop table multiz470wayFrames;'
+
 #########################################################################
-# Phylogenetic tree from 470-way (DONE - 2013-09-13 - Hiram)
+# Phylogenetic tree from 470-way (DONE - 2022-08-26 - Hiram)
     mkdir /hive/data/genomes/hg38/bed/multiz470way/4d
     cd /hive/data/genomes/hg38/bed/multiz470way/4d
 
     # the annotated maf's are in:
-    ../anno/result/*.maf
+    ../perChrom/*.maf
 
-    # using knownGene for hg38, only transcribed genes and nothing
+    # using ncbiRefSeq for hg38, only transcribed genes and nothing
     #	from the randoms and other misc.
-    hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene where cdsEnd > cdsStart;" hg38 \
-      | egrep -E -v "chrM|chrUn|random|_alt" > knownGene.gp
+    hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq where cdsEnd > cdsStart;" hg38 \
+      | egrep -E -v "chrM|chrUn|random|_alt|_fix" > ncbiRefSeq.gp
     wc -l *.gp
-    #     95199 knownGene.gp
+    #     129657 ncbiRefSeq.gp
 
     # verify it is only on the chroms:
-    cut -f2 knownGene.gp | sort | uniq -c | sort -rn | sed -e 's/^/    # /;'
-    #    7956 chr1
-    #    74706 chr19
-    #    6554 chr17
-    #    6371 chr11
-    #    64701 chr2
-    #    5794 chr12
-    #    5688 chr3
-    #    4971 chr16
-    #    4324 chr7
-    #    4277 chr6
-    #    4108 chr5
-    #    3751 chr14
-    #    3622 chr4
-    #    3580 chr8
-    #    3364 chr15
-    #    47076 chrX
-    #    2968 chr10
-    #    2961 chr9
-    #    2107 chr22
-    #    2091 chr20
-    #    1703 chr18
-    #    1175 chr13
-    #     935 chr21
-    #     216 chrY
+    cut -f2 ncbiRefSeq.gp | sort | uniq -c | sort -rn | sed -e 's/^/    # /;'
+    #   12777 chr1
+    #    9451 chr2
+    #    8323 chr3
+    #    7604 chr19
+    #    7493 chr11
+    #    7131 chr17
+    #    6948 chr12
+    #    6161 chr6
+    #    6080 chr10
+    #    5857 chr7
+    #    5527 chr5
+    #    5495 chr9
+    #    5384 chr4
+    #    5294 chr16
+    #    4651 chr8
+    #    4346 chr15
+    #    4323 chrX
+    #    3999 chr14
+    #    3178 chr20
+    #    2773 chr22
+    #    2526 chr18
+    #    2508 chr13
+    #    1456 chr21
+    #     372 chrY
 
-    genePredSingleCover knownGene.gp stdout | sort > knownGeneNR.gp
-    wc -l knownGeneNR.gp
-    #	194706 knownGeneNR.gp
+    genePredSingleCover ncbiRefSeq.gp stdout | sort > ncbiRefSeqNR.gp
+    wc -l ncbiRefSeqNR.gp
+    #	19524 ncbiRefSeqNR.gp
 
     ssh ku
     mkdir /hive/data/genomes/hg38/bed/multiz470way/4d/run
@@ -1170,15 +1160,15 @@ done | sort -k1,1 -k2,2n > multiz470wayFrames.bed
     # the sed of the gp file inserts the reference species in the chr name
     cat << '_EOF_' > 4d.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin
 set r = "/hive/data/genomes/hg38/bed/multiz470way"
 set c = $1
-set infile = $r/anno/result/$2
+set infile = $r/perChrom/$2
 set outfile = $3
 cd /dev/shm
 # 'clean' maf, removes all chrom names, leaves only the db name
 perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
-awk -v C=$c '$2 == C {print}' $r/4d/knownGeneNR.gp | sed -e "s/\t$c\t/\thg38.$c\t/" > $c.gp
+awk -v C=$c '$2 == C {print}' $r/4d/ncbiRefSeqNR.gp | sed -e "s/\t$c\t/\thg38.$c\t/" > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
     $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
@@ -1191,9 +1181,9 @@ rm -f $c.gp $c.maf $c.ss
     # << happy emacs
     chmod +x 4d.csh
 
-    ls -1S /hive/data/genomes/hg38/bed/multiz470way/anno/result/*.maf \
-	| sed -e "s#.*multiz470way/anno/result/##" \
-        | egrep -E -v "chrM|chrUn|random|_alt" > maf.list
+    ls -1S /hive/data/genomes/hg38/bed/multiz470way/perChrom/*.maf \
+	| sed -e "s#.*multiz470way/perChrom/##" \
+        | egrep -E -v "chrM|chrUn|random|_alt|_fix" > maf.list
 
     printf '#LOOP
 4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
@@ -1201,7 +1191,7 @@ rm -f $c.gp $c.maf $c.ss
 ' > template
 
     gensub2 maf.list single template jobList
-    para -ram=64g create jobList
+    para -ram=128g create jobList
     para try ... check ... push ... etc...
     para time
 # Completed: 24 of 24 jobs
@@ -1216,28 +1206,30 @@ rm -f $c.gp $c.maf $c.ss
     cd /hive/data/genomes/hg38/bed/multiz470way/4d
     # verify no tiny files:
     ls -og mfa | sort -k3nr | tail -2
-    #  -rw-rw-r-- 1  235884 Nov  3 11:25 chrY.mfa
+    #  -rw-rw-r-- 1   386695 Aug 25 17:58 chrY.mfa
 
     #want comma-less species.list
-    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin/msa_view \
-	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
+    time /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin/msa_view \
+	--aggregate "`cat ../species.list.txt`" mfa/*.mfa | sed s/"> "/">"/ \
 	    > 4d.all.mfa
-    # real    0m3.182s
+    # real    0m11.829s
+
 
     # check they are all in there:
     grep "^>" 4d.all.mfa | wc -l
     #   470
 
     sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
-        hg38.470way.nh
+        ../hg38.470way.nh
 
     sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
 	../hg38.470way.nh > tree-commas.nh
 
     # use phyloFit to create tree model (output is phyloFit.mod)
-    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin/phyloFit \
+    time /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree-commas.nh 4d.all.mfa
+XXX - running Fri Aug 26 07:39:53 PDT 2022
     #   real    8m6.444s
 
     mv phyloFit.mod all.mod
@@ -1650,7 +1642,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     printf '#!/bin/csh -ef
 set c = $1
-set MAF = /hive/data/genomes/hg38/bed/multiz470way/anno/result/$c.maf
+set MAF = /hive/data/genomes/hg38/bed/multiz470way/perChrom/$c.maf
 set WINDOWS = /hive/data/genomes/hg38/bed/multiz470way/consPhyloP/ss/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
@@ -1667,7 +1659,7 @@ rm -fr $WINDOWS
 mkdir -p $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin/msa_split \
+/cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin/msa_split \
     $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
@@ -1678,11 +1670,11 @@ rm -f $2.running
     chmod +x doSplit.csh
 
     #	do the easy ones first to see some immediate results
-    ls -1S -r ../../anno/result | sed -e "s/.maf//;" > maf.list
+    ls -1SL -r ../../perChrom | sed -e "s/.maf//;" > maf.list
 
     # this needs a {check out line+ $(root1.done)} test for verification:
     printf '#LOOP
-./doSplit.csh $(root1) $(root1).done
+./doSplit.csh $(root1) {check out line+ $(root1).done}
 #ENDLOOP
 ' > template
 
@@ -1691,12 +1683,16 @@ rm -f $2.running
     para -ram=64g create jobList
     para try ... check ... push ... etc...
 
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:      13512s     225.20m     3.75h    0.16d  0.000 y
-# IO & Wait Time:                  1646s      27.43m     0.46h    0.02d  0.000 y
-# Average job time:                  42s       0.71m     0.01h    0.00d
-# Longest finished job:            1494s      24.90m     0.41h    0.02d
-# Submission to last job:          1717s      28.62m     0.48h    0.02d
+# Completed: 475 of 499 jobs
+# Crashed: 24 jobs
+# CPU time in finished jobs:       6410s     106.83m     1.78h    0.07d  0.000 y
+# IO & Wait Time:                 28903s     481.72m     8.03h    0.33d  0.001 y
+# Average job time:                  74s       1.24m     0.02h    0.00d
+# Longest finished job:            1018s      16.97m     0.28h    0.01d
+# Submission to last job:         12627s     210.45m     3.51h    0.15d
+
+    # finished those crashed 24 jobs manually, they took hundreds of Gb
+    # of memory and all day to finish
 
     # run phyloP with score=LRT
     ssh ku
@@ -1708,18 +1704,18 @@ rm -f $2.running
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACK ../../4d/all.mod
-    #   BACKGROUND: 0.207173 0.3284701 0.237184 0.227343
+    #   BACKGROUND: 0.226533 0.344573 0.178804 0.250090 
 
     grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.565
-    /cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin/modFreqs \
-	../../4d/all.mod 0.565 > all.mod
+    #	0.523
+    /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin/modFreqs \
+	../../4d/all.mod 0.523 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.217500 0.282500 0.282500 0.217500
+    #   BACKGROUND: 0.238500 0.261500 0.261500 0.238500 
 
     printf '#!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin
 set f = $1
 set ssFile = $1:t
 set out = $2
@@ -1753,7 +1749,7 @@ sleep 4
     find ../ss -type f | sed -e "s/.ss$//; s#../ss/##;" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	34708 ss.list
+    #	3468 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -1766,16 +1762,15 @@ sleep 4
     # setup run for all species
     mkdir /hive/data/genomes/hg38/bed/multiz470way/consPhyloP/all
     cd /hive/data/genomes/hg38/bed/multiz470way/consPhyloP/all
-    rm -fr wigFix
     mkdir wigFix
 
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
     # beware overloading the cluster with these quick and high I/O jobs
-    para -ram=32g create jobList
+    para -ram=16g create jobList
     para try ... check ...
     para -maxJob=16 push
     para time > run.time
-
+XXX some of the jobs fail with an error in phyloP
 # Completed: 34708 of 34708 jobs
 # CPU time in finished jobs:     647954s   10799.23m   179.99h    7.50d  0.021 y
 # IO & Wait Time:                 22374s     372.90m     6.22h    0.26d  0.001 y
@@ -1794,94 +1789,94 @@ done
     #   real    48m50.219s
 
     du -hsc downloads
-    #   4.6G    downloads
+    #   5.8G    downloads
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/*.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/hg38/chrom.sizes \
 	phyloP470way.bw) > bigWig.log 2>&1
 
-
     egrep "real|VmPeak" bigWig.log
     # pid=66292: VmPeak:    33751268 kB
     #  real    43m40.194s
 
-
-    bigWigInfo phyloP470way.bw  | sed -e 's/^/# /;'
+    bigWigInfo phyloP470way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 6,4704,076,591
-# primaryIndexSize: 93,404,704
+# primaryDataSize: 8,691,460,678
+# primaryIndexSize: 135,762,716
 # zoomLevels: 10
-# chromCount: 355
-# basesCovered: 2,955,660,581
-# mean: 0.097833
+# chromCount: 466
+# basesCovered: 2,828,476,393
+# mean: -0.004698
 # min: -20.000000
-# max: 1.312000
-# std: 0.727453
+# max: 11.936000
+# std: 1.758256
+
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phyloP470way.wig phyloP470way.wib)
+XXX - running - Mon Aug 29 15:28:59 PDT 2022
+# Converted stdin, upper limit 11.94, lower limit -20.00
+# real    8m32.643s
 
-# Converted stdin, upper limit 1.31, lower limit -20.00
-# real    17m36.880s
-# -rw-rw-r--   1 2955660581 Nov  6 14:10 phyloP470way.wib
-# -rw-rw-r--   1  4704274846 Nov  6 14:10 phyloP470way.wig
+# -rw-rw-r--   1  2828476393 Aug 29 15:37 phyloP470way.wib
+# -rw-rw-r--   1   446336215 Aug 29 15:37 phyloP470way.wig
 
     du -hsc *.wi?
-    # 2.8G    phyloP470way.wib
-    # 291M    phyloP470way.wig
+    # 2.7G    phyloP470way.wib
+    # 426M    phyloP470way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP470way.wib /gbdb/hg38/multiz470way/phyloP470way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz470way hg38 \
 	phyloP470way phyloP470way.wig
-    # real    0m470.538s
+    # real    0m51.154s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh hg38 phyloP470way
 # db.table          min   max     mean       count     sumData
-# hg38.phyloP470way  -20 1.312 0.0978331 2955660581 2.89162e+08
+# hg38.phyloP470way -20 11.936 -0.00469849 2828476393 -1.32896e+07
+#      1.75826 viewLimits=-8.79598:8.78658
 #       stdDev viewLimits
-#     0.727453 viewLimits=-3.53943:1.312
 
-    #	that range is: 20+1.312= 21.312 for hBinSize=0.021312
+    #	that range is: 20+11.936= 31.936 for hBinSize=0.031936
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.021312 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
+	-hBinSize=0.031936 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
 	    -db=hg38 phyloP470way > histogram.data 2>&1
-    #   real    2m43.313s
+    #   real    1m31.526s
 
     # xaxis range:
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
 	| sed -e 's/^/# /;'
-# Q1 -10.9547050
-# median -6.861155
-# Q3 -2.769245
-# average -6.875971
+# Q1 -9.157730
+# median -2.115840
+# Q3 4.894110
+# average -2.132855
 # min -20.000000
-# max 1.312000
-# count 768
-# total -5280.745380
-# standard deviation 4.757034
+# max 11.936000
+# count 883
+# total -1883.311115
+# standard deviation 8.140902
 
     # find out the range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
       | sed -e 's/^/# /;'
-# Q1 0.000000
-# median 0.000001
-# Q3 0.000140
-# average 0.0014702
+# Q1 0.000014
+# median 0.000064
+# Q3 0.000437
+# average 0.001133
 # min 0.000000
-# max 0.023556
-# count 768
-# total 0.999975
-# standard deviation 0.003490
+# max 0.020000
+# count 883
+# total 1.000052
+# standard deviation 0.003053
 
     #	create plot of histogram:
     printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
@@ -2559,29 +2554,35 @@ XXX - working - Tue Oct 26 12:43:42 PDT 2021
 # standard deviation 0.003490
 
     #	create plot of histogram:
-    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
-
-    printf 'set terminal pngcairo size 900,400 background "#000000" \\
-font "/usr/share/fonts/default/Type1/n022004l.pfb"
-set size 1.4, 0.8
-set key left box
+    # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
+    printf 'set terminal pngcairo size 1200,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "hg38.phyloP470.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
 set grid noxtics
-set grid ytics
-set title " Human hg38 Histogram phyloPSSREV470way track"
-set xlabel " phyloPSSREV470way score"
-set ylabel " Relative Frequency"
-set y2label " Cumulative Relative Frequency (CRF)"
-set y2range [0:1]
-set y2tics
-set xrange [-5:1.5]
+set grid ytics ls 4
+set y2tics border nomirror out tc rgb "#ffffff"
+set ytics border nomirror out tc rgb "#ffffff"
+set title " human/hg38 Histogram phyloP470way track" tc rgb "#ffffff"
+set xlabel " hg38.phyloP470way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set xrange [-4:2.5]
 set yrange [0:0.04]
+set y2range [0:1]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
-' | gnuplot > histo.png
+plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
 
     # verify it looks sane
-    display histo.png &
+    display hg38phyloP470.histo.png &
 
 #############################################################################
 # sequence logo

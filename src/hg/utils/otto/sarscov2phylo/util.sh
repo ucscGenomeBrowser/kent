@@ -43,7 +43,7 @@ cleanGenbank () {
     | sed -re 's@, complete sequence@@;' \
     | sed -re 's@humans, [A-Za-z]+,( [0-9]+ Years old)?( Adult)?/@@' \
     | sed -re 's@hCo[vV]-19/@@;' \
-    | sed -re 's@SARS?-CoV-?2/([Hh]umai?ns?|[Hh]o[mw]o ?sapiens?)/@@;' \
+    | sed -re 's@SARS?-CoV-?2/([Hh]umai?ns?|[Hh]o[mw]o ?sapiens?)[^/]*/@@;' \
     | sed -re 's@SARS-CoV-2/HUMAN/@@;' \
     | sed -re 's@SARS-CoV-2/([Ee]nvironment|ENV)/@env/@;' \
     | sed -re 's@SARS-CoV-2/Canis lupus familiaris/@dog/@;' \

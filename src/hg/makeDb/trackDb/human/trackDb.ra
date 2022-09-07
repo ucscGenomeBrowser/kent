@@ -4356,17 +4356,17 @@ shortCircuit 1
 semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10
-release beta,public
+#release beta,public
 
-searchName omimGene2AccBb
-searchTable omimGene2bb
-searchMethod exact
-searchType bigBed
-shortCircuit 1
-semiShortCircuit 1
-termRegex ([0-9]{6})
-searchPriority 10
-release alpha
+#searchName omimGene2AccBb
+#searchTable omimGene2bb
+#searchMethod exact
+#searchType bigBed
+#shortCircuit 1
+#semiShortCircuit 1
+#termRegex ([0-9]{6})
+#searchPriority 10
+#release alpha
 
 searchName omimGeneLocAcc
 searchTable omimLocation
@@ -5617,15 +5617,19 @@ itemRgb on
 
 track hgnc
 shortLabel HGNC
-longLabel HGNC
+longLabel HUGO Gene Nomenclature 
 bigDataUrl /gbdb/$D/hgnc/hgnc.bb
 type bigBed 9 +
-labelFields symbol, geneName, name, uniprot_ids, ensembl_gene_id, ucsc_id, refseq_accession, alias_symbol, prev_symbol
+labelFields symbol, geneName, name, uniprot_ids, ensembl_gene_id, ucsc_id, refseq_accession
 defaultLabelFields symbol
+mouseOver Symbol:$symbol; $name, Alias symbol: $alias_symbol; Previous symbols:$prev_symbol
 filterValues.locus_type RNA Y,RNA cluster,RNA long non-coding,RNA micro,RNA misc,RNA ribosomal,RNA small nuclear,RNA small nucleolar,RNA transfer,RNA vault,T cell receptor gene,T cell receptor pseudogene,complex locus constituent,endogenous retrovirus,fragile site,gene with protein product,immunoglobulin gene,immunoglobulin pseudogene,locus_type,protocadherin,pseudogene,readthrough,region,unknown,virus integration site,
 group genes
 searchIndex name
 searchTrix /gbdb/$D/hgnc/search.ix
+skipEmptyFields on
+itemRgb on
+noScoreFilter on
 
 searchTable hgnc
 searchMethod exact

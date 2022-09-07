@@ -24,39 +24,110 @@
 #include "psl.h"
 #include "ra.h"
 #include "regexHelper.h"
+#include "trackHub.h"
 #include "trashDir.h"
 #include "vcf.h"
 
 // Globals:
 static boolean measureTiming = FALSE;
 
-// wuhCor1-specific:
-char *chrom = "NC_045512v2";
-int chromSize = 29903;
-
 // Parameter constants:
 int maxGenotypes = 1000;        // Upper limit on number of samples user can upload at once.
 boolean showParsimonyScore = FALSE;
 
+
+struct slName *phyloPlaceDbList()
+/* Each subdirectory of PHYLOPLACE_DATA_DIR that contains a config.ra file is a supported db
+ * or track hub name (without the hub_number_ prefix).  Return a list of them, or NULL if none
+ * are found. */
+{
+struct slName *dbList = NULL;
+// I was hoping the pattern would be wildMatch'd only against filenames so I could use "config.ra",
+// but both directories and files must match the pattern so must use "*".
+struct slName *dataDirPaths = pathsInDirAndSubdirs(PHYLOPLACE_DATA_DIR, "*");
+struct slName *path;
+for (path = dataDirPaths;  path != NULL;  path = path->next)
+    {
+    if (endsWith(path->name, "/config.ra"))
+        {
+        char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
+        splitPath(path->name, dir, name, extension);
+        if (endsWith(dir, "/"))
+            dir[strlen(dir)-1] = '\0';
+        char *db = strrchr(dir, '/');
+        if (db == NULL)
+            db = dir;
+        else
+            db++;
+        if (hDbExists(db))
+            slNameAddHead(&dbList, db);
+        else
+            {
+            struct trackHubGenome *hubGenome = trackHubGetGenomeUndecorated(db);
+            if (hubGenome != NULL)
+                slNameAddHead(&dbList, hubGenome->name);
+            else
+                {
+                // Not connected to session currently.  If the name looks like an NCBI Assembly ID
+                // then try connecting to the corresponding UCSC assembly hub.
+                regmatch_t substrs[5];
+                if (regexMatchSubstr(db, "^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\\.[0-9]$",
+                                     substrs, ArraySize(substrs)))
+                    {
+                    char gcPrefix[4], first3[4], mid3[4], last3[4];
+                    regexSubstringCopy(db, substrs[1], gcPrefix, sizeof gcPrefix);
+                    regexSubstringCopy(db, substrs[2], first3, sizeof first3);
+                    regexSubstringCopy(db, substrs[3], mid3, sizeof mid3);
+                    regexSubstringCopy(db, substrs[4], last3, sizeof last3);
+                    struct dyString *dy = dyStringCreate("https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/"
+                                                         "%s/%s/hub.txt",
+                                                         gcPrefix, first3, mid3, last3, db);
+                    struct errCatch *errCatch = errCatchNew();
+                    struct trackHub *hub = NULL;
+                    if (errCatchStart(errCatch))
+                        {
+                        hub = trackHubOpen(dy->string, db);
+                        }
+                    errCatchEnd(errCatch);
+                    if (hub != NULL && hub->genomeList != NULL &&
+                        endsWith(hub->genomeList->name, db))
+                        slNameAddHead(&dbList, hub->genomeList->name);
+                    }
+                }
+            }
+        }
+    }
+// Reverse alphabetical sort to put wuhCor1/SARS-CoV-2 first
+slNameSort(&dbList);
+slReverse(&dbList);
+return dbList;
+}
 
 char *phyloPlaceDbSetting(char *db, char *settingName)
 /* Return a setting from hgPhyloPlaceData/<db>/config.ra or NULL if not found. */
 {
 static struct hash *configHash = NULL;
 static char *configDb = NULL;
-if (!sameOk(db, configDb))
+char *dbBase = trackHubSkipHubName(db);
+if (!sameOk(dbBase, configDb))
     {
     char configFile[1024];
-    safef(configFile, sizeof configFile, PHYLOPLACE_DATA_DIR "/%s/config.ra", db);
+    safef(configFile, sizeof configFile, PHYLOPLACE_DATA_DIR "/%s/config.ra", dbBase);
     if (fileExists(configFile))
         {
         configHash = raReadSingle(configFile);
-        configDb = cloneString(db);
+        configDb = cloneString(dbBase);
         }
     }
-if (sameOk(db, configDb))
+if (sameOk(dbBase, configDb))
     return cloneString(hashFindVal(configHash, settingName));
 return NULL;
+}
+
+// TODO: libify
+INLINE boolean isUrl(char *url)
+{
+return (startsWith("http://", url) || startsWith("https://", url) || startsWith("ftp://", url));
 }
 
 char *phyloPlaceDbSettingPath(char *db, char *settingName)
@@ -64,9 +135,10 @@ char *phyloPlaceDbSettingPath(char *db, char *settingName)
  * or NULL if not found.  (Append hgPhyloPlaceData/<db>/ to the beginning of relative path) */
 {
 char *fileName = phyloPlaceDbSetting(db, settingName);
-if (isNotEmpty(fileName) && fileName[0] != '/' && !fileExists(fileName))
+if (isNotEmpty(fileName) && fileName[0] != '/' && !isUrl(fileName) && !fileExists(fileName))
     {
-    struct dyString *dy = dyStringCreate(PHYLOPLACE_DATA_DIR "/%s/%s", db, fileName);
+    struct dyString *dy = dyStringCreate(PHYLOPLACE_DATA_DIR "/%s/%s",
+                                         trackHubSkipHubName(db), fileName);
     if (fileExists(dy->string))
         return dyStringCannibalize(&dy);
     else
@@ -106,7 +178,8 @@ if (isNotEmpty(usherAssignmentsPath) && fileExists(usherAssignmentsPath))
     return usherAssignmentsPath;
 else if (abortIfNotFound)
     errAbort("Missing usher protobuf file (config setting in "
-             PHYLOPLACE_DATA_DIR "/%s/config.ra = %s", db, usherAssignmentsPath);
+             PHYLOPLACE_DATA_DIR "/%s/config.ra = %s",
+             trackHubSkipHubName(db), usherAssignmentsPath);
 return NULL;
 }
 
@@ -117,6 +190,7 @@ boolean hgPhyloPlaceEnabled()
 char *cfgSetting = cfgOption("hgPhyloPlaceEnabled");
 boolean isEnabled = (isNotEmpty(cfgSetting) &&
                      differentWord(cfgSetting, "off") && differentWord(cfgSetting, "no"));
+//#*** TODO -- make less wuhCor1-specific
 return (isEnabled && hDbExists("wuhCor1"));
 }
 
@@ -127,7 +201,7 @@ dyStringClear(dy);
 if (fileExists(fileName))
     dyStringAppend(dy, fileName);
 else
-    dyStringPrintf(dy, PHYLOPLACE_DATA_DIR "/%s/%s", db, fileName);
+    dyStringPrintf(dy, PHYLOPLACE_DATA_DIR "/%s/%s", trackHubSkipHubName(db), fileName);
 }
 
 struct treeChoices *loadTreeChoices(char *db)
@@ -236,7 +310,8 @@ if (node->numEdges > 0)
     }
 }
 
-static boolean *informativeBasesFromTree(struct phyloTree *bigTree, struct slName **maskSites)
+static boolean *informativeBasesFromTree(struct phyloTree *bigTree, struct slName **maskSites,
+                                         int chromSize)
 /* Return an array indexed by reference position with TRUE at positions that have a non-leaf
  * variant in bigTree.  If a position is in maskSites but is informative in bigTree then remove
  * it from maskSites because it was not masked (yet) back when the tree was built. */
@@ -361,10 +436,10 @@ if (errCatchStart(errCatch))
             chopTabs(line, words);
             //#*** TODO: check that POS is sorted
             int pos = strtol(words[1], NULL, 10);
-            if (pos > chromSize)
+            if (pos > refGenome->size)
                 {
                 lineFileAbort(lf, "VCF POS value %d exceeds size of reference sequence (%d)",
-                              pos, chromSize);
+                              pos, refGenome->size);
                 }
             // make sure REF value (if given) matches reference genome
             int chromStart = pos - 1;
@@ -434,7 +509,7 @@ if (errCatchStart(errCatch))
                 }
             if (!maskedReasons)
                 {
-                fputs(chrom, f);
+                fputs(refGenome->name, f);
                 for (i = 1;  i < colCount;  i++)
                     {
                     fputc('\t', f);
@@ -491,11 +566,11 @@ while ((hel = hashNext(&cookie)) != NULL)
     }
 }
 
-static void displaySampleMuts(struct placementInfo *info)
+static void displaySampleMuts(struct placementInfo *info, char *refAcc)
 {
 printf("<p>Differences from the reference genome "
-       "(<a href='https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2' target=_blank>"
-       "NC_045512.2</a>): ");
+       "(<a href='https://www.ncbi.nlm.nih.gov/nuccore/%s' target=_blank>%s</a>): ",
+       refAcc, refAcc);
 if (info->sampleMuts == NULL)
     printf("(None; identical to reference)");
 else
@@ -720,6 +795,9 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     int regionIx = stringArrayIx("region", headerWords, headerWordCount);
     int nCladeUsherIx = stringArrayIx("Nextstrain_clade_usher", headerWords, headerWordCount);
     int lineageUsherIx = stringArrayIx("pango_lineage_usher", headerWords, headerWordCount);
+    int authorsIx = stringArrayIx("authors", headerWords, headerWordCount);
+    int pubsIx = stringArrayIx("publications", headerWords, headerWordCount);
+    int nLineageIx = stringArrayIx("Nextstrain_lineage", headerWords, headerWordCount);
     while (lineFileNext(lf, &line, NULL))
         {
         char *words[headerWordCount];
@@ -763,6 +841,12 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
             met->nCladeUsher = cloneString(words[nCladeUsherIx]);
         if (lineageUsherIx >= 0)
             met->lineageUsher = cloneString(words[lineageUsherIx]);
+        if (authorsIx >= 0)
+            met->authors = cloneString(words[authorsIx]);
+        if (pubsIx >= 0)
+            met->pubs = cloneString(words[pubsIx]);
+        if (nLineageIx >= 0)
+            met->nLineage = cloneString(words[nLineageIx]);
         // If epiId and/or genbank ID is included, we'll probably be using that to look up items.
         if (epiIdIx >= 0 && !isEmpty(words[epiIdIx]))
             hashAdd(sampleMetadata, words[epiIdIx], met);
@@ -861,7 +945,7 @@ static char *lineageForSample(struct hash *sampleMetadata, char *sampleId)
 char *lineage = NULL;
 struct sampleMetadata *met = metadataForSample(sampleMetadata, sampleId);
 if (met)
-    lineage = met->lineage;
+    lineage = met->lineage ? met->lineage : met->nLineage;
 return lineage;
 }
 
@@ -883,28 +967,49 @@ while ((hel = hashNext(&cookie)) != NULL)
     }
 }
 
-static void printLineageUrl(char *lineage)
+static void printLineageLink(char *lineage, char *db)
+/* Print lineage with link to outbreak.info or pango-designation issue if appropriate.
+ * Caller must handle case of empty/NULL lineage. */
+{
+boolean isSarsCov2 = sameString(db, "wuhCor1");
+if (isEmpty(lineage))
+    errAbort("programmer error:printLineageLink called with empty lineage");
+else if (isSarsCov2 && startsWith("proposed", lineage))
+    printf("<a href='"PANGO_DESIGNATION_ISSUE_URLBASE"%s' target=_blank>%s</a>",
+           lineage+strlen("proposed"), lineage);
+else if (isSarsCov2 && differentString(lineage, "None") && differentString(lineage, "Unassigned"))
+    {
+    // Trim _suffix that I add to extra tree annotations for problematic branches, if present.
+    char lineageCopy[strlen(lineage)+1];
+    safecpy(lineageCopy, sizeof lineageCopy, lineage);
+    char *p = strchr(lineageCopy, '_');
+    if (p != NULL)
+        *p = '\0';
+    printf("<a href='"OUTBREAK_INFO_URLBASE"%s' target=_blank>%s</a>", lineageCopy, lineageCopy);
+    }
+else
+    printf("%s", lineage);
+}
+
+static void maybePrintLineageLink(char *lineage, char *db)
 /* If lineage is not empty/NULL, print ": lineage <lineage>" and link to outbreak.info
  * (unless lineage is "None") */
 {
 if (isNotEmpty(lineage))
     {
-    if (differentString(lineage, "None"))
-        printf(": lineage <a href='"OUTBREAK_INFO_URLBASE"%s' target=_blank>%s</a>",
-               lineage, lineage);
-    else
-        printf(": lineage %s", lineage);
+    printf(": lineage ");
+    printLineageLink(lineage, db);
     }
 }
 
-static void displayNearestNeighbors(struct placementInfo *info, char *source)
+static void displayNearestNeighbors(struct placementInfo *info, char *source, char *db)
 /* Use info->variantPaths to find sample's nearest neighbor(s) in tree. */
 {
 if (isNotEmpty(info->nearestNeighbor))
     {
     printf("<p>Nearest neighboring %s sequence already in phylogenetic tree: %s",
            source, info->nearestNeighbor);
-    printLineageUrl(info->neighborLineage);
+    maybePrintLineageLink(info->neighborLineage, db);
     puts("</p>");
     }
 }
@@ -1035,7 +1140,7 @@ dyStringFree(&dy);
 
 static void describeSamplePlacements(struct slName *sampleIds, struct hash *samplePlacements,
                                      struct phyloTree *subtree, struct hash *sampleMetadata,
-                                     char *source)
+                                     char *source, char *refAcc, char *db)
 /* Report how each sample fits into the big tree. */
 {
 // Sort sample placements by sampleMuts so we can group identical samples.
@@ -1079,7 +1184,7 @@ while ((clumpSize = countIdentical(refsToGo)) > 0)
         ref = ref->next;
         }
     refsToGo = ref;
-    displaySampleMuts(info);
+    displaySampleMuts(info, refAcc);
     if (info->imputedBases)
         {
         puts("<p>Base values imputed by parsimony:\n<ul>");
@@ -1090,7 +1195,7 @@ while ((clumpSize = countIdentical(refsToGo)) > 0)
         puts("</p>");
         }
     displayVariantPath(info->variantPath, clumpSize == 1 ? info->sampleId : "samples");
-    displayNearestNeighbors(info, source);
+    displayNearestNeighbors(info, source, db);
     if (showParsimonyScore && info->parsimonyScore > 0)
         printf("<p>Parsimony score added by your sample: %d</p>\n", info->parsimonyScore);
         //#*** TODO: explain parsimony score
@@ -1163,7 +1268,9 @@ while ((hel = hashNext(&cookie)) != NULL)
         if (isNotEmpty(pi->nextClade))
             gotClades = TRUE;
         if (isNotEmpty(pi->pangoLineage))
+            {
             gotLineages = TRUE;
+            }
         if (gotClades && gotLineages)
             break;
         }
@@ -1261,7 +1368,8 @@ puts("</p>");
 
 #define TOOLTIP(text) " <div class='tooltip'>(?)<span class='tooltiptext'>" text "</span></div>"
 
-static void printSummaryHeader(boolean isFasta, boolean gotClades, boolean gotLineages)
+static void printSummaryHeader(boolean isFasta, boolean gotClades, boolean gotLineages,
+                               char *refName, char *db)
 /* Print the summary table header row with tooltips explaining columns. */
 {
 puts("<thead><tr>");
@@ -1284,16 +1392,16 @@ puts("<th>#Mixed"
      TOOLTIP("Number of IUPAC ambiguous bases, e.g. 'R' for 'A or G'")
      "</th>");
 if (isFasta)
-    puts("<th>Bases aligned"
-         TOOLTIP("Number of bases aligned to reference NC_045512.2 Wuhan/Hu-1, including "
+    printf("<th>Bases aligned"
+         TOOLTIP("Number of bases aligned to reference %s, including "
                  "matches and mismatches")
          "</th>\n<th>Inserted bases"
          TOOLTIP("Number of bases in aligned portion of uploaded sequence that are not present in "
-                 "reference NC_045512.2 Wuhan/Hu-1")
+                 "reference %s")
          "</th>\n<th>Deleted bases"
-         TOOLTIP("Number of bases in reference NC_045512.2 Wuhan/Hu-1 that are not "
+         TOOLTIP("Number of bases in reference %s that are not "
                  "present in aligned portion of uploaded sequence")
-         "</th>");
+           "</th>", refName, refName, refName);
 puts("<th>#SNVs used for placement"
      TOOLTIP("Number of single-nucleotide variants in uploaded sample "
              "(does not include N's or mixed bases) used by UShER to place sample "
@@ -1304,9 +1412,17 @@ puts("<th>#SNVs used for placement"
              "<a href='https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473/12' "
              "target=_blank>Problematic Sites</a>"));;
 if (gotClades)
-    puts("</th>\n<th>Nextstrain clade"
-     TOOLTIP("The <a href='https://nextstrain.org/blog/2021-01-06-updated-SARS-CoV-2-clade-naming' "
-             "target=_blank>Nextstrain clade</a> assigned to the sample by UShER"));
+    {
+    if (sameString(db, "wuhCor1"))
+        puts("</th>\n<th>Nextstrain clade"
+             TOOLTIP("The <a href='https://nextstrain.org/blog/2021-01-06-updated-SARS-CoV-2-clade-naming' "
+                     "target=_blank>Nextstrain clade</a> assigned to the sample by "
+                     "placement in the tree"));
+    else
+        puts("</th>\n<th>Nextstrain lineage"
+             TOOLTIP("The Nextstrain lineage assigned by "
+                     "placement in the tree"));
+    }
 if (gotLineages)
     puts("</th>\n<th>Pango lineage"
      TOOLTIP("The <a href='https://cov-lineages.org/' "
@@ -1314,10 +1430,15 @@ if (gotLineages)
 puts("</th>\n<th>Neighboring sample in tree"
      TOOLTIP("A sample already in the tree that is a child of the node at which the uploaded "
              "sample was placed, to give an example of a closely related sample")
-     "</th>\n<th>Lineage of neighbor"
-     TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
-             "Pango lineage</a> assigned to the nearest neighboring sample already in the tree")
-     "</th>\n<th>#Imputed values for mixed bases"
+     "</th>\n<th>Lineage of neighbor");
+if (sameString(db, "wuhCor1"))
+    puts(TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
+                 "Pango lineage</a> assigned by pangolin "
+                 "to the nearest neighboring sample already in the tree"));
+else
+    puts(TOOLTIP("The lineage assigned by Nextclade "
+                 "to the nearest neighboring sample already in the tree"));
+puts("</th>\n<th>#Imputed values for mixed bases"
      TOOLTIP("If the uploaded sequence contains mixed/ambiguous bases, then UShER may assign "
              "values based on maximum parsimony")
      "</th>\n<th>#Maximally parsimonious placements"
@@ -1501,15 +1622,17 @@ if (si->nCountEnd)
     dyStringPrintf(dy, "%d N bases at end", si->nCountEnd);
 }
 
-static void printLineageTd(char *lineage, char *alt)
+static void printLineageTd(char *lineage, char *alt, char *db)
 /* Print a table cell with lineage (& link to outbreak.info if not 'None') or alt if no lineage. */
 {
-if (lineage && differentString(lineage, "None"))
-    printf("<td><a href='"OUTBREAK_INFO_URLBASE"%s' target=_blank>%s</a></td>", lineage, lineage);
-else if (lineage)
-    printf("<td>%s</td>", lineage);
-else
+if (isEmpty(lineage))
     printf("<td>%s</td>", alt);
+else
+    {
+    printf("<td>");
+    printLineageLink(lineage, db);
+    printf("</td>");
+    }
 }
 
 static void printSubtreeTd(struct subtreeInfo *subtreeInfoList, struct tempName *jsonTns[],
@@ -1535,7 +1658,7 @@ else
 
 static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
                                struct usherResults *ur, struct tempName *jsonTns[],
-                               struct hash *sampleMetadata, struct dnaSeq *refGenome)
+                               char *refAcc, char *db)
 /* Show a table with composition & alignment stats for each sequence that passed basic QC. */
 {
 if (seqInfoList)
@@ -1543,7 +1666,7 @@ if (seqInfoList)
     puts("<table class='seqSummary'>");
     boolean gotClades = FALSE, gotLineages = FALSE;
     lookForCladesAndLineages(ur->samplePlacements, &gotClades, &gotLineages);
-    printSummaryHeader(isFasta, gotClades, gotLineages);
+    printSummaryHeader(isFasta, gotClades, gotLineages, refAcc, db);
     puts("<tbody>");
     struct dyString *dy = dyStringNew(0);
     struct seqInfo *si;
@@ -1675,10 +1798,10 @@ if (seqInfoList)
             if (gotClades)
                 printf("<td>%s</td>", pi->nextClade ? pi->nextClade : "n/a");
             if (gotLineages)
-                printLineageTd(pi->pangoLineage, "n/a");
+                printLineageTd(pi->pangoLineage, "n/a", db);
             printf("<td>%s</td>",
                    pi->nearestNeighbor ? replaceChars(pi->nearestNeighbor, "|", " | ") : "?");
-            printLineageTd(pi->neighborLineage, "?");
+            printLineageTd(pi->neighborLineage, "?", db);
             int imputedCount = slCount(pi->imputedBases);
             printf("<td class='%s'>%d",
                    qcClassForImputedBases(imputedCount), imputedCount);
@@ -1716,7 +1839,7 @@ if (seqInfoList)
 
 static void summarizeSubtrees(struct slName *sampleIds, struct usherResults *results,
                               struct hash *sampleMetadata, struct tempName *jsonTns[],
-                              struct mutationAnnotatedTree *bigTree)
+                              struct mutationAnnotatedTree *bigTree, char *db)
 /* Print a summary table of pasted/uploaded identifiers and subtrees */
 {
 boolean gotClades = FALSE, gotLineages = FALSE;
@@ -1752,7 +1875,7 @@ for (si = sampleIds;  si != NULL;  si = si->next)
         if (gotClades)
             printf("<td>%s</td>", pi->nextClade ? pi->nextClade : "n/a");
         if (gotLineages)
-            printLineageTd(pi->pangoLineage, "n/a");
+            printLineageTd(pi->pangoLineage, "n/a", db);
         }
     else
         {
@@ -1763,11 +1886,7 @@ for (si = sampleIds;  si != NULL;  si = si->next)
         }
     // pangolin-assigned lineage
     char *lineage = lineageForSample(sampleMetadata, si->name);
-    if (isNotEmpty(lineage))
-        printf("<td><a href='"OUTBREAK_INFO_URLBASE"%s' target=_blank>%s</a></td>",
-               lineage, lineage);
-    else
-        printf("<td>n/a</td>");
+    printLineageTd(lineage, "n/a", db);
     // Maybe also #mutations with mouseover to show mutation path?
     printSubtreeTd(results->subtreeInfoList, jsonTns, si->name);
     }
@@ -1790,9 +1909,9 @@ for (mut = sampleMuts;  mut != NULL;  mut = mut->next)
         errAbort("sncListFromSampleMuts: expected ref base value, got '%c' in '%s'",
                  ref, mut->name);
     int pos = atoi(&(mut->name[1]));
-    if (pos < 1 || pos > chromSize)
+    if (pos < 1 || pos > gSeqWin->end)
         errAbort("sncListFromSampleMuts: expected pos between 1 and %d, got %d in '%s'",
-                 chromSize, pos, mut->name);
+                 gSeqWin->end, pos, mut->name);
     char alt = mut->name[strlen(mut->name)-1];
     if (alt < 'A' || alt > 'Z')
         errAbort("sncListFromSampleMuts: expected alt base value, got '%c' in '%s'",
@@ -2287,7 +2406,7 @@ reportTiming(pStartTime, "make subtree zipfile");
 return zipTn;
 }
 
-static struct slName **getProblematicSites(char *db)
+static struct slName **getProblematicSites(char *db, char *chrom, int chromSize)
 /* If config.ra specfies maskFile them return array of lists (usually NULL) of reasons that
  * masking is recommended, one per position in genome; otherwise return NULL. */
 {
@@ -2485,7 +2604,7 @@ if (isNotEmpty(aliasFile) && fileExists(aliasFile))
             }
         }
     lineFileClose(&lf);
-    if (missCount > 0)
+    if (missCount > 0 && verboseLevel() > 1)
         fprintf(stderr, "aliasFile %s: %d values in second column were not found in tree, "
                 "e.g. '%s'", aliasFile, missCount, missExample);
     }
@@ -2638,8 +2757,10 @@ if (! bigTree)
     warn("Problem parsing %s; can't make subtree subtracks.", protobufPath);
     }
 lineFileCarefulNewlines(lf);
-struct slName **maskSites = getProblematicSites(db);
-boolean *informativeBases = informativeBasesFromTree(bigTree->tree, maskSites);
+char *chrom = hDefaultChrom(db);
+int chromSize = hChromSize(db, chrom);
+struct slName **maskSites = getProblematicSites(db, chrom, chromSize);
+boolean *informativeBases = informativeBasesFromTree(bigTree->tree, maskSites, chromSize);
 struct dnaSeq *refGenome = hChromSeq(db, chrom, 0, chromSize);
 boolean isFasta = FALSE;
 boolean subtreesOnly = FALSE;
@@ -2717,7 +2838,7 @@ if (results && results->singleSubtreeInfo)
     // Make Nextstrain/auspice JSON file for each subtree.
     char *bigGenePredFile = phyloPlaceDbSettingPath(db, "bigGenePredFile");
     struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
-    struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
+    struct seqWindow *gSeqWin = memSeqWindowNew(chrom, refGenome->dna);
     struct hash *sampleMetadata = getSampleMetadata(metadataFile);
     struct hash *sampleUrls = hashNew(0);
     struct tempName *jsonTns[subtreeCount];
@@ -2766,7 +2887,7 @@ if (results && results->singleSubtreeInfo)
     struct tempName *ctTn = NULL;
     if (subtreesOnly)
         {
-        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, bigTree);
+        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, bigTree, db);
         reportTiming(&startTime, "describe subtrees");
         }
     else
@@ -2775,8 +2896,8 @@ if (results && results->singleSubtreeInfo)
 
         // Make custom tracks for uploaded samples and subtree(s).
         struct phyloTree *sampleTree = NULL;
-        ctTn = writeCustomTracks(vcfTn, results, sampleIds, bigTree,
-                                 source, fontHeight, &sampleTree, &startTime);
+        ctTn = writeCustomTracks(db, vcfTn, results, sampleIds, bigTree, source, fontHeight,
+                                 &sampleTree, &startTime);
 
         // Make a sample summary TSV file and accumulate S gene changes
         struct hash *spikeChanges = hashNew(0);
@@ -2789,7 +2910,14 @@ if (results && results->singleSubtreeInfo)
         int seqCount = slCount(seqInfoList);
         if (seqCount <= MAX_SEQ_DETAILS)
             {
-            summarizeSequences(seqInfoList, isFasta, results, jsonTns, sampleMetadata, refGenome);
+            char *refAcc = cloneString(chrom);
+            if (regexMatch(refAcc, "v[0-9]+$"))
+                {
+                char *v = strrchr(refAcc, 'v');
+                assert(v != NULL);
+                *v = '.';
+                }
+            summarizeSequences(seqInfoList, isFasta, results, jsonTns, refAcc, db);
             reportTiming(&startTime, "write summary table (including reading in lineages)");
             for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
                 {
@@ -2807,7 +2935,7 @@ if (results && results->singleSubtreeInfo)
                 struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
                 subtree = phyloPruneToIds(subtree, ti->subtreeUserSampleIds);
                 describeSamplePlacements(ti->subtreeUserSampleIds, results->samplePlacements,
-                                         subtree, sampleMetadata, source);
+                                         subtree, sampleMetadata, source, refAcc, db);
                 }
             reportTiming(&startTime, "describe placements");
             }

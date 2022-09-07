@@ -1016,10 +1016,16 @@ if (!(isWig||isBedGr||isBam||isVcf||isLongTabix||isHic))
     name = filterFieldVarName(db, rootTable, "", filterRawLogicVar);
     cgiMakeDropList(name, logOpMenu, logOpMenuSize,
 		cartUsualString(cart, name, logOpMenu[0]));
-    hPrintf(" Free-form query: ");
+    hPrintf(" Free-form SQL query: ");
     name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
     char *val = cartUsualString(cart, name, "");
     cgiMakeTextVar(name, val, 50);
+    hPrintf("<br> &nbsp;&nbsp;Must be a correctly formatted SQL language clause. Here are some Examples:<br>");
+    hPrintf(" &nbsp;&nbsp; name like 'ENST%%' <br>");
+    hPrintf(" &nbsp;&nbsp; name like \"ENST*\" <br>");
+    hPrintf(" &nbsp;&nbsp; name = 'ENST00000693149.1_1' <br>");
+    hPrintf(" &nbsp;&nbsp; (name = 'ENST00000693149.1_1' and score < 100) or (name = 'ENST00000691165.1_1' and score < 1000) <br>");
+    
     hPrintf("</TD></TR></TABLE>\n");
     }
 

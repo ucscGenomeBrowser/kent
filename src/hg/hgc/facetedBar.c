@@ -17,6 +17,7 @@
 #include "hgConfig.h"
 #include "facetedTable.h"
 #include "facetedBar.h"
+#include "htmlColor.h"
 
 
 struct wrapContext
@@ -33,9 +34,20 @@ void wrapVal(struct fieldedTable *table, struct fieldedRow *row,
 {
 struct wrapContext *wc = context;
 char *color = "#000000";    // Black is default color if no color column
+unsigned rgb;
 int colorIx = wc->colorIx;
 if (colorIx >= 0)
+    {
     color = row->row[colorIx];
+    /* try r,g,b */
+    if (index(color, ','))
+        {
+        unsigned char r, g, b;
+        parseColor(color, &r, &g, &b);
+        htmlColorFromRGB(&rgb, r, g, b);
+        color = htmlColorToCode(rgb);
+        }
+    }
 double x = sqlDouble(val);
 int width = 500, height = 13;  // These are units of ~2010 pixels or something
 double barWidth = (double)width*x/wc->maxVal;

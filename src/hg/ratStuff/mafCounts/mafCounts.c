@@ -105,6 +105,9 @@ for(; (maf = mafNext(mf)) != NULL;)
     // now go through each component of the maf block and count the nucs
     for(; comp; comp = comp->next)
         {
+        if (comp->text == NULL)
+            continue;
+
         char *str = comp->text;
         char *end = &str[seqLen];
 

@@ -8,6 +8,10 @@ include ${kentSrc}/inc/common.mk
 # note: lists such as the following need to be defined *before*
 # they are used in the wildcard target rules.  An oddity of gnu make
 
+# List of directories to build for userApps
+UTILS_APPLIST = \
+	tabToTabDir
+
 # List of all directories to build
 
 ALL_APPS = \
@@ -20,6 +24,11 @@ ALL_APPS = \
 all: $(ALL_APPS:%=%.all)
 
 %.all:
+	cd $* && echo $* && $(MAKE)
+
+userApps: $(UTILS_APPLIST:%=%.userApp)
+
+%.userApp:
 	cd $* && echo $* && $(MAKE)
 
 test: $(ALL_APPS:%=%.test)
