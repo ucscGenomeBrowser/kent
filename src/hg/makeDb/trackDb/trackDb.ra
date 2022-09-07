@@ -3076,6 +3076,7 @@ itemRgb on
 type bigBed 12
 searchIndex name
 searchTrix  /gbdb/$D/TOGAvHg38v1/HLTOGAannotVsHg38v1.ix
+html TOGAannotation
 
 # searchTable HLTOGAannotvsHg38v1BIG
 # searchType bigBed
@@ -3092,3 +3093,4 @@ itemRgb on
 type bigBed 12
 searchIndex name
 searchTrix  /gbdb/$D/TOGAvGalGal6v1/HLTOGAannotVsgalGal6v1.ix
+html TOGAannotation
