@@ -1833,6 +1833,20 @@ pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
     html genotypeArrays
     pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
 
+searchTable snpArrayIllumina450k
+searchMethod exact
+searchType bigBed
+termRegex cg[0-9]+
+semiShortCircuit 1
+searchPriority 55
+
+searchTable snpArrayIllumina850k
+searchMethod exact
+searchType bigBed
+termRegex cg[0-9]+
+semiShortCircuit 1
+searchPriority 55
+
 track tfbsConsSites
 shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
