@@ -3064,3 +3064,31 @@ searchTable evaSnp
 searchType bigBed
 searchMethod exact
 padding 20
+
+track HLTOGAannotvHg38v1
+release alpha
+bigDataUrl /gbdb/$D/TOGAvHg38v1/HLTOGAannotVsHg38v1.bb
+shortLabel TOGA vs. hg38
+longLabel TOGA annotations using human/hg38 as reference
+group genes
+visibility hide
+itemRgb on
+type bigBed 12
+searchIndex name
+searchTrix  /gbdb/$D/TOGAvHg38v1/HLTOGAannotVsHg38v1.ix
+
+# searchTable HLTOGAannotvsHg38v1BIG
+# searchType bigBed
+# searchMethod fuzzy
+
+track HLTOGAannotvGalGal6v1
+release alpha
+bigDataUrl /gbdb/$D/TOGAvGalGal6v1/HLTOGAannotVsgalGal6v1.bb
+shortLabel TOGA vs. galGal6
+longLabel TOGA annotations using chicken/galGal6 as reference
+group genes
+visibility hide
+itemRgb on
+type bigBed 12
+searchIndex name
+searchTrix  /gbdb/$D/TOGAvGalGal6v1/HLTOGAannotVsgalGal6v1.ix
