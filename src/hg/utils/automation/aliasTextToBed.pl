@@ -48,7 +48,7 @@ if ($titleLine !~ m/^#\s/) {
   printf STDERR "ERROR: unrecognized alias file title line:\n%s\n", $titleLine;
   exit 255;
 }
-if ($titleLine =~ m/sequenceName/) {
+if ($titleLine =~ m/# sequenceName/) {
   printf STDERR "ERROR: this is an older style alias file:\n%s\n", $titleLine;
   exit 255;
 }
