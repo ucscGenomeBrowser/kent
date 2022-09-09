@@ -1575,4 +1575,21 @@ void printInfoIcon(char *mouseover);
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart);
 /* Maybe print a "related track" section */
 
+struct trackDb *snp125FetchGeneTracks(char *database, struct cart *cart);
+/* Get a list of genePred tracks. */
+
+struct trackDb *tdbOrAncestorByName(struct trackDb *tdb, char *name);
+/* For reasons Angie cannot fathom, if a composite or view is passed to cfgByCfgType then
+ * cfgByCfgType passes a leaf subtrack to its callees like bigDbSnpCfgUi.  That is why we
+ * see so many calls to isNameAtParentLevel, which returns true if the tdb was originally
+ * at the composite or view level, which we can only tell by comparing with the original track name.
+ * labelMakeCheckBox, called by many handlers in hgTrackUi that must be always top-level
+ * (or have a special handler that bypasses cfgByCfgType like refSeqComposite),
+ * is blissfully unaware of this.  It uses the same tdb for looking in cart ClosestToHome
+ * and for making the HTML element's cart var name, trusting that the correct tdb has been
+ * handed to it.
+ * So in order for a callee of cfgByCfgType to call labelMakeCheckBox with the correct tdb,
+ * we need to walk back up comparing name like isNameAtParentLevel does.
+ * If name doesn't match tdb or any of its ancestors then this returns NULL. */
+
 #endif /* HUI_H */

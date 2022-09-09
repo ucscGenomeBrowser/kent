@@ -47,6 +47,9 @@
 #include "dnaMotif.h"
 #include "togaClick.h"
 
+#include "snp125.h"
+
+
 extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
 extern int winStart, winEnd;    /* Bounds of sequence. */
@@ -507,6 +510,14 @@ void doGtexGeneExpr(struct trackDb *tdb, char *item);
 
 void doGtexEqtlDetails(struct trackDb *tdb, char *item);
 /* Details of GTEx eQTL item */
+
+void printSnp125Function(struct trackDb *tdb, struct snp125 *snp);
+/* If the user has selected a gene track for functional annotation,
+ * report how this SNP relates to any nearby genes. */
+
+void printSnp153Function(struct trackDb *tdb, struct snp125 *snp);
+/* If the user has selected a gene track for functional annotation,
+ * report how this SNP relates to any nearby genes. */
 
 void doBigDbSnp(struct trackDb *tdb, char *rsId);
 /* Show details for bigDbSnp item. */

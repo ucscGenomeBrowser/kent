@@ -1711,6 +1711,7 @@ pennantIcon Note green ../goldenPath/newsarch.html "dbSNP 155 is now available, 
         shortLabel Common dbSNP(153)
         longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 153
         bigDataUrl /gbdb/$D/snp/dbSnp153Common.bb
+        defaultGeneTracks knownGene
         priority 1
 
         track dbSnp153ClinVar
@@ -1719,6 +1720,7 @@ pennantIcon Note green ../goldenPath/newsarch.html "dbSNP 155 is now available, 
         shortLabel dbSNP(153) in ClinVar
         longLabel Short Genetic Variants from dbSNP Release 153 Included in ClinVar
         bigDataUrl /gbdb/$D/snp/dbSnp153ClinVar.bb
+        defaultGeneTracks knownGene
         priority 2
 
         track dbSnp153Mult
@@ -1727,6 +1729,7 @@ pennantIcon Note green ../goldenPath/newsarch.html "dbSNP 155 is now available, 
         shortLabel dbSNP(153) Mult.
         longLabel Short Genetic Variants from dbSNP Release 153 that Map to Multiple Genomic Loci
         bigDataUrl /gbdb/$D/snp/dbSnp153Mult.bb
+        defaultGeneTracks knownGene
         priority 3
 
         track dbSnp153
@@ -1736,6 +1739,7 @@ pennantIcon Note green ../goldenPath/newsarch.html "dbSNP 155 is now available, 
         longLabel All Short Genetic Variants from dbSNP Release 153
         bigDataUrl /gbdb/$D/snp/dbSnp153.bb
         maxWindowToDraw 1000000
+        defaultGeneTracks knownGene
         priority 4
 
     track dbSnp153ViewErrs
@@ -1833,6 +1837,7 @@ pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
         subGroups view=variants
         shortLabel Common dbSNP(155)
         longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 155
+        defaultGeneTracks knownGene
         bigDataUrl /gbdb/$D/snp/dbSnp155Common.bb
         priority 1
 
@@ -1841,6 +1846,7 @@ pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
         subGroups view=variants
         shortLabel ClinVar dbSNP(155)
         longLabel Short Genetic Variants from dbSNP Release 155 Included in ClinVar
+        defaultGeneTracks knownGene
         bigDataUrl /gbdb/$D/snp/dbSnp155ClinVar.bb
         priority 2
 
@@ -1849,6 +1855,7 @@ pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
         subGroups view=variants
         shortLabel Mult. dbSNP(155)
         longLabel Short Genetic Variants from dbSNP Release 155 that Map to Multiple Genomic Loci
+        defaultGeneTracks knownGene
         bigDataUrl /gbdb/$D/snp/dbSnp155Mult.bb
         priority 3
 
@@ -1857,6 +1864,7 @@ pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
         subGroups view=variants
         shortLabel All dbSNP(155)
         longLabel All Short Genetic Variants from dbSNP Release 155
+        defaultGeneTracks knownGene
         bigDataUrl /gbdb/$D/snp/dbSnp155.bb
         maxWindowToDraw 1000000
         priority 4

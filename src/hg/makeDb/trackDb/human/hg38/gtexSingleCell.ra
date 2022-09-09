@@ -2,8 +2,7 @@ track gtexSnAtlas
 release alpha
 shortLabel GTEx Atlas
 longLabel GTEx Cross-Tissue Single-Nucleus Atlas
-superTrack on show
-visibility pack
+superTrack on
 type bigBarChart
 group singleCell
 pennantIcon New red
@@ -22,8 +21,8 @@ urlLabel View on the UCSC Cell Browser
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/hg38/gtex/snRnaSeq/combined.bb
-    barChartCategoryUrl /hive/data/outside/gtex/V9/snRnaSeq/atlasOut/atlasOut.categories
-    barChartStatsUrl /hive/data/outside/gtex/V9/snRnaSeq/atlasOut/combinedStats.withFacets.withColors.tsv
+    barChartCategoryUrl /gbdb/hg38/gtex/snRnaSeq/barChartCategories.tsv
+    barChartStatsUrl /gbdb/hg38/gtex/snRnaSeq/barChartStats.tsv
     barChartFacets Organ,Broad_Cell_Type
     maxLimit 6.0
     priority 1
