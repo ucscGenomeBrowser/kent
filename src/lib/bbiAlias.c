@@ -32,6 +32,10 @@ struct bptIndex *bbiAliasOpenExtra(struct bbiFile *bbi)
 {
 struct bptIndex *bptList = NULL;
 struct slName *indexList = bigBedListExtraIndexes(bbi);
+
+if (indexList == NULL)
+    errAbort("chromAlias bigBed file %s has to have a least one extra index.", bbi->fileName);
+
 for(; indexList; indexList = indexList->next)
     {
     struct bptIndex *bptIndex;
