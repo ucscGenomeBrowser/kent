@@ -4709,7 +4709,7 @@ struct hash *trackHash = trackHashMakeWithComposites(database,NULL,&tdbList,FALS
 
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *justGenePredTables = hTrackTablesOfType(conn, "genePred%%"), *gt;
-struct slName *bigGenePredTables = hTrackTablesOfType(conn, "bigGenePred");
+struct slName *bigGenePredTables = hTrackTablesOfType(conn, "bigGenePred%%");
 struct slName *genePredTables = slCat(justGenePredTables,bigGenePredTables);
 struct trackDb *geneTdbList = NULL, *gTdb;
 if (genePredTables != NULL)
