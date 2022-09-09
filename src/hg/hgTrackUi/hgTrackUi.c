@@ -170,25 +170,10 @@ void snp125OfferGeneTracksForFunction(struct trackDb *tdb)
 /* Get a list of genePred tracks and make checkboxes to enable hgc's functional
  * annotations. */
 {
-struct sqlConnection *conn = hAllocConn(database);
-struct slName *genePredTables = hTrackTablesOfType(conn, "genePred%%"), *gt;
-if (genePredTables != NULL)
+struct trackDb *geneTdbList = NULL, *gTdb;
+geneTdbList = snp125FetchGeneTracks(database, cart);
+if (geneTdbList)
     {
-    struct trackDb *geneTdbList = NULL, *gTdb;
-    for (gt = genePredTables;  gt != NULL;  gt = gt->next)
-	{
-	gTdb = hashFindVal(trackHash, gt->name);
-	if (gTdb && sameString(gTdb->grp, "genes"))
-	    {
-	    // We are going to overwrite gTdb's next pointer and possibly its priority,
-	    // so make a shallow copy:
-	    gTdb = CloneVar(gTdb);
-	    if (gTdb->parent)
-		gTdb->priority = (gTdb->parent->priority + gTdb->priority/1000);
-	    slAddHead(&geneTdbList, gTdb);
-	    }
-	}
-    slSort(&geneTdbList, trackDbCmp);
     jsBeginCollapsibleSection(cart, tdb->track, "geneTracks",
 			      "Use Gene Tracks for Functional Annotation", FALSE);
     printf("<BR><B>On details page, show function and coding differences relative to: </B>\n");
@@ -227,7 +212,6 @@ if (genePredTables != NULL)
     cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedGeneTracks, numCols);
     jsEndCollapsibleSection();
     }
-hFreeConn(&conn);
 }
 
 #define SNP125_FILTER_COLUMNS 4
