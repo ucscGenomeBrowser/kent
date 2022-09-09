@@ -12,12 +12,12 @@ output/human.chromAlias.bb:  outputDir
 	${BINDIR}/${A} input/human.chromAlias.bed input/human.chrom.sizes.txt output/human.chromAlias.bb   -tab -type=bed3+4 -as=input/chromAliasIndex.as -extraIndex=genbank,ensembl,ncbi,ucsc
 
 testBbSize1: outputDir output/human.chromAlias.bb
-	${BINDIR}/${A} input/colored.genbank.bed output/human.chromAlias.bb output/colored.genbank.bb -sizesIsBb -tab -type=bed12+13 -as=input/bigGenePred.as 
+	${BINDIR}/${A} input/colored.genbank.bed output/human.chromAlias.bb output/colored.genbank.bb -sizesIsChromAliasBb -tab -type=bed12+13 -as=input/bigGenePred.as 
 	bigBedToBed output/colored.genbank.bb output/colored.genbank.bed
 	diff input/colored.genbank.bed output/colored.genbank.bed
 
 testBbSize2: outputDir output/human.chromAlias.bb
-	-${BINDIR}/${A} input/mixed.bed output/human.chromAlias.bb output/noFile.chromAlias.bb -sizesIsBb -tab -type=bed12+13 -as=input/bigGenePred.as 2> output/mixed.err
+	-${BINDIR}/${A} input/mixed.bed output/human.chromAlias.bb output/noFile.chromAlias.bb -sizesIsChromAliasBb -tab -type=bed12+13 -as=input/bigGenePred.as 2> output/mixed.err
 	diff expected/mixed.err output/mixed.err
 
 testRgb: outputDir

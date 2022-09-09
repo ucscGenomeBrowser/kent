@@ -18711,21 +18711,8 @@ hFreeConn(&conn2);
 return gpList;
 }
 
-void printSnp125Function(struct trackDb *tdb, struct snp125 *snp)
-/* If the user has selected a gene track for functional annotation,
- * report how this SNP relates to any nearby genes. */
+void printSnp125FunctionShared(struct snp125 *snp, struct slName *geneTracks)
 {
-char varName[512];
-safef(varName, sizeof(varName), "%s_geneTrack", tdb->track);
-struct slName *geneTracks = cartOptionalSlNameList(cart, varName);
-if (geneTracks == NULL && !cartListVarExists(cart, varName))
-    {
-    char *defaultGeneTracks = trackDbSetting(tdb, "defaultGeneTracks");
-    if (isNotEmpty(defaultGeneTracks))
-	geneTracks = slNameListFromComma(defaultGeneTracks);
-    else
-	return;
-    }
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *gt;
 boolean first = TRUE;
@@ -18755,6 +18742,54 @@ for (gt = geneTracks;  gt != NULL;  gt = gt->next)
 if (! first)
     printf("</TABLE>\n");
 hFreeConn(&conn);
+}
+
+void printSnp125Function(struct trackDb *tdb, struct snp125 *snp)
+/* If the user has selected a gene track for functional annotation,
+ * report how this SNP relates to any nearby genes. */
+{
+char varName[512];
+safef(varName, sizeof(varName), "%s_geneTrack", tdb->track);
+struct slName *geneTracks = cartOptionalSlNameList(cart, varName);
+if (geneTracks == NULL && !cartListVarExists(cart, varName))
+    {
+    char *defaultGeneTracks = trackDbSetting(tdb, "defaultGeneTracks");
+    if (isNotEmpty(defaultGeneTracks))
+	geneTracks = slNameListFromComma(defaultGeneTracks);
+    else
+	return;
+    }
+
+printSnp125FunctionShared(snp, geneTracks);
+}
+
+void printSnp153Function(struct trackDb *tdb, struct snp125 *snp)
+/* If the user has selected a gene track for functional annotation,
+ * report how this SNP relates to any nearby genes. */
+{
+
+struct slName *geneTracks = NULL;
+
+struct trackDb *correctTdb = tdbOrAncestorByName(tdb, tdb->track);
+
+struct slName *defaultGeneTracks = slNameListFromComma(trackDbSetting(tdb, "defaultGeneTracks"));
+
+struct trackDb *geneTdbList = snp125FetchGeneTracks(database, cart);
+struct trackDb *gTdb;
+for (gTdb = geneTdbList; gTdb; gTdb=gTdb->next)
+    {
+    char *trackName = gTdb->track;
+    char suffix[512];
+    safef(suffix, sizeof(suffix), "geneTrack.%s", trackName);
+    boolean option = cartUsualBooleanClosestToHome(cart, correctTdb, FALSE, suffix, slNameInList(defaultGeneTracks,trackName));
+    if (option)
+        {
+        slNameAddHead(&geneTracks, trackName);
+        }
+    }
+
+if (geneTracks)
+    printSnp125FunctionShared(snp, geneTracks);
 }
 
 char *dbSnpFuncFromInt(unsigned char funcCode)

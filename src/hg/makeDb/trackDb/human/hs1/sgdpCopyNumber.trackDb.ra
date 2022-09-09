@@ -4,6 +4,9 @@ compositeTrack off
 shortLabel SGDP copy number
 longLabel  SGDP copy number estimates
 type bigBed 9 +
+noScoreFilter on
+filter.name 0
+filterLabel.name Minimum copy number
 itemRgb on
 group varRep
 maxItems 100000
@@ -3203,6 +3206,9 @@ shortLabel SGDP copy number subset
 longLabel  SGDP copy number estimates subset
 priority 102
 type bigBed 9 +
+noScoreFilter on
+filter.name 0
+filterLabel.name Minimum copy number
 itemRgb on
 maxItems 100000
 group varRep

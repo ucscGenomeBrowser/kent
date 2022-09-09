@@ -4619,6 +4619,21 @@ cgiMakeCheckBox(cartVar, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", desc);
 }
 
+void geneTrackMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
+                       boolean defaultOn)
+/* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
+ * NOTE: This does not have a track name argument, so the correct tdb must be passed in:
+ * if setting is at composite level, then pass in composite tdb, likewise for view. */
+{
+char suffix[512];
+safef(suffix, sizeof(suffix), "geneTrack.%s", sym);
+boolean option = cartUsualBooleanClosestToHome(cart, tdb, FALSE, suffix, defaultOn);
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, suffix);
+cgiMakeCheckBox(cartVar, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", desc);
+}
+
 static void freqSourceSelect(struct cart *cart, struct trackDb *tdb, char *name)
 /* Make a select input for preferred source of allele frequencies from
  * trackDb setting freqSourceOrder. */
@@ -4651,7 +4666,7 @@ cgiMakeDropListWithVals(cartVar, menu, values, ArraySize(menu), freqProj);
 puts("<br>");
 }
 
-static struct trackDb *tdbOrAncestorByName(struct trackDb *tdb, char *name)
+struct trackDb *tdbOrAncestorByName(struct trackDb *tdb, char *name)
 /* For reasons Angie cannot fathom, if a composite or view is passed to cfgByCfgType then
  * cfgByCfgType passes a leaf subtrack to its callees like bigDbSnpCfgUi.  That is why we
  * see so many calls to isNameAtParentLevel, which returns true if the tdb was originally
@@ -4670,6 +4685,118 @@ for (correctTdb = tdb;  correctTdb != NULL;  correctTdb = correctTdb->parent)
     if (startsWithWordByDelimiter(correctTdb->track, '.', name))
         return correctTdb;
 return NULL;
+}
+
+void snp153MakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet)
+/* Make a button for setting or clearing a set of checkboxes with the same name.
+ * Uses only javascript to change the checkboxes, no resubmit. */
+{
+char id[256];
+char javascript[256];
+safef(javascript, sizeof(javascript), 
+	"$(\"input:checkbox[name^='%s']\").each(function(){this.checked = %s;$(this).trigger('change');})",
+	buttonVar, isSet ? "true" : "false");
+safef(id, sizeof id, "%s_grp%sBut", buttonVar, isSet ? "Set" : "Clr");
+cgiMakeOnClickButton(id, javascript, isSet ? JS_SET_ALL_BUTTON_LABEL : JS_CLEAR_ALL_BUTTON_LABEL);
+}
+
+
+struct trackDb *snp125FetchGeneTracks(char *database, struct cart *cart)
+/* Get a list of genePred tracks. */
+{
+struct trackDb *tdbList = NULL;
+struct hash *trackHash = trackHashMakeWithComposites(database,NULL,&tdbList,FALSE);
+
+struct sqlConnection *conn = hAllocConn(database);
+struct slName *justGenePredTables = hTrackTablesOfType(conn, "genePred%%"), *gt;
+struct slName *bigGenePredTables = hTrackTablesOfType(conn, "bigGenePred%%");
+struct slName *genePredTables = slCat(justGenePredTables,bigGenePredTables);
+struct trackDb *geneTdbList = NULL, *gTdb;
+if (genePredTables != NULL)
+    {
+    for (gt = genePredTables;  gt != NULL;  gt = gt->next)
+	{
+	gTdb = hashFindVal(trackHash, gt->name);
+	if (gTdb && sameString(gTdb->grp, "genes"))
+	    {
+	    // We are going to overwrite gTdb's next pointer and possibly its priority,
+	    // so make a shallow copy:
+	    gTdb = CloneVar(gTdb);
+	    if (gTdb->parent)
+		gTdb->priority = (gTdb->parent->priority + gTdb->priority/1000);
+	    slAddHead(&geneTdbList, gTdb);
+	    }
+	}
+    slSort(&geneTdbList, trackDbCmp);
+    }
+hFreeConn(&conn);
+return geneTdbList;
+}
+
+void snp153OfferGeneTracksForFunction(char *database, struct cart *cart, char *name, struct trackDb *tdb, struct trackDb *correctTdb)
+/* Get a list of genePred tracks and make checkboxes to enable hgc's functional
+ * annotations. */
+{
+struct trackDb *geneTdbList = NULL, *gTdb;
+geneTdbList = snp125FetchGeneTracks(database, cart);
+if (geneTdbList)
+    {
+
+    char sectionVar[256];
+    safef(sectionVar, sizeof(sectionVar), "%s.geneTracks", name);
+    jsBeginCollapsibleSection(cart, name, sectionVar,
+			      "Use Gene Tracks for Functional Annotation", FALSE);
+    printf("<BR><B>On details page, show function and coding differences relative to: </B>\n");
+
+    char buttonVarPrefix[256];
+    safef(buttonVarPrefix, sizeof(buttonVarPrefix), "%s.geneTrack", name);
+    snp153MakeCheckboxGroupSetClearButton(buttonVarPrefix, TRUE);
+    snp153MakeCheckboxGroupSetClearButton(buttonVarPrefix, FALSE);
+
+    struct slName *defaultGeneTracks = slNameListFromComma(trackDbSetting(tdb, "defaultGeneTracks"));
+
+    int i;
+    int numCols = 4;
+    int menuSize = slCount(geneTdbList);
+    char **values = needMem(menuSize*sizeof(char *));
+    char **labels = needMem(menuSize*sizeof(char *));
+    for (i = 0, gTdb = geneTdbList;  i < menuSize && gTdb != NULL;  i++, gTdb = gTdb->next)
+	{
+	values[i] = gTdb->track;
+	if (gTdb->parent != NULL)
+	    {
+	    struct dyString *dy = dyStringNew(0);
+	    if (gTdb->parent->parent != NULL &&
+		!startsWith(gTdb->parent->parent->shortLabel, gTdb->parent->shortLabel))
+		dyStringPrintf(dy, "%s: ", gTdb->parent->parent->shortLabel);
+	    if (!startsWith(gTdb->parent->shortLabel, gTdb->shortLabel))
+		dyStringPrintf(dy, "%s: ", gTdb->parent->shortLabel);
+	    dyStringPrintf(dy, "%s", gTdb->shortLabel);
+	    labels[i] = dyStringCannibalize(&dy);
+	    }
+	else
+	    labels[i] = gTdb->shortLabel;
+	}
+
+    printf("<BR>\n");
+
+    puts("<TABLE BORDERWIDTH=0><TR>");
+    for (i = 0; i < menuSize; ++i)
+	{
+	if (i > 0 && (i % numCols) == 0)
+	    printf("</TR><TR>");
+	printf("<TD>");
+	geneTrackMakeCheckBox(cart, correctTdb, values[i], labels[i], slNameInList(defaultGeneTracks, values[i]) );
+        printf("</TD>");
+	}
+    if ((i % numCols) != 0)
+	while ((i++ % numCols) != 0)
+	    printf("<TD></TD>");
+    puts("</TR></TABLE>");
+
+    jsEndCollapsibleSection();
+
+    }
 }
 
 void bigDbSnpCfgUi(char *db, struct cart *cart, struct trackDb *leafTdb, char *name, char *title,
@@ -4697,7 +4824,16 @@ double minMaf = cartUsualDoubleClosestToHome(cart, leafTdb, parentLevel, "minMaf
 char cartVar[1024];
 safef(cartVar, sizeof cartVar, "%s.minMaf", name);
 cgiMakeDoubleVarWithLimits(cartVar, minMaf, "MAF", 0, 0.0, 0.5);
-puts("range: 0.0 - 0.5");
+puts("range: 0.0 - 0.5<br>");
+
+// Make wrapper table for collapsible sections:
+puts("<TABLE border=0 cellspacing=0 cellpadding=0>");
+
+snp153OfferGeneTracksForFunction(db, cart, name, leafTdb, correctTdb);
+
+// End wrapper table for collapsible sections:
+puts("</TABLE>");
+
 cfgEndBox(boxed);
 }
 

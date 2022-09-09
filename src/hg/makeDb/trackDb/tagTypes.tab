@@ -108,7 +108,7 @@ dbProfile *
 dbTrackType customTracks
 detailsUrls big*
 detailsTabUrls big*
-defaultGeneTracks bed
+defaultGeneTracks bed bigDbSnp
 defaultLabelFields big*
 defaultMaf wigMaf
 defaultMaxWeight bed
