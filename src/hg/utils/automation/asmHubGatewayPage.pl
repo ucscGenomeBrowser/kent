@@ -16,7 +16,7 @@ my $genomeSize = 0;	# will be set below
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
 sub usage() {
-  printf STDERR "usage: asmHubGatewayPage.pl <asmHubName> <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes <pathTo>/image.jpg <pathTo>/photoCredits.txt\n";
+  printf STDERR "usage: asmHubGatewayPage.pl <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes <pathTo>/image.jpg <pathTo>/photoCredits.txt\n";
   printf STDERR "output is to stdout, redirect to file: > description.html\n";
   printf STDERR "photoCredits.txt is a two line tag<tab>string file:\n";
   printf STDERR "tags: photoCreditURL and photoCreditName\n";
@@ -98,11 +98,11 @@ sub chromSizes($) {
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 5) {
+if ($argc != 4) {
   usage;
 }
 
-my ($asmHubName, $asmReport, $chromSizes, $jpgImage, $photoCredits) = @ARGV;
+my ($asmReport, $chromSizes, $jpgImage, $photoCredits) = @ARGV;
 if ( ! -s $asmReport ) {
   printf STDERR "ERROR: can not find '$asmReport'\n";
   usage;
@@ -449,7 +449,7 @@ gfClient -t=dnax -q=prot  -genome=$accessionId -genomeDataDir=$accessionDir \
 At this time, this genome size: %s, is too large (greater than 4294967296),
 to function with the UCSC blat system.  We hope to have improvements to
 that system in the future to allow blat service for the larger genome sizes.
-</p>\n", commify($genomeSize);
+</p>\n", &AsmHub::commify($genomeSize);
 }
 
 printf "<hr>
