@@ -88,7 +88,7 @@ static void selectDb(char **pDb, char **pLabel)
  * supported assembly, then make a menu / select input for supported  assemblies;
  * reload the page on change. */
 {
-struct slName *supportedDbs = phyloPlaceDbList();
+struct slName *supportedDbs = phyloPlaceDbList(cart);
 if (supportedDbs == NULL)
     errAbort("Sorry, this server is not configured to perform phylogenetic placement.");
 if (!slNameInList(supportedDbs, *pDb))

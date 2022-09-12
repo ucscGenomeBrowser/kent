@@ -4,14 +4,17 @@
 
 #include "common.h"
 #include "bigBed.h"
+#include "cart.h"
 #include "cheapcgi.h"
 #include "errCatch.h"
 #include "fa.h"
 #include "genePred.h"
+#include "grp.h"
 #include "hCommon.h"
 #include "hash.h"
 #include "hgConfig.h"
 #include "htmshell.h"
+#include "hubConnect.h"
 #include "hui.h"
 #include "iupac.h"
 #include "jsHelper.h"
@@ -36,7 +39,7 @@ int maxGenotypes = 1000;        // Upper limit on number of samples user can upl
 boolean showParsimonyScore = FALSE;
 
 
-struct slName *phyloPlaceDbList()
+struct slName *phyloPlaceDbList(struct cart *cart)
 /* Each subdirectory of PHYLOPLACE_DATA_DIR that contains a config.ra file is a supported db
  * or track hub name (without the hub_number_ prefix).  Return a list of them, or NULL if none
  * are found. */
@@ -82,16 +85,18 @@ for (path = dataDirPaths;  path != NULL;  path = path->next)
                     struct dyString *dy = dyStringCreate("https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/"
                                                          "%s/%s/hub.txt",
                                                          gcPrefix, first3, mid3, last3, db);
+                    // Use cart variables to pretend user clicked to connect to this hub.
+                    cartSetString(cart, hgHubDataText, dy->string);
+                    cartSetString(cart, hgHubGenome, db);
                     struct errCatch *errCatch = errCatchNew();
-                    struct trackHub *hub = NULL;
+                    char *hubDb = NULL;
                     if (errCatchStart(errCatch))
                         {
-                        hub = trackHubOpen(dy->string, db);
+                        hubDb = hubConnectLoadHubs(cart);
                         }
                     errCatchEnd(errCatch);
-                    if (hub != NULL && hub->genomeList != NULL &&
-                        endsWith(hub->genomeList->name, db))
-                        slNameAddHead(&dbList, hub->genomeList->name);
+                    if (hubDb != NULL)
+                        slNameAddHead(&dbList, hubDb);
                     }
                 }
             }
@@ -2585,7 +2590,6 @@ static void addAliases(struct hash *nameHash, char *aliasFile)
 if (isNotEmpty(aliasFile) && fileExists(aliasFile))
     {
     struct lineFile *lf = lineFileOpen(aliasFile, TRUE);
-    int missCount = 0;
     char *missExample = NULL;
     char *line;
     while (lineFileNextReal(lf, &line))
@@ -2598,15 +2602,11 @@ if (isNotEmpty(aliasFile) && fileExists(aliasFile))
             hashAdd(nameHash, words[0], fullName);
         else
             {
-            missCount++;
             if (missExample == NULL)
                 missExample = cloneString(words[1]);
             }
         }
     lineFileClose(&lf);
-    if (missCount > 0 && verboseLevel() > 1)
-        fprintf(stderr, "aliasFile %s: %d values in second column were not found in tree, "
-                "e.g. '%s'", aliasFile, missCount, missExample);
     }
 }
 

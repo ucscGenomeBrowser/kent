@@ -4,6 +4,7 @@
 #define _PHYLO_PLACE_H_
 
 #include "common.h"
+#include "cart.h"
 #include "dnaseq.h"
 #include "hash.h"
 #include "linefile.h"
@@ -201,7 +202,7 @@ struct sampleMetadata *metadataForSample(struct hash *sampleMetadata, char *samp
 struct phyloTree *phyloPruneToIds(struct phyloTree *node, struct slName *sampleIds);
 /* Prune all descendants of node that have no leaf descendants in sampleIds. */
 
-struct slName *phyloPlaceDbList();
+struct slName *phyloPlaceDbList(struct cart *cart);
 /* Each subdirectory of PHYLOPLACE_DATA_DIR that contains a config.ra file is a supported db
  * or track hub name (without the hub_number_ prefix).  Return a list of them, or NULL if none
  * are found. */
