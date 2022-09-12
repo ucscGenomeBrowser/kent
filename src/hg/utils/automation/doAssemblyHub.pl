@@ -35,7 +35,7 @@ use vars qw/
     $opt_xenoRefSeq
     $opt_noXenoRefSeq
     $opt_ucscNames
-    $opt_asmHubName
+    $opt_dbName
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -79,7 +79,7 @@ my $xenoRefSeq = "/hive/data/genomes/asmHubs/xenoRefSeq";
 my $noAugustus = 0;     # bacteria do *not* create an augustus track
 my $noXenoRefSeq = 0;	# bacteria do *not* create a xenoRefSeq track
 my $ucscNames = 0;  # default 'FALSE' (== 0)
-my $asmHubName = "n/a";  # directory name in: /gbdb/hubs/asmHubName
+my $dbName = "";  # default uses NCBI asmId for name, can specify: abcDef1
 my $workhorse = "hgwdev";  # default workhorse when none chosen
 my $fileServer = "hgwdev";  # default when none chosen
 my $bigClusterHub = "ku";  # default when none chosen
@@ -111,7 +111,7 @@ options:
        $sourceDir/GC[AF]/123/456/789/asmId
     -ucscNames        Translate NCBI/INSDC/RefSeq names to UCSC names
                       default is to use the given NCBI/INSDC/RefSeq names
-    -asmHubName <name>  directory name in: /gbdb/hubs/asmHubName
+    -dbName <name>    name for UCSC style database name, e.g. 'abcDef1'
     -species <name>   use this species designation if there is no
                       asmId_assembly_report.txt with an
                       'Organism name:' entry to obtain species
@@ -143,7 +143,7 @@ Automates build of assembly hub.  Steps:
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
     chromAlias:  construct asmId.chromAlias.txt for alias name recognition
-    gatewayPage: create html/asmId.description.html contents (USE: asmHubName)
+    gatewayPage: create html/asmId.description.html contents
     cytoBand: create cytoBand track and navigation ideogram
     gc5Base: create bigWig file for gc5Base track
     repeatMasker: run repeat masker cluster run and create bigBed files for
@@ -206,7 +206,7 @@ sub checkOptions {
 		      'ncbiRmsk',
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
-		      'asmHubName=s',
+		      'dbName=s',
 		      'noXenoRefSeq',
 		      'noAugustus',
 		      'ucscNames',
@@ -858,11 +858,14 @@ sub doSequence {
     }
   }
 
+  my $defaultName = $asmId;
+  $defaultName = $dbName if (length($dbName));
+
   $bossScript->add(<<_EOF_
 export asmId="$asmId"
+export dbName="$defaultName"
 
-
-if [ -s ../\$asmId.chrom.sizes ]; then
+if [ -s ../\$dbName.chrom.sizes ]; then
   printf "sequence step previously completed\\n" 1>&2
   exit 0
 fi
@@ -896,30 +899,30 @@ printf STDERR "partsDone: %d\n", $partsDone;
   }
 
   $bossScript->add(<<_EOF_
-zcat *.agp.gz | gzip > ../\$asmId.agp.gz
-faToTwoBit *.fa.gz ../\$asmId.2bit
-faToTwoBit -noMask *.fa.gz ../\$asmId.unmasked.2bit
-twoBitDup ../\$asmId.unmasked.2bit > \$asmId.dups.txt
+zcat *.agp.gz | gzip > ../\$dbName.agp.gz
+faToTwoBit *.fa.gz ../\$dbName.2bit
+faToTwoBit -noMask *.fa.gz ../\$dbName.unmasked.2bit
+twoBitDup ../\$dbName.unmasked.2bit > \$asmId.dups.txt
 if [ -s "\$asmId.dups.txt" ]; then
-  printf "ERROR: duplicate sequences found in ../\$asmId.unmasked.2bit\\n" 1>&2
+  printf "ERROR: duplicate sequences found in ../\$dbName.unmasked.2bit\\n" 1>&2
   cat \$asmId.dups.txt 1>&2
   awk '{print \$1}' \$asmId.dups.txt > \$asmId.remove.dups.list
-  mv ../\$asmId.unmasked.2bit ../\$asmId.unmasked.dups.2bit
-  twoBitToFa ../\$asmId.unmasked.dups.2bit stdout | faSomeRecords -exclude \\
+  mv ../\$dbName.unmasked.2bit ../\$dbName.unmasked.dups.2bit
+  twoBitToFa ../\$dbName.unmasked.dups.2bit stdout | faSomeRecords -exclude \\
     stdin \$asmId.remove.dups.list stdout | gzip -c > \$asmId.noDups.fasta.gz
-  rm -f ../\$asmId.2bit ../\$asmId.unmasked.2bit
-  faToTwoBit \$asmId.noDups.fasta.gz ../\$asmId.2bit
-  faToTwoBit -noMask \$asmId.noDups.fasta.gz ../\$asmId.unmasked.2bit
+  rm -f ../\$dbName.2bit ../\$dbName.unmasked.2bit
+  faToTwoBit \$asmId.noDups.fasta.gz ../\$dbName.2bit
+  faToTwoBit -noMask \$asmId.noDups.fasta.gz ../\$dbName.unmasked.2bit
 fi
 gzip -f \$asmId.dups.txt
-touch -r ../download/\$asmId.2bit ../\$asmId.2bit
-touch -r ../download/\$asmId.2bit ../\$asmId.unmasked.2bit
-touch -r ../download/\$asmId.2bit ../\$asmId.agp.gz
-twoBitInfo ../\$asmId.2bit stdout | sort -k2nr > ../\$asmId.chrom.sizes
-touch -r ../\$asmId.2bit ../\$asmId.chrom.sizes
+touch -r ../download/\$asmId.2bit ../\$dbName.2bit
+touch -r ../download/\$asmId.2bit ../\$dbName.unmasked.2bit
+touch -r ../download/\$asmId.2bit ../\$dbName.agp.gz
+twoBitInfo ../\$dbName.2bit stdout | sort -k2nr > ../\$dbName.chrom.sizes
+touch -r ../\$dbName.2bit ../\$dbName.chrom.sizes
 # verify everything is there
 twoBitInfo ../download/\$asmId.2bit stdout | sort -k2nr > source.\$asmId.chrom.sizes
-export newTotal=`ave -col=2 ../\$asmId.chrom.sizes | grep "^total"`
+export newTotal=`ave -col=2 ../\$dbName.chrom.sizes | grep "^total"`
 export oldTotal=`ave -col=2 source.\$asmId.chrom.sizes | grep "^total"`
 if [ "\$newTotal" != "\$oldTotal" ]; then
   printf "# ERROR: sequence construction error: not same totals source vs. new:\\n" 1>&2
@@ -927,20 +930,20 @@ if [ "\$newTotal" != "\$oldTotal" ]; then
   exit 255
 fi
 rm source.\$asmId.chrom.sizes
-export checkAgp=`checkAgpAndFa ../\$asmId.agp.gz ../\$asmId.2bit 2>&1 | tail -1`
+export checkAgp=`checkAgpAndFa ../\$dbName.agp.gz ../\$dbName.2bit 2>&1 | tail -1`
 if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ]; then
-  printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\\n" 1>&2
+  printf "# ERROR: checkAgpAndFa \$dbName.agp.gz \$dbName.2bit failing\\n" 1>&2
   exit 255
 fi
 _EOF_
   );
   if ($ucscNames) {
     $bossScript->add(<<_EOF_
-join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
-join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$1,\$2,\$3,\$2}' > \$asmId.ucscToNcbi.lift
+join -t\$'\\t' <(sort ../\$dbName.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
+join -t\$'\\t' <(sort ../\$dbName.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$1,\$2,\$3,\$2}' > \$asmId.ucscToNcbi.lift
 export c0=`cat \$asmId.ncbiToUcsc.lift | wc -l`
 export c1=`cat \$asmId.ucscToNcbi.lift | wc -l`
-export c2=`cat ../\$asmId.chrom.sizes | wc -l`
+export c2=`cat ../\$dbName.chrom.sizes | wc -l`
 # verify all names are accounted for
 if [ "\$c0" -ne "\$c2" ]; then
   printf "# ERROR: not all names accounted for in \$asmId.ncbiToUcsc.lift" 1>&2
@@ -954,10 +957,10 @@ _EOF_
     );
   }
   $bossScript->add(<<_EOF_
-twoBitToFa ../\$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
-touch -r ../\$asmId.2bit \$asmId.faCount.txt.gz
+twoBitToFa ../\$dbName.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
+touch -r ../\$dbName.2bit \$asmId.faCount.txt.gz
 zgrep -P "^total\t" \$asmId.faCount.txt.gz > \$asmId.faCount.signature.txt
-touch -r ../\$asmId.2bit \$asmId.faCount.signature.txt
+touch -r ../\$dbName.2bit \$asmId.faCount.signature.txt
 _EOF_
   );
   $bossScript->execute();
@@ -1063,10 +1066,6 @@ _EOF_
 #########################################################################
 # * step: gatewayPage [workhorse]
 sub doGatewayPage {
-  if ($asmHubName eq "n/a") {
-    printf STDERR "ERROR: step gatewayPage needs argument -asmHubName <name>\n";
-    exit 255;
-  }
   my $runDir = "$buildDir/html";
   &HgAutomate::mustMkdir($runDir);
 
@@ -1091,7 +1090,7 @@ sub doGatewayPage {
 export asmId=$asmId
 
 \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
-     $asmHubName ../download/\${asmId}_assembly_report.txt \\
+     ../download/\${asmId}_assembly_report.txt \\
        ../\${asmId}.chrom.sizes \\
          $photoJpg $photoCredit \\
            > \$asmId.description.html 2> \$asmId.names.tab
@@ -2043,6 +2042,7 @@ if (length($species) < 1) {
   }
 }
 
+$dbName = $opt_dbName ? $opt_dbName : $dbName;
 $rmskSpecies = $opt_rmskSpecies ? $opt_rmskSpecies : $species;
 $augustusSpecies = $opt_augustusSpecies ? $opt_augustusSpecies : $augustusSpecies;
 $xenoRefSeq = $opt_xenoRefSeq ? $opt_xenoRefSeq : $xenoRefSeq;
@@ -2053,17 +2053,18 @@ $workhorse = $opt_workhorse ? $opt_workhorse : $workhorse;
 $bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
 $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHub;
 $fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
-$asmHubName = $opt_asmHubName ? $opt_asmHubName : $asmHubName;
 $ncbiRmsk = $opt_ncbiRmsk ? 1 : 0;
 $noRmsk = $opt_noRmsk ? 1 : 0;
 
 die "can not find assembly source directory\n$assemblySource" if ( ! -d $assemblySource);
 printf STDERR "# buildDir: %s\n", $buildDir;
 printf STDERR "# sourceDir %s\n", $sourceDir;
+if (length($dbName)) {
+printf STDERR "# dbName %s - building in /hive/data/genomes/%s\n", $dbName, $dbName;
+}
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
 printf STDERR "# xenoRefSeq %s\n", $xenoRefSeq;
 printf STDERR "# assemblySource: %s\n", $assemblySource;
-printf STDERR "# asmHubName %s\n", $asmHubName;
 printf STDERR "# rmskSpecies %s\n", $rmskSpecies;
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
 printf STDERR "# ncbiRmsk %s\n", $ncbiRmsk ? "TRUE" : "FALSE";
