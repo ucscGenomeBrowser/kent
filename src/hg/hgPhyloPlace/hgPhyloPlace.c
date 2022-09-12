@@ -116,6 +116,8 @@ if (supportedDbCount > 1)
     cgiMakeDropListFull(selectVar, labels, values, supportedDbCount, *pDb, "change", js);
     puts("</p>");
     }
+else
+    cgiMakeHiddenVar("db", *pDb);
 slNameFreeList(&supportedDbs);
 }
 
