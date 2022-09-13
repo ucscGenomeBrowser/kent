@@ -1207,7 +1207,8 @@ sub doRepeatMasker {
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
+export ncbiAsmId=$asmId
 
 if [ $buildDir/\$asmId.2bit -nt faSize.rmsk.txt ]; then
 export species=`echo $rmskSpecies | sed -e 's/_/ /g;'`
@@ -1226,8 +1227,8 @@ doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asm
   -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
 
 if [ ! -s versionInfo.txt ]; then
-  if [ -s ../../download/${asmId}_rm.run ]; then
-    ln -s ../../download/${asmId}_rm.run versionInfo.txt
+  if [ -s ../../download/\${ncbiAsmId}_rm.run ]; then
+    ln -s ../../download/\${ncbiAsmId}_rm.run versionInfo.txt
   fi
 fi
 
@@ -1253,12 +1254,12 @@ sub doSimpleRepeat {
 
   my $trfClusterHub = $smallClusterHub;
 
-  my $seqCount = `cat $buildDir/$asmId.chrom.sizes | wc -l`;
+  my $seqCount = `cat $buildDir/$defaultName.chrom.sizes | wc -l`;
   chomp $seqCount;
   # check for large seqCount and large genome, then use bigCluster
   # the 100000 and 20000000 are from doSimpleRepeat.pl
   if ( $seqCount > 100000 ) {
-     my $genomeSize = `ave -col=2 $buildDir/$asmId.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
+     my $genomeSize = `ave -col=2 $buildDir/$defaultName.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
      chomp $genomeSize;
      if ($genomeSize > 200000000) {
 	$trfClusterHub = $bigClusterHub;
@@ -1266,7 +1267,7 @@ sub doSimpleRepeat {
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export buildDir=$buildDir
 
 if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
@@ -1312,7 +1313,7 @@ sub doAllGaps {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export buildDir=$buildDir
 
 if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
@@ -1391,11 +1392,11 @@ _EOF_
 # * step: idKeys [workhorse]
 sub doIdKeys {
   my $runDir = "$buildDir/trackData/idKeys";
-  if (! -s "$buildDir/$asmId.2bit") {
-    &HgAutomate::verbose(1, "ERROR: idKeys can not find $asmId.2bit\n");
+  if (! -s "$buildDir/$defaultName.2bit") {
+    &HgAutomate::verbose(1, "ERROR: idKeys can not find $defaultName.2bit\n");
     exit 255;
   }
-  if (! needsUpdate("$buildDir/$asmId.2bit", "$runDir/$asmId.keySignature.txt")) {
+  if (! needsUpdate("$buildDir/$defaultName.2bit", "$runDir/$defaultName.keySignature.txt")) {
      &HgAutomate::verbose(1, "# idKeys step previously completed\n");
      return;
   }
@@ -1406,7 +1407,7 @@ sub doIdKeys {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export twoBit=$buildDir/\$asmId.2bit
 
 if [ ../../\$asmId.2bit -nt \$asmId.keySignature.txt ]; then
@@ -1428,15 +1429,15 @@ sub doAddMask {
 
   my $goNoGo = 0;
   if (! $noRmsk) {
-    if ( ! -s "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit" ) {
+    if ( ! -s "$buildDir/trackData/repeatMasker/$defaultName.rmsk.2bit" ) {
        printf STDERR "ERROR: repeatMasker step not completed\n";
-       printf STDERR "can not find: $buildDir/trackData/repeatMasker/$asmId.rmsk.2bit\n";
+       printf STDERR "can not find: $buildDir/trackData/repeatMasker/$defaultName.rmsk.2bit\n";
        $goNoGo = 1;
     }
   }
-  if ( ! -s "$buildDir/trackData/windowMasker/$asmId.cleanWMSdust.2bit" ) {
+  if ( ! -s "$buildDir/trackData/windowMasker/$defaultName.cleanWMSdust.2bit" ) {
       printf STDERR "ERROR: windowMasker step not completed\n";
-      printf STDERR "can not find: $buildDir/trackData/windowMasker/$asmId.cleanWMSdust.2bit\n";
+      printf STDERR "can not find: $buildDir/trackData/windowMasker/$defaultName.cleanWMSdust.2bit\n";
       $goNoGo = 1;
   }
   if ( ! -s "$buildDir/trackData/simpleRepeat/doCleanup.csh" ) {
@@ -1454,21 +1455,27 @@ sub doAddMask {
   my $bossScript = newBash HgRemoteScript("$runDir/doAddMask.bash",
                     $workhorse, $runDir, $whatItDoes);
 
-  my $wmMasked=`grep "masked total" $buildDir/trackData/windowMasker/faSize.$asmId.cleanWMSdust.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+  my $wmMasked=`grep "masked total" $buildDir/trackData/windowMasker/faSize.$defaultName.cleanWMSdust.txt | awk '{print \$1}' | sed -e 's/%//;'`;
   my $rmMasked = 0;
   if (! $noRmsk) {
     $rmMasked=`grep "masked total" $buildDir/trackData/repeatMasker/faSize.rmsk.txt | awk '{print \$1}' | sed -e 's/%//;'`;
   }
 
-  my $src2BitToMask = "../repeatMasker/$asmId.rmsk.2bit";
+  my $src2BitToMask = "../repeatMasker/$defaultName.rmsk.2bit";
   if ($noRmsk || ($wmMasked > $rmMasked)) {
-    $src2BitToMask = "../windowMasker/$asmId.cleanWMSdust.2bit";
+    $src2BitToMask = "../windowMasker/$defaultName.cleanWMSdust.2bit";
+  }
+
+  my $accessionId = $defaultName;
+  if ($accessionId =~ m/^GC[AF]_/) {
+     my @a = split('_', $defaultName);
+     $accessionId = sprintf("%s_%s", $a[0], $a[1]);
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export src2Bit=$src2BitToMask
-export accessionId=`echo \$asmId | cut -d'_' -f1-2`
+export accessionId=$accessionId
 
 # if simple repeat has a result, add it, otherwise no add
 if [ -s ../simpleRepeat/trfMask.bed.gz ]; then
@@ -1524,7 +1531,7 @@ sub doWindowMasker {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.cleanWMSdust.txt ]; then
   \$HOME/kent/src/hg/utils/automation/doWindowMasker.pl -stop=twobit -buildDir=`pwd` -dbHost=$dbHost \\
@@ -1585,7 +1592,7 @@ sub doGapOverlap {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ ../../\$asmId.unmasked.2bit -nt \$asmId.gapOverlap.bed.gz ]; then
   doGapOverlap.pl -buildDir=`pwd` -bigClusterHub=$bigClusterHub -smallClusterHub=$smallClusterHub -workhorse=$workhorse -twoBit=../../\$asmId.2bit \$asmId
@@ -1602,23 +1609,23 @@ _EOF_
 # * step: tandemDups [workhorse]
 sub doTandemDups {
   my $runDir = "$buildDir/trackData/tandemDups";
-  if (! -s "$buildDir/$asmId.unmasked.2bit") {
+  if (! -s "$buildDir/$defaultName.unmasked.2bit") {
     &HgAutomate::verbose(1,
-	"ERROR: tandemDups: can not find $buildDir/$asmId.unmasked.2bit\n");
+	"ERROR: tandemDups: can not find $buildDir/$defaultName.unmasked.2bit\n");
     exit 255;
   }
-  my $ctgCount = `grep -c '^' $buildDir/$asmId.chrom.sizes`;
+  my $ctgCount = `grep -c '^' $buildDir/$defaultName.chrom.sizes`;
   chomp $ctgCount;
   if ( $ctgCount > 100000) {
    &HgAutomate::verbose(1, "# tandemDups step too many contigs at $ctgCount\n");
        return;
   }
   if (-d "${runDir}" ) {
-     if (! -s "$runDir/$asmId.tandemDups.bb") {
+     if (! -s "$runDir/$defaultName.tandemDups.bb") {
        &HgAutomate::verbose(1,
        "WARNING tandemDups step may already be running, but not completed ?\n");
        return;
-     } elsif (! needsUpdate("$buildDir/$asmId.unmasked.2bit", "$runDir/$asmId.tandemDups.bb")) {
+     } elsif (! needsUpdate("$buildDir/$defaultName.unmasked.2bit", "$runDir/$defaultName.tandemDups.bb")) {
        &HgAutomate::verbose(1, "# tandemDups step previously completed\n");
        return;
      }
@@ -1631,7 +1638,7 @@ sub doTandemDups {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export twoBit=$buildDir/\$asmId.unmasked.2bit
 
 if [ \$twoBit -nt \$asmId.tandemDups.bb ]; then
@@ -1658,7 +1665,7 @@ sub doCpgIslands {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 mkdir -p masked unmasked
 cd unmasked
@@ -1711,17 +1718,17 @@ sub doNcbiGene {
   }
   my $runDir = "$buildDir/trackData/ncbiGene";
   if (-d "${runDir}" ) {
-     if (! -s "$runDir/$asmId.ncbiGene.bb") {
+     if (! -s "$runDir/$defaultName.ncbiGene.bb") {
        &HgAutomate::verbose(1,
        "WARNING ncbiGene step may already be running, but not completed ?\n");
        return;
-     } elsif (! needsUpdate("$gffFile", "$runDir/$asmId.ncbiGene.bb")) {
+     } elsif (! needsUpdate("$gffFile", "$runDir/$defaultName.ncbiGene.bb")) {
        &HgAutomate::verbose(1, "# ncbiGene step previously completed\n");
        return;
      }
   }
-  if (! -s "$buildDir/$asmId.faSize.txt") {
-    &HgAutomate::verbose(1, "# step ncbiGene: can not find faSize.txt at:\n#  $buildDir/$asmId.faSize.txt\n");
+  if (! -s "$buildDir/$defaultName.faSize.txt") {
+    &HgAutomate::verbose(1, "# step ncbiGene: can not find faSize.txt at:\n#  $buildDir/$defaultName.faSize.txt\n");
     exit 255;
   }
 
@@ -1737,7 +1744,7 @@ sub doNcbiGene {
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export gffFile=$gffFile
 
 function cleanUp() {
@@ -1764,7 +1771,7 @@ _EOF_
   if ($ucscNames) {
     $bossScript->add(<<_EOF_
   liftUp -extGenePred -type=.gp stdout \\
-    ../../sequence/\$asmId.ncbiToUcsc.lift warn \\
+    ../../sequence/$asmId.ncbiToUcsc.lift warn \\
       \$asmId.ncbiGene.genePred.gz | gzip -c \\
         > \$asmId.ncbiGene.ucsc.genePred.gz
   ncbiGenePred="\$asmId.ncbiGene.ucsc.genePred.gz"
@@ -1838,10 +1845,10 @@ sub doNcbiRefSeq {
 
   my $liftSpec = "";
   if ($ucscNames) {
-    $liftSpec="-liftFile=\"\$buildDir/sequence/\$asmId.ncbiToUcsc.lift\"";
+    $liftSpec="-liftFile=\"\$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
   }
   $bossScript->add(<<_EOF_
-export asmId="$asmId"
+export asmId="$defaultName"
 export buildDir="$buildDir"
 export liftSpec="$liftSpec"
 export target2bit="\$buildDir/\$asmId.2bit"
@@ -1852,7 +1859,7 @@ if [ $buildDir/\$asmId.2bit -nt \$asmId.ncbiRefSeq.bb ]; then
       -assemblyHub -bigClusterHub=$bigClusterHub -dbHost=$dbHost $liftSpec \\
       -target2bit="\$target2bit" \\
       -stop=load -fileServer=$fileServer -smallClusterHub=$smallClusterHub -workhorse=$workhorse \\
-      \$asmId \$asmId
+      $asmId \$asmId
 else
   printf "# ncbiRefSeq step previously completed\\n" 1>&2
 fi
@@ -1869,17 +1876,17 @@ sub doAugustus {
 	return;
   }
   my $runDir = "$buildDir/trackData/augustus";
-  if (! -s "$buildDir/$asmId.2bit") {
+  if (! -s "$buildDir/$defaultName.2bit") {
     &HgAutomate::verbose(1,
-	"ERROR: augustus step can not find $buildDir/$asmId.2bit\n");
+	"ERROR: augustus step can not find $buildDir/$defaultName.2bit\n");
     exit 255;
   }
   if (-d "${runDir}" ) {
-     if (! -s "$runDir/$asmId.augustus.bb") {
+     if (! -s "$runDir/$defaultName.augustus.bb") {
        &HgAutomate::verbose(1,
        "WARNING augustus step may already be running, but not completed ?\n");
        return;
-     } elsif (! needsUpdate("$buildDir/$asmId.2bit", "$runDir/$asmId.augustus.bb")) {
+     } elsif (! needsUpdate("$buildDir/$defaultName.2bit", "$runDir/$defaultName.augustus.bb")) {
        &HgAutomate::verbose(1, "# augustus step previously completed\n");
        return;
      }
@@ -1892,7 +1899,7 @@ sub doAugustus {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.augustus.bb ]; then
   time (~/kent/src/hg/utils/automation/doAugustus.pl -stop=makeGp -buildDir=`pwd` -dbHost=$dbHost \\
@@ -1925,7 +1932,7 @@ sub doXenoRefGene {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.xenoRefGene.bb ]; then
   time (~/kent/src/hg/utils/automation/doXenoRefGene.pl -buildDir=`pwd` -dbHost=$dbHost \\

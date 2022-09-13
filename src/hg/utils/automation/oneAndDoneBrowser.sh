@@ -126,10 +126,16 @@ if [ "x${noRmsk}y" != "xy" ]; then
 fi
 printf "\n" 1>&2
 
+# possible steps in order:
+
+# download sequence assemblyGap chromAlias gatewayPage cytoBand gc5Base
+# repeatMasker simpleRepeat allGaps idKeys windowMasker addMask gapOverlap
+# tandemDups cpgIslands ncbiGene ncbiRefSeq xenoRefGene augustus trackDb cleanup
+
 ## export stepStart="download"
 ## export stepEnd="sequence"
-export stepStart="chromAlias"
-export stepEnd="chromAlias"
+export stepStart="ncbiGene"
+export stepEnd="augustus"
 
 printf "cd \"${buildDir}\"\n" 1>&2
 cd "${buildDir}"
@@ -182,4 +188,7 @@ cat dbDbInsert.sql 1>&2
 
 if [ ! -s "chrom.sizes" ]; then
   ln -s $dbName.chrom.sizes chrom.sizes
+fi
+if [ ! -d "bed" ]; then
+  ln -s trackData bed
 fi
