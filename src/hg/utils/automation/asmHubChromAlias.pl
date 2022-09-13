@@ -4,8 +4,8 @@ use strict;
 use warnings;
 
 my $argc = scalar(@ARGV);
-if ($argc != 1) {
-  printf STDERR "usage: asmHubChromAlias.pl asmId > asmId.chromAlias.tab\n\n";
+if ($argc != 2) {
+  printf STDERR "usage: asmHubChromAlias.pl asmId ncbiAsmId > asmId.chromAlias.tab\n\n";
   printf STDERR "where asmId is something like: GCF_000001735.4_TAIR10.1\n";
   printf STDERR "Outputs a tab file suitable for processing with ixIxx to\n";
   printf STDERR "create an index file to use in an assembly hub.\n";
@@ -26,6 +26,7 @@ my $sequenceCount = 0;
 my %sequenceSizes;	# key is sequence name, value is sequence size
 
 my $asmId = shift;
+my $ncbiAsmId = shift;
 
 my %aliasOut;	# key is source name, value is a hash pointer where
 		# key is alias name and value is chrom name
@@ -135,7 +136,7 @@ sub addAlias($$$) {
 # asmSource - is this a genbank or refseq assembly
 my $asmSource = "genbank";
 my $isRefSeq = 0; #       == 0 for Genbank assembly, == 1 for RefSeq assembly
-if ($asmId =~ m/^GCF/) {
+if ($ncbiAsmId =~ m/^GCF/) {
 #  printf STDERR "# processing a RefSeq assembly\n";
   $isRefSeq = 1;
   $asmSource = "refseq";
