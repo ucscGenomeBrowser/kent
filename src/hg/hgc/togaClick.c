@@ -428,6 +428,7 @@ printf("<div id=\"collapseExons\" class=\"panel-collapse collapse\">\n");
 printf("%s\n", info->exon_ali_html);
 
 htmlHorizontalLine();
+printf("</div>\n<BR>\n");
 
 // TODO: check whether I need this
 printf("%s", hgTracksPathAndSettings());
