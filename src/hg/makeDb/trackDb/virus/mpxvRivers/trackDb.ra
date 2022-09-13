@@ -114,3 +114,5 @@ visibility dense
 type bigBed 3
 bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.windowMasker.bb
 html html/GCF_014621545.1_ASM1462154v1.windowMasker
+
+include pcrAmplicon.ra

@@ -1,0 +1,8 @@
+track pcrAmplicon
+shortLabel pcrAmplicon
+longLabel pcrAmplicon
+group map
+visibility hide
+type bigBed 12 +
+bigDataUrl /gbdb/mpxvRivers/pcrAmplicon/pcrAmplicon.bb
+#itemRgb on
