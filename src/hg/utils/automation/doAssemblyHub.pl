@@ -80,6 +80,7 @@ my $noAugustus = 0;     # bacteria do *not* create an augustus track
 my $noXenoRefSeq = 0;	# bacteria do *not* create a xenoRefSeq track
 my $ucscNames = 0;  # default 'FALSE' (== 0)
 my $dbName = "";  # default uses NCBI asmId for name, can specify: abcDef1
+my $defaultName = "";  # will be asmId or dbName if present
 my $workhorse = "hgwdev";  # default workhorse when none chosen
 my $fileServer = "hgwdev";  # default when none chosen
 my $bigClusterHub = "ku";  # default when none chosen
@@ -194,7 +195,7 @@ Assumptions:
 # Command line args: asmId
 my ( $asmId);
 # Other:
-my ($buildDir, $secondsStart, $secondsEnd, $assemblySource);
+my ($buildDir, $secondsStart, $secondsEnd, $assemblySource, $asmReport);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -858,9 +859,6 @@ sub doSequence {
     }
   }
 
-  my $defaultName = $asmId;
-  $defaultName = $dbName if (length($dbName));
-
   $bossScript->add(<<_EOF_
 export asmId="$asmId"
 export dbName="$defaultName"
@@ -977,7 +975,7 @@ sub doAssemblyGap {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId="$defaultName"
 
 if [ ../../\$asmId.agp.gz -nt \$asmId.assembly.bb ]; then
 
@@ -1027,7 +1025,7 @@ sub doChromAlias {
 
   $bossScript->add(<<_EOF_
 export buildDir=$buildDir
-export asmId=$asmId
+export asmId="$defaultName"
 
 \$HOME/kent/src/hg/utils/automation/asmHubChromAlias.pl \\
     \${asmId} | sort > \${asmId}.chromAlias.txt
@@ -1088,10 +1086,10 @@ sub doGatewayPage {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
+export asmReport="$asmReport"
 
 \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
-     ../download/\${asmId}_assembly_report.txt \\
-       ../\${asmId}.chrom.sizes \\
+     \${asmReport} ../\${asmId}.chrom.sizes \\
          $photoJpg $photoCredit \\
            > \$asmId.description.html 2> \$asmId.names.tab
 \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
@@ -2024,7 +2022,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 
 $sourceDir = $opt_sourceDir ? $opt_sourceDir : $sourceDir;
 $assemblySource = $opt_sourceDir ? "$opt_sourceDir" : "$sourceDir/$ftpDir";
-my $asmReport = "$assemblySource/${asmId}_assembly_report.txt";
+$asmReport = "$assemblySource/${asmId}_assembly_report.txt";
 
 $species = $opt_species ? $opt_species : $species;
 
@@ -2055,6 +2053,9 @@ $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHu
 $fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
 $ncbiRmsk = $opt_ncbiRmsk ? 1 : 0;
 $noRmsk = $opt_noRmsk ? 1 : 0;
+$defaultName = $asmId;
+$defaultName = $dbName if (length($dbName));
+
 
 die "can not find assembly source directory\n$assemblySource" if ( ! -d $assemblySource);
 printf STDERR "# buildDir: %s\n", $buildDir;

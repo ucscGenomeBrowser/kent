@@ -126,8 +126,10 @@ if [ "x${noRmsk}y" != "xy" ]; then
 fi
 printf "\n" 1>&2
 
-export stepStart="download"
-export stepEnd="sequence"
+## export stepStart="download"
+## export stepEnd="sequence"
+export stepStart="chromAlias"
+export stepEnd="chromAlias"
 
 printf "cd \"${buildDir}\"\n" 1>&2
 cd "${buildDir}"
@@ -147,6 +149,9 @@ $HOME/kent/src/hg/utils/automation/doAssemblyHub.pl \
               -workhorse=hgwdev "${asmId}" >> build.log 2>&1
 
 cd "${buildDir}"
+
+if [ "download/${asmId}_assembly_report.txt" -nt "${dbName}.config.ra" ]; then
+
 $HOME/kent/src/hg/utils/automation/prepConfig.pl "${dbName}" \
   "${hgCentralClade}" "${trackDbDir}" download/${asmId}_assembly_report.txt \
        > ${dbName}.config.ra
@@ -160,9 +165,6 @@ export orderKey=`grep "^orderKey" ${dbName}.config.ra | sed -e "s/orderKey \+//"
 export accessionID=`grep "^genBankAccessionID" ${dbName}.config.ra | sed -e "s/genBankAccessionID \+//"`
 export defaultPos=`head -1 $dbName.chrom.sizes | awk '{end=int($2/2)+9999; if (end > $2){end = $2}; printf "%s:%d-%d", $1, int($2/2), end}'`
 
-printf "where is the invalid number\n"
-echo "${dbName}" "${asmDate}" "${asmName}" "${dbName}" "${dbName}" "${comName}" "${defaultPos}" "${orderKey}" "${comName}" "${sciName}" "${dbName}" "${accessionID}"
-
 printf "DELETE from dbDb where name = \"%s\";\n" "${dbName}" > dbDbInsert.sql
 printf "INSERT INTO dbDb
     (name, description, nibPath, organism,
@@ -173,3 +175,11 @@ printf "(\"%s\", \"%s (%s/%s)\", \"/gbdb/%s\", \"%s\",
    \"%s\", 1, %d, \"%s\", \"%s\", \"/gbdb/%s/html/description.html\", 0,
      1, \"%s\", %d);\n" "${dbName}" "${asmDate}" "${asmName}" "${dbName}" "${dbName}" "${comName}" "${defaultPos}" "${orderKey}" "${comName}" "${sciName}" "${dbName}" "${accessionID}" "${taxId}" >> dbDbInsert.sql
 
+fi
+
+printf "# dbDbInsert.sql statement is completed:\n" 1>&2
+cat dbDbInsert.sql 1>&2
+
+if [ ! -s "chrom.sizes" ]; then
+  ln -s $dbName.chrom.sizes chrom.sizes
+fi
