@@ -1961,12 +1961,12 @@ sub doTrackDb {
   my $bossScript = newBash HgRemoteScript("$runDir/doTrackDb.bash",
                     $workhorse, $runDir, $whatItDoes);
 
-  if (! -s "${buildDir}/trackData/chromAlias/${asmId}.chromAlias.txt" ) {
-    die "ERROR: can not find ${asmId}.chromAlias.txt in\n# ${buildDir}/trackData/chromAlias/\n";
+  if (! -s "${buildDir}/trackData/chromAlias/${defaultName}.chromAlias.txt" ) {
+    die "ERROR: can not find ${defaultName}.chromAlias.txt in\n# ${buildDir}/trackData/chromAlias/\n";
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export buildDir=$buildDir
 
 rm -f \$asmId.chromAlias.txt
