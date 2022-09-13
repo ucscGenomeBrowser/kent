@@ -4,7 +4,7 @@ include simpleRepeat.trackDb.ra
 include cpgIslands.trackDb.ra
 include windowMasker.trackDb.ra
 include xenoRefGene.trackDb.ra
-include humanChainNet.trackDb.ra
+include humanChainNet.trackDb.ra alpha
 include ncbiRefSeq.trackDb.ra
 
 include t2t-supplied.trackDb.ra
