@@ -1028,7 +1028,7 @@ export buildDir=$buildDir
 export asmId="$defaultName"
 
 \$HOME/kent/src/hg/utils/automation/asmHubChromAlias.pl \\
-    \${asmId} | sort > \${asmId}.chromAlias.txt
+    \${asmId} $asmId | sort > \${asmId}.chromAlias.txt
 
 \$HOME/kent/src/hg/utils/automation/aliasTextToBed.pl \\
   -chromSizes=\$buildDir/\$asmId.chrom.sizes \\
