@@ -1117,14 +1117,14 @@ sub doCytoBand {
   my $bossScript = newBash HgRemoteScript("$runDir/doCytoBand.bash",
                     $workhorse, $runDir, $whatItDoes);
 
-  if ( ! -s "$buildDir/$asmId.chrom.sizes" ) {
+  if ( ! -s "$buildDir/$defaultName.chrom.sizes" ) {
       printf STDERR "ERROR: sequence step not completed\n";
-      printf STDERR "can not find: $buildDir/$asmId.chrom.sizes\n";
+      printf STDERR "can not find: $buildDir/$defaultName.chrom.sizes\n";
       exit 255;
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ ../../\$asmId.chrom.sizes -nt \$asmId.cytoBand.bb ]; then
   awk '{printf "%s\\t0\\t%d\\t\\tgneg\\n", \$1, \$2}' ../../\$asmId.chrom.sizes | sort -k1,1 -k2,2n > \$asmId.cytoBand.bed
@@ -1151,7 +1151,7 @@ sub doGc5Base {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ ../../\$asmId.2bit -nt \$asmId.gc5Base.bw ]; then
   hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \\
