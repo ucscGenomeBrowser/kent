@@ -108,8 +108,12 @@ sub addAlias($$$) {
   if ($sequence eq "na") {
     return;
   }
+  # it is OK to allow duplicate names, different naming authorities could
+  # have the same name, found for example in GCF_006542625.1_Asia_NLE_v1
+  # which has UCSC names identical to 'assembly' names and the hub has been
+  # build with UCSC names
   # do not need to add the sequence name itself
-  return if ($alias eq $sequence);
+  #  return if ($alias eq $sequence);
   if (!defined($aliasOut{$source})) {
      my %h;	# hash: key: alias name, value 'native' chrom name
      $aliasOut{$source} = \%h;
@@ -308,7 +312,6 @@ while (my $line = <FH>) {
      printf STDERR "# skipping duplicate name $refSeqName\n";
      next;
   }
-  printf STDERR "# asmRpt: '%s'\t'%s'\t'%s'\n", $asmName, $gbkName, $refSeqName if ($dbgCount < 5);
 #  next if ($refSeqName eq "na");	# may not be any RefSeq name
 #  next if ($gbkName eq "na");	# may not be any GenBank name
   # fill in ncbiToUcsc for potentially the 'other' NCBI name
@@ -319,6 +322,13 @@ while (my $line = <FH>) {
   if (defined($ncbiToUcsc{$gbkName}) && !defined($ncbiToUcsc{$refSeqName})) {
     $ncbiToUcsc{$refSeqName} = $ncbiToUcsc{$gbkName};
     $ucscToNcbi{$ncbiToUcsc{$gbkName}} = $refSeqName;
+  }
+  if (defined($ncbiToUcsc{$gbkName})) {
+     printf STDERR "# asmRpt: '%s'\t'%s'\t'%s'\t'%s'\n", $asmName, $gbkName, $refSeqName, $ncbiToUcsc{$gbkName} if ($dbgCount < 5);
+  } elsif (defined($ncbiToUcsc{$refSeqName})) {
+     printf STDERR "# asmRpt: '%s'\t'%s'\t'%s'\t'%s'\n", $asmName, $gbkName, $refSeqName, $ncbiToUcsc{$refSeqName} if ($dbgCount < 5);
+  } else {
+     printf STDERR "# asmRpt: '%s'\t'%s'\t'%s'\tno UCSC name\n", $asmName, $gbkName, $refSeqName if ($dbgCount < 5);
   }
   if ($refSeqName ne "na") {
     my $seqName = $refSeqName;
