@@ -114,14 +114,3 @@ visibility dense
 type bigBed 3
 bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.windowMasker.bb
 html html/GCF_014621545.1_ASM1462154v1.windowMasker
-
-
-track BRwindowMasker
-shortLabel BRWM + SDust
-longLabel Genomic Intervals Masked by WindowMasker + SDust
-group varRep
-visibility dense
-type bigBed 3
-bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.windowMasker.bb
-html html/GCF_014621545.1_ASM1462154v1.windowMasker
-
