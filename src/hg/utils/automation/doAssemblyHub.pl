@@ -1067,7 +1067,7 @@ sub doGatewayPage {
   my $runDir = "$buildDir/html";
   &HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes = "construct html/$asmId.description.html";
+  my $whatItDoes = "construct html/$defaultName.description.html";
   my $bossScript = newBash HgRemoteScript("$runDir/doGatewayPage.bash",
                     $workhorse, $runDir, $whatItDoes);
 
@@ -1076,6 +1076,7 @@ sub doGatewayPage {
   my $photoLink = "";
   my $speciesNoBlank = $species;
   $speciesNoBlank =~ s/ /_/g;
+printf STDERR "# looking for photo species: %s\n", ${speciesNoBlank};
   if ( -s "$runDir/../photo/$speciesNoBlank.jpg" ) {
      $photoJpg = "../photo/${speciesNoBlank}.jpg";
      $photoCredit = "../photo/photoCredits.txt";
@@ -1084,8 +1085,14 @@ sub doGatewayPage {
      printf STDERR "# gatewayPage: warning: no photograph available\n";
   }
 
+printf STDERR "# asmId: %s\n", $defaultName;
+printf STDERR "# asmReport %s\n", $asmReport;
+printf STDERR "# chrom.sizes: ../%s.chrom.sizes\n", $defaultName;
+printf STDERR "# photoJpg %s\n", $photoJpg;
+printf STDERR "# photoCredit %s\n", $photoCredit;
+
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId="$defaultName"
 export asmReport="$asmReport"
 
 \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\

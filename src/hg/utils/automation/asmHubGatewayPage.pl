@@ -28,7 +28,6 @@ sub usage() {
 sub chromSizes($) {
   my ($sizeFile) = @_;
   if ( -s $sizeFile ) {
-    printf STDERR "# reading chrom.sizes file:\n#\t'%s\'\n", $sizeFile;
     my $ix = 0;
     my $contigCount = 0;
 
@@ -134,7 +133,6 @@ my $imageHeight = 0;
 my $imageWidthBorder = 15;
 
 if ($jpgImage ne "noPhoto") {
-  printf STDERR "# reading $photoCredits\n";
   open (FH, "<$photoCredits") or die "can not read $photoCredits";
   while (my $line = <FH>) {
     chomp $line;
@@ -162,7 +160,8 @@ if ($jpgImage ne "noPhoto") {
 my $thisDir = `pwd`;
 chomp $thisDir;
 my $ftpName = dirname($thisDir);
-my $asmId = basename($ftpName);;
+my $asmId = basename($asmReport);
+$asmId =~ s/_assembly_report.txt//;
 my ($gcXPrefix, $accession, $rest) = split('_', $asmId, 3);
 my $accessionId = sprintf("%s_%s", $gcXPrefix, $accession);
 
@@ -181,11 +180,8 @@ $ftpName =~ s#/hive/data/inside/ncbi/##;
 $ftpName =~ s#/hive/data/genomes/asmHubs/##;
 # my $urlDirectory = `basename $ftpName`;
 # chomp $urlDirectory;
-my $speciesSubgroup = $ftpName;
 my $asmType = "genbank";
 $asmType = "refseq" if ( $gcXPrefix =~ m#GCF#);
-$speciesSubgroup =~ s#genomes/$asmType/##;;
-$speciesSubgroup =~ s#/.*##;;
 
 my %taxIdCommonName;  # key is taxId, value is common name
                       # from NCBI taxonomy database dump
