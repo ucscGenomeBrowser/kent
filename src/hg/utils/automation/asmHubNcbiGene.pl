@@ -9,10 +9,13 @@ use File::Basename;
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 3) {
-  printf STDERR "usage: asmHubNcbiGene.pl asmId asmId.names.tab .../trackData/\n";
+if ($argc != 4) {
+  printf STDERR "usage: asmHubNcbiGene.pl asmId ncbiAsmId asmId.names.tab .../trackData/\n";
   printf STDERR "where asmId is the assembly identifier,\n";
   printf STDERR "and .../trackData/ is the path to the /trackData/ directory.\n";
+  printf STDERR "asmId may be equal to ncbiAsmId if it is a GenArk build\n";
+  printf STDERR "or asmId might be a default dbName if it is a UCSC style\n";
+  printf STDERR "browser build.\n";
   exit 255;
 }
 
@@ -25,6 +28,7 @@ sub commify($) {
 }
 
 my $asmId = shift;
+my $ncbiAsmId = shift;
 my $namesFile = shift;
 my $trackDataDir = shift;
 my $ncbiGeneBbi = "$trackDataDir/ncbiGene/$asmId.ncbiGene.bb";
@@ -35,10 +39,10 @@ if ( ! -s $ncbiGeneBbi ) {
   exit 255;
 }
 
-my @partNames = split('_', $asmId);
+my @partNames = split('_', $ncbiAsmId);
 my $ftpDirPath = sprintf("%s/%s/%s/%s/%s", $partNames[0],
    substr($partNames[1],0,3), substr($partNames[1],3,3),
-   substr($partNames[1],6,3), $asmId);
+   substr($partNames[1],6,3), $ncbiAsmId);
 
 $asmType = "genbank" if ($partNames[0] =~ m/GCA/);
 my $totalBases = `ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
@@ -63,8 +67,8 @@ chomp $organism;
 print <<_EOF_
 <h2>Description</h2>
 <p>
-The NCBI Gene track for the $assemblyDate $em${organism}$noEm/$asmId
-genome assembly is constructed from the gff file <b>${asmId}_genomic.gff.gz</b>
+The NCBI Gene track for the $assemblyDate $em${organism}$noEm/$ncbiAsmId
+genome assembly is constructed from the gff file <b>${ncbiAsmId}_genomic.gff.gz</b>
 delivered with the NCBI RefSeq genome assemblies at the FTP location:<br>
 <a href='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
 </p>
