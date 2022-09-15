@@ -4,7 +4,7 @@ longLabel T2T Encode Reanalysis
 group regulation
 compositeTrack on
 subGroup1 cell Cell_Line \
-  22Rv1=22Rv1 \
+  CL_22Rv1=22Rv1 \
   BE2C=BE2C \
   C4-2B=C4-2B \
   Caco-2=Caco-2 \
@@ -54,7 +54,7 @@ html html/encode.html
     longLabel 22Rv1 CTCF Coverage
     bigDataUrl /gbdb/hs1/encode/coverage/22Rv1.CTCF.chm13v2.0.bw
     parent T2T_Encode_Coverage
-    subGroups cell=22Rv1 ab=CTCF view=coverage
+    subGroups cell=CL_22Rv1 ab=CTCF view=coverage
     type bigWig
 
     track T2T_Encode_Coverage_22Rv1.Control
@@ -62,7 +62,7 @@ html html/encode.html
     longLabel 22Rv1 Control Coverage
     bigDataUrl /gbdb/hs1/encode/coverage/22Rv1.Control.chm13v2.0.bw
     parent T2T_Encode_Coverage
-    subGroups cell=22Rv1 ab=Control view=coverage
+    subGroups cell=CL_22Rv1 ab=Control view=coverage
     type bigWig
 
     track T2T_Encode_Coverage_22Rv1.H3K27ac
@@ -70,7 +70,7 @@ html html/encode.html
     longLabel 22Rv1 H3K27ac Coverage
     bigDataUrl /gbdb/hs1/encode/coverage/22Rv1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Coverage
-    subGroups cell=22Rv1 ab=H3K27ac view=coverage
+    subGroups cell=CL_22Rv1 ab=H3K27ac view=coverage
     type bigWig
 
     track T2T_Encode_Coverage_BE2C.Control
@@ -529,7 +529,7 @@ html html/encode.html
     longLabel 22Rv1 CTCF Enrichment
     bigDataUrl /gbdb/hs1/encode/enrichment/22Rv1.CTCF.chm13v2.0.bw
     parent T2T_Encode_Enrichment
-    subGroups cell=22Rv1 ab=CTCF view=enrichment
+    subGroups cell=CL_22Rv1 ab=CTCF view=enrichment
     type bigWig
 
     track T2T_Encode_Enrichment_22Rv1.H3K27ac
@@ -537,7 +537,7 @@ html html/encode.html
     longLabel 22Rv1 H3K27ac Enrichment
     bigDataUrl /gbdb/hs1/encode/enrichment/22Rv1.H3K27ac.chm13v2.0.bw
     parent T2T_Encode_Enrichment
-    subGroups cell=22Rv1 ab=H3K27ac view=enrichment
+    subGroups cell=CL_22Rv1 ab=H3K27ac view=enrichment
     type bigWig
 
     track T2T_Encode_Enrichment_BE2C.H3K27me3
@@ -889,7 +889,7 @@ html html/encode.html
     longLabel 22Rv1 CTCF Macs2 Peaks
     bigDataUrl /gbdb/hs1/encode/peaks/22Rv1.CTCF.chm13v2.0.bb
     parent T2T_Encode_Peaks
-    subGroups cell=22Rv1 ab=CTCF view=peaks
+    subGroups cell=CL_22Rv1 ab=CTCF view=peaks
     type bigBed 6 +
 
     track T2T_Encode_Peaks_22Rv1.H3K27ac
@@ -897,7 +897,7 @@ html html/encode.html
     longLabel 22Rv1 H3K27ac Macs2 Peaks
     bigDataUrl /gbdb/hs1/encode/peaks/22Rv1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_Peaks
-    subGroups cell=22Rv1 ab=H3K27ac view=peaks
+    subGroups cell=CL_22Rv1 ab=H3K27ac view=peaks
     type bigBed 6 +
 
     track T2T_Encode_Peaks_BE2C.H3K27me3
@@ -1249,7 +1249,7 @@ html html/encode.html
     longLabel 22Rv1 CTCF hg38 liftover Macs2 Peaks
     bigDataUrl /gbdb/hs1/encode/LO_peaks/22Rv1.CTCF.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
-    subGroups cell=22Rv1 ab=CTCF view=LOpeaks
+    subGroups cell=CL_22Rv1 ab=CTCF view=LOpeaks
     type bigBed 6 +
 
     track T2T_Encode_LOPeaks_22Rv1.H3K27ac
@@ -1257,7 +1257,7 @@ html html/encode.html
     longLabel 22Rv1 H3K27ac hg38 liftover Macs2 Peaks
     bigDataUrl /gbdb/hs1/encode/LO_peaks/22Rv1.H3K27ac.chm13v2.0.bb
     parent T2T_Encode_LOPeaks
-    subGroups cell=22Rv1 ab=H3K27ac view=LOpeaks
+    subGroups cell=CL_22Rv1 ab=H3K27ac view=LOpeaks
     type bigBed 6 +
 
     track T2T_Encode_LOPeaks_BE2C.H3K27me3

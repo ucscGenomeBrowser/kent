@@ -606,7 +606,7 @@ padding 5
 track resist
 pennantIcon Updated red ../goldenPath/newsarch.html#022522 "Updated July 1, 2022"
 shortLabel Drug Resistance Mutations
-longLabel Mutations that confer drug resistance (Anna Nieviadomska, BV-BRC)
+longLabel Mutations that confer drug resistance (Anna Niewiadomska, BV-BRC)
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/resist/resist.bb
 itemRgb on

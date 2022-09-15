@@ -194,6 +194,8 @@ foreach my $queryDb (@queryList) {
   my $QueryDb = ucfirst($queryDb);
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
+  if ( -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb) {
+printf STDERR "constructing net.bb links\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb  $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
   my $queryDate = "some date";
@@ -217,10 +219,12 @@ foreach my $queryDb (@queryList) {
         html html/%s.chainNet
         priority %d
 ", $QueryDb, $targetDb, $N, $queryDb, $queryDb, $queryAsmName, $queryDate, $targetDb, $queryDb, $targetDb, $queryDb, $queryDb, $targetDb, $chainNetPriority++;
+  }
 
-  if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb" ) {
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
+  if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb" ) {
+printf STDERR "constructing synNet.bb links\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb  $buildDir/bbi/$targetDb.${queryDb}.synNet.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
     printf "
@@ -239,9 +243,10 @@ foreach my $queryDb (@queryList) {
 
   }
 
-  if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.bb" ) {
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.rbestNet.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.rbestNet.summary.bb`;
+  if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.bb" ) {
+printf STDERR "constructing rbestNet.bb links\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.bb  $buildDir/bbi/$targetDb.${queryDb}.rbestNet.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.rbestNet.summary.bb`;
     printf "
@@ -260,9 +265,9 @@ foreach my $queryDb (@queryList) {
 
   }
 
-  if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.liftOverNet.bb" ) {
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.liftOverNet.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.liftOverNet.summary.bb`;
+  if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.liftOverNet.bb" ) {
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.liftOverNet.bb  $buildDir/bbi/$targetDb.${queryDb}.liftOverNet.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.liftOverNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.liftOverNet.summary.bb`;
     printf "

@@ -31,7 +31,8 @@ fi
 export augustusSpecies="-augustusSpecies=human"
 export ncbiRmsk="-ncbiRmsk"
 export noRmsk=""
-export ucscNames="-ucscNames"
+# export ucscNames="-ucscNames"
+export ucscNames=""
 ####
 
 export asmId="${1}"
@@ -132,10 +133,8 @@ printf "\n" 1>&2
 # repeatMasker simpleRepeat allGaps idKeys windowMasker addMask gapOverlap
 # tandemDups cpgIslands ncbiGene ncbiRefSeq xenoRefGene augustus trackDb cleanup
 
-## export stepStart="download"
-## export stepEnd="sequence"
-export stepStart="ncbiGene"
-export stepEnd="augustus"
+export stepStart="download"
+export stepEnd="trackDb"
 
 printf "cd \"${buildDir}\"\n" 1>&2
 cd "${buildDir}"
@@ -177,14 +176,14 @@ printf "INSERT INTO dbDb
      defaultPos, active, orderKey, genome, scientificName,
      htmlPath, hgNearOk, hgPbOk, sourceName, taxId)
 VALUES\n" >> dbDbInsert.sql
-printf "(\"%s\", \"%s (%s/%s)\", \"/gbdb/%s\", \"%s\",
+printf "(\"%s\", \"%s (%s/%s)\", \"hub:/gbdb/%s/hubs\", \"%s\",
    \"%s\", 1, %d, \"%s\", \"%s\", \"/gbdb/%s/html/description.html\", 0,
      1, \"%s\", %d);\n" "${dbName}" "${asmDate}" "${asmName}" "${dbName}" "${dbName}" "${comName}" "${defaultPos}" "${orderKey}" "${comName}" "${sciName}" "${dbName}" "${accessionID}" "${taxId}" >> dbDbInsert.sql
 
 fi
 
 printf "# dbDbInsert.sql statement is completed:\n" 1>&2
-cat dbDbInsert.sql 1>&2
+printf "# to add to hgcentraltest: hgsql hgcentraltest < dbDbInsert.sql\n" 1>&2
 
 if [ ! -s "chrom.sizes" ]; then
   ln -s $dbName.chrom.sizes chrom.sizes
@@ -192,3 +191,35 @@ fi
 if [ ! -d "bed" ]; then
   ln -s trackData bed
 fi
+
+# establish symLinks to make this browser appear
+cd "${buildDir}"
+mkdir -p hubs /gbdb/$dbName
+for F in "$dbName.2bit" bbi ixIxx hubs html
+do
+  rm -f /gbdb/$dbName/${F}
+  ln -s `pwd`/${F} /gbdb/$dbName/${F}
+done
+rm -f hubs/chromAlias.bb hubs/chromSizes.txt hubs/groups.txt
+ln -s `pwd`/trackData/chromAlias/mpxv2022.chromAlias.bb hubs/chromAlias.bb
+ln -s `pwd`/mpxv2022.chrom.sizes hubs/chromSizes.txt
+cp -p ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt hubs/groups.txt
+
+if [ -s "$dbName.trans.gfidx" ]; then
+   printf "# sending files for dynamic blat\n#\t$dbName.2bit $dbName.trans.gfidx $dbName.untrans.gfidx\n" 1>&2
+   rsync -a ./$dbName.2bit ./$dbName.trans.gfidx ./$dbName.untrans.gfidx \
+      qateam@dynablat-01:/scratch/hubs/$dbName/
+fi
+
+export blatServerPresent=`hgsql -N -e 'select * from blatServers where db="'$dbName'";' hgcentraltest | wc -l`
+if [ "$blatServerPresent" != 2 ]; then
+  printf "# adding blatServers entry\n" 1>&2
+  hgsql -e 'delete from blatServers where db="'$dbName'";' hgcentraltest
+  hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr, dynamic) \
+        VALUES ("'$dbName'", "dynablat-01", "4040", "1", "0", "1"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr, dynamic) \
+        VALUES ("'$dbName'", "dynablat-01", "4040", "0", "1", "1");' \
+            hgcentraltest
+fi
+printf "# blatServers entry:\n" 1>&2
+hgsql -e 'select * from blatServers where db="'$dbName'";' hgcentraltest 1>&2

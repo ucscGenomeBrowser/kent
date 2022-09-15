@@ -1966,17 +1966,18 @@ sub doTrackDb {
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$defaultName
+export defaultName=$defaultName
+export asmId=$asmId
 export buildDir=$buildDir
 
-rm -f \$asmId.chromAlias.txt
-ln -s trackData/chromAlias/\${asmId}.chromAlias.txt .
-if [ -s trackData/chromAlias/\${asmId}.chromAlias.bb ]; then
-  rm -f \${asmId}.chromAlias.bb
-  ln -s trackData/chromAlias/\${asmId}.chromAlias.bb .
+rm -f \$defaultName.chromAlias.txt
+ln -s trackData/chromAlias/\${defaultName}.chromAlias.txt .
+if [ -s trackData/chromAlias/\${defaultName}.chromAlias.bb ]; then
+  rm -f \${defaultName}.chromAlias.bb
+  ln -s trackData/chromAlias/\${defaultName}.chromAlias.bb .
 fi
-\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId \$buildDir \\
-   > \$asmId.trackDb.txt
+\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$defaultName \$asmId \$buildDir \\
+   > \$defaultName.trackDb.txt
 
 _EOF_
   );
