@@ -872,8 +872,6 @@ case ${asmId} in
      ;;
 esac
 
-ls -og "${buildDir}/$asmId.userTrackDb.txt" 1>&2
-
 if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then
   printf "\ninclude %s.userTrackDb.txt\n" "${accessionId}"
 fi
