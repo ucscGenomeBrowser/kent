@@ -519,9 +519,9 @@ on hg38 6 of 6 (100%) hit across versions
 </pre>
 
 <p>
-The matrixToBarChartBed combines an expression matrix and a BED file with gene structures
-(mapping.bed from the previous step) to make a new BED file (myTissueComp.bed) with a barchart
-showing gene expression that can be viewed on the Genome Browser. The optional argument,
+The <code>matrixToBarChartBed</code> combines an expression matrix and a BED file with gene
+structures (mapping.bed from the previous step) to make a new BED file (myTissueComp.bed) with a
+barChart showing gene expression that can be viewed on the Genome Browser. The optional argument,
 <code>stats=stats.tsv</code> provides a statistics file (from <code>matrixClusterColumns</code>
 output) and improves the coloring in trackDb.
 The following command uses the
@@ -531,7 +531,7 @@ The following command uses the
 to create the
 <a href="/goldenPath/help/examples/barChart/singleCell/myTissueComp.bed">myTissueComp.bed</a> file
 that can be viewed on the Genome Browser or converted into a bigBed file so it can be used inside
-of a track hub. 
+of a track hub.
 </p>
 <pre>
 matrixToBarChartBed TissueCompMatrix.tsv mapping.bed myTissueComp.bed -stats=TissueCompStats.tsv
