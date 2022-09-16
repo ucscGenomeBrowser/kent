@@ -87,7 +87,7 @@ hideEmptySubtracksLabel *
 hideEmptySubtracksMultiBedUrl *
 hideEmptySubtracksSourcesUrl *
 color *
-colorByStrand bigBed bed genePred
+colorByStrand bigBed bed genePred bigGenePred
 colorChromDefault psl bigPsl
 compareGenomeLinks bed
 compositeTrack *
