@@ -30,8 +30,11 @@ if (defined($ENV{"QUERY_STRING"})) {
   my @idVal = split("&", $qString);
   foreach $id (@idVal) {
     my ($tag, $value) = split("=", $id, 2);
-    $incoming{$tag} = uri_unescape( $value ) if (defined($value));
-    ++$validIncoming if (defined($value));
+    # only accept known inputs, the five defined above for %incoming defaults
+    if (defined($incoming{$tag}) && defined($value)) {
+      $incoming{$tag} = uri_unescape( $value );
+      ++$validIncoming;
+    }
   }
 }
 
