@@ -1,5 +1,5 @@
 SUBDIRS = doOmimGene2 doOmimGeneSymbols doOmimLocation
-PREFIX = /hive/data/outside/omim
+PREFIX = /hive/data/outside/otto/omim
 
 all: ${SUBDIRS:%=%.suball}
 FILES = omimWrapper.sh omim.tables checkOmim.sh validateOmim.sh parseGeneMap.pl omimUploadWrapper.sh checkOmimUpload.sh doOmimPhenotypeNew buildOmimTracks.sh flagOmimGene.py

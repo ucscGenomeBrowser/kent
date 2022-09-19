@@ -4,14 +4,14 @@ use strict;
 use warnings;
 
 my $argc = scalar(@ARGV);
-if ($argc != 1) {
-  printf STDERR "usage: asmHubChromAlias.pl asmId > asmId.chromAlias.tab\n\n";
+if ($argc != 2) {
+  printf STDERR "usage: asmHubChromAlias.pl asmId ncbiAsmId > asmId.chromAlias.tab\n\n";
   printf STDERR "where asmId is something like: GCF_000001735.4_TAIR10.1\n";
   printf STDERR "Outputs a tab file suitable for processing with ixIxx to\n";
   printf STDERR "create an index file to use in an assembly hub.\n";
   printf STDERR "This command assumes it is in a work directory in the\n";
   printf STDERR "assembly hub: .../asmId/trackData/chromAlias/\n";
-  printf STDERR "and .../asmId/downloads/ and .../asmId/sequence/ have\n";
+  printf STDERR "and ../../download/ and ../../sequence/ have\n";
   printf STDERR "been created and processed for the hub build.\n";
   exit 255;
 }
@@ -26,6 +26,7 @@ my $sequenceCount = 0;
 my %sequenceSizes;	# key is sequence name, value is sequence size
 
 my $asmId = shift;
+my $ncbiAsmId = shift;
 
 my %aliasOut;	# key is source name, value is a hash pointer where
 		# key is alias name and value is chrom name
@@ -108,8 +109,12 @@ sub addAlias($$$) {
   if ($sequence eq "na") {
     return;
   }
+  # it is OK to allow duplicate names, different naming authorities could
+  # have the same name, found for example in GCF_006542625.1_Asia_NLE_v1
+  # which has UCSC names identical to 'assembly' names and the hub has been
+  # build with UCSC names
   # do not need to add the sequence name itself
-  return if ($alias eq $sequence);
+  #  return if ($alias eq $sequence);
   if (!defined($aliasOut{$source})) {
      my %h;	# hash: key: alias name, value 'native' chrom name
      $aliasOut{$source} = \%h;
@@ -131,7 +136,7 @@ sub addAlias($$$) {
 # asmSource - is this a genbank or refseq assembly
 my $asmSource = "genbank";
 my $isRefSeq = 0; #       == 0 for Genbank assembly, == 1 for RefSeq assembly
-if ($asmId =~ m/^GCF/) {
+if ($ncbiAsmId =~ m/^GCF/) {
 #  printf STDERR "# processing a RefSeq assembly\n";
   $isRefSeq = 1;
   $asmSource = "refseq";
@@ -172,7 +177,8 @@ while (my $line = <FH>) {
 close (FH);
 
 my $dupsNotFound = 0;
-my $dupsList = "../../download/$asmId.dups.txt.gz";
+my $dupsList = `ls ../../download/*.dups.txt.gz 2> /dev/null|head -1`;
+chomp $dupsList if (defined($dupsList));
 if ( -s "$dupsList" ) {
   open (FH, "zcat $dupsList | awk '{print \$1, \$3}'|") or die "can not read $dupsList";
   while (my $line = <FH>) {
@@ -259,11 +265,11 @@ foreach my $sequence (sort keys %sequenceSizes) {
 ### next set of names are the equivalents declared by NCBI
 ### if they exist
 my %chr2acc;	# key is sequence name, value is NCBI chromosome name
-my $asmStructCount = `ls  ../../download/${asmId}_assembly_structure/*/*/chr2acc 2> /dev/null | wc -l`;
+my $asmStructCount = `ls ../../download/*_assembly_structure/*/*/chr2acc 2> /dev/null | wc -l`;
 chomp $asmStructCount;
 if ( $asmStructCount > 0 ) {
 #  printf STDERR "# second name set processing chr2acc files\n";
-  open (FH, "grep -h -v '^#' ../../download/${asmId}_assembly_structure/*/*/chr2acc|") or die "can not grep chr2acc files";
+  open (FH, "grep -h -v '^#' ../../download/*_assembly_structure/*/*/chr2acc|") or die "can not grep chr2acc files";
   while (my $line = <FH>) {
     chomp $line;
     my ($alias, $seqName) = split('\t', $line);
@@ -290,11 +296,13 @@ my $dbgCount = 0;
 # printf STDERR "# third set processing assembly_report\n";
 # column 1 is the 'assembly' name
 # column 5 is the GenBank-Accn, column 7 is the RefSeq-Accn
-open (FH, "grep -v '^#' ../../download/${asmId}_assembly_report.txt | cut -d\$'\t' -f1,5,7|") or die "can not grep assembly_report";
+open (FH, "grep -v '^#' ../../download/*_assembly_report.txt | cut -d\$'\t' -f1,5,7|") or die "can not grep assembly_report";
 while (my $line = <FH>) {
   chomp $line;
   ++$dbgCount;
-  my ($asmName, $gbkName, $refSeqName) = split('\s+', $line);
+  my ($asmName, $gbkName, $refSeqName) = split('\t', $line);
+  $asmName =~ s/ /_/g;	# some assemblies have spaces in chr names ...
+  $asmName =~ s/:/_/g;	# one assembly had : in chr name
   if (defined($dupToSequence{$asmName})) {   # avoid duplicates
      printf STDERR "# skipping duplicate name $asmName\n";
      next;
@@ -305,9 +313,24 @@ while (my $line = <FH>) {
      printf STDERR "# skipping duplicate name $refSeqName\n";
      next;
   }
-  printf STDERR "# '%s'\t'%s'\t'%s'\n", $asmName, $gbkName, $refSeqName if ($dbgCount < 5);
 #  next if ($refSeqName eq "na");	# may not be any RefSeq name
 #  next if ($gbkName eq "na");	# may not be any GenBank name
+  # fill in ncbiToUcsc for potentially the 'other' NCBI name
+  if (defined($ncbiToUcsc{$refSeqName}) && !defined($ncbiToUcsc{$gbkName})) {
+    $ncbiToUcsc{$gbkName} = $ncbiToUcsc{$refSeqName};
+    $ucscToNcbi{$ncbiToUcsc{$refSeqName}} = $gbkName;
+  }
+  if (defined($ncbiToUcsc{$gbkName}) && !defined($ncbiToUcsc{$refSeqName})) {
+    $ncbiToUcsc{$refSeqName} = $ncbiToUcsc{$gbkName};
+    $ucscToNcbi{$ncbiToUcsc{$gbkName}} = $refSeqName;
+  }
+  if (defined($ncbiToUcsc{$gbkName})) {
+     printf STDERR "# asmRpt: '%s'\t'%s'\t'%s'\t'%s'\n", $asmName, $gbkName, $refSeqName, $ncbiToUcsc{$gbkName} if ($dbgCount < 5);
+  } elsif (defined($ncbiToUcsc{$refSeqName})) {
+     printf STDERR "# asmRpt: '%s'\t'%s'\t'%s'\t'%s'\n", $asmName, $gbkName, $refSeqName, $ncbiToUcsc{$refSeqName} if ($dbgCount < 5);
+  } else {
+     printf STDERR "# asmRpt: '%s'\t'%s'\t'%s'\tno UCSC name\n", $asmName, $gbkName, $refSeqName if ($dbgCount < 5);
+  }
   if ($refSeqName ne "na") {
     my $seqName = $refSeqName;
     if (! $isRefSeq) {

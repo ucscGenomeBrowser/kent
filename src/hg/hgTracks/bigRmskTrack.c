@@ -470,7 +470,7 @@ struct bigRmskRecord *items = tg->items;
 boolean showLabels = cartUsualBoolean(cart, BIGRMSK_SHOW_LABELS, BIGRMSK_SHOW_LABELS_DEFAULT);
 boolean origPackViz = cartUsualBoolean(cart, BIGRMSK_ORIG_PACKVIZ, BIGRMSK_ORIG_PACKVIZ_DEFAULT);
 
-if (tg->visibility == tvSquish )
+if ((tg->visibility == tvSquish) || (tg->visibility == tvDense))
   showLabels = FALSE;
 
 if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)

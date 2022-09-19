@@ -1010,7 +1010,7 @@ char *newCuratedHub = NULL;
 char *dbSpec = cartOptionalString(cart, "db");
 char *curatedHubPrefix = cfgOption("curatedHubPrefix");
 if (curatedHubPrefix && (dbSpec != NULL) ) 
-    newCuratedHub = lookForCuratedHubs(cart, dbSpec, curatedHubPrefix);
+    newCuratedHub = lookForCuratedHubs(cart, trackHubSkipHubName(dbSpec), curatedHubPrefix);
 
 char *newDatabase = checkForNew( cart);
 if (newCuratedHub)

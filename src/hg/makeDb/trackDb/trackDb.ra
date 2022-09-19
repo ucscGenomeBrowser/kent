@@ -20,8 +20,7 @@ include trackDb.transMap.ra
 
 include trackDb.nt.ra
 include trackDb.genbank.ra 
-include trackDb.uniprot.ra public
-include uniprot.ra alpha,beta
+include uniprot.ra
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something

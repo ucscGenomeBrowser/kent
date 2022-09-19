@@ -78,6 +78,8 @@ carefulClose(&f);
 void readInGulp(char *fileName, char **retBuf, size_t *retSize)
 /* Read whole file in one big gulp. */
 {
+if (fileExists(fileName) && !isRegularFile(fileName))
+    errAbort("can only read regular files with readInGulp: %s", fileName);
 size_t size = (size_t)fileSize(fileName);
 char *buf;
 FILE *f = mustOpen(fileName, "rb");

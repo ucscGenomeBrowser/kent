@@ -467,6 +467,93 @@ In this image after making the selections browsing ACE2 the &quot;zoom out&quot;
 been clicked to also view nearby genes where the expression of these tissue selections for the
 gene PIR is quite noticeably different.</p>
 
+<h6 id="example7">Example #7</h6>
+<p>
+In this example, we will be using command-line tools that were used to create the single-cell tracks
+available on hg38. For a more in-depth examples of these tools, take a look at the following
+<a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/makeDb/doc/hg38/gtex.txt#L711"
+target="_blank">makedoc</a> for a real-life example.
+</p>
+<p>
+The <code>matrixClusterColumns</code> command converts a single cell gene expression matrix to a
+cell-type gene expression matrix. It takes a cell-by-cell metadata matrix that refers to the same
+cells as a gene expression matrix and combines the gene expression values for all cells of a given
+type into a single value representing the cell type. It can also be used on other metadata fields to
+produce matrices that show mean or average gene expression levels for a donor, an organ, or any
+other metadta field or combination of fields. The following command uses the
+<a href="/goldenPath/help/examples/barChart/singleCell/exprMatrix.tsv">exprMatrix.tsv</a> and
+<a href="/goldenPath/help/examples/barChart/singleCell/meta.tsv">meta.tsv</a> files to create six
+files: prepMatrix.tsv, prepStats.tsv, TissueCompMatrix.tsv, TissueCompStats.tsv, SexMatrix.tsv, and
+SexStats.tsv.
+</p>
+<pre>
+matrixClusterColumns exprMatrix.tsv meta.tsv \
+    prep prepMatrix.tsv prepStats.tsv \
+    "Tissue Composition" TissueCompMatrix.tsv TissueCompStats.tsv \
+    Sex SexMatrix.tsv SexStats.tsv
+
+Read 5 rows from meta.tsv
+matrix exprMatrix.tsv has 209126 fields
+209126 total columns, 209121 unclustered, 0 misses
+209126 total columns, 209121 unclustered, 0 misses
+209126 total columns, 209121 unclustered, 0 misses
+.
+</pre>
+<p>
+If you are not sure which GENCODE Genes version is best suited for your data, the
+<code>gencodeVersionForGenes</code> command takes a list of gene symbols or gene accessions and
+searches for the version of GENCODE or RefSeq that matches the most genes in the list. Optionally,
+the tool can produces a BED file containing the gene structures for the genes in the list.
+The following command uses the
+<a href="/goldenPath/help/examples/barChart/singleCell/gene.lst">gene.lst</a> and
+<a href="/goldenPath/help/examples/barChart/singleCell/geneSymVerTx.tsv">geneSymVerTx.tsv</a> files
+to create a mapping.bed file that will be used in the next step.
+</p>
+<pre>
+# Figure out gene set
+gencodeVersionForGenes -target=hg38 gene.lst geneSymVerTx.tsv -bed=mapping.bed
+
+examining 23 versions of gencode and refseq
+best is gencodeVM5 as sym on mm10 with 6 of 6 (100%) hits
+on hg38 6 of 6 (100%) hit across versions
+</pre>
+
+<p>
+The <code>matrixToBarChartBed</code> combines an expression matrix and a BED file with gene
+structures (mapping.bed) to make a new BED file (myTissueComp.bed) with a barChart showing gene
+expression that can be viewed on the Genome Browser. The optional argument,
+<code>stats=stats.tsv</code> provides a statistics file and improves the coloring in trackDb.
+The following command uses the
+<a href="/goldenPath/help/examples/barChart/singleCell/TissueCompMatrix.tsv">TissueCompMatrix.tsv</a>,
+<a href="/goldenPath/help/examples/barChart/singleCell/mapping.bed">mapping.bed</a>, and
+<a href="/goldenPath/help/examples/barChart/singleCell/TissueCompStats.tsv">TissueCompStats.tsv</a>
+to create the
+<a href="/goldenPath/help/examples/barChart/singleCell/myTissueComp.bed">myTissueComp.bed</a> file
+that can be viewed on the Genome Browser or converted into a bigBed file so it can be used inside
+of a track hub.
+</p>
+<pre>
+matrixToBarChartBed TissueCompMatrix.tsv mapping.bed myTissueComp.bed -stats=TissueCompStats.tsv
+
+5 genes found, 0 (0.00%) missed
+</pre>
+<p>
+The <a href="/goldenPath/help/examples/barChart/singleCell/simpleBarChartBed.as">
+simpleBarChartBed.as</a> can be used with the <code>bedToBigBed</code> command to create the
+bigBarChart file.
+<pre>
+bedToBigBed myTissueComp.bed hg38.chrom.sizes myTissueComp.bb -type=bed6+3 -as=simpleBarChartBed.as
+pass1 - making usageList (1 chroms): 15 millis
+pass2 - checking and writing primary data (5 records, 9 fields): 1 millis
+</pre>
+<!--
+<p>
+You can then view the bigBarChart custom track with the following track line:
+</p>
+<pre>
+track name="My singleCell barChart" type=bigBarChart bigDataUrl=https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/barChart/singleCell/myTissueComp.bb
+</pre>
+-->
 <h2>Sharing your data with others</h2>
 <p>
 If you would like to share your barChart/bigBarChart data track with a colleague, learn how to create a URL by 

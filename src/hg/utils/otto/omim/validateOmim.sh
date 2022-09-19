@@ -8,6 +8,9 @@ do
     if test $i == "omimGeneMap" 
     then
 	fields="month,day,year,location,geneSymbol,geneStatus,title1,title2,omimId,method,comment1,comment2,disorders1,disorders2,disorders3,mouseCorrelate,reference"
+    elif test $i == "omimGeneMap2" 
+    then
+	fields="location,compCtyoLoc,omimId,geneSymbol,geneName,approvedSymbol,entrez,comments,phenotypes,mmGeneId"
     else
 	fields='*'
     fi

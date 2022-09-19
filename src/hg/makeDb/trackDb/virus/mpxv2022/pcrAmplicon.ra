@@ -1,0 +1,8 @@
+track pcrAmplicon
+shortLabel PrimalSeq V2
+longLabel PrimalSeq V2 PCR Amplicons
+group map
+visibility dense
+type bigBed 12 +
+bigDataUrl bbi/pcrAmplicon.bb
+html html/pcrAmplicon

@@ -2,22 +2,18 @@
 
 set -beEu -o pipefail
 
-if [ $# -ne 2 ]; then
-  printf "usage: trackDb.sh <asmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
+if [ $# -ne 3 ]; then
+  printf "usage: trackDb.sh <asmId> <ncbiAsmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
   printf "expecting to find *.ucsc.2bit and bbi/ files at given path\n" 1>&2
+  printf "asmId may be equal to ncbiAsmId if it is a GenArk build\n" 1>&2
+  printf "or asmId might be a default dbName if it is a UCSC style\n" 1>&2
+  printf "browser build.\n" 1>&2
   exit 255
 fi
 
 export asmId=$1
-export buildDir=$2
-# hubLinks is for mouseStrains specific hub only
-export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
-export accessionId=`echo "$asmId" | awk -F"_" '{printf "%s_%s", $1, $2}'`
-export gcX=`echo $asmId | cut -c1-3`
-export d0=`echo $asmId | cut -c5-7`
-export d1=`echo $asmId | cut -c8-10`
-export d2=`echo $asmId | cut -c11-13`
-export hubPath="$gcX/$d0/$d1/$d2/$asmId"
+export ncbiAsmId=$2
+export buildDir=$3
 
 export scriptDir="$HOME/kent/src/hg/utils/automation"
 
@@ -613,7 +609,7 @@ urlLabel Entrez gene
 labelFields geneName,geneName2
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 
-  $scriptDir/asmHubNcbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
+  $scriptDir/asmHubNcbiGene.pl $asmId $ncbiAsmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
 
 haveNcbiGene="yes"
 fi	#	if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]
@@ -802,6 +798,8 @@ else
   printf "# no ensGene found\n" 1>&2
 fi
 
+# hubLinks is for mouseStrains specific hub only
+export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
 if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
   printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
 fi
@@ -817,15 +815,17 @@ export lz=`ls -d ${buildDir}/trackData/lastz.* 2> /dev/null | wc -l`
 
 if [ "${lz}" -gt 0 ]; then
   if [ "${lz}" -eq 1 ]; then
+printf "single chainNet\n" 1>&2
     export lastzDir=`ls -d ${buildDir}/trackData/lastz.*`
     export oOrganism=`basename "${lastzDir}" | sed -e 's/lastz.//;'`
     # single chainNet here, no need for a composite track, does the symLinks too
-    ~/kent/src/hg/utils/automation/asmHubChainNetTrackDb.sh $asmId $buildDir
-    $scriptDir/asmHubChainNet.pl $asmId $buildDir/html/$asmId.names.tab $oOrganism $hubPath > $buildDir/html/$asmId.chainNet.html
+    $scriptDir/asmHubChainNetTrackDb.sh $asmId $buildDir
+    $scriptDir/asmHubChainNet.pl $asmId $ncbiAsmId $buildDir/html/$asmId.names.tab $oOrganism > $buildDir/html/$asmId.chainNet.html
   else
+printf "composite chainNet\n" 1>&2
     # multiple chainNets here, create composite track, does the symLinks too
-    ~/kent/src/hg/utils/automation/asmHubChainNetTrackDb.pl $buildDir
-    $scriptDir/asmHubChainNetComposite.pl $asmId $buildDir/html/$asmId.names.tab $hubPath > $buildDir/html/$asmId.chainNet.html
+    $scriptDir/asmHubChainNetTrackDb.pl $buildDir
+    $scriptDir/asmHubChainNetComposite.pl $asmId $ncbiAsmId $buildDir/html/$asmId.names.tab > $buildDir/html/$asmId.chainNet.html
   fi
 fi
 
@@ -863,6 +863,14 @@ scoreFilterMax 100
 $scriptDir/asmHubCrisprAll.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.crisprAll.html
 
 fi
+
+# accessionId only used for include statements for other trackDb.txt files
+export accessionId="${asmId}"
+case ${asmId} in
+   GC*)
+     accessionId=`echo "$asmId" | awk -F"_" '{printf "%s_%s", $1, $2}'`
+     ;;
+esac
 
 if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then
   printf "\ninclude %s.userTrackDb.txt\n" "${accessionId}"

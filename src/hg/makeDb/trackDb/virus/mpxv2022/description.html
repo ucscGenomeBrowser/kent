@@ -1,0 +1,123 @@
+<p>
+<b>Common name:</b>&nbsp;monkeypox<br>
+<b>Taxonomic name: Monkeypox virus, taxonomy ID:</b> <a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=10244' target='_blank'> 10244</a><br>
+<b>Sequencing/Assembly provider ID:</b> na<br>
+<b>Assembly date:</b> 30 May 2022<br>
+<b>Assembly type:</b> na<br>
+<b>Assembly level:</b> Complete Genome<br>
+<b>Biosample:</b> <a href="https://www.ncbi.nlm.nih.gov/biosample/?term=(n/a)" target="_blank">(n/a)</a><br>
+<b>Assembly accession ID:</b> <a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_014621545.1" target="_blank">GCF_014621545.1</a><br>
+<b>Assembly FTP location:</b> <a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/014/621/545/GCF_014621545.1_ASM1462154v1' target='_blank'>GCF/014/621/545/GCF_014621545.1_ASM1462154v1</a><br>
+
+<b>Total assembly nucleotides:</b> 197,209<br>
+<b>Assembly contig count:</b> 1<br>
+<b>N50 size:</b> 197,209<br>
+</p>
+<hr>
+<h4>Data file downloads</h4>
+<p>
+<ul>
+<li><a href='https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/GCF_014621545.1.fa.gz' target=_blank>GCF_014621545.1.fa.gz</a> fasta sequence with NCBI GenBank sequence names</li>
+<li><a href='https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/GCF_014621545.1.2bit' target=_blank>GCF_014621545.1.2bit</a> UCSC 2bit sequence file with NCBI GenBank sequence names</li>
+<li><a href='https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/GCF_014621545.1.chromAlias.txt' target=_blank>GCF_014621545.1.chromAlias.txt</a> chromAlias file to relate chromosome names</li>
+<li>explore the hub directory at: <a href='https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/' target=_blank>hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/</a></li>
+</ul>
+</p>
+<hr>
+<h4>Copy this entire assembly hub for local use</h4>
+<p>
+This download is only for the purpose of using this assembly hub in
+your institution which may have firewall access restrictions to this
+data.<br>
+
+To download this assembly data, use this <b>rsync</b> command:
+<pre>
+  rsync -a -P \
+    rsync://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/ \
+      ./GCF_014621545.1/
+</pre>
+
+  which creates the local directory: <b>./GCF_014621545.1/</b><br>
+or this <b>wget</b> command:
+<pre>
+  wget --timestamping -m -nH -x --cut-dirs=6 -e robots=off -np -k \
+    --reject "index.html*" -P "GCF_014621545.1" \
+       https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/
+</pre>
+
+  which creates a local directory: <b>./GCF_014621545.1/</b>
+<p>
+There is an included <b>hub.txt</b> file in that download
+data directory to use for your local track hub instance.<br>
+Using the genome browser menus: <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em><br>
+select the <em><strong>My Hubs</strong></em> tab to enter a URL
+to this <b>hub.txt</b> file to attach this assembly hub to a genome browser.
+</p>
+<p>
+The <b>html/GCF_014621545.1_ASM1462154v1.description.html</b> page is information for your users to
+describe this assembly.<br>This web page with these instructions
+is an instance of the <b>html/GCF_014621545.1_ASM1462154v1.description.html</b> file.
+</p>
+<p>
+See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub help</a> documentation.<br>
+</p>
+<hr>
+<h4>blat service</h4>
+<p>
+There is blat service available for this genome assembly.  When viewing this
+assembly in the genome browser, access the blat service via the
+<em><b>Tools -> Blat</b></em> blue navigation bar menu item.
+</p>
+<p>
+For local command line blat service, access
+the blat service via the <b>gfClient</b> command line operation.<br>
+See also: <a href='http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/' target=_blank>
+hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/</a> to download command line
+binaries.<br>
+<br>
+To operate this locally, you will need the <b>GCF_014621545.1.2bit</b> file from:
+<pre>
+  https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/
+</pre>
+Which can be obtained with rsync via:
+<pre>
+  rsync -a -P 
+    rsync://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/GCF_014621545.1.2bit ./
+</pre>
+With that <b>GCF_014621545.1.2bit</b> file in your working directory where you run
+this command, for example, a DNA query with your DNA sequence in
+the file: <b>someDna.fa</b>
+with result in the file: <b>GCF_014621545.1.someDna.psl</b>
+<pre>
+gfClient -t=dna -q=dna -genome=GCF_014621545.1 -genomeDataDir=GCF/014/621/545/GCF_014621545.1 
+    dynablat-01.soe.ucsc.edu 4040 ./ someDna.fa GCF_014621545.1.someDna.psl
+</pre>
+For a protein fasta query with your protein sequence in the file: <b>someProtein.faa</b>
+with result in the file: <b>GCF_014621545.1.someProtein.psl</b>
+<pre>
+gfClient -t=dnax -q=prot  -genome=GCF_014621545.1 -genomeDataDir=GCF/014/621/545/GCF_014621545.1 
+    dynablat-01.soe.ucsc.edu 4040 ./ someProtein.faa GCF_014621545.1.someProtein.psl
+</pre>
+</p>
+<hr>
+<p>
+<b>Search the assembly:</b>
+<ul>
+<li>
+<b>By position or search term: </b> Use the &quot;position or search term&quot;
+box to find areas of the genome associated with many different attributes, such
+as a specific chromosomal coordinate range; mRNA, EST, or STS marker names; or
+keywords from the GenBank description of an mRNA.
+<a href="http://genome.ucsc.edu/goldenPath/help/query.html">More information</a>, including sample queries.</li>
+<li>
+<b>By gene name: </b> Type a gene name into the &quot;search term&quot; box,
+choose your gene from the drop-down list, then press &quot;submit&quot; to go
+directly to the assembly location associated with that gene.
+<a href="http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html">More information</a>.  To avoid case sensitivity issues, always use fully lower case gene names.</li>
+<li>
+<b>By track type: </b> Click the &quot;track search&quot; button
+to find Genome Browser tracks that match specific selection criteria.
+<a href="http://genome.ucsc.edu/goldenPath/help/trackSearch.html">More information</a>.</li>
+</ul>
+</p>
+<hr>

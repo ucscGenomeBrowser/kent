@@ -10,8 +10,8 @@ use URI::Escape;
 
 print "Content-type: text/html\n\n";
 
-print "<HTML><HEAD><TITLE>GenArk Request assembly build</TITLE></HEAD>\n";
-print "<BODY>\n";
+print "<html><head><title>GenArk Request assembly build</title></head>\n";
+print "<body>\n";
 
 # QUERY_STRING    name=some%20name&email=some@email.com&asmId=GCF_000951035.1_Cang.pa_1.0
 
@@ -23,13 +23,25 @@ my %incoming = (
   "comment" => "noComment",
 );
 
+my $validIncoming = 0;
+
 if (defined($ENV{"QUERY_STRING"})) {
   my $qString = $ENV{"QUERY_STRING"};
   my @idVal = split("&", $qString);
   foreach $id (@idVal) {
     my ($tag, $value) = split("=", $id, 2);
-    $incoming{$tag} = uri_unescape( $value ) if (defined($value));
+    # only accept known inputs, the five defined above for %incoming defaults
+    if (defined($incoming{$tag}) && defined($value)) {
+      $incoming{$tag} = uri_unescape( $value );
+      ++$validIncoming;
+    }
   }
+}
+
+if ($validIncoming != 5) {
+  # not a legitimate request from our own business, do nothing.
+  print "</body></html>\n";
+  exit 0;
 }
 
 printf "<ul>\n";
