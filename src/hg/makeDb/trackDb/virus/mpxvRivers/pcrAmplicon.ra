@@ -1,7 +1,25 @@
 track pcrAmplicon
-shortLabel PrimalSeq V2
-longLabel PrimalSeq V2 PCR Amplicons
+shortLabel PCR Sequencing
+longLabel PCR Sequencing Protocols: Amplicons and Primers
 group map
 visibility dense
 type bigBed 12 +
-bigDataUrl /gbdb/mpxvRivers/pcrAmplicon/pcrAmplicon.bb
+compositeTrack on
+
+        track pcrWelkers
+        shortLabel Welkers et al
+        longLabel PCR Amplicons: Welkers et al. 2022 V1
+        parent pcrAmplicon on
+        group map
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/mpxvRivers/pcrAmplicon/pcrWelkers.bb
+
+        track pcrChen
+        shortLabel Chen et al V2
+        longLabel PCR Amplicons: Chen et al. 2022 V2
+        parent pcrAmplicon on
+        group map
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/mpxvRivers/pcrAmplicon/pcrAmplicon.bb
