@@ -93,7 +93,6 @@ sub n50Cell($$$) {
 ###############################################################################
 
 my @clades = qw( primates mammals birds fish vertebrate invertebrates plants fungi );
-# my @clades = qw( primates mammals birds );
 
 # to help weed out some of the noise
 # key is clade, value is minimal size to count as a whole genome
@@ -116,8 +115,12 @@ my %minimalGenomeSize = (
 ## read in list of current GenArk assemblies
 
 my %genArkAsm;	# key is asmId, value is string with:
+my %genArkClade;	# key is asmId, value is clade
+my %genArkCladeProfile;	# key is clade, value is count
+my %genArkSciName;	# key is asmId, value is sciName
+my %genArkComName;	# key is asmId, value is sciName
 
-# accession<tab>assembly<tab>scientific name<tab>common name<tab>taxonId
+# accession<tab>assembly<tab>scientific name<tab>common name<tab>taxonId<tab>clade
 
 my $genArkCount = 0;
 printf STDERR "# reading UCSC_GI.assemblyHubList.txt\n";
@@ -125,10 +128,14 @@ open (FH, "<UCSC_GI.assemblyHubList.txt") or die "can not read UCSC_GI.assemblyH
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
-  my ($accession, $assembly, $sciName, $commonName, $taxonId) = split('\t', $line);
-  die "ERROR: duplicate accession from UCSC_GI.assemblyHubList.txt" if (defined($genArkAsm{$accession}));
+  my ($accession, $assembly, $sciName, $commonName, $taxonId, $gClade) = split('\t', $line);
   my $asmId = sprintf("%s_%s", $accession, $assembly);
+  die "ERROR: duplicate accession from UCSC_GI.assemblyHubList.txt" if (defined($genArkAsm{$asmId}));
   $genArkAsm{$asmId} = sprintf("%s\t%s\t%s\t%s\t%s", $accession, $assembly, $sciName, $commonName, $taxonId);
+  $gClade =~ s/\(L\)//;	# remove the 'legacy' tag
+  $gClade = "invertebrates" if ($gClade =~ m/invertebrate/);
+  $genArkClade{$asmId} = $gClade;
+  ++$genArkCladeProfile{$gClade};
   ++$genArkCount;
 }
 close (FH);
@@ -137,6 +144,10 @@ close (FH);
 # GCA_000001905.1 Loxafr3.0       Loxodonta africana      African savanna elephant (2009 genbank) 9785
 
 printf STDERR "# have %s assemblies from GenArk UCSC_GI.assemblyHubList.txt\n", commify($genArkCount);
+printf STDERR "# genArk clade profile:\n";
+foreach my $gClade (sort keys %genArkCladeProfile) {
+  printf STDERR "# %6d\t%s\n", $genArkCladeProfile{$gClade}, $gClade;
+}
 
 my $rrCount = 0;
 my %rrGcaGcfList;	# key is asmId, value is UCSC db name
@@ -150,6 +161,8 @@ while (my $line = <FH>) {
 close (FH);
 
 printf STDERR "# have %d assemblies with RR equivalent databases\n", $rrCount;
+printf STDERR "# therefore, should be a total of %s existing browsers\n", commify($rrCount+$genArkCount-$genArkCladeProfile{'viral'}-$genArkCladeProfile{'bacteria'});
+printf STDERR "# %s + %s - %s - %s = %s\n", commify($genArkCount), commify($rrCount), commify($genArkCladeProfile{'viral'}), commify($genArkCladeProfile{'bacteria'}), commify($rrCount+$genArkCount-$genArkCladeProfile{'viral'}-$genArkCladeProfile{'bacteria'});
 
 # establish a name equivalence for some NCBI three word scientific names
 # to IUCN two word scientific names
@@ -267,13 +280,16 @@ close (FH);
 printf STDERR "# common names from GenArk hubs: %s\n", commify($hubComNames);
 
 my $genArkCatchup = 0;
+my $genArkDone = 0;
 ### catch up for any missed genArk hubs
 # accession<tab>assembly<tab>scientific name<tab>common name<tab>taxonId
 foreach my $asmIdKey (sort keys %genArkAsm) {
   if (defined($sciName{$asmIdKey})) {
+    ++$genArkDone;
     next;
   }
   if (defined($comName{$asmIdKey})) {
+    ++$genArkDone;
     next;
   }
   my @a = split('\t', $genArkAsm{$asmIdKey});
@@ -283,6 +299,7 @@ foreach my $asmIdKey (sort keys %genArkAsm) {
   ++$genArkCatchup;
 }
 
+printf STDERR "# %d genArk hubs from hgdownload list already done\n", $genArkDone;
 printf STDERR "# catch up %d genArk hubs from hgdownload list\n", $genArkCatchup;
 
 my %metaInfo;	# key is asmId, value is a tsv string of numbers for:
@@ -302,6 +319,7 @@ if ( -s "../accumulateMetaInfo.tsv" ) {
   close (FH);
 }
 
+my $noDateFromSize = 0;
 my $earliestDate = 22001231;
 my $latestDate = 19000101;
 printf STDERR "### reading asmId.sciName.comonName.date.tsv\n";
@@ -320,16 +338,17 @@ while (my $line = <FH>) {
      $latestDate = $ncbiDate{$a[0]} if ($latestDate < $ncbiDate{$a[0]});
   } else {
      $ncbiDate{$a[0]} = 19720101;
+     ++$noDateFromSize;
      if (defined($a[3])) {
-       printf STDERR "# no date '%s' for %s'\n", $a[3], $a[0];
+       printf STDERR "# no date '%s' for %s'\n", $a[3], $a[0] if ($noDateFromSize < 5);
      } else {
-       printf STDERR "# no date 'undef' for %s'\n", $a[0];
+       printf STDERR "# no date 'undef' for %s'\n", $a[0] if ($noDateFromSize < 5);
      }
   }
 }
 close (FH);
 printf STDERR "# comNameCount %s from ../../../sizes/asmId.sciName.commonName.date.tsv\n", commify($comNameCount);
-printf STDERR "# dates from %s to %s\n", $earliestDate, $latestDate;
+printf STDERR "# dates from %s to %s, no dates: %d\n", $earliestDate, $latestDate, $noDateFromSize;;
 
 my %sciNameCount;	# key is scientific name, value is count of assemblies
 			# from NCBI assembly_summary .txt files
@@ -471,6 +490,7 @@ printf STDERR "### reading asmId.suppressed.list\n";
 open (FH, "<asmId.suppressed.list") or die "can not read asmId.suppressed.list";
 while (my $id = <FH>) {
   chomp $id;
+  next if (defined($genArkAsm{$id}) || defined($rrGcaGcfList{$id}));
   $asmSuppressed{$id} = 1;
 }
 close (FH);
@@ -552,11 +572,14 @@ my %alreadyDone;	# key is asmId, value = 1 indicates already done
 my %underSized;		# key is clade, value is count of underSized
 
 my $NA = "/hive/data/outside/ncbi/genomes/reports/newAsm";
-my %genArkClade;	# key is asmId, value is clade
 
+my $examinedAsmId = 0;
 my $shouldBeGenArk = 0;
 my $shouldBeUcsc = 0;
 my %usedGenArk;	# key is asmId, value is count seen in *.today files
+my $genArkTooManySpecies = 0;
+my $countingUsedGenArk = 0;
+my $prevUsedGenArk = 0;
 
 foreach my $clade (@clades) {
   my $cladeCount = 0;
@@ -564,9 +587,13 @@ foreach my $clade (@clades) {
   my $refSeq = "${NA}/all.refseq.${clade}.today";
   my $genBank = "${NA}/all.genbank.${clade}.today";
   my $asmHubTsv = "~/kent/src/hg/makeDb/doc/${clade}AsmHub/${clade}.orderList.tsv";
+  if ($clade eq "invertebrates") {
+    $asmHubTsv = "~/kent/src/hg/makeDb/doc/invertebrateAsmHub/invertebrate.orderList.tsv";
+  }
   open (FH, "cut -f1 ${refSeq} ${genBank} ${asmHubTsv}|sort -u|") or die "can not read $refSeq or $genBank or $asmHubTsv";
   while (my $asmId = <FH>) {
      chomp $asmId;
+     ++$examinedAsmId;
      $asmId =~ s/\.]/_/g;
      $asmId =~ s/\:/_/g;
      $asmId =~ s/\%/_/g;
@@ -579,10 +606,10 @@ foreach my $clade (@clades) {
      ++$shouldBeGenArk if (defined($genArkAsm{$asmId}));
      ++$shouldBeUcsc if (defined($rrGcaGcfList{$asmId}));
      if (defined ($skipPartialGenome{$asmId})) {
-       next if (!defined($genArkAsm{$asmId}));
+       next if (!defined($genArkAsm{$asmId}) && !defined($rrGcaGcfList{$asmId}));
      }
      if (defined ($asmSuppressed{$asmId})) {
-       next if (!defined($genArkAsm{$asmId}));
+       next if (!defined($genArkAsm{$asmId}) && !defined($rrGcaGcfList{$asmId}));
      }
      next if (defined ($alreadyDone{$asmId}));
      # something wrong with these two
@@ -603,20 +630,23 @@ printf STDERR "# ACK metaInfo: %s '%s'\n", $asmId, $metaInfo{$asmId};
      }
      $alreadyDone{$asmId} = 1;
      if (defined($genArkClade{$asmId})) {
-      die "ERROR: duplicate asmId today $asmId '$clade' '$genArkClade{$asmId}'";
+          printf STDERR "# warning genArkClade{%s} does not = %s\n", $genArkClade{$asmId}, $clade if ($genArkClade{$asmId} ne $clade);
      }
      ++$checkedAsmIds;
      my $iucnSciName = "";
      if (defined($sciNames{$asmId})) {
        ++$ncbiSpeciesRecorded{$sciNames{$asmId}};
-       next if ($ncbiSpeciesRecorded{$sciNames{$asmId}} > $sciNameDisplayLimit);
-       $iucnSciName = $sciNames{$asmId};
- $iucnSciName = $ncbiToIucnNames{$sciNames{$asmId}} if (defined($ncbiToIucnNames{$sciNames{$asmId}}));
-       ++$iucnSpeciesRecorded{$iucnSciName};
+       if (! defined($genArkAsm{$asmId}) && !defined($rrGcaGcfList{$asmId})) {
+         next if ($ncbiSpeciesRecorded{$sciNames{$asmId}} > $sciNameDisplayLimit);
+         $iucnSciName = $sciNames{$asmId};
+   $iucnSciName = $ncbiToIucnNames{$sciNames{$asmId}} if (defined($ncbiToIucnNames{$sciNames{$asmId}}));
+         ++$iucnSpeciesRecorded{$iucnSciName};
+       } else { 
+         ++$genArkTooManySpecies if ($ncbiSpeciesRecorded{$sciNames{$asmId}} > $sciNameDisplayLimit);
+       }
      } else {
        printf STDERR "# no sciName for: '%s' at %s\n", $asmId, commify($goodToGoCount + 1);
      }
-     $genArkClade{$asmId} = $clade;
      ++$cladeCount;
      if (! defined($cladeToGo{$clade})) {
        my @a;
@@ -624,7 +654,8 @@ printf STDERR "# ACK metaInfo: %s '%s'\n", $asmId, $metaInfo{$asmId};
      }
      my $cPtr = $cladeToGo{$clade};
      push (@$cPtr, $asmId);
-     $usedGenArk{$asmId} += 1 if (defined($genArkAsm{$asmId}));
+     ++$usedGenArk{$asmId} if (defined($genArkAsm{$asmId}));
+     ++$countingUsedGenArk if (defined($genArkAsm{$asmId}));
      ++$acceptedAsmIds;
      ++$goodToGoCount;
      ++$ncbiSpeciesUsed if ( defined($sciNames{$asmId}) && defined($ncbiSpeciesRecorded{$sciNames{$asmId}}) && (1 == $ncbiSpeciesRecorded{$sciNames{$asmId}}) );
@@ -646,47 +677,62 @@ printf STDERR "# ACK metaInfo: %s '%s'\n", $asmId, $metaInfo{$asmId};
                  my ($asmSize, $asmContigCount, $n50Size, $n50Count, $n50ContigSize, $n50ContigCount, $n50ScaffoldSize, $n50ScaffoldCount) = split('\t', $metaInfo{$aId});
                  # if asmSize is below the minimum, don't use it
                  if ($asmSize < $minimalGenomeSize{$clade}) {
+                   if (! defined($genArkAsm{$aId}) && !defined($rrGcaGcfList{$aId}) ) {
                    printf STDERR "# %s underSized 1 %d %s %s < %s\n", $clade, ++$underSized{$clade}, $aId, commify($asmSize), commify($minimalGenomeSize{$clade});
      printf STDERR "# ACK would be genArk assembly %s\n", $aId if (defined($genArkAsm{$aId}));
      printf STDERR "# ACK would be UCSC RR %s\n", $aId if (defined($rrGcaGcfList{$aId}));
 printf STDERR "# ACK metaInfo: %s '%s'\n", $aId, $metaInfo{$aId};
                    next;
+                   } else {
+                     printf STDERR "# ACK %s genArk/RR too small at %s\n", $aId, commify($asmSize);
+                   }
                  }
                }
                ++$ncbiSpeciesRecorded{$sciNames{$aId}};
                # the defined($sciName{$aId}) indicates it is a GenArk genome
                # always accept those even if it goes beyond the limit
-               if ( ($ncbiSpeciesRecorded{$sciNames{$aId}} <= $sciNameDisplayLimit) || defined($sciName{$aId}) ) {
+               if ( ($ncbiSpeciesRecorded{$sciNames{$aId}} <= $sciNameDisplayLimit) || defined($genArkAsm{$aId}) || defined($rrGcaGcfList{$aId})) {
                  push (@$cPtr, $aId);
                  $usedGenArk{$aId} += 1 if (defined($genArkAsm{$aId}));
+                 ++$countingUsedGenArk if (defined($genArkAsm{$asmId}));
                  ++$acceptedAsmIds;
                  ++$goodToGoCount;
                  ++$cladeCounts{$clade};
                }	#	under limit count or is GenArk assembly
              }	#	if ($aId ne $asmId)
           }	#	foreach my $aId (@$bPtr)
-       }	#	if ($assembliesAvailable > 1)
+        }	#	if ($assembliesAvailable > 1)
      }	#	if (defined($sciNames{$asmId}))
   }	#	while (my $asmId = <FH>)
   close (FH);
-  printf STDERR "# %s\t%s\tgood to go %s\n", $clade, commify($cladeCount), $goodToGoCount;
   $totalGoodToGo += $goodToGoCount;
+  printf STDERR "# %s\t%s\tgood to go %s, total good: %d\n", $clade, commify($cladeCount), $goodToGoCount, $totalGoodToGo;
+  printf STDERR "# examined %d asmIds from\n#%s\n# %s\n# %s\n", $examinedAsmId, $refSeq, $genBank, $asmHubTsv;
+  printf STDERR "# usedGenArk: %s total: %s\t%s\n", commify($countingUsedGenArk-$prevUsedGenArk), commify($countingUsedGenArk), $clade;
+  $prevUsedGenArk = $countingUsedGenArk;
 }	#	foreach my $clade (@clades)
 
+printf STDERR "# would have knocked out %s GenArk assemblies over species count\n", commify($genArkTooManySpecies);
 printf STDERR "# checkedAsmIds: %d, acceptedAsmIds: %d, notInGoodToGo: %d\n", $checkedAsmIds, $acceptedAsmIds, $notInGoodToGo;
 
 printf STDERR "# total good to go %s, maxDupAsmCount: %s\n", commify($totalGoodToGo), commify($maxDupAsm);;
 
 printf STDERR "# should be GenArk: %s\n", commify($shouldBeGenArk);
 printf STDERR "# had originally %s assemblies from GenArk UCSC_GI.assemblyHubList.txt\n", commify($genArkCount);
+my $usedGenArk = 0;
+my $missedGenArk = 0;
 foreach my $genArkAsmId (sort keys %genArkAsm) {
+  my $gClade = "n/a";
+  $gClade = $genArkClade{$genArkAsmId} if (defined($genArkClade{$genArkAsmId}));
   if (defined($usedGenArk{$genArkAsmId})) {
-    printf STDERR "# used genArk %s %s\n", $genArkAsmId, $genArkAsm{$genArkAsmId};
+    ++$usedGenArk;
+    printf STDERR "# used genArk %s %s %s\n", $genArkAsmId, $gClade, $genArkAsm{$genArkAsmId} if ($usedGenArk < 5);
   } else {
-    printf STDERR "# missed genArk %s %s\n", $genArkAsmId, $genArkAsm{$genArkAsmId};
+    ++$missedGenArk;
+    printf STDERR "# missed genArk %s %s %s\n", $genArkAsmId, $gClade, $genArkAsm{$genArkAsmId} if ($gClade !~ m/viral|bacteria/);
   }
 }
-printf STDERR "# should be UCSC RR %s\n", commify($shouldBeUcsc);
+printf STDERR "# should be UCSC RR %s, used GenArk: %s, missed GenArk: %s\n", commify($shouldBeUcsc), commify($usedGenArk), commify($missedGenArk);
 
 printf "<hr>\n";
 if ( 1 == 0 ) {
@@ -871,6 +917,10 @@ my $asmCountInTable = 0;	# counting the rows output
 my %statusCounts;	# key is status: CR EN VU, value is count
 my $totalAssemblySize = 0;	# sum of all assembly sizes
 
+my $outputGenArkRR = 0;
+my %outputGenArk;	# key is asmId, value is clade
+my %outputRR;	# key is asmId, value is clade
+
 foreach my $clade (@clades) {
   my $cPtr = $cladeToGo{$clade};
   my $countThisClade = scalar(@$cPtr);
@@ -881,6 +931,8 @@ foreach my $clade (@clades) {
   ++$pageSectionCount;
   my $totalContigCounts = 0;
   my $underSized = 0;
+  my $noCommonName = 0;
+  my $suppressedCount = 0;
 
   ######################## rows of per clade table output here ################
   my $tsvFile = sprintf("%s.tableData.txt", $clade);
@@ -901,8 +953,13 @@ foreach my $clade (@clades) {
     }
     if (defined ($asmSuppressed{$asmId})) {
       if (!defined($rrGcaGcfList{$asmId})) {
-        printf STDERR "# suppressed $asmId\n";
+        if (! defined($genArkAsm{$asmId}) && !defined($rrGcaGcfList{$asmId})) {
+        ++$suppressedCount;
+        printf STDERR "# suppressed $asmId\n" if ($suppressedCount < 5);
         next;
+        } else {
+          printf STDERR "# genArk/RR %s would have been suppressed\n", $asmId;
+        }
       }
     }
     my $commonName = "n/a";
@@ -917,7 +974,11 @@ foreach my $clade (@clades) {
         printf STDERR "# getting n/a commonName from comName{%s}\n", $asmId;
       }
     } else {
-      printf STDERR "# no commonName for %s in ncbiCommonName or comName\n", $asmId;
+      if (defined($genArkAsm{$asmId}) || defined($rrGcaGcfList{$asmId})) {
+        printf STDERR "# ACK missed genArk/RR due to no common name for %s\n", $asmId;
+      }
+      ++$noCommonName;
+      printf STDERR "# no commonName for %s in ncbiCommonName or comName\n", $asmId if ($noCommonName < 5);
       next;
     }
 
@@ -1027,6 +1088,9 @@ foreach my $clade (@clades) {
   }
 
   ############# starting a table row  #################################
+  ++$outputGenArkRR if (defined($rrGcaGcfList{$asmId}) || defined($genArkAsm{$asmId}));
+  $outputGenArk{$asmId} = $clade if (defined($genArkAsm{$asmId}));
+  $outputRR{$asmId} = $clade if (defined($rrGcaGcfList{$asmId}));
   if ($asmId =~ m/^GCF/) {
     $gcfGcaCounts{'GCF'} += 1;
   } elsif ($asmId =~ m/GCA/) {
@@ -1223,7 +1287,11 @@ foreach my $clade (@clades) {
   printf "</tr>\n";
   }	#	foreach my $asmId (@$cPtr)
   close (PC);	# finished with clade.tableData.txt output
+  printf STDERR "# no commonName %s for clade %s\n", commify($noCommonName), $clade;
+  printf STDERR "# suppressed %s for clade %s\n", commify($suppressedCount), $clade;
 }	#	foreach my $clade (@clades)
+
+printf STDERR "# output %s genArk or RR assemblies\n", commify($outputGenArkRR);
 
 ##########################################################################
 ## single table is finished, output the end of tbody and the tfoot row
@@ -1313,6 +1381,29 @@ close (FH);
 } else {
   printf STDERR "# no new metaInfo\n";
 }
+
+my $beenThere = 0;
+printf STDERR "# checking missing genArk assemblies in output\n";
+foreach my $gAsmId (sort keys %genArkAsm) {
+  ++$beenThere if ($genArkClade{$gAsmId} !~ m/viral|bacteria/);
+  if (!defined($outputGenArk{$gAsmId})) {
+    printf STDERR "# not output genArk %s\t%s\n", $gAsmId, $genArkClade{$gAsmId}
+ if ($genArkClade{$gAsmId} !~ m/viral|bacteria/);
+  }
+}
+printf STDERR "# there were %s GenArk potential to output\n", commify($beenThere);
+
+$beenThere = 0;
+
+printf STDERR "# checking missing RR assemblies in output\n";
+
+foreach my $rrAsmId (sort keys %rrGcaGcfList) {
+  ++$beenThere;
+  if (!defined($outputRR{$rrAsmId})) {
+   printf STDERR "# not output RR %s\t%s\n", $rrAsmId, $rrGcaGcfList{$rrAsmId};
+  }
+}
+printf STDERR "# there were %s RR potential to output\n", commify($beenThere);
 
 printf STDERR "# done at exit\n";
 exit 0;

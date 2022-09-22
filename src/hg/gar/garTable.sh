@@ -83,12 +83,13 @@ NCBI RefSeq Genes and Ensembl Genes.
 <p>For more details on using this page, please see this <a href='https://genome-blog.soe.ucsc.edu/blog/2022/04/12/genark-hubs-part-4/' target=_blank>blog post</a>.
 </p>\n"
 
-cut -d' ' -f3,5 \
+grep -v "^#" \
   /cluster/home/hiram/kent/src/hg/makeDb/doc/asmHubs/master.run.list \
-    | sort | awk '{printf "%s\t%s\n", $1, $2};' > asmId.sciName
+    | cut -d' ' -f3,5 | awk '{printf "%s\t%s\n", $1, $2};' | sort -k1,1 -u \
+       > asmId.sciName
 
-sort -k1,1 -u \
-  /cluster/home/hiram/kent/src/hg/makeDb/doc/*AsmHub/*.orderList.tsv \
+ls /cluster/home/hiram/kent/src/hg/makeDb/doc/*AsmHub/*.orderList.tsv \
+  | grep -v others.orderList.tsv | xargs grep -h -v "^#" | sort -k1,1 -u \
     > asmId.commonName;
 
 sort -u /hive/data/outside/ncbi/genomes/reports/newAsm/*.suppressed.asmId.list \
