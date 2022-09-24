@@ -886,7 +886,7 @@ bigDataUrl bbi/HLTOGAannotVsHg38v1.bb
 shortLabel TOGA vs. hg38
 longLabel TOGA annotations using human/hg38 as reference
 group genes
-visibility hide
+visibility pack
 itemRgb on
 type bigBed 12
 searchIndex name
@@ -899,7 +899,7 @@ bigDataUrl bbi/HLTOGAannotVsGalGal6v1.bb
 shortLabel TOGA vs. galGal6
 longLabel TOGA annotations using chicken/galGal6 as reference
 group genes
-visibility hide
+visibility pack
 itemRgb on
 type bigBed 12
 searchIndex name
