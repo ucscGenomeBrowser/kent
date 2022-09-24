@@ -2008,7 +2008,7 @@
 ./runBuild GCF_016699345.2 GCF_016699345.2_BCM_Sbol_2.1 primates Saimiri_boliviensis_boliviensis
 ./runBuild GCF_016699485.2 GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b birds Gallus_gallus
 ./runBuild GCF_016700215.1 GCF_016700215.1_bGalGal1.pat.whiteleghornlayer.GRCg7w birds Gallus_gallus
-./runBuild GCF_016700215.2 GCF_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w_WZ birds Gallus_gallus
+./runBuild GCF_016700215.2 GCF_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w birds Gallus_gallus
 ./runBuild GCF_016745375.1 GCF_016745375.1_EPA_FHM_2.0 fish Pimephales_promelas
 ./runBuild GCF_016746235.2 GCF_016746235.2_Prin_Dtei_1.1 invertebrate Drosophila_teissieri
 ./runBuild GCF_016746245.1 GCF_016746245.1_Prin_Dsan_1.0 invertebrate Drosophila_santomea
