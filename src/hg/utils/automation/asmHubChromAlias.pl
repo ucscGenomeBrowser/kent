@@ -157,6 +157,27 @@ while (my $line = <FH>) {
 close (FH);
 # printf STDERR "# counted %d sequence names in the twoBit file\n", $sequenceCount;
 
+my %customName;	# key is native sequence name, value is a custom alias
+my $customNameCount = 0;
+
+if ( -s "customNames.tsv" ) {
+  open (FH, "<customNames.tsv") or die "can not read customNames.tsv";
+  while (my $line = <FH>) {
+    chomp $line;
+    my ($native, $alias) = split('\s+', $line);
+    if (!defined($sequenceSizes{$native})) {
+       printf STDERR "ERROR: processing customNames.tsv given native name\n";
+       printf STDERR " '%s' that does not exist (alias: %s)\n", $native, $alias;
+       exit 255;
+    }
+    $customName{$native} = $alias;
+    ++$customNameCount;
+    addAlias("custom", $alias, $native);
+  }
+  close (FH);
+  printf STDERR "# read %d custom alias names from customNames.tsv\n", $customNameCount;
+}
+
 my $nameCount = 0;
 my %ncbiToUcsc;	# key is NCBI sequence name, value is 'chr' UCSC chromosome name
 my %ucscToNcbi;	# key is 'chr' UCSC name, value is NCBI sequence name
