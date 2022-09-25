@@ -756,7 +756,7 @@ sub hubDateName($) {
     # special case the CHM13 assembly
     my $betterId = $accession;
     if ($accession =~ m/GCA_009914755.4/) {
-       $betterId = "GCA_009914755.4_CHM13_T2T_v2.0";
+       $betterId = "GCA_009914755.4_T2T-CHM13v2.0";
     }
     my $dirCount = `ls -d /hive/data/outside/ncbi/genomes/$gcX/$d0/$d1/$d2/${betterId}* | wc -l`;
     chomp $dirCount;
