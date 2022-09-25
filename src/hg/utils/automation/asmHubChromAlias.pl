@@ -31,6 +31,9 @@ my $ncbiAsmId = shift;
 my %aliasOut;	# key is source name, value is a hash pointer where
 		# key is alias name and value is chrom name
 	# typical source names: ucsc, refseq, genbank, ensembl, assembly, ncbi
+my %aliasDone;	# key is source name, value is hash pointer where
+		# key is chrom name value is alias, to check
+                # for duplicate incoming
 
 # the argument is the name of the 'native' source name
 # where 'native' are the names in the assembly itself, thus the
@@ -97,7 +100,7 @@ sub showAlias($) {
   foreach my $seqName (sort keys %chromIndex) {
     printf "%s\t%s\n", $seqName, $chromIndex{$seqName};
   }
-}
+}	#	sub showAlias($)
 
 #  given an alias and a sequence name, add to result or verify identical
 #  to previous add
@@ -113,14 +116,14 @@ sub addAlias($$$) {
   # have the same name, found for example in GCF_006542625.1_Asia_NLE_v1
   # which has UCSC names identical to 'assembly' names and the hub has been
   # build with UCSC names
-  # do not need to add the sequence name itself
-  #  return if ($alias eq $sequence);
   if (!defined($aliasOut{$source})) {
      my %h;	# hash: key: alias name, value 'native' chrom name
      $aliasOut{$source} = \%h;
-#     printf STDERR "# creating aliasOut{'%s'}\n", $source;
+     my %t;	# hash: key: native sequence name, value alias
+     $aliasDone{$source} = \%t;
   }
   my $hashPtr = $aliasOut{$source};
+  my $donePtr = $aliasDone{$source};
   # already done, verify it is equivalent to previous request
   if (defined($hashPtr->{$alias})) {
      if ($sequence ne $hashPtr->{$alias}) {
@@ -129,9 +132,14 @@ sub addAlias($$$) {
      }
      return;
   }
-  $hashPtr->{$alias} = $sequence;
+  if (defined($donePtr->{$sequence})) {
+    printf STDERR "# WARNING multiple inputs for source '%s.%s' was '%s' new '%s'\n", $source, $sequence, $donePtr->{$sequence}, $alias;
+  } else {
+    $donePtr->{$sequence} = $alias;
+    $hashPtr->{$alias} = $sequence;
+  }
   return;
-}
+}	#	sub addAlias($$$)
 
 # asmSource - is this a genbank or refseq assembly
 my $asmSource = "genbank";
@@ -197,6 +205,9 @@ while (my $line = <FH>) {
 }
 close (FH);
 
+# with the new style system, can not have multiple aliases for
+# the same sequence name.  The older system did do this.
+# Need to record them here so they can be skipped later.
 my $dupsNotFound = 0;
 my $dupsList = `ls ../../download/*.dups.txt.gz 2> /dev/null|head -1`;
 chomp $dupsList if (defined($dupsList));
@@ -210,13 +221,13 @@ if ( -s "$dupsList" ) {
       if (!defined($ncbiToUcsc{$dupTarget})) {
        printf STDERR "# ERROR: can not find dupTarget: $dupTarget in ncbiToUcsc for dupAlias: $dupAlias\n";
          $dupsNotFound += 1;
-      } else {
-        printf STDERR "# addAlias(\"ucsc\", $dupAlias, $ncbiToUcsc{$dupTarget});\n";
+#      } else {
+#        printf STDERR "# dupList addAlias(\"ucsc\", $dupAlias, $ncbiToUcsc{$dupTarget});\n";
       }
-    } else {
-        printf STDERR "# addAlias($asmSource, $dupAlias, $dupTarget);\n";
+#    } else {
+#        printf STDERR "# dupList addAlias($asmSource, $dupAlias, $dupTarget);\n";
     }
-    printf STDERR "# adding duplicate alias %s\n", $dupAlias;
+    printf STDERR "# would have added duplicate alias %s for %s\n", $dupAlias, $dupTarget;
     ++$dupCount;
   }
   close (FH);
@@ -337,13 +348,15 @@ while (my $line = <FH>) {
 #  next if ($refSeqName eq "na");	# may not be any RefSeq name
 #  next if ($gbkName eq "na");	# may not be any GenBank name
   # fill in ncbiToUcsc for potentially the 'other' NCBI name
-  if (defined($ncbiToUcsc{$refSeqName}) && !defined($ncbiToUcsc{$gbkName})) {
-    $ncbiToUcsc{$gbkName} = $ncbiToUcsc{$refSeqName};
-    $ucscToNcbi{$ncbiToUcsc{$refSeqName}} = $gbkName;
-  }
-  if (defined($ncbiToUcsc{$gbkName}) && !defined($ncbiToUcsc{$refSeqName})) {
-    $ncbiToUcsc{$refSeqName} = $ncbiToUcsc{$gbkName};
-    $ucscToNcbi{$ncbiToUcsc{$gbkName}} = $refSeqName;
+  if ($refSeqName ne "na"  && $gbkName ne "na") {
+    if (defined($ncbiToUcsc{$refSeqName}) && !defined($ncbiToUcsc{$gbkName})) {
+      $ncbiToUcsc{$gbkName} = $ncbiToUcsc{$refSeqName};
+      $ucscToNcbi{$ncbiToUcsc{$refSeqName}} = $gbkName;
+      }
+    if (defined($ncbiToUcsc{$gbkName}) && !defined($ncbiToUcsc{$refSeqName})) {
+      $ncbiToUcsc{$refSeqName} = $ncbiToUcsc{$gbkName};
+      $ucscToNcbi{$ncbiToUcsc{$gbkName}} = $refSeqName;
+    }
   }
   if (defined($ncbiToUcsc{$gbkName})) {
      printf STDERR "# asmRpt: '%s'\t'%s'\t'%s'\t'%s'\n", $asmName, $gbkName, $refSeqName, $ncbiToUcsc{$gbkName} if ($dbgCount < 5);
