@@ -35,8 +35,8 @@ while (my $lastzDir = <DL>) {
 close (DL);
 
 # foreach my $queryDb (@queryList) {
-#  printf "%s vs. %s\n", $queryDb, $targetDb;
-#}
+#    printf STDERR "%s vs. %s\n", $queryDb, $targetDb;
+# }
 
 ##### begin trackDb output ######
 printf "track %sChainNet\n", $targetDb;
@@ -192,14 +192,14 @@ foreach my $queryDb (@queryList) {
   my @targetAccession = split('_', $targetDb);
   my $targetAcc = sprintf("%s_%s", $targetAccession[0], $targetAccession[1]);
   my $QueryDb = ucfirst($queryDb);
-  `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
-  `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
-  if ( -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb) {
-printf STDERR "constructing net.bb links\n";
-  `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb  $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
-  `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
   my $queryDate = "some date";
   my $queryAsmName = "";
+  `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
+  `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
+  if ( -s "../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb" ) {
+printf STDERR "constructing net.bb links $targetDb $queryDb\n";
+  `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb  $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
+  `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
   if ( $queryDb !~ m/^GC/ ) {
     $queryDate = `hgsql -N -e 'select description from dbDb where name="$queryDb"' hgcentraltest | sed -e 's/ (.*//;'`;
     chomp $queryDate;
@@ -224,7 +224,7 @@ printf STDERR "constructing net.bb links\n";
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
   if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb" ) {
-printf STDERR "constructing synNet.bb links\n";
+printf STDERR "constructing synNet.bb links $targetDb $queryDb\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb  $buildDir/bbi/$targetDb.${queryDb}.synNet.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
     printf "
@@ -246,7 +246,7 @@ printf STDERR "constructing synNet.bb links\n";
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.rbestNet.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.rbestNet.summary.bb`;
   if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.bb" ) {
-printf STDERR "constructing rbestNet.bb links\n";
+printf STDERR "constructing rbestNet.bb links $targetDb $queryDb\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.bb  $buildDir/bbi/$targetDb.${queryDb}.rbestNet.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.rbestNet.summary.bb`;
     printf "
@@ -268,6 +268,7 @@ printf STDERR "constructing rbestNet.bb links\n";
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.liftOverNet.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.liftOverNet.summary.bb`;
   if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.liftOverNet.bb" ) {
+printf STDERR "constructing liftOverNet links $targetDb $queryDb\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.liftOverNet.bb  $buildDir/bbi/$targetDb.${queryDb}.liftOverNet.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.liftOverNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.liftOverNet.summary.bb`;
     printf "
@@ -287,3 +288,5 @@ printf STDERR "constructing rbestNet.bb links\n";
   }
   $N++;
 }
+
+printf "\n" if ($N > 0);
