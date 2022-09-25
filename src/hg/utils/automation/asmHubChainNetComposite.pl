@@ -55,7 +55,7 @@ while (my $accession = <TD>) {
      $qAsmId = "${accession}${qAsmName}";
   }
   $queryDates{$qAsmId} = $qDate;
-  my ($qCommonName, undef, $qSubmitter) = &HgAutomate::getAssemblyInfo("hgwdev", $qAsmId);
+  my ($qCommonName, undef, $qSubmitter) = &HgAutomate::getAssemblyInfo($dbHost, $qAsmId);
   $queryCommonName{$qAsmId} = $qCommonName;
   $querySubmitter{$qAsmId} = $qSubmitter;
 }
