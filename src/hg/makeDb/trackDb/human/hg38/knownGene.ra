@@ -3,7 +3,8 @@ shortLabel GENCODE V41
 longLabel GENCODE V41
 priority 1
 visibility pack
-type bigGenePred knownGenePep knownGeneMrna
+#type bigGenePred knownGenePep knownGeneMrna
+type bigGenePred
 bigDataUrl /gbdb/hg38/gencode/gencodeV41.bb
 baseColorDefault genomicCodons
 group genes
