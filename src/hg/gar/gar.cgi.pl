@@ -8,6 +8,16 @@ use URI::Escape;
 # use strict;
 # use warnings;
 
+my $httpRefer = "noReference";
+my $referDomain = "noDomain";
+
+if (defined($ENV{'HTTP_REFERER'})) {
+  my @a = split('/', $ENV{'HTTP_REFERER'});
+  $httpRefer = $a[-1];  # should be "assemblyRequest.html"
+  my @b = split('\.', $a[-2]);
+  $referDomain = "$b[-2].$b[-1]";	# should be "ucsc.edu"
+}
+
 print "Content-type: text/html\n\n";
 
 print "<html><head><title>GenArk Request assembly build</title></head>\n";
@@ -24,18 +34,23 @@ my %incoming = (
 );
 
 my $validIncoming = 0;
+my $extraneousArgs = 0;
 
 if (defined($ENV{"QUERY_STRING"})) {
   my $qString = $ENV{"QUERY_STRING"};
   my @idVal = split("&", $qString);
   foreach $id (@idVal) {
     my ($tag, $value) = split("=", $id, 2);
-    $incoming{$tag} = uri_unescape( $value ) if (defined($value));
-    ++$validIncoming if (defined($value));
+    # only accept known inputs, the five defined above for %incoming defaults
+    if (defined($incoming{$tag}) && defined($value)) {
+      $incoming{$tag} = uri_unescape( $value );
+      ++$validIncoming;
+    }
+    ++$extraneousArgs if (!defined($incoming{$tag}));
   }
 }
 
-if ($validIncoming != 5) {
+if ( ($validIncoming != 5) || ($extraneousArgs > 0) ) {
   # not a legitimate request from our own business, do nothing.
   print "</body></html>\n";
   exit 0;
@@ -45,8 +60,8 @@ printf "<ul>\n";
 printf "<li> name: '%s'</li>\n", $incoming{"name"};
 printf "<li>email: '%s'</li>\n", $incoming{"email"};
 printf "<li>asmId: '%s'</li>\n", $incoming{"asmId"};
-printf "<li>betterName '%s'</li>\n", $incoming{"betterName"};
-printf "<li>comment '%s'</li>\n", $incoming{"comment"};
+printf "<li>betterName: '%s'</li>\n", $incoming{"betterName"};
+printf "<li>comment: '%s'</li>\n", $incoming{"comment"};
 printf "</ul>\n";
 
 my $DS=`date "+%F %T"`;
@@ -62,9 +77,11 @@ email: '%s'
 asmId: '%s'
 betterName: '%s'
 comment: '%s'
+httpRefer '%s'
+referDomain '%s'
 
 date: '$DS'
-", $incoming{"email"}, $incoming{"asmId"}, $incoming{"name"}, $incoming{"email"}, $incoming{"asmId"}, $incoming{"betterName"}, $incoming{"comment"};
+", $incoming{"email"}, $incoming{"asmId"}, $incoming{"name"}, $incoming{"email"}, $incoming{"asmId"}, $incoming{"betterName"}, $incoming{"comment"}, $httpRefer, $referDomain;
 
 close (FH);
 

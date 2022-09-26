@@ -14,8 +14,8 @@ urlLabel View on the UCSC Cell Browser
     parent gtexSnAtlas
     type bigBarChart
     visibility pack
-    shortLabel GTEx Atlas Combined Tissue-Cell Type
-    longLabel Combined Tissue and Cell Type
+    shortLabel Combined Tissue-Cell Type
+    longLabel GTEx Atlas Combined Tissue and Cell Type
     barChartMetric mean
     barChartUnit log(TP10K+1)
     defaultLabelFields name
@@ -32,7 +32,7 @@ urlLabel View on the UCSC Cell Browser
     type bigBarChart
     visibility hide 
     release alpha
-    shortLabel GTEx Atlas Age
+    shortLabel Age
     longLabel GTEx Atlas binned by Age
     barChartMetric mean
     barChartUnit log(TP10K+1)
@@ -48,7 +48,7 @@ urlLabel View on the UCSC Cell Browser
     type bigBarChart
     visibility hide
     release alpha
-    shortLabel GTEx Atlas Broad Cell Type
+    shortLabel Broad Cell Type
     longLabel GTEx Atlas binned by Broad cell type
     barChartMetric mean
     barChartUnit log(TP10K+1)
@@ -64,7 +64,7 @@ urlLabel View on the UCSC Cell Browser
     type bigBarChart
     visibility hide
     release alpha
-    shortLabel GTEx Atlas Granular Cell Type
+    shortLabel Granular Cell Type
     longLabel GTEx Atlas binned by Granular Cell Type
     barChartMetric mean
     barChartUnit log(TP10K+1)
@@ -80,7 +80,7 @@ urlLabel View on the UCSC Cell Browser
     type bigBarChart
     visibility hide
     release alpha
-    shortLabel GTEx Atlas Sample Ischemic Time
+    shortLabel Sample Ischemic Time
     longLabel GTEx Atlas binned by Sample Ischemic Time
     barChartMetric mean
     barChartUnit log(TP10K+1)
@@ -96,7 +96,7 @@ urlLabel View on the UCSC Cell Browser
     type bigBarChart
     visibility hide
     release alpha
-    shortLabel GTEx Atlas Sex
+    shortLabel Sex
     longLabel GTEx Atlas binned by Sex
     barChartMetric mean
     barChartUnit log(TP10K+1)
@@ -112,7 +112,7 @@ urlLabel View on the UCSC Cell Browser
     type bigBarChart
     visibility hide
     release alpha
-    shortLabel GTEx Atlas Tissue Site Detail
+    shortLabel Tissue Site Detail
     longLabel GTEx Atlas binned by Tissue Site Detail
     barChartMetric mean
     barChartUnit log(TP10K+1)
@@ -128,7 +128,7 @@ urlLabel View on the UCSC Cell Browser
     type bigBarChart
     visibility hide
     release alpha
-    shortLabel GTEx Atlas Prep
+    shortLabel Prep
     longLabel GTEx Atlas binned by Prep
     barChartMetric mean
     barChartUnit log(TP10K+1)

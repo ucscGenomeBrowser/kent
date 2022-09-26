@@ -61,10 +61,10 @@ To create this track, WindowMasker was run with the following parameters:
 <pre>
 windowmasker -mk_counts true -input $asmId.unmasked.fa -output wm_counts
 windowmasker -ustat wm_counts -sdust true -input $asmId.unmasked.fa -output windowmasker.intervals
-perl -wpe 'if (s/^>lcl\\|(.*)\\n\$//) { \$chr = \$1; } \\
+perl -wpe 'if (s/^&gt;lcl\\|(.*)\\n&dollar;//) { &dollar;chr = &dollar;1; } \\
    if (/^(\\d+) - (\\d+)/) { \\
-   \$s=\$1; \$e=\$2+1; s/(\\d+) - (\\d+)/\$chr\\t\$s\\t\$e/; \
-   }' windowmasker.intervals > windowmasker.sdust.bed
+   &dollar;s=&dollar;1; &dollar;e=&dollar;2+1; s/(\\d+) - (\\d+)/&dollar;chr\\t&dollar;s\\t&dollar;e/; \
+   }' windowmasker.intervals &gt; windowmasker.sdust.bed
 </pre>
 The windowmasker.sdust.bed included masking for areas of the
 assembly that are gap.  The file was 'cleaned' to remove those areas

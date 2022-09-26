@@ -232,6 +232,7 @@ bigDataUrl bbi/%s.rmsk.bb\n" "${asmId}"
 if [ -s "$buildDir/bbi/${asmId}.rmsk.align.bb" ]; then
   printf "xrefDataUrl bbi/%s.rmsk.align.bb\n" "${asmId}"
 fi
+printf "maxWindowToDraw 5000000\n"
 export rmskClassProfile="$buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt"
 if [ -s "${rmskClassProfile}" ]; then
   printf "html html/%s.repeatMasker\n\n" "${asmId}"
@@ -862,7 +863,58 @@ scoreFilterMax 100
 
 $scriptDir/asmHubCrisprAll.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.crisprAll.html
 
-fi
+fi	#	if [ -s ${buildDir}/trackData/crisprAll/crispr.bb ]
+
+# TOGA track if exists
+# build directory can be either TOGAvGalGal6v1 or TOGAvHg38v1
+
+export tg=`ls -d ${buildDir}/trackData/TOGAv* 2> /dev/null | wc -l`
+if [ "${tg}" -gt 0 ]; then
+  rm -f $buildDir/bbi/HLTOGAannotVs*.*
+  rm -f $buildDir/ixIxx/HLTOGAannotVs*.*
+  tData=`ls -d $buildDir/trackData/TOGAv* | sed -e 's#.*/trackData#trackData#;'`
+  fBase=`ls $buildDir/trackData/TOGAv*/HLTOGAannotVs*.bb | sed -e 's#.*/##; s/.bb//;'`
+  # there is a bug in the source files that have galGal6 when they should
+  # be GalGal6
+  FBase=`echo $fBase | sed -e 's#galGal6#GalGal6#;'`
+  ln -s ../$tData/$fBase.bb $buildDir/bbi/$FBase.bb
+  ln -s ../$tData/$fBase.ix $buildDir/ixIxx/$FBase.ix
+  ln -s ../$tData/$fBase.ixx $buildDir/ixIxx/$FBase.ixx
+  if [ -d ${buildDir}/trackData/TOGAvHg38v1 ]; then
+printf "track HLTOGAannotvHg38v1
+bigDataUrl bbi/HLTOGAannotVsHg38v1.bb
+shortLabel TOGA vs. hg38
+longLabel TOGA annotations using human/hg38 as reference
+group genes
+visibility pack
+itemRgb on
+type bigBed 12
+searchIndex name
+searchTrix  ixIxx/HLTOGAannotVsHg38v1.ix
+html html/TOGAannotation
+"
+  elif [ -d ${buildDir}/trackData/TOGAvGalGal6v1 ]; then
+printf "track HLTOGAannotvGalGal6v1
+bigDataUrl bbi/HLTOGAannotVsGalGal6v1.bb
+shortLabel TOGA vs. galGal6
+longLabel TOGA annotations using chicken/galGal6 as reference
+group genes
+visibility pack
+itemRgb on
+type bigBed 12
+searchIndex name
+searchTrix  ixIxx/HLTOGAannotVsGalGal6v1.ix
+html html/TOGAannotation
+"
+  else
+    printf "# ERROR: do not recognize TOGA build directory:\n" 1>&2
+    ls -d ${buildDir}/trackData/TOGAv* 1>&2
+    exit 255
+  fi
+
+$scriptDir/asmHubTOGA.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/TOGAannotation.html
+
+fi	#	if [ "${tg}" -gt 0 ]
 
 # accessionId only used for include statements for other trackDb.txt files
 export accessionId="${asmId}"
@@ -871,8 +923,6 @@ case ${asmId} in
      accessionId=`echo "$asmId" | awk -F"_" '{printf "%s_%s", $1, $2}'`
      ;;
 esac
-
-ls -og "${buildDir}/$asmId.userTrackDb.txt" 1>&2
 
 if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then
   printf "\ninclude %s.userTrackDb.txt\n" "${accessionId}"

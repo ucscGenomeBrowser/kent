@@ -98,7 +98,7 @@ sub getActiveDbs {
   my $dbh = DBI->connect("DBI:mysql:database=$centdb;host=$host",
 			 $username, $password);
   my $results =
-      $dbh->selectcol_arrayref("select name from dbDb where active = 1;");
+      $dbh->selectcol_arrayref("select name from dbDb where active = 1 and nibPath not like 'hub:%';");
   $dbh->disconnect();
   return @{$results};
 }
