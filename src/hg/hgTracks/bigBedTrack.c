@@ -620,7 +620,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
     if (lf->label == NULL)
         lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
-    if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
+    if (startsWith("bigGenePred", track->tdb->type) || startsWith("genePred", track->tdb->type))
         {
         lf->original = genePredFromBigGenePred(chromName, bb); 
         }
