@@ -68,7 +68,8 @@ my %nameLabels = (
    "ncbi" => "NCBI",
    "refseq" => "RefSeq",
    "ucsc" => "UCSC",
-   "ensembl" => "Ensembl"
+   "ensembl" => "Ensembl",
+   "custom" => "custom"
 );
 
 open (AS, ">$opt_aliasAs") or die "can not write to $opt_aliasAs";
