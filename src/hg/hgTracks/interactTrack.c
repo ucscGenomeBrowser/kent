@@ -883,7 +883,8 @@ if (tInfo->clusterMode || isLinkedFeaturesMode(tg))
 #endif
     {
     tg->drawItemAt = interactLinkedFeaturesDrawAt;
-    linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+    if (tg->items != NULL)
+        linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
     }
 else
     // curve, etc. connector display
