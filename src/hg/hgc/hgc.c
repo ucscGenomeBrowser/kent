@@ -976,16 +976,18 @@ if (eUrl==NULL)
    setting prefix */
 safef(urlLabelSetting, sizeof(urlLabelSetting), "%sLabel", urlSetting);
 char *linkLabel = trackDbSettingOrDefault(tdb, urlLabelSetting, "Outside Link:");
+char *eLinkLabel = replaceInUrl(linkLabel, itemName, cart, database, seqName, winStart, winEnd, tdb->track,
+                            encode, fields);
 
 // if we got no item name from hgTracks or the item name does not appear in the URL
 // there is no need to show the item name at all
 if (isEmpty(itemName) || !stringIn("$$", url))
     {
-    printf("<A TARGET=_blank HREF='%s'>%s</A><BR>",eUrl, linkLabel);
+    printf("<A TARGET=_blank HREF='%s'>%s</A><BR>",eUrl, eLinkLabel);
     return;
     }
 
-printf("<B>%s </B>",linkLabel);
+printf("<B>%s </B>",eLinkLabel);
 
 printf("<A HREF=\"%s\" target=_blank>", eUrl);
 
