@@ -33,8 +33,8 @@ use File::Spec;
     # General-purpose utility routines:
     qw( checkCleanSlate checkExistsUnlessDebug closeStdin
 	getAssemblyInfo getSpecies hubDateName gensub2 machineHasFile
-	databaseExists makeGsub mustMkdir asmHubBuildDir asmHubDownloadDir
-	mustOpen nfsNoodge paraRun run verbose
+	databaseExists dbTableExists makeGsub mustMkdir asmHubBuildDir
+	asmHubDownloadDir mustOpen nfsNoodge paraRun run verbose
       ),
     # Hardcoded paths/commands/constants:
     qw( $centralDbSql $git
@@ -803,6 +803,20 @@ sub databaseExists {
   my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
   chomp $line;
   return length($line);     # will be zero if not existing, >0 if exists
+}
+
+sub dbTableExists {
+  my ($dbHost, $db, $table) = @_;
+  return 0 if ($dbHost =~ m/nohost/i);
+  confess "Must have exactly 3 arguments" if (scalar(@_) != 3);
+  if (&HgAutomate::databaseExists($dbHost, $db)) {
+    my $query = "select count(*) from $db.$table;";
+    my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql 2>>/dev/null`;
+    chomp $line;
+    return length($line);     # will be zero if not existing, >0 if exists
+  } else {	# no DB, no table
+    return 0;
+  }
 }
 
 sub makeGsub {

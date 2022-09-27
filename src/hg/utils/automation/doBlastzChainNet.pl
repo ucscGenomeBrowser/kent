@@ -274,7 +274,7 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
 # Globals:
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $fileServer);
-my ($swapDir, $tAsmId, $qAsmId, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists);
+my ($swapDir, $tAsmId, $qAsmId, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists, $tChromInfoExists, $qChromInfoExists);
 
 sub isInDirList {
   # Return TRUE if $dir is under (begins with) something in dirList.
@@ -1160,7 +1160,7 @@ _EOF_
     $qRepeats = $opt_tRepeats ? "-qRepeats=$opt_tRepeats" : $defaultTRepeats;
   }
     if (! $opt_trackHub && $dbExists) {
-      if ($qDbExists) {
+      if ($qDbExists && $qChromInfoExists) {
       $bossScript->add(<<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
@@ -1786,7 +1786,7 @@ if (\$lineCount > 0) then
 endif
 _EOF_
       );
-      if ($qDbExists) {
+      if ($qDbExists && $qChromInfoExists) {
         $bossScript->add(<<_EOF_
   netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
     | hgLoadNet -verbose=0 $tDb netSyn$QDb stdin
@@ -1969,9 +1969,23 @@ $fileServer = &HgAutomate::chooseFileServer($opt_swap ? $swapDir : $buildDir);
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;
 $dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
+# db might exist, but it may not have chromInfo table (promoted hub)
+$tChromInfoExists = 0;
+if ($dbExists) {
+  $tChromInfoExists = 1 if (&HgAutomate::dbTableExists($dbHost, $tDb, "chromInfo"));
+}
 # may be working with a query that does not have a database
 $qDbExists = 0;
 $qDbExists = 1 if (&HgAutomate::databaseExists($dbHost, $qDb));
+$qChromInfoExists = 0;
+if ($qDbExists) {
+  $qChromInfoExists = 1 if (&HgAutomate::dbTableExists($dbHost, $qDb, "chromInfo"));
+}
+
+printf STDERR "# target db exists: %s\n", $dbExists ? "TRUE" : "FALSE";
+printf STDERR "# target chromInfo exists: %s\n", $tChromInfoExists ? "TRUE" : "FALSE";
+printf STDERR "# query db exists: %s\n", $qDbExists ? "TRUE" : "FALSE";
+printf STDERR "# query chromInfo exists: %s\n", $qChromInfoExists ? "TRUE" : "FALSE";
 
 # When running -swap, swapGlobals() happens at the end of the chainMerge step.
 # However, if we also use -continue with some step later than chainMerge, we
