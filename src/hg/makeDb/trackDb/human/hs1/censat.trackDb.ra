@@ -9,3 +9,4 @@ type bigBed 9 +
 bigDataUrl /gbdb/hs1/censat/censat.bb
 html html/censat.html
 mouseOverField component
+priority 2

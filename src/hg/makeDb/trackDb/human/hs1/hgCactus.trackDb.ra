@@ -11,7 +11,7 @@ noInherit on
 centerLabelsDense on
 visibility hide
 type bigBed 3
-priority 1
+priority 2
 html  html/hgCactus.html
 
     track cactusAlignments

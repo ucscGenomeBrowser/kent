@@ -2,7 +2,7 @@ track hgUnique
 compositeTrack on
 shortLabel CHM13 unique
 longLabel  CHM13 unique in comparison to GRCh38/hg38 and GRCh37/hg19
-priority 0.1
+priority 3
 group map
 type bigBed 3
 visibility pack
