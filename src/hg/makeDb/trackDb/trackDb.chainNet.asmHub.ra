@@ -1,4 +1,101 @@
 ##############################################################################
+# hs1/ GCA_009914755.4_CHM13_T2T_v2.0 - human - Homo sapiens - taxId: 9606 - primate
+##############################################################################
+track chainNetHs1
+compositeTrack on
+shortLabel CHM13 T2T Chain/Net
+longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb hs1
+html chainNet
+
+    track chainNetHs1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetHs1
+    spectrum on
+
+        track chainHs1
+        parent chainNetHs1Viewchain
+        subGroups view=chain
+        shortLabel CHM13 T2T Chain
+        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Chained Alignments
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHs1Link.bb
+
+        track chainSynHs1
+        parent chainNetHs1Viewchain
+        subGroups view=chain
+        shortLabel CHM13 T2T Chain
+        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Chained Alignments
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynHs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynHs1Link.bb
+
+        track chainRBestHs1
+        parent chainNetHs1Viewchain
+        subGroups view=chain
+        shortLabel CHM13 T2T Chain
+        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Chained Alignments
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestHs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestHs1Link.bb
+
+    track mafNetHs1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetHs1
+
+        track netHs1
+        parent mafNetHs1Viewnet
+        subGroups view=net
+        shortLabel CHM13 T2T mafNet
+        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.hs1.net.bb
+        summary /gbdb/$D/chainNet/$D.hs1.net.summary.bb
+        speciesOrder hs1
+        speciesLabels hs1="CHM13 T2T"
+
+        track synNetHs1
+        parent mafNetHs1Viewnet
+        subGroups view=net
+        shortLabel CHM13 T2T mafNet
+        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.hs1.synNet.bb
+        summary /gbdb/$D/chainNet/$D.hs1.synNet.summary.bb
+        speciesOrder hs1
+        speciesLabels hs1="CHM13 T2T"
+
+        track rbestNetHs1
+        parent mafNetHs1Viewnet
+        subGroups view=net
+        shortLabel CHM13 T2T mafNet
+        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.hs1.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.hs1.rbestNet.summary.bb
+        speciesOrder hs1
+        speciesLabels hs1="CHM13 T2T"
+
+##############################################################################
 # GCA_009914755.4_CHM13_T2T_v2.0 - human - Homo sapiens - taxId: 9606 - primate
 ##############################################################################
 track chainNetGCA_009914755.4
