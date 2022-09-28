@@ -1089,7 +1089,7 @@ sub loadUp {
   my $runDir = "$buildDir/axtChain";
   my $QDbLink = "chain$QDb" . "Link";
   # First, make sure we're starting clean.
-  if (-e "$runDir/$tDb.$qDb.net" || -e "$runDir/$tDb.$qDb.net.gz") {
+  if (! $opt_debug && (-e "$runDir/$tDb.$qDb.net" || -e "$runDir/$tDb.$qDb.net.gz") ) {
     die "loadUp: looks like this was run successfully already " .
       "($tDb.$qDb.net[.gz] exists).  Either run with -continue download, " .
 	"or move aside/remove $runDir/$tDb.$qDb.net[.gz] and run again.\n";
@@ -1113,6 +1113,7 @@ and loads the net table.";
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
 # Load chains:
+set buildDir = "$buildDir"
 _EOF_
     );
   if ($opt_loadChainSplit && $splitRef) {
@@ -1190,12 +1191,12 @@ _EOF_
 
       $bossScript->add(<<_EOF_
 
-cd $buildDir
+cd \$buildDir
 featureBits $tDb $QDbLink >&fb.$tDb.$QDbLink.txt
 cat fb.$tDb.$QDbLink.txt
 _EOF_
       );
-    } else {
+    } else {	# not a database assembly
       $bossScript->add(<<_EOF_
 cp -p noClass.net $tDb.$qDb.net
 netFilter -minGap=10 noClass.net \\
@@ -1203,8 +1204,29 @@ netFilter -minGap=10 noClass.net \\
 mv align.tab net$QDb.tab
 _EOF_
       );
+      # target may be database assembly, special set of gbdb symLinks
+      if ($dbExists && $tChromInfoExists) {
+      $bossScript->add(<<_EOF_
+mkdir -p /gbdb/$tDb/chainNet
+foreach T (chain chainRBest chainSyn)
+  if ( -s "\$buildDir/axtChain/\${T}${QDb}.bb" ) then
+    rm -f "/gbdb/$tDb/chainNet/$tDb.\${T}$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.\${T}.${QDb}Link.bb"
+    ln -s "\$buildDir/axtChain/\${T}${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.\${T}$QDb.bb"
+    ln -s "\$buildDir/axtChain/\${T}${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.\${T}.${QDb}Link.bb"
+  endif
+end
+foreach T (net rbestNet synNet)
+  if ( -s "\$buildDir/bigMaf/$tDb.$qDb.\${T}.bb" ) then
+    rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.summary.bb"
+    ln -s "\$buildDir/bigMaf/$tDb.$qDb.\${T}.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.bb"
+    ln -s "\$buildDir/bigMaf/$tDb.$qDb.\${T}.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.summary.bb"
+  endif
+end
+_EOF_
+      );
+      }
     }
-  }
+  }	#	if (! $isSelf)
   $bossScript->execute();
 # maybe also peek in trackDb and see if entries need to be added for chain/net
 }	#	sub loadUp {}
