@@ -7393,6 +7393,7 @@ return (startsWith("big", track->tdb->type)
      && (bdu && isValidBigDataUrl(bdu, FALSE))
      && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
      && (track->subtracks == NULL)
+     && (!startsWith("bigInteract", track->tdb->type))
      && (!startsWith("bigMaf", track->tdb->type));
 }
 

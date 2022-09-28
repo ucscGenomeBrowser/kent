@@ -930,6 +930,12 @@ sub swapGlobals {
   my $tmp = $qDb;
   $qDb = $tDb;
   $tDb = $tmp;
+  $tmp = $dbExists;
+  $dbExists = $qDbExists;
+  $qDbExists = $tmp;
+  $tmp = $tChromInfoExists;
+  $tChromInfoExists = $qChromInfoExists;
+  $qChromInfoExists = $tmp;
   $QDb = $isSelf ? 'Self' : ucfirst($qDb);
   foreach my $var ('DIR', 'LEN', 'CHUNK', 'LAP', 'SMSK') {
     $tmp = $defVars{"SEQ1_$var"};
@@ -1126,7 +1132,7 @@ end
 _EOF_
       );
   } else {
-    if (! $opt_trackHub && $dbExists) {
+    if (! $opt_trackHub && $dbExists && $tChromInfoExists ) {
       $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
@@ -1159,7 +1165,7 @@ _EOF_
     $tRepeats = $opt_qRepeats ? "-tRepeats=$opt_qRepeats" : $defaultQRepeats;
     $qRepeats = $opt_tRepeats ? "-qRepeats=$opt_tRepeats" : $defaultTRepeats;
   }
-    if (! $opt_trackHub && $dbExists) {
+    if (! $opt_trackHub && $dbExists && $tChromInfoExists) {
       if ($qDbExists && $qChromInfoExists) {
       $bossScript->add(<<_EOF_
 
@@ -1778,7 +1784,7 @@ netChainSubset -verbose=0 $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz stdout \\
 _EOF_
       );
 
-    if (! $opt_trackHub && $dbExists) {
+    if (! $opt_trackHub && $dbExists && $tChromInfoExists) {
       $bossScript->add(<<_EOF_
 set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
 if (\$lineCount > 0) then
@@ -1875,7 +1881,7 @@ _EOF_
       );
     }
 
-    if (! $opt_trackHub && $dbExists) {
+    if (! $opt_trackHub && $dbExists && $tChromInfoExists) {
       $bossScript->add(<<_EOF_
 cd "$buildDir"
 if (\$lineCount > 0) then
@@ -1887,7 +1893,7 @@ _EOF_
     }
   }
   $bossScript->execute();
-}
+}	#	sub doSyntenicNet
 
 #########################################################################
 #
@@ -1986,6 +1992,7 @@ printf STDERR "# target db exists: %s\n", $dbExists ? "TRUE" : "FALSE";
 printf STDERR "# target chromInfo exists: %s\n", $tChromInfoExists ? "TRUE" : "FALSE";
 printf STDERR "# query db exists: %s\n", $qDbExists ? "TRUE" : "FALSE";
 printf STDERR "# query chromInfo exists: %s\n", $qChromInfoExists ? "TRUE" : "FALSE";
+printf STDERR "# trackHub: %s\n", $opt_trackHub ? "TRUE" : "FALSE";
 
 # When running -swap, swapGlobals() happens at the end of the chainMerge step.
 # However, if we also use -continue with some step later than chainMerge, we
