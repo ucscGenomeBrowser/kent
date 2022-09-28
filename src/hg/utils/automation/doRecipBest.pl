@@ -495,6 +495,12 @@ if ($qDbExists) {
   $qChromInfoExists = 1 if (&HgAutomate::dbTableExists($dbHost, $qDb, "chromInfo"));
 }
 
+printf STDERR "# target db exists: %s\n", $dbExists ? "TRUE" : "FALSE";
+printf STDERR "# target chromInfo exists: %s\n", $tChromInfoExists ? "TRUE" : "FALSE";
+printf STDERR "# query db exists: %s\n", $qDbExists ? "TRUE" : "FALSE";
+printf STDERR "# query chromInfo exists: %s\n", $qChromInfoExists ? "TRUE" : "FALSE";
+printf STDERR "# trackHub: %s\n", $opt_trackHub ? "TRUE" : "FALSE";
+
 $QDb = ucfirst($qDb);
 
 $target2Bit = "$HgAutomate::clusterData/$tDb/$tDb.2bit";
