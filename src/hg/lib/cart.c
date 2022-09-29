@@ -262,12 +262,13 @@ char *contents = "";
 char *table = defaultCartTable();
 if (sqlTableExists(conn, table))
     {
-    char buffer[16 * 1024];
     char query[1024];
 
+    sqlSafef(query, sizeof query, "select length(contents) from %s", table);
+    int length = sqlQuickNum(conn, query) + 1;
+    contents = needLargeMem(length);
     sqlSafef(query, sizeof query, "select contents from %s", table);
-    sqlQuickQuery(conn, query, buffer, sizeof buffer);
-    contents = cloneString(buffer);
+    sqlQuickQuery(conn, query, contents, length);
     }
 return contents;
 }
