@@ -3,16 +3,8 @@ shortLabel UK Biobank Depletion Rank Score
 longLabel UK Biobank Depletion Rank Score
 parent constraintSuper
 visibility full
-#type bigBed 8 +
 type bigWig 0.0 1.0
-#itemRgb off
-#spectrum on
-#mouseOver Depletion Rank Score = ${drs}
 viewLimits 0.0:1.0
 viewLimitsMax 0:1.0
 bigDataUrl /gbdb/hg38/ukbDepletion/ukbDepletion.bw
-#filter.drs 0
-#filterByRange.drs on
-#filterLimits.drs 0:1.0
-#filterLabel.drs Depletion Rank Score
 priority 10.5
