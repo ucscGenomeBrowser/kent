@@ -14,3 +14,5 @@ include hmc.ra
 include metaDome.ra
 # MTR scores
 include mtr.ra
+# UKB Depletion rank score
+include ukbDepletion.ra

@@ -274,7 +274,7 @@ BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
 # Globals:
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $fileServer);
-my ($swapDir, $tAsmId, $qAsmId, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists);
+my ($swapDir, $tAsmId, $qAsmId, $splitRef, $inclHap, $secondsStart, $secondsEnd, $dbExists, $qDbExists, $tChromInfoExists, $qChromInfoExists);
 
 sub isInDirList {
   # Return TRUE if $dir is under (begins with) something in dirList.
@@ -930,6 +930,12 @@ sub swapGlobals {
   my $tmp = $qDb;
   $qDb = $tDb;
   $tDb = $tmp;
+  $tmp = $dbExists;
+  $dbExists = $qDbExists;
+  $qDbExists = $tmp;
+  $tmp = $tChromInfoExists;
+  $tChromInfoExists = $qChromInfoExists;
+  $qChromInfoExists = $tmp;
   $QDb = $isSelf ? 'Self' : ucfirst($qDb);
   foreach my $var ('DIR', 'LEN', 'CHUNK', 'LAP', 'SMSK') {
     $tmp = $defVars{"SEQ1_$var"};
@@ -1083,7 +1089,7 @@ sub loadUp {
   my $runDir = "$buildDir/axtChain";
   my $QDbLink = "chain$QDb" . "Link";
   # First, make sure we're starting clean.
-  if (-e "$runDir/$tDb.$qDb.net" || -e "$runDir/$tDb.$qDb.net.gz") {
+  if (! $opt_debug && (-e "$runDir/$tDb.$qDb.net" || -e "$runDir/$tDb.$qDb.net.gz") ) {
     die "loadUp: looks like this was run successfully already " .
       "($tDb.$qDb.net[.gz] exists).  Either run with -continue download, " .
 	"or move aside/remove $runDir/$tDb.$qDb.net[.gz] and run again.\n";
@@ -1107,6 +1113,7 @@ and loads the net table.";
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
 # Load chains:
+set buildDir = "$buildDir"
 _EOF_
     );
   if ($opt_loadChainSplit && $splitRef) {
@@ -1126,7 +1133,7 @@ end
 _EOF_
       );
   } else {
-    if (! $opt_trackHub && $dbExists) {
+    if (! $opt_trackHub && $dbExists && $tChromInfoExists ) {
       $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
@@ -1159,8 +1166,8 @@ _EOF_
     $tRepeats = $opt_qRepeats ? "-tRepeats=$opt_qRepeats" : $defaultQRepeats;
     $qRepeats = $opt_tRepeats ? "-qRepeats=$opt_tRepeats" : $defaultTRepeats;
   }
-    if (! $opt_trackHub && $dbExists) {
-      if ($qDbExists) {
+    if (! $opt_trackHub && $dbExists && $tChromInfoExists) {
+      if ($qDbExists && $qChromInfoExists) {
       $bossScript->add(<<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
@@ -1184,12 +1191,12 @@ _EOF_
 
       $bossScript->add(<<_EOF_
 
-cd $buildDir
+cd \$buildDir
 featureBits $tDb $QDbLink >&fb.$tDb.$QDbLink.txt
 cat fb.$tDb.$QDbLink.txt
 _EOF_
       );
-    } else {
+    } else {	# not a database assembly
       $bossScript->add(<<_EOF_
 cp -p noClass.net $tDb.$qDb.net
 netFilter -minGap=10 noClass.net \\
@@ -1197,8 +1204,29 @@ netFilter -minGap=10 noClass.net \\
 mv align.tab net$QDb.tab
 _EOF_
       );
+      # target may be database assembly, special set of gbdb symLinks
+      if ($dbExists && $tChromInfoExists) {
+      $bossScript->add(<<_EOF_
+mkdir -p /gbdb/$tDb/chainNet
+foreach T (chain chainRBest chainSyn)
+  if ( -s "\$buildDir/axtChain/\${T}${QDb}.bb" ) then
+    rm -f "/gbdb/$tDb/chainNet/$tDb.\${T}$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.\${T}.${QDb}Link.bb"
+    ln -s "\$buildDir/axtChain/\${T}${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.\${T}$QDb.bb"
+    ln -s "\$buildDir/axtChain/\${T}${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.\${T}.${QDb}Link.bb"
+  endif
+end
+foreach T (net rbestNet synNet)
+  if ( -s "\$buildDir/bigMaf/$tDb.$qDb.\${T}.bb" ) then
+    rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.summary.bb"
+    ln -s "\$buildDir/bigMaf/$tDb.$qDb.\${T}.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.bb"
+    ln -s "\$buildDir/bigMaf/$tDb.$qDb.\${T}.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.summary.bb"
+  endif
+end
+_EOF_
+      );
+      }
     }
-  }
+  }	#	if (! $isSelf)
   $bossScript->execute();
 # maybe also peek in trackDb and see if entries need to be added for chain/net
 }	#	sub loadUp {}
@@ -1778,7 +1806,7 @@ netChainSubset -verbose=0 $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz stdout \\
 _EOF_
       );
 
-    if (! $opt_trackHub && $dbExists) {
+    if (! $opt_trackHub && $dbExists && $tChromInfoExists) {
       $bossScript->add(<<_EOF_
 set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
 if (\$lineCount > 0) then
@@ -1786,7 +1814,7 @@ if (\$lineCount > 0) then
 endif
 _EOF_
       );
-      if ($qDbExists) {
+      if ($qDbExists && $qChromInfoExists) {
         $bossScript->add(<<_EOF_
   netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
     | hgLoadNet -verbose=0 $tDb netSyn$QDb stdin
@@ -1875,7 +1903,7 @@ _EOF_
       );
     }
 
-    if (! $opt_trackHub && $dbExists) {
+    if (! $opt_trackHub && $dbExists && $tChromInfoExists) {
       $bossScript->add(<<_EOF_
 cd "$buildDir"
 if (\$lineCount > 0) then
@@ -1887,7 +1915,7 @@ _EOF_
     }
   }
   $bossScript->execute();
-}
+}	#	sub doSyntenicNet
 
 #########################################################################
 #
@@ -1969,9 +1997,24 @@ $fileServer = &HgAutomate::chooseFileServer($opt_swap ? $swapDir : $buildDir);
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;
 $dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
+# db might exist, but it may not have chromInfo table (promoted hub)
+$tChromInfoExists = 0;
+if ($dbExists) {
+  $tChromInfoExists = 1 if (&HgAutomate::dbTableExists($dbHost, $tDb, "chromInfo"));
+}
 # may be working with a query that does not have a database
 $qDbExists = 0;
 $qDbExists = 1 if (&HgAutomate::databaseExists($dbHost, $qDb));
+$qChromInfoExists = 0;
+if ($qDbExists) {
+  $qChromInfoExists = 1 if (&HgAutomate::dbTableExists($dbHost, $qDb, "chromInfo"));
+}
+
+printf STDERR "# target db exists: %s\n", $dbExists ? "TRUE" : "FALSE";
+printf STDERR "# target chromInfo exists: %s\n", $tChromInfoExists ? "TRUE" : "FALSE";
+printf STDERR "# query db exists: %s\n", $qDbExists ? "TRUE" : "FALSE";
+printf STDERR "# query chromInfo exists: %s\n", $qChromInfoExists ? "TRUE" : "FALSE";
+printf STDERR "# trackHub: %s\n", $opt_trackHub ? "TRUE" : "FALSE";
 
 # When running -swap, swapGlobals() happens at the end of the chainMerge step.
 # However, if we also use -continue with some step later than chainMerge, we

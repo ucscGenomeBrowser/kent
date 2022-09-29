@@ -7,11 +7,14 @@ selection, where variations likely have functional impact. The algorithms do
 not use multi-species alignments to derive evolutionary constraint, but use
 primarily human variation, usually from variants collected by gnomAD (see the
 gnomAD V2 or V3 tracks on hg19 and hg38) or TOPMED (contained in our dbSNP
-tracks and available as a filter). 
+tracks and available as a filter). One of the subtracks is based on UK Biobank
+variants, which are not available publicly, so we have no track with the raw data.
+The number of human genomes that are used as the input for these scores are
+76k, 53k and 110k for gnomAD, TOPMED and UK Biobank, respectively.
 </p>
 
 <p>Note that another important constraint score, gnomAD
-constraint, is not part of this container but can be found in the hg38 gnomAD
+constraint, is not part of this container track but can be found in the hg38 gnomAD
 track.
 </p>
 
@@ -28,7 +31,7 @@ The algorithms included in this track are:
     annotations with a multi-module deep learning framework to infer
     pathogenicity of noncoding regions that still remains naive to existing
     phylogenetic conservation metrics. The higher the score, the more deleterious
-    the prediction.
+    the prediction. This score covers the entire genome, except the gaps.
 
     <li><b><a href="https://www.cardiodb.org/hmc/" target="_blank">
     HMC - Homologous Missense Constraint</a></b>:
@@ -40,16 +43,16 @@ The algorithms included in this track are:
     model (Expected). The upper limit of a 95% confidence interval for the
     Observed/Expected ratio is defined as the HMC score. Missense variants
     disrupting the amino-acid positions with HMC&lt;0.8 are predicted to be
-    likely deleterious.
+    likely deleterious. This score only covers PFAM domains within coding regions.
 
     <li><b><a href="https://stuart.radboudumc.nl/metadome/" target="_blank">
     MetaDome - Tolerance Landscape Score</a> (hg19 only)</b>:
     MetaDome Tolerance Landscape scores are computed as a missense over synonymous 
     variant count ratio, which is calculated in a sliding window (with a size of 21 
-    codons/residues) manner to provide 
+    codons/residues) to provide 
     a per-position indication of regional tolerance to missense variation. The 
-    variants are based on gnomAD and corrected for codon composition. Scores 
-    &lt;0.7 are considered intolerant.
+    variant database was gnomAD and the score corrected for codon composition. Scores 
+    &lt;0.7 are considered intolerant. This score covers only coding regions.
    
     <li><b><a href="http://biosig.unimelb.edu.au/mtr-viewer/" target="_blank">
     MTR - Missense Tolerance Ratio</a> (hg19 only)</b>:
@@ -58,8 +61,26 @@ The algorithms included in this track are:
     protein-coding sequence. It is estimated across sliding windows of 31 codons 
     (default) and uses observed standing variation data from the WES component of 
     gnomAD / the Exome Aggregation Consortium Database (ExAC), version 2.0. Scores
-    were computed using Ensembl v95 release.
-</ol>
+    were computed using Ensembl v95 release. The number of gnomAD 2 exomes used here
+    is higher than the number of gnomAD 3 samples (125 exoms versus 76k full genomes), 
+    but this score only covers coding regions.
+
+    <li><b><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9329122/" target="_blank">
+    UK Biobank depletion rank score</a> (hg38 only)</b>:
+    Halldorsson et al. tabulated the number of UK Biobank variants in each
+    500bp window of the genome and compared this number to an expected number
+    given the heptamer nucleotide composition of the window and the fraction of
+    heptamers with a sequence variant across the genome and their mutational
+    classes. A variant depletion score was computed for every overlapping set
+    of 500-bp windows in the genome with a 50-bp step size.  They then assigned
+    a rank (depletion rank (DR)) from 0 (most depletion) to 100 (least
+    depletion) for each 500-bp window. Since the windows are overlapping, we
+    plot the value only in the central 50bp of the 500bp window, following
+    advice from the author of the score,
+    Hakon Jonsson, deCODE Genetics. He suggested that the value of the central
+    window, rather than the worst possible score of all overlapping windows, is
+    the most informative for a position. This score covers almost the entire genome,
+    only very few regions were excluded, where the genome sequence had too many gap characters.</ol>
 
 <h2>Display Conventions and Configuration</h2>
 
@@ -290,3 +311,14 @@ MTR-Viewer: identifying regions within genes under purifying selection</a>.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31170280" target="_blank">31170280</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6602522/" target="_blank">PMC6602522</a>
 </p>
+
+<p>
+Halldorsson BV, Eggertsson HP, Moore KHS, Hauswedell H, Eiriksson O, Ulfarsson MO, Palsson G,
+Hardarson MT, Oddsson A, Jensson BO <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35859178" target="_blank">
+    The sequences of 150,119 genomes in the UK Biobank</a>.
+<em>Nature</em>. 2022 Jul;607(7920):732-740.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35859178" target="_blank">35859178</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9329122/" target="_blank">PMC9329122</a>
+</p>
+

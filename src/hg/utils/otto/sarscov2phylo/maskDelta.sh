@@ -66,7 +66,7 @@ alphaNode=$(grep Italy/TAA-1900553896/2021 $samplePaths \
 betaNode=$(grep SouthAfrica/CERI-KRISP-K012031/2021 $samplePaths \
            | awk '{print $NF;}' | sed -re 's/:.*//;')
 gammaNode=$(grep FRA/IHUCOVID-005193-N1/2021 $samplePaths | awk '{print $NF;}' | sed -re 's/:.*//;')
-BA2Node=$(grep India/KA-CBR-1402HAV021/2022 $samplePaths \
+BA2Node=$(grep England/DHSC-CYBAB7G/2022 $samplePaths \
           | awk '{print $(NF-1);}' | sed -re 's/:.*//;')
 set +x
 for node in $alphaNode $betaNode $gammaNode $BA2Node; do
@@ -115,7 +115,9 @@ done >> $maskFile
 for ((i=21633;  $i <= 21641;  i++)); do
     echo -e "N${i}N\t$BA2Node"
 done >> $maskFile
-for ((i=28362;  $i <= 28370;  i++)); do
+# The deletion is supposed to be 28362-28370 but there is some uncertainty in placement and
+# some edge effects to mask adjacent bases too.
+for ((i=28361;  $i <= 28371;  i++)); do
     echo -e "N${i}N\t$BA2Node"
 done >> $maskFile
 for ((i=29734;  $i <= 29759;  i++)); do
@@ -136,12 +138,63 @@ for i in 197 198 199 200 201 203 204 206 207 214 216 217 218 219 221 222 223 224
     echo -e "N${i}N\t$BA2Node"
 done >> $maskFile
 
-# BA.5 has this deletion like BA.1:
+# BA.4 and BA.5 have this deletion like BA.1:
+BA4Node=$(grep SouthAfrica/NICD-N41664/2022 $samplePaths \
+          | awk '{print $NF;}' | sed -re 's/:.*//;')
 BA5Node=$(grep England/PHEP-YYFJPAM/2022 $samplePaths \
           | awk '{print $NF;}' | sed -re 's/:.*//;')
 for ((i=21765;  $i <= 21770;  i++)); do
+    echo -e "N${i}N\t$BA4Node"
     echo -e "N${i}N\t$BA5Node"
 done >> $maskFile
+
+# 28877 and 28878 together are highly homoplasic in all of B.1.1 (28881-28883).  They seem to be
+# found very consistently in P.1*, but pop up in many places in Alpha and Omicrons.  I haven't
+# looked closely at the Alpha instances but they definitely cause some mini-Omicrons
+# (https://github.com/cov-lineages/pango-designation/issues/988).  Mask in BA.2 (which also covers
+# BA.4 and BA.5); possibly could also mask in B.1.1.7 and BA.1 but those are old news.
+for i in 28877 28878; do
+    echo -e "N${i}N\t$BA2Node"
+done >> $maskFile
+
+# Also noticing a lot of noise on these 5'UTR locations (now I see why pangolin masks entire UTRs):
+for i in 76 77 78 79 80 81 83 84 85 86 88 89 91 92 93 94 96 97 98 99 100 123 124 126 127 129 130 131 132 133 134 135 136 139 140 141 143 144 145 146 147 148 151 152 154 157 158 159 162 164 179 180; do
+    echo -e "N${i}N\t$BA2Node"
+done >> $maskFile
+
+# BA.4-specific deletion:
+for ((i=686;  $i <= 694;  i++)); do
+    echo -e "N${i}N\t$BA4Node"
+done >> $maskFile
+
+# BA.2.75 has an awful lot of amplicon dropout problematic sites as of Sep. 2022.
+BA275Node=$(grep Australia/QLD0x010633/2022 $samplePaths \
+          | awk '{print $NF;}' | sed -re 's/:.*//;')
+# These sites I would mask in all of BA.2 if it weren't for wanting to find legit recombinants:
+for i in 670 2790 10198 21618 22674 22679 22686 22688 23063 23075 23948 24424 24469 26577 ; do
+    echo -e "N${i}N\t$BA275Node"
+done >> $maskFile
+# These are BA.2.75-defining but prone to dropout.  Make sure we just wipe out reversions,
+# not the BA.2.75 alleles that we want to keep on that node and subsequent nodes.
+for backMut in T4586C G22001A C22016T A22033C G22190A C22577G G26275A; do
+    echo -e "$backMut\t$BA275Node"
+done >> $maskFile
+# These BA.2.75-defining sites are less bad off, might want to back off on these if/when there
+# are 10s of thousands of BA.2.75 sequences & more chances for recombinants:
+for backMut in A15451G A22331G A22898G G22942T; do
+    echo -e "$backMut\t$BA275Node"
+done >> $maskFile
+
+# BA.5 reversions causing big yuck branches
+for backMut in G670T T2790C T3037C A4184G T4321C G9424A T9534C T10198C A12160G T15714C T17410C \
+    G18163A T19955C G20055A T21618C G22200T A22578G T22674C C22679T T22686C G22688A A22775G T22813G \
+    G22882T G22917T A22992G A22995C C23013A G23018T G23055A T23063A C23075T G23403A T23525C G23599T \
+    A23604C T25000C A26529G G26577C A26709G T27807C T27889C T28271A C29510A ; do
+    echo -e "$backMut\t$BA5Node"
+done >> $maskFile
+# The path to XAV should have G12160A and C27889T, but those cause too much trouble in BA.5
+# so it will have to be a little incorrect.
+# Likewise, XAN path should have G12160A but oh well.
 
 set -x
 
