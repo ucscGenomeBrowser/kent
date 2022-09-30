@@ -2,7 +2,7 @@
 <p>
 The
 <a target="_blank" href="https://panelapp.genomicsengland.co.uk/#!">Genomics England PanelApp</a>
-tracks show virtual gene panels related to human disorders. Originally developed to
+tracks show gene panels that are related to human disorders. Originally developed to
 aid interpretation of participant genomes in the
 <a href="https://www.genomicsengland.co.uk/initiatives/100000-genomes-project"
 target="_blank">100,000 Genomes Project</a>, PanelApp is now also being used as the platform for
@@ -24,7 +24,24 @@ supporting association with phenotypes covered by the gene panel in question.
 The available data tracks are: 
 </p>
 
-<!--#insert file="$db/panelAppTracks.html"-->
+<ul>
+  <li>
+    <b>Genomics England PanelApp Genes (PanelApp Genes):</b>
+    <br>
+    shows genes with evidence supporting a gene-disease relationship.</li>
+  <br>
+  <li>
+    <b>Genomics England PanelApp STRs (PanelApp STRs):</b>
+    <br>
+    shows short tandem repeats that can be disease-causing when a particular number of repeats is
+    present.</li>
+  <br>
+  <li>
+    <b>Only on hg38: Genomics England PanelApp Regions (PanelApp CNV Regions):</b>
+    <br>
+    shows copy-number variants (region-loss and region-gain) with evidence supporting a gene-disease
+    relationship.</li>
+</ul>
 
 <h2>Display Conventions</h2>
 <p>
@@ -57,6 +74,21 @@ The raw data can be explored interactively with the
 <a target="_blank" href="/cgi-bin/hgIntegrator">Data Integrator</a>.
 For automated analysis, the data may be queried from our
 <a target="_blank" href="/goldenPath/help/api.html">REST API</a>.
+</p>
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/panelApp/" target="_blank">our download server</a>.
+The files for this track are called <tt>genes.bb</tt>, <tt>tandRep.bb</tt> and <tt>cnv.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool
+can also be used to obtain only features within a given range, e.g. 
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/panelApp/genes.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+
+<p>
 Please refer to our
 <a target="_blank" href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
 mailing list archives</a> for questions, or our
@@ -68,17 +100,24 @@ Data is also freely available on the
 <a target="_blank" href="https://panelapp.genomicsengland.co.uk/#!API">PanelApp API</a>.
 </p>
 
+<h2>Updates and archiving of old releases</h2>
+<p>
+This track is updated automatically every week. If you need to access older releases of the data,
+you can download them from our <a href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/panelApp/">archive directory</a> on the download server. To load them into the browser, select a week on the archive directory, copy the link to a file, go to <a href="http://genome.ucsc.edu/cgi-bin/hgCustom">My Data &gt; Custom Tracks</a>, click "Add custom track", paste the link into the box and click "Submit".
+</p>
+
 <h2>Methods</h2>
 <p>
 PanelApp files were reformatted at UCSC to the <a target="_blank"
-href="/goldenPath/help/bigBed.html">bigBed</a> format.
+href="/goldenPath/help/bigBed.html">bigBed</a> format. The script that updates the track is called 
+<tt>updatePanelApp</tt> and can be found in our <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/panelApp">Github repository</a>.
 </p>
 
 <h2>Credits</h2>
 <p>
 Thank you to Genomics England PanelApp, especially Catherine Snow for technical
 coordination and consultation. Thank you to Beagan Nguy, Christopher Lee, Daniel Schmelter,
-and Ana Benet-Pag&egrave;s of the Genome Browser team for the creation of the tracks.
+Ana Benet-Pag&egrave;s and Maximilian Haeussler of the Genome Browser team for the creation of the tracks.
 </p>
 
 <h2>Reference</h2>

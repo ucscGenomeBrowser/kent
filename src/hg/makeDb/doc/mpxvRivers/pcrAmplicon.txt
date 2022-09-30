@@ -17,6 +17,9 @@ isPcr ../../mpxvRivers.2bit query.txt ispcr.out
 # convert isPcr fasta output to bed12 with left and right as two "exons" plus two extra fields with sequence in them
 grep ">" ispcr.out | tr -d '>' | tr ':' ' ' | awk '/+/ {strand="PS"} /-/ {strand="MS"} {print $1, $2, $3, strand, $4,$5,$6}' | tr '-' ' ' | tr '+' ' ' | sed 's/bp//' | awk '{$2=$2-1;print $1, $2, $3, $4, 0, $5, $2,$3, "0,0,0", 2, length($7) "," length($8), 0 "," $3 - length($8) - $2,$7,$8}' | sed 's/MS/-/' | sed 's/PS/+/' | sed 's/_LEFT//' | sort -k1,1 -k2,2n > pcrAmplicon.bed
 
+# Sep 30: fixed up pcrAmplicon manually, added _102 pair as left primer cannot be found by isPCR, there is a mutation in the genome.
+# would have needed to change isPrimer options rather than add manually, noticed too late.
+
 bedToBigBed pcrAmplicon.bed ../../chrom.sizes pcrAmplicon.bb -as=pcrAmplicon.as -type=bed12+2
 
 # for the Welkers et al protocol
