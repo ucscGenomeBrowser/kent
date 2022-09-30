@@ -11,8 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 #include "rmskOut.h"
-
-
+#include "repMask.h"
 
 boolean noBin = FALSE;
 boolean split = FALSE;
@@ -162,19 +161,7 @@ char *line, *words[24];
 int lineSize, wordCount;
 
 /* Open .out file and process header. */
-lf = lineFileOpen(rmskFile, TRUE);
-if (!lineFileNext(lf, &line, &lineSize))
-    errAbort("Empty %s", lf->fileName);
-if (!(startsWith("   SW  perc perc", line) ||
-      startsWith("   SW   perc perc", line) ||
-      startsWith("    SW   perc perc", line) ||
-      startsWith("  bit   perc perc", line)))
-    {
-    errAbort("%s doesn't seem to be a RepeatMasker .out file, first "
-             "line seen:\n%s", lf->fileName, line);
-    }
-lineFileNext(lf, &line, &lineSize);
-lineFileNext(lf, &line, &lineSize);
+lf = rmskLineFileOpen(rmskFile);
 
 /* Process line oriented records of .out file. */
 while (lineFileNext(lf, &line, &lineSize))
