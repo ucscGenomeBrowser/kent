@@ -662,3 +662,4 @@ doWiggle on
 group varRep
 visibility dense
 priority 100
+maxHeightPixels 100:40:8
