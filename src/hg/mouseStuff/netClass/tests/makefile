@@ -1,4 +1,6 @@
 
+SHELL=/bin/bash -o pipefail
+
 NETCLASS=netClass
 
 ifneq ($(wildcard ../netClass),)
