@@ -11,7 +11,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "chromInfo.h"
-
+#include "net.h"
 
 void chromInfoStaticLoad(char **row, struct chromInfo *ret)
 /* Load a row from chromInfo table into ret.  The contents of ret will
@@ -253,7 +253,11 @@ struct chromInfo *chromInfoListFromFile(char *fileName)
 /* read chrom info from file and return list of name and size */
 {
 struct chromInfo *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = NULL;
+if (udcIsLocal(fileName))
+    lf = lineFileOpen(fileName, TRUE);
+else
+    lf = netLineFileOpen(fileName);
 char *row[2];
 
 while (lineFileRow(lf, row))
