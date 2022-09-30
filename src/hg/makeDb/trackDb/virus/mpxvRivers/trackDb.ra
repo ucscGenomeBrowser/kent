@@ -79,6 +79,7 @@ searchTrix  /gbdb/mpxvRivers/ixIxx/GCF_014621545.1_ASM1462154v1.ncbiGene.ix
 url https://www.ncbi.nlm.nih.gov/gene/?term=$$
 urlLabel Entrez gene
 labelFields geneName,geneName2
+defaultLabelFields geneName2
 group genes
 
 track cpgIslands
