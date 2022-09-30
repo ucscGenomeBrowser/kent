@@ -1,0 +1,18 @@
+
+track viralzoneGenes
+shortLabel Viralzone Transcriptome
+longLabel Viralzone Transcriptome: early=green, intermediate=bleu, late=red
+visibility pack
+#colorByStrand 150,100,30 230,170,40
+#color 150,100,30
+#altColor 230,170,40
+itemRgb on
+bigDataUrl  /gbdb/mpxvRivers/viralzoneGenes/viralzone.bb
+type bigBed 9 +
+#searchIndex name
+#searchTrix  /gbdb/mpxvRivers/ixIxx/GCF_014621545.1_ASM1462154v1.assembly.ix
+##url https://www.ncbi.nlm.nih.gov/nuccore/$$
+#urlLabel NCBI Nucleotide database
+mouseOverField stage
+group genes
+
