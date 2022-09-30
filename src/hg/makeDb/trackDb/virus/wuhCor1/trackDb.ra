@@ -627,6 +627,15 @@ bedNameLabel Mutation
 mouseOver $changeFreq
 group varRep
 
+track recomb
+shortLabel Recomb. Breakpoints
+longLabel Recombination Breakpoints, approximate location, from Thurakia et al, Nature 2022 (coverage shown by default. Configure to show recombined segments)
+type bigBed 6 +
+bigDataUrl /gbdb/wuhCor1/recomb/ripples_breakpoints.bb
+doWiggle on
+group varRep
+visibility dense
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
