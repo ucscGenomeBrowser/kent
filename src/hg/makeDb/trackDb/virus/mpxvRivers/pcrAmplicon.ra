@@ -16,8 +16,8 @@ compositeTrack on
         bigDataUrl /gbdb/mpxvRivers/pcrAmplicon/pcrWelkers.bb
 
         track pcrChen
-        shortLabel Chen et al V2
-        longLabel PCR Amplicons: Chen et al. 2022 V2
+        shortLabel Yale hMPXV
+        longLabel PCR Amplicons: Yale hMPXV Amplicon Scheme (Chen et al. 2022 V2)
         parent pcrAmplicon on
         group map
         visibility dense

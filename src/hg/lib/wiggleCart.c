@@ -433,7 +433,7 @@ if (!autoScale) /*      if nothing from the Cart, check trackDb/settings */
     char * tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, AUTOSCALE, "NONE");
     if (sameWord(tdbDefault,"on"))
 	autoScale = cloneString(autoString);
-    else if (sameWord(tdbDefault,"group"))
+    else if (sameWord(tdbDefault,"group") && (tdb->parent != NULL))
         autoScale = cloneString(cumulativeString);
     else if (sameWord(tdbDefault,"off"))
 	autoScale = cloneString(manualString);

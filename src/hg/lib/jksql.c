@@ -3920,7 +3920,7 @@ void sqlCheckIdentifiersList(char* buffer, int bufSize, char *identifiers)
  * Save safe output to char array */
 {
 sqlCheckIdentifiersListExt(identifiers);
-safef(buffer, bufSize, "NOSQLINJ %s", identifiers);
+safef(buffer, bufSize, NOSQLINJ "%s", identifiers);
 }
 
 char *sqlCheckIdentifier(char *identifier)

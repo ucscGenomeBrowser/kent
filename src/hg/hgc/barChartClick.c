@@ -1,6 +1,6 @@
 /* Details pages for barChart tracks */
 
-/* Copyright (C) 2015 The Regents of the University of California 
+/* Copyright (C) 2015 The Regents of the University of California
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
@@ -39,19 +39,28 @@ struct barChartItemData
     double value;	/* Measured value (e.g. expression level) */
     };
 
-static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file, 
-                                                char *item, char *chrom, int start, int end, 
+struct barChartPlusRow
+/* Keep original row around for url processing */
+    {
+    struct barChartPlusRow *next;
+    struct barChartBed *barChart;
+    char **row;
+    };
+
+static struct barChartPlusRow *getBarChartFromFile(struct trackDb *tdb, char *file,
+                                                char *item, char *chrom, int start, int end,
                                                 struct asObject **retAs, char **extraFieldsRet,
                                                 int *extraFieldsCountRet)
 /* Retrieve barChart BED item from big file */
 {
+struct barChartPlusRow *ret = NULL;
 boolean hasOffsets = TRUE;
 struct bbiFile *bbi =  bigBedFileOpenAlias(file, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 if (retAs != NULL)
     *retAs = as;
 hasOffsets = (
-    asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL && 
+    asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL &&
     asColumnFind(as, BARCHART_LEN_COLUMN) != NULL);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
@@ -76,16 +85,20 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                 extraFieldsRet[i] = restFields[restBedFields + i];
             *extraFieldsCountRet = (restCount - restBedFields);
             }
-        return barChart;
+        AllocVar(ret);
+        ret->barChart = barChart;
+        ret->row = row;
+        return ret;
         }
     }
 return NULL;
 }
 
-static struct barChartBed *getBarChartFromTable(struct trackDb *tdb, char *table, 
+static struct barChartPlusRow *getBarChartFromTable(struct trackDb *tdb, char *table,
                                                 char *item, char *chrom, int start, int end)
 /* Retrieve barChart BED item from track table */
 {
+struct barChartPlusRow *ret = NULL;
 struct sqlConnection *conn = NULL;
 struct customTrack *ct = lookupCt(tdb->track);
 if (ct == NULL)
@@ -105,27 +118,30 @@ if (sqlTableExists(conn, table))
     {
     boolean hasOffsets = (sqlColumnExists(conn, table, BARCHART_OFFSET_COLUMN) &&
                          sqlColumnExists(conn, table, BARCHART_LEN_COLUMN));
-    sqlSafef(query, sizeof query, 
+    sqlSafef(query, sizeof query,
                 "SELECT * FROM %s WHERE name='%s'"
-                    "AND chrom='%s' AND chromStart=%d AND chromEnd=%d", 
+                    "AND chrom='%s' AND chromStart=%d AND chromEnd=%d",
                                 table, item, chrom, start, end);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
         {
         barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
+        AllocVar(ret);
+        ret->barChart = barChart;
+        ret->row = row;
         }
     sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
-return barChart;
+return ret;
 }
 
-static struct barChartBed *getBarChart(struct trackDb *tdb, char *item, char *chrom, int start, int end,
+static struct barChartPlusRow *getBarChart(struct trackDb *tdb, char *item, char *chrom, int start, int end,
                                         struct asObject **retAs, char **extraFieldsReg, int *extraFieldsCountRet)
 /* Retrieve barChart BED item from track */
 {
-struct barChartBed *barChart = NULL;
+struct barChartPlusRow *barChart = NULL;
 char *file = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (file != NULL)
     barChart = getBarChartFromFile(tdb, file, item, chrom, start, end, retAs, extraFieldsReg, extraFieldsCountRet);
@@ -134,8 +150,8 @@ else
 return barChart;
 }
 
-static struct barChartItemData *getSampleValsFromFile(struct trackDb *tdb, 
-                        struct hash *categoryHash, struct barChartBed *bed, 
+static struct barChartItemData *getSampleValsFromFile(struct trackDb *tdb,
+                        struct hash *categoryHash, struct barChartBed *bed,
                         char *dataFile, char *sampleFile)
 /* Get all data values in a file for this item (locus) */
 {
@@ -157,7 +173,7 @@ struct udcFile *f = udcFileOpen(dataFile, NULL);
 
 // Get header line with sample ids
 char *header = udcReadLine(f);
-int wordCt = sampleCt+1;        // initial field is label or empty 
+int wordCt = sampleCt+1;        // initial field is label or empty
 char **samples;
 AllocArray(samples, wordCt);
 chopByWhite(header, samples, wordCt);
@@ -242,7 +258,7 @@ if (!sqlTableExists(conn, table))
 return conn;
 }
 
-static struct barChartItemData *getSampleValsFromTable(struct trackDb *tdb, 
+static struct barChartItemData *getSampleValsFromTable(struct trackDb *tdb,
                                                         struct hash *categoryHash,
                                                         struct barChartBed *bed)
 /* Get data values for this item (locus) from all samples */
@@ -253,7 +269,7 @@ if (conn == NULL)
     return NULL;
 struct barChartData *val, *vals = barChartDataLoadForLocus(conn, table, bed->name);
 
-// Get category for samples 
+// Get category for samples
 conn = getConnectionAndTable(tdb, "Sample", &table);
 char query[512];
 sqlSafef(query, sizeof(query), "SELECT * FROM %s", table);
@@ -366,8 +382,8 @@ trashDirFile(&pngTn, "hgc", "barChart", ".png");
 bool useOldFonts = cgiBoolean("oldFonts");
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
-char *pipeCmd[] = {"Rscript","--vanilla","--slave","hgcData/barChartBoxplot.R", 
-    item, units, colorFile, df, pngTn.forHtml, 
+char *pipeCmd[] = {"Rscript","--vanilla","--slave","hgcData/barChartBoxplot.R",
+    item, units, colorFile, df, pngTn.forHtml,
     isEmpty(name2) ? "n/a" : name2, useOldFonts ? "1" : "0", NULL};
 struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 int ret = pipelineWait(pl);
@@ -454,7 +470,7 @@ double labelOffset = patchWidth + 2*borderSize;
 double statsOffset = labelOffset + labelWidth;
 double barOffset = statsOffset + statsSize;
 double statsRightOffset = barOffset - 9;
-double barNumLabelWidth = estimateStringWidth(" 1234.000"); 
+double barNumLabelWidth = estimateStringWidth(" 1234.000");
 double barMaxWidth = totalWidth-barOffset -barNumLabelWidth ;
 double totalHeight = headerHeight + heightPer * categCount + borderSize;
 
@@ -463,12 +479,12 @@ printf("<svg width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
 /* Draw header */
 printf("<rect width=\"%g\" height=\"%g\" style=\"fill:#%s\"/>\n", totalWidth, headerHeight, HG_COL_HEADER);
 char *sampleLabel = trackDbSettingOrDefault(tdb, "barChartLabel", "Sample");
-printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n", 
+printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n",
     labelOffset, innerHeight-1, innerHeight-1, sampleLabel);
 if (statsSize > 0.0)
-    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n",
 	statsRightOffset, innerHeight-1, innerHeight-1, "N");
-printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s %s</text>\n", 
+printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s %s</text>\n",
     barOffset, innerHeight-1, innerHeight-1, metric, "Value");
 
 /* Set up clipping path for the pesky labels, which may be too long */
@@ -493,25 +509,25 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
     if (i&1)  // every other time
 	printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
 	    labelOffset, yPos, labelWidth+statsSize, innerHeight, 0xFFFFFF);
-    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n", 
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n",
  	labelOffset, yPos+innerHeight-1, innerHeight-1, deunder);
     if (statsSize > 0.0)
 	{
 	struct fieldedRow *fr = hashFindVal(statsHash, deunder);
 	if (fr != NULL)
 	    {
-	    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n", 
+	    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n",
 		statsRightOffset, yPos+innerHeight-1, innerHeight-1, fr->row[countStatIx]);
 	    }
 	}
-    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n", 
+    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n",
 	barOffset+barWidth+2, yPos+innerHeight-1, innerHeight-1, score);
     }
 printf("</svg>");
 }
 
 
-static void printBarChart(char *item, struct barChartBed *chart, struct trackDb *tdb, 
+static void printBarChart(char *item, struct barChartBed *chart, struct trackDb *tdb,
     double maxVal, char *metric)
 /* Plot bar chart without expressionMatrix or R plots*/
 {
@@ -541,7 +557,9 @@ struct asObject *as = NULL;
 char *extraFields[EXTRA_FIELDS_SIZE];
 int extraFieldCount = 0;
 int numColumns = 0;
-struct barChartBed *chartItem = getBarChart(tdb, item, seqName, start, end, &as, extraFields, &extraFieldCount);
+struct barChartPlusRow *bcRow = getBarChart(tdb, item, seqName, start, end, &as, extraFields, &extraFieldCount);
+struct barChartBed *chartItem = bcRow->barChart;
+char **row = bcRow->row;
 if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table/file %s\n", item, tdb->table);
 
@@ -558,12 +576,13 @@ if (as != NULL)
     name2Col = asFindColByIx(as, BARCHART_NAME2_COLUMN_IX);
     }
 nameLabel = trackDbSettingClosestToHomeOrDefault(tdb, "bedNameLabel", nameCol ? nameCol->comment : "Item");
+struct slPair *fields = getFields(tdb, row);
 if (trackDbSettingClosestToHomeOrDefault(tdb, "url", NULL) != NULL)
-    printCustomUrl(tdb, item, TRUE);
+    printCustomUrlWithFields(tdb, item, nameLabel, TRUE, fields);
 else
     printf("<b>%s: </b>%s ", nameLabel, chartItem->name);
 name2Label = name2Col ? name2Col->comment : "Alternative name";
-if (differentString(chartItem->name2, "")) 
+if (differentString(chartItem->name2, ""))
     {
     if (trackDbSettingClosestToHomeOrDefault(tdb, "url2", NULL) != NULL)
         printOtherCustomUrl(tdb, chartItem->name2, "url2", TRUE);
@@ -577,14 +596,14 @@ int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
 char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
-printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n", 
+printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n",
 	    metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb, NULL));
 printf("<b>Gene position: "
-                "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a>\n", 
-                    database, hgTracksPathAndSettings(), database, 
+                "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a>\n",
+                    database, hgTracksPathAndSettings(), database,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
-printf("&nbsp;&nbsp;<b>Strand: </b> %s\n", chartItem->strand); 
+printf("&nbsp;&nbsp;<b>Strand: </b> %s\n", chartItem->strand);
 
 // print any remaining extra fields
 if (numColumns > 0)
@@ -601,8 +620,8 @@ if (vals != NULL)
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);
     printBoxplot(df, item, chartItem->name2, units, colorFile);
-    printf("<br><a href='%s'>View all data points for %s%s%s%s</a>\n", df, 
-                        chartItem->name, 
+    printf("<br><a href='%s'>View all data points for %s%s%s%s</a>\n", df,
+                        chartItem->name,
                         chartItem->name2 ? " (" : "",
                         chartItem->name2 ? chartItem->name2 : "",
                         chartItem->name2 ? ")" : "");

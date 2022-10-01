@@ -33,8 +33,8 @@ use File::Spec;
     # General-purpose utility routines:
     qw( checkCleanSlate checkExistsUnlessDebug closeStdin
 	getAssemblyInfo getSpecies hubDateName gensub2 machineHasFile
-	databaseExists makeGsub mustMkdir asmHubBuildDir asmHubDownloadDir
-	mustOpen nfsNoodge paraRun run verbose
+	databaseExists dbTableExists makeGsub mustMkdir asmHubBuildDir
+	asmHubDownloadDir mustOpen nfsNoodge paraRun run verbose
       ),
     # Hardcoded paths/commands/constants:
     qw( $centralDbSql $git
@@ -756,7 +756,7 @@ sub hubDateName($) {
     # special case the CHM13 assembly
     my $betterId = $accession;
     if ($accession =~ m/GCA_009914755.4/) {
-       $betterId = "GCA_009914755.4_CHM13_T2T_v2.0";
+       $betterId = "GCA_009914755.4_T2T-CHM13v2.0";
     }
     my $dirCount = `ls -d /hive/data/outside/ncbi/genomes/$gcX/$d0/$d1/$d2/${betterId}* | wc -l`;
     chomp $dirCount;
@@ -803,6 +803,20 @@ sub databaseExists {
   my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
   chomp $line;
   return length($line);     # will be zero if not existing, >0 if exists
+}
+
+sub dbTableExists {
+  my ($dbHost, $db, $table) = @_;
+  return 0 if ($dbHost =~ m/nohost/i);
+  confess "Must have exactly 3 arguments" if (scalar(@_) != 3);
+  if (&HgAutomate::databaseExists($dbHost, $db)) {
+    my $query = "select count(*) from $db.$table;";
+    my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql 2>>/dev/null`;
+    chomp $line;
+    return length($line);     # will be zero if not existing, >0 if exists
+  } else {	# no DB, no table
+    return 0;
+  }
 }
 
 sub makeGsub {

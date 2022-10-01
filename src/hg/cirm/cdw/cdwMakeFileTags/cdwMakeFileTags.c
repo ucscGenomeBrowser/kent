@@ -113,7 +113,7 @@ do
 	}
     if (fileId == lastFileId)
 	{
-	sqlDyStringPrintf(groupList, ",");
+	dyStringPrintf(groupList, ",");
 	}
     else
 	{
@@ -126,7 +126,7 @@ do
 	dyStringClear(groupList);
 	lastFileId = fileId;
 	}
-    sqlDyStringPrintf(groupList, "%u", groupId);
+    dyStringPrintf(groupList, "%u", groupId);
     }
 while (fileId != -2);
 sqlFreeResult(&sr);
@@ -268,12 +268,16 @@ struct dyString *query = dyStringNew(0);
 // Functions in src/lib/tabToSql.c cannot use functions like sqlSafef
 // since they are in src/hg/lib/ which is not available. 
 // That is why we see NOSQLINJ exposed here.
-dyStringAppend(query, NOSQLINJ);
+// Otherwise, we would be free to use sqlSafef v2 functions in 
+// tagStormToSqlCreate and tagStanzaToSqlInsert.
 tagStormToSqlCreate(tagStorm, fullTable, ttiList, ttiHash, 
     keyFields, ArraySize(keyFields), query);
 verbose(2, "%s\n", query->string);
 verboseTime(2, "creating query string and tab-sep file");
-sqlRemakeTable(conn, fullTable, query->string);
+
+char trustedQuery[query->stringSize + NOSQLINJ_SIZE + 1];
+safef(trustedQuery, sizeof trustedQuery, NOSQLINJ "%s", query->string);
+sqlRemakeTable(conn, fullTable, trustedQuery);
 verboseTime(2, "sqlRemakeTable");
 
 /* Do insert statements for each accessioned file in the system */
@@ -283,9 +287,12 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     {
     struct tagStanza *stanza = stanzaRef->val;
     dyStringClear(query);
-    dyStringAppend(query, NOSQLINJ);
     tagStanzaToSqlInsert(stanza, fullTable, query);
-    sqlUpdate(conn, query->string);
+
+    char trustedQuery[query->stringSize + NOSQLINJ_SIZE + 1];
+    safef(trustedQuery, sizeof trustedQuery, NOSQLINJ "%s", query->string);
+    sqlUpdate(conn, trustedQuery);
+
     }
 slFreeList(&stanzaList);
 verboseTime(2, "sql inserts");

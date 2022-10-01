@@ -15,6 +15,7 @@ dimensions dimensionX=clade dimensionY=species
 sortOrder species=+ view=+ clade=+
 configurable on
 html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+priority 1
 
     track GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain
     shortLabel  Chains
