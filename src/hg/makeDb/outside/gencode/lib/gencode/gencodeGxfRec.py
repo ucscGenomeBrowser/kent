@@ -4,7 +4,8 @@ records parsed from either GTF or GFF3 files.  This is not general
 class Attributes(object):
     "attributes and values"
 
-    stdAttrs = frozenset(("gene_id", "gene_name", "gene_type", "gene_status", "transcript_id", "transcript_name", "transcript_type", "transcript_status", "havana_gene", "havana_transcript", "ccdsid", "level", "exon_id", "protein_id", "transcript_support_level", "ID", "Parent"))
+    stdAttrs = frozenset(("gene_id", "gene_name", "gene_type", "gene_status", "transcript_id", "transcript_name", "transcript_type", "transcript_status", "havana_gene", "havana_transcript", "ccdsid", "level", "exon_id", "protein_id",
+                          "transcript_support_level", "ID", "Parent", "hgnc_id"))
     singleValueAttrs = frozenset(stdAttrs)
     multiValueAttrs = frozenset(["tag", "ont"])
     ignoredAttrs = frozenset(["exon_number"])
