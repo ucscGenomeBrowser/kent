@@ -1,0 +1,28 @@
+
+## setup dynamic blat service (DONE - Hiram - 2022-09-30)
+
+cd /hive/data/genomes/mpxvRivers
+
+gfServer -trans index mpxvRivers.trans.gfidx mpxvRivers.2bit
+gfServer -stepSize=5 index mpxvRivers.untrans.gfidx mpxvRivers.2bit
+
+rsync -a -P ./mpxvRivers.2bit ./mpxvRivers.*.gfidx \
+   qateam@dynablat-01:/scratch/hubs/mpxvRivers/
+
+# test the blat service with some DNA and some protein
+
+# the blatServers table had already been updated:
+
+hgsql -e 'select * from blatServers where db like "mpxv%";' hgcentraltest
+
++------------+-------------+------+---------+--------+---------+
+| db         | host        | port | isTrans | canPcr | dynamic |
++------------+-------------+------+---------+--------+---------+
+| mpxvRivers | dynablat-01 | 4040 |       1 |      0 |       1 |
+| mpxvRivers | dynablat-01 | 4040 |       0 |      1 |       1 |
++------------+-------------+------+---------+--------+---------+
+
+with the following insert statements:
+
+insert into blatServers values("mpxvRivers", "dynablat-01", 4040, 1, 0, 1);
+insert into blatServers values("mpxvRivers", "dynablat-01", 4040, 0, 1, 1);
