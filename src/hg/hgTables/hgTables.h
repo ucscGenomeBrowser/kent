@@ -168,6 +168,9 @@ struct trackDb *findTrack(char *name, struct trackDb *trackList);
 struct trackDb *mustFindTrack(char *name, struct trackDb *trackList);
 /* Find track or squawk and die. */
 
+struct asObject *asForTableNoTdb(struct sqlConnection *conn, char *table);
+/* Get autoSQL description if any associated with table. Don't try tdb */
+
 struct asObject *asForTable(struct sqlConnection *conn, char *table);
 /* Get autoSQL description if any associated with table. */
 

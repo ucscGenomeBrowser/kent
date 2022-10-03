@@ -1,0 +1,54 @@
+hub bigWigAutoScaleTest
+shortLabel bigWig AutoScale Test
+longLabel bigWig AutoScale Test
+useOneFile on
+email genome-www@soe.ucsc.edu
+
+genome mm39
+
+track compBad
+compositeTrack on
+type bigWig
+shortLabel example of bad track
+longLabel  example of bad track
+
+    track badTrack1
+    parent compBad
+    shortLabel bad track 1
+    longLabel bad track 1
+    type bigWig
+    maxHeightPixels 60
+    autoScale group
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+
+    track badTrack2
+    parent compBad
+    shortLabel bad track 2
+    longLabel bad track 2
+    type bigWig
+    maxHeightPixels 60
+    autoScale group
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+
+track compGood
+compositeTrack on
+type bigWig
+autoScale group
+shortLabel example of good track
+longLabel  example of good track
+
+    track goodTrack1
+    parent compGood
+    shortLabel good track 1
+    longLabel good track 1
+    type bigWig
+    maxHeightPixels 60
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
+
+    track goodTrack2
+    parent compGood
+    shortLabel good track 2
+    longLabel good track 2
+    type bigWig
+    maxHeightPixels 60
+    bigDataUrl https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/bbi/araTha1.gc5Base.bw
