@@ -43,7 +43,9 @@ errAbort(
   "options:\n"
   "   -tabFile=text.tab - don't actually load database, just create tab file\n"
   "   -split - load chrN_rmsk separate tables even if a single file is given\n"
-  "   -table=name - use a different suffix other than the default (rmsk)");
+  "   -table=name - use a different suffix other than the default (rmsk)\n"
+  "note: the input file.out can also be a compressed file.out.gz file,\n"
+  "      or a URL to a file.out or file.out.gz");
 }
 
 void badFormat(struct lineFile *lf, int id)
