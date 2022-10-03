@@ -331,7 +331,12 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = hAllocConn(db);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
-struct asObject *asObj = asForTable(conn, rootTable);
+struct asObject *asObj = NULL;
+
+if (sameString("knownGene", rootTable))  // temporary hack to get table description from knownGene table instead of bigGenePred
+    asObj = asForTableNoTdb(conn, rootTable);
+else
+    asObj = asForTable(conn, rootTable);
 boolean showItemRgb = FALSE;
 
 showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
