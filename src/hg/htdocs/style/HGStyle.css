@@ -28,6 +28,11 @@ a:link {
         text-decoration: underline
 }
 
+input[type="submit"], button {
+    border: 1px solid darkgray;
+    border-radius: 3px;
+}
+
 .blueLink {
         color: #121E9A !important; 
         cursor: pointer;
@@ -417,6 +422,8 @@ table.chainTbl, .descTbl, .stdTbl {border-collapse: collapse;}
 table.chainTbl td, .descTbl td, .descTbl th, .stdTbl td, .stdTbl th {border: 1px solid #666; padding: 5px;}
 table.descTbl td.number { text-align: right; }
 
+.infoText { font-size: 80% }
+
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }
 .pale  { background-color: #F8F8F8; }
@@ -435,7 +442,6 @@ table.descTbl td.number { text-align: right; }
 .greenBox  { border: 5px outset #008800; }
 .blueBox   { border: 4px inset #000088; } /* cfg box */
 .redBox    { border: 3px ridge #AA0000; background-color: #FFF9D2; padding: 10px; margin: 10px; text-align: left; } /* Special alert */
-
 
 /* Experiments with squeezing giant matrices */
 .up45 { text-align: left; vertical-align: middle; width: 20px; margin: 0px; padding: 10px 3px 0px 3px; white-space: nowrap;

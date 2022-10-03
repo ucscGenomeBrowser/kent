@@ -8092,6 +8092,41 @@ if (html)
     puts(html);
 }
 
+void printShortcutButtons(struct cart *cart, bool hasCustomTracks, bool revCmplDisp, bool multiRegionButtonTop)
+/* Display bottom control panel. */
+{
+if (isSearchTracksSupported(database,cart))
+    {
+    cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
+    }
+
+hPrintf("&nbsp;");
+hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks");
+
+hPrintf(" ");
+hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
+        hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
+        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
+jsOnEventById("click", "ct_add", "document.customTrackForm.submit(); return false;");
+
+hPrintf(" ");
+hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
+hPrintf(" ");
+
+if (!multiRegionButtonTop)
+    {
+    printMultiRegionButton();
+    hPrintf(" ");
+    }
+hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
+                       revCmplDisp ? "Show forward strand at this location"
+                                   : "Show reverse strand at this location",
+                       NULL, revCmplDisp);
+hPrintf(" ");
+
+hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8950,10 +8985,12 @@ if (!hideControls)
     hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
     hWrites("Click+shift+drag to zoom in. ");
-    hWrites("Click side bars for track options. ");
+    hWrites("Click grey side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
     hWrites("Drag tracks left or right to new position. ");
     hWrites("Press \"?\" for keyboard shortcuts. ");
+    hWrites("Use drop-down controls below and press refresh to alter tracks displayed. ");
+
     hPrintf("</TD>");
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
@@ -8968,56 +9005,6 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
 
-    /* Display bottom control panel. */
-    if (isSearchTracksSupported(database,cart))
-        {
-        cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
-        hPrintf(" ");
-        }
-    hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks");
-    hPrintf("&nbsp;");
-    hButtonWithMsg("hgt.defaultImgOrder", "default order",
-                   "Display current tracks in their default order");
-    // if (showTrackControls)  - always show "hide all", Hiram 2008-06-26
-        {
-        hPrintf("&nbsp;");
-        hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visibile tracks");
-        }
-
-    hPrintf(" ");
-    hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
-            hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
-            hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
-    jsOnEventById("click", "ct_add", "document.customTrackForm.submit(); return false;");
-
-    hPrintf(" ");
-    if (hubConnectTableExists())
-        {
-        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='track hubs' title='Import tracks from hubs'>");
-	jsOnEventById("click", "th_form", "document.trackHubForm.submit();");
-        hPrintf(" ");
-        }
-
-    hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
-    hPrintf(" ");
-
-    if (!multiRegionButtonTop)
-        {
-        printMultiRegionButton();
-        hPrintf(" ");
-        }
-    hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
-                           revCmplDisp ? "Show forward strand at this location"
-                                       : "Show reverse strand at this location",
-                           NULL, revCmplDisp);
-    hPrintf(" ");
-
-    hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
-    hPrintf(" ");
-
-    hButtonWithMsg("hgt.refresh", "refresh","Refresh image");
-
-    hPrintf("<BR>\n");
 
     if( chromosomeColorsMade )
         {
@@ -9054,11 +9041,10 @@ if (!hideControls)
                            "return vis.expandAllGroups(false)");
         hPrintf("</td>");
 
-        hPrintf("<td colspan='%d' class='infoText' align='CENTER' nowrap>"
-                "Use drop-down controls below and press refresh to alter tracks "
-                "displayed.<BR>"
-                "Tracks with lots of items will automatically be displayed in "
-                "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
+        hPrintf("<td colspan='%d' class='infoText' align='CENTER' nowrap>\n", MAX_CONTROL_COLUMNS - 2);
+
+        printShortcutButtons(cart, hasCustomTracks, revCmplDisp, multiRegionButtonTop);
+        hPrintf("</td>\n");
 
         hPrintf("<td align='right'>");
         hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups",
