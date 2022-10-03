@@ -4834,6 +4834,8 @@ snp153OfferGeneTracksForFunction(db, cart, name, leafTdb, correctTdb);
 // End wrapper table for collapsible sections:
 puts("</TABLE>");
 
+wigOption(cart, name, title, leafTdb);
+
 cfgEndBox(boxed);
 }
 
