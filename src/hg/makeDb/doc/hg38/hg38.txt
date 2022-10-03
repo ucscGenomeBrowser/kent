@@ -6972,32 +6972,6 @@ _EOF_
 #Loading 2115 chains into hg38.chainHg19ReMapAxtChain
 
 ###################################################
-
-# PanelApp refs #25568
-cd /hive/data/genomes/hg38/bed
-mkdir panelApp
-cd panelApp
-wget https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg38/panel_hg38.bb
-wget https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg38/str_hg38.bb
-mv /cluster/home/bnguy/trackhub/region/region_hg38.bb .
-mv panel_hg38.bb genesPanel.bb
-mv str_hg38.bb STRsPanel.bb
-mv region_hg38.bb CNVregions.bb
-cd /gbdb/hg38
-mkdir panelApp
-cd panelApp
-ln -s /hive/data/genomes/hg38/bed/panelApp/genesPanel.bb
-ln -s /hive/data/genomes/hg38/bed/panelApp/STRsPanel.bb
-ln -s /hive/data/genomes/hg38/bed/panelApp/CNVregions.bb 
-cd ~/kent/src/hg/makeDb/trackDb/human/hg38
-wget https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg38/panelapp.html
-mv panelapp.html panelApp.html
-curl https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg38/trackDb.txt >> trackDb.ra
-vi trackDb.ra
-cd ~/kent/src/hg/makeDb/trackDb
-make alpha DBS=hg38
-
-######
 #Agilent SNP/CNV arrays 3/11/21
 #Downloaded by web browser
 cd /hive/data/genomes/hg38/bed/agilentProbes/genetiSureCyto
