@@ -15,7 +15,7 @@ compositeTrack on
     visibility pack
     bigDataUrl /gbdb/$D/panelApp/genes.bb
     itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
+    urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$" publications="$$"
     mouseOverField mouseOverField
     labelFields geneSymbol
     skipEmptyFields on
