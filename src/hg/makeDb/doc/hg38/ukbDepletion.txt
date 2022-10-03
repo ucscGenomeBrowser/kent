@@ -1,0 +1,13 @@
+# Thu Sep 29 04:56:06 PDT 2022, Max (birthday track!)
+cd /hive/data/genomes/hg38/bed/ukb
+# Downloaded supplemental file from https://www.nature.com/articles/s41586-022-04965-x
+wget https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-022-04965-x/MediaObjects/41586_2022_4965_MOESM3_ESM.gz
+gunzip 41586_2022_4965_MOESM3_ESM.gz 
+# this was a first try as a bigBed track... but was not very useful. A lot of overlaps. Confusing information.
+less 41586_2022_4965_MOESM3_ESM  | grep -v Chr | tawk '{print $1,$2,$3,"",int(1000*$4),".",$2,$3,"0",$4}' > ukbDepletion.bed &
+# bedToBigBed drs.bed ../../chrom.sizes drs.bb -tab -type=bed8+1 -as=ukb.as
+# much better as a wiggle
+# Asked author by email, he suggested that we use only the central 50bp since they're "most informative"
+cat 41586_2022_4965_MOESM3_ESM  | grep -v Fromx | tawk '{print $1,$2+225,$3-225,$4}' > ukbDepletion.bedgraph
+gzip ukbDepletion.bedgraph
+bedGraphToBigWig ukbDrs.bedgraph.gz ../../chrom.sizes ukbDepletion.bw

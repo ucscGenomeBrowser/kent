@@ -9,7 +9,7 @@ from gencode.gencodeTags import GencodeTag
 class ParseException(Exception):
     "indicates a parser error that is report, but allows checking to continue"
     def __init__(self, gxfParser, msg):
-        Exception.__init__(self, "Error: " + gxfParser.gxfFile + ":" + str(gxfParser.lineNum) + ": " + msg)
+        Exception.__init__(self, "Error: " + gxfParser.gxfFile + ":" + str(gxfParser.lineNumber) + ": " + msg)
 
 class GxfParser(object):
     """common code shared between GTF and GFF3 parsers"""

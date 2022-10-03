@@ -632,8 +632,7 @@ struct sqlResult *sqlStoreResult(struct sqlConnection *sc, char *query);
 
 /* --------- input checks to prevent sql injection --------------------------------------- */
 
-//#define sqlCkIl sqlCheckIdentifiersList
-#define sqlCkIl(fieldsSafe,fields) char fieldsSafe[strlen(fields)+9+1]; \
+#define sqlCkIl(fieldsSafe,fields) char fieldsSafe[strlen(fields)+NOSQLINJ_SIZE+1]; \
    sqlCheckIdentifiersList(fieldsSafe, sizeof fieldsSafe, fields);
 
 void sqlCheckIdentifiersList(char* buffer, int bufSize, char *identifiers);

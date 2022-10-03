@@ -726,63 +726,6 @@ include genePredArchive.ra
 include tgpArchive.ra
 include spliceAi.ra
 
-track panelApp
-shortLabel PanelApp
-longLabel Genomics England PanelApp Diagnostics
-type bigBed 9 +
-visibility hide
-group phenDis
-pennantIcon New red ../goldenPath/newsarch.html "Released Mar. 2022"
-compositeTrack on
-html ../panelApp
-
-    track panelAppGenes
-    parent panelApp on
-    shortLabel PanelApp Genes Panel
-    longLabel Genomics England PanelApp Genes Panel
-    type bigBed 9 +
-    visibility pack
-    bigDataUrl /gbdb/hg38/panelApp/genesPanel.bb
-    itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
-    mouseOverField mouseOverField
-    labelFields geneSymbol
-    skipEmptyFields on
-    skipFields chrom,chromStart,blockStarts,blockSizes,entityName,tags,status,mouseOverField
-    filterValues.confidenceLevel 3,2,1,0
-    html ../panelApp
-
-    track panelAppSTRs
-    parent panelApp on
-    shortLabel PanelApp STRs panel
-    longLabel Genomics England PanelApp Short Tandem Repeats Panel
-    type bigBed 9 +
-    visibility pack
-    bigDataUrl /gbdb/hg38/panelApp/STRsPanel.bb  
-    itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" ensemblID="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
-    mouseOverField mouseOverField
-    labelFields hgncSymbol
-    skipEmptyFields on
-    skipFields chrom,chromStart,blockStarts,blockSizes,mouseOverField
-    filterValues.confidenceLevel 3,2,1,0
-    html ../panelApp
-
-    track panelAppCNVs
-    parent panelApp on
-    shortLabel PanelApp CNV Regions
-    longLabel Genomics England PanelApp CNV Regions
-    type bigBed 9 +
-    visibility pack
-    bigDataUrl /gbdb/hg38/panelApp/CNVregions.bb
-    itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" entityName="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
-    labelFields entityName
-    skipEmptyFields on
-    skipFields chrom,chromStart,blockStarts,blockSizes
-    filterValues.confidenceLevel 3,2,1,0
-    html ../panelApp
-
 track genotypeArrays
 shortLabel Array Probesets
 longLabel Microarray Probesets

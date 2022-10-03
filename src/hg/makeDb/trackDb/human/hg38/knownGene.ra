@@ -1,4 +1,5 @@
 track knownGene
+table knownGene
 shortLabel GENCODE V41
 longLabel GENCODE V41
 priority 1

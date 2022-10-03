@@ -128,6 +128,7 @@ directUrl *
 dividers *
 dragAndDrop *
 drawMode hic
+doWiggle bigBed
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred

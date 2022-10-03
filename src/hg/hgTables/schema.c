@@ -739,14 +739,9 @@ else
     doTableSchema(database, curTable, conn);
 }
 
-struct asObject *asForTable(struct sqlConnection *conn, char *table)
-/* Get autoSQL description if any associated with table. */
-/* Wrap some error catching around asForTable. */
+struct asObject *asForTableNoTdb(struct sqlConnection *conn, char *table)
+/* Get autoSQL description if any associated with table. Don't try tdb */
 {
-struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
-if (tdb != NULL)
-    return asForTdb(conn,tdb);
-
 // Some cases are for tables with no tdb!
 struct asObject *asObj = NULL;
 if (sqlTableExists(conn, "tableDescriptions"))
@@ -777,4 +772,15 @@ if (sqlTableExists(conn, "tableDescriptions"))
     errCatchFree(&errCatch);
     }
 return asObj;
+}
+
+struct asObject *asForTable(struct sqlConnection *conn, char *table)
+/* Get autoSQL description if any associated with table. */
+/* Wrap some error catching around asForTable. */
+{
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+if (tdb != NULL)
+    return asForTdb(conn,tdb);
+
+return asForTableNoTdb(conn, table);
 }

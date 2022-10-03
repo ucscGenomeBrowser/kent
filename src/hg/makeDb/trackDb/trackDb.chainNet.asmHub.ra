@@ -3,8 +3,8 @@
 ##############################################################################
 track chainNetHs1
 compositeTrack on
-shortLabel CHM13 T2T Chain/Net
-longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0), Chain and Net Alignments
+shortLabel hs1/CHM13 T2T Chain/Net
+longLabel hs1/CHM13 T2T (Jan. 2022 hs1/GCA_009914755.4_CHM13_T2T_v2.0), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -32,8 +32,8 @@ html chainNet
         track chainHs1
         parent chainNetHs1Viewchain
         subGroups view=chain
-        shortLabel CHM13 T2T Chain
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Chained Alignments
+        shortLabel hs1/CHM13 T2T Chain
+        longLabel hs1/CHM13 T2T (Jan. 2022 hs1/GCA_009914755.4_CHM13_T2T_v2.0) Chained Alignments
         type bigChain hs1
         bigDataUrl /gbdb/$D/chainNet/$D.chainHs1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainHs1Link.bb
@@ -41,8 +41,8 @@ html chainNet
         track chainSynHs1
         parent chainNetHs1Viewchain
         subGroups view=chain
-        shortLabel CHM13 T2T Chain
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Chained Alignments
+        shortLabel hs1/CHM13 T2T Chain
+        longLabel hs1/CHM13 T2T (Jan. 2022 hs1/GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Chained Alignments
         type bigChain hs1
         bigDataUrl /gbdb/$D/chainNet/$D.chainSynHs1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainSynHs1Link.bb
@@ -50,8 +50,8 @@ html chainNet
         track chainRBestHs1
         parent chainNetHs1Viewchain
         subGroups view=chain
-        shortLabel CHM13 T2T Chain
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Chained Alignments
+        shortLabel hs1/CHM13 T2T Chain
+        longLabel hs1/CHM13 T2T (Jan. 2022 hs1/GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Chained Alignments
         type bigChain hs1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestHs1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestHs1Link.bb
@@ -65,8 +65,8 @@ html chainNet
         track netHs1
         parent mafNetHs1Viewnet
         subGroups view=net
-        shortLabel CHM13 T2T mafNet
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) mafNet Alignment
+        shortLabel hs1/CHM13 T2T mafNet
+        longLabel hs1/CHM13 T2T (Jan. 2022 hs1/GCA_009914755.4_CHM13_T2T_v2.0) mafNet Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.hs1.net.bb
         summary /gbdb/$D/chainNet/$D.hs1.net.summary.bb
@@ -76,8 +76,8 @@ html chainNet
         track synNetHs1
         parent mafNetHs1Viewnet
         subGroups view=net
-        shortLabel CHM13 T2T mafNet
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Net Alignment
+        shortLabel hs1/CHM13 T2T mafNet
+        longLabel hs1/CHM13 T2T (Jan. 2022 hs1/GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.hs1.synNet.bb
         summary /gbdb/$D/chainNet/$D.hs1.synNet.summary.bb
@@ -87,8 +87,8 @@ html chainNet
         track rbestNetHs1
         parent mafNetHs1Viewnet
         subGroups view=net
-        shortLabel CHM13 T2T mafNet
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Net Alignment
+        shortLabel hs1/CHM13 T2T mafNet
+        longLabel hs1/CHM13 T2T (Jan. 2022 hs1/GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.hs1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.hs1.rbestNet.summary.bb

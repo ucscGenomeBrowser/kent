@@ -11,8 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 #include "rmskOut.h"
-
-
+#include "repMask.h"
 
 boolean noBin = FALSE;
 boolean split = FALSE;
@@ -44,7 +43,9 @@ errAbort(
   "options:\n"
   "   -tabFile=text.tab - don't actually load database, just create tab file\n"
   "   -split - load chrN_rmsk separate tables even if a single file is given\n"
-  "   -table=name - use a different suffix other than the default (rmsk)");
+  "   -table=name - use a different suffix other than the default (rmsk)\n"
+  "note: the input file.out can also be a compressed file.out.gz file,\n"
+  "      or a URL to a file.out or file.out.gz");
 }
 
 void badFormat(struct lineFile *lf, int id)
@@ -162,19 +163,7 @@ char *line, *words[24];
 int lineSize, wordCount;
 
 /* Open .out file and process header. */
-lf = lineFileOpen(rmskFile, TRUE);
-if (!lineFileNext(lf, &line, &lineSize))
-    errAbort("Empty %s", lf->fileName);
-if (!(startsWith("   SW  perc perc", line) ||
-      startsWith("   SW   perc perc", line) ||
-      startsWith("    SW   perc perc", line) ||
-      startsWith("  bit   perc perc", line)))
-    {
-    errAbort("%s doesn't seem to be a RepeatMasker .out file, first "
-             "line seen:\n%s", lf->fileName, line);
-    }
-lineFileNext(lf, &line, &lineSize);
-lineFileNext(lf, &line, &lineSize);
+lf = rmskLineFileOpen(rmskFile);
 
 /* Process line oriented records of .out file. */
 while (lineFileNext(lf, &line, &lineSize))
