@@ -28,7 +28,7 @@ a:link {
         text-decoration: underline
 }
 
-input[type="submit"], button {
+input[type="submit"], input[type="button"], button {
     border: 1px solid darkgray;
     border-radius: 3px;
 }
