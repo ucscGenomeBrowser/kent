@@ -2377,48 +2377,6 @@ include genePredArchive.ra
 include tgpArchive.ra
 include chm13LiftOver.ra
 
-track panelApp
-shortLabel PanelApp 
-longLabel Genomics England PanelApp Diagnostics 
-type bigBed 9 +
-visibility hide
-group phenDis
-pennantIcon New red ../goldenPath/newsarch.html "Released Mar. 2022"
-compositeTrack on
-html ../panelApp
-
-    track panelAppGene
-    parent panelApp on
-    shortLabel PanelApp Genes
-    longLabel Genomics England PanelApp Genes Panel
-    type bigBed 9 +
-    visibility pack
-    bigDataUrl /gbdb/hg19/panelApp/genesPanel.bb
-    itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
-    mouseOverField mouseOverField
-    labelFields geneSymbol
-    skipEmptyFields on
-    skipFields chrom,chromStart,blockStarts,blockSizes,entityName,tags,status,mouseOverField
-    filterValues.confidenceLevel 3,2,1,0
-    html ../panelApp
-
-    track PanelAppSTRs
-    parent panelApp on
-    shortLabel PanelApp STRs
-    longLabel Genomics England PanelApp Short Tandem Repeats Panel
-    type bigBed 9 +
-    visibility pack
-    bigDataUrl /gbdb/hg19/panelApp/STRsPanel.bb
-    itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" panelAppQuery="https://panelapp.genomicsengland.co.uk/panels/$P/gene/$p" hgncSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$" ensemblID="https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$"
-    mouseOverField mouseOverField
-    labelFields hgncSymbol
-    skipEmptyFields on
-    skipFields chrom,chromStart,blockStarts,blockSizes,mouseOverField
-    filterValues.confidenceLevel 3,2,1,0
-    html ../panelApp
-
 track starita
 shortLabel L. Starita BRCA1
 longLabel Lea Starita BRCA1 variants
