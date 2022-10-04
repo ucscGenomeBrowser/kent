@@ -307,7 +307,7 @@ else
            If these conditions are met then print position link to
            browser for toDb, otherwise just print position without link. */
         boolean startedAnchor = FALSE;
-        if (hDbIsActive(toDb->name) && chromSeqExists)
+        if ((hDbIsActive(toDb->name) && chromSeqExists) || startsWith("hub:",toDb->nibPath))
             {
 	    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
 		   hgTracksName(), toDb->name, chain->qName, qStart+1, qEnd);
