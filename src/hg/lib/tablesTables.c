@@ -803,7 +803,14 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
  * is an optional way to enrich output of specific columns of the table.  It is keyed
  * by column name and has for values functions of type webTableOutputWrapperType. */
 {
-webFilteredFieldedTable(cart, table, NULL, returnUrl, varPrefix, 
+struct dyString *visibleFacetList = dyStringNew(256); 
+int i;
+for (i = 0; i < table->fieldCount; ++i)
+    {
+    if (i > 0) dyStringPrintf(visibleFacetList, ",");
+    dyStringPrintf(visibleFacetList, "%s", table->fields[i]);
+    }
+webFilteredFieldedTable(cart, table, visibleFacetList->string, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
     slCount(table->rowList), 

@@ -782,6 +782,7 @@ void searchFilesWithAccess(struct sqlConnection *conn, char *searchString, char 
 /* Get list of files that we are authorized to see and that match searchString in the trix file
  * Returns: retList of matching files, retWhere with sql where expression for these files, retFields
  * If nothing to see, retList is NULL
+ * DO NOT Convert to safef V2 since the where clause is checked by gbSanity in tablesTables.c
  * */
 char *fields = filterFieldsToJustThoseInTable(conn, allFields, getCdwTableSetting("cdwFileTags"));
 
@@ -831,7 +832,7 @@ if (!isEmpty(searchString))
  * if any. */
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
-    sqlDyStringPrintf(where, "(%-s)", initialWhere); // trust
+    dyStringPrintf(where, "(%-s)", initialWhere); // trust
 if (securityColumnsInTable)
     {
     if (user)
@@ -846,22 +847,22 @@ if (securityColumnsInTable)
 	    struct sqlResult *sr = sqlGetResult(conn, query);
 	    char **row;
 	    if (!isEmpty(where->string))
-		sqlDyStringPrintf(where, " and ");
-	    sqlDyStringPrintf(where, "(allAccess > 0");
+		dyStringPrintf(where, " and ");
+	    dyStringPrintf(where, "(allAccess > 0");
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
 		int groupId = sqlUnsigned(row[0]);
-		sqlDyStringPrintf(where, " or FIND_IN_SET('%u', groupIds)", groupId);
+		dyStringPrintf(where, " or FIND_IN_SET('%u', groupIds)", groupId);
 		}
 	    sqlFreeResult(&sr);
-	    sqlDyStringPrintf(where, ")");
+	    dyStringPrintf(where, ")");
 	    }
 	}
     else
 	{
 	if (!isEmpty(where->string))
-	    sqlDyStringPrintf(where, " and ");
-	sqlDyStringPrintf(where, "allAccess > 0");
+	    dyStringPrintf(where, " and ");
+	dyStringPrintf(where, "allAccess > 0");
 	}
     }
 
@@ -869,16 +870,16 @@ if (efList
     || (securityColumnsInTable && (!isEmpty(searchString)))) // have search terms but nothing was found
     {
     if (!isEmpty(where->string))
-	sqlDyStringPrintf(where, " and ");
-    sqlDyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
+	dyStringPrintf(where, " and ");
+    dyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
     for (ef = efList; ef != NULL; ef = ef->next)
 	{
 	if (searchPassTree == NULL || securityColumnsInTable || intValTreeFind(searchPassTree, ef->id) != NULL)
 	    {
-	    sqlDyStringPrintf(where, ",%u", ef->id);
+	    dyStringPrintf(where, ",%u", ef->id);
 	    }
 	}
-    sqlDyStringPrintf(where, ")");
+    dyStringPrintf(where, ")");
     }
 
 rbTreeFree(&searchPassTree);
