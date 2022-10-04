@@ -8973,7 +8973,7 @@ if (!hideControls)
             tl.picWidth, 27);
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
-    hPrintf("move start<BR>");
+    hPrintf("<span class='moveButtonText'>move start</span><br>");
     hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left",
                        "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
@@ -8995,7 +8995,7 @@ if (!hideControls)
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
-    hPrintf("move end<BR>");
+    hPrintf("<span class='moveButtonText'>move end</span><br>");
     hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left",
                        "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
