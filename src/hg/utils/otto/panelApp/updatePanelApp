@@ -56,6 +56,8 @@ def updateGbdbSymlinks():
     for db in ["hg19", "hg38"]:
         archDir = getArchDir(db)
         for subTrack in ["genes", "tandRep", "cnv"]:
+            if subTrack=="cnv" and db=="hg19":
+                continue # no cnv on hg19
             cmd = "ln -sf `pwd`/current/%s/%s.bb /gbdb/%s/panelApp/%s.bb" % (db, subTrack, db, subTrack)
             assert(os.system(cmd)==0)
 
