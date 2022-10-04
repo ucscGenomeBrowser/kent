@@ -308,6 +308,7 @@ $sciNameUnderscore =~ s/ /_/g;
 $sciNameUnderscore = "Strigops_habroptilus" if ($orgName =~ m/Strigops habroptila/);
 
 printf "<p>
+<b>Share this genome browser with the link:</b> <a href='/h/%s' target=_blank>%s</a><br>
 <b>Common name:</b>&nbsp;%s<br>
 <b>Taxonomic name: %s, taxonomy ID:</b> <a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s' target='_blank'> %s</a><br>
 <b>Sequencing/Assembly provider ID:</b> %s<br>
@@ -317,7 +318,7 @@ printf "<p>
 <b>Biosample:</b> <a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\">%s</a><br>
 <b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
 <b>Assembly FTP location:</b> <a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/%s' target='_blank'>%s</a><br>
-\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
+\n", $asmAccession, $asmId, $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
   $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $newStyleUrl, $newStyleUrl;
 
 chromSizes($chromSizes);
