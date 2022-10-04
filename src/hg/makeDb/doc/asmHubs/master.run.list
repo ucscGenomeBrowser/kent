@@ -566,6 +566,7 @@
 ./runBuild GCF_000004195.4 GCF_000004195.4_UCB_Xtro_10.0 vertebrate_other Xenopus_tropicalis
 ./runBuild GCF_000004255.2 GCF_000004255.2_v.1.0 plants Arabidopsis_lyrata_subsp._lyrata
 ./runBuild GCF_000004335.2 GCF_000004335.2_AilMel_1.0 vertebrate_mammalian Ailuropoda_melanoleuca
+./runBuild GCF_000004515.4 GCF_000004515.4_Glycine_max_v2.0 plants Glycine_max
 ./runBuild GCF_000004515.5 GCF_000004515.5_Glycine_max_v2.1 plants Glycine_max
 ./runBuild GCF_000004515.6 GCF_000004515.6_Glycine_max_v4.0 plants Glycine_max
 ./runBuild GCF_000004555.1 GCF_000004555.1_ASM455v1 invertebrate Caenorhabditis_briggsae

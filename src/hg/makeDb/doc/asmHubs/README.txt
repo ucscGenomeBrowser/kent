@@ -1,6 +1,8 @@
 #############################################################################
 ### Building the assembly hubs ###
 #############################################################################
+### see below for adding custom/local developed tracks to an existing GenArk hub
+#############################################################################
 
 The build of each assembly takes place in, for example:
 
@@ -124,5 +126,77 @@ where I want to update all the trackDb files since something has
 been improved for trackDb, in which case I adjust the
 stepStart and stepEnd to run just the trackDb step.  (would have
 to disable the rebuild prevention)
+
+#############################################################################
+### adding custom/local developed tracks to a GenArk hub
+#############################################################################
+
+Work in the trackData/ directory of the assembly hub in a directory
+name of the track, think of this as your /hive/data/genomes/<db>/bed/myTrack/
+usual work directory as if it were a database assembly.
+
+For example, the extra pcrAmplicon track on the Monkeypox browser
+GCF_000857045.1_ViralProj15142
+
+Is developed in:
+/hive/data/genomes/asmHubs/refseqBuild/GCF/014/621/545/GCF_014621545.1_ASM1462154v1/trackData/pcrAmplicon/
+
+When your data is ready, add your big* files, ixIxx and html page description
+files to the browser with symLinks in the bbi, ixIxx and html directories:
+
+/hive/data/genomes/asmHubs/refseqBuild/GCF/014/621/545/GCF_014621545.1_ASM1462154v1/bbi/
+and
+/hive/data/genomes/asmHubs/refseqBuild/GCF/014/621/545/GCF_014621545.1_ASM1462154v1/ixIxx/
+/hive/data/genomes/asmHubs/refseqBuild/GCF/014/621/545/GCF_014621545.1_ASM1462154v1/html/
+
+To get your track added to the GenArk hub, place your trackDb.txt
+definitions in the special named file: <asmId>.userTrackDb.txt
+in the top-level build directory:
+/hive/data/genomes/asmHubs/refseqBuild/GCF/014/621/545/GCF_014621545.1_ASM1462154v1/
+for example: GCF_014621545.1_ASM1462154v1.userTrackDb.txt
+
+Your track will push out to hgdownload with this GenArk hub the next time
+the build is run for the clade this organism is packaged in.
+
+Typical 'build' sequence to do the release of a clade set:
+
+  cd ~/kent/src/hg/makeDb/doc/viralAsmHub
+  # builds symLinks for delivery staging directory, constructs index pages
+  # for this clade set, makes everything available on genome-test
+  time (make) >> dbg 2>&1
+  # when finished, examine the dbg file to see if there are any errors reported
+  # by the scripts.  Then, verify it is looking good in the staging
+  # directory on genome-test:
+  time (make verifyTestDownload) >> test.down.log 2>&1
+  # this testing is performed by the API on hgwdev.
+  # this test.down.log file accumulates each time a build is run, to make sure
+  # it is sane and there are no errors, grep for 'checked' to see lines such as:
+
+  grep checked test.down.log
+# checked 221 hubs, 221 success, 0 fail, total tracks: 4720, 2022-09-25 14:58:55
+# checked 222 hubs, 222 success, 0 fail, total tracks: 4740, 2022-10-04 11:55:28
+
+  # if you wanted to view this clade set on genome-test to see what it
+  # looks like, the URL is:  https://genome-test.gi.ucsc.edu/hubs/viral/
+  # each clade has a different directory here:
+  #  primates mammals birds fish vertebrate plants fungi viral bacteria archaea
+
+  # if it looks good on genome-test and verifyTestDownload runs without errors,
+  # the hub can push to hgdownload:
+
+  time (make sendDownload) >> send.down.log 2>&1
+
+  # there isn't much to see in this send.down.log, it is just for the record
+  # then to verify it is correct on hgdownload:
+
+  time (make verifyDownload) >> verify.down.log 2>&1 &
+  # this testing runs via the API on hgwbeta so that the access
+  # activity logs on the RR won't be disturbed by such testing.
+
+  # to see if it is sane, grep for 'checked' in this log file:
+  grep checked verify.down.log
+
+# checked 221 hubs, 221 success, 0 fail, total tracks: 4720, 2022-09-25 19:42:48
+# checked 222 hubs, 222 success, 0 fail, total tracks: 4740, 2022-10-04 12:23:35
 
 #############################################################################

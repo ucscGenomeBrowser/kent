@@ -578,7 +578,7 @@ if (as != NULL)
 nameLabel = trackDbSettingClosestToHomeOrDefault(tdb, "bedNameLabel", nameCol ? nameCol->comment : "Item");
 struct slPair *fields = getFields(tdb, row);
 if (trackDbSettingClosestToHomeOrDefault(tdb, "url", NULL) != NULL)
-    printCustomUrlWithFields(tdb, item, nameLabel, TRUE, fields);
+    printCustomUrlWithFields(tdb, item, item, TRUE, fields);
 else
     printf("<b>%s: </b>%s ", nameLabel, chartItem->name);
 name2Label = name2Col ? name2Col->comment : "Alternative name";
