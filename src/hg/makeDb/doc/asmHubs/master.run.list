@@ -685,6 +685,7 @@
 ./runBuild GCF_000188115.4 GCF_000188115.4_SL3.0 plants Solanum_lycopersicum
 ./runBuild GCF_000189315.1 GCF_000189315.1_Devil_ref_v7.0 vertebrate_mammalian Sarcophilus_harrisii
 ./runBuild GCF_000192795.1 GCF_000192795.1_Vavr_culi_floridensis_V1 fungi Vavraia_culicis_subsp._floridensis
+./runBuild GCF_000195955.2 GCF_000195955.2_ASM19595v2 bacteria Mycobacterium_tuberculosis_H37Rv
 ./runBuild GCF_000203795.1 GCF_000203795.1_v1.0 fungi Batrachochytrium_dendrobatidis_JAM81
 ./runBuild GCF_000204055.1 GCF_000204055.1_v1.0 fungi Melampsora_larici-populina_98AG31
 ./runBuild GCF_000204515.1 GCF_000204515.1_Aech_3.9 invertebrate Acromyrmex_echinatior
