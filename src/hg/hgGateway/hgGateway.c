@@ -159,7 +159,7 @@ else
     jsonWriteString(jw, "genomeLabel", genomeLabel);
     jsonWriteString(jw, "position", position);
     char *suggestTrack = NULL;
-    if (! trackHubDatabase(db))
+    if (! trackHubDatabase(db) && (sqlMayConnect(db) != NULL))
         suggestTrack = assemblyGeneSuggestTrack(db);
     jsonWriteString(jw, "suggestTrack", suggestTrack);
     char *description = maybeGetDescriptionText(db);
