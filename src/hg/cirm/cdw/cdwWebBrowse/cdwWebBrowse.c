@@ -929,9 +929,11 @@ for (sff = selectedList; sff; sff=sff->next)
 	}
     }
 
+
 // get their fileIds
 struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from %s %-s", table, filteredWhere->string); // trust
-sqlDyStringPrintf(tagQuery,  "%-s", facetedWhere->string); // trust because it was created safely
+if (!isEmpty(facetedWhere->string))
+    sqlDyStringPrintf(tagQuery,  "%-s", facetedWhere->string); // trust because it was created safely
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
 // retrieve the cdwFiles objects for these
@@ -1630,7 +1632,13 @@ if (!isEmpty(where))
     // Can't use sqlDyString functions due to the possible presence of valid wildcards, but
     // the while clause has already been validated by passing through the more restrictive
     // rql parser anyway.
-    sqlDyStringPrintf(sqlQuery, " where %-s", rqlParseToSqlWhereClause(rql->whereClause, FALSE));
+
+    // Note currently unable to use sqlSafefV2 inside /src/lib/rqlParse* since it needs functions in /src/hg/lib/jksql.c
+    // and things in /src/lib are not supposed to use and depend on stuff under /src/hg/lib.
+    char *rqlWhere = rqlParseToSqlWhereClause(rql->whereClause, FALSE);
+    char trustedQuery[strlen(rqlWhere) + NOSQLINJ_SIZE + 1];
+    safef(trustedQuery, sizeof trustedQuery, NOSQLINJ "%s", rqlWhere);
+    sqlDyStringPrintf(sqlQuery, " where %-s", trustedQuery);
     whereClauseStarted = 1;
     }
 

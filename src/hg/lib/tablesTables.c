@@ -894,7 +894,8 @@ if (withFilters)
 	    }
 	}
     }
-sqlDyStringPrintf(query, "%-s", where->string);  // trust
+if (!isEmpty(where->string))
+    sqlDyStringPrintf(query, "%-s", where->string);  // trust
 
 /* We do order here so as to keep order when working with tables bigger than a page. */
 char orderVar[256];
