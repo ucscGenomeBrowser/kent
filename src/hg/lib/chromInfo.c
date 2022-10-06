@@ -140,9 +140,10 @@ char query[256];
 char *res = NULL;
 boolean exists = FALSE;
 
-/* if the database exists, check for the chromInfo file */
-if (sqlDatabaseExists(db))
+/* if the database exists (which it must since we opened the connection above), check for the chromInfo table */
+if (sqlDatabaseExists(db) && sqlTableExists(conn, "chromInfo"))
     {
+    /* the database and chromInfo table exist, look to see if it has our chrom. */
     sqlSafef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
     res = sqlQuickQuery(conn, query, seqFile, 512);
     sqlDisconnect(&conn);

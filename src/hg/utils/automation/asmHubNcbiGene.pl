@@ -64,15 +64,40 @@ chomp $ncbiAssemblyId;
 my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
 
+if ( "${asmType}" eq "refseq" ) {
+
 print <<_EOF_
 <h2>Description</h2>
 <p>
 The NCBI Gene track for the $assemblyDate $em${organism}$noEm/$ncbiAsmId
 genome assembly is constructed from the gff file <b>${ncbiAsmId}_genomic.gff.gz</b>
-delivered with the NCBI RefSeq genome assemblies at the FTP location:<br>
+supplied with the genome assembly at the FTP location:<br>
 <a href='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
 </p>
 
+_EOF_
+   ;
+
+} else {
+
+print <<_EOF_
+<h2>Description</h2>
+<p>
+The Gene model track for the $assemblyDate $em${organism}$noEm/$ncbiAsmId
+genome assembly is constructed from the gff file <b>${ncbiAsmId}_genomic.gff.gz</b>
+supplied with the genome assembly at the FTP location:<br>
+<a href='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
+</p>
+<p>
+The gene models were constructed by the submitter of the assembly to the
+NCBI assembly release system.
+</p>
+
+_EOF_
+    ;
+}
+
+print <<_EOF_
 <h2>Track statistics summary</h2>
 <p>
 <b>Total genome size: </b>$totalBases<br>
@@ -83,3 +108,4 @@ delivered with the NCBI RefSeq genome assemblies at the FTP location:<br>
 
 _EOF_
    ;
+

@@ -52,7 +52,6 @@ GCF_000747805.1_ChaPel_1.0	birds
 GCA_002880755.3_Clint_PTRv2	primates
 GCF_002994745.1_RchiOBHm-V2	plants
 GCF_003668045.1_CriGri-PICR	mammals
-GCA_000738955.1_M_pentadactyla-1.1.1	mammals
 GCF_000700745.1_ASM70074v1	birds
 GCF_900324465.1_fAnaTes1.1	fish
 GCA_900324465.2_fAnaTes1.2	fish
@@ -180,6 +179,7 @@ GCF_006149115.1_Oner_1.0	fish
 GCA_004026725.1_OnyTor_v1_BIUU	mammals
 GCA_004027855.1_ChoDid_v1_BIUU	mammals
 GCA_000283155.1_CerSimSim1.0	mammals
+GCF_000004515.4_Glycine_max_v2.0	plants
 GCF_000004515.5_Glycine_max_v2.1	plants
 GCA_905163445.1_ilParAegt1.1	invertebrates
 GCA_002880775.3_Susie_PABv2	primates

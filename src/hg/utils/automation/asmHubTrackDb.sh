@@ -17,6 +17,8 @@ export buildDir=$3
 
 export scriptDir="$HOME/kent/src/hg/utils/automation"
 
+export asmType="n/a"
+
 # technique to set variables based on the name in another variable:
 
 if [ -s "$buildDir/dropTracks.list" ]; then
@@ -28,6 +30,13 @@ if [ -s "$buildDir/dropTracks.list" ]; then
      eval $notTrack="1"
   done
 fi
+
+case "${asmId}" in
+  GCA_*) asmType="genbank"
+    ;;
+  GCF_*) asmType="refseq"
+    ;;
+esac
 
 mkdir -p $buildDir/bbi
 mkdir -p $buildDir/ixIxx
@@ -591,12 +600,18 @@ if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
 rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+export longLabel="Gene models submitted to NCBI"
+export shortLabel="Gene models"
+if [ "$asmType" = "refseq" ]; then
+  longLabel="NCBI gene predictions"
+  shortLabel="NCBI Genes"
+fi
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
   printf "track ncbiGene
-longLabel NCBI gene predictions
-shortLabel NCBI Genes
+longLabel $longLabel
+shortLabel $shortLabel
 visibility pack
 color 0,80,150
 altColor 150,80,0

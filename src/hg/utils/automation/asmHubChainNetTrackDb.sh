@@ -62,11 +62,11 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
   rm -f $buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.liftOverNet.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
-  if [ -s ../trackData/$lastzDir/axtChain/chain${OtherDb}.bb ]; then
+  if [ -s "$buildDir/trackData/$lastzDir/axtChain/chain${OtherDb}.bb" ]; then
     ln -s ../trackData/$lastzDir/axtChain/chain${OtherDb}.bb $buildDir/bbi/${asmId}.chain$OtherDb.bb
     ln -s ../trackData/$lastzDir/axtChain/chain${OtherDb}Link.bb $buildDir/bbi/${asmId}.chain${OtherDb}Link.bb
   fi
-  if [ -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.net.bb ]; then
+  if [ -s "$buildDir/trackData/$lastzDir/bigMaf/$accessionId.$otherDb.net.bb" ]; then
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.net.bb $buildDir/bbi/${asmId}.$otherDb.net.bb
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.net.summary.bb $buildDir/bbi/${asmId}.$otherDb.net.summary.bb
   fi
@@ -74,7 +74,7 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
     ln -s ../trackData/$lastzDir/axtChain/chainSyn${OtherDb}.bb $buildDir/bbi/${asmId}.chainSyn$OtherDb.bb
     ln -s ../trackData/$lastzDir/axtChain/chainSyn${OtherDb}Link.bb $buildDir/bbi/${asmId}.chainSyn${OtherDb}Link.bb
   fi
-  if [ -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.synNet.bb ]; then
+  if [ -s "$buildDir/trackData/$lastzDir/bigMaf/$accessionId.$otherDb.synNet.bb" ]; then
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.synNet.bb $buildDir/bbi/${asmId}.$otherDb.synNet.bb
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.synNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.synNet.summary.bb
   fi
@@ -82,7 +82,7 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
     ln -s ../trackData/$lastzDir/axtChain/chainRBest${OtherDb}.bb $buildDir/bbi/${asmId}.chainRBest$OtherDb.bb
     ln -s ../trackData/$lastzDir/axtChain/chainRBest${OtherDb}Link.bb $buildDir/bbi/${asmId}.chainRBest${OtherDb}Link.bb
   fi
-  if [ -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.bb ]; then
+  if [ -s "$buildDir/trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.bb" ]; then
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.bb $buildDir/bbi/${asmId}.$otherDb.rbestNet.bb
     ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.rbestNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb
   fi
