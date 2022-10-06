@@ -30,6 +30,14 @@ window.surveyLink=null;
 window.surveyLabel=null;
 window.surveyLabelImage=null;
 
+function setCopyLinks() {
+  // add onclick to class 'copyLink' buttons, there could be more than one.
+  buttons = document.getElementsByClassName('copyLink');
+  addOnClick = function(){copyToClipboard(event);};
+  for (i = 0; i < buttons.length; i++) {
+      buttons[i].onclick = addOnClick;
+  }
+}
 
 function svgCreateEl(type, config) {
     // Helper function for creating a new SVG element and initializing its
@@ -1185,6 +1193,7 @@ var hgGateway = (function() {
         // Apply square bullet style to all ul's in description.
         $('#descriptionText ul').addClass('jwNoBullet');
         $('#descriptionText li').addClass('jwSquareBullet');
+        setCopyLinks();
     }
 
     function initFindPositionContents() {

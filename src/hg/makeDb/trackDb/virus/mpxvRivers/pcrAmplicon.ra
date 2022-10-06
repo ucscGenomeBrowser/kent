@@ -10,6 +10,7 @@ compositeTrack on
         shortLabel Welkers et al
         longLabel PCR Amplicons: Welkers et al. 2022 V1
         parent pcrAmplicon on
+        noScoreFilter on
         group map
         visibility dense
         type bigBed 12 +
@@ -19,6 +20,7 @@ compositeTrack on
         shortLabel Yale hMPXV
         longLabel PCR Amplicons: Yale hMPXV Amplicon Scheme (Chen et al. 2022 V2)
         parent pcrAmplicon on
+        noScoreFilter on
         group map
         visibility dense
         type bigBed 12 +
