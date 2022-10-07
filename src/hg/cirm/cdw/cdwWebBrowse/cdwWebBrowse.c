@@ -2240,7 +2240,7 @@ void localWebStartWrapper(char *titleString)
     puts(getCspMetaHeader());
     printf("<TITLE>%s</TITLE>\n", titleString);
     printf("\t\t<link rel=\"shortcut icon\" href=\"../images/schub.ico\" type=\"image/png\" />\n");
-    printf("\t\t<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>");
+    printf("\t\t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>");
     webIncludeResourceFile("cirmStyle.css");
 
     printf("\t\t<link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.7.2/css/all.css\"\n"
