@@ -30,12 +30,17 @@ a:link {
 
 input[type="submit"], input[type="button"], button {
     border: 1px solid rgba(100, 100, 100, .5);
-    /* border-radius: 3px; */
+    border-radius: 3px;
     margin: 0;
     padding-top: 3px;
     padding-bottom: 3px;
     background-color: #EEE;
 }
+
+input[type="submit"]:hover, input[type="button"]:hover, button:hover {
+    background-color: #E8E8E8;
+}
+
 
 .moveButtonText {
         font-size: 80%
@@ -44,6 +49,17 @@ input[type="submit"], input[type="button"], button {
 .infoText { 
         font-size: 90%;
         text-align: center;
+}
+
+.infoText > input {
+    margin-left: 3px;
+    margin-right: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.controlButtons {
+    margin-bottom: 6px;
 }
 
 .blueLink {
@@ -594,7 +610,10 @@ td.disabled   { color: gray; }
 
 #hgt\.left3, #hgt\.in1, #hgt\.out1 {
         border-right: 1px solid lightgray;
-        border-radius: 0px;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
 }
 #hgt\.left2, #hgt\.left1, #hgt\.right1, #hgt\.right2, #hgt\.in2, #hgt\.in3, #hgt\.out2, #hgt\.out3 {
         border-right: 1px solid lightgray;
@@ -603,7 +622,10 @@ td.disabled   { color: gray; }
 }
 #hgt\.right3, #hgt\.inBase, #hgt\.out4 {
         border-left: 1px solid lightgray;
-        border-radius: 0px;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
 }
 
 
