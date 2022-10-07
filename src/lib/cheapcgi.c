@@ -1871,7 +1871,7 @@ htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' ID='%s|attr|' SIZE=%d VALUE='%s|att
 	varName, varName, charSize, initialVal);
 if (isNotEmpty(script))
     jsOnEventById("keypress", varName, script);
-printf(">\n");
+printf(">");
 }
 
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize)

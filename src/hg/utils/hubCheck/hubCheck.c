@@ -886,6 +886,17 @@ if (errCatchStart(errCatch))
         if (!tdb->html)
             warn("warning: missing description page for track: '%s'", tdb->track);
         }
+
+    if (!trackIsContainer && sameString(trackDbRequiredSetting(tdb, "type"), "bigWig"))
+        {
+        char *autoScaleSetting = trackDbLocalSetting(tdb, "autoScale");
+        if (autoScaleSetting && !sameString(autoScaleSetting, "off") && !sameString(autoScaleSetting, "on"))
+            {
+            errAbort("track \"%s\" has value \"%s\" for autoScale setting, "
+                    "valid autoScale values for bigWig tracks are \"off\" or \"on\" only",
+                    trackHubSkipHubName(tdb->track), autoScaleSetting);
+            }
+        }
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)

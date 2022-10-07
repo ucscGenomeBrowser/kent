@@ -23,6 +23,7 @@ def getGenesLocations(jsonFh):
     repeat38 = list()
     continuous_count = 0
     genes_missing_info = list()
+    genes_no_location = list()
 
     while Error: 
         url = "https://panelapp.genomicsengland.co.uk/api/v1/genes/?format=json&page={}".format(page_count)
@@ -46,39 +47,41 @@ def getGenesLocations(jsonFh):
                 temp_attribute_dictionary = dict()
                 string_dict_key = 'gene_{}'.format(continuous_count)
 
+                gene_range_37 = None
+                gene_range_38 = None
+
                 try:
                     ensembl_genes_GRch37_82_location = res[count]['gene_data']['ensembl_genes']['GRch37']['82']['location']
+                    location_37 = ensembl_genes_GRch37_82_location.split(':')
+                    chromo_37 = 'chr'+location_37[0]
+                    gene_range_37 = location_37[1].split('-')
+                    # on hg19, we have added a chrMT sequence later.
                 except:
-                    print(count)
                     genes_missing_info.append(res[count]['gene_data']['gene_symbol']+"/hg19")
-                    count = count + 1
 
                 try:
                     ensembl_genes_GRch38_90_location = res[count]['gene_data']['ensembl_genes']['GRch38']['90']['location']
+                    location_38 = ensembl_genes_GRch38_90_location.split(':')
+                    chromo_38 = 'chr'+location_38[0]
+                    # Change mitochondrial chromosomal suffix from MT -> M for hg38 only
+                    if chromo_38 == "chrMT":
+                        chromo_38 = "chrM"
+
+                    gene_range_38 = location_38[1].split('-')
                 except:
-                    print(count)
                     genes_missing_info.append(res[count]['gene_data']['gene_symbol']+"/hg38")
-                    count = count + 1
 
-                location_37 = ensembl_genes_GRch37_82_location.split(':')
-                chromo_37 = 'chr'+location_37[0]
-                gene_range_37 = location_37[1].split('-')
-        
-                location_38 = ensembl_genes_GRch38_90_location.split(':')
+                if gene_range_37 is None and gene_range_38 is None:
+                    #print("gene without location on any assembly: %s" % res[count])
+                    genes_no_location.append(res[count]['gene_data'])
+                    count+=1
+                    continue
 
-                # Change mitochondrial chromosomal suffix from MT -> M, fetchrom recognize only chrM
-                chr_num = location_38[0]
 
-                if chr_num == "MT":
-                    chr_num = "M"
-                chromo_38 = 'chr'+chr_num
-
-                gene_range_38 = location_38[1].split('-')
 
                 score = '0'
                 strand = '.'
                 blockCount = '1'
-                blockSizes = int(gene_range_37[1]) - int(gene_range_37[0])
                 blockStarts = '0'
 
                 #-----------------------------------------------------------------------------------------------------------
@@ -130,7 +133,6 @@ def getGenesLocations(jsonFh):
                         temp_attribute_dictionary['biotype'] = ''
                 except:
                     temp_attribute_dictionary['biotype'] = ''
-                    print(res[count])
 
                 #-----------------------------------------------------------------------------------------------------------    
 
@@ -277,32 +279,22 @@ def getGenesLocations(jsonFh):
                     temp_attribute_dictionary['relevant_disorders'] = ''
                 
                 #-----------------------------------------------------------------------------------------------------------
-                # Add comma separated to list of pub id
-
-                publications = ' '.join(res[count]['publications'])
-
-                if not publications:
-                    temp_attribute_dictionary['publications'] = ''
-                else:
-                    if re.match("^[0-9 ]+$", publications):
-                        temp_attribute_dictionary['publications'] = publications.replace(' ', ', ')
-                    else:
-                        temp_attribute_dictionary['publications'] = publications
-
-                # Remove new lines
-                temp_attribute_dictionary['publications'] = temp_attribute_dictionary['publications'].replace("\n", "")
-
-                # make everything a URL, as we have not only PMIDs in here
-                # convert numbers to Pubmed URLs
-                pubs = temp_attribute_dictionary['publications'].split(", ")
-                pubUrls = []
+                # minimal effort to clean up the publication field, which is a mess of free form text
+                pubs = res[count]['publications']
+                newPubs = []
                 for pub in pubs:
-                    if re.match("^[0-9 ]+$", pub):
-                        pubUrls.append("https://pubmed.ncbi.nlm.nih.gov/"+pub)
-                    else:
-                        pubUrls.append(pub)
+                    pub = pub.replace("\n", "")
+                    # replace commas with html commas as unfortunately I use commasin the browser to split fields
+                    pub = pub.replace(",", "&comma;")
+                    # translate unicode chars to something the genome browser can display
+                    pub = pub.encode('ascii', 'xmlcharrefreplace').decode("ascii")
+                    if re.match("^[0-9]+$", pub):
+                        #pubUrls.append("https://pubmed.ncbi.nlm.nih.gov/"+pub+"|PMID"+pub)
+                        pub = "PMID"+pub
 
-                temp_attribute_dictionary['publications'] = ", ".join(pubUrls)
+                    newPubs.append(pub)
+
+                temp_attribute_dictionary['publications'] = ", ".join(newPubs)
 
                 #-----------------------------------------------------------------------------------------------------------
                 # MouseOverField
@@ -345,8 +337,9 @@ def getGenesLocations(jsonFh):
                 max_num = float(0.99)
                 
                 if version_num > max_num: 
-                    if temp_attribute_dictionary['label'] not in repeat19:    # Removes Repeats
+                    if temp_attribute_dictionary['label'] not in repeat19 and gene_range_37 is not None:    # Removes Repeats
                         repeat19.append(temp_attribute_dictionary['label'])
+                        blockSizes = int(gene_range_37[1]) - int(gene_range_37[0])
                         hg19_dict[string_dict_key] = [chromo_37, int(gene_range_37[0]), gene_range_37[1], temp_attribute_dictionary['label'], 
                                                 score, strand, gene_range_37[0], gene_range_37[1], rgb, blockCount, blockSizes, blockStarts, 
                                                 temp_attribute_dictionary['gene_symbol'], temp_attribute_dictionary['biotype'], temp_attribute_dictionary['hgnc_id'], 
@@ -358,8 +351,9 @@ def getGenesLocations(jsonFh):
                                                 temp_attribute_dictionary['disease_group'], temp_attribute_dictionary['disease_sub_group'], temp_attribute_dictionary['status'], 
                                                 temp_attribute_dictionary['version'], temp_attribute_dictionary['version_created'], temp_attribute_dictionary['relevant_disorders'], temp_attribute_dictionary['mouseOverField']]
                     
-                    if temp_attribute_dictionary['label'] not in repeat38:    # Remove Repeats
+                    if temp_attribute_dictionary['label'] not in repeat38 and gene_range_38 is not None:    # Remove Repeats
                         repeat38.append(temp_attribute_dictionary['label'])
+                        blockSizes = int(gene_range_38[1]) - int(gene_range_38[0])
                         hg38_dict[string_dict_key] = [chromo_38, int(gene_range_38[0]), gene_range_38[1], temp_attribute_dictionary['label'], 
                                                 score, strand, gene_range_38[0], gene_range_38[1], rgb, blockCount, blockSizes, blockStarts, 
                                                 temp_attribute_dictionary['gene_symbol'], temp_attribute_dictionary['biotype'], temp_attribute_dictionary['hgnc_id'], 
@@ -377,10 +371,26 @@ def getGenesLocations(jsonFh):
             Error = False        # End of all pages
 
         page_count = page_count + 1
-        print(page_count)
-    print('Genes with missing coordinates (written to missing_genes.txt):')
+
+    print('Genes with missing coordinates in one assembly (written to missing_genes.txt):')
     print(genes_missing_info)
-    open("missing_genes.txt", "w").write("\n".join(genes_missing_info))
+
+    print('Genes with missing coordinates in both assemblies (written to missing_genes.txt):')
+    missSyms = []
+    for miss in genes_no_location:
+        missSyms.append(miss["gene_symbol"])
+    print(",".join(missSyms))
+
+
+    missOfh = open("missing_genes.txt", "w")
+    missOfh.write("* Not found in one assembly:\n")
+    missOfh.write("\n".join(genes_missing_info))
+    missOfh.write("* No location at all:\n")
+    for miss in genes_no_location:
+        missOfh.write("\t"+str(miss))
+        missOfh.write("\n")
+    missOfh.close()
+
     return(hg19_dict, hg38_dict)
 
 def downloadGenes():

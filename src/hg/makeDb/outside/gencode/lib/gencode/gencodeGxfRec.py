@@ -36,9 +36,9 @@ class Attributes(object):
 class Record(object):
     "one record of a GTF or GFF3"
 
-    __slots__ = ("line", "lineNumber", "seqname", "source", "feature", "start", "end", "score", "strand", "frame", "attributes")
+    __slots__ = ("line", "lineNumber", "seqname", "source", "feature", "start", "end", "score", "strand", "phase", "attributes")
 
-    def __init__(self, line, lineNumber, seqname, source, feature, start, end, score, strand, frame, attrVals):
+    def __init__(self, line, lineNumber, seqname, source, feature, start, end, score, strand, phase, attrVals):
         self.line = line
         self.lineNumber = lineNumber
         self.seqname = seqname
@@ -48,7 +48,7 @@ class Record(object):
         self.end = end
         self.score = score
         self.strand = strand
-        self.frame = feature
+        self.phase = phase
         self.attributes = Attributes(attrVals)
 
     def __str__(self):
