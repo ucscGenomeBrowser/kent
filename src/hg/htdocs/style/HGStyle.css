@@ -51,6 +51,17 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
         text-align: center;
 }
 
+.infoText > input {
+    margin-left: 3px;
+    margin-right: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.controlButtons {
+    margin-bottom: 6px;
+}
+
 .blueLink {
         color: #121E9A !important; 
         cursor: pointer;

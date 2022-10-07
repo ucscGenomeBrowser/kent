@@ -8984,7 +8984,7 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
-    hWrites("Click+shift+drag to zoom in. ");
+    hWrites("Shift+click+drag to zoom in. ");
     hWrites("Click grey side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
     hWrites("Drag tracks left or right to new position. ");
@@ -9041,7 +9041,7 @@ if (!hideControls)
                            "return vis.expandAllGroups(false)");
         hPrintf("</td>");
 
-        hPrintf("<td colspan='%d' class='infoText' align='CENTER' nowrap>\n", MAX_CONTROL_COLUMNS - 2);
+        hPrintf("<td colspan='%d' class='controlButtons' align='CENTER' nowrap>\n", MAX_CONTROL_COLUMNS - 2);
 
         printShortcutButtons(cart, hasCustomTracks, revCmplDisp, multiRegionButtonTop);
         hPrintf("</td>\n");
