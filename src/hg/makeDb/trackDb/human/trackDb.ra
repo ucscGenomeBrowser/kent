@@ -1644,6 +1644,7 @@ visibility hide
 url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 subGroup1 view Views variants=Variants errs=Mapping_Errors
+maxWindowCoverage 4000000
 priority 1
 pennantIcon Note green ../goldenPath/newsarch.html "dbSNP 155 is now available, and dbSNP 153 will be nested into the dbSNP archive soon."
 
@@ -1771,6 +1772,7 @@ visibility pack
 url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 subGroup1 view Views variants=Variants errs=Mapping_Errors
+maxWindowCoverage 4000000
 priority 0.8
 pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
 
@@ -1784,7 +1786,6 @@ pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
     freqSourceOrder 1000Genomes,dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
     classFilterValues snv,mnv,ins,del,delins,identity
     classFilterType multipleListOr
-    showCfg on
     ucscNotesFilterValues \
         altIsAmbiguous|Alternate allele contains IUPAC ambiguous base(s),\
         classMismatch|Variant class/type is inconsistent with allele sizes,\
@@ -1842,6 +1843,7 @@ pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
         longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 155
         defaultGeneTracks knownGene
         bigDataUrl /gbdb/$D/snp/dbSnp155Common.bb
+        showCfg on
         priority 1
 
         track dbSnp155ClinVar
