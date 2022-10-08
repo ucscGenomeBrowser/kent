@@ -832,7 +832,7 @@ if (!isEmpty(searchString))
  * if any. */
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
-    dyStringPrintf(where, "(%-s)", initialWhere); // trust
+    sqlDyStringPrintf(where, "(%-s)", initialWhere); // trust
 if (securityColumnsInTable)
     {
     if (user)
@@ -847,22 +847,22 @@ if (securityColumnsInTable)
 	    struct sqlResult *sr = sqlGetResult(conn, query);
 	    char **row;
 	    if (!isEmpty(where->string))
-		dyStringPrintf(where, " and ");
-	    dyStringPrintf(where, "(allAccess > 0");
+		sqlDyStringPrintf(where, " and ");
+	    sqlDyStringPrintf(where, "(allAccess > 0");
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
 		int groupId = sqlUnsigned(row[0]);
-		dyStringPrintf(where, " or FIND_IN_SET('%u', groupIds)", groupId);
+		sqlDyStringPrintf(where, " or FIND_IN_SET('%u', groupIds)", groupId);
 		}
 	    sqlFreeResult(&sr);
-	    dyStringPrintf(where, ")");
+	    sqlDyStringPrintf(where, ")");
 	    }
 	}
     else
 	{
 	if (!isEmpty(where->string))
-	    dyStringPrintf(where, " and ");
-	dyStringPrintf(where, "allAccess > 0");
+	    sqlDyStringPrintf(where, " and ");
+	sqlDyStringPrintf(where, "allAccess > 0");
 	}
     }
 
@@ -870,16 +870,16 @@ if (efList
     || (securityColumnsInTable && (!isEmpty(searchString)))) // have search terms but nothing was found
     {
     if (!isEmpty(where->string))
-	dyStringPrintf(where, " and ");
-    dyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
+	sqlDyStringPrintf(where, " and ");
+    sqlDyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
     for (ef = efList; ef != NULL; ef = ef->next)
 	{
 	if (searchPassTree == NULL || securityColumnsInTable || intValTreeFind(searchPassTree, ef->id) != NULL)
 	    {
-	    dyStringPrintf(where, ",%u", ef->id);
+	    sqlDyStringPrintf(where, ",%u", ef->id);
 	    }
 	}
-    dyStringPrintf(where, ")");
+    sqlDyStringPrintf(where, ")");
     }
 
 rbTreeFree(&searchPassTree);
@@ -1089,6 +1089,12 @@ else
 
 char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwBrowseFiles_filter", "");
+if (!sameString(initialWhere, ""))
+    {
+    struct dyString *safeWhere = dyStringNew(0);
+    sqlSanityCheckWhere(initialWhere, safeWhere);
+    initialWhere = dyStringCannibalize(&safeWhere);
+    }
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
 
@@ -1151,6 +1157,12 @@ continueSearchVars();
 
 char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwBrowseFiles_filter", "");
+if (!sameString(initialWhere, ""))
+    {
+    struct dyString *safeWhere = dyStringNew(0);
+    sqlSanityCheckWhere(initialWhere, safeWhere);
+    initialWhere = dyStringCannibalize(&safeWhere);
+    }
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
 
@@ -1280,6 +1292,13 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
 char *where = cartUsualString(cart, "cdwBrowseFiles_filter", "");
+if (!sameString(where, ""))
+    {
+    struct dyString *safeWhere = dyStringNew(0);
+    sqlSanityCheckWhere(where, safeWhere);
+    where = dyStringCannibalize(&safeWhere);
+    }
+
 
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
@@ -1316,7 +1335,7 @@ printf("The accession link shows more metadata.<BR>");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks&%s",
     cartSidUrlString(cart) );
-char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'narrowPeak', 'broadPeak')";
+struct dyString *where = sqlDyStringCreate("fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'narrowPeak', 'broadPeak')");
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "accession", wrapMetaNearAccession);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearAccession);
@@ -1324,10 +1343,11 @@ char *searchString = showSearchControl("cdwTrackSearch", "tracks");
 accessibleFilesTable(cart, conn, searchString,
     "ucsc_db,chrom,accession,format,file_size,lab,assay,data_set_id,output,"
     "enriched_in,sample_label,submit_file_name",
-    getBrowseTracksTables(), where, 
+    getBrowseTracksTables(), where->string, 
     returnUrl, "cdw_track_filter", 
     22, wrappers, conn, TRUE, "tracks", 100, NULL, FALSE);
 printf("</FORM>\n");
+dyStringFree(&where);
 }
 
 struct hash* loadDatasetDescs(struct sqlConnection *conn)
