@@ -99,7 +99,7 @@ release alpha
     longLabel CpG Islands (Islands < 300 Bases are Light Green)
     type bigBed 4 +
     priority 1
-    bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.cpgIslandExt.bb
+    bigDataUrl /gbdb/mpxvRivers/cpgIslands/mpxvRivers.cpgIslandExt.bb
     html html/cpgIslands
     release alpha
 
@@ -109,7 +109,7 @@ release alpha
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
     type bigBed 4 +
     priority 2
-    bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.cpgIslandExtUnmasked.bb
+    bigDataUrl /gbdb/mpxvRivers/cpgIslands/mpxvRivers.cpgIslandExtUnmasked.bb
     html html/cpgIslands
     release alpha
 
