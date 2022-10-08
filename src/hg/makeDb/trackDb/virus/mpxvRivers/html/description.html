@@ -2,7 +2,7 @@
 <table align=right border=0 width=364 height=300>
   <tr><td align=RIGHT><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_014621545.1"
     target=_blank>
-    <img src="https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/html/Monkeypox_virus.jpg" width=349 height=300 alt="monkeypox"></a>
+    <img src="../images/Monkeypox_virus.jpg" width=349 height=300 alt="monkeypox"></a>
   </td></tr>
   <tr><td align=right>
     <font size=-1> <em>Monkeypox virus</em><BR>
@@ -32,49 +32,11 @@
 <h4>Data file downloads</h4>
 <p>
 <ul>
-<li><a href='https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/GCF_014621545.1.fa.gz' target=_blank>GCF_014621545.1.fa.gz</a> fasta sequence with NCBI GenBank sequence names</li>
-<li><a href='https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/GCF_014621545.1.2bit' target=_blank>GCF_014621545.1.2bit</a> UCSC 2bit sequence file with NCBI GenBank sequence names</li>
-<li><a href='https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/GCF_014621545.1.chromAlias.txt' target=_blank>GCF_014621545.1.chromAlias.txt</a> chromAlias file to relate chromosome names</li>
-<li>explore the hub directory at: <a href='https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/' target=_blank>hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/</a></li>
+<li><a href='https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/bigZips/mpxvRivers.fa.gz' target=_blank>mpxvRivers.fa.gz</a> fasta sequence</li>
+<li><a href='https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/bigZips/mpxvRivers.2bit' target=_blank>mpxvRivers.2bit</a> UCSC 2bit sequence file</li>
+<li><a href='https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/bigZips/mpxvRivers.chromAlias.txt' target=_blank>mpxvRivers.chromAlias.txt</a> chromAlias file to relate chromosome names</li>
+<li>explore the download directory at: <a href='https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/' target=_blank>hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/</a></li>
 </ul>
-</p>
-<hr>
-<h4>Copy this entire assembly hub for local use</h4>
-<p>
-This download is only for the purpose of using this assembly hub in
-your institution which may have firewall access restrictions to this
-data.<br>
-
-To download this assembly data, use this <b>rsync</b> command:
-<pre>
-  rsync -a -P \
-    rsync://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/ \
-      ./GCF_014621545.1/
-</pre>
-
-  which creates the local directory: <b>./GCF_014621545.1/</b><br>
-or this <b>wget</b> command:
-<pre>
-  wget --timestamping -m -nH -x --cut-dirs=6 -e robots=off -np -k \
-    --reject "index.html*" -P "GCF_014621545.1" \
-       https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/
-</pre>
-
-  which creates a local directory: <b>./GCF_014621545.1/</b>
-<p>
-There is an included <b>hub.txt</b> file in that download
-data directory to use for your local track hub instance.<br>
-Using the genome browser menus: <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em><br>
-select the <em><strong>My Hubs</strong></em> tab to enter a URL
-to this <b>hub.txt</b> file to attach this assembly hub to a genome browser.
-</p>
-<p>
-The <b>html/GCF_014621545.1_ASM1462154v1.description.html</b> page is information for your users to
-describe this assembly.<br>This web page with these instructions
-is an instance of the <b>html/GCF_014621545.1_ASM1462154v1.description.html</b> file.
-</p>
-<p>
-See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub help</a> documentation.<br>
 </p>
 <hr>
 <h4>blat service</h4>
@@ -90,28 +52,28 @@ See also: <a href='http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/' targe
 hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/</a> to download command line
 binaries.<br>
 <br>
-To operate this locally, you will need the <b>GCF_014621545.1.2bit</b> file from:
+To operate this locally, you will need the <b>mpxvRivers.2bit</b> file from:
 <pre>
-  https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/
+  https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/
 </pre>
 Which can be obtained with rsync via:
 <pre>
   rsync -a -P 
-    rsync://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/GCF_014621545.1.2bit ./
+    rsync://hgdownload.soe.ucsc.edu/mpxvRivers/bigZips/mpxvRivers.2bit ./
 </pre>
-With that <b>GCF_014621545.1.2bit</b> file in your working directory where you run
+With that <b>mpxvRivers.2bit</b> file in your working directory where you run
 this command, for example, a DNA query with your DNA sequence in
 the file: <b>someDna.fa</b>
-with result in the file: <b>GCF_014621545.1.someDna.psl</b>
+with result in the file: <b>mpxvRivers.someDna.psl</b>
 <pre>
-gfClient -t=dna -q=dna -genome=GCF_014621545.1 -genomeDataDir=GCF/014/621/545/GCF_014621545.1 
-    dynablat-01.soe.ucsc.edu 4040 ./ someDna.fa GCF_014621545.1.someDna.psl
+gfClient -t=dna -q=dna -genome=mpxvRivers -genomeDataDir=mpxvRivers \\ 
+    dynablat-01.soe.ucsc.edu 4040 ./ someDna.fa mpxvRivers.someDna.psl
 </pre>
 For a protein fasta query with your protein sequence in the file: <b>someProtein.faa</b>
-with result in the file: <b>GCF_014621545.1.someProtein.psl</b>
+with result in the file: <b>mpxvRivers.someProtein.psl</b>
 <pre>
-gfClient -t=dnax -q=prot  -genome=GCF_014621545.1 -genomeDataDir=GCF/014/621/545/GCF_014621545.1 
-    dynablat-01.soe.ucsc.edu 4040 ./ someProtein.faa GCF_014621545.1.someProtein.psl
+gfClient -t=dnax -q=prot -genome=mpxvRivers -genomeDataDir=mpxvRivers \\ 
+    dynablat-01.soe.ucsc.edu 4040 ./ someProtein.faa mpxvRivers.someProtein.psl
 </pre>
 </p>
 <hr>
