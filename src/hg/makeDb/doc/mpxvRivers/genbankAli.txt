@@ -1,0 +1,8 @@
+# downloaded cdcSeqs1.fa and hgq.fa manually from Genbank. Should use NCBI command line tool for that
+# sequences were made by pasting accessions received from authors into a text file.
+cd /hive/data/genomes/mpxvRivers/bed/genbankAli/
+cat cdcSeqs1.fa hgq.fa > seqs.fa
+blat ../../mpxvRivers.unmasked.2bit seqs.fa seqs.psl -noHead
+pslReps seqs.psl seqs.filt.psl out.psr
+pslToBigPsl -fa=seqs.fa seqs.psl stdout | sort -k1,1 -k2,2n > seqs.bed
+bedToBigBed -as=${HOME}/kent/src/hg/lib/bigPsl.as -type=bed12+13 -tab seqs.bed ../../chrom.sizes seqs.bb
