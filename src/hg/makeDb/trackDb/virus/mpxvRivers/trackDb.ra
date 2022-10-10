@@ -124,6 +124,6 @@ html html/windowMasker
 
 include pcrAmplicon.ra
 include viralzone.ra
-include annots.ra
+#include annots.ra
 include genbankAli.ra
 include strs.ra
