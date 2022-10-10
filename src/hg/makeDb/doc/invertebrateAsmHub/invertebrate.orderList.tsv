@@ -72,7 +72,7 @@ GCF_014356525.1_ASM1435652v1	brown planthopper (BPH 2020)
 GCF_000757685.1_NilLug1.0	brown planthopper (NLH13 2014)
 GCF_000214255.1_Bter_1.0	buff-tailed bumblebee (2011 BCM)
 GCF_910591885.1_iyBomTerr1.2	buff-tailed bumblebee (2022 Wellcome Sanger)
-GCF_002938995.1_ASM293899v1	butterflies V.tameamea
+GCF_002938995.1_ASM293899v1	butterfly V.tameamea
 GCA_905187585.1_ilCyaSemi1.1	butterfly C.semiargus
 GCA_019049475.1_ASM1904947v1	butterfly E.isabella
 GCA_905147385.1_ilLimCami1.1	butterfly L.camilla
@@ -354,6 +354,7 @@ GCF_902806685.1_iAphHyp1.1	ringlet
 GCF_000002985.6_WBcel235	roundworm
 GCF_001186385.1_Dnoxia_1.0	Russian wheat aphid
 GCF_016086655.3_UVic_Lsal_1.2	salmon louse (v1.2 2020)
+GCA_917862395.1_iHelSar1.1	Sara longwing butterfly (2021)
 GCF_001417965.1_Aiptasia_genome_1.1	sea anemones
 GCF_000326865.1_Helobdella_robusta_v1.0	segmented worms
 GCF_907165205.1_icCocSept1.1	seven-spotted ladybird
