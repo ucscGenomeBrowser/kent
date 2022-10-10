@@ -5,6 +5,7 @@ group map
 visibility dense
 type bigBed 12 +
 compositeTrack on
+html html/pcrAmplicon
 
         track pcrWelkers
         shortLabel Welkers et al
@@ -15,6 +16,7 @@ compositeTrack on
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/mpxvRivers/pcrAmplicon/pcrWelkers.bb
+        html html/pcrAmplicon
 
         track pcrChen
         shortLabel Yale hMPXV
@@ -25,3 +27,4 @@ compositeTrack on
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/mpxvRivers/pcrAmplicon/pcrAmplicon.bb
+        html html/pcrAmplicon

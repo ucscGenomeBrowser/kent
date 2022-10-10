@@ -1853,6 +1853,24 @@ freeMem(connDb);
 return (ret!=NULL);
 }
 
+boolean sqlColumnExistsInTablesList(struct sqlConnection *conn, char *tables, char *field)
+/* check if column exists in a list of tables */
+{
+boolean result = FALSE;
+struct slName *tablesList = slNameListFromComma(tables);
+struct slName *table;
+for(table = tablesList; table; table = table->next)
+    {
+    if (sqlColumnExists(conn, table->name, field))
+	{
+	result = TRUE;
+	break;
+	}
+    }
+slFreeList(&tablesList);
+return result;
+}
+
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table)
 /* Return row count if a table exists, -1 if it doesn't. */
 {

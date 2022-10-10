@@ -782,6 +782,7 @@ void searchFilesWithAccess(struct sqlConnection *conn, char *searchString, char 
 /* Get list of files that we are authorized to see and that match searchString in the trix file
  * Returns: retList of matching files, retWhere with sql where expression for these files, retFields
  * If nothing to see, retList is NULL
+ * DO NOT Convert to safef V2 since the where clause is checked by gbSanity in tablesTables.c
  * */
 char *fields = filterFieldsToJustThoseInTable(conn, allFields, getCdwTableSetting("cdwFileTags"));
 
@@ -928,9 +929,11 @@ for (sff = selectedList; sff; sff=sff->next)
 	}
     }
 
+
 // get their fileIds
 struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from %s %-s", table, filteredWhere->string); // trust
-sqlDyStringPrintf(tagQuery,  "%-s", facetedWhere->string); // trust because it was created safely
+if (!isEmpty(facetedWhere->string))
+    sqlDyStringPrintf(tagQuery,  "%-s", facetedWhere->string); // trust because it was created safely
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
 // retrieve the cdwFiles objects for these
@@ -1086,6 +1089,12 @@ else
 
 char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwBrowseFiles_filter", "");
+if (!sameString(initialWhere, ""))
+    {
+    struct dyString *safeWhere = dyStringNew(0);
+    sqlSanityCheckWhere(initialWhere, safeWhere);
+    initialWhere = dyStringCannibalize(&safeWhere);
+    }
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
 
@@ -1148,6 +1157,12 @@ continueSearchVars();
 
 char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwBrowseFiles_filter", "");
+if (!sameString(initialWhere, ""))
+    {
+    struct dyString *safeWhere = dyStringNew(0);
+    sqlSanityCheckWhere(initialWhere, safeWhere);
+    initialWhere = dyStringCannibalize(&safeWhere);
+    }
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
 
@@ -1277,6 +1292,13 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
 char *where = cartUsualString(cart, "cdwBrowseFiles_filter", "");
+if (!sameString(where, ""))
+    {
+    struct dyString *safeWhere = dyStringNew(0);
+    sqlSanityCheckWhere(where, safeWhere);
+    where = dyStringCannibalize(&safeWhere);
+    }
+
 
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
@@ -1313,7 +1335,7 @@ printf("The accession link shows more metadata.<BR>");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks&%s",
     cartSidUrlString(cart) );
-char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'narrowPeak', 'broadPeak')";
+struct dyString *where = sqlDyStringCreate("fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'narrowPeak', 'broadPeak')");
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "accession", wrapMetaNearAccession);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearAccession);
@@ -1321,10 +1343,11 @@ char *searchString = showSearchControl("cdwTrackSearch", "tracks");
 accessibleFilesTable(cart, conn, searchString,
     "ucsc_db,chrom,accession,format,file_size,lab,assay,data_set_id,output,"
     "enriched_in,sample_label,submit_file_name",
-    getBrowseTracksTables(), where, 
+    getBrowseTracksTables(), where->string, 
     returnUrl, "cdw_track_filter", 
     22, wrappers, conn, TRUE, "tracks", 100, NULL, FALSE);
 printf("</FORM>\n");
+dyStringFree(&where);
 }
 
 struct hash* loadDatasetDescs(struct sqlConnection *conn)
@@ -1629,7 +1652,13 @@ if (!isEmpty(where))
     // Can't use sqlDyString functions due to the possible presence of valid wildcards, but
     // the while clause has already been validated by passing through the more restrictive
     // rql parser anyway.
-    sqlDyStringPrintf(sqlQuery, " where %-s", rqlParseToSqlWhereClause(rql->whereClause, FALSE));
+
+    // Note currently unable to use sqlSafefV2 inside /src/lib/rqlParse* since it needs functions in /src/hg/lib/jksql.c
+    // and things in /src/lib are not supposed to use and depend on stuff under /src/hg/lib.
+    char *rqlWhere = rqlParseToSqlWhereClause(rql->whereClause, FALSE);
+    char trustedQuery[strlen(rqlWhere) + NOSQLINJ_SIZE + 1];
+    safef(trustedQuery, sizeof trustedQuery, NOSQLINJ "%s", rqlWhere);
+    sqlDyStringPrintf(sqlQuery, " where %-s", trustedQuery);
     whereClauseStarted = 1;
     }
 
@@ -2231,7 +2260,7 @@ void localWebStartWrapper(char *titleString)
     puts(getCspMetaHeader());
     printf("<TITLE>%s</TITLE>\n", titleString);
     printf("\t\t<link rel=\"shortcut icon\" href=\"../images/schub.ico\" type=\"image/png\" />\n");
-    printf("\t\t<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>");
+    printf("\t\t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>");
     webIncludeResourceFile("cirmStyle.css");
 
     printf("\t\t<link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.7.2/css/all.css\"\n"
