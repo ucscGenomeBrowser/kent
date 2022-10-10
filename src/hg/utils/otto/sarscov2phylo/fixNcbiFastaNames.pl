@@ -63,7 +63,7 @@ while (<$GBMETA>) {
   $isoName =~ s@^SARS?[- ]Co[Vv]-?2/@@;
   $isoName =~ s@^hCo[Vv]-19/@@;
   $isoName =~ s@^BetaCoV/@@;
-  $isoName =~ s@^humans?,?/@@;
+  $isoName =~ s@^[Hh]umans?,?/@@;
   $isoName =~ s@/ENV/@/env/@;
   $isoName =~ s@Canis lupus familiaris@canine@;
   $isoName =~ s@Felis catus@cat@;
