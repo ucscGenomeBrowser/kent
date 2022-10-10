@@ -112,8 +112,8 @@ $(document).ready(function() {
         // <input type="hidden" value="https://hgwdev-kent.gi.ucsc.edu/~kent/t2t/hub/hub2.txt">
         // <svg class="pasteIcon">...</svg>    <--- this is e.target of the click handler
         // </td>
-        var inputEl = e.target.previousSibling;
-        var connectUrl = e.target.previousSibling.previousSibling.href;
+        var inputEl = e.target.closest("svg").previousSibling;
+        var connectUrl = inputEl.previousSibling.href;
 
         // the url is in the <input> element just before the SVG
         var oldVal = inputEl.value;
