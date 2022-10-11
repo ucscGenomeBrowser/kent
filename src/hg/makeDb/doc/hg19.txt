@@ -33812,7 +33812,7 @@ hgLoadBed hg19 -noBin -tab -type=bed6+4 \
     ln -sf `pwd`/$pre.bb /gbdb/hg19/ncbiRefSeq/$pre.bb
 
 #############################################################################
-# clinvarSubLolly track  DONE BRANEY 12/14/2020
+# clinvarSubLolly track  DONE BRANEY 10/08/22
 mkdir /cluster/data/hg19/bed/clinvarSubLolly
 cd /cluster/data/hg19/bed/clinvarSubLolly
 bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed
