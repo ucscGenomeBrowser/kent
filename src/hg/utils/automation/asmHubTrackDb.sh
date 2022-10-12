@@ -626,6 +626,7 @@ searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
 urlLabel Entrez gene
 labelFields geneName,geneName2
+defaultLabelFields geneName2
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 
   $scriptDir/asmHubNcbiGene.pl $asmId $ncbiAsmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
