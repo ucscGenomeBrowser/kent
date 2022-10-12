@@ -96,9 +96,10 @@ retroParent: mkdirs
 
 # -mapFileWithInQName
 testMapFileWithInQName: mkdirs
-	${pslMap} -mapFileWithInQName input/gencode.src.psl input/gencode.blocks.qName-psl output/$@.psl
+	${pslMap} -mapFileWithInQName -mapInfo=output/$@.mapinfo input/gencode.src.psl input/gencode.blocks.qName-psl output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.mapinfo output/$@.mapinfo
 
 clean::
 	rm -rf output
