@@ -3667,6 +3667,10 @@ if (categories != NULL)
         cartSetString(cart, "addHighlight", hgp->singlePos->highlight);
     if (hgp->posCount > 0)
         return hgp;
+    else
+        // if categories was passed in we should explicitly return no results
+        // if there weren't any
+        return NULL;
     }
 
 /* Allow any search term to end with a :Start-End range -- also support stuff 
