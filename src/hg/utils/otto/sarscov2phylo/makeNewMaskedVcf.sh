@@ -312,7 +312,7 @@ wc -l $renaming
 tawk '{ if ($1 ~ /^#/) { print; } else if ($7 == "mask") { $1 = "NC_045512v2"; print; } }' \
     $problematicSitesVcf > mask.vcf
 time cat <(twoBitToFa $ref2bit stdout) $alignedFa \
-| faToVcf -maxDiff=1000 \
+| faToVcf -maxDiff=200 \
     -excludeFile=exclude.ids \
     -verbose=2 stdin stdout \
 | vcfRenameAndPrune stdin $renaming stdout \

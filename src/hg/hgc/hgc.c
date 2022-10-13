@@ -6004,7 +6004,7 @@ void appendAuthor(struct dyString *dy, char *gbAuthor, int len)
  * gbAuthor gets eaten in the process.
  * Also strip web URLs since Entrez doesn't like those. */
 {
-char buf[2048];
+char buf[MAXURLSIZE];
 char *ptr;
 
 if (len >= sizeof(buf))

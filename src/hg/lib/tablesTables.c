@@ -838,8 +838,7 @@ sqlDyStringPrintf(query, "select %-s from %-s", fieldsSafe, fromSafe);
 if (!isEmpty(initialWhere))
     {
     sqlDyStringPrintf(where, " where ");
-    sqlDyStringPrintf(where, "%-s", initialWhere); // GALT DEBUG TEST REMOVE
-    //sqlSanityCheckWhere(initialWhere, where);  // GALT DEBUG TEST RESTORE
+    sqlDyStringPrintf(where, "%-s", initialWhere);
     gotWhere = TRUE;
     }
 

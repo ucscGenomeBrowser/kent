@@ -4033,6 +4033,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	if (tdbIsSuperTrack(tdb->parent))
 	    /* Do supertrack-specific inheritance. */
 	    inheritFromSuper(tdb, tdb->parent);
+        // make sure composite subtracks inherit from their parents too:
+        trackDbFieldsFromSettings(tdb);
 	}
     rInheritFields(tdb->subtracks);
     }

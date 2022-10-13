@@ -168,11 +168,14 @@ for ((i=686;  $i <= 694;  i++)); do
 done >> $maskFile
 
 # BA.2.75 has an awful lot of amplicon dropout problematic sites as of Sep. 2022.
-BA275Node=$(grep Australia/QLD0x010633/2022 $samplePaths \
+BA275Node=$(grep India/WB-INSACOG-1931503209307/2022 $samplePaths \
           | awk '{print $NF;}' | sed -re 's/:.*//;')
 # These sites I would mask in all of BA.2 if it weren't for wanting to find legit recombinants:
-for i in 670 2790 10198 21618 22674 22679 22686 22688 23063 23075 23948 24424 24469 26577 ; do
-    echo -e "N${i}N\t$BA275Node"
+for backMut in G670T T2790C T3037C T4321C G9424A T9534C T9866C T10029C T10198C G18163A T19955C \
+    G20055A T21618C G22200T A22578G T22674C C22679T T22686C G22688A A22775G T22813G A22992G A22995C \
+    C23013A G23055A T23063A C23075T G23403A T23525C G23599T A23604C T23948G T24424A A24469T T25000C \
+    T26270C G26577C T27807C T28271A C29510A ; do
+    echo -e "$backMut\t$BA275Node"
 done >> $maskFile
 # These are BA.2.75-defining but prone to dropout.  Make sure we just wipe out reversions,
 # not the BA.2.75 alleles that we want to keep on that node and subsequent nodes.
@@ -181,7 +184,7 @@ for backMut in T4586C G22001A C22016T A22033C G22190A C22577G G26275A; do
 done >> $maskFile
 # These BA.2.75-defining sites are less bad off, might want to back off on these if/when there
 # are 10s of thousands of BA.2.75 sequences & more chances for recombinants:
-for backMut in A15451G A22331G A22898G G22942T; do
+for backMut in T3796C T3927C T5183C G12444A A15451G G22190A A22331G A22898G G22942T C23013A; do
     echo -e "$backMut\t$BA275Node"
 done >> $maskFile
 

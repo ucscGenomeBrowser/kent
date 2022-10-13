@@ -9,7 +9,7 @@
 
 
 /* Variables that can be set from command line. */
-int prefixSize = trixPrefixSize;
+int prefixSize;
 int binSize = 64*1024;
 
 int maxFailedWordLength = 0;
@@ -39,52 +39,6 @@ static struct optionSpec options[] = {
    {"maxWordLength", OPTION_INT},
    {NULL, 0},
 };
-
-bool wordMiddleChars[256];  /* Characters that may be part of a word. */
-bool wordBeginChars[256];
-
-void initCharTables()
-/* Initialize tables that describe characters. */
-{
-int c;
-for (c=0; c<256; ++c)
-    if (isalnum(c))
-       wordBeginChars[c] = wordMiddleChars[c] = TRUE;
-wordBeginChars['_'] = wordMiddleChars['_'] = TRUE;
-wordMiddleChars['.'] = TRUE;
-wordMiddleChars['-'] = TRUE;
-}
-
-
-char *skipToWord(char *s)
-/* Skip to next word character.  Return NULL at end of string. */
-{
-unsigned char c;
-while ((c = *s) != 0)
-    {
-    if (wordBeginChars[c])
-        return s;
-    s += 1;
-    }
-return NULL;
-}
-
-char *skipOutWord(char *start)
-/* Skip to next non-word character.  Returns empty string at end. */
-{
-char *s = start;
-unsigned char c;
-while ((c = *s) != 0)
-    {
-    if (!wordMiddleChars[c])
-        break;
-    s += 1;
-    }
-while (s > start && !wordBeginChars[(int)(s[-1])])
-    s -= 1;
-return s;
-}
-
 
 struct wordPos
 /* Word position. */
@@ -281,7 +235,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-prefixSize = optionInt("prefixSize", prefixSize);
+prefixSize = optionInt("prefixSize", trixPrefixSize);
 binSize = optionInt("binSize", binSize);
 maxWordLength = optionInt("maxWordLength", maxWordLength);
 if (argc != 4)

@@ -438,6 +438,7 @@ priority 2
         shortLabel RefSeq All
         type bigGenePred
         labelFields name,geneName,geneName2
+        defaultLabelFields geneName2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeq.ix
         bigDataUrl bbi/%s.ncbiRefSeq.bb
@@ -462,6 +463,7 @@ priority 2
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
         type bigGenePred
         labelFields name,geneName,geneName2
+        defaultLabelFields geneName2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqCurated.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -486,6 +488,7 @@ priority 2
         longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
         type bigGenePred
         labelFields name,geneName,geneName2
+        defaultLabelFields geneName2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqPredicted.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -623,6 +626,7 @@ searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
 urlLabel Entrez gene
 labelFields geneName,geneName2
+defaultLabelFields geneName2
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 
   $scriptDir/asmHubNcbiGene.pl $asmId $ncbiAsmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
@@ -770,6 +774,7 @@ color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.xenoRefGene.bb
 labelFields name,geneName,geneName2
+defaultLabelFields geneName
 searchIndex name
 searchTrix ixIxx/%s.xenoRefGene.ix
 html html/%s.xenoRefGene\n\n" "${asmId}" "${asmId}" "${asmId}"

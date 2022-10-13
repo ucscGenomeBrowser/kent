@@ -1,6 +1,6 @@
 
 #############################################################################
-# clinvarSubLolly track  DONE BRANEY 12/14/2020
+# clinvarSubLolly track  DONE BRANEY 10/8/2022
 mkdir /cluster/data/hg38/bed/clinvarSubLolly
 cd /cluster/data/hg38/bed/clinvarSubLolly
 bigBedToBed /gbdb/hg38/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed

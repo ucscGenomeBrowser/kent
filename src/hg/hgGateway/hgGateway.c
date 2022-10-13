@@ -507,6 +507,14 @@ static char *boldTerm(char *target, char *term, int offset, enum dbDbMatchType t
 {
 int termLen = strlen(term);
 int targetLen = strlen(target);
+if (type == ddmtDescription)
+    {
+    // Search of dbDb->description skips the date that precedes the actual description which is
+    // in parentheses.  Adjust offset accordingly.
+    char *leftP = strchr(target, '(');
+    if (leftP)
+        offset += (leftP+1 - target);
+    }
 if (offset + termLen > targetLen)
     errAbort("boldTerm: invalid offset (%d) for term '%s' (length %d) in target '%s' (length %d)",
              offset, term, termLen, target, targetLen);
@@ -697,10 +705,17 @@ for (dbDb = dbDbList;  dbDb != NULL; dbDb = dbDb->next)
         checkTerm(term, dbDb->genome, ddmtGenome, dbDb, matchHash, &matchList);
         checkTerm(term, dbDb->scientificName, ddmtSciName, dbDb, matchHash, &matchList);
         }
-    // dbDb.description is a little too much for autocomplete ("br" would match dozens
-    // of Broad assemblies), but we do need to recognize "GRC".
-    if (startsWith("GR", term))
-        checkTerm(term, dbDb->description, ddmtDescription, dbDb, matchHash, &matchList);
+    // dbDb.description has dozens of matches for some institutions like Broad, so suppress
+    // it for search terms that would get too many probably unwanted matches.
+    if (! (startsWith(term, "BRO") || startsWith(term, "WU") || startsWith(term, "BAY") ||
+           startsWith(term, "AGE")))
+        {
+        // dbDb.description also starts with dates followed by actual description in parentheses,
+        // so search only the part in parentheses to avoid month prefix matches.
+        char *leftP = strchr(dbDb->description, '(');
+        char *toSearch = leftP ? leftP+1 : dbDb->description;
+        checkTerm(term, toSearch, ddmtDescription, dbDb, matchHash, &matchList);
+        }
     }
 slSort(&matchList, dbDbMatchCmp);
 return matchList;

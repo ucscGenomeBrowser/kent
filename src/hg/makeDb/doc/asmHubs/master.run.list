@@ -512,6 +512,7 @@
 ./runBuild GCA_910591565.1 GCA_910591565.1_ilCydSple1.1 invertebrate Cydia_splendana
 ./runBuild GCA_910592155.1 GCA_910592155.1_ilYpsScab1.1 invertebrate Ypsolopha_scabrella
 ./runBuild GCA_910594945.1 GCA_910594945.1_ilAmpBerb1.1 invertebrate Amphipyra_berbera
+./runBuild GCA_917862395.1 GCA_917862395.1_iHelSar1.1 invertebrates Heliconius_sara
 ./runBuild GCF_000001215.4 GCF_000001215.4_Release_6_plus_ISO1_MT invertebrate Drosophila_melanogaster
 ./runBuild GCF_000001405.39 GCF_000001405.39_GRCh38.p13 vertebrate_mammalian Homo_sapiens
 ./runBuild GCF_000001405.40 GCF_000001405.40_GRCh38.p14 primates Homo_sapiens

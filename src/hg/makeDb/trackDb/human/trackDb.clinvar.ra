@@ -93,7 +93,9 @@ scoreLabel ClinVar Star-Rating (0-4)
 searchTable clinvarCnv
 searchType bigBed
 searchDescription ClinVar Copy Number Variants 
+termRegex ^[ne]ssv[0-9]+
 
 searchTable clinvarMain
 searchType bigBed
 searchDescription ClinVar Copy Number Variants
+termRegex ^[ne]ssv[0-9]+

@@ -2677,6 +2677,80 @@ else if (match == NULL && strchr(name, ' '))
 return match;
 }
 
+static boolean tallyMatch(char *match, char *term,
+                          struct slName **retMatches, struct slName **retUnmatched)
+/* If match is non-NULL, add result to retMatches and return TRUE, otherwise add term to
+ * retUnmatched and return FALSE. */
+{
+boolean foundIt = FALSE;
+if (match)
+    {
+    foundIt = TRUE;
+    slNameAddHead(retMatches, match);
+    }
+else
+    slNameAddHead(retUnmatched, term);
+return foundIt;
+}
+
+static boolean matchIdRange(struct hash *nameHash, char *line,
+                            struct slName **retMatches, struct slName **retUnmatched)
+/* If line looks like it might contain a range of IDs, for example EPI_ISL_123-129 from an EPI_SET,
+ * then expand the range(s) into individual IDs, look up the IDs, set retMatches and retUnmatched
+ * to per-ID results, and return TRUE. */
+{
+boolean foundAny = FALSE;
+*retMatches = *retUnmatched = NULL;
+regmatch_t substrArr[7];
+// Line may contain a list of distinct IDs and/or ID ranges
+#define oneIdExp "([A-Z_]+)([0-9]+)"
+#define rangeEndExp "- *([A-Z_]*)([0-9]+)"
+#define rangeListExp "^("oneIdExp" *("rangeEndExp")?),? *"
+while (regexMatchSubstr(line, rangeListExp, substrArr, ArraySize(substrArr)))
+    {
+    char *prefixA = regexSubstringClone(line, substrArr[2]);
+    char *numberA = regexSubstringClone(line, substrArr[3]);
+    if (regexSubstrMatched(substrArr[4]))
+        {
+        // Looks like a well-formed ID range
+        char *prefixB = regexSubstringClone(line, substrArr[5]);
+        char *numberB = regexSubstringClone(line, substrArr[6]);
+        int start = atol(numberA);
+        int end = atol(numberB);
+        if ((isEmpty(prefixB) || sameString(prefixA, prefixB)) && end >= start)
+            {
+            char oneId[strlen(line)+1];
+            int num;
+            for (num = start;  num <= end;  num++)
+                {
+                safef(oneId, sizeof oneId, "%s%d", prefixA, num);
+                char *match = hashFindVal(nameHash, oneId);
+                foundAny |= tallyMatch(match, oneId, retMatches, retUnmatched);
+                }
+            }
+        else
+            {
+            // It matched the regex but the prefixes don't match and/or numbers are out of order
+            // so we don't know what to do with it -- try matchName just in case.
+            char *regMatch = regexSubstringClone(line, substrArr[1]);
+            char *match = matchName(nameHash, regMatch);
+            foundAny |= tallyMatch(match, regMatch, retMatches, retUnmatched);
+            }
+        }
+    else
+        {
+        // Just one ID
+        char oneId[strlen(line)+1];
+        safef(oneId, sizeof oneId, "%s%s", prefixA, numberA);
+        char *match = hashFindVal(nameHash, oneId);
+        foundAny |= tallyMatch(match, oneId, retMatches, retUnmatched);
+        }
+    // Skip past this match to see if the line has another range next.
+    line += (substrArr[0].rm_eo - substrArr[0].rm_so);
+    }
+return foundAny;
+}
+
 static struct slName *readSampleIds(struct lineFile *lf, struct mutationAnnotatedTree *bigTree,
                                     char *aliasFile)
 /* Read a file of sample names/IDs from the user; typically these will not be exactly the same
@@ -2703,7 +2777,16 @@ while (lineFileNext(lf, &line, NULL))
     if (match)
         slNameAddHead(&sampleIds, match);
     else
-        slNameAddHead(&unmatched, line);
+        {
+        struct slName *rangeMatches = NULL, *rangeUnmatched = NULL;
+        if (matchIdRange(nameHash, line, &rangeMatches, &rangeUnmatched))
+            {
+            sampleIds = slCat(rangeMatches, sampleIds);
+            unmatched = slCat(rangeUnmatched, unmatched);
+            }
+        else
+            slNameAddHead(&unmatched, line);
+        }
     }
 if (unmatched)
     {
