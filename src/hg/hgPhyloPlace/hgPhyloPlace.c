@@ -374,7 +374,7 @@ puts("  </div>");
 puts("<div class='readableWidth'>");
 puts("<div class='gbControl col-md-12'>");
 puts("<h2>Tutorial</h2>");
-puts("<iframe width='267' height='150' src='https://www.youtube.com/embed/humQ1NyZOUM' "
+puts("<iframe width='950' height='535' src='https://www.youtube.com/embed/humQ1NyZOUM' "
      "frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; "
      "gyroscope; picture-in-picture' allowfullscreen></iframe>\n"
      "<h3><a href='https://www.cdc.gov/amd/pdf/slidesets/ToolkitModule_3.3-508C.pdf' "
