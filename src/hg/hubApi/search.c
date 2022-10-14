@@ -128,7 +128,8 @@ else
 struct hgPositions *hgp = NULL;
 jsonWriteString(jw, "genome", db);
 hgp = hgPositionsFind(db, searchTerm, "", "searchExample", bogusCart, FALSE, measureTiming, searchCategoryList);
-hgPositionsJson(jw, db, hgp, NULL);
+if (hgp)
+    hgPositionsJson(jw, db, hgp, NULL);
 apiFinishOutput(0, NULL, jw);
 }
 
