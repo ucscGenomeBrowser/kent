@@ -655,7 +655,7 @@ include mutCons.ra
 
 track recomb
 shortLabel Recomb. Breakpoints
-longLabel Recombination Breakpoints, approximate location, from Thurakia et al, Nature 2022 (coverage shown by default. Configure to show recombined segments)
+longLabel Recombination Breakpoints from Thurakia et al 2022
 type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/recomb/ripples_breakpoints.bb
 doWiggle on

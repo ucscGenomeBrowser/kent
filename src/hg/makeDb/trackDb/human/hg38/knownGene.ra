@@ -49,5 +49,6 @@ searchType knownGeneFast
 shortCircuit 1
 searchPriority 1001
 searchTrix /gbdb/hg38/knownGeneFastV41.ix
+searchTrixContext on
 doPage 1
 

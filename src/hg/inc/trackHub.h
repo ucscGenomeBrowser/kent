@@ -190,7 +190,7 @@ struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
 /* Return a dbDb structure for just this database. */
 
 struct hgPositions;
-void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp);
+void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp, boolean measureTiming);
 /* Look for term in track hubs.  Update hgp if found */
 
 void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb);

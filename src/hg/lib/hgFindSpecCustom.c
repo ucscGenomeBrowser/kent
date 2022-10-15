@@ -442,7 +442,7 @@ while ((cur != NULL) && (!sameString(cur->searchName, spec->searchName)))
 return (cur) ? TRUE : FALSE;
 }
 
-static int hgFindSpecPriCmp(const void *va, const void *vb)
+int hgFindSpecPriCmp(const void *va, const void *vb)
 /* Compare to sort by assending searchPriority. */
 {
 const struct hgFindSpec *a = *((struct hgFindSpec **)va);

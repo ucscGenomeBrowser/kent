@@ -51,6 +51,8 @@ Options:
        This is from the start of the query in the positive
        direction.
      o qEndTrunc - similary for qEnd
+     o mappedPslLine - zero-based line number of the corresponding PSL line number
+       in outPsl.
    If the psl count not be mapped, the mapping* and mapped* columns are empty.
   -mappingPsls=pslFile - write mapping alignments that were used in
    PSL format to this file.  Transformations that were done, such as

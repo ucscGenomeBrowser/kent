@@ -13,9 +13,12 @@
 #include "jsonWrite.h"
 #include "suggest.h"
 #include "genbank.h"
+#include "hgFind.h"
+#include "trix.h"
 
 // Optional CGI param type can specify what kind of thing to suggest (default: gene)
 #define ALT_OR_PATCH "altOrPatch"
+#define HELP_DOCS "helpDocs"
 
 void suggestGene(char *database, char *table, char *prefix)
 /* Print out a Javascript list of objects describing genes that start with prefix. */
@@ -224,6 +227,31 @@ puts(jw->dy->string);
 jsonWriteFree(&jw);
 }
 
+void suggestHelpPage(char *prefix)
+/* Print out a Javascript list of objects describing help pages that start with prefix. */
+{
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteListStart(jw, NULL);
+char *lowered = cloneString(prefix);
+char *keyWords[16];
+int keyCount;
+tolowers(lowered);
+keyCount = chopLine(lowered, keyWords);
+struct trix *helpTrix = openStaticTrix(helpDocsTrix);
+struct trixSearchResult *tsr, *tsrList = trixSearch(helpTrix, keyCount, keyWords, tsmExpand);
+int i;
+for (i = 0, tsr = tsrList; i < 25 && tsr != NULL; i++, tsr = tsr->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "value", tsr->itemId); // value is necessary
+    jsonWriteString(jw, "category", "helpDocs"); // hardcode this for client
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+}
+
 char *checkParams(char *database, char *prefix, char *type)
 /* If we don't have valid CGI parameters, quit with a Bad Request HTTP response. */
 {
@@ -233,10 +261,10 @@ if(prefix == NULL || database == NULL)
     errAbort("%s", "Missing prefix and/or db CGI parameter");
 if (! hDbIsActive(database))
     errAbort("'%s' is not a valid, active database", htmlEncode(database));
-if (isNotEmpty(type) && differentString(type, ALT_OR_PATCH))
+if (isNotEmpty(type) && differentString(type, ALT_OR_PATCH) && differentString(type, HELP_DOCS))
     errAbort("'%s' is not a valid type", type);
 char *table = NULL;
-if (! sameOk(type, ALT_OR_PATCH))
+if (! sameOk(type, ALT_OR_PATCH) && !sameOk(type, HELP_DOCS))
     {
     char *knownDatabase = hdbDefaultKnownDb(database);
     struct sqlConnection *conn = hAllocConn(knownDatabase);
@@ -265,6 +293,8 @@ puts("\n");
 
 if (sameOk(type, ALT_OR_PATCH))
     suggestAltOrPatch(database, prefix);
+else if (sameOk(type, HELP_DOCS))
+    suggestHelpPage(prefix);
 else
     suggestGene(database, table, prefix);
 

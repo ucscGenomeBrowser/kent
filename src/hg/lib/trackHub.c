@@ -1266,10 +1266,10 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 
 
 
-void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
+void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp, boolean measureTiming)
 /* Look for term in track hubs.  Update hgp if found */
 {
-findBigBedPosInTdbList(cart, db, hubCollectTracks(db, NULL), term, hgp, NULL);
+findBigBedPosInTdbList(cart, db, hubCollectTracks(db, NULL), term, hgp, NULL, measureTiming);
 }
 
 static void parseBlatPcrParams(char *database, char *type, char *setting,

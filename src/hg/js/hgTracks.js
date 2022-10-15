@@ -4500,6 +4500,19 @@ var imageV2 = {
                 window.location.href = blatUrl;
                 return false;
             }
+
+            // redirect to search disambiguation page if it looks like we didn't enter a regular position:
+            var canonMatch = newPos.match(canonicalRangeExp);
+            var gbrowserMatch = newPos.match(gbrowserRangeExp);
+            var lengthMatch = newPos.match(lengthRangeExp);
+            var bedMatch = newPos.match(bedRangeExp);
+            var sqlMatch = newPos.match(sqlRangeExp);
+            var singleMatch = newPos.match(singleBaseExp);
+            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+            if (positionMatch === null) {
+                window.location.assign("../cgi-bin/hgSearch?hgsid=" + getHgsid() + "&search=" + newPos);
+                return false;
+            }
                 
             return true;
         });
@@ -5093,6 +5106,7 @@ $(document).ready(function()
             return false;
         }
     }
+
     initVars();
     imageV2.loadSuggestBox();
     if ($('#pdfLink').length === 1) {
