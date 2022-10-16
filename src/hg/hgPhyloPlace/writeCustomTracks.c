@@ -140,7 +140,7 @@ if (anyImputedBases(samplePlacements, sampleIds))
                                             foundIt = TRUE;
                                             alt->name[0] = val[0];
                                             // Update the alts column
-                                            words[4] = slNameListToString(alts, '.');
+                                            words[4] = slNameListToString(alts, ',');
                                             int len = strlen(words[colIx]);
                                             safef(words[colIx], len+1, "%d", altIx+1);
                                             verbose(3, "gtIx %d: swapped in %s\n",
