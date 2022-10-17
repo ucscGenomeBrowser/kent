@@ -23,10 +23,16 @@ export subset=${fileName%.orderList.tsv}
 
 export minTrackCount=12
 if [ "${subset}" == "invertebrate" ]; then
-  minTrackCount=10
+  minTrackCount=9
 elif [ "${subset}" == "bacteria" ]; then
   minTrackCount=9
+elif [ "${subset}" == "plants" ]; then
+  minTrackCount=11
+elif [ "${subset}" == "birds" ]; then
+  minTrackCount=11
 elif [ "${subset}" == "mammals" ]; then
+  minTrackCount=9
+elif [ "${subset}" == "archaea" ]; then
   minTrackCount=9
 elif [ "${subset}" == "viral" ]; then
   minTrackCount=7
@@ -84,4 +90,5 @@ hgsql -N -e "select organism,description,\",\",scientificName from dbDb where na
 
 done
 export failCount=`echo $doneCount $successCount | awk '{printf "%d", $1-$2}'`
-printf "# checked %3d hubs, %3d success, %3d fail, total tracks: %d\n" "${doneCount}" "${successCount}" "${failCount}" "${totalTrackCount}"
+export DS=`date "+%F %T"`
+printf "# checked %3d hubs, %3d success, %3d fail, total tracks: %d, %s\n" "${doneCount}" "${successCount}" "${failCount}" "${totalTrackCount}" "${DS}"
