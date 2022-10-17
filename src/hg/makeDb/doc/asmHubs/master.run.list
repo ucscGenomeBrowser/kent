@@ -7,6 +7,7 @@
 ./runBuild GCA_000164785.2 GCA_000164785.2_C_hoffmanni-2.0.1 mammals Choloepus_hoffmanni
 ./runBuild GCA_000165445.3 GCA_000165445.3_Mmur_3.0 primates Microcebus_murinus
 ./runBuild GCA_000208655.2 GCA_000208655.2_Dasnov3.0 mammals Dasypus_novemcinctus
+./runBuild GCA_000209555.1 GCA_000209555.1_ASM20955v1 invertebrate Oikopleura_dioica
 ./runBuild GCA_000239315.1 GCA_000239315.1_MusPutFurMale1.0 mammals Mustela_putorius_furo
 ./runBuild GCA_000243295.1 GCA_000243295.1_TriManLat1.0 mammals Trichechus_manatus_latirostris
 ./runBuild GCA_000247695.1 GCA_000247695.1_HetGla_female_1.0 mammals Heterocephalus_glaber
@@ -37,6 +38,7 @@
 ./runBuild GCA_000622305.1 GCA_000622305.1_S.galili_v1.0 mammals Nannospalax_galili
 ./runBuild GCA_000687225.1 GCA_000687225.1_UrsMar_1.0 mammals Ursus_maritimus
 ./runBuild GCA_000688575.1 GCA_000688575.1_CavAp1.0 mammals Cavia_aperea
+./runBuild GCA_000695325.1 GCA_000695325.1_P.bachei_draft_genome_v.1.1 invertebrate Pleurobrachia_bachei
 ./runBuild GCA_000696695.1 GCA_000696695.1_Burgud mammals Equus_przewalskii
 ./runBuild GCA_000738955.1 GCA_000738955.1_M_pentadactyla-1.1.1 mammals Manis_pentadactyla
 ./runBuild GCA_000754665.1 GCA_000754665.1_Bison_UMD1.0 mammals Bison_bison_bison
@@ -45,6 +47,7 @@
 ./runBuild GCA_000767855.1 GCA_000767855.1_Ca_bactrianus_MBC_1.0 mammals Camelus_bactrianus
 ./runBuild GCA_000769185.1 GCA_000769185.1_Rrox_v1 primates Rhinopithecus_roxellana
 ./runBuild GCA_000772875.3 GCA_000772875.3_Mmul_8.0.1 primates Macaca_mulatta
+./runBuild GCA_000934455.1 GCA_000934455.1_Ppar_1.0 invertebrate Apostichopus_parvimensis
 ./runBuild GCA_000952055.2 GCA_000952055.2_Anan_2.0 primates Aotus_nancymaae
 ./runBuild GCA_000956105.1 GCA_000956105.1_Pcoq_1.0 primates Propithecus_coquereli
 ./runBuild GCA_000978405.1 GCA_000978405.1_CapAeg_1.0 mammals Capra_aegagrus
@@ -70,6 +73,7 @@
 ./runBuild GCA_001632615.1 GCA_001632615.1_LP_J_v1 mammals Mus_musculus
 ./runBuild GCA_001651235.1 GCA_001651235.1_ASM165123v1 mammals Giraffa_tippelskirchi
 ./runBuild GCA_001660835.1 GCA_001660835.1_ASM166083v1 mammals Okapia_johnstoni
+./runBuild GCA_001663935.1 GCA_001663935.1_Asyluc0.1 invertebrate Asymmetron_lucayanum
 ./runBuild GCA_001685075.1 GCA_001685075.1_ASM168507v1 mammals Ellobius_lutescens
 ./runBuild GCA_001685095.1 GCA_001685095.1_ETalpinus_0.1 mammals Ellobius_talpinus
 ./runBuild GCA_001685135.1 GCA_001685135.1_ManJav1.0 mammals Manis_javanica
@@ -109,6 +113,7 @@
 ./runBuild GCA_003327715.1 GCA_003327715.1_PumCon1.0 mammals Puma_concolor
 ./runBuild GCA_003342835.1 GCA_003342835.1_rhePen1 birds Rhea_pennata
 ./runBuild GCA_003343005.1 GCA_003343005.1_rheAme1 birds Rhea_americana
+./runBuild GCA_003344405.1 GCA_003344405.1_TrispH2_1.0 invertebrate Trichoplax_sp._H2
 ./runBuild GCA_003369685.2 GCA_003369685.2_UOA_Angus_1 mammals Bos_indicus_x_Bos_taurus
 ./runBuild GCA_003413605.1 GCA_003413605.1_Chrysolophus_pictus_GenomeV1.0 birds Chrysolophus_pictus
 ./runBuild GCA_003957525.1 GCA_003957525.1_bTaeGut1_v1.h birds Taeniopygia_guttata
@@ -244,6 +249,13 @@
 ./runBuild GCA_004365145.1 GCA_004365145.1_OryAfe_v1_BIUU mammals Orycteropus_afer
 ./runBuild GCA_004365215.1 GCA_004365215.1_CunPac_v1_BIUU mammals Cuniculus_paca
 ./runBuild GCA_004365275.1 GCA_004365275.1_TupTan_v1_BIUU mammals Tupaia_tana
+./runBuild GCA_004367855.1 GCA_004367855.1_ASM436785v1 invertebrate Oikopleura_vanhoeffeni
+./runBuild GCA_004367875.1 GCA_004367875.1_ASM436787v1 invertebrate Oikopleura_albicans
+./runBuild GCA_004367895.1 GCA_004367895.1_ASM436789v1 invertebrate Oikopleura_longicauda
+./runBuild GCA_004367955.1 GCA_004367955.1_ASM436795v1 invertebrate Bathochordaeus_stygius
+./runBuild GCA_004367975.1 GCA_004367975.1_ASM436797v1 invertebrate Mesochordaeus_erythrocephalus
+./runBuild GCA_004368075.1 GCA_004368075.1_ASM436807v1 invertebrate Fritillaria_borealis
+./runBuild GCA_004765925.1 GCA_004765925.1_PBRC_Esco_1.0 invertebrate Euprymna_scolopes
 ./runBuild GCA_007364235.1 GCA_007364235.1_fArcCen1_v1.h fish Archocentrus_centrarchus
 ./runBuild GCA_007364275.2 GCA_007364275.2_fArcCen1 vertebrate Archocentrus_centrarchus
 ./runBuild GCA_007399395.1 GCA_007399395.1_rGopEvg1_v1.alt vertebrate Gopherus_evgoodei
@@ -313,6 +325,7 @@
 ./runBuild GCA_011004845.1 GCA_011004845.1_fEsoLuc1.pri fish Esox_lucius
 ./runBuild GCA_011004865.1 GCA_011004865.1_bBalReg1.alt birds Balearica_regulorum_gibbericeps
 ./runBuild GCA_011004875.1 GCA_011004875.1_bBalReg1.pri birds Balearica_regulorum_gibbericeps
+./runBuild GCA_011033025.1 GCA_011033025.1_UCSC_Bfor_v1 invertebrate Beroe_forskalii
 ./runBuild GCA_011064685.1 GCA_011064685.1_ZJU_Sfru_1.0 invertebrate Spodoptera_frugiperda
 ./runBuild GCA_011078405.1 GCA_011078405.1_mCalJac1.mat primates Callithrix_jacchus
 ./runBuild GCA_011100535.1 GCA_011100535.1_mCalJac1.pat primates Callithrix_jacchus
@@ -332,8 +345,11 @@
 ./runBuild GCA_012275275.1 GCA_012275275.1_bMelUnd1.pat birds Melopsittacus_undulatus
 ./runBuild GCA_012275295.1 GCA_012275295.1_bMelUnd1.mat.Z birds Melopsittacus_undulatus
 ./runBuild GCA_013030995.1 GCA_013030995.1_ASM1303099v1 birds Anser_cygnoides
+./runBuild GCA_013339895.1 GCA_013339895.1_Emu_genome_v1 invertebrate Ephydatia_muelleri
 ./runBuild GCA_013368605.1 GCA_013368605.1_bNycGra1.pri birds Nyctibius_grandis
 ./runBuild GCA_013407035.1 GCA_013407035.1_ASM1340703v1 birds Coloeus_monedula
+./runBuild GCA_013436055.1 GCA_013436055.1_Harore_MTP2014 invertebrate Halocynthia_roretzi
+./runBuild GCA_013436065.1 GCA_013436065.1_Haaura_MTP2014 invertebrate Halocynthia_aurantium
 ./runBuild GCA_014337955.1 GCA_014337955.1_AspMar1.0 vertebrate Aspidoscelis_marmoratus
 ./runBuild GCA_014607495.2 GCA_014607495.2_ASM1460749v2 invertebrate Carposina_sasakii
 ./runBuild GCA_014839755.1 GCA_014839755.1_bSylBor1.pri birds Sylvia_borin

@@ -3,12 +3,16 @@
 #Make a list of all assemblies in hgCentral with active=1
 allDbs = get_ipython().getoutput(u'hgsql -h genome-centdb -e "SELECT name FROM dbDb WHERE active = 1 ORDER BY RAND()" hgcentral | grep -v "name"')
 
+curatedHubs=['hs1','mpxvRivers']
+
 #Initialize list to hold assemblies with errors
 troubleDbs = []
 
 #Iterate through allDbs and run checkSync.csh comparing to hgw1
 for db in allDbs:
     checkSyncResults = get_ipython().getoutput(u"checkSync.csh '$db' hgw1 hgwbeta")
+    if db in curatedHubs:
+        continue
     if db == 'mm9':
         if '  0 hgw1.only' not in str(checkSyncResults) and '  4 hgwbeta.only' not in str(checkSyncResults):
             troubleDbs.append(db)
@@ -31,7 +35,8 @@ for db in allDbs:
 #Iterate through allDbs and run checkSync.csh comparing to hgw2, informing of discrepancies
 for db in allDbs:
     checkSyncResults = get_ipython().getoutput(u"checkSync.csh '$db' hgw2 hgwbeta")
-    
+    if db in curatedHubs:
+        continue
     if db == 'mm9':
         if '  0 hgw1.only' not in str(checkSyncResults) and '  4 hgwbeta.only' not in str(checkSyncResults)             and db not in troubleDbs:
             get_ipython().system(u" echo There looks to be a discrepancy between hgw1 and hgw2 checkSync for: '$db'")
