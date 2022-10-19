@@ -4,6 +4,17 @@
 # and then ssh otto@hgwdev and run crontab on the edited and checked in file,
 # for example crontab ~lrnassar/kent/src/hg/utils/otto/otto.crontab
 
+# To save the current crontab back into git:
+# crontab -l > ~max/kent/src/hg/utils/otto/otto.crontab
+# logout
+# cd ~max/kent/src/hg/utils/otto/
+# git commit otto.crontab -m 'updating crontab'
+
+
+# Note that you can see the list of auto-pushes of files from hgwdev to the RR by running:
+# cat /etc/crontab
+# on Hgwdev.
+
 TMPDIR=/data/tmp
 ottomeister=lrnassar@ucsc.edu
 
@@ -60,7 +71,7 @@ MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
 14 13 * * mon /hive/data/outside/otto/lovd/doUpdate.sh
 
 #Mastermind
-05 8 8  */3 * /hive/data/outside/otto/mastermind/buildMastermind.sh
+05 8 8  * * /hive/data/outside/otto/mastermind/buildMastermind.sh
 
 #wuhCor1 uniprot otto cron by Max, May 2021
 00 4 * * * /hive/data/outside/otto/uniprot/covidCheck.sh
@@ -81,5 +92,9 @@ MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
 MAILTO=lrnassar@ucsc.edu
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
+
+MAILTO=bwick@ucsc.edu
+# Cell Browser news sec update by Matt/Brittney Sept 2022
+04 12 * * 1-5 ~bwick/cellBrowser/ucsc/updateNewsSec -r
 
 #Format: Minute - Hour - DayofMonth month Day-of-week

@@ -695,18 +695,22 @@ var hgSearch = (function() {
             _.each(uiState.positionMatches, function(match) {
                 uiState.resultHash[match.name] = match;
             });
-            updateFilters(uiState);
-            updateSearchResults(uiState);
-            buildSpeciesDropdown();
-            fillOutAssemblies();
-            urlVars = {"db": db, "search": uiState.search, "showSearchResults": ""};
-            // changing the url allows the history to be associated to a specific url
-            var urlParts = changeUrl(urlVars);
-            $("#searchCategories").jstree(true).refresh(false,true);
-            if (doSaveHistory)
-                saveHistory(uiState, urlParts);
-            changeSearchResultsLabel();
+        } else {
+            // no results for this search
+            uiState.resultHash = {};
+            uiState.positionMatches = [];
         }
+        updateFilters(uiState);
+        updateSearchResults(uiState);
+        buildSpeciesDropdown();
+        fillOutAssemblies();
+        urlVars = {"db": db, "search": uiState.search, "showSearchResults": ""};
+        // changing the url allows the history to be associated to a specific url
+        var urlParts = changeUrl(urlVars);
+        $("#searchCategories").jstree(true).refresh(false,true);
+        if (doSaveHistory)
+            saveHistory(uiState, urlParts);
+        changeSearchResultsLabel();
     }
 
     function handleRefreshState(jsonData) {
