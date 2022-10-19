@@ -877,7 +877,7 @@ for (x1 = 0; x1 < width; ++x1)
             {
             if (p->count > 0)	/* allow any number of values to display */
                 {
-                double thisValue = p->sumData/p->count;	/*average if count > 1*/
+                double thisValue = p->smooth;
                 if (mouseOverX2 < 0)    /* first valid data found */
                     {
                     struct wigMouseOver *dataItem;

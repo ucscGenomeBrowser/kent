@@ -4789,11 +4789,7 @@ var mouseOver = {
        mouseOverValue = mouseOver.noAverageString;
     }
     if (foundIdx > -1) { // value to display
-      if (mouseOver.items[trackName][foundIdx].c > 1) {
-        mouseOverValue = "&nbsp;~&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
-      } else {
         mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
-      }
     }
     $('#mouseOverText').html(mouseOverValue);
     var msgWidth = mouseOver.maximumWidth[trackName];
