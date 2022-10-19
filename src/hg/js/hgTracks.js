@@ -4806,7 +4806,7 @@ var mouseOver = {
     var msgLeft = Math.max(tdLeft, clientX - (msgWidth/2) - 3); // with magic 3
     var msgTop = Math.max(0, tdTop);
     var lineTop = Math.max(0, msgTop + msgHeight);
-    var lineLeft = Math.max(0, clientX - 3);  // with magic 3
+    var lineLeft = Math.max(0, clientX - 1);  // magic 3 +  2 for width of indicator box
     if (clientY < msgTop + msgHeight) {	// cursor overlaps with the msg box
       msgLeft = clientX - msgWidth - 6;     // to the left of the cursor
       if (msgLeft < tdLeft || msgLeft < 0) {   // hits left edge, switch
