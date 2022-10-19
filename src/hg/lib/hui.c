@@ -1814,6 +1814,7 @@ static char *wiggleWindowingOptions[] =
     "maximum",
     "mean",
     "minimum",
+    "sum",
     };
 
 enum wiggleWindowingEnum wiggleWindowingStringToEnum(char *string)
@@ -5870,7 +5871,7 @@ tdb->type = "bedGraph";
 if (hashFindVal(tdb->settingsHash, AUTOSCALE) == NULL)
     hashAdd(tdb->settingsHash, AUTOSCALE, "on");
 if (hashFindVal(tdb->settingsHash, WINDOWINGFUNCTION) == NULL)
-    hashAdd(tdb->settingsHash, WINDOWINGFUNCTION, wiggleWindowingEnumToString( wiggleWindowingMax));
+    hashAdd(tdb->settingsHash, WINDOWINGFUNCTION, wiggleWindowingEnumToString( wiggleWindowingMean));
 wigCfgUi(cart,tdb,name,title,TRUE);
 tdb->type = origType;
 printf("</DIV>\n\n");

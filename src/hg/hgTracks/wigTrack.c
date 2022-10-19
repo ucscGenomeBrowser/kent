@@ -613,6 +613,9 @@ for (i = 0; i < preDrawSize; ++i)
                 else
 		    dataValue = preDraw[i].max;
 		break;
+	    case wiggleWindowingSum:
+		dataValue = preDraw[i].sumData;
+                break;
 	    case wiggleWindowingMean:
 	    case wiggleWindowingWhiskers:
 		dataValue =
