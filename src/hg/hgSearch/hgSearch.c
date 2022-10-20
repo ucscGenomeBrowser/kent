@@ -399,6 +399,7 @@ jsIncludeFile("hgSearch.js", NULL);
 
 // Write the skeleton HTML, which will get filled out by the javascript
 webIncludeFile("inc/hgSearch.html");
+webIncludeFile("inc/gbFooter.html");
 }
 
 /* End handler helper functions */
