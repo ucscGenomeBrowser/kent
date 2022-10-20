@@ -1694,6 +1694,16 @@ char *clade = NULL;
 
 oldVars = hashNew(10);
 
+char *checkDb = cgiOptionalString("db");
+char *checkGenome = cgiOptionalString("org");
+
+if (checkGenome && differentString(checkGenome, "0") && checkDb && sameString(checkDb, "0"))
+    {
+    char *newDb = hDefaultDbForGenome(checkGenome);
+    if (newDb)
+        cgiChangeVar("db", newDb);
+    }
+
 /* Sometimes we output HTML and sometimes plain text; let each outputter
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);

@@ -607,6 +607,10 @@ char *defaultClade = hClade(genome);
 char *defaultLabel = NULL;
 int numClades = 0;
 
+if (hubConnectIsCurated(trackHubSkipHubName(genome)))
+    defaultClade = hClade(trackHubSkipHubName(genome));
+else
+    defaultClade = hClade(genome);
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
 // get only the clades that have actual active genomes
 char query[4096];

@@ -2406,6 +2406,23 @@ if (cgiVarExists(varName))
     cgiMakeHiddenVarWithIdExtra(varName, varName, cgiString(varName), NULL);
 }
 
+void cgiChangeVar(char *varName, char *value)
+/* An entry point to change the value of a something passed to us on the URL. */
+{
+if (cgiVarExists(varName))
+    {
+    struct cgiVar *el = inputList;
+    for(; el; el = el->next)
+        {
+        if (sameString(el->name, varName))
+            {
+            el->val = cloneString(value);
+            break;
+            }
+        }
+    }
+}
+
 void cgiVarExclude(char *varName)
 /* If varName exists, remove it. */
 {

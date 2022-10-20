@@ -193,4 +193,6 @@ struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable
 /* Return a hash linking hub URLs to struct hubEntries.  Also make pHash point to a hash that just stores
  * the names of the public hubs (for use later when determining if hubs were added by the user) */
 
+boolean hubConnectIsCurated(char *db);
+/* Look in the dbDb table to see if this hub is curated. */
 #endif /* HUBCONNECT_H */
