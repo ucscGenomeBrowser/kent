@@ -305,8 +305,8 @@ if (startsWith("bigWig", tdb->type) || !startsWith("big", tdb->type))
 
 char *indexField = NULL;
 indexField = trackDbSetting(tdb, "searchIndex");
-if (!indexField)
-    return FALSE;
+if (indexField)
+    return TRUE;
 
 // If !indexField but we do have an index on the bigBed use that
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
