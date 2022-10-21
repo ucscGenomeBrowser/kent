@@ -601,9 +601,9 @@ var hgSearch = (function() {
                     subList.innerHTML += "<input type='hidden' id='" + idAttr.value + "_" + categoryCount +  "showMore' value='0'>";
                     subList.innerHTML += "<img height='18' width='18' id='" + idAttr.value + "_" + categoryCount + "_showMoreButton' src='../images/add_sm.gif'>";
                     if (matches.length > 500)
-                        subList.innerHTML += "<div class='showMoreDiv' id='" + idAttr.value+"_"+categoryCount+"_showMoreDiv'>Show 490 (out of " + (matches.length) + " total) more matches for " + searchDesc + "</div></li>";
+                        subList.innerHTML += "<div class='showMoreDiv' id='" + idAttr.value+"_"+categoryCount+"_showMoreDiv'>&nbsp;Show 490 (out of " + (matches.length) + " total) more matches for " + searchDesc + "</div></li>";
                     else
-                        subList.innerHTML += "<div class='showMoreDiv' id='" + idAttr.value+"_"+categoryCount+"_showMoreDiv'>Show " + (matches.length - 10) + " more matches for " + searchDesc + "</div></li>";
+                        subList.innerHTML += "<div class='showMoreDiv' id='" + idAttr.value+"_"+categoryCount+"_showMoreDiv'>&nbsp;Show " + (matches.length - 10) + " more matches for " + searchDesc + "</div></li>";
                 }
                 newListObj.append(subList);
                 newList.append(newListObj);
@@ -695,18 +695,22 @@ var hgSearch = (function() {
             _.each(uiState.positionMatches, function(match) {
                 uiState.resultHash[match.name] = match;
             });
-            updateFilters(uiState);
-            updateSearchResults(uiState);
-            buildSpeciesDropdown();
-            fillOutAssemblies();
-            urlVars = {"db": db, "search": uiState.search, "showSearchResults": ""};
-            // changing the url allows the history to be associated to a specific url
-            var urlParts = changeUrl(urlVars);
-            $("#searchCategories").jstree(true).refresh(false,true);
-            if (doSaveHistory)
-                saveHistory(uiState, urlParts);
-            changeSearchResultsLabel();
+        } else {
+            // no results for this search
+            uiState.resultHash = {};
+            uiState.positionMatches = [];
         }
+        updateFilters(uiState);
+        updateSearchResults(uiState);
+        buildSpeciesDropdown();
+        fillOutAssemblies();
+        urlVars = {"db": db, "search": uiState.search, "showSearchResults": ""};
+        // changing the url allows the history to be associated to a specific url
+        var urlParts = changeUrl(urlVars);
+        $("#searchCategories").jstree(true).refresh(false,true);
+        if (doSaveHistory)
+            saveHistory(uiState, urlParts);
+        changeSearchResultsLabel();
     }
 
     function handleRefreshState(jsonData) {

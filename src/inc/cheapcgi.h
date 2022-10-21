@@ -665,4 +665,7 @@ char *cgiScriptDirUrl();
  * in external URLs to this webserver.
  * e.g. if CGI is called via http://localhost/subdir/cgi-bin/cgiTest
  * the returned string is /subdir/. Must be free'd. */
+
+void cgiChangeVar(char *varName, char *value);
+/* An entry point to change the value of a something passed to us on the URL. */
 #endif /* CHEAPCGI_H */

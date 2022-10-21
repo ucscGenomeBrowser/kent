@@ -970,6 +970,22 @@ hDisconnectCentral(&conn);
 return added;
 }
 
+
+boolean hubConnectIsCurated(char *db)
+/* Look in the dbDb table to see if this hub is curated. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[4096];
+sqlSafef(query, sizeof query, "SELECT nibPath from %s where name = '%s' AND nibPath like '%s%%'",
+          dbDbTable(), db, hubCuratedPrefix);
+
+char *dir = sqlQuickString(conn, query);
+boolean ret = !isEmpty(dir);
+hDisconnectCentral(&conn);
+
+return ret;
+}
+
 char *dbOveride;  // communicate with the web front end if we load a hub to support db cgivar. */
 
 static int lookForCuratedHubs(struct cart *cart, char *db,  char *curatedHubPrefix)
@@ -981,7 +997,9 @@ char query[4096];
 sqlSafef(query, sizeof query, "SELECT nibPath from %s where name = '%s' AND nibPath like '%s%%'",
           dbDbTable(), db, hubCuratedPrefix);
 
-char *dir = sqlQuickString(conn, query);
+char *dir = cloneString(sqlQuickString(conn, query));
+hDisconnectCentral(&conn);
+
 if (!isEmpty(dir))
     {
     char *path = &dir[sizeof hubCuratedPrefix - 1];

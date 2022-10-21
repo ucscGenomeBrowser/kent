@@ -4789,11 +4789,7 @@ var mouseOver = {
        mouseOverValue = mouseOver.noAverageString;
     }
     if (foundIdx > -1) { // value to display
-      if (mouseOver.items[trackName][foundIdx].c > 1) {
-        mouseOverValue = "&nbsp;~&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
-      } else {
         mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
-      }
     }
     $('#mouseOverText').html(mouseOverValue);
     var msgWidth = mouseOver.maximumWidth[trackName];
@@ -4806,7 +4802,7 @@ var mouseOver = {
     var msgLeft = Math.max(tdLeft, clientX - (msgWidth/2) - 3); // with magic 3
     var msgTop = Math.max(0, tdTop);
     var lineTop = Math.max(0, msgTop + msgHeight);
-    var lineLeft = Math.max(0, clientX - 3);  // with magic 3
+    var lineLeft = Math.max(0, clientX - 1);  // magic 3 +  2 for width of indicator box
     if (clientY < msgTop + msgHeight) {	// cursor overlaps with the msg box
       msgLeft = clientX - msgWidth - 6;     // to the left of the cursor
       if (msgLeft < tdLeft || msgLeft < 0) {   // hits left edge, switch
