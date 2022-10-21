@@ -39,11 +39,12 @@ SHELL=/bin/sh
 PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin
 MAILTO=lrnassar@ucsc.edu
 
-#PanelApp hg19 / hg38
-57 4 * * 2 /hive/data/outside/otto/panelApp/updatePanelApp
-
 #Update check
 0 5 1 */3 * mail -s "OMIM/GWAS CHECK - DID DBSNP UPDATE?" lrnassar@ucsc.edu < /cluster/home/chmalee/crontabs/dbSnpCheck.txt
+
+# PanelApp
+MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
+10 10 * * 2 /hive/data/outside/otto/panelApp/updatePanelApp
 
 #DECIPHER - Reactivated 5/13/2022 by Lou
 11 4 * * * /hive/data/outside/otto/decipher/decipherWrapper.sh
