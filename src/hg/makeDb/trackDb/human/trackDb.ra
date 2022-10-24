@@ -5643,7 +5643,7 @@ searchTrix /gbdb/$D/hgnc/search.ix
 skipEmptyFields on
 itemRgb on
 noScoreFilter on
-pennantIcon New red ../goldenPath/newsarch.html#102122 "Released Oct 21, 2022"
+pennantIcon New red ../goldenPath/newsarch.html#102422 "Released at UCSC on Oct 24, 2022"
 
 searchTable hgnc
 searchMethod exact
