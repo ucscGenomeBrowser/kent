@@ -631,7 +631,7 @@ var hgSearch = (function() {
         _.each(_.sortBy(uiState.genomes[organism], ['orderKey']), function(assembly) {
             newOpt = document.createElement("option");
             newOpt.value = assembly.name;
-            newOpt.label = assembly.organism + " " + assembly.description;
+            newOpt.label = trackHubSkipHubName(assembly.organism) + " " + assembly.description;
             if (assembly.name == db) {
                 newOpt.selected = true;
             }
@@ -650,10 +650,16 @@ var hgSearch = (function() {
         _.each(uiState.genomes, function(genome) {
             newOpt = document.createElement("option");
             newOpt.value = genome[0].organism;
-            newOpt.label = genome[0].organism;
+            newOpt.label = trackHubSkipHubName(genome[0].organism);
             if (genome.some(function(assembly) {
-                if (assembly.name === db) {
-                    return true;
+                if (assembly.isCurated) {
+                    if (assembly.name === trackHubSkipHubName(db)) {
+                        return true;
+                    }
+                } else {
+                    if (assembly.name === db) {
+                        return true;
+                    }
                 }
             })) {
                 newOpt.selected = true;
@@ -764,12 +770,9 @@ var hgSearch = (function() {
     }
 
     function switchAssemblies(newDb) {
-        // get the new uiState, or look it up if we've already seen it
-        db = newDb;
-        cart.send({ getUiState: {db: db} }, handleRefreshState);
-        cart.flush();
-        // make changing the database automatically fire off a search
-        sendUserSearch();
+        // reload the page to attach curated hub (if any)
+        re = /db=[\w,\.]*/;
+        window.location = window.location.href.replace(re,"db="+newDb);
     }
 
     function init() {

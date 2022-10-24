@@ -1139,16 +1139,6 @@ var hgGateway = (function() {
         $('#selectAssemblyLabel').text(assemblySelectLabel);
     }
 
-    function trackHubSkipHubName(name) {
-        // Just like hg/lib/trackHub.c's...
-        var matches;
-        if (name && (matches = name.match(/^hub_[0-9]+_(.*)/)) !== null) {
-            return matches[1];
-        } else {
-            return name;
-        }
-    }
-
     function setAssemblyDescriptionTitle(db, genome) {
         $('#descriptionGenome').html(trackHubSkipHubName(genome));
         $('#descriptionDb').html(trackHubSkipHubName(db));

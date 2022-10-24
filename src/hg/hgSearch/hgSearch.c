@@ -43,6 +43,7 @@ struct dbDbHelper
 struct dbDbHelper *next;
 struct dbDb *dbDb;
 boolean isDefault;
+boolean isCurated;;
 };
 
 /* Helper functions for cart handlers */
@@ -66,11 +67,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct dbDbHelper *this;
     db = dbDbLoad(row);
     boolean isGenarkHub = sameOk(db->nibPath, "genark");
-    if (isGenarkHub || hashLookup(hash, db->name))
+    boolean isCuratedHub = startsWith("hub:", db->nibPath);
+    if (isGenarkHub || isCuratedHub ||  hashLookup(hash, db->name))
         {
         AllocVar(this);
         this->dbDb = db;
         this->isDefault = sameString(row[14],row[0]);
+        this->isCurated = isCuratedHub;
         slAddTail(&ret, this);
         }
     else
@@ -435,6 +438,7 @@ static struct jsonElement *getGenomes()
 struct jsonElement *genomesObj = newJsonObject(hashNew(0));
 struct dbDbHelper *localDbs = getDbDbWithDefault();
 struct dbDbHelper *temp;
+struct hash *curatedHubs = hashNew(0);
 for (temp = localDbs; temp != NULL; temp = temp->next)
     {
     // fill out the dbDb fields into a struct
@@ -445,6 +449,10 @@ for (temp = localDbs; temp != NULL; temp = temp->next)
     jsonObjectAdd(genomeObj, "description", newJsonString(temp->dbDb->description));
     jsonObjectAdd(genomeObj, "orderKey", newJsonNumber(temp->dbDb->orderKey));
     jsonObjectAdd(genomeObj, "isDefault", newJsonBoolean(temp->isDefault));
+    jsonObjectAdd(genomeObj, "isCurated", newJsonBoolean(temp->isCurated));
+
+    if (temp->isCurated)
+        hashStore(curatedHubs, temp->dbDb->name);
 
     // finally add the dbDb object to the hash on species, either create a new
     // list if this is the first time seeing this species or append to the end
@@ -464,6 +472,10 @@ struct dbDb *trackHubDbs = trackHubGetDbDbs(NULL);
 struct dbDb *dbDb;
 for (dbDb = trackHubDbs; dbDb != NULL; dbDb = dbDb->next)
     {
+    // if this is a curated hub, don't treat it like other track hubs
+    if (hashLookup(curatedHubs, trackHubSkipHubName(dbDb->name)) != NULL)
+        continue;
+
     // fill out the dbDb fields into a struct
     struct jsonElement *genomeObj = newJsonObject(hashNew(0));
     jsonObjectAdd(genomeObj, "organism", newJsonString(dbDb->organism));
