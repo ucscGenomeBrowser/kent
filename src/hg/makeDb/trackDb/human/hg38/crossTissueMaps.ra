@@ -1,0 +1,47 @@
+track crossTissueMaps
+superTrack on
+shortLabel Cross Tissue Nuclei
+longLabel Single nuclei sequenced cross many tissues
+visibility hide
+release alpha
+group singleCell
+
+    track crossTissueMapsTissueCellType
+    parent crossTissueMaps
+    html crossTissueMaps
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=tabula-sapiens+all&gene=$<name2>
+    urlLabel View on the UCSC Cell Browser: $<name2>
+    visibility pack
+    shortLabel Cross Tissue Nuclei
+    longLabel Cross tissue nuclei RNA by tissue and cell type
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/crossTissueMaps/tissue_cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/crossTissueMaps/tissue_cell_type.facets
+    barChartCategoryUrl /gbdb/hg38/bbi/crossTissueMaps/tissue_cell_type.categories
+    barChartFacets tissue,cell_class,cell_subclass,cell_type
+    barChartStretchToItem on
+
+    track crossTissueMapsFullDetails
+    parent crossTissueMaps
+    html crossTissueMaps
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=tabula-sapiens+all&gene=$<name2>
+    urlLabel View on the UCSC Cell Browser: $<name2>
+    visibility hide
+    shortLabel Cross Tissue Details
+    longLabel Cross tissue nuclei full details 
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/crossTissueMaps/facet_detailed.bb
+    barChartStatsUrl /gbdb/hg38/bbi/crossTissueMaps/facet_detailed.facets
+    barChartCategoryUrl /gbdb/hg38/bbi/crossTissueMaps/facet_detailed.categories
+    barChartFacets tissue,cell_class,cell_subclass,cell_type,granular_cell_type,sex,donor
+    maxWindowToDraw 10000000
+    barChartStretchToItem on
+    barChartMerge on
