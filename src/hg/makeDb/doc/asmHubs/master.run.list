@@ -389,6 +389,8 @@
 ./runBuild GCA_020740725.1 GCA_020740725.1_bCorHaw1.pri.cur birds Corvus_hawaiiensis
 ./runBuild GCA_020740795.1 GCA_020740795.1_bApuApu2.pri.cur birds Apus_apus
 ./runBuild GCA_020745705.1 GCA_020745705.1_bHemCom1.pri.cur birds Hemiprocne_comata
+./runBuild GCA_020745735.1 GCA_020745735.1_sHemOce1.pat.X.cur. vertebrate Hemiscyllium_ocellatum
+./runBuild GCA_020745765.1 GCA_020745765.1_sHemOce1.mat.decon vertebrate Hemiscyllium_ocellatum
 ./runBuild GCA_020745775.1 GCA_020745775.1_bTheCae1.pri.cur birds Theristicus_caerulescens
 ./runBuild GCA_020746105.1 GCA_020746105.1_bTroSur1.pri.cur birds Trogon_surrucura
 ./runBuild GCA_020800305.1 GCA_020800305.1_bPorHoc1.mat.Z.cur birds Porphyrio_hochstetteri
