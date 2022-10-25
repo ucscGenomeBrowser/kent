@@ -32,6 +32,8 @@ elif [ "${subset}" == "birds" ]; then
   minTrackCount=11
 elif [ "${subset}" == "mammals" ]; then
   minTrackCount=9
+elif [ "${subset}" == "vertebrate" ]; then
+  minTrackCount=11
 elif [ "${subset}" == "archaea" ]; then
   minTrackCount=9
 elif [ "${subset}" == "viral" ]; then
