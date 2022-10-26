@@ -20,6 +20,7 @@ my $bounceAddr = 'hiram@soe.ucsc.edu';
 if (defined($ENV{'HTTP_REFERER'})) {
   my @a = split('/', $ENV{'HTTP_REFERER'});
   $httpRefer = $a[-1];  # should be "assemblyRequest.html"
+  $httpRefer =~ s/\?.*//;	# remove arguments if present
   my @b = split('\.', $a[-2]);
   $referDomain = "$b[-2].$b[-1]";	# should be "ucsc.edu"
 }
@@ -58,6 +59,7 @@ if (defined($ENV{"QUERY_STRING"})) {
 
 if ( ($validIncoming != 5) || ($extraneousArgs > 0) || ($referDomain ne $domainMustBe) || ($httpRefer ne $httpReferMustBe) ) {
   # not a legitimate request from our own business, do nothing.
+  printf STDERR "# ERROR: cgi-bin/gar invalid something: %d %d %s %s\n", $validIncoming, $extraneousArgs, $referDomain, $httpRefer;
   print "</body></html>\n";
   exit 0;
 }
