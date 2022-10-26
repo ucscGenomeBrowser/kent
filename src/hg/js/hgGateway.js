@@ -36,6 +36,9 @@ function setCopyLinks() {
   copySpan = document.getElementsByClassName('copyLinkSpan');
   for (i = 0; i < copySpan.length; i++) {
     dataTarget = copySpan[i].getAttribute('data-target');
+    hostName = window.location.hostname;
+    targetSpan = document.getElementById(dataTarget);
+    targetSpan.innerText = targetSpan.innerText.replace("http_host", hostName);
     aButton = document.createElement('button');
     aButton.type = "button";
     aButton.title = "Copy URL to clipboard";
