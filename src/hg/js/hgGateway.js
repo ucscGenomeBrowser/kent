@@ -32,12 +32,32 @@ window.surveyLabelImage=null;
 
 function setCopyLinks() {
   // add onclick to class 'copyLink' buttons, there could be more than one.
-  buttons = document.getElementsByClassName('copyLink');
   addOnClick = function(){copyToClipboard(event);};
-  for (i = 0; i < buttons.length; i++) {
-      buttons[i].onclick = addOnClick;
-  }
-}
+  copySpan = document.getElementsByClassName('copyLinkSpan');
+  for (i = 0; i < copySpan.length; i++) {
+    dataTarget = copySpan[i].getAttribute('data-target');
+    aButton = document.createElement('button');
+    aButton.type = "button";
+    aButton.title = "Copy URL to clipboard";
+    aButton.id = "copyIcon" + i;
+    aButton.className = "copyLink";
+    aButton.onclick = addOnClick;
+    aButton.setAttribute('data-target', dataTarget);
+    svgComment = document.createTextNode("<!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->");
+    svgEl = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svgEl.setAttributeNS(null, 'style', 'width:0.9em');
+    svgEl.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.w3.org/2000/svg');
+    svgEl.setAttributeNS(null, 'viewBox', '0 0 512 512');
+    pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathEl.setAttribute("d", 'M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z');
+    svgEl.appendChild(svgComment);
+    svgEl.appendChild(pathEl);
+    buttonText = document.createTextNode(" Copy");
+    aButton.append(svgEl);
+    aButton.append(buttonText);
+    copySpan[i].append(aButton);
+  }     //      for (i = 0; i < copySpan.length; i++)
+}       //      function setCopyLinks()
 
 function svgCreateEl(type, config) {
     // Helper function for creating a new SVG element and initializing its
