@@ -3,7 +3,6 @@ superTrack on
 shortLabel Cross Tissue Nuclei
 longLabel Single nuclei sequenced cross many tissues
 visibility hide
-release alpha
 group singleCell
 
     track crossTissueMapsTissueCellType
@@ -24,6 +23,7 @@ group singleCell
     barChartCategoryUrl /gbdb/hg38/bbi/crossTissueMaps/tissue_cell_type.categories
     barChartFacets tissue,cell_class,cell_subclass,cell_type
     barChartStretchToItem on
+    barChartMerge on
 
     track crossTissueMapsFullDetails
     parent crossTissueMaps
