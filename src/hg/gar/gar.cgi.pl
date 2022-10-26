@@ -10,6 +10,12 @@ use URI::Escape;
 
 my $httpRefer = "noReference";
 my $referDomain = "noDomain";
+my $legitimateFrom = 'hclawson@ucsc.edu';
+my $httpReferMustBe = "assemblyRequest.html";
+my $domainMustBe = "ucsc.edu";
+my $sendTo = 'hclawson@ucsc.edu';
+my $Cc = 'clayfischer@ucsc.edu';
+my $bounceAddr = 'hiram@soe.ucsc.edu';
 
 if (defined($ENV{'HTTP_REFERER'})) {
   my @a = split('/', $ENV{'HTTP_REFERER'});
@@ -50,7 +56,7 @@ if (defined($ENV{"QUERY_STRING"})) {
   }
 }
 
-if ( ($validIncoming != 5) || ($extraneousArgs > 0) ) {
+if ( ($validIncoming != 5) || ($extraneousArgs > 0) || ($referDomain ne $domainMustBe) || ($httpRefer ne $httpReferMustBe) ) {
   # not a legitimate request from our own business, do nothing.
   print "</body></html>\n";
   exit 0;
@@ -67,9 +73,12 @@ printf "</ul>\n";
 my $DS=`date "+%F %T"`;
 chomp $DS;
 
-open (FH, "|/usr/sbin/sendmail -t -oi");
-printf FH "To: hclawson\@ucsc.edu,clayfischer\@ucsc.edu
+open (FH, "|/usr/sbin/sendmail -f \"${bounceAddr}\" -t -oi");
+printf FH "To: %s
 From: %s
+Reply-to: %s
+Return-path: %s
+Cc: %s
 Subject: gar request: %s
 
 name: '%s'
@@ -77,11 +86,9 @@ email: '%s'
 asmId: '%s'
 betterName: '%s'
 comment: '%s'
-httpRefer '%s'
-referDomain '%s'
 
-date: '$DS'
-", $incoming{"email"}, $incoming{"asmId"}, $incoming{"name"}, $incoming{"email"}, $incoming{"asmId"}, $incoming{"betterName"}, $incoming{"comment"}, $httpRefer, $referDomain;
+date: '%s'
+", $sendTo, $legitimateFrom, $incoming{"email"}, $legitimateFrom, $Cc, $incoming{"asmId"}, $incoming{"name"}, $incoming{"email"}, $incoming{"asmId"}, $incoming{"betterName"}, $incoming{"comment"}, ${DS};
 
 close (FH);
 
