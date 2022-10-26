@@ -77,7 +77,6 @@ chomp $DS;
 
 open (FH, "|/usr/sbin/sendmail -f \"${bounceAddr}\" -t -oi");
 printf FH "To: %s
-From: %s
 Reply-to: %s
 Return-path: %s
 Cc: %s
@@ -90,7 +89,7 @@ betterName: '%s'
 comment: '%s'
 
 date: '%s'
-", $sendTo, $legitimateFrom, $incoming{"email"}, $legitimateFrom, $Cc, $incoming{"asmId"}, $incoming{"name"}, $incoming{"email"}, $incoming{"asmId"}, $incoming{"betterName"}, $incoming{"comment"}, ${DS};
+", $sendTo, $incoming{"email"}, $legitimateFrom, $Cc, $incoming{"asmId"}, $incoming{"name"}, $incoming{"email"}, $incoming{"asmId"}, $incoming{"betterName"}, $incoming{"comment"}, ${DS};
 
 close (FH);
 
