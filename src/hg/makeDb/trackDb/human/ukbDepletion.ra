@@ -6,5 +6,7 @@ visibility full
 type bigWig 0.0 1.0
 viewLimits 0.0:1.0
 viewLimitsMax 0:1.0
+maxHeightPixels 128:40:8
 bigDataUrl /gbdb/hg38/ukbDepletion/ukbDepletion.bw
 priority 10.5
+html constraintSuper

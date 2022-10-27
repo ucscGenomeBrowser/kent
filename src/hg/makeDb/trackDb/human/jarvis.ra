@@ -11,7 +11,7 @@ visibility dense
 color 150,130,160
 maxWindowToDraw 10000000
 mouseOverFunction noAverage
-maxHeightPixels 8:40:100
+maxHeightPixels 8:40:128
 yLineMark 0.73
 yLineOnOff on
 html constraintSuper

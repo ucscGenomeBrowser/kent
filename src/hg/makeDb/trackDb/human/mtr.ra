@@ -47,7 +47,7 @@ priority 9.2
         parent mtrScores on
         visibility full
         bigDataUrl /gbdb/$D/mtr/a.bw
-        maxHeightPixels 128:30:8
+        maxHeightPixels 128:40:8
 
         track mtrC
         shortLabel Mutation: C
@@ -56,7 +56,7 @@ priority 9.2
         parent mtrScores on
         visibility full
         bigDataUrl /gbdb/$D/mtr/c.bw
-        maxHeightPixels 128:30:8
+        maxHeightPixels 128:40:8
 
         track mtrG
         shortLabel Mutation: G
@@ -65,7 +65,7 @@ priority 9.2
         parent mtrScores on
         visibility full
         bigDataUrl /gbdb/$D/mtr/g.bw
-        maxHeightPixels 128:30:8
+        maxHeightPixels 128:40:8
 
         track mtrT
         shortLabel Mutation: T
@@ -74,4 +74,4 @@ priority 9.2
         parent mtrScores on
         visibility full
         bigDataUrl /gbdb/$D/mtr/t.bw
-        maxHeightPixels 128:30:8
+        maxHeightPixels 128:40:8
