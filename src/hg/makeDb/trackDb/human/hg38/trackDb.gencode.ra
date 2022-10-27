@@ -7,7 +7,6 @@ longLabel All GENCODE transcripts, including comprehensive set and previous vers
 pennantIcon New red ../goldenPath/newsarch.html#080222 "Updated Aug. 02, 2022"
 # don't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
-include wgEncodeGencodeV19.ra
 include wgEncodeGencodeV20.ra
 include wgEncodeGencodeV21.ra
 include wgEncodeGencodeV22.ra
