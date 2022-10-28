@@ -116,7 +116,6 @@ html gnomadV3_1_1
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
 
 track gnomadConstraint
-pennantIcon New red ../goldenPath/newsarch.html#050322 "Released at UCSC May 3, 2022"
 parent gnomadVariants on
 shortLabel gnomAD Mut Constraint
 longLabel Genome Aggregation Database (gnomAD) Genome Mutational Constraint (includes chrX)
@@ -128,6 +127,7 @@ maxHeightPixels 128:40:8
 viewLimitsMax -3:3
 autoScale on
 priority 10
+pennantIcon Updated red ../goldenPath/newsarch.html "Updated October, 2022"
 html gnomadV3_1_1
 
     track gnomadPLI
