@@ -3389,7 +3389,7 @@ for (hfs = shortList; hfs != NULL; hfs = hfs->next)
     if (multiTerm && foundSpec)
         break;
     }
-if (multiTerm && !foundIt)
+if (!(multiTerm) || (multiTerm && !foundIt))
     {
     for (hfs = longList; hfs != NULL; hfs = hfs->next)
         {

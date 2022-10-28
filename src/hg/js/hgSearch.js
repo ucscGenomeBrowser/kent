@@ -414,10 +414,6 @@ var hgSearch = (function() {
                     li.style = state ? "display" : "display: none";
                 });
         }
-        if (state)
-            $("#searchCategories").jstree().open_node(node);
-        else
-            $("#searchCategories").jstree().close_node(node);
     }
 
     function buildTree(node, cb) {
