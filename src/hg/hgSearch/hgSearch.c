@@ -163,37 +163,36 @@ void doQuery(struct jsonWrite *jw, char *db, struct searchCategory *categories, 
  * otherwise return the position list as JSON */
 {
 struct hgPositions *hgp = NULL;
-hgp = hgPositionsFind(db, searchTerms, "", "hgSearch", cart, FALSE, measureTiming, categories);
-if (hgp)
+char *chrom;
+int retWinStart = 0, retWinEnd = 0;
+boolean categorySearch = TRUE;
+hgp = genomePosCJ(jw, db, searchTerms, &chrom, &retWinStart, &retWinEnd, cart, categories, categorySearch);
+// at this point, if the search term wasn't a singlePos, we have written
+// out the JSON already. So now take care of the singlePos case
+if (hgp && hgp->singlePos)
     {
     // if we got an hgvs match to chromInfo (example: chrX:g.31500000_31600000del),
     // or just a plain position range was searched, we have to create the json
     // manually, cause the tdb lookups in hgPositionsJson() won't work
-    if (hgp->singlePos && hgp->posCount == 1 && hgp->tableList != NULL &&
-            sameString(hgp->tableList->name, "chromInfo"))
-        {
-        struct hgPosTable *table = hgp->tableList;
-        jsonWriteListStart(jw, "positionMatches");
-        jsonWriteObjectStart(jw, NULL);
-        jsonWriteString(jw, "name", "chromInfo");
-        jsonWriteString(jw, "description", table->description);
-        if (table->searchTime >= 0)
-            jsonWriteNumber(jw, "searchTime", table->searchTime);
-        jsonWriteListStart(jw, "matches");
+    struct hgPosTable *table = hgp->tableList;
+    jsonWriteListStart(jw, "positionMatches");
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "name", table->name);
+    jsonWriteString(jw, "description", table->description);
+    if (table->searchTime >= 0)
+        jsonWriteNumber(jw, "searchTime", table->searchTime);
+    jsonWriteListStart(jw, "matches");
 
-        jsonWriteObjectStart(jw, NULL);
-        char position[512];
-        safef(position, sizeof(position), "%s:%d-%d", hgp->singlePos->chrom, hgp->singlePos->chromStart, hgp->singlePos->chromEnd);
-        jsonWriteString(jw, "position", position);
-        jsonWriteString(jw, "posName", hgp->query);
-        jsonWriteObjectEnd(jw);
+    jsonWriteObjectStart(jw, NULL);
+    char position[512];
+    safef(position, sizeof(position), "%s:%d-%d", hgp->singlePos->chrom, retWinStart, retWinEnd);
+    jsonWriteString(jw, "position", position);
+    jsonWriteString(jw, "posName", hgp->query);
+    jsonWriteObjectEnd(jw);
 
-        jsonWriteListEnd(jw); // end matches
-        jsonWriteObjectEnd(jw); // end one table
-        jsonWriteListEnd(jw); // end positionMatches
-        }
-    else
-        hgPositionsJson(jw, db, hgp, cart);
+    jsonWriteListEnd(jw); // end matches
+    jsonWriteObjectEnd(jw); // end one table
+    jsonWriteListEnd(jw); // end positionMatches
     }
 }
 
