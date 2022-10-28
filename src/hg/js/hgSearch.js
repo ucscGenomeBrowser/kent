@@ -609,7 +609,7 @@ var hgSearch = (function() {
                 $('#'+idAttr.value+"_" +categoryCount+"_showMoreButton").click(showMoreResults);
                 categoryCount += 1;
             });
-        } else if (uiState) {
+        } else if (uiState && uiState.search !== undefined) {
             // No results from match
             var msg = "<p>No results for: <b>" + uiState.search + "<b></p>";
             parentDiv.empty();
@@ -732,7 +732,7 @@ var hgSearch = (function() {
         // term, fire off a search
         cart.debug(debugCartJson);
         var searchTerm = $("#searchBarSearchString").val().replaceAll("\"","");
-        if (searchTerm !== undefined) {
+        if (searchTerm !== undefined && searchTerm.length > 0) {
             // put up a loading image
             $("#searchBarSearchButton").after("<i id='spinner' class='fa fa-spinner fa-spin'></i>");
 
