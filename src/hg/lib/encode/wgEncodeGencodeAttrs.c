@@ -35,7 +35,7 @@ if (numColumns > 13)
 if (numColumns > 14)
     ret->transcriptRank = sqlSigned(row[14]);
 else
-    ret->transcriptRank = -1;
+    ret->transcriptRank = 0;
 }
 
 struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsLoad(char **row, int numColumns)
@@ -63,7 +63,7 @@ if (numColumns > 13)
 if (numColumns > 14)
     ret->transcriptRank = sqlSigned(row[14]);
 else
-    ret->transcriptRank = -1;
+    ret->transcriptRank = 0;
 return ret;
 }
 

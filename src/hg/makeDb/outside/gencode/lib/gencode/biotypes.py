@@ -74,6 +74,7 @@ class BioType(SymEnum):
     artifactual_duplication = auto()
     protein_coding_CDS_not_defined = auto()
 
+
 GencodeFunction = SymEnum("GencodeFunction", ("pseudo", "coding", "nonCoding", "problem"))
 
 bioTypesCoding = frozenset([BioType.IG_C_gene,
@@ -140,7 +141,7 @@ bioTypesProblem = frozenset([BioType.retained_intron,
                              BioType.artifact,
                              BioType.artifactual_duplication])
 
-assert((bioTypesCoding | bioTypesNonCoding | bioTypesProblem | bioTypesPseudo) == frozenset(BioType))
+assert (bioTypesCoding | bioTypesNonCoding | bioTypesProblem | bioTypesPseudo) == frozenset(BioType)
 
 bioTypesTR = frozenset((BioType.TR_C_gene,
                         BioType.TR_D_gene,

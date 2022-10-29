@@ -32,8 +32,8 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-#preRelease = no
-preRelease = yes
+preRelease = no
+#preRelease = yes
 db = hg38
 #db = hg19
 #db = mm39
@@ -93,6 +93,7 @@ relDir = ${dataDir}/release_${ver}
 annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
 pseudo2WayGff = ${relDir}/gencode.v${ver}.2wayconspseudos.gff3.gz
 polyAGff = ${relDir}/gencode.v${ver}.polyAs.gff3.gz
+transcriptRanks = ${relDir}/gencode.v${ver}.transcript_rankings.txt.gz
 
 gencodeBinDir = ${HOME}/kent/src/hg/makeDb/outside/gencode/bin
 gencodeMakeTracks = ${gencodeBinDir}/gencodeMakeTracks
@@ -364,7 +365,7 @@ ${gencodeGp}: ${annotationGff} ${gencodeToUcscChain}
 	touch $@
 ${gencodeTsv}: ${annotationGff}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToAttrs} ${annotationGff} $@.${tmpExt}
+	${gencodeGxfToAttrs} --transcriptRanks=${transcriptRanks} ${annotationGff} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${targetGencodeTsv}:
@@ -375,7 +376,7 @@ ${targetGencodeTsv}:
 
 # check attributes so code can be updated to handle new biotypes
 checkAttrs: ${annotationGff}
-	${gencodeGxfToAttrs} ${annotationGff} /dev/null
+	${gencodeGxfToAttrs} --transcriptRanks=${transcriptRanks} ${annotationGff} /dev/null
 
 ##
 # load tables
