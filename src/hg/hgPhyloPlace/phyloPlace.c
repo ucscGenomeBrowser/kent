@@ -1,6 +1,6 @@
 /* Place SARS-CoV-2 sequences in phylogenetic tree using usher program. */
 
-/* Copyright (C) 2020 The Regents of the University of California */
+/* Copyright (C) 2020-2022 The Regents of the University of California */
 
 #include "common.h"
 #include "bigBed.h"
@@ -25,6 +25,7 @@
 #include "phyloTree.h"
 #include "pipeline.h"
 #include "psl.h"
+#include "pthreadWrap.h"
 #include "ra.h"
 #include "regexHelper.h"
 #include "trackHub.h"
@@ -153,12 +154,19 @@ return fileName;
 }
 
 char *getUsherPath(boolean abortIfNotFound)
-/* Return hgPhyloPlaceData/usher if it exists, else NULL.  Do not free the returned value. */
+/* Return hgPhyloPlaceData/usher-sampled if it exists, else try hgPhyloPlaceData/usher, else NULL.
+ * Do not free the returned value. */
 {
-char *usherPath = PHYLOPLACE_DATA_DIR "/usher";
+char *usherPath = PHYLOPLACE_DATA_DIR "/usher-sampled";
 if (fileExists(usherPath))
     return usherPath;
-else if (abortIfNotFound)
+else
+    {
+    usherPath = PHYLOPLACE_DATA_DIR "/usher";
+    if (fileExists(usherPath))
+        return usherPath;
+    }
+if (abortIfNotFound)
     errAbort("Missing usher executable (expected to be at %s)", usherPath);
 return NULL;
 }
@@ -223,11 +231,12 @@ if (isNotEmpty(filename) && fileExists(filename))
     AllocArray(treeChoices->sources, maxChoices);
     AllocArray(treeChoices->descriptions, maxChoices);
     AllocArray(treeChoices->aliasFiles, maxChoices);
+    AllocArray(treeChoices->sampleNameFiles, maxChoices);
     struct lineFile *lf = lineFileOpen(filename, TRUE);
     char *line;
     while (lineFileNextReal(lf, &line))
         {
-        char *words[6];
+        char *words[7];
         int wordCount = chopTabs(line, words);
         lineFileExpectAtLeast(lf, 4, wordCount);
         if (treeChoices->count >= maxChoices)
@@ -256,6 +265,11 @@ if (isNotEmpty(filename) && fileExists(filename))
             {
             addPathIfNecessary(dy, db, words[4]);
             treeChoices->aliasFiles[treeChoices->count] = cloneString(dy->string);
+            }
+        if (wordCount > 5)
+            {
+            addPathIfNecessary(dy, db, words[5]);
+            treeChoices->sampleNameFiles[treeChoices->count] = cloneString(dy->string);
             }
         treeChoices->count++;
         dyStringFree(&dy);
@@ -567,7 +581,9 @@ while ((hel = hashNext(&cookie)) != NULL)
         pi->sampleMuts = sampleMuts;
         }
     else
+        {
         errAbort("addSampleMutsFromSeqInfo: no seqInfo for placed sequence '%s'", pi->sampleId);
+        }
     }
 }
 
@@ -636,19 +652,6 @@ else
 puts("</p>");
 }
 
-static struct variantPathNode *findLastInternalNode(struct variantPathNode *variantPath,
-                                                    int minNewNode)
-/* Return the last node in variantPath with a numeric name less than minNewNode, or NULL. */
-{
-if (!variantPath || !isInternalNodeName(variantPath->nodeName, minNewNode))
-    return NULL;
-while (variantPath->next && isInternalNodeName(variantPath->next->nodeName, minNewNode))
-    variantPath = variantPath->next;
-if (variantPath && isInternalNodeName(variantPath->nodeName, minNewNode))
-    return variantPath;
-return NULL;
-}
-
 static int mutCountCmp(const void *a, const void *b)
 /* Compare number of mutations of phyloTree nodes a and b. */
 {
@@ -657,8 +660,8 @@ const struct phyloTree *nodeB = *(struct phyloTree * const *)b;
 return slCount(nodeA->priv) - slCount(nodeB->priv);
 }
 
-static char *leafWithLeastMuts(struct phyloTree *node, struct mutationAnnotatedTree *bigTree)
-/* If node has a leaf child with no mutations of its own, return the name of that leaf.
+static char *leafWithLeastMuts(struct phyloTree *node, struct hash *excludeHash)
+/* If node has a leaf child (not in excludeHash) with no mutations of its own, return that leaf name.
  * Otherwise, if node has leaf children, return the name of the leaf with the fewest mutations.
  * Otherwise return NULL. */
 {
@@ -668,17 +671,13 @@ int i;
 for (i = 0;  i < node->numEdges;  i++)
     {
     struct phyloTree *kid = node->edges[i];
-    if (kid->numEdges == 0)
+    if (kid->numEdges == 0 && !hashLookup(excludeHash, kid->ident->name))
         {
         leafCount++;
         struct singleNucChange *kidMuts = kid->priv;
         if (!kidMuts)
             {
-            struct slName *nodeList = hashFindVal(bigTree->condensedNodes, kid->ident->name);
-            if (nodeList)
-                leafName = cloneString(nodeList->name);
-            else
-                leafName = cloneString(kid->ident->name);
+            leafName = cloneString(kid->ident->name);
             break;
             }
         }
@@ -691,7 +690,7 @@ if (leafName == NULL && leafCount)
     for (i = 0;  i < node->numEdges;  i++)
         {
         struct phyloTree *kid = node->edges[i];
-        if (kid->numEdges == 0)
+        if (kid->numEdges == 0 && !hashLookup(excludeHash, kid->ident->name))
                 leafKids[leafIx++] = kid;
         }
     qsort(leafKids, leafCount, sizeof(leafKids[0]), mutCountCmp);
@@ -700,39 +699,20 @@ if (leafName == NULL && leafCount)
 return leafName;
 }
 
-static char *findNearestNeighbor(struct mutationAnnotatedTree *bigTree, char *sampleId,
-                                 struct variantPathNode *variantPath)
-/* Use the sequence of mutations in variantPath to find sampleId's parent node in bigTree,
- * then look for most similar leaf sibling(s). */
+static char *findNearestNeighbor(struct phyloTree *tree, char *sampleId,
+                                 struct hash *samplePlacements)
+/* Find sampleId's parent node in bigTree, then look for most similar leaf sibling(s),
+ * excluding other uploaded samples (which can be found in samplePlacements). */
 {
-char *nearestNeighbor = NULL;
-int bigTreeINodeCount = phyloCountInternalNodes(bigTree->tree);
-int minNewNode = bigTreeINodeCount + 1; // 1-based
-struct variantPathNode *lastOldNode = findLastInternalNode(variantPath, minNewNode);
-struct phyloTree *node = lastOldNode ? hashFindVal(bigTree->nodeHash, lastOldNode->nodeName) :
-                                       bigTree->tree;
-if (lastOldNode && !node)
+struct phyloTree *sampleNode = phyloFindName(tree, sampleId);
+if (!sampleNode || ! sampleNode->parent)
+    return NULL;
+struct phyloTree *node = sampleNode->parent;
+char *nearestNeighbor = leafWithLeastMuts(node, samplePlacements);
+while (nearestNeighbor == NULL && node->parent != NULL)
     {
-    if (startsWith(USHER_NODE_PREFIX, lastOldNode->nodeName))
-        // protobuf still has number even if usher prepends USHER_NODE_PREFIX when parsing.
-        node = hashFindVal(bigTree->nodeHash, lastOldNode->nodeName+strlen(USHER_NODE_PREFIX));
-    if (node == NULL)
-        errAbort("Can't find last internal node %s for sample %s", lastOldNode->nodeName, sampleId);
-    }
-// Look for a leaf kid with no mutations relative to the parent, should be closest.
-if (node->numEdges == 0)
-    {
-    struct slName *nodeList = hashFindVal(bigTree->condensedNodes, node->ident->name);
-    if (nodeList)
-        nearestNeighbor = cloneString(nodeList->name);
-    else
-        nearestNeighbor = cloneString(node->ident->name);
-    }
-else
-    {
-    nearestNeighbor = leafWithLeastMuts(node, bigTree);
-    if (nearestNeighbor == NULL && node->parent != NULL)
-        nearestNeighbor = leafWithLeastMuts(node->parent, bigTree);
+    node = node->parent;
+    nearestNeighbor = leafWithLeastMuts(node, samplePlacements);
     }
 return nearestNeighbor;
 }
@@ -954,24 +934,6 @@ if (met)
 return lineage;
 }
 
-static void findNearestNeighbors(struct hash *samplePlacements, struct hash *sampleMetadata,
-                                 struct mutationAnnotatedTree *bigTree)
-/* For each placed sample, find the nearest neighbor in the bigTree and its assigned lineage,
- * and fill in those two fields of placementInfo. */
-{
-if (!bigTree)
-    return;
-struct hashCookie cookie = hashFirst(samplePlacements);
-struct hashEl *hel;
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    struct placementInfo *info = hel->val;
-    info->nearestNeighbor = findNearestNeighbor(bigTree, info->sampleId, info->variantPath);
-    if (isNotEmpty(info->nearestNeighbor))
-        info->neighborLineage = lineageForSample(sampleMetadata, info->nearestNeighbor);
-    }
-}
-
 static void printLineageLink(char *lineage, char *db)
 /* Print lineage with link to outbreak.info or pango-designation issue if appropriate.
  * Caller must handle case of empty/NULL lineage. */
@@ -1052,8 +1014,16 @@ for (sample = sampleIds;  sample != NULL;  sample = sample->next)
     {
     struct placementInfo *info = hashFindVal(samplePlacements, sample->name);
     if (!info)
-        errAbort("getPlacementRefList: can't find placement info for sample '%s'",
-                 sample->name);
+        {
+        // Usher might have added a prefix to distinguish from a sequence with the same name
+        // already in the tree.
+        char nameWithPrefix[strlen(USHER_DEDUP_PREFIX) + strlen(sample->name) + 1];
+        safef(nameWithPrefix, sizeof nameWithPrefix, "%s%s", USHER_DEDUP_PREFIX, sample->name);
+        info = hashFindVal(samplePlacements, nameWithPrefix);
+        if (!info)
+            errAbort("getPlacementRefList: can't find placement info for sample '%s'",
+                     sample->name);
+        }
     slAddHead(&placementRefs, slRefNew(info));
     }
 slReverse(&placementRefs);
@@ -1237,11 +1207,14 @@ if (node->numEdges)
     else
         return prunedKids;
     }
-else if (! (node->ident->name && slNameInList(sampleIds, node->ident->name)))
+else if (! (node->ident->name && slNameInListUseCase(sampleIds, node->ident->name)))
     node = NULL;
 return node;
 }
 
+// NOTE: it would be more efficient to associate a subtree with each sample after parsing
+// and sorting subtrees, e.g. hash and/or store a link in placementInfo so we don't have to search
+// subtrees for every sample like this, but this will do for now.
 static struct subtreeInfo *subtreeInfoForSample(struct subtreeInfo *subtreeInfoList, char *name,
                                                 int *retIx)
 /* Find the subtree that contains sample name and set *retIx to its index in the list.
@@ -1250,12 +1223,32 @@ static struct subtreeInfo *subtreeInfoForSample(struct subtreeInfo *subtreeInfoL
 struct subtreeInfo *ti;
 int ix;
 for (ti = subtreeInfoList, ix = 0;  ti != NULL;  ti = ti->next, ix++)
-    if (slNameInList(ti->subtreeUserSampleIds, name))
+    if (slNameInListUseCase(ti->subtreeUserSampleIds, name))
         break;
 if (ti == NULL)
     ix = -1;
 *retIx = ix;
 return ti;
+}
+
+static void findNearestNeighbors(struct usherResults *results, struct hash *sampleMetadata)
+/* For each placed sample, find the nearest neighbor in the subtree and its assigned lineage,
+ * and fill in those two fields of placementInfo. */
+{
+struct hashCookie cookie = hashFirst(results->samplePlacements);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct placementInfo *info = hel->val;
+    int ix;
+    struct subtreeInfo *ti = subtreeInfoForSample(results->subtreeInfoList, info->sampleId, &ix);
+    if (!ti)
+        continue;
+    info->nearestNeighbor = findNearestNeighbor(ti->subtree, info->sampleId,
+                                                results->samplePlacements);
+    if (isNotEmpty(info->nearestNeighbor))
+        info->neighborLineage = lineageForSample(sampleMetadata, info->nearestNeighbor);
+    }
 }
 
 static void lookForCladesAndLineages(struct hash *samplePlacements,
@@ -1844,7 +1837,7 @@ if (seqInfoList)
 
 static void summarizeSubtrees(struct slName *sampleIds, struct usherResults *results,
                               struct hash *sampleMetadata, struct tempName *jsonTns[],
-                              struct mutationAnnotatedTree *bigTree, char *db)
+                              char *db)
 /* Print a summary table of pasted/uploaded identifiers and subtrees */
 {
 boolean gotClades = FALSE, gotLineages = FALSE;
@@ -2296,13 +2289,24 @@ else
 }
 
 
-static struct hash *hashFromSeqInfoList(struct seqInfo *seqInfoList)
-/* Hash sequence name to seqInfo for quick lookup. */
+static struct hash *hashFromSeqInfoListAndIds(struct seqInfo *seqInfoList, struct slName *sampleIds)
+/* Hash sequence name (possibly prefixed by usher) to seqInfo for quick lookup. */
 {
 struct hash *hash = hashNew(0);
 struct seqInfo *si;
 for (si = seqInfoList;  si != NULL;  si = si->next)
+    {
+    if (! slNameInListUseCase(sampleIds, si->seq->name))
+        {
+        // Usher might have added a prefix to distinguish from a sequence with the same name
+        // already in the tree.
+        char nameWithPrefix[strlen(USHER_DEDUP_PREFIX) + strlen(si->seq->name) + 1];
+        safef(nameWithPrefix, sizeof nameWithPrefix, "%s%s", USHER_DEDUP_PREFIX, si->seq->name);
+        if (slNameInListUseCase(sampleIds, nameWithPrefix))
+            si->seq->name = cloneString(nameWithPrefix);
+        }
     hashAdd(hash, si->seq->name, si);
+    }
 return hash;
 }
 
@@ -2456,13 +2460,14 @@ struct subtreeInfo *tiB = *(struct subtreeInfo **)pb;
 return slCount(tiB->subtreeUserSampleIds) - slCount(tiA->subtreeUserSampleIds);
 }
 
-static void getProtobufMetadataSource(char *db, char *protobufFile, char **retProtobufPath,
-                                      char **retMetadataFile, char **retSource, char **retAliasFile)
+static void getProtobufMetadataSource(char *db, struct treeChoices *treeChoices,
+                                      char *protobufFile, char **retProtobufPath,
+                                      char **retMetadataFile, char **retSource,
+                                      char **retAliasFile, char **retSampleNameFile)
 /* If the config file specifies a list of tree choices, and protobufFile is a valid choice, then
  * set ret* to the files associated with that choice.  Otherwise fall back on older conf settings.
  * Return the selected treeChoice if there is one. */
 {
-struct treeChoices *treeChoices = loadTreeChoices(db);
 if (treeChoices)
     {
     *retProtobufPath = protobufFile;
@@ -2475,6 +2480,7 @@ if (treeChoices)
             *retMetadataFile = treeChoices->metadataFiles[i];
             *retSource = treeChoices->sources[i];
             *retAliasFile = treeChoices->aliasFiles[i];
+            *retSampleNameFile = treeChoices->sampleNameFiles[i];
             break;
             }
     if (i == treeChoices->count)
@@ -2483,6 +2489,7 @@ if (treeChoices)
         *retMetadataFile = treeChoices->metadataFiles[0];
         *retSource = treeChoices->sources[0];
         *retAliasFile = treeChoices->aliasFiles[0];
+        *retSampleNameFile = treeChoices->sampleNameFiles[0];
         }
     }
 else
@@ -2492,6 +2499,7 @@ else
     *retMetadataFile = phyloPlaceDbSettingPath(db, "metadataFile");
     *retSource = "GISAID";
     *retAliasFile = NULL;
+    *retSampleNameFile = NULL;
     }
 }
 
@@ -2610,15 +2618,37 @@ if (isNotEmpty(aliasFile) && fileExists(aliasFile))
     }
 }
 
-static struct hash *getTreeNames(struct mutationAnnotatedTree *bigTree, char *aliasFile,
-                                 boolean addComponents)
-/* Make a hash of full names of leaves of bigTree; if addComponents, also map components of those
- * names to the full names in case the user gives us partial names/IDs. */
+static struct hash *getTreeNames(char *nameFile, char *protobufFile,
+                                 struct mutationAnnotatedTree **pBigTree,
+                                 boolean addComponents, int *pStartTime)
+/* Make a hash of full names of leaves of bigTree, using nameFile if it exists, otherwise
+ * falling back on the bigTree itself, loading it if necessary.  If addComponents, also map
+ * components of those names to the full names in case the user gives us partial names/IDs. */
 {
-int nodeCount = bigTree->nodeHash->elCount;
-struct hash *nameHash = hashNew(digitsBaseTwo(nodeCount) + 3);
-rAddLeafNames(bigTree->tree, bigTree->condensedNodes, nameHash, addComponents);
-addAliases(nameHash, aliasFile);
+struct hash *nameHash = NULL;
+if (isNotEmpty(nameFile) && fileExists(nameFile))
+    {
+    nameHash = hashNew(26);
+    struct lineFile *lf = lineFileOpen(nameFile, TRUE);
+    char *line;
+    while (lineFileNext(lf, &line, NULL))
+        addNameMaybeComponents(nameHash, line, addComponents);
+    lineFileClose(&lf);
+    }
+else
+    {
+    if (*pBigTree == NULL)
+        {
+        *pBigTree = parseParsimonyProtobuf(protobufFile);
+        reportTiming(pStartTime, "parse protobuf file (at startup, because sample names file was "
+                     "not provided)");
+        }
+    struct mutationAnnotatedTree *bigTree = *pBigTree;
+    int nodeCount = bigTree->nodeHash->elCount;
+    nameHash = hashNew(digitsBaseTwo(nodeCount) + 3);
+    rAddLeafNames(bigTree->tree, bigTree->condensedNodes, nameHash, addComponents);
+    }
+reportTiming(pStartTime, "get tree names");
 return nameHash;
 }
 
@@ -2751,15 +2781,13 @@ while (regexMatchSubstr(line, rangeListExp, substrArr, ArraySize(substrArr)))
 return foundAny;
 }
 
-static struct slName *readSampleIds(struct lineFile *lf, struct mutationAnnotatedTree *bigTree,
-                                    char *aliasFile)
+static struct slName *readSampleIds(struct lineFile *lf, struct hash *nameHash)
 /* Read a file of sample names/IDs from the user; typically these will not be exactly the same
  * as the protobuf's (UCSC protobuf names are typically country/isolate/year|ID|date), so attempt
  * to find component matches if an exact match isn't found. */
 {
 struct slName *sampleIds = NULL;
 struct slName *unmatched = NULL;
-struct hash *nameHash = getTreeNames(bigTree, aliasFile, TRUE);
 char *line;
 while (lineFileNext(lf, &line, NULL))
     {
@@ -2810,6 +2838,26 @@ slNameFreeList(&unmatched);
 return sampleIds;
 }
 
+void *loadMetadataWorker(void *arg)
+/* pthread worker function to read a tab-sep metadata file and return it hashed by name.  */
+{
+char *metadataFile = arg;
+int startTime = clock1000();
+struct hash *sampleMetadata = getSampleMetadata(metadataFile);
+reportTiming(&startTime, "read sample metadata (in a pthread)");
+return sampleMetadata;
+}
+
+static pthread_t *mayStartLoaderPthread(char *filename, void *(*workerFunction)(void *))
+/* Fork off a child process that parses a file and returns the resulting data structure. */
+{
+pthread_t *pt;
+AllocVar(pt);
+if (! pthreadMayCreate(pt, NULL, workerFunction, filename))
+    pt = NULL;
+return pt;
+}
+
 char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
                         boolean doMeasureTiming, int subtreeSize, int fontHeight,
                         boolean *retSuccess)
@@ -2832,18 +2880,25 @@ char *protobufPath = NULL;
 char *source = NULL;
 char *metadataFile = NULL;
 char *aliasFile = NULL;
-getProtobufMetadataSource(db, defaultProtobuf, &protobufPath, &metadataFile, &source, &aliasFile);
-struct mutationAnnotatedTree *bigTree = parseParsimonyProtobuf(protobufPath);
-reportTiming(&startTime, "parse protobuf file");
-if (! bigTree)
-    {
-    warn("Problem parsing %s; can't make subtree subtracks.", protobufPath);
-    }
+char *sampleNameFile = NULL;
+struct treeChoices *treeChoices = loadTreeChoices(db);
+getProtobufMetadataSource(db, treeChoices, defaultProtobuf,
+                          &protobufPath, &metadataFile, &source, &aliasFile, &sampleNameFile);
+reportTiming(&startTime, "start up and find the tree etc. files");
+struct mutationAnnotatedTree *bigTree = NULL;
 lineFileCarefulNewlines(lf);
 char *chrom = hDefaultChrom(db);
 int chromSize = hChromSize(db, chrom);
 struct slName **maskSites = getProblematicSites(db, chrom, chromSize);
-boolean *informativeBases = informativeBasesFromTree(bigTree->tree, maskSites, chromSize);
+//#*** TODO: add CGI param option for this almost-never-needed tweak:
+if (0)
+    {
+    bigTree = parseParsimonyProtobuf(protobufPath);
+    reportTiming(&startTime, "parse protobuf file (at startup, for excluding informativeBases "
+                 "from maskSites)");
+    informativeBasesFromTree(bigTree->tree, maskSites, chromSize);
+    reportTiming(&startTime, "remove any informative bases in tree from maskSites");
+    }
 struct dnaSeq *refGenome = hChromSeq(db, chrom, 0, chromSize);
 boolean isFasta = FALSE;
 boolean subtreesOnly = FALSE;
@@ -2852,8 +2907,11 @@ if (lfLooksLikeFasta(lf))
     {
     struct slPair *failedSeqs;
     struct slPair *failedPsls;
-    struct hash *treeNames = getTreeNames(bigTree, NULL, FALSE);
-    vcfTn = vcfFromFasta(lf, db, refGenome, informativeBases, maskSites, treeNames,
+    struct hash *treeNames = NULL;
+    // We need to check uploaded names in fasta only for original usher, not usher-sampled(-server).
+    if (!serverIsConfigured(db) && !endsWith(usherPath, "-sampled"))
+        treeNames = getTreeNames(sampleNameFile, protobufPath, &bigTree, FALSE, &startTime);
+    vcfTn = vcfFromFasta(lf, db, refGenome, maskSites, treeNames,
                          &sampleIds, &seqInfoList, &failedSeqs, &failedPsls, &startTime);
     if (failedSeqs)
         {
@@ -2884,31 +2942,48 @@ else if (lfLooksLikeVcf(lf))
 else
     {
     subtreesOnly = TRUE;
-    sampleIds = readSampleIds(lf, bigTree, aliasFile);
+    struct hash *treeNames = getTreeNames(sampleNameFile, protobufPath, &bigTree, TRUE, &startTime);
+    addAliases(treeNames, aliasFile);
+    reportTiming(&startTime, "load sample name aliases");
+    sampleIds = readSampleIds(lf, treeNames);
+    reportTiming(&startTime, "look up uploaded sample names");
     }
 lineFileClose(&lf);
-struct hash *seqInfoHash = hashFromSeqInfoList(seqInfoList);
 if (sampleIds == NULL)
     {
     return ctFile;
     }
+
+// Kick off child thread to load metadata simultaneously with running usher or matUtils.
+pthread_t *metadataPthread = mayStartLoaderPthread(metadataFile, loadMetadataWorker);
+
 struct usherResults *results = NULL;
 if (vcfTn)
     {
     fflush(stdout);
-    results = runUsher(usherPath, protobufPath, vcfTn->forCgi,
-                       subtreeSize, sampleIds, bigTree->condensedNodes,
-                       &startTime);
-    if (results)
-        addSampleMutsFromSeqInfo(results->samplePlacements, seqInfoHash);
+    results = runUsher(db, usherPath, protobufPath, vcfTn->forCgi, subtreeSize, &sampleIds,
+                       treeChoices, &startTime);
     }
 else if (subtreesOnly)
     {
     char *matUtilsPath = getMatUtilsPath(TRUE);
     results = runMatUtilsExtractSubtrees(matUtilsPath, protobufPath, subtreeSize,
-                                         sampleIds, bigTree->condensedNodes,
-                                         &startTime);
+                                         sampleIds, &startTime);
     }
+
+struct hash *sampleMetadata = NULL;
+if (metadataPthread)
+    {
+    pthreadJoin(metadataPthread, (void **)(&sampleMetadata));
+    reportTiming(&startTime, "wait for sample metadata loading thread to finish");
+    }
+else
+    {
+    // We really need metadata -- load it the slow way.
+    sampleMetadata = getSampleMetadata(metadataFile);
+    reportTiming(&startTime, "load sample metadata without pthread");
+    }
+
 if (results && results->singleSubtreeInfo)
     {
     if (retSuccess)
@@ -2922,7 +2997,6 @@ if (results && results->singleSubtreeInfo)
     char *bigGenePredFile = phyloPlaceDbSettingPath(db, "bigGenePredFile");
     struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
     struct seqWindow *gSeqWin = memSeqWindowNew(chrom, refGenome->dna);
-    struct hash *sampleMetadata = getSampleMetadata(metadataFile);
     struct hash *sampleUrls = hashNew(0);
     struct tempName *jsonTns[subtreeCount];
     struct subtreeInfo *ti;
@@ -2947,6 +3021,7 @@ if (results && results->singleSubtreeInfo)
     trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
     treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
                       sampleUrls, singleSubtreeJsonTn->forCgi, source);
+    reportTiming(&startTime, "make Auspice JSON");
     struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
     if (subtreeCount > MAX_SUBTREE_BUTTONS)
         subtreeInfoForButtons = NULL;
@@ -2970,22 +3045,25 @@ if (results && results->singleSubtreeInfo)
     struct tempName *ctTn = NULL;
     if (subtreesOnly)
         {
-        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, bigTree, db);
+        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, db);
         reportTiming(&startTime, "describe subtrees");
         }
     else
         {
-        findNearestNeighbors(results->samplePlacements, sampleMetadata, bigTree);
+        findNearestNeighbors(results, sampleMetadata);
+        reportTiming(&startTime, "find nearest neighbors");
 
         // Make custom tracks for uploaded samples and subtree(s).
         struct phyloTree *sampleTree = NULL;
-        ctTn = writeCustomTracks(db, vcfTn, results, sampleIds, bigTree, source, fontHeight,
+        ctTn = writeCustomTracks(db, vcfTn, results, sampleIds, source, fontHeight,
                                  &sampleTree, &startTime);
 
         // Make a sample summary TSV file and accumulate S gene changes
+        struct hash *seqInfoHash = hashFromSeqInfoListAndIds(seqInfoList, sampleIds);
+        addSampleMutsFromSeqInfo(results->samplePlacements, seqInfoHash);
         struct hash *spikeChanges = hashNew(0);
         tsvTn = writeTsvSummary(results, sampleTree, sampleIds, seqInfoHash,
-                                                 geneInfoList, gSeqWin, spikeChanges, &startTime);
+                                geneInfoList, gSeqWin, spikeChanges, &startTime);
         sTsvTn = writeSpikeChangeSummary(spikeChanges, slCount(sampleIds));
         downloadsRow(results->bigTreePlusTn->forHtml, tsvTn->forHtml, sTsvTn->forHtml,
                      zipTn->forHtml);
