@@ -485,6 +485,10 @@ var hgSearch = (function() {
                     url = "hgTracks?db=" + db + "&" + hgTracksTitle + "=pack&position=" + match.position + "&hgFind.matches=" + match.hgFindMatches;
                     if (match.extraSel)
                         url += "&" + match.extraSel;
+                    if (match.highlight) {
+                        url += url[url.length-1] !== '&' ? '&' : '';
+                        url += "highlight=" + match.highlight;
+                    }
                 } else {
                     url = "hgc?db=" + db + "&g=" + hgcTitle + "&i=" + match.position + "&c=0&o=0&l=0&r=0" ;
                 }
