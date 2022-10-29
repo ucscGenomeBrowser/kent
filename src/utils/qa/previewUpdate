@@ -1,0 +1,32 @@
+# This script does the preparation for and then updates genome preview with Dev CGIs
+# Made by Daniel Schmelter 11/21/19'
+# Based on http://genomewiki.ucsc.edu/genecats/index.php/Genome-preview_machine
+#
+
+echo "Updating libs, 1/5"
+cd ~/kent/src
+make -j8 clean > /dev/null
+cd ~/kent/src/hg/lib
+git pull > /dev/null
+make -j8 > /dev/null
+
+echo "Updating js files, 2/5"
+cd ~/kent/src/hg/js
+git pull > /dev/null
+make -j8 USER=preview > /dev/null
+
+echo "Updating CSS styles, 3/5"
+cd ~/kent/src/hg/htdocs/style
+git pull > /dev/null
+make -j8 alpha > /dev/null
+
+echo "Updating CGIs on preview, 4/5"
+cd ~/kent/src
+git pull > /dev/null
+USER=preview make -j8 cgi > /dev/null
+
+echo "Logging into qateam@hgwdev and running devUpdateToPreview, 5/5"
+ssh qateam@hgwdev 'echo "y" | pushDevToPreview' > /dev/null
+
+echo "The preview update is completed"
+echo "https://genome-preview.ucsc.edu/"
