@@ -87,23 +87,6 @@ def trackDbTemplateGen(params):
         "type genePred",
         "configurable off",
         "wgEncodeGencodeVersion {gencodeVer}",
-        "wgEncodeGencodeAttrs wgEncodeGencodeAttrsV{gencodeVer}"))
-    yield forStd(params, (
-        "wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV{gencodeVer}",))
-    yield forBoth(params, (
-        "wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV{gencodeVer}",
-        "wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV{gencodeVer}",
-        "wgEncodeGencodeHgnc wgEncodeGencodeHgncV{gencodeVer}",
-        "wgEncodeGencodePdb wgEncodeGencodePdbV{gencodeVer}",
-        "wgEncodeGencodePubMed wgEncodeGencodePubMedV{gencodeVer}",
-        "wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV{gencodeVer}",
-        "wgEncodeGencodeTag wgEncodeGencodeTagV{gencodeVer}",
-        "wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV{gencodeVer}",
-        "wgEncodeGencodeUniProt wgEncodeGencodeUniProtV{gencodeVer}",
-        "wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV{gencodeVer}",
-        "wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV{gencodeVer}",
-        "wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV{gencodeVer}",
-        "wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV{gencodeVer}",
         "",
         "    track wgEncodeGencodeV{gencodeVer}ViewGenes",
         "    shortLabel Genes",
