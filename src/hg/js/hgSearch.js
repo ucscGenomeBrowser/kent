@@ -787,6 +787,18 @@ var hgSearch = (function() {
             } else {
                 alert("Error no database from request");
             }
+            // check right away for a special redirect to hgTracks:
+            if (cartJson.positionMatches !== undefined &&
+                    cartJson.positionMatches.length == 1 &&
+                    cartJson.positionMatches[0].matches[0].doRedirect === true) {
+                match = cartJson.positionMatches[0].matches[0];
+                position = match.position;
+                newUrl = "../cgi-bin/hgTracks" + "?db=" + db + "&position=" + position;
+                if (match.highlight) {
+                    newUrl += "&highlight=" + match.highlight;
+                }
+                window.location.replace(newUrl);
+            }
             var urlParts = {};
             if (debugCartJson) {
                 console.log('from server:\n', cartJson);
