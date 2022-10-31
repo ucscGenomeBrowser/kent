@@ -753,6 +753,20 @@ if (S_ISREG(st.st_mode))
 return FALSE;
 }
 
+void mustBeReadableAndRegularFile(char *fileName)
+/* errAbort if fileName is a regular file and readable. */
+{
+int fd = open(fileName, O_RDONLY);
+
+if (fd < 0)
+    errAbort("Cannot open file (%s).  It doesn't exist or is not readable.", fileName);
+
+close(fd);
+
+if (!isRegularFile(fileName))
+    errAbort("input file (%s) must be a regular file.  Pipes or other special devices can't be used.", fileName);
+}
+
 char *mustReadSymlinkExt(char *path, struct stat *sb)
 /* Read symlink or abort. FreeMem the returned value. */
 {
