@@ -81,7 +81,8 @@ int showCount = min(matchCount, maxReturn);
 struct trixSearchResult *tsr = slElementFromIx(tsList, maxReturn-1);
 if (tsr)
     tsr->next = NULL;
-addSnippetsToSearchResults(tsList, trix);
+if (full)
+    addSnippetsToSearchResults(tsList, trix);
 dumpTsList(tsList, showCount, matchCount);
 trixSearchResultFreeList(&tsList);
 trixClose(&trix);

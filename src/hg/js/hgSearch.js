@@ -482,9 +482,17 @@ var hgSearch = (function() {
                         goToHgTracks = false;
                 }
                 if (goToHgTracks) {
-                    url = "hgTracks?db=" + db + "&" + hgTracksTitle + "=pack&position=" + match.position + "&hgFind.matches=" + match.hgFindMatches;
-                    if (match.extraSel)
+                    url = "hgTracks?db=" + db + "&" + hgTracksTitle + "=pack&position=" + match.position;
+                    if (match.hgFindMatches) {
+                        url += "&hgFind.matches=" + match.hgFindMatches;
+                    }
+                    if (match.extraSel) {
                         url += "&" + match.extraSel;
+                    }
+                    if (match.highlight) {
+                        url += url[url.length-1] !== '&' ? '&' : '';
+                        url += "highlight=" + match.highlight;
+                    }
                 } else {
                     url = "hgc?db=" + db + "&g=" + hgcTitle + "&i=" + match.position + "&c=0&o=0&l=0&r=0" ;
                 }
@@ -747,7 +755,7 @@ var hgSearch = (function() {
             var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
             if (positionMatch !== null) {
                 var prevCgi = uiState.prevCgi !== undefined ? uiState.prevCgi : "hgTracks";
-                window.location.replace("../cgi-bin/" + prevCgi + "?db=" + db + "position=" + searchTerm);
+                window.location.replace("../cgi-bin/" + prevCgi + "?db=" + db + "position=" + encodeURIComponent(searchTerm));
                 return;
             }
 
@@ -782,6 +790,22 @@ var hgSearch = (function() {
                 db = cartJson.db;
             } else {
                 alert("Error no database from request");
+            }
+            // check right away for a special redirect to hgTracks:
+            if (cartJson.positionMatches !== undefined &&
+                    cartJson.positionMatches.length == 1 &&
+                    cartJson.positionMatches[0].matches[0].doRedirect === true) {
+                positionMatch = cartJson.positionMatches[0];
+                match = positionMatch.matches[0];
+                position = match.position;
+                newUrl = "../cgi-bin/hgTracks" + "?db=" + db + "&position=" + position;
+                if (match.highlight) {
+                    newUrl += "&highlight=" + match.highlight;
+                }
+                if (positionMatch.name !== "chromInfo") {
+                    newUrl += "&" + positionMatch.name + "=pack";
+                }
+                window.location.replace(newUrl);
             }
             var urlParts = {};
             if (debugCartJson) {

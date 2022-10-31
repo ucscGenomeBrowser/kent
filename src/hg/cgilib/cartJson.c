@@ -125,6 +125,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
                 }
             jsonWriteString(jw, "hgFindMatches", encMatches);
             jsonWriteString(jw, "posName", htmlEncode(pos->name));
+            jsonWriteString(jw, "highlight", pos->highlight);
             jsonWriteBoolean(jw, "canonical", pos->canonical);
             if (pos->description)
                 {

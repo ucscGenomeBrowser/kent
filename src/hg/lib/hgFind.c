@@ -526,9 +526,17 @@ if (slCount(tsrList) > maxToReturn)
     tsr = slElementFromIx(tsrList, maxToReturn-1);
     tsr->next = NULL;
     }
-char *context = hgFindSpecSetting(hfs, "searchTrixContext");
-if (context && sameString(context, "on"))
-    addSnippetsToSearchResults(tsrList, trix);
+// allow supporting snippet file to not exist, if there are no
+// snippets then the below code will use the description from
+// kgXref
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *context = hgFindSpecSetting(hfs, "searchTrixContext");
+    if (context && sameString(context, "on"))
+        addSnippetsToSearchResults(tsrList, trix);
+    }
+errCatchEnd(errCatch);
 
 /* Make hash of all search results - one for each known gene ID. */
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
