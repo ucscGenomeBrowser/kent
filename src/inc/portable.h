@@ -168,6 +168,9 @@ void touchFileFromFile(const char *oldFile, const char *newFile);
 boolean isDirectory(char *pathName);
 /* Return TRUE if pathName is a directory. */
 
+void mustBeReadableAndRegularFile(char *fileName);
+/* errAbort if fileName is a regular file and readable. */
+
 boolean isRegularFile(char *fileName);
 /* Return TRUE if fileName is a regular file. */
 
