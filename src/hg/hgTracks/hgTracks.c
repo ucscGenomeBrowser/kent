@@ -65,6 +65,7 @@
 #include "extTools.h"
 #include "basicBed.h"
 #include "customFactory.h"
+#include "dupTrack.h"
 #include "genbank.h"
 #include "bigWarn.h"
 #include "wigCommon.h"
@@ -6596,6 +6597,80 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
+static void rHashList(struct hash *hash, struct track *list)
+/* Add list of tracks to hash including subtracks */
+{
+struct track *track;
+for (track = list; track != NULL; track = track->next)
+    {
+    hashAdd(hash, track->track, track);
+    if (track->subtracks != NULL)
+       rHashList(hash, track->subtracks);
+    }
+}
+
+static struct hash *hashTracksAndSubtracksFromList(struct track *list)
+/* Make a hash and put all of tracks and subtracks on it. */
+{
+struct hash *hash = hashNew(12);
+rHashList(hash, list);
+return hash;
+}
+
+void makeDupeTracks(struct track **pTrackList)
+/* Make up dupe tracks and append to list. Have to also crawl
+ * through list to add subtracks */
+{
+struct dupTrack *dupList = dupTrackListFromCart(cart);
+if (dupList == NULL)
+    return;
+
+/* Make up hash of tracks for quick finding of sources */
+struct hash *trackHash = hashTracksAndSubtracksFromList(*pTrackList);
+
+struct dupTrack *dup;
+for (dup = dupList; dup != NULL; dup = dup->next)
+    {
+    struct track *source = hashFindVal(trackHash, dup->source);
+    if (source != NULL)
+        {
+	struct track *track = CloneVar(source);
+	struct trackDb *tdb = track->tdb = dupTdbFrom(source->tdb, dup);
+	track->track = dup->name;
+	track->shortLabel = tdb->shortLabel;
+	track->longLabel = tdb->longLabel;
+	struct trackDb *parentTdb = tdb->parent;
+	if (parentTdb == NULL)
+	    slAddHead(pTrackList, track);
+	else
+	    {
+	    if (tdbIsFolder(parentTdb))
+	        {
+		refAdd(&parentTdb->children, tdb);
+		slAddHead(pTrackList, track);
+		}
+	    else
+	        {
+		/* Add to parent Tdb */
+		slAddHead(&parentTdb->subtracks, tdb);
+
+		/* The parentTrack may correspond to the parent or grandParent tdb, look both places */
+		struct track *parentTrack = hashFindVal(trackHash, parentTdb->track);
+		if (parentTrack == NULL && parentTdb->parent != NULL)
+		    parentTrack = hashFindVal(trackHash, parentTdb->parent->track);
+
+		if (parentTrack != NULL)
+		    slAddHead(&parentTrack->subtracks, track);
+		else
+		    warn("can't find parentTdb %s in makeDupeTracks", parentTdb->track);
+		}
+	    }
+	}
+    }
+hashFree(&trackHash);
+}
+
+
 void loadTrackHubs(struct track **pTrackList, struct grp **pGrpList)
 /* Load up stuff from data hubs and append to lists. */
 {
@@ -6995,6 +7070,7 @@ if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
     loadTrackHubs(&trackList, &grpList);
     }
 loadCustomTracks(&trackList);
+makeDupeTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
 boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
