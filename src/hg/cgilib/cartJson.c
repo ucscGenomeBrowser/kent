@@ -125,6 +125,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
                 }
             jsonWriteString(jw, "hgFindMatches", encMatches);
             jsonWriteString(jw, "posName", htmlEncode(pos->name));
+            jsonWriteString(jw, "highlight", pos->highlight);
             jsonWriteBoolean(jw, "canonical", pos->canonical);
             if (pos->description)
                 {
@@ -137,14 +138,14 @@ for (table = hgp->tableList; table != NULL; table = table->next)
         if (table->searchTime >= 0)
             jsonWriteNumber(jw, "searchTime", table->searchTime);
         jsonWriteObjectEnd(jw); // end one table
-	}
+        }
     }
     jsonWriteListEnd(jw); // end positionMatches
 }
 
-static struct hgPositions *genomePosCJ(struct jsonWrite *jw,
+struct hgPositions *genomePosCJ(struct jsonWrite *jw,
 				       char *db, char *spec, char **retChromName,
-				       int *retWinStart, int *retWinEnd, struct cart *cart)
+				       int *retWinStart, int *retWinEnd, struct cart *cart, struct searchCategory *categories, boolean categorySearch)
 /* Search for positions in genome that match user query.
  * Return an hgp unless there is a problem.  hgp->singlePos will be set if a single
  * position matched.
@@ -167,48 +168,48 @@ for (i = 0;  i < termCount;  i++)
     {
     trimSpaces(terms[i]);
     if (isEmpty(terms[i]))
-	continue;
-    hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm, measureTiming, NULL);
+    continue;
+    hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm, measureTiming, categories);
     if (hgp == NULL || hgp->posCount == 0)
-	{
-	jsonWriteStringf(jw, "error",
-			 "Sorry, couldn't locate %s in %s %s", htmlEncode(terms[i]),
-                         trackHubSkipHubName(hOrganism(db)), hFreezeDate(db));
-	if (multiTerm)
-	    jsonWriteStringf(jw, "error",
-			     "%s not uniquely determined -- can't do multi-position search.",
-			     terms[i]);
-	*retWinStart = 0;
-	return NULL;
-	}
+        {
+        jsonWriteStringf(jw, "error",
+                 "Sorry, couldn't locate %s in %s %s", htmlEncode(terms[i]),
+                             trackHubSkipHubName(hOrganism(db)), hFreezeDate(db));
+        if (multiTerm)
+            jsonWriteStringf(jw, "error",
+                     "%s not uniquely determined -- can't do multi-position search.",
+                     terms[i]);
+        *retWinStart = 0;
+        return NULL;
+        }
     if (hgp->singlePos != NULL)
-	{
-	if (chrom != NULL && !sameString(chrom, hgp->singlePos->chrom))
-	    {
-	    jsonWriteStringf(jw, "error",
-			     "Sites occur on different chromosomes: %s, %s.",
-			     chrom, hgp->singlePos->chrom);
-	    return NULL;
-	    }
-	chrom = hgp->singlePos->chrom;
-	if (hgp->singlePos->chromStart < start)
-	    start = hgp->singlePos->chromStart;
-	if (hgp->singlePos->chromEnd > end)
-	    end = hgp->singlePos->chromEnd;
-	}
+        {
+        if (!categorySearch && chrom != NULL && !sameString(chrom, hgp->singlePos->chrom))
+            {
+            jsonWriteStringf(jw, "error",
+                     "Sites occur on different chromosomes: %s, %s.",
+                     chrom, hgp->singlePos->chrom);
+            return NULL;
+            }
+        chrom = hgp->singlePos->chrom;
+        if (hgp->singlePos->chromStart < start)
+            start = hgp->singlePos->chromStart;
+        if (hgp->singlePos->chromEnd > end)
+            end = hgp->singlePos->chromEnd;
+        }
     else
-	{
-	hgPositionsJson(jw, db, hgp, cart);
-	if (multiTerm && hgp->posCount != 1)
-	    {
-	    jsonWriteStringf(jw, "error",
-			     "%s not uniquely determined (%d locations) -- "
-			     "can't do multi-position search.",
-			     terms[i], hgp->posCount);
-	    return NULL;
-	    }
-	break;
-	}
+        {
+        hgPositionsJson(jw, db, hgp, cart);
+        if (multiTerm && !categorySearch && hgp->posCount != 1)
+            {
+            jsonWriteStringf(jw, "error",
+                     "%s not uniquely determined (%d locations) -- "
+                     "can't do multi-position search.",
+                     terms[i], hgp->posCount);
+            return NULL;
+            }
+        break;
+        }
     }
 if (hgp != NULL)
     {
@@ -227,7 +228,7 @@ static void changePosition(struct cartJson *cj, char *newPosition)
 char *db = cartString(cj->cart, "db");
 char *chrom = NULL;
 int start=0, end=0;
-struct hgPositions *hgp = genomePosCJ(cj->jw, db, newPosition, &chrom, &start, &end, cj->cart);
+struct hgPositions *hgp = genomePosCJ(cj->jw, db, newPosition, &chrom, &start, &end, cj->cart, NULL, TRUE);
 // If it resolved to a single position, update the cart; otherwise the app can
 // present the error (or list of matches) to the user.
 if (hgp && hgp->singlePos)

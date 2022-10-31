@@ -4628,7 +4628,7 @@ if (autoScale == NULL)
     wigCart->autoScale =  wiggleScaleAuto;
 char *windowingFunction = cartOptionalStringClosestToHome(cart, tdb, parentLevel, WINDOWINGFUNCTION);
 if (windowingFunction == NULL)
-    wigCart->windowingFunction = wiggleWindowingMax;
+    wigCart->windowingFunction = wiggleWindowingMean;
 unsigned *counts = countOverlaps(tg);
 
 countsToPixels(counts, pre);

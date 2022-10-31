@@ -23,6 +23,7 @@
 #include "botDelay.h"
 #include "grp.h"
 #include "customTrack.h"
+#include "dupTrack.h"
 #include "pipeline.h"
 #include "hgFind.h"
 #include "hgTables.h"
@@ -772,12 +773,19 @@ if (track == NULL)
 return track;
 }
 
+static char *undupedTrackName(struct cart *cart, char *varName)
+/* Return cartString for varName after removing any dup_N_ prefixes */
+{
+char *s = cartString(cart, varName);
+return dupTrackSkipToSourceName(s);
+}
+
 struct trackDb *findSelectedTrack(struct trackDb *trackList,
 	struct grp *group, char *varName)
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
 {
-char *name = cartOptionalString(cart, varName);
+char *name = undupedTrackName(cart, varName);
 struct trackDb *track = NULL;
 
 if (name != NULL)
@@ -1405,7 +1413,7 @@ struct trackDb *track = NULL;
 
 if (!sameString(curGroup->name, "allTables"))
     {
-    trackName = cartString(cart, hgtaTrack);
+    trackName = undupedTrackName(cart, hgtaTrack);
     track = mustFindTrack(trackName, fullTrackList);
     }
 else

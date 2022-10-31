@@ -526,9 +526,17 @@ if (slCount(tsrList) > maxToReturn)
     tsr = slElementFromIx(tsrList, maxToReturn-1);
     tsr->next = NULL;
     }
-char *context = hgFindSpecSetting(hfs, "searchTrixContext");
-if (context && sameString(context, "on"))
-    addSnippetsToSearchResults(tsrList, trix);
+// allow supporting snippet file to not exist, if there are no
+// snippets then the below code will use the description from
+// kgXref
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *context = hgFindSpecSetting(hfs, "searchTrixContext");
+    if (context && sameString(context, "on"))
+        addSnippetsToSearchResults(tsrList, trix);
+    }
+errCatchEnd(errCatch);
 
 /* Make hash of all search results - one for each known gene ID. */
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
@@ -3300,8 +3308,8 @@ int len = 0;
 struct hgPosTable *table = NULL;
 AllocVar(table);
 table->searchTime = -1;
-table->name = category->name;
-table->description = category->description;
+table->name = cloneString(category->name);
+table->description = cloneString(category->description);
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {
     if (startsWith(category->name,"publicHubs"))
@@ -3358,7 +3366,7 @@ return ret;
 }
 
 static boolean userDefinedSearch(char *db, char *term, int limitResults, struct cart *cart,
-                            struct hgPositions *hgp, struct searchCategory *categories, boolean measureTiming)
+                            struct hgPositions *hgp, struct searchCategory *categories, boolean multiTerm, boolean measureTiming)
 /* If a search type(s) is specified in the cart, perform that search.
  * If the search is successful, fill in hgp and return TRUE. */
 {
@@ -3379,29 +3387,43 @@ hubCategoryList = hubCategoriesToTdbList(categories);
 struct hgFindSpec *hfs;
 for (hfs = shortList; hfs != NULL; hfs = hfs->next)
     {
-    boolean foundSpec = hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, FALSE, measureTiming);
+    boolean foundSpec = hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, multiTerm, measureTiming);
     if (foundSpec)
         hashAdd(foundSpecHash, hfs->searchTable, hfs->searchTable);
     foundIt |= foundSpec;
+
+    // for multiTerm searches (like '15q11;15q13'), each individual component
+    // must resolve to a single position, so break once we find the first match
+    if (multiTerm && foundSpec)
+        break;
     }
-for (hfs = longList; hfs != NULL; hfs = hfs->next)
+if (!(multiTerm) || (multiTerm && !foundIt))
     {
-    if (hashFindVal(foundSpecHash, hfs->searchTable) != NULL)
-        continue;
-    foundIt |= hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, FALSE, measureTiming);
-    }
-// lastly search any included track hubs, or in the case of an assembly hub, any of the tracks
-if (hubCategoryList)
-    foundIt |= findBigBedPosInTdbList(cart, db, hubCategoryList, term, hgp, NULL, measureTiming);
-getLabelsForHubs();
-struct searchCategory *category;
-for (category = categories; category != NULL; category = category->next)
-    {
-    if (startsWith("trackDb", category->id)
-            || sameString(category->id, "helpDocs")
-            || sameString(category->id, "publicHubs"))
+    for (hfs = longList; hfs != NULL; hfs = hfs->next)
         {
-        foundIt |= doTrixQuery(category, term, hgp, db, measureTiming);
+        if (hashFindVal(foundSpecHash, hfs->searchTable) != NULL)
+            continue;
+        foundIt |= hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, multiTerm, measureTiming);
+        }
+    // lastly search any included track hubs, or in the case of an assembly hub, any of the tracks
+    if (hubCategoryList)
+        foundIt |= findBigBedPosInTdbList(cart, db, hubCategoryList, term, hgp, NULL, measureTiming);
+    }
+
+// multiTerm searches must resolve to a single range on a chromosome, so don't
+// do these non positional searches if a multiTerm was requested
+if (!multiTerm)
+    {
+    getLabelsForHubs();
+    struct searchCategory *category;
+    for (category = categories; category != NULL; category = category->next)
+        {
+        if (startsWith("trackDb", category->id)
+                || sameString(category->id, "helpDocs")
+                || sameString(category->id, "publicHubs"))
+            {
+            foundIt |= doTrixQuery(category, term, hgp, db, measureTiming);
+            }
         }
     }
 
@@ -3657,8 +3679,28 @@ if (singleSearch(db, term, limitResults, cart, hgp, measureTiming))
 
 if (categories != NULL)
     {
-    if (!matchesHgvs(cart, db, term, hgp, measureTiming))
-        userDefinedSearch(db, term, limitResults, cart, hgp, categories, measureTiming);
+    char *originalTerm = term;
+    if (hgOfficialChromName(db, term) != NULL) // this mangles the term
+        {
+        char *chrom;
+        int start, end;
+
+        hgParseChromRange(db, term, &chrom, &start, &end);
+        if (relativeFlag)
+            {
+            int chromSize = end;
+            end = start + relEnd;
+            start = start + relStart;
+            if (end > chromSize)
+                end = chromSize;
+            if (start < 0)
+                start = 0;
+            }
+        singlePos(hgp, "Chromosome Range", NULL, "chromInfo", originalTerm,
+              "", chrom, start, end);
+        }
+    else if (!matchesHgvs(cart, db, term, hgp, measureTiming))
+        userDefinedSearch(db, term, limitResults, cart, hgp, categories, multiTerm, measureTiming);
     slReverse(&hgp->tableList);
     if (multiTerm)
         collapseSamePos(hgp);

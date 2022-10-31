@@ -54,7 +54,7 @@ return FALSE;
 }
 
 struct tempName *userVcfWithImputedBases(struct tempName *userVcfTn, struct hash *samplePlacements,
-                                         struct slName *sampleIds, int chromSize)
+                                         struct slName *sampleIds, int chromSize, int *pStartTime)
 /* If usher imputed the values of ambiguous bases in user's VCF, then swap in
  * the imputed values and write a new VCF to use as the custom track.  Otherwise just use
  * the user's VCF for the custom track. */
@@ -176,6 +176,7 @@ if (anyImputedBases(samplePlacements, sampleIds))
             fputc('\n', f);
         }
     carefulClose(&f);
+    reportTiming(pStartTime, "Make user VCF with imputed bases");
     }
 return ctVcfTn;
 }
@@ -237,11 +238,10 @@ static struct vcfFile *parseUserVcf(char *userVcfFile, int chromSize, int *pStar
 struct vcfFile *userVcf = vcfFileMayOpen(userVcfFile, NULL, 0, chromSize, 0, chromSize, TRUE);
 if (! userVcf)
     return NULL;
-reportTiming(pStartTime, "read userVcf");
 struct vcfRecord *rec;
 for (rec = userVcf->records;  rec != NULL;  rec = rec->next)
     vcfParseGenotypesGtOnly(rec);
-reportTiming(pStartTime, "parse userVcf genotypes");
+reportTiming(pStartTime, "read userVcf and parse genotypes");
 return userVcf;
 }
 
@@ -297,7 +297,7 @@ for (ref = inList;  ref != NULL;  ref = ref->next)
 return outList;
 }
 
-static void treeToBaseAlleles(struct phyloTree *node, struct hash *condensedNodes, char *refBases,
+static void treeToBaseAlleles(struct phyloTree *node, char *refBases,
                               char **sampleBases, struct hash *sampleToIx, struct slRef *parentMuts)
 /* Traverse tree, building up an array of reference bases indexed by position, and an array
  * (indexed by pos) of sample allele arrays indexed by sampleToIx. */
@@ -316,44 +316,30 @@ if (node->numEdges > 0)
     {
     int i;
     for (i = 0;  i < node->numEdges;  i++)
-        treeToBaseAlleles(node->edges[i], condensedNodes, refBases, sampleBases, sampleToIx,
-                          nodeMuts);
+        treeToBaseAlleles(node->edges[i], refBases, sampleBases, sampleToIx, nodeMuts);
     }
 else
     {
     // Leaf node: if in sampleToIx, then for each mutation (beware back-mutations),
     // set refBase if it has not already been set and set sample allele.
-    boolean allocdHere = FALSE;
-    struct slName *nameList = hashFindVal(condensedNodes, node->ident->name);
-    if (nameList == NULL)
+    int ix = hashIntValDefault(sampleToIx, node->ident->name, -1);
+    if (ix >= 0)
         {
-        nameList = slNameNew(node->ident->name);
-        allocdHere = TRUE;
-        }
-    struct slName *name;
-    for (name = nameList;  name != NULL;  name = name->next)
-        {
-        int ix = hashIntValDefault(sampleToIx, name->name, -1);
-        if (ix >= 0)
+        struct slRef *mlRef;
+        for (mlRef = nodeMuts;  mlRef != NULL;  mlRef = mlRef->next)
             {
-            struct slRef *mlRef;
-            for (mlRef = nodeMuts;  mlRef != NULL;  mlRef = mlRef->next)
+            struct singleNucChange *snc, *sncs = mlRef->val;
+            for (snc = sncs;  snc != NULL;  snc = snc->next)
                 {
-                struct singleNucChange *snc, *sncs = mlRef->val;
-                for (snc = sncs;  snc != NULL;  snc = snc->next)
-                    {
-                    // Don't let a back-mutation overwrite the true ref value:
-                    if (!refBases[snc->chromStart])
-                        refBases[snc->chromStart] = snc->refBase;
-                    if (sampleBases[snc->chromStart] == NULL)
-                        AllocArray(sampleBases[snc->chromStart], sampleToIx->elCount);
-                    sampleBases[snc->chromStart][ix] = snc->newBase;
-                    }
+                // Don't let a back-mutation overwrite the true ref value:
+                if (!refBases[snc->chromStart])
+                    refBases[snc->chromStart] = snc->refBase;
+                if (sampleBases[snc->chromStart] == NULL)
+                    AllocArray(sampleBases[snc->chromStart], sampleToIx->elCount);
+                sampleBases[snc->chromStart][ix] = snc->newBase;
                 }
             }
         }
-    if (allocdHere)
-        slFreeList(&nameList);
     }
 if (node->priv != NULL)
     slFreeList(&nodeMuts);
@@ -379,7 +365,7 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
         int ix = gtIxToSampleIx[gtIx];
         if (ix >= 0)
             {
-            // If refBases was already set by bigTree, go with that.
+            // If refBases was already set by tree, go with that.
             if (!refBases[rec->chromStart])
                 refBases[rec->chromStart] = rec->alleles[0][0];
             if (sampleBases[rec->chromStart] == NULL)
@@ -506,16 +492,16 @@ for (chromStart = 0;  chromStart < baseCount;  chromStart++)
 }
 
 static void writeSubtreeVcf(FILE *f, struct hash *sampleToIx, char *chrom, int chromSize,
-                            struct vcfFile *userVcf, struct mutationAnnotatedTree *bigTree)
+                            struct vcfFile *userVcf, struct phyloTree *subtree)
 /* Write rows of VCF with genotypes for samples in sampleToIx (with order determined by sampleToIx)
- * with some samples found in userVcf and the rest found in bigTree which has been annotated
+ * with some samples found in userVcf and the rest found in subtree which has been annotated
  * with single-nucleotide variants. */
 {
 char refBases[chromSize];
 memset(refBases, 0, sizeof refBases);
 char *sampleBases[chromSize];
 memset(sampleBases, 0, sizeof sampleBases);
-treeToBaseAlleles(bigTree->tree, bigTree->condensedNodes, refBases, sampleBases, sampleToIx, NULL);
+treeToBaseAlleles(subtree, refBases, sampleBases, sampleToIx, NULL);
 vcfToBaseAlleles(userVcf, refBases, sampleBases, sampleToIx);
 int sampleCount = sampleToIx->elCount;
 baseAllelesToVcf(refBases, sampleBases, chrom, chromSize, sampleCount, f);
@@ -526,7 +512,6 @@ for (i = 0;  i < chromSize;  i++)
 
 static void addSubtreeCustomTracks(FILE *ctF, char *userVcfFile, struct subtreeInfo *subtreeInfoList,
                                    struct hash *samplePlacements, char *chrom, int chromSize,
-                                   struct mutationAnnotatedTree *bigTree,
                                    char *source, char *geneTrack, int fontHeight, int *pStartTime)
 /* For each subtree trashfile, write VCF+treeFile custom track text to ctF. */
 {
@@ -537,15 +522,13 @@ if (! userVcf)
          userVcfFile);
     return;
     }
-if (!bigTree)
-    return;
 struct subtreeInfo *ti;
 int subtreeNum;
 for (subtreeNum = 1, ti = subtreeInfoList;  ti != NULL;  ti = ti->next, subtreeNum++)
     {
     writeSubtreeTrackLine(ctF, ti, subtreeNum, source, geneTrack, fontHeight);
     writeVcfHeader(ctF, ti->subtreeNameList);
-    writeSubtreeVcf(ctF, ti->subtreeIdToIx, chrom, chromSize, userVcf, bigTree);
+    writeSubtreeVcf(ctF, ti->subtreeIdToIx, chrom, chromSize, userVcf, ti->subtree);
     fputc('\n', ctF);
     }
 vcfFileFree(&userVcf);
@@ -553,8 +536,7 @@ reportTiming(pStartTime, "write subtree custom tracks");
 }
 
 struct tempName *writeCustomTracks(char *db, struct tempName *vcfTn, struct usherResults *ur,
-                                   struct slName *sampleIds, struct mutationAnnotatedTree *bigTree,
-                                   char *source, int fontHeight,
+                                   struct slName *sampleIds, char *source, int fontHeight,
                                    struct phyloTree **retSampleTree, int *pStartTime)
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 {
@@ -565,7 +547,7 @@ char *geneTrack = phyloPlaceDbSetting(db, "geneTrack");
 if (isEmpty(geneTrack))
     geneTrack = sameString(db, "wuhCor1") ? "ncbiGeneBGP" : "ncbiGene";
 struct tempName *ctVcfTn = userVcfWithImputedBases(vcfTn, ur->samplePlacements, sampleIds,
-                                                   chromSize);
+                                                   chromSize, pStartTime);
 struct tempName *ctTn;
 AllocVar(ctTn);
 trashDirFile(ctTn, "ct", "ct_pp", ".ct");
@@ -573,12 +555,13 @@ FILE *ctF = mustOpen(ctTn->forCgi, "w");
 int subtreeCount = slCount(ur->subtreeInfoList);
 if (subtreeCount <= MAX_SUBTREE_CTS)
     addSubtreeCustomTracks(ctF, ctVcfTn->forCgi, ur->subtreeInfoList, ur->samplePlacements,
-                           chrom, chromSize, bigTree, source, geneTrack, fontHeight, pStartTime);
+                           chrom, chromSize, source, geneTrack, fontHeight, pStartTime);
 else
     printf("<p>Subtree custom tracks are added when there are at most %d subtrees, "
            "but %d subtrees were found.</p>\n",
            MAX_SUBTREE_CTS, subtreeCount);
-struct phyloTree *sampleTree = addSampleOnlyCustomTrack(ctF, ctVcfTn, ur->bigTreePlusTn->forCgi,
+struct phyloTree *sampleTree = addSampleOnlyCustomTrack(ctF, ctVcfTn,
+                                                        ur->singleSubtreeInfo->subtreeTn->forCgi,
                                                         sampleIds, geneTrack, fontHeight,
                                                         pStartTime);
 if (retSampleTree)

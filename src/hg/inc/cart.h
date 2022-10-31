@@ -126,6 +126,10 @@ struct slPair *cartVarsWithPrefixLm(struct cart *cart, char *prefix, struct lm *
 /* Return list of cart vars that begin with prefix allocated in local memory.
  * Quite a lot faster than cartVarsWithPrefix. */
 
+void cartCloneVarsWithPrefix(struct cart *cart, char *prefix, char *newPrefix);
+/* Add a copy of all vars that start with prefix to cart.  The new vars will
+ * start with newPrefix instead of prefix */
+
 void cartRemoveLike(struct cart *cart, char *wildCard);
 /* Remove all variable from cart that match wildCard. */
 
