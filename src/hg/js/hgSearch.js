@@ -482,9 +482,13 @@ var hgSearch = (function() {
                         goToHgTracks = false;
                 }
                 if (goToHgTracks) {
-                    url = "hgTracks?db=" + db + "&" + hgTracksTitle + "=pack&position=" + match.position + "&hgFind.matches=" + match.hgFindMatches;
-                    if (match.extraSel)
+                    url = "hgTracks?db=" + db + "&" + hgTracksTitle + "=pack&position=" + match.position;
+                    if (match.hgFindMatches) {
+                        url += "&hgFind.matches=" + match.hgFindMatches;
+                    }
+                    if (match.extraSel) {
                         url += "&" + match.extraSel;
+                    }
                     if (match.highlight) {
                         url += url[url.length-1] !== '&' ? '&' : '';
                         url += "highlight=" + match.highlight;
@@ -791,11 +795,15 @@ var hgSearch = (function() {
             if (cartJson.positionMatches !== undefined &&
                     cartJson.positionMatches.length == 1 &&
                     cartJson.positionMatches[0].matches[0].doRedirect === true) {
-                match = cartJson.positionMatches[0].matches[0];
+                positionMatch = cartJson.positionMatches[0];
+                match = positionMatch.matches[0];
                 position = match.position;
                 newUrl = "../cgi-bin/hgTracks" + "?db=" + db + "&position=" + position;
                 if (match.highlight) {
                     newUrl += "&highlight=" + match.highlight;
+                }
+                if (positionMatch.name !== "chromInfo") {
+                    newUrl += "&" + positionMatch.name + "=pack";
                 }
                 window.location.replace(newUrl);
             }
