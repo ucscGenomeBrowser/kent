@@ -1669,6 +1669,25 @@ hashElFreeList(&elList);
 return cartVars;
 }
 
+void cartCloneVarsWithPrefix(struct cart *cart, char *prefix, char *newPrefix)
+/* Add a copy of all vars that start with prefix to cart.  The new vars will
+ * start with newPrefix instead of prefix */
+{
+int prefixSize = strlen(prefix);
+struct dyString *buf = dyStringNew(0);
+struct slPair *pair, *pairList = cartVarsWithPrefix(cart, prefix);
+for (pair = pairList; pair != NULL; pair = pair->next)
+    {
+    dyStringClear(buf);
+    dyStringAppend(buf, newPrefix);
+    dyStringAppend(buf, pair->name + prefixSize);
+    cartAddString(cart, buf->string, pair->val);
+    }
+slFreeList(&pairList);
+dyStringFree(&buf);
+}
+
+
 struct slPair *cartVarsWithPrefixLm(struct cart *cart, char *prefix, struct lm *lm)
 /* Return list of cart vars that begin with prefix allocated in local memory.
  * Quite a lot faster than cartVarsWithPrefix. */

@@ -18,6 +18,7 @@
 #include "bbiFile.h"
 #include "bwgInternal.h"
 #include "bigWig.h"
+#include "portable.h"
 
 
 char *version = "2.9";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
@@ -374,6 +375,8 @@ return twiceReducedList;
 void bedGraphToBigWig(char *inName, char *chromSizes, char *outName)
 /* bedGraphToBigWig - Convert a bedGraph program to bigWig.. */
 {
+mustBeReadableAndRegularFile(inName);
+
 verboseTimeInit();
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 int minDiff = 0, i;

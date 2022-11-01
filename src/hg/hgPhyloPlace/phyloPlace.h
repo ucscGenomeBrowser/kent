@@ -24,6 +24,8 @@
 // For usher's -K option (single subtree):
 #define SINGLE_SUBTREE_SIZE "2000"
 #define USHER_NUM_THREADS "16"
+#define USHER_SERVER_CHILD_TIMEOUT "600"
+#define USHER_DEDUP_PREFIX "uploaded_"
 
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
 #define OUTBREAK_INFO_URLBASE "https://outbreak.info/situation-reports?pango="
@@ -41,6 +43,7 @@ struct treeChoices
     char **sources;            // GISAID or public
     char **descriptions;       // Menu labels to describe the options to the user
     char **aliasFiles;         // Two-column files associating IDs/aliases with full tree names
+    char **sampleNameFiles;    // One-column files with full tree names
     int count;                 // Number of choices (and size of each array)
 };
 
@@ -153,8 +156,7 @@ struct geneInfo
     };
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
-                              boolean *informativeBases, struct slName **maskSites,
-                              struct hash *treeNames,
+                              struct slName **maskSites, struct hash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime);
@@ -162,19 +164,41 @@ struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refG
  * percentage of N's.  Align to reference, extract SNVs from alignment, and save as VCF
  * with sample genotype columns. */
 
-struct usherResults *runUsher(char *usherPath, char *usherAssignmentsPath, char *vcfFile,
-                              int subtreeSize, struct slName *userSampleIds,
-                              struct hash *condensedNodes, int *pStartTime);
+struct usherResults *runUsher(char *db, char *usherPath, char *usherAssignmentsPath, char *vcfFile,
+                              int subtreeSize, struct slName **pUserSampleIds,
+                              struct treeChoices *treeChoices, int *pStartTime);
 /* Open a pipe from Yatish Turakhia's usher program, save resulting big trees and
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
- * and parse other results out of stderr output. */
+ * and parse other results out of stderr output.  The usher-sampled version of usher might
+ * modify userSampleIds, adding a prefix if a sample with the same name is already in the tree. */
 
 struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
-                                                struct hash *condensedNodes, int *pStartTime);
+                                                int *pStartTime);
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
+
+boolean serverIsConfigured(char *db);
+/* Return TRUE if all necessary configuration settings are in place to run usher-sampled-server. */
+
+boolean serverIsRunning(char *db, FILE *errFile);
+/* Return TRUE if we can find a PID for server and that PID looks alive according to /proc. */
+
+boolean startServer(char *db, struct treeChoices *treeChoices, FILE *errFile);
+/* Start up an usher-sampled-server process to run in the background. */
+
+void serverReloadProtobufs(char *db, struct treeChoices *treeChoices);
+/* Send a reload command and list of protobufs for db to usher server. */
+
+void serverStop(char *db);
+/* Send stop command to usher server. */
+
+void serverSetThreadCount(char *db, int val);
+/* Send thread command and value to usher server. */
+
+void serverSetTimeout(char *db, int val);
+/* Send timeout command and value (in seconds) to usher server. */
 
 struct slPair *getAaMutations(struct singleNucChange *sncList, struct geneInfo *geneInfoList,
                               struct seqWindow *gSeqWin);
@@ -190,8 +214,7 @@ void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneI
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
 struct tempName *writeCustomTracks(char *db, struct tempName *vcfTn, struct usherResults *ur,
-                                   struct slName *sampleIds, struct mutationAnnotatedTree *bigTree,
-                                   char *source, int fontHeight,
+                                   struct slName *sampleIds, char *source, int fontHeight,
                                    struct phyloTree **retSampleTree, int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 

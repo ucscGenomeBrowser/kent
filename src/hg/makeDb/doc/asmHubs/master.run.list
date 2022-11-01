@@ -54,6 +54,7 @@
 ./runBuild GCA_000978805.1 GCA_000978805.1_ASM97880v1 mammals Balaenoptera_bonaerensis
 ./runBuild GCA_001262665.1 GCA_001262665.1_Eflavifronsk33QCA primates Eulemur_flavifrons
 ./runBuild GCA_001305755.1 GCA_001305755.1_ASM130575v1 mammals Equus_asinus
+./runBuild GCA_001420675.1 GCA_001420675.1_ASM142067v1 birds Amazona_aestiva
 ./runBuild GCA_001443585.1 GCA_001443585.1_aciJub1 mammals Acinonyx_jubatus
 ./runBuild GCA_001624185.1 GCA_001624185.1_129S1_SvImJ_v1 mammals Mus_musculus
 ./runBuild GCA_001624215.1 GCA_001624215.1_A_J_v1 mammals Mus_musculus
@@ -256,6 +257,7 @@
 ./runBuild GCA_004367975.1 GCA_004367975.1_ASM436797v1 invertebrate Mesochordaeus_erythrocephalus
 ./runBuild GCA_004368075.1 GCA_004368075.1_ASM436807v1 invertebrate Fritillaria_borealis
 ./runBuild GCA_004765925.1 GCA_004765925.1_PBRC_Esco_1.0 invertebrate Euprymna_scolopes
+./runBuild GCA_006130075.1 GCA_006130075.1_GSC_cangoose_1.0 birds Branta_canadensis
 ./runBuild GCA_007364235.1 GCA_007364235.1_fArcCen1_v1.h fish Archocentrus_centrarchus
 ./runBuild GCA_007364275.2 GCA_007364275.2_fArcCen1 vertebrate Archocentrus_centrarchus
 ./runBuild GCA_007399395.1 GCA_007399395.1_rGopEvg1_v1.alt vertebrate Gopherus_evgoodei
@@ -316,8 +318,11 @@
 ./runBuild GCA_009829205.1 GCA_009829205.1_bChiLan1.alt birds Chiroxiphia_lanceolata
 ./runBuild GCA_009859025.1 GCA_009859025.1_bTaeGut2.p.v1.alt birds Taeniopygia_guttata
 ./runBuild GCA_009859065.2 GCA_009859065.2_bTaeGut2.pri.v2 birds Taeniopygia_guttata
+./runBuild GCA_009867235.1 GCA_009867235.1_ASM986723v1 birds Psittacus_erithacus
 ./runBuild GCA_009873245.2 GCA_009873245.2_mBalMus1.v2 mammals Balaenoptera_musculus
-./runBuild GCA_009914755.4 GCA_009914755.4_CHM13_T2T_v2.0 primates Homo_sapiens
+# ./runBuild GCA_009914755.4 GCA_009914755.4_CHM13_T2T_v2.0 primates Homo_sapiens
+./runBuild GCA_009917745.1 GCA_009917745.1_GSC_cook_1.0 mammals Delphinapterus_leucas
+./runBuild GCA_009936445.2 GCA_009936445.2_ASM993644v2 birds Anodorhynchus_hyacinthinus
 ./runBuild GCA_010909745.1 GCA_010909745.1_sAmbRad1.alt vertebrate Amblyraja_radiata
 ./runBuild GCA_010909765.1 GCA_010909765.1_sAmbRad1.pri vertebrate Amblyraja_radiata
 ./runBuild GCA_010993595.1 GCA_010993595.1_kPetMar1.alt vertebrate Petromyzon_marinus
@@ -350,6 +355,7 @@
 ./runBuild GCA_013407035.1 GCA_013407035.1_ASM1340703v1 birds Coloeus_monedula
 ./runBuild GCA_013436055.1 GCA_013436055.1_Harore_MTP2014 invertebrate Halocynthia_roretzi
 ./runBuild GCA_013436065.1 GCA_013436065.1_Haaura_MTP2014 invertebrate Halocynthia_aurantium
+./runBuild GCA_014060925.1 GCA_014060925.1_Heter_glaber.v1.7_hic_pac mammals Heterocephalus_glaber
 ./runBuild GCA_014337955.1 GCA_014337955.1_AspMar1.0 vertebrate Aspidoscelis_marmoratus
 ./runBuild GCA_014607495.2 GCA_014607495.2_ASM1460749v2 invertebrate Carposina_sasakii
 ./runBuild GCA_014839755.1 GCA_014839755.1_bSylBor1.pri birds Sylvia_borin
@@ -383,6 +389,8 @@
 ./runBuild GCA_020740725.1 GCA_020740725.1_bCorHaw1.pri.cur birds Corvus_hawaiiensis
 ./runBuild GCA_020740795.1 GCA_020740795.1_bApuApu2.pri.cur birds Apus_apus
 ./runBuild GCA_020745705.1 GCA_020745705.1_bHemCom1.pri.cur birds Hemiprocne_comata
+./runBuild GCA_020745735.1 GCA_020745735.1_sHemOce1.pat.X.cur. vertebrate Hemiscyllium_ocellatum
+./runBuild GCA_020745765.1 GCA_020745765.1_sHemOce1.mat.decon vertebrate Hemiscyllium_ocellatum
 ./runBuild GCA_020745775.1 GCA_020745775.1_bTheCae1.pri.cur birds Theristicus_caerulescens
 ./runBuild GCA_020746105.1 GCA_020746105.1_bTroSur1.pri.cur birds Trogon_surrucura
 ./runBuild GCA_020800305.1 GCA_020800305.1_bPorHoc1.mat.Z.cur birds Porphyrio_hochstetteri
@@ -531,7 +539,7 @@
 ./runBuild GCA_917862395.1 GCA_917862395.1_iHelSar1.1 invertebrates Heliconius_sara
 ./runBuild GCF_000001215.4 GCF_000001215.4_Release_6_plus_ISO1_MT invertebrate Drosophila_melanogaster
 ./runBuild GCF_000001405.39 GCF_000001405.39_GRCh38.p13 vertebrate_mammalian Homo_sapiens
-./runBuild GCF_000001405.40 GCF_000001405.40_GRCh38.p14 primates Homo_sapiens
+# ./runBuild GCF_000001405.40 GCF_000001405.40_GRCh38.p14 primates Homo_sapiens
 ./runBuild GCF_000001635.26 GCF_000001635.26_GRCm38.p6 vertebrate_mammalian Mus_musculus
 ./runBuild GCF_000001635.27 GCF_000001635.27_GRCm39 mammals Mus_musculus
 ./runBuild GCF_000001735.4 GCF_000001735.4_TAIR10.1 plants Arabidopsis_thaliana

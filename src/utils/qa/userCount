@@ -1,0 +1,6 @@
+#!/bin/bash
+export HGDB_CONF=$HOME/.hg.conf
+DISTINCT=`/cluster/bin/x86_64/hgsql -h genome-centdb -Ne 'select distinct email from gbMembers' hgcentral 2> ~/bin/userCountErrorLog | wc -l`
+#TOTAL=`/cluster/bin/x86_64/hgsql -h genome-centdb -Ne 'select email from gbMembers' hgcentral 2> ~/bin/userCountErrorLog | wc -l`
+DATE=`date "+%s	%F"`
+printf "%s\t%d\n" "$DATE" "$DISTINCT" >> /hive/data/inside/wwwstats/RR/gbMembersCount.txt

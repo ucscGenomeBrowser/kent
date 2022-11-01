@@ -46,6 +46,13 @@ pwarn("pthread_create", err);
 return err == 0;
 }
 
+void pthreadJoin(pthread_t *thread, void **retVal)
+/* Wait for thread to complete and optionally get its return value, or die. */
+{
+int err = pthread_join(*thread, retVal);
+perr("pthread_join", err);
+}
+
 void pthreadMutexInit(pthread_mutex_t *mutex)
 /* Initialize mutex or die trying */
 {

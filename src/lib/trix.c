@@ -942,6 +942,11 @@ while (ourReadLine(trix, snippetIndex->textIndex, &snippetIxLine))
     }
 }
 
+void resetPrefixSize()
+{
+trixPrefixSize = 5;
+}
+
 void initSnippetIndex(struct trix *trix)
 /* Setup what we need to obtain snippets */
 {
@@ -957,4 +962,5 @@ initSnippetIndex(trix);
 struct trixSearchResult *tsr;
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     addSnippetForResult(tsr, trix);
+resetPrefixSize();
 }

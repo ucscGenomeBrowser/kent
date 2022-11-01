@@ -49,6 +49,15 @@ void cartJsonExecute(struct cartJson *cj);
 void cartJsonFree(struct cartJson **pCj);
 /* Close **pCj's contents and nullify *pCj. */
 
+struct hgPositions *genomePosCJ(struct jsonWrite *jw, char *db, char *spec, char **retChromName,
+                               int *retWinStart, int *retWinEnd, struct cart *cart, struct searchCategory *categories, boolean categorySearch);
+/* Search for positions in genome that match user query.
+ * Return an hgp unless there is a problem.  hgp->singlePos will be set if a single
+ * position matched. categorySearch determines whether to error out if we can't
+ * uniquely determine a position for a multiTerm search
+ * Otherwise display list of positions, put # of positions in retWinStart,
+ * and return NULL. */
+
 void hgPositionsJson(struct jsonWrite *jw, char *db, struct hgPositions *hgp, struct cart *cart);
 /* Write out JSON description of multiple position matches. */
 
