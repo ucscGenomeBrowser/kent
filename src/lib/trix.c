@@ -13,6 +13,7 @@
 #include "net.h"
 #include "rangeTree.h"
 #include "portable.h"
+#include "errCatch.h"
 
 /* Some local structures for the search. */
 struct trixHitPos 
@@ -956,11 +957,21 @@ openSnippetIndex(trix);
 }
 
 void addSnippetsToSearchResults(struct trixSearchResult *tsrList, struct trix *trix)
-/* Add snippets to each search result in tsrList */
+/* Add snippets to each search result in tsrList. Wrap in an errCatch
+ * in case the supporting files don't exist. */
 {
-initSnippetIndex(trix);
-struct trixSearchResult *tsr;
-for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
-    addSnippetForResult(tsr, trix);
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    initSnippetIndex(trix);
+    struct trixSearchResult *tsr;
+    for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+        addSnippetForResult(tsr, trix);
+    }
+if (errCatch->gotError || errCatch->gotWarning)
+    {
+    warn("error adding snippets to search results: %s", errCatch->message->string);
+    }
+errCatchEnd(errCatch);
 resetPrefixSize();
 }
