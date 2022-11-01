@@ -186,6 +186,13 @@ if (hgp && hgp->singlePos)
 
     jsonWriteObjectStart(jw, NULL);
     char position[512];
+    retWinStart = hgp->singlePos->chromStart;
+    retWinEnd = hgp->singlePos->chromEnd;
+    if (hgp->singlePos->chromStart > hgp->singlePos->chromEnd)
+        {
+        retWinStart = retWinEnd;
+        retWinEnd = hgp->singlePos->chromStart;
+        }
     safef(position, sizeof(position), "%s:%d-%d", hgp->singlePos->chrom, retWinStart+1, retWinEnd);
     jsonWriteString(jw, "position", position);
     jsonWriteString(jw, "posName", hgp->query);
