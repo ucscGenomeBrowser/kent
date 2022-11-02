@@ -19,7 +19,7 @@ uc&#115;&#99;.
 &#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;&#111;&#101;.uc&#115;&#99;.&#101;&#100;&#117;
 </A> to have it added to the list.
 
-<p>As a reference for interpreting trackDb.txt settings use the Hub Track Database Definition <a 
+<p>As a reference for interpreting trackDb.txt settings, use the Hub Track Database Definition <a
 target="_blank" href="trackDb/trackDbHub.html#loc">glossary</a>. For information on using the Track
 Hub features, refer to the <a href="hgTrackHubHelp.html">Genome Browser Track Hub User Guide</a>.
 See also the <a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a>, <a
@@ -50,8 +50,8 @@ target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
  <li>All of your description pages MUST have a contact email address prominently displayed.
  </li>
  <li>Try to have no more than 10 tracks with <a target="_blank"
-     href="trackDb/trackDbHub.html#visibility">visibility</a> set to display (in full, pack, dense,
-     or squish) as default upon first connecting your hub.
+     href="trackDb/trackDbHub.html#visibility">visibility</a> set to display (in full, pack, squish,
+     or dense) as default upon first connecting your hub.
  </li>
  <li>Have a descriptionUrl html page specified in your hub.txt. This should be a URL to a description
      page for your entire hub, often public hubs will link to a full-text paper or to their
@@ -70,12 +70,12 @@ target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
  <li>The following settings should properly be set in your genomes.txt (The last 3 settings will make
      it easier to find assembly hub species in hgGateway by UI search):
  </li>
- <ol>
+ <ul>
   <li>defaultPos</li>
   <li>scientificName</li>
   <li>organism</li>
   <li>description</li>
- </ol>
+ </ul>
 </ul>
 
 <a id="recommendedGuidelines"></a>
@@ -113,17 +113,17 @@ appropriate.</p>
   <li>Using two dimensions: use dimX and dimY (e.g. dimensions dimX=cell dimY=mark)</li>
   <li>Using more than two: use dimX, dimY on the most important dimensions. Then use dimA,B,C as
       needed on lesser dimensions. (e.g. dimensions dimX=cell dimY=mark dimA=donor_id)</li>
-  <li>The A,B,C.. dimensions should probably use <a href="trackDb/trackDbHub.html#filterComposite"
+  <li>The A,B,C dimensions should probably use <a href="trackDb/trackDbHub.html#filterComposite"
       target="_blank">filterComposite</a> (e.g. filterComposite dimA)</li>
   <li>Each dimension and views should be represented in sortOrder, ideally in order of dimX, dimY,
       dimA,B,C, view (e.g. sortOrder cell_type=+ mark=+ donor_id=+ view=+).
   <li>Tags of subGroup/dimension should be short and sweet with no special chars. Also labels can
       have HTML codes embedded (e.g. NOT CPG_methylation_%=CPG_methylation_% RATHER
-      mpct=CPG_methylation_&_#37</li>
+      mpct=CPG_methylation_&_#37)</li>
   <li>Never represent the same subgroup in both view and as a dimension (e.g. NOT dimensions
       dimX=view). A subgroup should never be in two dimensions (e.g. NOT dimensions
       dimX=cell dimY=mark dimA=cell). The composite will appear to function but multiple ways of
-      selecting the same thing will create a confusing and inconsistent User Interface.</li>   
+      selecting the same thing will create a confusing and inconsistent user interface.</li>
  </ol>
 </ul>
 
@@ -132,7 +132,7 @@ appropriate.</p>
 Extremely large hubs may use  <a href="trackDb/trackDbHub.html#superTrack"
 target="_blank">superTracks</a> as well to achieve a meaningful hierarchy. Super tracks
 can be used to group together any type of related tracks; for example, you could combine a multiWig,
-a composite and a bigBed track together into a single superTrack.</p>
+a composite, and a bigBed track together into a single superTrack.</p>
 
 <h3>Track display recommendations</h3>
 <ul>
@@ -142,7 +142,7 @@ a composite and a bigBed track together into a single superTrack.</p>
      This provides an example of your track data to users who turn on your composite track. If no
      subtracks are turned on by default, a user who changes your composite track visibility to
      "show" won't see anything.</li>
- <li>The shortLabel text should be under 17 characters, or meaningful information may be cut off
+ <li>The shortLabel text should be under 20 characters, or meaningful information may be cut off
      from display when tracks are set to "dense" visibility.</li>
 </ul>
 
