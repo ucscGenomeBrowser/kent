@@ -18,7 +18,7 @@
 // Allow users to upload a lot of sequences, but put limits on how much detail we'll show and
 // how many custom tracks we'll create.
 #define MAX_SUBTREE_BUTTONS 5
-#define MAX_SEQ_DETAILS 100
+#define MAX_SEQ_DETAILS 1000
 #define MAX_SUBTREE_CTS 10
 
 // For usher's -K option (single subtree):
