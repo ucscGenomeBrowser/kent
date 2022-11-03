@@ -7407,7 +7407,7 @@ if (opened)
     }
 }
 
-static void gencodeLabelControls(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed, boolean parentLevel)
+static void gencodeLabelControls(char *db, struct cart *cart, struct trackDb *tdb, char *name, boolean parentLevel)
 /* generate label checkboxes for GENCODE. */
 {
 // See hgTracks/gencodeTracks.c:registerProductionTrackHandlers()
@@ -7429,6 +7429,18 @@ for (i = 0; labelsNames[i][0] != NULL; i++)
     printf("%s%s: ", (i > 0) ? "&nbsp;&nbsp;" : "", labelsNames[i][0]);
     cgiMakeCheckBoxMore(varName, checked, NULL);
     }
+}
+
+static void gencodeDisplayControls(char *db, struct cart *cart, struct trackDb *tdb, char *name, boolean parentLevel)
+/* generate display controls */
+{
+static char *varSuffix = "maxTrans";
+char varName[64];
+safef(varName, sizeof(varName), "%s.%s", name, varSuffix);
+int maxTrans = cartUsualIntClosestToHome(cart, tdb, parentLevel, varSuffix, 0);
+printf("<br>Maximum number of transcripts to display: ");
+cgiMakeIntVar(varName, maxTrans, 5);
+printf(" (0 to display all)");
 }
 
 static void newGencodeShowOptions(struct cart *cart, struct trackDb *tdb)
@@ -7490,7 +7502,8 @@ else if (isGencode3)
 else if (startsWith("wgEncodeGencode", name))
     {
     // new GENCODEs
-    gencodeLabelControls(db, cart, tdb, name, title, boxed, parentLevel);
+    gencodeLabelControls(db, cart, tdb, name, parentLevel);
+    gencodeDisplayControls(db, cart, tdb, name, parentLevel);
     }
 else if (sameString("wgEncodeSangerGencode", name)
      ||  (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))

@@ -285,9 +285,10 @@ static void addFilterMaxTranscripsByRange(struct sqlConnection *conn, struct tra
 /* Add query for the maximum number of transcripts to display if requested and
  * if transcriptRank is available in attrs */
 {
-// FIXME: tmp until we can get it in the UI
-int maxTrans = cartCgiUsualInt(cart, "maxTrans", 0);
-if (maxTrans == 0)
+char varName[64];
+safef(varName, sizeof(varName), "%s.maxTrans", tg->track);
+int maxTrans = cartCgiUsualInt(cart, varName, 0);
+if (maxTrans <= 0)
     return;  // zero disables
 // do we have transcriptRank column?
 if (!sqlColumnExists(conn, gencodeGetTableName(tg->tdb, "wgEncodeGencodeAttrs"), "transcriptRank"))
