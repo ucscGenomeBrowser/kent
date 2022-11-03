@@ -487,6 +487,7 @@ enum wiggleWindowingEnum {
    wiggleWindowingMax = 1,
    wiggleWindowingMean = 2,
    wiggleWindowingMin = 3,
+   wiggleWindowingSum = 4,
 };
 
 enum wiggleWindowingEnum wiggleWindowingStringToEnum(char *string);

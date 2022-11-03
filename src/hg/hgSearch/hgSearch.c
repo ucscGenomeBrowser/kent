@@ -43,6 +43,7 @@ struct dbDbHelper
 struct dbDbHelper *next;
 struct dbDb *dbDb;
 boolean isDefault;
+boolean isCurated;;
 };
 
 /* Helper functions for cart handlers */
@@ -66,11 +67,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct dbDbHelper *this;
     db = dbDbLoad(row);
     boolean isGenarkHub = sameOk(db->nibPath, "genark");
-    if (isGenarkHub || hashLookup(hash, db->name))
+    boolean isCuratedHub = startsWith("hub:", db->nibPath);
+    if (isGenarkHub || isCuratedHub ||  hashLookup(hash, db->name))
         {
         AllocVar(this);
         this->dbDb = db;
         this->isDefault = sameString(row[14],row[0]);
+        this->isCurated = isCuratedHub;
         slAddTail(&ret, this);
         }
     else
@@ -154,44 +157,58 @@ for (g = hgFindGrpList; g != NULL; g = g->next)
 }
 
 
-void doQuery(struct jsonWrite *jw, char *db, struct searchCategory *categories, char *searchTerms, boolean measureTiming)
+struct hgPositions *doQuery(struct jsonWrite *jw, char *db, struct searchCategory *categories, boolean doRedirect, char *searchTerms, boolean measureTiming)
 /* Fire off a query. If the query results in a single position and we came from another CGI,
- * redirect right back to that CGI (except if we came from hgGateway redirect to hgTracks),
- * otherwise return the position list as JSON */
+ * inform the client that we can redirect right to hgTracks, otherwise write the
+ * list as JSON. Return the results if we want to handle the redirect server
+ * side later. */
 {
 struct hgPositions *hgp = NULL;
-hgp = hgPositionsFind(db, searchTerms, "", "hgSearch", cart, FALSE, measureTiming, categories);
-if (hgp)
+char *chrom;
+int retWinStart = 0, retWinEnd = 0;
+boolean categorySearch = TRUE;
+hgp = genomePosCJ(jw, db, searchTerms, &chrom, &retWinStart, &retWinEnd, cart, categories, categorySearch);
+// at this point, if the search term wasn't a singlePos, we have written
+// out the JSON already. So now take care of the singlePos case.
+if (hgp && hgp->singlePos)
     {
     // if we got an hgvs match to chromInfo (example: chrX:g.31500000_31600000del),
     // or just a plain position range was searched, we have to create the json
     // manually, cause the tdb lookups in hgPositionsJson() won't work
-    if (hgp->singlePos && hgp->posCount == 1 && hgp->tableList != NULL &&
-            sameString(hgp->tableList->name, "chromInfo"))
+    struct hgPosTable *table = hgp->tableList;
+    jsonWriteListStart(jw, "positionMatches");
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "name", table->name);
+    jsonWriteString(jw, "description", table->description);
+    if (table->searchTime >= 0)
+        jsonWriteNumber(jw, "searchTime", table->searchTime);
+    jsonWriteListStart(jw, "matches");
+
+    jsonWriteObjectStart(jw, NULL);
+    char position[512];
+    retWinStart = hgp->singlePos->chromStart;
+    retWinEnd = hgp->singlePos->chromEnd;
+    if (hgp->singlePos->chromStart > hgp->singlePos->chromEnd)
         {
-        struct hgPosTable *table = hgp->tableList;
-        jsonWriteListStart(jw, "positionMatches");
-        jsonWriteObjectStart(jw, NULL);
-        jsonWriteString(jw, "name", "chromInfo");
-        jsonWriteString(jw, "description", table->description);
-        if (table->searchTime >= 0)
-            jsonWriteNumber(jw, "searchTime", table->searchTime);
-        jsonWriteListStart(jw, "matches");
-
-        jsonWriteObjectStart(jw, NULL);
-        char position[512];
-        safef(position, sizeof(position), "%s:%d-%d", hgp->singlePos->chrom, hgp->singlePos->chromStart, hgp->singlePos->chromEnd);
-        jsonWriteString(jw, "position", position);
-        jsonWriteString(jw, "posName", hgp->query);
-        jsonWriteObjectEnd(jw);
-
-        jsonWriteListEnd(jw); // end matches
-        jsonWriteObjectEnd(jw); // end one table
-        jsonWriteListEnd(jw); // end positionMatches
+        retWinStart = retWinEnd;
+        retWinEnd = hgp->singlePos->chromStart;
         }
-    else
-        hgPositionsJson(jw, db, hgp, cart);
+    safef(position, sizeof(position), "%s:%d-%d", hgp->singlePos->chrom, retWinStart+1, retWinEnd);
+    jsonWriteString(jw, "position", position);
+    jsonWriteString(jw, "posName", hgp->query);
+    if (doRedirect)
+        {
+        // If we are coming from hgTracks or hgGateway, then we can just return right
+        // back to hgTracks, the client will handle this:
+        jsonWriteBoolean(jw, "doRedirect", doRedirect);
+        }
+    jsonWriteObjectEnd(jw);
+
+    jsonWriteListEnd(jw); // end matches
+    jsonWriteObjectEnd(jw); // end one table
+    jsonWriteListEnd(jw); // end positionMatches
     }
+return hgp;
 }
 
 static void addCategoryFieldsToHash(struct hash *elementHash, struct searchCategory *category)
@@ -399,6 +416,7 @@ jsIncludeFile("hgSearch.js", NULL);
 
 // Write the skeleton HTML, which will get filled out by the javascript
 webIncludeFile("inc/hgSearch.html");
+webIncludeFile("inc/gbFooter.html");
 }
 
 /* End handler helper functions */
@@ -415,7 +433,8 @@ char *searchTerms = cartJsonRequiredParam(paramHash, SEARCH_TERM_VAR, cj->jw, "g
 measureTiming = cartUsualBoolean(cj->cart, "measureTiming", FALSE);
 struct jsonElement *searchCategs = hashFindVal(paramHash, "categs");
 struct searchCategory *searchCategoryList = makeCategsFromJson(searchCategs, db);
-doQuery(cj->jw, db, searchCategoryList, searchTerms, measureTiming);
+boolean doRedirect = FALSE;
+(void)doQuery(cj->jw, db, searchCategoryList, doRedirect, searchTerms, measureTiming);
 fprintf(stderr, "performed query on %s\n", searchTerms);
 }
 
@@ -435,6 +454,7 @@ static struct jsonElement *getGenomes()
 struct jsonElement *genomesObj = newJsonObject(hashNew(0));
 struct dbDbHelper *localDbs = getDbDbWithDefault();
 struct dbDbHelper *temp;
+struct hash *curatedHubs = hashNew(0);
 for (temp = localDbs; temp != NULL; temp = temp->next)
     {
     // fill out the dbDb fields into a struct
@@ -445,6 +465,10 @@ for (temp = localDbs; temp != NULL; temp = temp->next)
     jsonObjectAdd(genomeObj, "description", newJsonString(temp->dbDb->description));
     jsonObjectAdd(genomeObj, "orderKey", newJsonNumber(temp->dbDb->orderKey));
     jsonObjectAdd(genomeObj, "isDefault", newJsonBoolean(temp->isDefault));
+    jsonObjectAdd(genomeObj, "isCurated", newJsonBoolean(temp->isCurated));
+
+    if (temp->isCurated)
+        hashStore(curatedHubs, temp->dbDb->name);
 
     // finally add the dbDb object to the hash on species, either create a new
     // list if this is the first time seeing this species or append to the end
@@ -464,6 +488,10 @@ struct dbDb *trackHubDbs = trackHubGetDbDbs(NULL);
 struct dbDb *dbDb;
 for (dbDb = trackHubDbs; dbDb != NULL; dbDb = dbDb->next)
     {
+    // if this is a curated hub, don't treat it like other track hubs
+    if (hashLookup(curatedHubs, trackHubSkipHubName(dbDb->name)) != NULL)
+        continue;
+
     // fill out the dbDb fields into a struct
     struct jsonElement *genomeObj = newJsonObject(hashNew(0));
     jsonObjectAdd(genomeObj, "organism", newJsonString(dbDb->organism));
@@ -554,17 +582,41 @@ struct searchCategory *allCategories = getAllCategories(cart, db, hgFindGroupHas
 struct jsonElement *categsJsonElement = jsonElementFromSearchCategory(allCategories, db);
 
 struct cartJson *cj = cartJsonNew(cart);
-dyStringPrintf(cj->jw->dy, "\"db\": '%s'", db);
+// since we are coming directly from hgTracks/hgGateway (or a URL manipulation),
+// if the search would normally be a singlePos, like a chromosome name or HGVS search,
+// we can just go directly there. But if we aren't a singlePos, we need to show
+// the results page
+boolean doRedirect = TRUE;
+measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
+(void)doQuery(cj->jw, db, allCategories, doRedirect, userSearch, measureTiming);
+/* This is an option to do an automatic redirect but I'm commenting it
+ * out for now, as this page suggests the refresh option is not helpful
+ * for visually impaired users:
+ * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+ * For now the client javascript can handle the redirect
+if (hgp && hgp->singlePos)
+    {
+    char newPosBuf[128];
+    safef(newPosBuf, sizeof(newPosBuf), "%s:%d-%d", hgp->singlePos->chrom, hgp->singlePos->chromStart+1, hgp->singlePos->chromEnd);
+    cartSetString(cj->cart, "position", newPosBuf);
+    if (hgp->singlePos->highlight)
+        cartSetString(cj->cart, "addHighlight", hgp->singlePos->highlight);
+    puts("Content-type:text/html\n");
+    puts("<HTML>\n<HEAD>\n");
+    hPrintf("<META HTTP-EQUIV=refresh CONTENT=\"1;URL="
+            "../cgi-bin/hgTracks?db=%s&position=%s\">\n", db, newPosBuf);
+    puts("</HEAD>\n</HTML>");
+    }
+else
+*/
+dyStringPrintf(cj->jw->dy, ", \"db\": '%s'", db);
 dyStringPrintf(cj->jw->dy, ", \"categs\": ");
 jsonDyStringPrint(cj->jw->dy, categsJsonElement, NULL,-1);
 dyStringPrintf(cj->jw->dy, ", \"trackGroups\": ");
 jsonDyStringPrint(cj->jw->dy, makeTrackGroupsJson(db), NULL, -1);
 dyStringPrintf(cj->jw->dy, ", \"genomes\": ");
 jsonDyStringPrint(cj->jw->dy, getGenomes(), NULL, -1);
-dyStringPrintf(cj->jw->dy, ", ");
 
-measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
-doQuery(cj->jw, db, allCategories, userSearch, measureTiming);
 // Now we need to actually spit out the page + json
 webStartGbNoBanner(cart, db, "Search Disambiguation");
 printMainPageIncludes();

@@ -256,6 +256,7 @@
 #include "trix.h"
 #include "bPlusTree.h"
 #include "customFactory.h"
+#include "dupTrack.h"
 #include "iupac.h"
 #include "clinvarSubLolly.h"
 #include "jsHelper.h"
@@ -26178,6 +26179,14 @@ char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
+char *dupWholeName = NULL;
+boolean isDup = isDupTrack(track);
+if (isDup)
+    {
+    dupWholeName = track;
+    track = dupTrackSkipToSourceName(track);
+    }
+
 if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
@@ -26303,6 +26312,17 @@ if ((!isCustomTrack(track) && dbIsFound)
 		tdb = hashFindVal(trackHash, "mrna");
                   /* Oh what a tangled web we weave. */
 	    }
+	}
+    }
+
+if (isDup)
+    {
+    struct dupTrack *dupList = dupTrackListFromCart(cart);
+    struct dupTrack *dup = dupTrackFindInList(dupList, dupWholeName);
+    if (dup != NULL)
+	{
+	tdb = dupTdbFrom(tdb, dup);
+	track = dupWholeName;
 	}
     }
 

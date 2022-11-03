@@ -1,6 +1,6 @@
 /* hgPhyloPlace - Upload SARS-CoV-2 or MPXV sequence for placement in phylo tree. */
 
-/* Copyright (C) 2020 The Regents of the University of California */
+/* Copyright (C) 2020-2022 The Regents of the University of California */
 
 #include "common.h"
 #include "botDelay.h"
@@ -9,10 +9,13 @@
 #include "cheapcgi.h"
 #include "hCommon.h"
 #include "hash.h"
+#include "hgConfig.h"
+#include "htmshell.h"
 #include "hui.h"
 #include "jsHelper.h"
 #include "knetUdc.h"
 #include "linefile.h"
+#include "md5.h"
 #include "net.h"
 #include "options.h"
 #include "phyloPlace.h"
@@ -20,6 +23,7 @@
 #include "trackLayout.h"
 #include "udc.h"
 #include "web.h"
+#include "wikiLink.h"
 
 /* Global Variables */
 struct cart *cart = NULL;      // CGI and other variables
@@ -35,6 +39,10 @@ static long enteredMainTime = 0;
 #define seqFileVar "sarsCoV2File"
 #define pastedIdVar "namesOrIds"
 #define remoteFileVar "remoteFile"
+#define serverCommandVar "hgpp_serverCommand"
+#define serverCommentVar "hgpp_serverComment"
+#define serverPlainVar "hgpp_serverPlain"
+#define serverSaltyVar "hgpp_serverSalty"
 
 static struct lineFile *lineFileFromFileInput(struct cart *cart, char *fileVar)
 /* Return a lineFile on data from an uploaded file with cart variable name fileVar.
@@ -374,7 +382,7 @@ puts("  </div>");
 puts("<div class='readableWidth'>");
 puts("<div class='gbControl col-md-12'>");
 puts("<h2>Tutorial</h2>");
-puts("<iframe width='267' height='150' src='https://www.youtube.com/embed/humQ1NyZOUM' "
+puts("<iframe width='950' height='535' src='https://www.youtube.com/embed/humQ1NyZOUM' "
      "frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; "
      "gyroscope; picture-in-picture' allowfullscreen></iframe>\n"
      "<h3><a href='https://www.cdc.gov/amd/pdf/slidesets/ToolkitModule_3.3-508C.pdf' "
@@ -498,6 +506,140 @@ puts("</div>\n");
 newPageEndStuff();
 }
 
+static boolean serverAuthOk(char *plain, char *salty)
+/* Construct a salted hash of plain and compare it to salty. */
+{
+char *salt = cfgOption(CFG_LOGIN_COOKIE_SALT);
+if (! salt)
+    salt = "";
+char *plainMd5 = md5HexForString(plain);
+struct dyString *dySalted = dyStringCreate("%s-%s", salt, plainMd5);
+char *rightSalty = md5HexForString(dySalted->string);
+boolean ok = sameOk(salty, rightSalty);
+dyStringFree(&dySalted);
+return ok;
+}
+
+INLINE void maybeComment(char *comment)
+/* If comment is nonempty, append it to stderr.  Then print a newline regardless of comment. */
+{
+if (isNotEmpty(comment))
+    fprintf(stderr, ": %s", comment);
+fputc('\n', stderr);
+}
+
+#define CONTENT_TYPE "Content-Type: text/plain\n\n"
+
+static void sendServerCommand(char *db)
+/* If a recognized server command is requested (with minimal auth to prevent DoS), and usher server
+ * is configured, then send the command to the usher server's manager fifo. */
+{
+pushWarnHandler(htmlVaBadRequestAbort);
+pushAbortHandler(htmlVaBadRequestAbort);
+char *plain = cgiOptionalString(serverPlainVar);
+char *salty = cgiOptionalString(serverSaltyVar);
+if (isNotEmpty(plain) && isNotEmpty(salty) && serverAuthOk(plain, salty))
+    {
+    if (serverIsConfigured(db))
+        {
+        char *command = cgiString(serverCommandVar);
+        char *comment = cgiOptionalString(serverCommentVar);
+        struct tempName tnCheckServer;
+        trashDirFile(&tnCheckServer, "ct", "usher_check_server", ".txt");
+        FILE *errFile = mustOpen(tnCheckServer.forCgi, "w");
+        boolean serverUp = serverIsRunning(db, errFile);
+        carefulClose(&errFile);
+        if (sameString(command, "start"))
+            {
+            // This one is really a command for the CGI not the server manager fifo (because the
+            // server is not yet running and needs to be started at this point), but uses the
+            // same CGI interface.
+            struct treeChoices *treeChoices = loadTreeChoices(db);
+            if (treeChoices != NULL)
+                {
+                if (serverUp)
+                    errAbort("Server is already running for db %s, see %s",
+                             db, tnCheckServer.forCgi);
+                struct tempName tnServerStartup;
+                trashDirFile(&tnServerStartup, "ct", "usher_server_startup", ".txt");
+                errFile = mustOpen(tnServerStartup.forCgi, "w");
+                fprintf(stderr, "Usher server start for %s", db);
+                maybeComment(comment);
+                boolean success = startServer(db, treeChoices, errFile);
+                carefulClose(&errFile);
+                if (success)
+                    {
+                    fprintf(stderr, "Spawned usher server background process, details in %s",
+                            tnServerStartup.forCgi);
+                    printf(CONTENT_TYPE"Started server for %s\n", db);
+                    }
+                else
+                    errAbort("Unable to spawn usher server background process, details in %s",
+                             tnServerStartup.forCgi);
+                }
+            else
+                errAbort("No treeChoices for db=%s", db);
+            }
+        else if (serverUp)
+            {
+            if (sameString(command, "reload"))
+                {
+                struct treeChoices *treeChoices = loadTreeChoices(db);
+                fprintf(stderr, "Usher server reload for %s", db);
+                maybeComment(comment);
+                serverReloadProtobufs(db, treeChoices);
+                printf(CONTENT_TYPE"Sent reload command for %s\n", db);
+                }
+            else if (sameString(command, "stop"))
+                {
+                fprintf(stderr, "Usher server stop for %s", db);
+                maybeComment(comment);
+                serverStop(db);
+                printf(CONTENT_TYPE"Sent stop command for %s\n", db);
+                }
+            else
+                {
+                char commandCopy[16];
+                safecpy(commandCopy, sizeof commandCopy, command);
+                char *words[3];
+                int wordCount = chopLine(commandCopy, words);
+                int val;
+                if (wordCount == 2 && (val = atol(words[1])) > 0)
+                    {
+                    if (sameString(words[0], "thread"))
+                        {
+                        fprintf(stderr, "Usher server thread count set to %d", val);
+                        maybeComment(comment);
+                        serverSetThreadCount(db, val);
+                        printf(CONTENT_TYPE"Sent thread %d command for %s\n", val, db);
+                        }
+                    else if (sameString(words[0], "timeout"))
+                        {
+                        fprintf(stderr, "Usher server timeout set to %d", val);
+                        maybeComment(comment);
+                        serverSetTimeout(db, val);
+                        printf(CONTENT_TYPE"Sent timeout %d command for %s\n", val, db);
+                        }
+                    else
+                        errAbort("Unrecognized command '%s'", command);
+                    }
+                else
+                    errAbort("Unrecognized command '%s'", command);
+                }
+            }
+        else
+            errAbort("Server for %s is down (see %s), cannot send command '%s'",
+                     db, tnCheckServer.forCgi, command);
+        }
+    else
+        errAbort("Usher server mode not configured for db=%s", db);
+    }
+else
+    errAbort("Bad request");
+popWarnHandler();
+popAbortHandler();
+}
+
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
@@ -539,6 +681,10 @@ else if (cgiOptionalString(seqFileVar) || cgiOptionalString(seqFileVar "__filena
     struct lineFile *lf = lineFileFromFileInput(cart, seqFileVar);
     resultsPage(db, lf);
     }
+else if (isNotEmpty(cgiOptionalString(serverCommandVar)))
+    {
+    sendServerCommand(db);
+    }
 else
     mainPage(db);
 }
@@ -571,7 +717,8 @@ int main(int argc, char *argv[])
 /* Null terminated list of CGI Variables we don't want to save to cart */
 char *excludeVars[] = {"submit", "Submit",
                        seqFileVar, seqFileVar "__binary", seqFileVar "__filename",
-                       pastedIdVar,
+                       pastedIdVar, remoteFileVar,
+                       serverCommandVar, serverCommentVar, serverPlainVar, serverSaltyVar,
                        NULL};
 enteredMainTime = clock1000();
 issueBotWarning = earlyBotCheck(enteredMainTime, "hgPhyloPlace", delayFraction, 0, 0, "html");
@@ -579,6 +726,7 @@ issueBotWarning = earlyBotCheck(enteredMainTime, "hgPhyloPlace", delayFraction, 
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
 addLdLibraryPath();
+
 cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgPhyloPlace", enteredMainTime);
 return 0;

@@ -2581,7 +2581,7 @@ return res;
 char *hDbDbOptionalField(char *database, char *field)
  /* Look up in the regular central database. */
 {
-if (trackHubDatabase(database))
+if (trackHubDatabase(database) && !hubConnectIsCurated(trackHubSkipHubName(database)))
     {
     // In dbDb the genome field is the name of the organism, but
     // genome is the name of the assembly in track hubs.
@@ -2592,7 +2592,7 @@ if (trackHubDatabase(database))
     return trackHubAssemblyField(database, field);
     }
 
-char *res = hCentralDbDbOptionalField(database, field);
+char *res = hCentralDbDbOptionalField(trackHubSkipHubName(database), field);
 
 return res;
 }

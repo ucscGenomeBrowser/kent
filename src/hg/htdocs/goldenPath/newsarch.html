@@ -55,6 +55,121 @@
 email list. We send around one short announcement email every two weeks.</p>
 
 <a name="2022"></a>
+<a name="103122"></a>
+<h2>Oct. 31, 2022 &nbsp;&nbsp; UK Biobank Depletion rank score for human</h2>
+<p>
+We are happy to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=ukbDepletion">UK Biobank Depletion rank score</a> track
+for the human assembly (<a href="/cgi-bin/hgGateway?db=hg38">GRCh38/hg38</a>). This track is part of
+the Constraint score container track that includes several subtracks showing the results of
+constraint prediction algorithms.</p>
+<p>
+A variant depletion score was computed for every overlapping set of 500bp windows in the genome
+with a 50bp step size, and assigned a rank (depletion rank (DR)) from 0 (most depletion) to 100
+(least depletion) for each 500bp window. Since the windows are overlapping, only the value in the
+central 50bp of the 500bp window is plotted. You can learn more about how the data was generated
+from the <a href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=ukbDepletion">track description</a> page.</p>
+<p>
+We would like to thank the UK Biobank / deCODE Genetics team for providing the data for the track.
+We would also like to thank Max Haeussler and Jairo Navarro at UCSC for the creation and release of
+this track.</p>
+
+<a name="102422"></a>
+<h2>Oct. 24, 2022 &nbsp;&nbsp; Two new data tracks on human: HGNC and PanelApp</h2>
+<p>
+The UCSC Genome Browser team is happy to announce two new fantastic data tracks 
+on the human reference genomes, hg19 and hg38. We hope these additions will 
+improve disease diagnostic capacity and harmonize different gene naming systems.
+</p><p>
+The PanelApp track is a Phenotype and Literature track from <a 
+href="https://panelapp.genomicsengland.co.uk" target="_blank">Genomics England</a>
+which shows expert, crowdsourced diagnostic disease panels among genes, 
+copy-number variants (CNV), and short tandem repeats (STR). This collection 
+of nearly 50,000 associations includes a confidence level color-score,
+detailed mouseover, inheritance patterns, and links to the primary data 
+source. We are proud to say that this evolving resource will be kept 
+up-to-date with automatic weekly data updates. This is a much-requested 
+data track and we hope it sees some attention!
+</p><p>
+The HGNC track is a Genes track from the <a href="https://www.genenames.org/" 
+target="_blank">Hugo Gene Nomenclature Committee</a>, 
+the official source for gene names. This searchable track is a unifier 
+of different identifiers for the same gene, with up to 24 aliases 
+linked together under one annotation. Clicking into an entry will show data 
+on current names, former names, and full names; you name it! Actually don't 
+name it, because it's already been named. We have also added this thesaurus 
+archive to our search engine to help researchers find the gene they're looking for, 
+regardless of information source and version.
+</p><p>
+Try PanelApp and HGNC yourself here:</p>
+<p><a href="https://genome.ucsc.edu/s/view/PanelApp.HGNC">
+https://genome.ucsc.edu/s/view/PanelApp.HGNC</a><br>
+<a href="https://genome.ucsc.edu/s/view/PanelApp.HGNC">
+<img src="../../images/panelApp.HGNC.png" alt="PanelApp and HGNC tracks image" width="700">
+</a></p>
+
+<a name="101922"></a>
+<h2>Oct. 19, 2022 &nbsp;&nbsp; Two new curated assemblies: hs1 and mpxvRivers</h2>
+<p>
+We are happy to announce the release of two new curated assembly hubs for human
+<a href="/cgi-bin/hgGateway?db=hs1">(T2T/hs1)</a> and the Monkeypox virus
+<a href="/cgi-bin/hgGateway?db=mpxvRivers">(MT903340.1/mpxvRivers)</a>. These two assemblies
+showcase the new method of how we will be releasing new assemblies on the UCSC Genome Browser.
+Curated assembly hubs will be reviewed by our quality assurance team like previous native assemblies
+which will allow for quicker and streamlined releases. For the majority of users, there will be no
+obvious difference between the curated hubs and native assemblies. 
+</p>
+<p>
+Please note, the hs1 assembly is identical to the T2T Genark assembly hub. Unfortunately, with the
+database name change and the change in sequence names, users will need to reattach any
+custom tracks or hubs that were previously on the T2T assembly hub.
+</p>
+<p>
+<b>hs1 statistics</b>:</p>
+<ul>
+  <li>Common name: human</li>
+  <li>Taxonomic name: Homo sapiens, taxonomy ID:
+      <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9606"
+      target="_blank">9606</a></li>
+  <li>Sequencing/Assembly provider ID: T2T Consortium</li>
+  <li>Assembly date: 24 Jan 2022</li>
+  <li>Assembly type: haploid</li>
+  <li>Assembly level: Complete Genome</li>
+  <li>Biosample: (n/a)</li>
+  <li>Assembly accession ID:
+      <a href="https://www.ncbi.nlm.nih.gov/assembly/GCA_009914755.4"
+      target="_blank">GCA_009914755.4</a></li>
+  <li>Assembly FTP location:
+      <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0"
+      target="_blank">GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0</a></li>
+  <li>Total assembly nucleotides: 3,117,292,070</li>
+  <li>Assembly contig count: 25</li>
+  <li>N50 size: 150,617,247</li>
+</ul>
+<p>
+<b>mpxvRivers statistics</b>:</p>
+<ul>
+  <li>Common name: monkeypox
+  <li>Taxonomic name: Monkeypox virus, taxonomy ID:
+      <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=10244"
+      target="_blank">10244</a></li>
+  <li>Sequencing/Assembly provider ID: na</li>
+  <li>Assembly date: 30 May 2022</li>
+  <li>Assembly type: na</li>
+  <li>Assembly level: Complete Genome</li>
+  <li>Biosample: (n/a)</li>
+  <li>Assembly accession ID: <a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_014621545.1"
+      target="_blank">GCF_014621545.1</a></li>
+  <li>Assembly FTP location:
+      <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/014/621/545/GCF_014621545.1_ASM1462154v1"
+      target="_blank">GCF/014/621/545/GCF_014621545.1_ASM1462154v1</a></li>
+  <li>Total assembly nucleotides: 197,209</li>
+  <li>Assembly contig count: 1</li>
+  <li>N50 size: 197,209</li>
+</ul>
+<p>
+We would like to thank Brian Raney and Jairo Navarro for the creation and release of these
+assemblies.</p>
 
 <a name="090522"></a>
 <h2>Sep. 5, 2022 &nbsp;&nbsp; Using the Genome Browser in your Teaching</h2>

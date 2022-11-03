@@ -3674,3 +3674,14 @@ var dragReorder = {
                         });
     }
 };
+
+function trackHubSkipHubName(name) {
+    // Just like hg/lib/trackHub.c's...
+    var matches;
+    if (name && (matches = name.match(/^hub_[0-9]+_(.*)/)) !== null) {
+        return matches[1];
+    } else {
+        return name;
+    }
+}
+

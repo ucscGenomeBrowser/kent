@@ -9,6 +9,7 @@
 #include "errAbort.h"
 #include "htmshell.h"
 #include "web.h"
+#include "dupTrack.h"
 #include "hPrint.h"
 #include "hdb.h"
 #include "hui.h"
@@ -607,6 +608,10 @@ char *defaultClade = hClade(genome);
 char *defaultLabel = NULL;
 int numClades = 0;
 
+if (hubConnectIsCurated(trackHubSkipHubName(genome)))
+    defaultClade = hClade(trackHubSkipHubName(genome));
+else
+    defaultClade = hClade(genome);
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
 // get only the clades that have actual active genomes
 char query[4096];
@@ -1445,9 +1450,10 @@ if(scriptName)
         if (tdb)
 	    {
 	    struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb); 
+	    char *undupedTrack = dupTrackSkipToSourceName(topLevel->track);
 	    safef(hgTablesOptions, sizeof  hgTablesOptions, 
 		    "../cgi-bin/hgTables?hgta_doMainPage=1&hgta_group=%s&hgta_track=%s&hgta_table=%s&", 
-		    topLevel->grp, topLevel->track, tdb->table);
+		    topLevel->grp, undupedTrack, tdb->table);
 	    menuStr = replaceChars(menuStr, "../cgi-bin/hgTables?", hgTablesOptions);
 	    trackDbFree(&tdb);
 	    }

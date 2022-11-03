@@ -12642,3 +12642,31 @@ TMPDIR=/dev/shm' > DEF
 # Command: doCrispr.sh mm9 ensGene
 ##############################################################################
 
+##############################################################################
+# LIFTOVER TO mm39 (DONE - 2022-10-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm9/bed/blat.mm39.2022-10-24
+    cd /hive/data/genomes/mm9/bed/blat.mm39.2022-10-24
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/mm9/mm9.2bit \
+        -targetSizes=/hive/data/genomes/mm9/chrom.sizes \
+        -query2Bit=/hive/data/genomes/mm39/mm39.2bit \
+        -querySizes=/hive/data/genomes/mm39/chrom.sizes \
+        -ooc=/hive/data/genomes/mm9/11.ooc \
+         mm9 mm39
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/mm9/mm9.2bit \
+        -targetSizes=/hive/data/genomes/mm9/chrom.sizes \
+        -query2Bit=/hive/data/genomes/mm39/mm39.2bit \
+        -querySizes=/hive/data/genomes/mm39/chrom.sizes \
+        -ooc=/hive/data/genomes/mm9/11.ooc \
+         mm9 mm39) > doLiftOverToMm39.log 2>&1
+    # performed in two steps
+    # real    212m47.631s
+    # real    128m9.574s
+
+    # see if the liftOver menus function in the browser from mm9 to mm39
+
+##############################################################################
