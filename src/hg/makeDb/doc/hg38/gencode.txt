@@ -1137,7 +1137,7 @@ cd kent/src/hg/makeDb/trackDb
 
     # generate trackDb and joiner blurb
     pushd ~/kent/src/hg/makeDb/trackDb
-    ../outside/gencode/bin/gencodeGenerateTrackDbs hg38 42 107 'Oct 2022'
+    ../outside/gencode/bin/gencodeGenerateTrackDbs hg38 42 108 'Oct 2022'
 
     # Update 'Release Notes' (for final)
     # human/hg38/wgEncodeGencodeSuper.html
@@ -1156,3 +1156,4 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
     jkmake DBS=hg38 alpha
 
+#########################################################################

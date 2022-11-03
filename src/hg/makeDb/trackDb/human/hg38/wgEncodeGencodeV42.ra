@@ -2,7 +2,7 @@ track wgEncodeGencodeV42
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
 shortLabel All GENCODE V42
-longLabel All GENCODE annotations from V42 (Ensembl 107)
+longLabel All GENCODE annotations from V42 (Ensembl 108)
 group genes
 dragAndDrop subTracks
 priority 34.163
@@ -59,7 +59,7 @@ wgEncodeGencodeVersion 42
         subTrack wgEncodeGencodeV42ViewGenes on
         shortLabel Basic
         subGroups view=aGenes name=Basic
-        longLabel Basic Gene Annotation Set from GENCODE Version 42 (Ensembl 107)
+        longLabel Basic Gene Annotation Set from GENCODE Version 42 (Ensembl 108)
         type genePred
         priority 1
 
@@ -68,7 +68,7 @@ wgEncodeGencodeVersion 42
         subTrack wgEncodeGencodeV42ViewGenes off
         subGroups view=aGenes name=Comprehensive
         shortLabel Comprehensive
-        longLabel Comprehensive Gene Annotation Set from GENCODE Version 42 (Ensembl 107)
+        longLabel Comprehensive Gene Annotation Set from GENCODE Version 42 (Ensembl 108)
         type genePred
         priority 2
 
@@ -77,7 +77,7 @@ wgEncodeGencodeVersion 42
         subTrack wgEncodeGencodeV42ViewGenes on
         subGroups view=aGenes name=Pseudogenes
         shortLabel Pseudogenes
-        longLabel Pseudogene Annotation Set from GENCODE Version 42 (Ensembl 107)
+        longLabel Pseudogene Annotation Set from GENCODE Version 42 (Ensembl 108)
         type genePred
         color 255,51,255
         priority 3
@@ -95,7 +95,7 @@ wgEncodeGencodeVersion 42
         subTrack wgEncodeGencodeV42View2Way off
         subGroups view=b2-way name=yTwo-way
         shortLabel 2-way Pseudogenes
-        longLabel 2-way Pseudogene Annotation Set from GENCODE Version 42 (Ensembl 107)
+        longLabel 2-way Pseudogene Annotation Set from GENCODE Version 42 (Ensembl 108)
         type genePred
         color 255,51,255
         priority 4
@@ -113,7 +113,7 @@ wgEncodeGencodeVersion 42
         subTrack wgEncodeGencodeV42ViewPolya off
         subGroups view=cPolya name=zPolyA
         shortLabel PolyA
-        longLabel PolyA Transcript Annotation Set from GENCODE Version 42 (Ensembl 107)
+        longLabel PolyA Transcript Annotation Set from GENCODE Version 42 (Ensembl 108)
         type genePred
         color 0,0,0
         priority 5
