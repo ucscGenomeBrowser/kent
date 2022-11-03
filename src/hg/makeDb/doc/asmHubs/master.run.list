@@ -402,6 +402,8 @@
 ./runBuild GCA_021951015.1 GCA_021951015.1_HG002.mat.cur.20211005 primates Homo_sapiens
 ./runBuild GCA_023515785.1 GCA_023515785.1_UTH_Rnor_SHR_Utx mammals Rattus_norvegicus
 ./runBuild GCA_023515805.1 GCA_023515805.1_UTH_Rnor_WKY_Bbb_1.0 mammals Rattus_norvegicus
+./runBuild GCA_025617745.1 GCA_025617745.1_DUKEBGI_Hery_1.0 invertebrate Heliocidaris_erythrogramma
+./runBuild GCA_025618425.1 GCA_025618425.1_DUKEBGI_Htub_1.0 invertebrate Heliocidaris_tuberculata
 ./runBuild GCA_900006655.3 GCA_900006655.3_Susie3 primates Gorilla_gorilla_gorilla
 ./runBuild GCA_900094665.2 GCA_900094665.2_CAROLI_EIJ_v1.1 mammals Mus_caroli
 ./runBuild GCA_900108605.1 GCA_900108605.1_NNQGG.v01 mammals Neovison_vison
