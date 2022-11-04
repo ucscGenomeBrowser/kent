@@ -115,7 +115,8 @@ for (seq = seqs;  seq != NULL;  seq = nextSeq)
             }
         else
             {
-            if (isInternalNodeName(seq->name, 0) || hashLookup(treeNames, seq->name))
+            if (treeNames &&
+                (isInternalNodeName(seq->name, 0) || hashLookup(treeNames, seq->name)))
                 {
                 // usher will reject any sequence whose name is already in the tree, even a
                 // numeric internal node name.  Add a prefix so usher won't reject sequence.
@@ -368,11 +369,10 @@ return -1;
 }
 
 static void extractSnvs(struct psl *psls, struct dnaSeq *ref, struct seqInfo *querySeqs,
-                        struct snvInfo **snvsByPos, boolean *informativeBases,
-                        struct slName **maskSites)
+                        struct snvInfo **snvsByPos, struct slName **maskSites)
 /* For each PSL, find single-nucleotide differences between ref and query (one of querySeqs),
  * building up target position-indexed array of snvInfo w/genotypes in same order as querySeqs.
- * Add explicit no-calls for unaligned positions in informativeBases. */
+ * Add explicit no-calls for unaligned positions that are not masked. */
 {
 int gtCount = slCount(querySeqs);
 struct psl *psl;
@@ -386,7 +386,7 @@ for (psl = psls;  psl != NULL;  psl = psl->next)
     int tStart;
     for (tStart = 0;  tStart < psl->tStart;  tStart++)
         {
-        if (informativeBases[tStart])
+        if (!maskSites[tStart])
             {
             char refBase = ref->dna[tStart];
             addCall(snvsByPos, tStart, refBase, '-', gtIx, gtCount);
@@ -424,7 +424,7 @@ for (psl = psls;  psl != NULL;  psl = psl->next)
             // Add no-calls for unaligned bases between this block and the next
             for (;  tStart < psl->tStarts[blkIx+1];  tStart++)
                 {
-                if (informativeBases[tStart])
+                if (!maskSites[tStart])
                     {
                     char refBase = ref->dna[tStart];
                     addCall(snvsByPos, tStart, refBase, '-', gtIx, gtCount);
@@ -435,7 +435,7 @@ for (psl = psls;  psl != NULL;  psl = psl->next)
     // Add no-calls for unaligned bases after last block
     for (tStart = psl->tEnd;  tStart < ref->size;  tStart++)
         {
-        if (informativeBases[tStart])
+        if (!maskSites[tStart])
             {
             char refBase = ref->dna[tStart];
             addCall(snvsByPos, tStart, refBase, '-', gtIx, gtCount);
@@ -503,13 +503,13 @@ carefulClose(&f);
 }
 
 static void pslSnvsToVcfFile(struct psl *psls, struct dnaSeq *ref, struct seqInfo *querySeqs,
-                             char *vcfFileName, boolean *informativeBases, struct slName **maskSites)
+                             char *vcfFileName, struct slName **maskSites)
 /* Find single-nucleotide differences between each query sequence and reference, and
  * write out a VCF file with genotype columns for the queries. */
 {
 struct snvInfo *snvsByPos[ref->size];
 memset(snvsByPos, 0, sizeof snvsByPos);
-extractSnvs(psls, ref, querySeqs, snvsByPos, informativeBases, maskSites);
+extractSnvs(psls, ref, querySeqs, snvsByPos, maskSites);
 int sampleCount = slCount(querySeqs);
 char *sampleNames[sampleCount];
 struct seqInfo *qSeq;
@@ -582,8 +582,7 @@ for (si = filteredSeqs;  si != NULL;  si = si->next)
 }
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
-                              boolean *informativeBases, struct slName **maskSites,
-                              struct hash *treeNames,
+                              struct slName **maskSites, struct hash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime)
@@ -618,8 +617,7 @@ if (filteredSeqs)
         {
         AllocVar(tn);
         trashDirFile(tn, "ct", "pp", ".vcf");
-        pslSnvsToVcfFile(filteredAlignments, refGenome, filteredSeqs, tn->forCgi, informativeBases,
-                         maskSites);
+        pslSnvsToVcfFile(filteredAlignments, refGenome, filteredSeqs, tn->forCgi, maskSites);
         struct psl *psl;
         for (psl = filteredAlignments;  psl != NULL;  psl = psl->next)
             slNameAddHead(&sampleIds, psl->qName);

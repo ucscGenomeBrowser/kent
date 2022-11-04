@@ -402,6 +402,8 @@
 ./runBuild GCA_021951015.1 GCA_021951015.1_HG002.mat.cur.20211005 primates Homo_sapiens
 ./runBuild GCA_023515785.1 GCA_023515785.1_UTH_Rnor_SHR_Utx mammals Rattus_norvegicus
 ./runBuild GCA_023515805.1 GCA_023515805.1_UTH_Rnor_WKY_Bbb_1.0 mammals Rattus_norvegicus
+./runBuild GCA_025617745.1 GCA_025617745.1_DUKEBGI_Hery_1.0 invertebrate Heliocidaris_erythrogramma
+./runBuild GCA_025618425.1 GCA_025618425.1_DUKEBGI_Htub_1.0 invertebrate Heliocidaris_tuberculata
 ./runBuild GCA_900006655.3 GCA_900006655.3_Susie3 primates Gorilla_gorilla_gorilla
 ./runBuild GCA_900094665.2 GCA_900094665.2_CAROLI_EIJ_v1.1 mammals Mus_caroli
 ./runBuild GCA_900108605.1 GCA_900108605.1_NNQGG.v01 mammals Neovison_vison
@@ -1799,6 +1801,7 @@
 ./runBuild GCF_008704595.1 GCF_008704595.1_ASM870459v1 fungi Diutina_rugosa
 ./runBuild GCF_008728515.1 GCF_008728515.1_Panubis1.0 vertebrate_mammalian Papio_anubis
 ./runBuild GCF_008729295.1 GCF_008729295.1_YSFRI_Pleo_2.0 fish Plectropomus_leopardus
+./runBuild GCF_008777455.1 GCF_008777455.1_ASM877745v1 viruses Bovine_herpesvirus_type_1.1
 ./runBuild GCF_008802855.1 GCF_008802855.1_Ppyr1.3 invertebrate Photinus_pyralis
 ./runBuild GCF_008822105.2 GCF_008822105.2_bTaeGut2.pat.W.v2 birds Taeniopygia_guttata
 ./runBuild GCF_008831285.1 GCF_008831285.1_ASM883128v1 plants Nymphaea_colorata

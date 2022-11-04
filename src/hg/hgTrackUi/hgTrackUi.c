@@ -30,6 +30,7 @@
 #include "chromGraph.h"
 #include "hgConfig.h"
 #include "customTrack.h"
+#include "dupTrack.h"
 #include "dbRIP.h"
 #include "tfbsConsSites.h"
 #include "hapmapSnps.h"
@@ -3164,6 +3165,22 @@ printf("<hr>");
 printf("</p>");
 }
 
+boolean tdbIsDupable(struct trackDb *tdb)
+/* Return TRUE if a track is duplicatable */
+{
+/* Can't handle container tracks yet at least */
+if (!tdbIsDataTrack(tdb))
+    return FALSE;
+/* A few other special case we can't handle */
+if (sameString(tdb->track, "ruler"))
+    return FALSE;
+if (sameString(tdb->track, "cutters"))
+    return FALSE;
+if (sameString(tdb->track, "oligoMatch"))
+    return FALSE;
+return TRUE;
+}
+
 void trackUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
 {
@@ -3389,8 +3406,22 @@ if (!tdbIsDownloadsOnly(tdb))
             {
             printf("\n&nbsp;&nbsp;<a href='%s' >Go to Track Collection Builder</a>\n", hgCollectionName());
             }
+	/* Offer to dupe the non-containery tracks including composite and supertrack elements */
+	if (tdbIsDupable(tdb))
+	    {
+	    printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&c=%s&g=%s&hgTrackUi_op=dupe' >Duplicate track</a>\n", 
+		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+		chromosome, cgiEncode(tdb->track));
+	    if (isDupTrack(tdb->track))
+		{
+		/* Offer to undupe */
+		printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&c=%s&g=%s&hgTrackUi_op=undupe' >Remove duplicate</a>\n", 
+		    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+		    chromosome, cgiEncode(tdb->track));
+		}
 
-        }
+	    }
+	}
 
     if (ct)
         {
@@ -3558,6 +3589,37 @@ return trackDbForPseudoTrack(OLIGO_MATCH_TRACK_NAME,
 	OLIGO_MATCH_TRACK_LABEL, OLIGO_MATCH_TRACK_LONGLABEL, tvHide, TRUE);
 }
 
+static char *handleDupOp(char *track, struct hash *trackHash)
+/* Handle the duplication operation in the URL if any.  Return dupe name if
+ * a dupe has happened. The trackHash is keyed by track name and has 
+ * struct trackDb values. */
+{
+char *newTrack = NULL;
+
+/* Handle duplicate, and possible in the future other operations on tracks. */
+char *opVar = "hgTrackUi_op";
+char *operation = cartUsualString(cart, opVar, NULL);
+if (operation != NULL)
+   {
+   if (sameString(operation, "dupe"))
+       {
+       struct trackDb *tdb = hashFindVal(trackHash, dupTrackSkipToSourceName(track));
+       newTrack = dupTrackInCartAndTrash(track, cart, tdb);
+       }
+   else if (sameString(operation, "undupe"))
+       {
+       newTrack = dupTrackSkipToSourceName(track);
+       undupTrackInCartAndTrash(track, cart);
+       }
+   else
+       {
+       internalErr();
+       }
+   cartRemove(cart, opVar);
+   }
+return newTrack;
+}
+
 void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
@@ -3582,8 +3644,50 @@ track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
 initGenbankTableNames(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
+trackHash = trackHashMakeWithComposites(database,chromosome,&tdbList,FALSE); 
 
-trackHash = trackHashMakeWithComposites(database,chromosome,&tdbList,FALSE);
+/* Handle dup of track related stuff */
+char *dupeName = handleDupOp(track, trackHash);
+if (dupeName != NULL)
+    track = dupeName;
+struct dupTrack *dupList = dupTrackListFromCart(cart);
+char *dupWholeName = NULL;
+boolean isDup = isDupTrack(track);
+if (isDup)
+    {
+    dupWholeName = track;
+    track = dupTrackSkipToSourceName(track);
+    }
+
+
+/* Add in duplicate tracks. */
+struct dupTrack *dup;
+for (dup = dupList; dup != NULL; dup = dup->next)
+    {
+    struct trackDb *sourceTdb = hashFindVal(trackHash, dup->source);
+    if (sourceTdb != NULL)
+	{
+	struct trackDb *dupTdb = dupTdbFrom(sourceTdb, dup);
+        hashAdd(trackHash, dupTdb->track, dupTdb);
+	if (sourceTdb->parent != NULL)
+	    {
+	    struct trackDb *parent = sourceTdb->parent;
+	    // Add to parent here depending on whether composite or something else?
+	    if (tdbIsFolder(parent))
+		{
+		refAdd(&parent->children, dupTdb);
+		}
+	    else
+		{
+		slAddHead(&parent->subtracks, dupTdb);
+		dupTdb = NULL;  /* We use it! */
+		}
+	    }
+	if (dupTdb != NULL)
+	    slAddHead(&tdbList, dupTdb);
+	}
+    }
+
 if (sameWord(track, WIKI_TRACK_TABLE))
     tdb = trackDbForWikiTrack();
 else if (sameWord(track, RULER_TRACK_NAME))
@@ -3620,6 +3724,15 @@ if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
    }
+
+// Do  little more dupe handling - make a tdb for dupe if any 
+if (isDup)
+    {
+    struct dupTrack *dup = dupTrackFindInList(dupList, dupWholeName);
+    tdb = dupTdbFrom(tdb, dup);
+    }
+
+
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html

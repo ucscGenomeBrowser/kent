@@ -14,6 +14,7 @@
 #include "hui.h"
 #include "dbDb.h"
 #include "hdb.h"
+#include "dupTrack.h"
 #include "web.h"
 #include "botDelay.h"
 #include "ra.h"
@@ -723,6 +724,7 @@ else
     if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 
     char *tableName = cartUsualString(cart, hggType, NULL);
+    tableName = dupTrackSkipToSourceName(tableName);
     char *knownDb = hdbDefaultKnownDb(database);
 
     // if no table has been given to us, try knownGene
