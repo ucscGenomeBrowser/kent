@@ -37,6 +37,10 @@ tables sangerLinks
 idSql select protName from sangerLinks where orfName = '%s'
 nameSql select protName from sangerLinks where orfName = '%s'
 
+name alphafold
+tables sangerLinks
+idSql select protName from sangerLinks where orfName = '%s'
+
 name refSeq
 shortLabel RefSeq
 tables sangerToRefSeq

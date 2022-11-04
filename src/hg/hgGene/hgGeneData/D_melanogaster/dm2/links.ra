@@ -20,6 +20,10 @@ name uniProt
 tables flyBaseToUniProt
 idSql select alias from flyBaseToUniProt where name = '%s'
 
+name alphafold
+tables flyBaseToUniProt
+idSql select alias from flyBaseToUniProt where name = '%s'
+
 name refSeq
 shortLabel RefSeq
 tables flyBaseToRefSeq
