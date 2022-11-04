@@ -7,8 +7,8 @@ group genes
 dragAndDrop subTracks
 priority 2.953
 visibility pack
-subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
-subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
+subGroup1 view View aGenes=Genes bPolya=PolyA
+subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes zPolyA=PolyA
 allButtonPair on
 sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
@@ -82,24 +82,6 @@ maxTransEnabled on
         type genePred
         color 255,51,255
         priority 3
-
-    track wgEncodeGencodeVM31View2Way
-    shortLabel 2-Way
-    view b2-way
-    visibility hide
-    subTrack wgEncodeGencodeVM31
-    type genePred
-    configurable off
-
-        track wgEncodeGencode2wayConsPseudoVM31
-        trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM31View2Way off
-        subGroups view=b2-way name=yTwo-way
-        shortLabel 2-way Pseudogenes
-        longLabel 2-way Pseudogene Annotation Set from GENCODE Version M31 (Ensembl 108)
-        type genePred
-        color 255,51,255
-        priority 4
 
     track wgEncodeGencodeVM31ViewPolya
     shortLabel PolyA
@@ -263,10 +245,3 @@ searchPriority 2.24318
 xrefTable wgEncodeGencodeAttrsVM31
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
-# searches for 2-way consensus
-searchName wgEncodeGencode2wayConsPseudoVM31
-searchTable wgEncodeGencode2wayConsPseudoVM31
-searchMethod exact
-searchType genePred
-termRegex PGOMOU[0-9.]+
-searchPriority 2.24319

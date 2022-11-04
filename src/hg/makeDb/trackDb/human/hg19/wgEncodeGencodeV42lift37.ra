@@ -7,8 +7,8 @@ group genes
 dragAndDrop subTracks
 priority 34.163
 visibility pack
-subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
-subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
+subGroup1 view View aGenes=Genes bPolya=PolyA
+subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes zPolyA=PolyA
 allButtonPair on
 sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession

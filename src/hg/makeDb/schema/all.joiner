@@ -3484,7 +3484,6 @@ identifier wgEncodeGencodeExonSupportV41
 
 # gencode genePred tables with no associations
 # wgEncodeGencodePolyaV42
-# wgEncodeGencode2wayConsPseudoV42
 
 # gencode genePred tables with joining through wgEncodeGencodeAttrsV42
 identifier wgEncodeGencodeBasicAttrsV42
@@ -5113,7 +5112,6 @@ identifier wgEncodeGencodeEntrezGeneV41lift37
 
 # gencode genePred tables with no associations
 # wgEncodeGencodePolyaV42lift37
-# wgEncodeGencode2wayConsPseudoV42lift37
 
 # gencode genePred tables with joining through wgEncodeGencodeAttrsV42lift37
 identifier wgEncodeGencodeBasicAttrsV42lift37
@@ -7188,7 +7186,6 @@ identifier wgEncodeGencodeExonSupportVM30
 
 # gencode genePred tables with no associations
 # wgEncodeGencodePolyaVM31
-# wgEncodeGencode2wayConsPseudoVM31
 
 # gencode genePred tables with joining through wgEncodeGencodeAttrsVM31
 identifier wgEncodeGencodeBasicAttrsVM31

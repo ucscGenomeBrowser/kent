@@ -34,8 +34,8 @@ mach = $(shell uname -m)
 ##
 preRelease = no
 #preRelease = yes
-#db = hg38
-db = hg19
+db = hg38
+#db = hg19
 #db = mm39
 #db = mm10
 ifeq (${db},mm10)
@@ -91,7 +91,6 @@ releaseUrl = ${baseUrl}/${gencodeOrg}/${ftpReleaseSubdir}
 dataDir = data
 relDir = ${dataDir}/release_${ver}
 annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
-pseudo2WayGff = ${relDir}/gencode.v${ver}.2wayconspseudos.gff3.gz
 polyAGff = ${relDir}/gencode.v${ver}.polyAs.gff3.gz
 ifneq (${isBackmap},yes)
    transcriptRanks = ${relDir}/gencode.v${ver}.transcript_rankings.txt.gz
@@ -142,9 +141,6 @@ tableAttrsTab = ${tableDir}/${tableAttrs}.tab
 tableTag = ${tablePre}Tag${rel}
 tableTagTab = ${tableDir}/${tableTag}.tab
 
-# obtained from gencode.v*.2wayconspseudos.GRCh37.gtf
-table2WayConsPseudo = ${tablePre}2wayConsPseudo${rel}
-table2WayConsPseudoGp = ${tableDir}/${table2WayConsPseudo}.gp
 
 # obtained from gencode.v*.polyAs.gtf
 tablePolyA = ${tablePre}Polya${rel}
@@ -217,7 +213,6 @@ ifeq (${isBackmap}, yes)
     targetGencodeTsv = ${dataDir}/target-gencode.tsv
 else
     # these are not included in backmap releases
-    genePredTables = ${table2WayConsPseudo}
     genePredExtTables += ${tablePolyA}
     tabTables += ${tableExonSupport}
 endif
@@ -245,7 +240,6 @@ ${fetchDone}:
 # dependencies for files from release
 ##
 ${annotationGff}: ${fetchDone}
-${pseudo2WayGff}: ${fetchDone}
 ${polyAGff}: ${fetchDone}
 ${tableGeneSourceMeta}: ${fetchDone}
 ${tableTranscriptSourceMeta}: ${fetchDone}
@@ -280,11 +274,6 @@ ${tableAttrsTab}: ${gencodeGp} ${gencodeTsv}
 	${gencodeMakeAttrs} ${gencodeGp} ${gencodeTsv} $@.${tmpExt} ${tableTagTab}.${tmpExt} ${tableTranscriptionSupportLevelTab}.${tmpExt}
 	mv -f ${tableTranscriptionSupportLevelTab}.${tmpExt} ${tableTranscriptionSupportLevelTab}
 	mv -f ${tableTagTab}.${tmpExt} ${tableTagTab}
-	mv -f $@.${tmpExt} $@
-
-${table2WayConsPseudoGp}: ${pseudo2WayGff}
-	@mkdir -p $(dir $@)
-	gff3ToGenePred -allowMinimalGenes $< $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tablePolyAGp}: ${polyAGff} ${gencodeToUcscChain}
