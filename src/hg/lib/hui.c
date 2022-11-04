@@ -7431,8 +7431,8 @@ for (i = 0; labelsNames[i][0] != NULL; i++)
     }
 }
 
-static void gencodeDisplayControls(char *db, struct cart *cart, struct trackDb *tdb, char *name, boolean parentLevel)
-/* generate display controls */
+
+static void gencodeMaxTransControl(char *db, struct cart *cart, struct trackDb *tdb, char *name, boolean parentLevel)
 {
 static char *varSuffix = "maxTrans";
 char varName[64];
@@ -7441,6 +7441,13 @@ int maxTrans = cartUsualIntClosestToHome(cart, tdb, parentLevel, varSuffix, 0);
 printf("<br>Maximum number of transcripts to display: ");
 cgiMakeIntVar(varName, maxTrans, 5);
 printf(" (0 to display all)");
+}
+
+static void gencodeDisplayControls(char *db, struct cart *cart, struct trackDb *tdb, char *name, boolean parentLevel)
+/* generate display controls */
+{
+if (trackDbSettingClosestToHome(tdb, "maxTransEnabled"))
+    gencodeMaxTransControl(db, cart, tdb, name, parentLevel);
 }
 
 static void newGencodeShowOptions(struct cart *cart, struct trackDb *tdb)

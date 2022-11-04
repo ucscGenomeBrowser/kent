@@ -15,6 +15,7 @@ fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred
 configurable off
 wgEncodeGencodeVersion 42
+maxTransEnabled on
 
     track wgEncodeGencodeV42ViewGenes
     shortLabel Genes

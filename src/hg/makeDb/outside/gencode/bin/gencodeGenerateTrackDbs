@@ -86,7 +86,10 @@ def trackDbTemplateGen(params):
         "fileSortOrder labVersion=Contents dccAccession=UCSC_Accession",
         "type genePred",
         "configurable off",
-        "wgEncodeGencodeVersion {gencodeVer}",
+        "wgEncodeGencodeVersion {gencodeVer}"))
+    yield forStd(params, (
+        "maxTransEnabled on",))
+    yield forBoth(params, (
         "",
         "    track wgEncodeGencodeV{gencodeVer}ViewGenes",
         "    shortLabel Genes",
