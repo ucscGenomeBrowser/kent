@@ -1801,6 +1801,7 @@
 ./runBuild GCF_008704595.1 GCF_008704595.1_ASM870459v1 fungi Diutina_rugosa
 ./runBuild GCF_008728515.1 GCF_008728515.1_Panubis1.0 vertebrate_mammalian Papio_anubis
 ./runBuild GCF_008729295.1 GCF_008729295.1_YSFRI_Pleo_2.0 fish Plectropomus_leopardus
+./runBuild GCF_008777455.1 GCF_008777455.1_ASM877745v1 viruses Bovine_herpesvirus_type_1.1
 ./runBuild GCF_008802855.1 GCF_008802855.1_Ppyr1.3 invertebrate Photinus_pyralis
 ./runBuild GCF_008822105.2 GCF_008822105.2_bTaeGut2.pat.W.v2 birds Taeniopygia_guttata
 ./runBuild GCF_008831285.1 GCF_008831285.1_ASM883128v1 plants Nymphaea_colorata
