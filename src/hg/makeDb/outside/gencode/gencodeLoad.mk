@@ -35,8 +35,8 @@ mach = $(shell uname -m)
 preRelease = no
 #preRelease = yes
 #db = hg38
-#db = hg19
-db = mm39
+db = hg19
+#db = mm39
 #db = mm10
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
@@ -64,9 +64,9 @@ else ifeq (${db},hg38)
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 41
+    verBase = 42
+    prevVer = 41lift37
     ver = ${verBase}lift37
-    prevVer = 38lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
     gencodeOrg = Gencode_human
@@ -93,7 +93,10 @@ relDir = ${dataDir}/release_${ver}
 annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
 pseudo2WayGff = ${relDir}/gencode.v${ver}.2wayconspseudos.gff3.gz
 polyAGff = ${relDir}/gencode.v${ver}.polyAs.gff3.gz
-transcriptRanks = ${relDir}/gencode.v${ver}.transcript_rankings.txt.gz
+ifneq (${isBackmap},yes)
+   transcriptRanks = ${relDir}/gencode.v${ver}.transcript_rankings.txt.gz
+   transcriptRanksOpt = --transcriptRanks=${transcriptRanks}
+endif
 
 gencodeBinDir = ${HOME}/kent/src/hg/makeDb/outside/gencode/bin
 gencodeMakeTracks = ${gencodeBinDir}/gencodeMakeTracks
@@ -366,7 +369,7 @@ ${gencodeGp}: ${annotationGff} ${gencodeToUcscChain}
 	touch $@
 ${gencodeTsv}: ${annotationGff}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToAttrs} --transcriptRanks=${transcriptRanks} ${annotationGff} $@.${tmpExt}
+	${gencodeGxfToAttrs} ${transcriptRanksOpt} ${annotationGff} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${targetGencodeTsv}:
@@ -377,7 +380,7 @@ ${targetGencodeTsv}:
 
 # check attributes so code can be updated to handle new biotypes
 checkAttrs: ${annotationGff}
-	${gencodeGxfToAttrs} --transcriptRanks=${transcriptRanks} ${annotationGff} /dev/null
+	${gencodeGxfToAttrs} ${transcriptRanksOpt} ${annotationGff} /dev/null
 
 ##
 # load tables
