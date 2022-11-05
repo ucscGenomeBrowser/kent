@@ -169,7 +169,7 @@ def trackDbTemplateGen(params):
         "        track wgEncodeGencodePolyaV{gencodeVer}",
         "        trackHandler wgEncodeGencode",
         "        subTrack wgEncodeGencodeV{gencodeVer}ViewPolya off",
-        "        subGroups view=cPolya name=zPolyA",
+        "        subGroups view=bPolya name=zPolyA",
         "        shortLabel PolyA",
         "        longLabel PolyA Transcript Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
         "        type genePred",

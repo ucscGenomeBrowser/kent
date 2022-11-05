@@ -94,7 +94,7 @@ maxTransEnabled on
         track wgEncodeGencodePolyaVM31
         trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeVM31ViewPolya off
-        subGroups view=cPolya name=zPolyA
+        subGroups view=bPolya name=zPolyA
         shortLabel PolyA
         longLabel PolyA Transcript Annotation Set from GENCODE Version M31 (Ensembl 108)
         type genePred

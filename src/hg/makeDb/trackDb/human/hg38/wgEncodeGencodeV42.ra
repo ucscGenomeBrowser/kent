@@ -94,7 +94,7 @@ maxTransEnabled on
         track wgEncodeGencodePolyaV42
         trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeV42ViewPolya off
-        subGroups view=cPolya name=zPolyA
+        subGroups view=bPolya name=zPolyA
         shortLabel PolyA
         longLabel PolyA Transcript Annotation Set from GENCODE Version 42 (Ensembl 108)
         type genePred
