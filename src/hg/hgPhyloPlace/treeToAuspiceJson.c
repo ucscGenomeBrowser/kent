@@ -457,6 +457,8 @@ if (node->priv != NULL)
     if (node->numEdges > 0)
         {
         jsonWriteObjectStart(jw, "labels");
+        if (node->ident->name)
+            jsonWriteString(jw, "id", node->ident->name);
         struct singleNucChange *snc = sncList;
         struct dyString *dy = dyStringCreate("%c%d%c",
                                              snc->parBase, snc->chromStart+1, snc->newBase);
