@@ -274,7 +274,7 @@ puts("<p>Enter hub URLs below to connect hubs. Hubs connected this way are not a
         "style='color:#121E9A' target=_blank>build a link with the hub URL</a> to allow users to retain their browser "
         "configuration, connected hubs, and custom tracks.</p>"
         "</p>"
-        "<p><a href=\"../contacts.html\" style='color:#121E9A'>Contact us</A> if you wish to submit a hub to the list of public hubs.</p>\n"
+        "<p>See our <a href=\"/goldenPath/help/publicHubGuidelines.html\" style='color:#121E9A'>public hub guidelines</A> for information on submitting a new public hub.</p>\n"
         );
 
 if (unlistedHubCount == 0)
