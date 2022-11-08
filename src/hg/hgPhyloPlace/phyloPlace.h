@@ -209,7 +209,8 @@ struct geneInfo *getGeneInfoList(char *bigGenePredFile, struct dnaSeq *refGenome
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
                        struct seqWindow *gSeqWin, struct hash *sampleMetadata,
-                       struct hash *sampleUrls, char *jsonFile, char *source);
+                       struct hash *sampleUrls, struct hash *samplePlacements,
+                       char *jsonFile, char *source);
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 

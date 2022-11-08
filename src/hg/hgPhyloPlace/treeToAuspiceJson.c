@@ -110,7 +110,9 @@ static char *getDefaultColor(struct slName *colorFields)
 /* Pick default color from available color fields from metadata.  Do not free returned string. */
 {
 char *colorDefault = NULL;
-if (slNameInList(colorFields, "Nextstrain_lineage"))
+if (slNameInList(colorFields, "pango_lineage_usher"))
+    colorDefault = "pango_lineage_usher";
+else if (slNameInList(colorFields, "Nextstrain_lineage"))
     colorDefault = "Nextstrain_lineage";
 else if (slNameInList(colorFields, "Nextstrain_clade"))
     colorDefault = "Nextstrain_clade";
@@ -246,6 +248,7 @@ else
 static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
                                         struct sampleMetadata *met, boolean isUserSample,
                                         char *source, struct hash *sampleUrls,
+                                        struct hash *samplePlacements,
                                         char **retUserOrOld, char **retNClade, char **retGClade,
                                         char **retLineage, char **retNLineage,
                                         char **retNCladeUsher, char **retLineageUsher)
@@ -263,21 +266,22 @@ if (met && met->author)
     // Note: Nextstrain adds paper_url and title when available; they also add author and use
     // a uniquified value (e.g. "author": "Wenjie Tan et al" / "value": "Wenjie Tan et al A")
     }
-*retNClade = isUserSample ? "uploaded sample" : (met && met->nClade) ? met->nClade : NULL;
+struct placementInfo *pi = (isUserSample && name) ? hashFindVal(samplePlacements, name) : NULL;
+
+*retNClade = (met && met->nClade) ? met->nClade : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retNClade))
     jsonWriteObjectValue(jw, "Nextstrain_clade", *retNClade);
-*retGClade = isUserSample ? "uploaded sample" : (met && met->gClade) ? met->gClade : NULL;
+*retGClade = (met && met->gClade) ? met->gClade : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retGClade))
     jsonWriteObjectValue(jw, "GISAID_clade", *retGClade);
-*retLineage = isUserSample ? "uploaded sample" :
-                             (met && met->lineage) ? met->lineage : NULL;
+*retLineage =  (met && met->lineage) ? met->lineage : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retLineage))
     {
     char lineageUrl[1024];
     makeLineageUrl(*retLineage, lineageUrl, sizeof lineageUrl);
     jsonWriteObjectValueUrl(jw, "pango_lineage", *retLineage, lineageUrl);
     }
-*retNLineage = isUserSample ? "uploaded sample" : (met && met->nLineage) ? met->nLineage : NULL;
+*retNLineage = (met && met->nLineage) ? met->nLineage : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retNLineage))
     {
     jsonWriteObjectValue(jw, "Nextstrain_lineage", *retNLineage);
@@ -302,12 +306,14 @@ if (met && met->subLab)
     jsonWriteObjectValue(jw, "submitting_lab", met->subLab);
 if (met && met->region)
     jsonWriteObjectValue(jw, "region", met->region);
-*retNCladeUsher = isUserSample ? "uploaded sample" :
-                                 (met && met->nCladeUsher) ? met->nCladeUsher : NULL;
+*retNCladeUsher = (pi && pi->nextClade) ? pi->nextClade :
+                  (met && met->nCladeUsher) ? met->nCladeUsher :
+                  isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retNCladeUsher))
     jsonWriteObjectValue(jw, "Nextstrain_clade_usher", *retNCladeUsher);
-*retLineageUsher = isUserSample ? "uploaded sample" :
-                                  (met && met->lineageUsher) ? met->lineageUsher : NULL;
+*retLineageUsher = (pi && pi->pangoLineage) ? pi->pangoLineage :
+                   (met && met->lineageUsher) ? met->lineageUsher :
+                   isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retLineageUsher))
     {
     char lineageUrl[1024];
@@ -527,6 +533,7 @@ struct auspiceJsonInfo
     struct seqWindow *gSeqWin;            // Reference genome seq for predicting AA change
     struct hash *sampleMetadata;          // Sample metadata for decorating tree
     struct hash *sampleUrls;              // URLs for samples, if applicable
+    struct hash *samplePlacements;        // Sample placement info e.g. clade/lineage from usher
     int nodeNum;                          // For generating sequential node ID (in absence of name)
     char *source;                         // Source of non-user sequences in tree (GISAID or public)
     };
@@ -632,6 +639,7 @@ jsonWriteObjectStart(aji->jw, "node_attrs");
 jsonWriteDouble(aji->jw, "div", depth);
 if (node->numEdges == 0)
     jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample, aji->source, aji->sampleUrls,
+                                aji->samplePlacements,
                                 retUserOrOld, retNClade, retGClade, retLineage, retNLineage,
                                 retNCladeUsher, retLineageUsher);
 else if (retUserOrOld && retGClade && retLineage)
@@ -702,7 +710,8 @@ return geneInfoList;
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
                        struct seqWindow *gSeqWin, struct hash *sampleMetadata,
-                       struct hash *sampleUrls, char *jsonFile, char *source)
+                       struct hash *sampleUrls, struct hash *samplePlacements,
+                       char *jsonFile, char *source)
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 {
@@ -739,7 +748,7 @@ struct phyloTree *root = phyloTreeNewNode("wrapper");
 phyloAddEdge(root, tree);
 tree = root;
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
-                               sampleMetadata, sampleUrls, nodeNum, source };
+                               sampleMetadata, sampleUrls, samplePlacements, nodeNum, source };
 rTreeToAuspiceJson(tree, depth, &aji, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 jsonWriteObjectEnd(jw); // tree
 jsonWriteObjectEnd(jw); // top-level object
