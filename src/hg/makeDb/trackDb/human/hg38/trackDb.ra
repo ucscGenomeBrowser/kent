@@ -732,7 +732,6 @@ longLabel Microarray Probesets
 type bigBed 4
 visibility hide
 group varRep
-pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
 compositeTrack on
 
     track genetiSureCytoCghSnp
@@ -772,7 +771,6 @@ compositeTrack on
     urls refGeneAccession="https://www.ncbi.nlm.nih.gov/nuccore/$$" rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
     colorByStrand 255,0,0 0,0,255
     html genotypeArrays
-    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 5
     noScoreFilter on
 
@@ -786,7 +784,6 @@ compositeTrack on
     urls refGeneAccession="https://www.ncbi.nlm.nih.gov/nuccore/$$" rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
     colorByStrand 255,0,0 0,0,255
     html genotypeArrays
-    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 4
     noScoreFilter on
 
@@ -800,7 +797,6 @@ compositeTrack on
     urls rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
     colorByStrand 255,0,0 0,0,255
     html genotypeArrays
-    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
     priority 6
     noScoreFilter on
 
@@ -817,12 +813,6 @@ searchType bigBed
 termRegex cg[0-9]+
 semiShortCircuit 1
 searchPriority 55
-
-track decipher override
-pennantIcon New red ../goldenPath/newsarch.html#041522 "Released Apr. 15, 2022"
-
-track decipherSnvs override
-pennantIcon New red ../goldenPath/newsarch.html#041522 "Released Apr. 15, 2022"
 
 include hprcChain.ra
 

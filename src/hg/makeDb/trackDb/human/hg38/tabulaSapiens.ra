@@ -5,7 +5,6 @@ shortLabel Tabula Sapiens
 longLabel Tabula Sapiens single cell RNA data from many tissues
 visibility hide
 group singleCell
-pennantIcon New red ../goldenPath/newsarch.html#033122 "Released Mar. 31, 2022"
 
     track tabulaSapiensTissueCellType
     parent tabulaSapiens
