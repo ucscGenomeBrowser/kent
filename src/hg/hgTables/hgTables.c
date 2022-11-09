@@ -776,7 +776,11 @@ return track;
 static char *undupedTrackName(struct cart *cart, char *varName)
 /* Return cartString for varName after removing any dup_N_ prefixes */
 {
-char *s = cartString(cart, varName);
+char *s = cartOptionalString(cart, varName);
+
+if (s == NULL)
+    return NULL;
+
 return dupTrackSkipToSourceName(s);
 }
 
