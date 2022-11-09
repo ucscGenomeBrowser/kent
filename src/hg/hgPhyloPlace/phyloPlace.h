@@ -18,7 +18,7 @@
 // Allow users to upload a lot of sequences, but put limits on how much detail we'll show and
 // how many custom tracks we'll create.
 #define MAX_SUBTREE_BUTTONS 5
-#define MAX_SEQ_DETAILS 100
+#define MAX_SEQ_DETAILS 1000
 #define MAX_SUBTREE_CTS 10
 
 // For usher's -K option (single subtree):
@@ -209,7 +209,8 @@ struct geneInfo *getGeneInfoList(char *bigGenePredFile, struct dnaSeq *refGenome
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
                        struct seqWindow *gSeqWin, struct hash *sampleMetadata,
-                       struct hash *sampleUrls, char *jsonFile, char *source);
+                       struct hash *sampleUrls, struct hash *samplePlacements,
+                       char *jsonFile, char *source);
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
