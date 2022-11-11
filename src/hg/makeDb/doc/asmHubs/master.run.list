@@ -112,6 +112,7 @@
 ./runBuild GCA_003013265.1 GCA_003013265.1_ASM301326v1 invertebrate Trypanosoma_congolense_IL3000
 ./runBuild GCA_003031525.1 GCA_003031525.1_Neophocaena_asiaeorientalis_V1 mammals Neophocaena_asiaeorientalis_asiaeorientalis
 ./runBuild GCA_003327715.1 GCA_003327715.1_PumCon1.0 mammals Puma_concolor
+./runBuild GCA_003336285.1 GCA_003336285.1_MUSP714 mammals Mus_spicilegus
 ./runBuild GCA_003342835.1 GCA_003342835.1_rhePen1 birds Rhea_pennata
 ./runBuild GCA_003343005.1 GCA_003343005.1_rheAme1 birds Rhea_americana
 ./runBuild GCA_003344405.1 GCA_003344405.1_TrispH2_1.0 invertebrate Trichoplax_sp._H2
@@ -568,6 +569,7 @@
 ./runBuild GCF_000002655.1 GCF_000002655.1_ASM265v1 fungi Aspergillus_fumigatus_Af293
 ./runBuild GCF_000002715.2 GCF_000002715.2_ASM271v1 fungi Aspergillus_clavatus_NRRL_1
 ./runBuild GCF_000002725.2 GCF_000002725.2_ASM272v2 invertebrate Leishmania_major_strain_Friedlin
+./runBuild GCF_000002765.5 GCF_000002765.5_GCA_000002765 viral Plasmodium_falciparum_3D7
 ./runBuild GCF_000002775.4 GCF_000002775.4_Pop_tri_v3 plants Populus_trichocarpa
 ./runBuild GCF_000002845.2 GCF_000002845.2_ASM284v2 invertebrate Leishmania_braziliensis_MHOM/BR/75/M2904
 ./runBuild GCF_000002855.3 GCF_000002855.3_ASM285v2 fungi Aspergillus_niger_CBS_513.88
@@ -1801,7 +1803,7 @@
 ./runBuild GCF_008704595.1 GCF_008704595.1_ASM870459v1 fungi Diutina_rugosa
 ./runBuild GCF_008728515.1 GCF_008728515.1_Panubis1.0 vertebrate_mammalian Papio_anubis
 ./runBuild GCF_008729295.1 GCF_008729295.1_YSFRI_Pleo_2.0 fish Plectropomus_leopardus
-./runBuild GCF_008777455.1 GCF_008777455.1_ASM877745v1 viruses Bovine_herpesvirus_type_1.1
+./runBuild GCF_008777455.1 GCF_008777455.1_ASM877745v1 viral Bovine_herpesvirus_type_1.1
 ./runBuild GCF_008802855.1 GCF_008802855.1_Ppyr1.3 invertebrate Photinus_pyralis
 ./runBuild GCF_008822105.2 GCF_008822105.2_bTaeGut2.pat.W.v2 birds Taeniopygia_guttata
 ./runBuild GCF_008831285.1 GCF_008831285.1_ASM883128v1 plants Nymphaea_colorata
