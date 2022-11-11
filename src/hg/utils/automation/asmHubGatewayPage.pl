@@ -463,7 +463,7 @@ keywords from the GenBank description of an mRNA.
 <b>By gene name: </b> Type a gene name into the &quot;search term&quot; box,
 choose your gene from the drop-down list, then press &quot;submit&quot; to go
 directly to the assembly location associated with that gene.
-<a href=\"http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html\">More information</a>.  To avoid case sensitivity issues, always use fully lower case gene names.</li>
+<a href=\"http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html\">More information</a>.</li>
 <li>
 <b>By track type: </b> Click the &quot;track search&quot; button
 to find Genome Browser tracks that match specific selection criteria.
