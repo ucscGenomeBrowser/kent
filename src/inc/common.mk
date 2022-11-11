@@ -146,29 +146,40 @@ else
    ifeq (${CONDA_BUILD},1)
        L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
    else
-     ifneq ($(wildcard /opt/local/lib/libssl.a),)
-         L+=/opt/local/lib/libssl.a
+     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@1.1/1.1.1s/lib/libssl.a),)
+         L+=/opt/homebrew/Cellar/openssl@1.1/1.1.1s/lib/libssl.a
      else
-       ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
-	  L+=/usr/lib/x86_64-linux-gnu/libssl.a
+       ifneq ($(wildcard /opt/local/lib/libssl.a),)
+         L+=/opt/local/lib/libssl.a
        else
-          ifneq ($(wildcard /usr/local/opt/openssl/lib/libssl.a),)
-             L+=/usr/local/opt/openssl/lib/libssl.a
-          else
-             L+=-lssl
-          endif
+         ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
+	   L+=/usr/lib/x86_64-linux-gnu/libssl.a
+         else
+           ifneq ($(wildcard /usr/local/opt/openssl/lib/libssl.a),)
+              L+=/usr/local/opt/openssl/lib/libssl.a
+           else
+              L+=-lssl
+           endif
+         endif
        endif
      endif
-     ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
-         L+=/opt/local/lib/libcrypto.a
+     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@1.1/1.1.1s/lib/libcrypto.a),)
+         L+=/opt/homebrew/Cellar/openssl@1.1/1.1.1s/lib/libcrypto.a
      else
+       ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
+          L+=/opt/local/lib/libcrypto.a
+       else
           ifneq ($(wildcard /usr/local/opt/openssl/lib/libcrypto.a),)
              L+=/usr/local/opt/openssl/lib/libcrypto.a
           else
              L+=-lcrypto
           endif
+       endif
      endif
-  endif
+     ifneq ($(wildcard /opt/homebrew/Cellar/zstd/1.5.2/lib/libzstd.a),)
+          L+=/opt/homebrew/Cellar/zstd/1.5.2/lib/libzstd.a
+     endif
+   endif
 endif
 
 # autodetect where libm is installed
