@@ -316,6 +316,11 @@ ifneq ($(MAKECMDGOALS),clean)
     endif
   endif
   ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /opt/homebrew/Cellar/mysql-client/8.0.31/lib/libmysqlclient.a),)
+        MYSQLLIBS=/opt/homebrew/Cellar/mysql-client/8.0.31/lib/libmysqlclient.a
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
     ifneq ($(wildcard /usr/local/Cellar/mysql/5.6.19/lib/libmysqlclient.a),)
 	  MYSQLLIBS=/usr/local/Cellar/mysql/5.6.19/lib/libmysqlclient.a
     endif
