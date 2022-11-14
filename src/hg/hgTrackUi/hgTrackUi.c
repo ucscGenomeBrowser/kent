@@ -3172,6 +3172,12 @@ boolean tdbIsDupable(struct trackDb *tdb)
 if (!tdbIsDataTrack(tdb))
     return FALSE;
 /* A few other special case we can't handle */
+if (startsWith("hub_", tdb->track))
+    return FALSE;
+if (startsWith("ct_", tdb->track))
+    return FALSE;
+if (sameString(tdb->track, "hgPcrResult"))
+    return FALSE;
 if (sameString(tdb->track, "ruler"))
     return FALSE;
 if (sameString(tdb->track, "cutters"))
