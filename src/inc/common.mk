@@ -146,8 +146,8 @@ else
    ifeq (${CONDA_BUILD},1)
        L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
    else
-     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@1.1/1.1.1s/lib/libssl.a),)
-         L+=/opt/homebrew/Cellar/openssl@1.1/1.1.1s/lib/libssl.a
+     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@3/3.0.7/lib/libssl.a),)
+         L+=/opt/homebrew/Cellar/openssl@3/3.0.7/lib/libssl.a
      else
        ifneq ($(wildcard /opt/local/lib/libssl.a),)
          L+=/opt/local/lib/libssl.a
@@ -163,8 +163,8 @@ else
          endif
        endif
      endif
-     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@1.1/1.1.1s/lib/libcrypto.a),)
-         L+=/opt/homebrew/Cellar/openssl@1.1/1.1.1s/lib/libcrypto.a
+     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@3/3.0.7/lib/libcrypto.a),)
+         L+=/opt/homebrew/Cellar/openssl@3/3.0.7/lib/libcrypto.a
      else
        ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
           L+=/opt/local/lib/libcrypto.a
@@ -327,8 +327,8 @@ ifneq ($(MAKECMDGOALS),clean)
     endif
   endif
   ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /opt/homebrew/Cellar/mysql-client/8.0.31/lib/libmysqlclient.a),)
-        MYSQLLIBS=/opt/homebrew/Cellar/mysql-client/8.0.31/lib/libmysqlclient.a
+    ifneq ($(wildcard /opt/local/lib/mariadb-10.10/mysql/libmariadbclient.a),)
+        MYSQLLIBS=/opt/local/lib/mariadb-10.10/mysql/libmariadbclient.a
     endif
   endif
   ifeq (${MYSQLLIBS},)
@@ -381,7 +381,6 @@ endif
 L += $(kentSrc)/htslib/libhts.a
 
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
-HG_INC+=${PNGINCL}
 ifneq ($(wildcard /usr/local/Cellar/mariadb/10.8.3_1/include/mysql/mysql.h),)
     HG_INC+=-I/usr/local/Cellar/mariadb/10.8.3_1/include/mysql
 else
@@ -393,9 +392,14 @@ else
     endif
   endif
 endif
-ifneq ($(wildcard /usr/local/opt/openssl/include/openssl/hmac.h),)
-  HG_INC+=-I/usr/local/opt/openssl/include
+ifneq ($(wildcard /opt/homebrew/Cellar/openssl@3/3.0.7/include/openssl/hmac.h),)
+    HG_INC+=-I/opt/homebrew/Cellar/openssl@3/3.0.7/include
+else
+  ifneq ($(wildcard /usr/local/opt/openssl/include/openssl/hmac.h),)
+    HG_INC+=-I/usr/local/opt/openssl/include
+  endif
 endif
+HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
 ifneq (${COREDUMP},)
