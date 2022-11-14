@@ -67,7 +67,7 @@ type bigBed 6
 html html/%s.assembly
 searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
-urlLabel NCBI Nucleotide database
+urlLabel NCBI Nucleotide database:
 group map\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 $scriptDir/asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId > $buildDir/html/$asmId.assembly.html
 fi
@@ -517,7 +517,7 @@ rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
         searchTrix ixIxx/%s.ncbiRefSeqOther.ix
         bigDataUrl bbi/%s.ncbiRefSeqOther.bb
         type bigBed 12 +
-        labelFields gene
+        labelFields name
         skipEmptyFields on
         urls GeneID=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" MIM=\"https://www.ncbi.nlm.nih.gov/omim/\$\$\" HGNC=\"http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=\$\$\" FlyBase=\"http://flybase.org/reports/\$\$\" WormBase=\"http://www.wormbase.org/db/gene/gene?name=\$\$\" RGD=\"https://rgd.mcw.edu/rgdweb/search/search.html?term=\$\$\" SGD=\"https://www.yeastgenome.org/locus/\$\$\" miRBase=\"http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=\$\$\" ZFIN=\"https://zfin.org/\$\$\" MGI=\"http://www.informatics.jax.org/marker/\$\$\"\n\n" "${asmId}" "${asmId}"
 
@@ -624,7 +624,7 @@ type bigGenePred
 html html/%s.ncbiGene
 searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
-urlLabel Entrez gene
+urlLabel Entrez gene:
 labelFields geneName,geneName2
 defaultLabelFields geneName2
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
@@ -773,6 +773,8 @@ visibility pack
 color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.xenoRefGene.bb
+url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
+urlLabel NCBI Nucleotide database:
 labelFields name,geneName,geneName2
 defaultLabelFields geneName
 searchIndex name
@@ -825,9 +827,11 @@ if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
   printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
 fi
 ##  for mouse strain hubs only
-if [ -s "${buildDir}/$asmId.bigMaf.trackDb.txt" ]; then
-  printf "include %s.bigMaf.trackDb.txt\n\n" "${asmId}"
-fi
+## turned off 2022-11-02 until these can be correctly translated
+## to GenArk naming schemes
+### if [ -s "${buildDir}/$asmId.bigMaf.trackDb.txt" ]; then
+###   printf "include %s.bigMaf.trackDb.txt\n\n" "${asmId}"
+### fi
 
 ###################################################################
 # check for lastz/chain/net available

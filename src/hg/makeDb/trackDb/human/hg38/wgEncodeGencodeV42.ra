@@ -7,29 +7,15 @@ group genes
 dragAndDrop subTracks
 priority 34.163
 visibility pack
-subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
-subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
+subGroup1 view View aGenes=Genes bPolya=PolyA
+subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes zPolyA=PolyA
 allButtonPair on
 sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred
 configurable off
 wgEncodeGencodeVersion 42
-wgEncodeGencodeAttrs wgEncodeGencodeAttrsV42
-wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV42
-wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV42
-wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV42
-wgEncodeGencodeHgnc wgEncodeGencodeHgncV42
-wgEncodeGencodePdb wgEncodeGencodePdbV42
-wgEncodeGencodePubMed wgEncodeGencodePubMedV42
-wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV42
-wgEncodeGencodeTag wgEncodeGencodeTagV42
-wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV42
-wgEncodeGencodeUniProt wgEncodeGencodeUniProtV42
-wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV42
-wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV42
-wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV42
-wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV42
+maxTransEnabled on
 
     track wgEncodeGencodeV42ViewGenes
     shortLabel Genes
@@ -97,24 +83,6 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV42
         color 255,51,255
         priority 3
 
-    track wgEncodeGencodeV42View2Way
-    shortLabel 2-Way
-    view b2-way
-    visibility hide
-    subTrack wgEncodeGencodeV42
-    type genePred
-    configurable off
-
-        track wgEncodeGencode2wayConsPseudoV42
-        trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeV42View2Way off
-        subGroups view=b2-way name=yTwo-way
-        shortLabel 2-way Pseudogenes
-        longLabel 2-way Pseudogene Annotation Set from GENCODE Version 42 (Ensembl 108)
-        type genePred
-        color 255,51,255
-        priority 4
-
     track wgEncodeGencodeV42ViewPolya
     shortLabel PolyA
     view cPolya
@@ -126,7 +94,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV42
         track wgEncodeGencodePolyaV42
         trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeV42ViewPolya off
-        subGroups view=cPolya name=zPolyA
+        subGroups view=bPolya name=zPolyA
         shortLabel PolyA
         longLabel PolyA Transcript Annotation Set from GENCODE Version 42 (Ensembl 108)
         type genePred
@@ -277,10 +245,3 @@ searchPriority 2.25518
 xrefTable wgEncodeGencodeAttrsV42
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
-# searches for 2-way consensus
-searchName wgEncodeGencode2wayConsPseudoV42
-searchTable wgEncodeGencode2wayConsPseudoV42
-searchMethod exact
-searchType genePred
-termRegex PGOHUM[0-9.]+
-searchPriority 2.25519

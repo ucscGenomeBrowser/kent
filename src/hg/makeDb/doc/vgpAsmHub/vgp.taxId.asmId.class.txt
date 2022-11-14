@@ -214,6 +214,7 @@
 51337	GCF_020740685.1_mJacJac1.mat.Y.cur	mammals
 134902	GCF_020740725.1_bCorHaw1.pri.cur	birds
 208333	GCF_021462225.1_DD_fGirMul_XY1	fish
+99487	GCF_024166365.1_mEleMax1_primary_haplotype	mammals
 8154	GCF_900246225.1_fAstCal1.2	fish
 64144	GCF_900324465.2_fAnaTes1.2	fish
 205130	GCF_900324485.2_fMasArm1.2	fish

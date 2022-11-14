@@ -32,8 +32,8 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-#preRelease = no
-preRelease = yes
+preRelease = no
+#preRelease = yes
 db = hg38
 #db = hg19
 #db = mm39
@@ -50,8 +50,8 @@ ifeq (${db},mm10)
     isBackmap = yes
 else ifeq (${db},mm39)
     grcRefAssembly = GRCm39
-    ver = M30
-    prevVer = M29
+    ver = M31
+    prevVer = M30
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
@@ -64,9 +64,9 @@ else ifeq (${db},hg38)
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 41
+    verBase = 42
+    prevVer = 41lift37
     ver = ${verBase}lift37
-    prevVer = 38lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
     gencodeOrg = Gencode_human
@@ -91,8 +91,11 @@ releaseUrl = ${baseUrl}/${gencodeOrg}/${ftpReleaseSubdir}
 dataDir = data
 relDir = ${dataDir}/release_${ver}
 annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
-pseudo2WayGff = ${relDir}/gencode.v${ver}.2wayconspseudos.gff3.gz
 polyAGff = ${relDir}/gencode.v${ver}.polyAs.gff3.gz
+ifneq (${isBackmap},yes)
+   transcriptRanks = ${relDir}/gencode.v${ver}.transcript_rankings.txt.gz
+   transcriptRanksOpt = --transcriptRanks=${transcriptRanks}
+endif
 
 gencodeBinDir = ${HOME}/kent/src/hg/makeDb/outside/gencode/bin
 gencodeMakeTracks = ${gencodeBinDir}/gencodeMakeTracks
@@ -138,9 +141,6 @@ tableAttrsTab = ${tableDir}/${tableAttrs}.tab
 tableTag = ${tablePre}Tag${rel}
 tableTagTab = ${tableDir}/${tableTag}.tab
 
-# obtained from gencode.v*.2wayconspseudos.GRCh37.gtf
-table2WayConsPseudo = ${tablePre}2wayConsPseudo${rel}
-table2WayConsPseudoGp = ${tableDir}/${table2WayConsPseudo}.gp
 
 # obtained from gencode.v*.polyAs.gtf
 tablePolyA = ${tablePre}Polya${rel}
@@ -213,7 +213,6 @@ ifeq (${isBackmap}, yes)
     targetGencodeTsv = ${dataDir}/target-gencode.tsv
 else
     # these are not included in backmap releases
-    genePredTables = ${table2WayConsPseudo}
     genePredExtTables += ${tablePolyA}
     tabTables += ${tableExonSupport}
 endif
@@ -233,6 +232,7 @@ all: fetch mkTables loadTables checkSanity cmpRelease listTables
 ##
 fetch: ${fetchDone}
 ${fetchDone}:
+	@mkdir -p $(dir $@)
 	rsync -a --include='gencode.*' --exclude='*' '${releaseUrl}/' ${relDir}
 	touch $@
 
@@ -240,7 +240,6 @@ ${fetchDone}:
 # dependencies for files from release
 ##
 ${annotationGff}: ${fetchDone}
-${pseudo2WayGff}: ${fetchDone}
 ${polyAGff}: ${fetchDone}
 ${tableGeneSourceMeta}: ${fetchDone}
 ${tableTranscriptSourceMeta}: ${fetchDone}
@@ -275,11 +274,6 @@ ${tableAttrsTab}: ${gencodeGp} ${gencodeTsv}
 	${gencodeMakeAttrs} ${gencodeGp} ${gencodeTsv} $@.${tmpExt} ${tableTagTab}.${tmpExt} ${tableTranscriptionSupportLevelTab}.${tmpExt}
 	mv -f ${tableTranscriptionSupportLevelTab}.${tmpExt} ${tableTranscriptionSupportLevelTab}
 	mv -f ${tableTagTab}.${tmpExt} ${tableTagTab}
-	mv -f $@.${tmpExt} $@
-
-${table2WayConsPseudoGp}: ${pseudo2WayGff}
-	@mkdir -p $(dir $@)
-	gff3ToGenePred -allowMinimalGenes $< $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tablePolyAGp}: ${polyAGff} ${gencodeToUcscChain}
@@ -364,7 +358,7 @@ ${gencodeGp}: ${annotationGff} ${gencodeToUcscChain}
 	touch $@
 ${gencodeTsv}: ${annotationGff}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToAttrs} ${annotationGff} $@.${tmpExt}
+	${gencodeGxfToAttrs} ${transcriptRanksOpt} ${annotationGff} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${targetGencodeTsv}:
@@ -375,7 +369,7 @@ ${targetGencodeTsv}:
 
 # check attributes so code can be updated to handle new biotypes
 checkAttrs: ${annotationGff}
-	${gencodeGxfToAttrs} ${annotationGff} /dev/null
+	${gencodeGxfToAttrs} ${transcriptRanksOpt} ${annotationGff} /dev/null
 
 ##
 # load tables

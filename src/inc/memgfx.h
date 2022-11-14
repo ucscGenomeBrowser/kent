@@ -438,7 +438,7 @@ int rB = COLOR_32_RED(*pt);
 int gB = COLOR_32_GREEN(*pt);
 int bB = COLOR_32_BLUE(*pt);
 
-int aOut = aA + (aB * (255 - aA) / 255);
+double aOut = aA + (aB * (255.0 - aA) / 255);
 int rOut, gOut, bOut;
 if (aOut == 0)
     rOut = gOut = bOut = 0;
