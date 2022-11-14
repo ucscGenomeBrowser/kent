@@ -17,6 +17,7 @@ install:
 	cp -p --remove-destination bigPush.sh              ${SCRIPTS}
 	cp -p --remove-destination blatPing.csh            ${SCRIPTS}
 	cp -p --remove-destination browserUsage.csh        ${SCRIPTS}
+	cp -p --remove-destination buildPublicSessionThumbnailsIndexPage.py        ${SCRIPTS}
 	cp -p --remove-destination catchBot.csh            ${SCRIPTS}
 	cp -p --remove-destination chain.csh               ${SCRIPTS}
 	cp -p --remove-destination chain2.csh              ${SCRIPTS}
