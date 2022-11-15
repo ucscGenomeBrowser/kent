@@ -2730,38 +2730,43 @@ struct sqlResult *sr = NULL;
 struct slName *tbl, *tblList = hTrackDbList();
 for (tbl = tblList; tbl != NULL; tbl = tbl->next)
     {
+    dyStringClear(clause);
     char *tblName = replaceChars(tbl->name, "trackDb", "hgFindSpec");
-    sqlDyStringPrintf(clause, "select * from %s where searchName in (", tblName);
-    for (categ = categories; categ != NULL; categ = categ->next)
+    if (hTableExists(db, tblName))
         {
-        sqlDyStringPrintf(clause, "'%s'", categ->id);
-        if (categ->next)
-            sqlDyStringPrintf(clause, ",");
-        }
-    sqlDyStringPrintf(clause, ") or searchTable in (");
-    for (categ = categories; categ != NULL; categ = categ->next)
-        {
-        if (sameString(categ->id, "mrna"))
-            sqlDyStringPrintf(clause, "'all_mrna'");
-        else
+        sqlDyStringPrintf(clause, "select * from %s where searchName in (", tblName);
+        for (categ = categories; categ != NULL; categ = categ->next)
+            {
             sqlDyStringPrintf(clause, "'%s'", categ->id);
-        if (categ->next)
-            sqlDyStringPrintf(clause, ",");
+            if (categ->next)
+                sqlDyStringPrintf(clause, ",");
+            }
+        sqlDyStringPrintf(clause, ") or searchTable in (");
+        for (categ = categories; categ != NULL; categ = categ->next)
+            {
+            if (sameString(categ->id, "mrna"))
+                sqlDyStringPrintf(clause, "'all_mrna'");
+            else
+                sqlDyStringPrintf(clause, "'%s'", categ->id);
+            if (categ->next)
+                sqlDyStringPrintf(clause, ",");
+            }
+        sqlDyStringPrintf(clause, ")");
+        sr = sqlGetResult(conn, dyStringContents(clause));
+        char **row = NULL;
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            struct hgFindSpec *hfs = hgFindSpecLoad(row);
+            if (hfs->shortCircuit)
+                slAddHead(&shortList, hfs);
+            else
+                slAddHead(&longList, hfs);
+            }
+        sqlFreeResult(&sr);
         }
-    sqlDyStringPrintf(clause, ")");
-    sr = sqlGetResult(conn, dyStringCannibalize(&clause));
-    char **row = NULL;
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        struct hgFindSpec *hfs = hgFindSpecLoad(row);
-        if (hfs->shortCircuit)
-            slAddHead(&shortList, hfs);
-        else
-            slAddHead(&longList, hfs);
-        }
-    sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
+dyStringFree(&clause);
 
 if (quickList != NULL)
     {
@@ -2872,36 +2877,39 @@ for (tbl = tblList; tbl != NULL; tbl = tbl->next)
     char *tdbName, *findSpecName;
     tdbName = tbl->name;
     findSpecName = replaceChars(tbl->name, "trackDb", "hgFindSpec");
-    char query[1024];
-    sqlSafef(query, sizeof(query), "select distinct "
-        "tableName,shortLabel,longLabel,searchDescription,priority "
-        "from %s join %s on "
-        "%s.searchTable=%s.tableName or "
-        "%s.searchName=%s.tableName or "
-        "%s.searchTable = concat('all_', %s.tableName) "
-        "where searchTable !='knownGene' and searchName != 'knownGene' "
-        "order by priority,shortLabel",
-        findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row = NULL;
-    struct trackDb *tdb = NULL;
-    while ( (row = sqlNextRow(sr)) != NULL)
+    if (hTableExists(database, findSpecName))
         {
-        if ( (tdb = hashFindVal(hgFindTrackHash, row[0])) != NULL)
+        char query[1024];
+        sqlSafef(query, sizeof(query), "select distinct "
+            "tableName,shortLabel,longLabel,searchDescription,priority "
+            "from %s join %s on "
+            "%s.searchTable=%s.tableName or "
+            "%s.searchName=%s.tableName or "
+            "%s.searchTable = concat('all_', %s.tableName) "
+            "where searchTable !='knownGene' and searchName != 'knownGene' "
+            "order by priority,shortLabel",
+            findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName);
+        struct sqlResult *sr = sqlGetResult(conn, query);
+        char **row = NULL;
+        struct trackDb *tdb = NULL;
+        while ( (row = sqlNextRow(sr)) != NULL)
             {
-            struct searchableTrack *track = NULL;
-            AllocVar(track);
-            track->track = cloneString(row[0]);
-            track->shortLabel = cloneString(row[1]);
-            track->longLabel = cloneString(row[2]);
-            track->description = cloneString(row[3]);
-            track->visibility = isTrackVisible(cart, tdb);
-            track->priority = sqlDouble(row[4]);
-            track->grp = tdb->grp;
-            slAddHead(&ret, track);
+            if ( (tdb = hashFindVal(hgFindTrackHash, row[0])) != NULL)
+                {
+                struct searchableTrack *track = NULL;
+                AllocVar(track);
+                track->track = cloneString(row[0]);
+                track->shortLabel = cloneString(row[1]);
+                track->longLabel = cloneString(row[2]);
+                track->description = cloneString(row[3]);
+                track->visibility = isTrackVisible(cart, tdb);
+                track->priority = sqlDouble(row[4]);
+                track->grp = tdb->grp;
+                slAddHead(&ret, track);
+                }
             }
+        sqlFreeResult(&sr);
         }
-    sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
 slReverse(&ret);
