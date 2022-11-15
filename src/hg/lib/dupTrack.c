@@ -8,6 +8,7 @@
 #include "ra.h"
 #include "portable.h"
 #include "trashDir.h"
+#include "hgConfig.h"
 
 boolean isDupTrack(char *track)
 /* determine if track name refers to a custom track */
@@ -247,5 +248,11 @@ tdb->next = NULL;
 tdb->track = cloneString(dup->name);
 dupTrackAddInfoToTdb(dup, tdb);
 return tdb;
+}
+
+boolean dupTrackEnabled()
+/* Return true if we allow tracks to be duped. */
+{
+return  cfgOptionBooleanDefault("canDupTracks", FALSE);
 }
 
