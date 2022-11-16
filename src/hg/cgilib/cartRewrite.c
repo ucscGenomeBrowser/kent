@@ -11,6 +11,7 @@
 
 void cartEdit0(struct cart *cart);
 void cartEdit1(struct cart *cart);
+void cartEdit2(struct cart *cart);
 
 struct cartRewrite
 {
@@ -22,6 +23,7 @@ static struct cartRewrite cartRewrites[] =
 {
 { cartEdit0},
 { cartEdit1},
+{ cartEdit2},
 };
 
 void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVersion)

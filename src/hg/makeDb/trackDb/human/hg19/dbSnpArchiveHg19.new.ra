@@ -3,7 +3,7 @@
 
 track dbSnpArchive
 superTrack on
-cartVersion 1
+cartVersion 3
 shortLabel dbSNP Archive
 longLabel dbSNP Track Archive
 group varRep

@@ -2,7 +2,7 @@
 # Daniel Schmelter 4/1/21
 
 track dbSnpArchive
-cartVersion 1
+cartVersion 3
 superTrack on
 shortLabel dbSNP Archive
 longLabel dbSNP Track Archive
