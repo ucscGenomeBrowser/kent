@@ -517,7 +517,7 @@ rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
         searchTrix ixIxx/%s.ncbiRefSeqOther.ix
         bigDataUrl bbi/%s.ncbiRefSeqOther.bb
         type bigBed 12 +
-        labelFields gene
+        labelFields name
         skipEmptyFields on
         urls GeneID=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" MIM=\"https://www.ncbi.nlm.nih.gov/omim/\$\$\" HGNC=\"http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=\$\$\" FlyBase=\"http://flybase.org/reports/\$\$\" WormBase=\"http://www.wormbase.org/db/gene/gene?name=\$\$\" RGD=\"https://rgd.mcw.edu/rgdweb/search/search.html?term=\$\$\" SGD=\"https://www.yeastgenome.org/locus/\$\$\" miRBase=\"http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=\$\$\" ZFIN=\"https://zfin.org/\$\$\" MGI=\"http://www.informatics.jax.org/marker/\$\$\"\n\n" "${asmId}" "${asmId}"
 

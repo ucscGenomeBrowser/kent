@@ -9,6 +9,7 @@ sys.path.extend((os.path.join(myBinDir, "../lib"),
 from collections import defaultdict
 from dataclasses import dataclass
 from pycbio.sys import fileOps
+from pycbio.tsv import TsvReader
 from gencode import gencodeGxfParserFactory
 from gencode.gencodeGxfParser import ParseException, GxfValidateException, GxfRecordValidator
 from gencode.biotypes import BioType, getTranscriptFunction
@@ -19,6 +20,8 @@ use by other programs."""
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("--debug", action="store_true",
                         help="""print stack trace on all error""")
+    parser.add_argument("--transcriptRanks",
+                        help="""the gencode.v??.transcript_rankings.txt.gz file""")
     parser.add_argument("gencodeGxf",
                         help="""GENCODE GTF or GFF3 file""")
     parser.add_argument("attrsTsv",
@@ -28,6 +31,16 @@ use by other programs."""
 
 def emptyIfNone(v):
     return v if v is not None else ""
+
+def loadTranscriptRanks(transcriptRanksTab):
+    "load transcript ranks"
+    cols = ("chrom", "geneId", "geneType", "rank", "transcriptId", "transcriptType", "carsScore", "extraInfo")
+    typeMap = {
+        "rank": int,
+        "carsScore": float
+    }
+    return {rec.transcriptId: rec for rec in TsvReader(transcriptRanksTab,
+                                                       columns=cols, typeMap=typeMap)}
 
 @dataclass
 class Transcript:
@@ -44,14 +57,15 @@ class Transcript:
     ccdsId: str
     level: int
     proteinId: str
-    transcriptRank: int
     transcriptSupportLevel: str
+    transcriptRank: int
     tags: set
 
 class GencodeGxfToAttrs(object):
-    def __init__(self, gxfParser):
+    def __init__(self, gxfParser, transcriptRanks=None):
         self.gxfParser = gxfParser
         self.recValidator = GxfRecordValidator(sys.stderr)
+        self.transcriptRanks = transcriptRanks
         self.errorCnt = 0
         self.unknownGeneTypes = set()
         self.unknownTranscriptTypes = set()
@@ -63,10 +77,19 @@ class GencodeGxfToAttrs(object):
         for tag in rec.attributes.tags:
             geneTags.add(tag)
 
+    def _getTranscriptRank(self, transcriptId):
+        if self.transcriptRanks is None:
+            return 0
+        rankRec = self.transcriptRanks.get(transcriptId)
+        if rankRec is None:
+            raise ParseException(f"no transcript rank found for {transcriptId}")
+        return rankRec.rank
+
     def _processTransRec(self, rec):
         attrs = rec.attributes
         trans = self.transcripts.get(attrs.transcript_id)
         if trans is None:
+            # older GENCODEs had transcript id twice because of PAR
             trans = Transcript(transcriptId=attrs.transcript_id,
                                transcriptName=attrs.transcript_name,
                                transcriptType=attrs.transcript_type,
@@ -80,12 +103,12 @@ class GencodeGxfToAttrs(object):
                                level=attrs.level,
                                transcriptSupportLevel=attrs.transcript_support_level,
                                proteinId=attrs.protein_id,
-                               transcriptRank=-1, # TMP: set transcriptRank to -1 until it is in GFF
+                               transcriptRank=self._getTranscriptRank(attrs.transcript_id),
                                tags=set())
             self.transcripts[attrs.transcript_id] = trans
-        # due to PAR, we have to handle multiple tags for the same
-        # transcript_id, which might be different (mainly the PAR tag), so
-        # always add
+        # due to PAR naming on older GENCODES, we have to handle multiple
+        # tags for the same transcript_id, which might be different (mainly
+        # the PAR tag), so always add they now have modified ids
         for tag in attrs.tags:
             trans.tags.add(tag)
 
@@ -145,7 +168,11 @@ class GencodeGxfToAttrs(object):
 
 def gencodeGxfToAttrs(opts):
     try:
-        parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True))
+        transcriptRanks = None
+        if opts.transcriptRanks is not None:
+            transcriptRanks = loadTranscriptRanks(opts.transcriptRanks)
+        parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True),
+                                   transcriptRanks)
         parser.parse()
         with open(opts.attrsTsv, "w") as fh:
             parser.writeAttrsTsv(fh)
@@ -154,7 +181,6 @@ def gencodeGxfToAttrs(opts):
             raise
         print(str(ex), file=sys.stderr)
         exit(1)
-
 
 
 gencodeGxfToAttrs(parseArgs())

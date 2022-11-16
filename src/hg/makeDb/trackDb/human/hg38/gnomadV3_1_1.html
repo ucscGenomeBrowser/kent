@@ -14,7 +14,7 @@ see the related
 <a target="_blank" href="https://gnomad.broadinstitute.org/news/2021-03-gnomad-v3-1-1/">changelog</a>.</p>
 
 <p>GnomAD Genome Mutational Constraint is based on v3.1.2 and is available only on hg38. 
-It shows the reduced disruptive variation caused by purifying
+It shows the reduced variation caused by purifying
 natural selection. This is similar to negative selection on loss-of-function
 (LoF) for genes, but can be calculated for non-coding regions too. 
 Positive values are red and reflect stronger mutation constraint (and less variation), indicating 
@@ -26,7 +26,8 @@ the genome, a model based on trinucleotide sequence context, base-level
 methylation, and regional genomic features predicts expected number of mutations,
 and compares this number to the observed number of mutations using a Z-score (see preprint
 in the Reference section for details). The chrX scores were added as received from the authors,
-as there are no mutations available for chrX, they are more speculative than the ones on the autosomes.</p>
+as there are no de novo mutation data available on chrX (for estimating the effects of regional 
+genomic features on mutation rates), they are more speculative than the ones on the autosomes.</p>
 
 <p>
 The gnomAD Predicted Constraint Metrics track contains metrics of pathogenicity per-gene as 

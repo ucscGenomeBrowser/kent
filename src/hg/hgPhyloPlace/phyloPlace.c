@@ -1290,7 +1290,8 @@ char *jsonUrlForNextstrain = urlFromTn(jsonTn);
 char *protocol = strstr(jsonUrlForNextstrain, "://");
 if (protocol)
     jsonUrlForNextstrain = protocol + strlen("://");
-struct dyString *dy = dyStringCreate("%s/fetch/%s", nextstrainHost(), jsonUrlForNextstrain);
+struct dyString *dy = dyStringCreate("%s/fetch/%s?f_userOrOld=uploaded%%20sample",
+                                     nextstrainHost(), jsonUrlForNextstrain);
 return dyStringCannibalize(&dy);
 }
 
@@ -2735,7 +2736,7 @@ regmatch_t substrArr[7];
 // Line may contain a list of distinct IDs and/or ID ranges
 #define oneIdExp "([A-Z_]+)([0-9]+)"
 #define rangeEndExp "- *([A-Z_]*)([0-9]+)"
-#define rangeListExp "^("oneIdExp" *("rangeEndExp")?),? *"
+#define rangeListExp "^("oneIdExp",? *("rangeEndExp")?),? *"
 while (regexMatchSubstr(line, rangeListExp, substrArr, ArraySize(substrArr)))
     {
     char *prefixA = regexSubstringClone(line, substrArr[2]);
@@ -2791,16 +2792,10 @@ struct slName *unmatched = NULL;
 char *line;
 while (lineFileNext(lf, &line, NULL))
     {
-    // If tab-sep or comma-sep, just try first word in line
+    // If tab-sep, just try first word in line
     char *tab = strchr(line, '\t');
     if (tab)
         *tab = '\0';
-    else
-        {
-        char *comma = strchr(line, ',');
-        if (comma)
-            *comma = '\0';
-        }
     char *match = matchName(nameHash, line);
     if (match)
         slNameAddHead(&sampleIds, match);
@@ -2813,7 +2808,21 @@ while (lineFileNext(lf, &line, NULL))
             unmatched = slCat(rangeUnmatched, unmatched);
             }
         else
-            slNameAddHead(&unmatched, line);
+            {
+            // If comma-sep, just try first word in line
+            char *comma = strchr(line, ',');
+            if (comma)
+                {
+                *comma = '\0';
+                match = matchName(nameHash, line);
+                if (match)
+                    slNameAddHead(&sampleIds, match);
+                else
+                    slNameAddHead(&unmatched, line);
+                }
+            else
+                slNameAddHead(&unmatched, line);
+            }
         }
     }
 if (unmatched)
@@ -3008,7 +3017,7 @@ if (results && results->singleSubtreeInfo)
         safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
         trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
         treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, NULL,
-                          jsonTns[ix]->forCgi, source);
+                          results->samplePlacements, jsonTns[ix]->forCgi, source);
         // Add a link for every sample to this subtree, so the single-subtree JSON can
         // link to subtree JSONs
         char *subtreeUrl = nextstrainUrlFromTn(jsonTns[ix]);
@@ -3020,7 +3029,7 @@ if (results && results->singleSubtreeInfo)
     AllocVar(singleSubtreeJsonTn);
     trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
     treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
-                      sampleUrls, singleSubtreeJsonTn->forCgi, source);
+                      sampleUrls, results->samplePlacements, singleSubtreeJsonTn->forCgi, source);
     reportTiming(&startTime, "make Auspice JSON");
     struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
     if (subtreeCount > MAX_SUBTREE_BUTTONS)

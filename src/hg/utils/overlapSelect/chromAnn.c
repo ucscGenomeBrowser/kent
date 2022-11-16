@@ -141,10 +141,8 @@ for (iBlk = 0; iBlk < bed->blockCount; iBlk++)
     int end = start + bed->blockSizes[iBlk];
     if (opts & chromAnnCds)
         {
-        if (start < bed->thickStart)
-            start = bed->thickStart;
-        if (end > bed->thickEnd)
-            end = bed->thickEnd;
+        start = max(start, bed->thickStart);
+        end = min(end, bed->thickEnd);
         }
     if (start < end)
         chromAnnBlkNew(ca, start, end);
@@ -215,10 +213,11 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
     {
     int start = gp->exonStarts[iExon];
     int end = gp->exonEnds[iExon];
-    if ((opts & chromAnnCds) && (gp->cdsStart > start))
-        start = gp->cdsStart;
-    if ((opts & chromAnnCds) && (gp->cdsEnd < end))
-        end = gp->cdsEnd;
+    if (opts & chromAnnCds)
+        {
+        start = max(start, gp->cdsStart);
+        end = min(end, gp->cdsEnd);
+        }
     if (start < end)
         chromAnnBlkNew(ca, start, end);
     }

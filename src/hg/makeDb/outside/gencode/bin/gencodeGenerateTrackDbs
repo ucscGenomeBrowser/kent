@@ -79,31 +79,17 @@ def trackDbTemplateGen(params):
         "dragAndDrop subTracks",
         "priority {superTrackPriority:.3f}",
         "visibility pack",
-        "subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA",
-        "subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA",
+        "subGroup1 view View aGenes=Genes bPolya=PolyA",
+        "subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes zPolyA=PolyA",
         "allButtonPair on",
         "sortOrder name=+ view=+",
         "fileSortOrder labVersion=Contents dccAccession=UCSC_Accession",
         "type genePred",
         "configurable off",
-        "wgEncodeGencodeVersion {gencodeVer}",
-        "wgEncodeGencodeAttrs wgEncodeGencodeAttrsV{gencodeVer}"))
+        "wgEncodeGencodeVersion {gencodeVer}"))
     yield forStd(params, (
-        "wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV{gencodeVer}",))
+        "maxTransEnabled on",))
     yield forBoth(params, (
-        "wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV{gencodeVer}",
-        "wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV{gencodeVer}",
-        "wgEncodeGencodeHgnc wgEncodeGencodeHgncV{gencodeVer}",
-        "wgEncodeGencodePdb wgEncodeGencodePdbV{gencodeVer}",
-        "wgEncodeGencodePubMed wgEncodeGencodePubMedV{gencodeVer}",
-        "wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV{gencodeVer}",
-        "wgEncodeGencodeTag wgEncodeGencodeTagV{gencodeVer}",
-        "wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV{gencodeVer}",
-        "wgEncodeGencodeUniProt wgEncodeGencodeUniProtV{gencodeVer}",
-        "wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV{gencodeVer}",
-        "wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV{gencodeVer}",
-        "wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV{gencodeVer}",
-        "wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV{gencodeVer}",
         "",
         "    track wgEncodeGencodeV{gencodeVer}ViewGenes",
         "    shortLabel Genes",
@@ -172,24 +158,6 @@ def trackDbTemplateGen(params):
         "        priority 3",
         ""))
     yield forStd(params, (
-        "    track wgEncodeGencodeV{gencodeVer}View2Way",
-        "    shortLabel 2-Way",
-        "    view b2-way",
-        "    visibility hide",
-        "    subTrack wgEncodeGencodeV{gencodeVer}",
-        "    type genePred",
-        "    configurable off",
-        "",
-        "        track wgEncodeGencode2wayConsPseudoV{gencodeVer}",
-        "        trackHandler wgEncodeGencode",
-        "        subTrack wgEncodeGencodeV{gencodeVer}View2Way off",
-        "        subGroups view=b2-way name=yTwo-way",
-        "        shortLabel 2-way Pseudogenes",
-        "        longLabel 2-way Pseudogene Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
-        "        type genePred",
-        "        color 255,51,255",
-        "        priority 4",
-        "",
         "    track wgEncodeGencodeV{gencodeVer}ViewPolya",
         "    shortLabel PolyA",
         "    view cPolya",
@@ -201,7 +169,7 @@ def trackDbTemplateGen(params):
         "        track wgEncodeGencodePolyaV{gencodeVer}",
         "        trackHandler wgEncodeGencode",
         "        subTrack wgEncodeGencodeV{gencodeVer}ViewPolya off",
-        "        subGroups view=cPolya name=zPolyA",
+        "        subGroups view=bPolya name=zPolyA",
         "        shortLabel PolyA",
         "        longLabel PolyA Transcript Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
         "        type genePred",
@@ -357,14 +325,6 @@ def trackDbTemplateGen(params):
         "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
         "xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'",
         ""))
-    yield forStd(params, (
-        "# searches for 2-way consensus",
-        "searchName wgEncodeGencode2wayConsPseudoV{gencodeVer}",
-        "searchTable wgEncodeGencode2wayConsPseudoV{gencodeVer}",
-        "searchMethod exact",
-        "searchType genePred",
-        "termRegex {twoWayPseudoIdRegex}",
-        "searchPriority {twoWayConsPseudoSearchPriority:.5f}"))
 
 def trackHtmlTemplateGen(params):
     """Generate template for track HTML"""
@@ -433,7 +393,6 @@ def joinerCheckTemplateGen(params):
         "",
         "# gencode genePred tables with no associations",
         "# wgEncodeGencodePolyaV{gencodeVer}",
-        "# wgEncodeGencode2wayConsPseudoV{gencodeVer}",
         "",
         "# gencode genePred tables with joining through wgEncodeGencodeAttrsV{gencodeVer}",
         "identifier wgEncodeGencodeBasicAttrsV{gencodeVer}",
@@ -550,7 +509,7 @@ class GencodeParams(object):
                  superTrackBasePriority, searchBasePriority,
                  ensemblTransIdRegex, havanaTransIdRegex,
                  ensemblGeneIdRegex, havanaGeneIdRegex,
-                 ensemblProtIdRegex, twoWayPseudoIdRegex):
+                 ensemblProtIdRegex):
         self.gencodeGenesUrl = "https://www.gencodegenes.org"
         self.orgName = orgName
         self.orgHgDb = orgHgDb
@@ -576,7 +535,6 @@ class GencodeParams(object):
         self.ensemblGeneIdRegex = ensemblGeneIdRegex
         self.havanaGeneIdRegex = havanaGeneIdRegex
         self.ensemblProtIdRegex = ensemblProtIdRegex
-        self.twoWayPseudoIdRegex = twoWayPseudoIdRegex
 
         self.transBiotypes = ",".join(getTransBioTypes(orgHgDb, gencodeVer))
         self.tags = ",".join(getTags(orgHgDb, gencodeVer))
@@ -612,8 +570,6 @@ class GencodeParams(object):
         self.pseudoGeneHavanaTranscriptSearchPriority = self.nextPriority()
         self.pseudoGeneHavanaGeneSearchPriority = self.nextPriority()
 
-        self.twoWayConsPseudoSearchPriority = self.nextPriority()
-
         if self.isLifted():
             self.displayHtml = "../../wgEncodeGencodeDisplayLift1.shared.html"
         else:
@@ -640,7 +596,7 @@ def getHumanGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
                          34.205, 2.29701,
                          "ENST[0-9.]+", "OTTHUMT[0-9.]+",
                          "ENSG[0-9.]+", "OTTHUMG[0-9.]+",
-                         "ENSP[0-9.]+", "PGOHUM[0-9.]+")
+                         "ENSP[0-9.]+")
 
 def getHumanBackmapGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     "create GENCODE parameters for human backmapped GENCODE"
@@ -648,7 +604,7 @@ def getHumanBackmapGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
                          34.205, 2.29701,
                          "ENST[0-9._]+", "OTTHUMT[0-9._]+",
                          "ENSG[0-9._]+", "OTTHUMG[0-9._]+",
-                         None, None)
+                         None)
 
 def getMouseGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     "create GENCODE parameters for mouse GENCODE"
@@ -656,7 +612,7 @@ def getMouseGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
                          2.984, 2.27401,
                          "ENSMUST[0-9.]+", "OTTMUST[0-9.]+",
                          "ENSMUSG[0-9.]+", "OTTMUSG[0-9.]+",
-                         "ENSMUSP[0-9.]+", "PGOMOU[0-9.]+")
+                         "ENSMUSP[0-9.]+")
 
 def getGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     "create GencodeParams object for a single"

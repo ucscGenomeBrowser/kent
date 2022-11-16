@@ -1774,7 +1774,6 @@ urlLabel dbSNP:
 subGroup1 view Views variants=Variants errs=Mapping_Errors
 maxWindowCoverage 4000000
 priority 0.8
-pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
 
     track dbSnp155ViewVariants
     view variants

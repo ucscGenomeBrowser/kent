@@ -7,6 +7,9 @@ if [ "xxx$1" != "xxxmakeItSo" ]; then
 fi
 
 cd ~/kent/src/hg/makeDb/doc/asmHubs
+printf "# row count in genark.hgcentraltest before update:\n"
+hgsql hgcentraltest -e 'select count(*) from genark;'
+
 scp -p qateam@hgdownload:/mirrordata/hubs/UCSC_GI.assemblyHubList.txt ./
 
 ./genArkListToSql.pl makeItSo > genark.tsv
@@ -16,6 +19,7 @@ hgsql hgcentraltest < ~/kent/src/hg/lib/genark.sql
 
 hgsql hgcentraltest -e "LOAD DATA LOCAL INFILE 'genark.tsv' INTO TABLE genark;"
 
+printf "# row count in genark.hgcentraltest after update:\n"
 hgsql hgcentraltest -e 'select count(*) from genark;'
 
 # +----------------+--------------+------+-----+---------+-------+

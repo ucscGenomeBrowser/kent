@@ -1,0 +1,266 @@
+#This is the supertrack archive of dbSNP tracks
+# Daniel Schmelter 4/1/21
+
+track dbSnpArchive
+cartVersion 3
+superTrack on
+shortLabel dbSNP Archive
+longLabel dbSNP Track Archive
+group varRep
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+maxWindowToDraw 10000000
+type bed 6 +
+html ../../dbSnpArchive
+
+        track dbSnp153Composite override
+        parent dbSnpArchive on
+        visibility pack
+        priority 0.908
+	type bed 6 +
+        html ../dbSnp153Composite
+
+        track snp151Common override
+        parent dbSnpArchive
+        priority 0.909
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp151Common
+
+        track snp151 override
+        parent dbSnpArchive
+        priority 0.910
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp151
+
+        track snp151Flagged override
+        parent dbSnpArchive
+        priority 0.911
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html snp151Flagged
+
+        track snp151Mult override
+        parent dbSnpArchive 
+        priority 0.912
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp150Mult
+
+        track snp150Mult override
+        parent dbSnpArchive 
+        priority 0.913
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp150Mult
+
+        track snp150 override
+        parent dbSnpArchive 
+        priority 0.914
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp150
+
+        track snp150Common override
+        parent dbSnpArchive 
+        priority 0.915
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp150Common
+
+        track snp150Flagged override
+        parent dbSnpArchive 
+        priority 0.916
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp150Flagged
+
+        track snp149Mult override
+        parent dbSnpArchive 
+        priority 0.917
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp149Mult
+
+        track snp149 override
+        parent dbSnpArchive 
+        priority 0.918
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp149
+
+        track snp149Common override
+        parent dbSnpArchive 
+        priority 0.919
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp149Common
+
+        track snp149Flagged override
+        parent dbSnpArchive 
+        priority 0.92
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp149Flagged
+
+	track snp147Mult override
+        parent dbSnpArchive 
+        priority 0.921
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp147Mult
+
+	track snp147Flagged override
+        parent dbSnpArchive 
+        priority 0.922
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp147Flagged
+
+	track snp147Common override
+        parent dbSnpArchive 
+        priority 0.923
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp147Common
+	
+	track snp147 override
+        parent dbSnpArchive 
+        priority 0.924
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp147
+
+	track snp146Mult override
+        parent dbSnpArchive 
+        priority 0.925
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp146Mult
+
+        track snp146Flagged override
+        parent dbSnpArchive 
+        priority 0.926
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp146Flagged
+
+        track snp146Common override
+        parent dbSnpArchive 
+        priority 0.927
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp146Common
+
+        track snp146 override
+        parent dbSnpArchive 
+        priority 0.928
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp146
+
+        track snp144Mult override
+        snpSeqFile /gbdb/hg38/snp/snp144.fa
+        parent dbSnpArchive 
+        priority 0.929
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp144Mult
+
+        track snp144Flagged override
+        snpSeqFile /gbdb/hg38/snp/snp144.fa
+        parent dbSnpArchive 
+        priority 0.93
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp144Flagged
+
+        track snp144Common override
+        snpSeqFile /gbdb/hg38/snp/snp144.fa
+        parent dbSnpArchive 
+        priority 0.931
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp144Common
+
+        track snp144 override
+        snpSeqFile /gbdb/hg38/snp/snp144.fa
+        parent dbSnpArchive 
+        priority 0.932
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp144
+
+        track snp142Mult override
+        group varRep
+        snpSeqFile /gbdb/hg38/snp/snp142.fa
+        parent dbSnpArchive 
+        priority 0.933
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp142Mult
+
+        track snp142Flagged override
+        group varRep
+        snpSeqFile /gbdb/hg38/snp/snp142.fa
+        parent dbSnpArchive 
+        priority 0.934
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp142Flagged
+
+        track snp142Common override
+        group varRep
+        snpSeqFile /gbdb/hg38/snp/snp142.fa
+        parent dbSnpArchive 
+        priority 0.935
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp142Common
+
+        track snp142 override
+        group varRep
+        snpSeqFile /gbdb/hg38/snp/snp142.fa
+        parent dbSnpArchive 
+        priority 0.936
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp142
+        
+        track snp141Mult override
+        snpSeqFile /gbdb/hg38/snp/snp141.fa
+        parent dbSnpArchive 
+        priority 0.937
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp141Mult
+
+        track snp141Flagged override
+        group varRep
+        snpSeqFile /gbdb/hg38/snp/snp141.fa
+        parent dbSnpArchive 
+        priority 0.938
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp141Flagged
+
+        track snp141Common override
+        group varRep
+        snpSeqFile /gbdb/hg38/snp/snp141.fa
+        parent dbSnpArchive 
+        priority 0.939
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp141Common
+
+        track snp141 override
+        group varRep
+        snpSeqFile /gbdb/hg38/snp/snp141.fa
+        parent dbSnpArchive 
+        priority 0.94
+        defaultGeneTracks knownGene
+        type bed 6 +
+        html ../snp141
+
+#END of dbSNP archive

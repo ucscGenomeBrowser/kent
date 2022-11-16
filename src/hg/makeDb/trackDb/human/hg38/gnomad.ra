@@ -5,7 +5,6 @@ track gnomadVariants
 superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
-pennantIcon Updated red ../goldenPath/newsarch.html#063022 "Released Jun. 30, 2022"
 group varRep
 html gnomadV3_1_1
 
@@ -139,7 +138,6 @@ html gnomadV3_1_1
     type bigBed 12
     labelFields name,geneName
     visibility hide
-    pennantIcon New red ../goldenPath/newsarch.html#063022 "Released Jun. 30, 2022"
 
         track pliByGene
         shortLabel Gene LoF

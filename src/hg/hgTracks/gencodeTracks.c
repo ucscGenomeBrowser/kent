@@ -4,6 +4,7 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
+#include "gencodeTracksCommon.h"
 #include "hgTracks.h"
 #include "hdb.h"
 #include "gencodeIntron.h"
@@ -280,33 +281,54 @@ for (filterBy = filterBySet; filterBy != NULL; filterBy = filterBy->next)
 filterBySetFree(&filterBySet);
 }
 
+static void addFilterMaxTranscripsByRange(struct sqlConnection *conn, struct track *tg, struct gencodeQuery *gencodeQuery)
+/* Add query for the maximum number of transcripts to display if requested and
+ * if transcriptRank is available in attrs */
+{
+char varName[64];
+safef(varName, sizeof(varName), "%s.maxTrans", tg->track);
+int maxTrans = cartCgiUsualInt(cart, varName, 0);
+if (maxTrans <= 0)
+    return;  // zero disables
+// do we have transcriptRank column?
+if (!sqlColumnExists(conn, gencodeGetTableName(tg->tdb, "wgEncodeGencodeAttrs"), "transcriptRank"))
+    return ;
+
+// rank starts at 1, so anything less than or equal to max will be included
+gencodeQueryBeginSubWhere(gencodeQuery);
+sqlDyStringPrintf(gencodeQuery->where, "attrs.transcriptRank <= %d", maxTrans);
+gencodeQuery->joinAttrs = TRUE;
+gencodeQueryEndSubWhere(gencodeQuery);
+gencodeQuery->isFiltered = TRUE;
+}
+
 static void addQueryTables(struct track *tg, struct gencodeQuery *gencodeQuery)
 /* add required from tables and joins */
 {
 sqlDyStringPrintf(gencodeQuery->from, "%s g", tg->table);
 if (gencodeQuery->joinAttrs)
     {
-    sqlDyStringPrintf(gencodeQuery->from, ", %s attrs", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs"));
+    sqlDyStringPrintf(gencodeQuery->from, ", %s attrs", gencodeGetTableName(tg->tdb, "wgEncodeGencodeAttrs"));
     sqlDyStringPrintf(gencodeQuery->where, " and (attrs.transcriptId = g.name)");
     }
 if (gencodeQuery->joinTranscriptSource)
     {
-    sqlDyStringPrintf(gencodeQuery->from, ", %s transSrc", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptSource"));
+    sqlDyStringPrintf(gencodeQuery->from, ", %s transSrc", gencodeGetTableName(tg->tdb, "wgEncodeGencodeTranscriptSource"));
     sqlDyStringPrintf(gencodeQuery->where, " and (transSrc.transcriptId = g.name)");
     }
 if (gencodeQuery->joinSupportLevel)
     {
-    sqlDyStringPrintf(gencodeQuery->from, ", %s supLevel", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptionSupportLevel"));
+    sqlDyStringPrintf(gencodeQuery->from, ", %s supLevel", gencodeGetTableName(tg->tdb, "wgEncodeGencodeTranscriptionSupportLevel"));
     sqlDyStringPrintf(gencodeQuery->where, " and (supLevel.transcriptId = g.name)");
     }
 if (gencodeQuery->joinTag)
     {
-    sqlDyStringPrintf(gencodeQuery->from, ", %s tag", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTag"));
+    sqlDyStringPrintf(gencodeQuery->from, ", %s tag", gencodeGetTableName(tg->tdb, "wgEncodeGencodeTag"));
     sqlDyStringPrintf(gencodeQuery->where, " and (tag.transcriptId = g.name)");
     }
 }
 
-static void addQueryCommon(struct track *tg, filterBySetGetFuncType filterBySetGetFunc, struct gencodeQuery *gencodeQuery)
+static void addQueryCommon(struct sqlConnection *conn, struct track *tg, filterBySetGetFuncType filterBySetGetFunc, struct gencodeQuery *gencodeQuery)
 /* Add tables and joins for both gene and highlight queries */
 {
 // bin range overlap part
@@ -314,6 +336,7 @@ hAddBinToQuery(winStart, winEnd, gencodeQuery->where);
 sqlDyStringPrintf(gencodeQuery->where, "(g.chrom = \"%s\") and (g.txStart < %u) and (g.txEnd > %u)", chromName, winEnd, winStart);
 
 gencodeFilterBySetQuery(tg, filterBySetGetFunc, gencodeQuery);
+addFilterMaxTranscripsByRange(conn, tg, gencodeQuery);
 addQueryTables(tg, gencodeQuery);
 }
 
@@ -359,7 +382,7 @@ static void geneQueryAddAttrsCols(struct track *tg, struct sqlConnection *conn,
                                   struct gencodeQuery *gencodeQuery)
 /* add attributes columns to query */
 {
-struct slName *fields = sqlFieldNames(conn, trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs"));
+struct slName *fields = sqlFieldNames(conn, gencodeGetTableName(tg->tdb, "wgEncodeGencodeAttrs"));
 
 sqlDyStringPrintf(gencodeQuery->fields, ", ");
 sqlDyStringPrintf(gencodeQuery->fields, "attrs.geneId, attrs.geneName, attrs.geneType, attrs.geneStatus, attrs.transcriptId, attrs.transcriptName, attrs.transcriptType, attrs.transcriptStatus, attrs.havanaGeneId, attrs.havanaTranscriptId, attrs.ccdsId, attrs.level, attrs.transcriptClass");
@@ -377,8 +400,8 @@ if (slNameInList(fields, "transcriptRank"))
 gencodeQuery->joinAttrs = TRUE;
 }
 
-static struct gencodeQuery *geneQueryConstruct(struct track *tg,
-                                               struct sqlConnection *conn,
+static struct gencodeQuery *geneQueryConstruct(struct sqlConnection *conn,
+                                               struct track *tg,
                                                boolean includeAttrs)
 /* construct the query for a GENCODE records, which includes filters. */
 {
@@ -386,11 +409,11 @@ struct gencodeQuery *gencodeQuery = gencodeQueryNew();
 geneQueryAddGenePredCols(tg, gencodeQuery);
 if (includeAttrs)
     geneQueryAddAttrsCols(tg, conn, gencodeQuery);
-addQueryCommon(tg, filterBySetGet, gencodeQuery);
+addQueryCommon(conn, tg, filterBySetGet, gencodeQuery);
 return gencodeQuery;
 }
 
-static struct gencodeQuery *highlightQueryConstruct(struct track *tg)
+static struct gencodeQuery *highlightQueryConstruct(struct track *tg, struct sqlConnection *conn)
 /* construct the query for GENCODE ids which should be highlighted.
  * this essentially redoes the genePred query, only using the filter functions
  * and only getting ids */
@@ -398,7 +421,7 @@ static struct gencodeQuery *highlightQueryConstruct(struct track *tg)
 struct gencodeQuery *gencodeQuery = gencodeQueryNew();
 sqlDyStringPrintf(gencodeQuery->fields, "g.name");
 
-addQueryCommon(tg, highlightBySetGet, gencodeQuery);
+addQueryCommon(conn, tg, highlightBySetGet, gencodeQuery);
 return gencodeQuery;
 }
 
@@ -428,7 +451,7 @@ static struct hash* loadHighlightIds(struct sqlConnection *conn, struct track *t
 /* Load ids (genePred names) in window for annotations to be highlighted. */
 {
 struct hash *highlightIds = hashNew(0);
-struct gencodeQuery *gencodeQuery = highlightQueryConstruct(tg);
+struct gencodeQuery *gencodeQuery = highlightQueryConstruct(tg, conn);
 struct sqlResult *sr = executeQuery(conn, gencodeQuery);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -546,7 +569,7 @@ boolean needAttrs = (enabledLabels & ITEM_LABEL_GENE_ID) != 0;  // only for cert
 struct hash *highlightIds = NULL;
 if (anyFilterBy(tg, highlightBySetGet))
     highlightIds = loadHighlightIds(conn, tg);
-struct gencodeQuery *gencodeQuery = geneQueryConstruct(tg, conn, needAttrs);
+struct gencodeQuery *gencodeQuery = geneQueryConstruct(conn, tg, needAttrs);
 struct sqlResult *sr = executeQuery(conn, gencodeQuery);
 struct linkedFeatures *lfList = NULL;
 unsigned highlightColor = getHighlightColor(tg);
