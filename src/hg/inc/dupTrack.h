@@ -44,4 +44,7 @@ char *dupTrackSkipToSourceName(char *dupeTrackName);
 /* If it looks like it's a dupe track then skip over duppy part 
  * in particular skip over dup_N_ form prefix for numerical N. */
 
+boolean dupTrackEnabled();
+/* Return true if we allow tracks to be duped. */
+
 #endif /* DUPTRACK_H */

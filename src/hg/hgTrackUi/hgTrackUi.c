@@ -3168,10 +3168,19 @@ printf("</p>");
 boolean tdbIsDupable(struct trackDb *tdb)
 /* Return TRUE if a track is duplicatable */
 {
+if (!dupTrackEnabled())
+    return FALSE;
+
 /* Can't handle container tracks yet at least */
 if (!tdbIsDataTrack(tdb))
     return FALSE;
 /* A few other special case we can't handle */
+if (startsWith("hub_", tdb->track))
+    return FALSE;
+if (startsWith("ct_", tdb->track))
+    return FALSE;
+if (sameString(tdb->track, "hgPcrResult"))
+    return FALSE;
 if (sameString(tdb->track, "ruler"))
     return FALSE;
 if (sameString(tdb->track, "cutters"))
