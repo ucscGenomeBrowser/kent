@@ -756,15 +756,16 @@ return FALSE;
 void mustBeReadableAndRegularFile(char *fileName)
 /* errAbort if fileName is a regular file and readable. */
 {
-int fd = open(fileName, O_RDONLY);
+// check if file exists and is readable, including the
+// magic "stdin" name.
+FILE *fh = mustOpen(fileName, "r");
+struct stat st;
+if (fstat(fileno(fh), &st) < 0)
+    errnoAbort("stat failed on: %s", fileName);  // should never happen
+carefulClose(&fh);
 
-if (fd < 0)
-    errAbort("Cannot open file (%s).  It doesn't exist or is not readable.", fileName);
-
-close(fd);
-
-if (!isRegularFile(fileName))
-    errAbort("input file (%s) must be a regular file.  Pipes or other special devices can't be used.", fileName);
+if (!S_ISREG(st.st_mode))
+    errAbort("input file (%s) must be a regular file.  Pipes or other special devices can't be used here.", fileName);
 }
 
 char *mustReadSymlinkExt(char *path, struct stat *sb)

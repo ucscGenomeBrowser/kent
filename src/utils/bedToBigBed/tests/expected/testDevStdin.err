@@ -1,0 +1,1 @@
+input file (/dev/stdin) must be a regular file.  Pipes or other special devices can't be used here.
