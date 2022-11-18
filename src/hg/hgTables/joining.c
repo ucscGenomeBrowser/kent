@@ -101,9 +101,15 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
                 if (outSep == ',') fputc('"', f);
                 while (s != NULL)
                     {
-                    if (lastS == NULL || !sameString(lastS, s->name))
+                    if (lastS == NULL)
                         {
-                        fprintf(f, "%s,", s->name);
+                        // first field no comma needed
+                        fprintf(f, "%s", s->name);
+                        }
+                    else if (!sameString(lastS, s->name))
+                        {
+                        // print a comma before each unique val
+                        fprintf(f, ",%s", s->name);
                         }
                     lastS = s->name;
                     s = s->next;
