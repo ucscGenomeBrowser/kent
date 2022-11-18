@@ -20,7 +20,7 @@ makeDirs:
 
 mkGenomes::
 	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
-	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/download.${genomesTxt}.txt
+	cp -p ${destDir}/${genomesTxt}.txt ${destDir}/download.${genomesTxt}.txt
 
 symLinks::
 	${toolsDir}/mkSymLinks.pl ${orderList}

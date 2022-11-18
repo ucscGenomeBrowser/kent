@@ -30,8 +30,8 @@ my $blatHostDomain = ".soe.ucsc.edu";
 my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
 ################### writing out hub.txt file, twice ##########################
-sub singleFileHub($$$$$$$$$$$$) {
-  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $asmDate, $defPos, $taxId, $trackDb, $accessionDir, $buildDir) = @_;
+sub singleFileHub($$$$$$$$$$$$$) {
+  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $asmDate, $defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority) = @_;
   my @fhN;
   push @fhN, $fh1;
   push @fhN, $fh2;
@@ -88,6 +88,9 @@ sub singleFileHub($$$$$$$$$$$$) {
       printf $fh "chromAliasBb %s.chromAlias.bb\n", $accessionId;
     } else {
       printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
+    }
+    if ($chromAuthority =~ m/^chromAuthority/) {
+       printf $fh "%s\n", $chromAuthority;
     }
     printf $fh "organism %s %s\n", $assemblyName, $asmDate;
     printf $fh "defaultPos %s\n", $defPos;
@@ -153,6 +156,9 @@ my $orderKey = 0;
 foreach my $asmId (@orderList) {
   ++$orderKey;
   next if ($asmId !~ m/^GC/);
+  my $chromAuthority = "";
+  $chromAuthority = `~/kent/src/hg/makeDb/doc/asmHubs/chromAuthority.pl $asmId 2> /dev/null`;
+  chomp $chromAuthority;
   my ($gcPrefix, $accession, undef) = split('_', $asmId);
   my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
   my $accessionDir = substr($asmId, 0 ,3);
@@ -188,7 +194,7 @@ foreach my $asmId (@orderList) {
     next;
   }
   ++$buildDone;
-printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessionId;
+printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $accessionId, ($chromAuthority =~ m/^chromAuthority/) ?  "chromAuthority ucsc" : "no authority";
   my $taxId=`grep -i "taxid:" $asmReport | head -1 | awk '{printf \$(NF)}' | tr -d \$'\\r'`;
   chomp $taxId;
   my $descr=`grep -i "organism name:" $asmReport | head -1 | tr -d \$'\\r' | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
@@ -226,6 +232,9 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
     printf "chromAliasBb ../%s/%s/%s.chromAlias.bb\n", $accessionDir, $accessionId, $accessionId;
   } else {
     printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
+  }
+  if ($chromAuthority =~ m/^chromAuthority/) {
+     printf "%s\n", $chromAuthority;
   }
   printf "organism %s %s\n", $assemblyName, $asmDate;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
@@ -272,7 +281,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
 
   singleFileHub(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId, $asmDate,
-	$defPos, $taxId, $trackDb, $accessionDir, $buildDir);
+	$defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority);
 
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
   open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
@@ -288,6 +297,9 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
     printf GF "chromAliasBb %s.chromAlias.bb\n", $accessionId;
   } else {
     printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
+  }
+  if ($chromAuthority =~ m/^chromAuthority/) {
+     printf GF "%s\n", $chromAuthority;
   }
   printf GF "organism %s %s\n", $assemblyName, $asmDate;
   printf GF "defaultPos %s\n", $defPos;
