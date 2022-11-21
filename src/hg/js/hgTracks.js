@@ -4501,6 +4501,21 @@ var imageV2 = {
                 return false;
             }
 
+            // helper functions for checking whether a plain chrom name was searched for
+            term = encodeURIComponent(genomePos.get());
+            function onSuccess(jqXHR, textStatus) {
+                if (jqXHR.chromName !== null) {
+                    imageV2.markAsDirtyPage();
+                    imageV2.navigateInPlace("position=" + encodeURIComponent(newPos), null, false);
+                    window.scrollTo(0,0);
+                } else  {
+                    window.location.assign("../cgi-bin/hgSearch?search=" + term  + "&hgsid="+ getHgsid());
+                }
+            }
+            function onFail(jqXHR, textStatus) {
+                window.location.assign("../cgi-bin/hgSearch?search=" + term  + "&hgsid="+ getHgsid());
+            }
+
             // redirect to search disambiguation page if it looks like we didn't enter a regular position:
             var canonMatch = newPos.match(canonicalRangeExp);
             var gbrowserMatch = newPos.match(gbrowserRangeExp);
@@ -4510,7 +4525,17 @@ var imageV2 = {
             var singleMatch = newPos.match(singleBaseExp);
             var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
             if (positionMatch === null) {
-                window.location.assign("../cgi-bin/hgSearch?search=" + encodeURIComponent(genomePos.get()) + "&hgsid=" + getHgsid());
+                // user may have entered a full chromosome name, check for that asynchronosly:
+                $.ajax({
+                    type: "GET",
+                    url: "../cgi-bin/hgSearch",
+                    data: cart.varsToUrlData({ 'cjCmd': '{"getChromName": {"db": "' + getDb() + '", "searchTerm": "' + term + '"}}' }),
+                    dataType: "json",
+                    trueSuccess: onSuccess,
+                    success: onSuccess,
+                    error: onFail,
+                    cache: true
+                });
                 return false;
             }
                 

@@ -1509,15 +1509,36 @@ var hgGateway = (function() {
     function goToHgTracks() {
         // Create and submit a form for hgTracks with hidden inputs for org, db and position.
         var position = $('#positionInput').val();
-        var searchTerm = position;
+        var searchTerm = encodeURIComponent(position);
         var posDisplay = $('#positionDisplay').text();
         var pix = uiState.pix || calculateHgTracksWidth();
+        var oldCgi = cart.cgi();
+        cart.setCgi('hgSearch');
         var $form;
+        $form = $('<form action="hgTracks" method=GET id="mainForm">' +
+                  '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
+                  '<input type=hidden name="org" value="' + uiState.genome + '">' +
+                  '<input type=hidden name="db" value="' + uiState.db + '">' +
+                  '<input type=hidden name="position" value="' + position + '">' +
+                  '<input type=hidden name="pix" value="' + pix + '">' +
+                  '</form>');
         if (! position || position === '' || position === positionWatermark ||
             position === selectedGene) {
             position = posDisplay;
         } else {
             position = position.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
+        }
+        // helper functions for checking whether a plain chrom name was searched for
+        function onSuccess(jqXHR, textStatus) {
+            if (jqXHR.chromName !== null) {
+                $('body').append($form);
+                $form.submit();
+            } else  {
+                window.location.assign("../cgi-bin/hgSearch?search=" + searchTerm  + "&hgsid="+ window.hgsid );
+            }
+        }
+        function onFail(jqXHR, textStatus) {
+            window.location.assign("../cgi-bin/hgSearch?search=" + searchTerm  + "&hgsid="+ window.hgsid );
         }
         var canonMatch = position.match(canonicalRangeExp);
         var gbrowserMatch = position.match(gbrowserRangeExp);
@@ -1533,21 +1554,18 @@ var hgGateway = (function() {
             $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
             // Make a form and submit it.  In order for this to work in IE, the form
             // must be appended to the body.
-            $form = $('<form action="hgTracks" method=GET id="mainForm">' +
-                      '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
-                      '<input type=hidden name="org" value="' + uiState.genome + '">' +
-                      '<input type=hidden name="db" value="' + uiState.db + '">' +
-                      '<input type=hidden name="position" value="' + position + '">' +
-                      '<input type=hidden name="pix" value="' + pix + '">' +
-                      '</form>');
             $('body').append($form);
             $form.submit();
         } else {
             // User has entered a search term with no suggestion, go to the disambiguation
             // page so the user can choose a position
+            // but first check if just a plain chromosome name was entered:
             $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
-            window.location.assign("../cgi-bin/hgSearch?search=" + encodeURIComponent(searchTerm) + "&hgsid="+ window.hgsid );
+            cmd = {getChromName: {'searchTerm': searchTerm, 'db': uiState.db}};
+            cart.send(cmd, onSuccess, onFail);
+            cart.flush();
         }
+        cart.setCgi(oldCgi);
     }
 
     function replaceHgsidInLinks() {

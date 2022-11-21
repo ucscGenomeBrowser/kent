@@ -43,6 +43,7 @@ var cart = (function() {
     var cgiBinUrl = '../cgi-bin/';
     // cart.setCgi(name) sets this to cgiBinUrl + name, and must be called before sending requests:
     var cgiUrl;
+    var cgiName; // get sets by cart.setCgi()
 
     // accumulator for cgiVars passed in to send() before flush() is called:
     var cgiVars = {};
@@ -206,10 +207,14 @@ var cart = (function() {
             defaultErrorCallback(jqXHR, textStatus);
         },
 
+        cgi: function() {
+            return cgiName;
+        },
 
         setCgi: function(newCgi) {
             // Sets the name of the CGI (e.g. hgIntegrator, hgChooseDb etc).
             // This must be called before cart.send.
+            cgiName = newCgi;
             cgiUrl = cgiBinUrl + newCgi;
         },
 
