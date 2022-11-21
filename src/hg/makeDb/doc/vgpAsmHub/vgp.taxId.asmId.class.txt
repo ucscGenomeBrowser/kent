@@ -194,7 +194,7 @@
 10116	GCF_015227675.2_mRatBN7.2	mammals
 43150	GCF_015227805.1_bHirRus1.pri.v2	birds
 8469	GCF_015237465.1_rCheMyd1.pri	reptiles
-8469	GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 2021)
+8469	GCF_015237465.2_rCheMyd1.pri.v2	reptiles
 8839	GCF_015476345.1_ZJU1.0	birds
 8839	GCF_015476345.1_ZJU1.0	birds
 9261	GCF_015852505.1_mTacAcu1.pri	mammals
@@ -213,8 +213,10 @@
 9447	GCF_020740605.2_mLemCat1.pri	mammals
 51337	GCF_020740685.1_mJacJac1.mat.Y.cur	mammals
 134902	GCF_020740725.1_bCorHaw1.pri.cur	birds
+8895	GCF_020740795.1_bApuApu2.pri.cur	birds
 208333	GCF_021462225.1_DD_fGirMul_XY1	fish
 99487	GCF_024166365.1_mEleMax1_primary_haplotype	mammals
+286002	GCF_025201925.1_rGopFla2.mat.asm	reptiles
 8154	GCF_900246225.1_fAstCal1.2	fish
 64144	GCF_900324465.2_fAnaTes1.2	fish
 205130	GCF_900324485.2_fMasArm1.2	fish
@@ -250,6 +252,7 @@
 1047088	GCF_903992535.1_mArvAmp1.1	mammals
 1047088	GCF_903992535.2_mArvAmp1.2	mammals
 38674	GCF_903995425.1_mOncTor1.1	mammals
+60746	GCF_903995435.1_mAcoRus1.1	mammals
 8177	GCF_904848185.1_fAcaLat1.1	fish
 91739	GCF_905147365.1_ilAriAges1.1	insects
 116150	GCF_905163445.1_ilParAegt1.1	insects

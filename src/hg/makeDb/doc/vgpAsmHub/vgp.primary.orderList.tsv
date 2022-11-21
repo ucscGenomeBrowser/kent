@@ -22,7 +22,7 @@ GCF_900634415.1_fCotGob3.1	channel bull blenny
 GCF_900324465.2_fAnaTes1.2	climbing perch
 GCF_011100635.1_mTriVul1.pri	common brushtail
 GCA_017976375.1_bCucCan1.pri	common cuckoo (VGP 2021)
-GCA_020740795.1_bApuApu2.pri.cur	common swift (2021 VGP)
+GCF_020740795.1_bApuApu2.pri.cur	common swift (bApuApu2 2021 VGP refseq)
 GCA_009819605.1_bSteHir1.pri	common tern
 GCF_905171765.1_aBufBuf1.1	common toad
 GCA_009764595.1_bGeoTri1.pri	common yellowthroat
@@ -51,6 +51,7 @@ GCF_902459505.1_aGeoSer1.1	Gabon caecilian
 GCA_014839755.1_bSylBor1.pri	garden warbler
 GCF_900880675.1_fSpaAur1.1	gilthead seabream
 GCF_900496995.4_bAquChr1.4	golden eagle (2021)
+GCF_903995435.1_mAcoRus1.1	golden spiny mouse (2020 VGP)
 GCF_007399415.2_rGopEvg1_v1.p	Goodes thornscrub tortoise
 GCF_902686445.1_mSciCar1.2	gray squirrel (2020 VGP)
 GCA_013368605.1_bNycGra1.pri	great potoo
@@ -79,6 +80,7 @@ GCF_900963305.1_fEcheNa1.1	live sharksucker
 GCF_009769545.1_fCycLum1.pri	lumpfish (refseq)
 GCA_017639555.1_bCicMag1.pri	maguari stork (2021 VGP)
 GCF_015476345.1_ZJU1.0	mallard (Pekin duck Z2 2020 Zhejiang U)
+GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (rGopFla2 2022 VGP)
 GCF_902362185.1_fChaCha1.1	milkfish
 GCF_019393635.1_mDroGli1.pri	monito del monte (2021 VGP)
 GCF_009769625.2_bCygOlo1.pri.v2	mute swan (v2 2021)
