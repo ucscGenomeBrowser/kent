@@ -115,8 +115,8 @@ GCA_020169555.1_solTubStieglitzHap1	potato S.tuberosum (hap 1 of 4 Otava Stiegli
 GCA_020169535.1_solTubStieglitzHap2	potato S.tuberosum (hap 2 of 4 Otava Stieglitz 2021)
 GCA_020169585.1_solTubHeraHap1	potato S.tuberosum (hap 3 of 4 Otava Hera 2021)
 GCA_020169575.1_solTubHeraHap2	potato S.tuberosum (hap 4 of 4 Otava Hera 2021)
-# GCA_014189475.1_ASM1418947v1	potato S.tuberosum (RH89-039-16 2020)
-# GCA_014189305.1_ASM1418930v1	potato S.tuberosum (alt pseudohaplotype RH89-039-16 2020)
+GCA_014189475.1_ASM1418947v1	potato S.tuberosum (RH89-039-16 2020)
+GCA_014189305.1_ASM1418930v1	potato S.tuberosum (alt pseudohaplotype RH89-039-16 2020)
 GCF_900185275.1_falcon-dt-bn	potato S.verrucosum (2019)
 GCF_001683475.1_ASM168347v1	quinoa
 GCF_000801105.1_Rs1.0	radish
