@@ -1,0 +1,164 @@
+#!/usr/bin/env python
+# pylint: disable=C0103,C0326,C0410,W0402
+
+""" guess the best assembly given a bigWig or bigBed file """
+
+import logging, optparse
+from collections import defaultdict
+from os.path import join, isfile, expanduser
+import os, gzip, subprocess
+
+# ==== functions =====
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] filename - given a bigBed or "\
+            "bigWig file, " \
+        "guess the assembly based on the chrom sizes")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", \
+        help="show debug messages")
+    parser.add_option("", "--index", dest="index", action="store_true", \
+        help="go /hive/data/genomes and build a file ~/.guessAssembly.txt with all chromSizes")
+    parser.add_option("-b", "--onlyBest", dest="onlyBest", action="store_true", \
+        help="only print a single string, the best matching assembly")
+    (options, args) = parser.parse_args()
+
+    if args==[] and not options.index:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+
+def parseSizes(inFname, doSubset):
+    " given a chrom.sizes file, return the 10 longest and 10 shortest chrom names "
+    logging.info("Reading %s",inFname)
+    sizes = list()
+    for line in open(inFname):
+        if line.startswith("#"):
+            continue
+        chrom, size = line.rstrip("\n").split("\t")[:2]
+        sizes.append( (int(size), chrom) )
+    sizes.sort()
+
+    if not doSubset:
+        return sizes
+
+    someSizes = sizes[:10]
+    someSizes.extend(sizes[-10:])
+    return someSizes
+
+def writeSizes(allSizes, outFname):
+    " write all sizes to the index file "
+    ofh = gzip.open(outFname, "wt") # "write" "text"
+    for db, dbSizes in allSizes.items():
+        sizeParts = ["%s=%d" % (chrom, size) for size,chrom in dbSizes]
+        sizeStr = ",".join(sizeParts)
+        ofh.write("%s\t%s\n" % (db, sizeStr))
+    ofh.close()
+    logging.info("Wrote %s", outFname)
+
+def buildIndex(inDir, outFname):
+    """ go over all direct subdirectories of inDir and find a chrom.sizes file,
+    compact it to format db -> list of (chrom,size) and write to outFname """
+    allSizes = dict()
+    for db in os.listdir(inDir):
+        if "Patch" in db or db == "sonMus0":
+            continue
+
+        subDir = join(inDir, db)
+        chromFname = join(subDir, "chrom.sizes")
+        if not isfile(chromFname):
+            chromFname = join(subDir, db+".sizes")
+
+        if not isfile(chromFname):
+            print("not found "+chromFname)
+            continue
+
+        doSubset = True
+        if db.startswith("hg") or db.startswith("mm"):
+            doSubset = False
+
+        if os.path.getsize(chromFname) != 0:
+            allSizes[db] = parseSizes(chromFname, doSubset)
+
+    writeSizes(allSizes, outFname)
+
+def readSizeIndex(inFname):
+    " read chrom sizes index and return as dict (chromName, size) - > db "
+    sizeToDbs = defaultdict(list)
+    #sizeToDb = dict()
+    for line in gzip.open(inFname, "rt"):
+        db, sizeStr = line.rstrip("\n").split("\t")
+        sizes = sizeStr.split(",")
+        sizes = [x.split("=") for x in sizes]
+        sizes = [(chrom, int(size)) for (chrom, size) in sizes]
+        for chrom, size in sizes:
+            #assert( (chrom, size) not in sizeToDb )
+            #sizeToDb[ (chrom, size) ] = db
+            sizeToDbs[ (chrom, size) ].append(db)
+    return sizeToDbs
+
+def bigWigSizes(inFname):
+    " return chrom -> size from bigWig file "
+    sizes = list()
+    cmd = ["bigWigInfo", "-chroms", inFname]
+    doParse = False
+    p = subprocess.Popen(cmd, encoding="latin1", stdout=subprocess.PIPE)
+    for line in p.stdout:
+        if line.startswith("chromCount: "):
+            doParse = True
+            continue
+        if line.startswith("basesCovered: "):
+            doParse = False
+            continue
+        if doParse:
+            chrom, _idx, size = line.strip().split(" ")
+            sizes.append((chrom, int(size)))
+    return sizes
+
+def findBestDb(sizeIndex, fileSizes):
+    """ given a list of file sizes, look up all (chrom, size) in chrom size index
+    and report best DBs sorted by number of matches """
+    dbChromMatch = defaultdict(list)
+    for (chrom, size) in fileSizes:
+        if (chrom, size) in sizeIndex:
+            dbs = sizeIndex[(chrom, size)]
+            for db in dbs:
+                dbChromMatch[db].append(chrom)
+
+    dbChromMatch = sorted(dbChromMatch.items(), key=len)
+    return dbChromMatch
+
+def printAllMatches(dbChromMatch):
+    " print all matching dbs as a tsv "
+    print("#db\tchromMatch\tchromList\n")
+    for db, chromList in dbChromMatch:
+        print("\t".join([db, str(len(chromList)), ",".join(chromList)]))
+
+# ----------- main --------------
+def main():
+    " entry point to script "
+    args, options = parseArgs()
+
+    indexFname = expanduser("~/.guessAssembly.txt.gz")
+    if options.index:
+        buildIndex("/hive/data/genomes", indexFname)
+    else:
+        inFname = args[0]
+        fileSizes = bigWigSizes(inFname)
+
+        sizeIndex = readSizeIndex(indexFname)
+        hits = findBestDb(sizeIndex, fileSizes)
+        if options.onlyBest:
+            print(hits[0][0])
+        else:
+            printAllMatches(hits)
+
+main()

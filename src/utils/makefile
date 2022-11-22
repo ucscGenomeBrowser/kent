@@ -154,7 +154,8 @@ UCSC_APPS = \
 	vcfFilter \
 	venn \
 	verticalSplitSqlTable \
-	weedLines
+	weedLines \
+	bigGuessDb
 
 # list of scripts to install
 
