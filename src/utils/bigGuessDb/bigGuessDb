@@ -19,7 +19,7 @@ def parseArgs():
         help="show debug messages")
     parser.add_option("", "--index", dest="index", action="store_true", \
         help="go /hive/data/genomes and build a file ~/.guessAssembly.txt with all chromSizes")
-    parser.add_option("-b", "--onlyBest", dest="onlyBest", action="store_true", \
+    parser.add_option("-b", "--best", dest="best", action="store_true", \
         help="only print a single string, the best matching assembly")
     (options, args) = parser.parse_args()
 
@@ -156,7 +156,7 @@ def main():
 
         sizeIndex = readSizeIndex(indexFname)
         hits = findBestDb(sizeIndex, fileSizes)
-        if options.onlyBest:
+        if options.best:
             print(hits[0][0])
         else:
             printAllMatches(hits)
