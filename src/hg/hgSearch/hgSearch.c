@@ -23,6 +23,7 @@
 #include "trix.h"
 #include "genbank.h"
 #include "cartTrackDb.h"
+#include "chromAlias.h"
 
 // name of the searchBar form variable from the HTML
 #define SEARCH_TERM_VAR "search"
@@ -515,6 +516,31 @@ for (dbDb = trackHubDbs; dbDb != NULL; dbDb = dbDb->next)
 return genomesObj;
 }
 
+static void getChromName(struct cartJson *cj, struct hash *paramHash)
+/* Check if search term is a valid chromosome name, if so return the
+ * UCSC approved chromsome name for easy redirect to hgTracks/CGI. If
+ * no chromosome name return chromName: null and let the user handle it */
+{
+// we need to connect to database explicitly to handle hub chromosomes (hs1):
+char *database = NULL, *genome = NULL;
+getDbAndGenome(cj->cart, &database, &genome, oldVars);
+char *term = cartJsonRequiredParam(paramHash, "searchTerm", cj->jw, "getChromName");
+chromAliasSetup(database);
+char *chromName = NULL;
+
+// wrap this lookup in an errCatch so we can silently return
+// a null chromosome name if there was a problem. This is meant
+// for quick look ups so if a term is not a chrom name it's not
+// a big deal
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    chromName = hgOfficialChromName(database, term);
+errCatchEnd(errCatch);
+
+// whoever consumes this json can deal with a NULL chromName
+jsonWriteString(cj->jw, "chromName", chromName);
+}
+
 /* End Handlers */
 
 /* Start do commands, functions that dispatch */
@@ -540,6 +566,7 @@ struct cartJson *cj = cartJsonNew(cart);
 cartJsonRegisterHandler(cj, "getSearchResults", getSearchResults);
 cartJsonRegisterHandler(cj, "getUiState", getUiState);
 cartJsonRegisterHandler(cj, "saveCategoriesToCart", doSaveCategoriesToCart);
+cartJsonRegisterHandler(cj, "getChromName", getChromName);
 cartJsonExecute(cj);
 }
 
