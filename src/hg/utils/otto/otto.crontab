@@ -93,7 +93,7 @@ MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
 23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
 
 #Index page public session thumbnails update
-MAILTO=lrnassar@ucsc.edu
+MAILTO=lrnassar@ucsc.edu,gperez2@ucsc.edu
 11 1 * * 1 /cluster/software/bin/python3.6 /cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py /usr/local/apache/htdocs/
 
 #OMIM Upload
