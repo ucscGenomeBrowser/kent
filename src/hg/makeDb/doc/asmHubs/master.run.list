@@ -41,6 +41,7 @@
 ./runBuild GCA_000695325.1_P.bachei_draft_genome_v.1.1 invertebrate Pleurobrachia_bachei
 ./runBuild GCA_000696695.1_Burgud mammals Equus_przewalskii
 ./runBuild GCA_000738955.1_M_pentadactyla-1.1.1 mammals Manis_pentadactyla
+./runBuild GCA_000750555.1_ASM75055v1 bacteria Escherichia_coli_BW25113
 ./runBuild GCA_000754665.1_Bison_UMD1.0 mammals Bison_bison_bison
 ./runBuild GCA_000767525.1_Vi_pacos_V1.0 mammals Vicugna_pacos_huacaya
 ./runBuild GCA_000767585.1_PRJNA234474_Ca_dromedarius_V1.0 mammals Camelus_dromedarius
