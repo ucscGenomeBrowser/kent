@@ -94,7 +94,7 @@ MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
 
 #Index page public session thumbnails update
 MAILTO=lrnassar@ucsc.edu,gperez2@ucsc.edu
-11 1 * * 1 /cluster/software/bin/python3.6 /cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py /usr/local/apache/htdocs/
+11 1 * * 4 /cluster/software/bin/python3.6 /cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py /usr/local/apache/htdocs/
 
 #OMIM Upload
 MAILTO=lrnassar@ucsc.edu
