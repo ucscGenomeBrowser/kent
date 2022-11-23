@@ -1040,6 +1040,7 @@
 ./runBuild GCF_000747765.1_ASM74776v1 fungi Moesziomyces_antarcticus
 ./runBuild GCF_000747805.1_ChaPel_1.0 vertebrate_other Chaetura_pelagica
 ./runBuild GCF_000747805.2_ChaPel_1.1 birds Chaetura_pelagica
+./runBuild GCF_000750555.1_ASM75055v1 bacteria Escherichia_coli_BW25113
 ./runBuild GCF_000754665.1_Bison_UMD1.0 vertebrate_mammalian Bison_bison
 ./runBuild GCF_000755165.1_ASM75516v1 invertebrate Leishmania_panamensis
 ./runBuild GCF_000757685.1_NilLug1.0 invertebrate Nilaparvata_lugens
