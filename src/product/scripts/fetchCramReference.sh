@@ -55,12 +55,8 @@ then
     exit 255
 fi
 
-if lockfile -! -r 0 "${PENDING}/fetch.lock" >& /dev/null
-then
-    # echo "${PENDING}/fetch.lock already exists.  Exiting."
-    exit 0
-fi
-
+(
+flock -n 9 || exit 0
 
 # set up cleanup in the event of Ctrl-C
 trap '{rm -f "${PENDING}/*.out"; rm -f ${PENDING}/fetch.lock; exit 1; }' INT
@@ -112,5 +108,4 @@ xargs -I % -n 1 -P 5 sh -c \
         rm -f "${PENDING}/%.out"
     fi
 '
-
-rm -f "${PENDING}/fetch.lock"
+) 9>${PENDING}/fetch.lock
