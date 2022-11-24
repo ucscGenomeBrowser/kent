@@ -260,6 +260,7 @@ cgiMakeHiddenVar(configGroupTarget, "none");
 
 // Now all groups are in a single table, divided by an empty borderless row
 hPrintf("<TABLE BORDER='0' CELLSPACING='0' class='groupLists'>\n");
+struct hash *superHash = hashNew(8);
 for (group = groupList; group != NULL; group = group->next)
     {
     struct trackRef *tr;
@@ -344,7 +345,7 @@ for (group = groupList; group != NULL; group = group->next)
      * tracks, and to insert a track in the list for the supertrack.
      * Sort tracks and supertracks together by priority */
     makeGlobalTrackHash(trackList);
-    groupTrackListAddSuper(cart, group);
+    groupTrackListAddSuper(cart, group, superHash);
 
     if (!withPriorityOverride)
         {
@@ -446,6 +447,7 @@ for (group = groupList; group != NULL; group = group->next)
     cgiDown(0.9);
     hPrintf("</td></tr>\n");
     }
+hashFree(&superHash);
 hPrintf("</TABLE>\n");
 
 jsInline("$(document).ready( cfgPageAddListeners )");
