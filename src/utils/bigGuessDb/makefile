@@ -7,7 +7,7 @@ compile:
 check:
 	pylint bigGuessDb
 
-#clean:
+clean:
 	#cd tests && ${MAKE} clean
 
 #test:
