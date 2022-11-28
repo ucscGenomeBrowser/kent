@@ -3,7 +3,7 @@
 
 """ guess the best assembly given a bigWig or bigBed file """
 
-import logging, optparse
+import logging, optparse, sys
 from collections import defaultdict
 from os.path import join, isfile, expanduser
 import os, gzip, subprocess
@@ -69,7 +69,7 @@ def buildIndex(inDir, outFname):
     compact it to format db -> list of (chrom,size) and write to outFname """
     allSizes = dict()
     for db in os.listdir(inDir):
-        if "Patch" in db or db == "sonMus0":
+        if "Patch" in db or db == "sonMus0" or db.startswith("braNey"):
             continue
 
         subDir = join(inDir, db)
@@ -105,12 +105,27 @@ def readSizeIndex(inFname):
             sizeToDbs[ (chrom, size) ].append(db)
     return sizeToDbs
 
-def bigWigSizes(inFname):
+def bigSizes(inFname):
     " return chrom -> size from bigWig file "
     sizes = list()
-    cmd = ["bigWigInfo", "-chroms", inFname]
+
+    cmdExec = "bigWigInfo"
+    inExt = inFname.lower().split(".")[-1]
+    if inExt in ["bb", ".igbed"]:
+        cmdExec = "bigBedInfo"
+
+    cmd = [cmdExec, "-chroms", inFname]
+
     doParse = False
-    p = subprocess.Popen(cmd, encoding="latin1", stdout=subprocess.PIPE)
+    if sys.version_info[0]==2:
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    else:
+        p = subprocess.Popen(cmd, encoding="latin1", stdout=subprocess.PIPE)
+
+    if p.returncode is not None and p.returncode!=0:
+        logging.error("Could not run '%s'. Are the tools bigBedInfo and bigWigInfo installed and in your PATH?" % (" ".join(cmd)))
+        sys.exit(1)
+
     for line in p.stdout:
         if line.startswith("chromCount: "):
             doParse = True
@@ -123,6 +138,10 @@ def bigWigSizes(inFname):
             sizes.append((chrom, int(size)))
     return sizes
 
+def sortBySecondLen(e):
+    " sort function that takes the second element of a tuple and returns its negative length -> put longest lists first "
+    return -len(e[1])
+
 def findBestDb(sizeIndex, fileSizes):
     """ given a list of file sizes, look up all (chrom, size) in chrom size index
     and report best DBs sorted by number of matches """
@@ -133,12 +152,13 @@ def findBestDb(sizeIndex, fileSizes):
             for db in dbs:
                 dbChromMatch[db].append(chrom)
 
-    dbChromMatch = sorted(dbChromMatch.items(), key=len)
-    return dbChromMatch
+    dbMatches = list(dbChromMatch.items()) # dbMatches is now a list of db -> list of chromosomes
+    dbMatches.sort(key=sortBySecondLen)
+    return dbMatches
 
 def printAllMatches(dbChromMatch):
     " print all matching dbs as a tsv "
-    print("#db\tchromMatch\tchromList\n")
+    print("#db\tmatchCount\tmatchList")
     for db, chromList in dbChromMatch:
         print("\t".join([db, str(len(chromList)), ",".join(chromList)]))
 
@@ -152,7 +172,7 @@ def main():
         buildIndex("/hive/data/genomes", indexFname)
     else:
         inFname = args[0]
-        fileSizes = bigWigSizes(inFname)
+        fileSizes = bigSizes(inFname)
 
         sizeIndex = readSizeIndex(indexFname)
         hits = findBestDb(sizeIndex, fileSizes)

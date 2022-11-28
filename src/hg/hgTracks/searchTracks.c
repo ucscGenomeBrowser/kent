@@ -1050,9 +1050,10 @@ makeGlobalTrackHash(trackList);
 parentChildCartCleanup(trackList,cart,oldVars);
 
 slSort(&groupList, gCmpGroup);
+struct hash *superHash = hashNew(8);
 for (group = groupList; group != NULL; group = group->next)
     {
-    groupTrackListAddSuper(cart, group);
+    groupTrackListAddSuper(cart, group, superHash);
     if (group->trackList != NULL)
         {
         groups[numGroups] = cloneString(group->name);
@@ -1062,6 +1063,7 @@ for (group = groupList; group != NULL; group = group->next)
             internalErr();
         }
     }
+hashFree(&superHash);
 
 safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly",
       organism, hFreezeFromDb(database));

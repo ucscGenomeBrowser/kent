@@ -26,49 +26,38 @@ def parseArgs():
     options = parser.parse_args()
     return  options
 
-def bash(cmd):
-    """Run the cmd in bash subprocess"""
-    try:
-        rawBashOutput = subprocess.run(cmd, check=True, shell=True,\
-                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
-        bashStdoutt = rawBashOutput.stdout
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
-    return(bashStdoutt)
-
 def queryHgPublicSessAndAssignOutputFileAndDir(saveDir):
     """Curl hgPublicSession and assign output file name/directory"""
-    hgPublicSessionOutPut = bash('curl -Lk https://genome.ucsc.edu/cgi-bin/hgPublicSessions')
+    hgPublicSessionOutPut = requests.get('https://genome.ucsc.edu/cgi-bin/hgPublicSessions')
     outputFile = open(saveDir+'thumbNailLinks.html', 'w')
     return(hgPublicSessionOutPut, outputFile)
 
 def parseHgPublicSessPageAndWriteOut(hgPublicSessionOutPut, saveDir, outputFile):
     """Parse hgPublicSession curled page, extract thumbnail/url/description and write out to file"""
     sessionThumbNailsWritten = 1
-    for line in hgPublicSessionOutPut.split('\n'):
+    for line in hgPublicSessionOutPut.text.split('\n'):
         if "trash" in line and sessionThumbNailsWritten < 4:
             sessionUrl = "https://genome.ucsc.edu/cgi-bin/"+line.split('"')[1].split("/")[2]
             trashDirUrl = line.split('"')[3]
             downloadThumbNailUrl = "https://genome.ucsc.edu/trash/hgPS/"+trashDirUrl.split("/")[3]
             currentImageFileName = 'sessionThumbNail'+str(sessionThumbNailsWritten)+'.png'
             img_data = requests.get(downloadThumbNailUrl).content
-            with open(currentImageFileName, 'wb') as handler:
+            with open(saveDir+currentImageFileName, 'wb') as handler:
                 handler.write(img_data)
-            bash('mv '+currentImageFileName+' '+saveDir+currentImageFileName)
-            bash('chmod 777 '+saveDir+currentImageFileName)
+            os.chmod(saveDir+currentImageFileName, 0o664)
         if "Description:" in line and sessionThumbNailsWritten < 4:
             sessionThumbNailsWritten+=1
             sessionDescription = line.split('</b> ')[1].split('<br>')[0]
             outputFile.write('''<a href="'''+sessionUrl+'''">\n<img src="/'''+currentImageFileName+'''" title="'''
-                         +sessionDescription+'''" class="sessionThumbnail" style="vertical-align: top;" width="30%" 
-                         height=40%"></img></a>\n''')   
-    outputFile.close()        
-    bash('chmod 777 '+saveDir+'thumbNailLinks.html')
-    
+                         +sessionDescription+'''" class="sessionThumbnail" style="vertical-align: top;" width="30%"
+                         height=40%"></img></a>\n''')
+    outputFile.close()
+    os.chmod(saveDir+'thumbNailLinks.html', 0o775)
+
 def main():
     options = parseArgs()
     saveDir = options.saveDir
     hgPublicSessionOutPut, outputFile = queryHgPublicSessAndAssignOutputFileAndDir(saveDir)
     parseHgPublicSessPageAndWriteOut(hgPublicSessionOutPut, saveDir, outputFile)
-    
+
 main()

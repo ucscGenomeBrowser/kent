@@ -6904,7 +6904,7 @@ hashFree(&hash);
 *pGroupList = list;
 }
 
-void groupTrackListAddSuper(struct cart *cart, struct group *group)
+void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash)
 /* Construct a new track list that includes supertracks, sort by priority,
  * and determine if supertracks have visible members.
  * Replace the group track list with this new list.
@@ -6913,7 +6913,6 @@ void groupTrackListAddSuper(struct cart *cart, struct group *group)
  * supertracks) are invoked. */
 {
 struct trackRef *newList = NULL, *tr, *ref;
-struct hash *superHash = hashNew(8);
 
 if (!group || !group->trackList)
     return;
@@ -6960,7 +6959,6 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         }
     }
 slSort(&newList, trackRefCmpPriority);
-hashFree(&superHash);
 /* we could free the old track list here, but it's a trivial amount of mem */
 group->trackList = newList;
 }
@@ -9132,6 +9130,7 @@ if (!hideControls)
         hPrintf("</td></tr>");
 
         cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+        struct hash *superHash = hashNew(8);
 	for (group = groupList; group != NULL; group = group->next)
 	    {
 	    if (group->trackList == NULL)
@@ -9208,7 +9207,7 @@ if (!hideControls)
 
 	    /* Add supertracks to track list, sort by priority and
 	     * determine if they have visible member tracks */
-	    groupTrackListAddSuper(cart, group);
+	    groupTrackListAddSuper(cart, group, superHash);
 
 	    /* Display track controls */
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
@@ -9246,6 +9245,7 @@ if (!hideControls)
 	    if (group->next != NULL)
 		controlGridEndRow(cg);
 	    }
+        hashFree(&superHash);
 	endControlGrid(&cg);
 	}
 

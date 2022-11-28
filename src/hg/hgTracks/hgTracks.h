@@ -630,7 +630,7 @@ struct track *getTrackList(struct group **pGroupList, int vis);
  * If vis is -1, restore default groups to tracks.
  * Shared by hgTracks and configure page. */
 
-void groupTrackListAddSuper(struct cart *cart, struct group *group);
+void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash);
 /* Construct a new track list that includes supertracks, sort by priority,
  * and determine if supertracks have visible members.
  * Replace the group track list with this new list.
