@@ -1508,12 +1508,20 @@ var hgGateway = (function() {
 
     function goToHgTracks() {
         // Create and submit a form for hgTracks with hidden inputs for org, db and position.
+        var goDirectlyToHgTracks = false;
         var position = $('#positionInput').val();
         var searchTerm = encodeURIComponent(position);
         var posDisplay = $('#positionDisplay').text();
         var pix = uiState.pix || calculateHgTracksWidth();
         var oldCgi = cart.cgi();
         cart.setCgi('hgSearch');
+        if (! position || position === '' || position === positionWatermark ||
+            position === selectedGene) {
+            position = posDisplay;
+            goDirectlyToHgTracks = true;
+        } else {
+            position = position.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
+        }
         var $form;
         $form = $('<form action="hgTracks" method=GET id="mainForm">' +
                   '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
@@ -1522,12 +1530,6 @@ var hgGateway = (function() {
                   '<input type=hidden name="position" value="' + position + '">' +
                   '<input type=hidden name="pix" value="' + pix + '">' +
                   '</form>');
-        if (! position || position === '' || position === positionWatermark ||
-            position === selectedGene) {
-            position = posDisplay;
-        } else {
-            position = position.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
-        }
         // helper functions for checking whether a plain chrom name was searched for
         function onSuccess(jqXHR, textStatus) {
             if (jqXHR.chromName !== null) {
@@ -1547,7 +1549,7 @@ var hgGateway = (function() {
         var sqlMatch = position.match(sqlRangeExp);
         var singleMatch = position.match(singleBaseExp);
         var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
-        if (positionMatch !== null) {
+        if (positionMatch !== null || goDirectlyToHgTracks) {
             // We already have a position from either selecting a suggestion or the user just typed a regular
             // old position, so go to hgTracks at that location
             // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
