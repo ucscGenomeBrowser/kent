@@ -2,7 +2,7 @@ kentSrc = ../..
 include ../../inc/common.mk
 
 compile:
-	cp -p bigGuessDb ${DESTBINDIR}/chromToUcsc
+	cp -p bigGuessDb ${DESTBINDIR}/bigGuessDb
 
 check:
 	pylint bigGuessDb

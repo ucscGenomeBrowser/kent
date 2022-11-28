@@ -154,8 +154,7 @@ UCSC_APPS = \
 	vcfFilter \
 	venn \
 	verticalSplitSqlTable \
-	weedLines \
-	bigGuessDb
+	weedLines
 
 # list of scripts to install
 
@@ -168,7 +167,8 @@ USER_APP_SCRIPTS = \
 	tdbSort \
 	webSync \
 	chromToUcsc \
-	bigHeat
+	bigHeat \
+	bigGuessDb
 
 SCRIPT_FILES = \
 	agpToLift \
