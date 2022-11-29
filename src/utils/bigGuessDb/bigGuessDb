@@ -18,9 +18,11 @@ def parseArgs():
     parser.add_option("-d", "--debug", dest="debug", action="store_true", \
         help="show debug messages")
     parser.add_option("", "--index", dest="index", action="store_true", \
-        help="go /hive/data/genomes and build a file ~/.guessAssembly.txt with all chromSizes")
+        help="go /hive/data/genomes and build an index file with all chromSizes")
     parser.add_option("-b", "--best", dest="best", action="store_true", \
-        help="only print a single string, the best matching assembly")
+        help="only print a single string, the best matching assembly, or 'emptyFile' or 'notFound'. ")
+    parser.add_option("", "--indexFile", dest="indexFname", action="store", \
+        help="Use specified index file, default is %default", default="~/.guessAssembly.txt.gz")
     (options, args) = parser.parse_args()
 
     if args==[] and not options.index:
@@ -45,13 +47,17 @@ def parseSizes(inFname, doSubset):
             continue
         chrom, size = line.rstrip("\n").split("\t")[:2]
         sizes.append( (int(size), chrom) )
+
+    if len(sizes)==0:
+        logging.error("bigBed/bigWig file is empty. Cannot guess assembly.")
+        return None
+
     sizes.sort()
 
     if not doSubset:
         return sizes
 
-    someSizes = sizes[:10]
-    someSizes.extend(sizes[-10:])
+    someSizes = sizes[-20:] # small chroms carry less information and have fewer features
     return someSizes
 
 def writeSizes(allSizes, outFname):
@@ -69,7 +75,7 @@ def buildIndex(inDir, outFname):
     compact it to format db -> list of (chrom,size) and write to outFname """
     allSizes = dict()
     for db in os.listdir(inDir):
-        if "Patch" in db or db == "sonMus0" or db.startswith("braNey"):
+        if "Patch" in db or db == "sonMus0" or db.startswith("braNey") or db.endswith(".lowec"):
             continue
 
         subDir = join(inDir, db)
@@ -167,17 +173,26 @@ def main():
     " entry point to script "
     args, options = parseArgs()
 
-    indexFname = expanduser("~/.guessAssembly.txt.gz")
+    indexFname = expanduser(options.indexFname)
     if options.index:
         buildIndex("/hive/data/genomes", indexFname)
     else:
         inFname = args[0]
         fileSizes = bigSizes(inFname)
 
-        sizeIndex = readSizeIndex(indexFname)
-        hits = findBestDb(sizeIndex, fileSizes)
+        if len(fileSizes) == 0:
+            logging.debug("%s is empty. Cannot determine assembly." % inFname)
+            hits = ( ("emptyFile", 0),  )
+        else:
+            sizeIndex = readSizeIndex(indexFname)
+            hits = findBestDb(sizeIndex, fileSizes)
+
         if options.best:
-            print(hits[0][0])
+            if len(hits)==0:
+                print("notFound")
+            else:
+                #if (len(hits[0][1]) >= 2): # need more than a single match, as chrM often matches
+                print(hits[0][0])
         else:
             printAllMatches(hits)
 
