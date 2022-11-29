@@ -720,8 +720,7 @@ release alpha
 track orphadata override
 urls ensemblID="https://ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=$$" pmid="https://pubmed.ncbi.nlm.nih.gov/$$" orphaCode="http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=en&Expert=$$" omim="https://www.omim.org/entry/$$?search=$$&highlight=$$" hgnc="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$"
 
-include dbSnpArchiveHg38.new.ra alpha,beta
-include dbSnpArchiveHg38.ra public
+include dbSnpArchiveHg38.ra
 include affyArchive.ra
 include genePredArchive.ra
 include tgpArchive.ra

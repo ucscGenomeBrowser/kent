@@ -2367,8 +2367,7 @@ skipFields mouseOver
 noScoreFilter on
 mouseOver $name, HI: $quantile
 
-include dbSnpArchiveHg19.new.ra alpha,beta
-include dbSnpArchiveHg19.ra public
+include dbSnpArchiveHg19.ra
 include affyArchive.ra
 include genePredArchive.ra
 include tgpArchive.ra
