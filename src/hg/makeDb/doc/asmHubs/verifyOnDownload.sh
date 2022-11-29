@@ -21,14 +21,18 @@ export doneCount=0
 export fileName=`basename $orderList`
 export subset=${fileName%.orderList.tsv}
 
-export minTrackCount=12
+export minTrackCount=11
 if [ "${subset}" == "invertebrate" ]; then
   minTrackCount=9
 elif [ "${subset}" == "bacteria" ]; then
   minTrackCount=9
+elif [ "${subset}" == "legacy" ]; then
+  minTrackCount=9
 elif [ "${subset}" == "plants" ]; then
   minTrackCount=11
 elif [ "${subset}" == "birds" ]; then
+  minTrackCount=11
+elif [ "${subset}" == "fish" ]; then
   minTrackCount=11
 elif [ "${subset}" == "mammals" ]; then
   minTrackCount=9

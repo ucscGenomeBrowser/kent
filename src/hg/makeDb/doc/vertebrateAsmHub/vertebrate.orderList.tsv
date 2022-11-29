@@ -31,12 +31,15 @@ GCF_000090745.1_AnoCar2.0	green anole
 GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 2021)
 GCF_000935625.1_ASM93562v1	High Himalaya frog
 GCF_004798865.1_ASM479886v1	Komodo dragon (SLA01 2019)
+GCA_024294585.1_rVipLat1.pri	Lataste's viper (rVipLat1 2022 VGP)
 GCF_009764565.3_rDerCor1.pri.v4	leatherback sea turtle (v4 2021 refseq G10K VGP)
 GCA_009762595.1_rDerCor1.alt	leatherback sea turtle (alt pseudohaplotype 2019 VGP)
 GCF_023653815.1_GSC_CCare_1.0	loggerhead turtle (SJ_126:Eziel1 2022)
 GCF_900518725.1_TS10Xv2-PRI	mainland tiger snake
 GCA_014337955.1_AspMar1.0	marbled whiptail (SIMRID8450 2020)
-GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (rGopFla2 2022 VGP)
+GCA_947247035.1_rVipUrs1.1	meadow viper (2022 VGP)
+GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (WGS:JAMKFC01 2022 VGP)
+GCA_025201965.1_rGopFla2.pat.asm	Mexican gopher tortoise (WGS:JAMKFD01 2022 VGP)
 GCF_017654505.1_ASM1765450v1	Mississippi paddlefish
 GCF_013100865.1_CAS_Tse_1.0	red-eared slider turtle
 GCF_900747795.1_fErpCal1.1	reedfish

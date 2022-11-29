@@ -20,7 +20,9 @@ GCF_000165445.2_Mmur_3.0	gray mouse lemur
 GCF_000409795.2_Chlorocebus_sabeus_1.1	green monkey 1994-021 (2014 refseq)
 GCF_015252025.1_Vero_WHO_p1.0	green monkey WHO RCB 10-87
 GCA_004025065.1_SemEnt_v1_BIUU	Hanuman langur
-GCF_000001405.39_GRCh38.p13	human
+GCF_000001405.39_GRCh38.p13	human (GRCh38.p13 2019)
+GCA_016700455.2_mHomSap3.pat	human (WGS:JACSEW01 2021 VGP alt pseudohaplotype)
+GCA_016695395.2_mHomSap3.mat	human (WGS:JACSEX01 2021 VGP)
 # GCF_000001405.40_GRCh38.p14	human
 # GCA_009914755.4_CHM13_T2T_v2.0	human CHM13 T2T v2.0
 # GCA_009914755.4_T2T-CHM13v2.0	human T2T CHM13 v2.0

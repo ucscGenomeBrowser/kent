@@ -2,17 +2,23 @@ GCA_009769605.1_bBucAby1.pri	Abyssinian ground-hornbill
 GCA_009819775.1_bPhoRub2.pri	American flamingo
 GCF_018492685.1_fAloSap1.pri	American shad
 GCA_003957555.2_bCalAnn1_v1.p	Anna's hummingbird
+GCA_946808225.1_fSilAri3.1	Aristotle's catfish (2022 VGP)
 GCF_900964775.1_fSclFor1.1	Asian bonytongue
 GCF_024166365.1_mEleMax1_primary_haplotype	Asiatic elephant (2022 VGP)
 GCF_902167405.1_gadMor3.0	Atlantic cod
 GCF_009819705.1_fHipHip1.pri	Atlantic halibut (refseq)
+GCA_905171665.2_fTraTra1.2	Atlantic horse mackerel (2021 VGP)
 GCF_015852505.1_mTacAcu1.pri	Australian echidna
 GCF_017976425.1_fToxJac2.pri	banded archerfish
+GCA_936440315.1_fBarBab1.1	barbel (2022 VGP)
 GCF_015227805.1_bHirRus1.pri.v2	barn swallow
+GCA_020826845.1_mDicBic1.mat.cur	black rhinoceros (2021 VGP)
 GCA_009819655.1_bSylAtr1.pri	blackcap
+GCA_025265405.1_mMesDen1_primary_haplotype	Blainville's beaked whale ( 2022 VGP)
 GCF_009873245.2_mBalMus1.pri.v3	blue whale
 GCF_900634775.1_fGouWil2.1	blunt-snouted clingfish
 GCF_017639745.1_fMelBoe1.pri	Boeseman's rainbowfish
+GCA_933228915.1_fTelBon1.1	bonti-bonti (T.bonti 2022 VGP)
 GCF_905147365.1_ilAriAges1.1	brown argus butterfly
 GCF_020382885.2_fScaArg1.pri	butterfish (2021 G10K VGP)
 GCF_009762305.2_mZalCal1.pri.v2	California sea lion
@@ -22,11 +28,14 @@ GCF_900634415.1_fCotGob3.1	channel bull blenny
 GCF_900324465.2_fAnaTes1.2	climbing perch
 GCF_011100635.1_mTriVul1.pri	common brushtail
 GCA_017976375.1_bCucCan1.pri	common cuckoo (VGP 2021)
+GCA_903992545.1_mPipPip1.1	common pipistrelle (2020 VGP)
 GCF_020740795.1_bApuApu2.pri.cur	common swift (bApuApu2 2021 VGP refseq)
 GCA_009819605.1_bSteHir1.pri	common tern
 GCF_905171765.1_aBufBuf1.1	common toad
 GCA_009764595.1_bGeoTri1.pri	common yellowthroat
+GCA_020510985.1_fPhoLeu1.pri	convict blenny (chichlid 2021 VGP)
 GCF_017976325.1_fCheRos1.pri	copperband butterflyfish
+GCA_020745685.1_fTauAds1.pri.cur	cunner (2021 VGP)
 GCF_021462225.1_DD_fGirMul_XY1	dark-edged splitfin (DD_20200921_A 2022 VGP)
 GCF_900700375.1_fDenClu1.1	denticle herring
 GCA_014839835.1_bDryPub1.pri	downy woodpecker (VGP 2020)
@@ -36,6 +45,7 @@ GCF_014176215.1_mRouAeg1.p	Egyptian rousette
 GCF_013358815.1_fEleEle1.pri	electric eel
 GCA_016128335.1_ZJU1.0	emu (2020)
 GCF_009829155.1_mMusErm1.Pri	ermine
+GCA_922990625.1_mMelMel3.1_maternal_haplotype_uncurated	Eurasian badger (2021 VGP)
 GCA_907165065.1_bCapEur3.1	Eurasian nightjar
 GCA_902686455.1_mSciVul1.1	Eurasian red squirrel
 GCF_902655055.1_mLutLut1.2	Eurasian river otter (2020 VGP)
@@ -46,7 +56,9 @@ GCA_017639485.1_bPluApr1.pri	European golden plover
 GCA_903797595.2_bEriRub2.2	European robin
 GCF_902459465.1_eAstRub1.3	European starfish
 GCA_901699155.2_bStrTur1.2	European turtle dove (v1.2 2021 VGP)
+GCA_947179515.1_mApoSyl1.1	European woodmouse (2022 VGP)
 GCF_007364275.1_fArcCen1	flier cichlid
+GCA_014839995.1_fXenCan1.pri	freshwater garfish (fXenCan1 2020 VGP)
 GCF_902459505.1_aGeoSer1.1	Gabon caecilian
 GCA_014839755.1_bSylBor1.pri	garden warbler
 GCF_900880675.1_fSpaAur1.1	gilthead seabream
@@ -54,6 +66,7 @@ GCF_900496995.4_bAquChr1.4	golden eagle (2021)
 GCF_903995435.1_mAcoRus1.1	golden spiny mouse (2020 VGP)
 GCF_007399415.2_rGopEvg1_v1.p	Goodes thornscrub tortoise
 GCF_902686445.1_mSciCar1.2	gray squirrel (2020 VGP)
+GCA_905319855.2_mCanLor1.2	gray wolf (2021 VGP)
 GCA_013368605.1_bNycGra1.pri	great potoo
 GCF_902652985.1_xPecMax1.1	great scallop
 GCF_017639515.1_sCarCar2.pri	great white shark
@@ -64,6 +77,7 @@ GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 2021)
 GCF_015220075.1_bFalRus1.pri	gyrfalcon
 GCF_020740725.1_bCorHaw1.pri.cur	Hawaiian crow (2021 refseq VGP)
 GCF_015220745.1_fSebUmb1.pri	honeycomb rockfish
+GCA_016695395.2_mHomSap3.mat	human (WGS:JACSEX01 2021 VGP)
 GCA_003369685.2_UOA_Angus_1	hybrid cattle
 GCF_003369695.1_UOA_Brahman_1	hybrid cattle
 GCF_900634625.1_fParRan2.1	Indian glassy fish
@@ -73,14 +87,20 @@ GCF_004027225.2_bStrHab1.2.pri	Kakapo
 GCF_009829125.1_fPerMag1.pri	Korean giant-fin mudskipper (refseq)
 GCF_014108245.1_mPipKuh1.p	Kuhl's pipistrelle
 GCF_009829145.1_bChiLan1.pri	lance-tailed manakin
+GCA_023638135.1_bFalBia1.pri	lanner falcon (2022 VGP)
+GCA_014839685.1_fAnaAna1.pri	largescale foureyes (2020 VGP)
+GCA_024294585.1_rVipLat1.pri	Lataste's viper (rVipLat1 2022 VGP)
 GCF_009764565.3_rDerCor1.pri.v4	leatherback sea turtle (v4 2021 refseq G10K VGP)
 GCF_020740685.1_mJacJac1.mat.Y.cur	lesser Egyptian jerboa (2021 VGP)
-GCF_017639655.2_bFalNau1.pat	lesser kestrel
+GCF_017639655.2_bFalNau1.pat	lesser kestrel (v2 2021 VGP)
 GCF_900963305.1_fEcheNa1.1	live sharksucker
+GCA_910589615.1_fTauBub2.1	longspined bullhead (2021 VGP)
 GCF_009769545.1_fCycLum1.pri	lumpfish (refseq)
 GCA_017639555.1_bCicMag1.pri	maguari stork (2021 VGP)
 GCF_015476345.1_ZJU1.0	mallard (Pekin duck Z2 2020 Zhejiang U)
-GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (rGopFla2 2022 VGP)
+GCA_947247035.1_rVipUrs1.1	meadow viper (2022 VGP)
+GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (WGS:JAMKFC01 2022 VGP)
+GCA_025201965.1_rGopFla2.pat.asm	Mexican gopher tortoise (WGS:JAMKFD01 2022 VGP)
 GCF_902362185.1_fChaCha1.1	milkfish
 GCF_019393635.1_mDroGli1.pri	monito del monte (2021 VGP)
 GCF_009769625.2_bCygOlo1.pri.v2	mute swan (v2 2021)
@@ -91,6 +111,8 @@ GCF_015227675.2_mRatBN7.2	Norway rat BN7.2
 GCF_902148855.1_fSphaOr1.1	orbiculate cardinalfish
 GCF_004126475.2_mPhyDis1.pri.v3	pale spear-nosed bat
 GCF_014108415.1_mMolMol1.p	Pallas's mastiff bat
+GCA_017639675.1_fAplTae1.pri	peladilla (galaxoid fish 2021 VGP)
+GCA_023634155.1_bFalPer1.pri	peregrine falcon (2022 VGP)
 GCF_902150065.1_fMyrMur1.1	pinecone soldierfish
 GCF_004115215.2_mOrnAna1.pri.v4	platypus (v4 2020)
 GCA_020745775.1_bTheCae1.pri.cur	plumbeous ibis (2021 VGP)
@@ -105,6 +127,8 @@ GCA_009819825.1_bCarCri1.pri	red-legged seriema
 GCF_900747795.1_fErpCal1.1	reedfish
 GCA_016904835.1_bAcaChl1.pri	rifleman (VGP 2021)
 GCF_901001165.1_fSalTru1.1	river trout
+GCA_910591455.2_fPhoGun1.2	rock gunnel (2021 VGP)
+GCA_023634085.1_bFalChe1.pri	Saker falcon (2022 VGP)
 GCF_009819535.1_rLacAgi1.pri	sand lizard
 GCF_010993605.1_kPetMar1.pri	sea lamprey
 GCF_900634795.3_fBetSpl5.3	Siamese fighting fish (2020)
@@ -112,8 +136,10 @@ GCA_009764475.1_sPriPec2.pri	smalltooth sawfish
 GCA_020800305.1_bPorHoc1.mat.Z.cur	South Island takahe (VGP primary 2021)
 GCF_910596095.1_fThuMac1.1	southern bluefin tuna (2021 VGP)
 GCF_903995425.1_mOncTor1.1	southern grasshopper mouse
+GCA_023851605.1_mTamTet1.pri	southern tamandua (2022 VGP)
 GCF_015220235.1_mChoDid1.pri	southern two-toed sloth
 GCF_905163445.1_ilParAegt1.1	specked wood butterfly
+GCA_947034865.1_fBarBar1.1	stone loach (2022 VGP)
 GCA_020746105.1_bTroSur1.pri.cur	Suruca trogon (2021 VGP)
 GCF_009819885.2_bCatUst1.pri.v2	Swainson's thrush (v2 2020 VGP)
 GCF_010909765.2_sAmbRad1.1.pri	thorny skate (v2 2020)
@@ -122,6 +148,7 @@ GCF_901000725.2_fTakRub1.2	torafugu
 GCF_009819795.1_bAytFul2.pri	tufted duck
 GCF_901001135.1_aRhiBiv1.1	two-lined caecilian
 GCF_008692025.1_mPhoSin1.pri	vaquita
+GCA_013358685.1_fAntMac1.pri	warty frogfish (2020 VGP)
 GCF_904848185.1_fAcaLat1.1	yellowfin seabream
 GCF_009769535.1_rThaEle1.pri	Western terrestrial garter snake
 GCA_020745705.1_bHemCom1.pri.cur	whiskered treeswift (2021 VGP)
@@ -129,4 +156,7 @@ GCF_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w	white leghorn X broiler ch
 GCA_009769525.1_bPteGut1.pri	yellow-throated sandgrouse
 GCF_914725855.1_fThuAlb1.1	yellowfin tuna (2021 VGP)
 GCF_003957565.2_bTaeGut1.4.pri	zebra finch (refseq 2021 Blue55 female)
+GCA_903684865.1_fDreABH1.1	zebrafish (WGS:CAHPTA01 2020 VGP)
+GCA_903684855.2_fDreTuH1.2	zebrafish (WGS:CAHPTB02 2020 VGP)
+GCA_944039275.1_fDanRer4.1	zebrafish (WGS:CALUEM01 2022 VGP)
 GCF_900324485.2_fMasArm1.2	zig-zag eel

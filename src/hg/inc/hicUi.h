@@ -33,6 +33,7 @@
 #define HIC_DRAW_MODE_SQUARE        "square"
 #define HIC_DRAW_MODE_ARC           "arc"
 #define HIC_DRAW_MODE_DEFAULT       HIC_DRAW_MODE_TRIANGLE
+#define HIC_DRAW_INVERTED           "inverted"
 #define HIC_NORMALIZATION           "normalization"
 #define HIC_RESOLUTION              "resolution"
 #define HIC_DRAW_AUTOSCALE          "autoscale"
@@ -79,6 +80,11 @@ void hicUiNormalizationDropDown(struct cart *cart, struct trackDb *tdb, struct h
 char *hicUiFetchDrawMode(struct cart *cart, struct trackDb *tdb);
 /* Return the current draw mode selection, or the default if none
  * has been selected. */
+
+boolean hicUiFetchInverted(struct cart *cart, struct trackDb *tdb);
+/* Check if the user has set this track to draw in inverted mode.
+ * Ideally this would also be available via a trackDb setting, but
+ * this is the first pass at this feature. */
 
 char *hicUiFetchDrawColor(struct cart *cart, struct trackDb *tdb);
 /* Retrieve the HTML hex code for the color to draw the

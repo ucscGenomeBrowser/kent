@@ -288,6 +288,7 @@ int maxHeight = tg->height;
 struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
 int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
+boolean invert = hicUiFetchInverted(cart, tg->tdb);
 
 yScale *= hicSqueezeFactor(vis);
 
@@ -311,22 +312,30 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
     // left point of the diamond
     double x = xScale * (leftStart+rightStart)/2.0;
     double y = yScale * (rightStart-leftStart)/2.0;
-    gfxPolyAddPoint(diamond, (int)x+xOff, maxHeight-(int)y+yOff);
+    if (!invert)
+        y = maxHeight-(int)y;
+    gfxPolyAddPoint(diamond, (int)x+xOff, (int)y+yOff);
 
     // top point of the diamond
     x = xScale * (leftStart+rightEnd)/2.0;
     y = yScale * (rightEnd-leftStart)/2.0;
-    gfxPolyAddPoint(diamond, (int)x+xOff, maxHeight-(int)y+yOff);
+    if (!invert)
+        y = maxHeight-(int)y;
+    gfxPolyAddPoint(diamond, (int)x+xOff, (int)y+yOff);
 
     // right point of the diamond
     x = xScale * ((leftEnd + rightEnd)/2.0);
     y = yScale * (rightEnd-leftEnd)/2.0;
-    gfxPolyAddPoint(diamond, (int)x+xOff, maxHeight-(int)y+yOff);
+    if (!invert)
+        y = maxHeight-(int)y;
+    gfxPolyAddPoint(diamond, (int)x+xOff, (int)y+yOff);
 
     // bottom point of the diamond
     x = xScale * (leftEnd+rightStart)/2.0;
     y = yScale * (rightStart-leftEnd)/2.0;
-    gfxPolyAddPoint(diamond, (int)x+xOff, maxHeight-(int)y+yOff);
+    if (!invert)
+        y = maxHeight-(int)y;
+    gfxPolyAddPoint(diamond, (int)x+xOff, (int)y+yOff);
     hvGfxDrawPoly(hvg, diamond, colorIx, TRUE);
     gfxPolyFree(&diamond);
     }
@@ -345,6 +354,7 @@ int maxHeight = tg->height;
 struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
 int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
+boolean invert = hicUiFetchInverted(cart, tg->tdb);
 if (binSize == 0)
     return;
 
@@ -367,17 +377,26 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
         colorIx = colorIxs[(int)(HIC_SCORE_BINS * hicItem->value/maxScore)];
     double x = xScale * leftStart;
     double y = yScale * ((winEnd-winStart)-rightStart);
-    hvGfxBox(hvg, (int)x+xOff, maxHeight-(int)y+yOff, (int)(xScale*(leftEnd-leftStart))+1, (int)(yScale*(rightEnd-rightStart))+1, colorIx);
+    y = maxHeight-(int)y;
+    if (invert)  // when inverted, the top left of the box corresponds to rightEnd instead of rightStart
+        y = yScale * ((winEnd-winStart)-rightEnd);
+    hvGfxBox(hvg, (int)x+xOff, (int)y+yOff, (int)(xScale*(leftEnd-leftStart))+1, (int)(yScale*(rightEnd-rightStart))+1, colorIx);
     if (leftStart != rightStart)
         {
         x = xScale * rightStart;
         y = yScale * ((winEnd-winStart)-leftStart);
-        hvGfxBox(hvg, (int)x+xOff, maxHeight-(int)y+yOff, (int)(xScale*(rightEnd-rightStart))+1, (int)(yScale*(leftEnd-leftStart))+1, colorIx);
+        y = maxHeight-(int)y;
+        if (invert)
+            y = yScale * ((winEnd-winStart)-leftEnd);
+        hvGfxBox(hvg, (int)x+xOff, (int)y+yOff, (int)(xScale*(rightEnd-rightStart))+1, (int)(yScale*(leftEnd-leftStart))+1, colorIx);
         }
     }
     // Draw top-left to bottom-right diagonal axis line in black
     int colorIx = hvGfxFindColorIx(hvg, 0, 0, 0);
-    hvGfxLine(hvg, xOff, yOff, ((winEnd-winStart)*xScale)+xOff, maxHeight+yOff, colorIx);
+    if (invert)  // Draw bottom-left to top-right instead
+        hvGfxLine(hvg, xOff, maxHeight+yOff, ((winEnd-winStart)*xScale)+xOff, yOff, colorIx);
+    else
+        hvGfxLine(hvg, xOff, yOff, ((winEnd-winStart)*xScale)+xOff, maxHeight+yOff, colorIx);
 }
 
 
@@ -404,6 +423,7 @@ int maxHeight = tg->height;
 struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
 int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
+boolean invert = hicUiFetchInverted(cart, tg->tdb);
 if (binSize == 0)
     return;
 
@@ -436,9 +456,14 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
     double rightx = xScale * rightMidpoint;
     double midx = xScale * (rightMidpoint+leftMidpoint)/2.0;
     double midy = yScale * (rightMidpoint-leftMidpoint)/2.0;
+    if (!invert)
+        midy = maxHeight-(int)midy;
     midy *= 1.5; // Heuristic scaling for better use of vertical space
-    hvGfxCurve(hvg, (int)leftx+xOff, maxHeight+yOff, (int)midx+xOff, maxHeight-(int)midy+yOff,
-            (int)rightx+xOff, maxHeight+yOff, colorIx, FALSE);
+    int lefty = maxHeight, righty = maxHeight; // the height of the endpoints
+    if (invert)
+        lefty = righty = 0;
+    hvGfxCurve(hvg, (int)leftx+xOff, lefty+yOff, (int)midx+xOff, midy+yOff,
+            (int)rightx+xOff, righty+yOff, colorIx, FALSE);
     }
 }
 

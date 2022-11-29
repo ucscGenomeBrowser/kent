@@ -19,7 +19,7 @@ my %chrNames;	# key is UCSC chrom name, value is number of times seen
 
 while (my $file = shift @ARGV) {
   my $name = $file;
-  $name =~ s/ucsc.//;
+  $name =~ s/^[^.]+.//;
   $name =~ s/.tab//;
   printf STDERR "# working: %s\n", $name;
   my $namePtr;
