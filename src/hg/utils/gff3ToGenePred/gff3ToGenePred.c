@@ -379,6 +379,15 @@ for(attr=ann->attrs; attr; attr=attr->next)
         }
     fputc('\n', outAttrsFp);
     }
+// include some basic info from GFF3 fixed fields, capitalize
+// to prevent any conflicts with attributes, capitalize attributes
+// are reserved
+fprintf(outAttrsFp, "Seqid\t%s\n", ann->seqid);
+fprintf(outAttrsFp, "Source\t%s\n", ann->source);
+fprintf(outAttrsFp, "Type\t%s\n", ann->type);
+fprintf(outAttrsFp, "Start\t%u\n", ann->start);
+fprintf(outAttrsFp, "End\t%u\n", ann->end);
+fprintf(outAttrsFp, "Strand\t%s\n", ann->strand);
 }
 
 static void outputGenePred(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
