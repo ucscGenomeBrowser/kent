@@ -884,7 +884,6 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
             {
             hashReplace(td->settingsHash, "shortLabel", cloneString(td->shortLabel));
             hashReplace(td->settingsHash, "longLabel", cloneString(td->longLabel));
-            hashReplace(td->settingsHash, "html", cloneString(td->html));
             }
         }
     carefulClose(&f);
