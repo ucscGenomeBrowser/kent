@@ -382,12 +382,12 @@ for(attr=ann->attrs; attr; attr=attr->next)
 // include some basic info from GFF3 fixed fields, capitalize
 // to prevent any conflicts with attributes, capitalize attributes
 // are reserved
-fprintf(outAttrsFp, "Seqid\t%s\n", ann->seqid);
-fprintf(outAttrsFp, "Source\t%s\n", ann->source);
-fprintf(outAttrsFp, "Type\t%s\n", ann->type);
-fprintf(outAttrsFp, "Start\t%u\n", ann->start);
-fprintf(outAttrsFp, "End\t%u\n", ann->end);
-fprintf(outAttrsFp, "Strand\t%s\n", ann->strand);
+fprintf(outAttrsFp, "%s\tSeqid\t%s\n", name, ann->seqid);
+fprintf(outAttrsFp, "%s\tSource\t%s\n", name, ann->source);
+fprintf(outAttrsFp, "%s\tType\t%s\n", name, ann->type);
+fprintf(outAttrsFp, "%s\tStart\t%u\n", name, ann->start);
+fprintf(outAttrsFp, "%s\tEnd\t%u\n", name, ann->end);
+fprintf(outAttrsFp, "%s\tStrand\t%s\n", name, ann->strand);
 }
 
 static void outputGenePred(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
