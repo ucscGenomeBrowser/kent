@@ -74,7 +74,13 @@ def buildIndex(inDir, outFname):
     """ go over all direct subdirectories of inDir and find a chrom.sizes file,
     compact it to format db -> list of (chrom,size) and write to outFname """
     allSizes = dict()
-    for db in os.listdir(inDir):
+
+    import json # this is not style guide conform, but makes sure that these packages don't lead to problems for users of this script
+    from six.moves import urllib # works in python2 and 3
+
+    apiData = json.load(urllib.request.urlopen("https://api.genome.ucsc.edu/list/ucscGenomes"))
+
+    for db in apiData["ucscGenomes"]:
         if "Patch" in db or db == "sonMus0" or db.startswith("braNey") or db.endswith(".lowec"):
             continue
 
