@@ -119,6 +119,7 @@
 ./runBuild GCA_003344405.1_TrispH2_1.0 invertebrate Trichoplax_sp._H2
 ./runBuild GCA_003369685.2_UOA_Angus_1 mammals Bos_indicus_x_Bos_taurus
 ./runBuild GCA_003413605.1_Chrysolophus_pictus_GenomeV1.0 birds Chrysolophus_pictus
+./runBuild GCA_003660325.2_Oct15_3.7Mb_N50_Jamaican_Lion_Assembly plants Cannabis_sativa
 ./runBuild GCA_003957525.1_bTaeGut1_v1.h birds Taeniopygia_guttata
 ./runBuild GCA_003957555.2_bCalAnn1_v1.p birds Calypte_anna
 ./runBuild GCA_003957565.2_bTaeGut1_v1.p birds Taeniopygia_guttata
