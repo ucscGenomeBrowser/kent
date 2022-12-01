@@ -274,14 +274,18 @@ ifneq ($(MAKECMDGOALS),clean)
     endif
   endif
   ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.8.3_1/lib/libmariadbclient.a),)
-         MYSQLLIBS+=/usr/local/Cellar/mariadb/10.8.3_1/lib/libmariadbclient.a
+    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.9.4/lib/libmariadbclient.a),)
+         MYSQLLIBS+=/usr/local/Cellar/mariadb/10.9.4/lib/libmariadbclient.a
     else
-      ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a),)
-         MYSQLLIBS+=/usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a
+      ifneq ($(wildcard /usr/local/Cellar/mariadb/10.8.3_1/lib/libmariadbclient.a),)
+           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.8.3_1/lib/libmariadbclient.a
       else
-        ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
-         MYSQLLIBS+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
+        ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a),)
+           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a
+        else
+          ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
+           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
+	  endif
         endif
       endif
     endif
@@ -381,14 +385,18 @@ endif
 L += $(kentSrc)/htslib/libhts.a
 
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
-ifneq ($(wildcard /usr/local/Cellar/mariadb/10.8.3_1/include/mysql/mysql.h),)
-    HG_INC+=-I/usr/local/Cellar/mariadb/10.8.3_1/include/mysql
+ifneq ($(wildcard /usr/local/Cellar/mariadb/10.9.4/include/mysql/mysql.h),)
+    HG_INC+=-I/usr/local/Cellar/mariadb/10.9.4/include/mysql
 else
-  ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/include/mysql/mysql.h),)
-    HG_INC+=-I/usr/local/Cellar/mariadb/10.6.4/include/mysql
+  ifneq ($(wildcard /usr/local/Cellar/mariadb/10.8.3_1/include/mysql/mysql.h),)
+      HG_INC+=-I/usr/local/Cellar/mariadb/10.8.3_1/include/mysql
   else
-    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
-      HG_INC+=-I/usr/local/Cellar/mariadb/10.4.12/include/mysql
+    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/include/mysql/mysql.h),)
+      HG_INC+=-I/usr/local/Cellar/mariadb/10.6.4/include/mysql
+    else
+      ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
+        HG_INC+=-I/usr/local/Cellar/mariadb/10.4.12/include/mysql
+      endif
     endif
   endif
 endif
