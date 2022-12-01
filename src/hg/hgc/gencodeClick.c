@@ -507,6 +507,12 @@ if (!isEmpty(transAttrs->ccdsId))
     printf("\" target=_blank>%s</a>", transAttrs->ccdsId);
     }
 printf("<td></tr>\n");
+if (transAttrs->transcriptRank > 0)
+    {
+    // older versions will have rank of zero
+    printf("<tr><th>Transcript rank<td>%d<td></tr>\n",
+           transAttrs->transcriptRank);
+    }
 
 if (isProteinCodingTrans(transAttrs))
     writeAprrisRow(conn, tdb, transAttrs, tags);
