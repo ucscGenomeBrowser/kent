@@ -5,7 +5,7 @@
 # the base of the Omicron branch.
 
 # Some bad sequences are assigned 19A, 20A, 20B but have a suspicious number of Omicron muts.
-# Others are assigned Omicron (21K, 21L, 21M) but have a lot of reversions.
+# Others are assigned Omicron (21K, 21L, 21M, 22*) but have a lot of reversions.
 
 use warnings;
 use strict;
@@ -31,7 +31,7 @@ my $ambigIx = 30;
 
 sub cladeIsOmicron($) {
   my ($clade) = @_;
-  return $clade =~ /^21[KLM]/;
+  return $clade =~ /^(21[KLM]|22|recombinant)/;
 }
 
 sub reversionCount($$) {
