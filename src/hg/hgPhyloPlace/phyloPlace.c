@@ -2521,19 +2521,17 @@ static void maybeAddIsolate(struct hash *nameHash, char *name, char *fullName)
 /* If name looks like country/isolate/year and isolate looks sufficiently distinctive
  * then also map isolate to fullName. */
 {
-regmatch_t substrs[2];
-if (regexMatchSubstr(name, "^[A-Za-z _]+/(.*)/[0-9]{4}$", substrs, ArraySize(substrs)))
+char *firstSlash = strchr(name, '/');
+char *lastSlash = strrchr(name, '/');
+if (firstSlash && lastSlash && (lastSlash - firstSlash) >= 4)
     {
-    char isolate[substrs[1].rm_eo - substrs[1].rm_so + 1];
-    regexSubstringCopy(name, substrs[1], isolate, sizeof isolate);
-    if (! isInternalNodeName(isolate, 0) &&
-        (regexMatch(isolate, "[A-Za-z0-9]{4}") ||
-         regexMatch(isolate, "[A-Za-z0-9][A-Za-z0-9]+[-_][A-Za-z0-9][A-Za-z0-9]+")))
-        {
-        hashAdd(nameHash, isolate, fullName);
-        }
+    int len = strlen(name);
+    char isolate[len+1];
+    safencpy(isolate, sizeof isolate, firstSlash+1, lastSlash - firstSlash - 1);
+    hashAdd(nameHash, isolate, fullName);
     }
 }
+
 static void addNameMaybeComponents(struct hash *nameHash, char *fullName, boolean addComponents)
 /* Add entries to nameHash mapping fullName to itself, and components of fullName to fullName.
  * If addComponents and fullName is |-separated name|ID|date, add name and ID to nameHash. */
