@@ -172,9 +172,9 @@ struct usherResults *runUsher(char *db, char *usherPath, char *usherAssignmentsP
  * and parse other results out of stderr output.  The usher-sampled version of usher might
  * modify userSampleIds, adding a prefix if a sample with the same name is already in the tree. */
 
-struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
+struct usherResults *runMatUtilsExtractSubtrees(char *db, char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
-                                                int *pStartTime);
+                                                struct treeChoices *treeChoices, int *pStartTime);
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */

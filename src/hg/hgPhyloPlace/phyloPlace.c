@@ -2976,8 +2976,8 @@ if (vcfTn)
 else if (subtreesOnly)
     {
     char *matUtilsPath = getMatUtilsPath(TRUE);
-    results = runMatUtilsExtractSubtrees(matUtilsPath, protobufPath, subtreeSize,
-                                         sampleIds, &startTime);
+    results = runMatUtilsExtractSubtrees(db, matUtilsPath, protobufPath, subtreeSize,
+                                         sampleIds, treeChoices, &startTime);
     }
 
 struct hash *sampleMetadata = NULL;
