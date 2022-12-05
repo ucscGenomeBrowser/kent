@@ -116,6 +116,9 @@ usher_to_taxonium --input public-$today.all.masked.pb \
     --metadata public-$today.metadata.tsv.gz \
     --genbank ~angie/github/taxonium/taxoniumtools/test_data/hu1.gb \
     --columns genbank_accession,country,date,pangolin_lineage,pango_lineage_usher \
+    --clade_types=nextstrain,pango \
+    --name_internal_nodes \
+    --title "$today tree with sequences from GISAID, INSDC, COG-UK and CNCB" \
     --output public-$today.all.masked.taxonium.jsonl.gz
 
 # Link to public trees download directory hierarchy
@@ -152,10 +155,12 @@ mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2
 ln -sf $archive /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2/$y/$m
 
 # Update links to latest public protobuf and metadata in hgwdev cgi-bin directories
+pigz -p 8 -c samples.public.$today > samples.public.$today.gz
 for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/public-$today.all.masked.pb $dir/public-latest.all.masked.pb
     ln -sf `pwd`/public-$today.metadata.tsv.gz $dir/public-latest.metadata.tsv.gz
     ln -sf `pwd`/hgPhyloPlace.description.txt $dir/public-latest.version.txt
+    ln -sf `pwd`/samples.public.$today.gz $dir/public-latest.names.gz
 done
 
 # Update MSA and make tree version with only MSA sequences

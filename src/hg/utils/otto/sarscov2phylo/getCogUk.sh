@@ -23,7 +23,7 @@ cd $ottoDir/cogUk.$today
 function curlRetry {
     local url=$*
     local attempt=0
-    local maxAttempts=5
+    local maxAttempts=100
     local retryDelay=60
     while [[ $((++attempt)) -le $maxAttempts ]]; do
         echo "curl attempt $attempt"
@@ -42,7 +42,7 @@ function curlRetry {
 
 curlRetry $cogUrlBase/cog_all.fasta.gz
 curlRetry $cogUrlBase/cog_metadata.csv.gz
-gunzip cog_metadata.csv.gz
+gunzip -f cog_metadata.csv.gz
 curlRetry $cogUrlBase/cog_global_tree.newick
 
 zcat cog_all.fasta.gz | xz -T 20 > cog_all.fasta.xz

@@ -138,11 +138,11 @@ if (!useOldFonts && require("showtext",character.only=TRUE, quietly=TRUE)) {
 }
 
 # read colors file
-colorDf = read.table(colorFile, sep="\t", header=TRUE)
+colorDf = read.table(colorFile, sep="\t", header=TRUE, comment.char="")
 colorsHex <- paste("#",as.character(as.hexmode(colorDf$color)), sep="")
 
 # order categories as in colors file
-df <- read.table(dataFile, sep="\t", header=TRUE)
+df <- read.table(dataFile, sep="\t", header=TRUE, comment.char="")
 # ensure colors df and data df have consistent spacing:
 colorDf$category <- gsub("_", " ", colorDf$category)
 df$category <- gsub("_", " ", df$category)
