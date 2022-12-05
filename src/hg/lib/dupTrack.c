@@ -21,7 +21,8 @@ char *dupTrackSkipToSourceName(char *dupeTrackName)
  * in particular skip over dup_N_ form prefix for numerical N. */
 {
 char *name = dupeTrackName;
-if (startsWith(DUP_TRACK_PREFIX, name))
+
+if ((name != NULL ) && startsWith(DUP_TRACK_PREFIX, name))
     {
     char *s = name + strlen(DUP_TRACK_PREFIX);
     if (isdigit(s[0]))
