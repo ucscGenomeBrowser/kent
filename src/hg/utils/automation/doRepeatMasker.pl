@@ -343,9 +343,9 @@ _EOF_
   );
   if ($opt_useRMBlastn) {
     $bossScript->add(<<_EOF_
-printf "# using rmblastn:\\n" >> ../versionInfo.txt
+printf "# using rmblastn:\\t" >> ../versionInfo.txt
 echo "# useRMBlastn: rmblastn:"
-grep RMBLAST_DIR $RepeatMaskerPath/RepeatMaskerConfig.pm | grep rmblastn-2 | awk '{print \$NF}' >> ../versionInfo.txt
+grep -w value $RepeatMaskerPath/RepeatMaskerConfig.pm | grep rmblastn | awk '{print \$NF}' >> ../versionInfo.txt
 _EOF_
     );
   }
