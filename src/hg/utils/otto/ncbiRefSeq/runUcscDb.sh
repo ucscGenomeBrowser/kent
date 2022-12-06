@@ -57,7 +57,7 @@ cd $wrkDir
      printf "%s\n" "${srcSum}" > "${sumFile}"
      /hive/data/outside/ncbi/genomes/ncbiRefSeq/archiveOne.sh "${wrkDir}"
   fi
-else
-  prevCompleted $db
+# else
+#   prevCompleted $db
 fi
 
