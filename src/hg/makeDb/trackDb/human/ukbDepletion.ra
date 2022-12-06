@@ -10,3 +10,4 @@ maxHeightPixels 128:40:8
 bigDataUrl /gbdb/hg38/ukbDepletion/ukbDepletion.bw
 priority 10.5
 html constraintSuper
+pennantIcon New red ../goldenPath/newsarch.html#103122 "Released on Oct 31, 2022"
