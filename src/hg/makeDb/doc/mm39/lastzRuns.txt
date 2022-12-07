@@ -2319,3 +2319,94 @@ TMPDIR=/dev/shm
     # 892863094 bases of 2991710746 (29.845%) in intersection
 
 ##############################################################################
+# LASTZ Mouse Mm39 vs. Seba's short-tailed bat GCA_004027735.1 (DONE - 2022-10-10 - Gerardo)
+
+# should be able to run this from anywhere, this time it was run from:
+    cd kent/src/hg/utils/automation
+
+  time (~/kent/src/hg/utils/automation/pairLastz.sh \
+	mm39 GCA_004027735.1_CarPer_v1_BIUU mammal mammal) \
+	   > mm39.GCA_004027735.1_20221010.log 2>&1 &
+  # check the total time
+grep -w real  mm39.GCA_004027735.1_20221010.log  | tail -1 | sed -e 's/^/    # /;'
+    # real      4941m5.588s
+##############################################################################
+# LASTZ Mouse Mm39 vs. Seba's short-tailed bat GCA_004027735.1
+#    (DONE - 2022-10-10 - Gerardo)
+
+    mkdir /hive/data/genomes/mm39/bed/lastzGCA_004027735.1.2022-10-10
+    cd /hive/data/genomes/mm39/bed/lastzGCA_004027735.1.2022-10-10
+
+    printf '# Seba's short-tailed bat GCA_004027735.1 vs. Mouse Mm39
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Mouse  mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Seba's short-tailed bat 2019-01-16 GCA_004027735.1_CarPer_v1_BIUU
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCA/004/027/735/GCA_004027735.1/GCA_004027735.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCA/004/027/735/GCA_004027735.1/GCA_004027735.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm39/bed/lastzGCA_004027735.1.2022-10-10
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCA_004027735.1_CarPer_v1_BIUU -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	682m7.456s
+
+    sed -e 's/^/    # /;' fb.mm39.chainGCA_004027735.1Link.txt
+    # 646007750 bases of 2728222451 (23.679%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainSynGCA_004027735.1Link.txt
+    # 266104069 bases of 2728222451 (9.754%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCA/004/027/735/GCA_004027735.1/GCA_004027735.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/004/027/735/GCA_004027735.1/GCA_004027735.1.chrom.sizes.txt" \
+        mm39 GCA_004027735.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	514m58.090s
+
+    sed -e 's/^/    # /;' fb.mm39.chainRBest.GCA_004027735.1.txt
+    # 613273332 bases of 2728222451 (22.479%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCA/004/027/735/GCA_004027735.1_CarPer_v1_BIUU/trackData/blastz.mm39.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCA_004027735.1_CarPer_v1_BIUU /hive/data/genomes/mm39/bed/lastzGCA_004027735.1.2022-10-10/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	1925m11.716s
+
+    sed -e 's/^/    # /;' fb.GCA_004027735.1.chainMm39Link.txt
+    # 687442098 bases of 2689411905 (25.561%) in intersection
+    sed -e 's/^/    # /;' fb.GCA_004027735.1.chainSynMm39Link.txt
+    # 261303649 bases of 2689411905 (9.716%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCA/004/027/735/GCA_004027735.1/GCA_004027735.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCA/004/027/735/GCA_004027735.1/GCA_004027735.1.chrom.sizes.txt" \
+   GCA_004027735.1 mm39) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	1818m46.969s
+
+    sed -e 's/^/    # /;' fb.GCA_004027735.1.chainRBest.Mm39.txt
+    # 614276787 bases of 2689411905 (22.841%) in intersection
+
