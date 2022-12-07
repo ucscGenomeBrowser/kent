@@ -19,8 +19,14 @@ export dateStamp=`date "+%FT%T %s"`
 export asmId=$1
 export rmOutFile=$2
 export destDir=$3
+export chrSizes=""
 
-export chrSizes="../../$asmId.chrom.sizes"
+if [ -s "$destDir/$asmId.chrom.sizes" ]; then
+  chrSizes="$destDir/$asmId.chrom.sizes"
+elif [ -s "../../$asmId.chrom.sizes" ]; then
+  chrSizes="../../$asmId.chrom.sizes"
+fi
+
 # assume this file name pattern
 export faAlign=`echo "${rmOutFile}" | sed -e 's/sorted.fa.out/fa.align/; s/.gz//;'`
 export RepeatMaskerPath="/hive/data/staging/data/RepeatMasker210401"

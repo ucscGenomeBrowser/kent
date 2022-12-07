@@ -1148,7 +1148,7 @@ return socketFd;
 #define EOT 4
 
 static boolean sendQuery(int socketFd, char *cmd[], char *db, struct treeChoices *treeChoices,
-                         FILE *errFile)
+                         FILE *errFile, boolean addNoIgnorePrefix)
 /* Send command to socket, read response on socket, return TRUE if we get a successful response. */
 {
 boolean success = FALSE;
@@ -1161,8 +1161,9 @@ for (ix = 0;  cmd[ix] != NULL;  ix++)
         break;
     dyStringPrintf(dyMessage, "%s\n", cmd[ix]);
     }
-// But we do need --no-ignore-prefix:
-dyStringPrintf(dyMessage, "--no-ignore-prefix\n"USHER_DEDUP_PREFIX"\n");
+if (addNoIgnorePrefix)
+    // Needed when placing uploaded sequences, but not when finding uploaded names
+    dyStringPrintf(dyMessage, "--no-ignore-prefix\n"USHER_DEDUP_PREFIX"\n");
 dyStringAppendC(dyMessage, '\n');
 boolean serverError = FALSE;
 int bytesWritten = write(socketFd, dyMessage->string, dyMessage->stringSize);
@@ -1215,7 +1216,7 @@ if (serverIsConfigured(db))
     reportTiming(pStartTime, "get socket");
     if (serverSocket > 0)
         {
-        success = sendQuery(serverSocket, cmd, db, treeChoices, errFile);
+        success = sendQuery(serverSocket, cmd, db, treeChoices, errFile, TRUE);
         close(serverSocket);
         reportTiming(pStartTime, "send query");
         }
@@ -1289,7 +1290,7 @@ return results;
 static void addEmptyPlacements(struct slName *sampleIds, struct hash *samplePlacements)
 /* Parsing an usher-style clades.txt file from matUtils extract requires samplePlacements to
  * have placementInfo for each sample.  When running usher, those are added when we parse
- * usher stderr; when running matUtils, just allocate one for each sample. */
+ * placement_stats.tsv; when running matUtils, just allocate one for each sample. */
 {
 struct slName *sample;
 for (sample = sampleIds;  sample != NULL;  sample = sample->next)
@@ -1301,9 +1302,58 @@ for (sample = sampleIds;  sample != NULL;  sample = sample->next)
     }
 }
 
-struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
+static void runMatUtilsExtractCommand(char *matUtilsPath, char *protobufPath,
+                                      char *subtreeSizeStr, struct tempName *tnSamples,
+                                      struct tempName *tnOutDir, int *pStartTime)
+/* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
+ * containing sampleIds, save resulting subtrees to trash files, return subtree results.
+ * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
+{
+char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir->forCgi,
+                "-s", tnSamples->forCgi,
+                "-x", subtreeSizeStr, "-X", SINGLE_SUBTREE_SIZE, "-T", USHER_NUM_THREADS,
+                "--usher-clades-txt", NULL };
+char **cmds[] = { cmd, NULL };
+struct tempName tnStderr;
+trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
+pipelineClose(&pl);
+reportTiming(pStartTime, "run matUtils");
+}
+
+static boolean runMatUtilsServer(char *db, char *protobufPath, char *subtreeSizeStr,
+                                 struct tempName *tnSamples, struct tempName *tnOutDir,
+                                 struct treeChoices *treeChoices, int *pStartTime)
+/* Cheng Ye added a 'matUtils mode' to usher-sampled-server so we can get subtrees super-fast
+ * for uploaded sample names too. */
+{
+boolean success = FALSE;
+char *cmd[] = { "usher-sampled-server", "-i", protobufPath, "-d", tnOutDir->forCgi,
+                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE,
+                "--existing_samples", tnSamples->forCgi, "-D",
+                NULL };
+struct tempName tnErrFile;
+trashDirFile(&tnErrFile, "ct", "matUtils_server_stderr", ".txt");
+if (serverIsConfigured(db))
+    {
+    FILE *errFile = mustOpen(tnErrFile.forCgi, "w");
+    int serverSocket = getServerSocket(db, treeChoices, errFile);
+
+    reportTiming(pStartTime, "get socket");
+    if (serverSocket > 0)
+        {
+        success = sendQuery(serverSocket, cmd, db, treeChoices, errFile, FALSE);
+        close(serverSocket);
+        reportTiming(pStartTime, "send query");
+        }
+    carefulClose(&errFile);
+    }
+return success;
+}
+
+struct usherResults *runMatUtilsExtractSubtrees(char *db, char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
-                                                int *pStartTime)
+                                                struct treeChoices *treeChoices, int *pStartTime)
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
@@ -1311,7 +1361,6 @@ struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protob
 struct usherResults *results = usherResultsNew();
 char subtreeSizeStr[16];
 safef(subtreeSizeStr, sizeof subtreeSizeStr, "%d", subtreeSize);
-char *numThreadsStr = "16";
 struct tempName tnSamples;
 trashDirFile(&tnSamples, "ct", "matUtilsExtractSamples", ".txt");
 FILE *f = mustOpen(tnSamples.forCgi, "w");
@@ -1321,16 +1370,10 @@ for (sample = sampleIds;  sample != NULL;  sample = sample->next)
 carefulClose(&f);
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "matUtils_outdir", ".dir");
-char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir.forCgi,
-                "-s", tnSamples.forCgi,
-                "-x", subtreeSizeStr, "-X", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr,
-                "--usher-clades-txt", NULL };
-char **cmds[] = { cmd, NULL };
-struct tempName tnStderr;
-trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
-struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
-pipelineClose(&pl);
-reportTiming(pStartTime, "run matUtils");
+if (! runMatUtilsServer(db, protobufPath, subtreeSizeStr, &tnSamples, &tnOutDir, treeChoices,
+                        pStartTime))
+    runMatUtilsExtractCommand(matUtilsPath, protobufPath, subtreeSizeStr, &tnSamples, &tnOutDir,
+                              pStartTime);
 addEmptyPlacements(sampleIds, results->samplePlacements);
 struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
