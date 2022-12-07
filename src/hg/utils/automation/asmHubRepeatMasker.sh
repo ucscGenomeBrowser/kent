@@ -23,7 +23,7 @@ export chrSizes=""
 
 if [ -s "$destDir/$asmId.chrom.sizes" ]; then
   chrSizes="$destDir/$asmId.chrom.sizes"
-elif [ -s "../../$admId.chrom.sizes" ]; then
+elif [ -s "../../$asmId.chrom.sizes" ]; then
   chrSizes="../../$asmId.chrom.sizes"
 fi
 
