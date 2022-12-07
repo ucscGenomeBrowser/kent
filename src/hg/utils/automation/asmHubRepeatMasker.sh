@@ -110,7 +110,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
             bbi/${asmId}.rmsk.RNA.bb
     fi
     dateStamp=`date "+%FT%T %s"`
-    printf "# %s checking ls rmskClass/*.tab | egrep -v \"/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab\" " "${dateStamp}"
+    printf "# %s checking ls rmskClass/*.tab | egrep -v \"/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab\"\n" "${dateStamp}"
     otherCount=`(ls rmskClass/*.tab 2> /dev/null || true) | (egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" || true) | wc -l`
     if [ "${otherCount}" -gt 0 ]; then
       dateStamp=`date "+%FT%T %s"`
