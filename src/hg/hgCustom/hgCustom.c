@@ -727,7 +727,9 @@ printf("view in ");
 // Construct a menu of destination CGIs
 puts(cgiMakeSingleSelectDropList(hgCtNavDest, valsAndLabels, selected, NULL, NULL,
  "change", "var newVal = $('#navSelect').val(); $('#navForm').attr('action', newVal);", NULL, "navSelect"));
-cgiMakeButton("submit", "go");
+cgiMakeButton("submit", "go to first annotation");
+puts("&nbsp;<input type='submit' name='submit' id='submitGoBack' value='return to current position'>");
+jsOnEventByIdF("click", "submitGoBack", "$('#navForm > [name=position]').remove()");
 puts("</FORM>");
 }
 
