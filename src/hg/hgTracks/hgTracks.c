@@ -8947,6 +8947,12 @@ if (!hideControls)
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
                     "<A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
                     survey, surveyLabel ? surveyLabel : "Take survey");
+
+        // a piece of HTML, can be a link or anything else
+	char *hgTracksNoteHtml = cfgOption("hgTracksNoteHtml");
+	if (hgTracksNoteHtml)
+            puts(hgTracksNoteHtml);
+
 	hPutc('\n');
 	}
     }
@@ -10940,6 +10946,8 @@ if(!trackImgOnly)
     jsIncludeFile("es5-shim.4.0.3.min.js", NULL);
     jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
     jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
+    jsIncludeFile("popper.min.js", NULL);
+    jsIncludeFile("tippy-bundle.umd.js", NULL);
     jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
