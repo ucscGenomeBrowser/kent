@@ -6766,6 +6766,7 @@ for (grp = grps; grp != NULL; grp = grp->next)
     group->defaultPriority = grp->priority;
     group->priority = priority;
     group->defaultIsClosed = grp->defaultIsClosed;
+    group->errMessage = grp->errMessage;
     slAddHead(&list, group);
     hashAdd(hash, grp->name, group);
     }
@@ -6790,6 +6791,7 @@ for(; grpList; grpList = grpList->next)
     group->name = cloneString(grpList->name);
     group->label = cloneString(grpList->label);
     group->defaultPriority = group->priority = priority;
+    group->errMessage = grpList->errMessage;
     priority += priorityInc;
     slAddHead(&list, group);
     hashAdd(hash, group->name, group);
@@ -9139,7 +9141,7 @@ if (!hideControls)
         struct hash *superHash = hashNew(8);
 	for (group = groupList; group != NULL; group = group->next)
 	    {
-	    if (group->trackList == NULL)
+	    if ((group->trackList == NULL) && (group->errMessage == NULL))
 		continue;
 
 	    struct trackRef *tr;
@@ -9153,7 +9155,10 @@ if (!hideControls)
 				    &indicator, &otherState);
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
-            hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
+            if (group->errMessage)
+                hPrintf("<th align=\"left\" colspan=%d class='redToggleBar'>",MAX_CONTROL_COLUMNS);
+            else
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
 
@@ -9216,6 +9221,12 @@ if (!hideControls)
 	    groupTrackListAddSuper(cart, group, superHash);
 
 	    /* Display track controls */
+            if (group->errMessage)
+                {
+		myControlGridStartCell(cg, isOpen, group->name);
+                hPrintf("%s", group->errMessage);
+		controlGridEndCell(cg);
+                }
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
 		{
 		struct track *track = tr->track;
