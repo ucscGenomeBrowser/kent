@@ -144,6 +144,7 @@
 #include "knetUdc.h"
 #include "trackHub.h"
 #include "hubConnect.h"
+#include "bigWarn.h"
 
 #define CHROM_COLORS 26
 
@@ -14789,6 +14790,8 @@ else
 static TrackHandler lookupTrackHandler(struct trackDb *tdb)
 /* Lookup handler for track of give name.  Return NULL if none. */
 {
+if (tdb->errMessage != NULL)
+    return (TrackHandler)bigWarnMethods;
 if (handlerHash == NULL)
     return NULL;
 TrackHandler handler = hashFindVal(handlerHash, tdb->table);

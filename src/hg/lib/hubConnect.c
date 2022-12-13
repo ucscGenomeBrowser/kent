@@ -146,6 +146,7 @@ struct errCatch *errCatch = errCatchNew();
 struct trackHub *tHub = NULL;
 boolean gotWarning = FALSE;
 char *url = hubStatus->hubUrl;
+*errorMessage = NULL;
 
 char hubName[64];
 safef(hubName, sizeof(hubName), "hub_%d", hubStatus->id);
@@ -194,7 +195,7 @@ if (row != NULL)
     hub->hubUrl = cloneString(row[0]);
     hub->status = sqlUnsigned(row[1]);
     hub->errorMessage = cloneString(row[2]);
-    char *shortLabel = row[4];
+    hub->shortLabel = cloneString(row[4]);
     if (isEmpty(row[2]) || hubTimeToCheck(hub, row[3]))
 	{
 	char *errorMessage = NULL;
@@ -211,8 +212,9 @@ if (row != NULL)
          "Collection</b></a> that has expired and been removed. Track Collections "
          "expire 48 hours after their last use. <a href=\"/cgi-bin/hgSession\"><b>"
          "Save your session</b></a> to preserve collections long-term and to allow sharing.");
-            else
-                warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
+            // commenting this out, but leaving it in the source because we might use it later.
+            //else
+                //warn("Could not connect to hub \"%s\": %s", hub->shortLabel, hub->errorMessage);
 	    }
 	}
     }
@@ -517,6 +519,8 @@ hub->hubUrl = cloneString(url);
 struct trackHub *tHub = fetchHub( hub, &errorMessage);
 if (tHub != NULL)
     hub->trackHub = tHub;
+if (errorMessage != NULL)
+    hub->errorMessage = cloneString(errorMessage);
 
 /* update the status table with the lastest label and database information */
 hubUpdateStatus( errorMessage, hub);
@@ -634,6 +638,8 @@ for(; urls; urls = urls->next)
                     {
                     if (sameString(assemblyDb, hubConnectSkipHubPrefix(genomeList->name)))
                         {
+                        if (hub->errorMessage)
+                            errAbort("Hub error: %s", hub->errorMessage);
                         newDatabase = genomeList->name;
                         break;
                         }
@@ -798,7 +804,7 @@ AllocVar(grp);
 char name[16];
 safef(name, sizeof(name), "hub_%d", hub->id);
 grp->name = cloneString(name);
-grp->label = cloneString(hub->trackHub->shortLabel);
+grp->label = cloneString(hub->shortLabel);
 return grp;
 }
 
@@ -845,6 +851,13 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 
         errCatchFree(&errCatch);
 	}
+    else
+        {
+        /* create an empty group to hold the error message. */
+        struct grp *grp = grpFromHub(hub);
+        grp->errMessage = hub->errorMessage;
+        slAddHead(&hubGroups, grp);
+        }
     }
 
 hubTrackDbs = tdbList;
@@ -1017,7 +1030,12 @@ if (!isEmpty(dir))
         return status->id;
         }
     else
-        errAbort("Cannot open hub %s.", url);
+        {
+        if (!isEmpty(status->errorMessage))
+            errAbort("Hub error: url %s: error  %s.", url, status->errorMessage);
+        else
+            errAbort("Cannot open hub %s.", url);
+        }
 
     }
 return 0;

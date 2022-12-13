@@ -132,3 +132,17 @@ if (tg->height == 0)  // since this gets called more that once, but we should ca
     }
 return tg->height;
 }
+
+void bigWarnLoad(struct track *tg)
+/* At the moment we do nothing at load time. */
+{
+}
+
+void bigWarnMethods(struct track *track)
+/* Set up bigWarn methods. */
+{
+track->networkErrMsg = track->tdb->errMessage;
+track->drawItems = bigDrawWarning;
+track->loadItems = bigWarnLoad;
+track->totalHeight = bigWarnTotalHeight;
+}

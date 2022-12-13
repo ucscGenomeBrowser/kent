@@ -347,7 +347,8 @@ struct group
     float priority;        /* Display order, 0 is on top. */
     float defaultPriority; /* original priority before reordering */
     struct trackRef *trackList;  /* List of tracks. */
-    boolean defaultIsClosed;
+    boolean defaultIsClosed; /* close the track group by default. */
+    char *errMessage;      /* any error messages that came up during trackDb parsing. */
     };
 
 struct simpleFeature

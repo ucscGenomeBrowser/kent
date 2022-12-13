@@ -70,6 +70,7 @@ struct hubConnectStatus
     struct hubConnectStatus *next;
     unsigned id;	/* Hub ID */
     char *hubUrl;	/* URL to hub.ra file. */
+    char *shortLabel;   /* shortLabel from hubStatus table. */
     char *errorMessage;	/* If non-empty hub has an error and this describes it. */
     struct trackHub *trackHub; /* pointer to structure that describes hub */
     unsigned  status;   /* 1 if private */
