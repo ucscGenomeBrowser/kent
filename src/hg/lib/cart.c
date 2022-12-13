@@ -1404,9 +1404,7 @@ if (cartVarExists(cart, hgHubDoDisconnect))
 if (didSessionLoad)
     cartCopyCustomComposites(cart);
 
-pushWarnHandler(cartHubWarn);
 char *newDatabase = hubConnectLoadHubs(cart);
-popWarnHandler();
 
 if (newDatabase != NULL)
     {

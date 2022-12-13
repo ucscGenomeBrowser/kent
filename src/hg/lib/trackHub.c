@@ -1047,7 +1047,16 @@ markContainers(hub, genome, tdbList);
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    validateOneTrack(hub, genome, tdb);
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        validateOneTrack(hub, genome, tdb);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        {
+        tdb->errMessage = cloneString(errCatch->message->string);
+        }
 
     // clear these two pointers which we set in markContainers
     tdb->subtracks = NULL;
