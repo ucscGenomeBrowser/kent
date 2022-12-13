@@ -4,6 +4,7 @@ shortLabel Cross Tissue Nuclei
 longLabel Single nuclei sequenced cross many tissues
 visibility hide
 group singleCell
+configureByPopup off
 
     track crossTissueMapsTissueCellType
     parent crossTissueMaps
