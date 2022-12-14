@@ -29,7 +29,7 @@ fi
 
 # assume this file name pattern
 export faAlign=`echo "${rmOutFile}" | sed -e 's/sorted.fa.out/fa.align/; s/.gz//;'`
-export RepeatMaskerPath="/hive/data/staging/data/RepeatMasker210401"
+export RepeatMaskerPath="/hive/data/staging/data/RepeatMasker221107"
 
 if [ -d "${destDir}" ]; then
   cd "${destDir}"
@@ -41,8 +41,8 @@ if [ -d "${destDir}" ]; then
   # align file only exists when RM has been run locally, not for NCBI version
   # it is OK if it is missing, can do this anyway without it
   if [ -s "${faAlign}" ]; then
-    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
-    $RepeatMaskerPath/util/rmToTrackHub.pl -out "${rmOutFile}" -align "${faAlign}"
+    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
+    $RepeatMaskerPath/util/rmToTrackHub.pl -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}" -align "${faAlign}"
     # in place same file sort using the -o output option
     sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
   else
