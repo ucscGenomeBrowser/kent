@@ -14,6 +14,7 @@ sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred
 configurable off
+pennantIcon New red ../goldenPath/newsarch.html#121322 "Updated Sep. 13, 2022"
 wgEncodeGencodeVersion 42lift37
 
     track wgEncodeGencodeV42lift37ViewGenes
