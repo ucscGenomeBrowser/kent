@@ -2174,7 +2174,7 @@ struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
 if(highlightDef)
     {
-    char *hlArr[256];
+    char *hlArr[4096];
     int hlCount = chopByChar(cloneString(highlightDef), '|', hlArr, ArraySize(hlArr));
     int i;
     for (i=0; i<hlCount; i++)
