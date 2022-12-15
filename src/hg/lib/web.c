@@ -23,6 +23,7 @@
 #include "geoMirror.h"
 #include "trackHub.h"
 #include "versionInfo.h"
+#include "asmAlias.h"
 
 #ifndef GBROWSE
 #include "axtInfo.h"
@@ -921,6 +922,7 @@ if (*retDb == NULL)  // if db is not in URL, but genome is, use it for db
  * If so, it takes precedence and determines the genome. */
 if (*retDb)
     {
+    *retDb = asmAliasFind(*retDb);
     if (hDbExists(*retDb))
         *retGenome = hGenome(*retDb);
     else
@@ -943,6 +945,7 @@ else if (*retClade && gotClade)
 else
     {
     *retDb = cartOptionalString(cart, dbCgiName);
+    *retDb = asmAliasFind(*retDb);
     *retGenome = cartOptionalString(cart, orgCgiName);
     *retClade = cartOptionalString(cart, cladeCgiName);
     /* If there was a db found in the session that determines everything. */

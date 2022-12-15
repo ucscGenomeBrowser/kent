@@ -25,6 +25,7 @@
 #include "udc.h"
 #include "hubPublic.h"
 #include "genark.h"
+#include "asmAlias.h"
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -937,6 +938,7 @@ for(hub = hubList; hub; hub = hub->next)
         {
         char *name = genome->name;
 
+        name = asmAliasFind(name);
         if (!hDbIsActive(name) )
             {
             char buffer[4096];
@@ -1054,6 +1056,7 @@ if (dbSpec != NULL)
     newCuratedHubId = lookForCuratedHubs(cart, trackHubSkipHubName(dbSpec), curatedHubPrefix);
 
 char *newDatabase = checkForNew( cart);
+newDatabase = asmAliasFind(newDatabase);
 if (newCuratedHubId)
     newDatabase = dbOveride;
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
