@@ -61,7 +61,7 @@ options:
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
     -buildDir dir         Use dir instead of default
-                          $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/RepeatModeler.\$date
+                          $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/repeatModeler.\$date
                           (necessary when continuing at a later date).
     -unmaskedSeq seq.2bit Use seq.2bit as the unmasked input sequence instead
                           of default ($unmaskedSeq).
@@ -74,10 +74,9 @@ _EOF_
 Automates the RepeatModeler process for genome assembly \$db.  Steps:
     blastDb: construct fasta file from unmasked.2bit and rmblastn index files.
     cluster: Parasol cluster run of RepeatModeler.
-    libResult: Collect the consensus library file from the RepeatModeler output.
     cleanup: Removes or compresses intermediate files.
 All operations are performed in the build directory which is
-$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/RepeatModeler.\$date unless -buildDir is given.
+$HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/repeatModeler.\$date unless -buildDir is given.
 Run -help to see what files are required for this script.
 ";
   # Detailed help (-help):
@@ -233,21 +232,26 @@ sub doCleanup {
   $bossScript->add(<<_EOF_
 export asmId="${db}"
 
-rm -f \${asmId}.fa
-rm -f \${asmId}.n??
-gzip -c \${asmId}.stk
+if [ ! -s "\${asmId}-families.fa" ]; then
+  printf "cleanup expected result file: \${asmId}-families.fa does not exist\n" 1>&2
+  exit 255
+fi
+rm -fr \${asmId}.fa \${asmId}.n?? ./err/
+if [ -s "\${asmId}-families.stk" ]; then
+  gzip \${asmId}-families.stk
+fi
 c=`ls -d RM_* | wc -l`
 if [ "\${c}" -eq 1 ]; then
    RM_dir=`ls -d RM_*`
    if [ -d "\${RM_dir}" ]; then
      rm -fr "\${RM_dir}"
    else
-     printf "directory RM_* not found ?\n" 1>&2
+     printf "directory RM_* not found ?\\n" 1>&2
      ls -d RM* 1>&2
      exit 255
    fi
 else
-   printf "single directory RM_* not found ?\n" 1>&2
+   printf "single directory RM_* not found ?\\n" 1>&2
    ls -d RM* 1>&2
    exit 255
 fi
@@ -273,7 +277,7 @@ chomp $secondsStart;
 my $date = `date +%Y-%m-%d`;
 chomp $date;
 $buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/RepeatModeler.$date";
+  "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/repeatModeler.$date";
 $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
   "$HgAutomate::clusterData/$db/$db.unmasked.2bit";
 
