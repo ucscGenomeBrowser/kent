@@ -28,6 +28,7 @@ use vars qw/
     $opt_sourceDir
     $opt_species
     $opt_rmskSpecies
+    $opt_runRepeatModeler
     $opt_ncbiRmsk
     $opt_noRmsk
     $opt_augustusSpecies
@@ -47,6 +48,7 @@ my $stepper = new HgStepManager(
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'cytoBand',   func => \&doCytoBand },
       { name => 'gc5Base',   func => \&doGc5Base },
+      { name => 'repeatModeler',   func => \&doRepeatModeler },
       { name => 'repeatMasker',   func => \&doRepeatMasker },
       { name => 'simpleRepeat',   func => \&doSimpleRepeat },
       { name => 'allGaps',   func => \&doAllGaps },
@@ -71,6 +73,7 @@ my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $species = "";       # usually found in asmId_assembly_report.txt
 my $ftpDir = "";	# will be determined from given asmId
 my $rmskSpecies = "";
+my $runRepeatModeler = 0;       # default off
 my $noRmsk = 0;	# when RepeatMasker is not possible, such as bacteria
 my $ncbiRmsk = 0;	# when =1 call doRepeatMasker.pl
                         # with -ncbiRmsk=path.out.gz and -liftSpec=...
@@ -119,6 +122,8 @@ options:
     -rmskSpecies <name> to override default 'species' name for repeat masker
                       the default is found in the asmId_asssembly_report.txt
                       e.g. -rmskSpecies=viruses
+    -runRepeatModeler run RepeatModeler to supply custom lib to RepeatMasker,
+                      default is to not run RepeatModeler
     -noRmsk           when RepeatMasker is not possible, such as bacteria
     -ncbiRmsk         use NCBI rm.out.gz file instead of local cluster run
                       for repeat masking
@@ -147,6 +152,11 @@ Automates build of assembly hub.  Steps:
     gatewayPage: create html/asmId.description.html contents
     cytoBand: create cytoBand track and navigation ideogram
     gc5Base: create bigWig file for gc5Base track
+    repeatModeler: optionally, run RepeatModeler to construct custom library
+                   for repeatMasker run.  Use: -runRepeatModeler to perform
+                   this procedure, warning: can take a considerable amount
+                   of time (12 to 48 hours or more), and consumes an entire
+                   ku cluster node
     repeatMasker: run repeat masker cluster run and create bigBed files for
                   the composite track categories of repeats
     simpleRepeat: run trf cluster run and create bigBed file for simple repeats
@@ -203,6 +213,7 @@ sub checkOptions {
 		      'buildDir=s',
 		      'sourceDir=s',
 		      'rmskSpecies=s',
+		      'runRepeatModeler',
 		      'noRmsk',
 		      'ncbiRmsk',
 		      'augustusSpecies=s',
@@ -1170,6 +1181,41 @@ _EOF_
 } # gc5Base
 
 #########################################################################
+# * step: repeatModeler [workhorse, bigClusterHub]
+sub doRepeatModeler {
+  if (! $runRepeatModeler) {
+       &HgAutomate::verbose(1, "# RepeatModeler not being run, add argument: -runRepeatModeler to run this step before RepeatMasker\n");
+	return;
+  }
+  my $runDir = "$buildDir/trackData/repeatModeler";
+  #  check if been run before
+  if ( -d "${runDir}" ) {
+    if ( -s "${runDir}/${defaultName}-families.fa" ) {
+      &HgAutomate::verbose(1, "\nRepeatModeler step previously completed\n");
+      return;
+    } elsif ( -s "$buildDir/trackData/repeatModeler/blastDb.bash" ) {
+        &HgAutomate::verbose(1, "\nERROR: repeatModeler step may be running\n");
+         exit 255;
+    }
+  }
+  &HgAutomate::mustMkdir($runDir);
+  my $whatItDoes = "run RepeatModeler on sequence to prepare RepeatMasker custom library";
+  my $bossScript = newBash HgRemoteScript("$runDir/doRepeatModeler.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId="${defaultName}"
+export buildDir="${buildDir}"
+
+doRepeatModeler.pl -buildDir=`pwd` \\
+  -unmaskedSeq=\$buildDir/\$asmId.unmasked.2bit \\
+    -bigClusterHub=$bigClusterHub -workhorse=$workhorse \$asmId
+_EOF_
+  );
+  $bossScript->execute();
+}	# sub doRepeatModeler
+
+#########################################################################
 # * step: repeatMasker [workhorse]
 sub doRepeatMasker {
   if ($noRmsk) {
@@ -1190,6 +1236,11 @@ sub doRepeatMasker {
   my $bossScript = newBash HgRemoteScript("$runDir/doRepeatMasker.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $repeatModeler = "$buildDir/trackData/repeatModeler";
+  my $customLib = "";
+  if ( -s "${repeatModeler}/${defaultName}-families.fa" ) {
+     $customLib = "-customLib=\"${repeatModeler}/${defaultName}-families.fa\"";
+  }
   my $rmskOpts = "";
   if ($ncbiRmsk) {
      if ( -s "$buildDir/download/${asmId}_rm.out.gz" ) {
@@ -1206,6 +1257,10 @@ sub doRepeatMasker {
      }
   }
 
+  my $speciesOrLib = "-species=\"\$species\"";
+  if ( length(${customLib}) ) {
+     $speciesOrLib = "${customLib}";
+  }
   $bossScript->add(<<_EOF_
 export asmId=$defaultName
 export ncbiAsmId=$asmId
@@ -1216,7 +1271,7 @@ export species=`echo $rmskSpecies | sed -e 's/_/ /g;'`
 rm -f versionInfo.txt
 
 doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit $rmskOpts \\
-  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse $speciesOrLib \$asmId
 
 if [ -s "\$asmId.fa.out" ]; then
   gzip \$asmId.fa.out
@@ -1224,7 +1279,7 @@ fi
 gzip \$asmId.sorted.fa.out \$asmId.nestedRepeats.bed
 
 doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit $rmskOpts \\
-  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse $speciesOrLib \$asmId
 
 if [ ! -s versionInfo.txt ]; then
   if [ -s ../../download/\${ncbiAsmId}_rm.run ]; then
@@ -2057,6 +2112,7 @@ if (length($species) < 1) {
 
 $dbName = $opt_dbName ? $opt_dbName : $dbName;
 $rmskSpecies = $opt_rmskSpecies ? $opt_rmskSpecies : $species;
+$runRepeatModeler = $opt_runRepeatModeler ? $opt_runRepeatModeler : $runRepeatModeler;
 $augustusSpecies = $opt_augustusSpecies ? $opt_augustusSpecies : $augustusSpecies;
 $xenoRefSeq = $opt_xenoRefSeq ? $opt_xenoRefSeq : $xenoRefSeq;
 $ucscNames = $opt_ucscNames ? 1 : $ucscNames;   # '1' == 'TRUE'
@@ -2081,6 +2137,7 @@ printf STDERR "# dbName %s - building in /hive/data/genomes/%s\n", $dbName, $dbN
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
 printf STDERR "# xenoRefSeq %s\n", $xenoRefSeq;
 printf STDERR "# assemblySource: %s\n", $assemblySource;
+printf STDERR "# runRepeatModeler %s\n", $runRepeatModeler ? "TRUE" : "FALSE";
 printf STDERR "# rmskSpecies %s\n", $rmskSpecies;
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
 printf STDERR "# ncbiRmsk %s\n", $ncbiRmsk ? "TRUE" : "FALSE";
