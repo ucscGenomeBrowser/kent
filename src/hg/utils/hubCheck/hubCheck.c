@@ -893,8 +893,11 @@ if (errCatchStart(errCatch))
         if (autoScaleSetting && !sameString(autoScaleSetting, "off") && !sameString(autoScaleSetting, "on"))
             {
             errAbort("track \"%s\" has value \"%s\" for autoScale setting, "
-                    "valid autoScale values for bigWig tracks are \"off\" or \"on\" only",
-                    trackHubSkipHubName(tdb->track), autoScaleSetting);
+                    "valid autoScale values for individual bigWig tracks are \"off\" or \"on\" only. "
+                    "If \"%s\" is part of a bigWig composite track and you want to use the "
+                    "\"%s\" setting, only declare \"autoScale group\" in the parent stanza",
+                    trackHubSkipHubName(tdb->track), autoScaleSetting, trackHubSkipHubName(tdb->track), 
+                    autoScaleSetting);
             }
         }
     }
