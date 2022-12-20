@@ -2286,7 +2286,7 @@ ensemblIdUrl https://grch37.ensembl.org/Homo_sapiens
 
 include trackDb.wgEncode.ra
 
-include wgEncodeReg.ra alpha 
+include wgEncodeReg.ra 
 
 include encode3.ra 
 
