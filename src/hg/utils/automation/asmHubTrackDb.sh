@@ -210,6 +210,7 @@ if [ "${rmskItemCount}" -lt 4 ]; then
   rm -f $buildDir/bbi/${asmId}.rmsk.bb
   rm -f $buildDir/${asmId}.fa.align.tsv.gz
   rm -f $buildDir/${asmId}.fa.join.tsv.gz
+  rm -f $buildDir/${asmId}.rmsk.customLib.fa.gz
 else
 
 rm -f $buildDir/$asmId.repeatMasker.out.gz
@@ -217,6 +218,10 @@ ln -s trackData/repeatMasker/$asmId.sorted.fa.out.gz $buildDir/$asmId.repeatMask
 if [ -s "$buildDir/trackData/repeatMasker/versionInfo.txt" ]; then
    rm -f "$buildDir/${asmId}.repeatMasker.version.txt"
    ln -s trackData/repeatMasker/versionInfo.txt "$buildDir/${asmId}.repeatMasker.version.txt"
+fi
+if [ -s "$buildDir/trackData/repeatModeler/${asmId}-families.fa" ]; then
+   cp -p "$buildDir/trackData/repeatModeler/${asmId}-families.fa" "$buildDir/${asmId}.rmsk.customLib.fa"
+   gzip "$buildDir/${asmId}.rmsk.customLib.fa"
 fi
 
 if [ "${newRmsk}" -gt 0 ]; then
