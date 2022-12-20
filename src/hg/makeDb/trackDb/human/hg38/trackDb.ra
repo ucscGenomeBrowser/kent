@@ -816,7 +816,7 @@ searchPriority 55
 
 include hprcChain.ra
 
-include trackDb.470way.ra alpha
+include trackDb.470way.ra
 
 track michaelMaf
 release alpha
