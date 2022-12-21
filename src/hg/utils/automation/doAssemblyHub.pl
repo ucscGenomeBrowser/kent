@@ -473,7 +473,7 @@ sub readAltPlacement($$) {
     my $acc = $alt_scaf_acc;
     $alt_scaf_acc = $acc;
     my $ucscName = $acc;
-    if (1 == 1 || $ucscNames) {
+    if ($ucscNames) {
       $alt_scaf_acc =~ s/\./v/;
       $ucscName = sprintf("chr%s_%s_alt", $parent_name, $alt_scaf_acc);
       if ( $prim_asm_name ne "Primary Assembly" ) {
