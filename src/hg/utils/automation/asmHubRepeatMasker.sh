@@ -41,20 +41,28 @@ if [ -d "${destDir}" ]; then
   # align file only exists when RM has been run locally, not for NCBI version
   # it is OK if it is missing, can do this anyway without it
   if [ -s "${faAlign}" ]; then
-    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
-    $RepeatMaskerPath/util/rmToTrackHub.pl -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}" -align "${faAlign}"
+    printf "# using faAlign file: %s\n" "${faAlign}" 1>&2
+    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
+    $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}" -align "${faAlign}"
     # in place same file sort using the -o output option
     sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
   else
-    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -out \"${rmOutFile}\"\n" 1>&2
-    $RepeatMaskerPath/util/rmToTrackHub.pl -out "${rmOutFile}"
+    printf "# there is no faAlign file\n" 1>&2
+    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\"\n" 1>&2
+    $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}"
   fi
   sort -k1,1 -k2,2n -o "${asmId}.sorted.fa.join.tsv" "${asmId}.sorted.fa.join.tsv" &
   wait
+  printf "bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskBed.as -type=bed9+5
+    \"${asmId}.sorted.fa.join.tsv\" \"${chrSizes}\"
+      \"${asmId}.rmsk.bb\" &\n" 1>&2
   bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskBed.as -type=bed9+5 \
     "${asmId}.sorted.fa.join.tsv" "${chrSizes}" \
       "${asmId}.rmsk.bb" &
   if [ -s "${asmId}.fa.align.tsv" ]; then
+    printf "bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskAlignBed.as
+      -type=bed3+14 \"${asmId}.fa.align.tsv\" \"${chrSizes}\"
+        \"${asmId}.rmsk.align.bb\" &\n" 1>&2
     bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskAlignBed.as \
       -type=bed3+14 "${asmId}.fa.align.tsv" "${chrSizes}" \
         "${asmId}.rmsk.align.bb" &
