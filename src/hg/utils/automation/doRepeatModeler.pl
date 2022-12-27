@@ -227,7 +227,7 @@ sub doCleanup {
     }
   }
   my $whatItDoes = "Cleans up or compresses intermediate files.";
-  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/modelerCleanup.bash", $workhorse,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 export asmId="${db}"
