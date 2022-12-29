@@ -32,8 +32,8 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-preRelease = no
-#preRelease = yes
+#preRelease = no
+preRelease = yes
 db = hg38
 #db = hg19
 #db = mm39
@@ -57,8 +57,8 @@ else ifeq (${db},mm39)
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 42
-    prevVer = 41
+    ver = 43
+    prevVer = 42
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
