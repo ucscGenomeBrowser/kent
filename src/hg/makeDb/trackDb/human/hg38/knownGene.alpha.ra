@@ -1,10 +1,11 @@
 track knownGene
-shortLabel GENCODE V41
-longLabel GENCODE V41
+table knownGene
+shortLabel GENCODE V43
+longLabel GENCODE V43
 priority 1
 visibility pack
-type bigGenePred
-bigDataUrl /gbdb/hg38/gencode/gencodeV41.bb
+type bigGenePred knownGenePep knownGeneMrna
+bigDataUrl /gbdb/hg38/gencode/gencodeV43.bb
 baseColorDefault genomicCodons
 group genes
 isGencode3 on
@@ -12,9 +13,9 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-#externalDb knownGeneV41
+#externalDb knownGeneV43
 maxItems 50000
-html knownGeneV41
+html knownGeneV43
 searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
@@ -29,11 +30,24 @@ semiShortCircuit 1
 termRegex ENST[0-9.]+
 searchPriority 9
 
+track knownGeneOld12
+shortLabel Old UCSC Genes
+longLabel Previous Version of UCSC Genes
+group genes
+visibility hide
+color 82,82,160
+type genePred
+hgsid on
+oldToNew kg12ToKg13
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 searchName knownGeneFast
 searchTable knownGene
 searchType knownGeneFast
 shortCircuit 1
 searchPriority 1001
-searchTrix /gbdb/hg38/knownGeneFastV41.ix
+searchTrix /gbdb/hg38/knownGeneFastV43.ix
+searchTrixContext on
 doPage 1
 
