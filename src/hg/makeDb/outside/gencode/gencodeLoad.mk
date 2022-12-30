@@ -34,9 +34,9 @@ mach = $(shell uname -m)
 ##
 #preRelease = no
 preRelease = yes
-db = hg38
+#db = hg38
 #db = hg19
-#db = mm39
+db = mm39
 #db = mm10
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
@@ -50,8 +50,8 @@ ifeq (${db},mm10)
     isBackmap = yes
 else ifeq (${db},mm39)
     grcRefAssembly = GRCm39
-    ver = M31
-    prevVer = M30
+    ver = M32
+    prevVer = M31
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
@@ -64,8 +64,8 @@ else ifeq (${db},hg38)
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 42
-    prevVer = 41lift37
+    verBase = 43
+    prevVer = 42lift37
     ver = ${verBase}lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping

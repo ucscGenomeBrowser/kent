@@ -7370,6 +7370,100 @@ identifier wgEncodeGencodeExonSupportVM31
 
 # end Gencode VM31
 
+# begin Gencode VM32
+
+# gencode genePred tables with no associations
+# wgEncodeGencodePolyaVM32
+
+# gencode genePred tables with joining through wgEncodeGencodeAttrsVM32
+identifier wgEncodeGencodeBasicAttrsVM32
+"Link together Gencode Basic Table with Attributes table"
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId
+    mm39.wgEncodeGencodeBasicVM32.name
+
+identifier wgEncodeGencodeCompAttrsVM32
+"Link together Gencode Comprehensive Table with Attributes table"
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId
+    mm39.wgEncodeGencodeCompVM32.name
+
+identifier wgEncodeGencodePseudoGeneAttrsVM32
+"Link together Gencode PseudoGene Table with Attributes table"
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId
+    mm39.wgEncodeGencodePseudoGeneVM32.name
+
+# gencode association tables (joined through wgEncodeGencodeAttrsVM32)
+identifier wgEncodeGencodeGeneSourceVM32
+"Link together Gencode Gene Source table with Attributes table"
+    mm39.wgEncodeGencodeGeneSourceVM32.geneId
+    mm39.wgEncodeGencodeAttrsVM32.geneId
+
+identifier wgEncodeGencodeGeneSymbolVM32
+"Link together Gencode gene symbol table with Attributes table"
+    mm39.wgEncodeGencodeGeneSymbolVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId minCheck=0.20
+
+identifier wgEncodeGencodePdbVM32
+"Link together Gencode Pdb table with Attributes table"
+    mm39.wgEncodeGencodePdbVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId minCheck=0.015
+
+identifier wgEncodeGencodePubMedVM32
+"Link together Gencode Pubmed table with Attributes table"
+    mm39.wgEncodeGencodePubMedVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId  minCheck=0.63
+
+identifier wgEncodeGencodeRefSeqVM32
+"Link together Gencode RefSeq table with Attributes table"
+    mm39.wgEncodeGencodeRefSeqVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId minCheck=0.05
+
+identifier wgEncodeGencodeRefSeqToRefGeneVM32
+"Link together Gencode RefSeq table with refGene track"
+    mm39.wgEncodeGencodeRefSeqVM32.rnaAcc dupeOk chopAfter=.
+    mm39.refGene.name minCheck=0.77
+
+identifier wgEncodeGencodeTagVM32
+"Link together Gencode Tag table with Attributes table"
+    mm39.wgEncodeGencodeTagVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId minCheck=0.36
+
+identifier wgEncodeGencodeTranscriptSourceVM32
+"Link together Gencode Transcript Source table with Attributes table"
+    mm39.wgEncodeGencodeTranscriptSourceVM32.transcriptId
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportVM32
+"Link together Gencode Transcript Support table with Attributes table"
+    mm39.wgEncodeGencodeTranscriptSupportVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId minCheck=0.04
+
+identifier wgEncodeGencodeTranscriptionSupportLevelVM32
+"Link together Gencode Transcription Support Level table with Attributes table"
+    mm39.wgEncodeGencodeTranscriptionSupportLevelVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeUniProtVM32
+"Link together Gencode UniProt Support table with Attributes table"
+    mm39.wgEncodeGencodeUniProtVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId minCheck=0.35
+
+identifier wgEncodeGencodeAnnotationRemarkVM32
+"Link together Gencode Annotation Remark table with Attributes table"
+    mm39.wgEncodeGencodeAnnotationRemarkVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId minCheck=0.10
+
+identifier wgEncodeGencodeEntrezGeneVM32
+"Link together Gencode UniProt Support table with Attributes table"
+    mm39.wgEncodeGencodeEntrezGeneVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeEntrezGeneVM32.transcriptId minCheck=0.35
+
+identifier wgEncodeGencodeExonSupportVM32
+"Link together Gencode Exon Support table with Attributes table"
+    mm39.wgEncodeGencodeExonSupportVM32.transcriptId dupeOk
+    mm39.wgEncodeGencodeAttrsVM32.transcriptId minCheck=0.80
+
+# end Gencode VM32
+
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
     hg19.wgEncodeGencodeClassesV3.name
