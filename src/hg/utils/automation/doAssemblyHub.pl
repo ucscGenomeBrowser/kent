@@ -469,16 +469,18 @@ sub readAltPlacement($$) {
   while (my $line = <AP>) {
     chomp $line;
     next if ($line =~ m/^#/);
+    my $fixAlt = "alt";
+    $fixAlt = "fix" if ($altPlacementFile =~ m/PATCH/);
     my ($alt_asm_name, $prim_asm_name, $alt_scaf_name, $alt_scaf_acc, $parent_type, $parent_name, $parent_acc, $region_name, $ori, $alt_scaf_start, $alt_scaf_stop, $parent_start, $parent_stop, $alt_start_tail, $alt_stop_tail) = split('\t', $line);
     my $acc = $alt_scaf_acc;
     $alt_scaf_acc = $acc;
     my $ucscName = $acc;
-    if (1 == 1 || $ucscNames) {
-      $alt_scaf_acc =~ s/\./v/;
-      $ucscName = sprintf("chr%s_%s_alt", $parent_name, $alt_scaf_acc);
-      if ( $prim_asm_name ne "Primary Assembly" ) {
-        $ucscName = sprintf("%s_alt", $alt_scaf_acc);
-      }
+    # should always be calculating UCSC names here, the resulting names
+    # can be used for either naming scheme later in AGP and FA processing
+    $alt_scaf_acc =~ s/\./v/;
+    $ucscName = sprintf("chr%s_%s_%s", $parent_name, $alt_scaf_acc, $fixAlt);
+    if ( $prim_asm_name ne "Primary Assembly" ) {
+      $ucscName = sprintf("%s_%s", $alt_scaf_acc, $fixAlt);
     }
     $accToChr->{$acc} = $ucscName;
     printf STDERR "# warning: name longer than 31 characters: '%s'\n# in: '%s'\n", $ucscName, $altPlacementFile if (length($ucscName) > 31);
@@ -499,7 +501,11 @@ sub processAltAgp($$$) {
     my $ncbiAcc = $a[0];
     next if (exists($dupAccessionList{$ncbiAcc}));
     my $ucscName = $nameHash->{$ncbiAcc};
-    printf $fh "%s", $ucscName;  # begin AGP line with accession nam
+    if ($ucscNames) {
+      printf $fh "%s", $ucscName;  # begin AGP line with accession nam
+    } else {
+      printf $fh "%s", $ncbiAcc;  # begin AGP line with accession nam
+    }
     for (my $i = 1; $i < scalar(@a); ++$i) {  # the reset of the AGP line
       printf $fh "\t%s", $a[$i];
     }
@@ -518,11 +524,16 @@ sub processAltFasta($$$) {
   while (my $line = <FF>) {
     if ($line =~ m/^>/) {
       chomp $line;
-      $line =~ s/^>//;
-      $line =~ s/ .*//;
-      die "ERROR: can not find accession $line in nameHash" if (! exists($nameHash->{$line}));
-      my $ucscName = $nameHash->{$line};
-      printf $fh ">%s\n", $ucscName;
+      my $ncbiAcc = $line;
+      $ncbiAcc =~ s/^>//;
+      $ncbiAcc =~ s/ .*//;
+      die "ERROR: can not find accession $ncbiAcc in nameHash" if (! exists($nameHash->{$ncbiAcc}));
+      my $ucscName = $nameHash->{$ncbiAcc};
+      if ($ucscNames) {
+        printf $fh ">%s\n", $ucscName;
+      } else {
+        printf $fh ">%s\n", $ncbiAcc;
+      }
     } else {
       print $fh $line;
     }

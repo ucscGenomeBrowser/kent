@@ -645,7 +645,7 @@ bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
 
 include trackDb.gencode.ra
 
-include wgEncodeReg.ra 
+include wgEncodeReg.ra
 
 include encode3.ra 
 
@@ -817,7 +817,7 @@ searchPriority 55
 
 include hprcChain.ra
 
-include trackDb.470way.ra alpha
+include trackDb.470way.ra
 
 track michaelMaf
 release alpha

@@ -4502,7 +4502,7 @@ var imageV2 = {
             }
 
             // helper functions for checking whether a plain chrom name was searched for
-            term = encodeURIComponent(genomePos.get());
+            term = encodeURIComponent(genomePos.get().replace(/^[\s]*/,'').replace(/[\s]*$/,''));
             function onSuccess(jqXHR, textStatus) {
                 if (jqXHR.chromName !== null) {
                     imageV2.markAsDirtyPage();

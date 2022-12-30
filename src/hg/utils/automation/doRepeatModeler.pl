@@ -145,6 +145,11 @@ export asmId="${db}"
 export unmasked2Bit="${unmaskedSeq}"
 export bDatabase="${BuildDatabase}"
 
+export tmpDir=`mktemp -d -p /dev/shm rModeler.XXXXXX`
+
+# working directory
+cd "\${tmpDir}"
+
 if [ "\${unmasked2Bit}" -nt "\${asmId}.fa" ]; then
   twoBitToFa "\${unmasked2Bit}" "\${asmId}.fa"
   touch -r "\${unmasked2Bit}" "\${asmId}.fa"
@@ -153,6 +158,12 @@ fi
 if [ "\${asmId}.fa" -nt "\${asmId}.nsq" ]; then
   time (\$bDatabase -name "\${asmId}" -engine ncbi "\${asmId}.fa") > blastDb.log 2>&1
 fi
+
+cd ${runDir}
+rsync -a -P "\${tmpDir}/" ./
+rm -fr "\${tmpDir}/"
+chmod 775 ${runDir}
+
 _EOF_
     );
 
@@ -190,6 +201,12 @@ printf '#!/bin/bash
 
 set -beEu -o pipefail
 
+export tmpDir=`mktemp -d -p /dev/shm rModeler.XXXXXX`
+
+# working directory
+cd "\${tmpDir}"
+rsync -a -P "${runDir}/" "\${tmpDir}/"
+
 export asmId="\${1}"
 export threadCount="${threadCount}"
 export rModeler="${RepeatModeler}"
@@ -202,6 +219,12 @@ para make $parasolOpts jobList
 para check
 para time > run.time
 cat run.time
+
+cd ${runDir}
+rsync -a -P "\${tmpDir}/" ./
+rm -fr "\${tmpDir}/"
+chmod 775 ${runDir}
+
 _EOF_
   );
   $bossScript->execute() if (! $opt_debug);
@@ -227,7 +250,7 @@ sub doCleanup {
     }
   }
   my $whatItDoes = "Cleans up or compresses intermediate files.";
-  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/modelerCleanup.bash", $workhorse,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 export asmId="${db}"

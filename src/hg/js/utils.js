@@ -9,12 +9,12 @@ var debug = false;
 
 /* Support these formats for range specifiers.  Note the ()'s around chrom,
  * start and end portions for substring retrieval: */
-var canonicalRangeExp = /^([\w._#-]+)[\s]*:[\s]*([-0-9,]+)[\s]*[-_][\s]*([0-9,]+)$/;
-var gbrowserRangeExp =  /^([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\.\.[\s]*([0-9,]+)$/;
-var lengthRangeExp =    /^([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\+[\s]*([0-9,]+)$/;
-var bedRangeExp =       /^([\w._#-]+)[\s]+([0-9,]+)[\s]+([0-9,]+)$/;
-var sqlRangeExp =       /^([\w._#-]+)[\s]*\|[\s]*([0-9,]+)[\s]*\|[\s]*([0-9,]+)$/;
-var singleBaseExp =     /^([\w._#-]+)[\s]*:[\s]*([0-9,]+)$/;
+var canonicalRangeExp = /^[\s]*([\w._#-]+)[\s]*:[\s]*([-0-9,]+)[\s]*[-_][\s]*([0-9,]+)$[\s]*/;
+var gbrowserRangeExp =  /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\.\.[\s]*([0-9,]+)$[\s]*/;
+var lengthRangeExp =    /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\+[\s]*([0-9,]+)[\s]*$/;
+var bedRangeExp =       /^[\s]*([\w._#-]+)[\s]+([0-9,]+)[\s]+([0-9,]+)[\s]*$/;
+var sqlRangeExp =       /^[\s]*([\w._#-]+)[\s]*\|[\s]*([0-9,]+)[\s]*\|[\s]*([0-9,]+)[\s]*$/;
+var singleBaseExp =     /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*$/;
 
 function copyToClipboard(ev) {
     /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 

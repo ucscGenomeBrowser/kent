@@ -1,6 +1,6 @@
 # set for preview 1: move date and vNNN from REVIEWDAY to LASTREVIEWDAY
-setenv REVIEWDAY 2022-11-28             # v441 preview
-setenv LASTREVIEWDAY  2022-11-07             # v440 preview
+setenv REVIEWDAY 2022-12-19             # v442 preview
+setenv LASTREVIEWDAY  2022-11-28             # v441 preview
 setenv previewSubversion       # empty string unless mistake, otherwise .1 etc
 
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
@@ -26,7 +26,8 @@ setenv BUILDDIR $BUILDHOME
 setenv MYSQLINC /usr/include/mysql
 setenv MYSQLLIBS /usr/lib64/mysql/libmysqlclient.a
 setenv JAVABUILD /scratch/javaBuild
-setenv JAVA_HOME /usr/java/default
+#setenv JAVA_HOME /usr/java/default
+setenv JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.261-2.6.22.2.el7_8.x86_64/
 setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/bin/java/jtidy.jar:/usr/share/java/rhino.jar:/cluster/bin/java/mysql-connector-java-3.0.16-ga-bin.jar
 # java and ant wont run on hgwdev now without setting max memory
 setenv _JAVA_OPTIONS "-Xmx1024m"

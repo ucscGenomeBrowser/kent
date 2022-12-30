@@ -1338,6 +1338,8 @@ else
         if (!nextTok)
             nextTok = strchr(db, 0);
         db = cloneStringZ(db,nextTok-db);
+        stripChar(db, '\'');
+        stripChar(db, '"');
         if (!sameString(db,database))
             err = "Invalid configuration found - remove db= or return it to its original value. ";
         }

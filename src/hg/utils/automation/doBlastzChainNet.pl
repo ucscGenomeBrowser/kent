@@ -1207,21 +1207,18 @@ _EOF_
       # target may be database assembly, special set of gbdb symLinks
       if ($dbExists && $tChromInfoExists) {
       $bossScript->add(<<_EOF_
-mkdir -p /gbdb/$tDb/chainNet
-foreach T (chain chainRBest chainSyn)
-  if ( -s "\$buildDir/axtChain/\${T}${QDb}.bb" ) then
-    rm -f "/gbdb/$tDb/chainNet/$tDb.\${T}$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.\${T}.${QDb}Link.bb"
-    ln -s "\$buildDir/axtChain/\${T}${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.\${T}$QDb.bb"
-    ln -s "\$buildDir/axtChain/\${T}${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.\${T}.${QDb}Link.bb"
-  endif
-end
-foreach T (net rbestNet synNet)
-  if ( -s "\$buildDir/bigMaf/$tDb.$qDb.\${T}.bb" ) then
-    rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.summary.bb"
-    ln -s "\$buildDir/bigMaf/$tDb.$qDb.\${T}.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.bb"
-    ln -s "\$buildDir/bigMaf/$tDb.$qDb.\${T}.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.\${T}.summary.bb"
-  endif
-end
+if ( -s "\$buildDir/axtChain/chain${QDb}.bb" ) then
+  mkdir -p /gbdb/$tDb/chainNet
+  rm -f "/gbdb/$tDb/chainNet/$tDb.chain$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chain${QDb}Link.bb"
+  ln -s "\$buildDir/axtChain/chain${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chain$QDb.bb"
+  ln -s "\$buildDir/axtChain/chain${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chain${QDb}Link.bb"
+endif
+if ( -s "\$buildDir/bigMaf/$tDb.$qDb.net.bb" ) then
+  mkdir -p /gbdb/$tDb/chainNet
+  rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.net.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.net.summary.bb"
+  ln -s "\$buildDir/bigMaf/$tDb.$qDb.net.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.net.bb"
+  ln -s "\$buildDir/bigMaf/$tDb.$qDb.net.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.net.summary.bb"
+endif
 _EOF_
       );
       }
@@ -1840,6 +1837,18 @@ if (\$lineCount > 0) then
 netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
   | hgLoadNet -test -noBin -warn -verbose=0 $tDb netSyn$QDb stdin
 mv align.tab netSyn$QDb.tab
+if ( -s "\$buildDir/axtChain/chainSyn${QDb}.bb" ) then
+  mkdir -p /gbdb/$tDb/chainNet
+  rm -f "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
+  ln -s "\$buildDir/axtChain/chainSyn${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb"
+  ln -s "\$buildDir/axtChain/chainSyn${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
+endif
+if ( -s "\$buildDir/bigMaf/$tDb.$qDb.synNet.bb" ) then
+  mkdir -p /gbdb/$tDb/chainNet
+  rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+  ln -s "\$buildDir/bigMaf/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb"
+  ln -s "\$buildDir/bigMaf/$tDb.$qDb.synNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+endif
 endif
 rm -f link.tab
 rm -f chain.tab
