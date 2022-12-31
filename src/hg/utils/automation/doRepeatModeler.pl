@@ -145,11 +145,6 @@ export asmId="${db}"
 export unmasked2Bit="${unmaskedSeq}"
 export bDatabase="${BuildDatabase}"
 
-export tmpDir=`mktemp -d -p /dev/shm rModeler.XXXXXX`
-
-# working directory
-cd "\${tmpDir}"
-
 if [ "\${unmasked2Bit}" -nt "\${asmId}.fa" ]; then
   twoBitToFa "\${unmasked2Bit}" "\${asmId}.fa"
   touch -r "\${unmasked2Bit}" "\${asmId}.fa"
@@ -158,11 +153,6 @@ fi
 if [ "\${asmId}.fa" -nt "\${asmId}.nsq" ]; then
   time (\$bDatabase -name "\${asmId}" -engine ncbi "\${asmId}.fa") > blastDb.log 2>&1
 fi
-
-cd ${runDir}
-rsync -a -P "\${tmpDir}/" ./
-rm -fr "\${tmpDir}/"
-chmod 775 ${runDir}
 
 _EOF_
     );
@@ -212,6 +202,10 @@ export threadCount="${threadCount}"
 export rModeler="${RepeatModeler}"
 
 time (\$rModeler -engine ncbi \$threadCount -database "\${asmId}") > modeler.log 2>&1
+rsync -a -P ./ "${runDir}/"
+cd "${runDir}"
+rm -fr "\${tmpDir}/"
+chmod 775 "${runDir}"
 ' > oneJob
 chmod +x oneJob
 printf "oneJob ${db} {check out line+ ${db}-rmod.log}\n" > jobList
@@ -219,11 +213,6 @@ para make $parasolOpts jobList
 para check
 para time > run.time
 cat run.time
-
-cd ${runDir}
-rsync -a -P "\${tmpDir}/" ./
-rm -fr "\${tmpDir}/"
-chmod 775 ${runDir}
 
 _EOF_
   );
