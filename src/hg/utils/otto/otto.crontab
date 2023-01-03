@@ -56,7 +56,7 @@ MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
 00 8 * * 2 /hive/data/outside/otto/geneReviews/geneReviewsWrapper.sh
 
 #LRG
-57 9 1 * * /hive/data/outside/otto/lrg/lrgWrapper.sh
+57 9 1 4,6,12 * /hive/data/outside/otto/lrg/lrgWrapper.sh
 
 #dbVar
 13 8 2 * * /hive/data/outside/otto/dbVar/dbVarWrapper.sh
