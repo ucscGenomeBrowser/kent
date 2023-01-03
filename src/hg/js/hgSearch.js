@@ -683,7 +683,7 @@ var hgSearch = (function() {
         // otherwise complain on behalf of caller.
         if (! jsonData) {
             alert(callerName + ': empty response from server');
-        } else if (jsonData.error) {
+        } else if (jsonData.error && !jsonData.error.startsWith("Sorry, couldn't locate")) {
             console.error(jsonData.error);
             alert(callerName + ': error from server: ' + jsonData.error);
         } else {
