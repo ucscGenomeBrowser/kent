@@ -42,14 +42,14 @@ if [ -d "${destDir}" ]; then
   # it is OK if it is missing, can do this anyway without it
   if [ -s "${faAlign}" ]; then
     printf "# using faAlign file: %s\n" "${faAlign}" 1>&2
-    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
-    $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}" -align "${faAlign}"
+    printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
+    time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}" -align "${faAlign}"
     # in place same file sort using the -o output option
     sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
   else
     printf "# there is no faAlign file\n" 1>&2
-    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\"\n" 1>&2
-    $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}"
+    printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\"\n" 1>&2
+    time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}"
   fi
   sort -k1,1 -k2,2n -o "${asmId}.sorted.fa.join.tsv" "${asmId}.sorted.fa.join.tsv" &
   wait
