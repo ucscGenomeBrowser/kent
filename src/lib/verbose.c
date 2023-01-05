@@ -7,6 +7,7 @@
 #include "common.h"
 #include "portable.h"
 #include "verbose.h"
+#include "obscure.h"
 
 
 static int logVerbosity = 1;	/* The level of log verbosity.  0 is silent. */
@@ -16,6 +17,8 @@ static boolean checkedDotsEnabled = FALSE;  /* have we check for dot output
                                              * being enabled? */
 static boolean dotsEnabled = FALSE;         /* is dot output enabled? */
 
+static boolean doHtml = FALSE;
+
 void verboseVa(int verbosity, char *format, va_list args)
 /* Log with at given verbosity vprintf formatted args. */
 {
@@ -23,7 +26,15 @@ if (verbosity <= logVerbosity)
     {
     if (logFile == NULL)
         logFile = stderr;
-    vfprintf(logFile, format, args);
+    if (doHtml)
+        {
+        char buf[4096];
+        int threadId = get_thread_id();
+        safef(buf, sizeof(buf), "%d %s<br>", threadId, format); // cannot do two printfs, as they are not thread safe, so the <br> will not stay with the line
+        vfprintf(logFile, buf, args);
+        }
+    else
+        vfprintf(logFile, format, args);
     fflush(logFile);
     }
 }
@@ -128,4 +139,17 @@ FILE *verboseLogFile()
 if (logFile == NULL)
     logFile = stderr;
 return logFile;
+}
+
+void verboseCgi(char *level) 
+/* Set verbosity level for a CGI: if level is not NULL, set output file to stdout, set verbosity and print a content-type header */
+{
+    if (level==NULL)
+        return;
+    int levelNum = atoi(level);
+    verboseSetLevel(levelNum);
+    verboseSetLogFile("stdout");
+    puts("Content-type: text/html\n");
+    doHtml = TRUE;
+    verbose(0, "Debugging output activated, level %d", levelNum);
 }
