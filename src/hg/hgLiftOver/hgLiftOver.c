@@ -196,8 +196,8 @@ puts("<p style='margin-left:3px'>Paste in data below, one position per line. You
         "<a href='../../FAQ/FAQformat.html#format1'>BED format</a> (e.g. \"chr4 100000 100001\", "
         "0-based) or the format of the position box (\"chr4:100,001-100,001\", 1-based). "
         "See the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a>.\n"
-        "For SNPs that have rs-identifiers, we do not recommend liftOver, see "
-        "<a href='/FAQ/FAQreleases.html#snpConversion'>this FAQ</a> on fast lookups in our dbSNP tables.</p>\n");
+        "We do not recommend liftOver for SNPs that have rsIDs. See our "
+        "<a href='/FAQ/FAQreleases.html#snpConversion'>FAQ</a> for more information.</p>\n");
 
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
