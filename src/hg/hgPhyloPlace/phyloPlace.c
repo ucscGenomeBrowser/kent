@@ -876,11 +876,12 @@ char *gbIdFromSampleName(char *sampleId)
 {
 char *gbId = NULL;
 regmatch_t substrs[2];
-if (regexMatchSubstr(sampleId, "([A-Z][A-Z][0-9]{6})", substrs, ArraySize(substrs)))
+// If it's preceded by anything, make sure it's a | so we ignore isolate names that glom on the
+// reference's GenBank accession in them (e.g. ..._MN908947.3/2022|OQ070230.1).
+if (regexMatchSubstr(sampleId, "^(.*\\|)?([A-Z][A-Z][0-9]{6})", substrs, ArraySize(substrs)))
     {
-    // Make sure there are word boundaries around the match
-    if ((substrs[1].rm_so == 0 || !isalnum(sampleId[substrs[1].rm_so-1])) &&
-        !isalnum(sampleId[substrs[1].rm_eo]))
+    // Make sure there is a word boundary at the end of the match too
+    if (!isalnum(sampleId[substrs[1].rm_eo]))
         gbId = cloneStringZ(sampleId+substrs[1].rm_so, substrs[1].rm_eo - substrs[1].rm_so);
     }
 return gbId;

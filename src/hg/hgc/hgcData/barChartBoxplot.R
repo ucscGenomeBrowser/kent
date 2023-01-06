@@ -139,7 +139,7 @@ if (!useOldFonts && require("showtext",character.only=TRUE, quietly=TRUE)) {
 
 # read colors file
 colorDf = read.table(colorFile, sep="\t", header=TRUE, comment.char="")
-colorsHex <- paste("#",as.character(as.hexmode(colorDf$color)), sep="")
+colorsHex <- paste("#",format(as.hexmode(colorDf$color), width=6), sep="")
 
 # order categories as in colors file
 df <- read.table(dataFile, sep="\t", header=TRUE, comment.char="")

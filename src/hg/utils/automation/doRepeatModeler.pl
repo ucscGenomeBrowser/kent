@@ -153,6 +153,7 @@ fi
 if [ "\${asmId}.fa" -nt "\${asmId}.nsq" ]; then
   time (\$bDatabase -name "\${asmId}" -engine ncbi "\${asmId}.fa") > blastDb.log 2>&1
 fi
+
 _EOF_
     );
 
@@ -190,11 +191,21 @@ printf '#!/bin/bash
 
 set -beEu -o pipefail
 
+export tmpDir=`mktemp -d -p /dev/shm rModeler.XXXXXX`
+
+# working directory
+cd "\${tmpDir}"
+rsync --exclude "do.log" -a -P "${runDir}/" "\${tmpDir}/"
+
 export asmId="\${1}"
 export threadCount="${threadCount}"
 export rModeler="${RepeatModeler}"
 
 time (\$rModeler -engine ncbi \$threadCount -database "\${asmId}") > modeler.log 2>&1
+rsync --exclude "do.log" -a -P ./ "${runDir}/"
+cd "${runDir}"
+rm -fr "\${tmpDir}/"
+chmod 775 "${runDir}"
 ' > oneJob
 chmod +x oneJob
 printf "oneJob ${db} {check out line+ ${db}-rmod.log}\n" > jobList
@@ -202,6 +213,7 @@ para make $parasolOpts jobList
 para check
 para time > run.time
 cat run.time
+
 _EOF_
   );
   $bossScript->execute() if (! $opt_debug);
