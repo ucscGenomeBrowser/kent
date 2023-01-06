@@ -122,7 +122,7 @@ if [ "../../${asmId}.agp.gz" -nt "${asmId}.assembly.bb" ]; then
   fi
   if [ -s "${asmId}.gap.bed" ]; then
     bedToBigBed -extraIndex=name -verbose=0 $asmId.gap.bed \
-      ../../$asmId.chrom.sizes $asmId.gap.bb
+      ../../$asmId.chrom.sizes.txt $asmId.gap.bb
     touch -r ../../$asmId.agp.gz $asmId.gap.bb
     rm -f ${destDir}/bbi/$asmId.gap.bb
     ln -s ../trackData/assemblyGap/$asmId.gap.bb ${destDir}/bbi/$asmId.gap.bb
@@ -157,7 +157,7 @@ type bigBed 6
 html html/$asmId.assembly
 searchIndex name
 searchTrix ixIxx/$asmId.assembly.ix
-url https://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
 group map
 " >> ${destDir}/hub.txt
@@ -166,6 +166,29 @@ printf "<h1>assembly track description page</h1>
 <p>
 Should be filled in with information about this track.
 </p>\n" > ${destDir}/html/$asmId.assembly.html
+
+fi
+
+if [ -s "${destDir}/trackData/assemblyGap/$asmId.gap.bb" ]; then
+  rm -f ${destDir}/bbi/$asmId.gap.bb
+  ln -s ../trackData/assemblyGap/$asmId.gap.bb ${destDir}/bbi/$asmId.gap.bb
+
+  printf "
+track gap
+longLabel AGP gap
+shortLabel Gap (AGP defined)
+visibility dense
+color 0,0,0
+bigDataUrl bbi/$asmId.gap.bb
+type bigBed 4
+group map
+html html/$asmId.gap
+" >> ${destDir}/hub.txt
+
+printf "<h1>gap track description page</h1>
+<p>
+Should be filled in with information about this track.
+</p>\n" > ${destDir}/html/$asmId.gap.html
 
 fi
 
