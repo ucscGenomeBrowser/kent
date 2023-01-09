@@ -86,6 +86,10 @@ static char *labelForDb(char *db)
 char *label = NULL;
 if (sameString(trackHubSkipHubName(db), "GCF_014621545.1"))
     label = cloneString("hMPXV");
+else if (sameString(trackHubSkipHubName(db), "GCF_002815475.1"))
+    label = cloneString("RSV-A");
+else if (sameString(trackHubSkipHubName(db), "GCF_000855545.1"))
+    label = cloneString("RSV-B");
 else
     label = hGenome(db);
 return label;
