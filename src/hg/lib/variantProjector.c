@@ -965,7 +965,7 @@ struct vpPep *vpTranscriptToProtein(struct vpTx *vpTx, struct genbankCds *cds,
 //#*** This will produce incorrect results for the rare cds with join(...) unless we make a more
 //#*** complicated cds data structure to represent those (basically list of cds's) and use it here.
 {
-if (cds == NULL || cds->start == -1 || cds->end == -1 || !cds->startComplete)
+if (cds == NULL || cds->start == -1 || cds->end == -1)
     return NULL;
 if (txSeq == NULL)
     errAbort("vpTranscriptToProtein: txSeq must not be NULL");
@@ -975,14 +975,14 @@ vpPep->name = cloneString(protSeq->name);
 uint txStart = vpTx->start.txOffset;
 uint txEnd = vpTx->end.txOffset;
 // If the variant starts and ends within exon(s) and overlaps CDS then predict protein change.
-if (txStart >= cds->start && txStart < cds->end && txEnd > cds->start &&
+if (cds->startComplete && (txStart >= cds->start && txStart < cds->end && txEnd > cds->start &&
     ((vpTx->start.region == vpExon && vpTx->end.region == vpExon) ||
      // Insertion at exon boundary -- it doesn't disrupt the splice site so assume its effect
      // is on the exon, in the spirit of HGVS's 3' exception rule
      (vpTxPosIsInsertion(&vpTx->start, &vpTx->end) &&
       (vpTx->start.region == vpExon || vpTx->end.region == vpExon)) ||
      (vpTx->start.region == vpUpstream && vpTx->end.region == vpDownstream && isEmpty(vpTx->txAlt))
-     ))
+     )))
     {
     uint startInCds = max(txStart, cds->start) - cds->start;
     uint endInCds = min(txEnd, cds->end) - cds->start;
@@ -1542,7 +1542,7 @@ else if (cds && cds->end > cds->start)
             gpFxSetNoncodingInfo(fxList, startExonIx, exonCount, vpTx->start.txOffset,
                                  vpTx->txRef, vpTx->txAlt, lm);
             }
-        else
+        else if (vpPep)
             fxList = vpTxToFxUtrCds(vpTx, psl, cds, txSeq, vpPep, protSeq, lm);
         }
     else if (vpTx->end.txOffset > cds->end)
@@ -1553,14 +1553,14 @@ else if (cds && cds->end > cds->start)
             gpFxSetNoncodingInfo(fxList, startExonIx, exonCount, vpTx->start.txOffset,
                                  vpTx->txRef, vpTx->txAlt, lm);
             }
-        else
+        else if (vpPep)
             fxList = vpTxToFxUtrCds(vpTx, psl, cds, txSeq, vpPep, protSeq, lm);
         }
-    else
+    else if (vpPep)
         {
         fxList = vpTxToFxCds(vpTx, psl, cds, txSeq, vpPep, protSeq, lm);
         }
-    if (pslNmdTarget(psl, cds, MIN_INTRON))
+    if (pslNmdTarget(psl, cds, MIN_INTRON) && fxList)
         fxList->soNumber = NMD_transcript_variant;
     }
 else

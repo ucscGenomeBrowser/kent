@@ -37,7 +37,7 @@ latestLogs_euro=latestLogs_euro[len(latestLogs_euro)-5:]
 
 #Make a directory for the month (Y-M) 
 try:
-   bash("mkdir /hive/users/qateam/searchedTermsCronArchive/"+datetime.now().strftime("%Y-%m"))
+   os.makedirs("/hive/users/qateam/searchedTermsCronArchive/"+datetime.now().strftime("%Y-%m"))
 except subprocess.CalledProcessError:
         print("mkdir: cannot create directory /hive/users/qateam/searchedTermsCronArchive/"+datetime.now().strftime("%Y-%m")+": File exists")
         quit()

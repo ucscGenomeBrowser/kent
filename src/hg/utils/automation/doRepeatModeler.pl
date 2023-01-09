@@ -195,14 +195,14 @@ export tmpDir=`mktemp -d -p /dev/shm rModeler.XXXXXX`
 
 # working directory
 cd "\${tmpDir}"
-rsync -a -P "${runDir}/" "\${tmpDir}/"
+rsync --exclude "do.log" -a -P "${runDir}/" "\${tmpDir}/"
 
 export asmId="\${1}"
 export threadCount="${threadCount}"
 export rModeler="${RepeatModeler}"
 
 time (\$rModeler -engine ncbi \$threadCount -database "\${asmId}") > modeler.log 2>&1
-rsync -a -P ./ "${runDir}/"
+rsync --exclude "do.log" -a -P ./ "${runDir}/"
 cd "${runDir}"
 rm -fr "\${tmpDir}/"
 chmod 775 "${runDir}"

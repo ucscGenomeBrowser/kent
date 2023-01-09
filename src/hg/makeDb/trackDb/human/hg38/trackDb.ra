@@ -628,6 +628,7 @@ group varRep
     filterByRange._size on
     filterLabel._size Genomic size of variant
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
+    dataVersion 2020-02-25
 
     track dgvSupporting override
     parent dgvPlus
@@ -637,6 +638,7 @@ group varRep
     filterByRange._size on
     filterLabel._size Genomic size of variant
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
+    dataVersion 2020-02-25
 
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb

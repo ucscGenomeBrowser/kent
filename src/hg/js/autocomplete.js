@@ -97,7 +97,14 @@ var suggestBox = {
                     // jQuery('body').css('cursor', 'wait');
                     // document.TrackHeaderForm.submit();
                 }
-            });
+            })
+            .data("autocomplete")._renderMenu = function(ul, items) {
+                var that = this;
+                jQuery.each(items, function(index, item) {
+                    that._renderItem(ul, item);
+                });
+                ul.append("<div style='color:grey'>Click the go button or press Enter to search across all tracks, hubs and our website. See 'examples' link above.</div>");
+              };
         }
 
         // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from

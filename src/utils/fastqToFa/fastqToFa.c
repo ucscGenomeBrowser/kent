@@ -53,7 +53,7 @@ boolean inSequence = FALSE;
 long long seqCount = 0;
 long long totalSize = 0;
 boolean readingOk = lineFileNextReal(lf, &line);
-char seqNameNote[128];
+char seqNameNote[4096];
 FILE *qFH = NULL;
 FILE *qSZ = NULL;
 
