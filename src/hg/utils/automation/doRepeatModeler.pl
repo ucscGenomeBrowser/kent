@@ -253,6 +253,8 @@ rm -fr \${asmId}.fa \${asmId}.n?? ./err/
 if [ -s "\${asmId}-families.stk" ]; then
   gzip \${asmId}-families.stk
 fi
+gzip -c "\${asmId}-families.fa" > "${buildDir}/\${asmId}.repeatModeler.families.fa.gz"
+touch -r "\${asmId}-families.fa" "${buildDir}/\${asmId}.repeatModeler.families.fa.gz"
 c=`ls -d RM_* | wc -l`
 if [ "\${c}" -eq 1 ]; then
    RM_dir=`ls -d RM_*`
