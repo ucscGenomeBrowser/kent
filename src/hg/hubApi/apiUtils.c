@@ -437,6 +437,8 @@ for ( ; var; var = var->next)
 	continue;
     if (sameWord("debug", var->name))
 	continue;
+    if (sameWord("cmd", var->name))
+	continue;
     if (sameWord("measureTiming", var->name))
 	continue;
     if (NULL == validHash)

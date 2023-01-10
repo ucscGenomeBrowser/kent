@@ -985,9 +985,19 @@ hDisconnectCentral(&conn);
 return added;
 }
 
+static char *getCuratedHubPrefix()
+/* figure out what sandbox we're in. */
+{
+char *curatedHubPrefix = cfgOption("curatedHubPrefix");
+if (isEmpty(curatedHubPrefix))
+    curatedHubPrefix = "public";
 
-boolean hubConnectIsCurated(char *db)
-/* Look in the dbDb table to see if this hub is curated. */
+return curatedHubPrefix;
+}
+
+
+boolean hubConnectGetCuratedUrl(char *db, char **hubUrl)
+/* Check to see if this db is a curated hub and if so return its hubUrl */
 {
 struct sqlConnection *conn = hConnectCentral();
 char query[4096];
@@ -998,7 +1008,25 @@ char *dir = sqlQuickString(conn, query);
 boolean ret = !isEmpty(dir);
 hDisconnectCentral(&conn);
 
+if (hubUrl != NULL) // if user passed in hubUrl, calculate what it should be
+    {
+    *hubUrl = NULL;
+    if (!isEmpty(dir))   // this is a curated hub
+        {
+        char *path = dir + sizeof(hubCuratedPrefix) - 1;
+        char url[4096];
+        safef(url, sizeof url, "%s/%s/hub.txt", path, getCuratedHubPrefix());
+        *hubUrl = cloneString(url);
+        }
+    }
+
 return ret;
+}
+
+boolean hubConnectIsCurated(char *db)
+/* Look in the dbDb table to see if this hub is curated. */
+{
+return hubConnectGetCuratedUrl(db, NULL);
 }
 
 char *dbOveride;  // communicate with the web front end if we load a hub to support db cgivar. */
@@ -1049,9 +1077,7 @@ char *hubConnectLoadHubs(struct cart *cart)
 {
 int newCuratedHubId = 0;
 char *dbSpec = cartOptionalString(cart, "db");
-char *curatedHubPrefix = cfgOption("curatedHubPrefix");
-if (isEmpty(curatedHubPrefix))
-    curatedHubPrefix = "public";
+char *curatedHubPrefix = getCuratedHubPrefix();
 if (dbSpec != NULL)
     newCuratedHubId = lookForCuratedHubs(cart, trackHubSkipHubName(dbSpec), curatedHubPrefix);
 
