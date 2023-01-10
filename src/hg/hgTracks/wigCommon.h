@@ -16,7 +16,7 @@ struct wigCartOptions
     enum wiggleGridOptEnum horizontalGrid;	/*  grid lines, ON/OFF */
     enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
     enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
-    enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min */
+    enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min,sum */
     enum wiggleSmoothingEnum smoothingWindow;	/*  N: [1:15] */
     enum wiggleYLineMarkEnum yLineOnOff;	/*  OFF/ON	*/
     enum wiggleAlwaysZeroEnum alwaysZero;	/*  OFF/ON	*/

@@ -17,7 +17,7 @@ include wgEncodeRegDnase.ra
     superTrack wgEncodeReg hide
     shortLabel Transcription
     longLabel Transcription Levels Assayed by RNA-seq on 9 Cell Lines from ENCODE
-    visibility full
+    visibility hide
     maxHeightPixels 100:30:11
     showSubtrackColorOnUi on
     aggregate transparentOverlay

@@ -7,7 +7,7 @@ color 150,100,30
 altColor 230,170,40
 bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.assembly.bb
 type bigBed 6
-html html/GCF_014621545.1_ASM1462154v1.assembly
+html html/assembly
 searchIndex name
 searchTrix  /gbdb/mpxvRivers/ixIxx/GCF_014621545.1_ASM1462154v1.assembly.ix
 url https://www.ncbi.nlm.nih.gov/nuccore/$$
@@ -37,7 +37,7 @@ altColor 128,128,128
 viewLimits 30:70
 type bigWig 0 100
 bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.gc5Base.bw
-html html/GCF_014621545.1_ASM1462154v1.gc5Base
+html html/gc5Base
 
 track tanDups
 shortLabel Tandem Dups
@@ -46,7 +46,7 @@ compositeTrack on
 visibility hide
 type bigBed 12
 group map
-html html/GCF_014621545.1_ASM1462154v1.tanDups
+html html/tanDups
 
     track tandemDups
     parent tanDups on
@@ -54,6 +54,7 @@ html html/GCF_014621545.1_ASM1462154v1.tanDups
     longLabel Paired exactly identical sequence survey over entire genome assembly
     bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.tandemDups.bb
     type bigBed 12
+    html html/tanDups
 
 track simpleRepeat
 shortLabel Simple Repeats
@@ -62,7 +63,7 @@ group varRep
 visibility dense
 type bigBed 4 +
 bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.simpleRepeat.bb
-html html/GCF_014621545.1_ASM1462154v1.simpleRepeat
+html html/simpleRepeat
 
 track ncbiGene
 longLabel NCBI gene predictions
@@ -73,7 +74,7 @@ altColor 150,80,0
 #colorByStrand 0,80,150 150,80,0
 bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.ncbiGene.bb
 type bigGenePred
-html html/GCF_014621545.1_ASM1462154v1.ncbiGene
+html html/ncbiGene
 searchIndex name
 searchTrix  /gbdb/mpxvRivers/ixIxx/GCF_014621545.1_ASM1462154v1.ncbiGene.ix
 url https://www.ncbi.nlm.nih.gov/gene/?term=$$
@@ -89,7 +90,8 @@ longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
 visibility pack
 type bigBed 4 +
-html html/GCF_014621545.1_ASM1462154v1.cpgIslands
+html html/cpgIslands
+release alpha
 
     track cpgIslandExt
     parent cpgIslands off
@@ -97,7 +99,9 @@ html html/GCF_014621545.1_ASM1462154v1.cpgIslands
     longLabel CpG Islands (Islands < 300 Bases are Light Green)
     type bigBed 4 +
     priority 1
-    bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.cpgIslandExt.bb
+    bigDataUrl /gbdb/mpxvRivers/cpgIslands/mpxvRivers.cpgIslandExt.bb
+    html html/cpgIslands
+    release alpha
 
     track cpgIslandExtUnmasked
     parent cpgIslands on
@@ -105,7 +109,9 @@ html html/GCF_014621545.1_ASM1462154v1.cpgIslands
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
     type bigBed 4 +
     priority 2
-    bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.cpgIslandExtUnmasked.bb
+    bigDataUrl /gbdb/mpxvRivers/cpgIslands/mpxvRivers.cpgIslandExtUnmasked.bb
+    html html/cpgIslands
+    release alpha
 
 track windowMasker
 shortLabel WM + SDust
@@ -114,7 +120,10 @@ group varRep
 visibility dense
 type bigBed 3
 bigDataUrl  /gbdb/mpxvRivers/bbi/GCF_014621545.1_ASM1462154v1.windowMasker.bb
-html html/GCF_014621545.1_ASM1462154v1.windowMasker
+html html/windowMasker
 
 include pcrAmplicon.ra
 include viralzone.ra
+include genbankAli.ra
+include strs.ra
+include mask.ra

@@ -347,7 +347,8 @@ struct group
     float priority;        /* Display order, 0 is on top. */
     float defaultPriority; /* original priority before reordering */
     struct trackRef *trackList;  /* List of tracks. */
-    boolean defaultIsClosed;
+    boolean defaultIsClosed; /* close the track group by default. */
+    char *errMessage;      /* any error messages that came up during trackDb parsing. */
     };
 
 struct simpleFeature
@@ -630,7 +631,7 @@ struct track *getTrackList(struct group **pGroupList, int vis);
  * If vis is -1, restore default groups to tracks.
  * Shared by hgTracks and configure page. */
 
-void groupTrackListAddSuper(struct cart *cart, struct group *group);
+void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash);
 /* Construct a new track list that includes supertracks, sort by priority,
  * and determine if supertracks have visible members.
  * Replace the group track list with this new list.

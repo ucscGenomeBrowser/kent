@@ -15,7 +15,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../cgi-bin/hgTracks?db=hg38&amp;position=lastDbPos">Human GRCh38/hg38</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
-        <li><a href="../cgi-bin/hgTracks?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt&genome=GCA_009914755.4&position=lastDbPos">Human T2T-CHM13</a></li>
+        <li><a href="../cgi-bin/hgTracks?db=hub_3671779_hs1&position=lastDbPos">Human T2T-CHM13/hs1</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm39&amp;position=lastDbPos">Mouse GRCm39/mm39</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
 	<li><a href="https://hgdownload.soe.ucsc.edu/hubs/">Genome Archive GenArk</a></li>
@@ -110,8 +110,9 @@
 	<li class="even"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
 	<li class="odd"><a href="../staff.html">Staff</a></li>
 	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
-	<li class="odd"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
-	<li class="even last"><a href="../license/">Licenses</a></li>
+        <li class="odd"><a href="../goldenPath/history.html">Our History</a></li>
+        <li class="even"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
+        <li class="odd last"><a href="../license/">Licenses</a></li>
         <li><a href="../contacts.html">Contact Us</a></li>
 </ul>
 </li>

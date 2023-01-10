@@ -465,6 +465,7 @@ scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed bigP
 scoreLabel bed bigBed bigPsl bigGenePred bigLolly
 searchIndex bigBed bigPsl bigGenePred bigBarChart
 searchTrix bigBed bigPsl bigGenePred
+searchTrixContext bigBed bigPsl bigGenePred
 selectSubject psl bigPsl
 seqTable bed
 settingsByView *
@@ -573,6 +574,7 @@ wgEncodeGencodePolyAFeature genePred
 wgEncodeGencodeAnnotationRemark genePred
 wgEncodeGencodeTranscriptionSupportLevel genePred
 wgEncodeGencodeEntrezGene genePred
+maxTransEnabled *
 wibFile customTracks
 wigColorBy wig
 wigFile customTracks

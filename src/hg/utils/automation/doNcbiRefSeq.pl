@@ -898,7 +898,7 @@ hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq \$db $gbdbDir/se
 hgLoadPsl \$db -table=ncbiRefSeqPsl process/\$asmId.\$db.psl.gz
 
 if [ -s process/\$asmId.rna.cds ]; then
-  zcat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
+  cat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
     | pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
       process/\$asmId.\$db.psl.gz $dbTwoBit \\
         \$db.rna.fa ncbiRefSeqGenomicDiff || true

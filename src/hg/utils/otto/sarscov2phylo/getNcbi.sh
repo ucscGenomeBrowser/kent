@@ -27,8 +27,6 @@ while [[ $((++attempt)) -le $maxAttempts ]]; do
     if datasets download virus genome taxon 2697049 \
             --exclude-cds \
             --exclude-protein \
-            --exclude-gpff \
-            --exclude-pdb \
             --filename ncbi_dataset.zip \
             --no-progressbar \
             --debug \
@@ -36,8 +34,12 @@ while [[ $((++attempt)) -le $maxAttempts ]]; do
         break;
     else
         echo "FAILED; will try again after $retryDelay seconds"
-        rm -f ncbi_dataset.zip
-        sleep $retryDelay
+        if [[ -f ncbi_dataset.zip ]]; then
+            mv ncbi_dataset.zip{,.fail.$attempt}
+        fi
+        if [[ $attempt -lt $maxAttempts ]]; then
+            sleep $retryDelay
+        fi
         # Double the delay to give NCBI progressively more time
         retryDelay=$(($retryDelay * 2))
     fi

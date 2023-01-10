@@ -256,6 +256,7 @@
 #include "trix.h"
 #include "bPlusTree.h"
 #include "customFactory.h"
+#include "dupTrack.h"
 #include "iupac.h"
 #include "clinvarSubLolly.h"
 #include "jsHelper.h"
@@ -6004,7 +6005,7 @@ void appendAuthor(struct dyString *dy, char *gbAuthor, int len)
  * gbAuthor gets eaten in the process.
  * Also strip web URLs since Entrez doesn't like those. */
 {
-char buf[2048];
+char buf[MAXURLSIZE];
 char *ptr;
 
 if (len >= sizeof(buf))
@@ -26178,6 +26179,14 @@ char *item = cloneString(cartOptionalString(cart, "i"));
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
+char *dupWholeName = NULL;
+boolean isDup = isDupTrack(track);
+if (isDup)
+    {
+    dupWholeName = track;
+    track = dupTrackSkipToSourceName(track);
+    }
+
 if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
@@ -26303,6 +26312,17 @@ if ((!isCustomTrack(track) && dbIsFound)
 		tdb = hashFindVal(trackHash, "mrna");
                   /* Oh what a tangled web we weave. */
 	    }
+	}
+    }
+
+if (isDup)
+    {
+    struct dupTrack *dupList = dupTrackListFromCart(cart);
+    struct dupTrack *dup = dupTrackFindInList(dupList, dupWholeName);
+    if (dup != NULL)
+	{
+	tdb = dupTdbFrom(tdb, dup);
+	track = dupWholeName;
 	}
     }
 

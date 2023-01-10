@@ -6,7 +6,7 @@ longLabel All GENCODE annotations from VM30 (Ensembl 107)
 group genes
 dragAndDrop subTracks
 priority 2.954
-visibility pack
+visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
 allButtonPair on
@@ -15,21 +15,6 @@ fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred
 configurable off
 wgEncodeGencodeVersion M30
-wgEncodeGencodeAttrs wgEncodeGencodeAttrsVM30
-wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportVM30
-wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceVM30
-wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceVM30
-wgEncodeGencodeHgnc wgEncodeGencodeHgncVM30
-wgEncodeGencodePdb wgEncodeGencodePdbVM30
-wgEncodeGencodePubMed wgEncodeGencodePubMedVM30
-wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqVM30
-wgEncodeGencodeTag wgEncodeGencodeTagVM30
-wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportVM30
-wgEncodeGencodeUniProt wgEncodeGencodeUniProtVM30
-wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureVM30
-wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkVM30
-wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelVM30
-wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM30
 
     track wgEncodeGencodeVM30ViewGenes
     shortLabel Genes

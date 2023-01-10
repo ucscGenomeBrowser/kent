@@ -50,7 +50,7 @@ static char *mapInfoHdr =
     "mappedQName\t" "mappedQStart\t" "mappedQEnd\t"
     "mappedTName\t" "mappedTStart\t" "mappedTEnd\t"
     "mappedStrand\t"
-    "mappedAligned\t" "qStartTrunc\t" "qEndTrunc\n";
+    "mappedAligned\t" "qStartTrunc\t" "qEndTrunc\t" "mappedPslLine\n";
 
 static void usage()
 /* usage msg and exit */
@@ -232,7 +232,7 @@ return cnt;
 }
 
 static void writeMapInfo(FILE* fh, struct psl *inPsl, struct mapAln *mapAln, 
-                         struct psl* mappedPsl)
+                         struct psl* mappedPsl, unsigned outPslLine)
 /* write mapInfo row. mapAln and mappedPsl are NULL in not mapped  */
 {
 /* srcQName srcQStart srcQEnd srcQSize */
@@ -257,17 +257,19 @@ if (mapAln != NULL)
             mappedPsl->tName, mappedPsl->tStart, mappedPsl->tEnd,
             mappedPsl->strand);
     /* mappedAligned qStartTrunc qEndTrunc */
-    fprintf(fh, "%d\t%d\t%d\n",
+    fprintf(fh, "%d\t%d\t%d\t",
             pslAlignedBases(mappedPsl), 
             (mappedPsl->qStart-inPsl->qStart), (inPsl->qEnd-mappedPsl->qEnd));
+    /* mappedPslLine */
+    fprintf(fh, "%u", outPslLine);
     }
 else
     {
     int i;
-    for (i = 9; i < 26; i++)
+    for (i = 9; i < 27; i++)
         fputc('\t', fh);
-    fputc('\n', fh);
     }
+fputc('\n', fh);
 }
 
 static void addQNameSuffix(struct psl *psl)
@@ -282,20 +284,21 @@ freeMem(oldQName);
 }
 
 static void mappedPslOutput(struct psl *inPsl, struct mapAln *mapAln, struct psl* mappedPsl,
-                            FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
+                            FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh, unsigned outPslLine)
 /* output one mapped psl */
 {
 if (suffix != NULL)
     addQNameSuffix(mappedPsl);
 pslTabOut(mappedPsl, outPslFh);
 if (mapInfoFh != NULL)
-    writeMapInfo(mapInfoFh, inPsl, mapAln, mappedPsl);
+    writeMapInfo(mapInfoFh, inPsl, mapAln, mappedPsl, outPslLine);
 if (mappingPslFh != NULL)
     pslTabOut(mapAln->psl, mappingPslFh);
 }
 
 static boolean mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
-                          FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
+                          FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh,
+                          unsigned* outPslLineRef)
 /* map one pair of query and target PSL */
 {
 struct psl* mappedPsl;
@@ -312,13 +315,17 @@ verbosePslNl(2, "mappedAln", mappedPsl);
 /* only output if blocks were actually mapped */
 boolean wasMapped = mappedPsl != NULL;
 if (wasMapped)
-    mappedPslOutput(inPsl, mapAln, mappedPsl, outPslFh, mapInfoFh, mappingPslFh);
+    {
+    mappedPslOutput(inPsl, mapAln, mappedPsl, outPslFh, mapInfoFh, mappingPslFh, *outPslLineRef);
+    (*outPslLineRef)++;
+    }
 pslFree(&mappedPsl);
 return wasMapped;
 }
 
 static void mapQueryPsl(struct psl* inPsl, struct genomeRangeTree *mapAlns,
-                        FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
+                        FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh,
+                        unsigned* outPslLineRef)
 /* map a query psl to all targets  */
 {
 static struct dyString *idBuf = NULL;
@@ -332,13 +339,13 @@ for (overMapAlnNode = overMapAlnNodes; overMapAlnNode != NULL; overMapAlnNode = 
         {
         if ((overMapAln->qNameMatch == NULL) || sameString(inPsl->qName, overMapAln->qNameMatch))
             {
-            if (mapPslPair(inPsl, overMapAln, outPslFh, mapInfoFh, mappingPslFh))
+            if (mapPslPair(inPsl, overMapAln, outPslFh, mapInfoFh, mappingPslFh, outPslLineRef))
                 wasMapped = TRUE;
             }
         }
     }
 if ((mapInfoFh != NULL) && !wasMapped)
-    writeMapInfo(mapInfoFh, inPsl, NULL, NULL);
+    writeMapInfo(mapInfoFh, inPsl, NULL, NULL, 0);
 }
 
 static void pslMap(char* inPslFile, char *mapFile, char *outPslFile)
@@ -348,6 +355,7 @@ struct genomeRangeTree *mapAlns;
 struct psl* inPsl;
 struct lineFile* inPslLf = pslFileOpen(inPslFile);
 FILE *outPslFh, *mapInfoFh = NULL, *mappingPslFh = NULL;
+unsigned outPslLine = 0;
 
 if (chainMapFile)
     mapAlns = loadMapChains(mapFile);
@@ -366,7 +374,7 @@ while ((inPsl = pslNext(inPslLf)) != NULL)
     {
     if (swapIn)
         pslSwap(inPsl, FALSE);
-    mapQueryPsl(inPsl, mapAlns, outPslFh, mapInfoFh, mappingPslFh);
+    mapQueryPsl(inPsl, mapAlns, outPslFh, mapInfoFh, mappingPslFh, &outPslLine);
     pslFree(&inPsl);
     }
 carefulClose(&mappingPslFh);

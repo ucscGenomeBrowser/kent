@@ -26,11 +26,47 @@ while (my $asmId = <FH>) {
   my $id2 = substr($asmId, 10, 3);
   my $srcDir = sprintf "%s/%s/%s/%s/%s/%s", $ncbiSrc, $gcx, $id0, $id1, $id2, $asmId;
   my $asmRpt = "$srcDir/${asmId}_assembly_report.txt";
+  my $yearDate = `grep -i -m 1 "Date:" "${asmRpt}" | tr -d "" | awk '{print \$NF}' | sed -e 's/-.*//;'`;
+  chomp $yearDate;
+  my $isolate = `grep -i -m 1 "Isolate:" "${asmRpt}" | tr -d ""`;
+  chomp $isolate;
+  if (length($isolate)) {
+    $isolate =~ s/.*solate: *//;
+  }
+  my $cultivar = `grep -i -m 1 "Infraspecific name:" "${asmRpt}" | tr -d ""`;
+  chomp $cultivar;
+  if (length($cultivar)) {
+    $cultivar =~ s/.*cultivar=//;
+    $cultivar =~ s/.*ecotype=//;
+    $cultivar =~ s/.*strain=//;
+    $cultivar =~ s/.*breed=//;
+  }
+  my $extraStrings = "";
+  if (length($isolate) && length($cultivar)) {
+     $extraStrings = "$cultivar $isolate $yearDate";
+  } elsif (length($isolate)) {
+     $extraStrings = "$isolate $yearDate";
+  } elsif (length($cultivar)) {
+     $extraStrings = "$cultivar $yearDate";
+  }
+  if ( "x${extraStrings}y" eq "xy" ) {
+     $extraStrings = "$yearDate";
+  }
   my $orgName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
   $orgName =~ s/.*\(//;
   $orgName =~ s/\)//;
   chomp $orgName;
-  printf "%s\t%s\n", $asmId, $orgName;
+  if ($orgName eq "viruses") {
+    $orgName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
+    chomp $orgName;
+    $orgName =~ s/.*ism name:\s+//i;
+    $orgName =~ s/\s+\(.*\)$//;
+  }
+  if (length($extraStrings)) {
+    printf "%s\t%s (%s)\n", $asmId, $orgName, $extraStrings;
+  } else {
+    printf "%s\t%s\n", $asmId, $orgName;
+  }
 }
 close (FH);
 

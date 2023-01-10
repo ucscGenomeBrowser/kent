@@ -257,7 +257,7 @@ class GencodeGeneLocus(object):
         return True
 
     def add(self, transcriptLocus):
-        assert(transcriptLocus.gp.chrom == self.chrom)
+        assert transcriptLocus.gp.chrom == self.chrom
         self.transcriptLoci.append(transcriptLocus)
         if self.chromStart is None:
             self.chromStart = transcriptLocus.gp.txStart

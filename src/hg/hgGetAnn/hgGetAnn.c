@@ -220,7 +220,7 @@ verbose(2, "begin position query: %s\n", spec);
 if (sameString(spec, "-"))
     positions = findAllChroms(db);
 else
-    positions = hgPositionsFind(db, spec, NULL, "hgGetAnn", NULL, FALSE);
+    positions = hgPositionsFind(db, spec, NULL, "hgGetAnn", NULL, FALSE, FALSE, NULL);
 
 verbose(2, "end position query: %d matches\n", countFindMatches(positions));
 if (verboseLevel() >= 2)

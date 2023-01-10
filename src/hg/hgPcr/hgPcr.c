@@ -458,6 +458,9 @@ printf(" Min Perfect Match: ");
 cgiMakeIntVar("wp_perfect", minPerfect, 2);
 printf("%s", "</TD>\n");
 
+jsOnEventById("click", "Submit", "if ($('#wp_r').val()==='' || $('#wp_f').val()==='') "\
+        "{ alert('Please specify at least a forward and reverse primer. Both input boxes need to be filled out.'); event.preventDefault(); }");
+
 printf("%s", "<TD><CENTER>\n");
 printf(" Min Good Match: ");
 cgiMakeIntVar("wp_good", minGood, 2);

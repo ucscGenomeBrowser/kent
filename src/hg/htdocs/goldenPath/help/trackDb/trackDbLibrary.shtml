@@ -2546,8 +2546,8 @@ There are no extra options that can appear on the type hic line.
     <code>use vertical viewing range setting</code>.</P>
     <P>NOTE: These options can be misleading if a noisy, low signal
     erroneously appears as significant because there is no high signal in the
-    view window. The "<code>group</code>" option only applies to composite 
-    bigWig tracks.</P>
+    view window. To use the <b>group</b> option declare the setting only in
+    the parent bigWig composite, not in the individual children tracks.</P>
     <p>For Hi-C tracks, higher interaction scores are represented with more
     intense colors.  When this setting is set to "<code>off</code>", the score
     at which the color reaches maximum intensity is a fixed value that can

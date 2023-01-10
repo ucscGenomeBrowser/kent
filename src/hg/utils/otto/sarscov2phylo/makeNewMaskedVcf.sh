@@ -180,13 +180,13 @@ cut -f 1 *.dropoutContam \
 | awk -F\| '{ if ($3 == "") { print $1; } else { print $2; } }' \
     > dropoutContam.ids
 # Also exclude sequences with unbelievably low numbers of mutations given sampling dates.
-zcat $gisaidDir/chunks/nextclade.full.tsv.gz | cut -f 1,6 \
+zcat $gisaidDir/chunks/nextclade.full.tsv.gz | cut -f 1,10 \
 | awk -F\| '{ if ($3 == "") { print $1 "\t" $2; } else { print $2 "\t" $3; } }' \
 | $scriptDir/findRefBackfill.pl > gisaid.refBackfill
-zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,6 | sort \
+zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
 | join -t $'\t' <(cut -f 1,3 $ncbiDir/ncbi_dataset.plusBioSample.tsv | sort) - \
 | $scriptDir/findRefBackfill.pl > gb.refBackfill
-zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,6 | sort \
+zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
 | join -t $'\t' <(cut -d, -f 1,5 $cogUkDir/cog_metadata.csv | tr , $'\t' | sort) - \
 | $scriptDir/findRefBackfill.pl > cog.refBackfill
 cut -f 1 *.refBackfill > refBackfill.ids
@@ -312,7 +312,7 @@ wc -l $renaming
 tawk '{ if ($1 ~ /^#/) { print; } else if ($7 == "mask") { $1 = "NC_045512v2"; print; } }' \
     $problematicSitesVcf > mask.vcf
 time cat <(twoBitToFa $ref2bit stdout) $alignedFa \
-| faToVcf -maxDiff=1000 \
+| faToVcf -maxDiff=200 \
     -excludeFile=exclude.ids \
     -verbose=2 stdin stdout \
 | vcfRenameAndPrune stdin $renaming stdout \

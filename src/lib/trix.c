@@ -11,7 +11,9 @@
 #include "sqlNum.h"
 #include "udc.h"
 #include "net.h"
-
+#include "rangeTree.h"
+#include "portable.h"
+#include "errCatch.h"
 
 /* Some local structures for the search. */
 struct trixHitPos 
@@ -33,13 +35,7 @@ struct trixWordResult
     struct trixHitPos *iHit;	/* Current position during an inner iteration. */
     };
 
-struct trixIxx
-/* A prefix and */
-    {
-    off_t pos;	   /* Position where prefix first occurs in file. */
-    char prefix[trixPrefixSize];/* Space padded first five letters of what we're indexing. */
-    };
-
+int trixPrefixSize = 5;
 /* Some cleanup code. */
 
 static void trixHitPosFree(struct trixHitPos **pPos)
@@ -193,7 +189,8 @@ if (trix->ixxSize >= trix->ixxAlloc)
      }
 ixx = trix->ixx + trix->ixxSize;
 ixx->pos = pos;
-memcpy(ixx->prefix, prefix, sizeof(ixx->prefix));
+AllocVar(ixx->prefix);
+memcpy(ixx->prefix, prefix, trixPrefixSize);
 trix->ixxSize += 1;
 }
 
@@ -223,12 +220,12 @@ else
     lineFileClose((struct lineFile **)lf);
 }
 
-void ourSeek(struct trix *trix, off_t ixPos)
+void ourSeek(struct trix *trix, struct lineFile *lf, off_t ixPos)
 {
 if (trix->useUdc)
-    udcSeek((struct udcFile *)trix->lf, ixPos);
+    udcSeek((struct udcFile *)lf, ixPos);
 else
-    lineFileSeek((struct lineFile *)trix->lf, ixPos, SEEK_SET);
+    lineFileSeek((struct lineFile *)lf, ixPos, SEEK_SET);
 }
 
 struct trix *trixOpen(char *ixFile)
@@ -269,7 +266,7 @@ else
     }
 }
 
-static off_t trixFindIndexStartLine(struct trix *trix, char *word)
+static off_t trixFindIndexStartLine(struct trixIxx *trixIxx, int ixxSize, char *word)
 /* Find start position of line we want to start at in the first level
  * index. */
 {
@@ -279,9 +276,9 @@ off_t pos = 0;
 
 trixCopyToPrefix(word, wordPrefix);
 toLowerN(wordPrefix, trixPrefixSize);
-for (i=0; i<trix->ixxSize; ++i)
+for (i=0; i < ixxSize; ++i)
     {
-    struct trixIxx *ixx = trix->ixx + i;
+    struct trixIxx *ixx = trixIxx + i;
     if (memcmp(wordPrefix, ixx->prefix, trixPrefixSize) < 0)
        break;
     pos = ixx->pos;
@@ -313,59 +310,19 @@ slReverse(&hitList);
 return hitList;
 }
 
-int trixHitPosCmp(struct trixHitPos *a, struct trixHitPos *b)
+int trixHitPosCmp(const void *a, const void *b)
 /* Compare function to sort trixHitPos. */
 {
-int diff = strcmp(a->itemId, b->itemId);
+struct trixHitPos *aHitPos = *((struct trixHitPos **)a);
+struct trixHitPos *bHitPos = *((struct trixHitPos **)b);
+int diff = strcmp(aHitPos->itemId, bHitPos->itemId);
 if (diff == 0)
     {
-    diff = a->wordIx - b->wordIx;
+    diff = aHitPos->wordIx - bHitPos->wordIx;
     if (diff == 0)
-        diff = a->leftoverLetters - b->leftoverLetters;
+        diff = aHitPos->leftoverLetters - bHitPos->leftoverLetters;
     }
 return diff;
-}
-
-
-struct trixHitPos *mergeHits(struct trixHitPos *aList, struct trixHitPos *bList)
-/* Return hit list that merges aList and bList.  The input is sorted,
- * and so is the output. */
-{
-struct trixHitPos *a, *b, *aNext, *bNext, *newList = NULL;
-
-a = aList;
-b = bList;
-for (;;)
-    {
-    if (a == NULL)
-        {
-	if (b == NULL)
-	    break;
-	bNext = b->next;
-	slAddHead(&newList, b);
-	b = bNext;
-	}
-    else if (b == NULL)
-        {
-	aNext = a->next;
-	slAddHead(&newList, a);
-	a = aNext;
-	}
-    else if (trixHitPosCmp(a, b) < 0)
-        {
-	aNext = a->next;
-	slAddHead(&newList, a);
-	a = aNext;
-	}
-    else
-        {
-	bNext = b->next;
-	slAddHead(&newList, b);
-	b = bNext;
-	}
-    }
-slReverse(&newList);
-return newList;
 }
 
 static int reasonablePrefix(char *prefix, char *word, enum trixSearchMode mode)
@@ -414,25 +371,25 @@ struct trixHitPos *hitList = hashFindVal(trix->wordHitHash, searchWord);
 if (hitList == NULL)
     {
     struct trixHitPos *oneHitList;
-    off_t ixPos = trixFindIndexStartLine(trix, searchWord);
-    ourSeek(trix, ixPos);
+    off_t ixPos = trixFindIndexStartLine(trix->ixx, trix->ixxSize, searchWord);
+    ourSeek(trix, trix->lf, ixPos);
     while (ourReadLine(trix, trix->lf, &line))
-	{
-	word = nextWord(&line);
-	if (startsWith(searchWord, word))
-	    {
-	    int leftoverLetters = reasonablePrefix(searchWord, word, mode);
-	    /* uglyf("reasonablePrefix(%s,%s)=%d<BR>\n", searchWord, word, leftoverLetters); */
-	    if (leftoverLetters >= 0)
-		{
-		oneHitList = trixParseHitList(searchWord, line, 
-			leftoverLetters);
-		hitList = mergeHits(hitList, oneHitList);
-		}
-	    }
-	else if (strcmp(searchWord, word) < 0)
-	    break;
-	}
+        {
+        word = nextWord(&line);
+        if (startsWith(searchWord, word))
+            {
+            int leftoverLetters = reasonablePrefix(searchWord, word, mode);
+            /* uglyf("reasonablePrefix(%s,%s)=%d<BR>\n", searchWord, word, leftoverLetters); */
+            if (leftoverLetters >= 0)
+                {
+                oneHitList = trixParseHitList(searchWord, line, leftoverLetters);
+                hitList = slCat(oneHitList, hitList);
+                }
+            }
+        else if (strcmp(searchWord, word) < 0)
+            break;
+        }
+    slSort(&hitList, trixHitPosCmp);
     hashAdd(trix->wordHitHash, searchWord, hitList);
     }
 if (hitList != NULL)
@@ -528,13 +485,16 @@ for (twr = twrList; twr != NULL; twr = twr->next)
 return FALSE;
 }
 
-static void findUnorderedSpan(struct trixWordResult *twrList,
-	char *itemId, int *retSpan, int *retLeftoverLetters)
+static int findUnorderedSpan(struct trixWordResult *twrList,
+	char *itemId, int *retLeftoverLetters, int **retWordPos)
 /* Find out smallest number of words in doc that will cover
  * all words in search. */
 {
 int minSpan = BIGNUM;
 int leftoverLetters = 0;
+int curLeftover = 0;
+int minPossibleSpan;
+int i;
 struct trixWordResult *twr;
 
 /* Set up iHit pointers we use to keep track of our 
@@ -542,51 +502,55 @@ struct trixWordResult *twr;
  * will be used later. */
 for (twr = twrList; twr != NULL; twr = twr->next)
     twr->iHit = twr->hit;
-
+int numWords = minPossibleSpan = slCount(twrList);
+int *unorderedWordPositions;
+AllocArray(unorderedWordPositions, numWords);
 for (;;)
     {
     int minWord = BIGNUM, maxWord=0, span;
-    int curLeftover = 0;
 
     /* Figure out current span and save as min if it's smallest so far. */
-    for (twr = twrList; twr != NULL; twr = twr->next)
+    for (twr = twrList, i = 0; twr != NULL && i < numWords; twr = twr->next, i++)
         {
-	int curWord = twr->iHit->wordIx;
-	if (curWord < minWord)
-	    minWord = curWord;
-	if (curWord > maxWord)
-	    maxWord = curWord;
-	curLeftover += twr->iHit->leftoverLetters;
-	}
+        unorderedWordPositions[i] = twr->iHit->wordIx-1;
+        int curWord = twr->iHit->wordIx;
+        if (curWord < minWord)
+            minWord = curWord;
+        if (curWord > maxWord)
+            maxWord = curWord;
+        curLeftover += twr->iHit->leftoverLetters;
+        }
     span = maxWord - minWord;
     if (span < minSpan)
-	{
+        {
         minSpan = span;
-	leftoverLetters = curLeftover;
-	}
+        leftoverLetters = curLeftover;
+        }
 
     /* Advance iHit past minWord.  Break if we go outside of our doc or item. */
     for (twr = twrList; twr != NULL; twr = twr->next)
         {
-	if (twr->iHit->wordIx == minWord)
-	    {
-	    struct trixHitPos *hit = twr->iHit = twr->iHit->next;
-	    if (hit == NULL || !sameString(hit->itemId, itemId))
-	        {
-		*retSpan = minSpan+1;
-		*retLeftoverLetters = leftoverLetters;
-		return;
-		}
-	    }
-	}
+        if (twr->iHit->wordIx == minWord)
+            {
+            struct trixHitPos *hit = twr->iHit = twr->iHit->next;
+            if (hit == NULL || !sameString(hit->itemId, itemId) || minSpan == minPossibleSpan)
+                {
+                *retLeftoverLetters = leftoverLetters;
+                *retWordPos = unorderedWordPositions;
+                return span + 1;
+                }
+            }
+        }
     }
+*retWordPos = unorderedWordPositions;
 } 
 
-static int findWordPos(struct trixWordResult *twrList, char *itemId)
+int findWordPos(struct trixWordResult *twrList, char *itemId)
 /* Figure out the first word position.  For multiple words, this
  * will be the maximimum first word position of all words. 
  * This assumes that the hits are sorted by word position
- * within a document. */
+ * within a document. NOTE: this does not take into account
+ * that the span may not actually start at that word */
 {
 int firstWordPos = 0;
 struct trixWordResult *twr;
@@ -599,8 +563,7 @@ for (twr = twrList; twr != NULL; twr = twr->next)
 return firstWordPos;
 }
 
-static int findOrderedSpan(struct trixWordResult *twrList,
-	char *itemId)
+static int findOrderedSpan(struct trixWordResult *twrList, char *itemId, int **retWordPos)
 /* Find out smallest number of words in doc that will cover
  * all words in search. */
 {
@@ -613,34 +576,47 @@ struct trixWordResult *twr;
 for (twr = twrList; twr != NULL; twr = twr->next)
     twr->iHit = twr->hit;
 
+int numWords = slCount(twrList);
+int *orderedWordPositions;
+AllocArray(orderedWordPositions, numWords);
 for (;;)
     {
-    int startWord = twrList->iHit->wordIx;
+    int startWord = twrList->iHit->wordIx-1;
     int endWord = startWord;
-    int span;
+    int span, i;
     struct trixHitPos *hit;
+    // we haven't found a span yet so initialize to the first word start position
+    if (minSpan == BIGNUM - 1)
+        orderedWordPositions[0] = startWord;
 
     /* Set up twr->iHit to be closest one past hit of previous twr. */
-    for (twr = twrList->next; twr != NULL; twr = twr->next)
+    for (twr = twrList->next, i = 1; twr != NULL && i < numWords; twr = twr->next, i++)
         {
-	for (hit = twr->iHit; ; hit = hit->next)
-	    {
-	    if (hit == NULL || !sameString(hit->itemId, itemId))
-	        return minSpan + 1;
-	    if (hit->wordIx > endWord)
-	        break;
-	    }
-	twr->iHit = hit;
-	endWord = hit->wordIx;
-	}
+        for (hit = twr->iHit; ; hit = hit->next)
+            {
+            if (hit == NULL || !sameString(hit->itemId, itemId))
+                return minSpan + 1;
+            if (hit->wordIx > endWord)
+                break;
+            }
+        twr->iHit = hit;
+        endWord = hit->wordIx;
+        orderedWordPositions[i] = hit->wordIx-1;
+        }
     span = endWord - startWord;
     if (span < minSpan)
+        {
+        orderedWordPositions[0] = startWord;
+        CopyArray(orderedWordPositions, *retWordPos, numWords);
         minSpan = span;
+        }
 
     /* Advance to next occurence of first word. */
     hit = twrList->iHit = twrList->iHit->next;
     if (hit == NULL || !sameString(hit->itemId, itemId))
-	return minSpan+1;
+        {
+        return minSpan+1;
+        }
     }
 }
 
@@ -660,14 +636,18 @@ for (;;)
     char *itemId = highestId(twrList);
     if (seekAllToId(twrList, itemId))
         {
-	AllocVar(ts);
-	ts->itemId = cloneString(itemId);
-	findUnorderedSpan(twrList, itemId, 
-		&ts->unorderedSpan, &ts->leftoverLetters);
-	ts->orderedSpan = findOrderedSpan(twrList, itemId);
-	ts->wordPos = findWordPos(twrList, itemId);
-	slAddHead(&tsList, ts);
-	}
+        AllocVar(ts);
+        ts->itemId = cloneString(itemId);
+        // NOTE: tsr->wordPos first gets filled in by findUnorderedSpan.
+        // If findOrderedSpan also finds the search words in order, tsr->wordPos
+        // becomes that order instead of the unordered positions. Ideally I suppose
+        // it would be best that there were two word position arrays saved for each
+        // type
+        ts->unorderedSpan = findUnorderedSpan(twrList, itemId, &ts->leftoverLetters, &ts->wordPos);
+        ts->orderedSpan = findOrderedSpan(twrList, itemId, &ts->wordPos);
+        ts->wordPosSize = slCount(twrList);
+        slAddHead(&tsList, ts);
+        }
     seekAllPastId(twrList, itemId);
     if (anyTwrDone(twrList))
         break;
@@ -684,16 +664,23 @@ const struct trixSearchResult *b = *((struct trixSearchResult **)vb);
 int dif;
 dif = a->unorderedSpan - b->unorderedSpan;
 if (dif == 0)
-   {
-   dif = a->orderedSpan - b->orderedSpan;
-   if (dif == 0)
-       {
-       dif = a->leftoverLetters - b->leftoverLetters;
-       if (dif == 0)
-	   dif = a->wordPos - b->wordPos;
-       }
-   }
-       
+    {
+    dif = a->orderedSpan - b->orderedSpan;
+    if (dif == 0)
+        {
+        dif = a->leftoverLetters - b->leftoverLetters;
+        if (dif == 0)
+            {
+            int i;
+            for (i = 0; i < a->wordPosSize; i++)
+                {
+                dif = a->wordPos[i] - b->wordPos[i];
+                if (dif != 0)
+                    break;
+                }
+            }
+        }
+    }
 return dif;
 }
 
@@ -705,7 +692,10 @@ struct trixSearchResult *trixSearch(struct trix *trix, int wordCount, char **wor
  * closer to the start of the search text will appear before those later.
  * Do a trixSearchResultFreeList when done.  If mode is tsmExpand or tsmFirstFive then
  * this will match not only the input words, but also additional words that start with
- * the input words. */
+ * the input words. If addSnippets is true, go back to the original text and include
+ * the text around the matching word as a "word1 word2 ... matchedWord word3 word4 ..."
+ * style snippet. The snippet will have '...' in between multi-word matches if the
+ * span between matched words is 'too' long. */
 {
 struct trixWordResult *twr, *twrList = NULL;
 struct trixSearchResult *ts, *tsList = NULL;
@@ -721,45 +711,267 @@ if (wordCount == 1)
         return NULL;
     for (hit = twr->hitList; hit != NULL; hit = hit->next)
         {
-	if (!sameString(lastId, hit->itemId))
-	    {
-	    lastId = hit->itemId;
-	    AllocVar(ts);
-	    ts->itemId = hit->itemId;	/* Transfer itemId */
-	    hit->itemId = NULL;
-	    ts->orderedSpan = 1;
-	    ts->unorderedSpan = 1;
-	    ts->wordPos = hit->wordIx;
-	    ts->leftoverLetters = hit->leftoverLetters;
-	    slAddHead(&tsList, ts);
-	    }
-	}
+        if (!sameString(lastId, hit->itemId))
+            {
+            lastId = hit->itemId;
+            AllocVar(ts);
+            ts->itemId = hit->itemId;        /* Transfer itemId */
+            hit->itemId = NULL;
+            ts->orderedSpan = 1;
+            ts->unorderedSpan = 1;
+            AllocArray(ts->wordPos, 1);
+            ts->wordPos[0] = hit->wordIx - 1;
+            ts->wordPosSize = 1;
+            ts->leftoverLetters = hit->leftoverLetters;
+            slAddHead(&tsList, ts);
+            }
+        }
     }
 else
     {
     for (wordIx=0; wordIx<wordCount; ++wordIx)
-	{
-	char *searchWord = words[wordIx];
-	twr = trixSearchWordResults(trix, searchWord, mode);
-	if (twr == NULL)
-	    {
-	    gotMiss = TRUE;
-	    break;
-	    }
-	slAddHead(&twrList, twr);
+        {
+        char *searchWord = words[wordIx];
+        twr = trixSearchWordResults(trix, searchWord, mode);
+        if (twr == NULL)
+            {
+            gotMiss = TRUE;
+            break;
+            }
+        slAddHead(&twrList, twr);
 #ifdef DEBUG
-	trwDump(twr);
+        trwDump(twr);
 #endif /* DEBUG */
-	}
+        }
     if (!gotMiss)
-	{
-	slReverse(&twrList);
-	tsList = findMultipleWordHits(twrList);
-	}
+        {
+        slReverse(&twrList);
+        tsList = findMultipleWordHits(twrList);
+        }
     }
 trixWordResultFreeList(&twrList);
 slSort(&tsList, trixSearchResultCmp);
 return tsList;
 }
 
+void snippetIndexAddToIxx(struct snippetIndex *snippetIndex, off_t pos, char *prefix)
+/* Add to trix->ixx. */
+{
+struct trixIxx *ixx;
+if (snippetIndex->ixxSize >= snippetIndex->ixxAlloc)
+     {
+     snippetIndex->ixxAlloc += snippetIndex->ixxAlloc;	/* Double allocation. */
+     ExpandArray(snippetIndex->ixx, snippetIndex->ixxSize, snippetIndex->ixxAlloc);
+     }
+ixx = snippetIndex->ixx + snippetIndex->ixxSize;
+ixx->pos = pos;
+AllocVar(ixx->prefix);
+toLowerN(prefix, trixPrefixSize);
+memcpy(ixx->prefix, prefix, trixPrefixSize);
+snippetIndex->ixxSize += 1;
+}
 
+static void openSnippetIxx(struct snippetIndex *snippetIndex, char *ixxFile, struct trix *trix)
+{
+int prefixSize = 15;
+snippetIndex->ixxAlloc = 8*1024;
+AllocArray(snippetIndex->ixx, snippetIndex->ixxAlloc);
+void *lf = ourOpen(trix, ixxFile);
+char *line;
+while (ourReadLine(trix, lf, &line) )
+    {
+    off_t pos = unhex(line+prefixSize);
+    snippetIndexAddToIxx(snippetIndex, pos, line);
+    }
+ourClose(trix, &lf);
+}
+
+static void openSnippetIndex(struct trix *trix)
+/* Fill out a struct snippetIndex on a trix index */
+{
+char *baseName = cloneString(trix->lf->fileName);
+chopSuffix(baseName);
+char origFile[PATH_LEN];
+safef(origFile, sizeof(origFile), "%s.txt", baseName);
+if (!fileExists(origFile))
+    safef(origFile, sizeof(origFile), "%s.tab", baseName);
+if (!fileExists(origFile))
+    errAbort("Can't find original file used for indexing, base name: '%s', %s.txt or %s.tab should exist",
+            baseName, baseName, baseName);
+char offsetFile[PATH_LEN];
+char ixxFile[PATH_LEN];
+safef(offsetFile, sizeof(origFile), "%s.offsets", baseName);
+if (!fileExists(offsetFile))
+    errAbort("Can't find offset file '%s.offsets'", baseName);
+safef(ixxFile, sizeof(origFile), "%s.offsets.ixx", baseName);
+if (!fileExists(ixxFile))
+    errAbort("Can't find offsets.ixx file '%s.offsets.ixx'", baseName);
+struct snippetIndex *snippetIndex = NULL;
+AllocVar(snippetIndex);
+snippetIndex->origFile = lineFileOpen(origFile, TRUE);
+snippetIndex->textIndex = lineFileOpen(offsetFile, TRUE);
+openSnippetIxx(snippetIndex, ixxFile, trix);
+trix->snippetIndex = snippetIndex;
+}
+
+bool wordMiddleChars[256];  /* Characters that may be part of a word. */
+bool wordBeginChars[256];
+
+void initCharTables()
+/* Initialize tables that describe characters. */
+{
+int c;
+for (c=0; c<256; ++c)
+    if (isalnum(c))
+       wordBeginChars[c] = wordMiddleChars[c] = TRUE;
+wordBeginChars['_'] = wordMiddleChars['_'] = TRUE;
+wordMiddleChars['.'] = TRUE;
+wordMiddleChars['-'] = TRUE;
+}
+
+char *skipToWord(char *s)
+/* Skip to next word character.  Return NULL at end of string. */
+{
+unsigned char c;
+while ((c = *s) != 0)
+    {
+    if (wordBeginChars[c])
+        return s;
+    s += 1;
+    }
+return NULL;
+}
+
+char *skipOutWord(char *start)
+/* Skip to next non-word character.  Returns empty string at end. */
+{
+char *s = start;
+unsigned char c;
+while ((c = *s) != 0)
+    {
+    if (!wordMiddleChars[c])
+        break;
+    s += 1;
+    }
+while (s > start && !wordBeginChars[(int)(s[-1])])
+    s -= 1;
+return s;
+}
+
+static struct rbTree *wordPosToRangeTree(int *intList, int len)
+/* Convert an array of integers to a range tree with 10 context around each int */
+{
+struct rbTree *rt = rangeTreeNew();
+int i;
+for (i = 0; i < len; i++)
+    {
+    int temp = intList[i] - 10;
+    if (temp < 0) temp = 0;
+    rangeTreeAdd(rt, temp, intList[i]+10);
+    }
+return rt;
+}
+
+void addSnippetForResult(struct trixSearchResult *tsr, struct trix *trix)
+/* Find the snippet for a search result */
+{
+struct snippetIndex *snippetIndex = trix->snippetIndex;
+char *ourDocId = tsr->itemId;
+static struct dyString *snippet = NULL;
+if (snippet == NULL)
+    snippet = dyStringNew(0);
+else
+    dyStringClear(snippet);
+off_t origFileOffset = 0, offsetFilePos = trixFindIndexStartLine(snippetIndex->ixx, snippetIndex->ixxSize, ourDocId);
+ourSeek(trix, snippetIndex->textIndex, offsetFilePos);
+char *snippetIxLine, *origTextLine;
+char *thisDocId;
+while (ourReadLine(trix, snippetIndex->textIndex, &snippetIxLine))
+    {
+    thisDocId = nextWord(&snippetIxLine);
+    if (sameString(thisDocId, ourDocId))
+        {
+        origFileOffset = sqlUnsignedLong(nextWord(&snippetIxLine));
+        ourSeek(trix, snippetIndex->origFile, origFileOffset);
+        ourReadLine(trix, snippetIndex->origFile, &origTextLine);
+        nextWord(&origTextLine);
+        char *origText = skipLeadingSpaces(origTextLine);
+        // make a rangeTree out of wordPos
+        intSort(tsr->wordPosSize, tsr->wordPos);
+        struct rbTree *rt = wordPosToRangeTree(tsr->wordPos, tsr->wordPosSize);
+        int i, end = tsr->wordPos[tsr->wordPosSize-1] + 10;
+        char word[128];
+        char *s, *e = origText;
+        boolean didEllipse = FALSE;
+        for (i = 0 ; i < end; i++)
+            {
+            s = skipToWord(e);
+            if (s == NULL)
+                break;
+            e = skipOutWord(s);
+            if (rangeTreeOverlaps(rt, i, i+1))
+                {
+                int len = e - s;
+                safencpy(word, sizeof(word), s, len);
+                if (isNotEmpty(word))
+                    {
+                    int j;
+                    boolean bold = FALSE;
+                    for (j = 0; j < tsr->wordPosSize; j++)
+                        if (i == tsr->wordPos[j])
+                            bold = TRUE;
+                    if (bold)
+                        dyStringPrintf(snippet, "<b>%s</b>", word);
+                    else
+                        dyStringPrintf(snippet, "%s", word);
+                    if (i < end)
+                        dyStringPrintf(snippet, " ");
+                    didEllipse = FALSE;
+                    }
+                else
+                    break;
+                }
+            else if (!didEllipse)
+                {
+                didEllipse = TRUE;
+                dyStringPrintf(snippet, " ... ");
+                }
+            }
+        tsr->snippet = dyStringCannibalize(&snippet);
+        break;
+        }
+    }
+}
+
+void resetPrefixSize()
+{
+trixPrefixSize = 5;
+}
+
+void initSnippetIndex(struct trix *trix)
+/* Setup what we need to obtain snippets */
+{
+trixPrefixSize = 15;
+initCharTables();
+openSnippetIndex(trix);
+}
+
+void addSnippetsToSearchResults(struct trixSearchResult *tsrList, struct trix *trix)
+/* Add snippets to each search result in tsrList. Wrap in an errCatch
+ * in case the supporting files don't exist. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    initSnippetIndex(trix);
+    struct trixSearchResult *tsr;
+    for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+        addSnippetForResult(tsr, trix);
+    }
+if (errCatch->gotError || errCatch->gotWarning)
+    {
+    warn("error adding snippets to search results: %s", errCatch->message->string);
+    }
+errCatchEnd(errCatch);
+resetPrefixSize();
+}

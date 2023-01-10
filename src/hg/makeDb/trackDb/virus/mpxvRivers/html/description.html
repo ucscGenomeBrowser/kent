@@ -1,0 +1,100 @@
+<!-- Display image in righthand corner -->
+<table align=right border=0 width=364 height=300>
+  <tr><td align=RIGHT><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_014621545.1"
+    target=_blank>
+    <img src="../images/Monkeypox_virus.jpg" width=349 height=300 alt="monkeypox"></a>
+  </td></tr>
+  <tr><td align=right>
+    <font size=-1> <em>Monkeypox virus</em><BR>
+    </font>
+    <font size=-2> (Photo courtesy of
+      <a href="https://www.flickr.com/photos/niaid/52103767506/" target=_blank>NIAID Integrated Research Facility (IRF)</a>)
+    </font>
+  </td></tr>
+</table>
+
+<p>
+<b>Common name:</b>&nbsp;monkeypox<br>
+<b>Taxonomic name: Monkeypox virus, taxonomy ID:</b> <a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=10244' target='_blank'> 10244</a><br>
+<b>Sequencing/Assembly provider ID:</b> na<br>
+<b>Assembly date:</b> 30 May 2022<br>
+<b>Assembly type:</b> na<br>
+<b>Assembly level:</b> Complete Genome<br>
+<b>Biosample:</b> <a href="https://www.ncbi.nlm.nih.gov/biosample/?term=(n/a)" target="_blank">(n/a)</a><br>
+<b>Assembly accession ID:</b> <a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_014621545.1" target="_blank">GCF_014621545.1</a><br>
+<b>Assembly FTP location:</b> <a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/014/621/545/GCF_014621545.1_ASM1462154v1' target='_blank'>GCF/014/621/545/GCF_014621545.1_ASM1462154v1</a><br>
+
+<b>Total assembly nucleotides:</b> 197,209<br>
+<b>Assembly contig count:</b> 1<br>
+<b>N50 size:</b> 197,209<br>
+</p>
+<hr>
+<h4>Data file downloads</h4>
+<p>
+<ul>
+<li><a href='https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/bigZips/mpxvRivers.fa.gz' target=_blank>mpxvRivers.fa.gz</a> fasta sequence</li>
+<li><a href='https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/bigZips/mpxvRivers.2bit' target=_blank>mpxvRivers.2bit</a> UCSC 2bit sequence file</li>
+<li><a href='https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/bigZips/mpxvRivers.chromAlias.txt' target=_blank>mpxvRivers.chromAlias.txt</a> chromAlias file to relate chromosome names</li>
+<li>explore the download directory at: <a href='https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/' target=_blank>hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/</a></li>
+</ul>
+</p>
+<hr>
+<h4>blat service</h4>
+<p>
+There is blat service available for this genome assembly.  When viewing this
+assembly in the genome browser, access the blat service via the
+<em><b>Tools -> Blat</b></em> blue navigation bar menu item.
+</p>
+<p>
+For local command line blat service, access
+the blat service via the <b>gfClient</b> command line operation.<br>
+See also: <a href='http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/' target=_blank>
+hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/</a> to download command line
+binaries.<br>
+<br>
+To operate this locally, you will need the <b>mpxvRivers.2bit</b> file from:
+<pre>
+  https://hgdownload.soe.ucsc.edu/goldenPath/mpxvRivers/
+</pre>
+Which can be obtained with rsync via:
+<pre>
+  rsync -a -P 
+    rsync://hgdownload.soe.ucsc.edu/mpxvRivers/bigZips/mpxvRivers.2bit ./
+</pre>
+With that <b>mpxvRivers.2bit</b> file in your working directory where you run
+this command, for example, a DNA query with your DNA sequence in
+the file: <b>someDna.fa</b>
+with result in the file: <b>mpxvRivers.someDna.psl</b>
+<pre>
+gfClient -t=dna -q=dna -genome=mpxvRivers -genomeDataDir=mpxvRivers \\ 
+    dynablat-01.soe.ucsc.edu 4040 ./ someDna.fa mpxvRivers.someDna.psl
+</pre>
+For a protein fasta query with your protein sequence in the file: <b>someProtein.faa</b>
+with result in the file: <b>mpxvRivers.someProtein.psl</b>
+<pre>
+gfClient -t=dnax -q=prot -genome=mpxvRivers -genomeDataDir=mpxvRivers \\ 
+    dynablat-01.soe.ucsc.edu 4040 ./ someProtein.faa mpxvRivers.someProtein.psl
+</pre>
+</p>
+<hr>
+<p>
+<b>Search the assembly:</b>
+<ul>
+<li>
+<b>By position or search term: </b> Use the &quot;position or search term&quot;
+box to find areas of the genome associated with many different attributes, such
+as a specific chromosomal coordinate range; mRNA, EST, or STS marker names; or
+keywords from the GenBank description of an mRNA.
+<a href="http://genome.ucsc.edu/goldenPath/help/query.html">More information</a>, including sample queries.</li>
+<li>
+<b>By gene name: </b> Type a gene name into the &quot;search term&quot; box,
+choose your gene from the drop-down list, then press &quot;submit&quot; to go
+directly to the assembly location associated with that gene.
+<a href="http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html">More information</a>.  To avoid case sensitivity issues, always use fully lower case gene names.</li>
+<li>
+<b>By track type: </b> Click the &quot;track search&quot; button
+to find Genome Browser tracks that match specific selection criteria.
+<a href="http://genome.ucsc.edu/goldenPath/help/trackSearch.html">More information</a>.</li>
+</ul>
+</p>
+<hr>

@@ -16,11 +16,13 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded command path:
-my $RepeatMaskerPath = "/hive/data/staging/data/RepeatMasker";
+my $RepeatMaskerPath = "/hive/data/staging/data/RepeatMasker221107";
 my $RepeatMasker = "$RepeatMaskerPath/RepeatMasker";
-my $RepeatMaskerEngine = "-engine crossmatch -s";
-# Let parasol pick defaults
-my $parasolRAM = "";
+# default engine changed from crossmatch to rmblast as of 2022-12
+# with RM version 4.1.4
+my $RepeatMaskerEngine = "-engine rmblast -pa 1";
+# per RM doc, rmblast uses 4 CPUs for each job
+my $parasolRAM = "-cpu=4 -ram=32g";
 
 # Option variable names, both common and peculiar to this script:
 use vars @HgAutomate::commonOptionVars;
@@ -35,6 +37,7 @@ use vars qw/
     $opt_customLib
     $opt_useHMMER
     $opt_useRMBlastn
+    $opt_useCrossMatch
     $opt_splitTables
     $opt_noSplit
     $opt_updateTable
@@ -89,7 +92,8 @@ options:
     -unmaskedSeq seq.2bit Use seq.2bit as the unmasked input sequence instead
                           of default ($unmaskedSeq).
     -customLib lib.fa     Use custom repeat library instead of RepeatMaskers\'s.
-    -useRMBlastn          Use NCBI rmblastn instead of crossmatch
+    -useRMBlastn          This is the default as of 2022-12 == NCBI rmblastn
+    -useCrossMatch        Use crossmatch instead of NCBI rmblastn
     -useHMMER             Use hmmer instead of crossmatch ( currently for human only )
     -updateTable          load into table name rmskUpdate (default: rmsk)
     -splitTables          split the _rmsk tables (default is not split)
@@ -140,6 +144,7 @@ sub checkOptions {
 		      'unmaskedSeq=s',
 		      'customLib=s',
                       'useRMBlastn',
+                      'useCrossMatch',
                       'useHMMER',
 		      'splitTables',
 		      'noSplit',
@@ -205,11 +210,11 @@ sub doCluster {
   # updated for ku kluster operation -cpu option instead of ram option
   if ( $opt_useRMBlastn ) {
     $RepeatMaskerEngine = "-engine rmblast -pa 1";
+    $parasolRAM = "-cpu=4 -ram=32g";
+  } elsif ( $opt_useCrossMatch ) {
+    $RepeatMaskerEngine = "-engine crossmatch -s";
     $parasolRAM = "-cpu=1";
-  }
-
-  # updated for ku kluster operation -cpu option instead of ram option
-  if ( $opt_useHMMER ) {
+  } elsif ( $opt_useHMMER ) {
     # NOTE: This is only applicable for 8gb one-job-per-node scheduling
     $RepeatMaskerEngine = "-engine hmmer -pa 4";
     $parasolRAM = "-cpu=4 -ram=32g";
@@ -318,13 +323,16 @@ and runs it on the cluster with the most available bandwidth.";
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
+
+set path = (/cluster/software/bin \$path)
+
 chmod a+x dummyRun.csh
 chmod a+x RMRun.csh
 
 # Record RM version used:
 printf "The repeat files provided for this assembly were generated using RepeatMasker.\\
   Smit, AFA, Hubley, R & Green, P.,\\
-  RepeatMasker Open-4.0.\\
+  RepeatMasker version 4.1.4\\
   1996-2010 <http://www.repeatmasker.org>.\\
 \\
 VERSION:\\n" > ../versionInfo.txt
@@ -332,24 +340,30 @@ VERSION:\\n" > ../versionInfo.txt
 ./dummyRun.csh | grep -v "dev/null" >> ../versionInfo.txt
 
 $RepeatMasker -v >> ../versionInfo.txt
-grep RELEASE $RepeatMaskerPath/Libraries/RepeatMaskerLib.embl >> ../versionInfo.txt
+printf "# RMRBMeta.embl library version: %s\\n" "`grep RELEASE $RepeatMaskerPath/Libraries/RMRBMeta.embl`" >> ../versionInfo.txt
 printf "# RepeatMasker engine: %s\\n" "${RepeatMaskerEngine}" >> ../versionInfo.txt
 
 ls -ld $RepeatMaskerPath $RepeatMasker
 $RepeatMasker -v
-grep RELEASE $RepeatMaskerPath/Libraries/RepeatMaskerLib.embl
+echo -n "# RMRBMeta.embl library version: "
+grep RELEASE $RepeatMaskerPath/Libraries/RMRBMeta.embl | sed -e 's/  *\\*\$//;'
 echo "# RepeatMasker engine: $RepeatMaskerEngine"
 _EOF_
   );
-  if ($opt_useRMBlastn) {
+  if ($opt_useCrossMatch) {
     $bossScript->add(<<_EOF_
-printf "# using rmblastn:\\n" >> ../versionInfo.txt
-echo "# useRMBlastn: rmblastn:"
-grep RMBLAST_DIR $RepeatMaskerPath/RepeatMaskerConfig.pm | grep rmblastn-2 | awk '{print \$NF}' >> ../versionInfo.txt
+printf "# using engine crossmatch\\n" >> ../versionInfo.txt
+echo "# useCrossMatch crossmatch"
 _EOF_
     );
-  }
-  if ($opt_useHMMER) {
+  } elsif ($opt_useRMBlastn) {
+    $bossScript->add(<<_EOF_
+printf "# using engine rmblastn:\\t" >> ../versionInfo.txt
+echo "# useRMBlastn: rmblastn:"
+grep -w value $RepeatMaskerPath/RepeatMaskerConfig.pm | grep rmblastn | awk '{print \$NF}' >> ../versionInfo.txt
+_EOF_
+    );
+  } elsif ($opt_useHMMER) {
     $bossScript->add(<<_EOF_
 printf "# using Dfam library and HMMER3:\\n" >> ../versionInfo.txt
 echo "# useHMMER: Dfam library: "

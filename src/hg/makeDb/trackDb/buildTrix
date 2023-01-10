@@ -37,9 +37,16 @@ buildDbTrix() {
     makeTrackIndex $db $metaDbName $cvRaPath > $tmpFile;
     if test -s $tmpFile; then
         ixIxx -maxWordLength=64 $tmpFile $tmpFile2 $tmpFile3
-	chmod 664  $tmpFile2 $tmpFile3
-	rsync -a $tmpFile2 $outMachine:$outPath/${db}_${trixName}.ix
-	rsync -a $tmpFile3 $outMachine:$outPath/${db}_${trixName}.ixx
+        # trixContextIndex makes the $db_$trixName.offsets and $db_$trixName.offsets.ixx files:
+        trixContextIndex $tmpFile ${db}_${trixName}
+        chmod 664  $tmpFile2 $tmpFile3 $tmpFile ${db}_${trixName}.offsets ${db}_${trixName}.offsets.ixx
+        rsync -a $tmpFile2 $outMachine:$outPath/${db}_${trixName}.ix
+        rsync -a $tmpFile3 $outMachine:$outPath/${db}_${trixName}.ixx
+        # these three are for snippets on search pages:
+        rsync -a $tmpFile $outMachine:$outPath/${db}_${trixName}.txt
+        rsync -a ${db}_${trixName}.offsets $outMachine:$outPath/${db}_${trixName}.offsets
+        rsync -a ${db}_${trixName}.offsets.ixx $outMachine:$outPath/${db}_${trixName}.offsets.ixx
+        rm -f ${db}_${trixName}.offsets ${db}_${trixName}.offsets.ixx
     fi
     rm -f $tmpFile $tmpFile2 $tmpFile3
 }

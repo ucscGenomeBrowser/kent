@@ -86,6 +86,9 @@ static void closeNonStdDescriptors(void)
 long maxFd = sysconf(_SC_OPEN_MAX);
 if (maxFd < 0)
     maxFd = 4096;  // shouldn't really happen
+if (maxFd > 4096)	// this does happen on Mac OSX arm64/M1 machine
+    maxFd = 4096;	// under some condition in the browser while making
+			// custom tracks.  It returns: 2^63 - 1
 int fd;
 for (fd = STDERR_FILENO+1; fd < maxFd; fd++)
     close(fd);
@@ -417,7 +420,8 @@ static void groupApoptosis(int signum)
 fprintf(stderr, "pipeline timeout kill after %d seconds: %s\n", groupApoptosisPipeline->timeout,
         pipelineDesc(groupApoptosisPipeline));
 fflush(stderr);
-(int)kill(0, SIGKILL); // kill off process group
+// the (void) tells the compiler we know we are ignoring the return value
+(void)kill(0, SIGKILL); // kill off process group
 }
 
 static void setupTimeout(struct pipeline* pl)

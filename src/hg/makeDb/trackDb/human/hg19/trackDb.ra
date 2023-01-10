@@ -1582,7 +1582,6 @@ visibility hide
 noScoreFilter .
 noInherit on
 type bed 3 .
-pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
 
     track snpArrayAffy6
     parent genotypeArrays
@@ -1809,7 +1808,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
     type bigBed 4
     priority 24
     bigDataUrl /gbdb/hg19/bbi/illumina/illumina450K.bb
-    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
 
     track snpArrayIllumina850k
     parent genotypeArrays
@@ -1818,7 +1816,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
     type bigBed 4
     priority 25
     bigDataUrl /gbdb/hg19/bbi/illumina/epic850K.bb
-    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
 
     track snpArrayCytoSnp850k
     parent genotypeArrays on
@@ -1831,7 +1828,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#083122 "Aug. 31, 2022"
     urls rsID="https://www.ncbi.nlm.nih.gov/snp/?term=$$"
     colorByStrand 255,0,0 0,0,255
     html genotypeArrays
-    pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 29, 2022"
 
 searchTable snpArrayIllumina450k
 searchMethod exact
@@ -2371,53 +2367,11 @@ skipFields mouseOver
 noScoreFilter on
 mouseOver $name, HI: $quantile
 
-include dbSnpArchiveHg19.ra 
+include dbSnpArchiveHg19.ra
 include affyArchive.ra
 include genePredArchive.ra
 include tgpArchive.ra
 include chm13LiftOver.ra
-
-track panelApp
-shortLabel PanelApp 
-longLabel Genomics England PanelApp Diagnostics 
-type bigBed 9 +
-visibility hide
-group phenDis
-pennantIcon New red ../goldenPath/newsarch.html "Released Mar. 2022"
-compositeTrack on
-html ../panelApp
-
-    track panelAppGene
-    parent panelApp on
-    shortLabel PanelApp Genes
-    longLabel Genomics England PanelApp Genes Panel
-    type bigBed 9 +
-    visibility pack
-    bigDataUrl /gbdb/hg19/panelApp/genesPanel.bb
-    itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" ensemblGenes="https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" geneSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$"
-    mouseOverField mouseOverField
-    labelFields geneSymbol
-    skipEmptyFields on
-    skipFields chrom,chromStart,blockStarts,blockSizes,entityName,tags,status,mouseOverField
-    filterValues.confidenceLevel 3,2,1,0
-    html ../panelApp
-
-    track PanelAppSTRs
-    parent panelApp on
-    shortLabel PanelApp STRs
-    longLabel Genomics England PanelApp Short Tandem Repeats Panel
-    type bigBed 9 +
-    visibility pack
-    bigDataUrl /gbdb/hg19/panelApp/STRsPanel.bb
-    itemRgb on
-    urls omimGene="https://www.omim.org/entry/$$" hgncID="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" panelID="https://panelapp.genomicsengland.co.uk/panels/$$/" panelAppQuery="https://panelapp.genomicsengland.co.uk/panels/$P/gene/$p" hgncSymbol="https://panelapp.genomicsengland.co.uk/panels/entities/$$" ensemblID="https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$"
-    mouseOverField mouseOverField
-    labelFields hgncSymbol
-    skipEmptyFields on
-    skipFields chrom,chromStart,blockStarts,blockSizes,mouseOverField
-    filterValues.confidenceLevel 3,2,1,0
-    html ../panelApp
 
 track starita
 shortLabel L. Starita BRCA1

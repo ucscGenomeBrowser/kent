@@ -13,7 +13,6 @@ filterByRange.p on
 filterLimits.p 0:0.01
 filterLabel.p p-Value range to filter
 maxItems 1000000
-pennantIcon Updated red ../goldenPath/newsarch.html "Updated May, 2021"
         
         track Negative_Selection
         parent pond

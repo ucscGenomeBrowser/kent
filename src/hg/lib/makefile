@@ -3,24 +3,24 @@ include ../../inc/localEnvironment.mk
 include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
-O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o autoUpgrade.o axtInfo.o \
+O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o asmAlias.o autoUpgrade.o axtInfo.o \
   barChartBed.o barChartCategory.o barChartUi.o bed.o bed12Source.o \
   bedDetail.o bigBedFind.o bigBedLabel.o bigDbSnp.o bigGenePred.o \
   bigPsl.o blastTab.o borf.o botDelay.o cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o \
   cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgiApoptosis.o chainCart.o chainDb.o chainLink.o chainNet.o \
   chainNetDbLoad.o chromAlias.o chromBins.o chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o \
   chromKeeper.o clonePos.o cpgIsland.o ctgPos.o customAdjacency.o customComposite.o customFactory.o \
-  customPp.o customTrack.o cv.o cytoBand.o dbDb.o defaultDb.o dnaMotifSql.o \
+  customPp.o customTrack.o cv.o cytoBand.o dbDb.o defaultDb.o dnaMotifSql.o dupTrack.o \
   encode/encodeErge.o encode/encodeErgeHssCellLines.o encode/encodeExp.o encode/encodeHapMapAlleleFreq.o \
   encode/encodeIndels.o encode/encodePeak.o encode/encodeRegionInfoCustom.o encode/encodeRna.o \
   encode/encodeStanfordPromoters.o encode/encodeStanfordPromotersAverage.o encode/peptideMapping.o \
   encode/wgEncodeGencodeAnnotationRemark.o encode/wgEncodeGencodeAttrs.o encode/wgEncodeGencodeEntrezGene.o \
-  encode/wgEncodeGencodeExonSupport.o encode/wgEncodeGencodeGeneSource.o encode/wgEncodeGencodePdb.o \
+  encode/wgEncodeGencodeExonSupport.o encode/wgEncodeGencodeGeneSource.o  encode/wgEncodeGencodeGeneSymbol.o encode/wgEncodeGencodePdb.o \
   encode/wgEncodeGencodePubMed.o encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeTag.o \
   encode/wgEncodeGencodeTranscriptSource.o encode/wgEncodeGencodeTranscriptSupport.o \
   encode/wgEncodeGencodeTranscriptionSupportLevel.o encode/wgEncodeGencodeUniProt.o encode3/encode3Valid.o \
   estOrientInfo.o expData.o expRecord.o facetField.o facetedTable.o featureBits.o findKGAlias.o \
-  findKGProtAlias.o gbSeq.o gbExtFile.o gcPercent.o genark.o genbank.o genbankBlackList.o gencodeAttrs.o gencodeToRefSeq.o geneGraph.o \
+  findKGProtAlias.o gbSeq.o gbExtFile.o gcPercent.o genark.o genbank.o genbankBlackList.o gencodeTracksCommon.o gencodeAttrs.o gencodeToRefSeq.o geneGraph.o \
   genePred.o genePredReader.o geoMirror.o ggCluster.o ggDump.o ggGraph.o ggMrnaAli.o ggTypes.o glDbRep.o \
   googleAnalytics.o gpFx.o grp.o gtexAse.o gtexDonor.o gtexGeneBed.o gtexInfo.o gtexSample.o \
   gtexSampleData.o gtexTissue.o gtexTissueMedian.o gtexUi.o hCommon.o hPrint.o hVarSubst.o \

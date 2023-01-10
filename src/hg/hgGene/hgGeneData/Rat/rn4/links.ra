@@ -90,6 +90,10 @@ idSql select value from rgdGene2ToUniProt where name = '%s'
 url http://www.uniprot.org/uniprot/%s
 priority 10
 
+name alphafold
+tables rgdGene2ToUniProt
+idSql select value from rgdGene2ToUniProt where name = '%s'
+
 name reactome
 shortLabel Reactome
 tables proteome.spReactomeEvent rgdGene2ToUniProt

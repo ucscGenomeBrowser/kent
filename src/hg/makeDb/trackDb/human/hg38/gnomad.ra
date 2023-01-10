@@ -5,7 +5,6 @@ track gnomadVariants
 superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
-pennantIcon Updated red ../goldenPath/newsarch.html#063022 "Released Jun. 30, 2022"
 group varRep
 html gnomadV3_1_1
 
@@ -116,7 +115,6 @@ html gnomadV3_1_1
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
 
 track gnomadConstraint
-pennantIcon New red ../goldenPath/newsarch.html#050322 "Released at UCSC May 3, 2022"
 parent gnomadVariants on
 shortLabel gnomAD Mut Constraint
 longLabel Genome Aggregation Database (gnomAD) Genome Mutational Constraint (includes chrX)
@@ -128,6 +126,7 @@ maxHeightPixels 128:40:8
 viewLimitsMax -3:3
 autoScale on
 priority 10
+pennantIcon Updated red ../goldenPath/newsarch.html "Updated October, 2022"
 html gnomadV3_1_1
 
     track gnomadPLI
@@ -139,7 +138,6 @@ html gnomadV3_1_1
     type bigBed 12
     labelFields name,geneName
     visibility hide
-    pennantIcon New red ../goldenPath/newsarch.html#063022 "Released Jun. 30, 2022"
 
         track pliByGene
         shortLabel Gene LoF
@@ -216,6 +214,18 @@ searchTable pliByGene
 searchType bigBed
 searchDescription gnomAD Loss of Function Metrics by Gene
 
+searchName gnomadGenomesVariantsV3_1_1_displayName
 searchTable gnomadGenomesVariantsV3_1_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
+termRegex ^chr([1-9][0-9]?|[XYM]):[0-9]+-[0-9]+-*
+
+searchName gnomadGenomesVariantsV3_1_1_rsId
+searchTable gnomadGenomesVariantsV3_1_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
+termRegex ^rs*
+
+searchTable gnomadGenomesVariantsV3_1_1_name
 searchType bigBed
 searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1

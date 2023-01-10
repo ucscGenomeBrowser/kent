@@ -65,6 +65,7 @@
 #include "extTools.h"
 #include "basicBed.h"
 #include "customFactory.h"
+#include "dupTrack.h"
 #include "genbank.h"
 #include "bigWarn.h"
 #include "wigCommon.h"
@@ -76,6 +77,7 @@
 #include "jsonWrite.h"
 #include "cds.h"
 #include "cacheTwoBit.h"
+#include "cartJson.h"
 
 //#include "bed3Sources.h"
 
@@ -2172,7 +2174,7 @@ struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
 if(highlightDef)
     {
-    char *hlArr[256];
+    char *hlArr[4096];
     int hlCount = chopByChar(cloneString(highlightDef), '|', hlArr, ArraySize(hlArr));
     int i;
     for (i=0; i<hlCount; i++)
@@ -6595,6 +6597,83 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
+static void rHashList(struct hash *hash, struct track *list)
+/* Add list of tracks to hash including subtracks */
+{
+struct track *track;
+for (track = list; track != NULL; track = track->next)
+    {
+    hashAdd(hash, track->track, track);
+    if (track->subtracks != NULL)
+       rHashList(hash, track->subtracks);
+    }
+}
+
+static struct hash *hashTracksAndSubtracksFromList(struct track *list)
+/* Make a hash and put all of tracks and subtracks on it. */
+{
+struct hash *hash = hashNew(12);
+rHashList(hash, list);
+return hash;
+}
+
+void makeDupeTracks(struct track **pTrackList)
+/* Make up dupe tracks and append to list. Have to also crawl
+ * through list to add subtracks */
+{
+if (!dupTrackEnabled())
+    return;
+
+struct dupTrack *dupList = dupTrackListFromCart(cart);
+if (dupList == NULL)
+    return;
+
+/* Make up hash of tracks for quick finding of sources */
+struct hash *trackHash = hashTracksAndSubtracksFromList(*pTrackList);
+
+struct dupTrack *dup;
+for (dup = dupList; dup != NULL; dup = dup->next)
+    {
+    struct track *source = hashFindVal(trackHash, dup->source);
+    if (source != NULL)
+        {
+	struct track *track = CloneVar(source);
+	struct trackDb *tdb = track->tdb = dupTdbFrom(source->tdb, dup);
+	track->track = dup->name;
+	track->shortLabel = tdb->shortLabel;
+	track->longLabel = tdb->longLabel;
+	struct trackDb *parentTdb = tdb->parent;
+	if (parentTdb == NULL)
+	    slAddHead(pTrackList, track);
+	else
+	    {
+	    if (tdbIsFolder(parentTdb))
+	        {
+		refAdd(&parentTdb->children, tdb);
+		slAddHead(pTrackList, track);
+		}
+	    else
+	        {
+		/* Add to parent Tdb */
+		slAddHead(&parentTdb->subtracks, tdb);
+
+		/* The parentTrack may correspond to the parent or grandParent tdb, look both places */
+		struct track *parentTrack = hashFindVal(trackHash, parentTdb->track);
+		if (parentTrack == NULL && parentTdb->parent != NULL)
+		    parentTrack = hashFindVal(trackHash, parentTdb->parent->track);
+
+		if (parentTrack != NULL)
+		    slAddHead(&parentTrack->subtracks, track);
+		else
+		    warn("can't find parentTdb %s in makeDupeTracks", parentTdb->track);
+		}
+	    }
+	}
+    }
+hashFree(&trackHash);
+}
+
+
 void loadTrackHubs(struct track **pTrackList, struct grp **pGrpList)
 /* Load up stuff from data hubs and append to lists. */
 {
@@ -6687,6 +6766,7 @@ for (grp = grps; grp != NULL; grp = grp->next)
     group->defaultPriority = grp->priority;
     group->priority = priority;
     group->defaultIsClosed = grp->defaultIsClosed;
+    group->errMessage = grp->errMessage;
     slAddHead(&list, group);
     hashAdd(hash, grp->name, group);
     }
@@ -6711,6 +6791,7 @@ for(; grpList; grpList = grpList->next)
     group->name = cloneString(grpList->name);
     group->label = cloneString(grpList->label);
     group->defaultPriority = group->priority = priority;
+    group->errMessage = grpList->errMessage;
     priority += priorityInc;
     slAddHead(&list, group);
     hashAdd(hash, group->name, group);
@@ -6825,7 +6906,7 @@ hashFree(&hash);
 *pGroupList = list;
 }
 
-void groupTrackListAddSuper(struct cart *cart, struct group *group)
+void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash)
 /* Construct a new track list that includes supertracks, sort by priority,
  * and determine if supertracks have visible members.
  * Replace the group track list with this new list.
@@ -6834,7 +6915,6 @@ void groupTrackListAddSuper(struct cart *cart, struct group *group)
  * supertracks) are invoked. */
 {
 struct trackRef *newList = NULL, *tr, *ref;
-struct hash *superHash = hashNew(8);
 
 if (!group || !group->trackList)
     return;
@@ -6881,7 +6961,6 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         }
     }
 slSort(&newList, trackRefCmpPriority);
-hashFree(&superHash);
 /* we could free the old track list here, but it's a trivial amount of mem */
 group->trackList = newList;
 }
@@ -6994,6 +7073,7 @@ if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
     loadTrackHubs(&trackList, &grpList);
     }
 loadCustomTracks(&trackList);
+makeDupeTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
 boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
@@ -8869,6 +8949,12 @@ if (!hideControls)
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
                     "<A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
                     survey, surveyLabel ? surveyLabel : "Take survey");
+
+        // a piece of HTML, can be a link or anything else
+	char *hgTracksNoteHtml = cfgOption("hgTracksNoteHtml");
+	if (hgTracksNoteHtml)
+            puts(hgTracksNoteHtml);
+
 	hPutc('\n');
 	}
     }
@@ -8984,7 +9070,7 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
-    hWrites("Click+shift+drag to zoom in. ");
+    hWrites("Shift+click+drag to zoom in. ");
     hWrites("Click grey side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
     hWrites("Drag tracks left or right to new position. ");
@@ -9041,7 +9127,7 @@ if (!hideControls)
                            "return vis.expandAllGroups(false)");
         hPrintf("</td>");
 
-        hPrintf("<td colspan='%d' class='infoText' align='CENTER' nowrap>\n", MAX_CONTROL_COLUMNS - 2);
+        hPrintf("<td colspan='%d' class='controlButtons' align='CENTER' nowrap>\n", MAX_CONTROL_COLUMNS - 2);
 
         printShortcutButtons(cart, hasCustomTracks, revCmplDisp, multiRegionButtonTop);
         hPrintf("</td>\n");
@@ -9052,9 +9138,10 @@ if (!hideControls)
         hPrintf("</td></tr>");
 
         cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+        struct hash *superHash = hashNew(8);
 	for (group = groupList; group != NULL; group = group->next)
 	    {
-	    if (group->trackList == NULL)
+	    if ((group->trackList == NULL) && (group->errMessage == NULL))
 		continue;
 
 	    struct trackRef *tr;
@@ -9068,7 +9155,10 @@ if (!hideControls)
 				    &indicator, &otherState);
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
-            hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
+            if (group->errMessage)
+                hPrintf("<th align=\"left\" colspan=%d class='redToggleBar'>",MAX_CONTROL_COLUMNS);
+            else
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
 
@@ -9128,9 +9218,15 @@ if (!hideControls)
 
 	    /* Add supertracks to track list, sort by priority and
 	     * determine if they have visible member tracks */
-	    groupTrackListAddSuper(cart, group);
+	    groupTrackListAddSuper(cart, group, superHash);
 
 	    /* Display track controls */
+            if (group->errMessage)
+                {
+		myControlGridStartCell(cg, isOpen, group->name);
+                hPrintf("%s", group->errMessage);
+		controlGridEndCell(cg);
+                }
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
 		{
 		struct track *track = tr->track;
@@ -9166,6 +9262,7 @@ if (!hideControls)
 	    if (group->next != NULL)
 		controlGridEndRow(cg);
 	    }
+        hashFree(&superHash);
 	endControlGrid(&cg);
 	}
 
@@ -9487,9 +9584,7 @@ hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName
 displayChromName = chromAliasGetDisplayChrom(database, cart, chromName);
 if (isNotEmpty(dyWarn->string))
     {
-    if (noShort) // we're on the second pass of the search
-        hgp->posCount = 0; // hgFindSearch gives us a bogus hgp if the warn string is set
-    else
+    if (!noShort) // we're not on the second pass of the search
         warn("%s", dyWarn->string);
     }
 

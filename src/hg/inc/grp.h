@@ -16,6 +16,7 @@ struct grp
     char *label;	/* Label to display to user */
     float priority;	/* 0 is top */
     boolean defaultIsClosed; /* true if group is closed by default in hgTracks (this column is optional, and may be missing in some installations. */
+    char *errMessage;   /* if non-NULL contains an error message for the group. */
     };
 
 void grpStaticLoad(char **row, struct grp *ret);

@@ -286,6 +286,9 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table);
 bool sqlColumnExists(struct sqlConnection *conn, char *tableName, char *column);
 /* return TRUE if column exists in table. column can contain sql wildcards  */
 
+boolean sqlColumnExistsInTablesList(struct sqlConnection *conn, char *tables, char *field);
+/* check if column exists in a list of tables */
+
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table);
 /* Return row count if a table exists, -1 if it doesn't. */
 

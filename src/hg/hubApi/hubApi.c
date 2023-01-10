@@ -49,6 +49,7 @@ char *argListChromosomes[] = { argGenome, argHubUrl, argTrack, NULL };
 char *argListSchema[] = { argGenome, argHubUrl, argTrack, NULL };
 char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argMaxItemsOutput, argJsonOutputArrays, NULL };
 char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, NULL };
+char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -967,6 +968,7 @@ if (apiFunctionHash)
 apiFunctionHash = hashNew(0);
 hashAdd(apiFunctionHash, "list", &apiList);
 hashAdd(apiFunctionHash, "getData", &apiGetData);
+hashAdd(apiFunctionHash, "search", &apiSearch);
 }
 
 static struct hashEl *parsePathInfo(char *pathInfo, char *words[MAX_PATH_INFO])
@@ -1245,6 +1247,17 @@ char *end = cgiOptionalString("end");
 char *db = cgiOptionalString("genome");
 char *hubUrl = cgiOptionalString("hubUrl");
 struct dyString *errorMsg = dyStringNew(128);
+
+// first check for curated hubs
+if (isEmpty(hubUrl) && isNotEmpty(db))
+    {
+    char *newHubUrl;
+    if (hubConnectGetCuratedUrl(db, &newHubUrl))
+        {
+        hubUrl = newHubUrl;  // use curated hub hubUrl
+        cgiVarSet("hubUrl", hubUrl);   // subsequent code grabs hubUrl from env
+        }
+    }
 
 if (isEmpty(hubUrl) && isNotEmpty(db))
     {
@@ -1581,8 +1594,11 @@ setUdcCacheDir();
 initSupportedTypes();
 
 char *pathInfo = getenv("PATH_INFO");
+char *cmd;
 if (isNotEmpty(pathInfo)) /* can get to this immediately, no cart needed */
     apiRequest(pathInfo);
+else if ((cmd = cgiOptionalString("cmd")) != NULL)
+    apiRequest(cmd);
 else
     {
     char *allowApiHtml = cfgOptionDefault("hubApi.allowHtml", "off");

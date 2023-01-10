@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/hive/data/outside/otto/panelApp/venv/bin/python3
 from datetime import date
 import os
 import shutil
@@ -26,7 +26,7 @@ def writeBb(hg19Table, hg38Table, subTrack):
     for db in ["hg19", "hg38"]:
         archDir = getArchDir(db)
 
-        bedFname = "current/%s/%s.bed.tmp" % (db, subTrack)
+        bedFname = "current/%s/%s.bed" % (db, subTrack)
         bbFname = "current/%s/%s.bb.tmp" % (db, subTrack)
 
         if db=="hg19":

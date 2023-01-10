@@ -7,6 +7,15 @@
 
 var debug = false;
 
+/* Support these formats for range specifiers.  Note the ()'s around chrom,
+ * start and end portions for substring retrieval: */
+var canonicalRangeExp = /^[\s]*([\w._#-]+)[\s]*:[\s]*([-0-9,]+)[\s]*[-_][\s]*([0-9,]+)[\s]*$/;
+var gbrowserRangeExp =  /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\.\.[\s]*([0-9,]+)[\s]*$/;
+var lengthRangeExp =    /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\+[\s]*([0-9,]+)[\s]*$/;
+var bedRangeExp =       /^[\s]*([\w._#-]+)[\s]+([0-9,]+)[\s]+([0-9,]+)[\s]*$/;
+var sqlRangeExp =       /^[\s]*([\w._#-]+)[\s]*\|[\s]*([0-9,]+)[\s]*\|[\s]*([0-9,]+)[\s]*$/;
+var singleBaseExp =     /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*$/;
+
 function copyToClipboard(ev) {
     /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
      * The attribute data-target of this element is the ID of the element that contains the text to copy. 
@@ -3665,3 +3674,14 @@ var dragReorder = {
                         });
     }
 };
+
+function trackHubSkipHubName(name) {
+    // Just like hg/lib/trackHub.c's...
+    var matches;
+    if (name && (matches = name.match(/^hub_[0-9]+_(.*)/)) !== null) {
+        return matches[1];
+    } else {
+        return name;
+    }
+}
+

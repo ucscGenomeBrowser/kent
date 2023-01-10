@@ -176,7 +176,7 @@ if (spID != NULL)
     if (chp != NULL) *chp = '\0';
     
     hPrintf(
-    "<BR>Protein %s (<A href=\"http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=%s\" TARGET=_blank>Reactome details)</A> participates in the following event(s):<BR><BR>" 
+    "<BR>Protein %s (<A href=\"https://reactome.org/content/query?q=%s\" TARGET=_blank>Reactome details)</A> participates in the following event(s):<BR><BR>" 
     , spID, spID);
 
     conn2= hAllocConn(database);

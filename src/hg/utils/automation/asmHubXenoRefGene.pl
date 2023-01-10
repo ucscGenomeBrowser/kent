@@ -71,12 +71,6 @@ invertebrate mRNA in
 <b>Percent genome coverage: </b>% $percentCoverage<br>
 </p>
 
-<h2>Search tips</h2>
-<p>
-Please note, the name searching system is not completely case insensitive.
-When in doubt, enter search names in all lower case to find gene names.
-</p>
-
 <h2>Methods</h2>
 
 <p>

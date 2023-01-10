@@ -1,0 +1,34 @@
+# This program takes in an identifier and removes entries from hubPublic
+echo ""
+echo "Caution, this script will delete hubPublic entries on Dev, Beta, and RR"
+echo ""
+read -p 'Enter a unique URL string for the hub entry you would like to delete : ' URL
+
+hgsql -e "select * from hubPublic where hubUrl like '%$URL%'\G" hgcentraltest
+sleep 10
+hgsql -e "delete from hubPublic where hubUrl like '%$URL%'\G" hgcentraltest
+echo "DEV Changed, Beta in 13s"
+hgsql -e "select * from hubPublic where hubUrl like '%$URL%'\G" hgcentraltest
+sleep 3
+
+hgsql -h hgwbeta -e "select * from hubPublic where hubUrl like '%$URL%'\G" hgcentralbeta
+sleep 10
+hgsql -h hgwbeta -e "delete from hubPublic where hubUrl like '%$URL%'\G" hgcentralbeta
+echo "BETA Changed, RR in 13s"
+hgsql -h hgwbeta -e "select * from hubPublic where hubUrl like '%$URL%'\G" hgcentralbeta
+sleep 3
+
+hgsql -h genome-centdb -e "select * from hubPublic where hubUrl like '%$URL%'\G" hgcentral
+sleep 10
+hgsql -h genome-centdb -e "delete from hubPublic where hubUrl like '%$URL%'\G" hgcentral
+echo "RR Changed, make sure nothing below and Email Notice is sent"
+hgsql -h genome-centdb -e "select * from hubPublic where hubUrl like '%$URL%'\G" hgcentral
+sleep 3
+echo ""
+echo "Hello Joana,"
+echo ""
+echo "Since we did not receive a response to the previous email and your Public Hub has been offline for 25 days, I have removed your hub from our Public Hubs page on the UCSC Genome Browser. If you wish to share your track hub data with the research community again, please contact our Genome Browser support email, genome@soe.ucsc.edu. We are happy to help if you have any questions or concerns."
+echo ""
+echo "All the best,"
+echo "Daniel Schmelter"
+echo "UCSC Genome Browser"

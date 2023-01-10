@@ -1644,8 +1644,8 @@ visibility hide
 url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 subGroup1 view Views variants=Variants errs=Mapping_Errors
+maxWindowCoverage 4000000
 priority 1
-pennantIcon Note green ../goldenPath/newsarch.html "dbSNP 155 is now available, and dbSNP 153 will be nested into the dbSNP archive soon."
 
     track dbSnp153ViewVariants
     view variants
@@ -1771,8 +1771,8 @@ visibility pack
 url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 subGroup1 view Views variants=Variants errs=Mapping_Errors
+maxWindowCoverage 4000000
 priority 0.8
-pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
 
     track dbSnp155ViewVariants
     view variants
@@ -1784,7 +1784,6 @@ pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
     freqSourceOrder 1000Genomes,dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
     classFilterValues snv,mnv,ins,del,delins,identity
     classFilterType multipleListOr
-    showCfg on
     ucscNotesFilterValues \
         altIsAmbiguous|Alternate allele contains IUPAC ambiguous base(s),\
         classMismatch|Variant class/type is inconsistent with allele sizes,\
@@ -1842,6 +1841,7 @@ pennantIcon New red ../goldenPath/newsarch.html#082222 "Released Aug. 22, 2022"
         longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 155
         defaultGeneTracks knownGene
         bigDataUrl /gbdb/$D/snp/dbSnp155Common.bb
+        showCfg on
         priority 1
 
         track dbSnp155ClinVar
@@ -3703,7 +3703,7 @@ track omimGene2
 shortLabel OMIM Genes
 longLabel OMIM Gene Phenotypes - Dark Green Can Be Disease-causing
 group phenDis
-visibility hide
+visibility dense
 color 0, 80, 0
 type bed 4
 hgsid on
@@ -3857,16 +3857,16 @@ searchTable snpediaAll
 searchMethod exact
 searchType bigBed
 termRegex rs[0-9]+
-searchPriority 1
+searchPriority 14
 padding 50
-#semiShortCircuit 1
+semiShortCircuit 1
 
 searchTable snpediaText
 searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 11.001
+searchPriority 14.001
 padding 50
 
 track interactions
@@ -4478,7 +4478,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 11
+searchPriority 13
 padding 250
 
 track darned
@@ -5492,7 +5492,7 @@ padding 100
 searchTable dbSnp153Common
 searchMethod exact
 searchType bigBed
-#semiShortCircuit 1
+shortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9450
 padding 100
@@ -5508,7 +5508,7 @@ padding 100
 searchTable dbSnp153
 searchMethod exact
 searchType bigBed
-semiShortCircuit 1
+shortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9452
 padding 100
@@ -5641,6 +5641,7 @@ searchTrix /gbdb/$D/hgnc/search.ix
 skipEmptyFields on
 itemRgb on
 noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html#102422 "Released at UCSC on Oct 24, 2022"
 
 searchTable hgnc
 searchMethod exact

@@ -4507,6 +4507,44 @@ var imageV2 = {
                 window.location.href = blatUrl;
                 return false;
             }
+
+            // helper functions for checking whether a plain chrom name was searched for
+            term = encodeURIComponent(genomePos.get().replace(/^[\s]*/,'').replace(/[\s]*$/,''));
+            function onSuccess(jqXHR, textStatus) {
+                if (jqXHR.chromName !== null) {
+                    imageV2.markAsDirtyPage();
+                    imageV2.navigateInPlace("position=" + encodeURIComponent(newPos), null, false);
+                    window.scrollTo(0,0);
+                } else  {
+                    window.location.assign("../cgi-bin/hgSearch?search=" + term  + "&hgsid="+ getHgsid());
+                }
+            }
+            function onFail(jqXHR, textStatus) {
+                window.location.assign("../cgi-bin/hgSearch?search=" + term  + "&hgsid="+ getHgsid());
+            }
+
+            // redirect to search disambiguation page if it looks like we didn't enter a regular position:
+            var canonMatch = newPos.match(canonicalRangeExp);
+            var gbrowserMatch = newPos.match(gbrowserRangeExp);
+            var lengthMatch = newPos.match(lengthRangeExp);
+            var bedMatch = newPos.match(bedRangeExp);
+            var sqlMatch = newPos.match(sqlRangeExp);
+            var singleMatch = newPos.match(singleBaseExp);
+            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+            if (positionMatch === null) {
+                // user may have entered a full chromosome name, check for that asynchronosly:
+                $.ajax({
+                    type: "GET",
+                    url: "../cgi-bin/hgSearch",
+                    data: cart.varsToUrlData({ 'cjCmd': '{"getChromName": {"db": "' + getDb() + '", "searchTerm": "' + term + '"}}' }),
+                    dataType: "json",
+                    trueSuccess: onSuccess,
+                    success: onSuccess,
+                    error: onFail,
+                    cache: true
+                });
+                return false;
+            }
                 
             return true;
         });
@@ -4783,11 +4821,7 @@ var mouseOver = {
        mouseOverValue = mouseOver.noAverageString;
     }
     if (foundIdx > -1) { // value to display
-      if (mouseOver.items[trackName][foundIdx].c > 1) {
-        mouseOverValue = "&nbsp;~&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
-      } else {
         mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
-      }
     }
     $('#mouseOverText').html(mouseOverValue);
     var msgWidth = mouseOver.maximumWidth[trackName];
@@ -4800,7 +4834,7 @@ var mouseOver = {
     var msgLeft = Math.max(tdLeft, clientX - (msgWidth/2) - 3); // with magic 3
     var msgTop = Math.max(0, tdTop);
     var lineTop = Math.max(0, msgTop + msgHeight);
-    var lineLeft = Math.max(0, clientX - 3);  // with magic 3
+    var lineLeft = Math.max(0, clientX - 1);  // magic 3 +  2 for width of indicator box
     if (clientY < msgTop + msgHeight) {	// cursor overlaps with the msg box
       msgLeft = clientX - msgWidth - 6;     // to the left of the cursor
       if (msgLeft < tdLeft || msgLeft < 0) {   // hits left edge, switch
@@ -5100,6 +5134,7 @@ $(document).ready(function()
             return false;
         }
     }
+
     initVars();
     imageV2.loadSuggestBox();
     if ($('#pdfLink').length === 1) {

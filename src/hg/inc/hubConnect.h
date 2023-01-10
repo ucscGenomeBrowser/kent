@@ -70,6 +70,7 @@ struct hubConnectStatus
     struct hubConnectStatus *next;
     unsigned id;	/* Hub ID */
     char *hubUrl;	/* URL to hub.ra file. */
+    char *shortLabel;   /* shortLabel from hubStatus table. */
     char *errorMessage;	/* If non-empty hub has an error and this describes it. */
     struct trackHub *trackHub; /* pointer to structure that describes hub */
     unsigned  status;   /* 1 if private */
@@ -193,4 +194,9 @@ struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable
 /* Return a hash linking hub URLs to struct hubEntries.  Also make pHash point to a hash that just stores
  * the names of the public hubs (for use later when determining if hubs were added by the user) */
 
+boolean hubConnectIsCurated(char *db);
+/* Look in the dbDb table to see if this hub is curated. */
+
+boolean hubConnectGetCuratedUrl(char *db, char **hubUrl);
+/* Check to see if this db is a curated hub and if so return its hubUrl */
 #endif /* HUBCONNECT_H */

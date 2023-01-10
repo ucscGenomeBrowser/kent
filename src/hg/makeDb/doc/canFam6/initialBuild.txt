@@ -1311,4 +1311,29 @@ done
 #	/hive/data/genomes/canFam6/pushQ/redmine.canFam6.releaseLog.txt
 #	/hive/data/genomes/canFam6/pushQ/redmine.canFam6.table.list
 
-#########################################################################
+##############################################################################
+# LIFTOVER TO canFam2 (DONE - 2022-12-07 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam6/bed/blat.canFam2.2022-12-07
+    cd /hive/data/genomes/canFam6/bed/blat.canFam2.2022-12-07
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/canFam6/canFam6.2bit \
+        -targetSizes=/hive/data/genomes/canFam6/chrom.sizes \
+        -query2Bit=/hive/data/genomes/canFam2/canFam2.2bit \
+        -querySizes=/hive/data/genomes/canFam2/chrom.sizes \
+        -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
+         canFam6 canFam2
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/canFam6/canFam6.2bit \
+        -targetSizes=/hive/data/genomes/canFam6/chrom.sizes \
+        -query2Bit=/hive/data/genomes/canFam2/canFam2.2bit \
+        -querySizes=/hive/data/genomes/canFam2/chrom.sizes \
+        -ooc=/hive/data/genomes/canFam6/jkStuff/canFam6.11.ooc \
+         canFam6 canFam2) > doLiftOverToCanFam2.log 2>&1
+    # real    2179m29.114s
+
+    # see if the liftOver menus function in the browser from canFam6 to canFam2
+
+##############################################################################

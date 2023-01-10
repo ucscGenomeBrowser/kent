@@ -20,7 +20,6 @@ searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
 defaultLinkedTables kgXref
-pennantIcon Updated red ../goldenPath/newsarch.html#071222 "Updated July 12, 2022"
 
 searchName knownGeneAcc
 searchTable knownGene
@@ -49,5 +48,6 @@ searchType knownGeneFast
 shortCircuit 1
 searchPriority 1001
 searchTrix /gbdb/hg38/knownGeneFastV41.ix
+searchTrixContext on
 doPage 1
 

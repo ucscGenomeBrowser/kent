@@ -308,6 +308,7 @@ $sciNameUnderscore =~ s/ /_/g;
 $sciNameUnderscore = "Strigops_habroptilus" if ($orgName =~ m/Strigops habroptila/);
 
 printf "<p>
+ <b>Share this genome browser with the link:&nbsp;&nbsp;</b><span id='urlText0'><em>https://http_host/h/%s</em></span>&nbsp;&nbsp;<span class='copyLinkSpan' data-target='urlText0'></span><br>
 <b>Common name:</b>&nbsp;%s<br>
 <b>Taxonomic name: %s, taxonomy ID:</b> <a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s' target='_blank'> %s</a><br>
 <b>Sequencing/Assembly provider ID:</b> %s<br>
@@ -317,7 +318,7 @@ printf "<p>
 <b>Biosample:</b> <a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\">%s</a><br>
 <b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
 <b>Assembly FTP location:</b> <a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/%s' target='_blank'>%s</a><br>
-\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
+\n", $asmAccession, $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
   $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $newStyleUrl, $newStyleUrl;
 
 chromSizes($chromSizes);
@@ -462,7 +463,7 @@ keywords from the GenBank description of an mRNA.
 <b>By gene name: </b> Type a gene name into the &quot;search term&quot; box,
 choose your gene from the drop-down list, then press &quot;submit&quot; to go
 directly to the assembly location associated with that gene.
-<a href=\"http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html\">More information</a>.  To avoid case sensitivity issues, always use fully lower case gene names.</li>
+<a href=\"http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html\">More information</a>.</li>
 <li>
 <b>By track type: </b> Click the &quot;track search&quot; button
 to find Genome Browser tracks that match specific selection criteria.

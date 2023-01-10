@@ -314,8 +314,8 @@ html mm39RBestChainNet
         shortLabel lance-tailed manakin syChain
         longLabel lance-tailed manakin (Jan. 2020 GCF_009829145.1_bChiLan1.pri) Chained Alignments
         type bigChain GCF_009829145.1
-        bigDataUrl /gbdb/mm39/bbi/chainNet/chainRBestGCF_009829145.1.bb
-        linkDataUrl /gbdb/mm39/bbi/chainNet/chainRBestGCF_009829145.1Link.bb
+        bigDataUrl /gbdb/mm39/chainNet/mm39.chainRBestGCF_009829145.1.bb
+        linkDataUrl /gbdb/mm39/chainNet/mm39.chainRBestGCF_009829145.1Link.bb
         otherDb GCF_009829145.1
 
         track chainRBestXenTro10
@@ -638,8 +638,8 @@ html mm39RBestChainNet
         shortLabel lance-tailed manakin mafNet
         longLabel lance-tailed manakin (Jan. 2020 GCF_009829145.1_bChiLan1.pri) mafNet Alignment
         type bigMaf
-        bigDataUrl /gbdb/mm39/bbi/chainNet/mm39.GCF_009829145.1.rbestNet.bb
-        summary /gbdb/mm39/bbi/chainNet/mm39.GCF_009829145.1.rbestNet.summary.bb
+        bigDataUrl /gbdb/mm39/chainNet/mm39.GCF_009829145.1.rbestNet.bb
+        summary /gbdb/mm39/chainNet/mm39.GCF_009829145.1.rbestNet.summary.bb
         speciesOrder GCF_009829145.1
         otherDb GCF_009829145.1
         itemFirstCharCase noChange

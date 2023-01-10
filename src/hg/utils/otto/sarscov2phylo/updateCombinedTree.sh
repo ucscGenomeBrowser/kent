@@ -57,8 +57,8 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
     # Prune samples with too many private mutations and internal branches that are too long.
     $matUtils extract -i merged.deltaMasked.pb \
         --max-parsimony 20 \
-        --max-branch-length 50 \
-        --max-path-length 150 \
+        --max-branch-length 60 \
+        --max-path-length 175 \
         -O -o merged.deltaMasked.filtered.pb
     # Improved matOptimize from branch
     time $matOptimize \
@@ -70,8 +70,8 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
     # Again prune samples with too many private mutations and internal branches that are too long.
     $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
         --max-parsimony 20 \
-        --max-branch-length 50 \
-        --max-path-length 150 \
+        --max-branch-length 60 \
+        --max-path-length 175 \
         -O -o gisaidAndPublic.$today.masked.pb
 fi
 
@@ -156,28 +156,15 @@ rm tmp1 tmp2
 cut -f 1,3 $epiToPublic > epiToPublic.latest
 
 # Update links to latest public+GISAID protobuf and metadata in hgwdev cgi-bin directories
+pigz -p 8 -c samples.$today > samples.$today.gz
 for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/gisaidAndPublic.$today.masked.pb $dir/public.plusGisaid.latest.masked.pb
     ln -sf `pwd`/gisaidAndPublic.$today.metadata.tsv.gz \
         $dir/public.plusGisaid.latest.metadata.tsv.gz
     ln -sf `pwd`/hgPhyloPlace.plusGisaid.description.txt $dir/public.plusGisaid.latest.version.txt
     ln -sf `pwd`/epiToPublic.latest $dir/
+    ln -sf `pwd`/samples.$today.gz $dir/public.plusGisaid.names.gz
 done
-
-# Make Taxonium v1 protobuf for display
-zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz \
-| grep -v '"ORF1a"' > ncbiGenes.gtf
-zcat /hive/data/genomes/wuhCor1/wuhCor1.fa.gz > wuhCor1.fa
-zcat gisaidAndPublic.$today.metadata.tsv.gz > metadata.tmp.tsv
-time $matUtils extract -i gisaidAndPublic.$today.masked.pb \
-    -f wuhCor1.fa \
-    -g ncbiGenes.gtf \
-    -M metadata.tmp.tsv \
-    --extra-fields pango_lineage_usher \
-    --include-nt \
-    --write-taxodium gisaidAndPublic.$today.masked.taxodium.pb
-rm metadata.tmp.tsv wuhCor1.fa
-pigz -p 8 -f gisaidAndPublic.$today.masked.taxodium.pb
 
 # Make Taxonium v2 protobuf for display
 usher_to_taxonium --input gisaidAndPublic.$today.masked.pb \
@@ -185,9 +172,11 @@ usher_to_taxonium --input gisaidAndPublic.$today.masked.pb \
     --genbank ~angie/github/taxonium/taxoniumtools/test_data/hu1.gb \
     --columns genbank_accession,country,date,pangolin_lineage,pango_lineage_usher \
     --clade_types=nextstrain,pango \
+    --name_internal_nodes \
+    --title "$today tree with sequences from GISAID, INSDC, COG-UK and CNCB" \
     --output gisaidAndPublic.$today.masked.taxonium.jsonl.gz
 
 $scriptDir/extractPublicTree.sh $today $prevDate
 
-grep skipping annotate*
-
+set +o pipefail
+grep skipping annotate* | cat

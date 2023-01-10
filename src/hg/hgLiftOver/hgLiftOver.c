@@ -192,10 +192,13 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
-cgiParagraph("&nbsp;Paste in data below, one position per line. You can use the "
+puts("<p style='margin-left:3px'>Paste in data below, one position per line. You can use the "
         "<a href='../../FAQ/FAQformat.html#format1'>BED format</a> (e.g. \"chr4 100000 100001\", "
         "0-based) or the format of the position box (\"chr4:100,001-100,001\", 1-based). "
-        "See the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a>.\n");
+        "See the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a>.\n"
+        "We do not recommend liftOver for SNPs that have rsIDs. See our "
+        "<a href='/FAQ/FAQreleases.html#snpConversion'>FAQ</a> for more information.</p>\n");
+
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 

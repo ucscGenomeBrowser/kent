@@ -879,6 +879,12 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	subChar(td->longLabel, '\t', ' ');	/* Tabs confuse things. */
 	trackDbTabOut(td, f);
         td->html = hold;
+        // be sure to change the settings hash with the updated substituted settings
+        if (td->settingsHash)
+            {
+            hashReplace(td->settingsHash, "shortLabel", cloneString(td->shortLabel));
+            hashReplace(td->settingsHash, "longLabel", cloneString(td->longLabel));
+            }
         }
     carefulClose(&f);
     verbose(2, "Wrote tab representation to %s\n", tab);

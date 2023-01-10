@@ -1172,4 +1172,29 @@ ls: cannot access no: No such file or directory
 /hive/data/genomes/bosTau9/pushQ/redmine.bosTau9.releaseLog.txt
 /hive/data/genomes/bosTau9/pushQ/redmine.bosTau9.table.list
 
-#########################################################################
+##############################################################################
+# LIFTOVER TO bosTau4 (DONE - 2022-12-06 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bosTau9/bed/blat.bosTau4.2022-12-06
+    cd /hive/data/genomes/bosTau9/bed/blat.bosTau4.2022-12-06
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/bosTau9/bosTau9.2bit \
+        -targetSizes=/hive/data/genomes/bosTau9/chrom.sizes \
+        -query2Bit=/hive/data/genomes/bosTau4/bosTau4.2bit \
+        -querySizes=/hive/data/genomes/bosTau4/chrom.sizes \
+        -ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
+         bosTau9 bosTau4
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/bosTau9/bosTau9.2bit \
+        -targetSizes=/hive/data/genomes/bosTau9/chrom.sizes \
+        -query2Bit=/hive/data/genomes/bosTau4/bosTau4.2bit \
+        -querySizes=/hive/data/genomes/bosTau4/chrom.sizes \
+        -ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
+         bosTau9 bosTau4) > doLiftOverToBosTau9.log 2>&1
+    # real    384m15.787s
+
+    # see if the liftOver menus function in the browser from bosTau9 to bosTau4
+
+##############################################################################

@@ -1,0 +1,63 @@
+<h2>Description</h2>
+
+<p>
+This track shows the alignments of selected full genome sequences in Genbank to the reference
+genome.</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Alignable regions are shown with thick lines. Small single-bp differences are highlighted with red
+tickmarks on the thick lines. Alignable regions can be separated by non-alignable sequences with
+thinner lines. Deletions are shown with single lines. Deletions that include at least one short
+insertion are shown with double lines. Rearrangements are not shown directly, but duplications will
+lead to two rows of thick lines, with the exact origin of the sequence shown on mouse over or by
+clicking the sequence.
+</p>
+
+<h2>Methods</h2>
+<p>
+Sequences were aligned with BLAT and filtered with our command line tool pslReps at default
+settings.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables">Table Browser</a> or combined with other datasets in the
+<a href="hgIntegrator">Data Integrator</a> tool.
+For automated analysis, the genome annotation is stored in
+a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/mpxvRivers/genbankAli/">the download server</a>.</p>
+<p>
+Annotations can
+be converted from binary to ASCII text by our command-line tool bigBedToBed.
+Instructions for downloading this command can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities page</a>.
+The tool can also be used to obtain features within a given range without downloading the file,
+for example:</p>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/mpxvRivers/genbankAli/seqs.bb -chrom=NC_063383.1 -start=0 -end=100000 stdout</code>
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>References</h2>
+<p>
+
+Monzon S et al, 
+<a href="https://www.biorxiv.org/content/10.1101/2022.09.30.510261v2" target="_blank">
+Genomic accordions may hold the key to Monkeypox Clade IIb's increased transmissibility
+</a>
+<em>Biorxiv</em> Oct 01, 2022
+</p>
+
+<p>
+Gigante CM et al,
+<a href="https://www.biorxiv.org/content/10.1101/2022.09.16.508251v1" target="_blank">
+Genomic deletions and rearrangements in monkeypox virus from the 2022 outbreak, USA
+</a>
+<em>Biorxiv</em>, Sep 17 , 2022
+</p>
+

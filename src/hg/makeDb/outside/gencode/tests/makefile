@@ -31,7 +31,7 @@ test:: attrsTests makeTracksTests makeAttrsTests buildGencodeToUcscLiftTests \
 ##
 attrsTests: attrsSet1GtfTest attrsV21GtfTest attrsV21Gff3Test attrsV27ParGtfTest attrsV27ParGff3Test \
 	attrsV19GtfTest attrsTagGtfTests attrsTagGff3Tests attrsPseudoGff3Tests \
-	attrsErrorGtfTest attrsErrorGff3Test
+	attrsErrorGtfTest attrsErrorGff3Test attrsRankTest
 
 attrsSet1GtfTest: mkdirs
 	${gencodeGxfToAttrs} input/set1.gtf output/$@.tsv
@@ -81,6 +81,12 @@ attrsErrorGff3Test: mkdirs
 	if ${gencodeGxfToAttrs} input/attrErrors.gff3 /dev/null >output/$@.err 2>&1 ; \
 	   then echo Error: should fail >&2 ; exit 1 ; else exit 0 ; fi
 	${diff} expected/$@.err output/$@.err
+
+attrsRankTest: mkdirs
+	${gencodeGxfToAttrs} --transcriptRanks=input/v42.transcript_rankings.txt input/v42.gff3 output/$@.tsv
+	${diff} expected/$@.tsv output/$@.tsv
+
+
 
 ##
 # generate input need for tests

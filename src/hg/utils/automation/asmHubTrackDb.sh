@@ -17,6 +17,8 @@ export buildDir=$3
 
 export scriptDir="$HOME/kent/src/hg/utils/automation"
 
+export asmType="n/a"
+
 # technique to set variables based on the name in another variable:
 
 if [ -s "$buildDir/dropTracks.list" ]; then
@@ -28,6 +30,13 @@ if [ -s "$buildDir/dropTracks.list" ]; then
      eval $notTrack="1"
   done
 fi
+
+case "${asmId}" in
+  GCA_*) asmType="genbank"
+    ;;
+  GCF_*) asmType="refseq"
+    ;;
+esac
 
 mkdir -p $buildDir/bbi
 mkdir -p $buildDir/ixIxx
@@ -58,7 +67,7 @@ type bigBed 6
 html html/%s.assembly
 searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
-urlLabel NCBI Nucleotide database
+urlLabel NCBI Nucleotide database:
 group map\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 $scriptDir/asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz https://hgdownload.soe.ucsc.edu/hubs/VGP/genomes/$asmId > $buildDir/html/$asmId.assembly.html
 fi
@@ -201,6 +210,7 @@ if [ "${rmskItemCount}" -lt 4 ]; then
   rm -f $buildDir/bbi/${asmId}.rmsk.bb
   rm -f $buildDir/${asmId}.fa.align.tsv.gz
   rm -f $buildDir/${asmId}.fa.join.tsv.gz
+  rm -f $buildDir/${asmId}.rmsk.customLib.fa.gz
 else
 
 rm -f $buildDir/$asmId.repeatMasker.out.gz
@@ -208,6 +218,10 @@ ln -s trackData/repeatMasker/$asmId.sorted.fa.out.gz $buildDir/$asmId.repeatMask
 if [ -s "$buildDir/trackData/repeatMasker/versionInfo.txt" ]; then
    rm -f "$buildDir/${asmId}.repeatMasker.version.txt"
    ln -s trackData/repeatMasker/versionInfo.txt "$buildDir/${asmId}.repeatMasker.version.txt"
+fi
+if [ -s "$buildDir/trackData/repeatModeler/${asmId}-families.fa" ]; then
+   cp -p "$buildDir/trackData/repeatModeler/${asmId}-families.fa" "$buildDir/${asmId}.rmsk.customLib.fa"
+   gzip "$buildDir/${asmId}.rmsk.customLib.fa"
 fi
 
 if [ "${newRmsk}" -gt 0 ]; then
@@ -429,6 +443,7 @@ priority 2
         shortLabel RefSeq All
         type bigGenePred
         labelFields name,geneName,geneName2
+        defaultLabelFields geneName2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeq.ix
         bigDataUrl bbi/%s.ncbiRefSeq.bb
@@ -453,6 +468,7 @@ priority 2
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
         type bigGenePred
         labelFields name,geneName,geneName2
+        defaultLabelFields geneName2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqCurated.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -477,6 +493,7 @@ priority 2
         longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
         type bigGenePred
         labelFields name,geneName,geneName2
+        defaultLabelFields geneName2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqPredicted.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -505,7 +522,7 @@ rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
         searchTrix ixIxx/%s.ncbiRefSeqOther.ix
         bigDataUrl bbi/%s.ncbiRefSeqOther.bb
         type bigBed 12 +
-        labelFields gene
+        labelFields name
         skipEmptyFields on
         urls GeneID=\"https://www.ncbi.nlm.nih.gov/gene/\$\$\" MIM=\"https://www.ncbi.nlm.nih.gov/omim/\$\$\" HGNC=\"http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=\$\$\" FlyBase=\"http://flybase.org/reports/\$\$\" WormBase=\"http://www.wormbase.org/db/gene/gene?name=\$\$\" RGD=\"https://rgd.mcw.edu/rgdweb/search/search.html?term=\$\$\" SGD=\"https://www.yeastgenome.org/locus/\$\$\" miRBase=\"http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=\$\$\" ZFIN=\"https://zfin.org/\$\$\" MGI=\"http://www.informatics.jax.org/marker/\$\$\"\n\n" "${asmId}" "${asmId}"
 
@@ -591,12 +608,18 @@ if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
 rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+export longLabel="Gene models submitted to NCBI"
+export shortLabel="Gene models"
+if [ "$asmType" = "refseq" ]; then
+  longLabel="NCBI gene predictions"
+  shortLabel="NCBI Genes"
+fi
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
 ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
   printf "track ncbiGene
-longLabel NCBI gene predictions
-shortLabel NCBI Genes
+longLabel $longLabel
+shortLabel $shortLabel
 visibility pack
 color 0,80,150
 altColor 150,80,0
@@ -606,8 +629,9 @@ type bigGenePred
 html html/%s.ncbiGene
 searchIndex name%s
 url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
-urlLabel Entrez gene
+urlLabel Entrez gene:
 labelFields geneName,geneName2
+defaultLabelFields geneName2
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 
   $scriptDir/asmHubNcbiGene.pl $asmId $ncbiAsmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
@@ -754,7 +778,10 @@ visibility pack
 color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.xenoRefGene.bb
+url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
+urlLabel NCBI Nucleotide database:
 labelFields name,geneName,geneName2
+defaultLabelFields geneName
 searchIndex name
 searchTrix ixIxx/%s.xenoRefGene.ix
 html html/%s.xenoRefGene\n\n" "${asmId}" "${asmId}" "${asmId}"
@@ -805,9 +832,11 @@ if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
   printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
 fi
 ##  for mouse strain hubs only
-if [ -s "${buildDir}/$asmId.bigMaf.trackDb.txt" ]; then
-  printf "include %s.bigMaf.trackDb.txt\n\n" "${asmId}"
-fi
+## turned off 2022-11-02 until these can be correctly translated
+## to GenArk naming schemes
+### if [ -s "${buildDir}/$asmId.bigMaf.trackDb.txt" ]; then
+###   printf "include %s.bigMaf.trackDb.txt\n\n" "${asmId}"
+### fi
 
 ###################################################################
 # check for lastz/chain/net available

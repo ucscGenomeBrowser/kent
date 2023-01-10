@@ -19,11 +19,17 @@ export dateStamp=`date "+%FT%T %s"`
 export asmId=$1
 export rmOutFile=$2
 export destDir=$3
+export chrSizes=""
 
-export chrSizes="../../$asmId.chrom.sizes"
+if [ -s "$destDir/$asmId.chrom.sizes" ]; then
+  chrSizes="$destDir/$asmId.chrom.sizes"
+elif [ -s "../../$asmId.chrom.sizes" ]; then
+  chrSizes="../../$asmId.chrom.sizes"
+fi
+
 # assume this file name pattern
 export faAlign=`echo "${rmOutFile}" | sed -e 's/sorted.fa.out/fa.align/; s/.gz//;'`
-export RepeatMaskerPath="/hive/data/staging/data/RepeatMasker210401"
+export RepeatMaskerPath="/hive/data/staging/data/RepeatMasker221107"
 
 if [ -d "${destDir}" ]; then
   cd "${destDir}"
@@ -35,20 +41,28 @@ if [ -d "${destDir}" ]; then
   # align file only exists when RM has been run locally, not for NCBI version
   # it is OK if it is missing, can do this anyway without it
   if [ -s "${faAlign}" ]; then
-    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
-    $RepeatMaskerPath/util/rmToTrackHub.pl -out "${rmOutFile}" -align "${faAlign}"
+    printf "# using faAlign file: %s\n" "${faAlign}" 1>&2
+    printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\" -align \"${faAlign}\"\n" 1>&2
+    time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}" -align "${faAlign}"
     # in place same file sort using the -o output option
     sort -k1,1 -k2,2n -o "${asmId}.fa.align.tsv" "${asmId}.fa.align.tsv" &
   else
-    printf "$RepeatMaskerPath/util/rmToTrackHub.pl -out \"${rmOutFile}\"\n" 1>&2
-    $RepeatMaskerPath/util/rmToTrackHub.pl -out "${rmOutFile}"
+    printf "# there is no faAlign file\n" 1>&2
+    printf "time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes \"${chrSizes}\" -genome \"${asmId}\" -hubname \"${asmId}\" -out \"${rmOutFile}\"\n" 1>&2
+    time $RepeatMaskerPath/util/rmToTrackHub.pl -sizes "${chrSizes}" -genome "${asmId}" -hubname "${asmId}" -out "${rmOutFile}"
   fi
   sort -k1,1 -k2,2n -o "${asmId}.sorted.fa.join.tsv" "${asmId}.sorted.fa.join.tsv" &
   wait
+  printf "bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskBed.as -type=bed9+5
+    \"${asmId}.sorted.fa.join.tsv\" \"${chrSizes}\"
+      \"${asmId}.rmsk.bb\" &\n" 1>&2
   bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskBed.as -type=bed9+5 \
     "${asmId}.sorted.fa.join.tsv" "${chrSizes}" \
       "${asmId}.rmsk.bb" &
   if [ -s "${asmId}.fa.align.tsv" ]; then
+    printf "bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskAlignBed.as
+      -type=bed3+14 \"${asmId}.fa.align.tsv\" \"${chrSizes}\"
+        \"${asmId}.rmsk.align.bb\" &\n" 1>&2
     bedToBigBed -tab -as=$HOME/kent/src/hg/lib/bigRmskAlignBed.as \
       -type=bed3+14 "${asmId}.fa.align.tsv" "${chrSizes}" \
         "${asmId}.rmsk.align.bb" &
@@ -104,7 +118,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
             bbi/${asmId}.rmsk.RNA.bb
     fi
     dateStamp=`date "+%FT%T %s"`
-    printf "# %s checking ls rmskClass/*.tab | egrep -v \"/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab\" " "${dateStamp}"
+    printf "# %s checking ls rmskClass/*.tab | egrep -v \"/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab\"\n" "${dateStamp}"
     otherCount=`(ls rmskClass/*.tab 2> /dev/null || true) | (egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" || true) | wc -l`
     if [ "${otherCount}" -gt 0 ]; then
       dateStamp=`date "+%FT%T %s"`

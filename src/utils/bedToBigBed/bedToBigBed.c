@@ -19,6 +19,7 @@
 #include "bigBed.h"
 #include "bbiAlias.h"
 #include "twoBit.h"
+#include "portable.h"
 
 char *version = "2.9";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
 /* Version history from 2.6 on at least -
@@ -864,6 +865,11 @@ udcDir = optionVal("udcDir", udcDefaultDir());
 size_t maxAlloc = optionLongLong("maxAlloc", 0);
 if (argc != 4)
     usage();
+
+char *bedFileName = argv[1];
+
+mustBeReadableAndRegularFile(bedFileName);
+
 udcSetDefaultDir(udcDir);
 if (maxAlloc > 0)
     setMaxAlloc(maxAlloc);
@@ -897,7 +903,6 @@ else
 
 /* If the haven't set bedN and bedP from the type var in the command line, then we sniff it
  * out from file. */
-char *bedFileName = argv[1];
 if (bedN == 0)
     {
     /* Just read in single line and count fields. */

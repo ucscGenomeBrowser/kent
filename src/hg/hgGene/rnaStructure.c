@@ -4,6 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "common.h"
+#include <limits.h>
 #include "hash.h"
 #include "linefile.h"
 #include "jksql.h"
@@ -73,13 +74,15 @@ for (side = 0; side < ArraySize(names); ++side)
 	{
 	struct rnaFold fold;
 	int bases;
-	char psName[128];
+	char psName[2048], altPsName[2048];
 
 	/* Load fold and save it as postScript. */
 	rnaFoldStaticLoad(row, &fold);
-	safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps", table, table, geneId);
+	safef(psName, sizeof(psName), "%s/%s/%s_%s.ps", trashDir(), table, table, geneId);
+        // newer versions of RNAplot add _ss.ps to the file name
+        safef(altPsName, sizeof(altPsName), "%s/%s/%s_%s.ps_ss.ps", trashDir(), table, table, geneId);
         bool plotDone = FALSE;
-	if (fileExists(psName))
+	if (fileExists(psName) || fileExists(altPsName))
             plotDone = TRUE;
         else
 	    {
@@ -88,26 +91,34 @@ for (side = 0; side < ArraySize(names); ++side)
             if (!fileExists(rnaPlotPath))
                 {
                 plotDone = FALSE;
-                fprintf(stderr, "Could not find %s", rnaPlotPath);
                 }
             else
                 {
-                char *plotCmd[] = {rnaPlotPath, NULL};
+                char *absoluteRnaPlotPath = NULL;
+                absoluteRnaPlotPath = realpath(rnaPlotPath, NULL);
+                char *plotCmd[] = {absoluteRnaPlotPath, NULL};
+                char *curdir, outputDir[2048], psNameLocal[2048];
+                curdir = getCurrentDir();
+                safef(outputDir, sizeof(outputDir), "%s/%s/", trashDir(), table);
+                setCurrentDir(outputDir); /* RNAplot only writes output to the current directory */
                 struct pipeline *plStruct = pipelineOpen1(plotCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
+                safef(psNameLocal, sizeof(psNameLocal), "%s_%s.ps", table, geneId);
                 f = pipelineFile(plStruct);
                 if (f != NULL)
                     {
-                    fprintf(f, ">%s\n", psName);	/* This tells where to put file. */
+                    fprintf(f, ">%s\n", psNameLocal);	/* This is used by RNAplot for the filename. */
                     fprintf(f, "%s\n%s\n", fold.seq, fold.fold);
                     plotDone = TRUE;
                     }
                 pipelineClose(&plStruct);
+                setCurrentDir(curdir); // return home
+                free(absoluteRnaPlotPath);
                 }
             }
 
         // newer versions of RNAplot add _ss.ps to the file name
         if (!fileExists(psName))
-            safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps_ss.ps", table, table, geneId);
+            safecpy(psName, sizeof(psName), altPsName);
             
 	/* Print row of table, starting with energy terms . */
 	hPrintf("</TR><TR>");

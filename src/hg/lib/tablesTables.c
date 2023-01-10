@@ -118,7 +118,9 @@ char *separator = "";
 struct slName *suggest;
 for (suggest = suggestList; suggest != NULL; suggest = suggest->next)
     {
-    dyStringPrintf(dy,"%s\"%s\"", separator, suggest->name);
+    dyStringPrintf(dy,"%s\"", separator);
+    dyStringAppendEscapeQuotes(dy, suggest->name, '"', '\\');
+    dyStringPrintf(dy, "\"");
     separator = ",";
     }
 dyStringPrintf(dy,"]\n");
@@ -803,7 +805,14 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
  * is an optional way to enrich output of specific columns of the table.  It is keyed
  * by column name and has for values functions of type webTableOutputWrapperType. */
 {
-webFilteredFieldedTable(cart, table, NULL, returnUrl, varPrefix, 
+struct dyString *visibleFacetList = dyStringNew(256); 
+int i;
+for (i = 0; i < table->fieldCount; ++i)
+    {
+    if (i > 0) dyStringPrintf(visibleFacetList, ",");
+    dyStringPrintf(visibleFacetList, "%s", table->fields[i]);
+    }
+webFilteredFieldedTable(cart, table, visibleFacetList->string, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
     slCount(table->rowList), 
@@ -824,11 +833,12 @@ boolean gotWhere = FALSE;
 sqlCkIl(fieldsSafe,fields)
 sqlCkIl(fromSafe,from)
 
+// from can be a list of tables if joining
 sqlDyStringPrintf(query, "select %-s from %-s", fieldsSafe, fromSafe);
 if (!isEmpty(initialWhere))
     {
     sqlDyStringPrintf(where, " where ");
-    sqlSanityCheckWhere(initialWhere, where);
+    sqlDyStringPrintf(where, "%-s", initialWhere);
     gotWhere = TRUE;
     }
 
@@ -887,7 +897,8 @@ if (withFilters)
 	    }
 	}
     }
-sqlDyStringPrintf(query, "%-s", where->string);  // trust
+if (!isEmpty(where->string))
+    sqlDyStringPrintf(query, "%-s", where->string);  // trust
 
 /* We do order here so as to keep order when working with tables bigger than a page. */
 char orderVar[256];
@@ -906,7 +917,7 @@ if (!isEmpty(orderFields))
 *retWhere = where;
 }
 
-struct dyString *fuseCsvFields(struct sqlConnection *conn, char *table, 
+struct dyString *fuseCsvFields(struct sqlConnection *conn, char *tables, 
     char *firstCsv, char *secondCsv)
 /* Return a list that is firstCsv followed by any fields in secondCsv not already in firstCsv
  *      "a,b,c,d",  "b,f,d,e"   yeilds "a,b,c,d,f,e"
@@ -920,7 +931,7 @@ struct slName *el;
 struct slName *aList = slNameListFromComma(firstCsv);
 for (el = aList; el != NULL; el = el->next)
     {
-    if (sqlColumnExists(conn, table, el->name))
+    if (sqlColumnExistsInTablesList(conn, tables, el->name))
 	csvEscapeAndAppend(result, el->name);
     hashAdd(uniq, el->name, NULL);
     }
@@ -931,7 +942,7 @@ for (el = bList; el != NULL; el = el->next)
     {
     if (!hashLookup(uniq, el->name))
         {
-	if (sqlColumnExists(conn, table, el->name))
+	if (sqlColumnExistsInTablesList(conn, tables, el->name))
 	    csvEscapeAndAppend(result, el->name);
 	hashAdd(uniq, el->name, NULL);
 	}
@@ -946,7 +957,7 @@ return result;
 
 void webFilteredSqlTable(struct cart *cart,    /* User set preferences here */
     struct sqlConnection *conn,		       /* Connection to database */
-    char *fields, char *from, char *initialWhere,  /* Our query in three parts */
+    char *fields, char *from, char *initialWhere,  /* Our query in three parts, from can be a table list if joining */
     char *returnUrl, char *varPrefix,	       /* Url to get back to us, and cart var prefix */
     int maxFieldWidth,			       /* How big do we let fields get in characters */
     struct hash *tagOutWrappers,	       /* A hash full of callbacks, one for each column */
@@ -1001,7 +1012,8 @@ else
     /* Figure out size of query result */
     sqlCkIl(fromSafe,from)
     struct dyString *countQuery = sqlDyStringCreate("select count(*) from %-s", fromSafe);
-    sqlDyStringPrintf(countQuery, "%-s", where->string);   // trust
+    if (!isEmpty(where->string))
+	sqlDyStringPrintf(countQuery, "%-s", where->string);   // trust
     context.tableSize = sqlQuickNum(conn, countQuery->string);
     dyStringFree(&countQuery);
     }

@@ -9,6 +9,7 @@
 #include "errAbort.h"
 #include "htmshell.h"
 #include "web.h"
+#include "dupTrack.h"
 #include "hPrint.h"
 #include "hdb.h"
 #include "hui.h"
@@ -22,6 +23,7 @@
 #include "geoMirror.h"
 #include "trackHub.h"
 #include "versionInfo.h"
+#include "asmAlias.h"
 
 #ifndef GBROWSE
 #include "axtInfo.h"
@@ -607,6 +609,10 @@ char *defaultClade = hClade(genome);
 char *defaultLabel = NULL;
 int numClades = 0;
 
+if (hubConnectIsCurated(trackHubSkipHubName(genome)))
+    defaultClade = hClade(trackHubSkipHubName(genome));
+else
+    defaultClade = hClade(genome);
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
 // get only the clades that have actual active genomes
 char query[4096];
@@ -914,9 +920,13 @@ if (*retDb == NULL)  // if db is not in URL, but genome is, use it for db
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
-if (*retDb && hDbExists(*retDb))
+if (*retDb)
     {
-    *retGenome = hGenome(*retDb);
+    *retDb = asmAliasFind(*retDb);
+    if (hDbExists(*retDb))
+        *retGenome = hGenome(*retDb);
+    else
+        errAbort("No db called %s", *retDb);
     }
 /* If no db was passed in as a cgi param then was the organism (a.k.a. genome)
  * passed in as a cgi param?
@@ -935,6 +945,7 @@ else if (*retClade && gotClade)
 else
     {
     *retDb = cartOptionalString(cart, dbCgiName);
+    *retDb = asmAliasFind(*retDb);
     *retGenome = cartOptionalString(cart, orgCgiName);
     *retClade = cartOptionalString(cart, cladeCgiName);
     /* If there was a db found in the session that determines everything. */
@@ -1445,9 +1456,10 @@ if(scriptName)
         if (tdb)
 	    {
 	    struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb); 
+	    char *undupedTrack = dupTrackSkipToSourceName(topLevel->track);
 	    safef(hgTablesOptions, sizeof  hgTablesOptions, 
 		    "../cgi-bin/hgTables?hgta_doMainPage=1&hgta_group=%s&hgta_track=%s&hgta_table=%s&", 
-		    topLevel->grp, topLevel->track, tdb->table);
+		    topLevel->grp, undupedTrack, tdb->table);
 	    menuStr = replaceChars(menuStr, "../cgi-bin/hgTables?", hgTablesOptions);
 	    trackDbFree(&tdb);
 	    }

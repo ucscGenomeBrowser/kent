@@ -158,6 +158,15 @@ else if (sameWordOk(selected, HIC_DRAW_MODE_TRIANGLE))
 return result;
 }
 
+boolean hicUiFetchInverted(struct cart *cart, struct trackDb *tdb)
+/* Check if the user has set this track to draw in inverted mode.
+ * Ideally this would also be available via a trackDb setting, but
+ * this is the first pass at this feature. */
+{
+boolean defaultVal = FALSE;
+return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_DRAW_INVERTED, defaultVal);
+}
+
 
 void hicUiDrawMenu(struct cart *cart, struct trackDb *tdb)
 /* Draw the list of draw mode options for Hi-C tracks.  Square is the
@@ -173,6 +182,10 @@ safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_MODE);
 char *menu[] = {HIC_DRAW_MODE_SQUARE, HIC_DRAW_MODE_TRIANGLE, HIC_DRAW_MODE_ARC};
 char* selected = hicUiFetchDrawMode(cart, tdb);
 cgiMakeDropList(cartVar, menu, 3, selected);
+puts("&nbsp;&nbsp;");
+printf("<b>Invert:</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_INVERTED);
+cgiMakeCheckBox(cartVar, hicUiFetchInverted(cart, tdb));
 }
 
 

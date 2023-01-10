@@ -110,6 +110,9 @@ while (my $line = <FH>) {
      exit 255;
   }
   my $nameIndex = 0;
+  if (! exists $chromSizes{$a[$nameIndex]}) {
+      die("sequence '$a[$nameIndex]' not found in chromSizes")
+  }
   printf BD "%s\t0\t%d", $a[$nameIndex], $chromSizes{$a[$nameIndex]};
   foreach my $name (@a) {
     printf BD "\t%s", $a[$nameIndex++];

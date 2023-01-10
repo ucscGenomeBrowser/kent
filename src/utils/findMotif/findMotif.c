@@ -3,7 +3,7 @@
 /* Copyright (C) 2012 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
-#include <popcntintrin.h>
+#include "libpopcnt.h"
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -32,25 +32,64 @@ static int lowerLimitMotifLength = 4;	/* must be at least 4 characters */
 #define bitsPerLongLong	(8 * sizeof(unsigned long long))
 #define perfectScore 1000	/*	mis-matches will lower the score */
 
+/* A union to access 8 bytes either as a (unsigned long long) type or
+ *  as an 8 byte array for the universal popcnt operation
+ */
+typedef union {
+   unsigned long long ull;
+   char b[8];
+} eightBytes;
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "findMotif - find specified motif in sequence\n"
-  "usage:\n"
-  "   findMotif [options] -motif=<acgt...> sequence\n"
-  "where:\n"
-  "   sequence is a .fa , .nib or .2bit file or a file which is a list of sequence files.\n"
-  "options:\n"
-  "   -motif=<acgt...> - search for this specified motif (case ignored, [acgt] only)\n"
-  "   NOTE: motif must be at least %d characters, less than %d\n"
-  "   -chr=<chrN> - process only this one chrN from the sequence\n"
-  "   -strand=<+|-> - limit to only one strand.  Default is both.\n"
-  "   -bedOutput - output bed format (this is the default)\n"
-  "   -wigOutput - output wiggle data format instead of bed file\n"
-  "   -misMatch=N - allow N mismatches (0 default == perfect match)\n"
-  "   -verbose=N - set information level [1-4]\n"
-  "   -verbose=4 - will display gaps as bed file data lines to stderr",
+"findMotif - find specified motif in sequence\n"
+"usage:\n"
+"   findMotif [options] -motif=<acgt...> sequence\n"
+"where:\n"
+"   sequence is a .fa , .nib or .2bit file or a file which is a list of\n"
+"       sequence files.\n"
+"options:\n"
+"   -motif=<acgt...> - search for this specified motif\n"
+"                      (case ignored, [acgt] only)\n"
+"   NOTE: motif must be at least %d characters, less than %d\n"
+"   -chr=<chrN> - process only this one chrN from the sequence\n"
+"   -strand=<+|-> - limit to only one strand.  Default is both.\n"
+"   -bedOutput - output bed format (this is the default)\n"
+"   -wigOutput - output wiggle data format instead of bed file\n"
+"   -misMatch=N - allow N mismatches (0 default == perfect match)\n"
+"   -verbose=N - set information level [1-4]\n"
+"   -verbose=4 - will display gaps as bed file data lines to stderr\n\n"
+" * libpopcnt.h - C/C++ library for counting the number of 1 bits (bit\n"
+" * population count) in an array as quickly as possible using\n"
+" * specialized CPU instructions i.e. POPCNT, AVX2, AVX512, NEON.\n"
+" *\n"
+" * Copyright (c) 2016 - 2020, Kim Walisch\n"
+" * Copyright (c) 2016 - 2018, Wojciech Muła\n"
+" *\n"
+" * All rights reserved.\n"
+" *\n"
+" * Redistribution and use in source and binary forms, with or without\n"
+" * modification, are permitted provided that the following conditions are met:\n"
+" *\n"
+" * 1. Redistributions of source code must retain the above copyright notice,\n"
+" *    this list of conditions and the following disclaimer.\n"
+" * 2. Redistributions in binary form must reproduce the above copyright notice,\n"
+" *    this list of conditions and the following disclaimer in the documentation\n"
+" *    and/or other materials provided with the distribution.\n"
+" *\n"
+" * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'\n"
+" * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\n"
+" * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE\n"
+" * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE\n"
+" * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR\n"
+" * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF\n"
+" * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS)\n"
+" * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN\n"
+" * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)\n"
+" * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE\n"
+" * POSSIBILITY OF SUCH DAMAGE.",
 lowerLimitMotifLength, (int)(bitsPerLongLong / 2)
   );
 }
@@ -207,22 +246,24 @@ for (i=0; i < seq->size; ++i)
 	    int score = perfectScore;
 	    if (doPlusStrand && (incomingLength >= motifLen))
 		{
-		unsigned long long bitsXor = incomingVal ^ posNeedle;
+                eightBytes bitsXor;	// declare bitsXor == 8 bytes
+                assert(sizeof(bitsXor) == 8);
+		bitsXor.ull = incomingVal ^ posNeedle;
 		boolean matchOK = FALSE;
-		if (bitsXor)
+		if (bitsXor.ull)
 		    {
 		    if (misMatch)
 			{
-			/* possible bitsXor bit values: 01 10 11
+			/* possible bitsXor.ull bit values: 01 10 11
 			 *  turn those three values into just: 01
 			 */
-			bitsXor=(bitsXor|(bitsXor >> 1)) & 0x5555555555555555;
+			bitsXor.ull=(bitsXor.ull|(bitsXor.ull >> 1)) & 0x5555555555555555;
 			/* now count those 1 bits on */
-			int bitsOn = _mm_popcnt_u64(bitsXor);
+			unsigned long int bitsOn = popcnt(bitsXor.b, sizeof(bitsXor.b));
 			if (bitsOn <= misMatch)
 			    {
-			    misMatchString(misMatchPrint, bitsXor, motifLen);
-verbose(2, "# misMatch count: %d position: %llu\n", bitsOn, chromPosition-motifLen);
+			    misMatchString(misMatchPrint, bitsXor.ull, motifLen);
+verbose(2, "# misMatch count: %lu position: %llu\n", bitsOn, chromPosition-motifLen);
 			    matchOK = TRUE;
 			    score -= bitsOn;
 			    }
@@ -260,22 +301,24 @@ verbose(2, "# misMatch count: %d position: %llu\n", bitsOn, chromPosition-motifL
 		&& (incomingVal == negNeedle))
 		{
 		score = perfectScore;
-		unsigned long long bitsXor = incomingVal ^ negNeedle;
+                eightBytes bitsXor;	// declare bitsXor == 8 bytes
+                assert(sizeof(bitsXor) == 8);
+		bitsXor.ull = incomingVal ^ negNeedle;
 		boolean matchOK = FALSE;
-		if (bitsXor)
+		if (bitsXor.ull)
 		    {
 		    if (misMatch)
 			{
 			/* possible bitsXor bit values: 01 10 11
 			 *  turn those three values into just: 01
 			 */
-			bitsXor=(bitsXor|(bitsXor >> 1)) & 0x5555555555555555;
+			bitsXor.ull=(bitsXor.ull|(bitsXor.ull >> 1)) & 0x5555555555555555;
 			/* now count those 1 bits on */
-			int bitsOn = _mm_popcnt_u64(bitsXor);
+			unsigned long int bitsOn = popcnt(bitsXor.b, sizeof(bitsXor.b));
 			if (bitsOn <= misMatch)
 			    {
-			    misMatchString(misMatchPrint, bitsXor, motifLen);
-verbose(2, "# misMatch count: %d position: %llu\n", bitsOn, chromPosition-motifLen);
+			    misMatchString(misMatchPrint, bitsXor.ull, motifLen);
+verbose(2, "# misMatch count: %lu position: %llu\n", bitsOn, chromPosition-motifLen);
 			    matchOK = TRUE;
 			    score -= bitsOn;
 			    }
