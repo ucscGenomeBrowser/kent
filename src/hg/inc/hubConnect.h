@@ -196,4 +196,7 @@ struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable
 
 boolean hubConnectIsCurated(char *db);
 /* Look in the dbDb table to see if this hub is curated. */
+
+boolean hubConnectGetCuratedUrl(char *db, char **hubUrl);
+/* Check to see if this db is a curated hub and if so return its hubUrl */
 #endif /* HUBCONNECT_H */
