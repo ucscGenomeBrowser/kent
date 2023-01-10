@@ -34,7 +34,9 @@ while [[ $((++attempt)) -le $maxAttempts ]]; do
         break;
     else
         echo "FAILED; will try again after $retryDelay seconds"
-        mv ncbi_dataset.zip{,.fail.$attempt}
+        if [[ -f ncbi_dataset.zip ]]; then
+            mv ncbi_dataset.zip{,.fail.$attempt}
+        fi
         if [[ $attempt -lt $maxAttempts ]]; then
             sleep $retryDelay
         fi
