@@ -920,13 +920,10 @@ if (*retDb == NULL)  // if db is not in URL, but genome is, use it for db
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
-if (*retDb)
+*retDb = asmAliasFind(*retDb);
+if (*retDb && hDbExists(*retDb))
     {
-    *retDb = asmAliasFind(*retDb);
-    if (hDbExists(*retDb))
-        *retGenome = hGenome(*retDb);
-    else
-        errAbort("No db called %s", *retDb);
+    *retGenome = hGenome(*retDb);
     }
 /* If no db was passed in as a cgi param then was the organism (a.k.a. genome)
  * passed in as a cgi param?
