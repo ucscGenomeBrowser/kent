@@ -30,5 +30,6 @@ table gencodeBGP
    string level;           "support level, tsl1 is strongest support, tsl5 weakest, NA means not analyzed (from gencodeTranscriptionSupportLevel)"
 # tier:  all, basic, canonical
    string tier;   "Transcript Tier"
+   uint rank;          "Transcript Rank"
    )
 
