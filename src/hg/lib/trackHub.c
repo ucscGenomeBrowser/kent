@@ -1064,10 +1064,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles)
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles, boolean *foundFirstGenome)
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
  * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
- * put the list of included files in there. */
+ * put the list of included files in there.  Only the first example of a genome 
+ * gets to populate groups, the others get a group for the trackHub.  */
 {
 struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
 struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL, incFiles);
@@ -1099,8 +1100,10 @@ validateTracks(hub, genome, tdbList);
 trackDbAddTableField(tdbList);
 if (!isEmpty(hub->name))
     trackHubAddNamePrefix(hub->name, tdbList);
-if (genome->twoBitPath == NULL)
+if (genome->twoBitPath == NULL || *foundFirstGenome)
     trackHubAddGroupName(hub->name, tdbList);
+else
+    *foundFirstGenome = TRUE;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     trackDbFieldsFromSettings(tdb);

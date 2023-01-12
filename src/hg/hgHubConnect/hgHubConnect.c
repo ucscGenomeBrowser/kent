@@ -1435,12 +1435,14 @@ long beforeCheck = clock1000();
 
 struct hubConnectStatus *hub = hubList;
 
+boolean foundFirstGenome = FALSE;
+struct hash *trackDbNameHash = newHash(5);
 for(; hub; hub = hub->next)
     {
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-	hubAddTracks(hub, database);
+	hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash);
 	}
     errCatchEnd(errCatch);
     if (errCatch->gotError)

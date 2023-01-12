@@ -307,7 +307,8 @@ if (db)
     tdb = hTrackDb(db);
 else
     {
-    tdb = trackHubTracksForGenome(genome->trackHub, genome, NULL);
+    boolean foundFirstGenome = FALSE;
+    tdb = trackHubTracksForGenome(genome->trackHub, genome, NULL, &foundFirstGenome);
     tdb = trackDbLinkUpGenerations(tdb);
     tdb = trackDbPolishAfterLinkup(tdb, genome->name);
     }
