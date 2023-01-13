@@ -12,6 +12,7 @@
 #include "htmshell.h"
 #include "hgConfig.h"
 #include "cart.h"
+#include "verbose.h"
 #include "net.h"
 #include "web.h"
 #include "hdb.h"
@@ -1397,7 +1398,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 #endif /* GBROWSE */
 
 /* wire up the assembly hubs so we can operate without sql */
-setUdcTimeout(cart);
+setUdcOptions(cart);
 if (cartVarExists(cart, hgHubDoDisconnect))
     doDisconnectHub(cart);
 
@@ -2332,6 +2333,10 @@ if ( cgiOptionalString("ignoreCookie") == NULL )
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
+
+// activate optional debuging output for CGIs
+verboseCgi(cartCgiUsualString(cart, "verbose", NULL));
+
 return cart;
 }
 

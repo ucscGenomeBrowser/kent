@@ -177,6 +177,9 @@ if (startsWith(trashDir(), url) ||
     (isNotEmpty(sessionDataDirOld) && startsWith(sessionDataDirOld, url)))
     return TRUE;
 
+if (udcIsResolvable(url))
+    return TRUE;
+
 char *prefix = cfgOption("udc.localDir");
 if (prefix == NULL)
     {
@@ -184,15 +187,17 @@ if (prefix == NULL)
         errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
     return FALSE;
     }
-
-if (!startsWith(prefix, url))
+else if (!startsWith(prefix, url))
     {
     if (doAbort)
-        errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
+        errAbort("bigDataUrl '%s' is not an internet URL but udc.localDir is set in cgi-bin/hg.conf of this " \
+                "UCSC Genome Browser, so the bigDataUrl can be a file " \
+                "on the local hard disk of this UCSC Genome Browser instance. However, for such a file path to be acceptable from  "
+                "the local file system, bigDataUrl has to start with the prefix set by udc.localDir, which is '%s' on this Genome Browser.", url, prefix);
     return FALSE;
     }
-
-return TRUE;
+else
+    return TRUE;
 }
 
 static void checkAllowedBigDataUrlProtocols(char *url)
@@ -4200,7 +4205,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
     if (lf->fileName && (
             startsWith("http://" , lf->fileName) ||
             startsWith("https://", lf->fileName) ||
-            startsWith("ftp://"  , lf->fileName)
+            startsWith("ftp://"  , lf->fileName) ||
+            udcIsResolvable(lf->fileName)
             ))
         dataUrl = cloneString(lf->fileName);
     if (startsWithWord("track", line))

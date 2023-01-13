@@ -49,5 +49,8 @@ void verboseSetLogFile(char *name);
 FILE *verboseLogFile();
 /* Get the verbose log file. */
 
+void verboseCgi(char *level);
+/* Set verbosity level for a CGI: if level is not NULL, set output file to stdout, set verbosity and print a content-type header */
+
 #endif /* VERBOSE_H */
 
