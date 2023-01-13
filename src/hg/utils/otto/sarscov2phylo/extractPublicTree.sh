@@ -96,21 +96,6 @@ sampleCountComma=$(echo $(wc -l < samples.public.$today) \
 echo "$sampleCountComma genomes from GenBank, COG-UK and CNCB ($today); sarscov2phylo 13-11-20 tree with newer sequences added by UShER" \
     > hgPhyloPlace.description.txt
 
-# Make Taxonium V1-formatted protobuf for display
-zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz \
-| grep -v '"ORF1a"' > ncbiGenes.gtf
-zcat /hive/data/genomes/wuhCor1/wuhCor1.fa.gz > wuhCor1.fa
-zcat public-$today.metadata.tsv.gz > metadata.tmp.tsv
-time $matUtils extract -i public-$today.all.masked.pb \
-    -f wuhCor1.fa \
-    -g ncbiGenes.gtf \
-    -M metadata.tmp.tsv \
-    --extra-fields pango_lineage_usher \
-    --include-nt \
-    --write-taxodium public-$today.all.masked.taxodium.pb
-rm metadata.tmp.tsv wuhCor1.fa
-gzip -f public-$today.all.masked.taxodium.pb
-
 # Make Taxonium V2 .jsonl.gz protobuf for display
 usher_to_taxonium --input public-$today.all.masked.pb \
     --metadata public-$today.metadata.tsv.gz \
@@ -135,7 +120,6 @@ gzip -c public-$today.all.masked.nextclade.pangolin.pb \
 gzip -c lineageToPublicName > $archive/lineageToPublicName.tsv.gz
 gzip -c cladeToPublicName > $archive/cladeToPublicName.tsv.gz
 ln -f `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
-ln -f `pwd`/public-$today.all.masked.taxodium.pb.gz $archive/
 ln -f `pwd`/public-$today.all.masked.taxonium.jsonl.gz $archive/
 
 # Update 'latest' in $archiveRoot
@@ -145,8 +129,6 @@ ln -f $archive/public-$today.all.masked.pb.gz $archiveRoot/public-latest.all.mas
 ln -f $archive/public-$today.all.masked.vcf.gz $archiveRoot/public-latest.all.masked.vcf.gz
 ln -f $archive/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.tsv.gz
 ln -f $archive/public-$today.version.txt $archiveRoot/public-latest.version.txt
-ln -f $archive/public-$today.all.masked.taxodium.pb.gz \
-    $archiveRoot/public-latest.all.masked.taxodium.pb.gz
 ln -f $archive/public-$today.all.masked.taxonium.jsonl.gz \
     $archiveRoot/public-latest.all.masked.taxonium.jsonl.gz
 

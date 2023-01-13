@@ -887,7 +887,8 @@ if (trackHubDatabase(db))
     if (hub != NULL)
         {
         struct trackHubGenome *hubGenome = trackHubFindGenome(hub, db);
-        struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome, NULL), *tdb;
+        boolean foundFirstGenome = FALSE;
+        struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome, NULL, &foundFirstGenome), *tdb;
         for (tdb = tdbList;  tdb != NULL;  tdb = tdb->next)
             {
             hashAdd(dbTblHash, tdb->table, slNameNew(tdb->table));

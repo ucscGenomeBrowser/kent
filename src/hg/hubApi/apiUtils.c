@@ -307,7 +307,8 @@ if (db)
     tdb = hTrackDb(db);
 else
     {
-    tdb = trackHubTracksForGenome(genome->trackHub, genome, NULL);
+    boolean foundFirstGenome = FALSE;
+    tdb = trackHubTracksForGenome(genome->trackHub, genome, NULL, &foundFirstGenome);
     tdb = trackDbLinkUpGenerations(tdb);
     tdb = trackDbPolishAfterLinkup(tdb, genome->name);
     }
@@ -436,6 +437,8 @@ for ( ; var; var = var->next)
     if (sameWord("cgiSpoof", var->name))
 	continue;
     if (sameWord("debug", var->name))
+	continue;
+    if (sameWord("cmd", var->name))
 	continue;
     if (sameWord("measureTiming", var->name))
 	continue;

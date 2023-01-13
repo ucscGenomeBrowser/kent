@@ -380,7 +380,8 @@ struct hubConnectStatus *hub = hubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
 if (hubGenome == NULL)
     errAbort("Cannot find genome %s in hub %s", database, hub->hubUrl);
-struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL);
+boolean foundFirstGenome = FALSE;
+struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL, &foundFirstGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
 //this next line causes warns to print outside of warn box on hgTrackUi
@@ -751,16 +752,23 @@ else if (tHub != NULL)
 hDisconnectCentral(&conn);
 }
 
-struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database)
-/* Load up stuff from data hub and return list. */
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boolean *foundFirstGenome, struct hash *trackDbNameHash)
+/* Load up stuff from data hub and append to list. The hubUrl points to
+ * a trackDb.ra format file. Only the first example of a genome gets to 
+ * populate groups, the others get a group for the trackHub.  A particular 
+ * trackDb is only read once even if referenced from more than one hub.  */
 {
-/* Load trackDb.ra file and make it into proper trackDb tree */
 struct trackDb *tdbList = NULL;
 struct trackHub *trackHub = hub->trackHub;
 
 if (trackHub != NULL)
     {
     struct trackHubGenome *hubGenome = trackHubFindGenome(trackHub, database);
+    if (hashLookup(trackDbNameHash,  hubGenome->trackDbFile))
+        hubGenome = NULL; // we already saw this trackDb, so ignore this stanza
+    else
+        hashStore(trackDbNameHash,  hubGenome->trackDbFile);
+
     if (hubGenome != NULL)
 	{
         boolean doCache = trackDbCacheOn();
@@ -784,7 +792,7 @@ if (trackHub != NULL)
             }
 
         struct dyString *incFiles = dyStringNew(4096);
-        tdbList = trackHubTracksForGenome(trackHub, hubGenome, incFiles);
+        tdbList = trackHubTracksForGenome(trackHub, hubGenome, incFiles, foundFirstGenome);
         tdbList = trackDbLinkUpGenerations(tdbList);
         tdbList = trackDbPolishAfterLinkup(tdbList, database);
         trackDbPrioritizeContainerItems(tdbList);
@@ -826,6 +834,8 @@ if (hubTrackDbs != NULL)
 
 struct hubConnectStatus *hub, *hubList =  hubConnectGetHubs();
 struct trackDb *tdbList = NULL;
+boolean foundFirstGenome = FALSE;
+struct hash *trackDbNameHash = newHash(5);
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
     if (isEmpty(hub->errorMessage))
@@ -834,7 +844,7 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
 	    {
-	    struct trackDb *thisList = hubAddTracks(hub, database);
+	    struct trackDb *thisList = hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash);
 	    tdbList = slCat(tdbList, thisList);
 	    }
         errCatchEnd(errCatch);
@@ -985,9 +995,19 @@ hDisconnectCentral(&conn);
 return added;
 }
 
+static char *getCuratedHubPrefix()
+/* figure out what sandbox we're in. */
+{
+char *curatedHubPrefix = cfgOption("curatedHubPrefix");
+if (isEmpty(curatedHubPrefix))
+    curatedHubPrefix = "public";
 
-boolean hubConnectIsCurated(char *db)
-/* Look in the dbDb table to see if this hub is curated. */
+return curatedHubPrefix;
+}
+
+
+boolean hubConnectGetCuratedUrl(char *db, char **hubUrl)
+/* Check to see if this db is a curated hub and if so return its hubUrl */
 {
 struct sqlConnection *conn = hConnectCentral();
 char query[4096];
@@ -998,7 +1018,25 @@ char *dir = sqlQuickString(conn, query);
 boolean ret = !isEmpty(dir);
 hDisconnectCentral(&conn);
 
+if (hubUrl != NULL) // if user passed in hubUrl, calculate what it should be
+    {
+    *hubUrl = NULL;
+    if (!isEmpty(dir))   // this is a curated hub
+        {
+        char *path = dir + sizeof(hubCuratedPrefix) - 1;
+        char url[4096];
+        safef(url, sizeof url, "%s/%s/hub.txt", path, getCuratedHubPrefix());
+        *hubUrl = cloneString(url);
+        }
+    }
+
 return ret;
+}
+
+boolean hubConnectIsCurated(char *db)
+/* Look in the dbDb table to see if this hub is curated. */
+{
+return hubConnectGetCuratedUrl(db, NULL);
 }
 
 char *dbOveride;  // communicate with the web front end if we load a hub to support db cgivar. */
@@ -1049,9 +1087,7 @@ char *hubConnectLoadHubs(struct cart *cart)
 {
 int newCuratedHubId = 0;
 char *dbSpec = cartOptionalString(cart, "db");
-char *curatedHubPrefix = cfgOption("curatedHubPrefix");
-if (isEmpty(curatedHubPrefix))
-    curatedHubPrefix = "public";
+char *curatedHubPrefix = getCuratedHubPrefix();
 if (dbSpec != NULL)
     newCuratedHubId = lookForCuratedHubs(cart, trackHubSkipHubName(dbSpec), curatedHubPrefix);
 

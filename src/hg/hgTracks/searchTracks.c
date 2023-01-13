@@ -297,7 +297,9 @@ while(1)
     if (errCatchStart(errCatch))
         {
         pfd->done = FALSE;
-        struct trackDb *tdbList = hubAddTracks(hst->hub, database);
+        boolean foundFirstGenome = FALSE;
+        struct hash *trackDbNameHash = newHash(5);
+        struct trackDb *tdbList = hubAddTracks(hst->hub, database, &foundFirstGenome, trackDbNameHash);
         if (measureTiming)
             measureTime("After connecting to hub %s: '%d': ", hst->hubUrl, hst->hubId);
         // get composite and subtracks into trackList

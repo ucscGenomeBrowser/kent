@@ -366,6 +366,18 @@ var genomePos = {
             imageV2.markAsDirtyPage();
     },
 
+    getXLimits : function(img, slop) {
+        // calculate the min/max x position for drag-select, such that user cannot drag into the label area
+        var imgWidth = jQuery(img).width();
+        var imgOfs = jQuery(img).offset();
+        var leftX = hgTracks.revCmplDisp ?  imgOfs.left - slop :
+                                            imgOfs.left + hgTracks.insideX - slop;
+        var rightX = hgTracks.revCmplDisp ? imgOfs.left + imgWidth - hgTracks.insideX + slop :
+                                            imgOfs.left + imgWidth + slop;
+
+        return [leftX, rightX];
+    },
+
     check: function (img, selection)
     {   // return true if user's selection is still w/n the img (including some slop).
         var imgWidth = jQuery(img).width();
@@ -373,17 +385,8 @@ var genomePos = {
         var imgOfs = jQuery(img).offset();
         var slop = 10;
 
-        // We ignore clicks in the gray tab and track title column
-        // (we really should suppress all drag activity there,
-        // but I don't know how to do that with imgAreaSelect).
-        var leftX = hgTracks.revCmplDisp ?  imgOfs.left - slop :
-                                            imgOfs.left + hgTracks.insideX - slop;
-        var rightX = hgTracks.revCmplDisp ? imgOfs.left + imgWidth - hgTracks.insideX + slop :
-                                            imgOfs.left + imgWidth + slop;
-
-        return (   (selection.event.pageX >= leftX)
-                && (selection.event.pageX < rightX)
-                && (selection.event.pageY >= (imgOfs.top - slop))
+        // No need to check the x limits anymore, as imgAreaSelect is doing that now.
+        return  (  (selection.event.pageY >= (imgOfs.top - slop))
                 && (selection.event.pageY <  (imgOfs.top + imgHeight + slop)));
     },
 
@@ -1402,7 +1405,11 @@ var dragSelect = {
                 hgTracks.rulerClickHeight = 0; // will be zero if no ruler track
             var heights = hgTracks.rulerClickHeight;
 
+            var xLimits = genomePos.getXLimits($(imageV2.imgTbl), 0);
+
             dragSelect.areaSelector = jQuery((imageV2.imgTbl).imgAreaSelect({
+                minX : xLimits[0],
+                maxX : xLimits[1],
                 selectionColor:  'blue',
                 outerColor:      '',
                 minHeight:       imgHeight,

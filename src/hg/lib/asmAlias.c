@@ -171,7 +171,10 @@ char *ret = alias;
 struct sqlConnection *centralConn = hConnectCentral();
 
 if (!sqlTableExists(centralConn, "asmAlias"))
+    {
+    hDisconnectCentral(&centralConn);
     return alias;
+    }
 
 char buffer[4096];
 

@@ -150,9 +150,11 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub);
 boolean trackHubHasDatabase(struct trackHub *hub, char *database) ;
 /* Return TRUE if hub has contents for database */
 
-struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database);
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boolean *foundFirstGenome, struct hash *trackDbNameHash);
 /* Load up stuff from data hub and append to list. The hubUrl points to
- * a trackDb.ra format file.  */
+ * a trackDb.ra format file. Only the first example of a genome gets to 
+ * populate groups, the others get a group for the trackHub.  A particular 
+ * trackDb is only read once even if referenced from more than one hub.  */
 
 char *hubConnectLoadHubs(struct cart *cart);
 /* load the track data hubs.  Set a static global to remember them */
@@ -196,4 +198,7 @@ struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable
 
 boolean hubConnectIsCurated(char *db);
 /* Look in the dbDb table to see if this hub is curated. */
+
+boolean hubConnectGetCuratedUrl(char *db, char **hubUrl);
+/* Check to see if this db is a curated hub and if so return its hubUrl */
 #endif /* HUBCONNECT_H */

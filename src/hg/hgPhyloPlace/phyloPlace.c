@@ -2419,13 +2419,13 @@ return zipTn;
 
 static struct slName **getProblematicSites(char *db, char *chrom, int chromSize)
 /* If config.ra specfies maskFile them return array of lists (usually NULL) of reasons that
- * masking is recommended, one per position in genome; otherwise return NULL. */
+ * masking is recommended, one per position in genome; otherwise return array of NULLs. */
 {
 struct slName **pSites = NULL;
+AllocArray(pSites, chromSize);
 char *pSitesFile = phyloPlaceDbSettingPath(db, "maskFile");
 if (isNotEmpty(pSitesFile) && fileExists(pSitesFile))
     {
-    AllocArray(pSites, chromSize);
     struct bbiFile *bbi = bigBedFileOpen(pSitesFile);
     struct lm *lm = lmInit(0);
     struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, 0, chromSize, 0, lm);

@@ -9,7 +9,7 @@ set -beEu -x -o pipefail
 fa=$1
 out=$fa.pangolin.csv
 
-threadCount=5
+threadCount=6
 
 logfile=$(mktemp)
 pangolin -t $threadCount --analysis-mode pangolearn $fa --outfile $out > $logfile 2>&1

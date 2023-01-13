@@ -38,9 +38,9 @@ latestLogs_euro=latestLogs_euro[len(latestLogs_euro)-5:]
 #Make a directory for the month (Y-M) 
 try:
    os.makedirs("/hive/users/qateam/searchedTermsCronArchive/"+datetime.now().strftime("%Y-%m"))
-except subprocess.CalledProcessError:
+except OSError:
         print("mkdir: cannot create directory /hive/users/qateam/searchedTermsCronArchive/"+datetime.now().strftime("%Y-%m")+": File exists")
-        quit()
+        sys.exit(1)
 
 #Nodes to check for error logs
 nodes = ['RR', 'asiaNode', 'euroNode']

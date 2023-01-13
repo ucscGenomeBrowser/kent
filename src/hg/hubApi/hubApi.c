@@ -1248,6 +1248,17 @@ char *db = cgiOptionalString("genome");
 char *hubUrl = cgiOptionalString("hubUrl");
 struct dyString *errorMsg = dyStringNew(128);
 
+// first check for curated hubs
+if (isEmpty(hubUrl) && isNotEmpty(db))
+    {
+    char *newHubUrl;
+    if (hubConnectGetCuratedUrl(db, &newHubUrl))
+        {
+        hubUrl = newHubUrl;  // use curated hub hubUrl
+        cgiVarSet("hubUrl", hubUrl);   // subsequent code grabs hubUrl from env
+        }
+    }
+
 if (isEmpty(hubUrl) && isNotEmpty(db))
     {
     struct sqlConnection *conn = hAllocConnMaybe(db);
@@ -1583,8 +1594,11 @@ setUdcCacheDir();
 initSupportedTypes();
 
 char *pathInfo = getenv("PATH_INFO");
+char *cmd;
 if (isNotEmpty(pathInfo)) /* can get to this immediately, no cart needed */
     apiRequest(pathInfo);
+else if ((cmd = cgiOptionalString("cmd")) != NULL)
+    apiRequest(cmd);
 else
     {
     char *allowApiHtml = cfgOptionDefault("hubApi.allowHtml", "off");
