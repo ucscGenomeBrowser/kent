@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include <unistd.h>
+#include <sys/syscall.h>
 #include "portable.h"
 #include "localmem.h"
 #include "hash.h"
@@ -1045,4 +1046,19 @@ if (f)
 return ret;
 }
 
-
+int get_thread_id() {
+/* return some int specific to a thread, copied from https://stackoverflow.com/questions/21091000/how-to-get-thread-id-of-a-pthread-in-linux-c-program */
+#if defined(__linux__)
+    return syscall(SYS_gettid);
+#elif defined(__FreeBSD__)
+    long tid;
+    thr_self(&tid);
+    return (int)tid;
+#elif defined(__NetBSD__)
+    return _lwp_self();
+#elif defined(__OpenBSD__)
+    return getthrid();
+#else
+    return getpid();
+#endif
+}
