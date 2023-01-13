@@ -21,6 +21,9 @@ void setUdcTimeout(struct cart *cart);
 void setUdcCacheDir();
 /* set the path to the udc cache dir */
 
+void setUdcOptions(struct cart *cart);
+/* do udc setup: set timeout and resolver and anything else that requires cart or hg.conf */
+
 char *hDownloadsServer();
 /* get the downloads server from hg.conf or the default */
 

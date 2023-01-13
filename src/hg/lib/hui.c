@@ -635,6 +635,18 @@ else
     udcDisableCache();
 }
 
+void setUdcOptions(struct cart *cart)
+/* do udc setup: set timeout and resolver and anything else that requires cart or hg.conf */
+{
+setUdcTimeout(cart);
+
+char *prots = cfgOption("resolvProts");
+char *cmd = cfgOption("resolvCmd");
+
+if (prots && cmd)
+        udcSetResolver(prots, cmd);
+}
+
 
 char *wrapWhiteFont(char *s)
 /* Write white font around s */

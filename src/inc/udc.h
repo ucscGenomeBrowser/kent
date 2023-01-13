@@ -118,6 +118,9 @@ char *udcDefaultDir();
 void udcSetDefaultDir(char *path);
 /* Set default directory for cache */
 
+void udcSetResolver(char *prots, char *cmd);
+/* Set protocols and local wrapper program to resolve s3:// and similar URLs to HTTPS */
+
 void udcDisableCache();
 /* Switch off caching. Re-enable with udcSetDefaultDir */
 
@@ -183,5 +186,11 @@ void *udcMMapFetch(struct udcFile *file, bits64 offset, bits64 size);
  * maybe returned.  Maybe called multiple times on a range or overlapping
  * returns. */
 
+//void setUrlResolver(char *prot, char* cmd);
+/* Define a command that can be used to resolve a protocol like "s3" to a final URL */
+
+
+bool udcIsResolvable(char *url);
+/* check if third-party protocol resolving (e.g. for "s3://") is enabled and if a URL can be resolved this way to HTTP */
 
 #endif /* UDC_H */
