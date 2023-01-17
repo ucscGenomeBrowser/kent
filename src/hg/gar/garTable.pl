@@ -92,7 +92,7 @@ sub n50Cell($$$) {
 }
 ###############################################################################
 
-my @clades = qw( primates mammals birds fish vertebrate invertebrates plants fungi );
+my @clades = qw( primates mammals birds fish vertebrate invertebrate plants fungi );
 
 # to help weed out some of the noise
 # key is clade, value is minimal size to count as a whole genome
@@ -106,7 +106,7 @@ my %minimalGenomeSize = (
   birds => 200000000,
   fish => 100000,
   vertebrate => 4000000,
-  invertebrates => 10000,
+  invertebrate => 10000,
   plants => 100000,
   fungi => 50000,
 );
@@ -133,7 +133,6 @@ while (my $line = <FH>) {
   die "ERROR: duplicate accession from UCSC_GI.assemblyHubList.txt" if (defined($genArkAsm{$asmId}));
   $genArkAsm{$asmId} = sprintf("%s\t%s\t%s\t%s\t%s", $accession, $assembly, $sciName, $commonName, $taxonId);
   $gClade =~ s/\(L\)//;	# remove the 'legacy' tag
-  $gClade = "invertebrates" if ($gClade =~ m/invertebrate/);
   $genArkClade{$asmId} = $gClade;
   ++$genArkCladeProfile{$gClade};
   ++$genArkCount;
@@ -587,7 +586,7 @@ foreach my $clade (@clades) {
   my $refSeq = "${NA}/all.refseq.${clade}.today";
   my $genBank = "${NA}/all.genbank.${clade}.today";
   my $asmHubTsv = "~/kent/src/hg/makeDb/doc/${clade}AsmHub/${clade}.orderList.tsv";
-  if ($clade eq "invertebrates") {
+  if ($clade eq "invertebrate") {
     $asmHubTsv = "~/kent/src/hg/makeDb/doc/invertebrateAsmHub/invertebrate.orderList.tsv";
   }
   open (FH, "cut -f1 ${refSeq} ${genBank} ${asmHubTsv}|sort -u|") or die "can not read $refSeq or $genBank or $asmHubTsv";
@@ -1103,7 +1102,7 @@ foreach my $clade (@clades) {
      $browserUrl = sprintf("/cgi-bin/hgTracks?db=%s", $rrGcaGcfList{$asmId});
   }
 
-  printf PC "%d", $asmCountInTable;	# start a line output to clade.tableData.tsv
+  printf PC "%s", $browserUrl;	# start a line output to clade.tableData.tsv
 
   ## count number of different scientific names used in this clade table
   if (!defined($cladeSciNameCounts{$clade})) {
