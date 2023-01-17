@@ -802,7 +802,7 @@ printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.vis
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='birdsCheckBox' value='birds' checked><span id='birdsLabel'> birds</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='fishCheckBox' value='fish' checked><span id='fishLabel'> fish</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='vertebrateCheckBox' value='vertebrate' checked><span id='vertebrateLabel'> vertebrate</span></label></li>\n";
-printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='invertebratesCheckBox' value='invertebrates' checked><span id='invertebratesLabel'> invertebrates</span></label></li>\n";
+printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='invertebrateCheckBox' value='invertebrate' checked><span id='invertebrateLabel'> invertebrate</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='plantsCheckBox' value='plants' checked><span id='plantsLabel'> plants</span></label></li>\n";
 printf "    <li><label><input class='hideShow' type='checkbox' onchange='gar.visCheckBox(this)' id='fungiCheckBox' value='fungi' checked><span id='fungiLabel'> fungi</span></label></li>\n";
 printf "  </ul>\n";
