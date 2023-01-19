@@ -3572,6 +3572,7 @@ if (hgvsList)
         // at least one of the hgvs terms mapped sucessfully, so we can go to that spot
         // or let the user pick a location
         {
+        int numPositions = 0;
         struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
         for (hel = helList; hel != NULL; hel = hel->next)
             {
@@ -3594,8 +3595,11 @@ if (hgvsList)
                 // highlight the mapped bases to distinguish from padding
                 hgp->tableList->posList->highlight = addHighlight(db, helper->chrom,
                                                         helper->chromStart, helper->chromEnd);
+                numPositions++;
                 }
             }
+        if (numPositions > 1)
+            table->description = "HGVS search resulted in multiple positions, please select a transcript below";
         }
     else
         // all of the positions mapped incorrectly, so the term was bad. However, we may
