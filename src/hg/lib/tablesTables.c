@@ -80,7 +80,7 @@ if (largerContext != NULL)  // Need to page?
 
 printf("<input class='btn btn-secondary' type='submit' name='submit' id='submit' value='Search'>");
 
-printf("&nbsp&nbsp;");
+printf("&nbsp;&nbsp;");
 printf("<input class='btn btn-secondary' type='button' id='clearButton' VALUE=\"Clear Search\">");
 char jsText[1024];
 safef(jsText, sizeof(jsText),
@@ -554,7 +554,7 @@ if (visibleFacetList)
         
 	printf("Restricting files to where %s. ", where);
 
-	printf("&nbsp&nbsp;");
+	printf("&nbsp;&nbsp;");
 	printf("<input class='btn btn-secondary' type='button' id='clearRestrictionButton' VALUE=\"Clear Restriction\">");
 	char jsText[1024];
 	safef(jsText, sizeof(jsText),

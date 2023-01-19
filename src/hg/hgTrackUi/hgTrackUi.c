@@ -3095,7 +3095,7 @@ struct trackDb *tdbParent = tdb->parent;
 
 printf("<b>Track collection: "
            "<img height=12 src='../images/ab_up.gif'>"
-            "<a href='%s?%s=%s&c=%s&g=%s'>%s </b></a>",
+            "<a href='%s?%s=%s&c=%s&g=%s'>%s </a></b>",
             hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
             chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
 printf("<p>");
@@ -3125,11 +3125,11 @@ if (tdbParent->html)
         *end = '\0';
     printf("%s", html);
     printf("<p><i>To view the full description, click "
-                "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</i></a>\n",
+                "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</a></i>\n",
                         hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                         chromosome, cgiEncode(tdbParent->track));
     jsEndCollapsibleSection();
-    printf("</table>"); // required by jsCollapsible
+    printf("</table>\n"); // required by jsCollapsible
     }
 
 // collapsed panel for list of other tracks in the supertrack

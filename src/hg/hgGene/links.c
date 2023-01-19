@@ -161,6 +161,7 @@ if (row != NULL && row[0][0] != 0) /* If not null or empty */
     {
     struct dyString *dy = dyStringNew(0);
     char *name = cloneAndCut(row[0], link->postCutAt);
+    eraseTrailingSpaces(link->url); // sometimes people accidentally leave trailing spaces in the .ra
     dyStringPrintf(dy, link->url, name, row[1], row[2], row[3]);
     addLinkExtras(link, dy);
     url = dyStringCannibalize(&dy);

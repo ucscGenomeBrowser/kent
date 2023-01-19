@@ -1519,7 +1519,7 @@ if (indelAppropriate(tdb))
     char var[512];
     indelEnabledByName(cart, tdb, name, 0.0, &showDoubleInsert, &showQueryInsert, &showPolyA);
     printf("<TABLE><TR><TD colspan=2><B>Alignment Gap/Insertion Display Options</B>");
-    printf("&nbsp;<A HREF=\"%s\">Help on display options</A>\n<TR valign='top'><TD>",
+    printf("&nbsp;<A HREF=\"%s\">Help on display options</A></TD></TR>\n<TR valign='top'><TD>",
 	   INDEL_HELP_PAGE);
     if (includeDoubleInsert)
 	{
@@ -4572,7 +4572,7 @@ cartTdbFetchMinMaxPixels(cart, tdb, MIN_HEIGHT_LOLLY, atoi(DEFAULT_HEIGHT_PER), 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 printf("<TABLE BORDER=0>");
 
-printf("<TR valign=center><th align=right>Track height:</th><td align=left colspan=3>");
+printf("<TR valign=middle><th align=right>Track height:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, HEIGHTPER );
 cgiMakeIntVarWithLimits(option, defaultHeight, "Track height",0, minHeightPixels, maxHeightPixels);
 printf("pixels&nbsp;(range: %d to %d)",
@@ -4581,7 +4581,7 @@ printf("pixels&nbsp;(range: %d to %d)",
 char *autoScale;
 wigFetchAutoScaleWithCart(cart,tdb,name, &autoScale);
 
-printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
+printf("<TR valign=middle><th align=right>Data view scaling:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
 wiggleScaleDropDown(option, autoScale);
 void wiggleScaleDropDownJavascript(char *name);
@@ -4595,7 +4595,7 @@ double tDbMaxY;     /*  data range limits from trackDb type line */
 char *words[8];     /*  to parse the trackDb type line  */
 int wordCount = 0;  /*  to parse the trackDb type line  */
 wigFetchMinMaxYWithCart(cart, tdb, name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
-printf("<TR class=\"%sAutoScaleDesc\" valign=center><th align=right>Vertical viewing range:</th>"
+printf("<TR class=\"%sAutoScaleDesc\" valign=middle><th align=right>Vertical viewing range:</th>"
        "<td align=left>&nbsp;min:&nbsp;", name);
 safef(option, sizeof(option), "%s.%s", name, MIN_Y );
 cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
@@ -4603,7 +4603,7 @@ printf("</td><td align=leftv colspan=2>max:&nbsp;");
 safef(option, sizeof(option), "%s.%s", name, MAX_Y );
 cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
 /*
-printf("<TR valign=center><th align=right>Drawing method:</th><td align=left>");
+printf("<TR valign=middle><th align=right>Drawing method:</th><td align=left>");
 safef(option, sizeof(option), "%s.%s", name, POPMETHOD);
 char *popMethodVal = cartOrTdbString(cart, tdb, "popMethod", NULL);
         
@@ -5130,12 +5130,13 @@ if (subCount > 5 || (restrictions && sortOrder != NULL))
     if (subCount > 5)
 	printf("<span class='subCBcount'></span>\n");
 
+    printf("</TD>\n");
     // Restriction policy needs a link
     if (restrictions && sortOrder != NULL)
-	printf("</TD><TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>",
+	printf("<TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A></TH>",
 	       ENCODE_DATA_RELEASE_POLICY);
 
-    printf("</TD></TR></TFOOT>\n");
+    printf("</TR></TFOOT>\n");
     }
 }
 
@@ -5418,7 +5419,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	    safef(id, sizeof id, "%s_toggle", subtrack->track);
 	    #define SUBTRACK_CFG_WRENCH "<span id='%s' class='clickable%s' " \
 					"title='Configure this subtrack'><img src='../images/wrench.png'>" \
-                    "<span class='link'>&nbsp;Configure</a> </span></span>\n"
+                    "<span class='link'>&nbsp;Configure</span></span>\n"
 	    printf(SUBTRACK_CFG_WRENCH,id, (visibleCB ? "":" disabled"));
 	    jsOnEventByIdF("click", id, "return subCfg.cfgToggle(this,\"%s\");", subtrack->track);
 	    }
@@ -5458,7 +5459,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                     // Each sortable column requires hidden goop (in the "abbr" field currently)
                     // which is the actual sort on value
                     printf("<TD id='%s_%s' abbr='%s' align='left'>", subtrack->track, col, term);
-                    printf("&nbsp");
+                    printf("&nbsp;");
                     char *link = NULL;
                     if (vocabHash)
                         {
@@ -5985,12 +5986,12 @@ if (parentLevel && !isLogo)
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
         if (isCustomComposite(tdb))
             {
-            printf("<TR valign=center><th align=right>Merge method:</th><td align=left>");
+            printf("<TR valign=middle><th align=right>Merge method:</th><td align=left>");
             aggregateExtraDropDown(option, aggregateVal);
             }
         else
             {
-            printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
+            printf("<TR valign=middle><th align=right>Overlay method:</th><td align=left>");
             aggregateDropDown(option, aggregateVal);
             }
         puts("</td></TR>");
@@ -6007,12 +6008,12 @@ if (parentLevel && !isLogo)
         {
         /*
         char *viewFuncVal = cartOrTdbString(cart, tdb->parent, "viewFunc", NULL);
-        printf("<TR valign=center><th align=right>Math method:</th><td align=left>");
+        printf("<TR valign=middle><th align=right>Math method:</th><td align=left>");
         safef(option, sizeof(option), "%s.%s", name, VIEWFUNC);
         viewFuncDropDown(option, viewFuncVal);
         */
 
-        printf("<TR valign=center><th align=right>Missing data treatment:</th><td align=left>");
+        printf("<TR valign=middle><th align=right>Missing data treatment:</th><td align=left>");
         char *missingMethodVal = cartOrTdbString(cart, tdb->parent, "missingMethod", NULL);
         boolean missingIsZero = (missingMethodVal == NULL) ||  differentString(missingMethodVal, "missing");
         char buffer[1024];
@@ -6027,7 +6028,7 @@ if (parentLevel && !isLogo)
 
 if (!isLogo)
     {
-    printf("<TR valign=center><th align=right>Type of graph:</th><td align=left>");
+    printf("<TR valign=middle><th align=right>Type of graph:</th><td align=left>");
     safef( option, sizeof(option), "%s.%s", name, LINEBAR );
     wiggleGraphDropDown(option, lineBar);
     if (boxed)
@@ -6038,14 +6039,14 @@ if (!isLogo)
     puts("</td></TR>");
     }
 
-printf("<TR valign=center><th align=right>Track height:</th><td align=left colspan=3>");
+printf("<TR valign=middle><th align=right>Track height:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, HEIGHTPER );
 cgiMakeIntVarWithLimits(option, defaultHeight, "Track height",0, minHeightPixels, maxHeightPixels);
 printf("pixels&nbsp;(range: %d to %d)",
        minHeightPixels, maxHeightPixels);
 puts("</TD></TR>");
 
-printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
+printf("<TR valign=middle><th align=right>Data view scaling:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
 if (tdb->parent || tdb->subtracks)
     wiggleScaleDropDownParent(option, autoScale);
@@ -6056,12 +6057,12 @@ wiggleScaleDropDownJavascript(name);
 if (!isLogo)
     {
     safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
-    printf("Always include zero:&nbsp");
+    printf("Always include zero:&nbsp;");
     wiggleAlwaysZeroDropDown(option, alwaysZero);
     puts("</TD></TR>");
     }
 
-printf("<TR class=\"%sAutoScaleDesc\" valign=center><th align=right>Vertical viewing range:</th>"
+printf("<TR class=\"%sAutoScaleDesc\" valign=middle><th align=right>Vertical viewing range:</th>"
        "<td align=left>&nbsp;min:&nbsp;", name);
 safef(option, sizeof(option), "%s.%s", name, MIN_Y );
 cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
@@ -6073,27 +6074,31 @@ if (!isCustomComposite(tdb))
            tDbMinY, tDbMaxY);
 puts("</TD></TR>");
 
-printf("<TR valign=center><th align=right>Transform function:</th><td align=left>");
+printf("<TR valign=middle><th align=right>Transform function:</th><td align=left>");
 safef(option, sizeof(option), "%s.%s", name, TRANSFORMFUNC);
-printf("Transform data points by:&nbsp");
+printf("Transform data points by:&nbsp;");
 wiggleTransformFuncDropDown(option, transformFunc);
+puts("</TD></TR>");
 
 if (!isLogo)
     {
-    printf("<TR valign=center><th align=right>Windowing function:</th><td align=left>");
+    printf("<TR valign=middle><th align=right>Windowing function:</th><td align=left>");
     safef(option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
     wiggleWindowingDropDown(option, windowingFunction);
+    puts("</TD>");
 
     printf("<th align=right>Smoothing window:</th><td align=left>");
     safef(option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
     wiggleSmoothingDropDown(option, smoothingWindow);
     puts("&nbsp;pixels</TD></TR>");
 
+    printf("<TR valign=middle>");
     printf("<th align=right>Negate values:</th><td align=left>");
     safef(option, sizeof(option), "%s.%s", name, DONEGATIVEMODE );
     cgiMakeCheckBox(option, doNegative);
+    puts("</TD></TR>");
 
-    printf("<TR valign=center><td align=right><b>Draw y indicator lines:</b>"
+    printf("<TR valign=middle><td align=right><b>Draw y indicator lines:</b></td>"
            "<td align=left colspan=2>");
     printf("at y = 0.0:");
     safef(option, sizeof(option), "%s.%s", name, HORIZGRID );
@@ -6103,7 +6108,6 @@ if (!isLogo)
     cgiMakeDoubleVarInRange(option, yLineMark, "Indicator at Y", 0, NULL, NULL);
     safef(option, sizeof(option), "%s.%s", name, YLINEONOFF );
     wiggleYLineMarkDropDown(option, yLineMarkOnOff);
-    printf("</td>");
     }
 if (boxed)
     puts("</TD></TR></TABLE>");
@@ -7987,9 +7991,9 @@ if (differentString(tdb->track, name) && tdb->parent != NULL && sameString(tdb->
 char *showWig = cartOrTdbString(cart, tdb, BAMWIG_MODE, "0");
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAMWIG_MODE);
 cgiMakeCheckBox(cartVarName, SETTING_IS_ON(showWig));
-printf("</TD><TD>Only show coverage of reads</TD>");
-printf("</TR>\n");
+printf("</TD><TD>Only show coverage of reads");
 #endif
+printf("</TD></TR>\n");
 
 printf("<TR><TD>\n");
 char *showNames = cartOrTdbString(cart, tdb, BAM_SHOW_NAMES, "0");
@@ -8247,6 +8251,7 @@ if (makeCfgRows)
                 cfgByCfgType(configurable[ix],db,cart,view->subtracks,view->track,
                              membersOfView->titles[ix],TRUE);
                 }
+	    printf("</TD></TR>");
             }
         }
     }
@@ -9019,7 +9024,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
 if (dimensionY && cntY>MATRIX_BOTTOM_BUTTONS_AFTER)
     matrixXheadings(db,parentTdb,membersForAll,FALSE);
 
-puts("</TD></TR></TABLE>");
+puts("</TABLE>");
 
 // if there is a treeImage, put it beside the matrix
 if (treeImage != NULL)

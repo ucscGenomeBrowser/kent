@@ -439,7 +439,7 @@ void wrapColor(struct fieldedTable *table, struct fieldedRow *row,
     char *field, char *val, char *shortVal, void *context)
 /* Write out wrapper draws a SVG bar*/
 {
-printf("<div style=\"background-color:%s\">&nbsp;&nbsp;&nbsp</span>", val);
+printf("<div style=\"background-color:%s\">&nbsp;&nbsp;&nbsp;</span>", val);
 // printf("<TD><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR>");
 }
 
