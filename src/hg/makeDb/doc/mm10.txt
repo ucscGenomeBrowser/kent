@@ -18631,8 +18631,70 @@ TMPDIR=/dev/shm
     sed -e 's/^/    # /;' fb.GCA_001624535.1.chainRBest.Mm10.txt
     # 2255354454 bases of 2588619290 (87.126%) in intersection
 
-##############################################################################
 
 real	1211m31.498s
 user	0m1.396s
 sys	0m1.411s
+##############################################################################
+
+##############################################################################
+# LIFTOVER TO GCA_001632575.1_C3H_HeJ_v1 (WORKING - 2023-01-19 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm10/bed/blat.GCA_001632575.1.2023-01-19
+    cd /hive/data/genomes/mm10/bed/blat.GCA_001632575.1.2023-01-19
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -targetSizes=/hive/data/genomes/mm10/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.chrom.sizes \
+        -ooc=/hive/data/genomes/mm10/jkStuff/mm10.11.ooc \
+         mm10 GCA_001632575.1
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -targetSizes=/hive/data/genomes/mm10/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.chrom.sizes \
+        -ooc=/hive/data/genomes/mm10/jkStuff/mm10.11.ooc \
+         mm10 GCA_001632575.1) > doLiftOverToGCA_001632575.1.log 2>&1
+XXX - running - Thu Jan 19 12:32:47 PST 2023
+
+    # see if the liftOver menus function in the browser from mm10
+    #    to GCA_001632575.1
+
+##############################################################################
+# LIFTOVER TO mm10 (WORKING - 2023-01-19 - Hiram)
+    ssh hgwdev
+    # going to need an ooc for this GenArk hub
+    cd  /hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1
+    time blat GCA_001632575.1_C3H_HeJ_v1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=GCA_001632575.1_C3H_HeJ_v1.11.ooc -repMatch=1000
+# Wrote 14128 overused 11-mers to GCA_001632575.1_C3H_HeJ_v1.11.ooc
+# real    0m46.685s
+
+
+    mkdir /hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/trackData/blat.mm10.2023-01-19
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/trackData/blat.mm10.2023-01-19
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.chrom.sizes \
+        -query2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -querySizes=/hive/data/genomes/mm10/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.11.ooc \
+         GCA_001632575.1 mm10
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.chrom.sizes \
+        -query2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -querySizes=/hive/data/genomes/mm10/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.11.ooc \
+         GCA_001632575.1 mm10) > doLiftOverToMm10.log 2>&1
+XXX - running - Thu Jan 19 12:32:47 PST 2023
+
+    # see if the liftOver menus function in the browser from mm10
+    #    to GCA_001632575.1
+
+##############################################################################
