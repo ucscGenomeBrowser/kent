@@ -10,7 +10,8 @@
 A Trix index consists of a pair of files that allow for fast look-up of free text associated with a 
 list of identifiers. The index is created from a single line-oriented text file using the program 
 <code>ixIxx</code>. Each line in the text file starts with an identifier, followed by free text 
-associated with the ID. For a more complete description of how to make a searchable track hub (or
+associated with the ID. The search is not case sensitive, so any case-combination of the free text
+entered will me matched. For a more complete description of how to make a searchable track hub (or
 custom track), please visit the <a href="hubQuickStartSearch.html" target="_blank">Quick Start
 Guide to Searchable track hubs</a>.</p>
 <p>
@@ -40,9 +41,9 @@ To create a Trix index, follow these steps:
   input.txt such as the following that associates the bigBed name with other
   identifiers people might search for or with shorter spellings of the names:
   <pre>
-    SIRT1 sirt1 sir sirt SIR SIRT Sirtuin SIR2-Like ENSG00000096717 NM_012238
-    BRCA1 brca1 brca brc BRC BRCA breast cancer 1 ENSG00000012048 NM_007300
-    TP53 tp53 tp5 TP5 Tumor Protein P53 ENSG00000141510 NM_001126112</pre></li>
+    SIRT1 sirt1 sir sirt Sirtuin SIR2-Like ENSG00000096717 NM_012238
+    BRCA1 brca1 brca brc breast cancer 1 ENSG00000012048 NM_007300
+    TP53 tp53 tp5 Tumor Protein P53 ENSG00000141510 NM_001126112</pre></li>
   <li>
   You would then run the <code>ixIxx</code> program on your text file,
   taking into account the length of your longest word.<br>
