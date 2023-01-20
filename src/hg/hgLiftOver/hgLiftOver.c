@@ -19,6 +19,7 @@
 #include "hash.h"
 #include "liftOver.h"
 #include "liftOverChain.h"
+#include "errCatch.h"
 
 
 /* CGI Variables */
@@ -480,93 +481,101 @@ if (lastChain && thisChain && sameString(lastChain, thisChain))
 webMain(choice, multiple, keepSettings, minSizeQ, minChainT, minBlocks, minMatch, fudgeThick);
 liftOverChainFreeList(&chainList);
 
-if (!refreshOnly && userData != NULL && userData[0] != '\0')
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    struct hash *chainHash = newHash(0);
-    char *chainFile;
-    struct tempName oldTn, mappedTn, unmappedTn;
-    FILE *old, *mapped, *unmapped;
-    char *line;
-    int lineSize;
-    char *fromDb, *toDb;
-    int ct = -1, errCt = 0;
-    enum liftOverFileType lft;
-    /* read in user data and save to file */
-    makeTempName(&oldTn, HGLFT, ".user");
-    old = mustOpen(oldTn.forCgi, "w");
-    fputs(userData, old);
-    fputs("\n", old);           /* in case user doesn't end last line */
-    carefulClose(&old);
-    chmod(oldTn.forCgi, 0666);
-
-    /* setup output files -- one for converted lines, the other
-     * for lines that could not be mapped */
-    makeTempName(&mappedTn, HGLFT, ".bed");
-    makeTempName(&unmappedTn, HGLFT, ".err");
-    mapped = mustOpen(mappedTn.forCgi, "w");
-    chmod(mappedTn.forCgi, 0666);
-    unmapped = mustOpen(unmappedTn.forCgi, "w");
-    chmod(unmappedTn.forCgi, 0666);
-
-    fromDb = cgiString(HGLFT_FROMDB_VAR);
-    toDb = cgiString(HGLFT_TODB_VAR);
-    chainFile = liftOverChainFile(fromDb, toDb);
-    if (chainFile == NULL)
-        errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
-                                fromDb, toDb);
-
-    readLiftOverMap(chainFile, chainHash);
-    lft = liftOverSniff(oldTn.forCgi);
-    if (lft == bed)
-	ct = liftOverBed(oldTn.forCgi, chainHash, 
-			minMatch, minBlocks, 0, minSizeQ,
-			minChainT, 0,
-                        fudgeThick, mapped, unmapped, multiple, FALSE, NULL, &errCt);
-    else if (lft == positions)
-	ct = liftOverPositions(oldTn.forCgi, chainHash, 
-			minMatch, minBlocks, 0, minSizeQ,
-			minChainT, 0,
-			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
-    if (ct == -1)
-        /* programming error */
-        errAbort("ERROR: Unsupported data format.\n");
-
-    webNewSection("Results");
-    if (ct > 0)
+    if (!refreshOnly && userData != NULL && userData[0] != '\0')
         {
-        /* some records succesfully converted */
-        cgiParagraph("");
-        printf("Successfully converted %d record", ct);
-        printf("%s: ", ct > 1 ? "s" : "");
-        printf("<A HREF=%s TARGET=_blank>View Conversions</A>\n", mappedTn.forCgi);
-        }
-    if (errCt)
+        struct hash *chainHash = newHash(0);
+        char *chainFile;
+        struct tempName oldTn, mappedTn, unmappedTn;
+        FILE *old, *mapped, *unmapped;
+        char *line;
+        int lineSize;
+        char *fromDb, *toDb;
+        int ct = -1, errCt = 0;
+        enum liftOverFileType lft;
+        /* read in user data and save to file */
+        makeTempName(&oldTn, HGLFT, ".user");
+        old = mustOpen(oldTn.forCgi, "w");
+        fputs(userData, old);
+        fputs("\n", old);           /* in case user doesn't end last line */
+        carefulClose(&old);
+        chmod(oldTn.forCgi, 0666);
+
+        /* setup output files -- one for converted lines, the other
+         * for lines that could not be mapped */
+        makeTempName(&mappedTn, HGLFT, ".bed");
+        makeTempName(&unmappedTn, HGLFT, ".err");
+        mapped = mustOpen(mappedTn.forCgi, "w");
+        chmod(mappedTn.forCgi, 0666);
+        unmapped = mustOpen(unmappedTn.forCgi, "w");
+        chmod(unmappedTn.forCgi, 0666);
+
+        fromDb = cgiString(HGLFT_FROMDB_VAR);
+        toDb = cgiString(HGLFT_TODB_VAR);
+        chainFile = liftOverChainFile(fromDb, toDb);
+        if (chainFile == NULL)
+            errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
+                                    fromDb, toDb);
+
+        readLiftOverMap(chainFile, chainHash);
+        lft = liftOverSniff(oldTn.forCgi);
+        if (lft == bed)
+        ct = liftOverBed(oldTn.forCgi, chainHash, 
+                minMatch, minBlocks, 0, minSizeQ,
+                minChainT, 0,
+                            fudgeThick, mapped, unmapped, multiple, FALSE, NULL, &errCt);
+        else if (lft == positions)
+        ct = liftOverPositions(oldTn.forCgi, chainHash, 
+                minMatch, minBlocks, 0, minSizeQ,
+                minChainT, 0,
+                fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
+        if (ct == -1)
+            /* programming error */
+            errAbort("ERROR: Unsupported data format.\n");
+
+        webNewSection("Results");
+        if (ct > 0)
+            {
+            /* some records succesfully converted */
+            cgiParagraph("");
+            printf("Successfully converted %d record", ct);
+            printf("%s: ", ct > 1 ? "s" : "");
+            printf("<A HREF=%s TARGET=_blank>View Conversions</A>\n", mappedTn.forCgi);
+            }
+        if (errCt)
+            {
+            /* some records not converted */
+            cgiParagraph("");
+            printf("Conversion failed on %d record", errCt);
+            printf("%s. &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
+            printf("<A HREF=%s TARGET=_blank>Display failure file</A>&nbsp; &nbsp;\n",
+                             unmappedTn.forCgi);
+            printf("<A HREF=\"../cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
+            puts("<P>Failed input regions:\n");
+            struct lineFile *errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
+            puts("<BLOCKQUOTE><PRE>\n");
+            while (lineFileNext(errFile, &line, &lineSize))
+                puts(line);
+            lineFileClose(&errFile);
+            puts("</PRE></BLOCKQUOTE>\n");
+            }
+        if ((multiple) && (lft == positions))
         {
-        /* some records not converted */
-        cgiParagraph("");
-        printf("Conversion failed on %d record", errCt);
-        printf("%s. &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
-        printf("<A HREF=%s TARGET=_blank>Display failure file</A>&nbsp; &nbsp;\n",
-                         unmappedTn.forCgi);
-        printf("<A HREF=\"../cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
-        puts("<P>Failed input regions:\n");
-        struct lineFile *errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
         puts("<BLOCKQUOTE><PRE>\n");
-        while (lineFileNext(errFile, &line, &lineSize))
-            puts(line);
-        lineFileClose(&errFile);
+        puts("Note: &quot;multiple&quot; option is not supported for position format.");
         puts("</PRE></BLOCKQUOTE>\n");
         }
-    if ((multiple) && (lft == positions))
-	{
-	puts("<BLOCKQUOTE><PRE>\n");
-	puts("Note: &quot;multiple&quot; option is not supported for position format.");
-	puts("</PRE></BLOCKQUOTE>\n");
-	}
-    webParamsUsed(minMatch, multiple, minSizeQ, minChainT, minBlocks, fudgeThick);
+        webParamsUsed(minMatch, multiple, minSizeQ, minChainT, minBlocks, fudgeThick);
 
-    carefulClose(&unmapped);
+        carefulClose(&unmapped);
+        }
     }
+errCatchEnd(errCatch);
+if (errCatch->gotError || errCatch->gotWarning)
+    warn("%s", errCatch->message->string);
+errCatchFree(&errCatch);
 webDownloads();
 cartWebEnd();
 }
