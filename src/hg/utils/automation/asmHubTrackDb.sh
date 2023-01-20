@@ -839,6 +839,21 @@ fi
 ### fi
 
 ###################################################################
+# check for blat sameSpecies liftOver, then link to lift over chain file
+export lo=`ls -d ${buildDir}/trackData/blat.* 2> /dev/null | wc -l`
+
+if [ "${lo}" -gt 0 ]; then
+  mkdir -p ${buildDir}/liftOver
+  for loS in `ls -d ${buildDir}/trackData/blat.* 2> /dev/null`
+  do
+     blatDir=`basename "${loS}"`
+     overChain=`ls ${loS}/*.over.chain.gz | awk -F'/' "{print \\$NF}"`
+     rm -f ${buildDir}/liftOver/${overChain}
+     ln -s ../trackData/${blatDir}/${overChain} ${buildDir}/liftOver
+  done
+fi
+
+###################################################################
 # check for lastz/chain/net available
 
 export lz=`ls -d ${buildDir}/trackData/lastz.* 2> /dev/null | wc -l`

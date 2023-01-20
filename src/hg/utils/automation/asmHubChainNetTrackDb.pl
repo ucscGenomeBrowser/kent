@@ -23,7 +23,12 @@ if ($argc != 1) {
 
 my $buildDir = shift;
 my $targetDb = basename($buildDir);
+my @tParts = split('_', $targetDb);
+my $targetAccession = "$tParts[0]_$tParts[1]";
 my @queryList;
+
+`mkdir -p $buildDir/bbi`;
+`mkdir -p $buildDir/liftOver`;
 
 open (DL, "ls -d $buildDir/trackData/lastz.*|") or die "can not list $buildDir/trackData/lastz.*";
 while (my $lastzDir = <DL>) {
@@ -77,8 +82,17 @@ $N = 0;
 my $chainNetPriority = 1;
 foreach my $queryDb (@queryList) {
   my $QueryDb = ucfirst($queryDb);
+  my $overChain="${targetAccession}.${queryDb}.over.chain.gz";
+  my $overToChain="${targetAccession}To${QueryDb}.over.chain.gz";
+  my $lastzDir="lastz.$queryDb";
   `rm -f $buildDir/bbi/$targetDb.chain${QueryDb}.bb`;
   `rm -f $buildDir/bbi/$targetDb.chain${QueryDb}Link.bb`;
+  `rm -f $buildDir/liftOver/${overToChain}`;
+  if ( -s "$buildDir/trackData/$lastzDir/axtChain/${overChain}" ) {
+     `ln -s ../trackData/$lastzDir/axtChain/${overChain} $buildDir/liftOver/${overToChain}`;
+  } else {
+     printf STDERR "# NOT FOUND: '%s'\n", "$buildDir/trackData/$lastzDir/axtChain/${overChain}";
+  }
   `ln -s ../trackData/lastz.$queryDb/axtChain/chain${QueryDb}.bb  $buildDir/bbi/$targetDb.chain${QueryDb}.bb`;
   `ln -s ../trackData/lastz.$queryDb/axtChain/chain${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chain${QueryDb}Link.bb`;
   my $queryDate = "some date";
