@@ -18635,10 +18635,9 @@ TMPDIR=/dev/shm
 real	1211m31.498s
 user	0m1.396s
 sys	0m1.411s
-##############################################################################
 
 ##############################################################################
-# LIFTOVER TO GCA_001632575.1_C3H_HeJ_v1 (WORKING - 2023-01-19 - Hiram)
+# LIFTOVER TO GCA_001632575.1_C3H_HeJ_v1 (DONE - 2023-01-19 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/mm10/bed/blat.GCA_001632575.1.2023-01-19
     cd /hive/data/genomes/mm10/bed/blat.GCA_001632575.1.2023-01-19
@@ -18658,13 +18657,13 @@ sys	0m1.411s
  -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.chrom.sizes \
         -ooc=/hive/data/genomes/mm10/jkStuff/mm10.11.ooc \
          mm10 GCA_001632575.1) > doLiftOverToGCA_001632575.1.log 2>&1
-XXX - running - Thu Jan 19 12:32:47 PST 2023
+    # real    190m50.501s
 
     # see if the liftOver menus function in the browser from mm10
     #    to GCA_001632575.1
 
 ##############################################################################
-# LIFTOVER TO mm10 (WORKING - 2023-01-19 - Hiram)
+# LIFTOVER TO mm10 (DONE - 2023-01-19 - Hiram)
     ssh hgwdev
     # going to need an ooc for this GenArk hub
     cd  /hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1
@@ -18692,9 +18691,74 @@ XXX - running - Thu Jan 19 12:32:47 PST 2023
         -querySizes=/hive/data/genomes/mm10/chrom.sizes \
         -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/632/575/GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.11.ooc \
          GCA_001632575.1 mm10) > doLiftOverToMm10.log 2>&1
-XXX - running - Thu Jan 19 12:32:47 PST 2023
+
+    # real    244m28.766s
 
     # see if the liftOver menus function in the browser from mm10
     #    to GCA_001632575.1
+
+##############################################################################
+# LIFTOVER TO GCA_001624675.1_C3H_HeJ_v1 (DONE - 2023-01-20 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm10/bed/blat.GCA_001624675.1.2023-01-20
+    cd /hive/data/genomes/mm10/bed/blat.GCA_001624675.1.2023-01-20
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -targetSizes=/hive/data/genomes/mm10/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.chrom.sizes \
+        -ooc=/hive/data/genomes/mm10/jkStuff/mm10.11.ooc \
+         mm10 GCA_001624675.1
+
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -targetSizes=/hive/data/genomes/mm10/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.chrom.sizes \
+        -ooc=/hive/data/genomes/mm10/jkStuff/mm10.11.ooc \
+         mm10 GCA_001624675.1) > doLiftOverToGCA_001624675.1.log 2>&1
+XXX - running - Fri Jan 20 15:07:05 PST 2023
+    # real    190m50.501s
+
+    # see if the liftOver menus function in the browser from mm10
+    #    to GCA_001624675.1
+
+##############################################################################
+# LIFTOVER TO mm10 (DONE - 2023-01-20 - Hiram)
+    ssh hgwdev
+    # going to need an ooc for this GenArk hub
+    cd  /hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1
+    time blat GCA_001624675.1_NOD_ShiLtJ_v1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=GCA_001624675.1_NOD_ShiLtJ_v1.11.ooc -repMatch=1000
+
+# Wrote 13801 overused 11-mers to GCA_001624675.1_NOD_ShiLtJ_v1.11.ooc
+# real    0m29.753s
+
+    mkdir /hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/trackData/blat.mm10.2023-01-20
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/trackData/blat.mm10.2023-01-20
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.chrom.sizes \
+        -query2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -querySizes=/hive/data/genomes/mm10/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.11.ooc \
+         GCA_001624675.1 mm10
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.chrom.sizes \
+        -query2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -querySizes=/hive/data/genomes/mm10/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.11.ooc \
+         GCA_001624675.1 mm10) > doLiftOverToMm10.log 2>&1
+XXX running Fri Jan 20 14:46:36 PST 2023
+
+    # real    244m28.766s
+
+    # see if the liftOver menus function in the browser from mm10
+    #    to GCA_001624675.1
 
 ##############################################################################
