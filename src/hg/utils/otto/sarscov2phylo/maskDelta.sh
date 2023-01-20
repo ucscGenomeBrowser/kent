@@ -207,6 +207,22 @@ done >> $maskFile
 
 set -x
 
+# BA.1.1 has a ton of false reversions of A26530G that cause many flip-flops on the branch
+# leading to BA.1.1.1, as well as a bunch of sequences with noise at 76/77.  As of Jan. 2023
+# I'm not worried about messing up potential recombinants and want a cleaner tree for assignment.
+# Although it does add a false A26530G to the path for XD, oh well.
+BA11Node=$(grep England/ALDP-2BEB0A0/2021 $samplePaths \
+         | awk '{print $NF;}' | sed -re 's/:.*//;')
+set +x
+for backMut in G26530A ; do
+    echo -e "$backMut\t$BA11Node"
+done >> $maskFile
+for ((i=76;  $i <= 77;  i++)); do
+    echo -e "N${i}N\t$BA11Node"
+done >> $maskFile
+
+set -x
+
 time $matUtils mask -i $treeInPb \
     -m $maskFile \
     -o $treeOutPb
