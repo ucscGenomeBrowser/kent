@@ -131,8 +131,9 @@ puts(" Data must be formatted in\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format2'>PSL</A>,\n"
 " or <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>\n"
-" formats.<br>"
-" <li>You can paste just the URL to the file, without a \"track\" line, for bigBed, bigWig, bigGenePred, BAM and VCF.<br>"
+" formats.<br>\n"
+" <ul>\n"
+" <li>You can paste just the URL to the file, without a \"track\" line, for bigBed, bigWig, bigGenePred, BAM and VCF.<br></li>"
 " <li>To configure the display, set\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
 " and"
@@ -142,7 +143,8 @@ puts(" Data must be formatted in\n"
 " Examples are\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n"
 " If you do not have web-accessible data storage available, please see the\n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html#Hosting'>Hosting</A> section of the Track Hub Help documentation.\n<br><br>"
+" <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html#Hosting'>Hosting</A> section of the Track Hub Help documentation.\n<br><br></li>"
+" </ul>\n"
 " Please note a much more efficient way to load data is to use\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html'>Track Hubs</A>, which are loaded\n" 
 " from the <A TARGET=_BLANK HREF='hgHubConnect'>Track Hubs Portal</A> found in the menu under My Data.\n"
@@ -428,6 +430,7 @@ else
     {
     cgiMakeTextArea(hgCtDocText, cartUsualString(cart, hgCtDocText, ""),
                                     TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
+    cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
     cgiSimpleTableStart();
     cgiSimpleTableRowStart();

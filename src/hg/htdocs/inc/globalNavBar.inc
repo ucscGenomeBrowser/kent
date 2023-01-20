@@ -60,7 +60,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="https://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
 	<li><a href="https://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
-  <li><a href="https://genome-store.ucsc.edu">Genome Browser Store</a></li>
+	<li><a href="https://genome-store.ucsc.edu">Genome Browser Store</a></li>
 	<li><a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
@@ -88,16 +88,18 @@
 	<li><a href="../singlecell.html">UCSC Cell Browser</a></li>
 	<li class="last"><a href="../covid19.html">UCSC COVID-19 Research</a></li>
 	</ul>
+</li>
 <!-- OPTIONAL_PROJECT_MENU_END -->
 
-<li class="menuparent" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
+<li class="menuparent" id="help"><span>Help</span>
+    <ul style="display: none; visibility: hidden;">
 <!-- CONTEXT_SPECIFIC_HELP -->
-<li><a href="../FAQ/">FAQs & Search</a></li>
-<li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
-<li><a href="../training/index.html">Training</a></li>
-<li><a href="../contacts.html">Contact Us</a></li>
-<li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
-</ul>
+    <li><a href="../FAQ/">FAQs & Search</a></li>
+    <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
+    <li><a href="../training/index.html">Training</a></li>
+    <li><a href="../contacts.html">Contact Us</a></li>
+    <li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
+    </ul>
 </li>
 
 <li class="menuparent last" id="aboutUs"><span>About Us</span>
@@ -110,11 +112,11 @@
 	<li class="even"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
 	<li class="odd"><a href="../staff.html">Staff</a></li>
 	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
-        <li class="odd"><a href="../goldenPath/history.html">Our History</a></li>
-        <li class="even"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
-        <li class="odd last"><a href="../license/">Licenses</a></li>
-        <li><a href="../contacts.html">Contact Us</a></li>
-</ul>
+	<li class="odd"><a href="../goldenPath/history.html">Our History</a></li>
+	<li class="even"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
+	<li class="odd last"><a href="../license/">Licenses</a></li>
+	<li><a href="../contacts.html">Contact Us</a></li>
+	</ul>
 </li>
 
 </ul>

@@ -4,7 +4,7 @@ set -beEu -o pipefail
 
 export srcDir="$HOME/kent/src/hg/gar"
 
-rsync -aP hgdownload.soe.ucsc.edu::hubs/UCSC_GI.assemblyHubList.txt ./ \
+rsync -aP qateam@hgdownload.soe.ucsc.edu:/mirrordata/hubs/UCSC_GI.assemblyHubList.txt ./ \
   > /dev/null 2>&1
 
 ### starting html page output ##############################################
@@ -85,7 +85,7 @@ NCBI RefSeq Genes and Ensembl Genes.
 
 grep -v "^#" \
   /cluster/home/hiram/kent/src/hg/makeDb/doc/asmHubs/master.run.list \
-    | cut -d' ' -f3,5 | awk '{printf "%s\t%s\n", $1, $2};' | sort -k1,1 -u \
+    | cut -d' ' -f2,4 | awk '{printf "%s\t%s\n", $1, $2};' | sort -k1,1 -u \
        > asmId.sciName
 
 ls /cluster/home/hiram/kent/src/hg/makeDb/doc/*AsmHub/*.orderList.tsv \
