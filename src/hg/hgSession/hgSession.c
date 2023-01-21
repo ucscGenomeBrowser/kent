@@ -609,12 +609,12 @@ else
     jsInit();
     }
 
-printf("See the <A HREF=\"../goldenPath/help/hgSessionHelp.html\" "
+printf("<P>See the <A HREF=\"../goldenPath/help/hgSessionHelp.html\" "
        "TARGET=_BLANK>Sessions User's Guide</A> "
        "for more information about this tool. "
        "See the <A HREF=\"../goldenPath/help/sessions.html\" "
        "TARGET=_BLANK>Session Gallery</A> "
-       "for example sessions.<P/>\n");
+       "for example sessions.</P>\n");
 
 showCartLinks();
 
@@ -628,7 +628,7 @@ if (isNotEmpty(userName))
     existingSessionNames = showExistingSessions(userName);
 else if (savedSessionsSupported)
      printf("<P>If you <A HREF=\"%s\">sign in</A>, "
-         "you will also have the option to save named sessions.\n",
+         "you will also have the option to save named sessions.</P>\n",
          wikiLinkUserLoginUrl(cartSessionId(cart)));
 showSavingOptions(userName, existingSessionNames);
 showLoadingOptions(userName, savedSessionsSupported);

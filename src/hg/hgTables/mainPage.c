@@ -123,7 +123,7 @@ jsOnEventById(event,groupVar,groupScript);
 for (group = groupList; group != NULL; group = group->next)
     {
     if (allTablesOk || differentString(group->name, "allTables"))
-        hPrintf(" <OPTION VALUE=%s%s>%s\n", group->name,
+        hPrintf(" <OPTION VALUE=%s%s>%s</OPTION>\n", group->name,
                 (group == selGroup ? " SELECTED" : ""),
                 group->label);
     }
@@ -180,7 +180,7 @@ if (sameString(selGroup->name, "allTables"))
     jsOnEventById(event, trackVar, trackScript);
     for (db = dbList; db != NULL; db = db->next)
 	{
-	hPrintf(" <OPTION VALUE=%s%s>%s\n", db->name,
+	hPrintf(" <OPTION VALUE=%s%s>%s</OPTION>\n", db->name,
 		(sameString(db->name, selDb) ? " SELECTED" : ""),
 		db->name);
 	}
@@ -328,11 +328,12 @@ for (name = nameList; name != NULL; name = name->next)
         }
     if (tdb != NULL)
 	if ((curTrack == NULL) || differentWord(tdb->shortLabel, curTrack->shortLabel))
-	    hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
+	    hPrintf(">%s (%s)", tdb->shortLabel, name->name);
 	else
-	    hPrintf(">%s\n", name->name);
+	    hPrintf(">%s", name->name);
     else
-	hPrintf(">%s\n", name->name);
+	hPrintf(">%s", name->name);
+    hPrintf("</OPTION>\n");
     }
 hPrintf("</SELECT>\n");
 if (!trackHubDatabase(database))
@@ -383,7 +384,7 @@ for (ot = otList; ot != NULL; ot = ot->next)
 	hPrintf(" SELECTED");
     if (sameString(ot->name, outBed) || sameString(ot->name, outWigBed))
         hPrintf(" id=\"outBed\"");
-    hPrintf(">%s\n", ot->label);
+    hPrintf(">%s</OPTION>\n", ot->label);
     }
 hPrintf("</SELECT>\n");
 hPrintf(" ");

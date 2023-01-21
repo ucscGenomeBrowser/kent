@@ -22,21 +22,23 @@ hPrintf("%s",
  "one another.  The relationship can be one of several types, including "
  "protein-level homology, similarity of gene expression profiles, or "
  "genomic proximity. </P>"
- "<P>To display a gene and its relatives:"
+ "<P>To display a gene and its relatives:</P>"
  "<OL>"
- "<LI>Select a genome and assembly from the corresponding pull-down menus. " 
+ "<LI>Select a genome and assembly from the corresponding pull-down menus. </LI>" 
  "<LI>Type a word or phrase into the <em>search</em> text box to specify "
- "which gene should be displayed in the Gene Sorter. "
+ "which gene should be displayed in the Gene Sorter. </LI>"
+ "</OL>\n"
 );
 
 hPrintf("%s", genomeSetting("examples"));
 
 hPrintf("%s", 
+ "<OL>"
  "<LI>Choose the gene relationship with which you would like to sort the list "
- "by selecting an option from the <em>sort by</em> pull-down menu." 
- "<LI>Press the Go! button to display your results. " 
+ "by selecting an option from the <em>sort by</em> pull-down menu.</LI>" 
+ "<LI>Press the Go! button to display your results.</LI>" 
  "</OL>"
- "</P> "
+ "<BR>\n"
  );
 
 hPrintf("%s", 
@@ -65,7 +67,7 @@ hPrintf("%s",
  "button will fetch associated protein, mRNA, promoter, or genomic sequence.  "
  "To dump the table into a simple tab-delimited format suitable for "
  "import into a spreadsheet or relational database, click the <em>text</em> "
- "button. "
+ "button. </P>"
  "<P>The UCSC Gene Sorter was designed and implemented by Jim Kent, "
  "Fan Hsu, Donna Karolchik, David Haussler, and the UCSC Genome Bioinformatics "
  "Group. This work is supported by a grant from the National Human Genome "

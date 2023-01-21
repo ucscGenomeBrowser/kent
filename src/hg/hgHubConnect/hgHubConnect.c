@@ -282,14 +282,14 @@ if (unlistedHubCount == 0)
     {
     // nothing to see here
     printf("<tr><td style='text-align:left'>No connected track or assembly hubs.<p>To connect a hub:"
-            "<li>Enter its URL into the input box above and click 'Add Hub'. "
+            "<ul><li>Enter its URL into the input box above and click 'Add Hub'. </li>"
             "<li>Alternatively, you can go to the 'Public Hubs' tab on this page and connect one "
-            "of the hubs that were submitted to us. "
-            "<li>Another way to connect to hubs is via a direct connection link copied using the copy icon, shown on this page, when a hub is connected. "
+            "of the hubs that were submitted to us. </li>"
+            "<li>Another way to connect to hubs is via a direct connection link copied using the copy icon, shown on this page, when a hub is connected. </li>"
             "<li>You can also connect to hub by following a short link to a saved session, created though the menu "
-            "'My Data &gt; My Sessions', if the Genome Browser had connected hubs when the session was saved."
+            "'My Data &gt; My Sessions', if the Genome Browser had connected hubs when the session was saved.</li>"
             "</ul></td></tr>");
-    printf("</thead></table>");
+    printf("</thead></table>\n");
     puts("</FORM>");      // return from within DIV and FROM is probably not a good idea
     puts("</div></div>"); // tabSection and .unlistedHubs
     return;
@@ -501,8 +501,9 @@ if (cartNonemptyString(cart, "measureTiming"))
 printf("<b style='font-size:90%%'>Show load times: %s</b> &nbsp;", timeStatus);
 printf("<button type='submit' name='measureTiming' value='%s'>Change to: %s</button>", timeVal, timeLabel);
 
-printf("<div class='help'>Current setting: %s</div>", timeDesc);
+printf("<div class='help'>Current setting: %s</div>\n", timeDesc);
 
+puts("</FORM>");
 puts("</div>"); // margin-left
 puts("</div>"); // tabSection
 puts("</div>"); // #hubDeveloper
@@ -568,7 +569,13 @@ puts("<table id=\"publicHubsTable\" class=\"hubList\"> "
             "<th>Description</th> "
             //"<th>Assemblies</th> "
             "<th>Assemblies<span class='assemblyClickNote'>Click to connect and browse directly</span></th> "
-        "</tr></thead>");
+        "</tr></thead><tbody><tr><td>");
+}
+
+void printHubListFooter()
+/* Write out the header for a list of hubs in its own table */
+{
+puts("</td></tr></tbody></table>");
 }
 
 void outputPublicTableRow(struct hubEntry *hubInfo, int count)
@@ -1184,6 +1191,8 @@ if (hubsToPrint != NULL)
         printf("hgHubConnect: printOutputForHubTime before js execution: %lu millis<BR>\n", printOutputForHubTime - slTime);
     if (searchResultHash == NULL)
         printf("</tbody></table>\n");
+
+    printHubListFooter();
     }
 if (hubsToPrint != NULL)
     {
@@ -1260,7 +1269,7 @@ printf(
     "User's Guide</A>. "
     "</P>"
     "<P>Track Hubs are created and maintained by external sources."
-    " UCSC is not responsible for their content.<BR></P>"
+    " UCSC is not responsible for their content.<BR></P>\n"
 );
 
 char *hubSearchTableName = hubSearchTextTableName();

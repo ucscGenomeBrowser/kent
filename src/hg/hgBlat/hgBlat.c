@@ -1792,7 +1792,7 @@ puts("<TABLE class='hgBlatTable' BORDER=0 WIDTH=80>\n");
 printf("<TR>\n");
 printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
 printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
-printf(" <span id=searchAllText> Search all<span>");
+printf(" <span id=searchAllText> Search all</span>");
 printf("</TD>");
 // clicking on the Search ALL text clicks the checkbox.
 jsOnEventById("click", "searchAllText", 
@@ -1804,7 +1804,7 @@ printf("<TD ALIGN=CENTER>Assembly:</TD>");
 printf("<TD ALIGN=CENTER>Query type:</TD>");
 printf("<TD ALIGN=CENTER>Sort output:</TD>");
 printf("<TD ALIGN=CENTER>Output type:</TD>");
-printf("<TD ALIGN=CENTER>&nbsp</TD>");
+printf("<TD ALIGN=CENTER>&nbsp;</TD>");
 printf("</TR>\n");
 
 printf("<TR>\n");
@@ -1835,7 +1835,7 @@ printf("</TR>\n");
 printf("<TR>\n");
 printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
 cgiMakeCheckBoxWithId("allResults", allResults, "allResults");
-printf("<span id=allResultsText>All Results (no minimum matches)");
+printf("<span id=allResultsText>All Results (no minimum matches)</span>");
 // clicking on the All Results text clicks the checkbox.
 jsOnEventById("click", "allResultsText", 
     "document.mainForm.allResults.click();"

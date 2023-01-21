@@ -568,7 +568,7 @@ for (emd = col->emdList; emd != NULL; emd = emd->next)
     hPrintf("<OPTION VALUE=\"%s\"", emd->name);
     if (emd == curEmd)
 	hPrintf(" SELECTED");
-    hPrintf(">%s", emd->shortLabel);
+    hPrintf(">%s</OPTION>", emd->shortLabel);
     }
 hPrintf("</SELECT>\n");
 }

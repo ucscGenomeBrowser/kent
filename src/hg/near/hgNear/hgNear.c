@@ -1080,7 +1080,7 @@ for (org = orgList; org != NULL; org = org->next)
     hPrintf("<OPTION VALUE=\"%s\"", genome);
     if (sameString(ourOrg, genome))
 	hPrintf(" SELECTED");
-    hPrintf(">%s\n", genome);
+    hPrintf(">%s</OPTION>\n", genome);
     }
 hPrintf("</SELECT>");
 
@@ -1096,7 +1096,7 @@ for (as = asList; as != NULL; as = as->next)
     hPrintf("<OPTION VALUE=\"%s\"", db->name);
     if (sameString(database, db->name))
 	hPrintf(" SELECTED");
-    hPrintf(">%s\n", db->description);
+    hPrintf(">%s</OPTION>\n", db->description);
     }
 hPrintf("</SELECT>");
 
@@ -1172,7 +1172,7 @@ hPrintf("</TD></TR>\n<TR><TD>");
 	hPrintf("<OPTION VALUE=\"%s\"", ord->name);
 	if (ord == curOrd)
 	    hPrintf(" SELECTED");
-	hPrintf(">%s\n", ord->shortLabel);
+	hPrintf(">%s</OPTION>\n", ord->shortLabel);
 	}
     hPrintf("</SELECT>\n");
     }
@@ -1206,7 +1206,7 @@ hPrintf("</TD></TR>\n<TR><TD>");
 	hPrintf("<OPTION VALUE=\"%s\"", menu[i]);
 	if (sameString(displayCountString, menu[i]))
 	    hPrintf(" SELECTED");
-	hPrintf(">%s\n", menu[i]);
+	hPrintf(">%s</OPTION>\n", menu[i]);
 	}
     hPrintf("</SELECT>\n");
     }

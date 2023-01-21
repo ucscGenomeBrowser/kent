@@ -15,7 +15,7 @@ if (isGenomeSpaceEnabled())
     return 
 "        <LI><B>Send output to GenomeSpace:</B> sends data to \n"
 "        <A HREF=\"http://www.genomespace.org\">GenomeSpace</A> Data Manager for use with\n"
-"        diverse computational tools.\n";
+"        diverse computational tools.</LI>\n";
     }
 else
     {
@@ -78,7 +78,7 @@ hPrintf(
 "		 format.</LI>\n"
 "        \n"
 "        <LI><B>lookup:</B> Press this button after typing in a gene name or \n"
-"        other id in the position text box to look up the chromosome position\n"
+"        other id in the position text box to look up the chromosome position</LI>\n"
 "        \n"
 "        <LI><B>identifiers</B> (selected tracks only)<B>: </B>Restricts the \n"
 "        output to table data that match a list of identifiers, for\n"
@@ -108,10 +108,10 @@ hPrintf(
 "        <LI><em><B>all fields from selected table</B></em> - data from the selected table\n"
 "        displayed in a tab-separated format suitable \n"
 "        for import into spreadsheets and relational databases. The ASCII \n"
-"        format may be read in any web browser or text editor.\n"
+"        format may be read in any web browser or text editor.</LI>\n"
 "        <LI><em><B>selected fields from primary and related tables</B></em> - user-selected \n"
 "        set of tab-separated fields \n"
-"        from the selected table and (optionally) other related tables as well. \n"
+"        from the selected table and (optionally) other related tables as well. </LI>\n"
 "        <LI><em><B>sequence</B></em> - DNA (or protein sequence, in some cases) \n"
 "        associated with the table.</LI>\n"
 "        <LI><em><B>BED</B></em> - positions of data items in a standard UCSC Browser \n"
@@ -147,17 +147,17 @@ hPrintf(
 "        \n"
 "        <LI><B>Send output to Galaxy:</B> displays results of query in \n"
 "        <A HREF=\""GALAXY_URL_BASE"\">Galaxy</A>, a framework for \n"
-"        interactive genome analysis.\n"
+"        interactive genome analysis.</LI>\n"
 "        <LI><B>Send output to GREAT:</B> displays the functional enrichments of the \n"
 "        query results in <A HREF=\"http://great.stanford.edu\">GREAT</A>, a tool for\n"
-"        analysis of the biological function of cis-regulatory regions.\n"
+"        analysis of the biological function of cis-regulatory regions.</LI>\n"
 "%s"
 "        <LI><B>file type returned: </B>When a filename is entered in the \n"
 "	 &quot;output file&quot; text box, specifies the format of the output file:\n"
 "        <UL>\n"
-"        <LI><em><B>plain text</B></em> - data is in ASCII format\n"
+"        <LI><em><B>plain text</B></em> - data is in ASCII format</LI>\n"
 "        \n"
-"        <LI><em><B>gzip compressed</B></em> - data is compressed in gzip format\n"
+"        <LI><em><B>gzip compressed</B></em> - data is compressed in gzip format</LI>\n"
 "        \n"
 "        </UL>\n"
 "        </LI>\n"
