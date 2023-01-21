@@ -753,7 +753,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
  -querySizes=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.chrom.sizes \
         -ooc=/hive/data/genomes/oviAri1/jkStuff/oviAri1.11.ooc \
          oviAri1 GCF_016772045.1) > doLiftOverToGCF_016772045.1.log 2>&1
-XXX - running - Thu Jan 19 13:08:03 PST 2023
+    # real    149m54.568s
 
     # see if the liftOver menus function in the browser from oviAri1
     #    to GCF_016772045.1
@@ -801,7 +801,7 @@ XXX - running - Thu Jan 19 13:08:03 PST 2023
         -querySizes=/hive/data/genomes/oviAri1/chrom.sizes \
         -ooc=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.11.ooc \
          GCF_016772045.1 oviAri1) > doLiftOverToOviAri1.log 2>&1
-XXX - running - Thu Jan 19 13:08:03 PST 2023
+    # real    55m5.324s
 
     # see if the liftOver menus function in the browser from oviAri1
     #    to GCF_016772045.1

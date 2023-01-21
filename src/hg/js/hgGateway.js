@@ -1627,7 +1627,7 @@ var hgGateway = (function() {
                                    watermark: speciesWatermark,
                                    onSelect: setDbFromAutocomplete,
                                    onServerReply: processSpeciesResults,
-                                   enterSelectsIdentical: true });
+                                   enterSelectsIdentical: false });
             $('#selectAssembly').change(onChangeDbMenu);
             $('#positionDisplay').click(onClickCopyPosition);
             $('#copyPosition').click(onClickCopyPosition);

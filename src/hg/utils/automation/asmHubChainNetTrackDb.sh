@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -beEu -o pipefail
+set -x
 
 if [ $# -ne 2 ]; then
   printf "usage: asmHubChainNetTrackDb.pl <asmId> <pathTo/assembly hub build directory> > chainNettrackDb.txt\n" 1>&2
@@ -24,7 +25,7 @@ esac
 export scriptDir="$HOME/kent/src/hg/utils/automation"
 
 mkdir -p $buildDir/bbi
-mkdir -p $buildDir/ixIxx
+mkdir -p $buildDir/liftOver
 
 export chainNetPriority=1
 
@@ -37,6 +38,8 @@ do
   otherDb=`echo $lastzDir | sed -e 's/lastz.//;'`
   OtherDb="${otherDb^}"
   asmReport=`ls -d $buildDir/download/*assembly_report.txt 2> /dev/null`
+  overChain="${targetDb}.${otherDb}.over.chain.gz"
+  overToChain="${targetDb}To${OtherDb}.over.chain.gz"
 printf "asmReport: %s\n" "${asmReport}" 1>&2
   if [ ! -s "${asmReport}" ]; then
  printf "# ERROR: can not find assembly_report.txt in $buildDir/download\n" 1>&2
@@ -62,6 +65,10 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
   rm -f $buildDir/bbi/${asmId}.$otherDb.rbestNet.summary.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.liftOverNet.bb
   rm -f $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
+  rm -f $buildDir/liftOver/${overToChain}
+  if [ -s "$buildDir/trackData/$lastzDir/axtChain/${overChain}" ]; then
+     ln -s ../trackDb/$lastzDir/axtChain/${overChain} $buildDir/liftOver/${overToChain}
+  fi
   if [ -s "$buildDir/trackData/$lastzDir/axtChain/chain${OtherDb}.bb" ]; then
     ln -s ../trackData/$lastzDir/axtChain/chain${OtherDb}.bb $buildDir/bbi/${asmId}.chain$OtherDb.bb
     ln -s ../trackData/$lastzDir/axtChain/chain${OtherDb}Link.bb $buildDir/bbi/${asmId}.chain${OtherDb}Link.bb

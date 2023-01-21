@@ -29,7 +29,7 @@ function makeIframe(ev) {
 
 
     // when the waiting page has finished loading, load the hub checker page
-    var finalUrl = waitUrl + '&validateHubUrl='+hubUrl;
+    var finalUrl = waitUrl + '&validateHubUrl='+encodeURIComponent(hubUrl);
     var alreadyRun = false;
     node.addEventListener("load", function() {
         if (! alreadyRun)
