@@ -911,7 +911,7 @@ void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
  */
 {
 boolean gotClade = hGotClade();
-*retDb = (dbOveride != NULL) ? dbOveride :  cgiOptionalString(dbCgiName);
+*retDb =  cgiOptionalString(dbCgiName);
 if (*retDb == NULL)  // if db is not in URL, but genome is, use it for db 
     *retDb = cgiOptionalString(hgHubGenome);
 

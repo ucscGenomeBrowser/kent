@@ -9,8 +9,6 @@
 #include "cart.h"
 #include "dbDb.h"
 
-extern char *dbOveride;  // communicate with the web front end if we load a hub to support db cgivar. */
-
 void webSetStyle(char *style);
 /* set a style to add to the header */
 

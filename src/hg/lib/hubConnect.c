@@ -26,6 +26,7 @@
 #include "hubPublic.h"
 #include "genark.h"
 #include "asmAlias.h"
+#include "cheapcgi.h"
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -764,7 +765,7 @@ struct trackHub *trackHub = hub->trackHub;
 if (trackHub != NULL)
     {
     struct trackHubGenome *hubGenome = trackHubFindGenome(trackHub, database);
-    if (hashLookup(trackDbNameHash,  hubGenome->trackDbFile))
+    if ((hubGenome == NULL) || hashLookup(trackDbNameHash,  hubGenome->trackDbFile))
         hubGenome = NULL; // we already saw this trackDb, so ignore this stanza
     else
         hashStore(trackDbNameHash,  hubGenome->trackDbFile);
@@ -1039,8 +1040,6 @@ boolean hubConnectIsCurated(char *db)
 return hubConnectGetCuratedUrl(db, NULL);
 }
 
-char *dbOveride;  // communicate with the web front end if we load a hub to support db cgivar. */
-
 static int lookForCuratedHubs(struct cart *cart, char *db,  char *curatedHubPrefix)
 /* Check to see if db is a curated hub which will require the hub to be attached. 
  * The variable curatedHubPrefix has the release to use (alpha, beta, public, or a user name ) */
@@ -1063,9 +1062,13 @@ if (!isEmpty(dir))
 
     if (status && isEmpty(status->errorMessage))
         {
-        char buffer[4096];
-        safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
-        dbOveride = cloneString(buffer);
+        if (cgiOptionalString("db"))
+            {
+            /* user specified db on URL, we need to decorate and put it back. */
+            char buffer[4096];
+            safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
+            cgiVarSet("db",  cloneString(buffer));
+            }
 
         return status->id;
         }
@@ -1085,16 +1088,13 @@ return 0;
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
-int newCuratedHubId = 0;
 char *dbSpec = cartOptionalString(cart, "db");
 char *curatedHubPrefix = getCuratedHubPrefix();
 if (dbSpec != NULL)
-    newCuratedHubId = lookForCuratedHubs(cart, trackHubSkipHubName(dbSpec), curatedHubPrefix);
+    lookForCuratedHubs(cart, trackHubSkipHubName(dbSpec), curatedHubPrefix);
 
 char *newDatabase = checkForNew( cart);
 newDatabase = asmAliasFind(newDatabase);
-if (newCuratedHubId)
-    newDatabase = dbOveride;
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
 

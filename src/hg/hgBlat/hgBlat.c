@@ -2117,10 +2117,7 @@ dnaUtilOpen();
 
 orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
 if (orgChange)
-    {
     cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
-    dbOveride = NULL;
-    }
 getDbAndGenome(cart, &db, &organism, oldVars);
 char *oldDb = cloneString(db);
 
