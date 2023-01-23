@@ -2,7 +2,7 @@
 # that leads to crashes if I use that name.
 track recombRate2
 shortLabel Recombination rate
-longLabel Recombination rate: Genetic maps from deCODE (2019) and 1000 Genomes (2011)
+longLabel Recombination rate: genetic maps from deCODE and 1000 Genomes
 type bed
 superTrack on hide
 group map
@@ -13,7 +13,7 @@ color 0,130,0
     track recombAvg
     parent recombRate2
     shortLabel Recomb. deCODE Avg
-    longLabel Recombination rate: deCODE Genetics, average
+    longLabel Recombination rate: deCODE Genetics, average from paternal and maternal
     type bigWig
     bigDataUrl /gbdb/hg38/recombRate/recombMat.bw
     visibility full
@@ -49,7 +49,7 @@ color 0,130,0
     track recombEvents
     parent recombRate2
     shortLabel Recomb. deCODE Evts
-    longLabel Recombination events in deCODE Genetic Map (often too many to show - zoom to < 10kbp to see the events)
+    longLabel Recombination events in deCODE Genetic Map (zoom to < 10kbp to see the events)
     type bigBed 4 +
     bigDataUrl /gbdb/hg38/recombRate/events.bb
     visibility hide
