@@ -495,6 +495,9 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 
+char *squishField = cartOrTdbString(cart, track->tdb, "squishyPackField", NULL);
+int squishFieldIdx = bbExtraFieldIndex(bbi, squishField);
+
 int seqTypeField =  0;
 if (sameString(track->tdb->type, "bigPsl"))
     {
@@ -572,6 +575,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
                 scoreMin, scoreMax, useItemRgb);
             }
+
+        if (lf && squishFieldIdx)
+            lf->squishyPackVal = atof(restField(bb, squishFieldIdx));
+
         if (track->visibility != tvDense && lf && doWindowSizeFilter && bb->start < winStart && bb->end > winEnd)
             {
             mergeCount++;

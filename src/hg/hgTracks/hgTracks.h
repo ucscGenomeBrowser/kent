@@ -299,6 +299,7 @@ struct track
     boolean subTrackVis;        /* if we calculated it, what is it */
 
     struct lollyCartOptions *lollyCart;
+    double squishyPackPoint;    /* the value at which we switch to squish mode. */
     };
 
 struct window  // window in multiwindow image
@@ -407,6 +408,7 @@ struct linkedFeatures
     boolean isBigGenePred;
     char *label;                        /* Label for bigBeds. */
     int qSize;				/* Query size for chain/bigChain */
+    double squishyPackVal;              /* the squishyPoint value for this item. */
     };
 
 struct linkedFeaturesSeries

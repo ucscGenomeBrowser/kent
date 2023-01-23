@@ -998,6 +998,11 @@ return isCenterLabelsPackOff(track);
 boolean isCenterLabelIncluded(struct track *track)
 /* Center labels may be conditionally included */
 {
+/*   need to make this generic for squishyPack tracks  */
+/*
+if (sameString(track->track, "knownGeneSquish"))
+    return FALSE;
+    */
 if (!isWithCenterLabels(track))
     return FALSE;
 if (theImgBox)
