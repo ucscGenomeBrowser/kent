@@ -1188,7 +1188,7 @@ if (!endsWith(url, ".html"))
     safef(buffer, sizeof buffer, "%s.html", url);
     fixedUrl = buffer;
     }
-tdb->html = netReadTextFileIfExists(fixedUrl);
+tdb->html = udcFileReadAllIfExists(fixedUrl, NULL, 0, NULL);
 freez(&url);
 }
 
