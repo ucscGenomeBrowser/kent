@@ -38,7 +38,9 @@ buildDbTrix() {
     if test -s $tmpFile; then
         ixIxx -maxWordLength=64 $tmpFile $tmpFile2 $tmpFile3
         # trixContextIndex makes the $db_$trixName.offsets and $db_$trixName.offsets.ixx files:
+        echo trixContextIndex $tmpFile ${db}_${trixName}
         trixContextIndex $tmpFile ${db}_${trixName}
+        ixIxx -maxWordLength=64 ${db}_${trixName} ${db}_${trixName}.offsets ${db}_${trixName}.offsets.ixx
         chmod 664  $tmpFile2 $tmpFile3 $tmpFile ${db}_${trixName}.offsets ${db}_${trixName}.offsets.ixx
         rsync -a $tmpFile2 $outMachine:$outPath/${db}_${trixName}.ix
         rsync -a $tmpFile3 $outMachine:$outPath/${db}_${trixName}.ixx
@@ -46,7 +48,7 @@ buildDbTrix() {
         rsync -a $tmpFile $outMachine:$outPath/${db}_${trixName}.txt
         rsync -a ${db}_${trixName}.offsets $outMachine:$outPath/${db}_${trixName}.offsets
         rsync -a ${db}_${trixName}.offsets.ixx $outMachine:$outPath/${db}_${trixName}.offsets.ixx
-        rm -f ${db}_${trixName}.offsets ${db}_${trixName}.offsets.ixx
+        rm -f ${db}_${trixName} ${db}_${trixName}.offsets ${db}_${trixName}.offsets.ixx
     fi
     rm -f $tmpFile $tmpFile2 $tmpFile3
 }
