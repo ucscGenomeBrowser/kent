@@ -979,7 +979,6 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	    if (twoBitString == NULL)
 		twoBitString = "/gbdb/hg19/hg19.2bit";
 
-            printf("twoBitString %s\n", twoBitString);
 	    if ((lastTwoBitString == NULL) ||
 		differentString(lastTwoBitString, twoBitString))
 		{
