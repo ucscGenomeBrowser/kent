@@ -1,0 +1,5 @@
+
+struct snakeInfo
+{
+int maxLevel;
+} ;

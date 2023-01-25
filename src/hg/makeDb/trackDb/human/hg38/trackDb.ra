@@ -834,3 +834,39 @@ include topmed.ra alpha
 include gerp.ra alpha
 
 include crossTissueMaps.ra alpha
+
+track BRchainPanTro6
+shortLabel $o_Organism SNAKE
+longLabel $o_Organism SNAKE
+type snake panTro6
+otherDb panTro6
+colorBy byStrand
+twoBit /gbdb/panTro6/panTro6.2bit
+
+track BRliftOverHg19
+shortLabel UCSC liftOver to hg19
+longLabel UCSC liftOver alignments to hg19
+#priority 1
+type snake hg19
+#matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+#matrixHeader A, C, G, T
+otherDb hg19
+#chainMinScore 3000
+#chainLinearGap medium
+twoBit /gbdb/hg19/hg19.2bit
+colorBy byStrand
+#parent liftHg19
+
+track BRchainHg19ReMapAxtChain
+shortLabel ReMap + axtChain hg19
+longLabel NCBI ReMap alignments to hg19/GRCh37, joined by axtChain
+priority 3
+type snake hg19
+colorBy byStrand
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb hg19
+chainMinScore 3000
+chainLinearGap medium
+# parent liftHg19
+

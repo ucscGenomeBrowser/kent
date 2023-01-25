@@ -1,7 +1,6 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
-#ifdef USE_HAL
 /* snakeTrack - stuff to load and display snake type tracks in browser.  */
 
 #include "common.h"
@@ -28,6 +27,7 @@
 
 #include "halBlockViz.h"
 #include "bigPsl.h"
+#include "snake.h"
 
 // this is the number of pixels used by the target self-align bar
 #define DUP_LINE_HEIGHT	4
@@ -48,6 +48,7 @@ struct snakeFeature
     unsigned pixX1, pixX2;              /* pixel coordinates within window */
     };
 
+#ifdef NOTNOW
 static int snakeFeatureCmpTStart(const void *va, const void *vb)
 /* sort by start position on the target sequence */
 {
@@ -57,6 +58,7 @@ int diff = a->start - b->start;
 
 return diff;
 }
+#endif
 
 static int snakeFeatureCmpQStart(const void *va, const void *vb)
 /* sort by start position on the query sequence */
@@ -222,11 +224,6 @@ for(temp=proposedList; temp; temp = next)
     slAddHead(&newList, temp);
     }
 }
-
-struct snakeInfo
-{
-int maxLevel;
-} snakeInfo;
 
 static void freeFullLevels()
 // free the connection levels and bitmaps for each level
@@ -736,10 +733,12 @@ static int snakePalette2[] =
 0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
 };
 
+#ifdef NOTNOW
 static int snakePalette[] =
 {
 0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
 };
+#endif
 
 static Color hashColor(char *name)
 {
@@ -856,6 +855,7 @@ if (withLabels)
         }
     }
 
+#ifdef NOTNOW
 // let's draw some blue bars for the duplications
 struct hal_target_dupe_list_t* dupeList = lf->dupeList;
 
@@ -882,6 +882,7 @@ if ((tg->visibility == tvFull) || (tg->visibility == tvPack))
 	}
     y+=DUP_LINE_HEIGHT;
     }
+#endif
 
 // now we're going to draw the boxes
 
@@ -963,7 +964,8 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     hvGfxBox(hvg, sx, y, w, heightPer, color);
 
     // now draw the mismatches if we're at high enough resolution 
-    if ((isHalSnake && sf->qSequence != NULL) && (winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack)))
+    //if ((isHalSnake && sf->qSequence != NULL) && (winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack)))
+    if ( (winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack)))
 	{
 	char *twoBitString = trackDbSetting(tg->tdb, "twoBit");
 	static struct twoBitFile *tbf = NULL;
@@ -977,6 +979,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	    if (twoBitString == NULL)
 		twoBitString = "/gbdb/hg19/hg19.2bit";
 
+            printf("twoBitString %s\n", twoBitString);
 	    if ((lastTwoBitString == NULL) ||
 		differentString(lastTwoBitString, twoBitString))
 		{
@@ -1124,6 +1127,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
         }
         double queryGapNFrac = 0.0;
         double queryGapMaskedFrac = 0.0;
+        #ifdef NOTNOW
         if ((qs > lastQEnd) && qs - lastQEnd < 1000000) {
             // sketchy
             char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
@@ -1147,6 +1151,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
             queryGapMaskedFrac = ((double) numMasked) / (qs - lastQEnd);
             queryGapNFrac = ((double) numNs) / (qs - lastQEnd);
         }
+        #endif
 
 	// draw the vertical orange bars if there is an insert in the other sequence
 	if ((winBaseCount < showSnpWidth) )
@@ -1158,7 +1163,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		boundMapBox(hvg, s, e, sx, y2 - lineHeight/2, 1, lineHeight, tg->track,
 				    "foo", buffer, NULL, TRUE, NULL);
 		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
-                hvGfxTextCentered(hvg, sx - 10, y2 + lineHeight/2, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
+                //hvGfxTextCentered(hvg, sx - 10, y2 + lineHeight/2, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 		}
 	    else if ((sf->orientation == -1) && (qs != lastQEnd) && (lastS == e))
 		{
@@ -1167,7 +1172,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		boundMapBox(hvg, s, e, ex, y2 - lineHeight/2, 1, lineHeight, tg->track,
 				    "foo", buffer, NULL, TRUE, NULL);
 		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
-                hvGfxTextCentered(hvg, ex - 10, y2 + lineHeight/2, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
+                //hvGfxTextCentered(hvg, ex - 10, y2 + lineHeight/2, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 		}
 	    }
 
@@ -1192,7 +1197,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 				"", buffer, NULL, TRUE, NULL);
                         if (lastQEnd != qs) {
                             safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
-                            hvGfxTextCentered(hvg, ex, y2 + lineHeight/2, lastX-ex, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
+                            //hvGfxTextCentered(hvg, ex, y2 + lineHeight/2, lastX-ex, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
                         }
 			}
 		    }
@@ -1205,7 +1210,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 				"", buffer, NULL, TRUE, NULL);
                         if (lastQEnd != qs) {
                             safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
-                            hvGfxTextCentered(hvg, lastX, y2 + lineHeight/2, sx-lastX, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
+                            //hvGfxTextCentered(hvg, lastX, y2 + lineHeight/2, sx-lastX, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
                         }
 			}
 		    }
@@ -1219,8 +1224,8 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		boundMapBox(hvg, s, e, sx, y2 - lineHeight - lineHeight/3, 2, lineHeight + lineHeight/3, tg->track,
 	                    "", buffer, NULL, TRUE, NULL);
 		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
-                if (lastQEnd != qs)
-                    hvGfxTextCentered(hvg, sx - 10, y2 + lineHeight/2, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
+                //if (lastQEnd != qs)
+                    //hvGfxTextCentered(hvg, sx - 10, y2 + lineHeight/2, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 
 		}
 	    else
@@ -1234,8 +1239,8 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		    boundMapBox(hvg, s, e, ex-1, y2, 2, lineHeight , tg->track,
 				"", buffer, NULL, TRUE, NULL);
                     safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
-                    if (lastQEnd != qs)
-                        hvGfxTextCentered(hvg, ex - 10, y2 + lineHeight, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
+                    //if (lastQEnd != qs)
+                        //hvGfxTextCentered(hvg, ex - 10, y2 + lineHeight, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 		    }
 		else
 		    {
@@ -1245,8 +1250,8 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 				"", buffer, NULL, TRUE, NULL);
 
                     safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
-                    if (lastQEnd != qs)
-                        hvGfxTextCentered(hvg, sx - 10, y2 + lineHeight, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
+                    //if (lastQEnd != qs)
+                        //hvGfxTextCentered(hvg, sx - 10, y2 + lineHeight, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 		    }
 		}
 	    }
@@ -1262,6 +1267,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     }
 }
 
+#ifdef NOTNOW
 static char *doChromIxSearch(char *trixFile, char *searchName)
 /* search ixFile for the searchName, return name if found */
 {
@@ -1326,238 +1332,11 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
 return head;
 }
-
-void halSnakeLoadItems(struct track *tg)
-// load up a snake from a HAL file.   This code is called in threads
-// so *no* use of globals please. All but full snakes are read into a single
-// linked feature.
-{
-unsigned showSnpWidth = cartOrTdbInt(cart, tg->tdb, 
-    SNAKE_SHOW_SNP_WIDTH, SNAKE_DEFAULT_SHOW_SNP_WIDTH);
-
-char * chromAlias = NULL;	// create later when needed
-char * chromAliasFile = trackDbSetting(tg->tdb, "searchTrix");
-if (chromAliasFile)
-   chromAlias = doChromIxSearch(chromAliasFile, chromName);
-
-char *aliasName = chromName;
-if (chromAlias)
-   {
-       if (differentWord(chromAlias, aliasName))
-          aliasName = chromAlias;
-   }
-
-boolean isPsl = sameString(tg->tdb->type, "pslSnake");
-
-// if we have a network error we want to put out a message about it
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
-    char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
-    char *errString = "<HAL error message not set>";
-    int handle = -1;
-    if (!isPsl)
-        {
-        handle = halOpenLOD(fileName, &errString);
-        if (handle < 0)
-            {
-            errAbort("HAL open error: %s\n", errString);
-            goto out;
-            }
-        }
-    boolean isPackOrFull = (tg->visibility == tvFull) || 
-	(tg->visibility == tvPack);
-    hal_dup_type_t dupMode =  (isPackOrFull) ? HAL_QUERY_AND_TARGET_DUPS :
-	HAL_QUERY_DUPS;
-    hal_seqmode_type_t needSeq = isPackOrFull && (winBaseCount < showSnpWidth) ? HAL_LOD0_SEQUENCE : HAL_NO_SEQUENCE;
-    int mapBackAdjacencies = (tg->visibility == tvFull);
-    char codeVarName[1024];
-    safef(codeVarName, sizeof codeVarName, "%s.coalescent", tg->tdb->track);
-    char *coalescent = cartOptionalString(cart, codeVarName);
-    char *otherDbName = trackHubSkipHubName(database);
-    struct hal_block_results_t *head = NULL;
-    if (isPsl)
-        {
-        head = pslSnakeBlocks(fileName, tg, chromName, winStart, winEnd, 10000000);
-        }
-    else 
-        {
-        struct slName *aliasList = chromAliasFindAliases(chromName);
-        struct slName *nativeName = newSlName(aliasName);
-        slAddHead(&aliasList, nativeName);
-        for (; aliasList; aliasList = aliasList->next)
-            {
-            head = halGetBlocksInTargetRange(handle, otherSpecies, otherDbName, aliasList->name, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, coalescent, &errString);
-            if (head != NULL) 
-                break;
-            }
-        }
-
-    // did we get any blocks from HAL
-    if (head == NULL)
-	{
-	errAbort("HAL get blocks error: %s\n", errString);
-	goto out;
-	}
-    struct hal_block_t* cur = head->mappedBlocks;
-    struct linkedFeatures *lf = NULL;
-    struct hash *qChromHash = newHash(5);
-    struct linkedFeatures *lfList = NULL;
-    char buffer[4096];
-
-#ifdef NOTNOW
-    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
-
-    for(;targetDupeBlocks; targetDupeBlocks = targetDupeBlocks->next)
-	{
-	printf("<br>id: %d qChrom %s\n", targetDupeBlocks->id, targetDupeBlocks->qChrom);
-	struct hal_target_range_t *range = targetDupeBlocks->tRange;
-	for(; range; range = range->next)
-	    {
-	    printf("<br>   %ld : %ld\n", range->tStart, range->size);
-	    }
-	}
 #endif
 
-    while (cur)
-    {
-	struct hashEl* hel;
 
-	if (tg->visibility == tvFull)
-	    safef(buffer, sizeof buffer, "%s", cur->qChrom);
-	else
-	    {
-	    // make sure the block is on the screen 
-	    if (!positiveRangeIntersection(winStart, winEnd, cur->tStart,  cur->tStart + cur->size))
-		{
-		cur = cur->next;
-		continue;
-		}
-	    safef(buffer, sizeof buffer, "allInOne");
-	    }
 
-	if ((hel = hashLookup(qChromHash, buffer)) == NULL)
-	    {
-	    AllocVar(lf);
-	    lf->isHalSnake = TRUE;
-	    slAddHead(&lfList, lf);
-	    lf->start = 0;
-	    lf->end = 1000000000;
-	    lf->grayIx = maxShade;
-	    lf->name = cloneString(buffer);
-	    lf->extra = cloneString(buffer);
-	    lf->orientation = (cur->strand == '+') ? 1 : -1;
-	    hashAdd(qChromHash, lf->name, lf);
 
-	    // now figure out where the duplication bars go
-	    struct hal_target_dupe_list_t* targetDupeBlocks = head->targetDupeBlocks;
-
-	    if ((tg->visibility == tvPack) || (tg->visibility == tvFull))
-		for(;targetDupeBlocks; targetDupeBlocks = targetDupeBlocks->next)
-		    {
-		    if ((tg->visibility == tvPack) ||
-			((tg->visibility == tvFull) &&
-			 (sameString(targetDupeBlocks->qChrom, cur->qChrom))))
-			{
-			struct hal_target_dupe_list_t* dupeList;
-			AllocVar(dupeList);
-			*dupeList = *targetDupeBlocks;
-			slAddHead(&lf->dupeList, dupeList);
-			// TODO: should clone the target_range structures
-			// rather than copying them
-			}
-		    }
-	    }
-	else
-	    {
-	    lf = hel->val;
-	    }
-
-	struct snakeFeature  *sf;
-	AllocVar(sf);
-	slAddHead(&lf->components, sf);
-	
-	sf->start = cur->tStart;
-	sf->end = cur->tStart + cur->size;
-	sf->qStart = cur->qStart;
-	sf->qEnd = cur->qStart + cur->size;
-	sf->orientation = (cur->strand == '+') ? 1 : -1;
-	sf->tSequence = cloneString(cur->tSequence);
-	sf->qSequence = cloneString(cur->qSequence);
-	if (sf->tSequence != NULL)
-	    toUpperN(sf->tSequence, strlen(sf->tSequence));
-	if (sf->qSequence != NULL)
-	    toUpperN(sf->qSequence, strlen(sf->qSequence));
-	sf->qName = cur->qChrom;
-
-	cur = cur->next;
-    }
-    if (tg->visibility == tvFull)
-	{
-	for(lf=lfList; lf ; lf = lf->next)
-	    {
-	    slSort(&lf->components, snakeFeatureCmpQStart);
-	    }
-	}
-    else if ((tg->visibility == tvPack) && (lfList != NULL))
-	{
-	assert(lfList->next == NULL);
-	slSort(&lfList->components, snakeFeatureCmpTStart);
-	}
-    
-    //halFreeBlocks(head);
-    //halClose(handle, myThread);
-
-    tg->items = lfList;
-    }
-
-out:
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    tg->networkErrMsg = cloneString(errCatch->message->string);
-    tg->drawItems = bigDrawWarning;
-    tg->totalHeight = bigWarnTotalHeight;
-    }
-errCatchFree(&errCatch);
-}
-
-void halSnakeDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-        boolean withCenterLabels, MgFont *font,
-        Color color, enum trackVisibility vis)
-/* Draw left label (shortLabel) in pack and dense modes. */
-{
-if ((vis == tvDense) ||  (vis == tvPack))
-    {
-    hvGfxSetClip(hvgSide, leftLabelX, yOff + tg->lineHeight, insideWidth, tg->height);
-    hvGfxTextRight(hvgSide, leftLabelX, yOff + tg->lineHeight, leftLabelWidth-1, tg->lineHeight,
-                   color, font, tg->shortLabel);
-    hvGfxUnclip(hvgSide);
-    }
-}
-
-void halSnakeMethods(struct track *tg, struct trackDb *tdb, 
-	int wordCount, char *words[])
-{
-linkedFeaturesMethods(tg);
-tg->canPack = tdb->canPack = TRUE;
-tg->loadItems = halSnakeLoadItems;
-tg->drawItems = snakeDraw;
-tg->mapItemName = lfMapNameFromExtra;
-tg->subType = lfSubChain;
-//tg->extraUiData = (void *) chainCart;
-tg->totalHeight = snakeHeight; 
-tg->drawLeftLabels = halSnakeDrawLeftLabels;
-
-tg->drawItemAt = snakeDrawAt;
-tg->itemHeight = snakeItemHeight;
-tg->nextItemButtonable = FALSE;
-}
-#endif  // USE_HAL
-
-#ifdef NOTNOW
 
 // from here down are routines to support the visualization of chains as snakes
 // this code is currently BROKEN, and may be removed completely in the future
@@ -1591,7 +1370,8 @@ if (chainId == -1)
 	"select chainId,tStart,tEnd,qStart from %sLink ", fullName);
     if (isSplit)
 	sqlDyStringPrintf(query,"force index (bin) ");
-    sqlDyStringPrintf(query, "where ",
+    //sqlDyStringPrintf(query, "where ",
+    sqlDyStringPrintf(query,"where "); 
     }
 else
     sqlDyStringPrintf(query, 
@@ -1738,6 +1518,30 @@ if (hash->size)
 hFreeConn(&conn);
 }
 
+static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+
+return(tg->colorShades[lf->grayIx]);
+}
+
+static Color chainNoColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+return(tg->ixColor);
+}
+
+static void setNoColor(struct track *tg)
+{
+tg->itemColor = chainNoColor;
+tg->color.r = 0;
+tg->color.g = 0;
+tg->color.b = 0;
+tg->altColor.r = 127;
+tg->altColor.g = 127;
+tg->altColor.b = 127;
+tg->ixColor = MG_BLACK;
+tg->ixAltColor = MG_GRAY;
+}
 void snakeLoadItems(struct track *tg)
 // Load chains from a mySQL database
 {
@@ -1748,7 +1552,7 @@ char **row;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 struct linkedFeatures *list = NULL, *lf;
-int qs;
+//int qs;
 char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr;
 char extraWhere[128] ;
@@ -1761,13 +1565,15 @@ safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->table);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 int ourStart = winStart;
 int ourEnd = winEnd;
+//optionChrStr = "chr15";
+
 
 // we're grabbing everything now.. we really should be 
 // doing this as a preprocessing stage, rather than at run-time
-ourStart = 0;
-ourEnd = 500000000;
-//ourStart = winStart;
-//ourEnd = winEnd;
+//ourStart = 0;
+//ourEnd = 500000000;
+ourStart = winStart;
+ourEnd = winEnd;
 if (startsWith("chr",optionChrStr)) 
     {
     sqlSafef(extraWhere, sizeof(extraWhere), 
@@ -1816,12 +1622,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (chain.qStrand == '-')
 	{
 	lf->orientation = -1;
-        qs = chain.qSize - chain.qEnd;
+        //qs = chain.qSize - chain.qEnd;
 	}
     else
         {
 	lf->orientation = 1;
-	qs = chain.qStart;
+	//qs = chain.qStart;
 	}
     char buffer[1024];
     safef(buffer, sizeof(buffer), "%s", chain.qName);
@@ -1918,28 +1724,3 @@ tg->drawItemAt = snakeDrawAt;
 tg->itemHeight = snakeItemHeight;
 }
 
-static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
-{
-struct linkedFeatures *lf = (struct linkedFeatures *)item;
-
-return(tg->colorShades[lf->grayIx]);
-}
-
-static Color chainNoColor(struct track *tg, void *item, struct hvGfx *hvg)
-{
-return(tg->ixColor);
-}
-
-static void setNoColor(struct track *tg)
-{
-tg->itemColor = chainNoColor;
-tg->color.r = 0;
-tg->color.g = 0;
-tg->color.b = 0;
-tg->altColor.r = 127;
-tg->altColor.g = 127;
-tg->altColor.b = 127;
-tg->ixColor = MG_BLACK;
-tg->ixAltColor = MG_GRAY;
-}
-#endif
