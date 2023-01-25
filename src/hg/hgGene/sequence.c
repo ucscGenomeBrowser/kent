@@ -19,6 +19,18 @@
 #include "hgGene.h"
 
 
+void printPrimer3Anchor(char *table, char *itemName,
+	char *chrom, int start, int end)
+/* Print primer3 sequence export anchor. */
+{
+hPrintf("<A HREF=\"%s?%s", hgcName(),
+   cartSidUrlString(cart));
+hPrintf("&g=htcDnaNearGene&i=%s", itemName);
+hPrintf("&c=%s&l=%d&r=%d", chrom, start, end);
+hPrintf("&o=%s&table=%s&primer3=1", table, table);
+hPrintf("\">");
+}
+
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
 /* Print genomic sequence anchor. */
