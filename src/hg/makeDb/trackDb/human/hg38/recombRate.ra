@@ -15,7 +15,7 @@ color 0,130,0
     shortLabel Recomb. deCODE Avg
     longLabel Recombination rate: deCODE Genetics, average from paternal and maternal
     type bigWig
-    bigDataUrl /gbdb/hg38/recombRate/recombMat.bw
+    bigDataUrl /gbdb/hg38/recombRate/recombAvg.bw
     visibility full
     maxHeightPixels 128:60:8
     viewLimits 0.0:100
