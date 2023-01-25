@@ -14249,12 +14249,10 @@ else if (sameWord(type, "psl"))
     if (startsWith("pubs", track->track))
         pubsBlatPslMethods(track);
     }
-#ifdef NOTNOW
 else if (sameWord(type, "snake"))
     {
     snakeMethods(track, tdb, wordCount, words);
     }
-#endif
 else if (sameWord(type, "chain"))
     {
     chainMethods(track, tdb, wordCount, words);

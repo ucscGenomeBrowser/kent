@@ -702,7 +702,7 @@ else if(startsWith("wig", type) || startsWith("mathWig", type) || startsWith("bi
     cType = cfgWig;
 else if(startsWith("bigGenePred", type))
     cType = cfgGenePred;
-else if(startsWith("chain",type) || startsWith("bigChain",type))
+else if(startsWith("chain",type) || startsWith("bigChain",type) || startsWith("snake", type))
     cType = cfgChain;
 else if (startsWith("psl", type) || startsWith("bigPsl", type))
     cType = cfgPsl;
