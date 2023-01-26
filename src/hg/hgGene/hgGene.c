@@ -433,6 +433,7 @@ addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(domainsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(primersSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(flyBaseRolesSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(flyBasePhenotypesSection(conn, sectionRa), conn, &sectionList);
