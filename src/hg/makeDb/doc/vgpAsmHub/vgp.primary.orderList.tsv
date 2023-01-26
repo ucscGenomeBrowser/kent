@@ -71,6 +71,7 @@ GCA_013368605.1_bNycGra1.pri	great potoo
 GCF_902652985.1_xPecMax1.1	great scallop
 GCF_017639515.1_sCarCar2.pri	great white shark
 GCA_004115265.2_mRhiFer1_v1.p	greater horseshoe bat
+GCF_004115265.2_mRhiFer1_v1.p	greater horseshoe bat (v2 MPI-CBG 2019 VGP)
 GCF_901709675.1_fSynAcu1.2	greater pipefish
 GCF_014108235.1_mMyoMyo1.p	greater mouse-eared bat
 GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 2021)
@@ -84,6 +85,7 @@ GCF_900634625.1_fParRan2.1	Indian glassy fish
 GCF_013368585.1_fMegCyp1.pri	Indo-Pacific tarpon
 GCF_902148845.1_fSalaFa1.1	jewelled blenny
 GCF_004027225.2_bStrHab1.2.pri	Kakapo
+GCF_937001465.1_mOrcOrc1.1	killer whale (2022 VGP)
 GCF_009829125.1_fPerMag1.pri	Korean giant-fin mudskipper (refseq)
 GCF_014108245.1_mPipKuh1.p	Kuhl's pipistrelle
 GCF_009829145.1_bChiLan1.pri	lance-tailed manakin
@@ -128,6 +130,7 @@ GCF_900747795.1_fErpCal1.1	reedfish
 GCA_016904835.1_bAcaChl1.pri	rifleman (VGP 2021)
 GCF_901001165.1_fSalTru1.1	river trout
 GCA_910591455.2_fPhoGun1.2	rock gunnel (2021 VGP)
+GCF_023343835.1_bLagMut1_primary	rock ptarmigan (2022 VGP)
 GCA_023634085.1_bFalChe1.pri	Saker falcon (2022 VGP)
 GCF_009819535.1_rLacAgi1.pri	sand lizard
 GCF_010993605.1_kPetMar1.pri	sea lamprey
@@ -153,6 +156,7 @@ GCF_904848185.1_fAcaLat1.1	yellowfin seabream
 GCF_009769535.1_rThaEle1.pri	Western terrestrial garter snake
 GCA_020745705.1_bHemCom1.pri.cur	whiskered treeswift (2021 VGP)
 GCF_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w	white leghorn X broiler chicken (leghorn haplotype v2 VGP 2021)
+GCF_024139225.1_mSunEtr1.pri.cur	white-toothed pygmy shrew (mSunEtr1 2022)
 GCA_009769525.1_bPteGut1.pri	yellow-throated sandgrouse
 GCF_914725855.1_fThuAlb1.1	yellowfin tuna (2021 VGP)
 GCF_003957565.2_bTaeGut1.4.pri	zebra finch (refseq 2021 Blue55 female)

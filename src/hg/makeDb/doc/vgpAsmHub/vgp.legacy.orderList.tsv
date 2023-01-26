@@ -16,7 +16,8 @@ GCA_901699155.1_bStrTur1.1	European turtle dove (v1.1 2019 VGP)
 GCA_007364275.2_fArcCen1	flier cichlid
 GCA_902459505.1_aGeoSer1.1	Gabon caecilian
 GCF_900496995.1_bAquChr1.2	golden eagle (2019)
-GCF_004115265.1_mRhiFer1_v1.p	greater horseshoe bat
+GCA_004115265.2_mRhiFer1_v1.p	greater horseshoe bat (v1 MPI-CBG 2019 genbank VGP)
+GCF_004115265.1_mRhiFer1_v1.p	greater horseshoe bat (v1 MPI-CBG 2019 refseq VGP)
 GCA_901709675.1_fSynAcu1.1	greater pipefish
 GCF_015237465.1_rCheMyd1.pri	green sea turtle (v1 2020)
 GCA_004027225.2_bStrHab1.2.pri	kakapo
