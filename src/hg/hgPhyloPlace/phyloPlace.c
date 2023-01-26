@@ -783,6 +783,11 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     int authorsIx = stringArrayIx("authors", headerWords, headerWordCount);
     int pubsIx = stringArrayIx("publications", headerWords, headerWordCount);
     int nLineageIx = stringArrayIx("Nextstrain_lineage", headerWords, headerWordCount);
+    int gnCladeIx = stringArrayIx("goya_nextclade", headerWords, headerWordCount);
+    int rnCladeIx = stringArrayIx("ramaekers_nextclade", headerWords, headerWordCount);
+    int guCladeIx = stringArrayIx("goya_usher", headerWords, headerWordCount);
+    int ruCladeIx = stringArrayIx("ramaekers_usher", headerWords, headerWordCount);
+    int rtCladeIx = stringArrayIx("ramaekers_tableS1", headerWords, headerWordCount);
     while (lineFileNext(lf, &line, NULL))
         {
         char *words[headerWordCount];
@@ -832,6 +837,19 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
             met->pubs = cloneString(words[pubsIx]);
         if (nLineageIx >= 0)
             met->nLineage = cloneString(words[nLineageIx]);
+        // For RSV, use lineage for Ramaekers clades and nClade for Goya clades.
+        // This is getting ugly and we really should specify metadata columns in config.ra files.
+        if (gnCladeIx >= 0)
+            met->nClade = cloneString(words[gnCladeIx]);
+        if (rnCladeIx >= 0)
+            met->lineage = cloneString(words[rnCladeIx]);
+        if (guCladeIx >= 0)
+            met->nCladeUsher = cloneString(words[guCladeIx]);
+        if (ruCladeIx >= 0)
+            met->lineageUsher = cloneString(words[ruCladeIx]);
+        // Uglier still, use gClade to store Ramaekers Table S1 designations because it's left over.
+        if (rtCladeIx >= 0)
+            met->gClade = cloneString(words[rtCladeIx]);
         // If epiId and/or genbank ID is included, we'll probably be using that to look up items.
         if (epiIdIx >= 0 && !isEmpty(words[epiIdIx]))
             hashAdd(sampleMetadata, words[epiIdIx], met);
@@ -1411,6 +1429,7 @@ puts("<th>#SNVs used for placement"
              "(not used for placement) because they occur at known "
              "<a href='https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473/12' "
              "target=_blank>Problematic Sites</a>"));;
+boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db));
 if (gotClades)
     {
     if (sameString(db, "wuhCor1"))
@@ -1418,15 +1437,35 @@ if (gotClades)
              TOOLTIP("The <a href='https://nextstrain.org/blog/2021-01-06-updated-SARS-CoV-2-clade-naming' "
                      "target=_blank>Nextstrain clade</a> assigned to the sample by "
                      "placement in the tree"));
+    else if (isRsv)
+        puts("</th>\n<th><a href='https://doi.org/10.1111/irv.12715' target=_blank>"
+             "Goya 2020</a> clade"
+             TOOLTIP("The clade described in "
+                     "<a href='https://doi.org/10.1111/irv.12715' target=_blank>Goya et al. 2020, "
+                     "&quot;Toward unified molecular surveillance of RSV: A proposal for "
+                     "genotype definition&quot;</a> "
+                     "assigned by placement in the tree"));
     else
         puts("</th>\n<th>Nextstrain lineage"
              TOOLTIP("The Nextstrain lineage assigned by "
                      "placement in the tree"));
     }
 if (gotLineages)
-    puts("</th>\n<th>Pango lineage"
-     TOOLTIP("The <a href='https://cov-lineages.org/' "
-             "target=_blank>Pango lineage</a> assigned to the sample by UShER"));
+    {
+    if (isRsv)
+         puts("</th>\n<th><a href='https://doi.org/10.1093/ve/veaa052' target=_blank>"
+              "Ramaekers 2020</a> clade"
+             TOOLTIP("The clade described in "
+                     "<a href='https://doi.org/10.1093/ve/veaa052' target=_blank>"
+                     "Ramaekers et al. 2020, "
+                     "&quot;Towards a unified classification for human respiratory syncytial virus "
+                     "genotypes&quot;</a> "
+                     "assigned by placement in the tree"));
+   else
+        puts("</th>\n<th>Pango lineage"
+             TOOLTIP("The <a href='https://cov-lineages.org/' "
+                     "target=_blank>Pango lineage</a> assigned to the sample by UShER"));
+    }
 puts("</th>\n<th>Neighboring sample in tree"
      TOOLTIP("A sample already in the tree that is a child of the node at which the uploaded "
              "sample was placed, to give an example of a closely related sample")

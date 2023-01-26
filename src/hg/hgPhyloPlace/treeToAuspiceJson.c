@@ -116,6 +116,8 @@ else if (slNameInList(colorFields, "Nextstrain_lineage"))
     colorDefault = "Nextstrain_lineage";
 else if (slNameInList(colorFields, "Nextstrain_clade"))
     colorDefault = "Nextstrain_clade";
+else if (slNameInList(colorFields, "goya_usher"))
+    colorDefault = "goya_usher";
 else if (colorFields != NULL)
     colorDefault = colorFields->name;
 else
@@ -148,6 +150,16 @@ for (col = colorFields;  col != NULL;  col = col->next)
         auspiceMetaColoringCategorical(jw, col->name, "Pango lineage assigned by UShER");
     else if (sameString(col->name, "Nextstrain_lineage"))
         auspiceMetaColoringCategorical(jw, col->name, "Nextstrain lineage");
+    else if (sameString(col->name, "goya_nextclade"))
+        auspiceMetaColoringCategorical(jw, col->name, "Goya 2020 clade assigned by nextclade");
+    else if (sameString(col->name, "goya_usher"))
+        auspiceMetaColoringCategorical(jw, col->name, "Goya 2020 clade assigned by UShER");
+    else if (sameString(col->name, "ramaekers_nextclade"))
+        auspiceMetaColoringCategorical(jw, col->name, "Ramaekers 2020 clade assigned by nextclade");
+    else if (sameString(col->name, "ramaekers_usher"))
+        auspiceMetaColoringCategorical(jw, col->name, "Ramaekers 2020 clade assigned by UShER");
+    else if (sameString(col->name, "ramaekers_tableS1"))
+        auspiceMetaColoringCategorical(jw, col->name, "Ramaekers 2020 Table S1 designation");
     else if (sameString(col->name, "country"))
         auspiceMetaColoringCategorical(jw, col->name, "Country");
     else
@@ -200,13 +212,21 @@ jsonWriteListStart(jw, "filters");
 jsonWriteString(jw, NULL, "userOrOld");
 jsonWriteString(jw, NULL, "country");
 //#*** FIXME: TODO: either pass in along with sampleMetadata, or better yet, compute while building
-//#*** tree object and then write the header object.
+//#*** tree object in memory, then write the header object, then write the tree.
 if (sameString(db, "wuhCor1"))
     {
     jsonWriteString(jw, NULL, "pango_lineage_usher");
     jsonWriteString(jw, NULL, "pango_lineage");
     jsonWriteString(jw, NULL, "Nextstrain_clade_usher");
     jsonWriteString(jw, NULL, "Nextstrain_clade");
+    }
+else if (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db))
+    {
+    jsonWriteString(jw, NULL, "goya_usher");
+    jsonWriteString(jw, NULL, "goya_nextclade");
+    jsonWriteString(jw, NULL, "ramaekers_tableS1");
+    jsonWriteString(jw, NULL, "ramaekers_usher");
+    jsonWriteString(jw, NULL, "ramaekers_nextclade");
     }
 else
     {
@@ -248,7 +268,7 @@ else
 static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
                                         struct sampleMetadata *met, boolean isUserSample,
                                         char *source, struct hash *sampleUrls,
-                                        struct hash *samplePlacements,
+                                        struct hash *samplePlacements, boolean isRsv,
                                         char **retUserOrOld, char **retNClade, char **retGClade,
                                         char **retLineage, char **retNLineage,
                                         char **retNCladeUsher, char **retLineageUsher)
@@ -270,16 +290,17 @@ struct placementInfo *pi = (isUserSample && name) ? hashFindVal(samplePlacements
 
 *retNClade = (met && met->nClade) ? met->nClade : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retNClade))
-    jsonWriteObjectValue(jw, "Nextstrain_clade", *retNClade);
+    jsonWriteObjectValue(jw, (isRsv ? "goya_nextclade" : "Nextstrain_clade"), *retNClade);
 *retGClade = (met && met->gClade) ? met->gClade : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retGClade))
-    jsonWriteObjectValue(jw, "GISAID_clade", *retGClade);
+    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_tableS1" : "GISAID_clade"), *retGClade);
 *retLineage =  (met && met->lineage) ? met->lineage : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retLineage))
     {
     char lineageUrl[1024];
     makeLineageUrl(*retLineage, lineageUrl, sizeof lineageUrl);
-    jsonWriteObjectValueUrl(jw, "pango_lineage", *retLineage, lineageUrl);
+    jsonWriteObjectValueUrl(jw, (isRsv ? "ramaekers_nextclade" : "pango_lineage"),
+                            *retLineage, lineageUrl);
     }
 *retNLineage = (met && met->nLineage) ? met->nLineage : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retNLineage))
@@ -310,7 +331,7 @@ if (met && met->region)
                   (met && met->nCladeUsher) ? met->nCladeUsher :
                   isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retNCladeUsher))
-    jsonWriteObjectValue(jw, "Nextstrain_clade_usher", *retNCladeUsher);
+    jsonWriteObjectValue(jw, (isRsv ? "goya_usher" : "Nextstrain_clade_usher"), *retNCladeUsher);
 *retLineageUsher = (pi && pi->pangoLineage) ? pi->pangoLineage :
                    (met && met->lineageUsher) ? met->lineageUsher :
                    isUserSample ? "uploaded sample" : NULL;
@@ -318,7 +339,8 @@ if (isNotEmpty(*retLineageUsher))
     {
     char lineageUrl[1024];
     makeLineageUrl(*retLineageUsher, lineageUrl, sizeof lineageUrl);
-    jsonWriteObjectValueUrl(jw, "pango_lineage_usher", *retLineageUsher, lineageUrl);
+    jsonWriteObjectValueUrl(jw, (isRsv ? "ramaekers_usher" : "pango_lineage_usher"),
+                            *retLineageUsher, lineageUrl);
     }
 char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
 if (isNotEmpty(sampleUrl))
@@ -337,7 +359,7 @@ if (isNotEmpty(sampleUrl))
     }
 }
 
-static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, char *userOrOld,
+static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, boolean isRsv, char *userOrOld,
                                           char *nClade, char *gClade, char *lineage, char *nLineage,
                                           char *nCladeUsher, char *lineageUsher)
 /* Write elements of node_attrs for a branch. */
@@ -345,17 +367,17 @@ static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, char *userOrOld,
 if (userOrOld)
     jsonWriteObjectValue(jw, "userOrOld", userOrOld);
 if (nClade)
-    jsonWriteObjectValue(jw, "Nextstrain_clade", nClade);
+    jsonWriteObjectValue(jw, (isRsv ? "goya_nextclade" : "Nextstrain_clade"), nClade);
 if (gClade)
-    jsonWriteObjectValue(jw, "GISAID_clade", gClade);
+    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_tableS1" : "GISAID_clade"), gClade);
 if (lineage)
-    jsonWriteObjectValue(jw, "pango_lineage", lineage);
+    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_nextclade" : "pango_lineage"), lineage);
 if (nLineage)
     jsonWriteObjectValue(jw, "Nextstrain_lineage", lineage);
 if (nCladeUsher)
-    jsonWriteObjectValue(jw, "Nextstrain_clade_usher", nCladeUsher);
+    jsonWriteObjectValue(jw, (isRsv ? "goya_usher" : "Nextstrain_clade_usher"), nCladeUsher);
 if (lineageUsher)
-    jsonWriteObjectValue(jw, "pango_lineage_usher", lineageUsher);
+    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_usher" : "pango_lineage_usher"), lineageUsher);
 }
 
 static boolean changesProtein(struct singleNucChange *snc, struct geneInfo *gi,
@@ -581,6 +603,7 @@ return (maxRunLength > (arraySize >> 1)) ? maxRunVal : NULL;
 }
 
 static void rTreeToAuspiceJson(struct phyloTree *node, int depth, struct auspiceJsonInfo *aji,
+                               boolean isRsv,
                                char **retUserOrOld, char **retNClade, char **retGClade,
                                char **retLineage, char **retNLineage,
                                char **retNCladeUsher, char **retLineageUsher)
@@ -616,7 +639,7 @@ if (node->numEdges > 0)
     for (i = node->numEdges - 1;  i >= 0;  i--)
         {
         jsonWriteObjectStart(aji->jw, NULL);
-        rTreeToAuspiceJson(node->edges[i], depth, aji,
+        rTreeToAuspiceJson(node->edges[i], depth, aji, isRsv,
                            &kidUserOrOld[i], &kidNClade[i], &kidGClade[i], &kidLineage[i],
                            &kidNLineage[i], &kidNCladeUsher[i], &kidLineageUsher[i]);
         jsonWriteObjectEnd(aji->jw);
@@ -641,11 +664,11 @@ jsonWriteObjectStart(aji->jw, "node_attrs");
 jsonWriteDouble(aji->jw, "div", depth);
 if (node->numEdges == 0)
     jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample, aji->source, aji->sampleUrls,
-                                aji->samplePlacements,
+                                aji->samplePlacements, isRsv,
                                 retUserOrOld, retNClade, retGClade, retLineage, retNLineage,
                                 retNCladeUsher, retLineageUsher);
 else if (retUserOrOld && retGClade && retLineage)
-    jsonWriteBranchNodeAttributes(aji->jw, *retUserOrOld, *retNClade, *retGClade, *retLineage,
+    jsonWriteBranchNodeAttributes(aji->jw, isRsv, *retUserOrOld, *retNClade, *retGClade, *retLineage,
                                   *retNLineage, *retNCladeUsher, *retLineageUsher);
 jsonWriteObjectEnd(aji->jw);
 }
@@ -723,7 +746,8 @@ struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "version", "v2");
 //#*** FIXME: TODO: either pass in along with sampleMetadata, or better yet, compute while building
-//#*** tree object and then write the header object.
+//#*** tree object in memory, then write the header object, then write the tree.
+boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db));
 struct slName *colorFields = NULL;
 if (sameString(db, "wuhCor1"))
     {
@@ -732,6 +756,15 @@ if (sameString(db, "wuhCor1"))
     slNameAddHead(&colorFields, "pango_lineage_usher");
     slNameAddHead(&colorFields, "Nextstrain_clade");
     slNameAddHead(&colorFields, "pango_lineage");
+    }
+else if (isRsv)
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "ramaekers_nextclade");
+    slNameAddHead(&colorFields, "ramaekers_usher");
+    slNameAddHead(&colorFields, "ramaekers_tableS1");
+    slNameAddHead(&colorFields, "goya_nextclade");
+    slNameAddHead(&colorFields, "goya_usher");
     }
 else
     {
@@ -751,7 +784,7 @@ phyloAddEdge(root, tree);
 tree = root;
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
                                sampleMetadata, sampleUrls, samplePlacements, nodeNum, source };
-rTreeToAuspiceJson(tree, depth, &aji, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+rTreeToAuspiceJson(tree, depth, &aji, isRsv, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 jsonWriteObjectEnd(jw); // tree
 jsonWriteObjectEnd(jw); // top-level object
 fputs(jw->dy->string, outF);
