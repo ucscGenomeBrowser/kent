@@ -2194,6 +2194,7 @@
 ./runBuild GCF_019279795.1_PAN1.0 vertebrate Protopterus_annectens
 ./runBuild GCF_019320065.1_ASM1932006v1 mammals Cervus_canadensis
 ./runBuild GCF_019321695.1_ASM1932169v1 fungi Diaporthe_batatas
+./runBuild GCF_019356215.1_ASM1935621v1 bacteria Acinetobacter_baumannii
 ./runBuild GCF_019393635.1_mDroGli1.pri mammals Dromiciops_gliroides
 ./runBuild GCF_019419815.1_Pyrus_bretschneideri_v1 plants Pyrus_x_bretschneideri
 ./runBuild GCF_019456465.1_ASM1945646v1 fungi Bacidia_gigantensis
