@@ -1582,6 +1582,7 @@ visibility hide
 noScoreFilter .
 noInherit on
 type bed 3 .
+configurable off
 
     track snpArrayAffy6
     parent genotypeArrays
