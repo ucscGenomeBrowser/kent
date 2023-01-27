@@ -26,6 +26,7 @@
 #include "facetedBar.h"
 #include "pipeline.h"
 #include "chromAlias.h"
+#include "jsHelper.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -430,6 +431,7 @@ for (row = ft->rowList; row != NULL; row = row->next)
 static void svgBarChart(struct barChartBed *chart, struct trackDb *tdb, double maxVal, char *metric)
 /* Plot bar chart without quartiles or anything fancy just using SVG */
 {
+jsIncludeFile("hgc.js", NULL);
 puts("<p>");
 /* Load up input labels, color, and data */
 struct barChartCategory *categs = barChartUiGetCategories(database, tdb, NULL);
@@ -474,17 +476,17 @@ double barNumLabelWidth = estimateStringWidth(" 1234.000");
 double barMaxWidth = totalWidth-barOffset -barNumLabelWidth ;
 double totalHeight = headerHeight + heightPer * categCount + borderSize;
 
-printf("<svg width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
+printf("<svg id='svgBarChart' width=\"%g\" height=\"%g\">\n", totalWidth, totalHeight);
 
 /* Draw header */
 printf("<rect width=\"%g\" height=\"%g\" style=\"fill:#%s\"/>\n", totalWidth, headerHeight, HG_COL_HEADER);
 char *sampleLabel = trackDbSettingOrDefault(tdb, "barChartLabel", "Sample");
-printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n",
+printf("<text class=\"sampleLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\">%s</text>\n",
     labelOffset, innerHeight-1, innerHeight-1, sampleLabel);
 if (statsSize > 0.0)
-    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n",
+    printf("<text class=\"statsLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n",
 	statsRightOffset, innerHeight-1, innerHeight-1, "N");
-printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%s %s</text>\n",
+printf("<text class=\"valueLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\">%s %s</text>\n",
     barOffset, innerHeight-1, innerHeight-1, metric, "Value");
 
 /* Set up clipping path for the pesky labels, which may be too long */
@@ -504,23 +506,23 @@ for (i=0, categ=categs; i<categCount; ++i , categ=categ->next, yPos += heightPer
     replaceChar(deunder, '_', ' ');
     printf("<rect x=\"0\" y=\"%g\" width=\"15\" height=\"%g\" style=\"fill:#%06X\"/>\n",
 	yPos, innerHeight, categ->color);
-    printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
-	barOffset, yPos, barWidth, innerHeight, categ->color);
+    printf("<rect id=\"bar%d\" x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
+	i+1, barOffset, yPos, barWidth, innerHeight, categ->color);
     if (i&1)  // every other time
-	printf("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
+	printf("<rect class=\"sampleBand\" x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" style=\"fill:#%06X\"/>\n",
 	    labelOffset, yPos, labelWidth+statsSize, innerHeight, 0xFFFFFF);
-    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n",
+    printf("<text class=\"sampleLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\" clip-path=\"url(#labelClip)\"\">%s</text>\n",
  	labelOffset, yPos+innerHeight-1, innerHeight-1, deunder);
     if (statsSize > 0.0)
 	{
 	struct fieldedRow *fr = hashFindVal(statsHash, deunder);
 	if (fr != NULL)
 	    {
-	    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n",
+	    printf("<text class=\"statsLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\" text-anchor=\"end\">%s</text>\n",
 		statsRightOffset, yPos+innerHeight-1, innerHeight-1, fr->row[countStatIx]);
 	    }
 	}
-    printf("<text x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n",
+    printf("<text class=\"valueLabel\" x=\"%g\" y=\"%g\" font-size=\"%g\">%5.3f</text>\n",
 	barOffset+barWidth+2, yPos+innerHeight-1, innerHeight-1, score);
     }
 printf("</svg>");
