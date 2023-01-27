@@ -444,14 +444,14 @@ static void getHubTrackData(char *hubUrl)
  */
 {
 char *genome = cgiOptionalString("genome");
-char *track = cgiOptionalString("track");
+char *trackArg = cgiOptionalString("track");
 char *chrom = cgiOptionalString("chrom");
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 
 if (isEmpty(genome))
     apiErrAbort(err400, err400Msg, "missing genome=<name> for endpoint '/getData/track'  given hubUrl='%s'", hubUrl);
-if (isEmpty(track))
+if (isEmpty(trackArg))
     apiErrAbort(err400, err400Msg, "missing track=<name> for endpoint '/getData/track'  given hubUrl='%s'", hubUrl);
 
 struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
@@ -463,87 +463,96 @@ struct trackDb *tdb = obtainTdb(hubGenome, NULL);
 if (NULL == tdb)
     apiErrAbort(err400, err400Msg, "failed to find a track hub definition in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", genome, hubUrl);
 
-struct trackDb *thisTrack = findTrackDb(track, tdb);
-if (NULL == thisTrack)
-    apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", track, genome, hubUrl);
-if (trackHasNoData(thisTrack))
-    apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
-if (! isSupportedType(thisTrack->type))
-    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time", thisTrack->type, track);
-
-char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
-struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
-if (NULL == bbi)
-    apiErrAbort(err400, err400Msg, "track type %s management not implemented yet TBD track=%s in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", thisTrack->type, track, genome, hubUrl);
-
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "hubUrl", hubUrl);
 jsonWriteString(jw, "genome", genome);
-unsigned chromSize = 0;
-struct bbiChromInfo *chromList = NULL;
-if (isNotEmpty(chrom))
-    {
-    chromSize = bbiChromSize(bbi, chrom);
-    if (0 == chromSize)
-	apiErrAbort(err400, err400Msg, "can not find specified chrom=%s in bigBed file URL '%s', track=%s genome=%s for endpoint '/getData/track' given hubUrl='%s'", chrom, bigDataUrl, track, genome, hubUrl);
-    jsonWriteNumber(jw, "chromSize", (long long)chromSize);
-    }
-else
-    {
-    chromList = bbiChromList(bbi);
-    jsonWriteNumber(jw, "chromCount", (long long)slCount(chromList));
-    }
 
-unsigned uStart = 0;
-unsigned uEnd = chromSize;
-if ( ! (isEmpty(start) || isEmpty(end)) )
+// allow optional comma sep list of tracks
+char *tracks[100];
+int numTracks = chopByChar(trackArg, ',', tracks, sizeof(tracks));
+int i = 0;
+for (i = 0; i < numTracks; i++)
     {
-    uStart = sqlUnsigned(start);
-    uEnd = sqlUnsigned(end);
-    jsonWriteNumber(jw, "start", uStart);
-    jsonWriteNumber(jw, "end", uEnd);
-    }
+    char *track = cloneString(tracks[i]);
+    struct trackDb *thisTrack = findTrackDb(track, tdb);
+    if (NULL == thisTrack)
+        apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", track, genome, hubUrl);
+    if (trackHasNoData(thisTrack))
+        apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
+    if (! isSupportedType(thisTrack->type))
+        apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time", thisTrack->type, track);
 
-jsonWriteString(jw, "bigDataUrl", bigDataUrl);
-jsonWriteString(jw, "trackType", thisTrack->type);
+    char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
+    struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+    if (NULL == bbi)
+        apiErrAbort(err400, err400Msg, "track type %s management not implemented yet TBD track=%s in genome=%s for endpoint '/getData/track'  given hubUrl='%s'", thisTrack->type, track, genome, hubUrl);
 
-if (allowedBigBedType(thisTrack->type))
-    {
-    struct asObject *as = bigBedAsOrDefault(bbi);
-    if (! as)
-	apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/getData/track' given hubUrl='%s'", bigDataUrl, track, genome, hubUrl);
-    struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
-    if (jsonOutputArrays || debug)
-        bigColumnTypes(jw, fiList, as);
-
-    jsonWriteListStart(jw, track);
-    unsigned itemsDone = 0;
-    if (isEmpty(chrom))
-	{
-	struct bbiChromInfo *bci;
-	for (bci = chromList; bci && (itemsDone < maxItemsOutput); bci = bci->next)
-	    {
-	    itemsDone += bbiDataOutput(jw, bbi, bci->name, 0, bci->size,
-		fiList, thisTrack, itemsDone);
-	    }
-	    if (itemsDone >= maxItemsOutput)
-		reachedMaxItems = TRUE;
-	}
+    unsigned chromSize = 0;
+    struct bbiChromInfo *chromList = NULL;
+    if (isNotEmpty(chrom))
+        {
+        chromSize = bbiChromSize(bbi, chrom);
+        if (0 == chromSize)
+        apiErrAbort(err400, err400Msg, "can not find specified chrom=%s in bigBed file URL '%s', track=%s genome=%s for endpoint '/getData/track' given hubUrl='%s'", chrom, bigDataUrl, track, genome, hubUrl);
+        jsonWriteNumber(jw, "chromSize", (long long)chromSize);
+        }
     else
-	itemsDone += bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList,
-		thisTrack, itemsDone);
-    itemsReturned += itemsDone;
-    jsonWriteListEnd(jw);
+        {
+        chromList = bbiChromList(bbi);
+        jsonWriteNumber(jw, "chromCount", (long long)slCount(chromList));
+        }
+
+    unsigned uStart = 0;
+    unsigned uEnd = chromSize;
+    if ( ! (isEmpty(start) || isEmpty(end)) )
+        {
+        uStart = sqlUnsigned(start);
+        uEnd = sqlUnsigned(end);
+        jsonWriteNumber(jw, "start", uStart);
+        jsonWriteNumber(jw, "end", uEnd);
+        }
+
+    jsonWriteString(jw, "bigDataUrl", bigDataUrl);
+    jsonWriteString(jw, "trackType", thisTrack->type);
+
+    if (allowedBigBedType(thisTrack->type))
+        {
+        struct asObject *as = bigBedAsOrDefault(bbi);
+        if (! as)
+        apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/getData/track' given hubUrl='%s'", bigDataUrl, track, genome, hubUrl);
+        struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
+        if (jsonOutputArrays || debug)
+            bigColumnTypes(jw, fiList, as);
+
+        jsonWriteListStart(jw, track);
+        unsigned itemsDone = 0;
+        if (isEmpty(chrom))
+        {
+        struct bbiChromInfo *bci;
+        for (bci = chromList; bci && (itemsDone < maxItemsOutput); bci = bci->next)
+            {
+            itemsDone += bbiDataOutput(jw, bbi, bci->name, 0, bci->size,
+            fiList, thisTrack, itemsDone);
+            }
+            if (itemsDone >= maxItemsOutput)
+            reachedMaxItems = TRUE;
+        }
+        else
+        itemsDone += bbiDataOutput(jw, bbi, chrom, uStart, uEnd, fiList,
+            thisTrack, itemsDone);
+        itemsReturned += itemsDone;
+        jsonWriteListEnd(jw);
+        }
+    else if (startsWith("bigWig", thisTrack->type))
+        {
+        if (jsonOutputArrays || debug)
+        wigColumnTypes(jw);
+        jsonWriteObjectStart(jw, track);
+        bigWigData(jw, bbi, chrom, uStart, uEnd);
+        jsonWriteObjectEnd(jw);
+        }
+    bbiFileClose(&bbi);
     }
-else if (startsWith("bigWig", thisTrack->type))
-    {
-    if (jsonOutputArrays || debug)
-	wigColumnTypes(jw);
-    jsonWriteObjectStart(jw, track);
-    bigWigData(jw, bbi, chrom, uStart, uEnd);
-    jsonWriteObjectEnd(jw);
-    }
-bbiFileClose(&bbi);
 apiFinishOutput(0, NULL, jw);
 }	/*	static void getHubTrackData(char *hubUrl)	*/
 
@@ -558,7 +567,7 @@ char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 /* 'track' name in trackDb often refers to a SQL 'table' */
 char *trackArg = cgiOptionalString("track");
-char *sqlTable = cloneString(trackArg); /* might be something else */
+//char *sqlTable = cloneString(trackArg); /* might be something else */
      /* depends upon 'table' setting in track db, or split table business */
 
 unsigned chromSize = 0;	/* maybe set later */
@@ -585,6 +594,7 @@ if (NULL == conn)
     apiErrAbort(err400, err400Msg, "can not find genome 'genome=%s' for endpoint '/getData/track", db);
 
 struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "genome", db);
 
 // load the tracks
 struct trackDb *tdbList = NULL;
@@ -664,7 +674,6 @@ for (i = 0; i < numTracks; i++)
             tableTrack = FALSE;
         }
 
-    jsonWriteString(jw, "genome", db);
     if (tableTrack)
         {
         char *dataTime = NULL;

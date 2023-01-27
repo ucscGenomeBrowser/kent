@@ -8257,6 +8257,10 @@ hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
 hPrintf(" ");
 
 hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
+
+// put the track download interface behind hg.conf control
+if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
+    jsInline("var showDownloadButton = true;\n");
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
