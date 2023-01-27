@@ -2150,7 +2150,7 @@ var rightClick = {
     selectedMenuItem: null,   // currently choosen context menu item (via context menu).
     floatingMenuItem: null,
     currentMapItem:   null,
-    supportZoomCodon: false,  // turns on experimental feature (currently only in larry's tree).
+    supportZoomCodon: true,  // add zoom to exon and zoom to codon to right click menu
     clickedHighlightIdx : null,  // the index (0,1,...) of the highlight item that overlaps the last right-click
 
     makeMapItem: function (id)
@@ -2201,11 +2201,7 @@ var rightClick = {
     {
         var json = JSON.parse(response);
         if (json.pos) {
-            genomePos.set(json.pos, 3);
-            if (document.TrackForm)
-                document.TrackForm.submit();
-            else
-                document.TrackHeaderForm.submit();
+            imageV2.navigateInPlace("position="+json.pos);
         } else {
             alert(json.error);
         }
@@ -2796,6 +2792,7 @@ var rightClick = {
                     o = {};
                     var any = false;
                     var title = rightClick.selectedMenuItem.title || "feature";
+                    var exonNum = 0;
                     var maxLength = 60;
                     if (title.length > maxLength) {
                         title = title.substring(0, maxLength) + "...";
@@ -2829,6 +2826,10 @@ var rightClick = {
                         // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
                         // We don't have the value of "exonNumbers" here, so just use a heuristic to see if it's on
                         if (title.search(/, strand [+-], (Intron|Exon) /)!==-1) {
+                            re = /(Exon) ([1-9]+) of/;
+                            matches = re.exec(title);
+                            if (matches !== null && matches[2].length > 0)
+                                exonNum = matches[2];
                             title = title.split(",")[0];
                         }
 
@@ -2891,13 +2892,23 @@ var rightClick = {
                                                         {name: name, table: table});
                                             return true;}
                                     };
-                                    o[rightClick.makeImgTag("magnify.png")+" Zoom to exon"] = {
-                                        onclick: function(menuItemClicked, menuObject) {
-                                            rightClick.hit(menuItemClicked, menuObject,
-                                                          "zoomExon",
-                                                          {name: name, table: table});
-                                            return true; }
-                                    };
+                                    if (exonNum > 0) {
+                                        o[rightClick.makeImgTag("magnify.png")+" Zoom to exon"] = {
+                                            onclick: function(menuItemClicked, menuObject) {
+                                                $.ajax({
+                                                        type: "GET",
+                                                        url: "../cgi-bin/hgApi",
+                                                        data: cart.varsToUrlData({ 'db': getDb(),
+                                                                'cmd': "exonToPos", 'num': exonNum,
+                                                                'table': table, 'name': name}),
+                                                        trueSuccess: rightClick.handleZoomCodon,
+                                                        success: catchErrorOrDispatch,
+                                                        error: errorHandler,
+                                                        cache: true
+                                                    });
+                                                return true; }
+                                        };
+                                    }
                                 }
                             }
                             o[rightClick.makeImgTag("dnaIcon.png")+" Get DNA for "+title] = {
