@@ -25,7 +25,6 @@
 #include "trix.h"
 #include "chromAlias.h"
 
-#include "halBlockViz.h"
 #include "bigPsl.h"
 #include "snake.h"
 
@@ -791,8 +790,6 @@ else if (tg->visibility == tvPack)
 if (lf->components == NULL)
     return;
 
-boolean isHalSnake = lf->isHalSnake;
-
 struct snakeFeature  *sf = (struct snakeFeature *)lf->components, *prevSf = NULL;
 int s = tg->itemStart(tg, item);
 int sClp = (s < winStart) ? winStart : s;
@@ -964,7 +961,6 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     hvGfxBox(hvg, sx, y, w, heightPer, color);
 
     // now draw the mismatches if we're at high enough resolution 
-    //if ((isHalSnake && sf->qSequence != NULL) && (winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack)))
     if ( (winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack)))
 	{
 	char *twoBitString = trackDbSetting(tg->tdb, "twoBit");
@@ -974,51 +970,38 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	static char *lastQName = NULL;
 
 	// sequence for chain snakes is in 2bit files which we cache
-	if (!isHalSnake)
-	    {
-	    if (twoBitString == NULL)
-		twoBitString = "/gbdb/hg19/hg19.2bit";
+        if (twoBitString == NULL)
+            twoBitString = "/gbdb/hg19/hg19.2bit";
 
-	    if ((lastTwoBitString == NULL) ||
-		differentString(lastTwoBitString, twoBitString))
-		{
-		if (tbf != NULL)
-		    {
-		    lastQName = NULL;
-		    twoBitClose(&tbf);
-		    }
-		tbf = twoBitOpen(twoBitString);
-		}
+        if ((lastTwoBitString == NULL) ||
+            differentString(lastTwoBitString, twoBitString))
+            {
+            if (tbf != NULL)
+                {
+                lastQName = NULL;
+                twoBitClose(&tbf);
+                }
+            tbf = twoBitOpen(twoBitString);
+            }
 
-	    // we're reading in the whole chrom
-	    if ((lastQName == NULL) || differentString(sf->qName, lastQName))
-		seq = twoBitReadSeqFrag(tbf, sf->qName,  0, 0);
-	    lastQName = sf->qName;
-	    lastTwoBitString = twoBitString;
-	    }
+        // we're reading in the whole chrom
+        if ((lastQName == NULL) || differentString(sf->qName, lastQName))
+            seq = twoBitReadSeqFrag(tbf, sf->qName,  0, 0);
+        lastQName = sf->qName;
+        lastTwoBitString = twoBitString;
 
 	char *ourDna;
-	if (isHalSnake)
-	    ourDna = sf->qSequence;
-	else
-	    ourDna = &seq->dna[sf->qStart];
+        ourDna = &seq->dna[sf->qStart];
 
 	int seqLen = sf->qEnd - sf->qStart;
 	toUpperN(ourDna, seqLen);
-	if (!isHalSnake && (sf->orientation == -1))
+	if (sf->orientation == -1)
 	    reverseComplement(ourDna,seqLen);
 
 	// get the reference sequence
 	char *refDna;
-        if (isHalSnake && differentString(tg->tdb->type, "pslSnake"))
-	    {
-	    refDna = sf->tSequence;
-	    }
-	else
-	    {
-	    struct dnaSeq *extraSeq = hDnaFromSeq(database, chromName, sf->start, sf->end, dnaUpper);
-	    refDna = extraSeq->dna;
-	    }
+        struct dnaSeq *extraSeq = hDnaFromSeq(database, chromName, sf->start, sf->end, dnaUpper);
+        refDna = extraSeq->dna;
 	int si = s;
 	char *ptr1 = refDna;
 	char *ptr2 = ourDna;

@@ -81,6 +81,7 @@ codingAnnoLabel_snp131CodingDbSnp bed
 codingAnnoLabel_snp132CodingDbSnp bed
 codingAnnoLabel_snp134CodingDbSnp bed
 codingAnnotations bed
+colorBy snake
 collapseEmptySubtracks *
 hideEmptySubtracks *
 hideEmptySubtracksLabel *
@@ -539,6 +540,7 @@ transMapTypeDesc psl bigPsl
 transMapSrcSet psl bigPsl
 transformFunc bed bigBed bedGraph wig bigWig barChart bigBarChart
 treeImage wigMaf bigMaf
+twoBit snake
 txInfo genePred
 type *
 url *
