@@ -89,6 +89,7 @@ GCA_009769545.1_fCycLum1.pri	fish
 GCA_009769625.1_bCygOlo1.pri	birds
 GCA_009819705.1_fHipHip1.pri	fish
 GCA_009873245.2_mBalMus1.v2	mammals
+GCA_009914755.4_T2T-CHM13v2.0	primates
 GCA_010909765.1_sAmbRad1.pri	vertebrate
 GCA_011004845.1_fEsoLuc1.pri	fish
 GCA_011064685.1_ZJU_Sfru_1.0	invertebrate
