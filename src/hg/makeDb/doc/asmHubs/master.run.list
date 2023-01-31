@@ -21,6 +21,7 @@
 ./runBuild GCA_000296755.1_EriEur2.0 mammals Erinaceus_europaeus
 ./runBuild GCA_000297895.2_ASM29789v2 invertebrate Crassostrea_gigas
 ./runBuild GCA_000298735.2_Oar_v4.0 mammals Ovis_aries
+./runBuild GCA_000300575.2_ASM30057v2 fungi Agaricus_bisporus
 ./runBuild GCA_000311805.2_CB1 mammals Camelus_ferus
 ./runBuild GCA_000313985.1_EchTel2.0 mammals Echinops_telfairi
 ./runBuild GCA_000340355.2_Leishmania_braziliensis_M2903-1.0.6 invertebrate Leishmania_braziliensis
