@@ -67,7 +67,7 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
   rm -f $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
   rm -f $buildDir/liftOver/${overToChain}
   if [ -s "$buildDir/trackData/$lastzDir/axtChain/${overChain}" ]; then
-     ln -s ../trackDb/$lastzDir/axtChain/${overChain} $buildDir/liftOver/${overToChain}
+     ln -s ../trackData/$lastzDir/axtChain/${overChain} $buildDir/liftOver/${overToChain}
   fi
   if [ -s "$buildDir/trackData/$lastzDir/axtChain/chain${OtherDb}.bb" ]; then
     ln -s ../trackData/$lastzDir/axtChain/chain${OtherDb}.bb $buildDir/bbi/${asmId}.chain$OtherDb.bb
