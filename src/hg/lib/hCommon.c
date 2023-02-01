@@ -140,7 +140,7 @@ else
 }
 
 char *prot = NULL;
-if (sameWord(isHttps, "on"))
+if (isHttps && sameWord(isHttps, "on"))
     prot = "https";
 else
     prot = "http";
