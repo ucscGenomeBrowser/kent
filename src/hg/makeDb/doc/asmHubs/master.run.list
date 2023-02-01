@@ -2259,6 +2259,7 @@
 ./runBuild GCF_021462225.1_DD_fGirMul_XY1 fish Girardinichthys_multiradiatus
 ./runBuild GCF_021613505.1_UCLA_HA_Equagga_1.0 mammals Equus_quagga
 ./runBuild GCF_021653875.1_ASM2165387v1 fungi Nematocida_major
+./runBuild GCF_021869535.1_xbMytCali1.0.p invertebrate Mytilus_californianus
 ./runBuild GCF_021869965.1_sRhiTyp1.1 vertebrate Rhincodon_typus
 ./runBuild GCF_021901455.1_iyNeoLeco1.1 invertebrate Neodiprion_lecontei
 ./runBuild GCF_021901495.1_iyNeoVirg1.1 invertebrate Neodiprion_virginiana
