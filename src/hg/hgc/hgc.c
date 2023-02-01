@@ -26153,8 +26153,8 @@ makeBigPsl(pslName, faName, database, bigBedFile);
 char* host = getenv("HTTP_HOST");
 
 boolean isProt = cgiOptionalString("isProt") != NULL;
-char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\"\n";  
-char *extraForMismatch = "indelPolyA=on  showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
+char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\" colorByStrand=\"0,0,0 0,0,150\" mouseOver=\"${oChromStart}-${oChromEnd} of ${oChromSize} bp, strand ${oStrand}\"\n";  
+char *extraForMismatch = "indelPolyA=on showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
   
 if (isProt)
     extraForMismatch = "";
