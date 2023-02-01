@@ -1,0 +1,6 @@
+hub CCGP
+shortLabel CCGP
+longLabel The California Conservation Genomics Project (CCGP) assemblies
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html
