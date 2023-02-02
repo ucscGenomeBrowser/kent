@@ -10,9 +10,19 @@
 # exit on any error
 set -beEu -o pipefail
 
-if [ "xxx$1" != "xxxmakeItSo" ]; then
+function usage() {
   printf "usage: ./updateCentral.sh makeItSo\n" 1>&2
   printf "updates hgcentral.genark with the latest hub list from hgdownload\n" 1>&2
+}
+
+# check for an 'unbound' variable safely
+if [ -z "${1+x}" ]; then
+  usage
+  exit 255
+fi
+# something is in $1, verify is is 'makeItSo'
+if [ "xxx$1" != "xxxmakeItSo" ]; then
+  usage
   exit 255
 fi
 
