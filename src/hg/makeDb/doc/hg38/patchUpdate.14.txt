@@ -895,7 +895,8 @@ echo "    <TR><TD><B><FONT SIZE=-1>Total</FONT></B></TD><TD ALIGN=\"CENTER\"><FO
 echo "</TABLE>"
 echo "</p>"
 
-
+FYI I had to manually reorder some rows in the stats table so they were in a readable order instead in alphabetical order by chrom name,
+but it was quite eay to do with vim.
 
 
 #############################################################################
@@ -923,7 +924,7 @@ and should they get changed to the new one?
 
 
 ##############################################################################
-# GRC Incident Database (TODO 2021-10-12 galt)
+# GRC Incident Database (DONE 2023-01-31 galt)
 
     # Wait until the updated hg38 files have been pushed to RR because GRC Incident update is
     # automated.  Then update the file used to map GRC's RefSeq accessions to our names:
