@@ -987,7 +987,7 @@ while ((psl = pslNext(f)) != NULL)
         if (sameString(psl->strand, "+"))
             lf->filterColor = MAKECOLOR_32(0,0,0);
         else
-            lf->filterColor = MAKECOLOR_32(0,0,100);
+            lf->filterColor = MAKECOLOR_32(0,0,150);
 
 	slAddHead(&lfList, lf);
 	/* Don't free psl -- used in drawing phase by baseColor code. */
