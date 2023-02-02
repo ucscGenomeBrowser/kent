@@ -2,7 +2,7 @@
 # that leads to crashes if I use that name.
 track recombRate2
 shortLabel Recombination rate
-longLabel Recombination rate: genetic maps from deCODE and 1000 Genomes
+longLabel Recombination rate: Genetic maps from deCODE and 1000 Genomes
 type bed
 superTrack on hide
 group map

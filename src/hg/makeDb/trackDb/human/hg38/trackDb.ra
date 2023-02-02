@@ -835,6 +835,30 @@ include gerp.ra alpha
 
 include crossTissueMaps.ra alpha
 
+track BRchainPonAbe3
+shortLabel $o_Organism SNAKE
+longLabel $o_Organism SNAKE
+type snake ponAbe3
+otherDb ponAbe3
+colorBy byStrand
+twoBit /gbdb/ponAbe3/ponAbe3.2bit
+
+track BRchainRheMac10
+shortLabel $o_Organism SNAKE
+longLabel $o_Organism SNAKE
+type snake rheMac10
+otherDb rheMac10
+colorBy byStrand
+twoBit /gbdb/rheMac10/rheMac10.2bit
+
+track BRchainGorGor6
+shortLabel $o_Organism SNAKE
+longLabel $o_Organism SNAKE
+type snake gorGor6
+otherDb gorGor6
+colorBy byStrand
+twoBit /gbdb/gorGor6/gorGor6.2bit
+
 track BRchainPanTro6
 shortLabel $o_Organism SNAKE
 longLabel $o_Organism SNAKE
@@ -858,15 +882,8 @@ colorBy byStrand
 #parent liftHg19
 
 track BRchainHg19ReMapAxtChain
-shortLabel ReMap + axtChain hg19
-longLabel NCBI ReMap alignments to hg19/GRCh37, joined by axtChain
-priority 3
+shortLabel ReMap SNAKE
+longLabel NCBI ReMap SNAKE
 type snake hg19
 colorBy byStrand
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
 otherDb hg19
-chainMinScore 3000
-chainLinearGap medium
-# parent liftHg19
-

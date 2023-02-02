@@ -5865,6 +5865,29 @@ if (boxed)
     puts("</td></tr></table>");
 }
 
+void snakeOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
+/* let the user choose to see the track in snake mode */
+{
+if (!cfgOptionBooleanDefault("canSnake", FALSE))
+    return;
+
+printf("<BR><BR><B>Display data as a snake graph:</B> ");
+boolean option = cartOrTdbBoolean(cart, tdb, "doSnake", FALSE);
+
+char varName[1024];
+safef(varName, sizeof(varName), "%s.doSnake", name);
+cgiMakeCheckBox(varName, option);
+printf("<BR>\n");
+
+char *style = option ? "display:block" : "display:none";
+printf("<DIV ID=\"snakeGraphOptions\" STYLE=\"%s\">\n", style);
+printf("SNAKE OPTIONS!!\n");
+printf("</DIV>\n\n");
+
+jsInlineF("$(\"input[name='%s']\").click( function() { $('#snakeGraphOptions').toggle();} );\n"
+    , varName); // XSS FILTER?
+}
+
 void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 /* let the user choose to see the track in wiggle mode */
 {
@@ -7127,6 +7150,7 @@ if (normScoreAvailable)
 
 
 wigOption(cart, prefix, title, tdb);
+snakeOption(cart, prefix, title, tdb);
 cfgEndBox(boxed);
 }
 
