@@ -49,7 +49,8 @@ def parseArgs():
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
     parser.add_option("-s", "--skipUnknown", dest="skipUnknown", action="store_true", help="skip unknown sequence rather than generate an error.")
     parser.add_option("-k", "--field", dest="fieldNo", action="store", type="int", \
-            help="index of field to convert, default is %default (first field is 1). ", default=1)
+            help="Index of field (1-based) that contains the chromosome name. No other field is touched by this program, unless the "
+            "SAM format is detected. Default is %default (first field).", default=1)
 
     (options, args) = parser.parse_args()
 

@@ -960,19 +960,16 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	}
     hvGfxBox(hvg, sx, y, w, heightPer, color);
 
-    // now draw the mismatches if we're at high enough resolution 
-    if ( (winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack)))
+    // now draw the mismatches if we're at high enough resolution and have the sequence
+    char *twoBitString = trackDbSetting(tg->tdb, "twoBit");
+    if (twoBitString &&  ((winBaseCount < showSnpWidth) && ((vis == tvFull) || (vis == tvPack))))
 	{
-	char *twoBitString = trackDbSetting(tg->tdb, "twoBit");
 	static struct twoBitFile *tbf = NULL;
 	static char *lastTwoBitString = NULL;
 	static struct dnaSeq *seq = NULL;
 	static char *lastQName = NULL;
 
 	// sequence for chain snakes is in 2bit files which we cache
-        if (twoBitString == NULL)
-            twoBitString = "/gbdb/hg19/hg19.2bit";
-
         if ((lastTwoBitString == NULL) ||
             differentString(lastTwoBitString, twoBitString))
             {
