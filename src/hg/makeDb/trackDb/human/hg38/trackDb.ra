@@ -835,6 +835,30 @@ include gerp.ra alpha
 
 include crossTissueMaps.ra alpha
 
+track BRchainPonAbe3
+shortLabel $o_Organism SNAKE
+longLabel $o_Organism SNAKE
+type snake ponAbe3
+otherDb ponAbe3
+colorBy byStrand
+twoBit /gbdb/ponAbe3/ponAbe3.2bit
+
+track BRchainRheMac10
+shortLabel $o_Organism SNAKE
+longLabel $o_Organism SNAKE
+type snake rheMac10
+otherDb rheMac10
+colorBy byStrand
+twoBit /gbdb/rheMac10/rheMac10.2bit
+
+track BRchainGorGor6
+shortLabel $o_Organism SNAKE
+longLabel $o_Organism SNAKE
+type snake gorGor6
+otherDb gorGor6
+colorBy byStrand
+twoBit /gbdb/gorGor6/gorGor6.2bit
+
 track BRchainPanTro6
 shortLabel $o_Organism SNAKE
 longLabel $o_Organism SNAKE

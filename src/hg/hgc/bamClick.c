@@ -17,13 +17,12 @@
 #include "hgBam.h"
 #include "hgConfig.h"
 
-static boolean foundIt = FALSE; // used in chromAlias search
-
 struct bamTrackData
     {
     int itemStart;
     char *itemName;
     struct hash *pairHash;
+    boolean foundIt;
     };
 
 /* Maybe make this an option someday -- for now, I find it too confusing to deal with
@@ -145,6 +144,7 @@ if (core->flag & BAM_FUNMAP)
 struct bamTrackData *btd = (struct bamTrackData *)data;
 if (sameString(bam1_qname(bam), btd->itemName))
     {
+    btd->foundIt = TRUE;
     if (btd->pairHash == NULL || (core->flag & BAM_FPAIRED) == 0)
 	{
 	if (core->pos == btd->itemStart)
@@ -193,7 +193,7 @@ boolean isPaired = cartUsualBoolean(cart, varName,
 				    (trackDbSetting(tdb, "pairEndsByName") != NULL));
 char position[512];
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
-struct bamTrackData btd = {start, item, pairHash};
+struct bamTrackData btd = {start, item, pairHash, FALSE};
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
     {
@@ -224,7 +224,7 @@ for (; aliasList; aliasList = aliasList->next)
     safef(position, sizeof(position), "%s:%d-%d", chromName, winStart, winEnd);
 
     bamAndIndexFetchPlus(fileName, indexName, position, oneBam, &btd, NULL, refUrl, cacheDir);
-    if (foundIt)
+    if (btd.foundIt)
         break;
     }
 
@@ -239,7 +239,7 @@ if (isPaired)
 	btd.pairHash = newPairHash;
 	safef(position, sizeof(position), "%s:%d-%d", chromName,
 	      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetch(fileName, position, oneBam, &btd, NULL);
+        bamAndIndexFetchPlus(fileName, indexName, position, oneBam, &btd, NULL, refUrl, cacheDir);
 	}
     struct hashEl *hel;
     struct hashCookie cookie = hashFirst(btd.pairHash);

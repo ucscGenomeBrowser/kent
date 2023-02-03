@@ -30,8 +30,8 @@ def bash(cmd):
     return(rawOutput.stdout.split('\n')[0:-1])
 
 #Get the last 5 error logs from the RR/euro
-latestLogs=bash("ls /hive/data/inside/wwwstats/RR/2022/hgw1")
-latestLogs_euro=bash("ls /hive/data/inside/wwwstats/euroNode/2022/")
+latestLogs=bash("ls /hive/data/inside/wwwstats/RR/"+datetime.now().strftime("%Y")+"/hgw1")
+latestLogs_euro=bash("ls /hive/data/inside/wwwstats/euroNode/"+datetime.now().strftime("%Y")+"/")
 latestLogs = latestLogs[len(latestLogs)-5:]
 latestLogs_euro=latestLogs_euro[len(latestLogs_euro)-5:]
 
@@ -52,18 +52,19 @@ for node in nodes:
         if node == 'RR':
             for machine in machines:
                 for log in latestLogs:#Copy the 5 latest error logs for each of the rr machines
-                    hgSearch=bash("zcat /hive/data/inside/wwwstats/"+node+"/2022/"+machine+"/"+log+"  | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
+                    hgSearch=bash("zcat /hive/data/inside/wwwstats/"+node+"/"+datetime.now().strftime("%Y")+"/"+machine+"/"+log+"  | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
                     for i in hgSearch:
                         f.write(i+'\n')
         elif node == 'euroNode':
             for log in latestLogs_euro:
-                hgSearch=bash(" zcat /hive/data/inside/wwwstats/"+node+"/2022/"+log+" | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
+                hgSearch=bash(" zcat /hive/data/inside/wwwstats/"+node+"/"+datetime.now().strftime("%Y")+"/"+log+" | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
                 for i in hgSearch:
                     f.write(i+'\n')
         else:
-            hgSearch=bash(" zcat /hive/data/inside/wwwstats/"+node+"/2022/"+log+" | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
-            for i in hgSearch:
-                f.write(i+'\n')
+            for log in latestLogs:
+                hgSearch=bash(" zcat /hive/data/inside/wwwstats/"+node+"/"+datetime.now().strftime("%Y")+"/"+log+" | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
+                for i in hgSearch:
+                    f.write(i+'\n')
 f.close()
 
 #Remove duplicates with the same hgsid and save the list to a variable 

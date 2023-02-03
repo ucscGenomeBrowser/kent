@@ -979,6 +979,16 @@ while ((psl = pslNext(f)) != NULL)
 	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE, tg);
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
+
+        // set mouse over and color to indicate query position and strand
+        char over[256];
+        safef(over, sizeof over, "%d-%d of %d bp, strand %c", psl->qStart, psl->qEnd, psl->qSize, psl->strand[0]);
+        lf->mouseOver = cloneString(over);
+        if (sameString(psl->strand, "+"))
+            lf->filterColor = MAKECOLOR_32(0,0,0);
+        else
+            lf->filterColor = MAKECOLOR_32(0,0,100);
+
 	slAddHead(&lfList, lf);
 	/* Don't free psl -- used in drawing phase by baseColor code. */
 	}
