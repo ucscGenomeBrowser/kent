@@ -58,6 +58,14 @@ int diff = a->start - b->start;
 return diff;
 }
 #endif
+static int snakeFeatureCmpQSequence(const void *va, const void *vb)
+/* sort by sequence name of the query sequence */
+{
+const struct snakeFeature *a = *((struct snakeFeature **)va);
+const struct snakeFeature *b = *((struct snakeFeature **)vb);
+
+return strcmp(a->qSequence, b->qSequence);
+}
 
 static int snakeFeatureCmpQStart(const void *va, const void *vb)
 /* sort by start position on the query sequence */
@@ -1081,6 +1089,9 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 
 	if (lastQEnd != qs) {
             long long queryInsertSize = llabs(lastQEnd - qs);
+        if (queryInsertSize > 100)
+            color = MG_ORANGE;
+#ifdef NOTNOW
             long long targetInsertSize;
             if (sf->orientation == 1)
                 targetInsertSize = s - lastE;
@@ -1103,6 +1114,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
                 green = 255 * frac;
             }
             color = hvGfxFindColorIx(hvg, red, green, blue);
+#endif
         }
         double queryGapNFrac = 0.0;
         double queryGapMaskedFrac = 0.0;
@@ -1544,13 +1556,7 @@ safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->table);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 int ourStart = winStart;
 int ourEnd = winEnd;
-//optionChrStr = "chr15";
 
-
-// we're grabbing everything now.. we really should be 
-// doing this as a preprocessing stage, rather than at run-time
-//ourStart = 0;
-//ourEnd = 500000000;
 ourStart = winStart;
 ourEnd = winEnd;
 if (startsWith("chr",optionChrStr)) 
@@ -1633,9 +1639,16 @@ hFreeConn(&conn);
 
 /* now load the items */
 loadLinks(tg, ourStart, ourEnd, tg->visibility);
+
+/* we need to sort by query chrom so they'll bunch up together */
+slSort(&tg->items, snakeFeatureCmpQSequence);
 lf=tg->items;
 fixItems(lf);
 }	/*	chainLoadItems()	*/
+
+static void snakeDrawLeftLabels()
+{
+}
 
 void snakeMethods(struct track *tg, struct trackDb *tdb, 
 	int wordCount, char *words[])
@@ -1698,6 +1711,7 @@ tg->mapItemName = lfMapNameFromExtra;
 tg->subType = lfSubChain;
 tg->extraUiData = (void *) chainCart;
 tg->totalHeight = snakeHeight; 
+tg->drawLeftLabels = snakeDrawLeftLabels;
 
 tg->drawItemAt = snakeDrawAt;
 tg->itemHeight = snakeItemHeight;
