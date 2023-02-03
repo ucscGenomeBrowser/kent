@@ -3680,6 +3680,12 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
                        char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
+boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", FALSE);
+
+extern void doSnakeClick(struct trackDb *tdb, char *itemName);
+if (doSnake)
+    return doSnakeClick(tdb, item);
+
 struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
 char *thisOrg = hOrganism(database);
 char *otherOrg = NULL;
