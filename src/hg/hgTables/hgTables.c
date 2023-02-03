@@ -204,9 +204,12 @@ fprintf(f, "# No results");
 if (identifierFileName() != NULL)
     fprintf(f, " matching identifier list");
 if (anyFilter())
-    fprintf(f, " passing filter");
-if (!fullGenomeRegion())
-    fprintf(f, " in given region");
+    fprintf(f, " passing filter. To show all results: return to the table browser, under 'subset','filter' click 'clear'");
+if (!fullGenomeRegion()) {
+    char *region = cartUsualString(cart, "position", "undefined");
+    fprintf(f, " in region '%s'. If you want to show results from the entire genome:\n", region);
+    fprintf(f, "# go back to the table browser and switch the region of interest from 'position:%s' to 'genome'", region);
+}
 if (anyIntersection())
     fprintf(f, " after intersection");
 fprintf(f, ".\n");

@@ -10,6 +10,10 @@ exec > >(tee -a "${HOME}/browserInstall.log") 2>&1
 
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
 
+# set all locale settings to English
+# searching for certain strings in command output might fail, if locale is different
+export LANG=C
+
 exitHandler() {
     if [ "$1" == "100" -o "$1" == "0" ] ; then
        exit $1 # all fine, a specific error message has already been output

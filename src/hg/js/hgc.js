@@ -143,7 +143,57 @@ function dataToTable(label, data) {
 // on page load initialize VEP, Population Frequency and Haplotype Tables
 // for gnomAD v3.1.1 track
 $(document).ready(function() {
-    if (_jsonHgcLabels !== null) {
+    if ($("#svgTable") !== null) {
+        // redraw the svg with appropriate widths for all columns
+        // swatchWidth and columnSpacer are taken from svgBarChart() in hgc/barChartClick.c
+        // they should probably be dynamically determined
+        var swatchWidth = 20.0;
+        var columnSpacer = 4.0;
+        var maxSampleWidth = 0.0;
+
+        // determine the size taken up by the sample names
+        $(".sampleLabel").each(function(s) {
+            if ((sampleLength = this.getComputedTextLength()) >= maxSampleWidth) {
+                maxSampleWidth = sampleLength;
+            }
+        });
+
+        // determine the size taken up by the 'N' counts
+        var maxStatsWidth = 0.0;
+        $(".statsLabel").each(function(s) {
+            if ((statWidth = this.getComputedTextLength()) >= maxStatsWidth) {
+                maxStatsWidth = statWidth;
+            }
+        });
+
+        // the stat is right aligned so take into account it's width as well
+        statsRightOffset = swatchWidth + maxSampleWidth + (2 * columnSpacer) + maxStatsWidth;
+
+        // The white band that separates every other row needs to be resized
+        $(".sampleBand").each(function(s) {
+            this.setAttribute("width", statsRightOffset - swatchWidth);
+        });
+
+        // now move the stat number
+        $(".statsLabel").each(function(s) {
+            this.setAttribute("x", statsRightOffset);
+        });
+
+        // now shift the actual bars (plus value) over if necessary
+        $(".valueLabel").each(function(s) {
+            barName = "#bar" + s;
+            var barWidth = 0;
+            var newX = statsRightOffset + (2 * columnSpacer);
+            if ($(barName).length > 0) {
+                barWidth = parseInt($(barName)[0].getAttribute("width"));
+                $(barName)[0].setAttribute("x", newX);
+                this.setAttribute("x", newX + barWidth + 2 * columnSpacer);
+            } else { // the header label only
+                this.setAttribute("x", newX + barWidth);
+            }
+        });
+    }
+    if (typeof _jsonHgcLabels !== "undefined") {
         var obj, o;
         for (obj in _jsonHgcLabels) {
             // build up the new table:

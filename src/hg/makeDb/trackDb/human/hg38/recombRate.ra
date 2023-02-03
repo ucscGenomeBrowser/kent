@@ -2,7 +2,7 @@
 # that leads to crashes if I use that name.
 track recombRate2
 shortLabel Recombination rate
-longLabel Recombination rate: genetic maps from deCODE and 1000 Genomes
+longLabel Recombination rate: Genetic maps from deCODE and 1000 Genomes
 type bed
 superTrack on hide
 group map
@@ -21,6 +21,7 @@ color 0,130,0
     viewLimits 0.0:100
     viewLimitsMax 0:150000
     priority 1
+    html recombRate2.html
 
     track recombPat
     parent recombRate2
@@ -33,6 +34,7 @@ color 0,130,0
     viewLimits 0.0:100
     viewLimitsMax 0:150000
     priority 2
+    html recombRate2.html
 
     track recombMat
     parent recombRate2
@@ -45,6 +47,7 @@ color 0,130,0
     viewLimits 0.0:100
     viewLimitsMax 0:150000
     priority 3
+    html recombRate2.html
 
     track recombEvents
     parent recombRate2
@@ -54,6 +57,7 @@ color 0,130,0
     bigDataUrl /gbdb/hg38/recombRate/events.bb
     visibility hide
     priority 4
+    html recombRate2.html
 
     track recombDnm
     parent recombRate2
@@ -63,6 +67,7 @@ color 0,130,0
     bigDataUrl /gbdb/hg38/recombRate/recombDenovo.bb
     visibility hide
     priority 5
+    html recombRate2.html
 
     track recomb1000GAvg
     parent recombRate2
@@ -75,5 +80,6 @@ color 0,130,0
     viewLimits 0.0:100
     viewLimitsMax 0:150000
     priority 6
+    html recombRate2.html
 
 

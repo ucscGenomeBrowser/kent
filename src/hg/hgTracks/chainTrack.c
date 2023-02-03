@@ -19,8 +19,7 @@
 #include "hgColors.h"
 #include "hubConnect.h"
 #include "chromAlias.h"
-
-
+#include "hgConfig.h"
 
 struct cartOptions
     {
@@ -536,6 +535,13 @@ void chainMethods(struct track *tg, struct trackDb *tdb,
 	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
 {
+
+boolean doSnake = cartOrTdbBoolean(cart, tg->tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", FALSE);
+
+extern void snakeMethods(struct track *tg, struct trackDb *tdb,
+	int wordCount, char *words[]);
+if (doSnake)
+    return snakeMethods(tg, tdb, wordCount, words);
 
 struct cartOptions *chainCart;
 

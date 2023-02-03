@@ -441,17 +441,17 @@ set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 10
 printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainRBest.$QDb.txt
 rm -f link.tab
 rm -f chain.tab
-if ( -s "\$buildDir/axtChain/chainRBest${QDb}.bb" ) then
+if ( -s "$buildDir/axtChain/chainRBest${QDb}.bb" ) then
   mkdir -p /gbdb/$tDb/chainNet
   rm -f "/gbdb/$tDb/chainNet/$tDb.chainRBest$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest${QDb}Link.bb"
-  ln -s "\$buildDir/axtChain/chainRBest${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest$QDb.bb"
-   ln -s "\$buildDir/axtChain/chainRBest${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest${QDb}Link.bb"
+  ln -s "$buildDir/axtChain/chainRBest${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest$QDb.bb"
+   ln -s "$buildDir/axtChain/chainRBest${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest${QDb}Link.bb"
 endif
-if ( -s "\$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" ) then
+if ( -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" ) then
   mkdir -p /gbdb/$tDb/chainNet
   rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.summary.bb"
-  ln -s "\$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.bb"
-  ln -s "\$buildDir/bigMaf/$tDb.$qDb.rbestNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.summary.bb"
+  ln -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.bb"
+  ln -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.summary.bb"
 endif
 _EOF_
       );
