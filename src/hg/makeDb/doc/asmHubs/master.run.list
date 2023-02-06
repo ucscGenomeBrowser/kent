@@ -2345,6 +2345,7 @@
 ./runBuild GCF_900700415.1_Ch_v2.0.2 vertebrate Clupea_harengus
 ./runBuild GCF_900700415.2_Ch_v2.0.2 fish Clupea_harengus
 ./runBuild GCF_900747795.1_fErpCal1.1 vertebrate Erpetoichthys_calabaricus
+./runBuild GCF_900747795.2_fErpCal1.3 vertebrate Erpetoichthys_calabaricus
 ./runBuild GCF_900880675.1_fSpaAur1.1 vertebrate Sparus_aurata
 ./runBuild GCF_900963305.1_fEcheNa1.1 vertebrate Echeneis_naucrates
 ./runBuild GCF_900964775.1_fSclFor1.1 vertebrate Scleropages_formosus
