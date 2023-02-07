@@ -60,11 +60,14 @@ slReverse(&newList);
 list = newList;
 
 // Add custom tracks at head of list
-struct customTrack *ctList, *ct;
-ctList = customTracksParseCart(db, cart, NULL, NULL);
-for (ct = ctList; ct != NULL; ct = ct->next)
+if (cart)
     {
-    slAddHead(&list, ct->tdb);
+    struct customTrack *ctList, *ct;
+    ctList = customTracksParseCart(db, cart, NULL, NULL);
+    for (ct = ctList; ct != NULL; ct = ct->next)
+        {
+        slAddHead(&list, ct->tdb);
+        }
     }
 
 return list;
@@ -186,6 +189,21 @@ if (retFullGroupList != NULL)
     *retFullGroupList = fullGroupList;
 }
 
+void cartTrackDbInitForApi(struct cart *cart, char *db, struct trackDb **retFullTrackList,
+                     struct grp **retFullGroupList, boolean useAccessControl)
+/* Similar to cartTrackDbInit, but allow cart to be NULL */
+{
+useAC = useAccessControl;
+struct grp *hubGrpList = NULL;
+struct trackDb *fullTrackList = getFullTrackList(cart, db, &hubGrpList);
+boolean allTablesOk = hAllowAllTables() && !trackHubDatabase(db);
+struct grp *fullGroupList = makeGroupList(db, fullTrackList, &hubGrpList, allTablesOk);
+if (retFullTrackList != NULL)
+    *retFullTrackList = fullTrackList;
+if (retFullGroupList != NULL)
+    *retFullGroupList = fullGroupList;
+}
+
 static char *chopAtFirstDot(char *string)
 /* Terminate string at first '.' if found.  Return string for convenience. */
 {
@@ -261,6 +279,15 @@ if (! trackHubDatabase(db))
     hFreeConn(&conn);
     }
 struct slRef *tdbRef;
+
+// init accessControlTrackRefList
+if (!accessControlTrackRefList)
+    {
+    boolean oldAC = useAC;
+    useAC = TRUE;
+    (void)getFullTrackList(NULL, db, NULL);
+    useAC = oldAC;
+    }
 for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *tdb = tdbRef->val;
@@ -273,7 +300,7 @@ for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 
     boolean isNoGenome = sameString(type, "noGenome");
     if (!isNoGenome)
-        isNoGenome = sameString(type, "tbNoGenome"); // like 'noGenome' but only in the table browser, not the API 
+        isNoGenome = sameString(type, "off") || sameString(type, "tbNoGenome"); // like 'noGenome' but only in the table browser, not the API 
         // since the API does not use this function
 
     // Add track table to acHash:
@@ -282,6 +309,22 @@ for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     char *tbl;
     while ((tbl = nextWord(&tbOff)) != NULL)
         acHashAddOneTable(acHash, tbl, NULL, isNoGenome);
+    // add any subtracks that don't have their own setting overriding us
+    struct trackDb *subTdb;
+    for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
+        {
+        char *subTdbOff = cloneString(trackDbSetting(tdb, "tableBrowser"));
+        if (!subTdbOff)
+            acHashAddOneTable(acHash, subTdb->table, NULL, isNoGenome);
+        else
+            {
+            char *subTdbType = nextWord(&subTdbOff);
+            boolean subTdbIsNoGenome = sameString(subTdbType, "noGenome");
+            if (!subTdbIsNoGenome)
+                subTdbIsNoGenome = sameString(subTdbType, "off") || sameString(subTdbType, "tbNoGenome");
+            acHashAddOneTable(acHash, subTdb->table, NULL, subTdbIsNoGenome);
+            }
+        }
     }
 return acHash;
 }
