@@ -1484,7 +1484,7 @@ if(scriptName)
     if (endsWith(scriptName, "hgGenome"))
         {
 	safef(buf, sizeof(buf), "../cgi-bin/hgGenome?%s&hgGenome_doPsOutput=1", uiVars);
-    	dyStringPrintf(viewItems, "<li><a href='%s' id='%s'>%s</a></li>\n", buf, "pdfLink", "PDF/PS");
+    	dyStringPrintf(viewItems, "<li><a href='%s' id='%s'>%s</a></li>\n", buf, "pdfLink", "PDF");
         }
     else
 	{
