@@ -13,7 +13,10 @@ sub performRestAction($$$);
 my $http = HTTP::Tiny->new();
 # my $server = 'https://api.genome.ucsc.edu';
 # my $server = 'https://apibeta.soe.ucsc.edu';
+# api-test is actually hgwdev.gi.ucsc.edu == genome-test.gi.ucsc.edu
+# using /usr/local/apache/cgi-bin/hubApi
 my $server = 'https://api-test.gi.ucsc.edu';
+# hgwdev-api is using /usr/local/apache/cgi-bin-api/hubApi
 # my $server = 'https://hgwdev-api.gi.ucsc.edu';
 my $globalHeaders = { 'Content-Type' => 'application/json' };
 my $lastRequestTime = Time::HiRes::time();
