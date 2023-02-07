@@ -304,20 +304,21 @@ slRefFreeListAndVals(&blockList);
 return fosList;
 }
 
-typedef boolean (*BbFirstWordMatch)(char *line, int fieldIx, void *target);
+typedef boolean (*BbFirstWordMatch)(char *origLine, int fieldIx, void *target);
 /* A function that returns TRUE if first word in tab-separated line matches target. */
 
-static void extractField(char *line, int fieldIx, char **retField, int *retFieldSize)
+static void extractField(char *origLine, int fieldIx, char **retField, int *retFieldSize)
 /* Go through tab separated line and figure out start and size of given field. */
 {
 int i;
 fieldIx -= 3;	/* Skip over chrom/start/end, which are not in line. */
+char *line = origLine;
 for (i=0; i<fieldIx; ++i)
     {
     line = strchr(line, '\t');
     if (line == NULL)
         {
-	warn("Not enough fields in extractField of %s", line);
+	warn("Not enough fields in extractField of %s", origLine);
 	internalErr();
 	}
     line += 1;
