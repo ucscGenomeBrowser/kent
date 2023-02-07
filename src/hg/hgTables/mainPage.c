@@ -686,7 +686,7 @@ printStep(stepNumber++);
         {
         isChromGraphCt = isChromGraph(tdb);
         }
-    cgiMakeButton(hgtaDoSchema, "describe table schema");
+    cgiMakeButton(hgtaDoSchema, "data format description");
     hPrintf("</TD></TR>\n");
     }
 

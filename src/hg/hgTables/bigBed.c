@@ -444,12 +444,15 @@ struct asObject *as = bigBedAsOrDefault(bbi);
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s ", table);
 printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", firstWordInLine(sqlUnixTimeToDate(&timep, FALSE)));
-hPrintf("<B>Big Bed File:</B> %s", fileName);
+
+printDownloadLink("Big Bed", fileName);
+
 if (bbi->version >= 2)
     {
     hPrintf("<BR><B>Item Count:</B> ");
     printLongWithCommas(stdout, bigBedItemCount(bbi));
     }
+printTypeHelpDesc(tdb->type);
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);
 

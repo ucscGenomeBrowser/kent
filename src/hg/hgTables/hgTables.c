@@ -234,6 +234,43 @@ else
     return hgTablesName();
 }
 
+void printDownloadLink(char *typeLabel, char *fileName)
+/* print a link to the file, so the user can download it right here */
+{
+char *downPrefix = "";
+if (startsWith("/gbdb", fileName))
+    downPrefix = "https://hgdownload.soe.ucsc.edu";
+
+hPrintf("<B>%s File Download:</B> <A HREF='%s%s'>%s</A>", typeLabel, downPrefix, fileName, fileName);
+}
+
+boolean printTypeHelpDesc(char *type)
+/* print a little link to our help docs given a track type. Return true if file type is a big* file format. */
+{
+boolean isBig = FALSE;
+
+if (startsWith("vcf", type))
+    {
+    hPrintf("See the <A HREF=\"%s\" target=_blank>Variant Call Format specification</A> for  more details<BR>\n",
+            "http://www.1000genomes.org/wiki/analysis/vcf4.0");
+    }
+else if (startsWithWord("bigWig", type))
+    {
+    printf("<BR>The data is stored in the binary "
+           "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
+           "BigWig</A> format.\n");
+    isBig = TRUE;
+    }
+else if (startsWith("big", type))
+    {
+    printf("<BR>The data is stored in the binary "
+           "<A HREF=\"/goldenPath/help/bigBed.html\" TARGET=_BLANK>"
+           "BigBed</A> format.<BR>\n");
+    isBig = TRUE;
+    }
+
+return isBig;
+}
 
 void textOpen()
 /* Start up page in text format. (No need to close this).

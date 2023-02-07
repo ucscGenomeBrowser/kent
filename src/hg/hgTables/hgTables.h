@@ -90,6 +90,12 @@ boolean varOn(char *var);
 void printMainHelp();
 /* Put up main page help info. */
 
+void printDownloadLink(char *typeLabel, char *fileName);
+/* print a link to the file, so the user can download it right here */
+
+boolean printTypeHelpDesc(char *fileType);
+/* print a little link to our help docs given a file type. Return true if file type is a big* file format. */
+
 struct grp *showGroupField(char *groupVar, char *event, char *groupScript,
     struct sqlConnection *conn, boolean allTablesOk);
 /* Show group control. Returns selected group. */
