@@ -29,9 +29,11 @@ def bash(cmd):
     rawOutput = subprocess.run(cmd,check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
     return(rawOutput.stdout.split('\n')[0:-1])
 
+#Variable to get the current year
+year=datetime.now().strftime("%Y")
 #Get the last 5 error logs from the RR/euro
-latestLogs=bash("ls /hive/data/inside/wwwstats/RR/"+datetime.now().strftime("%Y")+"/hgw1")
-latestLogs_euro=bash("ls /hive/data/inside/wwwstats/euroNode/"+datetime.now().strftime("%Y")+"/")
+latestLogs=bash("ls /hive/data/inside/wwwstats/RR/"+year+"/hgw1")
+latestLogs_euro=bash("ls /hive/data/inside/wwwstats/euroNode/"+year+"/")
 latestLogs = latestLogs[len(latestLogs)-5:]
 latestLogs_euro=latestLogs_euro[len(latestLogs_euro)-5:]
 
@@ -52,17 +54,17 @@ for node in nodes:
         if node == 'RR':
             for machine in machines:
                 for log in latestLogs:#Copy the 5 latest error logs for each of the rr machines
-                    hgSearch=bash("zcat /hive/data/inside/wwwstats/"+node+"/"+datetime.now().strftime("%Y")+"/"+machine+"/"+log+"  | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
+                    hgSearch=bash("zcat /hive/data/inside/wwwstats/"+node+"/"+year+"/"+machine+"/"+log+"  | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
                     for i in hgSearch:
                         f.write(i+'\n')
         elif node == 'euroNode':
             for log in latestLogs_euro:
-                hgSearch=bash(" zcat /hive/data/inside/wwwstats/"+node+"/"+datetime.now().strftime("%Y")+"/"+log+" | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
+                hgSearch=bash(" zcat /hive/data/inside/wwwstats/"+node+"/"+year+"/"+log+" | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
                 for i in hgSearch:
                     f.write(i+'\n')
         else:
             for log in latestLogs:
-                hgSearch=bash(" zcat /hive/data/inside/wwwstats/"+node+"/"+datetime.now().strftime("%Y")+"/"+log+" | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
+                hgSearch=bash(" zcat /hive/data/inside/wwwstats/"+node+"/"+year+"/"+log+" | grep 'hgSearch' | tr '?' '\t' | cut -f 2 | grep 'search' | uniq")
                 for i in hgSearch:
                     f.write(i+'\n')
 f.close()
