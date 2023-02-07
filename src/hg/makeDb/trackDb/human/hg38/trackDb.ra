@@ -42,7 +42,7 @@ include liftOver.ra
 include exomeProbesets.ra
 include chm13LiftOver.ra
 include reMap.ra
-include recombRate.ra alpha
+include recombRate.ra alpha,beta
 
 track miRnaAtlas
 compositeTrack on
