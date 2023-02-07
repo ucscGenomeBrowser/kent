@@ -1021,8 +1021,8 @@ notSup01: setOutput
 
 # request a track type that is not yet supported: vcfTabix
 notSup02: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/getData/track?track=variants;chrom=chr1;genome=danRer11;hubUrl=http://research.nhgri.nih.gov/manuscripts/Burgess/zebrafish/downloads/NHGRI-1/hub.txt;jsonOutputArrays=1;maxItemsOutput=5'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -hubUrl="http://research.nhgri.nih.gov/manuscripts/Burgess/zebrafish/downloads/NHGRI-1/hub.txt" -genome="danRer11" -track="variants" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ 'https://hgwdev-api.gi.ucsc.edu/cgi-bin/hubApi/getData/track?track=gnomadGenomesVariantsV3;chrom=chr21;start=5033429;end=5033498;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg38" -track="gnomadGenomesVariantsV3" -chrom="chr21" -start="5033429" -end="5033498" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # request a track type that is not yet supported: ld2
