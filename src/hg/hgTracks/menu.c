@@ -251,7 +251,7 @@ if (recTrackSetsEnabled() && recTrackSetsForDb())
 
 // Create top items in view menu
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.psOutput=on", uiVars);
-appendLink(&links, buf, "PDF/PS", "pdfLink", FALSE);
+appendLink(&links, buf, "PDF", "pdfLink", FALSE);
 safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s",
       hgcNameAndSettings(), winStart, chromName, winStart, winEnd, database, uiVars);
 //appendLink(&links, buf, "DNA", "dnaLink", FALSE);

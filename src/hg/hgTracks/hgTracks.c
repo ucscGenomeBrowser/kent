@@ -5801,6 +5801,8 @@ if(sameString(type, "jsonp"))
 else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "eps"))
     {
     // following code bypasses html and return png's directly - see redmine 4888
+    // NB: Pretty sure the pdf and eps options here are never invoked.  I don't see any
+    // calls that would activate eps output, and pdf is locked behind an unused ifdef
     char *file;
     if(sameString(type, "pdf"))
         {
@@ -9565,14 +9567,11 @@ if (pdfFile != NULL)
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
-    // postscript
-    printf("EPS (Postscript) images are a variant of PDF and easier to import into some "
-            "drawing programs.\n");
-    printf("<UL style=\"margin-top: 5px;\">\n");
-    printf("<LI>Download <A HREF=\"%s\">the current browser graphic in EPS</A>", psTn.forCgi);
-    if (strlen(ideoPsTn.forCgi))
-        printf("<LI>Download <A HREF=\"%s\">the current chromosome ideogram in EPS</A>", ideoPsTn.forCgi);
-    printf("</UL>\n");
+
+    printf("EPS (PostScript) output has been discontinued in pursuit of additional features\n");
+    printf("that are not PostScript-compatible.  If you require PostScript output for your\n");
+    printf("workflow, please <a href='https://genome.ucsc.edu/contacts.html'>reach out to us</a>\n");
+    printf("and let us know what your needs are - we may be able to help.\n");
 
     // see redmine #1077
     printf("<div style=\"margin-top:15px\">Tips for producing quality images for publication:</div>\n");
@@ -10780,13 +10779,13 @@ dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').submit().click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').submit().click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('#defaultTracksMenuLink')[0].click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('#defaultTrackOrderMenuLink')[0].click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').submit().click(); }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('v d', function() { gotoGetDnaPage() }); \n"); // anon. function because gotoGetDnaPage is sometimes not loaded yet.
 

@@ -123,12 +123,13 @@ if (res < 0)
 	remainingTime.tv_usec = (long) (((msTimeout/1000)-remainingTime.tv_sec)*1000000);
 	while (1) 
 	    {
-	    fd_set mySet;
+	    fd_set mySet, exceptSet;
 	    FD_ZERO(&mySet);
 	    FD_SET(sd, &mySet);
+            exceptSet = mySet;
 	    // use tempTime (instead of using remainingTime directly) because on some platforms select() may modify the time val.
 	    struct timeval tempTime = remainingTime;
-	    res = select(sd+1, NULL, &mySet, &mySet, &tempTime);  
+	    res = select(sd+1, NULL, &mySet, &exceptSet, &tempTime);  
 	    if (res < 0) 
 		{
 		if (errno == EINTR)  // Ignore the interrupt 
