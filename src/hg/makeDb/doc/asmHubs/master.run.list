@@ -490,6 +490,7 @@
 ./runBuild GCA_902713425.1_fAciRut3.1_maternal_haplotype vertebrate Acipenser_ruthenus
 ./runBuild GCA_902713435.1_fAciRut3.1_paternal_haplotype vertebrate Acipenser_ruthenus
 ./runBuild GCA_902806625.1_Camarhynchus_parvulus_V1.1 birds Camarhynchus_parvulus
+./runBuild GCA_902829235.1_CLODIP2 invertebrate Cloeon_dipterum
 ./runBuild GCA_903684855.2_fDreTuH1.2 fish Danio_rerio
 ./runBuild GCA_903684865.1_fDreABH1.1 fish Danio_rerio
 ./runBuild GCA_903797595.2_bEriRub2.2 birds Erithacus_rubecula
