@@ -12,7 +12,7 @@ test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOu
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
 	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
 	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest makeBadTest \
-	transcriptOnlyTest
+	transcriptOnlyTest hprcTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -126,6 +126,10 @@ transcriptOnlyTest: mkout
 	${gff3ToGenePred} -allowMinimalGenes input/transcriptOnly.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
+# check features used by Ensembl HPRC annotations
+hprcTest: mkout
+	${gff3ToGenePred} -geneNameAttr=Name -rnaNameAttr=transcript_id input/hprc.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
 
 mkout:
 	@mkdir -p output
