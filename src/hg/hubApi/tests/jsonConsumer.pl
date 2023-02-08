@@ -15,7 +15,6 @@ my $http = HTTP::Tiny->new();
 # my $server = 'https://apibeta.soe.ucsc.edu';
 # api-test is actually hgwdev.gi.ucsc.edu == genome-test.gi.ucsc.edu
 # using /usr/local/apache/cgi-bin/hubApi
-my $server = 'https://api-test.gi.ucsc.edu';
 # hgwdev-api is using /usr/local/apache/cgi-bin-api/hubApi
 # my $server = 'https://hgwdev-api.gi.ucsc.edu';
 my $globalHeaders = { 'Content-Type' => 'application/json' };
@@ -25,6 +24,7 @@ my $requestCount = 0;
 
 ##############################################################################
 # command line options
+my $server = 'https://api-test.gi.ucsc.edu'; # defaults to api-test but can be set via "binary" command line arg
 my $endpoint = "";
 my $hubUrl = "";
 my $genome = "";
@@ -463,7 +463,8 @@ GetOptions ("hubUrl=s" => \$hubUrl,
     "trackLeavesOnly"    => \$trackLeavesOnly,
     "measureTiming"    => \$measureTiming,
     "jsonOutputArrays"    => \$jsonOutputArrays,
-    "maxItemsOutput=s"   => \$maxItemsOutput)
+    "maxItemsOutput=s"   => \$maxItemsOutput,
+    "serverName=s"           => \$server)
     or die "Error in command line arguments\n";
 
 if ($test0) {
