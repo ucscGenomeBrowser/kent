@@ -1,0 +1,38 @@
+##gff-version 3
+# from Ensembl Homo_sapiens-GCA_018466835.1-2022_07-genes.gff3.gz
+#!genome-build  HG02257.alt.pat.f1_v2
+#!genome-version HG02257.alt.pat.f1_v2
+#!genome-date 2021-05
+#!genome-build-accession GCA_018466835.1
+#!genebuild-last-updated 2022-07
+###
+JAGYVI010000001.1	ensembl	pseudogene	10319	12856	.	+	.	ID=gene:ENSG04835059029;biotype=transcribed_unprocessed_pseudogene;description=%3Bparent_gene%3D.%3Bmapping_type%3Dpotential_paralogue;gene_id=ENSG04835059029;version=1
+JAGYVI010000001.1	ensembl	pseudogenic_transcript	10319	12856	.	+	.	ID=transcript:ENST04835233199;Parent=gene:ENSG04835059029;biotype=transcribed_unprocessed_pseudogene;tag=Ensembl_canonical;transcript_id=ENST04835233199;version=1
+JAGYVI010000001.1	ensembl	exon	10319	10677	.	+	.	Parent=transcript:ENST04835233199;constitutive=1;exon_id=ENSE04835748428;rank=1;version=1
+JAGYVI010000001.1	ensembl	exon	11059	11167	.	+	.	Parent=transcript:ENST04835233199;constitutive=1;exon_id=ENSE04835748429;rank=2;version=1
+JAGYVI010000001.1	ensembl	exon	11667	12102	.	+	.	Parent=transcript:ENST04835233199;constitutive=1;exon_id=ENSE04835748430;rank=3;version=1
+JAGYVI010000001.1	ensembl	exon	12105	12161	.	+	.	Parent=transcript:ENST04835233199;constitutive=1;exon_id=ENSE04835748431;rank=4;version=1
+JAGYVI010000001.1	ensembl	exon	12163	12404	.	+	.	Parent=transcript:ENST04835233199;constitutive=1;exon_id=ENSE04835748432;rank=5;version=1
+JAGYVI010000001.1	ensembl	exon	12406	12856	.	+	.	Parent=transcript:ENST04835233199;constitutive=1;exon_id=ENSE04835748433;rank=6;version=1
+###
+JAGYVI010000001.1	ensembl	ncRNA_gene	33019	34489	.	-	.	ID=gene:ENSG04835059031;Name=FAM138B;biotype=lncRNA;description=family with sequence similarity 138 member B [Source:HGNC Symbol%3BAcc:HGNC:33582]%3Bparent_gene%3DENSG00000226516.7%3Bmapping_type%3Dpotential_paralogue%3Bparent_gene_display_xref%3DFAM138B;gene_id=ENSG04835059031;version=1
+JAGYVI010000001.1	ensembl	lnc_RNA	33019	34489	.	-	.	ID=transcript:ENST04835233201;Parent=gene:ENSG04835059031;biotype=lncRNA;tag=Ensembl_canonical;transcript_id=ENST04835233201;version=1
+JAGYVI010000001.1	ensembl	exon	33019	33889	.	-	.	Parent=transcript:ENST04835233201;constitutive=1;exon_id=ENSE04835748440;rank=2;version=1
+JAGYVI010000001.1	ensembl	exon	34129	34489	.	-	.	Parent=transcript:ENST04835233201;constitutive=1;exon_id=ENSE04835748439;rank=1;version=1
+###
+JAGYVI010000001.1	ensembl	gene	58643	60369	.	+	.	ID=gene:ENSG04835059034;biotype=TEC;description=%3Bparent_gene%3D.%3Bmapping_type%3Dpotential_paralogue;gene_id=ENSG04835059034;version=1
+JAGYVI010000001.1	ensembl	unconfirmed_transcript	58643	60369	.	+	.	ID=transcript:ENST04835233204;Parent=gene:ENSG04835059034;biotype=TEC;tag=Ensembl_canonical;transcript_id=ENST04835233204;version=1
+JAGYVI010000001.1	ensembl	exon	58643	59037	.	+	.	Parent=transcript:ENST04835233204;constitutive=1;exon_id=ENSE04835748444;rank=1;version=1
+JAGYVI010000001.1	ensembl	exon	59039	59098	.	+	.	Parent=transcript:ENST04835233204;constitutive=1;exon_id=ENSE04835748445;rank=2;version=1
+JAGYVI010000001.1	ensembl	exon	59100	59190	.	+	.	Parent=transcript:ENST04835233204;constitutive=1;exon_id=ENSE04835748446;rank=3;version=1
+JAGYVI010000001.1	ensembl	exon	59196	59546	.	+	.	Parent=transcript:ENST04835233204;constitutive=1;exon_id=ENSE04835748447;rank=4;version=1
+JAGYVI010000001.1	ensembl	exon	59548	59704	.	+	.	Parent=transcript:ENST04835233204;constitutive=1;exon_id=ENSE04835748448;rank=5;version=1
+JAGYVI010000001.1	ensembl	exon	59789	60369	.	+	.	Parent=transcript:ENST04835233204;constitutive=1;exon_id=ENSE04835748449;rank=6;version=1
+###
+JAGYVI010000001.1	ensembl	ncRNA_gene	20800526	20800654	.	+	.	ID=gene:ENSG04835026263;Name=SNORA30B;biotype=snoRNA;description=small nucleolar RNA%2C H/ACA box 30B [Source:HGNC Symbol%3BAcc:HGNC:52200]%3Bparent_gene_display_xref%3DSNORA30B;gene_id=ENSG04835026263;version=1
+JAGYVI010000001.1	ensembl	snoRNA	20800526	20800654	.	+	.	ID=transcript:ENST04835101259;Parent=gene:ENSG04835026263;biotype=snoRNA;tag=Ensembl_canonical;transcript_id=ENST04835101259;version=1
+JAGYVI010000001.1	ensembl	exon	20800526	20800654	.	+	.	Parent=transcript:ENST04835101259;constitutive=1;exon_id=ENSE04835320461;rank=1;version=1
+###
+JAGYVI010000005.1	ensembl	ncRNA_gene	7013407	7013590	.	+	.	ID=gene:ENSG04835029986;biotype=scaRNA;gene_id=ENSG04835029986;version=1
+JAGYVI010000005.1	ensembl	scRNA	7013407	7013590	.	+	.	ID=transcript:ENST04835116634;Parent=gene:ENSG04835029986;biotype=scaRNA;tag=Ensembl_canonical;transcript_id=ENST04835116634;version=1
+JAGYVI010000005.1	ensembl	exon	7013407	7013590	.	+	.	Parent=transcript:ENST04835116634;constitutive=1;exon_id=ENSE04835372785;rank=1;version=1

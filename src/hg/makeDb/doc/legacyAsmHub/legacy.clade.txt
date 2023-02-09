@@ -47,6 +47,7 @@ GCA_001857705.1_PanPar1.0	mammals
 GCA_001890085.1_ASM189008v1	mammals
 GCA_001922835.1_NIST_Tur_tru_v1	mammals
 GCA_002007445.1_ASM200744v1	mammals
+GCA_002007445.2_ASM200744v2	mammals
 GCA_002102435.1_Ovir.te_1.0	mammals
 GCA_002201575.1_ASM220157v1	mammals
 GCA_002288905.2_ASM228890v2	mammals
@@ -81,6 +82,7 @@ GCA_004027935.1_ChrAsi_v1_BIUU	mammals
 GCA_004115215.3_mOrnAna1.pri.v3	mammals
 GCA_004115265.2_mRhiFer1_v1.p	mammals
 GCA_004365145.1_OryAfe_v1_BIUU	mammals
+GCA_006229205.1_meerkat_22Aug2017_6uvM2_HiC	mammals
 GCA_007364275.2_fArcCen1	fish
 GCA_009663435.1_Callithrix_jacchus_cj1700_1.0	primates
 GCA_009762305.1_mZalCal1.pri	mammals
@@ -224,6 +226,7 @@ GCF_008831285.1_ASM883128v1	plants
 GCF_009764565.2_rDerCor1.pri.v3	vertebrate
 GCF_009819885.1_bCatUst1.pri	birds
 GCF_009828535.1_HMol	primates
+GCF_009858895.2_ASM985889v3	viral
 GCF_010909765.1_sAmbRad1.pri	vertebrate
 GCF_011064685.1_ZJU_Sfru_1.0	invertebrate
 GCF_013339695.1_ASM1333969v1	invertebrate
@@ -243,5 +246,6 @@ GCF_900324485.1_fMasArm1.1	fish
 GCF_900496995.1_bAquChr1.2	birds
 GCF_900634795.2_fBetSpl5.2	fish
 GCF_900700415.1_Ch_v2.0.2	fish
+GCF_900747795.1_fErpCal1.1	vertebrate
 GCF_902150015.1_genome_assembly_l500	birds
 GCF_903992535.1_mArvAmp1.1	mammals

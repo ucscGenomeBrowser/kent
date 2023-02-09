@@ -123,7 +123,7 @@ GCA_902686455.1_mSciVul1.1	Eurasian red squirrel (2019 VGP)
 GCF_902655055.1_mLutLut1.2	Eurasian river otter
 GCF_903992535.2_mArvAmp1.2	Eurasian water vole (v2 2021)
 GCF_000181275.1_SorAra2.0	European shrew
-GCA_947179515.1_mApoSyl1.1	European woodmouse (2022 VGP)
+GCF_947179515.1_mApoSyl1.1	European woodmouse (2022 refseq)
 GCA_004027185.1_GliGli_v1_BIUU	fat dormouse
 GCA_002215935.1_ASM221593v1	fat sand rat
 GCF_022837055.1_UM_Priviv_1.0	fishing cat (Anna 2022 U Missouri)
@@ -218,7 +218,7 @@ GCF_001685135.1_ManJav1.0	Malayan pangolin (MP_PG03-UM 2016 refseq)
 GCF_014570535.1_YNU_ManJav_2.0	Malayan pangolin YNU ManJav 2.0
 GCA_001651235.1_ASM165123v1	Masai giraffe (MA1 2016 Penn St)
 GCA_004024765.1_ZapHud_v1_BIUU	meadow jumping mouse
-GCF_006229205.1_meerkat_22Aug2017_6uvM2_HiC	meerkat (VVHF042 2019 DNA Zoo)
+GCF_006229205.1_meerkat_22Aug2017_6uvM2_HiC	meerkat (VVHF042 2019 DNA Zoo refseq)
 GCF_000493695.1_BalAcu1.0	minke whale (2013 refseq)
 GCF_002204375.1_MunDraft-v1.0	Mongolian gerbil (243 2017 Lucigen Corp.)
 GCA_008131255.1_ASM813125v1	Mongolian gerbil (EAM2014 2019 BGI)
