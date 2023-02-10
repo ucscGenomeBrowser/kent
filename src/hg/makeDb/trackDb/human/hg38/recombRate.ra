@@ -1,13 +1,13 @@
 # must not use the track name "recombRate" as there is some special code 
 # that leads to crashes if I use that name.
 track recombRate2
-shortLabel Recombination rate
+shortLabel Recomb Rate
 longLabel Recombination rate: Genetic maps from deCODE and 1000 Genomes
 type bed
 superTrack on hide
 group map
 visibility hide
-pennantIcon New red
+pennantIcon New red ../goldenPath/newsarch.html#021023 "Released Feb. 10, 2023"
 color 0,130,0
 
     track recombAvg
