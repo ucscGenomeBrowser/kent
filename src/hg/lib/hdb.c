@@ -49,6 +49,7 @@
 #include "wikiLink.h"
 #include "cheapcgi.h"
 #include "chromAlias.h"
+#include "asmEquivalent.h"
 
 
 #ifdef LOWELAB
@@ -628,6 +629,8 @@ for (i = 0;  dbToGcf[i].db != NULL;  i++)
         gcf = cloneString(dbToGcf[i].gcf);
         break;
         }
+if (NULL == gcf)
+    gcf = asmEquivalentUcscToNCBI(db);
 return gcf;
 }
 
@@ -650,6 +653,8 @@ if (! trackHubDatabase(db))
         }
     hDisconnectCentral(&conn);
     }
+if (NULL == gca)
+    gca = asmEquivalentUcscToNCBI(db);
 return gca;
 }
 

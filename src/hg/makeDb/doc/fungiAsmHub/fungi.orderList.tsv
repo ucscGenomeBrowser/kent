@@ -382,7 +382,8 @@ GCF_000002515.2_ASM251v1	budding yeast K.lactis
 GCF_001417885.1_Kmar_1.0	budding yeast K.marxianus DMKU3-1042
 GCF_000348985.1_ASM34898v1	budding yeast K.naganishii CBS 8797
 GCA_001708105.1_ASM170810v1	budding yeast K.pastoris ATCC 28485
-GCF_000027005.1_ASM2700v1	budding yeast K.phaffii GS115
+GCF_000027005.1_ASM2700v1	budding yeast K.phaffii (GS115 2009 refseq)
+GCA_001746955.1_ASM174695v1	budding yeast K.phaffii (GS115 2016 genbank)
 GCF_000149685.1_ASM14968v1	budding yeast L.elongisporus NRRL YB-4239
 GCF_000938715.1_LALA0	budding yeast L.lanzarotensis
 GCF_000142805.1_ASM14280v1	budding yeast L.thermotolerans CBS 6340

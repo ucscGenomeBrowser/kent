@@ -42,7 +42,6 @@ GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (WGS:JAMKFC01 2022 VGP)
 GCA_025201965.1_rGopFla2.pat.asm	Mexican gopher tortoise (WGS:JAMKFD01 2022 VGP)
 GCF_017654505.1_ASM1765450v1	Mississippi paddlefish
 GCF_013100865.1_CAS_Tse_1.0	red-eared slider turtle
-GCF_900747795.2_fErpCal1.3	reedfish
 GCF_016161935.1_ASM1616193v1	Reeves's turtle
 GCA_009819545.1_rLacAgi1.alt	sand lizard (alt pseudohaplotype 2019 VGP)
 GCF_009819535.1_rLacAgi1.pri	sand lizard (2019 VGP)
@@ -50,7 +49,7 @@ GCF_001447785.1_Gekko_japonicus_V1.1	Schlegel's Japanese gecko
 GCA_010993595.1_kPetMar1.alt	sea lamprey (alt pseudohaplotype 2020 VGP)
 GCF_010993605.1_kPetMar1.pri	sea lamprey (2020 VGP)
 GCF_902713615.1_sScyCan1.1	smaller spotted catshark
-GCA_009764475.1_sPriPec2.pri	smalltooth sawfish (2019 VGP)
+GCF_009764475.1_sPriPec2.1.pri	smalltooth sawfish (2019 refseq)
 GCA_009764485.1_sPriPec2.alt	smalltooth sawfish (alt pseudohaplotype 2019 VGP)
 GCF_000242695.1_LepOcu1	spotted gar
 GCF_010645085.1_ASM1064508v1	sterlet

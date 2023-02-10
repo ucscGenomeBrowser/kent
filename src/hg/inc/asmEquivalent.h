@@ -10,14 +10,7 @@
 
 extern char *asmEquivalentCommaSepFieldNames;
 
-enum asmEquivalentSourceAuthority
-    {
-    asmEquivalentEnsembl = 0,
-    asmEquivalentUcsc = 1,
-    asmEquivalentGenbank = 2,
-    asmEquivalentRefseq = 3,
-    };
-enum asmEquivalentDestinationAuthority
+enum asmEquivalentAuthority
     {
     asmEquivalentEnsembl = 0,
     asmEquivalentUcsc = 1,
@@ -30,8 +23,8 @@ struct asmEquivalent
     struct asmEquivalent *next;  /* Next in singly linked list. */
     char *source;	/* assembly name */
     char *destination;	/* equivalent assembly name */
-    enum asmEquivalentSourceAuthority sourceAuthority;	/* origin of source assembly */
-    enum asmEquivalentDestinationAuthority destinationAuthority;	/* origin of equivalent assembly */
+    enum asmEquivalentAuthority sourceAuthority;	/* origin of source assembly */
+    enum asmEquivalentAuthority destinationAuthority;	/* origin of equivalent assembly */
     long long matchCount;	/* number of exactly matching sequences */
     long long sourceCount;	/* number of sequences in source assembly */
     long long destinationCount;	/* number of sequences in equivalent assembly */
@@ -96,6 +89,15 @@ void asmEquivalentJsonOutput(struct asmEquivalent *el, FILE *f);
 /* Print out asmEquivalent in JSON format. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+char *asmEquivalentUcscToNCBI(char *ucscName);
+/* check if there is a RefSeq/GenBank equivalent to this UCSC assembly name.
+ *    If RefSeq exists, return that first, else if GenBank than return that.
+ * No checking of sequence match counts in this first implementation,
+ *    therefore, could be a fuzzy match, and since it is returning only the
+ *    first one, it might not be the best match.  Could add more specifics
+ *    later to get better match.
+ */
 
 #endif /* ASMEQUIVALENT_H */
 
