@@ -499,12 +499,41 @@ to use LiftOver</b> to convert SNPs between two assembly versions. Using LiftOve
 convert a very small region, especially a single base SNP, is not always a trivial task as the
 alignment may not get a high enough score to be considered a successful conversion.</p>
 <p>
+The mapping from one genome assembly to the next is automatically generated from sequence alignments
+and is not complete nor perfect, just a best attempt. The stability of rsIDs is why we recommend
+mapping across assemblies using rsIDs first and then falling back to using cross-assembly mappings
+to look up the positions of items that didn't map. When an rsID in hg18 is not found in the hg38
+dbSNP data, that rsID has been withdrawn or replaced by a different rsID. In that case, mapping the
+hg18 position of the disappeared rsID to hg38 and looking for a new rsID at the corresponding
+position may help to find the new rsID.</p>
+<p>
+dbSNP started assigning rsIDs in the 1990s, before the human genome was assembled. At that point,
+SNPs were defined by flanking sequences with the varying base(s) in the middle -- local sequence
+context, with no genomic location because there was no genome. rsIDs are supposed to be stable
+across genome assemblies despite the changing genomic positions. Regardless of the genome assembly
+version, "rs429358" refers to the same polymorphic variant in the 4th exon of the ApoE gene with T
+as the major allele and C as the minor allele. Its genomic position in hg18 is chr19:50103781, and
+its genomic position in hg38 is chr19:44908684.</p>
+<p>
 <b>Instead, the recommended process</b> to convert a SNP's coordinates between assemblies is to use
 a SNP track to search for each rsID on the target genome assembly. For example, after creating a
 list of rsIDs for your conversion, you would then search for each rsID on the target's Genome
 Browser using the dbSNP track for human assemblies (i.e. hg19 or hg38) or the EVA SNP track on mouse
-assemblies (i.e. mm10 or mm39) to perform the conversion.
-</p>
+assemblies (i.e. mm10 or mm39) to perform the conversion.</p>
+<p>To summarize the setps:</p>
+<ol>
+  <li>Create a file of all rsIDs</li>
+  <li>Use the Table Browser to map the file of rsIDs to the other assembly's coordinates</li>
+  <li>Create another file containing any rsIDs that were not mapped by the Table Browser</li>
+  <li>Using the file from the previous step, use the Table Browser to create a BED4 file for the
+      rsIDs that were not mapped by the Table Browser</li>
+  <li>Run LiftOver on the BED4 file to get the new coordinates in the other assembly</li>
+  <li>Use the Data Integrator to map the LiftOver results to new rsIDs where possible</li>
+  <li>Combine the Table Browser rsID-mapped BED4 with the LiftOver/Data Integrator-mapped BED4.
+      Beware duplicates that will cause downstream problems. You will need to decide whether to
+      remove duplicates as unreliable or resolve duplicates</li>
+</ol>
+<h6>How can I convert a large set of SNP annotations?</h6>
 <p>
 For bulk conversions, the <a href="/cgi-bin/hgTables">Table Browser</a> can be used to extract the
 coordinates for the rsIDs on the target assembly. More information about performing batch queries on
