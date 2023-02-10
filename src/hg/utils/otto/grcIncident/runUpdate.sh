@@ -36,7 +36,7 @@ do
   mkdir -p ${D}/log/${YM}
 done
 
-./grcUpdate.sh GRCh38 hg38 GRCh38.p13_issues human/GRC/Issue_Mapping \
+./grcUpdate.sh GRCh38 hg38 GRCh38.p14_issues human/GRC/Issue_Mapping \
   > GRCh38/log/${YM}/${DS}.txt 2>&1
 
 ./grcUpdate.sh GRCh37 hg19 GRCh37.p13_issues human/GRC/Issue_Mapping \
@@ -67,5 +67,12 @@ WC=`tail --quiet --lines=1 ${TOP}/GRCg6a/log/${YM}/${DS}.txt ${TOP}/GRCh37/log/$
 if [ "${WC}" -ne 9 ]; then
     ${ECHO} "incidentDb/runUpdate.sh failing" 1>&2
     ${ECHO} "WC: ${WC} <- should be nine" 1>&2
+    for T in ${TOP}/GRCg6a/log/${YM}/${DS}.txt ${TOP}/GRCh37/log/${YM}/${DS}.txt ${TOP}/GRCh38/log/${YM}/${DS}.txt ${TOP}/GRCm38/log/${YM}/${DS}.txt ${TOP}/GRCz10/log/${YM}/${DS}.txt ${TOP}/GRCz11/log/${YM}/${DS}.txt ${TOP}/Gallus_gallus-5.0/log/${YM}/${DS}.txt ${TOP}/MGSCv37/log/${YM}/${DS}.txt ${TOP}/Zv9/log/${YM}/${DS}.txt
+    do
+       c=`tail --lines=1 "${T}" | grep SUCCESS | wc -l`
+       if [ "${c}" -ne 1 ]; then
+          printf "# failing %s\n" "${T}" 1>&2
+       fi
+    done
     exit 255
 fi
