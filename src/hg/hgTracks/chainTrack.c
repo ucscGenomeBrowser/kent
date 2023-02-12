@@ -20,6 +20,7 @@
 #include "hubConnect.h"
 #include "chromAlias.h"
 #include "hgConfig.h"
+#include "snake.h"
 
 struct cartOptions
     {
@@ -131,12 +132,8 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 }
 
-void chainDraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw chained features. This loads up the simple features from
- * the chainLink table, calls linkedFeaturesDraw, and then
- * frees the simple features again. */
+static void loadLinks(struct track *tg, int seqStart, int seqEnd,
+        enum trackVisibility vis)
 {
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
@@ -151,10 +148,6 @@ int start, end, extra;
 struct simpleFeature *lastSf = NULL;
 int maxOverLeft = 0, maxOverRight = 0;
 int overLeft, overRight;
-
-if (tg->items == NULL)		/*Exit Early if nothing to do */
-    return;
-
 void *closure;
 struct sqlClosure sqlClosure;
 struct bbClosure bbClosure;
@@ -218,7 +211,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     }
 
 /* if some chains are actually loaded */
-if (hash->size)
+if (hash->elCount) 
     {
     boolean isSplit = TRUE;
     /* Make up range query. */
@@ -319,19 +312,40 @@ if (hash->size)
 	    }
 	}
     }
-linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-	font, color, vis);
-/* Cleanup time. */
 for (lf = tg->items; lf != NULL; lf = lf->next)
-    lf->components = NULL;
+        {
+	if ((lf) && lf->orientation == -1)
+	    {
+            struct simpleFeature *sf = lf->components;
 
+            for(; sf; sf = sf->next)
+                {
+                int temp;
+
+                temp = sf->qStart;
+                sf->qStart = lf->qSize - sf->qEnd;
+                sf->qEnd = lf->qSize - temp;
+                }
+	    }
+        }
 if (tg->isBigBed)
     bbiFileClose(&bbClosure.bbi);
 else
     hFreeConn(&sqlClosure.conn);
+    }
+void chainDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw chained features. This loads up the simple features from
+ * the chainLink table, calls linkedFeaturesDraw, and then
+ * frees the simple features again. */
+{
 
-lmCleanup(&lm);
-freeHash(&hash);
+if (tg->items == NULL)		/*Exit Early if nothing to do */
+    return;
+
+linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+	font, color, vis);
 }
 
 void bigChainLoadItems(struct track *tg)
@@ -411,6 +425,7 @@ void chainLoadItems(struct track *tg)
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
+boolean doSnake = cartOrTdbBoolean(cart, tg->tdb, "doSnake" , FALSE);
 char *table = tg->table;
 struct chain chain;
 int rowOffset;
@@ -483,7 +498,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     int len = strlen(chain.qName) + 32;
     lf->name = needMem(len);
-    safef(lf->name, len, "%s %c %dk", chain.qName, chain.qStrand, qs/1000);
+    if (!doSnake)
+        safef(lf->name, len, "%s %c %dk", chain.qName, chain.qStrand, qs/1000);
+    else
+        safef(lf->name, len, "%s", chain.qName);
     safef(buf, sizeof(buf), "%d", chain.id);
     lf->extra = cloneString(buf);
     slAddHead(&list, lf);
@@ -499,7 +517,9 @@ else if ((tg->visibility == tvDense) &&
 else
     slReverse(&list);
 tg->items = list;
+loadLinks(tg, winStart, winEnd, tvFull);
 
+maybeLoadSnake(tg);
 
 /* Clean up. */
 sqlFreeResult(&sr);
@@ -535,14 +555,6 @@ void chainMethods(struct track *tg, struct trackDb *tdb,
 	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
 {
-
-boolean doSnake = cartOrTdbBoolean(cart, tg->tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", FALSE);
-
-extern void snakeMethods(struct track *tg, struct trackDb *tdb,
-	int wordCount, char *words[]);
-if (doSnake)
-    return snakeMethods(tg, tdb, wordCount, words);
-
 struct cartOptions *chainCart;
 
 AllocVar(chainCart);

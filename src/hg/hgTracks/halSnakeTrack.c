@@ -29,7 +29,11 @@
 #include "halBlockViz.h"
 #include "bigPsl.h"
 
-#include "snake.h"
+struct snakeInfo
+{
+int maxLevel;
+} ;
+
 
 // this is the number of pixels used by the target self-align bar
 #define DUP_LINE_HEIGHT	4

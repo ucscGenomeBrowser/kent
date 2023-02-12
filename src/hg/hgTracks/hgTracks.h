@@ -409,6 +409,7 @@ struct linkedFeatures
     char *label;                        /* Label for bigBeds. */
     int qSize;				/* Query size for chain/bigChain */
     double squishyPackVal;              /* the squishyPoint value for this item. */
+    struct snakeInfo *snakeInfo;           /* if we're in snake mode, here's the deets */
     };
 
 struct linkedFeaturesSeries
@@ -937,6 +938,9 @@ int simpleFeatureCmp(const void *va, const void *vb);
 
 int linkedFeaturesCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
+
+int linkedFeaturesCmpName(const void *va, const void *vb);
+/* Help sort linkedFeatures by name. */
 
 int linkedFeaturesCmpStart(const void *va, const void *vb);
 /* Help sort linkedFeatures by starting pos. */

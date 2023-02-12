@@ -29,43 +29,9 @@
 #include "snake.h"
 
 // this is the number of pixels used by the target self-align bar
-#define DUP_LINE_HEIGHT	4
+#define DUP_LINE_HEIGHT	0
 // this is the number of pixels used when displaying the insertion lengths
-#define INSERT_TEXT_HEIGHT 10
-
-struct snakeFeature
-    {
-    struct snakeFeature *next;
-    int start, end;			/* Start/end in browser coordinates. */
-    int qStart, qEnd;			/* query start/end */
-    int level;				/* level in snake */
-    int orientation;			/* strand... -1 is '-', 1 is '+' */
-    boolean drawn;			/* did we draw this feature? */
-    char *qSequence;			/* may have sequence, or NULL */
-    char *tSequence;			/* may have sequence, or NULL */
-    char *qName;			/* chrom name on other species */
-    unsigned pixX1, pixX2;              /* pixel coordinates within window */
-    };
-
-#ifdef NOTNOW
-static int snakeFeatureCmpTStart(const void *va, const void *vb)
-/* sort by start position on the target sequence */
-{
-const struct snakeFeature *a = *((struct snakeFeature **)va);
-const struct snakeFeature *b = *((struct snakeFeature **)vb);
-int diff = a->start - b->start;
-
-return diff;
-}
-#endif
-static int snakeFeatureCmpQSequence(const void *va, const void *vb)
-/* sort by sequence name of the query sequence */
-{
-const struct snakeFeature *a = *((struct snakeFeature **)va);
-const struct snakeFeature *b = *((struct snakeFeature **)vb);
-
-return strcmp(a->qSequence, b->qSequence);
-}
+#define INSERT_TEXT_HEIGHT 0
 
 static int snakeFeatureCmpQStart(const void *va, const void *vb)
 /* sort by start position on the query sequence */
@@ -416,9 +382,9 @@ struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 if (lf->components == NULL)
     return;
 
-// we use the codons field to keep track of whether we already
+// we use the snakeInfo field to keep track of whether we already
 // calculated the height of this snake
-if (lf->codons == NULL)
+if (lf->snakeInfo == NULL)
     {
     clearLevels();
     struct snakeFeature *sf;
@@ -489,7 +455,7 @@ if (lf->codons == NULL)
     struct snakeInfo *si;
     AllocVar(si);
     si->maxLevel = maxLevel;
-    lf->codons = (struct simpleFeature *)si;
+    lf->snakeInfo = si;
     }
 }
 
@@ -604,9 +570,9 @@ struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 if (lf->components == NULL)
     return;
 
-// we use the codons field to keep track of whether we already
+// we use the snakeIfno field to keep track of whether we already
 // calculated the height of this snake
-if (lf->codons == NULL)
+if (lf->snakeInfo == NULL)
     {
     clearLevels();
 
@@ -620,7 +586,7 @@ if (lf->codons == NULL)
     struct snakeInfo *si;
     AllocVar(si);
     si->maxLevel = maxLevel;
-    lf->codons = (struct simpleFeature *)si;
+    lf->snakeInfo = si;
     }
 }
 
@@ -639,25 +605,13 @@ if (tg->visibility == tvFull)
 else if (tg->visibility == tvPack) 
     calcPackSnake(tg, item);
 
-struct snakeInfo *si = (struct snakeInfo *)lf->codons;
+struct snakeInfo *si = (struct snakeInfo *)lf->snakeInfo;
 int lineHeight = tg->lineHeight ;
 int multiplier = 1;
 
 if (tg->visibility == tvFull)
     multiplier = 2;
 return (si->maxLevel + 1) * (multiplier * lineHeight);
-}
-
-static int linkedFeaturesCmpScore(const void *va, const void *vb)
-/* Help sort linkedFeatures by score */
-{
-const struct linkedFeatures *a = *((struct linkedFeatures **)va);
-const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
-if (a->score > b->score)
-    return -1;
-else if (a->score < b->score)
-    return 1;
-return 0;
 }
 
 static int snakeHeight(struct track *tg, enum trackVisibility vis)
@@ -691,47 +645,6 @@ if (height < DUP_LINE_HEIGHT + tg->lineHeight)
 return height;
 }
 
-static void snakeDraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw linked features items. */
-{
-struct slList *item;
-int y;
-struct linkedFeatures  *lf;
-double scale = scaleForWindow(width, seqStart, seqEnd);
-int height = snakeHeight(tg, vis);
-
-hvGfxSetClip(hvg, xOff, yOff, width, height);
-
-if ((tg->visibility == tvFull) || (tg->visibility == tvPack))
-    {
-    // score snakes by how many bases they cover
-    for (item = tg->items; item != NULL; item = item->next)
-	{
-	lf = (struct linkedFeatures *)item;
-	struct snakeFeature  *sf;
-
-	lf->score = 0;
-	for (sf =  (struct snakeFeature *)lf->components; sf != NULL;  sf = sf->next)
-	    {
-	    lf->score += sf->end - sf->start;
-	    }
-	}
-
-    slSort(&tg->items, linkedFeaturesCmpScore);
-    }
-
-y = yOff;
-for (item = tg->items; item != NULL; item = item->next)
-    {
-    if(tg->itemColor != NULL) 
-	color = tg->itemColor(tg, item, hvg);
-    tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-    if (vis == tvFull)
-	y += tg->itemHeight(tg, item);
-    } 
-}
 
 //  this is a 16 color palette with every other color being a lighter version of
 //  the color before it
@@ -740,12 +653,6 @@ static int snakePalette2[] =
 0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
 };
 
-#ifdef NOTNOW
-static int snakePalette[] =
-{
-0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
-};
-#endif
 
 static Color hashColor(char *name)
 {
@@ -859,35 +766,6 @@ if (withLabels)
         hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
         }
     }
-
-#ifdef NOTNOW
-// let's draw some blue bars for the duplications
-struct hal_target_dupe_list_t* dupeList = lf->dupeList;
-
-int count = 0;
-if ((tg->visibility == tvFull) || (tg->visibility == tvPack)) 
-    {
-    for(; dupeList ; dupeList = dupeList->next, count++)
-	{
-	struct hal_target_range_t *range = dupeList->tRange;
-
-	unsigned int colorInt = snakePalette[count % (sizeof(snakePalette)/sizeof(Color))];
-	Color color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
-
-	for(; range; range = range->next)
-	    {
-	    int s = range->tStart;
-	    int e = range->tStart + range->size;
-	    int sClp = (s < winStart) ? winStart : s;
-	    int eClp = (e > winEnd) ? winEnd : e;
-	    int x1 = round((sClp - winStart)*scale) + xOff;
-	    int x2 = round((eClp - winStart)*scale) + xOff;
-	    hvGfxBox(hvg, x1, y , x2-x1, DUP_LINE_HEIGHT - 1 , color);
-	    }
-	}
-    y+=DUP_LINE_HEIGHT;
-    }
-#endif
 
 // now we're going to draw the boxes
 
@@ -1091,58 +969,9 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
             long long queryInsertSize = llabs(lastQEnd - qs);
         if (queryInsertSize > 100)
             color = MG_ORANGE;
-#ifdef NOTNOW
-            long long targetInsertSize;
-            if (sf->orientation == 1)
-                targetInsertSize = s - lastE;
-            else
-                targetInsertSize = lastS - e;
-            int blue = 0;
-            int red = 0;
-            int green = 0;
-            if (queryInsertSize > targetInsertSize) {
-                double frac = ((double) queryInsertSize - targetInsertSize) / targetInsertSize;
-                if (frac > 1.0)
-                    frac = 1.0;
-                red = 255 - 255 * frac;
-                blue = 255 * frac;
-            } else {
-                double frac = ((double) targetInsertSize - queryInsertSize) / targetInsertSize;
-                if (frac > 1.0)
-                    frac = 1.0;
-                red = 255 - 255 * frac;
-                green = 255 * frac;
-            }
-            color = hvGfxFindColorIx(hvg, red, green, blue);
-#endif
         }
         double queryGapNFrac = 0.0;
         double queryGapMaskedFrac = 0.0;
-        #ifdef NOTNOW
-        if ((qs > lastQEnd) && qs - lastQEnd < 1000000) {
-            // sketchy
-            char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
-            char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
-            int handle = halOpenLOD(fileName, NULL);
-            char *queryGapDna = halGetDna(handle, otherSpecies, sf->qName, lastQEnd, qs, NULL);
-            long long numNs = 0;
-            long long numMasked = 0;
-            char *i = queryGapDna;
-            while (*i != '\0') {
-                if (*i == 'N' || *i == 'n') {
-                    numNs++;
-                    numMasked++;
-                }
-                if (*i == 'a' || *i == 't' || *i == 'g' || *i == 'c') {
-                        numMasked++;
-                }
-                i++;
-            }
-            free(queryGapDna);
-            queryGapMaskedFrac = ((double) numMasked) / (qs - lastQEnd);
-            queryGapNFrac = ((double) numNs) / (qs - lastQEnd);
-        }
-        #endif
 
 	// draw the vertical orange bars if there is an insert in the other sequence
 	if ((winBaseCount < showSnpWidth) )
@@ -1258,151 +1087,11 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     }
 }
 
-#ifdef NOTNOW
-static char *doChromIxSearch(char *trixFile, char *searchName)
-/* search ixFile for the searchName, return name if found */
-{
-struct trix *trix = trixOpen(trixFile);
-char *trixWords[1];
-int trixWordCount = 1;
-trixWords[0] = strLower(searchName);
-char *name = NULL;  // assume NOT found
-
-struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, tsmExact);
-if (tsList)
-   name = tsList->itemId;  // FOUND
-return name;
-}
-
-static struct hal_block_results_t *pslSnakeBlocks(char *fileName, struct track *track, char *chrom, unsigned start, unsigned end, unsigned int maxItems)
-/* create HAL-like blocks from a bigPsl file. */
-{
-struct hal_block_results_t *head;
-
-AllocVar(head);
-
-struct lm *lm = lmInit(0);
-//struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
-struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, 0, hChromSize(database,chromName), lm, maxItems);
-
-struct bbiFile *bbi = fetchBbiForTrack(track);
-int seqTypeField =  0;
-if (sameString(track->tdb->type, "bigPsl"))
-    {
-    seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-    }
-bbiFileClose(&bbi);
-for (bb = bbList; bb != NULL; bb = bb->next)
-    {
-    char *seq, *cds;
-    struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds); 
-    unsigned *targetStart = psl->tStarts;
-    unsigned *queryStart = psl->qStarts;
-    unsigned *size = psl->blockSizes;
-    int ii;
-
-    if ((seq != NULL) && (psl->strand[0] == '-'))
-        reverseComplement(seq, strlen(seq));
-    for(ii = 0; ii < psl->blockCount; ii++)
-        {
-        struct hal_block_t *block;
-        AllocVar(block);
-        slAddHead(&head->mappedBlocks, block);
-
-        block->qChrom = psl->qName;
-        block->tStart = *targetStart++;
-        block->qStart = *queryStart++;
-        block->size = *size++;
-        block->strand = psl->strand[0];
-        block->qSequence = &seq[block->qStart];
-
-        if (block->strand == '-')
-            block->qStart = psl->qSize - block->qStart;
-        }
-    }
-
-return head;
-}
-#endif
-
-
-
-
-
-// from here down are routines to support the visualization of chains as snakes
-// this code is currently BROKEN, and may be removed completely in the future
-
 struct cartOptions
     {
     enum chainColorEnum chainColor; /*  ChromColors, ScoreColors, NoColors */
     int scoreFilter ; /* filter chains by score if > 0 */
     };
-
-// mySQL code to read in chains
-
-static void doQuery(struct sqlConnection *conn, char *fullName, 
-			struct lm *lm, struct hash *hash, 
-			int start, int end,  boolean isSplit, int chainId)
-/* doQuery- check the database for chain elements between
- * 	start and end.  Use the passed hash to resolve chain
- * 	id's and place the elements into the right
- * 	linkedFeatures structure
- */
-{
-struct sqlResult *sr = NULL;
-char **row;
-struct linkedFeatures *lf;
-struct snakeFeature *sf;
-struct dyString *query = dyStringNew(1024);
-
-if (chainId == -1)
-    {
-    sqlDyStringPrintf(query, 
-	"select chainId,tStart,tEnd,qStart from %sLink ", fullName);
-    if (isSplit)
-	sqlDyStringPrintf(query,"force index (bin) ");
-    //sqlDyStringPrintf(query, "where ",
-    sqlDyStringPrintf(query,"where "); 
-    }
-else
-    sqlDyStringPrintf(query, 
-	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%d and ",
-	fullName, chainId);
-if (!isSplit)
-    sqlDyStringPrintf(query, "tName='%s' and ", chromName);
-hAddBinToQuery(start, end, query);
-sqlDyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
-sr = sqlGetResult(conn, query->string);
-
-/* Loop through making up simple features and adding them
- * to the corresponding linkedFeature. */
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    lf = hashFindVal(hash, row[0]);
-    if (lf != NULL)
-	{
-	struct chain *pChain = lf->extra;
-	lmAllocVar(lm, sf);
-	sf->start = sqlUnsigned(row[1]);
-	sf->end = sqlUnsigned(row[2]);
-	sf->qStart = sqlUnsigned(row[3]); 
-
-	sf->qEnd = sf->qStart + (sf->end - sf->start);
-	if ((pChain) && pChain->qStrand == '-')
-	    {
-	    int temp;
-
-	    temp = sf->qStart;
-	    sf->qStart = pChain->qSize - sf->qEnd;
-	    sf->qEnd = pChain->qSize - temp;
-	    }
-	sf->orientation = lf->orientation;
-	slAddHead(&lf->components, sf);
-	}
-    }
-sqlFreeResult(&sr);
-dyStringFree(&query);
-}
 
 static void fixItems(struct linkedFeatures *lf)
 // put all chain blocks from a single query chromosome into one
@@ -1441,279 +1130,56 @@ if (firstLf != NULL)
 }
 
 
-static void loadLinks(struct track *tg, int seqStart, int seqEnd,
-         enum trackVisibility vis)
-// load up the chain elements into linkedFeatures
+void snakeDrawLeftLabels()
 {
-int start, end, extra;
-char fullName[64];
-int maxOverLeft = 0, maxOverRight = 0;
-int overLeft, overRight;
-struct linkedFeatures *lf;
-struct lm *lm;
-struct hash *hash;	/* Hash of chain ids. */
-struct sqlConnection *conn;
-lm = lmInit(1024*4);
-hash = newHash(0);
-conn = hAllocConn(database);
-
-/* Make up a hash of all linked features keyed by
- * id, which is held in the extras field.  */
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    {
-    char buf[256];
-    struct chain *pChain = lf->extra;
-    safef(buf, sizeof(buf), "%d", pChain->id);
-    hashAdd(hash, buf, lf);
-    overRight = lf->end - seqEnd;
-    if (overRight > maxOverRight)
-	maxOverRight = overRight;
-    overLeft = seqStart - lf->start ;
-    if (overLeft > maxOverLeft)
-	maxOverLeft = overLeft;
-    }
-
-if (hash->size)
-    {
-    boolean isSplit = TRUE;
-    /* Make up range query. */
-    safef(fullName, sizeof fullName, "%s_%s", chromName, tg->table);
-    if (!hTableExists(database, fullName))
-	{
-	strcpy(fullName, tg->table);
-	isSplit = FALSE;
-	}
-
-    /* in dense mode we don't draw the lines 
-     * so we don't need items off the screen 
-     */
-    if (vis == tvDense)
-	doQuery(conn, fullName, lm,  hash, seqStart, seqEnd,  isSplit, -1);
-    else
-	{
-	/* if chains extend beyond edge of window we need to get 
-	 * elements that are off the screen
-	 * in both directions so we know whether to draw
-	 * one or two lines to the edge of the screen.
-	 */
-#define STARTSLOP	0
-#define MULTIPLIER	10
-#define MAXLOOK		100000
-	extra = (STARTSLOP < maxOverLeft) ? STARTSLOP : maxOverLeft;
-	start = seqStart - extra;
-	extra = (STARTSLOP < maxOverRight) ? STARTSLOP : maxOverRight;
-	end = seqEnd + extra;
-	doQuery(conn, fullName, lm,  hash, start, end,  isSplit, -1);
-	}
-    }
-hFreeConn(&conn);
 }
 
-static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
+static void makeSnakeFeatures(struct linkedFeatures *lf)
 {
-struct linkedFeatures *lf = (struct linkedFeatures *)item;
-
-return(tg->colorShades[lf->grayIx]);
-}
-
-static Color chainNoColor(struct track *tg, void *item, struct hvGfx *hvg)
-{
-return(tg->ixColor);
-}
-
-static void setNoColor(struct track *tg)
-{
-tg->itemColor = chainNoColor;
-tg->color.r = 0;
-tg->color.g = 0;
-tg->color.b = 0;
-tg->altColor.r = 127;
-tg->altColor.g = 127;
-tg->altColor.b = 127;
-tg->ixColor = MG_BLACK;
-tg->ixAltColor = MG_GRAY;
-}
-void snakeLoadItems(struct track *tg)
-// Load chains from a mySQL database
-{
-char *track = tg->table;
-struct chain chain;
-int rowOffset;
-char **row;
-struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr = NULL;
-struct linkedFeatures *list = NULL, *lf;
-//int qs;
-char optionChr[128]; /* Option -  chromosome filter */
-char *optionChrStr;
-char extraWhere[128] ;
-struct cartOptions *chainCart;
-struct chain *pChain;
-
-chainCart = (struct cartOptions *) tg->extraUiData;
-
-safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->table);
-optionChrStr = cartUsualString(cart, optionChr, "All");
-int ourStart = winStart;
-int ourEnd = winEnd;
-
-ourStart = winStart;
-ourEnd = winEnd;
-if (startsWith("chr",optionChrStr)) 
+for(; lf; lf = lf->next)
     {
-    sqlSafef(extraWhere, sizeof(extraWhere), 
-            "qName = \"%s\" and score > %d",optionChrStr, 
-            chainCart->scoreFilter);
-    sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
-            extraWhere, &rowOffset);
-    }
-else
-    {
-    if (chainCart->scoreFilter > 0)
+    struct simpleFeature *sf = lf->components;
+    struct snakeFeature *sfList = NULL;
+
+    for(;sf; sf = sf->next)
         {
-        sqlSafef(extraWhere, sizeof(extraWhere), 
-                "score > \"%d\"",chainCart->scoreFilter);
-        sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
-                extraWhere, &rowOffset);
+        struct snakeFeature *this;
+
+        AllocVar(this);
+        *(struct simpleFeature *)this = *sf;
+        /*
+	if ((lf) && lf->orientation == -1)
+	    {
+	    int temp;
+
+	    temp = this->qStart;
+	    this->qStart = lf->qSize - this->qEnd;
+	    this->qEnd = lf->qSize - temp;
+	    }
+            */
+	this->orientation = lf->orientation;
+        slAddHead(&sfList, this);
         }
-    else
-        {
-        sqlSafef(extraWhere, sizeof(extraWhere), " ");
-        sr = hRangeQuery(conn, track, chromName, ourStart, ourEnd, 
-                NULL, &rowOffset);
-        }
+    lf->components = (struct simpleFeature *)sfList;
     }
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    chainHeadStaticLoad(row + rowOffset, &chain);
-    AllocVar(pChain);
-    *pChain = chain;
-    AllocVar(lf);
-    lf->start = lf->tallStart = chain.tStart;
-    lf->end = lf->tallEnd = chain.tEnd;
-    lf->grayIx = maxShade;
-    if (chainCart->chainColor == chainColorScoreColors)
-	{
-	float normScore = sqlFloat((row+rowOffset)[11]);
-	lf->grayIx = (int) ((float)maxShade * (normScore/100.0));
-	if (lf->grayIx > (maxShade+1)) lf->grayIx = maxShade+1;
-	lf->score = normScore;
-	}
-    else
-	lf->score = chain.score;
-
-    lf->filterColor = -1;
-
-    if (chain.qStrand == '-')
-	{
-	lf->orientation = -1;
-        //qs = chain.qSize - chain.qEnd;
-	}
-    else
-        {
-	lf->orientation = 1;
-	//qs = chain.qStart;
-	}
-    char buffer[1024];
-    safef(buffer, sizeof(buffer), "%s", chain.qName);
-    lf->name = cloneString(buffer);
-    lf->extra = pChain;
-    slAddHead(&list, lf);
-    }
-
-/* Make sure this is sorted if in full mode. Sort by score when
- * coloring by score and in dense */
-if (tg->visibility != tvDense)
-    slSort(&list, linkedFeaturesCmpStart);
-else if ((tg->visibility == tvDense) &&
-	(chainCart->chainColor == chainColorScoreColors))
-    slSort(&list, chainCmpScore);
-else
-    slReverse(&list);
-tg->items = list;
-
-
-/* Clean up. */
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-
-/* now load the items */
-loadLinks(tg, ourStart, ourEnd, tg->visibility);
-
-/* we need to sort by query chrom so they'll bunch up together */
-slSort(&tg->items, snakeFeatureCmpQSequence);
-lf=tg->items;
-fixItems(lf);
-}	/*	chainLoadItems()	*/
-
-static void snakeDrawLeftLabels()
-{
 }
 
-void snakeMethods(struct track *tg, struct trackDb *tdb, 
-	int wordCount, char *words[])
-/* Fill in custom parts of alignment chains. */
+void maybeLoadSnake(struct track *track)
+/* check to see if we're doing snakes and if so load the correct methods. */
 {
-
-struct cartOptions *chainCart;
-
-AllocVar(chainCart);
-
-boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
-
-/*	what does the cart say about coloring option	*/
-chainCart->chainColor = chainFetchColorOption(cart, tdb, FALSE);
-
-chainCart->scoreFilter = cartUsualIntClosestToHome(cart, tdb,
-	FALSE, SCORE_FILTER, 0);
-
-
-linkedFeaturesMethods(tg);
-tg->itemColor = lfChromColor;	/*	default coloring option */
-
-/*	if normScore column is available, then allow coloring	*/
-if (normScoreAvailable)
+boolean doSnake = cartOrTdbBoolean(cart, track->tdb, "doSnake", FALSE);
+if (doSnake)
     {
-    switch (chainCart->chainColor)
-	{
-	case (chainColorScoreColors):
-	    tg->itemColor = chainScoreColor;
-	    tg->colorShades = shadesOfGray;
-	    break;
-	case (chainColorNoColors):
-	    setNoColor(tg);
-	    break;
-	default:
-	case (chainColorChromColors):
-	    break;
-	}
+    track->drawLeftLabels = snakeDrawLeftLabels;
+    track->itemHeight = snakeItemHeight;
+    track->totalHeight = snakeHeight;
+    track->drawItemAt = snakeDrawAt;
+
+    slSort(track->items, linkedFeaturesCmpStart);
+    makeSnakeFeatures(track->items);
+    fixItems(track->items);
+    track->visibility = track->limitedVis = tvFull;
+    track->canPack = FALSE;
     }
-else
-    {
-    char option[128]; /* Option -  rainbow chromosome color */
-    char *optionStr;	/* this old option was broken before */
-
-    safef(option, sizeof(option), "%s.color", tg->table);
-    optionStr = cartUsualString(cart, option, "on");
-    if (differentWord("on",optionStr))
-	{
-	setNoColor(tg);
-	chainCart->chainColor = chainColorNoColors;
-	}
-    else
-	chainCart->chainColor = chainColorChromColors;
-    }
-
-tg->canPack = FALSE;
-tg->loadItems = snakeLoadItems;
-tg->drawItems = snakeDraw;
-tg->mapItemName = lfMapNameFromExtra;
-tg->subType = lfSubChain;
-tg->extraUiData = (void *) chainCart;
-tg->totalHeight = snakeHeight; 
-tg->drawLeftLabels = snakeDrawLeftLabels;
-
-tg->drawItemAt = snakeDrawAt;
-tg->itemHeight = snakeItemHeight;
 }
 
