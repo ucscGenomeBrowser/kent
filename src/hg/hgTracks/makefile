@@ -11,7 +11,7 @@ A = hgTracks
 RENDERA = hgRenderTracks
 
 COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrack.o bedGraph.o \
-	bedTrack.o  bigBedTrack.o bigRmskTrack.o bigWarn.o bigWigTrack.o chainSnakeTrack.o \
+	bedTrack.o  bigBedTrack.o bigRmskTrack.o bigWarn.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
 	expRatioTracks.o factorSource.o hgTracks.o interactTrack.o \
@@ -19,7 +19,7 @@ COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrac
 	halSnakeTrack.o lollyTrack.o longRangeTrack.o loweLabTracks.o lrgTrack.o \
 	mafTrack.o makeItemsTrack.o menu.o multiWig.o netTrack.o peptideAtlasTrack.o pslTrack.o \
 	recTrackSets.o rmskJoinedTrack.o rmskTrack.o \
-	sampleTracks.o searchTracks.o simpleTracks.o sortWig.o switchGear.o transMapTracks.o \
+	sampleTracks.o searchTracks.o simpleTracks.o snake.o sortWig.o switchGear.o transMapTracks.o \
 	wabaTrack.o wigTrack.o cds.o \
 	wigMafTrack.o encode.o variation.o vcfTrack.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\
