@@ -1158,6 +1158,10 @@ cd kent/src/hg/makeDb/trackDb
 
 #########################################################################
 2022-12-27: import of UCSC GENCODE group processing of GENCODE V43 pre-release for hgc all gencode  (markd)
+2023-02-13: import of UCSC GENCODE group processing of GENCODE V43 release for hgc all gencode  (markd)
+
+    pre-release moved to hgcImportPre, notes revised
+    
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
 
     # download, build and load tables
