@@ -18,6 +18,7 @@
 #include "trackHub.h"
 #include "extTools.h"
 #include "trackVersion.h"
+#include "chromAlias.h"
 
 /* list of links to display in a menu */
 /* a link with an empty name is displayed as a horizontal separator line */
@@ -346,13 +347,24 @@ if (differentWord(database,"susScr2"))
     }
 hFreeConn(&conn);
 
+char *gcfId = hNcbiGcfId(database);
 char *gcaId = hNcbiGcaId(database);
-if (isNotEmpty(gcaId))
+if (isNotEmpty(gcfId))	/* GCF has priority over GCA */
     {
+    char *ncbiChr = chromAliasNCBI(database, chromName, gcfId);
     safef(buf, sizeof(buf),
           "https://www.ncbi.nlm.nih.gov/genome/gdv/browser/"
           "?context=genome&acc=%s&chr=%s&from=%d&to=%d",
-          gcaId, skipChr(chromName), winStart+1, winEnd);
+          gcfId, ncbiChr, winStart+1, winEnd);
+    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
+    }
+else if (isNotEmpty(gcaId))
+    {
+    char *ncbiChr = chromAliasNCBI(database, chromName, gcaId);
+    safef(buf, sizeof(buf),
+          "https://www.ncbi.nlm.nih.gov/genome/gdv/browser/"
+          "?context=genome&acc=%s&chr=%s&from=%d&to=%d",
+          gcaId, ncbiChr, winStart+1, winEnd);
     appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
     }
 else if (startsWith("oryLat", database))

@@ -79,4 +79,10 @@ char *chromAliasFindSingleAlias(char *seqName, char *authority);
 
 char *chromAliasGetDisplayChrom(char *db, struct cart *cart, char *seqName);
 /* Return the sequence name to display based on the database and cart. */
+
+char *chromAliasNCBI(char *db, char *chr, char *gcX);
+/* given the database and the chrom name, find the NCBI equivalent chr name
+ *   gcX helps determine if RefSeq/GCF or GenBank/GCA
+ */
+
 #endif /* CHROMALIAS_H */
