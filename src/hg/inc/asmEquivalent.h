@@ -90,9 +90,9 @@ void asmEquivalentJsonOutput(struct asmEquivalent *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-char *asmEquivalentUcscToNCBI(char *ucscName);
-/* check if there is a RefSeq/GenBank equivalent to this UCSC assembly name.
- *    If RefSeq exists, return that first, else if GenBank than return that.
+char *asmEquivalentUcscToNCBI(char *ucscName, char *authority);
+/* check if there is an "authority" equivalent to this UCSC assembly name.
+ *    where 'authority' in this case is either 'refseq' or 'genbank'
  * No checking of sequence match counts in this first implementation,
  *    therefore, could be a fuzzy match, and since it is returning only the
  *    first one, it might not be the best match.  Could add more specifics

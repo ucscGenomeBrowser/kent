@@ -320,6 +320,14 @@ struct sqlConnection *conn = hAllocConn(database);
 chromAliasGlobals.chromToAliasHash = hashNew(0);
 chromAliasGlobals.aliasToChromHash = hashNew(0);
 
+/* the 'source' field of this table can be a comma separated list of
+ *   naming authorities, not just one.  Keep track so they can be counted.
+ */
+struct hash *sources = hashNew(0);
+int sourceCount = 0;
+struct slName *fieldNames = NULL; /* a list of strings, source authority name */
+struct slName *name;	/* one name to add to list */
+
 char query[2048];
 sqlSafef(query, sizeof(query), "select * from chromAlias");
 struct sqlResult *sr = sqlGetResult(conn, query);
@@ -327,12 +335,36 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromAlias *new = chromAliasLoad(row);
-    hashAdd(chromAliasGlobals.chromToAliasHash, new->chrom, new);
-    hashAdd(chromAliasGlobals.aliasToChromHash, new->alias, new);
+    char *words[1024];  /* 1024 naming authorities ?  surely never more . . . */
+    int wordCount = chopByChar(new->source, ',', words, ArraySize(words));
+    for (int i = 0; i < wordCount; ++i)
+	{
+        int sourceN = hashIntValDefault(sources, words[i], -1);
+        if (sourceN < 0)	/* a new source */
+	    {
+            name = slNameNew(words[i]);
+            slAddHead(&fieldNames, name);
+	    hashAddInt(sources, words[i], sourceCount++);
+	    }
+        struct chromAlias *chromAlias;
+        AllocVar(chromAlias);
+        chromAlias->chrom = cloneString(new->chrom);
+        chromAlias->alias = cloneString(new->alias);
+        chromAlias->source = cloneString(words[i]);
+	hashAdd(chromAliasGlobals.chromToAliasHash, new->chrom, chromAlias);
+	hashAdd(chromAliasGlobals.aliasToChromHash, new->alias, chromAlias);
+	}
+    chromAliasFree(&new);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-}
+chromAliasGlobals.fieldCount = sourceCount;
+slReverse(&fieldNames);
+AllocArray(chromAliasGlobals.fields, chromAliasGlobals.fieldCount);
+name = fieldNames;
+for(int i=0; i < chromAliasGlobals.fieldCount; i++, name = name->next)
+    chromAliasGlobals.fields[i] = name->name;
+}	/*	static void chromAliasSetupSql(char *database)	*/
 
 static pthread_mutex_t ourMutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -355,8 +387,10 @@ if (database == NULL)
     return;
 
 getLock();
-if (chromAliasGlobals.inited)
+if (chromAliasGlobals.inited) {
+    releaseLock();
     return;
+}
 chromAliasGlobals.inited = TRUE;
 
 char *gbdbFile;
@@ -454,8 +488,8 @@ char *chromAliasFindSingleAlias(char *seqName, char *authority)
 if (authority == NULL)
     return cloneString(seqName);
 
-
 struct slName *aliases = chromAliasFindAliases(seqName);
+
 
 if (aliases == NULL)
     return cloneString(seqName);
@@ -469,7 +503,6 @@ for(; fieldNum < chromAliasGlobals.fieldCount; fieldNum++)
 
 if (fieldNum >= chromAliasGlobals.fieldCount)
     return cloneString(seqName);
-
 
 unsigned count = 0;
 for(; aliases && count < fieldNum; count++,aliases = aliases->next)
@@ -493,3 +526,15 @@ if (trackHubDatabase(db))
 return seqName;
 }
 
+char *chromAliasNCBI(char *db, char *chr, char *gcX)
+/* given the database and the chrom name, find the NCBI equivalent chr name */
+{
+char *seqName = NULL;
+/* just in case this has not yet been done by the caller */
+chromAliasSetup(db);
+if (startsWith("GCF", gcX))
+    seqName = chromAliasFindSingleAlias(chr, "refseq");
+else
+    seqName = chromAliasFindSingleAlias(chr, "genbank");
+return seqName;
+}

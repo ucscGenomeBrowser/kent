@@ -255,9 +255,9 @@ fputc('}',f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-char *asmEquivalentUcscToNCBI(char *ucscName)
-/* check if there is a RefSeq/GenBank equivalent to this UCSC assembly name.
- *    If RefSeq exists, return that first, else if GenBank than return that.
+char *asmEquivalentUcscToNCBI(char *ucscName, char *authority)
+/* check if there is an "authority" equivalent to this UCSC assembly name.
+ *    where 'authority' in this case is either 'refseq' or 'genbank'
  * No checking of sequence match counts in this first implementation,
  *    therefore, could be a fuzzy match, and since it is returning only the
  *    first one, it might not be the best match.  Could add more specifics
@@ -267,6 +267,7 @@ char *asmEquivalentUcscToNCBI(char *ucscName)
 char *ret = NULL;
 if (ucscName == NULL)
     return ret;
+
 
 struct sqlConnection *conn = hAllocConn("hgFixed");
 if (!conn)
@@ -280,13 +281,8 @@ if (!sqlTableExists(conn, "asmEquivalent"))
 
 char buffer[4096];
 
-sqlSafef(buffer, sizeof buffer, "SELECT destination FROM asmEquivalent WHERE sourceAuthority='ucsc' AND destinationAuthority='refseq' AND source='%s' LIMIT 1", ucscName);
+sqlSafef(buffer, sizeof buffer, "SELECT destination FROM asmEquivalent WHERE sourceAuthority='ucsc' AND destinationAuthority='%s' AND source='%s' LIMIT 1", authority, ucscName);
 char *sqlAnswer = sqlQuickString(conn, buffer);
-if (isEmpty(sqlAnswer))
-    {
-    sqlSafef(buffer, sizeof buffer, "SELECT destination FROM asmEquivalent WHERE sourceAuthority='ucsc' AND destinationAuthority='genbank' AND source='%s' LIMIT 1", ucscName);
-    sqlAnswer = sqlQuickString(conn, buffer);
-    }
 hFreeConn(&conn);
 
 /* if there is a result, for example: GCA_000001405.28_GRCh38.p13
