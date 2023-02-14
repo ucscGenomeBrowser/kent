@@ -3271,8 +3271,13 @@ DNA *dna = *retSeq;
 if (dna == NULL)
     {
     struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
-    struct dnaSeq *seq = twoBitReadSeqFrag(otherTbf, psl->qName, 0, 0);
-    *retSeq = dna = seq->dna;
+    struct dnaSeq *seq = NULL;
+    if (otherTbf)
+        {
+        seq = twoBitReadSeqFrag(otherTbf, psl->qName, 0, 0);
+        if (seq)
+            *retSeq = dna = seq->dna;
+        }
     }
 return psl;
 }
