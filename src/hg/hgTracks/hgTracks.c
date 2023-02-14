@@ -7525,19 +7525,8 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
-return (startsWith("big", track->tdb->type)
-     || startsWithWord("mathWig"  , track->tdb->type)
-     || startsWithWord("bam"     , track->tdb->type)
-     || startsWithWord("halSnake", track->tdb->type)
-     || startsWithWord("bigRmsk", track->tdb->type)
-     || startsWithWord("bigLolly", track->tdb->type)
-     || startsWithWord("vcfTabix", track->tdb->type))
-     // XX code-review: shouldn't we error abort if the URL is not valid?
-     && (bdu && isValidBigDataUrl(bdu, FALSE))
-     && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
-     && (track->subtracks == NULL)
-     && (!startsWith("bigInteract", track->tdb->type))
-     && (!startsWith("bigMaf", track->tdb->type));
+
+return customFactoryParallelLoad(bdu, track->tdb->type) && (track->subtracks == NULL);
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList)
