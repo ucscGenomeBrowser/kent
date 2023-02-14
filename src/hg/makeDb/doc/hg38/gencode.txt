@@ -1175,10 +1175,14 @@ cd kent/src/hg/makeDb/trackDb
 
     # generate trackDb and joiner blurb
     pushd ~/kent/src/hg/makeDb/trackDb
-    ../outside/gencode/bin/gencodeGenerateTrackDbs hg38 43 109 'Jan 2023'
+    ../outside/gencode/bin/gencodeGenerateTrackDbs hg38 43 109 'Feb 2023'
 
     # edit all.joiner to add ~/tmp/gencodeV43.joiner
 
+    # Update 'Release Notes' (for final)
+    # human/hg38/wgEncodeGencodeSuper.html
+
+    # edit human/hg38/trackDb.gencode.ra to remove alpha
     jkmake DBS=hg38
 
     # check joiner 
