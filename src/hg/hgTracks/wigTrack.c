@@ -1196,6 +1196,9 @@ struct wigGraphOutput *wgo = tg->wigGraphOutput;
 //struct wigMouseOver *mouseOverData = NULL;
 unsigned numBases = seqEnd - seqStart;
 struct dnaSeq *seq = hChromSeq(database, chromName, seqStart, seqEnd);
+if (baseCmpl)
+    complement(seq->dna, seq->size);
+
 struct pixelCountBin *pixelBins = wgo->pixelBins;
 double *yOffsets = wgo->yOffsets;
 int numTrack = wgo->numTrack;
