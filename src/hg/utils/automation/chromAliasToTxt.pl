@@ -3,6 +3,11 @@
 use strict;
 use warnings;
 
+printf STDERR "# # # ! ! ! Obsolete program, please instead use:\n";
+printf STDERR "  aliasTabToText.pl asmId.chromAlias.tab > asmId.chromAlias.txt\n";
+
+exit 255;
+__END__
 my $argc = scalar(@ARGV);
 
 if ($argc !=1 ) {
