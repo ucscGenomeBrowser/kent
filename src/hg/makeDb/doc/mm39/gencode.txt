@@ -306,6 +306,11 @@
     jkmake DBS=mm39 alpha
 ##############################################################################
 2022-12-29: import of UCSC GENCODE group processing of GENCODE VM31 pre-release (markd)
+2023-02-13: import of UCSC GENCODE group processing of GENCODE VM31 final release (markd)
+
+    pre-release moved to hgcImportPre, notes revised
+    
+
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
     # download, build and load tables
     mkdir -p /hive/data/genomes/mm39/bed/gencodeVM32/hgcImport
@@ -318,7 +323,7 @@
 
     # generate trackDb and joiner blurb
     pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbs mm39 M32 109 'Jan 2023'
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbs mm39 M32 109 'Feb 2023'
 
     # edit mouse/mm39/trackDb.gencode.ra to add new .ra file include
     jkmake DBS=mm39
