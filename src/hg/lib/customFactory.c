@@ -4147,6 +4147,23 @@ pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
+boolean customFactoryParallelLoad(char *bdu, char *type)
+/* Is this a data type that should be loaded in parallel ? */
+{
+return (startsWith("big", type)
+     || startsWithWord("mathWig"  , type)
+     || startsWithWord("bam"     , type)
+     || startsWithWord("halSnake", type)
+     || startsWithWord("bigRmsk", type)
+     || startsWithWord("bigLolly", type)
+     || startsWithWord("vcfTabix", type))
+     // XX code-review: shouldn't we error abort if the URL is not valid?
+     && (bdu && isValidBigDataUrl(bdu, FALSE))
+     && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
+     && (!startsWith("bigInteract", type))
+     && (!startsWith("bigMaf", type));
+}
+
 static struct customTrack *customFactoryParseOptionalDb(char *genomeDb, char *text,
 	boolean isFile, struct slName **retBrowserLines,
 	boolean mustBeCurrentDb, boolean doParallelLoad)
@@ -4321,7 +4338,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 			 (lf ? lf->lineIx : 0), (lf ? lf->fileName : "NULL file"));
 		}
 	    }
-	if (bigDataUrl && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
+	if (customFactoryParallelLoad(bigDataUrl, type) && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
                                        //  (unless ptMax == 0 which means turn parallel loading off)
             {
             if (doParallelLoad)
