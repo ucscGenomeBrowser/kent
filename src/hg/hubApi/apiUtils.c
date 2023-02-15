@@ -621,47 +621,10 @@ else
     return TRUE;	/* might be true */
 }
 
-boolean protectedTrack(struct trackDb *tdb, char *tableName)
+boolean protectedTrack(char *db, struct trackDb *tdb, char *tableName)
 /* determine if track is off-limits protected data */
 {
-boolean ret = FALSE;
-
-/* this is a fixed list for now since there are so few and this
- * takes care of the situation where the tableName might be for a table
- * that has no trackDb entry
- */
-if (sameOk(tableName, "cosmicRegions"))
-  ret = TRUE;
-else if (sameOk(tableName, "decipherRaw"))
-  ret = TRUE;
-else if (sameOk(tableName, "knownToDecipher"))
-  ret = TRUE;
-else if (sameOk(tableName, "knownCanonToDecipher"))
-  ret = TRUE;
-else if (sameOk(tableName, "decipherSnvsRaw"))
-  ret = TRUE;
-else if (sameOk(tableName, "lovd"))
-  ret = TRUE;
-else if (sameOk(tableName, "lovdShort"))
-  ret = TRUE;
-else if (sameOk(tableName, "lovdLong"))
-  ret = TRUE;
-else if (sameOk(tableName, "lovdComp"))
-  ret = TRUE;
-else if (sameOk(tableName, "hgmd"))
-  ret = TRUE;
-else
-    {
-    if (tdb)	/* may not have a tdb at this time */
-	{
-	char *tbOff = trackDbSetting(tdb, "tableBrowser");
-	if (tbOff && startsWithWord("off", tbOff))
-	    ret = TRUE;
-	if (tbOff && startsWithWord("noGenome", tbOff))
-	    ret = TRUE;
-	}
-    }
-return ret;
+return cartTrackDbIsNoGenome(db, tableName);
 }
 
 boolean isWiggleDataTable(char *type)

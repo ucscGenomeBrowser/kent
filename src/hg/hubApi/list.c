@@ -302,7 +302,7 @@ errCatchFree(&errCatch);
 return itemCount;
 }
 
-static void outputTrackDbVars(struct jsonWrite *jw, struct trackDb *tdb,
+static void outputTrackDbVars(struct jsonWrite *jw, char *db, struct trackDb *tdb,
     long long itemCount)
 /* JSON output the fundamental trackDb variables */
 {
@@ -312,7 +312,7 @@ if (NULL == tdb)	/* might not be any trackDb */
 boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
 
 boolean protectedData = FALSE;
-protectedData = protectedTrack(tdb, tdb->track);
+protectedData = protectedTrack(db, tdb, tdb->track);
 jsonWriteString(jw, "shortLabel", tdb->shortLabel);
 jsonWriteString(jw, "type", tdb->type);
 jsonWriteString(jw, "longLabel", tdb->longLabel);
@@ -388,7 +388,7 @@ char *indexFileOrUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataIndex"));
 struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
 long long itemCount = bbiItemCount(bigDataUrl, thisTrack->type, indexFileOrUrl);
 
-outputTrackDbVars(jw, thisTrack, itemCount);
+outputTrackDbVars(jw, genome, thisTrack, itemCount);
 
 struct asObject *as = bigBedAsOrDefault(bbi);
 if (! as)
@@ -516,7 +516,7 @@ long long itemCount = 0;
 if (bbi)
     {
     /* do not show itemCount for protected data */
-    if (! protectedTrack(thisTrack, track))
+    if (! protectedTrack(db, thisTrack, track))
 	{
 	char *indexFileOrUrl = hReplaceGbdb(trackDbSetting(thisTrack, "bigDataIndex"));
 	itemCount = bbiItemCount(bigDataUrl, thisTrack->type, indexFileOrUrl);
@@ -544,7 +544,7 @@ else
     asColumnCount = slCount(columnEl);
 
     /* do not show counts for protected data */
-    if (! protectedTrack(thisTrack, track))
+    if (! protectedTrack(db, thisTrack, track))
 	{
 	char query[2048];
 	sqlSafef(query, sizeof(query), "select count(*) from %s", splitTableName);
@@ -565,7 +565,7 @@ outputSchema(thisTrack, jw, columnNames, columnTypes, jsonTypes, hti,
   columnCount, asColumnCount, columnEl);
     }
 
-outputTrackDbVars(jw, thisTrack, itemCount);
+outputTrackDbVars(jw, db, thisTrack, itemCount);
 
 apiFinishOutput(0, NULL, jw);
 
@@ -705,7 +705,7 @@ static long long dataItemCount(char *db, struct trackDb *tdb)
 long long itemCount = 0;
 if (trackHasNoData(tdb))	/* container 'tracks' have no data items */
     return itemCount;
-if (protectedTrack(tdb, tdb->track))	/*	private data */
+if (protectedTrack(db, tdb, tdb->track))	/*	private data */
     return itemCount;
 if (sameWord("downloadsOnly", tdb->type))
     return itemCount;
@@ -772,7 +772,7 @@ if (! (trackLeavesOnly && isContainer) )
 #ifdef NOTNOW
     long long itemCount = 0;
     /* do not show counts for protected data or continers (== no items)*/
-    if (! (isContainer || protectedTrack(tdb, tdb->track)))
+    if (! (isContainer || protectedTrack(db, tdb, tdb->track)))
 	itemCount = dataItemCount(db, tdb);
 #endif
     jsonWriteObjectStart(jw, tdb->track);
@@ -780,7 +780,7 @@ if (! (trackLeavesOnly && isContainer) )
         jsonWriteString(jw, "compositeContainer", "TRUE");
     if (tdbIsCompositeView(tdb))
         jsonWriteString(jw, "compositeViewContainer", "TRUE");
-    outputTrackDbVars(jw, tdb, -1);
+    outputTrackDbVars(jw, db, tdb, -1);
 
     if (tdb->subtracks)
 	{
