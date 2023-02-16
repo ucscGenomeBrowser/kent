@@ -56,7 +56,20 @@ while (my $asmId = <FH>) {
   $orgName =~ s/.*\(//;
   $orgName =~ s/\)//;
   chomp $orgName;
-  if ($orgName eq "viruses") {
+  if ($orgName =~ m/ascomycete|basidiomycete|budding|microsporidian|smut|fungi/) {
+    my ($order, undef) = split('\s', $orgName, 2);
+    $order = "budding yeast" if ($order =~ m/budding/);
+    $order = "smut fungi" if ($order =~ m/smut/);
+    $order = "ascomycetes" if ($order =~ m/ascomycete/);
+    $order = "basidiomycetes" if ($order =~ m/basidiomycete/);
+    my $sciName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
+    chomp $sciName;
+    $sciName =~ s/.*ism name:\s+//i;
+    $sciName =~ s/\s+\(.*\)$//;
+    my @a = split('\s+', $sciName);
+    my $lastN = scalar(@a) - 1;
+    $orgName = "$order " . uc(substr($a[0], 0, 1)) . "." . @a[1..$lastN];
+  } elsif ($orgName eq "viruses") {
     $orgName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
     chomp $orgName;
     $orgName =~ s/.*ism name:\s+//i;
