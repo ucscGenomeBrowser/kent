@@ -461,6 +461,7 @@
 ./runBuild GCA_013358685.1_fAntMac1.pri fish Antennarius_maculatus
 ./runBuild GCA_013368605.1_bNycGra1.pri birds Nyctibius_grandis
 ./runBuild GCA_013407035.1_ASM1340703v1 birds Coloeus_monedula
+./runBuild GCA_013425905.1_ASM1342590v1 invertebrate Oscheius_tipulae
 ./runBuild GCA_013436055.1_Harore_MTP2014 invertebrate Halocynthia_roretzi
 ./runBuild GCA_013436065.1_Haaura_MTP2014 invertebrate Halocynthia_aurantium
 ./runBuild GCA_014060925.1_Heter_glaber.v1.7_hic_pac mammals Heterocephalus_glaber
