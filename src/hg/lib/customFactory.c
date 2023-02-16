@@ -4150,6 +4150,9 @@ return errCount;
 boolean customFactoryParallelLoad(char *bdu, char *type)
 /* Is this a data type that should be loaded in parallel ? */
 {
+if ((type == NULL) || (bdu == NULL))
+    return FALSE;
+
 return (startsWith("big", type)
      || startsWithWord("mathWig"  , type)
      || startsWithWord("bam"     , type)
