@@ -1682,7 +1682,7 @@ static struct slName *findFieldsInExtraFile(char *detailsTableUrl, struct asColu
 // return a list of the ${}-enclosed fields from an extra file
 {
 struct slName *foundFields = NULL;
-char *table = netReadTextFileIfExists(hReplaceGbdb(detailsTableUrl));
+char *table = udcFileReadAllIfExists(hReplaceGbdb(detailsTableUrl), NULL, 0, NULL);
 if (table)
     {
     for (; col != NULL; col = col->next)

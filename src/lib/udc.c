@@ -466,7 +466,7 @@ void udcSetResolver(char *prots, char *cmd)
 /* Set protocols and local wrapper program to resolve s3:// and similar URLs to HTTPS */
 {
     resolvProts = slNameListFromString(cloneString(prots), ',');
-    resolvCmd = cmd;
+    resolvCmd = trimSpaces(cloneString(cmd));
 }
 
 static void initializeUdc()
@@ -512,47 +512,83 @@ static bool udcCacheEnabled()
 return (defaultDir != NULL);
 }
 
+static void makeUdcTmp(char tmpPath[PATH_LEN])
+/* create a URL temporary file */
+{
+safef(tmpPath, PATH_LEN, "%s/udcTmp-XXXXXX", getTempDir());
+int fd = mkstemp(tmpPath);
+if (fd < 0)
+    errnoAbort("udc:makeUdcTmp: creating temporary file failed: %s", tmpPath);
+close(fd);
+}
+
+static void resolveUrlExec(char *url, char *stdoutTmp, char *stderrTmp)
+/* exec child process to resolve URL */
+{
+if ((dup2(mustOpenFd("/dev/null", O_RDONLY), STDIN_FILENO) < 0) ||
+    (dup2(mustOpenFd(stdoutTmp, O_WRONLY), STDOUT_FILENO) < 0) ||
+    (dup2(mustOpenFd(stderrTmp, O_WRONLY), STDERR_FILENO) < 0))
+    errnoAbort("udc:resolveUrlExec: dup2 failed");
+
+// parse into words to get any arguments encoded in string
+int numWords = chopByWhite(cloneString(resolvCmd), NULL, 0);
+char *words[numWords + 1];
+chopByWhite(resolvCmd, words, numWords);
+
+char* args[numWords + 2];
+CopyArray(words, args, numWords);
+args[numWords] = url;
+args[numWords + 1] = NULL;
+
+execv(resolvCmd, args);
+errnoAbort("udc:resolveUrlExec  failed: %s", resolvCmd);
+exit(1); // should never make it here
+}
+
 static char* resolveUrl(char *url) 
 /* return the HTTPS URL given a pseudo-URL e.g. s3://xxxx. Result must be freed. */
 {
-char filename[1024];
-safef(filename, sizeof filename, "%s/udcTmp-XXXXXX", getTempDir());
-mkstemp(filename);
-
+// Max tried to do this with pipeline but there is some hard to find bug with it and threads
+char stdoutTmp[PATH_LEN], stderrTmp[PATH_LEN];
+makeUdcTmp(stdoutTmp);
+makeUdcTmp(stderrTmp);
+    
 verbose(4, "Resolving url %s using command %s\n", url, resolvCmd);
 
-char* program = resolvCmd;
-char* args[4];
-args[0] = program;
-args[1] = url;
-args[2] = filename;
-args[3] = NULL;
-
-pid_t pid = 0;
-int status;
-pid = fork();
-
+pid_t pid = fork();
 if (pid < 0)
-    errAbort("udc:resolveUrl: error in fork");
+    errnoAbort("udc:resolveUrl: error in fork");
 if (pid == 0)
     {
     // child process
-    int err = execv(program, args);
-    if (err!=0)
-        errAbort("Cannot run %s", program);
-    exit(0);
+    resolveUrlExec(url, stdoutTmp, stderrTmp);
     }
 
 // pid > 0 = main process
-pid = wait(&status);
-char* newUrl = NULL;
-size_t len = 0;
-readInGulp(filename, &newUrl, &len);
-unlink(filename);
-if (len <= 0)
-    errAbort("Got empty string in output file, from %s, args %s %s", program, url, filename);
+int status;
+if (waitpid(pid, &status, 0) < 0)
+    errnoAbort("udc:resolveUrl: waitpid failed");
+if (WIFSIGNALED(status))
+    errAbort("udc:resolveUrl: resolver signaled (%d)", WTERMSIG(status));
+if (WIFSTOPPED(status) || WIFCONTINUED(status))
+    errAbort("udc:resolveUrl: resolver unexpectedly stop or continued");
+if (WIFEXITED(status) && (WEXITSTATUS(status) != 0))
+    {
+    char* errMsg;
+    readInGulp(stderrTmp, &errMsg, NULL);
+    errAbort("udc:resolveUrl: resolve program failed %s: %s", resolvCmd, errMsg);
+    }
 
-stripString(newUrl, "\n");
+// sucesss; got URL
+char* newUrl = NULL;
+readInGulp(stdoutTmp, &newUrl, NULL);
+trimSpaces(newUrl);
+if (strlen(newUrl) == 0)
+    errAbort("Got empty URL from URL resolve program: %s %s", resolvCmd, url);
+
+unlink(stdoutTmp);
+unlink(stderrTmp);
+    
 verbose(4, "Resolved url: %s -> %s\n", url, newUrl);
 return newUrl;
 }
@@ -2039,15 +2075,17 @@ freeMem(longBuf);
 return retString;
 }
 
-char *udcFileReadAll(char *url, char *cacheDir, size_t maxSize, size_t *retSize)
-/* Read a complete file via UDC. The cacheDir may be null in which case udcDefaultDir()
- * will be used.  If maxSize is non-zero, check size against maxSize
- * and abort if it's bigger.  Returns file data (with an extra terminal for the
- * common case where it's treated as a C string).  If retSize is non-NULL then
- * returns size of file in *retSize. Do a freeMem or freez of the returned buffer
- * when done. */
+char *udcFileReadAllIfExists(char *url, char *cacheDir, size_t maxSize, size_t *retSize)
+/* Read a complete file via UDC. Return NULL if the file doesn't exist.  The
+ * cacheDir may be null in which case udcDefaultDir() will be used.  If
+ * maxSize is non-zero, check size against maxSize and abort if it's bigger.
+ * Returns file data (with an extra terminal for the common case where it's
+ * treated as a C string).  If retSize is non-NULL then returns size of file
+ * in *retSize. Do a freeMem or freez of the returned buffer when done. */
 {
-struct udcFile  *file = udcFileOpen(url, cacheDir);
+struct udcFile  *file = udcFileMayOpen(url, cacheDir);
+if (file == NULL)
+    return NULL;
 size_t size = file->size;
 if (maxSize != 0 && size > maxSize)
     errAbort("%s is %lld bytes, but maxSize to udcFileReadAll is %lld",
@@ -2058,6 +2096,20 @@ buf[size] = 0;	// add trailing zero for string processing
 udcFileClose(&file);
 if (retSize != NULL)
     *retSize = size;
+return buf;
+}
+
+char *udcFileReadAll(char *url, char *cacheDir, size_t maxSize, size_t *retSize)
+/* Read a complete file via UDC. The cacheDir may be null in which case udcDefaultDir()
+ * will be used.  If maxSize is non-zero, check size against maxSize
+ * and abort if it's bigger.  Returns file data (with an extra terminal for the
+ * common case where it's treated as a C string).  If retSize is non-NULL then
+ * returns size of file in *retSize. Do a freeMem or freez of the returned buffer
+ * when done. */
+{
+char *buf = udcFileReadAllIfExists(url, cacheDir, maxSize, retSize);
+if (buf == NULL)
+    errAbort("Couldn't open %s", url);
 return buf;
 }
 
