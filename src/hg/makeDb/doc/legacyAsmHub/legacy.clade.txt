@@ -1,10 +1,15 @@
 GCA_000001905.1_Loxafr3.0	mammals
 GCA_000002305.1_EquCab2.0	mammals
+GCA_000002595.3_Chlamydomonas_reinhardtii_v5.5	plants
+GCA_000002725.2_ASM272v2	invertebrate
+GCA_000002875.2_ASM287v2	invertebrate
 GCA_000003205.6_Btau_5.0.1	mammals
 GCA_000003625.1_OryCun2.0	mammals
 GCA_000146795.3_Nleu_3.0	primates
+GCA_000147415.1_v_1.0	plants
 GCA_000151735.1_Cavpor3.0	mammals
 GCA_000165445.3_Mmur_3.0	primates
+GCA_000184155.1_FraVesHawaii_1.0	plants
 GCA_000208655.2_Dasnov3.0	mammals
 GCA_000243295.1_TriManLat1.0	mammals
 GCA_000247695.1_HetGla_female_1.0	mammals
@@ -21,6 +26,7 @@ GCA_000313985.1_EchTel2.0	mammals
 GCA_000349665.1_MesAur1.0	mammals
 GCA_000349705.1_LepWed1.0	mammals
 GCA_000364345.1_Macaca_fascicularis_5.0	primates
+GCA_000365465.3_Ptep_3.0	invertebrate
 GCA_000409795.2_Chlorocebus_sabeus_1.1	primates
 GCA_000442215.1_Lipotes_vexillifer_v1	mammals
 GCA_000464555.1_PanTig1.0	mammals
@@ -29,6 +35,8 @@ GCA_000493695.1_BalAcu1.0	mammals
 GCA_000622305.1_S.galili_v1.0	mammals
 GCA_000687225.1_UrsMar_1.0	mammals
 GCA_000696695.1_Burgud	mammals
+GCA_000710875.1_Pepper_Zunla_1_Ref_v1.0	plants
+GCA_000741045.2_Vradiata_ver6	plants
 GCA_000750555.1_ASM75055v1	bacteria
 GCA_000754665.1_Bison_UMD1.0	mammals
 GCA_000767525.1_Vi_pacos_V1.0	mammals
@@ -36,9 +44,11 @@ GCA_000767585.1_PRJNA234474_Ca_dromedarius_V1.0	mammals
 GCA_000767855.1_Ca_bactrianus_MBC_1.0	mammals
 GCA_000769185.1_Rrox_v1	primates
 GCA_000772875.3_Mmul_8.0.1	primates
+GCA_000845685.2_ViralProj14462	viral
 GCA_000952055.2_Anan_2.0	primates
 GCA_000956105.1_Pcoq_1.0	primates
 GCA_001305755.1_ASM130575v1	mammals
+GCA_001417965.1_Aiptasia_genome_1.1	invertebrate
 GCA_001443585.1_aciJub1	mammals
 GCA_001685135.1_ManJav1.0	mammals
 GCA_001698545.1_ASM169854v1	primates
@@ -49,6 +59,8 @@ GCA_001922835.1_NIST_Tur_tru_v1	mammals
 GCA_002007445.1_ASM200744v1	mammals
 GCA_002007445.2_ASM200744v2	mammals
 GCA_002102435.1_Ovir.te_1.0	mammals
+GCA_002114115.1_ASM211411v1	plants
+GCA_002156985.1_Harm_1.0	invertebrate
 GCA_002201575.1_ASM220157v1	mammals
 GCA_002288905.2_ASM228890v2	mammals
 GCA_002288925.2_ASM228892v2	mammals
@@ -86,6 +98,7 @@ GCA_006229205.1_meerkat_22Aug2017_6uvM2_HiC	mammals
 GCA_007364275.2_fArcCen1	fish
 GCA_009663435.1_Callithrix_jacchus_cj1700_1.0	primates
 GCA_009762305.1_mZalCal1.pri	mammals
+GCA_009764475.1_sPriPec2.pri	vertebrate
 GCA_009764565.1_rDerCor1.pri	vertebrate
 GCA_009769545.1_fCycLum1.pri	fish
 GCA_009769625.1_bCygOlo1.pri	birds
@@ -126,6 +139,7 @@ GCA_905237065.2_Ssal_v3.1	fish
 GCA_905333055.1_ilManJurt1.1	invertebrate
 GCA_905404315.1_ilLepSina1.1	invertebrate
 GCA_905475465.1_ilPieNapi1.1	invertebrate
+GCA_947179515.1_mApoSyl1.1	mammals
 GCF_000001405.39_GRCh38.p13	primates
 GCF_000001405.40_GRCh38.p14	primates
 GCF_000001635.26_GRCm38.p6	mammals
@@ -189,6 +203,7 @@ GCF_001698545.1_ASM169854v1	primates
 GCF_001704415.1_ARS1	mammals
 GCF_001891065.1_H_comes_QL1_v1	fish
 GCF_002007445.1_ASM200744v2	mammals
+GCF_002021735.1_Okis_V1	fish
 GCF_002162155.1_WEW_v2.0	plants
 GCF_002201575.1_ASM220157v1	mammals
 GCF_002263795.1_ARS-UCD1.2	mammals
