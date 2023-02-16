@@ -257,7 +257,7 @@ if (jsonOutputArrays)
     dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
 char *extraFlags = dyStringCannibalize(&extraDyFlags);
 
-if (protectedTrack(tdb, tdb->track))
+if (protectedTrack(db, tdb, tdb->track))
     hPrintf("<li>%s : %s &lt;protected data&gt;</li>\n", tdb->track, tdb->type);
 else if (db)
     {
@@ -298,7 +298,7 @@ else
     hPrintf("<li>%s : %s not db hub track ?</li>\n", tdb->track, tdb->type);
 }
 
-static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
+static void hubSampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb,
     long chromCount, long itemCount, char *genome, char *errorString)
 {
 struct dyString *extraDyFlags = dyStringNew(128);
@@ -328,7 +328,7 @@ if (chromCount > 0 || itemCount > 0)
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld count ", chromCount, itemCount);
     }
 
-if (protectedTrack(tdb, tdb->track))
+if (protectedTrack(db, tdb, tdb->track))
     hPrintf("    <li><b>%s</b>: %s protected data</li>\n", tdb->track, tdb->type);
 else if (isSupportedType(tdb->type))
     {
@@ -515,7 +515,7 @@ if (tdb->subtracks)
 	else
 	    {
 	    if (isSupportedType(tdbEl->type))
-		hubSampleUrl(hub, tdbEl, chromCount, itemCount, genome, errorString);
+		hubSampleUrl(hub, db, tdbEl, chromCount, itemCount, genome, errorString);
 	    else
 		hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
 	    }
@@ -556,11 +556,11 @@ if (tdb->subtracks)
 hPrintf("    </ul></li>\n");
 }
 
-static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
+static void trackSettings(char *db, struct trackDb *tdb, struct hash *countTracks)
 /* process the settingsHash for a trackDb, recursive when subtracks */
 {
 hPrintf("    <li><ul>\n");
-boolean protectedData = protectedTrack(tdb, tdb->track);
+boolean protectedData = protectedTrack(db, tdb, tdb->track);
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(tdb->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
@@ -586,7 +586,7 @@ if (tdb->subtracks)
 	{
         hPrintf("<li>subtrack: %s of parent: %s : type: '%s' (TBD: sample data)</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
 	hashCountTrack(tdbEl, countTracks);
-	trackSettings(tdbEl, countTracks);
+	trackSettings(db, tdbEl, countTracks);
 	}
     }
 hPrintf("    </ul></li>\n");
@@ -626,7 +626,7 @@ if (! (compositeContainer || compositeView) )
 if (depthSearch && bigDataUrl)
     {
     if (isSupportedType(tdb->type))
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome, errors->string);
+	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome, errors->string);
     }
 else
     {
@@ -637,7 +637,7 @@ else
     else if (superChild)
 	{
 	if (isSupportedType(tdb->type))
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome,  errors->string);
+	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome,  errors->string);
 	else
 	    hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
 	}
@@ -645,14 +645,14 @@ else
 	{
         if (isSupportedType(tdb->type))
 	    {
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome, errors->string);
+	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome, errors->string);
 	    }
 	}
     else
 	{
         if (isSupportedType(tdb->type))
 	    {
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome, errors->string);
+	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome, errors->string);
 	    }
 	else
 	    hPrintf("    <li><b>%s</b>: %s (what is this)</li>\n", tdb->track, tdb->type);
@@ -661,7 +661,7 @@ else
 if (allTrackSettings)
     {
     hPrintf("    <li><ul>\n");
-    trackSettings(tdb, countTracks); /* show all settings */
+    trackSettings(db, tdb, countTracks); /* show all settings */
     hPrintf("    </ul></li>\n");
     }
 else if (tdb->subtracks)
@@ -685,7 +685,7 @@ boolean compositeContainer = tdbIsComposite(tdb);
 boolean compositeView = tdbIsCompositeView(tdb);
 boolean superChild = tdbIsSuperTrackChild(tdb);
 boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
-boolean protectedData = protectedTrack(tdb, tdb->track);
+boolean protectedData = protectedTrack(db, tdb, tdb->track);
 hashCountTrack(tdb, countTracks);
 
 if (compositeContainer)
@@ -717,7 +717,7 @@ else
 if (allTrackSettings)
     {
     hPrintf("    <li><ul>\n");
-    trackSettings(tdb, countTracks); /* show all settings */
+    trackSettings(db, tdb, countTracks); /* show all settings */
     hPrintf("    </ul></li>\n");
     }
 else if (tdb->subtracks)

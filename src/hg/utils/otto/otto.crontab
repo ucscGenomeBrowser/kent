@@ -86,7 +86,7 @@ MAILTO=abenet@ucsc.edu,lrnassar@ucsc.edu
 
 #GRC Incident
 MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
-33 09 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
+33 06 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
 
 # GenArk update hgcentral.genark table, once a week on Tuesday
 # the script itself sends email for notices about activity
