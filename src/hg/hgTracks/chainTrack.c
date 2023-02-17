@@ -353,6 +353,7 @@ void bigChainLoadItems(struct track *tg)
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
+boolean doSnake = cartOrTdbBoolean(cart, tg->tdb, "doSnake" , FALSE);
 struct linkedFeatures *list = NULL, *lf;
 int qs;
 char *optionChrStr;
@@ -400,7 +401,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
     int len = strlen(bedRow[7]) + 32;
     lf->name = needMem(len);
-    safef(lf->name, len, "%s %c %dk", bedRow[7], *bedRow[5], qs/1000);
+    if (!doSnake)
+        safef(lf->name, len, "%s %c %dk", bedRow[7], *bedRow[5], qs/1000);
+    else
+        safef(lf->name, len, "%s", bedRow[7]);
     lf->extra = cloneString(bedRow[3]);
     lf->components = NULL;
     slAddHead(&list, lf);
@@ -418,6 +422,9 @@ else
 tg->items = list;
 
 bbiFileClose(&bbi);
+
+loadLinks(tg, winStart, winEnd, tvFull);
+maybeLoadSnake(tg);
 }
 
 void chainLoadItems(struct track *tg)

@@ -19,8 +19,12 @@ makeDirs:
 	mkdir -p ${destDir}
 
 mkGenomes::
+	@printf "# starting mkGenomes " 1>&2
+	@date "+%s %F %T" 1>&2
 	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
 	cp -p ${destDir}/${genomesTxt}.txt ${destDir}/download.${genomesTxt}.txt
+	@printf "# finished mkGenomes " 1>&2
+	@date "+%s %F %T" 1>&2
 
 symLinks::
 	${toolsDir}/mkSymLinks.pl ${orderList}
