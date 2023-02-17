@@ -26,6 +26,10 @@ while (my $asmId = <FH>) {
   my $id2 = substr($asmId, 10, 3);
   my $srcDir = sprintf "%s/%s/%s/%s/%s/%s", $ncbiSrc, $gcx, $id0, $id1, $id2, $asmId;
   my $asmRpt = "$srcDir/${asmId}_assembly_report.txt";
+  my $sciName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
+  chomp $sciName;
+  $sciName =~ s/.*ism name:\s+//i;
+  $sciName =~ s/\s+\(.*\)$//;
   my $yearDate = `grep -i -m 1 "Date:" "${asmRpt}" | tr -d "" | awk '{print \$NF}' | sed -e 's/-.*//;'`;
   chomp $yearDate;
   my $isolate = `grep -i -m 1 "Isolate:" "${asmRpt}" | tr -d ""`;
@@ -56,13 +60,34 @@ while (my $asmId = <FH>) {
   $orgName =~ s/.*\(//;
   $orgName =~ s/\)//;
   chomp $orgName;
-  if ($orgName eq "viruses") {
+  if ($orgName =~ m/firmicutes|proteobacteria|high G|enterobacteria|agent of/) {
+#    my @a = split('\s+', $sciName);
+#    my $lastN = scalar(@a) - 1;
+#    $orgName = uc(substr($a[0], 0, 1)) . "." . @a[1..$lastN];
+    $orgName = $sciName;
+  } elsif ($orgName =~ m/ascomycete|basidiomycete|budding|microsporidian|smut|fungi/) {
+    my ($order, undef) = split('\s', $orgName, 2);
+    $order = "budding yeast" if ($order =~ m/budding/);
+    $order = "smut fungi" if ($order =~ m/smut/);
+    $order = "ascomycetes" if ($order =~ m/ascomycete/);
+    $order = "basidiomycetes" if ($order =~ m/basidiomycete/);
+    my @a = split('\s+', $sciName);
+    my $lastN = scalar(@a) - 1;
+    $orgName = "$order " . uc(substr($a[0], 0, 1)) . "." . @a[1..$lastN];
+  } elsif ($orgName eq "viruses") {
     $orgName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
     chomp $orgName;
     $orgName =~ s/.*ism name:\s+//i;
     $orgName =~ s/\s+\(.*\)$//;
   }
   if (length($extraStrings)) {
+    my @a = split('\s+', $extraStrings);
+    for (my $i = 0; $i < scalar(@a); ++$i) {
+        $orgName =~ s/$a[$i]//;
+    }
+    $orgName =~ s/=//g;
+    $orgName =~ s/  / /g;
+    $orgName =~ s/ +$//;
     printf "%s\t%s (%s)\n", $asmId, $orgName, $extraStrings;
   } else {
     printf "%s\t%s\n", $asmId, $orgName;

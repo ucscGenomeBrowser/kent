@@ -1165,6 +1165,16 @@ function getHgsid()
     return "";
 }
 
+function undecoratedDb(db)
+// return the db name with any hub_id_ stripped
+{
+var retDb = db;
+if (db.startsWith("hub_")) {
+    retDb = db.split('_', 3)[2];
+}
+return retDb;
+}
+
 function getDb()
 {
     var db = normed($("input[name='db']").first());
@@ -1184,6 +1194,16 @@ function getDb()
         return db.value;
 
     return "";
+}
+
+function undecoratedTrack(track)
+// return the track name with any hub_id_ stripped
+{
+var retTrack = track;
+if (track.startsWith("hub_")) {
+    retTrack = track.split('_', 3)[2];
+}
+return retTrack;
 }
 
 function getTrack()

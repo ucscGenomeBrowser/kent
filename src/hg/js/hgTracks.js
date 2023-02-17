@@ -5140,7 +5140,7 @@ var downloadCurrentTrackData = {
         // for each track downloaded, perhaps as an option
         ignoredKeys = new Set(["chrom", "dataTime", "dataTimeStamp", "downloadTime", "downloadTimeStamp",
             "start", "end", "track", "trackType", "genome", "itemsReturned", "columnTypes",
-            "bigDataUrl", "chromSize"]);
+            "bigDataUrl", "chromSize", "hubUrl"]);
         // first get rid of top level non track object keys
         _.each(data, function(val, key) {
             if (ignoredKeys.has(key)) {delete data[key];}
@@ -5201,12 +5201,12 @@ var downloadCurrentTrackData = {
     startDownload: function() {
         trackList = [];
         $(".downloadTrackName:checked").each(function(i, elem) {
-            trackList.push(elem.id);
+            trackList.push(undecoratedTrack(elem.id));
         });
         chrom = hgTracks.chromName;
         start = hgTracks.winStart;
         end = hgTracks.winEnd;
-        db = getDb();
+        db = undecoratedDb(getDb());
         apiUrl = "../cgi-bin/hubApi/getData/track?";
         apiUrl += "chrom=" + chrom;
         apiUrl += ";start=" + start;
