@@ -6731,6 +6731,16 @@ for (dup = dupList; dup != NULL; dup = dup->next)
 		    warn("can't find parentTdb %s in makeDupeTracks", parentTdb->track);
 		}
 	    }
+
+        if (track->wigCartData)
+            {
+            char *typeLine = tdb->type, *words[8];
+            int wordCount = 0;
+            words[0] = NULL;
+            if (typeLine != NULL)
+                wordCount = chopLine(cloneString(typeLine), words);
+            track->wigCartData = wigCartOptionsNew(cart, track->tdb, wordCount, words);
+            }
 	}
     }
 hashFree(&trackHash);
