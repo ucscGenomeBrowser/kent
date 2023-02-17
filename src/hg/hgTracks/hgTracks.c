@@ -11030,6 +11030,10 @@ if(!trackImgOnly)
         webIncludeResourceFile("ui.dropdownchecklist.css");
         jsIncludeFile("ui.dropdownchecklist.js", NULL);
         jsIncludeFile("ddcl.js", NULL);
+        if (cfgOptionBooleanDefault("showTutorial", FALSE))
+            puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
+            puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
+            jsIncludeFile("tutorial.js",NULL);
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");

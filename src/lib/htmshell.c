@@ -978,6 +978,8 @@ dyStringAppend(policy, " maxcdn.bootstrapcdn.com");
 dyStringAppend(policy, " d3js.org/d3.v3.min.js");
 // jsHelper
 dyStringAppend(policy, " cdn.datatables.net");
+// shephered js for tutorial overlay
+dyStringAppend(policy, " cdn.jsdelivr.net");
 
 dyStringAppend(policy, ";");
 

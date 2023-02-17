@@ -5486,5 +5486,10 @@ $(document).ready(function()
         $("#hgt\\.setWidth")[0].parentNode.appendChild(newButton);
         $("#hgTracksDownload").click(downloadCurrentTrackData.showDownloadUi);
     }
+
+    // show a tutorial page if this is a new user
+    if (tour !== undefined) {
+        tour.start();
+    }
     
 });
