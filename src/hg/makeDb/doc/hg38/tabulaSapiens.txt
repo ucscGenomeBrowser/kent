@@ -1,0 +1,42 @@
+This describes building tabula-sapiens related tracks
+
+
+#############################################################################
+# bam-dec2022 download (Max)
+#############################################################################
+
+
+Download to:
+  /hive/data/inside/cells/datasets/tabula-sapiens/bam-dec2022/
+
+some doc in https://github.com/czbiohub/tabula-sapiens
+
+
+#############################################################################
+# setup for intronProspector runs (markd)
+#############################################################################
+
+Install htslib-1.16 and intronProspector-1.0.3 in /cluster/software/. Obtain
+from:
+
+   https://github.com/samtools/htslib/releases/download/1.16/htslib-1.16.tar.bz2
+   https://github.com/diekhans/intronProspector/archive/refs/tags/v1.0.3.tar.gz
+
+Need to get genome sequence matching the BAMs.
+
+STAR/homo.gencode.v30.annotation.ERCC92 which is not in bucket
+
+
+something is weird with samrtseq2 directory BAMs
+    cd /hive/data/inside/cells/datasets/tabula-sapiens/bam-dec2022/Pilot1/alignment-gencode/
+
+    % samtools view -H  ./smartseq2/B107813_G5_S31.homo.covid19.Aligned.out.sorted.bam| head
+    [E::sam_hrecs_refs_from_targets_array] Duplicate entry "NC_040671" in target list
+    samtools view: failed to add PG line to the header
+
+    % picard ValidateSamFile I=./smartseq2/B107813_G5_S31.homo.covid19.Aligned.out.sorted.bam
+    ERROR	2023-02-08 21:44:44	ValidateSamFile	Cannot add sequence that already exists in SAMSequenceDictionary: NC_040671
+
+
+CZI contacted about problems
+
