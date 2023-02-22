@@ -396,7 +396,8 @@ hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 
         "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/genes'>bigZips/genes</a> "
         "directory on our download server.</DIV>", database);
 hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='wigNote'>"
-        "<b>Signal data points format:</b> The Table Browser at the moment outputs signal track data points in wiggle text format. "
+        "<b>Signal data points format:</b> The Table Browser at the moment outputs signal track data points in "
+        "<a href='../goldenPath/help/wiggle.html' target=_blank>wiggle</a> text format. "
         "If you need the output in BED/bedGraph format, use our <a href=\"../goldenPath/help/bigWig.html#Extract\" "
         "target=_blank>bigWigToBedGraph</a> command line tool or contact us at genome@soe.ucsc.edu if that poses a problem.</div>");
 hPrintf(" ");
@@ -514,7 +515,7 @@ if (isBedGr)
 else if (isWig)
     {
     slAddTail(&otList, &otWigData);
-    // slAddTail(&otList, &otWigBed); removed in 2022 as output is not bedgraph and has no data points
+    slAddTail(&otList, &otWigBed);
     slAddTail(&otList, &otCustomTrack);
     // hyperlinks output works for db-wiggle but not for bigWig
     }
