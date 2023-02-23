@@ -24,7 +24,9 @@ if [ "${badLinks}" -gt 0 ]; then
   exit 255
 fi
 
+export DS=`date "+%F %T"`
 export destDir="/mirrordata/hubs/${dirPath}"
+printf "### sending %s\t%s\t##########\n" "`basename ${srcDir}`" "${DS}"
 printf "# srcDir: %s\n" "${srcDir}"
 printf "# destDir: %s\n" "${destDir}"
 
@@ -47,12 +49,14 @@ if [ "${idxCount}" -gt 0 ]; then
 export dynaServerDir="/scratch/hubs/${dirPath}"
 
 ssh qateam@$dynaBlat "mkdir -p ${dynaServerDir}" 2>&1 | grep -v "X11 forwarding request" || true
-printf "# successful mkdir on $dynaBlat\n"
+printf "# successful mkdir on $dynaBlat\n" 1>&2
 
+printf "rsync --stats -a -L -P ${srcDir}/*.2bit \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
 rsync --stats -a -L -P ${srcDir}/*.2bit "qateam@$dynaBlat:${dynaServerDir}/" \
-  2>&1 | grep -v "X11 forwarding request" || true
+  2>&1 | grep -v "X11 forwarding request"
+printf "rsync --stats -a -L -P ${srcDir}/*.gfidx \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
 rsync --stats -a -L -P ${srcDir}/*.gfidx "qateam@$dynaBlat:${dynaServerDir}/" \
-  2>&1 | grep -v "X11 forwarding request" || true
+  2>&1 | grep -v "X11 forwarding request"
 
 fi
 
@@ -60,9 +64,11 @@ fi
 # genomes.txt obsolete now with the single file
 # ssh qateam@hgdownload.soe.ucsc.edu "rm ${destDir}/genomes.txt" 2>&1 | egrep -v "cannot remove|X11 forwarding request" || true
 # ssh qateam@hgdownload.soe.ucsc.edu "rm ${destDir}/html/*.description.html" 2>&1 | grep -v "X11 forwarding request" || true
+printf "rsync --delete --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@hgdownload.soe.ucsc.edu:${destDir}/\"\n" 1>&2
 rsync --delete --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@hgdownload.soe.ucsc.edu:${destDir}/" \
-  2>&1 | grep -v "X11 forwarding request" || true
+  2>&1 | grep -v "X11 forwarding request"
 # the new single file hub genome trackDb file:
+printf "rsync --stats -a -L -P \"${srcDir}/download.hub.txt\" \"qateam@hgdownload.soe.ucsc.edu:${destDir}/hub.txt\"\n" 1>&2
 rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@hgdownload.soe.ucsc.edu:${destDir}/hub.txt" \
-  2>&1 | grep -v "X11 forwarding request" || true
+  2>&1 | grep -v "X11 forwarding request"
 printf "# successful rsync\n"

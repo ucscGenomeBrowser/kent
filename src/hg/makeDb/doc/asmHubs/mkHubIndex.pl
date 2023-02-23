@@ -392,7 +392,12 @@ sub tableContents() {
     }
     printf "    <td align=center><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
     if ("legacy" eq $asmHubName) {
-      printf "    <td align=center>%s</td>\n", $cladeId{$asmId};
+      if (! defined($cladeId{$asmId})) {
+         printf STDERR "# ERROR: missing clade definition for %s\n", $asmId;
+         exit 255;
+      } else {
+         printf "    <td align=center>%s</td>\n", $cladeId{$asmId};
+      }
     }
     if ($vgpIndex) {
       my $sciNameUnderscore = $sciName;

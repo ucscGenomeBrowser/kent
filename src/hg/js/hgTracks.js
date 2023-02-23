@@ -2150,7 +2150,7 @@ var rightClick = {
     selectedMenuItem: null,   // currently choosen context menu item (via context menu).
     floatingMenuItem: null,
     currentMapItem:   null,
-    supportZoomCodon: false,  // turns on experimental feature (currently only in larry's tree).
+    supportZoomCodon: true,  // add zoom to exon and zoom to codon to right click menu
     clickedHighlightIdx : null,  // the index (0,1,...) of the highlight item that overlaps the last right-click
 
     makeMapItem: function (id)
@@ -2201,11 +2201,7 @@ var rightClick = {
     {
         var json = JSON.parse(response);
         if (json.pos) {
-            genomePos.set(json.pos, 3);
-            if (document.TrackForm)
-                document.TrackForm.submit();
-            else
-                document.TrackHeaderForm.submit();
+            imageV2.navigateInPlace("position="+json.pos);
         } else {
             alert(json.error);
         }
@@ -2796,6 +2792,7 @@ var rightClick = {
                     o = {};
                     var any = false;
                     var title = rightClick.selectedMenuItem.title || "feature";
+                    var exonNum = 0;
                     var maxLength = 60;
                     if (title.length > maxLength) {
                         title = title.substring(0, maxLength) + "...";
@@ -2829,6 +2826,10 @@ var rightClick = {
                         // "exonNumbers on" is the default for genePred/bigGenePred tracks but can also be actived for bigBed and others
                         // We don't have the value of "exonNumbers" here, so just use a heuristic to see if it's on
                         if (title.search(/, strand [+-], (Intron|Exon) /)!==-1) {
+                            re = /(Exon) ([1-9]+) of/;
+                            matches = re.exec(title);
+                            if (matches !== null && matches[2].length > 0)
+                                exonNum = matches[2];
                             title = title.split(",")[0];
                         }
 
@@ -2891,13 +2892,23 @@ var rightClick = {
                                                         {name: name, table: table});
                                             return true;}
                                     };
-                                    o[rightClick.makeImgTag("magnify.png")+" Zoom to exon"] = {
-                                        onclick: function(menuItemClicked, menuObject) {
-                                            rightClick.hit(menuItemClicked, menuObject,
-                                                          "zoomExon",
-                                                          {name: name, table: table});
-                                            return true; }
-                                    };
+                                    if (exonNum > 0) {
+                                        o[rightClick.makeImgTag("magnify.png")+" Zoom to exon"] = {
+                                            onclick: function(menuItemClicked, menuObject) {
+                                                $.ajax({
+                                                        type: "GET",
+                                                        url: "../cgi-bin/hgApi",
+                                                        data: cart.varsToUrlData({ 'db': getDb(),
+                                                                'cmd': "exonToPos", 'num': exonNum,
+                                                                'table': table, 'name': name}),
+                                                        trueSuccess: rightClick.handleZoomCodon,
+                                                        success: catchErrorOrDispatch,
+                                                        error: errorHandler,
+                                                        cache: true
+                                                    });
+                                                return true; }
+                                        };
+                                    }
                                 }
                             }
                             o[rightClick.makeImgTag("dnaIcon.png")+" Get DNA for "+title] = {
@@ -5102,6 +5113,209 @@ var trackSearch = {
     }
 };
 
+////////
+// Download Current Tracks in window Dialog
+////////
+var downloadCurrentTrackData = {
+    downloadData: {}, // container for holding data while it comes in from the api
+    currentRequests: {}, // pending requests
+    intervalId: null, // the id of the timer that waits on the api
+
+    failedTrackDataRequest: function(msg) {
+        msgJson = JSON.parse(msg);
+        alert("Download failed. Error message: '" + msgJson.error);
+    },
+
+    receiveTrackData: function(track, data) {
+        downloadCurrentTrackData.downloadData[track] = data;
+    },
+
+    convertJson: function(data, outType) {
+        if (outType !== "tsv" && outType !== "csv") {
+            alert("ERROR: incorrect output format option");
+            return null;
+        }
+        outSep = outType === "tsv" ? '\t' : ',';
+        // TODO: someday we will probably want to include some of these fields
+        // for each track downloaded, perhaps as an option
+        ignoredKeys = new Set(["chrom", "dataTime", "dataTimeStamp", "downloadTime", "downloadTimeStamp",
+            "start", "end", "track", "trackType", "genome", "itemsReturned", "columnTypes",
+            "bigDataUrl", "chromSize", "hubUrl"]);
+        // first get rid of top level non track object keys
+        _.each(data, function(val, key) {
+            if (ignoredKeys.has(key)) {delete data[key];}
+        });
+        // now go through each track and format it correctly
+        str = "";
+        _.each(data, function(val, track) {
+            str += "track name=\"" + track + "\"\n";
+            for (var row in val) {
+                for (var  i = 0; i < val[row].length; i++) {
+                    str += JSON.stringify(val[row][i]);
+                    if (i < val[row].length) { str += outSep; }
+                }
+                str += "\n";
+            }
+            str += "\n"; // extra new line after each track oh well
+        });
+        return new Blob([str], {type: "text/plain"});
+    },
+
+    makeDownloadFile: function(key) {
+        if (_.keys(downloadCurrentTrackData.currentRequests).length === 0) {
+            // first stop the timer so we don't execute again
+            clearInterval(downloadCurrentTrackData.intervalId);
+            outType = $("#outputFormat")[0].selectedOptions[0].value;
+            var blob = null;
+            if (outType === 'json') {
+                blob = new Blob([JSON.stringify(downloadCurrentTrackData.downloadData[key])], {type: "text/plain"});
+            } else {
+                blob = downloadCurrentTrackData.convertJson(downloadCurrentTrackData.downloadData[key], outType);
+            }
+            if (blob) {
+                anchor = document.createElement("a");
+                anchor.href = URL.createObjectURL(blob);
+                fname = $("#downloadFileName")[0].value;
+                if (fname.length === 0) {
+                    fname = "trackDownload.txt";
+                }
+                switch (outType) {
+                    case "tsv":
+                        if (!fname.endsWith(".tsv")) {fname += ".tsv";}
+                        break;
+                    case "csv":
+                        if (!fname.endsWith(".csv")) {fname += ".csv";}
+                        break;
+                    default:
+                        if (!fname.endsWith(".txt")) {fname += ".txt";}
+                        break;
+                }
+                anchor.download = fname;
+                anchor.click();
+                window.URL.revokeObjectURL(anchor.href);
+                downloadCurrentTrackData.downloadData = {};
+            }
+        }
+    },
+
+    startDownload: function() {
+        trackList = [];
+        $(".downloadTrackName:checked").each(function(i, elem) {
+            trackList.push(undecoratedTrack(elem.id));
+        });
+        chrom = hgTracks.chromName;
+        start = hgTracks.winStart;
+        end = hgTracks.winEnd;
+        db = undecoratedDb(getDb());
+        apiUrl = "../cgi-bin/hubApi/getData/track?";
+        apiUrl += "chrom=" + chrom;
+        apiUrl += ";start=" + start;
+        apiUrl += ";end=" + end;
+        apiUrl += ";genome=" + db;
+        apiUrl += ";jsonOutputArrays=1";
+        apiUrl += ";track=" + trackList.join(',');
+        // strip off final comma:
+        var xmlhttp = new XMLHttpRequest();
+        downloadCurrentTrackData.currentRequests[apiUrl] = true;
+        xmlhttp.onreadystatechange = function() {
+            if (4 === this.readyState && 200 === this.status) {
+                var mapData = JSON.parse(this.responseText);
+                downloadCurrentTrackData.receiveTrackData(apiUrl, mapData);
+                delete downloadCurrentTrackData.currentRequests[apiUrl];
+            } else {
+                if (4 === this.readyState && this.status >= 400) {
+                    clearInterval(downloadCurrentTrackData.intervalId);
+                    downloadCurrentTrackData.failedTrackDataRequest(this.responseText);
+                    delete downloadCurrentTrackData.currentRequests[apiUrl];
+                }
+            }
+        };
+        xmlhttp.open("GET", apiUrl, true);
+        xmlhttp.send();  // sends request and exits this function
+        // the onreadystatechange callback above will trigger
+        // when the data has safely arrived
+        // wait for the request to complete before making the download file
+        downloadCurrentTrackData.intervalId = setInterval(downloadCurrentTrackData.makeDownloadFile, 200, apiUrl);
+    },
+
+
+    showDownloadUi: function() {
+        // Populate the dialog with the current list of tracks
+        // and allow the user to select which ones to download
+        // Grey out tracks that are currently unsupported by the api
+        // or are protected data
+        var downloadDialog = $("#downloadDialog")[0];
+        if (!downloadDialog) {
+            downloadDialog = document.createElement("div");
+            downloadDialog.id = "downloadDialog";
+            downloadDialog.style = "display: none";
+            document.body.append(downloadDialog);
+            $("#checkAllDownloadTracks").click( function() {
+                $(".downloadTrackName").each(function(i, elem) {
+                    elem.checked = true;
+                });
+            });
+            $("#uncheckAllDownloadTracks").click( function() {
+                $(".downloadTrackName").each(function(i, elem) {
+                    elem.checked = false;
+                });
+            });
+            var popMaxHeight = ($(window).height() - 40);
+            var popMaxWidth  = ($(window).width() - 40);
+            var popWidth     = 700;
+            if (popWidth > popMaxWidth)
+                popWidth = popMaxWidth;
+            downloadTrackDataButtons = {};
+            downloadTrackDataButtons.Download = downloadCurrentTrackData.startDownload;
+            downloadTrackDataButtons.Cancel = function(){
+                $(this).dialog("close");
+            };
+            $(downloadDialog).dialog({
+                title: "Download track data in view",
+                resizable: true,               // Let scroll vertically
+                height: 'auto',
+                width: popWidth,
+                minHeight: 200,
+                minWidth: 400,
+                maxHeight: popMaxHeight,
+                maxWidth: popMaxWidth,
+                modal: true,
+                closeOnEscape: true,
+                autoOpen: false,
+                buttons: downloadTrackDataButtons
+            });
+        }
+        htmlStr = "<p>Use this selection window to download track data" +
+            " for the current region (" + genomePos.get() + "). Please note that large regions" +
+            " may be slow to download.</p>";
+        htmlStr  += "<div><button id='checkAllDownloadTracks'>Check All</button>" +
+            "&nbsp;" +
+            "<button id='uncheckAllDownloadTracks'>Clear All</button>" +
+            "</div>";
+        _.each(hgTracks.trackDb, function(track, trackName) {
+            if (trackName !== "ruler" && track.visibility > 0) {
+                htmlStr += "<input type=checkbox checked class='downloadTrackName' id='" + trackName + "'>";
+                htmlStr += "<label>" + track.shortLabel + "</label>";
+                htmlStr += "</input>";
+                htmlStr += "<br>";
+            }
+        });
+        htmlStr += "<div ><label style='padding-right: 10px' for='downloadFileName'>Enter an output file name</label>";
+        htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
+            " value='" + getDb() + ".tracks'</input>";
+        htmlStr += "<br>";
+        htmlStr += "<label style='padding-right: 10px' for='outputFormat'>Choose an output format</label>";
+        htmlStr += "<select name='outputFormat' id='outputFormat'>";
+        htmlStr += "<option selected value='json'>JSON</option>";
+        htmlStr += "<option value='csv'>CSV</option>";
+        htmlStr += "<option value='tsv'>TSV</option>";
+        htmlStr += "</select>";
+        htmlStr += "</div>";
+        downloadDialog.innerHTML = htmlStr;
+        $(downloadDialog).dialog('open');
+    }
+};
+
 
   ///////////////
  //// READY ////
@@ -5258,4 +5472,19 @@ $(document).ready(function()
         }
     });
 
+
+    // add a button to download the current track data (under hg.conf control)
+    if (typeof showDownloadButton !== 'undefined' && showDownloadButton) {
+        newButton = document.createElement("input");
+        newButton.setAttribute("id", "hgTracksDownload");
+        newButton.setAttribute("type", "button");
+        newButton.setAttribute("name", "downloadTracks");
+        newButton.setAttribute("value", "download current tracks");
+        newButton.setAttribute("title", "download track data in window");
+        // add a space to match the other buttons
+        $("#hgt\\.setWidth")[0].parentNode.appendChild(document.createTextNode(" "));
+        $("#hgt\\.setWidth")[0].parentNode.appendChild(newButton);
+        $("#hgTracksDownload").click(downloadCurrentTrackData.showDownloadUi);
+    }
+    
 });

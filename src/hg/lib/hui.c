@@ -176,9 +176,9 @@ if (trackDataAccessible(db, tdb) && differentString("longTabix", tdb->type))
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
 	return FALSE;
-    char *hint = " title='Open table schema in new window'";
+    char *hint = " title='Open data format (table schema) in new window'";
     if (label == NULL)
-	label = " View table schema";
+	label = " View data format";
     struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb);
     printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->track, tdb->table, hint, label);
     return TRUE;
@@ -575,7 +575,7 @@ if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(
     // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
     // until it's implemented
     {
-    makeSchemaLink(db,tdb,(links > 1 ? "schema":"View table schema"));
+    makeSchemaLink(db,tdb,(links > 1 ? "Data format":"Data schema/format description and download"));
     if (downloadLink)
 	printf(", ");
     }
@@ -5525,7 +5525,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // A schema link for each track
     printf("</td>\n<TD>&nbsp;");
-    makeSchemaLink(db,subtrack,"Schema");
+    makeSchemaLink(db,subtrack,"Data format");
     printf("&nbsp;");
 
     // Do we have a restricted until date?
@@ -7070,6 +7070,7 @@ if (wordCount == 3 && sameWord(words[1], "xeno"))
 baseColorDropLists(cart, tdb, name);
 indelShowOptionsWithName(cart, tdb, name);
 wigOption(cart, name, title, tdb);
+snakeOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 }
 

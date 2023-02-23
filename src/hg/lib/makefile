@@ -3,7 +3,8 @@ include ../../inc/localEnvironment.mk
 include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
-O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o asmAlias.o autoUpgrade.o axtInfo.o \
+O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
+  asmAlias.o asmEquivalent.o autoUpgrade.o axtInfo.o \
   barChartBed.o barChartCategory.o barChartUi.o bed.o bed12Source.o \
   bedDetail.o bigBedFind.o bigBedLabel.o bigDbSnp.o bigGenePred.o \
   bigPsl.o blastTab.o borf.o botDelay.o cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o \

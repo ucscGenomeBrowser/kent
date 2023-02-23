@@ -124,6 +124,7 @@ static char **cdjvFeatures[] = {
 static char** geneFeatures[] = {
     &gff3FeatGene,
     &gff3FeatPseudogene,
+    &gff3FeatNCRnaGene,
     NULL
 };
 static char** transFeatures[] = {
@@ -132,6 +133,12 @@ static char** transFeatures[] = {
     &gff3FeatCDS,
     &gff3FeatRRna,
     &gff3FeatTRna,
+    &gff3FeatLncRna,
+    &gff3FeatPseudogenicTranscript,
+    &gff3FeatScRna,
+    &gff3FeatSnRna,
+    &gff3FeatSnoRna,
+    &gff3FeatUnconfirmedTranscript,
     &gff3FeatCGeneSegment,
     &gff3FeatDGeneSegment,
     &gff3FeatJGeneSegment,
@@ -752,7 +759,7 @@ else if (allowMinimalGenes)
 static void processRoot(FILE *gpFh, struct gff3Ann *node, struct hash *processed)
 /* process a root node in the tree */
 {
-if (sameString(node->type, gff3FeatGene) || sameString(node->type, gff3FeatPseudogene))
+if (featTypeMatch(node->type, geneFeatures))
     processGene(gpFh, node, processed);
 else if (shouldProcessAsTranscript(node))
     processTranscript(gpFh, NULL, node, processed);

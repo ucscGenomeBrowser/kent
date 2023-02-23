@@ -395,17 +395,26 @@ hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 
         "gene model files for use in genome analysis pipelines,<br>check the "
         "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/genes'>bigZips/genes</a> "
         "directory on our download server.</DIV>", database);
+hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='wigNote'>"
+        "<b>Signal data points format:</b> The Table Browser at the moment outputs signal track data points in "
+        "<a href='../goldenPath/help/wiggle.html' target=_blank>wiggle</a> text format. "
+        "If you need the output in BED/bedGraph format, use our <a href=\"../goldenPath/help/bigWig.html#Extract\" "
+        "target=_blank>bigWigToBedGraph</a> command line tool or contact us at genome@soe.ucsc.edu if that poses a problem.</div>");
 hPrintf(" ");
 
-jsInline("function checkGtfNote(event) {\n"
-    "if (document.getElementById('outputTypeDropdown').value==='gff')\n"
+// we should make an hgTables.js one day, this is ugly
+jsInline("function checkOutputNotes(event) {\n"
+    "var outType=document.getElementById('outputTypeDropdown').value;\n"
+    "if (outType==='gff')\n"
     "    document.getElementById('gffNote').style.display='';\n"
+    "else if (outType==='wigData')\n"
+    "    document.getElementById('wigNote').style.display='';\n"
     "else\n"
-    "    document.getElementById('gffNote').style.display='none';\n"
+    "    $('.outputNote').hide();\n" // a lot shorter with Jquery than without
     "}\n"
-    "$(document).ready(checkGtfNote);\n"
+    "$(document).ready(checkOutputNotes);\n"
 );
-jsAddEventForId("change", "outputTypeDropdown", "checkGtfNote");
+jsAddEventForId("change", "outputTypeDropdown", "checkOutputNotes");
 
 jsInline("function checkSnpTablesNote(event) {\n"  
     "var trackName = document.getElementById('hgta_track').value;\n"
@@ -686,7 +695,7 @@ printStep(stepNumber++);
         {
         isChromGraphCt = isChromGraph(tdb);
         }
-    cgiMakeButton(hgtaDoSchema, "describe table schema");
+    cgiMakeButton(hgtaDoSchema, "data format description");
     hPrintf("</TD></TR>\n");
     }
 

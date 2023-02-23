@@ -1196,6 +1196,9 @@ struct wigGraphOutput *wgo = tg->wigGraphOutput;
 //struct wigMouseOver *mouseOverData = NULL;
 unsigned numBases = seqEnd - seqStart;
 struct dnaSeq *seq = hChromSeq(database, chromName, seqStart, seqEnd);
+if (baseCmpl)
+    complement(seq->dna, seq->size);
+
 struct pixelCountBin *pixelBins = wgo->pixelBins;
 double *yOffsets = wgo->yOffsets;
 int numTrack = wgo->numTrack;
@@ -1278,7 +1281,8 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                 if (boxTop == h)
                     boxTop = h - 1;
 
-                if (tg->tdb->parent && startsWith("multiWig", trackDbSetting(tg->tdb->parent,"container")))
+                char *setting;
+                if (tg->tdb->parent && ((setting = trackDbSetting(tg->tdb->parent,"container")) != NULL) && startsWith("multiWig", setting))
                     {
                     switch(numTrack)
                         {

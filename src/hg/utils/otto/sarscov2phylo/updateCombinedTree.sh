@@ -9,7 +9,7 @@ usage() {
     echo "This assumes that ncbi.latest and cogUk.latest links/directories have been updated."
 }
 
-if [ $# != 3 && $# != 4 ]; then
+if (( $# != 3 && $# != 4 )); then
   usage
   exit 1
 fi

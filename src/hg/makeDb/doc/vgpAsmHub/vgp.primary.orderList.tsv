@@ -56,7 +56,7 @@ GCA_017639485.1_bPluApr1.pri	European golden plover
 GCA_903797595.2_bEriRub2.2	European robin
 GCF_902459465.1_eAstRub1.3	European starfish
 GCA_901699155.2_bStrTur1.2	European turtle dove (v1.2 2021 VGP)
-GCA_947179515.1_mApoSyl1.1	European woodmouse (2022 VGP)
+GCF_947179515.1_mApoSyl1.1	European woodmouse (2022 refseq)
 GCF_007364275.1_fArcCen1	flier cichlid
 GCA_014839995.1_fXenCan1.pri	freshwater garfish (fXenCan1 2020 VGP)
 GCF_902459505.1_aGeoSer1.1	Gabon caecilian
@@ -70,12 +70,12 @@ GCA_905319855.2_mCanLor1.2	gray wolf (2021 VGP)
 GCA_013368605.1_bNycGra1.pri	great potoo
 GCF_902652985.1_xPecMax1.1	great scallop
 GCF_017639515.1_sCarCar2.pri	great white shark
-GCA_004115265.2_mRhiFer1_v1.p	greater horseshoe bat
 GCF_004115265.2_mRhiFer1_v1.p	greater horseshoe bat (v2 MPI-CBG 2019 VGP)
 GCF_901709675.1_fSynAcu1.2	greater pipefish
 GCF_014108235.1_mMyoMyo1.p	greater mouse-eared bat
 GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 2021)
 GCF_015220075.1_bFalRus1.pri	gyrfalcon
+GCF_026419915.1_bHarHar1_primary_haplotype	Harpy eagle (bHarHar1 2022)
 GCF_020740725.1_bCorHaw1.pri.cur	Hawaiian crow (2021 refseq VGP)
 GCF_015220745.1_fSebUmb1.pri	honeycomb rockfish
 GCA_016695395.2_mHomSap3.mat	human (WGS:JACSEX01 2021 VGP)
@@ -126,7 +126,7 @@ GCF_015220715.1_fPygNat1.pri	red-bellied piranha
 GCA_009769465.1_bTauEry1.pri	red-crested turaco
 GCA_015220805.1_bPogPus1.pri	red-fronted tinkerbird
 GCA_009819825.1_bCarCri1.pri	red-legged seriema
-GCF_900747795.1_fErpCal1.1	reedfish
+GCF_900747795.2_fErpCal1.3	reedfish (2021)
 GCA_016904835.1_bAcaChl1.pri	rifleman (VGP 2021)
 GCF_901001165.1_fSalTru1.1	river trout
 GCA_910591455.2_fPhoGun1.2	rock gunnel (2021 VGP)
@@ -135,7 +135,7 @@ GCA_023634085.1_bFalChe1.pri	Saker falcon (2022 VGP)
 GCF_009819535.1_rLacAgi1.pri	sand lizard
 GCF_010993605.1_kPetMar1.pri	sea lamprey
 GCF_900634795.3_fBetSpl5.3	Siamese fighting fish (2020)
-GCA_009764475.1_sPriPec2.pri	smalltooth sawfish
+GCF_009764475.1_sPriPec2.1.pri	smalltooth sawfish (v2.1 2019 refseq)
 GCA_020800305.1_bPorHoc1.mat.Z.cur	South Island takahe (VGP primary 2021)
 GCF_910596095.1_fThuMac1.1	southern bluefin tuna (2021 VGP)
 GCF_903995425.1_mOncTor1.1	southern grasshopper mouse

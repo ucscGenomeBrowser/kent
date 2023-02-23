@@ -49,6 +49,7 @@
 #include "wikiLink.h"
 #include "cheapcgi.h"
 #include "chromAlias.h"
+#include "asmEquivalent.h"
 
 
 #ifdef LOWELAB
@@ -601,7 +602,7 @@ struct dbToGcf
     };
 static struct dbToGcf dbToGcf[] =
     {
-    { "hg38", "GCF_000001405.37" },
+    { "hg38", "GCF_000001405.40" },
     { "hg19", "GCF_000001405.25" },
     { "mm10", "GCF_000001635.26" },
     { "danRer11", "GCF_000002035.6" },
@@ -628,6 +629,8 @@ for (i = 0;  dbToGcf[i].db != NULL;  i++)
         gcf = cloneString(dbToGcf[i].gcf);
         break;
         }
+if (NULL == gcf)
+    gcf = asmEquivalentUcscToNCBI(db, "refseq");
 return gcf;
 }
 
@@ -650,6 +653,8 @@ if (! trackHubDatabase(db))
         }
     hDisconnectCentral(&conn);
     }
+if (NULL == gca)
+    gca = asmEquivalentUcscToNCBI(db, "genbank");
 return gca;
 }
 

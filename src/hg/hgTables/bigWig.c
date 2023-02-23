@@ -453,10 +453,8 @@ else
 void showSchemaBigWigNoTable(char *db, char *table, struct trackDb *tdb)
 {
 struct trackDb *tableTdb = hashFindVal(fullTableToTdbHash, table);
-hPrintf("<B>Database:</B> %s", db);
-printf("<BR>The data for this track is provided by a file in "
-       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
-       "BigWig</A> format.");
-hPrintf("<BR><B>Data URL:</B>  %s", trackDbSetting(tableTdb, "bigDataUrl"));
+hPrintf("<B>Database:</B> %s<br>", db);
+printDownloadLink("BigWig", trackDbSetting(tableTdb, "bigDataUrl"));
+printTypeHelpDesc(tableTdb->type);
 printTrackHtml(tableTdb);
 }

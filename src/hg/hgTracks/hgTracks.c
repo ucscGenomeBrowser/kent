@@ -987,7 +987,7 @@ while ((psl = pslNext(f)) != NULL)
         if (sameString(psl->strand, "+"))
             lf->filterColor = MAKECOLOR_32(0,0,0);
         else
-            lf->filterColor = MAKECOLOR_32(0,0,100);
+            lf->filterColor = MAKECOLOR_32(0,0,150);
 
 	slAddHead(&lfList, lf);
 	/* Don't free psl -- used in drawing phase by baseColor code. */
@@ -5801,6 +5801,8 @@ if(sameString(type, "jsonp"))
 else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "eps"))
     {
     // following code bypasses html and return png's directly - see redmine 4888
+    // NB: Pretty sure the pdf and eps options here are never invoked.  I don't see any
+    // calls that would activate eps output, and pdf is locked behind an unused ifdef
     char *file;
     if(sameString(type, "pdf"))
         {
@@ -6729,6 +6731,16 @@ for (dup = dupList; dup != NULL; dup = dup->next)
 		    warn("can't find parentTdb %s in makeDupeTracks", parentTdb->track);
 		}
 	    }
+
+        if (track->wigCartData)
+            {
+            char *typeLine = tdb->type, *words[8];
+            int wordCount = 0;
+            words[0] = NULL;
+            if (typeLine != NULL)
+                wordCount = chopLine(cloneString(typeLine), words);
+            track->wigCartData = wigCartOptionsNew(cart, track->tdb, wordCount, words);
+            }
 	}
     }
 hashFree(&trackHash);
@@ -7523,19 +7535,8 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
-return (startsWith("big", track->tdb->type)
-     || startsWithWord("mathWig"  , track->tdb->type)
-     || startsWithWord("bam"     , track->tdb->type)
-     || startsWithWord("halSnake", track->tdb->type)
-     || startsWithWord("bigRmsk", track->tdb->type)
-     || startsWithWord("bigLolly", track->tdb->type)
-     || startsWithWord("vcfTabix", track->tdb->type))
-     // XX code-review: shouldn't we error abort if the URL is not valid?
-     && (bdu && isValidBigDataUrl(bdu, FALSE))
-     && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
-     && (track->subtracks == NULL)
-     && (!startsWith("bigInteract", track->tdb->type))
-     && (!startsWith("bigMaf", track->tdb->type));
+
+return customFactoryParallelLoad(bdu, track->tdb->type) && (track->subtracks == NULL);
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList)
@@ -8266,6 +8267,10 @@ hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
 hPrintf(" ");
 
 hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
+
+// put the track download interface behind hg.conf control
+if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
+    jsInline("var showDownloadButton = true;\n");
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -9565,14 +9570,11 @@ if (pdfFile != NULL)
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
-    // postscript
-    printf("EPS (Postscript) images are a variant of PDF and easier to import into some "
-            "drawing programs.\n");
-    printf("<UL style=\"margin-top: 5px;\">\n");
-    printf("<LI>Download <A HREF=\"%s\">the current browser graphic in EPS</A>", psTn.forCgi);
-    if (strlen(ideoPsTn.forCgi))
-        printf("<LI>Download <A HREF=\"%s\">the current chromosome ideogram in EPS</A>", ideoPsTn.forCgi);
-    printf("</UL>\n");
+
+    printf("EPS (PostScript) output has been discontinued in pursuit of additional features\n");
+    printf("that are not PostScript-compatible.  If you require PostScript output for your\n");
+    printf("workflow, please <a href='https://genome.ucsc.edu/contacts.html'>reach out to us</a>\n");
+    printf("and let us know what your needs are - we may be able to help.\n");
 
     // see redmine #1077
     printf("<div style=\"margin-top:15px\">Tips for producing quality images for publication:</div>\n");
@@ -10780,13 +10782,13 @@ dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').submit().click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').submit().click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('#defaultTracksMenuLink')[0].click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('#defaultTrackOrderMenuLink')[0].click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').submit().click(); }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]')[0].click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('v d', function() { gotoGetDnaPage() }); \n"); // anon. function because gotoGetDnaPage is sometimes not loaded yet.
 

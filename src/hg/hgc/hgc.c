@@ -1682,7 +1682,7 @@ static struct slName *findFieldsInExtraFile(char *detailsTableUrl, struct asColu
 // return a list of the ${}-enclosed fields from an extra file
 {
 struct slName *foundFields = NULL;
-char *table = netReadTextFileIfExists(hReplaceGbdb(detailsTableUrl));
+char *table = udcFileReadAllIfExists(hReplaceGbdb(detailsTableUrl), NULL, 0, NULL);
 if (table)
     {
     for (; col != NULL; col = col->next)
@@ -3271,8 +3271,13 @@ DNA *dna = *retSeq;
 if (dna == NULL)
     {
     struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
-    struct dnaSeq *seq = twoBitReadSeqFrag(otherTbf, psl->qName, 0, 0);
-    *retSeq = dna = seq->dna;
+    struct dnaSeq *seq = NULL;
+    if (otherTbf)
+        {
+        seq = twoBitReadSeqFrag(otherTbf, psl->qName, 0, 0);
+        if (seq)
+            *retSeq = dna = seq->dna;
+        }
     }
 return psl;
 }
@@ -3676,10 +3681,61 @@ else
     }
 }
 
+void doSnakeChainClick(struct trackDb *tdb, char *itemName)
+/* Put up page for chain snakes. */
+{
+struct trackDb *parentTdb = trackDbTopLevelSelfOrParent(tdb);
+char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
+if (otherSpecies == NULL)
+    otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+
+char *hubName = cloneString(database);
+char otherDb[4096];
+char *qName = cartOptionalString(cart, "qName");
+int qs = atoi(cartOptionalString(cart, "qs"));
+int qe = atoi(cartOptionalString(cart, "qe"));
+int qWidth = atoi(cartOptionalString(cart, "qWidth"));
+char *qTrack = cartString(cart, "g");
+if(isHubTrack(qTrack) && ! trackHubDatabase(database))
+    hubName = cloneString(qTrack);
+
+/* current mouse strain hal file has incorrect chrom names */
+char *aliasQName = qName;
+// aliasQName = "chr1";  // temporarily make this work for the mouse hal
+
+if(trackHubDatabase(database) || isHubTrack(qTrack))
+    {
+    char *ptr = strchr(hubName + 4, '_');
+    *ptr = 0;
+    safef(otherDb, sizeof otherDb, "%s_%s", hubName, otherSpecies);
+    }
+else
+    {
+    safef(otherDb, sizeof otherDb, "%s", otherSpecies);
+    }
+
+char headerText[256];
+safef(headerText, sizeof headerText, "reference: %s, query: %s\n", trackHubSkipHubName(database), trackHubSkipHubName(otherDb) );
+genericHeader(parentTdb, headerText);
+
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, qs, qe, hubName, trackHubSkipHubName(database), aliasQName, qs, qe, trackHubSkipHubName(otherDb));
+
+int qCenter = (qs + qe) / 2;
+int newQs = qCenter - qWidth/2;
+int newQe = qCenter + qWidth/2;
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,hubName, trackHubSkipHubName(database), aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+printTrackHtml(tdb);
+} 
+
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
                        char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
+boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", FALSE);
+
+if (doSnake)
+    return doSnakeChainClick(tdb, item);
+
 struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
 char *thisOrg = hOrganism(database);
 char *otherOrg = NULL;

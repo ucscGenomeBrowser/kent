@@ -339,18 +339,18 @@ printf("<li>I: sum of all intron lengths of the gene under consideration. </li>\
 printf("</ul>\n");
 printf("Using these variables, TOGA computes the following features:\n");
 printf("<ul>\n");
-printf("<li>“global CDS fraction” as C / A. Chains with a high value have alignments that largely overlap coding exons,");
+printf("<li>&quot;global CDS fraction&quot; as C / A. Chains with a high value have alignments that largely overlap coding exons,");
 printf("which is a hallmark of paralogous or processed pseudogene chains. In contrast, chains with a low value also align many ");
 printf("intronic and intergenic regions, which is a hallmark of orthologous chains. </li>\n");
-printf("<li>“local CDS fraction” as c / a. Orthologous chains tend to have a lower value, as intronic ");
+printf("<li>&quot;local CDS fraction&quot; as c / a. Orthologous chains tend to have a lower value, as intronic ");
 printf("regions partially align. This feature is not computed for single-exon genes. </li>\n");
-printf("<li>“local intron fraction” as i / I. Orthologous chains tend to have a higher value.");
+printf("<li>&quot;local intron fraction&quot; as i / I. Orthologous chains tend to have a higher value.");
 printf("This feature is not computed for single-exon genes. </li>\n");
-printf("<li>“flank fraction” as f / 20,000. Orthologous chains tend to have higher values,");
+printf("<li>&quot;flank fraction&quot; as f / 20,000. Orthologous chains tend to have higher values,");
 printf("as flanking intergenic regions partially align. This feature is important to detect orthologous loci of single-exon genes. </li>\n");
-printf("<li>“synteny” as log10 of the number of genes, whose coding exons overlap by at least one base aligning");
+printf("<li>&quot;synteny&quot; as log10 of the number of genes, whose coding exons overlap by at least one base aligning");
 printf("blocks of this chain. Orthologous chains tend to cover several genes located in a conserved order, resulting in higher synteny values. </li>\n");
-printf("<li>“local CDS coverage” as c / CDS, which is only used for single-exon genes. </li>\n");
+printf("<li>&quot;local CDS coverage&quot; as c / CDS, which is only used for single-exon genes. </li>\n");
 printf("</ul>\n");
 
 
@@ -431,7 +431,6 @@ htmlHorizontalLine();
 printf("</div>\n<BR>\n");
 
 // TODO: check whether I need this
-printf("%s", hgTracksPathAndSettings());
 hPrintf("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css\">");
 hPrintf("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js\"></script>");
 hPrintf("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js\"></script>");
@@ -528,18 +527,18 @@ void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *
             printf("</ul>\n");
             printf("Using these variables, TOGA computes the following features:\n");
             printf("<ul>\n");
-            printf("<li>“global CDS fraction” as C / A. Chains with a high value have alignments that largely overlap coding exons,");
+            printf("<li>&quot;global CDS fraction&quot; as C / A. Chains with a high value have alignments that largely overlap coding exons,");
             printf("which is a hallmark of paralogous or processed pseudogene chains. In contrast, chains with a low value also align many ");
             printf("intronic and intergenic regions, which is a hallmark of orthologous chains. </li>\n");
-            printf("<li>“local CDS fraction” as c / a. Orthologous chains tend to have a lower value, as intronic ");
+            printf("<li>&quot;local CDS fraction&quot; as c / a. Orthologous chains tend to have a lower value, as intronic ");
             printf("regions partially align. This feature is not computed for single-exon genes. </li>\n");
-            printf("<li>“local intron fraction” as i / I. Orthologous chains tend to have a higher value.");
+            printf("<li>&quot;local intron fraction&quot; as i / I. Orthologous chains tend to have a higher value.");
             printf("This feature is not computed for single-exon genes. </li>\n");
-            printf("<li>“flank fraction” as f / 20,000. Orthologous chains tend to have higher values,");
+            printf("<li>&quot;flank fraction&quot; as f / 20,000. Orthologous chains tend to have higher values,");
             printf("as flanking intergenic regions partially align. This feature is important to detect orthologous loci of single-exon genes. </li>\n");
-            printf("<li>“synteny” as log10 of the number of genes, whose coding exons overlap by at least one base aligning");
+            printf("<li>&quot;synteny&quot; as log10 of the number of genes, whose coding exons overlap by at least one base aligning");
             printf("blocks of this chain. Orthologous chains tend to cover several genes located in a conserved order, resulting in higher synteny values. </li>\n");
-            printf("<li>“local CDS coverage” as c / CDS, which is only used for single-exon genes. </li>\n");
+            printf("<li>&quot;local CDS coverage&quot; as c / CDS, which is only used for single-exon genes. </li>\n");
             printf("</ul>\n");
 
 

@@ -254,6 +254,6 @@ return tdb;
 boolean dupTrackEnabled()
 /* Return true if we allow tracks to be duped. */
 {
-return  cfgOptionBooleanDefault("canDupTracks", FALSE);
+return  cfgOptionBooleanDefault("canDupTracks", TRUE);
 }
 

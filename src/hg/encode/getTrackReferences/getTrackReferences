@@ -126,7 +126,6 @@ def makeHtml(infoDict, plain, verbose, doi):
         m = re.search('<div class="full-text-links-list">\s*<a\s+(class="[^"]*"\s+)?href="(\S+)"', fetch.text)
         if m:
             if m.group(2):
-                # Rhetorical: how can m match without m.group(1) being defined for this regex? Anyway ....
                 infoDict['url'] = m.group(2).replace("&amp;", "&")
             break
         else:

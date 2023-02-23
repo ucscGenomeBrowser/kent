@@ -707,12 +707,12 @@ html chainNet
         speciesLabels GCF_000349665.1="Golden hamster"
 
 ##############################################################################
-# GCF_024166365.1 - Asiatic elephant - Elephas maximus indicus - taxId: 99487 - mammal
+# GCF_024166365.1 - Asiatic elephant - Elephas maximus indicus - taxId: 99487 - mammals
 ##############################################################################
 track chainNetGCF_024166365.1
 compositeTrack on
 shortLabel Asiatic elephant Chain/Net
-longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp), Chain and Net Alignments
+longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1 primary haplotype), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
 visibility hide
@@ -741,7 +741,7 @@ html chainNet
         parent chainNetGCF_024166365.1Viewchain
         subGroups view=chain
         shortLabel Asiatic elephant Chain
-        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Chained Alignments
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1 primary haplotype) Chained Alignments
         type bigChain GCF_024166365.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_024166365.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_024166365.1Link.bb
@@ -749,8 +749,8 @@ html chainNet
         track chainSynGCF_024166365.1
         parent chainNetGCF_024166365.1Viewchain
         subGroups view=chain
-        shortLabel Asiatic elephant Chain
-        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Syntenic Chained Alignments
+        shortLabel Asiatic elephant synChain
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1 primary haplotype) Syntenic Chained Alignments
         type bigChain GCF_024166365.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_024166365.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_024166365.1Link.bb
@@ -758,8 +758,8 @@ html chainNet
         track chainRBestGCF_024166365.1
         parent chainNetGCF_024166365.1Viewchain
         subGroups view=chain
-        shortLabel Asiatic elephant Chain
-        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Reciprocal Best Chained Alignments
+        shortLabel Asiatic elephant rBestChain
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1 primary haplotype) Reciprocal Best Chained Alignments
         type bigChain GCF_024166365.1
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_024166365.1.bb
         linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_024166365.1Link.bb
@@ -774,7 +774,7 @@ html chainNet
         parent mafNetGCF_024166365.1Viewnet
         subGroups view=net
         shortLabel Asiatic elephant mafNet
-        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) mafNet Alignment
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1 primary haplotype) mafNet Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.net.summary.bb
@@ -784,8 +784,8 @@ html chainNet
         track synNetGCF_024166365.1
         parent mafNetGCF_024166365.1Viewnet
         subGroups view=net
-        shortLabel Asiatic elephant mafNet
-        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Syntenic Net Alignment
+        shortLabel Asiatic elephant synNet
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1 primary haplotype) Syntenic Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.synNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.synNet.summary.bb
@@ -795,12 +795,206 @@ html chainNet
         track rbestNetGCF_024166365.1
         parent mafNetGCF_024166365.1Viewnet
         subGroups view=net
-        shortLabel Asiatic elephant mafNet
-        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Reciprocal Best Net Alignment
+        shortLabel Asiatic elephant rBestNet
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1 primary haplotype) Reciprocal Best Net Alignment
         type bigMaf
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.rbestNet.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.rbestNet.summary.bb
         speciesOrder GCF_024166365.1
         speciesLabels GCF_024166365.1="Asiatic elephant"
+
+##############################################################################
+# GCF_018350175.1 - domestic cat - Felis catus - taxId: 9685 - mammals
+##############################################################################
+track chainNetGCF_018350175.1
+compositeTrack on
+shortLabel domestic cat Chain/Net
+longLabel domestic cat (May 2021 GCF_018350175.1_F.catus_Fca126_mat1.0), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCF_018350175.1
+html chainNet
+
+    track chainNetGCF_018350175.1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_018350175.1
+    spectrum on
+
+        track chainGCF_018350175.1
+        parent chainNetGCF_018350175.1Viewchain
+        subGroups view=chain
+        shortLabel domestic cat Chain
+        longLabel domestic cat (May 2021 GCF_018350175.1_F.catus_Fca126_mat1.0) Chained Alignments
+        type bigChain GCF_018350175.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_018350175.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_018350175.1Link.bb
+
+        track chainSynGCF_018350175.1
+        parent chainNetGCF_018350175.1Viewchain
+        subGroups view=chain
+        shortLabel domestic cat synChain
+        longLabel domestic cat (May 2021 GCF_018350175.1_F.catus_Fca126_mat1.0) Syntenic Chained Alignments
+        type bigChain GCF_018350175.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_018350175.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_018350175.1Link.bb
+
+        track chainRBestGCF_018350175.1
+        parent chainNetGCF_018350175.1Viewchain
+        subGroups view=chain
+        shortLabel domestic cat rBestChain
+        longLabel domestic cat (May 2021 GCF_018350175.1_F.catus_Fca126_mat1.0) Reciprocal Best Chained Alignments
+        type bigChain GCF_018350175.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_018350175.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_018350175.1Link.bb
+
+    track mafNetGCF_018350175.1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_018350175.1
+
+        track netGCF_018350175.1
+        parent mafNetGCF_018350175.1Viewnet
+        subGroups view=net
+        shortLabel domestic cat mafNet
+        longLabel domestic cat (May 2021 GCF_018350175.1_F.catus_Fca126_mat1.0) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_018350175.1.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_018350175.1.net.summary.bb
+        speciesOrder GCF_018350175.1
+        speciesLabels GCF_018350175.1="domestic cat"
+
+        track synNetGCF_018350175.1
+        parent mafNetGCF_018350175.1Viewnet
+        subGroups view=net
+        shortLabel domestic cat synNet
+        longLabel domestic cat (May 2021 GCF_018350175.1_F.catus_Fca126_mat1.0) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_018350175.1.synNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_018350175.1.synNet.summary.bb
+        speciesOrder GCF_018350175.1
+        speciesLabels GCF_018350175.1="domestic cat"
+
+        track rbestNetGCF_018350175.1
+        parent mafNetGCF_018350175.1Viewnet
+        subGroups view=net
+        shortLabel domestic cat rBestNet
+        longLabel domestic cat (May 2021 GCF_018350175.1_F.catus_Fca126_mat1.0) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_018350175.1.rbestNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_018350175.1.rbestNet.summary.bb
+        speciesOrder GCF_018350175.1
+        speciesLabels GCF_018350175.1="domestic cat"
+
+##############################################################################
+# GCF_004115215.2 - platypus - Ornithorhynchus anatinus - taxId: 9258 - mammals
+##############################################################################
+track chainNetGCF_004115215.2
+compositeTrack on
+shortLabel platypus Chain/Net
+longLabel platypus (Nov. 2020 GCF_004115215.2_mOrnAna1.pri.v4), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 540.3
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCF_004115215.2
+html chainNet
+
+    track chainNetGCF_004115215.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_004115215.2
+    spectrum on
+
+        track chainGCF_004115215.2
+        parent chainNetGCF_004115215.2Viewchain
+        subGroups view=chain
+        shortLabel platypus Chain
+        longLabel platypus (Nov. 2020 GCF_004115215.2_mOrnAna1.pri.v4) Chained Alignments
+        type bigChain GCF_004115215.2
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_004115215.2.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_004115215.2Link.bb
+
+        track chainSynGCF_004115215.2
+        parent chainNetGCF_004115215.2Viewchain
+        subGroups view=chain
+        shortLabel platypus synChain
+        longLabel platypus (Nov. 2020 GCF_004115215.2_mOrnAna1.pri.v4) Syntenic Chained Alignments
+        type bigChain GCF_004115215.2
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_004115215.2.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCF_004115215.2Link.bb
+
+        track chainRBestGCF_004115215.2
+        parent chainNetGCF_004115215.2Viewchain
+        subGroups view=chain
+        shortLabel platypus rBestChain
+        longLabel platypus (Nov. 2020 GCF_004115215.2_mOrnAna1.pri.v4) Reciprocal Best Chained Alignments
+        type bigChain GCF_004115215.2
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_004115215.2.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCF_004115215.2Link.bb
+
+    track mafNetGCF_004115215.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_004115215.2
+
+        track netGCF_004115215.2
+        parent mafNetGCF_004115215.2Viewnet
+        subGroups view=net
+        shortLabel platypus mafNet
+        longLabel platypus (Nov. 2020 GCF_004115215.2_mOrnAna1.pri.v4) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_004115215.2.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_004115215.2.net.summary.bb
+        speciesOrder GCF_004115215.2
+        speciesLabels GCF_004115215.2="platypus"
+
+        track synNetGCF_004115215.2
+        parent mafNetGCF_004115215.2Viewnet
+        subGroups view=net
+        shortLabel platypus synNet
+        longLabel platypus (Nov. 2020 GCF_004115215.2_mOrnAna1.pri.v4) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_004115215.2.synNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_004115215.2.synNet.summary.bb
+        speciesOrder GCF_004115215.2
+        speciesLabels GCF_004115215.2="platypus"
+
+        track rbestNetGCF_004115215.2
+        parent mafNetGCF_004115215.2Viewnet
+        subGroups view=net
+        shortLabel platypus rBestNet
+        longLabel platypus (Nov. 2020 GCF_004115215.2_mOrnAna1.pri.v4) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_004115215.2.rbestNet.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_004115215.2.rbestNet.summary.bb
+        speciesOrder GCF_004115215.2
+        speciesLabels GCF_004115215.2="platypus"
 
 ##############################################################################

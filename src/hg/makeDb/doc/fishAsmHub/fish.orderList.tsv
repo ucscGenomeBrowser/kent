@@ -44,7 +44,8 @@ GCF_012931545.1_Oket_V1	chum salmon
 GCF_900324465.2_fAnaTes1.2	climbing perch (v1.2 2018 refseq VGP)
 GCA_900650485.1_fAnaTes1.2_alternate_haplotype	climbing perch (alt pseudohaplotype 2019 VGP)
 GCF_002776465.1_AmpOce1.0	clown anemonefish
-GCF_002021735.2_Okis_V2	coho salmon
+GCF_002021735.2_Okis_V2	coho salmon (150728-3 2019)
+GCF_002021735.1_Okis_V1	coho salmon (150728-3 2017)
 GCF_018340385.1_ASM1834038v1	common carp SPL01 (2021)
 GCA_020510985.1_fPhoLeu1.pri	convict blenny (chichlid 2021 VGP)
 GCF_017976325.1_fCheRos1.pri	copperband butterflyfish
@@ -137,8 +138,10 @@ GCF_902500255.1_fThaAma1.1	prehistoric monster fish (2019 refseq VGP)
 GCA_902500245.1_fThaAma1.1_alternate_haplotype	prehistoric monster fish (alt pseudohaplotype 2019 VGP)
 GCF_002163495.1_Omyk_1.0	rainbow trout (Swanson)
 GCF_013265735.2_USDA_OmykA_1.1	rainbow trout (Arlee)
+GCA_014183145.1_ASM1418314v1	red drum (XU1910 2020)
 GCF_001682695.1_Pygocentrus_nattereri-1.0.2	red-bellied piranha (Pna-1 2016)
 GCF_015220715.1_fPygNat1.pri	red-bellied piranha (2020 VGP)
+GCF_900747795.2_fErpCal1.3	reedfish (2021)
 GCA_900700845.2_fErpCal1.1_alternate_haplotype	reedfish (alt pseudohaplotype VGP)
 GCF_014905685.2_NemWhi1	Rio pearlfish (Nwh7 v2 2021)
 GCF_901001165.1_fSalTru1.1	river trout
@@ -177,6 +180,8 @@ GCA_013358685.1_fAntMac1.pri	warty frogfish (2020 VGP)
 GCF_019740435.1_SWU_Gaff_1.0	western mosquitofish
 GCF_016077235.1_ASM1607723v1	White Sands pupfish
 GCF_004355925.1_GSC_Weel_1.0	wolf-eel
+GCA_023055335.1_fCliAna1.0.p	woolly sculpin (CAN_PGR_092001 2022)
+GCA_023055415.1_fCliAna1.0.a	woolly sculpin (alt pseudohaplotype CAN_PGR_092001 2022)
 GCF_018812025.1_ASM1881202v1	Wuchang bream
 GCF_022655615.1_HZAU_PFXX_2.0	yellow catfish (hzauxx_2018 2022)
 GCF_003724035.1_ASM372403v1	yellow catfish (Tf-2017 2018)

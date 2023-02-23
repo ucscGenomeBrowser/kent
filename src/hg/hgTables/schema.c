@@ -355,6 +355,28 @@ if (tdb != NULL && isNotEmpty(tdb->html))
     }
 }
 
+static void addNotesForBbiTables(struct trackDb *tdb, struct sqlConnection *conn)
+/* single-row BBI file pointer tables are confusing, help the users a little here */
+{
+if (tdb != NULL)
+    {
+    boolean isBig = printTypeHelpDesc(tdb->type);
+
+    if (isBig)
+        {
+        char *fileName = trackDbSetting(tdb, "bigDataUrl");
+        if (!fileName) 
+            {
+            char query[1024];
+            sqlSafef(query, sizeof query, "SELECT fileName from %s", tdb->table);
+            char *bbiPath = sqlQuickString(conn, query);
+            printf("The MySQL table contains only a single row with a pointer to the file.<BR>");
+            printf("You can download the binary file from our "
+                    "<a href=\"https://hgdownload.soe.ucsc.edu%s\">Download server</a>.<BR>", bbiPath);
+            }
+        }
+    }
+}
 
 static void showSchemaDb(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
@@ -380,17 +402,20 @@ if (date != NULL)
     printf("&nbsp&nbsp<B> Data last updated:&nbsp;</B>%s<BR>\n", date);
 if (asObj != NULL)
     hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
+
 if (cartTrackDbIsNoGenome(db, table))
     hPrintf(" Note: genome-wide queries are not available for this table.");
-describeFields(db, splitTable, asObj, conn);
-if (tdbForConn != NULL)
+else
     {
-    char *type = tdbForConn->type;
-    if (startsWithWord("bigWig", type))
-	printf("<BR>This table points to a file in "
-	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
-	       "BigWig</A> format.<BR>\n");
+    hPrintf("<B>On download server: </B>");
+    hPrintf("<A HREF='https://hgdownload.soe.ucsc.edu/goldenPath/%s/database/'>MariaDB table dump directory</A><BR>", db);
     }
+
+describeFields(db, splitTable, asObj, conn);
+
+struct trackDb *childTdb = tdbForTrack(db, table, NULL);
+addNotesForBbiTables(childTdb, conn);
+
 jpList = joinerRelate(joiner, db, table, NULL);
 
 /* sort and unique list */

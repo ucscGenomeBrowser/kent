@@ -477,11 +477,9 @@ char *fileName = vcfMustFindFileName(conn, table, hDefaultChrom(database), isTab
 struct asObject *as = vcfAsObj();
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s<br>", table);
-hPrintf("<B>VCF File:</B> %s", fileName);
+printDownloadLink("VCF", fileName);
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);
-hPrintf("See the <A HREF=\"%s\" target=_blank>Variant Call Format specification</A> for  more details<BR>\n",
-	"http://www.1000genomes.org/wiki/analysis/vcf4.0");
 
 /* Put up table that describes fields. */
 hTableStart();

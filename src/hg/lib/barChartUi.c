@@ -452,55 +452,66 @@ barChartUiLogTransform(cart, track, tdb);
 puts("&nbsp;&nbsp;");
 barChartUiViewLimits(cart, track, tdb);
 
-char *facets = trackDbSetting(tdb, "barChartFacets");
-char *statsFile = hReplaceGbdb(trackDbRequiredSetting(tdb, "barChartStatsUrl"));
-
-/* Write html to make white background */
-hInsideStyleToWhite();
-
-/* Set up url that has enough context to get back to us.  */
-struct dyString *returnUrl = dyStringNew(0);
-dyStringPrintf(returnUrl, "../cgi-bin/hgTrackUi?g=%s", track);
-dyStringPrintf(returnUrl, "&%s", cartSidUrlString(cart));
-
-/* Load up table from tsv file */
-char *requiredStatsFields[] = {"count",};
-struct fieldedTable *table = fieldedTableFromTabFile(statsFile, statsFile, 
-    requiredStatsFields, ArraySize(requiredStatsFields));
-
-/* Update facet selections from users input if any and get selected part of table */
-struct facetedTable *facTab = facetedTableFromTable(table, tdb->track, facets);
-facTab->mergeFacetsOk = trackDbSettingOn(tdb, "barChartMerge");
-facetedTableUpdateOnClick(facTab, cart);
-struct facetField **selectedFf = NULL;
-struct fieldedTable *selected = facetedTableSelect(facTab, cart, &selectedFf);
-
-/* Add wrapper function(s) */
-struct hash *wrapperHash = hashNew(0);
-hashAdd(wrapperHash, "color", wrapColor);
-
-/* Pick which fields to display.  We'll take the first field whatever it is
- * named, color if possible, and also count, and any faceted fields. */
-struct dyString *displayList = dyStringNew(0);
-int colorIx = fieldedTableFindFieldIx(selected, "color");
-if (colorIx >= 0)
-   dyStringPrintf(displayList, "color,");
-dyStringAppend(displayList, selected->fields[0]);
-dyStringPrintf(displayList, ",count");
-struct slName *facetNameList = slNameListFromComma(facets);
-struct slName *facetName;
-for (facetName = facetNameList; facetName != NULL; facetName = facetName->next)
+if (isPopup)
     {
-    if (fieldedTableFindFieldIx(selected, facetName->name))
-       dyStringPrintf(displayList, ",%s", facetName->name);
+    char *categoryLabel =  trackDbSettingClosestToHomeOrDefault(tdb,
+                    BAR_CHART_CATEGORY_LABEL, BAR_CHART_CATEGORY_LABEL_DEFAULT);
+    printf("<div><b>%s:</b>\n", categoryLabel);
+    printf("<a href='%s?g=%s'><button type='button'>Change</button><a>",
+                hTrackUiForTrack(track), track);
     }
+else
+    {
+    char *facets = trackDbSetting(tdb, "barChartFacets");
+    char *statsFile = hReplaceGbdb(trackDbRequiredSetting(tdb, "barChartStatsUrl"));
 
-/* Put up facets and table */
-facetedTableWriteHtml(facTab, cart, selected, selectedFf, displayList->string,
-    returnUrl->string, 40, wrapperHash, NULL, 7);
+    /* Write html to make white background */
+    hInsideStyleToWhite();
 
-/* Clean up and go home. */
-facetedTableFree(&facTab);
+    /* Set up url that has enough context to get back to us.  */
+    struct dyString *returnUrl = dyStringNew(0);
+    dyStringPrintf(returnUrl, "../cgi-bin/hgTrackUi?g=%s", track);
+    dyStringPrintf(returnUrl, "&%s", cartSidUrlString(cart));
+
+    /* Load up table from tsv file */
+    char *requiredStatsFields[] = {"count",};
+    struct fieldedTable *table = fieldedTableFromTabFile(statsFile, statsFile, 
+        requiredStatsFields, ArraySize(requiredStatsFields));
+
+    /* Update facet selections from users input if any and get selected part of table */
+    struct facetedTable *facTab = facetedTableFromTable(table, tdb->track, facets);
+    facTab->mergeFacetsOk = trackDbSettingOn(tdb, "barChartMerge");
+    facetedTableUpdateOnClick(facTab, cart);
+    struct facetField **selectedFf = NULL;
+    struct fieldedTable *selected = facetedTableSelect(facTab, cart, &selectedFf);
+
+    /* Add wrapper function(s) */
+    struct hash *wrapperHash = hashNew(0);
+    hashAdd(wrapperHash, "color", wrapColor);
+
+    /* Pick which fields to display.  We'll take the first field whatever it is
+     * named, color if possible, and also count, and any faceted fields. */
+    struct dyString *displayList = dyStringNew(0);
+    int colorIx = fieldedTableFindFieldIx(selected, "color");
+    if (colorIx >= 0)
+       dyStringPrintf(displayList, "color,");
+    dyStringAppend(displayList, selected->fields[0]);
+    dyStringPrintf(displayList, ",count");
+    struct slName *facetNameList = slNameListFromComma(facets);
+    struct slName *facetName;
+    for (facetName = facetNameList; facetName != NULL; facetName = facetName->next)
+        {
+        if (fieldedTableFindFieldIx(selected, facetName->name))
+           dyStringPrintf(displayList, ",%s", facetName->name);
+        }
+
+    /* Put up facets and table */
+    facetedTableWriteHtml(facTab, cart, selected, selectedFf, displayList->string,
+        returnUrl->string, 40, wrapperHash, NULL, 7);
+
+    /* Clean up and go home. */
+    facetedTableFree(&facTab);
+    }
 }
 
 void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 

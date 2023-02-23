@@ -31,6 +31,7 @@
 #include "chromInfo.h"
 #include "wiggle.h"
 #include "hubPublic.h"
+#include "cartTrackDb.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -223,7 +224,7 @@ boolean trackHasData(struct trackDb *tdb);
 
 #define trackHasNoData(tdb) (!trackHasData(tdb))
 
-boolean protectedTrack(struct trackDb *tdb, char *trackName);
+boolean protectedTrack(char *db, struct trackDb *tdb, char *trackName);
 /* determine if track is off-limits protected data */
 
 boolean isWiggleDataTable(char *type);

@@ -137,7 +137,7 @@ group phenDis
 visibility hide
 type bigBed 9 +
 itemRgb on
-tableBrowser off
+tableBrowser off knownCanonToDecipher knownToDecipher decipherRaw
 bigDataUrl /gbdb/$D/decipher/decipherCnv.bb
 url https://decipher.sanger.ac.uk/patient/$$
 urlLabel Decipher Patient View:

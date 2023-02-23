@@ -16,6 +16,7 @@
 #include "obscure.h"
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
+#include "snake.h"
 
 #define SEQ_DELIM '~'
 
@@ -539,6 +540,7 @@ if(tg->extraUiData)
     filterBed(tg, &lfList);
 slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
+maybeLoadSnake(tg);   // if we're in snake mode, change the methods
 }
 
 void bedDrawSimpleAt(struct track *tg, void *item,
