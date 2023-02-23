@@ -71,6 +71,7 @@ GCF_018446385.1_Zo_v1.1	ginger
 GCF_001531365.2_CcrdV1.1	globe artichoke (v1.1 2C 2018)
 GCF_002575655.1_Aet_v4.0	goatgrass A.strangulata
 GCF_001957025.1_Aet_MR_1.0	goatgrass A.tauschii
+GCA_003024255.1_Red5_PS1_1.69.0	golden kiwifruit (Red5 2018)
 GCA_001981405.1_ASM198140v1	great duckweed (9509 2017)
 GCF_000733215.1_ASM73321v1	green algae A.protothecoides (0710 2014)
 GCF_002220235.1_ASM222023v1	green algae B.prasinos (RCC1105 2012)
@@ -154,7 +155,8 @@ GCF_900635035.1_Rarg10x-PRISCAF	silver malletwood (14919 2019)
 GCF_020921035.1_ASM2092103v1	silver malletwood (NSW1041297 2021)
 GCF_005239225.1_ASM523922v1	silver poplar
 GCF_933775445.1_drPotAnse1.1	silverweed (2022)
-GCF_000003195.3_Sorghum_bicolor_NCBIv3	sorghum
+GCF_000003195.3_Sorghum_bicolor_NCBIv3	sorghum (BTx623 2017)
+GCA_003482435.1_Corteva_Sorghum_ONT_TX430_1.0	sorghum (Tx430 2018)
 GCF_000004515.6_Glycine_max_v4.0	soybean (US DOE JGI-PGF v2 2021)
 GCF_000463585.1_ASM46358v1	spider flower
 GCF_002007265.1_ASM200726v1	spinach
@@ -163,7 +165,9 @@ GCF_000005505.3_Brachypodium_distachyon_v3.0	stiff brome
 GCA_000511835.1_FAN_r1.1	strawberry (Reikou 2013)
 GCF_002207925.1_PAV_r1.0	sweet cherry
 GCF_000317415.1_Csi_valencia_1.0	sweet orange
+GCA_002525835.2_ipoBat4	sweet potato (Taizhong6 2017)
 GCF_016808335.1_P.virgatum_v5	switchgrass
+GCA_002319775.1_Ft1.0	Tartarian buckwheat (Pinku1 2017)
 GCF_000001735.4_TAIR10.1	thale cress (tair10.1 Columbia 2018)
 GCF_013401445.1_ASM1340144v1	thunder duke vine
 GCF_001879085.1_NIATTr2	tobacco N.attenuata
@@ -187,7 +191,8 @@ GCF_000816755.2_Araip1.1	wild peanut A.ipaensis
 GCF_004193775.1_ASM419377v2	wild soybean
 GCF_000184155.1_FraVesHawaii_1.0	wild strawberry (2011 refseq)
 GCF_001406875.1_SPENNV200	wild tomato S.pennellii
-GCF_000003745.3_12X	wine grape
+GCF_000003745.3_12X	wine grape (PN40024 2009)
+GCA_002922885.1_Chkhaveri_assembly01	wine grape (Chkhaveri 2017)
 GCA_001920985.1_ASM192098v1	winter cress (G-type 2016)
 GCF_002738345.1_Cmax_1.0	winter squash
 GCF_000393655.1_Nsyl	wood tobacco
