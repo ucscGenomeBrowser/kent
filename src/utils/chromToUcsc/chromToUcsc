@@ -199,7 +199,18 @@ def chromToUcsc(aliasFname, fieldIdx, skipUnknown, ifh, ofh):
         ofh.write("\n")
 
 def download(db):
-    url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
+    " download chromAlias file from UCSC "
+    # Genark assemblies are in a different directory of the download server
+    if "_" in db:
+        p1 = db[0:3]
+        p2 = db[4:7]
+        p3 = db[7:10]
+        p4 = db[10:13]
+        url = "https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/%s/%s/%s.chromAlias.txt" % (p1, p2, p3, p4, db, db)
+        asd
+    else:
+        url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
+
     gzData = urlopen(url).read()
 
     if 'cStringIO' in modules:
