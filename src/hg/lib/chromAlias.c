@@ -507,6 +507,10 @@ if (fieldNum >= chromAliasGlobals.fieldCount)
 unsigned count = 0;
 for(; aliases && count < fieldNum; count++,aliases = aliases->next)
     ;
+
+if (!aliases)
+    return cloneString(seqName);
+
 if (!isEmpty(aliases->name))
     return cloneString(aliases->name);
 
