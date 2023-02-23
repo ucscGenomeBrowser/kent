@@ -106,6 +106,7 @@ UTILS_APPLIST = \
 	pslSomeRecords \
 	pslSort \
 	pslSortAcc \
+	pslSplitOnTarget \
 	pslStats \
 	pslToBed \
 	pslToChain \

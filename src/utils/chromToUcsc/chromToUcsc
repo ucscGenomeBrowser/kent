@@ -23,6 +23,8 @@ def parseArgs():
 
     Requires a <genome>.chromAlias.tsv file which can be downloaded like this:
         %prog --get hg19              # download the file hg19.chromAlias.tsv into current directory
+    Which also works for GenArk assemblies:
+        %prog --get GCF_000001735.3   # for GenArk assemblies, will translate to NCBI sequence names (accessions)
 
     If you do not want to use the --get option to retrieve the mapping tables, you can also download the alias mapping
     files yourself, e.g. for mm10 with 'wget https://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/chromAlias.txt.gz'
@@ -199,15 +201,27 @@ def chromToUcsc(aliasFname, fieldIdx, skipUnknown, ifh, ofh):
         ofh.write("\n")
 
 def download(db):
-    url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
-    gzData = urlopen(url).read()
-
-    if 'cStringIO' in modules:
-        data = StringIO(gzData)
+    " download chromAlias file from UCSC "
+    # Genark assemblies are in a different directory of the download server
+    if "_" in db:
+        p1 = db[0:3]
+        p2 = db[4:7]
+        p3 = db[7:10]
+        p4 = db[10:13]
+        url = "https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/%s/%s/%s.chromAlias.txt" % (p1, p2, p3, p4, db, db)
     else:
-        data = BytesIO(gzData)
+        url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
 
-    data = gzip.GzipFile(fileobj=data).read().decode()
+    data = urlopen(url).read()
+
+    if url.endswith(".gz"):
+        if 'cStringIO' in modules:
+            data = StringIO(data)
+        else:
+            data = BytesIO(data)
+
+        data = gzip.GzipFile(fileobj=data).read().decode()
+
     outFname = db+".chromAlias.tsv"
     open(outFname, "w").write(data)
     print("Wrote %s to %s" % (url, outFname))
