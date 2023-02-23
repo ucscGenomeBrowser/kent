@@ -5214,7 +5214,6 @@ var downloadCurrentTrackData = {
         apiUrl += ";genome=" + db;
         apiUrl += ";jsonOutputArrays=1";
         apiUrl += ";track=" + trackList.join(',');
-        // strip off final comma:
         var xmlhttp = new XMLHttpRequest();
         downloadCurrentTrackData.currentRequests[apiUrl] = true;
         xmlhttp.onreadystatechange = function() {
