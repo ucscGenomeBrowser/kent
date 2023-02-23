@@ -655,8 +655,8 @@ Files included in this directory (updated nightly):
 To see descriptions of the tables underlying Genome Browser annotation
 tracks, select the table in the Table Browser:
   http://genome.ucsc.edu/cgi-bin/hgTables?db=$db
-and click the "describe table schema" button.  There is also a "view
-table schema" link on the configuration page for each track.
+and click the "data format description" button.  There is also a "Data schema/format 
+description and download" link on the configuration page for each track.
 
 ---------------------------------------------------------------
 If you plan to download a large file or multiple files from this

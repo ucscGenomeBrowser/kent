@@ -122,8 +122,8 @@ if (aliasField != NULL)
     }
 else
     hPrintf(".\n");
-hPrintf("(The \"describe table schema\" button shows more information about "
-	"the table fields.)\n");
+hPrintf("(The \"data format description\" button shows more information about "
+	"the fields in the data.)\n");
 
 // on a browserbox, db is on the UCSC server, so cannot select into db, even if temporary
 if (!isCustomTrack(curTable) && !hIsBrowserbox() && (conn == NULL || sqlCanCreateTemp(conn)))
@@ -506,8 +506,8 @@ if (isNotEmpty(idText))
 
 	warn("Note: %d of the %d given identifiers have no match in "
 	     "table %s, field %s%s%s%s%s.  "
-	     "Try the \"describe table schema\" button for more "
-	     "information about the table and field.\n"
+	     "Try the \"data format description\" button for more "
+	     "information about the data fields and their contents.\n"
 	     "%d %smissing identifier(s):\n"
 	     "%s\n"
 	     "<a href='%s|none|'>Complete list of missing identifiers<a>\n",
