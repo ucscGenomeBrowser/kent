@@ -207,7 +207,6 @@ def download(db):
         p3 = db[7:10]
         p4 = db[10:13]
         url = "https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/%s/%s/%s.chromAlias.txt" % (p1, p2, p3, p4, db, db)
-        asd
     else:
         url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
 
