@@ -209,8 +209,11 @@ def download(db):
         p3 = db[7:10]
         p4 = db[10:13]
         url = "https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/%s/%s/%s.chromAlias.txt" % (p1, p2, p3, p4, db, db)
+    elif db in ["hg38"]:
+        # hg38 has been patched a few times, assume that the user wants the latest chromAlias file
+        url="https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/latest/%s.chromAlias.txt" % (db, db)
     else:
-        url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
+        url = "https://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
 
     data = urlopen(url).read()
 
