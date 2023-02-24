@@ -106,10 +106,10 @@ priority 10
 
 # stopped working in late 2020
 #name stanfordSource
-#shortLabel Stanford SOURCE
+#shortLabel SOURCE
 #tables kgXref
 #idSql select mRNA from kgXref where kgID = '%s'
-#url http://smd.stanford.edu/cgi-bin/source/sourceResult?organism=Hs&option=Number&criteria=%s&choice=Gene
+#url http://source-search.princeton.edu/cgi-bin/source/sourceResult?organism=Hs&option=Number&criteria=%s&choice=Gene
 #priority 10
 
 name nextProt

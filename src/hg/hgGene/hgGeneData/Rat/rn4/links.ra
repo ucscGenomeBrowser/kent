@@ -77,10 +77,10 @@ dbInUrl on
 priority 1
 
 name stanfordSource
-shortLabel Stanford SOURCE
+shortLabel SOURCE
 tables rgdGene2ToRefSeq
 idSql select value from rgdGene2ToRefSeq where name = '%s'
-url http://smd.stanford.edu/cgi-bin/source/sourceResult?organism=Rn&option=Number&criteria=%s&choice=Gene
+url http://source-search.princeton.edu/cgi-bin/source/sourceResult?organism=Rn&option=Number&criteria=%s&choice=Gene
 priority 10
 
 name uniProt
