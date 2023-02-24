@@ -4,7 +4,6 @@ longLabel Genomics England PanelApp Diagnostics
 type bigBed 9 +
 visibility hide
 group phenDis
-pennantIcon New red ../goldenPath/newsarch.html#102422 "Released at UCSC on Oct 24, 2022"
 compositeTrack on
 
     track panelAppGenes

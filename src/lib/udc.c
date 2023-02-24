@@ -570,8 +570,8 @@ if (waitpid(pid, &status, 0) < 0)
     errnoAbort("udc:resolveUrl: waitpid failed");
 if (WIFSIGNALED(status))
     errAbort("udc:resolveUrl: resolver signaled (%d)", WTERMSIG(status));
-if (WIFSTOPPED(status) || WIFCONTINUED(status))
-    errAbort("udc:resolveUrl: resolver unexpectedly stop or continued");
+if (WIFSTOPPED(status))
+    errAbort("udc:resolveUrl: resolver unexpectedly stop");
 if (WIFEXITED(status) && (WEXITSTATUS(status) != 0))
     {
     char* errMsg;
