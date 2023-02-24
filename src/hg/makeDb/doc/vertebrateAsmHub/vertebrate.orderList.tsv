@@ -1,4 +1,5 @@
 GCF_003597395.1_ASM359739v1	Abingdon island giant tortoise
+GCF_027172205.1_rPodRaf1.pri	Aeolian wall lizard (rPodRaf1 primary hap 2022)
 GCF_017654675.1_Xenopus_laevis_v10.1	African clawed frog (2021)
 GCF_000281125.3_ASM28112v4	American alligator
 GCF_014858855.1_ASM1485885v1	Asiatic toad (SCDJY-AF-19 2020)
@@ -37,10 +38,12 @@ GCA_009762595.1_rDerCor1.alt	leatherback sea turtle (alt pseudohaplotype 2019 VG
 GCF_023653815.1_GSC_CCare_1.0	loggerhead turtle (SJ_126:Eziel1 2022)
 GCF_900518725.1_TS10Xv2-PRI	mainland tiger snake
 GCA_014337955.1_AspMar1.0	marbled whiptail (SIMRID8450 2020)
-GCA_947247035.1_rVipUrs1.1	meadow viper (2022 VGP)
+GCA_947247035.1_rVipUrs1.1	meadow viper (primary hap 2022)
+GCA_947247025.1_rVipUrs1.1_alternate_haplotype	meadow viper (alternate hap 2022)
 GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (WGS:JAMKFC01 2022 VGP)
 GCA_025201965.1_rGopFla2.pat.asm	Mexican gopher tortoise (WGS:JAMKFD01 2022 VGP)
 GCF_017654505.1_ASM1765450v1	Mississippi paddlefish
+GCF_027358695.1_aSpeBom1.2.pri	plains spadefoot toad (aSpeBom1 primary hap 2022)
 GCF_013100865.1_CAS_Tse_1.0	red-eared slider turtle
 GCF_016161935.1_ASM1616193v1	Reeves's turtle
 GCA_023333525.1_rAspTig1.0.p	San Diegan tiger whiptail (HBS 135688 2022)
@@ -54,7 +57,8 @@ GCF_902713615.1_sScyCan1.1	smaller spotted catshark
 GCF_009764475.1_sPriPec2.1.pri	smalltooth sawfish (2019 refseq)
 GCA_009764485.1_sPriPec2.alt	smalltooth sawfish (alt pseudohaplotype 2019 VGP)
 GCF_000242695.1_LepOcu1	spotted gar
-GCF_010645085.1_ASM1064508v1	sterlet
+GCA_902713435.2_fAciRut3.2_paternal_haplotype	sterlet (fAciRut3.2 2022)
+GCF_010645085.1_ASM1064508v1	sterlet (Gen_M01 2020)
 GCF_010909765.2_sAmbRad1.1.pri	thorny skate (CabotCenter1 v1.1 2020 VGP)
 GCA_010909745.1_sAmbRad1.alt	thorny skate (alt pseudohaplotype CabotCenter1 2020 VGP)
 GCF_002925995.2_T_m_triunguis-2.0	three-toed box turtle

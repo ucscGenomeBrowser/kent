@@ -6,7 +6,7 @@ table hgncBig62
     uint   chromEnd;   "End position in chromosome"
     string name;       "HGNC Identifier"
     uint   score;      "Score from 0-1000"
-    char[1] strand;    "+ or -"
+    char[1] strand;    "Placeholder value"
     uint thickStart;   "Start of where display should be thick (start codon)"
     uint thickEnd;     "End of where display should be thick (stop codon)"
     uint reserved;     "Used as itemRgb as of 2004-11-22"

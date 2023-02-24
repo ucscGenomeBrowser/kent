@@ -5214,7 +5214,6 @@ var downloadCurrentTrackData = {
         apiUrl += ";genome=" + db;
         apiUrl += ";jsonOutputArrays=1";
         apiUrl += ";track=" + trackList.join(',');
-        // strip off final comma:
         var xmlhttp = new XMLHttpRequest();
         downloadCurrentTrackData.currentRequests[apiUrl] = true;
         xmlhttp.onreadystatechange = function() {
@@ -5250,16 +5249,6 @@ var downloadCurrentTrackData = {
             downloadDialog.id = "downloadDialog";
             downloadDialog.style = "display: none";
             document.body.append(downloadDialog);
-            $("#checkAllDownloadTracks").click( function() {
-                $(".downloadTrackName").each(function(i, elem) {
-                    elem.checked = true;
-                });
-            });
-            $("#uncheckAllDownloadTracks").click( function() {
-                $(".downloadTrackName").each(function(i, elem) {
-                    elem.checked = false;
-                });
-            });
             var popMaxHeight = ($(window).height() - 40);
             var popMaxWidth  = ($(window).width() - 40);
             var popWidth     = 700;
@@ -5312,6 +5301,16 @@ var downloadCurrentTrackData = {
         htmlStr += "</select>";
         htmlStr += "</div>";
         downloadDialog.innerHTML = htmlStr;
+        $("#checkAllDownloadTracks").click( function() {
+            $(".downloadTrackName").each(function(i, elem) {
+                elem.checked = true;
+            });
+        });
+        $("#uncheckAllDownloadTracks").click( function() {
+            $(".downloadTrackName").each(function(i, elem) {
+                elem.checked = false;
+            });
+        });
         $(downloadDialog).dialog('open');
     }
 };
