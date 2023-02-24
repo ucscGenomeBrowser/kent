@@ -646,6 +646,7 @@ if (tg->visibility == tvFull)
 return (si->maxLevel + 1) * (multiplier * lineHeight);
 }
 
+#ifdef NOTNOW
 static int linkedFeaturesCmpScore(const void *va, const void *vb)
 /* Help sort linkedFeatures by score */
 {
@@ -657,6 +658,7 @@ else if (a->score < b->score)
     return 1;
 return 0;
 }
+#endif
 
 static int snakeHeight(struct track *tg, enum trackVisibility vis)
 /* calculate height of all the snakes being displayed */
