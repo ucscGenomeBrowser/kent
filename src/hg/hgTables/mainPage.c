@@ -399,7 +399,7 @@ hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 
         "<b>Signal data points format:</b> The Table Browser outputs signal track data in "
         "<a href='../goldenPath/help/wiggle.html' target=_blank>wiggle</a> format by default. You can also use the "
         "Table Browser <b>filter</b> feature to designate a value threshold and then output that as BED format. The "
-        "BED file will create a discreet entry for every value that meets the filter. Our command line tool "
+        "Table Browser will then create a BED file with an entry for every value that passes the filter. Our command line tool "
         "<a href=\"../goldenPath/help/bigWig.html#Extract\" target=_blank>bigWigToBedGraph</a> can also be used "
         "to convert wig files directly. Contact us at genome@soe.ucsc.edu for help with data extraction or conversion.</div>");
 hPrintf(" ");
