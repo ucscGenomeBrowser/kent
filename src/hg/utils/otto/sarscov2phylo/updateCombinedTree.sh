@@ -174,7 +174,8 @@ usher_to_taxonium --input gisaidAndPublic.$today.masked.pb \
     --clade_types=nextstrain,pango \
     --name_internal_nodes \
     --title "$today tree with sequences from GISAID, INSDC, COG-UK and CNCB" \
-    --output gisaidAndPublic.$today.masked.taxonium.jsonl.gz
+    --output gisaidAndPublic.$today.masked.taxonium.jsonl.gz \
+    >& utt.log
 
 $scriptDir/extractPublicTree.sh $today $prevDate
 
