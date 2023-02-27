@@ -99,13 +99,22 @@ int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b)
 return MAKECOLOR_32(r,g,b);
 }
 
+int pscmFindAlphaColorIx(struct pscmGfx *pscm, int r, int g, int b, int a)
+/* Returns closest color in color map to rgba values.  If it doesn't
+ * already exist in color map and there's room, it will create
+ * exact color in map. */
+{
+return MAKECOLOR_32_A(r,g,b,a);
+}
+
 struct rgbColor pscmColorIxToRgb(struct pscmGfx *pscm, int colorIx)
 /* Return rgb value at color index. */
 {
 static struct rgbColor rgb;
-rgb.r = (colorIx >> 0) & 0xff;
-rgb.g = (colorIx >> 8) & 0xff;
-rgb.b = (colorIx >> 16) & 0xff;
+rgb.r = COLOR_32_RED(colorIx);
+rgb.g = COLOR_32_GREEN(colorIx);
+rgb.b = COLOR_32_BLUE(colorIx);
+rgb.a = COLOR_32_ALPHA(colorIx);
 
 return rgb;
 }
@@ -146,18 +155,11 @@ if (pscm != NULL)
 void pscmSetColor(struct pscmGfx *pscm, Color color)
 /* Set current color to Color. */
 {
-struct rgbColor *col;
-
-struct rgbColor myCol;
-col = &myCol;
-
-col->r = (color >> 0) & 0xff;
-col->g = (color >> 8) & 0xff;
-col->b = (color >> 16) & 0xff;
-
+struct rgbColor col = colorIxToRgb(color);
 if (color != pscm->curColor)
     {
-    psSetColor(pscm->ps, col->r, col->g, col->b);
+    psSetColor(pscm->ps, col.r, col.g, col.b);
+    psSetColorAlpha(pscm->ps, (int)col.a);
     pscm->curColor = color;
     }
 }
@@ -787,6 +789,7 @@ vg->textRight = (vg_textRight)pscmTextRight;
 vg->textCentered = (vg_textCentered)pscmTextCentered;
 vg->textInBox = (vg_textInBox)pscmTextInBox;
 vg->findColorIx = (vg_findColorIx)pscmFindColorIx;
+vg->findAlphaColorIx = (vg_findAlphaColorIx)pscmFindAlphaColorIx;
 vg->colorIxToRgb = (vg_colorIxToRgb)pscmColorIxToRgb;
 vg->setClip = (vg_setClip)pscmSetClip;
 vg->unclip = (vg_unclip)pscmUnclip;

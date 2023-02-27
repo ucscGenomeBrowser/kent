@@ -94,7 +94,7 @@ if (gg != NULL)
     struct chromGraphBin *cgb = gg->cgb;
     struct chromGraphSettings *cgs = gg->settings;
     int maxGapToFill = cgs->maxGapToFill;
-    static struct rgbColor missingDataColor = { 180, 180, 120};
+    static struct rgbColor missingDataColor = { 180, 180, 120, 255};
     Color missingColor = hvGfxFindRgb(hvg, &missingDataColor);
     double pixelsPerBase = 1.0/gl->basesPerPixel;
     double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
@@ -103,7 +103,7 @@ if (gg != NULL)
     /* Draw significance threshold as a light blue line */
     if (leftLabel)
         {
-	static struct rgbColor guidelineColor = { 220, 220, 255};
+	static struct rgbColor guidelineColor = { 220, 220, 255, 255};
 	Color lightBlue = hvGfxFindRgb(hvg, &guidelineColor);
 	struct slRef *ref;
 	struct genoLayChrom *chrom;

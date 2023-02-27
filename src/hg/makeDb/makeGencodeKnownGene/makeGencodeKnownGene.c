@@ -196,11 +196,11 @@ fputs("\n", f);
 }
 
 
-static struct rgbColor pink = {255,51,255};
-static struct rgbColor black = {0,0,0};
-static struct rgbColor trueBlue = {12,12,120};
-static struct rgbColor mediumBlue = {80, 80, 160};
-static struct rgbColor lightBlue = {130, 130, 210};
+static struct rgbColor pink = {255,51,255, 255};
+static struct rgbColor black = {0,0,0, 255};
+static struct rgbColor trueBlue = {12,12,120, 255};
+static struct rgbColor mediumBlue = {80, 80, 160, 255};
+static struct rgbColor lightBlue = {130, 130, 210, 255};
 
 static void outputKnownGeneColor( struct genePred *compGenePreds, struct hashes *hashes)
 /* Output the kgColor table. */

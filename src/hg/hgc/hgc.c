@@ -21585,6 +21585,7 @@ for (i=0; i<=maxShade; ++i)
     int level = 255 - (255*i/maxShade);
     if (level < 0) level = 0;
     rgb.r = rgb.g = rgb.b = level;
+    rgb.a = 255;
     shadesOfGray[i] = hvGfxFindRgb(hvg, &rgb);
     }
 shadesOfGray[maxShade+1] = MG_RED;
@@ -21618,8 +21619,8 @@ for (i=0; i<=steps; ++i)
 void makeRedGreenShades(struct memGfx *mg)
 /* Allocate the  shades of Red, Green and Blue */
 {
-static struct rgbColor black = {0, 0, 0};
-static struct rgbColor red = {255, 0, 0};
+static struct rgbColor black = {0, 0, 0, 255};
+static struct rgbColor red = {255, 0, 0, 255};
 mgMakeColorGradient(mg, &black, &red, maxRGBShade+1, shadesOfRed);
 exprBedColorsMade = TRUE;
 }

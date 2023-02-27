@@ -56,7 +56,7 @@ void hvGfxMakeColorGradient(struct hvGfx *hvg,
 double scale = 0, invScale;
 double invStep;
 int i;
-int r,g,b;
+int r,g,b,a;
 
 steps -= 1;	/* Easier to do the calculation in an inclusive way. */
 invStep = 1.0/steps;
@@ -66,7 +66,8 @@ for (i=0; i<=steps; ++i)
     r = invScale * start->r + scale * end->r;
     g = invScale * start->g + scale * end->g;
     b = invScale * start->b + scale * end->b;
-    colorIxs[i] = hvGfxFindColorIx(hvg, r, g, b);
+    a = invScale * start->a + scale * end->a;
+    colorIxs[i] = hvGfxFindAlphaColorIx(hvg, r, g, b, a);
     scale += invStep;
     }
 }

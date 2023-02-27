@@ -599,8 +599,8 @@ static Color snp132ColorByAlleleFreq(struct snp132Ext *snp, struct hvGfx *hvg)
 {
 static boolean colorsInited = FALSE;
 static Color redToBlue[EXPR_DATA_SHADES];
-static struct rgbColor red = {255, 0, 0};
-static struct rgbColor blue = {0, 0, 255};
+static struct rgbColor red = {255, 0, 0, 255};
+static struct rgbColor blue = {0, 0, 255, 255};
 if (!colorsInited)
     hvGfxMakeColorGradient(hvg, &red, &blue, EXPR_DATA_SHADES, redToBlue);
 if (snp->alleleFreqCount > 0)
@@ -1553,10 +1553,10 @@ int colorLookup[256];
 void ldShadesInit(struct track *tg, struct hvGfx *hvg, boolean isDprime)
 /* Allocate the LD for positive and negative values, and error cases */
 {
-static struct rgbColor white = {255, 255, 255};
-static struct rgbColor red   = {255,   0,   0};
-static struct rgbColor green = {  0, 255,   0};
-static struct rgbColor blue  = {  0,   0, 255};
+static struct rgbColor white = {255, 255, 255, 255};
+static struct rgbColor red   = {255,   0,   0, 255};
+static struct rgbColor green = {  0, 255,   0, 255};
+static struct rgbColor blue  = {  0,   0, 255, 255};
 char *ldPos = NULL;
 
 ldPos = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "_pos", ldPosDefault);

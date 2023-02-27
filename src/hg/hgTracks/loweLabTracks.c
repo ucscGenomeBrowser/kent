@@ -40,9 +40,9 @@ int rnaHybShadesInitialized = 0;
 void rnaHybShadesInit(struct hvGfx *hvg) 
 /* Allocate the LD for positive and negative values, and error cases */
 {
-static struct rgbColor white  = {255, 255, 255};
-static struct rgbColor red   =  {255,   0,   0};
-static struct rgbColor blue  =  {  0,   0, 255};
+static struct rgbColor white  = {255, 255, 255, 255};
+static struct rgbColor red   =  {255,   0,   0, 255};
+static struct rgbColor blue  =  {  0,   0, 255, 255};
 
 
 hvGfxMakeColorGradient(hvg, &white, &blue,  RNA_HYBRIDIZATION_SHADES, rnaHybShadesPos);
