@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import logging, optparse, gzip
 from sys import stdin, stdout, stderr, exit, modules
-from os.path import basename
+from os.path import basename, join
 
 try:
     from urllib.request import urlopen # py2
@@ -23,8 +23,8 @@ def parseArgs():
 
     Requires a <genome>.chromAlias.tsv file which can be downloaded like this:
         %prog --get hg19              # download the file hg19.chromAlias.tsv into current directory
-    Which also works for GenArk assemblies:
-        %prog --get GCF_000001735.3   # for GenArk assemblies, will translate to NCBI sequence names (accessions)
+    Which also works for GenArk assemblies and can take an output directory:
+        %prog --get GCF_000001735.3 -o /tmp/  # for GenArk assemblies, will translate to NCBI sequence names (accessions)
 
     If you do not want to use the --get option to retrieve the mapping tables, you can also download the alias mapping
     files yourself, e.g. for mm10 with 'wget https://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/chromAlias.txt.gz'
@@ -44,7 +44,7 @@ def parseArgs():
     (If a line starts with @ (SAM format), -k is automatically set to 2.)
     """)
 
-    parser.add_option("", "--get", dest="downloadDb", action="store", help="download a chrom alias table from UCSC for the genomeDb into the current directory and exit")
+    parser.add_option("", "--get", dest="downloadDb", action="store", help="download a chrom alias table from UCSC for the genomeDb into the current directory or directory provided by -o and exit")
     parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias file in tab-sep format or the http/https URL to one")
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
@@ -217,7 +217,7 @@ def downloadUrl(url):
 
     return data
 
-def download(db):
+def download(db, outDir):
     " download chromAlias file from UCSC "
     # Genark assemblies are in a different directory of the download server
     if "_" in db:
@@ -234,7 +234,10 @@ def download(db):
 
     data = downloadUrl(url)
 
-    outFname = db+".chromAlias.tsv"
+    if outDir is None:
+        outDir = "."
+
+    outFname = join(outDir, db+".chromAlias.tsv")
 
     open(outFname, "w").write(data)
     print("Wrote %s to %s" % (url, outFname))
@@ -250,7 +253,7 @@ def main():
     skipUnknown = options.skipUnknown
 
     if options.downloadDb:
-        download(options.downloadDb)
+        download(options.downloadDb, outFname)
 
     if aliasFname is None:
         logging.error("You need to provide an alias table with the -a option or use --get to download one.")
