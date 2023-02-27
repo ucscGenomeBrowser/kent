@@ -167,11 +167,12 @@ if (!sqlTableExists(conn, sessionDbTable()))
 return TRUE;
 }
 
-void cartParseOverHash(struct cart *cart, char *contents)
-/* Parse cgi-style contents into a hash table.  This will *not*
+void cartParseOverHashExt(struct cart *cart, char *contents, boolean merge)
+/* Parse cgi-style contents into a hash table.  If merge is FALSE, this will *not*
  * replace existing members of hash that have same name, so we can
  * support multi-select form inputs (same var name can have multiple
- * values which will be in separate hashEl's). */
+ * values which will be in separate hashEl's). If merge is TRUE, we
+ * replace existing values with new values */
 {
 struct hash *hash = cart->hash;
 char *namePt, *dataPt, *nextNamePt;
@@ -188,9 +189,21 @@ while (namePt != NULL && namePt[0] != 0)
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
-    hashAdd(hash, namePt, cloneString(dataPt));
+    if (!merge)
+        hashAdd(hash, namePt, cloneString(dataPt));
+    else 
+        hashReplace(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
     }
+}
+
+void cartParseOverHash(struct cart *cart, char *contents)
+/* Parse cgi-style contents into a hash table.  This will *not*
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). */
+{
+cartParseOverHashExt(cart, contents, FALSE);
 }
 
 static boolean looksCorrupted(struct cartDb *cdb)
@@ -589,8 +602,12 @@ if ((row = sqlNextRow(sr)) != NULL)
 	struct sqlConnection *conn2 = hConnectCentral();
 	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
         if (!merge)
+            {
             cartRemoveLike(cart, "*");
-	cartParseOverHash(cart, row[1]);
+            cartParseOverHash(cart, row[1]);
+            }
+        else
+            cartParseOverHashExt(cart, row[1], TRUE);
 	cartSetString(cart, sessionVar, hgsid);
 	if (sessionTableString != NULL)
 	    cartSetString(cart, hgSessionTableState, sessionTableString);
