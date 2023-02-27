@@ -200,6 +200,23 @@ def chromToUcsc(aliasFname, fieldIdx, skipUnknown, ifh, ofh):
         ofh.write(line)
         ofh.write("\n")
 
+def downloadUrl(url):
+    """ download URL and return as string. gzip OK.
+    Supporting both py2 and py3 here makes this method more complicated that one would expect.
+    """
+    data = urlopen(url).read()
+
+    if url.endswith(".gz"):
+        if "decompress" in dir(gzip): # py3
+            data = gzip.decompress(data)
+        else:
+            data = gzip.GzipFile(fileobj=StringIO(data)).read() # py2
+
+    if isinstance(data, bytes): # urlopen returns 'bytes' on py3
+        data = data.decode("latin1")
+
+    return data
+
 def download(db):
     " download chromAlias file from UCSC "
     # Genark assemblies are in a different directory of the download server
@@ -215,17 +232,10 @@ def download(db):
     else:
         url = "https://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
 
-    data = urlopen(url).read()
-
-    if url.endswith(".gz"):
-        if 'cStringIO' in modules:
-            data = StringIO(data)
-        else:
-            data = BytesIO(data)
-
-        data = gzip.GzipFile(fileobj=data).read().decode()
+    data = downloadUrl(url)
 
     outFname = db+".chromAlias.tsv"
+
     open(outFname, "w").write(data)
     print("Wrote %s to %s" % (url, outFname))
     print("You can now convert a file with 'chromToUcsc -a %s -i infile.bed -o outfile.bed'" % outFname)
