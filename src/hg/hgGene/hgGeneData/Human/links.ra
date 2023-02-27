@@ -49,9 +49,6 @@ idSql select hgncId from kgXref,proteome.hgncXref where kgID = '%s' and geneSymb
 url http://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/%s
 priority 10
 
-name cgap
-url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s
-
 name hprd
 shortLabel HPRD
 tables knownToHprd 
