@@ -33,7 +33,7 @@ BA.1:
               [ 21988, 21995 ],
               [ 22194, 22217 ],   # deletion 22194-22196, insertion after 22204, big mess after that
               [ 28362, 28370 ] ]
-    sites: [ 22813, 22898, 22882, 23854 ]
+    sites: [ 203, 22813, 22898, 22882, 23854 ]
 
 BA.1.1:
     # On the BA.1 branch, so it inherits BA.1 masking.
@@ -105,3 +105,42 @@ BA.5:
                   A22992G, A22995C, C23013A, G23018T, G23055A, T23063A, C23075T, G23403A,
                   T23525C, G23599T, A23604C, T25000C, A26529G, G26577C, A26709G, T27807C,
                   T27889C, T28271A, C29510A ]
+
+BQ.1:
+    # Inherits from BA.5
+    # Mask some suspicious run-of-nearby-site mutations that cause a mini-BQ.1 branch and
+    # caused trouble when minimizing the tree for pango-designation v1.18.1 pangolin-data release.
+    representative: England/PHEP-YYGYEQS/2022
+    sites: [ 114, 117, 244, 256, 258, 261, 264 ]
+
+BQ.1.1:
+    # Inherits from BQ.1
+    representative: England/DHSC-CYF1KSU/2022
+    reversions: [ C22893A, A22942T ]
+
+XBB:
+    # Inherits from BA.2
+    # Lots of false reversions; I would also mask G405A except that would be wrong for XBN.
+    representative: England/PHEC-YY8GAXZ/2022
+    reversions: [ T2790C, T3037C, A4184G, T4321C, T9344C, G9424A, T10198C, C17859T, G19326A,
+                  T21618C, C21810T, A22000C, G22109C, C22577G, A22578G, C22599G, A22664C, C22679T,
+                  T22686C, G22688A, T22813G, C22895G, C22896T, A22898G, G22942T, A22992G, A22995C,
+                  C23013A, C23019T, C23031T, T24424A, A24469T, T25000C, T26060C, G26577C, A26709G,
+                  T26858C, T27807C ]
+XBB.1:
+    # Inherits from XBB
+    # Here I'm going a bit past the technical start of XBB.1, to include G27915T to be more sure
+    # that it's XBB.1 before we mask out the defining mutation of XBB.1
+    representative: England/LSPA-32578111/2022
+    reversions: [ T22317G ]
+
+XBB.1.5:
+    # Inherits from XBB.1
+    # Don't believe reversions on 27915 once we're as far as XBB.1.*
+    representative: England/BRBR-326C0A5A/2023
+    reversions: [ T27915G ]
+
+XBC:
+    # Inherits nothing!  Should find out its deletions.
+    representative: Philippines/PH-VUI-142736/2022
+    reversions: [ G5584A, T13019C, T25000C, T28271A ]

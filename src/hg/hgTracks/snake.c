@@ -28,11 +28,6 @@
 #include "bigPsl.h"
 #include "snake.h"
 
-// this is the number of pixels used by the target self-align bar
-#define DUP_LINE_HEIGHT	0
-// this is the number of pixels used when displaying the insertion lengths
-#define INSERT_TEXT_HEIGHT 0
-
 static int snakeFeatureCmpQStart(const void *va, const void *vb)
 /* sort by start position on the query sequence */
 {
@@ -533,12 +528,12 @@ if (proposedList == NULL)
 // now let's see if the list of blocks for this level is big enough
 // to actually add
 
+// order the blocks so lowest start position is first
+slReverse(&proposedList);
 struct snakeFeature *temp;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 int start, end;
 
-// order the blocks so lowest start position is first
-slReverse(&proposedList);
 
 start=proposedList->start;
 for(temp=proposedList; temp->next; temp = temp->next)
@@ -631,17 +626,13 @@ if (vis == tvDense)
 if (vis == tvSquish)
     return tg->lineHeight/2;
 
-int height = DUP_LINE_HEIGHT + INSERT_TEXT_HEIGHT; 
-struct slList *item = tg->items;
+int height = 0;
+struct linkedFeatures *item = tg->items;
 
-item = tg->items;
-
-for (item=tg->items;item; item = item->next)
+for (;item; item = item->next)
     {
     height += tg->itemHeight(tg, item);
     }
-if (height < DUP_LINE_HEIGHT + tg->lineHeight)
-    height = DUP_LINE_HEIGHT + tg->lineHeight;
 return height;
 }
 
@@ -685,6 +676,48 @@ if (x + width > insideWidth)
 mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height,
                        track, item, statusLine, directUrl, withHgsid,
                        extra);
+}
+
+static void snakeDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw snake items. */
+{
+struct slList *item;
+int y;
+struct linkedFeatures  *lf;
+double scale = scaleForWindow(width, seqStart, seqEnd);
+int height = snakeHeight(tg, vis);
+
+hvGfxSetClip(hvg, xOff, yOff, width, height);
+
+if ((tg->visibility == tvFull) || (tg->visibility == tvPack))
+    {
+    // score snakes by how many bases they cover
+    for (item = tg->items; item != NULL; item = item->next)
+	{
+	lf = (struct linkedFeatures *)item;
+	struct snakeFeature  *sf;
+
+	lf->score = 0;
+	for (sf =  (struct snakeFeature *)lf->components; sf != NULL;  sf = sf->next)
+	    {
+	    lf->score += sf->end - sf->start;
+	    }
+	}
+
+    slSort(&tg->items, linkedFeaturesCmpScore);
+    }
+
+y = yOff;
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    if(tg->itemColor != NULL) 
+	color = tg->itemColor(tg, item, hvg);
+    tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+    if (vis == tvFull)
+	y += tg->itemHeight(tg, item);
+    } 
 }
 
 static void snakeDrawAt(struct track *tg, void *item,
@@ -1107,6 +1140,7 @@ for (;lf; lf = next)
     if (!sameString(firstLf->name, lf->name) && (lf->components != NULL))
 	{
 	slSort(&firstLf->components, snakeFeatureCmpQStart);
+        firstLf->next = lf;
 	firstLf = lf;
 	}
     for (sf =  (struct snakeFeature *)lf->components; sf != NULL; sf = nextSf)
@@ -1147,16 +1181,6 @@ for(; lf; lf = lf->next)
 
         AllocVar(this);
         *(struct simpleFeature *)this = *sf;
-        /*
-	if ((lf) && lf->orientation == -1)
-	    {
-	    int temp;
-
-	    temp = this->qStart;
-	    this->qStart = lf->qSize - this->qEnd;
-	    this->qEnd = lf->qSize - temp;
-	    }
-            */
 	this->orientation = lf->orientation;
         slAddHead(&sfList, this);
         }
@@ -1174,8 +1198,9 @@ if (doSnake)
     track->itemHeight = snakeItemHeight;
     track->totalHeight = snakeHeight;
     track->drawItemAt = snakeDrawAt;
+    track->drawItems = snakeDraw;
 
-    slSort(track->items, linkedFeaturesCmpStart);
+    slSort(&track->items, linkedFeaturesCmpName);
     makeSnakeFeatures(track->items);
     fixItems(track->items);
     track->visibility = track->limitedVis = tvFull;

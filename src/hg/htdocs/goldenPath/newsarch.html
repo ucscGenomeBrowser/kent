@@ -49,7 +49,6 @@
   </div> 
 </div>
 
-<!-- ============= 2022 archived news ============= -->
 <p>You can sign-up to get these announcements via our 
 <a target=_blank href="https://groups.google.com/a/soe.ucsc.edu/g/genome-announce?hl=en">Genome-announce</a>
 email list. We send around one short announcement email every two weeks.</p>
@@ -58,7 +57,90 @@ email list. We send around one short announcement email every two weeks.</p>
 <a target=_blank href="https://genecats.gi.ucsc.edu/builds/versions.html">here</a>. 
 For the full list of our daily code changes head to <a
 href="https://github.com/ucscGenomeBrowser/kent/commits/master"
-target=_blank>our GitHub page</a>.</p> <a name="2023"></a>
+target=_blank>our GitHub page</a>.</p>
+
+<!-- ============= 2023 archived news ============= -->
+<a name="2023"></a>
+
+<a name="022423"></a>
+<h2>Feb. 22, 2023 &nbsp;&nbsp; GENCODE Genes V43 for human (hg38/hg19) and VM32 for mouse (mm39)</h2>
+<p>
+We are pleased to announce the release of five new <a href="https://www.gencodegenes.org/" target="_blank">
+GENCODE Gene</a> tracks corresponding to GENCODE release V43 for human and VM32 for mouse. While all of the
+tracks are built from the GENCODE release, they fall into two categories. Two of these tracks, 
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=knownGene&c=chrX">GENCODE V43 (hg38)</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=knownGene&c=chrX">GENCODE VM32 (mm39)</a> were built with our
+<b>knownGene</b> pipeline and are now the default gene tracks for those assemblies. The knownGene pipeline
+builds extensive associations from the annotations and allows us to show additional metadata for each
+item as well as link to external resources. The track description pages for these tracks contain options
+for configuring the display such as also showing non-coding genes, splice variants, and pseudogenes. 
+Different tags and labels may also be toggled.</p>
+<p>
+The remaining three tracks were each nested within our GENCODE Versions superTrack for each of the three 
+assemblies: <a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg19&c=chrX&g=wgEncodeGencodeV43lift37">hg19</a>,
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=wgEncodeGencodeV43">hg38</a>,
+and
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=mm39&c=chr12&g=wgEncodeGencodeVM32">mm39</a>.
+For human, the GENCODE V43 annotations were mapped to hg38 and then back-mapped
+to the hg19 assembly. New GENCODE releases now have an
+assigned rank for transcripts within the gene. The transcript rank may be used to filter the number
+of transcripts displayed in a principled manner. More details about transcript ranking can be found
+on the <a href="../cgi-bin/hgTrackUi?db=hg38&position=default&g=wgEncodeGencodeV43#Methods"
+target="_blank">track description page</a>. For all three assemblies, the gene sets contain the
+following tracks:</p> 
+
+<ul>
+  <li>
+      <b>Basic</b> - a subset of the <em>Comprehensive set</em>.</li>
+  <li>
+      <b>Comprehensive</b> - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>
+      <b>Pseudogenes</b> - all annotations except polymorphic pseudogenes.</li>
+</ul>
+<p>
+The hg38 and mm39 assemblies also include the following track:
+</p>
+<ul>
+  <li>
+      <b>PolyA</b> - polyA signals and sites manually annotated on the genome based on transcribed
+      evidence (ESTs and cDNAs) of 3' end of transcripts containing at least 3 A's not matching the
+      genome.</li>
+</ul>
+<p>
+Below is a summary of the contents found in each release. For more details visit the <a target="_blank"
+href="https://www.gencodegenes.org/">GENCODE site</a>.</p>
+<p>
+<table class="stdTbl">
+<tr><th COLSPAN=4>GENCODE v43 Release Stats</th></tr>
+<tr align=left><th>Genes</th><th>Observed</th><th>Transcripts</th><th>Observed</th></tr>
+<tr align=left><td>Protein-coding genes</td><td>19,393</td><td>Protein-coding transcripts</td><td>89,411</td></tr>
+<tr align=left><td>Long non-coding RNA genes</td><td>19,928</td><td><font size="-1">- full length protein-coding</font></td><td>64,004</td></tr>
+<tr align=left><td>Small non-coding RNA genes</td><td>7,566</td><td><font size="-1">- partial length protein-coding</font></td><td>25,407</td></tr>
+<tr align=left><td>Pseudogenes</td><td>14,737</td><td>Nonsense mediated decay transcripts</td><td>21,354</td></tr>
+<tr align=left><td>Immunoglobulin/T-cell receptor gene segments</td><td>410</td><td>Long non-coding RNA loci transcripts</td><td>58,023</td></tr>
+<tr align=left><td>Total No of distinct translations</td><td>65,519</td><td>Genes that have more than one distinct translations</td><td>13,618</td></tr>
+</table><BR>
+</p>
+<p>
+<table class="stdTbl">
+<tr><th COLSPAN=4>GENCODE VM32 Release Stats</th></tr>
+<tr align=left><th>Genes</th><th>Observed</th><th>Transcripts</th><th>Observed</th></tr>
+<tr align=left><td>Protein-coding genes</td><td>21,565</td><td>Protein-coding transcripts</td><td>58,913</td></tr>
+<tr align=left><td>Long non-coding RNA genes</td><td>14,834</td><td><font size="-1">- full length protein-coding</font></td><td>45,219</td></tr>
+<tr align=left><td>Small non-coding RNA genes</td><td>6,105</td><td><font size="-1">- partial length protein-coding</font></td><td>13,694</td></tr>
+<tr align=left><td>Pseudogenes</td><td>13,722</td><td>Nonsense mediated decay transcripts</td><td>7,211</td></tr>
+<tr align=left><td>Immunoglobulin/T-cell receptor gene segments</td><td>701</td><td>Long non-coding RNA loci transcripts</td><td>26,421</td></tr>
+<tr align=left><td>Total No of distinct translations</td><td>45,163</td><td>Genes that have more than one distinct translations</td><td>10,914</td></tr>
+</table><BR>
+</p>
+
+<p>
+We would like to thank the <a target="_blank"
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Mark Diekhans, Brian Raney, and Lou Nassar for the development and
+release of these tracks.</p>
 
 <a name="021323"></a>
 <h2>Feb. 13, 2023 &nbsp;&nbsp; New recombination rate tracks for hg38</h2>
@@ -140,6 +222,7 @@ Reference Consortium</a> for creating the patches for hg38. We would also like t
 Jairo Navarro, and Gerardo Perez at UCSC for implementing and testing the latest patch to the
 hg38 genome.</p>
 
+<!-- ============= 2022 archived news ============= -->
 <a name="2022"></a>
 
 <a name="122022"></a>

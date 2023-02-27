@@ -13,7 +13,7 @@ color 0,130,0
     track recombAvg
     parent recombRate2
     shortLabel Recomb. deCODE Avg
-    longLabel Recombination rate: deCODE Genetics, average from paternal and maternal
+    longLabel Recombination rate: deCODE Genetics, average from paternal and maternal (mat for chrX)
     type bigWig
     bigDataUrl /gbdb/hg38/recombRate/recombAvg.bw
     visibility full

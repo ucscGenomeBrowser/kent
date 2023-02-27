@@ -437,7 +437,7 @@ if (ret == 0)
 return ret;
 }
 
-static int linkedFeaturesCmpScore(const void *va, const void *vb)
+int linkedFeaturesCmpScore(const void *va, const void *vb)
 /* Help sort linkedFeatures by score (descending), then by starting pos. */
 {
 const struct linkedFeatures *a = *((struct linkedFeatures **)va);

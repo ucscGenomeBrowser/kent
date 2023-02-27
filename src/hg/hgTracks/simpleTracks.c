@@ -3517,6 +3517,14 @@ if (diff == 0)
 return diff;
 }
 
+int linkedFeaturesCmpName(const void *va, const void *vb)
+/* Help sort linkedFeatures by query name. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+return strcmp(a->name, b->name);
+}
+
 int linkedFeaturesCmpStart(const void *va, const void *vb)
 /* Help sort linkedFeatures by starting pos. */
 {
