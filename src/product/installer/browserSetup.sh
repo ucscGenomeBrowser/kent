@@ -816,7 +816,7 @@ function installRedhat () {
             if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
                 echo /usr/include/mysql/mysql.h already has reconnect attribute
             else
-                sed '/st_mysql_options options;/a    bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
+                sed '/st_mysql_options options;/a    my_bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
             fi
 
 	    # fedora > 34 doesn't have any pip2 package anymore so install it now
