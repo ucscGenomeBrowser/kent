@@ -923,9 +923,11 @@ tg->colorShades = NULL;
 tg->color.r = r;
 tg->color.g = g;
 tg->color.b = b;
+tg->color.a = 255;
 tg->altColor.r = (r+255)/2;
 tg->altColor.g = (g+255)/2;
 tg->altColor.b = (b+255)/2;
+tg->altColor.a = 255;
 }
 
 void parseSs(char *ss, char **retPsl, char **retFa)
