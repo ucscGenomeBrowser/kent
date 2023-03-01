@@ -3586,6 +3586,7 @@ if (!((lf->isBigGenePred) ||(lf->filterColor == 0)|| (lf->filterColor == -1)))
         *retColor = *retBarbColor = bedColorToGfxColor(lf->filterColor);
 	}
     else
+        // When does this case happen?  Why isn't this color also being parsed like above?
 	*retColor = *retBarbColor = lf->filterColor;
     }
 else if (tg->itemColor)
@@ -7620,6 +7621,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         lighter.r = (6*normal->r + 4*255) / 10;
         lighter.g = (6*normal->g + 4*255) / 10;
         lighter.b = (6*normal->b + 4*255) / 10;
+        lighter.a = normal->a;
         col = hvGfxFindRgb(hvg, &lighter);
         }
     else
@@ -7627,6 +7629,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         lightest.r = (1*normal->r + 2*255) / 3;
         lightest.g = (1*normal->g + 2*255) / 3;
         lightest.b = (1*normal->b + 2*255) / 3;
+        lightest.a = normal->a;
         col = hvGfxFindRgb(hvg, &lightest);
         }
     }

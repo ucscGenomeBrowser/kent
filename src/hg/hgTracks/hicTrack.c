@@ -230,6 +230,7 @@ htmlColorToRGB(lowRgbVal, &r, &g, &b);
 rgbLow.r=(unsigned char)r;
 rgbLow.g=(unsigned char)g;
 rgbLow.b=(unsigned char)b;
+rgbLow.a = 255;
 
 struct rgbColor rgbHigh;
 char *highColorText = hicUiFetchDrawColor(cart, tg->tdb); // This is an HTML color like #ffed02
@@ -243,6 +244,7 @@ htmlColorToRGB(highRgbVal, &r, &g, &b);
 rgbHigh.r=(unsigned char)r;
 rgbHigh.g=(unsigned char)g;
 rgbHigh.b=(unsigned char)b;
+rgbHigh.a = 255;
 Color *colorIxs = NULL;
 AllocArray(colorIxs, bucketCount);
 hvGfxMakeColorGradient(hvg, &rgbLow, &rgbHigh, bucketCount, colorIxs);

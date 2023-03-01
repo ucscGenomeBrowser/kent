@@ -1940,9 +1940,11 @@ tg->itemColor = chainNoColor;
 tg->color.r = 0;
 tg->color.g = 0;
 tg->color.b = 0;
+tg->color.a = 255;
 tg->altColor.r = 127;
 tg->altColor.g = 127;
 tg->altColor.b = 127;
+tg->altColor.a = 255;
 tg->ixColor = MG_BLACK;
 tg->ixAltColor = MG_GRAY;
 }
