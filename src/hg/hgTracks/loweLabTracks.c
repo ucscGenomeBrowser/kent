@@ -196,7 +196,7 @@ slFreeList(&lf);
 Color gpGeneNameColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* draw name for the linked feature in blue. */
 {
-tg->ixAltColor = 1;
+tg->ixAltColor = hvGfxFindColorIx(hvg, 1, 0, 0);
 return MG_BLACK;
 }
 
