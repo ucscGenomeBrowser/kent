@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # script to install/setup dependencies for the UCSC genome browser CGIs
-# call it like this as root from a command line: bash browserInstall.sh
+# call it like this as root from a command line: bash browserSetup.sh
 
-# you can easily debug this script with 'bash -x browserInstall.sh', it 
+# you can easily debug this script with 'bash -x browserSetup.sh', it 
 # will show all commands then
 
-exec > >(tee -a "${HOME}/browserInstall.log") 2>&1
+exec > >(tee -a "${HOME}/browserSetup.sh") 2>&1
 
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
 
@@ -967,10 +967,10 @@ function installOsx ()
 function installDebian ()
 {
     # update repos
-    if [ ! -f /tmp/browserInstall.aptGetUpdateDone ]; then
+    if [ ! -f /tmp/browserSetup.aptGetUpdateDone ]; then
        echo2 Running apt-get update
        apt-get update
-       touch /tmp/browserInstall.aptGetUpdateDone
+       touch /tmp/browserSetup.aptGetUpdateDone
     fi
 
     echo2 Installing ghostscript and imagemagick

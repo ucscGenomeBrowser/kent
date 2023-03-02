@@ -1406,35 +1406,36 @@ enum liftOverFileType liftOverSniff(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line = NULL;
-char *chrom, *start, *end;
+char *chrom = NULL, *start = NULL, *end = NULL;
 boolean isPosition = FALSE;
 lineFileNextReal(lf, &line);
 if (!line)
     return 0;
-chrom = line;
-start = strchr(chrom, ':');
-if (start)
+chrom = cloneString(line);
+char *words[3];
+int numWords = chopLine(line, words);
+if (numWords < 3)
     {
-    *start++ = 0;
-    end = strchr(start, '-');
-    if (end)
-	{
-	*end++ = 0;
-	isPosition = TRUE;
-	}
-    else 
-	return 0;
+    start = strchr(chrom, ':');
+    if (start)
+        {
+        *start++ = 0;
+        end = strchr(start, '-');
+        if (end)
+            {
+            *end++ = 0;
+            isPosition = TRUE;
+            }
+        else
+            return 0;
+        }
     }
 else
     {
-    char *words[3];
-    int numWords = chopLine(line, words);
-    if (numWords < 3)
-	return 0;
     start = words[1];
     end = words[2];
     }
-if (!isdigit(start[0]) || !isdigit(end[0]))
+if ((start && !isdigit(start[0])) || (end && !isdigit(end[0])))
     return none;
 lineFileClose(&lf);
 if (isPosition)
