@@ -30,6 +30,18 @@ if (isEmpty(analyticsKey))
 
 /* updated to Universal Analytics code 2014-06-19 */
 
+if (startsWith("G-", analyticsKey))
+    {
+    jsInlineF(
+        "<!-- Google tag (gtag.js) -->\n"
+        "<script async src=\"https://www.googletagmanager.com/gtag/js?id=%s\"></script>\n"
+        "<script>\n"
+        "   window.dataLayer = window.dataLayer || [];\n"
+        "   function gtag(){dataLayer.push(arguments);}\n"
+        "   gtag('js', new Date()); gtag('config', '%s');\n"
+        "</script>\n", analyticsKey, analyticsKey);
+    return;
+    }
 // replace analytics.js below with analytics_debug.js to activate ga debugging
 // It will log all events and all data that is sent to the javascript console, very handy
 jsInlineF(
