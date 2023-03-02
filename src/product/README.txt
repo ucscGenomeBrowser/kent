@@ -6,6 +6,8 @@ Like most web servers, running a Genome Browser installation at your institution
 even for your own department, requires a Unix machine, disk space (6TB for hg19), and the
 resources to update the site and underlying OS regularly. You may want to consider these 
 alternatives before embarking on a full UCSC Genome Browser installation directly on your server.
+For information about operating in the cloud, visit the
+[Cloud Data and Software Resources](http://genome.ucsc.edu/goldenPath/help/cloud.html) help page.
 
 1. **Embed the Genome Browser graphic in your web page**
 
