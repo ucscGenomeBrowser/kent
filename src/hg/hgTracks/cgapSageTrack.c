@@ -297,8 +297,8 @@ void cgapSageDrawItems(struct track *tg,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Initialize the colors, then do the normal drawing. */
 {
-static struct rgbColor lowerColor = {205, 191, 191};
-static struct rgbColor cgapRed = {205, 0, 0};
+static struct rgbColor lowerColor = {205, 191, 191, 255};
+static struct rgbColor cgapRed = {205, 0, 0, 255};
 hvGfxMakeColorGradient(hvg, &lowerColor, &cgapRed, 10, cgapShadesOfRed);
 genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }

@@ -107,7 +107,7 @@ printf(
   "                  90 for nucleotide searches, 25 for protein or translated\n"
   "                  protein searches.\n"
   "   -maxGap=N      Sets the size of maximum gap between tiles in a clump.  Usually\n"
-  "                  set from 0 to 3.  Default is 2. Only relevent for minMatch > 1.\n"
+  "                  set from 0 to 3.  Default is 2. Only relevant for minMatch > 1.\n"
   "   -noHead        Suppresses .psl header (so it's just a tab-separated file).\n"
   "   -makeOoc=N.ooc Make overused tile file. Target needs to be complete genome.\n"
   "   -repMatch=N    Sets the number of repetitions of a tile allowed before\n"

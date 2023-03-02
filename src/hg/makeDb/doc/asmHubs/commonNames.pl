@@ -26,10 +26,18 @@ while (my $asmId = <FH>) {
   my $id2 = substr($asmId, 10, 3);
   my $srcDir = sprintf "%s/%s/%s/%s/%s/%s", $ncbiSrc, $gcx, $id0, $id1, $id2, $asmId;
   my $asmRpt = "$srcDir/${asmId}_assembly_report.txt";
+  if ( ! -s "${asmRpt}" ) {
+    printf STDERR "%s\tmissing '%s'\n", $asmId, $asmRpt;
+    next;
+  }
   my $sciName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
   chomp $sciName;
   $sciName =~ s/.*ism name:\s+//i;
   $sciName =~ s/\s+\(.*\)$//;
+  $sciName =~ s/\)//g;
+  $sciName =~ s/\(//g;
+  $sciName =~ s/\[//g;
+  $sciName =~ s/\]//g;
   my $yearDate = `grep -i -m 1 "Date:" "${asmRpt}" | tr -d "" | awk '{print \$NF}' | sed -e 's/-.*//;'`;
   chomp $yearDate;
   my $isolate = `grep -i -m 1 "Isolate:" "${asmRpt}" | tr -d ""`;
@@ -58,7 +66,11 @@ while (my $asmId = <FH>) {
   }
   my $orgName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
   $orgName =~ s/.*\(//;
-  $orgName =~ s/\)//;
+  $orgName =~ s/\)//g;
+  $orgName =~ s/\(//g;
+  $orgName =~ s/\[//g;
+  $orgName =~ s/\]//g;
+  $orgName =~ s/\+//g;
   chomp $orgName;
   if ($orgName =~ m/firmicutes|proteobacteria|high G|enterobacteria|agent of/) {
 #    my @a = split('\s+', $sciName);
@@ -81,6 +93,11 @@ while (my $asmId = <FH>) {
     $orgName =~ s/\s+\(.*\)$//;
   }
   if (length($extraStrings)) {
+    $extraStrings =~ s/\(//g;
+    $extraStrings =~ s/\)//g;
+    $extraStrings =~ s/\[//g;
+    $extraStrings =~ s/\]//g;
+    $extraStrings =~ s/\+//g;
     my @a = split('\s+', $extraStrings);
     for (my $i = 0; $i < scalar(@a); ++$i) {
         $orgName =~ s/$a[$i]//;
@@ -88,7 +105,12 @@ while (my $asmId = <FH>) {
     $orgName =~ s/=//g;
     $orgName =~ s/  / /g;
     $orgName =~ s/ +$//;
-    printf "%s\t%s (%s)\n", $asmId, $orgName, $extraStrings;
+    $orgName =~ s/^ +//;
+    if (length($orgName)) {
+      printf "%s\t%s (%s)\n", $asmId, $orgName, $extraStrings;
+    } else {
+      printf "%s\t%s\n", $asmId, $extraStrings;
+    }
   } else {
     printf "%s\t%s\n", $asmId, $orgName;
   }

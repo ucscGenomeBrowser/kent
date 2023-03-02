@@ -923,9 +923,11 @@ tg->colorShades = NULL;
 tg->color.r = r;
 tg->color.g = g;
 tg->color.b = b;
+tg->color.a = 255;
 tg->altColor.r = (r+255)/2;
 tg->altColor.g = (g+255)/2;
 tg->altColor.b = (b+255)/2;
+tg->altColor.a = 255;
 }
 
 void parseSs(char *ss, char **retPsl, char **retFa)
@@ -6731,6 +6733,16 @@ for (dup = dupList; dup != NULL; dup = dup->next)
 		    warn("can't find parentTdb %s in makeDupeTracks", parentTdb->track);
 		}
 	    }
+
+        if (track->wigCartData)
+            {
+            char *typeLine = tdb->type, *words[8];
+            int wordCount = 0;
+            words[0] = NULL;
+            if (typeLine != NULL)
+                wordCount = chopLine(cloneString(typeLine), words);
+            track->wigCartData = wigCartOptionsNew(cart, track->tdb, wordCount, words);
+            }
 	}
     }
 hashFree(&trackHash);

@@ -1792,7 +1792,7 @@ puts("<TABLE class='hgBlatTable' BORDER=0 WIDTH=80>\n");
 printf("<TR>\n");
 printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
 printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
-printf(" <span id=searchAllText> Search all</span>");
+printf(" <span id=searchAllText> Search all genomes</span>");
 printf("</TD>");
 // clicking on the Search ALL text clicks the checkbox.
 jsOnEventById("click", "searchAllText", 

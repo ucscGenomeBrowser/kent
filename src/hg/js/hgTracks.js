@@ -5214,7 +5214,6 @@ var downloadCurrentTrackData = {
         apiUrl += ";genome=" + db;
         apiUrl += ";jsonOutputArrays=1";
         apiUrl += ";track=" + trackList.join(',');
-        // strip off final comma:
         var xmlhttp = new XMLHttpRequest();
         downloadCurrentTrackData.currentRequests[apiUrl] = true;
         xmlhttp.onreadystatechange = function() {
@@ -5249,44 +5248,7 @@ var downloadCurrentTrackData = {
             downloadDialog = document.createElement("div");
             downloadDialog.id = "downloadDialog";
             downloadDialog.style = "display: none";
-            htmlStr = "<p>Use this selection window to download track data" +
-                " for the current region (" + genomePos.get() + "). Please note that large regions" +
-                " may be slow to download.</p>";
-            htmlStr  += "<div><button id='checkAllDownloadTracks'>Check All</button>" +
-                "&nbsp;" + 
-                "<button id='uncheckAllDownloadTracks'>Clear All</button>" +
-                "</div>";
-            _.each(hgTracks.trackDb, function(track, trackName) {
-                if (trackName !== "ruler") {
-                    htmlStr += "<input type=checkbox checked class='downloadTrackName' id='" + trackName + "'>";
-                    htmlStr += "<label>" + track.shortLabel + "</label>";
-                    htmlStr += "</input>";
-                    htmlStr += "<br>";
-                }
-            });
-            htmlStr += "<div ><label style='padding-right: 10px' for='downloadFileName'>Enter an output file name</label>";
-            htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
-                " value='" + getDb() + ".tracks'</input>";
-            htmlStr += "<br>";
-            htmlStr += "<label style='padding-right: 10px' for='outputFormat'>Choose an output format</label>";
-            htmlStr += "<select name='outputFormat' id='outputFormat'>";
-            htmlStr += "<option selected value='json'>JSON</option>";
-            htmlStr += "<option value='csv'>CSV</option>";
-            htmlStr += "<option value='tsv'>TSV</option>";
-            htmlStr += "</select>";
-            htmlStr += "</div>";
-            downloadDialog.innerHTML = htmlStr;
             document.body.append(downloadDialog);
-            $("#checkAllDownloadTracks").click( function() {
-                $(".downloadTrackName").each(function(i, elem) {
-                    elem.checked = true;
-                });
-            });
-            $("#uncheckAllDownloadTracks").click( function() {
-                $(".downloadTrackName").each(function(i, elem) {
-                    elem.checked = false;
-                });
-            });
             var popMaxHeight = ($(window).height() - 40);
             var popMaxWidth  = ($(window).width() - 40);
             var popWidth     = 700;
@@ -5312,6 +5274,43 @@ var downloadCurrentTrackData = {
                 buttons: downloadTrackDataButtons
             });
         }
+        htmlStr = "<p>Use this selection window to download track data" +
+            " for the current region (" + genomePos.get() + "). Please note that large regions" +
+            " may be slow to download.</p>";
+        htmlStr  += "<div><button id='checkAllDownloadTracks'>Check All</button>" +
+            "&nbsp;" +
+            "<button id='uncheckAllDownloadTracks'>Clear All</button>" +
+            "</div>";
+        _.each(hgTracks.trackDb, function(track, trackName) {
+            if (trackName !== "ruler" && track.visibility > 0) {
+                htmlStr += "<input type=checkbox checked class='downloadTrackName' id='" + trackName + "'>";
+                htmlStr += "<label>" + track.shortLabel + "</label>";
+                htmlStr += "</input>";
+                htmlStr += "<br>";
+            }
+        });
+        htmlStr += "<div ><label style='padding-right: 10px' for='downloadFileName'>Enter an output file name</label>";
+        htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
+            " value='" + getDb() + ".tracks'</input>";
+        htmlStr += "<br>";
+        htmlStr += "<label style='padding-right: 10px' for='outputFormat'>Choose an output format</label>";
+        htmlStr += "<select name='outputFormat' id='outputFormat'>";
+        htmlStr += "<option selected value='json'>JSON</option>";
+        htmlStr += "<option value='csv'>CSV</option>";
+        htmlStr += "<option value='tsv'>TSV</option>";
+        htmlStr += "</select>";
+        htmlStr += "</div>";
+        downloadDialog.innerHTML = htmlStr;
+        $("#checkAllDownloadTracks").click( function() {
+            $(".downloadTrackName").each(function(i, elem) {
+                elem.checked = true;
+            });
+        });
+        $("#uncheckAllDownloadTracks").click( function() {
+            $(".downloadTrackName").each(function(i, elem) {
+                elem.checked = false;
+            });
+        });
         $(downloadDialog).dialog('open');
     }
 };

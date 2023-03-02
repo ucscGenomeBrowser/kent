@@ -25,10 +25,10 @@ double scaleHeight=0;
 void plShadesInit(struct track *tg, struct hvGfx *hvg, boolean isDprime) 
 /* Allocate the LD for positive and negative values, and error cases */
 {
-static struct rgbColor white = {255, 255, 255};
-static struct rgbColor red   = {255,   0,   0};
-static struct rgbColor green = {0   , 255,  0};
-static struct rgbColor blue  = {  0,   0, 255};
+static struct rgbColor white = {255, 255, 255, 255};
+static struct rgbColor red   = {255,   0,   0, 255};
+static struct rgbColor green = {0   , 255,  0, 255};
+static struct rgbColor blue  = {  0,   0, 255, 255};
 
 plOutlineColor = hvGfxFindColorIx(hvg, 0, 0, 0); /* black */
 plHighDprimeLowLod = hvGfxFindColorIx(hvg, 192, 192, 240); /* blue */

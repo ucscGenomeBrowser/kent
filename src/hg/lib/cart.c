@@ -167,11 +167,12 @@ if (!sqlTableExists(conn, sessionDbTable()))
 return TRUE;
 }
 
-void cartParseOverHash(struct cart *cart, char *contents)
-/* Parse cgi-style contents into a hash table.  This will *not*
+void cartParseOverHashExt(struct cart *cart, char *contents, boolean merge)
+/* Parse cgi-style contents into a hash table.  If merge is FALSE, this will *not*
  * replace existing members of hash that have same name, so we can
  * support multi-select form inputs (same var name can have multiple
- * values which will be in separate hashEl's). */
+ * values which will be in separate hashEl's). If merge is TRUE, we
+ * replace existing values with new values */
 {
 struct hash *hash = cart->hash;
 char *namePt, *dataPt, *nextNamePt;
@@ -188,9 +189,21 @@ while (namePt != NULL && namePt[0] != 0)
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
-    hashAdd(hash, namePt, cloneString(dataPt));
+    if (!merge)
+        hashAdd(hash, namePt, cloneString(dataPt));
+    else 
+        hashReplace(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
     }
+}
+
+void cartParseOverHash(struct cart *cart, char *contents)
+/* Parse cgi-style contents into a hash table.  This will *not*
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). */
+{
+cartParseOverHashExt(cart, contents, FALSE);
 }
 
 static boolean looksCorrupted(struct cartDb *cdb)
@@ -548,14 +561,15 @@ assert(hashNumEntries(hash) == 0);
 }
 
 #ifndef GBROWSE
-void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
+void cartLoadUserSessionExt(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
-			 struct hash *oldVars, char *actionVar)
+			 struct hash *oldVars, char *actionVar, boolean merge)
 /* If permitted, load the contents of the given user's session, and then
  * reload the CGI settings (to support override of session settings).
  * If non-NULL, oldVars will contain values overloaded when reloading CGI.
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
- * CGI action variable that sent us here. */
+ * CGI action variable that sent us here. 
+ * If merge is TRUE, then don't clear the cart first. */
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -587,8 +601,13 @@ if ((row = sqlNextRow(sr)) != NULL)
     pubSessionsTableString = cloneString(pubSessionsTableString);
 	struct sqlConnection *conn2 = hConnectCentral();
 	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
-	cartRemoveLike(cart, "*");
-	cartParseOverHash(cart, row[1]);
+        if (!merge)
+            {
+            cartRemoveLike(cart, "*");
+            cartParseOverHash(cart, row[1]);
+            }
+        else
+            cartParseOverHashExt(cart, row[1], TRUE);
 	cartSetString(cart, sessionVar, hgsid);
 	if (sessionTableString != NULL)
 	    cartSetString(cart, hgSessionTableState, sessionTableString);
@@ -612,6 +631,20 @@ else
 	     sessionName, sessionOwner);
 sqlFreeResult(&sr);
 freeMem(encSessionName);
+}
+
+void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
+			 char *sessionName, struct cart *cart,
+			 struct hash *oldVars, char *actionVar)
+/* If permitted, load the contents of the given user's session, and then
+ * reload the CGI settings (to support override of session settings).
+ * If non-NULL, oldVars will contain values overloaded when reloading CGI.
+ * If non-NULL, actionVar is a cartRemove wildcard string specifying the
+ * CGI action variable that sent us here. */
+{
+cartLoadUserSessionExt(conn, sessionOwner,
+			 sessionName, cart,
+			 oldVars, actionVar, FALSE);
 }
 #endif /* GBROWSE */
 
@@ -1372,9 +1405,10 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	{
 	char *otherUser = cartString(cart, hgsOtherUserName);
 	char *sessionName = cartString(cart, hgsOtherUserSessionName);
+	boolean mergeCart = cartUsualBoolean(cart, hgsMergeCart, FALSE);
 	struct sqlConnection *conn2 = hConnectCentral();
-	cartLoadUserSession(conn2, otherUser, sessionName, cart,
-			    oldVars, hgsDoOtherUser);
+	cartLoadUserSessionExt(conn2, otherUser, sessionName, cart,
+			    oldVars, hgsDoOtherUser, mergeCart);
 	hDisconnectCentral(&conn2);
 	cartTrace(cart, "after cartLUS", conn);
 	didSessionLoad = TRUE;

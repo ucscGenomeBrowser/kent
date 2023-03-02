@@ -8,10 +8,10 @@
 #include "bedCart.h"
 
 // we distinguish between four levels of impact factors <1, <3, <10 and >10
-static struct rgbColor impact1Color  = {80, 80, 80};
-static struct rgbColor impact2Color  = {0, 80, 255};
-static struct rgbColor impact3Color  = {0, 100, 0};
-static struct rgbColor impact4Color  = {255, 255, 0};
+static struct rgbColor impact1Color  = {80, 80, 80, 255};
+static struct rgbColor impact2Color  = {0, 80, 255, 255};
+static struct rgbColor impact3Color  = {0, 100, 0, 255};
+static struct rgbColor impact4Color  = {255, 255, 0, 255};
 
 static char *pubsArticleTable(struct track *tg)
 /* return the name of the pubs articleTable, either

@@ -227,6 +227,7 @@ while (lineFileChopTab(lf, row))
     color->r = atoi(row[1]);
     color->g = atoi(row[2]);
     color->b = atoi(row[3]);
+    color->a = 255;
     hashAdd(hash, name, color);
     }
 lineFileClose(&lf);

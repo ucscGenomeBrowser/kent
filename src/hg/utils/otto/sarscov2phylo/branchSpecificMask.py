@@ -94,11 +94,16 @@ def getRepresentativeNodes(pbIn, spec):
             name = fullName.split('|')[0]
             if repNodes.get(name) is not None:
                 nodes = path.split(' ')
+                # In most cases we want the last node in the path [-1]
                 nodeIx = -1
+                # ... but if the last word starts with the sample name (with private mutations)
+                # then we do not want to mask just that sample, so backtrack to [-2]
                 if nodes[-1].startswith(name):
                     nodeIx = nodeIx - 1
+                # ... and the spec might say to backtrack even more (e.g. parent or grandparent):
                 nodeIx = nodeIx - getBacktrack(spec, name)
                 nodeMuts = nodes[nodeIx]
+                # Strip to just the node ID, discard mutations
                 node = nodeMuts.split(':')[0]
                 repNodes[name] = node;
     # Make sure we found all of them

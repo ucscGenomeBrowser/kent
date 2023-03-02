@@ -646,6 +646,7 @@ if (tg->visibility == tvFull)
 return (si->maxLevel + 1) * (multiplier * lineHeight);
 }
 
+#ifdef NOTNOW
 static int linkedFeaturesCmpScore(const void *va, const void *vb)
 /* Help sort linkedFeatures by score */
 {
@@ -657,6 +658,7 @@ else if (a->score < b->score)
     return 1;
 return 0;
 }
+#endif
 
 static int snakeHeight(struct track *tg, enum trackVisibility vis)
 /* calculate height of all the snakes being displayed */
@@ -1938,9 +1940,11 @@ tg->itemColor = chainNoColor;
 tg->color.r = 0;
 tg->color.g = 0;
 tg->color.b = 0;
+tg->color.a = 255;
 tg->altColor.r = 127;
 tg->altColor.g = 127;
 tg->altColor.b = 127;
+tg->altColor.a = 255;
 tg->ixColor = MG_BLACK;
 tg->ixAltColor = MG_GRAY;
 }

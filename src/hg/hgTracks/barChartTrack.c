@@ -141,7 +141,8 @@ if (!extras->colors)
     int i = 0;
     for (categ = categs; categ != NULL; categ = categ->next)
         {
-        extras->colors[i] = (struct rgbColor){.r=COLOR_32_BLUE(categ->color), .g=COLOR_32_GREEN(categ->color), .b=COLOR_32_RED(categ->color)};
+        // takes advantage of bedColorToRgb assuming alpha will never be 0, and assigning 0xff instead
+        extras->colors[i] = bedColorToRgb(categ->color);
         i++;
         }
     }

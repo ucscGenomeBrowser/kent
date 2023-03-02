@@ -280,6 +280,13 @@ INLINE int hvGfxFindColorIx(struct hvGfx *hvg, int r, int g, int b)
 return vgFindColorIx(hvg->vg, r, g, b);
 }
 
+INLINE int hvGfxFindAlphaColorIx(struct hvGfx *hvg, int r, int g, int b, int a)
+/* Find color in map if possible, otherwise create new color or
+ * in a pinch a close color. */
+{
+return vgFindAlphaColorIx(hvg->vg, r, g, b, a);
+}
+
 INLINE struct rgbColor hvGfxColorIxToRgb(struct hvGfx *hvg, int colorIx)
 /* Return rgb values for given color index. */
 {

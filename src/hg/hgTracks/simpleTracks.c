@@ -211,7 +211,7 @@ int emPadding = 6;                  /* # bases padding for exon-mostly regions *
 int gmPadding = 6;                  /* # bases padding for gene-mostly regions */
 char *emGeneTable = NULL;           /* Gene table to use for exon mostly */
 struct track *emGeneTrack = NULL;   /* Track for gene table for exon mostly */
-struct rgbColor vertWindowSeparatorColor = { 255, 220, 220};  // light red
+struct rgbColor vertWindowSeparatorColor = { 255, 220, 220, 255};  // light red
 char *multiRegionsBedUrl = "";     /* URL to Multi-window bed regions file */
 
 // demo2
@@ -269,15 +269,15 @@ int maxShade = 9;	/* Highest shade in a color gradient. */
 Color shadesOfGray[10+1];	/* 10 shades of gray from white to black
                                  * Red is put at end to alert overflow. */
 Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
-struct rgbColor brownColor = {100, 50, 0};
-struct rgbColor tanColor = {255, 240, 200};
-struct rgbColor guidelineColor = {220, 220, 255};
-struct rgbColor multiRegionAltColor = {235, 235, 255};
-struct rgbColor undefinedYellowColor = {240,240,180};
+struct rgbColor brownColor = {100, 50, 0, 255};
+struct rgbColor tanColor = {255, 240, 200, 255};
+struct rgbColor guidelineColor = {220, 220, 255, 255};
+struct rgbColor multiRegionAltColor = {235, 235, 255, 255};
+struct rgbColor undefinedYellowColor = {240,240,180, 255};
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */
-struct rgbColor darkSeaColor = {0, 60, 120};
-struct rgbColor lightSeaColor = {200, 220, 255};
+struct rgbColor darkSeaColor = {0, 60, 120, 255};
+struct rgbColor lightSeaColor = {200, 220, 255, 255};
 
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
 
@@ -306,7 +306,7 @@ struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = ((int)rgbColor.r)/2;
 rgbColor.g = ((int)rgbColor.g)/2;
 rgbColor.b = ((int)rgbColor.b)/2;
-return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+return hvGfxFindAlphaColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b, rgbColor.a);
 }
 
 Color somewhatDarkerColor(struct hvGfx *hvg, Color color)
@@ -316,7 +316,7 @@ struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (2*(int)rgbColor.r)/3;
 rgbColor.g = (2*(int)rgbColor.g)/3;
 rgbColor.b = (2*(int)rgbColor.b)/3;
-return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+return hvGfxFindAlphaColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b, rgbColor.a);
 }
 
 Color slightlyDarkerColor(struct hvGfx *hvg, Color color)
@@ -326,7 +326,7 @@ struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (9*(int)rgbColor.r)/10;
 rgbColor.g = (9*(int)rgbColor.g)/10;
 rgbColor.b = (9*(int)rgbColor.b)/10;
-return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+return hvGfxFindAlphaColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b, rgbColor.a);
 }
 
 Color lighterColor(struct hvGfx *hvg, Color color)
@@ -336,7 +336,7 @@ struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (rgbColor.r+255)/2;
 rgbColor.g = (rgbColor.g+255)/2;
 rgbColor.b = (rgbColor.b+255)/2;
-return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+return hvGfxFindAlphaColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b, rgbColor.a);
 }
 
 Color somewhatLighterColor(struct hvGfx *hvg, Color color)
@@ -346,7 +346,7 @@ struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (2*rgbColor.r+255)/3;
 rgbColor.g = (2*rgbColor.g+255)/3;
 rgbColor.b = (2*rgbColor.b+255)/3;
-return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+return hvGfxFindAlphaColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b, rgbColor.a);
 }
 
 boolean trackIsCompositeWithSubtracks(struct track *track)
@@ -362,7 +362,7 @@ struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (rgbColor.r+128)/2;
 rgbColor.g = (rgbColor.g+128)/2;
 rgbColor.b = (rgbColor.b+128)/2;
-return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+return hvGfxFindAlphaColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b, rgbColor.a);
 }
 
 boolean winTooBigDoWiggle(struct cart *cart, struct track *tg)
@@ -3345,12 +3345,12 @@ darkGreenColor = hvGfxFindColorIx(hvg, 28,140,40);
 void makeRedGreenShades(struct hvGfx *hvg)
 /* Allocate the shades of Red, Green, Blue and Yellow for expression tracks */
 {
-static struct rgbColor black = {0, 0, 0};
-static struct rgbColor red = {255, 0, 0};
-static struct rgbColor green = {0, 255, 0};
-static struct rgbColor blue = {0, 0, 255};
-static struct rgbColor yellow = {255, 255, 0};
-static struct rgbColor white  = {255, 255, 255};
+static struct rgbColor black = {0, 0, 0, 255};
+static struct rgbColor red = {255, 0, 0, 255};
+static struct rgbColor green = {0, 255, 0, 255};
+static struct rgbColor blue = {0, 0, 255, 255};
+static struct rgbColor yellow = {255, 255, 0, 255};
+static struct rgbColor white  = {255, 255, 255, 255};
 hvGfxMakeColorGradient(hvg, &black, &blue, EXPR_DATA_SHADES, shadesOfBlue);
 hvGfxMakeColorGradient(hvg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
 hvGfxMakeColorGradient(hvg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
@@ -3517,6 +3517,14 @@ if (diff == 0)
 return diff;
 }
 
+int linkedFeaturesCmpName(const void *va, const void *vb)
+/* Help sort linkedFeatures by query name. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+return strcmp(a->name, b->name);
+}
+
 int linkedFeaturesCmpStart(const void *va, const void *vb)
 /* Help sort linkedFeatures by starting pos. */
 {
@@ -3575,14 +3583,10 @@ if (!((lf->isBigGenePred) ||(lf->filterColor == 0)|| (lf->filterColor == -1)))
     {
     if (lf->useItemRgb)
 	{
-	struct rgbColor itemRgb;
-	itemRgb.r = (lf->filterColor & 0xff0000) >> 16;
-	itemRgb.g = (lf->filterColor & 0xff00) >> 8;
-	itemRgb.b = lf->filterColor & 0xff;
-	*retColor = *retBarbColor =
-		hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
+        *retColor = *retBarbColor = bedColorToGfxColor(lf->filterColor);
 	}
     else
+        // When does this case happen?  Why isn't this color also being parsed like above?
 	*retColor = *retBarbColor = lf->filterColor;
     }
 else if (tg->itemColor)
@@ -3609,11 +3613,7 @@ Color bigGenePredColor(struct track *tg, void *item,  struct hvGfx *hvg)
 /* Determine the color of the name for the bigGenePred linked feature. */
 {
 struct linkedFeatures *lf = item;
-struct rgbColor itemRgb;
-itemRgb.r = (lf->filterColor & 0xff0000) >> 16;
-itemRgb.g = (lf->filterColor & 0xff00) >> 8;
-itemRgb.b = lf->filterColor & 0xff;
-return hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
+return bedColorToGfxColor(lf->filterColor);
 }
 
 Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -3627,7 +3627,10 @@ Color linkedFeaturesNameColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 Color col, barbCol;
 lfColors(tg, item, hvg, &col, &barbCol);
-return col;
+// Draw the item name fully opaque even even the item itself is drawn with alpha
+struct rgbColor rgb = hvGfxColorIxToRgb(hvg, col);
+rgb.a = 255;
+return hvGfxFindRgb(hvg, &rgb);
 }
 
 struct simpleFeature *simpleFeatureCloneList(struct simpleFeature *list)
@@ -7618,6 +7621,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         lighter.r = (6*normal->r + 4*255) / 10;
         lighter.g = (6*normal->g + 4*255) / 10;
         lighter.b = (6*normal->b + 4*255) / 10;
+        lighter.a = normal->a;
         col = hvGfxFindRgb(hvg, &lighter);
         }
     else
@@ -7625,6 +7629,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         lightest.r = (1*normal->r + 2*255) / 3;
         lightest.g = (1*normal->g + 2*255) / 3;
         lightest.b = (1*normal->b + 2*255) / 3;
+        lightest.a = normal->a;
         col = hvGfxFindRgb(hvg, &lightest);
         }
     }
@@ -7731,7 +7736,7 @@ Color ensGeneNonCodingColor(struct track *tg, void *item, struct hvGfx *hvg)
 char condStr[255];
 char *bioType;
 Color color = {MG_GRAY};  /* Set default to gray */
-struct rgbColor hAcaColor = {0, 128, 0}; /* darker green, per request by Weber */
+struct rgbColor hAcaColor = {0, 128, 0, 255}; /* darker green, per request by Weber */
 Color hColor;
 struct sqlConnection *conn;
 char *name;
@@ -9572,7 +9577,7 @@ Color ncRnaColor(struct track *tg, void *item, struct hvGfx *hvg)
 char condStr[255];
 char *rnaType;
 Color color = {MG_GRAY};  /* Set default to gray */
-struct rgbColor hAcaColor = {0, 128, 0}; /* darker green, per request by Weber */
+struct rgbColor hAcaColor = {0, 128, 0, 255}; /* darker green, per request by Weber */
 Color hColor;
 struct sqlConnection *conn;
 char *name;
@@ -9610,7 +9615,7 @@ char condStr[255];
 char *rnaType;
 Color color = {MG_BLACK};  /* Set default to black.  But, if we got black, something is wrong. */
 Color hColor;
-struct rgbColor hAcaColor = {0, 128, 0}; /* darker green */
+struct rgbColor hAcaColor = {0, 128, 0, 255}; /* darker green */
 struct sqlConnection *conn;
 char *name;
 
@@ -12092,6 +12097,7 @@ if (hTableExists(database, classTable))
         gClassColor.r = (sqlUnsigned(rgbVals[0]));
         gClassColor.g = (sqlUnsigned(rgbVals[1]));
         gClassColor.b = (sqlUnsigned(rgbVals[2]));
+        gClassColor.a = 0xff;
 
         /* find index for color */
         color = hvGfxFindRgb(hvg, &gClassColor);
@@ -13010,10 +13016,12 @@ Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
 lighter.r = (6*normal->r + 4*255) / 10;
 lighter.g = (6*normal->g + 4*255) / 10;
 lighter.b = (6*normal->b + 4*255) / 10;
+lighter.a = normal->a;
 
 lightest.r = (1*normal->r + 2*255) / 3;
 lightest.g = (1*normal->g + 2*255) / 3;
 lightest.b = (1*normal->b + 2*255) / 3;
+lightest.a = normal->a;
 
 
 struct sqlConnection *conn = hAllocConn(database);
@@ -13347,10 +13355,12 @@ Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
 lighter.r = (6*normal->r + 4*255) / 10;
 lighter.g = (6*normal->g + 4*255) / 10;
 lighter.b = (6*normal->b + 4*255) / 10;
+lighter.a = normal->a;
 
 lightest.r = (1*normal->r + 2*255) / 3;
 lightest.g = (1*normal->g + 2*255) / 3;
 lightest.b = (1*normal->b + 2*255) / 3;
+lightest.a = normal->a;
 
 class1Clr = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
 class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
@@ -14564,10 +14574,10 @@ void makeCompositeTrack(struct track *track, struct trackDb *tdb)
 {
 buildMathWig(tdb);
 unsigned char finalR = track->color.r, finalG = track->color.g,
-                            finalB = track->color.b;
+                            finalB = track->color.b, finalA = track->color.a;
 unsigned char altR = track->altColor.r, altG = track->altColor.g,
-                            altB = track->altColor.b;
-unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
+                            altB = track->altColor.b, altA = track->altColor.a;
+unsigned char deltaR = 0, deltaG = 0, deltaB = 0, deltaA = 0;
 
 struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
 
@@ -14606,6 +14616,9 @@ if (altColors && (finalR || finalG || finalB))
     deltaR = (finalR - altR) / altColors;
     deltaG = (finalG - altG) / altColors;
     deltaB = (finalB - altB) / altColors;
+    // speculative - no harm, but there's no current way for a track to set its alpha,
+    // so both final and altA should be 255
+    deltaA = (finalA - altA) / altColors;
     }
 
 /* fill in subtracks of composite track */
@@ -14639,15 +14652,20 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 	subtrack->color.b = altB;
 	subtrack->altColor.b = (255+altB)/2;
 	altB += deltaB;
+	subtrack->color.a = altA;
+	subtrack->altColor.a = altA;
+	altA += deltaA;
 	}
     else
 	{
 	subtrack->color.r = subTdb->colorR;
 	subtrack->color.g = subTdb->colorG;
 	subtrack->color.b = subTdb->colorB;
+        subtrack->color.a = 255;
 	subtrack->altColor.r = subTdb->altColorR;
 	subtrack->altColor.g = subTdb->altColorG;
 	subtrack->altColor.b = subTdb->altColorB;
+        subtrack->altColor.a = 255;
 	}
     slAddHead(&track->subtracks, subtrack);
     }
@@ -14711,9 +14729,11 @@ else
 track->color.r = tdb->colorR;
 track->color.g = tdb->colorG;
 track->color.b = tdb->colorB;
+track->color.a = 255; // No way to specify alpha in tdb currently - assume it's fully opaque
 track->altColor.r = tdb->altColorR;
 track->altColor.g = tdb->altColorG;
 track->altColor.b = tdb->altColorB;
+track->altColor.a = 255;
 track->lineHeight = tl.fontHeight+1;
 track->heightPer = track->lineHeight - 1;
 track->private = tdb->private;

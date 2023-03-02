@@ -593,6 +593,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                     spannedLf->end = tmp->end;
                 if (fieldCount > 9) // average the colors in the merged item
                     {
+                    // Not sure how averaging alphas in the merged item would work; probably better
+                    // to ignore it.
                     struct rgbColor itemColor = colorIxToRgb(lf->filterColor);
                     struct rgbColor currColor = colorIxToRgb(spannedLf->filterColor);
                     int r = currColor.r + round((itemColor.r - currColor.r) / mergeCount);

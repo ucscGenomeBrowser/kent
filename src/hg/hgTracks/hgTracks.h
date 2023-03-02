@@ -936,6 +936,9 @@ void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList);
 int simpleFeatureCmp(const void *va, const void *vb);
 /* Compare to sort based on start. */
 
+int linkedFeaturesCmpScore(const void *va, const void *vb);
+/* Help sort linkedFeatures by score (descending), then by starting pos. */
+
 int linkedFeaturesCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
 

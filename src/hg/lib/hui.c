@@ -466,14 +466,8 @@ while (lineFileChopNext(lf, words, bedSize))
         }
     else
         {
-        // no lib ? sigh
-        int colorIx = (int)region->itemRgb;
-        struct rgbColor rgb = colorIxToRgb(colorIx);
-        safef(userColor, sizeof userColor, "%d,%d,%d", rgb.b, rgb.g, rgb.r);
-
-        // or this ? -- uglier but deeper in code
-        //safef(userColor, sizeof userColor, "%d,%d,%d", (region->itemRgb & 0xff0000) >> 16,
-            //(region->itemRgb & 0xff00) >> 8, (region->itemRgb & 0xff));
+        struct rgbColor rgb = bedColorToRgb(region->itemRgb);
+        safef(userColor, sizeof userColor, "%d,%d,%d", rgb.r, rgb.g, rgb.b);
         }
     if (bedSize < 4)
         {
@@ -3501,6 +3495,7 @@ struct rgbColor rgbColor;
 rgbColor.r = subtrack->colorR;
 rgbColor.g = subtrack->colorG;
 rgbColor.b = subtrack->colorB;
+rgbColor.a = 255;
 struct hslColor hslColor = mgRgbToHsl(rgbColor);
 int hue = hslColor.h * 10;
 char buf[5];

@@ -1,5 +1,87 @@
 #############################################################################
-### Building the assembly hubs ###
+### Building the GenArk assembly hubs ###
+#############################################################################
+###
+###  To build a single hub:
+#############################################################################
+
+0: Given an accession identifier, e.g. GCF_002776525.5
+a. find build command and designated clade
+b. run the build of the hub
+c. add lines to source tree files master.run.list and clade.orderList.tsv
+d. in the source tree run; time (make) > dbg 2>&1 # check for errors
+e. time (make verifyTestDownload) >> test.down.log 2>&1 # check for errors
+f. time (make sendDownload) >> send.down.log 2>&1 # check for errors
+g. time (make verifyDownload) >> verify.down.log 2>&1 # check for errors
+h. verify the browser functions: https://genome.ucsc.edu/h/GCF_002776525.5
+
+### Details of those steps:
+
+1.  Given an accession identifier, e.g. GCF_002776525.5
+    Find the build command and designated clade:
+
+  grep GCF_002776525.5 \
+     /hive/data/outside/ncbi/genomes/reports/newAsm/{rs,gb}.todo.*.txt
+
+Answer: 'primates' clade and command:
+rs.todo.primates.txt:./runBuild GCF_002776525.5_ASM277652v5 primates Piliocolobus_tephrosceles   2019_12_12
+
+    If that grep finds nothing, that browser may already be built.
+    Can grep source tree file: ~/kent/src/hg/makeDb/doc/asmHubs/master.run.list
+    for your accession to see if it already done
+
+2.  Run the build of the browser in the directory:
+    cd /hive/data/genomes/asmHubs/allBuild
+time (./runBuild GCF_002776525.5_ASM277652v5 primates Piliocolobus_tephrosceles) > GCF_002776525.5.log 2>&1 &
+    That could take several days for a large genome, a few hours for a small one
+    When it is done, there will be a asmId.trackDb.txt file in the build
+    directory:
+/hive/data/genomes/asmHubs/refseqBuild/GCF/002/776/525/GCF_002776525.5_ASM277652v5/
+
+3.  When the build is done, add that runBuild command to the source tree:
+             ~/kent/src/hg/makeDb/doc/asmHubs/master.run.list
+    maintain the sorted order of that file
+
+4.  Add the full assembly ID and common name to the primates.orderList.txt
+    cd ~/kent/src/hg/makeDb/doc/primatesAsmHub
+    echo GCF_002776525.5_ASM277652v5 | ../asmHubs/commonNames.pl /dev/stdin
+ GCF_002776525.5_ASM277652v5     Ugandan red Colobus (RC106 2019)
+    Keep the list in order by the second column case insensitive.
+    These common names will be the pull-down menu list in the browser
+    to select a genome from this group.  Make the common name unique so
+    there is something the user can see that they can identify as the
+    assembly they want to use.
+    Extra credit:  if your new build is an updated version of
+                   that genome assembly, move the old one out of this
+                   orderList.txt into ../legacyAsmHub/legacy.orderList.txt
+                   Same procedures there to push out that group.
+
+5. Prepare the build for the push.  In this primatesAsmHub directory:
+     time (make) > dbg 2>&1
+     This could stop prematurely if errors are encountered, to verify
+     when done, check for errors: grep -i err dbg
+     should be nothing significant
+
+6. Verify the browser is correct on hgwdev:
+     time (makeVerifyTestDownload) >> test.down.log 2>&1
+     should finish with an all clear line, no failures:
+# checked  58 hubs, 58 success, 0 fail, total tracks: 1188, 2023-02-15 13:48:07
+
+7. Push the hub to hgdownload (and dynamic blat server):
+     time (make sendDownload) >> send.down.log 2>&1
+     should stop if there are errors.  Can verify: grep -i error send.down.log
+
+8. Verify the hub is correctly on hgdownload:
+     time (make verifyDownload) >> verify.down.log 2>&1
+     should finish with an all clear line, no failures:
+# checked 58 hubs, 58 success, 0 fail, total tracks: 1188, 2023-02-15 13:58:02
+
+9. Verify the hub appears in the browser:
+        https://genome.ucsc.edu/h/GCF_002776525.5
+
+Extra historical discussion included below.
+
+#############################################################################
 #############################################################################
 ### see below for adding custom/local developed tracks to an existing GenArk hub
 #############################################################################
@@ -107,7 +189,7 @@ The builds are operated from the directory:
 
 The 'runBuild' is operated, for example, a single assembly:
 
-  time (./runBuild GCF_000001405.39 GCF_000001405.39_GRCh38.p13 vertebrate_mammalian Homo_sapiens) >> GCF_000001405.39.log 2>&1 &
+  time (./runBuild GCF_000001405.39_GRCh38.p13 primates Homo_sapiens) >> GCF_000001405.39.log 2>&1 &
 
 Or, typically, there may be a whole list of such commands
 ( such as in the master.run.list here:

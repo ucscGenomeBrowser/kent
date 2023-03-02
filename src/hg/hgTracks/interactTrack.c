@@ -33,17 +33,8 @@ if (tg->colorShades)
     adjustBedScoreGrayLevel(tg->tdb, bed, scoreMin, scoreMax);
     return tg->colorShades[grayInRange(inter->score, 0, 1000)];
     }
-/*
- There must be a better way..., e.g.:
-
-unsigned red = COLOR_32_RED(inter->color);
-unsigned green = COLOR_32_GREEN(inter->color);
-unsigned blue = COLOR_32_BLUE(inter->color);
-*/
-unsigned red = (inter->color & 0xff0000) >> 16;
-unsigned green = (inter->color & 0xff00) >> 8;
-unsigned blue = inter->color & 0xff;
-return hvGfxFindColorIx(hvg, red, green, blue);
+struct rgbColor color = bedColorToRgb(inter->color);
+return hvGfxFindAlphaColorIx(hvg, color.r, color.g, color.b, color.a);
 }
 
 boolean interactSourceInWindow(struct interact *inter)

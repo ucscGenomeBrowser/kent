@@ -141,8 +141,7 @@ assert(i>=0);
 struct gtexEqtlClusterTrack *extras = (struct gtexEqtlClusterTrack *)track->extraUiData;
 struct gtexTissue *tis = (struct gtexTissue *)hashFindVal(extras->tissueHash, eqtl->expNames[i]);
 assert (tis);
-return (struct rgbColor){.r=COLOR_32_BLUE(tis->color), .g=COLOR_32_GREEN(tis->color), 
-                .b=COLOR_32_RED(tis->color)};
+return bedColorToRgb(tis->color);
 }
 
 static char *eqtlSourcesLabel(struct gtexEqtlCluster *eqtl)

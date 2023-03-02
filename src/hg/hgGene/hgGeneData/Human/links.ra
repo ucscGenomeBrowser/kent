@@ -49,9 +49,6 @@ idSql select hgncId from kgXref,proteome.hgncXref where kgID = '%s' and geneSymb
 url http://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/%s
 priority 10
 
-name cgap
-url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s
-
 name hprd
 shortLabel HPRD
 tables knownToHprd 
@@ -106,10 +103,10 @@ priority 10
 
 # stopped working in late 2020
 #name stanfordSource
-#shortLabel Stanford SOURCE
+#shortLabel SOURCE
 #tables kgXref
 #idSql select mRNA from kgXref where kgID = '%s'
-#url http://smd.stanford.edu/cgi-bin/source/sourceResult?organism=Hs&option=Number&criteria=%s&choice=Gene
+#url http://source-search.princeton.edu/cgi-bin/source/sourceResult?organism=Hs&option=Number&criteria=%s&choice=Gene
 #priority 10
 
 name nextProt
