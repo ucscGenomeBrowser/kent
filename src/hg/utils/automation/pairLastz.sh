@@ -5,6 +5,8 @@ set -beEu -o pipefail
 export userName="`whoami`"
 
 if [ $# != 4 ]; then
+  printf "ERROR: arg count: %d != 4\n" "$#" 1>&2
+
   printf "usage: pairLastz.sh <target> <query> <tClade> <qClade>
 
 Where target/query is either a UCSC db name, or is an
@@ -128,6 +130,12 @@ function orgDate() {
        ;;
   esac
   printf "%s" "${oDate}"
+}
+
+# check if this database is actually a database browser or a promoted
+# hub.  It could have a MySQL database, but it won't have a chromInfo
+function promotedHub() {
+  export db=$1
 }
 
 export target="$1"

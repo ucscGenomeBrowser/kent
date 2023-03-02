@@ -1876,6 +1876,13 @@ if (vpTx->start.region == vpTx->end.region ||
     errAbort("vpTxSplitByRegion: don't call this if start and end region (%s, %s) are the same, "
              "if vpTx is an insertion, or if vpTx deletes the entire transcript",
              vpTxRegionToString(vpTx->start.region), vpTxRegionToString(vpTx->end.region));
+// Even if vpTxPosIsInsertion() is false because this is not an insertion into the transcript,
+// it might still be an insertion into the genome, e.g. danRer11's rs499587024 with NCBI's
+// alignment of NM_001002580.1 that places a 12-base "exon" after a double-sided gap "intron"
+// that skips 400-odd transcript bases, with rs499587024 at the "exon"/"intron" boundary.
+// In this case start > end in tx coords, not equal, so vpTxPosIsInsertion returns false.
+if (vpTx->start.gOffset == vpTx->end.gOffset)
+    return NULL;
 // If start region and end region are different then at least one of them should be exon or
 // they should have at least one exon in the middle, so txRef should not be NULL.
 if (vpTx->txRef == NULL)
