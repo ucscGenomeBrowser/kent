@@ -36,7 +36,7 @@ errAbort(
   "\n"
   "Sequence and range may also be specified as part of the input\n"
   "file name using the syntax:\n"
-  "      /path/input.2bit:name\n"
+  "      /path/input.2bit\n"
   "   or\n"
   "      /path/input.2bit:name\n"
   "   or\n"
