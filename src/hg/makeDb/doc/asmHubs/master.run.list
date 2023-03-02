@@ -197,6 +197,7 @@
 ./runBuild GCA_002180455.1_ASM218045v1 plants Eleusine_coracana_subsp._coracana
 ./runBuild GCA_002201575.1_ASM220157v1 mammals Neomonachus_schauinslandi
 ./runBuild GCA_002201775.1_ALER1.0 mammals Ammotragus_lervia
+./runBuild GCA_002204515.1_AaegL5.0 invertebrate Aedes_aegypti
 ./runBuild GCA_002215935.1_ASM221593v1 mammals Psammomys_obesus
 ./runBuild GCA_002216045.1_PinMar1.0 invertebrate Pinctada_imbricata
 ./runBuild GCA_002240015.2_TDr96_F1_Pseudo_Chromosome_v1.0 plants Dioscorea_cayenensis_subsp._rotundata
