@@ -470,7 +470,11 @@ if (useJoiner)
         for (jp = jpList; jp != NULL; jp = jp->next)
             {
             struct joinerDtf *dtf = jp->b;
-            if (cartTrackDbIsAccessDenied(dtf->database, dtf->table))
+            // If we are checking a non-assembly database like hgFixed, then
+            // we can't have a valid tableBrowser setting to deny the table
+            // anyways (because we have no tracks for that database), so don't
+            // bother checking unless the joined tables have the same database
+            if (sameString(dtf->database, db) && cartTrackDbIsAccessDenied(dtf->database, dtf->table))
                 continue;
             char buf[256];
             char *s;
