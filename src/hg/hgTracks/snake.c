@@ -875,7 +875,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	{
 	safef(qAddress, sizeof qAddress, "qName=%s&qs=%d&qe=%d&qWidth=%d",sf->qName,  qs, qe,  winEnd - winStart);
 	boundMapBox(hvg, s, e, sx+1, y, w-2, heightPer, tg->track,
-		    buffer, buffer, NULL, TRUE, qAddress);
+		    sf->qName, sf->qName, NULL, TRUE, qAddress);
 	}
     hvGfxBox(hvg, sx, y, w, heightPer, color);
 
