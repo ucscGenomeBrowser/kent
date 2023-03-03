@@ -142,5 +142,7 @@ XBB.1.5:
 
 XBC:
     # Inherits nothing!  Should find out its deletions.
+    # Cornelius Roemer requested to mask several reversions in
+    # https://github.com/cov-lineages/pango-designation/issues/1100#issuecomment-1426502678
     representative: Philippines/PH-VUI-142736/2022
-    reversions: [ G5584A, T13019C, T25000C, T28271A ]
+    reversions: [ G5584A, T13019C, T22329C, T25000C, C27718T, T28271A ]
