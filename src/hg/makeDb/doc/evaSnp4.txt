@@ -219,8 +219,8 @@ def splitChromsAndRunHgVai(workDir,dbs):
     allTables = bash("\hgsql -e \"show tables\" "+dbs+"")
     if dbs in ['galGal6','oviAri4','ponAbe3']: #Special exception to use refGene because ncbiRefSeq has incorrect protein sequence in Link table see #29262
         geneTableToUse = "refGene"
-    elif "ncbiRefSeqSelect" in allTables:
-        geneTableToUse = "ncbiRefSeqSelect"
+#     elif "ncbiRefSeqSelect" in allTables: #Removing refseq select as the annotations are too sparse
+#         geneTableToUse = "ncbiRefSeqSelect"
     elif "ncbiRefSeqCurated" in allTables:
         geneTableToUse = "ncbiRefSeqCurated"
     elif "ensGene" in allTables:
