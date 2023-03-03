@@ -5,7 +5,15 @@
 #include "hgConfig.h"
 #include "hPrint.h"
 #include "googleAnalytics.h"
+#include "htmshell.h"
 
+void googleAnalyticsSetGa4Key()
+/* if the google analytics key is a GA4 key, set the variable in htmlshell */
+{
+char *analyticsKey = cfgOption("analyticsKey");
+if (analyticsKey && startsWith("G-", analyticsKey))
+    htmlSetGa4Key(analyticsKey);
+}
 
 void googleAnalytics()
 /* check for analytics configuration item and output google hooks if OK */
@@ -28,20 +36,19 @@ boolean trackButtons = cfgOptionBooleanDefault("analytics.trackButtons", TRUE);
 if (isEmpty(analyticsKey))
     return;
 
-/* updated to Universal Analytics code 2014-06-19 */
-
+// new GA4 tags start with G- and should be used with the entirely new system called Google Tag Manager,
+// which is a different Javascript, new functions, totally different features.
 if (startsWith("G-", analyticsKey))
     {
     jsInlineF(
-        "<!-- Google tag (gtag.js) -->\n"
-        "<script async src=\"https://www.googletagmanager.com/gtag/js?id=%s\"></script>\n"
-        "<script>\n"
+        "// Google tag load (gtag.js)\n"
         "   window.dataLayer = window.dataLayer || [];\n"
         "   function gtag(){dataLayer.push(arguments);}\n"
         "   gtag('js', new Date()); gtag('config', '%s');\n"
-        "</script>\n", analyticsKey, analyticsKey);
+        "// Google tag load end\n", analyticsKey);
     return;
     }
+
 // replace analytics.js below with analytics_debug.js to activate ga debugging
 // It will log all events and all data that is sent to the javascript console, very handy
 jsInlineF(

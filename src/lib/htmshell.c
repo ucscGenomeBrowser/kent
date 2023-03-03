@@ -27,6 +27,8 @@ static bool NoEscape = FALSE;
 
 static bool errorsNoHeader = FALSE;
 
+static char *analyticsKey = NULL;
+
 void htmlSuppressErrors()
 /* Do not output a http header for error messages. Makes sure that very early
  * errors are not shown back to the user but trigger a 500 error, */
@@ -804,6 +806,12 @@ void htmlSetFormClass(char *formClass)
 htmlFormClass = formClass;
 }
 
+void htmlSetGa4Key(char *key)
+/* Set GA4 key. Needs to be called before htmlStart or htmShell. */
+{
+analyticsKey = key;
+}
+
 void htmlSetStyleTheme(char *style)
 /* Set theme style. Needs to be called before htmlStart or htmShell. */
 {
@@ -962,6 +970,7 @@ dyStringPrintf(policy, " %s", noncePolicy);
 freeMem(noncePolicy);
 dyStringAppend(policy, " code.jquery.com");          // used by hgIntegrator jsHelper and others
 dyStringAppend(policy, " www.google-analytics.com"); // used by google analytics
+dyStringAppend(policy, " www.googletagmanager.com"); // used by google tag manager (new version of analytics)
 // cirm cdw lib and web browse
 dyStringAppend(policy, " www.samsarin.com/project/dagre-d3/latest/dagre-d3.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js");
@@ -1094,6 +1103,8 @@ if (htmlStyleSheet != NULL)
     fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n", htmlStyleSheet);
 if (htmlStyleTheme != NULL)
     fputs(htmlStyleTheme, f);
+if (analyticsKey)
+    fprintf(f, "<script async src=\"https://www.googletagmanager.com/gtag/js?id=%s\"></script>\n", analyticsKey);
 
 fputs("</HEAD>\n\n",f);
 printBodyTag(f);
