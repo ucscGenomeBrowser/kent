@@ -598,7 +598,7 @@ jsonWriteString(jw, "genome", db);
 
 // load the tracks
 struct trackDb *tdbList = NULL;
-cartTrackDbInitForApi(NULL, db, &tdbList, NULL, FALSE);
+cartTrackDbInitForApi(NULL, db, &tdbList, NULL, TRUE);
 
 // allow optional comma sep list of tracks
 char *tracks[100];
@@ -608,6 +608,10 @@ for (i = 0; i < numTracks; i++)
     {
     char *track = cloneString(tracks[i]);
     char *sqlTable = cloneString(track);
+
+    if (cartTrackDbIsAccessDenied(db, sqlTable) ||
+            (cartTrackDbIsNoGenome(db, sqlTable) && !(chrom && start && end)))
+        apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data, see also: https://genome.ucsc.edu/FAQ/FAQdownloads.html#download40", db, track);
     struct trackDb *thisTrack = tdbForTrack(db, track, &tdbList);
 
     if (NULL == thisTrack)
@@ -641,9 +645,6 @@ for (i = 0; i < numTracks; i++)
         freeMem(sqlTable);
         sqlTable = cloneString(track);
         }
-
-    if (protectedTrack(db, thisTrack, sqlTable) && !(chrom && start && end))
-            apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data, see also: https://genome.ucsc.edu/FAQ/FAQdownloads.html#download40", db, track);
 
     struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
 
