@@ -13,6 +13,7 @@ include trackDb.vertebrateChainNet.ra
 include trackDb.previousVersionsChainNet.ra alpha
 include tabulaMurisSenis.ra
 include tabulamuris.ra
+include liftOverMm39.ra
 
 # Local declaration so that local gold.html is picked up.
 track gold override
