@@ -145,6 +145,42 @@ compositeTrack on
         chainLinearGap medium
         parent liftHg38
 
+        track liftOverHg38Agp
+        shortLabel AGP liftOver
+        longLabel AGP alignments (A Hinrichs)
+        priority 4
+        type chain hg38
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg38
+
+        track liftOverHg38allPlusAgpExtMain
+        shortLabel liftOver+AGP, main chroms
+        longLabel AGP plus UCSC liftOver alingments, main chromosomes only
+        priority 5
+        type chain hg38
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg38
+
+        track liftOverHg38allPlusAgpExtAll
+        shortLabel liftOver+AGP, all chroms
+        longLabel AGP plus UCSC liftOver alingments, all chromosomes
+        priority 6
+        type chain hg19
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg38
+
 track ucscRetroAli5
 shortLabel Retroposed Genes
 longLabel Retroposed Genes V5, Including Pseudogenes

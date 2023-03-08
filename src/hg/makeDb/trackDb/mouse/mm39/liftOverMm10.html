@@ -1,0 +1,43 @@
+<h2>Description</h2>
+
+<p>
+This track shows the 'lift over' calculated alignments from the mm10/mouse to
+the mm39/mouse genome assembly, used by the UCSC
+<a href="https://genome.ucsc.edu/cgi-bin/hgLiftOver"
+target="_blank">liftOver</a> tool.
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+The alignments are shown as &quot;chains&quot; of alignable regions. The display is similar to
+the other chain tracks, see our 
+<a target="_blank" href="/goldenPath/help/hgTracksHelp.html#ChainDisplay">
+chain display documentation</a> for more information.
+</p>
+
+
+<H2>Data access</H2>
+
+<p>
+UCSC liftOver chain files for mm10 to mm39 can be obtained from a dedicated
+directory on our
+<a href="https://hgdownload.soe.ucsc.edu/goldenpath/mm10/liftOver/"
+target="_blank">download server</a> mm10/liftOver directory.  Specifically,
+the <a href="https://hgdownload.soe.ucsc.edu/goldenpath/mm10/liftOver/mm39ToMm10.over.chain.gz"
+target="_blank">mm39ToMm10.over.chain.gz</a> file.
+</p>
+
+<p>
+The table can also be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The lift over chain file is constructed with the
+<a href="http://genomewiki.ucsc.edu/index.php/DoSameSpeciesLiftOver.pl"
+target="_blank">doSameSpeciesLiftOver</a> processing using the <em>blat</em>
+genome alignment program.
+</p>

@@ -218,6 +218,7 @@ struct accessControl
     {
     struct slName *hostList;       // List of hosts that are allowed to view this table
     boolean isNoGenome;            // True if it's OK for position range but not genome-wide query
+    boolean isFullDeny;            // True if track/table is completely inaccessible
     };
 
 void accessControlAddHost(struct accessControl *ac, char *host)
@@ -227,30 +228,32 @@ if (isNotEmpty(host))
     slAddHead(&ac->hostList, slNameNew(host));
 }
 
-struct accessControl *accessControlNew(char *host, boolean isNoGenome)
+struct accessControl *accessControlNew(char *host, boolean isNoGenome, boolean isFullDeny)
 /* Alloc, init & return accessControl. */
 {
 struct accessControl *ac;
 AllocVar(ac);
 accessControlAddHost(ac, host);
 ac->isNoGenome = isNoGenome;
+ac->isFullDeny = isFullDeny;
 return ac;
 }
 
-static void acHashAddOneTable(struct hash *acHash, char *table, char *host, boolean isNoGenome)
+static void acHashAddOneTable(struct hash *acHash, char *table, char *host, boolean isNoGenome, boolean isFullDeny)
 /* If table is already in acHash, update its accessControl fields; otherwise store a
  * new accessControl for table. */
 {
 struct hashEl *hel = hashLookup(acHash, table);
 if (hel == NULL)
     {
-    struct accessControl *ac = accessControlNew(host, isNoGenome);
+    struct accessControl *ac = accessControlNew(host, isNoGenome, isFullDeny);
     hashAdd(acHash, table, ac);
     }
 else
     {
     struct accessControl *ac = hel->val;
     ac->isNoGenome = isNoGenome;
+    ac->isFullDeny = isFullDeny;
     accessControlAddHost(ac, host);
     }
 }
@@ -273,21 +276,12 @@ if (! trackHubDatabase(db))
 	sqlSafef(query, sizeof query, "select name,host from tableAccessControl");
         sr = sqlGetResult(conn, query);
         while ((row = sqlNextRow(sr)) != NULL)
-            acHashAddOneTable(acHash, row[0], chopAtFirstDot(row[1]), FALSE);
+            acHashAddOneTable(acHash, row[0], chopAtFirstDot(row[1]), FALSE, FALSE);
         sqlFreeResult(&sr);
         }
     hFreeConn(&conn);
     }
 struct slRef *tdbRef;
-
-// init accessControlTrackRefList
-if (!accessControlTrackRefList)
-    {
-    boolean oldAC = useAC;
-    useAC = TRUE;
-    (void)getFullTrackList(NULL, db, NULL);
-    useAC = oldAC;
-    }
 for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *tdb = tdbRef->val;
@@ -299,30 +293,32 @@ for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     char *type = nextWord(&tbOff);
 
     boolean isNoGenome = sameString(type, "noGenome");
+    boolean isFullDeny = sameString(type, "off");
     if (!isNoGenome)
         isNoGenome = sameString(type, "off") || sameString(type, "tbNoGenome"); // like 'noGenome' but only in the table browser, not the API 
         // since the API does not use this function
 
     // Add track table to acHash:
-    acHashAddOneTable(acHash, tdb->table, NULL, isNoGenome);
+    acHashAddOneTable(acHash, tdb->table, NULL, isNoGenome, isFullDeny);
     // Remaining words are additional table names to add:
     char *tbl;
     while ((tbl = nextWord(&tbOff)) != NULL)
-        acHashAddOneTable(acHash, tbl, NULL, isNoGenome);
+        acHashAddOneTable(acHash, tbl, NULL, isNoGenome, isFullDeny);
     // add any subtracks that don't have their own setting overriding us
     struct trackDb *subTdb;
     for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
         {
         char *subTdbOff = cloneString(trackDbSetting(tdb, "tableBrowser"));
         if (!subTdbOff)
-            acHashAddOneTable(acHash, subTdb->table, NULL, isNoGenome);
+            acHashAddOneTable(acHash, subTdb->table, NULL, isNoGenome, isFullDeny);
         else
             {
             char *subTdbType = nextWord(&subTdbOff);
             boolean subTdbIsNoGenome = sameString(subTdbType, "noGenome");
+            boolean subTdbIsDenied = sameString(subTdbType, "off");
             if (!subTdbIsNoGenome)
                 subTdbIsNoGenome = sameString(subTdbType, "off") || sameString(subTdbType, "tbNoGenome");
-            acHashAddOneTable(acHash, subTdb->table, NULL, subTdbIsNoGenome);
+            acHashAddOneTable(acHash, subTdb->table, NULL, subTdbIsNoGenome, subTdbIsDenied);
             }
         }
     }
@@ -371,6 +367,8 @@ struct hash *acHash = getCachedAcHash(db);
 struct accessControl *ac = hashFindVal(acHash, table);
 if (ac == NULL)
     return FALSE;
+if (ac->isFullDeny)
+    return TRUE;
 if (ac->isNoGenome && ac->hostList == NULL)
     return FALSE;
 char *currentHost = getCachedCurrentHost();
