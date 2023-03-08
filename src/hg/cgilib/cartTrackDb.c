@@ -279,15 +279,6 @@ if (! trackHubDatabase(db))
     hFreeConn(&conn);
     }
 struct slRef *tdbRef;
-
-// init accessControlTrackRefList
-if (!accessControlTrackRefList)
-    {
-    boolean oldAC = useAC;
-    useAC = TRUE;
-    (void)getFullTrackList(NULL, db, NULL);
-    useAC = oldAC;
-    }
 for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *tdb = tdbRef->val;
