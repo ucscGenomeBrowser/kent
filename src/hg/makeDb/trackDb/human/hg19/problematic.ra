@@ -20,8 +20,8 @@ type bigBed 3 +
     searchTrix /gbdb/hg19/bbi/problematic/notes.ix
 
     track encBlacklist
-    shortLabel ENCODE Blacklist
-    longLabel ENCODE Blacklist
+    shortLabel ENCODE Blacklist V2
+    longLabel ENCODE Blacklist V2
     type bigBed 4
     bigDataUrl /gbdb/hg19/bbi/problematic/encBlacklist.bb
     visibility dense
