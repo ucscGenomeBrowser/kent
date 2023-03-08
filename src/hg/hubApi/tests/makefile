@@ -12,7 +12,8 @@ listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
 	test29 test39 test40 test41 test42 test43 test44 test45 test46 test47 \
-	test48 test49 test50 test51 test52 test53 test54 test55 test56 test57
+	test48 test49 test50 test51 test52 test53 test54 test55 test56 test57 \
+	multiTrack1
 
 listSchema: schema01 schema02 schema03 schema04 schema05 schema06 schema07 \
 	schema08 schema09 schema10 schema11 schema12
@@ -33,7 +34,7 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err11 err12 err13 err14 err15 err16 err17 err18 err19 err20 \
 	err21 err22 err23 err24 err25 err26 err27 err28 err29 err30 \
 	err31 err32 err33 err34 err35 err36 err37 err38 err39 err40 \
-	err41 err42 err43 err44 err45 err46 err47
+	err41 err42 err43 err44 err45 err46 err47 err48 err49
 
 notSupported: notSup01 notSup02 notSup03 notSup07 notSup10
 
@@ -373,6 +374,13 @@ test57: setOutput
 	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=mrna;genome=ce11;jsonOutputArrays=1;maxItemsOutput=5'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=ce11 -track=mrna -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
+
+# getData but with multiple tracks
+multiTrack1:
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?tracks=gold,gap;genome=hg38;jsonOutputArrays=1;chrom=chr2;start=16129261;end=16163278'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hg38 -track=gold,gap -jsonOutputArrays -chrom=chr2 -start=16129261 -end=16163278 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 
 ###############################################################################
 #  /getData/sequence testing
@@ -767,6 +775,18 @@ err46: setOutput
 err47: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/getData/track?track=lovdLong;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hg19 -track=lovdLong -maxItemsOutput=5 -jsonOutputArrays 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing always protected tracks, even with a range
+err48: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?tracks=gold,gap,decipher;genome=hg38;jsonOutputArrays=1;chrom=chr2;start=16129261;end=16163278'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hg38 -track=gold,gap,decipher -jsonOutputArrays -chrom=chr2 -start=16129261 -end=16163278 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing protected  tracks that are allowed if not whole genome
+err49: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?tracks=gold,gap,omimGene2;genome=hg38;jsonOutputArrays=1;chrom=chr2;start=16129261;end=16163278'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hg38 -track=gold,gap,omimGene2 -jsonOutputArrays -chrom=chr2 -start=16129261 -end=16163278 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 #####################  wiggle data ###########################################

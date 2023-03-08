@@ -28,6 +28,16 @@
 #include "bigPsl.h"
 #include "snake.h"
 
+static int snakeFeatureCmpScore(const void *va, const void *vb)
+/* sort by score of the alignment. */
+{
+const struct snakeFeature *a = *((struct snakeFeature **)va);
+const struct snakeFeature *b = *((struct snakeFeature **)vb);
+int diff = b->score - a->score;
+
+return diff;
+}
+
 static int snakeFeatureCmpQStart(const void *va, const void *vb)
 /* sort by start position on the query sequence */
 {
@@ -875,7 +885,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	{
 	safef(qAddress, sizeof qAddress, "qName=%s&qs=%d&qe=%d&qWidth=%d",sf->qName,  qs, qe,  winEnd - winStart);
 	boundMapBox(hvg, s, e, sx+1, y, w-2, heightPer, tg->track,
-		    buffer, buffer, NULL, TRUE, qAddress);
+		    sf->qName, sf->qName, NULL, TRUE, qAddress);
 	}
     hvGfxBox(hvg, sx, y, w, heightPer, color);
 
@@ -1147,6 +1157,7 @@ for (;lf; lf = next)
 	{
 	sf->qName = lf->name;
 	sf->orientation = lf->orientation;
+        sf->score = lf->score;
 	nextSf = sf->next;
 	if (firstLf != lf)
 	    {
@@ -1169,6 +1180,7 @@ void snakeDrawLeftLabels()
 }
 
 static void makeSnakeFeatures(struct linkedFeatures *lf)
+/* allocate an info structure for every block in the alignment. */
 {
 for(; lf; lf = lf->next)
     {
@@ -1188,6 +1200,39 @@ for(; lf; lf = lf->next)
     }
 }
 
+static void makeSingleCoverage(struct linkedFeatures *lf)
+/* Because snakes are a display of O+O of the query sequence projected onto the reference sequence, 
+ * we need to only have one copy of each piece of the query sequence. */
+{
+for(; lf; lf = lf->next)   // for each query sequence
+    {
+    slSort(&lf->components, snakeFeatureCmpScore); // we want to choose the higher scoring alignements
+    Bits *qBits = bitAlloc(lf->qSize); // the bit array we use to keep track if we've seen this query sequence
+    struct simpleFeature *sf = lf->components;
+    struct simpleFeature *prevSf = NULL;
+
+    for(; sf ; sf = sf->next)
+        {
+        // have we seen this query range?
+        if (bitCountRange(qBits, sf->qStart, sf->qEnd - sf->qStart))
+            {
+            // if we've seen this query sequence, then delete it
+            if (prevSf == NULL)
+                lf->components = sf->next;
+            else
+                prevSf->next = sf->next;
+            }
+        else
+            {
+            bitSetRange(qBits, sf->qStart, sf->qEnd - sf->qStart);
+            prevSf = sf;
+            }
+        }
+
+    slSort(&lf->components, snakeFeatureCmpQStart);
+    }
+}
+
 void maybeLoadSnake(struct track *track)
 /* check to see if we're doing snakes and if so load the correct methods. */
 {
@@ -1203,6 +1248,7 @@ if (doSnake)
     slSort(&track->items, linkedFeaturesCmpName);
     makeSnakeFeatures(track->items);
     fixItems(track->items);
+    makeSingleCoverage(track->items);
     track->visibility = track->limitedVis = tvFull;
     track->canPack = FALSE;
     }

@@ -624,7 +624,7 @@ else
 boolean protectedTrack(char *db, struct trackDb *tdb, char *tableName)
 /* determine if track is off-limits protected data */
 {
-return cartTrackDbIsNoGenome(db, tableName);
+return cartTrackDbIsAccessDenied(db, tableName) || cartTrackDbIsNoGenome(db, tableName);
 }
 
 boolean isWiggleDataTable(char *type)

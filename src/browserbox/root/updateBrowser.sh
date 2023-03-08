@@ -125,6 +125,40 @@ if [ "$#" -eq 0 ] ; then
    fi
 fi
 
+# March 02, 2023 - do an update of the underlying Ubuntu operating system
+if [[ "$1" == "vm" ]] ; then
+    # remove swapfile to free up space if it's present
+    swapoff /swapfile
+    rm /swapfile
+
+    # check for upgrades first
+    apt-get install -y --only-upgrade apt
+
+    # remove old packages and linux versions to make sure there is enough free space
+    apt-get clean && sudo apt-get autoremove
+    apt-get purge -y $(dpkg -l linux-{image,headers}-"[0-9]*" | awk '/ii/{print $2}' | grep -ve "$(uname -r | sed -r 's/-[a-z]+//')")
+
+    # add the below to /etc/apt/apt.conf so non-interactive update will work (https://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+bug/1640274/comments/5):
+    echo 'Dpkg::Options { "--force-confold"; }' >> /etc/apt/apt.conf
+
+    # finally do the upgrade
+    do-release-upgrade -f DistUpgradeViewNonInteractive
+
+    # turn off apparmor because it doesn't play nice with mysql
+    systemctl stop apparmor.service
+    update-rc.d -f apparmor remove
+
+    # do a restart to force apparmor changes
+    # need a flag to tell the OS to restart mysql after the changes
+    touch /root/doRestartMysql
+    shutdown -r now
+fi
+
+if [ -e /root/doRestartMysql ]; then
+    service mysql restart
+    rm -f /root/doRestartMysql
+fi
+
 # unless already calling self, update self and call self unless doing only cgis
 # self-updates are not done when suppressed with notSelf and also not in hgwdev-mode to allow testing of local updateBrowser.sh changes
 # Internal sidenote: if you want hgwdev CGIs and also the current hgwdev update
