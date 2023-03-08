@@ -316,6 +316,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                             }
                         }
                     }
+                else
+                    org = hashFindVal(orgHash, orgName);
 		}
 
 	    /* create a  new org if necessary. */
