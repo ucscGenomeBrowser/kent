@@ -144,6 +144,12 @@ if [[ "$1" == "vm" ]] ; then
     # finally do the upgrade
     do-release-upgrade -f DistUpgradeViewNonInteractive
 
+    # restore the swapfile
+    dd if=/dev/zero of=/swapfile bs=1M count=1024
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
+
     # turn off apparmor because it doesn't play nice with mysql
     systemctl stop apparmor.service
     update-rc.d -f apparmor remove
