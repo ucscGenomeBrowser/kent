@@ -58,6 +58,7 @@ GCA_004025025.1_TapTer_v1_BIUU	Brazilian tapir
 GCF_023065955.1_UrsArc1.0	brown bear (2022 WashU)
 GCF_003584765.2_ASM358476v2	brown bear (GAN/ISIS:MIG12 v2 2018)
 GCA_004027775.1_BraVar_v1_BIUU	brown-throated sloth
+GCF_007827085.1_ASM782708v3	California mouse (IS 2022)
 GCA_009762295.2_mZalCal1.alt.v2	California sea lion (mZalCal1 alternate hap 2020)
 GCA_009762295.1_mZalCal1.alt	California sea lion (alternate hap 2019 VGP)
 GCF_009762305.2_mZalCal1.pri.v2	California sea lion (v2 primary hap 2020 VGP)
@@ -72,6 +73,7 @@ GCA_004026925.1_ProCapCap_v1_BIUU	Cape rock hyrax (US060 2019 Broad)
 GCA_004027455.1_HydHyd_v1_BIUU	capybara
 GCF_002263795.2_ARS-UCD1.3	cattle (Hereford L1 Dominette 01449 42190680 v3 2018 USDA)
 GCA_004024745.2_CatWag_v2_BIUU_UCD	Chacoan peccary (BS20 v2 2019 Broad)
+GCF_027475565.1_VMU_Ajub_asm_v1.0	cheetah (Ajub_Pintada_27869175 2022)
 GCF_003709585.1_Aci_jub_2	cheetah (Rico 2018)
 GCF_003668045.3_CriGri-PICRH-1.0	Chinese hamster (17A/GY CHO 2020)
 GCF_000223135.1_CriGri_1.0	Chinese hamster (CHO v1 2011 BGI)
@@ -101,6 +103,7 @@ GCA_004026965.1_PetTyp_v1_BIUU	dassie-rat
 GCA_002406435.1_ASM240643v1	Daurian ground squirrel
 GCF_000327345.1_ASM32734v1	David's myotis bat
 GCF_000260255.1_OctDeg1.0	degu (3935 2012 refseq)
+GCF_943737965.1_PHOROB	desert hamster (2022)
 GCA_004027915.1_CapPil_v1_BIUU	Desmarest's hutia
 GCF_012295265.1_UNSW_AlpineDingo_1.0	dingo (2020 Alpine COOINDA U.NSW)
 GCF_003254725.2_ASM325472v2	dingo (Sandy 2020 James Cook U)
@@ -193,7 +196,7 @@ GCA_001624775.1_PWK_PhJ_v1	house mouse PWK_PhJ
 GCA_001624835.1_WSB_EiJ_v1	house mouse WSB_EiJ
 GCA_003369685.2_UOA_Angus_1	hybrid cattle (Angus x Brahman F1 Angus haplotype 2018 VGP)
 GCF_003369695.1_UOA_Brahman_1	hybrid cattle (Angus x Brahman F1 Brahman haplotype 2018 VGP)
-GCF_014898055.1_MPIMG_talOcc4	Iberian mole
+GCF_014898055.2_MPIMG_talOcc4v2	Iberian mole (v2 TD23 2020)
 GCA_004026885.1_MegLyr_v1_BIUU	Indian false vampire
 GCF_902729225.1_Ma_sr-lr_union100	Indian flying fox
 GCA_004027635.1_CroInd_v1_BIUU	Indochinese shrew (US011 2019 Broad)
@@ -201,6 +204,7 @@ GCA_004363435.1_PlaMin_v1_BIUU	Indus River dolphin
 GCA_004023805.1_PanOnc_v1_BIUU	jaguar
 GCF_014898765.1_PumYag	jaguarundi
 GCF_014825515.1_WHU_Ajam_v2	Jamaican fruit-eating bat (1a 2020 Wuhan U)
+GCF_021234435.1_CSHL_Jam_final	Jamaican fruit-eating bat (2021)
 GCA_004024965.1_TraJav_v1_BIUU	Java mouse-deer (US108 2019 Broad)
 GCF_000331955.2_Oorc_1.1	killer whale (Morgan 2013)
 GCF_937001465.1_mOrcOrc1.1	killer whale (2022 VGP)
@@ -289,7 +293,7 @@ GCA_004363535.1_DasPun_v1_BIUU	punctate agouti
 GCA_004363705.1_KogBre_v1_BIUU	pygmy sperm whale
 GCA_026419965.1_mKogBre1_haplotype_1	pygmy sperm whale (mKogBre1 haplotype 1 2022)
 GCA_026419985.1_mKogBre1_haplotype_2	pygmy sperm whale (mKogBre1 haplotype 2 2022)
-GCA_009806435.2_UM_NZW_1.0	rabbit (New Zealand White 2021)
+GCF_009806435.1_UM_NZW_1.0	rabbit (New Zealand White DNA-2018 2021 refseq)
 GCF_000003625.3_OryCun2.0	rabbit (Thorbecke 2009 Broad refseq)
 GCF_002742125.1_Oar_rambouillet_v1.0	Rambouillet sheep (Baylor 2017)
 GCF_016772045.1_ARS-UI_Ramb_v2.0	Rambouillet sheep (U.Idaho 2021)
@@ -297,7 +301,7 @@ GCA_004024625.1_MelCap_v1_BIUU	ratel
 GCA_004026805.1_LasBor_v1_BIUU	red bat
 GCF_910594005.1_mCerEla1.1	red deer
 GCF_003160815.1_VulVul2.2	red fox
-GCF_014885135.2_M_Fortis_MF-2015_v1.1	reed vole (2020)
+GCF_014885135.2_M_Fortis_MF-2015_v1.1	reed vole (MF-2015 2020)
 GCA_004026565.1_RanTarSib_v1_BIUU	reindeer
 GCF_900094665.1_CAROLI_EIJ_v1.1	Ryukyu mouse (2017 EBI refseq)
 GCA_015443085.1_Saanen_v1	Saanen dairy goat
@@ -365,9 +369,9 @@ GCF_000298355.1_BosGru_v2.0	wild yak
 GCF_021218885.1_Marmota_monax_Labrador192_V1.0	woodchuck (LI92 2021)
 GCA_004027655.1_GraMur_v1_BIUU	woodland dormouse
 GCF_004785775.1_NIH_TR_1.0	woodland thicket rat
-GCF_003031525.2_Neophocaena_asiaeorientalis_V1	Yangtze finless porpoise (v2 wild 2018 refseq)
-GCF_000442215.1_Lipotes_vexillifer_v1	Yangtze River dolphin (BGI 2013 refseq)
+GCF_003031525.2_Neophocaena_asiaeorientalis_V1.1	Yangtze finless porpoise (v2 wild 2018 refseq)
+GCF_000442215.2_Lipotes_vexillifer_v1.1	Yangtze River dolphin (v1.1 BGI 2013 refseq)
 GCF_003676075.3_GSC_YBM_2.1	yellow-bellied marmot (SJ_83 v2.1 2019)
-GCA_016432865.1_AdamAnt	yellow-footed antechinus
+GCF_016432865.1_AdamAnt_v2	yellow-footed antechinus (v2 Samford, QLD, Australia AdamAnt 2021)
 GCA_004026845.1_HetBruBak_v1_BIUU	yellow-spotted hyrax
 GCF_000247795.1_Bos_indicus_1.0	zebu cattle (Nelore 2014 refseq)

@@ -357,7 +357,7 @@ def mergeVariants(pvList):
                 sampleAlleles[ix] = alIx
                 if (alIx == 0 and thisRef != '-'):
                     backMutSamples.append(sampleName(sample))
-        if thisName != varName:
+        if thisRef != trueRef:
             # If this is a new merged mutation, add it to variantCounts.  If merging makes an
             # already-seen mutation then add to the existing count.
             if variantCounts.get(mergedName):

@@ -298,6 +298,7 @@ boolean rcTarget = (psl->strand[1] == '-');
 AllocVar(lf);
 lf->score = (psl->match - psl->misMatch - psl->repMatch);
 lf->grayIx = grayIx;
+lf->qSize = psl->qSize;
 if (nameGetsPos)
     {
     char buf[256];

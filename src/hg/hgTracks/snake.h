@@ -22,6 +22,7 @@ struct snakeFeature
     char *tSequence;			/* may have sequence, or NULL */
     char *qName;			/* chrom name on other species */
     unsigned pixX1, pixX2;              /* pixel coordinates within window */
+    double score;                       /* score from the alignment */
     };
 
 void maybeLoadSnake(struct track *track);
