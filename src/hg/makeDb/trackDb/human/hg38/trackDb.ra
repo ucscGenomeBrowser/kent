@@ -630,6 +630,7 @@ group varRep
     dataVersion 2020-02-25
     searchIndex name
 
+
     track dgvSupporting override
     parent dgvPlus
     type bigBed 9 +
@@ -640,6 +641,16 @@ group varRep
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
     searchIndex name
+
+searchTable dgvMerged
+searchMethod exact
+searchType bigBed
+searchDescription DGV Merged Variants
+
+searchTable dgvSupporting
+searchMethod exact
+searchType bigBed
+searchDescription DGV Supporting Variants
 
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb

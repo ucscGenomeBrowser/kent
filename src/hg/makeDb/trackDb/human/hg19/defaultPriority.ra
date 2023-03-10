@@ -84,6 +84,16 @@ searchTable dgvGold
 searchType bigBed
 searchDescription DGV Gold Variants
 
+searchTable dgvMerged
+searchType bigBed
+searchMethod exact
+searchDescription DGV Merged Variants
+
+searchTable dgvSupporting
+searchType bigBed
+searchMehtod exact
+searchDescription DGV Supporting Variants
+
 # Repeats
 
 track rmsk override
