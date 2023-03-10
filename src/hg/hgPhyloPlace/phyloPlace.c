@@ -2238,7 +2238,7 @@ if (info)
     // AA mutations
     struct singleNucChange *sncList = sncListFromSampleMutsAndImputed(info->sampleMuts,
                                                                       info->imputedBases, gSeqWin);
-    struct slPair *geneAaMutations = getAaMutations(sncList, geneInfoList, gSeqWin);
+    struct slPair *geneAaMutations = getAaMutations(sncList, NULL, geneInfoList, gSeqWin);
     struct slPair *geneAaMut;
     boolean first = TRUE;
     for (geneAaMut = geneAaMutations;  geneAaMut != NULL;  geneAaMut = geneAaMut->next)

@@ -380,82 +380,112 @@ if (lineageUsher)
     jsonWriteObjectValue(jw, (isRsv ? "ramaekers_usher" : "pango_lineage_usher"), lineageUsher);
 }
 
-static boolean changesProtein(struct singleNucChange *snc, struct geneInfo *gi,
-                              struct seqWindow *gSeqWin,
-                              int *retAaStart, char *retOldAa, char *retNewAa)
-/* If snc changes the coding sequence of gene, return TRUE and set ret values accordingly
- * (note amino acid values are single-base not strings). */
+INLINE char maybeComplement(char base, struct psl *psl)
+/* If psl is on '+' strand, return base, otherwise return the complement of base. */
 {
-boolean isCodingChange = FALSE;
-if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
-    {
-    struct bed3 gBed3 = { NULL, gSeqWin->seqName, snc->chromStart, snc->chromStart+1 };
-    char gAlt[2];
-    safef(gAlt, sizeof(gAlt), "%c", snc->newBase);
-    struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &gBed3, gAlt, gi->psl, gi->txSeq);
-    if (vpTx->start.region == vpExon)
-        {
-        int aaStart = vpTx->start.txOffset / 3;
-        int codonStart = aaStart * 3;
-        char newCodon[4];
-        safencpy(newCodon, sizeof newCodon, gi->txSeq->dna + codonStart, 3);
-        int codonOffset = vpTx->start.txOffset - codonStart;
-        assert(codonOffset < sizeof newCodon);
-        char newNt = (pslOrientation(gi->psl) > 0) ? snc->newBase : ntCompTable[(int)snc->newBase];
-        newCodon[codonOffset] = newNt;
-        char newAa = lookupCodon(newCodon);
-        char oldAa;
-        if (snc->parBase == snc->refBase)
-            oldAa = lookupCodon(gi->txSeq->dna + codonStart);
-        else
-            {
-            char oldCodon[4];
-            safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + codonStart, 3);
-            char oldNt = (pslOrientation(gi->psl) > 0) ? snc->parBase : ntCompTable[(int)snc->parBase];
-            oldCodon[codonOffset] = oldNt;
-            oldAa = lookupCodon(oldCodon);
-            }
-        // Watch out for lookupCodon's null-character return value for stop codon; we want '*'.
-        if (newAa == '\0')
-            newAa = '*';
-        if (oldAa == '\0')
-            oldAa = '*';
-        if (newAa != oldAa)
-            {
-            isCodingChange = TRUE;
-            *retAaStart = aaStart;
-            *retOldAa = oldAa;
-            *retNewAa = newAa;
-            }
-        }
-    vpTxFree(&vpTx);
-    }
-return isCodingChange;
+return (pslOrientation(psl) > 0) ? base : ntCompTable[(int)base];
 }
 
-struct slPair *getAaMutations(struct singleNucChange *sncList, struct geneInfo *geneInfoList,
-                              struct seqWindow *gSeqWin)
-/* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
+static struct slName *codonVpTxToAaChange(struct vpTx *codonVpTxList,
+                                          struct singleNucChange *ancestorMuts,
+                                          struct geneInfo *gi)
+/* Given a list of vpTx from the same codon, combine their changes with inherited mutations
+ * in the same codon to get the amino acid change at this node.
+ * Note: this assumes there is no UTR in transcript, only CDS.  True so far for pathogens... */
+{
+struct slName *aaChange = NULL;
+if (codonVpTxList != NULL)
+    {
+    struct vpTx *vpTx = codonVpTxList;
+    int firstAaStart = vpTx->start.txOffset / 3;
+    int codonStart = firstAaStart * 3;
+    int codonOffset = vpTx->start.txOffset - codonStart;
+    char oldCodon[4];
+    safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + codonStart, 3);
+    int codonStartG = vpTx->start.gOffset - codonOffset;
+    struct singleNucChange *anc;
+    for (anc = ancestorMuts;  anc != NULL;  anc = anc->next)
+        {
+        int ancCodonOffset = anc->chromStart - codonStartG;
+        if (ancCodonOffset >= 0 && ancCodonOffset < 3)
+            oldCodon[ancCodonOffset] = maybeComplement(anc->newBase, gi->psl);
+        }
+    char oldAa = lookupCodon(oldCodon);
+    if (oldAa == '\0')
+        oldAa = '*';
+    char newCodon[4];
+    safecpy(newCodon, sizeof newCodon, oldCodon);
+    for (vpTx = codonVpTxList;  vpTx != NULL;  vpTx = vpTx->next)
+        {
+        int aaStart = vpTx->start.txOffset / 3;
+        if (aaStart != firstAaStart)
+            errAbort("codonVpTxToAaChange: program error: firstAaStart %d != aaStart %d",
+                     firstAaStart, aaStart);
+        int codonOffset = vpTx->start.txOffset - codonStart;
+        newCodon[codonOffset] = vpTx->txAlt[0];
+        }
+    char newAa = lookupCodon(newCodon);
+    if (newAa == '\0')
+        newAa = '*';
+    if (newAa != oldAa)
+        {
+        char aaChangeStr[32];
+        safef(aaChangeStr, sizeof aaChangeStr, "%c%d%c", oldAa, firstAaStart+1, newAa);
+        aaChange = slNameNew(aaChangeStr);
+        }
+    }
+return aaChange;
+}
+
+struct slPair *getAaMutations(struct singleNucChange *sncList, struct singleNucChange *ancestorMuts,
+                              struct geneInfo *geneInfoList, struct seqWindow *gSeqWin)
+/* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }.
+ * Note: this assumes there is no UTR in transcript, only CDS.  True so far for pathogens... */
 {
 struct slPair *geneChangeList = NULL;
 struct geneInfo *gi;
 for (gi = geneInfoList;  gi != NULL;  gi = gi->next)
     {
     struct slName *aaChangeList = NULL;
+    int prevAaStart = -1;
+    struct vpTx *codonVpTxList = NULL;
     struct singleNucChange *snc;
     for (snc = sncList;  snc != NULL;  snc = snc->next)
         {
         if (snc->chromStart < gi->psl->tEnd && snc->chromStart >= gi->psl->tStart)
             {
-            int aaStart;
-            char oldAa, newAa;
-            if (changesProtein(snc, gi, gSeqWin, &aaStart, &oldAa, &newAa))
+            struct bed3 gBed3 = { NULL, gSeqWin->seqName, snc->chromStart, snc->chromStart+1 };
+            char gAlt[2];
+            safef(gAlt, sizeof(gAlt), "%c", snc->newBase);
+            struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &gBed3, gAlt, gi->psl, gi->txSeq);
+            if (vpTx->start.region == vpExon)
                 {
-                char aaChange[32];
-                safef(aaChange, sizeof aaChange, "%c%d%c", oldAa, aaStart+1, newAa);
-                slNameAddHead(&aaChangeList, aaChange);
+                int aaStart = vpTx->start.txOffset / 3;
+                // Accumulate vpTxs in the same codon
+                if (aaStart == prevAaStart || prevAaStart == -1)
+                    {
+                    slAddHead(&codonVpTxList, vpTx);
+                    }
+                else
+                    {
+                    // Done with previous codon; find change from accumulated mutations
+                    struct slName *aaChange = codonVpTxToAaChange(codonVpTxList, ancestorMuts, gi);
+                    if (aaChange)
+                        slAddHead(&aaChangeList, aaChange);
+                    slFreeListWithFunc(&codonVpTxList, vpTxFree);
+                    codonVpTxList = vpTx;
+                    }
+                prevAaStart = aaStart;
                 }
             }
+        }
+    // Find change from final set of accumulated mutations
+    if (codonVpTxList != NULL)
+        {
+        struct slName *aaChange = codonVpTxToAaChange(codonVpTxList, ancestorMuts, gi);
+        if (aaChange)
+            slAddHead(&aaChangeList, aaChange);
+        slFreeListWithFunc(&codonVpTxList, vpTxFree);
         }
     if (aaChangeList != NULL)
         {
@@ -468,13 +498,14 @@ return geneChangeList;
 }
 
 static void jsonWriteBranchAttrs(struct jsonWrite *jw, struct phyloTree *node,
+                                 struct singleNucChange *ancestorMuts,
                                  struct geneInfo *geneInfoList, struct seqWindow *gSeqWin)
 /* Write mutations (if any).  If node is not a leaf, write label for mutations at this node. */
 {
 if (node->priv != NULL)
     {
     struct singleNucChange *sncList = node->priv;
-    struct slPair *geneAaMutations = getAaMutations(sncList, geneInfoList, gSeqWin);
+    struct slPair *geneAaMutations = getAaMutations(sncList, ancestorMuts, geneInfoList, gSeqWin);
     jsonWriteObjectStart(jw, "branch_attrs");
     if (node->numEdges > 0)
         {
@@ -603,15 +634,15 @@ return (maxRunLength > (arraySize >> 1)) ? maxRunVal : NULL;
 }
 
 static void rTreeToAuspiceJson(struct phyloTree *node, int depth, struct auspiceJsonInfo *aji,
-                               boolean isRsv,
+                               struct singleNucChange *ancestorMuts, boolean isRsv,
                                char **retUserOrOld, char **retNClade, char **retGClade,
                                char **retLineage, char **retNLineage,
                                char **retNCladeUsher, char **retLineageUsher)
 /* Write Augur/Auspice V2 JSON for tree.  Enclosing object start and end are written by caller. */
 {
-if (node->priv)
+struct singleNucChange *sncList = node->priv;
+if (sncList)
     {
-    struct singleNucChange *sncList = node->priv;
     depth += slCount(sncList);
     }
 boolean isUserSample = FALSE;
@@ -623,9 +654,15 @@ if (name)
     jsonWriteString(aji->jw, "name", name);
 else
     jsonWriteStringf(aji->jw, "name", "NODE%d", aji->nodeNum++);
-jsonWriteBranchAttrs(aji->jw, node, aji->geneInfoList, aji->gSeqWin);
+jsonWriteBranchAttrs(aji->jw, node, ancestorMuts, aji->geneInfoList, aji->gSeqWin);
 if (node->numEdges > 0)
     {
+    struct singleNucChange *allMuts = ancestorMuts;
+    struct singleNucChange *ancLast = slLastEl(ancestorMuts);
+    if (ancLast != NULL)
+        ancLast->next = sncList;
+    else
+        allMuts = sncList;
     jsonWriteListStart(aji->jw, "children");
     char *kidUserOrOld[node->numEdges];
     char *kidNClade[node->numEdges];
@@ -639,7 +676,7 @@ if (node->numEdges > 0)
     for (i = node->numEdges - 1;  i >= 0;  i--)
         {
         jsonWriteObjectStart(aji->jw, NULL);
-        rTreeToAuspiceJson(node->edges[i], depth, aji, isRsv,
+        rTreeToAuspiceJson(node->edges[i], depth, aji, allMuts, isRsv,
                            &kidUserOrOld[i], &kidNClade[i], &kidGClade[i], &kidLineage[i],
                            &kidNLineage[i], &kidNCladeUsher[i], &kidLineageUsher[i]);
         jsonWriteObjectEnd(aji->jw);
@@ -659,6 +696,8 @@ if (node->numEdges > 0)
         *retLineageUsher = majorityMaybe(kidLineageUsher, node->numEdges);
     if (retNLineage)
         *retNLineage = majorityMaybe(kidNLineage, node->numEdges);
+    if (ancLast)
+        ancLast->next = NULL;
     }
 jsonWriteObjectStart(aji->jw, "node_attrs");
 jsonWriteDouble(aji->jw, "div", depth);
@@ -784,7 +823,7 @@ phyloAddEdge(root, tree);
 tree = root;
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
                                sampleMetadata, sampleUrls, samplePlacements, nodeNum, source };
-rTreeToAuspiceJson(tree, depth, &aji, isRsv, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+rTreeToAuspiceJson(tree, depth, &aji, NULL, isRsv, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 jsonWriteObjectEnd(jw); // tree
 jsonWriteObjectEnd(jw); // top-level object
 fputs(jw->dy->string, outF);

@@ -200,8 +200,8 @@ void serverSetThreadCount(char *db, int val);
 void serverSetTimeout(char *db, int val);
 /* Send timeout command and value (in seconds) to usher server. */
 
-struct slPair *getAaMutations(struct singleNucChange *sncList, struct geneInfo *geneInfoList,
-                              struct seqWindow *gSeqWin);
+struct slPair *getAaMutations(struct singleNucChange *sncList, struct singleNucChange *ancestorMuts,
+                              struct geneInfo *geneInfoList, struct seqWindow *gSeqWin);
 /* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
 
 struct geneInfo *getGeneInfoList(char *bigGenePredFile, struct dnaSeq *refGenome);
