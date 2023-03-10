@@ -79,6 +79,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         yAxisNumLabels off
         lollyNoStems on
         configurable off
+        skipFields reviewStatus
         yAxisLabel.0 0 on 150,150,150 OTH
         yAxisLabel.1 1 on 150,150,150 B
         yAxisLabel.2 2 on 150,150,150 LB
