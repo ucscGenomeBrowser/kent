@@ -1345,9 +1345,17 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                 if (boxTop == h)
                     boxTop = h - 1;
 
+                unsigned color = MG_BLACK;
+
                 char *setting;
                 if (tg->tdb->parent && ((setting = trackDbSetting(tg->tdb->parent,"container")) != NULL) && startsWith("multiWig", setting))
                     {
+                    /* for multiwig display, use track colors */
+                    if (dataValue < 0)
+                        color = tg->ixAltColor;
+                    else
+                        color = tg->ixColor;
+
                     switch(numTrack)
                         {
                         case 3: if (baseCmpl) base='t'; else base='a';break;
@@ -1356,20 +1364,23 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                         case 0: if (baseCmpl) base='a'; else base='t';break;
                         }
                     }
+                else  /* hard-coded colors for dynSeq display */
+                    {
+                    if (base == 'a')
+                        color = MG_RED;
+                    else if (base == 't')
+                        color = MG_GREEN;
+                    else if (base == 'c')
+                        color = MG_BROWN;
+                    else if (base == 'g')
+                        color = MG_BLUE;
+                    }
+
                 char string[2];
                 string[0] = toupper(base);
                 string[1] = 0;
                 MgFont *font = tl.font;
                 int height = dataValue * scaleFactor;
-                unsigned color = MG_BLACK;
-                if (base == 'a')
-                    color = MG_RED;
-                else if (base == 't')
-                    color = MG_GREEN;
-                else if (base == 'c')
-                    color = MG_BROWN;
-                else if (base == 'g')
-                    color = MG_BLUE;
                 if (height != 0)
                     {
                     if (baseProbs)
