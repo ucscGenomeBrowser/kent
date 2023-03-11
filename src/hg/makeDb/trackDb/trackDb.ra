@@ -2927,6 +2927,7 @@ urls variationId="http://www.uniprot.org/uniprot/$$" uniProtId="http://www.unipr
 mouseOverField comments
 exonNumbers off
 noScoreFilter on
+maxWindowCoverage 10000000
 
 track ncbiRefOverlap
 shortLabel NCBI Overlaps
