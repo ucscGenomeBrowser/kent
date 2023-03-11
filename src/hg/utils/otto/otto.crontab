@@ -39,6 +39,9 @@ SHELL=/bin/sh
 PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin
 MAILTO=otto-group@ucsc.edu
 
+#md5sum checker script - makes sure otto scripts in hive match git tree
+0 0 * * 1-5 ~/kent/src/hg/utils/otto/ottoCompareGitVsHiveFiles.py
+
 # PanelApp
 MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 10 10 * * 2 /hive/data/outside/otto/panelApp/updatePanelApp
@@ -62,7 +65,7 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 10 7 10 * * /hive/data/outside/otto/orphanet/orphanetWrapper.sh
 
 #ClinVar
-MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
+MAILTO=otto-group@ucsc.edu
 08 00 8 * * umask 002; /hive/data/outside/otto/clinvar/doUpdate.sh
 
 #OMIM
@@ -101,7 +104,6 @@ MAILTO=otto-group@ucsc.edu,gperez2@ucsc.edu
 MAILTO=otto-group@ucsc.edu
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
-
 
 # UniProt massive 110+ database update, takes 3-4 days.
 #Format: Minute - Hour - DayofMonth month Day-of-week

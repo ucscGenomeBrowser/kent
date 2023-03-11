@@ -1,5 +1,6 @@
 import os
 import requests
+import time
 import json 
 import pandas as pd 
 import sys 
@@ -88,7 +89,18 @@ def getGenesLocations(jsonFh):
 
     for sym in syms:
         url = "https://panelapp.genomicsengland.co.uk/api/v1/genes/{}?format=json".format(sym)
-        myResponse = requests.get(url)
+
+        count = 0
+        while True:
+            try:
+                myResponse = requests.get(url)
+                break
+            except:
+                logging.error("HTTP error on %s, retrying after 1 minute (trial %d)" % (url, count))
+                time.sleep(60)
+                count += 1
+                if count > 10:
+                    assert(False) # cannot get URL
 
         if not (myResponse.ok):
             assert(False)
