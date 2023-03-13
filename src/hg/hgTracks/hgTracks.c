@@ -8245,6 +8245,12 @@ if (isSearchTracksSupported(database,cart))
     }
 
 hPrintf("&nbsp;");
+hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks");
+hPrintf("&nbsp;");
+hButtonWithMsg("hgt.defaultImgOrder", "default order",
+   "Display current tracks in their default order");
+
+hPrintf("&nbsp;");
 hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks");
 
 hPrintf(" ");
@@ -9778,6 +9784,20 @@ if (h && h->db && sameString(h->db, database))
     }
 }
 
+static void setupTimeWarning()
+/* add javascript that outputs a warning message if page takes too long to load */
+{
+char *maxTimeStr = cfgOption("warnSeconds");
+if (!maxTimeStr)
+    return;
+
+int maxTime = atoi(maxTimeStr);
+struct dyString *dy = dyStringNew(150);
+dyStringPrintf(dy, "$(document).ready( function() { hgtWarnTiming(%d)});\n", maxTime);
+jsInline(dy->string);
+dyStringFree(&dy);
+}
+
 
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
@@ -10273,6 +10293,7 @@ if (gotExtTools)
     printExtMenuData(chromName);
 if (recTrackSetsEnabled())
     printRecTrackSets();
+setupTimeWarning();
 }
 
 static void chromInfoTotalRow(int count, long long total, boolean hasAlias)
