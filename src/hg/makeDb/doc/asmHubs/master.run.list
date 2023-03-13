@@ -804,6 +804,7 @@
 ./runBuild GCA_903797595.2_bEriRub2.2 birds Erithacus_rubecula
 ./runBuild GCA_903992545.1_mPipPip1.1 mammals Pipistrellus_pipistrellus
 ./runBuild GCA_904848175.1_fAcaLat1.1_alternate_haplotype fish Acanthopagrus_latus
+./runBuild GCA_904849725.1_MorexV3_pseudomolecules_assembly plants Hordeum_vulgare
 ./runBuild GCA_905067065.1_Zm-LH244-REFERENCE-BAYER-1.0 plants Zea_mays
 ./runBuild GCA_905146925.1_ilAutGamm1.1 invertebrate Autographa_gamma
 ./runBuild GCA_905147015.1_ilLasFlex1.1 invertebrate Laspeyria_flexula
