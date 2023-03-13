@@ -112,11 +112,11 @@ idSql select value from knownToTreefam where name = '%s';
 url http://www.treefam.org/family/%s
 priority 10
 
-name cgap
-shortLabel CGAP
-tables cgapAlias kgXref
-idSql select cgapID from cgapAlias,kgXref where kgID = '%s' and geneSymbol = alias;
-priority 10
+#name cgap
+#shortLabel CGAP
+#tables cgapAlias kgXref
+#idSql select cgapID from cgapAlias,kgXref where kgID = '%s' and geneSymbol = alias;
+#priority 10
 
 name ensembl
 shortLabel Ensembl

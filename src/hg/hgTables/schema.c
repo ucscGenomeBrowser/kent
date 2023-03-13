@@ -413,8 +413,11 @@ else
 
 describeFields(db, splitTable, asObj, conn);
 
-struct trackDb *childTdb = tdbForTrack(db, table, NULL);
-addNotesForBbiTables(childTdb, conn);
+if (tdbForConn && sameString(tdbForConn->track, table))
+    {
+    struct trackDb *childTdb = tdbForTrack(db, table, NULL);
+    addNotesForBbiTables(childTdb, conn);
+    }
 
 jpList = joinerRelate(joiner, db, table, NULL);
 

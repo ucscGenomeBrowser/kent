@@ -191,6 +191,56 @@ while ((c = *s++) != 0)
 return count;
 }
 
+struct mafBaseProbs *hgMafProbs(
+	char *database,     /* Database, must already have hSetDb to this */
+	char *track,        /* Name of MAF track */
+	char *chrom,        /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+        char strand         /* strand */
+        )
+/* calculate the probability of each nucleotide in each column of a maf. */
+{
+struct mafAli *maf = hgMafFrag(database, track, chrom, start, end, '+', NULL, NULL);
+
+struct mafBaseProbs *probs;
+int size = end - start;
+
+AllocArray(probs, size);
+int count = 0;
+unsigned letterBox[256]; 
+
+int ii;
+for(ii=0; ii < maf->textSize; ii++)
+    {
+    struct mafComp *comp = maf->components;
+    char ch = comp->text[ii];
+
+    if (ch == '-')
+        continue;
+
+    memset(letterBox, 0, sizeof letterBox);
+    for(; comp; comp = comp->next)
+        {
+        if (comp->text == NULL)
+            continue;
+        letterBox[tolower(comp->text[ii])]++;
+        }
+
+    double total = 0;
+    total += letterBox['a'];
+    total += letterBox['c'];
+    total += letterBox['g'];
+    total += letterBox['t'];
+    probs[count].aProb = letterBox['a'] / total;
+    probs[count].cProb = letterBox['c'] / total;
+    probs[count].gProb = letterBox['g'] / total;
+    probs[count].tProb = letterBox['t'] / total;
+    count++;
+    }   
+
+return probs;
+}
+
 struct mafAli *hgMafFrag(
 	char *database,     /* Database, must already have hSetDb to this */
 	char *track,        /* Name of MAF track */

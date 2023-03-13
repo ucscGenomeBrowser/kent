@@ -4,7 +4,7 @@
 
 export TOP="/hive/data/outside/otto/grcIncidentDb"
 export ECHO="/bin/echo -e"
-export failMail="hiram@soe.ucsc.edu,lrnassar@ucsc.edu"
+export failMail="hiram@soe.ucsc.edu,otto-group@ucsc.edu"
 
 if [[ $# == 0 || "$1" != "makeItSo" ]]; then
   printf "To: $failMail\nFrom: $failMail\nSubject: ALERT: GRC Incident update\n\nERROR: ${TOP}/runUpdate.sh is being run without the argument: makeItSo\n" | /usr/sbin/sendmail -t -oi
