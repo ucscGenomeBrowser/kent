@@ -203,6 +203,7 @@
 ./runBuild GCA_002240015.2_TDr96_F1_Pseudo_Chromosome_v1.0 plants Dioscorea_cayenensis_subsp._rotundata
 ./runBuild GCA_002250225.1_ASM225022v1 fungi Saccharomyces_cerevisiae
 ./runBuild GCA_002269645.1_Mlig_3_7 invertebrate Macrostomum_lignano
+./runBuild GCA_002270425.1_ASM227042v1 bacteria Starmerella_bacillaris
 ./runBuild GCA_002271895.2_ASM227189v2 plants Capsicum_chinense
 ./runBuild GCA_002276565.1_ASM227656v1 bacteria Lactobacillus_kefiranofaciens
 ./runBuild GCA_002288905.2_ASM228890v2 mammals Enhydra_lutris_kenyoni

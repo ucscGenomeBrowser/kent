@@ -164,22 +164,35 @@ are available in the file formats for liftOver or pslMap from our data archive
 (see "Data Access" section below).
 </p>
 
-<p>An important step of the mapping process is filtering the alignment from
-protein to transcript. Due to differences between the UniProt proteins and the
-transcripts and the genome, the best matching transcript is not always the
-correct transcript.  Therefore, only for organisms that have a RefSeq transcript track,
-proteins are only aligned to the RefSeq transcripts that are annotated
-by UniProt for this protein. If no transcripts are annotated on the protein, or
-the annotated ones do not exist anymore, but a NCBI Gene ID is annotated,
-the RefSeq transcripts for the gene are used.  If no NCBI Gene is annotated,
-then the best matching alignment is used. Only a handful of edge cases
-(pseudogenes, very recently added proteins) on hg38 remain where the
-global transcriptome-wide matches have to be used.  The details page of the
-protein alignments shows the transcripts used for the mapping and how
-these transcripts were found. There can be multiple transcripts for one
-protein, as their coding sequences can be identical or several of them do
-not differ by more than 1% in alignment score.
+<p>An important step of the mapping process protein -&gt; transcript -&gt;
+genome is filtering the alignment from protein to transcript. Due to
+differences between the UniProt proteins and the transcripts (proteins were
+made many years before the transcripts were made, and human genomes have
+variants), the transcript with the highest BLAST score when aligning the
+protein to all transcripts is not always the correct transcript for a protein
+sequence.  Therefore, the protein sequence is aligned to only a very short list
+of one or sometimes more transcripts, selected by a three-step procedure:
+<ol>
+    <li>Use transcripts directly annotated by UniProt: for organisms that have a RefSeq transcript track,
+proteins are aligned to the RefSeq transcripts that are annotated
+by UniProt for this particular protein.
+    <li>Use transcripts for NCBI Gene ID annotated by UniProt: If no transcripts are annotated on the
+protein, or the annotated ones have been deprecated by NCBI, but a NCBI Gene ID is
+annotated, the RefSeq transcripts for this Gene ID are used. This can result in multiple matching transcripts for a protein.
+    <li>Use best matching transcript: If no NCBI Gene is
+annotated, then BLAST scores are used to pick the transcripts. There can be multiple transcripts for one
+protein, as their coding sequences can be identical. All transcripts within 1% of the highest observed BLAST score are used.
+</ol>
 </p>
+
+<p>
+For strategy 2 and 3, many of the transcripts found do not differ in coding
+sequence, so the resulting alignments on the genome will be identical.
+Therefore, any identical alignments are removed in a final filtering step. The
+details page of these alignments will contain a list of all transcripts that
+result in the same protein-genome alignment.  On hg38, only a handful of edge
+cases (pseudogenes, very recently added proteins) remain in 2023 where strategy
+3 has to be used.</p>
 
 <p>In other words, when an NCBI or UCSC RefSeq track is used for the mapping and to align a
 protein sequence to the correct transcript, we use a three stage process:
@@ -219,10 +232,10 @@ can be found on <a
 href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/uniprot/doUniprot">Github</a>.
 </p>
 
-<h2>Automated data updates and release history</h2>
+<h2>Older releases</h2>
 <p>
 This track is automatically updated on an ongoing basis, every 2-3 months.
-The current version is always shown on the track details page, it includes the
+The current version name is always shown on the track details page, it includes the
 release of UniProt, the version of the transcript set and a unique MD5 that is
 based on the protein sequences, the transcript sequences, the mapping file
 between both and the transcript-genome alignment. The exact transcript
@@ -231,17 +244,14 @@ in one of the two alignment tracks.
 </p>
 
 <p>
-For reproducibility of older analysis results, previous versions of this track
+For reproducibility of older analysis results and for manual inspection, previous versions of this track
 are available for browsing in the form of the <a
     href="hgTracks?db=$db&hubUrl=https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/uniprot/hub.txt"
-    target=_blank> UCSC UniProt Archive Track Hub</a>. The underlying data of
+    target=_blank> UCSC UniProt Archive Track Hub</a> (click this link to connect the hub now). The underlying data of
     all releases of this track (past and current) can be obtained from our <a
     href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/uniprot"
 target=_blank>downloads server</a>, including the UniProt
-protein-to-genome alignment. The file formats available are in the
-command line programs liftOver or pslMap, which can be used to map
-coordinates on protein sequences to genome coordinates. The filenames are
-unipToGenome.over.chain.gz (liftOver) and unipToGenomeLift.psl.gz (pslMap).  </p>
+protein-to-genome alignment.</p>
 
 <h2>Data Access</h2>
 
@@ -270,6 +280,24 @@ for more information.
 </p>
 
 <p>
+
+<h2>Lifting from UniProt to genome coordinates in pipelines</h2>
+<p>To facilitate mapping protein coordinates to the genome, we provide the
+alignment files in formats that are suitable for our command line tools. Our
+command line programs liftOver or pslMap can be used to map
+coordinates on protein sequences to genome coordinates. The filenames are
+unipToGenome.over.chain.gz (liftOver) and unipToGenomeLift.psl.gz (pslMap).</p>
+
+<p>Example commands:
+<pre>
+wget -q https://hgdownload.soe.ucsc.edu/goldenPath/archive/hg38/uniprot/2022_03/unipToGenome.over.chain.gz
+wget -q https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/liftOver
+chmod a+x liftOver
+echo 'Q99697 1 10 annotationOnProtein' &gt; prot.bed
+liftOver prot.bed unipToGenome.over.chain.gz genome.bed
+cat genome.bed
+</pre>
+</p>
 
 <h2>Credits</h2>
 
