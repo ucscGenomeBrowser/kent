@@ -706,6 +706,7 @@
 ./runBuild GCA_027579445.1_bAmmNel1.pri birds Ammospiza_nelsoni
 ./runBuild GCA_027579665.1_bAmmNel1.alt birds Ammospiza_nelsoni
 ./runBuild GCA_027579695.1_fNeoGra1.pri fish Neoarius_graeffei
+./runBuild GCF_027579735.1_aBomBom1.pri vertebrate Bombina_bombina
 ./runBuild GCA_027579805.1_fNeoGra1.alt fish Neoarius_graeffei
 ./runBuild GCA_027595965.1_bRhyJub1.alt birds Rhynochetos_jubatus
 ./runBuild GCA_027887135.1_bAmmCau1.alt birds Ammodramus_caudacutus
