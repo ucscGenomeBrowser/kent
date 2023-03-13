@@ -8245,22 +8245,22 @@ if (isSearchTracksSupported(database,cart))
     }
 
 hPrintf("&nbsp;");
-hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks");
+hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks - keyboard shortcut: d, then t");
 hPrintf("&nbsp;");
 hButtonWithMsg("hgt.defaultImgOrder", "default order",
-   "Display current tracks in their default order");
+   "Display current tracks in their default order - keyboard shortcut: d, then o");
 
 hPrintf("&nbsp;");
-hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks");
+hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");
 
 hPrintf(" ");
 hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
         hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
-        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
+        hasCustomTracks ? "Manage your custom tracks - keyboard shortcut: c, then t" : "Add your own custom tracks - keyboard shortcut: c, then t");
 jsOnEventById("click", "ct_add", "document.customTrackForm.submit(); return false;");
 
 hPrintf(" ");
-hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
+hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection - keyboard shortcut: c, then f");
 hPrintf(" ");
 
 if (!multiRegionButtonTop)
@@ -8269,12 +8269,12 @@ if (!multiRegionButtonTop)
     hPrintf(" ");
     }
 hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
-                       revCmplDisp ? "Show forward strand at this location"
-                                   : "Show reverse strand at this location",
+                       revCmplDisp ? "Show forward strand at this location - keyboard shortcut: r, then v"
+                                   : "Show reverse strand at this location - keyboard shortcut: r, then v",
                        NULL, revCmplDisp);
 hPrintf(" ");
 
-hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
+hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
