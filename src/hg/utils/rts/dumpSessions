@@ -1,0 +1,11 @@
+dbs="hg19 hg38"
+
+for db in $dbs
+do
+    sed '/^ *#/d' ../../htdocs/inc/recTrackSets.$db.tab | tawk '{print $3}' |
+    while read session
+    do
+        hgsql hgcentraltest -Ne "select contents from namedSessionDb where sessionName='$session'" |  tr '&' '\n' | sort > $db/$session
+    done
+done
+
