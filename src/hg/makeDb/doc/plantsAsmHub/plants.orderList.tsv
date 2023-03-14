@@ -53,7 +53,7 @@ GCA_001662545.1_ASM166254v1	damask rose (2016)
 GCF_009389715.1_palm_55x_up_171113_PBpolish2nd_filt_p	date palm (Barhee BC4 2019)
 GCF_000413155.1_DPV01	date palm (Khalas 2013)
 GCF_014633365.1_ASM1463336v1	date-plum (Yz01 2020)
-GCF_904849725.1_MorexV3_pseudomolecules_assembly	domesticated barley
+GCF_904849725.1_MorexV3_pseudomolecules_assembly	domesticated barley (H.vulgare 2021 refseq)
 GCF_002303985.1_Duzib1.0	durian
 GCA_000787875.1_SME_r2.5.1	eggplant (2014)
 GCF_932294415.1_dhQueRobu3.1	English oak (primary hap 2022)
@@ -111,7 +111,8 @@ GCF_002575655.2_Aet_v5.0	monocots
 GCF_000002425.4_Phypa_V3	mosses
 GCF_000414095.1_ASM41409v2	mulberry M.notabilis
 GCF_000741045.1_Vradiata_ver6	mung bean (VC1973A 2015 refseq)
-GCF_000313045.1_ASM31304v1	muskmelon
+GCF_025177605.1_USDA_Cmelo_AY_1.0	muskmelon (AY 2022)
+GCF_000313045.1_ASM31304v1	muskmelon (DHL92 2012)
 GCF_001865875.1_LupAngTanjil_v1.0	narrow-leaved blue lupine
 GCF_018873765.1_Tspe_v1	New South Wales waratah (Mountain lineage 2021)
 GCF_003573695.1_ASM357369v1	opium poppy
