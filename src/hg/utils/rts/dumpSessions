@@ -5,7 +5,7 @@ do
     sed '/^ *#/d' ../../htdocs/inc/recTrackSets.$db.tab | tawk '{print $3}' |
     while read session
     do
-        hgsql hgcentraltest -Ne "select contents from namedSessionDb where sessionName='$session'" |  tr '&' '\n' | sort > $db/$session
+        hgsql hgcentraltest -Ne "select contents from namedSessionDb where sessionName='$session' && userName='View'" |  tr '&' '\n' | sort -u -u > $db/$session
     done
 done
 
