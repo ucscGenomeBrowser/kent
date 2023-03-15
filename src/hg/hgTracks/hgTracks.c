@@ -2263,8 +2263,8 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                 char position[1024];
                 safef(position, sizeof position, "%s:%ld-%ld", h->chrom, h->chromStart, h->chromEnd);
                 char *newPosition = undisguisePosition(position); // UN-DISGUISE VMODE
-                if (startsWith(MULTI_REGION_CHROM, newPosition))
-                   newPosition = replaceChars(position, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
+                if (startsWith(OLD_MULTI_REGION_CHROM, newPosition))
+                   newPosition = replaceChars(newPosition, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
                 if (startsWith(MULTI_REGION_CHROM, newPosition))
                     {
                     parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
@@ -2277,7 +2277,6 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
         &&  (h->chromEnd != 0)
         &&  (h->chromStart <= virtWinEnd && h->chromEnd >= virtWinStart))
             {
-
             h->chromStart = max(h->chromStart, virtWinStart);
             h->chromEnd = min(h->chromEnd, virtWinEnd);
             double pixelsPerBase = (double)fullInsideWidth/(virtWinEnd - virtWinStart);
@@ -2289,13 +2288,13 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                 width = 2;
 
             // Default color to light blue, but if setting has color, use it.
-            unsigned int hexColor = MAKECOLOR_32(170, 255, 255);
+            // 179 for alpha because javascript uses 0.7 opacity, *255 ~= 179
+            unsigned int hexColor = MAKECOLOR_32_A(170, 255, 255,179);
             if (h->hexColor)
                 {
                 long rgb = strtol(h->hexColor,NULL,16); // Big and little Endians
-                hexColor = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+                hexColor = MAKECOLOR_32_A( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff), 179 );
                 }
-
             hvGfxBox(hvg, fullInsideX + startPixels, 0, width, imagePixelHeight, hexColor);
             }
         }
@@ -5172,9 +5171,6 @@ initColors(hvg);
 /* Start up client side map. */
 hPrintf("<MAP id='map' Name=%s>\n", mapName);
 
-if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
-    drawHighlights(cart, hvg, imagePixelHeight);
-
 for (window=windows; window; window=window->next)
     {
     /* Find colors to draw in. */
@@ -5503,6 +5499,8 @@ if (withGuidelines)
         }
     }
 
+if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
+    drawHighlights(cart, hvg, imagePixelHeight);
 
 /* Draw ruler */
 
