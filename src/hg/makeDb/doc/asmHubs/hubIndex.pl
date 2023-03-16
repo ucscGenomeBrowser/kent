@@ -178,7 +178,7 @@ foreach my $orderUp (@orderOutHubs) {
   printf "<tr>\n";
   ++$hubCount;
   if ($orderUp eq "VGP") {
-     printf "    <th colspan=2>collections below are subsets of the assemblies above</th>\n";
+     printf "    <th style='text-align:center;' colspan=2>collections below are subsets of the assemblies above</th>\n";
      printf "</tr>\n";
      printf "<tr>\n";
   }
