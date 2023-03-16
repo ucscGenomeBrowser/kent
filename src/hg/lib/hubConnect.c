@@ -1088,7 +1088,7 @@ return 0;
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
-char *dbSpec = cartOptionalString(cart, "db");
+char *dbSpec = asmAliasFind(cartOptionalString(cart, "db"));
 char *curatedHubPrefix = getCuratedHubPrefix();
 if (dbSpec != NULL)
     lookForCuratedHubs(cart, trackHubSkipHubName(dbSpec), curatedHubPrefix);
