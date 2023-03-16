@@ -952,6 +952,8 @@ boolean isWithCenterLabels(struct track *track)
  * If track->tdb has a centerLabelDense setting, go with it.
 // * If composite child then no center labels in dense mode. */
 {
+if (strstr(track->track, "Squish"))
+    return FALSE;
 if (!withCenterLabels)
     {
     return FALSE;
@@ -4125,7 +4127,10 @@ if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     {
     char *directUrl = trackDbSetting(tg->tdb, "directUrl");
     boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
-    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
+    char *trackName = tg->track;
+    if (tg->originalTrack != NULL)
+        trackName = tg->originalTrack;
+    mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, trackName,
                       mapItemName, itemName, directUrl, withHgsid, NULL);
     }
 }
@@ -5071,7 +5076,10 @@ char *newItemName   = (isEmpty(lf->mouseOver)) ? itemName: lf->mouseOver;
 // copied from genericMapItem
 char *directUrl = trackDbSetting(tg->tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
-mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
+char *trackName = tg->track;
+if (tg->originalTrack != NULL)
+    trackName = tg->originalTrack;
+mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, trackName,
                   mapItemName, newItemName, directUrl, withHgsid, NULL);
 }
 

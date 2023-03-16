@@ -506,6 +506,8 @@ speciesTarget wigMaf
 speciesTree wigMaf
 speciesUseFile wigMafProt wigMaf
 spectrum *
+squishyPackField  bigBed bigGenePred
+squishyPackPoint bigBed bigGenePred
 stripPrefix bam
 subGroup1 *
 subGroup2 *

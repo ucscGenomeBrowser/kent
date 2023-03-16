@@ -4745,10 +4745,16 @@ for (track = trackList; track != NULL; track = nextTrack)
         double squishyPackPoint = atof(string);
 
         /* clone the track */
+        char buffer[strlen(track->track) + strlen("Squish") + 1];
+        safef(buffer, sizeof buffer, "%sSquish", track->track);
+
         struct track *squishTrack = CloneVar(track);
         squishTrack->tdb = CloneVar(track->tdb);
+        squishTrack->tdb->track = cloneString(buffer);
+        squishTrack->tdb->next = NULL;
         squishTrack->visibility = tvSquish;
         squishTrack->limitedVis = tvSquish;
+        hashAdd(trackHash, squishTrack->tdb->track, squishTrack);
         struct linkedFeatures *lf = track->items;
 
         /* distribute the items based on squishyPackPoint */
@@ -4766,10 +4772,10 @@ for (track = trackList; track != NULL; track = nextTrack)
         slReverse(&track->items);
         slReverse(&squishTrack->items);
         
-        /* these should be changed to something more rational. */
-        squishTrack->track = cloneString("knownGeneSquish");
-        squishTrack->shortLabel = cloneString("knownGeneSquish");
-        squishTrack->longLabel = cloneString("knownGeneSquish");
+        squishTrack->track = cloneString(buffer);
+        squishTrack->originalTrack = track->track;
+        squishTrack->shortLabel = cloneString(buffer);
+        squishTrack->longLabel = cloneString(buffer);
 
         /* insert the squished track */
         track->next = squishTrack;
