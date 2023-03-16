@@ -15,6 +15,8 @@
  *
  * o selection.event - provides access mouse event object to callbacks
  *
+ * modified by max to support: minX, maxX - do not allow selecting before or after a given x position
+ *
  */
 
 jQuery.imgAreaSelect = { onKeyPress: null };
@@ -214,11 +216,17 @@ jQuery.imgAreaSelect.init = function (img, options) {
         x2 = newX2;
         y2 = newY2;
 
+        if (options.minX && x2 < options.minX)
+            x2 = options.minX;
+        if (options.maxX && x2 > options.maxX)
+            x2 = options.maxX;
+
         if (options.minWidth && Math.abs(x2 - x1) < options.minWidth) {
             x2 = x1 - options.minWidth * (x2 < x1 ? 1 : -1);
 
             if (x2 < left)
                 x1 = left + options.minWidth;
+
             else if (x2 > left + imgWidth)
                 x1 = left + imgWidth - options.minWidth;
         }
