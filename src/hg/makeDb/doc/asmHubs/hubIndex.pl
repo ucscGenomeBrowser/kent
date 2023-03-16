@@ -35,7 +35,6 @@ printf '
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
 </div><!-- closing container-fluid from gbPageStartHardcoded.html -->
 <!--#include virtual="$ROOT/inc/gbFooterHardcoded.html"-->
-<script src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
 <script src="<!--#echo var="ROOT" -->/js/analytics.js"></script>
 </body></html>
 '
@@ -167,7 +166,7 @@ foreach my $hubSet (@checkList) {
 
 my $hubCount = 0;
 
-printf "<table class='sortable' border='1'>\n";
+printf "<table border='1'>\n";
 printf "<thead><tr>\n";
 printf "  <th>hub&nbsp;gateway</th>\n";
 printf "  <th>description</th>\n";
