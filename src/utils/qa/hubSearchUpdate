@@ -4,7 +4,7 @@
 #!/bin/sh -e
 PATH=/cluster/bin/x86_64:$PATH
 
-date
+date >> /hive/groups/browser/hubCrawl/hubSearchText.log
 cd /hive/groups/browser/hubCrawl
 nohup ./doPublicCrawl &> /dev/null #Send stdout & stderr to /dev/null
 echo "HubSearchText Dev cron-updated on `date`. Exit status: $?" >> /hive/groups/browser/hubCrawl/hubSearchText.log 
