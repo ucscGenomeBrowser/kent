@@ -35,8 +35,8 @@ printf '
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
 </div><!-- closing container-fluid from gbPageStartHardcoded.html -->
 <!--#include virtual="$ROOT/inc/gbFooterHardcoded.html"-->
-<script type="text/javascript" src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
-<script type="text/javascript" src="<!--#echo var="ROOT" -->/js/analytics.js"></script>
+<script src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
+<script src="<!--#echo var="ROOT" -->/js/analytics.js"></script>
 </body></html>
 '
 }
@@ -46,6 +46,7 @@ startHtml;
 
 my %expectedList = (
  "VGP" => 1,
+ "HPRC" => 1,
  "birds" => 1,
  "fish" => 1,
  "globalReference" => 1,
@@ -62,6 +63,7 @@ my %expectedList = (
 
 my %titles = (
  "VGP" => "Vertebrate Genomes Project collection",
+ "HPRC" => "Human Pangenome Reference Consortium",
  "birds" => "NCBI bird genomes",
  "fish" => "NCBI fish genomes",
  "globalReference" => "Global Human Reference genomes, January 2020",
@@ -103,6 +105,7 @@ my @orderOutHubs = (
  "viral",
  "bacteria",
  "VGP",
+ "HPRC",
  "globalReference",
  "mouseStrains",
  "legacy",
@@ -127,6 +130,7 @@ my %indexPage = (
  "viral" => "index.html",
  "bacteria" => "index.html",
  "VGP" => "index.html",
+ "HPRC" => "index.html",
  "mouseStrains" => "hubIndex.html",
  "globalReference" => "index.html",
  "gtexAnalysis" => "index.html",
@@ -153,7 +157,7 @@ my $genomeCount = `grep -h ^genome /mirrordata/hubs/VGP/*enomes.txt | wc -l`;
 chomp $genomeCount;
 $genomeCounts{"VGP"} = $genomeCount;
 
-my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'bacteria', 'globalReference');
+my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'bacteria', 'HPRC', 'globalReference');
 
 foreach my $hubSet (@checkList) {
   $genomeCount = `grep -h ^genome /mirrordata/hubs/$hubSet/genomes.txt | wc -l`;
@@ -173,6 +177,11 @@ printf "</tr></thead><tbody>\n";
 foreach my $orderUp (@orderOutHubs) {
   printf "<tr>\n";
   ++$hubCount;
+  if ($orderUp eq "VGP") {
+     printf "    <th colspan=2>collections below are subsets of the assemblies above</th>\n";
+     printf "</tr>\n";
+     printf "<tr>\n";
+  }
   if ($orderUp eq "fish") {
      printf "    <td><a href='%s/%s' target=_blank>fishes</a></td>\n", $orderUp, $indexPage{$orderUp};
   } else {
@@ -191,7 +200,7 @@ printf "</tbody></table>\n";
 my $totalAsmHubs = `grep -v "^#" /mirrordata/hubs/UCSC_GI.assemblyHubList.txt | wc -l`;
 chomp $totalAsmHubs;
 printf "<p>\n";
-printf "Please note: text file <a href='UCSC_GI.assemblyHubList.txt' target=_blank>listing</a> of %d NCBI/VGP genome assembly hubs\n", $totalAsmHubs;
+printf "Please note: text file <a href='UCSC_GI.assemblyHubList.txt' target=_blank>listing</a> of %d genome assembly hubs\n", $totalAsmHubs;
 printf "</p>\n";
 
 printf "<p>\n";
