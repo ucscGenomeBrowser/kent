@@ -1,18 +1,23 @@
 # If SERVERNAME is defined in the environment use it, else use api-test
-
 SERVERNAME ?= https://hgwdev-${USER}.gi.ucsc.edu
 
 test:: all
 
 help::
-	printf "makefile targets:\n\
-default - your sandbox hgwdev-${USER}.gi.ucsc.edu\n\
-hgwdev -  a unique vhost on hgwdev: api-test.gi.ucsc.edu\n\
-alpha  -  genome-test.gi.ucsc.edu\n\
-beta   -  apibeta-soe.ucsc.edu\n"
+	@printf "makefile targets:\n\
+test   -  using your sandbox hgwdev-${USER}.gi.ucsc.edu to run all tests\n\
+hgwdev -  using a unique vhost on hgwdev: api-test.gi.ucsc.edu\n\
+alpha  -  using genome-test.gi.ucsc.edu\n\
+beta   -  using apibeta-soe.ucsc.edu - the hgwbeta machine, not all tests\n\
+       -  may work due to different sets of tracks and databases there.\n\
+anyTestTarget - there are many test targets\n\
+\n\
+To run a specific test for a specific server, for example:\n\
+\n\
+  SERVERNAME=\"https://genome-test.gi.ucsc.edu\" make test8\n"
 
 hgwdev::
-	SERVERNAME" https://api-test.gi.ucsc.edu" make test
+	SERVERNAME="https://api-test.gi.ucsc.edu" make test
 
 alpha::
 	SERVERNAME="https://genome-test.gi.ucsc.edu" make test
@@ -21,7 +26,7 @@ beta::
 	SERVERNAME="https://apibeta.soe.ucsc.edu" make test
 
 all:: test0 listFunctions getFunctions listSchema getSequence wigData \
-	supportedTypes errorTests notSupported bugReports
+	search supportedTypes errorTests notSupported bugReports
 
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 	list10 list11 list12 list13 list14 list15 list16 list17 list18
@@ -40,6 +45,8 @@ getSequence: getSeq01 getSeq02 getSeq03 getSeq04 getSeq05
 wigData: wig01 wig02 wig03 wig04 wig05 wig06 wig07 wig08 wig09 wig10 \
 	wig11 wig12 wig13 wig14 wig15 wig16 wig17 wig18 wig19 wig20 \
 	wig21 wig22 wig23 wig24
+
+search: search01
 
 supportedTypes: altGraphX barChart chain ctgPos expRatio \
 	interact netAlign peptideMapping pgSnp
@@ -950,6 +957,15 @@ wig24: setOutput
 	@printf "### $@ '${SERVERNAME}/cgi-bin/hubApi/getData/track?track=gc5Base;chrom=chrCp;genome=araTha1;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt;end=5647;start=1234;jsonOutputArrays=1;maxItemsOutput=5'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="araTha1" -track="gc5Base" -chrom="chrCp" -start=1234 -end=5647 -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
+
+##############################################################################
+### search - test search function
+##############################################################################
+
+# basic search just to see if it works:
+search01: setOutput
+	@ printf "### $@ '${SERVERNAME}/search/?search=brca;genome=hg38'\n"
+	@ curl -L "${SERVERNAME}/search?search=brca;genome=hg38" 2> /dev/null | python -mjson.tool | egrep -c -n "\[|\]" | awk -v t="$@" '{if (($$1 < 25) || ($$1 > 35)) {printf "test %s failed, count %d not in range 25-35\n", t, $$1; exit 255;}}'
 
 ##############################################################################
 ### supportedTypes - test both /list/chromosomes and /getData/track
