@@ -192,6 +192,24 @@ Instead of adding all the assemblies in one collected group, use the individual
 <em>view in browser</em> in the table below.
 </p>
 <h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
+END
+
+if ($vgpIndex) {
+  print <<"END";
+<h3>Listings:</h3>&nbsp;&nbsp;<b>(from RepeatModeler masking)</b>
+<p>
+<ul>
+<li><a href='modeler.families.urls.txt' target=_blank>families fasta.gz</a> list of URLs for the custom library created by the RepeatModeler run</li>
+<li><a href='modeler.2bit.urls.txt' target=_blank>assembly 2bit file list</a> of URLs as masked with the RepeatModeler + <b>TRF/simpleRepeats</b> with period of 12 or less</li>
+<li><a href='rmod.log.file.list.txt' target=_blank>the rmod.log files from each RepeatModeler run</a></li>
+<li><a href='default.twoBit.file.list.txt' target=_blank>default GenArk 2bit file list</a> of URLs as masked with the ordinary RepeatMasker + <b>TRF/simpleRepeats</b> with period of 12 or less</li>
+<li><a href='modeler.table.txt' target=_blank>this data table in tab-separated</a> file text format (including TBD not working yet, or in VGP collection but not on the alignment list)</li>
+</ul>
+</p>
+END
+}
+
+print <<"END";
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
 <br>
