@@ -8244,11 +8244,6 @@ if (isSearchTracksSupported(database,cart))
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     }
 
-hPrintf("&nbsp;");
-hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks - keyboard shortcut: d, then t");
-hPrintf("&nbsp;");
-hButtonWithMsg("hgt.defaultImgOrder", "default order",
-   "Display current tracks in their default order - keyboard shortcut: d, then o");
 
 hPrintf("&nbsp;");
 hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");
