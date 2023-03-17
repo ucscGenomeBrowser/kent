@@ -65,7 +65,7 @@ def parseArgs():
 # ----------- main --------------
 def getHubUrls(centralName):
     " return list of huburls "
-    logging.info("Getting hubUrls from db %s" % centralName)
+    logging.debug("Getting hubUrls from db %s" % centralName)
     cmd = "hgsql %s -se 'select hubUrl from hubPublic'" % centralName
     lines = os.popen(cmd).read().splitlines() # please do not suggest using subprocess in code review. Thx.
     return lines
@@ -109,7 +109,7 @@ def downloadUrls(urls, emails):
                 reqFailed = True
 
         if reqFailed:
-            logging.info("URL %s failed." % url)
+            logging.debug("URL %s failed." % url)
             didFail.append(url)
             continue
 

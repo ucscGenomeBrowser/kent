@@ -8,8 +8,12 @@ my $thisMachine = `uname -n`;
 chomp $thisMachine;
 
 if ($thisMachine ne "hgdownload") {
-  printf STDERR "# NOTE: This script is only used on hgdownload\n";
-  exit 255;
+  if ($thisMachine ne "hgdownload1") {
+    if ($thisMachine ne "hgdownload1.soe.ucsc.edu") {
+     printf STDERR "# NOTE: This script is only used on hgdownload\n";
+     exit 255;
+    }
+  }
 }
 
 #############################################################################
@@ -31,8 +35,7 @@ printf '
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
 </div><!-- closing container-fluid from gbPageStartHardcoded.html -->
 <!--#include virtual="$ROOT/inc/gbFooterHardcoded.html"-->
-<script type="text/javascript" src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
-<script type="text/javascript" src="<!--#echo var="ROOT" -->/js/analytics.js"></script>
+<script src="<!--#echo var="ROOT" -->/js/analytics.js"></script>
 </body></html>
 '
 }
@@ -42,6 +45,7 @@ startHtml;
 
 my %expectedList = (
  "VGP" => 1,
+ "HPRC" => 1,
  "birds" => 1,
  "fish" => 1,
  "globalReference" => 1,
@@ -52,10 +56,13 @@ my %expectedList = (
  "fungi" => 1,
  "legacy" => 1,
  "plants" => 1,
+ "viral" => 1,
+ "bacteria" => 1,
 );
 
 my %titles = (
  "VGP" => "Vertebrate Genomes Project collection",
+ "HPRC" => "Human Pangenome Reference Consortium",
  "birds" => "NCBI bird genomes",
  "fish" => "NCBI fish genomes",
  "globalReference" => "Global Human Reference genomes, January 2020",
@@ -66,6 +73,8 @@ my %titles = (
  "fungi" => "NCBI fungi genomes",
  "legacy" => "NCBI genomes legacy/superseded by newer versions",
  "plants" => "NCBI plant genomes",
+ "viral" => "NCBI virus genomes",
+ "bacteria" => "NCBI bacteria genomes",
  "gtexAnalysis" => "Genotype-Tissue Expression (GTEx) Project analysis results track hub, V6 October 2015",
  "gtex" => "Genotype-Tissue Expression (GTEx) RNA-seq signal track hub, V6 October 2015",
  "mouseStrains" => "16 mouse strain assembly and track hub, May 2017",
@@ -92,7 +101,10 @@ my @orderOutHubs = (
  "invertebrate",
  "fungi",
  "plants",
+ "viral",
+ "bacteria",
  "VGP",
+ "HPRC",
  "globalReference",
  "mouseStrains",
  "legacy",
@@ -114,7 +126,10 @@ my %indexPage = (
  "fungi" => "index.html",
  "legacy" => "index.html",
  "plants" => "index.html",
+ "viral" => "index.html",
+ "bacteria" => "index.html",
  "VGP" => "index.html",
+ "HPRC" => "index.html",
  "mouseStrains" => "hubIndex.html",
  "globalReference" => "index.html",
  "gtexAnalysis" => "index.html",
@@ -141,7 +156,7 @@ my $genomeCount = `grep -h ^genome /mirrordata/hubs/VGP/*enomes.txt | wc -l`;
 chomp $genomeCount;
 $genomeCounts{"VGP"} = $genomeCount;
 
-my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'globalReference');
+my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'bacteria', 'HPRC', 'globalReference');
 
 foreach my $hubSet (@checkList) {
   $genomeCount = `grep -h ^genome /mirrordata/hubs/$hubSet/genomes.txt | wc -l`;
@@ -151,7 +166,7 @@ foreach my $hubSet (@checkList) {
 
 my $hubCount = 0;
 
-printf "<table class='sortable' border='1'>\n";
+printf "<table border='1'>\n";
 printf "<thead><tr>\n";
 printf "  <th>hub&nbsp;gateway</th>\n";
 printf "  <th>description</th>\n";
@@ -161,6 +176,11 @@ printf "</tr></thead><tbody>\n";
 foreach my $orderUp (@orderOutHubs) {
   printf "<tr>\n";
   ++$hubCount;
+  if ($orderUp eq "VGP") {
+     printf "    <th style='text-align:center;' colspan=2>collections below are subsets of the assemblies above</th>\n";
+     printf "</tr>\n";
+     printf "<tr>\n";
+  }
   if ($orderUp eq "fish") {
      printf "    <td><a href='%s/%s' target=_blank>fishes</a></td>\n", $orderUp, $indexPage{$orderUp};
   } else {
@@ -179,7 +199,7 @@ printf "</tbody></table>\n";
 my $totalAsmHubs = `grep -v "^#" /mirrordata/hubs/UCSC_GI.assemblyHubList.txt | wc -l`;
 chomp $totalAsmHubs;
 printf "<p>\n";
-printf "Please note: text file <a href='UCSC_GI.assemblyHubList.txt' target=_blank>listing</a> of %d NCBI/VGP genome assembly hubs\n", $totalAsmHubs;
+printf "Please note: text file <a href='UCSC_GI.assemblyHubList.txt' target=_blank>listing</a> of %d genome assembly hubs\n", $totalAsmHubs;
 printf "</p>\n";
 
 printf "<p>\n";
@@ -187,7 +207,7 @@ printf "Please note, the <em>invertebrate</em> category contains more than just 
 printf "</p>\n";
 
 printf "<p>\n";
-printf "Please use the <a href='https://genome.ucsc.edu/assemblyRequest.html' target=_blank>Assembly Request</a> page to find and request GenBank assemblies that have not yet been included in the collections here.\n";
+printf "Please use the <a href='https://genome.ucsc.edu/assemblyRequest.html?all' target=_blank>Assembly Request</a> page to find and request GenBank assemblies that have not yet been included in the collections here.\n";
 printf "</p>\n";
 
 endHtml;

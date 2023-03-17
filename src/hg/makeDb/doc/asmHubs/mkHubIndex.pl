@@ -35,7 +35,9 @@ if ( ! -s "$orderList" ) {
 my %cladeId;	# value is asmId, value is clade, useful for 'legacy' index page
 
 printf STDERR "# mkHubIndex %s %s %s %s\n", $Name, $asmHubName, $defaultAssembly, $orderList;
+my $hprcIndex = 0;
 my $vgpIndex = 0;
+$hprcIndex = 1 if ($Name =~ m/hprc/i);
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
 my %vgpClass;	# key is asmId, value is taxon 'class' as set by VGP project
 if ($vgpIndex) {
@@ -106,7 +108,27 @@ Vertebrate Genomes Project.</a> $vgpSubset
 
 END
 } else {
-  print <<"END";
+  if ($hprcIndex) {
+    print <<"END";
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="HPRC - Human Pangenome Reference Consortium" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>HPRC - Human Pangenome Reference Consortium assembly hub</h1>
+<p>
+<a href='https://humanpangenome.org/' target=_blank>
+<img src='HPRC_logo.png' width=280 alt='HPRC logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://humanpangenome.org/' target=_blank>
+Human Pangenome Reference Consortium.</a>
+</p>
+
+END
+  } else {
+    print <<"END";
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
@@ -119,6 +141,7 @@ Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
 END
+  }
 }
 
 print <<"END";

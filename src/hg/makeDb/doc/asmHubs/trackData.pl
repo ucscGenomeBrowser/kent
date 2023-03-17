@@ -49,6 +49,8 @@ my %commonName;	# key is asmId, value is a common name, perhaps more appropriate
 		# assembly_report
 my $vgpIndex = 0;
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
+my $hprcIndex = 0;
+$hprcIndex = 1 if ($Name =~ m/hprc/i);
 
 my $assemblyTotal = 0;	# complete list of assemblies in this group
 my $asmCount = 0;	# count of assemblies completed and in the table
@@ -167,7 +169,27 @@ Vertebrate Genomes Project.</a> $vgpSubset
 
 END
 } else {
-  print <<"END"
+  if ($hprcIndex) {
+    print <<"END"
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="HPRC - Human Pangenome Reference Consortium assembly hubs, track statistics" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>HPRC - Human Pangenome Reference Consortium assembly hubs, track statistics</h1>
+<p>
+<a href='https://humanpangenome.org/' target=_blank>
+<img src='HPRC_logo.png' width=280 alt='HPRC logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://humanpangenome.org/' target=_blank>
+Human Pangenome Reference Consortium.</a>
+</p>
+
+END
+  } else {
+    print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs, track statistics" -->
 <!--#set var="ROOT" value="../.." -->
@@ -180,6 +202,7 @@ Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
 END
+  }
 }
   my $indexUrl = "index";
   my $asmStats = "asmStats";
