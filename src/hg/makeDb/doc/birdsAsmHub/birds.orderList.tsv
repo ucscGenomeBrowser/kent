@@ -21,6 +21,7 @@ GCF_013377495.2_CAtr_DNAZoo_HiC_assembly	black swan (v2 Queensland, Australia AK
 GCA_019023105.1_LSU_DiBr_2.0	black-throated flowerpiercer
 GCF_002901205.1_cyaCae2	blue tit
 GCF_001604755.1_Lepidothrix_coronata-1.0	blue-crowned manakin
+GCA_017639355.1_Aaes_hic	blue-fronted amazon (AMXYW 2021)
 GCA_001420675.1_ASM142067v1	blue-fronted amazon (FVVF132 2015)
 GCA_019593555.1_cma1	brown eared-pheasant
 GCF_012460135.1_BPBGC_Mater_1.0	brown headed cowbird
@@ -38,6 +39,7 @@ GCA_009819595.1_bMerNub1.pri	carmine bee-eater (2019)
 GCF_000002315.6_GRCg6a	chicken (GRCg6a 2018)
 GCA_027408205.1_bGalGal5.alt	chicken (Cobb bGalGal5 alternate hap 2022)
 GCA_027408225.1_bGalGal5.pri	chicken (Cobb bGalGal5 primary hap 2022)
+GCA_024206055.2_ASM2420605v2	chicken (Huxu 2023)
 GCA_027408255.1_bGalGal4.alt	chicken (Ross bGalGal4 alternate hap 2022)
 GCA_027557775.1_bGalGal4.pri	chicken (Ross bGalGal4 primary hap 2023)
 GCF_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w	chicken white leghorn layer X broiler (leghorn haplotype v2 2021)
@@ -157,6 +159,7 @@ GCA_023634155.1_bFalPer1.pri	peregrine falcon (bFalPer1 primary hap 2022)
 GCF_000337955.1_F_peregrinus_v1.0	peregrine falcon (BGI 2013)
 GCA_020745805.1_bTheCae1.alt.cur	plumbeous ibis (bTheCae1 alternate hap 2021)
 GCA_020745775.1_bTheCae1.pri.cur	plumbeous ibis (bTheCae1 primary hap 2021)
+GCA_000332375.2_ASM33237v2	Puerto Rican parrot (LU 182127 2020)
 GCA_008658365.1_bAlcTor1_primary	razorbill (2006_11_07_Graehlm_vinge_78 2019)
 GCA_008658355.1_bAlcTor1_alternate	razorbill (alternate hap 2006_11_07_Graehlm_vinge_78 2019)
 GCA_009769465.1_bTauEry1.pri	red-crested turaco (2019)
