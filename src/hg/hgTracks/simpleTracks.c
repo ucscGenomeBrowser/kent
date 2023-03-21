@@ -952,7 +952,7 @@ boolean isWithCenterLabels(struct track *track)
  * If track->tdb has a centerLabelDense setting, go with it.
 // * If composite child then no center labels in dense mode. */
 {
-if (strstr(track->track, "Squish"))
+if ( track->originalTrack != NULL)
     return FALSE;
 if (!withCenterLabels)
     {
