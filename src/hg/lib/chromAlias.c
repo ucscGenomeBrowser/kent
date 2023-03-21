@@ -257,7 +257,7 @@ if (fileExists(buffer))
 return NULL;
 }
 
-static void chromAliasSetupBb(char *database, char *bbFile)
+void chromAliasSetupBb(char *database, char *bbFile)
 /* Look for a chromAlias bigBed file and open it. */
 {
 chromAliasGlobals.bbi = bigBedFileOpen(bbFile);

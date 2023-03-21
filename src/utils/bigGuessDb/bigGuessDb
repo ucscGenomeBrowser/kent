@@ -22,7 +22,7 @@ def parseArgs():
     parser.add_option("-b", "--best", dest="best", action="store_true", \
         help="only print a single string, the best matching assembly, or 'emptyFile' or 'notFound'. ")
     parser.add_option("", "--indexFile", dest="indexFname", action="store", \
-        help="Use specified index file, default is %default", default="~/.guessAssembly.txt.gz")
+        help="Use specified index file, default is %default. Use --index to create this file.", default="~/.guessAssembly.txt.gz")
     (options, args) = parser.parse_args()
 
     if args==[] and not options.index:
