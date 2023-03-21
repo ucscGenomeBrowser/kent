@@ -674,3 +674,20 @@ if (isEmpty(chrom))	// can't find it here, return the name from the cart
     chrom = cartChr;
 return chrom;
 }
+struct trackHubGenome *hubGenome = NULL;
+
+void hubAliasSetup(struct trackHubGenome *hubGenome)
+/* see if this hub has an alias file and run chromAliasSetupBb() for it */
+{
+if (hubGenome->settingsHash)
+    {
+    char *aliasFile = hashFindVal(hubGenome->settingsHash, "chromAliasBb");
+    char *absFileName = NULL;
+    if (aliasFile)
+       absFileName = trackHubRelativeUrl((hubGenome->trackHub)->url, aliasFile);
+    if (absFileName)
+        {
+        chromAliasSetupBb(NULL, absFileName);
+        }
+    }
+}

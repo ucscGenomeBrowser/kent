@@ -445,7 +445,6 @@ static void getHubTrackData(char *hubUrl)
 {
 char *genome = cgiOptionalString("genome");
 char *trackArg = cgiOptionalString("track");
-/* char *chrom = cgiOptionalString("chrom"); */
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 
@@ -457,17 +456,9 @@ if (isEmpty(trackArg))
 struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
 struct trackHubGenome *hubGenome = findHubGenome(hub, genome, "/getData/track",
   hubUrl);
-if (hubGenome->settingsHash)
-    {
-    char *aliasFile = hashFindVal(hubGenome->settingsHash, "chromAliasBb");
-    char *absFileName = NULL;
-    if (aliasFile)
-       absFileName = trackHubRelativeUrl((hubGenome->trackHub)->url, aliasFile);
-    if (absFileName)
-        {
-        chromAliasSetupBb(NULL, absFileName);
-        }
-    }
+
+hubAliasSetup(hubGenome);
+
 char *chrom = chrOrAlias(genome, hubUrl);
 
 struct trackDb *tdb = obtainTdb(hubGenome, NULL);
@@ -574,7 +565,6 @@ static void getTrackData()
  */
 {
 char *db = cgiOptionalString("genome");
-/* char *chrom = cgiOptionalString("chrom"); */
 char *chrom = chrOrAlias(db, NULL);
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
@@ -803,7 +793,7 @@ static void getSequenceData(char *db, char *hubUrl)
 /* return DNA sequence, given at least a genome=name and chrom=chr,
    optionally start and end, might be a track hub for UCSC database  */
 {
-char *chrom = cgiOptionalString("chrom");
+char *chrom = chrOrAlias(db, hubUrl);
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 
@@ -872,14 +862,11 @@ static void getHubSequenceData(char *hubUrl)
    optionally start and end  */
 {
 char *genome = cgiOptionalString("genome");
-char *chrom = cgiOptionalString("chrom");
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 
 if (isEmpty(genome))
     apiErrAbort(err400, err400Msg, "missing genome=<name> for endpoint '/getData/sequence'  given hubUrl='%s'", hubUrl);
-if (isEmpty(chrom))
-    apiErrAbort(err400, err400Msg, "missing chrom=<name> for endpoint '/getData/sequence?genome=%s' given hubUrl='%s'", genome, hubUrl);
 
 struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
 struct trackHubGenome *hubGenome = NULL;
@@ -890,6 +877,12 @@ for (hubGenome = hub->genomeList; hubGenome; hubGenome = hubGenome->next)
     }
 if (NULL == hubGenome)
     apiErrAbort(err400, err400Msg, "failed to find specified genome=%s for endpoint '/getData/sequence'  given hubUrl '%s'", genome, hubUrl);
+
+hubAliasSetup(hubGenome);
+
+char *chrom = chrOrAlias(genome, hubUrl);
+if (isEmpty(chrom))
+    apiErrAbort(err400, err400Msg, "missing chrom=<name> for endpoint '/getData/sequence?genome=%s' given hubUrl='%s'", genome, hubUrl);
 
 /* might be a UCSC database track hub, where hubGenome=name is the database */
 if (isEmpty(hubGenome->twoBitPath))

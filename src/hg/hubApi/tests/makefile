@@ -981,37 +981,52 @@ search01: setOutput
 
 # testing /getData/track?genome=ce11&track=gold&chrom=MT
 chrAlias01: setOutput
-	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=MT'\n"
+	@ printf "### $@ '${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=MT'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="ce11" -track="gold" -chrom="MT" 2>&1 | egrep -v "${excludeLines}"  | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /getData/track?genome=ce11&track=gold&chrom=NC_001328.1
 chrAlias02: setOutput
-	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=NC_001328.1'\n"
+	@ printf "### $@ '${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=NC_001328.1'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="ce11" -track="gold" -chrom="NC_001328.1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /getData/track?genome=ce11&track=gold&chrom=X54252.1
 chrAlias03: setOutput
-	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=X54252.1'\n"
+	@ printf "### $@ '${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=X54252.1'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="ce11" -track="gold" -chrom="X54252.1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /getData/track?genome=ce11&track=gold&chrom=MtDNA
 chrAlias04: setOutput
-	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=MtDNA'\n"
+	@ printf "### $@ '${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=MtDNA'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="ce11" -track="gold" -chrom="MtDNA" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # chrom alias on an assembly hub
 chrAlias05: setOutput
-	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=GCF_000001735.4;track=assembly;chrom=chrPltd;hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt'\n"
+	@ printf "### $@ '${SERVERNAME}/getData/track?genome=GCF_000001735.4;track=assembly;chrom=chrPltd;hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt" -genome="GCF_000001735.4" -track="assembly" -chrom="chrPltd" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # chrom alias on an assembly hub
 chrAlias06: setOutput
+	@ printf "### $@ '${SERVERNAME}/getData/track?genome=GCF_000001735.4;track=assembly;chrom=Pltd;hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt" -genome="GCF_000001735.4" -track="assembly" -chrom="Pltd" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence? hubUrl genome=GCF_000001735.4&chrom=Pltd&start=4321&end=5647
+# Pltd
+chrAlias07: setOutput
+	@ printf "### $@ '${SERVERNAME}/getData/sequence?genome=GCF_000001735.4;chrom=Pltd;start=4321;end=5678;hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/sequence" -hubUrl="https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt" -genome="GCF_000001735.4" -chrom="Pltd" -start=4321 -end=5678 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/sequence#/sequence#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/sequence? genome=hg19&chrom=MT&start=4321&end=5647
+# Pltd
+chrAlias08: setOutput
+	@ printf "### $@ '${SERVERNAME}/getData/sequence?genome=hg19;chrom=MT;start=4321;end=5678'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/sequence" -genome="hg19" -chrom="MT" -start=4321 -end=5678 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/sequence#/sequence#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ##############################################################################
