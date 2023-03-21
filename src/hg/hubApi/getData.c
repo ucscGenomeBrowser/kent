@@ -445,7 +445,7 @@ static void getHubTrackData(char *hubUrl)
 {
 char *genome = cgiOptionalString("genome");
 char *trackArg = cgiOptionalString("track");
-char *chrom = cgiOptionalString("chrom");
+/* char *chrom = cgiOptionalString("chrom"); */
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 
@@ -457,6 +457,18 @@ if (isEmpty(trackArg))
 struct trackHub *hub = errCatchTrackHubOpen(hubUrl);
 struct trackHubGenome *hubGenome = findHubGenome(hub, genome, "/getData/track",
   hubUrl);
+if (hubGenome->settingsHash)
+    {
+    char *aliasFile = hashFindVal(hubGenome->settingsHash, "chromAliasBb");
+    char *absFileName = NULL;
+    if (aliasFile)
+       absFileName = trackHubRelativeUrl((hubGenome->trackHub)->url, aliasFile);
+    if (absFileName)
+        {
+        chromAliasSetupBb(NULL, absFileName);
+        }
+    }
+char *chrom = chrOrAlias(genome, hubUrl);
 
 struct trackDb *tdb = obtainTdb(hubGenome, NULL);
 
@@ -562,7 +574,8 @@ static void getTrackData()
  */
 {
 char *db = cgiOptionalString("genome");
-char *chrom = cgiOptionalString("chrom");
+/* char *chrom = cgiOptionalString("chrom"); */
+char *chrom = chrOrAlias(db, NULL);
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 /* 'track' name in trackDb often refers to a SQL 'table' */
@@ -613,7 +626,6 @@ for (i = 0; i < numTracks; i++)
             (cartTrackDbIsNoGenome(db, sqlTable) && !(chrom && start && end)))
         apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data, see also: https://genome.ucsc.edu/FAQ/FAQdownloads.html#download40", db, track);
     struct trackDb *thisTrack = tdbForTrack(db, track, &tdbList);
-
     if (NULL == thisTrack)
         {
         if (! sqlTableExists(conn, track))

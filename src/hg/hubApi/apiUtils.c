@@ -640,3 +640,37 @@ if (startsWith("wig", type))
 else
      return FALSE;
 }
+
+char *chrOrAlias(char *db, char *hubUrl)
+/* get incoming chr name, may be an alias, return the native chr name
+ * might be given a db, maybe not
+ * might be given a hubUrl, maybe not
+ */
+{
+char *cartChr = cgiOptionalString("chrom");
+if (isEmpty(cartChr))
+   return NULL;
+char *chrom = cartChr;
+if (isEmpty(hubUrl))
+    {
+    if (isEmpty(db))
+       return chrom;
+    chromAliasSetup(db);
+    chrom = hgOfficialChromName(db, chrom);
+    }
+else
+    {
+/*
+    not sure if the 'curated' hub situation has been solved yet
+    if (sameString("hs1", db)) {
+      chromAliasSetup("hub_25359_hs1");
+    } else {
+      chromAliasSetup(db);
+    }
+*/
+    chrom = chromAliasFindNative(chrom);
+    }
+if (isEmpty(chrom))	// can't find it here, return the name from the cart
+    chrom = cartChr;
+return chrom;
+}
