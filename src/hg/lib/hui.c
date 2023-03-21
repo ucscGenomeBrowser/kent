@@ -5883,6 +5883,24 @@ jsInlineF("$(\"input[name='%s']\").click( function() { $('#snakeGraphOptions').t
     , varName); // XSS FILTER?
 }
 
+void squishyPackOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
+/* let the user choose to see the track in wiggle mode */
+{
+char option[256];
+char *field = trackDbSetting(tdb, "squishyPackField");
+if (field == NULL)
+    return;
+
+char *squishyPackPointStr = trackDbSetting(tdb, "squishyPackPoint");
+double squishyPackPoint = 999;
+if (squishyPackPointStr != NULL)
+    squishyPackPoint = atof(squishyPackPointStr);
+printf("<BR><B>Squish items that have a %s value that is greater or equal to </B> ", field);
+
+safef(option, sizeof(option), "%s.%s", name, "squishyPackPoint" );
+cgiMakeDoubleVarWithLimits(option, squishyPackPoint, "Range min", 0, NO_VALUE, NO_VALUE);
+}
+
 void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 /* let the user choose to see the track in wiggle mode */
 {
@@ -7595,6 +7613,7 @@ if (highlightBySet != NULL)
     filterBySetFree(&highlightBySet);
     }
 
+squishyPackOption(cart, name, title, tdb);
 wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 }

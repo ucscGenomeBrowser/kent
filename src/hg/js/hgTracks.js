@@ -5282,7 +5282,7 @@ var downloadCurrentTrackData = {
             "<button id='uncheckAllDownloadTracks'>Clear All</button>" +
             "</div>";
         _.each(hgTracks.trackDb, function(track, trackName) {
-            if (trackName !== "ruler" && track.visibility > 0) {
+            if (!trackName.includes("Squish") && trackName !== "ruler" && track.visibility > 0) {
                 htmlStr += "<input type=checkbox checked class='downloadTrackName' id='" + trackName + "'>";
                 htmlStr += "<label>" + track.shortLabel + "</label>";
                 htmlStr += "</input>";

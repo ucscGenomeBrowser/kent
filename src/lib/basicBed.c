@@ -1076,8 +1076,7 @@ if ((wordCount == 3) && (isdigit(row[0][0]) &&
     isdigit(row[1][0]) && isdigit(row[2][0])))
         return ( ((atoi(row[0]) & 0xff) << 16) |
                 ((atoi(row[1]) & 0xff) << 8) |
-                (atoi(row[2]) & 0xff) |
-                (0xff << 24));
+                (atoi(row[2]) & 0xff) );
 
 if ((wordCount == 4) && (isdigit(row[0][0]) &&
     isdigit(row[1][0]) && isdigit(row[2][0]) && isdigit(row[3][0])))

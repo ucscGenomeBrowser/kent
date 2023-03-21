@@ -4739,7 +4739,7 @@ for (track = trackList; track != NULL; track = nextTrack)
     if (track->visibility != tvPack)
         continue;
 
-    char *string = trackDbSetting(track->tdb, "squishyPackPoint");
+    char *string = cartOrTdbString(cart, track->tdb,  "squishyPackPoint", NULL);
     if (string != NULL)
         {
         double squishyPackPoint = atof(string);
