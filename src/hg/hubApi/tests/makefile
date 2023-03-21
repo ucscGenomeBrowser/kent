@@ -48,7 +48,7 @@ wigData: wig01 wig02 wig03 wig04 wig05 wig06 wig07 wig08 wig09 wig10 \
 
 search: search01
 
-chrAlias: chrAlias01 chrAlias02 chrAlias03 chrAlias04 chrAlias05
+chrAlias: chrAlias01 chrAlias02 chrAlias03 chrAlias04 chrAlias05 chrAlias06
 
 supportedTypes: altGraphX barChart chain ctgPos expRatio \
 	interact netAlign peptideMapping pgSnp
@@ -817,6 +817,7 @@ err49: setOutput
 
 # testing chrom alias for a hub that doesn't have any aliases
 err50: setOutput
+	@printf "### $@ ### '${SERVERNAME}.edu/getData/track?tracks=assembly;genome=araTha1;chrom=chrPtld;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="araTha1" -track="assembly" -chrom="chrPtld" 2>&1 | sed -e 's/, /,\n/g; s#http.*/getData#/getData#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
