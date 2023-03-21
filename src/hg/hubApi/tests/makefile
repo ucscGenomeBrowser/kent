@@ -48,6 +48,8 @@ wigData: wig01 wig02 wig03 wig04 wig05 wig06 wig07 wig08 wig09 wig10 \
 
 search: search01
 
+chrAlias: chrAlias01 chrAlias02 chrAlias03 chrAlias04 chrAlias05
+
 supportedTypes: altGraphX barChart chain ctgPos expRatio \
 	interact netAlign peptideMapping pgSnp
 
@@ -58,7 +60,7 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err11 err12 err13 err14 err15 err16 err17 err18 err19 err20 \
 	err21 err22 err23 err24 err25 err26 err27 err28 err29 err30 \
 	err31 err32 err33 err34 err35 err36 err37 err38 err39 err40 \
-	err41 err42 err43 err44 err45 err46 err47 err48 err49
+	err41 err42 err43 err44 err45 err46 err47 err48 err49 err50
 
 notSupported: notSup01 notSup02 notSup03 notSup07 notSup10
 
@@ -813,6 +815,11 @@ err49: setOutput
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hg38 -track=gold,gap,omimGene2 -jsonOutputArrays -chrom=chr2 -start=16129261 -end=16163278 2>&1 | sed -e 's/, /,\n/g; s#http.*/getData#/getData#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# testing chrom alias for a hub that doesn't have any aliases
+err50: setOutput
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="araTha1" -track="assembly" -chrom="chrPtld" 2>&1 | sed -e 's/, /,\n/g; s#http.*/getData#/getData#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 #####################  wiggle data ###########################################
 # classic wiggle with wig table and wib file
 wig01: setOutput
@@ -964,8 +971,47 @@ wig24: setOutput
 
 # basic search just to see if it works:
 search01: setOutput
-	@ printf "### $@ '${SERVERNAME}/search/?search=brca;genome=hg38'\n"
+	@ printf "### $@ 'https://${SERVERNAME}/search/?search=brca;genome=hg38'\n"
 	@ curl -L "${SERVERNAME}/search?search=brca;genome=hg38" 2> /dev/null | python -mjson.tool | egrep -c -n "\[|\]" | awk -v t="$@" '{if (($$1 < 25) || ($$1 > 35)) {printf "test %s failed, count %d not in range 25-35\n", t, $$1; exit 255;}}'
+
+##############################################################################
+### chrAlias - test chrom alias
+##############################################################################
+
+# testing /getData/track?genome=ce11&track=gold&chrom=MT
+chrAlias01: setOutput
+	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=MT'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="ce11" -track="gold" -chrom="MT" 2>&1 | egrep -v "${excludeLines}"  | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?genome=ce11&track=gold&chrom=NC_001328.1
+chrAlias02: setOutput
+	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=NC_001328.1'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="ce11" -track="gold" -chrom="NC_001328.1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?genome=ce11&track=gold&chrom=X54252.1
+chrAlias03: setOutput
+	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=X54252.1'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="ce11" -track="gold" -chrom="X54252.1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?genome=ce11&track=gold&chrom=MtDNA
+chrAlias04: setOutput
+	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=ce11;track=gold;chrom=MtDNA'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="ce11" -track="gold" -chrom="MtDNA" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# chrom alias on an assembly hub
+chrAlias05: setOutput
+	@ printf "### $@ 'https://${SERVERNAME}/getData/track?genome=GCF_000001735.4;track=assembly;chrom=chrPltd;hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt" -genome="GCF_000001735.4" -track="assembly" -chrom="chrPltd" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# chrom alias on an assembly hub
+chrAlias06: setOutput
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/735/GCF_000001735.4/hub.txt" -genome="GCF_000001735.4" -track="assembly" -chrom="Pltd" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
 
 ##############################################################################
 ### supportedTypes - test both /list/chromosomes and /getData/track
