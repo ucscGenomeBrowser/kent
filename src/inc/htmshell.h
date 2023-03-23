@@ -128,6 +128,9 @@ void htmEnd(FILE *f);
 extern char *htmlStyleUndecoratedLink;
 /* Style that gets rid of underline of links. */
 
+void htmlSetGa4Key(char *key);
+/* Set google analytics 4 key, used when outputting HEAD */
+
 void htmlSetStyle(char *style);
 /* Set document wide style. A favorite style to
  * use for many purposes is htmlStyleUndecoratedLink

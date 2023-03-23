@@ -456,6 +456,11 @@ void slFreeList(void *listPt);
  *    slFreeList(&list);
  */
 
+void slFreeListWithFunc(void *listPt, void (*freeFunc)());
+/* Free a list by calling freeFunc on each element.
+ * listPt must be a pointer to a pointer to some slList-compatible struct (&list).
+ * freeFunc must take one arg: a pointer to a pointer to the item it is going to free. */
+
 /******* slInt - an int on a list - the first of many singly linked list structures *******/
 
 struct slInt

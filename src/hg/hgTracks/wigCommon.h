@@ -33,6 +33,7 @@ struct wigCartOptions
     boolean isMultiWig;	/*      If true it's a multi-wig. */
     enum wiggleAggregateFunctionEnum aggregateFunction;	/*  NONE/TRANSPARENT/STACKED	*/
     boolean doNegative; /*      should we negate the values */
+    struct mafBaseProbs *baseProbs;  /* if we're in logoMaf mode, this will hold the base probabilities. */
     };
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[]);

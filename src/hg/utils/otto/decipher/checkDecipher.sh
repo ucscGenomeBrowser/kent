@@ -60,8 +60,9 @@ then
     cd ${WORKDIR}
     # Update our md5sum record
     md5sum decipher-variants-grch38.bed > decipher-variants-grch38.md5
-else
-    echo "No update"
+#Commenting out heartbeat message below so as not to get spam.
+#else
+#    echo "No update"
 fi
 
 rm decipher-variants-grch38.bed

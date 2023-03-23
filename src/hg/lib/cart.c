@@ -2638,7 +2638,10 @@ cartSetLastPosition(cart, pos, oldVars);
 safef(titlePlus, sizeof(titlePlus), "%s %s %s %s", 
                     org ? trackHubSkipHubName(org) : "", db ? db : "",  pos ? pos : "", title);
 popWarnHandler();
+
 setThemeFromCart(cart);
+googleAnalyticsSetGa4Key();
+
 htmStartWithHead(stdout, head, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);

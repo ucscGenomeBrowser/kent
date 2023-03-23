@@ -3,14 +3,20 @@ https://github.com/ucscGenomeBrowser/kent/.  It includes all files that are
 under an MIT license or in the public domain. All files can be packaged,
 redistributed and modified as needed by other projects. 
 
-The code should build with a simple "cd src; make utils". We test this on CentOS and OSX. 
-If you run into problems, please open a ticket or contact genome@soe.ucsc.edu. 
+The code should build with a simple "make". The binaries can then be found under "bin/".
+We tested this on CentOS 8, Ubuntu 20 and OSX. 
 
+To install the required libraries on Ubuntu 20, run the following command:
+
+    apt install make gcc g++ libpng-dev uuid-dev libmariadbclient-dev
+
+If you run into problems, you can contact genome@soe.ucsc.edu. 
 If you want to file issues or pull-requests, please do that at the original repo, at 
-https://github.com/ucscGenomeBrowser/kent/, not here. The changes will get merged into 
-this repository automatically with the next release (see kent/build/kent-core/).
+https://github.com/ucscGenomeBrowser/kent/, not here. Changes to that repo will
+get merged into this repository automatically with the next release (see
+kent/build/kent-core/).
 
-You can find short descriptions for most tools here:
+You can find short descriptions for most command line tools here:
 http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/FOOTER.txt
 
 Here are a few selected tools that are useful when building track and assembly hubs:

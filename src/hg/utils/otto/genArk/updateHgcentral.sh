@@ -31,7 +31,7 @@ export DS=`date "+%F"`
 export YYYY=`date "+%Y"`
 export LC_NUMERIC=en_US
 export msgTo="hclawson@ucsc.edu"
-# export msgTo="hclawson@ucsc.edu,lrnassar@ucsc.edu"
+# export msgTo="hclawson@ucsc.edu,otto-group@ucsc.edu"
 export msgFile="/tmp/ottoGenArk.$$.txt"
 
 ###########################################################################

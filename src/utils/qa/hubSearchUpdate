@@ -1,10 +1,7 @@
-# Updates hubSearchText table, run by cron for auto-push
-# Created by Dan 4/20/21, deleted and remade 5/18/21
-
 #!/bin/sh -e
-PATH=/cluster/bin/x86_64:$PATH
+# Updates hubSearchText table, run by cron for auto-push
 
-date
+date >> /hive/groups/browser/hubCrawl/hubSearchText.log
 cd /hive/groups/browser/hubCrawl
 nohup ./doPublicCrawl &> /dev/null #Send stdout & stderr to /dev/null
 echo "HubSearchText Dev cron-updated on `date`. Exit status: $?" >> /hive/groups/browser/hubCrawl/hubSearchText.log 

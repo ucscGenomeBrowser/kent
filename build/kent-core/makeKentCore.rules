@@ -15,6 +15,10 @@ H /src/ai/
 H /src/kehayden/
 H /pre-commit-prevent-large-files.sh
 H /confs/
+H /src/browserbox
+H /src/utils/qa/weeklybld/
+H /src/penn
+- /README
 
 # blat suite
 H /src/jkOwnLib/

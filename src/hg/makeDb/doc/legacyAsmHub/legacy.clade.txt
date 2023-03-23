@@ -110,6 +110,7 @@ GCA_009764565.1_rDerCor1.pri	vertebrate
 GCA_009769545.1_fCycLum1.pri	fish
 GCA_009769625.1_bCygOlo1.pri	birds
 GCA_009769485.1_bCygOlo1.alt	birds
+GCA_009806435.2_UM_NZW_1.0	mammals
 GCA_009819505.1_bCatUst1.alt	birds
 GCA_009819705.1_fHipHip1.pri	fish
 GCA_009873245.2_mBalMus1.v2	mammals
@@ -127,6 +128,8 @@ GCA_014905235.2_Bmori_2016v1.0	invertebrate
 GCA_015227675.2_mRatBN7.2	mammals
 GCA_015227805.2_bHirRus1.pri.v2	birds
 GCA_016128335.1_ZJU1.0	birds
+GCA_016432865.1_AdamAnt	mammals
+GCA_018139145.1_ASM1813914v1	birds
 GCA_018296145.1_Otsh_v2.0	fish
 GCA_020740725.1_bCorHaw1.pri.cur	birds
 GCA_020740795.1_bApuApu2.pri.cur	birds
@@ -142,6 +145,7 @@ GCA_901709675.1_fSynAcu1.1	fish
 GCA_902153765.1_bAquChr1.2_alternate_haplotype	birds
 GCA_902459505.1_aGeoSer1.1	vertebrate
 GCA_902500255.1_fThaAma1.1	fish
+GCA_904849725.1_MorexV3_pseudomolecules_assembly	plants
 GCA_905147045.1_ilAglIoxx1.1	invertebrate
 GCA_905147105.1_ilPieBrab1.1	invertebrate
 GCA_905147365.1_ilAriAges1.1	invertebrate
@@ -161,6 +165,7 @@ GCF_000001405.40_GRCh38.p14	primates
 GCF_000001635.26_GRCm38.p6	mammals
 GCF_000001735.3_TAIR10	plants
 GCF_000002595.1_v3.0	plants
+GCF_000002775.4_Pop_tri_v3	plants
 GCF_000002995.3_ASM299v2	invertebrate
 GCF_000004335.2_AilMel_1.0	mammals
 GCF_000004515.4_Glycine_max_v2.0	plants
@@ -190,6 +195,7 @@ GCF_000341935.1_Ccin1	invertebrate
 GCF_000344595.1_CheMyd_1.0	vertebrate
 GCF_000364345.1_Macaca_fascicularis_5.0	primates
 GCF_000365465.2_Ptep_2.0	invertebrate
+GCF_000442215.1_Lipotes_vexillifer_v1	mammals
 GCF_000471905.2_AMTR1.0	plants
 GCF_000511025.2_RefBeet-1.2.2	plants
 GCF_000687205.1_ASM68720v1	birds
@@ -205,14 +211,17 @@ GCF_000738735.2_ASM73873v2	birds
 GCF_000747805.1_ChaPel_1.0	birds
 GCF_000764305.1_Hazt_2.0	invertebrate
 GCF_000806345.1_ASM80634v1	invertebrate
+GCF_000817695.2_Aradu1.1	plants
 GCF_000951615.1_common_carp_genome	fish
 GCF_001458135.1_marMar2.1	mammals
 GCF_001531365.1_CcrdV1	plants
 GCF_001577835.1_Coturnix_japonica_2.0	birds
 GCF_001594075.1_Tcor1.0	invertebrate
 GCF_001633185.1_ValleyOak3.0	plants
+GCF_001640805.1_ASM164080v1	fish
 GCF_001649575.1_ASM164957v1	fish
 GCF_001659605.1_Manihot_esculenta_v6	plants
+GCF_001660625.2_IpCoco_1.2	fish
 GCF_001660625.1_IpCoco_1.2	fish
 GCF_001663975.1_Xenopus_laevis_v2	vertebrate
 GCF_001687245.1_Rhagoletis_zephyria_1.0	invertebrate
@@ -226,6 +235,7 @@ GCF_002201575.1_ASM220157v1	mammals
 GCF_002263795.1_ARS-UCD1.2	mammals
 GCF_002706865.1_ASM270686v1	invertebrate
 GCF_002776525.2_ASM277652v2	primates
+GCF_002776525.4_ASM277652v4	primates
 GCF_002776525.3_ASM277652v3	primates
 GCF_002870075.1_Lsat_Salinas_v7	plants
 GCF_002870075.2_Lsat_Salinas_v7	plants
@@ -263,6 +273,7 @@ GCF_010909765.1_sAmbRad1.pri	vertebrate
 GCF_011064685.1_ZJU_Sfru_1.0	invertebrate
 GCF_013339695.1_ASM1333969v1	invertebrate
 GCF_013377495.1_Cygnus_atratus_primary_v1.0	birds
+GCF_014898055.1_MPIMG_talOcc4	mammals
 GCF_014905685.1_NemWhi1	fish
 GCF_015227805.1_bHirRus1.pri.v2	birds
 GCF_015237465.1_rCheMyd1.pri	vertebrate

@@ -35,7 +35,9 @@ if ( ! -s "$orderList" ) {
 my %cladeId;	# value is asmId, value is clade, useful for 'legacy' index page
 
 printf STDERR "# mkHubIndex %s %s %s %s\n", $Name, $asmHubName, $defaultAssembly, $orderList;
+my $hprcIndex = 0;
 my $vgpIndex = 0;
+$hprcIndex = 1 if ($Name =~ m/hprc/i);
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
 my %vgpClass;	# key is asmId, value is taxon 'class' as set by VGP project
 if ($vgpIndex) {
@@ -106,7 +108,27 @@ Vertebrate Genomes Project.</a> $vgpSubset
 
 END
 } else {
-  print <<"END";
+  if ($hprcIndex) {
+    print <<"END";
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="HPRC - Human Pangenome Reference Consortium" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>HPRC - Human Pangenome Reference Consortium assembly hub</h1>
+<p>
+<a href='https://humanpangenome.org/' target=_blank>
+<img src='HPRC_logo.png' width=280 alt='HPRC logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://humanpangenome.org/' target=_blank>
+Human Pangenome Reference Consortium.</a>
+</p>
+
+END
+  } else {
+    print <<"END";
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
@@ -119,6 +141,7 @@ Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
 END
+  }
 }
 
 print <<"END";
@@ -169,6 +192,24 @@ Instead of adding all the assemblies in one collected group, use the individual
 <em>view in browser</em> in the table below.
 </p>
 <h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
+END
+
+if ($vgpIndex) {
+  print <<"END";
+<h3>Listings:</h3>&nbsp;&nbsp;<b>(from RepeatModeler masking)</b>
+<p>
+<ul>
+<li><a href='modeler.families.urls.txt' target=_blank>families fasta.gz</a> list of URLs for the custom library created by the RepeatModeler run</li>
+<li><a href='modeler.2bit.urls.txt' target=_blank>assembly 2bit file list</a> of URLs as masked with the RepeatModeler + <b>TRF/simpleRepeats</b> with period of 12 or less</li>
+<li><a href='rmod.log.file.list.txt' target=_blank>the rmod.log files from each RepeatModeler run</a></li>
+<li><a href='default.twoBit.file.list.txt' target=_blank>default GenArk 2bit file list</a> of URLs as masked with the ordinary RepeatMasker + <b>TRF/simpleRepeats</b> with period of 12 or less</li>
+<li><a href='modeler.table.txt' target=_blank>this data table in tab-separated</a> file text format (including TBD not working yet, or in VGP collection but not on the alignment list)</li>
+</ul>
+</p>
+END
+}
+
+print <<"END";
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
 <br>

@@ -341,6 +341,21 @@ while (next != NULL)
 *ppt = NULL;
 }
 
+void slFreeListWithFunc(void *listPt, void (*freeFunc)())
+/* Free a list by calling freeFunc on each element.
+ * listPt must be a pointer to a pointer to some slList-compatible struct (&list).
+ * freeFunc must take one arg: a pointer to a pointer to the item it is going to free. */
+{
+struct slList **pList = (struct slList**)listPt;
+struct slList *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    freeFunc(&el);
+    }
+*pList = NULL;
+}
+
 void slSort(void *pList, int (*compare )(const void *elem1,  const void *elem2))
 /* Sort a singly linked list with Qsort and a temporary array. */
 {

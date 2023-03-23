@@ -280,6 +280,7 @@ lollipopField bigBed bigLolly
 lollyField bigBed bigLolly
 lollyMaxSize bigBed bigLolly
 lollySizeField bigBed bigLolly
+logoMaf wig
 longLabel *
 longlabel genePred
 longLabelClip *
@@ -483,7 +484,7 @@ showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak broadPeak
 signalFilterLimits bed narrowPeak broadPeak
-skipFields bigBed bigPsl bigGenePred
+skipFields bigBed bigPsl bigGenePred bigLolly
 skipEmptyFields bigBed bigPsl
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
@@ -506,6 +507,8 @@ speciesTarget wigMaf
 speciesTree wigMaf
 speciesUseFile wigMafProt wigMaf
 spectrum *
+squishyPackField  bigBed bigGenePred
+squishyPackPoint bigBed bigGenePred
 stripPrefix bam
 subGroup1 *
 subGroup2 *

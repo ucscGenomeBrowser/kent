@@ -21,8 +21,8 @@ idSql select geneSymbol from kgXref where kgID = '%s'
 url http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s
 priority 10
 
-name cgap
-url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Mm&CID=%s
+#name cgap
+#url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Mm&CID=%s
 
 name reactome
 shortLabel Reactome

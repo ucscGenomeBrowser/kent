@@ -2263,8 +2263,8 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                 char position[1024];
                 safef(position, sizeof position, "%s:%ld-%ld", h->chrom, h->chromStart, h->chromEnd);
                 char *newPosition = undisguisePosition(position); // UN-DISGUISE VMODE
-                if (startsWith(MULTI_REGION_CHROM, newPosition))
-                   newPosition = replaceChars(position, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
+                if (startsWith(OLD_MULTI_REGION_CHROM, newPosition))
+                   newPosition = replaceChars(newPosition, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
                 if (startsWith(MULTI_REGION_CHROM, newPosition))
                     {
                     parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
@@ -2277,7 +2277,6 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
         &&  (h->chromEnd != 0)
         &&  (h->chromStart <= virtWinEnd && h->chromEnd >= virtWinStart))
             {
-
             h->chromStart = max(h->chromStart, virtWinStart);
             h->chromEnd = min(h->chromEnd, virtWinEnd);
             double pixelsPerBase = (double)fullInsideWidth/(virtWinEnd - virtWinStart);
@@ -2289,13 +2288,13 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                 width = 2;
 
             // Default color to light blue, but if setting has color, use it.
-            unsigned int hexColor = MAKECOLOR_32(170, 255, 255);
+            // 179 for alpha because javascript uses 0.7 opacity, *255 ~= 179
+            unsigned int hexColor = MAKECOLOR_32_A(170, 255, 255,179);
             if (h->hexColor)
                 {
                 long rgb = strtol(h->hexColor,NULL,16); // Big and little Endians
-                hexColor = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+                hexColor = MAKECOLOR_32_A( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff), 179 );
                 }
-
             hvGfxBox(hvg, fullInsideX + startPixels, 0, width, imagePixelHeight, hexColor);
             }
         }
@@ -4740,16 +4739,22 @@ for (track = trackList; track != NULL; track = nextTrack)
     if (track->visibility != tvPack)
         continue;
 
-    char *string = trackDbSetting(track->tdb, "squishyPackPoint");
+    char *string = cartOrTdbString(cart, track->tdb,  "squishyPackPoint", NULL);
     if (string != NULL)
         {
         double squishyPackPoint = atof(string);
 
         /* clone the track */
+        char buffer[strlen(track->track) + strlen("Squinked") + 1];
+        safef(buffer, sizeof buffer, "%sSquinked", track->track);
+
         struct track *squishTrack = CloneVar(track);
         squishTrack->tdb = CloneVar(track->tdb);
+        squishTrack->tdb->track = cloneString(buffer);
+        squishTrack->tdb->next = NULL;
         squishTrack->visibility = tvSquish;
         squishTrack->limitedVis = tvSquish;
+        hashAdd(trackHash, squishTrack->tdb->track, squishTrack);
         struct linkedFeatures *lf = track->items;
 
         /* distribute the items based on squishyPackPoint */
@@ -4767,10 +4772,10 @@ for (track = trackList; track != NULL; track = nextTrack)
         slReverse(&track->items);
         slReverse(&squishTrack->items);
         
-        /* these should be changed to something more rational. */
-        squishTrack->track = cloneString("knownGeneSquish");
-        squishTrack->shortLabel = cloneString("knownGeneSquish");
-        squishTrack->longLabel = cloneString("knownGeneSquish");
+        squishTrack->track = cloneString(buffer);
+        squishTrack->originalTrack = cloneString(track->track);
+        squishTrack->shortLabel = cloneString(buffer);
+        squishTrack->longLabel = cloneString(buffer);
 
         /* insert the squished track */
         track->next = squishTrack;
@@ -5172,9 +5177,6 @@ initColors(hvg);
 /* Start up client side map. */
 hPrintf("<MAP id='map' Name=%s>\n", mapName);
 
-if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
-    drawHighlights(cart, hvg, imagePixelHeight);
-
 for (window=windows; window; window=window->next)
     {
     /* Find colors to draw in. */
@@ -5207,6 +5209,8 @@ if (theImgBox)
             int order = flatTrack->order;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,
                                                isCenterLabelIncluded(track),order);
+            if (flatTrack->track->originalTrack != NULL)
+                curImgTrack->linked = TRUE;
             }
         }
     }
@@ -5503,6 +5507,8 @@ if (withGuidelines)
         }
     }
 
+if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
+    drawHighlights(cart, hvg, imagePixelHeight);
 
 /* Draw ruler */
 
@@ -8244,17 +8250,18 @@ if (isSearchTracksSupported(database,cart))
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     }
 
+
 hPrintf("&nbsp;");
-hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks");
+hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");
 
 hPrintf(" ");
 hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
         hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
-        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
+        hasCustomTracks ? "Manage your custom tracks - keyboard shortcut: c, then t" : "Add your own custom tracks - keyboard shortcut: c, then t");
 jsOnEventById("click", "ct_add", "document.customTrackForm.submit(); return false;");
 
 hPrintf(" ");
-hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
+hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection - keyboard shortcut: c, then f");
 hPrintf(" ");
 
 if (!multiRegionButtonTop)
@@ -8263,12 +8270,12 @@ if (!multiRegionButtonTop)
     hPrintf(" ");
     }
 hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
-                       revCmplDisp ? "Show forward strand at this location"
-                                   : "Show reverse strand at this location",
+                       revCmplDisp ? "Show forward strand at this location - keyboard shortcut: r, then v"
+                                   : "Show reverse strand at this location - keyboard shortcut: r, then v",
                        NULL, revCmplDisp);
 hPrintf(" ");
 
-hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
+hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
@@ -9778,6 +9785,20 @@ if (h && h->db && sameString(h->db, database))
     }
 }
 
+static void setupTimeWarning()
+/* add javascript that outputs a warning message if page takes too long to load */
+{
+char *maxTimeStr = cfgOption("warnSeconds");
+if (!maxTimeStr)
+    return;
+
+int maxTime = atoi(maxTimeStr);
+struct dyString *dy = dyStringNew(150);
+dyStringPrintf(dy, "$(document).ready( function() { hgtWarnTiming(%d)});\n", maxTime);
+jsInline(dy->string);
+dyStringFree(&dy);
+}
+
 
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
@@ -10273,6 +10294,7 @@ if (gotExtTools)
     printExtMenuData(chromName);
 if (recTrackSetsEnabled())
     printRecTrackSets();
+setupTimeWarning();
 }
 
 static void chromInfoTotalRow(int count, long long total, boolean hasAlias)

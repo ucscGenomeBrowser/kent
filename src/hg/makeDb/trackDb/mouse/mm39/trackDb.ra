@@ -48,3 +48,5 @@ include trackDb.gencode.ra
 include knownGene.ra
 include knownGeneArchive.ra alpha
 include reMap.ra
+
+include liftOverMm10.ra

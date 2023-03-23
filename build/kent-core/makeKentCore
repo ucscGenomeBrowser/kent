@@ -1,12 +1,23 @@
 #!/bin/bash
+set -e -o pipefail
 # creates ~/kent-core and fills it with files from the current dir
 if [ ! -e src/codelog.c ] ; then
         echo this script must be run from a clean kent/ directory checkout.
         exit 1
 fi
-rsync -avzp --filter "merge ${HOME}/kent/build/kent-core/makeKentCore.rules" ./ ~/kent-core/ --prune-empty-dirs --delete-excluded --delete
+if [ ! -e ~/kent-core ] ; then
+        echo Please clone the kent-core repo first:
+        echo "cd && git clone git@github.com:ucscGenomeBrowser/kent-core.git"
+        exit 1
+fi
+cd src
+make clean -j40
+cd ..
+rsync -avzp --filter "merge build/kent-core/makeKentCore.rules" ./ ~/kent-core/ --prune-empty-dirs --delete
 cp src/tagStorm/LICENSE ~/kent-core/
-cp build/kent-core/README ~/kent-core/
+cp build/kent-core/README.md ~/kent-core/
+echo You can now run: "cd ~/kent-core && git add -A && git commit -m 'all changes of current release' && git push"
+#not automating this just yet, as this script is new:
 #cd ~/kent-core/
 #git add -A
 #git commit -m 'all changes of current release'

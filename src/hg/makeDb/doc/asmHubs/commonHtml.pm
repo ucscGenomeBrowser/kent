@@ -25,7 +25,7 @@ sub otherHubLinks($$) {
   my ($vgpIndex, $asmHubName) = @_;
 
 my %asmCounts;	# key is hubName, value is number of assemblies
-my @hubList = qw(primates mammals birds fish vertebrate invertebrate plants fungi viral);
+my @hubList = qw(primates mammals birds fish vertebrate invertebrate plants fungi viral bacteria);
 foreach my $hubName (@hubList) {
   my $asmCount = `grep -v "^#" ../${hubName}AsmHub/${hubName}.orderList.tsv | wc -l`;
   chomp $asmCount;
@@ -34,7 +34,10 @@ foreach my $hubName (@hubList) {
 my $vgpCount = `grep -h -v "^#" ../vgpAsmHub/vgp.*.orderList.tsv | wc -l`;
 chomp $vgpCount;
 $asmCounts{'vgp'} = $vgpCount;
-my $legacyCount = `grep -h -v "^#" ../legacyAsmHub/legacy.orderList.tsv | wc -l`;
+my $hprcCount = `grep -c -h -v "^#" ../hprcAsmHub/hprc.orderList.tsv`;
+chomp $hprcCount;
+$asmCounts{'hprc'} = $hprcCount;
+my $legacyCount = `grep -c -h -v "^#" ../legacyAsmHub/legacy.orderList.tsv`;
 chomp $legacyCount;
 $asmCounts{'legacy'} = $legacyCount;
 
@@ -57,6 +60,8 @@ if ((0 == $vgpIndex)) {
       printf "<tr><th>Invertebrates</th>\n";
     } elsif ($hubName =~ m/viral/) {
       printf "<tr><th>Viruses</th>\n";
+    } elsif ($hubName =~ m/bacteria/) {
+      printf "<tr><th>Bacteria</th>\n";
     } else {
       printf "<tr><th>%s</th>\n", ucfirst($hubName);
     }
@@ -69,6 +74,11 @@ if ((0 == $vgpIndex)) {
   printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "VGP", $asmCounts{'vgp'};
   printf "    <th><a href='../VGP/asmStats.html'>assembly stats</a></th>\n";
   printf "    <th><a href='../VGP/trackData.html'>track stats</a></th>\n";
+  printf "</tr>\n";
+  printf "<tr><th>HPRC - Human Pangenome Reference Consortium</th>\n";
+  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "HPRC", $asmCounts{'hprc'};
+  printf "    <th><a href='../HPRC/asmStats.html'>assembly stats</a></th>\n";
+  printf "    <th><a href='../HPRC/trackData.html'>track stats</a></th>\n";
   printf "</tr>\n";
   printf "<tr><th>legacy/superseded</th>\n";
   printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "legacy", $asmCounts{'legacy'};
