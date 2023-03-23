@@ -50,7 +50,7 @@ wigData: wig01 wig02 wig03 wig04 wig05 wig06 wig07 wig08 wig09 wig10 \
 search: search01
 
 chrAlias: chrAlias01 chrAlias02 chrAlias03 chrAlias04 chrAlias05 chrAlias06 \
-	chrAlias07 chrAlias08 chrAlias09
+	chrAlias07 chrAlias08 chrAlias09 chrAlias10 chrAlias11
 
 supportedTypes: altGraphX barChart chain ctgPos expRatio \
 	interact netAlign peptideMapping pgSnp
