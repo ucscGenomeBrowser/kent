@@ -432,12 +432,12 @@ multiTrack01:
 # getData but with multiple tracks from a 'curated' hub
 multiTrack02:
 	@printf "### $@ ### '${SERVERNAME}/getData/track?tracks=assembly,cpgIslandExtUnmasked,simpleRepeat;genome=hs1;jsonOutputArrays=1;chrom=chr2;start=16129261;end=16163278'\n"
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hs1 -track=assembly,cpgIslandExtUnmasked,simpleRepeat -jsonOutputArrays -chrom=chr2 -start=16129261 -end=16163278 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hs1 -track=assembly,cpgIslandExtUnmasked,simpleRepeat -jsonOutputArrays -chrom=chr2 -start=16129261 -end=16163278 | egrep -v "${excludeLines}" | sed -e 's#hubs/.*/hub.txt#hubs/hub.txt#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 multiTrack03:
 	@printf "### $@ ### '${SERVERNAME}/getData/track?tracks=assembly,cpgIslandExtUnmasked,simpleRepeat;genome=hs1;jsonOutputArrays=1;chrom=CP068276.2;start=16129261;end=16163278'\n"
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hs1 -track=assembly,cpgIslandExtUnmasked,simpleRepeat -jsonOutputArrays -chrom=CP068276.2 -start=16129261 -end=16163278 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hs1 -track=assembly,cpgIslandExtUnmasked,simpleRepeat -jsonOutputArrays -chrom=CP068276.2 -start=16129261 -end=16163278 | egrep -v "${excludeLines}" | sed -e 's#hubs/.*/hub.txt#hubs/hub.txt#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 
@@ -1063,19 +1063,19 @@ chrAlias08: setOutput
 # testing /getData/sequence? genome=hs1&chrom=MT&start=4321&end=5647
 chrAlias09: setOutput
 	@ printf "### $@ '${SERVERNAME}/getData/sequence?genome=hs1;chrom=MT;start=4321;end=5678'\n"
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/sequence" -genome="hs1" -chrom="MT" -start=4321 -end=5678 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/sequence#/sequence#;' | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/sequence" -genome="hs1" -chrom="MT" -start=4321 -end=5678 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/sequence#/sequence#; s#hubs/.*/hub.txt#hubs/hub.txt#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /getData/track? track=assembly&genome=hs1&chrom=chr1
 chrAlias10: setOutput
 	@ printf "### $@ '${SERVERNAME}/getData/track?genome=hs1;chrom=chr1;track=assembly'\n"
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="hs1" -chrom="chr1" -track=assembly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="hs1" -chrom="chr1" -track=assembly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#; s#hubs/.*/hub.txt#hubs/hub.txt#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /getData/track? track=assembly&genome=hs1&chrom=CP068276.2
 chrAlias11: setOutput
 	@ printf "### $@ '${SERVERNAME}/getData/track?genome=hs1;chrom=CP068276.2;track=assembly'\n"
-	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="hs1" -chrom="CP068276.2" -track=assembly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="hs1" -chrom="CP068276.2" -track=assembly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#; s#hubs/.*/hub.txt#hubs/hub.txt#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ##############################################################################
