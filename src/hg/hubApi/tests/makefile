@@ -14,7 +14,10 @@ anyTestTarget - there are many test targets\n\
 \n\
 To run a specific test for a specific server, for example:\n\
 \n\
-  SERVERNAME=\"https://genome-test.gi.ucsc.edu\" make test8\n"
+  SERVERNAME=\"https://genome-test.gi.ucsc.edu\" make test8\n\
+\n\
+Note:  Your sandbox trackDb needs to be up to date to allow the tests\n\
+       to function correctly.  If one fails, update that trackDb.\n"
 
 hgwdev::
 	SERVERNAME="https://api-test.gi.ucsc.edu" make test
