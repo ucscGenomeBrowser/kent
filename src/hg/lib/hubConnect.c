@@ -1133,6 +1133,8 @@ for(; pairs; pairs = pairs->next)
         cartRemove(cart, hubName);
         }
     }
+
+cartRemove(cart, "assumesHub");
 }
 
 char *hubConnectLoadHubs(struct cart *cart)
