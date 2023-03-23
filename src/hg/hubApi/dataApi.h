@@ -234,6 +234,9 @@ boolean isWiggleDataTable(char *type);
 char *chrOrAlias(char *db, char *hubUrl);
 /* get incoming chr name, may be an alias, return the native chr name */
 
+void hubAliasSetup(struct trackHubGenome *hubGenome);
+/* see if this hub has an alias file and run chromAliasSetupBb() for it */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 

@@ -81,7 +81,6 @@ MAILTO=otto-group@ucsc.edu
 00 4 * * * /hive/data/outside/otto/uniprot/covidCheck.sh
 
 #ClinGen
-MAILTO=otto-group@ucsc.edu
 00 9 * * * /hive/data/outside/otto/clinGen/clinGenWrapper.sh
 
 #GRC Incident
@@ -93,15 +92,13 @@ MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
 37 10 * * 2 /hive/data/inside/GenArk/updateHgcentral.sh makeItSo
 
 #NCBI RefSeq
-MAILTO=otto-group@ucsc.edu,hiram@soe.ucsc.edu
 23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
 
 #Index page public session thumbnails update
-MAILTO=otto-group@ucsc.edu,gperez2@ucsc.edu
+MAILTO=otto-group@ucsc.edu
 11 1 * * 4 /cluster/software/bin/python3.6 /cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py /usr/local/apache/htdocs/
 
 #OMIM Upload
-MAILTO=otto-group@ucsc.edu
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
 

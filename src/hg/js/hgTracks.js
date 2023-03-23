@@ -5472,17 +5472,16 @@ $(document).ready(function()
     });
 
 
-    // add a button to download the current track data (under hg.conf control)
+    // add a 'link' to download the current track data (under hg.conf control)
     if (typeof showDownloadButton !== 'undefined' && showDownloadButton) {
-        newButton = document.createElement("input");
-        newButton.setAttribute("id", "hgTracksDownload");
-        newButton.setAttribute("type", "button");
-        newButton.setAttribute("name", "downloadTracks");
-        newButton.setAttribute("value", "download current tracks");
-        newButton.setAttribute("title", "download track data in window");
-        // add a space to match the other buttons
-        $("#hgt\\.setWidth")[0].parentNode.appendChild(document.createTextNode(" "));
-        $("#hgt\\.setWidth")[0].parentNode.appendChild(newButton);
+        newListEl = document.createElement("li");
+        newLink = document.createElement("a");
+        newLink.setAttribute("id", "hgTracksDownload");
+        newLink.setAttribute("name", "downloadTracks");
+        newLink.textContent = "Download Current Track Data";
+        newLink.href = "#";
+        newListEl.appendChild(newLink);
+        $("#downloads > ul")[0].appendChild(newListEl);
         $("#hgTracksDownload").click(downloadCurrentTrackData.showDownloadUi);
     }
     
