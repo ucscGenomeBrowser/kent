@@ -366,9 +366,9 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
 if (allowedBigBedType(trackType))
-    bbi = bigBedFileOpen(bigDataUrl);
+    bbi = bigBedFileOpenAlias(bigDataUrl, chromAliasFindAliases);
 else if (startsWith("bigWig", trackType))
-    bbi = bigWigFileOpen(bigDataUrl);
+    bbi = bigWigFileOpenAlias(bigDataUrl, chromAliasFindAliases);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
