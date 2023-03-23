@@ -767,6 +767,29 @@ if (cartVis == NULL)
     }
 }
 
+static void outAttachedHubUrls(struct cart *cart, struct dyString *dy)
+/* output the hubUrls for all attached hubs in the cart. */
+{
+struct hubConnectStatus *statusList = hubConnectStatusListFromCart(cart);
+
+if (statusList == NULL)
+    return;
+
+if (dy)
+    dyStringPrintf(dy,"&assumesHub=");
+else
+    printf("assumesHub ");
+for(; statusList; statusList = statusList->next)
+    {
+    if (dy)
+        dyStringPrintf(dy,"%d=%s ", statusList->id, statusList->hubUrl);
+    else
+        printf("%d=%s ", statusList->id, statusList->hubUrl);
+    }
+if (dy == NULL)
+    printf("\n");
+}
+
 static void outDefaultTracks(struct cart *cart, struct dyString *dy)
 /* Output the default trackDb visibility for all tracks
  * in trackDb if the track is not mentioned in the cart. */
@@ -874,6 +897,9 @@ sqlDyStringPrintf(dy, "'");
 cleanHgSessionFromCart(cart);
 struct dyString *encoded = dyStringNew(4096);
 cartEncodeState(cart, encoded);
+
+// First output the hubStatus id's for attached trackHubs
+outAttachedHubUrls(cart, encoded);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, encoded);
@@ -1371,6 +1397,9 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 cleanHgSessionFromCart(cart);
 
 cartDumpHgSession(cart);
+
+// First output the hubStatus id's for attached trackHubs
+outAttachedHubUrls(cart, NULL);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);

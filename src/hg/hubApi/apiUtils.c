@@ -366,9 +366,9 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
 if (allowedBigBedType(trackType))
-    bbi = bigBedFileOpen(bigDataUrl);
+    bbi = bigBedFileOpenAlias(bigDataUrl, chromAliasFindAliases);
 else if (startsWith("bigWig", trackType))
-    bbi = bigWigFileOpen(bigDataUrl);
+    bbi = bigWigFileOpenAlias(bigDataUrl, chromAliasFindAliases);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -624,7 +624,7 @@ else
 boolean protectedTrack(char *db, struct trackDb *tdb, char *tableName)
 /* determine if track is off-limits protected data */
 {
-return cartTrackDbIsNoGenome(db, tableName);
+return cartTrackDbIsAccessDenied(db, tableName) || cartTrackDbIsNoGenome(db, tableName);
 }
 
 boolean isWiggleDataTable(char *type)
@@ -639,4 +639,55 @@ if (startsWith("wig", type))
     }
 else
      return FALSE;
+}
+
+char *chrOrAlias(char *db, char *hubUrl)
+/* get incoming chr name, may be an alias, return the native chr name
+ * might be given a db, maybe not
+ * might be given a hubUrl, maybe not
+ */
+{
+char *cartChr = cgiOptionalString("chrom");
+if (isEmpty(cartChr))
+   return NULL;
+char *chrom = cartChr;
+if (isEmpty(hubUrl))
+    {
+    if (isEmpty(db))
+       return chrom;
+    chromAliasSetup(db);
+    chrom = hgOfficialChromName(db, chrom);
+    }
+else
+    {
+/*
+    not sure if the 'curated' hub situation has been solved yet
+    if (sameString("hs1", db)) {
+      chromAliasSetup("hub_25359_hs1");
+    } else {
+      chromAliasSetup(db);
+    }
+*/
+    chrom = chromAliasFindNative(chrom);
+    }
+if (isEmpty(chrom))	// can't find it here, return the name from the cart
+    chrom = cartChr;
+return chrom;
+}
+struct trackHubGenome *hubGenome = NULL;
+
+void hubAliasSetup(struct trackHubGenome *hubGenome)
+/* see if this hub has an alias file and run chromAliasSetupBb() for it */
+{
+if (hubGenome->settingsHash)
+    {
+    char *aliasFile = hashFindVal(hubGenome->settingsHash, "chromAliasBb");
+    char *absFileName = NULL;
+    if (aliasFile)
+       absFileName = trackHubRelativeUrl((hubGenome->trackHub)->url, aliasFile);
+    if (absFileName)
+        {
+        chromAliasSetupBb(NULL, absFileName);
+        }
+    }
 }

@@ -6,7 +6,7 @@ set -beEu -o pipefail
 export TOP="/hive/data/outside/otto/grcIncidentDb"
 
 export bbiInfo="/cluster/bin/x86_64/bigBedInfo"
-export failMail="hiram@soe.ucsc.edu,lrnassar@ucsc.edu"
+export failMail="hiram@soe.ucsc.edu,otto-group@ucsc.edu"
 
 if [ $# -ne 4 ]; then
   echo "usage: grcUpdate.sh <workDir> <db> <issueName> <ftpPath>" 1>&2

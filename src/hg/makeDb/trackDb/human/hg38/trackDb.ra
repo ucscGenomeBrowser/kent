@@ -535,10 +535,12 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra
+include knownGene.ra beta,public
+include knownGene.alpha.ra alpha
 include knownGeneArchive.ra alpha
 
-include trackDb.100way.ra
+include trackDb.100way.ra beta,public
+include trackDb.100way.alpha.ra alpha
 include trackDb.145way.ra alpha
 
 include trackDb.241wayT.ra alpha
@@ -628,6 +630,8 @@ group varRep
     filterLabel._size Genomic size of variant
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
+    searchIndex name
+
 
     track dgvSupporting override
     parent dgvPlus
@@ -638,6 +642,17 @@ group varRep
     filterLabel._size Genomic size of variant
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
+    searchIndex name
+
+searchTable dgvMerged
+searchMethod exact
+searchType bigBed
+searchDescription DGV Merged Variants
+
+searchTable dgvSupporting
+searchMethod exact
+searchType bigBed
+searchDescription DGV Supporting Variants
 
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
@@ -833,3 +848,5 @@ include topmed.ra alpha
 include gerp.ra alpha
 
 include crossTissueMaps.ra alpha
+
+include problematic.ra

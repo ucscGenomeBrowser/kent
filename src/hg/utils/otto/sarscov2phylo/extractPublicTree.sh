@@ -106,6 +106,10 @@ usher_to_taxonium --input public-$today.all.masked.pb \
     --title "$today tree with sequences from GISAID, INSDC, COG-UK and CNCB" \
     --output public-$today.all.masked.taxonium.jsonl.gz
 
+# Make a size-limited public tree for ShUShER so it doesn't exceed browser memory limits
+$matUtils extract -i public-$today.all.masked.pb --set-size 6000000 \
+    -o public-$today.all.masked.ShUShER.pb.gz
+
 # Link to public trees download directory hierarchy
 archiveRoot=/hive/users/angie/publicTrees
 read y m d < <(echo $today | sed -re 's/-/ /g')
@@ -121,6 +125,7 @@ gzip -c lineageToPublicName > $archive/lineageToPublicName.tsv.gz
 gzip -c cladeToPublicName > $archive/cladeToPublicName.tsv.gz
 ln -f `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
 ln -f `pwd`/public-$today.all.masked.taxonium.jsonl.gz $archive/
+ln -f `pwd`/public-$today.all.masked.ShUShER.pb.gz $archive/
 
 # Update 'latest' in $archiveRoot
 ln -f $archive/public-$today.all.nwk.gz $archiveRoot/public-latest.all.nwk.gz
@@ -131,6 +136,8 @@ ln -f $archive/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata
 ln -f $archive/public-$today.version.txt $archiveRoot/public-latest.version.txt
 ln -f $archive/public-$today.all.masked.taxonium.jsonl.gz \
     $archiveRoot/public-latest.all.masked.taxonium.jsonl.gz
+ln -f $archive/public-$today.all.masked.ShUShER.pb.gz \
+    $archiveRoot/public-latest.all.masked.ShUShER.pb.gz
 
 # Update hgdownload-test link for archive
 mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/UShER_SARS-CoV-2/$y/$m

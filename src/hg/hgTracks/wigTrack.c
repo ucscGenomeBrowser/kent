@@ -25,6 +25,8 @@
 #include "trashDir.h"
 #include "jsonWrite.h"
 #include "dnaMotif.h"
+#include "maf.h"
+#include "hgMaf.h"
 
 struct wigItem
 /* A wig track item. */
@@ -46,6 +48,12 @@ struct wigItem
     double graphUpperLimit;	/* filled in by DrawItems	*/
     double graphLowerLimit;	/* filled in by DrawItems	*/
     };
+
+static boolean doLogo(struct trackDb *tdb)
+/* Are we going to draw a logo? */
+{
+return trackDbSettingOn(tdb, "logo") || (trackDbSetting(tdb, "logoMaf") != NULL); 
+}
 
 static void wigFillInColorLfArray(struct track *wigTrack, Color *colArray, int colSize,
 				  struct track *colorTrack)
@@ -1185,6 +1193,29 @@ for (x1 = 0; x1 < width; ++x1)
 return(mouseOverData);
 }	/*	graphPreDraw()	*/
 
+struct probVal // the probability of a certain nucleotide being seen in a column
+    {
+    struct probVal *next;
+    char *nuc;
+    double prob;
+    unsigned long color;
+    };
+
+struct probVal probVals[4]; // one per nucleotide
+struct probVal *probList = probVals;  // a sortable list 
+
+static int probListCmp(const void *va, const void *vb)
+/* Compare probabilities for sorting. */
+{
+const struct probVal *a = *((struct probVal **)va);
+const struct probVal *b = *((struct probVal **)vb);
+    
+if (a->prob < b->prob)
+    return 1;
+return -1;
+}
+
+
 static struct wigMouseOver *logoPreDrawContainer(struct preDrawContainer *preDrawContainer,
     int preDrawZero, int width, struct track *tg, struct hvGfx *hvg,
     int xOff, int yOff, double graphUpperLimit, double graphLowerLimit,
@@ -1210,6 +1241,39 @@ void *image = wgo->image;
 int h = tg->lineHeight;	/*	the height of our drawing window */
 double scaleFactor = h/graphRange;
 struct wigMouseOver *mouseOverData = getMouseOverData(tg, preDraw, width, xOff, preDrawZero);
+
+struct mafBaseProbs *baseProbs = wigCart->baseProbs;
+if (baseProbs != NULL)
+    {
+    // initialize our nucleotide probability data structure
+    probVals[0].next = &probVals[1];
+    probVals[1].next = &probVals[2];
+    probVals[2].next = &probVals[3];
+
+    boolean baseCmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
+    if (baseCmpl)
+        {
+        probVals[3].nuc = "A";
+        probVals[3].color = MG_RED;
+        probVals[2].nuc = "C";
+        probVals[2].color = MG_BROWN;
+        probVals[1].nuc = "G";
+        probVals[1].color = MG_BLUE;
+        probVals[0].nuc = "T";
+        probVals[0].color = MG_GREEN;
+        }
+    else
+        {
+        probVals[0].nuc = "A";
+        probVals[0].color = MG_RED;
+        probVals[1].nuc = "C";
+        probVals[1].color = MG_BROWN;
+        probVals[2].nuc = "G";
+        probVals[2].color = MG_BLUE;
+        probVals[3].nuc = "T";
+        probVals[3].color = MG_GREEN;
+        }
+    }
 
 double xIncr = (double)width / numBases;
 unsigned baseNum;
@@ -1281,9 +1345,17 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                 if (boxTop == h)
                     boxTop = h - 1;
 
+                unsigned color = MG_BLACK;
+
                 char *setting;
                 if (tg->tdb->parent && ((setting = trackDbSetting(tg->tdb->parent,"container")) != NULL) && startsWith("multiWig", setting))
                     {
+                    /* for multiwig display, use track colors */
+                    if (dataValue < 0)
+                        color = tg->ixAltColor;
+                    else
+                        color = tg->ixColor;
+
                     switch(numTrack)
                         {
                         case 3: if (baseCmpl) base='t'; else base='a';break;
@@ -1292,31 +1364,59 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                         case 0: if (baseCmpl) base='a'; else base='t';break;
                         }
                     }
+                else  /* hard-coded colors for dynSeq display */
+                    {
+                    if (base == 'a')
+                        color = MG_RED;
+                    else if (base == 't')
+                        color = MG_GREEN;
+                    else if (base == 'c')
+                        color = MG_BROWN;
+                    else if (base == 'g')
+                        color = MG_BLUE;
+                    }
+
                 char string[2];
                 string[0] = toupper(base);
                 string[1] = 0;
                 MgFont *font = tl.font;
                 int height = dataValue * scaleFactor;
-                unsigned color = MG_BLACK;
-                if (base == 'a')
-                    color = MG_RED;
-                else if (base == 't')
-                    color = MG_GREEN;
-                else if (base == 'c')
-                    color = MG_BROWN;
-                else if (base == 'g')
-                    color = MG_BLUE;
                 if (height != 0)
                     {
-                    if (dataValue < 0)
+                    if (baseProbs)
                         {
-                        hvGfxTextInBox(hvg, x, yOff+boxTop, baseWidth - 1, -boxHeight,
-                            color, font, string);
+                        int thisHeight;
+
+                        // we want a sorted list so the most probable gets drawn on top
+                        probVals[0].prob = baseProbs[baseNum].aProb;
+                        probVals[1].prob = baseProbs[baseNum].cProb;
+                        probVals[2].prob = baseProbs[baseNum].gProb;
+                        probVals[3].prob = baseProbs[baseNum].tProb;
+                        slSort(&probList,probListCmp);
+
+                        int y = yOff+boxTop;
+                        struct probVal *pl = probList;
+                        for(; pl; pl = pl->next)
+                            {
+                            thisHeight = pl->prob * boxHeight;
+                            if (thisHeight)
+                                hvGfxTextInBox(hvg, x, y, baseWidth - 1, thisHeight,
+                                    pl->color, font, pl->nuc);
+                            y += thisHeight;
+                            }
                         }
                     else
                         {
-                        hvGfxTextInBox(hvg, x, yOff+boxTop, baseWidth - 1, boxHeight,
-                            color, font, string);
+                        if (dataValue < 0)
+                            {
+                            hvGfxTextInBox(hvg, x, yOff+boxTop, baseWidth - 1, -boxHeight,
+                                color, font, string);
+                            }
+                        else
+                            {
+                            hvGfxTextInBox(hvg, x, yOff+boxTop, baseWidth - 1, boxHeight,
+                                color, font, string);
+                            }
                         }
                     }
                 if (((boxTop+boxHeight) == 0) && !isnan(dataValue))
@@ -1610,8 +1710,7 @@ graphRange = graphUpperLimit - graphLowerLimit;
 wigTrackSetGraphOutputDefault(tg, xOff, yOff, width, hvg);
 
 struct wigMouseOver *mouseOverData = NULL;
-if (zoomedToCodonLevel && trackDbSettingOn(tg->tdb, "logo") && vis != tvDense)
-//if (zoomedToBaseLevel && trackDbSettingOn(tg->tdb, "logo"))
+if (zoomedToCodonLevel && doLogo(tg->tdb) && vis != tvDense)
     mouseOverData = logoPreDrawContainer(preContainer,
         preDrawZero, width, tg, hvg, xOff, yOff,
         graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart, seqStart, seqEnd);
@@ -1850,6 +1949,14 @@ static void wigPreDrawItems(struct track *tg, int seqStart, int seqEnd,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw wiggle items that resolve to doing a box for each pixel. */
 {
+char *logoMaf = trackDbSetting(tg->tdb, "logoMaf");
+
+if (logoMaf != NULL)
+    {
+    struct wigCartOptions *wigCart = tg->wigCartData;
+    wigCart->baseProbs = hgMafProbs(database, logoMaf, chromName, seqStart, seqEnd, '+');
+    }
+
 struct preDrawContainer *pre = wigLoadPreDraw(tg, seqStart, seqEnd, width);
 if (pre != NULL)
     {

@@ -266,6 +266,7 @@
 #include "pipeline.h"
 #include "genark.h"
 #include "chromAlias.h"
+#include "dotPlot.h"
 
 static char *rootDir = "hgcData";
 
@@ -3298,6 +3299,9 @@ if (start == end)
     ivStart = max(0, start-1);
     ivEnd++;
     }  
+
+if (cfgOptionBooleanDefault("drawDot", FALSE))
+    bigPslDotPlot(tdb, bbi, seqName, winStart, winEnd);
 
 boolean showEvery = sameString(item, "PrintAllSequences");
 boolean showAll = trackDbSettingOn(tdb, "showAll");

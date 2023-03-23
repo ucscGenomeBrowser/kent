@@ -26,8 +26,8 @@ for further interactive displays and additional data. </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-Tissue-cell type combinations in the Combined track are colored by which cell type they
-belong to in the below table:
+Tissue-cell type combinations in the Full and Combined tracks are
+colored by which cell type they belong to in the below table:
 <p>
 <table cellpadding='2'>
   <thead>
@@ -36,50 +36,41 @@ belong to in the below table:
       <th style="border-bottom: 2px solid;">Cell Type</th>
     </tr>
   </thead>
-  <tr><td style="background-color: rgb(91,57,27);"></td><td>Adipocyte</td></tr>
-  <tr><td style="background-color: rgb(92,138,73);"></td><td>Endothelial cell (lymphatic)</td></tr>
-  <tr><td style="background-color: rgb(47,64,32);"></td><td>Endothelial cell (vascular)</td></tr>
-  <tr><td style="background-color: rgb(240,142,60);"></td><td>Epithelial cell (Hillock)</td></tr>
-  <tr><td style="background-color: rgb(196,170,153);"></td><td>Epithelial cell (alveolar type I)</td></tr>
-  <tr><td style="background-color: rgb(182,50,47);"></td><td>Epithelial cell (alveolar type II)</td></tr>
-  <tr><td style="background-color: rgb(233,148,134);"></td><td>Epithelial cell (basal keratinocyte)</td></tr>
-  <tr><td style="background-color: rgb(222,88,50);"></td><td>Epithelial cell (basal)</td></tr>
-  <tr><td style="background-color: rgb(243,203,72);"></td><td>Epithelial cell (ciliated)</td></tr>
-  <tr><td style="background-color: rgb(188,160,118);"></td><td>Epithelial cell (club)</td></tr>
-  <tr><td style="background-color: rgb(123,79,36);"></td><td>Epithelial cell (cornified keratinocyte)</td></tr>
-  <tr><td style="background-color: rgb(192,120,48);"></td><td>Epithelial cell (luminal)</td></tr>
-  <tr><td style="background-color: rgb(242,192,152);"></td><td>Epithelial cell (mature keratinocyte)</td></tr>
-  <tr><td style="background-color: rgb(188,158,70);"></td><td>Epithelial cell (squamous)</td></tr>
-  <tr><td style="background-color: rgb(240,220,203);"></td><td>Epithelial cell (suprabasal keratinocyte)</td></tr>
-  <tr><td style="background-color: rgb(132,94,87);"></td><td>Epithelial cell (suprabasal)</td></tr>
-  <tr><td style="background-color: rgb(63,41,120);"></td><td>Fibroblast</td></tr>
-  <tr><td style="background-color: rgb(246,245,159);"></td><td>ICCs</td></tr>
-  <tr><td style="background-color: rgb(54,125,118);"></td><td>Immune (B cell)</td></tr>
-  <tr><td style="background-color: rgb(73,164,154);"></td><td>Immune (DC)</td></tr>
-  <tr><td style="background-color: rgb(123,197,203);"></td><td>Immune (DC/macrophage)</td></tr>
-  <tr><td style="background-color: rgb(121,197,205);"></td><td>Immune (Langerhans)</td></tr>
-  <tr><td style="background-color: rgb(79,131,166);"></td><td>Immune (NK cell)</td></tr>
-  <tr><td style="background-color: rgb(148,179,202);"></td><td>Immune (T cell)</td></tr>
-  <tr><td style="background-color: rgb(33,84,118);"></td><td>Immune (alveolar macrophage)</td></tr>
-  <tr><td style="background-color: rgb(207,234,249);"></td><td>Immune (mast cell)</td></tr>
-  <tr><td style="background-color: rgb(0,0,0);"></td><td>Melanocyte</td></tr>
-  <tr><td style="background-color: rgb(149,149,149);"></td><td>Mucous cell</td></tr>
-  <tr><td style="background-color: rgb(160,50,132);"></td><td>Myocyte (NMJ-rich)</td></tr>
-  <tr><td style="background-color: rgb(187,146,185);"></td><td>Myocyte (cardiac)</td></tr>
-  <tr><td style="background-color: rgb(93,76,153);"></td><td>Myocyte (cardiac, cytoplasmic)</td></tr>
-  <tr><td style="background-color: rgb(215,86,148);"></td><td>Myocyte (sk. muscle)</td></tr>
-  <tr><td style="background-color: rgb(229,153,188);"></td><td>Myocyte (sk. muscle, cytoplasmic)</td></tr>
-  <tr><td style="background-color: rgb(218,204,225);"></td><td>Myocyte (smooth muscle)</td></tr>
-  <tr><td style="background-color: rgb(211,129,85);"></td><td>Myoepithelial (basal)</td></tr>
-  <tr><td style="background-color: rgb(155,166,105);"></td><td>Myofibroblast</td></tr>
-  <tr><td style="background-color: rgb(150,192,147);"></td><td>Neuroendocrine</td></tr>
-  <tr><td style="background-color: rgb(99,141,65);"></td><td>Neuronal</td></tr>
-  <tr><td style="background-color: rgb(104,121,83);"></td><td>Pericyte/SMC</td></tr>
-  <tr><td style="background-color: rgb(211,224,147);"></td><td>Satellite cell</td></tr>
-  <tr><td style="background-color: rgb(89,194,59);"></td><td>Schwann cell</td></tr>
-  <tr><td style="background-color: rgb(184,83,88);"></td><td>Sebaceous gland cell</td></tr>
-  <tr><td style="background-color: rgb(138,62,66);"></td><td>Sweat gland cell</td></tr>
-  <tr><td style="background-color: rgb(249,249,249);"></td><td>Unknown</td></tr>
+  <tr><td style="background-color: #00ff00;"></td><td>Endothelial</td></tr>
+  <tr><td style="background-color: #0000ff;"></td><td>Epithelial</td></tr>
+  <tr><td style="background-color: #00d000;"></td><td>Glia</td></tr>
+  <tr><td style="background-color: #ff0000;"></td><td>Immune</td></tr>
+  <tr><td style="background-color: #ffee00;"></td><td>Neuron</td></tr>
+  <tr><td style="background-color: #cc00cc;"></td><td>Stromal</td></tr>
+  <tr><td style="background-color: #888888;"></td><td>Other</td></tr>
+</table>
+</p>
+
+<p>
+Tissue-cell type combinations in the Immune Atlas track are shaded according
+to the below table:
+<table cellpadding='2'>
+  <thead>
+    <tr>
+      <th style="border-bottom: 2px solid;">Color</th>
+      <th style="border-bottom: 2px solid;">Cell Type</th>
+    </tr>
+  </thead>
+  <tr><td style="background-color: rgb(192,173,208);"></td><td>Inflammatory Macrophage</td></tr>
+  <tr><td style="background-color: rgb(47,101,149);"></td><td>Lung Macrophage</td></tr>
+  <tr><td style="background-color: rgb(225,133,52);"></td><td>Monocyte/Macrophage FCGR3A High</td></tr>
+  <tr><td style="background-color: rgb(83,151,67);"></td><td>Monocyte/Macrophage FCGR3A Low</td></tr>
+  <tr><td style="background-color: rgb(180,197,221);"></td><td>Macrophage HLAII High</td></tr>
+  <tr><td style="background-color: rgb(238,165,160);"></td><td>Macrophage LYVE1 High</td></tr>
+  <tr><td style="background-color: rgb(134,105,180);"></td><td>Proliferating Macrophage</td></tr>
+  <tr><td style="background-color: rgb(126,96,87);"></td><td>Dendritic Cell 1</td></tr>
+  <tr><td style="background-color: rgb(181,160,151);"></td><td>Dendritic Cell 2</td></tr>
+  <tr><td style="background-color: rgb(240,189,206);"></td><td>Mature Dendritic Cell</td></tr>
+  <tr><td style="background-color: rgb(199,133,179);"></td><td>Langerhans</td></tr>
+  <tr><td style="background-color: rgb(172,215,165);"></td><td>CD14+ Monocyte</td></tr>
+  <tr><td style="background-color: rgb(188,49,44);"></td><td>CD16+ Monocyte</td></tr>
+  <tr><td style="background-color: rgb(242,196,146);"></td><td>LAM-like</td></tr>
+  <tr><td style="background-color: #888888;"></td><td>Other</td></tr>
 </table>
 </p>
 

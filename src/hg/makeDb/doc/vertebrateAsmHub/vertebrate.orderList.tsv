@@ -16,64 +16,66 @@ GCF_905171765.1_aBufBuf1.1	common toad
 GCF_001185365.1_UNIGE_PanGut_3.0	corn snake
 GCF_900518735.1_EBS10Xv2-PRI	eastern brown snake
 GCF_018977255.1_IMCB_Cmil_1.0	elephant shark (2021)
-GCA_020745735.1_sHemOce1.pat.X.cur.	epaulette shark (sHemOce1 2021 VGP)
-GCA_020745765.1_sHemOce1.mat.decon	epaulette shark (alt pseudohaplotype sHemOce1 2021 VGP)
+GCA_020745735.1_sHemOce1.pat.X.cur.	epaulette shark (sHemOce1 2021)
+GCA_020745765.1_sHemOce1.mat.decon	epaulette shark (alternate hap sHemOce1 2021)
 GCF_905171775.1_aRanTem1.1	European common frog
-GCF_013347855.1_fAngAng1.pri	European eel
+GCF_013347855.1_fAngAng1.pri	European eel (primary hap 2020)
 GCF_019175285.1_SceUnd_v1.1	fence lizard
-GCA_902459495.1_aGeoSer1.1_alternate_haplotype	Gaboon caecilian (alt pseudohaplotype 2019 VGP)
-GCF_902459505.1_aGeoSer1.1	Gaboon caecilian (2019 refseq VGP)
+GCF_027579735.1_aBomBom1.pri	fire-bellied toad (aBomBom1 primary hap 2023)
+GCA_902459495.1_aGeoSer1.1_alternate_haplotype	Gaboon caecilian (alternate hap 2019)
+GCF_902459505.1_aGeoSer1.1	Gaboon caecilian (2019 refseq)
 GCF_001723915.1_GavGan_comp1	gharial
-GCF_007399415.2_rGopEvg1_v1.p	Goodes thornscrub tortoise (Sinaloan 2019 VGP)
-GCA_007399395.1_rGopEvg1_v1.alt	Goodes thornscrub tortoise (Sinaloan alt pseudohaplotype 2019 VGP)
+GCF_007399415.2_rGopEvg1_v1.p	Goodes thornscrub tortoise (Sinaloan 2019)
+GCA_007399395.1_rGopEvg1_v1.alt	Goodes thornscrub tortoise (Sinaloan alternate hap 2019)
+GCF_027244095.1_rHemCap1.1.pri	graceful crag lizard (Gifberg primary hap 2022)
 GCF_016835505.1_ASM1683550v1	gray bichir
-GCF_017639515.1_sCarCar2.pri	great white shark
+GCF_017639515.1_sCarCar2.pri	great white shark (primary hap 2021)
 GCF_000090745.1_AnoCar2.0	green anole
-GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 2021)
+GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 primary hap 2021)
 GCF_000935625.1_ASM93562v1	High Himalaya frog
 GCF_004798865.1_ASM479886v1	Komodo dragon (SLA01 2019)
-GCA_024294585.1_rVipLat1.pri	Lataste's viper (rVipLat1 2022 VGP)
-GCF_009764565.3_rDerCor1.pri.v4	leatherback sea turtle (v4 2021 refseq G10K VGP)
-GCA_009762595.1_rDerCor1.alt	leatherback sea turtle (alt pseudohaplotype 2019 VGP)
+GCA_024294585.1_rVipLat1.pri	Lataste's viper (rVipLat1 primary hap 2022)
+GCF_009764565.3_rDerCor1.pri.v4	leatherback sea turtle (v4 primary hap 2021 refseq G10K)
+GCA_009762595.1_rDerCor1.alt	leatherback sea turtle (alternate hap 2019)
 GCF_023653815.1_GSC_CCare_1.0	loggerhead turtle (SJ_126:Eziel1 2022)
 GCF_900518725.1_TS10Xv2-PRI	mainland tiger snake
 GCA_014337955.1_AspMar1.0	marbled whiptail (SIMRID8450 2020)
 GCA_947247035.1_rVipUrs1.1	meadow viper (primary hap 2022)
 GCA_947247025.1_rVipUrs1.1_alternate_haplotype	meadow viper (alternate hap 2022)
-GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (WGS:JAMKFC01 2022 VGP)
-GCA_025201965.1_rGopFla2.pat.asm	Mexican gopher tortoise (WGS:JAMKFD01 2022 VGP)
+GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (WGS:JAMKFC01 2022)
+GCA_025201965.1_rGopFla2.pat.asm	Mexican gopher tortoise (WGS:JAMKFD01 2022)
 GCF_017654505.1_ASM1765450v1	Mississippi paddlefish
 GCF_027358695.1_aSpeBom1.2.pri	plains spadefoot toad (aSpeBom1 primary hap 2022)
 GCF_013100865.1_CAS_Tse_1.0	red-eared slider turtle
 GCF_016161935.1_ASM1616193v1	Reeves's turtle
 GCA_023333525.1_rAspTig1.0.p	San Diegan tiger whiptail (HBS 135688 2022)
-GCA_023333555.1_rAspTig1.0.a	San Diegan tiger whiptail (alt pseudohaplotype HBS 135688 2022)
-GCA_009819545.1_rLacAgi1.alt	sand lizard (alt pseudohaplotype 2019 VGP)
-GCF_009819535.1_rLacAgi1.pri	sand lizard (2019 VGP)
+GCA_023333555.1_rAspTig1.0.a	San Diegan tiger whiptail (alternate hap HBS 135688 2022)
+GCA_009819545.1_rLacAgi1.alt	sand lizard (alternate hap 2019)
+GCF_009819535.1_rLacAgi1.pri	sand lizard (primary hap 2019)
 GCF_001447785.1_Gekko_japonicus_V1.1	Schlegel's Japanese gecko
-GCA_010993595.1_kPetMar1.alt	sea lamprey (alt pseudohaplotype 2020 VGP)
-GCF_010993605.1_kPetMar1.pri	sea lamprey (2020 VGP)
+GCA_010993595.1_kPetMar1.alt	sea lamprey (alternate hap 2020)
+GCF_010993605.1_kPetMar1.pri	sea lamprey (primary hap 2020)
 GCF_902713615.1_sScyCan1.1	smaller spotted catshark
-GCF_009764475.1_sPriPec2.1.pri	smalltooth sawfish (2019 refseq)
-GCA_009764485.1_sPriPec2.alt	smalltooth sawfish (alt pseudohaplotype 2019 VGP)
+GCF_009764475.1_sPriPec2.1.pri	smalltooth sawfish (primary hap 2019 refseq)
+GCA_009764485.1_sPriPec2.alt	smalltooth sawfish (alternate hap 2019)
 GCF_000242695.1_LepOcu1	spotted gar
 GCA_902713435.2_fAciRut3.2_paternal_haplotype	sterlet (fAciRut3.2 2022)
 GCF_010645085.1_ASM1064508v1	sterlet (Gen_M01 2020)
-GCF_010909765.2_sAmbRad1.1.pri	thorny skate (CabotCenter1 v1.1 2020 VGP)
-GCA_010909745.1_sAmbRad1.alt	thorny skate (alt pseudohaplotype CabotCenter1 2020 VGP)
+GCF_010909765.2_sAmbRad1.1.pri	thorny skate (primary hap CabotCenter1 v1.1 2020)
+GCA_010909745.1_sAmbRad1.alt	thorny skate (alternate hap CabotCenter1 2020)
 GCF_002925995.2_T_m_triunguis-2.0	three-toed box turtle
 GCF_016545835.1_ASM1654583v1	tiger rattlesnake
 GCF_901765095.1_aMicUni1.1	tiny Cayenne caecilian
-GCA_901765105.1_aMicUni1.1_alternate_haplotype	tiny Cayenne caecilian (alt pseudohaplotype 2019 VGP)
+GCA_901765105.1_aMicUni1.1_alternate_haplotype	tiny Cayenne caecilian (alternate hap 2019)
 GCF_021028975.2_MPM_Stown_v2.3	Townsend's dwarf sphaero (gecko TG3544 2022)
 GCF_000004195.4_UCB_Xtro_10.0	tropical clawed frog
-GCF_901001135.1_aRhiBiv1.1	two-lined caecilian (2019 VGP)
-GCA_901001175.1_aRhiBiv1.1_alternate_haplotype	two-lined caecilian (alt pseudohaplotype 2019 VGP)
+GCF_901001135.1_aRhiBiv1.1	two-lined caecilian (2019)
+GCA_901001175.1_aRhiBiv1.1_alternate_haplotype	two-lined caecilian (alternate hap 2019)
 GCF_011800845.1_UG_Zviv_1	viviparous/common lizard
 GCF_019279795.1_PAN1.0	West African lungfish
 GCF_000241765.4_Chrysemys_picta_BioNano-3.0.4	western painted turtle (v304 2020)
-GCA_009769695.1_rThaEle1.alt	western terrestrial garter snake (alt pseudohaplotype 2019 VGP)
-GCF_009769535.1_rThaEle1.pri	western terrestrial garter snake (2019 VGP)
+GCA_009769695.1_rThaEle1.alt	western terrestrial garter snake (alternate hap 2019)
+GCF_009769535.1_rThaEle1.pri	western terrestrial garter snake (primary hap 2019)
 GCF_001642345.1_ASM164234v2	whale shark (Ralph 2017 Emory U)
 GCF_021869965.1_sRhiTyp1.1	whale shark (14 2022 Squalomix)
 GCF_004010195.1_ASM401019v2	whitespotted bambooshark
