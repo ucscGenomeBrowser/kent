@@ -1678,6 +1678,8 @@ struct track *trackNew()
 {
 struct track *tg;
 AllocVar(tg);
+tg->color = colorIxToRgb(MG_BLACK);
+tg->altColor = colorIxToRgb(MG_BLACK);
 return tg;
 }
 
