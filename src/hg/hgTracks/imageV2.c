@@ -33,7 +33,10 @@ struct flatTracks *flatTrack;
 AllocVar(flatTrack);
 flatTrack->track = track;
 char var[256];  // The whole reason to do this is to reorder tracks/subtracks in the image!
-safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
+if (track->originalTrack != NULL)
+    safef(var,sizeof(var),"%s_%s",track->originalTrack,IMG_ORDER_VAR);
+else
+    safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
 flatTrack->order = cartUsualInt(cart, var,IMG_ANYORDER);
 if (flatTrack->order >= IMG_ORDERTOP)
     {
@@ -62,7 +65,11 @@ int flatTracksCmp(const void *va, const void *vb)
 const struct flatTracks *a = *((struct flatTracks **)va);
 const struct flatTracks *b = *((struct flatTracks **)vb);
 if (a->order == b->order)
+    {
+    if ((a->track->originalTrack != NULL) || (b->track->originalTrack != NULL))
+        return a->track->visibility - b->track->visibility;
     return tgCmpPriority(&(a->track),&(b->track));
+    }
 return (a->order - b->order);
 }
 
@@ -997,6 +1004,8 @@ int imgTrackOrderCmp(const void *va, const void *vb)
 {
 const struct imgTrack *a = *((struct imgTrack **)va);
 const struct imgTrack *b = *((struct imgTrack **)vb);
+if (a->order == b->order)
+    return a->vis - b->vis;
 return (a->order - b->order);
 }
 
@@ -1978,6 +1987,38 @@ if (slice->parentImg)
     hPrintf("</div>");
 }
 
+struct imgTrack *smashSquish(struct imgTrack *imgTrackList)
+/* Javascript doesn't know about our trick to do squishyPack so we need to pass it a single div instead of two. 
+ * We assume that the linked track immediately follows the original track in the sorted list. */
+{
+struct imgTrack *nextImg, *imgTrack;
+
+for (imgTrack = imgTrackList; imgTrack!=NULL;imgTrack = nextImg)
+    {
+    nextImg = imgTrack->next;
+    boolean joinNext =  ((nextImg != NULL)  && nextImg->linked);
+
+    if (joinNext)  // Smash these together
+        {
+        struct imgSlice *packedSlices = imgTrack->slices;
+        struct imgSlice *squishSlices = imgTrack->next->slices;
+        for(; packedSlices; packedSlices = packedSlices->next, squishSlices = squishSlices->next)
+            {
+            if (packedSlices->type != stCenter)
+                {
+                if ((packedSlices->map != NULL) && (squishSlices->map != NULL))
+                    packedSlices->map->items = slCat(packedSlices->map->items, squishSlices->map->items);
+                packedSlices->height += squishSlices->height;
+                }
+            }
+        imgTrack->next = nextImg->next;
+        nextImg = nextImg->next;
+        }
+    }
+
+return imgTrackList;
+}
+
 void imageBoxDraw(struct imgBox *imgBox)
 // writes a entire imgBox including all tracksas HTML
 {
@@ -2044,7 +2085,7 @@ struct jsonElement *jsonTdbVars = newJsonObject(newHash(8));
 jsonTdbSettingsInit(jsonTdbVars);
 
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
-struct imgTrack *imgTrack = imgBox->imgTracks;
+struct imgTrack *imgTrack = smashSquish(imgBox->imgTracks);
 for (;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );

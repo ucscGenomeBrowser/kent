@@ -64,6 +64,8 @@ void chromAliasJsonOutput(struct chromAlias *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+void chromAliasSetupBb(char *database, char *bbFile);
+/* Look for a chromAlias bigBed file and open it. */
 
 void chromAliasSetup(char *database);
 /* Read in the chromAlias file/table for this database. */

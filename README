@@ -1,13 +1,13 @@
 CONTENTS AND COPYRIGHT
 
 This directory contains the entire source tree for the
-UCSC Genome Bioinformatics Group's suite of biological analysis
+UCSC Genome Browser Group's suite of biological analysis
 and web display programs as well as some of Jim Kent's own tools.
 All files are copyrighted, but license is hereby granted for personal,
 academic, and non-profit use. Please see the LICENSE file in the
 current directory for more details, the license differs by directory.
-If you want only the MIT-license parts of the code (libraries and command
-line tools, e.g. for package managers and pipelines), have a look at
+If you want only the MIT-licensed parts of the code (libraries and command
+line tools, e.g. for use in package managers and pipelines), have a look at
 https://github.com/ucscGenomeBrowser/kent-core
 
 Commercial users interested in the UCSC Genome Browser please see
