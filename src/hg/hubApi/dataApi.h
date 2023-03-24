@@ -32,6 +32,7 @@
 #include "wiggle.h"
 #include "hubPublic.h"
 #include "cartTrackDb.h"
+#include "chromAlias.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -229,6 +230,12 @@ boolean protectedTrack(char *db, struct trackDb *tdb, char *trackName);
 
 boolean isWiggleDataTable(char *type);
 /* is this a wiggle data track table */
+
+char *chrOrAlias(char *db, char *hubUrl);
+/* get incoming chr name, may be an alias, return the native chr name */
+
+void hubAliasSetup(struct trackHubGenome *hubGenome);
+/* see if this hub has an alias file and run chromAliasSetupBb() for it */
 
 /* ######################################################################### */
 /*  functions in getData.c */

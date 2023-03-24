@@ -191,7 +191,7 @@ zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
 | $scriptDir/findRefBackfill.pl > cog.refBackfill
 cut -f 1 *.refBackfill > refBackfill.ids
 sort -u ../tooManyEpps.ids ../badBranchSeed.ids dropoutContam.ids refBackfill.ids \
-| grep -vFwf <(tail -n+4 $scriptDir/includeRecombinants.tsv | cut -f 1) \
+| grep -vFwf <(tail -n+2 $scriptDir/includeRecombinants.tsv | cut -f 1) \
     > exclude.ids
 
 # Get new GenBank sequences with at least $minReal non-N bases.

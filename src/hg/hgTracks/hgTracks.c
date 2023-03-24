@@ -4745,8 +4745,8 @@ for (track = trackList; track != NULL; track = nextTrack)
         double squishyPackPoint = atof(string);
 
         /* clone the track */
-        char buffer[strlen(track->track) + strlen("Squish") + 1];
-        safef(buffer, sizeof buffer, "%sSquish", track->track);
+        char buffer[strlen(track->track) + strlen("Squinked") + 1];
+        safef(buffer, sizeof buffer, "%sSquinked", track->track);
 
         struct track *squishTrack = CloneVar(track);
         squishTrack->tdb = CloneVar(track->tdb);
@@ -4773,7 +4773,7 @@ for (track = trackList; track != NULL; track = nextTrack)
         slReverse(&squishTrack->items);
         
         squishTrack->track = cloneString(buffer);
-        squishTrack->originalTrack = track->track;
+        squishTrack->originalTrack = cloneString(track->track);
         squishTrack->shortLabel = cloneString(buffer);
         squishTrack->longLabel = cloneString(buffer);
 
@@ -5209,6 +5209,8 @@ if (theImgBox)
             int order = flatTrack->order;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,
                                                isCenterLabelIncluded(track),order);
+            if (flatTrack->track->originalTrack != NULL)
+                curImgTrack->linked = TRUE;
             }
         }
     }
