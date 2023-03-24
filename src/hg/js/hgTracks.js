@@ -5486,3 +5486,32 @@ $(document).ready(function()
     }
     
 });
+
+function hgtWarnTiming(maxSeconds) {
+    /* show a dialog box if the page load time was slower than x seconds. Has buttons to hide or never show this again. */
+    var loadTime = window.performance.timing.domContentLoadedEventStart-window.performance.timing.navigationStart; /// in msecs
+    var loadSeconds = loadTime/1000;
+    var skipNotification = localStorage.getItem("hgTracks.hideSpeedNotification");
+    if (loadSeconds > maxSeconds && !skipNotification) {
+        var div = document.createElement("div");
+        div.style.display = "none";
+        div.id = "notifBox";
+        div.innerHTML = "This page took "+loadSeconds+" seconds to load. We try to make the UCSC Genome Browser responsive. If you want us to look into "+
+            "why the page is so slow, you can create a "+
+            "session link with My Data &gt; My Sessions and send it to genome@soe.ucsc.edu.<br>"+
+            "<div style='text-align:center'>"+
+            "<button id='notifyHide'>Close</button>&nbsp;"+
+            "<button id='notifyHideForever'>Close and never show again</button>"+
+            "</div>";
+        document.body.appendChild(div);
+        notifBoxShow();
+
+        $("#notifyHide").click( function() {
+            $("#notifBox").remove();
+        });
+        $("#notifyHideForever").click( function() {
+            $("#notifBox").remove();
+            localStorage.setItem("hgTracks.hideSpeedNotification", "1");
+        });
+    }
+}
