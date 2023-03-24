@@ -5498,7 +5498,7 @@ function hgtWarnTiming(maxSeconds) {
         div.id = "notifBox";
         div.innerHTML = "This page took "+loadSeconds+" seconds to load. We try to make the UCSC Genome Browser responsive. If you want us to look into "+
             "why the page is so slow, you can create a "+
-            "session link with My Data &gt; My Sessions and send it to genome@soe.ucsc.edu.<br>"+
+            "session link with My Data &gt; My Sessions and send it to genome-www@soe.ucsc.edu.<br>"+
             "<div style='text-align:center'>"+
             "<button id='notifyHide'>Close</button>&nbsp;"+
             "<button id='notifyHideForever'>Close and never show again</button>"+
