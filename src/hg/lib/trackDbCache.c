@@ -104,6 +104,7 @@ else
     newTdb->parent = parent;
 
 newTdb->track = lmCloneString(lm, tdb->track);
+newTdb->errMessage = lmCloneString(lm, tdb->errMessage);
 newTdb->table = lmCloneString(lm, tdb->table);
 newTdb->shortLabel = lmCloneString(lm, tdb->shortLabel);
 newTdb->longLabel = lmCloneString(lm, tdb->longLabel);
