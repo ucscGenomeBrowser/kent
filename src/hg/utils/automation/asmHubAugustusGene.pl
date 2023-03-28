@@ -18,9 +18,13 @@ if ($argc != 3) {
 }
 
 my $asmId = shift;
+my @parts = split('_', $asmId, 3);
+my $accession = "$parts[0]_$parts[1]";
 my $namesFile = shift;
 my $bbiPrefix = shift;
 my $augustusBbi = "$bbiPrefix.augustus.bb";
+my $asmIdPath = &AsmHub::asmIdToPath($asmId);
+my $downloadGtf = "https://hgdownload.soe.ucsc.edu/hubs/$asmIdPath/$accession/genes/$asmId.augustus.gtf.gz";
 
 if ( ! -s $augustusBbi ) {
   printf STDERR "ERROR: can not find augustus bbi file:\n\t'%s'\n", $augustusBbi;
@@ -50,6 +54,11 @@ for the $assemblyDate $em${organism}$noEm/$asmId genome assembly.<br>
 The predictions are based on the genome sequence alone.<br>
 <br>
 $geneCount
+</p>
+
+<h2>Data Access</h2>
+<p>
+Download <a href='$downloadGtf' target=_blank> $asmId.augustus.gtf.gz </a> GTF file.
 </p>
 
 <h2>Methods</h2>

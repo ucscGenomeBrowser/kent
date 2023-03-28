@@ -16,19 +16,15 @@ if ($argc != 3) {
   exit 255;
 }
 
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
-}
-
 my $asmId = shift;
+my @parts = split('_', $asmId, 3);
+my $accession = "$parts[0]_$parts[1]";
 my $namesFile = shift;
 my $trackDataDir = shift;
 my $ncbiRefSeqBbi = "$trackDataDir/ncbiRefSeq/$asmId.ncbiRefSeq.bb";
 my $asmType = "refseq";
+my $asmIdPath = &AsmHub::asmIdToPath($asmId);
+my $downloadGtf = "https://hgdownload.soe.ucsc.edu/hubs/$asmIdPath/$accession/genes/$asmId.ncbiRefSeq.gtf.gz";
 
 if ( ! -s $ncbiRefSeqBbi ) {
   printf STDERR "ERROR: can not find $asmId.ncbiRefSeq.bb file\n";
@@ -47,9 +43,9 @@ my $geneStats = `cat $trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeq.stats.txt | aw
 chomp $geneStats;
 my ($itemCount, $basesCovered) = split('\s+', $geneStats);
 my $percentCoverage = sprintf("%.3f", 100.0 * $basesCovered / $totalBases);
-$itemCount = commify($itemCount);
-$basesCovered = commify($basesCovered);
-my $totalBasesCmfy = commify($totalBases);
+$itemCount = &AsmHub::commify($itemCount);
+$basesCovered = &AsmHub::commify($basesCovered);
+my $totalBasesCmfy = &AsmHub::commify($totalBases);
 
 my $em = "<em>";
 my $noEm = "</em>";
@@ -81,6 +77,11 @@ help concerning RefSeq records.
 <p>
 For more information on the different gene tracks, see our <a target=_blank 
 href="/FAQ/FAQgenes.html">Genes FAQ</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Download <a href='$downloadGtf' target=_blank> $asmId.ncbiRefSeq.gtf.gz </a> GTF file.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -202,8 +203,8 @@ if ( -s "$trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeqCurated.stats.txt" ) {
   chomp $geneStats;
   ($itemCount, $basesCovered) = split('\s+', $geneStats);
   $percentCoverage = sprintf("%.3f", 100.0 * $basesCovered / $totalBases);
-  $itemCount = commify($itemCount);
-  $basesCovered = commify($basesCovered);
+  $itemCount = &AsmHub::commify($itemCount);
+  $basesCovered = &AsmHub::commify($basesCovered);
   printf <<_EOF_
 <p>
 <b>Curated gene count: </b>$itemCount<br>
@@ -224,8 +225,8 @@ if ( -s "$trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeqPredicted.stats.txt" ) {
   chomp $geneStats;
   ($itemCount, $basesCovered) = split('\s+', $geneStats);
   $percentCoverage = sprintf("%.3f", 100.0 * $basesCovered / $totalBases);
-  $itemCount = commify($itemCount);
-  $basesCovered = commify($basesCovered);
+  $itemCount = &AsmHub::commify($itemCount);
+  $basesCovered = &AsmHub::commify($basesCovered);
   printf <<_EOF_
 <p>
 <b>Predicted gene count: </b>$itemCount<br>
@@ -246,8 +247,8 @@ if ( -s "$trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeqOther.stats.txt" ) {
   chomp $geneStats;
   ($itemCount, $basesCovered) = split('\s+', $geneStats);
   $percentCoverage = sprintf("%.3f", 100.0 * $basesCovered / $totalBases);
-  $itemCount = commify($itemCount);
-  $basesCovered = commify($basesCovered);
+  $itemCount = &AsmHub::commify($itemCount);
+  $basesCovered = &AsmHub::commify($basesCovered);
   printf <<_EOF_
 <p>
 <b>Other annotation count: </b>$itemCount<br>
