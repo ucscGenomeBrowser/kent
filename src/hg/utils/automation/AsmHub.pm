@@ -37,3 +37,15 @@ sub asmSize($) {
     chomp $asmSize;
     return $asmSize;
 }
+
+# given a fully qualified asmId, e.g.: GCA_018504075.1_HG02723.alt.pat.f1_v2
+# return the string representating the path: GCA/018/504/075
+sub asmIdToPath($) {
+  my ($asmId) = @_;
+  my $gcX = substr($asmId, 0, 3);
+  my $d0 = substr($asmId, 4, 3);
+  my $d1 = substr($asmId, 7, 3);
+  my $d2 = substr($asmId, 10, 3);
+  my $ret = sprintf("%s/%s/%s/%s", $gcX, $d0, $d1, $d2);
+  return $ret;
+}

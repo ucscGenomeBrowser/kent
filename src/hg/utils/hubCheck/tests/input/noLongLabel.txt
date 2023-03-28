@@ -1,0 +1,29 @@
+hub noLongLabel
+shortLabel noLongLabel
+longLabel noLongLabel
+email braney@soe.ucsc.edu
+descriptionUrl hub.html
+useOneFile on
+
+genome mm10
+
+track Mouse
+type bigBed 9
+bigDataUrl https://data.cyverse.org/dav-anon/iplant/home/tli824/mouseAncHub/mouse_anc/tracks/mm10/bbi/Mouse.bb
+priority 1
+itemRgb On
+group heatmap
+shortLabel Mouse
+visibility dense
+maxItems 99999
+
+track fullTreeAnc35
+type bigBed 9
+bigDataUrl https://data.cyverse.org/dav-anon/iplant/home/tli824/mouseAncHub/mouse_anc/tracks/mm10/bbi/fullTreeAnc35.bb
+priority 2
+itemRgb On
+group heatmap
+shortLabel fullTreeAnc35
+visibility dense
+maxItems 99999
+

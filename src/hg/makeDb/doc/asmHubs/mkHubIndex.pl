@@ -238,7 +238,7 @@ END
 sub startTable() {
 print '
 <table class="sortable" border="1">
-<thead><tr><th>count</th>
+<thead style="position:sticky; top:0;"><tr><th>count</th>
   <th>common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
