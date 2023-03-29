@@ -5495,13 +5495,18 @@ function hgtWarnTiming(maxSeconds) {
     if (loadSeconds > maxSeconds && !skipNotification) {
         var div = document.createElement("div");
         div.style.display = "none";
+        div.style.width = "90%";
+        div.style.marginLeft = "100px";
         div.id = "notifBox";
-        div.innerHTML = "This page took "+loadSeconds+" seconds to load. We try to make the UCSC Genome Browser responsive. If you want us to look into "+
-            "why the page is so slow, you can create a "+
-            "session link with My Data &gt; My Sessions and send it to genome-www@soe.ucsc.edu.<br>"+
+        div.innerHTML = "This page took "+loadSeconds+" seconds to load. You can read "+
+            "<a href='../FAQ/FAQtracks.html#speed' target=_blank>our display speed FAQ</a> to learn more about how the track selection influences the "+
+            "performance of the Genome Browser.<br> "+
+            "Also, we try to make the UCSC Genome Browser responsive. If you think the page should be faster and want us to look into "+
+            "this particular track combination, you can create a "+
+            "short session link with My Data &gt; My Sessions and send the link to genome-www@soe.ucsc.edu.<br>"+
             "<div style='text-align:center'>"+
             "<button id='notifyHide'>Close</button>&nbsp;"+
-            "<button id='notifyHideForever'>Close and never show again</button>"+
+            "<button id='notifyHideForever'>Close and do not show again</button>"+
             "</div>";
         document.body.appendChild(div);
         notifBoxShow();
