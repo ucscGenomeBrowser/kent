@@ -232,7 +232,7 @@ sub startTable() {
 # coordinate the order of these column headings with the @trackList listed above
 
 print '<table class="sortable" border="1">
-<thead><tr><th>count</th>
+<thead style="position:sticky; top:0;"><tr><th>count</th>
   <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
 ';
   print '<th class="sorttable_numeric">ncbiRefSeq</th>

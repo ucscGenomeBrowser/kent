@@ -16,18 +16,14 @@ if ($argc != 3) {
   exit 255;
 }
 
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
-}
-
 my $asmId = shift;
+my @parts = split('_', $asmId, 3);
+my $accession = "$parts[0]_$parts[1]";
 my $namesFile = shift;
 my $trackDataDir = shift;
 my $xenoRefGeneBbi = "$trackDataDir/xenoRefGene/$asmId.xenoRefGene.bb";
+my $asmIdPath = &AsmHub::asmIdToPath($asmId);
+my $downloadGtf = "https://hgdownload.soe.ucsc.edu/hubs/$asmIdPath/$accession/genes/$asmId.xenoRefGene.gtf.gz";
 
 if ( ! -s $xenoRefGeneBbi ) {
   printf STDERR "ERROR: can not find $asmId.xenoRefGene.bb file\n";
@@ -40,9 +36,9 @@ my $geneStats = `cat $trackDataDir/xenoRefGene/${asmId}.xenoRefGene.stats.txt | 
 chomp $geneStats;
 my ($itemCount, $basesCovered) = split('\s+', $geneStats);
 my $percentCoverage = sprintf("%.3f", 100.0 * $basesCovered / $totalBases);
-$itemCount = commify($itemCount);
-$basesCovered = commify($basesCovered);
-$totalBases = commify($totalBases);
+$itemCount = &AsmHub::commify($itemCount);
+$basesCovered = &AsmHub::commify($basesCovered);
+$totalBases = &AsmHub::commify($totalBases);
 
 my $em = "<em>";
 my $noEm = "</em>";
@@ -61,6 +57,11 @@ The RefSeq mRNAs gene track for the $assemblyDate $em${organism}$noEm/$asmId
 genome assembly displays translated blat alignments of vertebrate and
 invertebrate mRNA in
 <a href="https://www.ncbi.nlm.nih.gov/genbank/" target="_blank"> GenBank</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Download <a href='$downloadGtf' target=_blank> $asmId.xenoRefGene.gtf.gz </a> GTF file.
 </p>
 
 <h2>Track statistics summary</h2>

@@ -615,12 +615,9 @@ struct cartJson *cj = cartJsonNew(cart);
 // the results page
 boolean doRedirect = TRUE;
 measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
-(void)doQuery(cj->jw, db, allCategories, doRedirect, userSearch, measureTiming);
-/* This is an option to do an automatic redirect but I'm commenting it
- * out for now, as this page suggests the refresh option is not helpful
- * for visually impaired users:
- * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
- * For now the client javascript can handle the redirect
+struct hgPositions *hgp = doQuery(cj->jw, db, allCategories, doRedirect, userSearch, measureTiming);
+// Since we are coming from another CGI or a URL manip, go directly to hgTracks
+// if we resolve to a single position
 if (hgp && hgp->singlePos)
     {
     char newPosBuf[128];
@@ -630,29 +627,29 @@ if (hgp && hgp->singlePos)
         cartSetString(cj->cart, "addHighlight", hgp->singlePos->highlight);
     puts("Content-type:text/html\n");
     puts("<HTML>\n<HEAD>\n");
-    hPrintf("<META HTTP-EQUIV=refresh CONTENT=\"1;URL="
-            "../cgi-bin/hgTracks?db=%s&position=%s\">\n", db, newPosBuf);
+    printf("<script>window.location.href=\"../cgi-bin/hgTracks?db=%s&position=%s\";</script>\n", db, newPosBuf);
     puts("</HEAD>\n</HTML>");
     }
 else
-*/
-dyStringPrintf(cj->jw->dy, ", \"db\": '%s'", db);
-dyStringPrintf(cj->jw->dy, ", \"categs\": ");
-jsonDyStringPrint(cj->jw->dy, categsJsonElement, NULL,-1);
-dyStringPrintf(cj->jw->dy, ", \"trackGroups\": ");
-jsonDyStringPrint(cj->jw->dy, makeTrackGroupsJson(db), NULL, -1);
-dyStringPrintf(cj->jw->dy, ", \"genomes\": ");
-jsonDyStringPrint(cj->jw->dy, getGenomes(), NULL, -1);
+    {
+    dyStringPrintf(cj->jw->dy, ", \"db\": '%s'", db);
+    dyStringPrintf(cj->jw->dy, ", \"categs\": ");
+    jsonDyStringPrint(cj->jw->dy, categsJsonElement, NULL,-1);
+    dyStringPrintf(cj->jw->dy, ", \"trackGroups\": ");
+    jsonDyStringPrint(cj->jw->dy, makeTrackGroupsJson(db), NULL, -1);
+    dyStringPrintf(cj->jw->dy, ", \"genomes\": ");
+    jsonDyStringPrint(cj->jw->dy, getGenomes(), NULL, -1);
 
-// Now we need to actually spit out the page + json
-webStartGbNoBanner(cart, db, "Search Disambiguation");
-printMainPageIncludes();
-jsInlineF("var hgsid='%s';\n", cartSessionId(cart));
-jsInline("var cartJson = {");
-jsInline(cj->jw->dy->string);
-jsInline("};\n");
-jsInline("hgSearch.init();\n");
-webEndGb();
+    // Now we need to actually spit out the page + json
+    webStartGbNoBanner(cart, db, "Search Disambiguation");
+    printMainPageIncludes();
+    jsInlineF("var hgsid='%s';\n", cartSessionId(cart));
+    jsInline("var cartJson = {");
+    jsInline(cj->jw->dy->string);
+    jsInline("};\n");
+    jsInline("hgSearch.init();\n");
+    webEndGb();
+    }
 }
 /* End do commands */
 

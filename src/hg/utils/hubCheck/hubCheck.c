@@ -862,6 +862,9 @@ if (options->htmlOut)
 
 if (errCatchStart(errCatch))
     {
+    if (tdb->errMessage)  // if we found any errors when first reading in the trackDb
+        errAbort("%s",tdb->errMessage);
+
     hubCheckParentsAndChildren(tdb);
     if (trackIsContainer)
         retVal |= hubCheckCompositeSettings(genome, tdb, errors, options);
