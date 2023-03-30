@@ -48,7 +48,7 @@ group varRep
 visibility hide
 #type bigBed 9 +
 html dgvPlusGold
-pennantIcon Updated red ../goldenPath/newsarch.html#032823 "Updated Mar. 29, 2023"
+pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
     track dgvMerged override
     parent dgvPlus on
