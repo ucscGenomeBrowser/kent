@@ -2161,7 +2161,7 @@ exonNumbers off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
-dataVersion 2016-05-15
+dataVersion 2020-02-25
 pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
 
