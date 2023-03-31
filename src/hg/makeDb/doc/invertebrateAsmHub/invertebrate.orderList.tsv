@@ -176,6 +176,7 @@ GCF_009650485.1_drosAlbom15112-1751.03v1	fly D.albomicans
 GCF_017639315.1_ASM1763931v2	fly D.ananassae (14024-0371.13 U. Maryland 2021)
 GCF_003285975.2_DanaRS2.1	fly D.ananassae (14024-0371.16-18 U. Chicago 2018)
 GCF_001654025.1_ASM165402v1	fly D.arizonae
+GCA_005876895.1_DaztRS1	fly D.azteca (UCSD 14012-1071.03 2019)
 GCF_000233415.1_Dbia_2.0	fly D.biarmipes (BCM 2013)
 GCF_018148935.1_ASM1814893v1	fly D.biarmipes (Stanford 2021)
 GCF_000236285.1_Dbip_2.0	fly D.bipectinata (BCM 2013)
@@ -192,18 +193,22 @@ GCF_000005155.2_dgri_caf1	fly D.grimshawi (Agencourt 2006)
 GCF_018153295.1_ASM1815329v1	fly D.grimshawi (Stanford 2021)
 GCF_900245975.1_DGUA_6	fly D.guanche
 GCF_003285905.1_DhydRS2	fly D.hydei
-GCF_004354385.1_UK_Dinn_1.0	fly D.innubila
+GCF_004354385.1_UK_Dinn_1.0	fly D.innubila (TH190305 2019 refseq)
+GCA_004354385.2_ASM435438v2	fly D.innubila (TH190305 2020 genbank)
 GCF_000224215.1_Dkik_2.0	fly D.kikkawai (Baylor 2013)
 GCF_018152535.1_ASM1815253v1	fly D.kikkawai (Stanford 2021)
+GCA_008121275.1_UCBerk_Dlow_1.0	fly D.lowei (Jillo6 2019)
 GCF_004382145.1_ASM438214v1	fly D.mauritiana
 GCF_000001215.4_Release_6_plus_ISO1_MT	fly D.melanogaster
 GCF_003369915.1_D.miranda_PacBio2.1	fly D.miranda
 GCF_000005175.2_dmoj_caf1	fly D.mojavensis (Agencourt 2006)
 GCF_018153725.1_ASM1815372v1	fly D.mojavensis (Stanford 2021)
 GCF_001654015.2_UFRJ_Dnav_4.2	fly D.navojoa
+GCA_024703675.1_RU_Dneb_q3p	fly D.nebulosa (14030-0761.06 2022)
 GCF_003285875.2_DnovRS2.1	fly D.novamexicana
 GCF_018151105.1_ASM1815110v1	fly D.obscura (Stanford 2021)
 GCF_002217835.1_Dobs_1.0	fly D.obscura 14011-0151.01
+GCA_005876975.1_DoreRS1	fly D.orena (14021-0245.01 2019)
 GCF_003286085.1_DperRS2	fly D.persimilis
 GCF_009870125.1_UCI_Dpse_MV25	fly D.pseudoobscura
 GCF_000236305.1_Drho_2.0	fly D.rhopaloa (modENCODE 2013)
@@ -279,6 +284,7 @@ GCA_902829235.1_CLODIP2	mayflies C.dipterum (2020)
 GCF_905333055.1_ilManJurt1.1	meadow brown (refseq 2021)
 GCF_000347755.3_Ccap_2.1	Mediterranean fruit fly
 GCF_000806345.2_ASM80634v2	melon fly (v2 USDA-PBARC White Pupae T1 2014)
+GCF_028554725.1_idZeuCucr1.2	melon fly (PBARC_wt_2022May primary hap 2023)
 GCF_028408465.1_idAnaLude1.1	Mexican fruit fly (Willacy primary hap 2023)
 GCF_023375885.1_qqDerAnde1.2	mites & ticks D.andersoni (2022)
 GCF_013339745.2_BIME_Dsil_1.4	mites & ticks D.silvarum (Dsil-2018 2022)

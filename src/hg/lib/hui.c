@@ -541,6 +541,18 @@ printf("</p>");
 return TRUE;
 }
 
+static void makeFileDownloads(char *fileDownloads) 
+/* print an additional file download link, file can be anywhere on the internet, useful e.g. for GTF files for gene tracks */
+{
+char *parts[2];
+int partCount = chopByWhite(fileDownloads, parts, 2);
+if (partCount!=2)
+    puts("<b>Internal Error:</b> The downloadUrl trackDb statement needs exactly two arguments, the file type and the URL.");
+char* fileType = parts[0];
+char* url = parts[1];
+printf("<br>Download: <a href=\"%s\">%s File</a>", url, fileType);
+}
+
 void extraUiLinks(char *db, struct trackDb *tdb, struct cart *cart)
 // Show metadata, and downloads, schema links where appropriate
 {
@@ -573,6 +585,11 @@ if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(
     if (downloadLink)
 	printf(", ");
     }
+
+char *fileDownloads = trackDbSetting(tdb, "downloadUrl");
+if (fileDownloads)
+    makeFileDownloads(fileDownloads);
+
 if (downloadLink)
     {
     // special case exception (hg18:NHGRI BiPs are in 7 different dbs but only hg18 has downloads):
