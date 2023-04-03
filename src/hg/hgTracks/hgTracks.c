@@ -4769,6 +4769,11 @@ for (track = trackList; track != NULL; track = nextTrack)
             else
                 slAddHead(&track->items, lf);
             }
+
+        // if the squish track has no items, don't bother including it
+        if (slCount(squishTrack->items) == 0)
+            continue;
+
         slReverse(&track->items);
         slReverse(&squishTrack->items);
         
