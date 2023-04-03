@@ -1406,14 +1406,14 @@ var hgGateway = (function() {
         clearWatermarkInput($('#positionInput'), positionWatermark);
     }
 
-    function setTaxId(taxId, db, doScrollToItem, doClearSpeciesInput) {
+    function setTaxId(taxId, db, org, doScrollToItem, doClearSpeciesInput) {
         // The user has selected a species (and possibly even a particular database) --
         // if we're not already using it, change to it.
         var cmd;
         if (uiState.hubUrl !== null || taxId !== uiState.taxId || (db && db !== uiState.db)) {
             uiState.taxId = taxId;
             uiState.hubUrl = null;
-            cmd = { setTaxId: { taxId: '' + taxId } };
+            cmd = { setTaxId: { taxId: '' + taxId, org: org } };
             if (db) {
                 uiState.db = db;
                 cmd.setTaxId.db = db;
@@ -1428,7 +1428,7 @@ var hgGateway = (function() {
         }
   }
 
-    function setHubDb(hubUrl, taxId, db, hubName, isAutocomplete) {
+    function setHubDb(hubUrl, taxId, db, hubName, org, isAutocomplete) {
         // User clicked on a hub name (switch to its default genome) or selected an
         // assembly hub from autocomplete (switch to that assembly hub db).
         var cmd;
@@ -1460,13 +1460,14 @@ var hgGateway = (function() {
         // It might be a taxId and/or db from dbDb, or it might be a hub db.
         var taxId = item.taxId || -1;
         var db = item.db;
+        var org = item.org;
         if (item.hubUrl) {
             // The autocomplete sends the hub database from hubPublic.dbList,
             // without the hub prefix -- restore the prefix here.
             db = item.hubName + '_' + item.db;
-            setHubDb(item.hubUrl, taxId, db, item.hubName, true);
+            setHubDb(item.hubUrl, taxId, db, item.hubName, org, true);
         } else {
-            setTaxId(taxId, item.db, true, false);
+            setTaxId(taxId, item.db, org, true, false);
         }
     }
 
@@ -1474,7 +1475,7 @@ var hgGateway = (function() {
         // When user clicks on a label, use that taxId (default db);
         // don't scroll to the label because if they clicked on it they can see it already;
         // do clear the autocomplete input.
-        setTaxId(taxId, null, false, true);
+        setTaxId(taxId, null, null, false, true);
     }
 
     function onClickHubName(hubUrl, taxId, db, hubName) {
