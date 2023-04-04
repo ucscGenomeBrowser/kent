@@ -220,6 +220,7 @@ if [ -s "$buildDir/trackData/repeatMasker/versionInfo.txt" ]; then
    ln -s trackData/repeatMasker/versionInfo.txt "$buildDir/${asmId}.repeatMasker.version.txt"
 fi
 if [ -s "$buildDir/trackData/repeatModeler/${asmId}-families.fa" ]; then
+   rm -f "$buildDir/${asmId}.rmsk.customLib.fa.gz"
    cp -p "$buildDir/trackData/repeatModeler/${asmId}-families.fa" "$buildDir/${asmId}.rmsk.customLib.fa"
    gzip "$buildDir/${asmId}.rmsk.customLib.fa"
 fi
