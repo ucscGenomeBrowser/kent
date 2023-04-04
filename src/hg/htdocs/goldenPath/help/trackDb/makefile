@@ -42,4 +42,5 @@ doInstall:
 	cp ${CPFLAGS} trackDbDoc.css ${DEST}
 	cp ${CPFLAGS} trackDbDoc.html ${DEST}
 	cp ${CPFLAGS} trackDbHub.html ${DEST}
+	cp ${CPFLAGS} changes.html ${DEST}
 	cp ${CPFLAGS} ${HUB_SPEC_FILES} ${DEST}

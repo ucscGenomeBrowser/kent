@@ -505,7 +505,7 @@ void writePrimers(struct gfPcrOutput *gpo, char *fileName)
 {
 if (gpo == NULL)
     return;
-FILE *f = mustOpen(fileName, "w");
+FILE *f = mustOpen(fileName, "a");
 fprintf(f, "%s\t%s\n", gpo->fPrimer, gpo->rPrimer);
 carefulClose(&f);
 }
@@ -516,15 +516,28 @@ void writePcrResultTrack(struct gfPcrOutput *gpoList, char *db, char *target)
 char *cartVar = pcrResultCartVar(db);
 struct tempName bedTn, primerTn;
 char buf[2048];
-trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
-trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
-gfPcrOutputWriteAll(gpoList, "psl", NULL, bedTn.forCgi);
-writePrimers(gpoList, primerTn.forCgi);
-if (isNotEmpty(target))
-    safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
+char *pslFile, *txtFile, *cartResult;
+if ( (cartResult = cartOptionalString(cart, cartVar)) != NULL)
+    {
+    char *pcrFiles[3];
+    chopByWhite(cloneString(cartResult), pcrFiles, 3);
+    pslFile = pcrFiles[0];
+    txtFile = pcrFiles[1];
+    gfPcrOutputWriteAll(gpoList, "psl", NULL, pslFile);
+    writePrimers(gpoList, txtFile);
+    }
 else
-    safef(buf, sizeof(buf), "%s %s", bedTn.forCgi, primerTn.forCgi);
-cartSetString(cart, cartVar, buf);
+    {
+    trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
+    trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
+    gfPcrOutputWriteAll(gpoList, "psl", NULL, bedTn.forCgi);
+    writePrimers(gpoList, primerTn.forCgi);
+    if (isNotEmpty(target))
+        safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
+    else
+        safef(buf, sizeof(buf), "%s %s", bedTn.forCgi, primerTn.forCgi);
+    cartSetString(cart, cartVar, buf);
+    }
 }
 
 static void printHelpLinks(struct gfPcrOutput *gpoList) {
