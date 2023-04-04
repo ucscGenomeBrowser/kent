@@ -1,0 +1,2 @@
+#fname	db	matchCount	matchList
+in/hg19.bb	hg19	14	chr1,chr10,chr12,chr13,chr16,chr19,chr2,chr21,chr22,chr3,chr5,chr7,chr9,chrX
