@@ -15,7 +15,7 @@ ALK G1494E
 
 # More gene symbol HGVS-ish
 RERE:Thr758Serfs
-GBA:p.Leu29Alafs*18
+GBA1:p.Leu29Alafs*18
 H6PD Val320=
 MTHFR Pro101_Gly102insLeuTyrIleAspValThrTrpHisProAlaGlyAspPro
 YARS1 p.Val153_Val156del
