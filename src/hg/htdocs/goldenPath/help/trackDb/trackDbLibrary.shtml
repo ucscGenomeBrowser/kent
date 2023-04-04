@@ -650,6 +650,18 @@
     <pre>   directUrl http://mygenes.org/cgi-bin/geneView/%s</pre>
 </DIV>
 
+<DIV class="downloadUrl"><span class="types all"></span>
+<div class="format"><code>downloadUrl &lt;label&gt; &lt;URL&gt;</code></div>
+    <P>While description HTML pages can contain download instructions, having external file
+    download links directly specified in trackDb makes it possible show these links 
+    outside the description HTML pages. The URLs here are shown above the description page,
+    right under the "data format" link. The <tt>label</tt> can be any string and 
+    the URL should be absolute, including the server.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   downloadUrl GFF https://mywebsite.com/ucscTrack.gff.gz</pre>
+</DIV>
+
 <DIV class="otherSpecies"><span class="types all"></span>
 <div class="format"><code>otherSpecies &lt;otherSpecies&gt;</code></div>
     <P>The name of the other assembly in the pairwise alignment for this track. </P>

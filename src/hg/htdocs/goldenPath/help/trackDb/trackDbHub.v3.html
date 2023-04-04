@@ -45,6 +45,10 @@
 <DIV class="trackDbHub_intro">
 <H1>Hub Track Database Definition (<SPAN id="trackDbHub_version">v3</SPAN>)</H1>
 <H2>How to declare Dataset Display Settings in Genome Browser Hubs</H2>
+
+    <p>For returning readers: We keep a <a href="changes.html">list of
+        changes</a> to the trackDb specification below.</p>
+
     <P>This document describes how to set dataset display characteristics
     using "track database" or "trackDb" settings through key-value pair
     associations used in a Track Hub's trackDb.txt file.
@@ -65,7 +69,7 @@
         shortLabel Example Data
         longLabel The data in this track is format "bigBed 3".    </pre>
 
-    <P>A basic track stanza should have these five above settings
+    <P>Every track stanza should have these five settings
     (<code>track type bigDataUrl shortLabel longLabel</code>).
     The first line's <code>track</code> key value (<code>myFirstTrack</code>) is the
     identifier for the dataset given to the Browser and it must be
@@ -277,6 +281,9 @@ in the sections below.</I>
     <TR VALIGN=TOP><TD class="directUrl_for_hubs"><A name="directUrl_for_hubs"></A>
         <A name="directUrl"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">directUrl &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="downloadUrl"><A name="downloadUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">downloadUrl &lt;label&gt; &lt;URL&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="iframeUrl"><A name="iframeUrl"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">iframeUrl &lt;url&gt;</code></div>
