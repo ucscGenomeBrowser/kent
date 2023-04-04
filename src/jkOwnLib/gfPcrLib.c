@@ -327,7 +327,7 @@ void gfPcrOutputWriteAll(struct gfPcrOutput *outList,
  * to file.  If url is non-null it should be a printf formatted
  * string that takes %s, %d, %d for chromosome, start, end. */
 {
-FILE *f = mustOpen(fileName, "w");
+FILE *f = mustOpen(fileName, "a");
 gfPcrOutputWriteList(outList, outType, url, f);
 carefulClose(&f);
 }
