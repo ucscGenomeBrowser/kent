@@ -541,16 +541,34 @@ printf("</p>");
 return TRUE;
 }
 
-static void makeFileDownloads(char *fileDownloads) 
-/* print an additional file download link, file can be anywhere on the internet, useful e.g. for GTF files for gene tracks */
+static void printDownloadUrl(char *downloadUrl)
+/* given a string <label><space><url>, print a nice download link */
 {
 char *parts[2];
-int partCount = chopByWhite(fileDownloads, parts, 2);
+int partCount = chopByWhiteRespectDoubleQuotes(downloadUrl, parts, 2);
 if (partCount!=2)
     puts("<b>Internal Error:</b> The downloadUrl trackDb statement needs exactly two arguments, the file type and the URL.");
 char* fileType = parts[0];
+stripString(fileType, "\"");  // Remove any double quotes now and chop by commmas
 char* url = parts[1];
-printf("<br>Download: <a href=\"%s\">%s File</a>", url, fileType);
+printf("<br>Download: <a href=\"%s\">%s</a>", url, fileType);
+}
+
+static void makeFileDownloads(struct trackDb *tdb) 
+/* given either downloadUrl or downloadUrl.1/.2/... in trackDb, print links to these files.
+ * File can be anywhere on the internet, useful e.g. for GTF files for gene tracks */
+{
+char *downloadUrl = trackDbSetting(tdb, "downloadUrl");
+struct slName* tdbNames = trackDbSettingsWildMatch(tdb, "downloadUrl.*");
+if (downloadUrl)
+    printDownloadUrl(downloadUrl);
+
+while (tdbNames != NULL)
+    {
+    struct slName *tdbName = slPopHead(&tdbNames);
+    printDownloadUrl(trackDbSetting(tdb, tdbName->name));
+    slNameFree(&tdbName);
+    }
 }
 
 void extraUiLinks(char *db, struct trackDb *tdb, struct cart *cart)
@@ -586,9 +604,7 @@ if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(
 	printf(", ");
     }
 
-char *fileDownloads = trackDbSetting(tdb, "downloadUrl");
-if (fileDownloads)
-    makeFileDownloads(fileDownloads);
+makeFileDownloads(tdb);
 
 if (downloadLink)
     {

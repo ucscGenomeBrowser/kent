@@ -130,7 +130,7 @@ dividers *
 dragAndDrop *
 drawMode hic
 doWiggle bigBed
-downloadUrl *
+downloadUrl* *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
