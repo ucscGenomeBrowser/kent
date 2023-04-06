@@ -1,0 +1,11 @@
+dbs="hg19 hg38"
+
+for db in $dbs
+do
+    sed '/^ *#/d' ../../htdocs/inc/recTrackSets.$db.tab | tawk '{print $3}' |
+    while read session
+    do
+        grep -v -w -f verboten.lst $db/$session > $db/${session}.fixed
+    done
+done
+
