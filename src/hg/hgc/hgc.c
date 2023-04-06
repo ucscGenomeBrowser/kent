@@ -5751,7 +5751,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             if (bed->strand[0])
                 fb->strand = bed->strand[0];
             if (!clipFbToWindow(fb, winStart,winEnd))
-                break;
+                continue;
             slAddHead(&fbList, fb);
             }
         }
