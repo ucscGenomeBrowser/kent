@@ -11,6 +11,8 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS = ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
+pipelineTester = ${BIN_DIR}/pipelineTester
+
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     ${TABIX_TESTS} hacTreeTest testSumDoubles jsonQueryTest
@@ -50,76 +52,80 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \
-		pipelineExitCode pipelineWriteErr pipelineExecError pipelineSigpipe \
+		pipelineExitCode pipelineExitCode2X pipelineWriteErr pipelineExecError pipelineSigpipe \
 		pipelineTimeout
 
-pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
-	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
+pipelineWrite: ${pipelineTester} mkdirs
+	${pipelineTester} -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
 	gunzip -c output/$@.out.gz > output/$@.out
 	diff -b input/simple1.txt output/$@.out
 
 # add come junk to make sure output gets truncated
-pipelineWriteMult: ${BIN_DIR}/pipelineTester mkdirs
+pipelineWriteMult: ${pipelineTester} mkdirs
 	cat input/google.html > output/$@.wc
-	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.wc "gzip -1" "gzip -dc" "wc"
+	${pipelineTester} -write -pipeData=input/simple1.txt -otherEnd=output/$@.wc "gzip -1" "gzip -dc" "wc"
 	diff -b expected/simple1.wc output/$@.wc
 
-pipelineWriteFd: ${BIN_DIR}/pipelineTester mkdirs
-	${BIN_DIR}/pipelineTester -fdApi -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
+pipelineWriteFd: ${pipelineTester} mkdirs
+	${pipelineTester} -fdApi -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
 	gunzip -c output/$@.out.gz > output/$@.out
 	diff -b input/simple1.txt output/$@.out
 
-pipelineRead: ${BIN_DIR}/pipelineTester mkdirs
+pipelineRead: ${pipelineTester} mkdirs
 	gzip -1c input/simple1.txt >output/$@.in.gz
-	${BIN_DIR}/pipelineTester -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
+	${pipelineTester} -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
 	diff -b input/simple1.txt output/$@.out
 
-pipelineReadMult: ${BIN_DIR}/pipelineTester mkdirs
-	${BIN_DIR}/pipelineTester -pipeData=output/$@.wc -otherEnd=input/simple1.txt "gzip -1" "gzip -dc" "wc"
+pipelineReadMult: ${pipelineTester} mkdirs
+	${pipelineTester} -pipeData=output/$@.wc -otherEnd=input/simple1.txt "gzip -1" "gzip -dc" "wc"
 	diff -b expected/simple1.wc output/$@.wc
 
-pipelineReadFd: ${BIN_DIR}/pipelineTester mkdirs
+pipelineReadFd: ${pipelineTester} mkdirs
 	gzip -1c input/simple1.txt >output/$@.in.gz
-	${BIN_DIR}/pipelineTester -fdApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
+	${pipelineTester} -fdApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
 	diff -b input/simple1.txt output/$@.out
 
-pipelineReadMem: ${BIN_DIR}/pipelineTester mkdirs
+pipelineReadMem: ${pipelineTester} mkdirs
 	gzip -1c input/simple1.txt >output/$@.in.gz
-	${BIN_DIR}/pipelineTester -memApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
+	${pipelineTester} -memApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
 	diff -b input/simple1.txt output/$@.out
 
 # make sure pipe exit code makes it back
-pipelineExitCode: ${BIN_DIR}/pipelineTester
-	${BIN_DIR}/pipelineTester -exitCode=13 "sh -c 'exit 13'"
+pipelineExitCode: ${pipelineTester}
+	${pipelineTester} -exitCode=13 "sh -c 'exit 13'"
+
+# this failed when test was run twise in same process
+pipelineExitCode2X: ${pipelineTester}
+	${pipelineTester} -executeTwice -exitCode=13 "sh -c 'exit 13'"
 
 # test redirecting stderr, see that two process can write stderr, but only
 # the second's stdout should make it to the end of the pipe.  Since order
 # of writes to stderr is determined by process scheduling and when a process
 # terminates due to SIGPIPE, just check that stderr was not empty, don't
 # check contents.
-pipelineWriteErr: ${BIN_DIR}/pipelineTester mkdirs
-	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
+pipelineWriteErr: ${pipelineTester} mkdirs
+	${pipelineTester} -write -otherEnd=output/$@.out -stderr=output/$@.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
 	diff -b expected/$@.out output/$@.out
 	test -s output/$@.err
 
 # exec a non-existent program
-pipelineExecError: ${BIN_DIR}/pipelineTester mkdirs
-	if ${BIN_DIR}/pipelineTester -write -stderr=output/$@.err "./thatDoesNotCompute" 2> output/$@.parent.err ; then false else true ; fi
+pipelineExecError: ${pipelineTester} mkdirs
+	if ${pipelineTester} -write -stderr=output/$@.err "./thatDoesNotCompute" 2> output/$@.parent.err ; then false else true ; fi
 	diff -b expected/$@.err output/$@.err
 	diff -b expected/$@.parent.err output/$@.parent.err
 
 # test setting SIGPIPE by generating lots of output and then prematurely closing the
 # pipe
-pipelineSigpipe: ${BIN_DIR}/pipelineTester mkdirs
-	${BIN_DIR}/pipelineTester -sigpipe -maxNumLines=3 -pipeData=/dev/null "awk 'BEGIN {while (1) {print "foo"}}'"
+pipelineSigpipe: ${pipelineTester} mkdirs
+	${pipelineTester} -sigpipe -maxNumLines=3 -pipeData=/dev/null "awk 'BEGIN {while (1) {print "foo"}}'"
 
-pipelineTimeout: ${BIN_DIR}/pipelineTester mkdirs
-	if ${BIN_DIR}/pipelineTester -timeout=2 "bash -c 'sleep 20'" 2> output/$@.parent.err ; then false else true ; fi
+pipelineTimeout: ${pipelineTester} mkdirs
+	if ${pipelineTester} -timeout=2 "bash -c 'sleep 20'" 2> output/$@.parent.err ; then false else true ; fi
 	diff -b expected/$@.parent.err output/$@.parent.err
 
-${BIN_DIR}/pipelineTester: pipelineTester.o ${MYLIBS}
+${pipelineTester}: pipelineTester.o ${MYLIBS}
 	@${MKDIR} $(dir $@)
-	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} ${L}
+	${CC} ${COPT} -o ${pipelineTester} pipelineTester.o ${MYLIBS} ${L}
 
 
 dyStringTest: ${BIN_DIR}/dyStringTester mkdirs
