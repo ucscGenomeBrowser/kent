@@ -847,6 +847,6 @@ speciesOrder panPan3 panTro6 gorGor6 ponAbe3 HLhylMol2 HLnomLeu4 HLpapAnu5 HLthe
 include topmed.ra alpha
 include gerp.ra alpha
 
-include crossTissueMaps.ra alpha
+include crossTissueMaps.ra alpha,beta
 
 include problematic.ra

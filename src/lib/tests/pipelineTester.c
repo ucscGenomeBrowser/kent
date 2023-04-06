@@ -36,6 +36,7 @@ errAbort(
     "  -fdApi - use the file descriptor API\n"
     "  -sigpipe - enable SIGPIPE.\n"
     "  -maxNumLines=n - read or write this many lines and close (for testing -sigpipe)\n"
+    "  -executeTwice - turn test twice, regression for bug were multiple runs failed\n"
     "  -timeout=n - timeout, in seconds\n",
     msg);
 }
@@ -52,6 +53,7 @@ static struct optionSpec options[] =
     {"sigpipe", OPTION_BOOLEAN},
     {"maxNumLines", OPTION_INT},
     {"timeout", OPTION_INT},
+    {"executeTwice", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -67,6 +69,7 @@ char *pipeDataFile = NULL;   /* use for input or output to the pipeline */
 char *otherEndFile = NULL;   /* file for other end of pipeline */
 char *stderrFile = NULL;   /* file for other stderr of pipeline */
 unsigned int timeout = 0;  /* timeout to apply */
+boolean executeTwice = FALSE;  /* execute test twice */
 
 int countOpenFiles()
 /* count the number of opens.  This is used to make sure no stray
@@ -282,6 +285,7 @@ fdApi = optionExists("fdApi");
 sigpipe = optionExists("sigpipe");
 maxNumLines = optionInt("maxNumLines", INT_MAX);
 timeout = optionInt("timeout", 0);
+executeTwice = optionExists("executeTwice");
 if (fdApi && memApi)
     errAbort("can't specify both -fdApi and -memApi");
 pipeDataFile = optionVal("pipeData", NULL);
@@ -292,5 +296,7 @@ if (memApi && (otherEndFile == NULL))
     errAbort("-memApi requires -otherEndFile");
 stderrFile = optionVal("stderr", NULL);
 pipelineTester(argc-1, argv+1);
+if (executeTwice)
+    pipelineTester(argc-1, argv+1);
 return 0;
 }

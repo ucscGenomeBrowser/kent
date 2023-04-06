@@ -571,6 +571,106 @@ apiFinishOutput(0, NULL, jw);
 
 }	/*	static void schemaJsonOutput(FILE *f, char *db, char *track) */
 
+/* typical rsync return
+columns: 0              1        2      3         4
+drwxrwxr-x            162 2022/10/18 16:58:16 .
+drwxrwxr-x          4,096 2023/03/27 16:01:41 bigZips
+-r--rw-r--          3,455 2022/08/11 03:26:26 bigZips/GCA_009914755.4_assembly_report.txt
+-rw-rw-r--              0 2022/07/18 12:06:00 bigZips/THIS_IS_GENOME_ASSEMBLY_T2T-CHM13v2.0
+-rw-rw-r--    812,327,608 2022/07/16 14:27:39 bigZips/hs1.2bit
+
+appears to be a consistent set of columns
+*/
+
+/* might be variable depending upon which server request is coming from */
+#define DOWNLOAD_HOST "hgdownload.soe.ucsc.edu"
+
+static long long rsyncList(struct jsonWrite *jw, char *db, char *downPath)
+/* rsync listing from hgdownload on the given downPath/db
+ *   returning total bytes in the files listing
+ */
+{
+long long totalBytes = 0;
+int index = 3;	/* rsyncCmd[3] == starts out at NULL, will become the
+                 *    hgdownload path */
+char *rsyncCmd[] = {"/usr/bin/rsync", "-a", "--list-only", NULL, NULL};
+/* rsyncCmd[4] will remain NULL to terminate the list */
+
+struct dyString *tmpDy = dyStringNew(128);
+dyStringPrintf(tmpDy, "%s::%s/%s/", DOWNLOAD_HOST, downPath, db);
+rsyncCmd[index++] = dyStringCannibalize(&tmpDy);
+struct pipeline *dataPipe = pipelineOpen1(rsyncCmd,
+   pipelineRead, "/dev/null", NULL, 0);
+FILE *readingLines = pipelineFile(dataPipe);
+char lineBuf[PATH_MAX + 1024];
+while (fgets(lineBuf, sizeof(lineBuf), readingLines) != NULL)
+    {
+    if (startsWith("d", lineBuf))
+	continue;
+    char *columns[5];
+    (void) chopByWhite(lineBuf, columns, ArraySize(columns));
+    stripChar(columns[1], ',');
+    long long bytes = sqlLongLong(columns[1]);
+    totalBytes += bytes;
+    char outString[PATH_MAX + 1024];
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteNumber(jw, "b", sqlLongLong(columns[1]));
+    safef(outString, sizeof(outString), "%sT%s", columns[2], columns[3]);
+    jsonWriteString(jw, "d", outString);
+    safef(outString, sizeof(outString), "%s/%s/%s", downPath, db, columns[4]);
+    jsonWriteString(jw, "u", outString);
+    jsonWriteObjectEnd(jw);
+    }
+pipelineClose(&dataPipe);
+pipelineFree(&dataPipe);
+return totalBytes;
+}
+
+static void filesJsonOutput(FILE *f, char *genome)
+/* for given genome, output the URLs to files available on hgdownload
+ *   can be a UCSC database genome, or a GenArk hub genome name
+ */
+{
+boolean genArkHub = FALSE;
+char genArkUrl[PATH_MAX + 1024];
+
+if ( isGenArk(genome) )
+    {
+    genArkHub = TRUE;
+    safef(genArkUrl, sizeof(genArkUrl), "hubs/%s/", genArkPath(genome));
+    }
+
+/* if UCSC genome database, it has already been proven to exist */
+
+struct jsonWrite *jw = apiStartOutput();
+jsonWriteString(jw, "genome", genome);
+jsonWriteString(jw, "rsyncHost", "rsync://" DOWNLOAD_HOST);
+
+/* describe schema of items in the output array */
+jsonWriteListStart(jw, "urlListArraySchema");
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "b", "sizeBytes");
+jsonWriteString(jw, "d", "fileDateTime");
+jsonWriteString(jw, "u", "urlPathName");
+jsonWriteObjectEnd(jw);
+jsonWriteListEnd(jw);
+
+jsonWriteListStart(jw, "urlList");
+long long totalBytes = 0;
+if (genArkHub)
+    {
+    totalBytes = rsyncList(jw, genome, genArkUrl);
+    }
+else
+    {
+    totalBytes = rsyncList(jw, genome, "goldenPath");
+    totalBytes += rsyncList(jw, genome, "gbdb");
+    }
+jsonWriteListEnd(jw);
+jsonWriteNumber(jw, "totalBytes", totalBytes);
+apiFinishOutput(0, NULL, jw);
+}
+
 static void chromInfoJsonOutput(FILE *f, char *db)
 /* for given db, if there is a track, list the chromosomes in that track,
  * for no track, simply list the chromosomes in the sequence
@@ -979,6 +1079,17 @@ else if (sameWord("schema", words[1]))
         hubSchemaJsonOutput(stdout, hubUrl, genome, track);
 	return;
 	}
+    }
+else if (sameWord("files", words[1]))
+    {
+    char *extraArgs = verifyLegalArgs(argListFiles);
+    if (extraArgs)
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/files '%s', only 'genome' is allowed.", extraArgs);
+
+    char *genome = cgiOptionalString("genome");
+    if (isEmpty(genome))
+        apiErrAbort(err400, err400Msg, "must supply a genome name for endpoint '/list/files (a database name or GenArk genome name, e.g.: 'hg38' or 'GCA_021951015.1'");
+    filesJsonOutput(stdout, genome);
     }
 else
     apiErrAbort(err400, err400Msg, "do not recognize endpoint function: '/%s/%s'", words[0], words[1]);

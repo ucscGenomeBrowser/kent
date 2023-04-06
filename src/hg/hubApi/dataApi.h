@@ -33,10 +33,14 @@
 #include "hubPublic.h"
 #include "cartTrackDb.h"
 #include "chromAlias.h"
+#include "pipeline.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
 #endif
+
+/* test name for matching a GenArk hub genome name */
+#define isGenArk(name) (startsWith("GCA_", name) || startsWith("GCF_", name))
 
 /* reference for these error codes:
  * https://www.restapitutorial.com/httpstatuscodes.html
@@ -81,6 +85,7 @@ extern char *argListHubGenomes[];
 extern char *argListTracks[];
 extern char *argListChromosomes[];
 extern char *argListSchema[];
+extern char *argListFiles[];
 extern char *argGetDataTrack[];
 extern char *argGetDataSequence[];
 extern char *argSearch[];
@@ -236,6 +241,15 @@ char *chrOrAlias(char *db, char *hubUrl);
 
 void hubAliasSetup(struct trackHubGenome *hubGenome);
 /* see if this hub has an alias file and run chromAliasSetupBb() for it */
+
+char *genArkPath(char *genome);
+/* given a GenArk hub genome name, e.g. GCA_021951015.1 return the path:
+ *               GCA/021/951/015/GCA_021951015.1
+ * prefix that with desired server URL: https://hgdownload.soe.ucsc.edu/hubs/
+ *   if desired.  Or suffix add /hub.txt to get the hub.txt URL
+ *
+ *   already been proven that genome is a GCx_ name prefix before calling
+ */
 
 /* ######################################################################### */
 /*  functions in getData.c */

@@ -49,7 +49,8 @@ GCA_025265405.1_mMesDen1_primary_haplotype	Blainville's beaked whale (mMesDen1 p
 GCA_008658375.1_mBalMus1_alternate	blue whale (alternate hap JJ_BM4_2016_0621 2019 VGP)
 GCA_008658375.2_mBalMus1.alt.v2	Blue whale (JJ_BM4_2016_0621 v2 alternate hap 2020)
 GCF_009873245.2_mBalMus1.pri.v3	blue whale (JJ_BM4_2016_0621 v3 primary hap 2020)
-GCF_022079265.1_mLynRuf1.p	bobcat (2022 UCLA)
+GCA_022079275.1_mLynRuf1.a	bobcat (Redwood Valley CCGP_SWC_20201006 alternate hap 2022)
+GCF_022079265.1_mLynRuf1.p	bobcat (Redwood Valley CCGP_SWC_20201006 primary hap 2022)
 GCA_004363515.1_IniGeo_v1_BIUU	boutu
 GCF_000412655.1_ASM41265v1	Brandt's bat
 GCA_004025005.1_TadBra_v1_BIUU	Brazilian free-tailed bat
