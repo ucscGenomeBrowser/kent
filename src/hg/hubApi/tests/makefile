@@ -1008,8 +1008,8 @@ wig24: setOutput
 
 # basic search just to see if it works:
 search01: setOutput
-	@ printf "### $@ 'https://${SERVERNAME}/search/?search=brca;genome=hg38'\n"
-	@ curl -L "${SERVERNAME}/search?search=brca;genome=hg38" 2> /dev/null | python -mjson.tool | egrep -c -n "\[|\]" | awk -v t="$@" '{if (($$1 < 25) || ($$1 > 35)) {printf "test %s failed, count %d not in range 25-35\n", t, $$1; exit 255;}}'
+	@ printf "### $@ '${SERVERNAME}/search?search=brca;genome=hg38'\n"
+	@ curl -L "${SERVERNAME}/search?search=brca;genome=hg38" 2> /dev/null | python -mjson.tool | egrep -c -n "\[|\]" | awk -v t="$@" '{if (($$1 < 30) || ($$1 > 40)) {printf "test %s failed, count %d not in range 30-40\n", t, $$1; exit 255;}}'
 
 ##############################################################################
 ### chrAlias - test chrom alias
