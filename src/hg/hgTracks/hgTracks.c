@@ -256,14 +256,16 @@ else
    return 1;
 }
 
-void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
+void changeTrackVisExclude(struct group *groupList, char *groupTarget, int changeVis, struct hash *excludeHash)
 /* Change track visibilities. If groupTarget is
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should
  * be tvHide, tvDense, etc.
  * If we are going back to default visibility, then reset the track
- * ordering also. */
+ * ordering also. 
+ * If excludeHash is not NULL then don't change the visibility of the group names in that hash.
+ */
 {
 struct group *group;
 if (changeVis == -2)
@@ -271,6 +273,9 @@ if (changeVis == -2)
 for (group = groupList; group != NULL; group = group->next)
     {
     struct trackRef *tr;
+    if (excludeHash && hashLookup(excludeHash, group->name))
+        continue;
+
     if (groupTarget == NULL || sameString(group->name,groupTarget))
         {
         static char pname[512];
@@ -364,6 +369,18 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 slSort(&groupList, gCmpPriority);
+}
+
+void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
+/* Change track visibilities. If groupTarget is
+ * NULL then set visibility for tracks in all groups.  Otherwise,
+ * just set it for the given group.  If vis is -2, then visibility is
+ * unchanged.  If -1 then set visibility to default, otherwise it should
+ * be tvHide, tvDense, etc.
+ * If we are going back to default visibility, then reset the track
+ * ordering also. */
+{
+changeTrackVisExclude(groupList, groupTarget, changeVis, NULL);
 }
 
 int trackOffsetX()
@@ -7162,6 +7179,42 @@ loadCustomTracks(&trackList);
 makeDupeTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
+char *rtsLoad = cgiOptionalString( "rtsLoad");
+if (rtsLoad)  // load a recommended track set
+    {
+    // store session name and user
+    char *otherUserName = cartOptionalString(cart, hgsOtherUserName);
+    char *otherUserSessionName = rtsLoad;
+
+    // Hide all tracks except custom tracks
+    struct hash *excludeHash = newHash(2);
+    hashStore(excludeHash, "user");
+    changeTrackVisExclude(groupList, NULL, tvHide, excludeHash);
+
+    // delete any ordering we have
+    char wildCard[32];
+    safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
+    cartRemoveLike(cart, wildCard);
+
+    // now we have to restart to load the session since that happens at cart initialization
+    
+    char newUrl[4096];
+    safef(newUrl, sizeof newUrl,
+        "./hgTracks?"
+        hgsOtherUserSessionName "=%s"
+        "&" hgsOtherUserName "=%s"
+        "&" hgsMergeCart "=on"
+        "&" hgsDoOtherUser "=submit"
+	"& hgsid=%s"
+        , otherUserSessionName, otherUserName,cartSessionId(cart));
+
+    cartCheckout(&cart);   // make sure cart records all our changes above
+
+    // output the redirect and exit
+    printf("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">", newUrl);
+    exit(0);
+    }
+
 boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
 if (hideTracks)
     changeTrackVis(groupList, NULL, tvHide);    // set all top-level tracks to hide

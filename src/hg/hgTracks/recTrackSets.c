@@ -141,26 +141,16 @@ hPrintf("<ul class='indent'>");
 for (recTrackSet = recTrackSets; recTrackSet != NULL; recTrackSet = recTrackSet->next)
     {
 // TODO: consider libifying hgSession.c:add/getSessionLink() and using that
-    boolean mergeSession = cfgOptionBooleanDefault("mergeRecommended", FALSE);
-    char *mergeSessionString = "";
-    if (mergeSession)
-        mergeSessionString = "&" hgsMergeCart "=on";
 
+#define rtsLoadSessionName  "rtsLoad"
     hPrintf("<li><a class='recTrackSetLink' href='./hgTracks?"
-                    // preserve these user settings 
-                    "pix=%d&textSize=%s&textFont=%s&hgt.labelWidth=%d"
-                    "&" hgsOtherUserName "=%s"
-                    "&" hgsOtherUserSessionName "=%s"
-                    "&" hgsOtherUserSessionLabel "=%s"
-                    "&hgS_otherUserSessionDesc=%s"
-                    "&" hgsDoOtherUser "=submit"
-                    "%s"
+                    hgsOtherUserName "=%s"
+                    "&" rtsLoadSessionName "=%s"
+                    "& hgsid=%s"
                     "&position="        // JS fills in position
                     "'>" 
                 "%s</a>: <small>%s</small></li>",
-                    tl.picWidth, tl.textSize, tl.textFont, tl.leftLabelWidthChars,
-                    recTrackSet->userName, recTrackSet->sessionName, 
-                    recTrackSet->label, recTrackSet->description,  mergeSessionString,
+                    recTrackSet->userName, recTrackSet->sessionName, cartSessionId(cart),
                     recTrackSet->label, recTrackSet->description);
     }
 hPrintf("</ul>");
