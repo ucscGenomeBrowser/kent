@@ -22,9 +22,11 @@ mkdirs:
 	${MKDIR} output ${BIN_DIR}
 
 testSumDoubles: testSumDoubles.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ./testSumDoubles testSumDoubles.o ${MYLIBS} ${L}
 
 errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/errCatchTest errCatchTest.o ${MYLIBS} ${L}
 	${STRIP} ${BIN_DIR}/errCatchTest${EXE}
 	${BIN_DIR}/errCatchTest secret > output/errCatch.good
@@ -33,12 +35,14 @@ errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
 	diff expected/errCatch.bad output/errCatch.bad
 
 htmlExpandUrlTest: htmlExpandUrlTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/htmlExpandUrlTest htmlExpandUrlTest.o ${MYLIBS} ${L}
 	${STRIP} ${BIN_DIR}/htmlExpandUrlTest${EXE}
 	${BIN_DIR}/htmlExpandUrlTest > output/htmlExpandUrlTest 2>&1
 	diff expected/htmlExpandUrlTest output/htmlExpandUrlTest
 
 htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/htmlPageTest htmlPageTest.o ${MYLIBS} ${L}
 	${STRIP} ${BIN_DIR}/htmlPageTest${EXE}
 	${BIN_DIR}/htmlPageTest input/google.html > output/google.out
@@ -114,6 +118,7 @@ pipelineTimeout: ${BIN_DIR}/pipelineTester mkdirs
 	diff -b expected/$@.parent.err output/$@.parent.err
 
 ${BIN_DIR}/pipelineTester: pipelineTester.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} ${L}
 
 
@@ -121,12 +126,14 @@ dyStringTest: ${BIN_DIR}/dyStringTester mkdirs
 	${BIN_DIR}/dyStringTester
 
 ${BIN_DIR}/dyStringTester:  mkdirs dyStringTester.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/dyStringTester dyStringTester.o ${MYLIBS} ${L}
 
 
 mimeTests: mime1 mime2 mime3 mime4 mimeBin mime5 mimeAltHead mimeAutoBoundary mimeBlat
 
 ${BIN_DIR}/mimeTester:  mkdirs mimeTester.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/mimeTester mimeTester.o ${MYLIBS} ${L}
 
 
@@ -170,6 +177,7 @@ mimeSeries: ${BIN_DIR}/mimeTester mkdirs
 	${BIN_DIR}/mimeTester -sizeSeries=3000
 
 ${BIN_DIR}/htmlMimeTest:  mkdirs htmlMimeTest.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/htmlMimeTest htmlMimeTest.o ${MYLIBS} ${L}
 
 htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
@@ -180,6 +188,7 @@ htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
 base64Tests: base64Encode base64Decode
 
 ${BIN_DIR}/testBase64:  mkdirs testBase64.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/testBase64 testBase64.o ${MYLIBS} ${L}
 
 base64Encode: ${BIN_DIR}/testBase64 mkdirs
@@ -195,6 +204,7 @@ base64Decode: ${BIN_DIR}/testBase64 mkdirs
 quotedPTests: quotedPEncode quotedPDecode
 
 ${BIN_DIR}/testQuotedP:  mkdirs testQuotedP.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/testQuotedP testQuotedP.o ${MYLIBS} ${L}
 
 quotedPEncode: ${BIN_DIR}/testQuotedP mkdirs
@@ -206,6 +216,7 @@ quotedPDecode: ${BIN_DIR}/testQuotedP mkdirs
 	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/mimeDecodeTest:  mkdirs mimeDecodeTest.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/mimeDecodeTest mimeDecodeTest.o ${MYLIBS} ${L}
 
 mimeDecodeTest: ${BIN_DIR}/mimeDecodeTest mkdirs
@@ -213,6 +224,7 @@ mimeDecodeTest: ${BIN_DIR}/mimeDecodeTest mkdirs
 	diff expected/noName1.html output/noName1.html
 
 ${BIN_DIR}/safeTester:  mkdirs safeTester.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/safeTester safeTester.o ${MYLIBS} ${L}
 
 safeTest: ${BIN_DIR}/safeTester mkdirs
@@ -221,6 +233,7 @@ safeTest: ${BIN_DIR}/safeTester mkdirs
 hashTest: hashTest1
 
 ${BIN_DIR}/testHash:  mkdirs testHash.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/testHash testHash.o ${MYLIBS} ${L}
 
 hashTest1: ${BIN_DIR}/testHash mkdirs
@@ -228,18 +241,22 @@ hashTest1: ${BIN_DIR}/testHash mkdirs
 	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/testQuotedString: mkdirs testQuotedString.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/testQuotedString testQuotedString.o ${MYLIBS} ${L}
 
 testQuotedString:	${BIN_DIR}/testQuotedString mkdirs
 	${BIN_DIR}/testQuotedString -verbose=2 quote this\\ following
 
 miniBlat:  mkdirs miniBlat.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o miniBlat miniBlat.o ${MYLIBS} ${L}
 
 fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o fetchUrlTest fetchUrlTest.o ${MYLIBS} ${L}
 
 fetchUrlViaUdcTest:  mkdirs fetchUrlViaUdcTest.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o fetchUrlViaUdcTest fetchUrlViaUdcTest.o ${MYLIBS} ${L}
 
 ##
@@ -319,15 +336,18 @@ ${BIN_DIR}/hacTreeTest: hacTreeTest.o ${MYLIBS}
 
 # udc (not part of the top-level test target at this point):
 udcTest: udcTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/udcTest udcTest.o ${MYLIBS} ${L}
 	${BIN_DIR}/udcTest
 
 # udc (not part of the top-level test target at this point):
 udcCacheSizesCheck: udcCacheSizesCheck.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/udcCacheSizesCheck udcCacheSizesCheck.o ${MYLIBS} ${L}
 	${BIN_DIR}/udcCacheSizesCheck
 
 testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/testOutOfMem testOutOfMem.o ${MYLIBS} ${L}
 	# we expect this to errAbort because we allocate one byte too much beyond limit
 	-${BIN_DIR}/testOutOfMem 100000 1
@@ -336,6 +356,7 @@ clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest fetchUrlViaUdcTest
 
 ${BIN_DIR}/testDecodedString: mkdirs testDecodedString.o ${MYLIBS}
+	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/testDecodedString testDecodedString.o ${MYLIBS} ${L}
 
 testDecodedString:	${BIN_DIR}/testDecodedString mkdirs
