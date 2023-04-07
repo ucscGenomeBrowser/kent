@@ -715,3 +715,20 @@ dyStringPrintf(genArkPath, "%s", tmpBuf);
 
 return dyStringCannibalize(&genArkPath);
 }
+
+static struct dyString *textOutput = NULL;
+
+void textLineOut(char *lineOut)
+/* accumulate text lines for output in the dyString textOutput */
+{
+if (NULL == textOutput)
+    textOutput = dyStringNew(0);
+dyStringPrintf(textOutput, "%s\n", lineOut);
+}
+
+void textFinishOutput()
+/* all done with text output, print it all out */
+{
+puts("Content-Type:text/plain");
+printf("%s", dyStringCannibalize(&textOutput));
+}
