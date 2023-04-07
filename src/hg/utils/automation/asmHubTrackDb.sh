@@ -827,6 +827,36 @@ else
   printf "# no ensGene found\n" 1>&2
 fi
 
+###################################################################
+# Ensembl/ebiGene for HPRC project
+if [ -d ${buildDir}/trackData/ebiGene ]; then
+ export ebiGeneBb=`ls ${buildDir}/trackData/ebiGene/*.bb 2> /dev/null || true | head -1`
+ if [ -s "${ebiGeneBb}" ]; then
+    export ebiGeneLink=`echo $ebiGeneBb | sed -e 's#.*trackData#../trackData#;'`
+    printf "# link: $ebiGeneLink ${buildDir}/bbi/${asmId}.ebiGene.bb\n" 1>&2
+    rm -f ${buildDir}/bbi/${asmId}.ebiGene.bb
+    ln -s $ebiGeneLink ${buildDir}/bbi/${asmId}.ebiGene.bb
+
+    printf "track ebiGene
+shortLabel Ensembl v2
+longLabel Ensembl annotation v2
+group genes
+visibility pack
+color 150,0,0
+type bigGenePred
+bigDataUrl bbi/%s.ebiGene.bb
+searchIndex name,name2,txId,geneName,parentTranscript
+labelFields name,name2,txId,geneName,parentTranscript
+defaultLabelFields name
+labelSeperator \" \"
+html html/%s.ebiGene\n\n" "${asmId}" "${asmId}"
+
+# $scriptDir/asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html "${ensVersion}"
+ fi
+
+fi
+
+###################################################################
 # hubLinks is for mouseStrains specific hub only
 export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
 if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
