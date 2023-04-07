@@ -666,7 +666,7 @@ if ( isGenArk(genome) )
 struct jsonWrite *jw = NULL;
 if (textOut)
     {
-    char outString[PATH_MAX + 1024];
+    char outString[1024];
     safef(outString, sizeof(outString), "# genome: %s", genome);
     textLineOut(outString);
   safef(outString, sizeof(outString), "# rsyncHost: rsync://%s", DOWNLOAD_HOST);
