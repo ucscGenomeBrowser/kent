@@ -72,6 +72,7 @@
 #define argStart	"start"
 #define argEnd	"end"
 #define argMaxItemsOutput	"maxItemsOutput"
+#define argFormat	"format"
 #define argJsonOutputArrays	"jsonOutputArrays"
 #define argCategories "categories"
 #define argSearchTerm "search"
@@ -250,6 +251,12 @@ char *genArkPath(char *genome);
  *
  *   already been proven that genome is a GCx_ name prefix before calling
  */
+
+void textLineOut(char *lineOut);
+/* accumulate text lines for output in the dyString textOutput */
+
+void textFinishOutput();
+/* all done with text output, print it all out */
 
 /* ######################################################################### */
 /*  functions in getData.c */

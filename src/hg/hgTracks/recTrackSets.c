@@ -146,7 +146,7 @@ for (recTrackSet = recTrackSets; recTrackSet != NULL; recTrackSet = recTrackSet-
     hPrintf("<li><a class='recTrackSetLink' href='./hgTracks?"
                     hgsOtherUserName "=%s"
                     "&" rtsLoadSessionName "=%s"
-                    "& hgsid=%s"
+                    "&hgsid=%s"
                     "&position="        // JS fills in position
                     "'>" 
                 "%s</a>: <small>%s</small></li>",

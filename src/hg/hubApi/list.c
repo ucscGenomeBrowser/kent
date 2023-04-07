@@ -585,12 +585,15 @@ appears to be a consistent set of columns
 /* might be variable depending upon which server request is coming from */
 #define DOWNLOAD_HOST "hgdownload.soe.ucsc.edu"
 
-static long long rsyncList(struct jsonWrite *jw, char *db, char *downPath)
+static long long rsyncList(struct jsonWrite *jw, char *db, char *downPath, long long *itemsDone, boolean textOut)
 /* rsync listing from hgdownload on the given downPath/db
  *   returning total bytes in the files listing
  */
 {
 long long totalBytes = 0;
+if (*itemsDone >= maxItemsOutput)
+    return totalBytes;
+boolean reachedMaxItems = FALSE;
 int index = 3;	/* rsyncCmd[3] == starts out at NULL, will become the
                  *    hgdownload path */
 char *rsyncCmd[] = {"/usr/bin/rsync", "-a", "--list-only", NULL, NULL};
@@ -603,34 +606,52 @@ struct pipeline *dataPipe = pipelineOpen1(rsyncCmd,
    pipelineRead, "/dev/null", NULL, 0);
 FILE *readingLines = pipelineFile(dataPipe);
 char lineBuf[PATH_MAX + 1024];
-while (fgets(lineBuf, sizeof(lineBuf), readingLines) != NULL)
+while (! reachedMaxItems && fgets(lineBuf, sizeof(lineBuf), readingLines) != NULL)
     {
     if (startsWith("d", lineBuf))
 	continue;
-    char *columns[5];
-    (void) chopByWhite(lineBuf, columns, ArraySize(columns));
-    stripChar(columns[1], ',');
-    long long bytes = sqlLongLong(columns[1]);
-    totalBytes += bytes;
-    char outString[PATH_MAX + 1024];
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteNumber(jw, "b", sqlLongLong(columns[1]));
-    safef(outString, sizeof(outString), "%sT%s", columns[2], columns[3]);
-    jsonWriteString(jw, "d", outString);
-    safef(outString, sizeof(outString), "%s/%s/%s", downPath, db, columns[4]);
-    jsonWriteString(jw, "u", outString);
-    jsonWriteObjectEnd(jw);
+    *itemsDone += 1;
+    if (*itemsDone > maxItemsOutput)
+	{
+	reachedMaxItems = TRUE;
+	}
+    else
+        {
+        char *columns[5];
+        (void) chopByWhite(lineBuf, columns, ArraySize(columns));
+        stripChar(columns[1], ',');
+        long long bytes = sqlLongLong(columns[1]);
+        totalBytes += bytes;
+        char outString[PATH_MAX + 1024];
+        if (textOut)
+	    {
+	    safef(outString, sizeof(outString), "https://%s/%s/%s/%s",
+		DOWNLOAD_HOST, downPath, db, columns[4]);
+	    textLineOut(outString);
+	    }
+	else
+            {
+            jsonWriteObjectStart(jw, NULL);
+            jsonWriteNumber(jw, "sizeBytes", sqlLongLong(columns[1]));
+           safef(outString, sizeof(outString), "%sT%s", columns[2], columns[3]);
+            jsonWriteString(jw, "dateTime", outString);
+      safef(outString, sizeof(outString), "%s/%s/%s", downPath, db, columns[4]);
+            jsonWriteString(jw, "url", outString);
+            jsonWriteObjectEnd(jw);
+            }
+        }
     }
 pipelineClose(&dataPipe);
 pipelineFree(&dataPipe);
 return totalBytes;
 }
 
-static void filesJsonOutput(FILE *f, char *genome)
+static void filesJsonOutput(FILE *f, char *genome, boolean textOut)
 /* for given genome, output the URLs to files available on hgdownload
  *   can be a UCSC database genome, or a GenArk hub genome name
  */
 {
+long long itemsReturned = 0;
 boolean genArkHub = FALSE;
 char genArkUrl[PATH_MAX + 1024];
 
@@ -642,33 +663,70 @@ if ( isGenArk(genome) )
 
 /* if UCSC genome database, it has already been proven to exist */
 
-struct jsonWrite *jw = apiStartOutput();
-jsonWriteString(jw, "genome", genome);
-jsonWriteString(jw, "rsyncHost", "rsync://" DOWNLOAD_HOST);
-
-/* describe schema of items in the output array */
-jsonWriteListStart(jw, "urlListArraySchema");
-jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "b", "sizeBytes");
-jsonWriteString(jw, "d", "fileDateTime");
-jsonWriteString(jw, "u", "urlPathName");
-jsonWriteObjectEnd(jw);
-jsonWriteListEnd(jw);
-
-jsonWriteListStart(jw, "urlList");
-long long totalBytes = 0;
-if (genArkHub)
+struct jsonWrite *jw = NULL;
+if (textOut)
     {
-    totalBytes = rsyncList(jw, genome, genArkUrl);
+    char outString[1024];
+    safef(outString, sizeof(outString), "# genome: %s", genome);
+    textLineOut(outString);
+  safef(outString, sizeof(outString), "# rsyncHost: rsync://%s", DOWNLOAD_HOST);
+    textLineOut(outString);
     }
 else
     {
-    totalBytes = rsyncList(jw, genome, "goldenPath");
-    totalBytes += rsyncList(jw, genome, "gbdb");
+    jw = apiStartOutput();
+    jsonWriteString(jw, "genome", genome);
+    jsonWriteString(jw, "rsyncHost", "rsync://" DOWNLOAD_HOST);
+
+    jsonWriteListStart(jw, "urlList");
     }
-jsonWriteListEnd(jw);
-jsonWriteNumber(jw, "totalBytes", totalBytes);
-apiFinishOutput(0, NULL, jw);
+
+long long totalBytes = 0;
+if (genArkHub)
+    {
+    totalBytes = rsyncList(jw, genome, genArkUrl, &itemsReturned, textOut);
+    }
+else
+    {
+    totalBytes = rsyncList(jw, genome, "goldenPath", &itemsReturned, textOut);
+    if (itemsReturned < maxItemsOutput)
+       totalBytes += rsyncList(jw, genome, "gbdb", &itemsReturned, textOut);
+    if (itemsReturned < maxItemsOutput)
+       totalBytes += rsyncList(jw, genome, "mysql", &itemsReturned, textOut);
+    }
+
+if (textOut)
+    {
+    char outString[1024];
+    safef(outString, sizeof(outString), "# totalBytes: %lld", totalBytes);
+    textLineOut(outString);
+    if (itemsReturned > maxItemsOutput)
+	{
+        safef(outString, sizeof(outString), "# maxItemLimit: TRUE");
+        textLineOut(outString);
+   safef(outString, sizeof(outString), "# itemsReturned: %d", maxItemsOutput);
+        textLineOut(outString);
+	}
+    else
+	{
+   safef(outString, sizeof(outString), "# itemsReturned: %lld", itemsReturned);
+        textLineOut(outString);
+	}
+    textFinishOutput();
+    }
+else
+    {
+    jsonWriteListEnd(jw);
+    jsonWriteNumber(jw, "totalBytes", totalBytes);
+    if (itemsReturned > maxItemsOutput)
+	{
+	jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
+	jsonWriteNumber(jw, "itemsReturned", maxItemsOutput);
+	}
+    else
+	jsonWriteNumber(jw, "itemsReturned", itemsReturned);
+    apiFinishOutput(0, NULL, jw);
+    }
 }
 
 static void chromInfoJsonOutput(FILE *f, char *db)
@@ -1082,14 +1140,23 @@ else if (sameWord("schema", words[1]))
     }
 else if (sameWord("files", words[1]))
     {
+    boolean textOut = FALSE;
     char *extraArgs = verifyLegalArgs(argListFiles);
     if (extraArgs)
 	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/files '%s', only 'genome' is allowed.", extraArgs);
 
     char *genome = cgiOptionalString("genome");
+    char *format = cgiOptionalString("format");
     if (isEmpty(genome))
-        apiErrAbort(err400, err400Msg, "must supply a genome name for endpoint '/list/files (a database name or GenArk genome name, e.g.: 'hg38' or 'GCA_021951015.1'");
-    filesJsonOutput(stdout, genome);
+        apiErrAbort(err400, err400Msg, "must supply a genome name for endpoint '/list/files' (a database name or GenArk genome name, e.g.: 'hg38' or 'GCA_021951015.1'");
+    if (isNotEmpty(format))
+	{
+	if (sameWord("text", format))
+	    textOut = TRUE;
+        else
+	    apiErrAbort(err400, err400Msg, "only format=text allowed for endpoint '/list/files', found: format=%s", format);
+	}
+    filesJsonOutput(stdout, genome, textOut);
     }
 else
     apiErrAbort(err400, err400Msg, "do not recognize endpoint function: '/%s/%s'", words[0], words[1]);

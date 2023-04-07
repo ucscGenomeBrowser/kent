@@ -167,13 +167,24 @@ if (!sqlTableExists(conn, sessionDbTable()))
 return TRUE;
 }
 
-static void mergeHash(struct hash *first, struct hash *second)
+static void mergeHash(struct hash *origHash, struct hash *overlayHash)
 /* Merge one hash on top of another. */
 {
-struct hashCookie cookie = hashFirst(second);
-struct hashEl *hel;
-while ((hel = hashNext(&cookie)) != NULL)
-    hashReplace(first, hel->name, hel->val);
+struct hashCookie cookie = hashFirst(overlayHash);
+struct hashEl *helOverlay;
+while ((helOverlay = hashNext(&cookie)) != NULL)
+    {
+    char *varName = helOverlay->name;
+    struct hashEl *helOrig = hashLookup(origHash, varName);
+    if (helOrig)
+        {
+        // we don't want to hide a track that's visible in the overlay
+        if (differentString("hide", helOverlay->val))
+            hashReplace(origHash, helOverlay->name, helOverlay->val);
+        }
+    else 
+        hashAdd(origHash, varName, helOverlay->val);
+    }
 }
 
 static void loadHash(struct hash *hash, char *contents)
