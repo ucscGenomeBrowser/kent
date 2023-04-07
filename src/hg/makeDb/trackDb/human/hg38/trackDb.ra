@@ -631,7 +631,7 @@ group varRep
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
     searchIndex name
-
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$varType
 
     track dgvSupporting override
     parent dgvPlus
@@ -643,6 +643,21 @@ group varRep
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
     searchIndex name
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$varType
+
+    track dgvGold
+    parent dgvPlus
+    shortLabel DGV Gold Standard
+    longLabel Database of Genomic Variants: Gold Standard Variants
+    bigDataUrl /gbdb/hg38/dgv/dgvGold.bb
+    type bigBed 12 +
+    url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg38?ref=$S;start=${;end=$};name=$$;class=Sequence
+    searchIndex name
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$variant_sub_type
+
+searchTable dgvGold
+searchType bigBed
+searchDescription DGV Gold Variants
 
 searchTable dgvMerged
 searchMethod exact
