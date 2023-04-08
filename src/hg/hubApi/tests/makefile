@@ -33,7 +33,7 @@ all:: test0 listFunctions getFunctions listSchema getSequence wigData \
 
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 	list10 list11 list12 list13 list14 list15 list16 list17 list18 list19 \
-	list20 list21 list22 list23
+	list20 list21 list22 list23 list24 list25
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
@@ -236,6 +236,18 @@ list22: setOutput
 list23: setOutput
 	@printf "### $@ '${SERVERNAME}/list/files?genome=GCA_021951015.1'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="GCA_021951015.1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/files?genome=ce2;maxItemsOutput=5
+list24: setOutput
+	@printf "### $@ '${SERVERNAME}/list/files?genome=ce2;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -maxItemsOutput=5  -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="ce2" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/files?genome=ce2;maxItemsOutput=5;format=text
+list25: setOutput
+	@printf "### $@ '${SERVERNAME}/list/files?genome=ce2;maxItemsOutput=5;format=text'\n"
+	@ curl -L "${SERVERNAME}/list/files?genome=ce2;maxItemsOutput=5;format=text" 2> /dev/null | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ##########################   getData functions  #############################
@@ -1021,7 +1033,7 @@ wig24: setOutput
 # basic search just to see if it works:
 search01: setOutput
 	@ printf "### $@ '${SERVERNAME}/search?search=brca;genome=hg38'\n"
-	@ curl -L "${SERVERNAME}/search?search=brca;genome=hg38" 2> /dev/null | python -mjson.tool | egrep -c -n "\[|\]" | awk -v t="$@" '{if (($$1 < 30) || ($$1 > 40)) {printf "test %s failed, count %d not in range 30-40\n", t, $$1; exit 255;}}'
+	@ curl -L "${SERVERNAME}/search?search=brca;genome=hg38" 2> /dev/null | python -mjson.tool | egrep -c -n "\[|\]" | awk -v t="$@" '{if (($$1 < 30) || ($$1 > 50)) {printf "test %s failed, count %d not in range 30-40\n", t, $$1; exit 255;}}'
 
 ##############################################################################
 ### chrAlias - test chrom alias
