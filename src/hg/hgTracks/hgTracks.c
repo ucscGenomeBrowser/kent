@@ -99,7 +99,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
-            "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",
+            "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",hgsMergeCart,
             NULL };
 
 boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
@@ -7180,7 +7180,7 @@ makeDupeTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
 char *rtsLoad = cgiOptionalString( "rtsLoad");
-if (rtsLoad)  // load a recommended track set
+if (rtsLoad)  // load a recommended track set using the merge method
     {
     // store session name and user
     char *otherUserName = cartOptionalString(cart, hgsOtherUserName);
