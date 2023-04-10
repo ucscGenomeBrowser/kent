@@ -642,7 +642,6 @@ while (! reachedMaxItems && fgets(lineBuf, sizeof(lineBuf), readingLines) != NUL
         }
     }
 pipelineClose(&dataPipe);
-pipelineFree(&dataPipe);
 return totalBytes;
 }
 
