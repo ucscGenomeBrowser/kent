@@ -8286,3 +8286,95 @@ TMPDIR=/dev/shm
     # 2836696337 bases of 3029694013 (93.630%) in intersection
 
 ##############################################################################
+# LASTZ Human Hg38 vs. human GCA_018506945.1
+#    (DONE - 2023-04-10 - hiram)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzGCA_018506945.1.2023-04-10
+    cd /hive/data/genomes/hg38/bed/lastzGCA_018506945.1.2023-04-10
+
+    printf '# human GCA_018506945.1 vs. Human Hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human  hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: human 2021-05-26 GCA_018506945.1_HG005.alt.pat.f1_v2
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCA/018/506/945/GCA_018506945.1/GCA_018506945.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCA/018/506/945/GCA_018506945.1/GCA_018506945.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCA_018506945.1.2023-04-10
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCA_018506945.1_HG005.alt.pat.f1_v2 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	145m58.290s
+
+    sed -e 's/^/    # /;' fb.hg38.chainGCA_018506945.1Link.txt
+    # 2920733867 bases of 3299210039 (88.528%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynGCA_018506945.1Link.txt
+    # 2915764385 bases of 3299210039 (88.378%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCA/018/506/945/GCA_018506945.1/GCA_018506945.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/018/506/945/GCA_018506945.1/GCA_018506945.1.chrom.sizes.txt" \
+        hg38 GCA_018506945.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	69m36.569s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.GCA_018506945.1.txt
+    # 2711031495 bases of 3299210039 (82.172%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCA/018/506/945/GCA_018506945.1_HG005.alt.pat.f1_v2/trackData/blastz.hg38.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCA_018506945.1_HG005.alt.pat.f1_v2 /hive/data/genomes/hg38/bed/lastzGCA_018506945.1.2023-04-10/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	108m28.293s
+
+    sed -e 's/^/    # /;' fb.GCA_018506945.1.chainHg38Link.txt
+    # 2752380759 bases of 2937775295 (93.689%) in intersection
+    sed -e 's/^/    # /;' fb.GCA_018506945.1.chainSynHg38Link.txt
+    # 2746722452 bases of 2937775295 (93.497%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCA/018/506/945/GCA_018506945.1/GCA_018506945.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCA/018/506/945/GCA_018506945.1/GCA_018506945.1.chrom.sizes.txt" \
+   GCA_018506945.1 hg38) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	66m38.476s
+
+    sed -e 's/^/    # /;' fb.GCA_018506945.1.chainRBest.Hg38.txt
+    # 2709508288 bases of 2937775295 (92.230%) in intersection
+
+##############################################################################
