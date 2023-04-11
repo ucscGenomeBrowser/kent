@@ -35,3 +35,9 @@ cat manual.bed chr*.bed | sort -k1,1 -k2,2n | tawk '{desc=$5; desc2=$6; $5="0"; 
 bedToBigBed all.bed /hive/data/genomes/hg38/chrom.sizes comments.bb -tab -as=manual.as -type=bed9+ -extraIndex=name
 cut -f4,10 all.bed > notes.txt
 ixIxx notes.txt notes.ix notes.ixx
+
+# Tue Apr 11 02:12:18 PDT 2023
+# add the GRC exclude list, from MarkD
+cat ~markd/public_html/browser/grc-bad/GCA_000001405.15_GRCh38_GRC_exclusions.bed | grep -v description > grcExclusions.bed
+bedSort grcExclusions.bed grcExclusions.bed 
+bedToBigBed grcExclusions.bed ../../chrom.sizes bb/grcExclusions.bb -tab -type=bed4

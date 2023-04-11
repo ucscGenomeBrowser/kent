@@ -18,6 +18,7 @@ type bigBed 3 +
     mouseOverField note
     searchIndex name
     searchTrix /gbdb/hg38/problematic/notes.ix
+    noScoreFilter on
 
     track encBlacklist
     shortLabel ENCODE Blacklist V2
@@ -27,6 +28,16 @@ type bigBed 3 +
     visibility dense
     parent problematic
     priority 2
+
+    track grcExclusions
+    shortLabel GRC Exclusions
+    longLabel GRC Exclusion list: contaminations or false duplications
+    type bigBed 4
+    bigDataUrl /gbdb/hg38/problematic/grcExclusions.bb
+    visibility dense
+    parent problematic
+    priority 3
+
 
 searchTable comments
 searchPriority 0.5
