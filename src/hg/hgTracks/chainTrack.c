@@ -388,6 +388,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     lf = bedMungToLinkedFeatures(&bed, tg->tdb, fieldCount,
         0, 1000, FALSE);
 
+    lf->qSize = sqlUnsigned(bedRow[8]);
+
     if (*bedRow[5] == '-')
 	{
 	lf->orientation = -1;

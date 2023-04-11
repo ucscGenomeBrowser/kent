@@ -167,14 +167,29 @@ if (!sqlTableExists(conn, sessionDbTable()))
 return TRUE;
 }
 
-void cartParseOverHashExt(struct cart *cart, char *contents, boolean merge)
-/* Parse cgi-style contents into a hash table.  If merge is FALSE, this will *not*
- * replace existing members of hash that have same name, so we can
- * support multi-select form inputs (same var name can have multiple
- * values which will be in separate hashEl's). If merge is TRUE, we
- * replace existing values with new values */
+static void mergeHash(struct hash *origHash, struct hash *overlayHash)
+/* Merge one hash on top of another. */
 {
-struct hash *hash = cart->hash;
+struct hashCookie cookie = hashFirst(overlayHash);
+struct hashEl *helOverlay;
+while ((helOverlay = hashNext(&cookie)) != NULL)
+    {
+    char *varName = helOverlay->name;
+    struct hashEl *helOrig = hashLookup(origHash, varName);
+    if (helOrig)
+        {
+        // we don't want to hide a track that's visible in the overlay
+        if (differentString("hide", helOverlay->val))
+            hashReplace(origHash, helOverlay->name, helOverlay->val);
+        }
+    else 
+        hashAdd(origHash, varName, helOverlay->val);
+    }
+}
+
+static void loadHash(struct hash *hash, char *contents)
+/* Load a hash from a cart-like string. */
+{
 char *namePt, *dataPt, *nextNamePt;
 namePt = contents;
 while (namePt != NULL && namePt[0] != 0)
@@ -189,12 +204,28 @@ while (namePt != NULL && namePt[0] != 0)
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
-    if (!merge)
-        hashAdd(hash, namePt, cloneString(dataPt));
-    else 
-        hashReplace(hash, namePt, cloneString(dataPt));
+    hashAdd(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
     }
+}
+
+void cartParseOverHashExt(struct cart *cart, char *contents, boolean merge)
+/* Parse cgi-style contents into a hash table.  If merge is FALSE, this will *not*
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). If merge is TRUE, we
+ * replace existing values with new values */
+{
+if (merge)
+    {
+    struct hash *newHash = newHash(8);
+
+    loadHash(newHash, contents);
+    mergeHash(newHash, cart->hash);
+    cart->hash = newHash;
+    }
+else
+    loadHash(cart->hash, contents);
 }
 
 void cartParseOverHash(struct cart *cart, char *contents)
@@ -333,6 +364,17 @@ void cartExclude(struct cart *cart, char *var)
 hashAdd(cart->exclude, var, NULL);
 }
 
+
+static char *_cartNamedSessionDbTable = NULL;
+
+char *cartNamedSessionDbTable()
+/* Get the name of the table that lists named sessions.  Don't free the result. */
+{
+if (_cartNamedSessionDbTable == NULL)
+    _cartNamedSessionDbTable = cfgOptionEnvDefault("HGDB_NAMED_SESSION_DB", namedSessionDbTableConfVariable,
+                                             defaultNamedSessionDb);
+return _cartNamedSessionDbTable;
+}
 
 void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 			 char *encSessionName)

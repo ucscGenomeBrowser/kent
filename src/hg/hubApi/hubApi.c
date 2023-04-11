@@ -47,6 +47,7 @@ char *argListHubGenomes[] = { argHubUrl, NULL };
 char *argListTracks[] = { argGenome, argHubUrl, argTrackLeavesOnly, NULL };
 char *argListChromosomes[] = { argGenome, argHubUrl, argTrack, NULL };
 char *argListSchema[] = { argGenome, argHubUrl, argTrack, NULL };
+char *argListFiles[] = { argGenome, argMaxItemsOutput, argFormat, NULL };
 char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argMaxItemsOutput, argJsonOutputArrays, NULL };
 char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, NULL };
 char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
@@ -1261,11 +1262,14 @@ if (isEmpty(hubUrl) && isNotEmpty(db))
 
 if (isEmpty(hubUrl) && isNotEmpty(db))
     {
-    struct sqlConnection *conn = hAllocConnMaybe(db);
-    if (NULL == conn)
-        dyStringPrintf(errorMsg, "can not find genome genome='%s' for endpoint '%s'", db, pathInfo);
-    else
-        hFreeConn(&conn);
+    if ( ! isGenArk(db) )
+	{
+	struct sqlConnection *conn = hAllocConnMaybe(db);
+	if (NULL == conn)
+	    dyStringPrintf(errorMsg, "can not find genome='%s' for endpoint '%s'", db, pathInfo);
+	else
+	    hFreeConn(&conn);
+	}
     }
 if (isNotEmpty(start) || isNotEmpty(end))
     {

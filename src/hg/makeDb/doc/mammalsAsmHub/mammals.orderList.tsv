@@ -49,7 +49,8 @@ GCA_025265405.1_mMesDen1_primary_haplotype	Blainville's beaked whale (mMesDen1 p
 GCA_008658375.1_mBalMus1_alternate	blue whale (alternate hap JJ_BM4_2016_0621 2019 VGP)
 GCA_008658375.2_mBalMus1.alt.v2	Blue whale (JJ_BM4_2016_0621 v2 alternate hap 2020)
 GCF_009873245.2_mBalMus1.pri.v3	blue whale (JJ_BM4_2016_0621 v3 primary hap 2020)
-GCF_022079265.1_mLynRuf1.p	bobcat (2022 UCLA)
+GCA_022079275.1_mLynRuf1.a	bobcat (Redwood Valley CCGP_SWC_20201006 alternate hap 2022)
+GCF_022079265.1_mLynRuf1.p	bobcat (Redwood Valley CCGP_SWC_20201006 primary hap 2022)
 GCA_004363515.1_IniGeo_v1_BIUU	boutu
 GCF_000412655.1_ASM41265v1	Brandt's bat
 GCA_004025005.1_TadBra_v1_BIUU	Brazilian free-tailed bat
@@ -178,7 +179,8 @@ GCA_000164785.2_C_hoffmanni-2.0.1	Hoffmann's two-fingered sloth
 GCA_004027555.1_CraTho_v1_BIUU	hog-nosed bat
 GCF_014824575.1_WHU_Shon_v2	Honduran yellow-shouldered bat
 GCF_002863925.1_EquCab3.0	horse (Twilight 2018)
-GCA_001624185.1_129S1_SvImJ_v1	house mouse 129S1_SvImJ
+GCA_001624185.1_129S1_SvImJ_v1	house mouse (129S1_SvImJv1 2016)
+GCA_921998555.2_129S1_SvImJ_v3	house mouse (129S1_SvImJ_v3 2022)
 GCA_001624295.1_AKR_J_v1	house mouse AKR_J
 GCA_001624215.1_A_J_v1	house mouse A_J
 GCA_001632525.1_BALB_cJ_v1	house mouse BALB_cJ

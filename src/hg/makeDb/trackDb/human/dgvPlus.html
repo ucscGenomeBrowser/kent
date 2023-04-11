@@ -12,13 +12,15 @@ genomic alterations that involve segments of DNA that are larger than
 
 <H2>Display Conventions</H2>
 <P>
-This track contains two subtracks:
+This track contains three subtracks:
 <p>
 <ul>
 <li>Structural Variant Regions: annotations that have been generated from one or more reported
 structural variants at the same location.
 </li>
 <li>Supporting Structural Variants: the sample-level reported structural variants.
+</li>
+<li>Gold Standard Variants: curated variants from a selected number of studies in DGV.
 </li>
 </ul>
 <P>
@@ -42,6 +44,12 @@ Color is used in both subtracks to indicate the type of variation:
  </LI>
 </UL>
 </P>
+<p>
+The DGV Gold Standard subtrack utilizes a boxplot-like display to represent the 
+merging of records as explained in the Methods section below. In this track, the 
+middle box (where applicable), represents the high confidence location of the CNV, 
+while the thin lines and end boxes represent the possible range of the CNV.
+</p>
 <P>
 Clicking on a variant leads to a page with detailed information about the variant, 
 such as the study reference and PubMed abstract link, the study's method and any
@@ -119,6 +127,17 @@ are merged, and gains and losses are merged separately.
 Sample level calls that overlap by &ge; 70% are merged in this
 process.
 </P>
+<p>
+The initial criteria for the Gold Standard set require that a variant 
+is found in at least two different studies and found in at least two different 
+samples. After filtering out low-quality variants, the remaining variants are 
+clustered according to 50% minimum overlap, and then merged into a single 
+record. Gains and losses are merged separately.</p>
+<p>
+The highest ranking variant in the cluster defines the inner box, while the 
+outer lines define the maximum possible start and stop coordinates of the CNV. 
+In this way, the inner box forms a high-confidence CNV location and the 
+thin connecting lines indicate confidence intervals for the location of CNV.</p>
 
 <h2>Data Access</h2>
 <p>
