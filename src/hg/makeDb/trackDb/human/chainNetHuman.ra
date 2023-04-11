@@ -26,52 +26,6 @@ html homoSapiensChainNet
     subTrack humanChainNet
     spectrum on
 
-        track chainGCA_009914755.4
-        parent humanChainNetViewchain
-        subGroups view=chain species=s000 mafType=mt0
-        shortLabel CHM13 T2T Chain
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Chained Alignments
-        type bigChain GCA_009914755.4
-        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCA_009914755.4.bb
-        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCA_009914755.4Link.bb
-        otherDb GCA_009914755.4
-        priority 1
-
-        track chainSynGCA_009914755.4
-        parent humanChainNetViewchain
-        subGroups view=chain species=s000 mafType=mt1
-        shortLabel CHM13 T2T Syn Chain
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Chained Alignments
-        type bigChain GCA_009914755.4
-        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCA_009914755.4.bb
-        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainSynGCA_009914755.4Link.bb
-        otherDb GCA_009914755.4
-        priority 2
-
-        track chainRBestGCA_009914755.4
-        parent humanChainNetViewchain
-        subGroups view=chain species=s000 mafType=mt2
-        shortLabel CHM13 T2T RBest Chain
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Chained Alignments
-        type bigChain GCA_009914755.4
-        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCA_009914755.4.bb
-        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainRBestGCA_009914755.4Link.bb
-        otherDb GCA_009914755.4
-        priority 3
-
-        track chainLiftOverGCA_009914755.4
-        parent humanChainNetViewchain
-        subGroups view=chain species=s000 mafType=mt3
-        shortLabel CHM13 T2T LiftOver Chain
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Lift Over Chained Alignments
-        type bigChain GCA_009914755.4
-        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainLiftOverGCA_009914755.4.bb
-        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainLiftOverGCA_009914755.4Link.bb
-        otherDb GCA_009914755.4
-        priority 4
-
-#############################################################################
-
         track chainGCA_018471345.1
         parent humanChainNetViewchain
         subGroups view=chain species=s002 mafType=mt0
@@ -140,6 +94,16 @@ html homoSapiensChainNet
         type bigChain GCA_018506165.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018506165.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018506165.1Link.bb
+        otherDb GCA_018506165.1
+
+        track chainLiftOverGCA_018506165.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s003 mafType=mt3
+        shortLabel HG03098.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG03098.pri.mat.f1_v2 (May 2021 GCA_018506165.1_HG03098.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018506165.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506165.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506165.1Link.bb
         otherDb GCA_018506165.1
 
         track chainGCA_018472715.1
@@ -212,6 +176,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469405.1Link.bb
         otherDb GCA_018469405.1
 
+        track chainLiftOverGCA_018469405.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s005 mafType=mt3
+        shortLabel HG01258.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG01258.pri.mat.f1_v2 (May 2021 GCA_018469405.1_HG01258.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469405.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469405.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469405.1Link.bb
+        otherDb GCA_018469405.1
+
         track chainGCA_018506965.1
         parent humanChainNetViewchain
         subGroups view=chain species=s006 mafType=mt0
@@ -240,6 +214,16 @@ html homoSapiensChainNet
         type bigChain GCA_018506965.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018506965.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018506965.1Link.bb
+        otherDb GCA_018506965.1
+
+        track chainLiftOverGCA_018506965.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s006 mafType=mt3
+        shortLabel HG005.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG005.pri.mat.f1_v2 (May 2021 GCA_018506965.1_HG005.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018506965.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506965.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506965.1Link.bb
         otherDb GCA_018506965.1
 
         track chainGCA_018467165.1
@@ -272,6 +256,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018467165.1Link.bb
         otherDb GCA_018467165.1
 
+        track chainLiftOverGCA_018467165.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s007 mafType=mt3
+        shortLabel HG01891.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01891.alt.pat.f1_v2 (May 2021 GCA_018467165.1_HG01891.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018467165.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018467165.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018467165.1Link.bb
+        otherDb GCA_018467165.1
+
         track chainGCA_018506125.1
         parent humanChainNetViewchain
         subGroups view=chain species=s008 mafType=mt0
@@ -300,6 +294,16 @@ html homoSapiensChainNet
         type bigChain GCA_018506125.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018506125.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018506125.1Link.bb
+        otherDb GCA_018506125.1
+
+        track chainLiftOverGCA_018506125.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s008 mafType=mt3
+        shortLabel HG02055.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02055.pri.mat.f1_v2 (May 2021 GCA_018506125.1_HG02055.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018506125.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506125.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506125.1Link.bb
         otherDb GCA_018506125.1
 
         track chainGCA_018506975.1
@@ -372,6 +376,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018467015.1Link.bb
         otherDb GCA_018467015.1
 
+        track chainLiftOverGCA_018467015.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s010 mafType=mt3
+        shortLabel HG02486.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02486.pri.mat.f1_v2 (May 2021 GCA_018467015.1_HG02486.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018467015.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018467015.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018467015.1Link.bb
+        otherDb GCA_018467015.1
+
         track chainGCA_018469425.1
         parent humanChainNetViewchain
         subGroups view=chain species=s011 mafType=mt0
@@ -402,6 +416,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469425.1Link.bb
         otherDb GCA_018469425.1
 
+        track chainLiftOverGCA_018469425.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s011 mafType=mt3
+        shortLabel HG03516.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG03516.pri.mat.f1_v2 (May 2021 GCA_018469425.1_HG03516.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469425.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469425.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469425.1Link.bb
+        otherDb GCA_018469425.1
+
         track chainGCA_018470455.1
         parent humanChainNetViewchain
         subGroups view=chain species=s012 mafType=mt0
@@ -430,6 +454,16 @@ html homoSapiensChainNet
         type bigChain GCA_018470455.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018470455.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018470455.1Link.bb
+        otherDb GCA_018470455.1
+
+        track chainLiftOverGCA_018470455.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s012 mafType=mt3
+        shortLabel HG02886.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02886.pri.mat.f1_v2 (May 2021 GCA_018470455.1_HG02886.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018470455.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470455.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470455.1Link.bb
         otherDb GCA_018470455.1
 
         track chainGCA_018506955.1
@@ -502,6 +536,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469415.1Link.bb
         otherDb GCA_018469415.1
 
+        track chainLiftOverGCA_018469415.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s014 mafType=mt3
+        shortLabel HG03516.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG03516.alt.pat.f1_v2 (May 2021 GCA_018469415.1_HG03516.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469415.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469415.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469415.1Link.bb
+        otherDb GCA_018469415.1
+
         track chainGCA_018469925.1
         parent humanChainNetViewchain
         subGroups view=chain species=s015 mafType=mt0
@@ -532,6 +576,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469925.1Link.bb
         otherDb GCA_018469925.1
 
+        track chainLiftOverGCA_018469925.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s015 mafType=mt3
+        shortLabel HG02622.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02622.alt.pat.f1_v2 (May 2021 GCA_018469925.1_HG02622.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469925.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469925.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469925.1Link.bb
+        otherDb GCA_018469925.1
+
         track chainGCA_018470465.1
         parent humanChainNetViewchain
         subGroups view=chain species=s016 mafType=mt0
@@ -560,6 +614,16 @@ html homoSapiensChainNet
         type bigChain GCA_018470465.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018470465.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018470465.1Link.bb
+        otherDb GCA_018470465.1
+
+        track chainLiftOverGCA_018470465.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s016 mafType=mt3
+        shortLabel HG02886.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02886.alt.pat.f1_v2 (May 2021 GCA_018470465.1_HG02886.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018470465.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470465.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470465.1Link.bb
         otherDb GCA_018470465.1
 
         track chainGCA_018471095.1
@@ -672,6 +736,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469665.1Link.bb
         otherDb GCA_018469665.1
 
+        track chainLiftOverGCA_018469665.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s019 mafType=mt3
+        shortLabel HG01123.pri.mat.f1_v2.1 LiftOver Chain
+        longLabel HG01123.pri.mat.f1_v2.1 (May 2021 GCA_018469665.1_HG01123.pri.mat.f1_v2.1) Lift Over Chained Alignments
+        type bigChain GCA_018469665.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469665.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469665.1Link.bb
+        otherDb GCA_018469665.1
+
         track chainGCA_018466835.1
         parent humanChainNetViewchain
         subGroups view=chain species=s020 mafType=mt0
@@ -700,6 +774,16 @@ html homoSapiensChainNet
         type bigChain GCA_018466835.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018466835.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018466835.1Link.bb
+        otherDb GCA_018466835.1
+
+        track chainLiftOverGCA_018466835.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s020 mafType=mt3
+        shortLabel HG02257.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02257.alt.pat.f1_v2 (May 2021 GCA_018466835.1_HG02257.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018466835.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018466835.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018466835.1Link.bb
         otherDb GCA_018466835.1
 
         track chainGCA_018472765.1
@@ -772,6 +856,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504075.1Link.bb
         otherDb GCA_018504075.1
 
+        track chainLiftOverGCA_018504075.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s022 mafType=mt3
+        shortLabel HG02723.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02723.alt.pat.f1_v2 (May 2021 GCA_018504075.1_HG02723.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504075.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504075.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504075.1Link.bb
+        otherDb GCA_018504075.1
+
         track chainGCA_018473305.1
         parent humanChainNetViewchain
         subGroups view=chain species=s023 mafType=mt0
@@ -800,6 +894,16 @@ html homoSapiensChainNet
         type bigChain GCA_018473305.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018473305.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018473305.1Link.bb
+        otherDb GCA_018473305.1
+
+        track chainLiftOverGCA_018473305.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s023 mafType=mt3
+        shortLabel HG03453.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG03453.alt.pat.f1_v2 (May 2021 GCA_018473305.1_HG03453.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018473305.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018473305.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018473305.1Link.bb
         otherDb GCA_018473305.1
 
         track chainGCA_018472725.1
@@ -872,6 +976,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018472855.1Link.bb
         otherDb GCA_018472855.1
 
+        track chainLiftOverGCA_018472855.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s025 mafType=mt3
+        shortLabel HG03453.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG03453.pri.mat.f1_v2 (May 2021 GCA_018472855.1_HG03453.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018472855.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472855.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472855.1Link.bb
+        otherDb GCA_018472855.1
+
         track chainGCA_018471545.1
         parent humanChainNetViewchain
         subGroups view=chain species=s026 mafType=mt0
@@ -900,6 +1014,16 @@ html homoSapiensChainNet
         type bigChain GCA_018471545.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471545.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471545.1Link.bb
+        otherDb GCA_018471545.1
+
+        track chainLiftOverGCA_018471545.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s026 mafType=mt3
+        shortLabel HG01952.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG01952.pri.mat.f1_v2 (May 2021 GCA_018471545.1_HG01952.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018471545.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471545.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471545.1Link.bb
         otherDb GCA_018471545.1
 
         track chainGCA_018472595.1
@@ -972,6 +1096,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018466845.1Link.bb
         otherDb GCA_018466845.1
 
+        track chainLiftOverGCA_018466845.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s028 mafType=mt3
+        shortLabel HG02257.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02257.pri.mat.f1_v2 (May 2021 GCA_018466845.1_HG02257.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018466845.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018466845.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018466845.1Link.bb
+        otherDb GCA_018466845.1
+
         track chainGCA_018466985.1
         parent humanChainNetViewchain
         subGroups view=chain species=s029 mafType=mt0
@@ -1000,6 +1134,16 @@ html homoSapiensChainNet
         type bigChain GCA_018466985.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018466985.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018466985.1Link.bb
+        otherDb GCA_018466985.1
+
+        track chainLiftOverGCA_018466985.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s029 mafType=mt3
+        shortLabel HG02559.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02559.pri.mat.f1_v2 (May 2021 GCA_018466985.1_HG02559.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018466985.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018466985.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018466985.1Link.bb
         otherDb GCA_018466985.1
 
         track chainGCA_018469705.1
@@ -1032,6 +1176,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469705.1Link.bb
         otherDb GCA_018469705.1
 
+        track chainLiftOverGCA_018469705.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s030 mafType=mt3
+        shortLabel HG01361.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01361.alt.pat.f1_v2 (May 2021 GCA_018469705.1_HG01361.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469705.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469705.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469705.1Link.bb
+        otherDb GCA_018469705.1
+
         track chainGCA_018503285.1
         parent humanChainNetViewchain
         subGroups view=chain species=s031 mafType=mt0
@@ -1060,6 +1214,16 @@ html homoSapiensChainNet
         type bigChain GCA_018503285.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503285.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503285.1Link.bb
+        otherDb GCA_018503285.1
+
+        track chainLiftOverGCA_018503285.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s031 mafType=mt3
+        shortLabel NA18906.alt.pat.f1_v2 LiftOver Chain
+        longLabel NA18906.alt.pat.f1_v2 (May 2021 GCA_018503285.1_NA18906.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018503285.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503285.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503285.1Link.bb
         otherDb GCA_018503285.1
 
         track chainGCA_018471515.1
@@ -1132,6 +1296,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503255.1Link.bb
         otherDb GCA_018503255.1
 
+        track chainLiftOverGCA_018503255.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s033 mafType=mt3
+        shortLabel NA18906.pri.mat.f1_v2 LiftOver Chain
+        longLabel NA18906.pri.mat.f1_v2 (May 2021 GCA_018503255.1_NA18906.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018503255.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503255.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503255.1Link.bb
+        otherDb GCA_018503255.1
+
         track chainGCA_018504625.1
         parent humanChainNetViewchain
         subGroups view=chain species=s034 mafType=mt0
@@ -1160,6 +1334,16 @@ html homoSapiensChainNet
         type bigChain GCA_018504625.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504625.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504625.1Link.bb
+        otherDb GCA_018504625.1
+
+        track chainLiftOverGCA_018504625.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s034 mafType=mt3
+        shortLabel NA20129.alt.pat.f1_v2 LiftOver Chain
+        longLabel NA20129.alt.pat.f1_v2 (May 2021 GCA_018504625.1_NA20129.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504625.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504625.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504625.1Link.bb
         otherDb GCA_018504625.1
 
         track chainGCA_018504055.1
@@ -1192,6 +1376,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504055.1Link.bb
         otherDb GCA_018504055.1
 
+        track chainLiftOverGCA_018504055.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s035 mafType=mt3
+        shortLabel HG02080.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02080.alt.pat.f1_v2 (May 2021 GCA_018504055.1_HG02080.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504055.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504055.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504055.1Link.bb
+        otherDb GCA_018504055.1
+
         track chainGCA_018852615.1
         parent humanChainNetViewchain
         subGroups view=chain species=s036 mafType=mt0
@@ -1220,6 +1414,16 @@ html homoSapiensChainNet
         type bigChain GCA_018852615.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018852615.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018852615.1Link.bb
+        otherDb GCA_018852615.1
+
+        track chainLiftOverGCA_018852615.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s036 mafType=mt3
+        shortLabel HG002.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG002.pri.mat.f1_v2 (Jun. 2021 GCA_018852615.1_HG002.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018852615.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018852615.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018852615.1Link.bb
         otherDb GCA_018852615.1
 
         track chainGCA_018472695.1
@@ -1252,6 +1456,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018472695.1Link.bb
         otherDb GCA_018472695.1
 
+        track chainLiftOverGCA_018472695.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s037 mafType=mt3
+        shortLabel HG01928.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG01928.pri.mat.f1_v2 (May 2021 GCA_018472695.1_HG01928.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018472695.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472695.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472695.1Link.bb
+        otherDb GCA_018472695.1
+
         track chainGCA_018505825.1
         parent humanChainNetViewchain
         subGroups view=chain species=s038 mafType=mt0
@@ -1280,6 +1494,16 @@ html homoSapiensChainNet
         type bigChain GCA_018505825.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505825.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505825.1Link.bb
+        otherDb GCA_018505825.1
+
+        track chainLiftOverGCA_018505825.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s038 mafType=mt3
+        shortLabel HG02109.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02109.pri.mat.f1_v2 (May 2021 GCA_018505825.1_HG02109.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018505825.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505825.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505825.1Link.bb
         otherDb GCA_018505825.1
 
         track chainGCA_018472845.1
@@ -1312,6 +1536,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018472845.1Link.bb
         otherDb GCA_018472845.1
 
+        track chainLiftOverGCA_018472845.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s039 mafType=mt3
+        shortLabel HG01978.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01978.alt.pat.f1_v2 (May 2021 GCA_018472845.1_HG01978.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018472845.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472845.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472845.1Link.bb
+        otherDb GCA_018472845.1
+
         track chainGCA_018469685.1
         parent humanChainNetViewchain
         subGroups view=chain species=s040 mafType=mt0
@@ -1340,6 +1574,16 @@ html homoSapiensChainNet
         type bigChain GCA_018469685.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469685.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469685.1Link.bb
+        otherDb GCA_018469685.1
+
+        track chainLiftOverGCA_018469685.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s040 mafType=mt3
+        shortLabel HG01361.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG01361.pri.mat.f1_v2 (May 2021 GCA_018469685.1_HG01361.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469685.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469685.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469685.1Link.bb
         otherDb GCA_018469685.1
 
         track chainGCA_018469935.1
@@ -1372,6 +1616,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469935.1Link.bb
         otherDb GCA_018469935.1
 
+        track chainLiftOverGCA_018469935.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s041 mafType=mt3
+        shortLabel HG02717.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02717.pri.mat.f1_v2 (May 2021 GCA_018469935.1_HG02717.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469935.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469935.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469935.1Link.bb
+        otherDb GCA_018469935.1
+
         track chainGCA_018469695.1
         parent humanChainNetViewchain
         subGroups view=chain species=s042 mafType=mt0
@@ -1400,6 +1654,16 @@ html homoSapiensChainNet
         type bigChain GCA_018469695.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469695.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469695.1Link.bb
+        otherDb GCA_018469695.1
+
+        track chainLiftOverGCA_018469695.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s042 mafType=mt3
+        shortLabel HG01123.alt.pat.f1_v2.1 LiftOver Chain
+        longLabel HG01123.alt.pat.f1_v2.1 (May 2021 GCA_018469695.1_HG01123.alt.pat.f1_v2.1) Lift Over Chained Alignments
+        type bigChain GCA_018469695.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469695.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469695.1Link.bb
         otherDb GCA_018469695.1
 
         track chainGCA_018471535.1
@@ -1432,6 +1696,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471535.1Link.bb
         otherDb GCA_018471535.1
 
+        track chainLiftOverGCA_018471535.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s043 mafType=mt3
+        shortLabel HG02148.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02148.pri.mat.f1_v2 (May 2021 GCA_018471535.1_HG02148.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018471535.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471535.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471535.1Link.bb
+        otherDb GCA_018471535.1
+
         track chainGCA_018504085.1
         parent humanChainNetViewchain
         subGroups view=chain species=s044 mafType=mt0
@@ -1460,6 +1734,16 @@ html homoSapiensChainNet
         type bigChain GCA_018504085.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504085.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504085.1Link.bb
+        otherDb GCA_018504085.1
+
+        track chainLiftOverGCA_018504085.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s044 mafType=mt3
+        shortLabel HG02080.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02080.pri.mat.f1_v2 (May 2021 GCA_018504085.1_HG02080.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504085.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504085.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504085.1Link.bb
         otherDb GCA_018504085.1
 
         track chainGCA_021951015.1
@@ -1532,6 +1816,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503265.1Link.bb
         otherDb GCA_018503265.1
 
+        track chainLiftOverGCA_018503265.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s046 mafType=mt3
+        shortLabel NA19240.alt.pat.f1_v2 LiftOver Chain
+        longLabel NA19240.alt.pat.f1_v2 (May 2021 GCA_018503265.1_NA19240.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018503265.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503265.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503265.1Link.bb
+        otherDb GCA_018503265.1
+
         track chainGCA_018505845.1
         parent humanChainNetViewchain
         subGroups view=chain species=s047 mafType=mt0
@@ -1560,6 +1854,16 @@ html homoSapiensChainNet
         type bigChain GCA_018505845.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505845.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505845.1Link.bb
+        otherDb GCA_018505845.1
+
+        track chainLiftOverGCA_018505845.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s047 mafType=mt3
+        shortLabel HG03492.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG03492.pri.mat.f1_v2 (May 2021 GCA_018505845.1_HG03492.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018505845.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505845.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505845.1Link.bb
         otherDb GCA_018505845.1
 
         track chainGCA_018472565.1
@@ -1632,6 +1936,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503245.1Link.bb
         otherDb GCA_018503245.1
 
+        track chainLiftOverGCA_018503245.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s049 mafType=mt3
+        shortLabel HG03486.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG03486.alt.pat.f1_v2 (May 2021 GCA_018503245.1_HG03486.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018503245.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503245.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503245.1Link.bb
+        otherDb GCA_018503245.1
+
         track chainGCA_018469955.1
         parent humanChainNetViewchain
         subGroups view=chain species=s050 mafType=mt0
@@ -1660,6 +1974,16 @@ html homoSapiensChainNet
         type bigChain GCA_018469955.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469955.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469955.1Link.bb
+        otherDb GCA_018469955.1
+
+        track chainLiftOverGCA_018469955.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s050 mafType=mt3
+        shortLabel HG02630.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02630.pri.mat.f1_v2 (May 2021 GCA_018469955.1_HG02630.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469955.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469955.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469955.1Link.bb
         otherDb GCA_018469955.1
 
         track chainGCA_018471525.1
@@ -1692,6 +2016,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471525.1Link.bb
         otherDb GCA_018471525.1
 
+        track chainLiftOverGCA_018471525.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s051 mafType=mt3
+        shortLabel HG02148.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02148.alt.pat.f1_v2 (May 2021 GCA_018471525.1_HG02148.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018471525.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471525.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471525.1Link.bb
+        otherDb GCA_018471525.1
+
         track chainGCA_018471065.1
         parent humanChainNetViewchain
         subGroups view=chain species=s052 mafType=mt0
@@ -1720,6 +2054,16 @@ html homoSapiensChainNet
         type bigChain GCA_018471065.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471065.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471065.1Link.bb
+        otherDb GCA_018471065.1
+
+        track chainLiftOverGCA_018471065.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s052 mafType=mt3
+        shortLabel HG01175.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01175.alt.pat.f1_v2 (May 2021 GCA_018471065.1_HG01175.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018471065.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471065.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471065.1Link.bb
         otherDb GCA_018471065.1
 
         track chainGCA_018469945.1
@@ -1752,6 +2096,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469945.1Link.bb
         otherDb GCA_018469945.1
 
+        track chainLiftOverGCA_018469945.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s053 mafType=mt3
+        shortLabel HG02630.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02630.alt.pat.f1_v2 (May 2021 GCA_018469945.1_HG02630.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469945.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469945.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469945.1Link.bb
+        otherDb GCA_018469945.1
+
         track chainGCA_018467155.1
         parent humanChainNetViewchain
         subGroups view=chain species=s054 mafType=mt0
@@ -1780,6 +2134,16 @@ html homoSapiensChainNet
         type bigChain GCA_018467155.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018467155.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018467155.1Link.bb
+        otherDb GCA_018467155.1
+
+        track chainLiftOverGCA_018467155.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s054 mafType=mt3
+        shortLabel HG01891.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG01891.pri.mat.f1_v2 (May 2021 GCA_018467155.1_HG01891.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018467155.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018467155.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018467155.1Link.bb
         otherDb GCA_018467155.1
 
         track chainGCA_018504635.1
@@ -1812,6 +2176,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504635.1Link.bb
         otherDb GCA_018504635.1
 
+        track chainLiftOverGCA_018504635.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s055 mafType=mt3
+        shortLabel NA20129.pri.mat.f1_v2 LiftOver Chain
+        longLabel NA20129.pri.mat.f1_v2 (May 2021 GCA_018504635.1_NA20129.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504635.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504635.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504635.1Link.bb
+        otherDb GCA_018504635.1
+
         track chainGCA_018503575.1
         parent humanChainNetViewchain
         subGroups view=chain species=s056 mafType=mt0
@@ -1840,6 +2214,16 @@ html homoSapiensChainNet
         type bigChain GCA_018503575.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503575.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503575.1Link.bb
+        otherDb GCA_018503575.1
+
+        track chainLiftOverGCA_018503575.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s056 mafType=mt3
+        shortLabel HG02818.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02818.alt.pat.f1_v2 (May 2021 GCA_018503575.1_HG02818.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018503575.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503575.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503575.1Link.bb
         otherDb GCA_018503575.1
 
         track chainGCA_018504665.1
@@ -1872,6 +2256,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504665.1Link.bb
         otherDb GCA_018504665.1
 
+        track chainLiftOverGCA_018504665.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s057 mafType=mt3
+        shortLabel NA21309.alt.pat.f1_v2 LiftOver Chain
+        longLabel NA21309.alt.pat.f1_v2 (May 2021 GCA_018504665.1_NA21309.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504665.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504665.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504665.1Link.bb
+        otherDb GCA_018504665.1
+
         track chainGCA_018466855.1
         parent humanChainNetViewchain
         subGroups view=chain species=s058 mafType=mt0
@@ -1902,6 +2296,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018466855.1Link.bb
         otherDb GCA_018466855.1
 
+        track chainLiftOverGCA_018466855.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s058 mafType=mt3
+        shortLabel HG02559.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02559.alt.pat.f1_v2 (May 2021 GCA_018466855.1_HG02559.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018466855.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018466855.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018466855.1Link.bb
+        otherDb GCA_018466855.1
+
         track chainGCA_018469865.1
         parent humanChainNetViewchain
         subGroups view=chain species=s059 mafType=mt0
@@ -1930,6 +2334,16 @@ html homoSapiensChainNet
         type bigChain GCA_018469865.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469865.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469865.1Link.bb
+        otherDb GCA_018469865.1
+
+        track chainLiftOverGCA_018469865.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s059 mafType=mt3
+        shortLabel HG01358.pri.mat.f1_v2.1 LiftOver Chain
+        longLabel HG01358.pri.mat.f1_v2.1 (May 2021 GCA_018469865.1_HG01358.pri.mat.f1_v2.1) Lift Over Chained Alignments
+        type bigChain GCA_018469865.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469865.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469865.1Link.bb
         otherDb GCA_018469865.1
 
         track chainGCA_018471105.1
@@ -2002,6 +2416,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018472825.1Link.bb
         otherDb GCA_018472825.1
 
+        track chainLiftOverGCA_018472825.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s061 mafType=mt3
+        shortLabel HG03579.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG03579.pri.mat.f1_v2 (May 2021 GCA_018472825.1_HG03579.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018472825.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472825.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472825.1Link.bb
+        otherDb GCA_018472825.1
+
         track chainGCA_018504655.1
         parent humanChainNetViewchain
         subGroups view=chain species=s062 mafType=mt0
@@ -2032,6 +2456,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504655.1Link.bb
         otherDb GCA_018504655.1
 
+        track chainLiftOverGCA_018504655.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s062 mafType=mt3
+        shortLabel NA21309.pri.mat.f1_v2 LiftOver Chain
+        longLabel NA21309.pri.mat.f1_v2 (May 2021 GCA_018504655.1_NA21309.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504655.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504655.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504655.1Link.bb
+        otherDb GCA_018504655.1
+
         track chainGCA_018505865.1
         parent humanChainNetViewchain
         subGroups view=chain species=s063 mafType=mt0
@@ -2060,6 +2494,16 @@ html homoSapiensChainNet
         type bigChain GCA_018505865.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505865.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505865.1Link.bb
+        otherDb GCA_018505865.1
+
+        track chainLiftOverGCA_018505865.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s063 mafType=mt3
+        shortLabel HG02109.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02109.alt.pat.f1_v2 (May 2021 GCA_018505865.1_HG02109.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018505865.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505865.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505865.1Link.bb
         otherDb GCA_018505865.1
 
         track chainGCA_018472685.1
@@ -2132,6 +2576,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018473295.1Link.bb
         otherDb GCA_018473295.1
 
+        track chainLiftOverGCA_018473295.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s065 mafType=mt3
+        shortLabel HG03540.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG03540.pri.mat.f1_v2 (May 2021 GCA_018473295.1_HG03540.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018473295.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018473295.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018473295.1Link.bb
+        otherDb GCA_018473295.1
+
         track chainGCA_018852585.1
         parent humanChainNetViewchain
         subGroups view=chain species=s066 mafType=mt0
@@ -2160,6 +2614,16 @@ html homoSapiensChainNet
         type bigChain GCA_018852585.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018852585.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018852585.1Link.bb
+        otherDb GCA_018852585.1
+
+        track chainLiftOverGCA_018852585.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s066 mafType=mt3
+        shortLabel HG02145.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02145.pri.mat.f1_v2 (Jun. 2021 GCA_018852585.1_HG02145.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018852585.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018852585.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018852585.1Link.bb
         otherDb GCA_018852585.1
 
         track chainGCA_018472865.1
@@ -2192,6 +2656,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018472865.1Link.bb
         otherDb GCA_018472865.1
 
+        track chainLiftOverGCA_018472865.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s067 mafType=mt3
+        shortLabel HG01978.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG01978.pri.mat.f1_v2 (May 2021 GCA_018472865.1_HG01978.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018472865.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472865.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472865.1Link.bb
+        otherDb GCA_018472865.1
+
         track chainGCA_018503525.1
         parent humanChainNetViewchain
         subGroups view=chain species=s068 mafType=mt0
@@ -2220,6 +2694,16 @@ html homoSapiensChainNet
         type bigChain GCA_018503525.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503525.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503525.1Link.bb
+        otherDb GCA_018503525.1
+
+        track chainLiftOverGCA_018503525.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s068 mafType=mt3
+        shortLabel HG03486.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG03486.pri.mat.f1_v2 (May 2021 GCA_018503525.1_HG03486.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018503525.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503525.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503525.1Link.bb
         otherDb GCA_018503525.1
 
         track chainGCA_018503275.1
@@ -2252,6 +2736,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503275.1Link.bb
         otherDb GCA_018503275.1
 
+        track chainLiftOverGCA_018503275.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s069 mafType=mt3
+        shortLabel NA19240.pri.mat.f1_v2 LiftOver Chain
+        longLabel NA19240.pri.mat.f1_v2 (May 2021 GCA_018503275.1_NA19240.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018503275.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503275.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503275.1Link.bb
+        otherDb GCA_018503275.1
+
         track chainGCA_018503585.1
         parent humanChainNetViewchain
         subGroups view=chain species=s070 mafType=mt0
@@ -2280,6 +2774,16 @@ html homoSapiensChainNet
         type bigChain GCA_018503585.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503585.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018503585.1Link.bb
+        otherDb GCA_018503585.1
+
+        track chainLiftOverGCA_018503585.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s070 mafType=mt3
+        shortLabel HG02818.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02818.pri.mat.f1_v2 (May 2021 GCA_018503585.1_HG02818.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018503585.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503585.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018503585.1Link.bb
         otherDb GCA_018503585.1
 
         track chainGCA_018504065.1
@@ -2312,6 +2816,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504065.1Link.bb
         otherDb GCA_018504065.1
 
+        track chainLiftOverGCA_018504065.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s071 mafType=mt3
+        shortLabel HG02723.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02723.pri.mat.f1_v2 (May 2021 GCA_018504065.1_HG02723.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504065.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504065.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504065.1Link.bb
+        otherDb GCA_018504065.1
+
         track chainGCA_018469875.1
         parent humanChainNetViewchain
         subGroups view=chain species=s072 mafType=mt0
@@ -2340,6 +2854,16 @@ html homoSapiensChainNet
         type bigChain GCA_018469875.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469875.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469875.1Link.bb
+        otherDb GCA_018469875.1
+
+        track chainLiftOverGCA_018469875.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s072 mafType=mt3
+        shortLabel HG02622.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02622.pri.mat.f1_v2 (May 2021 GCA_018469875.1_HG02622.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469875.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469875.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469875.1Link.bb
         otherDb GCA_018469875.1
 
         track chainGCA_018473315.1
@@ -2372,6 +2896,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018473315.1Link.bb
         otherDb GCA_018473315.1
 
+        track chainLiftOverGCA_018473315.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s073 mafType=mt3
+        shortLabel HG03540.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG03540.alt.pat.f1_v2 (May 2021 GCA_018473315.1_HG03540.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018473315.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018473315.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018473315.1Link.bb
+        otherDb GCA_018473315.1
+
         track chainGCA_018470445.1
         parent humanChainNetViewchain
         subGroups view=chain species=s074 mafType=mt0
@@ -2400,6 +2934,16 @@ html homoSapiensChainNet
         type bigChain GCA_018470445.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018470445.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018470445.1Link.bb
+        otherDb GCA_018470445.1
+
+        track chainLiftOverGCA_018470445.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s074 mafType=mt3
+        shortLabel HG02572.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG02572.pri.mat.f1_v2 (May 2021 GCA_018470445.1_HG02572.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018470445.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470445.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470445.1Link.bb
         otherDb GCA_018470445.1
 
         track chainGCA_018504375.1
@@ -2432,6 +2976,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504375.1Link.bb
         otherDb GCA_018504375.1
 
+        track chainLiftOverGCA_018504375.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s075 mafType=mt3
+        shortLabel HG01243.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG01243.pri.mat.f1_v2 (May 2021 GCA_018504375.1_HG01243.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504375.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504375.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504375.1Link.bb
+        otherDb GCA_018504375.1
+
         track chainGCA_018504365.1
         parent humanChainNetViewchain
         subGroups view=chain species=s076 mafType=mt0
@@ -2462,6 +3016,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504365.1Link.bb
         otherDb GCA_018504365.1
 
+        track chainLiftOverGCA_018504365.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s076 mafType=mt3
+        shortLabel HG01109.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG01109.pri.mat.f1_v2 (May 2021 GCA_018504365.1_HG01109.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504365.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504365.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504365.1Link.bb
+        otherDb GCA_018504365.1
+
         track chainGCA_018471085.1
         parent humanChainNetViewchain
         subGroups view=chain species=s077 mafType=mt0
@@ -2490,6 +3054,16 @@ html homoSapiensChainNet
         type bigChain GCA_018471085.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471085.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471085.1Link.bb
+        otherDb GCA_018471085.1
+
+        track chainLiftOverGCA_018471085.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s077 mafType=mt3
+        shortLabel HG01175.pri.mat.f1_v2 LiftOver Chain
+        longLabel HG01175.pri.mat.f1_v2 (May 2021 GCA_018471085.1_HG01175.pri.mat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018471085.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471085.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471085.1Link.bb
         otherDb GCA_018471085.1
 
         track chainGCA_018472575.1
@@ -2562,6 +3136,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018472705.1Link.bb
         otherDb GCA_018472705.1
 
+        track chainLiftOverGCA_018472705.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s079 mafType=mt3
+        shortLabel HG01928.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01928.alt.pat.f1_v2 (May 2021 GCA_018472705.1_HG01928.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018472705.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472705.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472705.1Link.bb
+        otherDb GCA_018472705.1
+
         track chainGCA_018506945.1
         parent humanChainNetViewchain
         subGroups view=chain species=s080 mafType=mt0
@@ -2590,6 +3174,16 @@ html homoSapiensChainNet
         type bigChain GCA_018506945.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018506945.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018506945.1Link.bb
+        otherDb GCA_018506945.1
+
+        track chainLiftOverGCA_018506945.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s080 mafType=mt3
+        shortLabel HG005.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG005.alt.pat.f1_v2 (May 2021 GCA_018506945.1_HG005.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018506945.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506945.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506945.1Link.bb
         otherDb GCA_018506945.1
 
         track chainGCA_018471075.1
@@ -2622,6 +3216,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471075.1Link.bb
         otherDb GCA_018471075.1
 
+        track chainLiftOverGCA_018471075.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s081 mafType=mt3
+        shortLabel HG01106.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01106.alt.pat.f1_v2 (May 2021 GCA_018471075.1_HG01106.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018471075.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471075.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471075.1Link.bb
+        otherDb GCA_018471075.1
+
         track chainGCA_018469675.1
         parent humanChainNetViewchain
         subGroups view=chain species=s082 mafType=mt0
@@ -2650,6 +3254,16 @@ html homoSapiensChainNet
         type bigChain GCA_018469675.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469675.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469675.1Link.bb
+        otherDb GCA_018469675.1
+
+        track chainLiftOverGCA_018469675.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s082 mafType=mt3
+        shortLabel HG01258.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01258.alt.pat.f1_v2 (May 2021 GCA_018469675.1_HG01258.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018469675.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469675.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469675.1Link.bb
         otherDb GCA_018469675.1
 
         track chainGCA_018469965.1
@@ -2682,6 +3296,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018469965.1Link.bb
         otherDb GCA_018469965.1
 
+        track chainLiftOverGCA_018469965.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s083 mafType=mt3
+        shortLabel HG01358.alt.pat.f1_v2.1 LiftOver Chain
+        longLabel HG01358.alt.pat.f1_v2.1 (May 2021 GCA_018469965.1_HG01358.alt.pat.f1_v2.1) Lift Over Chained Alignments
+        type bigChain GCA_018469965.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469965.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018469965.1Link.bb
+        otherDb GCA_018469965.1
+
         track chainGCA_018504645.1
         parent humanChainNetViewchain
         subGroups view=chain species=s084 mafType=mt0
@@ -2710,6 +3334,16 @@ html homoSapiensChainNet
         type bigChain GCA_018504645.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504645.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504645.1Link.bb
+        otherDb GCA_018504645.1
+
+        track chainLiftOverGCA_018504645.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s084 mafType=mt3
+        shortLabel HG01109.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01109.alt.pat.f1_v2 (May 2021 GCA_018504645.1_HG01109.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504645.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504645.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504645.1Link.bb
         otherDb GCA_018504645.1
 
         track chainGCA_018470425.1
@@ -2742,6 +3376,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018470425.1Link.bb
         otherDb GCA_018470425.1
 
+        track chainLiftOverGCA_018470425.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s085 mafType=mt3
+        shortLabel HG02717.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02717.alt.pat.f1_v2 (May 2021 GCA_018470425.1_HG02717.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018470425.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470425.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470425.1Link.bb
+        otherDb GCA_018470425.1
+
         track chainGCA_018505855.1
         parent humanChainNetViewchain
         subGroups view=chain species=s086 mafType=mt0
@@ -2770,6 +3414,16 @@ html homoSapiensChainNet
         type bigChain GCA_018505855.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505855.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505855.1Link.bb
+        otherDb GCA_018505855.1
+
+        track chainLiftOverGCA_018505855.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s086 mafType=mt3
+        shortLabel HG02055.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02055.alt.pat.f1_v2 (May 2021 GCA_018505855.1_HG02055.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018505855.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505855.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505855.1Link.bb
         otherDb GCA_018505855.1
 
         track chainGCA_018852605.1
@@ -2802,6 +3456,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018852605.1Link.bb
         otherDb GCA_018852605.1
 
+        track chainLiftOverGCA_018852605.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s087 mafType=mt3
+        shortLabel HG002.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG002.alt.pat.f1_v2 (Jun. 2021 GCA_018852605.1_HG002.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018852605.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018852605.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018852605.1Link.bb
+        otherDb GCA_018852605.1
+
         track chainGCA_018505835.1
         parent humanChainNetViewchain
         subGroups view=chain species=s088 mafType=mt0
@@ -2830,6 +3494,16 @@ html homoSapiensChainNet
         type bigChain GCA_018505835.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505835.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018505835.1Link.bb
+        otherDb GCA_018505835.1
+
+        track chainLiftOverGCA_018505835.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s088 mafType=mt3
+        shortLabel HG03492.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG03492.alt.pat.f1_v2 (May 2021 GCA_018505835.1_HG03492.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018505835.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505835.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018505835.1Link.bb
         otherDb GCA_018505835.1
 
         track chainGCA_018472585.1
@@ -2942,6 +3616,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018504045.1Link.bb
         otherDb GCA_018504045.1
 
+        track chainLiftOverGCA_018504045.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s091 mafType=mt3
+        shortLabel HG01243.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01243.alt.pat.f1_v2 (May 2021 GCA_018504045.1_HG01243.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018504045.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504045.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018504045.1Link.bb
+        otherDb GCA_018504045.1
+
         track chainGCA_018467005.1
         parent humanChainNetViewchain
         subGroups view=chain species=s092 mafType=mt0
@@ -2970,6 +3654,16 @@ html homoSapiensChainNet
         type bigChain GCA_018467005.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018467005.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018467005.1Link.bb
+        otherDb GCA_018467005.1
+
+        track chainLiftOverGCA_018467005.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s092 mafType=mt3
+        shortLabel HG02486.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02486.alt.pat.f1_v2 (May 2021 GCA_018467005.1_HG02486.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018467005.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018467005.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018467005.1Link.bb
         otherDb GCA_018467005.1
 
         track chainGCA_018472835.1
@@ -3002,6 +3696,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018472835.1Link.bb
         otherDb GCA_018472835.1
 
+        track chainLiftOverGCA_018472835.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s093 mafType=mt3
+        shortLabel HG03579.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG03579.alt.pat.f1_v2 (May 2021 GCA_018472835.1_HG03579.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018472835.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472835.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018472835.1Link.bb
+        otherDb GCA_018472835.1
+
         track chainGCA_018852595.1
         parent humanChainNetViewchain
         subGroups view=chain species=s094 mafType=mt0
@@ -3030,6 +3734,16 @@ html homoSapiensChainNet
         type bigChain GCA_018852595.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018852595.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018852595.1Link.bb
+        otherDb GCA_018852595.1
+
+        track chainLiftOverGCA_018852595.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s094 mafType=mt3
+        shortLabel HG02145.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02145.alt.pat.f1_v2 (Jun. 2021 GCA_018852595.1_HG02145.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018852595.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018852595.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018852595.1Link.bb
         otherDb GCA_018852595.1
 
         track chainGCA_018471555.1
@@ -3062,6 +3776,16 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018471555.1Link.bb
         otherDb GCA_018471555.1
 
+        track chainLiftOverGCA_018471555.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s095 mafType=mt3
+        shortLabel HG01952.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG01952.alt.pat.f1_v2 (May 2021 GCA_018471555.1_HG01952.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018471555.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471555.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018471555.1Link.bb
+        otherDb GCA_018471555.1
+
         track chainGCA_018470435.1
         parent humanChainNetViewchain
         subGroups view=chain species=s096 mafType=mt0
@@ -3090,6 +3814,16 @@ html homoSapiensChainNet
         type bigChain GCA_018470435.1
         bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018470435.1.bb
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018470435.1Link.bb
+        otherDb GCA_018470435.1
+
+        track chainLiftOverGCA_018470435.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s096 mafType=mt3
+        shortLabel HG02572.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG02572.alt.pat.f1_v2 (May 2021 GCA_018470435.1_HG02572.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018470435.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470435.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018470435.1Link.bb
         otherDb GCA_018470435.1
 
         track chainGCA_018506155.1
@@ -3122,62 +3856,21 @@ html homoSapiensChainNet
         linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_018506155.1Link.bb
         otherDb GCA_018506155.1
 
+        track chainLiftOverGCA_018506155.1
+        parent humanChainNetViewchain
+        subGroups view=chain species=s097 mafType=mt3
+        shortLabel HG03098.alt.pat.f1_v2 LiftOver Chain
+        longLabel HG03098.alt.pat.f1_v2 (May 2021 GCA_018506155.1_HG03098.alt.pat.f1_v2) Lift Over Chained Alignments
+        type bigChain GCA_018506155.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506155.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_018506155.1Link.bb
+        otherDb GCA_018506155.1
+
     track humanMafNetViewnet
     shortLabel Nets
     view net
     visibility dense
     subTrack humanChainNet
-
-        track netGCA_009914755.4
-        parent humanMafNetViewnet
-        subGroups view=net species=s000 mafType=mt0
-        shortLabel CHM13 T2T Net
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Net Alignment
-        type bigMaf
-        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.net.bb
-        summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.net.summary.bb
-        speciesOrder GCA_009914755.4
-        html chainNet
-        otherDb GCA_009914755.4
-        priority 1
-
-        track synNetGCA_009914755.4
-        parent humanMafNetViewnet
-        subGroups view=net species=s000 mafType=mt1
-        shortLabel CHM13 T2T Syn Net
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Syntenic Net Alignment
-        type bigMaf
-        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.synNet.bb
-        summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.synNet.summary.bb
-        speciesOrder GCA_009914755.4
-        otherDb GCA_009914755.4
-        priority 2
-
-        track rbestNetGCA_009914755.4
-        parent humanMafNetViewnet
-        subGroups view=net species=s000 mafType=mt2
-        shortLabel CHM13 T2T RBest Net
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Reciprocal Best Net Alignment
-        type bigMaf
-        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.rbestNet.bb
-        summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.rbestNet.summary.bb
-        speciesOrder GCA_009914755.4
-        otherDb GCA_009914755.4
-        priority 3
-
-        track liftOverNetGCA_009914755.4
-        parent humanMafNetViewnet
-        subGroups view=net species=s000 mafType=mt3
-        shortLabel CHM13 T2T liftOverNet
-        longLabel CHM13 T2T (Jan. 2022 GCA_009914755.4_CHM13_T2T_v2.0) Lift Over Net Alignment
-        type bigMaf
-        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.liftOverNet.bb
-        summary /gbdb/$D/bbi/chainNet/$D.GCA_009914755.4.liftOverNet.summary.bb
-        speciesOrder GCA_009914755.4
-        otherDb GCA_009914755.4
-        priority 4
-
-###############################################################################
 
         track netGCA_018471345.1
         parent humanMafNetViewnet
@@ -3253,6 +3946,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018506165.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018506165.1.rbestNet.summary.bb
+        speciesOrder GCA_018506165.1
+        speciesLabels GCA_018506165.1="HG03098.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018506165.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s003 mafType=mt3
+        shortLabel HG03098.pri.mat.f1_v2 liftOverNet
+        longLabel HG03098.pri.mat.f1_v2 (May 2021 GCA_018506165.1_HG03098.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018506165.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018506165.1.liftOverNet.summary.bb
         speciesOrder GCA_018506165.1
         speciesLabels GCA_018506165.1="HG03098.pri.mat.f1_v2"
 
@@ -3333,6 +4037,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018469405.1
         speciesLabels GCA_018469405.1="HG01258.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018469405.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s005 mafType=mt3
+        shortLabel HG01258.pri.mat.f1_v2 liftOverNet
+        longLabel HG01258.pri.mat.f1_v2 (May 2021 GCA_018469405.1_HG01258.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469405.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469405.1.liftOverNet.summary.bb
+        speciesOrder GCA_018469405.1
+        speciesLabels GCA_018469405.1="HG01258.pri.mat.f1_v2"
+
         track netGCA_018506965.1
         parent humanMafNetViewnet
         subGroups view=net species=s006 mafType=mt0
@@ -3363,6 +4078,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018506965.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018506965.1.rbestNet.summary.bb
+        speciesOrder GCA_018506965.1
+        speciesLabels GCA_018506965.1="HG005.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018506965.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s006 mafType=mt3
+        shortLabel HG005.pri.mat.f1_v2 liftOverNet
+        longLabel HG005.pri.mat.f1_v2 (May 2021 GCA_018506965.1_HG005.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018506965.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018506965.1.liftOverNet.summary.bb
         speciesOrder GCA_018506965.1
         speciesLabels GCA_018506965.1="HG005.pri.mat.f1_v2"
 
@@ -3399,6 +4125,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018467165.1
         speciesLabels GCA_018467165.1="HG01891.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018467165.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s007 mafType=mt3
+        shortLabel HG01891.alt.pat.f1_v2 liftOverNet
+        longLabel HG01891.alt.pat.f1_v2 (May 2021 GCA_018467165.1_HG01891.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018467165.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018467165.1.liftOverNet.summary.bb
+        speciesOrder GCA_018467165.1
+        speciesLabels GCA_018467165.1="HG01891.alt.pat.f1_v2"
+
         track netGCA_018506125.1
         parent humanMafNetViewnet
         subGroups view=net species=s008 mafType=mt0
@@ -3429,6 +4166,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018506125.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018506125.1.rbestNet.summary.bb
+        speciesOrder GCA_018506125.1
+        speciesLabels GCA_018506125.1="HG02055.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018506125.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s008 mafType=mt3
+        shortLabel HG02055.pri.mat.f1_v2 liftOverNet
+        longLabel HG02055.pri.mat.f1_v2 (May 2021 GCA_018506125.1_HG02055.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018506125.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018506125.1.liftOverNet.summary.bb
         speciesOrder GCA_018506125.1
         speciesLabels GCA_018506125.1="HG02055.pri.mat.f1_v2"
 
@@ -3509,6 +4257,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018467015.1
         speciesLabels GCA_018467015.1="HG02486.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018467015.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s010 mafType=mt3
+        shortLabel HG02486.pri.mat.f1_v2 liftOverNet
+        longLabel HG02486.pri.mat.f1_v2 (May 2021 GCA_018467015.1_HG02486.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018467015.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018467015.1.liftOverNet.summary.bb
+        speciesOrder GCA_018467015.1
+        speciesLabels GCA_018467015.1="HG02486.pri.mat.f1_v2"
+
         track netGCA_018469425.1
         parent humanMafNetViewnet
         subGroups view=net species=s011 mafType=mt0
@@ -3542,6 +4301,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018469425.1
         speciesLabels GCA_018469425.1="HG03516.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018469425.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s011 mafType=mt3
+        shortLabel HG03516.pri.mat.f1_v2 liftOverNet
+        longLabel HG03516.pri.mat.f1_v2 (May 2021 GCA_018469425.1_HG03516.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469425.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469425.1.liftOverNet.summary.bb
+        speciesOrder GCA_018469425.1
+        speciesLabels GCA_018469425.1="HG03516.pri.mat.f1_v2"
+
         track netGCA_018470455.1
         parent humanMafNetViewnet
         subGroups view=net species=s012 mafType=mt0
@@ -3572,6 +4342,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018470455.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018470455.1.rbestNet.summary.bb
+        speciesOrder GCA_018470455.1
+        speciesLabels GCA_018470455.1="HG02886.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018470455.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s012 mafType=mt3
+        shortLabel HG02886.pri.mat.f1_v2 liftOverNet
+        longLabel HG02886.pri.mat.f1_v2 (May 2021 GCA_018470455.1_HG02886.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018470455.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018470455.1.liftOverNet.summary.bb
         speciesOrder GCA_018470455.1
         speciesLabels GCA_018470455.1="HG02886.pri.mat.f1_v2"
 
@@ -3652,6 +4433,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018469415.1
         speciesLabels GCA_018469415.1="HG03516.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018469415.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s014 mafType=mt3
+        shortLabel HG03516.alt.pat.f1_v2 liftOverNet
+        longLabel HG03516.alt.pat.f1_v2 (May 2021 GCA_018469415.1_HG03516.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469415.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469415.1.liftOverNet.summary.bb
+        speciesOrder GCA_018469415.1
+        speciesLabels GCA_018469415.1="HG03516.alt.pat.f1_v2"
+
         track netGCA_018469925.1
         parent humanMafNetViewnet
         subGroups view=net species=s015 mafType=mt0
@@ -3685,6 +4477,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018469925.1
         speciesLabels GCA_018469925.1="HG02622.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018469925.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s015 mafType=mt3
+        shortLabel HG02622.alt.pat.f1_v2 liftOverNet
+        longLabel HG02622.alt.pat.f1_v2 (May 2021 GCA_018469925.1_HG02622.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469925.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469925.1.liftOverNet.summary.bb
+        speciesOrder GCA_018469925.1
+        speciesLabels GCA_018469925.1="HG02622.alt.pat.f1_v2"
+
         track netGCA_018470465.1
         parent humanMafNetViewnet
         subGroups view=net species=s016 mafType=mt0
@@ -3715,6 +4518,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018470465.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018470465.1.rbestNet.summary.bb
+        speciesOrder GCA_018470465.1
+        speciesLabels GCA_018470465.1="HG02886.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018470465.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s016 mafType=mt3
+        shortLabel HG02886.alt.pat.f1_v2 liftOverNet
+        longLabel HG02886.alt.pat.f1_v2 (May 2021 GCA_018470465.1_HG02886.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018470465.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018470465.1.liftOverNet.summary.bb
         speciesOrder GCA_018470465.1
         speciesLabels GCA_018470465.1="HG02886.alt.pat.f1_v2"
 
@@ -3839,6 +4653,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018469665.1
         speciesLabels GCA_018469665.1="HG01123.pri.mat.f1_v2.1"
 
+        track liftOverNetGCA_018469665.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s019 mafType=mt3
+        shortLabel HG01123.pri.mat.f1_v2.1 liftOverNet
+        longLabel HG01123.pri.mat.f1_v2.1 (May 2021 GCA_018469665.1_HG01123.pri.mat.f1_v2.1) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469665.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469665.1.liftOverNet.summary.bb
+        speciesOrder GCA_018469665.1
+        speciesLabels GCA_018469665.1="HG01123.pri.mat.f1_v2.1"
+
         track netGCA_018466835.1
         parent humanMafNetViewnet
         subGroups view=net species=s020 mafType=mt0
@@ -3869,6 +4694,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018466835.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018466835.1.rbestNet.summary.bb
+        speciesOrder GCA_018466835.1
+        speciesLabels GCA_018466835.1="HG02257.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018466835.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s020 mafType=mt3
+        shortLabel HG02257.alt.pat.f1_v2 liftOverNet
+        longLabel HG02257.alt.pat.f1_v2 (May 2021 GCA_018466835.1_HG02257.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018466835.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018466835.1.liftOverNet.summary.bb
         speciesOrder GCA_018466835.1
         speciesLabels GCA_018466835.1="HG02257.alt.pat.f1_v2"
 
@@ -3949,6 +4785,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018504075.1
         speciesLabels GCA_018504075.1="HG02723.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018504075.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s022 mafType=mt3
+        shortLabel HG02723.alt.pat.f1_v2 liftOverNet
+        longLabel HG02723.alt.pat.f1_v2 (May 2021 GCA_018504075.1_HG02723.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504075.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504075.1.liftOverNet.summary.bb
+        speciesOrder GCA_018504075.1
+        speciesLabels GCA_018504075.1="HG02723.alt.pat.f1_v2"
+
         track netGCA_018473305.1
         parent humanMafNetViewnet
         subGroups view=net species=s023 mafType=mt0
@@ -3979,6 +4826,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018473305.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018473305.1.rbestNet.summary.bb
+        speciesOrder GCA_018473305.1
+        speciesLabels GCA_018473305.1="HG03453.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018473305.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s023 mafType=mt3
+        shortLabel HG03453.alt.pat.f1_v2 liftOverNet
+        longLabel HG03453.alt.pat.f1_v2 (May 2021 GCA_018473305.1_HG03453.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018473305.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018473305.1.liftOverNet.summary.bb
         speciesOrder GCA_018473305.1
         speciesLabels GCA_018473305.1="HG03453.alt.pat.f1_v2"
 
@@ -4059,6 +4917,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018472855.1
         speciesLabels GCA_018472855.1="HG03453.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018472855.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s025 mafType=mt3
+        shortLabel HG03453.pri.mat.f1_v2 liftOverNet
+        longLabel HG03453.pri.mat.f1_v2 (May 2021 GCA_018472855.1_HG03453.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018472855.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018472855.1.liftOverNet.summary.bb
+        speciesOrder GCA_018472855.1
+        speciesLabels GCA_018472855.1="HG03453.pri.mat.f1_v2"
+
         track netGCA_018471545.1
         parent humanMafNetViewnet
         subGroups view=net species=s026 mafType=mt0
@@ -4089,6 +4958,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471545.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018471545.1.rbestNet.summary.bb
+        speciesOrder GCA_018471545.1
+        speciesLabels GCA_018471545.1="HG01952.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018471545.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s026 mafType=mt3
+        shortLabel HG01952.pri.mat.f1_v2 liftOverNet
+        longLabel HG01952.pri.mat.f1_v2 (May 2021 GCA_018471545.1_HG01952.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471545.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018471545.1.liftOverNet.summary.bb
         speciesOrder GCA_018471545.1
         speciesLabels GCA_018471545.1="HG01952.pri.mat.f1_v2"
 
@@ -4169,6 +5049,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018466845.1
         speciesLabels GCA_018466845.1="HG02257.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018466845.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s028 mafType=mt3
+        shortLabel HG02257.pri.mat.f1_v2 liftOverNet
+        longLabel HG02257.pri.mat.f1_v2 (May 2021 GCA_018466845.1_HG02257.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018466845.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018466845.1.liftOverNet.summary.bb
+        speciesOrder GCA_018466845.1
+        speciesLabels GCA_018466845.1="HG02257.pri.mat.f1_v2"
+
         track netGCA_018466985.1
         parent humanMafNetViewnet
         subGroups view=net species=s029 mafType=mt0
@@ -4199,6 +5090,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018466985.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018466985.1.rbestNet.summary.bb
+        speciesOrder GCA_018466985.1
+        speciesLabels GCA_018466985.1="HG02559.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018466985.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s029 mafType=mt3
+        shortLabel HG02559.pri.mat.f1_v2 liftOverNet
+        longLabel HG02559.pri.mat.f1_v2 (May 2021 GCA_018466985.1_HG02559.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018466985.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018466985.1.liftOverNet.summary.bb
         speciesOrder GCA_018466985.1
         speciesLabels GCA_018466985.1="HG02559.pri.mat.f1_v2"
 
@@ -4235,6 +5137,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018469705.1
         speciesLabels GCA_018469705.1="HG01361.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018469705.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s030 mafType=mt3
+        shortLabel HG01361.alt.pat.f1_v2 liftOverNet
+        longLabel HG01361.alt.pat.f1_v2 (May 2021 GCA_018469705.1_HG01361.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469705.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469705.1.liftOverNet.summary.bb
+        speciesOrder GCA_018469705.1
+        speciesLabels GCA_018469705.1="HG01361.alt.pat.f1_v2"
+
         track netGCA_018503285.1
         parent humanMafNetViewnet
         subGroups view=net species=s031 mafType=mt0
@@ -4265,6 +5178,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503285.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018503285.1.rbestNet.summary.bb
+        speciesOrder GCA_018503285.1
+        speciesLabels GCA_018503285.1="NA18906.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018503285.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s031 mafType=mt3
+        shortLabel NA18906.alt.pat.f1_v2 liftOverNet
+        longLabel NA18906.alt.pat.f1_v2 (May 2021 GCA_018503285.1_NA18906.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503285.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018503285.1.liftOverNet.summary.bb
         speciesOrder GCA_018503285.1
         speciesLabels GCA_018503285.1="NA18906.alt.pat.f1_v2"
 
@@ -4345,6 +5269,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018503255.1
         speciesLabels GCA_018503255.1="NA18906.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018503255.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s033 mafType=mt3
+        shortLabel NA18906.pri.mat.f1_v2 liftOverNet
+        longLabel NA18906.pri.mat.f1_v2 (May 2021 GCA_018503255.1_NA18906.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503255.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018503255.1.liftOverNet.summary.bb
+        speciesOrder GCA_018503255.1
+        speciesLabels GCA_018503255.1="NA18906.pri.mat.f1_v2"
+
         track netGCA_018504625.1
         parent humanMafNetViewnet
         subGroups view=net species=s034 mafType=mt0
@@ -4375,6 +5310,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504625.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018504625.1.rbestNet.summary.bb
+        speciesOrder GCA_018504625.1
+        speciesLabels GCA_018504625.1="NA20129.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018504625.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s034 mafType=mt3
+        shortLabel NA20129.alt.pat.f1_v2 liftOverNet
+        longLabel NA20129.alt.pat.f1_v2 (May 2021 GCA_018504625.1_NA20129.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504625.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504625.1.liftOverNet.summary.bb
         speciesOrder GCA_018504625.1
         speciesLabels GCA_018504625.1="NA20129.alt.pat.f1_v2"
 
@@ -4411,6 +5357,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018504055.1
         speciesLabels GCA_018504055.1="HG02080.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018504055.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s035 mafType=mt3
+        shortLabel HG02080.alt.pat.f1_v2 liftOverNet
+        longLabel HG02080.alt.pat.f1_v2 (May 2021 GCA_018504055.1_HG02080.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504055.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504055.1.liftOverNet.summary.bb
+        speciesOrder GCA_018504055.1
+        speciesLabels GCA_018504055.1="HG02080.alt.pat.f1_v2"
+
         track netGCA_018852615.1
         parent humanMafNetViewnet
         subGroups view=net species=s036 mafType=mt0
@@ -4441,6 +5398,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018852615.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018852615.1.rbestNet.summary.bb
+        speciesOrder GCA_018852615.1
+        speciesLabels GCA_018852615.1="HG002.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018852615.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s036 mafType=mt3
+        shortLabel HG002.pri.mat.f1_v2 liftOverNet
+        longLabel HG002.pri.mat.f1_v2 (Jun. 2021 GCA_018852615.1_HG002.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018852615.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018852615.1.liftOverNet.summary.bb
         speciesOrder GCA_018852615.1
         speciesLabels GCA_018852615.1="HG002.pri.mat.f1_v2"
 
@@ -4477,6 +5445,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018472695.1
         speciesLabels GCA_018472695.1="HG01928.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018472695.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s037 mafType=mt3
+        shortLabel HG01928.pri.mat.f1_v2 liftOverNet
+        longLabel HG01928.pri.mat.f1_v2 (May 2021 GCA_018472695.1_HG01928.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018472695.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018472695.1.liftOverNet.summary.bb
+        speciesOrder GCA_018472695.1
+        speciesLabels GCA_018472695.1="HG01928.pri.mat.f1_v2"
+
         track netGCA_018505825.1
         parent humanMafNetViewnet
         subGroups view=net species=s038 mafType=mt0
@@ -4507,6 +5486,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505825.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018505825.1.rbestNet.summary.bb
+        speciesOrder GCA_018505825.1
+        speciesLabels GCA_018505825.1="HG02109.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018505825.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s038 mafType=mt3
+        shortLabel HG02109.pri.mat.f1_v2 liftOverNet
+        longLabel HG02109.pri.mat.f1_v2 (May 2021 GCA_018505825.1_HG02109.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505825.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018505825.1.liftOverNet.summary.bb
         speciesOrder GCA_018505825.1
         speciesLabels GCA_018505825.1="HG02109.pri.mat.f1_v2"
 
@@ -4543,6 +5533,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018472845.1
         speciesLabels GCA_018472845.1="HG01978.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018472845.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s039 mafType=mt3
+        shortLabel HG01978.alt.pat.f1_v2 liftOverNet
+        longLabel HG01978.alt.pat.f1_v2 (May 2021 GCA_018472845.1_HG01978.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018472845.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018472845.1.liftOverNet.summary.bb
+        speciesOrder GCA_018472845.1
+        speciesLabels GCA_018472845.1="HG01978.alt.pat.f1_v2"
+
         track netGCA_018469685.1
         parent humanMafNetViewnet
         subGroups view=net species=s040 mafType=mt0
@@ -4573,6 +5574,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469685.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018469685.1.rbestNet.summary.bb
+        speciesOrder GCA_018469685.1
+        speciesLabels GCA_018469685.1="HG01361.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018469685.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s040 mafType=mt3
+        shortLabel HG01361.pri.mat.f1_v2 liftOverNet
+        longLabel HG01361.pri.mat.f1_v2 (May 2021 GCA_018469685.1_HG01361.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469685.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469685.1.liftOverNet.summary.bb
         speciesOrder GCA_018469685.1
         speciesLabels GCA_018469685.1="HG01361.pri.mat.f1_v2"
 
@@ -4609,6 +5621,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018469935.1
         speciesLabels GCA_018469935.1="HG02717.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018469935.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s041 mafType=mt3
+        shortLabel HG02717.pri.mat.f1_v2 liftOverNet
+        longLabel HG02717.pri.mat.f1_v2 (May 2021 GCA_018469935.1_HG02717.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469935.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469935.1.liftOverNet.summary.bb
+        speciesOrder GCA_018469935.1
+        speciesLabels GCA_018469935.1="HG02717.pri.mat.f1_v2"
+
         track netGCA_018469695.1
         parent humanMafNetViewnet
         subGroups view=net species=s042 mafType=mt0
@@ -4639,6 +5662,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469695.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018469695.1.rbestNet.summary.bb
+        speciesOrder GCA_018469695.1
+        speciesLabels GCA_018469695.1="HG01123.alt.pat.f1_v2.1"
+
+        track liftOverNetGCA_018469695.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s042 mafType=mt3
+        shortLabel HG01123.alt.pat.f1_v2.1 liftOverNet
+        longLabel HG01123.alt.pat.f1_v2.1 (May 2021 GCA_018469695.1_HG01123.alt.pat.f1_v2.1) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469695.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469695.1.liftOverNet.summary.bb
         speciesOrder GCA_018469695.1
         speciesLabels GCA_018469695.1="HG01123.alt.pat.f1_v2.1"
 
@@ -4675,6 +5709,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018471535.1
         speciesLabels GCA_018471535.1="HG02148.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018471535.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s043 mafType=mt3
+        shortLabel HG02148.pri.mat.f1_v2 liftOverNet
+        longLabel HG02148.pri.mat.f1_v2 (May 2021 GCA_018471535.1_HG02148.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471535.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018471535.1.liftOverNet.summary.bb
+        speciesOrder GCA_018471535.1
+        speciesLabels GCA_018471535.1="HG02148.pri.mat.f1_v2"
+
         track netGCA_018504085.1
         parent humanMafNetViewnet
         subGroups view=net species=s044 mafType=mt0
@@ -4705,6 +5750,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504085.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018504085.1.rbestNet.summary.bb
+        speciesOrder GCA_018504085.1
+        speciesLabels GCA_018504085.1="HG02080.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018504085.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s044 mafType=mt3
+        shortLabel HG02080.pri.mat.f1_v2 liftOverNet
+        longLabel HG02080.pri.mat.f1_v2 (May 2021 GCA_018504085.1_HG02080.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504085.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504085.1.liftOverNet.summary.bb
         speciesOrder GCA_018504085.1
         speciesLabels GCA_018504085.1="HG02080.pri.mat.f1_v2"
 
@@ -4785,6 +5841,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018503265.1
         speciesLabels GCA_018503265.1="NA19240.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018503265.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s046 mafType=mt3
+        shortLabel NA19240.alt.pat.f1_v2 liftOverNet
+        longLabel NA19240.alt.pat.f1_v2 (May 2021 GCA_018503265.1_NA19240.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503265.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018503265.1.liftOverNet.summary.bb
+        speciesOrder GCA_018503265.1
+        speciesLabels GCA_018503265.1="NA19240.alt.pat.f1_v2"
+
         track netGCA_018505845.1
         parent humanMafNetViewnet
         subGroups view=net species=s047 mafType=mt0
@@ -4815,6 +5882,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505845.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018505845.1.rbestNet.summary.bb
+        speciesOrder GCA_018505845.1
+        speciesLabels GCA_018505845.1="HG03492.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018505845.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s047 mafType=mt3
+        shortLabel HG03492.pri.mat.f1_v2 liftOverNet
+        longLabel HG03492.pri.mat.f1_v2 (May 2021 GCA_018505845.1_HG03492.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505845.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018505845.1.liftOverNet.summary.bb
         speciesOrder GCA_018505845.1
         speciesLabels GCA_018505845.1="HG03492.pri.mat.f1_v2"
 
@@ -4895,6 +5973,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018503245.1
         speciesLabels GCA_018503245.1="HG03486.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018503245.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s049 mafType=mt3
+        shortLabel HG03486.alt.pat.f1_v2 liftOverNet
+        longLabel HG03486.alt.pat.f1_v2 (May 2021 GCA_018503245.1_HG03486.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503245.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018503245.1.liftOverNet.summary.bb
+        speciesOrder GCA_018503245.1
+        speciesLabels GCA_018503245.1="HG03486.alt.pat.f1_v2"
+
         track netGCA_018469955.1
         parent humanMafNetViewnet
         subGroups view=net species=s050 mafType=mt0
@@ -4925,6 +6014,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469955.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018469955.1.rbestNet.summary.bb
+        speciesOrder GCA_018469955.1
+        speciesLabels GCA_018469955.1="HG02630.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018469955.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s050 mafType=mt3
+        shortLabel HG02630.pri.mat.f1_v2 liftOverNet
+        longLabel HG02630.pri.mat.f1_v2 (May 2021 GCA_018469955.1_HG02630.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469955.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469955.1.liftOverNet.summary.bb
         speciesOrder GCA_018469955.1
         speciesLabels GCA_018469955.1="HG02630.pri.mat.f1_v2"
 
@@ -4961,6 +6061,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018471525.1
         speciesLabels GCA_018471525.1="HG02148.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018471525.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s051 mafType=mt3
+        shortLabel HG02148.alt.pat.f1_v2 liftOverNet
+        longLabel HG02148.alt.pat.f1_v2 (May 2021 GCA_018471525.1_HG02148.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471525.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018471525.1.liftOverNet.summary.bb
+        speciesOrder GCA_018471525.1
+        speciesLabels GCA_018471525.1="HG02148.alt.pat.f1_v2"
+
         track netGCA_018471065.1
         parent humanMafNetViewnet
         subGroups view=net species=s052 mafType=mt0
@@ -4991,6 +6102,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471065.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018471065.1.rbestNet.summary.bb
+        speciesOrder GCA_018471065.1
+        speciesLabels GCA_018471065.1="HG01175.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018471065.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s052 mafType=mt3
+        shortLabel HG01175.alt.pat.f1_v2 liftOverNet
+        longLabel HG01175.alt.pat.f1_v2 (May 2021 GCA_018471065.1_HG01175.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471065.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018471065.1.liftOverNet.summary.bb
         speciesOrder GCA_018471065.1
         speciesLabels GCA_018471065.1="HG01175.alt.pat.f1_v2"
 
@@ -5027,6 +6149,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018469945.1
         speciesLabels GCA_018469945.1="HG02630.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018469945.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s053 mafType=mt3
+        shortLabel HG02630.alt.pat.f1_v2 liftOverNet
+        longLabel HG02630.alt.pat.f1_v2 (May 2021 GCA_018469945.1_HG02630.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469945.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469945.1.liftOverNet.summary.bb
+        speciesOrder GCA_018469945.1
+        speciesLabels GCA_018469945.1="HG02630.alt.pat.f1_v2"
+
         track netGCA_018467155.1
         parent humanMafNetViewnet
         subGroups view=net species=s054 mafType=mt0
@@ -5057,6 +6190,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018467155.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018467155.1.rbestNet.summary.bb
+        speciesOrder GCA_018467155.1
+        speciesLabels GCA_018467155.1="HG01891.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018467155.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s054 mafType=mt3
+        shortLabel HG01891.pri.mat.f1_v2 liftOverNet
+        longLabel HG01891.pri.mat.f1_v2 (May 2021 GCA_018467155.1_HG01891.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018467155.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018467155.1.liftOverNet.summary.bb
         speciesOrder GCA_018467155.1
         speciesLabels GCA_018467155.1="HG01891.pri.mat.f1_v2"
 
@@ -5093,6 +6237,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018504635.1
         speciesLabels GCA_018504635.1="NA20129.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018504635.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s055 mafType=mt3
+        shortLabel NA20129.pri.mat.f1_v2 liftOverNet
+        longLabel NA20129.pri.mat.f1_v2 (May 2021 GCA_018504635.1_NA20129.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504635.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504635.1.liftOverNet.summary.bb
+        speciesOrder GCA_018504635.1
+        speciesLabels GCA_018504635.1="NA20129.pri.mat.f1_v2"
+
         track netGCA_018503575.1
         parent humanMafNetViewnet
         subGroups view=net species=s056 mafType=mt0
@@ -5123,6 +6278,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503575.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018503575.1.rbestNet.summary.bb
+        speciesOrder GCA_018503575.1
+        speciesLabels GCA_018503575.1="HG02818.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018503575.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s056 mafType=mt3
+        shortLabel HG02818.alt.pat.f1_v2 liftOverNet
+        longLabel HG02818.alt.pat.f1_v2 (May 2021 GCA_018503575.1_HG02818.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503575.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018503575.1.liftOverNet.summary.bb
         speciesOrder GCA_018503575.1
         speciesLabels GCA_018503575.1="HG02818.alt.pat.f1_v2"
 
@@ -5159,6 +6325,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018504665.1
         speciesLabels GCA_018504665.1="NA21309.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018504665.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s057 mafType=mt3
+        shortLabel NA21309.alt.pat.f1_v2 liftOverNet
+        longLabel NA21309.alt.pat.f1_v2 (May 2021 GCA_018504665.1_NA21309.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504665.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504665.1.liftOverNet.summary.bb
+        speciesOrder GCA_018504665.1
+        speciesLabels GCA_018504665.1="NA21309.alt.pat.f1_v2"
+
         track netGCA_018466855.1
         parent humanMafNetViewnet
         subGroups view=net species=s058 mafType=mt0
@@ -5192,6 +6369,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018466855.1
         speciesLabels GCA_018466855.1="HG02559.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018466855.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s058 mafType=mt3
+        shortLabel HG02559.alt.pat.f1_v2 liftOverNet
+        longLabel HG02559.alt.pat.f1_v2 (May 2021 GCA_018466855.1_HG02559.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018466855.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018466855.1.liftOverNet.summary.bb
+        speciesOrder GCA_018466855.1
+        speciesLabels GCA_018466855.1="HG02559.alt.pat.f1_v2"
+
         track netGCA_018469865.1
         parent humanMafNetViewnet
         subGroups view=net species=s059 mafType=mt0
@@ -5222,6 +6410,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469865.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018469865.1.rbestNet.summary.bb
+        speciesOrder GCA_018469865.1
+        speciesLabels GCA_018469865.1="HG01358.pri.mat.f1_v2.1"
+
+        track liftOverNetGCA_018469865.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s059 mafType=mt3
+        shortLabel HG01358.pri.mat.f1_v2.1 liftOverNet
+        longLabel HG01358.pri.mat.f1_v2.1 (May 2021 GCA_018469865.1_HG01358.pri.mat.f1_v2.1) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469865.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469865.1.liftOverNet.summary.bb
         speciesOrder GCA_018469865.1
         speciesLabels GCA_018469865.1="HG01358.pri.mat.f1_v2.1"
 
@@ -5302,6 +6501,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018472825.1
         speciesLabels GCA_018472825.1="HG03579.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018472825.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s061 mafType=mt3
+        shortLabel HG03579.pri.mat.f1_v2 liftOverNet
+        longLabel HG03579.pri.mat.f1_v2 (May 2021 GCA_018472825.1_HG03579.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018472825.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018472825.1.liftOverNet.summary.bb
+        speciesOrder GCA_018472825.1
+        speciesLabels GCA_018472825.1="HG03579.pri.mat.f1_v2"
+
         track netGCA_018504655.1
         parent humanMafNetViewnet
         subGroups view=net species=s062 mafType=mt0
@@ -5335,6 +6545,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018504655.1
         speciesLabels GCA_018504655.1="NA21309.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018504655.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s062 mafType=mt3
+        shortLabel NA21309.pri.mat.f1_v2 liftOverNet
+        longLabel NA21309.pri.mat.f1_v2 (May 2021 GCA_018504655.1_NA21309.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504655.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504655.1.liftOverNet.summary.bb
+        speciesOrder GCA_018504655.1
+        speciesLabels GCA_018504655.1="NA21309.pri.mat.f1_v2"
+
         track netGCA_018505865.1
         parent humanMafNetViewnet
         subGroups view=net species=s063 mafType=mt0
@@ -5365,6 +6586,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505865.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018505865.1.rbestNet.summary.bb
+        speciesOrder GCA_018505865.1
+        speciesLabels GCA_018505865.1="HG02109.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018505865.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s063 mafType=mt3
+        shortLabel HG02109.alt.pat.f1_v2 liftOverNet
+        longLabel HG02109.alt.pat.f1_v2 (May 2021 GCA_018505865.1_HG02109.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505865.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018505865.1.liftOverNet.summary.bb
         speciesOrder GCA_018505865.1
         speciesLabels GCA_018505865.1="HG02109.alt.pat.f1_v2"
 
@@ -5445,6 +6677,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018473295.1
         speciesLabels GCA_018473295.1="HG03540.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018473295.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s065 mafType=mt3
+        shortLabel HG03540.pri.mat.f1_v2 liftOverNet
+        longLabel HG03540.pri.mat.f1_v2 (May 2021 GCA_018473295.1_HG03540.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018473295.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018473295.1.liftOverNet.summary.bb
+        speciesOrder GCA_018473295.1
+        speciesLabels GCA_018473295.1="HG03540.pri.mat.f1_v2"
+
         track netGCA_018852585.1
         parent humanMafNetViewnet
         subGroups view=net species=s066 mafType=mt0
@@ -5475,6 +6718,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018852585.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018852585.1.rbestNet.summary.bb
+        speciesOrder GCA_018852585.1
+        speciesLabels GCA_018852585.1="HG02145.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018852585.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s066 mafType=mt3
+        shortLabel HG02145.pri.mat.f1_v2 liftOverNet
+        longLabel HG02145.pri.mat.f1_v2 (Jun. 2021 GCA_018852585.1_HG02145.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018852585.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018852585.1.liftOverNet.summary.bb
         speciesOrder GCA_018852585.1
         speciesLabels GCA_018852585.1="HG02145.pri.mat.f1_v2"
 
@@ -5511,6 +6765,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018472865.1
         speciesLabels GCA_018472865.1="HG01978.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018472865.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s067 mafType=mt3
+        shortLabel HG01978.pri.mat.f1_v2 liftOverNet
+        longLabel HG01978.pri.mat.f1_v2 (May 2021 GCA_018472865.1_HG01978.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018472865.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018472865.1.liftOverNet.summary.bb
+        speciesOrder GCA_018472865.1
+        speciesLabels GCA_018472865.1="HG01978.pri.mat.f1_v2"
+
         track netGCA_018503525.1
         parent humanMafNetViewnet
         subGroups view=net species=s068 mafType=mt0
@@ -5541,6 +6806,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503525.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018503525.1.rbestNet.summary.bb
+        speciesOrder GCA_018503525.1
+        speciesLabels GCA_018503525.1="HG03486.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018503525.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s068 mafType=mt3
+        shortLabel HG03486.pri.mat.f1_v2 liftOverNet
+        longLabel HG03486.pri.mat.f1_v2 (May 2021 GCA_018503525.1_HG03486.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503525.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018503525.1.liftOverNet.summary.bb
         speciesOrder GCA_018503525.1
         speciesLabels GCA_018503525.1="HG03486.pri.mat.f1_v2"
 
@@ -5577,6 +6853,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018503275.1
         speciesLabels GCA_018503275.1="NA19240.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018503275.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s069 mafType=mt3
+        shortLabel NA19240.pri.mat.f1_v2 liftOverNet
+        longLabel NA19240.pri.mat.f1_v2 (May 2021 GCA_018503275.1_NA19240.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503275.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018503275.1.liftOverNet.summary.bb
+        speciesOrder GCA_018503275.1
+        speciesLabels GCA_018503275.1="NA19240.pri.mat.f1_v2"
+
         track netGCA_018503585.1
         parent humanMafNetViewnet
         subGroups view=net species=s070 mafType=mt0
@@ -5607,6 +6894,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503585.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018503585.1.rbestNet.summary.bb
+        speciesOrder GCA_018503585.1
+        speciesLabels GCA_018503585.1="HG02818.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018503585.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s070 mafType=mt3
+        shortLabel HG02818.pri.mat.f1_v2 liftOverNet
+        longLabel HG02818.pri.mat.f1_v2 (May 2021 GCA_018503585.1_HG02818.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018503585.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018503585.1.liftOverNet.summary.bb
         speciesOrder GCA_018503585.1
         speciesLabels GCA_018503585.1="HG02818.pri.mat.f1_v2"
 
@@ -5643,6 +6941,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018504065.1
         speciesLabels GCA_018504065.1="HG02723.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018504065.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s071 mafType=mt3
+        shortLabel HG02723.pri.mat.f1_v2 liftOverNet
+        longLabel HG02723.pri.mat.f1_v2 (May 2021 GCA_018504065.1_HG02723.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504065.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504065.1.liftOverNet.summary.bb
+        speciesOrder GCA_018504065.1
+        speciesLabels GCA_018504065.1="HG02723.pri.mat.f1_v2"
+
         track netGCA_018469875.1
         parent humanMafNetViewnet
         subGroups view=net species=s072 mafType=mt0
@@ -5673,6 +6982,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469875.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018469875.1.rbestNet.summary.bb
+        speciesOrder GCA_018469875.1
+        speciesLabels GCA_018469875.1="HG02622.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018469875.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s072 mafType=mt3
+        shortLabel HG02622.pri.mat.f1_v2 liftOverNet
+        longLabel HG02622.pri.mat.f1_v2 (May 2021 GCA_018469875.1_HG02622.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469875.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469875.1.liftOverNet.summary.bb
         speciesOrder GCA_018469875.1
         speciesLabels GCA_018469875.1="HG02622.pri.mat.f1_v2"
 
@@ -5709,6 +7029,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018473315.1
         speciesLabels GCA_018473315.1="HG03540.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018473315.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s073 mafType=mt3
+        shortLabel HG03540.alt.pat.f1_v2 liftOverNet
+        longLabel HG03540.alt.pat.f1_v2 (May 2021 GCA_018473315.1_HG03540.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018473315.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018473315.1.liftOverNet.summary.bb
+        speciesOrder GCA_018473315.1
+        speciesLabels GCA_018473315.1="HG03540.alt.pat.f1_v2"
+
         track netGCA_018470445.1
         parent humanMafNetViewnet
         subGroups view=net species=s074 mafType=mt0
@@ -5739,6 +7070,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018470445.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018470445.1.rbestNet.summary.bb
+        speciesOrder GCA_018470445.1
+        speciesLabels GCA_018470445.1="HG02572.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018470445.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s074 mafType=mt3
+        shortLabel HG02572.pri.mat.f1_v2 liftOverNet
+        longLabel HG02572.pri.mat.f1_v2 (May 2021 GCA_018470445.1_HG02572.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018470445.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018470445.1.liftOverNet.summary.bb
         speciesOrder GCA_018470445.1
         speciesLabels GCA_018470445.1="HG02572.pri.mat.f1_v2"
 
@@ -5775,6 +7117,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018504375.1
         speciesLabels GCA_018504375.1="HG01243.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018504375.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s075 mafType=mt3
+        shortLabel HG01243.pri.mat.f1_v2 liftOverNet
+        longLabel HG01243.pri.mat.f1_v2 (May 2021 GCA_018504375.1_HG01243.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504375.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504375.1.liftOverNet.summary.bb
+        speciesOrder GCA_018504375.1
+        speciesLabels GCA_018504375.1="HG01243.pri.mat.f1_v2"
+
         track netGCA_018504365.1
         parent humanMafNetViewnet
         subGroups view=net species=s076 mafType=mt0
@@ -5808,6 +7161,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018504365.1
         speciesLabels GCA_018504365.1="HG01109.pri.mat.f1_v2"
 
+        track liftOverNetGCA_018504365.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s076 mafType=mt3
+        shortLabel HG01109.pri.mat.f1_v2 liftOverNet
+        longLabel HG01109.pri.mat.f1_v2 (May 2021 GCA_018504365.1_HG01109.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504365.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504365.1.liftOverNet.summary.bb
+        speciesOrder GCA_018504365.1
+        speciesLabels GCA_018504365.1="HG01109.pri.mat.f1_v2"
+
         track netGCA_018471085.1
         parent humanMafNetViewnet
         subGroups view=net species=s077 mafType=mt0
@@ -5838,6 +7202,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471085.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018471085.1.rbestNet.summary.bb
+        speciesOrder GCA_018471085.1
+        speciesLabels GCA_018471085.1="HG01175.pri.mat.f1_v2"
+
+        track liftOverNetGCA_018471085.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s077 mafType=mt3
+        shortLabel HG01175.pri.mat.f1_v2 liftOverNet
+        longLabel HG01175.pri.mat.f1_v2 (May 2021 GCA_018471085.1_HG01175.pri.mat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471085.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018471085.1.liftOverNet.summary.bb
         speciesOrder GCA_018471085.1
         speciesLabels GCA_018471085.1="HG01175.pri.mat.f1_v2"
 
@@ -5918,6 +7293,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018472705.1
         speciesLabels GCA_018472705.1="HG01928.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018472705.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s079 mafType=mt3
+        shortLabel HG01928.alt.pat.f1_v2 liftOverNet
+        longLabel HG01928.alt.pat.f1_v2 (May 2021 GCA_018472705.1_HG01928.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018472705.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018472705.1.liftOverNet.summary.bb
+        speciesOrder GCA_018472705.1
+        speciesLabels GCA_018472705.1="HG01928.alt.pat.f1_v2"
+
         track netGCA_018506945.1
         parent humanMafNetViewnet
         subGroups view=net species=s080 mafType=mt0
@@ -5948,6 +7334,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018506945.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018506945.1.rbestNet.summary.bb
+        speciesOrder GCA_018506945.1
+        speciesLabels GCA_018506945.1="HG005.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018506945.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s080 mafType=mt3
+        shortLabel HG005.alt.pat.f1_v2 liftOverNet
+        longLabel HG005.alt.pat.f1_v2 (May 2021 GCA_018506945.1_HG005.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018506945.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018506945.1.liftOverNet.summary.bb
         speciesOrder GCA_018506945.1
         speciesLabels GCA_018506945.1="HG005.alt.pat.f1_v2"
 
@@ -5984,6 +7381,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018471075.1
         speciesLabels GCA_018471075.1="HG01106.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018471075.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s081 mafType=mt3
+        shortLabel HG01106.alt.pat.f1_v2 liftOverNet
+        longLabel HG01106.alt.pat.f1_v2 (May 2021 GCA_018471075.1_HG01106.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471075.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018471075.1.liftOverNet.summary.bb
+        speciesOrder GCA_018471075.1
+        speciesLabels GCA_018471075.1="HG01106.alt.pat.f1_v2"
+
         track netGCA_018469675.1
         parent humanMafNetViewnet
         subGroups view=net species=s082 mafType=mt0
@@ -6014,6 +7422,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469675.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018469675.1.rbestNet.summary.bb
+        speciesOrder GCA_018469675.1
+        speciesLabels GCA_018469675.1="HG01258.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018469675.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s082 mafType=mt3
+        shortLabel HG01258.alt.pat.f1_v2 liftOverNet
+        longLabel HG01258.alt.pat.f1_v2 (May 2021 GCA_018469675.1_HG01258.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469675.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469675.1.liftOverNet.summary.bb
         speciesOrder GCA_018469675.1
         speciesLabels GCA_018469675.1="HG01258.alt.pat.f1_v2"
 
@@ -6050,6 +7469,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018469965.1
         speciesLabels GCA_018469965.1="HG01358.alt.pat.f1_v2.1"
 
+        track liftOverNetGCA_018469965.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s083 mafType=mt3
+        shortLabel HG01358.alt.pat.f1_v2.1 liftOverNet
+        longLabel HG01358.alt.pat.f1_v2.1 (May 2021 GCA_018469965.1_HG01358.alt.pat.f1_v2.1) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018469965.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018469965.1.liftOverNet.summary.bb
+        speciesOrder GCA_018469965.1
+        speciesLabels GCA_018469965.1="HG01358.alt.pat.f1_v2.1"
+
         track netGCA_018504645.1
         parent humanMafNetViewnet
         subGroups view=net species=s084 mafType=mt0
@@ -6080,6 +7510,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504645.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018504645.1.rbestNet.summary.bb
+        speciesOrder GCA_018504645.1
+        speciesLabels GCA_018504645.1="HG01109.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018504645.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s084 mafType=mt3
+        shortLabel HG01109.alt.pat.f1_v2 liftOverNet
+        longLabel HG01109.alt.pat.f1_v2 (May 2021 GCA_018504645.1_HG01109.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504645.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504645.1.liftOverNet.summary.bb
         speciesOrder GCA_018504645.1
         speciesLabels GCA_018504645.1="HG01109.alt.pat.f1_v2"
 
@@ -6116,6 +7557,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018470425.1
         speciesLabels GCA_018470425.1="HG02717.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018470425.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s085 mafType=mt3
+        shortLabel HG02717.alt.pat.f1_v2 liftOverNet
+        longLabel HG02717.alt.pat.f1_v2 (May 2021 GCA_018470425.1_HG02717.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018470425.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018470425.1.liftOverNet.summary.bb
+        speciesOrder GCA_018470425.1
+        speciesLabels GCA_018470425.1="HG02717.alt.pat.f1_v2"
+
         track netGCA_018505855.1
         parent humanMafNetViewnet
         subGroups view=net species=s086 mafType=mt0
@@ -6146,6 +7598,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505855.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018505855.1.rbestNet.summary.bb
+        speciesOrder GCA_018505855.1
+        speciesLabels GCA_018505855.1="HG02055.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018505855.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s086 mafType=mt3
+        shortLabel HG02055.alt.pat.f1_v2 liftOverNet
+        longLabel HG02055.alt.pat.f1_v2 (May 2021 GCA_018505855.1_HG02055.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505855.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018505855.1.liftOverNet.summary.bb
         speciesOrder GCA_018505855.1
         speciesLabels GCA_018505855.1="HG02055.alt.pat.f1_v2"
 
@@ -6182,6 +7645,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018852605.1
         speciesLabels GCA_018852605.1="HG002.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018852605.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s087 mafType=mt3
+        shortLabel HG002.alt.pat.f1_v2 liftOverNet
+        longLabel HG002.alt.pat.f1_v2 (Jun. 2021 GCA_018852605.1_HG002.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018852605.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018852605.1.liftOverNet.summary.bb
+        speciesOrder GCA_018852605.1
+        speciesLabels GCA_018852605.1="HG002.alt.pat.f1_v2"
+
         track netGCA_018505835.1
         parent humanMafNetViewnet
         subGroups view=net species=s088 mafType=mt0
@@ -6212,6 +7686,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505835.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018505835.1.rbestNet.summary.bb
+        speciesOrder GCA_018505835.1
+        speciesLabels GCA_018505835.1="HG03492.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018505835.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s088 mafType=mt3
+        shortLabel HG03492.alt.pat.f1_v2 liftOverNet
+        longLabel HG03492.alt.pat.f1_v2 (May 2021 GCA_018505835.1_HG03492.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018505835.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018505835.1.liftOverNet.summary.bb
         speciesOrder GCA_018505835.1
         speciesLabels GCA_018505835.1="HG03492.alt.pat.f1_v2"
 
@@ -6336,6 +7821,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018504045.1
         speciesLabels GCA_018504045.1="HG01243.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018504045.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s091 mafType=mt3
+        shortLabel HG01243.alt.pat.f1_v2 liftOverNet
+        longLabel HG01243.alt.pat.f1_v2 (May 2021 GCA_018504045.1_HG01243.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018504045.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018504045.1.liftOverNet.summary.bb
+        speciesOrder GCA_018504045.1
+        speciesLabels GCA_018504045.1="HG01243.alt.pat.f1_v2"
+
         track netGCA_018467005.1
         parent humanMafNetViewnet
         subGroups view=net species=s092 mafType=mt0
@@ -6366,6 +7862,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018467005.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018467005.1.rbestNet.summary.bb
+        speciesOrder GCA_018467005.1
+        speciesLabels GCA_018467005.1="HG02486.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018467005.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s092 mafType=mt3
+        shortLabel HG02486.alt.pat.f1_v2 liftOverNet
+        longLabel HG02486.alt.pat.f1_v2 (May 2021 GCA_018467005.1_HG02486.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018467005.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018467005.1.liftOverNet.summary.bb
         speciesOrder GCA_018467005.1
         speciesLabels GCA_018467005.1="HG02486.alt.pat.f1_v2"
 
@@ -6402,6 +7909,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018472835.1
         speciesLabels GCA_018472835.1="HG03579.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018472835.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s093 mafType=mt3
+        shortLabel HG03579.alt.pat.f1_v2 liftOverNet
+        longLabel HG03579.alt.pat.f1_v2 (May 2021 GCA_018472835.1_HG03579.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018472835.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018472835.1.liftOverNet.summary.bb
+        speciesOrder GCA_018472835.1
+        speciesLabels GCA_018472835.1="HG03579.alt.pat.f1_v2"
+
         track netGCA_018852595.1
         parent humanMafNetViewnet
         subGroups view=net species=s094 mafType=mt0
@@ -6432,6 +7950,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018852595.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018852595.1.rbestNet.summary.bb
+        speciesOrder GCA_018852595.1
+        speciesLabels GCA_018852595.1="HG02145.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018852595.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s094 mafType=mt3
+        shortLabel HG02145.alt.pat.f1_v2 liftOverNet
+        longLabel HG02145.alt.pat.f1_v2 (Jun. 2021 GCA_018852595.1_HG02145.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018852595.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018852595.1.liftOverNet.summary.bb
         speciesOrder GCA_018852595.1
         speciesLabels GCA_018852595.1="HG02145.alt.pat.f1_v2"
 
@@ -6468,6 +7997,17 @@ html homoSapiensChainNet
         speciesOrder GCA_018471555.1
         speciesLabels GCA_018471555.1="HG01952.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018471555.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s095 mafType=mt3
+        shortLabel HG01952.alt.pat.f1_v2 liftOverNet
+        longLabel HG01952.alt.pat.f1_v2 (May 2021 GCA_018471555.1_HG01952.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018471555.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018471555.1.liftOverNet.summary.bb
+        speciesOrder GCA_018471555.1
+        speciesLabels GCA_018471555.1="HG01952.alt.pat.f1_v2"
+
         track netGCA_018470435.1
         parent humanMafNetViewnet
         subGroups view=net species=s096 mafType=mt0
@@ -6498,6 +8038,17 @@ html homoSapiensChainNet
         type bigMaf
         bigDataUrl /gbdb/$D/chainNet/$D.GCA_018470435.1.rbestNet.bb
         summary /gbdb/$D/chainNet/$D.GCA_018470435.1.rbestNet.summary.bb
+        speciesOrder GCA_018470435.1
+        speciesLabels GCA_018470435.1="HG02572.alt.pat.f1_v2"
+
+        track liftOverNetGCA_018470435.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s096 mafType=mt3
+        shortLabel HG02572.alt.pat.f1_v2 liftOverNet
+        longLabel HG02572.alt.pat.f1_v2 (May 2021 GCA_018470435.1_HG02572.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018470435.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018470435.1.liftOverNet.summary.bb
         speciesOrder GCA_018470435.1
         speciesLabels GCA_018470435.1="HG02572.alt.pat.f1_v2"
 
@@ -6534,3 +8085,13 @@ html homoSapiensChainNet
         speciesOrder GCA_018506155.1
         speciesLabels GCA_018506155.1="HG03098.alt.pat.f1_v2"
 
+        track liftOverNetGCA_018506155.1
+        parent humanMafNetViewnet
+        subGroups view=net species=s097 mafType=mt3
+        shortLabel HG03098.alt.pat.f1_v2 liftOverNet
+        longLabel HG03098.alt.pat.f1_v2 (May 2021 GCA_018506155.1_HG03098.alt.pat.f1_v2) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_018506155.1.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_018506155.1.liftOverNet.summary.bb
+        speciesOrder GCA_018506155.1
+        speciesLabels GCA_018506155.1="HG03098.alt.pat.f1_v2"
