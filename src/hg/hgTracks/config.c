@@ -28,10 +28,10 @@ static void themeDropDown(struct cart* cart)
  * */
 {
 struct slName* themes = cfgNamesWithPrefix("browser.theme.");
-//struct slName* themes = cfgNames();
 if (themes==NULL)
     return;
 
+slNameSort(&themes);
 hPrintf("<TR><TD>website style:");
 hPrintf("<TD style=\"text-align: right\">");
 
@@ -43,8 +43,10 @@ el = themes;
 for (el = themes; el != NULL && i<50; el = el->next)
     {
     char* name = el->name;
-    name = chopPrefix(name); // chop off first two words
+    name = chopPrefix(name); // chop off first three words
     name = chopPrefix(name);
+    name = chopPrefix(name);
+    replaceChar(name, '_', ' ');
     labels[i] = name;
     i++;
     }
