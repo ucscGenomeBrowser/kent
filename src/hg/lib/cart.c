@@ -2621,7 +2621,7 @@ char *cartTheme = cartOptionalString(cart, "theme");
 // XXXX which setting should take precedence? Currently browser.theme does.
 
 char *styleFile = cfgOption("browser.style");
-if(styleFile != NULL)
+if (styleFile != NULL)
     {
     char buf[512];
     safef(buf, sizeof(buf), "<link rel='stylesheet' href='%s' type='text/css'>", styleFile);
@@ -2630,7 +2630,7 @@ if(styleFile != NULL)
     webSetStyle(copy);       // for web.c, used by hgc
     }
 
-if(isNotEmpty(cartTheme))
+if (isNotEmpty(cartTheme))
     {
     char *themeKey = catTwoStrings("browser.theme.", cartTheme);
     styleFile = cfgOption(themeKey);
@@ -2638,8 +2638,8 @@ if(isNotEmpty(cartTheme))
     if (isEmpty(styleFile))
         return;
 
-    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile, TRUE); // resource file link wrapped in html
-    if (link != NULL)
+    char * link = webCssLink(styleFile, FALSE); // resource file link wrapped in html
+    if (link != NULL && !sameOk(link, "<>")) // "<>" means "default settings" = "no file"
         {
         htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
         webSetStyle(link);       // for web.c, used by hgc

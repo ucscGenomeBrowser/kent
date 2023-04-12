@@ -26,6 +26,8 @@ hg38 jaspar ReMap ReMap is a database of TF binding sites inferred from ChIP-Seq
 
 hg38 problematic mappability The mappability track contains regions where short sequencing reads are hard to align
 hg38 mappability problematic The problematic regions track contains various gene clusters and the ENCODE blacklist
+hg38 problematic grcIncidentDb The GRC (Genome Reference Consortium) incidents track contains regions that were flagged by the group that puts together the genome 
+hg38 grcIncidentDb problematic The problematic regions track lists unusual regions and the ones that often lead to artefacts when aligning reads to the reference genome
 
 # hg19:
 hg19 caddSuper gnomad View associated variants
