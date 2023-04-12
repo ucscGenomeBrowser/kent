@@ -48,7 +48,7 @@ def parseHgPublicSessPageAndWriteOut(hgPublicSessionOutPut, saveDir, outputFile)
         if "Description:" in line and sessionThumbNailsWritten < 4:
             sessionThumbNailsWritten+=1
             sessionDescription = line.split('</b> ')[1].split('<br>')[0]
-            outputFile.write('''<a href="'''+sessionUrl+'''">\n<img src="/'''+currentImageFileName+'''" title="'''
+            outputFile.write('''<a href="'''+sessionUrl+'''">\n<img src="'''+currentImageFileName+'''" title="'''
                          +sessionDescription+'''" class="sessionThumbnail" style="vertical-align: top;" width="30%"
                          height=40%"></img></a>\n''')
     outputFile.close()
