@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Human Chain/Net
 longLabel Human Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species s000=CHM13 s002=HG01106.mat s003=HG03098.mat s004=HG00735.pat s005=HG01258.mat s006=HG005.mat s007=HG01891.pat s008=HG02055.mat s009=HG00733.mat s010=HG02486.mat s011=HG03516.mat s012=HG02886.mat s013=HG00733.pat s014=HG03516.pat s015=HG02622.pat s016=HG02886.pat s017=HG00741.mat s018=HG00621.mat s019=HG01123.mat s020=HG02257.pat s021=HG00735.mat s022=HG02723.pat s023=HG03453.pat s024=HG01071.pat s025=HG03453.mat s026=HG01952.mat s027=HG00438.pat s028=HG02257.mat s029=HG02559.mat s030=HG01361.pat s031=NA18906.pat s032=HG00438.mat s033=NA18906.mat s034=NA20129.pat s035=HG02080.pat s036=HG002.mat s037=HG01928.mat s038=HG02109.mat s039=HG01978.pat s040=HG01361.mat s041=HG02717.mat s042=HG01123.pat s043=HG02148.mat s044=HG02080.mat s045=HG002.mat.20211005 s046=NA19240.pat s047=HG03492.mat s048=HG00673.mat s049=HG03486.pat s050=HG02630.mat s051=HG02148.pat s052=HG01175.pat s053=HG02630.pat s054=HG01891.mat s055=NA20129.mat s056=HG02818.pat s057=NA21309.pat s058=HG02559.pat s059=HG01358.mat s060=HG00741.pat s061=HG03579.mat s062=NA21309.mat s063=HG02109.pat s064=HG01071.mat s065=HG03540.mat s066=HG02145.mat s067=HG01978.mat s068=HG03486.mat s069=NA19240.mat s070=HG02818.mat s071=HG02723.mat s072=HG02622.mat s073=HG03540.pat s074=HG02572.mat s075=HG01243.mat s076=HG01109.mat s077=HG01175.mat s078=HG00621.pat s079=HG01928.pat s080=HG005.pat s081=HG01106.pat s082=HG01258.pat s083=HG01358.pat s084=HG01109.pat s085=HG02717.pat s086=HG02055.pat s087=HG002.pat s088=HG03492.pat s089=HG00673.pat s090=HG002.pat.20211005 s091=HG01243.pat s092=HG02486.pat s093=HG03579.pat s094=HG02145.pat s095=HG01952.pat s096=HG02572.pat s097=HG03098.pat
+subGroup2 species Species s000=CHM13 s002a=T2T-CHM13v2.0 s002b=HG01106.mat s003=HG03098.mat s004=HG00735.pat s005=HG01258.mat s006=HG005.mat s007=HG01891.pat s008=HG02055.mat s009=HG00733.mat s010=HG02486.mat s011=HG03516.mat s012=HG02886.mat s013=HG00733.pat s014=HG03516.pat s015=HG02622.pat s016=HG02886.pat s017=HG00741.mat s018=HG00621.mat s019=HG01123.mat s020=HG02257.pat s021=HG00735.mat s022=HG02723.pat s023=HG03453.pat s024=HG01071.pat s025=HG03453.mat s026=HG01952.mat s027=HG00438.pat s028=HG02257.mat s029=HG02559.mat s030=HG01361.pat s031=NA18906.pat s032=HG00438.mat s033=NA18906.mat s034=NA20129.pat s035=HG02080.pat s036=HG002.mat s037=HG01928.mat s038=HG02109.mat s039=HG01978.pat s040=HG01361.mat s041=HG02717.mat s042=HG01123.pat s043=HG02148.mat s044=HG02080.mat s045=HG002.mat.20211005 s046=NA19240.pat s047=HG03492.mat s048=HG00673.mat s049=HG03486.pat s050=HG02630.mat s051=HG02148.pat s052=HG01175.pat s053=HG02630.pat s054=HG01891.mat s055=NA20129.mat s056=HG02818.pat s057=NA21309.pat s058=HG02559.pat s059=HG01358.mat s060=HG00741.pat s061=HG03579.mat s062=NA21309.mat s063=HG02109.pat s064=HG01071.mat s065=HG03540.mat s066=HG02145.mat s067=HG01978.mat s068=HG03486.mat s069=NA19240.mat s070=HG02818.mat s071=HG02723.mat s072=HG02622.mat s073=HG03540.pat s074=HG02572.mat s075=HG01243.mat s076=HG01109.mat s077=HG01175.mat s078=HG00621.pat s079=HG01928.pat s080=HG005.pat s081=HG01106.pat s082=HG01258.pat s083=HG01358.pat s084=HG01109.pat s085=HG02717.pat s086=HG02055.pat s087=HG002.pat s088=HG03492.pat s089=HG00673.pat s090=HG002.pat.20211005 s091=HG01243.pat s092=HG02486.pat s093=HG03579.pat s094=HG02145.pat s095=HG01952.pat s096=HG02572.pat s097=HG03098.pat
 subGroup3 mafType Align_type mt0=mafNet mt1=synNet mt2=rbestNet mt3=liftOver
 dragAndDrop subTracks
 visibility hide
@@ -26,9 +26,49 @@ html homoSapiensChainNet
     subTrack humanChainNet
     spectrum on
 
+        track chainGCA_009914755.4
+        parent humanChainNetViewchain
+        subGroups view=chain species=s002a mafType=mt0
+        shortLabel T2T-CHM13v2.0 Chain
+        longLabel T2T-CHM13v2.0 (May 2021 GCA_009914755.4_T2T-CHM13v2.0) Chained Alignments
+        type bigChain GCA_009914755.4
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_009914755.4.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_009914755.4Link.bb
+        otherDb GCA_009914755.4
+
+        track chainSynGCA_009914755.4
+        parent humanChainNetViewchain
+        subGroups view=chain species=s002a mafType=mt1
+        shortLabel T2T-CHM13v2.0 synChain
+        longLabel T2T-CHM13v2.0 (May 2021 GCA_009914755.4_T2T-CHM13v2.0) Syntenic Chained Alignments
+        type bigChain GCA_009914755.4
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_009914755.4.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_009914755.4Link.bb
+        otherDb GCA_009914755.4
+
+        track chainRBestGCA_009914755.4
+        parent humanChainNetViewchain
+        subGroups view=chain species=s002a mafType=mt2
+        shortLabel T2T-CHM13v2.0 rBestChain
+        longLabel T2T-CHM13v2.0 (May 2021 GCA_009914755.4_T2T-CHM13v2.0) Reciprocal Best Chained Alignments
+        type bigChain GCA_009914755.4
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_009914755.4.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_009914755.4Link.bb
+        otherDb GCA_009914755.4
+
+        track chainLiftOverGCA_009914755.4
+        parent humanChainNetViewchain
+        subGroups view=chain species=s002a mafType=mt3
+        shortLabel T2T-CHM13v2.0 LiftOver Chain
+        longLabel T2T-CHM13v2.0 (May 2021 GCA_009914755.4_T2T-CHM13v2.0) Lift Over Chained Alignments
+        type bigChain GCA_009914755.4
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_009914755.4.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCA_009914755.4Link.bb
+        otherDb GCA_009914755.4
+
         track chainGCA_018471345.1
         parent humanChainNetViewchain
-        subGroups view=chain species=s002 mafType=mt0
+        subGroups view=chain species=s002b mafType=mt0
         shortLabel HG01106.pri.mat.f1_v2 Chain
         longLabel HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) Chained Alignments
         type bigChain GCA_018471345.1
@@ -38,7 +78,7 @@ html homoSapiensChainNet
 
         track chainSynGCA_018471345.1
         parent humanChainNetViewchain
-        subGroups view=chain species=s002 mafType=mt1
+        subGroups view=chain species=s002b mafType=mt1
         shortLabel HG01106.pri.mat.f1_v2 synChain
         longLabel HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) Syntenic Chained Alignments
         type bigChain GCA_018471345.1
@@ -48,7 +88,7 @@ html homoSapiensChainNet
 
         track chainRBestGCA_018471345.1
         parent humanChainNetViewchain
-        subGroups view=chain species=s002 mafType=mt2
+        subGroups view=chain species=s002b mafType=mt2
         shortLabel HG01106.pri.mat.f1_v2 rBestChain
         longLabel HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) Reciprocal Best Chained Alignments
         type bigChain GCA_018471345.1
@@ -58,7 +98,7 @@ html homoSapiensChainNet
 
         track chainLiftOverGCA_018471345.1
         parent humanChainNetViewchain
-        subGroups view=chain species=s002 mafType=mt3
+        subGroups view=chain species=s002b mafType=mt3
         shortLabel HG01106.pri.mat.f1_v2 LiftOver Chain
         longLabel HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) Lift Over Chained Alignments
         type bigChain GCA_018471345.1
@@ -3872,9 +3912,53 @@ html homoSapiensChainNet
     visibility dense
     subTrack humanChainNet
 
+        track netGCA_009914755.4
+        parent humanMafNetViewnet
+        subGroups view=net species=s002a mafType=mt0
+        shortLabel T2T-CHM13v2.0 mafNet
+        longLabel T2T-CHM13v2.0 (May 2021 GCA_009914755.4_T2T-CHM13v2.0) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_009914755.4.net.bb
+        summary /gbdb/$D/chainNet/$D.GCA_009914755.4.net.summary.bb
+        speciesOrder GCA_009914755.4
+        speciesLabels GCA_009914755.4="T2T-CHM13v2.0"
+
+        track synNetGCA_009914755.4
+        parent humanMafNetViewnet
+        subGroups view=net species=s002a mafType=mt1
+        shortLabel T2T-CHM13v2.0 synNet
+        longLabel T2T-CHM13v2.0 (May 2021 GCA_009914755.4_T2T-CHM13v2.0) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_009914755.4.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_009914755.4.synNet.summary.bb
+        speciesOrder GCA_009914755.4
+        speciesLabels GCA_009914755.4="T2T-CHM13v2.0"
+
+        track rbestNetGCA_009914755.4
+        parent humanMafNetViewnet
+        subGroups view=net species=s002a mafType=mt2
+        shortLabel T2T-CHM13v2.0 rBestNet
+        longLabel T2T-CHM13v2.0 (May 2021 GCA_009914755.4_T2T-CHM13v2.0) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_009914755.4.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_009914755.4.rbestNet.summary.bb
+        speciesOrder GCA_009914755.4
+        speciesLabels GCA_009914755.4="T2T-CHM13v2.0"
+
+        track liftOverNetGCA_009914755.4
+        parent humanMafNetViewnet
+        subGroups view=net species=s002a mafType=mt3
+        shortLabel T2T-CHM13v2.0 liftOverNet
+        longLabel T2T-CHM13v2.0 (May 2021 GCA_009914755.4_T2T-CHM13v2.0) Lift Over Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_009914755.4.liftOverNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_009914755.4.liftOverNet.summary.bb
+        speciesOrder GCA_009914755.4
+        speciesLabels GCA_009914755.4="T2T-CHM13v2.0"
+
         track netGCA_018471345.1
         parent humanMafNetViewnet
-        subGroups view=net species=s002 mafType=mt0
+        subGroups view=net species=s002b mafType=mt0
         shortLabel HG01106.pri.mat.f1_v2 mafNet
         longLabel HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) mafNet Alignment
         type bigMaf
@@ -3885,7 +3969,7 @@ html homoSapiensChainNet
 
         track synNetGCA_018471345.1
         parent humanMafNetViewnet
-        subGroups view=net species=s002 mafType=mt1
+        subGroups view=net species=s002b mafType=mt1
         shortLabel HG01106.pri.mat.f1_v2 synNet
         longLabel HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) Syntenic Net Alignment
         type bigMaf
@@ -3896,7 +3980,7 @@ html homoSapiensChainNet
 
         track rbestNetGCA_018471345.1
         parent humanMafNetViewnet
-        subGroups view=net species=s002 mafType=mt2
+        subGroups view=net species=s002b mafType=mt2
         shortLabel HG01106.pri.mat.f1_v2 rBestNet
         longLabel HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) Reciprocal Best Net Alignment
         type bigMaf
@@ -3907,7 +3991,7 @@ html homoSapiensChainNet
 
         track liftOverNetGCA_018471345.1
         parent humanMafNetViewnet
-        subGroups view=net species=s002 mafType=mt3
+        subGroups view=net species=s002b mafType=mt3
         shortLabel HG01106.pri.mat.f1_v2 liftOverNet
         longLabel HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) Lift Over Best Net Alignment
         type bigMaf
