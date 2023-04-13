@@ -292,6 +292,7 @@ clean::
 
 clean_utils::
 	@for D in ${UTIL_DIRS}; do \
+		if test ! -s $${D} ; then continue ; fi; \
 		(cd $${D} && ${MAKE} clean;) \
 	done
 
