@@ -5923,10 +5923,7 @@ char *field = trackDbSetting(tdb, "squishyPackField");
 if (field == NULL)
     return;
 
-char *squishyPackPointStr = trackDbSetting(tdb, "squishyPackPoint");
-double squishyPackPoint = 999;
-if (squishyPackPointStr != NULL)
-    squishyPackPoint = atof(squishyPackPointStr);
+double squishyPackPoint = cartOrTdbDouble(cart, tdb, "squishyPackPoint", 999);
 printf("<BR><B>Squish items that have a %s value that is greater or equal to </B> ", field);
 
 safef(option, sizeof(option), "%s.%s", name, "squishyPackPoint" );
