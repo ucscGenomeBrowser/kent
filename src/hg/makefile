@@ -24,12 +24,14 @@ ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
 endif
 
 
-TEST_DIRS = lib cgilib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
+TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToBed genePredToGtf \
-	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross liftOver \
+	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross \
             mouseStuff mrnaToGene pslCDnaFilter pslDiff pslHisto \
             pslPartition pslSelect pslStats pslToBed spideyToPsl \
 	    sqlToXml xmlToSql utils
+
+TEST_EXTRA = cgilib liftOver
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
 
@@ -229,7 +231,9 @@ all::    cgi utils
 
 hgLib:
 	cd lib && ${MAKE}
+ifneq ($(wildcard cgilib/makefile),)
 	cd cgilib && ${MAKE}
+endif
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
 	cd altSplice/lib && $(MAKE)
@@ -291,17 +295,21 @@ clean_utils::
 		(cd $${D} && ${MAKE} clean;) \
 	done
 
-clean::	${TEST_DIRS:%=%.clean}
+clean::	${TEST_DIRS:%=%.clean} ${TEST_EXTRA:%=%.cleanExtra}
 
 %.clean:
 	cd $* && ${MAKE} clean
+
+# these directories are absent in the kent-core repo due to license issues
+%.cleanExtra:
+	@test -s $*/makefile && (cd $* && ${MAKE} clean) || true
 
 testAll: $(APPS:%=%.testAll)
 
 %.testAll:
 	@test -s $*/tests/makefile && (echo $*; cd $* && $(MAKE) test) || true
 
-test::	${TEST_DIRS:%=%.test} testAll
+test::	${TEST_DIRS:%=%.test} ${TEST_EXTRA:%=%.test} testAll
 
 %.test: hgLib
 	cd $* && ${MAKE} test
