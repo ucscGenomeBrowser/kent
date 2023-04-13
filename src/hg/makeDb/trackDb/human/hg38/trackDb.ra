@@ -847,6 +847,7 @@ semiShortCircuit 1
 searchPriority 55
 
 include hprcChain.ra
+include hprcCoverage.ra
 
 include trackDb.470way.ra
 
