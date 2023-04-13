@@ -200,6 +200,12 @@ boolean wigFetchDoNegativeWithCart(struct cart *cart, struct trackDb *tdb,
 #define wigFetchDoNegative(tdb,optString) \
         wigFetchDoNegativeWithCart(cart,(tdb),(tdb)->track,(optString))
 
+boolean wigFetchDoSequenceLogoWithCart(struct cart *cart, struct trackDb *tdb, 
+                                                     char *name,char **optString);
+#define wigFetchDoSequenceLogo(tdb,optString) \
+        wigFetchDoSequenceLogoWithCart(cart,(tdb),(tdb)->track,(optString))
+
+
 enum wiggleGridOptEnum wigFetchTransformFuncWithCart(struct cart *cart, struct trackDb *tdb, 
                                                      char *name,char **optString);
 #define wigFetchTransformFunc(tdb,optString) \
@@ -277,6 +283,7 @@ int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb);
 #define GRIDDEFAULT "gridDefault"
 #define TRANSFORMFUNC "transformFunc"
 #define DONEGATIVEMODE "negateValues"
+#define DOSEQUENCELOGOMODE "sequenceLogo"
 #define ALWAYSZERO "alwaysZero"
 #define AUTOSCALE "autoScale"
 #define AUTOSCALEDEFAULT "autoScaleDefault"
