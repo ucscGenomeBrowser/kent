@@ -30,7 +30,9 @@ hgLib:
 ifneq ($(wildcard hg/makefile),)
 	@./hg/sqlEnvTest.sh
 	cd hg/lib && ${MAKE}
+ifneq ($(wildcard hg/cgilib/makefile),)
 	cd hg/cgilib && ${MAKE}
+endif
 endif
 
 libs: topLibs hgLib optLib
