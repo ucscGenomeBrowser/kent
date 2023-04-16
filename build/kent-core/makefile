@@ -3,3 +3,6 @@ all: bindir
 
 bindir:
 	mkdir -p bin
+
+clean:
+	cd src && ${MAKE} clean

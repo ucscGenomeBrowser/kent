@@ -5923,10 +5923,7 @@ char *field = trackDbSetting(tdb, "squishyPackField");
 if (field == NULL)
     return;
 
-char *squishyPackPointStr = trackDbSetting(tdb, "squishyPackPoint");
-double squishyPackPoint = 999;
-if (squishyPackPointStr != NULL)
-    squishyPackPoint = atof(squishyPackPointStr);
+double squishyPackPoint = cartOrTdbDouble(cart, tdb, "squishyPackPoint", 999);
 printf("<BR><B>Squish items that have a %s value that is greater or equal to </B> ", field);
 
 safef(option, sizeof(option), "%s.%s", name, "squishyPackPoint" );
@@ -6038,6 +6035,7 @@ wigFetchSmoothingWindowWithCart(cart,tdb,name, &smoothingWindow);
 wigFetchYLineMarkWithCart(cart,tdb,name, &yLineMarkOnOff);
 wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 boolean doNegative = wigFetchDoNegativeWithCart(cart,tdb,tdb->track, (char **) NULL);
+boolean doSequenceLogo = wigFetchDoSequenceLogoWithCart(cart,tdb,tdb->track, (char **) NULL);
 
 printf("<TABLE BORDER=0>");
 
@@ -6176,6 +6174,16 @@ if (!isLogo)
     cgiMakeDoubleVarInRange(option, yLineMark, "Indicator at Y", 0, NULL, NULL);
     safef(option, sizeof(option), "%s.%s", name, YLINEONOFF );
     wiggleYLineMarkDropDown(option, yLineMarkOnOff);
+
+    char *logoMaf = trackDbSetting(tdb, "logoMaf");
+
+    if (logoMaf)
+        {
+        printf("<TR valign=middle><td align=right><b>Draw sequence logo when near base level:</b></td>"
+               "<td align=left colspan=2>");
+        safef(option, sizeof(option), "%s.%s", name, DOSEQUENCELOGOMODE );
+        cgiMakeCheckBox(option, doSequenceLogo);
+        }
     }
 if (boxed)
     puts("</TD></TR></TABLE>");

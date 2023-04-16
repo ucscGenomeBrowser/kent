@@ -34,6 +34,7 @@ struct wigCartOptions
     enum wiggleAggregateFunctionEnum aggregateFunction;	/*  NONE/TRANSPARENT/STACKED	*/
     boolean doNegative; /*      should we negate the values */
     struct mafBaseProbs *baseProbs;  /* if we're in logoMaf mode, this will hold the base probabilities. */
+    boolean doSequenceLogo; /*      should we draw a sequence logo when near baselevel? */
     };
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[]);

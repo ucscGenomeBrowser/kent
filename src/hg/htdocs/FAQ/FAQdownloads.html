@@ -53,6 +53,7 @@
 <li><a href="#download40">Restricted Track Data</a></li>
 <li><a href="#downloadAnalysis">What is the genome analysis set?</a></li>
 <li><a href="#downloadGenArk">How do I download GenArk data?</li>
+<li><a href="#downloadConservation">Why are the conservation scores different from the ones in the download file?</li>
 </ul>
 <hr>
 <p>
@@ -1216,6 +1217,18 @@ Alternatively, you can enter your GCA/GCF identifier
 in the URL in groups of three characters, seperated by slashes. For example, the 
 identifier "GCA_004027835.1" has data in the following directory:
 <pre>https://hgdownload.soe.ucsc.edu/hubs/GCA/004/027/835/</pre>
+</p>
+
+<a name="downloadConservation"></a>
+<h2>Conservation scores downloads</h2>
+<h6>Why are the conservation scores on the UCSC Genome Browser site different from the ones in the
+download file?</h6>
+<p>
+The difference in the conservation scores, for both PhastCons and PhyloP, is that the wiggle
+database format (from which the details page and Table Browser scores are extracted) uses lossy
+compression that keeps enough resolution to display the pixelated scores in the browser graphic
+display but does not reconstruct the true original scores. This is why we make the original score
+files available for download.
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
