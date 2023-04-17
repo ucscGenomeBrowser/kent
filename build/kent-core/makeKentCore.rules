@@ -67,6 +67,7 @@ H /src/blatz/
 H /src/isPcr/
 H /src/gfClient/
 H /src/gfServer/
+H /src/webBlat/
 
 # these sometimes appear on UCSC nfs file systems
 H .nfs*
