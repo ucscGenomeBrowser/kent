@@ -4796,8 +4796,8 @@ for (track = trackList; track != NULL; track = nextTrack)
         
         squishTrack->track = cloneString(buffer);
         squishTrack->originalTrack = cloneString(track->track);
-        squishTrack->shortLabel = cloneString(buffer);
-        squishTrack->longLabel = cloneString(buffer);
+        squishTrack->shortLabel = cloneString(track->shortLabel);
+        squishTrack->longLabel = cloneString(track->longLabel);
 
         /* insert the squished track */
         track->next = squishTrack;
@@ -5306,6 +5306,9 @@ if (withLeftLabels && psOutput == NULL)
 
             if (track->hasUi)
                 {
+                char *title = track->track;
+                if (track->originalTrack != NULL)
+                    title = track->originalTrack;
                 if (tdbIsCompositeChild(track->tdb))
                     {
                     struct trackDb *parent = tdbGetComposite(track->tdb);
@@ -5313,8 +5316,8 @@ if (withLeftLabels && psOutput == NULL)
                                   parent->track, parent->shortLabel, track->track);
                     }
                 else
-                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track,
-                                  track->shortLabel, track->track);
+                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, title,
+                                  track->shortLabel, title);
                 }
             }
         }

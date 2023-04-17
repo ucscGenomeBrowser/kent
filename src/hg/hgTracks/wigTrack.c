@@ -49,10 +49,11 @@ struct wigItem
     double graphLowerLimit;	/* filled in by DrawItems	*/
     };
 
-static boolean doLogo(struct trackDb *tdb)
+static boolean doLogo(struct track *tg)
 /* Are we going to draw a logo? */
 {
-return trackDbSettingOn(tdb, "logo") || (trackDbSetting(tdb, "logoMaf") != NULL); 
+struct wigCartOptions *wigCart = tg->wigCartData;
+return trackDbSettingOn(tg->tdb, "logo") || ((trackDbSetting(tg->tdb, "logoMaf") != NULL) && wigCart->doSequenceLogo); 
 }
 
 static void wigFillInColorLfArray(struct track *wigTrack, Color *colArray, int colSize,
@@ -1234,8 +1235,6 @@ struct pixelCountBin *pixelBins = wgo->pixelBins;
 double *yOffsets = wgo->yOffsets;
 int numTrack = wgo->numTrack;
 Color clipColor = MG_MAGENTA;
-WigVerticalLineVirtual vLine = wgo->vLine;
-void *image = wgo->image;
 #define doLine(image, x, y, height, color) {vLine(image, x, y, height, color); }
 
 int h = tg->lineHeight;	/*	the height of our drawing window */
@@ -1326,6 +1325,11 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
 #define scaleHeightToPixels(val) (min(BIGNUM,(scaleFactor * (graphUpperLimit - (val)) + yOff)))
 #define doLine(image, x, y, height, color) {vLine(image, x, y, height, color); }
                 {
+                // since we're drawing a sequence logo, we want to scale by the part of the line within the clipping window
+                if (dataValue > graphUpperLimit)
+                    dataValue = graphUpperLimit;
+                else if (dataValue < graphLowerLimit)
+                    dataValue = graphLowerLimit;
                 int y0 = graphUpperLimit * scaleFactor;
                 int y1 = (graphUpperLimit - dataValue)*scaleFactor;
                 if (yOffsets)
@@ -1426,13 +1430,13 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
 
 	    if ((yOffsets != NULL) && (numTrack > 0))
 		stackValue += yOffsets[(numTrack-1) *  width + x1];
-	    if (stackValue > graphUpperLimit)
+	    if (stackValue >= graphUpperLimit)
                 {
-		doLine(image, x, yOff, 2, clipColor);
+                hvGfxLine(hvg, x, yOff, x+baseWidth, yOff, clipColor);
                 }
-	    else if (stackValue < graphLowerLimit)
+	    else if (stackValue <= graphLowerLimit)
                 {
-		doLine(image, x, yOff + h - 1, 2, clipColor);
+                hvGfxLine(hvg, x, yOff + h - 1, x+baseWidth, yOff + h - 1, clipColor);
                 }
 #undef scaleHeightToPixels	/* No longer use this symbol */
             }   /*	vis == tvFull || vis == tvPack */
@@ -1710,7 +1714,7 @@ graphRange = graphUpperLimit - graphLowerLimit;
 wigTrackSetGraphOutputDefault(tg, xOff, yOff, width, hvg);
 
 struct wigMouseOver *mouseOverData = NULL;
-if (zoomedToCodonLevel && doLogo(tg->tdb) && vis != tvDense)
+if (zoomedToCodonLevel && doLogo(tg) && vis != tvDense && vis != tvSquish)
     mouseOverData = logoPreDrawContainer(preContainer,
         preDrawZero, width, tg, hvg, xOff, yOff,
         graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart, seqStart, seqEnd);
@@ -1954,7 +1958,8 @@ char *logoMaf = trackDbSetting(tg->tdb, "logoMaf");
 if (logoMaf != NULL)
     {
     struct wigCartOptions *wigCart = tg->wigCartData;
-    wigCart->baseProbs = hgMafProbs(database, logoMaf, chromName, seqStart, seqEnd, '+');
+    if (wigCart->doSequenceLogo)
+        wigCart->baseProbs = hgMafProbs(database, logoMaf, chromName, seqStart, seqEnd, '+');
     }
 
 struct preDrawContainer *pre = wigLoadPreDraw(tg, seqStart, seqEnd, width);
@@ -2179,6 +2184,7 @@ wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->track, (char **) N
 wigCart->alwaysZero = (enum wiggleAlwaysZeroEnum)wigFetchAlwaysZeroWithCart(cart,tdb,tdb->track, (char **) NULL);
 wigCart->transformFunc = (enum wiggleTransformFuncEnum)wigFetchTransformFuncWithCart(cart,tdb,tdb->track, (char **) NULL);
 wigCart->doNegative = wigFetchDoNegativeWithCart(cart,tdb,tdb->track, (char **) NULL);
+wigCart->doSequenceLogo = wigFetchDoSequenceLogoWithCart(cart,tdb,tdb->track, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;

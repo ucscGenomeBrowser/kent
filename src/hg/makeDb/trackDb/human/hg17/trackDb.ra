@@ -266,7 +266,7 @@ url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$
         shortLabel Affy Txn
         longLabel Affy Transcriptome Phase 3
         group expression
-        priority 0
+        #priority 0
 
 track affyTxnPhase3FragsL
 superTrack affyTxnPhase3Super dense
@@ -274,7 +274,7 @@ compositeTrack on
 shortLabel Affy Tx lRNA Reg
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Fragments
 group expression
-priority 0
+#priority 0
 type bed 3 .
 
     track affyTxnPhase3FragsHDF
@@ -345,7 +345,7 @@ longLabel Affymetrix Transcriptome Phase 3 Long RNA Signal
 viewLimits 0:150
 autoScale Off
 group expression
-priority 0
+#priority 0
 maxHeightPixels 100:30:10
 canPack off
 type wig 0 1000
@@ -416,7 +416,7 @@ compositeTrack on
 shortLabel Affy Tx sRNA Reg
 longLabel Affymetrix Transcriptome Phase 3 Short RNA Fragments
 group expression
-priority 0
+#priority 0
 type bed 3 .
 
     track affyTxnPhase3FragsHeLaTopStrand
@@ -451,7 +451,7 @@ longLabel Affymetrix Transcriptome Phase 3 Short RNA Signal
 group expression
 viewLimits 0:150
 autoScale Off
-priority 0
+#priority 0
 maxHeightPixels 100:30:10
 canPack off
 type wig 0 1000
