@@ -245,7 +245,12 @@ int rPrimerSize = strlen(out->rPrimer);
 int bothSize = fPrimerSize + rPrimerSize;
 int gapSize = size - bothSize;
 char *name = out->name;
-if (name == NULL) name = "n/a";
+if (name == NULL)
+    {
+    struct dyString *dy = dyStringNew(0);
+    dyStringPrintf(dy, "%s_%s", out->fPrimer, out->rPrimer);
+    name = dyStringCannibalize(&dy);;
+    }
 match = countMatch(out->dna, out->fPrimer, fPrimerSize);
 reverseComplement(out->rPrimer, rPrimerSize);
 assert(size > 0);

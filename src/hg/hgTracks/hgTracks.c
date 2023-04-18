@@ -883,7 +883,7 @@ else
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
             {
             struct linkedFeatures *lf = lfFromPslx(psl, 1, FALSE, FALSE, tg);
-            lf->name = cloneString("");
+            lf->name = cloneString(psl->qName);
             lf->extra = cloneString("");
             slAddHead(&itemList, lf);
             }
