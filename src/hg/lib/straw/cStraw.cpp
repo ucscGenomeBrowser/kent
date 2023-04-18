@@ -32,8 +32,20 @@ void getHeaderFields(Straw *hicFile, string &genome, vector<string> &chromNames,
 }
 
 
-extern "C" Straw *cStrawOpen(char *fname) {
-    return new Straw(fname);
+extern "C" char *cStrawOpen(char *fname, Straw **p)
+/* Create a Straw object based on the hic file at the provided path and set *p to point to it.
+ * On error, set *p = NULL and return a non-null string describing the error. */
+{
+    try {
+        *p = new Straw(fname);
+    } catch (strawException& err) {
+      char *errMsg = (char*) calloc((size_t) strlen(err.what())+1, sizeof(char));
+      strcpy(errMsg, err.what());
+      delete *p;
+      *p = NULL;
+      return errMsg;
+    }
+    return NULL;
 }
 
 extern "C" void cStrawClose(Straw **hicFile) {
