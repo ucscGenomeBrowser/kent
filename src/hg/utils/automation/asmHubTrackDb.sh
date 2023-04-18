@@ -838,16 +838,17 @@ if [ -d ${buildDir}/trackData/ebiGene ]; then
     ln -s $ebiGeneLink ${buildDir}/bbi/${asmId}.ebiGene.bb
 
     printf "track ebiGene
-shortLabel Ensembl v2
-longLabel Ensembl annotation v2
+shortLabel Ensembl 2022_07
+longLabel Ensembl annotation 2022_07
 group genes
 visibility pack
 color 150,0,0
+itemRgb on
 type bigGenePred
 bigDataUrl bbi/%s.ebiGene.bb
-searchIndex name,name2,txId,geneName,parentTranscript
-labelFields name,name2,txId,geneName,parentTranscript
-defaultLabelFields name
+searchIndex name,name2,geneName
+labelFields name,name2,geneName
+defaultLabelFields geneName
 labelSeperator \" \"
 html html/%s.ebiGene\n\n" "${asmId}" "${asmId}"
 
