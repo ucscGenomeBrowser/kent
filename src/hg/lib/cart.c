@@ -33,6 +33,7 @@
 #include "customComposite.h"
 #include "regexHelper.h"
 #include "windowsToAscii.h"
+#include "jsonWrite.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -2352,6 +2353,19 @@ if (loginSystemEnabled())
     }
 }
 
+static void cartJsonStart()
+/* Write the necessary headers for Apache */
+{
+puts("Content-Type: application/json\n");
+}
+
+static void cartJsonEnd(struct jsonWrite *jw)
+/* Write the final string which may have nothing in it */
+{
+if (jw)
+    puts(jw->dy->string);
+}
+
 struct cart *cartForSession(char *cookieName, char **exclude,
                             struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
@@ -2406,6 +2420,17 @@ if (noSqlInj_dumpStack)
 char *hguid = NULL;
 if ( cgiOptionalString("ignoreCookie") == NULL )
     hguid = getCookieId(cookieName);
+
+// if _dumpToLog is on the URL, we can exit early with whatever
+// message we are trying to write to the stderr/error_log
+char *logMsg = NULL;
+if ( (logMsg = cgiOptionalString("_dumpToLog")) != NULL)
+    {
+    cartJsonStart();
+    fprintf(stderr, "%s", cgiEncode(logMsg));
+    cartJsonEnd(NULL);
+    exit(0);
+    }
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);

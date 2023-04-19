@@ -5493,6 +5493,7 @@ function hgtWarnTiming(maxSeconds) {
     var loadSeconds = loadTime/1000;
     var skipNotification = localStorage.getItem("hgTracks.hideSpeedNotification");
     if (loadSeconds > maxSeconds && !skipNotification) {
+        writeToApacheLog("load time: " + loadSeconds + "s, showing warning message");
         var div = document.createElement("div");
         div.style.display = "none";
         div.style.width = "90%";
