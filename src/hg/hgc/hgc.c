@@ -7115,7 +7115,19 @@ if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target)
     errAbort("PCR Result track has disappeared!");
 
 char *fPrimer, *rPrimer;
-pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
+// the item name contains the forward and reverse primers
+int maxSplits = 2;
+char *splitQName[maxSplits];
+int numSplits = chopString(cloneString(item), "_", splitQName, sizeof(splitQName));
+if (numSplits == maxSplits)
+    {
+    fPrimer = splitQName[0];
+    touppers(fPrimer);
+    rPrimer = splitQName[1];
+    touppers(rPrimer);
+    }
+else
+    pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
 printf("<H2>PCR Results (<TT>%s %s</TT>)</H2>\n", fPrimer, rPrimer);
 printf("<B>Forward primer:</B> 5' <TT>%s</TT> 3'<BR>\n", fPrimer);
 printf("<B>Reverse primer:</B> 5' <TT>%s</TT> 3'<BR>\n", rPrimer);
