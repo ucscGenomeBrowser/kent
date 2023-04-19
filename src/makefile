@@ -125,10 +125,10 @@ endif
 	rm -f tags TAGS
 	rm -f cscope.out cscope.files cscope.po.out
 
-testDirs = lib utils blat gfServer hg
+testDirs = blat gfServer hg lib utils
 test:: $(testDirs:%=%.test)
 %.test:
-	cd $* && ${MAKE} test
+	if test -d $* ; then cd $* && ${MAKE} test; fi
 
 LIB_TAGS_IN = lib/*.[hc] */lib/*.[hc] */*/lib/*.[hc] */*/*/lib/*.[hc] jkOwnLib/*.c \
 	inc/*.h */inc/*.h */*/inc/*.h */*/*/inc/*.h */cgilib/*.[hc]
