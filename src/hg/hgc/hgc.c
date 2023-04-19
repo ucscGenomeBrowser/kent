@@ -1747,6 +1747,26 @@ for (tmp = embeddedTblSetting2; tmp != NULL; tmp = tmp->next)
     }
 }
 
+void printFieldLabel(char *entry)
+/* print the field label, the first column in the table, as a <td>. Allow a
+ * longer description after a |-char, as some fields are not easy to
+ * understand. */
+{
+char *afterPipe = strchr(entry, '|');
+if (afterPipe)
+    *afterPipe = 0;
+
+printf("<tr><td>%s", entry);
+
+if (afterPipe)
+    {
+    afterPipe++; // skip past | character
+    printf("<br><span class='bedExtraTblNote'>%s</small>", afterPipe);
+    }
+
+puts("</td>");
+}
+
 #define TDB_STATICTABLE_SETTING "extraDetailsTable"
 #define TDB_STATICTABLE_SETTING_2 "detailsStaticTable"
 int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
@@ -1890,7 +1910,8 @@ for (;col != NULL && count < fieldCount;col=col->next)
         entry = "Status of CDS end annotation (none, unknown, incomplete, or complete)";
     else
         entry = col->comment;
-    printf("<tr><td>%s</td>", entry); // bold style now in HGStyle.css
+
+    printFieldLabel(entry);
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
