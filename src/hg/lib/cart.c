@@ -2427,7 +2427,7 @@ char *logMsg = NULL;
 if ( (logMsg = cgiOptionalString("_dumpToLog")) != NULL)
     {
     cartJsonStart();
-    fprintf(stderr, "%s", cgiEncode(logMsg));
+    fprintf(stderr, "%s", logMsg);
     cartJsonEnd(NULL);
     exit(0);
     }

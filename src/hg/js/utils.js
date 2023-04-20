@@ -3724,7 +3724,7 @@ function writeToApacheLog(msg) {
     // send msg to web servers error_log
     // first need to figure out what server and CGI we are requesting:
     let currUrl = parseUrl(window.location.href);
-    logUrl = currUrl.protocol + "//" + currUrl.serverName + "/" + currUrl.pathInfo + "?_dumpToLog=" + msg;
+    logUrl = currUrl.protocol + "//" + currUrl.serverName + "/" + currUrl.pathInfo + "?_dumpToLog=" + encodeURIComponent(msg);
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", logUrl, true);
     xmlhttp.send();  // sends request and exits this function

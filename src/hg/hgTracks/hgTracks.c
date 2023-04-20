@@ -9853,9 +9853,9 @@ char *maxTimeStr = cfgOption("warnSeconds");
 if (!maxTimeStr)
     return;
 
-int maxTime = atoi(maxTimeStr);
+double maxTime = atof(maxTimeStr);
 struct dyString *dy = dyStringNew(150);
-dyStringPrintf(dy, "$(document).ready( function() { hgtWarnTiming(%d)});\n", maxTime);
+dyStringPrintf(dy, "$(document).ready( function() { hgtWarnTiming(%f)});\n", maxTime);
 jsInline(dy->string);
 dyStringFree(&dy);
 }
