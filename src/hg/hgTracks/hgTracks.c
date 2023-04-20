@@ -817,7 +817,7 @@ char *pcrResultMapItemName(struct track *tg, void *item)
 /* Stitch accession and display name back together (if necessary). */
 {
 struct linkedFeatures *lf = item;
-return pcrResultItemAccName(lf->name, lf->extra);
+return pcrResultItemAccName(lf->name, lf->extra, (struct psl *)lf->original);
 }
 
 void pcrResultLoad(struct track *tg)
@@ -883,8 +883,9 @@ else
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
             {
             struct linkedFeatures *lf = lfFromPslx(psl, 1, FALSE, FALSE, tg);
-            lf->name = cloneString(psl->qName);
+            lf->name = cloneString("");
             lf->extra = cloneString("");
+            lf->original = psl;
             slAddHead(&itemList, lf);
             }
 slSort(&itemList, linkedFeaturesCmp);
