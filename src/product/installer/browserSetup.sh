@@ -1629,6 +1629,8 @@ function downloadGenomes
 
     set +f
 
+    mysqlCheck
+
     goOffline # modify hg.conf and remove all statements that use the UCSC download server
 
     echo2
@@ -1694,6 +1696,13 @@ function startMysql
     fi
 }
 
+function mysqlCheck
+# check all mysql tables. Rarely, some of them are in an unclosed state on the download server, this command will close them
+{
+    echo2 Checking all mysql tables after the download to make sure that they are closed
+    mysqlcheck --all-databases --auto-repair --quick --fast --silent
+}
+
 # only download a set of minimal mysql tables, to make a genome browser that is using the mysql failover mechanism
 # faster. This should be fast enough in the US West Coast area and maybe even on the East Coast.
 function downloadMinimal
@@ -1742,6 +1751,8 @@ function downloadMinimal
             mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
         done
     done
+
+    mysqlCheck
 
     echo2 
     echo2 The mirror should be functional now. It contains some basic assembly tables 
