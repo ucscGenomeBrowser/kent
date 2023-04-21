@@ -649,6 +649,14 @@ The following track line attribute=value pairs are defined in the Genome Browser
   <a href="../help/vcf.html" target="_blank">VCF</a> tracks. This is a required attribute for those 
   track types. There is no default for this attribute.</li>
   <li>
+  <strong>bigDataIndex=<<em>external_url</em>></strong> - Optional. The URL of the BAI/TBI index file for 
+  <a href="../help/bam.html" target="_blank">BAM</a> and
+  <a href="../help/cram.html" target="_blank">CRAM</a> files. By default, these index files are assumed
+  to be at the same URL as the data file, but with the extension .bai. For example, if the data file is
+  https://genome.gov/genome.bam, the index file by default must be at https://genome.gov/genome.bam.bai.
+  If that is not the case, the bigDataIndex option must be used to point to the index file.
+  </li>
+  <li>
   <strong>doWiggle=<<em>on</em>></strong> - The doWiggle setting enables BAM custom tracks
   to be displayed as bar graphs where the height is proportional to the number of reads mapped
   to each genomic position. This display is described as a density graph and is best viewed with
