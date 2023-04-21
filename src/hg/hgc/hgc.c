@@ -27032,7 +27032,7 @@ else if (sameWord(table, "dgv") || sameWord(table, "dgvBeta"))
     {
     doDgv(tdb, item);
     }
-else if (sameWord(table, "dgvMerged") || sameWord(table, "dgvSupporting"))
+else if ((sameWord(table, "dgvMerged") || sameWord(table, "dgvSupporting")) && (tdb && !startsWith("bigBed", tdb->type)))
     {
     doDgvPlus(tdb, item);
     }
