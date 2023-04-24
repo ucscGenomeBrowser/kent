@@ -653,7 +653,7 @@ group varRep
     type bigBed 12 +
     url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg38?ref=$S;start=${;end=$};name=$$;class=Sequence
     searchIndex name
-    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$variant_sub_type
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$variant_sub_type; Frequency:$Frequency
 
 searchTable dgvGold
 searchType bigBed
