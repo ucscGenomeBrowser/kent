@@ -354,6 +354,8 @@ browser.indelOptions=on
 freeType=on
 freeTypeDir=../htdocs/urw-fonts
 
+cramRef=$APACHEDIR/userdata/cramCache
+
 EOF_HGCONF
 
 read -r -d '' HELP_STR << EOF_HELP
@@ -1432,6 +1434,10 @@ function installBrowser ()
     fi
 
     mysqlDbSetup
+
+    # setup the cram cache so remote cram files will load correctly
+    mkdir -p $APACHEDIR/userdata/cramCache/{error,pending}
+    chmod -R 777 $APACHEDIR/userdata/cramCache
 
     # -------------------
     # CGI installation
