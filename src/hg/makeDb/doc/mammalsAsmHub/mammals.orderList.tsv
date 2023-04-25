@@ -9,6 +9,7 @@ GCF_000164845.4_VicPac3.2	alpaca (v3.2 Carlotta AHFN-0088 2019 Deakin U)
 GCF_001458135.2_marMar	Alpine marmot (2019)
 GCF_001984765.1_C.can_genome_v1.0	American beaver (Ward 2017 refseq)
 GCF_000754665.1_Bison_UMD1.0	American bison (2014 refseq)
+GCA_024610745.1_mUrsAme1.0.a	American black bear (L20-20 alternate hap 2022)
 GCF_020975775.1_gsc_jax_bbear_1.0	American black bear (UA15103 2021)
 GCA_900108605.1_NNQGG.v01	American mink (2018)
 GCF_020171115.1_ASM_NN_V1	American mink (M4711 2021 Dalhousie U)
@@ -51,6 +52,8 @@ GCA_008658375.2_mBalMus1.alt.v2	Blue whale (JJ_BM4_2016_0621 v2 alternate hap 20
 GCF_009873245.2_mBalMus1.pri.v3	blue whale (JJ_BM4_2016_0621 v3 primary hap 2020)
 GCA_022079275.1_mLynRuf1.a	bobcat (Redwood Valley CCGP_SWC_20201006 alternate hap 2022)
 GCF_022079265.1_mLynRuf1.p	bobcat (Redwood Valley CCGP_SWC_20201006 primary hap 2022)
+GCA_024803775.1_mThoBot1.0.a	Botta's pocket gopher (bottae MVZ:Mamm:240275 alternate hap 2022)
+GCA_024803745.1_mThoBot1.0.p	Botta's pocket gopher (bottae MVZ:Mamm:240275 primary hap 2022)
 GCA_004363515.1_IniGeo_v1_BIUU	boutu
 GCF_000412655.1_ASM41265v1	Brandt's bat
 GCA_004025005.1_TadBra_v1_BIUU	Brazilian free-tailed bat
@@ -64,6 +67,7 @@ GCA_009762295.2_mZalCal1.alt.v2	California sea lion (mZalCal1 alternate hap 2020
 GCA_009762295.1_mZalCal1.alt	California sea lion (alternate hap 2019 VGP)
 GCF_009762305.2_mZalCal1.pri.v2	California sea lion (v2 primary hap 2020 VGP)
 GCF_900631625.1_zalCal2.2	California sea lion (LMU 2018 refseq)
+GCA_028537955.1_mMicCal1.0.hap1	California vole (kernensis MVZ Mamm 240107 2023)
 GCA_007474575.1_mLynCan4_v1.alt	Canada lynx (alternate hap LIC74 2019 VGP)
 GCA_007474575.2_mLynCan4.alt.v2	Canada lynx (LIC74 v2 alternate hap 2020)
 GCF_007474595.2_mLynCan4.pri.v2	Canada lynx (LIC74 v2 primary hap 2020)
@@ -229,6 +233,8 @@ GCA_004027375.1_MacSob_v1_BIUU	long-tongued fruit bat (US102 2019 Broad)
 GCA_004365215.1_CunPac_v1_BIUU	Lowland paca
 GCF_001685135.1_ManJav1.0	Malayan pangolin (MP_PG03-UM 2016 refseq)
 GCF_014570535.1_YNU_ManJav_2.0	Malayan pangolin YNU ManJav 2.0
+GCA_024711525.1_mDipMer1.0.a	Merriam's kangaroo rat (MVZ:Mamm:240054 alternate hap 2022)
+GCA_024711535.1_mDipMer1.0.p	Merriam's kangaroo rat (MVZ:Mamm:240054 primary hap 2022)
 GCA_001651235.1_ASM165123v1	Masai giraffe (MA1 2016 Penn St)
 GCA_004024765.1_ZapHud_v1_BIUU	meadow jumping mouse
 GCF_006229205.1_meerkat_22Aug2017_6uvM2_HiC	meerkat (VVHF042 2019 DNA Zoo refseq)
@@ -248,6 +254,7 @@ GCF_014824575.2_WHU_Shon_v2.1	neotropical fruit bat
 GCA_004026825.1_HemHyl_v1_BIUU	Nilgiri tahr
 GCF_000208655.3_Dasnov3.2	nine-banded armadillo (v3.2 3-136 2012 Baylor)
 GCA_026167925.1_mPerMan1.0.a	North American deer mouse (MVZ:Mamm:240117 alternate hap 2022)
+GCA_026229955.1_mPerMan1.0.p	North American deer mouse (MVZ:Mamm:240117 primary hap 2022)
 GCA_004363455.1_EubJap_v1_BIUU	North Pacific right whale
 GCF_010015895.1_GSC_riverotter_1.0	Northern American river otter
 GCF_021288785.1_ASM2128878v2	Northern elephant seal (2021 DNA Zoo)
