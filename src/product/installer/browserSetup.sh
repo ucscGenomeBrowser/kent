@@ -1682,6 +1682,19 @@ function stopMysql
     else
         echo2 Could not find mysql nor mysqld file in /etc/init.d nor a systemd command. Please email genome-mirror@soe.ucsc.edu.
     fi
+
+    # Wait for up to 10 seconds for the service to go away.
+    for attempt in $(seq 1 10); do
+        mysqlcheck --all-databases
+        if [ $? -ne 0 ]; then
+            break
+        fi
+        sleep 1
+        if [[ attempt -eq 10 ]]; then
+            echo "Mysql appears to still be running, but continuing on anyway."
+            break
+        fi
+    done
 }
 
 # start the mysql database server
@@ -1700,6 +1713,19 @@ function startMysql
     else
         echo2 Could not find mysql nor mysqld file in /etc/init.d nor a systemd command. Please email genome-mirror@soe.ucsc.edu.
     fi
+
+    # Wait for up to 10 seconds for the service to be ready.
+    for attempt in $(seq 1 10); do
+        mysqlcheck --all-databases
+        if [ $? -eq 0 ]; then
+            break
+        fi
+        sleep 1
+        if [[ attempt -eq 10 ]]; then
+            echo "Mysql appears to not be running yet, but we're carrying on anyway."
+            break
+        fi
+    done
 }
 
 function mysqlCheck
