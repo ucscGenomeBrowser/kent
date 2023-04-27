@@ -4754,7 +4754,7 @@ for (track = trackList; track != NULL; track = nextTrack)
     {
     nextTrack = track->next;
 
-    if (track->visibility != tvPack)
+    if ((track->visibility != tvPack) || checkIfWiggling(cart, track))
         continue;
 
     char *string = cartOrTdbString(cart, track->tdb,  "squishyPackPoint", NULL);
@@ -4768,6 +4768,7 @@ for (track = trackList; track != NULL; track = nextTrack)
 
         struct track *squishTrack = CloneVar(track);
         squishTrack->tdb = CloneVar(track->tdb);
+        squishTrack->tdb->originalTrack = squishTrack->tdb->track;
         squishTrack->tdb->track = cloneString(buffer);
         squishTrack->tdb->next = NULL;
         squishTrack->visibility = tvSquish;

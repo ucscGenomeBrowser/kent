@@ -38,7 +38,7 @@ struct minMax
 /* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
 /* This number is tacked onto the end of cached trackDb entries to make sure we
  * don't use a cached structure that has different contents. */
-#define TRACKDB_VERSION 6
+#define TRACKDB_VERSION 7
 
 struct trackDb
 /* This describes an annotation track.  */
@@ -95,6 +95,7 @@ struct trackDb
                                 // looked up once in the metaDb and used again and again.
     struct hash *isNewFilterHash;    // if a field is specified in the "new" way, the trackDb variable will be in this hash
     char *errMessage;           // if there's an error in the trackDb specification, there will be a message in here
+    char *originalTrack; /* Normally NULL, if populated holds the track name to use to fetch cart variables. */
 /* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
     };
 
