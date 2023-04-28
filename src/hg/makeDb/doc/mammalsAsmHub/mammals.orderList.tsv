@@ -10,6 +10,7 @@ GCF_001458135.2_marMar	Alpine marmot (2019)
 GCF_001984765.1_C.can_genome_v1.0	American beaver (Ward 2017 refseq)
 GCF_000754665.1_Bison_UMD1.0	American bison (2014 refseq)
 GCA_024610745.1_mUrsAme1.0.a	American black bear (L20-20 alternate hap 2022)
+GCA_024610735.1_mUrsAme1.0.p	American black bear (L20-20 primary hap 2022)
 GCF_020975775.1_gsc_jax_bbear_1.0	American black bear (UA15103 2021)
 GCA_900108605.1_NNQGG.v01	American mink (2018)
 GCF_020171115.1_ASM_NN_V1	American mink (M4711 2021 Dalhousie U)
@@ -227,6 +228,8 @@ GCF_020740685.1_mJacJac1.mat.Y.cur	lesser Egyptian jerboa (2021 VGP)
 GCA_002007465.1_ASM200746v1	lesser panda
 GCF_018350215.1_P.leo_Ple1_pat1.1	lion
 GCF_000147115.1_Myoluc2.0	little brown bat
+GCA_024363435.1_mPerLon1.0.a	little pocket mouse (longimembris alternate hap 2022)
+GCA_024363575.1_mPerLon1.0.p	little pocket mouse (longimembris primary hap 2022)
 GCA_004026665.1_MurFea_v1_BIUU	little tube-nosed bat
 GCF_006547405.1_ASM654740v1	long-finned pilot whale
 GCF_000276665.1_ChiLan1.0	long-tailed chinchilla
@@ -258,6 +261,8 @@ GCA_026167925.1_mPerMan1.0.a	North American deer mouse (MVZ:Mamm:240117 alternat
 GCA_026229955.1_mPerMan1.0.p	North American deer mouse (MVZ:Mamm:240117 primary hap 2022)
 GCA_004363455.1_EubJap_v1_BIUU	North Pacific right whale
 GCF_010015895.1_GSC_riverotter_1.0	Northern American river otter
+GCA_029215635.1_mMirAng1.0.hap2	Northern elephant seal (CCGP_5_RB_7025 alternate hap 2023)
+GCA_029215605.1_mMirAng1.0.hap1	Northern elephant seal (CCGP_5_RB_7025 primary hap 2023)
 GCF_021288785.1_ASM2128878v2	Northern elephant seal (2021 DNA Zoo)
 GCA_004023865.1_MirAng_v1_BIUU	Northern elephant seal (BS05 2019 Broad)
 GCF_003265705.1_ASM326570v1	northern fur seal
@@ -300,6 +305,8 @@ GCF_000317375.1_MicOch1.0	prairie vole
 GCA_021018645.1_ASM2101864v1	pronghorn (PH2016 2021)
 GCF_000696695.1_Burgud	Przewalski's horse (Burgud 2014 refseq)
 GCF_003327715.1_PumCon1.0	puma (SC36_Marlon 2018 refseq)
+GCA_028749985.1_mPumCon1.0.hap1	puma (L17-30 primary hap 2023)
+GCA_028749965.1_mPumCon1.0.hap2	puma (L17-30 alternate hap 2023)
 GCA_004363535.1_DasPun_v1_BIUU	punctate agouti
 GCA_004363705.1_KogBre_v1_BIUU	pygmy sperm whale
 GCA_026419965.1_mKogBre1_haplotype_1	pygmy sperm whale (mKogBre1 haplotype 1 2022)
@@ -386,4 +393,6 @@ GCF_000442215.2_Lipotes_vexillifer_v1.1	Yangtze River dolphin (v1.1 BGI 2013 ref
 GCF_003676075.3_GSC_YBM_2.1	yellow-bellied marmot (SJ_83 v2.1 2019)
 GCF_016432865.1_AdamAnt_v2	yellow-footed antechinus (v2 Samford, QLD, Australia AdamAnt 2021)
 GCA_004026845.1_HetBruBak_v1_BIUU	yellow-spotted hyrax
+GCA_028536395.1_mMyoYum1.0.hap2	Yuma myotis (MYYU_CA2020_CCGP alternate hap 2023)
+GCA_028538775.1_mMyoYum1.0.hap1	Yuma myotis (MYYU_CA2020_CCGP primary hap 2023)
 GCF_000247795.1_Bos_indicus_1.0	zebu cattle (Nelore 2014 refseq)

@@ -285,6 +285,8 @@ GCA_009770625.1_UL_Ltar_1.0	Leishmania tarentolae (Parrot-TarII 2019)
 GCF_001293395.1_ASM129339v1	Leptomonas pyrrhocoris (H10 2015 kinetoplastids)
 GCF_000956235.1_wasmannia.A_1.0	little fire ant
 GCF_000184785.3_Aflo_1.1	little honeybee
+GCA_024610695.1_qqTetVers1.0.a	longjawed orb weaver (CCGP_RG_IND1 alternate hap 2022)
+GCA_024610705.1_qqTetVers1.0.p	longjawed orb weaver (CCGP_RG_IND1 primary hap 2022)
 GCA_012273795.1_ASM1227379v1	masson pine moth
 GCA_902829235.1_CLODIP2	mayflies C.dipterum (2020)
 GCF_905333055.1_ilManJurt1.1	meadow brown (refseq 2021)
@@ -404,7 +406,8 @@ GCA_000695345.1_Assembly_2.2_of_Bactrocera_tryoni_genome	Queensland fruit fly (b
 GCF_016617805.1_CSIRO_BtryS06_freeze2	Queensland fruit fly (S06 2021)
 GCA_001949185.1_Rvar_4.0	R.varieornatus (YOKOZUNA-1 2016 tardigrades)
 GCF_003343065.1_H.ruf_v1.0	red abalone (Redab-CP-2226-F 2018 Iowa State U)
-GCF_023055435.1_xgHalRufe1.0.p	red abalone (2022 UCLA)
+GCA_023055495.1_xgHalRufe1.0.a	red abalone (VD_foot alternate hap 2022)
+GCF_023055435.1_xgHalRufe1.0.p	red abalone (VD_foot primary hap 2022 UCLA)
 GCF_905147765.1_ilVanAtal1.2	red admiral (refseq 2021)
 GCF_000188075.2_Si_gnH	red fire ant (2018)
 GCF_016802725.1_UNIL_Sinv_3.0	red fire ant (2021)
@@ -528,3 +531,5 @@ GCA_002204515.1_AaegL5.0	yellow fever mosquito (LVP_AGWG 2017 genbank)
 GCF_002204515.2_AaegL5.0	yellow fever mosquito (LVP_AGWG 2017 refseq)
 GCF_003268045.1_YSA_version1	yellow sugarcane aphid
 GCF_002113885.1_ASM211388v2	Yesso scallop
+GCA_023634265.1_eaPisBrev1.0.a	starfish (M0D059179O alternate hap 2022)
+GCA_023634235.1_eaPisBrev1.0.p	starfish (M0D059179O primary hap 2022)
