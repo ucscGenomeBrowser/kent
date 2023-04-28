@@ -40,6 +40,7 @@
 304258	GCA_023055415.1_fCliAna1.0.a	fish
 64432	GCA_023055425.1_ddLinParr1.0.p	plants
 67830	GCA_023055485.1_dhQueWisl1.0.a	plants
+6454	GCA_023055495.1_xgHalRufe1.0.a	invertebrate
 2893758	GCA_023055505.1_bCalCai1.0.p	birds
 64432	GCA_023055565.1_ddLinParr1.0.a	plants
 2893758	GCA_023055725.1_bCalCai1.0.a	birds

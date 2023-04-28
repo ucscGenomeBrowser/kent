@@ -292,6 +292,7 @@ git archive --format=zip -9 --remote=git://genome-source.soe.ucsc.edu/kent.git \
 src/parasol \
 src/tabFile \
 src/htslib \
+src/optimalLeaf \
 src/hg/pslToChain \
 src/hg/makeDb/outside \
 src/hg/makeDb/trackDbRaFormat \

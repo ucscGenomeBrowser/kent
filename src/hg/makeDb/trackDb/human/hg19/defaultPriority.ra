@@ -83,6 +83,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 202
     bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
     type bigBed 12
     url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$variant_sub_type; Frequency:$Frequency
     searchIndex name
 
 searchTable dgvGold

@@ -32,6 +32,10 @@ ncbiDir=$ottoDir/ncbi.$today
 mkdir -p $ncbiDir
 cd $ncbiDir && time $scriptDir/getNcbi.sh >& getNcbi.log &
 
+cncbDir=$ottoDir/cncb.$today
+mkdir -p $cncbDir
+cd $cncbDir && time $scriptDir/getCncb.sh >& getCncb.log &
+
 wait
 
 time $scriptDir/updateIdMapping.sh \
@@ -53,7 +57,7 @@ set +o pipefail
 grep skip annotate.pango annotate.nextclade | cat
 grep 'Could not' annotate.pango annotate.nextclade | cat
 
-# Check for newly lineages that are missing from pango.clade-mutations.tsv
+# Check for newly added lineages that are missing from pango.clade-mutations.tsv
 set +x
 lineages=~angie/github/pango-designation/lineages.csv
 tail -n+2 $lineages | cut -d, -f 2 | uniq | grep -E '^(AY|[B-Z][A-Z])' | sort -u \

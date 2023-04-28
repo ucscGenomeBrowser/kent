@@ -2810,10 +2810,13 @@ if (parentLevel)
 for ( ; tdb != NULL; tdb = tdb->parent)
     {
     char buf[512];
+    char *trackName = tdb->track;
+    if (tdb->originalTrack)
+        trackName = tdb->originalTrack;
     if (suffix[0] == '.' || suffix[0] == '_')
-        safef(buf, sizeof buf, "%s%s", tdb->track,suffix);
+        safef(buf, sizeof buf, "%s%s", trackName,suffix);
     else
-        safef(buf, sizeof buf, "%s.%s", tdb->track,suffix);
+        safef(buf, sizeof buf, "%s.%s", trackName,suffix);
     char *cartSetting = hashFindVal(cart->hash, buf);
     if (cartSetting != NULL)
         {

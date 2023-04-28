@@ -354,6 +354,8 @@ browser.indelOptions=on
 freeType=on
 freeTypeDir=../htdocs/urw-fonts
 
+cramRef=$APACHEDIR/userdata/cramCache
+
 EOF_HGCONF
 
 read -r -d '' HELP_STR << EOF_HELP
@@ -1433,6 +1435,10 @@ function installBrowser ()
 
     mysqlDbSetup
 
+    # setup the cram cache so remote cram files will load correctly
+    mkdir -p $APACHEDIR/userdata/cramCache/{error,pending}
+    chmod -R 777 $APACHEDIR/userdata/cramCache
+
     # -------------------
     # CGI installation
     # -------------------
@@ -1736,7 +1742,8 @@ function downloadMinimal
     echo2 Copying hgFixed.trackVersion, required for most tracks
     $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/trackVersion.* $MYSQLDIR/hgFixed/ 
     echo2 Copying hgFixed.refLink, required for RefSeq tracks across all species
-    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
+    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/
+    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
 
     startMysql
 
