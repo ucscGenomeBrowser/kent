@@ -3706,49 +3706,40 @@ else
     }
 }
 
-void doSnakeChainClick(struct trackDb *tdb, char *itemName)
+void doSnakeChainClick(struct trackDb *tdb, char *itemName, char *otherDb)
 /* Put up page for chain snakes. */
 {
 struct trackDb *parentTdb = trackDbTopLevelSelfOrParent(tdb);
-char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
-if (otherSpecies == NULL)
-    otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
-
-char *hubName = cloneString(database);
-char otherDb[4096];
 char *qName = cartOptionalString(cart, "qName");
 int qs = atoi(cartOptionalString(cart, "qs"));
 int qe = atoi(cartOptionalString(cart, "qe"));
 int qWidth = atoi(cartOptionalString(cart, "qWidth"));
-char *qTrack = cartString(cart, "g");
-if(isHubTrack(qTrack) && ! trackHubDatabase(database))
-    hubName = cloneString(qTrack);
 
-/* current mouse strain hal file has incorrect chrom names */
 char *aliasQName = qName;
-// aliasQName = "chr1";  // temporarily make this work for the mouse hal
 
-if(trackHubDatabase(database) || isHubTrack(qTrack))
-    {
-    char *ptr = strchr(hubName + 4, '_');
-    *ptr = 0;
-    safef(otherDb, sizeof otherDb, "%s_%s", hubName, otherSpecies);
-    }
-else
-    {
-    safef(otherDb, sizeof otherDb, "%s", otherSpecies);
-    }
+boolean otherIsActive = FALSE;
+char *hubUrl = NULL;
+if (hDbIsActive(otherDb))
+   otherIsActive = TRUE;
+else 
+    hubUrl = genarkUrl(otherDb); // may be NULL
 
 char headerText[256];
 safef(headerText, sizeof headerText, "reference: %s, query: %s\n", trackHubSkipHubName(database), trackHubSkipHubName(otherDb) );
 genericHeader(parentTdb, headerText);
 
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, qs, qe, hubName, trackHubSkipHubName(database), aliasQName, qs, qe, trackHubSkipHubName(otherDb));
+if (hubUrl != NULL)
+    printf("<A HREF=\"hgTracks?hubUrl=%s&genome=%s&position=%s:%d-%d\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", hubUrl, otherDb, aliasQName,  qs, qe,   aliasQName, qs, qe, trackHubSkipHubName(otherDb));
+else if (otherIsActive)
+    printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, qs, qe, aliasQName, qs, qe, trackHubSkipHubName(otherDb));
 
 int qCenter = (qs + qe) / 2;
 int newQs = qCenter - qWidth/2;
 int newQe = qCenter + qWidth/2;
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,hubName, trackHubSkipHubName(database), aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+if (hubUrl != NULL)
+   printf("<A HREF=\"hgTracks?hubUrl=%s&genome=%s&position=%s:%d-%d\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", hubUrl,otherDb, aliasQName, newQs, newQe,aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+else if (otherIsActive)
+    printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
 printTrackHtml(tdb);
 } 
 
@@ -3759,7 +3750,7 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
 boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", FALSE);
 
 if (doSnake)
-    return doSnakeChainClick(tdb, item);
+    return doSnakeChainClick(tdb, item, otherDb);
 
 struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
 char *thisOrg = hOrganism(database);
