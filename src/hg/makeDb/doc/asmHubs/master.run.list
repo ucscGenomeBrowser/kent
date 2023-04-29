@@ -923,6 +923,7 @@
 ./runBuild GCA_028536395.1_mMyoYum1.0.hap2 mammals Myotis_yumanensis
 ./runBuild GCA_028536645.1_bAphCal1.0.hap2 birds Aphelocoma_californica
 ./runBuild GCA_028536675.1_bAphCal1.0.hap1 birds Aphelocoma_californica
+./runBuild GCA_028537755.1_mMicCal1.0.hap2 mammals Microtus_californicus
 ./runBuild GCA_028537955.1_mMicCal1.0.hap1 mammals Microtus_californicus
 ./runBuild GCA_028538565.1_dmUmbCali1.0.hap2 plants Umbellularia_californica
 ./runBuild GCA_028538775.1_mMyoYum1.0.hap1 mammals Myotis_yumanensis
