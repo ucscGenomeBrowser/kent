@@ -65,7 +65,8 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err11 err12 err13 err14 err15 err16 err17 err18 err19 err20 \
 	err21 err22 err23 err24 err25 err26 err27 err28 err29 err30 \
 	err31 err32 err33 err34 err35 err36 err37 err38 err39 err40 \
-	err41 err42 err43 err44 err45 err46 err47 err48 err49 err50
+	err41 err42 err43 err44 err45 err46 err47 err48 err49 err50 \
+	err51 err52 err53
 
 notSupported: notSup01 notSup02 notSup03 notSup07 notSup10
 
@@ -865,20 +866,38 @@ err47: setOutput
 
 # testing always protected tracks, even with a range
 err48: setOutput
-	@printf "### $@ ### '${SERVERNAME}.edu/getData/track?tracks=gold,gap,decipher;genome=hg38;jsonOutputArrays=1;chrom=chr2;start=16129261;end=16163278'\n"
+	@printf "### $@ '${SERVERNAME}.edu/getData/track?tracks=gold,gap,decipher;genome=hg38;jsonOutputArrays=1;chrom=chr2;start=16129261;end=16163278'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hg38 -track=gold,gap,decipher -jsonOutputArrays -chrom=chr2 -start=16129261 -end=16163278 2>&1 | sed -e 's/, /,\n/g; s#http.*/getData#/getData#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing protected  tracks that are allowed if not whole genome
 err49: setOutput
-	@printf "### $@ ### '${SERVERNAME}.edu/getData/track?tracks=gold,gap,omimGene2;genome=hg38;jsonOutputArrays=1;chrom=chr2;start=16129261;end=16163278'\n"
+	@printf "### $@ '${SERVERNAME}.edu/getData/track?tracks=gold,gap,omimGene2;genome=hg38;jsonOutputArrays=1;chrom=chr2;start=16129261;end=16163278'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=hg38 -track=gold,gap,omimGene2 -jsonOutputArrays -chrom=chr2 -start=16129261 -end=16163278 2>&1 | sed -e 's/, /,\n/g; s#http.*/getData#/getData#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing chrom alias for a hub that doesn't have any aliases
 err50: setOutput
-	@printf "### $@ ### '${SERVERNAME}.edu/getData/track?tracks=assembly;genome=araTha1;chrom=chrPtld;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
+	@printf "### $@ '${SERVERNAME}.edu/getData/track?tracks=assembly;genome=araTha1;chrom=chrPtld;hubUrl=http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -hubUrl="http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/hub.txt" -genome="araTha1" -track="assembly" -chrom="chrPtld" 2>&1 | sed -e 's/, /,\n/g; s#http.*/getData#/getData#;' | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/files?genome=GCA_021951015.2 - illegal name
+err51: setOutput
+	@printf "### $@ '${SERVERNAME}/list/files?genome=GCA_021951015.2'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="GCA_021951015.2" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/files?genome=hg21 - illegal name
+err52: setOutput
+	@printf "### $@ '${SERVERNAME}/list/files?genome=hg21'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="hg21" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/files?genome=GCA_021951015.1 - additional illegal argument track
+err53: setOutput
+	@printf "### $@ '${SERVERNAME}/list/files?genome=GCA_021951015.1;track=gc5Base'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/files" -genome="GCA_021951015.1" -track="gc5Base" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 #####################  wiggle data ###########################################
