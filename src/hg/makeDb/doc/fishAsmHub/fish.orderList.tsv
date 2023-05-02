@@ -107,7 +107,8 @@ GCF_002260705.1_Sdu_1.0	greater amberjack
 GCF_901709675.1_fSynAcu1.2	greater pipefish (v1.2 2020)
 GCA_901709685.1_fSynAcu1.1_alternate_haplotype	greater pipefish (alternate hap 2019)
 GCF_003331165.1_Xiphophorus_hellerii-4.1	green swordtail
-GCF_024217435.1_RoL_Ssco_1.1	Gulf pipefish (Florida 2022)
+GCF_024217435.1_RoL_Ssco_1.1	Gulf pipefish (RoL_Ssco_1.1 Florida 2022 refseq)
+GCA_024217435.4_RoL_Ssco_1.2	Gulf pipefish (RoL_Ssco_1.2 Florida 2022 genbank)
 GCF_000633615.1_Guppy_female_1.0_MT	guppy
 GCA_015220095.1_fSebUmb1.alt	honeycomb rockfish (fSebUmb1 alternate hap 2020)
 GCF_015220745.1_fSebUmb1.pri	honeycomb rockfish (fSebUmb1 primary hap 2020)

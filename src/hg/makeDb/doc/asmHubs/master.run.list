@@ -831,6 +831,7 @@
 ./runBuild GCA_024140225.1_mSunEtr1.alt.cur mammals Suncus_etruscus
 ./runBuild GCA_024166345.1_mEleMax1_alternate_haplotype mammals Elephas_maximus_indicus
 ./runBuild GCA_024206055.2_ASM2420605v2 birds Gallus_gallus
+./runBuild GCA_024217435.4_RoL_Ssco_1.2 fish Syngnathus_scovelli
 ./runBuild GCA_024294585.1_rVipLat1.pri vertebrate Vipera_latastei
 ./runBuild GCA_024362935.1_bSetPet1.0.p birds Setophaga_petechia
 ./runBuild GCA_024362995.1_drHetArbu1.0.p plants Heteromeles_arbutifolia
