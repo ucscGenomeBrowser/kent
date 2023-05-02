@@ -836,23 +836,35 @@ if [ -d ${buildDir}/trackData/ebiGene ]; then
     printf "# link: $ebiGeneLink ${buildDir}/bbi/${asmId}.ebiGene.bb\n" 1>&2
     rm -f ${buildDir}/bbi/${asmId}.ebiGene.bb
     ln -s $ebiGeneLink ${buildDir}/bbi/${asmId}.ebiGene.bb
+    rm -f ${buildDir}/ixIxx/${asmId}.ebiGene.ix
+    rm -f ${buildDir}/ixIxx/${asmId}.ebiGene.ixx
+    export ixLink=`echo $ebiGeneBb | sed -e 's#.*trackData#../trackData#; s#.bb#.ix#'`
+    export ixxLink=`echo $ebiGeneBb | sed -e 's#.*trackData#../trackData#; s#.bb#.ixx#'`
+    ln -s $ixLink ${buildDir}/ixIxx/${asmId}.ebiGene.ix
+    ln -s $ixxLink ${buildDir}/ixIxx/${asmId}.ebiGene.ixx
+    export ebiVersion="2022_08"
+
+    if [ -s ${buildDir}/trackData/ebiGene/version.txt ]; then
+      ebiVersion=`cat "${buildDir}/trackData/ebiGene/version.txt"`
+    fi
 
     printf "track ebiGene
-shortLabel Ensembl 2022_07
-longLabel Ensembl annotation 2022_07
+shortLabel Ensembl %s
+longLabel Ensembl genes version %s
 group genes
 visibility pack
 color 150,0,0
 itemRgb on
 type bigGenePred
 bigDataUrl bbi/%s.ebiGene.bb
-searchIndex name,name2,geneName
-labelFields name,name2,geneName
-defaultLabelFields geneName
+searchTrix ixIxx/%s.ebiGene.ix
+searchIndex name,name2
+labelFields name,name2
+defaultLabelFields name2
 labelSeperator \" \"
-html html/%s.ebiGene\n\n" "${asmId}" "${asmId}"
+html html/%s.ebiGene\n\n" "${ebiVersion}" "${ebiVersion}" "${asmId}" "${asmId}" "${asmId}"
 
-# $scriptDir/asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html "${ensVersion}"
+$scriptDir/asmHubEbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ebiGene.html "${ebiVersion}"
  fi
 
 fi

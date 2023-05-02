@@ -11,15 +11,23 @@ GCF_014843425.1_RJC1_Hi-C	Barbados nut
 GCF_000219495.3_MedtrA17_4.0	barrel medic (A17 2014)
 GCA_002024945.1_R108_v._1.0	barrel medic (HM340 2017)
 GCF_003473485.1_MtrunA17r5.0-ANR	barrel medic (2018)
+GCA_028538565.1_dmUmbCali1.0.hap2	bay (USA: Berkeley CA var. californica CCGP_DODD_UMBCAL_S1 alternate hap 2023)
+GCA_028534965.1_dmUmbCali1.0.hap1	bay (USA: Berkeley CA var. californica CCGP_DODD_UMBCAL_S1 primary hap 2023)
 GCF_002917755.1_EL10_1.0	beet (EL10 2021 USDA)
 GCA_019985075.1_ddArcGlau1.0.a	bigberry manzanita (GLNDR_RDG_Rd-6 alternate hap 2021)
 GCA_019985065.2_ddArcGlau1.1p	bigberry manzanita (GLNDR_RDG_Rd-6 primary hap 2022)
 GCF_001995035.1_ASM199503v1	bitter melon
+GCA_028534865.1_ddPopTric1.0.hap2	black cottonwood (Ptri.A.LA.226.w1 alternate hap 2023)
+GCA_028534895.1_ddPopTric1.0.hap1	black cottonwood (Ptri.A.LA.226.w1 primary hap 2023)
 GCF_000002775.5_P.trichocarpa_v4.1	black cottonwood (v4.1 Nisqually-1 2022)
 GCF_004153795.1_AHAU_CSS_1	black tea
 GCA_907166925.1_wheat_cv_fielder_v1_assembly	bread wheat (Fielder 2021)
 GCF_018294505.1_IWGSC_CS_RefSeq_v2.1	bread wheat (Chinese Spring 2021, UC Davis)
 GCF_000208745.1_Criollo_cocoa_genome_V2	cacao
+GCA_023349545.1_dhJugClai1.0.a	California black walnut (Jcal.S.LA.6 alternate hap 2022)
+GCA_023349395.1_dhJugCali1.0.p	California black walnut (Jcal.S.LA.6 primary hap 2022)
+GCA_028535905.1_dhQueBerb1.0.hap2	California scrub oak (Qber.S.LA.60 alternate hap 2023)
+GCA_028535815.1_dhQueBerb1.0.hap1	California scrub oak (Qber.S.LA.60 primary hap 2023)
 GCF_900626175.2_cs10	Cannabis sativa (Harvard OEB 2019)
 GCA_001865755.1_ASM186575v1	Cannabis sativa (Cannatonic 2016)
 GCA_003660325.2_Oct15_3.7Mb_N50_Jamaican_Lion_Assembly	Cannabis sativa (Jamaican Lion DASH 2019)
@@ -97,7 +105,10 @@ GCF_002211085.1_PHallii_v3.1	Hall's panicgrass
 GCF_907164915.1_dImpGla2.1	eudicots Himalayan balsam
 GCF_010389155.1_C_canadensis_v1	horseweed
 GCF_003935025.1_Abrus_2018	Indian licorice
+GCA_023055485.1_dhQueWisl1.0.a	interior live oak (QUWIS_CCGP_1 alternate hap 2022)
 GCA_023055345.1_dhQueWisl1.0.p	interior live oak (QUWIS_CCGP_1 primary hap 2022)
+GCA_028535165.1_dhQueTome1.0.hap2	island oak (RSA801373 alternate hap 2023)
+GCA_028535515.1_dhQueTome1.0.hap1	island oak (RSA801373 primary hap 2023)
 GCF_000346735.1_P.mume_V1.0	Japanese apricot
 GCF_001879475.1_Asagao_1.1	Japanese morning glory
 GCF_001433935.1_IRGSP-1.0	Japanese rice
@@ -159,6 +170,8 @@ GCF_006381635.1_ASM638163v2	rose of Sharon
 GCF_001654055.1_ASM165405v1	rubber tree
 GCF_000365185.1_Chinese_Lotus_1.1	sacred lotus
 GCF_000478725.1_Eutsalg1_0	saltwater cress
+GCA_023055565.1_ddLinParr1.0.a	sandblossoms (Phelan CA IGA184 alternate hap 2022)
+GCA_023055425.1_ddLinParr1.0.p	sandblossoms (Phelan CA IGA184 primary hap 2022)
 GCF_900635055.1_Sole10x-PRISCAF	scented satinash
 GCF_000512975.1_S_indicum_v1.0	sesame
 GCF_900635035.1_Rarg10x-PRISCAF	silver malletwood (14919 2019)
@@ -183,6 +196,8 @@ GCF_013401445.1_ASM1340144v1	thunder duke vine
 GCF_001879085.1_NIATTr2	tobacco N.attenuata
 GCF_000390325.2_Ntom_v01	tobacco N.tomentosiformis
 GCF_000188115.5_SL3.1	tomato (v3.1 Heinz 1706 2018)
+GCA_024363235.1_drHetArbu1.0.a	toyon (HeAr 88 alternate hap 2022)
+GCA_024362995.1_drHetArbu1.0.p	toyon (HeAr 88 primary hap 2022)
 GCF_000612285.1_Gossypium_arboreum_v1.0	tree cotton (Shixiya1 2015 BGI)
 GCF_025698485.1_ASM2569848v2	tree cotton (Shixiya-1 2022)
 GCF_003576645.1_ASM357664v1	trilobed morning glory

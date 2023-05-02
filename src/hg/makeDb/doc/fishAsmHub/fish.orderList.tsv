@@ -7,6 +7,8 @@ GCF_002910315.2_ASM291031v2	Arctic char
 GCA_946807865.1_fSilAri3.1_alternate_haplotype	Aristotle's catfish (alternate hap 2022)
 GCA_946808225.1_fSilAri3.1	Aristotle's catfish (primary hap 2022)
 GCF_013103735.1_CSU_Ecrag_1.0	Arkansas darter
+GCA_026230005.1_fGilOrc1.0.hap1	arroyo chub (AC-1 alternate hap 2022)
+GCA_026230025.1_fGilOrc1.0.hap2	arroyo chub (AC-1 primary hap 2022)
 GCF_900964775.1_fSclFor1.1	Asian bonytongue (2019)
 GCA_900964985.2_fSclFor1.1_alternate_haplotype	Asian bonytongue (alternate hap)
 GCF_902167405.1_gadMor3.0	Atlantic cod (2019)
@@ -105,7 +107,8 @@ GCF_002260705.1_Sdu_1.0	greater amberjack
 GCF_901709675.1_fSynAcu1.2	greater pipefish (v1.2 2020)
 GCA_901709685.1_fSynAcu1.1_alternate_haplotype	greater pipefish (alternate hap 2019)
 GCF_003331165.1_Xiphophorus_hellerii-4.1	green swordtail
-GCF_024217435.1_RoL_Ssco_1.1	Gulf pipefish (Florida 2022)
+GCF_024217435.1_RoL_Ssco_1.1	Gulf pipefish (RoL_Ssco_1.1 Florida 2022 refseq)
+GCA_024217435.4_RoL_Ssco_1.2	Gulf pipefish (RoL_Ssco_1.2 Florida 2022 genbank)
 GCF_000633615.1_Guppy_female_1.0_MT	guppy
 GCA_015220095.1_fSebUmb1.alt	honeycomb rockfish (fSebUmb1 alternate hap 2020)
 GCF_015220745.1_fSebUmb1.pri	honeycomb rockfish (fSebUmb1 primary hap 2020)
@@ -144,6 +147,8 @@ GCA_019721115.1_AMEX_1.1	Mexican tetra (Pach_M1 Pachon cave 2021)
 GCF_023375975.1_AstMex3_surface	Mexican tetra (ESR-SI-001 2022)
 GCF_902362185.1_fChaCha1.1	milkfish (2019)
 GCA_902362175.1_fChaCha1.1_alternate_haplotype	milkfish (alternate hap 2019)
+GCA_023349535.1_fCebVio1.0.a	monkeyface prickleback (CVI_PGR_0920_01 alternate hap 2022)
+GCA_023349555.1_fCebVio1.0.p	monkeyface prickleback (CVI_PGR_0920_01 primary hap 2022)
 GCF_001444195.1_X_couchianus-1.0	Monterrey platyfish
 GCA_009829125.1_fPerMag1.pri	mudskipper P.magnuspinnatus (2020)
 GCA_009829135.1_fPerMag1.alt	mudskipper P.magnuspinnatus (alternate hap 2020)
@@ -218,6 +223,8 @@ GCF_001952655.1_M_albus_1.0	swamp eel
 GCF_016859285.1_ASM1685928v1	swordfish
 GCF_904425465.1_Colossoma_macropomum	tambaqui
 GCF_016920845.1_GAculeatus_UGA_version5	three-spined stickleback
+GCA_026437355.1_fEucNew1.0.hap2	tidewater goby (DKJ021-1_F 2022)
+GCA_026437365.1_fEucNew1.0.hap1	tidewater goby (DKJ021-1_F 2022)
 GCF_001891065.2_H_comes_QL1_v1.1	tiger tail seahorse (QL1 v2 2016)
 GCF_000523025.1_Cse_v1.0	tongue sole
 GCF_901000725.2_fTakRub1.2	torafugu (fTakRub1.2 2019 refseq)
