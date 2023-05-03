@@ -725,7 +725,7 @@ var hgGateway = (function() {
             if (activeTaxIds[taxId]) {
                 // When user clicks on icon, set the taxId (default database);
                 // scroll the image to that species and clear the species autocomplete input.
-                onClick = setTaxId.bind(null, taxId, null, true, true);
+                onClick = setTaxId.bind(null, taxId, null, null, true, true);
                 // Onclick for both the icon and its sibling label:
                 $('.jwIconSprite' + name).parent().children().click(onClick);
                 haveIcon = true;
