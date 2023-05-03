@@ -668,7 +668,7 @@ char genArkUrl[PATH_MAX + 1024];
 if ( isGenArk(genome) )
     {
     genArkHub = TRUE;
-    safef(genArkUrl, sizeof(genArkUrl), "hubs/%s/", genArkPath(genome));
+    safef(genArkUrl, sizeof(genArkUrl), "hubs/%s", genArkPath(genome));
     }
 
 /* if UCSC genome database, it has already been proven to exist */
