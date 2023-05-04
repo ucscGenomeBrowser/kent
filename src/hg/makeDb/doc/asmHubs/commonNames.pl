@@ -14,7 +14,11 @@ if ($argc != 1){
 my $ncbiSrc="/hive/data/outside/ncbi/genomes";
 
 my $listFile = shift;
-open (FH, "<$listFile") or die "can not open $listFile";
+if ($listFile eq "stdin") {
+  open (FH, "</dev/stdin") or die "can not open /dev/stdin";
+} else {
+  open (FH, "<$listFile") or die "can not open $listFile";
+}
 while (my $asmId = <FH>) {
   next if ($asmId =~ m/^#/);
   $asmId =~ s/\s+.*//;
@@ -30,6 +34,16 @@ while (my $asmId = <FH>) {
     printf STDERR "%s\tmissing '%s'\n", $asmId, $asmRpt;
     next;
   }
+  my $asmType = `grep -i -m 1 "Assembly type:" "${asmRpt}" | tr -d ""`;
+  chomp $asmType;
+  $asmType =~ s/.*bly type:\s+//i;
+  if ($asmType eq "alternate-pseudohaplotype") {
+    $asmType = " alternate hap";
+  } elsif ($asmType =~ m/principal pseudo/) {
+    $asmType = " primary hap";
+  } else {
+    $asmType = "";
+  }
   my $sciName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
   chomp $sciName;
   $sciName =~ s/.*ism name:\s+//i;
@@ -38,6 +52,9 @@ while (my $asmId = <FH>) {
   $sciName =~ s/\(//g;
   $sciName =~ s/\[//g;
   $sciName =~ s/\]//g;
+  $sciName =~ s/\+//g;
+  $sciName =~ s/\?/ /g;
+  $sciName =~ s/\*//g;
   my $yearDate = `grep -i -m 1 "Date:" "${asmRpt}" | tr -d "" | awk '{print \$NF}' | sed -e 's/-.*//;'`;
   chomp $yearDate;
   my $isolate = `grep -i -m 1 "Isolate:" "${asmRpt}" | tr -d ""`;
@@ -55,14 +72,15 @@ while (my $asmId = <FH>) {
   }
   my $extraStrings = "";
   if (length($isolate) && length($cultivar)) {
-     $extraStrings = "$cultivar $isolate $yearDate";
+     $extraStrings = "$cultivar ${isolate}$asmType $yearDate";
   } elsif (length($isolate)) {
-     $extraStrings = "$isolate $yearDate";
+     $extraStrings = "${isolate}$asmType $yearDate";
   } elsif (length($cultivar)) {
-     $extraStrings = "$cultivar $yearDate";
+     $extraStrings = "${cultivar}$asmType $yearDate";
   }
-  if ( "x${extraStrings}y" eq "xy" ) {
-     $extraStrings = "$yearDate";
+  if ( length("${extraStrings}") < 1) {
+     $extraStrings = "$asmType $yearDate";
+     $extraStrings =~ s/^ +//;
   }
   my $orgName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
   $orgName =~ s/.*\(//;
@@ -70,22 +88,24 @@ while (my $asmId = <FH>) {
   $orgName =~ s/\(//g;
   $orgName =~ s/\[//g;
   $orgName =~ s/\]//g;
+  $orgName =~ s/\?/ /g;
   $orgName =~ s/\+//g;
+  $orgName =~ s/\*//g;
   chomp $orgName;
-  if ($orgName =~ m/firmicutes|proteobacteria|high G|enterobacteria|agent of/) {
-#    my @a = split('\s+', $sciName);
-#    my $lastN = scalar(@a) - 1;
-#    $orgName = uc(substr($a[0], 0, 1)) . "." . @a[1..$lastN];
+  if ($orgName =~ m/kinetoplastids|firmicutes|proteobacteria|high G|enterobacteria|agent of/) {
     $orgName = $sciName;
-  } elsif ($orgName =~ m/ascomycete|basidiomycete|budding|microsporidian|smut|fungi/) {
+  } elsif ($orgName =~ m/bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi/) {
     my ($order, undef) = split('\s', $orgName, 2);
     $order = "budding yeast" if ($order =~ m/budding/);
     $order = "smut fungi" if ($order =~ m/smut/);
     $order = "ascomycetes" if ($order =~ m/ascomycete/);
+    $order = "crustacean" if ($order =~ m/crustaceans/);
+    $order = "flatworm" if ($order =~ m/flatworms/);
+    $order = "nematode" if ($order =~ m/nematodes/);
     $order = "basidiomycetes" if ($order =~ m/basidiomycete/);
     my @a = split('\s+', $sciName);
     my $lastN = scalar(@a) - 1;
-    $orgName = "$order " . uc(substr($a[0], 0, 1)) . "." . @a[1..$lastN];
+    $orgName = "$order " . uc(substr($a[0], 0, 1)) . "." . "@a[1..$lastN]";
   } elsif ($orgName eq "viruses") {
     $orgName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
     chomp $orgName;
@@ -97,7 +117,9 @@ while (my $asmId = <FH>) {
     $extraStrings =~ s/\)//g;
     $extraStrings =~ s/\[//g;
     $extraStrings =~ s/\]//g;
+    $extraStrings =~ s/\?/ /g;
     $extraStrings =~ s/\+//g;
+    $extraStrings =~ s/\*//g;
     my @a = split('\s+', $extraStrings);
     for (my $i = 0; $i < scalar(@a); ++$i) {
         $orgName =~ s/$a[$i]//;

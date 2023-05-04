@@ -118,8 +118,8 @@ GCA_018504635.1_NA20129.pri.mat.f1_v2	human (NA20129.mat 2021)
 GCA_018504625.1_NA20129.alt.pat.f1_v2	human (NA20129.pat 2021)
 GCA_018504655.1_NA21309.pri.mat.f1_v2	human (NA21309.mat 2021)
 GCA_018504665.1_NA21309.alt.pat.f1_v2	human (NA21309.pat 2021)
-GCA_016700455.2_mHomSap3.pat	human (WGS:JACSEW01 2021 VGP alt pseudohaplotype)
-GCA_016695395.2_mHomSap3.mat	human (WGS:JACSEX01 2021 VGP)
+GCA_016700455.2_mHomSap3.pat	human (WGS:JACSEW01 2021 alternate hap)
+GCA_016695395.2_mHomSap3.mat	human (mHomSap3 WGS:JACSEX01 2021)
 GCA_004024725.1_CheMed_v1_BIUU	lesser dwarf lemur
 GCF_000952055.2_Anan_2.0	Ma's night monkey
 GCA_004027835.1_AloPal_v1_BIUU	mantled howler monkey
@@ -136,7 +136,7 @@ GCF_029289425.1_NHGRI_mPanPan1-v1.1-0.1.freeze_pri	pygmy chimpanzee (NHGRI 2023)
 GCA_004027335.1_EryPat_v1_BIUU	red guenon
 GCA_004024825.1_PygNem_v1_BIUU	red shanked douc langur
 GCF_003339765.1_Mmul_10	Rhesus monkey (2019 U. Washington)
-GCF_020740605.2_mLemCat1.pri	ring-tailed lemur (2021 VGP)
+GCF_020740605.2_mLemCat1.pri	ring-tailed lemur (2021)
 GCF_028878055.1_NHGRI_mSymSyn1-v1.1-hic.freeze_pri	siamang (Jambi primary hap 2023)
 GCA_001262665.1_Eflavifronsk33QCA	Sclater's lemur (Harlow 2015)
 GCF_009828535.2_HMol_V2	silvery gibbon (HMO894 2020 UC Santa Cruz)
@@ -152,7 +152,7 @@ GCF_008122165.1_Kamilah_GGO_v0	western lowland gorilla (Kamilah 2019)
 GCA_004026645.1_PitPit_v1_BIUU	white-faced saki
 GCA_004027755.1_CebAlb_v1_BIUU	white-fronted capuchin
 GCF_009663435.1_Callithrix_jacchus_cj1700_1.1	white-tufted-ear marmoset (cj1700 2020)
-GCA_011078405.1_mCalJac1.mat	white-tufted-ear marmoset (maternal 2020 VGP)
-GCA_011100535.1_mCalJac1.pat	white-tufted-ear marmoset (paternal 2020 VGP)
-GCA_011100555.1_mCalJac1.pat.X	white-tufted-ear marmoset (paternal X 2020 VGP)
+GCA_011078405.1_mCalJac1.mat	white-tufted-ear marmoset (maternal 2020)
+GCA_011100535.1_mCalJac1.pat	white-tufted-ear marmoset (paternal 2020)
+GCA_011100555.1_mCalJac1.pat.X	white-tufted-ear marmoset (paternal X 2020)
 GCF_011100555.1_mCalJa1.2.pat.X	white-tufted-ear marmoset (mCalJac1 2021)

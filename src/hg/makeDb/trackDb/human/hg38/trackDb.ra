@@ -539,8 +539,7 @@ include knownGene.ra beta,public
 include knownGene.alpha.ra alpha
 include knownGeneArchive.ra alpha
 
-include trackDb.100way.ra beta,public
-include trackDb.100way.alpha.ra alpha
+include trackDb.100way.ra 
 include trackDb.145way.ra alpha
 
 include trackDb.241wayT.ra alpha

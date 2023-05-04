@@ -3058,6 +3058,7 @@
 ./runBuild GCF_028551555.1_PUWL_Pcris_2 birds Melozone_crissalis
 ./runBuild GCF_028554725.1_idZeuCucr1.2 invertebrate Zeugodacus_cucurbitae
 ./runBuild GCF_028583425.1_MPM_Emac_v1.0 vertebrate Eublepharis_macularius
+./runBuild GCF_028858705.1_bGruAme1.mat birds Grus_americana
 ./runBuild GCF_028858775.1_NHGRI_mPanTro3-v1.1-hic.freeze_pri primates Pan_troglodytes
 ./runBuild GCF_028878055.1_NHGRI_mSymSyn1-v1.1-hic.freeze_pri primates Symphalangus_syndactylus
 ./runBuild GCF_028885625.1_NHGRI_mPonPyg2-v1.1-hic.freeze_pri primates Pongo_pygmaeus
