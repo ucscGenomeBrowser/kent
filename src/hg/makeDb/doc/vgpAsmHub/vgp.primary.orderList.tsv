@@ -14,7 +14,7 @@ GCF_017976425.1_fToxJac2.pri	banded archerfish
 GCA_936440315.1_fBarBab1.1	barbel (2022)
 GCA_015227805.3_bHirRus1.pri.v3	barn swallow (bHirRus1 v3 primary hap 2021)
 GCA_028501385.1_bRisTri1.mat.cur.20221130	black-legged kittiwake (bRisTri1.mat 2023)
-GCA_028500815.1_bRisTri1.patW.cur.20221130	black-legged kittiwake (bRisTri1.patW 2023)
+GCF_028500815.1_bRisTri1.patW.cur.20221130	black-legged kittiwake (bRisTri1 2023 refseq)
 GCA_020826845.1_mDicBic1.mat.cur	black rhinoceros (2021)
 GCA_028021495.1_fLycPai1.hap1	blackbelly eelpout (fLycPai1 haplotype 1 2023)
 GCA_028022725.1_fLycPai1.hap2	blackbelly eelpout (fLycPai1 haplotype 2 2023)
@@ -35,7 +35,7 @@ GCA_027557775.1_bGalGal4.pri	chicken (Ross bGalGal4 primary hap 2023)
 GCF_027409825.1_fScoJap1.pri	chub mackerel (fScoJap1 primary hap 2022)
 GCA_900324465.3_fAnaTes1.3	climbing perch (v1.3 2021)
 GCF_011100635.1_mTriVul1.pri	common brushtail
-GCA_017976375.1_bCucCan1.pri	common cuckoo (2021)
+GCF_017976375.1_bCucCan1.pri	common cuckoo (bCucCan1 primary hap 2021 refseq)
 GCA_027559615.1_bAcrTri1.pri	common myna (bArcTri1 primary hap 2023)
 GCA_903992545.1_mPipPip1.1	common pipistrelle (2020)
 GCF_020740795.1_bApuApu2.pri.cur	common swift (bApuApu2 2021 refseq)
@@ -47,7 +47,8 @@ GCF_017976325.1_fCheRos1.pri	copperband butterflyfish
 GCA_020745685.1_fTauAds1.pri.cur	cunner (2021)
 GCF_021462225.1_DD_fGirMul_XY1	dark-edged splitfin (DD_20200921_A 2022)
 GCA_900700375.2_fDenClu1.2	denticle herring (v2 2020)
-GCA_014839835.1_bDryPub1.pri	downy woodpecker (2020)
+GCF_027887155.1_rMalTer1.hap1	diamondback terrapin (rMalTer1 2023)
+GCF_014839835.1_bDryPub1.pri	downy woodpecker (bDryPub1 primary hap 2020)
 GCA_011004875.1_bBalReg1.pri	East African grey crowned-crane
 GCA_900246225.5_fAstCal1.3	eastern happy (v3 2021)
 GCF_014176215.1_mRouAeg1.p	Egyptian rousette
@@ -65,9 +66,11 @@ GCF_013347855.1_fAngAng1.pri	European eel
 GCA_017639485.1_bPluApr1.pri	European golden plover
 GCF_947347685.1_fPlePla1.1	European plaice (primary hap 2022)
 GCA_903797595.2_bEriRub2.2	European robin
+GCF_027595985.1_mSorAra2.pri	European shrew (mSorAra2 primary hap 2023)
 GCF_902459465.1_eAstRub1.3	European starfish
 GCA_901699155.2_bStrTur1.2	European turtle dove (v1.2 2021)
 GCF_947179515.1_mApoSyl1.1	European woodmouse (2022 refseq)
+GCF_027579735.1_aBomBom1.pri	fire-bellied toad (aBomBom1 primary hap 2023)
 GCF_007364275.1_fArcCen1	flier cichlid
 GCA_014839995.1_fXenCan1.pri	freshwater garfish (fXenCan1 2020)
 GCF_902459505.1_aGeoSer1.1	Gabon caecilian
@@ -101,7 +104,7 @@ GCF_902148845.1_fSalaFa1.1	jewelled blenny
 GCA_027574665.1_bRhyJub1.pri	kagu (bRhyJub1 primary hap 2023)
 GCF_004027225.2_bStrHab1.2.pri	kakapo
 GCF_937001465.1_mOrcOrc1.1	killer whale (2022)
-GCF_009829125.1_fPerMag1.pri	Korean giant-fin mudskipper (refseq)
+GCF_009829125.3_fPerMag1.2.pri	Korean giant-fin mudskipper (v1.2 primary hap 2023)
 GCF_014108245.1_mPipKuh1.p	Kuhl's pipistrelle
 GCA_028022735.1_bGypBar2.pri	lammergeier (bGypBar2 primary hap 2023)
 GCF_009829145.1_bChiLan1.pri	lance-tailed manakin
@@ -185,6 +188,7 @@ GCA_901000725.3_fTakRub1.3	torafugu (fTakRub1.3 2021 genbank)
 GCF_009819795.1_bAytFul2.pri	tufted duck
 GCF_901001135.1_aRhiBiv1.1	two-lined caecilian
 GCF_008692025.1_mPhoSin1.pri	vaquita
+GCF_026979565.1_bVidCha1_merged_haplotype	village indigobird (OUT-0048 2022)
 GCA_013358685.1_fAntMac1.pri	warty frogfish (2020)
 GCF_904848185.1_fAcaLat1.1	yellowfin seabream
 GCF_009769535.1_rThaEle1.pri	Western terrestrial garter snake
@@ -192,6 +196,8 @@ GCA_020745705.1_bHemCom1.pri.cur	whiskered treeswift (2021)
 GCF_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w	white leghorn X broiler chicken (leghorn haplotype v2 2021)
 GCA_947461875.1_bHalAlb1.1	white-tailed eagle (bHalAlb1.1 2022)
 GCF_024139225.1_mSunEtr1.pri.cur	white-toothed pygmy shrew (mSunEtr1 2022)
+GCF_011100555.1_mCalJa1.2.pat.X	white-tufted-ear marmoset (mCalJac1 2021)
+GCF_028858705.1_bGruAme1.mat	whooping crane (bGruAme1 2023)
 GCA_009769525.1_bPteGut1.pri	yellow-throated sandgrouse
 GCF_914725855.1_fThuAlb1.1	yellowfin tuna (2021)
 GCF_003957565.2_bTaeGut1.4.pri	zebra finch (refseq 2021 Blue55 female)
