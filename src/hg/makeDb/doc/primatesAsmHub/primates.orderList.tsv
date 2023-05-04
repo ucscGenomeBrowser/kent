@@ -5,8 +5,10 @@ GCF_001698545.2_ASM169854v2	black snub-nosed monkey (Rb0 v2 refseq 2016)
 GCA_004024785.1_AteGeo_v1_BIUU	black-handed spider monkey
 GCA_004027715.1_CalDon_v1_BIUU	Bolivian titi
 GCF_016699345.2_BCM_Sbol_2.1	Bolivian squirrel monkey (100643 v2.1 BCM 2021)
+GCF_028885625.1_NHGRI_mPonPyg2-v1.1-hic.freeze_pri	Bornean orangutan (AG05252 primary hap 2023)
 GCA_004027275.1_EulFul_v1_BIUU	brown lemur
-GCF_002880755.1_Clint_PTRv2	chimpanzee
+GCF_002880755.1_Clint_PTRv2	chimpanzee (Clint C0471 2018)
+GCF_028858775.1_NHGRI_mPanTro3-v1.1-hic.freeze_pri	chimpanzee (AG18354 primary hap 2023)
 GCA_004024645.1_MizCoq_v1_BIUU	Coquerel's mouse lemur
 GCF_000956105.1_Pcoq_1.0	Coquerel's sifaka 6110/Marcella (2015 refseq)
 GCA_011100615.1_Macaca_fascicularis_6.0	crab-eating macaque (2020 cy0333)
@@ -129,17 +131,20 @@ GCF_000164805.1_Tarsius_syrichta-2.0.1	Philippine tarsier
 GCF_000956065.1_Mnem_1.0	pig-tailed macaque
 GCA_004027105.1_NasLar_v1_BIUU	proboscis monkey
 GCF_000258655.2_panpan1.1	pygmy chimpanzee (Ulindi refseq 2015)
-GCF_013052645.1_Mhudiblu_PPA_v0	pygmy chimpanzee (Mhudiblu)
+GCF_013052645.1_Mhudiblu_PPA_v0	pygmy chimpanzee (Mhudiblu Carbone 601152 2020)
+GCF_029289425.1_NHGRI_mPanPan1-v1.1-0.1.freeze_pri	pygmy chimpanzee (NHGRI 2023)
 GCA_004027335.1_EryPat_v1_BIUU	red guenon
 GCA_004024825.1_PygNem_v1_BIUU	red shanked douc langur
 GCF_003339765.1_Mmul_10	Rhesus monkey (2019 U. Washington)
 GCF_020740605.2_mLemCat1.pri	ring-tailed lemur (2021 VGP)
+GCF_028878055.1_NHGRI_mSymSyn1-v1.1-hic.freeze_pri	siamang (Jambi primary hap 2023)
 GCA_001262665.1_Eflavifronsk33QCA	Sclater's lemur (Harlow 2015)
 GCF_009828535.2_HMol_V2	silvery gibbon (HMO894 2020 UC Santa Cruz)
 GCF_027406575.1_mNycCou1.pri	slow loris (mNycCou1 primary hap 2022)
 GCF_000181295.1_OtoGar3	small-eared galago
 GCF_000955945.1_Caty_1.0	sooty mangabey
-GCF_002880775.1_Susie_PABv2	Sumatran orangutan (2018 refseq)
+GCF_028885655.1_NHGRI_mPonAbe1-v1.1-hic.freeze_pri	Sumatran orangutan (AG06213 primary hap 2023)
+GCF_002880775.1_Susie_PABv2	Sumatran orangutan (Susie 2018 refseq)
 GCA_004024885.1_SagImp_v1_BIUU	tamarin
 GCF_009761245.1_GSC_monkey_1.0	tufted capuchin
 GCF_002776525.5_ASM277652v5	Ugandan red Colobus (RC106 v5 2019)
@@ -150,3 +155,4 @@ GCF_009663435.1_Callithrix_jacchus_cj1700_1.1	white-tufted-ear marmoset (cj1700 
 GCA_011078405.1_mCalJac1.mat	white-tufted-ear marmoset (maternal 2020 VGP)
 GCA_011100535.1_mCalJac1.pat	white-tufted-ear marmoset (paternal 2020 VGP)
 GCA_011100555.1_mCalJac1.pat.X	white-tufted-ear marmoset (paternal X 2020 VGP)
+GCF_011100555.1_mCalJa1.2.pat.X	white-tufted-ear marmoset (mCalJac1 2021)
