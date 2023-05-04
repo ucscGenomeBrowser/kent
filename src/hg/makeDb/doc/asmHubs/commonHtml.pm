@@ -73,6 +73,16 @@ if ((0 == $vgpIndex)) {
     printf "    <th><a href='../%s/trackData.html'>track stats</a></th>\n", $hubName;
     printf "</tr>\n";
   }
+  printf "<tr><th>legacy/superseded</th>\n";
+  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "legacy", $asmCounts{'legacy'};
+  printf "    <th><a href='../legacy/asmStats.html'>assembly stats</a></th>\n";
+  printf "    <th><a href='../legacy/trackData.html'>track stats</a></th>\n";
+  printf "</tr>\n";
+
+  printf "<tr>
+    <th style='text-align:center;' colspan=4>collections below are subsets of the assemblies above</th>
+</tr>\n";
+
   printf "<tr><th>VGP - Vertebrate Genome Project</th>\n";
   printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "VGP", $asmCounts{'vgp'};
   printf "    <th><a href='../VGP/asmStats.html'>assembly stats</a></th>\n";
@@ -87,11 +97,6 @@ if ((0 == $vgpIndex)) {
   printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "HPRC", $asmCounts{'hprc'};
   printf "    <th><a href='../HPRC/asmStats.html'>assembly stats</a></th>\n";
   printf "    <th><a href='../HPRC/trackData.html'>track stats</a></th>\n";
-  printf "</tr>\n";
-  printf "<tr><th>legacy/superseded</th>\n";
-  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "legacy", $asmCounts{'legacy'};
-  printf "    <th><a href='../legacy/asmStats.html'>assembly stats</a></th>\n";
-  printf "    <th><a href='../legacy/trackData.html'>track stats</a></th>\n";
   printf "</tr></thead>\n</table>\n</p>\n";
 } elsif (1 == $vgpIndex) {
   printf "<p>\n<table border='1'><thead>\n";
