@@ -972,3 +972,12 @@ jsonWriteObjectEnd(cj->jw);
 puts(cj->jw->dy->string);
 cartJsonPopErrHandlers();
 }
+
+char *cartJsonDumpJson(struct cartJson *cj)
+/* Return the string that has been built up so far or an empty string */
+{
+if (cj != NULL && cj->jw != NULL && dyStringLen(cj->jw->dy) > 0)
+    return cj->jw->dy->string;
+else
+    return "";
+}

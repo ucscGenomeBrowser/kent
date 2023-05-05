@@ -1,0 +1,79 @@
+<div class='container-fluid gbPage'>
+
+    <div class='row gbTrackTitleBanner'>
+        <div class='col-md-9'>
+            Manage my data
+            &nbsp;&nbsp;&nbsp;
+            <a href='#INFO_SECTION' title='Jump to help section'>
+                <span class='gbIconSmall fa-stack'>
+                    <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>
+                    <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <div class='row' >
+        <div class='col-md-10'>
+            <div class='row gbSectionBanner'>
+                <div class='col-md-12'>Unsaved track data</div>
+            </div>
+            <div>
+                <p>Below are all uploaded track data files associated with your current browsing
+                session that have not been saved yet. Note that if you reset your browsing session
+                you will lose access to these data. Please click the save button below or create a
+                browsing save these files to your account.</p>
+            </div>
+            <div style="max-width: 1024px">
+                <table id="sessionTable" class="sessionTable stripe hover row-border compact" borderwidth=0>
+                    <thead>
+                        <tr>
+                            <th>
+                                <td><b>File name</b></td>
+                                <td><b>created on</b></td>
+                                <td><b>assembly</b></td>
+                                <td align=center><b>view/edit metadata&nbsp;</b></td>
+                                <td align=center><b>delete</b></td>
+                                <td align=center><b>share link</b></td>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&nbsp;&nbsp;</td>
+                            <td>lorem ipsum dolor</td>
+                    </tbody>
+                </table>
+        </div>
+    </div>
+
+    <div class='row' style='display: none'>
+        <div class='col-md-10'>
+            <div class='row gbSectionBanner'>
+                <div class='col-md-12'>Saved track data</div>
+            </div>
+            <div>
+                <p>Below are all track data files you have uploaded and saved. You can rename or delete
+                these files via the &quot;edit&quot; or &quot;delete&quot; buttons.</p>
+            </div>
+            <div id='saved' class=''></div>
+        </div>
+    </div>
+
+    <div class='row' style='display: none'>
+        <div class='col-md-10'>
+            <div class='row gbSectionBanner'>
+                <div class='col-md-12'>Connected track hubs</div>
+            </div>
+            <div>
+                <p>Below are all the non-public track hubs associated with your user. Please note
+                that track hubs are not hosted at UCSC, but instead by other websites/institutions.
+                Please contact the creators of the track hub for help saving this data. You can use
+                the &quot;disconnect&quot; buttons below to remove these track hubs from your current
+                browsing session.</p>
+            </div>
+            <div id='hubs' class=''></div>
+        </div>
+    </div>
+
+</div>

@@ -58,6 +58,9 @@ void cartJsonPopErrHandlers();
 void cartJsonExecute(struct cartJson *cj);
 /* Get commands from cgi, print Content-type, execute commands, print results as JSON. */
 
+char *cartJsonDumpJson(struct cartJson *cj);
+/* Return the string that has been built up so far or an empty string */
+
 void cartJsonFree(struct cartJson **pCj);
 /* Close **pCj's contents and nullify *pCj. */
 
