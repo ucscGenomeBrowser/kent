@@ -33,6 +33,7 @@ GCA_022577435.1_fEmbJac1.0.p	black perch (LCO1_2020_lvr primary hap 2022)
 GCF_000735185.1_NC01	black rockcod
 GCA_028021495.1_fLycPai1.hap1	blackbelly eelpout (fLycPai1 haplotype 1 2023)
 GCA_028022725.1_fLycPai1.hap2	blackbelly eelpout (fLycPai1 haplotype 2 2023)
+GCF_027474105.1_Auburn_PproV2	blackstripe livebearer (line A6 2022)
 GCF_023375685.1_Billie_1.0	blue catfish (D&B 2022)
 GCF_005870065.1_ASM587006v1	blue tilapia (BGI-SZ)
 GCF_013358895.1_ZZ_aureus	blue tilapia (Guangdong)
@@ -42,7 +43,6 @@ GCA_017639755.1_fMelBoe1.alt	Boeseman's rainbowfish (fMelBoe1 alternate hap 2021
 GCF_017639745.1_fMelBoe1.pri	Boeseman's rainbowfish (fMelBoe1 primary hap 2021)
 GCA_933228925.1_fTelBon1.1_alternate_haplotype	bonti-bonti (fTelBon1 alternate hap 2022)
 GCA_933228915.1_fTelBon1.1	bonti-bonti (fTelBon1 primary hap 2022)
-GCF_009829125.1_fPerMag1.pri	bony fishes
 GCF_011397635.1_E.fuscoguttatus.final_Chr_v1	brown-marbled grouper (2020)
 GCF_000239415.1_AstBur1.0	Burton's mouthbrooder (Broad 2011)
 GCF_018398535.1_NCSU_Asbu1	Burton's mouthbrooder (NCSU 2021)
@@ -64,7 +64,8 @@ GCF_012931545.1_Oket_V1	chum salmon (Oke142-1_Chum_Gynogen 2020)
 GCF_023373465.1_Oket_V2	chum salmon (PuntledgeMale-10-30-2019 2022)
 GCA_900324465.3_fAnaTes1.3	climbing perch (v1.3 2021)
 GCA_900650485.1_fAnaTes1.2_alternate_haplotype	climbing perch (alternate hap 2019)
-GCF_002776465.1_AmpOce1.0	clown anemonefish
+GCF_002776465.1_AmpOce1.0	clown anemonefish (DU_AmpOce 2017)
+GCF_022539595.1_ASM2253959v1	clown anemonefish (Okinawa individual 3 2022)
 GCF_002021735.2_Okis_V2	coho salmon (150728-3 2019)
 GCF_018340385.1_ASM1834038v1	common carp SPL01 (2021)
 GCA_020510965.1_fPhoLeu1.alt	convict blenny (fPhoLeu1 alternate hap 2021)
@@ -102,12 +103,14 @@ GCA_900880695.1_fSpaAur1.1_alternate_haplotype	gilthead seabream (alternate hap 
 GCF_001515645.1_SAMN03320097.WGS_v1.1	golden-line barbel
 GCF_003368295.1_ASM336829v1	goldfish
 GCF_019924925.1_HZGC01	grass carp (HZGC_01 2021)
-GCF_000788275.1_BP.fa	great blue-spotted mudskipper
+GCF_026225935.1_ASM2622593v1	great blue-spotted mudskipper (Guang Dong 2022)
+GCF_000788275.1_BP.fa	great blue-spotted mudskipper (pooled male+femail 2014 BGI)
 GCF_002260705.1_Sdu_1.0	greater amberjack
 GCF_901709675.1_fSynAcu1.2	greater pipefish (v1.2 2020)
 GCA_901709685.1_fSynAcu1.1_alternate_haplotype	greater pipefish (alternate hap 2019)
 GCF_003331165.1_Xiphophorus_hellerii-4.1	green swordtail
-GCF_024217435.1_RoL_Ssco_1.1	Gulf pipefish (Florida 2022)
+GCF_024217435.1_RoL_Ssco_1.1	Gulf pipefish (RoL_Ssco_1.1 Florida 2022 refseq)
+GCA_024217435.4_RoL_Ssco_1.2	Gulf pipefish (RoL_Ssco_1.2 Florida 2022 genbank)
 GCF_000633615.1_Guppy_female_1.0_MT	guppy
 GCA_015220095.1_fSebUmb1.alt	honeycomb rockfish (fSebUmb1 alternate hap 2020)
 GCF_015220745.1_fSebUmb1.pri	honeycomb rockfish (fSebUmb1 primary hap 2020)
@@ -139,7 +142,8 @@ GCA_910589615.1_fTauBub2.1	longspined bullhead (fTauBub2.1 primary hap 2021)
 GCF_009769545.1_fCycLum1.pri	lumpfish (2019 refseq)
 GCA_009769515.1_fCycLum1.alt	lumpfish (alternate hap 2019)
 GCF_000239395.1_NeoBri1.0	lyretail cichlid
-GCF_020085105.1_ASM2008510v1	mandarin fish
+GCF_020085105.1_ASM2008510v1	mandarin fish (FFG_IHB_CAS 2021)
+GCF_027744825.2_RoL_Sspl_1.0	mandarin fish (RoL2022-P1 2023)
 GCF_001649575.2_ASM164957v2	mangrove rivulus
 GCF_000372685.2_Astyanax_mexicanus-2.0	Mexican tetra (2017 WashU)
 GCA_019721115.1_AMEX_1.1	Mexican tetra (Pach_M1 Pachon cave 2021)
@@ -149,8 +153,8 @@ GCA_902362175.1_fChaCha1.1_alternate_haplotype	milkfish (alternate hap 2019)
 GCA_023349535.1_fCebVio1.0.a	monkeyface prickleback (CVI_PGR_0920_01 alternate hap 2022)
 GCA_023349555.1_fCebVio1.0.p	monkeyface prickleback (CVI_PGR_0920_01 primary hap 2022)
 GCF_001444195.1_X_couchianus-1.0	Monterrey platyfish
-GCA_009829125.1_fPerMag1.pri	mudskipper P.magnuspinnatus (2020)
-GCA_009829135.1_fPerMag1.alt	mudskipper P.magnuspinnatus (alternate hap 2020)
+GCF_009829125.3_fPerMag1.2.pri	mudskipper P.magnuspinnatus (v1.2 primary hap 2023)
+GCA_009829135.1_fPerMag1.alt	mudskipper P.magnuspinnatus (v1 alternate hap 2020 genbank)
 GCF_000826765.1_Fundulus_heteroclitus-3.0.2	mummichog (Maine)
 GCF_011125445.2_MU-UCD_Fhet_4.1	mummichog (U. Missouri)
 GCA_009762535.1_fNotCel1.pri	New Zealand spotty (2019)
@@ -165,6 +169,7 @@ GCF_002872115.1_PKINGS_0.1	Old Calabar mormyrid
 GCF_008692095.1_UIUC_Espe_1.0	orangethroat darter
 GCF_902148855.1_fSphaOr1.1	orbiculate cardinalfish (2019)
 GCA_902148825.1_fSphaOr1.1_alternate_haplotype	orbiculate cardinalfish (alternate hap 2019)
+GCF_027580225.1_HAU_Mang_1.0	oriental weatherfish (BS_2022a 2023)
 GCF_000239375.1_PunNye1.0	P.nyererei 1_Seehausen
 GCF_013339905.1_IPHC_HiSten_1.0	Pacific halibut (PH-IPHC-18 2020)
 GCF_022539355.2_HSTE1.2	Pacific halibut (QCI-W04-F060 2022)
@@ -181,12 +186,14 @@ GCF_902500255.1_fThaAma1.1	prehistoric monster fish (2019 refseq)
 GCA_902500245.1_fThaAma1.1_alternate_haplotype	prehistoric monster fish (alternate hap 2019)
 GCF_002163495.1_Omyk_1.0	rainbow trout (Swanson)
 GCF_013265735.2_USDA_OmykA_1.1	rainbow trout (Arlee)
+GCF_025860055.1_RBS_HiC_50CHRs	razorback sucker (HMW12.3.18 2022)
 GCA_014183145.1_ASM1418314v1	red drum (XU1910 2020)
 GCA_015220065.1_fPygNat1.alt	red-bellied piranha (fPygNat1 alternate hap 2020)
 GCF_015220715.1_fPygNat1.pri	red-bellied piranha (fPygNat1 primary hap 2020)
 GCF_001682695.1_Pygocentrus_nattereri-1.0.2	red-bellied piranha (Pna-1 2016)
 GCF_900747795.2_fErpCal1.3	reedfish (2021)
 GCA_900700845.2_fErpCal1.1_alternate_haplotype	reedfish (alternate hap)
+GCF_027744805.1_RoL_Ddac_1.1	ringed pipefish (RoL2022-P2 2023)
 GCF_014905685.2_NemWhi1	Rio pearlfish (Nwh7 v2 2021)
 GCA_901001165.2_fSalTru1.2	river trout (v2 2021)
 GCA_910591705.2_fPhoGun1.2_alternate_haplotype	rock gunnel (alternate hap 2021)
@@ -208,6 +215,7 @@ GCF_910596095.1_fThuMac1.1	southern bluefin tuna (primary hap 2021)
 GCF_001515605.1_SAMN03320099.WGS_v1.1	Southwestern China cavefish
 GCF_002109545.1_ASM210954v1	spiny chromis (Palm Islands 2017)
 GCF_021347895.1_KAUST_Apoly_ChrSc	spiny chromis (Palm Island Apoly-LR-REF 2022)
+GCF_027596085.1_Afim_UVic_2022	sablefish (Golden Eagle Sablefish UVic2021 2023)
 GCA_902713425.1_fAciRut3.1_maternal_haplotype	sterlet (maternal 2020)
 GCA_902713435.1_fAciRut3.1_paternal_haplotype	sterlet (paternal 2020)
 GCA_947034905.1_fBarBar1.1_alternate_haplotype	stone loach (alternate hap 2022)
@@ -230,7 +238,8 @@ GCF_901000725.2_fTakRub1.2	torafugu (fTakRub1.2 2019 refseq)
 GCA_901000725.3_fTakRub1.3	torafugu (fTakRub1.3 2021 genbank)
 GCA_901000745.3_fTakRub1.2_alternate_haplotype	torafugu (alternate hap 2019)
 GCF_022379125.1_ASM2237912v1	turbot (ysfricsl-2021 2022)
-GCF_001465895.1_Nfu_20140520	turquoise killifish
+GCF_001465895.1_Nfu_20140520	turquoise killifish (GRZ 2015)
+GCF_027789165.1_UI_Nfuz_MZM_1.0	turquoise killifish (MZM-0403 2023)
 GCA_013347815.1_fAntMac1.alt	warty frogfish (fAntMac1 alternate hap 2020)
 GCA_013358685.1_fAntMac1.pri	warty frogfish (fAntMac1 primary hap 2020)
 GCF_019740435.1_SWU_Gaff_1.0	western mosquitofish
@@ -246,7 +255,7 @@ GCA_904848175.1_fAcaLat1.1_alternate_haplotype	yellowfin seabream (v.2019 altern
 GCF_904848185.1_fAcaLat1.1	yellowfin seabream (v.2019 primary hap 2020)
 GCA_914744365.1_fThuAlb1.1_alternate_haplotype	yellowfin tuna (alternate hap 2021)
 GCF_914725855.1_fThuAlb1.1	yellowfin tuna (primary hap 2021)
-GCF_002814215.1_Sedor1	yellowtail amberjack
+GCF_002814215.2_Sedor1	yellowtail amberjack (v2 SW California HSWRI2012SDOR001 2017)
 GCF_009762535.1_fNotCel1.pri	Zealand spotty
 GCF_000238955.4_M_zebra_UMD2a	zebra mbuna
 GCA_018400075.1_ASM1840007v1	zebrafish (T5D 2021)

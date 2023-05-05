@@ -619,7 +619,7 @@ var hgSearch = (function() {
             });
         } else if (uiState && uiState.search !== undefined) {
             // No results from match
-            var msg = "<p>No results for: <b>" + uiState.search + "<b></p>";
+            var msg = "<p>No results</p>";
             parentDiv.empty();
             parentDiv.html(msg);
             clearOldFacetCounts();

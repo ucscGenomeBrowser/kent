@@ -37,6 +37,9 @@ $asmCounts{'vgp'} = $vgpCount;
 my $hprcCount = `grep -c -h -v "^#" ../hprcAsmHub/hprc.orderList.tsv`;
 chomp $hprcCount;
 $asmCounts{'hprc'} = $hprcCount;
+my $ccgpCount = `grep -c -h -v "^#" ../ccgpAsmHub/ccgp.orderList.tsv`;
+chomp $ccgpCount;
+$asmCounts{'ccgp'} = $ccgpCount;
 my $legacyCount = `grep -c -h -v "^#" ../legacyAsmHub/legacy.orderList.tsv`;
 chomp $legacyCount;
 $asmCounts{'legacy'} = $legacyCount;
@@ -70,20 +73,30 @@ if ((0 == $vgpIndex)) {
     printf "    <th><a href='../%s/trackData.html'>track stats</a></th>\n", $hubName;
     printf "</tr>\n";
   }
+  printf "<tr><th>legacy/superseded</th>\n";
+  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "legacy", $asmCounts{'legacy'};
+  printf "    <th><a href='../legacy/asmStats.html'>assembly stats</a></th>\n";
+  printf "    <th><a href='../legacy/trackData.html'>track stats</a></th>\n";
+  printf "</tr>\n";
+
+  printf "<tr>
+    <th style='text-align:center;' colspan=4>collections below are subsets of the assemblies above</th>
+</tr>\n";
+
   printf "<tr><th>VGP - Vertebrate Genome Project</th>\n";
   printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "VGP", $asmCounts{'vgp'};
   printf "    <th><a href='../VGP/asmStats.html'>assembly stats</a></th>\n";
   printf "    <th><a href='../VGP/trackData.html'>track stats</a></th>\n";
   printf "</tr>\n";
+  printf "<tr><th>CCGP - The California Conservation Genomics Project</th>\n";
+  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "CCGP", $asmCounts{'ccgp'};
+  printf "    <th><a href='../CCGP/asmStats.html'>assembly stats</a></th>\n";
+  printf "    <th><a href='../CCGP/trackData.html'>track stats</a></th>\n";
+  printf "</tr>\n";
   printf "<tr><th>HPRC - Human Pangenome Reference Consortium</th>\n";
   printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "HPRC", $asmCounts{'hprc'};
   printf "    <th><a href='../HPRC/asmStats.html'>assembly stats</a></th>\n";
   printf "    <th><a href='../HPRC/trackData.html'>track stats</a></th>\n";
-  printf "</tr>\n";
-  printf "<tr><th>legacy/superseded</th>\n";
-  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "legacy", $asmCounts{'legacy'};
-  printf "    <th><a href='../legacy/asmStats.html'>assembly stats</a></th>\n";
-  printf "    <th><a href='../legacy/trackData.html'>track stats</a></th>\n";
   printf "</tr></thead>\n</table>\n</p>\n";
 } elsif (1 == $vgpIndex) {
   printf "<p>\n<table border='1'><thead>\n";
