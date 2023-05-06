@@ -76,7 +76,7 @@ group compGeno
         color 60,60,140
         altColor 140,60,60
         priority 4
-        logoMaf multiz470way
+        #logoMaf multiz470way
 
     # phastCons conservation
     track cons470wayViewphastcons
