@@ -27,6 +27,7 @@
 #include "dnaMotif.h"
 #include "maf.h"
 #include "hgMaf.h"
+#include "chromAlias.h"
 
 struct wigItem
 /* A wig track item. */
@@ -1248,6 +1249,7 @@ if (baseProbs != NULL)
     probVals[0].next = &probVals[1];
     probVals[1].next = &probVals[2];
     probVals[2].next = &probVals[3];
+    probVals[3].next = NULL;
 
     boolean baseCmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
     if (baseCmpl)
@@ -1272,6 +1274,7 @@ if (baseProbs != NULL)
         probVals[3].nuc = "T";
         probVals[3].color = MG_GREEN;
         }
+    probList = probVals;  // a sortable list 
     }
 
 double xIncr = (double)width / numBases;
@@ -1430,11 +1433,11 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
 
 	    if ((yOffsets != NULL) && (numTrack > 0))
 		stackValue += yOffsets[(numTrack-1) *  width + x1];
-	    if (stackValue >= graphUpperLimit)
+	    if (stackValue > graphUpperLimit)
                 {
                 hvGfxLine(hvg, x, yOff, x+baseWidth, yOff, clipColor);
                 }
-	    else if (stackValue <= graphLowerLimit)
+	    else if (stackValue < graphLowerLimit)
                 {
                 hvGfxLine(hvg, x, yOff + h - 1, x+baseWidth, yOff + h - 1, clipColor);
                 }
@@ -1948,10 +1951,8 @@ if (wibFH > 0)
 return pre;
 }
 
-static void wigPreDrawItems(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis)
-/* Draw wiggle items that resolve to doing a box for each pixel. */
+void wigLogoMafCheck(struct track *tg,  int start, int end)
+/* Check to see if we should draw a sequence logo for the wiggle contents. */
 {
 char *logoMaf = trackDbSetting(tg->tdb, "logoMaf");
 
@@ -1959,8 +1960,27 @@ if (logoMaf != NULL)
     {
     struct wigCartOptions *wigCart = tg->wigCartData;
     if (wigCart->doSequenceLogo)
-        wigCart->baseProbs = hgMafProbs(database, logoMaf, chromName, seqStart, seqEnd, '+');
+        {
+        // see if the MAF is a bigBed
+        if (endsWith(logoMaf, ".bb") || endsWith(logoMaf, ".bigMaf"))
+            {
+            struct bbiFile *bbi = bigBedFileOpenAlias(logoMaf, chromAliasFindAliases);
+            wigCart->baseProbs = hgBigMafProbs(database, bbi, chromName, start, end, '+');
+            bbiFileClose(&bbi);
+            tg->bbiFile = NULL;
+            }
+        else  // otherwise it's a table
+            wigCart->baseProbs = hgMafProbs(database, logoMaf, chromName, start, end, '+');
+        }
     }
+}
+
+static void wigPreDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw wiggle items that resolve to doing a box for each pixel. */
+{
+wigLogoMafCheck(tg, seqStart, seqEnd);
 
 struct preDrawContainer *pre = wigLoadPreDraw(tg, seqStart, seqEnd, width);
 if (pre != NULL)
