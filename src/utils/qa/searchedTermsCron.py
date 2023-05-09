@@ -74,20 +74,25 @@ search_lines= bash("cat /hive/users/qateam/searchedTermsCronArchive/"+datetime.n
 
 #For loop that removes hgsid and counts the search term 
 searches_count = {}
-for term in search_lines:
-    if len(term.split('&'))>2:
-        term=term.split('&')
-        term.pop(1)
-        term.reverse()
-        term=str(term)[1:-1]
+
+#Added indexing by position then concatenating terms after a '&' line split
+for line in search_lines:
+    if len(line.split('&'))>2:
+        terms=line.split('&')
+        term=terms[0]
+        db=terms[2]
         term=term.split('=')
         term=term[1:3]
         term = str(term)[1:-1]
-        term = term.replace("\"", "").replace(", 'search", "").replace("\'", "").replace(",", "")
-        if term.lower() in searches_count:
-            searches_count[term.lower()] += 1
+        db=db.split('=')
+        db=db[1:3]
+        db=str(db)[1:-1]
+        searchTerm=db+" "+term
+        searchTerm=searchTerm.replace("\'", "")
+        if searchTerm.lower() in searches_count:
+            searches_count[searchTerm.lower()] += 1
         else:
-            searches_count[term.lower()] = 1
+            searches_count[searchTerm.lower()] = 1
 
 #Sort the count values from largest to smallest and stores to a list           
 sorted_searches_counts= sorted(searches_count.values(), reverse=True)

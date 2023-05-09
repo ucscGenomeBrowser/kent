@@ -5,37 +5,37 @@ GCF_018492685.1_fAloSap1.pri	American shad
 GCA_003957555.2_bCalAnn1_v1.p	Anna's hummingbird
 GCA_946808225.1_fSilAri3.1	Aristotle's catfish (2022)
 GCF_900964775.1_fSclFor1.1	Asian bonytongue
-GCF_024166365.1_mEleMax1_primary_haplotype	Asiatic elephant (2022)
+GCF_024166365.1_mEleMax1_primary_haplotype	Asiatic elephant (mEleMax1 primary hap 2022)
 GCF_902167405.1_gadMor3.0	Atlantic cod
 GCF_009819705.1_fHipHip1.pri	Atlantic halibut (refseq)
 GCA_905171665.2_fTraTra1.2	Atlantic horse mackerel (2021)
-GCF_015852505.1_mTacAcu1.pri	Australian echidna
+GCF_015852505.1_mTacAcu1.pri	Australian echidna (mTacAcu1 primary hap 2020)
 GCF_017976425.1_fToxJac2.pri	banded archerfish
 GCA_936440315.1_fBarBab1.1	barbel (2022)
 GCA_015227805.3_bHirRus1.pri.v3	barn swallow (bHirRus1 v3 primary hap 2021)
 GCA_028501385.1_bRisTri1.mat.cur.20221130	black-legged kittiwake (bRisTri1.mat 2023)
-GCA_028500815.1_bRisTri1.patW.cur.20221130	black-legged kittiwake (bRisTri1.patW 2023)
+GCF_028500815.1_bRisTri1.patW.cur.20221130	black-legged kittiwake (bRisTri1 2023 refseq)
 GCA_020826845.1_mDicBic1.mat.cur	black rhinoceros (2021)
 GCA_028021495.1_fLycPai1.hap1	blackbelly eelpout (fLycPai1 haplotype 1 2023)
 GCA_028022725.1_fLycPai1.hap2	blackbelly eelpout (fLycPai1 haplotype 2 2023)
 GCA_009819655.1_bSylAtr1.pri	blackcap
-GCA_025265405.1_mMesDen1_primary_haplotype	Blainville's beaked whale ( 2022)
-GCF_009873245.2_mBalMus1.pri.v3	blue whale
+GCA_025265405.1_mMesDen1_primary_haplotype	Blainville's beaked whale (mMesDen1 primary hap 2022)
+GCF_009873245.2_mBalMus1.pri.v3	blue whale (JJ_BM4_2016_0621 v3 primary hap 2020)
 GCA_900634775.2_fGouWil2.2	blunt-snouted clingfish (v2 2020 genbank)
 GCF_017639745.1_fMelBoe1.pri	Boeseman's rainbowfish
 GCA_933228915.1_fTelBon1.1	bonti-bonti (T.bonti 2022)
 GCF_905147365.1_ilAriAges1.1	brown argus butterfly
 GCF_020382885.2_fScaArg1.pri	butterfish (2021 G10K)
-GCF_009762305.2_mZalCal1.pri.v2	California sea lion
-GCF_007474595.2_mLynCan4.pri.v2	Canada lynx
+GCF_009762305.2_mZalCal1.pri.v2	California sea lion (v2 primary hap 2020)
+GCF_007474595.2_mLynCan4.pri.v2	Canada lynx (LIC74 v2 primary hap 2020)
 GCA_009819595.1_bMerNub1.pri	carmine bee-eater
 GCF_900634415.1_fCotGob3.1	channel bull blenny
 GCA_027408225.1_bGalGal5.pri	chicken (Cobb bGalGal5 primary hap 2022)
 GCA_027557775.1_bGalGal4.pri	chicken (Ross bGalGal4 primary hap 2023)
 GCF_027409825.1_fScoJap1.pri	chub mackerel (fScoJap1 primary hap 2022)
 GCA_900324465.3_fAnaTes1.3	climbing perch (v1.3 2021)
-GCF_011100635.1_mTriVul1.pri	common brushtail
-GCA_017976375.1_bCucCan1.pri	common cuckoo (2021)
+GCF_011100635.1_mTriVul1.pri	common brushtail (refseq 2020)
+GCF_017976375.1_bCucCan1.pri	common cuckoo (bCucCan1 primary hap 2021 refseq)
 GCA_027559615.1_bAcrTri1.pri	common myna (bArcTri1 primary hap 2023)
 GCA_903992545.1_mPipPip1.1	common pipistrelle (2020)
 GCF_020740795.1_bApuApu2.pri.cur	common swift (bApuApu2 2021 refseq)
@@ -47,27 +47,30 @@ GCF_017976325.1_fCheRos1.pri	copperband butterflyfish
 GCA_020745685.1_fTauAds1.pri.cur	cunner (2021)
 GCF_021462225.1_DD_fGirMul_XY1	dark-edged splitfin (DD_20200921_A 2022)
 GCA_900700375.2_fDenClu1.2	denticle herring (v2 2020)
-GCA_014839835.1_bDryPub1.pri	downy woodpecker (2020)
+GCF_027887155.1_rMalTer1.hap1	diamondback terrapin (rMalTer1 2023)
+GCF_014839835.1_bDryPub1.pri	downy woodpecker (bDryPub1 primary hap 2020)
 GCA_011004875.1_bBalReg1.pri	East African grey crowned-crane
 GCA_900246225.5_fAstCal1.3	eastern happy (v3 2021)
-GCF_014176215.1_mRouAeg1.p	Egyptian rousette
+GCF_014176215.1_mRouAeg1.p	Egyptian rousette (2020)
 GCF_013358815.1_fEleEle1.pri	electric eel
 GCA_016128335.2_ZJU2.0	emu (v2 ZJU1.0 2023)
 GCA_020745735.1_sHemOce1.pat.X.cur.	epaulette shark (sHemOce1 2021)
-GCF_009829155.1_mMusErm1.Pri	ermine
+GCF_009829155.1_mMusErm1.Pri	ermine (2020)
 GCA_922990625.1_mMelMel3.1_maternal_haplotype_uncurated	Eurasian badger (2021)
 GCA_907165065.1_bCapEur3.1	Eurasian nightjar
-GCA_902686455.1_mSciVul1.1	Eurasian red squirrel
+GCA_902686455.1_mSciVul1.1	Eurasian red squirrel (2019)
 GCF_902655055.1_mLutLut1.2	Eurasian river otter (2020)
-GCF_903992535.2_mArvAmp1.2	Eurasian water vole (2021)
+GCF_903992535.2_mArvAmp1.2	Eurasian water vole (v2 2021)
 GCF_905171775.1_aRanTem1.1	European common frog
 GCF_013347855.1_fAngAng1.pri	European eel
 GCA_017639485.1_bPluApr1.pri	European golden plover
 GCF_947347685.1_fPlePla1.1	European plaice (primary hap 2022)
 GCA_903797595.2_bEriRub2.2	European robin
+GCF_027595985.1_mSorAra2.pri	European shrew (mSorAra2 primary hap 2023)
 GCF_902459465.1_eAstRub1.3	European starfish
 GCA_901699155.2_bStrTur1.2	European turtle dove (v1.2 2021)
 GCF_947179515.1_mApoSyl1.1	European woodmouse (2022 refseq)
+GCF_027579735.1_aBomBom1.pri	fire-bellied toad (aBomBom1 primary hap 2023)
 GCF_007364275.1_fArcCen1	flier cichlid
 GCA_014839995.1_fXenCan1.pri	freshwater garfish (fXenCan1 2020)
 GCF_902459505.1_aGeoSer1.1	Gabon caecilian
@@ -84,7 +87,7 @@ GCF_017639515.1_sCarCar2.pri	great white shark
 GCF_004115265.2_mRhiFer1_v1.p	greater horseshoe bat (v2 MPI-CBG 2019)
 GCA_014108255.1_mRhiFer1.p	greater horseshoe bat (mRhiFer1 2020)
 GCF_901709675.1_fSynAcu1.2	greater pipefish
-GCF_014108235.1_mMyoMyo1.p	greater mouse-eared bat
+GCF_014108235.1_mMyoMyo1.p	greater mouse-eared bat (2020 Bat1K)
 GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 2021)
 GCF_015220075.1_bFalRus1.pri	gyrfalcon
 GCF_026419915.1_bHarHar1_primary_haplotype	Harpy eagle (bHarHar1 2022)
@@ -101,8 +104,8 @@ GCF_902148845.1_fSalaFa1.1	jewelled blenny
 GCA_027574665.1_bRhyJub1.pri	kagu (bRhyJub1 primary hap 2023)
 GCF_004027225.2_bStrHab1.2.pri	kakapo
 GCF_937001465.1_mOrcOrc1.1	killer whale (2022)
-GCF_009829125.1_fPerMag1.pri	Korean giant-fin mudskipper (refseq)
-GCF_014108245.1_mPipKuh1.p	Kuhl's pipistrelle
+GCF_009829125.3_fPerMag1.2.pri	Korean giant-fin mudskipper (v1.2 primary hap 2023)
+GCF_014108245.1_mPipKuh1.p	Kuhl's pipistrelle (2020)
 GCA_028022735.1_bGypBar2.pri	lammergeier (bGypBar2 primary hap 2023)
 GCF_009829145.1_bChiLan1.pri	lance-tailed manakin
 GCA_023638135.1_bFalBia1.pri	lanner falcon (2022)
@@ -123,7 +126,7 @@ GCA_947247035.1_rVipUrs1.1	meadow viper (2022)
 GCF_025201925.1_rGopFla2.mat.asm	Mexican gopher tortoise (WGS:JAMKFC01 2022)
 GCA_025201965.1_rGopFla2.pat.asm	Mexican gopher tortoise (WGS:JAMKFD01 2022)
 GCF_902362185.1_fChaCha1.1	milkfish
-GCF_019393635.1_mDroGli1.pri	monito del monte (2021)
+GCF_019393635.1_mDroGli1.pri	monito del monte (mDroGli1 primary hap 2021)
 GCF_009769625.2_bCygOlo1.pri.v2	mute swan (v2 2021)
 GCA_027579445.1_bAmmNel1.pri	Nelson's sparrow (bAmmNel1 primary hap 2023)
 GCF_009650955.1_bCorMon1.pri	New Caledonian crow
@@ -132,7 +135,7 @@ GCA_929443795.2_bAccGen1.2	northern goshawk (bAccGen1 v2 2022 genbank)
 GCF_011004845.1_fEsoLuc1.pri	northern pike
 GCF_015227675.2_mRatBN7.2	Norway rat BN7.2
 GCF_902148855.1_fSphaOr1.1	orbiculate cardinalfish
-GCF_004126475.2_mPhyDis1.pri.v3	pale spear-nosed bat
+GCF_004126475.2_mPhyDis1.pri.v3	pale spear-nosed bat (MPI-MPIP v3 mPhyDis1 primary hap 2020)
 GCF_014108415.1_mMolMol1.p	Pallas's mastiff bat
 GCA_027942865.1_fOdoBon6.hap1	pejerrey (fOdoBon6 haplotype 1 2023)
 GCA_027942885.1_fOdoBon6.hap2	pejerrey (fOdoBon6 haplotype 2 2023)
@@ -140,7 +143,7 @@ GCA_017639675.1_fAplTae1.pri	peladilla (galaxoid fish 2021)
 GCA_023634155.1_bFalPer1.pri	peregrine falcon (2022)
 GCF_902150065.1_fMyrMur1.1	pinecone soldierfish
 GCF_027358695.1_aSpeBom1.2.pri	plains spadefoot toad (aSpeBom1 primary hap 2022)
-GCF_004115215.2_mOrnAna1.pri.v4	platypus (v4 2020)
+GCF_004115215.2_mOrnAna1.pri.v4	platypus (Pmale09 v4 2020)
 GCA_020745775.1_bTheCae1.pri.cur	plumbeous ibis (2021)
 GCF_902500255.1_fThaAma1.1	prehistoric monster fish
 GCA_026419965.1_mKogBre1_haplotype_1	pygmy sperm whale (mKogBre1 haplotype 1 2022)
@@ -166,9 +169,9 @@ GCF_027406575.1_mNycCou1.pri	slow loris (mNycCou1 primary hap 2022)
 GCF_009764475.1_sPriPec2.1.pri	smalltooth sawfish (v2.1 2019 refseq)
 GCA_020800305.1_bPorHoc1.mat.Z.cur	South Island takahe (primary hap 2021)
 GCF_910596095.1_fThuMac1.1	southern bluefin tuna (2021)
-GCF_903995425.1_mOncTor1.1	southern grasshopper mouse
-GCA_023851605.1_mTamTet1.pri	southern tamandua (2022)
-GCF_015220235.1_mChoDid1.pri	southern two-toed sloth
+GCF_903995425.1_mOncTor1.1	southern grasshopper mouse (2020)
+GCA_023851605.1_mTamTet1.pri	southern tamandua (mTamTet1 primary hap 2022)
+GCF_015220235.1_mChoDid1.pri	southern two-toed sloth (mChoDid1 primary hap 2020)
 GCF_905163445.1_ilParAegt1.1	specked wood butterfly
 GCA_026979565.1_bVidCha1_merged_haplotype	steelblue widowfinch (merged hap OUT-0048 2022)
 GCA_026979555.1_bVidCha1_purged_dups_haplotype	steelblue widowfinch (purged dups hap OUT-0048 2022)
@@ -184,14 +187,17 @@ GCF_901765095.1_aMicUni1.1	tiny Cayenne caecilian
 GCA_901000725.3_fTakRub1.3	torafugu (fTakRub1.3 2021 genbank)
 GCF_009819795.1_bAytFul2.pri	tufted duck
 GCF_901001135.1_aRhiBiv1.1	two-lined caecilian
-GCF_008692025.1_mPhoSin1.pri	vaquita
+GCF_008692025.1_mPhoSin1.pri	vaquita (mPhoSin1 2019)
+GCF_026979565.1_bVidCha1_merged_haplotype	village indigobird (OUT-0048 2022)
 GCA_013358685.1_fAntMac1.pri	warty frogfish (2020)
 GCF_904848185.1_fAcaLat1.1	yellowfin seabream
 GCF_009769535.1_rThaEle1.pri	Western terrestrial garter snake
 GCA_020745705.1_bHemCom1.pri.cur	whiskered treeswift (2021)
 GCF_016700215.2_bGalGal1.pat.whiteleghornlayer.GRCg7w	white leghorn X broiler chicken (leghorn haplotype v2 2021)
 GCA_947461875.1_bHalAlb1.1	white-tailed eagle (bHalAlb1.1 2022)
-GCF_024139225.1_mSunEtr1.pri.cur	white-toothed pygmy shrew (mSunEtr1 2022)
+GCF_024139225.1_mSunEtr1.pri.cur	white-toothed pygmy shrew (mSunEtr1 primary hap 2022)
+GCF_011100555.1_mCalJa1.2.pat.X	white-tufted-ear marmoset (mCalJac1 2021)
+GCF_028858705.1_bGruAme1.mat	whooping crane (bGruAme1 2023)
 GCA_009769525.1_bPteGut1.pri	yellow-throated sandgrouse
 GCF_914725855.1_fThuAlb1.1	yellowfin tuna (2021)
 GCF_003957565.2_bTaeGut1.4.pri	zebra finch (refseq 2021 Blue55 female)
