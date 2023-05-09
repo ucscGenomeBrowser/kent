@@ -1747,7 +1747,7 @@ for (tmp = embeddedTblSetting2; tmp != NULL; tmp = tmp->next)
     }
 }
 
-static void printFieldLabel(char *entry)
+void printFieldLabel(char *entry)
 /* print the field label, the first column in the table, as a <td>. Allow a
  * longer description after a |-char, as some fields are not easy to
  * understand. */
