@@ -10991,7 +10991,7 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
+    measureTime("Startup (bottleneck delay %d ms, not applied if under %d) ", botDelayMillis, hgBotDelayCurrWarnMs()) ;
 
 char *mouseOverEnabled = cfgOptionDefault("mouseOverEnabled", "on");
 if (sameWordOk(mouseOverEnabled, "on"))
