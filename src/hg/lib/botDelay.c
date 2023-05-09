@@ -19,6 +19,8 @@
 #define defaultWarnMs 10000    /* warning at 10 to 20 second delay */
 #define defaultExitMs 20000    /* error 429 Too Many Requests after 20+ second delay */
 
+int botDelayWarnMs  = 0;       /* global so the previously used value can be retrieved */
+
 int botDelayTime(char *host, int port, char *botCheckString)
 /* Figure out suggested delay time for ip address in
  * milliseconds. */
@@ -264,27 +266,39 @@ if (botException())	/* don't do this if caller is on the exception list */
 
 if (delayFrac < 0.000001) /* passed in zero, use default */
     delayFrac = defaultDelayFrac;
-if (warnMs < 1)	/* passed in zero, use default */
-    warnMs = defaultWarnMs;
+
+botDelayWarnMs = warnMs;
+if (botDelayWarnMs < 1)	/* passed in zero, use default */
+    botDelayWarnMs = defaultWarnMs;
+
 if (exitMs < 1)	/* passed in zero, use default */
     exitMs = defaultExitMs;
 
 botDelayMillis = hgBotDelayTimeFrac(delayFrac);
 if (botDelayMillis > 0)
     {
-    int msAboveWarning = botDelayMillis - warnMs;
-    int retryAfterSeconds = 0;
-    if (msAboveWarning > 0)
-       retryAfterSeconds = 1 + (msAboveWarning / 10);
-    if (botDelayMillis > warnMs)
+    if (botDelayMillis > botDelayWarnMs)
 	{
 	if (botDelayMillis > exitMs) /* returning immediately */
+            {
+            int msAboveWarning = botDelayMillis - botDelayWarnMs;
+            int retryAfterSeconds = 0;
+            if (msAboveWarning > 0)
+               retryAfterSeconds = 1 + (msAboveWarning / 10);
 	    hogExit(cgiName, enteredMainTime, exitType, retryAfterSeconds);
+            }
 	else
 	    issueWarning = TRUE;
 
-        sleep1000(botDelayMillis); /* sleep when > warnMs and < exitMs */
+        sleep1000(botDelayMillis); /* sleep when > botDelayWarnMs and < exitMs */
 	}
     }
 return issueWarning;	/* caller can decide on their type of warning */
 }	/*	boolean earlyBotCheck()	*/
+
+int hgBotDelayCurrWarnMs()
+/* get number of millis that are tolerated until a warning is shown on the most recent call to earlyBotCheck */
+{
+    return botDelayWarnMs;
+}
+

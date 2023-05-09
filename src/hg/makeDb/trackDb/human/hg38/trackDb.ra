@@ -539,8 +539,7 @@ include knownGene.ra beta,public
 include knownGene.alpha.ra alpha
 include knownGeneArchive.ra alpha
 
-include trackDb.100way.ra beta,public
-include trackDb.100way.alpha.ra alpha
+include trackDb.100way.ra 
 include trackDb.145way.ra alpha
 
 include trackDb.241wayT.ra alpha
@@ -619,6 +618,7 @@ longLabel GTEx Brain Gene Expression in barChart track format
 group expression
 
 track dgvPlus override
+pennantIcon Updated red ../goldenPath/newsarch.html#042423 "Updated Apr. 24, 2023"
 group varRep
 
     track dgvMerged override
@@ -653,7 +653,8 @@ group varRep
     type bigBed 12 +
     url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg38?ref=$S;start=${;end=$};name=$$;class=Sequence
     searchIndex name
-    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$variant_sub_type
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$variant_sub_type; Frequency:$Frequency
+    pennantIcon Updated red ../goldenPath/newsarch.html#042423 "Updated Apr. 24, 2023"
 
 searchTable dgvGold
 searchType bigBed

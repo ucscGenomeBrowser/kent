@@ -21,6 +21,8 @@
 #include "obscure.h"
 #include "errCatch.h"
 
+char *timeoutErrorMessage = "";
+
 /* Brought errno in to get more useful error messages */
 extern int errno;
 
@@ -174,7 +176,7 @@ if (res < 0)
 		}
 	    else
 		{
-		dyStringPrintf(dy, "TCP non-blocking connect() to %s IP %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, ipStr, msTimeout);
+		dyStringPrintf(dy, "TCP non-blocking connect() to %s IP %s timed-out in select() after %ld milliseconds. %s", hostName, ipStr, msTimeout, timeoutErrorMessage);
 		return -1;
 		}
 	    }
@@ -2326,3 +2328,6 @@ boolean hasProtocol(char *urlOrPath)
 return stringIn("://", urlOrPath) != NULL;
 }
 
+void netSetTimeoutErrorMsg(char *msg) {
+    timeoutErrorMessage = msg;
+}

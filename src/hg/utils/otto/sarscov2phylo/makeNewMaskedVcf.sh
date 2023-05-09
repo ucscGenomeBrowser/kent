@@ -9,7 +9,7 @@ usage() {
     echo "This assumes that ncbi.latest and cogUk.latest links/directories have been updated."
 }
 
-if [ $# != 3 && $# != 4 ]; then
+if (( $# != 3 && $# != 4 )); then
   usage
   exit 1
 fi
@@ -31,6 +31,7 @@ gisaidDir=/hive/users/angie/gisaid
 minReal=20000
 ref2bit=/hive/data/genomes/wuhCor1/wuhCor1.2bit
 epiToPublic=$gisaidDir/epiToPublicAndDate.latest
+
 scriptDir=$(dirname "${BASH_SOURCE[0]}")
 source $scriptDir/util.sh
 
@@ -58,116 +59,123 @@ fi
 # Make lists of sequences already in the tree.
 $matUtils extract -i $baseProtobuf -u prevNames
 
-# Before updating the tree with new sequences, update the names used in the tree:
-# * Sequences that are already in the tree with EPI_ IDs, but that have been mapped to public IDs
-# * COG-UK sequences that are in GenBank.  Per Sam Nicholls the isolate alone is enough to identify
-#   them -- no need to match country & year which are sometimes incorrect at first.
-grep COG-UK/ $ncbiDir/ncbi_dataset.plusBioSample.tsv \
-| tawk '{print $6, $4 "/" $6 "/" $3 "|" $1 "|" $3;}' \
-| sed -re 's@COG-UK/@@g; s/United Kingdom://; s/(\/[0-9]{4})(-[0-9]+)*/\1/; s/ //g;' \
+# First, in order to catch & remove duplicates and update names that have changed, extract the
+# accession from every name in the tree.
+awk -F\| '{ if ($3 == "") { print $1 "\t" $0; } else { print $2 "\t" $0; } }' prevNames \
+| subColumn 1 -miss=/dev/null stdin <(cut -f 1,2 $epiToPublic) stdout \
 | sort \
-    > cogUkInGenBankIsolateToNewName
-fastaNames $cogUkDir/cog_all.fasta.xz > cogUk.names
-grep -Fwf <(cut -f 1 cogUkInGenBankIsolateToNewName) cogUk.names \
-    > cogUkInGenBank
-set +o pipefail
-# From 2021-05-04 on there should be no more unrenamed COG-UK/ in prevNames, but doesn't hurt
-# to check.
-grep COG-UK/ prevNames \
-| awk -F\| '{print $1 "\t" $0;}' \
-| sed -re 's@COG-UK/@@;' \
-| sort \
-    > cogUkInGenBankIsolateToPrevName
-set -o pipefail
-join -t$'\t' cogUkInGenBankIsolateToPrevName cogUkInGenBankIsolateToNewName \
-| cut -f 2,3 \
-    > prevTree.renaming
-# Look for COG-UK isolates in prevNames that have just been added to GenBank and need to be renamed.
-# Unfortunately for now we are not getting those from $epiToPublic.
-grep -Fwf <(cut -f 1 cogUkInGenBankIsolateToNewName) prevNames \
-| awk -F\| '$3 == ""' \
-| awk -F/ '{print $2 "\t" $0;}' \
-| sort \
-    > cogUkInGenBankIsolateToPrevName
-join -t$'\t' cogUkInGenBankIsolateToPrevName cogUkInGenBankIsolateToNewName \
-| cut -f 2,3 \
-    >> prevTree.renaming
-# Look for names with EPI_IDs that have just today been mapped to public sequences.
-grep EPI_ISL_ prevNames \
-| awk -F\| '{print $2 "\t" $0;}' \
-| sort \
-    > epiToPrevName
-set +o pipefail
-grep -Fwf <(cut -f 1 epiToPrevName) $epiToPublic \
-| grep -v COG-UK/ \
-| tawk '{if ($4 != "" && $3 == $2) { print $1, $2 "|" $4; } else if ($4 != "") { print $1, $3 "|" $2 "|" $4; }}' \
-| sort \
-    > epiToNewName
-set -o pipefail
-# Argh, missing sequences in COG-UK metadata can mean that a sequence may have been added to the
-# tree both with and without EPI ID... so renaming makes a name conflict.
-# If there are any of those then prune the sequences with EPI_ID or longer dates, so renaming doesn't
-# cause conflict.
-comm -12 <(cut -f 2 epiToNewName | sort) <(sort prevNames) > epiToNewNameAlreadyInTree
-join -t$'\t' epiToPrevName <(grep -vFwf epiToNewNameAlreadyInTree epiToNewName) \
-| cut -f 2,3 \
-    >> prevTree.renaming
-cp /dev/null dupsToRemove
-if [ -s epiToNewNameAlreadyInTree ]; then
-    set +o pipefail
-    grep -Fwf <(cut -d\| -f 1 epiToNewNameAlreadyInTree) prevNames \
-    | grep EPI_ISL \
-    | cat \
-        >> dupsToRemove
-    set -o pipefail
+    > prevIdToName
+# Arbitrarily pick one of each duplicated ID to keep in the tree
+sort -k1,1 -u prevIdToName > prevIdToNameDeDup
+# Remove whichever duplicated items were not arbitrarily chosen to remain
+comm -23 prevIdToName prevIdToNameDeDup | cut -f 2 > prevNameToRemove
+# Also remove items for which we have no metadata (i.e. they were removed from repository,
+# or .1 was replaced by .2 etc.)
+cut -f 1 prevIdToNameDeDup | grep -E '^[A-Z]{2}[0-9]{6}\.[0-9]+' > gb.acc
+comm -13 <(cut -f 1 $ncbiDir/ncbi_dataset.plusBioSample.tsv) gb.acc > gb.removed.acc
+if [ -s gb.removed.acc ]; then
+    grep -Fwf gb.removed.acc prevIdToName | cut -f 2 >> prevNameToRemove
 fi
-# Don't rename if the final name is already in the tree; remove the dup with the old name.
-set +o pipefail
-cut -f 2 prevTree.renaming \
-| grep -Fwf - prevNames | cat \
-    > alreadyThere
-grep -Fwf alreadyThere prevTree.renaming | cut -f 1 \
-    >> dupsToRemove
-# And finally, sometimes there are duplicates due to country or date being corrected in COG-UK
-# metadata.
-grep -vFwf dupsToRemove prevTree.renaming \
-| cut -f 2 | sort | uniq -c | awk '$1 > 1 {print $2;}' \
-| cut -d/ -f 2 \
-    > cogUkIsolateStillDup
-grep -Fwf cogUkIsolateStillDup $cogUkDir/cog_metadata.csv \
-| awk -F, '{print $1 "|" $5;}' \
-    > cogDupsLatestMetadata
-grep -Fwf cogUkIsolateStillDup prevNames \
-| grep -vFwf dupsToRemove \
-| grep -vFwf cogDupsLatestMetadata \
-| cat \
-    >> dupsToRemove
-set -o pipefail
-startingProtobuf=$baseProtobuf
-if [ -s dupsToRemove ]; then
-    startingProtobuf=prevDupTrimmed.pb
-    $matUtils extract -i $baseProtobuf -p -s dupsToRemove -o $startingProtobuf
+cut -f 1 prevIdToNameDeDup | grep -E '^EPI_ISL_' > epi.acc
+comm -13 <(zcat $gisaidDir/metadata_batch_$today.tsv.gz | cut -f 3 | sort) epi.acc > epi.removed.acc
+if [ -s epi.removed.acc ]; then
+    grep -Fwf epi.removed.acc prevIdToName | cut -f 2 >> prevNameToRemove
+fi
+cut -f 1 prevIdToNameDeDup | grep -E '^(England|Northern|Scotland|Wales)' > cog.acc
+comm -13 <(cut -d, -f 1 $cogUkDir/cog_metadata.csv | sort) cog.acc > cog.removed.acc
+if [ -s cog.removed.acc ]; then
+    grep -Fwf cog.removed.acc prevIdToName \
+    | grep -vE '^([A-Z]{2}[0-9]{6}\.[0-9]+|EPI_ISL_)' \
+    | cut -f 2 >> prevNameToRemove
+fi
+cut -f 1 prevIdToNameDeDup \
+| grep -vE '^([A-Z]{2}[0-9]{6}\.[0-9]+|EPI_ISL_|England|Northern|Scotland|Wales)' \
+    > cncb.acc
+comm -13 <(cut -f 2 $cncbDir/cncb.metadata.tsv | sort) cncb.acc > cncb.removed.acc
+if [ -s cncb.removed.acc ]; then
+    grep -Fwf cncb.removed.acc prevIdToName | cut -f 2 >> prevNameToRemove
 fi
 
-if [ -s prevTree.renaming ]; then
-    $matUtils mask -r prevTree.renaming -i $startingProtobuf -o prevRenamed.pb >& rename.out
-    $matUtils extract -i prevRenamed.pb -u prevNames
+# Remove duplicates and withdrawn sequences
+if [ -s prevNameToRemove ]; then
+    rm -f prevDedup.pb
+    $matUtils extract -i $baseProtobuf \
+        -p -s <(sort -u prevNameToRemove) \
+        -u prevDedupNames \
+        -o prevDedup.pb
 else
-    ln -sf $startingProtobuf prevRenamed.pb
+    ln -sf $baseProtobuf prevDedup.pb
+    $matUtils extract -i prevDedup.pb -u prevDedupNames
 fi
+
+function gbAccCogRenaming {
+    # pipeline: one INSDC accession per line of stdin, acc to full name if COG-UK on stdout
+    grep -Fwf - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
+    | grep COG-UK/ \
+    | tawk '{print $1, $4 "/" $6 "/" $3 "|" $1 "|" $3;}' \
+    | sed -re 's@COG-UK/@@g; s/United Kingdom://; s/(\/[0-9]{4})(-[0-9]+)*/\1/; s/ //g;'
+}
+
+function gbAccNonCogRenaming {
+    # pipeline: one INSDC accession per line of stdin, acc to full name if non-COG-UK on stdout
+    grep -Fwf - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
+    | grep -v COG-UK/ \
+    | cleanGenbank \
+    | tawk '{ if ($3 == "") { $3 = "?"; }
+              if ($6 != "") { print $1 "\t" $6 "|" $1 "|" $3; }
+              else { print $1 "\t" $1 "|" $3; } }' \
+    | sed -re 's/ /_/g'
+}
+
+# To update names that have changed and simplify detection of new sequences to add, relate to acc.
+# Strip country and year from COG-UK names to get COG acc.
+awk -F\| '{ if ($3 == "") { print $1 "\t" $0; } else { print $2 "\t" $0; } }' prevDedupNames \
+| subColumn 1 -miss=/dev/null stdin <(cut -f 1,2 $epiToPublic) stdout \
+| sed -re 's@^(England|Northern_?Ireland|Scotland|Wales)/([A-Z]+[_-]?[A-Za-z0-9]+)/[0-9]+@COG:\2@;' \
+| sort \
+    > accToPrevDedupName
+
+# Break down accs by source -- we will need those both for renaming acc to full name and for
+# figuring out which seqs the tree already has vs. which are new.
+cut -f 1 accToPrevDedupName | grep -E '^[A-Z]{2}[0-9]{6}\.[0-9]+' > prevGbAcc
+cut -f 1 accToPrevDedupName | grep -E '^COG:' | sed -re 's/^COG://;' > prevCogUk
+cut -f 1 accToPrevDedupName | grep -E '^EPI_ISL_' > prevGisaid
+cut -f 1 accToPrevDedupName | grep -vE '^([A-Z]{2}[0-9]{6}\.[0-9]+|COG:|EPI_ISL_)' > prevCncb
+
+# GenBank renaming has both COG-UK and non-COG-UK versions:
+gbAccCogRenaming < prevGbAcc > accToNewName
+gbAccNonCogRenaming < prevGbAcc >> accToNewName
+# Restore the COG:isolate format for non-GenBank COG-UK sequences:
+grep -Fwf prevCogUk $cogUkDir/cog_metadata.csv \
+| awk -F, '{print $1 "\t" $1 "|" $5;}' \
+| sed -re 's@^(England|Northern_?Ireland|Scotland|Wales)/([A-Z]+[_-]?[A-Za-z0-9]+)/[0-9]+@COG:\2@;' \
+    >> accToNewName
+# GISAID:
+zcat $gisaidDir/metadata_batch_$today.tsv.gz \
+| grep -Fwf prevGisaid \
+| tawk '$3 != "" {print $3 "\t" $1 "|" $3 "|" $5;}' \
+    >> accToNewName
+# CNCB:
+grep -Fwf prevCncb $cncbDir/cncb.metadata.tsv \
+| cleanCncb \
+| sed -re 's/ /_/g;' \
+| tawk '{print $2 "\t" $1 "|" $2 "|" $10;}' \
+    >> accToNewName
+join -t$'\t' accToPrevDedupName <(sort accToNewName) \
+| tawk '$2 != $3 {print $2, $3;}' \
+    > prevDedupNameToNewName
+
+$matUtils mask -i prevDedup.pb -r prevDedupNameToNewName -o prevRenamed.pb \
+    >& renaming.out
+rm renaming.out
 
 # OK, now that the tree names are updated, figure out which seqs are already in there and
 # which need to be added.
-awk -F\| '{if ($3 == "") { print $1; } else { print $2; } }' prevNames \
-| grep -E '^[A-Z]{2}[0-9]{6}\.[0-9]' > prevGbAcc
-grep -E '^(England|Northern|Scotland|Wales)' prevNames \
-| cut -d\| -f1 > prevCogUk
-awk -F\| '{if ($3 == "") { print $1; } else { print $2; } }' prevNames \
-| grep -E '^EPI_ISL_' > prevGisaid
+# Add GenBank COG-UK sequences to prevCogUk so we don't add dups.
+cut -f 6 $ncbiDir/ncbi_dataset.plusBioSample.tsv | grep COG-UK | sed -re 's@^COG-UK/@@;' >> prevCogUk
 # Add public sequences that have been mapped to GISAID sequences to prevGisaid.
-grep -Fwf prevGbAcc $epiToPublic | cut -f 1 >> prevGisaid
-grep -Fwf prevCogUk $epiToPublic | cut -f 1 >> prevGisaid
-wc -l prev*
+cut -f 1 $epiToPublic >> prevGisaid
+wc -l prev{GbAcc,CogUk,Gisaid,Cncb}
 
 # Exclude some sequences based on nextclade counts of reversions and other-clade mutations.
 zcat $gisaidDir/chunks/nextclade.full.tsv.gz \
@@ -176,6 +184,8 @@ zcat $ncbiDir/nextclade.full.tsv.gz \
 | $scriptDir/findDropoutContam.pl > gb.dropoutContam
 zcat $cogUkDir/nextclade.full.tsv.gz \
 | $scriptDir/findDropoutContam.pl > cog.dropoutContam
+zcat $cncbDir/nextclade.full.tsv.gz \
+| $scriptDir/findDropoutContam.pl > cncb.dropoutContam
 cut -f 1 *.dropoutContam \
 | awk -F\| '{ if ($3 == "") { print $1; } else { print $2; } }' \
     > dropoutContam.ids
@@ -189,41 +199,34 @@ zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
 zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
 | join -t $'\t' <(cut -d, -f 1,5 $cogUkDir/cog_metadata.csv | tr , $'\t' | sort) - \
 | $scriptDir/findRefBackfill.pl > cog.refBackfill
+zcat $cncbDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
+| join -t$'\t' <(cut -f 2,10 $cncbDir/cncb.metadata.tsv | sort) - \
+| $scriptDir/findRefBackfill.pl > cncb.refBackfill
 cut -f 1 *.refBackfill > refBackfill.ids
 sort -u ../tooManyEpps.ids ../badBranchSeed.ids dropoutContam.ids refBackfill.ids \
 | grep -vFwf <(tail -n+2 $scriptDir/includeRecombinants.tsv | cut -f 1) \
     > exclude.ids
 
 # Get new GenBank sequences with at least $minReal non-N bases.
-# Exclude seqs in the tree with EPI IDs that that have been mapped in the very latest $epiToPublic.
-set +o pipefail
-egrep $'\t''[A-Z][A-Z][0-9]{6}\.[0-9]+' $epiToPublic \
-| grep -Fwf prevGisaid - \
-| grep -vFwf prevGbAcc \
-| cat \
-    >> prevGbAcc
-set -o pipefail
 xzcat $ncbiDir/genbank.fa.xz \
 | faSomeRecords -exclude stdin <(cat prevGbAcc exclude.ids) newGenBank.fa
 faSize -veryDetailed newGenBank.fa \
 | tawk '$4 < '$minReal' {print $1;}' \
     > gbTooSmall
 # NCBI also includes NC_045512 in the download, but that's our reference, so... exclude that too.
-set +o pipefail
-fastaNames newGenBank.fa | grep NC_045512 >> gbTooSmall
-set -o pipefail
+echo NC_045512.2 >> gbTooSmall
 faSomeRecords -exclude newGenBank.fa gbTooSmall newGenBank.filtered.fa
 faSize newGenBank.filtered.fa
 
 # Get new COG-UK sequences with at least $minReal non-N bases.
 # Also exclude cog_all.fasta sequences not found in cog_metadata.csv.
-comm -23 <(fastaNames $cogUkDir/cog_all.fasta.xz | sort) \
-    <(cut -d, -f1 $cogUkDir/cog_metadata.csv | sort) \
-    > cogFaNotMeta
-# Also exclude COG-UK sequences that have been added to GenBank (cogUkInGenBank, see above).
+fastaNames $cogUkDir/cog_all.fasta.xz \
+| grep -vFwf prevCogUk \
+| grep -vFwf exclude.ids \
+| grep -Fwf <(cut -d, -f 1 $cogUkDir/cog_metadata.csv) \
+    > newCogUk.accs
 xzcat $cogUkDir/cog_all.fasta.xz \
-| faSomeRecords -exclude stdin \
-    <(cat prevCogUk cogFaNotMeta cogUkInGenBank exclude.ids) newCogUk.fa
+| faSomeRecords stdin newCogUk.accs newCogUk.fa
 faSize -veryDetailed newCogUk.fa \
 | tawk '$4 < '$minReal' {print $1;}' \
     > cogUkTooSmall
@@ -240,18 +243,15 @@ faSize -veryDetailed newGisaid.fa \
 faSomeRecords -exclude newGisaid.fa gisaidTooSmall newGisaid.filtered.fa
 faSize newGisaid.filtered.fa
 
-# Exclude public-mapped sequences from newGisaid:
-set +o pipefail
-fastaNames newGisaid.filtered.fa \
-| grep -Fwf - $epiToPublic \
-| cut -f 1 \
-    > newGisaid.public.names
-set -o pipefail
-if [ -s newGisaid.public.names ]; then
-    faSomeRecords -exclude newGisaid.filtered.fa newGisaid.public.names tmp
-    mv tmp newGisaid.filtered.fa
-    faSize newGisaid.filtered.fa
-fi
+# Get new CNCB sequences with at least $minReal non-N bases.
+xzcat $cncbDir/cncb.nonGenBank.acc.fasta.xz \
+| faSomeRecords -exclude stdin <(cat prevCncb exclude.ids) newCncb.fa
+faSize -veryDetailed newCncb.fa \
+| tawk '$4 < '$minReal' {print $1;}' \
+    > cncbTooSmall
+faSomeRecords -exclude newCncb.fa cncbTooSmall newCncb.filtered.fa
+faSize newCncb.filtered.fa
+
 cat new*.filtered.fa > new.fa
 faSize new.fa
 
@@ -264,13 +264,12 @@ export TMPDIR=/dev/shm
 time bash ~angie/github/sarscov2phylo/scripts/global_profile_alignment.sh \
   -i new.fa \
   -o $alignedFa \
-  -t 50
+  -t 30
 faSize $alignedFa
 
-# Now make a renaming that keeps all the prevNames and adds full names for the new seqs.
-tawk '{print $1, $1;}' prevNames > $renaming
+# Now make a renaming that converts accessions back to full name|acc|year names.
+cp /dev/null $renaming
 if [ -s newCogUk.filtered.fa ]; then
-    # Sometimes all of the new COG-UK sequences are missing from cog_metadata.csv -- complained.
     set +o pipefail
     fastaNames newCogUk.filtered.fa \
     | grep -Fwf - $cogUkDir/cog_metadata.csv \
@@ -282,21 +281,12 @@ if [ -s newGenBank.filtered.fa ]; then
     # Special renaming for COG-UK sequences: strip COG-UK/, add back country and year
     set +o pipefail
     fastaNames newGenBank.filtered.fa \
-    | grep COG-UK/ \
     | sed -re 's/[ |].*//' \
-    | grep -Fwf - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
-    | tawk '{print $1, $4 "/" $6 "/" $3 "|" $1 "|" $3;}' \
-    | sed -re 's@COG-UK/@@g; s/United Kingdom://; s/(\/[0-9]{4})(-[0-9]+)*/\1/; s/ //g;' \
+    | gbAccCogRenaming \
         >> $renaming
     fastaNames newGenBank.filtered.fa \
-    | grep -v COG-UK/ \
     | sed -re 's/[ |].*//' \
-    | grep -Fwf - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
-    | tawk '{ if ($3 == "") { $3 = "?"; }
-              if ($6 != "") { print $1 "\t" $6 "|" $1 "|" $3; }
-              else { print $1 "\t" $1 "|" $3; } }' \
-    | cleanGenbank \
-    | sed -re 's/ /_/g' \
+    | gbAccNonCogRenaming \
         >> $renaming
     set -o pipefail
 fi
@@ -304,6 +294,13 @@ if [ -s newGisaid.filtered.fa ]; then
     zcat $gisaidDir/metadata_batch_$today.tsv.gz \
     | grep -Fwf <(fastaNames newGisaid.filtered.fa) \
     | tawk '$3 != "" {print $3 "\t" $1 "|" $3 "|" $5;}' \
+        >> $renaming
+fi
+if [ -s newCncb.filtered.fa ]; then
+    cleanCncb < $cncbDir/cncb.metadata.tsv \
+    | sed -re 's/ /_/g;' \
+    | grep -Fwf <(fastaNames newCncb.filtered.fa) \
+    | tawk '{print $2 "\t" $1 "|" $2 "|" $10;}' \
         >> $renaming
 fi
 wc -l $renaming

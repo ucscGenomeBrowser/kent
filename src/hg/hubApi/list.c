@@ -602,46 +602,57 @@ char *rsyncCmd[] = {"/usr/bin/rsync", "-a", "--list-only", NULL, NULL};
 struct dyString *tmpDy = dyStringNew(128);
 dyStringPrintf(tmpDy, "%s::%s/%s/", DOWNLOAD_HOST, downPath, db);
 rsyncCmd[index++] = dyStringCannibalize(&tmpDy);
-struct pipeline *dataPipe = pipelineOpen1(rsyncCmd,
-   pipelineRead, "/dev/null", NULL, 0);
-FILE *readingLines = pipelineFile(dataPipe);
-char lineBuf[PATH_MAX + 1024];
-while (! reachedMaxItems && fgets(lineBuf, sizeof(lineBuf), readingLines) != NULL)
+
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    if (startsWith("d", lineBuf))
-	continue;
-    *itemsDone += 1;
-    if (*itemsDone > maxItemsOutput)
-	{
-	reachedMaxItems = TRUE;
-	}
-    else
+    struct pipeline *dataPipe = pipelineOpen1(rsyncCmd,
+       pipelineRead, "/dev/null", NULL, 0);
+    FILE *readingLines = pipelineFile(dataPipe);
+    char lineBuf[PATH_MAX + 1024];
+    while (! reachedMaxItems && fgets(lineBuf, sizeof(lineBuf), readingLines) != NULL)
         {
-        char *columns[5];
-        (void) chopByWhite(lineBuf, columns, ArraySize(columns));
-        stripChar(columns[1], ',');
-        long long bytes = sqlLongLong(columns[1]);
-        totalBytes += bytes;
-        char outString[PATH_MAX + 1024];
-        if (textOut)
-	    {
-	    safef(outString, sizeof(outString), "https://%s/%s/%s/%s",
-		DOWNLOAD_HOST, downPath, db, columns[4]);
-	    textLineOut(outString);
-	    }
-	else
+        if (startsWith("d", lineBuf))
+            continue;
+        *itemsDone += 1;
+        if (*itemsDone > maxItemsOutput)
             {
-            jsonWriteObjectStart(jw, NULL);
-            jsonWriteNumber(jw, "sizeBytes", sqlLongLong(columns[1]));
-           safef(outString, sizeof(outString), "%sT%s", columns[2], columns[3]);
-            jsonWriteString(jw, "dateTime", outString);
-      safef(outString, sizeof(outString), "%s/%s/%s", downPath, db, columns[4]);
-            jsonWriteString(jw, "url", outString);
-            jsonWriteObjectEnd(jw);
+            reachedMaxItems = TRUE;
+            }
+        else
+            {
+            char *columns[5];
+            (void) chopByWhite(lineBuf, columns, ArraySize(columns));
+            stripChar(columns[1], ',');
+            long long bytes = sqlLongLong(columns[1]);
+            totalBytes += bytes;
+            char outString[PATH_MAX + 1024];
+            if (textOut)
+                {
+                safef(outString, sizeof(outString), "https://%s/%s/%s/%s",
+                    DOWNLOAD_HOST, downPath, db, columns[4]);
+                textLineOut(outString);
+                }
+            else
+                {
+                jsonWriteObjectStart(jw, NULL);
+                jsonWriteNumber(jw, "sizeBytes", sqlLongLong(columns[1]));
+               safef(outString, sizeof(outString), "%sT%s", columns[2], columns[3]);
+                jsonWriteString(jw, "dateTime", outString);
+          safef(outString, sizeof(outString), "%s/%s/%s", downPath, db, columns[4]);
+                jsonWriteString(jw, "url", outString);
+                jsonWriteObjectEnd(jw);
+                }
             }
         }
+    pipelineClose(&dataPipe);
     }
-pipelineClose(&dataPipe);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    apiErrAbort(err400, err400Msg, "can not find genome='%s' for endpoint '/list/files'", db);
+    }
+errCatchFree(&errCatch);
 return totalBytes;
 }
 
@@ -657,7 +668,7 @@ char genArkUrl[PATH_MAX + 1024];
 if ( isGenArk(genome) )
     {
     genArkHub = TRUE;
-    safef(genArkUrl, sizeof(genArkUrl), "hubs/%s/", genArkPath(genome));
+    safef(genArkUrl, sizeof(genArkUrl), "hubs/%s", genArkPath(genome));
     }
 
 /* if UCSC genome database, it has already been proven to exist */
@@ -1142,7 +1153,7 @@ else if (sameWord("files", words[1]))
     boolean textOut = FALSE;
     char *extraArgs = verifyLegalArgs(argListFiles);
     if (extraArgs)
-	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/files '%s', only 'genome' is allowed.", extraArgs);
+	apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/files '%s', only 'genome' and 'format' is allowed.", extraArgs);
 
     char *genome = cgiOptionalString("genome");
     char *format = cgiOptionalString("format");

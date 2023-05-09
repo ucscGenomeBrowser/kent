@@ -331,6 +331,7 @@
 91951	GCF_009819885.1_bCatUst1.pri	birds
 91951	GCF_009819885.2_bCatUst1.pri.v2	birds
 409849	GCF_009829125.1_fPerMag1.pri	fish
+409849	GCF_009829125.3_fPerMag1.2.pri	fish
 296741	GCF_009829145.1_bChiLan1.pri	birds
 36723	GCF_009829155.1_mMusErm1.Pri	mammals
 9771	GCF_009873245.2_mBalMus1.pri.v3	mammals
@@ -338,6 +339,7 @@
 386614	GCF_010909765.2_sAmbRad1.1.pri	sharks
 7757	GCF_010993605.1_kPetMar1.pri	otherChordates
 8010	GCF_011004845.1_fEsoLuc1.pri	fish
+9483	GCF_011100555.1_mCalJa1.2.pat.X	mammals
 9337	GCF_011100635.1_mTriVul1.pri	mammals
 61156	GCF_011762505.1_mArvNil1.pat.X	mammals
 9739	GCF_011762595.1_mTurTru1.mat.Y	mammals
@@ -349,6 +351,7 @@
 59472	GCF_014108245.1_mPipKuh1.p	mammals
 27622	GCF_014108415.1_mMolMol1.p	mammals
 9407	GCF_014176215.1_mRouAeg1.p	mammals
+118200	GCF_014839835.1_bDryPub1.pri	birds
 120794	GCF_015220075.1_bFalRus1.pri	birds
 27675	GCF_015220235.1_mChoDid1.pri	mammals
 42514	GCF_015220715.1_fPygNat1.pri	fish
@@ -367,6 +370,7 @@
 148594	GCF_017639655.2_bFalNau1.pat	birds
 1250792	GCF_017639745.1_fMelBoe1.pri	fish
 109905	GCF_017976325.1_fCheRos1.pri	fish
+55661	GCF_017976375.1_bCucCan1.pri	birds
 941984	GCF_017976425.1_fToxJac2.pri	fish
 34773	GCF_018492685.1_fAloSap1.pri	fish
 33562	GCF_019393635.1_mDroGli1.pri	mammals
@@ -381,11 +385,17 @@
 99487	GCF_024166365.1_mEleMax1_primary_haplotype	mammals
 286002	GCF_025201925.1_rGopFla2.mat.asm	reptiles
 202280	GCF_026419915.1_bHarHar1_primary_haplotype	birds
+81927	GCF_026979565.1_bVidCha1_merged_haplotype	birds
 65483	GCF_027172205.1_rPodRaf1.pri	reptiles
 310915	GCF_027358585.1_fPanHyp1.pri	fish
 233779	GCF_027358695.1_aSpeBom1.2.pri	amphibians
 9470	GCF_027406575.1_mNycCou1.pri	mammals
 13676	GCF_027409825.1_fScoJap1.pri	fish
+8345	GCF_027579735.1_aBomBom1.pri	amphibians
+42254	GCF_027595985.1_mSorAra2.pri	mammals
+2991368	GCF_027887155.1_rMalTer1.hap1	reptiles
+75485	GCF_028500815.1_bRisTri1.patW.cur.20221130	birds
+9117	GCF_028858705.1_bGruAme1.mat	birds
 8154	GCF_900246225.1_fAstCal1.2	fish
 64144	GCF_900324465.2_fAnaTes1.2	fish
 205130	GCF_900324485.2_fMasArm1.2	fish

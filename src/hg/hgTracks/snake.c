@@ -28,12 +28,29 @@
 #include "bigPsl.h"
 #include "snake.h"
 
+typedef int (*compareFunction )(const void *elem1,  const void *elem2);
+
 static int snakeFeatureCmpScore(const void *va, const void *vb)
 /* sort by score of the alignment. */
 {
 const struct snakeFeature *a = *((struct snakeFeature **)va);
 const struct snakeFeature *b = *((struct snakeFeature **)vb);
 int diff = b->score - a->score;
+
+return diff;
+}
+
+static int snakeFeatureCmpTStart(const void *va, const void *vb)
+/* sort by start position on the target sequence */
+{
+const struct snakeFeature *a = *((struct snakeFeature **)va);
+const struct snakeFeature *b = *((struct snakeFeature **)vb);
+int diff = a->start - b->start;
+
+if (diff == 0)
+    {
+    diff = a->qStart - b->qStart;
+    }
 
 return diff;
 }
@@ -1136,7 +1153,7 @@ struct cartOptions
     int scoreFilter ; /* filter chains by score if > 0 */
     };
 
-static void fixItems(struct linkedFeatures *lf)
+static void fixItems(struct linkedFeatures *lf, compareFunction compare)
 // put all chain blocks from a single query chromosome into one
 // linkedFeatures structure
 {
@@ -1149,7 +1166,7 @@ for (;lf; lf = next)
     next = lf->next;
     if (!sameString(firstLf->name, lf->name) && (lf->components != NULL))
 	{
-	slSort(&firstLf->components, snakeFeatureCmpQStart);
+	slSort(&firstLf->components, compare);
         firstLf->next = lf;
 	firstLf = lf;
 	}
@@ -1169,7 +1186,7 @@ for (;lf; lf = next)
 
 if (firstLf != NULL)
     {
-    slSort(&firstLf->components, snakeFeatureCmpQStart);
+    slSort(&firstLf->components, compare);
     firstLf->next = 0;
     }
 }
@@ -1200,7 +1217,7 @@ for(; lf; lf = lf->next)
     }
 }
 
-static void makeSingleCoverage(struct linkedFeatures *lf)
+static void makeSingleCoverage(struct linkedFeatures *lf, compareFunction compare)
 /* Because snakes are a display of O+O of the query sequence projected onto the reference sequence, 
  * we need to only have one copy of each piece of the query sequence. */
 {
@@ -1229,7 +1246,7 @@ for(; lf; lf = lf->next)   // for each query sequence
             }
         }
 
-    slSort(&lf->components, snakeFeatureCmpQStart);
+    slSort(&lf->components, compare);
     }
 }
 
@@ -1239,6 +1256,13 @@ void maybeLoadSnake(struct track *track)
 boolean doSnake = cartOrTdbBoolean(cart, track->tdb, "doSnake", FALSE);
 if (doSnake)
     {
+    compareFunction compare;
+    if (track->visibility == tvFull)
+        compare = snakeFeatureCmpQStart;
+    else
+        // we don't care about the order on query
+        compare = snakeFeatureCmpTStart;
+
     track->drawLeftLabels = snakeDrawLeftLabels;
     track->itemHeight = snakeItemHeight;
     track->totalHeight = snakeHeight;
@@ -1247,9 +1271,8 @@ if (doSnake)
 
     slSort(&track->items, linkedFeaturesCmpName);
     makeSnakeFeatures(track->items);
-    fixItems(track->items);
-    makeSingleCoverage(track->items);
-    track->visibility = track->limitedVis = tvFull;
+    fixItems(track->items, compare);
+    makeSingleCoverage(track->items, compare);
     track->canPack = FALSE;
     }
 }

@@ -817,7 +817,7 @@ char *pcrResultMapItemName(struct track *tg, void *item)
 /* Stitch accession and display name back together (if necessary). */
 {
 struct linkedFeatures *lf = item;
-return pcrResultItemAccName(lf->name, lf->extra);
+return pcrResultItemAccName(lf->name, lf->extra, (struct psl *)lf->original);
 }
 
 void pcrResultLoad(struct track *tg)
@@ -883,8 +883,9 @@ else
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
             {
             struct linkedFeatures *lf = lfFromPslx(psl, 1, FALSE, FALSE, tg);
-            lf->name = cloneString(psl->qName);
+            lf->name = cloneString("");
             lf->extra = cloneString("");
+            lf->original = psl;
             slAddHead(&itemList, lf);
             }
 slSort(&itemList, linkedFeaturesCmp);
@@ -4753,7 +4754,7 @@ for (track = trackList; track != NULL; track = nextTrack)
     {
     nextTrack = track->next;
 
-    if (track->visibility != tvPack)
+    if ((track->visibility != tvPack) || checkIfWiggling(cart, track))
         continue;
 
     char *string = cartOrTdbString(cart, track->tdb,  "squishyPackPoint", NULL);
@@ -4767,6 +4768,7 @@ for (track = trackList; track != NULL; track = nextTrack)
 
         struct track *squishTrack = CloneVar(track);
         squishTrack->tdb = CloneVar(track->tdb);
+        squishTrack->tdb->originalTrack = squishTrack->tdb->track;
         squishTrack->tdb->track = cloneString(buffer);
         squishTrack->tdb->next = NULL;
         squishTrack->visibility = tvSquish;
@@ -9853,9 +9855,9 @@ char *maxTimeStr = cfgOption("warnSeconds");
 if (!maxTimeStr)
     return;
 
-int maxTime = atoi(maxTimeStr);
+double maxTime = atof(maxTimeStr);
 struct dyString *dy = dyStringNew(150);
-dyStringPrintf(dy, "$(document).ready( function() { hgtWarnTiming(%d)});\n", maxTime);
+dyStringPrintf(dy, "$(document).ready( function() { hgtWarnTiming(%f)});\n", maxTime);
 jsInline(dy->string);
 dyStringFree(&dy);
 }
@@ -10989,7 +10991,7 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
+    measureTime("Startup (bottleneck delay %d ms, not applied if under %d) ", botDelayMillis, hgBotDelayCurrWarnMs()) ;
 
 char *mouseOverEnabled = cfgOptionDefault("mouseOverEnabled", "on");
 if (sameWordOk(mouseOverEnabled, "on"))

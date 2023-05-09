@@ -3002,7 +3002,8 @@ static members_t *subgroupMembersWeedOutEmpties(struct trackDb *parentTdb, membe
 {
 if (members->count == 0)
     {
-    warn("No subtracks in group: %s.  This indicates a problem in the subGroup line for this group.", members->groupTitle);
+    warn("%s: No subtracks in group: %s.  This indicates a problem in the subGroup line for this group.",
+         parentTdb->track, members->groupTitle);
     return members;
     }
 // First tally all subtrack counts

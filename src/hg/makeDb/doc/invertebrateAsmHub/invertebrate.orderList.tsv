@@ -17,6 +17,7 @@ GCF_000143395.1_Attacep1.0	ant A.cephalotes
 GCF_001594045.1_Acol1.0	ant A.colombica
 GCF_001594065.1_Ccosl1.0	ant C.costatus
 GCF_021464435.1_ULB_Chis1_1.0	ant C.hispanica (Lineage 1 2022)
+GCA_025532165.1_iyCamVici1.0	ant C.vicinus (PSW18456_S1 2022)
 GCF_001313825.1_ASM131382v1	ant D.quadriceps
 GCF_003651465.1_ASM365146v1	ant F.exsecta
 GCF_005281655.2_TAMU_Nfulva_1.1	ant N.fulva (TAMU-Nful-2015 v1.1 2019)
@@ -284,6 +285,8 @@ GCA_009770625.1_UL_Ltar_1.0	Leishmania tarentolae (Parrot-TarII 2019)
 GCF_001293395.1_ASM129339v1	Leptomonas pyrrhocoris (H10 2015 kinetoplastids)
 GCF_000956235.1_wasmannia.A_1.0	little fire ant
 GCF_000184785.3_Aflo_1.1	little honeybee
+GCA_024610695.1_qqTetVers1.0.a	longjawed orb weaver (CCGP_RG_IND1 alternate hap 2022)
+GCA_024610705.1_qqTetVers1.0.p	longjawed orb weaver (CCGP_RG_IND1 primary hap 2022)
 GCA_012273795.1_ASM1227379v1	masson pine moth
 GCA_902829235.1_CLODIP2	mayflies C.dipterum (2020)
 GCF_905333055.1_ilManJurt1.1	meadow brown (refseq 2021)
@@ -403,7 +406,8 @@ GCA_000695345.1_Assembly_2.2_of_Bactrocera_tryoni_genome	Queensland fruit fly (b
 GCF_016617805.1_CSIRO_BtryS06_freeze2	Queensland fruit fly (S06 2021)
 GCA_001949185.1_Rvar_4.0	R.varieornatus (YOKOZUNA-1 2016 tardigrades)
 GCF_003343065.1_H.ruf_v1.0	red abalone (Redab-CP-2226-F 2018 Iowa State U)
-GCF_023055435.1_xgHalRufe1.0.p	red abalone (2022 UCLA)
+GCA_023055495.1_xgHalRufe1.0.a	red abalone (VD_foot alternate hap 2022)
+GCF_023055435.1_xgHalRufe1.0.p	red abalone (VD_foot primary hap 2022 UCLA)
 GCF_905147765.1_ilVanAtal1.2	red admiral (refseq 2021)
 GCF_000188075.2_Si_gnH	red fire ant (2018)
 GCF_016802725.1_UNIL_Sinv_3.0	red fire ant (2021)
@@ -499,6 +503,7 @@ GCF_010614865.2_ASM1061486v2	velvet spider (Namibia, Etosha AA2019 2020)
 GCA_023053555.1_BRLI_1.1	vernal pool fairy shrimp B.lindahli (BRLI_1 2022)
 GCA_023053575.1_BRLY_1.1	vernal pool fairy shrimp B.lynchi (BRLY_001 2022)
 GCA_023053545.1_LEPA1.1	vernal pool tadpole shrimp L.packardi (LEPA_1 2022)
+GCA_003260075.1_Phmamm_MTP2014	warty sea squirt (Sete-AP-2010 2018)
 GCF_014905175.1_ASM1490517v1	wasp A.gifuensis
 GCF_010883055.1_B_treatae_v1	wasp B.treatae
 GCF_000648655.2_Cflo_2.0	wasp C.floridanum
@@ -526,3 +531,5 @@ GCA_002204515.1_AaegL5.0	yellow fever mosquito (LVP_AGWG 2017 genbank)
 GCF_002204515.2_AaegL5.0	yellow fever mosquito (LVP_AGWG 2017 refseq)
 GCF_003268045.1_YSA_version1	yellow sugarcane aphid
 GCF_002113885.1_ASM211388v2	Yesso scallop
+GCA_023634265.1_eaPisBrev1.0.a	starfish (M0D059179O alternate hap 2022)
+GCA_023634235.1_eaPisBrev1.0.p	starfish (M0D059179O primary hap 2022)

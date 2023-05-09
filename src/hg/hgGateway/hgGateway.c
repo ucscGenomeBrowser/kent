@@ -910,7 +910,9 @@ static char *getSearchTermUpperCase()
 {
 pushWarnHandler(htmlVaBadRequestAbort);
 pushAbortHandler(htmlVaBadRequestAbort);
-char *term = cgiOptionalString(SEARCH_TERM);
+char *cgiTerm = cgiOptionalString(SEARCH_TERM);
+char *term = skipLeadingSpaces(cgiTerm);
+eraseTrailingSpaces(term);
 touppers(term);
 if (isEmpty(term))
     errAbort("Missing required CGI parameter %s", SEARCH_TERM);

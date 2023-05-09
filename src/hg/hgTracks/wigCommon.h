@@ -195,4 +195,7 @@ int normalizeCount(struct preDrawElement *el, double countFactor,
     double minVal, double maxVal, double sumData, double sumSquares);
 /* Normalize statistics to be based on an integer number of valid bases.
  * Integer value is the smallest integer not less than countFactor. */
+
+void wigLogoMafCheck(struct track *tg,  int start, int end);
+/* Check to see if we should draw a sequence logo for the wiggle contents. */
 #endif /* WIGCOMMON_H */

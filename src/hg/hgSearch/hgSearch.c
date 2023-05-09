@@ -625,9 +625,31 @@ if (hgp && hgp->singlePos)
     cartSetString(cj->cart, "position", newPosBuf);
     if (hgp->singlePos->highlight)
         cartSetString(cj->cart, "addHighlight", hgp->singlePos->highlight);
+    char *trackName = hgp->tableList->name;
+    struct trackDb *track = NULL;
+    track = tdbForTrack(db, trackName, &hgFindTdbList);
+    if (!track && startsWith("all_", trackName))
+        track = tdbForTrack(db, trackName+strlen("all_"), &hgFindTdbList);
+    if (!track)
+        errAbort("no track for table \"%s\" found via a findSpec", trackName);
     puts("Content-type:text/html\n");
     puts("<HTML>\n<HEAD>\n");
-    printf("<script>window.location.href=\"../cgi-bin/hgTracks?db=%s&position=%s\";</script>\n", db, newPosBuf);
+    printf("<script>window.location.href=\"../cgi-bin/hgTracks?");
+    printf("db=%s", db);
+    printf("&position=%s", newPosBuf);
+    printf("&%s=pack", trackName);
+    printf("&hgFind.matches=%s", hgp->singlePos->name);
+    if (track && track->parent)
+        {
+        if (tdbIsSuperTrackChild(track))
+            printf("&%s=show", track->parent->track);
+        else
+            {
+            // tdb is a subtrack of a composite or a view
+            printf("&%s_sel=1&%s_sel=1", trackName, track->parent->track);
+            }
+        }
+    printf("\"</script>\n");
     puts("</HEAD>\n</HTML>");
     }
 else

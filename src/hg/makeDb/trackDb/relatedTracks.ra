@@ -53,3 +53,6 @@ hg19 ReMap jaspar JASPAR is a database of predicted TF binding sites, based on s
 
 hg19 ReMap liftHg38 NCBI ReMap, even though it has the same name, is a liftOver-like hg19/hg38 alignment, and unrelated to the ReMap database
 hg19 liftHg38 ReMap ReMap, even though it has the same name, is a database of transcription factor binding sites, unrelated to NCBI ReMap
+
+hg19 refSeqComposite pseudoYale60 NCBI RefSeq Curated and RefSeq Other contains pseudogenes, but the Yale annotation should be more comprehensive for this transcript type
+hg19 pseudoYale60 refSeqComposite NCBI RefSeq Curated and RefSeq Other also contain some transcribed and untranscribed pseudogenes, respectively.
