@@ -1407,6 +1407,9 @@ if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
     htmlSuppressErrors();
 setUdcCacheDir();
 
+netSetTimeoutErrorMsg("A connection timeout means that either the server is offline or its firewall, the UCSC firewall or any router between the two blocks the connection.");
+
+
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
