@@ -296,7 +296,7 @@ if (botDelayMillis > 0)
 return issueWarning;	/* caller can decide on their type of warning */
 }	/*	boolean earlyBotCheck()	*/
 
-int hgBotWarnMs()
+int hgBotDelayCurrWarnMs()
 /* get number of millis that are tolerated until a warning is shown on the most recent call to earlyBotCheck */
 {
     return botDelayWarnMs;
