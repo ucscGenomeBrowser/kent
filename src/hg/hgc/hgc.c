@@ -1747,7 +1747,7 @@ for (tmp = embeddedTblSetting2; tmp != NULL; tmp = tmp->next)
     }
 }
 
-void printFieldLabel(char *entry)
+static void printFieldLabel(char *entry)
 /* print the field label, the first column in the table, as a <td>. Allow a
  * longer description after a |-char, as some fields are not easy to
  * understand. */
@@ -1760,6 +1760,7 @@ printf("<tr><td>%s", entry);
 
 if (afterPipe)
     {
+    // Could also have a "?" icon and show the description on mouse over
     afterPipe++; // skip past | character
     printf("<br><span class='bedExtraTblNote'>%s</small>", afterPipe);
     }
