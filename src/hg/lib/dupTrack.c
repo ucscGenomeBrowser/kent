@@ -90,12 +90,12 @@ int dupNo = atoi(dupeTrackName + strlen(DUP_TRACK_PREFIX)) + 1;
 if (sourceTdb != NULL)
     {
     fprintf(f, "shortLabel %s #%d\n", sourceTdb->shortLabel, dupNo);
-    fprintf(f, "longLabel %s #%d (duplicate)\n", sourceTdb->longLabel, dupNo);
+    fprintf(f, "longLabel %s (duplicate #%d)\n", sourceTdb->longLabel, dupNo);
     }
 else
     {
     fprintf(f, "%s #%d\n", sourceTrack, dupNo);
-    fprintf(f, "longLabel %s #%d (duplicate)\n", sourceTrack, dupNo);
+    fprintf(f, "longLabel %s (duplicate #%d)\n", sourceTrack, dupNo);
     }
 carefulClose(&f);
 
