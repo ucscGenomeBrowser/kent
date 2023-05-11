@@ -48,7 +48,7 @@ group map
     track highlyReproducible
     release alpha
     parent problematicSuper
-    subGroup1 view Views beds=Beds vcfs=VCFs
+    subGroup1 view Views beds=Regions vcfs=Variants
     compositeTrack on
     shortLabel Highly Reproducible Regions
     longLabel Highly Reproducible genomic regions for sequencing
