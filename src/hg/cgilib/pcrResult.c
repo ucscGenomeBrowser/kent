@@ -179,17 +179,15 @@ char *pcrResultItemAccName(char *acc, char *name, struct psl *origPsl)
  * into a single name that must match a non-genomic target item's name
  * in the targetDb .2bit.  Do not free the result. */
 {
-if (origPsl)
-    return cloneString(origPsl->qName);
-else
-    {
-    static char accName[256];
-    if (isEmpty(name))
-        safecpy(accName, sizeof(accName), acc);
+static char accName[256];
+if (isEmpty(name))
+    if (origPsl)
+        return cloneString(origPsl->qName);
     else
-        safef(accName, sizeof(accName), "%s__%s", acc, name);
-    return accName;
-    }
+        safecpy(accName, sizeof(accName), acc);
+else
+    safef(accName, sizeof(accName), "%s__%s", acc, name);
+return accName;
 }
 
 char *pcrResultItemAccession(char *nameIn)
