@@ -152,7 +152,7 @@ etags:
 # build tags for all files
 .PHONY: tags-all
 tags-all:
-	find . -name '*.[ch]' | ctags -L -
+	find . -name '*.[ch]' | grep -v "/userApps/" | ctags -L -
 
 # build emacs tags for all files
 .PHONY: etags-all
