@@ -418,8 +418,11 @@ char *trackHubChromSizes(char *database)
 {
 if (hubConnectIsCurated(trackHubSkipHubName(database)))
     {
+    /* using the function: hDownloadsServer() to get this URL
+     *  from hg.conf only helps for hgdownload-test vs. hgdownload.soe
+     */
     char urlPath[PATH_LEN];
-    safef(urlPath, sizeof(urlPath), "https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.chrom.sizes.txt", trackHubSkipHubName(database), trackHubSkipHubName(database));
+    safef(urlPath, sizeof(urlPath), "https://%s/goldenPath/%s/bigZips/%s.chrom.sizes.txt", hDownloadsServer(), trackHubSkipHubName(database), trackHubSkipHubName(database));
     return cloneString(urlPath);
     }
 else
@@ -434,7 +437,7 @@ char *trackHubAliasBbFile(char *database)
 if (hubConnectIsCurated(trackHubSkipHubName(database)))
     {
     char urlPath[PATH_LEN];
-    safef(urlPath, sizeof(urlPath), "https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.chromAlias.bb", trackHubSkipHubName(database), trackHubSkipHubName(database));
+    safef(urlPath, sizeof(urlPath), "https://%s/goldenPath/%s/bigZips/%s.chromAlias.bb", hDownloadsServer(), trackHubSkipHubName(database), trackHubSkipHubName(database));
     return cloneString(urlPath);
     }
 else
@@ -449,7 +452,7 @@ char *trackHubAliasFile(char *database)
 if (hubConnectIsCurated(trackHubSkipHubName(database)))
     {
     char urlPath[PATH_LEN];
-    safef(urlPath, sizeof(urlPath), "https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.chromAlias.txt", trackHubSkipHubName(database), trackHubSkipHubName(database));
+    safef(urlPath, sizeof(urlPath), "https://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), trackHubSkipHubName(database), trackHubSkipHubName(database));
     return cloneString(urlPath);
     }
 else
