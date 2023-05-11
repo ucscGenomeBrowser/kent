@@ -10675,7 +10675,7 @@ if (! trackHubDatabase(database))
     puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
+    printf("<a href='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes' target=_blank>%s.chrom.sizes</a>",
            hDownloadsServer(), database, database, database);
     cgiTableFieldEnd();
     if (hasAlias)
@@ -10688,7 +10688,7 @@ if (! trackHubDatabase(database))
 	if (file)
 	    {
 	    udcFileClose(&file);
-	    printf("<A HREF='%s'>%s.chromAlias.txt</A>", aliasFile, database);
+	    printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasFile, database);
 	    }
 	else
 	    puts("&nbsp");
@@ -10705,7 +10705,7 @@ else if (hubAliasFile)
     cgiSimpleTableFieldStart();
     if (chromSizesFile)
 	{
-        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</A>", chromSizesFile, trackHubSkipHubName(database));
+        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</a>", chromSizesFile, trackHubSkipHubName(database));
         puts("&nbsp;&nbsp;");
 	}
     else
@@ -10718,7 +10718,7 @@ else if (hubAliasFile)
      */
     if (endsWith(hubAliasFile, "chromAlias.bb"))
        aliasUrl = replaceChars(hubAliasFile, "chromAlias.bb", "chromAlias.txt");
-    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", aliasUrl, trackHubSkipHubName(database));
+    printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasUrl, trackHubSkipHubName(database));
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
