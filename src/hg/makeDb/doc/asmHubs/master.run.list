@@ -615,6 +615,7 @@
 ./runBuild GCA_017976375.1_bCucCan1.pri birds Cuculus_canorus
 ./runBuild GCA_018104305.1_AalbF3 invertebrate Aedes_albopictus
 ./runBuild GCA_018139145.1_ASM1813914v1 birds Gymnogyps_californianus
+./runBuild GCA_018150745.1_ASM1815074v1 invertebrate Drosophila_sucinea
 ./runBuild GCA_018296145.1_Otsh_v2.0 fish Oncorhynchus_tshawytscha
 ./runBuild GCA_018400075.1_ASM1840007v1 fish Danio_rerio
 ./runBuild GCA_018466835.1_HG02257.alt.pat.f1_v2 primates Homo_sapiens
