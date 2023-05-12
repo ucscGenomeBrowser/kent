@@ -416,14 +416,7 @@ char *trackHubChromSizes(char *database)
  * returns NULL when not present
  */
 {
-if (hubConnectIsCurated(trackHubSkipHubName(database)))
-    {
-    char urlPath[PATH_LEN];
-    safef(urlPath, sizeof(urlPath), "https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.chrom.sizes.txt", trackHubSkipHubName(database), trackHubSkipHubName(database));
-    return cloneString(urlPath);
-    }
-else
-    return assemblyHubGenomeSetting(database, "chromSizes");
+return assemblyHubGenomeSetting(database, "chromSizes");
 }
 
 char *trackHubAliasBbFile(char *database)
@@ -431,14 +424,7 @@ char *trackHubAliasBbFile(char *database)
  * returns NULL when not present
  */
 {
-if (hubConnectIsCurated(trackHubSkipHubName(database)))
-    {
-    char urlPath[PATH_LEN];
-    safef(urlPath, sizeof(urlPath), "https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.chromAlias.bb", trackHubSkipHubName(database), trackHubSkipHubName(database));
-    return cloneString(urlPath);
-    }
-else
-    return assemblyHubGenomeSetting(database, "chromAliasBb");
+return assemblyHubGenomeSetting(database, "chromAliasBb");
 }
 
 char *trackHubAliasFile(char *database)
@@ -446,14 +432,7 @@ char *trackHubAliasFile(char *database)
  * returns NULL when not present
  */
 {
-if (hubConnectIsCurated(trackHubSkipHubName(database)))
-    {
-    char urlPath[PATH_LEN];
-    safef(urlPath, sizeof(urlPath), "https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.chromAlias.txt", trackHubSkipHubName(database), trackHubSkipHubName(database));
-    return cloneString(urlPath);
-    }
-else
-    return assemblyHubGenomeSetting(database, "chromAlias");
+return assemblyHubGenomeSetting(database, "chromAlias");
 }
 
 struct chromInfo *trackHubAllChromInfo(char *database)
