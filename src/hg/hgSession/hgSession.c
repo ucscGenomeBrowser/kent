@@ -782,7 +782,7 @@ else
 for(; statusList; statusList = statusList->next)
     {
     if (dy)
-        dyStringPrintf(dy,"%d=%s ", statusList->id, statusList->hubUrl);
+        dyStringPrintf(dy,"%d=%s ", statusList->id, cgiEncode(statusList->hubUrl));
     else
         printf("%d=%s ", statusList->id, statusList->hubUrl);
     }
