@@ -1278,14 +1278,20 @@ if (baseProbs != NULL)
     }
 
 double xIncr = (double)width / numBases;
+int baseWidth = xIncr;
+int letterWidth = baseWidth - 1;
+if (h < letterWidth)
+    letterWidth = h;
 unsigned baseNum;
+
 for(baseNum = 0; baseNum < numBases; baseNum++)
     {
     int x1 = ceil(baseNum * xIncr);
     int x = x1 + xOff;
-    int baseWidth = xIncr;
     int base = seq->dna[baseNum];
-    int preDrawIndex = x1 + preDrawZero;
+    // grab our data value from the middle of a zoomed-in region because the edges may be rounded off 
+    // by the math function
+    int preDrawIndex = ceil(x1 + xIncr/2)  + preDrawZero; 
     struct preDrawElement *p = &preDraw[preDrawIndex];
 
     assert(x1/pixelBins->binSize < pixelBins->binCount);
@@ -1325,6 +1331,7 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
 
         if (vis == tvFull || vis == tvPack)
             {
+            double origDataValue = dataValue;  // save our original data value to draw the "clipped" lines
 #define scaleHeightToPixels(val) (min(BIGNUM,(scaleFactor * (graphUpperLimit - (val)) + yOff)))
 #define doLine(image, x, y, height, color) {vLine(image, x, y, height, color); }
                 {
@@ -1345,7 +1352,18 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                     }
 
                 int boxHeight = max(1,abs(y1 - y0));
+                // if our viewing region is clipped on the lower end we need to shrink
+                // the box to fit all the letters into it
+                if (graphLowerLimit > 0 ) 
+                    boxHeight -=  graphLowerLimit * scaleFactor;
                 int boxTop = min(y1,y0);
+                if (graphUpperLimit < 0 )
+                    {
+                    // if our viewing region is clipped on the upper end we need to shrink
+                    // the box AND lower the bottom of the box to fit all the letters into it
+                    boxHeight +=  graphUpperLimit * scaleFactor;
+                    boxTop -=  graphUpperLimit * scaleFactor;
+                    }
 
                 //	positive data value exactly equal to Bottom pixel
                 //  make sure it draws at least a pixel there
@@ -1407,7 +1425,7 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                             {
                             thisHeight = pl->prob * boxHeight;
                             if (thisHeight)
-                                hvGfxTextInBox(hvg, x, y, baseWidth - 1, thisHeight,
+                                hvGfxTextInBox(hvg, x + (baseWidth - letterWidth)/2, y, letterWidth, thisHeight,
                                     pl->color, font, pl->nuc);
                             y += thisHeight;
                             }
@@ -1416,12 +1434,12 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                         {
                         if (dataValue < 0)
                             {
-                            hvGfxTextInBox(hvg, x, yOff+boxTop, baseWidth - 1, -boxHeight,
+                            hvGfxTextInBox(hvg, x + (baseWidth - letterWidth)/2, yOff+boxTop, letterWidth, -boxHeight,
                                 color, font, string);
                             }
                         else
                             {
-                            hvGfxTextInBox(hvg, x, yOff+boxTop, baseWidth - 1, boxHeight,
+                            hvGfxTextInBox(hvg, x + (baseWidth - letterWidth)/2, yOff+boxTop, letterWidth, boxHeight,
                                 color, font, string);
                             }
                         }
@@ -1429,10 +1447,10 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                 if (((boxTop+boxHeight) == 0) && !isnan(dataValue))
                     boxHeight += 1;
                 }
-	    double stackValue = dataValue;
+	    double stackValue = origDataValue;
 
-	    if ((yOffsets != NULL) && (numTrack > 0))
-		stackValue += yOffsets[(numTrack-1) *  width + x1];
+	    //if ((yOffsets != NULL) && (numTrack > 0))
+		//stackValue += yOffsets[(numTrack-1) *  width + x1];
 	    if (stackValue > graphUpperLimit)
                 {
                 hvGfxLine(hvg, x, yOff, x+baseWidth, yOff, clipColor);
