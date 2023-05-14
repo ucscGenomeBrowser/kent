@@ -11,14 +11,8 @@ chainSwap = ${DESTBINDIR}/chainSwap
 all:
 
 test:	gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
-	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName
-
-# things with large files that we want to remove their big history from cvs
-# but soon will replace with short versions and no big history.
-# temporarily moved to /hive/users/galt/largeCvsFiles/kent/...
-# input/kgMRna.psl
-# input/negQ.chain
-testnot: kgProt negQChain
+	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName \
+	kgProt negQChain
 
 # basic tests of protein -> mrna -> genome mapping
 kgProt: mkdirs
