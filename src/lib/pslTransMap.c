@@ -81,7 +81,7 @@ assert(pslTStrand(inPsl) == pslQStrand(mapPsl));
  * orientation. */
 strand[0] = pslQStrand(inPsl);
 strand[1] = pslTStrand(mapPsl);
-strand[2] = '\n';
+strand[2] = '\0';
 
 return pslNew(inPsl->qName, inPsl->qSize, 0, 0,
               mapPsl->tName, mapPsl->tSize, 0, 0,
