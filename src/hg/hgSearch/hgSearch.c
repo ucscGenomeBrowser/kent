@@ -626,7 +626,8 @@ if (hgp && hgp->singlePos)
     cartSetString(cj->cart, "position", newPosBuf);
     if (hgp->singlePos->highlight)
         cartSetString(cj->cart, "addHighlight", hgp->singlePos->highlight);
-    char *trackName = hgp->tableList->name;
+    char *trackName = cloneString(hgp->tableList->name);
+    trackHubFixName(trackName);
     struct trackDb *track = NULL;
     if (!sameString(trackName, "chromInfo"))
         {

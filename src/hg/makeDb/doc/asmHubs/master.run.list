@@ -615,6 +615,7 @@
 ./runBuild GCA_017976375.1_bCucCan1.pri birds Cuculus_canorus
 ./runBuild GCA_018104305.1_AalbF3 invertebrate Aedes_albopictus
 ./runBuild GCA_018139145.1_ASM1813914v1 birds Gymnogyps_californianus
+./runBuild GCA_018150745.1_ASM1815074v1 invertebrate Drosophila_sucinea
 ./runBuild GCA_018296145.1_Otsh_v2.0 fish Oncorhynchus_tshawytscha
 ./runBuild GCA_018400075.1_ASM1840007v1 fish Danio_rerio
 ./runBuild GCA_018466835.1_HG02257.alt.pat.f1_v2 primates Homo_sapiens
@@ -1845,6 +1846,7 @@
 ./runBuild GCF_000864905.1_ViralProj15504 viral Human_papillomavirus_type_10
 ./runBuild GCF_000864925.1_ViralProj15508 viral Human_papillomavirus_type_32
 ./runBuild GCF_000864945.1_ViralProj15512 viral Alphapapillomavirus_4
+./runBuild GCF_000865065.1_ViralProj15599 viral Dengue_virus_type_4     2001_01_12
 ./runBuild GCF_000865565.1_ViralProj15486 viral Human_papillomavirus_type_63
 ./runBuild GCF_000865665.1_ViralProj15506 viral human_papillomavirus_18
 ./runBuild GCF_000865685.1_ViralProj15510 viral Human_papillomavirus_type_53
@@ -1852,11 +1854,13 @@
 ./runBuild GCF_000866405.1_ViralProj15491 viral Mupapillomavirus_1
 ./runBuild GCF_000866485.1_ViralProj15507 viral Human_papillomavirus_type_26
 ./runBuild GCF_000866505.1_ViralProj15511 viral Human_papillomavirus_5
+./runBuild GCF_000866625.1_ViralProj15598 viral Dengue_virus_type_3     2007_12_20
 ./runBuild GCF_000866785.1_ViralProj16150 viral Saint_Louis_encephalitis_virus
 ./runBuild GCF_000868225.1_ViralProj17119 viral human_papillomavirus_103
 ./runBuild GCF_000869845.1_ViralProj17121 viral Human_papillomavirus_type_101
 ./runBuild GCF_000870765.1_ViralProj19757 viral European_bat_1_lyssavirus
 ./runBuild GCF_000870785.1_ViralProj19765 viral WU_Polyomavirus
+./runBuild GCF_000871845.1_ViralProj20183 viral Dengue_virus_type_2     2007_11_01
 ./runBuild GCF_000872045.1_ViralProj20959 viral Human_herpesvirus_4_type_2
 ./runBuild GCF_000873085.1_ViralProj19155 viral Betapolyomavirus_tertihominis
 ./runBuild GCF_000874865.1_ViralProj28509 viral Merkel_cell_polyomavirus

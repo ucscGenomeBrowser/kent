@@ -10668,27 +10668,28 @@ hFreeConn(&conn);
 static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
-if (! trackHubDatabase(database))
+if (! trackHubDatabase(database) || hubConnectIsCurated(trackHubSkipHubName(database)))
     {
+    char *db = trackHubSkipHubName(database);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
     printf("<a href='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes' target=_blank>%s.chrom.sizes</a>",
-           hDownloadsServer(), database, database, database);
+           hDownloadsServer(), db, db, db);
     cgiTableFieldEnd();
     if (hasAlias)
 	{
 	cgiSimpleTableFieldStart();
 	/* see if this database has the chromAlias.txt download file */
 	char aliasFile[1024];
-        safef(aliasFile, sizeof aliasFile, "http://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), database, database);
+        safef(aliasFile, sizeof aliasFile, "http://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), db, db);
         struct udcFile *file = udcFileMayOpen(aliasFile, udcDefaultDir());
 	if (file)
 	    {
 	    udcFileClose(&file);
-	    printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasFile, database);
+	    printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasFile, db);
 	    }
 	else
 	    puts("&nbsp");
