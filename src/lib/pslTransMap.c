@@ -70,21 +70,6 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     }
 }
 
-static void pslNAToProt(struct psl *psl)
-/* undo pslProtToNA */
-{
-int iBlk;
-
-psl->qStart /= 3;
-psl->qEnd /= 3;
-psl->qSize /= 3;
-for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
-    {
-    psl->blockSizes[iBlk] /= 3;
-    psl->qStarts[iBlk] /= 3;
-    }
-}
-
 static struct psl* createMappedPsl(struct psl* inPsl, struct psl *mapPsl,
                                    int mappedPslMax)
 /* setup a PSL for the output alignment */
@@ -318,10 +303,9 @@ struct psl* pslTransMap(unsigned opts, struct psl *inPsl, struct psl *mapPsl)
 /* map a psl via a mapping psl, a single psl is returned, or NULL if it
  * couldn't be mapped. */
 {
-char inPslOrigStrand[3];
 boolean rcInPsl = (pslTStrand(inPsl) != pslQStrand(mapPsl));
-boolean cnv1 = (pslIsProtein(inPsl) && !pslIsProtein(mapPsl));
-boolean cnv2 = (pslIsProtein(mapPsl) && !pslIsProtein(inPsl));
+boolean cnvIn = (pslIsProtein(inPsl) && !pslIsProtein(mapPsl));
+boolean cnvMap = (pslIsProtein(mapPsl) && !pslIsProtein(inPsl));
 
 /* sanity check size, but allow names to vary to allow ids to have
  * unique-ifying suffixes. */
@@ -329,16 +313,20 @@ if (inPsl->tSize != mapPsl->qSize)
     errAbort("Error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)",
             inPsl->tName, inPsl->tSize, mapPsl->qName, mapPsl->qSize);
 
-/* convert protein PSLs */
-if (cnv1)
-    pslProtToNA(inPsl);
-if (cnv2)
-    pslProtToNA(mapPsl);
-
-/* need to ensure common sequence is in same orientation, save strand for later */
+/* ensure common sequence is in same orientation and convert protein PSLs */
+char inPslOrigStrand[3];
 safef(inPslOrigStrand, sizeof(inPslOrigStrand), "%s", inPsl->strand);
+if (cnvIn || rcInPsl)
+    inPsl = pslClone(inPsl);
+if (cnvIn)
+    pslProtToNA(inPsl);
 if (rcInPsl)
     pslRc(inPsl);
+if (cnvMap)
+    {
+    mapPsl = pslClone(mapPsl);
+    pslProtToNA(mapPsl);
+    }
 
 struct psl* mappedPsl = doMapping(inPsl, mapPsl);
 
@@ -351,16 +339,10 @@ else
     adjustOrientation(opts, inPsl, inPslOrigStrand, mappedPsl);
     }
 
-/* restore input */
-if (rcInPsl)
-    {
-    pslRc(inPsl);
-    strcpy(inPsl->strand, inPslOrigStrand);
-    }
-if (cnv1)
-    pslNAToProt(inPsl);
-if (cnv2)
-    pslNAToProt(mapPsl);
+if (cnvIn || rcInPsl)
+    pslFree(&inPsl);
+if (cnvMap)
+    pslFree(&mapPsl);
 
 return mappedPsl;
 }
