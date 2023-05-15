@@ -12,7 +12,7 @@ all:
 
 test:	gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
 	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName \
-	kgProt negQChain
+	kgProt negQChain testSpGencode
 
 # basic tests of protein -> mrna -> genome mapping
 kgProt: mkdirs
@@ -91,6 +91,15 @@ retroParent: mkdirs
 # -mapFileWithInQName
 testMapFileWithInQName: mkdirs
 	${pslMap} -mapFileWithInQName -mapInfo=output/$@.mapinfo input/gencode.src.psl input/gencode.blocks.qName-psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.mapinfo output/$@.mapinfo
+
+# swissprot canonical features that were mapped to isoform with protein
+# isoforms aligned to gencode RNAs.  Mapping these resulted in overlapping
+# blocks.  This tests block adjustments.
+testSpGencode: mkdirs
+	${pslMap} -mapInfo=output/$@.mapinfo input/spAnnotIso.psl input/spGencode.psl output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.mapinfo output/$@.mapinfo
