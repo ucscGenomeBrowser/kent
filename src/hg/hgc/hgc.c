@@ -1760,6 +1760,7 @@ printf("<tr><td>%s", entry);
 
 if (afterPipe)
     {
+    // Could also have a "?" icon and show the description on mouse over
     afterPipe++; // skip past | character
     printf("<br><span class='bedExtraTblNote'>%s</small>", afterPipe);
     }

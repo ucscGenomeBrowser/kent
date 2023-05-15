@@ -10668,27 +10668,28 @@ hFreeConn(&conn);
 static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
-if (! trackHubDatabase(database))
+if (! trackHubDatabase(database) || hubConnectIsCurated(trackHubSkipHubName(database)))
     {
+    char *db = trackHubSkipHubName(database);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
-           hDownloadsServer(), database, database, database);
+    printf("<a href='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes' target=_blank>%s.chrom.sizes</a>",
+           hDownloadsServer(), db, db, db);
     cgiTableFieldEnd();
     if (hasAlias)
 	{
 	cgiSimpleTableFieldStart();
 	/* see if this database has the chromAlias.txt download file */
 	char aliasFile[1024];
-        safef(aliasFile, sizeof aliasFile, "http://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), database, database);
+        safef(aliasFile, sizeof aliasFile, "http://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), db, db);
         struct udcFile *file = udcFileMayOpen(aliasFile, udcDefaultDir());
 	if (file)
 	    {
 	    udcFileClose(&file);
-	    printf("<A HREF='%s'>%s.chromAlias.txt</A>", aliasFile, database);
+	    printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasFile, db);
 	    }
 	else
 	    puts("&nbsp");
@@ -10705,7 +10706,7 @@ else if (hubAliasFile)
     cgiSimpleTableFieldStart();
     if (chromSizesFile)
 	{
-        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</A>", chromSizesFile, trackHubSkipHubName(database));
+        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</a>", chromSizesFile, trackHubSkipHubName(database));
         puts("&nbsp;&nbsp;");
 	}
     else
@@ -10718,7 +10719,7 @@ else if (hubAliasFile)
      */
     if (endsWith(hubAliasFile, "chromAlias.bb"))
        aliasUrl = replaceChars(hubAliasFile, "chromAlias.bb", "chromAlias.txt");
-    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", aliasUrl, trackHubSkipHubName(database));
+    printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasUrl, trackHubSkipHubName(database));
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
@@ -10991,7 +10992,7 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
+    measureTime("Startup (bottleneck delay %d ms, not applied if under %d) ", botDelayMillis, hgBotDelayCurrWarnMs()) ;
 
 char *mouseOverEnabled = cfgOptionDefault("mouseOverEnabled", "on");
 if (sameWordOk(mouseOverEnabled, "on"))

@@ -276,5 +276,7 @@ boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
 boolean hasProtocol(char *urlOrPath);
 /* Return TRUE if it looks like it has http://, ftp:// etc. */
 
+void netSetTimeoutErrorMsg(char *msg);
+/* set the error message text that is displayed after a timeout error */
 #endif /* NET_H */
 

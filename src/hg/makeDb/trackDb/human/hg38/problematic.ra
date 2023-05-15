@@ -1,43 +1,205 @@
-track problematic
+track problematicSuper
 shortLabel Problematic Regions
 longLabel Problematic/special genomic regions for sequencing or very variable regions
-compositeTrack on
-hideEmptySubtracks off
+superTrack on
+html problematic
 group map
-visibility hide
-type bigBed 3 +
 
-    track comments
-    shortLabel UCSC Unusual Regions
-    longLabel UCSC unusual regions on assembly structure (manually annotated)
-    type bigBed 9 +
-    bigDataUrl /gbdb/hg38/problematic/comments.bb
-    visibility dense
-    parent problematic
-    priority 1
-    mouseOverField note
-    searchIndex name
-    searchTrix /gbdb/hg38/problematic/notes.ix
-    noScoreFilter on
+    track problematic
+    parent problematicSuper
+    shortLabel Problematic Regions
+    longLabel Problematic/special genomic regions for sequencing or very variable regions
+    compositeTrack on
+    hideEmptySubtracks off
+    visibility pack
+    type bigBed 3 +
 
-    track encBlacklist
-    shortLabel ENCODE Blacklist V2
-    longLabel ENCODE Blacklist V2
-    type bigBed 4
-    bigDataUrl /gbdb/hg38/problematic/encBlacklist.bb
-    visibility dense
-    parent problematic
-    priority 2
+        track comments
+        shortLabel UCSC Unusual Regions
+        longLabel UCSC unusual regions on assembly structure (manually annotated)
+        type bigBed 9 +
+        bigDataUrl /gbdb/hg38/problematic/comments.bb
+        visibility dense
+        parent problematic
+        priority 1
+        mouseOverField note
+        searchIndex name
+        searchTrix /gbdb/hg38/problematic/notes.ix
+        noScoreFilter on
 
-    track grcExclusions
-    shortLabel GRC Exclusions
-    longLabel GRC Exclusion list: contaminations or false duplications
-    type bigBed 4
-    bigDataUrl /gbdb/hg38/problematic/grcExclusions.bb
-    visibility dense
-    parent problematic
-    priority 3
+        track encBlacklist
+        shortLabel ENCODE Blacklist V2
+        longLabel ENCODE Blacklist V2
+        type bigBed 4
+        bigDataUrl /gbdb/hg38/problematic/encBlacklist.bb
+        visibility dense
+        parent problematic
+        priority 2
 
+        track grcExclusions
+        shortLabel GRC Exclusions
+        longLabel GRC Exclusion list: contaminations or false duplications
+        type bigBed 4
+        bigDataUrl /gbdb/hg38/problematic/grcExclusions.bb
+        visibility dense
+        parent problematic
+        priority 3
+
+    track highlyReproducible
+    release alpha
+    parent problematicSuper
+    subGroup1 view Views beds=Regions vcfs=Variants
+    compositeTrack on
+    shortLabel Highly Reproducible Regions
+    longLabel Highly Reproducible genomic regions for sequencing
+    hideEmptySubtracks on
+    visibility hide
+    html problematic
+    type bed 3
+
+        track highReproBeds
+        parent highlyReproducible
+        shortLabel Highly Reproducible Regions
+        longLabel Highly Reproducible Regions
+        type bigBed 3
+        view beds
+        visibility dense
+        release alpha
+
+            track cq56Bed
+            parent highReproBeds
+            bigDataUrl /gbdb/hg38/problematic/highRepro/CQ-56.bb
+            subGroups view=beds
+            shortLabel CQ-56 Regions
+            longLabel CQ-56 Regions
+            type bigBed 3
+            release alpha
+
+            track cq7Bed
+            parent highReproBeds
+            bigDataUrl /gbdb/hg38/problematic/highRepro/CQ-7.bb
+            subGroups view=beds
+            shortLabel CQ-7 Regions
+            longLabel CQ-7 Regions
+            type bigBed 3
+            release alpha
+
+            track cq8Bed
+            parent highReproBeds
+            bigDataUrl /gbdb/hg38/problematic/highRepro/CQ-8.bb
+            subGroups view=beds
+            shortLabel CQ-8 Regions
+            longLabel CQ-8 Regions
+            type bigBed 3
+            release alpha
+
+            track hr_na10835Bed
+            parent highReproBeds
+            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA10835.bb
+            subGroups view=beds
+            shortLabel HR_NA10835 Regions
+            longLabel HR_NA10835 Regions
+            type bigBed 3
+            release alpha
+
+            track hr_na12248Bed
+            parent highReproBeds
+            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA12248.bb
+            subGroups view=beds
+            shortLabel HR_NA12248 Regions
+            longLabel HR_NA12248 Regions
+            type bigBed 3
+            release alpha
+
+            track hr_na12249Bed
+            parent highReproBeds
+            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA12249.bb
+            subGroups view=beds
+            shortLabel HR_NA12249 Regions
+            longLabel HR_NA12249 Regions
+            type bigBed 3
+            release alpha
+
+            track hr_na12878Bed
+            parent highReproBeds
+            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA12878.bb
+            subGroups view=beds
+            shortLabel HR_NA12878 Regions
+            longLabel HR_NA12878 Regions
+            type bigBed 3
+            release alpha
+
+        track highReproVcfs
+        parent highlyReproducible
+        shortLabel Highly Reproducible Variants
+        longLabel Highly Reproducible Variants
+        type vcfTabix
+        view vcfs
+        visibility dense
+        release alpha
+
+            track cq56Vcf
+            parent highReproVcfs
+            bigDataUrl /gbdb/hg38/problematic/highRepro/CQ-56.sort.vcf.gz
+            subGroups view=vcfs
+            shortLabel CQ-56 Variants
+            longLabel CQ-56 Variants
+            type vcfTabix
+            release alpha
+
+            track cq7Vcf
+            parent highReproVcfs
+            bigDataUrl /gbdb/hg38/problematic/highRepro/CQ-7.sort.vcf.gz
+            subGroups view=vcfs
+            shortLabel CQ-7 Variants
+            longLabel CQ-7 Variants
+            type vcfTabix
+            release alpha
+
+            track cq8Vcf
+            parent highReproVcfs
+            bigDataUrl /gbdb/hg38/problematic/highRepro/CQ-8.sort.vcf.gz
+            subGroups view=vcfs
+            shortLabel CQ-8 Variants
+            longLabel CQ-8 Variants
+            type vcfTabix
+            release alpha
+
+            track hr_na10835Vcf
+            parent highReproVcfs
+            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA10835.sort.vcf.gz
+            subGroups view=vcfs
+            shortLabel HR_NA10835 Variants
+            longLabel HR_NA10835 Variants
+            type vcfTabix
+            release alpha
+
+            track hr_na12248Vcf
+            parent highReproVcfs
+            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA12248.sort.vcf.gz
+            subGroups view=vcfs
+            shortLabel HR_NA12248 Variants
+            longLabel HR_NA12248 Variants
+            type vcfTabix
+            release alpha
+
+            track hr_na12249Vcf
+            parent highReproVcfs
+            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA12249.sort.vcf.gz
+            subGroups view=vcfs
+            shortLabel HR_NA12249 Variants
+            longLabel HR_NA12249 Variants
+            type vcfTabix
+            release alpha
+
+            track hr_na12878Vcf
+            parent highReproVcfs
+            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA12878.sort.vcf.gz
+            subGroups view=vcfs
+            shortLabel HR_NA12878 Variants
+            longLabel HR_NA12878 Variants
+            type vcfTabix
+            release alpha
 
 searchTable comments
 searchPriority 0.5

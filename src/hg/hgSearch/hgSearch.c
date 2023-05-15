@@ -594,6 +594,7 @@ webEndGb();
 void doSearchOnly()
 /* Send back search results along with whatever we need to make the UI */
 {
+cartJsonPushErrHandlers();
 char *db = NULL;
 char *genome = NULL;
 getDbAndGenome(cart, &db, &genome, oldVars);
@@ -625,19 +626,24 @@ if (hgp && hgp->singlePos)
     cartSetString(cj->cart, "position", newPosBuf);
     if (hgp->singlePos->highlight)
         cartSetString(cj->cart, "addHighlight", hgp->singlePos->highlight);
-    char *trackName = hgp->tableList->name;
+    char *trackName = cloneString(hgp->tableList->name);
+    trackHubFixName(trackName);
     struct trackDb *track = NULL;
-    track = tdbForTrack(db, trackName, &hgFindTdbList);
-    if (!track && startsWith("all_", trackName))
-        track = tdbForTrack(db, trackName+strlen("all_"), &hgFindTdbList);
-    if (!track)
-        errAbort("no track for table \"%s\" found via a findSpec", trackName);
+    if (!sameString(trackName, "chromInfo"))
+        {
+        track = tdbForTrack(db, trackName, &hgFindTdbList);
+        if (!track && startsWith("all_", trackName))
+            track = tdbForTrack(db, trackName+strlen("all_"), &hgFindTdbList);
+        if (!track)
+            errAbort("no track for table \"%s\" found via a findSpec", trackName);
+        }
     puts("Content-type:text/html\n");
     puts("<HTML>\n<HEAD>\n");
     printf("<script>window.location.href=\"../cgi-bin/hgTracks?");
     printf("db=%s", db);
     printf("&position=%s", newPosBuf);
-    printf("&%s=pack", trackName);
+    if (!sameString(trackName, "chromInfo"))
+        printf("&%s=pack", trackName);
     printf("&hgFind.matches=%s", hgp->singlePos->name);
     if (track && track->parent)
         {
@@ -672,6 +678,7 @@ else
     jsInline("hgSearch.init();\n");
     webEndGb();
     }
+cartJsonPopErrHandlers();
 }
 /* End do commands */
 
