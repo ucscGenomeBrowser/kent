@@ -2871,6 +2871,7 @@
 ./runBuild GCF_020099395.1_ASM2009939v1 bacteria Streptomyces_mobaraensis
 ./runBuild GCF_020137385.1_ASM2013738v1 fungi Morchella_sextelata
 ./runBuild GCF_020171115.1_ASM_NN_V1 mammals Neogale_vison
+./runBuild GCF_020184175.1_ASM2018417v2 invertebrate Aphis_gossypii
 ./runBuild GCF_020283565.1_ARS_RC_1.1 plants Trifolium_pratense
 ./runBuild GCF_020360975.1_ASM2036097v1 fungi Hirsutella_rhossiliensis
 ./runBuild GCF_020379485.1_Da-Ae plants Brassica_napus
