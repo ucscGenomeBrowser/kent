@@ -232,7 +232,7 @@ int prevQEnd = pslQEnd(mappedPsl, mappedPsl->blockCount - 1);
 int prevTEnd = pslTEnd(mappedPsl, mappedPsl->blockCount - 1);
 
 // trim, possibly setting to zero-length
-int overAmt = max((prevQEnd - mappedBlk->qStart), (prevTEnd - mappedBlk->tStart));
+int overAmt = max((prevQEnd - (int)mappedBlk->qStart), (prevTEnd - (int)mappedBlk->tStart));
 if (overAmt < 0)
     overAmt = 0;
 else if (overAmt > blockLength(mappedBlk))
