@@ -401,6 +401,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "animalgenomeinstitute.org");
     hashStoreName(domainWhiteList, "annotation.dbi.udel.edu");
     hashStoreName(domainWhiteList, "arn.ugr.es");
+    hashStoreName(domainWhiteList, "barmsijs.lumc.nl");
     hashStoreName(domainWhiteList, "bic2.ibi.upenn.edu");
     hashStoreName(domainWhiteList, "bifx-core3.bio.ed.ac.uk");
     hashStoreName(domainWhiteList, "biodb.kaist.ac.kr");
@@ -414,6 +415,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "bricweb.sund.ku.dk");
     hashStoreName(domainWhiteList, "bsaa.edu.ru");
     hashStoreName(domainWhiteList, "bx.bio.jhu.edu");
+    hashStoreName(domainWhiteList, "cbi-asang-009.pmacs.upenn.edu");
     hashStoreName(domainWhiteList, "ccg.epfl.ch");
     hashStoreName(domainWhiteList, "cctop.cos.uni-heidelberg.de");
     hashStoreName(domainWhiteList, "cell-innovation.nig.ac.jp");
@@ -446,6 +448,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "epd.epfl.ch");
     hashStoreName(domainWhiteList, "expiereddnsmanager.com");
     hashStoreName(domainWhiteList, "export.uppmax.uu.se");
+    hashStoreName(domainWhiteList, "flash.biohpc.swmed.edu");
     hashStoreName(domainWhiteList, "flu-infection.vhost38.genap.ca");
     hashStoreName(domainWhiteList, "frigg.uio.no");
     hashStoreName(domainWhiteList, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
@@ -478,8 +481,10 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "kbm7.genomebrowser.cemm.at");
     hashStoreName(domainWhiteList, "key2hair.com");
     hashStoreName(domainWhiteList, "ki-data.mit.edu");
+    hashStoreName(domainWhiteList, "lapti.ucc.ie");
     hashStoreName(domainWhiteList, "lichtlab.cancer.ufl.edu");
     hashStoreName(domainWhiteList, "ln1.path.ox.ac.uk");
+    hashStoreName(domainWhiteList, "login.bases-doc.univ-lorraine.fr");
     hashStoreName(domainWhiteList, "lyncoffee.cafe24.com");
     hashStoreName(domainWhiteList, "lvgsrv1.epfl.ch");
     hashStoreName(domainWhiteList, "mariottigenomicslab.bio.ub.edu");
@@ -501,6 +506,7 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "pgv19.virol.ucl.ac.uk");
     hashStoreName(domainWhiteList, "portal.nersc.gov");
     hashStoreName(domainWhiteList, "pricenas.biochem.uiowa.edu");
+    hashStoreName(domainWhiteList, "public-docs.crg.es");
     hashStoreName(domainWhiteList, "redirect.medsch.ucla.edu");
     hashStoreName(domainWhiteList, "rewrite.bcgsc.ca");
     hashStoreName(domainWhiteList, "rloop.hamadalab.com");
@@ -547,15 +553,18 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "www.isical.ac.in");
     hashStoreName(domainWhiteList, "www.morgridge.net");
     hashStoreName(domainWhiteList, "www.morgridge.us");
+    hashStoreName(domainWhiteList, "www.nitrofish.de");
     hashStoreName(domainWhiteList, "www.ogic.ca");
     hashStoreName(domainWhiteList, "www.picb.ac.cn");
     hashStoreName(domainWhiteList, "www.sagatenergy.kz");
     hashStoreName(domainWhiteList, "www.starklab.org");
     hashStoreName(domainWhiteList, "www.v93rc2.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "www-ncbi-nlm-nih-gov.bases-doc.univ-lorraine.fr");
     hashStoreName(domainWhiteList, "xinglabtrackhub.research.chop.edu");
     hashStoreName(domainWhiteList, "ydna-warehouse.org");
     hashStoreName(domainWhiteList, "yoda.ust.hk");
     hashStoreName(domainWhiteList, "zdzlab.einsteinmed.edu");
+    hashStoreName(domainWhiteList, "zhaohua.urmc.rochester.edu");
     hashStoreName(domainWhiteList, "zlab-trackhub.umassmed.edu");
     hashStoreName(domainWhiteList, "zlab.umassmed.edu");
     }

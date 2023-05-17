@@ -64,6 +64,7 @@ group map
         type bigBed 3
         view beds
         visibility dense
+        release alpha
 
             track cq56Bed
             parent highReproBeds
@@ -72,6 +73,7 @@ group map
             shortLabel CQ-56 Regions
             longLabel CQ-56 Regions
             type bigBed 3
+            release alpha
 
             track cq7Bed
             parent highReproBeds
@@ -80,6 +82,7 @@ group map
             shortLabel CQ-7 Regions
             longLabel CQ-7 Regions
             type bigBed 3
+            release alpha
 
             track cq8Bed
             parent highReproBeds
@@ -88,6 +91,7 @@ group map
             shortLabel CQ-8 Regions
             longLabel CQ-8 Regions
             type bigBed 3
+            release alpha
 
             track hr_na10835Bed
             parent highReproBeds
@@ -96,6 +100,7 @@ group map
             shortLabel HR_NA10835 Regions
             longLabel HR_NA10835 Regions
             type bigBed 3
+            release alpha
 
             track hr_na12248Bed
             parent highReproBeds
@@ -104,6 +109,7 @@ group map
             shortLabel HR_NA12248 Regions
             longLabel HR_NA12248 Regions
             type bigBed 3
+            release alpha
 
             track hr_na12249Bed
             parent highReproBeds
@@ -112,6 +118,7 @@ group map
             shortLabel HR_NA12249 Regions
             longLabel HR_NA12249 Regions
             type bigBed 3
+            release alpha
 
             track hr_na12878Bed
             parent highReproBeds
@@ -120,6 +127,7 @@ group map
             shortLabel HR_NA12878 Regions
             longLabel HR_NA12878 Regions
             type bigBed 3
+            release alpha
 
         track highReproVcfs
         parent highlyReproducible
@@ -128,6 +136,7 @@ group map
         type vcfTabix
         view vcfs
         visibility dense
+        release alpha
 
             track cq56Vcf
             parent highReproVcfs
@@ -136,6 +145,7 @@ group map
             shortLabel CQ-56 Variants
             longLabel CQ-56 Variants
             type vcfTabix
+            release alpha
 
             track cq7Vcf
             parent highReproVcfs
@@ -144,6 +154,7 @@ group map
             shortLabel CQ-7 Variants
             longLabel CQ-7 Variants
             type vcfTabix
+            release alpha
 
             track cq8Vcf
             parent highReproVcfs
@@ -152,6 +163,7 @@ group map
             shortLabel CQ-8 Variants
             longLabel CQ-8 Variants
             type vcfTabix
+            release alpha
 
             track hr_na10835Vcf
             parent highReproVcfs
@@ -160,6 +172,7 @@ group map
             shortLabel HR_NA10835 Variants
             longLabel HR_NA10835 Variants
             type vcfTabix
+            release alpha
 
             track hr_na12248Vcf
             parent highReproVcfs
@@ -168,6 +181,7 @@ group map
             shortLabel HR_NA12248 Variants
             longLabel HR_NA12248 Variants
             type vcfTabix
+            release alpha
 
             track hr_na12249Vcf
             parent highReproVcfs
@@ -176,6 +190,7 @@ group map
             shortLabel HR_NA12249 Variants
             longLabel HR_NA12249 Variants
             type vcfTabix
+            release alpha
 
             track hr_na12878Vcf
             parent highReproVcfs
@@ -184,6 +199,7 @@ group map
             shortLabel HR_NA12878 Variants
             longLabel HR_NA12878 Variants
             type vcfTabix
+            release alpha
 
 searchTable comments
 searchPriority 0.5

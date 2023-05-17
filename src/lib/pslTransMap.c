@@ -24,13 +24,36 @@
 
 
 struct block
-/* coordinates of a block */
+/* Coordinates of a block, which might be aligned or a gap on one side */
 {
     int qStart;          /* Query start position. */
     int qEnd;            /* Query end position. */
     int tStart;          /* Target start position. */
     int tEnd;            /* Target end position. */
 };
+
+static struct block ZERO_BLOCK = {0, 0, 0, 0};
+
+static void assertBlockAligned(struct block *blk)
+/* Make sure both sides are same size and not negative length.  */
+{
+assert(blk->qStart <= blk->qEnd);
+assert(blk->tStart <= blk->tEnd);
+assert((blk->qEnd - blk->qStart) == (blk->tEnd - blk->tStart));
+}
+
+static int blockIsAligned(struct block *blk)
+/* check that both the query and target side have alignment */
+{
+return (blk->qEnd != 0) && (blk->tEnd != 0); // can start at zero
+}
+
+static int blockLength(struct block *blk)
+/* get length of an aligned block  */
+{
+assertBlockAligned(blk);
+return (blk->qEnd - blk->qStart);
+}
 
 static void pslProtToNA(struct psl *psl)
 /* convert a protein/NA alignment to a NA/NA alignment */
@@ -47,21 +70,6 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     }
 }
 
-static void pslNAToProt(struct psl *psl)
-/* undo pslProtToNA */
-{
-int iBlk;
-
-psl->qStart /= 3;
-psl->qEnd /= 3;
-psl->qSize /= 3;
-for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
-    {
-    psl->blockSizes[iBlk] /= 3;
-    psl->qStarts[iBlk] /= 3;
-    }
-}
-
 static struct psl* createMappedPsl(struct psl* inPsl, struct psl *mapPsl,
                                    int mappedPslMax)
 /* setup a PSL for the output alignment */
@@ -73,7 +81,7 @@ assert(pslTStrand(inPsl) == pslQStrand(mapPsl));
  * orientation. */
 strand[0] = pslQStrand(inPsl);
 strand[1] = pslTStrand(mapPsl);
-strand[2] = '\n';
+strand[2] = '\0';
 
 return pslNew(inPsl->qName, inPsl->qSize, 0, 0,
               mapPsl->tName, mapPsl->tSize, 0, 0,
@@ -95,6 +103,7 @@ static void addPslBlock(struct psl* psl, struct block* blk, int* pslMax)
 /* add a block to a psl */
 {
 unsigned newIBlk = psl->blockCount;
+assertBlockAligned(blk);
 
 assert((blk->qEnd - blk->qStart) == (blk->tEnd - blk->tStart));
 if (newIBlk >= *pslMax)
@@ -102,27 +111,11 @@ if (newIBlk >= *pslMax)
 psl->qStarts[newIBlk] = blk->qStart;
 psl->tStarts[newIBlk] = blk->tStart;
 psl->blockSizes[newIBlk] = blk->qEnd - blk->qStart;
-/* lie about match counts. */
-psl->match += psl->blockSizes[newIBlk];
-/* count gaps */
-if (newIBlk > 0)
-    {
-    if (psl->qStarts[newIBlk] > pslQEnd(psl, newIBlk-1))
-        {
-        psl->qNumInsert++;
-        psl->qBaseInsert += psl->qStarts[newIBlk] - pslQEnd(psl, newIBlk-1);
-        }
-    if (psl->tStarts[newIBlk] > pslTEnd(psl, newIBlk-1))
-        {
-        psl->tNumInsert++;
-        psl->tBaseInsert += psl->tStarts[newIBlk] - pslTEnd(psl, newIBlk-1);
-        }
-    }
 psl->blockCount++;
 }
 
-static void setPslBounds(struct psl* mappedPsl)
-/* set sequences bounds on mapped PSL */
+static void setPslBoundsCounts(struct psl* mappedPsl)
+/* set sequences bounds and counts on mapped PSL */
 {
 int lastBlk = mappedPsl->blockCount-1;
 
@@ -136,6 +129,10 @@ mappedPsl->tStart = mappedPsl->tStarts[0];
 mappedPsl->tEnd = mappedPsl->tStarts[lastBlk] + mappedPsl->blockSizes[lastBlk];
 if (pslTStrand(mappedPsl) == '-')
     reverseIntRange(&mappedPsl->tStart, &mappedPsl->tEnd, mappedPsl->tSize);
+
+for (int iBlk = 0; iBlk < mappedPsl->blockCount; iBlk++)
+    mappedPsl->match += mappedPsl->blockSizes[iBlk];
+pslComputeInsertCounts(mappedPsl);
 }
 
 static void adjustOrientation(unsigned opts, struct psl *inPsl, char *inPslOrigStrand,
@@ -156,14 +153,12 @@ static struct block getBeforeBlockMapping(unsigned mqStart, unsigned mqEnd,
                                           struct block* align1Blk)
 /* map part of an ungapped psl block that occurs before a mapPsl block */
 {
-struct block mappedBlk;
-
 /* mRNA start in genomic gap before this block, this will
  * be an inPsl insert */
 unsigned size = (align1Blk->tEnd < mqStart)
     ? (align1Blk->tEnd - align1Blk->tStart)
     : (mqStart - align1Blk->tStart);
-ZeroVar(&mappedBlk);
+struct block mappedBlk = ZERO_BLOCK;
 mappedBlk.qStart = align1Blk->qStart;
 mappedBlk.qEnd = align1Blk->qStart + size;
 return mappedBlk;
@@ -173,15 +168,13 @@ static struct block getOverBlockMapping(unsigned mqStart, unsigned mqEnd,
                                         unsigned mtStart, struct block* align1Blk)
 /* map part of an ungapped psl block that overlapps a mapPsl block. */
 {
-struct block mappedBlk;
-
 /* common sequence start contained in this block, this handles aligned
  * and genomic inserts */
 unsigned off = align1Blk->tStart - mqStart;
 unsigned size = (align1Blk->tEnd > mqEnd)
     ? (mqEnd - align1Blk->tStart)
     : (align1Blk->tEnd - align1Blk->tStart);
-ZeroVar(&mappedBlk);
+struct block mappedBlk = ZERO_BLOCK;
 mappedBlk.qStart = align1Blk->qStart;
 mappedBlk.qEnd = align1Blk->qStart + size;
 mappedBlk.tStart = mtStart + off;
@@ -198,11 +191,10 @@ static struct block getBlockMapping(struct psl* inPsl, struct psl *mapPsl,
  * which is updated to prevent rescanning large psls.
  */
 {
-int iBlk;
-struct block mappedBlk;
 
 /* search for block or gap containing start of mrna block */
-for (iBlk = *iMapBlkPtr; iBlk < mapPsl->blockCount; iBlk++)
+int iBlk = *iMapBlkPtr;
+for (; iBlk < mapPsl->blockCount; iBlk++)
     {
     unsigned mqStart = mapPsl->qStarts[iBlk];
     unsigned mqEnd = mapPsl->qStarts[iBlk]+mapPsl->blockSizes[iBlk];
@@ -220,13 +212,36 @@ for (iBlk = *iMapBlkPtr; iBlk < mapPsl->blockCount; iBlk++)
 
 /* reached the end of the mRNA->genome alignment, finish off the 
  * rest of the the protein as an insert */
-ZeroVar(&mappedBlk);
+struct block mappedBlk = ZERO_BLOCK;
 mappedBlk.qStart = align1Blk->qStart;
 mappedBlk.qEnd = align1Blk->qEnd;
 *iMapBlkPtr = iBlk;
 return mappedBlk;
 }
 
+
+static void trimOverlapping(struct psl *mappedPsl, struct block *mappedBlk)
+/* if this block overlaps the previous block, trim accordingly.  Overlaps
+ * can be created with protein to DNA PSLs */
+{
+assertBlockAligned(mappedBlk);
+assert(mappedPsl->blockCount > 0);
+
+// use int so we can go negative
+int prevQEnd = pslQEnd(mappedPsl, mappedPsl->blockCount - 1);
+int prevTEnd = pslTEnd(mappedPsl, mappedPsl->blockCount - 1);
+
+// trim, possibly setting to zero-length
+int overAmt = max((prevQEnd - mappedBlk->qStart), (prevTEnd - mappedBlk->tStart));
+if (overAmt < 0)
+    overAmt = 0;
+else if (overAmt > blockLength(mappedBlk))
+    overAmt = blockLength(mappedBlk);
+
+mappedBlk->qStart += overAmt;
+mappedBlk->tStart += overAmt;
+}
+   
 static boolean mapBlock(struct psl *inPsl, struct psl *mapPsl, int *iMapBlkPtr,
                         struct block *align1Blk, struct psl* mappedPsl,
                         int* mappedPslMax)
@@ -236,8 +251,6 @@ static boolean mapBlock(struct psl *inPsl, struct psl *mapPsl, int *iMapBlkPtr,
  * Block starts are adjusted for next call.  Return FALSE if the end of the
  * alignment is reached. */
 {
-struct block mappedBlk;
-unsigned size;
 assert(align1Blk->qStart <= align1Blk->qEnd);
 assert(align1Blk->tStart <= align1Blk->tEnd);
 assert((align1Blk->qEnd - align1Blk->qStart) == (align1Blk->tEnd - align1Blk->tStart));
@@ -246,33 +259,53 @@ if ((align1Blk->qStart >= align1Blk->qEnd) || (align1Blk->tStart >= align1Blk->t
     return FALSE;  /* end of ungapped block. */
 
 /* find block or gap with start coordinates of mrna */
-mappedBlk = getBlockMapping(inPsl, mapPsl, iMapBlkPtr, align1Blk);
+struct block mappedBlk = getBlockMapping(inPsl, mapPsl, iMapBlkPtr, align1Blk);
 
-if ((mappedBlk.qEnd != 0) && (mappedBlk.tEnd != 0))
+/* Need to compute how much of input was consumed before trimming overlap */
+unsigned consumed = (mappedBlk.qEnd != 0)
+    ? (mappedBlk.qEnd - mappedBlk.qStart)
+    : (mappedBlk.tEnd - mappedBlk.tStart);
+
+/* remove overlap, which can happen with protein -> NA alignments */
+if (blockIsAligned(&mappedBlk) && (mappedPsl->blockCount > 0))
+    trimOverlapping(mappedPsl, &mappedBlk);
+
+if (blockIsAligned(&mappedBlk))
     addPslBlock(mappedPsl, &mappedBlk, mappedPslMax);
 
 /* advance past block or gap */
-size = (mappedBlk.qEnd != 0)
-    ? (mappedBlk.qEnd - mappedBlk.qStart)
-    : (mappedBlk.tEnd - mappedBlk.tStart);
-align1Blk->qStart += size;
-align1Blk->tStart += size;
-
+align1Blk->qStart += consumed;
+align1Blk->tStart += consumed;
 return TRUE;
+}
+
+struct psl* doMapping(struct psl *inPsl, struct psl *mapPsl)
+/* do the mapping after adjustments made to input */
+{
+int mappedPslMax = 8; /* allocated space in output psl */
+int iMapBlk = 0;
+struct psl* mappedPsl = createMappedPsl(inPsl, mapPsl, mappedPslMax);
+
+/* Fill in ungapped blocks.  */
+for (int iBlock = 0; iBlock < inPsl->blockCount; iBlock++)
+    {
+    struct block align1Blk = blockFromPslBlock(inPsl, iBlock);
+    while (mapBlock(inPsl, mapPsl, &iMapBlk, &align1Blk, mappedPsl,
+                    &mappedPslMax))
+        continue;
+    }
+assert(mappedPsl->blockCount <= mappedPslMax);
+
+return mappedPsl;
 }
 
 struct psl* pslTransMap(unsigned opts, struct psl *inPsl, struct psl *mapPsl)
 /* map a psl via a mapping psl, a single psl is returned, or NULL if it
  * couldn't be mapped. */
 {
-int mappedPslMax = 8; /* allocated space in output psl */
-int iMapBlk = 0;
-char inPslOrigStrand[3];
 boolean rcInPsl = (pslTStrand(inPsl) != pslQStrand(mapPsl));
-boolean cnv1 = (pslIsProtein(inPsl) && !pslIsProtein(mapPsl));
-boolean cnv2 = (pslIsProtein(mapPsl) && !pslIsProtein(inPsl));
-int iBlock;
-struct psl* mappedPsl;
+boolean cnvIn = (pslIsProtein(inPsl) && !pslIsProtein(mapPsl));
+boolean cnvMap = (pslIsProtein(mapPsl) && !pslIsProtein(inPsl));
 
 /* sanity check size, but allow names to vary to allow ids to have
  * unique-ifying suffixes. */
@@ -280,48 +313,36 @@ if (inPsl->tSize != mapPsl->qSize)
     errAbort("Error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)",
             inPsl->tName, inPsl->tSize, mapPsl->qName, mapPsl->qSize);
 
-/* convert protein PSLs */
-if (cnv1)
-    pslProtToNA(inPsl);
-if (cnv2)
-    pslProtToNA(mapPsl);
-
-/* need to ensure common sequence is in same orientation, save strand for later */
+/* ensure common sequence is in same orientation and convert protein PSLs */
+char inPslOrigStrand[3];
 safef(inPslOrigStrand, sizeof(inPslOrigStrand), "%s", inPsl->strand);
+if (cnvIn || rcInPsl)
+    inPsl = pslClone(inPsl);
+if (cnvIn)
+    pslProtToNA(inPsl);
 if (rcInPsl)
     pslRc(inPsl);
-
-mappedPsl = createMappedPsl(inPsl, mapPsl, mappedPslMax);
-
-/* Fill in ungapped blocks.  */
-for (iBlock = 0; iBlock < inPsl->blockCount; iBlock++)
+if (cnvMap)
     {
-    struct block align1Blk = blockFromPslBlock(inPsl, iBlock);
-    while (mapBlock(inPsl, mapPsl, &iMapBlk, &align1Blk, mappedPsl,
-                    &mappedPslMax))
-        continue;
+    mapPsl = pslClone(mapPsl);
+    pslProtToNA(mapPsl);
     }
 
+struct psl* mappedPsl = doMapping(inPsl, mapPsl);
+
 /* finish up psl, or free if no blocks were added */
-assert(mappedPsl->blockCount <= mappedPslMax);
 if (mappedPsl->blockCount == 0)
     pslFree(&mappedPsl);  /* nothing made it */
 else
     {
-    setPslBounds(mappedPsl);
+    setPslBoundsCounts(mappedPsl);
     adjustOrientation(opts, inPsl, inPslOrigStrand, mappedPsl);
     }
 
-/* restore input */
-if (rcInPsl)
-    {
-    pslRc(inPsl);
-    strcpy(inPsl->strand, inPslOrigStrand);
-    }
-if (cnv1)
-    pslNAToProt(inPsl);
-if (cnv2)
-    pslNAToProt(mapPsl);
+if (cnvIn || rcInPsl)
+    pslFree(&inPsl);
+if (cnvMap)
+    pslFree(&mapPsl);
 
 return mappedPsl;
 }
