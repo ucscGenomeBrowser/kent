@@ -73,7 +73,7 @@ def buildPubHubDic(hgsqlInput):
         hubPublicDic[hub[0]] = {}
         hubPublicDic[hub[0]] = {'hubUrl':hub[0],'shortLabel':hub[1],'longLabel':hub[2],\
                             'registrationTime':hub[3],'dbCount':hub[4],\
-                            'dbList':hub[5],'descriptionUrl':hub[5]}
+                            'dbList':hub[5],'descriptionUrl':hub[6]}
     return(hubPublicDic)
 
 def escapeDoubleQuotesOnLabels(label):
@@ -102,6 +102,8 @@ def buildCurrentHubTxtDic(hub):
         else:
             line = line.split(" ")
             currentHub[line[0]] = " ".join(line[1:])
+    if not currentHub['descriptionUrl'].startswith("http") or currentHub['descriptionUrl'].startswith("ftp"):
+        currentHub['descriptionUrl'] = '/'.join(hub.split('/')[0:len(hub.split('/'))-1])+"/"+currentHub['descriptionUrl']
     return(currentHub)
                     
 def queryHubTxt(currentHub,hub):
@@ -153,6 +155,9 @@ def compareResults(hubPublicDic,currentHub,hub,hgsqlInput,testMode):
         
     if set(hubPublicDic[hub]['dbList'][:-1].split(',')) != set(currentHub['dbList']):
         printHgsql(hub,'dbList',",".join(currentHub['dbList'])+",",hgsqlInput,testMode)
+
+    if hubPublicDic[hub]['descriptionUrl'] != currentHub['descriptionUrl'].rstrip().lstrip():
+        printHgsql(hub,'descriptionUrl',currentHub['descriptionUrl'].rstrip().lstrip(),hgsqlInput,testMode)
     
 def hubPublicCompare(hubPublicDic,hgsqlInput,testMode,silent):
     """Query hub.txt files and compare values to hubPublic values"""
