@@ -5499,34 +5499,19 @@ function hgtWarnTiming(maxSeconds) {
     if (loadSeconds < maxSeconds)
         return;
 
-    var skipNotification = localStorage.getItem("hgTracks.hideSpeedNotification");
+    var lsKey = "hgTracks.hideSpeedNotification";
+    var skipNotification = localStorage.getItem(lsKey);
     writeToApacheLog("warnTiming "+getHgsid()+" time=" + loadSeconds + " skipNotif="+skipNotification);
         
     if (skipNotification)
         return;
 
-    var div = document.createElement("div");
-    div.style.display = "none";
-    div.style.width = "90%";
-    div.style.marginLeft = "100px";
-    div.id = "notifBox";
-    div.innerHTML = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
+    msg = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
         "the UCSC Genome Browser quick and responsive. See our "+
         "<b><a href='../FAQ/FAQtracks.html#speed' target='_blank'>display speed FAQ</a></b> for "+
         "common causes and solutions to slow performance. If this problem continues, you can create a  "+
-        "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.<br>"+
-        "<div style='text-align:center'>"+
-        "<button id='notifyHide'>Close</button>&nbsp;"+
-        "<button id='notifyHideForever'>Don't show again</button>"+
-        "</div>";
-    document.body.appendChild(div);
-    notifBoxShow();
+        "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.";
+    notifBoxSetup("hgTracks", "hideSpeedNotification", msg);
+    notifBoxShow("hgTracks", "hideSpeedNotification");
 
-    $("#notifyHide").click( function() {
-        $("#notifBox").remove();
-    });
-    $("#notifyHideForever").click( function() {
-        $("#notifBox").remove();
-        localStorage.setItem("hgTracks.hideSpeedNotification", "1");
-    });
 }
