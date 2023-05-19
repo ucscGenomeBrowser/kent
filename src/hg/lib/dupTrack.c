@@ -46,7 +46,7 @@ static void findUniqDupName(char *sourceName, struct hash *dupHash, char nameBuf
 /* Make up a name of format dup_N_sourceTrack where N is a small unique number */
 {
 int i;
-for (i=1; ;++i)
+for (i=0; ;++i)
     {
     makeDupName(sourceName, i, nameBuf, nameBufSize);
     if (!hashLookup(dupHash, nameBuf))
@@ -64,7 +64,7 @@ FILE *f = NULL;	    // This will be our output
 /* We keep duplicate's name here. */
 int bufSize = strlen(sourceTrack) + 32;
 char dupeTrackName[bufSize];
-makeDupName(sourceTrack, 1, dupeTrackName, sizeof(dupeTrackName));
+makeDupName(sourceTrack, 0, dupeTrackName, sizeof(dupeTrackName));
 
 if (dupFileName != NULL && fileExists(dupFileName))   // Try and read in from old file
     {
@@ -90,12 +90,12 @@ int dupNo = atoi(dupeTrackName + strlen(DUP_TRACK_PREFIX)) + 1;
 if (sourceTdb != NULL)
     {
     fprintf(f, "shortLabel %s #%d\n", sourceTdb->shortLabel, dupNo);
-    fprintf(f, "longLabel %s copy #%d\n", sourceTdb->longLabel, dupNo);
+    fprintf(f, "longLabel %s (duplicate #%d)\n", sourceTdb->longLabel, dupNo);
     }
 else
     {
     fprintf(f, "%s #%d\n", sourceTrack, dupNo);
-    fprintf(f, "longLabel %s copy #%d\n", sourceTrack, dupNo);
+    fprintf(f, "longLabel %s (duplicate #%d)\n", sourceTrack, dupNo);
     }
 carefulClose(&f);
 

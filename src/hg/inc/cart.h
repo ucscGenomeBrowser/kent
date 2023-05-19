@@ -16,6 +16,9 @@ struct cart;         // forward definition for use in trackDb.h
 #include "linefile.h"
 #include "trackDb.h"
 
+#define namedSessionDbTableConfVariable    "namedSessionDbName"
+#define defaultNamedSessionDb              "namedSessionDb"
+
 // If cgi set as CART_VAR_EMPTY, then removed from cart
 // If If cgi created new and oldVars are stored, then will be CART_VAR_EMPTY in old vars
 #define CART_VAR_EMPTY "[]"
@@ -480,7 +483,7 @@ void cartSetDbDisconnector(DbDisconnect disconnector);
 #define hgsLoadUrlName hgSessionPrefix "loadUrlName"
 #define hgsDoLoadUrl hgSessionPrefix "doLoadUrl"
 
-#define namedSessionTable "namedSessionDb"
+#define namedSessionTable cartNamedSessionDbTable()
 
 void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 			 char *encSessionName);
@@ -678,5 +681,8 @@ void cartTurnOnSuper(struct cart *cart, char **trackNames, unsigned numTracks, c
 /* Turn on a supertrack if any of the subtracks are not hidden.  ASSUMES ALL TRACKS ARE HIDDEN
  * by default.
  */
+
+char *cartNamedSessionDbTable();
+/* Get the name of the table that lists named sessions.  Don't free the result. */
 #endif /* CART_H */
 

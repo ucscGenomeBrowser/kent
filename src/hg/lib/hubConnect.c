@@ -1062,11 +1062,13 @@ if (!isEmpty(dir))
 
     if (status && isEmpty(status->errorMessage))
         {
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
+
+        cartSetString(cart, "db", buffer);
         if (cgiOptionalString("db"))
             {
             /* user specified db on URL, we need to decorate and put it back. */
-            char buffer[4096];
-            safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
             cgiVarSet("db",  cloneString(buffer));
             }
 
@@ -1084,6 +1086,58 @@ if (!isEmpty(dir))
 return 0;
 }
 
+static void portHubStatus(struct cart *cart)
+/* When a session has been saved on a different host it may have cart variables that reference hubStatus id's
+ * that are different than what the local machine has.  Look for these cases using the "assumesHub" cart variable
+ * that maps id numbers to URL's. */
+{
+char *assumesHubStr = cartOptionalString(cart, "assumesHub");
+if (assumesHubStr == NULL)
+    return;
+
+struct slPair *pairs = slPairListFromString(assumesHubStr, FALSE);
+for(; pairs; pairs = pairs->next)
+    {
+    char *url = (char *)pairs->val;
+    unsigned sessionHubId = atoi(pairs->name);
+    char *errMessage;
+    unsigned localHubId = hubFindOrAddUrlInStatusTable(cart, url, &errMessage);
+
+    if (localHubId != sessionHubId)  // the hubStatus id on the local machine is different than in the session
+        {
+        // first look for visibility and settings for tracks on this hub
+        char wildCard[4096];
+
+        safef(wildCard, sizeof wildCard, "hub_%d_*", sessionHubId);
+        struct slPair *cartVars = cartVarsLike(cart, wildCard);
+
+        for(; cartVars; cartVars = cartVars->next)
+            {
+            char *rest = trackHubSkipHubName(cartVars->name);
+            char newVarName[4096];
+            
+            // add the new visibility/setting
+            safef(newVarName, sizeof newVarName, "hub_%d_%s", localHubId, rest);
+            cartSetString(cart, newVarName, cartVars->val);
+
+            // remove the old visibility/setting
+            cartRemove(cart, cartVars->name);
+            }
+
+        // turn on this remapped hub
+        char hubName[4096];
+        cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+        safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, localHubId);
+        cartSetString(cart, hubName, "1");
+
+        // remove the old hub connection
+        safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, sessionHubId);
+        cartRemove(cart, hubName);
+        }
+    }
+
+cartRemove(cart, "assumesHub");
+}
 
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
@@ -1096,6 +1150,9 @@ if (dbSpec != NULL)
 char *newDatabase = checkForNew( cart);
 newDatabase = asmAliasFind(newDatabase);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+
+portHubStatus(cart);
+
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
 
 char *genarkPrefix = cfgOption("genarkHubPrefix");

@@ -53,6 +53,7 @@ psl->tSize = targetSize;
 psl->tStart = gp->txStart;
 psl->tEnd = gp->txEnd;
 psl->blockCount = gp->exonCount;
+pslComputeInsertCounts(psl);
 return psl;
 }
 

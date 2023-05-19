@@ -366,9 +366,9 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
 if (allowedBigBedType(trackType))
-    bbi = bigBedFileOpen(bigDataUrl);
+    bbi = bigBedFileOpenAlias(bigDataUrl, chromAliasFindAliases);
 else if (startsWith("bigWig", trackType))
-    bbi = bigWigFileOpen(bigDataUrl);
+    bbi = bigWigFileOpenAlias(bigDataUrl, chromAliasFindAliases);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -690,4 +690,60 @@ if (hubGenome->settingsHash)
         chromAliasSetupBb(NULL, absFileName);
         }
     }
+}
+
+char *genArkPath(char *genome)
+/* given a GenArk hub genome name, e.g. GCA_021951015.1 return the path:
+ *               GCA/021/951/015/GCA_021951015.1
+ * prefix that with desired server URL: https://hgdownload.soe.ucsc.edu/hubs/
+ *   if desired.  Or suffix add /hub.txt to get the hub.txt URL
+ *
+ *   already been proven that genome is a GCx_ name prefix before calling
+ */
+{
+struct dyString *genArkPath = dyStringNew(0);
+
+char tmpBuf[4];
+safencpy(tmpBuf, sizeof(tmpBuf), genome, 3);
+dyStringPrintf(genArkPath, "%s/", tmpBuf);
+safencpy(tmpBuf, sizeof(tmpBuf), genome+4, 3);
+dyStringPrintf(genArkPath, "%s/", tmpBuf);
+safencpy(tmpBuf, sizeof(tmpBuf), genome+7, 3);
+dyStringPrintf(genArkPath, "%s/", tmpBuf);
+safencpy(tmpBuf, sizeof(tmpBuf), genome+10, 3);
+dyStringPrintf(genArkPath, "%s", tmpBuf);
+
+return dyStringCannibalize(&genArkPath);
+}
+
+static struct dyString *textOutput = NULL;
+
+void textLineOut(char *lineOut)
+/* accumulate text lines for output in the dyString textOutput */
+{
+if (NULL == textOutput)
+    {
+    char outString[1024];
+    textOutput = dyStringNew(0);
+    time_t timeNow = time(NULL);
+    struct tm tm;
+    gmtime_r(&timeNow, &tm);
+    safef(outString, sizeof(outString),
+       "# downloadTime: \"%d:%02d:%02dT%02d:%02d:%02dZ\"",
+        1900+tm.tm_year, tm.tm_mon+1, tm.tm_mday, tm.tm_hour, tm.tm_min,
+         tm.tm_sec);
+    dyStringPrintf(textOutput, "%s\n", outString);
+    safef(outString, sizeof(outString), "# downloadTimeStamp: %lld",
+        (long long) timeNow);
+    dyStringPrintf(textOutput, "%s\n", outString);
+    }
+
+dyStringPrintf(textOutput, "%s\n", lineOut);
+}
+
+void textFinishOutput()
+/* all done with text output, print it all out */
+{
+puts("Content-Type:text/plain\n");
+printf("%s", dyStringCannibalize(&textOutput));
 }

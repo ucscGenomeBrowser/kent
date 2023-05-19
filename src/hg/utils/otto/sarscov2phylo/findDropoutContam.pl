@@ -31,7 +31,7 @@ my $ambigIx = 30;
 
 sub cladeIsOmicron($) {
   my ($clade) = @_;
-  return $clade =~ /^(21[KLM]|22|recombinant)/;
+  return $clade =~ /^(21[KLM]|2[2-9]|recombinant)/;
 }
 
 sub reversionCount($$) {

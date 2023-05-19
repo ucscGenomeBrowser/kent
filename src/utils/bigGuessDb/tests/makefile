@@ -1,6 +1,8 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
+INDEX=/cluster/home/max/public_html/bigGuessDb/bigGuessDb.txt.gz
+
 # test files were made with:
 #
 #bigWigToBedGraph /gbdb/mm10/encode3/atac/encode3RenAtacSignalStomachE16.bw stdout | randomLines stdin 20 stdout > mm10.bed
@@ -15,9 +17,9 @@ all:
 	mkdir -p out
 	# alas, our automated tests cannot output anything to stderr, as otherwise emails will be sent
 	rm -f out/test.err
-	python2 ${DESTBINDIR}/bigGuessDb --indexFile ./guessAssembly.txt.gz in/hg19.bb > out/hg19.txt
-	python3 ${DESTBINDIR}/bigGuessDb --indexFile ./guessAssembly.txt.gz in/mm10.bw > out/mm10.txt
-	python3 ${DESTBINDIR}/bigGuessDb --indexFile ./guessAssembly.txt.gz in/mm10.bw --best > out/mm10.best.txt
+	python2 ${DESTBINDIR}/bigGuessDb --indexFile ${INDEX} in/hg19.bb > out/hg19.txt
+	python3 ${DESTBINDIR}/bigGuessDb --indexFile ${INDEX} in/mm10.bw > out/mm10.txt
+	python3 ${DESTBINDIR}/bigGuessDb --indexFile ${INDEX} in/mm10.bw --best > out/mm10.best.txt
 	diff out/hg19.txt expected/hg19.txt
 	diff out/mm10.txt expected/mm10.txt
 	diff out/mm10.best.txt expected/mm10.best.txt

@@ -223,11 +223,14 @@ for (region = regions; region != NULL; region = region->next)
     if (prevRegion == NULL || differentString(region->chrom, prevRegion->chrom) ||
                 region->chromStart >=  prevRegion->chromEnd)
         {
+        char *localChromName = chromAliasFindNative(region->chrom);
+        if (localChromName == NULL)
+            localChromName = region->chrom;  // For some reason, aliases don't (or don't always) include the native names
         safef(regionInfo, sizeof regionInfo, "%s\t%d\t%d\n",
-                    region->chrom, region->chromStart, region->chromEnd);
+                    localChromName, region->chromStart, region->chromEnd);
         mustWrite(f, regionInfo, strlen(regionInfo));
         int start = max(region->chromStart - padding, 0);
-        int end = min(region->chromEnd + padding, hChromSize(database, region->chrom));
+        int end = min(region->chromEnd + padding, hChromSize(database, localChromName));
         char *color = doLightColor ? colorLight : colorDark;
         doLightColor = !doLightColor;
         dyStringPrintf(ds, "%s\t%d\t%d\t"

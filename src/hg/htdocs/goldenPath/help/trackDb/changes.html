@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+    <META name="description" content="UCSC Track Database Definition Changes">
+    <META name="keywords" content="tracDb, tracks, UCSC, bioinformatics">
+    <TITLE>UCSC Track Database Definition History</TITLE>
+    <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+    <LINK REL="STYLESHEET" HREF="trackDbDoc.css">
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/staticDoc.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="trackDbDoc.js"></script>
+</HEAD>
+<BODY>
+<A NAME="TOP"></A>
+
+<!-- Format everthing inside this narrower "pageWidth" window -->
+<div class="pageWidth">
+
+<!--#include virtual="../../../cgi-bin/hgMenubar"-->
+
+<!--Content Tables-->
+    <!--outer table is for border purposes-->
+
+<div class="contentBorder">
+<div class="lightBlueBar">
+    <div class="lightBlueBarTitle">&nbsp;&nbsp;Track Database Definition Change History</div>
+</div>
+
+<!-- Finally to the content -->
+<div class="borderGuard">
+
+<DIV class="trackDbDoc_intro">
+<H1>Track Database Definition</H1>
+
+<p>This document summarizes the changes to the <a href="trackDbHub.html">UCSC Genome Browser Hub TrackDb specification</a>.<p>
+
+<TABLE class="settingsTable" id="Common_Settings">
+<tbody>
+<tr valign="TOP">
+<th width="100">Date</th>
+<th width="15%">Track Types</th>
+<th>Change</th>
+</tr>
+
+<tr>
+    <td>2023-04-04</td>
+    <td>all</td>
+    <td>New statement: <tt>downloadUrl &lt;fileType&gt; &lt;URL&gt;</tt><br>Shows a link where user can download a file. On the UCSC browser, the link is shown above the description page. Right now this is used for GFF files on gene tracks.</td>
+</tr>
+<tr>
+    <td>2020-06-30</td>
+    <td>bigPsl, bigChain</td>
+    <td>New statement: <tt>otherTwoBitUrl &lt;URL&gt;</tt><br>This statement allows to store query sequences in a separate twoBit file rather than in the annotation file itself, which can reduce the size of the annotation file.</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+
+</BODY></HTML>

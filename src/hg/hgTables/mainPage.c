@@ -318,7 +318,7 @@ for (name = nameList; name != NULL; name = name->next)
     hPrintf("<OPTION VALUE=\"%s\"", name->name);
     // Disable options for related tables that are noGenome -- if a non-positional table
     // is selected then we output its entire contents.
-    if (cartTrackDbIsNoGenome(database, name->name) &&
+    if (cartTrackDbIsNoGenome(database, name->name) && fullGenomeRegion() &&
         (track == NULL || differentString(track->table, name->name)))
         hPrintf(" DISABLED"NO_GENOME_CLASS);
     else if (sameString(selTable, name->name))
@@ -1106,7 +1106,7 @@ jsInline(
     "function maybeDisableNoGenome() {\n"
     "   var regionTypeSelected = $('input[name=\"hgta_regionType\"]:checked').val();\n"
     "   var regionIsGenome = (regionTypeSelected === 'genome');\n"
-    "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome');\n"
+    "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome,select[name=\"hgta_table\"] option.hgtaNoGenome');\n"
     "   $noGenomeOptions.attr('disabled', regionIsGenome)\n"
     "                   .css('color', regionIsGenome ? '' : 'black');\n"
     "}\n"

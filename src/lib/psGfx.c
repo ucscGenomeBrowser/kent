@@ -75,6 +75,7 @@ if (pl)
         minorVersion = strchr(versionString, '.') + 1;
     if ((atoi(versionString) > 9) || (atoi(versionString) == 9 && minorVersion && atoi(minorVersion) > 51))
         support = TRUE;
+    pipelineClose(&pl);
     }
 return support;
 }

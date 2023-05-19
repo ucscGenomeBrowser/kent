@@ -1,20 +1,21 @@
-Found 53 problems:
+Found 54 problems:
 
 Couldn't open https://bad.url.txt/missing.bb
 Host bad.url.txt not found --> Name or service not known
-No subtracks in group: Blank.  This indicates a problem in the subGroup line for this group.
-No subtracks in group: Tags.  This indicates a problem in the subGroup line for this group.
-No subtracks in group: Views.  This indicates a problem in the subGroup line for this group.
 Parent cpgIslandView of track cpgIslandExt_ doesn't exist in hub input/manyErrorsHub.txt genome ricCom1
+SuperEnhancersBadSubgroupsComposite: No subtracks in group: Views.  This indicates a problem in the subGroup line for this group.
+SuperEnhancersComposite2: No subtracks in group: Tags.  This indicates a problem in the subGroup line for this group.
 container multiWig H2A_Z_MultiWig_ImputedComp has only one subtrack. multiWigs must have more than one subtrack
 missing 'subgroups' setting for subtrack RegBuildOverview
 netConnect() failed
+repeatMasker_: No subtracks in group: Blank.  This indicates a problem in the subGroup line for this group.
 state3 not a member of sortOrder subgroup tag
 state3 not a member of sortOrder subgroup view
 subtrack "repeatMaskerSINE_" has a subgroup "noGroup" not defined at parent level
 subtrack "state3" has a subgroup "badTag" not defined at parent level
 subtrack state3 not a member of subgroup view
 subtrack track2 not a member of subgroup sub1
+viewStanza: No subtracks in group: Views.  This indicates a problem in the subGroup line for this group.
 warning: missing description page for track: 'BuildOverview'
 warning: missing description page for track: 'H2A_Z_MultiWig_ImputedComp'
 warning: missing description page for track: 'MissingSubs'

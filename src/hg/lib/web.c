@@ -1219,6 +1219,50 @@ void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
 finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkCellStart);
 }
 
+static struct dyString* getHtdocsSubdir(char *dirName)
+/* return dystring with subdirectory under htDocs, tolerant of missing docRoot */
+{
+struct dyString *fullDirName = NULL;
+char *docRoot = hDocumentRoot();
+if (docRoot != NULL)
+    fullDirName = dyStringCreate("%s/%s", docRoot, dirName);
+else
+    // tolerate missing docRoot (i.e. when running from command line)
+    fullDirName = dyStringCreate("%s", dirName);
+return fullDirName;
+}
+
+char *webCssLink(char *fileName, boolean mustExist)
+/* alternative for webTimeStampedLinkToResource for CSS files: returns a string with a time-stamped
+ * link to a CSS file as a html fragment <link .... >. returns empty string if file does not exist.
+ * errAborts if mustExist is True.
+ * */
+{
+// construct the absolute path to the file on disk
+char *relDir = cfgOptionDefault("browser.styleDir","style");
+struct dyString *absDir = getHtdocsSubdir(relDir);
+struct dyString *absFileName = dyStringCreate("%s/%s", dyStringContents(absDir), fileName);
+
+struct dyString *htmlFrag = NULL;
+if (!fileExists(dyStringContents(absFileName)))
+    {
+    if (mustExist)
+        errAbort("webCssLink: file: %s doesn't exist.\n", dyStringContents(absFileName));
+    else
+        htmlFrag = dyStringNew(0);
+    }
+else
+    {
+    // construct a link with the relative path to the file on the web server
+    long mtime = fileModTime(dyStringContents(absFileName));
+    htmlFrag = dyStringCreate("<link rel='stylesheet' href='../%s/%s?v=%ld' type='text/css'>\n", relDir, fileName, mtime);
+    }
+
+dyStringFree(&absFileName);
+dyStringFree(&absDir);
+return dyStringCannibalize(&htmlFrag);
+}
+
 char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml)
 // If wrapInHtml
 //   returns versioned link embedded in style or script html (free after use).
@@ -1260,6 +1304,7 @@ else if (style)
     dirName = cfgOptionDefault("browser.styleDir","style");
 else if (image)
     dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
+
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
 if (docRoot != NULL)
@@ -1267,6 +1312,7 @@ if (docRoot != NULL)
 else
     // tolerate missing docRoot (i.e. when running from command line)
     fullDirName = dyStringCreate("%s", dirName);
+
 if (!fileExists(dyStringContents(fullDirName)))
     errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist. (host: %s)\n",
              dyStringContents(fullDirName), httpHost);

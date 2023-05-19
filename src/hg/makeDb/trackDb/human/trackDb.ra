@@ -2161,7 +2161,8 @@ exonNumbers off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
-dataVersion 2016-05-15
+dataVersion 2020-02-25
+pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
 
     track dgvMerged
@@ -2169,12 +2170,14 @@ dataVersion 2016-05-15
     shortLabel DGV Struct Var
     longLabel Database of Genomic Variants: Structural Var Regions (CNV, Inversion, In/del)
     priority 1
+    pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
     track dgvSupporting
     parent dgvPlus
     shortLabel DGV Supp Var
     longLabel Database of Genomic Variants: Supporting Structural Var (CNV, Inversion, In/del)
     priority 2
+    pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
 track covMask1kGPilotLowCov
 compositeTrack on

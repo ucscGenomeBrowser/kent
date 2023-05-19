@@ -5,7 +5,6 @@ superTrack on hide
 type bed
 visibility hide
 group phenDis
-pennantIcon Updated red ../goldenPath/newsarch.html#102422 "Updated on Oct 24, 2022"
 
 # Jarvis scores
 include jarvis.ra

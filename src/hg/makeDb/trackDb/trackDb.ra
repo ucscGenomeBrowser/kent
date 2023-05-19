@@ -3006,6 +3006,7 @@ type bed 3 .
 track evaSnp
 shortLabel EVA SNP Release 3
 longLabel Short Genetic Variants from European Variant Archive Release 3
+release alpha
 type bigBed 9 +
 group varRep
 visibility dense
@@ -3047,7 +3048,7 @@ filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Sy
 filterLabel.itemRgb General variant types by color grouping
 maxWindowCoverage 250000
 maxItems 1000000
-pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released Xxx. xx, xxxx"
+pennantIcon New red ../goldenPath/newsarch.html#050423 "Released May 04, 2023"
 
 searchTable evaSnp4
 searchType bigBed

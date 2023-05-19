@@ -487,6 +487,9 @@ The URL requires three variables: the sequence to blat, the type of query and th
 <pre>
 https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=[seq]&amp;type=[type]&amp;db=[database]&amp;output=json</pre>
 <p>
+If the sequence is longer than 8kbp, the request must be sent via HTTP POST.
+</p>
+<p>
 Query types include DNA, protein, translated RNA and translated DNA:</p>
 <pre>
 <a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json</a>

@@ -1,0 +1,196 @@
+## calculate coverage measurement from liftOver chain files
+
+## collect files together in one location
+
+mkdir /hive/data/genomes/hg38/bed/hprc/liftOver/chains
+cd /hive/data/genomes/hg38/bed/hprc/liftOver/chains
+
+cut -f1 ~/kent/src/hg/makeDb/doc/hprcAsmHub/hprc.orderList.tsv \
+  | cut -d'_' -f1-2 > accessionId.txt
+
+#  need to do the 'realpath' to the /hive/data/ location to be available
+#  for cluster runs.  /gbdb/hg38 isn't available for cluster reference
+
+for id in `cat accessionId.txt`
+do
+   p0="/gbdb/hg38/liftOver/hg38To${id}.over.chain.gz"
+   ln -s `realpath "${p0}"` ./
+done
+
+# and one extra for the T2T
+
+ln -s /hive/data/genomes/hg38/bed/lastzGCA_009914755.4.2022-03-28/axtChain/hg38.GCA_009914755.4.over.chain.gz \
+   hg38ToGCA_009914755.4.over.chain.gz
+
+# should be 97:
+
+ls *.over.chain.gz | wc -l
+     97
+
+## chrom.sizes were previously obtained by Max:
+
+mkdir /hive/data/genomes/hg38/bed/hprc/sizes
+cd /hive/data/genomes/hg38/bed/hprc/sizes
+for i in `cat ../accs.txt`; do wget `curl -s "https://genome-test.gi.ucsc.edu/list/files?genome=$i&format=text" | grep sizes`; done
+
+## and the T2T
+cp -p /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/GCA_009914755.4_T2T-CHM13v2.0.chrom.sizes \
+  GCA_009914755.4.chrom.sizes.txt
+
+## and the 2bit files
+
+mkdir /hive/data/genomes/hg38/bed/hprc/2bits
+cd /hive/data/genomes/hg38/bed/hprc/2bits
+
+cut -f1 ~/kent/src/hg/makeDb/doc/hprcAsmHub/hprc.orderList.tsv \
+  | cut -d'_' -f1-2 > accessionId.txt
+
+for id in `cat accessionId.txt`
+do
+   export id
+   for P in `curl -s -L "https://genome-test.gi.ucsc.edu/list/files?genome=$id;format=text" \
+     | grep 2bit | grep -v bpt |  sed -e 's#https://hgdownload.soe.ucsc.edu/hubs#/hive/data/genomes/asmHubs##;'`
+  do
+    rp=`realpath $P`
+    echo ln -s \"${rp}\" ./$id.2bit
+    ln -s "${rp}" ./$id.2bit
+  done
+done
+
+## and the T2T 2bit file:
+cp -p /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/GCA_009914755.4_T2T-CHM13v2.0.2bit \
+  GCA_009914755.4.2bit
+
+## convert the chain files to bed:
+
+mkdir /hive/data/genomes/hg38/bed/hprc/chainToBed
+cd /hive/data/genomes/hg38/bed/hprc/chainToBed
+
+## make a cluster jobList
+ls ../liftOver/chains | grep chain.gz | while read C
+do
+  s="${C#hg38To}"
+  c="${s%.over.chain.gz}"
+  printf "./runOne %s {check out exists+ %s.bed}\n" "${c}" "${c}"
+done > jobList
+
+printf '#!/bin/bash
+
+set -beEu -o pipefail
+
+export S="${1}"
+export overChain="/hive/data/genomes/hg38/bed/hprc/liftOver/chains/hg38To${S}.over.chain.gz"
+export twoBit="/hive/data/genomes/hg38/bed/hprc/2bits/${S}.2bit"
+export sizes="/hive/data/genomes/hg38/bed/hprc/sizes/${S}.chrom.sizes.txt"
+
+if [ "${overChain}" -nt "${S}.bed" ]; then
+ /cluster/bin/x86_64/chainToPsl $overChain /hive/data/genomes/hg38/chrom.sizes \
+   $sizes /hive/data/genomes/hg38/hg38.2bit $twoBit stdout \
+     | /cluster/bin/x86_64/pslToBed stdin stdout \
+       | /cluster/bin/x86_64/bedToExons stdin ${S}.bed
+ touch -r $overChain ${S}.bed
+fi
+' > runOne
+chmod +x runOne
+
+## running on ku
+ssh ku
+cd /hive/data/genomes/hg38/bed/hprc/chainToBed
+para create jobList
+para push
+para time
+Completed: 96 of 96 jobs
+CPU time in finished jobs:      54194s     903.24m    15.05h    0.63d  0.002 y
+IO & Wait Time:                   231s       3.84m     0.06h    0.00d  0.000 y
+Average job time:                 567s       9.45m     0.16h    0.01d
+Longest finished job:            1378s      22.97m     0.38h    0.02d
+Submission to last job:          2286s      38.10m     0.64h    0.03d
+
+## and the T2T lift.over:
+ssh hgwdev
+cd /hive/data/genomes/hg38/bed/hprc/chainToBed
+
+./runOne GCA_009914755.4
+
+## put all the bed files into one file
+mkdir ../coverage
+$HOME/bin/x86_64/gnusort -k1,1 -k2,2n -S100G --parallel=32 *.bed \
+  > ../coverage/allOvers.bed
+
+## calculate the coverage numers
+cd /hive/data/genomes/hg38/bed/hprc/coverage
+bedItemOverlapCount hg38 allOvers.bed > allOvers.bedGraph
+touch -r allOvers.sorted.bed allOvers.bedGraph
+
+## account for those areas not covered at all
+
+bedInvert.pl /hive/data/genomes/hg38/chrom.sizes  allOvers.bedGraph \
+    > zeroCounts.bed
+touch -r allOvers.bedGraph zeroCounts.bed
+
+## add in the zero counts
+
+(awk '{printf "%s\t%d\t%d\t0\n", $1,$2,$3}' zeroCounts.bed;
+    cat allOvers.bedGraph) | $HOME/bin/x86_64/gnusort -k1,1 -k2,2n \
+       -S100G --parallel=32 > fullGenome.bedGraph
+
+## final answer:
+
+bedGraphToBigWig fullGenome.bedGraph /hive/data/genomes/hg38/chrom.sizes \
+   hprcCoverage.bw
+
+## count up percent of genome in each coverage number
+
+printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $genomeSize = `ave -col=2 /hive/data/genomes/hg38/chrom.sizes | grep -w total`;
+chomp $genomeSize;
+$genomeSize =~ s/.000000//;
+$genomeSize =~ s/total +//;
+printf "# hg38 total genome size: %s\n", $genomeSize;
+
+my $countedBases = 0;
+my @genomeProfile;      # index N is the coverage depth 0 to 97
+                        # value is total bases at that coverage
+open (FH, "<  fullGenome.bedGraph") or die "can not read fullGenome.bedGraph";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($chr, $start, $end, $cover) = split('\s+', $line);
+  $countedBases += $end - $start;
+  $genomeProfile[$cover] += $end - $start;
+}
+close (FH);
+
+printf STDERR "# counted bases: %d\n", $countedBases;
+
+for (my $i = 0; $i < scalar(@genomeProfile); ++$i) {
+  printf "%d\t%d\t%.4f\n", $i, $genomeProfile[$i], 100.0 * $genomeProfile[$i] / $genomeSize;
+}
+' > percentGenome.pl
+
+chmod +x percentGenome.pl
+
+./percentGenome.pl > profile.txt
+
+## created an ordered by size bed file:
+
+awk '{printf "%s\t%d\t%d\t%d\t%d\n", $1,$2,$3,$4,$3-$2}' fullGenome.bedGraph \
+   | sort -k5,5nr > bySize.bed5
+
+## profile sizes of blocks for under 20 coverage
+
+awk '$4 < 20' bySize.bed5 | ave -col=5 stdin
+
+Q1 1.000000
+median 1.000000
+Q3 3.000000
+average 2358.696411
+min 1.000000
+max 30180026.000000
+count 97609
+total 230229998.000000
+standard deviation 172056.394886
+

@@ -567,15 +567,14 @@ puts("<table id=\"publicHubsTable\" class=\"hubList\"> "
             "<th>Display</th> "
             "<th>Hub Name</th> "
             "<th>Description</th> "
-            //"<th>Assemblies</th> "
             "<th>Assemblies<span class='assemblyClickNote'>Click to connect and browse directly</span></th> "
-        "</tr></thead><tbody><tr><td>");
+        "</tr></thead><tbody>");
 }
 
 void printHubListFooter()
 /* Write out the header for a list of hubs in its own table */
 {
-puts("</td></tr></tbody></table>");
+puts("</tbody></table>");
 }
 
 void outputPublicTableRow(struct hubEntry *hubInfo, int count)
@@ -1109,12 +1108,10 @@ static void printOutputForHub(struct hubEntry *hubInfo, struct hubSearchText *hu
  * Otherwise, each hub line is printed in its own table followed by a <ul> containing details
  * about the search results. */
 {
-if (hubSearchResult != NULL)
-    printf("<table class='hubList'><tbody>\n");
 outputPublicTableRow(hubInfo, count);
 if (hubSearchResult != NULL)
     {
-    printf("</tbody></table>\n");
+    printf("<tr><td colspan=4 style='text-align:left;'>\n");
     struct trackHub *hub = fetchTrackHub(hubInfo);
     if (hub != NULL)
         {
@@ -1126,6 +1123,7 @@ if (hubSearchResult != NULL)
         printf("</div>\n");
         printHubOutputStructure(hubOut, hubInfo);
         }
+    printf("</td></tr>\n");
     }
 }
 
@@ -1157,9 +1155,7 @@ long printOutputForHubTime;
 if (hubsToPrint != NULL)
     {
     printHubListHeader();
-
-    if (searchResultHash == NULL) // if not displaying search results, join the hub <tr>s into one table
-        printf("<table class='hubList'><tbody>\n");
+    
     struct slName *thisHubName = NULL;
     for (thisHubName = hubsToPrint; thisHubName != NULL; thisHubName = thisHubName->next)
         {
@@ -1189,9 +1185,7 @@ if (hubsToPrint != NULL)
     printOutputForHubTime = clock1000();
     if (measureTiming)
         printf("hgHubConnect: printOutputForHubTime before js execution: %lu millis<BR>\n", printOutputForHubTime - slTime);
-    if (searchResultHash == NULL)
-        printf("</tbody></table>\n");
-
+    
     printHubListFooter();
     }
 if (hubsToPrint != NULL)

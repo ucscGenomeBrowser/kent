@@ -418,30 +418,48 @@ freeMem(escapedKey);
 return idList;
 }
 
+static struct hgPosTable *findTable(struct hgPosTable *list, char *name)
+/* Find first table in list that matches name */
+{
+struct hgPosTable *ret = NULL;
+for (ret = list; ret != NULL; ret = ret->next)
+    {
+    if (sameString(ret->name, name))
+        return ret;
+    }
+return NULL;
+}
+
 static struct hgPosTable *addKnownGeneTable(char *db, struct hgPositions *hgp, char *name)
 /* Create new table for known genes matches, add it to hgp, and return it. */
 {
+// we may be coming here a second time, after already hitting knownGeneFast
+// add non duplicate results to the end of our hgp
 struct hgPosTable *table;
-AllocVar(table);
-table->searchTime = -1;
-if (differentString(name, "knownGene"))
+table = findTable(hgp->tableList, name);
+if (table == NULL)
     {
-    char *masterGeneTrack = hdbGetMasterGeneTrack(name);
+    AllocVar(table);
+    table->searchTime = -1;
+    if (differentString(name, "knownGene"))
+        {
+        char *masterGeneTrack = hdbGetMasterGeneTrack(name);
 
-    table->description = cloneString(masterGeneTrack);
-    table->name = cloneString(masterGeneTrack);
-    }
-else
-    {
-    if (hTableExists(db, "knownAttrs"))
-        table->description = cloneString("Gencode Genes");
-    else if (hTableExists(db, "kgProtMap2"))
-        table->description = cloneString("UCSC Genes");
+        table->description = cloneString(masterGeneTrack);
+        table->name = cloneString(masterGeneTrack);
+        }
     else
-        table->description = cloneString("Known Genes");
-    table->name = cloneString("knownGene");
+        {
+        if (hTableExists(db, "knownAttrs"))
+            table->description = cloneString("Gencode Genes");
+        else if (hTableExists(db, "kgProtMap2"))
+            table->description = cloneString("UCSC Genes");
+        else
+            table->description = cloneString("Known Genes");
+        table->name = cloneString("knownGene");
+        }
+    slAddHead(&hgp->tableList, table);
     }
-slAddHead(&hgp->tableList, table);
 return table;
 }
 
@@ -497,7 +515,6 @@ if (diff == 0)
     }
 return diff;
 }
-
 
 static void addKnownGeneItems(struct hgPosTable *table,
 	struct trixSearchResult *tsrList, struct sqlConnection *conn, char *name, struct trix *trix, struct hgFindSpec *hfs)
@@ -603,7 +620,29 @@ for (tp = tpList; tp != NULL; tp = tp->next)
     }
 
 slSort(&posList, hgPosCmpCanonical);
-table->posList = posList;
+// we may have already been here (ex: queried knownGeneFast first), if so,
+// we need to put the new list of results behind the old list, since the
+// old results had a higher priority. We can now rank results to knownGene
+// by putting what we want users to find first in different search specs
+if (table->posList == NULL)
+    table->posList = posList;
+else
+    {
+    struct hash *prevHash = hashNew(0);
+    struct hgPos *newPosList = NULL, *next;
+    for (pos = table->posList; pos != NULL; pos = pos->next)
+        {
+        hashAdd(prevHash, pos->name, pos);
+        }
+    for (pos = posList; pos != NULL; pos = next)
+        {
+        next = pos->next;
+        if (!hashLookup(prevHash, pos->name))
+            slAddHead(&newPosList, pos);
+        }
+    slReverse(&newPosList);
+    table->posList = slCat(table->posList, newPosList);
+    }
 
 hashFree(&hash);
 dyStringFree(&dy);
@@ -639,7 +678,12 @@ trixClose(&trix);
 // This is hacky but rely on knownGene table being at head of list
 // for timing. TODO: make this more robust
 if (measureTiming && table != NULL)
-    table->searchTime = clock1000() - startTime;
+    {
+    if (table->searchTime == -1)
+        table->searchTime = clock1000() - startTime;
+    else
+        table->searchTime += clock1000() - startTime;
+    }
 return gotIt;
 }
 
@@ -3409,7 +3453,7 @@ if (!(multiTerm) || (multiTerm && !foundIt))
     {
     for (hfs = longList; hfs != NULL; hfs = hfs->next)
         {
-        if (hashFindVal(foundSpecHash, hfs->searchTable) != NULL)
+        if (hashFindVal(foundSpecHash, hfs->searchTable) != NULL && !sameString(hfs->searchTable, "knownGene"))
             continue;
         foundIt |= hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, multiTerm, measureTiming);
         }

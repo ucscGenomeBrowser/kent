@@ -11,14 +11,8 @@ chainSwap = ${DESTBINDIR}/chainSwap
 all:
 
 test:	gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
-	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName
-
-# things with large files that we want to remove their big history from cvs
-# but soon will replace with short versions and no big history.
-# temporarily moved to /hive/users/galt/largeCvsFiles/kent/...
-# input/kgMRna.psl
-# input/negQ.chain
-testnot: kgProt negQChain
+	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName \
+	kgProt negQChain testSpGencode
 
 # basic tests of protein -> mrna -> genome mapping
 kgProt: mkdirs
@@ -97,6 +91,15 @@ retroParent: mkdirs
 # -mapFileWithInQName
 testMapFileWithInQName: mkdirs
 	${pslMap} -mapFileWithInQName -mapInfo=output/$@.mapinfo input/gencode.src.psl input/gencode.blocks.qName-psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.mapinfo output/$@.mapinfo
+
+# swissprot canonical features that were mapped to isoform with protein
+# isoforms aligned to gencode RNAs.  Mapping these resulted in overlapping
+# blocks.  This tests block adjustments.
+testSpGencode: mkdirs
+	${pslMap} -mapInfo=output/$@.mapinfo input/spAnnotIso.psl input/spGencode.psl output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.mapinfo output/$@.mapinfo

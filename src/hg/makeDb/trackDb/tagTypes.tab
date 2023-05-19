@@ -130,6 +130,7 @@ dividers *
 dragAndDrop *
 drawMode hic
 doWiggle bigBed
+downloadUrl* *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
@@ -280,7 +281,7 @@ lollipopField bigBed bigLolly
 lollyField bigBed bigLolly
 lollyMaxSize bigBed bigLolly
 lollySizeField bigBed bigLolly
-logoMaf wig
+logoMaf wig bigWig
 longLabel *
 longlabel genePred
 longLabelClip *

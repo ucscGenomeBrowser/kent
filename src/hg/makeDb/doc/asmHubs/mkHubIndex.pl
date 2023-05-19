@@ -36,16 +36,20 @@ my %cladeId;	# value is asmId, value is clade, useful for 'legacy' index page
 
 printf STDERR "# mkHubIndex %s %s %s %s\n", $Name, $asmHubName, $defaultAssembly, $orderList;
 my $hprcIndex = 0;
+my $ccgpIndex = 0;
 my $vgpIndex = 0;
 $hprcIndex = 1 if ($Name =~ m/hprc/i);
+$ccgpIndex = 1 if ($Name =~ m/ccgp/i);
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
-my %vgpClass;	# key is asmId, value is taxon 'class' as set by VGP project
-if ($vgpIndex) {
-  my $vgpClass = "$home/kent/src/hg/makeDb/doc/vgpAsmHub/vgp.taxId.asmId.class.txt";
-  open (FH, "<$vgpClass") or die "can not read $vgpClass";
+my %extraClass;	# key is asmId, value is taxon 'class' as set by VGP project
+if ($vgpIndex || $ccgpIndex) {
+  my $whichIndex = "vgp";
+  $whichIndex = "ccgp" if ($ccgpIndex);
+  my $extraClass = "$home/kent/src/hg/makeDb/doc/${whichIndex}AsmHub/${whichIndex}.taxId.asmId.class.txt";
+  open (FH, "<$extraClass") or die "can not read $extraClass";
   while (my $line = <FH>) {
     my ($taxId, $asmId, $class) = split('\t', $line);
-    $vgpClass{$asmId} = $class;
+    $extraClass{$asmId} = $class;
   }
   close (FH);
 }
@@ -108,7 +112,26 @@ Vertebrate Genomes Project.</a> $vgpSubset
 
 END
 } else {
-  if ($hprcIndex) {
+  if ($ccgpIndex) {
+    print <<"END";
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="CCGP -  California Conservation Genomics Project " -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>CCGP -  California Conservation Genomics Project assembly hub</h1>
+<p>
+<a href='https://www.ccgproject.org/' target=_blank>
+<img src='CCGP_logo.png' width=280 alt='CCGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://www.ccgproject.org/' target=_blank>
+California Conservation Genomics Project.</a>
+</p>
+
+END
+  } elsif ($hprcIndex) {
     print <<"END";
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="HPRC - Human Pangenome Reference Consortium" -->
@@ -238,7 +261,7 @@ END
 sub startTable() {
 print '
 <table class="sortable" border="1">
-<thead><tr><th>count</th>
+<thead style="position:sticky; top:0;"><tr><th>count</th>
   <th>common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
@@ -254,7 +277,9 @@ if ("legacy" eq $asmHubName) {
   printf "<th>clade</th>\n";
 }
 
-if ($vgpIndex) {
+if ($ccgpIndex) {
+  printf "<th>class<br>CCGP&nbsp;link</th>\n";
+} elsif ($vgpIndex) {
   printf "<th>class<br>VGP&nbsp;link</th>\n";
 }
 print "</tr></thead><tbody>\n";
@@ -440,16 +465,28 @@ sub tableContents() {
          printf "    <td align=center>%s</td>\n", $cladeId{$asmId};
       }
     }
-    if ($vgpIndex) {
+    if ($ccgpIndex) {
       my $sciNameUnderscore = $sciName;
       $sciNameUnderscore =~ s/ /_/g;
       $sciNameUnderscore = "Strigops_habroptilus" if ($sciName =~ m/Strigops habroptila/);
 
-      if (! defined($vgpClass{$asmId})) {
-         printf STDERR "# ERROR: no 'class' defined for VGP assembly %s\n", $asmId;
+      if (! defined($extraClass{$asmId})) {
+         printf STDERR "# ERROR: no 'class' defined for CCGP assembly %s\n", $asmId;
          exit 255;
       }
-      printf "    <td align=center><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $vgpClass{$asmId}
+# it isn't clear how we can get these names
+# https://www.ccgproject.org/species/corynorhinus-townsendii-townsends-big-eared-bat
+      printf "    <td align=center><a href='https://www.ccgproject.org/species/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $extraClass{$asmId}
+    } elsif ($vgpIndex) {
+      my $sciNameUnderscore = $sciName;
+      $sciNameUnderscore =~ s/ /_/g;
+      $sciNameUnderscore = "Strigops_habroptilus" if ($sciName =~ m/Strigops habroptila/);
+
+      if (! defined($extraClass{$asmId})) {
+         printf STDERR "# ERROR: no 'class' defined for VGP/CCGP assembly %s\n", $asmId;
+         exit 255;
+      }
+      printf "    <td align=center><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $extraClass{$asmId}
     }
     printf "</tr>\n";
   }

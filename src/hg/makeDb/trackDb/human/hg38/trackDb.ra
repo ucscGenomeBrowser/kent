@@ -539,8 +539,7 @@ include knownGene.ra beta,public
 include knownGene.alpha.ra alpha
 include knownGeneArchive.ra alpha
 
-include trackDb.100way.ra beta,public
-include trackDb.100way.alpha.ra alpha
+include trackDb.100way.ra 
 include trackDb.145way.ra alpha
 
 include trackDb.241wayT.ra alpha
@@ -619,6 +618,7 @@ longLabel GTEx Brain Gene Expression in barChart track format
 group expression
 
 track dgvPlus override
+pennantIcon Updated red ../goldenPath/newsarch.html#042423 "Updated Apr. 24, 2023"
 group varRep
 
     track dgvMerged override
@@ -631,7 +631,7 @@ group varRep
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
     searchIndex name
-
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Size:$_size; Type:$varType; Affected genes:$genes
 
     track dgvSupporting override
     parent dgvPlus
@@ -643,6 +643,22 @@ group varRep
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
     searchIndex name
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Size:$_size; Type:$varType; Affected genes:$genes
+
+    track dgvGold
+    parent dgvPlus
+    shortLabel DGV Gold Standard
+    longLabel Database of Genomic Variants: Gold Standard Variants
+    bigDataUrl /gbdb/hg38/dgv/dgvGold.bb
+    type bigBed 12 +
+    url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg38?ref=$S;start=${;end=$};name=$$;class=Sequence
+    searchIndex name
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$variant_sub_type; Frequency:$Frequency
+    pennantIcon Updated red ../goldenPath/newsarch.html#042423 "Updated Apr. 24, 2023"
+
+searchTable dgvGold
+searchType bigBed
+searchDescription DGV Gold Variants
 
 searchTable dgvMerged
 searchMethod exact
@@ -832,6 +848,7 @@ semiShortCircuit 1
 searchPriority 55
 
 include hprcChain.ra
+include hprcCoverage.ra
 
 include trackDb.470way.ra
 
@@ -847,6 +864,6 @@ speciesOrder panPan3 panTro6 gorGor6 ponAbe3 HLhylMol2 HLnomLeu4 HLpapAnu5 HLthe
 include topmed.ra alpha
 include gerp.ra alpha
 
-include crossTissueMaps.ra alpha
+include crossTissueMaps.ra
 
 include problematic.ra

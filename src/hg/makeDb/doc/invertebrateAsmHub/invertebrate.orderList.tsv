@@ -8,6 +8,8 @@ GCF_021461395.2_iqSchAmer2.1	American grasshopper (TAMUIC-IGC-003095 2022)
 GCF_020809275.1_ASM2080927v1	American house dust mite (JKM2019 2021)
 GCF_018991925.1_GMGI_Hamer_2.0	American lobster
 GCF_943734745.1_idAnoDarlMG_H_01	American malaria mosquito (2022)
+GCA_022747625.1_ioHetAmer1.0.a	American ruby spot damselfly (1083.01 alternate hap 2022)
+GCA_022747635.1_ioHetAmer1.0.p	American ruby spot damselfly (1083.01 primary hap 2022)
 GCA_900088365.1_Bl71nemr	amphioxus (2018)
 GCF_000764305.2_Hazt_2.0.2	amphipods H.azteca (HAZT.00-mixed v2.0.2 2019)
 GCA_001587735.2_Phaw_5.0	amphipods P.hawaiensis (Chicago-F 2018)
@@ -15,6 +17,7 @@ GCF_000143395.1_Attacep1.0	ant A.cephalotes
 GCF_001594045.1_Acol1.0	ant A.colombica
 GCF_001594065.1_Ccosl1.0	ant C.costatus
 GCF_021464435.1_ULB_Chis1_1.0	ant C.hispanica (Lineage 1 2022)
+GCA_025532165.1_iyCamVici1.0	ant C.vicinus (PSW18456_S1 2022)
 GCF_001313825.1_ASM131382v1	ant D.quadriceps
 GCF_003651465.1_ASM365146v1	ant F.exsecta
 GCF_005281655.2_TAMU_Nfulva_1.1	ant N.fulva (TAMU-Nful-2015 v1.1 2019)
@@ -67,6 +70,8 @@ GCF_000648695.1_Otau_2.0	beetle O.taurus
 GCF_001625305.1_Haploidv18h27	Belcher's lancelet
 GCF_023158985.2_OEROSLIN_1.1	bivalves O.edulis (2022)
 GCF_902652985.1_xPecMax1.1	bivalves P.maximus (2019)
+GCA_022045225.1_xgHalCrac1.a	black abalone (W230 alternate hap 2022)
+GCA_022045235.1_xgHalCrac1.p	black abalone (W230 primary hap 2022)
 GCA_001735545.1_ASM173554v1	black blowfly (Indy2012f 2016)
 GCF_015345945.1_Tmad_KSU_1.1	black flour beetle
 GCF_015228065.1_NSTDA_Pmon_1	black tiger shrimp
@@ -98,7 +103,8 @@ GCF_003590095.1_tn1	cabbage looper
 GCA_905163435.1_ilMamBras1.1	cabbage moth
 GCF_001856805.1_P_rapae_3842_assembly_v2	cabbage white
 GCF_905147795.1_ilPieRapa1.1	cabbage white (refseq 2021)
-GCF_021869535.1_xbMytCali1.0.p	California mussel (2022)
+GCA_021869935.1_xbMytCali1.0.a	California mussel (M0D057914Y alternate hap 2022)
+GCF_021869535.1_xbMytCali1.0.p	California mussel (M0D057914Y primary hap 2022)
 GCF_000002075.1_AplCal3.0	California sea hare
 GCF_001194135.1_Octopus_bimaculoides_v2_0	California two-spot octopus O.bimaculoides (UCB-OBI-ISO-001 male 2015)
 GCF_021461385.2_iqSchPice1.1	Central American locust (TAMUIC-IGC-003096 2022)
@@ -126,7 +132,8 @@ GCF_001298355.1_Pap_ma_1.0	common yellow swallowtail (ya'a_city_454_Pm BGI 2015)
 GCF_022581195.2_ilHelZeax1.1	corn earworm (HzStark_Cry1AcR 2022)
 GCF_003676215.2_ASM367621v3	corn leaf aphid
 GCF_004010815.1_ASM401081v1	cotton aphid (AGOS-L3 2019)
-# GCF_020184175.1_ASM2018417v2	cotton aphid (Hap1 2021)
+GCA_917880025.4_PGI_APHIGO_v101	cotton aphid (2022)
+GCF_020184175.1_ASM2018417v2	cotton aphid (Hap1 2021)
 GCF_002156985.1_Harm_1.0	cotton bollworm (Harm_GR_Male_#8 2017 refseq)
 GCF_023701775.1_HaSCD2	cotton bollworm (SCD 2022)
 GCF_011630105.1_ASM1163010v1	crinoids A.japonica
@@ -176,6 +183,7 @@ GCF_009650485.1_drosAlbom15112-1751.03v1	fly D.albomicans
 GCF_017639315.1_ASM1763931v2	fly D.ananassae (14024-0371.13 U. Maryland 2021)
 GCF_003285975.2_DanaRS2.1	fly D.ananassae (14024-0371.16-18 U. Chicago 2018)
 GCF_001654025.1_ASM165402v1	fly D.arizonae
+GCA_005876895.1_DaztRS1	fly D.azteca (UCSD 14012-1071.03 2019)
 GCF_000233415.1_Dbia_2.0	fly D.biarmipes (BCM 2013)
 GCF_018148935.1_ASM1814893v1	fly D.biarmipes (Stanford 2021)
 GCF_000236285.1_Dbip_2.0	fly D.bipectinata (BCM 2013)
@@ -192,18 +200,22 @@ GCF_000005155.2_dgri_caf1	fly D.grimshawi (Agencourt 2006)
 GCF_018153295.1_ASM1815329v1	fly D.grimshawi (Stanford 2021)
 GCF_900245975.1_DGUA_6	fly D.guanche
 GCF_003285905.1_DhydRS2	fly D.hydei
-GCF_004354385.1_UK_Dinn_1.0	fly D.innubila
+GCF_004354385.1_UK_Dinn_1.0	fly D.innubila (TH190305 2019 refseq)
+GCA_004354385.2_ASM435438v2	fly D.innubila (TH190305 2020 genbank)
 GCF_000224215.1_Dkik_2.0	fly D.kikkawai (Baylor 2013)
 GCF_018152535.1_ASM1815253v1	fly D.kikkawai (Stanford 2021)
+GCA_008121275.1_UCBerk_Dlow_1.0	fly D.lowei (Jillo6 2019)
 GCF_004382145.1_ASM438214v1	fly D.mauritiana
 GCF_000001215.4_Release_6_plus_ISO1_MT	fly D.melanogaster
 GCF_003369915.1_D.miranda_PacBio2.1	fly D.miranda
 GCF_000005175.2_dmoj_caf1	fly D.mojavensis (Agencourt 2006)
 GCF_018153725.1_ASM1815372v1	fly D.mojavensis (Stanford 2021)
 GCF_001654015.2_UFRJ_Dnav_4.2	fly D.navojoa
+GCA_024703675.1_RU_Dneb_q3p	fly D.nebulosa (14030-0761.06 2022)
 GCF_003285875.2_DnovRS2.1	fly D.novamexicana
 GCF_018151105.1_ASM1815110v1	fly D.obscura (Stanford 2021)
 GCF_002217835.1_Dobs_1.0	fly D.obscura 14011-0151.01
+GCA_005876975.1_DoreRS1	fly D.orena (14021-0245.01 2019)
 GCF_003286085.1_DperRS2	fly D.persimilis
 GCF_009870125.1_UCI_Dpse_MV25	fly D.pseudoobscura
 GCF_000236305.1_Drho_2.0	fly D.rhopaloa (modENCODE 2013)
@@ -214,6 +226,7 @@ GCF_002093755.1_Dser1.0	fly D.serrata
 GCF_016746395.2_Prin_Dsim_3.1	fly D.simulans (w501 v3.1 2021)
 GCF_008121235.1_UCBerk_Dsub_1.0	fly D.subobscura
 GCF_014743375.2_RU_Dsub_v1.1	fly D.subpulchrella
+GCA_018150745.1_ASM1815074v1	fly D.sucinea (14030-0791.01 2021)
 GCF_013340165.1_LBDM_Dsuz_2.1.pri	fly D.suzukii
 GCF_000224235.1_Dtak_2.0	fly D.takahashii (BCM 2013)
 GCF_018152695.1_ASM1815269v1	fly D.takahashii (Stanford 2021)
@@ -274,11 +287,14 @@ GCA_009770625.1_UL_Ltar_1.0	Leishmania tarentolae (Parrot-TarII 2019)
 GCF_001293395.1_ASM129339v1	Leptomonas pyrrhocoris (H10 2015 kinetoplastids)
 GCF_000956235.1_wasmannia.A_1.0	little fire ant
 GCF_000184785.3_Aflo_1.1	little honeybee
+GCA_024610695.1_qqTetVers1.0.a	longjawed orb weaver (CCGP_RG_IND1 alternate hap 2022)
+GCA_024610705.1_qqTetVers1.0.p	longjawed orb weaver (CCGP_RG_IND1 primary hap 2022)
 GCA_012273795.1_ASM1227379v1	masson pine moth
 GCA_902829235.1_CLODIP2	mayflies C.dipterum (2020)
 GCF_905333055.1_ilManJurt1.1	meadow brown (refseq 2021)
 GCF_000347755.3_Ccap_2.1	Mediterranean fruit fly
 GCF_000806345.2_ASM80634v2	melon fly (v2 USDA-PBARC White Pupae T1 2014)
+GCF_028554725.1_idZeuCucr1.2	melon fly (PBARC_wt_2022May primary hap 2023)
 GCF_028408465.1_idAnaLude1.1	Mexican fruit fly (Willacy primary hap 2023)
 GCF_023375885.1_qqDerAnde1.2	mites & ticks D.andersoni (2022)
 GCF_013339745.2_BIME_Dsil_1.4	mites & ticks D.silvarum (Dsil-2018 2022)
@@ -392,7 +408,8 @@ GCA_000695345.1_Assembly_2.2_of_Bactrocera_tryoni_genome	Queensland fruit fly (b
 GCF_016617805.1_CSIRO_BtryS06_freeze2	Queensland fruit fly (S06 2021)
 GCA_001949185.1_Rvar_4.0	R.varieornatus (YOKOZUNA-1 2016 tardigrades)
 GCF_003343065.1_H.ruf_v1.0	red abalone (Redab-CP-2226-F 2018 Iowa State U)
-GCF_023055435.1_xgHalRufe1.0.p	red abalone (2022 UCLA)
+GCA_023055495.1_xgHalRufe1.0.a	red abalone (VD_foot alternate hap 2022)
+GCF_023055435.1_xgHalRufe1.0.p	red abalone (VD_foot primary hap 2022 UCLA)
 GCF_905147765.1_ilVanAtal1.2	red admiral (refseq 2021)
 GCF_000188075.2_Si_gnH	red fire ant (2018)
 GCF_016802725.1_UNIL_Sinv_3.0	red fire ant (2021)
@@ -485,7 +502,10 @@ GCF_000239435.1_ASM23943v1	two-spotted spider mite
 GCF_000224145.3_KH	vase tunicate C.intestinalis (2013)
 # GCF_023898315.1_iqSchNite1.1	vagrant locust (TAMUIC-IGC-003100 2022)
 GCF_010614865.2_ASM1061486v2	velvet spider (Namibia, Etosha AA2019 2020)
-GCA_023053545.1_LEPA1.1	vernal pool tadpole shrimp (LEPA_1 2022)
+GCA_023053555.1_BRLI_1.1	vernal pool fairy shrimp B.lindahli (BRLI_1 2022)
+GCA_023053575.1_BRLY_1.1	vernal pool fairy shrimp B.lynchi (BRLY_001 2022)
+GCA_023053545.1_LEPA1.1	vernal pool tadpole shrimp L.packardi (LEPA_1 2022)
+GCA_003260075.1_Phmamm_MTP2014	warty sea squirt (Sete-AP-2010 2018)
 GCF_014905175.1_ASM1490517v1	wasp A.gifuensis
 GCF_010883055.1_B_treatae_v1	wasp B.treatae
 GCF_000648655.2_Cflo_2.0	wasp C.floridanum
@@ -513,3 +533,5 @@ GCA_002204515.1_AaegL5.0	yellow fever mosquito (LVP_AGWG 2017 genbank)
 GCF_002204515.2_AaegL5.0	yellow fever mosquito (LVP_AGWG 2017 refseq)
 GCF_003268045.1_YSA_version1	yellow sugarcane aphid
 GCF_002113885.1_ASM211388v2	Yesso scallop
+GCA_023634265.1_eaPisBrev1.0.a	starfish (M0D059179O alternate hap 2022)
+GCA_023634235.1_eaPisBrev1.0.p	starfish (M0D059179O primary hap 2022)

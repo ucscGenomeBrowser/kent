@@ -767,6 +767,29 @@ if (cartVis == NULL)
     }
 }
 
+static void outAttachedHubUrls(struct cart *cart, struct dyString *dy)
+/* output the hubUrls for all attached hubs in the cart. */
+{
+struct hubConnectStatus *statusList = hubConnectStatusListFromCart(cart);
+
+if (statusList == NULL)
+    return;
+
+if (dy)
+    dyStringPrintf(dy,"&assumesHub=");
+else
+    printf("assumesHub ");
+for(; statusList; statusList = statusList->next)
+    {
+    if (dy)
+        dyStringPrintf(dy,"%d=%s ", statusList->id, cgiEncode(statusList->hubUrl));
+    else
+        printf("%d=%s ", statusList->id, statusList->hubUrl);
+    }
+if (dy == NULL)
+    printf("\n");
+}
+
 static void outDefaultTracks(struct cart *cart, struct dyString *dy)
 /* Output the default trackDb visibility for all tracks
  * in trackDb if the track is not mentioned in the cart. */
@@ -875,6 +898,9 @@ cleanHgSessionFromCart(cart);
 struct dyString *encoded = dyStringNew(4096);
 cartEncodeState(cart, encoded);
 
+// First output the hubStatus id's for attached trackHubs
+outAttachedHubUrls(cart, encoded);
+
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, encoded);
 
@@ -982,8 +1008,8 @@ if (convertTestResult != 0)
     }
 
 sqlSafef(query, sizeof(query),
-    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
-    encUserName, encSessionName);
+    "select firstUse from %s where userName = \"%s\" and sessionName = \"%s\"",
+    namedSessionTable, encUserName, encSessionName);
 char *firstUse = sqlNeedQuickString(conn, query);
 sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
 char *userIdx = sqlQuickString(conn, query);
@@ -1010,8 +1036,8 @@ void thumbnailRemove(char *encUserName, char *encSessionName, struct sqlConnecti
 {
 char query[4096];
 sqlSafef(query, sizeof(query),
-    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
-    encUserName, encSessionName);
+    "select firstUse from %s where userName = \"%s\" and sessionName = \"%s\"",
+    namedSessionTable, encUserName, encSessionName);
 char *firstUse = sqlNeedQuickString(conn, query);
 sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
 char *userIdx = sqlQuickString(conn, query);
@@ -1371,6 +1397,9 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 cleanHgSessionFromCart(cart);
 
 cartDumpHgSession(cart);
+
+// First output the hubStatus id's for attached trackHubs
+outAttachedHubUrls(cart, NULL);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);

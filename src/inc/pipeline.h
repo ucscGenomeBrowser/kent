@@ -97,9 +97,11 @@ struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
  * arguments.  Shell expansion is not done on the arguments.  If pipelineRead
  * is specified, the output of the pipeline is readable from the pipeline
  * object.  If pipelineWrite is specified, the input of the pipeline is
- * writable from the pipeline object.  If stderrFile is NULL, stderr is inherited,
- * otherwise it is redirected to this file.   If timeout is > 0, pipeline is killed
- * after timeout seconds.
+ * writable from the pipeline object.  Specify otherEndFile as "/dev/null" for
+ * no input or no output (or to discard output).  If otherEndFile is NULL,
+ * then either stdin or stdout are inherited from the current process.  If
+ * stderrFile is NULL, stderr is inherited, otherwise it is redirected to this
+ * file.  If timeout is > 0, pipeline is killed after timeout seconds.
  */
 
 void pipelineDumpCmds(char ***cmds);

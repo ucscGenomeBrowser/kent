@@ -535,6 +535,11 @@ char *getIdInUrl(struct trackDb *tdb, char *itemName);
 /* If we have an idInUrlSql tag, look up itemName in that, else just
  * return itemName. */
 
+void printFieldLabel(char *entry);
+/* print the field label, the first column in the table, as a <td>. Allow a
+ * longer description after a |-char, as some fields are not easy to
+ * understand. */
+
 struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount);
 /* return the extra field names and their values as a list of slPairs */
 

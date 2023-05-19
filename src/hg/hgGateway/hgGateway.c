@@ -174,6 +174,7 @@ static void setTaxId(struct cartJson *cj, struct hash *paramHash)
 {
 char *taxIdStr = cartJsonRequiredParam(paramHash, "taxId", cj->jw, "setTaxId");
 char *db = cartJsonOptionalParam(paramHash, "db");
+char *organism = cartJsonOptionalParam(paramHash, "org");
 int taxId = atoi(taxIdStr);
 if (isEmpty(db))
     db = hDbForTaxon(taxId);
@@ -183,6 +184,8 @@ else
     {
     writeFindPositionInfo(cj->jw, db, taxId, NULL, hDefaultPos(db));
     cartSetString(cart, "db", db);
+    if (!isEmpty(organism))
+        cartSetString(cart, "org", organism);
     cartSetString(cart, "position", hDefaultPos(db));
     }
 }
@@ -611,6 +614,7 @@ else
              match->type, dbDb->name, term);
 jsonWriteString(jw, "label", label);
 jsonWriteString(jw, "value", value);
+jsonWriteString(jw, "org", dbDb->organism);
 jsonWriteNumber(jw, "taxId", dbDb->taxId);
 if (isNotEmpty(category))
     jsonWriteString(jw, "category", category);
@@ -906,7 +910,9 @@ static char *getSearchTermUpperCase()
 {
 pushWarnHandler(htmlVaBadRequestAbort);
 pushAbortHandler(htmlVaBadRequestAbort);
-char *term = cgiOptionalString(SEARCH_TERM);
+char *cgiTerm = cgiOptionalString(SEARCH_TERM);
+char *term = skipLeadingSpaces(cgiTerm);
+eraseTrailingSpaces(term);
 touppers(term);
 if (isEmpty(term))
     errAbort("Missing required CGI parameter %s", SEARCH_TERM);

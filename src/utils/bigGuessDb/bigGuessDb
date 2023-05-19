@@ -11,21 +11,33 @@ import os, gzip, subprocess
 # ==== functions =====
 def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
-    parser = optparse.OptionParser("usage: %prog [options] filename - given a bigBed or "\
-            "bigWig file, " \
-        "guess the assembly based on the chrom sizes")
+    parser = optparse.OptionParser("""usage: %prog [options] inFile - given a bigBed or "\
+bigWig file or URL, 
+guess the assembly based on the chrom names and sizes. Must have bigBedInfo and
+bigWigInfo in PATH. Also requires a bigGuessDb.txt.gz, an alpha version of
+which can be downloaded at https://hgwdev.gi.ucsc.edu/~max/bigGuessDb/bigGuessDb.txt.gz
+
+Example run:
+    $ wget https://hgwdev.gi.ucsc.edu/~max/bigGuessDb/bigGuessDb.txt.gz
+    $ bigGuessDb --best https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM1014nnn/GSM1014177/suppl/GSM1014177_mm9_wgEncodeUwDnaseNih3t3NihsMImmortalSigRep2.bigWig
+    mm9
+
+""")
 
     parser.add_option("-d", "--debug", dest="debug", action="store_true", \
         help="show debug messages")
     parser.add_option("", "--index", dest="index", action="store_true", \
-        help="go /hive/data/genomes and build an index file with all chromSizes")
+            help="used by UCSC staff: go over /hive/data/genomes and build an index of all chromSizes")
     parser.add_option("-b", "--best", dest="best", action="store_true", \
-        help="only print a single string, the best matching assembly, or 'emptyFile' or 'notFound'. ")
-    parser.add_option("", "--indexFile", dest="indexFname", action="store", \
-        help="Use specified index file, default is %default. Use --index to create this file.", default="~/.guessAssembly.txt.gz")
+        help="only print a single string, the best matching assembly, or 'emptyFile' or 'notFound'. " \
+        "If multiple arguments are given or --fromFile is used, a tab-sep table is output.")
+    parser.add_option("-i", "--indexFile", dest="indexFname", action="store", \
+        help="Use specified index file, default is %default. ", default="bigGuessDb.txt.gz")
+    parser.add_option("", "--fromFile", dest="fromFile", action="store", \
+        help="Read URLs to process from input file, can be /dev/stdin")
     (options, args) = parser.parse_args()
 
-    if args==[] and not options.index:
+    if args==[] and not options.index and not options.fromFile:
         parser.print_help()
         exit(1)
 
@@ -70,6 +82,23 @@ def writeSizes(allSizes, outFname):
     ofh.close()
     logging.info("Wrote %s", outFname)
 
+def indexGenarkSizes(allSizes, inDir):
+    import glob
+    from os.path import basename
+    for dbType in ["GCA", "GCF"]:
+        baseDir = join(inDir, "asmHubs", dbType)
+        for (dirpath, dirnames, fnames) in os.walk(baseDir):
+            for fname in fnames:
+                if not fname.endswith("chrom.sizes.txt"):
+                    continue
+                fullFname = join(dirpath, fname)
+                db = fname.split("/")[-1].replace(".chrom.sizes.txt", "")
+                # e.g. /GCA/000/002/305/GCA_000002305.1/GCA_000002305.1.chrom.sizes.txt 
+                sizes = parseSizes(fullFname, False)
+                size1 = sizes.pop()
+                allSizes[db] = [size1]
+    return allSizes
+
 def buildIndex(inDir, outFname):
     """ go over all direct subdirectories of inDir and find a chrom.sizes file,
     compact it to format db -> list of (chrom,size) and write to outFname """
@@ -103,6 +132,8 @@ def buildIndex(inDir, outFname):
 
         if os.path.getsize(chromFname) != 0:
             allSizes[db] = parseSizes(chromFname, doSubset)
+
+    allSizes = indexGenarkSizes(allSizes, inDir)
 
     writeSizes(allSizes, outFname)
 
@@ -172,11 +203,10 @@ def findBestDb(sizeIndex, fileSizes):
     dbMatches.sort(key=sortBySecondLen)
     return dbMatches
 
-def printAllMatches(dbChromMatch):
+def printAllMatches(inFname, dbChromMatch):
     " print all matching dbs as a tsv "
-    print("#db\tmatchCount\tmatchList")
     for db, chromList in dbChromMatch:
-        print("\t".join([db, str(len(chromList)), ",".join(chromList)]))
+        print("\t".join([inFname, db, str(len(chromList)), ",".join(chromList)]))
 
 # ----------- main --------------
 def main():
@@ -186,24 +216,42 @@ def main():
     indexFname = expanduser(options.indexFname)
     if options.index:
         buildIndex("/hive/data/genomes", indexFname)
+        exit(0)
+
+    if len(args)>0:
+        inFnames = args
     else:
-        inFname = args[0]
+        inFnames = open(options.fromFile).read().splitlines()
+
+    if options.best:
+        if len(inFnames)>1:
+            print("#fname\tbestDb")
+    else:
+        print("#fname\tdb\tmatchCount\tmatchList")
+
+    for inFname in inFnames:
         fileSizes = bigSizes(inFname)
 
         if len(fileSizes) == 0:
             logging.debug("%s is empty. Cannot determine assembly." % inFname)
-            hits = ( ("emptyFile", 0),  )
+            hits = ( ("emptyFile", ["0"]),  )
         else:
             sizeIndex = readSizeIndex(indexFname)
             hits = findBestDb(sizeIndex, fileSizes)
 
         if options.best:
             if len(hits)==0:
-                print("notFound")
+                bestDb = "notFound"
             else:
                 #if (len(hits[0][1]) >= 2): # need more than a single match, as chrM often matches
-                print(hits[0][0])
+                # - deactivated for now, as we store only a single size for GenArk genomes 
+                bestDb = hits[0][0]
+            if len(inFnames)>1:
+                print(inFname+"\t"+bestDb)
+            else:
+                print(bestDb)
+
         else:
-            printAllMatches(hits)
+            printAllMatches(inFname, hits)
 
 main()

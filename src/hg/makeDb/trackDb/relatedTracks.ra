@@ -26,6 +26,8 @@ hg38 jaspar ReMap ReMap is a database of TF binding sites inferred from ChIP-Seq
 
 hg38 problematic mappability The mappability track contains regions where short sequencing reads are hard to align
 hg38 mappability problematic The problematic regions track contains various gene clusters and the ENCODE blacklist
+hg38 problematic grcIncidentDb The GRC (Genome Reference Consortium) incidents track contains regions that were flagged by the group that puts together the genome 
+hg38 grcIncidentDb problematic The problematic regions track lists unusual regions and the ones that often lead to artefacts when aligning reads to the reference genome
 
 # hg19:
 hg19 caddSuper gnomad View associated variants
@@ -51,3 +53,6 @@ hg19 ReMap jaspar JASPAR is a database of predicted TF binding sites, based on s
 
 hg19 ReMap liftHg38 NCBI ReMap, even though it has the same name, is a liftOver-like hg19/hg38 alignment, and unrelated to the ReMap database
 hg19 liftHg38 ReMap ReMap, even though it has the same name, is a database of transcription factor binding sites, unrelated to NCBI ReMap
+
+hg19 refSeqComposite pseudoYale60 NCBI RefSeq Curated and RefSeq Other contains pseudogenes, but the Yale annotation should be more comprehensive for this transcript type
+hg19 pseudoYale60 refSeqComposite NCBI RefSeq Curated and RefSeq Other also contain some transcribed and untranscribed pseudogenes, respectively.
