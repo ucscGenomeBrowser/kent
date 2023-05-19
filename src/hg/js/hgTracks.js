@@ -5,6 +5,7 @@
 // "use strict";
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
+/* jshint esnext: true */
 
 
 var debug = false;
@@ -5486,8 +5487,16 @@ $(document).ready(function()
     }
 
     // show a tutorial page if this is a new user
-    if (tour !== undefined) {
-        tour.start();
+    if (typeof tour !== 'undefined' && tour) {
+        let lsKey = "hgTracks_hideTutorial";
+        let hideTutorial = localStorage.getItem(lsKey);
+        if (typeof hideTutorial === 'undefined') {
+            let msg = "We now have a guided tutorial available, <a href=\"#showTutorial\">click here" +
+                "to start the tutorial";
+            notifBoxSetup("hgTracks", "hideTutorial", msg);
+            notifBoxShow("hgTracks", "hideTutorial");
+            tour.start();
+        }
     }
     
 });
@@ -5499,7 +5508,7 @@ function hgtWarnTiming(maxSeconds) {
     if (loadSeconds < maxSeconds)
         return;
 
-    var lsKey = "hgTracks.hideSpeedNotification";
+    let lsKey = "hgTracks_hideSpeedNotification";
     var skipNotification = localStorage.getItem(lsKey);
     writeToApacheLog("warnTiming "+getHgsid()+" time=" + loadSeconds + " skipNotif="+skipNotification);
         
