@@ -744,6 +744,16 @@ var hgSearch = (function() {
             // put up a loading image
             $("#searchBarSearchButton").after("<i id='spinner' class='fa fa-spinner fa-spin'></i>");
 
+            // redirect to hgBlat if the input looks like a DNA sequence
+            // minimum length=19 so we do not accidentally redirect to hgBlat for a gene identifier 
+            // like ATG5
+            var dnaRe = new RegExp("^(>[^\n\r ]+[\n\r ]+)?(\\s*[actgnACTGN \n\r]{19,}\\s*)$");
+            if (dnaRe.test(searchTerm)) {
+                var blatUrl = "hgBlat?type=BLAT%27s+guess&userSeq="+searchTerm;
+                window.location.href = blatUrl;
+                return false;
+            }
+
             // if the user entered a plain position string like chr1:blah-blah, just
             // go to the old cgi/hgTracks
             var canonMatch = searchTerm.match(canonicalRangeExp);

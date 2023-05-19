@@ -206,7 +206,7 @@ if (row != NULL)
             hub->trackHub->hubStatus = hub;
 	hub->errorMessage = cloneString(errorMessage);
 	hubUpdateStatus( hub->errorMessage, hub);
-	if (isNotEmpty(hub->errorMessage))
+	if (!isEmpty(hub->errorMessage))
 	    {
             boolean isCollection = (strstr(hub->hubUrl, "hgComposite") != NULL);
             if (isCollection)
@@ -261,7 +261,7 @@ for (name = nameList; name != NULL; name = name->next)
     hub = hubConnectStatusForId(conn, id);
     if (hub != NULL)
 	{
-	if (isNotEmpty(hub->errorMessage) && (strstr(hub->hubUrl, "hgComposite") != NULL))
+	if (!isEmpty(hub->errorMessage) && (strstr(hub->hubUrl, "hgComposite") != NULL))
             {
             // custom collection hub has disappeared.   Remove it from cart
             cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
@@ -328,7 +328,7 @@ struct hubConnectStatus *status = hubConnectStatusForId(conn, hubId);
 hDisconnectCentral(&conn);
 if (status == NULL)
     errAbort("The hubId %d was not found", hubId);
-if (isNotEmpty(status->errorMessage))
+if (!isEmpty(status->errorMessage))
     errAbort("%s", status->errorMessage);
 return status;
 }
@@ -478,7 +478,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     char *thisId = row[0], *thisError = row[1];
 
-    if (isNotEmpty(thisError))
+    if (!isEmpty(thisError))
 	*errorMessage = cloneString(thisError);
 
     id = sqlUnsigned(thisId);
@@ -1016,13 +1016,13 @@ sqlSafef(query, sizeof query, "SELECT nibPath from %s where name = '%s' AND nibP
           dbDbTable(), db, hubCuratedPrefix);
 
 char *dir = sqlQuickString(conn, query);
-boolean ret = isNotEmpty(dir);
+boolean ret = !isEmpty(dir);
 hDisconnectCentral(&conn);
 
 if (hubUrl != NULL) // if user passed in hubUrl, calculate what it should be
     {
     *hubUrl = NULL;
-    if (ret)   // this is a curated hub
+    if (!isEmpty(dir))   // this is a curated hub
         {
         char *path = dir + sizeof(hubCuratedPrefix) - 1;
         char url[4096];
@@ -1052,7 +1052,7 @@ sqlSafef(query, sizeof query, "SELECT nibPath from %s where name = '%s' AND nibP
 char *dir = cloneString(sqlQuickString(conn, query));
 hDisconnectCentral(&conn);
 
-if (isNotEmpty(dir))
+if (!isEmpty(dir))
     {
     char *path = &dir[sizeof hubCuratedPrefix - 1];
     char url[4096];
@@ -1076,7 +1076,7 @@ if (isNotEmpty(dir))
         }
     else
         {
-        if (isNotEmpty(status->errorMessage))
+        if (!isEmpty(status->errorMessage))
             errAbort("Hub error: url %s: error  %s.", url, status->errorMessage);
         else
             errAbort("Cannot open hub %s.", url);

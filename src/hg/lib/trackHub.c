@@ -628,6 +628,8 @@ while ((ra = raNextRecord(lf)) != NULL)
 	genome = addHubName(hashFindVal(ra, "genome"), hub->name);
     else
 	genome = hashFindVal(ra, "genome");
+    if (hasWhiteSpace(genome))
+        errAbort("Bad genome name: \"%s\". Only alpha-numeric characters and \"_\" are allowed ([A-Za-z0-9_]).", genome);
     if (hub->defaultDb == NULL)
 	hub->defaultDb = genome;
     if (genome == NULL)
