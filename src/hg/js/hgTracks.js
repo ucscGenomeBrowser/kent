@@ -5495,7 +5495,7 @@ function hgtWarnTiming(maxSeconds) {
         return;
 
     var skipNotification = localStorage.getItem("hgTracks.hideSpeedNotification");
-    writeToApacheLog("warnTiming "+getHgsid()+" time=" + loadSeconds + " skipNotif="+skipNotification);
+    dumpCart(loadSeconds, skipNotification);
         
     if (skipNotification)
         return;
