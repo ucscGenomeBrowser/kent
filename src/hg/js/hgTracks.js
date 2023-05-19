@@ -5490,12 +5490,16 @@ $(document).ready(function()
     if (typeof tour !== 'undefined' && tour) {
         let lsKey = "hgTracks_hideTutorial";
         let hideTutorial = localStorage.getItem(lsKey);
-        if (typeof hideTutorial === 'undefined') {
-            let msg = "We now have a guided tutorial available, <a href=\"#showTutorial\">click here" +
-                "to start the tutorial";
+        if (typeof hideTutorial === 'undefined' || !hideTutorial) {
+            let msg = "We now have a guided tutorial available, " +
+                "to start the tutorial " +
+                "<a id='showTutorialLink' href=\"#showTutorial\">click here</a>.";
             notifBoxSetup("hgTracks", "hideTutorial", msg);
             notifBoxShow("hgTracks", "hideTutorial");
-            tour.start();
+            $("#showTutorialLink").click( function() {
+                $("#hgTracks_hideTutorialnotifyHide").click();
+                tour.start();
+            });
         }
     }
     
