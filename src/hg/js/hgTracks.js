@@ -5493,7 +5493,7 @@ $(document).ready(function()
         let hideTutorial = localStorage.getItem(lsKey);
         // if the user is not logged in and they have not already gone through the
         // tutorial
-        if (!isUserLoggedIn && (typeof hideTutorial === 'undefined' && !hideTutorial)) {
+        if (!isUserLoggedIn && !hideTutorial) {
             let msg = "We now have a guided tutorial available, " +
                 "to start the tutorial " +
                 "<a id='showTutorialLink' href=\"#showTutorial\">click here</a>.";
