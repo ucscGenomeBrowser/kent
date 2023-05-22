@@ -79,10 +79,12 @@ GCF_000299155.1_EleEdw1.0	Cape elephant shrew
 GCF_000296735.1_ChrAsi1.0	Cape golden mole (2012 Broad)
 GCA_004026925.1_ProCapCap_v1_BIUU	Cape rock hyrax (US060 2019 Broad)
 GCA_004027455.1_HydHyd_v1_BIUU	capybara
+GCF_029407905.1_PCC_UOA_SB_1v2	carabao (swamp buffalo K-KA32 2023)
 GCF_002263795.2_ARS-UCD1.3	cattle (Hereford L1 Dominette 01449 42190680 v3 2018 USDA)
 GCA_004024745.2_CatWag_v2_BIUU_UCD	Chacoan peccary (BS20 v2 2019 Broad)
 GCF_027475565.1_VMU_Ajub_asm_v1.0	cheetah (Ajub_Pintada_27869175 2022)
 GCF_003709585.1_Aci_jub_2	cheetah (Rico 2018)
+GCF_022376915.1_ASM2237691v1	Chinese forest musk deer (Sichuan 2022)
 GCF_003668045.3_CriGri-PICRH-1.0	Chinese hamster (17A/GY CHO 2020)
 GCF_000223135.1_CriGri_1.0	Chinese hamster (CHO v1 2011 BGI)
 GCA_900186095.1_CHOK1S_HZDv1	Chinese hamster (CHO v2 2017 Eagle Genomics Ltd)
@@ -144,8 +146,9 @@ GCF_903992535.2_mArvAmp1.2	Eurasian water vole (v2 2021)
 GCF_000181275.1_SorAra2.0	European shrew (GB8-d 2012)
 GCF_027595985.1_mSorAra2.pri	European shrew (mSorAra2 primary hap 2023)
 GCF_947179515.1_mApoSyl1.1	European woodmouse (2022 refseq)
-GCA_004027185.1_GliGli_v1_BIUU	fat dormouse
-GCA_002215935.1_ASM221593v1	fat sand rat
+GCA_004027185.1_GliGli_v1_BIUU	fat dormouse (US078 2019)
+GCF_907164565.1_mPsaObe1.curated_primary_1811	fat sand rat (mPsaObe1 2021)
+GCA_002215935.1_ASM221593v1	fat sand rat (Psa_ob012049795 2017)
 GCF_022837055.1_UM_Priviv_1.0	fishing cat (Anna 2022 U Missouri)
 GCF_000243295.1_TriManLat1.0	Florida manatee (Lorelei 2012 refseq)
 GCA_004023885.1_CryFer_v1_BIUU	fossa
@@ -318,6 +321,7 @@ GCA_026419965.1_mKogBre1_haplotype_1	pygmy sperm whale (mKogBre1 haplotype 1 202
 GCA_026419985.1_mKogBre1_haplotype_2	pygmy sperm whale (mKogBre1 haplotype 2 2022)
 GCF_009806435.1_UM_NZW_1.0	rabbit (New Zealand White DNA-2018 2021 refseq)
 GCF_000003625.3_OryCun2.0	rabbit (Thorbecke 2009 Broad refseq)
+GCF_905146905.1_NYPRO_anot_genome	raccoon dog (2021)
 GCF_002742125.1_Oar_rambouillet_v1.0	Rambouillet sheep (Baylor 2017)
 GCF_016772045.1_ARS-UI_Ramb_v2.0	Rambouillet sheep (U.Idaho 2021)
 GCA_004024625.1_MelCap_v1_BIUU	ratel
