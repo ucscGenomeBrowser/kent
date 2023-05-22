@@ -2369,6 +2369,32 @@ if (jw)
     puts(jw->dy->string);
 }
 
+static void dumpCartWithTime(struct cart *cart, char *timeStr)
+/* Dump out the current cart to trash named by how long a page draw took using it. */
+{
+char prefix[128];
+
+// zero pad so the files will alphanumerically sort by elapsed time
+sprintf(prefix, "%06d.", atoi(timeStr));
+
+// make a temp file in trash
+struct tempName hubTn;
+trashDirDateFile(&hubTn, "cartDumps", prefix , ".txt");
+char *dumpName = cloneString(hubTn.forCgi);
+
+// write out the cart into the tempfile
+FILE *f = mustOpen(dumpName, "w");
+
+struct hashEl *el;
+struct hashEl *elList = hashElListHash(cart->hash);
+for (el = elList; el != NULL; el = el->next)
+    fprintf(f, "%s %s\n", el->name, (char *)el->val);
+fclose(f);
+
+// put something in the log to say we did this
+fprintf(stderr, "warnTiming %s time=%s skipNotif=%s\n", getSessionId(), timeStr, cartUsualString(cart, "skipNotif", "null"));
+}
+
 struct cart *cartForSession(char *cookieName, char **exclude,
                             struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
@@ -2437,6 +2463,13 @@ if ( (logMsg = cgiOptionalString("_dumpToLog")) != NULL)
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
+
+char *timeStr;
+if ( (timeStr = cgiOptionalString("_dumpCart")) != NULL)
+    {
+    dumpCartWithTime(cart, timeStr);
+    exit(0);
+    }
 
 // activate optional debuging output for CGIs
 verboseCgi(cartCgiUsualString(cart, "verbose", NULL));
