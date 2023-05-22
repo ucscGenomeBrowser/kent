@@ -5489,18 +5489,31 @@ $(document).ready(function()
     // show a tutorial page if this is a new user
     if (typeof tour !== 'undefined' && tour) {
         let lsKey = "hgTracks_hideTutorial";
+        let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
         let hideTutorial = localStorage.getItem(lsKey);
-        if (typeof hideTutorial === 'undefined' || !hideTutorial) {
+        // if the user is not logged in and they have not already gone through the
+        // tutorial
+        if (!isUserLoggedIn && (typeof hideTutorial === 'undefined' && !hideTutorial)) {
             let msg = "We now have a guided tutorial available, " +
                 "to start the tutorial " +
                 "<a id='showTutorialLink' href=\"#showTutorial\">click here</a>.";
             notifBoxSetup("hgTracks", "hideTutorial", msg);
             notifBoxShow("hgTracks", "hideTutorial");
-            $("#showTutorialLink").click( function() {
+            $("#showTutorialLink").click(function() {
                 $("#hgTracks_hideTutorialnotifyHide").click();
                 tour.start();
             });
         }
+        // allow user to bring the tutorial up under the help menu whether they've seen
+        // it or not
+        let tutorialLinkMenuItem = document.createElement("li");
+        tutorialLinkMenuItem.id = "hgTracksHelpTutorialMenuItem";
+        tutorialLinkMenuItem.innerHTML = "<a id='hgTracksHelpTutorialLink' href='#showTutorial'>" +
+            "Interactive Tutorial</a>";
+        $("#help > ul")[0].appendChild(tutorialLinkMenuItem);
+        $("#hgTracksHelpTutorialLink").click(function () {
+            tour.start();
+        });
     }
     
 });

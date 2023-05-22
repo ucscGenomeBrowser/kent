@@ -24,6 +24,7 @@ var tutorialButtons = {
     },
     'end': {
         action() {
+            localStorage.setItem("hgTracks_hideTutorial", "1");
             return this.complete();
         },
         classes: 'shepherd-button-secondary',
