@@ -792,21 +792,38 @@ fi
 ###################################################################
 # Ensembl genes
 if [ -s ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb ]; then
-ls -og ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb 1>&2
-printf "# link: ../trackData/ensGene/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
 rm -f ${buildDir}/bbi/${asmId}.ensGene.bb
 ln -s ../trackData/ensGene/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
 rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ix
 rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ixx
+rm -f ${buildDir}/genes/${asmId}.ensGene.*.gtf.gz
+export gtfGz=`ls ${buildDir}/trackData/ensGene/${asmId}.ensGene.*.gtf.gz`
+if [ -s ${gtfGz} ]; then
+    mkdir -p ${buildDir}/genes
+    bName=`basename "${gtfGz}"`
+   ln -s ../trackData/ensGene/${bName} ${buildDir}/genes/${bName}
+fi
 
-ln -s ../trackData/ensGene/process/${asmId}.ensGene.ix $buildDir/ixIxx/${asmId}.ensGene.ix
-ln -s ../trackData/ensGene/process/${asmId}.ensGene.ixx $buildDir/ixIxx/${asmId}.ensGene.ixx
+### if we had more than one index, but no, we are using ixIxx files
+# export indexList=`bigBedInfo -extraIndex ${buildDir}/bbi/${asmId}.ensGene.bb | grep -w field | grep -w with | awk '{print $1}' | xargs echo | tr ' ' ','`
+
+export indexList="name"
+
+# optional ix/ixx files, this string used in the trackDb stanza below
+export searchTrix=""
+if [ -s "${buildDir}/trackData/ensGene/${asmId}.ensGene.ix" ]; then
+  ln -s ../trackData/ensGene/${asmId}.ensGene.ix $buildDir/ixIxx/${asmId}.ensGene.ix
+  ln -s ../trackData/ensGene/${asmId}.ensGene.ixx $buildDir/ixIxx/${asmId}.ensGene.ixx
+      searchTrix="
+searchTrix ixIxx/${asmId}.ensGene.ix"
+    fi
 
 export ensVersion="v86"
 
 if [ -s ${buildDir}/trackData/ensGene/version.txt ]; then
   ensVersion=`cat "${buildDir}/trackData/ensGene/version.txt"`
 fi
+
 
 printf "track ensGene
 shortLabel Ensembl genes
@@ -815,11 +832,16 @@ group genes
 priority 40
 visibility pack
 color 150,0,0
-type bigBed 12 .
-bigDataUrl bbi/%s.ensGene.bb
-searchIndex name
-searchTrix ixIxx/%s.ensGene.ix
-html html/%s.ensGene\n\n" "${ensVersion}" "${asmId}" "${asmId}" "${asmId}"
+itemRgb on
+type bigGenePred
+bigDataUrl bbi/%s.ensGene.bb%s
+searchIndex %s
+labelFields name,name2
+defaultLabelFields name2
+baseColorUseCds given
+baseColorDefault genomicCodons
+labelSeperator \" \"
+html html/%s.ensGene\n\n" "${ensVersion}" "${asmId}" "${searchTrix}" "${indexList}" "${asmId}"
 
 $scriptDir/asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html "${ensVersion}"
 
@@ -833,15 +855,20 @@ if [ -d ${buildDir}/trackData/ebiGene ]; then
  export ebiGeneBb=`ls ${buildDir}/trackData/ebiGene/*.bb 2> /dev/null || true | head -1`
  if [ -s "${ebiGeneBb}" ]; then
     export ebiGeneLink=`echo $ebiGeneBb | sed -e 's#.*trackData#../trackData#;'`
-    printf "# link: $ebiGeneLink ${buildDir}/bbi/${asmId}.ebiGene.bb\n" 1>&2
     rm -f ${buildDir}/bbi/${asmId}.ebiGene.bb
     ln -s $ebiGeneLink ${buildDir}/bbi/${asmId}.ebiGene.bb
     rm -f ${buildDir}/ixIxx/${asmId}.ebiGene.ix
     rm -f ${buildDir}/ixIxx/${asmId}.ebiGene.ixx
     export ixLink=`echo $ebiGeneBb | sed -e 's#.*trackData#../trackData#; s#.bb#.ix#'`
     export ixxLink=`echo $ebiGeneBb | sed -e 's#.*trackData#../trackData#; s#.bb#.ixx#'`
-    ln -s $ixLink ${buildDir}/ixIxx/${asmId}.ebiGene.ix
-    ln -s $ixxLink ${buildDir}/ixIxx/${asmId}.ebiGene.ixx
+    # optional ix/ixx files, this string used in the trackDb stanza below
+    export searchTrix=""
+    if [ -s "${buildDir}/ixIxx/${asmId}.ebiGene.ix" ]; then
+      ln -s $ixLink ${buildDir}/ixIxx/${asmId}.ebiGene.ix
+      ln -s $ixxLink ${buildDir}/ixIxx/${asmId}.ebiGene.ixx
+      searchTrix="
+ixIxx/${asmId}.ebiGene.ix"
+    fi
     export ebiVersion="2022_08"
 
     if [ -s ${buildDir}/trackData/ebiGene/version.txt ]; then
@@ -856,13 +883,12 @@ visibility pack
 color 150,0,0
 itemRgb on
 type bigGenePred
-bigDataUrl bbi/%s.ebiGene.bb
-searchTrix ixIxx/%s.ebiGene.ix
+bigDataUrl bbi/%s.ebiGene.bb%s
 searchIndex name,name2
 labelFields name,name2
 defaultLabelFields name2
 labelSeperator \" \"
-html html/%s.ebiGene\n\n" "${ebiVersion}" "${ebiVersion}" "${asmId}" "${asmId}" "${asmId}"
+html html/%s.ebiGene\n\n" "${ebiVersion}" "${ebiVersion}" "${asmId}" "${searchTrix}" "${asmId}" "${asmId}"
 
 $scriptDir/asmHubEbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ebiGene.html "${ebiVersion}"
  fi
