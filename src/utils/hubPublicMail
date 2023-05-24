@@ -66,7 +66,10 @@ def parseArgs():
 def getHubUrls(centralName):
     " return list of huburls "
     logging.debug("Getting hubUrls from db %s" % centralName)
-    cmd = "hgsql %s -se 'select hubUrl from hubPublic'" % centralName
+    if centralName == 'hgcentral':
+        cmd = "hgsql -h genome-centdb %s -se 'select hubUrl from hubPublic'" % centralName
+    else:
+        cmd = "hgsql %s -se 'select hubUrl from hubPublic'" % centralName
     lines = os.popen(cmd).read().splitlines() # please do not suggest using subprocess in code review. Thx.
     return lines
 
