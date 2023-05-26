@@ -231,6 +231,7 @@ GCA_000264685.2_Panu_3.0	olive baboon (2017 HGSC genbank)
 GCA_905220365.1_ilVanCard2.1	painted lady (genbank 2021)
 GCF_004126475.1_mPhyDis1_v1.p	pale spear-nosed bat (MPI-MPIP v1 2019)
 GCF_005508785.1_pea_aphid_22Mar2018_4r6ur	pea aphid (AL4f v1 2019)
+GCA_023634155.1_bFalPer1.pri	peregrine falcon (bFalPer1 primary hap 2022 genbank)
 GCF_000340665.1_C.cajan_V1.0	pigeon pea (v1 2016 BGI)
 GCF_008315115.1_SLUC_FBN_1	pike-perch
 GCA_002966995.1_ASM296699v1	platypus (Pmale09 2018 BGI)
@@ -256,12 +257,14 @@ GCF_014905685.1_NemWhi1	Rio pearlfish (Nwh7 v1 2020)
 GCF_901001165.1_fSalTru1.1	river trout (v1 2019)
 GCA_900094665.2_CAROLI_EIJ_v1.1	Ryukyu mouse (v1 2017 EBI genbank)
 GCF_900094665.1_CAROLI_EIJ_v1.1	Ryukyu mouse (v1 2017 EBI refseq)
+GCA_023634085.1_bFalChe1.pri	Saker falcon (bFalChe1 primary hap 2022 genbank)
 GCF_016086655.2_UVic_Lsal_1.1	salmon louse (v1.1 2020)
 GCA_001417965.1_Aiptasia_genome_1.1	sea anemones (CC7 2015 genbank)
 GCA_002288905.2_ASM228890v2	sea otter (GAN:26980312 2017 genbank)
 GCF_009858895.2_ASM985889v3	SARS-CoV-2 (Jan 2020 COVID-19)
 GCF_000326865.1_Helobdella_robusta_v1.0	segmented worms (v1 2012)
 GCF_900634795.2_fBetSpl5.2	Siamese fighting fish (v2 2019)
+GCF_900634795.3_fBetSpl5.3	Siamese fighting fish (v3 2020)
 GCF_009828535.1_HMol	silvery gibbon
 GCA_004027815.1_NycCou_v1_BIUU	slow loris
 GCA_000313985.1_EchTel2.0	small Madagascar hedgehog
