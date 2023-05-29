@@ -4749,6 +4749,8 @@ return nonEmptySubtracksHash;
 static void expandSquishyPackTracks(struct track *trackList)
 /* Step through track list and duplicated tracks with squishyPackPoint defined */
 {
+if (windows->next)   // don't go into squishyPack mode if in multi-exon mode.
+    return;
 struct track *nextTrack = NULL, *track;
 for (track = trackList; track != NULL; track = nextTrack)
     {
