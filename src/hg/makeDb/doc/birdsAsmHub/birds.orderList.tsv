@@ -164,7 +164,7 @@ GCF_929443795.1_bAccGen1.1	northern goshawk (bAccGen1 primary hap v1 2022 refseq
 GCA_014706295.1_ASM1470629v1	Obi paradise-crow (lycPyr6 2020)
 GCF_003343035.1_aptRow1	Okarito brown kiwi
 GCA_023634185.1_bFalPer1.alt	peregrine falcon (bFalPer1 alternate hap 2022)
-GCA_023634155.1_bFalPer1.pri	peregrine falcon (bFalPer1 primary hap 2022)
+GCF_023634155.1_bFalPer1.pri	peregrine falcon (bFalPer1 primary hap 2022 refseq)
 GCF_000337955.1_F_peregrinus_v1.0	peregrine falcon (BGI 2013)
 GCF_024509145.1_ASM2450914v1	pin-tailed whydah (BioBank_ID:100142 2022)
 GCA_020745805.1_bTheCae1.alt.cur	plumbeous ibis (bTheCae1 alternate hap 2021)
@@ -196,7 +196,7 @@ GCF_003984885.1_ASM398488v2	saffron-crested tyrant-manakin
 GCA_021966175.1_bArtBel1.0.a	sage sparrow (canescens MVZ Bird 192114 alternate hap 2022)
 GCA_021963965.1_bArtBel1.0.p	sage sparrow (canescens MVZ Bird 192114 primary hap 2022)
 GCA_023634115.1_bFalChe1.alt	Saker falcon (bFalChe1 alternate hap 2022)
-GCA_023634085.1_bFalChe1.pri	Saker falcon (bFalChe1 primary hap 2022)
+GCF_023634085.1_bFalChe1.pri	Saker falcon (bFalChe1 primary hap 2022 refseq)
 GCF_000337975.1_F_cherrug_v1.0	Saker falcon (BGI 2013)
 GCA_027887135.1_bAmmCau1.alt	saltmarsh sparrow (bAmmCau1 alternate hap 2023)
 GCA_027887145.1_bAmmCau1.pri	saltmarsh sparrow (bAmmCau1 primary hap 2023)
