@@ -12802,7 +12802,7 @@ if (isNotEmpty(ret))
 
     // now phenotype information
     sqlSafef(query,sizeof(query),
-            "select GROUP_CONCAT(omimPhenotype.description, '|',inhMode  , '|',omimPhenoMapKey SEPARATOR '$') from omimGene2, omimGeneMap, omimPhenotype where omimGene2.name=omimGeneMap.omimId and omimGene2.name=omimPhenotype.omimId and omimGene2.name =%s", name);
+            "select GROUP_CONCAT(omimPhenotype.description, '|',inhMode  , '|',omimPhenoMapKey SEPARATOR '$') from omimGene2, omimGeneMap, omimPhenotype where omimGene2.name=omimGeneMap.omimId and omimGene2.name=omimPhenotype.omimId and omimGene2.name =%s and omimGene2.chrom=\'%s\'", name, chromName);
     ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 
     if (ret)
