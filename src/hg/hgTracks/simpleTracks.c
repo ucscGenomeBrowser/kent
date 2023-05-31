@@ -180,7 +180,7 @@ boolean doPliColors = FALSE;
 /* have the 10 scaffold colors been allocated */
 static boolean scafColorsMade = FALSE;
 
-int maxItemsInFullTrack = 1000;  /* Maximum number of items displayed in full */
+int maxItemsInFullTrack = 10000;  /* Maximum number of items displayed in full */
 int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 
 /* These variables persist from one incarnation of this program to the
