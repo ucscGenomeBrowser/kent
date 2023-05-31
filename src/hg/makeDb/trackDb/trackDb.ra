@@ -2797,7 +2797,7 @@ longLabel Pfam Domains in UCSC Genes
 group genes
 type bed 12
 color 20,0,250
-url http://pfam.xfam.org/family/$$
+url https://www.ebi.ac.uk/interpro/search/text/$$/?page=1#table
 
 track numtSeq2012
 compositeTrack on
