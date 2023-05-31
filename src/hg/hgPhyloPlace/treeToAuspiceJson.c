@@ -402,13 +402,21 @@ if (codonVpTxList != NULL)
     int codonOffset = vpTx->start.txOffset - codonStart;
     char oldCodon[4];
     safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + codonStart, 3);
+    touppers(oldCodon);
     int codonStartG = vpTx->start.gOffset - codonOffset;
     struct singleNucChange *anc;
     for (anc = ancestorMuts;  anc != NULL;  anc = anc->next)
         {
         int ancCodonOffset = anc->chromStart - codonStartG;
         if (ancCodonOffset >= 0 && ancCodonOffset < 3)
+            {
+            if (anc->parBase != oldCodon[ancCodonOffset])
+                errAbort("codonVpTxToAaChange: expected parBase for ancestral mutation at %d "
+                         "(%s codon %d offset %d) to be '%c' but it's '%c'",
+                         anc->chromStart+1, gi->psl->qName, firstAaStart, ancCodonOffset,
+                         oldCodon[ancCodonOffset], anc->parBase);
             oldCodon[ancCodonOffset] = maybeComplement(anc->newBase, gi->psl);
+            }
         }
     char oldAa = lookupCodon(oldCodon);
     if (oldAa == '\0')
@@ -422,6 +430,8 @@ if (codonVpTxList != NULL)
             errAbort("codonVpTxToAaChange: program error: firstAaStart %d != aaStart %d",
                      firstAaStart, aaStart);
         int codonOffset = vpTx->start.txOffset - codonStart;
+        // vpTx->txRef[0] is always the reference base, not like singleNucChange parBase,
+        // so we can't compare it to expected value as we could for ancMuts above.
         newCodon[codonOffset] = vpTx->txAlt[0];
         }
     char newAa = lookupCodon(newCodon);
