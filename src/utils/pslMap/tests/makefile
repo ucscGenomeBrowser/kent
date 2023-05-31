@@ -12,7 +12,7 @@ all:
 
 test:	gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
 	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName \
-	kgProt negQChain testSpGencode
+	kgProt negQChain testSpGencode testTypeErr
 
 # basic tests of protein -> mrna -> genome mapping
 kgProt: mkdirs
@@ -99,10 +99,15 @@ testMapFileWithInQName: mkdirs
 # isoforms aligned to gencode RNAs.  Mapping these resulted in overlapping
 # blocks.  This tests block adjustments.
 testSpGencode: mkdirs
-	${pslMap} -mapInfo=output/$@.mapinfo input/spAnnotIso.psl input/spGencode.psl output/$@.psl
+	${pslMap} -inType=prot_prot -mapInfo=output/$@.mapinfo input/spAnnotIso.psl input/spGencode.psl output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.mapinfo output/$@.mapinfo
+
+# implied types not supported
+testTypeErr: mkdirs
+	if ${pslMap} -mapInfo=output/$@.mapinfo input/spAnnotIso.psl input/spGencode.psl output/$@.psl  2> output/$@.err ; then  echo "Error: should have failed" >&2; false ; else true ; fi
+	diff expected/$@.err output/$@.err
 
 clean::
 	rm -rf output

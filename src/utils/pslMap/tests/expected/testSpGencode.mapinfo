@@ -1,2 +1,2 @@
 #srcQName	srcQStart	srcQEnd	srcQSize	srcTName	srcTStart	srcTEnd	srcStrand	srcAligned	mappingQName	mappingQStart	mappingQEnd	mappingTName	mappingTStart	mappingTEnd	mappingStrand	mappingId	mappedQName	mappedQStart	mappedQEnd	mappedTName	mappedTStart	mappedTEnd	mappedStrand	mappedAligned	qStartTrunc	qEndTrunc	mappedPslLine
-Q9Y215-1#11541	0	175	175	Q9Y215-1	95	270	+	175	Q9Y215-1	0	455	ENST00000679838.1	95	1447	++	0	Q9Y215-1#11541	0	175	ENST00000679838.1	190	352	+	162	0	0	0
+Q9Y215-1#11541	0	175	175	Q9Y215-1	95	270	+	175	Q9Y215-1	0	455	ENST00000679838.1	95	1447	++	0	Q9Y215-1#11541	0	525	ENST00000679838.1	367	892	+	525	0	-350	0
