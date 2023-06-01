@@ -41,18 +41,45 @@
 <tr valign="TOP">
 <th width="100">Date</th>
 <th width="15%">Track Types</th>
+<th width="15%">Link to Doc</th>
 <th>Change</th>
 </tr>
 
 <tr>
     <td>2023-04-04</td>
     <td>all</td>
-    <td>New statement: <tt>downloadUrl &lt;fileType&gt; &lt;URL&gt;</tt><br>Shows a link where user can download a file. On the UCSC browser, the link is shown above the description page. Right now this is used for GFF files on gene tracks.</td>
+    <td><a href="trackDbHub.html#downloadUrl">downloadUrl</a></td>
+    <td>New: <tt>downloadUrl &lt;fileType&gt; &lt;URL&gt;</tt><br>Shows a link where user can download a file. On the UCSC browser, the link is shown above the description page. Right now this is used for GFF files on gene tracks.</td>
 </tr>
 <tr>
-    <td>2020-06-30</td>
+    <td>2022-09-30</td>
+    <td>bigBed, BAM</td>
+    <td><a href="trackDbHub.html#doWiggle">doWiggle</a></td>
+    <td>New: <tt>doWiggle on</tt><br>Instead of showing the features, show coverage of features, as a 'wiggle' (signal) style track. Can be switched off by the user on the track config page.</td>
+</tr>
+<tr>
+    <td>2022-09-22</td>
+    <td>bigGenePred</td>
+    <td><a href="trackDbHub.html#colorByStrand">colorByStrand</a></td>
+    <td>Change: <tt>colorByStrand</tt> can now be used by bigGenePred-type tracks.</td>
+</tr>
+<tr>
+    <td>2022-06-30</td>
     <td>bigPsl, bigChain</td>
-    <td>New statement: <tt>otherTwoBitUrl &lt;URL&gt;</tt><br>This statement allows to store query sequences in a separate twoBit file rather than in the annotation file itself, which can reduce the size of the annotation file.</td>
+    <td><a href="trackDbHub.html#otherTwoBitUrl">otherTwoBitUrl</a></td>
+    <td>New: <tt>otherTwoBitUrl &lt;URL&gt;</tt><br>This statement allows to store query sequences in a separate twoBit file rather than in the annotation file itself, which can reduce the size of the annotation file.</td>
+</tr>
+<tr>
+    <td>2022-05-14</td>
+    <td>bigWig</td>
+    <td><a href="trackDbHub.html#logo">logo</a></td>
+    <td>New: <tt>logo on</tt><br>Motif logo of the genome sequence, as a "dynseq" display, see <a href='../bigWig.html#Ex4'>the example</a>.</td>
+</tr>
+<tr>
+    <td>2022-05-05</td>
+    <td>bigMaf, maf</td>
+    <td><a href="trackDbHub.html#logoMaf">logoMaf</a></td>
+    <td>New: <tt>logoMaf on</tt><br>Motif logo on MAF/bigMaf alignment tracks. Zooming in on alignment shows nucleotides scaled by phyloP conservation.</td>
 </tr>
 
 </tbody>
