@@ -125,7 +125,8 @@ else
 return colorDefault;
 }
 
-static void auspiceMetaColorings(struct jsonWrite *jw, char *source, struct slName *colorFields)
+static void auspiceMetaColorings(struct jsonWrite *jw, char *source, struct slName *colorFields,
+                                 char *db)
 /* Write coloring specs for colorFields from metadata, locally added userOrOld, and
  * Auspice-automatic gt. */
 {
@@ -141,7 +142,12 @@ struct slName *col;
 for (col = colorFields;  col != NULL;  col = col->next)
     {
     if (sameString(col->name, "Nextstrain_clade"))
-        auspiceMetaColoringSarsCov2Nextclade(jw, col->name, "Nextstrain Clade");
+        {
+        if (sameString(db, "wuhCor1"))
+            auspiceMetaColoringSarsCov2Nextclade(jw, col->name, "Nextstrain Clade");
+        else
+            auspiceMetaColoringCategorical(jw, col->name, "Clade assigned by nextclade");
+        }
     else if (sameString(col->name, "Nextstrain_clade_usher"))
         auspiceMetaColoringSarsCov2Nextclade(jw, col->name, "Nextstrain Clade assigned by UShER");
     else if (sameString(col->name, "pango_lineage"))
@@ -150,6 +156,7 @@ for (col = colorFields;  col != NULL;  col = col->next)
         auspiceMetaColoringCategorical(jw, col->name, "Pango lineage assigned by UShER");
     else if (sameString(col->name, "Nextstrain_lineage"))
         auspiceMetaColoringCategorical(jw, col->name, "Nextstrain lineage");
+    //#*** RSV hacks -- colorings really should come from JSON file in config directory
     else if (sameString(col->name, "goya_nextclade"))
         auspiceMetaColoringCategorical(jw, col->name, "Goya 2020 clade assigned by nextclade");
     else if (sameString(col->name, "goya_usher"))
@@ -206,13 +213,14 @@ jsonWriteString(jw, "branch_label", "aa mutations");
 jsonWriteString(jw, "color_by", getDefaultColor(colorFields));
 jsonWriteObjectEnd(jw);
 // Colorings: userOrOld, gt and whatever we got from metadata
-auspiceMetaColorings(jw, source, colorFields);
+auspiceMetaColorings(jw, source, colorFields, db);
 // Filters didn't work when I tried them a long time ago... revisit someday.
 jsonWriteListStart(jw, "filters");
 jsonWriteString(jw, NULL, "userOrOld");
 jsonWriteString(jw, NULL, "country");
-//#*** FIXME: TODO: either pass in along with sampleMetadata, or better yet, compute while building
-//#*** tree object in memory, then write the header object, then write the tree.
+//#*** FIXME: TODO: either pass in along with sampleMetadata, or take from JSON file specified
+//#*** in config, or better yet, compute while building tree object in memory, then write the
+//#*** header object, then write the tree.
 if (sameString(db, "wuhCor1"))
     {
     jsonWriteString(jw, NULL, "pango_lineage_usher");
@@ -227,6 +235,10 @@ else if (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db))
     jsonWriteString(jw, NULL, "ramaekers_tableS1");
     jsonWriteString(jw, NULL, "ramaekers_usher");
     jsonWriteString(jw, NULL, "ramaekers_nextclade");
+    }
+else if (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db))
+    {
+    jsonWriteString(jw, NULL, "Nextstrain_clade");
     }
 else
     {
@@ -794,8 +806,9 @@ FILE *outF = mustOpen(jsonFile, "w");
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "version", "v2");
-//#*** FIXME: TODO: either pass in along with sampleMetadata, or better yet, compute while building
-//#*** tree object in memory, then write the header object, then write the tree.
+//#*** FIXME: TODO: either pass in along with sampleMetadata, or take from JSON file specified
+//#*** in config, or better yet, compute while building tree object in memory, then write the
+//#*** header object, then write the tree.
 boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db));
 struct slName *colorFields = NULL;
 if (sameString(db, "wuhCor1"))
@@ -814,6 +827,11 @@ else if (isRsv)
     slNameAddHead(&colorFields, "ramaekers_tableS1");
     slNameAddHead(&colorFields, "goya_nextclade");
     slNameAddHead(&colorFields, "goya_usher");
+    }
+else if (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db))
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "Nextstrain_clade");
     }
 else
     {
