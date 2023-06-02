@@ -2935,6 +2935,11 @@ reportTiming(&startTime, "start up and find the tree etc. files");
 struct mutationAnnotatedTree *bigTree = NULL;
 lineFileCarefulNewlines(lf);
 char *chrom = hDefaultChrom(db);
+//#*** Hack for influenza
+if (stringIn("GCF_000865085.1", db))
+    chrom = "NC_007366.1";
+else if (stringIn("GCF_001343785.1", db))
+    chrom = "NC_026433.1";
 int chromSize = hChromSize(db, chrom);
 struct slName **maskSites = getProblematicSites(db, chrom, chromSize);
 //#*** TODO: add CGI param option for this almost-never-needed tweak:
