@@ -6,6 +6,9 @@
 #include "openssl/ssl.h"
 #include "openssl/err.h"
 
+#include "openssl/x509v3.h"
+#include "openssl/x509_vfy.h"
+
 #include <sys/socket.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -382,7 +385,17 @@ freez(&dmwl);
 if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))  
     {
     // Hardwired exceptions whitelist
-    // openssl automatically whitelists domains which are given as IPv4 or IPv6 addresses
+    // whitelist domains used in URLs given as IPv4 or IPv6 addresses
+    hashStoreName(domainWhiteList, "141.80.181.46");
+    hashStoreName(domainWhiteList, "119.17.138.121");
+    hashStoreName(domainWhiteList, "132.198.67.10");
+    hashStoreName(domainWhiteList, "133.9.148.160");
+    hashStoreName(domainWhiteList, "143.225.99.51");
+    hashStoreName(domainWhiteList, "147.139.138.179");
+    hashStoreName(domainWhiteList, "149.129.235.214");
+    hashStoreName(domainWhiteList, "161.116.70.109");
+    hashStoreName(domainWhiteList, "193.166.24.115");
+    hashStoreName(domainWhiteList, "66.154.14.49");
     hashStoreName(domainWhiteList, "*.altius.org");
     hashStoreName(domainWhiteList, "*.apps.wistar.org");
     hashStoreName(domainWhiteList, "*.bio.ed.ac.uk");
@@ -596,6 +609,8 @@ struct timeval tv;
 struct myData myData;
 boolean doSetMyData = FALSE;
 
+X509_VERIFY_PARAM *param = NULL;
+
 if (!sameString(https_cert_check, "none"))
     {
     if (checkIfInHashWithWildCard(hostName))
@@ -608,6 +623,15 @@ if (!sameString(https_cert_check, "none"))
 	}
     else
 	{
+
+	/* Enable automatic hostname checks */
+	param = SSL_CTX_get0_param(ctx);
+	X509_VERIFY_PARAM_set_hostflags(param, X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS);
+	if (!X509_VERIFY_PARAM_set1_host(param, hostName, 0))   // some had strlen(hostName)
+	    {
+	    warn("SSL hostName for verify failed");
+	    return 0;
+	    }
 
 	// verify peer cert of the server.
 	// Set TRUSTED_FIRST for openssl 1.0
