@@ -2066,6 +2066,7 @@
 ./runBuild GCF_001642055.1_Altal1 fungi Alternaria_alternata
 ./runBuild GCF_001642345.1_ASM164234v2 vertebrate Rhincodon_typus
 ./runBuild GCF_001642475.1_ASM164247v1 fungi Fonsecaea_monophora
+./runBuild GCF_001642655.1_ASM164265v1 bacteria Clostridium_tyrobutyricum
 ./runBuild GCF_001646965.1_ASM164696v1 fungi Fonsecaea_nubica
 ./runBuild GCF_001649575.1_ASM164957v1 vertebrate Kryptolebias_marmoratus
 ./runBuild GCF_001649575.2_ASM164957v2 fish Kryptolebias_marmoratus
