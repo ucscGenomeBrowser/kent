@@ -551,6 +551,7 @@
 ./runBuild GCA_013436055.1_Harore_MTP2014 invertebrate Halocynthia_roretzi
 ./runBuild GCA_013436065.1_Haaura_MTP2014 invertebrate Halocynthia_aurantium
 ./runBuild GCA_013621005.1_IRD_Aeve_1.1 plants Aeschynomene_evenia
+./runBuild GCA_013621035.1_C_magur1.0 fish Clarias_magur
 ./runBuild GCA_014060925.1_Heter_glaber.v1.7_hic_pac mammals Heterocephalus_glaber
 ./runBuild GCA_014108255.1_mRhiFer1.p mammals Rhinolophus_ferrumequinum
 ./runBuild GCA_014131795.1_ASM1413179v1 bacteria Clostridium_butyricum
