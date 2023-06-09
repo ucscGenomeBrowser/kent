@@ -198,7 +198,8 @@ GCF_024586455.1_APGP_CSIRO_Bneo_wtdbg2-racon-allhic-juicebox.fasta_v2	flies B.ne
 GCF_003227725.1_Cflo_v7.5	Florida carpenter ant
 GCF_000003815.2_Bfl_VNyyK	Florida lancelet
 GCF_027943255.1_idAnaObli1_1.0	fly A.obliqua (idAnaObli1 2023)
-GCF_014529535.1_BU_Bcop_v1	fly B.coprophila
+GCF_014529535.1_BU_Bcop_v1	fly B.coprophila (v1 Holo2 2020)
+GCA_014529535.2_BU_Bcop_v2	fly B.coprophila (v2 Holo2 2023)
 GCF_001853355.1_ASM185335v1	fly B.latifrons
 GCF_029603195.1_ASM2960319v2	fly C.longicornis (FDR11 2023)
 GCF_009650485.2_ASM965048v2	fly D.albomicans (v2 15112-1751.03 2022)

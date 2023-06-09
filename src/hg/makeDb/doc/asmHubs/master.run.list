@@ -562,6 +562,7 @@
 ./runBuild GCA_014356515.1_ASM1435651v1 invertebrate Sogatella_furcifera
 ./runBuild GCA_014356525.1_ASM1435652v1 invertebrate Nilaparvata_lugens
 ./runBuild GCA_014465815.1_ASM1446581v1 invertebrate Laodelphax_striatellus
+./runBuild GCA_014529535.2_BU_Bcop_v2 invertebrate Bradysia_coprophila
 ./runBuild GCA_014607495.2_ASM1460749v2 invertebrate Carposina_sasakii
 ./runBuild GCA_014706295.1_ASM1470629v1 birds Lycocorax_pyrrhopterus_obiensis
 ./runBuild GCA_014839645.1_fXenCan1.alt fish Xenentodon_cancila
