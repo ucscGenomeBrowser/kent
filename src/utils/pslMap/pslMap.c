@@ -319,14 +319,10 @@ static boolean mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
                           unsigned* outPslLineRef)
 /* map one pair of query and target PSL */
 {
-struct psl* mappedPsl;
-if (inPsl->tSize != mapAln->psl->qSize)
-    errAbort("Error: inPsl %s tSize (%d) != mapping alignment %s qSize (%d) (perhaps you need to specify -swapMap?)\n",
-             inPsl->tName, inPsl->tSize, mapAln->psl->qName, mapAln->psl->qSize);
 verbosePslNl(2, "inAln", inPsl);
 verbosePslNl(2, "mapAln", mapAln->psl);
 
-mappedPsl = pslTransMap(mapOpts, inPsl, inPslType, mapAln->psl, mapPslType);
+struct psl* mappedPsl = pslTransMap(mapOpts, inPsl, inPslType, mapAln->psl, mapPslType);
 
 verbosePslNl(2, "mappedAln", mappedPsl);
 

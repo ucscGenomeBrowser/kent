@@ -37,10 +37,22 @@ static boolean pslTypeQueryIsProtein(enum pslType pslType)
 return (pslType == pslTypeProtProt) || (pslType == pslTypeProtNa);
 }
 
+static boolean pslTypeQueryIsNa(enum pslType pslType)
+/* is the pslType indicate the query is a NA? */
+{
+return !pslTypeQueryIsProtein(pslType);
+}
+
 static boolean pslTypeTargetIsProtein(enum pslType pslType)
 /* is the pslType indicate the target is a protein? */
 {
 return (pslType == pslTypeProtProt);
+}
+
+static boolean pslTypeTargetIsNa(enum pslType pslType)
+/* is the pslType indicate the target is a NA? */
+{
+return !pslTypeTargetIsProtein(pslType);
 }
 
 struct block
@@ -105,6 +117,8 @@ int iBlk;
 psl->qStart *= 3;
 psl->qEnd *= 3;
 psl->qSize *= 3;
+if (!isProtNa)
+    psl->tSize *= 3;
 for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
     psl->blockSizes[iBlk] *= 3;
@@ -344,7 +358,17 @@ static void checkInMapCompat(struct psl *inPsl, enum pslType inPslType,
                              struct psl *mapPsl, enum pslType mapPslType)
 /* validate input and mapping alignments are compatible types */
 {
-if (pslTypeTargetIsProtein(inPslType) != pslTypeQueryIsProtein(mapPslType))
+/* allowed combinations:
+ *     inPslType   mapPslType  outPslType
+ *     na_na       na_na       na_na
+ *     prot_prot   prot_prot   prot_prot
+ *     prot_na     na_na       cds_na
+ *     prot_prot   na_na       cds_na
+ *     prot_prot   prot_na     cds_na
+ */
+
+if (!((pslTypeTargetIsNa(inPslType) && pslTypeQueryIsNa(mapPslType)) ||
+      pslTypeTargetIsProtein(inPslType)))
     errAbort("input PSL %s to %s type %s is not compatible with mapping PSL %s to %s type %s ",
              inPsl->qName, inPsl->tName, pslTypeDesc[inPslType],
              mapPsl->qName, mapPsl->tName, pslTypeDesc[mapPslType]);
@@ -356,12 +380,6 @@ struct psl* pslTransMap(unsigned opts, struct psl *inPsl, enum pslType inPslType
  * couldn't be mapped. psl types are normally set as pslTypeUnspecified,
  * and assumed to be NA->NA. */
 {
-/* sanity check size but not name, so names to vary to allow ids to have
- * unique-ifying suffixes. */
-if (inPsl->tSize != mapPsl->qSize)
-    errAbort("Error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)",
-            inPsl->tName, inPsl->tSize, mapPsl->qName, mapPsl->qSize);
-
 inPslType = determinePslType(inPsl, inPslType, "input PSL");
 mapPslType = determinePslType(mapPsl, mapPslType, "mapping PSL");
 checkInMapCompat(inPsl, inPslType, mapPsl, mapPslType);
@@ -389,6 +407,13 @@ if (cnvMap)
     mapPsl = pslClone(mapPsl);
     pslProtToNAConvert(mapPsl);
     }
+
+/* sanity check sizes after conversion Don't check name, so names to vary to
+ * allow ids to have unique-ifying suffixes. */
+if (inPsl->tSize != mapPsl->qSize)
+    errAbort("Error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)",
+            inPsl->tName, inPsl->tSize, mapPsl->qName, mapPsl->qSize);
+
 
 struct psl* mappedPsl = doMapping(inPsl, mapPsl);
 
