@@ -182,27 +182,6 @@ if (flags & bldPslx)
 psl->blockCount++;
 }
 
-static void countIndels(struct psl *psl)
-/* update indel counts in psl after adding a block */
-{
-if (psl->blockCount > 1)
-    {
-    int iBlk = psl->blockCount - 1;
-    if (pslQEnd(psl, iBlk-1) != psl->qStarts[iBlk])
-        {
-        /* insert in query */
-        psl->qNumInsert++;
-        psl->qBaseInsert += (psl->qStarts[iBlk] - pslQEnd(psl, iBlk-1));
-    }
-    if (pslTEnd(psl, iBlk-1) != psl->tStarts[iBlk])
-        {
-        /* insert in target */
-        psl->tNumInsert++;
-        psl->tBaseInsert += (psl->tStarts[iBlk] - pslTEnd(psl, iBlk-1));
-        }
-    }
-}
-
 static void countMatches(struct psl* psl, struct block* blk, unsigned flags)
 /* update the PSL match/mismatch after adding a block. */
 {
@@ -229,14 +208,12 @@ static void hspToBlocks(struct psl *psl, int *pslSpace, struct block *blk, unsig
 while (nextUngappedBlk(blk))
     {
     addUngappedBlock(psl, pslSpace, blk, flags);
-    countIndels(psl);
+    pslComputeInsertCounts(psl);
     countMatches(psl, blk, flags);
     }
+pslComputeInsertCounts(psl);
 assert(blk->qStart == blk->qEnd);
 assert(blk->tStart == blk->tEnd);
-// FIXME
-//assert(blk->qStart == pslQEnd(psl, psl->blockCount-1));
-//assert(blk->tStart == pslTEnd(psl, psl->blockCount-1));
 }
 
 static void makeUntranslated(struct psl* psl)
