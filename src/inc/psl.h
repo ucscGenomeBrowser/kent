@@ -356,7 +356,10 @@ return psl->qStarts[blkIdx] + psl->blockSizes[blkIdx];
 INLINE unsigned pslTEnd(struct psl *psl, int blkIdx)
 /* return target end for the given block */
 {
-return psl->tStarts[blkIdx] + psl->blockSizes[blkIdx];
+if (pslIsProtein(psl))
+    return psl->tStarts[blkIdx] + 3 * psl->blockSizes[blkIdx];
+else
+    return psl->tStarts[blkIdx] + psl->blockSizes[blkIdx];
 }
 
 struct psl* pslClone(struct psl *psl);

@@ -18,6 +18,7 @@ errAbort("pslMapPostChain - Post genomic pslMap (TransMap) chaining.\n"
          "that have been mapped via genomic chains adds back in\n"
          "blocks that didn't get include in genomic chains due\n"
          "to complex rearrangements or other issues.\n"
+         "This can also handle other PSLs, including protein-RNA alignments\n"
          "\n"
          "This program has not seen much use and may not do what you want\n");
 }
@@ -225,6 +226,9 @@ static void addPslToChained(struct psl* chainedPsl,
 /* add blocks form a psl to the chained psl at the given point */
 {
 assert(insertIdx <= chainedPsl->blockCount);
+if (pslIsProtein(chainedPsl) != pslIsProtein(nextPsl))
+    errAbort("can't chain protein/NA with NA/NA alignments: %s %s", chainedPsl->qName, chainedPsl->tName);
+
 // expand arrays and copy in entries
 pslArrayInsert(&chainedPsl->blockSizes, chainedPsl->blockCount, nextPsl->blockSizes, nextPsl->blockCount, insertIdx);
 pslArrayInsert(&chainedPsl->qStarts, chainedPsl->blockCount, nextPsl->qStarts, nextPsl->blockCount, insertIdx);
@@ -242,7 +246,7 @@ else
     chainedPsl->qStart = pslQStartStrand(chainedPsl, chainedPsl->blockCount-1, '+');
     chainedPsl->qEnd = pslQEndStrand(chainedPsl, 0, '+');
     }
-assert(pslTStrand(chainedPsl) == '+');
+assert(pslTStrand(chainedPsl) == '+');  // forced on load
 chainedPsl->tStart = pslTStartStrand(chainedPsl, 0, '+');
 chainedPsl->tEnd = pslTEndStrand(chainedPsl, chainedPsl->blockCount-1, '+');
 
@@ -285,7 +289,7 @@ static void chainQuery(struct psl** queryPsls,
 /* make chains for a single query. Takes over ownership
  * of PSLs */
 {
-// sort by genomic location, then pull of a group to
+// sort by genomic location, then group to chain
 // to chain
 slSort(queryPsls, pslCmpTargetAndStrandSpan);
 while (*queryPsls != NULL)
