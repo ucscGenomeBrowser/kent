@@ -7427,22 +7427,14 @@ if (cg->columnIx == cg->columns)
     controlGridEndRow(cg);
 if (!cg->rowOpen)
     {
-#if 0
-    /* This is unnecessary, b/c we can just use a blank display attribute to show the element rather
-       than figuring out what the browser specific string is to turn on display of the tr;
-       however, we may want to put in browser specific strings in the future, so I'm leaving this
-       code in as a reference. */
-    char *ua = getenv("HTTP_USER_AGENT");
-    char *display = ua && stringIn("MSIE", ua) ? "block" : "table-row";
-#endif
     // use counter to ensure unique tr id's (prefix is used to find tr's in javascript).
     printf("<tr %sid='%s-%d'>", isOpen ? "" : "style='display: none' ", id, counter++);
     cg->rowOpen = TRUE;
     }
 if (cg->align)
-    printf("<td align=%s>", cg->align);
+    printf("<td class='trackLabelTd' align=%s>", cg->align);
 else
-    printf("<td>");
+    printf("<td class='trackLabelTd'>");
 }
 
 static void pruneRedundantCartVis(struct track *trackList)

@@ -13,6 +13,7 @@ body.hgTracks {
 	background: url("../../images/internal_bg1.jpg") repeat-x fixed left bottom #F9F9F7;
 }
 
+
 body.training {
         background: url("../../images/internal_bg1.jpg") repeat-x fixed left bottom #F9F9F7;
 }
@@ -56,6 +57,10 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
     margin-right: 3px;
     padding-left: 8px;
     padding-right: 8px;
+}
+
+.trackLabelTd {
+        max-width: 14em;
 }
 
 .controlButtons {
@@ -284,6 +289,12 @@ table.bedExtraTbl td:first-child {
 table.bedExtraTbl tbody {
     background-color: #fffadb;
 }
+
+.bedExtraTblNote {
+    font-size: small;
+    font-weight: normal;
+}
+
 
 /* used by transMap details page in hgc */
 TABLE.transMap, TABLE.transMap TH, TABLE.transMap TD {
