@@ -1,0 +1,927 @@
+track fantom5
+dataVersion FANTOM5 reprocessed7
+longLabel FANTOM5
+group regulation
+superTrack on
+#dimensions dimX=group
+html fantom5.html
+shortLabel FANTOM5
+visibility hide
+#subGroup1 group Group peaks=Peaks counts=Counts
+
+	track robustPeaks
+	dataVersion FANTOM5 phase2.5
+	type bigBed 8 +
+	longLabel FANTOM5 DPI peak, robust set
+	#thickDrawItem on
+	bigDataUrl /gbdb/rheMac8/fantom5/rheMac8.cage_peak.bb
+	superTrack fantom5 dense
+	subGroups group=peaks
+	searchTrix rheMac8.cage_peak.bb.ix
+	itemRgb on
+	priority 1.2
+	exonArrows on
+	#showTopScorers 20
+	#exonArrowsDense on
+	searchIndex name
+	shortLabel TSS peaks
+	visibility dense
+	colorByStrand 255,0,0 0,0,255
+	showSubtrackColorOnUi on
+	boxedCfg on
+        html fantom5.html
+	
+	track Total_counts_multiwig
+	dataVersion FANTOM5 phase2.5
+	type bigWig 0 100
+	longLabel Total counts of CAGE reads
+	viewLimits 0:100
+	autoScale off
+	superTrack fantom5 full
+	subGroups group=counts
+	priority 1.3
+	configurable on
+	dragAndDrop subTracks
+	maxHeightPixels 64:64:11
+	shortLabel Total counts
+	visibility full
+	container multiWig
+	showSubtrackColorOnUi on
+	aggregate transparentOverlay
+        html fantom5.html
+	
+		track TotalCounts_Fwd
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Total counts of CAGE reads forward
+		color 255,0,0
+		parent Total_counts_multiwig
+		bigDataUrl /gbdb/rheMac8/fantom5/ctssTotalCounts.fwd.bw
+		subGroups category=total strand=forward
+		shortLabel Total counts of CAGE reads (fwd)
+		
+		track TotalCounts_Rev
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Total counts of CAGE reads reverse
+		color 0,0,255
+		parent Total_counts_multiwig
+		bigDataUrl /gbdb/rheMac8/fantom5/ctssTotalCounts.rev.bw
+		subGroups category=total strand=reverse
+		shortLabel Total counts of CAGE reads (rev)
+	
+	track Max_counts_multiwig
+	dataVersion FANTOM5 phase2.5
+	type bigWig 0 100
+	longLabel Max counts of CAGE reads
+	viewLimits 0:100
+	autoScale off
+	superTrack fantom5 full
+	subGroups group=counts
+	priority 1.4
+	configurable on
+	dragAndDrop subTracks
+	maxHeightPixels 64:64:11
+	shortLabel Max counts
+	visibility full
+	container multiWig
+	showSubtrackColorOnUi on
+	aggregate transparentOverlay
+        html fantom5.html
+	
+		track MaxCounts_Fwd
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Max counts of CAGE reads forward
+		color 255,0,0
+		parent Max_counts_multiwig
+		bigDataUrl /gbdb/rheMac8/fantom5/ctssMaxCounts.fwd.bw
+		subGroups category=max strand=forward
+		shortLabel Max counts of CAGE reads (fwd)
+		
+		track MaxCounts_Rev
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Max counts of CAGE reads reverse
+		color 0,0,255
+		parent Max_counts_multiwig
+		bigDataUrl /gbdb/rheMac8/fantom5/ctssMaxCounts.rev.bw
+		subGroups category=max strand=reverse
+		shortLabel Max counts of CAGE reads (rev)
+	
+	track TSS_activity_read_counts
+	dataVersion FANTOM5 phase2.5
+	type bigWig
+	longLabel TSS activity per sample(read counts)
+	priority 2
+	dimensions dimX=sequenceTech dimY=category dimA=strand
+	compositeTrack on
+	superTrack fantom5
+	subGroup3 strand Strand forward=forward reverse=reverse
+	subGroup2 category Category cellLine=cellLine fractionation=fractionation primaryCell=primaryCell tissue=tissue
+	shortLabel TSS activity(read counts)
+	visibility hide
+	subGroup1 sequenceTech Sequence_Tech hCAGE=hCAGE LQhCAGE=LQhCAGE
+	showSubtrackColorOnUi off
+	sortOrder category=+ sequenceTech=+
+	boxedCfg on
+        html fantom5.html
+	
+		track AmygdalaAdultDonor8633_CNhs14182_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:14610-159A2
+		type bigWig
+		longLabel amygdala, adult, donor8633_CNhs14182_14610-159A2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/amygdala%2c%20adult%2c%20donor8633.CNhs14182.14610-159A2.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=14610-159A2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AmygdalaD8633+
+		
+		track AmygdalaAdultDonor8633_CNhs14182_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:14610-159A2
+		type bigWig
+		longLabel amygdala, adult, donor8633_CNhs14182_14610-159A2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/amygdala%2c%20adult%2c%20donor8633.CNhs14182.14610-159A2.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=14610-159A2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AmygdalaD8633-
+		
+		track CaudateNucleusAdultDonor8633_CNhs14174_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10390-105I3
+		type bigWig
+		longLabel caudate nucleus, adult, donor8633_CNhs14174_10390-105I3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/caudate%20nucleus%2c%20adult%2c%20donor8633.CNhs14174.10390-105I3.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10390-105I3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel CaudateNucleusD8633+
+		
+		track CaudateNucleusAdultDonor8633_CNhs14174_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10390-105I3
+		type bigWig
+		longLabel caudate nucleus, adult, donor8633_CNhs14174_10390-105I3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/caudate%20nucleus%2c%20adult%2c%20donor8633.CNhs14174.10390-105I3.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10390-105I3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel CaudateNucleusD8633-
+		
+		track CerebellumAdultDonor8633_CNhs14176_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10392-105I5
+		type bigWig
+		longLabel cerebellum, adult, donor8633_CNhs14176_10392-105I5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/cerebellum%2c%20adult%2c%20donor8633.CNhs14176.10392-105I5.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10392-105I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel CerebellumD8633+
+		
+		track CerebellumAdultDonor8633_CNhs14176_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10392-105I5
+		type bigWig
+		longLabel cerebellum, adult, donor8633_CNhs14176_10392-105I5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/cerebellum%2c%20adult%2c%20donor8633.CNhs14176.10392-105I5.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10392-105I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel CerebellumD8633-
+		
+		track GlobusPallidusAdultDonor8633_CNhs14171_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10387-105H9
+		type bigWig
+		longLabel globus pallidus, adult, donor8633_CNhs14171_10387-105H9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/globus%20pallidus%2c%20adult%2c%20donor8633.CNhs14171.10387-105H9.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10387-105H9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel GlobusPallidusD8633+
+		
+		track GlobusPallidusAdultDonor8633_CNhs14171_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10387-105H9
+		type bigWig
+		longLabel globus pallidus, adult, donor8633_CNhs14171_10387-105H9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/globus%20pallidus%2c%20adult%2c%20donor8633.CNhs14171.10387-105H9.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10387-105H9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel GlobusPallidusD8633-
+		
+		track HippocampusAdultDonor8633_CNhs14180_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10396-105I9
+		type bigWig
+		longLabel hippocampus, adult, donor8633_CNhs14180_10396-105I9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/hippocampus%2c%20adult%2c%20donor8633.CNhs14180.10396-105I9.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10396-105I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HippocampusD8633+
+		
+		track HippocampusAdultDonor8633_CNhs14180_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10396-105I9
+		type bigWig
+		longLabel hippocampus, adult, donor8633_CNhs14180_10396-105I9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/hippocampus%2c%20adult%2c%20donor8633.CNhs14180.10396-105I9.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10396-105I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HippocampusD8633-
+		
+		track LocusCoeruleusAdultDonor8633_CNhs14172_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10388-105I1
+		type bigWig
+		longLabel locus coeruleus, adult, donor8633_CNhs14172_10388-105I1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/locus%20coeruleus%2c%20adult%2c%20donor8633.CNhs14172.10388-105I1.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10388-105I1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel LocusCoeruleusD8633+
+		
+		track LocusCoeruleusAdultDonor8633_CNhs14172_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10388-105I1
+		type bigWig
+		longLabel locus coeruleus, adult, donor8633_CNhs14172_10388-105I1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/locus%20coeruleus%2c%20adult%2c%20donor8633.CNhs14172.10388-105I1.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10388-105I1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel LocusCoeruleusD8633-
+		
+		track MedialFrontalGyrusAdultDonor8633_CNhs14177_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10393-105I6
+		type bigWig
+		longLabel medial frontal gyrus, adult, donor8633_CNhs14177_10393-105I6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/medial%20frontal%20gyrus%2c%20adult%2c%20donor8633.CNhs14177.10393-105I6.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10393-105I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedialFrontalGyrusD8633+
+		
+		track MedialFrontalGyrusAdultDonor8633_CNhs14177_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10393-105I6
+		type bigWig
+		longLabel medial frontal gyrus, adult, donor8633_CNhs14177_10393-105I6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/medial%20frontal%20gyrus%2c%20adult%2c%20donor8633.CNhs14177.10393-105I6.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10393-105I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedialFrontalGyrusD8633-
+		
+		track MedialTemporalGyrusAdultDonor8633_CNhs14179_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10395-105I8
+		type bigWig
+		longLabel medial temporal gyrus, adult, donor8633_CNhs14179_10395-105I8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/medial%20temporal%20gyrus%2c%20adult%2c%20donor8633.CNhs14179.10395-105I8.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10395-105I8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedialTemporalGyrusD8633+
+		
+		track MedialTemporalGyrusAdultDonor8633_CNhs14179_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10395-105I8
+		type bigWig
+		longLabel medial temporal gyrus, adult, donor8633_CNhs14179_10395-105I8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/medial%20temporal%20gyrus%2c%20adult%2c%20donor8633.CNhs14179.10395-105I8.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10395-105I8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedialTemporalGyrusD8633-
+		
+		track MedullaOblongataAdultDonor8633_CNhs14175_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10391-105I4
+		type bigWig
+		longLabel medulla oblongata, adult, donor8633_CNhs14175_10391-105I4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/medulla%20oblongata%2c%20adult%2c%20donor8633.CNhs14175.10391-105I4.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10391-105I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedullaOblongataD8633+
+		
+		track MedullaOblongataAdultDonor8633_CNhs14175_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10391-105I4
+		type bigWig
+		longLabel medulla oblongata, adult, donor8633_CNhs14175_10391-105I4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/medulla%20oblongata%2c%20adult%2c%20donor8633.CNhs14175.10391-105I4.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10391-105I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedullaOblongataD8633-
+		
+		track OccipitalCortexAdultDonor8633_CNhs14169_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10385-105H7
+		type bigWig
+		longLabel occipital cortex, adult, donor8633_CNhs14169_10385-105H7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/occipital%20cortex%2c%20adult%2c%20donor8633.CNhs14169.10385-105H7.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10385-105H7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel OccipitalCortexD8633+
+		
+		track OccipitalCortexAdultDonor8633_CNhs14169_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10385-105H7
+		type bigWig
+		longLabel occipital cortex, adult, donor8633_CNhs14169_10385-105H7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/occipital%20cortex%2c%20adult%2c%20donor8633.CNhs14169.10385-105H7.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10385-105H7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel OccipitalCortexD8633-
+		
+		track ParietalGyrusAdultDonor8633_CNhs14181_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:14609-159A1
+		type bigWig
+		longLabel parietal gyrus, adult, donor8633_CNhs14181_14609-159A1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/parietal%20gyrus%2c%20adult%2c%20donor8633.CNhs14181.14609-159A1.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=14609-159A1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel ParietalGyrusD8633+
+		
+		track ParietalGyrusAdultDonor8633_CNhs14181_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:14609-159A1
+		type bigWig
+		longLabel parietal gyrus, adult, donor8633_CNhs14181_14609-159A1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/parietal%20gyrus%2c%20adult%2c%20donor8633.CNhs14181.14609-159A1.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=14609-159A1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel ParietalGyrusD8633-
+		
+		track PutamenAdultDonor8633_CNhs14178_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10394-105I7
+		type bigWig
+		longLabel putamen, adult, donor8633_CNhs14178_10394-105I7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/putamen%2c%20adult%2c%20donor8633.CNhs14178.10394-105I7.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10394-105I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel PutamenD8633+
+		
+		track PutamenAdultDonor8633_CNhs14178_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10394-105I7
+		type bigWig
+		longLabel putamen, adult, donor8633_CNhs14178_10394-105I7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/putamen%2c%20adult%2c%20donor8633.CNhs14178.10394-105I7.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10394-105I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel PutamenD8633-
+		
+		track SpinalCordAdultDonor8633_CNhs14168_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10384-105H6
+		type bigWig
+		longLabel spinal cord, adult, donor8633_CNhs14168_10384-105H6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/spinal%20cord%2c%20adult%2c%20donor8633.CNhs14168.10384-105H6.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10384-105H6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel SpinalCordD8633+
+		
+		track SpinalCordAdultDonor8633_CNhs14168_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10384-105H6
+		type bigWig
+		longLabel spinal cord, adult, donor8633_CNhs14168_10384-105H6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/spinal%20cord%2c%20adult%2c%20donor8633.CNhs14168.10384-105H6.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10384-105H6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel SpinalCordD8633-
+		
+		track SubstantiaNigraAdultDonor8633_CNhs14173_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10389-105I2
+		type bigWig
+		longLabel substantia nigra, adult, donor8633_CNhs14173_10389-105I2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/substantia%20nigra%2c%20adult%2c%20donor8633.CNhs14173.10389-105I2.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10389-105I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel SubstantiaNigraD8633+
+		
+		track SubstantiaNigraAdultDonor8633_CNhs14173_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10389-105I2
+		type bigWig
+		longLabel substantia nigra, adult, donor8633_CNhs14173_10389-105I2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/substantia%20nigra%2c%20adult%2c%20donor8633.CNhs14173.10389-105I2.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10389-105I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel SubstantiaNigraD8633-
+		
+		track ThalamusAdultDonor8633_CNhs14170_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10386-105H8
+		type bigWig
+		longLabel thalamus, adult, donor8633_CNhs14170_10386-105H8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/thalamus%2c%20adult%2c%20donor8633.CNhs14170.10386-105H8.rheMac8.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10386-105H8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel ThalamusD8633+
+		
+		track ThalamusAdultDonor8633_CNhs14170_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10386-105H8
+		type bigWig
+		longLabel thalamus, adult, donor8633_CNhs14170_10386-105H8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rheMac8/fantom5/thalamus%2c%20adult%2c%20donor8633.CNhs14170.10386-105H8.rheMac8.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10386-105H8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel ThalamusD8633-
+		
+	track TSS_activity_TPM
+	dataVersion FANTOM5 phase2.5
+	type bigWig
+	longLabel TSS activity per sample(TPM)
+	priority 3
+	dimensions dimX=sequenceTech dimY=category dimA=strand
+	compositeTrack on
+	superTrack fantom5 full
+	subGroup3 strand Strand forward=forward reverse=reverse
+	subGroup2 category Category cellLine=cellLine fractionation=fractionation primaryCell=primaryCell tissue=tissue
+	shortLabel TSS activity(TPM)
+	visibility dense
+	subGroup1 sequenceTech Sequence_Tech hCAGE=hCAGE LQhCAGE=LQhCAGE
+	showSubtrackColorOnUi off
+	sortOrder category=+ sequenceTech=+
+	boxedCfg on
+        html fantom5.html
+		
+		track AmygdalaAdultDonor8633_CNhs14182_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:14610-159A2
+		type bigWig
+		longLabel amygdala, adult, donor8633_CNhs14182_14610-159A2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/amygdala%2c%20adult%2c%20donor8633.CNhs14182.14610-159A2.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=14610-159A2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AmygdalaD8633+
+		
+		track AmygdalaAdultDonor8633_CNhs14182_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:14610-159A2
+		type bigWig
+		longLabel amygdala, adult, donor8633_CNhs14182_14610-159A2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/amygdala%2c%20adult%2c%20donor8633.CNhs14182.14610-159A2.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=14610-159A2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AmygdalaD8633-
+		
+		track CaudateNucleusAdultDonor8633_CNhs14174_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10390-105I3
+		type bigWig
+		longLabel caudate nucleus, adult, donor8633_CNhs14174_10390-105I3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/caudate%20nucleus%2c%20adult%2c%20donor8633.CNhs14174.10390-105I3.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10390-105I3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel CaudateNucleusD8633+
+		
+		track CaudateNucleusAdultDonor8633_CNhs14174_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10390-105I3
+		type bigWig
+		longLabel caudate nucleus, adult, donor8633_CNhs14174_10390-105I3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/caudate%20nucleus%2c%20adult%2c%20donor8633.CNhs14174.10390-105I3.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10390-105I3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel CaudateNucleusD8633-
+		
+		track CerebellumAdultDonor8633_CNhs14176_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10392-105I5
+		type bigWig
+		longLabel cerebellum, adult, donor8633_CNhs14176_10392-105I5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/cerebellum%2c%20adult%2c%20donor8633.CNhs14176.10392-105I5.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10392-105I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel CerebellumD8633+
+		
+		track CerebellumAdultDonor8633_CNhs14176_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10392-105I5
+		type bigWig
+		longLabel cerebellum, adult, donor8633_CNhs14176_10392-105I5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/cerebellum%2c%20adult%2c%20donor8633.CNhs14176.10392-105I5.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10392-105I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel CerebellumD8633-
+		
+		track GlobusPallidusAdultDonor8633_CNhs14171_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10387-105H9
+		type bigWig
+		longLabel globus pallidus, adult, donor8633_CNhs14171_10387-105H9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/globus%20pallidus%2c%20adult%2c%20donor8633.CNhs14171.10387-105H9.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10387-105H9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel GlobusPallidusD8633+
+		
+		track GlobusPallidusAdultDonor8633_CNhs14171_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10387-105H9
+		type bigWig
+		longLabel globus pallidus, adult, donor8633_CNhs14171_10387-105H9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/globus%20pallidus%2c%20adult%2c%20donor8633.CNhs14171.10387-105H9.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10387-105H9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel GlobusPallidusD8633-
+		
+		track HippocampusAdultDonor8633_CNhs14180_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10396-105I9
+		type bigWig
+		longLabel hippocampus, adult, donor8633_CNhs14180_10396-105I9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/hippocampus%2c%20adult%2c%20donor8633.CNhs14180.10396-105I9.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10396-105I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HippocampusD8633+
+		
+		track HippocampusAdultDonor8633_CNhs14180_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10396-105I9
+		type bigWig
+		longLabel hippocampus, adult, donor8633_CNhs14180_10396-105I9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/hippocampus%2c%20adult%2c%20donor8633.CNhs14180.10396-105I9.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10396-105I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HippocampusD8633-
+		
+		track LocusCoeruleusAdultDonor8633_CNhs14172_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10388-105I1
+		type bigWig
+		longLabel locus coeruleus, adult, donor8633_CNhs14172_10388-105I1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/locus%20coeruleus%2c%20adult%2c%20donor8633.CNhs14172.10388-105I1.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10388-105I1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel LocusCoeruleusD8633+
+		
+		track LocusCoeruleusAdultDonor8633_CNhs14172_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10388-105I1
+		type bigWig
+		longLabel locus coeruleus, adult, donor8633_CNhs14172_10388-105I1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/locus%20coeruleus%2c%20adult%2c%20donor8633.CNhs14172.10388-105I1.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10388-105I1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel LocusCoeruleusD8633-
+		
+		track MedialFrontalGyrusAdultDonor8633_CNhs14177_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10393-105I6
+		type bigWig
+		longLabel medial frontal gyrus, adult, donor8633_CNhs14177_10393-105I6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/medial%20frontal%20gyrus%2c%20adult%2c%20donor8633.CNhs14177.10393-105I6.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10393-105I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedialFrontalGyrusD8633+
+		
+		track MedialFrontalGyrusAdultDonor8633_CNhs14177_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10393-105I6
+		type bigWig
+		longLabel medial frontal gyrus, adult, donor8633_CNhs14177_10393-105I6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/medial%20frontal%20gyrus%2c%20adult%2c%20donor8633.CNhs14177.10393-105I6.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10393-105I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedialFrontalGyrusD8633-
+		
+		track MedialTemporalGyrusAdultDonor8633_CNhs14179_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10395-105I8
+		type bigWig
+		longLabel medial temporal gyrus, adult, donor8633_CNhs14179_10395-105I8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/medial%20temporal%20gyrus%2c%20adult%2c%20donor8633.CNhs14179.10395-105I8.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10395-105I8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedialTemporalGyrusD8633+
+		
+		track MedialTemporalGyrusAdultDonor8633_CNhs14179_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10395-105I8
+		type bigWig
+		longLabel medial temporal gyrus, adult, donor8633_CNhs14179_10395-105I8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/medial%20temporal%20gyrus%2c%20adult%2c%20donor8633.CNhs14179.10395-105I8.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10395-105I8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedialTemporalGyrusD8633-
+		
+		track MedullaOblongataAdultDonor8633_CNhs14175_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10391-105I4
+		type bigWig
+		longLabel medulla oblongata, adult, donor8633_CNhs14175_10391-105I4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/medulla%20oblongata%2c%20adult%2c%20donor8633.CNhs14175.10391-105I4.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10391-105I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedullaOblongataD8633+
+		
+		track MedullaOblongataAdultDonor8633_CNhs14175_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10391-105I4
+		type bigWig
+		longLabel medulla oblongata, adult, donor8633_CNhs14175_10391-105I4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/medulla%20oblongata%2c%20adult%2c%20donor8633.CNhs14175.10391-105I4.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10391-105I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MedullaOblongataD8633-
+		
+		track OccipitalCortexAdultDonor8633_CNhs14169_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10385-105H7
+		type bigWig
+		longLabel occipital cortex, adult, donor8633_CNhs14169_10385-105H7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/occipital%20cortex%2c%20adult%2c%20donor8633.CNhs14169.10385-105H7.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10385-105H7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel OccipitalCortexD8633+
+		
+		track OccipitalCortexAdultDonor8633_CNhs14169_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10385-105H7
+		type bigWig
+		longLabel occipital cortex, adult, donor8633_CNhs14169_10385-105H7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/occipital%20cortex%2c%20adult%2c%20donor8633.CNhs14169.10385-105H7.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10385-105H7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel OccipitalCortexD8633-
+		
+		track ParietalGyrusAdultDonor8633_CNhs14181_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:14609-159A1
+		type bigWig
+		longLabel parietal gyrus, adult, donor8633_CNhs14181_14609-159A1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/parietal%20gyrus%2c%20adult%2c%20donor8633.CNhs14181.14609-159A1.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=14609-159A1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel ParietalGyrusD8633+
+		
+		track ParietalGyrusAdultDonor8633_CNhs14181_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:14609-159A1
+		type bigWig
+		longLabel parietal gyrus, adult, donor8633_CNhs14181_14609-159A1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/parietal%20gyrus%2c%20adult%2c%20donor8633.CNhs14181.14609-159A1.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=14609-159A1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel ParietalGyrusD8633-
+		
+		track PutamenAdultDonor8633_CNhs14178_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10394-105I7
+		type bigWig
+		longLabel putamen, adult, donor8633_CNhs14178_10394-105I7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/putamen%2c%20adult%2c%20donor8633.CNhs14178.10394-105I7.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10394-105I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel PutamenD8633+
+		
+		track PutamenAdultDonor8633_CNhs14178_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10394-105I7
+		type bigWig
+		longLabel putamen, adult, donor8633_CNhs14178_10394-105I7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/putamen%2c%20adult%2c%20donor8633.CNhs14178.10394-105I7.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10394-105I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel PutamenD8633-
+		
+		track SpinalCordAdultDonor8633_CNhs14168_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10384-105H6
+		type bigWig
+		longLabel spinal cord, adult, donor8633_CNhs14168_10384-105H6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/spinal%20cord%2c%20adult%2c%20donor8633.CNhs14168.10384-105H6.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10384-105H6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel SpinalCordD8633+
+		
+		track SpinalCordAdultDonor8633_CNhs14168_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10384-105H6
+		type bigWig
+		longLabel spinal cord, adult, donor8633_CNhs14168_10384-105H6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/spinal%20cord%2c%20adult%2c%20donor8633.CNhs14168.10384-105H6.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10384-105H6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel SpinalCordD8633-
+		
+		track SubstantiaNigraAdultDonor8633_CNhs14173_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10389-105I2
+		type bigWig
+		longLabel substantia nigra, adult, donor8633_CNhs14173_10389-105I2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/substantia%20nigra%2c%20adult%2c%20donor8633.CNhs14173.10389-105I2.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10389-105I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel SubstantiaNigraD8633+
+		
+		track SubstantiaNigraAdultDonor8633_CNhs14173_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10389-105I2
+		type bigWig
+		longLabel substantia nigra, adult, donor8633_CNhs14173_10389-105I2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/substantia%20nigra%2c%20adult%2c%20donor8633.CNhs14173.10389-105I2.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10389-105I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel SubstantiaNigraD8633-
+		
+		track ThalamusAdultDonor8633_CNhs14170_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10386-105H8
+		type bigWig
+		longLabel thalamus, adult, donor8633_CNhs14170_10386-105H8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/thalamus%2c%20adult%2c%20donor8633.CNhs14170.10386-105H8.rheMac8.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10386-105H8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel ThalamusD8633+
+		
+		track ThalamusAdultDonor8633_CNhs14170_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10386-105H8
+		type bigWig
+		longLabel thalamus, adult, donor8633_CNhs14170_10386-105H8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rheMac8/fantom5/thalamus%2c%20adult%2c%20donor8633.CNhs14170.10386-105H8.rheMac8.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10386-105H8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel ThalamusD8633-
+		

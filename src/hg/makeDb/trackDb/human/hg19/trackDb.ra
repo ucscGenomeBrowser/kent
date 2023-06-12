@@ -2339,6 +2339,7 @@ include platinumGenomes.ra
 include hic.ra
 include exomeProbesets.ra
 include reMap.ra
+include fantom5.ra alpha
 
 track epdNew
 shortLabel EPDnew Promoters

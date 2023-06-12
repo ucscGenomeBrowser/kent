@@ -369,6 +369,7 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 
 include trackDb.encode3.ra
 include encode3RenEnhancerGene.ra
+include fantom5.ra alpha
 
 track epdNew
 compositeTrack on

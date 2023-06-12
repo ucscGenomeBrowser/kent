@@ -1,0 +1,823 @@
+track fantom5
+dataVersion FANTOM5 reprocessed7
+longLabel FANTOM5
+group regulation
+superTrack on
+#dimensions dimX=group
+html fantom5.html
+shortLabel FANTOM5
+visibility hide
+#subGroup1 group Group peaks=Peaks counts=Counts
+
+	track robustPeaks
+	dataVersion FANTOM5 phase2.5
+	type bigBed 8 +
+	longLabel FANTOM5 DPI peak, robust set
+	#thickDrawItem on
+	bigDataUrl /gbdb/canFam3/fantom5/canFam3.cage_peak.bb
+	superTrack fantom5 dense
+	subGroups group=peaks
+	searchTrix canFam3.cage_peak.bb.ix
+	itemRgb on
+	priority 1.2
+	exonArrows on
+	#showTopScorers 20
+	#exonArrowsDense on
+	searchIndex name
+	shortLabel TSS peaks
+	visibility dense
+	colorByStrand 255,0,0 0,0,255
+	showSubtrackColorOnUi on
+	boxedCfg on
+        html fantom5.html
+	
+	track Total_counts_multiwig
+	dataVersion FANTOM5 phase2.5
+	type bigWig 0 100
+	longLabel Total counts of CAGE reads
+	viewLimits 0:100
+	autoScale off
+	superTrack fantom5 full
+	subGroups group=counts
+	priority 1.3
+	configurable on
+	dragAndDrop subTracks
+	maxHeightPixels 64:64:11
+	shortLabel Total counts
+	visibility full
+	container multiWig
+	showSubtrackColorOnUi on
+	aggregate transparentOverlay
+        html fantom5.html
+	
+		track TotalCounts_Fwd
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Total counts of CAGE reads forward
+		color 255,0,0
+		parent Total_counts_multiwig
+		bigDataUrl /gbdb/canFam3/fantom5/ctssTotalCounts.fwd.bw
+		subGroups category=total strand=forward
+		shortLabel Total counts of CAGE reads (fwd)
+		
+		track TotalCounts_Rev
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Total counts of CAGE reads reverse
+		color 0,0,255
+		parent Total_counts_multiwig
+		bigDataUrl /gbdb/canFam3/fantom5/ctssTotalCounts.rev.bw
+		subGroups category=total strand=reverse
+		shortLabel Total counts of CAGE reads (rev)
+	
+	track Max_counts_multiwig
+	dataVersion FANTOM5 phase2.5
+	type bigWig 0 100
+	longLabel Max counts of CAGE reads
+	viewLimits 0:100
+	autoScale off
+	superTrack fantom5 full
+	subGroups group=counts
+	priority 1.4
+	configurable on
+	dragAndDrop subTracks
+	maxHeightPixels 64:64:11
+	shortLabel Max counts
+	visibility full
+	container multiWig
+	showSubtrackColorOnUi on
+	aggregate transparentOverlay
+        html fantom5.html
+	
+		track MaxCounts_Fwd
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Max counts of CAGE reads forward
+		color 255,0,0
+		parent Max_counts_multiwig
+		bigDataUrl /gbdb/canFam3/fantom5/ctssMaxCounts.fwd.bw
+		subGroups category=max strand=forward
+		shortLabel Max counts of CAGE reads (fwd)
+		
+		track MaxCounts_Rev
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Max counts of CAGE reads reverse
+		color 0,0,255
+		parent Max_counts_multiwig
+		bigDataUrl /gbdb/canFam3/fantom5/ctssMaxCounts.rev.bw
+		subGroups category=max strand=reverse
+		shortLabel Max counts of CAGE reads (rev)
+	
+	track TSS_activity_read_counts
+	dataVersion FANTOM5 phase2.5
+	type bigWig
+	longLabel TSS activity per sample(read counts)
+	priority 2
+	dimensions dimX=sequenceTech dimY=category dimA=strand
+	compositeTrack on
+        superTrack fantom5
+	subGroup3 strand Strand forward=forward reverse=reverse
+	subGroup2 category Category cellLine=cellLine fractionation=fractionation primaryCell=primaryCell tissue=tissue
+	shortLabel TSS activity(read counts)
+	visibility hide
+	subGroup1 sequenceTech Sequence_Tech hCAGE=hCAGE LQhCAGE=LQhCAGE
+	showSubtrackColorOnUi off
+	sortOrder category=+ sequenceTech=+
+	boxedCfg on
+        html fantom5.html
+	
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor1_CNhs12204_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11470-119C3
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor1 _CNhs12204_11470-119C3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor1%20.CNhs12204.11470-119C3.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=LQhCAGE category=primaryCell strand=forward
+		metadata ontology_id=11470-119C3 sequence_tech=LQhCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD1+
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor1_CNhs12204_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11470-119C3
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor1 _CNhs12204_11470-119C3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor1%20.CNhs12204.11470-119C3.canFam3.ctss.rev.bw
+		subGroups sequenceTech=LQhCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11470-119C3 sequence_tech=LQhCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD1-
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor2_CNhs11066_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11471-119C4
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor2_CNhs11066_11471-119C4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor2.CNhs11066.11471-119C4.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11471-119C4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD2+
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor2_CNhs11066_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11471-119C4
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor2_CNhs11066_11471-119C4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor2.CNhs11066.11471-119C4.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11471-119C4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD2-
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor3_CNhs11053_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11472-119C5
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor3_CNhs11053_11472-119C5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor3.CNhs11053.11472-119C5.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11472-119C5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD3+
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor3_CNhs11053_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11472-119C5
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor3_CNhs11053_11472-119C5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor3.CNhs11053.11472-119C5.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11472-119C5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD3-
+		
+		track CanineAorticSmoothMuscleCellsDonor1_CNhs11895_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11297-117B1
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor1_CNhs11895_11297-117B1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11895.11297-117B1.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11297-117B1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1+
+		
+		track CanineAorticSmoothMuscleCellsDonor1_CNhs11895_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11297-117B1
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor1_CNhs11895_11297-117B1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11895.11297-117B1.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11297-117B1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1-
+		
+		track CanineAorticSmoothMuscleCellsDonor2_CNhs11300_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11374-118A6
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor2_CNhs11300_11374-118A6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11300.11374-118A6.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11374-118A6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2+
+		
+		track CanineAorticSmoothMuscleCellsDonor2_CNhs11300_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11374-118A6
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor2_CNhs11300_11374-118A6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11300.11374-118A6.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11374-118A6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2-
+		
+		track CanineAorticSmoothMuscleCellsDonor3_CNhs11070_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11446-118I6
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor3_CNhs11070_11446-118I6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11070.11446-118I6.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11446-118I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3+
+		
+		track CanineAorticSmoothMuscleCellsDonor3_CNhs11070_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11446-118I6
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor3_CNhs11070_11446-118I6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11070.11446-118I6.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11446-118I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3-
+		
+		track CanineHepatocytesDonor1_CNhs10873_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11244-116E2
+		type bigWig
+		longLabel Canine hepatocytes, donor1_CNhs10873_11244-116E2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor1.CNhs10873.11244-116E2.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11244-116E2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD1+
+		
+		track CanineHepatocytesDonor1_CNhs10873_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11244-116E2
+		type bigWig
+		longLabel Canine hepatocytes, donor1_CNhs10873_11244-116E2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor1.CNhs10873.11244-116E2.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11244-116E2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD1-
+		
+		track CanineHepatocytesDonor2_CNhs11069_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11325-117E2
+		type bigWig
+		longLabel Canine hepatocytes, donor2_CNhs11069_11325-117E2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor2.CNhs11069.11325-117E2.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11325-117E2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD2+
+		
+		track CanineHepatocytesDonor2_CNhs11069_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11325-117E2
+		type bigWig
+		longLabel Canine hepatocytes, donor2_CNhs11069_11325-117E2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor2.CNhs11069.11325-117E2.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11325-117E2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD2-
+		
+		track CanineHepatocytesDonor3_CNhs11308_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11407-118E3
+		type bigWig
+		longLabel Canine hepatocytes, donor3_CNhs11308_11407-118E3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor3.CNhs11308.11407-118E3.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11407-118E3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD3+
+		
+		track CanineHepatocytesDonor3_CNhs11308_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11407-118E3
+		type bigWig
+		longLabel Canine hepatocytes, donor3_CNhs11308_11407-118E3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor3.CNhs11308.11407-118E3.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11407-118E3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD3-
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11291_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11293-117A6
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor1_CNhs11291_11293-117A6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11291.11293-117A6.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11293-117A6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1+
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11291_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11293-117A6
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor1_CNhs11291_11293-117A6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11291.11293-117A6.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11293-117A6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1-
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor2_CNhs11304_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11370-118A2
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor2_CNhs11304_11370-118A2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor2.CNhs11304.11370-118A2.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11370-118A2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD2+
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor2_CNhs11304_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11370-118A2
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor2_CNhs11304_11370-118A2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor2.CNhs11304.11370-118A2.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11370-118A2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD2-
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor3_CNhs11310_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11442-118I2
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor3_CNhs11310_11442-118I2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor3.CNhs11310.11442-118I2.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11442-118I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD3+
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor3_CNhs11310_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11442-118I2
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor3_CNhs11310_11442-118I2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor3.CNhs11310.11442-118I2.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11442-118I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD3-
+		
+		track UniversalRNADogNormalTissuesBiochainPool1_CNhs10590_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10006-101B2
+		type bigWig
+		longLabel Universal RNA - Dog Normal Tissues Biochain, pool1_CNhs10590_10006-101B2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Universal%20RNA%20-%20Dog%20Normal%20Tissues%20Biochain%2c%20pool1.CNhs10590.10006-101B2.canFam3.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10006-101B2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel UniversalRna+
+		
+		track UniversalRNADogNormalTissuesBiochainPool1_CNhs10590_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10006-101B2
+		type bigWig
+		longLabel Universal RNA - Dog Normal Tissues Biochain, pool1_CNhs10590_10006-101B2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/canFam3/fantom5/Universal%20RNA%20-%20Dog%20Normal%20Tissues%20Biochain%2c%20pool1.CNhs10590.10006-101B2.canFam3.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10006-101B2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel UniversalRna-
+		
+	track TSS_activity_TPM
+	dataVersion FANTOM5 phase2.5
+	type bigWig
+	longLabel TSS activity per sample(TPM)
+	priority 3
+	dimensions dimX=sequenceTech dimY=category dimA=strand
+	compositeTrack on
+        superTrack fantom5
+	subGroup3 strand Strand forward=forward reverse=reverse
+	subGroup2 category Category cellLine=cellLine fractionation=fractionation primaryCell=primaryCell tissue=tissue
+	shortLabel TSS activity(TPM)
+	visibility dense
+	subGroup1 sequenceTech Sequence_Tech hCAGE=hCAGE LQhCAGE=LQhCAGE
+	showSubtrackColorOnUi off
+	sortOrder category=+ sequenceTech=+
+	boxedCfg on
+        html fantom5.html
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor1_CNhs12204_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11470-119C3
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor1 _CNhs12204_11470-119C3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor1%20.CNhs12204.11470-119C3.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=LQhCAGE category=primaryCell strand=forward
+		metadata ontology_id=11470-119C3 sequence_tech=LQhCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD1+
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor1_CNhs12204_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11470-119C3
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor1 _CNhs12204_11470-119C3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor1%20.CNhs12204.11470-119C3.canFam3.tpm.rev.bw
+		subGroups sequenceTech=LQhCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11470-119C3 sequence_tech=LQhCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD1-
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor2_CNhs11066_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11471-119C4
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor2_CNhs11066_11471-119C4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor2.CNhs11066.11471-119C4.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11471-119C4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD2+
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor2_CNhs11066_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11471-119C4
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor2_CNhs11066_11471-119C4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor2.CNhs11066.11471-119C4.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11471-119C4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD2-
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor3_CNhs11053_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11472-119C5
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor3_CNhs11053_11472-119C5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor3.CNhs11053.11472-119C5.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11472-119C5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD3+
+		
+		track CanineAorticSmoothMuscleCellsDifferentiatedDonor3_CNhs11053_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11472-119C5
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells - differentiated, donor3_CNhs11053_11472-119C5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor3.CNhs11053.11472-119C5.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11472-119C5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD3-
+		
+		track CanineAorticSmoothMuscleCellsDonor1_CNhs11895_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11297-117B1
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor1_CNhs11895_11297-117B1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11895.11297-117B1.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11297-117B1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1+
+		
+		track CanineAorticSmoothMuscleCellsDonor1_CNhs11895_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11297-117B1
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor1_CNhs11895_11297-117B1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11895.11297-117B1.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11297-117B1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1-
+		
+		track CanineAorticSmoothMuscleCellsDonor2_CNhs11300_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11374-118A6
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor2_CNhs11300_11374-118A6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11300.11374-118A6.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11374-118A6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2+
+		
+		track CanineAorticSmoothMuscleCellsDonor2_CNhs11300_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11374-118A6
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor2_CNhs11300_11374-118A6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11300.11374-118A6.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11374-118A6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2-
+		
+		track CanineAorticSmoothMuscleCellsDonor3_CNhs11070_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11446-118I6
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor3_CNhs11070_11446-118I6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11070.11446-118I6.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11446-118I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3+
+		
+		track CanineAorticSmoothMuscleCellsDonor3_CNhs11070_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11446-118I6
+		type bigWig
+		longLabel Canine Aortic Smooth Muscle cells, donor3_CNhs11070_11446-118I6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11070.11446-118I6.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11446-118I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3-
+		
+		track CanineHepatocytesDonor1_CNhs10873_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11244-116E2
+		type bigWig
+		longLabel Canine hepatocytes, donor1_CNhs10873_11244-116E2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor1.CNhs10873.11244-116E2.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11244-116E2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD1+
+		
+		track CanineHepatocytesDonor1_CNhs10873_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11244-116E2
+		type bigWig
+		longLabel Canine hepatocytes, donor1_CNhs10873_11244-116E2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor1.CNhs10873.11244-116E2.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11244-116E2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD1-
+		
+		track CanineHepatocytesDonor2_CNhs11069_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11325-117E2
+		type bigWig
+		longLabel Canine hepatocytes, donor2_CNhs11069_11325-117E2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor2.CNhs11069.11325-117E2.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11325-117E2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD2+
+		
+		track CanineHepatocytesDonor2_CNhs11069_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11325-117E2
+		type bigWig
+		longLabel Canine hepatocytes, donor2_CNhs11069_11325-117E2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor2.CNhs11069.11325-117E2.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11325-117E2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD2-
+		
+		track CanineHepatocytesDonor3_CNhs11308_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11407-118E3
+		type bigWig
+		longLabel Canine hepatocytes, donor3_CNhs11308_11407-118E3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor3.CNhs11308.11407-118E3.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11407-118E3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD3+
+		
+		track CanineHepatocytesDonor3_CNhs11308_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11407-118E3
+		type bigWig
+		longLabel Canine hepatocytes, donor3_CNhs11308_11407-118E3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20hepatocytes%2c%20donor3.CNhs11308.11407-118E3.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11407-118E3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD3-
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11291_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11293-117A6
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor1_CNhs11291_11293-117A6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11291.11293-117A6.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11293-117A6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1+
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11291_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11293-117A6
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor1_CNhs11291_11293-117A6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11291.11293-117A6.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11293-117A6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1-
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor2_CNhs11304_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11370-118A2
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor2_CNhs11304_11370-118A2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor2.CNhs11304.11370-118A2.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11370-118A2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD2+
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor2_CNhs11304_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11370-118A2
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor2_CNhs11304_11370-118A2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor2.CNhs11304.11370-118A2.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11370-118A2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD2-
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor3_CNhs11310_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11442-118I2
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor3_CNhs11310_11442-118I2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor3.CNhs11310.11442-118I2.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11442-118I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD3+
+		
+		track CanineMesenchymalStemCellsBoneMarrowDerivedDonor3_CNhs11310_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11442-118I2
+		type bigWig
+		longLabel Canine Mesenchymal stem cells - bone marrow derived, donor3_CNhs11310_11442-118I2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Canine%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor3.CNhs11310.11442-118I2.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11442-118I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD3-
+		
+		track UniversalRNADogNormalTissuesBiochainPool1_CNhs10590_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10006-101B2
+		type bigWig
+		longLabel Universal RNA - Dog Normal Tissues Biochain, pool1_CNhs10590_10006-101B2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Universal%20RNA%20-%20Dog%20Normal%20Tissues%20Biochain%2c%20pool1.CNhs10590.10006-101B2.canFam3.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10006-101B2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel UniversalRna+
+		
+		track UniversalRNADogNormalTissuesBiochainPool1_CNhs10590_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10006-101B2
+		type bigWig
+		longLabel Universal RNA - Dog Normal Tissues Biochain, pool1_CNhs10590_10006-101B2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/canFam3/fantom5/Universal%20RNA%20-%20Dog%20Normal%20Tissues%20Biochain%2c%20pool1.CNhs10590.10006-101B2.canFam3.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10006-101B2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel UniversalRna-
+		
