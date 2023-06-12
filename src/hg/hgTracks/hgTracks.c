@@ -140,7 +140,7 @@ char *rulerMenu[] =
     };
 
 char *protDbName;               /* Name of proteome database for this genome. */
-#define MAX_CONTROL_COLUMNS 6
+#define MAX_CONTROL_COLUMNS 8
 #define LOW 1
 #define MEDIUM 2
 #define BRIGHT 3
@@ -8242,6 +8242,13 @@ hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf
             "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
+static void printTrackDelIcon(struct track *track)
+/* little track icon after track name. Github uses SVG elements for all icons, apparently that is faster */
+{
+    hPrintf("<div data-track='%s' class='trackDeleteIcon'><svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 448 512'><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z'/></svg></div>", track->track);
+
+}
+
 static void printTrackLink(struct track *track)
 /* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
 {
@@ -8263,7 +8270,7 @@ if (track->hasUi)
     // Print icons before the title when any are defined
     hPrintIcons(track->tdb);
 
-    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, dyStringCannibalize(&dsMouseOver));
+    hPrintf("<A class='trackLink' HREF=\"%s\" data-group='%s' data-track='%s' title=\"%s\">", url, track->groupName, track->track, dyStringCannibalize(&dsMouseOver));
 
     freeMem(url);
     freeMem(longLabel);
@@ -8272,6 +8279,10 @@ if (track->hasUi)
 hPrintf("%s", track->shortLabel);
 if (track->hasUi)
     hPrintf("</A>");
+
+if (sameOk(track->groupName, "user"))
+    printTrackDelIcon(track);
+
 hPrintf("<BR>");
 }
 
@@ -9359,6 +9370,7 @@ if (!hideControls)
                 hPrintf("%s", group->errMessage);
 		controlGridEndCell(cg);
                 }
+
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
 		{
 		struct track *track = tr->track;
@@ -9390,6 +9402,7 @@ if (!hideControls)
 		    hPrintf("[No data-%s]", chromName);
 		controlGridEndCell(cg);
 		}
+
 	    /* now finish out the table */
 	    if (group->next != NULL)
 		controlGridEndRow(cg);

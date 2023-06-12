@@ -61,6 +61,13 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
 
 .trackLabelTd {
         max-width: 14em;
+        vertical-align: top;
+}
+
+.trackDeleteIcon {
+        margin-left: 6px;
+        display: inline;
+        cursor: pointer;
 }
 
 .controlButtons {
