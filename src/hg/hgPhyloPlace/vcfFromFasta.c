@@ -30,11 +30,34 @@ int gfMinScore = 50;
 int gfIMinMatch = 30;
 
 
+static void replaceNewickChars(char *seqName)
+/* If seqName includes any characters with special meaning in the Newick format, then substitute
+ * _ for each problematic character in seqName. */
+{
+if (strchr(seqName, '(') || strchr(seqName, ')') || strchr(seqName, ':') || strchr(seqName, ';') ||
+    strchr(seqName, ','))
+    {
+     subChar(seqName, '(', '_');
+     subChar(seqName, ')', '_');
+     subChar(seqName, ':', '_');
+     subChar(seqName, ';', '_');
+     subChar(seqName, ',', '_');
+     // Strip any underscores from beginning/end; strip double-underscores
+     while (seqName[0] == '_')
+         memmove(seqName, seqName+1, strlen(seqName)+1);
+     char *p;
+     while (*(p = seqName + strlen(seqName) - 1) == '_')
+         *p = '\0';
+     strSwapStrs(seqName, strlen(seqName), "__", "_");
+    }
+}
+
 static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct hash *treeNames,
                                       int minSeqSize, int maxSeqSize, struct slPair **retFailedSeqs)
 /* Return a list of sequences that pass basic QC checks (appropriate size etc).
  * If any sequences have names that are already in the tree, add a prefix so usher doesn't
- * reject them.
+ * reject them.  If any sequence name contains characters that have special meaning in the Newick
+ * format, replace them with something harmless.
  * Set retFailedSeqs to the list of sequences that failed checks. */
 {
 struct seqInfo *filteredSeqs = NULL;
@@ -105,6 +128,7 @@ for (seq = seqs;  seq != NULL;  seq = nextSeq)
             ambigCount++;
     if (passes)
         {
+        replaceNewickChars(seq->name);
         if (hashLookup(uniqNames, seq->name))
             {
             struct dyString *dy = dyStringCreate("Sequence name '%s' has already been used; "

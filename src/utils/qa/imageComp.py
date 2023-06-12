@@ -57,11 +57,11 @@ def populateServerDir1checkExist(userName,sessionName,serverDir1,serverUrl1):
         if not os.listdir(serverDir1):
             print("No server one images found, populating directory")
             createImageFromSession(userName,sessionName,serverDir1,serverUrl1)
-        else:    
+        else:
             print("Archive images found")
     else:
         sys.exit("Sever one directory given does not exist")
-        
+
 def populateServerDir1(userName,sessionName,serverDir1,serverUrl1):
     '''Creates all the image files for server 1 regardless of existence or not'''
     if os.path.exists(serverDir1) and os.path.isdir(serverDir1):
@@ -69,8 +69,9 @@ def populateServerDir1(userName,sessionName,serverDir1,serverUrl1):
     else:
         sys.exit("Sever one directory given does not exist")
 
-def imageCompare(imageFiles,serverDir2,serverDir1,diffImagesDir):
+def imageCompare(imageFiles,serverDir2,serverDir1,diffImagesDir,user1,sessName1):
     '''Compare server1 and server2 generated images'''
+    firstImageName = serverDir1+"/"+user1+"."+sessName1+"-"+str(date.today())+".png"
     emptyFiles = 0
     imagesCompared = 0
     differentImages = 0
@@ -79,11 +80,11 @@ def imageCompare(imageFiles,serverDir2,serverDir1,diffImagesDir):
     for image in imageFiles:
         if os.path.getsize(serverDir2+"/"+image) == 0:
             emptyFiles+=1
-        elif os.path.getsize(serverDir1+"/"+image) == 0:
+        elif os.path.getsize(firstImageName) == 0:
             emptyFiles+=1
-        else:    
+        else:
             imagesCompared+=1
-            previousImage = Image.open(serverDir1+"/"+image).convert('RGB')
+            previousImage = Image.open(firstImageName).convert('RGB')
             newImage = Image.open(serverDir2+"/"+image).convert('RGB')
             diff = ImageChops.difference(previousImage, newImage)
             if diff.getbbox():
@@ -93,7 +94,7 @@ def imageCompare(imageFiles,serverDir2,serverDir1,diffImagesDir):
             else:
                 noDiffImages.append(image)
     return(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages)
-        
+
 def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages,\
                  diffImagesDir,publicHtmlDirToSave,publicHtmlDirToView,serverUrl1,\
                  sessionUser1,sessionName1,serverUrl2,sessionUser2,sessionName2):
@@ -110,44 +111,46 @@ def reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImag
             print("Link: "+publicHtmlDirToView+image)
             print("session 1: %s/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s"
                    %(serverUrl1,sessionUser1,sessionName1))
-            print("session 1: %s/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s" 
+            print("session 2: %s/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s"
                    %(serverUrl2,sessionUser2,sessionName2))
     print("\nNumber of empty session files created: %s" % emptyFiles)
     print("Total number of images compared: %s" % imagesCompared)
     print("Different images found: %s" % differentImages)
-    
+
 ###########
 #To be used when extracting all session data
 #sessionData = run(["hgsql", "-e", "select userName,sessionName from namedSessionDb", "hgcentraltest"], stdout=subprocess.PIPE)
 ##########
 
 def main():
-    user = getpass.getuser()    
+    user = getpass.getuser()
     #Define cars
     serverUrl1 = "https://hgwdev.gi.ucsc.edu/"
     serverUrl2 = "https://hgwbeta.soe.ucsc.edu/"
-    sessionUser1 = "lou"
-    sessionUser2 = "lou"
-    sessionName1 = "imageCompCron1.2"
-    sessionName2 = "imageCompCron1.2"
+    # If you want to add more sessions, do so in the next 4 lines. Add the user and session name to the list
+    sessionUser1 = ["lou","lou","lou","lou"]
+    sessionUser2 = ["lou","lou","lou","lou"]
+    sessionName1 = ["imageCompCron1.2","bigLollyAndTrioDisplayExample","logoDisplayWithWeirdConfigurations","snakesDisplayExample"]
+    sessionName2 = ["imageCompCron1.2","bigLollyAndTrioDisplayExample","logoDisplayWithWeirdConfigurations","snakesDisplayExample"]
     serverDir1 = "/hive/users/"+user+"/imageTest/cronImages/server1Images"
     serverDir2 = "/hive/users/"+user+"/imageTest/cronImages/server2Images"
     diffImagesDir = "/hive/users/"+user+"/imageTest/cronImages/diffImages/"
     publicHtmlDirToSave = "/cluster/home/"+user+"/public_html/images/"
     publicHtmlDirToView = "https://hgwdev.gi.ucsc.edu/~"+user+"/images/"
-    #Create first set of image file(s)
-    populateServerDir1(sessionUser1,sessionName1,serverDir1,serverUrl1)
-    #Create second set of image file(s)
-    imageFiles = []
-    imageFiles.append(createImageFromSession(sessionUser2,sessionName2,serverDir2,serverUrl2))
-    #Compare images
-    emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages = imageCompare(imageFiles,serverDir2,serverDir1,diffImagesDir)
-    #Report findings
-    if diffImages == []: #Check if there is anything to report - that way cron does not output
-        pass
-    else:
-        reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages,\
+    for (user1, sessName1, user2, sessName2) in zip(sessionUser1, sessionName1, sessionUser2, sessionName2):
+        #Create first set of image file(s)
+        populateServerDir1(user1,sessName1,serverDir1,serverUrl1)
+        #Create second set of image file(s)
+        imageFiles = []
+        imageFiles.append(createImageFromSession(user2,sessName2,serverDir2,serverUrl2))
+        #Compare images
+        emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages = imageCompare(imageFiles,serverDir2,serverDir1,diffImagesDir,user1,sessName1)
+        #Report findings
+        if diffImages == []: #Check if there is anything to report - that way cron does not output
+            pass
+        else:
+            reportOutput(emptyFiles,imagesCompared,differentImages,diffImages,noDiffImages,\
                      diffImagesDir,publicHtmlDirToSave,publicHtmlDirToView,serverUrl1,\
-                     sessionUser1,sessionName1,serverUrl2,sessionUser2,sessionName2)
-    
+                     user1,sessName1,serverUrl2,user2,sessName2)
+
 main()

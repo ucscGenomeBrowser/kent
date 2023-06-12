@@ -544,7 +544,7 @@ void printSearchTerms(char *hubSearchTerms)
 /* Write out a reminder about the current search terms and a note about
  * how to navigate detailed search results */
 {
-printf("Displayed list <B>restricted by search terms:</B> %s\n", hubSearchTerms);
+printf("Displayed list <B>restricted by above search terms</B>&nbsp;\n");
 puts("<input name=\"hubDeleteSearchButton\" id='hubDeleteSearchButton' "
         "class=\"hubField\" type=\"button\" value=\"Show All Hubs\">\n");
 

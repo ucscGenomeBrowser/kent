@@ -166,7 +166,9 @@ GCF_000349665.1_MesAur1.0	golden hamster (Broad 2013 refseq)
 GCF_903995435.1_mAcoRus1.1	golden spiny mouse (2020)
 GCA_004024945.1_UroGra_v1_BIUU	gracile shrew mole
 GCF_012393455.1_Tufts_HGry_1.1	gray seal
-GCF_000002295.2_MonDom5	gray short-tailed opossum
+GCF_000002295.2_MonDom5	gray short-tailed opossum (MonDom5 2007)
+GCA_027917375.1_mMonDom1.alt	gray short-tailed opossum (mMonDom1 alternate hap 2023)
+GCA_027887165.1_mMonDom1.pri	gray short-tailed opossum (mMonDom1 primary hap 2023)
 GCF_902686445.1_mSciCar1.2	gray squirrel (2020)
 GCA_905319855.2_mCanLor1.2	gray wolf (2021)
 GCF_001890085.2_ASM189008v1	great roundleaf bat (v2 ML-2016 2016)

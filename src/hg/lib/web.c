@@ -456,6 +456,23 @@ if(!webInTextMode)
     }
 }
 
+void webEndExtra(char *footer)
+/* output the footer of the HTML page with extra footer as desired */
+{
+if(!webInTextMode)
+    {
+    webEndSectionTables();
+#ifndef GBROWSE
+    googleAnalytics();
+#endif /* GBROWSE */
+    jsInlineFinish();
+    if (footer)
+	puts(footer);
+    puts( "</BODY></HTML>");
+    webPopErrHandlers();
+    }
+}
+
 static void webStartGbOptionalBanner(struct cart *cart, char *db, char *title, boolean doBanner, 
                                 boolean hgGateway)
 /* Start HTML with new header and footer design by JWest.  

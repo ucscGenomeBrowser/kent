@@ -14,5 +14,8 @@
 #define CFG_SUGGEST_MAIL_SIGNATURE "suggest.mailSignature"
 #define CFG_SUGGEST_MAIL_RETURN_ADDR "suggest.mailReturnAddr"
 #define CFG_SUGGEST_BROWSER_NAME "suggest.browserName"
+#define CFG_SUGGEST_SITE_KEY "suggest.siteKey"
+#define CFG_SUGGEST_SECRET_KEY "suggest.secretKey"
+#define CFG_SUGGEST_HUMAN_THRESHOLD "suggest.humanThreshold"
 #endif /* hgUserSuggestion_H */
 

@@ -2648,6 +2648,16 @@ popWarnHandler();
 inWeb = FALSE;
 }
 
+void cartWebEndExtra(char *footer)
+/* Write out HTML footer and get rid or error handler, with extra text
+ * at the end of the page as desired.
+ */
+{
+webEndExtra(footer);
+popWarnHandler();
+inWeb = FALSE;
+}
+
 void cartFooter(void)
 /* Write out HTML footer, possibly with googleAnalytics too */
 {

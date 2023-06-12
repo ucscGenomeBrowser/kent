@@ -83,16 +83,40 @@ static char *labelForDb(char *db)
 /* The assembly hub name is just the accession; make a special label for hMPXV.  Otherwise just
  * return hGenome(db). */
 {
-char *label = NULL;
-if (sameString(trackHubSkipHubName(db), "GCF_014621545.1"))
-    label = cloneString("hMPXV");
-else if (sameString(trackHubSkipHubName(db), "GCF_002815475.1"))
-    label = cloneString("RSV-A");
-else if (sameString(trackHubSkipHubName(db), "GCF_000855545.1"))
-    label = cloneString("RSV-B");
-else
+char *label = phyloPlaceDbSetting(db, "name");
+if (isEmpty(label))
     label = hGenome(db);
 return label;
+}
+
+static int labelCmp(const void *va, const void *vb)
+/* Compare two slPairs on their string values -- but treat SARS-CoV-2 as more important. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+if (sameString((char *)(a->val), "SARS-CoV-2"))
+    return -1;
+else if (sameString((char *)(b->val), "SARS-CoV-2"))
+    return 1;
+return strcmp((char *)(a->val), (char *)(b->val));
+}
+
+
+static struct slName *sortByLabel(struct slName *dbList)
+/* Return a newly allocated version of dbList, sorted by labelForDb value -- but favor SARS-CoV-2. */
+{
+struct slPair *dbLabelList = NULL;
+struct slName *sln;
+for (sln = dbList;  sln != NULL;  sln = sln->next)
+    slPairAdd(&dbLabelList, sln->name, cloneString(labelForDb(sln->name)));
+slSort(&dbLabelList, labelCmp);
+struct slName *newList = NULL;
+struct slPair *slp;
+for (slp = dbLabelList;  slp != NULL;  slp = slp->next)
+    slAddHead(&newList, slNameNew(slp->name));
+slReverse(&newList);
+slPairFreeValsAndList(&dbLabelList);
+return newList;
 }
 
 static void selectDb(char **pDb, char **pLabel)
@@ -100,7 +124,7 @@ static void selectDb(char **pDb, char **pLabel)
  * supported assembly, then make a menu / select input for supported  assemblies;
  * reload the page on change. */
 {
-struct slName *supportedDbs = phyloPlaceDbList(cart);
+struct slName *supportedDbs = sortByLabel(phyloPlaceDbList(cart));
 if (supportedDbs == NULL)
     errAbort("Sorry, this server is not configured to perform phylogenetic placement.");
 if (!slNameInList(supportedDbs, *pDb))
