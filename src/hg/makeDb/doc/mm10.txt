@@ -18719,8 +18719,7 @@ sys	0m1.411s
  -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.chrom.sizes \
         -ooc=/hive/data/genomes/mm10/jkStuff/mm10.11.ooc \
          mm10 GCA_001624675.1) > doLiftOverToGCA_001624675.1.log 2>&1
-XXX - running - Fri Jan 20 15:07:05 PST 2023
-    # real    190m50.501s
+    # real    160m19.129s
 
     # see if the liftOver menus function in the browser from mm10
     #    to GCA_001624675.1
@@ -18754,9 +18753,8 @@ XXX - running - Fri Jan 20 15:07:05 PST 2023
         -querySizes=/hive/data/genomes/mm10/chrom.sizes \
         -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/001/624/675/GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.11.ooc \
          GCA_001624675.1 mm10) > doLiftOverToMm10.log 2>&1
-XXX running Fri Jan 20 14:46:36 PST 2023
 
-    # real    244m28.766s
+    # real    193m24.137s
 
     # see if the liftOver menus function in the browser from mm10
     #    to GCA_001624675.1
