@@ -140,7 +140,7 @@ char *rulerMenu[] =
     };
 
 char *protDbName;               /* Name of proteome database for this genome. */
-#define MAX_CONTROL_COLUMNS 6
+#define MAX_CONTROL_COLUMNS 8
 #define LOW 1
 #define MEDIUM 2
 #define BRIGHT 3
@@ -7427,22 +7427,14 @@ if (cg->columnIx == cg->columns)
     controlGridEndRow(cg);
 if (!cg->rowOpen)
     {
-#if 0
-    /* This is unnecessary, b/c we can just use a blank display attribute to show the element rather
-       than figuring out what the browser specific string is to turn on display of the tr;
-       however, we may want to put in browser specific strings in the future, so I'm leaving this
-       code in as a reference. */
-    char *ua = getenv("HTTP_USER_AGENT");
-    char *display = ua && stringIn("MSIE", ua) ? "block" : "table-row";
-#endif
     // use counter to ensure unique tr id's (prefix is used to find tr's in javascript).
     printf("<tr %sid='%s-%d'>", isOpen ? "" : "style='display: none' ", id, counter++);
     cg->rowOpen = TRUE;
     }
 if (cg->align)
-    printf("<td align=%s>", cg->align);
+    printf("<td class='trackLabelTd' align=%s>", cg->align);
 else
-    printf("<td>");
+    printf("<td class='trackLabelTd'>");
 }
 
 static void pruneRedundantCartVis(struct track *trackList)
@@ -8250,6 +8242,13 @@ hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf
             "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
+static void printTrackDelIcon(struct track *track)
+/* little track icon after track name. Github uses SVG elements for all icons, apparently that is faster */
+{
+    hPrintf("<div data-track='%s' class='trackDeleteIcon'><svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 448 512'><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z'/></svg></div>", track->track);
+
+}
+
 static void printTrackLink(struct track *track)
 /* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
 {
@@ -8271,7 +8270,7 @@ if (track->hasUi)
     // Print icons before the title when any are defined
     hPrintIcons(track->tdb);
 
-    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, dyStringCannibalize(&dsMouseOver));
+    hPrintf("<A class='trackLink' HREF=\"%s\" data-group='%s' data-track='%s' title=\"%s\">", url, track->groupName, track->track, dyStringCannibalize(&dsMouseOver));
 
     freeMem(url);
     freeMem(longLabel);
@@ -8280,10 +8279,14 @@ if (track->hasUi)
 hPrintf("%s", track->shortLabel);
 if (track->hasUi)
     hPrintf("</A>");
+
+if (sameOk(track->groupName, "user"))
+    printTrackDelIcon(track);
+
 hPrintf("<BR>");
 }
 
-void printSearchHelpLink()
+static void printSearchHelpLink()
 /* print the little search help link next to the go button */
 {
 char *url = cfgOptionDefault("searchHelpUrl","../goldenPath/help/query.html");
@@ -8292,6 +8295,17 @@ if (!url || isEmpty(url))
     return;
 
 printf("<div id='searchHelp'><a target=_blank title='Documentation on what you can enter into the Genome Browser search box' href='%s'>%s</a></div>", url, label);
+}
+
+static void printPatchNote()
+{
+    if (endsWith(chromName, "_fix") || endsWith(chromName, "_alt") || endsWith(chromName, "_hap"))
+        {
+        puts("<span id='patchNote'><svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z'/></svg>");
+        puts("<a href='http://genome.ucsc.edu/FAQ/FAQblat.html#blat1c' target=_blank>");
+        //puts("<svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm169.8-90.7c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z'/></svg>");
+        puts("Patch sequence</a></span>");
+        }
 }
 
 static void printDatabaseInfoHtml(char* database) 
@@ -9052,6 +9066,7 @@ if (!hideControls)
 
         printSearchHelpLink();
 
+        printPatchNote();
 
 	if (!trackHubDatabase(database))
 	    {
@@ -9367,6 +9382,7 @@ if (!hideControls)
                 hPrintf("%s", group->errMessage);
 		controlGridEndCell(cg);
                 }
+
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
 		{
 		struct track *track = tr->track;
@@ -9398,6 +9414,7 @@ if (!hideControls)
 		    hPrintf("[No data-%s]", chromName);
 		controlGridEndCell(cg);
 		}
+
 	    /* now finish out the table */
 	    if (group->next != NULL)
 		controlGridEndRow(cg);

@@ -3489,6 +3489,20 @@ function highlightCurrentPosition(mode) {
     }
 }
 
+function onTrackDelIconClick (ev) {
+    /* delete custom track if user clicks its trash icon */
+    // https://genome.ucsc.edu/cgi-bin/hgCustom?hgsid=1645697744_i0Yp2Di71NytSDdb6r0vUbupIvKO&hgct_do_delete=delete&hgct_del_ct_UserTrack_3545=on
+    var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.
+    var trackName = divEl.getAttribute("data-track");
+    var hgsid = getHgsid();
+    var url = 'hgCustom?hgsid='+hgsid+'&hgct_do_delete=delete&hgct_del_'+trackName+'=on';
+    xhttp = new XMLHttpRequest();
+    xhttp.open("GET", url);
+    xhttp.send();
+    divEl.closest("td").remove();
+}
+
+
   //////////////////////////////////
  //// popup (aka modal dialog) ////
 //////////////////////////////////
@@ -5315,7 +5329,6 @@ var downloadCurrentTrackData = {
     }
 };
 
-
   ///////////////
  //// READY ////
 ///////////////
@@ -5325,6 +5338,9 @@ $(document).ready(function()
 
     // hg.conf will turn this on 2020-10 - Hiram
     if (window.mouseOverEnabled) { mouseOver.addListener(); }
+
+    // custom tracks get little trash icons
+    $("div.trackDeleteIcon").click( onTrackDelIconClick );
 
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.
