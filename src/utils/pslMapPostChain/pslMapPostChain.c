@@ -74,52 +74,6 @@ if (dif == 0)
 return dif;
 }
 
-static char normStrand(char strand)
-/* return strand as stored in psl, converting implicit `\0' to `+' */
-{
-return (strand == '\0') ? '+' : strand;
-}
-
-static unsigned pslQStartStrand(struct psl *psl, int blkIdx, char strand)
-/* return query start for the given block, mapped to specified strand,
- * which can be `\0' for `+' */
-{
-if (psl->strand[0] == normStrand(strand))
-    return psl->qStarts[blkIdx];
-else
-    return psl->qSize - pslQEnd(psl, blkIdx);
-}
-
-static unsigned pslQEndStrand(struct psl *psl, int blkIdx, char strand)
-/* return query end for the given block, mapped to specified strand,
- * which can be `\0' for `+' */
-{
-if (psl->strand[0] == normStrand(strand))
-    return pslQEnd(psl, blkIdx);
-else
-    return psl->qSize - pslQStart(psl, blkIdx);
-}
-
-static unsigned pslTStartStrand(struct psl *psl, int blkIdx, char strand)
-/* return target start for the given block, mapped to specified strand,
- * which can be `\0' for `+' */
-{
-if (normStrand(psl->strand[1]) == normStrand(strand))
-    return psl->tStarts[blkIdx];
-else
-    return psl->tSize - pslTEnd(psl, blkIdx);
-}
-
-static unsigned pslTEndStrand(struct psl *psl, int blkIdx, char strand)
-/* return target end for the given block, mapped to specified strand,
- * which can be `\0' for `+' */
-{
-if (normStrand(psl->strand[1]) == normStrand(strand))
-    return pslTEnd(psl, blkIdx);
-else
-    return psl->tSize - pslTStart(psl, blkIdx);
-}
-
 static int findChainPointUpstream(struct psl* chainedPsl,
                                   struct psl* nextPsl)
 /* findChainPoint upstream check. */
@@ -235,20 +189,11 @@ pslArrayInsert(&chainedPsl->qStarts, chainedPsl->blockCount, nextPsl->qStarts, n
 pslArrayInsert(&chainedPsl->tStarts, chainedPsl->blockCount, nextPsl->tStarts, nextPsl->blockCount, insertIdx);
 chainedPsl->blockCount += nextPsl->blockCount;
 
-// update bounds if needed
-if (pslQStrand(chainedPsl) == '+')
-    {
-    chainedPsl->qStart = pslQStartStrand(chainedPsl, 0, '+');
-    chainedPsl->qEnd = pslQEndStrand(chainedPsl, chainedPsl->blockCount-1, '+');
-    }
-else
-    {
-    chainedPsl->qStart = pslQStartStrand(chainedPsl, chainedPsl->blockCount-1, '+');
-    chainedPsl->qEnd = pslQEndStrand(chainedPsl, 0, '+');
-    }
-assert(pslTStrand(chainedPsl) == '+');  // forced on load
-chainedPsl->tStart = pslTStartStrand(chainedPsl, 0, '+');
-chainedPsl->tEnd = pslTEndStrand(chainedPsl, chainedPsl->blockCount-1, '+');
+// update bounds
+chainedPsl->qStart = min(chainedPsl->qStart, nextPsl->qStart);
+chainedPsl->qEnd = max(chainedPsl->qEnd, nextPsl->qEnd);
+chainedPsl->tStart = min(chainedPsl->tStart, nextPsl->tStart);
+chainedPsl->tEnd = max(chainedPsl->tEnd, nextPsl->tEnd);
 
 // update counts
 chainedPsl->match += nextPsl->match;
