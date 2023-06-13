@@ -35097,4 +35097,25 @@ ln -s `pwd`/hgnc.hg19.bb /gbdb/hg19/hgnc/hgnc.bb
 rm -rf /gbdb/hg19/hgnc/search.ix /gbdb/hg19/hgnc/search.ixx
 ln -s `pwd`/search.hg19.ix /gbdb/hg19/hgnc/search.ix
 ln -s `pwd`/search.hg19.ixx /gbdb/hg19/hgnc/search.ixx
-
+#############################################################################
+# FANTOM5 refs #21605 (2023-06-09 Gerardo)
+cd /hive/data/outside/
+mkdir fantom5
+cd fantom5
+hubClone -download https://fantom.gsc.riken.jp/5/datahub/hub.txt
+cd /gbdb/hg19
+mkdir fantom5
+cd fantom5
+# Making symlinks for big files
+for file in $(ls /hive/data/outside/fantom5/riken_f5/hg19/*.b*) ; do ln -s $file; done
+cd /hive/data/outside/fantom5/riken_f5/hg19/
+cp trackDb.txt fantom5.ra
+vi fantom5.ra
+# Indented subtracks
+# Changing bigDataUrl
+# Removing non-alpha characters
+cd ~/kent/src/hg/makeDb/trackDb/human/hg19
+cp /hive/data/outside/fantom5/riken_f5/hg19/fantom5.ra .
+vi trackDb.ra
+#include fantom5.ra alpha
+#############################################################################

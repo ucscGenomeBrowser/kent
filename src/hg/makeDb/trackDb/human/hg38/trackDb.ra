@@ -43,6 +43,7 @@ include exomeProbesets.ra
 include chm13LiftOver.ra
 include reMap.ra
 include recombRate.ra
+include fantom5.ra alpha
 
 track miRnaAtlas
 compositeTrack on
@@ -544,6 +545,7 @@ include trackDb.145way.ra alpha
 
 include trackDb.241wayT.ra alpha
 include trackDb.241way.ra
+include trackDb.447way.ra
 
 # track multiz145way
 # shortLabel 145way maf

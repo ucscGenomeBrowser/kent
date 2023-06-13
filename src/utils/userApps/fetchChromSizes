@@ -28,7 +28,7 @@ DONE=0
 export DONE
 
 url="http://hgdownload.soe.ucsc.edu/goldenPath/${DB}/bigZips/${DB}.chrom.sizes"
-if [ "$DB" == "hg19" -o "$DB" == "hg38" ] ; then
+if [ "$DB" = "hg19" -o "$DB" = "hg38" ] ; then
     printf "INFO: Using latest patch release of genome for hg19/hg38\n" 1>&2
     url="http://hgdownload.soe.ucsc.edu/goldenPath/${DB}/bigZips/latest/${DB}.chrom.sizes"
 fi

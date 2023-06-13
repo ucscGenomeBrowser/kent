@@ -1,0 +1,1759 @@
+track fantom5
+dataVersion FANTOM5 reprocessed7
+longLabel FANTOM5
+group regulation
+superTrack on
+#dimensions dimX=group
+html fantom5.html
+shortLabel FANTOM5
+visibility hide
+#subGroup1 group Group peaks=Peaks counts=Counts
+
+	track robustPeaks
+	dataVersion FANTOM5 phase2.5
+	type bigBed 8 +
+	longLabel FANTOM5 DPI peak, robust set
+	#thickDrawItem on
+	bigDataUrl /gbdb/galGal5/fantom5/galGal5.cage_peak.bb
+	superTrack fantom5 dense
+	subGroups group=peaks
+	searchTrix galGal5.cage_peak.bb.ix
+	itemRgb on
+	priority 1.2
+	exonArrows on
+	#showTopScorers 20
+	#exonArrowsDense on
+	searchIndex name
+	shortLabel TSS peaks
+	visibility dense
+	colorByStrand 255,0,0 0,0,255
+	showSubtrackColorOnUi on
+	boxedCfg on
+        html fantom5.html
+	
+	track Total_counts_multiwig
+	dataVersion FANTOM5 phase2.5
+	type bigWig 0 100
+	longLabel Total counts of CAGE reads
+	viewLimits 0:100
+	autoScale off
+	superTrack fantom5 full
+	subGroups group=counts
+	priority 1.3
+	configurable on
+	dragAndDrop subTracks
+	maxHeightPixels 64:64:11
+	shortLabel Total counts
+	visibility full
+	container multiWig
+	showSubtrackColorOnUi on
+	aggregate transparentOverlay
+        html fantom5.html
+	
+		track TotalCounts_Fwd
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Total counts of CAGE reads forward
+		color 255,0,0
+		parent Total_counts_multiwig
+		bigDataUrl /gbdb/galGal5/fantom5/ctssTotalCounts.fwd.bw
+		subGroups category=total strand=forward
+		shortLabel Total counts of CAGE reads (fwd)
+		
+		track TotalCounts_Rev
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Total counts of CAGE reads reverse
+		color 0,0,255
+		parent Total_counts_multiwig
+		bigDataUrl /gbdb/galGal5/fantom5/ctssTotalCounts.rev.bw
+		subGroups category=total strand=reverse
+		shortLabel Total counts of CAGE reads (rev)
+	
+	track Max_counts_multiwig
+	dataVersion FANTOM5 phase2.5
+	type bigWig 0 100
+	longLabel Max counts of CAGE reads
+	viewLimits 0:100
+	autoScale off
+	superTrack fantom5 full
+	subGroups group=counts
+	priority 1.4
+	configurable on
+	dragAndDrop subTracks
+	maxHeightPixels 64:64:11
+	shortLabel Max counts
+	visibility full
+	container multiWig
+	showSubtrackColorOnUi on
+	aggregate transparentOverlay
+        html fantom5.html
+	
+		track MaxCounts_Fwd
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Max counts of CAGE reads forward
+		color 255,0,0
+		parent Max_counts_multiwig
+		bigDataUrl /gbdb/galGal5/fantom5/ctssMaxCounts.fwd.bw
+		subGroups category=max strand=forward
+		shortLabel Max counts of CAGE reads (fwd)
+		
+		track MaxCounts_Rev
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Max counts of CAGE reads reverse
+		color 0,0,255
+		parent Max_counts_multiwig
+		bigDataUrl /gbdb/galGal5/fantom5/ctssMaxCounts.rev.bw
+		subGroups category=max strand=reverse
+		shortLabel Max counts of CAGE reads (rev)
+		
+	track TSS_activity_read_counts
+	dataVersion FANTOM5 phase2.5
+	type bigWig
+	longLabel TSS activity per sample(read counts)
+	priority 2
+	dimensions dimX=sequenceTech dimY=category dimA=strand
+	compositeTrack on
+	superTrack fantom5
+	subGroup3 strand Strand forward=forward reverse=reverse
+	subGroup2 category Category cellLine=cellLine fractionation=fractionation primaryCell=primaryCell tissue=tissue
+	shortLabel TSS activity(read counts)
+	visibility hide
+	subGroup1 sequenceTech Sequence_Tech hCAGE=hCAGE LQhCAGE=LQhCAGE
+	showSubtrackColorOnUi off
+	sortOrder category=+ sequenceTech=+
+	boxedCfg on
+        html fantom5.html
+		
+		track AorticSmoothMuscleCellsDonor1_CNhs11296_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11298-117B2
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor1_CNhs11296_11298-117B2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11296.11298-117B2.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11298-117B2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1+
+		
+		track AorticSmoothMuscleCellsDonor1_CNhs11296_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11298-117B2
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor1_CNhs11296_11298-117B2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11296.11298-117B2.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11298-117B2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1-
+		
+		track AorticSmoothMuscleCellsDonor2_CNhs11299_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11375-118A7
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor2_CNhs11299_11375-118A7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11299.11375-118A7.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11375-118A7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2+
+		
+		track AorticSmoothMuscleCellsDonor2_CNhs11299_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11375-118A7
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor2_CNhs11299_11375-118A7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11299.11375-118A7.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11375-118A7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2-
+		
+		track AorticSmoothMuscleCellsDonor3_CNhs11314_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11447-118I7
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor3_CNhs11314_11447-118I7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11314.11447-118I7.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11447-118I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3+
+		
+		track AorticSmoothMuscleCellsDonor3_CNhs11314_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11447-118I7
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor3_CNhs11314_11447-118I7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11314.11447-118I7.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11447-118I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3-
+		
+		track ChickenEmbryoExtraembryonicTissueDay07HH32_CNhs14210_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10230-103I5
+		type bigWig
+		longLabel chicken embryo, extraembryonic tissue, day07 (HH32)_CNhs14210_10230-103I5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%2c%20extraembryonic%20tissue%2c%20day07%20%28HH32%29.CNhs14210.10230-103I5.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10230-103I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel Extraembryonic_day07+
+		
+		track ChickenEmbryoExtraembryonicTissueDay07HH32_CNhs14210_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10230-103I5
+		type bigWig
+		longLabel chicken embryo, extraembryonic tissue, day07 (HH32)_CNhs14210_10230-103I5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%2c%20extraembryonic%20tissue%2c%20day07%20%28HH32%29.CNhs14210.10230-103I5.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10230-103I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel Extraembryonic_day07-
+		
+		track ChickenEmbryoExtraembryonicTissueDay15HH41_CNhs14211_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10231-103I6
+		type bigWig
+		longLabel chicken embryo, extraembryonic tissue, day15 (HH41)_CNhs14211_10231-103I6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%2c%20extraembryonic%20tissue%2c%20day15%20%28HH41%29.CNhs14211.10231-103I6.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10231-103I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel Extraembryonic_day15+
+		
+		track ChickenEmbryoExtraembryonicTissueDay15HH41_CNhs14211_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10231-103I6
+		type bigWig
+		longLabel chicken embryo, extraembryonic tissue, day15 (HH41)_CNhs14211_10231-103I6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%2c%20extraembryonic%20tissue%2c%20day15%20%28HH41%29.CNhs14211.10231-103I6.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10231-103I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel Extraembryonic_day15-
+		
+		track ChickenEmbryoWholeBody01hr30minHH1_CNhs12735_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10210-103G3
+		type bigWig
+		longLabel chicken embryo whole body, 01hr30min (HH1)_CNhs12735_10210-103G3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2001hr30min%20%28HH1%29.CNhs12735.10210-103G3.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10210-103G3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_01hr30min+
+		
+		track ChickenEmbryoWholeBody01hr30minHH1_CNhs12735_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10210-103G3
+		type bigWig
+		longLabel chicken embryo whole body, 01hr30min (HH1)_CNhs12735_10210-103G3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2001hr30min%20%28HH1%29.CNhs12735.10210-103G3.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10210-103G3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_01hr30min-
+		
+		track ChickenEmbryoWholeBody05hr30minHH1_CNhs13027_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10211-103G4
+		type bigWig
+		longLabel chicken embryo whole body, 05hr30min (HH1)_CNhs13027_10211-103G4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2005hr30min%20%28HH1%29.CNhs13027.10211-103G4.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10211-103G4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_05hr30min+
+		
+		track ChickenEmbryoWholeBody05hr30minHH1_CNhs13027_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10211-103G4
+		type bigWig
+		longLabel chicken embryo whole body, 05hr30min (HH1)_CNhs13027_10211-103G4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2005hr30min%20%28HH1%29.CNhs13027.10211-103G4.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10211-103G4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_05hr30min-
+		
+		track ChickenEmbryoWholeBody06hrHH12_CNhs13028_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10212-103G5
+		type bigWig
+		longLabel chicken embryo whole body, 06hr (HH1-2)_CNhs13028_10212-103G5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2006hr%20%28HH1-2%29.CNhs13028.10212-103G5.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10212-103G5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_06hr+
+		
+		track ChickenEmbryoWholeBody06hrHH12_CNhs13028_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10212-103G5
+		type bigWig
+		longLabel chicken embryo whole body, 06hr (HH1-2)_CNhs13028_10212-103G5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2006hr%20%28HH1-2%29.CNhs13028.10212-103G5.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10212-103G5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_06hr-
+		
+		track ChickenEmbryoWholeBody14hrHH3_CNhs13029_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10213-103G6
+		type bigWig
+		longLabel chicken embryo whole body, 14hr (HH3)_CNhs13029_10213-103G6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2014hr%20%28HH3%29.CNhs13029.10213-103G6.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10213-103G6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_14hr+
+		
+		track ChickenEmbryoWholeBody14hrHH3_CNhs13029_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10213-103G6
+		type bigWig
+		longLabel chicken embryo whole body, 14hr (HH3)_CNhs13029_10213-103G6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2014hr%20%28HH3%29.CNhs13029.10213-103G6.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10213-103G6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_14hr-
+		
+		track ChickenEmbryoWholeBody18hrHH4_CNhs13030_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10214-103G7
+		type bigWig
+		longLabel chicken embryo whole body, 18hr (HH4)_CNhs13030_10214-103G7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2018hr%20%28HH4%29.CNhs13030.10214-103G7.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10214-103G7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_18hr+
+		
+		track ChickenEmbryoWholeBody18hrHH4_CNhs13030_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10214-103G7
+		type bigWig
+		longLabel chicken embryo whole body, 18hr (HH4)_CNhs13030_10214-103G7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2018hr%20%28HH4%29.CNhs13030.10214-103G7.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10214-103G7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_18hr-
+		
+		track ChickenEmbryoWholeBody22hrHH56_CNhs12736_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10215-103G8
+		type bigWig
+		longLabel chicken embryo whole body, 22hr (HH5-6)_CNhs12736_10215-103G8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2022hr%20%28HH5-6%29.CNhs12736.10215-103G8.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10215-103G8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_22hr+
+		
+		track ChickenEmbryoWholeBody22hrHH56_CNhs12736_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10215-103G8
+		type bigWig
+		longLabel chicken embryo whole body, 22hr (HH5-6)_CNhs12736_10215-103G8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2022hr%20%28HH5-6%29.CNhs12736.10215-103G8.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10215-103G8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_22hr-
+		
+		track ChickenEmbryoWholeBodyDay01_5HH10_CNhs13977_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10218-103H2
+		type bigWig
+		longLabel chicken embryo whole body, day01_5 (HH10)_CNhs13977_10218-103H2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%2e5%20%28HH10%29.CNhs13977.10218-103H2.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10218-103H2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01_5+
+		
+		track ChickenEmbryoWholeBodyDay01_5HH10_CNhs13977_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10218-103H2
+		type bigWig
+		longLabel chicken embryo whole body, day01_5 (HH10)_CNhs13977_10218-103H2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%2e5%20%28HH10%29.CNhs13977.10218-103H2.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10218-103H2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01_5-
+		
+		track ChickenEmbryoWholeBodyDay01_5HH1112_CNhs14201_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10219-103H3
+		type bigWig
+		longLabel chicken embryo whole body, day01_5 (HH11-12)_CNhs14201_10219-103H3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%2e5%20%28HH11-12%29.CNhs14201.10219-103H3.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10219-103H3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01_5+
+		
+		track ChickenEmbryoWholeBodyDay01_5HH1112_CNhs14201_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10219-103H3
+		type bigWig
+		longLabel chicken embryo whole body, day01_5 (HH11-12)_CNhs14201_10219-103H3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%2e5%20%28HH11-12%29.CNhs14201.10219-103H3.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10219-103H3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01_5-
+		
+		track ChickenEmbryoWholeBodyDay01HH713Somites_CNhs13976_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10216-103G9
+		type bigWig
+		longLabel chicken embryo whole body, day01 (HH7 1-3 somites)_CNhs13976_10216-103G9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%20%28HH7%201-3%20somites%29.CNhs13976.10216-103G9.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10216-103G9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01+
+		
+		track ChickenEmbryoWholeBodyDay01HH713Somites_CNhs13976_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10216-103G9
+		type bigWig
+		longLabel chicken embryo whole body, day01 (HH7 1-3 somites)_CNhs13976_10216-103G9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%20%28HH7%201-3%20somites%29.CNhs13976.10216-103G9.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10216-103G9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01-
+		
+		track ChickenEmbryoWholeBodyDay01HH723Somites_CNhs14200_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10217-103H1
+		type bigWig
+		longLabel chicken embryo whole body, day01 (HH7 2-3 somites)_CNhs14200_10217-103H1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%20%28HH7%202-3%20somites%29.CNhs14200.10217-103H1.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10217-103H1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01+
+		
+		track ChickenEmbryoWholeBodyDay01HH723Somites_CNhs14200_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10217-103H1
+		type bigWig
+		longLabel chicken embryo whole body, day01 (HH7 2-3 somites)_CNhs14200_10217-103H1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%20%28HH7%202-3%20somites%29.CNhs14200.10217-103H1.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10217-103H1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01-
+		
+		track ChickenEmbryoWholeBodyDay02_5HH17_CNhs13979_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10222-103H6
+		type bigWig
+		longLabel chicken embryo whole body, day02_5 (HH17)_CNhs13979_10222-103H6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%2e5%20%28HH17%29.CNhs13979.10222-103H6.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10222-103H6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02_5+
+		
+		track ChickenEmbryoWholeBodyDay02_5HH17_CNhs13979_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10222-103H6
+		type bigWig
+		longLabel chicken embryo whole body, day02_5 (HH17)_CNhs13979_10222-103H6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%2e5%20%28HH17%29.CNhs13979.10222-103H6.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10222-103H6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02_5-
+		
+		track ChickenEmbryoWholeBodyDay02HH13_CNhs13978_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10220-103H4
+		type bigWig
+		longLabel chicken embryo whole body, day02 (HH13)_CNhs13978_10220-103H4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%20%28HH13%29.CNhs13978.10220-103H4.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10220-103H4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02+
+		
+		track ChickenEmbryoWholeBodyDay02HH13_CNhs13978_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10220-103H4
+		type bigWig
+		longLabel chicken embryo whole body, day02 (HH13)_CNhs13978_10220-103H4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%20%28HH13%29.CNhs13978.10220-103H4.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10220-103H4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02-
+		
+		track ChickenEmbryoWholeBodyDay02HH14_CNhs14202_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10221-103H5
+		type bigWig
+		longLabel chicken embryo whole body, day02 (HH14)_CNhs14202_10221-103H5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%20%28HH14%29.CNhs14202.10221-103H5.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10221-103H5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02+
+		
+		track ChickenEmbryoWholeBodyDay02HH14_CNhs14202_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10221-103H5
+		type bigWig
+		longLabel chicken embryo whole body, day02 (HH14)_CNhs14202_10221-103H5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%20%28HH14%29.CNhs14202.10221-103H5.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10221-103H5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02-
+		
+		track ChickenEmbryoWholeBodyDay03HH19_CNhs14203_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10223-103H7
+		type bigWig
+		longLabel chicken embryo whole body, day03 (HH19)_CNhs14203_10223-103H7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day03%20%28HH19%29.CNhs14203.10223-103H7.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10223-103H7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day03+
+		
+		track ChickenEmbryoWholeBodyDay03HH19_CNhs14203_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10223-103H7
+		type bigWig
+		longLabel chicken embryo whole body, day03 (HH19)_CNhs14203_10223-103H7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day03%20%28HH19%29.CNhs14203.10223-103H7.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10223-103H7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day03-
+		
+		track ChickenEmbryoWholeBodyDay03HH20_CNhs13980_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10224-103H8
+		type bigWig
+		longLabel chicken embryo whole body, day03 (HH20)_CNhs13980_10224-103H8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day03%20%28HH20%29.CNhs13980.10224-103H8.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10224-103H8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day03+
+		
+		track ChickenEmbryoWholeBodyDay03HH20_CNhs13980_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10224-103H8
+		type bigWig
+		longLabel chicken embryo whole body, day03 (HH20)_CNhs13980_10224-103H8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day03%20%28HH20%29.CNhs13980.10224-103H8.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10224-103H8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day03-
+		
+		track ChickenEmbryoWholeBodyDay04HH23_CNhs14204_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10225-103H9
+		type bigWig
+		longLabel chicken embryo whole body, day04 (HH23)_CNhs14204_10225-103H9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day04%20%28HH23%29.CNhs14204.10225-103H9.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10225-103H9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day04+
+		
+		track ChickenEmbryoWholeBodyDay04HH23_CNhs14204_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10225-103H9
+		type bigWig
+		longLabel chicken embryo whole body, day04 (HH23)_CNhs14204_10225-103H9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day04%20%28HH23%29.CNhs14204.10225-103H9.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10225-103H9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day04-
+		
+		track ChickenEmbryoWholeBodyDay05HH2527_CNhs14208_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10234-103I9
+		type bigWig
+		longLabel chicken embryo whole body, day05 (HH25-27)_CNhs14208_10234-103I9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day05%20%28HH25-27%29.CNhs14208.10234-103I9.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10234-103I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day05+
+		
+		track ChickenEmbryoWholeBodyDay05HH2527_CNhs14208_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10234-103I9
+		type bigWig
+		longLabel chicken embryo whole body, day05 (HH25-27)_CNhs14208_10234-103I9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day05%20%28HH25-27%29.CNhs14208.10234-103I9.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10234-103I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day05-
+		
+		track ChickenEmbryoWholeBodyDay05HH2627_CNhs13981_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10226-103I1
+		type bigWig
+		longLabel chicken embryo whole body, day05 (HH26-27)_CNhs13981_10226-103I1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day05%20%28HH26-27%29.CNhs13981.10226-103I1.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10226-103I1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day05+
+		
+		track ChickenEmbryoWholeBodyDay05HH2627_CNhs13981_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10226-103I1
+		type bigWig
+		longLabel chicken embryo whole body, day05 (HH26-27)_CNhs13981_10226-103I1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day05%20%28HH26-27%29.CNhs13981.10226-103I1.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10226-103I1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day05-
+		
+		track ChickenEmbryoWholeBodyDay07HH32_CNhs14205_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10227-103I2
+		type bigWig
+		longLabel chicken embryo whole body, day07 (HH32)_CNhs14205_10227-103I2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day07%20%28HH32%29.CNhs14205.10227-103I2.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10227-103I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day07+
+		
+		track ChickenEmbryoWholeBodyDay07HH32_CNhs14205_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10227-103I2
+		type bigWig
+		longLabel chicken embryo whole body, day07 (HH32)_CNhs14205_10227-103I2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day07%20%28HH32%29.CNhs14205.10227-103I2.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10227-103I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day07-
+		
+		track ChickenEmbryoWholeBodyDay10HH37_CNhs10485_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10004-101A9
+		type bigWig
+		longLabel chicken embryo whole body, day10 (HH37)_CNhs10485_10004-101A9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day10%20%28HH37%29.CNhs10485.10004-101A9.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10004-101A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day10+
+		
+		track ChickenEmbryoWholeBodyDay10HH37_CNhs10485_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10004-101A9
+		type bigWig
+		longLabel chicken embryo whole body, day10 (HH37)_CNhs10485_10004-101A9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day10%20%28HH37%29.CNhs10485.10004-101A9.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10004-101A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day10-
+		
+		track ChickenEmbryoWholeBodyDay15HH41_CNhs14206_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10228-103I3
+		type bigWig
+		longLabel chicken embryo whole body, day15 (HH41)_CNhs14206_10228-103I3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day15%20%28HH41%29.CNhs14206.10228-103I3.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10228-103I3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day15+
+		
+		track ChickenEmbryoWholeBodyDay15HH41_CNhs14206_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10228-103I3
+		type bigWig
+		longLabel chicken embryo whole body, day15 (HH41)_CNhs14206_10228-103I3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day15%20%28HH41%29.CNhs14206.10228-103I3.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10228-103I3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day15-
+		
+		track ChickenEmbryoWholeBodyDay20HH45_CNhs14207_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10229-103I4
+		type bigWig
+		longLabel chicken embryo whole body, day20 (HH45)_CNhs14207_10229-103I4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day20%20%28HH45%29.CNhs14207.10229-103I4.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10229-103I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day20+
+		
+		track ChickenEmbryoWholeBodyDay20HH45_CNhs14207_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10229-103I4
+		type bigWig
+		longLabel chicken embryo whole body, day20 (HH45)_CNhs14207_10229-103I4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day20%20%28HH45%29.CNhs14207.10229-103I4.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10229-103I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day20-
+		
+		track ChickenLegBudsDay03HH20_CNhs14213_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10233-103I8
+		type bigWig
+		longLabel chicken leg buds, day03 (HH20)_CNhs14213_10233-103I8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20leg%20buds%2c%20day03%20%28HH20%29.CNhs14213.10233-103I8.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10233-103I8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel LegBuds_day03+
+		
+		track ChickenLegBudsDay03HH20_CNhs14213_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10233-103I8
+		type bigWig
+		longLabel chicken leg buds, day03 (HH20)_CNhs14213_10233-103I8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20leg%20buds%2c%20day03%20%28HH20%29.CNhs14213.10233-103I8.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10233-103I8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel LegBuds_day03-
+		
+		track ChickenWingBudsDay03HH20_CNhs14212_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10232-103I7
+		type bigWig
+		longLabel chicken wing buds, day03 (HH20)_CNhs14212_10232-103I7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20wing%20buds%2c%20day03%20%28HH20%29.CNhs14212.10232-103I7.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10232-103I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel WingBuds_day03+
+		
+		track ChickenWingBudsDay03HH20_CNhs14212_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10232-103I7
+		type bigWig
+		longLabel chicken wing buds, day03 (HH20)_CNhs14212_10232-103I7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20wing%20buds%2c%20day03%20%28HH20%29.CNhs14212.10232-103I7.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10232-103I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel WingBuds_day03-
+		
+		track HepatocytesDonor1_CNhs11922_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11260-116F9
+		type bigWig
+		longLabel hepatocytes, donor1_CNhs11922_11260-116F9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/hepatocytes%2c%20donor1.CNhs11922.11260-116F9.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11260-116F9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocytesD1+
+		
+		track HepatocytesDonor1_CNhs11922_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11260-116F9
+		type bigWig
+		longLabel hepatocytes, donor1_CNhs11922_11260-116F9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/hepatocytes%2c%20donor1.CNhs11922.11260-116F9.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11260-116F9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocytesD1-
+		
+		track HepatocytesDonor2_CNhs11306_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11337-117F5
+		type bigWig
+		longLabel hepatocytes, donor2_CNhs11306_11337-117F5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/hepatocytes%2c%20donor2.CNhs11306.11337-117F5.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11337-117F5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocytesD2+
+		
+		track HepatocytesDonor2_CNhs11306_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11337-117F5
+		type bigWig
+		longLabel hepatocytes, donor2_CNhs11306_11337-117F5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/hepatocytes%2c%20donor2.CNhs11306.11337-117F5.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11337-117F5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocytesD2-
+		
+		track MesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11292_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11294-117A7
+		type bigWig
+		longLabel Mesenchymal stem cells - bone marrow derived, donor1_CNhs11292_11294-117A7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11292.11294-117A7.galGal5.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11294-117A7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1+
+		
+		track MesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11292_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11294-117A7
+		type bigWig
+		longLabel Mesenchymal stem cells - bone marrow derived, donor1_CNhs11292_11294-117A7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/galGal5/fantom5/Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11292.11294-117A7.galGal5.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11294-117A7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1-
+		
+	track TSS_activity_TPM
+	dataVersion FANTOM5 phase2.5
+	type bigWig
+	longLabel TSS activity per sample(TPM)
+	priority 3
+	dimensions dimX=sequenceTech dimY=category dimA=strand
+	compositeTrack on
+        superTrack fantom5
+	subGroup3 strand Strand forward=forward reverse=reverse
+	subGroup2 category Category cellLine=cellLine fractionation=fractionation primaryCell=primaryCell tissue=tissue
+	shortLabel TSS activity(TPM)
+	visibility dense
+	subGroup1 sequenceTech Sequence_Tech hCAGE=hCAGE LQhCAGE=LQhCAGE
+	showSubtrackColorOnUi off
+	sortOrder category=+ sequenceTech=+
+	boxedCfg on
+        html fantom5.html
+		
+		track AorticSmoothMuscleCellsDonor1_CNhs11296_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11298-117B2
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor1_CNhs11296_11298-117B2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11296.11298-117B2.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11298-117B2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1+
+		
+		track AorticSmoothMuscleCellsDonor1_CNhs11296_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11298-117B2
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor1_CNhs11296_11298-117B2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11296.11298-117B2.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11298-117B2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1-
+		
+		track AorticSmoothMuscleCellsDonor2_CNhs11299_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11375-118A7
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor2_CNhs11299_11375-118A7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11299.11375-118A7.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11375-118A7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2+
+		
+		track AorticSmoothMuscleCellsDonor2_CNhs11299_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11375-118A7
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor2_CNhs11299_11375-118A7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11299.11375-118A7.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11375-118A7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2-
+		
+		track AorticSmoothMuscleCellsDonor3_CNhs11314_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11447-118I7
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor3_CNhs11314_11447-118I7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11314.11447-118I7.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11447-118I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3+
+		
+		track AorticSmoothMuscleCellsDonor3_CNhs11314_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11447-118I7
+		type bigWig
+		longLabel Aortic Smooth Muscle cells, donor3_CNhs11314_11447-118I7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11314.11447-118I7.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11447-118I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3-
+		
+		track ChickenEmbryoExtraembryonicTissueDay07HH32_CNhs14210_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10230-103I5
+		type bigWig
+		longLabel chicken embryo, extraembryonic tissue, day07 (HH32)_CNhs14210_10230-103I5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%2c%20extraembryonic%20tissue%2c%20day07%20%28HH32%29.CNhs14210.10230-103I5.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10230-103I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel Extraembryonic_day07+
+		
+		track ChickenEmbryoExtraembryonicTissueDay07HH32_CNhs14210_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10230-103I5
+		type bigWig
+		longLabel chicken embryo, extraembryonic tissue, day07 (HH32)_CNhs14210_10230-103I5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%2c%20extraembryonic%20tissue%2c%20day07%20%28HH32%29.CNhs14210.10230-103I5.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10230-103I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel Extraembryonic_day07-
+		
+		track ChickenEmbryoExtraembryonicTissueDay15HH41_CNhs14211_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10231-103I6
+		type bigWig
+		longLabel chicken embryo, extraembryonic tissue, day15 (HH41)_CNhs14211_10231-103I6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%2c%20extraembryonic%20tissue%2c%20day15%20%28HH41%29.CNhs14211.10231-103I6.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10231-103I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel Extraembryonic_day15+
+		
+		track ChickenEmbryoExtraembryonicTissueDay15HH41_CNhs14211_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10231-103I6
+		type bigWig
+		longLabel chicken embryo, extraembryonic tissue, day15 (HH41)_CNhs14211_10231-103I6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%2c%20extraembryonic%20tissue%2c%20day15%20%28HH41%29.CNhs14211.10231-103I6.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10231-103I6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel Extraembryonic_day15-
+		
+		track ChickenEmbryoWholeBody01hr30minHH1_CNhs12735_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10210-103G3
+		type bigWig
+		longLabel chicken embryo whole body, 01hr30min (HH1)_CNhs12735_10210-103G3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2001hr30min%20%28HH1%29.CNhs12735.10210-103G3.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10210-103G3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_01hr30min+
+		
+		track ChickenEmbryoWholeBody01hr30minHH1_CNhs12735_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10210-103G3
+		type bigWig
+		longLabel chicken embryo whole body, 01hr30min (HH1)_CNhs12735_10210-103G3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2001hr30min%20%28HH1%29.CNhs12735.10210-103G3.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10210-103G3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_01hr30min-
+		
+		track ChickenEmbryoWholeBody05hr30minHH1_CNhs13027_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10211-103G4
+		type bigWig
+		longLabel chicken embryo whole body, 05hr30min (HH1)_CNhs13027_10211-103G4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2005hr30min%20%28HH1%29.CNhs13027.10211-103G4.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10211-103G4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_05hr30min+
+		
+		track ChickenEmbryoWholeBody05hr30minHH1_CNhs13027_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10211-103G4
+		type bigWig
+		longLabel chicken embryo whole body, 05hr30min (HH1)_CNhs13027_10211-103G4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2005hr30min%20%28HH1%29.CNhs13027.10211-103G4.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10211-103G4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_05hr30min-
+		
+		track ChickenEmbryoWholeBody06hrHH12_CNhs13028_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10212-103G5
+		type bigWig
+		longLabel chicken embryo whole body, 06hr (HH1-2)_CNhs13028_10212-103G5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2006hr%20%28HH1-2%29.CNhs13028.10212-103G5.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10212-103G5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_06hr+
+		
+		track ChickenEmbryoWholeBody06hrHH12_CNhs13028_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10212-103G5
+		type bigWig
+		longLabel chicken embryo whole body, 06hr (HH1-2)_CNhs13028_10212-103G5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2006hr%20%28HH1-2%29.CNhs13028.10212-103G5.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10212-103G5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_06hr-
+		
+		track ChickenEmbryoWholeBody14hrHH3_CNhs13029_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10213-103G6
+		type bigWig
+		longLabel chicken embryo whole body, 14hr (HH3)_CNhs13029_10213-103G6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2014hr%20%28HH3%29.CNhs13029.10213-103G6.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10213-103G6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_14hr+
+		
+		track ChickenEmbryoWholeBody14hrHH3_CNhs13029_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10213-103G6
+		type bigWig
+		longLabel chicken embryo whole body, 14hr (HH3)_CNhs13029_10213-103G6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2014hr%20%28HH3%29.CNhs13029.10213-103G6.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10213-103G6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_14hr-
+		
+		track ChickenEmbryoWholeBody18hrHH4_CNhs13030_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10214-103G7
+		type bigWig
+		longLabel chicken embryo whole body, 18hr (HH4)_CNhs13030_10214-103G7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2018hr%20%28HH4%29.CNhs13030.10214-103G7.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10214-103G7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_18hr+
+		
+		track ChickenEmbryoWholeBody18hrHH4_CNhs13030_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10214-103G7
+		type bigWig
+		longLabel chicken embryo whole body, 18hr (HH4)_CNhs13030_10214-103G7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2018hr%20%28HH4%29.CNhs13030.10214-103G7.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10214-103G7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_18hr-
+		
+		track ChickenEmbryoWholeBody22hrHH56_CNhs12736_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10215-103G8
+		type bigWig
+		longLabel chicken embryo whole body, 22hr (HH5-6)_CNhs12736_10215-103G8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2022hr%20%28HH5-6%29.CNhs12736.10215-103G8.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10215-103G8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_22hr+
+		
+		track ChickenEmbryoWholeBody22hrHH56_CNhs12736_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10215-103G8
+		type bigWig
+		longLabel chicken embryo whole body, 22hr (HH5-6)_CNhs12736_10215-103G8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%2022hr%20%28HH5-6%29.CNhs12736.10215-103G8.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10215-103G8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_22hr-
+		
+		track ChickenEmbryoWholeBodyDay01_5HH10_CNhs13977_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10218-103H2
+		type bigWig
+		longLabel chicken embryo whole body, day01_5 (HH10)_CNhs13977_10218-103H2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%2e5%20%28HH10%29.CNhs13977.10218-103H2.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10218-103H2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01_5+
+		
+		track ChickenEmbryoWholeBodyDay01_5HH10_CNhs13977_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10218-103H2
+		type bigWig
+		longLabel chicken embryo whole body, day01_5 (HH10)_CNhs13977_10218-103H2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%2e5%20%28HH10%29.CNhs13977.10218-103H2.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10218-103H2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01_5-
+		
+		track ChickenEmbryoWholeBodyDay01_5HH1112_CNhs14201_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10219-103H3
+		type bigWig
+		longLabel chicken embryo whole body, day01_5 (HH11-12)_CNhs14201_10219-103H3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%2e5%20%28HH11-12%29.CNhs14201.10219-103H3.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10219-103H3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01_5+
+		
+		track ChickenEmbryoWholeBodyDay01_5HH1112_CNhs14201_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10219-103H3
+		type bigWig
+		longLabel chicken embryo whole body, day01_5 (HH11-12)_CNhs14201_10219-103H3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%2e5%20%28HH11-12%29.CNhs14201.10219-103H3.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10219-103H3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01_5-
+		
+		track ChickenEmbryoWholeBodyDay01HH713Somites_CNhs13976_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10216-103G9
+		type bigWig
+		longLabel chicken embryo whole body, day01 (HH7 1-3 somites)_CNhs13976_10216-103G9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%20%28HH7%201-3%20somites%29.CNhs13976.10216-103G9.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10216-103G9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01+
+		
+		track ChickenEmbryoWholeBodyDay01HH713Somites_CNhs13976_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10216-103G9
+		type bigWig
+		longLabel chicken embryo whole body, day01 (HH7 1-3 somites)_CNhs13976_10216-103G9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%20%28HH7%201-3%20somites%29.CNhs13976.10216-103G9.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10216-103G9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01-
+		
+		track ChickenEmbryoWholeBodyDay01HH723Somites_CNhs14200_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10217-103H1
+		type bigWig
+		longLabel chicken embryo whole body, day01 (HH7 2-3 somites)_CNhs14200_10217-103H1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%20%28HH7%202-3%20somites%29.CNhs14200.10217-103H1.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10217-103H1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01+
+		
+		track ChickenEmbryoWholeBodyDay01HH723Somites_CNhs14200_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10217-103H1
+		type bigWig
+		longLabel chicken embryo whole body, day01 (HH7 2-3 somites)_CNhs14200_10217-103H1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day01%20%28HH7%202-3%20somites%29.CNhs14200.10217-103H1.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10217-103H1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day01-
+		
+		track ChickenEmbryoWholeBodyDay02_5HH17_CNhs13979_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10222-103H6
+		type bigWig
+		longLabel chicken embryo whole body, day02_5 (HH17)_CNhs13979_10222-103H6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%2e5%20%28HH17%29.CNhs13979.10222-103H6.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10222-103H6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02_5+
+		
+		track ChickenEmbryoWholeBodyDay02_5HH17_CNhs13979_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10222-103H6
+		type bigWig
+		longLabel chicken embryo whole body, day02_5 (HH17)_CNhs13979_10222-103H6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%2e5%20%28HH17%29.CNhs13979.10222-103H6.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10222-103H6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02_5-
+		
+		track ChickenEmbryoWholeBodyDay02HH13_CNhs13978_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10220-103H4
+		type bigWig
+		longLabel chicken embryo whole body, day02 (HH13)_CNhs13978_10220-103H4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%20%28HH13%29.CNhs13978.10220-103H4.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10220-103H4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02+
+		
+		track ChickenEmbryoWholeBodyDay02HH13_CNhs13978_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10220-103H4
+		type bigWig
+		longLabel chicken embryo whole body, day02 (HH13)_CNhs13978_10220-103H4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%20%28HH13%29.CNhs13978.10220-103H4.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10220-103H4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02-
+		
+		track ChickenEmbryoWholeBodyDay02HH14_CNhs14202_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10221-103H5
+		type bigWig
+		longLabel chicken embryo whole body, day02 (HH14)_CNhs14202_10221-103H5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%20%28HH14%29.CNhs14202.10221-103H5.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10221-103H5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02+
+		
+		track ChickenEmbryoWholeBodyDay02HH14_CNhs14202_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10221-103H5
+		type bigWig
+		longLabel chicken embryo whole body, day02 (HH14)_CNhs14202_10221-103H5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day02%20%28HH14%29.CNhs14202.10221-103H5.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10221-103H5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day02-
+		
+		track ChickenEmbryoWholeBodyDay03HH19_CNhs14203_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10223-103H7
+		type bigWig
+		longLabel chicken embryo whole body, day03 (HH19)_CNhs14203_10223-103H7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day03%20%28HH19%29.CNhs14203.10223-103H7.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10223-103H7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day03+
+		
+		track ChickenEmbryoWholeBodyDay03HH19_CNhs14203_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10223-103H7
+		type bigWig
+		longLabel chicken embryo whole body, day03 (HH19)_CNhs14203_10223-103H7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day03%20%28HH19%29.CNhs14203.10223-103H7.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10223-103H7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day03-
+		
+		track ChickenEmbryoWholeBodyDay03HH20_CNhs13980_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10224-103H8
+		type bigWig
+		longLabel chicken embryo whole body, day03 (HH20)_CNhs13980_10224-103H8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day03%20%28HH20%29.CNhs13980.10224-103H8.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10224-103H8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day03+
+		
+		track ChickenEmbryoWholeBodyDay03HH20_CNhs13980_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10224-103H8
+		type bigWig
+		longLabel chicken embryo whole body, day03 (HH20)_CNhs13980_10224-103H8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day03%20%28HH20%29.CNhs13980.10224-103H8.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10224-103H8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day03-
+		
+		track ChickenEmbryoWholeBodyDay04HH23_CNhs14204_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10225-103H9
+		type bigWig
+		longLabel chicken embryo whole body, day04 (HH23)_CNhs14204_10225-103H9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day04%20%28HH23%29.CNhs14204.10225-103H9.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10225-103H9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day04+
+		
+		track ChickenEmbryoWholeBodyDay04HH23_CNhs14204_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10225-103H9
+		type bigWig
+		longLabel chicken embryo whole body, day04 (HH23)_CNhs14204_10225-103H9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day04%20%28HH23%29.CNhs14204.10225-103H9.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10225-103H9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day04-
+		
+		track ChickenEmbryoWholeBodyDay05HH2527_CNhs14208_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10234-103I9
+		type bigWig
+		longLabel chicken embryo whole body, day05 (HH25-27)_CNhs14208_10234-103I9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day05%20%28HH25-27%29.CNhs14208.10234-103I9.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10234-103I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day05+
+		
+		track ChickenEmbryoWholeBodyDay05HH2527_CNhs14208_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10234-103I9
+		type bigWig
+		longLabel chicken embryo whole body, day05 (HH25-27)_CNhs14208_10234-103I9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day05%20%28HH25-27%29.CNhs14208.10234-103I9.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10234-103I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day05-
+		
+		track ChickenEmbryoWholeBodyDay05HH2627_CNhs13981_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10226-103I1
+		type bigWig
+		longLabel chicken embryo whole body, day05 (HH26-27)_CNhs13981_10226-103I1_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day05%20%28HH26-27%29.CNhs13981.10226-103I1.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10226-103I1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day05+
+		
+		track ChickenEmbryoWholeBodyDay05HH2627_CNhs13981_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10226-103I1
+		type bigWig
+		longLabel chicken embryo whole body, day05 (HH26-27)_CNhs13981_10226-103I1_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day05%20%28HH26-27%29.CNhs13981.10226-103I1.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10226-103I1 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day05-
+		
+		track ChickenEmbryoWholeBodyDay07HH32_CNhs14205_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10227-103I2
+		type bigWig
+		longLabel chicken embryo whole body, day07 (HH32)_CNhs14205_10227-103I2_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day07%20%28HH32%29.CNhs14205.10227-103I2.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10227-103I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day07+
+		
+		track ChickenEmbryoWholeBodyDay07HH32_CNhs14205_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10227-103I2
+		type bigWig
+		longLabel chicken embryo whole body, day07 (HH32)_CNhs14205_10227-103I2_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day07%20%28HH32%29.CNhs14205.10227-103I2.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10227-103I2 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day07-
+		
+		track ChickenEmbryoWholeBodyDay10HH37_CNhs10485_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10004-101A9
+		type bigWig
+		longLabel chicken embryo whole body, day10 (HH37)_CNhs10485_10004-101A9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day10%20%28HH37%29.CNhs10485.10004-101A9.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10004-101A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day10+
+		
+		track ChickenEmbryoWholeBodyDay10HH37_CNhs10485_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10004-101A9
+		type bigWig
+		longLabel chicken embryo whole body, day10 (HH37)_CNhs10485_10004-101A9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day10%20%28HH37%29.CNhs10485.10004-101A9.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10004-101A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day10-
+		
+		track ChickenEmbryoWholeBodyDay15HH41_CNhs14206_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10228-103I3
+		type bigWig
+		longLabel chicken embryo whole body, day15 (HH41)_CNhs14206_10228-103I3_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day15%20%28HH41%29.CNhs14206.10228-103I3.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10228-103I3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day15+
+		
+		track ChickenEmbryoWholeBodyDay15HH41_CNhs14206_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10228-103I3
+		type bigWig
+		longLabel chicken embryo whole body, day15 (HH41)_CNhs14206_10228-103I3_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day15%20%28HH41%29.CNhs14206.10228-103I3.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10228-103I3 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day15-
+		
+		track ChickenEmbryoWholeBodyDay20HH45_CNhs14207_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10229-103I4
+		type bigWig
+		longLabel chicken embryo whole body, day20 (HH45)_CNhs14207_10229-103I4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day20%20%28HH45%29.CNhs14207.10229-103I4.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10229-103I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day20+
+		
+		track ChickenEmbryoWholeBodyDay20HH45_CNhs14207_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10229-103I4
+		type bigWig
+		longLabel chicken embryo whole body, day20 (HH45)_CNhs14207_10229-103I4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20embryo%20whole%20body%2c%20day20%20%28HH45%29.CNhs14207.10229-103I4.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10229-103I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel EmbryoWholeBody_day20-
+		
+		track ChickenLegBudsDay03HH20_CNhs14213_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10233-103I8
+		type bigWig
+		longLabel chicken leg buds, day03 (HH20)_CNhs14213_10233-103I8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20leg%20buds%2c%20day03%20%28HH20%29.CNhs14213.10233-103I8.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10233-103I8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel LegBuds_day03+
+		
+		track ChickenLegBudsDay03HH20_CNhs14213_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10233-103I8
+		type bigWig
+		longLabel chicken leg buds, day03 (HH20)_CNhs14213_10233-103I8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20leg%20buds%2c%20day03%20%28HH20%29.CNhs14213.10233-103I8.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10233-103I8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel LegBuds_day03-
+		
+		track ChickenWingBudsDay03HH20_CNhs14212_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10232-103I7
+		type bigWig
+		longLabel chicken wing buds, day03 (HH20)_CNhs14212_10232-103I7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20wing%20buds%2c%20day03%20%28HH20%29.CNhs14212.10232-103I7.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10232-103I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel WingBuds_day03+
+		
+		track ChickenWingBudsDay03HH20_CNhs14212_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10232-103I7
+		type bigWig
+		longLabel chicken wing buds, day03 (HH20)_CNhs14212_10232-103I7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/chicken%20wing%20buds%2c%20day03%20%28HH20%29.CNhs14212.10232-103I7.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10232-103I7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel WingBuds_day03-
+		
+		track MesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11292_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11294-117A7
+		type bigWig
+		longLabel Mesenchymal stem cells - bone marrow derived, donor1_CNhs11292_11294-117A7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11292.11294-117A7.galGal5.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11294-117A7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1+
+		
+		track MesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11292_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11294-117A7
+		type bigWig
+		longLabel Mesenchymal stem cells - bone marrow derived, donor1_CNhs11292_11294-117A7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/galGal5/fantom5/Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11292.11294-117A7.galGal5.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11294-117A7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1-
+		
