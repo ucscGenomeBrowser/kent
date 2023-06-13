@@ -209,7 +209,6 @@ SCRIPT_FILES = \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
-	hubPublicMail \
 	browserRace \
 	${USER_APP_SCRIPTS}
 

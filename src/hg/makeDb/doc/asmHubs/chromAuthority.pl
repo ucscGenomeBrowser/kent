@@ -45,8 +45,8 @@ if ( ! (($asmLevel =~ m/chromosome/i) || ($asmLevel =~ m/complete/i)) ) {
 
 my $gbRs = "genbankBuild";
 $gbRs = "refseqBuild" if ($gcX =~ m/GCF/);
-my $buildDir="/hive/data/genomes/asmHubs/$gcX/$d0/$d1/$d2/$accession";
-my $chromAlias = "$buildDir/$accession.chromAlias.txt";
+my $buildDir="/hive/data/genomes/asmHubs/$gbRs/$gcX/$d0/$d1/$d2/$asmId";
+my $chromAlias = "$buildDir/trackData/chromAlias/$asmId.chromAlias.txt";
 
 if (! -s "$chromAlias") {
   printf STDERR "not found: '%s'\n", $chromAlias;

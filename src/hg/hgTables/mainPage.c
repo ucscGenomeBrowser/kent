@@ -318,7 +318,7 @@ for (name = nameList; name != NULL; name = name->next)
     hPrintf("<OPTION VALUE=\"%s\"", name->name);
     // Disable options for related tables that are noGenome -- if a non-positional table
     // is selected then we output its entire contents.
-    if (cartTrackDbIsNoGenome(database, name->name) &&
+    if (cartTrackDbIsNoGenome(database, name->name) && fullGenomeRegion() &&
         (track == NULL || differentString(track->table, name->name)))
         hPrintf(" DISABLED"NO_GENOME_CLASS);
     else if (sameString(selTable, name->name))
@@ -394,7 +394,7 @@ hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 
         "If you are looking for fully formatted "
         "gene model files for use in genome analysis pipelines,<br>check the "
         "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/genes'>bigZips/genes</a> "
-        "directory on our download server.</DIV>", database);
+        "directory on our download server.</DIV>", trackHubSkipHubName(database));
 hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='wigNote'>"
         "<b>Signal data points format:</b> The Table Browser outputs signal track data in "
         "<a href='../goldenPath/help/wiggle.html' target=_blank>wiggle</a> format by default. You can also use the "
@@ -1106,7 +1106,7 @@ jsInline(
     "function maybeDisableNoGenome() {\n"
     "   var regionTypeSelected = $('input[name=\"hgta_regionType\"]:checked').val();\n"
     "   var regionIsGenome = (regionTypeSelected === 'genome');\n"
-    "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome');\n"
+    "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome,select[name=\"hgta_table\"] option.hgtaNoGenome');\n"
     "   $noGenomeOptions.attr('disabled', regionIsGenome)\n"
     "                   .css('color', regionIsGenome ? '' : 'black');\n"
     "}\n"

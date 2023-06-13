@@ -3,8 +3,12 @@
 /* Copyright (C) 2020-2022 The Regents of the University of California */
 
 #include "common.h"
+#include "cart.h"
+#include "knetUdc.h"
 #include "linefile.h"
 #include "options.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 #include "phyloPlace.h"
 
 void usage()
@@ -43,6 +47,20 @@ char *db = optionVal("db", "wuhCor1");
 char *protobuf = optionVal("protobuf", NULL);
 int subtreeSize = optionInt("subtreeSize", 50);
 boolean success = FALSE;
+
+int timeout = 300;
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+knetUdcInstall();
+
+if (isHubTrack(db))
+    {
+    // Connect to hubs so phyloPlaceSamples doesn't croak later.
+    struct cart *cart = cartOfNothing();
+    struct slName *supportedDbs = phyloPlaceDbList(cart);
+    if (! slNameInList(supportedDbs, db))
+        errAbort("Can't find db '%s'", db);
+    }
 char *ctFile = phyloPlaceSamples(lf, db, protobuf, TRUE, subtreeSize, 9, &success);
 if (ctFile)
     printf("ctFile = %s\n", ctFile);

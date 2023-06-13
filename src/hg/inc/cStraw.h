@@ -8,8 +8,9 @@
 
 typedef struct Straw Straw;
 
-Straw *cStrawOpen (char *fname);
-/* Return a pointer to a Straw object for further operations (i.e. reads) */
+char *cStrawOpen (char *fname, Straw **p);
+/* Create a Straw object based on the hic file at the provided path and set *p to point to it.
+ * On error, set *p = NULL and return a non-null string describing the error. */
 
 Straw *cStrawClose (Straw **hicFile);
 /* Close out a Straw record, freeing the object */

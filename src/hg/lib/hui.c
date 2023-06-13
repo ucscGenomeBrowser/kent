@@ -541,16 +541,38 @@ printf("</p>");
 return TRUE;
 }
 
-static void makeFileDownloads(char *fileDownloads) 
-/* print an additional file download link, file can be anywhere on the internet, useful e.g. for GTF files for gene tracks */
+static void printDownloadUrl(char *downloadUrl, char *database, char *track)
+/* given a string <label><space><url>, print a nice download link */
 {
 char *parts[2];
-int partCount = chopByWhite(fileDownloads, parts, 2);
+int partCount = chopByWhiteRespectDoubleQuotes(downloadUrl, parts, 2);
 if (partCount!=2)
+    {
     puts("<b>Internal Error:</b> The downloadUrl trackDb statement needs exactly two arguments, the file type and the URL.");
+    return;
+    }
 char* fileType = parts[0];
+stripString(fileType, "\"");  // Remove double quotes, weird that chopByWhiteRespectDoubleQuotes doesn't do this
 char* url = parts[1];
-printf("<br>Download: <a href=\"%s\">%s File</a>", url, fileType);
+char *newUrl = replaceInUrl(url, "", NULL, database, "", 0, 0, track, FALSE, NULL);
+printf("<br>Download: <a href=\"%s\">%s</a>", newUrl, fileType);
+}
+
+static void makeFileDownloads(struct trackDb *tdb, char *db) 
+/* given either downloadUrl or downloadUrl.1/.2/... in trackDb, print links to these files.
+ * File can be anywhere on the internet, useful e.g. for GTF files for gene tracks */
+{
+char *downloadUrl = trackDbSetting(tdb, "downloadUrl");
+struct slName* tdbNames = trackDbSettingsWildMatch(tdb, "downloadUrl.*");
+if (downloadUrl)
+    printDownloadUrl(downloadUrl, db, tdb->track);
+
+while (tdbNames != NULL)
+    {
+    struct slName *tdbName = slPopHead(&tdbNames);
+    printDownloadUrl(trackDbSetting(tdb, tdbName->name), db, tdb->track);
+    slNameFree(&tdbName);
+    }
 }
 
 void extraUiLinks(char *db, struct trackDb *tdb, struct cart *cart)
@@ -586,9 +608,7 @@ if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(
 	printf(", ");
     }
 
-char *fileDownloads = trackDbSetting(tdb, "downloadUrl");
-if (fileDownloads)
-    makeFileDownloads(fileDownloads);
+makeFileDownloads(tdb, db);
 
 if (downloadLink)
     {
@@ -2982,7 +3002,8 @@ static members_t *subgroupMembersWeedOutEmpties(struct trackDb *parentTdb, membe
 {
 if (members->count == 0)
     {
-    warn("No subtracks in group: %s.  This indicates a problem in the subGroup line for this group.", members->groupTitle);
+    warn("%s: No subtracks in group: %s.  This indicates a problem in the subGroup line for this group.",
+         parentTdb->track, members->groupTitle);
     return members;
     }
 // First tally all subtrack counts
@@ -5883,7 +5904,7 @@ void snakeOption(struct cart *cart, char *name, char *title, struct trackDb *tdb
 if (!cfgOptionBooleanDefault("canSnake", FALSE))
     return;
 
-printf("<BR><BR><B>Display data as a snake graph:</B> ");
+printf("<BR><B>Display data as a rearrangement graph:</B> ");
 boolean option = cartOrTdbBoolean(cart, tdb, "doSnake", FALSE);
 
 char varName[1024];
@@ -5891,10 +5912,9 @@ safef(varName, sizeof(varName), "%s.doSnake", name);
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
 
-char *style = option ? "display:block" : "display:none";
-printf("<DIV ID=\"snakeGraphOptions\" STYLE=\"%s\">\n", style);
-printf("SNAKE OPTIONS!!\n");
-printf("</DIV>\n\n");
+//char *style = option ? "display:block" : "display:none";
+//printf("<DIV ID=\"snakeGraphOptions\" STYLE=\"%s\">\n", style);
+//printf("</DIV>\n\n");
 
 jsInlineF("$(\"input[name='%s']\").click( function() { $('#snakeGraphOptions').toggle();} );\n"
     , varName); // XSS FILTER?
@@ -5908,10 +5928,7 @@ char *field = trackDbSetting(tdb, "squishyPackField");
 if (field == NULL)
     return;
 
-char *squishyPackPointStr = trackDbSetting(tdb, "squishyPackPoint");
-double squishyPackPoint = 999;
-if (squishyPackPointStr != NULL)
-    squishyPackPoint = atof(squishyPackPointStr);
+double squishyPackPoint = cartOrTdbDouble(cart, tdb, "squishyPackPoint", 999);
 printf("<BR><B>Squish items that have a %s value that is greater or equal to </B> ", field);
 
 safef(option, sizeof(option), "%s.%s", name, "squishyPackPoint" );
@@ -6023,6 +6040,7 @@ wigFetchSmoothingWindowWithCart(cart,tdb,name, &smoothingWindow);
 wigFetchYLineMarkWithCart(cart,tdb,name, &yLineMarkOnOff);
 wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 boolean doNegative = wigFetchDoNegativeWithCart(cart,tdb,tdb->track, (char **) NULL);
+boolean doSequenceLogo = wigFetchDoSequenceLogoWithCart(cart,tdb,tdb->track, (char **) NULL);
 
 printf("<TABLE BORDER=0>");
 
@@ -6161,6 +6179,16 @@ if (!isLogo)
     cgiMakeDoubleVarInRange(option, yLineMark, "Indicator at Y", 0, NULL, NULL);
     safef(option, sizeof(option), "%s.%s", name, YLINEONOFF );
     wiggleYLineMarkDropDown(option, yLineMarkOnOff);
+
+    char *logoMaf = trackDbSetting(tdb, "logoMaf");
+
+    if (logoMaf)
+        {
+        printf("<TR valign=middle><td align=right><b>Draw sequence logo when near base level:</b></td>"
+               "<td align=left colspan=2>");
+        safef(option, sizeof(option), "%s.%s", name, DOSEQUENCELOGOMODE );
+        cgiMakeCheckBox(option, doSequenceLogo);
+        }
     }
 if (boxed)
     puts("</TD></TR></TABLE>");

@@ -1,26 +1,29 @@
-GCA_011762505.1_mArvNil1.pat.X	African grass rat
+GCA_011762505.1_mArvNil1.pat.X	African grass rat (paternal X 2020)
 GCA_009819705.1_fHipHip1.pri	Atlantic halibut (genbank)
 GCF_003957555.1_bCalAnn1_v1.p	Anna's hummingbird
 GCF_015227805.1_bHirRus1.pri.v2	barn swallow (bHirRus1 v2 primary hap 2021 refseq)
+GCA_028500815.1_bRisTri1.patW.cur.20221130	black-legged kittiwake (bRisTri1.patW 2023 genbank)
 GCA_009873245.2_mBalMus1.v2	blue whale (JJ_BM4_2016_0621 v2 2020)
-GCA_008658375.1_mBalMus1_alternate	Blue whale
+GCA_008658375.1_mBalMus1_alternate	blue whale (alternate hap JJ_BM4_2016_0621 2019)
 GCA_900634775.1_fGouWil2.1	blunt-snouted clingfish (v1 2019 genbank)
 GCF_900634775.1_fGouWil2.1	blunt-snouted clingfish (v1 2019 refseq)
 GCA_012275295.1_bMelUnd1.mat.Z	budgerigar
 GCA_009762305.1_mZalCal1.pri	California sea lion (v1 2019)
-GCA_009762295.1_mZalCal1.alt	California sea lion
+GCA_009762295.1_mZalCal1.alt	California sea lion (alternate hap 2019)
 GCF_007474595.1_mLynCan4_v1.p	Canada lynx (LIC74 v1 2019)
-GCA_007474575.1_mLynCan4_v1.alt	Canada lynx
+GCA_007474575.1_mLynCan4_v1.alt	Canada lynx (alternate hap LIC74 2019)
 GCA_900634415.1_fCotGob3.1	channel bull blenny
 GCA_900324465.2_fAnaTes1.2	climbing perch (v1.2 2018 genbank)
 GCF_900324465.2_fAnaTes1.2	climbing perch (v1.2 2018 refseq)
-GCA_011100635.1_mTriVul1.pri	common brushtail
-GCA_011762595.1_mTurTru1.mat.Y	common bottlenose dolphin
-GCA_020740795.1_bApuApu2.pri.cur	common swift (bApuApu2 2021 VGP genbank)
+GCA_011100635.1_mTriVul1.pri	common brushtail (genbank 2020)
+GCA_011762595.1_mTurTru1.mat.Y	common bottlenose dolphin (maternal Y genbank 2020)
+GCA_017976375.1_bCucCan1.pri	common cuckoo (bCucCan1 primary hap 2021 genbank)
+GCA_020740795.1_bApuApu2.pri.cur	common swift (bApuApu2 2021 genbank)
 GCF_900700375.1_fDenClu1.1	denticle herring (v1 2019)
+GCA_014839835.1_bDryPub1.pri	downy woodpecker (bDryPub1 primary hap 2020)
 GCF_900246225.1_fAstCal1.2	eastern happy (v2 2018)
 GCA_016128335.1_ZJU1.0	emu (v1 ZJU1.0 2020)
-GCF_903992535.1_mArvAmp1.1	Eurasian water vole (2020)
+GCF_903992535.1_mArvAmp1.1	Eurasian water vole (v1 2020)
 GCA_901699155.1_bStrTur1.1	European turtle dove (v1.1 primary hap 2019)
 GCA_901699165.1_bStrTur1.1_alternate_haplotype	European turtle dove
 GCA_947179515.1_mApoSyl1.1	European woodmouse (2022 genbank)
@@ -29,16 +32,17 @@ GCA_902459505.1_aGeoSer1.1	Gabon caecilian
 GCF_900880675.1_fSpaAur1.1	gilthead seabream (v1 2019)
 GCF_900496995.1_bAquChr1.2	golden eagle (2019)
 GCA_902153765.1_bAquChr1.2_alternate_haplotype	golden eagle (v1.2 alternate hap 2019)
-GCA_004115265.2_mRhiFer1_v1.p	greater horseshoe bat (v1 MPI-CBG 2019 genbank VGP)
-GCF_004115265.1_mRhiFer1_v1.p	greater horseshoe bat (v1 MPI-CBG 2019 refseq VGP)
+GCA_004115265.2_mRhiFer1_v1.p	greater horseshoe bat (v1 MPI-CBG 2019 genbank)
+GCF_004115265.1_mRhiFer1_v1.p	greater horseshoe bat (v1 MPI-CBG 2019 refseq)
 GCA_901709675.1_fSynAcu1.1	greater pipefish
 GCF_015237465.1_rCheMyd1.pri	green sea turtle (v1 2020)
 GCF_900634625.1_fParRan2.1	Indian glassy fish (v1 2019)
 GCA_004027225.2_bStrHab1.2.pri	kakapo
-GCA_009829125.1_fPerMag1.pri	Korean giant-fin mudskipper (genbank)
-GCA_009764565.1_rDerCor1.pri	leatherback sea turtle (v1 2019 genbank G10K VGP)
-GCF_009764565.2_rDerCor1.pri.v3	leatherback sea turtle (v3 2020 refseq G10K VGP)
-GCF_017639655.1_bFalNau1.pat	lesser kestrel (v1 2021 VGP)
+GCA_009829125.1_fPerMag1.pri	Korean giant-fin mudskipper (v1 primary hap 2020 genbank)
+GCF_009829125.1_fPerMag1.pri	Korean giant-fin mudskipper (v1 primary hap 2020 refseq)
+GCA_009764565.1_rDerCor1.pri	leatherback sea turtle (v1 2019 genbank G10K)
+GCF_009764565.2_rDerCor1.pri.v3	leatherback sea turtle (v3 2020 refseq G10K)
+GCF_017639655.1_bFalNau1.pat	lesser kestrel (v1 2021)
 GCF_900963305.1_fEcheNa1.1	live sharksucker (v1 2019)
 GCA_009769545.1_fCycLum1.pri	lumpfish (genbank)
 GCA_009769625.1_bCygOlo1.pri	mute swan (2019)
@@ -46,14 +50,14 @@ GCA_009769485.1_bCygOlo1.alt	mute swan (bCygOlo1 v1 alternate hap 2019)
 GCA_009762535.1_fNotCel1.pri	New Zealand spotty (genbank)
 GCA_011004845.1_fEsoLuc1.pri	northern pike
 GCF_004126475.1_mPhyDis1_v1.p	pale spear-nosed bat (MPI-MPIP v1 2019)
-GCA_004115245.1_mPhyDis1_v1.h	pale spear-nosed bat
-GCA_004115215.3_mOrnAna1.pri.v3	platypus (v3 2020)
+GCA_004115245.1_mPhyDis1_v1.h	pale spear-nosed bat (alternate hap MPI-MPIP 2019)
+GCA_004115215.3_mOrnAna1.pri.v3	platypus (Pmale09 v3 2020)
 GCA_902500255.1_fThaAma1.1	prehistoric monster fish
 GCF_900747795.1_fErpCal1.1	reedfish (2019)
 GCF_901001165.1_fSalTru1.1	river trout (v1 2019)
 GCA_009764475.1_sPriPec2.pri	smalltooth sawfish (v2 2019 genbank)
 GCF_900634795.2_fBetSpl5.2	Siamese fighting fish (2019)
-GCF_009819885.1_bCatUst1.pri	Swainson's thrush (v1 2019 VGP)
+GCF_009819885.1_bCatUst1.pri	Swainson's thrush (v1 2019)
 GCA_009819505.1_bCatUst1.alt	Swainson's thrush (bCatUst1 v1 alternate hap 2019)
 GCA_010909765.1_sAmbRad1.pri	thorny skate (genbank 2020)
 GCF_010909765.1_sAmbRad1.pri	thorny skate (v1 2020)

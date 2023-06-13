@@ -782,7 +782,7 @@ else
 for(; statusList; statusList = statusList->next)
     {
     if (dy)
-        dyStringPrintf(dy,"%d=%s ", statusList->id, statusList->hubUrl);
+        dyStringPrintf(dy,"%d=%s ", statusList->id, cgiEncode(statusList->hubUrl));
     else
         printf("%d=%s ", statusList->id, statusList->hubUrl);
     }
@@ -1008,8 +1008,8 @@ if (convertTestResult != 0)
     }
 
 sqlSafef(query, sizeof(query),
-    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
-    encUserName, encSessionName);
+    "select firstUse from %s where userName = \"%s\" and sessionName = \"%s\"",
+    namedSessionTable, encUserName, encSessionName);
 char *firstUse = sqlNeedQuickString(conn, query);
 sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
 char *userIdx = sqlQuickString(conn, query);
@@ -1036,8 +1036,8 @@ void thumbnailRemove(char *encUserName, char *encSessionName, struct sqlConnecti
 {
 char query[4096];
 sqlSafef(query, sizeof(query),
-    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
-    encUserName, encSessionName);
+    "select firstUse from %s where userName = \"%s\" and sessionName = \"%s\"",
+    namedSessionTable, encUserName, encSessionName);
 char *firstUse = sqlNeedQuickString(conn, query);
 sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
 char *userIdx = sqlQuickString(conn, query);

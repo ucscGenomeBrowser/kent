@@ -25,7 +25,7 @@ Options:
           bed3+ - BED format where only the first three columns are used as the
                   range, the remainder are copied as-is.
           bed6+ - BED format where only the first six columns are used as the
-                  range and strange, the remainder are copied as-is.
+                  range and strand, the remainder are copied as-is.
           chain - chain file format (default from .chain files)
           chainq - chain file format, using query instead of target
   -selectCoordCols=spec - selectFile is tab-separate with coordinates

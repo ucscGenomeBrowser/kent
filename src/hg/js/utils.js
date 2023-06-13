@@ -4,6 +4,7 @@
 
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
+/* jshint esnext: true */
 
 var debug = false;
 
@@ -3705,3 +3706,35 @@ function trackHubSkipHubName(name) {
     }
 }
 
+function parseUrl(url) {
+    // turn a url into some of it's components like server, query-string, etc
+    let protocol, serverName, pathInfo, queryString;
+    let temp;
+    temp = url.split("?");
+    if (temp.length > 1)
+        queryString = temp.slice(1).join("?");
+    temp = temp[0].split("/");
+    protocol = temp[0]; // "https:"
+    serverName = temp[2]; // "genome-test.gi.ucsc.edu"
+    pathInfo = temp.slice(3).join("/"); // "cgi-bin/hgTracks"
+    return {protocol: protocol, serverName: serverName, pathInfo: pathInfo, queryString: queryString};
+}
+
+function dumpCart(seconds, skipNotification) {
+    // dump current cart
+    let currUrl = parseUrl(window.location.href);
+    logUrl = currUrl.protocol + "//" + currUrl.serverName + "/" + currUrl.pathInfo + "?hgsid=" + getHgsid() + "&_dumpCart=" + encodeURIComponent(seconds) + "&skipNotif=" + skipNotification;
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", logUrl, true);
+    xmlhttp.send();  // sends request and exits this function
+}
+
+function writeToApacheLog(msg) {
+    // send msg to web servers error_log
+    // first need to figure out what server and CGI we are requesting:
+    let currUrl = parseUrl(window.location.href);
+    logUrl = currUrl.protocol + "//" + currUrl.serverName + "/" + currUrl.pathInfo + "?_dumpToLog=" + encodeURIComponent(msg);
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", logUrl, true);
+    xmlhttp.send();  // sends request and exits this function
+}

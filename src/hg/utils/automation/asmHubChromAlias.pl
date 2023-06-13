@@ -186,6 +186,27 @@ if ( -s "customNames.tsv" ) {
   printf STDERR "# read %d custom alias names from customNames.tsv\n", $customNameCount;
 }
 
+my %ensemblName;	# key is native sequence name, value is a ensembl alias
+my $ensemblNameCount = 0;
+
+if ( -s "ensemblNames.tsv" ) {
+  open (FH, "<ensemblNames.tsv") or die "can not read ensemblNames.tsv";
+  while (my $line = <FH>) {
+    chomp $line;
+    my ($native, $alias) = split('\s+', $line);
+    if (!defined($sequenceSizes{$native})) {
+       printf STDERR "ERROR: processing ensemblNames.tsv given native name\n";
+       printf STDERR " '%s' that does not exist (alias: %s)\n", $native, $alias;
+       exit 255;
+    }
+    $ensemblName{$native} = $alias;
+    ++$ensemblNameCount;
+    addAlias("ensembl", $alias, $native);
+  }
+  close (FH);
+  printf STDERR "# read %d ensembl alias names from ensemblNames.tsv\n", $ensemblNameCount;
+}
+
 my $nameCount = 0;
 my %ncbiToUcsc;	# key is NCBI sequence name, value is 'chr' UCSC chromosome name
 my %ucscToNcbi;	# key is 'chr' UCSC name, value is NCBI sequence name

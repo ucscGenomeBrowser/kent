@@ -1,9 +1,11 @@
 89197	GCA_019985065.2_ddArcGlau1.1p	plants
 89197	GCA_019985075.1_ddArcGlau1.0.a	plants
+6549	GCA_021869935.1_xbMytCali1.0.a	invertebrate
 198938	GCA_021963965.1_bArtBel1.0.p	birds
 198938	GCA_021966175.1_bArtBel1.0.a	birds
 6455	GCA_022045225.1_xgHalCrac1.a	invertebrate
 6455	GCA_022045235.1_xgHalCrac1.p	invertebrate
+61384	GCA_022079275.1_mLynRuf1.a	mammals
 335395	GCA_022086475.1_rActMar1.p	reptiles
 335395	GCA_022086895.1_rActMar1.a	reptiles
 100190	GCA_022577435.1_fEmbJac1.0.p	fish
@@ -38,6 +40,7 @@
 304258	GCA_023055415.1_fCliAna1.0.a	fish
 64432	GCA_023055425.1_ddLinParr1.0.p	plants
 67830	GCA_023055485.1_dhQueWisl1.0.a	plants
+6454	GCA_023055495.1_xgHalRufe1.0.a	invertebrate
 2893758	GCA_023055505.1_bCalCai1.0.p	birds
 64432	GCA_023055565.1_ddLinParr1.0.a	plants
 2893758	GCA_023055725.1_bCalCai1.0.a	birds

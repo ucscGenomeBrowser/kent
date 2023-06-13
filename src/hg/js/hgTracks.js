@@ -3489,6 +3489,20 @@ function highlightCurrentPosition(mode) {
     }
 }
 
+function onTrackDelIconClick (ev) {
+    /* delete custom track if user clicks its trash icon */
+    // https://genome.ucsc.edu/cgi-bin/hgCustom?hgsid=1645697744_i0Yp2Di71NytSDdb6r0vUbupIvKO&hgct_do_delete=delete&hgct_del_ct_UserTrack_3545=on
+    var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.
+    var trackName = divEl.getAttribute("data-track");
+    var hgsid = getHgsid();
+    var url = 'hgCustom?hgsid='+hgsid+'&hgct_do_delete=delete&hgct_del_'+trackName+'=on';
+    xhttp = new XMLHttpRequest();
+    xhttp.open("GET", url);
+    xhttp.send();
+    divEl.closest("td").remove();
+}
+
+
   //////////////////////////////////
  //// popup (aka modal dialog) ////
 //////////////////////////////////
@@ -5315,7 +5329,6 @@ var downloadCurrentTrackData = {
     }
 };
 
-
   ///////////////
  //// READY ////
 ///////////////
@@ -5325,6 +5338,9 @@ $(document).ready(function()
 
     // hg.conf will turn this on 2020-10 - Hiram
     if (window.mouseOverEnabled) { mouseOver.addListener(); }
+
+    // custom tracks get little trash icons
+    $("div.trackDeleteIcon").click( onTrackDelIconClick );
 
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.
@@ -5491,31 +5507,37 @@ function hgtWarnTiming(maxSeconds) {
     /* show a dialog box if the page load time was slower than x seconds. Has buttons to hide or never show this again. */
     var loadTime = window.performance.timing.domContentLoadedEventStart-window.performance.timing.navigationStart; /// in msecs
     var loadSeconds = loadTime/1000;
-    var skipNotification = localStorage.getItem("hgTracks.hideSpeedNotification");
-    if (loadSeconds > maxSeconds && !skipNotification) {
-        var div = document.createElement("div");
-        div.style.display = "none";
-        div.style.width = "90%";
-        div.style.marginLeft = "100px";
-        div.id = "notifBox";
-        div.innerHTML = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
-            "the UCSC Genome Browser quick and responsive. See our "+
-            "<b><a href='../FAQ/FAQtracks.html#speed' target='_blank'>display speed FAQ</a></b> for "+
-            "common causes and solutions to slow performance. If this problem continues, you can create a  "+
-            "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.<br>"+
-            "<div style='text-align:center'>"+
-            "<button id='notifyHide'>Close</button>&nbsp;"+
-            "<button id='notifyHideForever'>Don't show again</button>"+
-            "</div>";
-        document.body.appendChild(div);
-        notifBoxShow();
+    if (loadSeconds < maxSeconds)
+        return;
 
-        $("#notifyHide").click( function() {
-            $("#notifBox").remove();
-        });
-        $("#notifyHideForever").click( function() {
-            $("#notifBox").remove();
-            localStorage.setItem("hgTracks.hideSpeedNotification", "1");
-        });
-    }
+    var skipNotification = localStorage.getItem("hgTracks.hideSpeedNotification");
+    dumpCart(loadSeconds, skipNotification);
+        
+    if (skipNotification)
+        return;
+
+    var div = document.createElement("div");
+    div.style.display = "none";
+    div.style.width = "90%";
+    div.style.marginLeft = "100px";
+    div.id = "notifBox";
+    div.innerHTML = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
+        "the UCSC Genome Browser quick and responsive. See our "+
+        "<b><a href='../FAQ/FAQtracks.html#speed' target='_blank'>display speed FAQ</a></b> for "+
+        "common causes and solutions to slow performance. If this problem continues, you can create a  "+
+        "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.<br>"+
+        "<div style='text-align:center'>"+
+        "<button id='notifyHide'>Close</button>&nbsp;"+
+        "<button id='notifyHideForever'>Don't show again</button>"+
+        "</div>";
+    document.body.appendChild(div);
+    notifBoxShow();
+
+    $("#notifyHide").click( function() {
+        $("#notifBox").remove();
+    });
+    $("#notifyHideForever").click( function() {
+        $("#notifBox").remove();
+        localStorage.setItem("hgTracks.hideSpeedNotification", "1");
+    });
 }

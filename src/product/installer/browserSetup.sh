@@ -354,6 +354,8 @@ browser.indelOptions=on
 freeType=on
 freeTypeDir=../htdocs/urw-fonts
 
+cramRef=$APACHEDIR/userdata/cramCache
+
 EOF_HGCONF
 
 read -r -d '' HELP_STR << EOF_HELP
@@ -1433,6 +1435,10 @@ function installBrowser ()
 
     mysqlDbSetup
 
+    # setup the cram cache so remote cram files will load correctly
+    mkdir -p $APACHEDIR/userdata/cramCache/{error,pending}
+    chmod -R 777 $APACHEDIR/userdata/cramCache
+
     # -------------------
     # CGI installation
     # -------------------
@@ -1629,6 +1635,8 @@ function downloadGenomes
 
     set +f
 
+    mysqlCheck
+
     goOffline # modify hg.conf and remove all statements that use the UCSC download server
 
     echo2
@@ -1694,6 +1702,13 @@ function startMysql
     fi
 }
 
+function mysqlCheck
+# check all mysql tables. Rarely, some of them are in an unclosed state on the download server, this command will close them
+{
+    echo2 Checking all mysql tables after the download to make sure that they are closed
+    mysqlcheck --all-databases --auto-repair --quick --fast --silent
+}
+
 # only download a set of minimal mysql tables, to make a genome browser that is using the mysql failover mechanism
 # faster. This should be fast enough in the US West Coast area and maybe even on the East Coast.
 function downloadMinimal
@@ -1727,7 +1742,8 @@ function downloadMinimal
     echo2 Copying hgFixed.trackVersion, required for most tracks
     $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/trackVersion.* $MYSQLDIR/hgFixed/ 
     echo2 Copying hgFixed.refLink, required for RefSeq tracks across all species
-    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
+    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/
+    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
 
     startMysql
 
@@ -1742,6 +1758,8 @@ function downloadMinimal
             mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
         done
     done
+
+    mysqlCheck
 
     echo2 
     echo2 The mirror should be functional now. It contains some basic assembly tables 

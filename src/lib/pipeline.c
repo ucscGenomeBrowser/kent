@@ -48,8 +48,8 @@ struct pipeline
     pid_t groupLeader;         /* process group id, or -1 if not set. This is pid of group leader */
     unsigned int timeout;      /* timeout, in seconds, or zero */
     char *procName;            /* name to use in error messages. */
-    int pipeFd;                /* fd of pipe to/from process, -1 if none */
     unsigned options;          /* options */
+    int pipeFd;                /* fd of pipe to/from process, -1 if none */
     FILE* pipeFh;              /* optional stdio around pipe */
     char* stdioBuf;            /* optional stdio buffer */
     struct lineFile *pipeLf;   /* optional lineFile around pipe */
@@ -577,7 +577,8 @@ if (opts & pipelineRead)
 else
     otherEndFd = (otherEndFile == NULL) ? STDOUT_FILENO : openWrite(otherEndFile, append);
 struct pipeline *pl = pipelineOpenFd(cmds, opts, otherEndFd, stderrFd, timeout);
-safeClose(&otherEndFd);
+if (otherEndFile != NULL)
+    safeClose(&otherEndFd);
 if (stderrFile != NULL)
     safeClose(&stderrFd);
 return pl;

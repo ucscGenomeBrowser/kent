@@ -454,7 +454,7 @@ def joinerCheckTemplateGen(params):
         "identifier wgEncodeGencodeTranscriptSupportV{gencodeVer}",
         '"Link together Gencode Transcript Support table with Attributes table"',
         "    {orgHgDb}.wgEncodeGencodeTranscriptSupportV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.04",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.02",
         "",
         "identifier wgEncodeGencodeTranscriptionSupportLevelV{gencodeVer}",
         '"Link together Gencode Transcription Support Level table with Attributes table"',
@@ -480,7 +480,7 @@ def joinerCheckTemplateGen(params):
         "identifier wgEncodeGencodeExonSupportV{gencodeVer}",
         '"Link together Gencode Exon Support table with Attributes table"',
         "    {orgHgDb}.wgEncodeGencodeExonSupportV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.80",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.50",
         ""))
     yield forBoth(params, (
         "# end Gencode V{gencodeVer}",

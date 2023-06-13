@@ -6,7 +6,8 @@ priority 1
 visibility pack
 type bigGenePred knownGenePep knownGeneMrna
 bigDataUrl /gbdb/hg38/gencode/gencodeV43.bb
-downloadUrl GFF https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
+downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
+downloadUrl.2 "Another File" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
 baseColorDefault genomicCodons
 group genes
 isGencode3 on

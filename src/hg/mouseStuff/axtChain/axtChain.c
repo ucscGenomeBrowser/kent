@@ -154,30 +154,18 @@ else
     }
 }
 
-static void loadFaSeq(struct hash *faHash, char *newName, char strand,
-	char **pName, struct dnaSeq **pSeq, char *pStrand, char *fastaFileName)
-/* retrieve sequence from hash.  Reverse complement
- * if necessary. */
+static void loadFaSeq(struct hash *faHash, char *newName,
+	char **pName, struct dnaSeq **pSeq, char *fastaFileName)
+/* retrieve sequence from hash.  Leave reverse complementing (and restoration to original strand)
+ * up to caller. */
 {
 struct dnaSeq *seq;
-if (sameString(newName, *pName))
-    {
-    if (strand != *pStrand)
-        {
-	seq = *pSeq;
-	reverseComplement(seq->dna, seq->size);
-	*pStrand = strand;
-	}
-    }
-else
+if (differentString(newName, *pName))
     {
     *pName = newName;
     *pSeq = seq = hashFindVal(faHash, newName);
     if (NULL == seq)
         errAbort("ERROR: can not find sequence name '%s' from fasta file '%s'\n", newName, fastaFileName);
-    *pStrand = strand;
-    if (strand == '-')
-        reverseComplement(seq->dna, seq->size);
     verbose(1, "Loaded %d bases from %s fa\n", seq->size, newName);
     }
 }
@@ -405,6 +393,8 @@ struct hash *tFaHash = newHash(0);
 FILE *faF;
 boolean qIsTwoBit = twoBitIsFile(qNibDir);
 boolean tIsTwoBit = twoBitIsFile(tNibDir);
+boolean qIsFa = optionExists("faQ");
+boolean tIsFa = optionExists("faT");
 
 axtScoreSchemeDnaWrite(scoreScheme, f, "axtChain");
 
@@ -416,7 +406,7 @@ if (optionExists("psl"))
 else
     spList = readAxtBlocks(axtIn, pairHash, f);
 
-if (optionExists("faQ"))
+if (qIsFa)
     {
     faF = mustOpen(qNibDir, "r");
     verbose(1, "reading query fasta sequence from '%s'\n", qNibDir);
@@ -424,7 +414,7 @@ if (optionExists("faQ"))
         hashAdd(qFaHash, seq->name, seq);
     fclose(faF);
     }
-if (optionExists("faT"))
+if (tIsFa)
     {
     faF = mustOpen(tNibDir, "r");
     verbose(1, "reading target fasta sequence from '%s'\n", tNibDir);
@@ -437,10 +427,13 @@ for (sp = spList; sp != NULL; sp = sp->next)
     slReverse(&sp->blockList);
     removeExactOverlaps(&sp->blockList);
     verbose(1, "%d blocks after duplicate removal\n", slCount(sp->blockList));
-    if (optionExists("faQ"))
+    if (qIsFa)
         {
         assert (qFaHash != NULL);
-        loadFaSeq(qFaHash, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand, qNibDir);
+        loadFaSeq(qFaHash, sp->qName, &qName, &qSeq, qNibDir);
+        qStrand = sp->qStrand;
+        if (sp->qStrand == '-')
+            reverseComplement(qSeq->dna, qSeq->size);
         }
     else
 	{
@@ -449,10 +442,10 @@ for (sp = spList; sp != NULL; sp = sp->next)
 	loadIfNewSeq(qNibDir, qIsTwoBit, sp->qName, sp->qStrand,
 		&qName, &qSeq, &qStrand);
 	}
-    if (optionExists("faT"))
+    if (tIsFa)
 	{
 	assert (tFaHash != NULL);
-	loadFaSeq(tFaHash, sp->tName, '+', &tName, &tSeq, &tStrand, tNibDir);
+	loadFaSeq(tFaHash, sp->tName, &tName, &tSeq, tNibDir);
 	}
     else
 	{
@@ -462,6 +455,8 @@ for (sp = spList; sp != NULL; sp = sp->next)
 		&tName, &tSeq, &tStrand);
 	}
     chainPair(sp, qSeq, tSeq, &chainList, details);
+    if (qIsFa && sp->qStrand == '-')
+        reverseComplement(qSeq->dna, qSeq->size);
     }
 slSort(&chainList, chainCmpScore);
 for (chain = chainList; chain != NULL; chain = chain->next)

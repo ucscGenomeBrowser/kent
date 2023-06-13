@@ -38,8 +38,11 @@ char *genome;
 char **chromosomes, **bpResolutions, **attributes;
 int *chromSizes, nChroms, nBpRes, nAttributes;
 
-Straw *newStraw = cStrawOpen(filename);
-char *errMsg = cStrawHeader(newStraw, &genome, &chromosomes, &chromSizes, &nChroms, &bpResolutions, &nBpRes, NULL, NULL, &attributes, &nAttributes);
+Straw *newStraw = NULL;
+char *errMsg = cStrawOpen(filename, &newStraw);
+if (errMsg != NULL)
+    return errMsg;
+errMsg = cStrawHeader(newStraw, &genome, &chromosomes, &chromSizes, &nChroms, &bpResolutions, &nBpRes, NULL, NULL, &attributes, &nAttributes);
 if (errMsg != NULL)
     return errMsg;
 

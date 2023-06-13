@@ -35,3 +35,35 @@ cat manual.bed chr*.bed | sort -k1,1 -k2,2n | tawk '{desc=$5; desc2=$6; $5="0"; 
 bedToBigBed all.bed /hive/data/genomes/hg38/chrom.sizes comments.bb -tab -as=manual.as -type=bed9+ -extraIndex=name
 cut -f4,10 all.bed > notes.txt
 ixIxx notes.txt notes.ix notes.ixx
+
+# Tue Apr 11 02:12:18 PDT 2023
+# add the GRC exclude list, from MarkD
+cat ~markd/public_html/browser/grc-bad/GCA_000001405.15_GRCh38_GRC_exclusions.bed | grep -v description > grcExclusions.bed
+bedSort grcExclusions.bed grcExclusions.bed 
+bedToBigBed grcExclusions.bed ../../chrom.sizes bb/grcExclusions.bb -tab -type=bed4
+
+# Add highly reproducible regions (#31122):
+# https://zenodo.org/record/5275189#.ZEhKRezMI-S
+cd /hive/data/genomes/hg38/bed/problematic/
+mkdir highRepro
+
+# The zenodo link has a bunch of links with "?download=1" on the url, copy and paste them
+# into a text file to remove that and then download them
+vim urls.txt
+wget --quiet --input-file=urls.txt
+# all of the beds are just bed3's
+head *.bed
+==> CQ-56.bed <==
+chr1    12857   12904
+chr1    12932   13028
+chr1    13129   13367
+chr1    13520   13633
+...
+
+# so turn those into bigBeds and link everything to /gbdb
+for f in $(ls *.bed); do base=$(basename -s .bed $f); bedSort ${f} ${f}.sorted; bedToBigBed ${f}.sorted../../../chrom.sizes ${base}.bb; done
+# for some reason tabix doesn't like to be run in a for loop from ls, needs find
+for f in $(find . -name "*.vcf.gz"); do tabix --verbosity 3 -p vcf "${f}"; done
+mkdir -p /gbdb/hg38/problematic/highRepro
+ln -s `pwd`/*.bb /gbdb/hg38/problematic/highRepro/
+ln -s `pwd`/*.vcf.gz* /gbdb/hg38/problematic/highRepro/

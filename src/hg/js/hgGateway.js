@@ -725,7 +725,7 @@ var hgGateway = (function() {
             if (activeTaxIds[taxId]) {
                 // When user clicks on icon, set the taxId (default database);
                 // scroll the image to that species and clear the species autocomplete input.
-                onClick = setTaxId.bind(null, taxId, null, true, true);
+                onClick = setTaxId.bind(null, taxId, null, null, true, true);
                 // Onclick for both the icon and its sibling label:
                 $('.jwIconSprite' + name).parent().children().click(onClick);
                 haveIcon = true;
@@ -1562,7 +1562,17 @@ var hgGateway = (function() {
         } else {
             // User has entered a search term with no suggestion, go to the disambiguation
             // page so the user can choose a position
-            // but first check if just a plain chromosome name was entered:
+            // redirect to hgBlat if the input looks like a DNA sequence
+            // minimum length=19 so we do not accidentally redirect to hgBlat for a gene identifier 
+            // like ATG5
+            var dnaRe = new RegExp("^(>[^\n\r ]+[\n\r ]+)?(\\s*[actgnACTGN \n\r]{19,}\\s*)$");
+            if (dnaRe.test(searchTerm)) {
+                var blatUrl = "hgBlat?type=BLAT%27s+guess&userSeq="+searchTerm;
+                window.location.href = blatUrl;
+                return false;
+            }
+
+            // also check if just a plain chromosome name was entered:
             $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
             cmd = {getChromName: {'searchTerm': searchTerm, 'db': uiState.db}};
             cart.send(cmd, onSuccess, onFail);

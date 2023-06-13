@@ -46,7 +46,7 @@ void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
 struct trackDb *pcrResultFakeTdb();
 /* Construct a trackDb record for PCR Results track. */
 
-char *pcrResultItemAccName(char *acc, char *name);
+char *pcrResultItemAccName(char *acc, char *name, struct psl *origPsl);
 /* If a display name is given in addition to the acc, concatenate them
  * into a single name that must match a non-genomic target item's name
  * in the targetDb .2bit.  Do not free the result. */

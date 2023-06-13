@@ -1062,11 +1062,13 @@ if (!isEmpty(dir))
 
     if (status && isEmpty(status->errorMessage))
         {
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
+
+        cartSetString(cart, "db", buffer);
         if (cgiOptionalString("db"))
             {
             /* user specified db on URL, we need to decorate and put it back. */
-            char buffer[4096];
-            safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
             cgiVarSet("db",  cloneString(buffer));
             }
 

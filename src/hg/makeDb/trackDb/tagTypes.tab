@@ -130,7 +130,7 @@ dividers *
 dragAndDrop *
 drawMode hic
 doWiggle bigBed
-downloadUrl *
+downloadUrl* *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
@@ -281,7 +281,7 @@ lollipopField bigBed bigLolly
 lollyField bigBed bigLolly
 lollyMaxSize bigBed bigLolly
 lollySizeField bigBed bigLolly
-logoMaf wig
+logoMaf wig bigWig
 longLabel *
 longlabel genePred
 longLabelClip *
@@ -447,7 +447,7 @@ sGroup_Strongylida wigMaf
 sGroup_Sudan_1976-9 wigMaf
 sGroup_Tylenchina wigMaf
 sGroup_vertebrate wigMaf
-sGroup_Vertebrate wigMaf
+sGroup_Vertebrate wigMaf bigMaf
 sGroup_Vertebrates wigMaf
 sGroup_Virus wigMaf
 sGroup_worm wigMaf

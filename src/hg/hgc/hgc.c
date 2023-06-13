@@ -1747,6 +1747,27 @@ for (tmp = embeddedTblSetting2; tmp != NULL; tmp = tmp->next)
     }
 }
 
+void printFieldLabel(char *entry)
+/* print the field label, the first column in the table, as a <td>. Allow a
+ * longer description after a |-char, as some fields are not easy to
+ * understand. */
+{
+char *afterPipe = strchr(entry, '|');
+if (afterPipe)
+    *afterPipe = 0;
+
+printf("<tr><td>%s", entry);
+
+if (afterPipe)
+    {
+    // Could also have a "?" icon and show the description on mouse over
+    afterPipe++; // skip past | character
+    printf("<br><span class='bedExtraTblNote'>%s</small>", afterPipe);
+    }
+
+puts("</td>");
+}
+
 #define TDB_STATICTABLE_SETTING "extraDetailsTable"
 #define TDB_STATICTABLE_SETTING_2 "detailsStaticTable"
 int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
@@ -1890,7 +1911,8 @@ for (;col != NULL && count < fieldCount;col=col->next)
         entry = "Status of CDS end annotation (none, unknown, incomplete, or complete)";
     else
         entry = col->comment;
-    printf("<tr><td>%s</td>", entry); // bold style now in HGStyle.css
+
+    printFieldLabel(entry);
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
@@ -3685,49 +3707,40 @@ else
     }
 }
 
-void doSnakeChainClick(struct trackDb *tdb, char *itemName)
+void doSnakeChainClick(struct trackDb *tdb, char *itemName, char *otherDb)
 /* Put up page for chain snakes. */
 {
 struct trackDb *parentTdb = trackDbTopLevelSelfOrParent(tdb);
-char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
-if (otherSpecies == NULL)
-    otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
-
-char *hubName = cloneString(database);
-char otherDb[4096];
 char *qName = cartOptionalString(cart, "qName");
 int qs = atoi(cartOptionalString(cart, "qs"));
 int qe = atoi(cartOptionalString(cart, "qe"));
 int qWidth = atoi(cartOptionalString(cart, "qWidth"));
-char *qTrack = cartString(cart, "g");
-if(isHubTrack(qTrack) && ! trackHubDatabase(database))
-    hubName = cloneString(qTrack);
 
-/* current mouse strain hal file has incorrect chrom names */
 char *aliasQName = qName;
-// aliasQName = "chr1";  // temporarily make this work for the mouse hal
 
-if(trackHubDatabase(database) || isHubTrack(qTrack))
-    {
-    char *ptr = strchr(hubName + 4, '_');
-    *ptr = 0;
-    safef(otherDb, sizeof otherDb, "%s_%s", hubName, otherSpecies);
-    }
-else
-    {
-    safef(otherDb, sizeof otherDb, "%s", otherSpecies);
-    }
+boolean otherIsActive = FALSE;
+char *hubUrl = NULL;
+if (hDbIsActive(otherDb))
+   otherIsActive = TRUE;
+else 
+    hubUrl = genarkUrl(otherDb); // may be NULL
 
 char headerText[256];
 safef(headerText, sizeof headerText, "reference: %s, query: %s\n", trackHubSkipHubName(database), trackHubSkipHubName(otherDb) );
 genericHeader(parentTdb, headerText);
 
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, qs, qe, hubName, trackHubSkipHubName(database), aliasQName, qs, qe, trackHubSkipHubName(otherDb));
+if (hubUrl != NULL)
+    printf("<A HREF=\"hgTracks?hubUrl=%s&genome=%s&position=%s:%d-%d\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", hubUrl, otherDb, aliasQName,  qs, qe,   aliasQName, qs, qe, trackHubSkipHubName(otherDb));
+else if (otherIsActive)
+    printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, qs, qe, aliasQName, qs, qe, trackHubSkipHubName(otherDb));
 
 int qCenter = (qs + qe) / 2;
 int newQs = qCenter - qWidth/2;
 int newQe = qCenter + qWidth/2;
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,hubName, trackHubSkipHubName(database), aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+if (hubUrl != NULL)
+   printf("<A HREF=\"hgTracks?hubUrl=%s&genome=%s&position=%s:%d-%d\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", hubUrl,otherDb, aliasQName, newQs, newQe,aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+else if (otherIsActive)
+    printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
 printTrackHtml(tdb);
 } 
 
@@ -3738,7 +3751,7 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
 boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", FALSE);
 
 if (doSnake)
-    return doSnakeChainClick(tdb, item);
+    return doSnakeChainClick(tdb, item, otherDb);
 
 struct twoBitFile *otherTbf = getOtherTwoBitUrl(tdb);
 char *thisOrg = hOrganism(database);
@@ -5751,7 +5764,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             if (bed->strand[0])
                 fb->strand = bed->strand[0];
             if (!clipFbToWindow(fb, winStart,winEnd))
-                break;
+                continue;
             slAddHead(&fbList, fb);
             }
         }
@@ -7094,7 +7107,19 @@ if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target)
     errAbort("PCR Result track has disappeared!");
 
 char *fPrimer, *rPrimer;
-pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
+// the item name contains the forward and reverse primers
+int maxSplits = 2;
+char *splitQName[maxSplits];
+int numSplits = chopString(cloneString(item), "_", splitQName, sizeof(splitQName));
+if (numSplits == maxSplits)
+    {
+    fPrimer = splitQName[0];
+    touppers(fPrimer);
+    rPrimer = splitQName[1];
+    touppers(rPrimer);
+    }
+else
+    pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
 printf("<H2>PCR Results (<TT>%s %s</TT>)</H2>\n", fPrimer, rPrimer);
 printf("<B>Forward primer:</B> 5' <TT>%s</TT> 3'<BR>\n", fPrimer);
 printf("<B>Reverse primer:</B> 5' <TT>%s</TT> 3'<BR>\n", rPrimer);
@@ -26999,7 +27024,7 @@ else if (sameWord(table, "dgv") || sameWord(table, "dgvBeta"))
     {
     doDgv(tdb, item);
     }
-else if (sameWord(table, "dgvMerged") || sameWord(table, "dgvSupporting"))
+else if ((sameWord(table, "dgvMerged") || sameWord(table, "dgvSupporting")) && (tdb && !startsWith("bigBed", tdb->type)))
     {
     doDgvPlus(tdb, item);
     }

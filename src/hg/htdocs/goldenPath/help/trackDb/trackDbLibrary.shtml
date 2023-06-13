@@ -656,10 +656,16 @@
     download links directly specified in trackDb makes it possible show these links 
     outside the description HTML pages. The URLs here are shown above the description page,
     right under the "data format" link. The <tt>label</tt> can be any string and 
-    the URL should be absolute, including the server.
+    the URL should be absolute, including the server. Either one can contain spaces, but they must
+    be double-quoted then.
     </P>
+    <P>This is one of the few statements that can be specified multiple times. In this case, all 
+    statements must have a .number suffix, e.g. .1, .2, ... </P>
     <P><B>Example:</B></P>
     <pre>   downloadUrl GFF https://mywebsite.com/ucscTrack.gff.gz</pre>
+    <B>or</B><br>
+    <pre>   downloadUrl.1 "GFF Format" https://mywebsite.com/ucscTrack.gff.gz</pre>
+    <pre>   downloadUrl.2 "BED Format" https://mywebsite.com/ucscTrack.bed.gz</pre>
 </DIV>
 
 <DIV class="otherSpecies"><span class="types all"></span>

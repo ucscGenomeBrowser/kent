@@ -174,14 +174,17 @@ hashAdd(tdb->settingsHash, "nextItemButton", cloneString("off"));
 return tdb;
 }
 
-char *pcrResultItemAccName(char *acc, char *name)
+char *pcrResultItemAccName(char *acc, char *name, struct psl *origPsl)
 /* If a display name is given in addition to the acc, concatenate them
  * into a single name that must match a non-genomic target item's name
  * in the targetDb .2bit.  Do not free the result. */
 {
 static char accName[256];
 if (isEmpty(name))
-    safecpy(accName, sizeof(accName), acc);
+    if (origPsl)
+        return cloneString(origPsl->qName);
+    else
+        safecpy(accName, sizeof(accName), acc);
 else
     safef(accName, sizeof(accName), "%s__%s", acc, name);
 return accName;

@@ -2266,6 +2266,7 @@ off_t udcFileSize(char *url)
 /* fetch file size from given URL or local path 
  * returns -1 if not found. */
 {
+verbose(4, "getting file size for %s", url);
 if (udcIsLocal(url))
     return fileSize(url);
 

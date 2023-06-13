@@ -16,12 +16,13 @@ cd ..
 rsync -avzp --filter "merge build/kent-core/makeKentCore.rules" ./ ~/kent-core/ --prune-empty-dirs --delete
 cp src/tagStorm/LICENSE ~/kent-core/
 cp build/kent-core/README.md ~/kent-core/
+cp build/kent-core/makefile ~/kent-core/
 version=`git describe --tags | cut -d_ -f1`
 echo You can now run: "cd ~/kent-core && git add -A && git commit -m 'release '$version && git tag $version && git push --tags"
+echo consider un-commenting the final lines in the script kent/build/makeKentCore if it works
 #not automating this just yet, as this script is new:
 #cd ~/kent-core/
 #git add -A
-#git commit -m 'all changes of current release'
-#version=`git describe --tags | cut -d_ -f1`
+#git commit -m "release $version"
 #git tag $version
-##git push --tags
+#git push --tags

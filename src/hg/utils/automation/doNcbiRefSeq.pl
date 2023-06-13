@@ -996,7 +996,9 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;
-$dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $db));
+if (! $opt_assemblyHub) {
+  $dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $db));
+}
 
 # Do everything.
 $stepper->execute();
