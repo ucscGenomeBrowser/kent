@@ -22,7 +22,7 @@ static void resetLocalStorage()
  * relevant to the particular web browser where the browser runs, e.g. notification settings, maybe one day font sizes and color schemes of the UI.
  * QA must be able to reset these, too, so do this here now */
 {
-jsInline("localStorage.removeItem('hgTracks.hideSpeedNotification');");
+jsInline("localStorage.clear();");
 }
 
 void doMiddle()
