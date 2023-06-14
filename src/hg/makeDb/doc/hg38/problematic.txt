@@ -71,5 +71,5 @@ ln -s `pwd`/*.vcf.gz* /gbdb/hg38/problematic/highRepro/
 # turns the beds into one single bed with the overlapped regions:
 for f in $(ls *.bed); do echo $f; n=${f/.bed/}; tawk -v name=${n} '{print $0,name}' $f > ${n}.bed4; done
 cat *.bed4 | sort -k1,1 -k2,2n > highRepro.allRegions
-bedOverlapMerge highRepro.allRegions > highRepro.merged
-bedToBigBed -type=bed3+ -tab -as=highRepro.as highRepro.merged ../../../chrom.sizes highRepro.bb
+bedOverlapMerge highRepro.allRegions | tawk '{print $0,0,".",$2,$2,"0,0,0",gensub(/\//, ",", "g",$4)}' > highRepro.merged
+bedToBigBed -type=bed9+1 -tab -as=highRepro.as highRepro.merged ../../../chrom.sizes highRepro.bb
