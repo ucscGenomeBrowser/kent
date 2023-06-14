@@ -180,7 +180,7 @@ boolean doPliColors = FALSE;
 /* have the 10 scaffold colors been allocated */
 static boolean scafColorsMade = FALSE;
 
-int maxItemsInFullTrack = 1000;  /* Maximum number of items displayed in full */
+int maxItemsInFullTrack = 10000;  /* Maximum number of items displayed in full */
 int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 
 /* These variables persist from one incarnation of this program to the
@@ -12802,7 +12802,7 @@ if (isNotEmpty(ret))
 
     // now phenotype information
     sqlSafef(query,sizeof(query),
-            "select GROUP_CONCAT(omimPhenotype.description, '|',inhMode  , '|',omimPhenoMapKey SEPARATOR '$') from omimGene2, omimGeneMap, omimPhenotype where omimGene2.name=omimGeneMap.omimId and omimGene2.name=omimPhenotype.omimId and omimGene2.name =%s", name);
+            "select GROUP_CONCAT(omimPhenotype.description, '|',inhMode  , '|',omimPhenoMapKey SEPARATOR '$') from omimGene2, omimGeneMap, omimPhenotype where omimGene2.name=omimGeneMap.omimId and omimGene2.name=omimPhenotype.omimId and omimGene2.name =%s and omimGene2.chrom=\'%s\'", name, chromName);
     ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 
     if (ret)

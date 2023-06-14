@@ -67,3 +67,9 @@ for f in $(find . -name "*.vcf.gz"); do tabix --verbosity 3 -p vcf "${f}"; done
 mkdir -p /gbdb/hg38/problematic/highRepro
 ln -s `pwd`/*.bb /gbdb/hg38/problematic/highRepro/
 ln -s `pwd`/*.vcf.gz* /gbdb/hg38/problematic/highRepro/
+
+# turns the beds into one single bed with the overlapped regions:
+for f in $(ls *.bed); do echo $f; n=${f/.bed/}; tawk -v name=${n} '{print $0,name}' $f > ${n}.bed4; done
+cat *.bed4 | sort -k1,1 -k2,2n > highRepro.allRegions
+bedOverlapMerge highRepro.allRegions > highRepro.merged
+bedToBigBed -type=bed3+ -tab -as=highRepro.as highRepro.merged ../../../chrom.sizes highRepro.bb

@@ -1169,7 +1169,7 @@ with the UCSC Genome Browser.</p>
 <p>
 For a deeper level of debugging, system administrators can use the open ssl client command:
 <pre>
-openssl s_client -connect yourdomain.com:443 -servername yourdomain.com
+openssl s_client -trusted_first -connect yourdomain.com:443 -servername yourdomain.com
 </pre></p>
 <p>
 Various online SSL Server Test sites have great detailed documentation about how

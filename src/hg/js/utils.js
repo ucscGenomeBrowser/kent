@@ -3758,6 +3758,15 @@ function parseUrl(url) {
     return {protocol: protocol, serverName: serverName, pathInfo: pathInfo, queryString: queryString};
 }
 
+function dumpCart(seconds, skipNotification) {
+    // dump current cart
+    let currUrl = parseUrl(window.location.href);
+    logUrl = currUrl.protocol + "//" + currUrl.serverName + "/" + currUrl.pathInfo + "?hgsid=" + getHgsid() + "&_dumpCart=" + encodeURIComponent(seconds) + "&skipNotif=" + skipNotification;
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", logUrl, true);
+    xmlhttp.send();  // sends request and exits this function
+}
+
 function writeToApacheLog(msg) {
     // send msg to web servers error_log
     // first need to figure out what server and CGI we are requesting:

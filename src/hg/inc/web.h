@@ -79,6 +79,9 @@ void webNewSectionHeaderEnd();
 void webEnd();
 /* output the footer of the HTML page */
 
+void webEndExtra(char *footer);
+/* output the footer of the HTML page with extra endText as desired */
+
 void webEndSection();
 /* Close down a section */
 

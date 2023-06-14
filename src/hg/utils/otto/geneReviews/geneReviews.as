@@ -11,5 +11,5 @@ table geneReviews
     uint thickEnd;     "End position"
     uint reserved;     "Used as itemRgb as of 2004-11-22"
     uint diseaseCount; "Count of related diseases"
-    string diseases;  "List of related diseases (semi-colon separated), for display"
+    lstring diseases;  "List of related diseases (semi-colon separated), for display"
     )

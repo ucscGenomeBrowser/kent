@@ -226,10 +226,8 @@ puts("<P>");
 /* row for error message */
 if (isNotEmpty(err))
     {
-    char *fullErrString = replaceChars(err, "\n", "<br>\n");
     printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:%s; font-style:italic;'>"
-           "%s</span><P>%s</B><P>", warnOnly ? "ORANGE" : "RED", warnOnly ? "Warning" : "Error", fullErrString);
-    freeMem(fullErrString);
+           "%s</span><P>%s</B><P>", warnOnly ? "ORANGE" : "RED", warnOnly ? "Warning" : "Error", htmlEncode(err));
     /* send two lines of the message to the apache error log also: */
     char *tmpString = replaceChars(err, "\n", " ");
     fprintf(stderr, "hgCustom load error: %s\n", tmpString);

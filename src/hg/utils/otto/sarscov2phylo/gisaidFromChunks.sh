@@ -26,7 +26,7 @@ cd /hive/users/angie/gisaid
 # Also remove a stray comma in a name that caused Newick parsing error ("Hungary/US-32533w,/2020").
 # Keep the strain|epiId|date "full names".
 time xzcat chunks/gisaid_epi_isl_*.fa.xz \
-| sed -re 's@^>hCo[Vv]-19/+@>@;  s/[ '"'"',()]//g;  s/\r$//;' \
+| sed -re 's@^>hCo[Vv]-19/+@>@;  /^>/ s/[ '"'"',()]//g;  s/\r$//;' \
 | xz -T 20 \
     > gisaid_fullNames_$today.fa.xz
 
@@ -34,22 +34,30 @@ time xzcat chunks/gisaid_epi_isl_*.fa.xz \
 fastaNames gisaid_fullNames_$today.fa.xz \
 | awk -F\| -vOFS="\t" '{print $0, $1, $2, $3;}' \
 | sort -u \
-    > tmp.first3
+    > tmp.first3 &
 # Sequence length
-faSize -detailed  <(xzcat gisaid_fullNames_$today.fa.xz) | sort -u > tmp.lengths
+faSize -detailed  <(xzcat gisaid_fullNames_$today.fa.xz) | sort -u > tmp.lengths &
 # Lineage & clade assignments
 sort -u chunks/pangolin.tsv \
-    > tmp.lineage
+    > tmp.lineage &
 sed -re 's/"//g;' chunks/nextclade.tsv \
 | sort -u \
-    > tmp.clade
+    > tmp.clade &
 # Countries -- go back to unstripped sequence names:
 xzcat chunks/gisaid_epi_isl_*.fa.xz \
 | grep ^\> \
 | sed -re 's@^>hCo[Vv]-19/+@@;' \
 | $scriptDir/gisaidNameToCountry.pl \
 | sort -u \
-    > tmp.country
+    > tmp.country &
+
+wait
+
+# Make fasta with strain-name headers a la nextfasta.
+xzcat gisaid_fullNames_$today.fa.xz \
+| sed -re '/^>/ s/\|.*//' \
+| xz -T 20 \
+    > sequences_batch_$today.fa.xz &
 
 # Join locally computed fields and sort by EPI ID for joining with latest real nextmeta
 join -t$'\t' -a 1 tmp.first3 tmp.lengths \
@@ -85,11 +93,7 @@ zcat $lastRealNextmeta \
 wc -l metadata_batch_$today.tsv
 pigz -p 8 -f metadata_batch_$today.tsv
 
-# Make fasta with strain-name headers a la nextfasta.
-xzcat gisaid_fullNames_$today.fa.xz \
-| sed -re '/^>/ s/\|.*//' \
-| xz -T 20 \
-    > sequences_batch_$today.fa.xz
+wait
 
 # Clean up
 rm tmp.*

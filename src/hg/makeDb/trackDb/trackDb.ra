@@ -2797,7 +2797,7 @@ longLabel Pfam Domains in UCSC Genes
 group genes
 type bed 12
 color 20,0,250
-url http://pfam.xfam.org/family/$$
+url https://www.ebi.ac.uk/interpro/search/text/$$/?page=1#table
 
 track numtSeq2012
 compositeTrack on
@@ -3006,10 +3006,9 @@ type bed 3 .
 track evaSnp
 shortLabel EVA SNP Release 3
 longLabel Short Genetic Variants from European Variant Archive Release 3
-release alpha
 type bigBed 9 +
 group varRep
-visibility dense
+visibility hide
 itemRgb on
 mouseOver $ref>$alt $ucscClass $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp.bb
