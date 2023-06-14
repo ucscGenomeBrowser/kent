@@ -48,7 +48,6 @@ group varRep
 visibility hide
 #type bigBed 9 +
 html dgvPlusGold
-pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
     track dgvMerged override
     parent dgvPlus on
@@ -61,7 +60,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 202
     dataVersion 2020-02-25
     searchIndex name
     mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Size:$_size; Type:$varType; Affected genes:$genes
-    pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
     track dgvSupporting override
     parent dgvPlus
@@ -74,7 +72,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 202
     dataVersion 2020-02-25
     searchIndex name
     mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Size:$_size; Type:$varType; Affected genes:$genes
-    pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
     track dgvGold
     parent dgvPlus
