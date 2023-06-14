@@ -59,7 +59,7 @@ group map
         parent highlyReproducible
         shortLabel Highly Reproducible Regions
         longLabel Highly Reproducible Regions
-        type bigBed 3 .
+        type bigBed 9 +
         view beds
         visibility dense
 
@@ -69,7 +69,9 @@ group map
             subGroups view=beds
             shortLabel Highly Reproducible Regions
             longLabel Highly Reproducible Regions
-            type bigBed 3 .
+            type bigBed 9 +
+            filterValues.sampleNames CQ-56,CQ-7,CQ-8,HR_NA10835,HR_NA12248,HR_NA12249,HR_NA12878
+            filterType.sampleNames multipleListOr
 
         track highReproVcfs
         parent highlyReproducible

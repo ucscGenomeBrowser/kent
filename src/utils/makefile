@@ -83,6 +83,7 @@ UTILS_APPLIST = \
 	pslMap \
 	pslMapPostChain \
 	pslPosTarget \
+	pslProtToRnaCoords \
 	pslRc \
 	pslRemoveFrameShifts \
 	pslScore \
