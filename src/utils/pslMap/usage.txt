@@ -41,9 +41,9 @@ Options:
    the remainder is a standard PSL.  When an inPsl record is mapped, only
    mapping records are used with the corresponding qName.
   -inType=type - input alignment type (prot-port, prot-na, na-na)
-   This is the type swapping if -swapIn is supplied.
+   This is the type after swapping if -swapIn is supplied.
   -mapType=type - map alignment type (prot-port, prot-na, na-na)
-   This is the type swapping if -swapMap is supplied.
+   This is the type after swapping if -swapMap is supplied.
   -mapInfo=file - output a file with information about each mapping.
    The file has the following columns:
      o srcQName, srcQStart, srcQEnd, srcQSize - qName, etc of
