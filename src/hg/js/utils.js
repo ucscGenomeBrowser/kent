@@ -795,13 +795,51 @@ if (debug)
 return content;
 }
 
-function notifBoxShow() {
+function notifBoxShow(cgiName, keyName) {
     /* move the notification bar div under '#TrackHeaderForm' */
-    var notifEl = document.getElementById("notifBox");
+    let lsKey = cgiName + "_" + keyName;
+    var notifEl = document.getElementById(lsKey + "notifBox");
+    // TODO: make a generic element for positioning this
     var parentEl = document.getElementById('TrackHeaderForm');
     parentEl.appendChild(notifEl);
     notifEl.style.display = 'block';
-    //document.getElementById('notifOK').onclick = notifBoxHide;
+}
+
+function notifBoxSetup(cgiName, keyName, msg) {
+/* Create a notification box if one hasn't been created, and
+ * add msg to the list of shown notifications.
+ * cgiName.keyName will be saved to localStorage in order to show
+ * or hide this notification.
+ * Must call notifBoxShow() in order to display the notification */
+    lsKey = cgiName + "_" + keyName;
+    let notifBox = document.getElementById(lsKey+"notifBox");
+    if (notifBox) {
+        notifBox.innerHTML += "<br>" + msg;
+    } else {
+        let newDiv = document.createElement("div");
+        newDiv.className = "notifBox";
+        newDiv.style.display = "none";
+        newDiv.style.width = "90%";
+        newDiv.style.marginLeft = "100px";
+        newDiv.id = lsKey+"notifBox";
+        if (msg) {
+            newDiv.innerHTML = msg;
+        }
+        newDiv.innerHTML += "<div style='text-align:center'>"+
+            "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
+            "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
+            "</div>";
+        document.body.appendChild(newDiv);
+        $("#"+lsKey+"notifyHide").click({"id":lsKey}, function() {
+            let key = arguments[0].data.id;
+            $("#"+key+"notifBox").remove();
+        });
+        $("#"+lsKey+"notifyHideForever").click({"id": lsKey}, function() {
+            let key = arguments[0].data.id;
+            $("#"+key+"notifBox").remove();
+            localStorage.setItem(key, "1");
+        });
+    }
 }
 
 function warnBoxJsSetup()

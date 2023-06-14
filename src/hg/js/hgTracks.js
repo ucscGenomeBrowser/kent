@@ -5,6 +5,7 @@
 // "use strict";
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
+/* jshint esnext: true */
 
 
 var debug = false;
@@ -5500,6 +5501,36 @@ $(document).ready(function()
         $("#downloads > ul")[0].appendChild(newListEl);
         $("#hgTracksDownload").click(downloadCurrentTrackData.showDownloadUi);
     }
+
+    // show a tutorial page if this is a new user
+    if (typeof tour !== 'undefined' && tour) {
+        let lsKey = "hgTracks_hideTutorial";
+        let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
+        let hideTutorial = localStorage.getItem(lsKey);
+        // if the user is not logged in and they have not already gone through the
+        // tutorial
+        if (!isUserLoggedIn && !hideTutorial) {
+            let msg = "We now have a guided tutorial available, " +
+                "to start the tutorial " +
+                "<a id='showTutorialLink' href=\"#showTutorial\">click here</a>.";
+            notifBoxSetup("hgTracks", "hideTutorial", msg);
+            notifBoxShow("hgTracks", "hideTutorial");
+            $("#showTutorialLink").click(function() {
+                $("#hgTracks_hideTutorialnotifyHide").click();
+                tour.start();
+            });
+        }
+        // allow user to bring the tutorial up under the help menu whether they've seen
+        // it or not
+        let tutorialLinkMenuItem = document.createElement("li");
+        tutorialLinkMenuItem.id = "hgTracksHelpTutorialMenuItem";
+        tutorialLinkMenuItem.innerHTML = "<a id='hgTracksHelpTutorialLink' href='#showTutorial'>" +
+            "Interactive Tutorial</a>";
+        $("#help > ul")[0].appendChild(tutorialLinkMenuItem);
+        $("#hgTracksHelpTutorialLink").click(function () {
+            tour.start();
+        });
+    }
     
 });
 
@@ -5516,28 +5547,12 @@ function hgtWarnTiming(maxSeconds) {
     if (skipNotification)
         return;
 
-    var div = document.createElement("div");
-    div.style.display = "none";
-    div.style.width = "90%";
-    div.style.marginLeft = "100px";
-    div.id = "notifBox";
-    div.innerHTML = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
+    msg = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
         "the UCSC Genome Browser quick and responsive. See our "+
         "<b><a href='../FAQ/FAQtracks.html#speed' target='_blank'>display speed FAQ</a></b> for "+
         "common causes and solutions to slow performance. If this problem continues, you can create a  "+
-        "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.<br>"+
-        "<div style='text-align:center'>"+
-        "<button id='notifyHide'>Close</button>&nbsp;"+
-        "<button id='notifyHideForever'>Don't show again</button>"+
-        "</div>";
-    document.body.appendChild(div);
-    notifBoxShow();
+        "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.";
+    notifBoxSetup("hgTracks", "hideSpeedNotification", msg);
+    notifBoxShow("hgTracks", "hideSpeedNotification");
 
-    $("#notifyHide").click( function() {
-        $("#notifBox").remove();
-    });
-    $("#notifyHideForever").click( function() {
-        $("#notifBox").remove();
-        localStorage.setItem("hgTracks.hideSpeedNotification", "1");
-    });
 }

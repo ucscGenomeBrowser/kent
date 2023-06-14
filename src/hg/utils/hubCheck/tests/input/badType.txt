@@ -4,7 +4,7 @@ longLabel Bad Type Setting Examples
 genomesFile badType.txt
 email email
 
-genome badType
+genome hg38
 trackDb badType.txt
 
 track badTypePlus
