@@ -1,32 +1,49 @@
-track problematic
+track problematicSuper
 shortLabel Problematic Regions
 longLabel Problematic/special genomic regions for sequencing or very variable regions
-compositeTrack on
-hideEmptySubtracks off
+superTrack on
+html problematic
 group map
-visibility hide
-type bigBed 3 +
 
-    track comments
-    shortLabel UCSC Unusual Regions
-    longLabel UCSC unusual regions on assembly structure (manually annotated)
-    type bigBed 9 +
-    bigDataUrl /gbdb/hg38/problematic/comments.bb
-    visibility dense
-    parent problematic
-    priority 1
-    mouseOverField note
-    searchIndex name
-    searchTrix /gbdb/hg38/problematic/notes.ix
+    track problematic
+    parent problematicSuper
+    shortLabel Problematic Regions
+    longLabel Problematic/special genomic regions for sequencing or very variable regions
+    compositeTrack on
+    hideEmptySubtracks off
+    visibility pack
+    type bigBed 3 +
 
-    track encBlacklist
-    shortLabel ENCODE Blacklist V2
-    longLabel ENCODE Blacklist V2
-    type bigBed 4
-    bigDataUrl /gbdb/hg38/problematic/encBlacklist.bb
-    visibility dense
-    parent problematic
-    priority 2
+        track comments
+        shortLabel UCSC Unusual Regions
+        longLabel UCSC unusual regions on assembly structure (manually annotated)
+        type bigBed 9 +
+        bigDataUrl /gbdb/hg38/problematic/comments.bb
+        visibility dense
+        parent problematic
+        priority 1
+        mouseOverField note
+        searchIndex name
+        searchTrix /gbdb/hg38/problematic/notes.ix
+        noScoreFilter on
+
+        track encBlacklist
+        shortLabel ENCODE Blacklist V2
+        longLabel ENCODE Blacklist V2
+        type bigBed 4
+        bigDataUrl /gbdb/hg38/problematic/encBlacklist.bb
+        visibility dense
+        parent problematic
+        priority 2
+
+        track grcExclusions
+        shortLabel GRC Exclusions
+        longLabel GRC Exclusion list: contaminations or false duplications
+        type bigBed 4
+        bigDataUrl /gbdb/hg38/problematic/grcExclusions.bb
+        visibility dense
+        parent problematic
+        priority 3
 
 searchTable comments
 searchPriority 0.5

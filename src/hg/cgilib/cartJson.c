@@ -845,7 +845,7 @@ if (dyWarn)
 exit(0);
 }
 
-static void cartJsonPushErrHandlers()
+void cartJsonPushErrHandlers()
 /* Push warn and abort handlers for errAbort. */
 {
 if (dyWarn == NULL)
@@ -856,7 +856,7 @@ pushWarnHandler(cartJsonVaWarn);
 pushAbortHandler(cartJsonAbort);
 }
 
-static void cartJsonPopErrHandlers()
+void cartJsonPopErrHandlers()
 /* Pop warn and abort handlers for errAbort. */
 {
 popWarnHandler();

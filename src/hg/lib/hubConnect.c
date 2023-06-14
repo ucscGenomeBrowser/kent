@@ -1062,11 +1062,13 @@ if (!isEmpty(dir))
 
     if (status && isEmpty(status->errorMessage))
         {
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
+
+        cartSetString(cart, "db", buffer);
         if (cgiOptionalString("db"))
             {
             /* user specified db on URL, we need to decorate and put it back. */
-            char buffer[4096];
-            safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
             cgiVarSet("db",  cloneString(buffer));
             }
 
@@ -1140,6 +1142,7 @@ cartRemove(cart, "assumesHub");
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
+pushWarnHandler(cartHubWarn);
 char *dbSpec = asmAliasFind(cartOptionalString(cart, "db"));
 char *curatedHubPrefix = getCuratedHubPrefix();
 if (dbSpec != NULL)
@@ -1158,7 +1161,16 @@ if (genarkPrefix && lookForLonelyHubs(cart, hubList, &newDatabase, genarkPrefix)
     hubList = hubConnectStatusListFromCart(cart);
 
 globalHubList = hubList;
+struct hubConnectStatus *list;
+for (list = hubList; list != NULL; list = list->next)
+    {
+    if (list->errorMessage)
+        {
+        warn("There is an error with hub '%s': %s", list->shortLabel, list->errorMessage);
+        }
+    }
 
+popWarnHandler();
 return newDatabase;
 }
 

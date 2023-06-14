@@ -391,7 +391,8 @@ for (tdb = tdbList ; tdb; tdb = next)
         }
 
     // finally we have verified the track is searchable, add it to our list we're returning
-    slAddHead(&ret, tdb);
+    // careful not to mess up the old list
+    slAddHead(&ret, CloneVar(tdb));
     }
 return ret;
 }

@@ -1,0 +1,14 @@
+dbs="hg19 hg38"
+namedSessionDb=namedSessionDb
+
+for db in $dbs
+do
+    sed '/^ *#/d' ../../htdocs/inc/recTrackSets.$db.tab | tawk '{print $3}' |
+    while read session
+    do
+        contents=`cat $db/$session | tr '\n' '&'`
+        echo "update $namedSessionDb set contents='$contents' where sessionName='$session' and userName='View';" 
+    done 
+done
+#done| hgsql hgcentraltest
+

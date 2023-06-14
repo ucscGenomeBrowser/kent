@@ -989,6 +989,7 @@ dyStringAppend(policy, " d3js.org/d3.v3.min.js");
 dyStringAppend(policy, " cdn.datatables.net");
 // shephered js for tutorial overlay
 dyStringAppend(policy, " cdn.jsdelivr.net");
+dyStringAppend(policy, " www.google.com/recaptcha/api.js");
 
 dyStringAppend(policy, ";");
 

@@ -64,14 +64,56 @@ those for coding open reading frames are thicker.
        retained_intron, TEC, or disrupted_domain)</li>
 </ul>
 
-
-
 <p>
 This track contains an optional <a target="_blank"
 href="../goldenPath/help/hgCodonColoring.html">codon coloring feature</a> that allows users to
 quickly validate and compare gene predictions. There is also an option to display the data as
 a <a target="_blank" href="../goldenPath/help/hgWiggleTrackHelp.html">density graph</a>, which
 can be helpful for visualizing the distribution of items over a region.</p>
+
+<h3>Squishy-pack Display</h3>
+<p>
+Within a gene using the <b>pack</b> display mode, transcripts below a specified rank will be
+condensed into a view similar to <b>squish</b> mode. The <b>transcript ranking</b> approach is
+preliminary and will change in future releases. The transcripts rankings are defined by the
+following criteria for protein-coding and non-coding genes:</p>
+<b>Protein_coding genes</b>
+<ol>
+  <li>MANE or Ensembl canonical
+    <ul>
+      <li>1st: MANE Select / Ensembl canonical</li>
+      <li>2nd: MANE Plus Clinical</li>
+    </ul>
+  </li>
+  <li>Coding biotypes
+    <ul>
+      <li>1st: protein_coding and protein_coding_LoF</li>
+      <li>2nd: NMDs and NSDs</li>
+      <li>3rd: retained intron and protein_coding_CDS_not_defined</li>
+    </ul>
+  </li>
+  <li>Completeness
+    <ul>
+      <li>1st: full length</li>
+      <li>2nd: CDS start/end not found</li>
+    </ul>
+  </li>
+  <li>CARS score (only for coding transcripts)</li>
+  <li>Transcript genomic span and length (only for non-coding transcripts)</li>
+</ol>
+<b>Non-coding genes</b>
+<ol>
+  <li> Transcript biotype
+    <ul>
+      <li>1st: transcript biotype identical to gene biotype</li>
+    </ul>
+  </li>
+  <li>Ensembl canonical</li>
+  <li>GENCODE basic</li>
+  <li>Transcript genomic span</li>
+  <li>Transcript length</li>
+</ol>
+
 
 <h2>Methods</h2>
 <p>

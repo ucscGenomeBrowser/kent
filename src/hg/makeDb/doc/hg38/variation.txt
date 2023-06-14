@@ -1971,3 +1971,13 @@ EOF
 ##############################################################################
 # Trios for Genome In a Bottle - DONE 08/04/2020 ChrisL
 # see ~/kent/src/hg/makeDb/giab/make.txt
+
+##############################################################################
+# DGV gold - DONE 04/07/2023 Lou
+
+    mkdir /hive/data/genomes/hg38/bed/dgv/dgvGold
+    cd /hive/data/genomes/hg38/bed/dgv/dgvGold
+    wget http://dgv.tcag.ca/dgv/docs/DGV.GS.hg38.gff3
+    ~/kent/src/hg/utils/automation/translateDgvGold.py DGV.GS.hg38.gff3 | sort -k1,1 -k2,2n | uniq > /hive/data/genomes/hg38/bed/dgv/dgvGold/dgvGold.bed12
+    bedToBigBed -type=bed12+17 -as=/hive/data/genomes/hg19/bed/dgv/190506/dgvGold.as -tab -extraIndex=name dgvGold.bed12 /hive/data/genomes/hg38/chrom.sizes dgvGold.bb
+    ln -s /hive/data/genomes/hg38/bed/dgv/dgvGold/dgvGold.bb /gbdb/hg38/dgv/

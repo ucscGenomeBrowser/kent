@@ -76,6 +76,7 @@ group compGeno
         color 60,60,140
         altColor 140,60,60
         priority 4
+        logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf
 
     # phastCons conservation
     track cons470wayViewphastcons

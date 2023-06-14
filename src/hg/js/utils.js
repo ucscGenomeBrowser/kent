@@ -4,6 +4,7 @@
 
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
+/* jshint esnext: true */
 
 var debug = false;
 
@@ -794,13 +795,51 @@ if (debug)
 return content;
 }
 
-function notifBoxShow() {
+function notifBoxShow(cgiName, keyName) {
     /* move the notification bar div under '#TrackHeaderForm' */
-    var notifEl = document.getElementById("notifBox");
+    let lsKey = cgiName + "_" + keyName;
+    var notifEl = document.getElementById(lsKey + "notifBox");
+    // TODO: make a generic element for positioning this
     var parentEl = document.getElementById('TrackHeaderForm');
     parentEl.appendChild(notifEl);
     notifEl.style.display = 'block';
-    //document.getElementById('notifOK').onclick = notifBoxHide;
+}
+
+function notifBoxSetup(cgiName, keyName, msg) {
+/* Create a notification box if one hasn't been created, and
+ * add msg to the list of shown notifications.
+ * cgiName.keyName will be saved to localStorage in order to show
+ * or hide this notification.
+ * Must call notifBoxShow() in order to display the notification */
+    lsKey = cgiName + "_" + keyName;
+    let notifBox = document.getElementById(lsKey+"notifBox");
+    if (notifBox) {
+        notifBox.innerHTML += "<br>" + msg;
+    } else {
+        let newDiv = document.createElement("div");
+        newDiv.className = "notifBox";
+        newDiv.style.display = "none";
+        newDiv.style.width = "90%";
+        newDiv.style.marginLeft = "100px";
+        newDiv.id = lsKey+"notifBox";
+        if (msg) {
+            newDiv.innerHTML = msg;
+        }
+        newDiv.innerHTML += "<div style='text-align:center'>"+
+            "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
+            "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
+            "</div>";
+        document.body.appendChild(newDiv);
+        $("#"+lsKey+"notifyHide").click({"id":lsKey}, function() {
+            let key = arguments[0].data.id;
+            $("#"+key+"notifBox").remove();
+        });
+        $("#"+lsKey+"notifyHideForever").click({"id": lsKey}, function() {
+            let key = arguments[0].data.id;
+            $("#"+key+"notifBox").remove();
+            localStorage.setItem(key, "1");
+        });
+    }
 }
 
 function warnBoxJsSetup()
@@ -3705,3 +3744,35 @@ function trackHubSkipHubName(name) {
     }
 }
 
+function parseUrl(url) {
+    // turn a url into some of it's components like server, query-string, etc
+    let protocol, serverName, pathInfo, queryString;
+    let temp;
+    temp = url.split("?");
+    if (temp.length > 1)
+        queryString = temp.slice(1).join("?");
+    temp = temp[0].split("/");
+    protocol = temp[0]; // "https:"
+    serverName = temp[2]; // "genome-test.gi.ucsc.edu"
+    pathInfo = temp.slice(3).join("/"); // "cgi-bin/hgTracks"
+    return {protocol: protocol, serverName: serverName, pathInfo: pathInfo, queryString: queryString};
+}
+
+function dumpCart(seconds, skipNotification) {
+    // dump current cart
+    let currUrl = parseUrl(window.location.href);
+    logUrl = currUrl.protocol + "//" + currUrl.serverName + "/" + currUrl.pathInfo + "?hgsid=" + getHgsid() + "&_dumpCart=" + encodeURIComponent(seconds) + "&skipNotif=" + skipNotification;
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", logUrl, true);
+    xmlhttp.send();  // sends request and exits this function
+}
+
+function writeToApacheLog(msg) {
+    // send msg to web servers error_log
+    // first need to figure out what server and CGI we are requesting:
+    let currUrl = parseUrl(window.location.href);
+    logUrl = currUrl.protocol + "//" + currUrl.serverName + "/" + currUrl.pathInfo + "?_dumpToLog=" + encodeURIComponent(msg);
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", logUrl, true);
+    xmlhttp.send();  // sends request and exits this function
+}

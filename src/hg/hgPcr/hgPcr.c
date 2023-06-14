@@ -228,6 +228,7 @@ puts(
 "<B>Min Perfect Match</B> - Number of bases that match exactly on 3' end of primers.  Minimum match size is 15.<BR>\n"
 "<B>Min Good Match</B> - Number of bases on 3' end of primers where at least 2 out of 3 bases match.<BR>\n"
 "<B>Flip Reverse Primer</B> - Invert the sequence order of the reverse primer and complement it.<BR>\n"
+"<B>Append to existing PCR result</B> - Add this PCR result list to the currently existing track of PCR results.<BR>\n"
 "\n"
 "<H3>Output</H3>\n"
 "When successful, the search returns a sequence output file in fasta format \n"
@@ -389,7 +390,7 @@ if (!gotDb)
 
 void doGetPrimers(char *db, char *organism, struct pcrServer *serverList,
 	char *fPrimer, char *rPrimer, int maxSize, int minPerfect, int minGood,
-	boolean flipReverse)
+	boolean flipReverse, boolean appendToResults)
 /* Put up form to get primers. */
 {
 redoDbAndOrgIfNoServer(serverList, &db, &organism);
@@ -470,6 +471,12 @@ printf("%s", "<TD><CENTER>\n");
 printf(" Flip Reverse Primer: ");
 cgiMakeCheckBox("wp_flipReverse", flipReverse);
 printf("%s", "</CENTER></TD>\n");
+
+printf("%s", "<TD><CENTER>\n");
+printf(" Append to existing PCR result: ");
+cgiMakeCheckBox("wp_append", appendToResults);
+printf("%s", "</CENTER></TD>\n");
+
 printf("</TR></TABLE><BR>");
 
 printf("</FORM>\n");
@@ -505,26 +512,39 @@ void writePrimers(struct gfPcrOutput *gpo, char *fileName)
 {
 if (gpo == NULL)
     return;
-FILE *f = mustOpen(fileName, "w");
+FILE *f = mustOpen(fileName, "a");
 fprintf(f, "%s\t%s\n", gpo->fPrimer, gpo->rPrimer);
 carefulClose(&f);
 }
 
-void writePcrResultTrack(struct gfPcrOutput *gpoList, char *db, char *target)
+void writePcrResultTrack(struct gfPcrOutput *gpoList, char *db, char *target, boolean appendToResults)
 /* Write trash files and store their name in a cart variable. */
 {
 char *cartVar = pcrResultCartVar(db);
 struct tempName bedTn, primerTn;
 char buf[2048];
-trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
-trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
-gfPcrOutputWriteAll(gpoList, "psl", NULL, bedTn.forCgi);
-writePrimers(gpoList, primerTn.forCgi);
-if (isNotEmpty(target))
-    safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
+char *pslFile, *txtFile, *cartResult;
+if ( (cartResult = cartOptionalString(cart, cartVar)) != NULL && appendToResults)
+    {
+    char *pcrFiles[3];
+    chopByWhite(cloneString(cartResult), pcrFiles, 3);
+    pslFile = pcrFiles[0];
+    txtFile = pcrFiles[1];
+    gfPcrOutputWriteAll(gpoList, "psl", NULL, pslFile);
+    writePrimers(gpoList, txtFile);
+    }
 else
-    safef(buf, sizeof(buf), "%s %s", bedTn.forCgi, primerTn.forCgi);
-cartSetString(cart, cartVar, buf);
+    {
+    trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
+    trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
+    gfPcrOutputWriteAll(gpoList, "psl", NULL, bedTn.forCgi);
+    writePrimers(gpoList, primerTn.forCgi);
+    if (isNotEmpty(target))
+        safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
+    else
+        safef(buf, sizeof(buf), "%s %s", bedTn.forCgi, primerTn.forCgi);
+    cartSetString(cart, cartVar, buf);
+    }
 }
 
 static void printHelpLinks(struct gfPcrOutput *gpoList) {
@@ -566,7 +586,7 @@ static void printHelpLinks(struct gfPcrOutput *gpoList) {
 }
 
 void doQuery(struct pcrServer *server, struct gfPcrInput *gpi,
-	     int maxSize, int minPerfect, int minGood)
+	     int maxSize, int minPerfect, int minGood, boolean appendToResults)
 /* Send a query to a genomic assembly PCR server and print the results. */
 {
 struct gfConnection *conn = gfConnect(server->host, server->port,
@@ -587,7 +607,7 @@ if (gpoList != NULL)
     printf("</PRE></TT>");
     
     printHelpLinks(gpoList);
-    writePcrResultTrack(gpoList, server->db, NULL);
+    writePcrResultTrack(gpoList, server->db, NULL, appendToResults);
     }
 else
     {
@@ -598,7 +618,7 @@ gfDisconnect(&conn);
 }
 
 void doTargetQuery(struct targetPcrServer *server, struct gfPcrInput *gpi,
-		   int maxSize, int minPerfect, int minGood)
+		   int maxSize, int minPerfect, int minGood, boolean appendToResults)
 /* Send a query to a non-genomic target PCR server and print the results. */
 {
 struct gfConnection *conn = gfConnect(server->host, server->port, NULL, NULL);
@@ -634,7 +654,7 @@ if (gpoList != NULL)
 	}
 
     printf("</PRE></TT>");
-    writePcrResultTrack(gpoList, server->targetDb->db, server->targetDb->name);
+    writePcrResultTrack(gpoList, server->targetDb->db, server->targetDb->name, appendToResults);
     }
 else
     {
@@ -646,7 +666,7 @@ gfDisconnect(&conn);
 
 boolean doPcr(struct pcrServer *server, struct targetPcrServer *targetServer,
 	char *fPrimer, char *rPrimer, 
-	int maxSize, int minPerfect, int minGood, boolean flipReverse)
+	int maxSize, int minPerfect, int minGood, boolean flipReverse, boolean appendToResults)
 /* Do the PCR, and show results. */
 {
 struct errCatch *errCatch = errCatchNew();
@@ -668,9 +688,9 @@ if (errCatchStart(errCatch))
     gpi->fPrimer = fPrimer;
     gpi->rPrimer = rPrimer;
     if (server != NULL)
-	doQuery(server, gpi, maxSize, minPerfect, minGood);
+	doQuery(server, gpi, maxSize, minPerfect, minGood, appendToResults);
     if (targetServer != NULL)
-	doTargetQuery(targetServer, gpi, maxSize, minPerfect, minGood);
+	doTargetQuery(targetServer, gpi, maxSize, minPerfect, minGood, appendToResults);
     ok = TRUE;
     }
 errCatchEnd(errCatch);
@@ -704,6 +724,7 @@ int minGood = 15;
 char *fPrimer = cartUsualString(cart, "wp_f", "");
 char *rPrimer = cartUsualString(cart, "wp_r", "");
 boolean flipReverse = cartUsualBoolean(cart, "wp_flipReverse", FALSE);
+boolean appendToResults = cartUsualBoolean(cart, "wp_append", TRUE);
 struct pcrServer *serverList = getServerList();
 
 getDbAndGenome(cart, &db, &organism, oldVars);
@@ -738,11 +759,11 @@ if (isNotEmpty(fPrimer) && isNotEmpty(rPrimer) &&
     fPrimer = gfPcrMakePrimer(fPrimer);
     rPrimer = gfPcrMakePrimer(rPrimer);
     if (doPcr(server, targetServer, fPrimer, rPrimer,
-	      maxSize, minPerfect, minGood, flipReverse))
+	      maxSize, minPerfect, minGood, flipReverse, appendToResults))
          return;
     }
 doGetPrimers(db, organism, serverList,
-	fPrimer, rPrimer, maxSize, minPerfect, minGood, flipReverse);
+	fPrimer, rPrimer, maxSize, minPerfect, minGood, flipReverse, appendToResults);
 }
 
 void doMiddle(struct cart *theCart)

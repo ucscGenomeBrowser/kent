@@ -149,7 +149,7 @@ html chainNet
         track chainBosTau9
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=jaCow clade=cLaura
-        shortLabel $o_Organism Chain Huh ?
+        shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau9
         otherDb bosTau9
@@ -395,7 +395,7 @@ html chainNet
         track netBosTau9
         subTrack placentalChainNetViewnet on
         subGroups view=net species=jaCow clade=cLaura
-        shortLabel $o_Organism Net Huh ?
+        shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau9 chainBosTau9
         otherDb bosTau9

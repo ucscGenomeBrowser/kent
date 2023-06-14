@@ -33,6 +33,7 @@
 #include "customComposite.h"
 #include "regexHelper.h"
 #include "windowsToAscii.h"
+#include "jsonWrite.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -167,14 +168,29 @@ if (!sqlTableExists(conn, sessionDbTable()))
 return TRUE;
 }
 
-void cartParseOverHashExt(struct cart *cart, char *contents, boolean merge)
-/* Parse cgi-style contents into a hash table.  If merge is FALSE, this will *not*
- * replace existing members of hash that have same name, so we can
- * support multi-select form inputs (same var name can have multiple
- * values which will be in separate hashEl's). If merge is TRUE, we
- * replace existing values with new values */
+static void mergeHash(struct hash *origHash, struct hash *overlayHash)
+/* Merge one hash on top of another. */
 {
-struct hash *hash = cart->hash;
+struct hashCookie cookie = hashFirst(overlayHash);
+struct hashEl *helOverlay;
+while ((helOverlay = hashNext(&cookie)) != NULL)
+    {
+    char *varName = helOverlay->name;
+    struct hashEl *helOrig = hashLookup(origHash, varName);
+    if (helOrig)
+        {
+        // we don't want to hide a track that's visible in the overlay
+        if (differentString("hide", helOverlay->val))
+            hashReplace(origHash, helOverlay->name, helOverlay->val);
+        }
+    else 
+        hashAdd(origHash, varName, helOverlay->val);
+    }
+}
+
+static void loadHash(struct hash *hash, char *contents)
+/* Load a hash from a cart-like string. */
+{
 char *namePt, *dataPt, *nextNamePt;
 namePt = contents;
 while (namePt != NULL && namePt[0] != 0)
@@ -189,12 +205,28 @@ while (namePt != NULL && namePt[0] != 0)
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
-    if (!merge)
-        hashAdd(hash, namePt, cloneString(dataPt));
-    else 
-        hashReplace(hash, namePt, cloneString(dataPt));
+    hashAdd(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
     }
+}
+
+void cartParseOverHashExt(struct cart *cart, char *contents, boolean merge)
+/* Parse cgi-style contents into a hash table.  If merge is FALSE, this will *not*
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). If merge is TRUE, we
+ * replace existing values with new values */
+{
+if (merge)
+    {
+    struct hash *newHash = newHash(8);
+
+    loadHash(newHash, contents);
+    mergeHash(newHash, cart->hash);
+    cart->hash = newHash;
+    }
+else
+    loadHash(cart->hash, contents);
 }
 
 void cartParseOverHash(struct cart *cart, char *contents)
@@ -333,6 +365,17 @@ void cartExclude(struct cart *cart, char *var)
 hashAdd(cart->exclude, var, NULL);
 }
 
+
+static char *_cartNamedSessionDbTable = NULL;
+
+char *cartNamedSessionDbTable()
+/* Get the name of the table that lists named sessions.  Don't free the result. */
+{
+if (_cartNamedSessionDbTable == NULL)
+    _cartNamedSessionDbTable = cfgOptionEnvDefault("HGDB_NAMED_SESSION_DB", namedSessionDbTableConfVariable,
+                                             defaultNamedSessionDb);
+return _cartNamedSessionDbTable;
+}
 
 void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 			 char *encSessionName)
@@ -1364,6 +1407,9 @@ if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
     htmlSuppressErrors();
 setUdcCacheDir();
 
+netSetTimeoutErrorMsg("A connection timeout means that either the server is offline or its firewall, the UCSC firewall or any router between the two blocks the connection.");
+
+
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
@@ -2310,6 +2356,45 @@ if (loginSystemEnabled())
     }
 }
 
+static void cartJsonStart()
+/* Write the necessary headers for Apache */
+{
+puts("Content-Type: application/json\n");
+}
+
+static void cartJsonEnd(struct jsonWrite *jw)
+/* Write the final string which may have nothing in it */
+{
+if (jw)
+    puts(jw->dy->string);
+}
+
+static void dumpCartWithTime(struct cart *cart, char *timeStr)
+/* Dump out the current cart to trash named by how long a page draw took using it. */
+{
+char prefix[128];
+
+// zero pad so the files will alphanumerically sort by elapsed time
+sprintf(prefix, "%06d.", atoi(timeStr));
+
+// make a temp file in trash
+struct tempName hubTn;
+trashDirDateFile(&hubTn, "cartDumps", prefix , ".txt");
+char *dumpName = cloneString(hubTn.forCgi);
+
+// write out the cart into the tempfile
+FILE *f = mustOpen(dumpName, "w");
+
+struct hashEl *el;
+struct hashEl *elList = hashElListHash(cart->hash);
+for (el = elList; el != NULL; el = el->next)
+    fprintf(f, "%s %s\n", el->name, (char *)el->val);
+fclose(f);
+
+// put something in the log to say we did this
+fprintf(stderr, "warnTiming %s time=%s skipNotif=%s\n", getSessionId(), timeStr, cartUsualString(cart, "skipNotif", "null"));
+}
+
 struct cart *cartForSession(char *cookieName, char **exclude,
                             struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
@@ -2364,9 +2449,27 @@ if (noSqlInj_dumpStack)
 char *hguid = NULL;
 if ( cgiOptionalString("ignoreCookie") == NULL )
     hguid = getCookieId(cookieName);
+
+// if _dumpToLog is on the URL, we can exit early with whatever
+// message we are trying to write to the stderr/error_log
+char *logMsg = NULL;
+if ( (logMsg = cgiOptionalString("_dumpToLog")) != NULL)
+    {
+    cartJsonStart();
+    fprintf(stderr, "%s", logMsg);
+    cartJsonEnd(NULL);
+    exit(0);
+    }
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
+
+char *timeStr;
+if ( (timeStr = cgiOptionalString("_dumpCart")) != NULL)
+    {
+    dumpCartWithTime(cart, timeStr);
+    exit(0);
+    }
 
 // activate optional debuging output for CGIs
 verboseCgi(cartCgiUsualString(cart, "verbose", NULL));
@@ -2545,6 +2648,16 @@ popWarnHandler();
 inWeb = FALSE;
 }
 
+void cartWebEndExtra(char *footer)
+/* Write out HTML footer and get rid or error handler, with extra text
+ * at the end of the page as desired.
+ */
+{
+webEndExtra(footer);
+popWarnHandler();
+inWeb = FALSE;
+}
+
 void cartFooter(void)
 /* Write out HTML footer, possibly with googleAnalytics too */
 {
@@ -2579,7 +2692,7 @@ char *cartTheme = cartOptionalString(cart, "theme");
 // XXXX which setting should take precedence? Currently browser.theme does.
 
 char *styleFile = cfgOption("browser.style");
-if(styleFile != NULL)
+if (styleFile != NULL)
     {
     char buf[512];
     safef(buf, sizeof(buf), "<link rel='stylesheet' href='%s' type='text/css'>", styleFile);
@@ -2588,7 +2701,7 @@ if(styleFile != NULL)
     webSetStyle(copy);       // for web.c, used by hgc
     }
 
-if(isNotEmpty(cartTheme))
+if (isNotEmpty(cartTheme))
     {
     char *themeKey = catTwoStrings("browser.theme.", cartTheme);
     styleFile = cfgOption(themeKey);
@@ -2596,8 +2709,8 @@ if(isNotEmpty(cartTheme))
     if (isEmpty(styleFile))
         return;
 
-    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile, TRUE); // resource file link wrapped in html
-    if (link != NULL)
+    char * link = webCssLink(styleFile, FALSE); // resource file link wrapped in html
+    if (link != NULL && !sameOk(link, "<>")) // "<>" means "default settings" = "no file"
         {
         htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
         webSetStyle(link);       // for web.c, used by hgc
@@ -2743,10 +2856,13 @@ if (parentLevel)
 for ( ; tdb != NULL; tdb = tdb->parent)
     {
     char buf[512];
+    char *trackName = tdb->track;
+    if (tdb->originalTrack)
+        trackName = tdb->originalTrack;
     if (suffix[0] == '.' || suffix[0] == '_')
-        safef(buf, sizeof buf, "%s%s", tdb->track,suffix);
+        safef(buf, sizeof buf, "%s%s", trackName,suffix);
     else
-        safef(buf, sizeof buf, "%s.%s", tdb->track,suffix);
+        safef(buf, sizeof buf, "%s.%s", trackName,suffix);
     char *cartSetting = hashFindVal(cart->hash, buf);
     if (cartSetting != NULL)
         {

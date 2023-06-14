@@ -1,10 +1,11 @@
 track crossTissueMaps
 superTrack on
 shortLabel Cross Tissue Nuclei
-longLabel Single nuclei sequenced cross many tissues
+longLabel Single Nuclei sequenced across many tissues
 visibility hide
 group singleCell
 configureByPopup off
+pennantIcon New red ../goldenPath/newsarch.html#041023 "Released Apr. 10, 2023"
 
     track crossTissueMapsTissueCellType
     parent crossTissueMaps
@@ -15,6 +16,7 @@ configureByPopup off
     visibility pack
     shortLabel Cross Tissue Nuclei
     longLabel Cross tissue nuclei RNA by tissue and cell type
+    priority 1
     barChartMetric gene/genome
     barChartUnit parts per million
     defaultLabelFields name
@@ -34,7 +36,8 @@ configureByPopup off
     urlLabel View on the UCSC Cell Browser: $<name2>
     visibility hide
     shortLabel Cross Tissue Details
-    longLabel Cross tissue nuclei full details 
+    longLabel Cross tissue nuclei full details
+    priority 2
     barChartMetric gene/genome
     barChartUnit parts per million
     defaultLabelFields name
@@ -55,7 +58,8 @@ configureByPopup off
     url https://cells.ucsc.edu/?ds=tabula-sapiens+all&gene=$<name2>
     urlLabel View on the UCSC Cell Browser: $<name2>
     shortLabel GTEx Immune Atlas
-    longLabel GTEx Single Nuclei Immune Expression
+    longLabel GTEx single nuclei immune expression
+    priority 3
     barChartMetric gene/genome
     barChartUnit parts per million
     defaultLabelFields name

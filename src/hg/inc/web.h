@@ -79,6 +79,9 @@ void webNewSectionHeaderEnd();
 void webEnd();
 /* output the footer of the HTML page */
 
+void webEndExtra(char *footer);
+/* output the footer of the HTML page with extra endText as desired */
+
 void webEndSection();
 /* Close down a section */
 
@@ -340,8 +343,15 @@ void webFinishPartialLinkOutTable(int rowIx, int itemPos, int maxPerRow);
 boolean validateGisaidUser(struct cart *cart);
 /* validate if the web user is an authenticated GISAID user */
 
+char *webCssLink(char *fileName, boolean mustExist);
+/* alternative for webTimeStampedLinkToResource for CSS files: prints a time-stamped
+ * link to a CSS file to stdout */
+
 char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml);
-// Returns full path of timestamped link to the requested resource file (js, or css).
+// Consider using webCssLink instead of this function. Make new functions webJsLink(), webPngLink()
+// if not using CSS files.
+
+// Deprecated. Returns full path of timestamped link to the requested resource file (js, or css).
 // If wrapInHtml, then returns link embedded in style or script html. Free after use.
 // NOTE: png, jpg and gif should also be supported but are untested.
 

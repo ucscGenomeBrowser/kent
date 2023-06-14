@@ -138,6 +138,11 @@ function promotedHub() {
   export db=$1
 }
 
+##############################################################################
+##############################################################################
+### start seconds
+export startT=`date "+%s"`
+
 export target="$1"
 export query="$2"
 export tClade="$3"
@@ -176,6 +181,8 @@ export tSwapRbestArgs=""
 export qSwapRbestArgs=""
 export tFullName=""
 export qFullName=""
+export tTdb="xxx"
+export qTdb="xxx"
 
 #  override those specifications if assembly hub
 case $target in
@@ -187,6 +194,7 @@ case $target in
        targetExists="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData"
        targetSizes="/hive/data/genomes/asmHubs/${tGcPath}/${tAsmId}/${tAsmId}.chrom.sizes.txt"
        target2bit="/hive/data/genomes/asmHubs/${tGcPath}/${tAsmId}/${tAsmId}.2bit"
+       tTdb="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/doTrackDb.bash"
        tRbestArgs="-target2Bit=\"${target2bit}\" \\
 -targetSizes=\"${targetSizes}\""
        tSwapRbestArgs="-query2bit=\"${target2bit}\" \\
@@ -203,6 +211,7 @@ case $query in
        queryExists="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData"
        querySizes="/hive/data/genomes/asmHubs/${qGcPath}/${qAsmId}/${qAsmId}.chrom.sizes.txt"
        query2bit="/hive/data/genomes/asmHubs/${qGcPath}/${qAsmId}/${qAsmId}.2bit"
+       qTdb="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/doTrackDb.bash"
        qRbestArgs="-query2Bit=\"${query2bit}\" \\
 -querySizes=\"${querySizes}\""
        qSwapRbestArgs="-target2bit=\"${query2bit}\" \\
@@ -251,7 +260,7 @@ if [ -L "${symLink}" ]; then
   doneCount=`echo $doneCount | awk '{printf "%d", $1+1}'`
   primaryDone=1
 else
-  printf "# no symLink: $symLink\n" 1>&2
+  printf "# primaryDone $primaryDone no symLink: $symLink\n" 1>&2
 fi
 
 if [ -L "${swapLink}" ]; then
@@ -273,6 +282,7 @@ fi
 export primaryPartsDone=`ls $buildDir/fb.* 2> /dev/null | wc -l`
 if [ "$primaryPartsDone" -gt 0 ]; then
   primaryDone="$primaryPartsDone"
+  printf "# primaryPartsDone $primaryPartsDone primaryDone $primaryDone\n" 1>&2
 fi
 
 if [ -d "${swapDir}" ]; then
@@ -280,6 +290,7 @@ if [ -d "${swapDir}" ]; then
   printf "# " 1>&2
   ls -ogd "${swapDir}" 1>&2
   if [ "${doneCount}" -ne 2 ]; then
+    printf "# doneCount $doneCount -ne 2 exit 0 since swap in progress\n" 1>&2
     exit 0
   fi
 fi
@@ -287,7 +298,6 @@ fi
 if [ "${doneCount}" -eq 2 ]; then
     printf "# all done\n" 1>&2
 fi
-
 
 export tOrgName="$(orgName $target)"
 export qOrgName="$(orgName $query)"
@@ -449,6 +459,13 @@ printf "running: time (${buildDir}/run.sh) >> ${buildDir}/do.log 2>&1\n" 1>&2
 
 time (${buildDir}/run.sh) >> ${buildDir}/do.log 2>&1
 
+# rebuild trackDb if possible here
+if [ -x "${tTdb}" ]; then
+   ${tTdb}
+else
+   printf "# do not find tTdb '%s'\n" "${tTdb}" 1>&2
+fi
+
 fi      ###     if [ $primaryDone -eq 0 ]; then
 
 #### print out the makeDoc.txt to this point into buildDir/makeDoc.txt
@@ -535,6 +552,14 @@ chmod +x  ${swapDir}/runSwap.sh
 printf "# running ${swapDir}/runSwap.sh\n" 1>&2
 
 time (${swapDir}/runSwap.sh) >> ${swapDir}/doSwap.log 2>&1
+
+# rebuild trackDb if possible here
+if [ -x "${qTdb}" ]; then
+   ${qTdb}
+else
+   printf "# do not find qTdb '%s'\n" "${qTdb}" 1>&2
+fi
+
 fi      ### if [ "$swapDone" -eq 0 ]; then
 
 ### continue the make doc
@@ -572,6 +597,9 @@ printf "\n######################################################################
 ### show completed makeDoc.txt ####
 cat ${buildDir}/makeDoc.txt
 
+### end seconds
+export endT=`date "+%s"`
+
 export toAddress="$userName"
 export fromAddress="$userName"
 export subject="pair lastz DONE $target $query"
@@ -584,6 +612,18 @@ Subject: $subject
 date >> /tmp/send.txt.$$
 printf "##################################################################\n" >> /tmp/send.txt.$$
 cat ${buildDir}/makeDoc.txt >> /tmp/send.txt.$$
+
+### show elapsed time
+printf "%s\t%s\n" "${endT}" "${startT}" | awk -F$'\t' '{
+seconds=$1-$2
+hours=int(seconds/3600)
+minutes=int((seconds-(hours*3600))/60)
+s=seconds % 60
+printf "### elapsed time: %02dh %02dm %02ds\n\n", hours, minutes, s
+}' >> /tmp/send.txt.$$
+
+date >> /tmp/send.txt.$$
+printf "##################################################################\n" >> /tmp/send.txt.$$
 
 cat /tmp/send.txt.$$ | /usr/sbin/sendmail -t -oi
 

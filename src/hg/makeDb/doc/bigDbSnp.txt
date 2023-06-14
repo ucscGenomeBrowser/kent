@@ -818,4 +818,67 @@ src/hg/makeDb/trackDb/human/dbSnp155Composite.html
 Informally, I made a couple of scripts in here to help update the studies list and the keywords counts sections of the description page.
 /hive/data/outside/dbSNP/155/json/
 
-##############################################################################
+
+
+redoing for 2023-03-15
+   # re-do since commas in clinicalSignificance needed htmlencoding so main utility was updated.
+
+    topDir=/hive/data/outside/dbSNP/155
+    # after trying ALFA2 as primary study, it did not have enought SNPs, so I am going back to using 1000Genomes as the primary study.
+    freqSourceOrder=1000Genomes,dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
+    # Run doBigDbSnp.pl (first with -debug to make runDir):
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder -debug
+
+# *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-15
+
+    cd /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-15
+
+    # Link to ../bigDbSnp.2021-09-30/split, -continue convert to avoid re-splitting (the slowest part of the process):
+    rmdir split
+    ln -s ../bigDbSnp.2021-09-30/split split
+    rmdir splitProcessed
+    ln -s ../bigDbSnp.2021-09-30/splitProcessed splitProcessed
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder \
+      -buildDir=`pwd` -continue convert -stop install \
+      >& do.log &
+    tail -f do.log
+
+ # convert step runs on ku kluster
+
+   ssh ku
+
+[ku.gi.ucsc.edu:~> parasol list batches
+#user     run   wait   done crash pri max cpu  ram  plan min batch
+galt      461   9755    334     0  10  -1   1  8.0g  496  10 /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-15/run.convert/
+
+
+
+redoing for 2023-03-26
+     # re-do since the clinicalSignificance fix had to be re-done in a completely different way that should be good now.
+
+    topDir=/hive/data/outside/dbSNP/155
+    # after trying ALFA2 as primary study, it did not have enought SNPs, so I am going back to using 1000Genomes as the primary study.
+    freqSourceOrder=1000Genomes,dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
+    # Run doBigDbSnp.pl (first with -debug to make runDir):
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder -debug
+
+# *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-26
+
+    cd /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-26
+
+    # Link to ../bigDbSnp.2021-09-30/split, -continue convert to avoid re-splitting (the slowest part of the process):
+    rmdir split
+    ln -s ../bigDbSnp.2021-09-30/split split
+    rmdir splitProcessed
+    ln -s ../bigDbSnp.2021-09-30/splitProcessed splitProcessed
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder \
+      -buildDir=`pwd` -continue convert -stop install \
+      >& do.log &
+    tail -f do.log
+
+ *** All done !  (through the 'install' step)  Elapsed time: 1028m23s
+ *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-26
+
+    # checked errors and warnings, did not see anything concerning.
+
+#############################################################################

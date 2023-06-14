@@ -106,6 +106,14 @@ the <em>input.bed</em> file and <em>chrom.sizes</em> files created in <em>Steps 
 <em>3</em>:</p> 
 <pre><code><strong>bedToBigBed</strong> input.bed chrom.sizes myBigBed.bb</code></pre>
 <p>
+The chrom.sizes file can also be a <em>2bit</em> or a <em>chromAlias</em> bigBed file using the
+following command-line arguments:
+<pre>
+   -sizesIs2Bit         -- If set, the chrom.sizes file is assumed to be a 2bit file.
+   -sizesIsChromAliasBb -- If set, then chrom.sizes file is assumed to be a chromAlias
+                           bigBed file or a URL to a such a file
+</pre></p>
+<p>
 <strong>Step 5.</strong>
 Move the newly created bigBed file (<em>myBigBed.bb</em>) to a web-accessible http, https, or 
 ftp location. At this point you should have a URL to your data, such as &quot;https://institution.edu/myBigBed.bb&quot;, and the file should be accessible outside of your institution/hosting providers network. For more information on where to host your data, please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>

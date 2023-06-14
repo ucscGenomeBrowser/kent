@@ -48,6 +48,7 @@ group varRep
 visibility hide
 #type bigBed 9 +
 html dgvPlusGold
+pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
     track dgvMerged override
     parent dgvPlus on
@@ -59,6 +60,8 @@ html dgvPlusGold
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
     searchIndex name
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Size:$_size; Type:$varType; Affected genes:$genes
+    pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
     track dgvSupporting override
     parent dgvPlus
@@ -70,6 +73,8 @@ html dgvPlusGold
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
     dataVersion 2020-02-25
     searchIndex name
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Size:$_size; Type:$varType; Affected genes:$genes
+    pennantIcon Updated red ../goldenPath/newsarch.html#032923 "Updated Mar. 29, 2023"
 
     track dgvGold
     parent dgvPlus
@@ -78,6 +83,7 @@ html dgvPlusGold
     bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
     type bigBed 12
     url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
+    mouseOver ID:$name; Position; $chrom:${chromStart}-${chromEnd}; Type:$variant_sub_type; Frequency:$Frequency
     searchIndex name
 
 searchTable dgvGold

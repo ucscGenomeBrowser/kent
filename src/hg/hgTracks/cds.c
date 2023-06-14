@@ -989,7 +989,7 @@ if (target != NULL)
 		 (char *)lf->extra);
     char *displayName = words[0];
     int ampStart = atoi(words[1]), ampEnd = atoi(words[2]);
-    char *realName = pcrResultItemAccName(lf->name, displayName);
+    char *realName = pcrResultItemAccName(lf->name, displayName, NULL);
     /* isPcr results are so sparse that I think the performance impact 
      * of re-reading the psl file in the draw function is negligible. */
     pcrResultGetPsl(pslFileName, target, realName, chromName, ampStart, ampEnd, &tpsl, NULL);

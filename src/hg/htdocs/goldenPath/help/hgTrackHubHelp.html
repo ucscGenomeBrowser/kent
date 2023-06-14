@@ -210,7 +210,8 @@ http://genome.ucsc.edu/cgi-bin/hgGateway?genome=GCF_000699105.1&hubUrl=https://h
 <h2>Setting up your own Track Hub</h2>
 <p>
 This section provides a step-by-step description of the process used to set up a track hub on your 
-own server.</p>
+own server. If you would like information about how to attach a track hub to an existing assembly
+hub, please refer to the following <a href="/FAQ/FAQlink.html#trackHubLoading">FAQ entry</a>.</p>
 <p>
 To create your own hub you will need:</p> 
 <ul>
@@ -1168,7 +1169,7 @@ with the UCSC Genome Browser.</p>
 <p>
 For a deeper level of debugging, system administrators can use the open ssl client command:
 <pre>
-openssl s_client -connect yourdomain.com:443 -servername yourdomain.com
+openssl s_client -trusted_first -connect yourdomain.com:443 -servername yourdomain.com
 </pre></p>
 <p>
 Various online SSL Server Test sites have great detailed documentation about how

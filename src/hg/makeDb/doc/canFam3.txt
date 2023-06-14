@@ -2051,3 +2051,24 @@ cat variantColors | grep . | awk '{print $1","}'
 filterValues.valid No,Yes
 
 ##############################################################################
+# FANTOM5 refs #21605 (2023-06-09 Gerardo)
+cd /hive/data/outside/
+mkdir fantom5
+cd fantom5
+hubClone -download https://fantom.gsc.riken.jp/5/datahub/hub.txt
+cd /gbdb/canFam3
+mkdir fantom5
+cd fantom5
+# Making symlinks for big files
+for file in $(ls /hive/data/outside/fantom5/riken_f5/canFam3/*.b*) ; do ln -s $file; done
+cd /hive/data/outside/fantom5/riken_f5/canFam3/
+cp trackDb.txt fantom5.ra
+vi fantom5.ra
+# Indented subtracks
+# Changing bigDataUrl
+# Removing non-alpha characters
+cd ~/kent/src/hg/makeDb/trackDb/human/canFam3
+cp /hive/data/outside/fantom5/riken_f5/canFam3/fantom5.ra .
+vi trackDb.ra
+#include fantom5.ra alpha
+##############################################################################

@@ -2002,7 +2002,11 @@ for (imgTrack = imgTrackList; imgTrack!=NULL;imgTrack = nextImg)
         {
         struct imgSlice *packedSlices = imgTrack->slices;
         struct imgSlice *squishSlices = imgTrack->next->slices;
-        for(; packedSlices; packedSlices = packedSlices->next, squishSlices = squishSlices->next)
+        
+        if ((packedSlices == NULL) || (squishSlices == NULL) ||
+           (slCount(packedSlices) != slCount(squishSlices)))
+           continue;
+        for(; packedSlices && squishSlices; packedSlices = packedSlices->next, squishSlices = squishSlices->next)
             {
             if (packedSlices->type != stCenter)
                 {

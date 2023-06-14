@@ -5,6 +5,7 @@
 // "use strict";
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
+/* jshint esnext: true */
 
 
 var debug = false;
@@ -3489,6 +3490,20 @@ function highlightCurrentPosition(mode) {
     }
 }
 
+function onTrackDelIconClick (ev) {
+    /* delete custom track if user clicks its trash icon */
+    // https://genome.ucsc.edu/cgi-bin/hgCustom?hgsid=1645697744_i0Yp2Di71NytSDdb6r0vUbupIvKO&hgct_do_delete=delete&hgct_del_ct_UserTrack_3545=on
+    var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.
+    var trackName = divEl.getAttribute("data-track");
+    var hgsid = getHgsid();
+    var url = 'hgCustom?hgsid='+hgsid+'&hgct_do_delete=delete&hgct_del_'+trackName+'=on';
+    xhttp = new XMLHttpRequest();
+    xhttp.open("GET", url);
+    xhttp.send();
+    divEl.closest("td").remove();
+}
+
+
   //////////////////////////////////
  //// popup (aka modal dialog) ////
 //////////////////////////////////
@@ -5315,7 +5330,6 @@ var downloadCurrentTrackData = {
     }
 };
 
-
   ///////////////
  //// READY ////
 ///////////////
@@ -5325,6 +5339,9 @@ $(document).ready(function()
 
     // hg.conf will turn this on 2020-10 - Hiram
     if (window.mouseOverEnabled) { mouseOver.addListener(); }
+
+    // custom tracks get little trash icons
+    $("div.trackDeleteIcon").click( onTrackDelIconClick );
 
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.
@@ -5486,8 +5503,56 @@ $(document).ready(function()
     }
 
     // show a tutorial page if this is a new user
-    if (tour !== undefined) {
-        tour.start();
+    if (typeof tour !== 'undefined' && tour) {
+        let lsKey = "hgTracks_hideTutorial";
+        let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
+        let hideTutorial = localStorage.getItem(lsKey);
+        // if the user is not logged in and they have not already gone through the
+        // tutorial
+        if (!isUserLoggedIn && !hideTutorial) {
+            let msg = "We now have a guided tutorial available, " +
+                "to start the tutorial " +
+                "<a id='showTutorialLink' href=\"#showTutorial\">click here</a>.";
+            notifBoxSetup("hgTracks", "hideTutorial", msg);
+            notifBoxShow("hgTracks", "hideTutorial");
+            $("#showTutorialLink").click(function() {
+                $("#hgTracks_hideTutorialnotifyHide").click();
+                tour.start();
+            });
+        }
+        // allow user to bring the tutorial up under the help menu whether they've seen
+        // it or not
+        let tutorialLinkMenuItem = document.createElement("li");
+        tutorialLinkMenuItem.id = "hgTracksHelpTutorialMenuItem";
+        tutorialLinkMenuItem.innerHTML = "<a id='hgTracksHelpTutorialLink' href='#showTutorial'>" +
+            "Interactive Tutorial</a>";
+        $("#help > ul")[0].appendChild(tutorialLinkMenuItem);
+        $("#hgTracksHelpTutorialLink").click(function () {
+            tour.start();
+        });
     }
     
 });
+
+function hgtWarnTiming(maxSeconds) {
+    /* show a dialog box if the page load time was slower than x seconds. Has buttons to hide or never show this again. */
+    var loadTime = window.performance.timing.domContentLoadedEventStart-window.performance.timing.navigationStart; /// in msecs
+    var loadSeconds = loadTime/1000;
+    if (loadSeconds < maxSeconds)
+        return;
+
+    var skipNotification = localStorage.getItem("hgTracks.hideSpeedNotification");
+    dumpCart(loadSeconds, skipNotification);
+        
+    if (skipNotification)
+        return;
+
+    msg = "This page took "+loadSeconds+" seconds to load. We strive to keep "+
+        "the UCSC Genome Browser quick and responsive. See our "+
+        "<b><a href='../FAQ/FAQtracks.html#speed' target='_blank'>display speed FAQ</a></b> for "+
+        "common causes and solutions to slow performance. If this problem continues, you can create a  "+
+        "session link via <b>My Data</b> &gt; <b>My Sessions</b> and send the link to <b>genome-www@soe.ucsc.edu</b>.";
+    notifBoxSetup("hgTracks", "hideSpeedNotification", msg);
+    notifBoxShow("hgTracks", "hideSpeedNotification");
+
+}

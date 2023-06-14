@@ -191,19 +191,13 @@ while ((c = *s++) != 0)
 return count;
 }
 
-struct mafBaseProbs *hgMafProbs(
-	char *database,     /* Database, must already have hSetDb to this */
-	char *track,        /* Name of MAF track */
-	char *chrom,        /* Chromosome (in database genome) */
-	int start, int end, /* start/end in chromosome */
-        char strand         /* strand */
+struct mafBaseProbs *hgMafProbsHelper(
+        int size,
+        struct mafAli *maf
         )
 /* calculate the probability of each nucleotide in each column of a maf. */
 {
-struct mafAli *maf = hgMafFrag(database, track, chrom, start, end, '+', NULL, NULL);
-
 struct mafBaseProbs *probs;
-int size = end - start;
 
 AllocArray(probs, size);
 int count = 0;
@@ -241,16 +235,45 @@ for(ii=0; ii < maf->textSize; ii++)
 return probs;
 }
 
-struct mafAli *hgMafFrag(
+struct mafBaseProbs *hgBigMafProbs(
+	char *database,     /* Database, must already have hSetDb to this */
+        struct bbiFile *bbi,
+	char *chrom,        /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+        char strand         /* strand */
+        )
+/* calculate the probability of each nucleotide in each column of a bigMaf. */
+{
+struct mafAli *maf = hgBigMafFrag(database, bbi, chrom, start, end, '+', NULL, NULL);
+
+return hgMafProbsHelper(end - start, maf);
+}
+
+struct mafBaseProbs *hgMafProbs(
 	char *database,     /* Database, must already have hSetDb to this */
 	char *track,        /* Name of MAF track */
 	char *chrom,        /* Chromosome (in database genome) */
 	int start, int end, /* start/end in chromosome */
+        char strand         /* strand */
+        )
+/* calculate the probability of each nucleotide in each column of a maf. */
+{
+struct mafAli *maf = hgMafFrag(database, track, chrom, start, end, '+', NULL, NULL);
+
+return hgMafProbsHelper(end - start, maf);
+}
+
+static struct mafAli *hgMafFragHelper(
+	char *database,     /* Database, must already have hSetDb to this */
+	//char *track,        /* Name of MAF track */
+	char *chrom,        /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
 	char strand,        /* Chromosome strand. */
+        struct mafAli *mafList,
 	char *outName,      /* Optional name to use in first component */
 	struct slName *orderList /* Optional order of organisms. */
 	)
-/* mafFrag- Extract maf sequences for a region from database.
+/* hgMafFragHelper- Extract maf sequences for a region from database.
  * This creates a somewhat unusual MAF that extends from start
  * to end whether or not there are actually alignments.  Where
  * there are no alignments (or alignments missing a species)
@@ -259,9 +282,8 @@ struct mafAli *hgMafFrag(
  * as normal. */
 {
 int chromSize = hChromSize(database, chrom);
-struct sqlConnection *conn = hAllocConn(database);
 struct dnaSeq *native = hChromSeq(database, chrom, start, end);
-struct mafAli *maf, *mafList = mafLoadInRegion(conn, track, chrom, start, end);
+struct mafAli *maf;
 char masterSrc[128];
 struct hash *orgHash = newHash(10);
 struct oneOrg *orgList = NULL, *org, *nativeOrg = NULL;
@@ -461,8 +483,42 @@ slReverse(&maf->components);
 
 slFreeList(&orgList);
 freeHash(&orgHash);
-hFreeConn(&conn);
 return maf;
+}
+
+struct mafAli *hgBigMafFrag(
+	char *database,     /* Database, must already have hSetDb to this */
+        struct bbiFile *bbi,
+	char *chrom,        /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+	char strand,        /* Chromosome strand. */
+	char *outName,      /* Optional name to use in first component */
+	struct slName *orderList /* Optional order of organisms. */
+	)
+/* hgBigMafFrag - Extract maf sequences for a region from a bigMaf and call hgMafFragHelper. */
+{
+struct mafAli *mafList = bigMafLoadInRegion( bbi,  chrom, start, end);
+return hgMafFragHelper(database, chrom, start, end, strand, mafList, outName, orderList);
+}
+
+struct mafAli *hgMafFrag(
+	char *database,     /* Database, must already have hSetDb to this */
+	char *track,        /* Name of MAF track */
+	char *chrom,        /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+	char strand,        /* Chromosome strand. */
+	char *outName,      /* Optional name to use in first component */
+	struct slName *orderList /* Optional order of organisms. */
+	)
+/* hgMafFrag- Extract maf sequences for a region from database and call hgMafFragHelper. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct mafAli  *mafList = mafLoadInRegion(conn, track, chrom, start, end);
+struct mafAli *ret = hgMafFragHelper(database, chrom, start, end, strand, mafList, outName, orderList);
+
+hFreeConn(&conn);
+
+return ret;
 }
 
 struct consWiggle *wigMafWiggles(char *db, struct trackDb *tdb)

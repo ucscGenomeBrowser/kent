@@ -111,7 +111,7 @@ compositeTrack on
 
         track liftOverHg38
         shortLabel UCSC liftOver to hg38
-        longLabel UCSC liftOver alignments to hg38
+        longLabel Lifting: UCSC liftOver alignments to hg38
         priority 1
         type chain hg38
         matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -123,7 +123,7 @@ compositeTrack on
 
         track chainHg38ReMap
         shortLabel NCBI ReMap hg38
-        longLabel NCBI ReMap alignments to hg38/GRCh38
+        longLabel Lifting: NCBI ReMap alignments to hg38/GRCh38
         priority 2
         type chain hg38
         matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -135,7 +135,7 @@ compositeTrack on
 
         track chainHg38ReMapAxtChain
         shortLabel ReMap + axtChain hg38
-        longLabel NCBI ReMap alignments to hg38/GRCh38, joined by axtChain
+        longLabel Lifting: NCBI ReMap alignments to hg38/GRCh38, joined by axtChain
         priority 3
         type chain hg38
         matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -147,7 +147,8 @@ compositeTrack on
 
         track liftOverHg38Agp
         shortLabel AGP liftOver
-        longLabel AGP alignments (A Hinrichs)
+        # the chain files made by Angie, not the ones made by Hiram
+        longLabel Lifting: AGP-derived pseudo-alignments to hg38/GRCh38
         priority 4
         type chain hg38
         matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -159,7 +160,7 @@ compositeTrack on
 
         track liftOverHg38allPlusAgpExtMain
         shortLabel liftOver+AGP, main chroms
-        longLabel AGP plus UCSC liftOver alingments, main chromosomes only
+        longLabel Lifting: AGP plus UCSC liftOver alingments to hg38, main chromosomes only
         priority 5
         type chain hg38
         matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -171,7 +172,7 @@ compositeTrack on
 
         track liftOverHg38allPlusAgpExtAll
         shortLabel liftOver+AGP, all chroms
-        longLabel AGP plus UCSC liftOver alingments, all chromosomes
+        longLabel Lifting: AGP plus UCSC liftOver alingments, all chromosomes (incl. patches/alt/fix)
         priority 6
         type chain hg19
         matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -810,6 +811,7 @@ priority 2
         color 10,10,70
         altColor 70,10,10
         priority 1
+        logoMaf multiz46way
 
         track phyloP46wayPlacental
         subTrack cons46wayViewphyloP on
@@ -827,6 +829,7 @@ priority 2
         color 25,25,95
         altColor 95,25,25
         priority 3
+        logoMaf multiz46way
 
         track phyloP46wayAll
         subTrack cons46wayViewphyloP off
@@ -844,6 +847,7 @@ priority 2
         color 40,40,120
         altColor 120,40,40
         priority 4
+        logoMaf multiz46way
 
     track cons46wayViewphastcons
     shortLabel Element Conservation (phastCons)
@@ -2335,6 +2339,7 @@ include platinumGenomes.ra
 include hic.ra
 include exomeProbesets.ra
 include reMap.ra
+include fantom5.ra alpha
 
 track epdNew
 shortLabel EPDnew Promoters

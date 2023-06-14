@@ -725,7 +725,7 @@ var hgGateway = (function() {
             if (activeTaxIds[taxId]) {
                 // When user clicks on icon, set the taxId (default database);
                 // scroll the image to that species and clear the species autocomplete input.
-                onClick = setTaxId.bind(null, taxId, null, true, true);
+                onClick = setTaxId.bind(null, taxId, null, null, true, true);
                 // Onclick for both the icon and its sibling label:
                 $('.jwIconSprite' + name).parent().children().click(onClick);
                 haveIcon = true;
@@ -1406,14 +1406,14 @@ var hgGateway = (function() {
         clearWatermarkInput($('#positionInput'), positionWatermark);
     }
 
-    function setTaxId(taxId, db, doScrollToItem, doClearSpeciesInput) {
+    function setTaxId(taxId, db, org, doScrollToItem, doClearSpeciesInput) {
         // The user has selected a species (and possibly even a particular database) --
         // if we're not already using it, change to it.
         var cmd;
         if (uiState.hubUrl !== null || taxId !== uiState.taxId || (db && db !== uiState.db)) {
             uiState.taxId = taxId;
             uiState.hubUrl = null;
-            cmd = { setTaxId: { taxId: '' + taxId } };
+            cmd = { setTaxId: { taxId: '' + taxId, org: org } };
             if (db) {
                 uiState.db = db;
                 cmd.setTaxId.db = db;
@@ -1428,7 +1428,7 @@ var hgGateway = (function() {
         }
   }
 
-    function setHubDb(hubUrl, taxId, db, hubName, isAutocomplete) {
+    function setHubDb(hubUrl, taxId, db, hubName, org, isAutocomplete) {
         // User clicked on a hub name (switch to its default genome) or selected an
         // assembly hub from autocomplete (switch to that assembly hub db).
         var cmd;
@@ -1460,13 +1460,14 @@ var hgGateway = (function() {
         // It might be a taxId and/or db from dbDb, or it might be a hub db.
         var taxId = item.taxId || -1;
         var db = item.db;
+        var org = item.org;
         if (item.hubUrl) {
             // The autocomplete sends the hub database from hubPublic.dbList,
             // without the hub prefix -- restore the prefix here.
             db = item.hubName + '_' + item.db;
-            setHubDb(item.hubUrl, taxId, db, item.hubName, true);
+            setHubDb(item.hubUrl, taxId, db, item.hubName, org, true);
         } else {
-            setTaxId(taxId, item.db, true, false);
+            setTaxId(taxId, item.db, org, true, false);
         }
     }
 
@@ -1474,7 +1475,7 @@ var hgGateway = (function() {
         // When user clicks on a label, use that taxId (default db);
         // don't scroll to the label because if they clicked on it they can see it already;
         // do clear the autocomplete input.
-        setTaxId(taxId, null, false, true);
+        setTaxId(taxId, null, null, false, true);
     }
 
     function onClickHubName(hubUrl, taxId, db, hubName) {
@@ -1561,7 +1562,17 @@ var hgGateway = (function() {
         } else {
             // User has entered a search term with no suggestion, go to the disambiguation
             // page so the user can choose a position
-            // but first check if just a plain chromosome name was entered:
+            // redirect to hgBlat if the input looks like a DNA sequence
+            // minimum length=19 so we do not accidentally redirect to hgBlat for a gene identifier 
+            // like ATG5
+            var dnaRe = new RegExp("^(>[^\n\r ]+[\n\r ]+)?(\\s*[actgnACTGN \n\r]{19,}\\s*)$");
+            if (dnaRe.test(searchTerm)) {
+                var blatUrl = "hgBlat?type=BLAT%27s+guess&userSeq="+searchTerm;
+                window.location.href = blatUrl;
+                return false;
+            }
+
+            // also check if just a plain chromosome name was entered:
             $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
             cmd = {getChromName: {'searchTerm': searchTerm, 'db': uiState.db}};
             cart.send(cmd, onSuccess, onFail);

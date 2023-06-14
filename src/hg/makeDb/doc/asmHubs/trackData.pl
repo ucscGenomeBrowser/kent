@@ -232,7 +232,7 @@ sub startTable() {
 # coordinate the order of these column headings with the @trackList listed above
 
 print '<table class="sortable" border="1">
-<thead><tr><th>count</th>
+<thead style="position:sticky; top:0;"><tr><th>count</th>
   <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
 ';
   print '<th class="sorttable_numeric">ncbiRefSeq</th>
@@ -507,6 +507,13 @@ sub tableContents() {
     foreach my $track (@trackList) {
       my $trackFile = "$buildDir/bbi/$asmId.$track";
       my $trackFb = "$buildDir/trackData/$track/fb.$asmId.$track.txt";
+      # no ensGene file ?  Then look for ebiGene file
+      if ($track eq "ensGene" && ! -s $trackFb) {
+        if ( -d "$buildDir/trackData/ebiGene" ) {
+          $trackFb = "$buildDir/trackData/ebiGene/fb.ebiGene.txt" if ( -d "$buildDir/trackData/ebiGene/fb.ebiGene.txt");
+          $trackFile = "$buildDir/bbi/$asmId.ebiGene";
+        }
+      }
       my $runDir = "$buildDir/trackData/$track";
       my ($itemCount, $percentCover);
       my $customKey = "";
@@ -598,9 +605,14 @@ sub tableContents() {
           }
 	} else {	# not the rmsk track
           ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
-          if (0 == $testOutput) {
-              # if track ncbiRefSeq does not exist, try the ncbiGene track
-            if ($track eq "ncbiRefSeq" && $itemCount eq "n/a") {
+          if (0 == $testOutput) {	# only on the production stats page
+            # if track ensGene does not exist, try the ebiGene track
+            if ($track eq "ensGene" && $itemCount eq "n/a") {
+              $runDir = "$buildDir/trackData/ebiGene";
+              $trackFile = "$buildDir/bbi/$asmId.$track.bb";
+              ($itemCount, $percentCover) = oneTrackData($asmId, "ebiGene", $trackFile, $totalSize, $trackFb, $runDir);
+            } elsif ($track eq "ncbiRefSeq" && $itemCount eq "n/a") {
+            # if track ncbiRefSeq does not exist, try the ncbiGene track
               $runDir = "$buildDir/trackData/ncbiGene";
               $trackFile = "$buildDir/bbi/$asmId.$track.bb";
               ($itemCount, $percentCover) = oneTrackData($asmId, "ncbiGene", $trackFile, $totalSize, $trackFb, $runDir);

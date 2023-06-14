@@ -59,6 +59,14 @@ time jq -c -r '[.accession, .biosample, .isolate.collectionDate, .location.geogr
 | sort -u \
     > ncbi_dataset.tsv
 
+# Make sure we didn't get a drastically truncated download despite apparently successful commands
+minSeqCount=6800000
+metadataLC=$(wc -l < ncbi_dataset.tsv)
+if (($metadataLC < $minSeqCount)); then
+    echo "TOO FEW SEQUENCES: $metadataLC lines of ncbi_dataset.tsv, expected at least $minSeqCount"
+    exit 1
+fi
+
 time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample.jsonl | uniq > gb.bioSample.tab
 
 # Use BioSample metadata to fill in missing pieces of GenBank metadata and report conflicting

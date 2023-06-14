@@ -305,8 +305,8 @@
     # commit all
     jkmake DBS=mm39 alpha
 ##############################################################################
-2022-12-29: import of UCSC GENCODE group processing of GENCODE VM31 pre-release (markd)
-2023-02-13: import of UCSC GENCODE group processing of GENCODE VM31 final release (markd)
+2022-12-29: import of UCSC GENCODE group processing of GENCODE VM32 pre-release (markd)
+2023-02-13: import of UCSC GENCODE group processing of GENCODE VM32 final release (markd)
 
     pre-release moved to hgcImportPre, notes revised
     
@@ -335,6 +335,40 @@
     # edit all.joiner to add ~/tmp/gencodeVM32/hgcImport.joiner
     # verify with:
     pushd /hive/data/genomes/mm39/bed/gencodeVM32/hgcImport
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # check tracks in browser sandbox
+    # commit all
+    jkmake DBS=mm39 alpha
+##############################################################################
+2023-04-25: import of UCSC GENCODE group processing of GENCODE VM33 pre-release (markd)
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+    pre="Pre"
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm39/bed/gencodeVM33/hgcImport${pre}
+    pushd /hive/data/genomes/mm39/bed/gencodeVM33/hgcImport${pre}
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbs mm39 M33 110 'May 2023'
+
+    # edit mouse/mm39/trackDb.gencode.ra to add new .ra file include
+    jkmake DBS=mm39
+
+    ## only if being pushed to RR:
+    # Update 'Release Notes' in
+    # mouse/mm39/wgEncodeGencodeSuper.html
+
+    # edit all.joiner to add ~/tmp/gencodeVM33/hgcImport${pre}.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm39/bed/gencodeVM33/hgcImport${pre}
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
     # check tracks in browser sandbox

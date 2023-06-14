@@ -35,3 +35,7 @@ boolean earlyBotCheck(long enteredMainTime, char *cgiName, double delayFrac, int
  * and exitType is either 'html' or 'json' to do that type of exit output in
  * the case of hogExit();
  */
+
+int hgBotDelayCurrWarnMs();
+/* get number of millis that are tolerated until a warning is shown on the most recent call to earlyBotCheck */
+
