@@ -9,9 +9,10 @@ const tour = new Shepherd.Tour({
     cancelIcon: {
       enabled: true
     },
-    classes: 'class-1 class-2 dark-background',
+    classes: 'class-1 class-2',
     scrollTo: { behavior: 'smooth', block: 'center' }
-  }
+  },
+  useModalOverlay: true
 });
 
 var tutorialButtons = {
