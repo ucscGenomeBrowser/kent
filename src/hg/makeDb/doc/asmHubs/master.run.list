@@ -908,6 +908,7 @@
 ./runBuild GCA_027557775.1_bGalGal4.pri birds Gallus_gallus
 ./runBuild GCA_027559525.1_bAcrTri1.alt birds Acridotheres_tristis
 ./runBuild GCA_027559615.1_bAcrTri1.pri birds Acridotheres_tristis
+./runBuild GCA_027560395.1_ASM2756039v1 vertebrate Boaedon_fuliginosus
 ./runBuild GCA_027574665.1_bRhyJub1.pri birds Rhynochetos_jubatus
 ./runBuild GCA_027579445.1_bAmmNel1.pri birds Ammospiza_nelsoni
 ./runBuild GCA_027579665.1_bAmmNel1.alt birds Ammospiza_nelsoni
