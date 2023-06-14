@@ -46,6 +46,18 @@ text: 'This is the first step in the tutorial, it is at ' +
 });
 
 tour.addStep({
+title: 'Jairo\'s test edit'
+text: 'This will highlight the blue navigation bar' +
+        'and hopefully works',
+    attachTo: {
+        element: '#hgTracks-main-menu-whole',
+        on: 'bottom'
+    },
+    buttons: [tutorialButtons['next'], tutorialButtons['end']],
+    id: 'test'
+});
+
+tour.addStep({
     title: 'Second step',
     text: 'This is the second step in the tutorial, to the left of the \'go\' button ' +
         'yes the tutorial will restart every time you refresh the page since this is a ' +
