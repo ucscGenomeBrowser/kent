@@ -801,8 +801,10 @@ function notifBoxShow(cgiName, keyName) {
     var notifEl = document.getElementById(lsKey + "notifBox");
     // TODO: make a generic element for positioning this
     var parentEl = document.getElementById('TrackHeaderForm');
-    parentEl.appendChild(notifEl);
-    notifEl.style.display = 'block';
+    if (parentEl) {
+        parentEl.appendChild(notifEl);
+        notifEl.style.display = 'block';
+    }
 }
 
 function notifBoxSetup(cgiName, keyName, msg) {
