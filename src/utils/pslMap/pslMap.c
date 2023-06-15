@@ -25,6 +25,8 @@ static struct optionSpec optionSpecs[] = {
     {"swapIn", OPTION_BOOLEAN},
     {"mapInfo", OPTION_STRING},
     {"mappingPsls", OPTION_STRING},
+    {"inType", OPTION_STRING},
+    {"mapType", OPTION_STRING},
     {"simplifyMappingIds", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -39,6 +41,8 @@ static boolean swapIn = FALSE;
 static boolean simplifyMappingIds = FALSE;
 static char* mapInfoFile = NULL;
 static char* mappingPslFile = NULL;
+static enum pslType inPslType = pslTypeUnspecified;
+static enum pslType mapPslType = pslTypeUnspecified;
 
 static char *mapInfoHdr =
     "#srcQName\t" "srcQStart\t" "srcQEnd\t" "srcQSize\t"
@@ -60,6 +64,20 @@ static char *usageMsg =
 #include "usage.msg"
     ;
 errAbort("%s", usageMsg);
+}
+
+static enum pslType parsePslType(char *typeStr)
+/* parse argument value of pslType */
+{
+if (sameString(typeStr, "prot_prot"))
+    return pslTypeProtProt;
+else if (sameString(typeStr, "prot_na"))
+    return pslTypeProtNa;
+else if (sameString(typeStr, "na_na"))
+    return pslTypeNaNa;
+else
+    errAbort("invalid value for PSL type '%s', expected 'prot_prot', 'prot_na', or 'na_na'", typeStr);
+return pslTypeUnspecified;
 }
 
 static void verbosePslNl(int verbosity, char *msg, struct psl *psl)
@@ -301,14 +319,10 @@ static boolean mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
                           unsigned* outPslLineRef)
 /* map one pair of query and target PSL */
 {
-struct psl* mappedPsl;
-if (inPsl->tSize != mapAln->psl->qSize)
-    errAbort("Error: inPsl %s tSize (%d) != mapping alignment %s qSize (%d) (perhaps you need to specify -swapMap?)\n",
-             inPsl->tName, inPsl->tSize, mapAln->psl->qName, mapAln->psl->qSize);
 verbosePslNl(2, "inAln", inPsl);
 verbosePslNl(2, "mapAln", mapAln->psl);
 
-mappedPsl = pslTransMap(mapOpts, inPsl, mapAln->psl);
+struct psl* mappedPsl = pslTransMap(mapOpts, inPsl, inPslType, mapAln->psl, mapPslType);
 
 verbosePslNl(2, "mappedAln", mappedPsl);
 
@@ -399,6 +413,12 @@ if (mapFileWithInQName && chainMapFile)
 swapMap = optionExists("swapMap");
 swapIn = optionExists("swapIn");
 simplifyMappingIds = optionExists("simplifyMappingIds");
+char *typeStr;
+if ((typeStr = optionVal("inType", NULL)) != NULL)
+    inPslType = parsePslType(typeStr);
+if ((typeStr = optionVal("mapType", NULL)) != NULL)
+    mapPslType = parsePslType(typeStr);
+
 mapInfoFile = optionVal("mapInfo", NULL);
 mappingPslFile = optionVal("mappingPsls", NULL);
 pslMap(argv[1], argv[2], argv[3]);
@@ -410,4 +430,3 @@ return 0;
  * c-file-style: "jkent-c"
  * End:
  */
-

@@ -17,6 +17,14 @@ static char *defaultDestination = "../cgi-bin/hgGateway";
 boolean problem = FALSE;
 char *destination = NULL;
 
+static void resetLocalStorage() 
+/* the cart is for configuration options that are relevant to a session. We are using more and more localStorage settings, these are
+ * relevant to the particular web browser where the browser runs, e.g. notification settings, maybe one day font sizes and color schemes of the UI.
+ * QA must be able to reset these, too, so do this here now */
+{
+jsInline("localStorage.clear();");
+}
+
 void doMiddle()
 /* cartReset - Reset cart. */
 {
@@ -26,6 +34,8 @@ if (problem)
 	   "Request for destination=[%s] rejected.\n", destination);
     }
 cartResetInDb(hUserCookie());
+resetLocalStorage();
+jsInlineFinish();
 }
 
 int main(int argc, char *argv[])

@@ -22,7 +22,6 @@ searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
 defaultLinkedTables kgXref
-pennantIcon Updated red ../goldenPath/newsarch.html#022423 "Updated Feb. 24, 2023"
 squishyPackPoint 2
 squishyPackField rank
 

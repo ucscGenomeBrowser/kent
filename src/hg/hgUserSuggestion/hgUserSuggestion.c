@@ -20,6 +20,9 @@
 #include "hgConfig.h"
 #include "hgUserSuggestion.h"
 #include "mailViaPipe.h"
+#include "htmlPage.h"
+#include "net.h"
+#include "jsonParse.h"
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* The user's ui state. */
@@ -79,7 +82,7 @@ static char *now()
 {
 char nowBuf[512];
 time_t curtime;
-curtime = time (NULL); 
+curtime = time (NULL);
 struct tm *theTime = localtime(&curtime);
 strftime(nowBuf, sizeof nowBuf, "%Y-%m-%d %H:%M:%S", theTime);
 return cloneString(nowBuf);
@@ -88,7 +91,7 @@ return cloneString(nowBuf);
 int spc_email_isvalid(const char *address) {
 /* Check the format of an email address syntactically. Return 1 if
  * valid, else 0 */
-/* Code copied from the book: 
+/* Code copied from the book:
 "Secure Programming Cookbook for C and C++"
 By: John Viega; Matt Messier
 Publisher: O'Reilly Media, Inc.
@@ -140,7 +143,7 @@ return (count >= 1);
 boolean validateCategory(char *category)
 /* Validate the Category from the request */
 {
-const char *cat[5] = {"Tracks", "Genome Assemblies",  "Browser Tools", 
+const char *cat[5] = {"Tracks", "Genome Assemblies",  "Browser Tools",
                       "Command-line Utilities", "Others"};
 int i;
 for(i=0;i<5;i++)
@@ -165,7 +168,7 @@ hPrintf(
     "A copy of the suggestion will be sent to your email address along with a reference number. "
     "You may follow up on the status of your request at any time by <a href=\"../contacts.html#followup\">contacting us</a> and quoting the reference number.</P>");
 hPrintf("<P>Please note: this form is not the proper place to submit questions regarding browser use or bug reports. Use the links on our <a href=\"../contacts.html\">contact page</a> instead.</P>");
-hPrintf("<HR><BR>"); 
+hPrintf("<HR><BR>");
 hPrintf(
     "      <div id=\"suggest\">  \n"
     "       <label for=\"name\">Your Name:</label><input type=\"text\" name=\"suggestName\" id=\"name\" size=\"50\"style=\"margin-left:20px\" maxlength=\"256\"/><BR><BR>\n"
@@ -185,12 +188,21 @@ hPrintf(
     "       <label for=\"details\">Details:</label><BR><textarea name=\"suggestDetails\" id=\"details\" cols=\"100\" rows=\"15\" maxlength=\"4096\"></textarea><BR><BR>\n"
     "<input type=\"text\" name=\"suggestWebsite\" style=\"display: none;\" />"
     "     </div>\n");
-hPrintf(
+if (isNotEmpty(cfgOption(CFG_SUGGEST_SITE_KEY)))
+    {
+    // hidden reCaptcha token input
+    hPrintf("<input type='hidden' id='reCaptchaToken' name='reCaptchaToken'>");
+    }
+else
+    {
+    hPrintf(
     "         <p>\n"
     "           <label for=\"code\">Enter the following value below: <span id=\"txtCaptchaDiv\" style=\"color:#F00\"></span><BR> \n"
     "           <input type=\"hidden\" id=\"txtCaptcha\" /></label>\n"
     "           <input type=\"text\" name=\"txtInput\" id=\"txtInput\" size=\"30\" />\n"
     "         </p>\n");
+    }
+
 hPrintf(
     "      <div class=\"formControls\">\n"
     "        <input id=\"sendButton\" type=\"button\" value=\"Send\"> \n"
@@ -198,12 +210,15 @@ hPrintf(
     "      </div>\n"
     "      \n"
     "     </FORM>\n\n");
+
+
 jsOnEventById("click","sendButton","submitform();");
 }
+
 void printValidateScript()
 /* javascript to validate form inputs */
 {
-jsInline(  
+jsInline(
     "    function validateMainForm(theform)\n"
     "    {\n"
     "    var x=theform.suggestName.value;\n"
@@ -265,7 +280,7 @@ jsInline(
 void printCheckCaptchaScript()
 /* javascript to check CAPTCHA code */
 {
-jsInline( 
+jsInline(
     " // The Simple JavaScript CAPTCHA Generator code is copied from typicalwhiner.com/190/simple-javascript-captcha-generator \n"
     "         function checkCaptcha(theform){\n"
     "                 var why = \"\";\n"
@@ -311,18 +326,43 @@ jsInline(
 void printSubmitFormScript()
 /* javascript to submit form */
 {
+if (isNotEmpty(cfgOption(CFG_SUGGEST_SITE_KEY)))
+    {
+    struct dyString *jsText = dyStringNew(0);
+    dyStringPrintf(jsText, "\n function submitform(){\n"
+    "         if ( validateMainForm(document.forms['mainForm'])){\n"
+    "             grecaptcha.execute('%s', { action: 'userSuggest' })\n"
+    "               .then(function(token) {\n"
+    "                document.getElementById('reCaptchaToken').value = token;\n"
+    "                 document.forms['mainForm'].submit();\n"
+    "             });\n"
+    "         }\n"
+    " }\n", cfgOption(CFG_SUGGEST_SITE_KEY));
+    jsInline(dyStringCannibalize(&jsText));
+    }
+else
+    {
 jsInline(
-    "     function submitform()\n"
-    "     {\n"
-    "      if ( validateMainForm(document.forms[\"mainForm\"]) && checkCaptcha(document.forms[\"mainForm\"]))\n"
-    "        {\n"
-    "          document.forms[\"mainForm\"].submit();\n"
-    "        }\n"
-    "     }\n"
+    "\n function submitform(){\n"
+    "         if ( validateMainForm(document.forms['mainForm']) && checkCaptcha(document.forms['mainForm'])){\n"
+    "                 document.forms['mainForm'].submit();\n"
+    "         }\n"
+    " }\n"
+    );
+    }
+}
+
+static void printReCaptchaV3()
+/* output the js to perform the reCAPTCHA v3 function */
+{
+jsInline(
+    "\n window.onload = function() {\n"
+    "  grecaptcha.ready();\n"
+    " };\n"
     );
 }
 
-void printSuggestionConfirmed(char *summary, char * refID, char *userAddr, char *adminAddr, char *details)
+void printSuggestionConfirmed(char *summary, char * refID, char *userAddr, char *adminAddr, char *details, double captchaScore)
 /* display suggestion confirm page */
 {
 hPrintf(
@@ -332,7 +372,7 @@ hPrintf(
     "You may follow up on the status of your request at any time by "
     "<a href=\"../contacts.html#followup\">contacting us</a> and quoting your reference number:<BR><BR>%s<BR><BR>"
     "A copy of this information has also been sent to you at %s.<BR></p>",
-     refID, userAddr); 
+     refID, userAddr);
 hPrintf(
     "<p><a href=\"hgUserSuggestion\">Click here if you wish to make additional suggestions.</a></p>");
 hPrintf(
@@ -343,17 +383,26 @@ hPrintf(
     "<pre>%s</pre>"
     "</p>",
     summary, details);
-} 
+if (captchaScore > -1.0)
+    hPrintf("<p>(google captcha score: %g)</p>\n", captchaScore);
+}
 
-void printInvalidForm()
+void printInvalidForm(double captchaScore)
 /* display invalid form page */
 {
 hPrintf(
     "<h2>Invalid Form.</h2>");
-hPrintf(
-    "<p>"
-    "The form is invalid. Please correct it and "
-    "<a id='goBack' >submit</a> again.</p>"
+if (captchaScore > -1.0)
+    hPrintf(
+	"<p>"
+	"The form is invalid. Please correct it and "
+	"<a id='goBack' >submit</a> again. (score: %g)</p>", captchaScore
+    );
+else
+    hPrintf(
+	"<p>"
+	"The form is invalid. Please correct it and "
+	"<a id='goBack' >submit</a> again.</p>"
     );
 jsOnEventById("click", "goBack", "history.go(-1)");
 }
@@ -397,7 +446,7 @@ safef(msg, sizeof(msg),
     "SuggestionID:: %s\nUserName:: %s\nUserEmail:: %s\nCategory:: %s\nSummary:: %s\n\n\nDetails::\n%s",
     suggestID, sName, sEmail, sCategory, sSummary, sDetails);
 
-safef(subject, sizeof(subject),"%s %s", filter, suggestID);   
+safef(subject, sizeof(subject),"%s %s", filter, suggestID);
 // ignore returned result
 mailViaPipe(mailTo, subject, msg, mailFrom);
 }
@@ -429,9 +478,29 @@ void askForSuggest(char *organism, char *db)
 {
 printMainForm();
 printValidateScript();
-printCheckCaptchaScript();
-printSubmitFormScript();
+if (isNotEmpty(cfgOption(CFG_SUGGEST_SITE_KEY)))
+    {
+    printSubmitFormScript();
+    }
+else
+    {
+    printCheckCaptchaScript();
+    printSubmitFormScript();
+    }
 //cartSaveSession(cart);
+}
+
+static void recordError(double score, char *msg, char *urlResult)
+/* record captcha errors in apache error_log */
+{
+if (urlResult)
+    {
+    stripChar(urlResult, '\n');
+    stripChar(urlResult, ' ');
+    fprintf(stderr, "reCAPTCHA score: %g, '%s' '%s'\n", score, msg, urlResult);
+    }
+else
+    fprintf(stderr, "reCAPTCHA score: %g, '%s'\n", score, msg);
 }
 
 void  submitSuggestion()
@@ -441,6 +510,71 @@ void  submitSuggestion()
 
 /* values from cart */
 char *sName=cartUsualString(cart,"suggestName","");
+boolean captchaRobot = FALSE;	// OK when not configured
+double captchaScore = -1.0;
+
+if (isNotEmpty(cfgOption(CFG_SUGGEST_SECRET_KEY)))
+    {
+    captchaRobot = TRUE;	// assume robot until proven human
+    captchaScore = -0.9;	// and allow score to show up in printout
+  char *threshHoldString = cfgOptionDefault(CFG_SUGGEST_HUMAN_THRESHOLD, "0.5");
+    double threshHoldScore = sqlDouble(threshHoldString);
+    char *reCaptcha = cartUsualString(cart,"reCaptchaToken", NULL);
+    if (reCaptcha)
+        {
+        char siteverify[4096];
+        safef(siteverify, sizeof(siteverify), "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s", cfgOption(CFG_SUGGEST_SECRET_KEY), reCaptcha);
+        struct htmlPage *verify = htmlPageGet(siteverify);
+    /*  successful return:
+
+    {  "success": true,  "challenge_ts": "2023-06-09T23:47:35Z",  "hostname": "genome-test.gi.ucsc.edu",  "score": 0.9,  "action": "userSuggest"}
+
+        error return:
+    {  "success": false,  "error-codes": [    "timeout-or-duplicate"  ]}'
+    */
+
+        if (verify)
+            {
+            struct lm *lm = lmInit(1<<16);
+            struct jsonElement *jsonObj = jsonParseLm(verify->htmlText, lm);
+            if (jsonObj)
+                {
+                struct jsonElement *score = jsonFindNamedField(jsonObj, NULL, "score");
+                struct jsonElement *success = jsonFindNamedField(jsonObj, NULL, "success");
+                if (success)
+		    {
+		    if (success->val.jeBoolean)
+			{
+			if (score)
+			    {
+                            captchaScore = score->val.jeDouble;
+			    if (score->val.jeDouble > threshHoldScore)
+				{
+				captchaRobot = FALSE;
+				recordError(captchaScore, "captcha approved", verify->htmlText);
+				}
+			    else
+				recordError(captchaScore, "score < threshold", verify->htmlText);
+			    }
+			else
+			    recordError(captchaScore, "score not found in JSON", verify->htmlText);
+			}	// if (success->val.jeBoolean)
+		    else
+			recordError(captchaScore, "success FALSE", verify->htmlText);
+		    }	// if (success)
+		else
+		  recordError(captchaScore, "success status not found in JSON", verify->htmlText);
+                }	// if (jsonObj)
+	    else
+		recordError(captchaScore, "JSON object not found in siteverify return", verify->htmlText);
+            }	// if (verify)
+	else
+	    recordError(captchaScore, "siteverify URL access failed", NULL);
+        }	// if (reCaptcha)
+    else
+	recordError(captchaScore, "reCaptchaToken not found in form", NULL);
+    }	// if (isNotEmpty(cfgOption(CFG_SUGGEST_SECRET_KEY)))
+
 char *sEmail=cartUsualString(cart,"suggestEmail","");
 char *sCategory=cartUsualString(cart,"suggestCategory","");
 char *sSummary=cartUsualString(cart,"suggestSummary","");
@@ -450,9 +584,9 @@ char suggestID[512];
 safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
 
 /* reject if the hidden field is not blank */
-if (isNotEmpty(sWebsite))
+if (isNotEmpty(sWebsite) || captchaRobot)
     {
-    printInvalidForm();
+    printInvalidForm(captchaScore);
     cartSetString(cart, "suggestWebsite", "");
     return;
     }
@@ -461,8 +595,8 @@ if (isNotEmpty(sWebsite))
 if (!validateCategory(sCategory))
     {
     printInvalidCategory(sCategory);
-    return;  
-    } 
+    return;
+    }
 
 /* Send back suggestion only with valid user email address */
 if (spc_email_isvalid(sEmail) != 0)
@@ -472,9 +606,9 @@ if (spc_email_isvalid(sEmail) != 0)
     /* send confirmation mail to user */
     sendConfirmMail(sEmail,suggestID, sSummary, sDetails);
     /* display confirmation page */
-    printSuggestionConfirmed(sSummary, suggestID, sEmail, mailReturnAddr(), sDetails);
-    } 
-else 
+    printSuggestionConfirmed(sSummary, suggestID, sEmail, mailReturnAddr(), sDetails, captchaScore);
+    }
+else
     {
     /* save all field value in cart */
      printInvalidEmailAddr(sEmail);
@@ -498,7 +632,19 @@ if (cartVarExists(cart, "do.suggestSendMail"))
     }
 
 askForSuggest(organism,db);
-cartWebEnd();
+if (isNotEmpty(cfgOption(CFG_SUGGEST_SITE_KEY)))
+    {
+    printReCaptchaV3();
+    hPrintf("<div><p>this site protected by reCAPTCHA and the Google <a href='https://policies.google.com/privacy?hl=en' target='_blank'>privacy policy</a> and <a href='https://policies.google.com/terms?hl=en' target='_blank'>terms of service</a> apply</p></div>\n");
+
+    char footer[1024];
+    safef(footer, sizeof(footer),
+   "<script src='https://www.google.com/recaptcha/api.js?render=%s'></script>",
+           cfgOption(CFG_SUGGEST_SITE_KEY));
+    cartWebEndExtra(footer);
+    }
+else
+    cartWebEnd();
 }
 
 /* Null terminated list of CGI Variables we don't want to save

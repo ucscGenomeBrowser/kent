@@ -1,0 +1,142 @@
+<h2>Description</h2>
+
+<p>
+This container track helps call out sections of the genome that often cause problems or
+confusion when working with the genome. There are three subtracks for now, Anshul Kundaje's
+<a href="https://github.com/Boyle-Lab/Blacklist/blob/master/lists/hg19-blacklist-README.pdf"
+target="_blank">ENCODE Blacklist</a>, GRC (Genome Reference Consortium) Exclusions, and the UCSC
+Unusual Regions track.
+</p>
+
+<p>The hg19 genome has a track with the same name, but with many more
+subtracks, as the GeT-RM and Genome-in-a-Bottle artifact variants do not exist yet
+for hg38, to our knowledge. If you are missing a track here that you know from
+hg19 and have an idea how to add it hg38, do not hesitate to contact us.</p>
+
+<p>
+The <b>Problematic Regions</b> track contains the following subtracks:
+<ul>
+<li>
+The <b>UCSC Unusual Regions</b> subtrack contains annotations collected at UCSC, 
+put together from other tracks, our experiences and support email list
+requests over the years. For example, it contains the most well-known gene
+clusters (IGH, IGL, PAR1/2, TCRA, TCRB, etc) and annotations for the GRC
+<a href="/cgi-bin/hgTracks?db=hg19&chromInfoPage=">fixed sequences, alternate haplotypes, unplaced
+contigs, pseudo-autosomal regions, and mitochondria</a>. These loci can yield alignments with
+low-quality mapping scores and discordant read pairs, especially for short-read sequencing data.
+This data set was manually curated, based on the <a href="/cgi-bin/hgGateway">Genome Browser's
+assembly</a> description, the <a href="/FAQ/FAQdownloads.html">FAQs</a> about assembly, and the
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=refSeqComposite">NCBI RefSeq &quot;other&quot; annotations</a>
+track data.
+</li>
+
+<li>
+The <b>ENCODE Blacklist</b> subtrack contains a comprehensive set of regions which are troublesome
+for high-throughput Next-Generation Sequencing (NGS) aligners. These regions tend to have a very
+high ratio of multi-mapping to unique mapping reads and high variance in mappability due to
+repetitive elements such as satellite, centromeric and telomeric repeats. 
+</li>
+
+<li>
+The <b>GRC Exclusions</b> subtrack contains a set of regions that have been flagged by the GRC to
+contain false duplications or contamination sequences. The GRC has now removed these sequences from
+the files that it uses to generate the reference assembly, however, removing the sequences from the
+GRCh38/hg38 assembly would trigger the next major release of the human assembly. In order to
+help users recognize these regions and avoid them in their analyses, the GRC have produced a masking
+file to be used as a companion to GRCh38, and the BED file is available from the
+<a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.39_GRCh38.p13/GRCh38_major_release_seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_GRC_exclusions.bed"
+target="_blank">GenBank FTP site</a>.
+</li>
+</ul>
+
+<p>
+The <b>Highly Reproducible Regions</b> track highlights regions and variants
+from eight samples that can be used to assess variant detection pipelines. The
+&quot;Highly Reproducible Regions&quot; subtrack is made up of the intersection
+of the reprodcuble regions across all eight samples, while the
+&quot;Variants&quot; subtracks contain the reproducble variants from each
+assayed sample. Both track contains data from the following samples:
+<ul>
+  <li>a Chinese Quartet, samples CQ-5,CQ-6,CQ-7,CQ-8
+  <li>a HapMap Trio, samples NA10385, NA12248, and NA12249
+  <li>a Genome in a Bottle sample, NA12878
+</ul>
+Please refer to the <em>Pan et al</em> reference for more information on how
+these regions were defined.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each track contains a set of regions of varying length with no special configuration options. 
+The <em>UCSC Unusual Regions</em> track has a mouse-over description, all other tracks have at most
+a name field, which can be shown in pack mode. The tracks are usually kept in dense mode.
+</p>
+
+<p>
+The <em>Hide empty subtracks</em> control hides subtracks with no data in the browser window.
+Changing the browser window by zooming or scrolling may result in the display of a different
+selection of tracks.
+</p>
+
+<H2>Data access</H2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+
+<p>
+For automated download and analysis, the genome annotation is stored in bigBed files that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/problematic/" target="_blank">our download server</a>.
+Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool
+can also be used to obtain only features within a given range, e.g. 
+<br>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/problematic/comments.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+</p>
+
+<p>
+<h2>Methods</h2>
+
+<p>
+Files were downloaded from the respective databases and converted to bigBed format.
+The procedure is documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/problematic.txt"
+target="_blank">hg38 makeDoc file</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Anna Benet-Pag&egrave;s, Max Haeussler, Angie Hinrichs, Daniel Schmelter, and Jairo
+Navarro at the UCSC Genome Browser for planning, building, and testing these tracks. The
+underlying data comes from the
+<a href="https://github.com/Boyle-Lab/Blacklist/blob/master/lists/hg19-blacklist-README.pdf"
+target="_blank">ENCODE Blacklist</a> and some parts were copied manually from the HGNC and NCBI
+RefSeq tracks.
+</p>
+
+<h2>References</h2>
+<p>
+Amemiya HM, Kundaje A, Boyle AP.
+<a href="https://www.nature.com/articles/s41598-019-45839-z" target="_blank">
+The ENCODE Blacklist: Identification of Problematic Regions of the Genome</a>.
+<em>Sci Rep</em>. 2019 Jun 27;9(1):9354.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31249361" target="_blank">31249361</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6597582/" target="_blank">PMC6597582</a>
+</p>
+
+<p>
+Pan B, Ren L, Onuchic V, Guan M, Kusko R, Bruinsma S, Trigg L, Scherer A, Ning B, Zhang C <em>et
+al</em>.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02569-8"
+target="_blank">
+Assessing reproducibility of inherited variants detected with short-read whole genome
+sequencing</a>.
+<em>Genome Biol</em>. 2022 Jan 3;23(1):2.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34980216" target="_blank">34980216</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8722114/" target="_blank">PMC8722114</a>
+</p>

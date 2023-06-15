@@ -417,6 +417,11 @@ void cartWebEnd();
 /* End out pretty wrapper around things when working
  * from cart. */
 
+void cartWebEndExtra(char *footer);
+/* Write out HTML footer and get rid or error handler, with extra text
+ * at the end of the page as desired.
+ */
+
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
         char *cookieName, char **exclude, struct hash *oldVars);
 /* Load cart from cookie and session cgi variable.  Write web-page
