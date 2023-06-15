@@ -1,9 +1,0 @@
-track dbSNP155
-shortLabel dbSNP 155
-longLabel dbSNP 155 (lifted)
-type vcfTabix
-hapClusterEnabled false
-maxWindowToDraw 3000000
-bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.dbSNP155/chm13v2.0_dbSNPv155.ncbi-names.vcf.gz
-html html/GCA_009914755.4_T2T-CHM13v2.0.dbSNP155.html
-group varRep
