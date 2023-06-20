@@ -868,5 +868,4 @@ include gerp.ra alpha
 
 include crossTissueMaps.ra
 
-include problematic.alpha.ra alpha,beta
-include problematic.ra public
+include problematic.ra
