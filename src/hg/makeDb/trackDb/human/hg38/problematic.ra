@@ -2,7 +2,7 @@ track problematicSuper
 shortLabel Problematic Regions
 longLabel Problematic/special genomic regions for sequencing or very variable regions
 superTrack on
-html problematicDev
+html problematic
 group map
 
     track problematic
@@ -52,7 +52,6 @@ group map
     shortLabel Highly Reproducible Regions
     longLabel Highly Reproducible genomic regions for sequencing
     visibility hide
-    html problematicDev
     type bed 3
 
         track highReproBeds
