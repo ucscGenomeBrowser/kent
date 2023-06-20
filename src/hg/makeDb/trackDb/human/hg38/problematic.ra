@@ -52,6 +52,7 @@ group map
     shortLabel Highly Reproducible Regions
     longLabel Highly Reproducible genomic regions for sequencing
     visibility hide
+    html problematic
     type bed 3
 
         track highReproBeds
