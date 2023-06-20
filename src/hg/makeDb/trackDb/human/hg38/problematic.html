@@ -14,6 +14,9 @@ for hg38, to our knowledge. If you are missing a track here that you know from
 hg19 and have an idea how to add it hg38, do not hesitate to contact us.</p>
 
 <p>
+The <b>Problematic Regions</b> track contains the following subtracks:
+<ul>
+<li>
 The <b>UCSC Unusual Regions</b> subtrack contains annotations collected at UCSC, 
 put together from other tracks, our experiences and support email list
 requests over the years. For example, it contains the most well-known gene
@@ -25,16 +28,16 @@ This data set was manually curated, based on the <a href="/cgi-bin/hgGateway">Ge
 assembly</a> description, the <a href="/FAQ/FAQdownloads.html">FAQs</a> about assembly, and the
 <a href="/cgi-bin/hgTrackUi?db=hg19&g=refSeqComposite">NCBI RefSeq &quot;other&quot; annotations</a>
 track data.
-</p>
+</li>
 
-<p>
+<li>
 The <b>ENCODE Blacklist</b> subtrack contains a comprehensive set of regions which are troublesome
 for high-throughput Next-Generation Sequencing (NGS) aligners. These regions tend to have a very
 high ratio of multi-mapping to unique mapping reads and high variance in mappability due to
 repetitive elements such as satellite, centromeric and telomeric repeats. 
-</p>
+</li>
 
-<p>
+<li>
 The <b>GRC Exclusions</b> subtrack contains a set of regions that have been flagged by the GRC to
 contain false duplications or contamination sequences. The GRC has now removed these sequences from
 the files that it uses to generate the reference assembly, however, removing the sequences from the
@@ -43,6 +46,24 @@ help users recognize these regions and avoid them in their analyses, the GRC hav
 file to be used as a companion to GRCh38, and the BED file is available from the
 <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.39_GRCh38.p13/GRCh38_major_release_seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_GRC_exclusions.bed"
 target="_blank">GenBank FTP site</a>.
+</li>
+</ul>
+
+<p>
+The <b>Highly Reproducible Regions</b> track highlights regions and variants
+from eight samples that can be used to assess variant detection pipelines. The
+&quot;Highly Reproducible Regions&quot; subtrack is made up of the intersection
+of the reprodcuble regions across all eight samples, while the
+&quot;Variants&quot; subtracks contain the reproducble variants from each
+assayed sample. Both track contains data from the following samples:
+<ul>
+  <li>a Chinese Quartet, samples CQ-5,CQ-6,CQ-7,CQ-8
+  <li>a HapMap Trio, samples NA10385, NA12248, and NA12249
+  <li>a Genome in a Bottle sample, NA12878
+</ul>
+Please refer to the <em>Pan et al</em> reference for more information on how
+these regions were defined.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 
@@ -106,4 +127,16 @@ The ENCODE Blacklist: Identification of Problematic Regions of the Genome</a>.
 <em>Sci Rep</em>. 2019 Jun 27;9(1):9354.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31249361" target="_blank">31249361</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6597582/" target="_blank">PMC6597582</a>
+</p>
+
+<p>
+Pan B, Ren L, Onuchic V, Guan M, Kusko R, Bruinsma S, Trigg L, Scherer A, Ning B, Zhang C <em>et
+al</em>.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02569-8"
+target="_blank">
+Assessing reproducibility of inherited variants detected with short-read whole genome
+sequencing</a>.
+<em>Genome Biol</em>. 2022 Jan 3;23(1):2.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34980216" target="_blank">34980216</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8722114/" target="_blank">PMC8722114</a>
 </p>
