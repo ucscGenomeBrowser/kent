@@ -361,7 +361,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     struct dyString *dy = dyStringNew(1024);
     addSessionLink(dy, encUserName, encSessionName, FALSE, TRUE);
-    printf("<a href=\"%s\">%s</a>", dyStringContents(dy), sessionName);
+    printf("<a href=\"%s\">%s</a>", dyStringContents(dy), htmlEncode(sessionName));
     dyStringFree(&dy);
 
     struct tm firstUseTm;
