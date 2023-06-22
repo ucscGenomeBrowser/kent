@@ -59,6 +59,10 @@ input[type="submit"]:hover, input[type="button"]:hover, button:hover {
     padding-right: 8px;
 }
 
+#patchNote {
+    margin-left: 3em;
+}
+
 .trackLabelTd {
         max-width: 14em;
         vertical-align: top;
