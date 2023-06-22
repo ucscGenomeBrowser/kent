@@ -7,7 +7,6 @@ type bed
 superTrack on hide
 group map
 visibility hide
-pennantIcon New red ../goldenPath/newsarch.html#021323 "Released Feb. 13, 2023"
 color 0,130,0
 
     track recombAvg

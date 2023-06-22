@@ -1768,7 +1768,7 @@ static struct psl *mapPsl(struct hgvsVariant *hgvs, char *acc, struct psl *txAli
 // the actual position might be outside the bounds of the transcript sequence (intron/UTR)
 struct psl *variantPsl = pslFromHgvsNuc(hgvs, acc, txAli->qSize, txAli->qEnd, cds,
                                         retUpstream, retDownstream);
-struct psl *mappedToGenome = pslTransMap(pslTransMapNoOpts, variantPsl, txAli);
+struct psl *mappedToGenome = pslTransMap(pslTransMapNoOpts, variantPsl, pslTypeUnspecified, txAli, pslTypeUnspecified);
 // If there is a deletion in the genome / insertion in the transcript then pslTransMap cannot
 // map those bases to the genome.  In that case take a harder look and return the deletion
 // coords.

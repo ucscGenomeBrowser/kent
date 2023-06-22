@@ -165,7 +165,7 @@ static void mapToRefWithMapping(struct hapRegions *hr, struct cDnaAlign *hapAln,
 /* map an alignment on a haplotype chromosome using one mapping */
 {
 struct psl *m;
-struct psl *mapped = pslTransMap(pslTransMapNoOpts, hapAln->psl, mapping);
+struct psl *mapped = pslTransMap(pslTransMapNoOpts, hapAln->psl, pslTypeUnspecified, mapping, pslTypeUnspecified);
 while ((m = slPopHead(&mapped)) != NULL)
     {
     slAddHead(&mappedHaps, m);
@@ -200,7 +200,7 @@ if (sameString(refAln->psl->tName, mappedHap->tName)
                          mappedHap->tStart, mappedHap->tEnd))
     {
     pslSwap(mappedHap, FALSE);
-    cDnaCDnaAln = pslTransMap(pslTransMapNoOpts, refAln->psl, mappedHap);
+    cDnaCDnaAln = pslTransMap(pslTransMapNoOpts, refAln->psl, pslTypeUnspecified, mappedHap, pslTypeUnspecified);
     pslSwap(mappedHap, FALSE);
     if ((hr->hapRefCDnaFh != NULL) && (cDnaCDnaAln != NULL))
         cDnaAlignPslOut(cDnaCDnaAln, refAln->alnId, hr->hapRefCDnaFh);

@@ -22,6 +22,38 @@
  *    while.
  */
 
+static char *pslTypeDesc[] =
+/* description of pslType */
+{
+    "unspecified",      // pslTypeUnspecified
+    "protein-protein",  // pslTypeProtProt
+    "protein-NA",       // pslTypeProtNa
+    "NA-NA"             // pslTypeNaNa
+};
+
+static boolean pslTypeQueryIsProtein(enum pslType pslType)
+/* is the pslType indicate the query is a protein? */
+{
+return (pslType == pslTypeProtProt) || (pslType == pslTypeProtNa);
+}
+
+static boolean pslTypeQueryIsNa(enum pslType pslType)
+/* is the pslType indicate the query is a NA? */
+{
+return !pslTypeQueryIsProtein(pslType);
+}
+
+static boolean pslTypeTargetIsProtein(enum pslType pslType)
+/* is the pslType indicate the target is a protein? */
+{
+return (pslType == pslTypeProtProt);
+}
+
+static boolean pslTypeTargetIsNa(enum pslType pslType)
+/* is the pslType indicate the target is a NA? */
+{
+return !pslTypeTargetIsProtein(pslType);
+}
 
 struct block
 /* Coordinates of a block, which might be aligned or a gap on one side */
@@ -55,19 +87,46 @@ assertBlockAligned(blk);
 return (blk->qEnd - blk->qStart);
 }
 
-static void pslProtToNA(struct psl *psl)
-/* convert a protein/NA alignment to a NA/NA alignment */
+static void setPslBoundsCounts(struct psl* psl)
+/* set sequences bounds and counts from blocks on a PSL */
 {
+int lastBlk = psl->blockCount-1;
+
+/* set start/end of sequences */
+psl->qStart = psl->qStarts[0];
+psl->qEnd = psl->qStarts[lastBlk] + psl->blockSizes[lastBlk];
+if (pslQStrand(psl) == '-')
+    reverseIntRange(&psl->qStart, &psl->qEnd, psl->qSize);
+
+psl->tStart = psl->tStarts[0];
+psl->tEnd = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
+if (pslTStrand(psl) == '-')
+    reverseIntRange(&psl->tStart, &psl->tEnd, psl->tSize);
+
+for (int iBlk = 0; iBlk < psl->blockCount; iBlk++)
+    psl->match += psl->blockSizes[iBlk];
+pslComputeInsertCounts(psl);
+}
+
+static void pslProtToNAConvert(struct psl *psl)
+/* convert a protein/NA or protein/protein alignment to a NA/NA alignment */
+{
+boolean isProtNa = pslIsProtein(psl);
 int iBlk;
 
 psl->qStart *= 3;
 psl->qEnd *= 3;
 psl->qSize *= 3;
+if (!isProtNa)
+    psl->tSize *= 3;
 for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
     psl->blockSizes[iBlk] *= 3;
     psl->qStarts[iBlk] *= 3;
+    if (!isProtNa)
+        psl->tStarts[iBlk] *= 3;
     }
+setPslBoundsCounts(psl);
 }
 
 static struct psl* createMappedPsl(struct psl* inPsl, struct psl *mapPsl,
@@ -112,27 +171,6 @@ psl->qStarts[newIBlk] = blk->qStart;
 psl->tStarts[newIBlk] = blk->tStart;
 psl->blockSizes[newIBlk] = blk->qEnd - blk->qStart;
 psl->blockCount++;
-}
-
-static void setPslBoundsCounts(struct psl* mappedPsl)
-/* set sequences bounds and counts on mapped PSL */
-{
-int lastBlk = mappedPsl->blockCount-1;
-
-/* set start/end of sequences */
-mappedPsl->qStart = mappedPsl->qStarts[0];
-mappedPsl->qEnd = mappedPsl->qStarts[lastBlk] + mappedPsl->blockSizes[lastBlk];
-if (pslQStrand(mappedPsl) == '-')
-    reverseIntRange(&mappedPsl->qStart, &mappedPsl->qEnd, mappedPsl->qSize);
-
-mappedPsl->tStart = mappedPsl->tStarts[0];
-mappedPsl->tEnd = mappedPsl->tStarts[lastBlk] + mappedPsl->blockSizes[lastBlk];
-if (pslTStrand(mappedPsl) == '-')
-    reverseIntRange(&mappedPsl->tStart, &mappedPsl->tEnd, mappedPsl->tSize);
-
-for (int iBlk = 0; iBlk < mappedPsl->blockCount; iBlk++)
-    mappedPsl->match += mappedPsl->blockSizes[iBlk];
-pslComputeInsertCounts(mappedPsl);
 }
 
 static void adjustOrientation(unsigned opts, struct psl *inPsl, char *inPslOrigStrand,
@@ -219,7 +257,6 @@ mappedBlk.qEnd = align1Blk->qEnd;
 return mappedBlk;
 }
 
-
 static void trimOverlapping(struct psl *mappedPsl, struct block *mappedBlk)
 /* if this block overlaps the previous block, trim accordingly.  Overlaps
  * can be created with protein to DNA PSLs */
@@ -232,7 +269,7 @@ int prevQEnd = pslQEnd(mappedPsl, mappedPsl->blockCount - 1);
 int prevTEnd = pslTEnd(mappedPsl, mappedPsl->blockCount - 1);
 
 // trim, possibly setting to zero-length
-int overAmt = max((prevQEnd - mappedBlk->qStart), (prevTEnd - mappedBlk->tStart));
+int overAmt = max((prevQEnd - (int)mappedBlk->qStart), (prevTEnd - (int)mappedBlk->tStart));
 if (overAmt < 0)
     overAmt = 0;
 else if (overAmt > blockLength(mappedBlk))
@@ -299,19 +336,62 @@ assert(mappedPsl->blockCount <= mappedPslMax);
 return mappedPsl;
 }
 
-struct psl* pslTransMap(unsigned opts, struct psl *inPsl, struct psl *mapPsl)
-/* map a psl via a mapping psl, a single psl is returned, or NULL if it
- * couldn't be mapped. */
+static enum pslType determinePslType(struct psl *psl, enum pslType pslType, char *errDesc)
+/* check the psl type if specified, set if unspecified */
 {
-boolean rcInPsl = (pslTStrand(inPsl) != pslQStrand(mapPsl));
-boolean cnvIn = (pslIsProtein(inPsl) && !pslIsProtein(mapPsl));
-boolean cnvMap = (pslIsProtein(mapPsl) && !pslIsProtein(inPsl));
+boolean isProtNa = pslIsProtein(psl);
+if (pslType == pslTypeUnspecified)
+    return  isProtNa ? pslTypeProtNa : pslTypeNaNa;  // default
 
-/* sanity check size, but allow names to vary to allow ids to have
- * unique-ifying suffixes. */
-if (inPsl->tSize != mapPsl->qSize)
-    errAbort("Error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)",
-            inPsl->tName, inPsl->tSize, mapPsl->qName, mapPsl->qSize);
+// check specified type
+if (isProtNa &&  (pslType != pslTypeProtNa))
+    errAbort("%s PSL %s to %s is a protein to NA alignment, however %s specified",
+             errDesc, psl->qName, psl->tName, pslTypeDesc[pslType]);
+    
+if ((!isProtNa) &&  (pslType == pslTypeProtNa))
+    errAbort("%s PSL %s to %s is not a protein to NA alignment, however %s was specified",
+             errDesc, psl->qName, psl->tName, pslTypeDesc[pslType]);
+return pslType;
+}
+
+static void checkInMapCompat(struct psl *inPsl, enum pslType inPslType,
+                             struct psl *mapPsl, enum pslType mapPslType)
+/* validate input and mapping alignments are compatible types */
+{
+/* allowed combinations:
+ *     inPslType   mapPslType  outPslType
+ *     na_na       na_na       na_na
+ *     prot_prot   prot_prot   prot_prot
+ *     prot_na     na_na       cds_na
+ *     prot_prot   na_na       cds_na
+ *     prot_prot   prot_na     cds_na
+ */
+
+if (!((pslTypeTargetIsNa(inPslType) && pslTypeQueryIsNa(mapPslType)) ||
+      pslTypeTargetIsProtein(inPslType)))
+    errAbort("input PSL %s to %s type %s is not compatible with mapping PSL %s to %s type %s ",
+             inPsl->qName, inPsl->tName, pslTypeDesc[inPslType],
+             mapPsl->qName, mapPsl->tName, pslTypeDesc[mapPslType]);
+}
+    
+struct psl* pslTransMap(unsigned opts, struct psl *inPsl, enum pslType inPslType,
+                        struct psl *mapPsl, enum pslType mapPslType)
+/* map a psl via a mapping psl, a single psl is returned, or NULL if it
+ * couldn't be mapped. psl types are normally set as pslTypeUnspecified,
+ * and assumed to be NA->NA. */
+{
+inPslType = determinePslType(inPsl, inPslType, "input PSL");
+mapPslType = determinePslType(mapPsl, mapPslType, "mapping PSL");
+checkInMapCompat(inPsl, inPslType, mapPsl, mapPslType);
+
+// check if need to swap strands
+boolean rcInPsl = (pslTStrand(inPsl) != pslQStrand(mapPsl));
+
+// need to convert all sides of both alignments to a common coordinate space
+// all protein or all NA require no conversions.
+boolean cnvIn = (inPslType == pslTypeProtNa) ||
+    ((inPslType == pslTypeProtProt) && (mapPslType != pslTypeProtProt));
+boolean cnvMap = (mapPslType == pslTypeProtNa) || (cnvIn && (mapPslType == pslTypeProtProt));
 
 /* ensure common sequence is in same orientation and convert protein PSLs */
 char inPslOrigStrand[3];
@@ -319,14 +399,21 @@ safef(inPslOrigStrand, sizeof(inPslOrigStrand), "%s", inPsl->strand);
 if (cnvIn || rcInPsl)
     inPsl = pslClone(inPsl);
 if (cnvIn)
-    pslProtToNA(inPsl);
+    pslProtToNAConvert(inPsl);
 if (rcInPsl)
     pslRc(inPsl);
 if (cnvMap)
     {
     mapPsl = pslClone(mapPsl);
-    pslProtToNA(mapPsl);
+    pslProtToNAConvert(mapPsl);
     }
+
+/* sanity check sizes after conversion Don't check name, so names to vary to
+ * allow ids to have unique-ifying suffixes. */
+if (inPsl->tSize != mapPsl->qSize)
+    errAbort("Error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)",
+            inPsl->tName, inPsl->tSize, mapPsl->qName, mapPsl->qSize);
+
 
 struct psl* mappedPsl = doMapping(inPsl, mapPsl);
 

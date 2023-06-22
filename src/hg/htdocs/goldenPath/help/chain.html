@@ -86,4 +86,27 @@ Alignment data lines contain three required attribute values:<p>
 NOTE: The last line of the alignment section contains only one number: the ungapped alignment size 
 of the last block.</p>
 
+<a name="rearrangement"></a> 
+<h3>&quot;Snake&quot; rearrangement display</h3>
+<p>
+Rearrangement display, sometimes called snakes display, is an alternative way to view pairwise alignemnts.
+It is available for PSL and chain format tracks.</p>
+<p>
+Rearrangement display is a representation of the path that the sequence follows in the &quot;other&quot; sequence. 
+You start in the upper left and move to the right, following the lines if you come to the end of a block. If a block 
+is red, which means it is a match on the negative strand, then you reverse your course and start going from right to left.
+The gray lines mean there are no bases in the other sequence between the blocks. Orange lines means there are some 
+bases in there that are not aligning.</p>
+<p>The display type can be enabled on the track configuration page of eligible tracks. Below are two examples for clarity.</p>
+<p>
+<div class="text-left">
+  <img src="../../images/rearrangementExample1.png" alt="Rearrangement display example 1" width='55%'>
+</div><br>
+This example shows a tandem duplication on CDH1 which duplicates 3 exons.</p>
+<p>
+<div class="text-left">
+  <img src="../../images/rearrangementExample2.png" alt="Rearrangement display example 2" width='55%'>
+</div><br>
+This example shows an inversion, which can be identified by the red colored sequence.</p>
+
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

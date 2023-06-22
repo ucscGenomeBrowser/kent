@@ -6,6 +6,7 @@ priority 1
 visibility pack
 type bigGenePred knownGenePep knownGeneMrna
 bigDataUrl /gbdb/hg38/gencode/gencodeV43.bb
+downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
 baseColorDefault genomicCodons
 group genes
 isGencode3 on
@@ -20,7 +21,8 @@ searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
 defaultLinkedTables kgXref
-pennantIcon Updated red ../goldenPath/newsarch.html#022423 "Updated Feb. 24, 2023"
+squishyPackPoint 2
+squishyPackField rank
 
 searchName knownGeneAcc
 searchTable knownGene

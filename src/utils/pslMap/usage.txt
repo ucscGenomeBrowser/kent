@@ -6,12 +6,26 @@ pslMap - map PSLs alignments to new targets using alignments of
 the old target to the new target.  Given inPsl and mapPsl, where
 the target of inPsl is the query of mapPsl, create a new PSL
 with the query of inPsl aligned to all the targets of mapPsl.
+
 If inPsl is a protein to nucleotide alignment and mapPsl is a
 nucleotide to nucleotide alignment, the resulting alignment is
-nucleotide to nucleotide alignment of a hypothetical mRNA that
+nucleotide to nucleotide alignment of the CDS coordinates mRNA that
 would code for the protein.  This is useful as it gives base
-alignments of spliced codons.  A chain file may be used instead
-mapPsl.
+alignments of spliced codons.
+
+Protein to NA alignments can be determine from the PSL, otherwise
+they are assumed to be NA-NA unless the types of the alignments are
+specified with -inType and -mapType.  The following combinations are
+valid, along with the type of output,
+
+     inPslType   mapPslType  outPslType
+     na_na       na_na       na_na
+     prot_prot   prot_prot   prot_prot
+     prot_na     na_na       cds_na
+     prot_prot   na_na       cds_na
+     prot_prot   prot_na     cds_na
+
+A chain file may be used instead mapPsl.
 
 Options:
   -chainMapFile - mapFile is a chain file instead of a psl file
@@ -26,6 +40,10 @@ Options:
   -mapFileWithInQName - The first column of the mapFile PSL records are a qName,
    the remainder is a standard PSL.  When an inPsl record is mapped, only
    mapping records are used with the corresponding qName.
+  -inType=type - input alignment type (prot-port, prot-na, na-na)
+   This is the type after swapping if -swapIn is supplied.
+  -mapType=type - map alignment type (prot-port, prot-na, na-na)
+   This is the type after swapping if -swapMap is supplied.
   -mapInfo=file - output a file with information about each mapping.
    The file has the following columns:
      o srcQName, srcQStart, srcQEnd, srcQSize - qName, etc of

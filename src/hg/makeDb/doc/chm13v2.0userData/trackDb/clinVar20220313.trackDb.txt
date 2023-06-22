@@ -1,9 +1,0 @@
-track clinVar20220313
-shortLabel ClinVar Variants
-longLabel ClinVar Variants 20220313 (lifted)
-type vcfTabix
-hapClusterEnabled false
-maxWindowToDraw 3000000
-bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.clinVar20220313/chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz
-html html/GCA_009914755.4_T2T-CHM13v2.0.clinVar20220313.html
-group varRep

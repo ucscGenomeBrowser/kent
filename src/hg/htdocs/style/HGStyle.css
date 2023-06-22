@@ -830,12 +830,12 @@ body.oldStaticPage .sectionContent {
 }
 
 /* like warnBox, but under the menu, not in the middle of the screen */
-#notifBox {
+.notifBox {
     background-color: beige;
     border: 1px solid grey;
     padding: 5px; 
     margin: 5px;
-    text-align: left;
+    text-align: center;
 }
 
 /* For jquery-ui dialog box */

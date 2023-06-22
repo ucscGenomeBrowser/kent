@@ -54,6 +54,7 @@
 #include "hic.h"
 #include "hui.h"
 #include "chromAlias.h"
+#include "asmAlias.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -627,7 +628,12 @@ while ((ra = raNextRecord(lf)) != NULL)
     if (twoBitPath != NULL)
 	genome = addHubName(hashFindVal(ra, "genome"), hub->name);
     else
-	genome = hashFindVal(ra, "genome");
+        {
+        genome = hashFindVal(ra, "genome");
+        char *alias = asmAliasFind(genome);
+        if (!hDbExists(alias))
+            errAbort("Error: non UCSC genome '%s' is defined without an associated twoBitPath. Please check the genomes.txt file stanzas", genome);
+        }
     if (hasWhiteSpace(genome))
         errAbort("Bad genome name: \"%s\". Only alpha-numeric characters and \"_\" are allowed ([A-Za-z0-9_]).", genome);
     if (hub->defaultDb == NULL)

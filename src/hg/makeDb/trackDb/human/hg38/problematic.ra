@@ -3,6 +3,7 @@ shortLabel Problematic Regions
 longLabel Problematic/special genomic regions for sequencing or very variable regions
 superTrack on
 html problematic
+pennantIcon New red ../goldenPath/newsarch.html#062123 "Released Jun. 21, 2023"
 group map
 
     track problematic
@@ -46,97 +47,42 @@ group map
         priority 3
 
     track highlyReproducible
-    release alpha
     parent problematicSuper
     subGroup1 view Views beds=Regions vcfs=Variants
     compositeTrack on
     shortLabel Highly Reproducible Regions
     longLabel Highly Reproducible genomic regions for sequencing
-    hideEmptySubtracks on
     visibility hide
     html problematic
+    pennantIcon New red ../goldenPath/newsarch.html#062123 "Released Jun. 21, 2023"
     type bed 3
 
         track highReproBeds
         parent highlyReproducible
         shortLabel Highly Reproducible Regions
         longLabel Highly Reproducible Regions
-        type bigBed 3
+        type bigBed 9 +
         view beds
         visibility dense
-        release alpha
 
-            track cq56Bed
+            track highReproRegions
             parent highReproBeds
-            bigDataUrl /gbdb/hg38/problematic/highRepro/CQ-56.bb
+            bigDataUrl /gbdb/hg38/problematic/highRepro/highRepro.bb
             subGroups view=beds
-            shortLabel CQ-56 Regions
-            longLabel CQ-56 Regions
-            type bigBed 3
-            release alpha
-
-            track cq7Bed
-            parent highReproBeds
-            bigDataUrl /gbdb/hg38/problematic/highRepro/CQ-7.bb
-            subGroups view=beds
-            shortLabel CQ-7 Regions
-            longLabel CQ-7 Regions
-            type bigBed 3
-            release alpha
-
-            track cq8Bed
-            parent highReproBeds
-            bigDataUrl /gbdb/hg38/problematic/highRepro/CQ-8.bb
-            subGroups view=beds
-            shortLabel CQ-8 Regions
-            longLabel CQ-8 Regions
-            type bigBed 3
-            release alpha
-
-            track hr_na10835Bed
-            parent highReproBeds
-            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA10835.bb
-            subGroups view=beds
-            shortLabel HR_NA10835 Regions
-            longLabel HR_NA10835 Regions
-            type bigBed 3
-            release alpha
-
-            track hr_na12248Bed
-            parent highReproBeds
-            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA12248.bb
-            subGroups view=beds
-            shortLabel HR_NA12248 Regions
-            longLabel HR_NA12248 Regions
-            type bigBed 3
-            release alpha
-
-            track hr_na12249Bed
-            parent highReproBeds
-            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA12249.bb
-            subGroups view=beds
-            shortLabel HR_NA12249 Regions
-            longLabel HR_NA12249 Regions
-            type bigBed 3
-            release alpha
-
-            track hr_na12878Bed
-            parent highReproBeds
-            bigDataUrl /gbdb/hg38/problematic/highRepro/HR_NA12878.bb
-            subGroups view=beds
-            shortLabel HR_NA12878 Regions
-            longLabel HR_NA12878 Regions
-            type bigBed 3
-            release alpha
+            shortLabel Highly Reproducible Regions
+            longLabel Highly Reproducible Regions
+            type bigBed 9 +
+            filterValues.sampleNames CQ-56,CQ-7,CQ-8,HR_NA10835,HR_NA12248,HR_NA12249,HR_NA12878
+            filterType.sampleNames multipleListOr
 
         track highReproVcfs
         parent highlyReproducible
         shortLabel Highly Reproducible Variants
         longLabel Highly Reproducible Variants
+        hideEmptySubtracks on
         type vcfTabix
         view vcfs
-        visibility dense
-        release alpha
+        visibility hide
 
             track cq56Vcf
             parent highReproVcfs
@@ -145,7 +91,6 @@ group map
             shortLabel CQ-56 Variants
             longLabel CQ-56 Variants
             type vcfTabix
-            release alpha
 
             track cq7Vcf
             parent highReproVcfs
@@ -154,7 +99,6 @@ group map
             shortLabel CQ-7 Variants
             longLabel CQ-7 Variants
             type vcfTabix
-            release alpha
 
             track cq8Vcf
             parent highReproVcfs
@@ -163,7 +107,6 @@ group map
             shortLabel CQ-8 Variants
             longLabel CQ-8 Variants
             type vcfTabix
-            release alpha
 
             track hr_na10835Vcf
             parent highReproVcfs
@@ -172,7 +115,6 @@ group map
             shortLabel HR_NA10835 Variants
             longLabel HR_NA10835 Variants
             type vcfTabix
-            release alpha
 
             track hr_na12248Vcf
             parent highReproVcfs
@@ -181,7 +123,6 @@ group map
             shortLabel HR_NA12248 Variants
             longLabel HR_NA12248 Variants
             type vcfTabix
-            release alpha
 
             track hr_na12249Vcf
             parent highReproVcfs
@@ -190,7 +131,6 @@ group map
             shortLabel HR_NA12249 Variants
             longLabel HR_NA12249 Variants
             type vcfTabix
-            release alpha
 
             track hr_na12878Vcf
             parent highReproVcfs
@@ -199,7 +139,6 @@ group map
             shortLabel HR_NA12878 Variants
             longLabel HR_NA12878 Variants
             type vcfTabix
-            release alpha
 
 searchTable comments
 searchPriority 0.5
