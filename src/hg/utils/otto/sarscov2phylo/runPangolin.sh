@@ -12,5 +12,5 @@ out=$fa.pangolin.csv
 threadCount=6
 
 logfile=$(mktemp)
-pangolin -t $threadCount --analysis-mode pangolearn $fa --outfile $out > $logfile 2>&1
+pangolin -t $threadCount --skip-scorpio $fa --outfile $out > $logfile 2>&1
 rm $logfile
