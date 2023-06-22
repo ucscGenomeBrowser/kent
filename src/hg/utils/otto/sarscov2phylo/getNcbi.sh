@@ -25,8 +25,7 @@ retryDelay=300
 while [[ $((++attempt)) -le $maxAttempts ]]; do
     echo "datasets attempt $attempt"
     if datasets download virus genome taxon 2697049 \
-            --exclude-cds \
-            --exclude-protein \
+            --include genome,annotation,biosample \
             --filename ncbi_dataset.zip \
             --no-progressbar \
             --debug \
@@ -67,7 +66,8 @@ if (($metadataLC < $minSeqCount)); then
     exit 1
 fi
 
-time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample.jsonl | uniq > gb.bioSample.tab
+time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample_report.jsonl \
+    | uniq > gb.bioSample.tab
 
 # Use BioSample metadata to fill in missing pieces of GenBank metadata and report conflicting
 # sample collection dates:
@@ -96,35 +96,27 @@ time faUniqify genbank.maybeDups.fa stdout \
     > genbank.fa.xz
 
 # Run pangolin and nextclade on sequences that are new since yesterday
-# TODO: remove the split, nextclade can handle big inputs now -- but truncate fasta names to
-# just the accession in a pipe to nextclade.
 export TMPDIR=/dev/shm
 fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | grep -vx pdb | sort -u > gb.names
-splitDir=splitForNextclade
-rm -rf $splitDir
-mkdir $splitDir
 zcat ../ncbi.latest/nextclade.full.tsv.gz > nextclade.full.tsv
 cp ../ncbi.latest/nextalign.fa.xz .
 comm -23 gb.names <(cut -f 1 nextclade.full.tsv | sort -u) > nextclade.names
 if [ -s nextclade.names ]; then
-    faSomeRecords <(xzcat genbank.fa.xz) nextclade.names stdout \
-    | faSplit about stdin 300000000 $splitDir/chunk
     nDataDir=~angie/github/nextclade/data/sars-cov-2
     outTsv=$(mktemp)
     outFa=$(mktemp)
-    for chunkFa in $splitDir/chunk*.fa; do
-        nextclade run -j 50 $chunkFa \
+    faSomeRecords <(xzcat genbank.fa.xz) nextclade.names stdout \
+    | sed -re 's/^>([A-Z]{2}[0-9]{6}\.[0-9])[ |].*/>\1/;' \
+    | nextclade run -j 50 \
             --input-dataset $nDataDir \
             --output-fasta $outFa \
             --output-tsv $outTsv >& nextclade.log
-        tail -n+2 $outTsv | sed -re 's/"//g;' >> nextclade.full.tsv
-        xz -T 20 < $outFa >> nextalign.fa.xz
-        rm $outTsv $outFa
-    done
+    tail -n+2 $outTsv | sed -re 's/"//g;' >> nextclade.full.tsv
+    xz -T 20 < $outFa >> nextalign.fa.xz
+    rm $outTsv $outFa
 fi
 wc -l nextclade.full.tsv
 pigz -f -p 8 nextclade.full.tsv
-rm -rf $splitDir
 
 set +x
 conda activate pangolin
@@ -133,7 +125,7 @@ runPangolin() {
     fa=$1
     out=$fa.pangolin.csv
     logfile=$(mktemp)
-    pangolin $fa --analysis-mode pangolearn --outfile $out > $logfile 2>&1
+    pangolin -t 4 $fa --skip-scorpio --outfile $out > $logfile 2>&1
     rm $logfile
 }
 export -f runPangolin
