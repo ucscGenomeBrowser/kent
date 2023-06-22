@@ -1,5 +1,5 @@
-table bed6
-"Browser extensible data"
+table revelOverlaps
+"a BED8 with two additional fields"
     (
     string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
@@ -9,6 +9,7 @@ table bed6
     char[1] strand;    "+, - or . for unknown"
     uint thickStart;   "Start of where display should be thick"
     uint thickEnd;     "End of where display should be thick"
-    lstring   transcriptId;      "Transcript IDs for the score"
-    string   revelScore;      "Revel score for mutation on transcripts above"
+    uint itemRgb;     "End of where display should be thick"
+    lstring   _jsonTable;      "Scores for transcript ID"
+    lstring   _mouseOver;      "Mouse over text"
     )
