@@ -831,7 +831,7 @@ body.oldStaticPage .sectionContent {
     border: 1px solid grey;
     padding: 5px; 
     margin: 5px;
-    text-align: left;
+    text-align: center;
 }
 
 /* For jquery-ui dialog box */
