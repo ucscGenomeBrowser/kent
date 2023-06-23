@@ -101,7 +101,7 @@ if [ -s new.accs.fa ]; then
     nDataDir=~angie/github/nextclade/data/sars-cov-2
     time nextclade run -j 20 new.accs.fa \
         --input-dataset $nDataDir \
-        --output-fasta nextalign.fa.xz \
+        --output-fasta nextalign.new.fa.xz \
         --output-tsv nextclade.new.full.tsv.gz  >& nextclade.log
     zcat nextclade.new.full.tsv.gz | cut -f 1,2 | tail -n+2 >> nextclade.tsv
     sort -u nextclade.tsv > tmp

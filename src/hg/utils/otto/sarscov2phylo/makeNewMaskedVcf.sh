@@ -112,7 +112,7 @@ function gbAccCogRenaming {
     # pipeline: one INSDC accession per line of stdin, acc to full name if COG-UK on stdout
     grep -Fwf - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
     | grep COG-UK/ \
-    | tawk '{print $1, $4 "/" $6 "/" $3 "|" $1 "|" $3;}' \
+    | tawk '{ if ($4 != "") { print $1, $4 "/" $6 "/" $3 "|" $1 "|" $3; } else { if ($3 != "") { print $1, $6  "/" $3 "|" $1 "|" $3; } else { print $1, $6 "|?"; } } }' \
     | sed -re 's@COG-UK/@@g; s/United Kingdom://; s/(\/[0-9]{4})(-[0-9]+)*/\1/; s/ //g;'
 }
 

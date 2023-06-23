@@ -16,6 +16,9 @@ $(A): ${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-clean::
-	rm -f ${O}
+compile: $O
+	${CC} -g $O ${MYLIBS} ${L}
+	mv ${AOUT} $A${EXE}
 
+clean::
+	rm -f ${O} ${A}${EXE}

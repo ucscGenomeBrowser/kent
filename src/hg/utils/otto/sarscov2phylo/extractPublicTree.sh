@@ -104,7 +104,7 @@ usher_to_taxonium --input public-$today.all.masked.pb \
     --clade_types=nextstrain,pango \
     --name_internal_nodes \
     --title "$today tree with sequences from GISAID, INSDC, COG-UK and CNCB" \
-    --output public-$today.all.masked.taxonium.jsonl.gz
+    --output public-$today.all.masked.taxonium.jsonl.gz >& utt.log
 
 # Make a size-limited public tree for ShUShER so it doesn't exceed browser memory limits
 $matUtils extract -i public-$today.all.masked.pb --set-size 6000000 \
