@@ -87,7 +87,7 @@ if (fileList)
     while (lineFileNextReal(lf, &line))
 	{
         ++lineCount;
-        if (hashIncInt(locHash, line) > 1)
+        if (hashIncInt(locHash, line) > 1)	// avoid duplicates
 	    continue;
         ++checked;
 	char *country = geoMirrorCountry6(centralConn, line);
@@ -96,7 +96,6 @@ if (fileList)
 	    if (countryCode)
 		{
 		char *name = hashFindVal(countryCode, country);
-                verbose(2, "# looking %s found: '%s'\n", country, name);
 		printf("%s\t%s\t'%s'\n", country, line, name);
 		}
 	    else
@@ -107,6 +106,7 @@ if (fileList)
 	    printf("n/a\t%s\tfailed\n", line);
 	    ++failed;
             }
+        freeMem(country);
 	}
     lineFileClose(&lf);
    verboseTime(0, "# processed %lld lines, checked %lld addresses, %lld failed", lineCount, checked, failed);
@@ -116,16 +116,17 @@ else
     char *country = geoMirrorCountry6(centralConn, ipStr);
     if (strlen(country)==2)  // ok
 	{
-	    if (countryCode)
-		{
-		char *name = hashFindVal(countryCode, country);
-		printf("%s\t%s\t%s\n", country, ipStr, name);
-		}
-	    else
-		printf("%s\t%s\n", country, ipStr);
+	if (countryCode)
+	    {
+	    char *name = hashFindVal(countryCode, country);
+	    printf("%s\t%s\t%s\n", country, ipStr, name);
+	    }
+	else
+	    printf("%s\t%s\n", country, ipStr);
 	}
     else
 	errAbort("unable to read IP address for %s, error message was: %s", ipStr, country);
+    freeMem(country);
     }
 
 // Leave it to others to extend it to process a list of things.
