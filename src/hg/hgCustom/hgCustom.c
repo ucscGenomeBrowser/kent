@@ -1065,7 +1065,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char var[256];
     safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->track);
-    if (cartBoolean(cart, var))
+    if (cartUsualBoolean(cart, var, FALSE))
 	slRemoveEl(&ctList, ct);
     }
 }
