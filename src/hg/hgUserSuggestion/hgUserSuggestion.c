@@ -406,7 +406,7 @@ if (captchaScore > -1.0)
         "you as a robot.  If this is in error, please email our support email:"
         "&nbsp;<a href='mailto:hclawson@ucsc.edu?subject=suggestion "
         "failed captcha&body=Failed captcha test in suggestion form, "
-        "score: %g, %s, %s, %s, %s, %s'>help me Mr. Wizard !</a>"
+        "score: %g, %s, %s, %s, %s, %s'>I am *not* a ROBOT !</a>"
 	"</p>", captchaScore, captchaScore, sName, sEmail, sCategory, sSummary, sDetails
 	);
 	}
