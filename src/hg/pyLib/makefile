@@ -14,33 +14,25 @@ endif
 
 my:: compile 
 	mkdir -p ${CGI_BIN_USER}/pyLib/
-	rm -f ${CGI_BIN_USER}/pyLib/{hgLib.{py,pyc,pyo},six.*} 
-	cp -p hgLib.py ${CGI_BIN_USER}/pyLib/hgLib.py
-	cp -p hgLib.pyo ${CGI_BIN_USER}/pyLib/hgLib.pyo
-	cp -p six.* ${CGI_BIN_USER}/pyLib/
+	rsync --whole-file --times --recursive --omit-dir-times --relative ./ ${CGI_BIN_USER}/pyLib/ --exclude=makefile --exclude=README.txt
 	
 beta:: compile
 	mkdir -p ${CGI_BIN_BETA}/pyLib/
-	rm -f ${CGI_BIN_BETA}/pyLib/{hgLib.{py,pyc,pyo},six.*} 
-	cp -p hgLib.py ${CGI_BIN_BETA}/pyLib/hgLib.py
-	cp -p hgLib.pyo ${CGI_BIN_BETA}/pyLib/hgLib.pyo
-	cp -p six.* ${CGI_BIN_BETA}/pyLib/
+	rsync --whole-file --times --recursive --omit-dir-times --relative ./ ${CGI_BIN_BETA}/pyLib/ --exclude=makefile --exclude=README.txt
 	
 alpha:: compile
 	mkdir -p ${CGI_BIN}/pyLib/
-	rm -f ${CGI_BIN}/pyLib/{hgLib.{py,pyc,pyo},six.*} 
-	cp -p hgLib.py ${CGI_BIN}/pyLib/hgLib.py
-	cp -p hgLib.pyo ${CGI_BIN}/pyLib/hgLib.pyo
-	cp -p six.* ${CGI_BIN}/pyLib/
+	rsync --whole-file --times --recursive --omit-dir-times --relative ./ ${CGI_BIN}/pyLib/ --exclude=makefile --exclude=README.txt
 	
 compile:
 	# byte-compile and strip all python source code to .pyo files
-	python2.7 -OO -m compileall ./
+	python3 -OO -m compileall ./
 
 clean::
 	rm -f *.pyc *.pyo
+	rm -rf __pycache__ pymysql/__pycache__ pymysql/constants/__pycache__
 
 lint::
-	pylint -E hgLib.py
+	pylint -E hgLib3.py
 
 install::

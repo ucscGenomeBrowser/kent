@@ -1,6 +1,4 @@
-# Library functions for genome browser CGI scripts written in Python 2.7
-# The new library is hgLib3.py. This file hgLib.py is slowly getting phased out and exists for now
-# during the transition phase.
+# Library functions for genome browser CGI scripts written in Python 3
 
 # Because this library is loaded for every CGI execution, only a
 # fairly minimal set of functions is implemented here, e.g. hg.conf parsing,
@@ -14,31 +12,22 @@
 # - never print incoming HTTP argument as raw text. Run it through cgi.escape to 
 #   destroy javascript code in them.
 
-# Non-standard imports. They need to be installed on the machine. 
-# We provide a pre-compiled library as part of our cgi-bin distribution as a
-# fallback in the "pyLib" directory. The idea of having pyLib be the last
-# directory in sys.path is that the system MySQLdb takes precedence.
 try:
-    import MySQLdb
+    import pymysql.cursors
 except:
-    print("Installation error - could not load MySQLdb for Python. Please tell your system administrator to run " \
-        "one of these commands as root: 'yum install MySQL-python', 'apt-get install python-mysqldb' or " \
-        "'pip install MySQL-python'. On a Python3 system, the command is usually 'sudo pip install mysqlclient'.")
+    print("Installation error - could not load pymysql for Python. Please tell your system administrator to run " \
+        "one of these commands as root: 'pip install pymysql'. Sometimes, pip is called 'pip3'.")
     exit(0)
 
-# Imports from the Python 2.7 standard library
+# Imports from the Python 3 standard library
 # This is a CGI, not a WSGI - minimize global imports. Each library import can take up to 20msecs.
 import os, cgi, sys, logging, time
 
 from os.path import join, isfile, normpath, abspath, dirname, isdir, splitext
 from collections import namedtuple
 
-# start to support both python2 and python3 
-try:
-    from six.moves import http_cookies, urllib
-except:
-    print("The python package 'six' could not be loaded. It is included with the Genome Browser. "
-        "Check if cgi-bin/pyLib/six.py is present and can be run from python.")
+from http import cookies
+import urllib.request
 
 # activate debugging output output only on dev
 import platform
@@ -143,7 +132,7 @@ def sqlConnect(db, host=None, user=None, passwd=None):
     cfg = parseHgConf()
     if host==None:
         host, user, passwd = cfg["db.host"], cfg["db.user"], cfg["db.password"]
-    conn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
+    conn = pymysql.connect(host=host, user=user, passwd=passwd, db=db, charset="utf8")
 
     # we will need this info later
     conn.failoverConn = None
@@ -175,7 +164,7 @@ def _sqlConnectFailover(conn):
     host, user, passwd = cfg["slow-db.host"], cfg["slow-db.user"], cfg["slow-db.password"]
     sys.stderr.write("SQL_CONNECT 0 %s %s %s\n" % (host, user, passwd))
     db = conn.db
-    failoverConn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
+    failoverConn = pymysql.connect(host=host, user=user, passwd=passwd, db=db)
     conn.failoverConn = failoverConn
 
 def _timeDeltaSeconds(time1, time2):
@@ -207,9 +196,9 @@ def sqlQuery(conn, query, args=None):
             timeDiff = _timeDeltaSeconds(datetime.now(), startTime)
             sys.stderr.write("SQL_TIME 0 %s %s %.3f\n" % (conn.host, conn.db, timeDiff))
 
-    except MySQLdb.Error as errObj:
+    except pymysql.Error as errObj:
         # on table not found, try the secondary mysql connection, "slow-db" in hg.conf
-        errCode, errDesc = errObj
+        errCode, errDesc = errObj.args
         if errCode!=1146: # "table not found" error
             raise
 
@@ -381,7 +370,7 @@ def printContentType(contType="text/html", status=None, fname=None, headers=None
             for key, val in headers.items():
                 print("%s: %s" % (key, val))
 
-        print  # this newline is essential, it means: end of header lines
+        print()  # this newline is essential, it means: end of header lines
 
     if doWarnBot:
         print ("<div style='background-color:yellow; border:2px solid black'>")
@@ -403,14 +392,14 @@ def botDelayTime(host, port, botString):
     s.connect((host, int(port)))
     msg = botString
     d = chr(len(msg))+msg
-    s.send(d)
+    s.send(d.encode("utf8"))
 
     # read delay time as ASCII chars
-    expLen = ord(s.recv(1))
+    expLen = ord(s.recv(1).decode("utf8"))
     totalLen = 0
     buf = list()
     while True:
-        resp = s.recv(1024)
+        resp = s.recv(1024).decode("utf8")
         buf.append(resp)
         totalLen+= len(resp)
         if totalLen==expLen:
@@ -418,19 +407,19 @@ def botDelayTime(host, port, botString):
     return int("".join(buf))
 
 # global variable, only used by findCookieData, local use without explicit 'global' will trigger a Python error
-cookies = None
+cookieData = None
 
 def findCookieData(cookieName):
     " return value of cookie or None is not set, port of lib/cheapcgi.c:findCookieData "
-    global cookies
-    if not cookies:
+    global cookieData
+    if not cookieData:
         if "HTTP_COOKIE" in os.environ:
-            cookies = http_cookies.SimpleCookie(os.environ["HTTP_COOKIE"])
+            cookieData = cookies.SimpleCookie(os.environ["HTTP_COOKIE"])
         else:
-            cookies = {}
+            cookieData = {}
 
     # unlike cheapcgi, Python does not even allow duplicate cookies, so no need to handle this case
-    cookie = cookies.get(cookieName)
+    cookie = cookieData.get(cookieName)
     if cookie:
         return cookie.value
 
@@ -502,7 +491,7 @@ def parseRa(text):
     for l in lines:
         if len(l)==0:
             continue
-        key, val = string.split(l, " ", maxsplit=1)
+        key, val = l.split(" ", maxsplit=1)
         data[key] = val
     return data
 
@@ -531,7 +520,7 @@ def lineFileNextRow(inFile):
         if line.startswith("#"):
             continue
         line = line.rstrip("\n")
-        fields = string.split(line, "\t", maxsplit=len(headers)-1)
+        fields = line.split("\t", maxsplit=len(headers)-1)
         try:
             rec = Record(*fields)
         except Exception as msg:
@@ -659,11 +648,11 @@ def makeRandomKey(numBits=128+33):
     " copied line-by-line from kent/src/lib/htmlshell.c:makeRandomKey "
     import base64
     numBytes = (numBits + 7) / 8  # round up to nearest whole byte.
-    numBytes = ((numBytes+2)/3)*3 # round up to the nearest multiple of 3 to avoid equals-char padding in base64 output
-    f = open("/dev/urandom", "r") # open random system device for read-only access.
+    numBytes = int(((numBytes+2)/3)*3) # round up to the nearest multiple of 3 to avoid equals-char padding in base64 output
+    f = open("/dev/urandom", "rb") # open random system device for read-only access.
     binaryString = f.read(numBytes)
     f.close()
-    return base64.b64encode(binaryString, "Aa") # replace + and / with characters that are URL-friendly.
+    return base64.b64encode(binaryString, b"Aa").decode("latin1")  # replace + and / with characters that are URL-friendly.
 
 
 # ============ Nonce and CSP functions =============
