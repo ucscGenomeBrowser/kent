@@ -404,9 +404,9 @@ if (captchaScore > -1.0)
 	"<p>"
 	"Congratulations, your google captcha score (%g) appears to qualify "
         "you as a robot.  If this is in error, please email our support email:"
-        "&nbsp;<a href='mailto:hclawson@ucsc.edu?subject=suggestion "
+        "&nbsp;<a href='mailto:genome-www@soe.ucsc.edu?subject=suggestion "
         "failed captcha&body=Failed captcha test in suggestion form, "
-        "score: %g, %s, %s, %s, %s, %s'>help me Mr. Wizard !</a>"
+        "score: %g, %s, %s, %s, %s, %s'>I am *not* a ROBOT !</a>"
 	"</p>", captchaScore, captchaScore, sName, sEmail, sCategory, sSummary, sDetails
 	);
 	}
@@ -540,7 +540,7 @@ if (isNotEmpty(cfgOption(CFG_SUGGEST_SECRET_KEY)))
     {
     captchaRobot = TRUE;	// assume robot until proven human
     captchaScore = -0.9;	// and allow score to show up in printout
-  char *threshHoldString = cfgOptionDefault(CFG_SUGGEST_HUMAN_THRESHOLD, "0.5");
+  char *threshHoldString = cfgOptionDefault(CFG_SUGGEST_HUMAN_THRESHOLD, "-0.1");
     double threshHoldScore = sqlDouble(threshHoldString);
     char *reCaptcha = cartUsualString(cart,"reCaptchaToken", NULL);
     if (reCaptcha)
