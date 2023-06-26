@@ -540,7 +540,7 @@ if (isNotEmpty(cfgOption(CFG_SUGGEST_SECRET_KEY)))
     {
     captchaRobot = TRUE;	// assume robot until proven human
     captchaScore = -0.9;	// and allow score to show up in printout
-  char *threshHoldString = cfgOptionDefault(CFG_SUGGEST_HUMAN_THRESHOLD, "0.5");
+  char *threshHoldString = cfgOptionDefault(CFG_SUGGEST_HUMAN_THRESHOLD, "-0.1");
     double threshHoldScore = sqlDouble(threshHoldString);
     char *reCaptcha = cartUsualString(cart,"reCaptchaToken", NULL);
     if (reCaptcha)
