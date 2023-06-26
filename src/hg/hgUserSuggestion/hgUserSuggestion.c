@@ -404,7 +404,7 @@ if (captchaScore > -1.0)
 	"<p>"
 	"Congratulations, your google captcha score (%g) appears to qualify "
         "you as a robot.  If this is in error, please email our support email:"
-        "&nbsp;<a href='mailto:hclawson@ucsc.edu?subject=suggestion "
+        "&nbsp;<a href='mailto:genome-www@soe.ucsc.edu?subject=suggestion "
         "failed captcha&body=Failed captcha test in suggestion form, "
         "score: %g, %s, %s, %s, %s, %s'>I am *not* a ROBOT !</a>"
 	"</p>", captchaScore, captchaScore, sName, sEmail, sCategory, sSummary, sDetails
