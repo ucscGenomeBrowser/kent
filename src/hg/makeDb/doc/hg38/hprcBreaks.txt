@@ -1,0 +1,24 @@
+# started 2023-06-22 braney
+
+mkdir /cluster/data/hg38/bed/hprcBreaks
+cd /cluster/data/hg38/bed/hprcBreaks
+
+ls /gbdb/hg38/chainNet/hg38.chainHprc* | grep -v Link > bigChain.lst
+
+for file in `cat bigChain.lst`
+do
+name=`echo $file | sed 's?.*Hprc??' | sed 's/.bb//'`
+echo bigChainBreaks $file $name breaks/$name.breaks.txt
+done > jobs
+
+rm -rf breaks
+mkdir breaks
+
+sh -x jobs
+
+sort breaks/* | uniq | sort -k 1,1 -k 2,2n | awk '{OFS="\t"}{if (($1 == last1) && ($2 == last2)) {score++; names=names","$3;} else {print last1, last2, last2, "item"count, score, "+", last2, last2, (score > 20) ? "255,0,0" : "0,255,0",  names; score=1; names=$3; count++;last1=$1; last2 = $2}}' | tail -n +2  > chainBreaks.bed
+
+bedToBigBed  chainBreaks.bed /cluster/data/hg38/chrom.sizes chainBreaks.bb -as=$HOME/kent/src/hg/lib/chainBreaks.as -type=bed9+1 -tab
+
+ln -s `pwd`/chainBreaks.bb /gbdb/hg38/chainBreaksHPRC/chainBreaksHPRC.bb
+

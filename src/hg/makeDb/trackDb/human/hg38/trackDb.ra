@@ -869,3 +869,12 @@ include gerp.ra alpha
 include crossTissueMaps.ra
 
 include problematic.ra
+
+track chainBreaksHPRC
+shortLabel chainBreaksHPRC
+longLabel chainBreaksHPRC
+bigDataUrl /gbdb/hg38/chainBreaksHPRC/chainBreaksHPRC.bb
+type bigBed 9 +
+group compGeno
+labelFields score
+itemRgb on
