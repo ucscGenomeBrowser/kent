@@ -103,6 +103,9 @@ install:
 	cp -p --remove-destination getVersion.csh          ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination graph.csh               ${SCRIPTS}
+	cp -p --remove-destination hubCheckDraftEmails.py  ${SCRIPTS}
+	cp -p --remove-destination hubCheckPublicHubs.sh   ${SCRIPTS}
+	cp -p --remove-destination hubPublicMail           ${SCRIPTS}
 	cp -p --remove-destination hubPublicAutoUpdate     ${SCRIPTS}
 	cp -p --remove-destination hubSearchUpdate         ${SCRIPTS}
 	cp -p --remove-destination igtc.csh                ${SCRIPTS}
@@ -129,6 +132,7 @@ install:
 	cp -p --remove-destination qaGbTracks              ${SCRIPTS}
 	cp -p --remove-destination qaEncodeTracks.csh      ${SCRIPTS}
 	cp -p --remove-destination qaEnsGenes.csh          ${SCRIPTS}
+	cp -p --remove-destination qaTestScript.py         ${SCRIPTS}
 	cp -p --remove-destination qaThis.csh              ${SCRIPTS}
 	cp -p --remove-destination realTime.csh            ${SCRIPTS}
 	cp -p --remove-destination removeAlphas            ${SCRIPTS}
