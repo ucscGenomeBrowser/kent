@@ -41,7 +41,7 @@ import unittest, time, re, sys, argparse
 
 # Adding a tmpdir for the cron
 import os
-os.environ['TMPDIR'] = "/hive/users/qateam/selenium/chrom113/TMP"
+os.environ['TMPDIR'] = "/hive/users/$USER/selenium/chrom113/cron/TMP"
 
 def initialize_driver(headless):
     """Initiates which webdriver to run for headless mode or local mode"""

@@ -1899,7 +1899,7 @@ There are no extra options that can appear on the type hic line.
     <P>Maximum number of items to display individually in full mode.  When the maximum is
     exceeded, the excess items are drawn on top of one another on the last line.
     In packed mode this refers to the number of lines rather than number of items.
-    Default: 250. For <code>type bigBed</code> tracks, this setting can never 
+    Default: 10,000. For <code>type bigBed</code> tracks, this setting can never 
     be larger than than 100,000.</P>
     <P><B>Example:</B>
     </P>
