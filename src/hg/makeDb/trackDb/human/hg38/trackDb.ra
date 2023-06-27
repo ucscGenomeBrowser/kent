@@ -545,7 +545,7 @@ include trackDb.145way.ra alpha
 
 include trackDb.241wayT.ra alpha
 include trackDb.241way.ra
-include trackDb.447way.ra
+include trackDb.447way.ra alpha
 
 # track multiz145way
 # shortLabel 145way maf
