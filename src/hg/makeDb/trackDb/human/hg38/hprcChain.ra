@@ -1,8 +1,8 @@
 track hprcChain
 compositeTrack on
-group compGeno
-shortLabel HPRC Chains
-longLabel HPRC Chains
+group x
+shortLabel HPRC Chains v0.1
+longLabel HPRC Chains version 0.1 prototype April 2022
 type bed 3
 
 track HG004381Chain
