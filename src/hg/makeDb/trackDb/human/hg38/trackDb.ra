@@ -293,10 +293,13 @@ color 255,0,0
 url https://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI accession record:
 
-include ../chainNetHuman.ra
 include ../chainNetPrimate.ra
 include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
+include chainNetHprc.ra alpha
+
+# a large composite with many chain/net experiments to other human assemblies
+include chainNetHumanExperiment.ra alpha
 
 track contigAlignmentSegments
 shortLabel ContigSegments
