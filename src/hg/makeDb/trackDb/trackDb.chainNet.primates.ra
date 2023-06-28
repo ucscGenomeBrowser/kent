@@ -2290,3 +2290,100 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment net
         type netAlign calJac1 chainCalJac1
         html chainNet
+
+##############################################################################
+# GCA_011100615.1 - crab-eating macaque - Macaca fascicularis - taxId: 9541 - primates
+##############################################################################
+track chainNetGCA_011100615.1
+compositeTrack on
+shortLabel crab-eating macaque Chain/Net
+longLabel crab-eating macaque (Mar. 2020 GCA_011100615.1_Macaca_fascicularis_6.0), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCA_011100615.1
+html chainNet
+
+    track chainNetGCA_011100615.1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_011100615.1
+    spectrum on
+
+        track chainGCA_011100615.1
+        parent chainNetGCA_011100615.1Viewchain
+        subGroups view=chain
+        shortLabel crab-eating macaque Chain
+        longLabel crab-eating macaque (Mar. 2020 GCA_011100615.1_Macaca_fascicularis_6.0) Chained Alignments
+        type bigChain GCA_011100615.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_011100615.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_011100615.1Link.bb
+
+        track chainSynGCA_011100615.1
+        parent chainNetGCA_011100615.1Viewchain
+        subGroups view=chain
+        shortLabel crab-eating macaque synChain
+        longLabel crab-eating macaque (Mar. 2020 GCA_011100615.1_Macaca_fascicularis_6.0) Syntenic Chained Alignments
+        type bigChain GCA_011100615.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_011100615.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_011100615.1Link.bb
+
+        track chainRBestGCA_011100615.1
+        parent chainNetGCA_011100615.1Viewchain
+        subGroups view=chain
+        shortLabel crab-eating macaque rBestChain
+        longLabel crab-eating macaque (Mar. 2020 GCA_011100615.1_Macaca_fascicularis_6.0) Reciprocal Best Chained Alignments
+        type bigChain GCA_011100615.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_011100615.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_011100615.1Link.bb
+
+    track mafNetGCA_011100615.1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCA_011100615.1
+
+        track netGCA_011100615.1
+        parent mafNetGCA_011100615.1Viewnet
+        subGroups view=net
+        shortLabel crab-eating macaque mafNet
+        longLabel crab-eating macaque (Mar. 2020 GCA_011100615.1_Macaca_fascicularis_6.0) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_011100615.1.net.bb
+        summary /gbdb/$D/chainNet/$D.GCA_011100615.1.net.summary.bb
+        speciesOrder GCA_011100615.1
+        speciesLabels GCA_011100615.1="crab-eating macaque"
+
+        track synNetGCA_011100615.1
+        parent mafNetGCA_011100615.1Viewnet
+        subGroups view=net
+        shortLabel crab-eating macaque synNet
+        longLabel crab-eating macaque (Mar. 2020 GCA_011100615.1_Macaca_fascicularis_6.0) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_011100615.1.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_011100615.1.synNet.summary.bb
+        speciesOrder GCA_011100615.1
+        speciesLabels GCA_011100615.1="crab-eating macaque"
+
+        track rbestNetGCA_011100615.1
+        parent mafNetGCA_011100615.1Viewnet
+        subGroups view=net
+        shortLabel crab-eating macaque rBestNet
+        longLabel crab-eating macaque (Mar. 2020 GCA_011100615.1_Macaca_fascicularis_6.0) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_011100615.1.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_011100615.1.rbestNet.summary.bb
+        speciesOrder GCA_011100615.1
+        speciesLabels GCA_011100615.1="crab-eating macaque"
