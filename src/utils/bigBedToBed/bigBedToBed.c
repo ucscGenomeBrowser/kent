@@ -90,7 +90,6 @@ if (clBed != NULL)
     }
 
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
-int itemCount = 0;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     if (clChrom != NULL && !sameString(clChrom, chrom->name))
