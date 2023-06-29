@@ -1,4 +1,8 @@
+# obtained from: https://github.com/human-pangenomics/HPP_Year1_Assemblies/blob/main/sample_metadata/hprc_year1_assemblies_v2_sample_metadata.txt
+# and: https://github.com/human-pangenomics/HPP_Year1_Assemblies/blob/main/genbank_changes/y1_genbank_assembly_accession_ids.txt
+#
 # Sample	Cohort	Sex	FamilyID	Subpopulation	Superpopulation	maternal	paternal	Superpopulation Notes
+#
 HG002	HPRC_PLUS	male	3140	PGP	-	GCA_018852615.1	GCA_018852605.1	Ashkenazim Jewish
 HG00438	HPRC	female	SH012	CHS	EAS	GCA_018471515.1	GCA_018472595.1
 HG005	HPRC_PLUS	male	3150	PGP	-	GCA_018506965.1	GCA_018506945.1	Chinese
