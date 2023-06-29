@@ -15,7 +15,7 @@ type bed 3
 chainLinearGap loose
 chainMinScore 5000
 dimensions dimensionX=subpop dimensionY=sample
-sortOrder sample=+ view=+ subpop=+
+sortOrder subpop=+
 configurable on
 html chainNetHprc
 
