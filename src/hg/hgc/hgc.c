@@ -26257,6 +26257,20 @@ cartSetString(cart, "i", "PrintAllSequences");
 hgCustom(newCts->tdb->track, NULL);
 }
 
+void doChainBreakTable(struct trackDb *tdb, char *itemName)
+/* Put up a generic bigBed details page, with a table of links to turn on related
+ * chain tracks with visibility toggles */
+{
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+genericHeader(tdb, itemName);
+genericBigBedClick(NULL, tdb, itemName, start, end, 0);
+printTrackHtml(tdb);
+// tell the javscript to reorganize the column of assemblies:
+jsIncludeFile("hgc.js", NULL);
+jsInlineF("var doChainBreakTable = true;\n");
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -27637,6 +27651,10 @@ else if (tdb != NULL &&
     {
     doBarChartDetails(tdb, item);
     printTrackHtml(tdb);
+    }
+else if (sameString("chainBreaksHPRC", table))
+    {
+    doChainBreakTable(tdb, item);
     }
 else if (tdb != NULL)
     {
