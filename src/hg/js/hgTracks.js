@@ -5447,9 +5447,8 @@ $(document).ready(function()
             // if the user is not logged in and they have not already gone through the
             // tutorial
             if (!isUserLoggedIn && !hideTutorial) {
-                let msg = "We now have a guided tutorial available, " +
-                    "to start the tutorial " +
-                    "<a id='showTutorialLink' href=\"#showTutorial\">click here</a>.";
+                let msg = "A guided tutorial is available for new users: " +
+                    "<button id='showTutorialLink' href=\"#showTutorial\">Start tutorial</button>";
                 notifBoxSetup("hgTracks", "hideTutorial", msg);
                 notifBoxShow("hgTracks", "hideTutorial");
                 $("#showTutorialLink").click(function() {
