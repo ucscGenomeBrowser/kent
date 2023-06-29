@@ -975,10 +975,16 @@ and your institution does not provide a data location supporting byte-range requ
 we know of at least the following sites where you can host
 research data and configuration files for free:
 <ul>
-  <li><a href="https://de.cyverse.org/de/" target="_blank">CyVerse Discovery Environment</a> - lots of space, but can be relatively slow to display</li>
-  <!--<li><a href="https://usegalaxy.org/" target="_blank">Galaxy</a></li>-->
-  <li><a href="https://github.com/" target="_blank">Github</a> - files limited to 100MB, but very fast</li>
-  <li><a href="https://figshare.com/" target="_blank">Figshare</a> - not limited and fast, but every file needs to be uploaded individually and cannot be changed. Optimal for very stable links, e.g. in publications.</li>
+  <li><a href="https://usegalaxy.org/" target="_blank">Galaxy</a> - Maximum size limit is
+      50 GB (uncompressed).</li>
+  <li><a href="https://de.cyverse.org/de/" target="_blank">CyVerse Discovery Environment</a>
+      - 5 GB of space for free, but can be relatively slow to display. Offers a paid subscription
+      service to expand space.</li>
+  <li><a href="https://github.com/" target="_blank">Github</a> - files limited to 100MB, but very
+      fast.</li>
+  <li><a href="https://figshare.com/" target="_blank">Figshare</a> - not limited and fast, but
+      every file needs to be uploaded individually and cannot be changed. Optimal for very stable
+      links, e.g. in publications.</li>
 </ul>
 <p>
 Each of the providers above has a slightly different approach to hosting data for
@@ -987,6 +993,113 @@ such as size limitations, usage statistics, and version control integration. Add
 previously mentioned, any provider that supports byte-range access will work for hub hosting, 
 and you are not limited to the above sites. Below is a summarized guide for
 each of the providers mentioned above.</p>
+
+<h3>Hosting Files on Galaxy</h3>
+<p>
+<a href="https://usegalaxy.org/" target="_blank">Galaxy</a> is an open-source platform for
+<a href="" target="_blank">FAIR</a> data analysis that enables users to streamline and the analysis
+of genomic data and serves as a comprehensive toolkit for researchers, scientists, and
+bioinformaticians.</p>
+<p>
+The Galaxy platform provides a user-friendly web interface that allows you to host your data. You
+can navigate to the Galaxy platform, log in to your account (or create one if you haven't
+already), and use the data upload functionality provided to host your data. Once uploaded, the data
+will be stored securely on the platform and made available for your analysis.</p>
+<h4>Viewing a Single File Hosted on Galaxy</h4>
+<ol>
+  <li>To begin, sign into your Galaxy account and then click the &quot;Upload Data&quot; button on
+      the left-hand side of the page. A pop-up will appear to upload the file to Galaxy.
+    <div class="text-left">
+      <img src="../../Galaxy_Upload.png">
+    </div></li>
+  <li>On the pop-up menu, click the &quot;Choose local files&quot; to select the file to host. Once
+      the file is selected, select the genome and file type from the drop-down menus, and click the
+      &quot;Start&quot; button. For this example, we will upload a
+      <a href="/goldenPath/help/examples/bigBedExample.bb">bigBed</a> file for the GRCh37/hg19
+      genome to Galaxy. 
+      <div class="text-left">
+        <img height="350px" src="../../Galaxy_file_uploading.png">
+      </div></li>
+  <li>Once the file is uploaded to Galaxy, it will appear in the &quot;History&quot; section on the
+      right-hand side. Click on the file to expand the menu, and additional information about the
+      file such as the file size, format, and the database. Towards the bottom of the menu, five
+      icons are displayed that perform different functions on Galaxy. Clicking on the
+      &quot;graph icon&quot; will bring up another menu in the middle of the screen with a link to
+      visualize the bigBed file on the UCSC Genome Browser.
+    <div class="text-left">
+      <img height="450px" src="../../Galaxy_custom_bigBed.png">
+    </div></li>
+</ol>
+<h4>Creating and Viewing a Hub Hosted on Galaxy</h4>
+<ol>
+  <li>Similar to the step in the previous example, sign into your Galaxy account and upload the
+      files to Galaxy. For this example, we will be uploading a
+      <a href="/goldenPath/help/examples/bigBedExample.bb">bigBed</a>, a
+      <a href="/goldenPath/help/examples/vcfExample.vcf.gz">VCF</a>, and a
+      <a href="/goldenPath/help/examples/vcfExample.vcf.gz.tbi">VCF index</a> file
+      to view on the GRCh37/hg19 genome as a track hub.
+      <div class="text-left">
+        <img src="../../Galaxy_hub_files.png">
+      </div>
+  </li>
+  <li>To create the hub, a URL to each of the files is needed to reference the Galaxy hosted data
+      inside the hub. Click on each of the three files to expand the menu and display the five icons
+      at the bottom. Next, click on the &quot;chain-link&quot; icon to copy the URL to the
+      hosted file. With these three URLs, we can now begin to build the hub.
+      <div class="text-left">
+        <img src="../../Galaxy_file_URL.png">
+      </div>
+  </li>
+  <li>When creating the hub, it is recommended to use the
+      <a href="/goldenPath/help/hgTracksHelp.html#UseOneFile" target="_blank">useOneFile on</a>
+      setting to have the contents of the genomes.txt, hub.txt, and trackDb.txt files inside of a
+      single file. With the URLs from the previous step, reference the three files hosted on Galaxy
+      using the the <a href="/goldenPath/help/trackDb/trackDbHub.html#bigDataUrl"
+      target="_blank">bigDataUrl</a> and
+      <a href="/goldenPath/help/trackDb/trackDbHub.html#bigDataIndex"
+      target="_blank">bigDataIndex</a> trackDb settings. The entire contents of the example hub can
+      be seen below:
+<pre>
+hub myExampleHub
+shortLabel Example Hub
+longLabel Example Hub Hosted on Galaxy
+useOneFile on
+email genome-www@soe.ucsc.edu
+
+genome hg19
+
+track vcfExample
+shortLabel VCF example
+longLabel VCF example using Galaxy
+visibility pack
+type vcfTabix
+maxWindowToDraw 200000
+bigDataUrl https://usegalaxy.org/api/datasets/f9cad7b01a472135076a05ca3c1069a7/display?to_ext=vcf
+bigDataIndex https://usegalaxy.org/api/datasets/f9cad7b01a47213595c3df01954cabaf/display?to_ext=binary
+
+track bigBedExample
+shortLabel BigBed example
+longLabel BigBed example using Galaxy
+type bigBed
+visibility pack
+bigDataUrl https://usegalaxy.org/api/datasets/f9cad7b01a4721358405ebd3fc34f65a/display?to_ext=bigbed</pre>
+ 
+  <li>After creating the hub on your local computer, upload the hub.txt file to Galaxy. Once the
+      file is on Galaxy, click on the hub.txt file to expand the menu. Again, click on the
+      &quot;chain-link&quot; icon to obtain the URL to the hub.txt file. Now, navigate to
+      the UCSC Genome Browser's <a href="/cgi-bin/hgHubConnect" target="_blank">Track Hubs</a> page
+      and enter the URL to view the hub.
+      <div class="text-left">
+        <img src="../../Galaxy_hub_URL.png">
+      </div>
+  </li>
+  <li>
+      Alternatively, you can create a URL using the <b>&amp;hubUrl=</b> URL parameter to quickly
+      share and load the hub with colleagues:<br>
+      <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=https://usegalaxy.org/api/datasets/f9cad7b01a472135a3056c5f93f137db/display?to_ext=txt&position=chr21:33031468-33034434"
+      target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr21:33031468-33034434&hubUrl=https://usegalaxy.org/api/datasets/f9cad7b01a472135a3056c5f93f137db/display?to_ext=txt</a>
+  </li>
+</ol>
 
 <h3>Hosting Hubs on CyVerse</h3>
 <p>
