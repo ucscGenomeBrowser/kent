@@ -387,19 +387,42 @@ if (captchaScore > -1.0)
     hPrintf("<p>(google captcha score: %g)</p>\n", captchaScore);
 }
 
-void printInvalidForm(double captchaScore)
+void printInvalidForm(double captchaScore, boolean robot)
 /* display invalid form page */
 {
-hPrintf(
-    "<h2>Invalid Form.</h2>");
 if (captchaScore > -1.0)
-    hPrintf(
+    {
+    if (robot)
+	{
+        char *sName=cartUsualString(cart,"suggestName","no name entered");
+        char *sEmail=cartUsualString(cart,"suggestEmail","no email entered");
+        char *sCategory=cartUsualString(cart,"suggestCategory","no category entered");
+        char *sSummary=cartUsualString(cart,"suggestSummary","no summary entered");
+        char *sDetails=cartUsualString(cart,"suggestDetails","no details entered");
+	hPrintf(
+        "<h2>Invalid Form.</h2>"
+	"<p>"
+	"Congratulations, your google captcha score (%g) appears to qualify "
+        "you as a robot.  If this is in error, please email our support email:"
+        "&nbsp;<a href='mailto:%s?subject=suggestion "
+        "failed captcha&body=Failed captcha test in suggestion form, "
+        "score: %g, %s, %s, %s, %s, %s'>I am *not* a ROBOT !</a>"
+	"</p>", captchaScore, mailToAddr(), captchaScore, sName, sEmail, sCategory, sSummary, sDetails
+	);
+	}
+    else
+	{
+	hPrintf(
+        "<h2>Invalid Form.</h2>"
 	"<p>"
 	"The form is invalid. Please correct it and "
 	"<a id='goBack' >submit</a> again. (score: %g)</p>", captchaScore
-    );
+	);
+	}
+    }
 else
     hPrintf(
+        "<h2>Invalid Form.</h2>"
 	"<p>"
 	"The form is invalid. Please correct it and "
 	"<a id='goBack' >submit</a> again.</p>"
@@ -517,7 +540,7 @@ if (isNotEmpty(cfgOption(CFG_SUGGEST_SECRET_KEY)))
     {
     captchaRobot = TRUE;	// assume robot until proven human
     captchaScore = -0.9;	// and allow score to show up in printout
-  char *threshHoldString = cfgOptionDefault(CFG_SUGGEST_HUMAN_THRESHOLD, "0.5");
+  char *threshHoldString = cfgOptionDefault(CFG_SUGGEST_HUMAN_THRESHOLD, "-0.1");
     double threshHoldScore = sqlDouble(threshHoldString);
     char *reCaptcha = cartUsualString(cart,"reCaptchaToken", NULL);
     if (reCaptcha)
@@ -586,7 +609,7 @@ safef(suggestID, sizeof(suggestID),"%s %s", sEmail, now());
 /* reject if the hidden field is not blank */
 if (isNotEmpty(sWebsite) || captchaRobot)
     {
-    printInvalidForm(captchaScore);
+    printInvalidForm(captchaScore, captchaRobot);
     cartSetString(cart, "suggestWebsite", "");
     return;
     }

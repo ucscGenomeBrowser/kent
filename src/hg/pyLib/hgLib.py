@@ -1,4 +1,6 @@
 # Library functions for genome browser CGI scripts written in Python 2.7
+# The new library is hgLib3.py. This file hgLib.py is slowly getting phased out and exists for now
+# during the transition phase.
 
 # Because this library is loaded for every CGI execution, only a
 # fairly minimal set of functions is implemented here, e.g. hg.conf parsing,

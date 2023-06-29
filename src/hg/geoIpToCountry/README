@@ -1,0 +1,12 @@
+Creating a utility to lookup country via IP address using our existing geoIp infrastructure,
+including the geoIp.geoIpCountry6 table which has been pushed to hgcentraltest.
+This should not be required to push geoIpCountry6 table to the RR unless people want to run this utility there.
+
+Hiram is interested in processing log files and looking up country via IP.
+In particular, China blocks google entirely which is a problem.
+
+See the process that builds the geoIp tables and data is in kent/src/hg/geoIp/
+
+I leave it to others to extend this utility to process a list instead of just a commandline option.
+
+Or handle host lookups you can see an example in kent/src/utils/dnsInfo/dnsInfo.c

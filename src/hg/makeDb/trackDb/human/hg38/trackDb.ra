@@ -293,10 +293,13 @@ color 255,0,0
 url https://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI accession record:
 
-include ../chainNetHuman.ra
 include ../chainNetPrimate.ra
 include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
+include chainNetHprc.ra alpha
+
+# a large composite with many chain/net experiments to other human assemblies
+include chainNetHumanExperiment.ra alpha
 
 track contigAlignmentSegments
 shortLabel ContigSegments
@@ -545,7 +548,7 @@ include trackDb.145way.ra alpha
 
 include trackDb.241wayT.ra alpha
 include trackDb.241way.ra
-include trackDb.447way.ra
+include trackDb.447way.ra alpha
 
 # track multiz145way
 # shortLabel 145way maf
@@ -869,3 +872,12 @@ include gerp.ra alpha
 include crossTissueMaps.ra
 
 include problematic.ra
+
+track chainBreaksHPRC
+shortLabel chainBreaksHPRC
+longLabel chainBreaksHPRC
+bigDataUrl /gbdb/hg38/chainBreaksHPRC/chainBreaksHPRC.bb
+type bigBed 9 +
+group compGeno
+labelFields score
+itemRgb on

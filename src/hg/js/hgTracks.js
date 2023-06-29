@@ -5438,6 +5438,36 @@ $(document).ready(function()
         }
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
+
+        // show a tutorial page if this is a new user
+        if (typeof tour !== 'undefined' && tour) {
+            let lsKey = "hgTracks_hideTutorial";
+            let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
+            let hideTutorial = localStorage.getItem(lsKey);
+            // if the user is not logged in and they have not already gone through the
+            // tutorial
+            if (!isUserLoggedIn && !hideTutorial) {
+                let msg = "We now have a guided tutorial available, " +
+                    "to start the tutorial " +
+                    "<a id='showTutorialLink' href=\"#showTutorial\">click here</a>.";
+                notifBoxSetup("hgTracks", "hideTutorial", msg);
+                notifBoxShow("hgTracks", "hideTutorial");
+                $("#showTutorialLink").click(function() {
+                    $("#hgTracks_hideTutorialnotifyHide").click();
+                    tour.start();
+                });
+            }
+            // allow user to bring the tutorial up under the help menu whether they've seen
+            // it or not
+            let tutorialLinkMenuItem = document.createElement("li");
+            tutorialLinkMenuItem.id = "hgTracksHelpTutorialMenuItem";
+            tutorialLinkMenuItem.innerHTML = "<a id='hgTracksHelpTutorialLink' href='#showTutorial'>" +
+                "Interactive Tutorial</a>";
+            $("#help > ul")[0].appendChild(tutorialLinkMenuItem);
+            $("#hgTracksHelpTutorialLink").click(function () {
+                tour.start();
+            });
+        }
         
         // Any highlighted region must be shown and warnBox must play nice with it.
         imageV2.drawHighlights();
@@ -5451,6 +5481,17 @@ $(document).ready(function()
             }
             return newShowWarnBox;
         })(showWarnBox);
+        // redraw highlights if the notification box is closed
+        $("[id$=notifyHide],[id$=notifyHideForever]").click(function(e) {
+            imageV2.drawHighlights();
+        });
+        notifBoxShow = (function(oldNotifBoxShow) {
+            function newNotifBoxShow() {
+                oldNotifBoxShow.apply();
+                imageV2.drawHighlights();
+            }
+            return newNotifBoxShow;
+        })(notifBoxShow);
     }
 
     // Drag select in chromIdeogram
@@ -5502,35 +5543,6 @@ $(document).ready(function()
         $("#hgTracksDownload").click(downloadCurrentTrackData.showDownloadUi);
     }
 
-    // show a tutorial page if this is a new user
-    if (typeof tour !== 'undefined' && tour) {
-        let lsKey = "hgTracks_hideTutorial";
-        let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
-        let hideTutorial = localStorage.getItem(lsKey);
-        // if the user is not logged in and they have not already gone through the
-        // tutorial
-        if (!isUserLoggedIn && !hideTutorial) {
-            let msg = "We now have a guided tutorial available, " +
-                "to start the tutorial " +
-                "<a id='showTutorialLink' href=\"#showTutorial\">click here</a>.";
-            notifBoxSetup("hgTracks", "hideTutorial", msg);
-            notifBoxShow("hgTracks", "hideTutorial");
-            $("#showTutorialLink").click(function() {
-                $("#hgTracks_hideTutorialnotifyHide").click();
-                tour.start();
-            });
-        }
-        // allow user to bring the tutorial up under the help menu whether they've seen
-        // it or not
-        let tutorialLinkMenuItem = document.createElement("li");
-        tutorialLinkMenuItem.id = "hgTracksHelpTutorialMenuItem";
-        tutorialLinkMenuItem.innerHTML = "<a id='hgTracksHelpTutorialLink' href='#showTutorial'>" +
-            "Interactive Tutorial</a>";
-        $("#help > ul")[0].appendChild(tutorialLinkMenuItem);
-        $("#hgTracksHelpTutorialLink").click(function () {
-            tour.start();
-        });
-    }
     
 });
 

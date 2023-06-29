@@ -1,0 +1,908 @@
+track hprcChainNet
+compositeTrack on
+shortLabel HPRC v1.0 Chain/Net
+longLabel Human Genomes, Chain Alignments, as mapped by the HPRC project
+subGroup1 view Views chain=Chains
+subGroup2 species Species s000=CHM13 s002a=T2T-CHM13v2.0 s002=HG01106.mat s003=HG03098.mat s004=HG00735.pat s005=HG01258.mat s006=HG005.mat s007=HG01891.pat s008=HG02055.mat s009=HG00733.mat s010=HG02486.mat s011=HG03516.mat s012=HG02886.mat s013=HG00733.pat s014=HG03516.pat s015=HG02622.pat s016=HG02886.pat s017=HG00741.mat s018=HG00621.mat s019=HG01123.mat s020=HG02257.pat s021=HG00735.mat s022=HG02723.pat s023=HG03453.pat s024=HG01071.pat s025=HG03453.mat s026=HG01952.mat s027=HG00438.pat s028=HG02257.mat s029=HG02559.mat s030=HG01361.pat s031=NA18906.pat s032=HG00438.mat s033=NA18906.mat s034=NA20129.pat s035=HG02080.pat s036=HG002.mat s037=HG01928.mat s038=HG02109.mat s039=HG01978.pat s040=HG01361.mat s041=HG02717.mat s042=HG01123.pat s043=HG02148.mat s044=HG02080.mat s045=HG002.mat.20211005 s046=NA19240.pat s047=HG03492.mat s048=HG00673.mat s049=HG03486.pat s050=HG02630.mat s051=HG02148.pat s052=HG01175.pat s053=HG02630.pat s054=HG01891.mat s055=NA20129.mat s056=HG02818.pat s057=NA21309.pat s058=HG02559.pat s059=HG01358.mat s060=HG00741.pat s061=HG03579.mat s062=NA21309.mat s063=HG02109.pat s064=HG01071.mat s065=HG03540.mat s066=HG02145.mat s067=HG01978.mat s068=HG03486.mat s069=NA19240.mat s070=HG02818.mat s071=HG02723.mat s072=HG02622.mat s073=HG03540.pat s074=HG02572.mat s075=HG01243.mat s076=HG01109.mat s077=HG01175.mat s078=HG00621.pat s079=HG01928.pat s080=HG005.pat s081=HG01106.pat s082=HG01258.pat s083=HG01358.pat s084=HG01109.pat s085=HG02717.pat s086=HG02055.pat s087=HG002.pat s088=HG03492.pat s089=HG00673.pat s090=HG002.pat.20211005 s091=HG01243.pat s092=HG02486.pat s093=HG03579.pat s094=HG02145.pat s095=HG01952.pat s096=HG02572.pat s097=HG03098.pat
+subGroup3 group Grouping g01=group_1 g02=group_2 g03=group_3 g04=group_4 g05=group_5 g06=group_6 g07=group_7 g08=group_8 g09=group_9 g10=group_10
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+color 0,0,0
+altColor 255,255,0
+type bed 3
+chainLinearGap loose
+chainMinScore 5000
+dimensions dimensionX=group dimensionY=species
+sortOrder species=+ view=+ group=+
+configurable on
+html chainNetHprc
+
+    track hprcChainNetViewchain
+    shortLabel Chains
+    view chain
+    visibility pack
+    subTrack hprcChainNet
+    spectrum on
+
+        track chainHprcGCA_018471345.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s002 group=g01
+        shortLabel HG01106.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471345.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471345.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471345.1Link.bb
+        otherDb GCA_018471345.1
+
+        track chainHprcGCA_018506165.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s003 group=g01
+        shortLabel HG03098.pri.mat.f1_v2 HPRC Chain
+        longLabel HG03098.pri.mat.f1_v2 (May 2021 GCA_018506165.1_HG03098.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018506165.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506165.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506165.1Link.bb
+        otherDb GCA_018506165.1
+
+        track chainHprcGCA_018472715.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s004 group=g01
+        shortLabel HG00735.alt.pat.f1_v2 HPRC Chain
+        longLabel HG00735.alt.pat.f1_v2 (May 2021 GCA_018472715.1_HG00735.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472715.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472715.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472715.1Link.bb
+        otherDb GCA_018472715.1
+
+        track chainHprcGCA_018469405.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s005 group=g01
+        shortLabel HG01258.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01258.pri.mat.f1_v2 (May 2021 GCA_018469405.1_HG01258.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469405.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469405.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469405.1Link.bb
+        otherDb GCA_018469405.1
+
+        track chainHprcGCA_018467165.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s007 group=g01
+        shortLabel HG01891.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01891.alt.pat.f1_v2 (May 2021 GCA_018467165.1_HG01891.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018467165.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018467165.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018467165.1Link.bb
+        otherDb GCA_018467165.1
+
+        track chainHprcGCA_018506125.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s008 group=g01
+        shortLabel HG02055.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02055.pri.mat.f1_v2 (May 2021 GCA_018506125.1_HG02055.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018506125.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506125.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506125.1Link.bb
+        otherDb GCA_018506125.1
+
+        track chainHprcGCA_018506975.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s009 group=g01
+        shortLabel HG00733.pri.mat.f1_v2 HPRC Chain
+        longLabel HG00733.pri.mat.f1_v2 (May 2021 GCA_018506975.1_HG00733.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018506975.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506975.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506975.1Link.bb
+        otherDb GCA_018506975.1
+
+        track chainHprcGCA_018467015.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s010 group=g01
+        shortLabel HG02486.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02486.pri.mat.f1_v2 (May 2021 GCA_018467015.1_HG02486.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018467015.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018467015.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018467015.1Link.bb
+        otherDb GCA_018467015.1
+
+        track chainHprcGCA_018469425.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s011 group=g01
+        shortLabel HG03516.pri.mat.f1_v2 HPRC Chain
+        longLabel HG03516.pri.mat.f1_v2 (May 2021 GCA_018469425.1_HG03516.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469425.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469425.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469425.1Link.bb
+        otherDb GCA_018469425.1
+
+        track chainHprcGCA_018470455.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s012 group=g02
+        shortLabel HG02886.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02886.pri.mat.f1_v2 (May 2021 GCA_018470455.1_HG02886.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018470455.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470455.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470455.1Link.bb
+        otherDb GCA_018470455.1
+
+        track chainHprcGCA_018506955.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s013 group=g02
+        shortLabel HG00733.alt.pat.f1_v2 HPRC Chain
+        longLabel HG00733.alt.pat.f1_v2 (May 2021 GCA_018506955.1_HG00733.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018506955.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506955.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506955.1Link.bb
+        otherDb GCA_018506955.1
+
+        track chainHprcGCA_018469415.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s014 group=g02
+        shortLabel HG03516.alt.pat.f1_v2 HPRC Chain
+        longLabel HG03516.alt.pat.f1_v2 (May 2021 GCA_018469415.1_HG03516.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469415.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469415.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469415.1Link.bb
+        otherDb GCA_018469415.1
+
+        track chainHprcGCA_018469925.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s015 group=g02
+        shortLabel HG02622.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02622.alt.pat.f1_v2 (May 2021 GCA_018469925.1_HG02622.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469925.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469925.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469925.1Link.bb
+        otherDb GCA_018469925.1
+
+        track chainHprcGCA_018470465.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s016 group=g02
+        shortLabel HG02886.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02886.alt.pat.f1_v2 (May 2021 GCA_018470465.1_HG02886.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018470465.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470465.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470465.1Link.bb
+        otherDb GCA_018470465.1
+
+        track chainHprcGCA_018471095.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s017 group=g02
+        shortLabel HG00741.pri.mat.f1_v2 HPRC Chain
+        longLabel HG00741.pri.mat.f1_v2 (May 2021 GCA_018471095.1_HG00741.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471095.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471095.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471095.1Link.bb
+        otherDb GCA_018471095.1
+
+        track chainHprcGCA_018472605.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s018 group=g02
+        shortLabel HG00621.pri.mat.f1_v2 HPRC Chain
+        longLabel HG00621.pri.mat.f1_v2 (May 2021 GCA_018472605.1_HG00621.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472605.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472605.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472605.1Link.bb
+        otherDb GCA_018472605.1
+
+        track chainHprcGCA_018469665.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s019 group=g02
+        shortLabel HG01123.pri.mat.f1_v2.1 HPRC Chain
+        longLabel HG01123.pri.mat.f1_v2.1 (May 2021 GCA_018469665.1_HG01123.pri.mat.f1_v2.1) HPRC project computed Chained Alignments
+        type bigChain GCA_018469665.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469665.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469665.1Link.bb
+        otherDb GCA_018469665.1
+
+        track chainHprcGCA_018466835.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s020 group=g02
+        shortLabel HG02257.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02257.alt.pat.f1_v2 (May 2021 GCA_018466835.1_HG02257.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018466835.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018466835.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018466835.1Link.bb
+        otherDb GCA_018466835.1
+
+        track chainHprcGCA_018472765.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s021 group=g03
+        shortLabel HG00735.pri.mat.f1_v2 HPRC Chain
+        longLabel HG00735.pri.mat.f1_v2 (May 2021 GCA_018472765.1_HG00735.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472765.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472765.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472765.1Link.bb
+        otherDb GCA_018472765.1
+
+        track chainHprcGCA_018504075.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s022 group=g03
+        shortLabel HG02723.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02723.alt.pat.f1_v2 (May 2021 GCA_018504075.1_HG02723.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504075.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504075.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504075.1Link.bb
+        otherDb GCA_018504075.1
+
+        track chainHprcGCA_018473305.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s023 group=g03
+        shortLabel HG03453.alt.pat.f1_v2 HPRC Chain
+        longLabel HG03453.alt.pat.f1_v2 (May 2021 GCA_018473305.1_HG03453.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018473305.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018473305.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018473305.1Link.bb
+        otherDb GCA_018473305.1
+
+        track chainHprcGCA_018472725.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s024 group=g03
+        shortLabel HG01071.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01071.alt.pat.f1_v2 (May 2021 GCA_018472725.1_HG01071.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472725.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472725.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472725.1Link.bb
+        otherDb GCA_018472725.1
+
+        track chainHprcGCA_018472855.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s025 group=g03
+        shortLabel HG03453.pri.mat.f1_v2 HPRC Chain
+        longLabel HG03453.pri.mat.f1_v2 (May 2021 GCA_018472855.1_HG03453.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472855.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472855.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472855.1Link.bb
+        otherDb GCA_018472855.1
+
+        track chainHprcGCA_018471545.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s026 group=g03
+        shortLabel HG01952.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01952.pri.mat.f1_v2 (May 2021 GCA_018471545.1_HG01952.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471545.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471545.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471545.1Link.bb
+        otherDb GCA_018471545.1
+
+        track chainHprcGCA_018472595.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s027 group=g03
+        shortLabel HG00438.alt.pat.f1_v2 HPRC Chain
+        longLabel HG00438.alt.pat.f1_v2 (May 2021 GCA_018472595.1_HG00438.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472595.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472595.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472595.1Link.bb
+        otherDb GCA_018472595.1
+
+        track chainHprcGCA_018466845.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s028 group=g03
+        shortLabel HG02257.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02257.pri.mat.f1_v2 (May 2021 GCA_018466845.1_HG02257.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018466845.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018466845.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018466845.1Link.bb
+        otherDb GCA_018466845.1
+
+        track chainHprcGCA_018466985.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s029 group=g03
+        shortLabel HG02559.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02559.pri.mat.f1_v2 (May 2021 GCA_018466985.1_HG02559.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018466985.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018466985.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018466985.1Link.bb
+        otherDb GCA_018466985.1
+
+        track chainHprcGCA_018469705.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s030 group=g04
+        shortLabel HG01361.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01361.alt.pat.f1_v2 (May 2021 GCA_018469705.1_HG01361.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469705.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469705.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469705.1Link.bb
+        otherDb GCA_018469705.1
+
+        track chainHprcGCA_018503285.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s031 group=g04
+        shortLabel NA18906.alt.pat.f1_v2 HPRC Chain
+        longLabel NA18906.alt.pat.f1_v2 (May 2021 GCA_018503285.1_NA18906.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018503285.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503285.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503285.1Link.bb
+        otherDb GCA_018503285.1
+
+        track chainHprcGCA_018471515.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s032 group=g04
+        shortLabel HG00438.pri.mat.f1_v2 HPRC Chain
+        longLabel HG00438.pri.mat.f1_v2 (May 2021 GCA_018471515.1_HG00438.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471515.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471515.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471515.1Link.bb
+        otherDb GCA_018471515.1
+
+        track chainHprcGCA_018503255.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s033 group=g04
+        shortLabel NA18906.pri.mat.f1_v2 HPRC Chain
+        longLabel NA18906.pri.mat.f1_v2 (May 2021 GCA_018503255.1_NA18906.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018503255.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503255.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503255.1Link.bb
+        otherDb GCA_018503255.1
+
+        track chainHprcGCA_018504625.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s034 group=g04
+        shortLabel NA20129.alt.pat.f1_v2 HPRC Chain
+        longLabel NA20129.alt.pat.f1_v2 (May 2021 GCA_018504625.1_NA20129.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504625.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504625.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504625.1Link.bb
+        otherDb GCA_018504625.1
+
+        track chainHprcGCA_018504055.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s035 group=g04
+        shortLabel HG02080.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02080.alt.pat.f1_v2 (May 2021 GCA_018504055.1_HG02080.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504055.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504055.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504055.1Link.bb
+        otherDb GCA_018504055.1
+
+        track chainHprcGCA_018472695.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s037 group=g04
+        shortLabel HG01928.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01928.pri.mat.f1_v2 (May 2021 GCA_018472695.1_HG01928.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472695.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472695.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472695.1Link.bb
+        otherDb GCA_018472695.1
+
+        track chainHprcGCA_018505825.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s038 group=g04
+        shortLabel HG02109.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02109.pri.mat.f1_v2 (May 2021 GCA_018505825.1_HG02109.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018505825.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505825.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505825.1Link.bb
+        otherDb GCA_018505825.1
+
+        track chainHprcGCA_018472845.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s039 group=g04
+        shortLabel HG01978.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01978.alt.pat.f1_v2 (May 2021 GCA_018472845.1_HG01978.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472845.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472845.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472845.1Link.bb
+        otherDb GCA_018472845.1
+
+        track chainHprcGCA_018469685.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s040 group=g05
+        shortLabel HG01361.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01361.pri.mat.f1_v2 (May 2021 GCA_018469685.1_HG01361.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469685.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469685.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469685.1Link.bb
+        otherDb GCA_018469685.1
+
+        track chainHprcGCA_018469935.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s041 group=g05
+        shortLabel HG02717.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02717.pri.mat.f1_v2 (May 2021 GCA_018469935.1_HG02717.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469935.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469935.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469935.1Link.bb
+        otherDb GCA_018469935.1
+
+        track chainHprcGCA_018469695.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s042 group=g05
+        shortLabel HG01123.alt.pat.f1_v2.1 HPRC Chain
+        longLabel HG01123.alt.pat.f1_v2.1 (May 2021 GCA_018469695.1_HG01123.alt.pat.f1_v2.1) HPRC project computed Chained Alignments
+        type bigChain GCA_018469695.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469695.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469695.1Link.bb
+        otherDb GCA_018469695.1
+
+        track chainHprcGCA_018471535.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s043 group=g05
+        shortLabel HG02148.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02148.pri.mat.f1_v2 (May 2021 GCA_018471535.1_HG02148.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471535.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471535.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471535.1Link.bb
+        otherDb GCA_018471535.1
+
+        track chainHprcGCA_018504085.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s044 group=g05
+        shortLabel HG02080.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02080.pri.mat.f1_v2 (May 2021 GCA_018504085.1_HG02080.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504085.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504085.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504085.1Link.bb
+        otherDb GCA_018504085.1
+
+        track chainHprcGCA_018505845.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s047 group=g05
+        shortLabel HG03492.pri.mat.f1_v2 HPRC Chain
+        longLabel HG03492.pri.mat.f1_v2 (May 2021 GCA_018505845.1_HG03492.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018505845.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505845.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505845.1Link.bb
+        otherDb GCA_018505845.1
+
+        track chainHprcGCA_018472565.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s048 group=g05
+        shortLabel HG00673.pri.mat.f1_v2 HPRC Chain
+        longLabel HG00673.pri.mat.f1_v2 (May 2021 GCA_018472565.1_HG00673.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472565.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472565.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472565.1Link.bb
+        otherDb GCA_018472565.1
+
+        track chainHprcGCA_018503245.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s049 group=g05
+        shortLabel HG03486.alt.pat.f1_v2 HPRC Chain
+        longLabel HG03486.alt.pat.f1_v2 (May 2021 GCA_018503245.1_HG03486.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018503245.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503245.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503245.1Link.bb
+        otherDb GCA_018503245.1
+
+        track chainHprcGCA_018469955.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s050 group=g05
+        shortLabel HG02630.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02630.pri.mat.f1_v2 (May 2021 GCA_018469955.1_HG02630.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469955.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469955.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469955.1Link.bb
+        otherDb GCA_018469955.1
+
+        track chainHprcGCA_018471525.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s051 group=g06
+        shortLabel HG02148.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02148.alt.pat.f1_v2 (May 2021 GCA_018471525.1_HG02148.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471525.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471525.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471525.1Link.bb
+        otherDb GCA_018471525.1
+
+        track chainHprcGCA_018471065.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s052 group=g06
+        shortLabel HG01175.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01175.alt.pat.f1_v2 (May 2021 GCA_018471065.1_HG01175.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471065.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471065.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471065.1Link.bb
+        otherDb GCA_018471065.1
+
+        track chainHprcGCA_018469945.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s053 group=g06
+        shortLabel HG02630.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02630.alt.pat.f1_v2 (May 2021 GCA_018469945.1_HG02630.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469945.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469945.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469945.1Link.bb
+        otherDb GCA_018469945.1
+
+        track chainHprcGCA_018467155.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s054 group=g06
+        shortLabel HG01891.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01891.pri.mat.f1_v2 (May 2021 GCA_018467155.1_HG01891.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018467155.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018467155.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018467155.1Link.bb
+        otherDb GCA_018467155.1
+
+        track chainHprcGCA_018504635.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s055 group=g06
+        shortLabel NA20129.pri.mat.f1_v2 HPRC Chain
+        longLabel NA20129.pri.mat.f1_v2 (May 2021 GCA_018504635.1_NA20129.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504635.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504635.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504635.1Link.bb
+        otherDb GCA_018504635.1
+
+        track chainHprcGCA_018503575.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s056 group=g06
+        shortLabel HG02818.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02818.alt.pat.f1_v2 (May 2021 GCA_018503575.1_HG02818.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018503575.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503575.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503575.1Link.bb
+        otherDb GCA_018503575.1
+
+        track chainHprcGCA_018504665.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s057 group=g06
+        shortLabel NA21309.alt.pat.f1_v2 HPRC Chain
+        longLabel NA21309.alt.pat.f1_v2 (May 2021 GCA_018504665.1_NA21309.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504665.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504665.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504665.1Link.bb
+        otherDb GCA_018504665.1
+
+        track chainHprcGCA_018466855.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s058 group=g06
+        shortLabel HG02559.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02559.alt.pat.f1_v2 (May 2021 GCA_018466855.1_HG02559.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018466855.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018466855.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018466855.1Link.bb
+        otherDb GCA_018466855.1
+
+        track chainHprcGCA_018469865.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s059 group=g06
+        shortLabel HG01358.pri.mat.f1_v2.1 HPRC Chain
+        longLabel HG01358.pri.mat.f1_v2.1 (May 2021 GCA_018469865.1_HG01358.pri.mat.f1_v2.1) HPRC project computed Chained Alignments
+        type bigChain GCA_018469865.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469865.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469865.1Link.bb
+        otherDb GCA_018469865.1
+
+        track chainHprcGCA_018471105.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s060 group=g07
+        shortLabel HG00741.alt.pat.f1_v2 HPRC Chain
+        longLabel HG00741.alt.pat.f1_v2 (May 2021 GCA_018471105.1_HG00741.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471105.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471105.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471105.1Link.bb
+        otherDb GCA_018471105.1
+
+        track chainHprcGCA_018472825.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s061 group=g07
+        shortLabel HG03579.pri.mat.f1_v2 HPRC Chain
+        longLabel HG03579.pri.mat.f1_v2 (May 2021 GCA_018472825.1_HG03579.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472825.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472825.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472825.1Link.bb
+        otherDb GCA_018472825.1
+
+        track chainHprcGCA_018504655.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s062 group=g07
+        shortLabel NA21309.pri.mat.f1_v2 HPRC Chain
+        longLabel NA21309.pri.mat.f1_v2 (May 2021 GCA_018504655.1_NA21309.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504655.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504655.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504655.1Link.bb
+        otherDb GCA_018504655.1
+
+        track chainHprcGCA_018505865.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s063 group=g07
+        shortLabel HG02109.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02109.alt.pat.f1_v2 (May 2021 GCA_018505865.1_HG02109.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018505865.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505865.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505865.1Link.bb
+        otherDb GCA_018505865.1
+
+        track chainHprcGCA_018472685.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s064 group=g07
+        shortLabel HG01071.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01071.pri.mat.f1_v2 (May 2021 GCA_018472685.1_HG01071.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472685.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472685.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472685.1Link.bb
+        otherDb GCA_018472685.1
+
+        track chainHprcGCA_018473295.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s065 group=g07
+        shortLabel HG03540.pri.mat.f1_v2 HPRC Chain
+        longLabel HG03540.pri.mat.f1_v2 (May 2021 GCA_018473295.1_HG03540.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018473295.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018473295.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018473295.1Link.bb
+        otherDb GCA_018473295.1
+
+        track chainHprcGCA_018852585.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s066 group=g07
+        shortLabel HG02145.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02145.pri.mat.f1_v2 (Jun. 2021 GCA_018852585.1_HG02145.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018852585.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018852585.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018852585.1Link.bb
+        otherDb GCA_018852585.1
+
+        track chainHprcGCA_018472865.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s067 group=g07
+        shortLabel HG01978.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01978.pri.mat.f1_v2 (May 2021 GCA_018472865.1_HG01978.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472865.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472865.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472865.1Link.bb
+        otherDb GCA_018472865.1
+
+        track chainHprcGCA_018503525.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s068 group=g07
+        shortLabel HG03486.pri.mat.f1_v2 HPRC Chain
+        longLabel HG03486.pri.mat.f1_v2 (May 2021 GCA_018503525.1_HG03486.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018503525.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503525.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503525.1Link.bb
+        otherDb GCA_018503525.1
+
+        track chainHprcGCA_018503585.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s070 group=g08
+        shortLabel HG02818.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02818.pri.mat.f1_v2 (May 2021 GCA_018503585.1_HG02818.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018503585.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503585.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018503585.1Link.bb
+        otherDb GCA_018503585.1
+
+        track chainHprcGCA_018504065.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s071 group=g08
+        shortLabel HG02723.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02723.pri.mat.f1_v2 (May 2021 GCA_018504065.1_HG02723.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504065.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504065.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504065.1Link.bb
+        otherDb GCA_018504065.1
+
+        track chainHprcGCA_018469875.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s072 group=g08
+        shortLabel HG02622.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02622.pri.mat.f1_v2 (May 2021 GCA_018469875.1_HG02622.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469875.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469875.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469875.1Link.bb
+        otherDb GCA_018469875.1
+
+        track chainHprcGCA_018473315.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s073 group=g08
+        shortLabel HG03540.alt.pat.f1_v2 HPRC Chain
+        longLabel HG03540.alt.pat.f1_v2 (May 2021 GCA_018473315.1_HG03540.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018473315.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018473315.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018473315.1Link.bb
+        otherDb GCA_018473315.1
+
+        track chainHprcGCA_018470445.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s074 group=g08
+        shortLabel HG02572.pri.mat.f1_v2 HPRC Chain
+        longLabel HG02572.pri.mat.f1_v2 (May 2021 GCA_018470445.1_HG02572.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018470445.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470445.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470445.1Link.bb
+        otherDb GCA_018470445.1
+
+        track chainHprcGCA_018504375.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s075 group=g08
+        shortLabel HG01243.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01243.pri.mat.f1_v2 (May 2021 GCA_018504375.1_HG01243.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504375.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504375.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504375.1Link.bb
+        otherDb GCA_018504375.1
+
+        track chainHprcGCA_018504365.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s076 group=g08
+        shortLabel HG01109.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01109.pri.mat.f1_v2 (May 2021 GCA_018504365.1_HG01109.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504365.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504365.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504365.1Link.bb
+        otherDb GCA_018504365.1
+
+        track chainHprcGCA_018471085.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s077 group=g08
+        shortLabel HG01175.pri.mat.f1_v2 HPRC Chain
+        longLabel HG01175.pri.mat.f1_v2 (May 2021 GCA_018471085.1_HG01175.pri.mat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471085.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471085.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471085.1Link.bb
+        otherDb GCA_018471085.1
+
+        track chainHprcGCA_018472575.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s078 group=g08
+        shortLabel HG00621.alt.pat.f1_v2 HPRC Chain
+        longLabel HG00621.alt.pat.f1_v2 (May 2021 GCA_018472575.1_HG00621.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472575.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472575.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472575.1Link.bb
+        otherDb GCA_018472575.1
+
+        track chainHprcGCA_018472705.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s079 group=g09
+        shortLabel HG01928.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01928.alt.pat.f1_v2 (May 2021 GCA_018472705.1_HG01928.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472705.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472705.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472705.1Link.bb
+        otherDb GCA_018472705.1
+
+        track chainHprcGCA_018471075.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s081 group=g09
+        shortLabel HG01106.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01106.alt.pat.f1_v2 (May 2021 GCA_018471075.1_HG01106.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471075.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471075.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471075.1Link.bb
+        otherDb GCA_018471075.1
+
+        track chainHprcGCA_018469675.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s082 group=g09
+        shortLabel HG01258.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01258.alt.pat.f1_v2 (May 2021 GCA_018469675.1_HG01258.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018469675.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469675.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469675.1Link.bb
+        otherDb GCA_018469675.1
+
+        track chainHprcGCA_018469965.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s083 group=g09
+        shortLabel HG01358.alt.pat.f1_v2.1 HPRC Chain
+        longLabel HG01358.alt.pat.f1_v2.1 (May 2021 GCA_018469965.1_HG01358.alt.pat.f1_v2.1) HPRC project computed Chained Alignments
+        type bigChain GCA_018469965.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469965.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018469965.1Link.bb
+        otherDb GCA_018469965.1
+
+        track chainHprcGCA_018504645.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s084 group=g09
+        shortLabel HG01109.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01109.alt.pat.f1_v2 (May 2021 GCA_018504645.1_HG01109.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504645.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504645.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504645.1Link.bb
+        otherDb GCA_018504645.1
+
+        track chainHprcGCA_018470425.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s085 group=g09
+        shortLabel HG02717.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02717.alt.pat.f1_v2 (May 2021 GCA_018470425.1_HG02717.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018470425.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470425.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470425.1Link.bb
+        otherDb GCA_018470425.1
+
+        track chainHprcGCA_018505855.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s086 group=g09
+        shortLabel HG02055.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02055.alt.pat.f1_v2 (May 2021 GCA_018505855.1_HG02055.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018505855.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505855.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505855.1Link.bb
+        otherDb GCA_018505855.1
+
+        track chainHprcGCA_018505835.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s088 group=g09
+        shortLabel HG03492.alt.pat.f1_v2 HPRC Chain
+        longLabel HG03492.alt.pat.f1_v2 (May 2021 GCA_018505835.1_HG03492.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018505835.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505835.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018505835.1Link.bb
+        otherDb GCA_018505835.1
+
+        track chainHprcGCA_018472585.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s089 group=g09
+        shortLabel HG00673.alt.pat.f1_v2 HPRC Chain
+        longLabel HG00673.alt.pat.f1_v2 (May 2021 GCA_018472585.1_HG00673.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472585.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472585.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472585.1Link.bb
+        otherDb GCA_018472585.1
+
+        track chainHprcGCA_018504045.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s091 group=g10
+        shortLabel HG01243.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01243.alt.pat.f1_v2 (May 2021 GCA_018504045.1_HG01243.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018504045.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504045.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018504045.1Link.bb
+        otherDb GCA_018504045.1
+
+        track chainHprcGCA_018467005.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s092 group=g10
+        shortLabel HG02486.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02486.alt.pat.f1_v2 (May 2021 GCA_018467005.1_HG02486.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018467005.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018467005.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018467005.1Link.bb
+        otherDb GCA_018467005.1
+
+        track chainHprcGCA_018472835.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s093 group=g10
+        shortLabel HG03579.alt.pat.f1_v2 HPRC Chain
+        longLabel HG03579.alt.pat.f1_v2 (May 2021 GCA_018472835.1_HG03579.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018472835.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472835.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018472835.1Link.bb
+        otherDb GCA_018472835.1
+
+        track chainHprcGCA_018852595.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s094 group=g10
+        shortLabel HG02145.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02145.alt.pat.f1_v2 (Jun. 2021 GCA_018852595.1_HG02145.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018852595.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018852595.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018852595.1Link.bb
+        otherDb GCA_018852595.1
+
+        track chainHprcGCA_018471555.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s095 group=g10
+        shortLabel HG01952.alt.pat.f1_v2 HPRC Chain
+        longLabel HG01952.alt.pat.f1_v2 (May 2021 GCA_018471555.1_HG01952.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018471555.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471555.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018471555.1Link.bb
+        otherDb GCA_018471555.1
+
+        track chainHprcGCA_018470435.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s096 group=g10
+        shortLabel HG02572.alt.pat.f1_v2 HPRC Chain
+        longLabel HG02572.alt.pat.f1_v2 (May 2021 GCA_018470435.1_HG02572.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018470435.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470435.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018470435.1Link.bb
+        otherDb GCA_018470435.1
+
+        track chainHprcGCA_018506155.1
+        parent hprcChainNetViewchain
+        subGroups view=chain species=s097 group=g10
+        shortLabel HG03098.alt.pat.f1_v2 HPRC Chain
+        longLabel HG03098.alt.pat.f1_v2 (May 2021 GCA_018506155.1_HG03098.alt.pat.f1_v2) HPRC project computed Chained Alignments
+        type bigChain GCA_018506155.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506155.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHprcGCA_018506155.1Link.bb
+        otherDb GCA_018506155.1
+
