@@ -72,6 +72,7 @@ https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annota
 This track was generated using liftOver using the T2T GRCh38/hg38 minimap2
 liftover alignments and manually modifying them, as described in
 chm13v2.0_CytoBandMapping.xlsx
+The main sheet is also in chm13v2.0_CytoBandMapping.main.tsv 
 
 bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/cytoBand.as chm13v2.0_cytobands_allchrs.bed../chromAlias/ucsc.sizes.txt cytoBandMapped.bb
 
