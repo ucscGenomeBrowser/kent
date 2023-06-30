@@ -296,7 +296,7 @@ urlLabel NCBI accession record:
 include ../chainNetPrimate.ra
 include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
-include chainNetHprc.ra alpha
+include chainsHprc.ra alpha
 
 # a large composite with many chain/net experiments to other human assemblies
 include chainNetHumanExperiment.ra alpha
