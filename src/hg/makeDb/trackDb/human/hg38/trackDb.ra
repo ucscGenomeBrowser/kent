@@ -297,6 +297,7 @@ include ../chainNetPrimate.ra
 include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
 include chainsHprc.ra alpha
+include hprcCoverage.ra alpha
 
 # a large composite with many chain/net experiments to other human assemblies
 include chainNetHumanExperiment.ra alpha
@@ -852,8 +853,9 @@ termRegex cg[0-9]+
 semiShortCircuit 1
 searchPriority 55
 
-include hprcChain.ra
-include hprcCoverage.ra
+# Brian's original experiment, April 2022
+include hprcChain.ra alpha
+include hprcCoverage97.ra alpha
 
 include trackDb.470way.ra
 

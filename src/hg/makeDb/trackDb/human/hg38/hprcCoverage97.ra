@@ -1,0 +1,65 @@
+track hprcCoverageSuper
+compositeTrack on
+shortLabel HPRC Coverage 97
+longLabel HPRC Coverage - 97 liftOver chain overlap counts
+group x
+color 1,1,1
+type bed 3 +
+html hprcCoverage
+
+    track 80to99
+    subTrack hprcCoverageSuper
+    shortLabel HPRC 80-97
+    longLabel HPRC Coverage - 80 to 97 coverage from 97 liftOver chains
+    type bigBed 5 .
+    bigDataUrl /gbdb/hg38/hprc/80to99.bb
+    html hprcCoverage
+    priority 1
+
+    track 60to79
+    subTrack hprcCoverageSuper dense
+    shortLabel HPRC 60-80
+    longLabel HPRC Coverage - 60 to 80 coverage from 97 liftOver chains
+    type bigBed 5 .
+    bigDataUrl /gbdb/hg38/hprc/60to79.bb
+    html hprcCoverage
+    priority 2
+
+    track 40to59
+    subTrack hprcCoverageSuper dense
+    shortLabel HPRC 40-60
+    longLabel HPRC Coverage - 40 to 60 coverage from 97 liftOver chains
+    type bigBed 5 .
+    bigDataUrl /gbdb/hg38/hprc/40to59.bb
+    html hprcCoverage
+    priority 3
+
+    track 20to39
+    subTrack hprcCoverageSuper dense
+    shortLabel HPRC 20-40
+    longLabel HPRC Coverage - 20 to 40 coverage from 97 liftOver chains
+    type bigBed 5 .
+    bigDataUrl /gbdb/hg38/hprc/20to39.bb
+    html hprcCoverage
+    priority 4
+
+    track under20
+    subTrack hprcCoverageSuper dense
+    shortLabel HPRC < 20
+    longLabel HPRC Coverage - less than 20 coverage from 97 liftOver chains
+    type bigBed 5 .
+    bigDataUrl /gbdb/hg38/hprc/under20.bb
+    html hprcCoverage
+    priority 5
+
+    track hprcCoverage
+    subTrack hprcCoverageSuper full
+    shortLabel HPRC Coverage
+    longLabel HPRC Coverage - 97 liftOver chain overlap counts
+    type bigWig 0 97
+    maxHeightPixels 128:64:16
+    viewLimits 0:97
+    graphTypeDefault bar
+    bigDataUrl /gbdb/hg38/hprc/hprcCoverage97.bw
+    html hprcCoverage
+    priority 6
