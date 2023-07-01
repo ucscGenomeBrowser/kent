@@ -52,7 +52,7 @@ html hprcCoverage
     html hprcCoverage
     priority 5
 
-    track hprcCoverage
+    track hprcCoverage97
     subTrack hprcCoverageSuper full
     shortLabel HPRC Coverage
     longLabel HPRC Coverage - 97 liftOver chain overlap counts
@@ -63,3 +63,15 @@ html hprcCoverage
     bigDataUrl /gbdb/hg38/hprc/hprcCoverage97.bw
     html hprcCoverage
     priority 6
+
+    track hprcComplement97
+    subTrack hprcCoverageSuper full
+    shortLabel HPRC Complement 97
+    longLabel HPRC Complement - 97 samples (== 1.0 - coverage score)
+    type bigWig 0 1
+    maxHeightPixels 128:64:16
+    viewLimits 0:1
+    graphTypeDefault bar
+    bigDataUrl /gbdb/hg38/hprc/hprcComplement97.bw
+    html hprcCoverage
+    priority 7
