@@ -31,6 +31,8 @@ Options:
   -chainMapFile - mapFile is a chain file instead of a psl file
   -swapMap - swap query and target sides of map file.
   -swapIn - swap query and target sides of inPsl file.
+  -check - validate input, mapping, and mapped PSLs.  This does slow
+   down the program some, so it is optional.
   -suffix=str - append str to the query ids in the output
    alignment.  Useful with protein alignments, where the result
    is not actually and alignment of the protein.

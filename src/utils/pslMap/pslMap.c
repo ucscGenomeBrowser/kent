@@ -20,6 +20,7 @@ static struct optionSpec optionSpecs[] = {
     {"suffix", OPTION_STRING},
     {"keepTranslated", OPTION_BOOLEAN},
     {"mapFileWithInQName", OPTION_BOOLEAN},
+    {"check", OPTION_BOOLEAN},
     {"chainMapFile", OPTION_BOOLEAN},
     {"swapMap", OPTION_BOOLEAN},
     {"swapIn", OPTION_BOOLEAN},
@@ -38,6 +39,7 @@ static boolean mapFileWithInQName = FALSE;
 static boolean chainMapFile = FALSE;
 static boolean swapMap = FALSE;
 static boolean swapIn = FALSE;
+static boolean check = FALSE;
 static boolean simplifyMappingIds = FALSE;
 static char* mapInfoFile = NULL;
 static char* mappingPslFile = NULL;
@@ -321,15 +323,20 @@ static boolean mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
 {
 verbosePslNl(2, "inAln", inPsl);
 verbosePslNl(2, "mapAln", mapAln->psl);
+if (check && (pslCheck("input PSL", stderr, inPsl) > 0))
+    errAbort("BUG: invalid input PSL, run with -verbose=2 for more details");
+if (check && (pslCheck("mapping PSL", stderr, mapAln->psl) > 0))
+    errAbort("BUG: invalid mapping PSL, run with -verbose=2 for more details");
 
 struct psl* mappedPsl = pslTransMap(mapOpts, inPsl, inPslType, mapAln->psl, mapPslType);
-
-verbosePslNl(2, "mappedAln", mappedPsl);
+verbosePslNl(2, "mappedPsl", mappedPsl);
 
 /* only output if blocks were actually mapped */
 boolean wasMapped = mappedPsl != NULL;
 if (wasMapped)
     {
+    if (check && (pslCheck("mapped psl", stderr, mappedPsl) > 0))
+        errAbort("BUG: invalid mapped PSL created, run with -verbose=2 for more details");
     mappedPslOutput(inPsl, mapAln, mappedPsl, outPslFh, mapInfoFh, mappingPslFh, *outPslLineRef);
     (*outPslLineRef)++;
     }
@@ -412,6 +419,7 @@ if (mapFileWithInQName && chainMapFile)
     errAbort("can't specify -mapFileWithInQName with -chainMapFile");
 swapMap = optionExists("swapMap");
 swapIn = optionExists("swapIn");
+check = optionExists("check");
 simplifyMappingIds = optionExists("simplifyMappingIds");
 char *typeStr;
 if ((typeStr = optionVal("inType", NULL)) != NULL)

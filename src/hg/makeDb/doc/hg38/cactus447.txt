@@ -1,0 +1,305 @@
+
+################################################################################
+#### 2023-06-13 - fetch maf.gz - Hiram
+
+mkdir -p /hive/data/genomes/hg38/bed/cactus447/singleCover
+cd /hive/data/genomes/hg38/bed/cactus447/singleCover
+
+obtained maf file from Glenn, from the 'courtyard' login:
+
+/nanopore/cgl/glenn-scratch/new-maf/447-mammalian-2022v1-single-copy.maf.gz
+
+-rw-r--r-- 1 hickey cgl 881994218891 Jun  5 11:06 /nanopore/cgl/glenn-scratch/new-maf/447-mammalian-2022v1-single-copy.maf.gz
+
+There was some go around with a different version.  This one
+is 'single coverage'
+
+-rw-r--r-- 1 881994218891 Jun  5 11:06 447-mammalian-2022v1-single-copy.maf.gz
+
+################################################################################
+#### split this file into individual chromosome files 2023-06-21 - Hiram
+
+  mkdir  /hive/data/genomes/hg38/bed/cactus447/splitSingleCover
+  cd  /hive/data/genomes/hg38/bed/cactus447/splitSingleCover
+
+time mafSplit -byTarget -useFullSequenceName /dev/null ./  ../singleCover/447-mammalian-2022v1-single-copy.maf.gz
+
+Splitting 1 files by target sequence -- ignoring first argument /dev/null
+
+real    804m35.124s
+user    1061m9.580s
+sys     101m19.894s
+
+
+################################################################################
+### convert the sequence names to hg38 chrom names 2023-06-12 to 06-14 - Hiram
+
+  mkdir  /hive/data/genomes/hg38/bed/cactus447/ucscNames
+  cd  /hive/data/genomes/hg38/bed/cactus447/ucscNames
+
+   runOne script for processing each file:
+
+#!/bin/bash
+
+set -beEu -o pipefail
+
+export cactusMaf="${1}"
+export srcMaf="../splitSingleCover/${cactusMaf}"
+
+cactusId=${cactusMaf%.maf}
+
+export sedCommand=`grep -w "${cactusId}" cactus.to.ucsc.sed`
+export ucscName=`grep -w "${cactusId}" 2022v1.hg38.chrom.equiv.txt | cut -f2`
+
+case "${ucscName}" in
+    chrM)
+if [ ${srcMaf} -nt ${ucscName}.maf ]; then
+  sed -f cactus.to.ucsc.sed ${srcMaf} > ${ucscName}.maf
+  touch -r ${srcMaf} ${ucscName}.maf
+fi
+       ;;
+    chr[0-9][0-9])
+       rm -f "${ucscName}.maf"
+       ln ${srcMaf} "${ucscName}.maf"
+       ;;
+    chr[0-9])
+       rm -f "${ucscName}.maf"
+       ln ${srcMaf} "${ucscName}.maf"
+       ;;
+    G*.maf)
+    K*.maf)
+if [ ${srcMaf} -nt ${ucscName}.maf ]; then
+  sed -e "${sedCommand}" ${srcMaf} > ${ucscName}.maf
+  touch -r ${srcMaf} ${ucscName}.maf
+else
+  printf "DONE: ${ucscName}.maf\n" 1>&2
+fi
+       ;;
+esac
+
+if [ "${ucscName}.maf" -nt "nameScan/${ucscName}.seqCount.txt" ]; then
+  grep "^s." "${ucscName}.maf" | cut -d' ' -f2 | sort | uniq -c | sort -rn \
+    > "nameScan/${ucscName}.seqCount.txt"
+  touch -r "${ucscName}.maf" "nameScan/${ucscName}.seqCount.txt"
+  sed -e "s/^ \+//;" "nameScan/${ucscName}.seqCount.txt" | cut -d' ' -f2 \
+    | cut -d'.' -f1 | sort | uniq -c \
+       | sort -rn > "nameScan/${ucscName}.species.txt"
+fi
+#####################################################
+
+     template:
+#LOOP
+runOne $(path1)
+#ENDLOOP
+
+     using list of maf files:
+     ls ../splitSingleCover  | grep maf > cactus.maf.list
+
+     gensub2 cactus.maf.list single template jobList
+
+     ### made mistake of running too many of those at the same time
+     ### and their use of large amounts of memory caused hgwdev to
+     ### hang up and needed a reboot to recover.  So, run these carefully
+     ### only a couple at a time on hgwdev and on hgcompute-01, the large
+     ### ones get as large as 800 Gb in memory.
+
+     ### get the species names from the nameScan:
+
+   sed -e 's/^ \+//;' nameScan/chr2.species.txt | cut -d' ' -f2 \
+      | sort > ../species.list.txt
+
+################################################################################
+### get the chrom.sizes out of the maf files 2023-06-19 - Hiram
+
+   mkdir /hive/data/genomes/hg38/bed/cactus447/chromSizes
+   cd /hive/data/genomes/hg38/bed/cactus447/chromSizes
+
+   ### runOne script to run each one:
+
+#!/bin/bash
+
+export inMaf="${1}"
+export result="${2}"
+
+grep "^s " "${inMaf}" | awk '{printf "%s\t%s\n", $2,$6}' | sort -u > "${result}
+
+    ### working on the maf list:
+    ls ../ucscNames/chr*.maf > maf.list
+
+     ### template to construct jobList
+#LOOP
+runOne $(path1) {check out line+ result/$(root1).txt}
+#ENDLOOP
+
+     gensub2 maf.list single template jobList
+
+     para -ram=6g create jobList
+
+Completed: 101 of 101 jobs
+CPU time in finished jobs:      90801s    1513.35m    25.22h    1.05d  0.003 y
+IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+Average job time:                 762s      12.69m     0.21h    0.01d
+Longest finished job:            7952s     132.53m     2.21h    0.09d
+Submission to last job:          8022s     133.70m     2.23h    0.09d
+
+    ### sizes.pl script to get the answer out of the result/*.txt files:
+
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %chromSizes; # key is assembly name, value is a pointer to a hash
+                #  with key chromName, value size
+
+open (my $FH, "-|", "ls result/*.txt") or die "can not read ls result/*.txt";
+while (my $file = <$FH>) {
+  chomp $file;
+  printf STDERR "# reading: %s\n", $file;
+  open (my $R, "<", $file) or die "can not read $file";
+  while (my $line = <$R>) {
+    chomp $line;
+    my @a = split('\.', $line);
+    if (! defined($chromSizes{$a[0]})) {
+       my %h;
+       $chromSizes{$a[0]} = \%h;
+    }
+    my $asm = $chromSizes{$a[0]};
+    if (scalar(@a) == 3) {
+      my ($a2, $size) = split('\s+', $a[2]);
+      my $chr = "$a[1].$a2";
+      if (defined($asm->{$chr})) {
+         if ($asm->{$chr} != $size) {
+           printf STDERR "ERROR: size mismatch: %d != %d for %s\t%s.%s\n", $asm->{$chr}, $size, $a[0], $a[1], $a[2];
+           exit 255;
+         }
+      } else {
+         $asm->{$chr} = $size;
+      }
+#      printf "%s\t%s.%s\n", $a[0], $a[1], $a[2];
+    } elsif (scalar(@a) == 2) {
+      my ($chr, $size) = split('\s+', $a[1]);
+      if (defined($asm->{$chr})) {
+         if ($asm->{$chr} != $size) {
+           printf STDERR "ERROR: size mismatch: %d != %d for %s\t%s\n", $asm->{$chr}, $size, $a[0], $a[1];
+           exit 255;
+         }
+      } else {
+         $asm->{$chr} = $size;
+      }
+#      printf "%s\t%s\n", $a[0], $a[1];
+    } else {
+      printf STDERR "ERROR: not 2 or 3: '%s'\n", $line;
+      exit 255;
+    }
+  }
+  close ($R);
+}
+close ($FH);
+
+foreach my $asm (sort keys %chromSizes) {
+   printf STDERR "# output %s\n", $asm;
+   my $out = "sizes/${asm}.chrom.sizes";
+   open ($FH, "|-", "sort -k2,2nr > $out") or die "can not write to $out";
+   my $h = $chromSizes{$asm};
+   foreach my $chr (sort keys %$h) {
+#      printf  "%s\t%s\t%d\n", $asm, $chr, $h->{$chr};
+      printf $FH "%s\t%d\n", $chr, $h->{$chr};
+   }
+   close ($FH);
+}
+
+    mkdir sizes
+
+    time (./sizes.pl) > sizes.log 2>&1
+real    10m11.808s
+user    6m40.128s
+sys     3m37.475s
+
+
+################################################################################
+### add the iRow annotation 2023-06-19 to 2023-06-26 - Hiram
+
+  mkdir /hive/data/genomes/hg38/bed/cactus447/iRows
+  cd /hive/data/genomes/hg38/bed/cactus447/iRows
+
+  # obtained the N.bed files from Glenn
+  ##  symLink them into this directory:
+
+ls /hive/data/genomes/hg38/bed/cactus447/Nbeds/*.N.bed | grep -v "hg38.N.bed" \
+   | while read P
+do
+  B=`basename $P | sed -e 's/N.bed/bed/;'`
+  rm -f ./${P}
+  ln -s "${P}" ./${B}
+done
+
+  ### and symlink in the chrom.sizes files as .len files
+
+  ls /hive/data/genomes/hg38/bed/cactus447/chromSizes/sizes/*.chrom.sizes \
+ | grep -v hg38.chrom.sizes | while read P
+do
+  S=`basename ${P} | sed -e 's/chrom.sizes/len/;'`
+  printf "%s\n" "${S}"
+  ln -s "${P}" ./${S}
+done
+
+ln -s /hive/data/genomes/hg38/chrom.sizes hg38.len
+
+   ls *.bed > nBeds
+   ls *.len > sizes
+
+   ### list of maf file to process:
+
+   ls ../ucscNames/chr*.maf > maf.list
+
+   ### template file to construct jobList
+#LOOP
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/hg38/hg38.2bit result/$(file1)
+#ENDLOOP
+
+   gensub2 maf.list single template jobList
+
+   ### took a week to get these all done.
+   ### convert each file to a bigMaf file:
+
+   mkdir /hive/data/genomes/hg38/bed/cactus447/iRows/bigMaf
+   cd /hive/data/genomes/hg38/bed/cactus447/iRows/bigMaf
+
+   ### tried to sort them, but made a mistake on the sort -k argument:
+   for F in ../result/chr*.maf
+do
+   B=`basename $F | sed -e 's/.maf//;'`
+   mafToBigMaf hg38 "${F}" stdout | $HOME/bin/x86_64/gnusort -k2,2 -S1000G \
+        --parallel=32 > "${B}.bigMaf"
+done
+
+real    1588m59.209s
+user    1259m38.364s
+sys     371m13.448s
+
+   ### put these all together:
+   ls -S chr*.bigMaf | while read M
+do
+  cat "${M}"
+done > ../hg38.cactus447.bigMaf
+
+real    322m25.741s
+user    0m13.577s
+sys     82m41.509s
+
+   ### since they were sorted incorrectly above, sort this one huge file:
+
+   $HOME/bin/x86_64/gnusort -S500G --parallel=64 -k1,1 -k2,2n \
+     hg38.cactus447.bigMaf > hg38.sorted447way.bigMaf
+real    752m12.425s
+user    47m34.825s
+sys     371m7.394s
+
+################################################################################
+### make the bigBed file from the sorted bigMaf 2023-06-27
+
+bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 \
+ -as=$HOME/kent/src/hg/lib/bigMaf.as -tab iRows/hg38.sorted447way.bigMaf \
+     /hive/data/genomes/hg38/chrom.sizes hg38.cactus447way.bb
+XXX running - Tue Jun 27 14:16:31 PDT 2023

@@ -37,11 +37,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest, time, re, sys, argparse
-
-
-# Adding a tmpdir for the cron
+import getpass
 import os
-os.environ['TMPDIR'] = "/hive/users/qateam/selenium/chrom113/TMP"
+
+user = getpass.getuser()
+
+
+#Make tmpdir for the cron
+try:
+   os.makedirs("/hive/users/"+user+"/selenium/chrom113/cron/TMP", exist_ok=True)
+except OSError as e:
+    print(f"Error creating directory: {e}")
+os.environ['TMPDIR'] = "/hive/users/"+user+"/selenium/chrom113/cron/TMP"
 
 def initialize_driver(headless):
     """Initiates which webdriver to run for headless mode or local mode"""

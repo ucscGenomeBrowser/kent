@@ -1,3 +1,85 @@
+################## first experiment include below  ###########################
+### calculate coverage from the HPRC chainLink files - 2023-06-30 - Hiram
+### this becomes the track: 'HPRC Coverage 89'
+
+mkdir /hive/data/genomes/hg38/bed/hprc/linkBeds
+cd /hive/data/genomes/hg38/bed/hprc/linkBeds
+
+### transform the chainLink.bb files into single cover bed files
+
+### create a parasol joblist from all the chainLink.bb files:
+
+ls ../bigChains/*Link.bb | while read BB
+do
+  S=`basename "${BB}" | sed -e 's#.*bigChains/##; s#-to-.*##;'`
+  printf "runOne ${BB} {check out exists+ singleCover/${S}.bed}\n"
+done > jobList
+
+### the runOne script:
+
+###
+#!/bin/bash
+
+export bbFile="${1}"
+export result="${2}"
+
+/cluster/bin/x86_64/bigBedToBed "${bbFile}" stdout | /cluster/bin/scripts/bedSingleCover.pl stdin > "${result}"
+###
+
+chmod +s runOne
+mkdir singleCover
+para -ram=6g create jobList
+para push
+para time
+Completed: 89 of 89 jobs
+CPU time in finished jobs:        730s      12.16m     0.20h    0.01d  0.000 y
+IO & Wait Time:                   184s       3.07m     0.05h    0.00d  0.000 y
+Average job time:                  10s       0.17m     0.00h    0.00d
+Longest finished job:              17s       0.28m     0.00h    0.00d
+
+### combine all those results into one file, then turn it into a bigBed
+
+cat singleCover/*.bed \
+   | $HOME/bin/x86_64/gnusort -S500G --parallel=64 -k1,1 -k2,2n > allLinks.bed
+
+bedItemOverlapCount hg38 allLinks.bed > allLinks.bedGraph
+
+### normalize the counts to the range [0.1:1.0] given there are 89 samples:
+
+awk '{printf "%s\t%s\t%s\t%.3f\n", $1, $2, $3, $4/89}' allLinks.bedGraph \
+   > hprc.coverage.normalized.bedGraph
+
+### identify regions with ZERO coverage
+
+bedInvert.pl /hive/data/genomes/hg38/chrom.sizes \
+  hprc.coverage.normalized.bedGraph  > hprc.zeroCoverage.bed
+
+### and add in that ZERO coverage with the others
+( awk '{printf "%s\t%s\t%s\t0\n", $1, $2, $3}' hprc.zeroCoverage.bed;
+cat hprc.coverage.normalized.bedGraph) | sort -k1,1 -k2,2n \
+   > hprc.coverage.89samples.bedGraph
+
+bedGraphToBigWig hprc.coverage.89samples.bedGraph \
+   /hive/data/genomes/hg38/chrom.sizes hprc.coverage.89samples.bw
+
+### track bigWig obtained from /gbdb/
+ln -s `pwd`/hprc.coverage.89samples.bw /gbdb/hg38/hprc/hprcCoverage89.bw
+
+### create a complement: '1.0 - score' to emphasize the low counts:
+
+awk '{printf "%s\t%s\t%s\t%.3f\n", $1, $2, $3, 1.0 - $4}' \
+   hprc.coverage.89samples.bedGraph > hprc.coverage.complement89.bedGraph
+
+bedGraphToBigWig hprc.coverage.complement89.bedGraph \
+   /hive/data/genomes/hg38/chrom.sizes hprc.coverage.complement89.bw
+
+ln -s `pwd`/hprc.coverage.complement89.bw /gbdb/hg38/hprc/hprcComplement89.bw
+
+###############################################################################
+### first experiment with the lastz/chain/net liftOver files
+### 2023-04-12 - Hiram
+### this became the track 'HPRC Coverage 97' in the Experimental track group
+
 ## calculate coverage measurement from liftOver chain files
 
 ## collect files together in one location
