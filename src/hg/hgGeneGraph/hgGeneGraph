@@ -2,6 +2,7 @@
 
 # Gene Interaction Viewer for the Genome Browser
 
+
 # query tables with prefix "gg" in hgFixed, writes the results to a dot file,
 # runs graphviz's "dot" program to create a pathway map from it and write html
 # and mapfiles to the trash directory.
@@ -30,7 +31,7 @@
 # ggGeneName (symbols), ggGeneClass (HPRD/Panther class)
 
 # these are default python modules on python 2.7, no errors expected here
-import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib
+import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib, codecs
 from sys import exit
 from collections import defaultdict, namedtuple
 from os.path import *
@@ -1231,9 +1232,7 @@ def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
     # graph itself
     print('<img src="%s" usemap="#test">' % picName)
     mapData = open(mapName, "rb").read()
-    sys.stdout.flush()
-    sys.stdout.buffer.write(mapData) # only way to get binary data to stdout. Problem may be that data is mixed latin1/utf8 in tables from Stanford
-    sys.stdout.flush()
+    print(mapData.decode("latin1")) # graphviz seems to use latin1 encoding for its output file?
 
     print('</div> <!-- graph -->')
     print("<p>")
@@ -1476,6 +1475,13 @@ def printDbRows(conn, rows, onlyDoc=None):
         eventId, causeType, causeName, causeGenes, themeType, themeName, themeGenes, \
             relType, relSubtype, sourceDb, sourceId, sourceDesc, docIds, evidence = row
 
+        # in Python3, 'longblob' fields get converted to byte strings
+        causeGenes = causeGenes.decode("utf8")
+        themeGenes = themeGenes.decode("utf8")
+        sourceId = sourceId.decode("utf8")
+        docIds = docIds.decode("utf8")
+        evidence = evidence.decode("utf8")
+
         if eventId.startswith("ppi_"):
             isPpi = True
         else:
@@ -1560,7 +1566,7 @@ def showPwyPpiInfo(conn, gene1, gene2):
 
 def markupSentence(row):
     " given a MSR-textmining row, print a sentence with the various detected words marked up in bold "
-    sent = row.sentence
+    sent = row.sentence.decode("utf8")
     tStart, tEnd = int(row.themeTokenStart), int(row.themeTokenEnd)
     cStart, cEnd = int(row.causeTokenStart), int(row.causeTokenEnd)
     trigToken = int(row.triggerTokenId)
@@ -1569,11 +1575,14 @@ def markupSentence(row):
     # put into temporary var to be able to replace " , " later
     parts = []
     for i, word in enumerate(sent.split()):
+        themeGenes = row.themeGenes.decode("utf8") # longblob = byte string
+        causeGenes = row.causeGenes.decode("utf8")
+
         if i==tStart or i==cStart:
             if i==cStart:
-                genes = row.themeGenes # XX bug in MsrNlp tab file: Inversed?
+                genes = themeGenes # XX bug in MsrNlp tab file: Inversed?
             else:
-                genes = row.causeGenes
+                genes = causeGenes
             geneDisp = genes.replace("|", ", ")
             gene1 = genes.split("|")[0]
             parts.append( '<b><i><a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" data-toggle="tooltip" data-placement="top" title="recognized genes: %s, click to go to Gene Cards" target=_blank>' % \
@@ -1596,7 +1605,9 @@ def iterUniqueInteractions(rows):
     doneDocs = set()
     for row in rows:
         # make sure to skip duplicated info (=same genes + same document + same sentence)
-        docInfo = tuple(sorted([row.causeGenes, row.themeGenes, row.docId, row.sentenceId]))
+        causeGenes = row.causeGenes.decode("utf8") # longblob = byte string
+        themeGenes = row.themeGenes.decode("utf8")
+        docInfo = tuple(sorted([causeGenes, themeGenes, row.docId, row.sentenceId]))
         if docInfo in doneDocs:
             continue
         doneDocs.add(docInfo)
@@ -1673,7 +1684,7 @@ def prettyDocLinks(conn, pmids):
 
 def prettyDocLink(row, showStar=True):
     " given a row that includes author/title/year/docId fields, return a nice link to our doc view "
-    authors = row.authors.split("; ")
+    authors = row.authors.decode("utf8").split("; ") # mysql longblob => byte string
     if len(authors)>0:
         fAu = authors[0].split(",")[0]
     else:
@@ -1690,8 +1701,9 @@ def prettyDocLink(row, showStar=True):
     text = "%s %s, %s %s" % (fAu, suffix, row.journal, row.year)
 
     mouseOver = None
-    if row.title!="":
-        mouseOver = row.title.replace('"', "")
+    title = row.title.decode("utf8") # longBlob = byte string
+    if title!="":
+        mouseOver = title.replace('"', "")
     return docLink(row.docId, text=text, mouseOver=mouseOver)+note
 
 def showSnipsLink(conn, gene1, gene2):
@@ -1709,8 +1721,9 @@ def showSnipsLink(conn, gene1, gene2):
         print(prettyDocLink(rows[0], showStar=False))
 
         disSuffix = ""
-        if rows[0].context!="":
-            contexts = rows[0].context.split("|")
+        context = rows[0].context.decode("utf8") # longblob = byte string
+        if context!="":
+            contexts = context.split("|")
             if len(contexts)>1:
                 suffix = "..."
             else:
@@ -2027,6 +2040,8 @@ def main():
         printGraph(conn, weightedLinks, alg, addNeighbors, gene, format)
         sys.exit(0)
 
+    # Apache doesn't set LANG, so the default encoding of stdout is ASCII: Change it to utf8
+    sys.stdout = codecs.getwriter('utf8')(sys.stdout.buffer)
 
     printContentType()
 

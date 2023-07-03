@@ -65,12 +65,18 @@ lngbdb rnaseq/*.bw
 cytoBandsMapped (2022-02-22 markd)
 ----------------------------------------------------------------
 cytoBand tracks from T2T project mapped from GRCh38
-Supplied by Nick Altemose <nickaltemose@gmail.com>
-Delivered via Slack
-trackData/cytoBandMapped
+Supplied by Nick Altemose <nickaltemose@gmail.com>, <altemose@stanford.edu>
+Delivered via Slack, but available from
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v2.0_cytobands_allchrs.bed
+
+This track was generated using liftOver using the T2T GRCh38/hg38 minimap2
+liftover alignments and manually modifying them, as described in
+chm13v2.0_CytoBandMapping.xlsx
+The main sheet is also in chm13v2.0_CytoBandMapping.main.tsv 
 
 bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/cytoBand.as chm13v2.0_cytobands_allchrs.bed../chromAlias/ucsc.sizes.txt cytoBandMapped.bb
 
+trackData/cytoBandMapped
 lngbdb cytoBandMapped/*.bb
 
 ================================================================
