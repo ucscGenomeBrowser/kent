@@ -31,7 +31,7 @@
 # ggGeneName (symbols), ggGeneClass (HPRD/Panther class)
 
 # these are default python modules on python 2.7, no errors expected here
-import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib
+import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib, codecs
 from sys import exit
 from collections import defaultdict, namedtuple
 from os.path import *
@@ -2040,6 +2040,8 @@ def main():
         printGraph(conn, weightedLinks, alg, addNeighbors, gene, format)
         sys.exit(0)
 
+    # Apache doesn't set LANG, so the default encoding of stdout is ASCII: Change it to utf8
+    sys.stdout = codecs.getwriter('utf8')(sys.stdout.buffer)
 
     printContentType()
 
