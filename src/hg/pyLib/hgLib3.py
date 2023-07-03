@@ -57,6 +57,8 @@ botDelayBlock = 5000
 
 jksqlTrace = False
 
+forceUnicode = False
+
 def warn(format, *args):
     print (format % args)
 
@@ -172,6 +174,19 @@ def _timeDeltaSeconds(time1, time2):
     td = time1 - time2
     return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
 
+def byteToUnicode(rows):
+    " makes sure that all fields are of type 'str' and no single field is a byte string "
+    newRows = []
+    for row in rows:
+        newRow = []
+        for field in row:
+            if isinstance(field, bytes):
+                field = field.decode("utf8")
+            newRow.append(field)
+        newRows.append(newRow)
+
+    return newRows
+
 def sqlQuery(conn, query, args=None):
     """ Return all rows for query, placeholders can be used, args is a list to
     replace placeholders, to prevent Mysql injection.  Never do replacement
@@ -227,7 +242,12 @@ def sqlQuery(conn, query, args=None):
 
     colNames = [desc[0] for desc in cursor.description]
     Rec = namedtuple("MysqlRow", colNames)
+
+    if forceUnicode:
+        data = byteToUnicode(data)
+
     recs = [Rec(*row) for row in data]
+
     return recs
 
 def htmlPageEnd(oldJquery=False):
