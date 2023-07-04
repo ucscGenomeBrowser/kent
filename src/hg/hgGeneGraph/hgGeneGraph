@@ -2025,7 +2025,7 @@ def main():
 
     # Apache doesn't set LANG, so the default encoding of stdout is ASCII: Change it to utf8
     import codecs
-    sys.stdout = codecs.getwriter('utf8')(sys.stdout.buffer)
+    sys.stdout = open(1, 'w', encoding='utf-8', closefd=False)
 
     printContentType()
 
