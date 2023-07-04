@@ -1223,12 +1223,8 @@ def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
 
     # graph itself
     print('<img src="%s" usemap="#test">' % picName)
-    mapData = open(mapName, "rb").read()
-    # the data in the graphviz map file seems to be sometimes utf8 and sometimes other codepages (not latin1). So passing it through as a byte string
-    # to the byte-buffer underneath sys.stdout. I have not found another way to make this work. Not sure why web browsers can show it just fine.
-    sys.stdout.flush()
-    sys.stdout.buffer.write(mapData)
-    sys.stdout.flush()
+    mapData = open(mapName, "rt", encoding="latin1").read()
+    sys.stdout.write(mapData)
 
     print('</div> <!-- graph -->')
     print("<p>")
