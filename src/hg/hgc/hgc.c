@@ -7036,7 +7036,7 @@ for (i=0; i<size; ++i)
     }
 }
 
-void printPcrSequence(struct targetDb *target, struct psl *psl,
+void printPcrSequence(char *item, struct targetDb *target, struct psl *psl,
 		      char *fPrimer, char *rPrimer)
 /* Print the amplicon sequence (as on hgPcr results page). */
 {
@@ -7045,7 +7045,7 @@ char *ffPrimer = cloneString(fPrimer);
 char *rrPrimer = cloneString(rPrimer);
 int rPrimerSize = strlen(rPrimer);
 struct dnaSeq *seq;
-if (target != NULL)
+if (stringIn("__", item) && target != NULL)
     {
     /* Use seq+extFile if specified; otherwise just retrieve from seqFile. */
     if (isNotEmpty(target->seqTable) && isNotEmpty(target->extFileTable))
@@ -7096,6 +7096,30 @@ faWriteNext(stdout, NULL, dna, productSize);
 printf("</PRE></TT>");
 }
 
+static void pslFileGetPrimers(char *pslFileName, char *transcript, char **retFPrimer, char **retRPrimer)
+/* Use a psl file to get primers associated with the transcript */
+{
+char *pslFields[21];
+struct lineFile *lf = lineFileOpen(pslFileName, TRUE);
+char *target = cloneString(transcript);
+char *pipe = strchr(target, '|');
+*pipe = '\0';
+while (lineFileRow(lf, pslFields))
+    {
+    struct psl *psl = pslLoad(pslFields);
+    if (sameString(psl->tName, target))
+        {
+        char *pair = psl->qName;
+        char *under = strchr(pair, '_');
+        *under = '\0';
+        *retFPrimer = cloneString(pair);
+        *retRPrimer = cloneString(under+1);
+        break;
+        }
+    }
+lineFileClose(&lf);
+}
+
 void doPcrResult(char *track, char *item)
 /* Process click on PCR of user's primers. */
 {
@@ -7107,27 +7131,34 @@ if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target)
     errAbort("PCR Result track has disappeared!");
 
 char *fPrimer, *rPrimer;
-// the item name contains the forward and reverse primers
-int maxSplits = 2;
-char *splitQName[maxSplits];
-int numSplits = chopString(cloneString(item), "_", splitQName, sizeof(splitQName));
-if (numSplits == maxSplits)
+boolean targetSearch = stringIn("__", item) != NULL;
+if (targetSearch)
     {
-    fPrimer = splitQName[0];
-    touppers(fPrimer);
-    rPrimer = splitQName[1];
-    touppers(rPrimer);
+    // use the psl file to find the right primer pair
+    pslFileGetPrimers(pslFileName, item, &fPrimer, &rPrimer);
     }
 else
-    pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
+    {
+    // the item name contains the forward and reverse primers
+    int maxSplits = 2;
+    char *splitQName[maxSplits];
+    int numSplits = chopString(cloneString(item), "_", splitQName, sizeof(splitQName));
+    if (numSplits == maxSplits)
+        {
+        fPrimer = splitQName[0];
+        touppers(fPrimer);
+        rPrimer = splitQName[1];
+        touppers(rPrimer);
+        }
+    }
 printf("<H2>PCR Results (<TT>%s %s</TT>)</H2>\n", fPrimer, rPrimer);
 printf("<B>Forward primer:</B> 5' <TT>%s</TT> 3'<BR>\n", fPrimer);
 printf("<B>Reverse primer:</B> 5' <TT>%s</TT> 3'<BR>\n", rPrimer);
-if (target != NULL)
+if (targetSearch)
     printf("<B>Search target:</B> %s<BR>\n", target->description);
 
 struct psl *itemPsl = NULL, *otherPsls = NULL, *psl;
-if (target != NULL)
+if (targetSearch)
     {
     /* item (from hgTracks) is |-separated: target sequence name,
      * amplicon start offset in target sequence, and amplicon end offset. */
@@ -7140,14 +7171,14 @@ if (target != NULL)
 	targetSeqName[strlen(targetSeqName)-2] = '\0';
     int ampStart = atoi(words[1]), ampEnd = atoi(words[2]);
     pcrResultGetPsl(pslFileName, target, targetSeqName, seqName, ampStart, ampEnd,
-		    &itemPsl, &otherPsls);
+		    &itemPsl, &otherPsls, fPrimer, rPrimer);
     printPcrTargetMatch(target, itemPsl, TRUE);
     }
 else
     {
-    pcrResultGetPsl(pslFileName, target, item,
+    pcrResultGetPsl(pslFileName, NULL, item,
 		    seqName, cartInt(cart, "o"), cartInt(cart, "t"),
-		    &itemPsl, &otherPsls);
+		    &itemPsl, &otherPsls, fPrimer, rPrimer);
     printPosOnChrom(itemPsl->tName, itemPsl->tStart, itemPsl->tEnd,
 		    itemPsl->strand, FALSE, NULL);
     }
@@ -7167,7 +7198,7 @@ if (otherPsls != NULL)
 	}
     puts("<HR>");
     }
-printPcrSequence(target, itemPsl, fPrimer, rPrimer);
+printPcrSequence(item, target, itemPsl, fPrimer, rPrimer);
 
 puts("<BR><HR>");
 printTrackHtml(tdb);

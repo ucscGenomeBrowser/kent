@@ -974,12 +974,18 @@ char *pslFileName, *primerFileName;
 struct targetDb *target;
 if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     return NULL;
-char *fPrimer, *rPrimer;
-pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
+char *fPrimer, *rPrimer, *nonCompRPrimer;
+char *primerKey = NULL;
+if (lf->original)
+    primerKey = ((struct psl *)lf->original)->qName;
+pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer, primerKey);
 int fPrimerSize = strlen(fPrimer);
 int rPrimerSize = strlen(rPrimer);
+// we need to reverse complement the sequence for the display, but we
+// don't want to when we do the lookup in the psl file
+nonCompRPrimer = cloneString(rPrimer);
 reverseComplement(rPrimer, rPrimerSize);
-if (target != NULL)
+if (lf->name && isNotEmpty(lf->name))
     {
     struct psl *tpsl;
     char *words[3];
@@ -992,7 +998,7 @@ if (target != NULL)
     char *realName = pcrResultItemAccName(lf->name, displayName, NULL);
     /* isPcr results are so sparse that I think the performance impact 
      * of re-reading the psl file in the draw function is negligible. */
-    pcrResultGetPsl(pslFileName, target, realName, chromName, ampStart, ampEnd, &tpsl, NULL);
+    pcrResultGetPsl(pslFileName, target, realName, chromName, ampStart, ampEnd, &tpsl, NULL, fPrimer, nonCompRPrimer);
     /* Use seq+extFile if specified; otherwise just retrieve from seqFile. */
     if (isNotEmpty(target->seqTable) && isNotEmpty(target->extFileTable))
 	{

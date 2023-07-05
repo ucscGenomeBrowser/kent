@@ -31,14 +31,17 @@ boolean pcrResultParseCart(char *db, struct cart *cart, char **retPslFile,
  * they are valid.  If so, set *ret's and return TRUE.  Otherwise, null out 
  * *ret's and return FALSE.  ret's are ignored if NULL. */
 
-void pcrResultGetPrimers(char *fileName, char **retFPrimer, char **retRPrimer);
+void pcrResultGetPrimers(char *fileName, char **retFPrimer, char **retRPrimer, char *primerKey);
 /* Given a file whose first line is 2 words (forward primer, reverse primer)
- * set the ret's to upper-cased primer sequences.  
+ * set the ret's to upper-cased primer sequences. If primerKey is non NULL, the
+ * first two words of the line joined with "_" must equal the primerKey:
+ * primerKey == word1_word2
+ * Used when there are multiple pcr results in a single track
  * Do not free the statically allocated ret's. */
 
 void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
 		     char *chrom, int itemStart, int itemEnd,
-		     struct psl **retItemPsl, struct psl **retOtherPsls);
+		     struct psl **retItemPsl, struct psl **retOtherPsls, char *fPrimer, char *rPrimer);
 /* Read in psl from file.  If a psl matches the given item position, set 
  * retItemPsl to that; otherwise add it to retOtherPsls.  Die if no psl
  * matches the given item position. */

@@ -70,34 +70,46 @@ if (retTarget == NULL)
 return TRUE;
 }
 
-void pcrResultGetPrimers(char *fileName, char **retFPrimer, char **retRPrimer)
+void pcrResultGetPrimers(char *fileName, char **retFPrimer, char **retRPrimer, char *primerKey)
 /* Given a file whose first line is 2 words (forward primer, reverse primer)
- * set the ret's to upper-cased primer sequences.  
+ * set the ret's to upper-cased primer sequences. If primerKey is non NULL, the
+ * first two words of the line joined with "_" must equal the primerKey:
+ * primerKey == word1_word2
+ * Used when there are multiple pcr results in a single track
  * Do not free the statically allocated ret's. */
 {
 static char fPrimer[1024], rPrimer[1024];;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct dyString *primerPair = dyStringNew(0);
 char *words[2];
-if (! lineFileRow(lf, words))
-    lineFileAbort(lf, "Couldn't read primers");
-if (retFPrimer != NULL)
+while (lineFileRow(lf, words))
     {
-    safecpy(fPrimer, sizeof(fPrimer), words[0]);
-    touppers(fPrimer);
-    *retFPrimer = fPrimer;
+    dyStringClear(primerPair);
+    dyStringPrintf(primerPair, "%s_%s", words[0], words[1]);
+    if (!primerKey || (primerKey && sameString(primerPair->string, primerKey)))
+        {
+        if (retFPrimer != NULL)
+            {
+            safecpy(fPrimer, sizeof(fPrimer), words[0]);
+            touppers(fPrimer);
+            *retFPrimer = fPrimer;
+            }
+        if (retRPrimer != NULL)
+            {
+            safecpy(rPrimer, sizeof(rPrimer), words[1]);
+            touppers(rPrimer);
+            *retRPrimer = rPrimer;
+            }
+        break;
+        }
     }
-if (retRPrimer != NULL)
-    {
-    safecpy(rPrimer, sizeof(rPrimer), words[1]);
-    touppers(rPrimer);
-    *retRPrimer = rPrimer;
-    }
+dyStringFree(&primerPair);
 lineFileClose(&lf);
 }
 
 void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
 		     char *chrom, int itemStart, int itemEnd,
-		     struct psl **retItemPsl, struct psl **retOtherPsls)
+		     struct psl **retItemPsl, struct psl **retOtherPsls, char *fPrimer, char *rPrimer)
 /* Read in psl from file.  If a psl matches the given item position, set 
  * retItemPsl to that; otherwise add it to retOtherPsls.  Die if no psl
  * matches the given item position. */
@@ -105,32 +117,44 @@ void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct psl *itemPsl = NULL, *otherPsls = NULL;
 char *pslFields[21];
+boolean targetSearchResult = stringIn("__", item) != NULL;
 while (lineFileRow(lf, pslFields))
     {
     struct psl *psl = pslLoad(pslFields);
     boolean gotIt = FALSE;
-    if (target != NULL)
-	{
-	if (sameString(psl->tName, item) && psl->tStart == itemStart && psl->tEnd == itemEnd)
-	    gotIt = TRUE;
-	}
-    else if (sameString(psl->tName, chrom) && psl->tStart == itemStart &&
-	     psl->tEnd == itemEnd)
-	gotIt = TRUE;
-    if (gotIt)
-	itemPsl = psl;
-    else
-	slAddHead(&otherPsls, psl);
+    char *pair = cloneString(psl->qName);
+    char *under = strchr(pair, '_');
+    *under = '\0';
+    char *thisFPrimer = pair;
+    char *thisRPrimer = under+1;
+    if (!differentWord(thisFPrimer, fPrimer) && !differentWord(thisRPrimer, rPrimer))
+        {
+        if (targetSearchResult)
+            {
+            if (sameString(psl->tName, item) && psl->tStart == itemStart && psl->tEnd == itemEnd)
+                gotIt = TRUE;
+            }
+        else if (sameString(psl->tName, chrom) && psl->tStart == itemStart &&
+                 psl->tEnd == itemEnd)
+            {
+            gotIt = TRUE;
+            }
+
+        if (gotIt)
+            itemPsl = psl;
+        else
+            slAddHead(&otherPsls, psl);
+        }
     }
 lineFileClose(&lf);
 if (itemPsl == NULL)
     {
     if (target != NULL)
-	errAbort("Did not find record for amplicon in %s sequence %s",
-		 target->description, item);
+        errAbort("Did not find record for amplicon in %s sequence %s",
+             target->description, item);
     else
-	errAbort("Did not find record for amplicon at %s:%d-%d",
-		 chrom, itemStart, itemEnd);
+        errAbort("Did not find record for amplicon at %s:%d-%d",
+             chrom, itemStart, itemEnd);
     }
 if (retItemPsl != NULL)
     *retItemPsl = itemPsl;

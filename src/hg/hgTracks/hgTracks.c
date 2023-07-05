@@ -832,56 +832,58 @@ if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target)
 /* Don't free psl -- used in drawing phase by baseColor code. */
 struct psl *pslList = pslLoadAll(pslFileName), *psl;
 struct linkedFeatures *itemList = NULL;
-if (target != NULL)
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    int rowOffset = hOffsetPastBin(database, chromName, target->pslTable);
-    struct sqlConnection *conn = hAllocConn(database);
-    struct sqlResult *sr;
-    char **row;
-    char query[2048];
-    struct psl *tpsl;
-    for (tpsl = pslList;  tpsl != NULL;  tpsl = tpsl->next)
-	{
-	char *itemAcc = pcrResultItemAccession(tpsl->tName);
-	char *itemName = pcrResultItemName(tpsl->tName);
-	/* Query target->pslTable to get target-to-genomic mapping: */
-	sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'",
-	      target->pslTable, itemAcc);
-	sr = sqlGetResult(conn, query);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    struct psl *gpsl = pslLoad(row+rowOffset);
-	    if (sameString(gpsl->tName, chromName) && gpsl->tStart < winEnd && gpsl->tEnd > winStart)
-		{
-		struct psl *trimmed = pslTrimToQueryRange(gpsl, tpsl->tStart,
-				      tpsl->tEnd);
-		struct linkedFeatures *lf;
-		char *targetStyle = cartUsualString(cart,
-		     PCR_RESULT_TARGET_STYLE, PCR_RESULT_TARGET_STYLE_DEFAULT);
-		if (sameString(targetStyle, PCR_RESULT_TARGET_STYLE_TALL))
-		    {
-		    lf = lfFromPslx(gpsl, 1, FALSE, FALSE, tg);
-		    lf->tallStart = trimmed->tStart;
-		    lf->tallEnd = trimmed->tEnd;
-		    }
-		else
-		    {
-		    lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
-		    }
-		lf->name = cloneString(itemAcc);
-		char extraInfo[512];
-		safef(extraInfo, sizeof(extraInfo), "%s|%d|%d",
-		      (itemName ? itemName : ""), tpsl->tStart, tpsl->tEnd);
-		lf->extra = cloneString(extraInfo);
-		slAddHead(&itemList, lf);
-		}
-	    }
-	}
-    hFreeConn(&conn);
-    }
-else
-    for (psl = pslList;  psl != NULL;  psl = psl->next)
-    if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
+    // pcr result matches to a targetDb are of the format transcript__gene
+    if (stringIn("__", psl->tName))
+        {
+        int rowOffset = hOffsetPastBin(database, chromName, target->pslTable);
+        char **row;
+        char query[2048];
+        char *itemAcc = pcrResultItemAccession(psl->tName);
+        char *itemName = pcrResultItemName(psl->tName);
+        /* Query target->pslTable to get target-to-genomic mapping: */
+        sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'",
+              target->pslTable, itemAcc);
+        sr = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            struct psl *gpsl = pslLoad(row+rowOffset);
+            if (sameString(gpsl->tName, chromName) && gpsl->tStart < winEnd && gpsl->tEnd > winStart)
+                {
+                struct psl *trimmed = pslTrimToQueryRange(gpsl, psl->tStart,
+                              psl->tEnd);
+                struct linkedFeatures *lf;
+                char *targetStyle = cartUsualString(cart,
+                     PCR_RESULT_TARGET_STYLE, PCR_RESULT_TARGET_STYLE_DEFAULT);
+                if (sameString(targetStyle, PCR_RESULT_TARGET_STYLE_TALL))
+                    {
+                    lf = lfFromPslx(gpsl, 1, FALSE, FALSE, tg);
+                    lf->tallStart = trimmed->tStart;
+                    lf->tallEnd = trimmed->tEnd;
+                    }
+                else
+                    {
+                    lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
+                    }
+                lf->name = cloneString(itemAcc);
+                char extraInfo[512];
+                safef(extraInfo, sizeof(extraInfo), "%s|%d|%d",
+                      (itemName ? itemName : ""), psl->tStart, psl->tEnd);
+                lf->extra = cloneString(extraInfo);
+                        // now that there may be more than one primer pair result
+                        // in the pcrResults list, we need make sure we are using the
+                        // right primer pair later
+                        ((struct psl *)(lf->original))->qName = cloneString(psl->qName);
+                slAddHead(&itemList, lf);
+                }
+            }
+        }
+    else
+        {
+        if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
             {
             struct linkedFeatures *lf = lfFromPslx(psl, 1, FALSE, FALSE, tg);
             lf->name = cloneString("");
@@ -889,6 +891,9 @@ else
             lf->original = psl;
             slAddHead(&itemList, lf);
             }
+        }
+    }
+hFreeConn(&conn);
 slSort(&itemList, linkedFeaturesCmp);
 tg->items = itemList;
 }

@@ -523,15 +523,22 @@ void writePcrResultTrack(struct gfPcrOutput *gpoList, char *db, char *target, bo
 char *cartVar = pcrResultCartVar(db);
 struct tempName bedTn, primerTn;
 char buf[2048];
-char *pslFile, *txtFile, *cartResult;
+char *pslFile, *txtFile, *cartTarget, *cartResult;
 if ( (cartResult = cartOptionalString(cart, cartVar)) != NULL && appendToResults)
     {
     char *pcrFiles[3];
     chopByWhite(cloneString(cartResult), pcrFiles, 3);
     pslFile = pcrFiles[0];
     txtFile = pcrFiles[1];
+    cartTarget = pcrFiles[2];
     gfPcrOutputWriteAll(gpoList, "psl", NULL, pslFile);
     writePrimers(gpoList, txtFile);
+    if (isNotEmpty(target) && isEmpty(cartTarget))
+        {
+        /* User is adding a targetDb search */
+        safef(buf, sizeof(buf), "%s %s %s", pslFile, txtFile, target);
+        cartSetString(cart, cartVar, buf);
+        }
     }
 else
     {
