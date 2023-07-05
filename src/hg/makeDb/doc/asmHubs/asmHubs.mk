@@ -18,6 +18,15 @@ all:: makeDirs mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
 makeDirs:
 	mkdir -p ${destDir}
 
+sshKeyDownload:
+	ssh -o PasswordAuthentication=no qateam@hgdownload date
+
+sshKeyDynablat:
+	ssh -o PasswordAuthentication=no qateam@dynablat-01 date
+
+sshKeyCheck: sshKeyDownload sshKeyDynablat
+	@printf "# ssh keys to hgdownload and dynablat-01 are good\n"
+
 mkGenomes::
 	@printf "# starting mkGenomes " 1>&2
 	@date "+%s %F %T" 1>&2
@@ -80,7 +89,7 @@ clean::
 	rm -f ${destDir}/${statsName}.html
 	rm -f ${destDir}/${testStatsName}.html
 
-sendDownload::
+sendDownload:: sshKeyCheck
 	${toolsDir}/mkSendList.pl ${orderList} | while read F; do \
 	  ${toolsDir}/sendToHgdownload.sh $$F < /dev/null; done
 	rsync -L -a -P \
