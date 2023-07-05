@@ -31,7 +31,7 @@
 # ggGeneName (symbols), ggGeneClass (HPRD/Panther class)
 
 # these are default python modules on python 2.7, no errors expected here
-import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib, codecs
+import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib
 from sys import exit
 from collections import defaultdict, namedtuple
 from os.path import *
@@ -46,11 +46,14 @@ try:
             sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
             printHgcSection, getNonce, getCspMetaHeader, jsOnEventById, \
             jsInlineFinish, webStartGbNoBanner, htmlPageEnd, hConnectCentral, \
-            sqlTableExists, readSmallFile
+            sqlTableExists, readSmallFile, forceUnicode
 except:
     print("Content-type: text/html\n")
     print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
     print("All all parts of cgi-bin installed? Did you do 'make' in kent/src/hg/pyLib?")
+
+import hgLib3
+hgLib3.forceUnicode = True
 
 import pymysql.cursors
 
@@ -136,19 +139,8 @@ geneAnnotFiles = [
 
 # ==== FUNCTIONS ===
 
-#<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-#<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-#<script src="../js/readmore.min.js"></script>
-
-#<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-#<link rel="stylesheet" href="../style/HGStyle.css" type="text/css" />
-#<link rel='stylesheet' href='../style/nice_menu.css' type='text/css' />
-
 def printInlineAndStyles():
-    #print('<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>')
     print('<script src="//cdn.rawgit.com/jedfoster/Readmore.js/master/readmore.min.js"></script>')
-
-
 
     print(("""
 <script type="text/javascript" nonce='%s'>
@@ -1231,8 +1223,8 @@ def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
 
     # graph itself
     print('<img src="%s" usemap="#test">' % picName)
-    mapData = open(mapName, "rb").read()
-    print(mapData.decode("latin1")) # graphviz seems to use latin1 encoding for its output file?
+    mapData = open(mapName, "rt", encoding="latin1").read()
+    sys.stdout.write(mapData)
 
     print('</div> <!-- graph -->')
     print("<p>")
@@ -1363,7 +1355,7 @@ def querySnippets(conn, pairs):
 
     pairSnips = {}
     for g1, g2, snip in rows:
-        pairSnips[(g1,g2)]=snip.decode("utf8")
+        pairSnips[(g1,g2)]=snip
     return pairSnips
 
 def makeHgGeneLink(sym, db):
@@ -1475,13 +1467,6 @@ def printDbRows(conn, rows, onlyDoc=None):
         eventId, causeType, causeName, causeGenes, themeType, themeName, themeGenes, \
             relType, relSubtype, sourceDb, sourceId, sourceDesc, docIds, evidence = row
 
-        # in Python3, 'longblob' fields get converted to byte strings
-        causeGenes = causeGenes.decode("utf8")
-        themeGenes = themeGenes.decode("utf8")
-        sourceId = sourceId.decode("utf8")
-        docIds = docIds.decode("utf8")
-        evidence = evidence.decode("utf8")
-
         if eventId.startswith("ppi_"):
             isPpi = True
         else:
@@ -1566,7 +1551,7 @@ def showPwyPpiInfo(conn, gene1, gene2):
 
 def markupSentence(row):
     " given a MSR-textmining row, print a sentence with the various detected words marked up in bold "
-    sent = row.sentence.decode("utf8")
+    sent = row.sentence
     tStart, tEnd = int(row.themeTokenStart), int(row.themeTokenEnd)
     cStart, cEnd = int(row.causeTokenStart), int(row.causeTokenEnd)
     trigToken = int(row.triggerTokenId)
@@ -1575,8 +1560,8 @@ def markupSentence(row):
     # put into temporary var to be able to replace " , " later
     parts = []
     for i, word in enumerate(sent.split()):
-        themeGenes = row.themeGenes.decode("utf8") # longblob = byte string
-        causeGenes = row.causeGenes.decode("utf8")
+        themeGenes = row.themeGenes
+        causeGenes = row.causeGenes
 
         if i==tStart or i==cStart:
             if i==cStart:
@@ -1605,8 +1590,8 @@ def iterUniqueInteractions(rows):
     doneDocs = set()
     for row in rows:
         # make sure to skip duplicated info (=same genes + same document + same sentence)
-        causeGenes = row.causeGenes.decode("utf8") # longblob = byte string
-        themeGenes = row.themeGenes.decode("utf8")
+        causeGenes = row.causeGenes
+        themeGenes = row.themeGenes
         docInfo = tuple(sorted([causeGenes, themeGenes, row.docId, row.sentenceId]))
         if docInfo in doneDocs:
             continue
@@ -1616,8 +1601,6 @@ def iterUniqueInteractions(rows):
 def printDocNlpResults(rows):
     " print text mining results for document-centered view "
     for row in iterUniqueInteractions(rows):
-        causeGene, themeGene = row.causeGenes, row.themeGenes
-
         if "Negative" in row.relType:
             sym = "8867" # unicode right-tack
         elif "Positive" in row.relType:
@@ -1633,13 +1616,11 @@ def printMsrNlpRows(rows):
     " print msrNlp table rows with marked-up snippets "
     phrases = []
     for row in iterUniqueInteractions(rows):
-        causeGene, themeGene = row.causeGenes, row.themeGenes
-        #if addGenes:
-            #print "%s &#8594; %s :" % (causeGene, themeGene)
         line = markupSentence(row)
         phrases.append(line)
 
-    print(" ... ".join(phrases))
+    lines = " ... ".join(phrases)
+    print(lines)
 
 # the blacklist ist not used right now, as we cannot write to the database. 
 # pending further discussions with senior engineers
@@ -1684,14 +1665,14 @@ def prettyDocLinks(conn, pmids):
 
 def prettyDocLink(row, showStar=True):
     " given a row that includes author/title/year/docId fields, return a nice link to our doc view "
-    authors = row.authors.decode("utf8").split("; ") # mysql longblob => byte string
+    authors = row.authors
     if len(authors)>0:
-        fAu = authors[0].split(",")[0]
+        fAu = authors.split(",")[0]
     else:
         fAu = ""
 
     suffix = ""
-    if len(authors)>1:
+    if len(authors) > 1:
         suffix = " et al."
 
     note = ""
@@ -1701,7 +1682,7 @@ def prettyDocLink(row, showStar=True):
     text = "%s %s, %s %s" % (fAu, suffix, row.journal, row.year)
 
     mouseOver = None
-    title = row.title.decode("utf8") # longBlob = byte string
+    title = row.title
     if title!="":
         mouseOver = title.replace('"', "")
     return docLink(row.docId, text=text, mouseOver=mouseOver)+note
@@ -1721,7 +1702,7 @@ def showSnipsLink(conn, gene1, gene2):
         print(prettyDocLink(rows[0], showStar=False))
 
         disSuffix = ""
-        context = rows[0].context.decode("utf8") # longblob = byte string
+        context = rows[0].context
         if context!="":
             contexts = context.split("|")
             if len(contexts)>1:
@@ -1990,6 +1971,7 @@ def showStats():
     print("<ul>")
 
     conn = sqlConnect(GGDB)
+
     pairs = uniquePairs(conn)
     for db, pairSet in sorted(pairs.items()):
         print("<li>%s: %d" % (db, len(pairSet)))
@@ -2040,8 +2022,10 @@ def main():
         printGraph(conn, weightedLinks, alg, addNeighbors, gene, format)
         sys.exit(0)
 
+
     # Apache doesn't set LANG, so the default encoding of stdout is ASCII: Change it to utf8
-    sys.stdout = codecs.getwriter('utf8')(sys.stdout.buffer)
+    import codecs
+    sys.stdout = open(1, 'w', encoding='utf-8', closefd=False)
 
     printContentType()
 

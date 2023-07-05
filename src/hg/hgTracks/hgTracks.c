@@ -9282,7 +9282,7 @@ if (!hideControls)
 	/* Display viewing options for each track. */
         /* Chuck: This is going to be wrapped in a table so that
          * the controls don't wrap around randomly */
-        hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
+        hPrintf("<table id='trackCtrlTable' border=0 cellspacing=1 cellpadding=1>\n");
         hPrintf("<tr><td align='left'>\n");
 
         hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups",

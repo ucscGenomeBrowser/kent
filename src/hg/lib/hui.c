@@ -6300,7 +6300,7 @@ radioButton(buffer, logicTypeVal, "or");
 printf("<BR>\n");
 
 /* List various fields you can filter on. */
-printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
+printf("<table border=0 cellspacing=1 cellpadding=1 width=940>\n");
 cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
