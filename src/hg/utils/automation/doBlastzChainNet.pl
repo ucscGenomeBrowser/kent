@@ -1843,12 +1843,6 @@ if ( -s "$buildDir/axtChain/chainSyn${QDb}.bb" ) then
   ln -s "$buildDir/axtChain/chainSyn${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn$QDb.bb"
   ln -s "$buildDir/axtChain/chainSyn${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainSyn${QDb}Link.bb"
 endif
-if ( -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" ) then
-  mkdir -p /gbdb/$tDb/chainNet
-  rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
-  ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb"
-  ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
-endif
 endif
 rm -f link.tab
 rm -f chain.tab
@@ -1889,6 +1883,12 @@ if (\$lineCount > 0) then
         $defVars{SEQ1_LEN} $tDb.$qDb.synNet.summary.bb
   rm -f $tDb.$qDb.synNet.txt $tDb.$qDb.synNet.summary.tab \\
         $tDb.$qDb.synNet.summary.bed
+  if ( -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" ) then
+    mkdir -p /gbdb/$tDb/chainNet
+    rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+    ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.bb"
+    ln -s "$buildDir/bigMaf/$tDb.$qDb.synNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.synNet.summary.bb"
+  endif
 endif
 _EOF_
       );
