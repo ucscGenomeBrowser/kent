@@ -36,13 +36,13 @@ if(exact)
     // using it so we still support it.
     if(hasKnownCanonical)
         sqlSafef(query, sizeof(query),
-                 "select x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description "
+                 "select distinct x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description "
                  "from knownCanonical k, knownGene kg, kgXref x "
                  "where k.transcript = x.kgID and k.transcript = kg.name and x.geneSymbol = '%s' "
                  "order by x.geneSymbol, k.chrom, kg.txEnd - kg.txStart desc", prefix);
     else
         sqlSafef(query, sizeof(query),
-                 "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
+                 "select distinct r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
                  "from %s r, %s g, %s d "
                  "where r.name2 = '%s' and g.acc = r.name and g.description = d.id "
                  "order by r.name2, r.chrom, r.txEnd - r.txStart desc",
@@ -56,13 +56,13 @@ else
     // 3 POU5F1's in hg19); we return all of them (#5962).
     if(hasKnownCanonical)
         sqlSafef(query, sizeof(query),
-                 "select x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description "
+                 "select distinct x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description "
                  "from knownCanonical k, knownGene kg, kgXref x "
                  "where k.transcript = x.kgID and k.transcript = kg.name "
                  "and x.geneSymbol LIKE '%s%%' "
                  "order by x.geneSymbol, k.chrom, kg.txStart", prefix);
     else
-        sqlSafef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
+        sqlSafef(query, sizeof(query), "select distinct r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
                  "from %s r, %s g, %s d "
                  "where r.name2 LIKE '%s%%' and g.acc = r.name and g.description = d.id "
                  "order by r.name2, r.chrom, r.txStart",
