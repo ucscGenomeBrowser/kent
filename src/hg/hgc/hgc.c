@@ -7130,7 +7130,7 @@ cartWebStart(cart, database, "PCR Results");
 if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     errAbort("PCR Result track has disappeared!");
 
-char *fPrimer, *rPrimer;
+char *fPrimer = NULL, *rPrimer = NULL;
 boolean targetSearch = stringIn("__", item) != NULL;
 if (targetSearch)
     {
