@@ -12,7 +12,7 @@ test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOu
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
 	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
 	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest makeBadTest \
-	transcriptOnlyTest hprcTest
+	transcriptOnlyTest hprcTest errDupIdDiffParentsTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -130,6 +130,11 @@ transcriptOnlyTest: mkout
 hprcTest: mkout
 	${gff3ToGenePred} -geneNameAttr=Name -rnaNameAttr=transcript_id input/hprc.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
+
+# error duplicated id
+errDupIdDiffParentsTest: mkout
+	if ! ${gff3ToGenePred} input/dupIdDiffParents.gff3 /dev/null >output/$@.out 2>&1 ; then true ; else ${cmdShouldFail} ; fi
+	diff expected/$@.out output/$@.out
 
 mkout:
 	@mkdir -p output
