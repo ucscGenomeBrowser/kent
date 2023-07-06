@@ -3498,7 +3498,9 @@ function onTrackDelIconClick (ev) {
     var hgsid = getHgsid();
     var url = 'hgCustom?hgsid='+hgsid+'&hgct_do_delete=delete&hgct_del_'+trackName+'=on';
     xhttp = new XMLHttpRequest();
-    xhttp.open("GET", url);
+    // this cannot be asyncronous, as users can click quickly here and the hgCustom calls above cannot run in parallel
+    // since we store custom tracks as a text file, not mysql tables
+    xhttp.open("GET", url, false);
     xhttp.send();
     divEl.closest("td").remove();
 }
