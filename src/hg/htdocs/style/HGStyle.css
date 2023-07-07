@@ -548,6 +548,7 @@ div.sliceDiv { overflow:hidden; }
 div.highlightItem { opacity:0.7; border-style:none; position:absolute; overflow:hidden; }
 div.loading { position: absolute; opacity: 0.75; z-index: 15; 
               background: white url("/images/loading.gif") no-repeat center;   }
+#imgTbl map {position: relative; z-index:11}
 
 /* These are for imageV2 sideButtons: */
 .btn  { border-style: outset; background-color: #CCCCCC; border-color: #CCCCCC; } /* border-color: works for FF but screws up IE */
@@ -1134,5 +1135,20 @@ span.gbSessionChanged {
     visibility: visible;
 }
 
+/* Tooltips - Note these are just general rules all the tooltips will have, the
+ * exact positioning is set by associated javascript in utils.js */
+.tooltip {
+    visibility: hidden;
+    background-color: #282828;
+    color: #CDCDCD;
+    text-align: center;
+    position: fixed;
+    z-index: 1003; /* these indices are all over the place for various things */
+    opacity: 0;
+    line-height: 1em;
+}
 
-
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 0.9;
+}

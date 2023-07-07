@@ -35,7 +35,6 @@ if (problem)
     }
 cartResetInDb(hUserCookie());
 resetLocalStorage();
-jsInlineFinish();
 }
 
 int main(int argc, char *argv[])

@@ -1897,7 +1897,7 @@ else
 #define ELLIPSIS_TO_USE(browser) ((browser) == btFF ? "" : "...")
 
 static void sliceAndMapDraw(struct imgBox *imgBox,struct imgTrack *imgTrack,
-                            enum sliceType sliceType,char *name,boolean scrollHandle)
+                            enum sliceType sliceType,char *name,boolean scrollHandle, struct jsonElement *ele)
 // writes a slice of an image and any assocated image map as HTML
 {
 if (imgBox==NULL || imgTrack==NULL)
@@ -1979,6 +1979,9 @@ else if (slice->link != NULL)
     hPrintf(">\n" );
     }
 
+char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
+struct jsonElement *trackHash = jsonFindNamedField(ele, "trackDb", trackName);
+jsonObjectAdd(trackHash, "imgOffsetY", newJsonNumber(offsetY));
 imageDraw(imgBox,imgTrack,slice,name,offsetX,offsetY,useMap);
 if (slice->link != NULL)
     hPrintf("</A>");
@@ -2106,7 +2109,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         // button
         safef(name, sizeof(name), "btn_%s", trackName);
         hPrintf(" <TD id='td_%s'%s>\n",name,(imgTrack->reorderable ? " class='dragHandle'" : ""));
-        sliceAndMapDraw(imgBox,imgTrack,stButton,name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stButton,name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
@@ -2115,7 +2118,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
                     name,attributeEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
-        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         }
 
@@ -2126,12 +2129,12 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
     if (imgTrack->hasCenterLabel)
         {
         safef(name, sizeof(name), "center_%s", trackName);
-        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,TRUE);
+        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,TRUE, jsonTdbVars);
         hPrintf("\n");
         }
     // data image
     safef(name, sizeof(name), "data_%s", trackName);
-    sliceAndMapDraw(imgBox,imgTrack,stData,name,(imgTrack->order>0));
+    sliceAndMapDraw(imgBox,imgTrack,stData,name,(imgTrack->order>0), jsonTdbVars);
     hPrintf("</TD>\n");
 
     if (imgBox->showSideLabel && !imgTrack->plusStrand)
@@ -2143,12 +2146,12 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
                     name,attributeEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
-        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         // button
         safef(name, sizeof(name), "btn_%s", trackName);
         hPrintf(" <TD id='td_%s'%s>\n",name,(imgTrack->reorderable ? " class='dragHandle'" : ""));
-        sliceAndMapDraw(imgBox,imgTrack,stButton, name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stButton, name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         }
     hPrintf("</TR>\n");
