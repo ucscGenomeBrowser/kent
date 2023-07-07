@@ -672,7 +672,7 @@ def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnno
     except:
         errAbort("Error writing %s, this is an installation error. Please make sure that the trash directory has the correct permissions." % fname)
     ofh.write("digraph test {\n")
-    ofh.write("graph [bgcolor=transparent; esep=0.4];\n")
+    ofh.write("graph [bgcolor=transparent; esep=0.4; start=1.0];\n")
     #ofh.write("rankdir=LR;\n")
     ofh.write("overlap=voronoi;\n")
     ofh.write('size="7,7";\n')
