@@ -36,8 +36,11 @@ from sys import exit
 from collections import defaultdict, namedtuple
 from os.path import *
 
-import cgitb
-cgitb.enable()
+#These two lines should be commented out whenever committing this file into git.
+#They activate stack traces to stdout which can in certain cases reveal the mysql password,
+#when there is a Mysql connection problem. 
+#import cgitb
+#cgitb.enable()
 
 # import the UCSC-specific library
 sys.path.append(join(dirname(__file__), "pyLib"))
