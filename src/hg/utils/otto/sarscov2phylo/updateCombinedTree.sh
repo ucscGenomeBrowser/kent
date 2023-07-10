@@ -60,9 +60,17 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
         --max-branch-length 60 \
         --max-path-length 175 \
         -O -o merged.deltaMasked.filtered.pb
-    # Improved matOptimize from branch
+    # matOptimize: used -r 8 -M2 until 2023-05-12, then switched to Cheng's recommended
+    # -m 0.00000001 -M 4 (avoid identical-child-node problem in
+    #  https://github.com/sars-cov-2-variants/lineage-proposals/issues/40)
+    # The -M 4 allowed up to radius 32, and crazy things started happening all while I was
+    # trying to get the tree cleaned up for pango-designation release 1.20 --> lineageTree.
+    # After 2023-05-20, when I found that matOptimize had moved a big chunk of B.1 onto a
+    # B.1.1.7 garbage branch, causing big trouble for lineageTree (23_05_18_updateLineageTreePb.txt).
+    # After that I changed it back to -M 2 for my sanity. If the identical-child thing happens again,
+    # then I'll probably just run matOptimize twice, with a small radius the second time.
     time $matOptimize \
-        -T 80 -r 8 -M 2 -S move_log.filtered \
+        -T 80 -m 0.00000001 -M 2 -S move_log.filtered \
         -i merged.deltaMasked.filtered.pb \
         -o gisaidAndPublic.$today.masked.preTrim.pb \
         >& matOptimize.filtered.log
