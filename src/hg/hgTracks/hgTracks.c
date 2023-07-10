@@ -9506,6 +9506,10 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 cartSaveSession(cart);
 puts("</FORM>");
 
+// put the track download interface behind hg.conf control
+if (cfgOptionBooleanDefault("showMouseovers", FALSE))
+    jsInline("var showMouseovers = true;\n");
+
 // TODO GALT nothing to do here.
 pruneRedundantCartVis(trackList);
 if (measureTiming)

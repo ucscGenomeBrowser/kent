@@ -4,6 +4,7 @@ function displaySelectedOption(selectId) {
   return selectedOption;
 }
 
+
 const tour = new Shepherd.Tour({
   defaultStepOptions: {
     cancelIcon: {
@@ -38,6 +39,18 @@ var tutorialButtons = {
         text: 'Finish'
     }
 };
+window.onload = function() {
+  function selectMiddleButton() {
+    var hgTracksTable = document.getElementById('imgTbl');
+    var rowCount = hgTracksTable.rows.length;
+    var middleIndex = Math.floor(rowCount / 2);
+
+    var middleRow = hgTracksTable.rows[middleIndex];
+    var firstId = middleRow.querySelector('td');
+    var middleTrackId = firstId.id;
+
+    return '#' + middleTrackId;
+  }
 
 tour.addStep({
     title: 'Welcome to the UCSC Genome Browser Tutorial',
@@ -116,8 +129,8 @@ tour.addStep({
           '<img src="/images/right_click_example.png" width="350">' +
           '',
     attachTo: {
-        element: '#td_btn_ruler',
-        on: 'right'
+        element: selectMiddleButton(),
+        on: 'right-end'
     },
     buttons: [tutorialButtons['back'], tutorialButtons['next']],
     id: 'hgTrackUiLink'
@@ -221,3 +234,4 @@ tour.addStep({
     buttons: [tutorialButtons['back'], tutorialButtons['end']],
     id: 'lastPopUp'
 });
+}

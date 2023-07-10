@@ -3884,6 +3884,9 @@ var imageV2 = {
             if (id) { // The remainder is only needed for full reload
                 imageV2.markAsDirtyPage(); // vis of cfg change
                 imageV2.drawHighlights();
+                if (typeof showMouseovers !== 'undefined' && showMouseovers) {
+                    convertTitleTagsToMouseovers();
+                }
                 return;
             }
         }
@@ -3897,6 +3900,9 @@ var imageV2 = {
             imageV2.setInHistory(false);    // Set this new position into History stack
         } else {
             imageV2.markAsDirtyPage();
+        }
+        if (typeof showMouseovers !== 'undefined' && showMouseovers) {
+            convertTitleTagsToMouseovers();
         }
     },
 
@@ -4129,6 +4135,7 @@ var imageV2 = {
                                 this.newVisibility + " mode.");
                     var rec = oldJson.trackDb[this.id];
                     rec.limitedVis = newJson.trackDb[this.id].limitedVis;
+                    rec.imgOffsetY = newJson.trackDb[this.id].imgOffsetY;
                     vis.update(this.id, visibility);
                     if (visibility === "hide")
                         cart.updateSessionPanel(); // notify when vis change to hide track
@@ -5299,10 +5306,21 @@ var downloadCurrentTrackData = {
             "<button id='uncheckAllDownloadTracks'>Clear All</button>" +
             "</div>";
         _.each(hgTracks.trackDb, function(track, trackName) {
+            showDisabledMsg = false;
             if (!trackName.includes("Squish") && trackName !== "ruler" && track.visibility > 0) {
-                htmlStr += "<input type=checkbox checked class='downloadTrackName' id='" + trackName + "'>";
+                htmlStr += "<input type=checkbox class='downloadTrackName' id='" + trackName + "'";
+                if (trackName.startsWith("ct_")) {
+                    showDisabledMsg = true;
+                    htmlStr += " disabled ";
+                } else {
+                    htmlStr += " checked ";
+                }
+                htmlStr +=  ">";
                 htmlStr += "<label>" + track.shortLabel + "</label>";
                 htmlStr += "</input>";
+                if (showDisabledMsg) {
+                    htmlStr += "&nbsp;<span id='" + trackName + "Tooltip'> (?)</span>";
+                }
                 htmlStr += "<br>";
             }
         });
@@ -5329,6 +5347,9 @@ var downloadCurrentTrackData = {
             });
         });
         $(downloadDialog).dialog('open');
+        $("[id$='Tooltip'").each(function(i, elem) {
+            addMouseover(elem, "This track must be downloaded with the Table Browser");
+        });
     }
 };
 
@@ -5544,7 +5565,9 @@ $(document).ready(function()
         $("#hgTracksDownload").click(downloadCurrentTrackData.showDownloadUi);
     }
 
-    
+    if (typeof showMouseovers !== 'undefined' && showMouseovers) {
+        convertTitleTagsToMouseovers();
+    }
 });
 
 function hgtWarnTiming(maxSeconds) {
