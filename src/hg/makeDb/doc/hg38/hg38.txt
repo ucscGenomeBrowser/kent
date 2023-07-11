@@ -7015,3 +7015,30 @@ cd /gbdb/hg38/decipher
 ln -s /hive/data/outside/otto/decipher/2022-04-05/decipherCnv.bb .
 
 #########################################################################
+# COSMIC (DONE 07-11-2023)
+# RM 29625
+
+#Fetch file
+cd /hive/data/outside/cosmic/hg38/v98/
+wget 'https://cog.sanger.ac.uk/cosmic/GRCh38/ucsc/v98/ucsc_export.bed.gz?AWSAccessKeyId=KRV7P7QR9DL41J9EWGA2&Expires=1686847188&Signature=4YV3CuFKudxIhqVdWAaCe0CMAiY%3D' -O ucsc_export.bed.gz
+wget 'https://cog.sanger.ac.uk/cosmic/GRCh38/ucsc/v98/ucsc_export.bed.gz?AWSAccessKeyId=KRV7P7QR9DL41J9EWGA2&Expires=1687525456&Signature=jBdJOlOOaqmMWNnOtJUyNRptVj4%3D'
+mv ucsc_export.bed.gz\?AWSAccessKeyId\=KRV7P7QR9DL41J9EWGA2\&Expires\=1687525456\&Signature\=jBdJOlOOaqmMWNnOtJUyNRptVj4\= ucsc_export.bed.gz
+
+#Reorder to columns to conform to bed 6+3
+zcat ucsc_export.bed.gz | awk -F'\t' -v OFS="\t" '{ print $1, $2, $3, $7, 0, $6, $4, $5, $8 }' | sort -k1,1 -k2,2n > cosmic.bed
+
+#Tiny bit of python to identify the broken lines in the file where chromStart > chromEnd
+
+#for line in myFile:
+#    newLine = line.split("\t")
+#    if int(newLine[1]) > int(newLine[2]):
+#        print(line)
+#        n+=1
+#print(n)
+
+#remove those broken records from the file
+cat cosmic.bed | grep -vf badRecords.bed > cosmic.fixed.bed
+bedToBigBed -type=bed6+3 -as=/hive/data/outside/cosmic/hg38/v98/cosmic.as /hive/data/outside/cosmic/hg38/v98/cosmic.fixed.bed /hive/data/genomes/hg38/chrom.sizes /hive/data/outside/cosmic/hg38/v98/cosmic.bb -tab
+
+#make symlink
+ln -s /gbdb/hg38/cosmic/cosmic.bb /hive/data/outside/cosmic/hg38/v98/cosmic.bb
