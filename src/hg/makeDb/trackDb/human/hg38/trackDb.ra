@@ -163,6 +163,17 @@ searchPriority 2.07207
 searchType bigBed
 searchDescription COSMIC Regions
 
+track cosmicMuts
+shortLabel COSMIC
+longLabel Catalogue of Somatic Mutations in Cancer V98
+type bigBed 6 + 3
+bigDataUrl /gbdb/hg38/cosmic/cosmic.bb
+group phenDis
+url https://cancer.sanger.ac.uk/cosmic/search?q=$$
+urlLabel COSMIC ID:
+noScoreFilter on
+dataVersion COSMIC v98
+
 track coriellDelDup override
 origAssembly hg19 
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
