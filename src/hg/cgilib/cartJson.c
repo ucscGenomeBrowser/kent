@@ -88,6 +88,13 @@ for (table = hgp->tableList; table != NULL; table = table->next)
             tdb = tdbForTrack(db, tableName, &tdbList);
             if (!tdb && startsWith("all_", tableName))
                 tdb = tdbForTrack(db, tableName+strlen("all_"), &tdbList);
+            if (!tdb && startsWith("xeno", tableName))
+                {
+                // due to genbank track changes over the years, sometimes tables
+                // get left on different servers when their trackDb entry was removed
+                // long ago. In that case skip those hits
+                continue;
+                }
             if (!tdb)
                 errAbort("no track for table \"%s\" found via a findSpec", tableName);
             trackName = tdb->track;
