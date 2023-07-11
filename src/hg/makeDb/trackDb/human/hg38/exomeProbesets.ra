@@ -7,6 +7,24 @@ visibility hide
 allButtonPair on
 compositeTrack on
 
+        track xGen_Research_Probes_V1
+        parent exomeProbesets on
+        bigDataUrl /gbdb/hg38/exomeProbesets/xgen-exome-research-panel-probes-hg38.bb
+        shortLabel IDT xGen V1 P
+        longLabel IDT - xGen Exome Research Panel V1 Probes
+        type bigBed
+        visibility dense
+        color 100,143,255
+
+        track xGen_Research_Targets_V1
+        parent exomeProbesets on
+        bigDataUrl /gbdb/hg38/exomeProbesets/xgen-exome-research-panel-targets-hg38.bb
+        shortLabel IDT xGen V1 T
+        longLabel IDT - xGen Exome Research Panel V1 Target Regions
+        type bigBed
+        visibility dense
+        color 100,143,255
+
 	track xGen_Research_Probes_V2
 	parent exomeProbesets on
 	bigDataUrl /gbdb/hg38/exomeProbesets/xgen-exome-research-panel-v2-probes-hg38.bb
