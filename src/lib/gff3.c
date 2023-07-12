@@ -944,12 +944,13 @@ if (slCount(g3a->parentIds) != 1)
     gff3AnnErr(g3a, FALSE, "Annotation records for discontinuous features with ID=\"%s\" must have one and only one parent", g3a->id);
 for (struct gff3Ann *g3a2 = g3a->nextPart; (g3a2 != NULL) && !gff3FileStopDueToErrors(g3a->file); g3a2 = g3a2->nextPart)
     {
-    if (!sameString(g3a->type, g3a2->type))
-        gff3AnnErr(g3a, FALSE, "Annotation records for discontinuous features with ID=\"%s\" do not have the same type, found \"%s\" and \"%s\"", g3a->id, g3a->type, g3a2->type);
-    if (!sameString(g3a->type, g3a2->type))
-        gff3AnnErr(g3a, FALSE, "Annotation records for discontinuous features with ID=\"%s\" do not have the same type, found \"%s\" and \"%s\"", g3a->id, g3a->type, g3a2->type);
-    if ((slCount(g3a2->parentIds) != 1) || !sameString(g3a2->parentIds->name, g3a->parentIds->name))
-        gff3AnnErr(g3a, FALSE, "Annotation records for discontinuous features with ID=\"%s\" must have same parent", g3a->id);
+    if (slCount(g3a2->parentIds) != 1)
+        gff3AnnErr(g3a2, FALSE, "Annotation records for discontinuous features with ID=\"%s\" must have one and only one parent", g3a2->id);
+    else if (!sameString(g3a->type, g3a2->type))
+        gff3AnnErr(g3a2, FALSE, "Annotation records for discontinuous features with ID=\"%s\" do not have the same type, found \"%s\" and \"%s\"", g3a->id, g3a->type, g3a2->type);
+    else if (!sameString(g3a2->parentIds->name, g3a->parentIds->name))
+        gff3AnnErr(g3a2, FALSE, "Annotation records for discontinuous features with ID=\"%s\" must have same parent, found: \"%s\" and \"%s\"", g3a->id,
+                   g3a2->parentIds->name, g3a->parentIds->name);
     }
 
 // The discontinuous features abomination means we can't check for duplicate

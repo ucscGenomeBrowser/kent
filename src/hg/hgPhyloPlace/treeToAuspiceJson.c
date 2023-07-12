@@ -415,18 +415,21 @@ if (codonVpTxList != NULL)
     char oldCodon[4];
     safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + codonStart, 3);
     touppers(oldCodon);
-    int codonStartG = vpTx->start.gOffset - codonOffset;
+    boolean isRc = (pslOrientation(gi->psl) < 0);
+    int codonStartG = isRc ? vpTx->start.gOffset + codonOffset : vpTx->start.gOffset - codonOffset;
     struct singleNucChange *anc;
     for (anc = ancestorMuts;  anc != NULL;  anc = anc->next)
         {
-        int ancCodonOffset = anc->chromStart - codonStartG;
+        int ancCodonOffset = isRc ? codonStartG - (anc->chromStart + 1) : anc->chromStart - codonStartG;
         if (ancCodonOffset >= 0 && ancCodonOffset < 3)
             {
-            if (anc->parBase != oldCodon[ancCodonOffset])
+            char parBase = isRc ? ntCompTable[(int)anc->parBase] : anc->parBase;
+            if (parBase != oldCodon[ancCodonOffset])
                 errAbort("codonVpTxToAaChange: expected parBase for ancestral mutation at %d "
-                         "(%s codon %d offset %d) to be '%c' but it's '%c'",
+                         "(%s codon %d offset %d) to be '%c' but it's '%c'%s",
                          anc->chromStart+1, gi->psl->qName, firstAaStart, ancCodonOffset,
-                         oldCodon[ancCodonOffset], anc->parBase);
+                         oldCodon[ancCodonOffset], parBase,
+                         isRc ? " (rev-comp'd)" : "");
             oldCodon[ancCodonOffset] = maybeComplement(anc->newBase, gi->psl);
             }
         }

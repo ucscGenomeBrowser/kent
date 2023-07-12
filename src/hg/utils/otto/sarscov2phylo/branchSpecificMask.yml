@@ -87,6 +87,12 @@ BA.2.75:
                   T3796C, T3927C, T5183C, G12444A, A15451G, G22190A, A22331G, A22898G,
                   G22942T, C23013A ]
 
+BN.1.2.3:
+    # Inherits from BA.2.75
+    representative: England/QEUH-326228D4/2022
+    sites: [ 337 # https://github.com/cov-lineages/pango-designation/issues/2016#issuecomment-1626159006
+           ]
+
 BA.4:
     # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.
     representative: SouthAfrica/NICD-N41664/2022

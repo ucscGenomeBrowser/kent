@@ -5509,7 +5509,7 @@ $(document).ready(function()
         });
         notifBoxShow = (function(oldNotifBoxShow) {
             function newNotifBoxShow() {
-                oldNotifBoxShow.apply();
+                oldNotifBoxShow.apply(null, arguments);
                 imageV2.drawHighlights();
             }
             return newNotifBoxShow;
