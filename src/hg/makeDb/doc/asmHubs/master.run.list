@@ -1185,6 +1185,7 @@
 ./runBuild GCF_000002295.2_MonDom5 mammals Monodelphis_domestica
 ./runBuild GCF_000002315.6_GRCg6a vertebrate Gallus_gallus
 ./runBuild GCF_000002335.3_Tcas5.2 invertebrate Tribolium_castaneum
+./runBuild GCF_000002415.2_ASM241v2 invertebrate Plasmodium_vivax
 ./runBuild GCF_000002425.4_Phypa_V3 plants Physcomitrium_patens
 ./runBuild GCF_000002445.2_ASM244v1 invertebrate Trypanosoma_brucei_brucei_TREU927
 ./runBuild GCF_000002495.2_MG8 fungi Pyricularia_oryzae_70-15
