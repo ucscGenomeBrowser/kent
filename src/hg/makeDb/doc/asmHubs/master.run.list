@@ -604,6 +604,7 @@
 ./runBuild GCA_016772295.1_ASM1677229v1 fungi Coprinopsis_cinerea_AmutBmut_pab1-1
 ./runBuild GCA_016880875.1_bAcaChl1.alt birds Acanthisitta_chloris
 ./runBuild GCA_016904835.1_bAcaChl1.pri birds Acanthisitta_chloris
+./runBuild GCA_016920875.1_Utah_Ccol_1.0 invertebrate Columbicola_columbae
 ./runBuild GCA_017140985.1_hormaphis_cornu_26Sep2017_PoQx8 invertebrate Hormaphis_cornu
 ./runBuild GCA_017311355.1_CVASU_Gayal_001 mammals Bos_frontalis
 ./runBuild GCA_017312745.1_Gbim_1.0 invertebrate Gryllus_bimaculatus
