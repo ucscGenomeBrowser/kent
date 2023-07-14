@@ -39,6 +39,8 @@ var tutorialButtons = {
         text: 'Finish'
     }
 };
+
+/* Wrapping the tutorial steps and fuctions to only execute after the page loads*/
 window.onload = function() {
   function selectMiddleButton() {
     var hgTracksTable = document.getElementById('imgTbl');
@@ -55,11 +57,23 @@ window.onload = function() {
 tour.addStep({
     title: 'Welcome to the UCSC Genome Browser Tutorial',
     text: 'The blue navigation bar at the top of the page will allow you to access the ' +
-          'tools, downloads, and help pages.' +
-          '<br><br>' +
-          'This tutorial is aimed for new users but may contain tips for even an ' +
-          'experienced user. For example, the Genome Browser supports keyboard shortcuts, and ' +
-          'you can press the \'<b>?</b>\' key on your keyboard for a full list of options. ',
+          'tools, downloads, and help pages. There are four main drop-downs that are useful ' +
+          'for most users: ' +
+          '<ul>' +
+          '<li><b>Genomes</b> - switch between the many genomes available</li> ' +
+          '<li><b>Genome Browser</b> - configure, search for tracks, and reset the ' +
+           'Genome Browser back to the default settings.</li>' +
+          '<li><b>Tools</b> - access to features such as <a target="_blank" ' +
+           'href="/cgi-bin/hgBlat">BLAT</a>, <a target="_blank" href="/cgi-bin/hgPcr">isPCR</a>, '+
+           'and <a target="_blank" href="/cgi-bin/hgLiftOver">LiftOver</a>. The <a target="_blank" '+
+           'href="/cgi-bin/hgTables">Table Browser</a> can also be used to export track data in ' +
+           'various file formats.</li>' +
+          '<li><b>My Data</b> - create stable short links (<a target="_blank" '+
+           'href="/cgi-bin/hgSession">Sessions</a>), and visualize '+
+           'your own data via <a target="_blank" href="/cgi-bin/hgCustom">custom tracks</a> or ' +
+           '<a target="_blank" href="/cgi-bin/hgHubConnect">track hubs</a>.</li>'+
+          '<li><b>Help</b> - access contact information, FAQs, and Browser Documentation.</li>' +
+          '</ul>',
     attachTo: {
         element: '#nice-menu-1',
         on: 'bottom'
@@ -69,21 +83,6 @@ tour.addStep({
     classes: 'dark-background'
 });
 
-/*
-tour.addStep({
-title: 'Multi-region',
-text: 'The multi-region feature allows you to view two or ' +
-        'more discontinuous regions of the genome on a virtual chromosome. The ' +
-        'multi-region feature also enables you to view only genes or exons from the ' +
-        'GENCODE genes track.',
-    attachTo: {
-        element: '#hgTracksConfigMultiRegionPage',
-        on: 'bottom'
-    },
-    buttons: [tutorialButtons['back'], tutorialButtons['next']],
-    id: 'multiRegion'
-});
-*/
 
 tour.addStep({
     title: 'Browsing the Genome',
@@ -118,6 +117,28 @@ tour.addStep({
 });
 
 tour.addStep({
+    title: 'Drag-and-Select the Genome Browser Image',
+    text: 'Dragging the Genome Browser image performs different tasks depeneding on where and ' +
+          'how you click the image. <br><br> '+
+          'Clicking and dragging across the ruler at the ' +
+          'top of the image will bring up a menu to zoom in or highlight the region. Clicking ' +
+          'and dragging anywhere else on the Genome Browser image will allow you to scroll to ' +
+          'left or right.' +
+          '<br><br>' +
+          'Alternatively, you can: '+
+          '<ul>'+
+          '<li>Hold <b>Alt+drag</b> or <b>Option+drag</b> to highlight</li>'+
+          '<li>Hold <b>Ctrl+drag</b> or <b>Cmd+drag</b> to zoom</li>'+
+          '</ul>',
+    attachTo: {
+        element: '#td_data_ruler',
+        on: 'bottom',
+    },
+    buttons: [tutorialButtons['back'], tutorialButtons['next']],
+    id: 'highlight'
+});
+
+tour.addStep({
     title: 'Quick Link to Change Track Settings',
     text: 'Clicking on the rectangle box next to a track is an easy way to quickly ' +
           'go to the track settings page for the track.' +
@@ -130,37 +151,23 @@ tour.addStep({
           '',
     attachTo: {
         element: selectMiddleButton(),
-        on: 'right-end'
+        on: 'right',
     },
     buttons: [tutorialButtons['back'], tutorialButtons['next']],
     id: 'hgTrackUiLink'
 });
-/*
-tour.addStep({
-    title: 'Collapasing and Expanding Track Groups',
-    text: 'Tracks are organized by the type of annotation the data represents. ' +
-          'The groups will vary depending on the data available for the assembly. ' +
-          '<br><br>' +
-          'You can click on the minus button to hide a track group. If the track group is '+ 
-          'hidden, click on the plus button to expand the group.',
-    attachTo: {
-        element: '#map_button',
-        on: 'bottom'
-    },
-    buttons: [tutorialButtons['back'], tutorialButtons['next']],
-    id: 'trackGroups'
-});
-*/
 
 tour.addStep({
     title: 'Changing the Display Mode of a Track',
-    text: 'After changing the display mode of a track, the change will not be applied ' +
-          'until after you refresh the page. You could either refresh the page manually ' +
-          'using your web browser or you can click the "refresh" button on any of the ' +
-          'track groups.' +
+    text: 'Annotation tracks can be entirely hidden or shown in four different ways that take ' +
+          'an increasing amount of vertical space: ' +
+          '<a href="/goldenPath/help/hgTracksHelp.html#TRACK_CONT" target="_blank">dense, squish, '+
+          'pack, and full</a>.'+
           '<br><br>' +
-          'More information about the four display modes can be found ' +
-          '<a href="/goldenPath/help/hgTracksHelp.html#TRACK_CONT" target="_blank">here</a>.',
+          'After changing the display mode of a track, the change will not be applied ' +
+          'until after you refresh the page. You could either refresh the page manually ' +
+          'using your web browser or you can click <button>refresh</button> on any of the ' +
+          'track groups.',
     attachTo: {
         element: function() {return $("input[name='hgt\.refresh']").slice(0)[0];},
         on: 'bottom'
@@ -176,32 +183,47 @@ tour.addStep({
         'feature allows searching for terms in track names, descriptions, groups, and ENCODE ' +
         'metadata. If multiple terms are used, only tracks with all matching terms will be part ' +
         'of the results. The Track Search feature can also be accessed by hovering over the ' +
-        '"Genome Browser" drop-down menu. '+
+        '"Genome Browser" drop-down menu or using the <b>t</b> then <b>s</b> keyboard shortcut. '+
         '<br><br>' +
         'More information about the Track Search can be found on the following ' +
         '<a href="/goldenPath/help/trackSearch.html" target="_blank">help page</a>.',
     attachTo: {
         element: '#hgt_tSearch',
-        on: 'top'
+        on: 'bottom'
     },
     buttons: [tutorialButtons['back'], tutorialButtons['next']],
-    id: 'shortCuts'
+    id: 'shortCuts',
 });
 
 tour.addStep({
     title: 'Configure the Genome Browser Image',
-    text: 'Use the <a href="/cgi-bin/hgTracks?hgTracksConfigPage=configure" ' +
-          'target="_blank">configure</a> button to customize graphic font, size, gridlines, ' +
+    text: 'Use the <button>configure</button> button to customize graphic font, size, gridlines, ' +
           'and more. This can be helpful when exporting an image for publication. ' +
           '<br><br>' +
           'You can also find a link to configure the browser image by hovering over the ' +
-          '"Genome Browser" drop-down menu. ',
+          '"Genome Browser" drop-down menu or using the <b>c</b> then <b>f</b> keyboard shortcut. ',
     attachTo: {
         element: '#hgTracksConfigPage',
         on: 'bottom'
     },
     buttons: [tutorialButtons['back'], tutorialButtons['next']],
     id: 'configure'
+});
+
+tour.addStep({
+title: 'Flip the Strand Orientation',
+text: 'By default, the UCSC Genome Browser displays the forward strand (5\' to 3\'), but ' +
+      'it can be configured to display the negative strand (3\' to 5\'). <br><br>' +
+      'To reverse the genome orientation, click the <button>reverse</button> button and the Genome Browser image '+
+      'will flip to show either the negative or positive strand. <br><br> ' +
+      'Alternatively, you can use the <b>r</b> then <b>v</b> keyboard shortcut to quickly ' +
+      'switch between strands.',
+    attachTo: {
+        element: document.getElementById('hgt.toggleRevCmplDisp'),
+        on: 'bottom'
+    },
+    buttons: [tutorialButtons['back'], tutorialButtons['next']],
+    id: 'reverse'
 });
 
 tour.addStep({
@@ -224,9 +246,6 @@ tour.addStep({
           'In addition to the <a href="/goldenPath/pubs.html" target="_blank">relevant paper</a>, '+
           'please include a reference to the Genome Browser website in your manuscript: '+
           '<i>http://genome.ucsc.edu</i>. ',
-          /*'<br><br>' +
-          'Permission is granted for reuse of all graphics produced by the UCSC Genome Browser ' +
-          'website.',*/
     attachTo: {
         element: '#help.menuparent',
         on: 'bottom'
