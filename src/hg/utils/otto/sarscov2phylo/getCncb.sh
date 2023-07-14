@@ -117,7 +117,7 @@ if [ -s new.accs.fa ]; then
     conda activate pangolin
     set -x
     set -e
-    time pangolin -t 20 new.accs.fa --analysis-mode pangolearn --outfile lineages.csv \
+    time pangolin -t 20 new.accs.fa --skip-scorpio --outfile lineages.csv \
         >& pangolin.log
     awk -F, '{print $1 "\t" $2;}' lineages.csv | tail -n+2 >> pangolin.tsv
     sort -u pangolin.tsv > tmp

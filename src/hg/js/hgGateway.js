@@ -1229,7 +1229,7 @@ var hgGateway = (function() {
         // Make matching part of the gene symbol bold
         _.each(results, function(item) {
             if (_.startsWith(item.value.toUpperCase(), term.toUpperCase())) {
-                item.value = '<b>' + item.value.substring(0, term.length) + '</b>' +
+                item.label = '<b>' + item.value.substring(0, term.length) + '</b>' +
                              item.value.substring(term.length);
             }
         });

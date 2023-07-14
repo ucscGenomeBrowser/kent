@@ -31,6 +31,7 @@ mkGenomes::
 	@printf "# starting mkGenomes " 1>&2
 	@date "+%s %F %T" 1>&2
 	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
+	rm -f ${destDir}/download.${genomesTxt}.txt
 	cp -p ${destDir}/${genomesTxt}.txt ${destDir}/download.${genomesTxt}.txt
 	@printf "# finished mkGenomes " 1>&2
 	@date "+%s %F %T" 1>&2
@@ -76,6 +77,7 @@ hubTxt:
 
 # all hubs have the same set of groups, no need for any name customization
 groupsTxt:
+	rm -f ${destDir}/groups.txt
 	rm -f ${destDir}/groups.txt
 	cp -p ${toolsDir}/groups.txt ${destDir}/groups.txt
 

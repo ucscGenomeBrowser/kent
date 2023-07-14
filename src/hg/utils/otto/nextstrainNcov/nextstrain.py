@@ -526,13 +526,19 @@ def bedForClades(fileName, clades, cladeColors):
             countryInferred = clade.get('countryInferred')
             if (not countryInferred):
                 countryInferred = ''
+            # Add placeholder blocks at first and last base of genome, but don't duplicate
+            varStarts = clade['varStarts']
+            if len(varStarts) == 0 or varStarts[0] != 0:
+                varStarts = [0] + varStarts
+            if varStarts[-1] != 29902:
+                varStarts = varStarts + [29902]
             outC.write('\t'.join(map(str,
                                      [ chrom, 0, 29903, name, 0, '.',
                                        clade['thickStart'], clade['thickEnd'],
                                        cladeColorFromName(name, cladeColors),
-                                       len(clade['varSizes']) + 2,
-                                       ','.join(map(str, ([1] + clade['varSizes']) + [1])),
-                                       ','.join(map(str, ([0] + clade['varStarts']) + [29902])),
+                                       len(varStarts),
+                                       ','.join(map(str, [1 for x in varStarts])),
+                                       ','.join(map(str, varStarts)),
                                        clade['varNames'],
                                        numDateToYmdStr(clade['dateInferred']),
                                        numDateToYmdStr(clade['dateConfMin']),

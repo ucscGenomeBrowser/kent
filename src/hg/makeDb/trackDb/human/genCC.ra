@@ -9,6 +9,8 @@ itemRgb on
 urls ensTranscript="https://useast.ensembl.org/Multi/Search/Results?q=$$;site=ensembl_all" ensGene="https://useast.ensembl.org/Multi/Search/Results?q=$$;site=ensembl_all" refSeqAccession="https://www.ncbi.nlm.nih.gov/clinvar/?term=$$" uuid="https://search.thegencc.org/submissions/$$" gene_curie="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$$" gene_symbol="https://www.genecards.org/cgi-bin/carddisp.pl?gene=$$" disease_curie="https://www.pombase.org/term/$$" moi_curie="https://hpo.jax.org/app/browse/term/$$"
 filterValues.classification_title Supportive,Strong,Definitive,Limited,Moderate,No Known Disease Relationship,Disputed Evidence,Refuted Evidence
 filterLabel.classification_title evidence classification
+url https://search.thegencc.org/genes/$<gene_curie>
+urlLabel Link to GenCC Gene page
 
 searchTable genCC
 searchType bigBed

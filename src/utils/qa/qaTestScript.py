@@ -146,8 +146,8 @@ driver.find_element_by_name("gene").send_keys("sirt1")
 driver.find_element_by_name("1").click()
 driver.find_element_by_id("dropdownMenu1").click()
 driver.find_element_by_link_text("GNF2 Expression").click()
-driver.find_element_by_id("edge4").click()
-driver.find_element_by_xpath("//a[contains(@href, 'hgGeneGraph?supportLevel=text&geneCount=25&geneAnnot=gnf2&1=OK&lastGene=SIRT1&gene=SIRT1')]")
+driver.find_element_by_id("edge7").click()
+driver.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Gene interactions and pathways from curated databases and text-mining'])[1]/following::a[2]")
 cartReset()
 
 # Tests hgVai

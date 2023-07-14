@@ -481,7 +481,7 @@ ti->subtreeNameList = phyloLeafNames(ti->subtree);
 ti->subtreeIdToIx = slNameListToIxHash(ti->subtreeNameList);
 ti->subtreeUserSampleIds = getSubtreeSampleIds(userSampleIds, ti->subtreeIdToIx);
 if (slCount(ti->subtreeUserSampleIds) == 0)
-    errAbort("No user sample IDs found in subtree file %s", ti->subtreeTn->forCgi);
+    errAbort("No user sample IDs (out of %d) found in subtree file %s", slCount(userSampleIds), ti->subtreeTn->forCgi);
 hashFree(&subtreeMutHash);
 return ti;
 }
