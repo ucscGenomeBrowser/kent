@@ -141,7 +141,7 @@ tour.addStep({
 tour.addStep({
     title: 'Quick Link to Change Track Settings',
     text: 'Clicking on the rectangle box next to a track is an easy way to quickly ' +
-          'go to the track settings page for the track.' +
+          'go to the track settings page for that track.' +
           '<br><br>' +
           '<a href="/goldenPath/help/hgTracksHelp.html#RIGHT_CLICK_NAV" ' +
           'target="_blank">Right-clicking</a> on the track will also bring up a menu ' +
@@ -182,7 +182,7 @@ tour.addStep({
         '<a href="/cgi-bin/hgTracks?hgt_tSearch=track+search" target="_blank">Track Search</a> ' +
         'feature allows searching for terms in track names, descriptions, groups, and ENCODE ' +
         'metadata. <br><br>'+
-        'More information about Track Search can be found on the following ' +
+        'More information about <button>track search</button> can be found on the following ' +
         '<a href="/goldenPath/help/trackSearch.html" target="_blank">help page</a>. '+
         'The Track Search feature can also be accessed by hovering over the ' +
         '"Genome Browser" drop-down menu.',
