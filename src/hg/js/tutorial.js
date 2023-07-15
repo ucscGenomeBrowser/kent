@@ -120,10 +120,9 @@ tour.addStep({
     title: 'Drag-and-Select the Genome Browser Image',
     text: 'Dragging the Genome Browser image performs different tasks depeneding on where and ' +
           'how you click the image. <br><br> '+
-          'Clicking and dragging across the ruler at the ' +
-          'top of the image will bring up a menu to zoom in or highlight the region. Clicking ' +
-          'and dragging anywhere else on the Genome Browser image will allow you to scroll to ' +
-          'left or right.' +
+          'Click-and-Drag the ruler at the top of the image will bring up a menu to zoom into '+
+          'or highlight the region. Click-and-Drag anywhere else on the Genome Browser image '+
+          'will allow you to scroll to the left or right.' +
           '<br><br>' +
           'Alternatively, you can: '+
           '<ul>'+
