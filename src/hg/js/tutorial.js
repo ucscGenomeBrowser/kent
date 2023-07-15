@@ -178,18 +178,17 @@ tour.addStep({
 
 tour.addStep({
     title: 'Searching for Tracks on the Genome Browser',
-    text: 'Having trouble finding a dataset for your genome assembly? <br><br> The ' +
+    text: 'Having trouble finding a dataset for your genome assembly? The ' +
         '<a href="/cgi-bin/hgTracks?hgt_tSearch=track+search" target="_blank">Track Search</a> ' +
         'feature allows searching for terms in track names, descriptions, groups, and ENCODE ' +
-        'metadata. If multiple terms are used, only tracks with all matching terms will be part ' +
-        'of the results. The Track Search feature can also be accessed by hovering over the ' +
-        '"Genome Browser" drop-down menu or using the <b>t</b> then <b>s</b> keyboard shortcut. '+
-        '<br><br>' +
-        'More information about the Track Search can be found on the following ' +
-        '<a href="/goldenPath/help/trackSearch.html" target="_blank">help page</a>.',
+        'metadata. <br><br>'+
+        'More information about Track Search can be found on the following ' +
+        '<a href="/goldenPath/help/trackSearch.html" target="_blank">help page</a>. '+
+        'The Track Search feature can also be accessed by hovering over the ' +
+        '"Genome Browser" drop-down menu.',
     attachTo: {
         element: '#hgt_tSearch',
-        on: 'bottom'
+        on: 'top'
     },
     buttons: [tutorialButtons['back'], tutorialButtons['next']],
     id: 'shortCuts',
@@ -201,7 +200,7 @@ tour.addStep({
           'and more. This can be helpful when exporting an image for publication. ' +
           '<br><br>' +
           'You can also find a link to configure the browser image by hovering over the ' +
-          '"Genome Browser" drop-down menu or using the <b>c</b> then <b>f</b> keyboard shortcut. ',
+          '"Genome Browser" drop-down menu.',
     attachTo: {
         element: '#hgTracksConfigPage',
         on: 'bottom'
@@ -215,9 +214,7 @@ title: 'Flip the Strand Orientation',
 text: 'By default, the UCSC Genome Browser displays the forward strand (5\' to 3\'), but ' +
       'it can be configured to display the negative strand (3\' to 5\'). <br><br>' +
       'To reverse the genome orientation, click the <button>reverse</button> button and the Genome Browser image '+
-      'will flip to show either the negative or positive strand. <br><br> ' +
-      'Alternatively, you can use the <b>r</b> then <b>v</b> keyboard shortcut to quickly ' +
-      'switch between strands.',
+      'will flip to show either the negative or positive strand.',
     attachTo: {
         element: document.getElementById('hgt.toggleRevCmplDisp'),
         on: 'bottom'
