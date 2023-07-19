@@ -16,7 +16,7 @@ COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrac
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
 	expRatioTracks.o factorSource.o hgTracks.o interactTrack.o \
 	gencodeTracks.o goldTrack.o gtexTracks.o gtexEqtlClusterTrack.o gvfTrack.o \
-	halSnakeTrack.o lollyTrack.o longRangeTrack.o loweLabTracks.o lrgTrack.o \
+	halSnakeTrack.o instaPortTrack.o lollyTrack.o longRangeTrack.o loweLabTracks.o lrgTrack.o \
 	mafTrack.o makeItemsTrack.o menu.o multiWig.o netTrack.o peptideAtlasTrack.o pslTrack.o \
 	recTrackSets.o rmskJoinedTrack.o rmskTrack.o \
 	sampleTracks.o searchTracks.o simpleTracks.o snake.o sortWig.o switchGear.o transMapTracks.o \

@@ -968,6 +968,7 @@ else
                   startsWithWord("bigInteract", type) ||
                   startsWithWord("hic", type) ||
                   startsWithWord("bigDbSnp", type) ||
+                  startsWithWord("instaPort", type) ||
                   startsWithWord("bam", type)))
                     {
                     errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
