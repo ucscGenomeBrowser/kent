@@ -59,6 +59,7 @@ char *gff3FeatSnoRna = "snoRNA";
 char *gff3FeatUnconfirmedTranscript = "unconfirmed_transcript";
 char *gff3FeatExon = "exon";
 char *gff3FeatCDS = "CDS";
+char *gff3FeatUTR = "UTR";
 char *gff3FeatThreePrimeUTR = "three_prime_UTR";
 char *gff3FeatFivePrimeUTR = "five_prime_UTR";
 char *gff3FeatStartCodon = "start_codon";
@@ -956,6 +957,7 @@ for (struct gff3Ann *g3a2 = g3a->nextPart; (g3a2 != NULL) && !gff3FileStopDueToE
 // The discontinuous features abomination means we can't check for duplicate
 // ids in features were it makes no sense. Add non-spec restriction.
 if (!(sameString(g3a->type, gff3FeatCDS) ||
+      sameString(g3a->type, gff3FeatUTR) ||
       sameString(g3a->type, gff3FeatThreePrimeUTR) ||
       sameString(g3a->type, gff3FeatFivePrimeUTR) ||
       sameString(g3a->type, gff3FeatStartCodon) ||

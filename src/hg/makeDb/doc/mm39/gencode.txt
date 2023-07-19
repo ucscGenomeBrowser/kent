@@ -346,6 +346,10 @@
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
     pre="Pre"
 
+2023-04-25: import of UCSC GENCODE group processing of GENCODE VM33 final release (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+    pre=""
+
     # download, build and load tables
     mkdir -p /hive/data/genomes/mm39/bed/gencodeVM33/hgcImport${pre}
     pushd /hive/data/genomes/mm39/bed/gencodeVM33/hgcImport${pre}
@@ -357,7 +361,7 @@
 
     # generate trackDb and joiner blurb
     pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbs mm39 M33 110 'May 2023'
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbs mm39 M33 110 'July 2023'
 
     # edit mouse/mm39/trackDb.gencode.ra to add new .ra file include
     jkmake DBS=mm39
