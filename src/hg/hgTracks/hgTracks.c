@@ -4617,6 +4617,7 @@ if (
 || sameWord(type, "bigBarChart")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
+|| sameWord(type, "instaPort")
 || sameWord(type, "bigRmsk")
 || sameWord(type, "bigLolly")
 //|| track->loadItems == loadSimpleBed
