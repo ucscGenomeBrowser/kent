@@ -4334,12 +4334,22 @@ while ((line = customPpNextReal(cpp)) != NULL)
 			lf->lineIx, fileName, emptyForNull(line));
 		    }
 		}
-	    else
+	    else if (bigDataUrl)
 		{
-		errAbort("Unrecognized format type=%s line %d of %s",
-			 (type? type : "NULL"),
-			 (lf ? lf->lineIx : 0), (lf ? lf->fileName : "NULL file"));
+#define TYPE_NOT_BIGDATAURL "Type '%s' is not a bigDataUrl type.  Please see the documentation links above."
+                if (lf)
+                    lineFileAbort(lf, TYPE_NOT_BIGDATAURL, type);
+                else
+                    errAbort(TYPE_NOT_BIGDATAURL, type);
 		}
+            else
+                {
+#define TYPE_UNRECOGNIZED "Unrecognized format 'type=%s'.  Please see the documentation links above."
+                if (lf)
+                    lineFileAbort(lf, TYPE_UNRECOGNIZED, type);
+                else
+                    errAbort(TYPE_UNRECOGNIZED, type);
+                }
 	    }
 	if (customFactoryParallelLoad(bigDataUrl, type) && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
                                        //  (unless ptMax == 0 which means turn parallel loading off)

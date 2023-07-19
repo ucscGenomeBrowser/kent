@@ -1617,6 +1617,10 @@ void gtexEqtlClusterMethods(struct track *tg);
 void gtexEqtlTissueMethods(struct track *tg);
 /* Install handler for GTEx eQTL Tissues track */
 
+void instaPortMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* instaPort track type methods */
+
 void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Lollipop track type methods */

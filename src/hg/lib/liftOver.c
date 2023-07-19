@@ -1069,7 +1069,7 @@ slFreeList(&badRanges);
 *pRangeList = NULL;
 }
 
-static char *remapBlockedBed(struct hash *chainHash, struct bed *bed, 
+char *remapBlockedBed(struct hash *chainHash, struct bed *bed, 
                              double minMatch, double minBlocks, bool fudgeThick,
                              bool multiple, char *db, char *chainTable)
 /* Remap blocks in bed, and also chromStart/chromEnd.  If multiple, then bed->next may be

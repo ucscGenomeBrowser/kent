@@ -229,69 +229,67 @@ struct chain *chainLoadIdRangeHub(char *db, char *fileName, char *linkFileName, 
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+struct bbiFile *linkBbi =  bigBedFileOpenAlias(linkFileName, chromAliasFindAliases);
+struct bigBedInterval *linkBb, *linkBbList =  bigBedIntervalQuery(linkBbi, chrom, start, end, 0, lm);
 char *bedRow[12];
 char startBuf[16], endBuf[16];
-bbiFileClose(&bbi);
-boolean loadAll = FALSE;
 
+struct chain *chainList = NULL;
 struct chain *chain;
-AllocVar(chain);
 
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
     unsigned chainId = sqlUnsigned(bedRow[3]);
-    if (chainId == id)
-        break;
-    }
-
-if (bb == NULL)
-    errAbort("chain %d is not in %s", id, fileName);
-
-chain->tName = cloneString(chrom);
-chain->tSize = sqlUnsigned(bedRow[6]);
-chain->tStart = sqlUnsigned(bedRow[1]);
-chain->tEnd = sqlUnsigned(bedRow[2]);
-chain->qName = cloneString(bedRow[7]);
-chain->qSize = sqlUnsigned(bedRow[8]);
-chain->qStrand = *bedRow[5];
-chain->qStart = sqlUnsigned(bedRow[9]);
-chain->qEnd = sqlUnsigned(bedRow[10]);
-chain->score = sqlUnsigned(bedRow[11]);
-chain->id = id;
-
-// Now load the links.
-bbi =  bigBedFileOpenAlias(linkFileName, chromAliasFindAliases);
-if (loadAll)
-    {
-    start = chain->tStart;
-    end = chain->tEnd;
-    }
-bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-bbiFileClose(&bbi);
-
-for (bb = bbList; bb != NULL; bb = bb->next)
-    {
-    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    unsigned chainId = sqlUnsigned(bedRow[3]);
-    if (chainId == id)
+    if ((chainId == id) || (id == -1))
         {
-        struct cBlock *cBlock;
+        AllocVar(chain);
 
-        AllocVar(cBlock);
-        slAddHead(&chain->blockList, cBlock);
-        cBlock->tStart = sqlUnsigned(bedRow[1]);
-        cBlock->tEnd = sqlUnsigned(bedRow[2]);
-        unsigned size = cBlock->tEnd - cBlock->tStart;
-        cBlock->qStart = sqlUnsigned(bedRow[4]);
-        cBlock->qEnd = cBlock->qStart + size;
+        chain->tName = cloneString(chrom);
+        chain->tSize = sqlUnsigned(bedRow[6]);
+        chain->tStart = sqlUnsigned(bedRow[1]);
+        chain->tEnd = sqlUnsigned(bedRow[2]);
+        chain->qName = cloneString(bedRow[7]);
+        chain->qSize = sqlUnsigned(bedRow[8]);
+        chain->qStrand = *bedRow[5];
+        chain->qStart = sqlUnsigned(bedRow[9]);
+        chain->qEnd = sqlUnsigned(bedRow[10]);
+        chain->score = sqlUnsigned(bedRow[11]);
+        chain->id = chainId;
+
+        for (linkBb = linkBbList; linkBb != NULL; linkBb = linkBb->next)
+            {
+            bigBedIntervalToRow(linkBb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+            unsigned chainId = sqlUnsigned(bedRow[3]);
+            if (chainId == chain->id)
+                {
+                struct cBlock *cBlock;
+
+                AllocVar(cBlock);
+                slAddHead(&chain->blockList, cBlock);
+                cBlock->tStart = sqlUnsigned(bedRow[1]);
+                cBlock->tEnd = sqlUnsigned(bedRow[2]);
+                unsigned size = cBlock->tEnd - cBlock->tStart;
+                cBlock->qStart = sqlUnsigned(bedRow[4]);
+                cBlock->qEnd = cBlock->qStart + size;
+                }
+            }
+        slReverse(&chain->blockList);
+
+        slAddHead(&chainList, chain);
+
+        if (id > 0)  // bail out if we found the id we were looking for
+            break;
         }
     }
-slReverse(&chain->blockList);
 
+bbiFileClose(&bbi);
+bbiFileClose(&linkBbi);
 lmCleanup(&lm);
-return chain;
+if ((id > 0) && (bb == NULL))
+    errAbort("chain %d is not in %s", id, fileName);
+return chainList;
 }
 
 static struct chain *chainLoadIdSome(char *database, char *track, char *chrom, 
