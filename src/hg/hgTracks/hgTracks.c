@@ -9887,7 +9887,8 @@ if (!maxTimeStr)
 
 double maxTime = atof(maxTimeStr);
 struct dyString *dy = dyStringNew(150);
-dyStringPrintf(dy, "$(document).ready( function() { hgtWarnTiming(%f)});\n", maxTime);
+dyStringPrintf(dy, "var warnTimingTimer = setTimeout( function() { hgtWarnTiming(0)}, %f);\n", maxTime);
+dyStringPrintf(dy, "$(document).ready( function() { clearTimeout(warnTimingTimer); hgtWarnTiming(%f)});\n", maxTime);
 jsInline(dy->string);
 dyStringFree(&dy);
 }
