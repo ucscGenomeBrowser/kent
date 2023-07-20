@@ -41,4 +41,4 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 #include trackDb.refGene.ra public
 include ../../refSeqComposite.ra
 
-include fantom5.ra alpha
+include fantom5.ra
