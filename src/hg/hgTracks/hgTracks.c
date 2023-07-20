@@ -2170,7 +2170,7 @@ for(ptr=begin; ((ptr = strchr(ptr, ',')) != NULL); ptr++)
 	}
     }
 fprintf(stderr, "trackLog %d %s %s %s\n", count++, database, hgsid, begin);
-fprintf(stderr, "trackLog position %s %s %s\n",  database, hgsid, position);
+fprintf(stderr, "trackLog position %s %s %s %s\n",  database, hgsid, position, CGI_VERSION);
 
 dyStringFree(&dy);
 }
@@ -4617,6 +4617,7 @@ if (
 || sameWord(type, "bigBarChart")
 || sameWord(type, "interact")
 || sameWord(type, "bigInteract")
+|| sameWord(type, "instaPort")
 || sameWord(type, "bigRmsk")
 || sameWord(type, "bigLolly")
 //|| track->loadItems == loadSimpleBed

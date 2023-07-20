@@ -52,8 +52,9 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed bigLolly
 bedPackDense bed bigBed
-bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio
+bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio instaPort
 bigGeneDataUrl genePred
+bigChainUrl instaPort
 blastRef psl bigPsl
 boxedCfg *
 browserLines customTracks
@@ -271,7 +272,7 @@ itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred bigLolly
 lfPslTable bed
 linesAt chromGraph
-linkDataUrl  bigChain
+linkDataUrl  bigChain instaPort
 linkIdInName bed bigBed
 labelFields big*
 labelOnFeature bed bigBed
@@ -343,6 +344,8 @@ onlyVisibility wigMafProt wigMaf bed
 orangDb bed
 origAssembly *
 origTrackLine customTracks
+origTable instaPort
+origType instaPort
 otherDb *
 otherTwoBitUrl *
 otherDbTable bed

@@ -86,6 +86,11 @@ BA.2.75:
                   # BA.2.75-defining, bad but maybe not quite as bad:
                   T3796C, T3927C, T5183C, G12444A, A15451G, G22190A, A22331G, A22898G,
                   G22942T, C23013A ]
+    # False muts in re-placed (from BA.5) recombinants:
+    # XBD: A26275G
+    # XBP: G22331A, G22577C, G22898A, A26275G
+    # XBR: A22190G, G22331A, G22577C, G22898A, A26275G
+    # XBS: A22190G, G22331A, G22577C, G22898A, A26275G
 
 BN.1.2.3:
     # Inherits from BA.2.75
@@ -105,6 +110,11 @@ BA.5:
     # Some of these should be reverted in recombinants, but we're pretty much past the point of
     # simultaneous Delta/Omicron and the noise from false reversions is so intolerable that we'll
     # just have to watch out for missing reversions when working with recombinants.
+    # False muts in recombinants that were later re-placed in BA.2.75:
+    # XBD: G12160A, T22917G, T23018G
+    # XBP: G12160A,
+    # XBR: G12160A
+    # XBS: G12160A
     reversions: [ G670T, T2790C, T3037C, A4184G, T4321C, G9424A, T9534C, T10198C, A12160G,
                   T15714C, T17410C, G18163A, T19955C, G20055A, T21618C, G22200T, A22578G,
                   T22674C, C22679T, T22686C, G22688A, A22775G, T22813G, G22882T, G22917T,

@@ -3915,7 +3915,7 @@ boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash
  *
  * if gbdbHash is not NULL, use it when looking for the file */
 {
-if (startsWith("mathWig", tdb->type) || startsWith("cartVersion", tdb->type)) 
+if (startsWith("mathWig", tdb->type) || startsWith("cartVersion", tdb->type)|| startsWith("instaPort", tdb->type)   ) 
     return TRUE; // assume mathWig data is available.  Fail at load time if it isn't
     // cartVersion is a pseudo trackDb entry with no data
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
