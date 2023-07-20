@@ -576,8 +576,10 @@ if (!result)
 return result;
 }
 
-int netConnectHttps(char *hostName, int port, boolean noProxy)
-/* Return socket for https connection with server or -1 if error. */
+int netConnectHttps(char *hostName, int port, boolean noProxy, char *httpProtocol)
+/* Return socket for https connection with server or -1 if error.
+ * httpProtocol is HTTP/1.0 or HTTP/1.1.  
+ * 1.1 may only be used for non-persistent connections. Chunked encoding also not supported yet. */
 {
 
 int fd=0;
@@ -699,9 +701,9 @@ if (fd == -1)
 if (proxyUrl)
     {
     if (sameOk(log_proxy,"on"))
-	verbose(1, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", hostName, port, connectHost,connectPort);
+	verbose(1, "CONNECT %s:%d %s via %s:%d\n", hostName, port, httpProtocol, connectHost,connectPort);
     struct dyString *dy = dyStringNew(512);
-    dyStringPrintf(dy, "CONNECT %s:%d HTTP/1.0\r\n", hostName, port);
+    dyStringPrintf(dy, "CONNECT %s:%d %s\r\n", hostName, port, httpProtocol);
     setAuthorization(pxy, "Proxy-Authorization", dy);
     dyStringAppend(dy, "\r\n");
     mustWriteFd(fd, dy->string, dy->stringSize);

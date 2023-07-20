@@ -1405,8 +1405,7 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                 string[0] = toupper(base);
                 string[1] = 0;
                 MgFont *font = tl.font;
-                int height = dataValue * scaleFactor;
-                if (height != 0)
+                if (boxHeight != 0)
                     {
                     if (baseProbs)
                         {

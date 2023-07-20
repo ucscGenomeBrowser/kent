@@ -1271,7 +1271,7 @@ else
 }
 
 
-int connectNpu(struct netParsedUrl npu, char *url, boolean noProxy)
+int connectNpu(struct netParsedUrl npu, char *url, boolean noProxy, char *httpProtocol)
 /* Connect using NetParsedUrl. */
 {
 int sd = -1;
@@ -1281,7 +1281,7 @@ if (sameString(npu.protocol, "http"))
     }
 else if (sameString(npu.protocol, "https"))
     {
-    sd = netConnectHttps(npu.host, atoi(npu.port), noProxy);
+    sd = netConnectHttps(npu.host, atoi(npu.port), noProxy, httpProtocol);
     }
 else
     {
@@ -1340,6 +1340,8 @@ int sd = -1;
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
 
+
+
 boolean noProxy = checkNoProxy(npu.host);
 char *proxyUrl = getenv("http_proxy");
 if (sameString(npu.protocol, "https"))
@@ -1351,14 +1353,14 @@ if (proxyUrl)
     netParseUrl(proxyUrl, &pxy);
     if (!sameString(pxy.protocol, "http"))
 	errAbort("Unknown proxy protocol %s in %s.", pxy.protocol, proxyUrl);
-    sd = connectNpu(pxy, url, noProxy);
+    sd = connectNpu(pxy, url, noProxy, protocol);
     char *logProxy = getenv("log_proxy");
     if (sameOk(logProxy,"on"))
 	verbose(1, "%s via proxy %s\n", url, proxyUrl);
     }
 else
     {
-    sd = connectNpu(npu, url, noProxy);
+    sd = connectNpu(npu, url, noProxy, protocol);
     }
 if (sd < 0)
     return -1;
@@ -1410,11 +1412,14 @@ if (npu.byteRangeStart != -1)
 
 if (optionalHeader)
     dyStringAppend(dy, optionalHeader);
+if (sameString(protocol, "HTTP/1.1"))
+    dyStringAppend(dy, "Connection: close\r\n");  // NON-persistent HTTP 1.1 connection
 
 /* finish off the header with final blank line */
 dyStringAppend(dy, "\r\n");
 
 mustWriteFd(sd, dy->string, dy->stringSize);
+
 
 /* Clean up and return handle. */
 dyStringFree(&dy);
@@ -1426,7 +1431,7 @@ int netOpenHttpExt(char *url, char *method, char *optionalHeader)
 /* Return a file handle that will read the url.  optionalHeader
  * may by NULL or may contain cookies and other info.  */
 {
-return netHttpConnect(url, method, "HTTP/1.0", "genome.ucsc.edu/net.c", optionalHeader);
+return netHttpConnect(url, method, "HTTP/1.1", "genome.ucsc.edu/net.c", optionalHeader);
 }
 
 static int netGetOpenHttp(char *url)
