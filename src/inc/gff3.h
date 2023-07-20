@@ -231,6 +231,7 @@ extern char *gff3FeatUnconfirmedTranscript;
 extern char *gff3FeatExon;
 extern char *gff3FeatCDS;
 extern char *gff3FeatThreePrimeUTR;
+extern char *gff3FeatUTR;
 extern char *gff3FeatFivePrimeUTR;
 extern char *gff3FeatStartCodon;
 extern char *gff3FeatStopCodon;
