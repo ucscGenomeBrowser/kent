@@ -1,6 +1,8 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
 include problematic.ra
+# Polygenic risk scores
+include prs.ra
 
 track cosmicRegions
 shortLabel COSMIC Regions
