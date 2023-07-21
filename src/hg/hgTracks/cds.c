@@ -974,11 +974,13 @@ char *pslFileName, *primerFileName;
 struct targetDb *target;
 if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     return NULL;
-char *fPrimer, *rPrimer, *nonCompRPrimer;
+char *fPrimer=NULL, *rPrimer=NULL, *nonCompRPrimer;
 char *primerKey = NULL;
 if (lf->original)
     primerKey = ((struct psl *)lf->original)->qName;
 pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer, primerKey);
+if ((fPrimer == NULL) || (rPrimer == NULL))
+        return NULL;
 int fPrimerSize = strlen(fPrimer);
 int rPrimerSize = strlen(rPrimer);
 // we need to reverse complement the sequence for the display, but we
