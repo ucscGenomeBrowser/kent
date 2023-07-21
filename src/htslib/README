@@ -1,5 +1,15 @@
+Brian Raney says:
+
+At some point we need to take htslib out of the tree.
+The stock library supports hooks for the low level file i/o routines so we
+can add just a little code to use UDC rather than UNIX file i/o.
+
+
+
 HTSlib is an implementation of a unified C library for accessing common file
 formats, such as SAM, CRAM, VCF, and BCF, used for high-throughput sequencing
 data.  It is the core library used by samtools and bcftools.
 
 See INSTALL for building and installation instructions.
+
+

@@ -56,7 +56,7 @@ window.onload = function() {
 
 tour.addStep({
     title: 'Welcome to the UCSC Genome Browser Tutorial',
-    text: 'The blue navigation bar at the top of the page will allow you to access the ' +
+    text: 'The navigation bar at the top of the page will allow you to access the ' +
           'tools, downloads, and help pages. There are four main drop-downs that are useful ' +
           'for most users: ' +
           '<ul>' +

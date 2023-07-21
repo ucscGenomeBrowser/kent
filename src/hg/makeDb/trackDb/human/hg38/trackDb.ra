@@ -43,7 +43,7 @@ include exomeProbesets.ra
 include chm13LiftOver.ra
 include reMap.ra
 include recombRate.ra
-include fantom5.ra alpha
+include fantom5.ra
 
 track miRnaAtlas
 compositeTrack on

@@ -1,5 +1,5 @@
 include trackDb.chainNet.ra
-include fantom5.ra alpha
+include fantom5.ra
 
 # Local declaration so that local gold.html is picked up.
 track gold override
