@@ -684,14 +684,14 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	scoreStr = words[score2Ix];
     else if (sameString(gpFx->gAllele, words[altAl3Ix]))
 	scoreStr = words[score3Ix];
-    double score = atof(scoreStr);
-    char prediction = '?';
-    if (score < 0.05)
-	prediction = 'D';
-    else
-	prediction = 'T';
     if (isNotEmpty(scoreStr) && differentString(scoreStr, "."))
 	{
+        double score = atof(scoreStr);
+        char prediction = '?';
+        if (score < 0.05)
+            prediction = 'D';
+        else
+            prediction = 'T';
 	afVepNewExtra(self, pGotExtra);
 	fprintf(self->f, "%s=%c(%s)", extraItem->tag, prediction, scoreStr);
 	}

@@ -138,6 +138,10 @@ XBB:
     # Inherits from BA.2
     # Lots of false reversions; I would also mask G405A except that would be wrong for XBN.
     representative: BGD/icddrb_TND_06_1053/2022
+    # Homopolymer run 21999-22005 causes big trouble for Ion Torrent & nanopore, leading to false
+    # substitutions in 21994, 21995 and 21998 as discussed in pango-designation issues 1882, 1503,
+    # 1999, 1918.  21998 in particular crops up a lot, all over XBB, interfering with many sublins.
+    sites: [ 21994, 21995, 21998 ]
     reversions: [ T2790C, T3037C, A4184G, T4321C, T9344C, G9424A, T10198C, C17859T, G19326A,
                   T21618C, C21810T, A22000C, G22109C, C22577G, A22578G, C22599G, A22664C, C22679T,
                   T22686C, G22688A, T22813G, C22895G, C22896T, A22898G, G22942T, A22992G, A22995C,
@@ -153,7 +157,7 @@ XBB.1:
 XBB.1.5:
     # Inherits from XBB.1
     # Don't believe reversions on 27915 once we're as far as XBB.1.*
-    representative: England/BRBR-326C0A5A/2023
+    representative: England/BRBR-32671539/2023
     reversions: [ T27915G ]
 
 XBC:
