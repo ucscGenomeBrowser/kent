@@ -472,10 +472,12 @@ printf(" Flip Reverse Primer: ");
 cgiMakeCheckBox("wp_flipReverse", flipReverse);
 printf("%s", "</CENTER></TD>\n");
 
+#ifdef NOTNOW   // disabling until Chris gets back from vacation
 printf("%s", "<TD><CENTER>\n");
 printf(" Append to existing PCR result: ");
 cgiMakeCheckBox("wp_append", appendToResults);
 printf("%s", "</CENTER></TD>\n");
+#endif
 
 printf("</TR></TABLE><BR>");
 
