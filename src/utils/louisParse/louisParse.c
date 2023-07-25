@@ -21,6 +21,8 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+#define VERSION 1
+
 struct instanceData
 {
 time_t date;
@@ -30,6 +32,8 @@ int hubTracks;
 int nativeTracks;
 int customTracks;
 char *pid;
+int version;
+int lineNo;
 };
 
 
@@ -58,7 +62,7 @@ static void outData(struct instanceData *data)
 int hubDb = 0;
 if (startsWith("hub_", data->db))
     hubDb = 1;
-printf("%ld\t%u\t%u\t%u\t%u\t%u\n", data->date,  data->elapsedTime, hubDb, data->hubTracks, data->nativeTracks, data->customTracks);
+printf("%ld\t%u\t%u\t%u\t%u\t%u\t%s\t%d\t%d\n", data->date,  data->elapsedTime, hubDb, data->hubTracks, data->nativeTracks, data->customTracks, data->db, data->version, data->lineNo);
 }
 
 void louisParse(char *logFile)
@@ -70,7 +74,13 @@ int wordCount;
 struct instanceData *data;
 struct hash *pidHash = newHash(5);
 struct hashEl *hel;
+time_t t = time(NULL);
+struct tm *tm = localtime(&t);
+char date[64];
+strftime(date, sizeof(date), "%c", tm);
 
+printf("# louisParse ver%d %s %s\n",VERSION, date,  logFile);
+printf("# date\telapsedTime\tisHub\t#HubTracks\t#NativeTracks\t#CustomTracks\tassembly\tversion\tline#\n");
 while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     //printf("pid %s\n",words[7]);
@@ -89,7 +99,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
             sprintf(buffer, "%s %s %s %s", words[1],words[2],words[3],words[4]);
             //printf("date %s\n",buffer);
             //strptime(buffer, "%m %d %T %y",&result);
-            data->date= dateToSeconds(buffer, "%b %d %T %y");
+            data->date= dateToSeconds(buffer, "%b %d %T %Y");
             data->pid= cloneString(words[7]);
             sprintf(buffer, "%s_%s", words[7],words[14]);
             //data->pid= cloneString(words[14]);
@@ -115,6 +125,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
         if ((hel = hashLookup(pidHash, words[7])) != NULL)
             {
             data = hel->val;
+            data->lineNo = lf->lineIx;
             data->elapsedTime = atoi(words[16]);
             outData(data);
             hashRemove(pidHash, words[7]);
