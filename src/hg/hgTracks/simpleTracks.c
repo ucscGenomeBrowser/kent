@@ -651,6 +651,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		range->end = end + winOffset;
 		slAddHead(&rangeList, range);
                 rangeWidth += (range->end - range->start);
+                range->height = 1;
 
 		AllocVar(node);
 		node->val = item;

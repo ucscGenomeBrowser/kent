@@ -1,6 +1,6 @@
-/* spaceSaver - routines that help layout 1-D objects into a
- * minimum number of tracks so that no two objects overlap
- * within a single track. 
+/* spaceSaver - routines that help layout 2-D objects into a
+ * minimum number of rows so that no two objects overlap
+ * within the same row. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -66,9 +66,9 @@ struct spaceNode *spaceSaverAddOverflowMultiOptionalPadding(struct spaceSaver *s
  * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
  * that won't fit in first row (ends up being last row after
  * spaceSaverFinish()). Allow caller to suppress padding between items 
- * (show adjacent items on single row */
+ * (show adjacent items on single row) */
 {
-struct spaceRowTracker *srt, *freeSrt = NULL;
+struct spaceRowTracker *startSrt, *freeSrt = NULL;
 int rowIx = 0;
 struct spaceNode *sn;
 
@@ -77,7 +77,7 @@ if (ss->isFull)
 
 struct spaceRange *range;
 struct spaceRange *cellRanges = NULL, *cellRange;
-
+int maxHeight = 0;
 for (range = rangeList; range; range = range->next)
     {
     AllocVar(cellRange);
@@ -92,6 +92,11 @@ for (range = rangeList; range; range = range->next)
     if (cellRange->end > ss->cellsInRow)
 	cellRange->end = ss->cellsInRow;
     cellRange->width = cellRange->end - cellRange->start;
+    if (range->height < 1)
+        errAbort ("Attempting to insert item with 0 height into spaceSaver");
+    cellRange->height = range->height;
+    if (range->height > maxHeight)
+        maxHeight = range->height;
     slAddHead(&cellRanges, cellRange);
     }
 slReverse(&cellRanges);
@@ -104,45 +109,73 @@ if (ss->vis == 2) // tvFull for BEDLIKE tracks does not pack, so force a new lin
 else
     {
     /* Find free row. */
-    for (srt = ss->rowList; srt != NULL; srt = srt->next)
+    for (startSrt = ss->rowList; startSrt != NULL; startSrt = startSrt->next)
 	{
 	bool freeFound = TRUE;
+        // Check if we can pack each of the cells into this row
 	for (cellRange = cellRanges; cellRange; cellRange = cellRange->next)
 	    { // TODO possibly can just calculate cellRange->width instead of storing it?
-	    if (!allClear(srt->used + cellRange->start, cellRange->width))
-		{
-		freeFound = FALSE;
-		break;
-		}
+            struct spaceRowTracker *srt = startSrt; // for packing something that fills multiple rows
+            int j;
+            for (j=0; j<cellRange->height; j++)
+                {
+                if (srt == NULL)  // can trivially pack into rows that aren't yet allocated
+                    break;
+                if (!allClear(srt->used + cellRange->start, cellRange->width))
+                    {
+                    // Nope, at least one cell won't fit in this row
+                    freeFound = FALSE;
+                    break;
+                    }
+                srt = srt->next;
+                }
+                if (!freeFound)
+                    // No point testing the rest of the cells; we've already found one that won't fit here
+                    break;
 	    }
 	if (freeFound)
 	    {
-	    freeSrt = srt;
+	    freeSrt = startSrt;
 	    break;
 	    }
 	++rowIx;
 	}
     }
 
-/* If no free row make new row. */
+/* If we need to make new row(s), do so up to the limit of either what's needed to draw the item or maxRows rows.
+ * If we successfully added any needed rows, freeSrt should point to the start row.  Otherwise it's NULL.
+ */
+if (rowIx + maxHeight > ss->rowCount)
+    {
+    struct spaceRowTracker *newSrt = NULL;
+    for (;ss->rowCount < rowIx + maxHeight; ss->rowCount++)
+        {
+        if (ss->rowCount >= ss->maxRows)
+            {
+            // this just became an overflow item
+            freeSrt = NULL;
+            rowIx = ss->rowCount;
+            break;
+            }
+        AllocVar(newSrt);
+        newSrt->used = needMem(ss->cellsInRow);
+        slAddTail(&ss->rowList, newSrt);
+        if (freeSrt == NULL)
+            freeSrt = newSrt; // This item was assigned to go on all new rows, so set freeSrt to the first new row
+        }
+    }
+
 if (freeSrt == NULL)
     {
-    if (ss->rowCount >= ss->maxRows)
+    if (ss->rowCount + maxHeight > ss->maxRows)
 	{
-	/* Abort if too many rows and no
-	   overflow allowed. */
+	/* Abort if too many rows and no overflow allowed. */
 	if(!allowOverflow) 
 	    {
 	    ss->isFull = TRUE;
 	    return NULL;
 	    }
-	}
-    else 
-	{
-	AllocVar(freeSrt);
-	freeSrt->used = needMem(ss->cellsInRow);
-	slAddTail(&ss->rowList, freeSrt);
-	++ss->rowCount;
+        ss->hasOverflowRow = TRUE;
 	}
     }
 
@@ -151,7 +184,13 @@ if(freeSrt != NULL)
     {
     for (cellRange = cellRanges; cellRange; cellRange = cellRange->next)
 	{
-	memset(freeSrt->used + cellRange->start, 1, cellRange->width);
+        struct spaceRowTracker *srt = freeSrt;
+        int j;
+        for (j=0; j<cellRange->height; j++)
+            {
+            memset(srt->used + cellRange->start, 1, cellRange->width);
+            srt = srt->next;
+            }
 	}
     }
 
@@ -163,9 +202,7 @@ for (sn=nodeList; sn; sn=snNext)
     {
     /* Make a space node. If allowing overflow it will
      all end up in the last row. */
-    //AllocVar(sn);
     sn->row = rowIx;
-    //sn->val = val;
     snNext = sn->next;
     slAddHead(&sn->parentSs->nodeList, sn);
     }
@@ -183,7 +220,8 @@ struct spaceNode *spaceSaverAddOverflowMulti(struct spaceSaver *ss,
 return spaceSaverAddOverflowMultiOptionalPadding(ss, rangeList, nodeList, allowOverflow, TRUE);
 }
 
-struct spaceNode *spaceSaverAddOverflowExtended(struct spaceSaver *ss, int start, int end, 
+
+struct spaceNode *spaceSaverAddOverflowExtended(struct spaceSaver *ss, int start, int end, int height,
 					void *val, boolean allowOverflow, struct spaceSaver *parentSs, bool noLabel)
 /* Add a new node to space saver. Returns NULL if can't fit item in
  * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
@@ -193,6 +231,7 @@ struct spaceRange *range;
 AllocVar(range);
 range->start = start;
 range->end = end;
+range->end = height;
 struct spaceNode *node;
 AllocVar(node);
 node->val = val;
@@ -207,9 +246,8 @@ struct spaceNode *spaceSaverAddOverflow(struct spaceSaver *ss, int start, int en
  * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
  * that won't fit in last row. */
 {
-return spaceSaverAddOverflowExtended(ss, start, end, val, allowOverflow, ss, FALSE);
+return spaceSaverAddOverflowExtended(ss, start, end, 1, val, allowOverflow, ss, FALSE);
 }
-
 
 struct spaceNode *spaceSaverAdd(struct spaceSaver *ss, 
 	int start, int end, void *val)
