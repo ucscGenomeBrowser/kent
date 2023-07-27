@@ -16,6 +16,11 @@ const tour = new Shepherd.Tour({
   useModalOverlay: true
 });
 
+// log when a tutorial is started
+tour.on('start', function() {
+    writeToApacheLog("tutorial start " + getHgsid());
+});
+
 var tutorialButtons = {
     'back': {
         action() {
@@ -32,6 +37,8 @@ var tutorialButtons = {
     },
     'end': {
         action() {
+            // log when the tutorial is finished
+            writeToApacheLog("tutorial finish " + getHgsid());
             localStorage.setItem("hgTracks_hideTutorial", "1");
             return this.complete();
         },
