@@ -7096,7 +7096,8 @@ faWriteNext(stdout, NULL, dna, productSize);
 printf("</PRE></TT>");
 }
 
-static void pslFileGetPrimers(char *pslFileName, char *transcript, char **retFPrimer, char **retRPrimer)
+static void pslFileGetPrimers(char *pslFileName, char *transcript, int ampStart, int ampEnd,
+        char **retFPrimer, char **retRPrimer)
 /* Use a psl file to get primers associated with the transcript */
 {
 char *pslFields[21];
@@ -7107,7 +7108,7 @@ char *pipe = strchr(target, '|');
 while (lineFileRow(lf, pslFields))
     {
     struct psl *psl = pslLoad(pslFields);
-    if (sameString(psl->tName, target))
+    if (sameString(psl->tName, target) && ampStart == psl->tStart && ampEnd == psl->tEnd)
         {
         char *pair = psl->qName;
         char *under = strchr(pair, '_');
@@ -7131,11 +7132,23 @@ if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target)
     errAbort("PCR Result track has disappeared!");
 
 char *fPrimer = NULL, *rPrimer = NULL;
+int ampStart, ampEnd;
+char *targetSeqName = NULL;
 boolean targetSearch = stringIn("__", item) != NULL;
 if (targetSearch)
     {
+    /* item (from hgTracks) is |-separated: target sequence name,
+     * amplicon start offset in target sequence, and amplicon end offset. */
+    char *words[3];
+    int wordCount = chopByChar(cloneString(item), '|', words, ArraySize(words));
+    if (wordCount != 3)
+	errAbort("doPcrResult: expected 3 |-sep'd words but got '%s'", item);
+    targetSeqName = words[0];
+    if (endsWith(targetSeqName, "__"))
+	targetSeqName[strlen(targetSeqName)-2] = '\0';
+    ampStart = atoi(words[1]), ampEnd = atoi(words[2]);
     // use the psl file to find the right primer pair
-    pslFileGetPrimers(pslFileName, item, &fPrimer, &rPrimer);
+    pslFileGetPrimers(pslFileName, item, ampStart, ampEnd, &fPrimer, &rPrimer);
     }
 else
     {
@@ -7160,16 +7173,6 @@ if (targetSearch)
 struct psl *itemPsl = NULL, *otherPsls = NULL, *psl;
 if (targetSearch)
     {
-    /* item (from hgTracks) is |-separated: target sequence name,
-     * amplicon start offset in target sequence, and amplicon end offset. */
-    char *words[3];
-    int wordCount = chopByChar(cloneString(item), '|', words, ArraySize(words));
-    if (wordCount != 3)
-	errAbort("doPcrResult: expected 3 |-sep'd words but got '%s'", item);
-    char *targetSeqName = words[0];
-    if (endsWith(targetSeqName, "__"))
-	targetSeqName[strlen(targetSeqName)-2] = '\0';
-    int ampStart = atoi(words[1]), ampEnd = atoi(words[2]);
     pcrResultGetPsl(pslFileName, target, targetSeqName, seqName, ampStart, ampEnd,
 		    &itemPsl, &otherPsls, fPrimer, rPrimer);
     printPcrTargetMatch(target, itemPsl, TRUE);
