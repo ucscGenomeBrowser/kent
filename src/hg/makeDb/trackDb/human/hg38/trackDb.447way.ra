@@ -6,7 +6,7 @@ type bigMaf
 viewUi on
 speciesCodonDefault hg38
 bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus447way/hg38.cactus447way.bb
-# summary https://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus447way/cactus447waySummary.bb
+summary https://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus447way/cactus447waySummary.bb
 speciesGroups Vertebrate
 group compGeno
 speciesDefaultOn Gorilla_gorilla Crocidura_indochinensis
