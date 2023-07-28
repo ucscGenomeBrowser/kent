@@ -14179,11 +14179,6 @@ else if (sameWord(type, "bigLolly"))
     track->mapsSelf = TRUE;
     lollyMethods(track, tdb, wordCount, words);
     }
-else if (sameWord(type, "instaPort"))
-    {
-    //track->isBigBed = TRUE;
-    instaPortMethods(track,tdb, wordCount, words);
-    }
 else if (sameWord(type, "bigInteract"))
     {
     track->isBigBed = TRUE;
