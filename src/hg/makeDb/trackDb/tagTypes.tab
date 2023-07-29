@@ -386,6 +386,7 @@ sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Carnivore wigMaf bigMaf
+sGroup_Carnivora wigMaf bigMaf
 sGroup_Cetartiodactyla wigMaf bigMaf
 sGroup_Chiroptera wigMaf bigMaf
 sGroup_CoV_2019 wigMaf
@@ -436,6 +437,10 @@ sGroup_Platyhelminthes wigMaf
 sGroup_Plectida wigMaf
 sGroup_Primate wigMaf bigMaf
 sGroup_Primates wigMaf bigMaf
+sGroup_Primates_catarrhini wigMaf bigMaf
+sGroup_Primates_platyrrhini wigMaf bigMaf
+sGroup_Primates_strepsirrhini wigMaf bigMaf
+sGroup_Primates_tarsiidae wigMaf bigMaf
 sGroup_primate wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
