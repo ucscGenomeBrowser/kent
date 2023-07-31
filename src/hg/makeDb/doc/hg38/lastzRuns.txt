@@ -13725,3 +13725,98 @@ TMPDIR=/dev/shm
     # 2414467692 bases of 3272116950 (73.789%) in intersection
 
 ##############################################################################
+# LASTZ Human Hg38 vs. crab-eating macaque GCA_011100615.1
+#    (DONE - 2023-03-15 - Gerardo)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzGCA_011100615.1.2023-03-15
+    cd /hive/data/genomes/hg38/bed/lastzGCA_011100615.1.2023-03-15
+
+    printf '# crab-eating macaque GCA_011100615.1 vs. Human Hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human  hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: crab-eating macaque 2020-03-10 GCA_011100615.1_Macaca_fascicularis_6.0
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCA/011/100/615/GCA_011100615.1/GCA_011100615.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCA/011/100/615/GCA_011100615.1/GCA_011100615.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCA_011100615.1.2023-03-15
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCA_011100615.1_Macaca_fascicularis_6.0 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	130m22.412s
+
+    sed -e 's/^/    # /;' fb.hg38.chainGCA_011100615.1Link.txt
+    # 2631841536 bases of 3299210039 (79.772%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynGCA_011100615.1Link.txt
+    # 2591533400 bases of 3299210039 (78.550%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCA/011/100/615/GCA_011100615.1/GCA_011100615.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCA/011/100/615/GCA_011100615.1/GCA_011100615.1.chrom.sizes.txt" \
+        hg38 GCA_011100615.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	149m26.588s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.GCA_011100615.1.txt
+    # 2392058538 bases of 3299210039 (72.504%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCA/011/100/615/GCA_011100615.1_Macaca_fascicularis_6.0/trackData/blastz.hg38.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCA_011100615.1_Macaca_fascicularis_6.0 /hive/data/genomes/hg38/bed/lastzGCA_011100615.1.2023-03-15/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	91m42.642s
+
+    sed -e 's/^/    # /;' fb.GCA_011100615.1.chainHg38Link.txt
+    # 2473727491 bases of 2906138557 (85.121%) in intersection
+    sed -e 's/^/    # /;' fb.GCA_011100615.1.chainSynHg38Link.txt
+    # 2446991743 bases of 2906138557 (84.201%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCA/011/100/615/GCA_011100615.1/GCA_011100615.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCA/011/100/615/GCA_011100615.1/GCA_011100615.1.chrom.sizes.txt" \
+   GCA_011100615.1 hg38) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	140m55.957s
+
+    sed -e 's/^/    # /;' fb.GCA_011100615.1.chainRBest.Hg38.txt
+    # 2394259873 bases of 2906138557 (82.386%) in intersection
+
+real	512m28.587s
+user	0m0.989s
+sys	0m1.306s
+##############################################################################
