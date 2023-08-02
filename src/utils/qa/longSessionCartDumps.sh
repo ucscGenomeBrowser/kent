@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # delete files that are two weeks or older
-directory="/hive/groups/browser/cartDumps"
+directory="/hive/users/qateam/cronCartDumps"
 find "$directory" -type f -mtime +14 -delete
 
 cd /hive/users/qateam/cronCartDumps
