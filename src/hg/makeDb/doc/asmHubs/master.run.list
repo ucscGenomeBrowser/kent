@@ -3130,6 +3130,7 @@
 ./runBuild GCF_026225885.1_UHH_iyHylAnth1.0_haploid invertebrate Hylaeus_anthracinus
 ./runBuild GCF_026225935.1_ASM2622593v1 fish Boleophthalmus_pectinirostris
 ./runBuild GCF_026229845.1_ASM2622984v1 fungi Diaporthe_amygdali
+./runBuild GCF_026262505.1_NYU_TvagG3_2 invertebrate Trichomonas_vaginalis_G3
 ./runBuild GCF_026283585.1_UHH_iyHylVolc1.0_haploid invertebrate Hylaeus_volcanicus
 ./runBuild GCF_026319165.1_ASM2631916v1 fungi Colletotrichum_fioriniae
 ./runBuild GCF_026319265.1_ASM2631926v1 fungi Colletotrichum_chrysophilum
