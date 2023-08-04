@@ -1,11 +1,34 @@
+<h2>Data Access</h2>
 <p>
-Downloads for data in this track are available:
+Downloads for data in this track are available from the directory:
 <ul>
 <li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus447way/">Multiz alignments</a> (MAF format), and phylogenetic trees
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus447way/">Cactus 447-way alignments</a> (MAF format), and phylogenetic trees
 </ul>
 </p>
 
+<h2>Methods</h2>
+<p>
+This alignment was created by making three edits (using Cactus) to the
+241-way mammalian Zoonomia Cactus alignment
+(<a href='https://cglgenomics.ucsc.edu/data/cactus/' target=_bland>
+https://cglgenomics.ucsc.edu/data/cactus/</a>).
+<ul>
+<li>One additional cat genome, "Felis_catus_fca126" (GCA_018350175.1) was
+added as a sister taxa to the existing "Felis_catus" species</li>
+<li>Five additional canine genomes were also added: canFam4,
+"Canis_lupus_dingo" (GCA_003254725.1), "Canis_lupus_orion"
+(GCA_905319855.2), "Nyctereutes_procyonoides" (GCA_905146905.1) and
+"Otocyon_megalotis" (GCA_017311455.1). "Canis_lupus" from the Zoonomia
+alignment was also renamed "Canis_lupus_VD" to reflect the fact that it
+corresponds to a  "village dog" and not "wolf" sample.</li>
+<li> The 43-species primates clade from the Zoonomia alignment was removed
+and replaced with the 243-way primates alignment from <b>TODO: [CITE ILLUMINA
+PAPER]</b>, increasing the alignment by 200 additional primate species.</li>
+</ul>
+</p>
+
+<h2>Sequences</h2>
 <p>
 <blockquote>
 <table border=1 class='stdTbl'>
@@ -465,3 +488,22 @@ Downloads for data in this track are available:
 </table><br>
 <b>Table 1.</b> <em>Genome assemblies included in the 447-way Conservation track.</em>
 </blockquote></p>
+
+<h2>References</h2>
+<ul>
+<li>Zoonomia Consortium., Genereux, D.P., Serres, A. et al.
+<a href='https://doi.org/10.1038/s41586-020-2876-6' target=_blank>
+A comparative genomics multitool for scientific discovery and conservation.</a>
+<em>Nature</em> 587, 240-245 (2020).
+</li>
+<li>Feng, S., Stiller, J., Deng, Y. et al.
+<a href='https://doi.org/10.1038/s41586-020-2873-9' target=_blank>
+Dense sampling of bird diversity increases power of comparative genomics.</a>
+<em>Nature</em> 587, 252-257 (2020).
+</li>
+<li>Armstrong, J., Hickey, G., Diekhans, M. et al.
+<a href='https://doi.org/10.1038/s41586-020-2871-y' target=_blank>
+Progressive Cactus is a multiple-genome aligner for the thousand-genome era.</a>
+<em>Nature</em> 587, 246-251 (2020).
+</li>
+</ul>
