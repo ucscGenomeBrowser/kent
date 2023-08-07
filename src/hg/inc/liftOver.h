@@ -6,6 +6,8 @@
 #ifndef LIFTOVER_H
 #define LIFTOVER_H
 
+#include "chain.h"
+
 #define LIFTOVER_MINMATCH        0.95
 #define LIFTOVER_MINBLOCKS       1.00
 
@@ -117,6 +119,16 @@ void readLiftOverMap(char *fileName, struct hash *chainHash);
 char *liftOverErrHelp();
 /* Help message explaining liftOver failures */
 
+char *remapBlockedBed(struct hash *chainHash, struct bed *bed,  
+                             double minMatch, double minBlocks, bool fudgeThick,
+                             bool multiple, char *db, char *chainTable);
+/* Remap blocks in bed, and also chromStart/chromEnd.  If multiple, then bed->next may be
+ * changed to point to additional newly allocated mapped beds, and bed's pointer members may
+ * be free'd so be sure to pass in a properly allocated bed.
+ * Return NULL on success, an error string on failure. */
+
+void liftOverAddChainHash(struct hash *chainHash, struct chain *chain);
+/* Add this chain to the hash of chains used by remapBlockedBed */
 
 #endif
 
