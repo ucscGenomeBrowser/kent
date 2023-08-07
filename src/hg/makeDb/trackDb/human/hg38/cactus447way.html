@@ -28,6 +28,17 @@ PAPER]</b>, increasing the alignment by 200 additional primate species.</li>
 </ul>
 </p>
 
+<h2>Phylogenic tree</h2>
+<p>
+The phylogenic tree was established by the research described
+in the paper:
+<b>Lukas F. K. Kuderna, et al.</b>
+<a href='https://www.science.org/doi/full/10.1126/science.abn7829' target=_blank>
+A global catalog of whole-genome diversity from 233 primate species.</a>
+<em>Science</em> Vol. 380, No. 6648, 906-913 (2023),
+DOI: 10.1126/science.abn7829
+</p>
+
 <h2>Sequences</h2>
 <p>
 <blockquote>
@@ -487,6 +498,119 @@ PAPER]</b>, increasing the alignment by 200 additional primate species.</li>
 <tr><td>447</td><th>little pocket mouse</th><td>euarchontoglires</td><td>Perognathus longimembris</td><th style='text-align:right;'><a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=38669' target=_blank>38669</a></th></tr>
 </table><br>
 <b>Table 1.</b> <em>Genome assemblies included in the 447-way Conservation track.</em>
+</blockquote></p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+In full and pack display modes, conservation scores are displayed as a
+<em>wiggle track</em> (histogram) in which the height reflects the
+size of the score.
+The conservation wiggles can be configured in a variety of ways to
+highlight different aspects of the displayed information.
+Click the <a href="../goldenPath/help/hgWiggleTrackHelp.html"
+target=_blank>Graph configuration help</a> link for an explanation
+of the configuration options.</p>
+<p>
+Pairwise alignments of each species to the $organism genome are
+displayed below the conservation histogram as a grayscale density plot (in
+pack mode) or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, conservation is shown in grayscale using
+darker values to indicate higher levels of overall conservation
+as scored by phastCons. </p>
+<p>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Note that excluding species from the pairwise display does not alter the
+the conservation score display.</p>
+<p>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.</p>
+
+<h3>Gap Annotation</h3>
+<p>
+The <em>Display chains between alignments</em> configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
+a manner similar to the Chain track display.  Missing sequence in any
+assembly is highlighted in the track display by regions of yellow when zoomed
+out and by Ns when displayed at base level.  The following conventions are used:
+<ul>
+<li><b>Single line:</b> No bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the $organism genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<li><b>Double line:</b> Aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between
+species or independent indels in the region between the aligned blocks in both
+species.
+<li><b>Pale yellow coloring:</b> Aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species.
+</ul></p>
+
+<h3>Genomic Breaks</h3>
+<p>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows:
+<ul>
+<li>
+<b>Vertical blue bar:</b> Represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement.
+<li>
+<b>Green square brackets:</b> Enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the $organism genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</ul></p>
+
+<h3>Base Level</h3>
+<p>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those
+alignment positions relative to the longest non-$organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</p>
+<p>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation,
+select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<ul>
+<li>
+<b>No codon translation:</b> The gene annotation is not used; the bases are
+displayed without translation.
+<li>
+<b>Use default species reading frames for translation:</b> The annotations from
+the genome displayed in the <em>Default species to establish reading frame</em>
+pull-down menu are used to translate all the aligned species present in the
+alignment.
+<li>
+<b>Use reading frames for species if available, otherwise no translation:</b>
+Codon translation is performed only for those species where the region is
+annotated as protein coding.
+<li><b>Use reading frames for species if available, otherwise use default species:</b>
+Codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</ul></p>
+<p>
+Codon translation uses the following gene tracks as the basis for translation:
+<blockquote><table class="stdTbl">
+<tr align=left><td><b>Gene Track</b></td><td><b>Species</b></td></tr>
+<tr align=left><td>RefSeq Genes</td><td>Bos mutus, Canis lupus familiaris, Carlito syrichta, Cercocebus atys, Chinchilla lanigera, Colobus angolensis, Condylura cristata, Dipodomys ordii, Elephantulus edwardii, Eptesicus fuscus, Felis catus, Felis catus fca126, Fukomys damarensis, Homo sapiesn, Ictidomys tridecemlineatus, Macaca mulatta, Macaca nemestrina, Marmota marmota, Microtus ochrogaster, Miniopterus natalensis, Mus musculus, Mus pahari, Myotis brandtii, Myotis davidii, Myotis lucifugus, Odobenus rosmarus, Orcinus orca, Otolemur garnettii, Peromyscus maniculatus, Piliocolobus tephrosceles, Propithecus coquerelli, Pteropus alecto, Pteropus vampyrus, Rattus norvegicus, Rhinopithecus roxellana, Saimiri boliviensis, Sorex araneus, Sus scrofa, Theropithecus gelada, Tupaia chinensis</td></tr>
+<tr align=left><td>Ensembl Genes</td><td>Cavia aperea</td></tr>
+<tr align=left><td>Augustus Genes</td><td>Eidolon helvum, Pteronotus parnellii</td></tr>
+<tr align=left><td>no annotation</td><td>Acinonyx jubatus, Acomys cahirinus, Ailuropoda melanoleuca, Ailurus fulgens, Allactaga bullata, Allenopithecus nigroviridis, Allochrocebus lhoesti, Allochrocebus preussi, Allochrocebus solatus, Alouatta belzebul, Alouatta caraya, Alouatta discolor, Alouatta juara, Alouatta macconnelli, Alouatta nigerrima, Alouatta palliata, Alouatta puruensis, Alouatta seniculus, Ammotragus lervia, Anoura caudifer, Antilocapra americana, Aotus azarae, Aotus griseimembra, Aotus nancymaae, Aotus trivirgatus, Aotus vociferans, Aplodontia rufa, Arctocebus calabarensis, Artibeus jamaicensis, Atele fusciceps, Ateles belzebuth, Ateles chamek, Ateles geoffroyi, Ateles marginatus, Ateles paniscus, Avahi laniger, Avahi peyrierasi, Balaenoptera acutorostrata, Balaenoptera bonaerensis, Beatragus hunteri, Bison bison, Bos indicus, Bos taurus, Bubalus bubalis, Cacajao ayresi, Cacajao calvus, Cacajao hosomi, Cacajao melanocephalus, Callibella humilis, Callimico goeldii, Callithrix geoffroyi, Callithrix jacchus, Callithrix kuhlii, Camelus bactrianus, Camelus dromedarius, Camelus ferus, Canis lupus VD, Canis lupus dingo, Canis lupus orion, Capra aegagrus, Capra hircus, Capromys pilorides, Carollia perspicillata, Castor canadensis, Catagonus wagneri, Cavia porcellus, Cavia tschudii, Cebuella niveiventris, Cebuella pygmaea, Cebus albifrons, Cebus olivaceus, Cebus unicolor, Cephalopachus bancanus, Ceratotherium simum, Ceratotherium simum cottoni, Cercocebus chrysogaster, Cercocebus lunulatus, Cercocebus torquatus, Cercopithecus ascanius, Cercopithecus cephus, Cercopithecus diana, Cercopithecus hamlyni, Cercopithecus lowei, Cercopithecus mitis, Cercopithecus mona, Cercopithecus neglectus, Cercopithecus nictitans, Cercopithecus petaurista, Cercopithecus pogonias, Cercopithecus roloway, Chaetophractus vellerosus, Cheirogaleus major, Cheirogaleus medius, Cheracebus lucifer, Cheracebus lugens, Cheracebus regulus, Cheracebus torquatus, Chiropotes albinasus, Chiropotes israelita, Chiropotes sagulatus, Chlorocebus aethiops, Chlorocebus pygerythrus, Chlorocebus sabaeus, Choloepus didactylus, Choloepus hoffmanni, Chrysochloris asiatica, Colobus guereza, Colobus polykomos, Craseonycteris thonglongyai, Cricetomys gambianus, Cricetulus griseus, Crocidura indochinensis, Cryptoprocta ferox, Ctenodactylus gundi, Ctenomys sociabilis, Cuniculus paca, Dasyprocta punctata, Dasypus novemcinctus, Daubentonia madagascariensis, Delphinapterus leucas, Desmodus rotundus, Dicerorhinus sumatrensis, Diceros bicornis, Dinomys branickii, Dipodomys stephensi, Dolichotis patagonum, Echinops telfairi, Elaphurus davidianus, Ellobius lutescens, Ellobius talpinus, Enhydra lutris, Equus asinus, Equus caballus, Equus przewalskii, Erinaceus europaeus, Erythrocebus patas, Eschrichtius robustus, Eubalaena japonica, Eulemur albifrons, Eulemur collaris, Eulemur coronatus, Eulemur flavifrons, Eulemur fulvus, Eulemur macaco, Eulemur mongoz, Eulemur rubriventer, Eulemur rufus, Eulemur sanfordi, Felis nigripes, Galago moholi, Galago senegalensis, Galagoides demidoff, Galeopterus variegatus, Giraffa tippelskirchi, Glis glis, Gorilla beringei, Gorilla gorilla, Graphiurus murinus, Hapalemur alaotrensis, Hapalemur gilberti, Hapalemur griseus, Hapalemur meridionalis, Hapalemur occidentalis, Helogale parvula, Hemitragus hylocrius, Heterocephalus glaber, Heterohyrax brucei, Hippopotamus amphibius, Hipposideros armiger, Hipposideros galeritus, Hoolock hoolock, Hyaena hyaena, Hydrochoerus hydrochaeris, Hylobates abbotti, Hylobates agilis, Hylobates klossii, Hylobates lar, Hylobates muelleri, Hylobates pileatus, Hystrix cristata, Indri indri, Inia geoffrensis, Jaculus jaculus, Kogia breviceps, Lagothrix lagothricha, Lasiurus borealis, Lemur catta, Leontocebus fuscicollis, Leontocebus illigeri, Leontocebus nigricollis, Leontopithecus chrysomelas, Leontopithecus rosalia, Lepilemur ankaranensis, Lepilemur dorsalis, Lepilemur ruficaudatus, Lepilemur septentrionalis, Leptonychotes weddellii, Lepus americanus, Lipotes vexillifer, Lophocebus aterrimus, Loris lydekkerianus, Loris tardigradus, Loxodonta africana, Lycaon pictus, Macaca arctoides, Macaca assamensis, Macaca cyclopis, Macaca fascicularis, Macaca fuscata, Macaca leonina, Macaca maura, Macaca nigra, Macaca radiata, Macaca siberu, Macaca silenus, Macaca thibetana, Macaca tonkeana, Macroglossus sobrinus, Mandrillus leucophaeus, Mandrillus sphinx, Manis javanica, Manis pentadactyla, Megaderma lyra, Mellivora capensis, Meriones unguiculatus, Mesocricetus auratus, Mesoplodon bidens, Mico argentatus, Mico humeralifer, Mico spnv, Microcebus murinus, Microgale talazaci, Micronycteris hirsuta, Miniopterus schreibersii, Miopithecus ogouensis, Mirounga angustirostris, Mirza zaza, Monodon monoceros, Mormoops blainvillei, Moschus moschiferus, Mungos mungo, Murina feae, Mus caroli, Mus spretus, Muscardinus avellanarius, Mustela putorius, Myocastor coypus, Myotis myotis, Myrmecophaga tridactyla, Nannospalax galili, Nasalis larvatus, Neomonachus schauinslandi, Neophocaena asiaeorientalis, Noctilio leporinus, Nomascus annamensis, Nomascus concolor, Nomascus gabriellae, Nomascus leucogenys, Nomascus siki, Nyctereutes procyonoides, Nycticebus bengalensis, Nycticebus coucang, Nycticebus pygmaeus, Ochotona princeps, Octodon degus, Odocoileus virginianus, Okapia johnstoni, Ondatra zibethicus, Onychomys torridus, Orycteropus afer, Oryctolagus cuniculus, Otocyon megalotis, Otolemur crassicaudatus, Ovis aries, Ovis canadensis, Pan paniscus, Pan troglodytes, Panthera onca, Panthera pardus, Panthera tigris, Pantholops hodgsonii, Papio anubis, Papio cynocephalus, Papio hamadryas, Papio kindae, Papio papio, Papio ursinus, Paradoxurus hermaphroditus, Perodicticus ibeanus, Perodicticus potto, Perognathus longimembris, Petromus typicus, Phocoena phocoena, Piliocolobus badius, Piliocolobus gordonorum, Piliocolobus kirkii, Pipistrellus pipistrellus, Pithecia albicans, Pithecia chrysocephala, Pithecia hirsuta, Pithecia mittermeieri, Pithecia pissinattii, Pithecia pithecia, Pithecia vanzolinii, Platanista gangetica, Plecturocebus bernhardi, Plecturocebus brunneus, Plecturocebus caligatus, Plecturocebus cinerascens, Plecturocebus cupreus, Plecturocebus dubius, Plecturocebus grovesi, Plecturocebus hoffmannsi, Plecturocebus miltoni, Plecturocebus moloch, Pongo abelii, Pongo pygmaeus, Presbytis comata, Presbytis mitrata, Procavia capensis, Prolemur simus, Propithecus coronatus, Propithecus diadema, Propithecus edwardsi, Propithecus perrieri, Propithecus tattersalli, Propithecus verreauxi, Psammomys obesus, Pteronura brasiliensis, Puma concolor, Pygathrix cinerea, Pygathrix nemaeus, Pygathrix nigripes, Rangifer tarandus, Rhinolophus sinicus, Rhinopithecus bieti, Rhinopithecus strykeri, Rousettus aegyptiacus, Saguinus bicolor, Saguinus geoffroyi, Saguinus imperator, Saguinus inustus, Saguinus labiatus, Saguinus midas, Saguinus mystax, Saguinus oedipus, Saiga tatarica, Saimiri cassiquiarensis, Saimiri macrodon, Saimiri oerstedii, Saimiri sciureus, Saimiri ustus, Sapajus apella, Sapajus macrocephalus, Scalopus aquaticus, Semnopithecus entellus, Semnopithecus hypoleucos, Semnopithecus johnii, Semnopithecus priam, Semnopithecus schistaceus, Semnopithecus vetulus, Sigmodon hispidus, Solenodon paradoxus, Spermophilus dauricus, Spilogale gracilis, Suricata suricatta, Symphalangus syndactylus, Tadarida brasiliensis, Tamandua tetradactyla, Tapirus indicus, Tapirus terrestris, Tarsius lariang, Tarsius wallacei, Thryonomys swinderianus, Tolypeutes matacus, Tonatia saurophila, Trachypithecus auratus, Trachypithecus crepusculus, Trachypithecus cristatus, Trachypithecus francoisi, Trachypithecus geei, Trachypithecus germaini, Trachypithecus hatinhensis, Trachypithecus laotum, Trachypithecus leucocephalus, Trachypithecus melamera, Trachypithecus obscurus, Trachypithecus phayrei, Trachypithecus pileatus, Tragulus javanicus, Trichechus manatus, Tupaia tana, Tursiops truncatus, Uropsilus gracilis, Ursus maritimus, Varecia rubra, Varecia variegata, Vicugna pacos, Vulpes lagopus, Xerus inauris, Zalophus californianus, Zapus hudsonius, Ziphius cavirostris
+</td></tr>
+</table>
+<b>Table 2.</b> <em>Gene tracks used for codon translation.</em>
 </blockquote></p>
 
 <h2>References</h2>
