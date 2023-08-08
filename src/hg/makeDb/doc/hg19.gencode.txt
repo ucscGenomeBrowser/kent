@@ -1156,3 +1156,42 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
     jkmake alpha DBS=hg19
 
 ##############################################################################
+2023-08-03: import of UCSC GENCODE group processing of GENCODE V44lift38 release (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV44lift37/hgcImport
+    pushd /hive/data/genomes/hg19/bed/gencodeV44lift37/hgcImport
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbs hg19 44lift37 110 'July 2023'
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release.
+
+    jkmake DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV44lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV44lift37/hgcImport
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+      These two complaint are cause by the new PAR id scheme causing a chrY V19 copy to be brought in.
+      This will be fixed in the next release.
+      Error: 1 duplicates in hg19.wgEncodeGencodeTranscriptSourceV44lift37.transcriptId including 'ENST00000302805.2'
+      Error: 1 duplicates in hg19.wgEncodeGencodeGeneSourceV44lift37.geneId including 'ENSG00000168939.6'
+
+      this is fixed by adding dupeOk only for this release.
+
+
+    # commit all
+    jkmake alpha DBS=hg19
+
+##############################################################################
