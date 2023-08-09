@@ -4,6 +4,7 @@ longLabel Cactus alignment on 447 mammal species
 configurable on
 type bigMaf
 viewUi on
+treeImage phylo/hg38_477way.png
 speciesCodonDefault hg38
 bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus447way/hg38.cactus447way.bb
 summary https://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus447way/cactus447waySummary.bb

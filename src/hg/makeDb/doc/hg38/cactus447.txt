@@ -302,4 +302,448 @@ sys     371m7.394s
 bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 \
  -as=$HOME/kent/src/hg/lib/bigMaf.as -tab iRows/hg38.sorted447way.bigMaf \
      /hive/data/genomes/hg38/chrom.sizes hg38.cactus447way.bb
-XXX running - Tue Jun 27 14:16:31 PDT 2023
+
+# pid=61008: VmPeak:     5682928 kB
+# real    4157m14.091s
+
+# that time is 69 hours
+
+##############################################################################
+# liftOver files to convert sequence names (DONE - 2023-08-04 - Hiram)
+#
+#   The sequence names in the assemblies in the alignment do not match
+#   the sequence names in the corresponding genome browsers assemblies
+
+    mkdir /hive/data/genomes/hg38/bed/cactus447/liftOver
+    cd /hive/data/genomes/hg38/bed/cactus447/liftOver
+    mkdir lifts
+    ln -s ../idKeys/447way.equivalent.txt .
+
+#  using this script to construct liftOver files
+#!/bin/bash
+
+TOP="/hive/data/genomes/hg38/bed/cactus447/liftOver"
+
+cd "${TOP}"
+mkdir -p lifts
+
+cat 447way.equivalent.txt | while read L
+do
+  seqName=`printf "%s" "${L}" | cut -f1`
+  asmId=`printf "%s" "${L}" | cut -f2`
+  seqIdKeys="/hive/data/genomes/hg38/bed/cactus447/idKeys/${seqName}/${seqName}.idKeys.txt"
+  case ${asmId} in
+      GCA_* | GCF_* )
+        gcX="${asmId:0:3}"
+        d0="${asmId:4:3}"
+        d1="${asmId:7:3}"
+        d2="${asmId:10:3}"
+    ab="/hive/data/genomes/asmHubs/allBuild/${gcX}/${d0}/${d1}/${d2}/${asmId}"
+        buildDir=`realpath "${ab}"`
+        asmKeys="${buildDir}/trackData/idKeys/${asmId}.idKeys.txt"
+        asmSizes="${buildDir}/${asmId}.chrom.sizes"
+#        asmSizes="${buildDir}/idKeys/chrom.sizes"
+ls -og "${asmKeys}"
+        ;;
+     [a-zA-Z0-9]*)
+        asmKeys="/hive/data/genomes/${asmId}/bed/idKeys/${asmId}.idKeys.txt"
+        asmSizes="/hive/data/genomes/${asmId}/chrom.sizes"
+        ;;
+     *)  printf "ERROR not recognized $asmId\n" 1>&2
+         exit 255
+       ;;
+  esac
+  seqKeys="/hive/data/genomes/hg38/bed/cactus447/idKeys/${seqName}/${seqName}.idKeys.txt"
+  seq2Bit="/hive/data/genomes/hg38/bed/cactus447/2bitFiles/${seqName}.2bit"
+  if [ ! -s  "${seqKeys}" ]; then
+    printf "can not find seq idKeys\n%s\n" "${seqKeys}" 1>&2
+    exit 255
+  fi
+  if [ ! -s  "${asmKeys}" ]; then
+    printf "can not find asm idKeys\n%s\n" "${asmKeys}" 1>&2
+    exit 255
+  fi
+  printf "%s\t%s\n" "${asmId}" "${seqName}" 1>&2
+printf "lifts/${seqName}.${asmId}.lift\n" 1>&2
+printf "$seqKeys\n" 1>&2
+printf "$asmKeys\n" 1>&2
+printf "$asmSizes\n" 1>&2
+  if [ ! -s "lifts/${seqName}.${asmId}.lift" ]; then
+  join -t$'\t' "${seqKeys}" "${asmKeys}" | sort -k3,3 \
+    | join -t$'\t' -2 3 <(sort -k1,1 ${asmSizes}) - \
+      | awk -F$'\t' '{printf "0\t%s\t%d\t%s\t%d\n", $1, $2, $4, $2}' \
+         > lifts/${seqName}.${asmId}.lift
+  fi
+done
+
+    # a couple of those ended up with duplicate names in the liftOver
+    # due to duplicate contigs in the assemblies.  They were edited
+    # manually, one was really bad and needed this perl script to clean it:
+
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %idDone;     # key is sequence name, value is string of names used
+
+open (my $fh, "<", "lifts/Otolemur_garnettii.otoGar3.lift") or die "can not read lifts/Otolemur_garnettii.otoGar3.lift";
+while (my $line = <$fh>) {
+  chomp $line;
+  my @a = split('\t', $line);
+  if (!defined($idDone{$a[1]})) {
+    $idDone{$a[1]} = $a[3];
+    printf "%s\n", $line;
+  } else {
+    $idDone{$a[1]} .= "," . $a[3];
+  }
+}
+close ($fh);
+
+foreach my $seq (sort keys %idDone) {
+  printf STDERR "%s\t%s\n", $seq, $idDone{$seq};
+}
+
+##############################################################################
+# MAF FRAMES (working - 2023-08-01 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/cactus447/frames
+    cd /hive/data/genomes/hg38/bed/cactus447/frames
+
+    mkdir genes
+
+#   survey all the genomes to find out what kinds of gene tracks they have
+
+printf '#/bin/bash
+
+egrep -v "GCA_|GCF_" ../idKeys/447way.equivalent.txt | cut -f2 | while read db
+do
+  printf "# ${db}:"
+  for table in `hgsql -N -e "show tables;" $db | egrep "Gene|ncbiRefSeq" | egrep -v "Curated|Cds|Link|Other|PepTable|Predicted|Psl|wgEncode|gencode|uuGene|ToGeneName|ccds|encode|Ext|Old|Pep|Select|Bak|Verify|orfeome|Multi|transMap|Pfam|knownGeneMrna|sgpGene"`
+  do
+     count=`hgsql -N -e "select count(*) from $table;" $db`
+     printf " %%s: %%s" "${table}" "${count}"
+  done
+  printf "\\n"
+done
+' > showGenes.sh
+
+
+    chmod +x ./showGenes.sh
+    ./showGenes.sh > gene.survey.txt 2>&1 &
+    # most of them have ncbiRefSeq
+    grep ncbiRefSeq gene.survey.txt  | cut -d' ' -f2 | sed -e 's/://;' \
+       | sort | xargs echo | fold -s -w 72
+# bosMut1 canFam4 chiLan1 colAng1 dipOrd2 eleEdw1 felCat8 fukDam1 micOch1
+# mm10 myoBra1 myoDav1 myoLuc2 odoRosDiv1 orcOrc1 otoGar3 proCoq1 pteAle1
+# rheMac10 sorAra2 speTri2 susScr3 tarSyr2 tupChi1
+
+    # a couple do not:
+    grep -v ncbiRefSeq gene.survey.txt  | cut -d' ' -f2 | sed -e 's/://;' \
+       | sort | xargs echo | fold -s -w 72
+# cavApe1 eidHel1 ptePar1
+    # but they do have ensGene or augustusGene:
+    egrep "cavApe1|eidHel1|ptePar1" gene.survey.txt
+# cavApe1: augustusGene: 10114 ensGene: 22510 xenoRefGene: 322224
+# eidHel1: augustusGene: 49674
+# ptePar1: augustusGene: 68613
+
+    #   1. ncbiRefSeq  - add hg38 here manually since it didn't come in above
+#    for db in hg38
+# do
+#    asmName="${db}"
+
+    for db in bosMut1 canFam4 chiLan1 colAng1 dipOrd2 eleEdw1 felCat8 fukDam1 micOch1 mm10 myoBra1 myoDav1 myoLuc2 odoRosDiv1 orcOrc1 otoGar3 proCoq1 pteAle1 rheMac10 sorAra2 speTri2 susScr3 tarSyr2 tupChi1
+do
+    asmName=`grep -w "${db}" ../idKeys/447way.equivalent.txt | cut -f1`
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq" ${db} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${asmName}.gp.gz
+    echo -n "# ${asmName}: "
+    genePredCheck -db=${db} genes/${asmName}.gp.gz
+done
+# hg38: checked: 22882 failed: 0
+# Bos_mutus: checked: 20457 failed: 0
+# CanFam4: checked: 21143 failed: 0
+# Chinchilla_lanigera: checked: 20482 failed: 0
+# Colobus_angolensis: checked: 20042 failed: 0
+# Dipodomys_ordii: checked: 19738 failed: 0
+# Elephantulus_edwardii: checked: 20384 failed: 0
+# Felis_catus: checked: 20051 failed: 0
+# Fukomys_damarensis: checked: 19811 failed: 0
+# Microtus_ochrogaster: checked: 20048 failed: 0
+# Mus_musculus: checked: 23375 failed: 0
+# Myotis_brandtii: checked: 19949 failed: 0
+# Myotis_davidii: checked: 18815 failed: 0
+# Myotis_lucifugus: checked: 19895 failed: 0
+# Odobenus_rosmarus: checked: 19346 failed: 0
+# Orcinus_orca: checked: 19136 failed: 0
+# Otolemur_garnettii: checked: 19536 failed: 0
+# Propithecus_coquerelli: checked: 19356 failed: 0
+# Pteropus_alecto: checked: 18326 failed: 0
+# Macaca_mulatta: checked: 21021 failed: 0
+# Sorex_araneus: checked: 19160 failed: 0
+# Ictidomys_tridecemlineatus: checked: 19892 failed: 0
+# Sus_scrofa: checked: 24180 failed: 0
+# Carlito_syrichta: checked: 19968 failed: 0
+# Tupaia_chinensis: checked: 21047 failed: 0
+
+    #   2. ensGene
+    for db in cavApe1
+do
+asmName=`grep -w "${db}" ../idKeys/447way.equivalent.txt | cut -f1`
+hgsql -N -e "select
+name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+from ensGene" ${db} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${db}.tmp.gz
+    mv /dev/shm/${db}.tmp.gz genes/${asmName}.gp.gz
+    echo -n "# ${asmName}: "
+    genePredCheck -db=${db} genes/${asmName}.gp.gz
+done
+# Cavia_aperea: checked: 14182 failed: 0
+
+    #   3. augustusGene
+    for db in eidHel1 ptePar1
+do
+asmName=`grep -w "${db}" ../idKeys/447way.equivalent.txt | cut -f1`
+hgsql -N -e "select
+name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+from augustusGene" ${db} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${db}.tmp.gz
+    mv /dev/shm/${db}.tmp.gz genes/${asmName}.gp.gz
+    echo -n "# ${asmName}: "
+    genePredCheck -db=${db} genes/${asmName}.gp.gz
+done
+# Eidolon_helvum: checked: 31495 failed: 0
+# Pteronotus_parnellii: checked: 47678 failed: 0
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    printf "# $T: "
+    zcat $T | cut -f1 | sort -u | wc -l
+done
+# genes/Bos_mutus.gp.gz: 20457
+# genes/CanFam4.gp.gz: 21143
+# genes/Canis_lupus_familiaris.gp.gz: 19812
+# genes/Carlito_syrichta.gp.gz: 19968
+# genes/Cavia_aperea.gp.gz: 14182
+# genes/Cercocebus_atys.gp.gz: 20534
+# genes/Chinchilla_lanigera.gp.gz: 20481
+# genes/Colobus_angolensis.gp.gz: 20042
+# genes/Condylura_cristata.gp.gz: 17842
+# genes/Dipodomys_ordii.gp.gz: 19738
+...
+# genes/Pteropus_vampyrus.gp.gz: 19485
+# genes/Rattus_norvegicus.gp.gz: 22854
+# genes/Rhinopithecus_roxellana.gp.gz: 21027
+# genes/Saimiri_boliviensis.gp.gz: 20933
+# genes/Sorex_araneus.gp.gz: 19160
+# genes/Sus_scrofa.gp.gz: 24043
+# genes/Theropithecus_gelada.gp.gz: 20592
+# genes/Tupaia_chinensis.gp.gz: 21047
+
+# And, can pick up ncbiRefSeq for GCF equivalent assemblies for those
+# outside the UCSC database set of genomes
+
+grep GCF_ ../idKeys/447way.equivalent.txt | while read dbGCF
+do
+  asmName=`printf "%s" "${dbGCF}" | cut -f1`
+  asmId=`printf "%s" "${dbGCF}" | cut -f2`
+  gcX="${asmId:0:3}"
+  d0="${asmId:4:3}"
+  d1="${asmId:7:3}"
+  d2="${asmId:10:3}"
+  buildDir="/hive/data/genomes/asmHubs/refseqBuild/$gcX/$d0/$d1/$d2/${asmId}"
+  if [ ! -d "${buildDir}" ]; then
+     printf "not found: %s\n" "${buildDir}"
+  else
+
+  ncbiRefSeqGp="${buildDir}/trackData/ncbiRefSeq/process/${asmId}.ncbiRefSeq.gp"
+    sizes="${buildDir}/${asmId}.chrom.sizes"
+    if [ -s "${ncbiRefSeqGp}" ]; then
+      genePredSingleCover "${ncbiRefSeqGp}" stdout | gzip -c > genes/${asmName}.gp.gz
+      printf "# %s: " "${asmName}"
+      genePredCheck -chromSizes="${sizes}" genes/${asmName}.gp.gz
+    else
+      printf "MISSING: ${ncbiRefSeqGp}\n" 1>&2
+    fi
+  fi
+
+done
+
+# verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    printf "# $T: "
+    zcat $T | cut -f1 | sort -u | wc -l
+done
+# genes/Bos_mutus.gp.gz: 20457
+# genes/CanFam4.gp.gz: 21143
+# genes/Canis_lupus_familiaris.gp.gz: 19812
+# genes/Carlito_syrichta.gp.gz: 19968
+# genes/Cavia_aperea.gp.gz: 14182
+# genes/Cercocebus_atys.gp.gz: 20534
+# genes/Chinchilla_lanigera.gp.gz: 20481
+# genes/Colobus_angolensis.gp.gz: 20042
+# genes/Condylura_cristata.gp.gz: 17842
+# genes/Dipodomys_ordii.gp.gz: 19738
+...
+# genes/Pteropus_vampyrus.gp.gz: 19485
+# genes/Rattus_norvegicus.gp.gz: 22854
+# genes/Rhinopithecus_roxellana.gp.gz: 21027
+# genes/Saimiri_boliviensis.gp.gz: 20933
+# genes/Sorex_araneus.gp.gz: 19160
+# genes/Sus_scrofa.gp.gz: 24043
+# genes/Theropithecus_gelada.gp.gz: 20592
+# genes/Tupaia_chinensis.gp.gz: 21047
+
+    # these gene predictions need lifting to change the sequence names
+    mv genes genes.seqToAsm
+    mkdir genes
+    cd genes.seqToAsm
+
+for F in *.gp.gz
+do
+  seqName=`echo $F | sed -e 's/.gp.gz//;'`
+  liftFile="`ls -d /hive/data/genomes/hg38/bed/cactus447/liftOver/lifts/${seqName}.*.lift 2> /dev/null`"
+  if [ -s "${liftFile}" ]; then
+    printf "%s\n" "${seqName}" 1>&2
+    liftUp -type=.genepred stdout "${liftFile}" warn "${F}" | gzip -c \
+        > "../genes/${seqName}.gp.gz"
+  else
+    printf "can not find lift file for $seqName\n" 1>&2
+  fi
+done
+
+    # kluster job to annotate each maf file
+    screen -S hg38      # manage long running procedure with screen
+    ssh ku
+    cd /hive/data/genomes/hg38/bed/cactus447way/frames
+
+    printf '#!/bin/bash
+set -beEu -o pipefail
+
+export C="${1}"
+export G="${2}"
+
+cat ../iRows/result/${C}.maf | genePredToMafFrames hg38 stdin stdout \
+        ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
+' > runOne
+
+    chmod +x runOne
+
+    ls ../iRows/result | grep maf | sed -e "s/.maf//" > chr.list
+    ls genes | sed -e "s/.gp.gz//" > gene.list
+
+    printf '#LOOP
+runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz}
+#ENDLOOP
+' > template
+
+    mkdir parts
+    # run on the ku kluster
+    gensub2 chr.list gene.list template jobList
+    para -ram=128g create jobList
+    para try ... check ... push
+# Completed: 4444 of 4444 jobs
+# CPU time in finished jobs:    3955725s   65928.75m  1098.81h   45.78d  0.125 y
+# IO & Wait Time:               1735948s   28932.46m   482.21h   20.09d  0.055 y
+# Average job time:                1281s      21.35m     0.36h    0.01d
+# Longest finished job:           34637s     577.28m     9.62h    0.40d
+# Submission to last job:         55372s     922.87m    15.38h    0.64d
+
+    # collect all results into one file:
+    cd /hive/data/genomes/hg38/bed/cactus447way/frames
+    find ./parts -type f | while read F;
+do
+ zcat ${F} | awk '11 == NF'
+done | sort -k1,1 -k2,2n > cactus447wayFrames.bed
+
+    bedToBigBed -type=bed3+7 -as=$HOME/kent/src/hg/lib/mafFrames.as \
+       -tab cactus447wayFrames.bed ../../../chrom.sizes cactus447wayFrames.bb
+
+    bigBedInfo cactus447wayFrames.bb | sed -e 's/^/# /;'
+
+# version: 4
+# fieldCount: 11
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 16,063,019
+# primaryDataSize: 136,782,205
+# primaryIndexSize: 1,013,720
+# zoomLevels: 10
+# chromCount: 82
+# basesCovered: 65,486,909
+# meanDepth (of bases covered): 22.709888
+# minDepth: 1.000000
+# maxDepth: 44.000000
+# std of depth: 18.692097
+
+    # -rw-rw-r-- 1 1192312943 Aug  5 15:28 cactus447wayFrames.bed
+    # -rw-rw-r-- 1  166572857 Aug  5 15:29 cactus447wayFrames.bb
+
+    gzip cactus447wayFrames.bed
+
+    # verify there are frames on everything expected.  Since the
+    #  frames on the HL* asemblies did not work due to sequence name
+    #  differences, this won't be everything.
+    # (ls genes | wc shows 44 'expected')
+    zcat cactus447wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
+        | sed -e 's/^/# /;' > species.check.list
+    wc -l species.check.list
+    # 44
+
+#  391443 Bos_mutus
+#  414721 CanFam4
+#  417196 Canis_lupus_familiaris
+#  328151 Carlito_syrichta
+#  255097 Cavia_aperea
+#  373053 Cercocebus_atys
+#  398356 Chinchilla_lanigera
+#  350442 Colobus_angolensis
+#  346524 Condylura_cristata
+#  363333 Dipodomys_ordii
+...
+#  379732 Pteropus_alecto
+#  387484 Pteropus_vampyrus
+#  389056 Rattus_norvegicus
+#  360929 Rhinopithecus_roxellana
+#  366019 Saimiri_boliviensis
+#  336296 Sorex_araneus
+#  402603 Sus_scrofa
+#  357418 Theropithecus_gelada
+#  372558 Tupaia_chinensis
+#  195495 hg38
+
+    #   load the resulting file, merely for measurement purposes here
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/cactus447way/frames
+    time hgLoadMafFrames hg38 cactus447wayFrames cactus447wayFrames.bed.gz
+    #   real    3m14.979s
+
+    hgsql -e 'select count(*) from cactus447wayFrames;' hg38
+    # +----------+
+    # | count(*) |
+    # +----------+
+    # | 16063019 |
+    # +----------+
+
+    time featureBits -countGaps hg38 cactus447wayFrames
+    # 65486909 bases of 3299210039 (1.985%) in intersection
+    # real    1m50.539s
+
+    #   enable the trackDb entries:
+# frames https://hgdownload.soe.ucsc.edu/goldenPath/hg38/cactus447way/cactus447wayFrames.bb
+# irows on
+    #   zoom to base level in an exon to see codon displays
+    #	appears to work OK
+
+    # do not need this loaded table:
+    hgsql hg38 -e 'drop table cactus447wayFrames;'
+
+#########################################################################

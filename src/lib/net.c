@@ -1431,7 +1431,7 @@ int netOpenHttpExt(char *url, char *method, char *optionalHeader)
 /* Return a file handle that will read the url.  optionalHeader
  * may by NULL or may contain cookies and other info.  */
 {
-return netHttpConnect(url, method, "HTTP/1.1", "genome.ucsc.edu/net.c", optionalHeader);
+return netHttpConnect(url, method, "HTTP/1.0", "genome.ucsc.edu/net.c", optionalHeader);
 }
 
 static int netGetOpenHttp(char *url)
