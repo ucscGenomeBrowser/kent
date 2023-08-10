@@ -1587,6 +1587,7 @@ boolean trackSettingIsFile(char *setting)
 {
 return endsWith(setting, "Url") ||
     sameString(setting, "bigDataIndex") ||
+    sameString(setting, "instaPort") ||
     sameString(setting, "frames") ||
     sameString(setting, "summary") ||
     sameString(setting, "searchTrix");

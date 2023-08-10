@@ -14,6 +14,7 @@
 #include "subText.h"
 #include "web.h"
 #include "chromAlias.h"
+#include "instaPort.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -372,7 +373,13 @@ if (start == end)
     ivStart = max(0, start-1);
     ivEnd++;
     }
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
+char *instaFile = cloneString(trackDbSetting(tdb, "instaPortUrl"));
+struct hash *chainHash = NULL;
+struct bigBedInterval *bbList = NULL;
+if (instaFile)
+    bbList = instaIntervals(instaFile, bbi, chrom, ivStart, ivEnd, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 
 /* Get bedSize if it's not already defined. */
 if (bedSize == 0)
@@ -391,8 +398,6 @@ boolean firstTime = TRUE;
 struct bigBedInterval *bb;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    if (!(bb->start == start && bb->end == end))
-	continue;
     if (bedSize > 3)
 	{
 	char *name = cloneFirstWordByDelimiterNoSkip(bb->rest, '\t');
@@ -437,8 +442,19 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         errAbort("Disagreement between trackDb field count (%d) and %s fieldCount (%d)",
 		bedSize, fileName, bbFieldCount);
 	}
-    struct bed *bed = bedLoadN(fields, bedSize);
-    if (bedSize >= 6 && scoreFilter && bed->score < minScore)
+    struct bed *bed = NULL;
+    if (instaFile)
+        {
+        if ((bed = instaBed(bbi, chainHash, bb)) == NULL)
+            errAbort("can't port %s",fields[3]);
+        }
+    else
+        {
+        bed = bedLoadN(fields, bedSize);
+        }
+    if ((bed == NULL) || (bedSize >= 6 && scoreFilter && bed->score < minScore))
+        continue;
+    if (!(bed->chromStart == start && bed->chromEnd == end))
 	continue;
 
     // if there are extra fields, load them up because we may want to use them in URL:

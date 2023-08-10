@@ -41,10 +41,23 @@ else
 // The maximum number of words per line that can be lifted:
 #define LIFTOVER_MAX_WORDS 2048
 
+void liftOverAddChainHash(struct hash *chainHash, struct chain *chain)
+/* Add this chain to the hash of chains used by remapBlockedBed */
+{       
+struct chromMap *map;
+        
+if ((map = hashFindVal(chainHash, chain->tName)) == NULL)
+    {   
+    AllocVar(map);
+    map->bk = binKeeperNew(0, chain->tSize);
+    hashAddSaveName(chainHash, chain->tName, map, &map->name);
+    }
+binKeeperAdd(map->bk, chain->tStart, chain->tEnd, chain);
+}
+
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */
 {
-
 struct lineFile *lf;
 if (udcIsLocal(fileName))
     lf = lineFileOpen(fileName, TRUE);
@@ -52,20 +65,9 @@ else
     lf = netLineFileOpen(fileName);
 
 struct chain *chain;
-struct chromMap *map;
-int chainCount = 0;
 
 while ((chain = chainRead(lf)) != NULL)
-    {
-    if ((map = hashFindVal(chainHash, chain->tName)) == NULL)
-	{
-	AllocVar(map);
-	map->bk = binKeeperNew(0, chain->tSize);
-	hashAddSaveName(chainHash, chain->tName, map, &map->name);
-	}
-    binKeeperAdd(map->bk, chain->tStart, chain->tEnd, chain);
-    ++chainCount;
-    }
+    liftOverAddChainHash(chainHash, chain);
 }
 
 static struct binElement *findRange(struct hash *chainHash, 
@@ -711,13 +713,24 @@ static struct liftRange *bedToRangeList(struct bed *bed)
 struct liftRange *range, *rangeList = NULL;
 int bedStart = bed->chromStart;
 int i, count = bed->blockCount, start;
-for (i=0; i<count; ++i)
+if (count == 0)
     {
     AllocVar(range);
-    start = bedStart + bed->chromStarts[i];
+    start =  bed->chromStart;
     range->start = start;
-    range->end = start + bed->blockSizes[i];
+    range->end = bed->chromEnd;
     slAddHead(&rangeList, range);
+    }
+else
+    {
+    for (i=0; i<count; ++i)
+        {
+        AllocVar(range);
+        start = bedStart + bed->chromStarts[i];
+        range->start = start;
+        range->end = start + bed->blockSizes[i];
+        slAddHead(&rangeList, range);
+        }
     }
 slReverse(&rangeList);
 return rangeList;
@@ -995,8 +1008,13 @@ static int sumBedBlocks(struct bed *bed)
 /* Calculate sum of all block sizes in bed. */
 {
 int i, total = 0;
-for (i=0; i<bed->blockCount; ++i)
-    total += bed->blockSizes[i];
+if (bed->blockCount == 0)
+    total = bed->chromEnd - bed->chromStart;
+else
+    {
+    for (i=0; i<bed->blockCount; ++i)
+        total += bed->blockSizes[i];
+    }
 return total;
 }
 
@@ -1040,7 +1058,7 @@ if (*retError == NULL)
 /* Convert rangeList back to bed blocks.  Also calculate start and end. */
 if (*retError == NULL)
     {
-    int i, start, end = 0;
+    int i, start, end = rangeList->end;
     if (chain->qStrand == '-')
 	{
 	rangeList = reverseRangeList(rangeList, chain->qSize);
@@ -1048,13 +1066,17 @@ if (*retError == NULL)
 	bed->strand[0] = otherStrand(bed->strand[0]);
 	}
     bed->chromStart = start = rangeList->start;
-    bed->blockCount = slCount(rangeList);
-    for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
-	{
-	end = range->end;
-	bed->blockSizes[i] = end - range->start;
-	bed->chromStarts[i] = range->start - start;
-	}
+    //if (slCount(rangeList) > 1)
+    if (bed->blockSizes != NULL)
+        {
+        bed->blockCount = slCount(rangeList);
+        for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
+            {
+            end = range->end;
+            bed->blockSizes[i] = end - range->start;
+            bed->chromStarts[i] = range->start - start;
+            }
+        }
     if (!sameString(chain->qName, chain->tName))
 	{
 	freeMem(bed->chrom);

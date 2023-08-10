@@ -2109,6 +2109,31 @@ if (isCoding != NULL && codingBasesSoFar > 0)
 return -1;  // introns not okay
 }
 
+struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, struct bigBedInterval *bb)
+/* build a genePred from a bigGenePred and a bed file */
+{
+char *extra = cloneString(bb->rest);
+int numCols = 12 + 8 - 3;
+char *row[numCols];
+int wordCount = chopByChar(extra, '\t', row, numCols);
+assert(wordCount == numCols);
+
+struct genePredExt *gp = bedToGenePredExt(bed);
+
+gp->name2 = cloneString(row[ 9]);
+
+int numBlocks;
+sqlSignedDynamicArray(row[ 12],  &gp->exonFrames, &numBlocks);
+gp->optFields |= genePredExonFramesFld;
+//assert (numBlocks == gp->exonCount);
+
+gp->type = cloneString(row[13]);
+gp->geneName = cloneString(row[14]);
+gp->geneName2 = cloneString(row[15]);
+
+return gp;
+}
+
 struct genePredExt  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb)
 /* build a genePred from a bigGenePred */
 {
