@@ -25,6 +25,7 @@ UTILS_APPLIST = \
 	bedMergeAdjacent \
 	bedPartition \
 	bigChainBreaks \
+	bigChainToChain \
 	bigGenePredToGenePred \
 	bigMafToMaf \
 	bigPslToPsl \
