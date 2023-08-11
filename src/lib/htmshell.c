@@ -1074,7 +1074,7 @@ return dyStringCannibalize(&policy);
 char *getCspMetaString(char *policy)
 /* get the policy string as an html header meta tag */
 {
-char meta[1024];
+char meta[4096];
 safef(meta, sizeof meta, "<meta http-equiv='Content-Security-Policy' content=\"%s\">\n", policy); 
 // use double quotes around policy because it contains single-quoted values.
 return cloneString(meta);
