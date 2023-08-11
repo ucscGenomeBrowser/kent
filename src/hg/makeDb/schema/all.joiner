@@ -5498,7 +5498,7 @@ identifier wgEncodeGencodePseudoGeneAttrsV44lift37
 # gencode association tables (joined through wgEncodeGencodeAttrsV44lift37)
 identifier wgEncodeGencodeGeneSourceV44lift37
 "Link together Gencode Gene Source table with Attributes table"
-o    hg19.wgEncodeGencodeGeneSourceV44lift37.geneId dupeOk
+    hg19.wgEncodeGencodeGeneSourceV44lift37.geneId dupeOk
     hg19.wgEncodeGencodeAttrsV44lift37.geneId
 
 identifier wgEncodeGencodeGeneSymbolV44lift37
