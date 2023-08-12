@@ -1477,7 +1477,7 @@ export asmId=$defaultName
 export twoBit=$buildDir/\$asmId.2bit
 
 if [ ../../\$asmId.2bit -nt \$asmId.keySignature.txt ]; then
-  doIdKeys.pl \$asmId -buildDir=`pwd` -twoBit=\$twoBit
+  doIdKeys.pl -bigClusterHub=$bigClusterHub \$asmId -buildDir=`pwd` -twoBit=\$twoBit
   touch -r \$twoBit \$asmId.keySignature.txt
 else
   printf "# idKeys step previously completed\\n" 1>&2

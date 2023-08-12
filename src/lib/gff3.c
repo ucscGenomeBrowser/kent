@@ -904,7 +904,7 @@ if ((ver != NULL) && (*ver != '\0'))
     *ver++ = '\0';
     ver = trimSpaces(ver);
     }
-if (!(sameString(line, "##gff-version") && sameString(ver, "3")))
+if (!(sameString(line, "##gff-version") && ( sameString(ver, "3") || (startsWith("3.", ver)))))
     {
     gff3FileErr(g3f, FALSE, "invalid GFF3 header");
     errAbort("may not be a GFF3 file");
