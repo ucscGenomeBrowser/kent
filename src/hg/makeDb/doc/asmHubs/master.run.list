@@ -723,6 +723,7 @@
 ./runBuild GCA_018852595.1_HG02145.alt.pat.f1_v2 primates Homo_sapiens
 ./runBuild GCA_018852605.1_HG002.alt.pat.f1_v2 primates Homo_sapiens
 ./runBuild GCA_018852615.1_HG002.pri.mat.f1_v2 primates Homo_sapiens
+./runBuild GCA_018873775.2_hg01243.v3.0 primates Homo_sapiens
 ./runBuild GCA_019023105.1_LSU_DiBr_2.0 birds Diglossa_brunneiventris
 ./runBuild GCA_019049465.1_Diul.assembly.v1.1 invertebrate Dryas_iulia_moderata
 ./runBuild GCA_019049475.1_ASM1904947v1 invertebrate Eueides_isabella
