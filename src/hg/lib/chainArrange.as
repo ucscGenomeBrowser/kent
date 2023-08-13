@@ -1,5 +1,5 @@
-table chainBreaks
-"A list of chain breaks"
+table chainArrange
+"A list of assembly rearrangements"
     (
     string chrom;      "Chromosome (or contig, scaffold, etc.)"
     uint   chromStart; "Start position in chromosome"
