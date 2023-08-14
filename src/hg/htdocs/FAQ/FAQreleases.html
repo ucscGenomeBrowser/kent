@@ -12,6 +12,7 @@
 <ul>
 <li><a href="#release1">List of UCSC genome releases</a></li>
 <li><a href="#release2">Initial assembly release dates</a></li>
+<li><a href="#patches">Patch sequences for human and mouse</a></li>
 <li><a href="#release3">UCSC assemblies</a></li>
 <li><a href="#release4">Comparison of UCSC and NCBI human assemblies</a></li>
 <li><a href="#release13">Looking for a genome assembly not shown in the tree?</a></li>
@@ -318,6 +319,44 @@ A new assembly release initially consists of the genome sequence and a small set
 annotation tracks. Additional annotation tracks are added as they are obtained or generated. Bulk 
 downloads of the data are typically available in the first week after the assembly is released in 
 the browser.</p> 
+
+<a name="patches"></a>
+<h2>Patch sequences for genome assemblies</h2>
+<h6>Why am I seeing chr_alt or chr_fix chromosomes on the Genome Browser?</h6>
+<p>
+Since the intial <a href="https://www.ncbi.nlm.nih.gov/grc" target="_blank">Genome Reference
+Consortium</a> (GRC) release of the human and mouse genome assemblies, there have been updates to
+these assemblies known as &quot;patches&quot;. Patches are accessioned scaffold sequences that add
+information to the assembly without disrupting the chromosome coordinates. Patches are given
+chromosome context by aligning the sequence to the current assembly. Together the scaffod sequence
+and the alignment define the patch to the genome assembly. The GRC patch releases do not change any
+previously existing sequences; they simply add new sequences for fix patches or alternate haplotypes
+that correspond to specific regions of the main chromosome sequences. For most users, the patches
+are unlikely to make a difference and may complicate the analysis as they can introduce duplication.
+</p>
+<p>
+There are two kinds of GRC patch sequences, <a href="/FAQ/FAQdownloads#downloadAlt"
+target="_blank">chr_alt</a> and <a href="/FAQ/FAQdownloads#downloadFix" target="_blank">chr_fix</a>
+sequences:
+</p>
+<ul>
+  <li><b>Novel patches (alternative haplotypes)</b> -
+    Chromosomal regions of the genome that exhibit sufficient variability to prevent adequate
+    representation by a single sequence. Also referred to as alternate loci. The Genome Browser
+    labels these haplotype sequences by appending &quot;<em>_alt</em>&quot; to their names, i.e.,
+    <em>chr5_KI270794v1_alt</em>.</li>
+  <li><b>Fix patches</b> -
+      Error corrections (addressed by approaches such as base changes, component
+      replacements/updates, switch-point updates or tiling-path changes) or assembly improvements,
+      such as the extension of sequence into gaps. The Genome Browser labels these fix sequences by
+      appending &quot;<em>_fix</em>&quot; to their names, i.e., <em>chr1_KN538361v1_fix</em>.</li>
+</ul>
+<p>
+The <a href="https://genome-blog.gi.ucsc.edu/blog/2019/02/22/patches/" target="_blank">Patching up
+the Genome</a> blog post contains more information on how patch sequences are incorporated into the
+UCSC Genome Browser. For more information about how patch sequences can affects BLAT and isPCR
+results, please refer to the following <a href="/FAQ/FAQblat.html#blat1c" target="_blank">BLAT
+FAQ</a>.</p>
 
 <a name="release3"></a>
 <h2>Data sources - UCSC assemblies</h2>

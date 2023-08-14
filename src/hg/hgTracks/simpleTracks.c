@@ -5148,22 +5148,33 @@ int *starts = bed->chromStarts, start;
 int *sizes = bed->blockSizes;
 int blockCount = bed->blockCount, i;
 
-assert(starts != NULL && sizes != NULL && blockCount > 0);
+//assert(starts != NULL && sizes != NULL && blockCount > 0);
 
 AllocVar(lf);
 lf->grayIx = grayIx;
 lf->name = cloneString(bed->name);
 lf->orientation = orientFromChar(bed->strand[0]);
-for (i=0; i<blockCount; ++i)
+if (sizes == NULL)
     {
     AllocVar(sf);
-    start = starts[i] + bed->chromStart;
-    sf->start = start;
-    sf->end = start + sizes[i];
+    sf->start = bed->chromStart;
+    sf->end = bed->chromEnd;
     sf->grayIx = grayIx;
     slAddHead(&sfList, sf);
     }
-slReverse(&sfList);
+else
+    {
+    for (i=0; i<blockCount; ++i)
+        {
+        AllocVar(sf);
+        start = starts[i] + bed->chromStart;
+        sf->start = start;
+        sf->end = start + sizes[i];
+        sf->grayIx = grayIx;
+        slAddHead(&sfList, sf);
+        }
+    slReverse(&sfList);
+    }
 lf->components = sfList;
 linkedFeaturesBoundsAndGrays(lf);
 lf->tallStart = bed->thickStart;

@@ -12,10 +12,10 @@
 #include "hdb.h"
 
 
-struct genePred *bedToGenePred(struct bed *bed)
+struct genePredExt *bedToGenePredExt(struct bed *bed)
 /* Convert a single bed to a genePred structure. */
 {
-struct genePred *gp = NULL;
+struct genePredExt *gp = NULL;
 int i;
 assert(bed);
 AllocVar(gp);
@@ -50,6 +50,12 @@ else
     gp->exonEnds[0] = bed->chromEnd;
     }
 return gp;
+}
+
+struct genePred *bedToGenePred(struct bed *bed)
+/* Convert a single bed to a genePred structure. */
+{
+return (struct genePred *)bedToGenePredExt(bed);
 }
 
 struct bed *bedFromGenePred(struct genePred *genePred)

@@ -1477,7 +1477,7 @@ export asmId=$defaultName
 export twoBit=$buildDir/\$asmId.2bit
 
 if [ ../../\$asmId.2bit -nt \$asmId.keySignature.txt ]; then
-  doIdKeys.pl \$asmId -buildDir=`pwd` -twoBit=\$twoBit
+  doIdKeys.pl -bigClusterHub=$bigClusterHub \$asmId -buildDir=`pwd` -twoBit=\$twoBit
   touch -r \$twoBit \$asmId.keySignature.txt
 else
   printf "# idKeys step previously completed\\n" 1>&2
@@ -1968,7 +1968,7 @@ sub doAugustus {
 export asmId=$defaultName
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.augustus.bb ]; then
-  time (~/kent/src/hg/utils/automation/doAugustus.pl -stop=makeGp -buildDir=`pwd` -dbHost=$dbHost \\
+  time (~/kent/src/hg/utils/automation/doAugustus.pl -ram=6g -stop=makeGp -buildDir=`pwd` -dbHost=$dbHost \\
     -bigClusterHub=$bigClusterHub -species=$augustusSpecies -workhorse=$workhorse \\
     -noDbGenePredCheck -maskedSeq=$buildDir/\$asmId.2bit \$asmId) > makeDb.log 2>&1
   time (~/kent/src/hg/utils/automation/doAugustus.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` -dbHost=$dbHost \\

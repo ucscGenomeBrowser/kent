@@ -20,6 +20,7 @@ use vars qw/
     $opt_maskedSeq
     $opt_species
     $opt_utr
+    $opt_ram
     $opt_noDbGenePredCheck
     /;
 
@@ -41,6 +42,7 @@ my $dbHost = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $utr = "off";
+my $ramG = "-ram=8g";
 my $noDbGenePredCheck = 1;    # default yes, use -db for genePredCheck
 my $species = "human";
 my $augustusDir = "/hive/data/outside/augustus/augustus-3.3.1";
@@ -66,6 +68,7 @@ options:
                           of default ($maskedSeq).
     -utr                  Obsolete, now is automatic (was: Use augustus arg: --UTR=on, default is --UTR=off)
     -noDbGenePredCheck    do not use -db= on genePredCheck, there is no real db
+    -ram Ng             set -ram=Ng argument to para create command (default 8g)
     -species <name>       name from list: human chicken zebrafish, default: human
 _EOF_
   ;
@@ -248,7 +251,6 @@ _EOF_
   $whatItDoes = "Run augustus on chunked fasta sequences.";
   $bossScript = newBash HgRemoteScript("$runDir/runAugustus.bash", $paraHub,
 				      $runDir, $whatItDoes);
-  my $paraRun = &HgAutomate::paraRun();
   $bossScript->add(<<_EOF_
 (grep -v partBundles ../partition/part.list || /bin/true) | while read twoBit
 do
@@ -266,7 +268,10 @@ done >> jobList
 
 chmod +x runOne
 
-$paraRun
+/parasol/bin/para $ramG make jobList
+/parasol/bin/para check
+/parasol/bin/para time > run.time
+cat run.time
 _EOF_
   );
   $bossScript->execute();
@@ -409,6 +414,7 @@ chomp $secondsStart;
 #$opt_verbose = 3 if ($opt_verbose < 3);
 
 $noDbGenePredCheck = $opt_noDbGenePredCheck ? 0 : $noDbGenePredCheck;
+$ramG = $opt_ram ? $ramG : "-ram=$opt_ram";
 
 # Establish what directory we will work in.
 $buildDir = $opt_buildDir ? $opt_buildDir :

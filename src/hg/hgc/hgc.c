@@ -11007,7 +11007,7 @@ else
 printf("<B>Patient View: </B>\n");
 printf("More details on patient %s at ", itemName);
 printf("<A HREF=\"%s%s\" target=_blank>",
-       "https://decipher.sanger.ac.uk/patient/", itemName);
+       "https://www.deciphergenomics.org/patient/", itemName);
 printf("DECIPHER</A>.<BR><BR>");
 
 /* print position info */
@@ -11109,7 +11109,7 @@ else
 printf("<B>Patient View: </B>\n");
 printf("More details on patient %s at ", itemName);
 printf("<A HREF=\"%s%s\" target=_blank>",
-       "https://decipher.sanger.ac.uk/patient/", itemName);
+       "https://www.deciphergenomics.org/patient/", itemName);
 printf("DECIPHER</A>.<BR><BR>");
 
 /* print position info */

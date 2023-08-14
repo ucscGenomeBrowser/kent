@@ -958,7 +958,7 @@ var vis = {
         if (arguments.length > 2)
             return setTableRowVisibility(button, prefix, "hgtgroup", "group",false,arguments[2]);
         else
-            return setTableRowVisibility(button, prefix, "hgtgroup", "group",false);
+            return setTableRowVisibility(button, prefix, "hgtgroup", "group", true);
     },
 
     expandAllGroups: function (newState)

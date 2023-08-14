@@ -76,7 +76,7 @@ if (hasProtocol(path))
     return cloneString(path);
 
 /* If it's a remote hub, let html path expander handle it. */
-if (hasProtocol(hubUrl))
+if (hasProtocol(hubUrl) && !startsWith("/gbdb",path))
     return expandUrlOnBase(hubUrl, path);
 
 /* If we got to here hub is local, and so is path.  Do standard
