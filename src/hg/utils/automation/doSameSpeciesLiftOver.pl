@@ -309,7 +309,6 @@ _EOF_
   my $minTpSize = 10000000;
   $tpSize = $minTpSize if ($tpSize < $minTpSize);
 
-  my $paraRun = &HgAutomate::paraRun();
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 # Compute partition (coordinate ranges) for cluster job.  This does
