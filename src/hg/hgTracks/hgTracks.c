@@ -832,13 +832,15 @@ if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target)
 /* Don't free psl -- used in drawing phase by baseColor code. */
 struct psl *pslList = pslLoadAll(pslFileName), *psl;
 struct linkedFeatures *itemList = NULL;
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = NULL;
 struct sqlResult *sr;
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     // pcr result matches to a targetDb are of the format transcript__gene
     if (stringIn("__", psl->tName))
         {
+        if (conn == NULL)
+            conn = hAllocConn(database);
         int rowOffset = hOffsetPastBin(database, chromName, target->pslTable);
         char **row;
         char query[2048];
