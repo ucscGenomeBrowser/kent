@@ -42,8 +42,10 @@ renaming files to something not as long
     CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_meryl-21mer-chm13v1.1_pos.bigwig   -> PROseq_k100_21mer_pos.bw
     CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_neg.bigwig                         -> PROseq_k100_neg.bw
     CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_pos.bigwig                         -> PROseq_k100_pos.bw
-    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig                                 -> PROseq_k100_dual_21mer_neg.bw
-    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig                                 -> PROseq_k100_dual_21mer_pos.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig                                 -> PROseq_k100_dual-21mer_neg.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig                                 -> PROseq_k100_dual-21mer_pos.bw
+
+Note: PROseq_k100_dual-21mer_*.bw accidental had inconsistent names
 
 lngbdb proseq/*.bw
 
@@ -410,7 +412,7 @@ two files were discovered to be missing chr1 and recreated.
 from T2T Globus /team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
 renaming files to something not as long
 
-    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig -> PROseq_k100_dual_21mer_neg.bw
-    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig -> PROseq_k100_dual_21mer_pos.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig -> PROseq_k100_dual-21mer_neg.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig -> PROseq_k100_dual-21mer_pos.bw
 
 and put in /hive/data/genomes/hs1/bed/proseq/, which still symlinked in /gbdb/
