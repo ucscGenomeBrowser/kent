@@ -422,8 +422,10 @@ hg19 sequence download instructions</a>. If you use hg19 today, chrMT should be
 considered the current mitochondrial sequence, chrM is only supported for backwards
 compatibility and legacy annotation files. 
 <p>
-For chrM or chrMT (on hg19), the GENCODE tracks contain the same gene
-annotations, but RefSeq annotations only exist on chrM. Both databases 
+For hg38, the GENCODE and ClinVar variants annotations are all present on chrM. The RefSeq Other
+Annotations data is not made by the RefSeq group and annotations are on chrM. For hg19, legacy
+annotations such as the UCSC Genes are on chrM. All more recent annotations, the RefSeq Other
+Annotations and NCBI ClinVar variants are on chrMT. Both GENCODE and RefSeq databases
 import their mitochondrial gene annotation directly from the rCRS 
 RefSeq record 
 <a target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/251831106">NC_012920.1</a>. 
