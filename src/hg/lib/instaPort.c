@@ -104,8 +104,8 @@ struct bed *bed = bedLoadN(bedRow, bbi->definedFieldCount);
 char *error;
 if ((error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL)) == NULL)
     return bed;
-else
-    printf("bed %s error:%s<BR>", bed->name, error);
+//else
+    //printf("bed %s error:%s<BR>", bed->name, error);
 
 return NULL;
 }

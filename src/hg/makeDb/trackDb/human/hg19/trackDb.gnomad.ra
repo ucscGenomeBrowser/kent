@@ -371,7 +371,7 @@ html gnomad
         url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
         urlLabel View this Gene on the gnomAD browser
         labelFields name,geneName
-        filter._zscore 0
+        filter._zscore -10:10
         filterLabel._zscore Show only items between this Z-score range
         filterByRange._zscore on
         parent gnomadPLI off
@@ -405,7 +405,7 @@ html gnomad
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
         urlLabel View this Transcript on the gnomAD browser
         labelFields name,geneName
-        filter._zscore 0
+        filter._zscore -10:10
         filterLabel._zscore Show only items between this Z-score range
         filterByRange._zscore on
         parent gnomadPLI off
