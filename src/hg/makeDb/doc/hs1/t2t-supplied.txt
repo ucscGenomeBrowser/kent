@@ -400,3 +400,17 @@ Problems:
 - hub groups doesn't have phenDis, so put clinvar and GWAS in varRep
   FIX THIS
 ================================================================
+
+================================================================
+proseq update (2023-08-15 markd)
+----------------------------------------------------------------
+Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
+two files were discovered to be missing chr1 and recreated.
+
+from T2T Globus /team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
+renaming files to something not as long
+
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig -> PROseq_k100_dual_21mer_neg.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig -> PROseq_k100_dual_21mer_pos.bw
+
+and put in /hive/data/genomes/hs1/bed/proseq/, which still symlinked in /gbdb/
