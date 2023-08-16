@@ -231,7 +231,7 @@ struct spaceRange *range;
 AllocVar(range);
 range->start = start;
 range->end = end;
-range->end = height;
+range->height = height;
 struct spaceNode *node;
 AllocVar(node);
 node->val = val;
