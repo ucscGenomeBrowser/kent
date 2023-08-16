@@ -55,6 +55,7 @@ H /src/browserbox
 H /src/utils/qa/weeklybld/
 H /src/penn
 H /src/utils/qa
+H /src/hg/hgTablesTest
 - /README
 
 # not useful for anyone
@@ -68,6 +69,10 @@ H /src/isPcr/
 H /src/gfClient/
 H /src/gfServer/
 H /src/webBlat/
+
+# uses BLAT libraries
+H /src/hg/mouseStuff/chainBridge
+H /src/hg/utils/blatServersCheck
 
 # these sometimes appear on UCSC nfs file systems
 H .nfs*

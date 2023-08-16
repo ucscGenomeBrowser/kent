@@ -54,6 +54,11 @@ else
   buildRefresh=encode3
 endif
 
+# in the kent-core version of the tree, there is no encode3 directory
+ifeq ($(wildcard encode3/*),)
+  buildRefresh=
+endif
+
 # List of directories to build for userApps
 UTILS_APPLIST = \
 	autoDtd \
@@ -241,12 +246,14 @@ userApps: $(UTILS_APPLIST:%=%.userApp)
 	cd mouseStuff && $(MAKE) userApps
 	cd ratStuff && $(MAKE) userApps
 
+# tolerate missing directories, as some were removed in kent-core
 %.userApp: hgLib
-	cd $* && echo $* && $(MAKE)
+	if test -d $* ; then cd $* && echo $* && $(MAKE) ; fi
 
 utils: $(APPS:%=%.utils)
+# tolerate missing directories, as some were removed in kent-core
 %.utils: hgLib
-	cd $* && echo $* && $(MAKE)
+	if test -d $* ; then cd $* && echo $* && $(MAKE) ; fi
 
 # Compile only, the cgi's for those builds without write access
 #	to apache cgi-bin directories  (this compiles and links executables)
