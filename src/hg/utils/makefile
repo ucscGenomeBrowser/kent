@@ -149,7 +149,7 @@ test::	${TEST_DIRS:%=%.test}
 clean:: $(APPS:%=%.clean)
 	- find . -name '*.o' -exec rm {} \;
 %.clean:
-	(if test -d $* ; then cd $* && echo $* && $(MAKE) ; fi)
+	(if test -d $* ; then cd $* && echo $* && $(MAKE) clean; fi)
 
 compile:: $(APPS:%=%.compile)
 	- find . -name '*.o' -exec rm {} \;
