@@ -863,11 +863,12 @@ if [ -d ${buildDir}/trackData/ebiGene ]; then
     export ixxLink=`echo $ebiGeneBb | sed -e 's#.*trackData#../trackData#; s#.bb#.ixx#'`
     # optional ix/ixx files, this string used in the trackDb stanza below
     export searchTrix=""
-    if [ -s "${buildDir}/ixIxx/${asmId}.ebiGene.ix" ]; then
+    export ebiGeneIx=`ls ${buildDir}/trackData/ebiGene/*.ix 2> /dev/null || true | head -1`
+    if [ -s "${ebiGeneIx}" ]; then
       ln -s $ixLink ${buildDir}/ixIxx/${asmId}.ebiGene.ix
       ln -s $ixxLink ${buildDir}/ixIxx/${asmId}.ebiGene.ixx
       searchTrix="
-ixIxx/${asmId}.ebiGene.ix"
+searchTrix ixIxx/${asmId}.ebiGene.ix"
     fi
     export ebiVersion="2022_08"
 
@@ -888,7 +889,7 @@ searchIndex name,name2
 labelFields name,name2
 defaultLabelFields name2
 labelSeperator \" \"
-html html/%s.ebiGene\n\n" "${ebiVersion}" "${ebiVersion}" "${asmId}" "${searchTrix}" "${asmId}" "${asmId}"
+html html/%s.ebiGene\n\n" "${ebiVersion}" "${ebiVersion}" "${asmId}" "${searchTrix}" "${asmId}"
 
 $scriptDir/asmHubEbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ebiGene.html "${ebiVersion}"
  fi
@@ -917,9 +918,13 @@ if [ "${lo}" -gt 0 ]; then
   for loS in `ls -d ${buildDir}/trackData/blat.* 2> /dev/null`
   do
      blatDir=`basename "${loS}"`
-     overChain=`ls ${loS}/*.over.chain.gz | awk -F'/' "{print \\$NF}"`
-     rm -f ${buildDir}/liftOver/${overChain}
-     ln -s ../trackData/${blatDir}/${overChain} ${buildDir}/liftOver
+     overChain=`(ls ${loS}/*.over.chain.gz || true) | awk -F'/' "{print \\$NF}"`
+     if [ "x${overChain}y" != "xy" ]; then
+       rm -f ${buildDir}/liftOver/${overChain}
+     fi
+     if [ -s "${buildDir}/trackData/${blatDir}/${overChain}" ]; then
+       ln -s ../trackData/${blatDir}/${overChain} ${buildDir}/liftOver
+     fi
   done
 fi
 
