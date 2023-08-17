@@ -714,7 +714,8 @@ printf("</TT>");
 printf("The temperature calculations are done assuming 50 mM salt and 50 nM annealing "
        "oligo concentration.  The code to calculate the melting temp comes from "
        "<A HREF=\"https://primer3.org/webinterface.html\" target=_blank>"
-       "Primer3</A>.");
+       "Primer3</A>, the formula by Rychlik W, Spencer WJ and Rhoads RE NAR 1990, which can "
+       "be activated in Primer3 with PRIMER_TM_FORMULA=0</A>.");
 webNewSection("Help");
 printf("<a href='../FAQ/FAQblat.html#blat1c'>What is chr_alt & chr_fix?</a><BR>");
 printf("<a href='../FAQ/FAQblat.html#blat5'>Replicating in-Silico PCR results on local machine</a>");

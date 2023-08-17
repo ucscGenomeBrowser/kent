@@ -308,6 +308,8 @@ include ../chainNetPrimate.ra
 include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
 include chainsHprc.ra alpha
+include chainsReHprc.ra alpha
+include netsReHprc.ra alpha
 include hprcCoverage.ra alpha
 
 # a large composite with many chain/net experiments to other human assemblies

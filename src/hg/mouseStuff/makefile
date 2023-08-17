@@ -86,16 +86,18 @@ DIRS = \
 USE_DIRS = $(DIRS) $(UTILS_APPLIST)
 
 all: ${USE_DIRS:%=%.all}
+# kent-core doesn't contain all utils, so tolerate missing directories
 %.all:
-	cd $* && echo $* && ${MAKE}
+	if test -d $* ; then cd $* && echo $* && $(MAKE) ; fi
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
+# kent-core doesn't contain all utils, so tolerate missing directories
 %.userApp:
-	cd $* && echo $* && $(MAKE)
+	if test -d $* ; then cd $* && echo $* && $(MAKE) ; fi
 
 clean:: $(USE_DIRS:%=%.cleanAll)
 %.cleanAll:
-	cd $* && echo $* && $(MAKE) clean
+	if test -d $* ; then cd $* && echo $* && $(MAKE) clean ; fi
 
 clean::
 	cd simpleChain && ${MAKE} clean

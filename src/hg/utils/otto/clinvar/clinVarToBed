@@ -749,8 +749,13 @@ for line in ifh:
         chrom = "chrUn_KI270742v1"
     elif chromAcc=="NT_167222.1":
         chrom = "chrUn_gl000228"
+    elif chromAcc=="NT_113889.1":
+        if assembly=="GRCh37":
+            chrom = "chrUn_gl000218"
+        else:
+            chrom = "chrUn_GL000218v1"
     elif chrom=="Un":
-        print("Unknown fix/alt/patch chrom, please adapt clinVarToBed")
+        print("Unknown fix/alt/patch chrom, please adapt clinVarToBed: %s, row: %s" % (chrom, row))
         sys.exit(1)
     else:
         chrom = "chr"+chrom
@@ -863,7 +868,9 @@ for line in ifh:
 
     if len(name)>90:
         name = name[:90]+"..."
-    name = varId+"|"+name
+
+    vcvId = "VCV%09d" % int(varId)
+    name = varId+"|"+vcvId+" : "+name
 
     if len(mouseOverName)>80:
         mouseOverName = mouseOverName[:80]+"..."
