@@ -219,12 +219,15 @@ genePredCheck -db=hg38 ncbiRefSeqOther
 # addition of HGMD-restricted subset, Max, Jan 29 2019
 # updated Dec 2019
 # updated Dec 2020
+# updated Aug 2023
 cd /hive/data/genomes/hg38/bed/ncbiRefSeq.p13.2020-10-27/
 # change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019?
 # adding "." so NM_123 doesn't match NM_123123                                                                             
 cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
 zcat process/hg38.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
 hgLoadGenePred -genePredExt hg38 ncbiRefSeqHgmd hgmd.curated.gp
+# wc -l says:
+10772 hgmd.curated.gp for the 2021 version
 #############################################################################
 # ncbiRefSeq.p13 update (DONE - 2019-12-06 - Hiram)
 
