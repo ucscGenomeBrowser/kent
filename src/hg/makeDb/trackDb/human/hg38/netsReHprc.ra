@@ -25,6 +25,7 @@ html chainsHprc
     longLabel HG02622.mat HG02622.pri.mat.f1_v2 (May 2021 GCA_018469875.1_HG02622.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469875.1 chainHprcGCA_018469875v1
     otherDb GCA_018469875.1
+    priority 1
 
     track netHprcGCA_018469925v1
     parent hprcReNets
@@ -33,6 +34,7 @@ html chainsHprc
     longLabel HG02622.pat HG02622.alt.pat.f1_v2 (May 2021 GCA_018469925.1_HG02622.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469925.1 chainHprcGCA_018469925v1
     otherDb GCA_018469925.1
+    priority 2
 
     track netHprcGCA_018469935v1
     parent hprcReNets
@@ -41,6 +43,7 @@ html chainsHprc
     longLabel HG02717.mat HG02717.pri.mat.f1_v2 (May 2021 GCA_018469935.1_HG02717.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469935.1 chainHprcGCA_018469935v1
     otherDb GCA_018469935.1
+    priority 3
 
     track netHprcGCA_018469945v1
     parent hprcReNets
@@ -49,6 +52,7 @@ html chainsHprc
     longLabel HG02630.pat HG02630.alt.pat.f1_v2 (May 2021 GCA_018469945.1_HG02630.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469945.1 chainHprcGCA_018469945v1
     otherDb GCA_018469945.1
+    priority 4
 
     track netHprcGCA_018469955v1
     parent hprcReNets
@@ -57,6 +61,7 @@ html chainsHprc
     longLabel HG02630.mat HG02630.pri.mat.f1_v2 (May 2021 GCA_018469955.1_HG02630.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469955.1 chainHprcGCA_018469955v1
     otherDb GCA_018469955.1
+    priority 5
 
     track netHprcGCA_018470425v1
     parent hprcReNets
@@ -65,6 +70,7 @@ html chainsHprc
     longLabel HG02717.pat HG02717.alt.pat.f1_v2 (May 2021 GCA_018470425.1_HG02717.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018470425.1 chainHprcGCA_018470425v1
     otherDb GCA_018470425.1
+    priority 6
 
     track netHprcGCA_018470435v1
     parent hprcReNets
@@ -73,6 +79,7 @@ html chainsHprc
     longLabel HG02572.pat HG02572.alt.pat.f1_v2 (May 2021 GCA_018470435.1_HG02572.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018470435.1 chainHprcGCA_018470435v1
     otherDb GCA_018470435.1
+    priority 7
 
     track netHprcGCA_018470445v1
     parent hprcReNets
@@ -81,6 +88,7 @@ html chainsHprc
     longLabel HG02572.mat HG02572.pri.mat.f1_v2 (May 2021 GCA_018470445.1_HG02572.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018470445.1 chainHprcGCA_018470445v1
     otherDb GCA_018470445.1
+    priority 8
 
     track netHprcGCA_018470455v1
     parent hprcReNets
@@ -89,6 +97,7 @@ html chainsHprc
     longLabel HG02886.mat HG02886.pri.mat.f1_v2 (May 2021 GCA_018470455.1_HG02886.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018470455.1 chainHprcGCA_018470455v1
     otherDb GCA_018470455.1
+    priority 9
 
     track netHprcGCA_018470465v1
     parent hprcReNets
@@ -97,6 +106,7 @@ html chainsHprc
     longLabel HG02886.pat HG02886.alt.pat.f1_v2 (May 2021 GCA_018470465.1_HG02886.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018470465.1 chainHprcGCA_018470465v1
     otherDb GCA_018470465.1
+    priority 10
 
     track netHprcGCA_018473295v1
     parent hprcReNets
@@ -105,6 +115,7 @@ html chainsHprc
     longLabel HG03540.mat HG03540.pri.mat.f1_v2 (May 2021 GCA_018473295.1_HG03540.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018473295.1 chainHprcGCA_018473295v1
     otherDb GCA_018473295.1
+    priority 11
 
     track netHprcGCA_018473315v1
     parent hprcReNets
@@ -113,6 +124,7 @@ html chainsHprc
     longLabel HG03540.pat HG03540.alt.pat.f1_v2 (May 2021 GCA_018473315.1_HG03540.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018473315.1 chainHprcGCA_018473315v1
     otherDb GCA_018473315.1
+    priority 12
 
     track netHprcGCA_018503575v1
     parent hprcReNets
@@ -121,6 +133,7 @@ html chainsHprc
     longLabel HG02818.pat HG02818.alt.pat.f1_v2 (May 2021 GCA_018503575.1_HG02818.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018503575.1 chainHprcGCA_018503575v1
     otherDb GCA_018503575.1
+    priority 13
 
     track netHprcGCA_018503585v1
     parent hprcReNets
@@ -129,6 +142,7 @@ html chainsHprc
     longLabel HG02818.mat HG02818.pri.mat.f1_v2 (May 2021 GCA_018503585.1_HG02818.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018503585.1 chainHprcGCA_018503585v1
     otherDb GCA_018503585.1
+    priority 14
 
     track netHprcGCA_018504065v1
     parent hprcReNets
@@ -137,6 +151,7 @@ html chainsHprc
     longLabel HG02723.mat HG02723.pri.mat.f1_v2 (May 2021 GCA_018504065.1_HG02723.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504065.1 chainHprcGCA_018504065v1
     otherDb GCA_018504065.1
+    priority 15
 
     track netHprcGCA_018504075v1
     parent hprcReNets
@@ -145,6 +160,7 @@ html chainsHprc
     longLabel HG02723.pat HG02723.alt.pat.f1_v2 (May 2021 GCA_018504075.1_HG02723.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504075.1 chainHprcGCA_018504075v1
     otherDb GCA_018504075.1
+    priority 16
 
     track netHprcGCA_018466835v1
     parent hprcReNets
@@ -153,6 +169,7 @@ html chainsHprc
     longLabel HG02257.pat HG02257.alt.pat.f1_v2 (May 2021 GCA_018466835.1_HG02257.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018466835.1 chainHprcGCA_018466835v1
     otherDb GCA_018466835.1
+    priority 17
 
     track netHprcGCA_018466845v1
     parent hprcReNets
@@ -161,6 +178,7 @@ html chainsHprc
     longLabel HG02257.mat HG02257.pri.mat.f1_v2 (May 2021 GCA_018466845.1_HG02257.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018466845.1 chainHprcGCA_018466845v1
     otherDb GCA_018466845.1
+    priority 18
 
     track netHprcGCA_018466855v1
     parent hprcReNets
@@ -169,6 +187,7 @@ html chainsHprc
     longLabel HG02559.pat HG02559.alt.pat.f1_v2 (May 2021 GCA_018466855.1_HG02559.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018466855.1 chainHprcGCA_018466855v1
     otherDb GCA_018466855.1
+    priority 19
 
     track netHprcGCA_018466985v1
     parent hprcReNets
@@ -177,6 +196,7 @@ html chainsHprc
     longLabel HG02559.mat HG02559.pri.mat.f1_v2 (May 2021 GCA_018466985.1_HG02559.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018466985.1 chainHprcGCA_018466985v1
     otherDb GCA_018466985.1
+    priority 20
 
     track netHprcGCA_018467005v1
     parent hprcReNets
@@ -185,6 +205,7 @@ html chainsHprc
     longLabel HG02486.pat HG02486.alt.pat.f1_v2 (May 2021 GCA_018467005.1_HG02486.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018467005.1 chainHprcGCA_018467005v1
     otherDb GCA_018467005.1
+    priority 21
 
     track netHprcGCA_018467015v1
     parent hprcReNets
@@ -193,6 +214,7 @@ html chainsHprc
     longLabel HG02486.mat HG02486.pri.mat.f1_v2 (May 2021 GCA_018467015.1_HG02486.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018467015.1 chainHprcGCA_018467015v1
     otherDb GCA_018467015.1
+    priority 22
 
     track netHprcGCA_018467155v1
     parent hprcReNets
@@ -201,6 +223,7 @@ html chainsHprc
     longLabel HG01891.mat HG01891.pri.mat.f1_v2 (May 2021 GCA_018467155.1_HG01891.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018467155.1 chainHprcGCA_018467155v1
     otherDb GCA_018467155.1
+    priority 23
 
     track netHprcGCA_018467165v1
     parent hprcReNets
@@ -209,6 +232,7 @@ html chainsHprc
     longLabel HG01891.pat HG01891.alt.pat.f1_v2 (May 2021 GCA_018467165.1_HG01891.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018467165.1 chainHprcGCA_018467165v1
     otherDb GCA_018467165.1
+    priority 24
 
     track netHprcGCA_018505825v1
     parent hprcReNets
@@ -217,6 +241,7 @@ html chainsHprc
     longLabel HG02109.mat HG02109.pri.mat.f1_v2 (May 2021 GCA_018505825.1_HG02109.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018505825.1 chainHprcGCA_018505825v1
     otherDb GCA_018505825.1
+    priority 25
 
     track netHprcGCA_018505855v1
     parent hprcReNets
@@ -225,6 +250,7 @@ html chainsHprc
     longLabel HG02055.pat HG02055.alt.pat.f1_v2 (May 2021 GCA_018505855.1_HG02055.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018505855.1 chainHprcGCA_018505855v1
     otherDb GCA_018505855.1
+    priority 26
 
     track netHprcGCA_018505865v1
     parent hprcReNets
@@ -233,6 +259,7 @@ html chainsHprc
     longLabel HG02109.pat HG02109.alt.pat.f1_v2 (May 2021 GCA_018505865.1_HG02109.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018505865.1 chainHprcGCA_018505865v1
     otherDb GCA_018505865.1
+    priority 27
 
     track netHprcGCA_018506125v1
     parent hprcReNets
@@ -241,6 +268,7 @@ html chainsHprc
     longLabel HG02055.mat HG02055.pri.mat.f1_v2 (May 2021 GCA_018506125.1_HG02055.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018506125.1 chainHprcGCA_018506125v1
     otherDb GCA_018506125.1
+    priority 28
 
     track netHprcGCA_018852585v1
     parent hprcReNets
@@ -249,6 +277,7 @@ html chainsHprc
     longLabel HG02145.mat HG02145.pri.mat.f1_v2 (Jun. 2021 GCA_018852585.1_HG02145.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018852585.1 chainHprcGCA_018852585v1
     otherDb GCA_018852585.1
+    priority 29
 
     track netHprcGCA_018852595v1
     parent hprcReNets
@@ -257,6 +286,7 @@ html chainsHprc
     longLabel HG02145.pat HG02145.alt.pat.f1_v2 (Jun. 2021 GCA_018852595.1_HG02145.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018852595.1 chainHprcGCA_018852595v1
     otherDb GCA_018852595.1
+    priority 30
 
     track netHprcGCA_018472825v1
     parent hprcReNets
@@ -265,6 +295,7 @@ html chainsHprc
     longLabel HG03579.mat HG03579.pri.mat.f1_v2 (May 2021 GCA_018472825.1_HG03579.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472825.1 chainHprcGCA_018472825v1
     otherDb GCA_018472825.1
+    priority 31
 
     track netHprcGCA_018472835v1
     parent hprcReNets
@@ -273,6 +304,7 @@ html chainsHprc
     longLabel HG03579.pat HG03579.alt.pat.f1_v2 (May 2021 GCA_018472835.1_HG03579.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472835.1 chainHprcGCA_018472835v1
     otherDb GCA_018472835.1
+    priority 32
 
     track netHprcGCA_018472855v1
     parent hprcReNets
@@ -281,6 +313,7 @@ html chainsHprc
     longLabel HG03453.mat HG03453.pri.mat.f1_v2 (May 2021 GCA_018472855.1_HG03453.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472855.1 chainHprcGCA_018472855v1
     otherDb GCA_018472855.1
+    priority 33
 
     track netHprcGCA_018473305v1
     parent hprcReNets
@@ -289,6 +322,7 @@ html chainsHprc
     longLabel HG03453.pat HG03453.alt.pat.f1_v2 (May 2021 GCA_018473305.1_HG03453.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018473305.1 chainHprcGCA_018473305v1
     otherDb GCA_018473305.1
+    priority 34
 
     track netHprcGCA_018503245v1
     parent hprcReNets
@@ -297,6 +331,7 @@ html chainsHprc
     longLabel HG03486.pat HG03486.alt.pat.f1_v2 (May 2021 GCA_018503245.1_HG03486.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018503245.1 chainHprcGCA_018503245v1
     otherDb GCA_018503245.1
+    priority 35
 
     track netHprcGCA_018503525v1
     parent hprcReNets
@@ -305,6 +340,7 @@ html chainsHprc
     longLabel HG03486.mat HG03486.pri.mat.f1_v2 (May 2021 GCA_018503525.1_HG03486.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018503525.1 chainHprcGCA_018503525v1
     otherDb GCA_018503525.1
+    priority 36
 
     track netHprcGCA_018506155v1
     parent hprcReNets
@@ -313,6 +349,7 @@ html chainsHprc
     longLabel HG03098.pat HG03098.alt.pat.f1_v2 (May 2021 GCA_018506155.1_HG03098.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018506155.1 chainHprcGCA_018506155v1
     otherDb GCA_018506155.1
+    priority 37
 
     track netHprcGCA_018506165v1
     parent hprcReNets
@@ -321,6 +358,7 @@ html chainsHprc
     longLabel HG03098.mat HG03098.pri.mat.f1_v2 (May 2021 GCA_018506165.1_HG03098.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018506165.1 chainHprcGCA_018506165v1
     otherDb GCA_018506165.1
+    priority 38
 
     track netHprcGCA_018503255v1
     parent hprcReNets
@@ -329,6 +367,7 @@ html chainsHprc
     longLabel NA18906.mat NA18906.pri.mat.f1_v2 (May 2021 GCA_018503255.1_NA18906.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018503255.1 chainHprcGCA_018503255v1
     otherDb GCA_018503255.1
+    priority 39
 
     track netHprcGCA_018503285v1
     parent hprcReNets
@@ -337,6 +376,7 @@ html chainsHprc
     longLabel NA18906.pat NA18906.alt.pat.f1_v2 (May 2021 GCA_018503285.1_NA18906.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018503285.1 chainHprcGCA_018503285v1
     otherDb GCA_018503285.1
+    priority 40
 
     track netHprcGCA_018504625v1
     parent hprcReNets
@@ -345,6 +385,7 @@ html chainsHprc
     longLabel NA20129.pat NA20129.alt.pat.f1_v2 (May 2021 GCA_018504625.1_NA20129.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504625.1 chainHprcGCA_018504625v1
     otherDb GCA_018504625.1
+    priority 41
 
     track netHprcGCA_018504635v1
     parent hprcReNets
@@ -353,6 +394,7 @@ html chainsHprc
     longLabel NA20129.mat NA20129.pri.mat.f1_v2 (May 2021 GCA_018504635.1_NA20129.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504635.1 chainHprcGCA_018504635v1
     otherDb GCA_018504635.1
+    priority 42
 
     track netHprcGCA_018469415v1
     parent hprcReNets
@@ -361,6 +403,7 @@ html chainsHprc
     longLabel HG03516.pat HG03516.alt.pat.f1_v2 (May 2021 GCA_018469415.1_HG03516.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469415.1 chainHprcGCA_018469415v1
     otherDb GCA_018469415.1
+    priority 43
 
     track netHprcGCA_018469425v1
     parent hprcReNets
@@ -369,6 +412,7 @@ html chainsHprc
     longLabel HG03516.mat HG03516.pri.mat.f1_v2 (May 2021 GCA_018469425.1_HG03516.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469425.1 chainHprcGCA_018469425v1
     otherDb GCA_018469425.1
+    priority 44
 
     track netHprcGCA_018471065v1
     parent hprcReNets
@@ -377,6 +421,7 @@ html chainsHprc
     longLabel HG01175.pat HG01175.alt.pat.f1_v2 (May 2021 GCA_018471065.1_HG01175.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471065.1 chainHprcGCA_018471065v1
     otherDb GCA_018471065.1
+    priority 45
 
     track netHprcGCA_018471075v1
     parent hprcReNets
@@ -385,6 +430,7 @@ html chainsHprc
     longLabel HG01106.pat HG01106.alt.pat.f1_v2 (May 2021 GCA_018471075.1_HG01106.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471075.1 chainHprcGCA_018471075v1
     otherDb GCA_018471075.1
+    priority 46
 
     track netHprcGCA_018471085v1
     parent hprcReNets
@@ -393,6 +439,7 @@ html chainsHprc
     longLabel HG01175.mat HG01175.pri.mat.f1_v2 (May 2021 GCA_018471085.1_HG01175.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471085.1 chainHprcGCA_018471085v1
     otherDb GCA_018471085.1
+    priority 47
 
     track netHprcGCA_018471095v1
     parent hprcReNets
@@ -401,6 +448,7 @@ html chainsHprc
     longLabel HG00741.mat HG00741.pri.mat.f1_v2 (May 2021 GCA_018471095.1_HG00741.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471095.1 chainHprcGCA_018471095v1
     otherDb GCA_018471095.1
+    priority 48
 
     track netHprcGCA_018471105v1
     parent hprcReNets
@@ -409,6 +457,7 @@ html chainsHprc
     longLabel HG00741.pat HG00741.alt.pat.f1_v2 (May 2021 GCA_018471105.1_HG00741.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471105.1 chainHprcGCA_018471105v1
     otherDb GCA_018471105.1
+    priority 49
 
     track netHprcGCA_018471345v1
     parent hprcReNets
@@ -417,6 +466,7 @@ html chainsHprc
     longLabel HG01106.mat HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471345.1 chainHprcGCA_018471345v1
     otherDb GCA_018471345.1
+    priority 50
 
     track netHprcGCA_018472685v1
     parent hprcReNets
@@ -425,6 +475,7 @@ html chainsHprc
     longLabel HG01071.mat HG01071.pri.mat.f1_v2 (May 2021 GCA_018472685.1_HG01071.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472685.1 chainHprcGCA_018472685v1
     otherDb GCA_018472685.1
+    priority 51
 
     track netHprcGCA_018472715v1
     parent hprcReNets
@@ -433,6 +484,7 @@ html chainsHprc
     longLabel HG00735.pat HG00735.alt.pat.f1_v2 (May 2021 GCA_018472715.1_HG00735.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472715.1 chainHprcGCA_018472715v1
     otherDb GCA_018472715.1
+    priority 52
 
     track netHprcGCA_018472725v1
     parent hprcReNets
@@ -441,6 +493,7 @@ html chainsHprc
     longLabel HG01071.pat HG01071.alt.pat.f1_v2 (May 2021 GCA_018472725.1_HG01071.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472725.1 chainHprcGCA_018472725v1
     otherDb GCA_018472725.1
+    priority 53
 
     track netHprcGCA_018472765v1
     parent hprcReNets
@@ -449,6 +502,7 @@ html chainsHprc
     longLabel HG00735.mat HG00735.pri.mat.f1_v2 (May 2021 GCA_018472765.1_HG00735.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472765.1 chainHprcGCA_018472765v1
     otherDb GCA_018472765.1
+    priority 54
 
     track netHprcGCA_018504045v1
     parent hprcReNets
@@ -457,6 +511,7 @@ html chainsHprc
     longLabel HG01243.pat HG01243.alt.pat.f1_v2 (May 2021 GCA_018504045.1_HG01243.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504045.1 chainHprcGCA_018504045v1
     otherDb GCA_018504045.1
+    priority 55
 
     track netHprcGCA_018504365v1
     parent hprcReNets
@@ -465,6 +520,7 @@ html chainsHprc
     longLabel HG01109.mat HG01109.pri.mat.f1_v2 (May 2021 GCA_018504365.1_HG01109.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504365.1 chainHprcGCA_018504365v1
     otherDb GCA_018504365.1
+    priority 56
 
     track netHprcGCA_018504375v1
     parent hprcReNets
@@ -473,6 +529,7 @@ html chainsHprc
     longLabel HG01243.mat HG01243.pri.mat.f1_v2 (May 2021 GCA_018504375.1_HG01243.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504375.1 chainHprcGCA_018504375v1
     otherDb GCA_018504375.1
+    priority 57
 
     track netHprcGCA_018504645v1
     parent hprcReNets
@@ -481,6 +538,7 @@ html chainsHprc
     longLabel HG01109.pat HG01109.alt.pat.f1_v2 (May 2021 GCA_018504645.1_HG01109.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504645.1 chainHprcGCA_018504645v1
     otherDb GCA_018504645.1
+    priority 58
 
     track netHprcGCA_018506955v1
     parent hprcReNets
@@ -489,6 +547,7 @@ html chainsHprc
     longLabel HG00733.pat HG00733.alt.pat.f1_v2 (May 2021 GCA_018506955.1_HG00733.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018506955.1 chainHprcGCA_018506955v1
     otherDb GCA_018506955.1
+    priority 59
 
     track netHprcGCA_018506975v1
     parent hprcReNets
@@ -497,6 +556,7 @@ html chainsHprc
     longLabel HG00733.mat HG00733.pri.mat.f1_v2 (May 2021 GCA_018506975.1_HG00733.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018506975.1 chainHprcGCA_018506975v1
     otherDb GCA_018506975.1
+    priority 60
 
     track netHprcGCA_018471525v1
     parent hprcReNets
@@ -505,6 +565,7 @@ html chainsHprc
     longLabel HG02148.pat HG02148.alt.pat.f1_v2 (May 2021 GCA_018471525.1_HG02148.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471525.1 chainHprcGCA_018471525v1
     otherDb GCA_018471525.1
+    priority 61
 
     track netHprcGCA_018471535v1
     parent hprcReNets
@@ -513,6 +574,7 @@ html chainsHprc
     longLabel HG02148.mat HG02148.pri.mat.f1_v2 (May 2021 GCA_018471535.1_HG02148.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471535.1 chainHprcGCA_018471535v1
     otherDb GCA_018471535.1
+    priority 62
 
     track netHprcGCA_018471545v1
     parent hprcReNets
@@ -521,6 +583,7 @@ html chainsHprc
     longLabel HG01952.mat HG01952.pri.mat.f1_v2 (May 2021 GCA_018471545.1_HG01952.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471545.1 chainHprcGCA_018471545v1
     otherDb GCA_018471545.1
+    priority 63
 
     track netHprcGCA_018471555v1
     parent hprcReNets
@@ -529,6 +592,7 @@ html chainsHprc
     longLabel HG01952.pat HG01952.alt.pat.f1_v2 (May 2021 GCA_018471555.1_HG01952.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471555.1 chainHprcGCA_018471555v1
     otherDb GCA_018471555.1
+    priority 64
 
     track netHprcGCA_018472695v1
     parent hprcReNets
@@ -537,6 +601,7 @@ html chainsHprc
     longLabel HG01928.mat HG01928.pri.mat.f1_v2 (May 2021 GCA_018472695.1_HG01928.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472695.1 chainHprcGCA_018472695v1
     otherDb GCA_018472695.1
+    priority 65
 
     track netHprcGCA_018472705v1
     parent hprcReNets
@@ -545,6 +610,7 @@ html chainsHprc
     longLabel HG01928.pat HG01928.alt.pat.f1_v2 (May 2021 GCA_018472705.1_HG01928.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472705.1 chainHprcGCA_018472705v1
     otherDb GCA_018472705.1
+    priority 66
 
     track netHprcGCA_018472845v1
     parent hprcReNets
@@ -553,6 +619,7 @@ html chainsHprc
     longLabel HG01978.pat HG01978.alt.pat.f1_v2 (May 2021 GCA_018472845.1_HG01978.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472845.1 chainHprcGCA_018472845v1
     otherDb GCA_018472845.1
+    priority 67
 
     track netHprcGCA_018472865v1
     parent hprcReNets
@@ -561,6 +628,7 @@ html chainsHprc
     longLabel HG01978.mat HG01978.pri.mat.f1_v2 (May 2021 GCA_018472865.1_HG01978.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472865.1 chainHprcGCA_018472865v1
     otherDb GCA_018472865.1
+    priority 68
 
     track netHprcGCA_018469405v1
     parent hprcReNets
@@ -569,6 +637,7 @@ html chainsHprc
     longLabel HG01258.mat HG01258.pri.mat.f1_v2 (May 2021 GCA_018469405.1_HG01258.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469405.1 chainHprcGCA_018469405v1
     otherDb GCA_018469405.1
+    priority 69
 
     track netHprcGCA_018469665v1
     parent hprcReNets
@@ -577,6 +646,7 @@ html chainsHprc
     longLabel HG01123.mat HG01123.pri.mat.f1_v2.1 (May 2021 GCA_018469665.1_HG01123.pri.mat.f1_v2.1) HPRC project computed Chain Nets
     type netAlign GCA_018469665.1 chainHprcGCA_018469665v1
     otherDb GCA_018469665.1
+    priority 70
 
     track netHprcGCA_018469675v1
     parent hprcReNets
@@ -585,6 +655,7 @@ html chainsHprc
     longLabel HG01258.pat HG01258.alt.pat.f1_v2 (May 2021 GCA_018469675.1_HG01258.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469675.1 chainHprcGCA_018469675v1
     otherDb GCA_018469675.1
+    priority 71
 
     track netHprcGCA_018469685v1
     parent hprcReNets
@@ -593,6 +664,7 @@ html chainsHprc
     longLabel HG01361.mat HG01361.pri.mat.f1_v2 (May 2021 GCA_018469685.1_HG01361.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469685.1 chainHprcGCA_018469685v1
     otherDb GCA_018469685.1
+    priority 72
 
     track netHprcGCA_018469695v1
     parent hprcReNets
@@ -601,6 +673,7 @@ html chainsHprc
     longLabel HG01123.pat HG01123.alt.pat.f1_v2.1 (May 2021 GCA_018469695.1_HG01123.alt.pat.f1_v2.1) HPRC project computed Chain Nets
     type netAlign GCA_018469695.1 chainHprcGCA_018469695v1
     otherDb GCA_018469695.1
+    priority 73
 
     track netHprcGCA_018469705v1
     parent hprcReNets
@@ -609,6 +682,7 @@ html chainsHprc
     longLabel HG01361.pat HG01361.alt.pat.f1_v2 (May 2021 GCA_018469705.1_HG01361.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018469705.1 chainHprcGCA_018469705v1
     otherDb GCA_018469705.1
+    priority 74
 
     track netHprcGCA_018469865v1
     parent hprcReNets
@@ -617,6 +691,7 @@ html chainsHprc
     longLabel HG01358.mat HG01358.pri.mat.f1_v2.1 (May 2021 GCA_018469865.1_HG01358.pri.mat.f1_v2.1) HPRC project computed Chain Nets
     type netAlign GCA_018469865.1 chainHprcGCA_018469865v1
     otherDb GCA_018469865.1
+    priority 75
 
     track netHprcGCA_018469965v1
     parent hprcReNets
@@ -625,6 +700,7 @@ html chainsHprc
     longLabel HG01358.pat HG01358.alt.pat.f1_v2.1 (May 2021 GCA_018469965.1_HG01358.alt.pat.f1_v2.1) HPRC project computed Chain Nets
     type netAlign GCA_018469965.1 chainHprcGCA_018469965v1
     otherDb GCA_018469965.1
+    priority 76
 
     track netHprcGCA_018471515v1
     parent hprcReNets
@@ -633,6 +709,7 @@ html chainsHprc
     longLabel HG00438.mat HG00438.pri.mat.f1_v2 (May 2021 GCA_018471515.1_HG00438.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018471515.1 chainHprcGCA_018471515v1
     otherDb GCA_018471515.1
+    priority 77
 
     track netHprcGCA_018472565v1
     parent hprcReNets
@@ -641,6 +718,7 @@ html chainsHprc
     longLabel HG00673.mat HG00673.pri.mat.f1_v2 (May 2021 GCA_018472565.1_HG00673.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472565.1 chainHprcGCA_018472565v1
     otherDb GCA_018472565.1
+    priority 78
 
     track netHprcGCA_018472575v1
     parent hprcReNets
@@ -649,6 +727,7 @@ html chainsHprc
     longLabel HG00621.pat HG00621.alt.pat.f1_v2 (May 2021 GCA_018472575.1_HG00621.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472575.1 chainHprcGCA_018472575v1
     otherDb GCA_018472575.1
+    priority 79
 
     track netHprcGCA_018472585v1
     parent hprcReNets
@@ -657,6 +736,7 @@ html chainsHprc
     longLabel HG00673.pat HG00673.alt.pat.f1_v2 (May 2021 GCA_018472585.1_HG00673.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472585.1 chainHprcGCA_018472585v1
     otherDb GCA_018472585.1
+    priority 80
 
     track netHprcGCA_018472595v1
     parent hprcReNets
@@ -665,6 +745,7 @@ html chainsHprc
     longLabel HG00438.pat HG00438.alt.pat.f1_v2 (May 2021 GCA_018472595.1_HG00438.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472595.1 chainHprcGCA_018472595v1
     otherDb GCA_018472595.1
+    priority 81
 
     track netHprcGCA_018472605v1
     parent hprcReNets
@@ -673,6 +754,7 @@ html chainsHprc
     longLabel HG00621.mat HG00621.pri.mat.f1_v2 (May 2021 GCA_018472605.1_HG00621.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018472605.1 chainHprcGCA_018472605v1
     otherDb GCA_018472605.1
+    priority 82
 
     track netHprcGCA_018504055v1
     parent hprcReNets
@@ -681,6 +763,7 @@ html chainsHprc
     longLabel HG02080.pat HG02080.alt.pat.f1_v2 (May 2021 GCA_018504055.1_HG02080.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504055.1 chainHprcGCA_018504055v1
     otherDb GCA_018504055.1
+    priority 83
 
     track netHprcGCA_018504085v1
     parent hprcReNets
@@ -689,6 +772,7 @@ html chainsHprc
     longLabel HG02080.mat HG02080.pri.mat.f1_v2 (May 2021 GCA_018504085.1_HG02080.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504085.1 chainHprcGCA_018504085v1
     otherDb GCA_018504085.1
+    priority 84
 
     track netHprcGCA_018504655v1
     parent hprcReNets
@@ -697,6 +781,7 @@ html chainsHprc
     longLabel NA21309.mat NA21309.pri.mat.f1_v2 (May 2021 GCA_018504655.1_NA21309.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504655.1 chainHprcGCA_018504655v1
     otherDb GCA_018504655.1
+    priority 85
 
     track netHprcGCA_018504665v1
     parent hprcReNets
@@ -705,6 +790,7 @@ html chainsHprc
     longLabel NA21309.pat NA21309.alt.pat.f1_v2 (May 2021 GCA_018504665.1_NA21309.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018504665.1 chainHprcGCA_018504665v1
     otherDb GCA_018504665.1
+    priority 86
 
     track netHprcHs1
     parent hprcReNets
@@ -713,6 +799,7 @@ html chainsHprc
     longLabel T2T-CHM13v2.0 T2T-CHM13v2.0 (Jan. 2022 GCF_009914755.1_T2T-CHM13v2.0) HPRC project computed Chain Nets
     type netAlign hs1 chainHprcHs1
     otherDb hs1
+    priority 87
 
     track netHprcGCA_018505835v1
     parent hprcReNets
@@ -721,6 +808,7 @@ html chainsHprc
     longLabel HG03492.pat HG03492.alt.pat.f1_v2 (May 2021 GCA_018505835.1_HG03492.alt.pat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018505835.1 chainHprcGCA_018505835v1
     otherDb GCA_018505835.1
+    priority 88
 
     track netHprcGCA_018505845v1
     parent hprcReNets
@@ -729,3 +817,4 @@ html chainsHprc
     longLabel HG03492.mat HG03492.pri.mat.f1_v2 (May 2021 GCA_018505845.1_HG03492.pri.mat.f1_v2) HPRC project computed Chain Nets
     type netAlign GCA_018505845.1 chainHprcGCA_018505845v1
     otherDb GCA_018505845.1
+    priority 89
