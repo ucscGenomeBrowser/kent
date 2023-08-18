@@ -157,7 +157,7 @@ XBB.1:
 XBB.1.5:
     # Inherits from XBB.1
     # Don't believe reversions on 27915 once we're as far as XBB.1.*
-    representative: England/BRBR-32671539/2023
+    representative: England/BRBR-32671539/2022
     reversions: [ T27915G ]
 
 XBC:
