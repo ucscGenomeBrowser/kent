@@ -24,6 +24,7 @@ intronGap 12
 defaultLinkedTables kgXref
 squishyPackPoint 2
 squishyPackField rank
+squishyPackLabel <A href="#squishyPack">GENCODE ranking</A>
 
 searchName knownGeneAcc
 searchTable knownGene
