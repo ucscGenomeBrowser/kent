@@ -837,7 +837,13 @@ static void cartJsonVaWarn(char *format, va_list args)
 dyStringVaPrintf(dyWarn, format, args);
 }
 
-static void cartJsonPrintWarnings(struct jsonWrite *jw)
+boolean cartJsonIsNoWarns()
+/* Return TRUE if there are no warnings present */
+{
+return dyWarn && dyStringLen(dyWarn) == 0;
+}
+
+void cartJsonPrintWarnings(struct jsonWrite *jw)
 /* If there are warnings, write them out as JSON: */
 {
 if (dyWarn && dyStringLen(dyWarn) > 0)
@@ -906,6 +912,7 @@ if (commandJson)
         jsonWritePopToLevel(cj->jw, 1);
         jsonWriteString(cj->jw, "error", errCatch->message->string);
         }
+    errCatchReWarn(errCatch);
     errCatchFree(&errCatch);
     }
 
