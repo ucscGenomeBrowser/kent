@@ -378,6 +378,8 @@ vcfParentSamples vcfPhasedTrio
 vcfUseAltSampleNames vcfPhasedTrio
 saturationScore hic
 sGroup_Afrotheria wigMaf bigMaf
+sGroup_African wigMaf bigMaf
+sGroup_American wigMaf bigMaf
 sGroup_Artiodactyla bigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
@@ -398,6 +400,7 @@ sGroup_DRC_2007 wigMaf
 sGroup_Deuterostomia wigMaf
 sGroup_Dorylaimia wigMaf
 sGroup_Drosophila wigMaf
+sGroup_East_Asian wigMaf bigMaf
 sGroup_Ebola_2014 wigMaf
 sGroup_Euarchontoglires wigMaf bigMaf
 sGroup_fish wigMaf
@@ -418,6 +421,7 @@ sGroup_Nematocera wigMaf
 sGroup_Nematode wigMaf
 sGroup_Nematodes wigMaf
 sGroup_Others wigMaf
+sGroup_other wigMaf bigMaf
 sGroup_Percent99 wigMaf
 sGroup_Percent98 wigMaf
 sGroup_Percent97 wigMaf
@@ -447,6 +451,7 @@ sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
 sGroup_Rodents wigMaf bigMaf
 sGroup_Sarcopterygii wigMaf
+sGroup_South_Asian wigMaf bigMaf
 sGroup_Spirurina wigMaf
 sGroup_Strongylida wigMaf
 sGroup_Sudan_1976-9 wigMaf
