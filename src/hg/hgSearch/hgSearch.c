@@ -619,7 +619,7 @@ measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
 struct hgPositions *hgp = doQuery(cj->jw, db, allCategories, doRedirect, userSearch, measureTiming);
 // Since we are coming from another CGI or a URL manip, go directly to hgTracks
 // if we resolve to a single position
-if (hgp && hgp->singlePos)
+if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
     {
     char newPosBuf[128];
     safef(newPosBuf, sizeof(newPosBuf), "%s:%d-%d", hgp->singlePos->chrom, hgp->singlePos->chromStart+1, hgp->singlePos->chromEnd);
@@ -671,6 +671,7 @@ else
     // Now we need to actually spit out the page + json
     webStartGbNoBanner(cart, db, "Search Disambiguation");
     printMainPageIncludes();
+    cartJsonPrintWarnings(cj->jw);
     jsInlineF("var hgsid='%s';\n", cartSessionId(cart));
     jsInline("var cartJson = {");
     jsInline(cj->jw->dy->string);

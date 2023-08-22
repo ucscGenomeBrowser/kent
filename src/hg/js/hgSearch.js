@@ -686,6 +686,9 @@ var hgSearch = (function() {
         } else if (jsonData.error && !jsonData.error.startsWith("Sorry, couldn't locate")) {
             console.error(jsonData.error);
             alert(callerName + ': error from server: ' + jsonData.error);
+        } else if (jsonData.warning) {
+            alert("Warning: " + jsonData.warning);
+            return true;
         } else {
             if (debugCartJson) {
                 console.log('from server:\n', jsonData);
@@ -800,6 +803,9 @@ var hgSearch = (function() {
                 db = cartJson.db;
             } else {
                 alert("Error no database from request");
+            }
+            if (cartJson.warning !== undefined) {
+                alert("Warning: " + cartJson.warning);
             }
             // check right away for a special redirect to hgTracks:
             if (cartJson.positionMatches !== undefined &&
