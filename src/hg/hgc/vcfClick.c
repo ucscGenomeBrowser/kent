@@ -158,14 +158,16 @@ for (j = 0;  j < el->count;  j++)
 }
 
 
-static void vcfInfoDetails(struct vcfRecord *rec, char *trackName)
+static void vcfInfoDetails(struct vcfRecord *rec, char *trackName, int recordCount)
 /* Expand info keys to descriptions, then print out keys and values. */
 {
 if (rec->infoCount == 0)
     return;
 struct vcfFile *vcff = rec->file;
 puts("<table>"); // wrapper table for collapsible section
-jsBeginCollapsibleSectionFontSize(cart, trackName, "infoFields", "INFO column annotations:", FALSE, "medium");
+char infoId[32];
+safef(infoId, sizeof(infoId), "infoFields%d", recordCount);
+jsBeginCollapsibleSectionFontSize(cart, trackName, infoId, "INFO column annotations:", FALSE, "medium");
 puts("<TABLE class=\"stdTbl\">\n");
 int i;
 for (i = 0;  i < rec->infoCount;  i++)
@@ -451,7 +453,7 @@ for (i = 0;  i < rec->alleleCount; i++)
     }
 }
 
-static void vcfRecordDetails(struct trackDb *tdb, struct vcfRecord *rec)
+static void vcfRecordDetails(struct trackDb *tdb, struct vcfRecord *rec, int recordCount)
 /* Display the contents of a single line of VCF, assumed to be from seqName
  * (using seqName instead of rec->chrom because rec->chrom might lack "chr"). */
 {
@@ -513,7 +515,7 @@ printf("<B>Reference allele:</B> %s<BR>\n", displayAls[0]);
 vcfAltAlleleDetails(rec, displayAls);
 vcfQualDetails(rec);
 vcfFilterDetails(rec);
-vcfInfoDetails(rec, tdb->track);
+vcfInfoDetails(rec, tdb->track, recordCount);
 pgSnpCodingDetail(rec);
 makeDisplayAlleles(rec, showLeftBase, leftBase, 5, FALSE, TRUE, displayAls);
 vcfGenotypesDetails(rec, tdb, displayAls);
@@ -549,9 +551,14 @@ errCatchFree(&errCatch);
 if (vcff != NULL)
     {
     struct vcfRecord *rec;
+    // use the recordCount to make up unique id strings for html collapsible INFO section later
+    int recordCount = 0;
     for (rec = vcff->records;  rec != NULL;  rec = rec->next)
-	if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
-	    vcfRecordDetails(tdb, rec);
+        {
+        if (rec->chromStart == start && rec->chromEnd == end) // in pgSnp mode, don't get name
+            vcfRecordDetails(tdb, rec, recordCount);
+        recordCount++;
+        }
     }
 else
     printf("Sorry, unable to open %s<BR>\n", fileOrUrl);

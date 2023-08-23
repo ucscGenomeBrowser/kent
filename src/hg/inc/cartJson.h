@@ -43,6 +43,12 @@ char *cartJsonRequiredParam(struct hash *paramHash, char *name, struct jsonWrite
 void cartJsonRegisterHandler(struct cartJson *cj, char *command, CartJsonHandler *handler);
 /* Associate handler with command; when javascript sends command, handler will be executed. */
 
+boolean cartJsonIsNoWarns();
+/* Return TRUE if there are no warnings present */
+
+void cartJsonPrintWarnings(struct jsonWrite *jw);
+/* If there are warnings, write them out as JSON: */
+
 void cartJsonPushErrHandlers();
 /* Push warn and abort handlers for errAbort. */
 

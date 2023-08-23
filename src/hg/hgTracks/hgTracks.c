@@ -11171,6 +11171,15 @@ if(!trackImgOnly)
             // blue bar under "Help"
             if (wikiLinkUserName())
                 jsInline("var userLoggedIn = true;");
+            // if the CGI variable startTutorial=true is present (in that exact
+            // spelling/case), immediately start the tutorial, for example
+            // when the user clicks a link from a help page. Note that this
+            // means it is a one time link that won't work on refresh because
+            // the variable isn't saved onto the URL
+            if (sameOk(cgiOptionalString("startTutorial"), "true"))
+                {
+                jsInline("var startTutorialOnLoad = true;");
+                }
             }
         }
 
