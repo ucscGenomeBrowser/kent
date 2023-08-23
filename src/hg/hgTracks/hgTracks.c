@@ -4793,7 +4793,7 @@ for (track = trackList; track != NULL; track = nextTrack)
         for(; lf; lf = nextLf)
             {
             nextLf = lf->next;
-            if (lf->squishyPackVal >= squishyPackPoint)
+            if (lf->squishyPackVal > squishyPackPoint)
                 slAddHead(&squishTrack->items, lf);
             else
                 slAddHead(&track->items, lf);
