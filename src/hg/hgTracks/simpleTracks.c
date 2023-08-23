@@ -11349,8 +11349,11 @@ if (vis == tvSquish || vis == tvDense || myItem->alleleCount > 2)
 char *allele[8];
 char *freq[8];
 int allTot = 0;
-int x1 = round((double)((int)myItem->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)((int)myItem->chromEnd-winStart)*scale) + xOff;
+int s = max(myItem->chromStart, winStart), e = min(myItem->chromEnd, winEnd);
+if (s > e)
+    return;
+int x1 = round((s-winStart)*scale) + xOff;
+int x2 = round((e-winStart)*scale) + xOff;
 int w = x2-x1;
 if (w < 1)
     w = 1;
