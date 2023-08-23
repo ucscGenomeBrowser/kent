@@ -9,9 +9,9 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from ncbiRefSeqLink whe
 hgMapToGene -geneTableType=genePred -tempDb=$tempDb $db ncbiRefSeq knownGene knownToLocusLink -lookup=refToLl.txt
 rm refToLl.txt
 
-if test "$gtexGeneMode" != ""
+if test "$gtexGeneModel" != ""
 then
-    hgMapToGene -geneTableType=genePred $db -tempDb=$tempDb -all -type=genePred $gtexGeneMode knownGene knownToGtex
+    hgMapToGene -geneTableType=genePred $db -tempDb=$tempDb -all -type=genePred $gtexGeneModel knownGene knownToGtex
 fi
 
 # knownToEnsembl and knownToGencode${GENCODE_VERSION}
@@ -105,13 +105,15 @@ cat mupit-pdbids.txt | tr '[a-z]' '[A-Z]' | \
 hgLoadSqlTab $tempDb knownToMupit ~/kent/src/hg/lib/knownTo.sql knownToMupit.txt
 
 # make knownToNextProt
-wget "ftp://ftp.nextprot.org/pub/current_release/ac_lists/nextprot_ac_list_all.txt"
+#wget "ftp://ftp.nextprot.org/pub/current_release/ac_lists/nextprot_ac_list_all.txt"
+wget "https://download.nextprot.org/pub/current_release/ac_lists/nextprot_ac_list_all.txt"
 awk '{print $0, $0}' nextprot_ac_list_all.txt | sed 's/NX_//' | sort > displayIdToNextProt.txt
 hgsql -e "select spID,kgId from kgXref" --skip-column-names $tempDb | awk '{if (NF == 2) print}' | sort > displayIdToKgId.txt
 join displayIdToKgId.txt displayIdToNextProt.txt | awk 'BEGIN {OFS="\t"} {print $2,$3}' > knownToNextProt.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToNextProt $kent/src/hg/lib/knownTo.sql  knownToNextProt.tab
 
-hgMapToGene -geneTableType=genePred -tempDb=$tempDb $db HInvGeneMrna knownGene knownToHInv
+# H-Inv is no longer built (last on hg19)
+#hgMapToGene -geneTableType=genePred -tempDb=$tempDb $db HInvGeneMrna knownGene knownToHInv
 
 
 echo "BuildKnownTo successfully finished"
