@@ -1,5 +1,3 @@
 Annotation records for discontinuous features with ID="NM_001320962.1" must have same parent, found: "TSPY10P" and "TSPY10"
-Incorrect duplicated ID="NM_001320962.1" or attempt to create discontinuous features for type "transcript"
 Annotation records for discontinuous features with ID="XM_017030025.2" must have same parent, found: "TSPY10P" and "TSPY10"
-Incorrect duplicated ID="XM_017030025.2" or attempt to create discontinuous features for type "transcript"
-GFF3: 4 parser errors
+GFF3: 2 parser errors
