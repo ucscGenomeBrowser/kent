@@ -804,11 +804,12 @@ var hgSearch = (function() {
             } else {
                 alert("Error no database from request");
             }
-            if (cartJson.warning !== undefined) {
+            if (typeof cartJson.warning !== undefined) {
                 alert("Warning: " + cartJson.warning);
             }
             // check right away for a special redirect to hgTracks:
-            if (cartJson.positionMatches !== undefined &&
+            if (typeof cartJson.warning === undefined &&
+                    cartJson.positionMatches !== undefined &&
                     cartJson.positionMatches.length == 1 &&
                     cartJson.positionMatches[0].matches[0].doRedirect === true) {
                 positionMatch = cartJson.positionMatches[0];

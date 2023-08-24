@@ -5936,7 +5936,7 @@ if (fieldLabel == NULL)
     }
 
 double squishyPackPoint = cartOrTdbDouble(cart, tdb, "squishyPackPoint", 999);
-printf("<BR><B><B>%s</B> ", fieldLabel);
+printf("<BR><B>%s</B> ", fieldLabel);
 
 safef(option, sizeof(option), "%s.%s", name, "squishyPackPoint" );
 cgiMakeDoubleVarWithLimits(option, squishyPackPoint, "Range min", 0, NO_VALUE, NO_VALUE);
