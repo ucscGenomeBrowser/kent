@@ -107,23 +107,6 @@ dyStringFree(&primerPair);
 lineFileClose(&lf);
 }
 
-static boolean checkPcrResultCoordinates(boolean targetSearchResult, char *tName, int tStart,
-            int tEnd, char *item, int itemStart, int itemEnd, char *chrom)
-/* Check the coordinates of a pcrResult match so we know which list of psls
- * to add the match to */
-{
-if (targetSearchResult)
-    {
-    if (sameString(tName, item) && tStart == itemStart && tEnd == itemEnd)
-        return TRUE;
-    }
-else if (sameString(tName, chrom) && tStart == itemStart && tEnd == itemEnd)
-    {
-    return TRUE;
-    }
-return FALSE;
-}
-
 void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
 		     char *chrom, int itemStart, int itemEnd,
 		     struct psl **retItemPsl, struct psl **retOtherPsls, char *fPrimer, char *rPrimer)
@@ -139,31 +122,29 @@ while (lineFileRow(lf, pslFields))
     {
     struct psl *psl = pslLoad(pslFields);
     boolean gotIt = FALSE;
-    // if "_" is in the item name, we look up the result(s) by the primer pair, else
-    // we just show all psls
-    if (stringIn("_", item))
+    char *pair = cloneString(psl->qName);
+    char *under = strchr(pair, '_');
+    *under = '\0';
+    char *thisFPrimer = pair;
+    char *thisRPrimer = under+1;
+    if (!differentWord(thisFPrimer, fPrimer) && !differentWord(thisRPrimer, rPrimer))
         {
-        char *pair = cloneString(psl->qName);
-        char *under = strchr(pair, '_');
-        *under = '\0';
-        char *thisFPrimer = pair;
-        char *thisRPrimer = under+1;
-        if (!differentWord(thisFPrimer, fPrimer) && !differentWord(thisRPrimer, rPrimer))
+        if (targetSearchResult)
             {
-            gotIt = checkPcrResultCoordinates(targetSearchResult, psl->tName, psl->tStart,
-                    psl->tEnd, item, itemStart, itemEnd, chrom);
+            if (sameString(psl->tName, item) && psl->tStart == itemStart && psl->tEnd == itemEnd)
+                gotIt = TRUE;
             }
-        }
-    else
-        {
-        gotIt = checkPcrResultCoordinates(targetSearchResult, psl->tName, psl->tStart,
-                psl->tEnd, item, itemStart, itemEnd, chrom);
-        }
+        else if (sameString(psl->tName, chrom) && psl->tStart == itemStart &&
+                 psl->tEnd == itemEnd)
+            {
+            gotIt = TRUE;
+            }
 
-    if (gotIt)
-        itemPsl = psl;
-    else
-        slAddHead(&otherPsls, psl);
+        if (gotIt)
+            itemPsl = psl;
+        else
+            slAddHead(&otherPsls, psl);
+        }
     }
 lineFileClose(&lf);
 if (itemPsl == NULL)

@@ -7150,7 +7150,7 @@ if (targetSearch)
     // use the psl file to find the right primer pair
     pslFileGetPrimers(pslFileName, item, ampStart, ampEnd, &fPrimer, &rPrimer);
     }
-else if (stringIn("_", item))
+else
     {
     // the item name contains the forward and reverse primers
     int maxSplits = 2;
@@ -7163,10 +7163,6 @@ else if (stringIn("_", item))
         rPrimer = splitQName[1];
         touppers(rPrimer);
         }
-    }
-else
-    {
-    pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer, NULL);
     }
 printf("<H2>PCR Results (<TT>%s %s</TT>)</H2>\n", fPrimer, rPrimer);
 printf("<B>Forward primer:</B> 5' <TT>%s</TT> 3'<BR>\n", fPrimer);
