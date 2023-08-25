@@ -976,21 +976,14 @@ if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target)
     return NULL;
 char *fPrimer = NULL, *rPrimer = NULL, *nonCompRPrimer = NULL;
 char *primerKey = NULL;
-if (lf->original)
+if (lf->original && stringIn("_", ((struct psl *)lf->original)->qName))
     {
     // we can use the qName to extract the primer sequence, which
     // may be different from the primers the user pasted in!
     struct psl *psl = (struct psl *)lf->original;
     fPrimer = cloneString(psl->qName);
     char *under = strchr(fPrimer, '_');
-    if (under)
-        *under = 0;
-    else
-        {
-        errAbort("Badly formatted qName ('%s', missing '_' character. "
-            "Please send an email to genome-www@soe.ucsc.edu with the assembly, "
-            "forward and reverse primers, and other PCR settings.", psl->qName);
-        }
+    *under = 0;
     rPrimer = under + 1;
     }
 else
