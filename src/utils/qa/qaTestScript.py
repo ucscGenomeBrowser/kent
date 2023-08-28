@@ -110,7 +110,7 @@ driver.find_element_by_xpath("//div[@id='selectSpeciesSection']/div[2]/div[2]/di
 
 # Tests mm39 hgTracks
 driver.get(machine + "/cgi-bin/hgTracks?db=mm39")
-#cartReset()
+cartReset()
 
 
 # Tests hg38 hgGene
@@ -499,12 +499,13 @@ driver.find_element_by_name("wp_size").send_keys("40000")
 select = Select(driver.find_element_by_name("wp_target"))
 select.select_by_visible_text("GENCODE Genes")
 driver.find_element_by_name("Submit").click()
-driver.find_element_by_link_text("ENST00000644422.2__ABO:77+1295").click()
+driver.find_element_by_link_text("ENST00000611156.4__ABO:90+1305").click()
 time.sleep(3)
 driver.find_element_by_xpath("//td[@id='td_data_hgPcrResult']/div[2]/map/area[2]").click()
+cartReset()
 
 # Tests GenArk Rabbit Hub
-cartReset()
+#cartReset()
 driver.get(machine + "/cgi-bin/hgTracks?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCF/000/003/625/GCF_000003625.3/hub.txt&genome=GCF_000003625.3")
 driver.get(machine + "/cgi-bin/hgTracks?hideTracks=1")
 driver.find_element_by_id("positionInput").clear()
@@ -521,6 +522,7 @@ time.sleep(3)
 driver.find_element_by_id("positionInput").clear()
 driver.find_element_by_id("positionInput").send_keys("scaffold_3:1,888,907-1,888,948")
 driver.find_element_by_id("goButton").click()
+time.sleep(3)
 driver.find_element_by_id("hgt.out1").click()
 time.sleep(3)
 # Tests track hub annotation if it is on the RR  
