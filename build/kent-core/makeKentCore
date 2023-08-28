@@ -14,12 +14,15 @@ cd src
 make clean -j40
 cd ..
 rsync -avzp --filter "merge build/kent-core/makeKentCore.rules" ./ ~/kent-core/ --prune-empty-dirs --delete
-cp src/tagStorm/LICENSE ~/kent-core/
-cp build/kent-core/README.md ~/kent-core/
-cp build/kent-core/makefile ~/kent-core/
+# replace the custom license files with the original MIT licence, as this repo now has all the special code removed
+cp -f src/tagStorm/LICENSE ~/kent-core/
+cp -f src/tagStorm/LICENSE ~/kent-core/src/hg/
+# put in a new README to explain what this franken-repo is
+cp -f build/kent-core/README.md ~/kent-core/
+cp -f build/kent-core/makefile ~/kent-core/
 version=`git describe --tags | cut -d_ -f1`
 echo You can now run: "cd ~/kent-core/ && git add -A && git commit -m 'release $version' && git push && git tag $version && git push origin $version"
-echo consider un-commenting the final lines in the script kent/build/makeKentCore if it works
+echo consider un-commenting the final lines in the script kent/build/makeKentCore, to automate this step in the future
 #not automating this just yet, as this script is new:
 #cd ~/kent-core/
 #git add -A
