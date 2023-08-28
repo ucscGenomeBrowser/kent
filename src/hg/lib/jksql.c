@@ -1118,7 +1118,11 @@ mysql_options(conn, MYSQL_OPT_LOCAL_INFILE, NULL);
 // If turned on this can defeat Man-In-The-Middle attacks.
 if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0"))
     {
+    #if MYSQL_VERSION_ID < 80000
     my_bool flag = TRUE;
+    #else
+    bool flag = TRUE;
+    #endif
     mysql_options(conn, MYSQL_OPT_SSL_VERIFY_SERVER_CERT, &flag);
     }
 
