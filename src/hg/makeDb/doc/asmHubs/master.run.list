@@ -2609,6 +2609,7 @@
 ./runBuild GCF_009819885.2_bCatUst1.pri.v2 birds Catharus_ustulatus
 ./runBuild GCF_009828535.1_HMol primates Hylobates_moloch
 ./runBuild GCF_009828535.2_HMol_V2 primates Hylobates_moloch
+./runBuild GCF_009828535.3_HMol_V3 primates Hylobates_moloch
 ./runBuild GCF_009829125.1_fPerMag1.pri fish Periophthalmus_magnuspinnatus
 ./runBuild GCF_009829125.3_fPerMag1.2.pri fish Periophthalmus_magnuspinnatus
 ./runBuild GCF_009829145.1_bChiLan1.pri birds Chiroxiphia_lanceolata

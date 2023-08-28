@@ -686,6 +686,9 @@ var hgSearch = (function() {
         } else if (jsonData.error && !jsonData.error.startsWith("Sorry, couldn't locate")) {
             console.error(jsonData.error);
             alert(callerName + ': error from server: ' + jsonData.error);
+        } else if (jsonData.warning) {
+            alert("Warning: " + jsonData.warning);
+            return true;
         } else {
             if (debugCartJson) {
                 console.log('from server:\n', jsonData);
@@ -796,13 +799,17 @@ var hgSearch = (function() {
         // start processing it now:
         $("#searchBarSearchButton").click(sendUserSearch);
         if (typeof cartJson !== "undefined") {
-            if (cartJson.db !== undefined) {
+            if (typeof cartJson.db !== "undefined") {
                 db = cartJson.db;
             } else {
                 alert("Error no database from request");
             }
+            if (typeof cartJson.warning !== "undefined") {
+                alert("Warning: " + cartJson.warning);
+            }
             // check right away for a special redirect to hgTracks:
-            if (cartJson.positionMatches !== undefined &&
+            if (typeof cartJson.warning === "undefined" &&
+                    typeof cartJson.positionMatches !== "undefined" &&
                     cartJson.positionMatches.length == 1 &&
                     cartJson.positionMatches[0].matches[0].doRedirect === true) {
                 positionMatch = cartJson.positionMatches[0];

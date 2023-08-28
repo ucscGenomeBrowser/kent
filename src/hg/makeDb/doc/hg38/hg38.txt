@@ -7042,3 +7042,175 @@ bedToBigBed -type=bed6+3 -as=/hive/data/outside/cosmic/hg38/v98/cosmic.as /hive/
 
 #make symlink
 ln -s /gbdb/hg38/cosmic/cosmic.bb /hive/data/outside/cosmic/hg38/v98/cosmic.bb
+
+##############################################################################
+# LIFTOVER TO GCA_018873775.2_hg01243.v3.0 (DONE - 2023-08-13 - Hiram)
+    ssh hgwdev
+    # going to need an ooc for hg38.p14.2bit
+    cd /hive/data/genomes/hg38
+    time blat hg38.p14.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=hg38.p14.ooc -repMatch=1024
+    # Wrote 36808 overused 11-mers to hg38.p14.ooc
+    # real    0m50.753s
+
+    # and ooc for this GenArk hub
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0
+  time blat GCA_018873775.2_hg01243.v3.0.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=GCA_018873775.2_hg01243.v3.0.ooc -repMatch=1024
+# Wrote 39087 overused 11-mers to GCA_018873775.2_hg01243.v3.0.ooc
+# real    0m49.426s
+
+  mkdir /hive/data/genomes/hg38/bed/blat.GCA_018873775.2_hg01243.v3.0.2023-08-13
+    cd /hive/data/genomes/hg38/bed/blat.GCA_018873775.2_hg01243.v3.0.2023-08-13
+
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.ooc \
+         hg38 GCA_018873775.2
+
+    # trying -ram=6g to get full use of hgwdev kluster nodes
+    time (~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+        -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.ooc \
+         hg38 GCA_018873775.2) > doLiftOverToGCA_018873775.2.log 2>&1
+    # real    12654m58.134s
+
+    # broken after the alignment was done, with the parasol endless loop
+    # error message in the log file:
+    #  select failure in rudp: Invalid argument
+    # killed that, cleaned the 4Tb log file, and gave up on this alignment
+    # since the lastz/chain/net is much better
+
+    # see if the liftOver menus function in the browser from hg38
+    #    to GCA_018873775.2
+
+##############################################################################
+# LIFTOVER GCA_018873775.2_hg01243.v3.0 to hg38 (DONE - 2023-08-13 - Hiram)
+    ssh hgwdev
+
+    mkdir /hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/trackData/blat.hg38.2023-08-13
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/trackData/blat.hg38.2023-08-13
+
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.chrom.sizes \
+        -query2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -querySizes=/hive/data/genomes/hg38/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.ooc \
+         GCA_018873775.2 hg38
+
+    # trying -ram=6g to get full use of hgwdev kluster nodes
+    time (~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+        -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.chrom.sizes \
+        -query2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -querySizes=/hive/data/genomes/hg38/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.ooc \
+         GCA_018873775.2 hg38) > doLiftOverToHg38.log 2>&1
+
+    # broken after the alignment was done, with the parasol endless loop
+    # error message in the log file:
+    #  select failure in rudp: Invalid argument
+    # killed that, cleaned the 4Tb log file, and gave up on this alignment
+    # since the lastz/chain/net is much better
+    # real    193m24.137s
+
+    # see if the liftOver menus function in the browser from GCA_018873775.2
+    #    to hg38
+
+##############################################################################
+# LIFTOVER TO GCA_018503275.1_NA19240.pri.mat.f1_v2 (TBD - 2023-08-14 - Hiram)
+    ssh hgwdev
+
+    # ooc for this GenArk hub
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2
+  time blat GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit /dev/null /dev/null \
+      -tileSize=11 -repMatch=1024 \
+      -makeOoc=GCA_018503275.1_NA19240.pri.mat.f1_v2.11.ooc
+  # Wrote 35866 overused 11-mers to GCA_018503275.1_NA19240.pri.mat.f1_v2.11.ooc
+    # real    0m32.298s
+
+  mkdir /hive/data/genomes/hg38/bed/blat.GCA_018503275.1_NA19240.pri.mat.f1_v2.2023-08-14
+  cd /hive/data/genomes/hg38/bed/blat.GCA_018503275.1_NA19240.pri.mat.f1_v2.2023-08-14
+
+    ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl -verbose=2 \
+        -buildDir=`pwd` -ram=4g -chainRam=16g \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.ooc \
+         hg38 GCA_018503275.1
+
+    # trying -ram=4g to get full use of hgwdev kluster nodes
+    time (~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+        -verbose=2 -buildDir=`pwd` -ram=4g -chainRam=16g \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.ooc \
+         hg38 GCA_018503275.1) > doLiftOverToGCA_018503275.1.log 2>&1
+    # real    11370m18.026s
+
+    # broken after the alignment was done, with the parasol endless loop
+    # error message in the log file:
+    #  select failure in rudp: Invalid argument
+    # killed that, cleaned the 4Tb log file, and gave up on this alignment
+    # since the lastz/chain/net is much better
+    # -rw-rw-r-- 1 4363949695640 Aug 22 09:16 doLiftOverToGCA_018503275.1.log
+
+    # see if the liftOver menus function in the browser from hg38
+    #    to GCA_018503275.1
+
+##############################################################################
+# LIFTOVER GCA_018503275.1_NA19240.pri.mat.f1_v2 to hg38 (DONE - 2023-08-14 - Hiram)
+    ssh hgwdev
+
+    mkdir /hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/trackData/blat.hg38.2023-08-14
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/trackData/blat.hg38.2023-08-14
+
+    ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl -verbose=2 \
+        -buildDir=`pwd` -ram=4g -chainRam=16g \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.chrom.sizes \
+        -query2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -querySizes=/hive/data/genomes/hg38/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.11.ooc \
+         GCA_018503275.1 hg38
+
+    time (~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl -verbose=2 \
+        -buildDir=`pwd` -ram=4g -chainRam=16g \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.chrom.sizes \
+        -query2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -querySizes=/hive/data/genomes/hg38/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.11.ooc \
+         GCA_018503275.1 hg38) > liftOverToHg38.log 2>&1
+    # real    5082m17.500s
+
+    # this is interesting, this alignment completed and actually has good
+    # coverage:
+    cat fb.GCA_018503275.1.chain.Hg38Link.txt
+    # 2928654519 bases of 3032066086 (96.589%) in intersection
+
+    # see if the liftOver menus function in the browser from GCA_018503275.1
+    #    to hg38
+
+##############################################################################
