@@ -52,9 +52,8 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed bigLolly
 bedPackDense bed bigBed
-bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio instaPort
+bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio 
 bigGeneDataUrl genePred
-bigChainUrl instaPort
 blastRef psl bigPsl
 boxedCfg *
 browserLines customTracks
@@ -272,7 +271,7 @@ itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred bigLolly
 lfPslTable bed
 linesAt chromGraph
-linkDataUrl  bigChain instaPort
+linkDataUrl  bigChain
 linkIdInName bed bigBed
 labelFields big*
 labelOnFeature bed bigBed
@@ -344,8 +343,6 @@ onlyVisibility wigMafProt wigMaf bed
 orangDb bed
 origAssembly *
 origTrackLine customTracks
-origTable instaPort
-origType instaPort
 otherDb *
 otherTwoBitUrl *
 otherDbTable bed
@@ -381,6 +378,8 @@ vcfParentSamples vcfPhasedTrio
 vcfUseAltSampleNames vcfPhasedTrio
 saturationScore hic
 sGroup_Afrotheria wigMaf bigMaf
+sGroup_African wigMaf bigMaf
+sGroup_American wigMaf bigMaf
 sGroup_Artiodactyla bigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
@@ -389,6 +388,7 @@ sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Carnivore wigMaf bigMaf
+sGroup_Carnivora wigMaf bigMaf
 sGroup_Cetartiodactyla wigMaf bigMaf
 sGroup_Chiroptera wigMaf bigMaf
 sGroup_CoV_2019 wigMaf
@@ -400,6 +400,7 @@ sGroup_DRC_2007 wigMaf
 sGroup_Deuterostomia wigMaf
 sGroup_Dorylaimia wigMaf
 sGroup_Drosophila wigMaf
+sGroup_East_Asian wigMaf bigMaf
 sGroup_Ebola_2014 wigMaf
 sGroup_Euarchontoglires wigMaf bigMaf
 sGroup_fish wigMaf
@@ -420,6 +421,7 @@ sGroup_Nematocera wigMaf
 sGroup_Nematode wigMaf
 sGroup_Nematodes wigMaf
 sGroup_Others wigMaf
+sGroup_other wigMaf bigMaf
 sGroup_Percent99 wigMaf
 sGroup_Percent98 wigMaf
 sGroup_Percent97 wigMaf
@@ -439,12 +441,17 @@ sGroup_Platyhelminthes wigMaf
 sGroup_Plectida wigMaf
 sGroup_Primate wigMaf bigMaf
 sGroup_Primates wigMaf bigMaf
+sGroup_Primates_catarrhini wigMaf bigMaf
+sGroup_Primates_platyrrhini wigMaf bigMaf
+sGroup_Primates_strepsirrhini wigMaf bigMaf
+sGroup_Primates_tarsiidae wigMaf bigMaf
 sGroup_primate wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
 sGroup_Rodents wigMaf bigMaf
 sGroup_Sarcopterygii wigMaf
+sGroup_South_Asian wigMaf bigMaf
 sGroup_Spirurina wigMaf
 sGroup_Strongylida wigMaf
 sGroup_Sudan_1976-9 wigMaf
@@ -513,6 +520,7 @@ speciesUseFile wigMafProt wigMaf
 spectrum *
 squishyPackField  bigBed bigGenePred
 squishyPackPoint bigBed bigGenePred
+squishyPackLabel bigBed bigGenePred
 stripPrefix bam
 subGroup1 *
 subGroup2 *

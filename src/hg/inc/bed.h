@@ -33,6 +33,9 @@
 struct genePred *bedToGenePred(struct bed *bed);
 /* Convert a single bed to a genePred structure. */
 
+struct genePredExt *bedToGenePredExt(struct bed *bed);
+/* Convert a single bed to a genePredExt structure. */
+
 struct bed *bedFromGenePred(struct genePred *genePred);
 /* Convert a single genePred to a bed structure */
 

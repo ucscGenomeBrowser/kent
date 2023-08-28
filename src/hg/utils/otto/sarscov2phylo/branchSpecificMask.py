@@ -109,7 +109,7 @@ def getRepresentativeNodes(pbIn, spec):
     # Make sure we found all of them
     for rep in repNodes:
         if repNodes[rep] == '':
-            die("sample-paths file {samplePaths.name} does not have name {rep}")
+            die(f"sample-paths file {samplePaths.name} does not have name {rep}")
     os.unlink(samplePaths.name)
     return repNodes
 
@@ -143,4 +143,5 @@ def main():
     makeMaskFile(spec, repNodes, maskFileName)
     run(['matUtils', 'mask', '-i', args.pbIn, '--mask-mutations', maskFileName, '-o', args.pbOut])
 
-main()
+if __name__ == '__main__':
+    main()

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # delete files that are two weeks or older
-directory="/hive/groups/browser/cartDumps"
+directory="/hive/users/qateam/cronCartDumps"
 find "$directory" -type f -mtime +14 -delete
 
 cd /hive/users/qateam/cronCartDumps
@@ -16,6 +16,6 @@ for i in `ls -r 0*`;
 do 
 echo "<tr>"
 date=`ls -l  --time-style="+%Y-%m-%d-%H:%M" $i | awk '{print $6}'`
-echo "<td><A href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=https://hgwdev.soe.ucsc.edu/~qateam/cartDumps/$i&ignoreCookie=1\"> $i </A></td><td>$date</td>" ;
+echo "<td><A href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=https://genecats.gi.ucsc.edu/qa/qaCrons/cronCartDumps/$i&ignoreCookie=1\"> $i </A></td><td>$date</td>" ;
 echo "</tr>"
-done) > /usr/local/apache/htdocs-genecats/qa/cronCartDumps/index.html
+done) > /usr/local/apache/htdocs-genecats/qa/qaCrons/cronCartDumps/index.html

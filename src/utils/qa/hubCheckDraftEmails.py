@@ -151,5 +151,6 @@ with open("/hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-
              f.write(endEmail)
              f.write('##########################\n')
 
+bash("cp /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/draftedMessages.txt /usr/local/apache/htdocs-genecats/qa/test-results/hubCheckCron/"+datetime.now().strftime("%Y-%m"))
 print("Check https://genecats.gi.ucsc.edu/qa/test-results/hubCheckCron/"+datetime.now().strftime("%Y-%m")+"/draftedMessages.txt to email hub authors about missing/broken public hub files")
 print("Archive of monthly raw data can be found here: /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m"))

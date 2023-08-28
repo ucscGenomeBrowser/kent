@@ -62,6 +62,103 @@ target=_blank>our GitHub page</a>.</p>
 
 <!-- ============= 2023 archived news ============= -->
 <a name="2023"></a>
+
+<a name="081823"></a>
+<h2>Aug. 18, 2023 &nbsp;&nbsp; New GENCODE gene tracks: Human V44 (hg19/hg38) - Mouse VM33
+(mm39)</h2>
+<p>
+We are pleased to announce new GENCODE Gene annotation tracks, which correspond
+to <a href="https://www.ensembl.info/2023/07/17/ensembl-110-has-been-released/"
+target="_blank">Ensembl 110</a>, for three assemblies: <a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg19&c=chrX&g=wgEncodeGencodeV44lift37">hg19/GRCh37</a>,
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=wgEncodeGencodeV44">hg38/GRCh38</a>,
+and
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=mm39&c=chr12&g=wgEncodeGencodeVM33">mm39/GRCm39</a>.
+For human, the GENCODE V44 annotations were mapped to hg38/GRCh38 and then back-mapped
+to the hg19/GRCh37 assembly. For all three assemblies, the gene sets contain the
+following tracks:</p>
+<ul>
+  <li>
+      Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>
+      Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>
+      Pseudogenes - all annotations except polymorphic pseudogenes.</li>
+</ul>
+<p>
+The hg38 and mm39 assemblies also include the following track that is not available on hg19:
+</p>
+<ul>
+  <li>
+      PolyA - polyA signals and sites manually annotated on the genome based on transcribed
+      evidence (ESTs and cDNAs) of 3' end of transcripts containing at least 3 A's not matching the
+      genome.</li>
+</ul>
+<p>
+Details on each release can be found on the <a target="_blank"
+href="https://www.gencodegenes.org/">GENCODE site</a>. This includes <a target="_blank"
+href="https://www.gencodegenes.org/human/stats.html">statistics on each release</a>.
+</p>
+<p>
+We would like to thank the <a target="_blank"
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Mark Diekhans and Gerardo Perez for the development and
+release of these tracks.</p>
+
+
+<a name="080723"></a>
+<h2>Aug. 07, 2023 &nbsp;&nbsp; Introducing an interactive tutorial for the UCSC Genome Browser</h2>
+<p>
+We are happy to announce the release of a new interactive tutorial for the UCSC Genome Browser. The
+tutorial is designed to help new users navigate the UCSC Genome Browser. Topics such as navigating
+around the Genome Browser display, configuring track display settings, searching for tracks, and
+viewing the negative strand (3' to 5') are covered in the tutorial.</p>
+<p>
+To begin the tutorial, select the <em>Interactive tutorial</em> from the &quot;Help&quot; drop-down
+menu.
+<div class="text-center">
+  <a href="/cgi-bin/hgTracks?db=hg38&position=default">
+    <img src="/images/newsArchImages/hgTracksTutorial.png" width="900">
+  </a>
+</div>
+</p>
+<p>
+We would like to thank Chris Lee and Jairo Navarro for their work in creating this tutorial.</p>
+
+<a name="080123"></a>
+<h2>Aug. 01, 2023 &nbsp;&nbsp; New ability to create duplicate tracks</h2>
+<p>
+We are pleased to announce the new Duplicate track feature, which allows a copy of a track to
+have its own independent settings and be used for multiple display views.</p>
+<div class="text-center">
+  <a href="http://genome.ucsc.edu/s/gperez2/RM_30365" target="_blank">
+  <img src="../images/duplicateDisplay.png"  width="300"></a>
+</div>
+<p>
+You can have multiple duplicates of the same track where the number will increment by one for
+each additional duplicate, and each duplicated track is independent of each other.
+Only tracks that are not inside of composite or supertracks can be duplicated and this feature does
+not work in hubs.</p>
+<p>
+Duplicate tracks can be helpful when comparing different settings and visibility
+types on the same data; for instance, displaying all GENCODE genes, including pseudogenes, in dense
+mode, alongside a more concise gene set, such as the default, in pack mode to see gene symbols and
+accessions. This is shown in the image below, where duplicated GENCODE track has the additional
+text &quot;(duplicate #1)&quot; on the label above the track display and &quot;#1&quot; text on
+the left label of the track display.</p>
+<div class="text-center">
+  <a href="http://genome.ucsc.edu/s/gperez2/RM_30365_v2" target="_blank">
+  <img src="../images/duplicationHgTracks2_GENCODEV43.png" alt="GENCODE V43 duplicate" width="1000"></a>
+</div>
+<p>
+For more information, see the "Duplicating a track" section of the
+<a target="_blank" href="help/hgTracksHelp.html#duplicate">Genome Browser User Guide</a>.</p>
+<p>
+We would like to thank Brian Joseph Raney, Max Haeussler, Jairo Navarro, and Gerardo Perez for
+their work on this release.</p>
+
+
 <a name="071923"></a>
 <h2>Jul. 19, 2023 &nbsp;&nbsp; FANTOM5 transcription start sites for Human, Mouse, Dog, Rhesus, Rat,
 and Chicken</h2>

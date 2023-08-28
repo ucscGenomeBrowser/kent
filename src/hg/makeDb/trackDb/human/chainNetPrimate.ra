@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Primate Chain/Net
 longLabel Primate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species s000a=Human s000b=Hg38P2 s001=Human s002=J._Craig_Venter s0025=Chimp s003=Chimp s004=Chimp s005=Chimp s006=Chimp s007a=Bonobo s007b=Bonobo s008=Bonobo s009a=Gorilla s009b=Gorilla s010=Gorilla s011=Gorilla s012=Gorilla s013a=Orangutan s013b=Orangutan s014=Gibbon s015=Gibbon s016=Proboscis_monkey s017=Black_snub-nosed_monkey s018=Golden_snub-nosed_monkey s019=Angolan_colobus s020=Crab-eating_macaque s021=Rhesus s022=Rhesus s023a=Rhesus s023b=Rhesus s024=Baboon s025=Baboon s026=Baboon s027=Pig-tailed_macaque s028=Sooty_mangabey s029=Green_monkey s030=Green_monkey s031=Drill s032=Squirrel_monkey s033=Ma's_night_monkey s034a=Marmoset s034b=Marmoset s035=Marmoset s036=White-faced_sapajou s037=Tarsier s038=Tarsier s039=Sclater's_lemur s040=Black_lemur s041=Coquerel's_sifaka s042=Mouse_lemur s043=Mouse_lemur s044=Mouse_lemur s045=Bushbaby s046=Bushbaby
+subGroup2 species Species s000a=Human s000b=Hg38P2 s001=Human s002=J._Craig_Venter s002a=HG01243v3 s0025=Chimp s003=Chimp s004=Chimp s005=Chimp s006=Chimp s007a=Bonobo s007b=Bonobo s008=Bonobo s009a=Gorilla s009b=Gorilla s010=Gorilla s011=Gorilla s012=Gorilla s013a=Orangutan s013b=Orangutan s014=Gibbon s015=Gibbon s016=Proboscis_monkey s017=Black_snub-nosed_monkey s018=Golden_snub-nosed_monkey s019=Angolan_colobus s020=Crab-eating_macaque s021=Rhesus s022=Rhesus s023a=Rhesus s023b=Rhesus s024=Baboon s025=Baboon s026=Baboon s027=Pig-tailed_macaque s028=Sooty_mangabey s029=Green_monkey s030=Green_monkey s031=Drill s032=Squirrel_monkey s033=Ma's_night_monkey s034a=Marmoset s034b=Marmoset s035=Marmoset s036=White-faced_sapajou s037=Tarsier s038=Tarsier s039=Sclater's_lemur s040=Black_lemur s041=Coquerel's_sifaka s042=Mouse_lemur s043=Mouse_lemur s044=Mouse_lemur s045=Bushbaby s046=Bushbaby
 subGroup3 clade Clade c00=hominidae c01=cercopithecinae c02=haplorrhini c03=strepsirrhini
 dragAndDrop subTracks
 visibility hide
@@ -58,6 +58,15 @@ priority 7
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain venter1
         otherDb venter1
+
+        track chainGCA_018873775.2
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=s002a clade=c00
+        shortLabel HG01243/human Chain
+        longLabel human (Sep. 2021 GCA_018873775.2_hg01243.v3.0) Chained Alignments
+        type bigChain GCA_018873775.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_018873775.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_018873775.2Link.bb
 
         track chainPanTro6
         subTrack primateChainNetViewchain off

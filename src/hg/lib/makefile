@@ -27,7 +27,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   gtexSampleData.o gtexTissue.o gtexTissueMedian.o gtexUi.o hCommon.o hPrint.o hVarSubst.o \
   hapmapAllelesOrtho.o hapmapPhaseIIISummary.o hapmapSnps.o hdb.o hgColors.o hgConfig.o hgFind.o \
   hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o hgMaf.o hgRelate.o hic.o hicUi.o hubConnect.o hubPublic.o \
-  hubSearchText.o hui.o imageClone.o indelShift.o interact.o interactUi.o itemAttr.o jksql.o joiner.o \
+  hubSearchText.o hui.o imageClone.o indelShift.o instaPort.o interact.o interactUi.o itemAttr.o jksql.o joiner.o \
   jsHelper.o kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o lav.o lfs.o liftOver.o liftOverChain.o \
   liftUp.o longRange.o lrg.o lsSnpPdb.o mafFrames.o mafGene.o mafSummary.o makeItemsItem.o mdb.o \
   microarray.o minChromSize.o netAlign.o netCart.o pepPred.o pgPhenoAssoc.o pgSnp.o pslReader.o qaSeq.o \

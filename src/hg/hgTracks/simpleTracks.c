@@ -651,6 +651,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		range->end = end + winOffset;
 		slAddHead(&rangeList, range);
                 rangeWidth += (range->end - range->start);
+                range->height = 1;
 
 		AllocVar(node);
 		node->val = item;
@@ -5147,22 +5148,33 @@ int *starts = bed->chromStarts, start;
 int *sizes = bed->blockSizes;
 int blockCount = bed->blockCount, i;
 
-assert(starts != NULL && sizes != NULL && blockCount > 0);
+//assert(starts != NULL && sizes != NULL && blockCount > 0);
 
 AllocVar(lf);
 lf->grayIx = grayIx;
 lf->name = cloneString(bed->name);
 lf->orientation = orientFromChar(bed->strand[0]);
-for (i=0; i<blockCount; ++i)
+if (sizes == NULL)
     {
     AllocVar(sf);
-    start = starts[i] + bed->chromStart;
-    sf->start = start;
-    sf->end = start + sizes[i];
+    sf->start = bed->chromStart;
+    sf->end = bed->chromEnd;
     sf->grayIx = grayIx;
     slAddHead(&sfList, sf);
     }
-slReverse(&sfList);
+else
+    {
+    for (i=0; i<blockCount; ++i)
+        {
+        AllocVar(sf);
+        start = starts[i] + bed->chromStart;
+        sf->start = start;
+        sf->end = start + sizes[i];
+        sf->grayIx = grayIx;
+        slAddHead(&sfList, sf);
+        }
+    slReverse(&sfList);
+    }
 lf->components = sfList;
 linkedFeaturesBoundsAndGrays(lf);
 lf->tallStart = bed->thickStart;
@@ -11337,8 +11349,11 @@ if (vis == tvSquish || vis == tvDense || myItem->alleleCount > 2)
 char *allele[8];
 char *freq[8];
 int allTot = 0;
-int x1 = round((double)((int)myItem->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)((int)myItem->chromEnd-winStart)*scale) + xOff;
+int s = max(myItem->chromStart, winStart), e = min(myItem->chromEnd, winEnd);
+if (s > e)
+    return;
+int x1 = round((s-winStart)*scale) + xOff;
+int x2 = round((e-winStart)*scale) + xOff;
 int w = x2-x1;
 if (w < 1)
     w = 1;
@@ -14177,11 +14192,6 @@ else if (sameWord(type, "bigLolly"))
     track->isBigBed = TRUE;
     track->mapsSelf = TRUE;
     lollyMethods(track, tdb, wordCount, words);
-    }
-else if (sameWord(type, "instaPort"))
-    {
-    //track->isBigBed = TRUE;
-    instaPortMethods(track,tdb, wordCount, words);
     }
 else if (sameWord(type, "bigInteract"))
     {

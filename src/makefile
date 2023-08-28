@@ -169,9 +169,7 @@ utils: libs destBin
             fi ;\
 	done
 	cd utils && ${MAKE}
-ifneq ($(wildcard jkOwnLib/*),)
 	cd hg && ${MAKE} utils
-endif
 
 utils-alpha: check-alpha libs destBin
 	${MKDIR} ${SCRIPTS}

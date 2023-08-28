@@ -5924,12 +5924,19 @@ void squishyPackOption(struct cart *cart, char *name, char *title, struct trackD
 /* let the user choose to see the track in wiggle mode */
 {
 char option[256];
+char buffer[4096];
 char *field = trackDbSetting(tdb, "squishyPackField");
 if (field == NULL)
     return;
+char *fieldLabel = trackDbSetting(tdb, "squishyPackLabel");
+if (fieldLabel == NULL)
+    {
+    fieldLabel = buffer;
+    safef(buffer, sizeof buffer, "Reduce (squish) the height of items that have a %s value greater than", field);
+    }
 
 double squishyPackPoint = cartOrTdbDouble(cart, tdb, "squishyPackPoint", 999);
-printf("<BR><B>Squish items that have a %s value that is greater or equal to </B> ", field);
+printf("<BR><B>%s</B> ", fieldLabel);
 
 safef(option, sizeof(option), "%s.%s", name, "squishyPackPoint" );
 cgiMakeDoubleVarWithLimits(option, squishyPackPoint, "Range min", 0, NO_VALUE, NO_VALUE);

@@ -1,0 +1,9 @@
+<BR><BR>
+Method:
+<BR>Chains between hg38 and each assembly in the HPRC assemblies are examined to find the orthologous sequence in the HPRC assembly. Next any sub-chains from the same sequence that overlap the orthologous sequence are identified.   Each of those overlaps is determined to be either an inversion or a local duplication and output to a two bed files that list the assembly the rearrangement is in.
+<BR><BR>
+Once all those bed files are calculated for each assembly, they are all collected together, with overlapping beds expanded to include all the overlapping beds such that the final set of beds is non-overlapping and contains a list of all the assemblies that contributed to that cluster.  These bed files are labeled "Elements".   There are also wiggle tracks called "Coverage" that count up all the overlapping beds for each cluster.
+<BR><BR>
+There are three sets of elements:  inversions, duplications, and the union of those two.
+<BR><BR>
+Elements are labeled by how many assemblies contributed to that cluster.

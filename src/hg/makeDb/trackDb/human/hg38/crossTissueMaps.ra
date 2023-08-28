@@ -5,7 +5,6 @@ longLabel Single Nuclei sequenced across many tissues
 visibility hide
 group singleCell
 configureByPopup off
-pennantIcon New red ../goldenPath/newsarch.html#041023 "Released Apr. 10, 2023"
 
     track crossTissueMapsTissueCellType
     parent crossTissueMaps

@@ -30,6 +30,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         filterValues._allTypeCode SUBST|single nucleotide variant - SUBST,STRUCT|translocation and fusion - STRUCT,LOSS|deletion and copy loss - LOSS,GAIN|duplication and copy gain - GAIN,INS|indel and insertion - INS,INV|inversion - INV,SEQALT|undetermined - SEQALT,SEQLEN|repeat change - SEQLEN
         filterType._allTypeCode multiple
         filter._varLen 0
+        skipFields rcvAcc
         filterByRange._varLen on
         filterLimits._varLen 0:49
         filterValues.molConseq genic downstream transcript variant|genic downstream transcript variant,no sequence alteration|no sequence alteration,inframe indel|inframe indel,stop lost|stop lost,genic upstream transcript variant|genic upstream transcript variant,initiatior codon variant|initiatior codon variant,inframe insertion|inframe insertion,inframe deletion|inframe deletion,splice acceptor variant|splice acceptor variant,splice donor variant|splice donor variant,5 prime UTR variant|5 prime UTR variant,nonsense|nonsense,non-coding transcript variant|non-coding transcript variant,3 prime UTR variant|3 prime UTR variant,frameshift variant|frameshift variant,intron variant|intron variant,synonymous variant|synonymous variant,missense variant|missense variant,|unknown
@@ -49,6 +50,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         itemRgb on
         group phenDis
         priority 2
+        skipFields rcvAcc
         # note that you cannot change these values. Old carts will contain them. If you must change these, you'll have to rename
         # the field, which will reset the cart variables. Or use the cart rewrite mechanism. You can add more values, though
         filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown

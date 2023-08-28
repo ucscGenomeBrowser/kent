@@ -22,8 +22,9 @@ searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
 defaultLinkedTables kgXref
-squishyPackPoint 2
+squishyPackPoint 1
 squishyPackField rank
+squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
 
 searchName knownGeneAcc
 searchTable knownGene

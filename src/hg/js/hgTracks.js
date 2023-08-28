@@ -958,7 +958,7 @@ var vis = {
         if (arguments.length > 2)
             return setTableRowVisibility(button, prefix, "hgtgroup", "group",false,arguments[2]);
         else
-            return setTableRowVisibility(button, prefix, "hgtgroup", "group",false);
+            return setTableRowVisibility(button, prefix, "hgtgroup", "group", true);
     },
 
     expandAllGroups: function (newState)
@@ -5464,6 +5464,10 @@ $(document).ready(function()
 
         // show a tutorial page if this is a new user
         if (typeof tour !== 'undefined' && tour) {
+            setupSteps();
+            if (typeof startTutorialOnLoad !== 'undefined' && startTutorialOnLoad) {
+                tour.start();
+            }
             let lsKey = "hgTracks_hideTutorial";
             let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
             let hideTutorial = localStorage.getItem(lsKey);
@@ -5568,6 +5572,7 @@ $(document).ready(function()
     if (typeof showMouseovers !== 'undefined' && showMouseovers) {
         convertTitleTagsToMouseovers();
     }
+
 });
 
 function hgtWarnTiming(maxSeconds) {

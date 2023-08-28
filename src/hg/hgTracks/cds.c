@@ -974,11 +974,20 @@ char *pslFileName, *primerFileName;
 struct targetDb *target;
 if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     return NULL;
-char *fPrimer=NULL, *rPrimer=NULL, *nonCompRPrimer;
+char *fPrimer = NULL, *rPrimer = NULL, *nonCompRPrimer = NULL;
 char *primerKey = NULL;
-if (lf->original)
-    primerKey = ((struct psl *)lf->original)->qName;
-pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer, primerKey);
+if (lf->original && stringIn("_", ((struct psl *)lf->original)->qName))
+    {
+    // we can use the qName to extract the primer sequence, which
+    // may be different from the primers the user pasted in!
+    struct psl *psl = (struct psl *)lf->original;
+    fPrimer = cloneString(psl->qName);
+    char *under = strchr(fPrimer, '_');
+    *under = 0;
+    rPrimer = under + 1;
+    }
+else
+    pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer, primerKey);
 if ((fPrimer == NULL) || (rPrimer == NULL))
         return NULL;
 int fPrimerSize = strlen(fPrimer);
