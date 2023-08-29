@@ -118,6 +118,7 @@ chainLinearGap medium
 matrixHeader A, C, G, T
 otherDb GCA_009914755.4
 html chainNet
+release alpha
 
     track chainNetGCA_009914755.4Viewchain
     shortLabel Chain
