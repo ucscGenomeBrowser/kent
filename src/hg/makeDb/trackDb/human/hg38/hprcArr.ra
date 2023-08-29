@@ -5,7 +5,7 @@ longLabel HPRC Rearrangments V1
 subGroup1 view Views wig=Coverage bed=Elements 
 dragAndDrop subTracks
 visibility dense
-group compGeno
+group hprc
 noInherit on
 #priority 498
 color 0,0,0
@@ -34,7 +34,6 @@ sortOrder view=+
         longLabel All
         bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrAllV1.bw
         type bigWig
-        group compGeno
 
         track hprcArrInvWigV1
         parent hprcArrViewWigV1 off
@@ -43,7 +42,6 @@ sortOrder view=+
         longLabel Inversions
         bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrInvV1.bw
         type bigWig
-        group compGeno
 
 
         track hprcArrDupWigV1
@@ -53,7 +51,6 @@ sortOrder view=+
         longLabel Duplications
         bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrDupV1.bw
         type bigWig
-        group compGeno
 
     track hprcArrViewBedV1
     shortLabel Elements
@@ -68,7 +65,6 @@ sortOrder view=+
         longLabel All
         bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrAllV1.bb
         type bigBed 9 +
-        group compGeno
         labelFields score
         itemRgb on
         visibility dense
@@ -81,7 +77,6 @@ sortOrder view=+
         longLabel Inversions
         bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrInvV1.bb
         type bigBed 9 +
-        group compGeno
         labelFields score
         itemRgb on
 
@@ -93,6 +88,5 @@ sortOrder view=+
         longLabel Duplications
         bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrDupV1.bb
         type bigBed 9 +
-        group compGeno
         labelFields score
         itemRgb on

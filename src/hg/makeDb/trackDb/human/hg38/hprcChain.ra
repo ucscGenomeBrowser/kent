@@ -1,6 +1,6 @@
 track hprcChain
 compositeTrack on
-group x
+group hprc
 shortLabel HPRC Chains v0.1
 longLabel HPRC Chains version 0.1 prototype April 2022
 type bed 3
