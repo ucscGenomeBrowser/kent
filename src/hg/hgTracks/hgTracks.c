@@ -11284,6 +11284,11 @@ if (prevColor)
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
 
+// add the center label height if center labels are present
+if (withCenterLabels)
+    jsonObjectAdd(jsonForClient, "centerLabelHeight",
+              newJsonNumber(tl.fontHeight));
+
 struct dyString *dy = dyStringNew(1024);
 jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
 jsInline(dy->string);

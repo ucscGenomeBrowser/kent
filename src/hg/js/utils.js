@@ -3817,19 +3817,23 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
 
         // now we need to offset our coordinates to the track tr, to account for dragReorder
         let parent = refEl.closest(".trDraggable");
+        let currParentOffset = 0, yDiff = 0;
         if (refEl.parentNode.name === "ideoMap") {
             parent = refImg.closest("tr");
-            let currParentOffset = parent.getBoundingClientRect().y;
-            let yDiff = y1;
-            refTop = currParentOffset + yDiff;
-            refBottom = currParentOffset + yDiff + refHeight;
+            currParentOffset = parent.getBoundingClientRect().y;
+            yDiff = y1;
         } else if (parent) {
             // how far in y direction we are from the tr start in the original image from the server:
-            let currParentOffset = parent.getBoundingClientRect().y;
-            let yDiff = y1 - hgTracks.trackDb[parent.id.slice(3)].imgOffsetY;
-            refTop = currParentOffset + yDiff;
-            refBottom = currParentOffset + yDiff + refHeight;
+            currParentOffset = parent.getBoundingClientRect().y;
+            yDiff = y1 - hgTracks.trackDb[parent.id.slice(3)].imgOffsetY;
+            // if track labels are on, then the imgOffsetY will be off by the track label amount
+            if (typeof hgTracks.centerLabelHeight !== 'undefined') {
+                yDiff += hgTracks.centerLabelHeight;
+            }
         }
+        // account for dragReorder and track labels
+        refTop = currParentOffset + yDiff;
+        refBottom = currParentOffset + yDiff + refHeight;
     } else {
         rect = refEl.getBoundingClientRect();
         refX = rect.x; refY = rect.y;
