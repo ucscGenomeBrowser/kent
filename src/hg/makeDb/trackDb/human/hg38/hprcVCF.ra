@@ -1,0 +1,12 @@
+track hprcVariants
+shortLabel HPRC variants
+longLabel HPRC Variants
+type vcfTabix
+showHardyWeinberg on
+configureByPopup off
+maxWindowToDraw 200000
+dataVersion August 2023
+html chainsHprc
+visibility hide
+bigDataUrl /gbdb/hg38/hprc/hprcCactusIds.vcf.gz
+group hprc
