@@ -3795,22 +3795,22 @@ if ((canonicalSpec =
     relStart = atoi(stripCommas(term+substrs[2].rm_so));
     term[substrs[3].rm_eo] = 0;
     if (singleBaseSpec)
-	{
-	relEnd   = relStart;
-	relStart--;
-	}
+        {
+        relEnd   = relStart;
+        relStart--;
+        }
     else
-	relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
-    if (relStart > relEnd)
-	{
-	int tmp  = relStart;
-	relStart = relEnd;
-	relEnd   = tmp;
-	}
-    if (canonicalSpec || gbrowserSpec || lengthSpec)
-	relStart--;
+        relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
     if (lengthSpec)
         relEnd += relStart;
+    if (relStart > relEnd)
+        {
+        int tmp  = relStart;
+        relStart = relEnd;
+        relEnd   = tmp;
+        }
+    if (canonicalSpec || gbrowserSpec || lengthSpec)
+        relStart--;
     relativeFlag = TRUE;
     }
 term = cloneString(term); // because hgOfficialChromName mangles it
