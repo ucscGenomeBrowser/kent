@@ -799,7 +799,13 @@ return content;
 function notifBoxShow(cgiName, keyName) {
     /* move the notification bar div under '#TrackHeaderForm' */
     let lsKey = cgiName + "_" + keyName;
+    if (localStorage.getItem(lsKey))
+        return;
     var notifEl = document.getElementById(lsKey + "notifBox");
+    if (!notifEl) {
+        // missing call to setup function (ie generated server side like a udcTimeout message)
+        notifBoxSetup(cgiName, keyName);
+    }
     // TODO: make a generic element for positioning this
     var parentEl = document.getElementById('TrackHeaderForm');
     if (parentEl) {
@@ -815,34 +821,42 @@ function notifBoxSetup(cgiName, keyName, msg) {
  * or hide this notification.
  * Must call notifBoxShow() in order to display the notification */
     lsKey = cgiName + "_" + keyName;
+    if (localStorage.getItem(lsKey))
+        return;
+    let alreadyPresent = false;
     let notifBox = document.getElementById(lsKey+"notifBox");
     if (notifBox) {
-        notifBox.innerHTML += "<br>" + msg;
-    } else {
-        let newDiv = document.createElement("div");
-        newDiv.className = "notifBox";
-        newDiv.style.display = "none";
-        newDiv.style.width = "90%";
-        newDiv.style.marginLeft = "100px";
-        newDiv.id = lsKey+"notifBox";
+        alreadyPreset = true;
         if (msg) {
-            newDiv.innerHTML = msg;
+            notifBox.innerHTML += "<br>" + msg;
         }
-        newDiv.innerHTML += "<div style='text-align:center'>"+
-            "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
-            "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
-            "</div>";
-        document.body.appendChild(newDiv);
-        $("#"+lsKey+"notifyHide").click({"id":lsKey}, function() {
-            let key = arguments[0].data.id;
-            $("#"+key+"notifBox").remove();
-        });
-        $("#"+lsKey+"notifyHideForever").click({"id": lsKey}, function() {
-            let key = arguments[0].data.id;
-            $("#"+key+"notifBox").remove();
-            localStorage.setItem(key, "1");
-        });
+    } else {
+        notifBox = document.createElement("div");
+        notifBox.className = "notifBox";
+        notifBox.style.display = "none";
+        notifBox.style.width = "90%";
+        notifBox.style.marginLeft = "100px";
+        notifBox.id = lsKey+"notifBox";
+        if (msg) {
+            notifBox.innerHTML = msg;
+        }
     }
+    notifBox.innerHTML += "<div style='text-align:center'>"+
+        "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
+        "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
+        "</div>";
+    if (!alreadyPresent) {
+        document.body.appendChild(notifBox);
+    }
+    $("#"+lsKey+"notifyHide").click({"id":lsKey}, function() {
+        let key = arguments[0].data.id;
+        $("#"+key+"notifBox").remove();
+    });
+    $("#"+lsKey+"notifyHideForever").click({"id": lsKey}, function() {
+        let key = arguments[0].data.id;
+        $("#"+key+"notifBox").remove();
+        localStorage.setItem(key, "1");
+    });
 }
 
 function warnBoxJsSetup()

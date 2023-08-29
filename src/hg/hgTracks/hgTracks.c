@@ -11007,14 +11007,12 @@ if (newHighlight)
     }
 }
 
-void notify (char *msg)
+void notify (char *msg, char *msgId)
 /* print a message into a hidden DIV tag, and call Javascript to move the DIV under the
  * tableHeaderForm element and un-hide it. Less obtrusive than a warn() message but still hard to miss. */
 {
-puts("<div style='display:none' id='notifBox'>");
-puts(msg);
-puts("</div>");
-jsInline("notifBoxShow();\n");
+jsInlineF("notifBoxSetup(\"hgTracks\", \"%s\", \"%s\");\n", msgId, msg);
+jsInlineF("notifBoxShow(\"hgTracks\", \"%s\");\n", msgId);
 }
 
 extern boolean issueBotWarning;
@@ -11326,7 +11324,7 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"This is useful when developing hubs, but it reduces "
 	"performance. To clear the setting, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
-    notify(buf);
+    notify(buf, "udcTimeout");
     }
 #ifdef DEBUG
 if (cdsQueryCache != NULL)
