@@ -6,7 +6,7 @@ subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phylo
 dragAndDrop subTracks
 visibility hide
 type bed 4
-group compGeno
+group hprc
 html chainsHprc
 
     track consHprc90wayViewalign
@@ -16,7 +16,6 @@ html chainsHprc
     viewUi on
     subTrack consHprc90way
 
-#        irows on
 #        frames hprc90wayFrames
 
         track hprc90way
@@ -28,9 +27,9 @@ html chainsHprc
         type wigMaf 0.0 1.0
         viewUi on
         treeImage phylo/hprc_90way.png
+        irows on
         summary hprc90waySummary
         itemFirstCharCase noChange
-        group compGeno
         color 0, 10, 100
         altColor 0,90,10
         speciesCodonDefault hg38
