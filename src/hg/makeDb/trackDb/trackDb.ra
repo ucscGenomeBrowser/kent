@@ -351,6 +351,7 @@ release alpha
     type bigBed 9 +
     colorByStrand 0,0,128 128,0,0
     priority 1
+    release alpha
 
     track crisprKmers
     parent crispors
@@ -360,6 +361,7 @@ release alpha
     type bigBed 9 .
     itemRgb on
     priority 2
+    release alpha
 
 include crisprAll.ra
 include crispr10K.ra 
