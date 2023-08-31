@@ -1151,6 +1151,7 @@ span.gbSessionChanged {
     border: 1px solid black;
     border-radius: 2px;
     box-shadow: 0px 1px 2px darkgrey;
+    max-width: 400px;
 }
 
 .tooltip:hover .tooltiptext {
