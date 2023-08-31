@@ -3997,6 +3997,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
         mouseoverContainer.style.visibility = "hidden";
         mouseoverContainer.style.opacity = "0";
         mouseoverContainer.id = "mouseoverContainer";
+        mouseoverContainer.style.fontSize = window.browserTextSize + "px";
         document.body.append(mouseoverContainer);
     }
     // create a mouseover element out of text, or, if text is null, use already

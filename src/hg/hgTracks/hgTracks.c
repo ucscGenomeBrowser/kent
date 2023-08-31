@@ -11295,6 +11295,8 @@ jsInline(dy->string);
 dyStringFree(&dy);
 
 dy = dyStringNew(1024);
+// always write the font-size, it's useful for other javascript functions
+dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
 // do not have a JsonFile available when PDF/PS output
 if (enableMouseOver && isNotEmpty(mouseOverJsonFile->forCgi))
     {
@@ -11309,7 +11311,6 @@ if (enableMouseOver && isNotEmpty(mouseOverJsonFile->forCgi))
 
     hPrintf("<div id='mouseOverVerticalLine' class='mouseOverVerticalLine'></div>\n");
     hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
-    dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
     dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
     }
 else
