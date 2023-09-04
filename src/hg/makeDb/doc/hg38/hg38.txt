@@ -7038,10 +7038,20 @@ zcat ucsc_export.bed.gz | awk -F'\t' -v OFS="\t" '{ print $1, $2, $3, $7, 0, $6,
 
 #remove those broken records from the file
 cat cosmic.bed | grep -vf badRecords.bed > cosmic.fixed.bed
-bedToBigBed -type=bed6+3 -as=/hive/data/outside/cosmic/hg38/v98/cosmic.as /hive/data/outside/cosmic/hg38/v98/cosmic.fixed.bed /hive/data/genomes/hg38/chrom.sizes /hive/data/outside/cosmic/hg38/v98/cosmic.bb -tab
+
+#subtract to conform to bed format for all the items that have same star and endPos
+
+cat cosmic.fixed.bed | awk 'BEGIN {OFS="\t"} {
+if ($2 == $3)
+        print $1,$2-1,$3,$4,$5,$6,$7,$8,$9;
+else
+        print $0;
+}' > cosmic.fixedPos.bed
+
+bedToBigBed -type=bed6+3 -as=/hive/data/outside/cosmic/hg38/v98/cosmic.as /hive/data/outside/cosmic/hg38/v98/cosmic.fixedPos.bed /hive/data/genomes/hg38/chrom.sizes /hive/data/outside/cosmic/hg38/v98/cosmic.bb -tab
 
 #make symlink
-ln -s /gbdb/hg38/cosmic/cosmic.bb /hive/data/outside/cosmic/hg38/v98/cosmic.bb
+ln -s /hive/data/outside/cosmic/hg38/v98/cosmic.bb /gbdb/hg38/cosmic/cosmic.bb
 
 ##############################################################################
 # LIFTOVER TO GCA_018873775.2_hg01243.v3.0 (DONE - 2023-08-13 - Hiram)
@@ -7212,5 +7222,48 @@ ln -s /gbdb/hg38/cosmic/cosmic.bb /hive/data/outside/cosmic/hg38/v98/cosmic.bb
 
     # see if the liftOver menus function in the browser from GCA_018503275.1
     #    to hg38
+
+##############################################################################
+## update grp table add new row for HPRC (DONE - 2023-08-29 - Hiram)
+## existing structure:
+
+    hgsql -e 'desc grp;' hg38
+
++-----------------+-----------+------+-----+---------+-------+
+| Field           | Type      | Null | Key | Default | Extra |
++-----------------+-----------+------+-----+---------+-------+
+| name            | char(255) | NO   | PRI |         |       |
+| label           | char(255) | NO   |     |         |       |
+| priority        | float     | NO   |     | 0       |       |
+| defaultIsClosed | int(11)   | YES  |     | NULL    |       |
++-----------------+-----------+------+-----+---------+-------+
+
+    #  add one new row:
+    hgsql hg38 \
+      -e "INSERT INTO grp VALUES ('hprc', 'Human Pangenome - HPRC', 3.6, 0);"
+
+    # resulting table:
+
+    hgsql -e 'select * from grp order by priority;' hg38
++------------+------------------------------------+----------+-----------------+
+| name       | label                              | priority | defaultIsClosed |
++------------+------------------------------------+----------+-----------------+
+| user       | Custom Tracks                      |        1 |               0 |
+| remc       | Reference Epigenome Mapping Center |      1.2 |               1 |
+| map        | Mapping and Sequencing             |        2 |               0 |
+| genes      | Genes and Gene Predictions         |        3 |               0 |
+| phenDis    | Phenotype and Literature           |      3.4 |               0 |
+| pub        | Literature                         |      3.5 |               0 |
+| hprc       | Human Pangenome - HPRC             |      3.6 |               0 |
+| covid      | COVID-19                           |      3.6 |               0 |
+| singleCell | Single Cell RNA-seq                |      3.7 |               0 |
+| rna        | mRNA and EST                       |        4 |               0 |
+| expression | Expression                         |      4.5 |               0 |
+| regulation | Regulation                         |        5 |               0 |
+| compGeno   | Comparative Genomics               |        6 |               0 |
+| varRep     | Variation                          |        7 |               0 |
+| rep        | Repeats                            |        8 |               0 |
+| x          | Experimental                       |       10 |               1 |
++------------+------------------------------------+----------+-----------------+
 
 ##############################################################################

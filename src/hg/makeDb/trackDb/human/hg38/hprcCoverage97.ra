@@ -2,7 +2,7 @@ track hprcCoverageSuper
 compositeTrack on
 shortLabel HPRC Coverage 97
 longLabel HPRC Coverage - 97 liftOver chain overlap counts
-group x
+group hprc
 color 1,1,1
 type bed 3 +
 html hprcCoverage

@@ -2198,12 +2198,12 @@ There are no extra options that can appear on the type hic line.
 </DIV>
 
 <DIV class="baseColorUseCds"><span class="types bed genePred psl bigPsl"></span>
-<div class="format"><code>baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
+<div class="format"><code>baseColorUseCds &lt;given&gt;</code></div>
     <P>Specifies where coding sequence (CDS)
     coordinates can be found (if any) so that codons can be drawn
-    when viewing a sufficiently small region.  If <code>table</code> is
-    specified, an additional parameter of a table name, in cdsSpec
-    format, is required.</P>
+    when viewing a sufficiently small region.</P>
+    <P><B>Example:</B></P>
+    <pre>   baseColorUseCds given</pre>
 </DIV>
 
 <DIV class="baseColorDefault"><span class="types all"></span>

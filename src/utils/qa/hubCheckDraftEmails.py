@@ -123,7 +123,7 @@ The UCSC Genome Browser Group
 """
 
 # Gets the total lines number from the hubCheck output 
-totalLines=bash("wc -l /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/hubCheck_output | tr ' ' '\t' | cut -f1")
+totalLines=bash("wc -l /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/filtered_output.txt | tr ' ' '\t' | cut -f1")
 with open("/hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/draftedMessages.txt", 'a') as f:
      f.write('##########################\n')
      # For loop that gets each hub.txt that has the error of missing description page
@@ -131,7 +131,7 @@ with open("/hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-
              f.write('Send email to: '+getEmail(stringTerm(item))+'\n')
              f.write(emailIntro % item)
              # For loop that gets hubCheck output for each hub.txt that has the error of missing description page
-             for line in (bash("cat /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/hubCheck_output | grep -A "+stringTerm(totalLines)+" "+stringTerm(item))):
+             for line in (bash("cat /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/filtered_output.txt | grep -A "+stringTerm(totalLines)+" "+stringTerm(item))):
                 if '#' not in line:
                    f.write(line+'\n')
                 else: break
@@ -143,7 +143,7 @@ with open("/hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-
              f.write('Send email to: '+getEmail(stringTerm(item))+'\n')
              f.write(emailIntro % item)
              # For loop that gets hubCheck output for each hub.txt that has the error of couldn't open
-             for line in (bash("cat  /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/hubCheck_output | grep -A "+stringTerm(totalLines)+" "+stringTerm(item))):
+             for line in (bash("cat  /hive/users/qateam/hubCheckCronArchive/"+datetime.now().strftime("%Y-%m")+"/filtered_output.txt | grep -A "+stringTerm(totalLines)+" "+stringTerm(item))):
                 if '#' not in line:
                    f.write(line+'\n')
                 else: break

@@ -134,6 +134,7 @@ static void webStartWrapperDetailedInternal(struct cart *theCart,
 {
 char uiState[256];
 char *scriptName = cgiScriptName();
+char *textOutBufDb = cloneString(textOutBuf);
 boolean isEncode = FALSE;
 if (theCart)
     {
@@ -176,6 +177,13 @@ dnaUtilOpen();
 if (withHttpHeader)
     puts("Content-type:text/html\n");
 
+// If the database name is not already in the title string, add it now
+if (endsWith(scriptName, "hgc") && db != NULL && !stringIn(db, textOutBufDb))
+    {
+    struct dyString *newTitle = dyStringNew(0);
+    dyStringPrintf(newTitle, "%s %s", db, textOutBufDb);
+    textOutBufDb = dyStringCannibalize(&newTitle);
+    }
 if (withHtmlHeader)
     {
     char *newString, *ptr1, *ptr2;
@@ -198,9 +206,9 @@ if (withHtmlHeader)
     printf("\t<TITLE>");
 
     /* we need to take any HTML formatting out of the titlebar string */
-    newString = cloneString(textOutBuf);
+    newString = cloneString(textOutBufDb);
 
-    for(ptr1=newString, ptr2=textOutBuf; *ptr2 ; ptr2++)
+    for(ptr1=newString, ptr2=textOutBufDb; *ptr2 ; ptr2++)
 	{
 	if (*ptr2 == '<')
 	    {
@@ -253,7 +261,7 @@ if (withLogo)
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {
-    webFirstSection(textOutBuf);
+    webFirstSection(textOutBufDb);
     };
 webPushErrHandlers();
 /* set the flag */
