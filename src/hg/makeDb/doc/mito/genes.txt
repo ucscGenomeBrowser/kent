@@ -1,0 +1,179 @@
+#### obtain all the genes for the 'mito' browser
+
+### This script will use the mito.chrom.sizes listing which defines
+###  the species used in the mito browser.  It will parse the names
+###  to determine if they are UCSC databse browsers or GenArk browsers.
+###  Then, it will check those browser build directories to find the
+###  appropriate gene definitions and gather them all together
+###  in this /hive/data/genomes/mito/trackData/genes/<species>
+###  directory.
+
+#########################################################################
+#!/bin/bash
+
+mkdir -p /hive/data/genomes/mito/trackData/genes
+cd /hive/data/genomes/mito/trackData/genes
+
+for asmChr in `cut -f1 ../../mito.chrom.sizes`
+do
+  case "${asmChr}" in
+      GC*)
+        asmName=`echo $asmChr | cut -d'_' -f1-2 | sed -e 's/v/./;'`
+        chrName=`echo $asmChr | cut -d'_' -f3-`
+        gcX="${asmName:0:3}"
+        d0="${asmName:4:3}"
+        d1="${asmName:7:3}"
+        d2="${asmName:10:3}"
+        t=`ls -d /hive/data/genomes/asmHubs/allBuild/${gcX}/${d0}/${d1}/${d2}/${asmName}_*`
+        if [ -d "${t}" ]; then
+          buildDir=`realpath "${t}"`
+          asmId=`basename "${buildDir}"`
+          ncbiRefSeq="${buildDir}/trackData/ncbiRefSeq"
+          if [ -d "${ncbiRefSeq}" ]; then
+            if [ ! -s "${asmName}/${asmChr}.gp.gz" ]; then
+              printf "%s %s %s\n" "${asmId}" "${asmChr}" "${chrName}"
+              mkdir -p "${asmName}"
+              if [ -s "${ncbiRefSeq}/process/${asmId}.other.gp" -a -s "${ncbiRefSeq}/process/${asmId}.ncbiRefSeq.gp" ]; then
+              egrep -h -w "${chrName}" \
+                "${ncbiRefSeq}/process/${asmId}.ncbiRefSeq.gp" \
+                "${ncbiRefSeq}/process/${asmId}.other.gp" \
+                  | sort -u | tawk -v chr="${asmChr}" '{$2=chr; print $0}' \
+                     | gzip -c > "${asmName}/${asmChr}.gp.gz"
+printf "# DBG proceess %s both\n" "${asmChr}" 1>&2
+             elif [ -s "${ncbiRefSeq}/process/${asmId}.ncbiRefSeq.gp" ]; then
+              egrep -h -w "${chrName}" \
+                "${ncbiRefSeq}/process/${asmId}.ncbiRefSeq.gp" \
+                  | sort -u | tawk -v chr="${asmChr}" '{$2=chr; print $0}' \
+                     | gzip -c > "${asmName}/${asmChr}.gp.gz"
+printf "# DBG proceess %s other\n" "${asmChr}" 1>&2
+              elif [ -s "${ncbiRefSeq}/process/${asmId}.other.gp" ]; then
+              egrep -h -w "${chrName}" \
+                "${ncbiRefSeq}/process/${asmId}.other.gp" \
+                  | sort -u | tawk -v chr="${asmChr}" '{$2=chr; print $0}' \
+                     | gzip -c > "${asmName}/${asmChr}.gp.gz"
+printf "# DBG %s\n" "${asmChr}" 1>&2
+              else
+                 printf "# can not find ncbiRefSeq.gp or other.gp\n"
+              fi
+            else
+              printf "DONE\t%s %s %s\n" "${asmId}" "${asmChr}" "${chrName}"
+            fi
+          else
+            printf "%s: no ncbiRefSeq\n" "${asmName}"
+          fi
+        else
+          printf "%s: GCx missing buildDir\n" "${asmName}"
+        fi
+        ;;
+      mm10_chrM)
+        if [ ! -s "mm10/${asmChr}.gp.gz" ]; then
+          printf "%s\n" "mm10/${asmChr}.gp.gz"
+          mkdir -p mm10
+          zcat /hive/data/genomes/mm10/bed/ncbiRefSeq.p6.2021-04-22/process/mm10.curated.gp.gz \
+             | awk '$2 == "chrM"' \
+                  | sed -e 's/chrM/mm10_chrM/;' \
+                 | gzip -c > mm10/${asmChr}.gp.gz
+         else
+          printf "DONE\t%s\n" "mm10/${asmChr}.gp.gz"
+        fi
+        ;;
+      mm39_chrM)
+        if [ ! -s "hg39/${asmChr}.gp.gz" ]; then
+          mkdir -p mm39
+          zcat /hive/data/genomes/mm39/bed/ncbiRefSeq.2023-04-19/process/mm39.other.gp.gz \
+             | awk '$2 == "chrM"' \
+                  | sed -e 's/chrM/mm39_chrM/;' \
+                 | gzip -c > mm39/${asmChr}.gp.gz
+        else
+          printf "DONE\t%s\n" "mm39/${asmChr}.gp.gz"
+        fi
+        ;;
+      hg19a_chrM)
+        if [ ! -s "hg19/${asmChr}.gp.gz" ]; then
+        mkdir -p hg19
+        hgsql -N -e 'select * from ensGene where chrom="chrM";' hg19 \
+           | cut -f2- | sed -e 's/chrM/hg19a_chrM/;' | gzip -c > hg19/${asmChr}.gp.gz
+        else
+          printf "DONE\t%s\n" "hg19/${asmChr}.gp.gz"
+        fi
+        ;;
+      hg19b_chrMT)
+        if [ ! -s "hg19/${asmChr}.gp.gz" ]; then
+          mkdir -p hg19
+          zcat /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2023-03-29/process/hg38.other.gp.gz \
+             | awk '$2 == "chrM"' \
+                  | sed -e "s/chrM/${asmChr}/;" \
+                     | gzip > hg19/${asmChr}.gp.gz
+        else
+          printf "DONE\t%s\n" "hg19/${asmChr}.gp.gz"
+        fi
+        ;;
+      hg38_chrM)
+        if [ ! -s "hg38/${asmChr}.gp.gz" ]; then
+        mkdir -p hg38
+        zcat /hive/data/genomes/hg38/bed/ncbiRefSeq.p14.2023-03-29/process/hg38.other.gp.gz \
+           | awk '$2 == "chrM"' \
+               | sed -e 's/chrM/hg38_chrM/;' \
+                  | gzip > hg38/${asmChr}.gp.gz
+        else
+          printf "DONE\t%s\n" "hg38/${asmChr}.gp.gz"
+        fi
+        ;;
+      [a-z]*)
+        asmName=`echo $asmChr | cut -d'_' -f1`
+        chr=`echo $asmChr | cut -d'_' -f2-`
+        buildDir="/hive/data/genomes/${asmName}"
+        if [ -d "${buildDir}" ]; then
+          printf "DBG %s:\t" "${asmChr}" 1>&2
+          hgsql -N -e 'show tables;' $asmName | grep -i gene | while read tbl
+          do
+            printf " %s" "${tbl}"
+          done
+          printf "\n"
+          # priority of gene tables
+          for xTbl in ncbiRefSeq ensGene refGene augustusGene
+          do
+          hgsql -N -e 'show tables;' $asmName | grep -i gene | while read tbl
+          do
+             case "${tbl}" in
+               $xTbl)
+                 mkdir -p "${asmName}"
+                 if [ ! -s "$asmName/${asmChr}.gp.gz" ]; then
+printf "DBG select * from $tbl where chrom=\"$chr\"; $asmName\n" 1>&2
+       hgsql -N -e "select * from $tbl where chrom=\"$chr\";" $asmName \
+                   | cut -f2- | tawk -v chr="${asmChr}" '{$2=chr; print $0}' \
+                      | gzip -c > $asmName/${asmChr}.gp.gz
+                 C=`zgrep -c . "$asmName/${asmChr}.gp.gz"`
+                 if [ "${C}" -eq 0 ]; then
+                    rm -f "$asmName/${asmChr}.gp.gz"
+                 fi
+                 else
+                   printf "DONE\t%s\n" "$asmName/${asmChr}.gp.gz"
+                 fi
+                  ;;
+             esac
+          done
+          done
+        else
+          printf "%s: a-z missing\n" "${asmName}"
+        fi
+        ;;
+  esac
+done
+
+exit $?
+      9 refGene
+     23 augustusGene
+      9 ensGene
+      9 ensemblToGeneName
+      3 geneName
+      2 geneid
+      1 mgcGenes
+      5 ncbiRefSeq
+      5 no
+      1 nscanGene
+      1 sgpGene
+      1 transMapAlnUcscGenes
+      1 transMapInfoUcscGenes
+     19 xenoRefGene
+
