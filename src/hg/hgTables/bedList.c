@@ -724,7 +724,7 @@ for (region = regionList; region != NULL; region = region->next)
     }
 if (!gotResults)
     {
-    hPrintf(NO_RESULTS);
+    explainWhyNoResults(stdout);
     }
 else if (doCt)
     {
