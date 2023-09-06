@@ -1456,7 +1456,7 @@ if (fieldToUrl != NULL)
     url = (char*)hashFindVal(fieldToUrl, col->name);
 if (url == NULL)
     {
-    printf("<td>%s</td></tr>\n", idList);
+    printf("<td class='bedExtraTblVal'>%s</td></tr>\n", idList);
     return;
     }
 
@@ -1925,7 +1925,7 @@ for (;col != NULL && count < fieldCount;col=col->next)
             printf("<td>%s</td></tr>\n", fields[ix]); // decided not to print error
         }
     else
-        printf("<td>%s</td></tr>\n", fields[ix]);
+        printf("<td class='bedExtraTblVal'>%s</td></tr>\n", fields[ix]);
     printCount++;
     }
 if (skipIds)
@@ -7150,7 +7150,7 @@ if (targetSearch)
     // use the psl file to find the right primer pair
     pslFileGetPrimers(pslFileName, item, ampStart, ampEnd, &fPrimer, &rPrimer);
     }
-else
+else if (stringIn("_", item))
     {
     // the item name contains the forward and reverse primers
     int maxSplits = 2;
@@ -7163,6 +7163,10 @@ else
         rPrimer = splitQName[1];
         touppers(rPrimer);
         }
+    }
+else
+    {
+    pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer, NULL);
     }
 printf("<H2>PCR Results (<TT>%s %s</TT>)</H2>\n", fPrimer, rPrimer);
 printf("<B>Forward primer:</B> 5' <TT>%s</TT> 3'<BR>\n", fPrimer);

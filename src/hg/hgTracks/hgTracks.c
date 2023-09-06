@@ -11007,14 +11007,12 @@ if (newHighlight)
     }
 }
 
-void notify (char *msg)
+void notify (char *msg, char *msgId)
 /* print a message into a hidden DIV tag, and call Javascript to move the DIV under the
  * tableHeaderForm element and un-hide it. Less obtrusive than a warn() message but still hard to miss. */
 {
-puts("<div style='display:none' id='notifBox'>");
-puts(msg);
-puts("</div>");
-jsInline("notifBoxShow();\n");
+jsInlineF("notifBoxSetup(\"hgTracks\", \"%s\", \"%s\");\n", msgId, msg);
+jsInlineF("notifBoxShow(\"hgTracks\", \"%s\");\n", msgId);
 }
 
 extern boolean issueBotWarning;
@@ -11286,12 +11284,19 @@ if (prevColor)
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
 
+// add the center label height if center labels are present
+if (withCenterLabels)
+    jsonObjectAdd(jsonForClient, "centerLabelHeight",
+              newJsonNumber(tl.fontHeight));
+
 struct dyString *dy = dyStringNew(1024);
 jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
 jsInline(dy->string);
 dyStringFree(&dy);
 
 dy = dyStringNew(1024);
+// always write the font-size, it's useful for other javascript functions
+dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
 // do not have a JsonFile available when PDF/PS output
 if (enableMouseOver && isNotEmpty(mouseOverJsonFile->forCgi))
     {
@@ -11306,7 +11311,6 @@ if (enableMouseOver && isNotEmpty(mouseOverJsonFile->forCgi))
 
     hPrintf("<div id='mouseOverVerticalLine' class='mouseOverVerticalLine'></div>\n");
     hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
-    dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
     dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
     }
 else
@@ -11326,7 +11330,7 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"This is useful when developing hubs, but it reduces "
 	"performance. To clear the setting, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
-    notify(buf);
+    notify(buf, "udcTimeout");
     }
 #ifdef DEBUG
 if (cdsQueryCache != NULL)

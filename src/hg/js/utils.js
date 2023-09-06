@@ -799,7 +799,13 @@ return content;
 function notifBoxShow(cgiName, keyName) {
     /* move the notification bar div under '#TrackHeaderForm' */
     let lsKey = cgiName + "_" + keyName;
+    if (localStorage.getItem(lsKey))
+        return;
     var notifEl = document.getElementById(lsKey + "notifBox");
+    if (!notifEl) {
+        // missing call to setup function (ie generated server side like a udcTimeout message)
+        notifBoxSetup(cgiName, keyName);
+    }
     // TODO: make a generic element for positioning this
     var parentEl = document.getElementById('TrackHeaderForm');
     if (parentEl) {
@@ -815,34 +821,42 @@ function notifBoxSetup(cgiName, keyName, msg) {
  * or hide this notification.
  * Must call notifBoxShow() in order to display the notification */
     lsKey = cgiName + "_" + keyName;
+    if (localStorage.getItem(lsKey))
+        return;
+    let alreadyPresent = false;
     let notifBox = document.getElementById(lsKey+"notifBox");
     if (notifBox) {
-        notifBox.innerHTML += "<br>" + msg;
-    } else {
-        let newDiv = document.createElement("div");
-        newDiv.className = "notifBox";
-        newDiv.style.display = "none";
-        newDiv.style.width = "90%";
-        newDiv.style.marginLeft = "100px";
-        newDiv.id = lsKey+"notifBox";
+        alreadyPreset = true;
         if (msg) {
-            newDiv.innerHTML = msg;
+            notifBox.innerHTML += "<br>" + msg;
         }
-        newDiv.innerHTML += "<div style='text-align:center'>"+
-            "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
-            "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
-            "</div>";
-        document.body.appendChild(newDiv);
-        $("#"+lsKey+"notifyHide").click({"id":lsKey}, function() {
-            let key = arguments[0].data.id;
-            $("#"+key+"notifBox").remove();
-        });
-        $("#"+lsKey+"notifyHideForever").click({"id": lsKey}, function() {
-            let key = arguments[0].data.id;
-            $("#"+key+"notifBox").remove();
-            localStorage.setItem(key, "1");
-        });
+    } else {
+        notifBox = document.createElement("div");
+        notifBox.className = "notifBox";
+        notifBox.style.display = "none";
+        notifBox.style.width = "90%";
+        notifBox.style.marginLeft = "100px";
+        notifBox.id = lsKey+"notifBox";
+        if (msg) {
+            notifBox.innerHTML = msg;
+        }
     }
+    notifBox.innerHTML += "<div style='text-align:center'>"+
+        "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
+        "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
+        "</div>";
+    if (!alreadyPresent) {
+        document.body.appendChild(notifBox);
+    }
+    $("#"+lsKey+"notifyHide").click({"id":lsKey}, function() {
+        let key = arguments[0].data.id;
+        $("#"+key+"notifBox").remove();
+    });
+    $("#"+lsKey+"notifyHideForever").click({"id": lsKey}, function() {
+        let key = arguments[0].data.id;
+        $("#"+key+"notifBox").remove();
+        localStorage.setItem(key, "1");
+    });
 }
 
 function warnBoxJsSetup()
@@ -3803,19 +3817,23 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
 
         // now we need to offset our coordinates to the track tr, to account for dragReorder
         let parent = refEl.closest(".trDraggable");
+        let currParentOffset = 0, yDiff = 0;
         if (refEl.parentNode.name === "ideoMap") {
             parent = refImg.closest("tr");
-            let currParentOffset = parent.getBoundingClientRect().y;
-            let yDiff = y1;
-            refTop = currParentOffset + yDiff;
-            refBottom = currParentOffset + yDiff + refHeight;
+            currParentOffset = parent.getBoundingClientRect().y;
+            yDiff = y1;
         } else if (parent) {
             // how far in y direction we are from the tr start in the original image from the server:
-            let currParentOffset = parent.getBoundingClientRect().y;
-            let yDiff = y1 - hgTracks.trackDb[parent.id.slice(3)].imgOffsetY;
-            refTop = currParentOffset + yDiff;
-            refBottom = currParentOffset + yDiff + refHeight;
+            currParentOffset = parent.getBoundingClientRect().y;
+            yDiff = y1 - hgTracks.trackDb[parent.id.slice(3)].imgOffsetY;
+            // if track labels are on, then the imgOffsetY will be off by the track label amount
+            if (typeof hgTracks.centerLabelHeight !== 'undefined') {
+                yDiff += hgTracks.centerLabelHeight;
+            }
         }
+        // account for dragReorder and track labels
+        refTop = currParentOffset + yDiff;
+        refBottom = currParentOffset + yDiff + refHeight;
     } else {
         rect = refEl.getBoundingClientRect();
         refX = rect.x; refY = rect.y;
@@ -3979,6 +3997,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
         mouseoverContainer.style.visibility = "hidden";
         mouseoverContainer.style.opacity = "0";
         mouseoverContainer.id = "mouseoverContainer";
+        mouseoverContainer.style.fontSize = window.browserTextSize + "px";
         document.body.append(mouseoverContainer);
     }
     // create a mouseover element out of text, or, if text is null, use already

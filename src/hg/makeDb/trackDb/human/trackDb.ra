@@ -3804,8 +3804,8 @@ html lovdComp
         mergeSpannedItems on
 
 track hgmd
-shortLabel HGMD Variants
-longLabel Human Gene Mutation Database Public Variants
+shortLabel HGMD public
+longLabel Human Gene Mutation Database - Public Version Dec 2022
 group phenDis
 visibility hide
 bigDataUrl /gbdb/$D/bbi/hgmd.bb

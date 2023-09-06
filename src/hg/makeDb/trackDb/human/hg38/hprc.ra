@@ -4,4 +4,4 @@ longLabel Human Pangenome Reference Genomes - Pangenome Graph Builder - Chains
 type bigChain someGenome
 bigDataUrl /gbdb/hg38/hprc/pggb.bigChain.bb
 linkDataUrl /gbdb/hg38/hprc/pggb.bigLink.bb
-
+group hprc

@@ -341,6 +341,7 @@ group genes
 visibility hide
 type bed 3
 html crispors
+release alpha
 
     track crisprEnsembl
     parent crispors
@@ -350,6 +351,7 @@ html crispors
     type bigBed 9 +
     colorByStrand 0,0,128 128,0,0
     priority 1
+    release alpha
 
     track crisprKmers
     parent crispors
@@ -359,6 +361,7 @@ html crispors
     type bigBed 9 .
     itemRgb on
     priority 2
+    release alpha
 
 include crisprAll.ra
 include crispr10K.ra 

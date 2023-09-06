@@ -747,3 +747,717 @@ done | sort -k1,1 -k2,2n > cactus447wayFrames.bed
     hgsql hg38 -e 'drop table cactus447wayFrames;'
 
 #########################################################################
+# Try loading this track data into database to see if download files
+#    such as upstream gene mafs can be constructed
+    mkdir -p /gbdb/hg38/cactus447way/maf
+    cd /hive/data/genomes/hg38/bed/cactus447/iRows/result
+    ln -s `pwd`/chr*.maf /gbdb/hg38/cactus447way/maf/
+
+    # this generates an immense cactus447way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    #   This is going to take all day.
+    cd /dev/shm
+    time hgLoadMaf -pathPrefix=/gbdb/hg38/cactus447way/maf hg38 cactus447way
+
+# -rw-rw-r--    1 55422976 Aug  8 09:22 cactus447way.tab
+
+    hgsql -e 'select count(*) from cactus447way;' hg38
+
+    # Loading cactus447way into database
+    # Loaded 108225530 mafs in 101 files from /gbdb/hg38/cactus447way/maf
+
+    # real    440m30.144s
+    # user    404m46.183s
+    # sys     19m27.664s
+
+#########################################################################
+# Phylogenetic tree from 447-way (DONE - 2022-08-26 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/cactus447/4d
+    cd /hive/data/genomes/hg38/bed/cactus447/4d
+
+    # the annotated maf's are in:
+    ../iRows/result/chr*.maf
+
+    # using ncbiRefSeq for hg38, only transcribed genes and nothing
+    #	from the randoms and other misc.
+    hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq where cdsEnd > cdsStart;" hg38 \
+      | egrep -E -v "chrM|chrUn|random|_alt|_fix" > ncbiRefSeq.gp
+    wc -l *.gp
+    #     130420 ncbiRefSeq.gp
+
+    # verify it is only on the chroms:
+    cut -f2 ncbiRefSeq.gp | sort | uniq -c | sort -rn | sed -e 's/^/    # /;'
+    #   12841 chr1
+    #    9518 chr2
+    #    8490 chr3
+    #    7521 chr19
+    #    7519 chr11
+    #    7329 chr17
+    #    7287 chr12
+    #    6155 chr6
+    #    6151 chr10
+    #    5905 chr7
+    #    5561 chr5
+    #    5504 chr9
+    #    5351 chr4
+    #    5235 chr16
+    #    4964 chr8
+    #    4296 chrX
+    #    4255 chr15
+    #    3959 chr14
+    #    3089 chr20
+    #    2721 chr22
+    #    2521 chr18
+    #    2471 chr13
+    #    1411 chr21
+    #     366 chrY
+
+    genePredSingleCover ncbiRefSeq.gp stdout | sort > ncbiRefSeqNR.gp
+    wc -l ncbiRefSeqNR.gp
+    #	19542 ncbiRefSeqNR.gp
+
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/cactus447/4d/run
+    cd /hive/data/genomes/hg38/bed/cactus447/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    # these processes are going to be copying the whole chromosome maf file
+    # to /scratch/tmp/ - these are huge files, make sure /scratch/tmp/
+    # on the kluster nodes is clean enough to manage the largest chromosome
+    # maf file, for example:
+# -rw-rw-r-- 1 661829442743 Jun 20 18:55 chr1.maf
+# -rw-rw-r-- 1 682410918389 Jun 21 16:21 chr2.maf
+
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin
+set r = "/hive/data/genomes/hg38/bed/cactus447"
+set c = $1
+set infile = $r/iRows/result/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf, removes all chrom names, leaves only the db name
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
+awk -v C=$c '$2 == C {print}' $r/4d/ncbiRefSeqNR.gp | sed -e "s/\t$c\t/\thg38.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/hg38/bed/cactus447/iRows/result/chr*.maf \
+	| sed -e "s#.*cactus447/iRows/result/##" \
+        | egrep -E -v "chrM|chrUn|random|_alt|_fix" > maf.list
+
+    printf '#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+' > template
+
+    gensub2 maf.list single template jobList
+    para -ram=128g create jobList
+    para try ... check ... push ... etc...
+    para time
+# CPU time in finished jobs:     290959s    4849.31m    80.82h    3.37d  0.009 y
+# IO & Wait Time:                 17027s     283.79m     4.73h    0.20d  0.001 y
+# Average job time:               15399s     256.65m     4.28h    0.18d
+# Longest finished job:           36250s     604.17m    10.07h    0.42d
+# Submission to last job:         36265s     604.42m    10.07h    0.42d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/cactus447/4d
+    # verify no tiny files:
+    ls -og mfa | sort -k3nr | tail -3
+    # -rw-rw-r-- 1  2583636 Aug  8 10:30 chr21.mfa
+    # -rw-rw-r-- 1  1759815 Aug  8 09:47 chrY.mfa
+
+    #want comma-less species.list
+    time /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin/msa_view \
+	--aggregate "`cat ../species.list.txt`" mfa/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # real    0m9.416s
+    # -rw-rw-r-- 1 303080280 Aug  8 21:48 4d.all.mfa
+
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | wc -l
+    #   447
+
+    sed 's/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        ../hg38.447way.nh
+
+    sed 's/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../hg38.447way.nh > tree-commas.nh
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree-commas.nh 4d.all.mfa
+    #   real    880m32.863s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE: (((((((((((((hg38:0.00899231,(Pan_paniscus:0.00233221,
+# Pan_troglodytes:0.00214362):0.00450706):0.00200006,
+# (Gorilla_gorilla:0.00120794,
+# Gorilla_beringei:0.00131286):0.00731999):0.00848699,
+# (Pongo_abelii:0.00175881,Pongo_pygmaeus:0.0021602):0.015206):0.00273536,
+# (((((Hylobates_lar:0.000904688,Hylobates_pileatus:0.000921279):0.00271202,
+# (((Hylobates_abbotti:0.00182513,Hylobates_muelleri:0.00188051):0.000678509,
+# Hylobates_agilis:0.00217126):0.00068124,
+# ...
+# (Ceratotherium_simum:0.000693402,
+# Ceratotherium_simum_cottoni:0.000665708):0.00612505):0.00973125):0.0392953):0.0100285):0.0323073):0.00299066):0.00383198):0.00906124):0.0213096):0.012194,
+# (((Dasypus_novemcinctus:0.0705749,(Tolypeutes_matacus:0.036879,
+# Chaetophractus_vellerosus:0.0367115):0.0193664):0.0421356,
+# ((Tamandua_tetradactyla:0.0243613,
+# Myrmecophaga_tridactyla:0.0216596):0.0822034,
+# (Choloepus_didactylus:0.0057887,
+# Choloepus_hoffmanni:0.00621468):0.0702582):0.018824):0.0529836,
+# (((Trichechus_manatus:0.0621184,(Procavia_capensis:0.0107201,
+# Heterohyrax_brucei:0.0105857):0.149548):0.00440411,
+# Loxodonta_africana:0.0800445):0.0234193,
+# ((((Microgale_talazaci:0.118008,Echinops_telfairi:0.077048):0.158928,
+# Chrysochloris_asiatica:0.138211):0.0147081,
+# Elephantulus_edwardii:0.20827):0.00712897,
+# Orycteropus_afer:0.112233):0.00664842):0.0534765):0.012194);
+
+    # compare these calculated lengths to what we started with
+
+    /cluster/bin/phast/all_dists ../hg38.447way.nh  | grep hg38 \
+	| sed -e "s/hg38.//;" | sort > original.dists
+
+    grep TREE all.mod | sed -e 's/TREE: //;' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep hg38 \
+          | sed -e "s/hg38.//;"  | sort > hg38.dists
+
+    # printing out the 'original', the 'new' the 'difference' and
+    #    percent difference/delta
+    join original.dists hg38.dists | awk '{
+  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }'       | sort -k4n | cut -f2,3,4,6 | sort -k4,4n
+Chiropotes_albinasus    0.044221        0.153018        -71.100786
+Hapalemur_gilberti      0.091144        0.238983        -61.861722
+Hapalemur_meridionalis  0.091511        0.239866        -61.849116
+Hapalemur_occidentalis  0.090759        0.237751        -61.826028
+Hapalemur_griseus       0.091379        0.239368        -61.824889
+Hapalemur_alaotrensis   0.091149        0.238685        -61.812012
+Eulemur_rufus   0.090624        0.236415        -61.667407
+Eulemur_fulvus  0.090508        0.236040        -61.655652
+Lemur_catta     0.090748        0.236490        -61.627130
+...
+Tolypeutes_matacus      0.518057        0.332742        55.693300
+Chaetophractus_vellerosus       0.520177        0.332575        56.408930
+Catagonus_wagneri       0.578187        0.366272        57.857275
+Megaderma_lyra  0.575967        0.360862        59.608659
+Spermophilus_dauricus   0.530847        0.329338        61.186076
+Choloepus_didactylus    0.537227        0.329232        63.175815
+Vicugna_pacos   0.553177        0.338170        63.579561
+Choloepus_hoffmanni     0.539357        0.329658        63.611076
+Tursiops_truncatus      0.533317        0.325632        63.779051
+Myrmecophaga_tridactyla 0.589117        0.357048        64.996583
+
+    # also calculated with SSREV model:
+    mkdir /cluster/data/hg38/bed/cactus447/4dSSREV
+    cd /cluster/data/hg38/bed/cactus447/4dSSREV
+    cp -p ../4d/4d.all.mfa .
+    cp -p ../4d/tree-commas.nh .
+    time /cluster/bin/phast.build/cornellCVS/phast.2021-06-01/bin/phyloFit \
+       --EM --precision MED --msa-format FASTA --subst-mod SSREV \
+          --tree tree-commas.nh 4d.all.mfa
+    # real    1406m51.018s
+
+    mv phyloFit.mod all.mod
+    grep BACK all.mod
+    # BACKGROUND: 0.254978 0.245022 0.245022 0.254978
+
+#########################################################################
+# phyloP for 447-way (DONE - 2017-11-06 - Hiram)
+#
+    # split SS files into 1M chunks, this business needs smaller files
+    #   to complete
+
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/cactus447/consPhyloP
+    cd /hive/data/genomes/hg38/bed/cactus447/consPhyloP
+    mkdir ss run.split
+    cd run.split
+
+    # the annotated maf's are in:
+    ../iRows/result/chr*.maf
+
+    printf '#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/hg38/bed/cactus447/iRows/result/$c.maf
+set WINDOWS = /hive/data/genomes/hg38/bed/cactus447/consPhyloP/ss/$c
+set NL = `grep -m 10 -c -v "^#" $MAF`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $NL > 0 ) then
+/cluster/bin/phast.build/cornellCVS/phast.2021-06-01/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+' > doSplit.csh
+
+    chmod +x doSplit.csh
+
+    #	do the easy ones first to see some immediate results
+    ls -1SL -r ../../iRows/result | grep chr | sed -e "s/.maf//;" > maf.list
+
+    # this needs a {check out line+ $(root1.done)} test for verification:
+    printf '#LOOP
+./doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+' > template
+
+    gensub2 maf.list single template jobList
+    # this was tricky, some of the jobs couldn't complete even with
+    #  128g, had to complete a number of these manually, and they
+    #  take a long time, more than 12 hours for individual chromosomes
+    para -ram=128g create jobList
+    para try ... check ... push ... etc...
+
+# Completed: 79 of 101 jobs
+# Crashed: 22 jobs
+# CPU time in finished jobs:       8058s     134.29m     2.24h    0.09d  0.000 y
+# IO & Wait Time:                   380s       6.34m     0.11h    0.00d  0.000 y
+# Average job time:                 107s       1.78m     0.03h    0.00d
+# Longest finished job:            3239s      53.98m     0.90h    0.04d
+# Submission to last job:          5350s      89.17m     1.49h    0.06d
+
+    # run phyloP with score=LRT
+    ssh ku
+    mkdir /cluster/data/hg38/bed/cactus447/consPhyloP
+    cd /cluster/data/hg38/bed/cactus447/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACK ../../4dSSREV/all.mod
+    # BACKGROUND: 0.254978 0.245022 0.245022 0.254978
+    # interesting, they are already paired up
+
+    grep BACKGROUND ../../4dSSREV/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.490
+    /cluster/bin/phast.build/cornellCVS/phast.2021-06-01/bin/modFreqs \
+	../../4dSSREV/all.mod 0.490 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.255000 0.245000 0.245000 0.255000
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2021-06-01/bin
+set f = $1
+set ssFile = $1:t
+set out = $2
+set cName = $f:h
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/hg38/bed/cactus447/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "$cons/ss/$cName/$ssFile"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+echo source: $ssSrc.ss
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $ssFile.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$ssFile.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+' > doPhyloP.csh
+
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../ss -type f | sed -e "s/.ss$//; s#../ss/##;" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	3031 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    printf '#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+' > template
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/hg38/bed/cactus447/consPhyloP/all
+    cd /hive/data/genomes/hg38/bed/cactus447/consPhyloP/all
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # beware overloading the cluster with these quick and high I/O jobs
+    para -ram=64g create jobList
+    para try ... check ...
+    para -maxJob=16 push
+    para time > run.time
+Completed: 3031 of 3031 jobs
+CPU time in finished jobs:   28585172s  476419.53m  7940.33h  330.85d  0.906 y
+IO & Wait Time:                132590s    2209.83m    36.83h    1.53d  0.004 y
+Average job time:                9475s     157.91m     2.63h    0.11d
+Longest finished job:           13733s     228.88m     3.81h    0.16d
+Submission to last job:         38568s     642.80m    10.71h    0.45d
+
+    mkdir downloads
+    time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
+do
+    echo "working: $D" 1>&2
+    find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+        | gzip -c > downloads/${D}.phyloP447way.wigFix.gz
+done
+    #   real    34m31.522s
+
+    du -hsc downloads
+    #   5.4G    downloads
+
+    # check integrity of data with wigToBigWig
+    zcat downloads/*.wigFix.gz > all.wigFix
+  time (wigToBigWig -verbose=2 all.wigFix /hive/data/genomes/hg38/chrom.sizes \
+	phyloP447way.bw) > bigWig.log 2>&1
+
+    egrep "real|VmPeak" bigWig.log
+    # pid=236037: VmPeak:   33037308 kB
+    # real    25m42.759s
+
+    bigWigInfo phyloP447way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 7,824,240,203
+# primaryIndexSize: 90,693,508
+# zoomLevels: 10
+# chromCount: 98
+# basesCovered: 2,874,168,445
+# mean: -0.022678
+# min: -20.000000
+# max: 8.123000
+# std: 1.692685
+
+    #	encode those files into wiggle data
+#     time (zcat downloads/*.wigFix.gz \
+    wigEncode all.wigFix phyloP447way.wig phyloP447way.wib
+# Converted all.wigFix, upper limit 8.12, lower limit -20.00
+# real    8m8.231s
+
+
+# -rw-rw-r--   1  2874168445 Aug 30 14:08 phyloP447way.wib
+# -rw-rw-r--   1   298978228 Aug 30 14:08 phyloP447way.wig
+
+    du -hsc *.wi?
+    # 2.7G    phyloP447way.wib
+    # 286M    phyloP447way.wig
+
+    # Load gbdb and database with wiggle.
+    rm -f /gbdb/hg38/cactus447way/phyloP447way.wib
+    ln -s `pwd`/phyloP447way.wib /gbdb/hg38/cactus447way/phyloP447way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/hg38/cactus447way hg38 \
+	phyloP447way phyloP447way.wig
+    # real    0m27.533s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh hg38 phyloP447way
+# db.table          min   max     mean       count     sumData
+hg38.phyloP447way   -20 8.123 -0.022678 2874168445 -6.51804e+07
+#      1.69269 viewLimits=-8.4861:8.123
+#       stdDev viewLimits
+
+    #	that range is: 20+8.123= 28.123 for hBinSize=0.028123
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram \
+	-hBinSize=0.028123 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
+	    -db=hg38 phyloP447way > histogram.data 2>&1
+    #  real    1m39.861s
+
+
+    # x-axis range:
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
+	| sed -e 's/^/# /;'
+# Q1 -10.086650
+# median -4.012075
+# Q3 2.062495
+# average -4.017054
+# min -20.000000
+# max 8.123000
+# count 864
+# total -3470.734684
+# standard deviation 7.028195
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
+      | sed -e 's/^/# /;'
+# Q1 0.000016
+# median 0.000074
+# Q3 0.000431
+# average 0.001157
+# min 0.000000
+# max 0.025240
+# count 864
+# total 1.000001
+# standard deviation 0.003283
+
+    #	create plot of histogram:
+    printf 'set terminal pngcairo size 1200,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "hg38.phyloP447.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
+set grid noxtics
+set grid ytics ls 4
+set y2tics border nomirror out tc rgb "#ffffff"
+set ytics border nomirror out tc rgb "#ffffff"
+set title " Human hg38 Histogram phyloP447way track" tc rgb "#ffffff"
+set xlabel " hg38.phyloP447way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set xrange [-4:2.5]
+set yrange [0:0.04]
+set y2range [0:1]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
+
+    # verify it looks sane
+    display hg38.phyloP447.histo.png &
+    # it now shows the spike at -1.000 for the artifical filling of
+    # no data available.
+
+    ######################   Running primate species  #######################
+    # computing 4d-sites phyloFit for primates
+    mkdir /cluster/data/hg38/bed/cactus447/4d/primates
+    cd /cluster/data/hg38/bed/cactus447/4d/primates
+    # the primates.list.txt was obtained from the hg38.447way.nh
+    # tree by taking the first 243 in that tree, ending in:
+    head -243 ../../hg38.447way.nh | tail -1
+     Galagoides_demidoff:0.00802126):0.0124128):0.0334321):0.0146219):0.105,
+
+    head -243 ../../hg38.447way.nh | sed -e 's/^ \+//;' \
+       | tr -d '(' | sed -e 's/:.*//;' | sort  > primates.list.txt
+
+    # then only using the mfa sequences for those specific sequences
+    ls ../mfa/chr*.mfa | while read C
+do
+  B=`basename $C`
+  faSomeRecords "${C}" primates.list.txt ${B}
+  printf "%s\n" "${B}"
+done
+    # resulting in:
+    faSize chr*.mfa
+# 151201516 bases (18902 N's 151182614 real 151182614 upper 0 lower)
+#	in 5832 sequences in 24 files
+
+    # then running phyloFit:
+    sed 's/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d'  primates.nh > tree-commas.nh
+
+    # note: using the SSREV model here:
+    /cluster/bin/phast.build/cornellCVS/phast.2021-06-01/bin/phyloFit \
+      --EM --precision MED --msa-format FASTA --subst-mod SSREV \
+        --tree tree-commas.nh primates.mfa
+    # rename the result
+    mv phyloFit.mod primates.mod
+
+    # adjust the frequencies
+    cd  /cluster/data/hg38/bed/cactus447/consPhyloP/run.phyloP
+    grep BACK ../../4d/primates/primates.mod
+    # BACKGROUND: 0.261935 0.238065 0.238065 0.261935
+    # interesting, they are already paired up
+
+    grep BACK ../../4d/primates/primates.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.476
+    /cluster/bin/phast.build/cornellCVS/phast.2021-06-01/bin/modFreqs \
+	../../4d/primates/primates.mod 0.476 > primates.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.262000 0.238000 0.238000 0.262000
+
+    # setup run for primate species
+    mkdir /hive/data/genomes/hg38/bed/cactus447/consPhyloP/primates
+    cd /hive/data/genomes/hg38/bed/cactus447/consPhyloP/primates
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para -ram=6g create jobList
+    para try ... check ...
+    para -maxJob=16 push
+    para time > run.time
+Completed: 2438 of 2438 jobs
+CPU time in finished jobs:   18916928s  315282.13m  5254.70h  218.95d  0.600 y
+IO & Wait Time:                 68909s    1148.49m    19.14h    0.80d  0.002 y
+Average job time:                7787s     129.79m     2.16h    0.09d
+Longest finished job:           12050s     200.83m     3.35h    0.14d
+Submission to last job:         26707s     445.12m     7.42h    0.31d
+
+    mkdir downloads
+    time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
+do
+    echo "working: $D" 1>&2
+    find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+        | gzip -c > downloads/${D}.phyloP447wayPrimates.wigFix.gz
+done
+    #   real    33m18.006s
+
+    du -hsc downloads
+    #   4.9G    downloads
+
+    # check integrity of data with wigToBigWig
+    zcat downloads/*.wigFix.gz > primates.wigFix
+    time (wigToBigWig -verbose=2 primates.wigFix \
+        /hive/data/genomes/hg38/chrom.sizes \
+	phyloP447wayPrimates.bw) > bigWig.log 2>&1
+
+    egrep "real|VmPeak" bigWig.log
+    # pid=236355: VmPeak:   33037308 kB
+    # real    26m17.042s
+
+    bigWigInfo phyloP447wayPrimates.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 6,954,238,655
+# primaryIndexSize: 90,693,508
+# zoomLevels: 10
+# chromCount: 98
+# basesCovered: 2,874,168,445
+# mean: -0.066955
+# min: -20.000000
+# max: 1.587000
+# std: 1.479093
+
+    #	encode those files into wiggle data
+#    time (zcat downloads/*.wigFix.gz \
+	time wigEncode primates.wigFix phyloP447wayPrimates.wig phyloP447wayPrimates.wib
+# Converted primates.wigFix, upper limit 1.59, lower limit -20.00
+# real    9m17.113s
+XXX - running - Wed Aug 30 13:59:09 PDT 2023
+
+# -rw-rw-r--   1  2874168445 Aug 30 14:08 phyloP447wayPrimates.wib
+# -rw-rw-r--   1   320006223 Aug 30 14:08 phyloP447wayPrimates.wig
+
+    du -hsc *.wi?
+    # 2.7G    phyloP447way.wib
+    # 306M    phyloP447way.wig
+
+    # Load gbdb and database with wiggle.
+    rm -f /gbdb/hg38/cactus447way/phyloP447wayPrimates.wib
+    ln -s `pwd`/phyloP447wayPrimates.wib /gbdb/hg38/cactus447way/phyloP447wayPrimates.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/hg38/cactus447way hg38 \
+	phyloP447wayPrimates phyloP447wayPrimates.wig
+    # real    0m27.140s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh hg38 phyloP447wayPrimates
+# db.table                min   max     mean       count     sumData
+hg38.phyloP447wayPrimates -20 1.587 -0.0669553 2874168445 -1.92441e+08
+#      1.47909 viewLimits=-7.46242:1.587
+#       stdDev viewLimits
+
+    #	that range is: 20+1.587= 21.587 for hBinSize=0.021587
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram \
+	-hBinSize=0.021587 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
+	    -db=hg38 phyloP447wayPrimates > histogram.data 2>&1
+    #   real    1m30.401s
+    # x-axis range:
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
+	| sed -e 's/^/# /;'
+# Q1 -11.645800
+# median -7.231290
+# Q3 -2.816750
+# average -7.238782
+# min -20.000000
+# max 1.565410
+# count 818
+# total -5921.323540
+# standard deviation 5.110470
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
+      | sed -e 's/^/# /;'
+# Q1 0.000007
+# median 0.000032
+# Q3 0.000340
+# average 0.001237
+# min 0.000001
+# max 0.025761
+# count 818
+# total 1.012033
+# standard deviation 0.003386
+
+    #	create plot of histogram:
+    printf 'set terminal pngcairo size 1200,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "hg38.phyloP447Primates.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
+set grid noxtics
+set grid ytics ls 4
+set y2tics border nomirror out tc rgb "#ffffff"
+set ytics border nomirror out tc rgb "#ffffff"
+set title " Human hg38 Histogram phyloP447wayPrimates track" tc rgb "#ffffff"
+set xlabel " hg38.phyloP447wayPrimates score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set xrange [-3:2]
+set yrange [0:0.04]
+set y2range [0:1]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
+
+    # verify it looks sane
+    display hg38.phyloP447Primates.histo.png &
+    # it now shows the spike at -1.000 for the artifical filling of
+    # no data available.
+
+#############################################################################

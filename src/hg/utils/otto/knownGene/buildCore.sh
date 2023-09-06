@@ -158,9 +158,13 @@ join tempSearch2.txt tempSearch3.txt | sort > knownGene.txt
 rm tempSearch2.txt tempSearch3.txt
 
 ixIxx knownGene.txt knownGene${GENCODE_VERSION}.ix knownGene${GENCODE_VERSION}.ixx
-rm -rf /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
+trixContextIndex knownGene.txt knownGene${GENCODE_VERSION}
+rm -rf /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx /gbdb/$db/knownGene.offsets /gbdb/$db/knownGene.offsets.ixx /gbdb/$db/knownGene.txt
+ln -s `pwd`/knownGene.txt /gbdb/$db/knownGene.txt
 ln -s `pwd`/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene.ix
 ln -s `pwd`/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene.ixx
+ln -s `pwd`/knownGene${GENCODE_VERSION}.offsets /gbdb/$db/knownGene.offsets
+ln -s `pwd`/knownGene${GENCODE_VERSION}.offsets.ixx /gbdb/$db/knownGene.offsets.ixx
 #rm -rf /gbdb/$db/knownGene${GENCODE_VERSION}.ix /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
 #ln -s `pwd`/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene${GENCODE_VERSION}.ix
 #ln -s `pwd`/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
@@ -170,9 +174,13 @@ tawk '{print $5}' knownCanonical.tab | sort > knownCanonicalId.txt
 tawk '$11 == "pseudo" {print $1}' knownAttrs.tab | sort > pseudo.txt
 join knownCanonicalId.txt knownGene.txt | join -v 1 /dev/stdin pseudo.txt > knownGeneFast.txt
 ixIxx knownGeneFast.txt knownGeneFast${GENCODE_VERSION}.ix knownGeneFast${GENCODE_VERSION}.ixx
-rm -rf /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx
+trixContextIndex knownGeneFast.txt knownGeneFast${GENCODE_VERSION}
+rm -rf /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.offsets /gbdb/$db/knownGeneFast${GENCODE_VERSION}.offsets.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.txt
+ln -s $dir/knownGeneFast.txt  /gbdb/$db/knownGeneFast${GENCODE_VERSION}.txt
 ln -s $dir/knownGeneFast${GENCODE_VERSION}.ix  /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix
 ln -s $dir/knownGeneFast${GENCODE_VERSION}.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx
+ln -s $dir/knownGeneFast${GENCODE_VERSION}.offsets /gbdb/$db/knownGeneFast${GENCODE_VERSION}.offsets
+ln -s $dir/knownGeneFast${GENCODE_VERSION}.offsets.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.offsets.ixx
 
 bedToPsl /cluster/data/$db/chrom.sizes ucscGenes.bed ucscGenes.psl
 pslRecalcMatch ucscGenes.psl /cluster/data/$db/$db.2bit ucscGenes.fa kgTargetAli.psl

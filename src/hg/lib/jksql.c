@@ -1333,6 +1333,9 @@ static boolean sqlConnectIfUnconnected(struct sqlConnection *sc, bool abort)
  * connection object is just tracking the database changes on the main
  * connection, and connects only when really necessary.  */
 {
+if (!sc)
+    return FALSE;
+
 if (sc->conn!=NULL)
     return TRUE;
 char *profName = NULL;
@@ -1421,7 +1424,7 @@ bool sqlConnMustUseFailover(struct sqlConnection *sc)
 {
 // a db that is different between the sqlConnection object and mysql means that we have
 // moved previously to a db that does not exist on the main connection server
-if ((sc->failoverConn != NULL) && differentStringNullOk(sc->db, sc->conn->db))
+if ((sc && sc->failoverConn != NULL) && differentStringNullOk(sc->db, sc->conn->db))
     {
     monitorPrint(sc, "SQL_MAINCONN_DB_INVALID", "%s != %s", sc->db, sc->conn->db);
     return TRUE;

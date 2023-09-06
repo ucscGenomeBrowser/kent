@@ -215,7 +215,7 @@ for (;;)
 	/* make sure chrom names are sorted in ASCII order */
 	if ((usage != NULL) && strcmp(usage->name, chrom) > 0)
 	    {
-	    errAbort("%s is not case-sensitive sorted at line %d.  Please use \"sort -k1,1 -k2,2n\" with LC_COLLATE=C,  or bedSort and try again.",
+	    errAbort("%s is not case-sensitive sorted at line %d.  Please use \"LC_ALL=C sort -k1,1 -k2,2n\" or bedSort and try again.",
 	    	lf->fileName, lf->lineIx);
 	    }
 	int chromSize = (*chromSizeFunc)(chromSizeClosure, chrom, lf->lineIx);
