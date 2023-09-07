@@ -3,3 +3,4 @@ quick true
 dbSpec all
 table refGene
 zoomCount 1
+httpProto https

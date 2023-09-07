@@ -98,7 +98,7 @@ public class TrackCheck {
 	  }
 
 	  // get tracks for this assembly (read track controls from web)
-	  String hgtracksURL = "http://" + target.server + "/cgi-bin/hgTracks?db=";
+	  String hgtracksURL = target.httpProto + "://" + target.server + "/cgi-bin/hgTracks?db=";
 	  hgtracksURL = hgtracksURL + assembly;
           if (debug) {
             System.out.println("HgTracks.getTrackControlOrAll(url=" + hgtracksURL +", pos="+defaultPos+", table=" + target.table+", debug="+debug+")");
@@ -116,7 +116,7 @@ public class TrackCheck {
 	  while (trackIter.hasNext()) {
 	    String track = (String) trackIter.next();
 	    String mode = "default";
-	    HgTracks.exerciseTrack(target.server, assembly, chroms, 
+	    HgTracks.exerciseTrack(target.httpProto, target.server, assembly, chroms, 
 				       track, mode, defaultPos, "full", target.zoomCount);
 	    checkedCount++;
 	  }

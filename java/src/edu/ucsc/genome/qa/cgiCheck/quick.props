@@ -3,3 +3,4 @@ quick true
 dbSpec hg16
 table refGene
 zoomCount 1
+httpProto https
