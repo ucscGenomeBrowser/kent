@@ -283,8 +283,7 @@ for (i=0; i<fieldCount; i++)
         }
     else
         {
-        printf("<tr><td>%s</td>\n", name);
-        printf("<td>%s</td></tr>\n", val);
+        printFieldLabel(name);
         }
     printCount++;
     }

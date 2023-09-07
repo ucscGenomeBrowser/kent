@@ -1456,7 +1456,7 @@ if (fieldToUrl != NULL)
     url = (char*)hashFindVal(fieldToUrl, col->name);
 if (url == NULL)
     {
-    printf("<td>%s</td></tr>\n", idList);
+    printf("<td class='bedExtraTblVal'>%s</td></tr>\n", idList);
     return;
     }
 
@@ -1925,7 +1925,7 @@ for (;col != NULL && count < fieldCount;col=col->next)
             printf("<td>%s</td></tr>\n", fields[ix]); // decided not to print error
         }
     else
-        printf("<td>%s</td></tr>\n", fields[ix]);
+        printf("<td class='bedExtraTblVal'>%s</td></tr>\n", fields[ix]);
     printCount++;
     }
 if (skipIds)

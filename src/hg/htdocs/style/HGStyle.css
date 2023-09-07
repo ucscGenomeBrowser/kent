@@ -311,6 +311,10 @@ table.bedExtraTbl tbody {
     font-weight: normal;
 }
 
+.bedExtraTblVal {
+        word-wrap: break-word;
+}
+
 
 /* used by transMap details page in hgc */
 TABLE.transMap, TABLE.transMap TH, TABLE.transMap TD {

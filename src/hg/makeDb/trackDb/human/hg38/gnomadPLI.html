@@ -135,7 +135,7 @@ GENCODE transcripts were filtered according to the following criteria:
 </ul>
 </p>
 <p>
-In order to map transcripts and genes to the genome the following steps were taken:
+The gnomAD gene/transcript data is based on hg19. In order to map transcripts and genes to the hg38 genome the following steps were taken:
 <ul>
 <li><b>Transcript track:</b> The gnomAD ENST identifiers were attempted to be matched to all GENCODE versions
 between V20 and V44, giving coordinate priorities to the most recent models. In total 74550/80950 
@@ -156,8 +156,8 @@ Per gene and per transcript data were downloaded from the gnomAD Google Storage 
 gs://gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz
 gs://gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_transcript.txt.bgz
 </pre>
-These data were then joined to the Gencode v40 set of genes/transcripts available at the UCSC
-Genome Browser and then transformed into a bigBed 12+5. For the full list of commands used to
+These data were then joined to the Gencode set of genes/transcripts available at the UCSC
+Genome Browser (see previous section) and then transformed into a bigBed 12+5. For the full list of commands used to
 make this track please see the
 <a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomadPLI.txt">makedoc</a>.
 </p>

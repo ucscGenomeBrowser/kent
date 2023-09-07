@@ -7,6 +7,7 @@ import java.util.Properties;
 public class TestTarget {
 
   // data
+  public String httpProto; // "https" or "http"
   public String machine;
   // could hold database name or the string "all"
   public String server;
@@ -30,6 +31,7 @@ public class TestTarget {
 
     Properties properties = new Properties();
     properties = QALibrary.readProps(propFileName);
+    httpProto = properties.getProperty("httpProto", machine);
     machine = properties.getProperty("machine", machine);
     server = properties.getProperty("server", machine);
     dbSpec = properties.getProperty("dbSpec", dbSpec);
@@ -42,6 +44,7 @@ public class TestTarget {
   }
     
   public void setDefaults() {
+    httpProto = "https";
     machine = "localhost";
     dbSpec = "hg17";
     table = "refGene";
@@ -51,6 +54,7 @@ public class TestTarget {
 
   public String toString() {
     return
+    "httpProto " + httpProto + "\n" + 
     "machine " + machine + "\n" + 
     "server " + server + "\n" +
     "quick " + quickOn + "\n" +

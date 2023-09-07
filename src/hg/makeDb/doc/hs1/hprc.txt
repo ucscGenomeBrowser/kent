@@ -1,0 +1,109 @@
+### adding HPRC multiple alignment to the hs1 browser ###
+
+### pick up the maf file from Glenn:
+### /private/home/hickey/dev/work/hprc-v1.0-maf/hprc-v1.0-mc-chm13.single-copy.maf.gz
+
+mkdir /hive/data/genomes/hs1/bed/hprc/fromGlenn
+cd /hive/data/genomes/hs1/bed/hprc/fromGlenn
+
+## the file was in a /private/ directory on the phoenix.gi server,
+## which is behind the 'prism' firewall, therefore, login to the phoenix
+## server and rsync it out of there to hgwdev:
+
+-rw-r--r-- 1 11932640896 Sep  5 11:32 hprc-v1.0-mc-chm13.single-copy.maf.gz
+-rw-r--r-- 1     4722431 Sep  5 11:55 hprc-v1.0-mc-chm13.single-copy.maf.gz.tai
+
+## I don't know what the .tai file is, but picked that up also
+## scan the maf file for names to see what was used:
+
+zgrep '^s' hprc-v1.0-mc-chm13.single-copy.maf.gz | cut -f2 \
+  > raw.name.list
+
+head raw.name.list
+CHM13.chr1
+HG00673#1.JAHBBZ010000189.1
+HG01071#1.JAHBCF010000154.1
+HG01071#2.JAHBCE010000132.1
+HG01109#2.JAHEOZ010000140.1
+
+tail raw.name.list:
+GRCh38.chrY
+CHM13.chrY
+GRCh38.chrY
+CHM13.chrY
+GRCh38.chrY
+
+#########################################################################
+### fix the names in the maf file to correspond to UCSC names
+
+mkdir  /hive/data/genomes/hs1/bed/hprc/reName
+cd  /hive/data/genomes/hs1/bed/hprc/reName
+
+### reuse the name mapping file from this same process in hg38
+
+cp -p \
+/hive/data/genomes/hg38/bed/hprc/mafFile/db.hgMatPat.asmName.longLabel.txt .
+
+rw-rw-r-- 1      12514 Aug 17 14:48 db.hgMatPat.asmName.longLabel.txt
+
+head db.hgMatPat.asmName.longLabel.txt 
+GCA_018466835.1 HG02257.pat     HG02257#1       HG02257.alt.pat.f1_v2 (May 2021 GCA_018466835.1_HG02257.alt.pat.f1_v2) HPRC project computed Chain Nets
+GCA_018466845.1 HG02257.mat     HG02257#2       HG02257.pri.mat.f1_v2 (May 2021 GCA_018466845.1_HG02257.pri.mat.f1_v2) HPRC project computed Chain Nets
+
+### with the perl script:
+
+    time (./reName.pl | gzip -c > renamed.maf.gz) > reName.log 2>&1 &
+    # real    52m4.679s
+    # -rw-rw-r-- 1 7203795233 Sep  5 15:38 renamed.maf.gz
+
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %asmNameDb;	# key is asmName in the hal file, value is dbName at UCSC
+
+open (my $fh, "<", "db.hgMatPat.asmName.longLabel.txt") or die "can not read db.hgMatPat.asmName.longLabel.txt";
+while (my $line = <$fh>) {
+  chomp $line;
+  my @a = split('\t', $line);
+  $asmNameDb{$a[2]} = $a[0];
+}
+close ($fh);
+$asmNameDb{'GRCh38'} = "hg38";
+$asmNameDb{'CHM13'} = "hs1";
+
+open ($fh, "-|", "zcat ../fromGlenn/hprc-v1.0-mc-chm13.single-copy.maf.gz") or die "can not zcat hprc-v1.0-mc-chm13.single-copy.maf.gz";
+while (my $line = <$fh>) {
+  chomp $line;
+  if ($line =~ m/^s\t/) {
+    my @a = split('\t', $line, 3);
+    my $asmName = $a[1];
+    $asmName =~ s/\..*//;
+    my $seqName = "hg38";
+    if (!defined($asmNameDb{$asmName})) {
+      printf "no equivalent name for: '%s'\n", $asmName;
+      exit 255;
+    }
+    $seqName = $asmNameDb{$asmName} if ($asmName ne "GRCh38");
+    $a[1] =~ s/^$asmName/$seqName/;
+    printf "%s\n", join("\t", @a);
+  } else {
+    printf "%s\n", $line;
+  }
+}
+close ($fh);
+
+
+## scan that result:
+    zgrep "^s" renamed.maf.gz | cut -f2 > rename.name.scan
+## and which genomes:
+    grep -v "GC" rename.name.scan | cut -d'.' -f1 | sort | uniq -c
+1549489 hg38
+1618032 hs1
+
+    grep  "GC" rename.name.scan | cut -d'.' -f1-2 | sort | uniq -c \
+       | sort -rn | head
+
+
+##############################################################################
