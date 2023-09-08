@@ -3966,6 +3966,7 @@ function showMouseoverText(e) {
 
     // allow the user to mouse over the mouse over, (eg. clicking a link or selecting text)
     document.addEventListener("mousemove", callback, {signal: mousemoveSignal.signal});
+    document.addEventListener("scroll", callback, {signal: mousemoveSignal.signal});
     mouseoverTimer = undefined;
 }
 
