@@ -79,7 +79,7 @@ public class HGNearCheck {
 	  continue;
 	}
         // initialize robot
-        String hgNearURL = "http://" + target.machine + "/cgi-bin/hgNear?db=";
+        String hgNearURL = target.httpProto + "://" + target.machine + "/cgi-bin/hgNear?db=";
         hgNearURL = hgNearURL + assembly;
         Robot myRobot = new Robot(hgNearURL);
         // PART 1

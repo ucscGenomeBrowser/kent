@@ -3786,7 +3786,7 @@ html lovdComp
         longLabel Leiden Open Variation Database, short < 50 bp variants and insertions of any length
         group phenDis
         visibility hide
-        urls id="http://varcache.lovd.nl/redirect/$$"
+        urls id="https://varcache.lovd.nl/redirect/$$"
         noScoreFilter on
         bigDataUrl /gbdb/$D/lovd/lovd.$D.short.bb
         parent lovdComp
@@ -3797,7 +3797,7 @@ html lovdComp
         longLabel Leiden Open Variation Database Public Variants, long >= 50 bp variants
         group phenDis
         visibility hide
-        urls id="http://varcache.lovd.nl/redirect/$$"
+        urls id="https://varcache.lovd.nl/redirect/$$"
         noScoreFilter on
         bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
         parent lovdComp
