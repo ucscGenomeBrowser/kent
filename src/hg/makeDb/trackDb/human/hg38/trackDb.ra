@@ -550,7 +550,6 @@ include trackDb.cloneEnd.ra
 include hg38Patch11.ra alpha
 
 include knownGene.ra
-include knownGene.alpha.ra beta
 include knownGeneArchive.ra alpha
 
 include trackDb.100way.ra 
