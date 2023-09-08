@@ -3879,6 +3879,11 @@ function replaceReserved(txt) {
 
 // the current mouseover timer, for showing the mouseover after a delay
 var mouseoverTimer;
+// the timer for when a user is moving the mouse after already bringing up
+// a pop up, there may be many items close together and we want the user
+// to bring up those mouseovers
+var mousemoveTimer;
+var showDiffMouseover = false;
 // signal handler for when mousemove has gone far enough away from the pop up
 // we can't use removeEventListener because the function call is hard to keep
 // track of because of a bounded this keyword
@@ -3894,25 +3899,36 @@ function hideMouseoverText(ele) {
     tooltipTarget.style.visibility = "hidden";
 }
 
+function mousemoveTimerHelper(e) {
+    showDiffMouseover = true;
+    clearTimeout(mousemoveTimer);
+    mousemoveTimer = undefined;
+}
+
 function mousemoveHelper(e) {
     /* Helper function for deciding whether to keep a tooltip visible upon a mousemove event */
-    if ($(".tooltip.isShown").length > 0) {
-        return;
+    if (mousemoveTimer === undefined) {
+        // if we are over another mouseable element we want to show that one instead
+        // use this timer to do so
+        showDiffMouseover = false;
+        mousemoveTimer = setTimeout(mousemoveTimerHelper, 100, e);
     }
     let targetBox = this.getBoundingClientRect();
     let mouseX = e.clientX;
     let mouseY = e.clientY;
     // currently allow the mouse to move in a 45 pixel box around the element
     if ( mouseX >= (targetBox.left - 45) && mouseX <= (targetBox.right + 45) &&
-            mouseY >= (targetBox.top - 45) && mouseY <= (targetBox.bottom + 45) ) {
-        // keep the mouseover showing
+            mouseY >= (targetBox.top - 45) && mouseY <= (targetBox.bottom + 45)
+            && !showDiffMouseover) {
         return;
     } else {
         // now that we are going to hide the pop up we can remove the event listener
         // for whether we wanted to keep the pop up or not
-        console.log("hiding mouseover in mousemove helper:");
-        console.log(this);
-        hideMouseoverText(this);
+        if ($(".tooltip.isShown").length > 0) {
+            console.log("hiding mouseover in mousemove helper:");
+            console.log(this);
+            hideMouseoverText(this);
+        }
         mousemoveSignal.abort();
     }
 }
