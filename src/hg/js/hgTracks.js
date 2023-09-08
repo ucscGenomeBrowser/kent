@@ -5309,7 +5309,7 @@ var downloadCurrentTrackData = {
             showDisabledMsg = false;
             if (!trackName.includes("Squish") && trackName !== "ruler" && track.visibility > 0) {
                 htmlStr += "<input type=checkbox class='downloadTrackName' id='" + trackName + "'";
-                if (trackName.startsWith("ct_")) {
+                if (trackName.startsWith("ct_") || !tdbIsLeaf(track)) {
                     showDisabledMsg = true;
                     htmlStr += " disabled ";
                 } else {
@@ -5319,7 +5319,7 @@ var downloadCurrentTrackData = {
                 htmlStr += "<label>" + track.shortLabel + "</label>";
                 htmlStr += "</input>";
                 if (showDisabledMsg) {
-                    htmlStr += "&nbsp;<span id='" + trackName + "Tooltip'> (?)</span>";
+                    htmlStr += "&nbsp;<span id='" + trackName + "Tooltip'><a href='#'>(?)</a></span>";
                 }
                 htmlStr += "<br>";
             }
