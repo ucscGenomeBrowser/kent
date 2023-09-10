@@ -64,6 +64,7 @@ GCA_004025025.1_TapTer_v1_BIUU	Brazilian tapir
 GCF_023065955.2_UrsArc2.0	brown bear (v2.0 North America Adak 2023)
 GCF_003584765.2_ASM358476v2	brown bear (GAN/ISIS:MIG12 v2 2018)
 GCA_004027775.1_BraVar_v1_BIUU	brown-throated sloth
+GCF_949786415.1_PerEre_H2_v1	cactus mouse (2023)
 GCF_007827085.1_ASM782708v3	California mouse (IS 2022)
 GCA_009762295.2_mZalCal1.alt.v2	California sea lion (mZalCal1 alternate hap 2020)
 GCA_009762295.1_mZalCal1.alt	California sea lion (alternate hap 2019)
@@ -145,6 +146,7 @@ GCA_902685485.1_mSciVul1.1_alternate_haplotype	Eurasian red squirrel (alternate 
 GCA_902686455.1_mSciVul1.1	Eurasian red squirrel (2019)
 GCF_902655055.1_mLutLut1.2	Eurasian river otter (2020)
 GCF_903992535.2_mArvAmp1.2	Eurasian water vole (v2 2021)
+GCF_030435805.1_mMusLut2.pri	European mink (mMusLut2 primary hap 2023)
 GCF_000181275.1_SorAra2.0	European shrew (GB8-d 2012)
 GCF_027595985.1_mSorAra2.pri	European shrew (mSorAra2 primary hap 2023)
 GCF_950005125.1_mChiNiv1.1	European snow vole (primary hap 2023)
@@ -171,7 +173,7 @@ GCA_004024945.1_UroGra_v1_BIUU	gracile shrew mole
 GCF_012393455.1_Tufts_HGry_1.1	gray seal
 GCF_000002295.2_MonDom5	gray short-tailed opossum (MonDom5 2007)
 GCA_027917375.1_mMonDom1.alt	gray short-tailed opossum (mMonDom1 alternate hap 2023)
-GCA_027887165.1_mMonDom1.pri	gray short-tailed opossum (mMonDom1 primary hap 2023)
+GCF_027887165.1_mMonDom1.pri	gray short-tailed opossum (mMonDom1 primary hap 2023 refseq)
 GCF_902686445.1_mSciCar1.2	gray squirrel (2020)
 GCA_905319855.2_mCanLor1.2	gray wolf (2021)
 GCF_001890085.2_ASM189008v1	great roundleaf bat (v2 ML-2016 2016)
@@ -325,7 +327,7 @@ GCA_028749985.1_mPumCon1.0.hap1	puma (L17-30 primary hap 2023)
 GCA_028749965.1_mPumCon1.0.hap2	puma (L17-30 alternate hap 2023)
 GCA_004363535.1_DasPun_v1_BIUU	punctate agouti
 GCA_004363705.1_KogBre_v1_BIUU	pygmy sperm whale
-GCA_026419965.1_mKogBre1_haplotype_1	pygmy sperm whale (mKogBre1 haplotype 1 2022)
+GCF_026419965.1_mKogBre1_haplotype_1	pygmy sperm whale (mKogBre1 2022 refseq)
 GCA_026419985.1_mKogBre1_haplotype_2	pygmy sperm whale (mKogBre1 haplotype 2 2022)
 GCF_009806435.1_UM_NZW_1.0	rabbit (New Zealand White DNA-2018 2021 refseq)
 GCF_000003625.3_OryCun2.0	rabbit (Thorbecke 2009 Broad refseq)
