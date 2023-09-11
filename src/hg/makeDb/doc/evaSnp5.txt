@@ -1,4 +1,4 @@
-# Track for EVA snp release 4  - https://www.ebi.ac.uk/eva/?RS-Release&releaseVersion=5
+# Track for EVA snp release 5  - https://www.ebi.ac.uk/eva/?RS-Release&releaseVersion=5
 # Tracks built by Lou on 9/7/2023
 
 # Track was built for the following 35 assemblies
