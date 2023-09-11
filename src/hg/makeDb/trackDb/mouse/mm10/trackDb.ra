@@ -419,3 +419,12 @@ type bed 12
 searchTable HLTOGAannotvsHg38v1
 searchType bed
 searchMethod fuzzy
+
+track allGaps
+shortLabel All Gaps
+longLabel All gaps of unknown nucleotides (N's), including AGP annotated gaps
+group map
+visibility dense
+type bigBed 3
+bigDataUrl /gbdb/mm10/bbi/allGaps.bb
+html allGaps
