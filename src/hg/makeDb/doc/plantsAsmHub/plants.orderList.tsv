@@ -1,9 +1,11 @@
+GCF_019202715.1_MaoHua_MHT	A.eriantha eudicots (MHT-2021 2021)
 GCF_016808095.1_ASM1680809v1	adzuki bean (LongXiaoDou No.4 2021)
 GCF_001190045.1_Vigan1.1	adzuki bean (Jingnong 6 2015)
 GCF_000442705.1_EG5	African oil palm
 GCF_000147395.1_OglaRS2	African rice (2021)
 GCF_004799145.1_ASM479914v1	algarrobo blanco
 GCF_902201215.1_ALMONDv2	almond
+GCF_937616625.2_ddMerAnnu1.2	annual mercury (primary hap 2022)
 GCF_022539505.1_APGP_CSIRO_Lrig_0.1	annual ryegrass (FL_2022 2022)
 GCF_937616625.1_ddMerAnnu1.1	annual mercury (primary hap 2022)
 GCF_002114115.1_ASM211411v1	apple (Golden Delicious X9273 #13 2017 refseq)
@@ -13,14 +15,17 @@ GCA_002024945.1_R108_v._1.0	barrel medic (HM340 2017)
 GCF_003473485.1_MtrunA17r5.0-ANR	barrel medic (2018)
 GCA_028538565.1_dmUmbCali1.0.hap2	bay (USA: Berkeley CA var. californica CCGP_DODD_UMBCAL_S1 alternate hap 2023)
 GCA_028534965.1_dmUmbCali1.0.hap1	bay (USA: Berkeley CA var. californica CCGP_DODD_UMBCAL_S1 primary hap 2023)
-GCF_002917755.1_EL10_1.0	beet (EL10 2021 USDA)
+GCF_002917755.1_EL10_1.0	beet (v1 EL10 2021 USDA)
+GCF_026745355.1_EL10.2	beet (v2 EL10 2022 USDA)
 GCA_019985075.1_ddArcGlau1.0.a	bigberry manzanita (GLNDR_RDG_Rd-6 alternate hap 2021)
 GCA_019985065.2_ddArcGlau1.1p	bigberry manzanita (GLNDR_RDG_Rd-6 primary hap 2022)
+GCF_012489685.1_LjGifu_v1.2	birdsfoot trefoil (B-129 2022)
 GCF_001995035.1_ASM199503v1	bitter melon
 GCA_028534865.1_ddPopTric1.0.hap2	black cottonwood (Ptri.A.LA.226.w1 alternate hap 2023)
 GCA_028534895.1_ddPopTric1.0.hap1	black cottonwood (Ptri.A.LA.226.w1 primary hap 2023)
 GCF_000002775.5_P.trichocarpa_v4.1	black cottonwood (v4.1 Nisqually-1 2022)
 GCF_004153795.1_AHAU_CSS_1	black tea
+GCF_021117445.2_Sole_v2.1	blue lilly pilly tree (NSW1041296 2022)
 GCA_907166925.1_wheat_cv_fielder_v1_assembly	bread wheat (Fielder 2021)
 GCF_018294505.1_IWGSC_CS_RefSeq_v2.1	bread wheat (Chinese Spring 2021, UC Davis)
 GCF_000208745.1_Criollo_cocoa_genome_V2	cacao
@@ -36,7 +41,7 @@ GCF_001625215.1_ASM162521v1	carrot
 GCF_001659605.2_M.esculenta_v8	cassava (v8 AM560-2 2021 DOE)
 GCF_000151685.1_JCVI_RCG_1.1	castor bean (Hale 2011 JCVI)
 GCF_019578655.1_ASM1957865v1	castor bean (wild-type WT05 2021)
-GCF_023119035.1_UniMelb_Shisp_WGS_1.0	eudicots chia (TCC Black 2014 2022)
+GCF_023119035.1_UniMelb_Shisp_WGS_1.0	chia eudicots (TCC Black 2014 2022)
 GCF_000331145.1_ASM33114v1	chickpea
 GCF_002994745.2_RchiOBHm-V2	China rose (Old Blush v2 2019)
 GCA_024364735.1_CEBAR_Bro_1.0	Chinese keys (BR_CEBAR01 2022)
@@ -69,9 +74,9 @@ GCF_002303985.1_Duzib1.0	durian
 GCA_000787875.1_SME_r2.5.1	eggplant (2014)
 GCF_932294415.1_dhQueRobu3.1	English oak (primary hap 2022)
 GCF_001411555.2_Walnut_2.0	English walnut
-GCF_002878395.1_UCD10Xv1.1	eudicots bell pepper (UCD-10X-F1 2018)
-GCF_004785595.1_Jm3101_v1.0	eudicots J.microcarpa x regia (UCDavis 2019)
-GCF_004379255.1_SspV2	eudicots S.splendens huo1 (BFU 2021)
+GCF_002878395.1_UCD10Xv1.1	bell pepper eudicots (UCD-10X-F1 2018)
+GCF_004785595.1_Jm3101_v1.0	J.microcarpa x regia eudicots (UCDavis 2019)
+GCF_004379255.1_SspV2	S.splendens huo1 eudicots (BFU 2021)
 GCF_000495115.2_PopEup_1.0	Euphrates poplar (v2 2014)
 GCF_916048215.2_drMalSylv7.2	European crab apple (2022)
 GCA_000831365.1_hl_SW_version_1.0.fasta	European hop (Shinshu Wase 2014)
@@ -81,6 +86,7 @@ GCA_002180455.1_ASM218045v1	finger millet (ML-365 2017)
 GCF_000263155.2_Setaria_italica_v2.0	foxtail millet
 GCF_001876935.1_Aspof.V1	garden asparagus (2017)
 GCF_024323335.1_CAAS_Psat_ZW6_1.0	garden pea (Zhongwan6 2022)
+GCF_029873635.1_ASM2987363v1	garlic-fruit tree (guangnan 2023)
 GCF_029017545.1_ASM2901754v1	ghaf (Desert tree PC_DT_omini 2023)
 GCF_018446385.1_Zo_v1.1	ginger
 GCF_001531365.2_CcrdV1.1	globe artichoke (v1.1 2C 2018)
@@ -104,8 +110,9 @@ GCF_000143455.1_v1.0	green algae V.carteri (Eve 2010)
 GCF_009805555.1_ASM980555v1	green chiretta (2019)
 GCF_005286985.1_Setaria_viridis_v2.0	green foxtail
 GCA_002240015.2_TDr96_F1_Pseudo_Chromosome_v1.0	Guinea yam (TDr96_F1 2017)
+GCF_029867415.1_Vvil1.0	hairy vetch (HV-30 2023)
 GCF_002211085.1_PHallii_v3.1	Hall's panicgrass
-GCF_907164915.1_dImpGla2.1	eudicots Himalayan balsam
+GCF_907164915.1_dImpGla2.1	Himalayan balsam (dImpGla2.1 2021)
 GCF_010389155.1_C_canadensis_v1	horseweed
 GCF_003935025.1_Abrus_2018	Indian licorice
 GCA_023055485.1_dhQueWisl1.0.a	interior live oak (QUWIS_CCGP_1 alternate hap 2022)
@@ -115,6 +122,7 @@ GCA_028535515.1_dhQueTome1.0.hap1	island oak (RSA801373 primary hap 2023)
 GCF_000346735.1_P.mume_V1.0	Japanese apricot
 GCF_001879475.1_Asagao_1.1	Japanese morning glory
 GCF_001433935.1_IRGSP-1.0	Japanese rice
+GCF_026212465.1_ASM2621246v1	Joseph's coat eudicots (Red AtriRed21 2022)
 GCA_001602275.1_ASM160227v1	Korean lawngrass (Nagirizaki 2016)
 GCF_002870075.4_Lsat_Salinas_v11	garden lettuce (Salinas v11 2022)
 GCA_000227445.1_Legassy_V2	lettuce eudicots (Salinas 2011)
@@ -160,12 +168,14 @@ GCA_014189475.1_ASM1418947v1	potato S.tuberosum (RH89-039-16 2020)
 GCA_014189305.1_ASM1418930v1	potato S.tuberosum (alt pseudohaplotype RH89-039-16 2020)
 GCF_900185275.1_falcon-dt-bn	potato S.verrucosum (2019)
 GCF_001683475.1_ASM168347v1	quinoa
-GCF_000801105.1_Rs1.0	radish
+GCF_000801105.2_ASM80110v3	radish (v2 WK10039 2023)
 GCF_000686985.2_Bra_napus_v2.0	rape (ZS11 2017)
 GCF_020379485.1_Da-Ae	rape (Da-Ae 2021)
-GCF_020283565.1_ARS_RC_1.1	eudicots red clover (HEN17-A07 2021)
+GCF_020283565.1_ARS_RC_1.1	red clover eudicots (HEN17-A07 2021)
+GCF_028751815.1_IMPLAD_Smil_shh	red sage (Shanhuang shh 2023)
 GCF_003073215.2_Tu2.1	red wild einkorn wheat (G1812 2018)
-GCF_018835915.1_ASM1883591v1	eudicots rice bean (VRB-3 Himshakti 2021)
+GCF_030253575.1_ASM3025357v1	Rhododendron vialii eudicots (Sample 1 2023)
+GCF_018835915.1_ASM1883591v1	rice bean eudicots (VRB-3 Himshakti 2021)
 GCF_004353265.1_EGFV_Vit.rip_1.0	riverbank grape
 GCF_016545825.1_ASM1654582v1	rose gum (2021)
 GCF_000612305.1_Egrandis1_0	rose gum (BRASUZ1 2014)
@@ -186,7 +196,8 @@ GCF_000003195.3_Sorghum_bicolor_NCBIv3	sorghum (BTx623 2017)
 GCA_003482435.1_Corteva_Sorghum_ONT_TX430_1.0	sorghum (Tx430 2018)
 GCF_000004515.6_Glycine_max_v4.0	soybean (US DOE JGI-PGF v2 2021)
 GCF_000463585.1_ASM46358v1	spider flower
-GCF_002007265.1_ASM200726v1	spinach
+GCF_002007265.1_ASM200726v1	spinach (Sp75 2017)
+GCF_020520425.1_BTI_SOV_V1	spinach (Varoflay 2021)
 GCF_000504015.1_Mimgu1_0	spotted monkey flower
 GCF_000005505.3_Brachypodium_distachyon_v3.0	stiff brome
 GCA_000511835.1_FAN_r1.1	strawberry (Reikou 2013)
@@ -218,7 +229,8 @@ GCF_002162155.2_WEW_v2.1	wild emmer wheat (Zavitan Atlit2015 v2.1 2019)
 GCF_000313855.2_ASM31385v2	wild Malaysian banana
 GCF_002742605.1_O_europaea_v1	wild olive
 GCF_000817695.3_aradu.V14167.gnm2.J7QH	wild peanut A.duranensis (v2 V14167 2020)
-GCF_000816755.2_Araip1.1	wild peanut A.ipaensis
+GCF_000816755.2_Araip1.1	wild peanut A.ipaensis (K30076 2017)
+GCF_014773155.1_arast.V10309.gnm1.PFL2	wild peanut A.stenosperma (V10309 2020)
 GCF_004193775.1_ASM419377v2	wild soybean
 GCF_000184155.1_FraVesHawaii_1.0	wild strawberry (2011 refseq)
 GCF_001406875.1_SPENNV200	wild tomato S.pennellii
