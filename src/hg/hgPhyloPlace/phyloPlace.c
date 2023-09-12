@@ -284,7 +284,10 @@ static char *urlFromTn(struct tempName *tn)
  * just leave it up to the user's web browser to do the right thing with "../". */
 {
 struct dyString *dy = dyStringCreate("%s%s", hLocalHostCgiBinUrl(), tn->forHtml);
-return dyStringCannibalize(&dy);
+char *url = dyStringCannibalize(&dy);
+int size = strlen(url) + 1;
+strSwapStrs(url, size, "cgi-bin/../", "");
+return url;
 }
 
 void reportTiming(int *pStartTime, char *message)
@@ -1297,20 +1300,34 @@ while ((hel = hashNext(&cookie)) != NULL)
 }
 
 static char *nextstrainHost()
-/* Return the nextstrain hostname from an hg.conf param, or NULL if missing. */
+/* Return the nextstrain hostname from an hg.conf param, or NULL if missing. Do not free result. */
 {
 return cfgOption("nextstrainHost");
+}
+
+static char *nextstrainUrlBase()
+/* Alloc & return the part of the nextstrain URL before the JSON filename. */
+{
+struct dyString *dy = dyStringCreate("%s/fetch/", nextstrainHost());
+return dyStringCannibalize(&dy);
+}
+
+static char *skipProtocol(char *url)
+/* Skip the protocol:// part at the beginning of url if found.  Do not free result. */
+{
+char *protocol = strstr(url, "://");
+return protocol ? protocol + strlen("://") : url;
 }
 
 static char *nextstrainUrlFromTn(struct tempName *jsonTn)
 /* Return a link to Nextstrain to view an annotated subtree. */
 {
 char *jsonUrlForNextstrain = urlFromTn(jsonTn);
-char *protocol = strstr(jsonUrlForNextstrain, "://");
-if (protocol)
-    jsonUrlForNextstrain = protocol + strlen("://");
-struct dyString *dy = dyStringCreate("%s/fetch/%s?f_userOrOld=uploaded%%20sample",
-                                     nextstrainHost(), jsonUrlForNextstrain);
+char *urlBase = nextstrainUrlBase();
+struct dyString *dy = dyStringCreate("%s/%s?f_userOrOld=uploaded%%20sample",
+                                     urlBase, skipProtocol(jsonUrlForNextstrain));
+freeMem(jsonUrlForNextstrain);
+freeMem(urlBase);
 return dyStringCannibalize(&dy);
 }
 
@@ -1350,20 +1367,111 @@ makeNextstrainButton("viewNextstrainSingleSubtree", tn,
                      "tree for context");
 }
 
+char *microbeTraceHost()
+/* Return the MicrobeTrace hostname from an hg.conf param, or NULL if missing. Do not free result. */
+{
+return cfgOption("microbeTraceHost");
+}
+
+static char *microbeTraceUrlBase()
+/* Alloc & return the part of the MicrobeTrace URL before the JSON filename. */
+{
+struct dyString *dy = dyStringCreate("%s/MicrobeTrace/?url=", microbeTraceHost());
+return dyStringCannibalize(&dy);
+}
+
+static void makeSubtreeDropdown(char *subtreeDropdownName, struct subtreeInfo *subtreeInfoList,
+                                struct tempName **jsonTns)
+/* Let user choose subtree to view */
+{
+int count = slCount(subtreeInfoList);
+char *labels[count];
+char *values[count];
+struct subtreeInfo *ti;
+int ix;
+for (ix = 0, ti = subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
+    {
+    struct dyString *dy = dyStringCreate("subtree %d", ix+1);
+    labels[ix] = dyStringCannibalize(&dy);
+    values[ix] = urlFromTn(jsonTns[ix]);
+    }
+cgiMakeDropListWithVals(subtreeDropdownName, labels, values, count, NULL);
+for (ix = 0;  ix < count;  ix++)
+    {
+    freeMem(labels[ix]);
+    }
+}
+
+static void makeSubtreeJumpButton(char *subtreeDropdownName, char *dest, char *destUrlBase,
+                                  char *destUrlParams, boolean skipProtocol)
+/* Make a button with javascript to get a JSON filename from a dropdown element, format a link
+ * to dest, and jump to that dest when clicked. */
+{
+char *mouseover = "view selected subtree with your sequences and other sequences from the "
+    "full phylogenetic tree for context";
+struct dyString *js = dyStringCreate("jsonUrl = document.querySelector('select[name=\"%s\"]').value;"
+                                     "if (%d) { ix = jsonUrl.indexOf('://');"
+                                     "          if (ix >= 0) { jsonUrl = jsonUrl.substr(ix+3); } }"
+                                     "window.open('%s' + jsonUrl + '%s');",
+                                     subtreeDropdownName, skipProtocol, destUrlBase, destUrlParams);
+struct dyString *id = dyStringCreate("jumpTo%s", dest);
+printf("<input type='button' id='%s' value='%s' title='%s' class='fullwidth'>",
+       id->string, dest, mouseover);
+jsOnEventById("click", id->string, js->string);
+dyStringFree(&js);
+dyStringFree(&id);
+}
+
 static void makeButtonRow(struct tempName *singleSubtreeJsonTn, struct tempName *jsonTns[],
                           struct subtreeInfo *subtreeInfoList, int subtreeSize, boolean isFasta,
                           boolean offerCustomTrack)
 /* Russ's suggestion: row of buttons at the top to view results in GB, Nextstrain, Nextclade. */
 {
 puts("<p>");
+puts("<table class='invisalign'><tbody><tr>");
 if (offerCustomTrack)
+    {
+    puts("<td>");
     cgiMakeButtonWithMsg("submit", "view in Genome Browser",
                          "view your uploaded sequences, their phylogenetic relationship and their "
                          "mutations along with many other datasets available in the Genome Browser");
+    puts("</td>");
+    }
+// SingleSubtree -- only for Nextstrain, not really applicable to MicrobeTrace
 if (nextstrainHost())
     {
-    printf("&nbsp;");
+    puts("<td>");
     makeNsSingleTreeButton(singleSubtreeJsonTn);
+    puts("</td>");
+    }
+
+// If both Nextstrain and MicrobeTrace are configured then make a subtree dropdown and buttons
+// to view in Nextstrain or MicrobeTrace
+if (nextstrainHost() && microbeTraceHost())
+    {
+    puts("<td>View subtree</td><td>");
+    char *subtreeDropdownName = "subtreeSelect";
+    makeSubtreeDropdown(subtreeDropdownName, subtreeInfoList, jsonTns);
+    puts("</td><td>in</td><td>");
+    makeSubtreeJumpButton(subtreeDropdownName, "Nextstrain", nextstrainUrlBase(),
+                          "?f_userOrOld=uploaded%20sample", TRUE);
+    puts("<br>");
+    if (subtreeSize <= MAX_MICROBETRACE_SUBTREE_SIZE)
+        {
+        makeSubtreeJumpButton(subtreeDropdownName, "MicrobeTrace", microbeTraceUrlBase(), "", FALSE);
+        }
+    else
+        {
+        cgiMakeOptionalButton("disabledMTButton", "MicrobeTrace", TRUE);
+        printf(" (%d samples is too many to view in MicrobeTrace; maximum is %d)",
+               subtreeSize, MAX_MICROBETRACE_SUBTREE_SIZE);
+        }
+    puts("</td>");
+    }
+else if (nextstrainHost())
+    {
+    // Nextstrain only: do the old row of subtree buttons
+    puts("<td>");
     struct subtreeInfo *ti;
     int ix;
     for (ix = 0, ti = subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
@@ -1372,15 +1480,18 @@ if (nextstrainHost())
         printf("&nbsp;");
         makeNextstrainButtonN("viewNextstrainTopRow", ix, userSampleCount, subtreeSize, jsonTns);
         }
+    puts("</td>");
     }
 if (0 && isFasta)
     {
-    printf("&nbsp;");
+    puts("<td>");
     struct dyString *js = dyStringCreate("window.open('https://master.clades.nextstrain.org/"
                                          "?input-fasta=%s');",
                                          "needATn");  //#*** TODO: save FASTA to file
     cgiMakeOnClickButton("viewNextclade", js->string, "view sequences in Nextclade");
+    puts("</td>");
     }
+puts("</tr></tbody></table>");
 puts("</p>");
 }
 

@@ -234,6 +234,15 @@ puts("<style>\n"
 "}\n"
 "h2 { font-size: 18px; }\n"
 "h3 { font-size: 16px; }\n"
+"table.invisalign {\n"
+"    border: 0px;\n"
+"}\n"
+"table.invisalign td {\n "
+"    padding: 5px;\n"
+"}\n"
+"button.fullwidth {\n "
+"    width: 100%;\n"
+"}\n"
 "</style>\n"
      );
 
@@ -300,9 +309,13 @@ if (treeChoices)
 puts("</p><p>");
 printf("Number of samples per subtree showing sample placement: ");
 int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
-cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
-                        "Number of samples in subtree showing neighborhood of placement",
-                        5, 10, 5000);
+struct dyString *dy = dyStringCreate("Number of samples in subtree showing neighborhood of "
+                                     "placement (max: %d", MAX_SUBTREE_SIZE);
+if (microbeTraceHost() != NULL)
+    dyStringPrintf(dy, "; max for MicrobeTrace: %d)", MAX_MICROBETRACE_SUBTREE_SIZE);
+else
+    dyStringAppend(dy, ")");
+cgiMakeIntVarWithLimits("subtreeSize", subtreeSize, dy->string, 5, 10, MAX_SUBTREE_SIZE);
 puts("</p><p>");
 cgiMakeOnClickSubmitButton(CHECK_FILE_OR_PASTE_INPUT_JS(seqFileVar, pastedIdVar),
                            "submit", "Upload");
