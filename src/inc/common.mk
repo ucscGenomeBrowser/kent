@@ -3,12 +3,12 @@ CC?=gcc
 # allow the somewhat more modern C syntax, e.g. 'for (int i=5; i<10, i++)'
 CFLAGS += -std=c99
 
+# add additional library paths
+L += ${LDFLAGS}
+
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
     COPT=-O -g
-endif
-ifeq (${CFLAGS},)
-    CFLAGS=
 endif
 ifeq (${MACHTYPE},)
     MACHTYPE:=$(shell uname -m)

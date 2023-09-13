@@ -77,7 +77,7 @@ public class PBGeneCheck {
 	  continue;
 	}
 	if (QADBLibrary.tableExists(dbinfo, "knownGene") )
-	  HgTracks.pbgene(dbinfo, target.server, assembly, table, target.quickOn);
+	  HgTracks.pbgene(dbinfo, target.httpProto, target.server, assembly, table, target.quickOn);
       } catch (Exception e) {
         // Catch, print, and ignore errors.
 	System.out.println(e.toString());

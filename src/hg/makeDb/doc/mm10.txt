@@ -19196,3 +19196,27 @@ real	1562m52.789s
 user	0m4.517s
 sys	0m2.098s
 ##############################################################################
+## allGaps track per user request redmine 32104 - DONE - Hiram - 2023-09-11
+
+    mkdir /hive/data/genomes/mm10/bed/allGaps
+    cd /hive/data/genomes/mm10/bed/allGaps
+    twoBitInfo -nBed ../../mm10.p6.2bit stdout \
+       | sort -k1,1 -k2,2n > mm10.p6.allGaps.bed
+    bedToBigBed -type=bed3 mm10.p6.allGaps.bed \
+        ../../chrom.sizes.p6 mm10.p6.allGaps.bb
+
+    ln -s `pwd`/mm10.p6.allGaps.bed /gbdb/mm10/bbi/allGaps.bb
+
+    #  all these gaps:
+    featureBits -countGaps mm10 mm10.p6.allGaps.bed > fb.allGaps.txt 2>&1
+    #	79435853 bases of 2818974548 (2.818%) in intersection
+
+    # standard AGP defined gap track:
+    featureBits -countGaps mm10 mm10.gap.bed > fb.gap.txt 2>&1
+    #	79370942 bases of 2818974548 (2.816%) in intersection
+
+    # with both, should be identical to the standard gap track:
+    featureBits -countGaps mm10 mm10.gap.bed mm10.p6.allGaps.bed
+    #	79370942 bases of 2818974548 (2.816%) in intersection
+
+##############################################################################

@@ -206,7 +206,7 @@ for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next
 	}
     else
 	{
-	if (elapsedTime > 5000)
+	if (elapsedTime > 10000)
 	    printf("%s %ld <---\n", machinePos->name, elapsedTime);
 	else
 	    printf("%s %ld\n", machinePos->name, elapsedTime);

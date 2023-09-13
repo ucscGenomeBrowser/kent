@@ -2,6 +2,7 @@ GCF_003597395.1_ASM359739v1	Abingdon island giant tortoise
 GCF_027172205.1_rPodRaf1.pri	Aeolian wall lizard (rPodRaf1 primary hap 2022)
 GCF_017654675.1_Xenopus_laevis_v10.1	African clawed frog (2021)
 GCF_000281125.3_ASM28112v4	American alligator
+GCF_028640845.1_ASM2864084v1	Asian vine snake (Xishuangbanna 2023)
 GCF_014858855.1_ASM1485885v1	Asiatic toad (SCDJY-AF-19 2020)
 GCF_001723895.1_CroPor_comp1	Australian saltwater crocodile
 GCA_026167985.1_rPhrBla1.0.hap1	Blainville's horned lizard (primary hap 2022)
@@ -38,7 +39,8 @@ GCA_029215655.1_rPitCat1.0.hap1	gopher snake (HBS135680 primary hap 2023)
 GCF_027244095.1_rHemCap1.1.pri	graceful crag lizard (Gifberg primary hap 2022)
 GCF_016835505.1_ASM1683550v1	gray bichir
 GCF_017639515.1_sCarCar2.pri	great white shark (primary hap 2021)
-GCF_000090745.1_AnoCar2.0	green anole
+GCF_000090745.1_AnoCar2.0	green anole (v1 2011)
+GCF_000090745.2_AnoCar2.0	green anole (v2 2010)
 GCF_015237465.2_rCheMyd1.pri.v2	green sea turtle (v2 primary hap 2021)
 GCF_000935625.1_ASM93562v1	High Himalaya frog
 GCF_004798865.1_ASM479886v1	Komodo dragon (SLA01 2019)
@@ -83,8 +85,10 @@ GCA_024509115.1_rCroOre1.0.p	Southern Pacific rattlesnake (HBS135844 primary hap
 GCA_023634275.1_rActPal1.0.a	Southwestern pond turtle (HBS135687 alternate hap 2022)
 GCA_023634205.1_rActPal1.0.p	Southwestern pond turtle (HBS135687 primary hap 2022)
 GCF_000242695.1_LepOcu1	spotted gar
-GCA_902713435.2_fAciRut3.2_paternal_haplotype	sterlet (fAciRut3.2 2022)
+GCF_902713425.1_fAciRut3.2_maternal_haplotype	sterlet (maternal fAciRut3.2 2022)
+GCA_902713435.2_fAciRut3.2_paternal_haplotype	sterlet (paternal fAciRut3.2 2022)
 GCF_010645085.2_ASM1064508v2	sterlet (v2 Gen_M01 2020)
+GCF_029931775.1_rEulEur1.hap1	tarantolino (rEulEur1 2023)
 GCF_010909765.2_sAmbRad1.1.pri	thorny skate (primary hap CabotCenter1 v1.1 2020)
 GCA_010909745.1_sAmbRad1.alt	thorny skate (alternate hap CabotCenter1 2020)
 GCF_002925995.2_T_m_triunguis-2.0	three-toed box turtle

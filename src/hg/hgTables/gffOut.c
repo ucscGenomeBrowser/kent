@@ -448,6 +448,6 @@ for (region = regionList; region != NULL; region = region->next)
     lmCleanup(&lm);
     }
 if (itemCount == 0)
-    hPrintf(NO_RESULTS);
+    explainWhyNoResults(stdout);
 }
 

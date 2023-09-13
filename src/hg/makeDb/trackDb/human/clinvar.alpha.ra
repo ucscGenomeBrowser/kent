@@ -1,7 +1,7 @@
 track clinvar
 compositeTrack on
-shortLabel ClinVar Variants
-longLabel ClinVar Variants
+shortLabel ClinVar Variants ALPHA
+longLabel ClinVar Variants ALPHA
 group phenDis
 visibility hide
 type bed 12 +
@@ -9,6 +9,7 @@ noParentConfig on
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 scoreLabel ClinVar Star-Rating (0-4)
+dataVersion /gbdb/$D/bbi/clinvar/version.txt
 
         track clinvarMain
         parent clinvar
@@ -33,9 +34,9 @@ scoreLabel ClinVar Star-Rating (0-4)
         skipFields rcvAcc
         filterByRange._varLen on
         filterLimits._varLen 0:49
-        filterValues.molConseq genic downstream transcript variant|genic downstream transcript variant,no sequence alteration|no sequence alteration,inframe indel|inframe indel,stop lost|stop lost,genic upstream transcript variant|genic upstream transcript variant,initiatior codon variant|initiatior codon variant,inframe insertion|inframe insertion,inframe deletion|inframe deletion,splice acceptor variant|splice acceptor variant,splice donor variant|splice donor variant,5 prime UTR variant|5 prime UTR variant,nonsense|nonsense,non-coding transcript variant|non-coding transcript variant,3 prime UTR variant|3 prime UTR variant,frameshift variant|frameshift variant,intron variant|intron variant,synonymous variant|synonymous variant,missense variant|missense variant,|unknown
+        filterValues.molConseq genic downstream transcript variant|genic downstream transcript variant,no sequence alteration|no sequence alteration,inframe indel|inframe indel,stop lost|stop lost,genic upstream transcript variant|genic upstream transcript variant,initiatior codon variant|initiatior codon variant,inframe insertion|inframe insertion,inframe deletion|inframe deletion,splice acceptor variant|splice acceptor variant,splice donor variant|splice donor variant,5 prime UTR variant|5 prime UTR variant,nonsense|nonsense,non-coding transcript variant|non-coding transcript variant,3 prime UTR variant|3 prime UTR variant,frameshift variant|frameshift variant,intron variant|intron variant,synonymous variant|synonymous variant,missense variant|missense variant,|unknown,initiator codon variant|initiator codon variant
         mouseOverField _mouseOver
-        bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMain.bb
+        bigDataUrl /gbdb/$D/bbi/clinvarAlpha/clinvarMain.bb
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
         noScoreFilter on
         searchIndex _dbVarSsvId
@@ -64,7 +65,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         filterByRange._varLen on
         filterLimits._varLen 50:999999999
         mouseOverField _mouseOver
-        bigDataUrl /gbdb/$D/bbi/clinvar/clinvarCnv.bb
+        bigDataUrl /gbdb/$D/bbi/clinvarAlpha/clinvarCnv.bb
         mergeSpannedItems on
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
         noScoreFilter on

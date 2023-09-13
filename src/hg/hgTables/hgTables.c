@@ -1383,7 +1383,8 @@ for (region = regionList; region != NULL; region = region->next)
     lmCleanup(&lm);
     }
 if (count == 0)
-    hPrintf(NO_RESULTS);
+    explainWhyNoResults(stdout);
+
 htmlClose();
 }
 

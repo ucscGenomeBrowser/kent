@@ -96,7 +96,7 @@ public class HGGeneCheck {
       // could write a helper routine to do this
 
       // get tracks for this assembly (read track controls from web)
-      String hgtracksURL = "http://" + target.machine + "/cgi-bin/hgTracks?db=";
+      String hgtracksURL = target.httpProto + "://" + target.machine + "/cgi-bin/hgTracks?db=";
       hgtracksURL = hgtracksURL + assembly;
       String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
       ArrayList trackList = 
@@ -112,7 +112,7 @@ public class HGGeneCheck {
          if (!trackHasHgGene(track))
 	    continue;
          System.out.println(track);
-         HgTracks.hggene(dbinfo, target.machine, assembly, track, 
+         HgTracks.hggene(dbinfo, target.httpProto, target.machine, assembly, track, 
                          target.quickOn);
          System.out.println();
       }

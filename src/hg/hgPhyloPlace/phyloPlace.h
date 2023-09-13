@@ -17,6 +17,8 @@
 
 // Allow users to upload a lot of sequences, but put limits on how much detail we'll show and
 // how many custom tracks we'll create.
+#define MAX_SUBTREE_SIZE 5000
+#define MAX_MICROBETRACE_SUBTREE_SIZE 500
 #define MAX_SUBTREE_BUTTONS 5
 #define MAX_SEQ_DETAILS 1000
 #define MAX_SUBTREE_CTS 10
@@ -199,6 +201,9 @@ void serverSetThreadCount(char *db, int val);
 
 void serverSetTimeout(char *db, int val);
 /* Send timeout command and value (in seconds) to usher server. */
+
+char *microbeTraceHost();
+/* Return the MicrobeTrace hostname from an hg.conf param, or NULL if missing. Do not free result. */
 
 struct slPair *getAaMutations(struct singleNucChange *sncList, struct singleNucChange *ancestorMuts,
                               struct geneInfo *geneInfoList, struct seqWindow *gSeqWin);

@@ -129,6 +129,7 @@ GCA_014839835.1_bDryPub1.pri	birds
 GCA_014905235.2_Bmori_2016v1.0	invertebrate
 GCA_015227675.2_mRatBN7.2	mammals
 GCA_015227805.2_bHirRus1.pri.v2	birds
+GCA_015227805.3_bHirRus1.pri.v3	birds
 GCA_016128335.1_ZJU1.0	birds
 GCA_016432865.1_AdamAnt	mammals
 GCA_017976375.1_bCucCan1.pri	birds
@@ -136,6 +137,14 @@ GCA_018139145.1_ASM1813914v1	birds
 GCA_018296145.1_Otsh_v2.0	fish
 GCA_020740725.1_bCorHaw1.pri.cur	birds
 GCA_020740795.1_bApuApu2.pri.cur	birds
+GCA_020826845.1_mDicBic1.mat.cur	mammals
+GCA_023634155.1_bFalPer1.pri	birds
+GCA_023634085.1_bFalChe1.pri	birds
+GCA_023638135.1_bFalBia1.pri	birds
+GCA_026419965.1_mKogBre1_haplotype_1	mammals
+GCA_027887145.1_bAmmCau1.pri	birds
+GCA_027887165.1_mMonDom1.pri	mammals
+GCA_028018845.1_bMelGeo1.pri	birds
 GCA_028500815.1_bRisTri1.patW.cur.20221130	birds
 GCA_900006655.3_Susie3	primates
 GCA_900094665.2_CAROLI_EIJ_v1.1	mammals
@@ -217,6 +226,7 @@ GCF_000700745.1_ASM70074v1	birds
 GCF_000709325.1_ASM70932v1	birds
 GCF_000709365.1_ASM70936v1	birds
 GCF_000738735.2_ASM73873v2	birds
+GCF_000738735.5_ASM73873v5	birds
 GCF_000747805.1_ChaPel_1.0	birds
 GCF_000764305.1_Hazt_2.0	invertebrate
 GCF_000806345.1_ASM80634v1	invertebrate
@@ -290,6 +300,7 @@ GCF_009650485.1_drosAlbom15112-1751.03v1	invertebrate
 GCF_009764565.2_rDerCor1.pri.v3	vertebrate
 GCF_009819885.1_bCatUst1.pri	birds
 GCF_009828535.1_HMol	primates
+GCF_009828535.2_HMol_V2	primates
 GCF_009829125.1_fPerMag1.pri	fish
 GCF_009858895.2_ASM985889v3	viral
 GCF_010645085.1_ASM1064508v1	vertebrate
@@ -315,7 +326,9 @@ GCF_016746395.1_Prin_Dsim_3.0	invertebrate
 GCF_016801865.1_TS_Cpip_V1	invertebrate
 GCF_016920785.1_Ixodes_scapularus_ComboLowHiFi	invertebrate
 GCF_017639655.1_bFalNau1.pat	birds
+GCF_021218885.1_Marmota_monax_Labrador192_V1.0	mammals
 GCF_021288785.1_ASM2128878v2	mammals
+GCF_023065955.1_UrsArc1.0	mammals
 GCF_900094665.1_CAROLI_EIJ_v1.1	mammals
 GCF_900246225.1_fAstCal1.2	fish
 GCF_900324465.1_fAnaTes1.1	fish
@@ -325,6 +338,7 @@ GCF_900496995.1_bAquChr1.2	birds
 GCF_900634625.1_fParRan2.1	fish
 GCF_900634775.1_fGouWil2.1	fish
 GCF_900634795.2_fBetSpl5.2	fish
+GCF_900634795.3_fBetSpl5.3	fish
 GCF_900700375.1_fDenClu1.1	fish
 GCF_900700415.1_Ch_v2.0.2	fish
 GCF_900747795.1_fErpCal1.1	vertebrate

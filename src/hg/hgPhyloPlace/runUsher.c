@@ -921,6 +921,10 @@ if (dup2(newStderr, STDERR_FILENO) < 0)
 closeNonStdDescriptors();
 
 // Reset all signal handlers to their default.
+#ifndef SIGRTMAX   // may not have real-time extensions
+#define SIGRTMAX SIGUSR2
+#endif
+
 int ix;
 for (ix = 0;  ix <= SIGRTMAX;  ix++)
     signal(ix, SIG_DFL);

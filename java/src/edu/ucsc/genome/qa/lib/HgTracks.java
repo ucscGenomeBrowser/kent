@@ -157,11 +157,12 @@ public class HgTracks {
    * Prints to .err, .msg and .ok files
    *
    * @param dbinfo   the host, assembly, user and password object
+   * @param httpProto  "http" or "https"
    * @param machine  the machine on which to run the check
    * @param assembly the genome to check
    * @param table    the table to check
    */
-   public static void hggene(HGDBInfo dbinfo, String machine, String assembly,                            String table, boolean quickOn) {
+   public static void hggene(HGDBInfo dbinfo, String httpProto, String machine, String assembly,  String table, boolean quickOn) {
 
     WebConversation wc = new WebConversation();
     Random random = new Random();
@@ -190,7 +191,7 @@ public class HgTracks {
       while (kgiter.hasNext()) {
         // not using all of the elements
         KnownGene kg = (KnownGene) kgiter.next();
-        String url = "http://" + machine + "/cgi-bin/hgGene?db=" + assembly +
+        String url = httpProto + "://" + machine + "/cgi-bin/hgGene?db=" + assembly +
                      "&hgg_gene="  + kg.name +
                      "&hgg_chrom=" + kg.chrom +
                      "&hgg_start=" + kg.txStart +
@@ -242,11 +243,12 @@ public class HgTracks {
    * Prints to .err, .ok and .msg  files
    *
    * @param dbinfo   The host, assembly, user and password object
+   * @param httpProto  "http" or "https"
    * @param server  The server on which to run the check
    * @param assembly The genome to check
    * @param table    The table to check
    */
-   public static void pbgene(HGDBInfo dbinfo, String server, String assembly, String table, boolean quickOn) {
+   public static void pbgene(HGDBInfo dbinfo, String httpProto, String server, String assembly, String table, boolean quickOn) {
 
     WebConversation wc = new WebConversation();
     Random random = new Random();
@@ -282,7 +284,7 @@ public class HgTracks {
       while (kgiter.hasNext()) {
         // not using all of the elements
         KnownGene kg = (KnownGene) kgiter.next();
-        String url = "http://" + server + "/cgi-bin/pbTracks?db=" + assembly +
+        String url = httpProto + "://" + server + "/cgi-bin/pbTracks?db=" + assembly +
                      "&proteinID="  + kg.proteinID;
         //           "&proteinID=HXA7_HUMAN";
         //           "&proteinID=OMD_HUMAN";
@@ -353,6 +355,7 @@ public class HgTracks {
   *    and give a good page (200 code) for all items in track.
   *  Zooms out 10x twice
   *
+  * @param httpProto  "http" or "https"
   * @param machine     The machine on which to run the check
   * @param assembly    The genome to check
   * @param chroms      The chromosomes to check
@@ -362,7 +365,7 @@ public class HgTracks {
   * @param displayMode The view level of the track (hide, squish, etc)
   */
   // track is the name of the track control   
-  public static void exerciseTrack(String machine, String assembly,
+  public static void exerciseTrack(String httpProto, String machine, String assembly,
                             ArrayList chroms, String track, 
                             String mode, String defaultPos,
                             String displayMode, int zoomCount) throws Exception {
@@ -394,7 +397,7 @@ public class HgTracks {
       // also full chrom view
       Position mypos = mypi.getNextPosition();
 
-      url1 = "http://" + machine;
+      url1 = httpProto + "://" + machine;
       url1 = url1 + "/cgi-bin/hgTracks?db=" + assembly;
 
       // set position

@@ -4,3 +4,4 @@ quick false
 dbSpec all
 table all
 zoomCount 3
+httpProto https
