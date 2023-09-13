@@ -39,7 +39,7 @@ sortOrder view=+
         parent hprcArrViewWigV1 off
         subGroups view=wig
         shortLabel Inversions
-        longLabel Inversions
+        longLabel Inversions in HPRC Assemblies
         bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrInvV1.bw
         type bigWig
 
@@ -74,7 +74,7 @@ sortOrder view=+
         visibility hide
         subGroups view=bed
         shortLabel Inversions
-        longLabel Inversions
+        longLabel Inversions in HPRC Assemblies
         bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrInvV1.bb
         type bigBed 9 +
         labelFields score
