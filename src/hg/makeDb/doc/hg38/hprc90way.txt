@@ -200,3 +200,188 @@ time (cat /gbdb/hg38/hprc/cactus90way/*.maf \
     | hgLoadMafSummary -verbose=2 -minSize=30000 \
       -mergeGap=1500 -maxSize=200000 hg38 hprc90waySummary stdin) > do.log 2>&1
 ###############################################################################
+### add gene reading frames
+
+    mkdir /hive/data/genomes/hg38/bed/hprc/mafFile/frames
+    cd /hive/data/genomes/hg38/bed/hprc/mafFile/frames
+
+    ### running this script to get genePred out of all the ensGene gtf files:
+   grep GCA_ asm.name.list | while read asmName
+do
+  gcX="${asmName:0:3}"
+  d0="${asmName:4:3}"
+  d1="${asmName:7:3}"
+  d2="${asmName:10:3}"
+   ls -d /hive/data/genomes/asmHubs/genbankBuild/$gcX/$d0/$d1/$d2/${asmName}_* | while read buildDir
+   do
+  if [ ! -d "${buildDir}" ]; then
+     printf "not found: %s\n" "${buildDir}"
+  else
+     asmId=`basename $buildDir`
+     printf "%s\n" "${asmId}"
+     if [ -d "${buildDir}/trackData/ensGene" ]; then
+        gtfToGenePred ${buildDir}/trackData/ensGene/${asmId}.ensGene*.gtf.gz stdout | gzip -c > genes/${asmName}.gp.gz
+     else
+       printf "# can not find $asmId ensGene\n"
+     fi
+  fi
+   done
+done
+
+    # two of them didn't have ensGene, but they do have ebiGene:
+    bigGenePredToGenePred /hive/data/genomes/asmHubs/genbankBuild/GCA/018/469/865/GCA_018469865.1_HG01358.pri.mat.f1_v2.1/trackData/ebiGene/HG01358.2.ensembl_genes.bb stdout | genePredSingleCover stdin stdout | gzip -c > genes/GCA_018469865.1.gp.gz
+    bigGenePredToGenePred /hive/data/genomes/asmHubs/genbankBuild/GCA/018/471/515/GCA_018471515.1_HG00438.pri.mat.f1_v2/trackData/ebiGene/HG00438.2.ensembl_genes.bb stdout | genePredSingleCover stdin stdout | gzip -c > genes/GCA_018471515.1.gp.gz
+
+     ## and hg38 from ncbiRefSeq
+    for db in hg38
+ do
+    asmName="${db}"
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq" ${db} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${asmName}.gp.gz
+    echo -n "# ${asmName}: "
+    genePredCheck -db=${db} genes/${asmName}.gp.gz
+done
+
+    ## and hs1 from ncbiRefSeq
+    genePredSingleCover \
+   /hive/data/genomes/hs1/bed/ncbiRefSeq.2023-05-25/process/hs1.ncbiRefSeq.gp \
+      stdout | gzip -2c > genes/hs1.gp.gz
+
+    ### verify they all look sane:
+    for G in genes/*.gp.gz
+do
+    B=`basename ${G} | sed -e 's/.gp.gz//;'`
+    printf "# ${B}: "
+    genePredCheck -chromSizes=../iRows/${B}.len ${G}
+done
+# GCA_018466835.1: checked: 19526 failed: 0
+# GCA_018466845.1: checked: 19508 failed: 0
+# GCA_018466855.1: checked: 19515 failed: 0
+# GCA_018466985.1: checked: 19624 failed: 0
+# GCA_018467005.1: checked: 18809 failed: 0
+# GCA_018467015.1: checked: 19459 failed: 0
+# GCA_018467155.1: checked: 19498 failed: 0
+# GCA_018467165.1: checked: 19574 failed: 0
+# GCA_018469405.1: checked: 19530 failed: 0
+# GCA_018469415.1: checked: 19708 failed: 0
+...
+# GCA_018505865.1: checked: 19585 failed: 0
+# GCA_018506125.1: checked: 19564 failed: 0
+# GCA_018506155.1: checked: 18717 failed: 0
+# GCA_018506165.1: checked: 19541 failed: 0
+# GCA_018506955.1: checked: 19553 failed: 0
+# GCA_018506975.1: checked: 19481 failed: 0
+# GCA_018852585.1: checked: 19446 failed: 0
+# GCA_018852595.1: checked: 18813 failed: 0
+# hg38: checked: 22882 failed: 0
+# hs1: checked: 19828 failed: 0
+
+#############################################################################
+### calculate snpView - WORKING - 2023-08-31 - Hiram
+#############################################################################
+    mkdir /hive/data/genomes/hg38/bed/hprc/snpView
+    cd /hive/data/genomes/hg38/bed/hprc/snpView
+
+    zgrep "^s" ../mafFile/reNamed.maf.gz | cut -f2 | sort -u > name.survey
+    grep  "^GC" name.survey  | cut -d'.' -f1-2 | sort -u > species.list
+    grep -v "^GC" name.survey  | cut -d'.' -f1 | sort -u >> species.list
+    wc -l species.list
+    # 90 species.list
+
+    zcat ../../ncbiRefSeq.p14.2023-03-29/process/hg38.ncbiRefSeq.gp.gz \
+       > ncbiRefSeq.gp
+
+    time mafGene -exons hg38 hprc90way -useFile ncbiRefSeq.gp \
+       species.list nonsyn.faa
+    real    174m8.912s
+
+XXX - need to transform the GCA_ and GCF_ names before paSNP
+XXX - maybe even before mafGene in the hprc90way table
+    paSNP species.list nonsyn.faa stdout | sed 's/:/ /' | sed 's/-/ /' \
+        | awk '{printf "%s\t%d\t%d\t%s\t1583\t+\t%d\t%d\t255,0,0\t1\t%d\t0\n", $1, $2-1, $3, $4, $2-1, $3, $3-($2 - 1)}' > nonsyn.bed
+
+        | awk '{print $1, $2-1, $3, $4, 1583, "+", $2-1, $3, "255,0,0", 1, $3-($2 - 1), 0}' > nonsyn.bed
+
+mafGene -uniqAA -exons eboVir3 multiz160way ncbiGene species.list syn.faa
+
+paSNP species.list syn.faa stdout | sed 's/:/ /' | sed 's/-/ /' | awk '{print $1, $2-1, $3, $4, 1819, "+", $2-1, $3, "0,255,0", 1, $3 - ($2 - 1), 0}' > syn.bed
+
+mafToSnpBed eboVir3 ../multiz160way/defraged.multiz160way.maf ../ncbiGene/ncbiGene.gp stdout |  sed 's/eboVir3.//' > single.bed
+
+#these should all disappear on the merge
+grep "1580$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' > codingVariant.bed
+
+grep "1623$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' > utrVariant.bed
+grep "1624$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' >> utrVariant.bed
+
+grep " 0$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "240,240,180", 1, $3 -$2, 0}' > missing.bed
+
+grep "1628$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' > intergenic.bed
+
+grep "1627$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' > intron.bed
+
+echo "select * from chromInfo" | hgsql eboVir3 | tail -n +2 > chrom.sizes
+rm output.bed
+for i in `cat species.list`
+do
+echo $i
+grep -wh "$i" nonsyn.bed syn.bed codingVariant.bed utrVariant.bed intron.bed intergenic.bed missing.bed | bedSmash stdin chrom.sizes stdout >>  output.bed
+done
+
+awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
+
+cat load.bed | sed -f ~/kent/src/hg/makeDb/doc/eboVir3/ucscName.strainName.sed \
+  | sed -e 's/G3686v1_2014/KM034562v1/' \
+  > strainLoad.bed
+
+hgLoadBed eboVir3 mafSnp160way load.bed
+hgLoadBed eboVir3 mafSnpStrainName160way strainLoad.bed
+
+###############################################################################
+## VCF tracks ( DONE - 2023-09-13 - Hiram)
+
+    mkdir  /hive/data/genomes/hg38/bed/hprc/VCF
+
+# file obtained from Glenn:
+    wget --timestamping \
+https://zenodo.org/record/6797328/files/cactus_filtered_ids.vcf.gz
+
+# -rw-rw-r-- 1 1598805305 Aug  8 14:04 cactus_filtered_ids.vcf.gz
+
+    zcat cactus_filtered_ids.vcf.gz > hprcCactusIds.vcf
+
+    bgzip -f hprcCactusIds.vcf
+    tabix -p vcf hprcCactusIds.vcf.gz
+
+    rm -f /gbdb/hg38/hprc/hprcCactusIds.vcf.gz \
+      /gbdb/hg38/hprc/hprcCactusIds.vcf.gz.tbi
+    ln -s `pwd`/hprcCactusIds.vcf.gz /gbdb/hg38/hprc
+    ln -s `pwd`/hprcCactusIds.vcf.gz.tbi /gbdb/hg38/hprc
+
+    zgrep  "^#" hprcCactusIds.vcf.gz > overSize3.vcf
+
+    zgrep -v "^#" hprcCactusIds.vcf.gz | awk 'length($4) > 3'  >> overSize3.vcf
+
+    zgrep  "^#" hprcCactusIds.vcf.gz > underSize4.vcf
+
+    zgrep -v "^#" hprcCactusIds.vcf.gz | awk 'length($4) < 4'  >> underSize4.vcf
+
+# -rw-rw-r-- 1 5095959238 Sep 13 10:35 overSize3.vcf
+# -rw-rw-r-- 1 2860716095 Sep 13 10:36 underSize4.vcf
+
+    bgzip -f overSize3.vcf
+    tabix -p vcf overSize3.vcf.gz
+    bgzip -f underSize4.vcf
+    tabix -p vcf underSize4.vcf.gz
+
+    rm -f /gbdb/hg38/hprc/overSize3.vcf.gz \
+	/gbdb/hg38/hprc/overSize3.vcf.gz.tbi \
+	/gbdb/hg38/hprc/underSize4.vcf.gz \
+	/gbdb/hg38/hprc/underSize4.vcf.gz.tbi
+    ln -s `pwd`/underSize4.vcf.gz /gbdb/hg38/hprc
+    ln -s `pwd`/underSize4.vcf.gz.tbi /gbdb/hg38/hprc
+    ln -s `pwd`/overSize3.vcf.gz /gbdb/hg38/hprc
+    ln -s `pwd`/overSize3.vcf.gz.tbi /gbdb/hg38/hprc
+
+###############################################################################
