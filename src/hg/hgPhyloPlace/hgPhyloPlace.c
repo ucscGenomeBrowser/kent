@@ -380,7 +380,14 @@ puts("Placement is performed by\n"
      "<a href='https://nextstrain.org' target=_blank>Nextstrain</a>'s interactive display "
      "which supports "
      "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' "
-     "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
+     "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.\n");
+if (microbeTraceHost())
+    printf("If the subtree size is set to %d or smaller, then subtrees can also be visualized in "
+           "<a href='https://github.com/CDCgov/MicrobeTrace/wiki' target=_blank>MicrobeTrace</a>, "
+           "a network visualization tool that integrates and overlays genomic, laboratory, and "
+           "epidemiologic data and offers multiple visualization options of your combined data.\n",
+           MAX_MICROBETRACE_SUBTREE_SIZE);
+puts("</p>");
 if (sameString(db, "wuhCor1"))
     {
     puts("<p>\n"
