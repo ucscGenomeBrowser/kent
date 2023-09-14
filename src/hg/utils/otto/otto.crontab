@@ -68,6 +68,9 @@ MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
 MAILTO=otto-group@ucsc.edu
 08 00 8 * * umask 002; /hive/data/outside/otto/clinvar/doUpdate.sh
 
+#MANE
+11 5 * * 1 python3 /hive/data/outside/otto/mane/doMane.py
+
 #OMIM
 17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
 

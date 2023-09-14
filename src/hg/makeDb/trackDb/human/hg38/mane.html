@@ -8,14 +8,12 @@ automated and manual methods based on conservation, expression levels, clinical 
 and other factors. Transcripts are matched between the NCBI RefSeq and Ensembl/GENCODE annotations
 based on the GRCh38 genome assembly, with precise 5' and 3' ends defined by high-throughput
 sequencing or other available data.</p>
-<p>
-The current release (MANE v1.0) includes coverage of 99% of human protein-coding genes and 99.8% of
-genes of clinical relevance, including genes in the
+<p>This track is automatically updated, see the <b>source data version</b> above for the current version
+number. MANE include almost all human protein-coding genes and genes of clinical relevance, including genes in the
 <a href="https://www.acmg.net/PDFLibrary/41436_2021_1172_OnlinePDF-1.pdf" target="_blank">American
-College of Medical Genetics and Genomics (ACMG) Secondary Findings list (SF) v3.0</a>. This release
-includes both <b>MANE Select (19062)</b> and <b>MANE Plus Clinical (58)</b> transcripts. <b>MANE 
+College of Medical Genetics and Genomics (ACMG) Secondary Findings list (SF) v3.0</a>. It includes 
+both <b>MANE Select</b> and <b>MANE Plus Clinical</b> transcripts. <b>MANE
 Plus Clinical</b> items are <b><font color=red>colored red</font></b>.
-</p>
 <p>
 For more information on the different gene tracks, including MANE vs GENCODE or RefSeq,
 see our <a href="/FAQ/FAQgenes.html#ens" target="_blank">Genes FAQ</a>.</p>
@@ -33,10 +31,10 @@ downloaded as a precompiled binary for your system. Files and instructions can b
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">utilities directory</a>.
 
 The utility can be used to obtain features within a given range, for example:</p>
-<code>bigBedToBed -chrom=chr6 -start=0 -end=1000000 http://hgdownload.soe.ucsc.edu/gbdb/hg38/mane/mane.1.0.bb stdout</code>
+<code>bigBedToBed -chrom=chr6 -start=0 -end=1000000 http://hgdownload.soe.ucsc.edu/gbdb/hg38/mane/mane.bb stdout</code>
 
 <p>
-Download links for MANE Select v1.0:
+Download links for MANE:
 <a href="ftp://ftp.ncbi.nlm.nih.gov/refseq/MANE">ftp://ftp.ncbi.nlm.nih.gov/refseq/MANE</a>
 </p>
 
