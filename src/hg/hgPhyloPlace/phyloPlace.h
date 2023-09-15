@@ -30,6 +30,8 @@
 #define USHER_DEDUP_PREFIX "uploaded_"
 
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
+#define NEXTSTRAIN_URL_PARAMS "?f_userOrOld=uploaded%20sample"
+#define MICROBETRACE_URL_PARAMS ""
 #define OUTBREAK_INFO_URLBASE "https://outbreak.info/situation-reports?pango="
 #define PANGO_DESIGNATION_ISSUE_URLBASE "https://github.com/cov-lineages/pango-designation/issues/"
 

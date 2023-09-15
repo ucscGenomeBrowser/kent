@@ -1324,8 +1324,8 @@ static char *nextstrainUrlFromTn(struct tempName *jsonTn)
 {
 char *jsonUrlForNextstrain = urlFromTn(jsonTn);
 char *urlBase = nextstrainUrlBase();
-struct dyString *dy = dyStringCreate("%s%s?f_userOrOld=uploaded%%20sample",
-                                     urlBase, skipProtocol(jsonUrlForNextstrain));
+struct dyString *dy = dyStringCreate("%s%s%s", urlBase, skipProtocol(jsonUrlForNextstrain),
+                                     NEXTSTRAIN_URL_PARAMS);
 freeMem(jsonUrlForNextstrain);
 freeMem(urlBase);
 return dyStringCannibalize(&dy);
@@ -1377,6 +1377,17 @@ static char *microbeTraceUrlBase()
 /* Alloc & return the part of the MicrobeTrace URL before the JSON filename. */
 {
 struct dyString *dy = dyStringCreate("%s/MicrobeTrace/?url=", microbeTraceHost());
+return dyStringCannibalize(&dy);
+}
+
+static char *microbeTraceUrlFromTn(struct tempName *jsonTn)
+/* Return a link to MicrobeTrace to view an annotated subtree. */
+{
+char *jsonUrl = urlFromTn(jsonTn);
+char *urlBase = microbeTraceUrlBase();
+struct dyString *dy = dyStringCreate("%s%s", urlBase, jsonUrl);
+freeMem(jsonUrl);
+freeMem(urlBase);
 return dyStringCannibalize(&dy);
 }
 
@@ -1454,11 +1465,12 @@ if (nextstrainHost() && microbeTraceHost())
     makeSubtreeDropdown(subtreeDropdownName, subtreeInfoList, jsonTns);
     puts("</td><td>in</td><td>");
     makeSubtreeJumpButton(subtreeDropdownName, "Nextstrain", nextstrainUrlBase(),
-                          "?f_userOrOld=uploaded%20sample", TRUE);
+                          NEXTSTRAIN_URL_PARAMS, TRUE);
     puts("<br>");
     if (subtreeSize <= MAX_MICROBETRACE_SUBTREE_SIZE)
         {
-        makeSubtreeJumpButton(subtreeDropdownName, "MicrobeTrace", microbeTraceUrlBase(), "", FALSE);
+        makeSubtreeJumpButton(subtreeDropdownName, "MicrobeTrace", microbeTraceUrlBase(),
+                              MICROBETRACE_URL_PARAMS, FALSE);
         }
     else
         {
@@ -1786,7 +1798,7 @@ else
 }
 
 static void printSubtreeTd(struct subtreeInfo *subtreeInfoList, struct tempName *jsonTns[],
-                           char *seqName)
+                           char *seqName, int subtreeSize)
 /* Print a table cell with subtree (& link if possible) if found. */
 {
 int ix;
@@ -1797,18 +1809,36 @@ if (ix < 0)
 else
     {
     printf("<td>%d", ix+1);
-    if (ti && nextstrainHost())
+    if (ti)
         {
-        char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
-        printf(" (<a href='%s' target=_blank>view in Nextstrain<a>)", nextstrainUrl);
+        boolean canNextstrain = (nextstrainHost() != NULL);
+        boolean canMicrobeTrace = (microbeTraceHost() != NULL &&
+                                   subtreeSize <= MAX_MICROBETRACE_SUBTREE_SIZE);
+        if (canNextstrain || canMicrobeTrace)
+            {
+            printf(" (view in");
+            if (canNextstrain)
+                {
+                char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
+                printf(" <a href='%s' target=_blank>Nextstrain</a>", nextstrainUrl);
+                }
+            if (canNextstrain && canMicrobeTrace)
+                printf(" or ");
+            if (canMicrobeTrace)
+                {
+                char *mtUrl = microbeTraceUrlFromTn(jsonTns[ix]);
+                printf(" <a href='%s' target=_blank>MicrobeTrace</a>", mtUrl);
+                }
+            printf(")");
+            }
         }
-    printf("</td>");
+    puts("</td>");
     }
 }
 
 static void summarizeSequences(struct seqInfo *seqInfoList, boolean isFasta,
                                struct usherResults *ur, struct tempName *jsonTns[],
-                               char *refAcc, char *db)
+                               char *refAcc, char *db, int subtreeSize)
 /* Show a table with composition & alignment stats for each sequence that passed basic QC. */
 {
 if (seqInfoList)
@@ -1980,7 +2010,7 @@ if (seqInfoList)
                 printf("<td>n/a</td>");
             printf("<td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td>");
             }
-        printSubtreeTd(ur->subtreeInfoList, jsonTns, si->seq->name);
+        printSubtreeTd(ur->subtreeInfoList, jsonTns, si->seq->name, subtreeSize);
         puts("</tr>");
         }
     puts("</tbody></table><p></p>");
@@ -1989,7 +2019,7 @@ if (seqInfoList)
 
 static void summarizeSubtrees(struct slName *sampleIds, struct usherResults *results,
                               struct hash *sampleMetadata, struct tempName *jsonTns[],
-                              char *db)
+                              char *db, int subtreeSize)
 /* Print a summary table of pasted/uploaded identifiers and subtrees */
 {
 boolean gotClades = FALSE, gotLineages = FALSE;
@@ -2038,7 +2068,7 @@ for (si = sampleIds;  si != NULL;  si = si->next)
     char *lineage = lineageForSample(sampleMetadata, si->name);
     printLineageTd(lineage, "n/a", db);
     // Maybe also #mutations with mouseover to show mutation path?
-    printSubtreeTd(results->subtreeInfoList, jsonTns, si->name);
+    printSubtreeTd(results->subtreeInfoList, jsonTns, si->name, subtreeSize);
     }
 puts("</tbody></table><p></p>");
 }
@@ -3208,7 +3238,7 @@ if (results && results->singleSubtreeInfo)
     struct tempName *ctTn = NULL;
     if (subtreesOnly)
         {
-        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, db);
+        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, db, subtreeSize);
         reportTiming(&startTime, "describe subtrees");
         }
     else
@@ -3241,7 +3271,7 @@ if (results && results->singleSubtreeInfo)
                 assert(v != NULL);
                 *v = '.';
                 }
-            summarizeSequences(seqInfoList, isFasta, results, jsonTns, refAcc, db);
+            summarizeSequences(seqInfoList, isFasta, results, jsonTns, refAcc, db, subtreeSize);
             reportTiming(&startTime, "write summary table (including reading in lineages)");
             for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
                 {
