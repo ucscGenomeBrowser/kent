@@ -5309,7 +5309,8 @@ var downloadCurrentTrackData = {
             showDisabledMsg = false;
             if (!trackName.includes("Squish") && trackName !== "ruler" && track.visibility > 0) {
                 htmlStr += "<input type=checkbox class='downloadTrackName' id='" + trackName + "'";
-                if (trackName.startsWith("ct_") || !tdbIsLeaf(track)) {
+                if (trackName.startsWith("ct_") || trackName === "hgPcrResult" ||
+                        track.type === "mathWig" || !tdbIsLeaf(track)) {
                     showDisabledMsg = true;
                     htmlStr += " disabled ";
                 } else {
