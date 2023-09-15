@@ -157,6 +157,7 @@ tableBrowser off
 mouseOverField _mouseOver
 html cosmicRegions
 noScoreFilter on
+pennantIcon snowflake.png ../goldenPath/newsarch.html#091523 "COSMIC data is now updated on the COSMIC track (not COSMIC Regions). See news archive for detail
 
 searchTable cosmicRegions
 searchPriority 2.07207
@@ -173,6 +174,7 @@ url https://cancer.sanger.ac.uk/cosmic/search?q=$$
 urlLabel Genomic Mutation ID:
 noScoreFilter on
 dataVersion COSMIC v98
+pennantIcon New red ../goldenPath/newsarch.html#091523 "Released Sep. 15, 2023"
 
 track coriellDelDup override
 origAssembly hg19 
