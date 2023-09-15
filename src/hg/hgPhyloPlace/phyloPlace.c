@@ -1324,7 +1324,7 @@ static char *nextstrainUrlFromTn(struct tempName *jsonTn)
 {
 char *jsonUrlForNextstrain = urlFromTn(jsonTn);
 char *urlBase = nextstrainUrlBase();
-struct dyString *dy = dyStringCreate("%s/%s?f_userOrOld=uploaded%%20sample",
+struct dyString *dy = dyStringCreate("%s%s?f_userOrOld=uploaded%%20sample",
                                      urlBase, skipProtocol(jsonUrlForNextstrain));
 freeMem(jsonUrlForNextstrain);
 freeMem(urlBase);
