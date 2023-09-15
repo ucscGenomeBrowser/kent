@@ -47,7 +47,7 @@ char *wikiHost = wikiLinkHost();
 char *loginUrl = wikiTrackUserLoginUrl();
 printf("<P>Please login to add annotations to this UCSC gene.</P>\n");
 printf("<P>The login page is handled by our "
-       "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
+       "<A HREF=\"https://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
 printf("<A HREF=\"%s\"><B>click here to login.</B></A><BR>\n", loginUrl);
 printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n</P>\n");
@@ -292,7 +292,7 @@ safef(transcriptTag, ArraySize(transcriptTag), "%s", curGeneId);
 
 if (canonical)
     dyStringPrintf(extraHeader,
-	"Canonical gene details [http://%s/cgi-bin/hgGene?hgg_chrom=none&org=%s&db=0&hgg_gene=%s "
+	"Canonical gene details [https://%s/cgi-bin/hgGene?hgg_chrom=none&org=%s&db=0&hgg_gene=%s "
 	    "%s %s]<BR>\n",
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
 	    canonical, name, canonical);
@@ -305,7 +305,7 @@ if ((slCount(allIsoforms) > 1) || (!canonical))
 	if (isNotEmpty(canonical) && sameWord(canonical,el->name))
 	    continue;
 	dyStringPrintf(extraHeader,
-	    "[http://%s/cgi-bin/hgGene?hgg_chrom=none&org=%s&db=0&hgg_gene=%s %s]",
+	    "[https://%s/cgi-bin/hgGene?hgg_chrom=none&org=%s&db=0&hgg_gene=%s %s]",
 		cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER),
 		    genome, el->name, el->name);
 	if (el->next)
