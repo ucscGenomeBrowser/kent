@@ -6091,8 +6091,6 @@ else
     subChar(buf, ',' , ' ');
     if ((ptr = strstr(buf, " http://")) != NULL)
         *ptr = 0;
-    if ((ptr = strstr(buf, " https://")) != NULL)
-        *ptr = 0;
     dyStringAppend(dy, buf);
     dyStringAppend(dy, " ");
     }
