@@ -168,7 +168,7 @@ void doSubmitToGreat(const char *path)
 /* Send a URL to GREAT that it can use to retrieve the results. */
 {
 struct dyString *requestName = getRequestName();
-struct dyString *requestURL = dyStringCreate("https://%s/%s", cgiServerNamePort(), path);
+struct dyString *requestURL = dyStringCreate("http://%s/%s", cgiServerNamePort(), path);
 struct dyString *greatRequest;
 
 // archive server for hg18

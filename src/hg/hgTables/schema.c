@@ -196,7 +196,7 @@ static void explainCoordSystem()
 {
 puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
  "1-based.  See explanation \n"
- "<A HREF=\"https://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
+ "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
      "here</A>.</I>");
 }
 
