@@ -157,7 +157,7 @@ tableBrowser off
 mouseOverField _mouseOver
 html cosmicRegions
 noScoreFilter on
-pennantIcon snowflake.png ../goldenPath/newsarch.html#091523 "COSMIC data is now updated on the COSMIC track (not COSMIC Regions). See news archive for detail
+pennantIcon snowflake.png ../goldenPath/newsarch.html#091523 "COSMIC data is now updated on the COSMIC track (not COSMIC Regions). See news archive for detail."
 
 searchTable cosmicRegions
 searchPriority 2.07207
