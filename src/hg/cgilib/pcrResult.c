@@ -9,6 +9,7 @@
 #include "obscure.h"
 #include "targetDb.h"
 #include "pcrResult.h"
+#include "trackHub.h"
 
 
 char *pcrResultCartVar(char *db)
@@ -50,7 +51,7 @@ char *pslFile = words[0];
 char *primerFile = words[1];
 char *targetName = (wordCount > 2) ? words[2] : NULL;
 struct targetDb *target = NULL;
-if (isNotEmpty(targetName))
+if (!trackHubDatabase(db))
     target = targetDbLookup(db, targetName);
 
 if (!fileExists(pslFile) || !fileExists(primerFile) ||
@@ -141,7 +142,7 @@ while (lineFileRow(lf, pslFields))
     boolean gotIt = FALSE;
     // if "_" is in the item name, we look up the result(s) by the primer pair, else
     // we just show all psls
-    if (stringIn("_", item))
+    if (stringIn("_", item) && !sameString(psl->qName, "n/a"))
         {
         char *pair = cloneString(psl->qName);
         char *under = strchr(pair, '_');
@@ -152,18 +153,22 @@ while (lineFileRow(lf, pslFields))
             {
             gotIt = checkPcrResultCoordinates(targetSearchResult, psl->tName, psl->tStart,
                     psl->tEnd, item, itemStart, itemEnd, chrom);
+            if (gotIt)
+                itemPsl = psl;
+            else
+                slAddHead(&otherPsls, psl);
             }
         }
     else
         {
         gotIt = checkPcrResultCoordinates(targetSearchResult, psl->tName, psl->tStart,
                 psl->tEnd, item, itemStart, itemEnd, chrom);
+        if (gotIt)
+            itemPsl = psl;
+        else if (!(fPrimer && rPrimer))
+            slAddHead(&otherPsls, psl);
         }
 
-    if (gotIt)
-        itemPsl = psl;
-    else
-        slAddHead(&otherPsls, psl);
     }
 lineFileClose(&lf);
 if (itemPsl == NULL)
