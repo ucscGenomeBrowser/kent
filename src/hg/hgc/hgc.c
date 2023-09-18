@@ -7197,7 +7197,7 @@ if (otherPsls != NULL)
     for (psl = otherPsls;  psl != NULL;  psl = psl->next)
 	{
 	puts("<BR>");
-	if (target != NULL)
+	if (stringIn("__", psl->tName))
 	    printPcrTargetMatch(target, psl, FALSE);
 	else
 	    printPosOnChrom(psl->tName, psl->tStart, psl->tEnd,
