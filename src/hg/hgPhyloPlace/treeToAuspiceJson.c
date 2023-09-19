@@ -91,8 +91,24 @@ struct geneInfo *gi;
 for (gi = geneInfoList;  gi != NULL;  gi = gi->next)
     {
     jsonWriteObjectStart(jw, gi->psl->qName);
-    jsonWriteNumber(jw, "start", gi->psl->tStart+1);
-    jsonWriteNumber(jw, "end", gi->psl->tEnd);
+    if (gi->psl->blockCount > 1)
+        {
+        jsonWriteListStart(jw, "segments");
+        int i;
+        for (i = 0;  i < gi->psl->blockCount;  i++)
+            {
+            jsonWriteObjectStart(jw, NULL);
+            jsonWriteNumber(jw, "start", gi->psl->tStarts[i]+1);
+            jsonWriteNumber(jw, "end", gi->psl->tStarts[i] + gi->psl->blockSizes[i]);
+            jsonWriteObjectEnd(jw);
+            }
+        jsonWriteListEnd(jw);
+        }
+    else
+        {
+        jsonWriteNumber(jw, "start", gi->psl->tStart+1);
+        jsonWriteNumber(jw, "end", gi->psl->tEnd);
+        }
     jsonWriteString(jw, "strand", (pslOrientation(gi->psl) > 0) ? "+" : "-");
     jsonWriteString(jw, "type", "CDS");
     jsonWriteObjectEnd(jw);

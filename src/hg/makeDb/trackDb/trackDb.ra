@@ -3036,7 +3036,7 @@ shortLabel EVA SNP Release 4
 longLabel Short Genetic Variants from European Variant Archive Release 4
 type bigBed 9 +
 group varRep
-visibility dense
+visibility hide
 itemRgb on
 mouseOver $ref>$alt $ucscClass $aaChange
 bigDataUrl /gbdb/$D/bbi/evaSnp4.bb

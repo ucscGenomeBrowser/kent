@@ -31,6 +31,7 @@
 #include "oligoTm.h"
 #include "trackHub.h"
 #include "hubConnect.h"
+#include "obscure.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -531,13 +532,35 @@ if ( (cartResult = cartOptionalString(cart, cartVar)) != NULL && appendToResults
     pslFile = pcrFiles[0];
     txtFile = pcrFiles[1];
     cartTarget = pcrFiles[2];
-    gfPcrOutputWriteAll(gpoList, "psl", NULL, pslFile);
-    writePrimers(gpoList, txtFile);
-    if (isNotEmpty(target) && isEmpty(cartTarget))
+    // if the old result is from a saved session, we can't append to it
+    // because we want the session to not change. Copy the old results
+    // into a new file and append these results to it
+    char *sessionDataDir = cfgOption("sessionDataDir");
+    if (sessionDataDir && startsWith(sessionDataDir, pslFile))
         {
-        /* User is adding a targetDb search */
-        safef(buf, sizeof(buf), "%s %s %s", pslFile, txtFile, target);
+        trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
+        trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
+        // copy the old to the new
+        copyFile(pslFile, bedTn.forCgi);
+        copyFile(txtFile, primerTn.forCgi);
+        gfPcrOutputWriteAll(gpoList, "psl", NULL, bedTn.forCgi);
+        writePrimers(gpoList, primerTn.forCgi);
+        if (isNotEmpty(target))
+            safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
+        else
+            safef(buf, sizeof(buf), "%s %s", bedTn.forCgi, primerTn.forCgi);
         cartSetString(cart, cartVar, buf);
+        }
+    else
+        {
+        gfPcrOutputWriteAll(gpoList, "psl", NULL, pslFile);
+        writePrimers(gpoList, txtFile);
+        if (isNotEmpty(target) && isEmpty(cartTarget))
+            {
+            /* User is adding a targetDb search */
+            safef(buf, sizeof(buf), "%s %s %s", pslFile, txtFile, target);
+            cartSetString(cart, cartVar, buf);
+            }
         }
     }
 else
