@@ -125,7 +125,7 @@ static void editBlockOverlap(struct psl *psl, int iBlk,
 /* remove overlap between two blocks.  If multiple blocks are covered,
  * then shift remove the block */
 {
-while ((overlapAmt3 > 0) && (iBlk < psl->blockCount - 1))
+while ((overlapAmt3 > 0) && (iBlk < ((int)psl->blockCount) - 1))
     {
     int jBlk = iBlk + 1;
     if (overlapAmt3 < psl->blockSizes[jBlk])
@@ -147,7 +147,7 @@ static void removeOverlappingBlock(struct psl *psl)
  * alignment.
  */
 {
-for (int iBlk = 0; iBlk < psl->blockCount - 1; iBlk++)
+for (int iBlk = 0; iBlk < ((int)psl->blockCount) - 1; iBlk++)
     {
     unsigned overlapAmt3 = blockOverlapAmt3(psl, iBlk);
     if (overlapAmt3 > 0)
