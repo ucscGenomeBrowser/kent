@@ -404,7 +404,8 @@ examples:
 All options have to precede the command.
 
 options:
-  -a   - use alternative download server at SDSC
+  -a   - use alternative download server at Univ Bielefeld, Germany
+         (used by default if faster ping time than to UCSC)
   -b   - batch mode, do not prompt for key presses
   -t   - For the "mirror" command: Track selection, requires a value.
          This option is only useful for Human/Mouse assemblies.
@@ -1885,9 +1886,6 @@ while getopts ":baeut:hof" opt; do
       }
       ;;
     a)
-      HGDOWNLOAD=hgdownload-sd.sdsc.edu
-      ;;
-    e)
       HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
       ;;
     t)
