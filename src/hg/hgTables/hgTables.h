@@ -1180,6 +1180,9 @@ void startGalaxyForm ();
 void sendParamsToGalaxy(char *doParam, char *paramVal);
 /* intermediate page for formats printed directly from top form */
 
+void verifyGalaxyFormat(const char *output);
+
+/* print warning about not using hyperlinks output formtat with Galaxy */
 /* --------------- GREAT functions --------------- */
 boolean doGreat();
 /* Has the send query results to GREAT checkbox been selected? */
