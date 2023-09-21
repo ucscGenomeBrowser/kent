@@ -194,10 +194,10 @@ static void explainCoordSystem()
  * reduce the frequency with which they find this "bug" on their own and
  * we have to explain it on the genome list. */
 {
-puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
+printf("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
  "1-based.  See explanation \n"
- "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
-     "here</A>.</I>");
+ "<A HREF=\"http%s://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
+     "here</A>.</I>", cgiAppendSForHttps());
 }
 
 
