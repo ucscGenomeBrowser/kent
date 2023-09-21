@@ -870,6 +870,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     slAddHead(&peakList, peak);
     }
 slReverse(&peakList);
+track->bedList = (struct bed *)peakList;
 return encodePeakFinish(track, peakList, pt);
 }
 
