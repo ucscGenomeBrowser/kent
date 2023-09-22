@@ -1814,11 +1814,18 @@ for (;item!=NULL;item=item->next)
 
     if (item->title != NULL && strlen(item->title) > 0)
         {
-        // for TITLEs, which we use for mouseOvers,  since they can't have HTML in 
-        // them, we substitute a unicode new line for <br> after we've encoded it.  
-        // This is stop-gap until we start doing mouseOvers entirely in Javascript
         char *encodedString = attributeEncode(item->title);
-        hPrintf(" TITLE='%s'", replaceChars(encodedString,"&#x3C;br&#x3E;", "&#8232;"));
+        if (cfgOptionBooleanDefault("showMouseovers", FALSE))
+            {
+            hPrintf(" TITLE='%s'", encodedString);
+            }
+        else
+            {
+            // for TITLEs, which we use for mouseOvers,  since they can't have HTML in
+            // them, we substitute a unicode new line for <br> after we've encoded it.
+            // This is stop-gap until we start doing mouseOvers entirely in Javascript
+            hPrintf(" TITLE='%s'", replaceChars(encodedString,"&#x3C;br&#x3E;", "&#8232;"));
+            }
         }
     if (item->id != NULL)
         hPrintf(" id='%s'", item->id);
