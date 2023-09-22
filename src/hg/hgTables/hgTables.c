@@ -1350,14 +1350,7 @@ for (region = regionList; region != NULL; region = region->next)
 	safef(posBuf, sizeof(posBuf), "%s:%d-%d",
 		    bed->chrom, start, end);
 	/* Construct browser anchor URL with tracks we're looking at open. */
-        if (doGalaxy())
-            {
-            char *s, *script = hgTracksName();
-            s = strstr(script, "cgi-bin");
-            hPrintf("<A HREF=\"http://%s/%s?db=%s", cgiServerNamePort(), s, database);
-            }
-        else
-	    hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);
+	hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);
 	hPrintf("&position=%s", posBuf);
 	ensureVisibility(database, table, curTrack);
 	if (table2 != NULL)
@@ -1496,6 +1489,8 @@ if (doGenomeSpace())
     }
 if (doGreat())
     verifyGreatFormat(output);
+if (doGalaxy())
+    verifyGalaxyFormat(output);
 if (sameString(output, outPrimaryTable))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
@@ -1525,7 +1520,9 @@ else if (sameString(output, outGff))
 else if (sameString(output, outHyperlinks))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
-        sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+	{
+        // sendParamsToGalaxy(hgtaDoTopSubmit, "get output");  not supported anymore
+	}
     else
         doOutHyperlinks(table, conn);
     }

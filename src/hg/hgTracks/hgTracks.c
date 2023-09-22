@@ -10709,15 +10709,15 @@ if (! trackHubDatabase(database) || hubConnectIsCurated(trackHubSkipHubName(data
     puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<a href='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes' target=_blank>%s.chrom.sizes</a>",
-           hDownloadsServer(), db, db, db);
+    printf("<a href='http%s://%s/goldenPath/%s/bigZips/%s.chrom.sizes' target=_blank>%s.chrom.sizes</a>",
+           cgiAppendSForHttps(), hDownloadsServer(), db, db, db);
     cgiTableFieldEnd();
     if (hasAlias)
 	{
 	cgiSimpleTableFieldStart();
 	/* see if this database has the chromAlias.txt download file */
 	char aliasFile[1024];
-        safef(aliasFile, sizeof aliasFile, "http://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), db, db);
+        safef(aliasFile, sizeof aliasFile, "http%s://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", cgiAppendSForHttps(), hDownloadsServer(), db, db);
         struct udcFile *file = udcFileMayOpen(aliasFile, udcDefaultDir());
 	if (file)
 	    {

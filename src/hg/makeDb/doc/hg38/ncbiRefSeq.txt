@@ -356,3 +356,64 @@ wc -l refseqSelect.curated.gp
   # 137385668 bases of 3110768607 (4.416%) in intersection
 
 #############################################################################
+
+#############################################################################
+# Add psuedo-track of old transcripts (DONE - ChrisL -2023-09-21)
+#############################################################################
+# see also /hive/data/outside/refSeqHistorical/build.sh
+# get the gff3
+wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/historical/GRCh38/current/GCF_000001405.40-RS_2023_03_genomic.gff.gz
+wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/historical/GRCh38/current/GCF_000001405.40-RS_2023_03_knownrefseq_alns.bam
+wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/historical/GRCh38/current/GCF_000001405.40-RS_2023_03_knownrefseq_alns.bam.bai
+
+# turn into genePred
+zcat GCF_000001405.40-RS_2023_03_genomic.gff.gz \
+    | gff3ToGenePred -maxParseErrors=-1 -maxConvertErrors=-1 -warnAndContinue \
+        -attrsOut=attrs.out -unprocessedRootsOut=unprocessedRoots.out \
+        -refseqHacks stdin out.gp 2>err
+
+# rename chromosomes to ucsc names, throwing away fix/alts/etc, and removing the ids
+# from the current version of the refSeq track
+# I don't know the story with NM_001304990.1, but it has an entry on chrX and chrY
+# with a different cds record, which have to be unique, so I'm throwing it away for
+# now
+hgsql -Ne "select distinct(name) from ncbiRefSeqCurated" hg38 | sort > ncbiRefSeq.currentIds
+chromToUcsc -k 2 -a /hive/data/genomes/hg38/goldenPath/bigZips/p14/hg38.p14.chromAlias.txt  \
+        -i out.gp \
+    | tawk '$2 !~ /alt/ && $2 !~ /fix/ && $2 !~ /random/ && $1 ~ /\./ && $1 !~ /NP/' \
+    | tawk '{if ($1 == "NM_001304990.1" && $2 == "chrY") {next} else {print}}' \
+    | sort > out.ucscChrom.gp
+cut -f1 out.ucscChrom.gp | sort -u | comm -23 - ncbiRefSeq.currentIds > old.ids
+grep -Fwf old.ids out.ucscChrom.gp > refSeqHistorical.gp
+
+# make the bed file for the track
+genePredToBed refSeqHistorical.gp stdout | sort -k1,1 -k2,2n > refSeqHistorical.bed
+bedToBigBed -extraIndex=name -sizesIsChromAliasBb -type=bed12 -tab \
+    refSeqHistorical.bed \
+    /hive/data/genomes/hg38/goldenPath/bigZips/p14/hg38.p14.chromAlias.bb \
+    refSeqHistorical.bb
+
+# construct the necessary tables for the hgvs search:
+# make a psl+cds for a special hgvs search on these old sequences
+genePredToFakePsl -chromSize=/hive/data/genomes/hg38/goldenPath/bigZips/p14/hg38.p14.chrom.sizes \
+    hg38 refSeqHistorical.gp  refSeqHistorical.psl refSeqHistorical.cds
+
+# ensure only coding transcripts have a cds
+awk -F$'\\t' '$6 != $7 {print $1;}' refSeqHistorical.gp | sort -u > coding.cds.names
+join -t$'\t' coding.cds.names <(sort -u refSeqHistorical.cds) > refSeqHistorical.cds.coding
+
+# extract the sequences
+samtools fasta GCF_000001405.40-RS_2023_03_knownrefseq_alns.bam > refSeqHistorical.fa
+
+# load psl table
+hgLoadPsl hg38 -table=ncbiRefSeqPslOld refSeqHistorical.psl
+
+# load cds table
+hgLoadSqlTab hg38 ncbiRefSeqCdsOld ~/kent/src/hg/lib/cdsSpec.sql refSeqHistorical.cds.coding
+
+# load seq and ext tables
+ln -sf `pwd`/refSeqHistorical.fa /gbdb/hg38/ncbiRefSeq/refSeqHistorical.fa
+hgLoadSeq -drop -seqTbl=seqNcbiRefSeqOld -extFileTbl=extNcbiRefSeqOld hg38 /gbdb/hg38/ncbiRefSeq/refSeqHistorical.fa
+
+# link the files into /gbdb
+ln -s `pwd`/refSeqHistorical.bb /gbdb/hg38/ncbiRefSeq/refSeqHistorical.bb

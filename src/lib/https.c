@@ -174,7 +174,7 @@ while (1)
     if (srd == 0)
 	FD_SET(params->sv[1], &readfds);
 
-    tv.tv_sec = 90; // timeout default 90 seconds
+    tv.tv_sec = 90; // timeout 90 seconds needed for slow CGIs respsonse time.
     tv.tv_usec = 0;
 
     err = select(max(fd,params->sv[1]) + 1, &readfds, &writefds, NULL, &tv);
@@ -794,8 +794,9 @@ while (1)
 	FD_SET(fd, &readfds);
 	FD_SET(fd, &writefds);
 	}
-    tv.tv_sec = 90; // timeout default 90 seconds
-    tv.tv_usec = 0;
+
+    tv.tv_sec = (long) (DEFAULTCONNECTTIMEOUTMSEC/1000);  // timeout default 10 seconds
+    tv.tv_usec = (long) (((DEFAULTCONNECTTIMEOUTMSEC/1000)-tv.tv_sec)*1000000);
 
     err = select(fd + 1, &readfds, &writefds, NULL, &tv);
     if (err < 0) 
