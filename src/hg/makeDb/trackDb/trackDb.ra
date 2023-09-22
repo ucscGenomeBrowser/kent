@@ -3075,6 +3075,7 @@ filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Sy
 filterLabel.itemRgb General variant types by color grouping
 maxWindowCoverage 250000
 maxItems 1000000
+pennantIcon New red ../goldenPath/newsarch.html#091923 "Released Sep. 19, 2023"
 
 searchTable evaSnp5
 searchType bigBed
