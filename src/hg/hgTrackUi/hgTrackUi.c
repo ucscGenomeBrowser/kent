@@ -3332,6 +3332,13 @@ if (!ajax)
         grpFreeList(&grps);
         }
 
+    // incoming links from Google searches can go directly to a composite child trackUi page: tell users 
+    // that they're inside a container now and can go back up the hierarchy
+    if (tdbGetComposite(tdb)) {
+        printf("<p>This track is a member of the composite container track \"%s\".<br>", tdb->parent->shortLabel);
+        printf("<a href='hgTrackUi?db=%s&c=%s&g=%s'>Click here</a> to display the container configuration page.", database, chromosome, tdb->parent->track);
+    }
+
     }
 puts("<BR><BR>");
 
