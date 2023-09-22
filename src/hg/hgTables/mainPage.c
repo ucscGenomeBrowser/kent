@@ -1068,9 +1068,9 @@ hPrintf(
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
   "Bulk download of track data is available from the "
-  "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html\""
+  "<A HREF=\"http%s://hgdownload.soe.ucsc.edu/downloads.html\""
   ">Sequence and Annotation Downloads</A> page.</span>"
-   , getGenomeSpaceText()
+   , getGenomeSpaceText(), cgiAppendSForHttps()
 );
 hPrintf(" <span id='tbHelpLess' class='blueLink' style='display:none'>Less...</span>");
 

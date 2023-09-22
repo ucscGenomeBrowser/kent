@@ -139,6 +139,19 @@ cgiMakeButton(hgtaDoMainPage, "Cancel");
 hPrintf("</FORM>\n");
 }
 
+void verifyGalaxyFormat(const char *output)
+/* print warning about not using hyperlinks output formtat with Galaxy */
+{
+if (sameString(output, outHyperlinks))
+    {
+    htmlOpen("Sorry!");
+    errAbort("Galaxy does not use hyperlinks output format.\n"
+         "Please go back and ensure that hyperlinks output format is not chosen.");
+    htmlClose();
+    }
+}
+
+
 boolean doGalaxy ()
 /* has the send to Galaxy checkbox been selected? */
 {
