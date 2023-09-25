@@ -5,7 +5,7 @@ shortLabel Variants of Concern
 longLabel  Mutations in Variants of Concern (VOC), Interest (VOI), or Under Monitoring (VUM) (configure to show more lineages)
 compositeTrack on
 subGroup1 mutation Mutations AA=Amino_Acid NUC=Nucleotide
-subGroup2 variant Variants A_B117=Alpha B_B1351=Beta C_P1=Gamma D_B16172=Delta L_C37=Lambda M_B1621=Mu E_B1429=Epsilon E_B1525=Eta I_B1526=Iota K_B16171=Kappa J_B11529=Omicron J_BA4=Omicron_BA.4 J_BA5=Omicron_BA.5
+subGroup2 variant Variants A_B117=Alpha B_B1351=Beta C_P1=Gamma D_B16172=Delta L_C37=Lambda M_B1621=Mu E_B1429=Epsilon E_B1525=Eta I_B1526=Iota K_B16171=Kappa J_BA1=Omicron_BA.1 K_BA2=Omicron_BA.2 L_BA4=Omicron_BA.4 M_BA5=Omicron_BA.5 N_BA2121=Omicron_BA.2.12.1 O_BA275=Omicron_BA.2.75 P_BQ1=Omicron_BQ.1 Q_XBB=Omicron_XBB R_XBB15=Omicron_XBB.1.5 S_XBB116=Omicron_XBB.1.16 T_CH11=Omicron_CH.1.1 U_XBB19=Omicron_XBB.1.9 V_XBB23=Omicron_XBB.2.3 W_EG51=Omicron_EG.5.1
 subGroup3 designation Designation VOC=VOC VOI=VOI VUM=VUM
 sortOrder designation=+ variant=+ mutation=+
 bedNameLabel Mutation
@@ -14,7 +14,7 @@ darkerLabels on
 noScoreFilter on
 group varRep
 allButtonPair on
-dataVersion Sequences downloaded September 10, 2021, update on Dec 2, 2021 and May 4, 2022
+dataVersion Sequences downloaded September 10, 2021, update on Dec 2, 2021, May 4, 2022 and September 22, 2023
 visibility dense
 html variantMuts
 
@@ -131,37 +131,159 @@ html variantMuts
         priority 10
 
         track variantAaMuts_B_1_1_529
-        parent variantMuts on
-        subGroups variant=J_B11529 mutation=AA designation=VOC
-        shortLabel Omicron AA Muts 
-        longLabel Omicron (B.1.1.529 SA Nov-2021) amino acid mutations from cov-lineages.org (Nov 2021)
-        url https://outbreak.info/situation-reports?pango=B.1.1.529
-        urlLabel B.1.1.529 Situation Report at outbreak.info
+        parent variantMuts off
+        subGroups variant=J_BA1 mutation=AA designation=VOC
+        shortLabel Omicron BA.1 AA Muts
+        longLabel Omicron (BA.1 SA Nov-2021) amino acid mutations from cov-lineages.org (Nov 2021)
+        url https://outbreak.info/situation-reports?pango=BA.1
+        urlLabel BA.1 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_prot.bb
         color 219,40,35
         priority 11
 
-        track variantAaMuts_BA_4
+        track variantAaMuts_BA_2
         parent variantMuts on
-        subGroups variant=J_BA4 mutation=AA designation=VOC
+        subGroups variant=K_BA2 mutation=AA designation=VOC
+        shortLabel Omicron BA.2 AA Muts
+        longLabel Omicron BA.2 amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=BA.2
+        urlLabel BA.2 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2_prot.bb
+        color 219,40,35
+        priority 12
+
+        track variantAaMuts_BA_4
+        parent variantMuts off
+        subGroups variant=L_BA4 mutation=AA designation=VUM
         shortLabel Omicron BA.4 AA Muts 
         longLabel Omicron BA.4 amino acid mutations from 573 GISAID sequences (May 4, 2022)
         url https://outbreak.info/situation-reports?pango=BA.4
         urlLabel BA.4 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.4_aa.bb
         color 219,40,35
-        priority 12
+        priority 13
 
         track variantAaMuts_BA_5
-        parent variantMuts on
-        subGroups variant=J_BA5 mutation=AA designation=VOC
+        parent variantMuts off
+        subGroups variant=M_BA5 mutation=AA designation=VUM
         shortLabel Omicron BA.5 AA Muts 
         longLabel Omicron BA.5 amino acid mutations from 287 GISAID sequences (May 4, 2022)
         url https://outbreak.info/situation-reports?pango=BA.5
         urlLabel BA.5 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.5_aa.bb
         color 219,40,35
-        priority 13
+        priority 14
+
+        track variantAaMuts_BA_2_12_1
+        parent variantMuts off
+        subGroups variant=N_BA2121 mutation=AA designation=VUM
+        shortLabel Omicron BA.2.12.1 AA Muts
+        longLabel Omicron BA.2.12.1 amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=BA.2.12.1
+        urlLabel BA.2.12.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2.12.1_prot.bb
+        color 219,40,35
+        priority 15
+
+        track variantAaMuts_BA_2_75
+        parent variantMuts off
+        subGroups variant=O_BA275 mutation=AA designation=VOC
+        shortLabel Omicron BA.2.75 AA Muts
+        longLabel Omicron BA.2.75 amino acid mutations from 287 GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=BA.2.75
+        urlLabel BA.2.75 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2.75_prot.bb
+        color 219,40,35
+        priority 16
+
+        track variantAaMuts_BQ_1
+        parent variantMuts off
+        subGroups variant=P_BQ1 mutation=AA designation=VUM
+        shortLabel Omicron BQ.1 AA Muts
+        longLabel Omicron BQ.1 amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=BQ.1
+        urlLabel BQ.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BQ.1_prot.bb
+        color 219,40,35
+        priority 17
+
+        track variantAaMuts_XBB
+        parent variantMuts off
+        subGroups variant=Q_XBB mutation=AA designation=VUM
+        shortLabel Omicron XBB AA Muts
+        longLabel Omicron XBB amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=XBB
+        urlLabel XBB Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB_prot.bb
+        color 219,40,35
+        priority 18
+
+        track variantAaMuts_XBB_1_5
+        parent variantMuts on
+        subGroups variant=R_XBB15 mutation=AA designation=VOI
+        shortLabel Omicron XBB.1.5 AA Muts
+        longLabel Omicron XBB.1.5 amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=XBB.1.5
+        urlLabel XBB.1.5 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.5_prot.bb
+        color 219,40,35
+        priority 19
+
+        track variantAaMuts_XBB_1_16
+        parent variantMuts on
+        subGroups variant=S_XBB116 mutation=AA designation=VOI
+        shortLabel Omicron XBB.1.16 AA Muts
+        longLabel Omicron XBB.1.16 amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=XBB.1.16
+        urlLabel XBB.1.16 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.16_prot.bb
+        color 219,40,35
+        priority 20
+
+        track variantAaMuts_CH_1_1
+        parent variantMuts off
+        subGroups variant=T_CH11 mutation=AA designation=VUM
+        shortLabel Omicron CH.1.1 AA Muts
+        longLabel Omicron CH.1.1 amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=CH.1.1
+        urlLabel CH.1.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/CH.1.1_prot.bb
+        color 219,40,35
+        priority 21
+
+        track variantAaMuts_XBB_1_9
+        parent variantMuts off
+        subGroups variant=U_XBB19 mutation=AA designation=VUM
+        shortLabel Omicron XBB.1.9 AA Muts
+        longLabel Omicron XBB.1.9 amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=XBB.1.9
+        urlLabel XBB.1.9 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.9_prot.bb
+        color 219,40,35
+        priority 22
+
+        track variantAaMuts_XBB_2_3
+        parent variantMuts off
+        subGroups variant=V_XBB23 mutation=AA designation=VUM
+        shortLabel Omicron XBB.2.3 AA Muts
+        longLabel Omicron XBB.2.3 amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=XBB.2.3
+        urlLabel XBB.2.3 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.2.3_prot.bb
+        color 219,40,35
+        priority 23
+
+        track variantAaMuts_EG_5_1
+        parent variantMuts on
+        subGroups variant=W_EG51 mutation=AA designation=VOI
+        shortLabel Omicron EG.5.1 AA Muts
+        longLabel Omicron EG.5.1 amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=EG.5.1
+        urlLabel EG.5.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/EG.5.1_prot.bb
+        color 219,40,35
+        priority 24
+
 
 # Nucleotide tracks
 
@@ -276,34 +398,156 @@ html variantMuts
         priority 120
 
         track variantNucMuts_B_1_1_529
-        parent variantMuts on
-        subGroups variant=J_B11529 mutation=NUC designation=VOC
-        shortLabel Omicron Nuc Muts 
-        longLabel Omicron VOC (B.1.1.529 SA Nov-2021) nucleotide mutations identifed from GISAID sequences (Nov 2021)
-        url https://outbreak.info/situation-reports?pango=B.1.1.529
-        urlLabel B.1.1.529 Situation Report at outbreak.info
+        parent variantMuts off
+        subGroups variant=J_BA1 mutation=NUC designation=VOC
+        shortLabel Omicron BA.1 Nuc Muts
+        longLabel Omicron VOC (BA.1 SA Nov-2021) nucleotide mutations identifed from GISAID sequences (Nov 2021)
+        url https://outbreak.info/situation-reports?pango=BA.1
+        urlLabel BA.1 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/B.1.1.529_nuc.bb
         color 219,40,35
         priority 121
 
+        track variantNucMuts_BA_2
+        parent variantMuts off
+        subGroups variant=K_BA2 mutation=NUC designation=VOC
+        shortLabel Omicron BA.2 Nuc Muts
+        longLabel Omicron VOC (BA.2) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=BA.2
+        urlLabel BA.2 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2_nuc.bb
+        color 219,40,35
+        priority 122
+
         track variantNucMuts_BA_4
-        parent variantMuts on
-        subGroups variant=J_BA4 mutation=NUC designation=VOC
+        parent variantMuts off
+        subGroups variant=L_BA4 mutation=NUC designation=VUM
         shortLabel Omicron BA.4 Nuc Muts 
         longLabel Omicron VOC (BA.4) nucleotide mutations identifed from 573 GISAID sequences (May 2022)
         url https://outbreak.info/situation-reports?pango=BA.4
         urlLabel BA.4 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.4_nuc.bb
         color 219,40,35
-        priority 122
+        priority 123
 
         track variantNucMuts_BA_5
-        parent variantMuts on
-        subGroups variant=J_BA5 mutation=NUC designation=VOC
+        parent variantMuts off
+        subGroups variant=M_BA5 mutation=NUC designation=VUM
         shortLabel Omicron BA.5 Nuc Muts 
         longLabel Omicron VOC (BA.5) nucleotide mutations identifed from 287 GISAID sequences (May 2022)
         url https://outbreak.info/situation-reports?pango=BA.5
         urlLabel BA.5 Situation Report at outbreak.info
         bigDataUrl /gbdb/wuhCor1/strainMuts/BA.5_nuc.bb
         color 219,40,35
-        priority 123
+        priority 124
+
+        track variantNucMuts_BA_2_12_1
+        parent variantMuts off
+        subGroups variant=N_BA2121 mutation=NUC designation=VUM
+        shortLabel Omicron BA.2.12.1 Nuc Muts
+        longLabel Omicron VOC (BA.2.12.1) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=BA.2.12.1
+        urlLabel BA.2.12.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2.12.1_nuc.bb
+        color 219,40,35
+        priority 125
+
+        track variantNucMuts_BA_2_75
+        parent variantMuts off
+        subGroups variant=O_BA275 mutation=NUC designation=VOC
+        shortLabel Omicron BA.2.75 Nuc Muts
+        longLabel Omicron VOC (BA.2.75) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=BA.2.75
+        urlLabel BA.2.75 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BA.2.75_nuc.bb
+        color 219,40,35
+        priority 126
+
+        track variantNucMuts_BQ_1
+        parent variantMuts off
+        subGroups variant=P_BQ1 mutation=NUC designation=VUM
+        shortLabel Omicron BQ.1 Nuc Muts
+        longLabel Omicron VOC (BQ.1) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=BQ.1
+        urlLabel BQ.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/BQ.1_nuc.bb
+        color 219,40,35
+        priority 127
+
+        track variantNucMuts_XBB
+        parent variantMuts off
+        subGroups variant=Q_XBB mutation=NUC designation=VUM
+        shortLabel Omicron XBB Nuc Muts
+        longLabel Omicron VOC (XBB) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=XBB
+        urlLabel XBB Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB_nuc.bb
+        color 219,40,35
+        priority 128
+
+        track variantNucMuts_XBB_1_5
+        parent variantMuts off
+        subGroups variant=R_XBB15 mutation=NUC designation=VOI
+        shortLabel Omicron XBB.1.5 Nuc Muts
+        longLabel Omicron VOC (XBB.1.5) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=XBB.1.5
+        urlLabel XBB.1.5 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.5_nuc.bb
+        color 219,40,35
+        priority 129
+
+        track variantNucMuts_XBB_1_16
+        parent variantMuts off
+        subGroups variant=S_XBB116 mutation=NUC designation=VOI
+        shortLabel Omicron XBB.1.16 Nuc Muts
+        longLabel Omicron VOC (XBB.1.16) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=XBB.1.16
+        urlLabel XBB.1.16 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.16_nuc.bb
+        color 219,40,35
+        priority 130
+
+        track variantNucMuts_CH_1_1
+        parent variantMuts off
+        subGroups variant=T_CH11 mutation=NUC designation=VUM
+        shortLabel Omicron CH.1.1 Nuc Muts
+        longLabel Omicron VOC (CH.1.1) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=CH.1.1
+        urlLabel CH.1.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/CH.1.1_nuc.bb
+        color 219,40,35
+        priority 131
+
+        track variantNucMuts_XBB_1_9
+        parent variantMuts off
+        subGroups variant=U_XBB19 mutation=NUC designation=VUM
+        shortLabel Omicron XBB.1.9 Nuc Muts
+        longLabel Omicron VOC (XBB.1.9) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=XBB.1.9
+        urlLabel XBB.1.9 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.1.9_nuc.bb
+        color 219,40,35
+        priority 132
+
+        track variantNucMuts_XBB_2_3
+        parent variantMuts off
+        subGroups variant=V_XBB23 mutation=NUC designation=VUM
+        shortLabel Omicron XBB.2.3 Nuc Muts
+        longLabel Omicron VOC (XBB.2.3) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=XBB.2.3
+        urlLabel XBB.2.3 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/XBB.2.3_nuc.bb
+        color 219,40,35
+        priority 133
+
+        track variantNucMuts_EG_5_1
+        parent variantMuts off
+        subGroups variant=W_EG51 mutation=NUC designation=VOI
+        shortLabel Omicron EG.5.1 Nuc Muts
+        longLabel Omicron VOC (EG.5.1) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=EG.5.1
+        urlLabel EG.5.1 Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/EG.5.1_nuc.bb
+        color 219,40,35
+        priority 134
+
