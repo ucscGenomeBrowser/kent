@@ -1672,7 +1672,7 @@ track->drawItems(track, winStart, winEnd, hvg, insideX, y, insideWidth,
 if (measureTiming && lastTime)
     {
     long thisTime = clock1000();
-    track->drawTime = thisTime - *lastTime;
+    track->drawTime += thisTime - *lastTime;
     *lastTime = thisTime;
     }
 hvGfxUnclip(hvg);
