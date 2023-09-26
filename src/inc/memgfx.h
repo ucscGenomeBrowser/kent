@@ -422,6 +422,7 @@ struct rgbColor colorIxToRgb(int colorIx);
 INLINE void mixColor(Color *d, Color s)
 /* Blend the color at s into d, respecting alpha */
 {
+/* algorithm borrowed from https://en.wikipedia.org/wiki/Alpha_compositing */
 int aA = COLOR_32_ALPHA(s);
 int rA = COLOR_32_RED(s);
 int gA = COLOR_32_GREEN(s);
@@ -455,7 +456,6 @@ if ((x < img->clipMinX) || (x >= img->clipMaxX) || (y < img->clipMinY) || (y >= 
 
 Color *pt = _mgPixAdr(img,x,y);
 
-/* algorithm borrowed from https://en.wikipedia.org/wiki/Alpha_compositing */
 int aA = frac * 255;
 int rA = COLOR_32_RED(col);
 int gA = COLOR_32_GREEN(col);
@@ -463,23 +463,5 @@ int bA = COLOR_32_BLUE(col);
 int tempC = MAKECOLOR_32_A(rA, gA, bA, aA);
 
 mixColor(pt, tempC);
-/*
-int aB = COLOR_32_ALPHA(*pt);
-int rB = COLOR_32_RED(*pt);
-int gB = COLOR_32_GREEN(*pt);
-int bB = COLOR_32_BLUE(*pt);
-
-double aOut = aA + (aB * (255.0 - aA) / 255);
-int rOut, gOut, bOut;
-if (aOut == 0)
-    rOut = gOut = bOut = 0;
-else
-    {
-    rOut = (rA * aA + rB * aB * (255 - aA) / 255)/aOut ;
-    gOut = (gA * aA + gB * aB * (255 - aA) / 255)/aOut ;
-    bOut = (bA * aA + bB * aB * (255 - aA) / 255)/aOut ;
-    }
-mgPutDot(img,x,y,MAKECOLOR_32_A(rOut,gOut,bOut,aOut));
-*/
 }
 #endif /* MEMGFX_H */

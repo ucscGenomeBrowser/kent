@@ -1590,7 +1590,8 @@ return endsWith(setting, "Url") ||
     sameString(setting, "instaPort") ||
     sameString(setting, "frames") ||
     sameString(setting, "summary") ||
-    sameString(setting, "searchTrix");
+    sameString(setting, "searchTrix") ||
+    (startsWith("decorator.", setting) && endsWith(setting, ".url"));
 }
 
 char *labelAsFilteredNumber(char *label, unsigned numOut)

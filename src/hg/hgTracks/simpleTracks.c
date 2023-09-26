@@ -38,6 +38,8 @@
 #include "htmshell.h"
 #include "kxTok.h"
 #include "hash.h"
+#include "decorator.h"
+#include "decoratorUi.h"
 
 #ifndef GBROWSE
 #include "encode.h"
@@ -468,6 +470,13 @@ if (currentWindow != windows)  // if not first window
 
 // If we get here, currentWindow should be first window i.e. windows var.
 
+if (hasDecorators(tg))
+{
+    packDecorators(tg);  // be nice to avoid doing this for every pass through packCountRowsOverflow
+            // reason being we only ever pack decorations one way, which only depends on the decoration style
+            // (and user selections), but not the vis mode - vis just changes height.
+}
+
 struct slList *item;
 MgFont *font = tl.font;
 int extraWidth = tl.mWidth * 2;
@@ -626,7 +635,23 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		    start = 0;
 		else
 		    start = round((double)(baseStart - w->winStart)*scale);
+
+int expandPack = 0;  // deactivating item boundary extention for now - working on that next
+                if (hasDecorators(tg) && expandPack)
+                // extend item start with overlays to put the label in the right place
+                    {
+                    int overlayStart;
+                    char decoratorKey[2048];
+                    safef(decoratorKey, sizeof decoratorKey, "%s:%d-%d:%s", chrom, baseStart, baseEnd, mapItemName);
+                    if (decoratorGroupGetOverlayExtent(tg, decoratorKey, &overlayStart, NULL))
+                        {
+                        if (overlayStart < start)
+                            start = overlayStart;
+                        }
+                    }
+
 		if (!tg->drawLabelInBox && !tg->drawName && withLabels && (!noLabel))
+                // add item label
 		    {
 		    leftLabelSize = mgFontStringWidth(font,
 					       tg->itemName(tg, item)) + extraWidth;
@@ -635,23 +660,74 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		    start -= leftLabelSize;
 		    }
 
+                if (hasDecorators(tg) && expandPack)
+                // expand item start for packing if other decorations push it past the left label edge, for packing
+                    {
+                    int decoratedStart;
+                    char decoratorKey[2048];
+                    safef(decoratorKey, sizeof decoratorKey, "%s:%d-%d:%s", chrom, baseStart, baseEnd, mapItemName);
+                    if (decoratorGroupGetExtent(tg, decoratorKey, &decoratedStart, NULL))
+                        {
+                        if (decoratedStart < start)
+                            start = decoratedStart;
+                        }
+                    }
+
 		if (baseEnd >= w->winEnd)
 		    end = w->insideWidth;
 		else
 		    end = round((baseEnd - w->winStart)*scale);
+
+                if (hasDecorators(tg) && expandPack)
+                // extend item ends via overlay here
+                    {
+                    int overlayEnd;
+                    char decoratorKey[2048];
+                    safef(decoratorKey, sizeof decoratorKey, "%s:%d-%d:%s", chrom, baseStart, baseEnd, mapItemName);
+                    if (decoratorGroupGetOverlayExtent(tg, decoratorKey, NULL, &overlayEnd))
+                        {
+                        if (overlayEnd > end)
+                            end = overlayEnd;
+                        }
+                    }
+
 		if (tg->itemRightPixels && withLabels)
+                // draw anything that's supposed to be off the right edge (like right labels)
 		    {
 		    end += tg->itemRightPixels(tg, item);
 		    if (end > w->insideWidth)
 			end = w->insideWidth;
 		    }
 
+                if (hasDecorators(tg) && expandPack)
+                // and extend item end via general decoration extension here, for packing
+                    {
+                    int decoratedEnd;
+                    char decoratorKey[2048];
+                    safef(decoratorKey, sizeof decoratorKey, "%s:%d-%d:%s", chrom, baseStart, baseEnd, mapItemName);
+                    if (decoratorGroupGetExtent(tg, decoratorKey, NULL, &decoratedEnd))
+                        {
+                        if (decoratedEnd > end)
+                            end = decoratedEnd;
+                        }
+                    }
+
+
 		AllocVar(range);
 		range->start = start + winOffset;
 		range->end = end + winOffset;
 		slAddHead(&rangeList, range);
                 rangeWidth += (range->end - range->start);
+
                 range->height = 1;
+                if (hasDecorators(tg))
+                    {
+                    char itemString[2048];
+                    struct linkedFeatures *lf = (struct linkedFeatures*) item;
+                    safef(itemString, sizeof(itemString), "%s:%d-%d:%s", chrom, baseStart,
+                            baseEnd, lf->name);
+                    range->height += decoratorGroupHeight(tg, itemString);
+                    }
 
 		AllocVar(node);
 		node->val = item;
@@ -4342,11 +4418,101 @@ tg->heightPer = origHeightPer;
 tg->lineHeight = origLineHeight;
 }
 
-static void genericDrawItem(struct track *tg, struct spaceNode *sn,
-                            struct hvGfx *hvg, int xOff, int yOff, int width,
-                            MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
-                            double scale, boolean withLeftLabels)
-/* draw one non-overflow item */
+
+static void genericDrawItemLabel(struct track *tg, struct spaceNode *sn,
+                                 struct hvGfx *hvg, int xOff, int y, int width,
+                                 MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                                 double scale, boolean withLeftLabels)
+{
+struct slList *item = sn->val;
+int s = tg->itemStart(tg, item);
+//int e = tg->itemEnd(tg, item);
+int sClp = (s < winStart) ? winStart : s;
+//int eClp = (e > winEnd)   ? winEnd   : e;
+int x1 = round((sClp - winStart)*scale) + xOff;
+//int x2 = round((eClp - winStart)*scale) + xOff;
+int textX = x1;
+
+if (tg->drawLabelInBox)
+    withLeftLabels = FALSE;
+
+if (tg->itemNameColor != NULL)
+    {
+    color = tg->itemNameColor(tg, item, hvg);
+    labelColor = color;
+    if (withLeftLabels && isTooLightForTextOnWhite(hvg, color))
+	labelColor = somewhatDarkerColor(hvg, color);
+    }
+
+/* pgSnpDrawAt may change withIndividualLabels between items */
+boolean withLabels = (withLeftLabels && withIndividualLabels && ((vis == tvPack) || (vis == tvFull && isTypeBedLike(tg))) && (!sn->noLabel) && !tg->drawName);
+if (withLabels)
+    {
+    char *name = tg->itemName(tg, item);
+    int nameWidth = mgFontStringWidth(font, name);
+    int dotWidth = tl.nWidth/2;
+    boolean snapLeft = FALSE;
+    boolean drawNameInverted = highlightItem(tg, item);
+    textX -= nameWidth + dotWidth;
+    snapLeft = (textX < fullInsideX);
+    snapLeft |= (vis == tvFull && isTypeBedLike(tg));
+
+    /* Special tweak for expRatio in pack mode: force all labels
+     * left to prevent only a subset from being placed right: */
+    snapLeft |= (startsWith("expRatio", tg->tdb->type));
+
+#ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    if (theImgBox == NULL && snapLeft)
+#else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    if (snapLeft)        /* Snap label to the left. */
+#endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+        {
+        textX = leftLabelX;
+        assert(hvgSide != NULL);
+        int prevX, prevY, prevWidth, prevHeight;
+        hvGfxGetClip(hvgSide, &prevX, &prevY, &prevWidth, &prevHeight);
+        hvGfxUnclip(hvgSide);
+        hvGfxSetClip(hvgSide, leftLabelX, y, fullInsideX - leftLabelX, tg->lineHeight);
+        if(drawNameInverted)
+            {
+            int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
+            hvGfxBox(hvgSide, boxStart, y, nameWidth+1, tg->heightPer - 1, color);
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+                        MG_WHITE, font, name);
+            }
+        else
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
+                        labelColor, font, name);
+        hvGfxUnclip(hvgSide);
+        hvGfxSetClip(hvgSide, prevX, prevY, prevWidth, prevHeight);
+        }
+    else
+        {
+	// shift clipping to allow drawing label to left of currentWindow
+	int pdfSlop=nameWidth/5;
+        int prevX, prevY, prevWidth, prevHeight;
+        hvGfxGetClip(hvgSide, &prevX, &prevY, &prevWidth, &prevHeight);
+        hvGfxUnclip(hvg);
+        hvGfxSetClip(hvg, textX-1-pdfSlop, y, nameWidth+1+pdfSlop, tg->heightPer);
+        if(drawNameInverted)
+            {
+            hvGfxBox(hvg, textX - 1, y, nameWidth+1, tg->heightPer-1, color);
+            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, MG_WHITE, font, name);
+            }
+        else
+            // usual labeling
+            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
+        hvGfxUnclip(hvg);
+        hvGfxSetClip(hvgSide, prevX, prevY, prevWidth, prevHeight);
+        }
+    }
+withIndividualLabels = TRUE; /* reset in case done with pgSnp */
+}
+
+static void genericItemMapAndArrows(struct track *tg, struct spaceNode *sn,
+                                    struct hvGfx *hvg, int xOff, int y, int width,
+                                    MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                                    double scale, boolean withLeftLabels)
 {
 struct slList *item = sn->val;
 int s = tg->itemStart(tg, item);
@@ -4356,6 +4522,42 @@ int eClp = (e > winEnd)   ? winEnd   : e;
 int x1 = round((sClp - winStart)*scale) + xOff;
 int x2 = round((eClp - winStart)*scale) + xOff;
 int textX = x1;
+
+
+if (!tg->mapsSelf)
+    {
+    int w = x2-textX;
+    /* Arrows? */
+    if (w > 0)
+        {
+        if (nextItemCompatible(tg))
+            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, textX, y, tg->heightPer, color, TRUE);
+        else if (exonNumberMapsCompatible(tg, vis))
+            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, textX, y, tg->heightPer, color, FALSE);
+        else
+            {
+            tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
+                        tg->mapItemName(tg, item), s, e, textX, y, w, tg->heightPer);
+            }
+        }
+    }
+}
+
+
+static void genericDrawItem(struct track *tg, struct spaceNode *sn,
+                            struct hvGfx *hvg, int xOff, int yOff, int width,
+                            MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                            double scale, boolean withLeftLabels)
+/* draw one non-overflow item */
+{
+struct slList *item = sn->val;
+//int s = tg->itemStart(tg, item);
+//int e = tg->itemEnd(tg, item);
+//int sClp = (s < winStart) ? winStart : s;
+//int eClp = (e > winEnd)   ? winEnd   : e;
+//int x1 = round((sClp - winStart)*scale) + xOff;
+//int x2 = round((eClp - winStart)*scale) + xOff;
+//int textX = x1;
 
 if (tg->drawLabelInBox)
     withLeftLabels = FALSE;
@@ -4388,83 +4590,11 @@ tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 // GALT non-proportional track like gtexGene
 handleNonPropDrawItemAt(tg, sn, item, hvg, xOff, y, scale, font, color, vis);
 
-/* pgSnpDrawAt may change withIndividualLabels between items */
-boolean withLabels = (withLeftLabels && withIndividualLabels && ((vis == tvPack) || (vis == tvFull && isTypeBedLike(tg))) && (!sn->noLabel) && !tg->drawName);
-if (withLabels)
-    {
-    char *name = tg->itemName(tg, item);
-    int nameWidth = mgFontStringWidth(font, name);
-    int dotWidth = tl.nWidth/2;
-    boolean snapLeft = FALSE;
-    boolean drawNameInverted = highlightItem(tg, item);
-    textX -= nameWidth + dotWidth;
+tg->drawItemLabel(tg, sn, hvg, xOff, y, width, font, color, labelColor, vis, scale, withLeftLabels);
 
-    snapLeft = (textX < fullInsideX);
-    snapLeft |= (vis == tvFull && isTypeBedLike(tg));
+// do mapping and arrows
 
-    /* Special tweak for expRatio in pack mode: force all labels
-     * left to prevent only a subset from being placed right: */
-    snapLeft |= (startsWith("expRatio", tg->tdb->type));
-
-#ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
-    if (theImgBox == NULL && snapLeft)
-#else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-    if (snapLeft)        /* Snap label to the left. */
-#endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-        {
-        textX = leftLabelX;
-        assert(hvgSide != NULL);
-        hvGfxUnclip(hvgSide);
-        hvGfxSetClip(hvgSide, leftLabelX, yOff, fullInsideX - leftLabelX, tg->height);
-        if(drawNameInverted)
-            {
-            int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
-            hvGfxBox(hvgSide, boxStart, y, nameWidth+1, tg->heightPer - 1, color);
-            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
-                        MG_WHITE, font, name);
-            }
-        else
-            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->heightPer,
-                        labelColor, font, name);
-        hvGfxUnclip(hvgSide);
-        hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
-        }
-    else
-        {
-	// shift clipping to allow drawing label to left of currentWindow
-	int pdfSlop=nameWidth/5;
-        hvGfxUnclip(hvg);
-        hvGfxSetClip(hvg, textX-1-pdfSlop, y, nameWidth+1+pdfSlop, tg->heightPer);
-        if(drawNameInverted)
-            {
-            hvGfxBox(hvg, textX - 1, y, nameWidth+1, tg->heightPer-1, color);
-            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, MG_WHITE, font, name);
-            }
-        else
-            // usual labeling
-            hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
-        hvGfxUnclip(hvg);
-        hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
-        }
-    }
-if (!tg->mapsSelf)
-    {
-    int w = x2-textX;
-    /* Arrows? */
-    if (w > 0)
-        {
-        if (nextItemCompatible(tg))
-            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, textX, y, tg->heightPer, color, TRUE);
-        else if (exonNumberMapsCompatible(tg, vis))
-            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, textX, y, tg->heightPer, color, FALSE);
-        else
-            {
-            tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
-                        tg->mapItemName(tg, item), s, e, textX, y, w, tg->heightPer);
-            }
-        }
-    }
-    withIndividualLabels = TRUE; /* reset in case done with pgSnp */
+tg->doItemMapAndArrows(tg, sn, hvg, xOff, y, width, font, color, labelColor, vis, scale, withLeftLabels);
 }
 
 int normalizeCount(struct preDrawElement *el, double countFactor,
@@ -5086,6 +5216,12 @@ mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, trackName,
                   mapItemName, newItemName, directUrl, withHgsid, NULL);
 }
 
+int linkedFeaturesFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis)
+{
+return tgFixedTotalHeightOptionalOverflow(tg,vis, tl.fontHeight+1, tl.fontHeight, FALSE);
+}
+
+
 void linkedFeaturesMethods(struct track *tg)
 /* Fill in track methods for linked features. */
 {
@@ -5095,7 +5231,8 @@ tg->drawItemAt = linkedFeaturesDrawAt;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
 tg->mapItem = linkedFeaturesMapItem;
-tg->totalHeight = tgFixedTotalHeightNoOverflow;
+//tg->totalHeight = tgFixedTotalHeightNoOverflow;
+tg->totalHeight = linkedFeaturesFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
@@ -14110,6 +14247,9 @@ wordCount = chopLine(cloneString(typeLine), words);
 if (wordCount <= 0)
     return;
 type = words[0];
+
+track->drawItemLabel = genericDrawItemLabel;
+track->doItemMapAndArrows = genericItemMapAndArrows;
 
 #ifndef GBROWSE
 if (sameWord(type, "bed"))

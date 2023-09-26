@@ -285,6 +285,7 @@ for (int i=x; i<x2; i++)
         mixDot(mg, i, j, COLOR_32_ALPHA(color)/255.0, color);
         }
     }
+
 }
 
 void mgDrawBoxMultiply(struct memGfx *mg, int x, int y, int width, int height, Color color)

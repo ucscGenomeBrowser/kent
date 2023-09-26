@@ -1322,6 +1322,45 @@ There are no extra options that can appear on the type hic line.
     <pre>   denseCoverage 100</pre>
 </DIV>
 
+<div class="decorator"><span class="types bed bigBed genePred bigGenePred psl bigPsl"></span>
+<div class="format"><code>decorator.default.*</code></div>
+    <p>Decorators allow annotation to be placed on top of linkedFeatures tracks by
+    highlighting regions and adding glyphs on top of them.  The decorators themselves
+    can be configured with a small selection of trackDb settings as follows.  For a
+    more interactive introduction to decorators, see the <a
+    href="../decorator.html">decorator documentation</a>.</p>
+    <p>NB: In all of the following settings, <code>decorator.default.</code> is used as
+    a prefix to indicate that the settings should be applied to the decorator and not the
+    primary track.  This is necessary because many settings that you can apply to
+    decorators are identical to settings that can be applied to tracks.  For example,
+    <code>filterValues</code> can be applied to a main track to filter which items
+    are displayed, but can also be applied to a decorator for that track as
+    <code>decorator.default.filterValues</code> to filter which decorations are drawn.
+    In the future, other names besides "default" may be allowed to permit multiple
+    decorators annotating a single track.</p>
+    <p><strong>Settings</strong></p>
+    <p><code>decorator.default.bigDataUrl &lt;url&gt;</code></p>
+    <p>This setting is required when adding a decorator to a track.  It specifies
+    the path to a bigBed file that contains the decorations.</p>
+    <p><code>decorator.default.filterValues &lt;specification&gt;</code></p>
+    <p>Decorators support the same filter options that bigBed tracks do.  This includes
+    the <code>filter</code>, <code>filterText</code>, and <code>filterValues</code>
+    settings, as described in <a href="../hubQuickStartFilter.html">this document</a>.</p>
+    <p><code>decorator.default.mouseOver &lt;specification&gt;</code></p>
+    <p>Decorators also support the same <code>mouseOver</code> and <code>mouseOverField</code>
+    settings that can be applied to bigBed tracks.</p>
+    <p>There is one more setting that is currently specific to decorators.</p>
+    <p><code>decorator.default.maxLabelBases &lt;integer&gt;</code></p>
+    <p>This setting controls a failsafe option for deactivating the drawing of decoration
+    labels when they're in block mode.  There will also be a checkbox on the track
+    configuration page to deactivate labels manually, but even when that is on, a track
+    display can quickly become unintelligible if the window displayed is too large -
+    there will simply be too many track items and too many decoration labels to process
+    visually.  <code>maxLabelBases</code> sets a maximum window size (in bases) for which
+    labels will be drawn.  If not set, the value will default to 200kb.
+    </p>
+</div>
+
 <DIV class="labelOnFeature"><span class="types bed bigBed"></span>
 <div class="format"><code>labelOnFeature &lt;on/off&gt;</code></div>
     <P>Usually, labels (the BED name field) are drawn next to the
