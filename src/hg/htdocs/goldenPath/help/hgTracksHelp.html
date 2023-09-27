@@ -1263,35 +1263,83 @@ To convert one or more coordinate ranges using the default conversion settings:<
 <p>
 Alternatively, you may load the coordinate ranges from an existing data file by entering the file
 name in the upload box at the bottom of the screen, then clicking the Submit File button.</p>
+
+<a name="liftParameters"></a>
+<h3>LiftOver parameters</h3>
 <p>
-The default parameter settings are recommended for general purpose use of the liftOver tool.
-However, you may want to customize settings if you have several very large regions to convert.
-<!--
+The default parameters for LiftOver are recommended for general use of the LiftOver tool. However,
+you may want to customize settings if you have several very large regions to convert.</p>
+<p>
+Although the LiftOver program accepts position ranges as input, some settings are only available
+when using a <a href="/FAQ/FAQformat.html#format1">BED line with standard columns</a>. The following
+describes each setting and the input requirements to use each setting.
+</p>
 <ul>
-<li><strong>Minimum ratio of bases that must remap</strong> (default 0.95)<strong>:</strong> It may
-be beneficial to reduce this value when working with poor-quality assemblies or
-cross-species conversions. For large-area conversions under these conditions,
-a value as low as 0.01 may be used.
-<li><strong>Minimum chain size in target</strong> (default 0)<strong>:</strong> This parameter is
-applied only when the &quot;Allow multiple output regions&quot; option is
-checked. This setting may be increased to reduce fragmentation. For example,
-when doing large-scale conversions, we have found that a setting of 4000
-worked well for this option.
-<li><strong>Minimum hit size in query</strong> (default 0)<strong>:</strong> This parameter is
-applied only when the &quot;Allow multiple output regions&quot; option is
-checked.
-<li><strong>Allow multiple output regions</strong> (default off)<strong>:</strong> By default,
-liftOver does not return a match if the region is split in the new assembly.
-Consider checking this option for conversions involving high-quality data
-within the same species. This option should not be used when mapping large
-regions, doing cross-species conversions or using fragmented poor-quality
-assemblies.
-<li><strong>Min ratio of alignment blocks/exons that must map</strong> (default
-1)<strong>:</strong>
-<li><strong>If thickStart/thickEnd is not mapped, use the closest mapped bas</strong>
-(default off)<strong>:</strong>
+  <li>
+    <b>Position Coordinates or BED with 3 standard columns:</b>
+    <dl>
+      <dt>Minimum ratio of bases that must remap</dt>
+        <dd>
+        It may be beneficial to reduce this value when working with poor-quality assemblies or
+        cross-species conversions. For large-area conversions under these conditions, a value as low
+        as 0.01 may be used.
+        </dd>
+        <dd><i>[default: 0.95]</i></dd>
+    </dl>
+  </li>
+  <li>
+    <b>BED with 4 standard columns or greater:</b>
+    <dl>
+      <dt>Allow multiple output regions</dt>
+        <dd>
+        By default, liftOver does not return a match if the region is split in the new assembly. If
+        LiftOver can map a region more than once, and this setting isn't on, there will be no output
+        for the region. Consider checking this option for conversions involving high-quality data
+        within the same species. This option should not be used when mapping large regions, doing
+        cross-species conversions, or using fragmented poor-quality assemblies.
+        </dd>
+        <dd><i>[default: off]</i></dd>
+      <dt>Minimum chain size in target</dt>
+        <dd>
+        Only applicable when the &quot;Allow multiple output regions&quot; option is checked.
+        Increasing the minimum chain size in the target may reduce fragmentation. A low-complexity
+        or repetitive region may have lots of little matches across the genome that don't
+        necessarily imply the regions had a common ancestor or are orthologous. For example, when
+        doing large-scale conversions, we have found that a setting of 4,000 worked well for this
+        option.
+        </dd>
+        <dd><i>[default: 0]</i></dd>
+      <dt>Minimum hit size in query</dt>
+        <dd>
+        Only applicable when the &quot;Allow multiple output regions&quot; option is checked.
+        Consider using this filter to remove small targets below a certain length that may be
+        introduced by a repeat/transposon within a longer input region.
+        </dd>
+        <dd><i>[default: 0]</i></dd>
+    </dl>
+  </li>
+  <li>
+  <b>BED with 12 standard columns:</b>
+    <dl>
+      <dt>Min ratio of alignment blocks/exons that must map</dt>
+        <dd>
+        The minimum ratio of the number of exons (not their bases) covered by the alignment.
+        Transcripts lower than this will not be output at all. For example, with a value of 3, there
+        must be 3 exons from the transcript covered in the alignment to produce output. With a value
+        of 0.5, only half of an exon must be covered in the alignment.
+        </dd>
+        <dd><i>[default: 1]</i></dd>
+      <dt>If thickStart/thickEnd is not mapped, use the closest mapped base</dt>
+        <dd>
+        Recommended if adjusting the &quot;minimum ratio of alignment blocks/exons that must
+        map&quot;. By default, if an exon (defined by thickStart to thickEnd in the BED) is not
+        alignable at all, it will be skipped in the alignment. If this option is checked, the exon
+        is lifted to the closest alignable base.
+        </dd>
+        <dd><i>[default: off]</i></dd>
+    </dl>
+  </li>
 </ul>
--->
 
 <h3>Command-line coordinate lifting</h3>
 <p>

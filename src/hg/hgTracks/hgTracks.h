@@ -71,6 +71,7 @@
 extern long enteredMainTime;
 
 #include "lolly.h"
+#include "spaceSaver.h"
 
 struct track
 /* Structure that displays of tracks. The central data structure
@@ -100,6 +101,7 @@ struct track
     /* loadItems loads up items for the chromosome range indicated.   */
 
     void *items;               /* Some type of slList of items. */
+    struct decoratorGroup *decoratorGroup;   /* Some type of slList of decoration sets for items. */
 
     char *(*itemName)(struct track *tg, void *item);
     /* Return name of one of an item to display on left side. */
@@ -139,6 +141,18 @@ struct track
     /* Draw a single item.  This is optional, but if it's here
      * then you can plug in genericDrawItems into the drawItems,
      * which takes care of all sorts of things including packing. */
+
+    void (*drawItemLabel)(struct track *tg, struct spaceNode *sn,
+                          struct hvGfx *hvg, int xOff, int y, int width,
+                          MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                          double scale, boolean withLeftLabels);
+    /* Draw the label for an item */
+
+    void (*doItemMapAndArrows)(struct track *tg, struct spaceNode *sn,
+                               struct hvGfx *hvg, int xOff, int y, int width,
+                               MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                               double scale, boolean withLeftLabels);
+    /* Handle item map and exon arrows for an item */
 
     int (*itemStart)(struct track *tg, void *item);
     /* Return start of item in base pairs. */
@@ -811,8 +825,7 @@ void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis);
  * be tvHide, tvDense, etc.
  */
 
-void genericDrawItems(struct track *tg,
-                      int seqStart, int seqEnd,
+void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
                       struct hvGfx *hvg, int xOff, int yOff, int width,
                       MgFont *font, Color color, enum trackVisibility vis);
 /* Draw generic item list.  Features must be fixed height

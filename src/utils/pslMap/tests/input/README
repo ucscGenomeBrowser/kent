@@ -33,3 +33,8 @@ mRNA->mRNA->DNA mapping test:
 
 retro/parent alignment with -simplifyMappingIds
   parent.psl, retro.psl from hg18
+
+
+annotProt.psl -> protGencode.psl
+  swissprot annotation to protein and proten to transcript
+  this created an invalid PSL when converting AA to NA

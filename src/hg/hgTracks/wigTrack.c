@@ -2221,7 +2221,8 @@ wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->track, (char **) N
 wigCart->alwaysZero = (enum wiggleAlwaysZeroEnum)wigFetchAlwaysZeroWithCart(cart,tdb,tdb->track, (char **) NULL);
 wigCart->transformFunc = (enum wiggleTransformFuncEnum)wigFetchTransformFuncWithCart(cart,tdb,tdb->track, (char **) NULL);
 wigCart->doNegative = wigFetchDoNegativeWithCart(cart,tdb,tdb->track, (char **) NULL);
-wigCart->doSequenceLogo = wigFetchDoSequenceLogoWithCart(cart,tdb,tdb->track, (char **) NULL);
+if (zoomedToCodonLevel)
+    wigCart->doSequenceLogo = wigFetchDoSequenceLogoWithCart(cart,tdb,tdb->track, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;

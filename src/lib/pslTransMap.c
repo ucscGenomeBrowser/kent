@@ -55,6 +55,108 @@ static boolean pslTypeTargetIsNa(enum pslType pslType)
 return !pslTypeTargetIsProtein(pslType);
 }
 
+static void setPslBoundsCounts(struct psl* psl)
+/* set sequences bounds and counts from blocks on a PSL */
+{
+int lastBlk = psl->blockCount-1;
+
+/* set start/end of sequences */
+psl->qStart = psl->qStarts[0];
+psl->qEnd = psl->qStarts[lastBlk] + psl->blockSizes[lastBlk];
+if (pslQStrand(psl) == '-')
+    reverseIntRange(&psl->qStart, &psl->qEnd, psl->qSize);
+
+psl->tStart = psl->tStarts[0];
+psl->tEnd = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
+if (pslTStrand(psl) == '-')
+    reverseIntRange(&psl->tStart, &psl->tEnd, psl->tSize);
+
+psl->match = 0;
+for (int iBlk = 0; iBlk < psl->blockCount; iBlk++)
+    psl->match += psl->blockSizes[iBlk];
+pslComputeInsertCounts(psl);
+}
+
+static unsigned int roundUpToMultipleOf3(unsigned n) {
+  return ((n + 2) / 3) * 3;
+}
+
+static unsigned blockOverlapAmt3(struct psl *psl,
+                                 int iBlk)
+/* How much overlap is there with the next block.  This is the max of query
+ * and target, rounded up to a multiple of three, since we are dealing with
+ * protein -> NA.
+ */
+{
+// care taken in subtraction because of unsigneds
+int tOver = (pslTStart(psl, iBlk + 1) < pslTEnd(psl, iBlk)) ?
+    (pslTEnd(psl, iBlk) - pslTStart(psl, iBlk + 1)) : 0;
+int qOver = (pslQStart(psl, iBlk + 1) < pslQEnd(psl, iBlk)) ?
+    (pslQEnd(psl, iBlk)- pslQStart(psl, iBlk + 1)) : 0;
+return roundUpToMultipleOf3(max(tOver, qOver));
+}   
+
+static void trimBlockOverlap(struct psl *psl, int jBlk,
+                             unsigned overlapAmt3)
+/* adjust bounds of a block by the specified amount */
+{
+psl->qStarts[jBlk] += overlapAmt3;
+psl->tStarts[jBlk] += overlapAmt3;
+psl->blockSizes[jBlk] -= overlapAmt3;
+}
+
+static void arrayDelete(unsigned *array, int iArray, unsigned arrayLen)
+/* remove one element in array by shifting down */
+{
+memmove(&array[iArray], &array[iArray + 1], (arrayLen - iArray - 1) * sizeof(unsigned));
+}
+
+static void removeBlock(struct psl *psl, int jBlk)
+/* remove the specified block */
+{
+arrayDelete(psl->blockSizes, jBlk, psl->blockCount);
+arrayDelete(psl->qStarts, jBlk, psl->blockCount);
+arrayDelete(psl->tStarts, jBlk, psl->blockCount);
+psl->blockCount--;
+}
+    
+static void editBlockOverlap(struct psl *psl, int iBlk,
+                             unsigned overlapAmt3)
+/* remove overlap between two blocks.  If multiple blocks are covered,
+ * then shift remove the block */
+{
+while ((overlapAmt3 > 0) && (iBlk < ((int)psl->blockCount) - 1))
+    {
+    int jBlk = iBlk + 1;
+    if (overlapAmt3 < psl->blockSizes[jBlk])
+        {
+        trimBlockOverlap(psl, jBlk, overlapAmt3);
+        overlapAmt3 = 0;
+        }
+    else
+        {
+        overlapAmt3 -= psl->blockSizes[jBlk];
+        removeBlock(psl, jBlk);
+        }
+    }
+}
+
+static void removeOverlappingBlock(struct psl *psl)
+/* Remove overlapping blocks, which BLAT can create with protein to NA
+ * alignments.  These are exposed when convert prot-NA alignments to NA-NA
+ * alignment.
+ */
+{
+for (int iBlk = 0; iBlk < ((int)psl->blockCount) - 1; iBlk++)
+    {
+    unsigned overlapAmt3 = blockOverlapAmt3(psl, iBlk);
+    if (overlapAmt3 > 0)
+        editBlockOverlap(psl, iBlk, overlapAmt3);
+    }
+setPslBoundsCounts(psl);
+}
+
+
 struct block
 /* Coordinates of a block, which might be aligned or a gap on one side */
 {
@@ -80,34 +182,6 @@ static int blockIsAligned(struct block *blk)
 return (blk->qEnd != 0) && (blk->tEnd != 0); // can start at zero
 }
 
-static int blockLength(struct block *blk)
-/* get length of an aligned block  */
-{
-assertBlockAligned(blk);
-return (blk->qEnd - blk->qStart);
-}
-
-static void setPslBoundsCounts(struct psl* psl)
-/* set sequences bounds and counts from blocks on a PSL */
-{
-int lastBlk = psl->blockCount-1;
-
-/* set start/end of sequences */
-psl->qStart = psl->qStarts[0];
-psl->qEnd = psl->qStarts[lastBlk] + psl->blockSizes[lastBlk];
-if (pslQStrand(psl) == '-')
-    reverseIntRange(&psl->qStart, &psl->qEnd, psl->qSize);
-
-psl->tStart = psl->tStarts[0];
-psl->tEnd = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
-if (pslTStrand(psl) == '-')
-    reverseIntRange(&psl->tStart, &psl->tEnd, psl->tSize);
-
-for (int iBlk = 0; iBlk < psl->blockCount; iBlk++)
-    psl->match += psl->blockSizes[iBlk];
-pslComputeInsertCounts(psl);
-}
-
 static void pslProtToNAConvert(struct psl *psl)
 /* convert a protein/NA or protein/protein alignment to a NA/NA alignment */
 {
@@ -126,7 +200,12 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     if (!isProtNa)
         psl->tStarts[iBlk] *= 3;
     }
-setPslBoundsCounts(psl);
+removeOverlappingBlock(psl);
+if (pslCheck("converted to NA", stderr, psl) > 0)
+    {
+    pslTabOut(psl, stderr);
+    errAbort("BUG: converting an AA to NA alignment produced an invalid PSL");
+    }
 }
 
 static struct psl* createMappedPsl(struct psl* inPsl, struct psl *mapPsl,
@@ -257,28 +336,6 @@ mappedBlk.qEnd = align1Blk->qEnd;
 return mappedBlk;
 }
 
-static void trimOverlapping(struct psl *mappedPsl, struct block *mappedBlk)
-/* if this block overlaps the previous block, trim accordingly.  Overlaps
- * can be created with protein to DNA PSLs */
-{
-assertBlockAligned(mappedBlk);
-assert(mappedPsl->blockCount > 0);
-
-// use int so we can go negative
-int prevQEnd = pslQEnd(mappedPsl, mappedPsl->blockCount - 1);
-int prevTEnd = pslTEnd(mappedPsl, mappedPsl->blockCount - 1);
-
-// trim, possibly setting to zero-length
-int overAmt = max((prevQEnd - (int)mappedBlk->qStart), (prevTEnd - (int)mappedBlk->tStart));
-if (overAmt < 0)
-    overAmt = 0;
-else if (overAmt > blockLength(mappedBlk))
-    overAmt = blockLength(mappedBlk);
-
-mappedBlk->qStart += overAmt;
-mappedBlk->tStart += overAmt;
-}
-   
 static boolean mapBlock(struct psl *inPsl, struct psl *mapPsl, int *iMapBlkPtr,
                         struct block *align1Blk, struct psl* mappedPsl,
                         int* mappedPslMax)
@@ -298,14 +355,10 @@ if ((align1Blk->qStart >= align1Blk->qEnd) || (align1Blk->tStart >= align1Blk->t
 /* find block or gap with start coordinates of mrna */
 struct block mappedBlk = getBlockMapping(inPsl, mapPsl, iMapBlkPtr, align1Blk);
 
-/* Need to compute how much of input was consumed before trimming overlap */
+/* Compute how much of input was consumed */
 unsigned consumed = (mappedBlk.qEnd != 0)
     ? (mappedBlk.qEnd - mappedBlk.qStart)
     : (mappedBlk.tEnd - mappedBlk.tStart);
-
-/* remove overlap, which can happen with protein -> NA alignments */
-if (blockIsAligned(&mappedBlk) && (mappedPsl->blockCount > 0))
-    trimOverlapping(mappedPsl, &mappedBlk);
 
 if (blockIsAligned(&mappedBlk))
     addPslBlock(mappedPsl, &mappedBlk, mappedPslMax);
@@ -332,7 +385,7 @@ for (int iBlock = 0; iBlock < inPsl->blockCount; iBlock++)
         continue;
     }
 assert(mappedPsl->blockCount <= mappedPslMax);
-
+removeOverlappingBlock(mappedPsl);
 return mappedPsl;
 }
 
@@ -407,6 +460,7 @@ if (cnvMap)
     mapPsl = pslClone(mapPsl);
     pslProtToNAConvert(mapPsl);
     }
+    
 
 /* sanity check sizes after conversion Don't check name, so names to vary to
  * allow ids to have unique-ifying suffixes. */

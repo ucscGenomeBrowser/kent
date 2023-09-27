@@ -52,6 +52,7 @@
 #include "botDelay.h"
 #include "customComposite.h"
 #include "hicUi.h"
+#include "decoratorUi.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -3496,6 +3497,19 @@ if (tdbIsDownloadsOnly(tdb))             // Composites without tracks but with f
     filesDownloadUi(database,cart,tdb);  // are tdb->type: downloadsOnly
 else
     specificUi(tdb, tdbList, ct, ajax);
+
+// Decorator UI
+struct slName *decoratorSettings = trackDbSettingsWildMatch(tdb, "decorator.*");
+if (decoratorSettings)
+    {
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
+        htmlHorizontalLine();
+    else
+        printf("<HR ALIGN='bottom' style='position:relative; top:1em;'>");
+    decoratorUi(tdb, cart, decoratorSettings);
+    }
+
 puts("</FORM>");
 
 if (ajax)
