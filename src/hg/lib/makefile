@@ -11,7 +11,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgiApoptosis.o chainCart.o chainDb.o chainLink.o chainNet.o \
   chainNetDbLoad.o chromAlias.o chromBins.o chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o \
   chromKeeper.o clonePos.o cpgIsland.o ctgPos.o customAdjacency.o customComposite.o customFactory.o \
-  customPp.o customTrack.o cv.o cytoBand.o dbDb.o defaultDb.o dnaMotifSql.o dupTrack.o \
+  customPp.o customTrack.o cv.o cytoBand.o dbDb.o decoration.o decoratorUi.o defaultDb.o dnaMotifSql.o dupTrack.o \
   encode/encodeErge.o encode/encodeErgeHssCellLines.o encode/encodeExp.o encode/encodeHapMapAlleleFreq.o \
   encode/encodeIndels.o encode/encodePeak.o encode/encodeRegionInfoCustom.o encode/encodeRna.o \
   encode/encodeStanfordPromoters.o encode/encodeStanfordPromotersAverage.o encode/peptideMapping.o \

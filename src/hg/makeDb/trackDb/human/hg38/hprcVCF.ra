@@ -43,3 +43,43 @@ html chainsHprc
     visibility hide
     bigDataUrl /gbdb/hg38/hprc/underSize4.vcf.gz
     html chainsHprc
+
+    track hprcDecomposed
+    parent hprcVCF
+    shortLabel variants decomposed
+    longLabel HPRC Variants decomposed from hprc-v1.0-mc.grch38.vcfbub.a100k.wave.vcf.gz
+    type vcfTabix
+    showHardyWeinberg on
+    configureByPopup off
+    maxWindowToDraw 200000
+    dataVersion August 2023
+    html chainsHprc
+    visibility hide
+    bigDataUrl /gbdb/hg38/hprc/decomposed.vcf.gz
+
+    track hprcPangenie
+    parent hprcVCF
+    shortLabel variants Pangenie
+    longLabel HPRC Variants Pangenie from cactus_filtered_ids.vcf.gz
+    type vcfTabix
+    showHardyWeinberg on
+    configureByPopup off
+    maxWindowToDraw 200000
+    dataVersion August 2023
+    html chainsHprc
+    visibility hide
+    bigDataUrl /gbdb/hg38/hprc/pangenie.vcf.gz
+
+    track hprcRaw
+    parent hprcVCF
+    shortLabel variants Raw
+    longLabel HPRC Variants Raw hprc-v1.0-mc-grch38.vcf.gz cactus_filtered_ids.vcf.gz
+    type vcfTabix
+    showHardyWeinberg on
+    configureByPopup off
+    maxWindowToDraw 200000
+    dataVersion August 2023
+    html chainsHprc
+    visibility hide
+    bigDataUrl /gbdb/hg38/hprc/raw.vcf.gz
+

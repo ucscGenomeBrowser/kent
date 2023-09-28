@@ -176,6 +176,17 @@ noScoreFilter on
 dataVersion COSMIC v98
 pennantIcon New red ../goldenPath/newsarch.html#091523 "Released Sep. 15, 2023"
 
+track vistaEnhancersBb
+shortLabel VISTA Enhancers
+longLabel VISTA Enhancers
+group regulation
+url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=1&experiment_id=$<experimentId>
+type bigBed 9 +
+urlLabel Vista Enhancer Browser
+bigDataUrl /gbdb/hg38/vistaEnhancers/vistaEnhancers.bb
+itemRgb on
+pennantIcon New red ../goldenPath/newsarch.html
+
 track coriellDelDup override
 origAssembly hg19 
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 

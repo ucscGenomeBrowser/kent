@@ -107,6 +107,9 @@ dbPrefixUrls bigBed bed bigPsl genePred psl
 dbPrefixLabels bigBed bed bigPsl genePred psl
 dbProfile *
 dbTrackType customTracks
+decorator bigBed bed bigPsl genePred bigGenePred psl
+decorator.url bigBed bed bigPsl genePred bigGenePred psl
+decorator.* bigBed bed bigPsl genePred bigGenePred psl
 detailsUrls big*
 detailsTabUrls big*
 defaultGeneTracks bed bigDbSnp

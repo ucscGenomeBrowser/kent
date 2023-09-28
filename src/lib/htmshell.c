@@ -29,6 +29,8 @@ static bool errorsNoHeader = FALSE;
 
 static char *analyticsKey = NULL;
 
+static bool doNotTranslate = FALSE;
+
 void htmlSuppressErrors()
 /* Do not output a http header for error messages. Makes sure that very early
  * errors are not shown back to the user but trigger a 500 error, */
@@ -44,6 +46,13 @@ NoEscape = TRUE;
 void htmlDoEscape()
 {
 NoEscape = FALSE;
+}
+
+void htmlDoNotTranslate()
+/* add <html> and <head> tags to tell browsers and chrome in particular not to translate this page. 
+ * DNA is recognized as Swedish otherwise and the translate will remove nucleotides */
+{
+    doNotTranslate = TRUE;
 }
 
 void htmlVaEncodeErrorText(char *format, va_list args)
@@ -1125,8 +1134,17 @@ if (printDocType)
     // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
 #endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     }
-fputs("<HTML>\n", f);
+
+if (doNotTranslate)
+    fputs("<HTML lang='en' class='notranslate' translate='no'>\n", f); // switches off auto-translation question
+else
+    fputs("<HTML>\n", f);
+
 fputs("<HEAD>\n", f);
+
+if (doNotTranslate)
+    fputs("<meta name='google' content='notranslate' />\n", f); // switches off translation bar in Chrome and related browsers
+
 // CSP header
 generateCspMetaHeader(f);
 

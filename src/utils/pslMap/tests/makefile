@@ -14,7 +14,7 @@ test:	gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
 	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName \
 	kgProt negQChain testProtPort_ProtNa testProtPort_ProtProt \
 	testProtNa_NaNa testProtProt_NaNa \
-	testTypeErr
+	testTypeErr testProtTrans
 
 # basic tests of protein -> mrna -> genome mapping
 kgProt: mkdirs
@@ -133,6 +133,13 @@ testProtProt_NaNa: mkdirs
 testTypeErr: mkdirs
 	if ${pslMap} input/spAnnotIso.psl input/spGencode.psl output/$@.psl  2> output/$@.err ; then  echo "Error: should have failed" >&2; false ; else true ; fi
 	diff expected/$@.err output/$@.err
+
+# bug where swissprot feature to protein is mapped via protein to transcript, genereated
+# an invalid PSL with an overlapping block
+testProtTrans: mkdirs
+	${pslMap} -inType=prot_prot -mapType=prot_na input/annotProt.psl input/protGencode.psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
 
 clean::
 	rm -rf output

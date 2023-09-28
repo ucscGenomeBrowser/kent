@@ -108,7 +108,7 @@ conda activate slAngie
 # (noting newer faToVcf missing from Angie's slAngie conda bin)
 pushd ~/miniconda3/envs/slAngie/bin/
 mkdir old
-mv faToVcf/old
+mv faToVcf old/
 popd
 
 mkdir results
@@ -362,4 +362,412 @@ for suffix in nuc aa; do
        ${lineage}_$suffix.bb
     ln -sf `pwd`/${lineage}_$suffix.bb /gbdb/wuhCor1/strainMuts/
 done
+done
+
+#########################################################################
+# Omicron updates - 2023-09-22 - Angie
+
+# For each lineage in BA.2, BA.2.12.1, BA.2.75, BQ.1, XBB, XBB.1.5, XBB.1.16, CH.1.1, XBB.1.9,
+# XBB.2.3, EG.5.1, do the following:
+
+# *** NOT THIS TIME, just for future reference: ***
+# Download method for a relatively new lineage
+# * Log in on gisaid.org, go to Search tab, select Lineage: <whichever lineage>
+# * If there are more than a couple thousand matching sequences, restrict by date to the earliest
+#   range that gets ~2000 sequences
+# * click checkbox to select all, click Download, leave the checkbox "Replace spaces with
+#   underscores in FASTA header" checked, click Download, rename and xz the downloaded file,
+#   upload file to hgwdev.
+#*** END NOT THIS TIME ***
+
+# At this point, those lineages are all huge and well-established.  Instead, pick a bunch of
+# sequences from the giant lineage polytomy nodes in the latest UShER tree, using a sample-paths
+# file generated from today's tree by matUtils extract.
+today=2023-09-22
+treeDir=/hive/data/outside/otto/sarscov2phylo/$today
+cd $treeDir
+# If sample-paths file has not already been created:
+time ~angie/github/usher/build/matUtils extract -i gisaidAndPublic.$today.masked.pb -c BA.2 \
+    -S sample-paths
+#real    7m29.687s
+
+mkdir /hive/data/genomes/wuhCor1/bed/strains/$today
+cd /hive/data/genomes/wuhCor1/bed/strains/$today
+
+#*** NOT THIS TIME ***
+# unxz the downloaded & uploaded GISAID sequence files
+unxz $lineage.$today.fa.xz
+#*** END NOT THIS TIME ***
+
+cladePaths=$treeDir/clade-paths
+samplePaths=$treeDir/sample-paths
+
+gisaidDir=/hive/users/angie/gisaid
+
+# Find the BA.2 polytomy node:
+lineage=BA.2
+grep ^$lineage$'\t' $cladePaths | cut -f 2
+#node_2161928
+# Get a bunch of sequences on that exact node... ah, actually, BA.2 is annotated one node upstream
+# of the real polytomy:
+grep node_2161928: $samplePaths | head -1
+# ... node_2161926:C9344T node_2161928:A9424G node_2162206:C2790T
+# We want to include C2790T, so use node_2162206 instead.
+linNode=node_2162206
+# For simplicity, restrict to GISAID sequences and randomly select 2000:
+grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:' \
+| cut -f 1 \
+| grep \|EPI_ISL_ \
+| randomLines stdin 2000 $lineage.fullNames
+# Extract the sequences from the full GISAID fasta
+time xzcat $gisaidDir/gisaid_fullNames_$today.fa.xz \
+| faSomeRecords stdin $lineage.fullNames $lineage.$today.fa
+#real    14m47.830s
+faSize $lineage.$today.fa
+#59490045 bases (298890 N's 59191155 real 59191155 upper 0 lower) in 2000 sequences in 1 files
+#Total size: mean 29745.0 sd 76.6 min 29296 (SouthKorea/GJ-HERI-A0956/2022|EPI_ISL_17703033|2022-04-29) max 29901 (India/MH-INSACOG-CSIR-NEERI1135/2022|EPI_ISL_11034322|2022-02-28) median 29751
+
+# BA.2.12.1 is annotated a couple nodes upstream of its giant polytomy.
+lineage=BA.2.12.1
+grep ^$lineage$'\t' $cladePaths | cut -f 2
+#node_2657907
+grep node_2657907: $samplePaths | head -1
+#... node_2657889:C11674T node_2657907:T22917A node_2657908:C21721T node_2657979:T15009C ...
+linNode=node_2657979
+grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:' \
+| cut -f 1 \
+| grep \|EPI_ISL_ \
+| randomLines stdin 2000 $lineage.fullNames
+# Making FASTA is very slow, do that later in a big loop with all the other lineages.
+
+# XBB.1.5 is practically nothing without 17124... and reversions have tossed XBB.1.5 on some dinky
+# reversion path with only a few thousand sequences total (13k including sublineages without 17124).
+# So use the XBB.1.5_17124 label for XBB.1.5.
+lineage=XBB.1.5
+linNode=$(grep ^XBB.1.5_17124 $cladePaths | cut -f 2)
+echo $linNode
+#node_2396649
+grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:' \
+| cut -f 1 \
+| grep \|EPI_ISL_ \
+| randomLines stdin 2000 $lineage.fullNames
+#stdin has 2203 lines.  Random lines will only output 1101 or less lines
+#on a file this size. You asked for 2000. Sorry.
+# Geez, OK, fine.
+grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:' \
+| cut -f 1 \
+| grep \|EPI_ISL_ \
+    > $lineage.fullNames
+wc -l $lineage.fullNames
+#2203 XBB.1.5.fullNames
+
+# XBB.1.16 is also annotated a couple nodes upstream of polytomy.  I should add a _dropout label
+# for these and annotate at the polytomy... helpful for Freyja code too.
+lineage=XBB.1.16
+grep ^$lineage$'\t' $cladePaths | cut -f 2
+#node_2301939
+grep node_2301939: $samplePaths | head -1
+#... node_2301939:A22101T node_2301940:T28297C node_2302169:C29386T ...
+linNode=2302169
+grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:' \
+| cut -f 1 \
+| grep \|EPI_ISL_ \
+    > $lineage.fullNames
+wc -l $lineage.fullNames
+#911 XBB.1.16.fullNames
+
+# XBB.2.3 is annotated 3 nodes upstream of its polytomy
+lineage=XBB.2.3
+grep ^$lineage$'\t' $cladePaths | cut -f 2
+#node_2505483
+grep node_2505483: $samplePaths | head -1
+#... node_2505483:T23018C node_2505484:G29706T node_2505485:C4234T node_2505521:G6536A ...
+linNode=node_2505521
+grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:' \
+| cut -f 1 \
+| grep \|EPI_ISL_ \
+    > $lineage.fullNames
+wc -l $lineage.fullNames
+#222 XBB.2.3.fullNames
+# Wow, that's so few.  Can add several sublineages if we don't get good results from that.
+# Or at least allow another node or two in the regex.
+
+
+# The other lineages are annotated on their big polytomy nodes.
+for lineage in BA.2.75 BQ.1 XBB CH.1.1 XBB.1.9 EG.5.1; do
+    linNode=$(grep ^$lineage$'\t' $cladePaths | cut -f 2)
+    grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:' \
+    | cut -f 1 \
+    | grep \|EPI_ISL_ \
+        > $lineage.fullNames
+    wc -l $lineage.fullNames
+done
+#611 BA.2.75.fullNames
+#168 BQ.1.fullNames
+#63 XBB.fullNames
+#88 CH.1.1.fullNames
+#177 XBB.1.9.fullNames
+#213 EG.5.1.fullNames
+
+# OK, that is just way too few for all but BA.2.75.  Allow another node...
+for lineage in BQ.1 XBB CH.1.1 XBB.1.9 EG.5.1; do
+    linNode=$(grep ^$lineage$'\t' $cladePaths | cut -f 2)
+    grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:[ACGT0-9,]+ node_[0-9]+:' \
+    | cut -f 1 \
+    | grep \|EPI_ISL_ \
+        > $lineage.fullNames
+    wc -l $lineage.fullNames
+done
+#1874 BQ.1.fullNames
+#743 XBB.fullNames
+#665 CH.1.1.fullNames
+#561 XBB.1.9.fullNames
+#975 EG.5.1.fullNames
+# OK, now we're talking.
+
+
+# Get FASTA for the ones for which I didn't already generate FASTA...
+for lineage in BA.2.12.1 BA.2.75 BQ.1 XBB XBB.1.5 XBB.1.16 CH.1.1 XBB.1.9 XBB.2.3 EG.5.1; do
+    time xzcat $gisaidDir/gisaid_fullNames_$today.fa.xz \
+    | faSomeRecords stdin $lineage.fullNames $lineage.$today.fa
+    faSize $lineage.$today.fa
+done
+#real    15m5.060s
+#65395512 bases (638366 N's 64757146 real 64757146 upper 0 lower) in 2203 sequences in 1 files
+#Total size: mean 29684.8 sd 146.5 min 28394 (USA/NV-NSPHL-CL2023-00002852/2023|EPI_ISL_16735355|2023-01-18) max 29862 (USA/CT-YNH-2586/2023|EPI_ISL_16757123|2023) median 29722
+#real    14m31.843s
+#18130724 bases (537201 N's 17593523 real 17593523 upper 0 lower) in 611 sequences in 1 files
+#Total size: mean 29673.9 sd 261.8 min 28578 (India/TG-CDFD-GH-276/2022|EPI_ISL_14196571|2022-07-19) max 29903 (India/MP-AIIMS_B-ICMR-INSACOG-WGS-918/2022|EPI_ISL_13574753|2022-06-09) median 29733
+#real    14m13.970s
+#55584411 bases (608337 N's 54976074 real 54976074 upper 0 lower) in 1874 sequences in 1 files
+#Total size: mean 29660.8 sd 196.8 min 28312 (USA/AZ-ASU93160/2022|EPI_ISL_15667635|2022-10-27) max 29871 (Italy/CAM-TIGEM-IZSM-COLLI-38577/2022|EPI_ISL_15195631|2022-09-22) median 29718
+#real    14m47.237s
+#22057105 bases (490469 N's 21566636 real 21566636 upper 0 lower) in 743 sequences in 1 files
+#Total size: mean 29686.5 sd 192.2 min 28032 (Malaysia/IMR_LF00509/2022|EPI_ISL_15852264|2022-11-08) max 29901 (India/DL-NII-1466/2022|EPI_ISL_16170535|2022-10-25) median 29737
+#real    14m51.990s
+#59412748 bases (723349 N's 58689399 real 58689399 upper 0 lower) in 2000 sequences in 1 files
+#Total size: mean 29706.4 sd 126.6 min 28766 (USA/TX-DSHS-19573/2022|EPI_ISL_12543273|2022-03-29) max 29874 (Australia/VIC59851/2022|EPI_ISL_13275021|2022-05-16) median 29729
+#real    15m6.092s
+#27058700 bases (519324 N's 26539376 real 26539376 upper 0 lower) in 911 sequences in 1 files
+#Total size: mean 29702.2 sd 170.5 min 28581 (India/TN-CDFD-M3-520/2023|EPI_ISL_17544408|2023-03-28) max 29946 (India/UP-ILSGS21449/2023|EPI_ISL_17957831|2023-04-12) median 29741
+#real    13m2.308s
+#19719791 bases (229086 N's 19490705 real 19490705 upper 0 lower) in 665 sequences in 1 files
+#Total size: mean 29653.8 sd 186.4 min 28572 (NewZealand/22YA4644/2022|EPI_ISL_15957424|2022-11-21) max 29876 (Italy/LOM-UniMI130/2022|EPI_ISL_17518108|2022-12-01) median 29701
+#real    13m0.853s
+#16635498 bases (293858 N's 16341640 real 16341640 upper 0 lower) in 561 sequences in 1 files
+#Total size: mean 29653.3 sd 202.2 min 28575 (Malaysia/MKAI-6779747/2022|EPI_ISL_16121077|2022-11-07) max 29870 (Italy/LOM-69338838/2023|EPI_ISL_17434186|2023-04-04) median 29727
+#real    12m58.907s
+#6585941 bases (133719 N's 6452222 real 6452222 upper 0 lower) in 222 sequences in 1 files
+#Total size: mean 29666.4 sd 187.9 min 28572 (Spain/CT-HUGTiP-A6R129/2023|EPI_ISL_17199678|2023-02-22) max 29899 (India/HR-NII-1658/2023|EPI_ISL_17372239|2023-03-07) median 29726
+#real    13m15.788s
+#28983299 bases (308229 N's 28675070 real 28675070 upper 0 lower) in 975 sequences in 1 files
+#Total size: mean 29726.5 sd 118.7 min 28578 (Belgium/UCL_H-245G0017/2023|EPI_ISL_18242731|2023-09-02) max 29900 (USA/TX-TAMGHRC-SHS_97566/2023|EPI_ISL_18111433|2023-07-14) median 29749
+
+
+ln -s ~angie/github/sarscov2lineages .
+# I had previously created this conda environment
+# (same conda env create shown in Kate's section above)
+conda activate slAngie
+
+for lineage in BA.2 BA.2.12.1 BA.2.75 BQ.1 XBB XBB.1.5 XBB.1.16 CH.1.1 XBB.1.9 XBB.2.3 EG.5.1; do
+    echo $lineage
+    time ./sarscov2lineages/lineageVariants.params.sh -c 50 -s 0.8 -i 0.7 -v \
+        $lineage.$today.fa sarscov2lineages/NC_045512.fa
+done
+#BA.2
+#real    2m21.662s
+#BA.2.12.1
+#real    3m15.397s
+#BA.2.75
+#real    0m42.523s
+#BQ.1
+#real    2m6.535s
+#XBB
+#real    0m54.531s
+#XBB.1.5
+#real    2m7.850s
+#XBB.1.16
+#real    1m11.199s
+#CH.1.1
+#real    0m46.571s
+#XBB.1.9
+#real    0m42.110s
+#XBB.2.3
+#real    0m18.271s
+#EG.5.1
+#real    1m16.673s
+
+
+# There are lots of codons, especially in Spike, with multiple nuc substitutions in the same
+# codon.  The script used above translates each nuc mutation independently, so instead of a
+# cumulative codon change it does two or three separate translations.  Find and fix those.
+for f in *_aa.bed; do
+    echo $f
+    cut -f 2 $f | uniq -d
+done
+#BA.2.12.1.2023-09-22_aa.bed
+#27381
+#BA.2.2023-09-22_aa.bed
+#27381
+#BA.2.75.2023-09-22_aa.bed
+#22576
+#27381
+#BQ.1.2023-09-22_aa.bed
+#11287
+#CH.1.1.2023-09-22_aa.bed
+#22576
+#27381
+#EG.5.1.2023-09-22_aa.bed
+#22576
+#22894
+#23017
+#27381
+#XBB.1.16.2023-09-22_aa.bed
+#22576
+#22894
+#23017
+#27381
+#XBB.1.5.2023-09-22_aa.bed
+#27381
+#XBB.1.9.2023-09-22_aa.bed
+#22576
+#22894
+#27381
+#XBB.2.3.2023-09-22_aa.bed
+#22576
+#22894
+#23017
+#27381
+#XBB.2023-09-22_aa.bed
+#22576
+#22894
+#27381
+# All of those except for BA.5-derived BQ.1 have BA.2's G27382C,A27383T,T27384C which is
+# ORF6:D61L.  When translated separately, there are two coding changes, neither of which is
+# the one we want:
+# NC_045512.2     27381   27384   ORF6:D61H
+# NC_045512.2     27381   27384   ORF6:D61V
+# So we can change ORF6:D61H to ORF6:D61L and remove D61V.
+sed -re 's/ORF6:D61H/ORF6:D61L/;
+         /ORF6:D61V/ d;' -i.bak *_aa.bed
+
+# BA.2.75, CH.1.1, EG.5.1, and XBB* have G22577C in addition to G22578A, so their _aa.bed
+# files have both S:G339R and S:G339D but they should have S:G339H.
+for lineage in BA.2.75 XBB XBB.1.5 XBB.1.16 CH.1.1 XBB.1.9 XBB.2.3 EG.5.1; do
+    sed -re 's/S:G339R/S:G339H/;
+             /S:G339D/ d;' -i.bak $lineage.${today}_aa.bed
+done
+
+# BQ.1 has conflicting annotations on 11288 from our separate indel and substitution pipelines:
+#NC_045512.2     11287   11296   del_11288
+#NC_045512.2     11287   11288   T11288A
+# What did I do for BA.5?  ../2022-05-04/BA.5.2022-05-03_nuc.bed has only the del.
+# Yep, minimap output BQ.1.2023-09-22.fa.vars shows just the deletion. Remove that one.
+sed -re '/T11288A/ d;' -i.bak BQ.1.${today}_nuc.bed
+sed -re '/nsp6:S106T/ d;' -i.bak BQ.1.${today}_aa.bed
+
+# XBB* including EG.5.1.1 have G22895C and T22896C making S:V445P (not S:V445L and S:V445A).
+for lineage in XBB XBB.1.5 XBB.1.16 XBB.1.9 XBB.2.3 EG.5.1; do
+    sed -re 's/S:V445L/S:V445P/;
+             /S:V445A/ d;' -i.bak $lineage.${today}_aa.bed
+done
+
+# EG.5.1, XBB.1.16 and XBB.2.3 have T23018C in addition to parents' T23019C making S:F486P
+for lineage in EG.5.1 XBB.1.16 XBB.2.3; do
+    sed -re 's/S:F486L/S:F486P/;
+             /S:F486S/ d;' -i.bak $lineage.${today}_aa.bed
+done
+
+# Double-check that we fixed all the double annotations:
+for f in *_aa.bed; do
+    echo $f
+    cut -f 2 $f | uniq -d
+done
+# Just the file names, good.
+
+
+for lineage in BA.2 BA.2.12.1 BA.2.75 BQ.1 XBB XBB.1.5 XBB.1.16 CH.1.1 XBB.1.9 XBB.2.3 EG.5.1; do
+    # Fix reference name, make bigBed, install in /gbdb.  Use Max's names for bigBed files.
+    sed -re 's/NC_045512\.2/NC_045512v2/' $lineage.${today}_nuc.bed \
+        > ${lineage}_nuc.bed
+    sed -re 's/NC_045512\.2/NC_045512v2/' $lineage.${today}_aa.bed \
+        > ${lineage}_prot.bed
+    for suffix in nuc prot; do
+        bedToBigBed -type=bed4 ${lineage}_$suffix.bed /hive/data/genomes/wuhCor1/chrom.sizes \
+            ${lineage}_$suffix.bb
+        ln -sf `pwd`/${lineage}_$suffix.bb /gbdb/wuhCor1/strainMuts/
+    done
+done
+
+conda deactivate
+
+# Now update the variantMuts.ra and .html files.
+
+# BA.2 needs to go before BA.4 but the others can appear in order after BA.5.  Follow pre-existing
+# conventions...
+
+# AA muts:
+ordLetter=N
+prio=15
+for lineage in BA.2.12.1 BA.2.75 BQ.1 XBB XBB.1.5 XBB.1.16 CH.1.1 XBB.1.9 XBB.2.3 EG.5.1; do
+    linUnd=$(echo $lineage | tr . _)
+    linSplat=$(echo $lineage | sed -re 's/\.//g;')
+    cat <<EOF
+        track variantAaMuts_$linUnd
+        parent variantMuts off
+        subGroups variant=${ordLetter}_$linSplat mutation=AA designation=VOC
+        shortLabel Omicron $lineage AA Muts
+        longLabel Omicron $lineage amino acid mutations from GISAID sequences (Sep 22, 2023)
+        url https://outbreak.info/situation-reports?pango=$lineage
+        urlLabel $lineage Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/${lineage}_prot.bb
+        color 219,40,35
+        priority $prio
+
+EOF
+    ordLetter=$(echo $ordLetter | tr 'A-YZ' 'B-ZA')
+    prio=$(($prio + 1))
+done
+
+# Nuc muts:
+ordLetter=N
+prio=125
+for lineage in BA.2.12.1 BA.2.75 BQ.1 XBB XBB.1.5 XBB.1.16 CH.1.1 XBB.1.9 XBB.2.3 EG.5.1; do
+    linUnd=$(echo $lineage | tr . _)
+    linSplat=$(echo $lineage | sed -re 's/\.//g;')
+    cat <<EOF
+        track variantNucMuts_$linUnd
+        parent variantMuts off
+        subGroups variant=${ordLetter}_$linSplat mutation=NUC designation=VOC
+        shortLabel Omicron $lineage Nuc Muts
+        longLabel Omicron VOC ($lineage) nucleotide mutations identifed from GISAID sequences (Sep 2023)
+        url https://outbreak.info/situation-reports?pango=$lineage
+        urlLabel $lineage Situation Report at outbreak.info
+        bigDataUrl /gbdb/wuhCor1/strainMuts/${lineage}_nuc.bb
+        color 219,40,35
+        priority $prio
+
+EOF
+    ordLetter=$(echo $ordLetter | tr 'A-YZ' 'B-ZA')
+    prio=$(($prio + 1))
+done
+
+# Description table
+color=$(perl -we 'print sprintf("%02X%02X%02X", 219,40,35) . "\n";')
+echo $color
+#DB2823
+for lineage in BA.2.12.1 BA.2.75 BQ.1 XBB XBB.1.5 XBB.1.16 CH.1.1 XBB.1.9 XBB.2.3 EG.5.1; do
+    cat <<EOF
+  <tr>
+    <td><span style="background-color: #$color;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>Omicron</td>
+    <td>$lineage</td>
+    <td>2??NS</td>
+    <td>GRA</td>
+    <td>???First det</td>
+    <td>???Date</td>
+    <td>VUM</td>
+  </tr>
+
+EOF
 done

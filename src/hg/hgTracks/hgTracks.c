@@ -79,6 +79,9 @@
 #include "cacheTwoBit.h"
 #include "cartJson.h"
 #include "wikiLink.h"
+#include "decorator.h"
+#include "decoratorUi.h"
+#include "mouseOver.h"
 
 //#include "bed3Sources.h"
 
@@ -7675,6 +7678,81 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     }
 }
 
+
+int tdbHasDecorators(struct track *track)
+{
+struct slName *decoratorSettings = trackDbSettingsWildMatch(track->tdb, "decorator.*");
+if (decoratorSettings)
+    {
+    slNameFreeList(&decoratorSettings);
+    return 1;
+    }
+return 0;
+}
+
+
+void loadDecorators(struct track *track)
+/* Load decorations from a source (file) and put them in a decorator, then add that
+ * decorator to the list of the track's decorators.  Within the new decorator, each
+ * of the decorations should have been entered into a hash table that is indexed by the
+ * name of the linked feature.  That way when we're drawing the linked feature, we'll
+ * be able to quickly locate the associated decorations.
+ *
+ * Note that this will need amendment when multiple decoration sources are possible.
+ */
+{
+char *decoratorUrl = trackDbSetting(track->tdb, "decorator.default.bigDataUrl");
+if (!decoratorUrl)
+    {
+    errAbort ("Decorator tags are present in track %s, but no decorator file specified (decorator.default.bigDataUrl is missing)",
+            track->track);
+    return;
+    }
+
+struct bbiFile *bbi = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (isValidBigDataUrl(decoratorUrl,TRUE))
+        bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    errAbort ("Network error while attempting to retrieve decorations from %s (track %s) - %s",
+            decoratorUrl, track->track, dyStringContents(errCatch->message));
+    return;
+    }
+errCatchFree(&errCatch);
+
+struct asObject *decoratorFileAsObj = asParseText(bigBedAutoSqlText(bbi));
+if (!asColumnNamesMatchFirstN(decoratorFileAsObj, decorationAsObj(), DECORATION_NUM_COLS))
+    {
+    errAbort ("Decoration file associated with track %s (%s) does not match the expected format - see decoration.as",
+            track->track, decoratorUrl);
+    return;
+    }
+
+struct trackDb *decoratorTdb = getTdbForDecorator(track->tdb);
+struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, decoratorTdb);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *result = bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+
+struct mouseOverScheme *mouseScheme = mouseOverSetupForBbi(decoratorTdb, bbi);
+
+// insert resulting entries into track->decorators, leaving room for having multiple sources applied
+// to the same track in the future.
+if (track->decoratorGroup == NULL)
+    track->decoratorGroup = newDecoratorGroup();
+
+struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi->fieldCount, mouseScheme);
+track->decoratorGroup->decorators = slCat(track->decoratorGroup->decorators, newDecorators);
+for (struct decorator *d = track->decoratorGroup->decorators; d != NULL; d = d->next)
+    d->group = track->decoratorGroup;
+lmCleanup(&lm);
+bigBedFileClose(&bbi);
+}
+
 static void *remoteParallelLoad(void *threadParam)
 /* Each thread loads tracks in parallel until all work is done. */
 {
@@ -7713,9 +7791,19 @@ while(1)
 	checkMaxWindowToDraw(pfd->track);
 	checkHideEmptySubtracks(pfd->track);
 	pfd->track->loadItems(pfd->track);
+        if (tdbHasDecorators(pfd->track))
+            {
+            loadDecorators(pfd->track);
+            decoratorMethods(pfd->track);
+            }
 	pfd->done = TRUE;
 	}
     errCatchEnd(errCatch);
+    if (errCatch->gotWarning)
+        {
+        // do something intelligent to permit reporting of warnings
+        // Can't pass it to warn yet - the fancy warnhandlers aren't ready
+        }
     if (errCatch->gotError)
 	{
 	pfd->track->networkErrMsg = cloneString(errCatch->message->string);
@@ -8370,6 +8458,7 @@ if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
     jsInline("var showDownloadButton = true;\n");
 }
 
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8654,6 +8743,11 @@ for (window=windows; window; window=window->next)
 		if (!loadHack)
 		    {
 		    track->loadItems(track);
+                    if (tdbHasDecorators(track))
+                        {
+                        loadDecorators(track);
+                        decoratorMethods(track);
+                        }
 		    }
 		else
 		    {
@@ -8692,7 +8786,6 @@ for (window=windows; window; window=window->next)
 	if (measureTiming)
 	    measureTime("Waiting for parallel (%d threads for %d tracks) remote data fetch", ptMax, pfdListCount);
 	}
-
     }
 trackLoadingInProgress = FALSE;
 
