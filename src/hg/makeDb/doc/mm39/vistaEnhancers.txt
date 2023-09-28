@@ -1,0 +1,13 @@
+# VISTA Enhancers track refs #16044  (2023-09-20 Gerardo)
+cd /hive/data/outside/
+mkdir vistaEnhancers; cd vistaEnhancers
+mkdir mm39; cd mm39
+liftOver -bedPlus=9 /hive/data/outside/vistaEnhancers/mm9/sortedVistaEnhancers.bed /hive/data/gbdb/mm9/liftOver/mm9ToMm39.over.chain.gz vistaEnhancers.bed unMapped
+bedToBigBed -tab -type=bed9+ -as=/hive/data/outside/vistaEnhancers/mm9/vistaEnhancers.as vistaEnhancers.bed https://hgdownload.soe.ucsc.edu/goldenPath/mm39/bigZips/mm39.chrom.sizes vistaEnhancers.bb
+cd /gbdb/mm39
+mkdir vistaEnhancers; cd vistaEnhancers
+# Making symlink for big files
+ln -s /hive/data/outside/vistaEnhancers/mm39/vistaEnhancers.bb
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm39
+vi trackDb.ra
+#############################################################################

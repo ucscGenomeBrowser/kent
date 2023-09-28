@@ -126,6 +126,21 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+static struct lineFile *rewindFile(char *inName, struct lineFile *lf)
+/* set up lineFile to point at the beginning of the file.  It we're reading from a decompressing
+ * pipe, we need to close and reopen the pipe. */
+{
+if (lf->pl)
+    {
+    lineFileClose(&lf);
+    lf = lineFileOpen(inName, TRUE);
+    }
+else
+    lineFileRewind(lf);
+
+return lf;
+}
+
 int bbNamedFileChunkCmpByName(const void *va, const void *vb)
 /* Compare two named offset object to facilitate qsorting by name. */
 {
@@ -684,7 +699,7 @@ if (bedCount > 0)
     {
     blockCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
     AllocArray(boundsArray, blockCount);
-    lineFileRewind(lf);
+    lf = rewindFile(inName, lf);
     if (eim)
 	bbExIndexMakerAllocChunkArrays(eim, bedCount);
     writeBlocks(usageList, lf, as, itemsPerSlot, boundsArray, blockCount, doCompress,
@@ -710,6 +725,7 @@ bits64 zoomIndexOffsets[bbiMaxZoomLevels];
 int zoomLevels = 0;
 if (bedCount > 0)
     {
+    lf = rewindFile(inName, lf); // rewind here so bbiWriteZoomLevels() won't have to
     zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
 	bedWriteReducedOnceReturnReducedTwice, fieldCount,
 	doCompress, indexOffset - dataOffset, 
