@@ -102,6 +102,7 @@ GCA_004115215.3_mOrnAna1.pri.v3	mammals
 GCA_004115265.2_mRhiFer1_v1.p	mammals
 GCA_004365145.1_OryAfe_v1_BIUU	mammals
 GCA_006229205.1_meerkat_22Aug2017_6uvM2_HiC	mammals
+GCA_007210705.1_Tcal_SD_v2.1	invertebrate
 GCA_007364275.2_fArcCen1	fish
 GCA_009663435.1_Callithrix_jacchus_cj1700_1.0	primates
 GCA_009762305.1_mZalCal1.pri	mammals
@@ -142,6 +143,7 @@ GCA_023634155.1_bFalPer1.pri	birds
 GCA_023634085.1_bFalChe1.pri	birds
 GCA_023638135.1_bFalBia1.pri	birds
 GCA_026419965.1_mKogBre1_haplotype_1	mammals
+GCA_027579445.1_bAmmNel1.pri	birds
 GCA_027887145.1_bAmmCau1.pri	birds
 GCA_027887165.1_mMonDom1.pri	mammals
 GCA_028018845.1_bMelGeo1.pri	birds
@@ -229,6 +231,7 @@ GCF_000738735.2_ASM73873v2	birds
 GCF_000738735.5_ASM73873v5	birds
 GCF_000747805.1_ChaPel_1.0	birds
 GCF_000764305.1_Hazt_2.0	invertebrate
+GCF_000801105.1_Rs1.0	plants
 GCF_000806345.1_ASM80634v1	invertebrate
 GCF_000817695.2_Aradu1.1	plants
 GCF_000951615.1_common_carp_genome	fish
@@ -288,6 +291,8 @@ GCF_004115265.1_mRhiFer1_v1.p	mammals
 GCF_004118075.1_ASM411807v1	plants
 GCF_004126475.1_mPhyDis1_v1.p	mammals
 GCF_004153925.1_Obicornis_v3	invertebrate
+GCF_004193835.1_ASM419383v1	invertebrate
+GCF_004193835.2_ASM419383v2	invertebrate
 GCF_004382195.1_ASM438219v1	invertebrate
 GCF_004664715.1_Pero_0.1	mammals
 GCF_005281655.1_TAMU_Nfulva_1.0	invertebrate
@@ -347,3 +352,4 @@ GCF_900963305.1_fEcheNa1.1	fish
 GCF_901001165.1_fSalTru1.1	fish
 GCF_902150015.1_genome_assembly_l500	birds
 GCF_903992535.1_mArvAmp1.1	mammals
+GCF_932274485.1_xgPatVulg1.1	invertebrate
