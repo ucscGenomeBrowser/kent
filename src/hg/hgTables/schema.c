@@ -409,6 +409,10 @@ else
     {
     hPrintf("<B>On download server: </B>");
     hPrintf("<A HREF='https://hgdownload.soe.ucsc.edu/goldenPath/%s/database/'>MariaDB table dump directory</A><BR>", db);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (sameString(table, "knownGene") && bigDataUrl!=NULL)
+        hPrintf("This track is available both in ASCII MariaDB table dump format and bigGenePred (bigBed) format.<br>");
+        printDownloadLink("bigBed", bigDataUrl);
     }
 
 describeFields(db, splitTable, asObj, conn);
