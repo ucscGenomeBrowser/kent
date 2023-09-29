@@ -986,6 +986,7 @@
 ./runBuild GCA_028537955.1_mMicCal1.0.hap1 mammals Microtus_californicus
 ./runBuild GCA_028538565.1_dmUmbCali1.0.hap2 plants Umbellularia_californica
 ./runBuild GCA_028538775.1_mMyoYum1.0.hap1 mammals Myotis_yumanensis
+./runBuild GCA_028627265.1_Cercopithecus_mitis_HiC primates Cercopithecus_mitis
 ./runBuild GCA_028749965.1_mPumCon1.0.hap2 mammals Puma_concolor
 ./runBuild GCA_028749985.1_mPumCon1.0.hap1 mammals Puma_concolor
 ./runBuild GCA_029207655.1_rThaSir1.0.hap2 vertebrate Thamnophis_sirtalis_fitchi
