@@ -4062,6 +4062,11 @@ function addMouseover(ele1, text = null, ele2 = null) {
         newEl = document.createElement("span");
         newEl.style = "max-width: 400px"; // max width of the mouseover text
         newEl.innerHTML = text;
+    } else {
+        text = ele2.innerHTML;
+        // if newEl was already created (as in on the server side), then
+        // it may have had it's visibility hidden by default for page load purposes
+        newEl.style.display = "inline-block";
     }
     if (ele1) {
         newDiv = document.createElement("div");
@@ -4096,6 +4101,18 @@ function convertTitleTagsToMouseovers() {
         if (a.title !== undefined && a.title.length > 0) {
             titleTagToMouseover(a);
         }
+    });
+}
+
+function tooltipNodesToMouseover() {
+    /* For server side printed tooltip texts, make them work as pop ups.
+     * Note this assumes two siblings nodes placed next to each other:
+     *    <nodeName class="Tooltip">the text or element that is hoverable</nodename>
+     *    <nodeName class="Tooltiptext'>the text/html of the popup itself
+     * Please note that the Tooltiptext node can have any arbitrary html in it, like
+     * line breaks or links*/
+    $(".Tooltip").each(function(i, n) {
+        addMouseover(n, null, n.nextSibling);
     });
 }
 
