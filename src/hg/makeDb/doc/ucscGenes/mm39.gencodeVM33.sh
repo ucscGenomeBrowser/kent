@@ -11,10 +11,10 @@ cp /hive/data/genomes/${db}/bed/gencode${PREV_GENCODE_VERSION}/build/buildEnv.sh
 # edit buildEnv.sh
  . buildEnv.sh
 
-cp ${oldGeneDir}/${PREV_GENCODE_VERSION}.files.txt  ${GENCODE_VERSION}.files.txt
+cp ${oldGeneDir}/${PREV_GENCODE_VERSION}.files.txt .
 # This failed on account of the V32 file was missing.  I reconstructed it and the V33 version by hand.
 
-cp ${oldGeneDir}/${PREV_GENCODE_VERSION}.tables.txt  ${GENCODE_VERSION}.tables.txt
+cp ${oldGeneDir}/${PREV_GENCODE_VERSION}.tables.txt .
 
 hgsql ${oldKnownDb} -Ne "show tables" > ${oldKnownDb}.tables.txt
 diff <(sort ${PREV_GENCODE_VERSION}.tables.txt) <(sort ${oldKnownDb}.tables.txt)
