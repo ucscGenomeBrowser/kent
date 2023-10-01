@@ -21,8 +21,9 @@
 #include "twoBit.h"
 #include "portable.h"
 
-char *version = "2.9";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
+char *version = "2.10";   // when changing, consider changing in bedToBigBed, bedGraphToBigWig, and wigToBigWig
 /* Version history from 2.6 on at least -
+ *   2.10 - allow chromsomes to be in non-lexicographic order
  *   2.9 - ability to specify chromAlias bigBed as chromSizes file
  *   2.8 - Various changes where developer didn't increment version id
  *   2.7 - Added check for duplicate field names in asParse.c

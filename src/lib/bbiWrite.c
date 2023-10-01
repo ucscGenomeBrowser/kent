@@ -57,10 +57,12 @@ struct bbiChromUsage *usage;
 
 /* Allocate and fill in array from list. */
 struct bbiChromInfo *chromInfoArray = NULL;
+struct bbiChromUsage **usageArray = NULL;
 int maxChromNameSize = 0;
 if (chromCount > 0)
     {
     AllocArray(chromInfoArray, chromCount);
+    AllocArray(usageArray, chromCount);
     int i;
     for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
 	{
@@ -71,10 +73,20 @@ if (chromCount > 0)
 	chromInfoArray[i].name = chromName;
 	chromInfoArray[i].id = usage->id;
 	chromInfoArray[i].size = usage->size;
+        usageArray[i] = usage;
 	}
 
     /* Sort so the b-Tree actually works. */
     qsort(chromInfoArray, chromCount, sizeof(chromInfoArray[0]), bbiChromInfoCmp);
+    /* Now we remap the chromId's so they reflect the order in the bTree */
+    for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
+        {
+        if ( usageArray[chromInfoArray[i].id]->id != i)
+            {
+            usageArray[chromInfoArray[i].id]->id = i;
+            chromInfoArray[i].id = i;
+            }
+        }
     }
 
 /* Write chromosome bPlusTree */
@@ -85,6 +97,7 @@ bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount
     f);
 
 freeMem(chromInfoArray);
+freeMem(usageArray);
 }
 
 void bbiWriteFloat(FILE *f, float val)
@@ -184,6 +197,7 @@ int lastStart = -1;
 bits32 id = 0;
 bits64 totalBases = 0, bedCount = 0;
 int minDiff = BIGNUM;
+struct hash *usedHash = newHash(0);
 
 lineFileRemoveInitialCustomTrackLines(lf);
 
@@ -212,12 +226,11 @@ for (;;)
     totalBases += (end - start);
     if (usage == NULL || differentString(usage->name, chrom))
         {
-	/* make sure chrom names are sorted in ASCII order */
-	if ((usage != NULL) && strcmp(usage->name, chrom) > 0)
-	    {
-	    errAbort("%s is not case-sensitive sorted at line %d.  Please use \"LC_ALL=C sort -k1,1 -k2,2n\" or bedSort and try again.",
-	    	lf->fileName, lf->lineIx);
-	    }
+        if (hashLookup(usedHash, chrom))
+            {
+	    errAbort("Error: All data for each sequence needs to be sorted together in file %s.  Found sequence named %s not in single block on line %d.  Please use \"LC_ALL=C sort -k1,1 -k2,2n\" or bedSort and try again.", lf->fileName, chrom, lf->lineIx);
+            }
+        hashStore(usedHash, chrom);
 	int chromSize = (*chromSizeFunc)(chromSizeClosure, chrom, lf->lineIx);
         if (chromSize == 0)
             errAbort("%s is not found in chromosome sizes file", chrom);
