@@ -12,7 +12,7 @@ echo '#############################################' >> /hive/users/qateam/hubCh
 for output in $(/cluster/bin/x86_64/hgsql -h genome-centdb -Ne "select hubUrl from hubPublic" hgcentral | tail -n +2)
 do
     echo $output >> /hive/users/qateam/hubCheckCronArchive/`date +'%Y-%m'`/hubCheck_output
-    /cluster/bin/x86_64/hubCheck $output >> /hive/users/qateam/hubCheckCronArchive/`date +'%Y-%m'`/hubCheck_output
+    /cluster/bin/x86_64/hubCheck $output 2> /dev/null >> /hive/users/qateam/hubCheckCronArchive/`date +'%Y-%m'`/hubCheck_output
     echo '#############################################' >> /hive/users/qateam/hubCheckCronArchive/`date +'%Y-%m'`/hubCheck_output
 done
 
