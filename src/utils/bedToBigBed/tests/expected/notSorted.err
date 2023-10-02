@@ -1,1 +1,1 @@
-input/notSorted.bed is not case-sensitive sorted at line 3.  Please use "LC_ALL=C sort -k1,1 -k2,2n" or bedSort and try again.
+Error: All data for each sequence needs to be sorted together in file input/notSorted.bed.  Found sequence named mitochondria not in single block on line 4.  Please use "LC_ALL=C sort -k1,1 -k2,2n" or bedSort and try again.

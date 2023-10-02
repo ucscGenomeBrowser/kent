@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = bedToBigBed
 include ../../../inc/common.mk
 
-test: testRgb testMultiInsAtEnd itemsRgb tabSep testBadChrom1 testBbSize1 testBbSize2 testDevStdin testStdin testCompress
+test: testOddSorted testRgb testMultiInsAtEnd itemsRgb tabSep testBadChrom1 testBbSize1 testBbSize2 testDevStdin testStdin testCompress testNotSorted
 
 testBadChrom1:  outputDir
 	-${BINDIR}/${A} input/colored.genbank.bed input/human.chrom.sizes.txt output/noFile.chromAlias.bb   -tab -type=bed12+13 -as=input/bigGenePred.as 2> output/testBadChrom1.err
@@ -29,6 +29,15 @@ testCompress: outputDir
 	${BINDIR}/${A} -type=bed9 -as=input/itemRgb.as input/itemRgb.bed.gz input/chrom.sizes output/itemRgb.bb 2> /dev/null
 	bigBedToBed output/itemRgb.bb output/test_itemRgb.bed
 	diff input/itemRgb.bed output/test_itemRgb.bed
+
+testOddSorted: outputDir
+	-${BINDIR}/${A} -extraIndex=name -type=bed12+16 -tab -as=../../..//hg/lib/gencodeBGP.as input/oddSorted.bed input/hg38.chrom.sizes output/oddSorted.bb
+	bigBedToBed output/oddSorted.bb output/oddSorted.bed
+	LC_ALL=C sort -k1,1 -k2,2n  input/oddSorted.bed > output/oddSorted.check.bed
+	diff output/oddSorted.check.bed output/oddSorted.bed
+	cut -f 4 input/oddSorted.bed > output/oddSorted.names
+	bigBedNamedItems output/oddSorted.bb output/oddSorted.names -nameFile stdout | LC_ALL=C sort -k1,1 -k2,2n >  output/searchNames.bed
+	diff output/oddSorted.bed output/searchNames.bed
 
 testNotSorted: outputDir
 	-${BINDIR}/${A} -type=bed12 input/notSorted.bed input/notSorted.chrom.sizes /dev/null 2> output/notSorted.err || true
