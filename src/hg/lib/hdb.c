@@ -1458,16 +1458,16 @@ char *hReplaceGbdb(char* fileName)
 {
 if (fileName == NULL)
     return fileName;
-if (!startsWith("/gbdb/", fileName))
+
+// if the gbdbLoc2 system is not used at all, like on the RR, stop now. 
+// This is important, as we would be doing tens of thousands of stats
+// otherwise on the RR when going over trackDb.
+char* newGbdbLoc = cfgOption("gbdbLoc2");
+if (newGbdbLoc == NULL || !startsWith("/gbdb/", fileName))
     return cloneString(fileName);
 
 char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
-    return path;
-
-// if the file did not exist, replace with gbdbLoc2
-char* newGbdbLoc = cfgOption("gbdbLoc2");
-if (newGbdbLoc==NULL)
     return path;
 
 freeMem(path);
