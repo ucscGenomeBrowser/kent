@@ -45,6 +45,7 @@ startHtml;
 
 my %expectedList = (
  "VGP" => 1,
+ "CCGP" => 1,
  "HPRC" => 1,
  "birds" => 1,
  "fish" => 1,
@@ -62,6 +63,7 @@ my %expectedList = (
 
 my %titles = (
  "VGP" => "Vertebrate Genomes Project collection",
+ "CCGP" => "The California Conservation Genomics Project",
  "HPRC" => "Human Pangenome Reference Consortium",
  "birds" => "NCBI bird genomes",
  "fish" => "NCBI fish genomes",
@@ -104,6 +106,7 @@ my @orderOutHubs = (
  "viral",
  "bacteria",
  "VGP",
+ "CCGP",
  "HPRC",
  "globalReference",
  "mouseStrains",
@@ -129,6 +132,7 @@ my %indexPage = (
  "viral" => "index.html",
  "bacteria" => "index.html",
  "VGP" => "index.html",
+ "CCGP" => "index.html",
  "HPRC" => "index.html",
  "mouseStrains" => "hubIndex.html",
  "globalReference" => "index.html",
@@ -156,7 +160,7 @@ my $genomeCount = `grep -h ^genome /mirrordata/hubs/VGP/*enomes.txt | wc -l`;
 chomp $genomeCount;
 $genomeCounts{"VGP"} = $genomeCount;
 
-my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'bacteria', 'HPRC', 'globalReference');
+my @checkList = ('primates', 'mammals', 'birds', 'fish', 'vertebrate', 'legacy', 'plants', "invertebrate", "fungi", 'viral', 'bacteria', 'CCGP', 'HPRC', 'globalReference');
 
 foreach my $hubSet (@checkList) {
   $genomeCount = `grep -h ^genome /mirrordata/hubs/$hubSet/genomes.txt | wc -l`;
