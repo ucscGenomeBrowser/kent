@@ -168,52 +168,14 @@ END
 }
 
 print <<"END";
-<h3>How to view the hub</h3>
+<h3>How to view the assembly of interest</h3>
 <p>
-Options:
-<ol>
-  <li>The links to the genome browser in the table below will attach that
-      one specific assembly to the genome browser.  This is most likely what
-      you want.  Alternatively, the entire set of assemblies can be attached
-      as one group to the genome browser with the following links depending
-      upon which of our mirror site browsers you prefer to use:
-<table border="1">
-<tr>
-  <th>attach all assemblies to selected site:</th>
-  <th>&nbsp;</th>
-  <th><a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-        target="_blank">genome.ucsc.edu</a></th>
-  <th>&nbsp;</th>
-  <th><a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-        target="_blank">genome-euro.ucsc.edu</a></th>
-  <th>&nbsp;</th>
-  <th><a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-        target="_blank">genome-asia.ucsc.edu</a></th>
-</tr>
-</table>
-  </li>
-  <li>To manually attach all the assemblies in this hub to genome browsers
-      that are not one of the three UCSC mirror sites:
-    <ol>
-      <li>From the blue navigation bar, go to
-    <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em></li>
-      <li>Then select the <strong>My Hubs</strong> tab and enter this URL into
-          the textbox:
-    <br><code>https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt</code></li>
-      <li> Once you have added the URL to the entry form,
-           press the <em><strong>Add Hub</strong></em> button to add the hub.</li>
-    </ol>
-  </li>
-</ol>
+The links to the genome browser in the table below will attach that
+one specific assembly to the genome browser.  Use the links in
+the column labeled <b>common name and view in browser</b> to view that
+assembly in the genome browser.
 </p>
 
-<p>
-After adding the hub, you will be redirected to the gateway page.  The
-genome assemblies can be selected from the
-<em>${Name} Hub Assembly</em> dropdown menu.
-Instead of adding all the assemblies in one collected group, use the individual
-<em>view in browser</em> in the table below.
-</p>
 <h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
 END
 
