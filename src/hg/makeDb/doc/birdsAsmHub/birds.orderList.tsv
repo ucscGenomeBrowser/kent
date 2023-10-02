@@ -156,7 +156,7 @@ GCA_017639245.1_MMon_1.0	monk parakeet
 GCA_009769485.2_bCygOlo1.alt.v2	mute swan (bCygOlo1 v2 alternate hap 2021)
 GCF_009769625.2_bCygOlo1.pri.v2	mute swan (bCygOlo1 v2 primary hap 2021)
 GCA_027579665.1_bAmmNel1.alt	Nelson's sparrow (bAmmNel1 alternate hap 2023)
-GCA_027579445.1_bAmmNel1.pri	Nelson's sparrow (bAmmNel1 primary hap 2023)
+GCF_027579445.1_bAmmNel1.pri	Nelson's sparrow (bAmmNel1 primary hap 2023 refseq)
 GCF_009650955.1_bCorMon1.pri	New Caledonian crow (2019)
 GCA_009651025.1_bCorMon1.alt	New Caledonian crow (alternate hap 2019)
 GCA_008692595.2_Cv_LA_2.0	northern bobwhite

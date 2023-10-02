@@ -3770,13 +3770,20 @@ function trackHubSkipHubName(name) {
     }
 }
 
-function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
-    /* The actual mouseover positioning function.
-    * refEl is an already existing element with coords that we use to
-    * position popUpEl. popUpEl will try to be as close to the right/above the refEl, except when:
-    *     it would extend past the screen in which case it would go left/below appropriately.
-    *     the refEl takes up the whole screen, in which case we can cover the refEl
-    *          with no consequence */
+function replaceReserved(txt) {
+    /* This should somehow be made more general so we can stop worrying about
+     * user made tracks with whatever characters in it */
+    if (!txt) {
+        throw new Error("trying to replace null txt");
+    }
+    return txt.replace(/[^A-Za-z0-9_]/g, "_");
+}
+
+function boundingRect(refEl) {
+    /* For regular HTML elements, this function wraps getBoundingClientRect(). For area
+     * elements like on hgTracks, getBoundingClientRect() won't work and we have to figure
+     * everything out from the .coords attribute along with taking into account dragReorder,
+     * page scroll, etc */
     if (! (refEl instanceof Element)) {
         // not a map/area element, maybe from some other part of the UI
         console.log("trying to place a mouseover element next to an element that has not been created yet");
@@ -3841,6 +3848,26 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
         refRight = rect.right; refLeft = rect.left;
         refTop = rect.top; refBottom = rect.bottom;
     }
+    return {bottom: refBottom, height: refHeight,
+            left: refLeft, right: refRight,
+            top: refTop, width: refWidth,
+            x: refX, y: refY};
+}
+
+function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
+    /* The actual mouseover positioning function.
+    * refEl is an already existing element with coords that we use to position popUpEl.
+    * popUpEl will try to be as close to the right/above the refEl, except when:
+    *     it would extend past the screen in which case it would go left/below appropriately.
+    *     the refEl takes up the whole screen, in which case we can cover the refEl
+    *     with no consequence */
+    rect = boundingRect(refEl);
+    refX = rect.x; refY = rect.y;
+    refWidth = rect.width; refHeight = rect.height;
+    refRight = rect.right; refLeft = rect.left;
+    refTop = rect.top; refBottom = rect.bottom;
+    let windowWidth = window.innerWidth;
+    let windowHeight = window.innerHeight;
 
     // figure out how large the mouseover will be
     // use firstChild because popUpEl should be a div with a sole child in it
@@ -3868,26 +3895,20 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
     popUpEl.style.top = topOffset + "px";
 }
 
-function replaceReserved(txt) {
-    /* This should somehow be made more general so we can stop worrying about
-     * user made tracks with whatever characters in it */
-    if (!txt) {
-        throw new Error("trying to replace null txt");
-    }
-    return txt.replace(/[^A-Za-z0-9_]/g, "_");
-}
-
 // the current mouseover timer, for showing the mouseover after a delay
 var mouseoverTimer;
 // the timer for when a user is moving the mouse after already bringing up
 // a pop up, there may be many items close together and we want the user
 // to bring up those mouseovers
 var mousemoveTimer;
-var showDiffMouseover = false;
+// flags to help figure out what state the users mouse is in:
+// hovered an item, moving to new item, moving to popup, moving away from popup/item
+var mousedNewItem  = false;
+var canShowNewMouseover = true;
 // signal handler for when mousemove has gone far enough away from the pop up
 // we can't use removeEventListener because the function call is hard to keep
 // track of because of a bounded this keyword
-var mousemoveSignal;
+let mousemoveController;
 // The div that moves around the users screen with the visible mouseover text
 var mouseoverContainer;
 
@@ -3899,9 +3920,35 @@ function hideMouseoverText(ele) {
     tooltipTarget.style.visibility = "hidden";
 }
 
+function mouseIsOverPopup(ev, ele, fudgeFactor=45) {
+    /* Is the mouse positioned over the popup? */
+    let targetBox = ele.getBoundingClientRect();
+    let mouseX = ev.clientX;
+    let mouseY = ev.clientY;
+    if ( (mouseX >= (targetBox.left - fudgeFactor) && mouseX <= (targetBox.right + fudgeFactor) &&
+            mouseY >= (targetBox.top - fudgeFactor) && mouseY <= (targetBox.bottom + fudgeFactor)) ) {
+        return true;
+    }
+    return false;
+}
+
+function mouseIsOverItem(ev, ele, fudgeFactor=45) {
+    /* Is the mouse positioned over the item that triggered the popup? */
+    let origName = ele.getAttribute("origItemMouseoverId");
+    let origTargetBox = boundingRect($("[mouseoverid='"+origName+"']")[0]);
+    let mouseX = ev.clientX;
+    let mouseY = ev.clientY;
+    if ( (mouseX >= (origTargetBox.left - fudgeFactor) && mouseX <= (origTargetBox.right + fudgeFactor) &&
+            mouseY >= (origTargetBox.top - fudgeFactor) && mouseY <= (origTargetBox.bottom + fudgeFactor)) ) {
+        return true;
+    }
+    return false;
+}
+
 function mousemoveTimerHelper(e) {
-    showDiffMouseover = true;
+    /* user has moved the mouse and then stopped moving for long enough. */
     clearTimeout(mousemoveTimer);
+    canShowNewMouseover = true;
     mousemoveTimer = undefined;
 }
 
@@ -3910,73 +3957,84 @@ function mousemoveHelper(e) {
     if (mousemoveTimer === undefined) {
         // if we are over another mouseable element we want to show that one instead
         // use this timer to do so
-        showDiffMouseover = false;
-        mousemoveTimer = setTimeout(mousemoveTimerHelper, 100, e);
+        let callback = mousemoveTimerHelper.bind(mouseoverContainer);
+        mousemoveTimer = setTimeout(callback, 250, e);
     }
-    let targetBox = this.getBoundingClientRect();
-    let mouseX = e.clientX;
-    let mouseY = e.clientY;
-    // currently allow the mouse to move in a 45 pixel box around the element
-    if ( mouseX >= (targetBox.left - 45) && mouseX <= (targetBox.right + 45) &&
-            mouseY >= (targetBox.top - 45) && mouseY <= (targetBox.bottom + 45)
-            && !showDiffMouseover) {
-        return;
+
+    if (mousedNewItem && canShowNewMouseover && !mouseIsOverPopup(e, this, 0)) {
+        // the !mouseIsOverPopup() check catches the corner case where the mouse
+        // was moved slowly enough to the popup to set off the mousemoveTimer, but
+        // is now over the pop up itself
+        hideMouseoverText(this);
+        mousemoveController.abort();
     } else {
-        // now that we are going to hide the pop up we can remove the event listener
-        // for whether we wanted to keep the pop up or not
-        if ($(".tooltip.isShown").length > 0) {
-            console.log("hiding mouseover in mousemove helper:");
-            console.log(this);
+        if (mouseIsOverPopup(e, this) || mouseIsOverItem(e, this)) {
+            // the mouse is in the general area of the popup/item
+            // the mouse needs to stop moving and then the flag will
+            // get set by the mousemoveTimer
+            canShowNewMouseover = false;
+            return;
+        } else {
             hideMouseoverText(this);
+            mousemoveController.abort();
+            canShowNewMouseover = true;
         }
-        mousemoveSignal.abort();
     }
 }
 
 function showMouseoverText(e) {
     // actually show the mouseover text
     e.preventDefault();
-    referenceElement = e.target;
-    if (!e.target.getAttribute("mouseoverid")) {
-        // corner case: the side slice and grey control bar slice are weird, the td
-        // container has the title tag, while the img or a element receives the mouseover
-        // event, so we need to go back up the tree to find the mouseoverid for those elems
-        while (referenceElement.parentElement && !referenceElement.getAttribute("mouseoverid")) {
-            referenceElement = referenceElement.parentElement;
+    // the mouseover event will fire all the time, let the mousemove code
+    // set the flags for whether its time to show the new mouseover or not
+    if (mousedNewItem && canShowNewMouseover) {
+        referenceElement = e.target;
+        if (!e.target.getAttribute("mouseoverid")) {
+            // corner case: the side slice and grey control bar slice are weird, the td
+            // container has the title tag, while the img or a element receives the mouseover
+            // event, so we need to go back up the tree to find the mouseoverid for those elems
+            while (referenceElement.parentElement && !referenceElement.getAttribute("mouseoverid")) {
+                referenceElement = referenceElement.parentElement;
+            }
         }
+        let tooltipDivId = "#" + referenceElement.getAttribute("mouseoverid");
+        let tooltipDiv = $(tooltipDivId)[0];
+        mouseoverContainer.replaceChildren();
+        let divCpy = tooltipDiv.cloneNode(true);
+        divCpy.childNodes.forEach(function(n) {
+            mouseoverContainer.appendChild(n);
+        });
+        positionMouseover(e, referenceElement, mouseoverContainer, e.pageX, e.pageY);
+        mouseoverContainer.classList.add("isShown");
+        mouseoverContainer.style.opacity = "1";
+        mouseoverContainer.style.visibility = "visible";
+        mouseoverContainer.setAttribute("origItemMouseoverId", referenceElement.getAttribute("mouseoverid"));
+
+        // Events all get their own unique id but they are tough to keep track of if we
+        // want to remove one. We can use the AbortController interface to let the
+        // web browser automatically raise a signal when the event is fired and remove
+        // appropriate event
+        mousemoveController = new AbortController();
+        let callback = mousemoveHelper.bind(mouseoverContainer);
+
+        mousedNewItem = false;
+        canShowNewMouseover = false;
+        clearTimeout(mouseoverTimer);
+        mouseoverTimer = undefined;
+        // allow the user to mouse over the mouse over, (eg. clicking a link or selecting text)
+        document.addEventListener("mousemove", callback, {signal: mousemoveController.signal});
+        document.addEventListener("scroll", callback, {signal: mousemoveController.signal});
     }
-    let tooltipDivId = "#" + referenceElement.getAttribute("mouseoverid");
-    let tooltipDiv = $(tooltipDivId)[0];
-    mouseoverContainer.replaceChildren();
-    let divCpy = tooltipDiv.cloneNode(true);
-    divCpy.childNodes.forEach(function(n) {
-        mouseoverContainer.appendChild(n);
-    });
-    positionMouseover(e, referenceElement, mouseoverContainer, e.pageX, e.pageY);
-    mouseoverContainer.classList.add("isShown");
-    mouseoverContainer.style.opacity = "1";
-    mouseoverContainer.style.visibility = "visible";
-
-    // Events all get their own unique id but they are tough to keep track of if we
-    // want to remove one. We can use the new AbortController interface to let the
-    // web browser automatically raise a signal when the event is fired and remove
-    // appropriate event
-    mousemoveSignal = new AbortController();
-    let callback = mousemoveHelper.bind(mouseoverContainer);
-
-    // allow the user to mouse over the mouse over, (eg. clicking a link or selecting text)
-    document.addEventListener("mousemove", callback, {signal: mousemoveSignal.signal});
-    document.addEventListener("scroll", callback, {signal: mousemoveSignal.signal});
-    mouseoverTimer = undefined;
 }
 
 function showMouseover(e) {
     /* Helper function for showing a mouseover. Uses a timeout function to allow
      * user to not immediately see all available tooltips. */
     e.preventDefault();
-    // if a tooltip is currently visible, we need to wait for its mouseout
+    // if a tooltip is currently visible, we need to wait for its mousemove
     // event to clear it before we can show this one, ie a user "hovers"
     // this element on their way to mousing over the shown mouseover
+    mousedNewItem = true;
     if (mouseoverTimer) {
         // user is moving their mouse around, make sure where they stop is what we show
         clearTimeout(mouseoverTimer);
@@ -4004,6 +4062,11 @@ function addMouseover(ele1, text = null, ele2 = null) {
         newEl = document.createElement("span");
         newEl.style = "max-width: 400px"; // max width of the mouseover text
         newEl.innerHTML = text;
+    } else {
+        text = ele2.innerHTML;
+        // if newEl was already created (as in on the server side), then
+        // it may have had it's visibility hidden by default for page load purposes
+        newEl.style.display = "inline-block";
     }
     if (ele1) {
         newDiv = document.createElement("div");
@@ -4038,6 +4101,18 @@ function convertTitleTagsToMouseovers() {
         if (a.title !== undefined && a.title.length > 0) {
             titleTagToMouseover(a);
         }
+    });
+}
+
+function tooltipNodesToMouseover() {
+    /* For server side printed tooltip texts, make them work as pop ups.
+     * Note this assumes two siblings nodes placed next to each other:
+     *    <nodeName class="Tooltip">the text or element that is hoverable</nodename>
+     *    <nodeName class="Tooltiptext'>the text/html of the popup itself
+     * Please note that the Tooltiptext node can have any arbitrary html in it, like
+     * line breaks or links*/
+    $(".Tooltip").each(function(i, n) {
+        addMouseover(n, null, n.nextSibling);
     });
 }
 

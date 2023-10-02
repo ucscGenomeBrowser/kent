@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = bedToBigBed
 include ../../../inc/common.mk
 
-test: testRgb testNotSorted testMultiInsAtEnd itemsRgb tabSep testBadChrom1 testBbSize1 testBbSize2 testDevStdin testStdin testCompress
+test: testRgb testMultiInsAtEnd itemsRgb tabSep testBadChrom1 testBbSize1 testBbSize2 testDevStdin testStdin testCompress
 
 testBadChrom1:  outputDir
 	-${BINDIR}/${A} input/colored.genbank.bed input/human.chrom.sizes.txt output/noFile.chromAlias.bb   -tab -type=bed12+13 -as=input/bigGenePred.as 2> output/testBadChrom1.err

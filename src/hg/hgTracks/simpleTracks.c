@@ -4419,18 +4419,16 @@ tg->lineHeight = origLineHeight;
 }
 
 
-static void genericDrawItemLabel(struct track *tg, struct spaceNode *sn,
+void genericDrawItemLabel(struct track *tg, struct spaceNode *sn,
                                  struct hvGfx *hvg, int xOff, int y, int width,
                                  MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
                                  double scale, boolean withLeftLabels)
+/* Generic function for writing out an item label */
 {
 struct slList *item = sn->val;
 int s = tg->itemStart(tg, item);
-//int e = tg->itemEnd(tg, item);
 int sClp = (s < winStart) ? winStart : s;
-//int eClp = (e > winEnd)   ? winEnd   : e;
 int x1 = round((sClp - winStart)*scale) + xOff;
-//int x2 = round((eClp - winStart)*scale) + xOff;
 int textX = x1;
 
 if (tg->drawLabelInBox)
@@ -4509,10 +4507,11 @@ if (withLabels)
 withIndividualLabels = TRUE; /* reset in case done with pgSnp */
 }
 
-static void genericItemMapAndArrows(struct track *tg, struct spaceNode *sn,
+void genericItemMapAndArrows(struct track *tg, struct spaceNode *sn,
                                     struct hvGfx *hvg, int xOff, int y, int width,
                                     MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
                                     double scale, boolean withLeftLabels)
+/* Generic function for putting down a mapbox with a label and drawing exon arrows */
 {
 struct slList *item = sn->val;
 int s = tg->itemStart(tg, item);
@@ -5229,6 +5228,8 @@ tg->freeItems = linkedFeaturesFreeItems;
 tg->drawItems = linkedFeaturesDraw;
 tg->drawItemAt = linkedFeaturesDrawAt;
 tg->itemName = linkedFeaturesName;
+tg->drawItemLabel = genericDrawItemLabel;
+tg->doItemMapAndArrows = genericItemMapAndArrows;
 tg->mapItemName = linkedFeaturesName;
 tg->mapItem = linkedFeaturesMapItem;
 //tg->totalHeight = tgFixedTotalHeightNoOverflow;
