@@ -61,8 +61,8 @@ html cactus447way
         track phyloP447wayBW
         subTrack cons447wayViewphyloP
         subGroups view=phyloP
-        shortLabel 447 phyloP v0 REF
-        longLabel 447 mammals Basewise Conservation by PhyloP version 0 REV model
+        shortLabel 447 phyloP REV
+        longLabel 447 mammals Basewise Conservation by PhyloP phyloFit REV model
         configurable on
         noInherit on
         type bigWig -20 11.936
