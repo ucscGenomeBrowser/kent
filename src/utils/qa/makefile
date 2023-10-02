@@ -64,6 +64,7 @@ install:
 	cp -p --remove-destination doGenbankTests          ${SCRIPTS}
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination dumpEmpty.csh           ${SCRIPTS}
+	cp -p --remove-destination filterCartDumps.sh      ${SCRIPTS}
 	cp -p --remove-destination findDbPartners.csh      ${SCRIPTS}
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}
 	cp -p --remove-destination findBlatServer.csh      ${SCRIPTS}

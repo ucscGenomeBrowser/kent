@@ -39,3 +39,6 @@ echo "20 random sessions" >> "$cron_output"
 tail -n +11 "$filter_file" | shuf | head -n 20 >> "$cron_output"
 rm /hive/users/qateam/cronCartDumps/regionSessions.txt
 rm /hive/users/qateam/cronCartDumps/filter_file
+
+echo "Check https://genecats.gi.ucsc.edu/qa/qaCrons/cron_output for long-running sessions"
+echo "Archive for the most recent long-running sessions can be found here: https://genecats.gi.ucsc.edu/qa/qaCrons/cronCartDumps/index.html"
