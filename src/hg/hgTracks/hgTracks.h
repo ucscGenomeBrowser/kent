@@ -702,6 +702,20 @@ void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int 
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 
+void genericDrawItemLabel(struct track *tg, struct spaceNode *sn,
+                    struct hvGfx *hvg, int xOff, int y, int width,
+                    MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                    double scale, boolean withLeftLabels);
+/* Generic function for writing out an item label */
+
+
+void genericItemMapAndArrows(struct track *tg, struct spaceNode *sn,
+                    struct hvGfx *hvg, int xOff, int y, int width,
+                    MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                    double scale, boolean withLeftLabels);
+/* Generic function for putting down a mapbox with a label and drawing exon arrows */
+
+
 void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 		    char *itemName, char *mapItemName, int start, int end,
 		    int x, int y, int width, int height);

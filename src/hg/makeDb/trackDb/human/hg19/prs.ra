@@ -7,7 +7,7 @@ type bed 3
 
         track prsEmerge
         shortLabel PRS eMERGE
-        longLabel Polygenic Risk Scores from Electronic Medical Records and Genomics (eMERGE) project
+        longLabel Polygenic Risk Scores from NHGRI Electronic Medical Records and Genomics (eMERGE) project
         compositeTrack on
         parent prs
         visibility dense
