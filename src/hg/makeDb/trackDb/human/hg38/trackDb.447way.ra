@@ -1,7 +1,7 @@
 track cons447way
 compositeTrack on
 shortLabel Cactus 447-way
-longLabel Cactus Alignment & Conservation on 447 mammal species
+longLabel Cactus Alignment & Conservation on 447 mammal species, including Zoonomia genomes
 subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP)
 dragAndDrop subTracks
 visibility hide
@@ -19,7 +19,7 @@ html cactus447way
         track cactus447way
         subTrack cons447wayViewalign
         shortLabel Cactus 447-way
-        longLabel Cactus alignment on 447 mammal species
+        longLabel Cactus alignment on 447 mammal species, including Zoonomia genomes
         subGroups view=align
         noInherit on
         type bigMaf
