@@ -907,6 +907,7 @@
 ./runBuild GCA_025201965.1_rGopFla2.pat.asm vertebrate Gopherus_flavomarginatus
 ./runBuild GCA_025265405.1_mMesDen1_primary_haplotype mammals Mesoplodon_densirostris
 ./runBuild GCA_025532165.1_iyCamVici1.0 invertebrate Camponotus_vicinus
+./runBuild GCA_025583915.1_AnoSag2.1 vertebrate Anolis_sagrei_ordinatus
 ./runBuild GCA_025617745.1_DUKEBGI_Hery_1.0 invertebrate Heliocidaris_erythrogramma
 ./runBuild GCA_025618425.1_DUKEBGI_Htub_1.0 invertebrate Heliocidaris_tuberculata
 ./runBuild GCA_026108075.1_ASM2610807v1 plants Chlamydomonas_reinhardtii
