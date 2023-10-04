@@ -232,7 +232,7 @@ sub startTable() {
 print '
 <table class="sortable" border="1">
 <thead style="position:sticky; top:0;"><tr><th>count</th>
-  <th><span style="float: left;">common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;UCSC&nbsp;browser</span><span style="float: right;">[IGV browser]</span></th>
+  <th><span style="float: left;">common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;UCSC&nbsp;browser</span><span style="float: right;">[IGV&nbsp;browser]</span></th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
   <th>BioSample</th>
