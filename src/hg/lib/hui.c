@@ -9284,8 +9284,8 @@ void printInfoIcon(char *mouseover)
  * Uses jquery icon set, with style customized to GB in jquery-ui.css */
 {
 // jquery icons print a bit high, so using sub instead of span to place next to text
-printf("<sub class='ui-icon ui-icon-info' style='display: inline-block;' title='%s'></sub>",
-            mouseover);
+printf("<sub class='Tooltip ui-icon ui-icon-info' style='display: inline-block;' title='%s' mouseoverText='%s'></sub>",
+            mouseover, mouseover);
 }
 
 void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
