@@ -360,7 +360,20 @@ if ( -d "${buildDir}/otherAligners" ) {
 
 printf "<li>explore the hub directory at: <a href='https://$sourceServer/hubs/$localDataUrl/' target=_blank>$sourceServer/hubs/$localDataUrl/</a></li>
 </ul>
+</p>
 ";
+
+print <<"END";
+<hr>
+<h4>Cite reference: To reference these resources in publications, please credit:</h4>
+<p>
+Clawson, H., Lee, B.T., Raney, B.J. et al.
+"<b>GenArk: towards a million UCSC genome browsers</b>.<br><em>Genome Biol</em> 24, 217 (2023).
+<a href='https://doi.org/10.1186/s13059-023-03057-x' target=_blank>
+https://doi.org/10.1186/s13059-023-03057-x</a>
+</p>
+END
+
 printf "</p>\n<hr>
 <h4>Copy this entire assembly hub for local use</h4>
 <p>
