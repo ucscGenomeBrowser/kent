@@ -177,6 +177,14 @@ assembly in the genome browser.
 </p>
 
 <h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
+
+<h3>Cite reference: To reference these resources in publications, please credit:</h3>
+<p>
+Clawson, H., Lee, B.T., Raney, B.J. et al.
+"<b>GenArk: towards a million UCSC genome browsers</b>.<br><em>Genome Biol</em> 24, 217 (2023).
+<a href='https://doi.org/10.1186/s13059-023-03057-x' target=_blank>
+https://doi.org/10.1186/s13059-023-03057-x</a>
+</p>
 END
 
 if ($vgpIndex) {
@@ -224,7 +232,7 @@ sub startTable() {
 print '
 <table class="sortable" border="1">
 <thead style="position:sticky; top:0;"><tr><th>count</th>
-  <th>common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;browser</th>
+  <th><span style="float: left;">common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;UCSC&nbsp;browser</span><span style="float: right;">[IGV browser]</span></th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
   <th>BioSample</th>
@@ -396,7 +404,15 @@ sub tableContents() {
        $browserName = "$commonName ($asmId)";
     }
     printf "<tr><td align=right>%d</td>\n", ++$rowCount;
-    printf "<td align=center><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
+    #  common name and view in browser
+    if ( $asmId =~ m/^GC/ ) {
+       my $hubTxt = "${hubUrl}/hub.txt";
+       my $igvUrl = "https://igv.org/app-test/?hubURL=$hubTxt";
+       printf "<td><span style='float: left;'><a href='%s' target=_blank>%s</a></span><span style='float: right;'>[<a href='%s' target=_blank>IGV</a>]</span></td>\n", $browserUrl, $browserName, $igvUrl;
+    } else {
+       printf "<td align=center><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
+    }
+    # scientific name and data download
     printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     if ($asmId !~ m/^GC/) {
       printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
