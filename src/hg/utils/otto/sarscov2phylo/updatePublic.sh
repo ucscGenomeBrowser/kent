@@ -20,6 +20,7 @@ ottoDir=/hive/data/outside/otto/sarscov2phylo
 gisaidDir=/hive/users/angie/gisaid
 
 today=$(date +%F)
+prevDate=$(date -d yesterday +%F)
 scriptDir=$(dirname "${BASH_SOURCE[0]}")
 
 $scriptDir/gisaidFromChunks.sh &
@@ -45,7 +46,6 @@ buildDir=$ottoDir/$today
 mkdir -p $buildDir
 cd $buildDir
 
-prevDate=$(date -d yesterday +%F)
 time $scriptDir/updateCombinedTree.sh $prevDate $today $problematicSitesVcf \
     >& updateCombinedTree.log
 
