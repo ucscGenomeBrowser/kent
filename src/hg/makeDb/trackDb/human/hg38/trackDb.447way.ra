@@ -74,7 +74,7 @@ html cactus447way
         windowingFunction mean
         color 60,60,140
         altColor 140,60,60
-        priority 4
+        priority 1
 #        logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz447way/multiz447way.bigMaf
 
         track phyloP447way
@@ -92,7 +92,7 @@ html cactus447way
         windowingFunction mean
         color 60,60,140
         altColor 140,60,60
-        priority 4
+        priority 2
 #        logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz447way/multiz447way.bigMaf
 
         track phyloP447wayPrimates
@@ -103,6 +103,25 @@ html cactus447way
         configurable on
         noInherit on
         type wig -20 1.587
+        maxHeightPixels 100:50:11
+        viewLimits -4.5:2
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 3
+#        logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz447way/multiz447way.bigMaf
+
+        track phyloP447wayLRT
+        subTrack cons447wayViewphyloP
+        subGroups view=phyloP
+        shortLabel 447 phyloP primates LRT
+        longLabel 447 mammals Basewise Conservation by PhyloP, primates subset LRT
+        configurable on
+        noInherit on
+        type bigWig -20 1.951
+        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP447way/hg38.phyloP447wayLRT.bw
         maxHeightPixels 100:50:11
         viewLimits -4.5:2
         autoScale off
