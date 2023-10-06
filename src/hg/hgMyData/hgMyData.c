@@ -19,42 +19,6 @@
 struct cart *cart;             /* CGI and other variables */
 struct hash *oldVars = NULL;
 
-char *getUserName()
-{
-return (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
-}
-
-void removeTrack(struct cartJson *cj, struct hash *paramHash)
-/* Removes a custom track for this user */
-{
-//char *userName = getUserName();
-}
-
-void uploadTrack(struct cartJson *cj, struct hash *paramHash)
-/* Saves a new track to the persistent storage for this user */
-{
-//char *userName = getUserName();
-}
-
-void listTracks(struct cartJson *cj, struct hash *paramHash)
-/* Return the list of:
- *   - Only if logged in:
- *       - custom tracks in saved sessions
- *       - non-public hubs in saved sessions
- *       - any other files stored in the per user directory
- *   - custom tracks in non-saved sessions
- *   - non-public hubs in non-saved sessions
- * Present data as a plain array for a table view */
-{
-char *userName = getUserName();
-if (userName)
-    {
-    return;
-    }
-// throw in the custom tracks that are in the current cart that may not be saved yet
-// throw in the attached hubs that are non-public hubs
-}
-
 void getUiState(struct cartJson *cj, struct hash *paramHash)
 /* Get just the JSON needed to show the initial web page */
 {
@@ -111,9 +75,9 @@ void doCartJson()
 {
 struct cartJson *cj = cartJsonNew(cart);
 cartJsonRegisterHandler(cj, "getUiState", getUiState);
-cartJsonRegisterHandler(cj, "remove", removeTrack);
-cartJsonRegisterHandler(cj, "upload", uploadTrack);
-cartJsonRegisterHandler(cj, "list", listTracks);
+//cartJsonRegisterHandler(cj, "remove", removeTrack);
+//cartJsonRegisterHandler(cj, "upload", uploadTrack);
+//cartJsonRegisterHandler(cj, "list", listTracks);
 cartJsonExecute(cj);
 }
 

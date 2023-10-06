@@ -13,6 +13,12 @@
 #include "dystring.h"
 #include "cheapcgi.h"
 #include "customFactory.h"
+#include "wikiLink.h"
+
+char *getUserName()
+{
+return (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+}
 
 static char *getDataDir(char *userName)
 /* Return the full path to the user specific data directory, can be configured via hg.conf
@@ -36,11 +42,44 @@ dyStringPrintf(newDataDir, "%s/%s/%s/",
 return dyStringCannibalize(&newDataDir);
 }
 
+void removeTrack()
+/* Removes a custom track for this user */
+{
+//char *userName = getUserName();
+}
+
+void uploadTrack()
+/* Saves a new track to the persistent storage for this user */
+{
+//char *userName = getUserName();
+}
+
+struct userFiles *getUserFiles()
+/* Return the list of:
+ *   - Only if logged in:
+ *       - custom tracks in saved sessions
+ *       - non-public hubs in saved sessions
+ *       - any other files stored in the per user directory
+ *   - custom tracks in non-saved sessions
+ *   - non-public hubs in non-saved sessions
+ * Present data as a plain array for a table view */
+{
+char *userName = getUserName();
+if (userName)
+    {
+    return NULL;
+    }
+// throw in the custom tracks that are in the current cart that may not be saved yet
+// throw in the attached hubs that are non-public hubs
+return NULL;
+}
+
 char *storeUserFile(char *userName, char *newFileName, void *data, size_t dataSize)
 /* Give a fileName and a data stream, write the data to:
- * userdata/userStore/hashedUserName/userName/fileName
- * where hashedUserName is based on the md5sum of the userName
- * to prevent proliferation of too many directories. 
+ * userDataDir/hashedUserName/userName/fileName
+ * where userDataDir comes from hg.conf and
+ * hashedUserName is based on the md5sum of the userName
+ * to prevent proliferation of too many directories.
  *
  * After sucessfully saving the file, return a web accessible url
  * to the file. */

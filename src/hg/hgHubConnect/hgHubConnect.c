@@ -31,6 +31,7 @@
 #include "pipeline.h"
 #include "hubPublic.h"
 #include "wikiLink.h"
+#include "hgHubConnect.h"
 
 static boolean measureTiming;
 
@@ -1528,6 +1529,12 @@ void blankWarn()
 {
 }
 
+void hgHubConnectOfferUpload()
+/* Make the tab that allows users to upload data files and create a hub on the fly */
+{
+doTrackHubWizard();
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
@@ -1676,6 +1683,8 @@ printf("<div id=\"tabs\">"
        "<li><a class=\"defaultDesc\" href=\"#unlistedHubs\">Connected Hubs</a></li> ");
 if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
     printf("<li><a class=\"hubDeveloperDesc\" href=\"#hubDeveloper\">Hub Development</a></li>");
+if (cfgOptionBooleanDefault("storeUserFiles", TRUE))
+    printf("<li><a class=\"hubUpload\" href=\"#hubUpload\">Hub Upload</a></li>");
 printf("</ul> ");
 
 // The public hubs table is getting big and takes a while to download.
@@ -1692,6 +1701,8 @@ hgHubConnectUnlisted(hubList, publicHash);
 
 if (cfgOptionBooleanDefault("hgHubConnect.validateHub", TRUE))
     hgHubConnectDeveloperMode();
+if (cfgOptionBooleanDefault("storeUserFiles", TRUE))
+    hgHubConnectOfferUpload();
 
 printf("</div>"); // #tabs
 
@@ -1701,7 +1712,7 @@ cartWebEnd();
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubDoHubCheck,
     hgHubCheckUrl, hgHubDoClear, hgHubDoRefresh, hgHubDoDisconnect,hgHubDoRedirect, hgHubDataText, 
-    hgHubConnectRemakeTrackHub, NULL};
+    hgHubConnectRemakeTrackHub, hgHubCreate, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -1710,7 +1721,10 @@ long enteredMainTime = clock1000();
 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+if (cgiOptionalString(hgHubCreate))
+    cartEmptyShellNoContent(doCreateHub, hUserCookie(), excludeVars, oldVars);
+else
+    cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgHubConnect", enteredMainTime);
 return 0;
 }
