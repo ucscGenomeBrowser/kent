@@ -292,6 +292,10 @@ return filters;
 boolean bigBedFilterInterval(char **bedRow, struct bigBedFilter *filters)
 /* Go through a row and filter based on filters.  Return TRUE if all filters are passed. */
 {
+// if this is a hgFind match, it always passed the filters
+if ((hgFindMatches != NULL) && hashLookup(hgFindMatches, bedRow[3]))
+    return TRUE;
+
 struct bigBedFilter *filter;
 for(filter = filters; filter; filter = filter->next)
     {
