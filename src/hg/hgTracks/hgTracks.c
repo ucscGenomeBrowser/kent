@@ -4796,7 +4796,11 @@ for (track = trackList; track != NULL; track = nextTrack)
         for(; lf; lf = nextLf)
             {
             nextLf = lf->next;
-            if (lf->squishyPackVal > squishyPackPoint)
+
+            // if this is a hgFind match, it always is in pack, not squish
+            if ((hgFindMatches != NULL) && hashLookup(hgFindMatches, lf->name))
+                slAddHead(&track->items, lf);
+            else if (lf->squishyPackVal > squishyPackPoint)
                 slAddHead(&squishTrack->items, lf);
             else
                 slAddHead(&track->items, lf);

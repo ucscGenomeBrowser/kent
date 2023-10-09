@@ -7,7 +7,7 @@ dragAndDrop subTracks
 visibility hide
 type bed 4
 group hprc
-html chainsHprc
+html hprc90way
 
     track consHprc90wayViewalign
     shortLabel HPRC 90-way
