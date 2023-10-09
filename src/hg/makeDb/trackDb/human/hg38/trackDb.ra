@@ -769,7 +769,7 @@ priority 100
 type bigBed 8 +
 color 150,20,20
 mouseOver $_mouseOver : $name - CQV: $cqv - Rank: $rank
-group covid
+group varRep
 bigDataUrl /gbdb/hg38/covidHct/covidHct.bb
 release alpha
 
