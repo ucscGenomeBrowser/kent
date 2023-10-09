@@ -19,10 +19,9 @@ transcripts of the SELENON gene in the human GRCh38/hg38 genome assembly.  In th
 transcript, the presence of a cyan diamond also marks the position of a selenocysteine.</p>
 <h2>Getting Started</h2>
 <p>
-Decorators can be added to any linkedFeatures track at present, which includes
-BED 12+, bigBed, PSL, and bigGenePred tracks.  To add decorations to a track, the decorations
-must first be stored in a separate bigBed file that includes extra fields to identify the
-decorated items.  The track settings for the track must then be modified to include a
+Decorators can be added to BED 12+, bigBed, PSL, and bigGenePred tracks. To add decorations to a
+track, the decorations must first be stored in a separate bigBed file that includes extra fields to
+identify the decorated items.  The track settings for the track must then be modified to include a
 pointer to that bigBed file; this can be done either in the track line for a custom track,
 or in the trackDb.txt file for a hub.<p>
 At present, we only support a single decorator per track, but we anticipate supporting
@@ -46,7 +45,7 @@ bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb
 itemRgb on
 decorator.default.bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb
 </code></pre>
-Other settings are available to further configure decorators.  Each may be be applied to the
+Other settings are available to further configure decorators.  Each may be applied to the
 decorator instead of the primary track by prepending "decorator.default." to the setting.  For
 example, to set up a filterValues filter on the "keywords" field of the decorator, allowing the
 user to filter to any combination of three classes "Type1", "Type2", and "Type3", the following
@@ -57,7 +56,7 @@ type bigBed
 bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb
 itemRgb on
 decorator.default.bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb
-decorator.default.filterValues.keyword Type1,Type2,Type3
+decorator.default.filterValues.keywords Type1,Type2,Type3
 </code></pre>
 Please note that this would also require building an extra <code>keyword</code> field into the decorator
 bigBed to hold those values.  A full list of supported decorator settings is available in the
@@ -96,7 +95,7 @@ Valid values for the style field are "block" and "glyph".  Valid glyph entries i
 "Square", "Diamond", "Triangle", "InvTriangle", "Octagon", "Star", and "Pentagram".  If the text isn't
 recognized, Circle will be used by default.
 <p>
-The "decoratedItem" field captures the link between the decoration and what item in the track is being
+The "decoratedItem" field (chr:start-end:item_name format) captures the link between the decoration and what item in the track is being
 decorated.  The contents of this field must be the chromosome, BED start coordinate, BED end coordinate,
 and item name for the decorated item (note - these are 0-based half-open BED coordinates, not 1-based
 fully closed coordinates.  That means they are the same values as should appear in a BED file describing
@@ -114,7 +113,7 @@ base 1200 to base 1800, we could create a corresponding item in a decorator bigB
 <code>chr1 1200 1800 MyDecoration 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:MyItem block 255,0,0,128 Ignored
 </code></pre>
 The first color, <code>255,0,0,255</code> specifies that the decoration outline will be in solid red (255 red,
-0 green, 0 blue, 255 alpha).  The second color, <code>255,0,0,128</code>, specifies that the interior of the
+0 green, 0 blue, 255 alpha).  The second color <code>255,0,0,128</code>, specifies that the interior of the
 decoration will be shaded toward pure red, but that the decorated item will still be partially visible behind it
 (due to the alpha value of 128).  The <code>chr1:1000-2000:MyItem</code> entry describes which item in the main
 track is to be annotated.  In this case, it's an item with the name "MyItem" that spans chr1 from base 1000 to
