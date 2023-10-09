@@ -134,7 +134,9 @@ if [ -e ../ncbi.latest/lineage_report.csv ]; then
     tail -n+2 linRepYesterday | sed -re 's/^([A-Z]+[0-9]+\.[0-9]+).*/\1/' | sort \
         > pangolin.prev.names
     comm -23 gb.names pangolin.prev.names > pangolin.names
-    faSomeRecords <(xzcat genbank.fa.xz) pangolin.names pangolin.fa
+    faSomeRecords <(xzcat genbank.fa.xz) pangolin.names stdout \
+    | sed -re '/^>/  s/^>([A-Z]{2}[0-9]{6}\.[0-9]+) \|[^,]+/>\1/;' \
+        > pangolin.fa
     pangolin --analysis-mode pangolearn pangolin.fa >& pangolin.log
     tail -n+2 lineage_report.csv >> linRepYesterday
     mv linRepYesterday lineage_report.csv

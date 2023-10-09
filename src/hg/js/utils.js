@@ -4112,7 +4112,10 @@ function tooltipNodesToMouseover() {
      * Please note that the Tooltiptext node can have any arbitrary html in it, like
      * line breaks or links*/
     $(".Tooltip").each(function(i, n) {
-        addMouseover(n, null, n.nextSibling);
+        tooltiptext = n.getAttribute("mouseoverText");
+        if (tooltiptext !== null) {
+            addMouseover(n, tooltiptext);
+        }
     });
 }
 

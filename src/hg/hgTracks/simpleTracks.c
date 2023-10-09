@@ -4522,6 +4522,34 @@ int x1 = round((sClp - winStart)*scale) + xOff;
 int x2 = round((eClp - winStart)*scale) + xOff;
 int textX = x1;
 
+if (tg->drawLabelInBox)
+    withLeftLabels = FALSE;
+
+boolean withLabels = (withLeftLabels && withIndividualLabels && ((vis == tvPack) || (vis == tvFull && isTypeBedLike(tg))) && (!sn->noLabel) && !tg->drawName);
+if (withLabels)
+    {
+    char *name = tg->itemName(tg, item);
+    int nameWidth = mgFontStringWidth(font, name);
+    int dotWidth = tl.nWidth/2;
+    boolean snapLeft = FALSE;
+    textX -= nameWidth + dotWidth;
+    snapLeft = (textX < fullInsideX);
+    snapLeft |= (vis == tvFull && isTypeBedLike(tg));
+
+    /* Special tweak for expRatio in pack mode: force all labels
+     * left to prevent only a subset from being placed right: */
+    snapLeft |= (startsWith("expRatio", tg->tdb->type));
+
+#ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    if (theImgBox == NULL && snapLeft)
+#else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    if (snapLeft)        /* Snap label to the left. */
+#endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+        {
+        textX = leftLabelX;
+        assert(hvgSide != NULL);
+        }
+    }
 
 if (!tg->mapsSelf)
     {
@@ -4550,13 +4578,6 @@ static void genericDrawItem(struct track *tg, struct spaceNode *sn,
 /* draw one non-overflow item */
 {
 struct slList *item = sn->val;
-//int s = tg->itemStart(tg, item);
-//int e = tg->itemEnd(tg, item);
-//int sClp = (s < winStart) ? winStart : s;
-//int eClp = (e > winEnd)   ? winEnd   : e;
-//int x1 = round((sClp - winStart)*scale) + xOff;
-//int x2 = round((eClp - winStart)*scale) + xOff;
-//int textX = x1;
 
 if (tg->drawLabelInBox)
     withLeftLabels = FALSE;
@@ -4592,6 +4613,9 @@ handleNonPropDrawItemAt(tg, sn, item, hvg, xOff, y, scale, font, color, vis);
 tg->drawItemLabel(tg, sn, hvg, xOff, y, width, font, color, labelColor, vis, scale, withLeftLabels);
 
 // do mapping and arrows
+// NB: I'd be happy to move the label mapbox draw from the next function into the preceding function,
+// so that it sits with the label drawing and doesn't duplicate those calculations.  That's a problem
+// to tackle another time though.
 
 tg->doItemMapAndArrows(tg, sn, hvg, xOff, y, width, font, color, labelColor, vis, scale, withLeftLabels);
 }

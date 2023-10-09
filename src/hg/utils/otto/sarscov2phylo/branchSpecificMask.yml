@@ -141,7 +141,10 @@ XBB:
     # Homopolymer run 21999-22005 causes big trouble for Ion Torrent & nanopore, leading to false
     # substitutions in 21994, 21995 and 21998 as discussed in pango-designation issues 1882, 1503,
     # 1999, 1918.  21998 in particular crops up a lot, all over XBB, interfering with many sublins.
-    sites: [ 21994, 21995, 21998 ]
+    # Also, XBB.1.9, XBB.1.16 and XBB.2.3 sequences all seem to have del21991-21993 though very few
+    # XBB.1.5 polytomy sequences seem to have it.  Mask anyway, causing trouble.
+    ranges: [ [ 21991, 21995 ] ]
+    sites: [ 21998 ]
     reversions: [ T2790C, T3037C, A4184G, T4321C, T9344C, G9424A, T10198C, C17859T, G19326A,
                   T21618C, C21810T, A22000C, G22109C, C22577G, A22578G, C22599G, A22664C, C22679T,
                   T22686C, G22688A, T22813G, C22895G, C22896T, A22898G, G22942T, A22992G, A22995C,
