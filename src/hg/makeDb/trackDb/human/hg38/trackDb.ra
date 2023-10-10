@@ -900,6 +900,7 @@ include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra alpha
 include hprcArr.ra alpha
 include hprcVCF.ra alpha
+include hprcVCFTest.ra alpha
 
 track ncbiRefSeqHistorical
 parent refSeqComposite off
