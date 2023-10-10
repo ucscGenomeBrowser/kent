@@ -11,23 +11,12 @@ Download to:
 
 some doc in https://github.com/czbiohub/tabula-sapiens
 
+metadata:
+  /hive/data/inside/cells/datasets/tabula-sapiens/all/meta.fixed.tsv
+  /hive/data/inside/cells/datasets/tabula-sapiens/orig/metaMerged/cellxgene.tsv
 
-#############################################################################
-# setup for intronProspector runs (markd)
-#############################################################################
-
-Install htslib-1.16 and intronProspector-1.0.3 in /cluster/software/. Obtain
-from:
-
-   https://github.com/samtools/htslib/releases/download/1.16/htslib-1.16.tar.bz2
-   https://github.com/diekhans/intronProspector/archive/refs/tags/v1.0.3.tar.gz
-
-Need to get genome sequence matching the BAMs.
-
-STAR/homo.gencode.v30.annotation.ERCC92 which is not in bucket
-
-
-something is weird with samrtseq2 directory BAMs
+# note that smartseq2 BAM can't be erad by samtools or picard due to duplicate
+# chromosomes:
     cd /hive/data/inside/cells/datasets/tabula-sapiens/bam-dec2022/Pilot1/alignment-gencode/
 
     % samtools view -H  ./smartseq2/B107813_G5_S31.homo.covid19.Aligned.out.sorted.bam| head
@@ -37,6 +26,69 @@ something is weird with samrtseq2 directory BAMs
     % picard ValidateSamFile I=./smartseq2/B107813_G5_S31.homo.covid19.Aligned.out.sorted.bam
     ERROR	2023-02-08 21:44:44	ValidateSamFile	Cannot add sequence that already exists in SAMSequenceDictionary: NC_040671
 
+however, intronProspector can read them
 
-CZI contacted about problems
+#############################################################################
+# setup for intronProspector runs (markd)
+#############################################################################
+
+Install htslib-1.18 and intronProspector-1.0.3 in /cluster/software/. Obtain
+from:
+
+   https://github.com/samtools/htslib/releases/download/1.18/htslib-1.18.tar.bz2
+   https://github.com/diekhans/intronProspector/archive/refs/tags/v1.0.3.tar.gz
+
+
+##
+# run intronProspector
+## 
+cd /hive/data/genomes/hg38/bed/tabula-sapiens-dec2022
+
+# script runIntronProspector is run on each BAM like
+   intronProspector --genome-fasta=${ref} --skip-missing-targets --min-confidence-score=1.0 \p
+                   --intron-calls=${outtsvtmp} ${inbam}
+
+# build jobs
+(cd /hive/data/inside/cells/datasets/tabula-sapiens/bam-dec2022 && find Pilot*/alignment-gencode/{smartseq2,SS2} -name '*.bam') | awk '{print "./runIntronProspector", $0}' >smartseq2.jobs
+
+para create smartseq2.jobs -batch=b1
+para push -maxPush=1000000 -batch=b1
+
+##
+# metadata check
+##
+find tmp -name "*.tsv" | sed -E -e 's#^.+/##' -e 's#.homo.gencode.+$##' > calls-cells.tab
+
+tmlr filter '$method == "smartseq2"' /hive/data/inside/cells/datasets/tabula-sapiens/all/meta.fixed.tsv > smartseq2.metadata.tsv
+
+have: selectById 1 smartseq2.metadata.tsv 1 calls-cells.tab |twc
+missing: selectById -not 1 smartseq2.metadata.tsv 1 calls-cells.tab |twc
+
+    calls-cells.tab:         84877
+    smartseq2.metadata.tsv:  27052
+    diff                     57825
+
+    have:                    23213
+    missing:                 61664
+
+# list of missing
+selectById -not 1 smartseq2.metadata.tsv  1 calls-cells.tab >missing.tab
+
+# count per Pilot
+for p in $(cd tmp && echo *) ; do find tmp/$p -name "*.tsv" | sed -E -e 's#^.+/##' -e 's#.homo.gencode.+$##' > calls-cells.$p.tab ; done&
+for f in calls-cells.*.tab; do  selectById -not 1 smartseq2.metadata.tsv  1 $f | (echo -n $f ' ' ; twc -l) ; done >&pilot.metadata.cnts
+    calls-cells.Pilot1.tab          15338
+    calls-cells.Pilot2.tab          12302
+    calls-cells.Pilot3.tab          2276
+    calls-cells.Pilot4.tab          4096
+    calls-cells.Pilot5.tab          629
+    calls-cells.Pilot6.tab          1881
+    calls-cells.Pilot7.tab          1436
+    calls-cells.Pilot8.tab          518
+    calls-cells.Pilot9.tab          1058
+    calls-cells.Pilot10.tab         1556
+    calls-cells.Pilot11.tab         428
+    calls-cells.Pilot12.tab         490
+    calls-cells.Pilot13.tab         978
+    calls-cells.Pilot14.tab         18678
 
