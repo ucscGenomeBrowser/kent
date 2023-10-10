@@ -3,50 +3,11 @@ superTrack on
 shortLabel HPRC variants
 longLabel HPRC Variants
 group hprc
-html chainsHprc
-
-    track hprcVariants
-    parent hprcVCF
-    shortLabel VCF from Glenn
-    longLabel original VCF file from Glenn
-    type vcfTabix
-    showHardyWeinberg on
-    configureByPopup off
-    maxWindowToDraw 200000
-    dataVersion August 2023
-    visibility hide
-    bigDataUrl /gbdb/hg38/hprc/hprcCactusIds.vcf.gz
-    html chainsHprc
-
-    track hprcVCFOver3
-    parent hprcVCF
-    shortLabel VCF > 3
-    longLabel VCF filtered for items size > 3
-    type vcfTabix
-    showHardyWeinberg on
-    configureByPopup off
-    maxWindowToDraw 200000
-    dataVersion August 2023
-    visibility hide
-    bigDataUrl /gbdb/hg38/hprc/overSize3.vcf.gz
-    html chainsHprc
-
-    track hprcVCFUnder4
-    parent hprcVCF
-    shortLabel VCF < 4
-    longLabel VCF filtered for items size < 4
-    type vcfTabix
-    showHardyWeinberg on
-    configureByPopup off
-    maxWindowToDraw 200000
-    dataVersion August 2023
-    visibility hide
-    bigDataUrl /gbdb/hg38/hprc/underSize4.vcf.gz
-    html chainsHprc
+html hprcVCF
 
     track hprcDecomposed
     parent hprcVCF
-    shortLabel variants decomposed
+    shortLabel HPRC variants
     longLabel HPRC Variants decomposed from hprc-v1.0-mc.grch38.vcfbub.a100k.wave.vcf.gz
     type vcfTabix
     showHardyWeinberg on
@@ -56,30 +17,30 @@ html chainsHprc
     html chainsHprc
     visibility hide
     bigDataUrl /gbdb/hg38/hprc/decomposed.vcf.gz
+    html hprcVCF
 
-    track hprcPangenie
+    track hprcVCFDecomposedOver3
     parent hprcVCF
-    shortLabel variants Pangenie
-    longLabel HPRC Variants Pangenie from cactus_filtered_ids.vcf.gz
+    shortLabel HPRC VCF > 3
+    longLabel HPRC VCF filtered for items size > 3
     type vcfTabix
     showHardyWeinberg on
     configureByPopup off
     maxWindowToDraw 200000
     dataVersion August 2023
-    html chainsHprc
     visibility hide
-    bigDataUrl /gbdb/hg38/hprc/pangenie.vcf.gz
+    bigDataUrl /gbdb/hg38/hprc/decomposedOver3.vcf.gz
+    html hprcVCF
 
-    track hprcRaw
+    track hprcVCFDecomposedUnder4
     parent hprcVCF
-    shortLabel variants Raw
-    longLabel HPRC Variants Raw hprc-v1.0-mc-grch38.vcf.gz cactus_filtered_ids.vcf.gz
+    shortLabel HPRC VCF > 3
+    longLabel HPRC VCF filtered for items size < 4
     type vcfTabix
     showHardyWeinberg on
     configureByPopup off
     maxWindowToDraw 200000
     dataVersion August 2023
-    html chainsHprc
     visibility hide
-    bigDataUrl /gbdb/hg38/hprc/raw.vcf.gz
-
+    bigDataUrl /gbdb/hg38/hprc/decomposedUnder4.vcf.gz
+    html hprcVCF

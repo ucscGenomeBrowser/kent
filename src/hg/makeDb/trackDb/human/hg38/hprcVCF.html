@@ -1,17 +1,28 @@
 <h2>Description</h2>
+
+<h2>Methods</h2>
 <p>
-This track shows multiple alignments of 90 human genomes and measurements of
-evolutionary conservation using
-the <em>phyloP</em> process from the
-<a HREF="http://compgen.cshl.edu/phast/" target=_BLANK>
-PHAST package</a>.
+The MAF was obtained from the HPRC v1.0 minigraph-cactus HAL file
+using cactus v2.6.4 as follows:
+
+<pre>
+cactus-hal2maf ./js ./hprc-v1.0-mc-grch38.hal \
+  hprc-v1.0-mc-grch38.maf.gz --noAncestors --refGenome GRCh38 \
+    --filterGapCausingDupes --chunkSize 100000 --batchCores 96 \
+      --batchCount 10 --noAncestors --batchParallelTaf 32 \
+         --batchSystem slurm --logFile hprc-v1.0-mc-grch38.maf.gz.log
+
+zcat hprc-v1.0-mc-grch38.maf.gz | mafDuplicateFilter -m - -k \
+   | bgzip &gt; hprc-v1.0-mc-grch38-single-copy.maf.gz
+</pre>
 </p>
 
-<h2>Methods:</h2>
+<h2>Credits</h2>
+<p>
+Thank you to Glenn Hickey for providing the HAL file from the HPRC project.
+</p>
 
-<h2>Credits:</h2>
-
-<h2>References:</h2>
+<h2>References</h2>
 
 <p>
 Wen-Wei Liao, Mobin Asri, Jana Ebler, ...<em>et al</em>, Heng Lin,
@@ -35,9 +46,9 @@ PMID: <a href='https://pubmed.ncbi.nlm.nih.gov/37165083/' target='_blank'>371650
 DOI: <a href=;https://doi.org/10.1038/s41587-023-01793-w; target='_blank'>10.1038/s41587-023-01793-w</a>
 </p>
 
-
 <p>
-Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q, Xie D, Feng S, Stiller J
+Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q,
+Xie D, Feng S, Stiller J
 <em>et al</em>.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">
 Progressive Cactus is a multiple-genome aligner for the thousand-genome era</a>.
