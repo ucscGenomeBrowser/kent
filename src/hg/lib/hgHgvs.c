@@ -740,7 +740,7 @@ else return NULL;
 struct sqlConnection *conn = hAllocConn(db);
 char *npAcc = sqlQuickString(conn, query);
 // if user passed in old versioned transcript, check in *Old tables:
-if (npAcc == NULL && hDbHasNcbiRefSeq(db) && strchr(nmAcc, '.'))
+if (npAcc == NULL && hDbHasNcbiRefSeqOld(db) && strchr(nmAcc, '.'))
     {
     sqlSafef(query, sizeof(query), "select protAcc from ncbiRefSeqLinkOld where id = '%s'", nmAcc);
     npAcc = sqlQuickString(conn, query);
@@ -869,7 +869,7 @@ else
                  "where name = '%s'", acc);
         struct sqlConnection *conn = hAllocConn(db);
         seq = sqlQuickString(conn, query);
-        if (seq == NULL)
+        if (seq == NULL && hDbHasNcbiRefSeqOld(db))
             {
             sqlSafef(query, sizeof(query), "select seq from ncbiRefSeqPepTableOld "
                      "where name = '%s'", acc);
@@ -1230,7 +1230,7 @@ else
     if (hDbHasNcbiRefSeq(db))
         {
         cdnaSeq = hDnaSeqGet(db, acc, "seqNcbiRefSeq", "extNcbiRefSeq");
-        if (cdnaSeq == NULL)
+        if (cdnaSeq == NULL && hDbHasNcbiRefSeqOld(db))
             cdnaSeq = hDnaSeqGet(db, acc, "seqNcbiRefSeqOld", "extNcbiRefSeqOld");
         }
     else
@@ -1276,7 +1276,7 @@ else
     struct sqlConnection *conn = hAllocConn(db);
     char cdsBuf[2048];
     cdsStr = sqlQuickQuery(conn, query, cdsBuf, sizeof(cdsBuf));
-    if (isEmpty(cdsStr) && strchr(acc, '.'))
+    if (isEmpty(cdsStr) && strchr(acc, '.') && hDbHasNcbiRefSeqOld(db))
         {
         sqlSafef(query, sizeof(query),
                  "select cds from ncbiRefSeqCdsOld where id = '%s'", acc);
@@ -1917,7 +1917,7 @@ else
     // try the old alignments if we can't find it in the current alignments
     if (!txAli && sameString(pslTable, "ncbiRefSeqPsl"))
         {
-        if (hTableExists(db, "ncbiRefSeqPslOld"))
+        if (hDbHasNcbiRefSeqOld(db))
             {
             txAli = pslForQName(db, "ncbiRefSeqPslOld", acc);
             if (txAli)
@@ -2006,7 +2006,7 @@ else if (startsWith("NP_", acc) || startsWith("XP_", acc))
                  acc);
         txAcc = sqlQuickString(conn, query);
         // user may have passed previous versioned transcript, check the *Old tables:
-        if (!txAcc)
+        if (!txAcc && hDbHasNcbiRefSeqOld(db))
             {
             sqlSafef(query, sizeof(query), "select mrnaAcc from ncbiRefSeqLinkOld where protAcc = '%s'",
                      acc);
