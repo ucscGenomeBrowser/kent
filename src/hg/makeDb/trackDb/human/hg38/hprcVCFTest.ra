@@ -2,7 +2,7 @@ track hprcVCFTest
 superTrack on
 shortLabel HPRC VCF testing
 longLabel HPRC Variants testing track formats
-group hprc
+group x
 html chainsHprc
 
     track hprcVariants
