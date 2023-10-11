@@ -900,19 +900,4 @@ include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra alpha
 include hprcArr.ra alpha
 include hprcVCF.ra alpha
-
-track ncbiRefSeqHistorical
-parent refSeqComposite off
-priority 10000
-type bigGenePred
-shortLabel RefSeq Historical
-longLabel NCBI RefSeq Historical Transcript Versions
-bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqHistorical.bb
-searchIndex name
-baseColorUseCds given
-baseColorDefault genomicCodons
-release alpha
-
-searchTable ncbiRefSeqHistorical
-searchPriority 20
-searchType bigBed
+include hprcVCFTest.ra alpha

@@ -739,12 +739,6 @@ else if (hTableExists(db, "refGene"))
 else return NULL;
 struct sqlConnection *conn = hAllocConn(db);
 char *npAcc = sqlQuickString(conn, query);
-// if user passed in old versioned transcript, check in *Old tables:
-if (npAcc == NULL && hDbHasNcbiRefSeq(db) && strchr(nmAcc, '.'))
-    {
-    sqlSafef(query, sizeof(query), "select protAcc from ncbiRefSeqLinkOld where id = '%s'", nmAcc);
-    npAcc = sqlQuickString(conn, query);
-    }
 hFreeConn(&conn);
 return npAcc;
 }
@@ -869,12 +863,6 @@ else
                  "where name = '%s'", acc);
         struct sqlConnection *conn = hAllocConn(db);
         seq = sqlQuickString(conn, query);
-        if (seq == NULL)
-            {
-            sqlSafef(query, sizeof(query), "select seq from ncbiRefSeqPepTableOld "
-                     "where name = '%s'", acc);
-            seq = sqlQuickString(conn, query);
-            }
         hFreeConn(&conn);
         }
     else
@@ -1228,11 +1216,7 @@ else
     {
     struct dnaSeq *cdnaSeq = NULL;
     if (hDbHasNcbiRefSeq(db))
-        {
         cdnaSeq = hDnaSeqGet(db, acc, "seqNcbiRefSeq", "extNcbiRefSeq");
-        if (cdnaSeq == NULL)
-            cdnaSeq = hDnaSeqGet(db, acc, "seqNcbiRefSeqOld", "extNcbiRefSeqOld");
-        }
     else
         cdnaSeq = hGenBankGetMrna(db, acc, NULL);
     if (cdnaSeq)
@@ -1276,12 +1260,6 @@ else
     struct sqlConnection *conn = hAllocConn(db);
     char cdsBuf[2048];
     cdsStr = sqlQuickQuery(conn, query, cdsBuf, sizeof(cdsBuf));
-    if (isEmpty(cdsStr) && strchr(acc, '.'))
-        {
-        sqlSafef(query, sizeof(query),
-                 "select cds from ncbiRefSeqCdsOld where id = '%s'", acc);
-        cdsStr = sqlQuickQuery(conn, query, cdsBuf, sizeof(cdsBuf));
-        }
     hFreeConn(&conn);
     }
 if (isNotEmpty(cdsStr))
@@ -1914,28 +1892,18 @@ else
             getCds(db, acc, cds);
         txAli = pslForQName(db, pslTable, acc);
         }
-    // try the old alignments if we can't find it in the current alignments
-    if (!txAli && sameString(pslTable, "ncbiRefSeqPsl"))
+    // As of 9/26/16, ncbiRefSeqPsl is missing some items (#13673#note-443) -- so fall back
+    // on UCSC alignments.
+    if (!txAli && sameString(pslTable, "ncbiRefSeqPsl") && hTableExists(db, "refSeqAli"))
         {
-        if (hTableExists(db, "ncbiRefSeqPslOld"))
+        char *accNoVersion = cloneFirstWordByDelimiter(acc, '.');
+        if (hgvs->type == hgvstCoding)
+            getCds(db, accNoVersion, cds);
+        txAli = pslForQName(db, "refSeqAli", accNoVersion);
+        if (txAli)
             {
-            txAli = pslForQName(db, "ncbiRefSeqPslOld", acc);
-            if (txAli)
-                pslTable = "ncbiRefSeqPslOld";
-            }
-        // As of 9/26/16, ncbiRefSeqPsl is missing some items (#13673#note-443) -- so fall back
-        // on UCSC alignments.
-        if (!txAli && hTableExists(db, "refSeqAli"))
-            {
-            char *accNoVersion = cloneFirstWordByDelimiter(acc, '.');
-            if (hgvs->type == hgvstCoding)
-                getCds(db, accNoVersion, cds);
-            txAli = pslForQName(db, "refSeqAli", accNoVersion);
-            if (txAli)
-                {
-                pslTable = "refSeqAli";
-                *pAcc = accNoVersion;
-                }
+            pslTable = "refSeqAli";
+            *pAcc = accNoVersion;
             }
         }
     if (txAli && retPslTable != NULL)
@@ -2001,26 +1969,14 @@ else if (startsWith("NP_", acc) || startsWith("XP_", acc))
     struct sqlConnection *conn = hAllocConn(db);
     char query[2048];
     if (hDbHasNcbiRefSeq(db))
-        {
         sqlSafef(query, sizeof(query), "select mrnaAcc from ncbiRefSeqLink where protAcc = '%s'",
                  acc);
-        txAcc = sqlQuickString(conn, query);
-        // user may have passed previous versioned transcript, check the *Old tables:
-        if (!txAcc)
-            {
-            sqlSafef(query, sizeof(query), "select mrnaAcc from ncbiRefSeqLinkOld where protAcc = '%s'",
-                     acc);
-            txAcc = sqlQuickString(conn, query);
-            }
-        }
     else if (hTableExists(db, "refGene"))
-        {
         sqlSafef(query, sizeof(query), "select mrnaAcc from %s l, refGene r "
                  "where l.protAcc = '%s' and r.name = l.mrnaAcc", refLinkTable, acc);
-        txAcc = sqlQuickString(conn, query);
-        }
     else
         return NULL;
+    txAcc = sqlQuickString(conn, query);
     hFreeConn(&conn);
     }
 if (txAcc)
