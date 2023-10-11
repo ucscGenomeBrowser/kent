@@ -894,7 +894,7 @@ include hprcCoverage97.ra alpha
 
 # other HPRC experiments
 include chainsHprc.ra alpha
-include chainsReHprc.ra alpha
+include hprcChains.ra alpha
 include netsReHprc.ra alpha
 include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra alpha
