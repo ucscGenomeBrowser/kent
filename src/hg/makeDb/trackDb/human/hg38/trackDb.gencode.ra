@@ -32,4 +32,5 @@ include wgEncodeGencodeV41.ra
 include wgEncodeGencodeV42.ra
 include wgEncodeGencodeV43.ra
 include wgEncodeGencodeV44.ra
+include wgEncodeGencodeV45.ra
 
