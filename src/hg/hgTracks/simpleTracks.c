@@ -4470,7 +4470,7 @@ if (withLabels)
         int prevX, prevY, prevWidth, prevHeight;
         hvGfxGetClip(hvgSide, &prevX, &prevY, &prevWidth, &prevHeight);
         hvGfxUnclip(hvgSide);
-        hvGfxSetClip(hvgSide, leftLabelX, y, fullInsideX - leftLabelX, tg->lineHeight);
+        hvGfxSetClip(hvgSide, leftLabelX, y, fullInsideX - leftLabelX, tg->height);
         if(drawNameInverted)
             {
             int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
