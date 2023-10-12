@@ -106,3 +106,210 @@ Longest finished job:               8s       0.13m     0.00h    0.00d
 Submission to last job:             8s       0.13m     0.00h    0.00d
 
 ##############################################################################
+# there was some question that arose if the above was correct.
+# The procedure was repeated again (DONE 2023-10-12 - Hiram)
+
+mkdir /hive/data/genomes/hg38/bed/hprc/firstPassReChain
+cd /hive/data/genomes/hg38/bed/hprc/firstPassReChain
+
+# using this runOne script:
+
+####################################################################
+#!/bin/bash
+
+set -beEu -o pipefail
+
+export hg38TwoBit="/hive/data/genomes/hg38/hg38.2bit"
+export chainFile="${1}"
+export inChain="../bigChainToChain/${chainFile}"
+export asmName=`echo $chainFile | sed -e 's/hg38.chainHprc//; s/.chain//;'`
+
+# may already be done
+if [ -s "${chainFile}" ]; then
+  exit 0
+fi
+
+export buildDir=""
+export twoBit=""
+export asmId=""
+
+case "${asmName}" in
+    GCA_*) gcX="${asmName:0:3}"
+       d0="${asmName:4:3}"
+       d1="${asmName:7:3}"
+       d2="${asmName:10:3}"
+       tB="`ls -d /hive/data/genomes/asmHubs/allBuild/${gcX}/${d0}/${d1}/${d2}/${asmName}_*`"
+       buildDir="`realpath ${tB}`"
+       asmId="`basename $buildDir`"
+       twoBit="${buildDir}/${asmId}.2bit"
+       ;;
+     T2T-*)
+       asmId="hs1"
+       buildDir="/hive/data/genomes/$asmId"
+       twoBit="${buildDir}/${asmId}.2bit"
+       ;;
+     *)  printf "ERROR: unrecognized $asmName\n" 1>&2
+       exit 255
+       ;;
+esac
+
+printf "%s\n" "${chainFile}" 1>&2
+
+time (chainToAxt "${inChain}" "${hg38TwoBit}" \
+   "${twoBit}" stdout | axtChain -minScore=0 -linearGap=loose \
+      stdin "${hg38TwoBit}" "${twoBit}" "${chainFile}") > err/${chainFile} 2>&1
+
+####################################################################
+
+# reusing the jobList from previous time:
+
+head jobList
+./runOne hg38.chainHprcGCA_018466835.1.chain
+./runOne hg38.chainHprcGCA_018466845.1.chain
+./runOne hg38.chainHprcGCA_018466855.1.chain
+./runOne hg38.chainHprcGCA_018466985.1.chain
+... etc
+./runOne hg38.chainHprcGCA_018506975.1.chain
+./runOne hg38.chainHprcGCA_018852585.1.chain
+./runOne hg38.chainHprcGCA_018852595.1.chain
+./runOne hg38.chainHprcT2T-CHM13v2.0.chain
+
+# running with perlPara.pl:
+
+time (perlPara.pl 7 jobList) > 7.log 2>&1
+# real    26m53.073s
+
+# and loading all those new chain files:
+############################
+
+#!/bin/bash
+
+set -beEu -o pipefail
+
+ls hg38.chainHprc*.chain |  while read chainFile
+do
+export asmName=`echo $chainFile | sed -e 's/hg38.chainHprc//; s/.chain//;'`
+
+export buildDir=""
+export twoBit=""
+export asmId=""
+
+case "${asmName}" in
+    GCA_*) asmId=`echo $asmName | sed -e 's/\./v/;'`
+       ;;
+     T2T-*)
+       asmId="Hs1"
+       ;;
+     *)  printf "ERROR: unrecognized $asmName\n" 1>&2
+       exit 255
+       ;;
+esac
+
+printf "hgLoadChain hg38 chainHprc${asmId} ${chainFile}\n" 1>&2
+hgLoadChain hg38 chainHprc${asmId} ${chainFile}
+
+done
+
+############ and then netting thos chains
+
+mkdir /hive/data/genomes/hg38/bed/hprc/firstPassReNet
+cd /hive/data/genomes/hg38/bed/hprc/firstPassReNet
+
+# using this runOne script:
+###########################
+#!/bin/bash
+
+set -beEu -o pipefail
+
+export chain="${1}"
+export seq1Len="/hive/data/genomes/hg38/chrom.sizes"
+B=`echo $chain | sed -e 's/hg38.chainHprc//; s/.chain//;'`
+export seq2Len="xx"
+case "${B}" in
+   T2T-CHM13v2.0)
+     seq2Len="/hive/data/genomes/hs1/chrom.sizes"
+     ;;
+   GCA_*)
+     gcX="${B:0:3}"
+     d0="${B:4:3}"
+     d1="${B:7:3}"
+     d2="${B:10:3}"
+     D="`ls -d /hive/data/genomes/asmHubs/allBuild/${gcX}/${d0}/${d1}/${d2}/${B}_*`"
+     if [ -d "${D}" ]; then
+       asmId=`basename $D`
+       seq2Len="${D}/${asmId}.chrom.sizes"
+     else
+       printf "ERROR: can not find: $chain\n" 1>&2
+       exit 255
+     fi
+     ;;
+   *)
+     printf "ERROR: unrecognized: $chain\n" 1>&2
+     exit 255
+     ;;
+esac
+
+chainPreNet ../firstPassReChain/${chain} ${seq1Len} ${seq2Len} stdout \
+  | chainNet stdin -minSpace=1 ${seq1Len} ${seq2Len} stdout /dev/null \
+  | netSyntenic stdin hg38.chainHprc${B}.net
+
+###########################
+
+# using the jobList from before:
+head jobList
+
+runOne hg38.chainHprcGCA_018466835.1.chain {check out exists+ hg38.chainHprcGCA_018466835.1.net}
+runOne hg38.chainHprcGCA_018466845.1.chain {check out exists+ hg38.chainHprcGCA_018466845.1.net}
+runOne hg38.chainHprcGCA_018466855.1.chain {check out exists+ hg38.chainHprcGCA_018466855.1.net}
+...
+runOne hg38.chainHprcGCA_018852585.1.chain {check out exists+ hg38.chainHprcGCA_018852585.1.net}
+runOne hg38.chainHprcGCA_018852595.1.chain {check out exists+ hg38.chainHprcGCA_018852595.1.net}
+runOne hg38.chainHprcT2T-CHM13v2.0.chain {check out exists+ hg38.chainHprcT2T-CHM13v2.0.net}
+
+###########################
+
+## this can be run in parasol, it takes only a few seconds:
+para -ram=4g create jobList
+para push
+para time
+
+Completed: 88 of 88 jobs
+CPU time in finished jobs:        351s       5.85m     0.10h    0.00d  0.000 y
+IO & Wait Time:                   118s       1.96m     0.03h    0.00d  0.000 y
+Average job time:                   5s       0.09m     0.00h    0.00d
+Longest finished job:               8s       0.13m     0.00h    0.00d
+Submission to last job:            26s       0.43m     0.01h    0.00d
+
+###########################
+
+Loading these nets:
+
+#!/bin/bash
+
+set -beEu -o pipefail
+
+ls hg38.chainHprc*.net | while read netFile
+do
+export asmName=`echo $netFile | sed -e 's/hg38.chainHprc//; s/.net//;'`
+
+export buildDir=""
+export twoBit=""
+export asmId=""
+
+case "${asmName}" in
+    GCA_*) asmId=`echo $asmName | sed -e 's/\./v/;'`
+       ;;
+     T2T-*)
+       asmId="Hs1"
+       ;;
+     *)  printf "ERROR: unrecognized $asmName\n" 1>&2
+       exit 255
+       ;;
+esac
+
+printf "hgLoadNet -warn hg38 netHprc${asmId} ${netFile}\n" 1>&2
+hgLoadNet -warn hg38 netHprc${asmId} ${netFile}
+
+done
+
+##############################################################################
