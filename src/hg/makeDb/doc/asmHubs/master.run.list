@@ -1003,6 +1003,7 @@
 ./runBuild GCA_029215755.1_aSpeHam1.0.hap2 vertebrate Spea_hammondii
 ./runBuild GCA_029215775.1_rAnnSte1.0.hap1 vertebrate Anniella_stebbinsi
 ./runBuild GCA_029215795.1_rAnnSte1.0.hap2 vertebrate Anniella_stebbinsi
+./runBuild GCA_030013775.1_ASM3001377v1 mammals Trichechus_manatus_latirostris
 ./runBuild GCA_900006655.3_Susie3 primates Gorilla_gorilla_gorilla
 ./runBuild GCA_900011295.1_ATCC19606_assembly bacteria Acinetobacter_baumannii
 ./runBuild GCA_900036025.1_v1.0 invertebrate Lymnaea_stagnalis
