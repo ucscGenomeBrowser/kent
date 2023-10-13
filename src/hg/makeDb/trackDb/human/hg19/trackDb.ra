@@ -27,7 +27,7 @@ searchType bigBed
 searchDescription COSMIC Regions
 
 # knownGene archive
-#include knownGeneArchive.ra
+include knownGeneArchive.ra
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -2036,7 +2036,7 @@ baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
 bigGeneDataUrl /gbdb/hg19/knownGene.bb
-#release beta,public
+release beta,public
 
 #
 # This is a temporary track constructed for the purpose of helping Brooke QA
@@ -2082,7 +2082,7 @@ searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 searchPriority 3.53
 
-#include knownGene.alpha.ra alpha
+include knownGene.alpha.ra alpha
 include lincRNAs.ra
 
 track sibTxGraph override
