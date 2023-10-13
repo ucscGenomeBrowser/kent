@@ -773,6 +773,7 @@
 ./runBuild GCA_020826845.1_mDicBic1.mat.cur mammals Diceros_bicornis_minor
 ./runBuild GCA_020854095.1_UniMelb_DasViv_v1.0 mammals Dasyurus_viverrinus
 ./runBuild GCA_021018645.1_ASM2101864v1 mammals Antilocapra_americana
+./runBuild GCA_021461655.1_ASM2146165v1 invertebrate Schistosoma_japonicum
 ./runBuild GCA_021498455.1_ASM2149845v1 primates Colobus_guereza
 ./runBuild GCA_021498465.1_ASM2149846v1 primates Hylobates_pileatus
 ./runBuild GCA_021498475.1_ASM2149847v1 primates Saguinus_midas
