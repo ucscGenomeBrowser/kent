@@ -1,22 +1,10 @@
 <h2>Description</h2>
 
 <h2>Methods</h2>
+something something about bigChains fetched.
+
+See /cluster/data/hg38/bed/hprc//bigChains/fetch.sh
 <p>
-The MAF was obtained from the HPRC v1.0 minigraph-cactus HAL file
-using cactus v2.6.4 as follows:
-
-<pre>
-cactus-hal2maf ./js ./hprc-v1.0-mc-grch38.hal \
-  hprc-v1.0-mc-grch38.maf.gz --noAncestors --refGenome GRCh38 \
-    --filterGapCausingDupes --chunkSize 100000 --batchCores 96 \
-      --batchCount 10 --noAncestors --batchParallelTaf 32 \
-         --batchSystem slurm --logFile hprc-v1.0-mc-grch38.maf.gz.log
-
-zcat hprc-v1.0-mc-grch38.maf.gz | mafDuplicateFilter -m - -k \
-   | bgzip &gt; hprc-v1.0-mc-grch38-single-copy.maf.gz
-</pre>
-</p>
-
 <h2>Credits</h2>
 <p>
 Thank you to Glenn Hickey for providing the HAL file from the HPRC project.

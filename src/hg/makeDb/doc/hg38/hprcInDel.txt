@@ -1,0 +1,7 @@
+cd /cluster/data/hg38/bed/hprc/inDels
+
+for i in ../chain/*.chain; do f=`basename $i .chain`;echo netChainSubset ../net/$f.net $i $f.topLevel.chain -type=top; done > jobs
+para make jobs
+
+
+
