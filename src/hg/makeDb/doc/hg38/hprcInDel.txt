@@ -1,7 +1,36 @@
+VERSION=V1
+inserts=hprcInserts$VERSION
+deletions=hprcDeletions$VERSION
+double=hprcDouble$VERSION
+
 cd /cluster/data/hg38/bed/hprc/inDels
 
-for i in ../chain/*.chain; do f=`basename $i .chain`;echo netChainSubset ../net/$f.net $i $f.topLevel.chain -type=top; done > jobs
-para make jobs
+rm -rf topLevel
+mkdir topLevel
+for i in ../chain/*.chain; do f=`basename $i .chain`;echo netChainSubset ../net/$f.net $i topLevel/$f.chain -type=top; done > subset.jobs
+para make subset.jobs
+
+rm -rf indels
+mkdir indels
+for chain in topLevel/*.chain; do 
+name=`basename $chain | sed 's?.*chainHprc??' | sed 's/\.chain//'`
+echo chainInDel $chain $name indels/$name.txt
+done > indel.jobs
+para make indel.jobs
+
+sort -k1 -k2,2n indels/* | awk '{if (($3 > $2) && ($5 == 0)) print}' | bedCollect stdin stdout | awk '{if ($5 > 1) print} ' > $inserts.bed
+
+bedToBigBed  $inserts.bed /cluster/data/hg38/chrom.sizes $inserts.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+1
+
+#cat indels/* | sort -k1,1 | bedItemOverlapCount hg38 stdin > $inversion.bedGraph
+#bedGraphToBigWig $inversion.bedGraph /cluster/data/hg38/chrom.sizes $inversion.bw
+#mkdir -p /gbdb/hg38/hprcArr$VERSION
+#rm -f  /gbdb/hg38/hprcArr$VERSION/$inversion.*
+#ln -s `pwd`/$inversion.bw /gbdb/hg38/hprcArr$VERSION
+ln -s `pwd`/$inserts.bb /gbdb/hg38/hprcArr$VERSION
+
+sort -k1 -k2,2n indels/* | awk '{if (($3 == $2) && ($5 != 0)) print}' | bedCollect stdin stdout | awk '{if ($5 > 1) print} ' > $deletions.bed
 
 
-
+bedToBigBed  $deletions.bed /cluster/data/hg38/chrom.sizes $deletions.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+1
+ln -s `pwd`/$deletions.bb /gbdb/hg38/hprcArr$VERSION
