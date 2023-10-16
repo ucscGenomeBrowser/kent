@@ -1,0 +1,820 @@
+track hprcChains
+compositeTrack on
+shortLabel HPRC Chains
+longLabel Human Genomes, Chain Alignments, as mapped by the HPRC project
+subGroup1 sample Sample s001=HG02622.mat s002=HG02622.pat s003=HG02717.mat s004=HG02630.pat s005=HG02630.mat s006=HG02717.pat s007=HG02572.pat s008=HG02572.mat s009=HG02886.mat s010=HG02886.pat s011=HG03540.mat s012=HG03540.pat s013=HG02818.pat s014=HG02818.mat s015=HG02723.mat s016=HG02723.pat s017=HG02257.pat s018=HG02257.mat s019=HG02559.pat s020=HG02559.mat s021=HG02486.pat s022=HG02486.mat s023=HG01891.mat s024=HG01891.pat s025=HG02109.mat s026=HG02055.pat s027=HG02109.pat s028=HG02055.mat s029=HG02145.mat s030=HG02145.pat s031=HG03579.mat s032=HG03579.pat s033=HG03453.mat s034=HG03453.pat s035=HG03486.pat s036=HG03486.mat s037=HG03098.pat s038=HG03098.mat s039=NA18906.mat s040=NA18906.pat s041=NA20129.pat s042=NA20129.mat s043=HG03516.pat s044=HG03516.mat s045=HG01175.pat s046=HG01106.pat s047=HG01175.mat s048=HG00741.mat s049=HG00741.pat s050=HG01106.mat s051=HG01071.mat s052=HG00735.pat s053=HG01071.pat s054=HG00735.mat s055=HG01243.pat s056=HG01109.mat s057=HG01243.mat s058=HG01109.pat s059=HG00733.pat s060=HG00733.mat s061=HG02148.pat s062=HG02148.mat s063=HG01952.mat s064=HG01952.pat s065=HG01928.mat s066=HG01928.pat s067=HG01978.pat s068=HG01978.mat s069=HG01258.mat s070=HG01123.mat s071=HG01258.pat s072=HG01361.mat s073=HG01123.pat s074=HG01361.pat s075=HG01358.mat s076=HG01358.pat s077=HG00438.mat s078=HG00673.mat s079=HG00621.pat s080=HG00673.pat s081=HG00438.pat s082=HG00621.mat s083=HG02080.pat s084=HG02080.mat s085=NA21309.mat s086=NA21309.pat s087=T2T-CHM13v2.0 s088=HG03492.pat s089=HG03492.mat
+subGroup2 subpop Subpopulation gwd=Gambian acb=Afr_Carib_Barbados msl=Mende_Sierra_Leone yri=Yoruba_Nigeria asw=African_SW_USA esn=Esan_Nigeria pur=Puerto_Rico pel=Peru_Lima clm=Columbia_Medellin chs=Han_SoChina khv=Vitnam_Kinh pjl=Punjabo_Pakist hapmap=HAPMAP t2t=T2T
+subGroup3 population Population afr=African amr=American eas=East_Asian eur=European sas=South_Asian other=other
+subGroup4 hap Haplotype mat=maternal pat=paternal pri=primary
+dragAndDrop subTracks
+visibility hide
+group hprc
+noInherit on
+color 0,0,0
+altColor 255,255,0
+type bed 3
+dimensions dimensionX=subpop dimensionY=sample
+sortOrder subpop=+ population=+ hap=+ sample=+
+configurable on
+html hprcChains
+
+    track chainHprcGCA_018469875v1
+    parent hprcChains
+    subGroups sample=s001 population=afr subpop=gwd hap=mat
+    shortLabel HG02622.mat
+    longLabel HG02622.mat HG02622.pri.mat.f1_v2 (May 2021 GCA_018469875.1_HG02622.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469875.1
+    otherDb GCA_018469875.1
+    priority 1
+
+    track chainHprcGCA_018469925v1
+    parent hprcChains
+    subGroups sample=s002 population=afr subpop=gwd hap=pat
+    shortLabel HG02622.pat
+    longLabel HG02622.pat HG02622.alt.pat.f1_v2 (May 2021 GCA_018469925.1_HG02622.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469925.1
+    otherDb GCA_018469925.1
+    priority 2
+
+    track chainHprcGCA_018469935v1
+    parent hprcChains
+    subGroups sample=s003 population=afr subpop=gwd hap=mat
+    shortLabel HG02717.mat
+    longLabel HG02717.mat HG02717.pri.mat.f1_v2 (May 2021 GCA_018469935.1_HG02717.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469935.1
+    otherDb GCA_018469935.1
+    priority 3
+
+    track chainHprcGCA_018469945v1
+    parent hprcChains
+    subGroups sample=s004 population=afr subpop=gwd hap=pat
+    shortLabel HG02630.pat
+    longLabel HG02630.pat HG02630.alt.pat.f1_v2 (May 2021 GCA_018469945.1_HG02630.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469945.1
+    otherDb GCA_018469945.1
+    priority 4
+
+    track chainHprcGCA_018469955v1
+    parent hprcChains
+    subGroups sample=s005 population=afr subpop=gwd hap=mat
+    shortLabel HG02630.mat
+    longLabel HG02630.mat HG02630.pri.mat.f1_v2 (May 2021 GCA_018469955.1_HG02630.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469955.1
+    otherDb GCA_018469955.1
+    priority 5
+
+    track chainHprcGCA_018470425v1
+    parent hprcChains
+    subGroups sample=s006 population=afr subpop=gwd hap=pat
+    shortLabel HG02717.pat
+    longLabel HG02717.pat HG02717.alt.pat.f1_v2 (May 2021 GCA_018470425.1_HG02717.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018470425.1
+    otherDb GCA_018470425.1
+    priority 6
+
+    track chainHprcGCA_018470435v1
+    parent hprcChains
+    subGroups sample=s007 population=afr subpop=gwd hap=pat
+    shortLabel HG02572.pat
+    longLabel HG02572.pat HG02572.alt.pat.f1_v2 (May 2021 GCA_018470435.1_HG02572.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018470435.1
+    otherDb GCA_018470435.1
+    priority 7
+
+    track chainHprcGCA_018470445v1
+    parent hprcChains
+    subGroups sample=s008 population=afr subpop=gwd hap=mat
+    shortLabel HG02572.mat
+    longLabel HG02572.mat HG02572.pri.mat.f1_v2 (May 2021 GCA_018470445.1_HG02572.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018470445.1
+    otherDb GCA_018470445.1
+    priority 8
+
+    track chainHprcGCA_018470455v1
+    parent hprcChains
+    subGroups sample=s009 population=afr subpop=gwd hap=mat
+    shortLabel HG02886.mat
+    longLabel HG02886.mat HG02886.pri.mat.f1_v2 (May 2021 GCA_018470455.1_HG02886.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018470455.1
+    otherDb GCA_018470455.1
+    priority 9
+
+    track chainHprcGCA_018470465v1
+    parent hprcChains
+    subGroups sample=s010 population=afr subpop=gwd hap=pat
+    shortLabel HG02886.pat
+    longLabel HG02886.pat HG02886.alt.pat.f1_v2 (May 2021 GCA_018470465.1_HG02886.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018470465.1
+    otherDb GCA_018470465.1
+    priority 10
+
+    track chainHprcGCA_018473295v1
+    parent hprcChains
+    subGroups sample=s011 population=afr subpop=gwd hap=mat
+    shortLabel HG03540.mat
+    longLabel HG03540.mat HG03540.pri.mat.f1_v2 (May 2021 GCA_018473295.1_HG03540.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018473295.1
+    otherDb GCA_018473295.1
+    priority 11
+
+    track chainHprcGCA_018473315v1
+    parent hprcChains
+    subGroups sample=s012 population=afr subpop=gwd hap=pat
+    shortLabel HG03540.pat
+    longLabel HG03540.pat HG03540.alt.pat.f1_v2 (May 2021 GCA_018473315.1_HG03540.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018473315.1
+    otherDb GCA_018473315.1
+    priority 12
+
+    track chainHprcGCA_018503575v1
+    parent hprcChains
+    subGroups sample=s013 population=afr subpop=gwd hap=pat
+    shortLabel HG02818.pat
+    longLabel HG02818.pat HG02818.alt.pat.f1_v2 (May 2021 GCA_018503575.1_HG02818.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018503575.1
+    otherDb GCA_018503575.1
+    priority 13
+
+    track chainHprcGCA_018503585v1
+    parent hprcChains
+    subGroups sample=s014 population=afr subpop=gwd hap=mat
+    shortLabel HG02818.mat
+    longLabel HG02818.mat HG02818.pri.mat.f1_v2 (May 2021 GCA_018503585.1_HG02818.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018503585.1
+    otherDb GCA_018503585.1
+    priority 14
+
+    track chainHprcGCA_018504065v1
+    parent hprcChains
+    subGroups sample=s015 population=afr subpop=gwd hap=mat
+    shortLabel HG02723.mat
+    longLabel HG02723.mat HG02723.pri.mat.f1_v2 (May 2021 GCA_018504065.1_HG02723.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504065.1
+    otherDb GCA_018504065.1
+    priority 15
+
+    track chainHprcGCA_018504075v1
+    parent hprcChains
+    subGroups sample=s016 population=afr subpop=gwd hap=pat
+    shortLabel HG02723.pat
+    longLabel HG02723.pat HG02723.alt.pat.f1_v2 (May 2021 GCA_018504075.1_HG02723.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504075.1
+    otherDb GCA_018504075.1
+    priority 16
+
+    track chainHprcGCA_018466835v1
+    parent hprcChains
+    subGroups sample=s017 population=afr subpop=acb hap=pat
+    shortLabel HG02257.pat
+    longLabel HG02257.pat HG02257.alt.pat.f1_v2 (May 2021 GCA_018466835.1_HG02257.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018466835.1
+    otherDb GCA_018466835.1
+    priority 17
+
+    track chainHprcGCA_018466845v1
+    parent hprcChains
+    subGroups sample=s018 population=afr subpop=acb hap=mat
+    shortLabel HG02257.mat
+    longLabel HG02257.mat HG02257.pri.mat.f1_v2 (May 2021 GCA_018466845.1_HG02257.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018466845.1
+    otherDb GCA_018466845.1
+    priority 18
+
+    track chainHprcGCA_018466855v1
+    parent hprcChains
+    subGroups sample=s019 population=afr subpop=acb hap=pat
+    shortLabel HG02559.pat
+    longLabel HG02559.pat HG02559.alt.pat.f1_v2 (May 2021 GCA_018466855.1_HG02559.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018466855.1
+    otherDb GCA_018466855.1
+    priority 19
+
+    track chainHprcGCA_018466985v1
+    parent hprcChains
+    subGroups sample=s020 population=afr subpop=acb hap=mat
+    shortLabel HG02559.mat
+    longLabel HG02559.mat HG02559.pri.mat.f1_v2 (May 2021 GCA_018466985.1_HG02559.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018466985.1
+    otherDb GCA_018466985.1
+    priority 20
+
+    track chainHprcGCA_018467005v1
+    parent hprcChains
+    subGroups sample=s021 population=afr subpop=acb hap=pat
+    shortLabel HG02486.pat
+    longLabel HG02486.pat HG02486.alt.pat.f1_v2 (May 2021 GCA_018467005.1_HG02486.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018467005.1
+    otherDb GCA_018467005.1
+    priority 21
+
+    track chainHprcGCA_018467015v1
+    parent hprcChains
+    subGroups sample=s022 population=afr subpop=acb hap=mat
+    shortLabel HG02486.mat
+    longLabel HG02486.mat HG02486.pri.mat.f1_v2 (May 2021 GCA_018467015.1_HG02486.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018467015.1
+    otherDb GCA_018467015.1
+    priority 22
+
+    track chainHprcGCA_018467155v1
+    parent hprcChains
+    subGroups sample=s023 population=afr subpop=acb hap=mat
+    shortLabel HG01891.mat
+    longLabel HG01891.mat HG01891.pri.mat.f1_v2 (May 2021 GCA_018467155.1_HG01891.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018467155.1
+    otherDb GCA_018467155.1
+    priority 23
+
+    track chainHprcGCA_018467165v1
+    parent hprcChains
+    subGroups sample=s024 population=afr subpop=acb hap=pat
+    shortLabel HG01891.pat
+    longLabel HG01891.pat HG01891.alt.pat.f1_v2 (May 2021 GCA_018467165.1_HG01891.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018467165.1
+    otherDb GCA_018467165.1
+    priority 24
+
+    track chainHprcGCA_018505825v1
+    parent hprcChains
+    subGroups sample=s025 population=afr subpop=acb hap=mat
+    shortLabel HG02109.mat
+    longLabel HG02109.mat HG02109.pri.mat.f1_v2 (May 2021 GCA_018505825.1_HG02109.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018505825.1
+    otherDb GCA_018505825.1
+    priority 25
+
+    track chainHprcGCA_018505855v1
+    parent hprcChains
+    subGroups sample=s026 population=afr subpop=acb hap=pat
+    shortLabel HG02055.pat
+    longLabel HG02055.pat HG02055.alt.pat.f1_v2 (May 2021 GCA_018505855.1_HG02055.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018505855.1
+    otherDb GCA_018505855.1
+    priority 26
+
+    track chainHprcGCA_018505865v1
+    parent hprcChains
+    subGroups sample=s027 population=afr subpop=acb hap=pat
+    shortLabel HG02109.pat
+    longLabel HG02109.pat HG02109.alt.pat.f1_v2 (May 2021 GCA_018505865.1_HG02109.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018505865.1
+    otherDb GCA_018505865.1
+    priority 27
+
+    track chainHprcGCA_018506125v1
+    parent hprcChains
+    subGroups sample=s028 population=afr subpop=acb hap=mat
+    shortLabel HG02055.mat
+    longLabel HG02055.mat HG02055.pri.mat.f1_v2 (May 2021 GCA_018506125.1_HG02055.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018506125.1
+    otherDb GCA_018506125.1
+    priority 28
+
+    track chainHprcGCA_018852585v1
+    parent hprcChains
+    subGroups sample=s029 population=afr subpop=acb hap=mat
+    shortLabel HG02145.mat
+    longLabel HG02145.mat HG02145.pri.mat.f1_v2 (Jun. 2021 GCA_018852585.1_HG02145.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018852585.1
+    otherDb GCA_018852585.1
+    priority 29
+
+    track chainHprcGCA_018852595v1
+    parent hprcChains
+    subGroups sample=s030 population=afr subpop=acb hap=pat
+    shortLabel HG02145.pat
+    longLabel HG02145.pat HG02145.alt.pat.f1_v2 (Jun. 2021 GCA_018852595.1_HG02145.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018852595.1
+    otherDb GCA_018852595.1
+    priority 30
+
+    track chainHprcGCA_018472825v1
+    parent hprcChains
+    subGroups sample=s031 population=afr subpop=msl hap=mat
+    shortLabel HG03579.mat
+    longLabel HG03579.mat HG03579.pri.mat.f1_v2 (May 2021 GCA_018472825.1_HG03579.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472825.1
+    otherDb GCA_018472825.1
+    priority 31
+
+    track chainHprcGCA_018472835v1
+    parent hprcChains
+    subGroups sample=s032 population=afr subpop=msl hap=pat
+    shortLabel HG03579.pat
+    longLabel HG03579.pat HG03579.alt.pat.f1_v2 (May 2021 GCA_018472835.1_HG03579.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472835.1
+    otherDb GCA_018472835.1
+    priority 32
+
+    track chainHprcGCA_018472855v1
+    parent hprcChains
+    subGroups sample=s033 population=afr subpop=msl hap=mat
+    shortLabel HG03453.mat
+    longLabel HG03453.mat HG03453.pri.mat.f1_v2 (May 2021 GCA_018472855.1_HG03453.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472855.1
+    otherDb GCA_018472855.1
+    priority 33
+
+    track chainHprcGCA_018473305v1
+    parent hprcChains
+    subGroups sample=s034 population=afr subpop=msl hap=pat
+    shortLabel HG03453.pat
+    longLabel HG03453.pat HG03453.alt.pat.f1_v2 (May 2021 GCA_018473305.1_HG03453.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018473305.1
+    otherDb GCA_018473305.1
+    priority 34
+
+    track chainHprcGCA_018503245v1
+    parent hprcChains
+    subGroups sample=s035 population=afr subpop=msl hap=pat
+    shortLabel HG03486.pat
+    longLabel HG03486.pat HG03486.alt.pat.f1_v2 (May 2021 GCA_018503245.1_HG03486.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018503245.1
+    otherDb GCA_018503245.1
+    priority 35
+
+    track chainHprcGCA_018503525v1
+    parent hprcChains
+    subGroups sample=s036 population=afr subpop=msl hap=mat
+    shortLabel HG03486.mat
+    longLabel HG03486.mat HG03486.pri.mat.f1_v2 (May 2021 GCA_018503525.1_HG03486.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018503525.1
+    otherDb GCA_018503525.1
+    priority 36
+
+    track chainHprcGCA_018506155v1
+    parent hprcChains
+    subGroups sample=s037 population=afr subpop=msl hap=pat
+    shortLabel HG03098.pat
+    longLabel HG03098.pat HG03098.alt.pat.f1_v2 (May 2021 GCA_018506155.1_HG03098.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018506155.1
+    otherDb GCA_018506155.1
+    priority 37
+
+    track chainHprcGCA_018506165v1
+    parent hprcChains
+    subGroups sample=s038 population=afr subpop=msl hap=mat
+    shortLabel HG03098.mat
+    longLabel HG03098.mat HG03098.pri.mat.f1_v2 (May 2021 GCA_018506165.1_HG03098.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018506165.1
+    otherDb GCA_018506165.1
+    priority 38
+
+    track chainHprcGCA_018503255v1
+    parent hprcChains
+    subGroups sample=s039 population=afr subpop=yri hap=mat
+    shortLabel NA18906.mat
+    longLabel NA18906.mat NA18906.pri.mat.f1_v2 (May 2021 GCA_018503255.1_NA18906.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018503255.1
+    otherDb GCA_018503255.1
+    priority 39
+
+    track chainHprcGCA_018503285v1
+    parent hprcChains
+    subGroups sample=s040 population=afr subpop=yri hap=pat
+    shortLabel NA18906.pat
+    longLabel NA18906.pat NA18906.alt.pat.f1_v2 (May 2021 GCA_018503285.1_NA18906.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018503285.1
+    otherDb GCA_018503285.1
+    priority 40
+
+    track chainHprcGCA_018504625v1
+    parent hprcChains
+    subGroups sample=s041 population=afr subpop=asw hap=pat
+    shortLabel NA20129.pat
+    longLabel NA20129.pat NA20129.alt.pat.f1_v2 (May 2021 GCA_018504625.1_NA20129.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504625.1
+    otherDb GCA_018504625.1
+    priority 41
+
+    track chainHprcGCA_018504635v1
+    parent hprcChains
+    subGroups sample=s042 population=afr subpop=asw hap=mat
+    shortLabel NA20129.mat
+    longLabel NA20129.mat NA20129.pri.mat.f1_v2 (May 2021 GCA_018504635.1_NA20129.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504635.1
+    otherDb GCA_018504635.1
+    priority 42
+
+    track chainHprcGCA_018469415v1
+    parent hprcChains
+    subGroups sample=s043 population=afr subpop=esn hap=pat
+    shortLabel HG03516.pat
+    longLabel HG03516.pat HG03516.alt.pat.f1_v2 (May 2021 GCA_018469415.1_HG03516.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469415.1
+    otherDb GCA_018469415.1
+    priority 43
+
+    track chainHprcGCA_018469425v1
+    parent hprcChains
+    subGroups sample=s044 population=afr subpop=esn hap=mat
+    shortLabel HG03516.mat
+    longLabel HG03516.mat HG03516.pri.mat.f1_v2 (May 2021 GCA_018469425.1_HG03516.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469425.1
+    otherDb GCA_018469425.1
+    priority 44
+
+    track chainHprcGCA_018471065v1
+    parent hprcChains
+    subGroups sample=s045 population=amr subpop=pur hap=pat
+    shortLabel HG01175.pat
+    longLabel HG01175.pat HG01175.alt.pat.f1_v2 (May 2021 GCA_018471065.1_HG01175.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471065.1
+    otherDb GCA_018471065.1
+    priority 45
+
+    track chainHprcGCA_018471075v1
+    parent hprcChains
+    subGroups sample=s046 population=amr subpop=pur hap=pat
+    shortLabel HG01106.pat
+    longLabel HG01106.pat HG01106.alt.pat.f1_v2 (May 2021 GCA_018471075.1_HG01106.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471075.1
+    otherDb GCA_018471075.1
+    priority 46
+
+    track chainHprcGCA_018471085v1
+    parent hprcChains
+    subGroups sample=s047 population=amr subpop=pur hap=mat
+    shortLabel HG01175.mat
+    longLabel HG01175.mat HG01175.pri.mat.f1_v2 (May 2021 GCA_018471085.1_HG01175.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471085.1
+    otherDb GCA_018471085.1
+    priority 47
+
+    track chainHprcGCA_018471095v1
+    parent hprcChains
+    subGroups sample=s048 population=amr subpop=pur hap=mat
+    shortLabel HG00741.mat
+    longLabel HG00741.mat HG00741.pri.mat.f1_v2 (May 2021 GCA_018471095.1_HG00741.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471095.1
+    otherDb GCA_018471095.1
+    priority 48
+
+    track chainHprcGCA_018471105v1
+    parent hprcChains
+    subGroups sample=s049 population=amr subpop=pur hap=pat
+    shortLabel HG00741.pat
+    longLabel HG00741.pat HG00741.alt.pat.f1_v2 (May 2021 GCA_018471105.1_HG00741.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471105.1
+    otherDb GCA_018471105.1
+    priority 49
+
+    track chainHprcGCA_018471345v1
+    parent hprcChains
+    subGroups sample=s050 population=amr subpop=pur hap=mat
+    shortLabel HG01106.mat
+    longLabel HG01106.mat HG01106.pri.mat.f1_v2 (May 2021 GCA_018471345.1_HG01106.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471345.1
+    otherDb GCA_018471345.1
+    priority 50
+
+    track chainHprcGCA_018472685v1
+    parent hprcChains
+    subGroups sample=s051 population=amr subpop=pur hap=mat
+    shortLabel HG01071.mat
+    longLabel HG01071.mat HG01071.pri.mat.f1_v2 (May 2021 GCA_018472685.1_HG01071.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472685.1
+    otherDb GCA_018472685.1
+    priority 51
+
+    track chainHprcGCA_018472715v1
+    parent hprcChains
+    subGroups sample=s052 population=amr subpop=pur hap=pat
+    shortLabel HG00735.pat
+    longLabel HG00735.pat HG00735.alt.pat.f1_v2 (May 2021 GCA_018472715.1_HG00735.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472715.1
+    otherDb GCA_018472715.1
+    priority 52
+
+    track chainHprcGCA_018472725v1
+    parent hprcChains
+    subGroups sample=s053 population=amr subpop=pur hap=pat
+    shortLabel HG01071.pat
+    longLabel HG01071.pat HG01071.alt.pat.f1_v2 (May 2021 GCA_018472725.1_HG01071.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472725.1
+    otherDb GCA_018472725.1
+    priority 53
+
+    track chainHprcGCA_018472765v1
+    parent hprcChains
+    subGroups sample=s054 population=amr subpop=pur hap=mat
+    shortLabel HG00735.mat
+    longLabel HG00735.mat HG00735.pri.mat.f1_v2 (May 2021 GCA_018472765.1_HG00735.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472765.1
+    otherDb GCA_018472765.1
+    priority 54
+
+    track chainHprcGCA_018504045v1
+    parent hprcChains
+    subGroups sample=s055 population=amr subpop=pur hap=pat
+    shortLabel HG01243.pat
+    longLabel HG01243.pat HG01243.alt.pat.f1_v2 (May 2021 GCA_018504045.1_HG01243.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504045.1
+    otherDb GCA_018504045.1
+    priority 55
+
+    track chainHprcGCA_018504365v1
+    parent hprcChains
+    subGroups sample=s056 population=amr subpop=pur hap=mat
+    shortLabel HG01109.mat
+    longLabel HG01109.mat HG01109.pri.mat.f1_v2 (May 2021 GCA_018504365.1_HG01109.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504365.1
+    otherDb GCA_018504365.1
+    priority 56
+
+    track chainHprcGCA_018504375v1
+    parent hprcChains
+    subGroups sample=s057 population=amr subpop=pur hap=mat
+    shortLabel HG01243.mat
+    longLabel HG01243.mat HG01243.pri.mat.f1_v2 (May 2021 GCA_018504375.1_HG01243.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504375.1
+    otherDb GCA_018504375.1
+    priority 57
+
+    track chainHprcGCA_018504645v1
+    parent hprcChains
+    subGroups sample=s058 population=amr subpop=pur hap=pat
+    shortLabel HG01109.pat
+    longLabel HG01109.pat HG01109.alt.pat.f1_v2 (May 2021 GCA_018504645.1_HG01109.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504645.1
+    otherDb GCA_018504645.1
+    priority 58
+
+    track chainHprcGCA_018506955v1
+    parent hprcChains
+    subGroups sample=s059 population=amr subpop=pur hap=pat
+    shortLabel HG00733.pat
+    longLabel HG00733.pat HG00733.alt.pat.f1_v2 (May 2021 GCA_018506955.1_HG00733.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018506955.1
+    otherDb GCA_018506955.1
+    priority 59
+
+    track chainHprcGCA_018506975v1
+    parent hprcChains
+    subGroups sample=s060 population=amr subpop=pur hap=mat
+    shortLabel HG00733.mat
+    longLabel HG00733.mat HG00733.pri.mat.f1_v2 (May 2021 GCA_018506975.1_HG00733.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018506975.1
+    otherDb GCA_018506975.1
+    priority 60
+
+    track chainHprcGCA_018471525v1
+    parent hprcChains
+    subGroups sample=s061 population=amr subpop=pel hap=pat
+    shortLabel HG02148.pat
+    longLabel HG02148.pat HG02148.alt.pat.f1_v2 (May 2021 GCA_018471525.1_HG02148.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471525.1
+    otherDb GCA_018471525.1
+    priority 61
+
+    track chainHprcGCA_018471535v1
+    parent hprcChains
+    subGroups sample=s062 population=amr subpop=pel hap=mat
+    shortLabel HG02148.mat
+    longLabel HG02148.mat HG02148.pri.mat.f1_v2 (May 2021 GCA_018471535.1_HG02148.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471535.1
+    otherDb GCA_018471535.1
+    priority 62
+
+    track chainHprcGCA_018471545v1
+    parent hprcChains
+    subGroups sample=s063 population=amr subpop=pel hap=mat
+    shortLabel HG01952.mat
+    longLabel HG01952.mat HG01952.pri.mat.f1_v2 (May 2021 GCA_018471545.1_HG01952.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471545.1
+    otherDb GCA_018471545.1
+    priority 63
+
+    track chainHprcGCA_018471555v1
+    parent hprcChains
+    subGroups sample=s064 population=amr subpop=pel hap=pat
+    shortLabel HG01952.pat
+    longLabel HG01952.pat HG01952.alt.pat.f1_v2 (May 2021 GCA_018471555.1_HG01952.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471555.1
+    otherDb GCA_018471555.1
+    priority 64
+
+    track chainHprcGCA_018472695v1
+    parent hprcChains
+    subGroups sample=s065 population=amr subpop=pel hap=mat
+    shortLabel HG01928.mat
+    longLabel HG01928.mat HG01928.pri.mat.f1_v2 (May 2021 GCA_018472695.1_HG01928.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472695.1
+    otherDb GCA_018472695.1
+    priority 65
+
+    track chainHprcGCA_018472705v1
+    parent hprcChains
+    subGroups sample=s066 population=amr subpop=pel hap=pat
+    shortLabel HG01928.pat
+    longLabel HG01928.pat HG01928.alt.pat.f1_v2 (May 2021 GCA_018472705.1_HG01928.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472705.1
+    otherDb GCA_018472705.1
+    priority 66
+
+    track chainHprcGCA_018472845v1
+    parent hprcChains
+    subGroups sample=s067 population=amr subpop=pel hap=pat
+    shortLabel HG01978.pat
+    longLabel HG01978.pat HG01978.alt.pat.f1_v2 (May 2021 GCA_018472845.1_HG01978.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472845.1
+    otherDb GCA_018472845.1
+    priority 67
+
+    track chainHprcGCA_018472865v1
+    parent hprcChains
+    subGroups sample=s068 population=amr subpop=pel hap=mat
+    shortLabel HG01978.mat
+    longLabel HG01978.mat HG01978.pri.mat.f1_v2 (May 2021 GCA_018472865.1_HG01978.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472865.1
+    otherDb GCA_018472865.1
+    priority 68
+
+    track chainHprcGCA_018469405v1
+    parent hprcChains
+    subGroups sample=s069 population=amr subpop=clm hap=mat
+    shortLabel HG01258.mat
+    longLabel HG01258.mat HG01258.pri.mat.f1_v2 (May 2021 GCA_018469405.1_HG01258.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469405.1
+    otherDb GCA_018469405.1
+    priority 69
+
+    track chainHprcGCA_018469665v1
+    parent hprcChains
+    subGroups sample=s070 population=amr subpop=clm hap=mat
+    shortLabel HG01123.mat
+    longLabel HG01123.mat HG01123.pri.mat.f1_v2.1 (May 2021 GCA_018469665.1_HG01123.pri.mat.f1_v2.1) HPRC project computed Chained Alignments
+    type chain GCA_018469665.1
+    otherDb GCA_018469665.1
+    priority 70
+
+    track chainHprcGCA_018469675v1
+    parent hprcChains
+    subGroups sample=s071 population=amr subpop=clm hap=pat
+    shortLabel HG01258.pat
+    longLabel HG01258.pat HG01258.alt.pat.f1_v2 (May 2021 GCA_018469675.1_HG01258.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469675.1
+    otherDb GCA_018469675.1
+    priority 71
+
+    track chainHprcGCA_018469685v1
+    parent hprcChains
+    subGroups sample=s072 population=amr subpop=clm hap=mat
+    shortLabel HG01361.mat
+    longLabel HG01361.mat HG01361.pri.mat.f1_v2 (May 2021 GCA_018469685.1_HG01361.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469685.1
+    otherDb GCA_018469685.1
+    priority 72
+
+    track chainHprcGCA_018469695v1
+    parent hprcChains
+    subGroups sample=s073 population=amr subpop=clm hap=pat
+    shortLabel HG01123.pat
+    longLabel HG01123.pat HG01123.alt.pat.f1_v2.1 (May 2021 GCA_018469695.1_HG01123.alt.pat.f1_v2.1) HPRC project computed Chained Alignments
+    type chain GCA_018469695.1
+    otherDb GCA_018469695.1
+    priority 73
+
+    track chainHprcGCA_018469705v1
+    parent hprcChains
+    subGroups sample=s074 population=amr subpop=clm hap=pat
+    shortLabel HG01361.pat
+    longLabel HG01361.pat HG01361.alt.pat.f1_v2 (May 2021 GCA_018469705.1_HG01361.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018469705.1
+    otherDb GCA_018469705.1
+    priority 74
+
+    track chainHprcGCA_018469865v1
+    parent hprcChains
+    subGroups sample=s075 population=amr subpop=clm hap=mat
+    shortLabel HG01358.mat
+    longLabel HG01358.mat HG01358.pri.mat.f1_v2.1 (May 2021 GCA_018469865.1_HG01358.pri.mat.f1_v2.1) HPRC project computed Chained Alignments
+    type chain GCA_018469865.1
+    otherDb GCA_018469865.1
+    priority 75
+
+    track chainHprcGCA_018469965v1
+    parent hprcChains
+    subGroups sample=s076 population=amr subpop=clm hap=pat
+    shortLabel HG01358.pat
+    longLabel HG01358.pat HG01358.alt.pat.f1_v2.1 (May 2021 GCA_018469965.1_HG01358.alt.pat.f1_v2.1) HPRC project computed Chained Alignments
+    type chain GCA_018469965.1
+    otherDb GCA_018469965.1
+    priority 76
+
+    track chainHprcGCA_018471515v1
+    parent hprcChains
+    subGroups sample=s077 population=eas subpop=chs hap=mat
+    shortLabel HG00438.mat
+    longLabel HG00438.mat HG00438.pri.mat.f1_v2 (May 2021 GCA_018471515.1_HG00438.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018471515.1
+    otherDb GCA_018471515.1
+    priority 77
+
+    track chainHprcGCA_018472565v1
+    parent hprcChains
+    subGroups sample=s078 population=eas subpop=chs hap=mat
+    shortLabel HG00673.mat
+    longLabel HG00673.mat HG00673.pri.mat.f1_v2 (May 2021 GCA_018472565.1_HG00673.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472565.1
+    otherDb GCA_018472565.1
+    priority 78
+
+    track chainHprcGCA_018472575v1
+    parent hprcChains
+    subGroups sample=s079 population=eas subpop=chs hap=pat
+    shortLabel HG00621.pat
+    longLabel HG00621.pat HG00621.alt.pat.f1_v2 (May 2021 GCA_018472575.1_HG00621.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472575.1
+    otherDb GCA_018472575.1
+    priority 79
+
+    track chainHprcGCA_018472585v1
+    parent hprcChains
+    subGroups sample=s080 population=eas subpop=chs hap=pat
+    shortLabel HG00673.pat
+    longLabel HG00673.pat HG00673.alt.pat.f1_v2 (May 2021 GCA_018472585.1_HG00673.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472585.1
+    otherDb GCA_018472585.1
+    priority 80
+
+    track chainHprcGCA_018472595v1
+    parent hprcChains
+    subGroups sample=s081 population=eas subpop=chs hap=pat
+    shortLabel HG00438.pat
+    longLabel HG00438.pat HG00438.alt.pat.f1_v2 (May 2021 GCA_018472595.1_HG00438.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472595.1
+    otherDb GCA_018472595.1
+    priority 81
+
+    track chainHprcGCA_018472605v1
+    parent hprcChains
+    subGroups sample=s082 population=eas subpop=chs hap=mat
+    shortLabel HG00621.mat
+    longLabel HG00621.mat HG00621.pri.mat.f1_v2 (May 2021 GCA_018472605.1_HG00621.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018472605.1
+    otherDb GCA_018472605.1
+    priority 82
+
+    track chainHprcGCA_018504055v1
+    parent hprcChains
+    subGroups sample=s083 population=eas subpop=khv hap=pat
+    shortLabel HG02080.pat
+    longLabel HG02080.pat HG02080.alt.pat.f1_v2 (May 2021 GCA_018504055.1_HG02080.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504055.1
+    otherDb GCA_018504055.1
+    priority 83
+
+    track chainHprcGCA_018504085v1
+    parent hprcChains
+    subGroups sample=s084 population=eas subpop=khv hap=mat
+    shortLabel HG02080.mat
+    longLabel HG02080.mat HG02080.pri.mat.f1_v2 (May 2021 GCA_018504085.1_HG02080.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504085.1
+    otherDb GCA_018504085.1
+    priority 84
+
+    track chainHprcGCA_018504655v1
+    parent hprcChains
+    subGroups sample=s085 population=other subpop=hapmap hap=mat
+    shortLabel NA21309.mat
+    longLabel NA21309.mat NA21309.pri.mat.f1_v2 (May 2021 GCA_018504655.1_NA21309.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504655.1
+    otherDb GCA_018504655.1
+    priority 85
+
+    track chainHprcGCA_018504665v1
+    parent hprcChains
+    subGroups sample=s086 population=other subpop=hapmap hap=pat
+    shortLabel NA21309.pat
+    longLabel NA21309.pat NA21309.alt.pat.f1_v2 (May 2021 GCA_018504665.1_NA21309.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018504665.1
+    otherDb GCA_018504665.1
+    priority 86
+
+    track chainHprcHs1
+    parent hprcChains
+    subGroups sample=s087 population=other subpop=t2t hap=pri
+    shortLabel T2T-CHM13v2.0
+    longLabel T2T-CHM13v2.0 T2T-CHM13v2.0 (Jan. 2022 GCF_009914755.1_T2T-CHM13v2.0) HPRC project computed Chained Alignments
+    type chain hs1
+    otherDb hs1
+    priority 87
+
+    track chainHprcGCA_018505835v1
+    parent hprcChains
+    subGroups sample=s088 population=sas subpop=pjl hap=pat
+    shortLabel HG03492.pat
+    longLabel HG03492.pat HG03492.alt.pat.f1_v2 (May 2021 GCA_018505835.1_HG03492.alt.pat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018505835.1
+    otherDb GCA_018505835.1
+    priority 88
+
+    track chainHprcGCA_018505845v1
+    parent hprcChains
+    subGroups sample=s089 population=sas subpop=pjl hap=mat
+    shortLabel HG03492.mat
+    longLabel HG03492.mat HG03492.pri.mat.f1_v2 (May 2021 GCA_018505845.1_HG03492.pri.mat.f1_v2) HPRC project computed Chained Alignments
+    type chain GCA_018505845.1
+    otherDb GCA_018505845.1
+    priority 89

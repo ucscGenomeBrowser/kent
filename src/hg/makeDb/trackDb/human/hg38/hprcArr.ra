@@ -90,3 +90,25 @@ sortOrder view=+
         type bigBed 9 +
         labelFields score
         itemRgb on
+
+track hprcInsertsV1
+shortLabel Inserts
+longLabel Inserts
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcInsertsV1.bb
+type bigBed 9 +
+itemRgb on
+visibility dense
+group hprc
+labelFields score
+
+
+track hprcDeletionsV1
+shortLabel Deletions
+longLabel Deletions
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcDeletionsV1.bb
+type bigBed 9 +
+itemRgb on
+visibility dense
+group hprc
+labelFields score
+

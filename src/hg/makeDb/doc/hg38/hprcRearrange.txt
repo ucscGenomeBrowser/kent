@@ -9,19 +9,17 @@ mkdir -p /cluster/data/hg38/bed/hprcArrange$VERSION
 cd /cluster/data/hg38/bed/hprcArrange$VERSION
 
 # grab the chains
-ls /hive/data/genomes/hg38/bed/hprc/bigChains/*.bb | grep -v Link > bigChain.lst
-ls /hive/data/genomes/hg38/bed/hprc/bigChains/*.bb | grep Link > bigLink.lst
-paste bigChain.lst bigLink.lst > both.lst
+ls /hive/data/genomes/hg38/bed/hprc/reChain/*.chain > chain.lst
 
 rm -rf inversions duplications
 mkdir inversions duplications
 
 # make the job that will figure out the inversions and duplications in each assembly
-while read chain link 
+while read chain 
 do
-name=`basename $chain | sed 's?-.*??' | sed 's/.bb//'`
-echo bigChainArrange $chain $link $name inversions/$name.txt duplications/$name.txt
-done < both.lst > jobs
+name=`basename $chain | sed 's?.*chainHprc??' | sed 's/\.chain//'`
+echo chainArrange $chain $name inversions/$name.txt duplications/$name.txt
+done < chain.lst > jobs
 
 para make jobs
 
@@ -54,4 +52,5 @@ mkdir -p /gbdb/hg38/hprcArr$VERSION
 rm -f  /gbdb/hg38/hprcArr$VERSION/$all.*
 ln -s `pwd`/$all.bw /gbdb/hg38/hprcArr$VERSION
 ln -s `pwd`/$all.bb /gbdb/hg38/hprcArr$VERSION
+
 

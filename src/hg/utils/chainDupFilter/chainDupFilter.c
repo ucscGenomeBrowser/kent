@@ -1,20 +1,17 @@
-/* bigChainArrange - output inversions and duplications from bigChain. */
+/* chainDupFilter - output inversions and duplications from chain. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "bigBed.h"
 #include "chain.h"
-#include "bigChain.h"
-#include "chainNetDbLoad.h"
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bigChainArrange - output inversions and duplications from bigChain\n"
+  "chainDupFilter - output local dups to different file than others\n"
   "usage:\n"
-  "   bigChainArrange bigChain.bb bigLinks.bb label inversions.bed dups.bed\n"
+  "   chainDupFilter file.chain noDup.chain dups.chain\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -68,7 +65,7 @@ for(; cb; prevCb = cb, cb = cb->next)
 return FALSE;
 }
 
-static void parseChrom(struct chain *chains,  char *label, FILE *inversions, FILE *duplications)
+static void parseChrom(struct chain *chains,   FILE *noDup, FILE *duplications)
 {
 slSort(&chains, chainCmp);
 
@@ -79,6 +76,7 @@ int  tEnd=0, qStart=0, qEnd=0;
 struct chain *enclosingChain = NULL;
 for(chain = chains; chain ; chain = chain->next)
     {
+    FILE *outFile = noDup;
     // is this chain from a new qName or outside the "current" one
     if (strcmp(lastName, chain->qName) || (chain->tStart > tEnd))
         {
@@ -97,30 +95,54 @@ for(chain = chains; chain ; chain = chain->next)
             (chain->qStart >= qStart) &&
             (chain->qEnd <= qEnd))
                 {
-                //bigChainTabOut(chain, f);
-                if (isInversion(chain, enclosingChain))
-                    fprintf(inversions, "%s %d %d %s\n", chain->tName, chain->tStart, chain->tEnd, label);
-                else
-                    fprintf(duplications, "%s %d %d %s\n", chain->tName, chain->tStart, chain->tEnd, label);
+                //chainTabOut(chain, f);
+                if (!isInversion(chain, enclosingChain))
+                    outFile = duplications;
                 }
-
         }
+    chainWrite(chain, outFile);
     }
 }
 
-void bigChainArrange(char *inChain, char *inLinks, char *label, char *inversions, char *duplications)
-/* bigChainArrange - output a set of rearrangement breakpoints. */
+struct chainHead
 {
-struct bbiFile *chainBbi = bigBedFileOpen(inChain);
-FILE *inversionsF = mustOpen(inversions, "w");
-FILE *duplicationsF = mustOpen(duplications, "w");
-struct bbiChromInfo *chrom, *chromList = bbiChromList(chainBbi);
+struct chainHead *next;
+struct chain *chains;
+};
 
-for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+struct chainHead *readChains(char *inChain)
+{
+struct lineFile *lf = lineFileOpen(inChain, TRUE);
+struct hash *hash = newHash(0);
+struct chainHead *chainHead, *chainHeads = NULL;
+struct chain *chain;
+
+while ((chain = chainRead(lf)) != NULL)
     {
-    struct chain  *chains = chainLoadIdRangeHub(NULL, inChain, inLinks, chrom->name, 0, chrom->size, -1);
-    parseChrom(chains,  label, inversionsF, duplicationsF);
+    if ((chainHead = hashFindVal(hash, chain->tName)) == NULL)
+        {
+        AllocVar(chainHead);
+        slAddHead(&chainHeads, chainHead);
+        hashAdd(hash, chain->tName, chainHead);
+        }
 
+    slAddHead(&chainHead->chains,  chain);
+    }
+
+return chainHeads;
+}
+
+void chainDupFilter(char *inChain,  char *noDups, char *duplications)
+/* chainDupFilter - output a set of rearrangement breakpoints. */
+{
+struct chainHead *chainHeads = readChains(inChain);
+FILE *noDupsF = mustOpen(noDups, "w");
+FILE *duplicationsF = mustOpen(duplications, "w");
+
+for (; chainHeads != NULL; chainHeads = chainHeads->next)
+    {
+    struct chain  *chains = chainHeads->chains;
+    parseChrom(chains,  noDupsF, duplicationsF);
     }
 }
 
@@ -128,8 +150,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 6)
+if (argc != 4)
     usage();
-bigChainArrange(argv[1], argv[2], argv[3], argv[4], argv[5]);
+chainDupFilter(argv[1], argv[2], argv[3]);
 return 0;
 }

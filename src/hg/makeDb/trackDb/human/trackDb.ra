@@ -5603,7 +5603,8 @@ mouseOver $gene $name $rsId Genotype: $genotype; Zygosity: $zygo ; Inheritance: 
 labelFields gene, name
 defaultLabelFields gene, name
 noScoreFilter on
-group covid 
+priority 2.2
+group varRep
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb

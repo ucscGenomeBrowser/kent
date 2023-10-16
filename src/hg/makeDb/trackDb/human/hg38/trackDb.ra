@@ -769,7 +769,7 @@ priority 100
 type bigBed 8 +
 color 150,20,20
 mouseOver $_mouseOver : $name - CQV: $cqv - Rank: $rank
-group covid
+group varRep
 bigDataUrl /gbdb/hg38/covidHct/covidHct.bb
 release alpha
 
@@ -894,25 +894,10 @@ include hprcCoverage97.ra alpha
 
 # other HPRC experiments
 include chainsHprc.ra alpha
-include chainsReHprc.ra alpha
-include netsReHprc.ra alpha
+include hprcChains.ra alpha
+include hprcNets.ra alpha
 include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra alpha
 include hprcArr.ra alpha
 include hprcVCF.ra alpha
-
-track ncbiRefSeqHistorical
-parent refSeqComposite off
-priority 10000
-type bigGenePred
-shortLabel RefSeq Historical
-longLabel NCBI RefSeq Historical Transcript Versions
-bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqHistorical.bb
-searchIndex name
-baseColorUseCds given
-baseColorDefault genomicCodons
-release alpha
-
-searchTable ncbiRefSeqHistorical
-searchPriority 20
-searchType bigBed
+include hprcVCFTest.ra alpha

@@ -1,3 +1,3 @@
 kentSrc = ../../..
-A = bigChainArrange
+A = chainDupFilter
 include $(kentSrc)/inc/userApp.mk

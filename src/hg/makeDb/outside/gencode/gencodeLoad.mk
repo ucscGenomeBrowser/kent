@@ -32,13 +32,13 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-preRelease = no
-#preRelease = yes
+#preRelease = no
+preRelease = yes
 #db = hg38
-db = hg19
-#db = mm39
-#db = mm10
+#db = hg19
+db = mm39
 ifeq (${db},mm10)
+    # mm10 lift back was never revewed and released
     grcRefAssembly = GRCm38
     verBase = M25
     prevVer = M24
@@ -50,22 +50,22 @@ ifeq (${db},mm10)
     isBackmap = yes
 else ifeq (${db},mm39)
     grcRefAssembly = GRCm39
-    ver = M33
-    prevVer = M32
+    ver = M34
+    prevVer = M33
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 44
-    prevVer = 43
+    ver = 45
+    prevVer = 44
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 44
-    prevVer = 43lift37
+    verBase = 45
+    prevVer = 44lift37
     ver = ${verBase}lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping

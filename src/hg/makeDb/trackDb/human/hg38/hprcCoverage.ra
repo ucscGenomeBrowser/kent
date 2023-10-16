@@ -2,7 +2,7 @@ track hprcCoverage89Super
 compositeTrack on
 shortLabel HPRC Coverage 89
 longLabel HPRC Coverage - 89 samples
-group hprc
+group x
 type bed 3 +
 html hprcCoverage89
 

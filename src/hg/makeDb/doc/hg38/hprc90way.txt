@@ -93,6 +93,46 @@ time (hgLoadMaf -pathPrefix=/gbdb/hg38/hprc/cactus90way hg38 hprc90way) > load90
 #  -rw-rw-r--    1   84132726 Aug 21 11:56 hprc90way.tab
 
 ###############################################################################
+# summary table loaded after failed experiment below (DONE - 2023-10-09 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/hprc/mafFile/summary
+    cd /hive/data/genomes/hg38/bed/hprc/mafFile/summary
+    # script to operate the translation of the GC names into something
+    # that hgLoadMafSummary can work correctly with.
+    printf '#!/bin/bash
+
+set -beEu -o pipefail
+
+export mafFile=${1}
+export B="${mafFile%.maf}"
+
+sed -e 's/GC\([AF]\)_\([0-9]\+\)./GC\1\2v/;' ../iRows/result/${mafFile} \
+  | hgLoadMafSummary -test -verbose=2 -minSize=30000 \
+     -mergeGap=1500 -maxSize=200000 hg38 "hprc90${B}Summary" stdin 2> /dev/null
+
+sed -e 's/GC\([AF]\)\([0-9]\+\)v/GC\1_\2./g;' "hprc90${B}Summary.tab" \
+      > "${B}.summary.tab"
+
+rm -f "hprc90${B}Summary.tab"
+' > runOne
+    chmod +x runOne
+
+    ls ../iRows/result | grep maf > maf.list
+    printf '#LOOP
+./runOne $(path1)
+#ENDLOOP
+' > template
+    gensub2 maf.list single template jobList
+
+    time (perlPara.pl 17 jobList) > 17.log 2>&1 &
+    #  real    10m34.640s
+
+    # when done
+    sort -k2,2 -k3,3n chr*.summary.tab > ../hprc90waySummary.tab
+    cd ..
+    hgLoadSqlTab hg38 hprc90waySummary ~/kent/src/hg/lib/mafSummary.sql \
+          hprc90waySummary.tab
+
+###############################################################################
 ### and the summary table (did not work with the GCA_0123.1 dot suffix
 ###    the .1 got trimmed off the names)
 time (cat /gbdb/hg38/hprc/cactus90way/*.maf \
