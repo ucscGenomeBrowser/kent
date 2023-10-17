@@ -60,14 +60,16 @@ group compGeno
     viewLimits -20.0:11.936
     viewLimitsMax -20:11.936
 
-        track phyloP470way
+        #track phyloP470wayBW
+        track phyloP470wayBW
         subTrack cons470wayViewphyloP
         subGroups view=phyloP
         shortLabel 470 phyloP
         longLabel 470 mammals Basewise Conservation by PhyloP
         configurable on
         type bigWig -20 11.936
-        bigDataUrl /gbdb/hg38/multiz470way/phyloP470way.bw
+        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP470way/hg38.phyloP470way.bw
+        #bigDataUrl /gbdb/hg38/multiz470way/phyloP470way.bw
         maxHeightPixels 100:50:11
         viewLimits -4.5:7.5
         autoScale off
@@ -75,7 +77,8 @@ group compGeno
         windowingFunction mean
         color 60,60,140
         altColor 140,60,60
-        priority 7
+        priority 4
+        logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf
 
     # phastCons conservation
     track cons470wayViewphastcons
