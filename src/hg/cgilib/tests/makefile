@@ -10,7 +10,7 @@ all: 	${BIN_DIR}/annoGratorTester
 
 #test: annoGratorTest 
 test: 
-	rm -r output
+	rm -rf output
 	echo tested all
 
 mkdirs:
