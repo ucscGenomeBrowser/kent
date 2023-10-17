@@ -50,4 +50,10 @@ doInstallTop: jshintTop
 	    rsync -a $$file ${DEST}/; \
 	done
 
+tags:
+	ctags ${UCSC_JS_FILES} model/*/*.js
+
+clean:
+	rm -f tags
+
 doInstall: doInstallTop ${SUBDIRS:%=%.doInstall}
