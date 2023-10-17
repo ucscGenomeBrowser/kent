@@ -24,7 +24,7 @@ done < chain.lst > jobs
 para make jobs
 
 # create the inversion bigBed and bigWig
-cat inversions/* |sort -k1,1 -k2,2n | bedCollect stdin $inversion.bed
+cat inversions/* |sort -k1,1 -k2,2n -k3,3n -k5,5n | bedCollect stdin $inversion.bed
 bedToBigBed  $inversion.bed /cluster/data/hg38/chrom.sizes $inversion.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+1
 cat inversions/* | sort -k1,1 | bedItemOverlapCount hg38 stdin > $inversion.bedGraph
 bedGraphToBigWig $inversion.bedGraph /cluster/data/hg38/chrom.sizes $inversion.bw
@@ -34,7 +34,7 @@ ln -s `pwd`/$inversion.bw /gbdb/hg38/hprcArr$VERSION
 ln -s `pwd`/$inversion.bb /gbdb/hg38/hprcArr$VERSION
 
 # create the duplications bigBed and bigWig
-cat duplications/* |sort -k1,1 -k2,2n | bedCollect stdin $duplication.bed
+cat duplications/* |sort -k1,1 -k2,2n -k3,3n -k5,5n | bedCollect stdin $duplication.bed
 bedToBigBed  $duplication.bed /cluster/data/hg38/chrom.sizes $duplication.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+1
 cat duplications/* | sort -k1,1 | bedItemOverlapCount hg38 stdin > $duplication.bedGraph
 bedGraphToBigWig $duplication.bedGraph /cluster/data/hg38/chrom.sizes $duplication.bw
