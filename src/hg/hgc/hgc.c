@@ -26458,18 +26458,22 @@ char* handler = trackDbSetting(tdb, "trackHandler");
 char *table = (tdb ? tdb->table : track);
 if (sameWord(table, "getDna"))
     {
+    htmlDoNotTranslate();
     doGetDna1();
     }
 else if (sameWord(table, "htcGetDna2"))
     {
+    htmlDoNotTranslate();
     doGetDna2();
     }
 else if (sameWord(table, "htcGetDna3"))
     {
+    htmlDoNotTranslate();
     doGetDna3();
     }
 else if (sameWord(table, "htcGetDnaExtended1"))
     {
+    htmlDoNotTranslate();
     doGetDnaExtended1();
     }
 else if (sameWord(table, "buildBigPsl"))

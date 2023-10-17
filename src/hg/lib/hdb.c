@@ -1459,11 +1459,12 @@ char *hReplaceGbdb(char* fileName)
 if (fileName == NULL)
     return fileName;
 
-// if the gbdbLoc2 system is not used at all, like on the RR, stop now. 
+// if the gbdbLoc1/gbdbLoc2 system is not used at all, like on the RR, do nothing and stop now. 
 // This is important, as we would be doing tens of thousands of stats
-// otherwise on the RR when going over trackDb.
-char* newGbdbLoc = cfgOption("gbdbLoc2");
-if (newGbdbLoc == NULL || !startsWith("/gbdb/", fileName))
+// otherwise on the RR when we parse trackDb
+char* newGbdbLoc1 = cfgOption("gbdbLoc1");
+char* newGbdbLoc2 = cfgOption("gbdbLoc2");
+if ((newGbdbLoc1 == NULL && newGbdbLoc2==NULL) || !startsWith("/gbdb/", fileName))
     return cloneString(fileName);
 
 char *path = hReplaceGbdbLocal(fileName);
@@ -1471,7 +1472,7 @@ if (fileExists(path))
     return path;
 
 freeMem(path);
-path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
+path = replaceChars(fileName, "/gbdb/", newGbdbLoc2);
 if (cfgOptionBooleanDefault("traceGbdb", FALSE))
     fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
 

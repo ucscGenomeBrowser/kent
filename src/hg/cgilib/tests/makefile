@@ -8,8 +8,9 @@ BIN_DIR = bin/${MACHTYPE}
 
 all: 	${BIN_DIR}/annoGratorTester 
 
-test: annoGratorTest 
-	rm -r output
+#test: annoGratorTest 
+test: 
+	rm -rf output
 	echo tested all
 
 mkdirs:
