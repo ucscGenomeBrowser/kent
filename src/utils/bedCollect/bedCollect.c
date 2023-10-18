@@ -15,12 +15,15 @@ errAbort(
   "   bedCollect input.bed output.bed\n"
   "note: input beds need to be sorted with bedSort\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -exact       overlapping blocks must be exactly the same range and score\n"
   );
 }
 
+boolean exact;  // overlapping blocks must be exactly the same range and score
+
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"exact", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -28,6 +31,7 @@ static void outBed(FILE *f, struct bed *bed, struct hash *nameHash)
 {
 static int count = 0;
 struct slName *names = hashSlNameFromHash(nameHash);
+int sizeQuery = bed->score;
 bed->score = slCount(names);
 struct dyString *dy = newDyString(100);
 for(; names; names = names->next)
@@ -36,7 +40,7 @@ for(; names; names = names->next)
     dyStringAppend(dy, ",");
     }
 bed->name = dy->string;
-fprintf(f, "%s %d %d arr%d %d + %d %d 0 %s\n", bed->chrom, bed->chromStart, bed->chromEnd, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name);
+fprintf(f, "%s %d %d arr%d %d + %d %d 0 %s %d\n", bed->chrom, bed->chromStart, bed->chromEnd, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name, sizeQuery);
 //bedOutputN(bed, 5, f, '\t', '\n');
 }
 
@@ -48,28 +52,48 @@ FILE *f = mustOpen(outFile, "w");
 struct bed *bed, *prevBed = allBeds;
 prevBed->score = 1;
 struct hash *nameHash = newHash(0);
+hashStore(nameHash, prevBed->name);
 
-for(bed = allBeds; bed;  bed = bed->next)
+if (exact)
     {
-    bed->score = 1;
-
-    if (differentString(prevBed->chrom, bed->chrom) || (prevBed->chromEnd <= bed->chromStart))
+    for(bed = prevBed->next; bed;  bed = bed->next)
         {
-        outBed(f, prevBed, nameHash);
+        if (differentString(prevBed->chrom, bed->chrom) || (prevBed->chromStart != bed->chromStart) || (prevBed->chromEnd != bed->chromEnd) || (prevBed->score != bed->score))
+            {
+            outBed(f, prevBed, nameHash);
 
-        nameHash = newHash(0);
-        prevBed = bed;
-        hashStore(nameHash, bed->name);
-        }
-    else
-        {
-        hashStore(nameHash, bed->name);
-        prevBed->chromEnd = (bed->chromEnd > prevBed->chromEnd) ?  bed->chromEnd : prevBed->chromEnd;
-        prevBed->score++;
-        //printf("merging %d %d %d %d %d %s\n", prevBed->chromStart, prevBed->chromEnd, bed->chromStart, bed->chromEnd, prevBed->score, bed->name);
+            freeHash(&nameHash);
+            nameHash = newHash(0);
+            prevBed = bed;
+            hashStore(nameHash, bed->name);
+            }
+        else
+            {
+            hashStore(nameHash, bed->name);
+            }
         }
     }
-outBed(f, prevBed, nameHash);
+else
+    {
+    for(bed = prevBed->next; bed;  bed = bed->next)
+        {
+        if (differentString(prevBed->chrom, bed->chrom) || (prevBed->chromEnd <= bed->chromStart))
+            {
+            outBed(f, prevBed, nameHash);
+
+            freeHash(&nameHash);
+            nameHash = newHash(0);
+            prevBed = bed;
+            hashStore(nameHash, bed->name);
+            }
+        else
+            {
+            hashStore(nameHash, bed->name);
+            prevBed->chromEnd = (bed->chromEnd > prevBed->chromEnd) ?  bed->chromEnd : prevBed->chromEnd;
+            }
+        }
+    outBed(f, prevBed, nameHash);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -78,6 +102,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+exact = optionExists("exact");
 bedCollect(argv[1], argv[2]);
 return 0;
 }

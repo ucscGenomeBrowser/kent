@@ -17,6 +17,7 @@ type bed 3
         mouseOver ${effectAllele}: weight ${weight}
         dataVersion Received from nlennon@broadinstitute.org, July 13 2023
         html prs
+        skipFields reserved
         #maxWindowCoverage 40000000
         #maxItems 10000
 

@@ -71,7 +71,7 @@ priority 1
         color 60,60,140
         altColor 140,60,60
         priority 4
-        #logoMaf multiz100way
+        logoMaf multiz100way
 
     # phastCons conservation
     track cons100wayViewphastcons
