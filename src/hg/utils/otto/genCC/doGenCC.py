@@ -160,9 +160,9 @@ def buildFileHg38(genCCfile,outPutFile):
 
     inputGenCCFile.close()
     outputHg38File.close()
-    print(str(len(badItems))+" lines were skipped in the file because they did not they have incorrect formatting. This is usually because they had newline and tab characters in the info column. Usually fewer than 60 items are skipped this way.\n\n")
+    print(str(len(badItems))+" lines were skipped in the file because they have incorrect formatting. This is usually because they had newline and tab characters in the info column. Usually fewer than 60 items are skipped this way. If the number is much greater, verify the script and update the estimate. The lines are printed below.\n\n")
     for item in badItems:
-        print(item)
+        print("\t".join(item).encode('utf-8'))
     print("\n\nhg38 genCC bed file completed. Total number of failed entries: "+str(n))
 
 def buildFileHg19(genCCfile,outPutFile):

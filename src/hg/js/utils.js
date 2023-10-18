@@ -3873,7 +3873,14 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
     // use firstChild because popUpEl should be a div with a sole child in it
     let popUpRect = popUpEl.firstChild.getBoundingClientRect();
     // position the popUp to the right and above the cursor by default
-    let topOffset = refTop - popUpRect.height;
+    let topOffset;
+    if (refEl.coords !== undefined && refEl.coords.length > 0 && refEl.coords.split(",").length == 4) {
+        // boundingRect has determined exactly as close as we can get to the item without covering
+        topOffset = refTop - popUpRect.height;
+    } else {
+        // just use the mouseY position for placement, the -5 accounts for cursor size
+        topOffset = mouseY - window.scrollY - popUpRect.height - 5;
+    }
     let leftOffset = mouseX + 15; // add 15 for large cursor sizes
 
     // first case, refEl takes the whole width of the image, so not a big deal to cover some of it
@@ -3886,6 +3893,11 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
     if (mouseX > (windowWidth* 0.66)) {
         // move to the left
         leftOffset = mouseX - popUpRect.width;
+    }
+
+    // the page is scrolled or otherwise off the screen
+    if (topOffset <= 0) {
+        topOffset = mouseY - window.scrollY + popUpRect.height;
     }
 
     if (leftOffset < 0) {
