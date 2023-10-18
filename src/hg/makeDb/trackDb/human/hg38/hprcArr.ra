@@ -97,10 +97,19 @@ longLabel Inserts
 bigDataUrl /gbdb/hg38/hprcArrV1/hprcInsertsV1.bb
 type bigBed 9 +
 itemRgb on
-visibility dense
+visibility hide
 group hprc
 labelFields score
 
+track hprcInsertsLargeV1
+shortLabel InsertsLarge
+longLabel InsertsLarge
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcInsertsLargeV1.bb
+type bigBed 9 +
+itemRgb on
+visibility hide
+group hprc
+labelFields score
 
 track hprcDeletionsV1
 shortLabel Deletions
@@ -108,7 +117,38 @@ longLabel Deletions
 bigDataUrl /gbdb/hg38/hprcArrV1/hprcDeletionsV1.bb
 type bigBed 9 +
 itemRgb on
-visibility dense
+visibility hide
+group hprc
+labelFields score
+
+track hprcDeletionsLargeV1
+shortLabel DeletionsLarge
+longLabel DeletionsLarge
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcDeletionsLargeV1.bb
+type bigBed 9 +
+itemRgb on
+visibility hide
+group hprc
+labelFields score
+
+track hprcDoubleV1
+shortLabel Double
+longLabel Double
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcDoubleV1.bb
+type bigBed 9 +
+itemRgb on
+visibility hide
+group hprc
+labelFields score
+
+
+track hprcDoubleLargeV1
+shortLabel DoubleLarge
+longLabel DoubleLarge
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcDoubleLargeV1.bb
+type bigBed 9 +
+itemRgb on
+visibility hide
 group hprc
 labelFields score
 

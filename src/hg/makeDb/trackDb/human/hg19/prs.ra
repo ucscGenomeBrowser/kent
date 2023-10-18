@@ -17,6 +17,7 @@ type bed 3
         mouseOver ${effectAllele}: weight ${weight}
         dataVersion Received from nlennon@broadinstitute.org, July 13 2023
         html prs
+        skipFields reserved
         #maxWindowCoverage 40000000
         #maxItems 10000
 
@@ -34,12 +35,12 @@ type bed 3
                 parent prsEmerge pack
                 type bigBed 8 +
 
-                track prsBmi
-                shortLabel PRS-E BMI
-                longLabel Polygenic Risk Scores eMERGE: Body Mass Index
-                bigDataUrl /gbdb/hg19/prsEmerge/bmi.bb
-                parent prsEmerge pack
-                type bigBed 8 +
+                #track prsBmi
+                #shortLabel PRS-E BMI
+                #longLabel Polygenic Risk Scores eMERGE: Body Mass Index
+                #bigDataUrl /gbdb/hg19/prsEmerge/bmi.bb
+                #parent prsEmerge pack
+                #type bigBed 8 +
 
                 track prsBrCancer
                 shortLabel PRS-E Breast Cancer

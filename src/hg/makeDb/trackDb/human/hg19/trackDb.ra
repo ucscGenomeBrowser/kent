@@ -813,7 +813,7 @@ priority 2
         color 10,10,70
         altColor 70,10,10
         priority 1
-        #logoMaf multiz46way
+        logoMaf multiz46way
 
         track phyloP46wayPlacental
         subTrack cons46wayViewphyloP on
@@ -831,7 +831,7 @@ priority 2
         color 25,25,95
         altColor 95,25,25
         priority 3
-        #logoMaf multiz46way
+        logoMaf multiz46way
 
         track phyloP46wayAll
         subTrack cons46wayViewphyloP off
@@ -849,7 +849,7 @@ priority 2
         color 40,40,120
         altColor 120,40,40
         priority 4
-        #logoMaf multiz46way
+        logoMaf multiz46way
 
     track cons46wayViewphastcons
     shortLabel Element Conservation (phastCons)

@@ -11,4 +11,5 @@ table chainArrange
     uint thickEnd;     "End of where display should be thick (stop codon)"
     uint itemRgb;      "Color"
     lstring source;     "List of assemblies where break occures"
+    uint querySize;      "size of item on query side"
     )
