@@ -34,12 +34,12 @@ type bed 3
                 parent prsEmerge pack
                 type bigBed 8 +
 
-                track prsBmi
-                shortLabel PRS-E BMI
-                longLabel Polygenic Risk Scores eMERGE: Body Mass Index
-                bigDataUrl /gbdb/hg19/prsEmerge/bmi.bb
-                parent prsEmerge pack
-                type bigBed 8 +
+                #track prsBmi
+                #shortLabel PRS-E BMI
+                #longLabel Polygenic Risk Scores eMERGE: Body Mass Index
+                #bigDataUrl /gbdb/hg19/prsEmerge/bmi.bb
+                #parent prsEmerge pack
+                #type bigBed 8 +
 
                 track prsBrCancer
                 shortLabel PRS-E Breast Cancer
