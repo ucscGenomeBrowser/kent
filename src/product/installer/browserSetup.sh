@@ -1730,7 +1730,7 @@ function downloadMinimal
     notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
 
     # these tracks are hidden by default
-    hideTracks='intronEst cons100way cons46way ucscRetroAli5 mrna'
+    hideTracks='intronEst cons100way cons46way ucscRetroAli5 mrna omimGene2'
 
     stopMysql
 

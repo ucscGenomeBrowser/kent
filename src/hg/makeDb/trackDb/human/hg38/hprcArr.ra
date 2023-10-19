@@ -92,23 +92,63 @@ sortOrder view=+
         itemRgb on
 
 track hprcInsertsV1
-shortLabel Inserts
-longLabel Inserts
+shortLabel Inserts <20bp
+longLabel Inserts compared to HPRC assemblies that are less than 20bp
 bigDataUrl /gbdb/hg38/hprcArrV1/hprcInsertsV1.bb
 type bigBed 9 +
 itemRgb on
-visibility dense
+visibility hide
+group hprc
+labelFields score
+
+track hprcInsertsLargeV1
+shortLabel Inserts >= 20bp
+longLabel Inserts compared to HPRC assemblies that are greater or equal to 20bp
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcInsertsLargeV1.bb
+type bigBed 9 +
+itemRgb on
+visibility hide
+group hprc
+labelFields score
+
+track hprcDeletionsV1
+shortLabel Deletions < 20bp
+longLabel Deletions compared to HPRC assemblies that are less than 20bp
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcDeletionsV1.bb
+type bigBed 9 +
+itemRgb on
+visibility hide
+group hprc
+labelFields score
+
+track hprcDeletionsLargeV1
+shortLabel Deletions >= 20bp
+longLabel Inserts compared to HPRC assemblies that are greater or equal to 20bp
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcDeletionsLargeV1.bb
+type bigBed 9 +
+itemRgb on
+visibility hide
+group hprc
+labelFields score
+
+track hprcDoubleV1
+shortLabel Double
+longLabel Double
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcDoubleV1.bb
+type bigBed 9 +
+itemRgb on
+visibility hide
 group hprc
 labelFields score
 
 
-track hprcDeletionsV1
-shortLabel Deletions
-longLabel Deletions
-bigDataUrl /gbdb/hg38/hprcArrV1/hprcDeletionsV1.bb
+track hprcDoubleLargeV1
+shortLabel DoubleLarge
+longLabel DoubleLarge
+bigDataUrl /gbdb/hg38/hprcArrV1/hprcDoubleLargeV1.bb
 type bigBed 9 +
 itemRgb on
-visibility dense
+visibility hide
 group hprc
 labelFields score
 
