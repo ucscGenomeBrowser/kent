@@ -3959,10 +3959,8 @@ static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 	       boolean privateHost, struct trackDb **tdbRetList)
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
-/* NOTE: we no longer check to see if the data is available in CGIs
- * since this is done by hTrackDb at trackDb build time */
 {
-if (!tdb->private || privateHost)
+if ((!tdb->private || privateHost) && trackDataAccessible(database, tdb))
     slAddHead(tdbRetList, tdb);
 else if (tdbIsDownloadsOnly(tdb))
     {
