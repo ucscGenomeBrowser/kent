@@ -160,6 +160,7 @@ GCA_901709675.1_fSynAcu1.1	fish
 GCA_902153765.1_bAquChr1.2_alternate_haplotype	birds
 GCA_902459505.1_aGeoSer1.1	vertebrate
 GCA_902500255.1_fThaAma1.1	fish
+GCA_902686455.1_mSciVul1.1	mammals
 GCA_904849725.1_MorexV3_pseudomolecules_assembly	plants
 GCA_905147045.1_ilAglIoxx1.1	invertebrate
 GCA_905147105.1_ilPieBrab1.1	invertebrate
@@ -352,4 +353,5 @@ GCF_900963305.1_fEcheNa1.1	fish
 GCF_901001165.1_fSalTru1.1	fish
 GCF_902150015.1_genome_assembly_l500	birds
 GCF_903992535.1_mArvAmp1.1	mammals
+GCF_922984935.1_mMelMel3.1_paternal_haplotype	mammals
 GCF_932274485.1_xgPatVulg1.1	invertebrate
