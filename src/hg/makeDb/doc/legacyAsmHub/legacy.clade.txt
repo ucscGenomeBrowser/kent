@@ -106,6 +106,7 @@ GCA_007210705.1_Tcal_SD_v2.1	invertebrate
 GCA_007364275.2_fArcCen1	fish
 GCA_009663435.1_Callithrix_jacchus_cj1700_1.0	primates
 GCA_009762305.1_mZalCal1.pri	mammals
+GCA_009762595.1_rDerCor1.alt	vertebrate
 GCA_009764475.1_sPriPec2.pri	vertebrate
 GCA_009764565.1_rDerCor1.pri	vertebrate
 GCA_009769485.1_bCygOlo1.alt	birds
@@ -351,8 +352,11 @@ GCF_900700415.1_Ch_v2.0.2	fish
 GCF_900747795.1_fErpCal1.1	vertebrate
 GCF_900880675.1_fSpaAur1.1	fish
 GCF_900963305.1_fEcheNa1.1	fish
+GCF_901001135.1_aRhiBiv1.1	vertebrate
 GCF_901001165.1_fSalTru1.1	fish
 GCF_902150015.1_genome_assembly_l500	birds
+GCF_902459505.1_aGeoSer1.1	vertebrate
 GCF_903992535.1_mArvAmp1.1	mammals
 GCF_922984935.1_mMelMel3.1_paternal_haplotype	mammals
 GCF_932274485.1_xgPatVulg1.1	invertebrate
+GCF_902713615.1_sScyCan1.1	vertebrate
