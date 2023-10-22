@@ -120,6 +120,7 @@ GCA_009914755.4_T2T-CHM13v2.0	primates
 GCA_010909765.1_sAmbRad1.pri	vertebrate
 GCA_011004845.1_fEsoLuc1.pri	fish
 GCA_011064685.1_ZJU_Sfru_1.0	invertebrate
+GCA_011100535.1_mCalJac1.pat	primates
 GCA_011100635.1_mTriVul1.pri	mammals
 GCA_011762505.1_mArvNil1.pat.X	mammals
 GCA_011762595.1_mTurTru1.mat.Y	mammals
