@@ -1,67 +1,42 @@
 <h2>Description</h2>
 <p>
   LiftOver alignments are used to map annotations from one human assembly to another one.
-  The subtracks of this track show two different types of liftOver: the first type was
-  created by the T2T consortium using the minimap2 aligner and strong filters;
-  it maps CHM13 coordinates to the human assemblies hg19 and hg38. The second
-  type was created by the UCSC Genome Browser Group using the lastz aligner and
-  relaxed filters; it maps CHM13 coordinates to hg19, hg38 and HG002 maternal
-  and HG002 paternal. (HG002 is one of the first <a
-      href="https://humanpangenome.org/hg002/" target=_blank> Human Pangenome
-  Reference Consortium (HPRC) assemblies</a> and both haplotypes
-  are available for this genome.)</p>
+  The subtracks of this track were created by the T2T consortium using the minimap2 aligner and strong filters;
+  it maps CHM13 coordinates to the human assemblies hg19 and hg38.</p>
 
 <p>
-  The approaches of the two pipelines are different: T2T used the minimap2
+  The T2T pipeline used the minimap2
   aligner which outputs long alignments that do not require "chaining" of
   alignments into longer ones, then removed alignments that go to other
   chromosomes and removed all alignments to alternate haplotypes, fixes
-  (corrections to the assembly) and unplaced contig sequences. UCSC used the
-  lastz aligner with their chains/net pipeline (see below), and from these kept
-  all possible liftOver alignments, without a chromosome or sequence type
-  filter.</p>
+  (corrections to the assembly) and unplaced contig sequences.</p>
 
 <p>
-  This means that the T2T alignments are tuned for high specificity, where
-  as the UCSC alignments are much more sensitive. The T2T alignments are
+  This means that the T2T alignments are tuned for high specificity. These alignments are
   probably best used for mapping annotations to hg38 in automated pipelines and
   in cases where the final processing on hg38 does not use alts/fixes/unplaced
   sequences and when one wants to be sure that annotations that are mapped are
-  as reliable as possible. The UCSC alignments are probably best used for
-  manual inspection, when one is wondering "is there anything that could map to
-  this in hg38?" or when trying to get an idea where a particular sequence in
-  CHM13 could come from or when the final analysis is using the entire hg38
-  assembly, including alts/fixes/unplaced sequences.
+  as reliable as possible.
 </p>
 <p>
-  Here are some examples to illustrate the differences:
+  Here is an example to illustrate the liftOver track:
 <ul>
-    <li><a target=_blank href="https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db=hub_24696_GCA_009914755.4&position=CP068256.2:0-14,073,712&t2tLiftOverHg38=dense&ucscLiftOverHg38=dense&hgUnique=dense&censat=dense&catLiftOffGenesV1=dense">Example 1:</a> The <a href="https://en.wikipedia.org/wiki/Centromere#Acrocentric" target=_blank>acrocentric</a>
+    <li><a target=_blank href="https://genome.ucsc.edu/s/Lou/hs1LiftExample1">Example 1:</a> The <a href="https://en.wikipedia.org/wiki/Centromere#Acrocentric" target=_blank>acrocentric</a>
     arms of chromosomes 13, 14, 15, 21, 22 and Y where not sequenced in hg38 at all but they are
     present in CHM13. The T2T liftOver shows that little is mappable there, as
-    the sequence is entirely new. The UCSC liftOver pipeline shows a lot of
-    alignable pieces in them, because these repeats and rDNA sequences have
-    similar copies in hg38. It depends on the particular analysis which approach is more appropriate.
+    the sequence is entirely new.
     <br>
     A note on genes: As the link above shows, even though the sequence is new,
     the T2T group mapped hg38 Gencode 35 gene models into these regions using
     CAT/LiftOff. This is because CAT and liftOff are using approaches for their
-    lifting of genes / mapping that are not based on the liftOver alignments but sequence homology, 
-    like the UCSC liftOver pipeline.
-
-    <li><a target=_blank href="https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?db=hub_24696_GCA_009914755.4&position=CP068269.2%3A145464863%2D145472134&t2tLiftOverHg38=pack&ucscLiftOverHg38=pack">Example 2:</a> The ABO gene in CHM13
-    is a longer haplotype than in hg38. In the T2T liftOver alignments, it looks as if the sequence
-    was entirely missing in hg38. The UCSC
-    liftOver alignments show that this sequence has been patched post-release into hg38 via chr9_KN196479v1_fix.
-    Analyses ignoring alts/fixes/unplaced sequences should use the T2T alignments here.
+    lifting of genes / mapping that are not based on the liftOver alignments but sequence homology.
 </ul>
 </p>
 
 <p>
-Also, we created dot plots from these alignments as an experiment to further demonstrate the differences betweem them:
+Also, we created dot plots from these alignments:
 <ul>
     <li><a href="https://genome-test.gi.ucsc.edu/~hiram/chm13LiftOver/T2T/" target=_blank>Dot-plots for the T2T minimap2 liftOver alignments</a>
-    <li><a href="https://genome-test.gi.ucsc.edu/~hiram/chm13LiftOver/overChain/" target=_blank>Dot-plots for the UCSC Genome Browser lastz liftOver alignments</a>
 </ul>
 </p>
 
@@ -148,45 +123,6 @@ with SafFire to confirm their quality.
 </p>
 </ul>
 </p>
-
-<h2>UCSC pipeline methods</h2>
-
-The UCSC pipeline is driven by <a
-href='http://genomewiki.ucsc.edu/index.php/DoBlastzChainNet.pl'
-target=_blank>DoBlastzChainNet.pl</a>, a script used for all current human
-assemblies and hundreds of other genome comparisons. It has been developed over
-20 years and goes through these steps:
-
-<b>Alignment and chaining of alignments</b>: The <b>query</b> genome was
-aligned to <b>target</b> genome with <b>lastz</b>.  The resulting alignments
-were converted into axt format using the <b>lavToAxt</b>
-program. The axt alignments were fed into <b>axtChain</b>, which organizes all
-alignments between a single <b>query</b> chromosome and a single
-<b>target</b> chromosome into a group and creates a kd-tree out
-of the gapless subsections (blocks) of the alignments. A dynamic program
-was then run over the kd-trees to find the maximally scoring chains of these
-blocks.
-</p>
-
-<b>Netting of alignments: </b>
-Chains were derived from lastz alignments, using the methods
-described on the chain tracks description pages, and sorted with the
-highest-scoring chains in the genome ranked first. The program
-<b>chainNet</b> was then used to place the chains one at a time, trimming them as
-necessary to fit into sections not already covered by a higher-scoring chain.
-During this process, a natural hierarchy emerged in which a chain that filled
-a gap in a higher-scoring chain was placed underneath that chain. The program
-<b>netSyntenic</b> was used to fill in information about the relationship between
-higher- and lower-level chains, such as whether a lower-level
-chain was syntenic or inverted relative to the higher-level chain.
-The program <b>netClass</b> was then used to fill in how much of the gaps and chains
-contained <b>N</b>s (sequencing gaps) in one or both species and how much
-was filled with transposons inserted before and after the two organisms
-diverged.
-</p>
-
-<b>LiftOver alignment extraction:</b> Finally, the chains referred to by the top-level nets are used
-to create a liftOver alignment file using netChainSubset and chainStitchId.
 
 <h2>Credits</h2>
 <p>

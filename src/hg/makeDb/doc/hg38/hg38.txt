@@ -7053,6 +7053,8 @@ bedToBigBed -type=bed6+3 -as=/hive/data/outside/cosmic/hg38/v98/cosmic.as /hive/
 #make symlink
 ln -s /hive/data/outside/cosmic/hg38/v98/cosmic.bb /gbdb/hg38/cosmic/cosmic.bb
 
+#This data has since been updated, see new makedoc doc/hg38/cosmicV98.txt and rm #32430
+
 ##############################################################################
 # LIFTOVER TO GCA_018873775.2_hg01243.v3.0 (DONE - 2023-08-13 - Hiram)
     ssh hgwdev

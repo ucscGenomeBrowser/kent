@@ -1070,7 +1070,7 @@ static void sendJsonHogMessage(char *hogHost)
 {
 apiErrAbort(err429, err429Msg, "Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
-       "Please contact genome@soe.ucsc.edu to ask that your site "
+       "Please contact genome-www@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
        "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
        hogHost);
@@ -1092,7 +1092,7 @@ hPrintf("<title>Status %d %s</title></head>\n", err429, err429Msg);
 hPrintf("<body><h1>Status %d %s</h1><p>\n", err429, err429Msg);
 hPrintf("Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
-       "Please contact genome@soe.ucsc.edu to ask that your site "
+       "Please contact genome-www@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
        "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
        hogHost);
