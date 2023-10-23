@@ -2800,15 +2800,28 @@ for (ref = exonList; TRUE; )
                 strandChar = '-';
             }
 
-            if (!isEmpty(lf->name))
-                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d", lf->name, strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+            char* existingText = lf->mouseOver;
+            if (isEmpty(existingText))
+                existingText = lf->name;
+
+            if (!isEmpty(existingText))
+                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d", 
+                        existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
             else
-                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d", strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d", 
+                        strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
 
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
+                // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
+                // prefer a lf->mouseOver over the itemName
+                char *oldMouseOver = lf->mouseOver;
+                lf->mouseOver = NULL;
 		tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
 		    sItem, eItem, sx, y, w, heightPer);
+                // and restore the mouseOver
+                lf->mouseOver = oldMouseOver;
+
 		picStart = ex;  // prevent pileups. is this right? add 1? does it work?
 		}
 	    }
@@ -5227,6 +5240,7 @@ if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb))
     return;
 
 struct linkedFeatures *lf = item;
+
 char *newItemName   = (isEmpty(lf->mouseOver)) ? itemName: lf->mouseOver;
 
 // copied from genericMapItem

@@ -215,6 +215,26 @@ driver.find_element_by_name("Submit").click()
 driver.find_element_by_name("submit").click()
 driver.find_element_by_id("p_btn_ct_hicExampleTWO_9382").click()
 driver.find_element_by_name("ct_hicExampleTWO_9382.color").click()
+# Tests hgCollection with custom tracks
+a = ActionChains(driver)
+#identify element
+m = driver.find_element_by_id("myData")
+##hover over element
+a.move_to_element(m).perform()
+#identify sub menu element
+n = driver.find_element_by_id("customCompositeMenuLink")
+# hover over element and click
+a.move_to_element(n).click().perform()
+driver.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Collected Tracks'])[1]/following::div[2]").click()
+driver.find_element_by_xpath("//input[@id='doNewCollection']").click()
+driver.find_element_by_xpath("//a[@id='ct_10WigglebedGraphfromzero_9682_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_11wigglevariableStep_373_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_12wigglefixedStep_4829_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_15bigWigbedGraphfromzero_9486_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_16bigWigvariableStep_4209_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_18bigWigfixedSteplog_9103_anchor']/i").click()
+driver.find_element_by_id("goButton").click()
+time.sleep(5)
 
 # Tests small custom track to click into hgTrackUi
 cartReset()
@@ -291,8 +311,8 @@ driver.find_element_by_name("hgt.positionInput").clear()
 driver.find_element_by_name("hgt.positionInput").send_keys("ATDI01079686")
 driver.find_element_by_name("goButton").click()
 time.sleep(5)
-#driver.find_element_by_id("hgt.out1").click()
-#time.sleep(5)
+driver.find_element_by_id("hgt.out1").click()
+time.sleep(5)
 # Tests track hub annotation for specific machine
 if 'hub_26485' in driver.page_source:
      driver.find_element_by_xpath("//td[@id='td_data_hub_26485_assembly']/div[2]/map/area[3]").click()
