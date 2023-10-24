@@ -237,6 +237,8 @@ else
 void printDownloadLink(char *typeLabel, char *fileName)
 /* print a link to the file, so the user can download it right here */
 {
+if (fileName==NULL)
+    return;
 char *downPrefix = "";
 if (startsWith("/gbdb", fileName))
     downPrefix = "https://hgdownload.soe.ucsc.edu";
