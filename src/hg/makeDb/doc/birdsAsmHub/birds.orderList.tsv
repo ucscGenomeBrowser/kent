@@ -15,7 +15,8 @@ GCF_018691265.1_T.alba_DEE_v4.0	barn owl (U. Lausanne 2021)
 GCA_015227815.3_bHirRus1.alt.v3	Barn swallow (bHirRus1 v3 alternate hap 2021)
 GCF_015227805.2_bHirRus1.pri.v3	Barn swallow (bHirRus1 v3 primary hap 2021 refseq)
 GCF_005870125.1_lonStrDom2	Bengalese finch
-GCF_030490865.1_bPoeAtr1.hap1	black-capped chickadee (bPoeAtr1 2023)
+GCF_030490865.1_bPoeAtr1.hap1	black-capped chickadee (hap1 2023)
+GCA_030490855.1_bPoeAtr1.hap2	black-capped chickadee (hap2 2023)
 GCF_028500815.1_bRisTri1.patW.cur.20221130	black-legged kittiwake (bRisTri1 2023 refseq)
 GCA_028501385.1_bRisTri1.mat.cur.20221130	black-legged kittiwake (bRisTri1.mat 2023)
 GCA_009819655.1_bSylAtr1.pri	blackcap (2019)
@@ -23,6 +24,8 @@ GCA_009819715.1_bSylAtr1.alt	blackcap (alternate hap 2019)
 GCF_013377495.2_CAtr_DNAZoo_HiC_assembly	black swan (v2 Queensland, Australia AKBS03 2022)
 GCA_019023105.1_LSU_DiBr_2.0	black-throated flowerpiercer
 GCF_002901205.1_cyaCae2	blue tit
+GCA_028858755.1_bAraAra1.hap1	blue-and-yellow macaw (hap1 2023)
+GCA_028858555.1_bAraAra1.hap2	blue-and-yellow macaw (hap2 2023)
 GCF_001604755.1_Lepidothrix_coronata-1.0	blue-crowned manakin
 GCA_017639355.1_Aaes_hic	blue-fronted amazon (AMXYW 2021)
 GCA_001420675.1_ASM142067v1	blue-fronted amazon (FVVF132 2015)
@@ -72,8 +75,10 @@ GCA_009764595.1_bGeoTri1.pri	common yellowthroat (2019)
 GCF_000708225.1_ASM70822v1	crested ibis
 GCF_000691785.1_ASM69178v1	cuckoo roller
 GCF_000687375.1_ASM68737v1	Dalmatian pelican
-GCA_014839825.1_bDryPub1.alt	Downy woodpecker (bDryPub1 alternate hap 2020)
-GCF_014839835.1_bDryPub1.pri	Downy woodpecker (bDryPub1 primary hap 2020)
+GCA_030449815.1_bPelCri1.alt	Dalmatian pelican (alternate hap 2023)
+GCA_030463565.1_bPelCri1.pri	Dalmatian pelican (primary hap 2023)
+GCA_014839825.1_bDryPub1.alt	Downy woodpecker (alternate hap 2020)
+GCF_014839835.1_bDryPub1.pri	Downy woodpecker (primary hap 2020)
 GCF_000709895.1_ASM70989v1	East African grey crowned-crane
 GCA_011004865.1_bBalReg1.alt	East African grey crowned-crane (alternate hap 2020)
 GCA_011004875.1_bBalReg1.pri	East African grey crowned-crane (bBalReg1 2020)
@@ -88,6 +93,8 @@ GCA_017639475.1_bPluApr1.alt	Eurpoean golden plover (bPluApr1 alternate hap 2021
 GCA_017639485.1_bPluApr1.pri	European golden plover (bPluApr1 primary hap 2021)
 GCA_903797565.2_bEriRub2.2_alternate_haplotype	European robin (alternate hap 2021)
 GCA_903797595.2_bEriRub2.2	European robin (primary hap 2021)
+GCA_949628205.1_bGulAri2.1_alternate_haplotype	European shag (alternate hap 2023)
+GCA_949628215.1_bGulAri2.1	European shag (primary hap 2023)
 GCA_901699165.2_bStrTur1.2_alternate_haplotype	European turtle dove (v1.2 alternate hap 2021)
 GCA_901699155.2_bStrTur1.2	European turtle dove (v1.2 2021)
 GCA_014839765.1_bSylBor1.alt	garden warbler (bSylBor1 alternate hap 2020)
@@ -114,7 +121,9 @@ GCF_026419915.1_bHarHar1_primary_haplotype	Harpy eagle (bHarHar1 primary hap 202
 GCA_020740675.1_bCorHaw1.alt.cur	Hawaiian crow (bCorHaw1 alternate hap 2021)
 GCF_020740725.1_bCorHaw1.pri.cur	Hawaiian crow (bCorHaw1 primary hap 2021 refseq)
 GCF_002078875.1_NumMel1.0	helmeted guineafowl
-GCF_000692075.1_ASM69207v1	hoatzin
+GCF_000692075.1_ASM69207v1	hoatzin (BGI_N306 2014)
+GCA_030867145.1_bOpiHoa1.hap1	hoatzin (hap1 2023)
+GCA_030867165.1_bOpiHoa1.hap2	hoatzin (hap2 2023)
 GCF_000738735.6_ASM73873v6	hooded crow (v6 S_Up_H32 2022)
 GCA_027406555.1_bHaeMex1.alt	house finch (bHaeMex1 alternate hap 2022)
 GCA_027477595.1_bHaeMex1.pri	house finch (bHaeMex1 primary hap 2022)
@@ -151,6 +160,10 @@ GCA_008746955.1_CAU_Wild1.0	mallard CAU_Wild1.0
 GCF_003850225.1_IASCAAS_PekingDuck_PBH1.5	mallard PBH1.5
 GCF_015476345.1_ZJU1.0	mallard ZJU1.0
 GCF_017639235.1_C.kubaryi_AGA036_p1.0	Mariana crow
+GCA_963210275.1_bFalPun1.1_alternate_haplotype	Mauritius kestrel (alternate hap 2023)
+GCA_963210335.1_bFalPun1.1	Mauritius kestrel (primary hap 2023)
+GCA_963243765.1_bPsiEch3.1_alternate_haplotype	Mauritius parakeet (alternate hap 2023)
+GCA_963264785.1_bPsiEch3.1	Mauritius parakeet (primary hap 2023)
 GCF_000277835.1_GeoFor_1.0	medium ground-finch
 GCA_017639245.1_MMon_1.0	monk parakeet
 GCA_009769485.2_bCygOlo1.alt.v2	mute swan (bCygOlo1 v2 alternate hap 2021)
@@ -161,6 +174,8 @@ GCF_009650955.1_bCorMon1.pri	New Caledonian crow (2019)
 GCA_009651025.1_bCorMon1.alt	New Caledonian crow (alternate hap 2019)
 GCA_008692595.2_Cv_LA_2.0	northern bobwhite
 GCF_000690835.1_ASM69083v1	northern fulmar
+GCA_031468805.1_bMorBas2.hap1	northern gannet (hap1 2023)
+GCA_031468815.1_bMorBas2.hap2	northern gannet (hap2 2023)
 GCA_929447715.1_bAccGen1.1_alternate_haplotype	northern goshawk (bAccGen1 v1 alternate hap 2022)
 GCA_929443795.2_bAccGen1.2	northern goshawk (bAccGen1 primary hap v2 2022 genbank)
 GCF_929443795.1_bAccGen1.1	northern goshawk (bAccGen1 primary hap v1 2022 refseq)
@@ -170,6 +185,8 @@ GCA_023634185.1_bFalPer1.alt	peregrine falcon (bFalPer1 alternate hap 2022)
 GCF_023634155.1_bFalPer1.pri	peregrine falcon (bFalPer1 primary hap 2022 refseq)
 GCF_000337955.1_F_peregrinus_v1.0	peregrine falcon (BGI 2013)
 GCF_024509145.1_ASM2450914v1	pin-tailed whydah (BioBank_ID:100142 2022)
+GCA_963082445.1_bNesMay2.1_alternate_haplotype	pink pigeon (alternate hap 2023)
+GCA_963082525.1_bNesMay2.1	pink pigeon (primary hap 2023)
 GCA_020745805.1_bTheCae1.alt.cur	plumbeous ibis (bTheCae1 alternate hap 2021)
 GCA_020745775.1_bTheCae1.pri.cur	plumbeous ibis (bTheCae1 primary hap 2021)
 GCA_000332375.2_ASM33237v2	Puerto Rican parrot (LU 182127 2020)
@@ -183,7 +200,9 @@ GCA_015220805.1_bPogPus1.pri	red-fronted tinkerbird (bPogPus1 primary hap 2020)
 GCA_019345075.1_ASM1934507v1	red-legged partridge
 GCA_009819825.1_bCarCri1.pri	red-legged seriema (2019)
 GCA_009819485.1_bCarCri1.alt	red-legged seriema (alternate hap 2019)
-GCF_000690875.1_ASM69087v1	red-throated loon
+GCF_000690875.1_ASM69087v1	red-throated loon (BGI_N328 2014)
+GCA_030936125.1_bGavSte3.hap1	red-throated loon (hap1 2023)
+GCA_030936135.1_bGavSte3.hap2	red-throated loon (hap2 2023)
 GCF_020745825.1_Agelaius_phoeniceus_1.1	red-winged blackbird (BioBank_ID:100140 2023)
 GCF_000710305.1_ASM71030v1	rhinoceros hornbill
 GCA_016880875.1_bAcaChl1.alt	rifleman (bAcaChl1 alternate hap 2021)
@@ -212,7 +231,9 @@ GCA_022749775.1_bMelMel1.0.a	song sparrow (gouldii PMB2087b alternate hap 2022)
 GCA_022749695.1_bMelMel1.0.p	song sparrow (gouldii PMB2087b primary hap 2022)
 GCA_020801775.1_bPorHoc1.pat.decon	South Island takahe (alternate 2021)
 GCA_020800305.1_bPorHoc1.mat.Z.cur	South Island takahe (primary 2021)
-GCF_000690715.1_ASM69071v1	speckled mousebird
+GCF_000690715.1_ASM69071v1	speckled mousebird (BGI_N325 2014)
+GCA_028858725.1_bColStr4.hap1	speckled mousebird (hap1 2023)
+GCA_028858625.1_bColStr4.hap2	speckled mousebird (hap2 2023)
 GCA_026979555.1_bVidCha1_purged_dups_haplotype	steelblue widowfinch (purged dups hap OUT-0048 2022)
 GCA_026979565.1_bVidCha1_merged_haplotype	steelblue widowfinch (merged hap OUT-0048 2022)
 GCA_026168045.1_bCyaSte1.0.a	Steller's jay (frontalis alternate hap 2022)
@@ -240,8 +261,10 @@ GCA_905368555.1_MGAL_WU_HG_1.0	turkey (WU_HG_1 2021)
 GCF_026979565.1_bVidCha1_merged_haplotype	village indigobird (OUT-0048 2022)
 GCA_022605895.1_bRalLim1.0.a	Virginia rail (171378401 alternate hap 2022)
 GCA_022605955.1_bRalLim1.0.p	Virginia rail (171378401 primary hap 2022)
-GCA_028536645.1_bAphCal1.0.hap2	Western scrub-jay (CA MVZ Bird 193978 2023)
-GCA_028536675.1_bAphCal1.0.hap1	Western scrub-jay (CA MVZ Bird 193978 2023)
+GCA_951394355.1_bTetUro1.1_alternate_haplotype	western capercaillie (alternate hap 2023)
+GCA_951394365.1_bTetUro1.1	western capercaillie (primary hap 2023)
+GCA_028536645.1_bAphCal1.0.hap2	western scrub-jay (CA MVZ Bird 193978 2023)
+GCA_028536675.1_bAphCal1.0.hap1	western scrub-jay (CA MVZ Bird 193978 2023)
 GCA_020745695.1_bHemCom1.alt.cur	whiskered treeswift (bHemCom1 alternate hap 2021)
 GCA_020745705.1_bHemCom1.pri.cur	whiskered treeswift (bHemCor1 primary hap 2021)
 GCF_015832195.1_Motacilla_alba_V1.0_pri	white wagtail
@@ -255,7 +278,8 @@ GCF_019238085.1_USGS_WTPT01	white-tailed ptarmigan
 GCF_000687285.1_ASM68728v1	white-tailed tropicbird
 GCF_000385455.1_Zonotrichia_albicollis-1.0.1	white-throated sparrow
 GCF_000705375.1_ASM70537v2	white-throated tinamou
-GCF_028858705.1_bGruAme1.mat	whooping crane (bGruAme1 2023)
+GCF_028858705.1_bGruAme1.mat	whooping crane (maternal hap 2023)
+GCA_028858595.1_bGruAme1.pat	whooping crane (paternal hap 2023)
 GCF_003031625.1_ASM303162v1	willow flycatcher
 GCF_003945595.2_ASM394559v2	wire-tailed manakin (2020)
 GCA_029207785.1_bChaFas1.0.hap2	wrentit (frontalis MVZ Bird 193981 alternate hap 2023)
