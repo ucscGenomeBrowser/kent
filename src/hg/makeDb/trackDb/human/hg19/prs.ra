@@ -51,6 +51,13 @@ pennantIcon New red ../goldenPath/newsarch.html#102323 "Released Oct. 23, 2023"
                 parent prsEmerge pack
                 type bigBed 8 +
 
+                track prsChKidneyDis
+                shortLabel PRS-E Ch Kidney Dis
+                longLabel Polygenic Risk Scores eMERGE: Chronic Kidney Disease
+                bigDataUrl /gbdb/hg19/prsEmerge/ckd.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+
                 track prsCorHeartDis
                 shortLabel PRS-E Cor Heart Dis
                 longLabel Polygenic Risk Scores eMERGE: Coronary Heart Disease
