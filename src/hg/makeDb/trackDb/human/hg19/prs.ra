@@ -32,7 +32,7 @@ pennantIcon New red ../goldenPath/newsarch.html#102323 "Released Oct. 23, 2023"
 
                 track prsAtrialFib
                 shortLabel PRS-E Atrial Fib
-                longLabel Polygenic Risk Scores eMERGE: Atrial Fibrilation
+                longLabel Polygenic Risk Scores eMERGE: Atrial Fibrillation
                 bigDataUrl /gbdb/hg19/prsEmerge/atrial_fibrilation.bb
                 parent prsEmerge pack
                 type bigBed 8 +
