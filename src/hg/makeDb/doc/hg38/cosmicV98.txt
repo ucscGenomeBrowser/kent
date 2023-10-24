@@ -1,0 +1,159 @@
+#This makedoc is for the update to the v98 track (#29625) originally in the hg38.txt makedoc
+#A user wrote in and many errors were found, largely due to the provider not correctly coverting to proper BED file coordinates
+#The following is the python script run to generate the new file, followed by the output
+
+#Parse the COSMIC input file and try and correct the incorrect coordinates. See https://redmine.soe.ucsc.edu/issues/32430
+
+import subprocess
+
+def writeOutToFile(outputFile,chrom,chromStart,chromEnd,refAllele,altAllele,strand,mutationID,legacyID):
+    outputFile.write(chrom+"\t"+str(chromStart)+"\t"+str(chromEnd)+"\t"+mutationID+"\t0\t"+strand+"\t"+refAllele+"\t"+altAllele+"\t"+legacyID+"\n")
+
+def bash(cmd):
+    """Run the cmd in bash subprocess"""
+    try:
+        rawBashOutput = subprocess.run(cmd, check=True, shell=True,\
+                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
+        bashStdoutt = rawBashOutput.stdout
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    return(bashStdoutt)
+
+#Vars
+inputFile = open("/hive/data/outside/cosmic/hg38/v98/ucsc_export.bed","r")
+outputFile = open("/hive/data/outside/cosmic/hg38/v98/cosmicV93.bed","w")
+outputFilePath = "/hive/data/outside/cosmic/hg38/v98/cosmicV93.bed"
+badItems = 0
+insertionsFixed = 0
+deletionsFixed = 0
+delinsFixed = 0
+pointSubsFixed = 0
+correctEntries = 0
+n = 0
+criticalErrors = 0
+
+print("Printing entries that are illegal (chromStart > chromEnd)")
+
+#chr19   56183614        56183614        G       T       +       COSV61999794    COSN20232200
+for entry in inputFile:
+    n+=1
+    entry = entry.rstrip()
+    entrySplit = entry.split("\t")
+    chrom = entrySplit[0]
+    chromStart = int(entrySplit[1])
+    chromEnd = int(entrySplit[2])
+    refAllele = entrySplit[3]
+    altAllele = entrySplit[4]
+    strand = entrySplit[5]
+    mutationID = entrySplit[6]
+    legacyID = entrySplit[7]
+
+    # Look for incorrect insertions which have start > end, and need -2 to start
+    if chromStart > chromEnd:
+        badItems+=1
+        chromStart = chromStart-2
+        chromEnd = chromEnd+1
+        print(entry)
+        
+    # Handle insertions which can also be dups, same coordinate insertions are fine but dups need -2 to end and -1 to start
+    elif refAllele == "" and altAllele != "":
+        if chromEnd-chromStart==2:
+            chromEnd = chromEnd-2
+            chromStart = chromStart-1
+            insertionsFixed+=1
+        elif chromEnd-chromStart==1:
+            insertionsFixed+=1
+            chromEnd = chromEnd-1
+            chromStart = chromStart-1
+        else:
+            n+=1
+        
+    # Handle deletions which are wrong when they are only 1 or 2 bases in size. Some 2 size items are correct, so check for that too
+    elif altAllele == "" and refAllele != "" and len(refAllele) < 3:
+        if chromEnd-chromStart != 2:
+            deletionsFixed+=1
+            chromStart = chromStart-1
+        
+    # Handle delins of different sizes which are wrong
+    elif altAllele != "" and refAllele != "" and len(altAllele) != len(refAllele):
+        delinsFixed+=1
+        chromStart = chromStart-1
+        
+    # Handle point substitutions which are wrong and need -1 to start
+    elif altAllele != "" and refAllele != "" and len(altAllele) == 1 and len(refAllele) == 1:
+        pointSubsFixed+=1
+        chromStart = chromStart-1
+        
+    # Final check for any illegal coordinates, all cases should have been covered before this
+    elif chromStart == chromEnd or chromStart > chromEnd:
+        criticalErrors+=1
+        print("ERROR: This should never come up. Problem with variant below.")
+        print(entry)
+    
+    # Final count of items that were properly formatted
+    else:
+        correctEntries+=1
+    
+    #Write out corrected (if needed) coordinates to file:
+    writeOutToFile(outputFile,chrom,chromStart,chromEnd,refAllele,altAllele,strand,mutationID,legacyID)
+
+outputFile.close()
+inputFile.close()
+
+# pointSubsFixed delinsFixed deletionsFixed insertionsFixed badItems criticalErrors correctEntries n
+print("Point substitutions fixed: "+str(pointSubsFixed)+" ("+str(round(pointSubsFixed/n,3))+"%)\nDeletionInsertions fixed: "+str(delinsFixed)+" ("+str(round(delinsFixed/n,3))+"%)\n" \
+     +"Deletions fixed: "+str(deletionsFixed)+" ("+str(round(deletionsFixed/n,3))+"%)\nInsertions fixed: "+str(insertionsFixed)+" ("+str(round(insertionsFixed/n,3))+"%)\n" \
+     +"Illegal items with start > end: "+str(badItems)+" ("+str(round(badItems/n,3))+"%)\nCritical errors: "+str(criticalErrors)+" ("+str(round(criticalErrors/n,3))+"%)\n" \
+     +"Correct entries not changed: "+str(correctEntries)+" ("+str(round(correctEntries/n,3))+"%)\nTotal items: "+str(n))
+
+bash("bedSort "+outputFilePath+" "+outputFilePath+".sorted")
+bash("bedToBigBed -type=bed6+3 -as=/hive/data/outside/cosmic/hg38/v98/cosmic.as -tab "+outputFilePath+".sorted /cluster/data/hg38/chrom.sizes /hive/data/outside/cosmic/hg38/v98/cosmic.bb")
+#make symlink
+bash("ln -s /hive/data/outside/cosmic/hg38/v98/cosmic.bb /gbdb/hg38/cosmic/cosmic.bb")
+
+####OUTPUT#####
+
+Printing entries that are illegal (chromStart > chromEnd)
+chr1	54139647	54139646		G	-	COSV61283612	COSM4967518
+chr1	92832120	92832119		C	+	COSV59873663	COSM5751392
+chr10	14908622	14908621		T	-	COSV57954760	COSM5751422
+chr11	32434699	32434698		T	-	COSV60065461	COSM5751469
+chr11	61967312	61967311		TCTTACTACTTTGACCGCGATGATGTGGCTTTGAAGAACTTTGCCAAATACTTTCTTCACCAATCTCATGAGGA	-	COSV56445358	COSM4746415
+chr12	25225627	25225626		T	-	COSV55926705	COSM5752083
+chr12	25225676	25225675		T	-	COSV55736226	COSM5751707
+chr14	32822108	32822107		A	+	COSV55234562	COSM5751856
+chr14	32822293	32822292		A	+	COSV55225526	COSM5751218
+chr14	32822984	32822983		A	+	COSV55217470	COSM5751765
+chr14	72465624	72465623		GGAT	+	COSV59575192	COSN190986
+chr14	99257556	99257555		T	-	COSV61735888	COSM5751532
+chr14	99257788	99257787		G	-	COSV61733306	COSM5751244
+chr16	67611246	67611245		A	+	COSV50461550	COSM5751489
+chr16	67611510	67611509		A	+	COSV50465990	COSM5751202
+chr17	7669666	7669665		T	-	COSV53205989	COSM5751520
+chr17	31327838	31327837		AGAGTTTA	+	COSV106105962	COSM34184
+chr19	10795440	10795439		A	+	COSV58965104	COSM5752008
+chr19	44274080	44274079		AACTCTCTGGTGAAGACCAGAATTCCTATTAAATATCCTGTCACTTACTT	-	COSV61933827	COSM5016626
+chr19	54145818	54145817		A	+	COSV55364997	COSM5751982
+chr19	54148744	54148743		A	+	COSV55366597	COSM5751751
+chr2	178443266	178443265		AAAGGGGGCATCAAAAAAGCAAGCCAAAAGGAACGCTGCT	-	COSV57870943	COSM4746427
+chr2	189854347	189854346		A	+	COSV59720649	COSM5751951
+chr2	241740952	241740951		G	+	COSV100345173	COSN31769167
+chr21	34834466	34834465		T	-	COSV55877103	COSM5751784
+chr3	52587352	52587351		A	-	COSV56310253	COSM422809
+chr3	195781704	195781703		CACGCCACCCCTCTTCATGTCACCAGCCCTTCCTCAGCATCCACAGGTGA	-	COSV57801139	COSM5016048
+chr6	31669484	31669483		CCT	+	COSV65507799	COSM306820
+chr6	134173149	134173148		A	-	COSV52804500	COSM1161565
+chr6	135195910	135195909		A	+	COSV57199385	COSM5751503
+chr6	138885581	138885580		G	+	COSV62884323	COSM5752103
+chr7	5986937	5986936		G	-	COSV56220859	COSM5751600
+chr7	50327638	50327637		A	+	COSV58792006	COSM5751834
+chrX	37453358	37453357		C	+	COSV66158042	COSM1161821
+chrX	41125720	41125719		TCTCGC	+	COSV61067912	COSN19269805
+Point substitutions fixed: 12394972 (0.938%)
+DeletionInsertions fixed: 4430 (0.0%)
+Deletions fixed: 322858 (0.024%)
+Insertions fixed: 316932 (0.024%)
+Illegal items with start > end: 35 (0.0%)
+Critical errors: 0 (0.0%)
+Correct entries not changed: 162397 (0.012%)
+Total items: 13218527

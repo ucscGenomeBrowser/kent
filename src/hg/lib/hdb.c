@@ -3936,9 +3936,6 @@ if (bigDataUrl != NULL)
     }
 else
     {
-    // we now allow references to native tracks in track hubs
-    tdb->table = trackHubSkipHubName(tdb->table);
-
     // if it's copied from a custom track, wait to find data later
     if (isCustomTrack(tdb->table))
         return TRUE;
@@ -3961,8 +3958,15 @@ static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-if ((!tdb->private || privateHost) && trackDataAccessible(database, tdb))
+if ((!tdb->private || privateHost))
+    {
+    // we now allow references to native tracks in track hubs (for track collections)
+    // so we need to give the downstream code the table name if there is no bigDataUrl.
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl == NULL)
+        tdb->table = trackHubSkipHubName(tdb->table);
     slAddHead(tdbRetList, tdb);
+    }
 else if (tdbIsDownloadsOnly(tdb))
     {
     // While it would be good to make table NULL, since we should support tracks
