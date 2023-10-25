@@ -14,7 +14,7 @@ The genome browser&lsquo;s primary way to annotate the genome uses colored recta
 a bigBed. These were originally used for genes but then evolved to cover other types of annotations,
 e.g. enhancers, chromatin modifications, or single nucleotide variants. We usually call these
 annotations &ldquo;features&rdquo;. Each rectangle (&ldquo;exon&rdquo;) of a feature has the same
-color and individual parts cannot be highlighted. If you want to highlight parts of the features,
+color and individual parts cannot be highlighted. If you wanted to highlight parts of the features,
 traditionally this required a second track.</p>
 <div class="text-center">
         <img src="../../images/runx2.png" style="width:80%;max-width:1083px">
@@ -46,7 +46,7 @@ insertion positions on the genome with small triangles.</p>
         <img src="../../images/glyphsEx.png" style="width:40%;max-width:1083px">
 </div>
 
-<p>We appreciate user feedback, If you have glyph questions, glyph style requests, or have found
+<p>We appreciate user feedback. If you have glyph questions, glyph style requests, or have found
 new glyph applications, please contact one of our
 <a href="../../contacts.html" target="_blank">Genome Browser support emails</a>.</p>
 
@@ -83,7 +83,9 @@ decorator.default.bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/de
 </code></pre>
 Other settings are available to further configure decorators.  Each may be applied to the
 decorator instead of the primary track by prepending "decorator.default." to the setting.  For
-example, to set up a filterValues filter on the "keywords" field of the decorator, allowing the
+example, to set up a
+<a href="hubQuickStartFilter.html#filterValues">filterValues filter</a>
+on the "keywords" field of the decorator, allowing the
 user to filter to any combination of three classes "Type1", "Type2", and "Type3", the following
 trackDb entry could be used.
 <pre>
@@ -94,7 +96,7 @@ itemRgb on
 decorator.default.bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb
 decorator.default.filterValues.keywords Type1,Type2,Type3
 </code></pre>
-Please note that this would also require building an extra <code>keyword</code> field into the decorator
+Please note that this would also require building an extra <code>keywords</code> field into the decorator
 bigBed to hold those values.  A full list of supported decorator settings is available in the
 <a href="trackDb/trackDbDoc.html">trackDb documentation</a>, while the next section discusses how
 to build a decorator bigBed file.
@@ -181,7 +183,7 @@ Create a decorator bigBed custom track using the decorator bigBed file from Exam
   Construct a track line that references the <a href="examples/decorator/main.bb">bigBed</a>
   and <a href="examples/decorator/decorations.bb">decorator bigBed file</a>:</p>
   <pre><code>browser position chr1:1000-2000
-track type=bigBed name=&quot;Decorators Example Two&quot; description=&quot;bigBed with decorators&quot; visibility=pack bigDataUrl=https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/decorator/main.bb decorator.default.bigDataUrl=https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb</code></pre>
+track type=bigBed name=&quot;Decorators Example Two&quot; description=&quot;bigBed with decorators&quot; visibility=pack bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb decorator.default.bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb</code></pre>
   <li>
   Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track
   page</a> for the human assembly, hg38.</li>
@@ -191,8 +193,8 @@ track type=bigBed name=&quot;Decorators Example Two&quot; description=&quot;bigB
 <p>
 Custom tracks can also be loaded via one URL line. The link below loads the same bigBed with decorators track
 and sets additional parameters in the URL:</p>
-<a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigBed%20bigDataUrl=https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/decorator/main.bb%20decorator.default.bigDataUrl=https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb"
-target="_blank"><pre><code>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;hgct_customText=track%20type=bigBed%20bigDataUrl=https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/decorator/main.bb%20decorator.default.bigDataUrl=https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb
+<a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigBed%20bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb%20decorator.default.bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb&position=chr1:1000-2000"
+target="_blank"><pre><code>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;hgct_customText=track%20type=bigBed%20bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb%20decorator.default.bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb&amp;position=chr1:1000-2000
 </code></pre></a>
 
 <a name="Example3"></a>
