@@ -343,6 +343,7 @@ GCF_016920785.1_Ixodes_scapularus_ComboLowHiFi	invertebrate
 GCF_017639655.1_bFalNau1.pat	birds
 GCF_021218885.1_Marmota_monax_Labrador192_V1.0	mammals
 GCF_021288785.1_ASM2128878v2	mammals
+GCF_022539665.1_CSIRO_AGI_Dcar_v0.2	invertebrate
 GCF_023065955.1_UrsArc1.0	mammals
 GCF_900094665.1_CAROLI_EIJ_v1.1	mammals
 GCF_900246225.1_fAstCal1.2	fish
