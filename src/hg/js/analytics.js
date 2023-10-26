@@ -6,29 +6,29 @@ document.body.onload = addGtag;
 
 function addGtag() {
   var hostName = location.hostname;
-  var analyticsKey = "UA-4289047-5";
+  var analyticsKey = "G-EGJY1746VM";
   if (hostName.search("genome.ucsc") > -1) {
-    analyticsKey = "UA-4289047-4";
+    analyticsKey = "G-P5EV0BL192";
   } else if (hostName.search("hgw[0-9]") > -1) {
-    analyticsKey = "UA-4289047-4";
+    analyticsKey = "G-P5EV0BL192";
   } else if (hostName.search("genome-euro") > -1) {
-    analyticsKey = "UA-4289047-8";
+    analyticsKey = "G-G5K9F3K9H2";
   } else if (hostName.search("genome-asia") > -1) {
-    analyticsKey = "UA-4289047-9";
+    analyticsKey = "G-LGP1NRZN4H";
   } else if (hostName.search("genome-test") > -1) {
-    analyticsKey = "UA-4289047-3";
+    analyticsKey = "G-RT83HV74PS";
   } else if (hostName.search("hgwdev.gi") > -1) {
-    analyticsKey = "UA-4289047-3";
+    analyticsKey = "G-RT83HV74PS";
   } else if (hostName.search("hgwbeta") > -1) {
-    analyticsKey = "UA-4289047-6";
+    analyticsKey = "G-X4EVCTYJ3E";
   } else if (hostName.search("genome-preview") > -1) {
-    analyticsKey = "UA-4289047-7";
+    analyticsKey = "G-S8DG7ZEQDB";
   } else if (hostName.search("hgwalpha") > -1) {
-    analyticsKey = "UA-4289047-7";
+    analyticsKey = "G-S8DG7ZEQDB";
   } else if (hostName.search("hgdownload") > -1) {
     analyticsKey = "G-PWFD1NPDNM";
   } else if (hostName.search("hgwdev-hiram") > -1) {
-    analyticsKey = "UA-4289047-10";
+    analyticsKey = "G-GTG3B0HBYJ";
   }
 
   var gtagScript = document.createElement("script");
