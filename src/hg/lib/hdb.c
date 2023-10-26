@@ -816,6 +816,9 @@ struct sqlConnection *hConnectCentral()
  * not specific to a particular genome lives.  Free this up
  * with hDisconnectCentral(). */
 {
+if (hIsUcscHost())
+    sqlSetIsUcscMirror(TRUE);
+
 if (centralCc == NULL)
     hCentralMkCache();
 return sqlConnCacheAlloc(centralCc, centralDb);
@@ -1471,10 +1474,13 @@ char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
     return path;
 
-freeMem(path);
-path = replaceChars(fileName, "/gbdb/", newGbdbLoc2);
-if (cfgOptionBooleanDefault("traceGbdb", FALSE))
-    fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+if (newGbdbLoc2!=NULL)
+    {
+    freeMem(path);
+    path = replaceChars(fileName, "/gbdb/", newGbdbLoc2);
+    if (cfgOptionBooleanDefault("traceGbdb", FALSE))
+        fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+    }
 
 return path;
 }
@@ -3527,6 +3533,18 @@ if (httpHost == NULL)
     return FALSE;
 
 return startsWith(prefix, httpHost);
+}
+
+boolean hIsUcscHost()
+/* Return TRUE if this is one of our own servers: any regional node, beta or test. */
+{
+char *geoSuffix = cfgOption("browser.geoSuffix");
+fprintf(stderr, "Geo suffix is %s<br>", geoSuffix);
+if (geoSuffix)
+    return TRUE;
+if (hIsPrivateHost())
+    fprintf(stderr, "is private host<br>");
+return hIsPrivateHost() || hIsBetaHost();
 }
 
 boolean hIsPrivateHost()
