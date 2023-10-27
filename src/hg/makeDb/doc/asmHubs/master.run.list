@@ -3522,6 +3522,7 @@
 ./runBuild GCF_030028045.1_mHipAmp2.hap2 mammals Hippopotamus_amphibius_kiboko
 ./runBuild GCF_030028575.1_MMel_1.1 birds Malurus_melanocephalus
 ./runBuild GCF_030052815.1_ASM3005281v1 plants Hevea_brasiliensis
+./runBuild GCF_030144855.1_sHypSab1.hap1 vertebrate Hypanus_sabinus
 ./runBuild GCF_030247185.1_Malgen_1.1 invertebrate Malaya_genurostris
 ./runBuild GCF_030247195.1_ASM3024719v1 invertebrate Topomyia_yanbarensis
 ./runBuild GCF_030253575.1_ASM3025357v1 plants Rhododendron_vialii
