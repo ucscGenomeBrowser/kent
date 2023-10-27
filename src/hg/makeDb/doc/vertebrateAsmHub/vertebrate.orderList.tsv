@@ -4,11 +4,11 @@ GCF_027172205.1_rPodRaf1.pri	Aeolian wall lizard (rPodRaf1 primary hap 2022)
 GCA_004786255.1_Pads_1.0	African bullfrog (1538 2019)
 GCF_017654675.1_Xenopus_laevis_v10.1	African clawed frog (2021)
 GCF_000281125.3_ASM28112v4	American alligator (KSC_2009_1 2016)
-GCA_030867065.1_rAllMis1	American alligator (rAllMis1 2023)
+GCF_030867095.1_rAllMis1	American alligator (2023 refseq)
 GCF_028640845.1_ASM2864084v1	Asian vine snake (Xishuangbanna 2023)
 GCF_014858855.1_ASM1485885v1	Asiatic toad (SCDJY-AF-19 2020)
-GCA_030144855.1_sHypSab1.hap1	Atlantic stingray (hap1 sHypSab1 2023)
-GCA_030144785.1_sHypSab1.hap2	Atlantic stingray (hap2 sHypSab1 2023)
+GCF_030144855.1_sHypSab1.hap1	Atlantic stingray (hap1 2023 refseq)
+GCA_030144785.1_sHypSab1.hap2	Atlantic stingray (hap2 2023)
 GCF_001723895.1_CroPor_comp1	Australian saltwater crocodile
 GCA_026167985.1_rPhrBla1.0.hap1	Blainville's horned lizard (primary hap 2022)
 GCA_026167975.1_rPhrBla1.0.hap2	Blainville's horned lizard (alternate hap 2022)
@@ -22,13 +22,19 @@ GCF_900067755.1_pvi1.1	central bearded dragon
 GCF_000455745.1_ASM45574v1	Chinese alligator
 GCF_000230535.1_PelSin_1.0	Chinese soft-shelled turtle
 GCF_000225785.1_LatCha1	coelacanth
+GCA_905171725.1_aRanTem1.1_alternate_haplotype	common frog (alternate hap 2021)
 GCF_001077635.1_Thamnophis_sirtalis-6.0	common garter snake
 GCF_004329235.1_PodMur_1.0	common wall lizard
-GCF_905171765.1_aBufBuf1.1	common toad
+GCA_905171715.1_aBufBuf1.1_alternate_haplotype	common toad (alternate hap 2021)
+GCF_905171765.1_aBufBuf1.1	common toad (primary hap 2021)
 GCF_001185365.1_UNIGE_PanGut_3.0	corn snake
+GCA_951804955.1_rPodCre2.1_alternate_haplotype	Cretan wall lizard (alternate hap 2023)
+GCA_951804945.1_rPodCre2.1	Cretan wall lizard (primary hap 2023)
 GCF_027887155.1_rMalTer1.hap1	diamondback terrapin (hap1 rMalTer1 2023)
 GCA_027887205.1_rMalTer1.hap2	diamondback terrapin (hap2 rMalTer1 2023)
 GCF_900518735.1_EBS10Xv2-PRI	eastern brown snake
+GCA_027917425.1_aGasCar1.pri	eastern narrow-mouthed toad (primary haplotype 2023)
+GCA_027917415.1_aGasCar1.hap2	eastern narrow-mouthed toad (hap2 2023)
 GCF_018977255.1_IMCB_Cmil_1.0	elephant shark (2021)
 GCA_020745735.1_sHemOce1.pat.X.cur.	epaulette shark (sHemOce1 2021)
 GCA_020745765.1_sHemOce1.mat.decon	epaulette shark (alternate hap sHemOce1 2021)
@@ -46,8 +52,9 @@ GCA_030035715.1_rRhiFlo1.hap1	Florida worm lizard (hap1 rRhiFlo1 2023)
 GCA_030035675.1_rRhiFlo1.hap2	Florida worm lizard (hap2 rRhiFlo1 2023)
 GCA_902459495.1_aGeoSer1.1_alternate_haplotype	Gaboon caecilian (alternate hap 2019)
 GCA_902459505.2_aGeoSer1.2	Gaboon caecilian (v1.2 2021 genbank)
-GCF_001723915.1_GavGan_comp1	gharial
-GCA_030020295.1_rGavGan2.hap2	gharial (hap2 rGavGan2 2023)
+GCF_001723915.1_GavGan_comp1	gharial (Ggan-Ray 2016)
+GCA_030020385.1_rGavGan2.hap1	Gharial (hap1 2023)
+GCA_030020295.1_rGavGan2.hap2	gharial (hap2 2023)
 GCA_030035685.1_sMobBir1.hap2	giant manta (sMobBir1 2023)
 GCF_007399415.2_rGopEvg1_v1.p	Goodes thornscrub tortoise (Sinaloan 2019)
 GCA_007399395.1_rGopEvg1_v1.alt	Goodes thornscrub tortoise (Sinaloan alternate hap 2019)
@@ -94,6 +101,7 @@ GCA_027410445.1_aDisPic1.pri	painted frog (primary hap 2022)
 GCA_027382365.2_aSpeBom1.2.alt	plains spadefoot toad (alternate hap 2022)
 GCF_027358695.1_aSpeBom1.2.pri	plains spadefoot toad (primary hap 2022)
 GCF_013100865.1_CAS_Tse_1.0	red-eared slider turtle
+GCA_900700845.3_fErpCal1.3_alternate_haplotype	reedfish (alternate hap 2021)
 GCF_016161935.1_ASM1616193v1	Reeves's turtle
 GCA_023053685.1_rDiaPun1.0.p	Ringneck snake (HBS135679 primary hap 2022)
 GCA_031021105.1_rEryReg1.hap1	royal ground snake (hap1 2023)
@@ -108,7 +116,8 @@ GCA_023053635.1_rElgMul1.0.p	San Diego alligator lizard (HBS135686 primary hap 2
 GCA_023053665.1_rDiaPun1.0.a	San Diego ringneck snake (HBS135679 alternate hap 2022)
 GCA_009819545.1_rLacAgi1.alt	sand lizard (alternate hap 2019)
 GCF_009819535.1_rLacAgi1.pri	sand lizard (primary hap 2019)
-GCF_029499605.1_aHylSar1.hap1	Sardinian treefrog (aHylSar1 2023)
+GCF_029499605.1_aHylSar1.hap1	Sardinian treefrog (hap1 2023)
+GCA_029493135.1_aHylSar1.hap2	Sardinian treefrog (hap2 2023)
 GCF_001447785.1_Gekko_japonicus_V1.1	Schlegel's Japanese gecko
 GCA_010993595.1_kPetMar1.alt	sea lamprey (alternate hap 2020)
 GCF_010993605.1_kPetMar1.pri	sea lamprey (primary hap 2020)

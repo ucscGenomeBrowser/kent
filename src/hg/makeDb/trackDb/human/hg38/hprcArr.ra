@@ -123,7 +123,7 @@ labelFields score
 
 track hprcDeletionsLargeV1
 shortLabel Deletions >= 20bp
-longLabel Inserts compared to HPRC assemblies that are greater or equal to 20bp
+longLabel Deletions compared to HPRC assemblies that are greater or equal to 20bp
 bigDataUrl /gbdb/hg38/hprcArrV1/hprcDeletionsLargeV1.bb
 type bigBed 9 +
 itemRgb on

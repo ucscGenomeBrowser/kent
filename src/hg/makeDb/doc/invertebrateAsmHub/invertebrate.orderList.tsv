@@ -54,6 +54,7 @@ GCF_009602425.1_ASM960242v1	Australian red waratah sea anemone
 GCF_000699065.1_Lcup_2.0	Australian sheep blowfly
 GCF_022045245.1_ASM2204524v1	Australian sheep blowfly (Lc7/37 2022)
 GCF_000002995.4_B_malayi-4.0	B.malayi (v4 2019 agent of lymphatic filariasis)
+GCF_031769215.1_AGI_CSIRO_Ybal_v1	Ballot's saucer scallop (Yb309-2  2023)
 GCF_000671375.1_Cexi_2.0	bark scorpion
 GCF_015706575.1_ASM1570657v1	bat star
 GCF_000648675.2_Clec_2.1	bed bug
@@ -156,7 +157,7 @@ GCF_023701775.1_HaSCD2	cotton bollworm (SCD 2022)
 GCF_011630105.1_ASM1163010v1	crinoids A.japonica
 GCF_001949145.1_OKI-Apl_1.0	crown-of-thorns starfish
 GCF_019059575.1_NRLGWU_Aamphi_draft	crustacean A.amphitrite
-GCF_022539665.1_CSIRO_AGI_Dcar_v0.2	crustacean D.carinata (CSIRO-1 2022)
+GCF_022539665.2_CSIRO_AGI_Dcar_HiC_V3	crustacean D.carinata (v2 CSIRO-1 2023)
 GCF_020631705.1_ASM2063170v1.1	crustacean D.magna (NIES Sungkyunkwan U. 2021)
 GCF_003990815.1_ASM399081v1	crustacean D.magna (SK Sungkyunkwan U. 2019 refseq)
 GCF_021234035.1_SC_F0-13Bv2	crustacean D.pulicaria (SC F1-1A 2022)
@@ -265,12 +266,14 @@ GCF_000005925.1_dwil_caf1	fly D.willistoni (TSC 14030-0811.24 2006)
 GCF_016746365.2_Prin_Dyak_Tai18E2_2.1	fly D.yakuba (v2 2021)
 GCF_905115235.1_iHerIll2.2.curated.20191125	fly H.illucens
 GCF_024334085.1_ASM2433408v1	fly L.longipalpis (SR_M1_2022 2022)
+GCF_947086385.1_Phlebotomus_argentipes_genome_assembly	fly P.argentipes (2022)
 GCF_024763615.1_Ppap_2.1	fly P.papatasi (M1 2022)
 GCF_003285725.1_SlebRS2	fly S.lebanonensis
 GCF_002237135.1_ASM223713v2	fly T.dalmanni
 GCA_002600895.1_ASM260089v1	freshwater planarian (S2 2017)
 GCF_025200985.1_Dgunungcola_SK_2	fruit fly (Sukarami 2022)
 GCF_016097555.1_Gae_host_genome	gastropods G.aegis
+GCF_028476545.1_ASM2847654v2	gastropods P.acuta (Inbredline_101_S28  2023)
 GCF_003073045.1_ASM307304v1	gastropods P.canaliculata
 GCA_003018175.1_Bger_1.1	German cockroach (American Cyanamid = Orlando Normal EBB2017 2018)
 GCA_000762945.2_Bger_2.0	German cockroach (v2.0 2018)
@@ -332,6 +335,7 @@ GCF_000002415.2_ASM241v2	malaria parasite P. vivax (Salvador I 2009)
 GCF_945859705.1_idEpiBalt1.1	marmalade hoverfly (primary hap 2022)
 GCA_012273795.1_ASM1227379v1	masson pine moth
 GCA_902829235.1_CLODIP2	mayflies C.dipterum (2020)
+GCF_031216515.1_ASM3121651v1	mayflies N.triangulifer (White Clay Creek 2 clone  2023)
 GCF_905333055.1_ilManJurt1.1	meadow brown (refseq 2021)
 GCF_000347755.3_Ccap_2.1	Mediterranean fruit fly
 GCF_028554725.1_idZeuCucr1.2	melon fly (PBARC_wt_2022May primary hap 2023)
@@ -438,7 +442,9 @@ GCF_014805675.1_ASM1480567v1.1	northern quahog (YKG-2019 2020)
 GCF_021730395.1_MADL_Memer_1	northern quahog (notata 2022)
 GCF_026250575.1_icDioCari1.1	northern tamarisk beetle (Delta primary hap 2022)
 GCF_001188975.3_MU_Boleae_v2	olive fruit fly
-GCA_905404175.1_ilAntCard3.1	orange tip
+GCA_905404175.1_ilAntCard3.1	orange tip (primary hap 2021)
+GCA_963082865.1_kaCorEumy4.1_alternate_haplotype	orange-tipped seq squirt (alternate hap 2023)
+GCA_963082875.1_kaCorEumy4.1	orange-tipped seq squirt (primary hap 2023)
 GCF_009176505.1_AAFC_SMos_1.0	orange wheat blossom midge (CC-2019 2019)
 GCF_012274295.1_USDA_OLig_1.0	orchard mason bee
 GCF_023373825.1_ASM2337382v1	oriental fruit fly (Fly_Bdor 2022)
@@ -527,7 +533,8 @@ GCF_000090795.2_v1.1	sponges A.queenslandica (v1.1 JGI-PGF 2010)
 GCF_002217175.1_ASM221717v1	springtails F.candida
 GCF_023614345.1_UGA_ACOO_1.1	spruce gall adelgid (2022)
 GCF_900239965.1_Bicyclus_anynana_v1.2	squinting bush brown
-GCF_001015335.1_Stomoxys_calcitrans-1.0.1	stable fly
+GCF_001015335.1_Stomoxys_calcitrans-1.0.1	stable fly (8C7A2A5H3J4 2015)
+GCF_963082655.1_idStoCalc2.1	stable fly (primary hap 2023)
 GCF_013122585.1_ASM1312258v2	stalked seq squirt
 GCA_023349385.1_jaAntSola1.0.a	starburst anemone (alt pseudohaplotype CCGP_MDBC_AS_20200803 2022)
 GCA_023349425.1_jaAntSola1.0.p	starburst anemone (CCGP_MDBC_AS_20200803 2022)

@@ -144,12 +144,18 @@ GCA_020826845.1_mDicBic1.mat.cur	mammals
 GCA_023634155.1_bFalPer1.pri	birds
 GCA_023634085.1_bFalChe1.pri	birds
 GCA_023638135.1_bFalBia1.pri	birds
+GCA_025265405.1_mMesDen1_primary_haplotype	mammals
 GCA_026419965.1_mKogBre1_haplotype_1	mammals
+GCA_027477595.1_bHaeMex1.pri	birds
 GCA_027579445.1_bAmmNel1.pri	birds
 GCA_027887145.1_bAmmCau1.pri	birds
 GCA_027887165.1_mMonDom1.pri	mammals
 GCA_028018845.1_bMelGeo1.pri	birds
+GCA_028023285.1_mBalRic1.hap2	mammals
 GCA_028500815.1_bRisTri1.patW.cur.20221130	birds
+GCA_030144855.1_sHypSab1.hap1	vertebrate
+GCA_030867065.1_rAllMis1	vertebrate
+GCA_030936135.1_bGavSte3.hap2	birds
 GCA_900006655.3_Susie3	primates
 GCA_900094665.2_CAROLI_EIJ_v1.1	mammals
 GCA_900324465.2_fAnaTes1.2	fish
@@ -178,6 +184,9 @@ GCA_905333055.1_ilManJurt1.1	invertebrate
 GCA_905404315.1_ilLepSina1.1	invertebrate
 GCA_905475465.1_ilPieNapi1.1	invertebrate
 GCA_947179515.1_mApoSyl1.1	mammals
+GCA_949774975.1_mLagAlb1.1	mammals
+GCA_949987515.1_mDelDel1.1	mammals
+GCA_950295315.1_mEriEur2.1	mammals
 GCF_000001405.39_GRCh38.p13	primates
 GCF_000001405.40_GRCh38.p14	primates
 GCF_000001635.26_GRCm38.p6	mammals
@@ -263,6 +272,7 @@ GCF_002093755.1_Dser1.0	invertebrate
 GCF_002162155.1_WEW_v2.0	plants
 GCF_002201575.1_ASM220157v1	mammals
 GCF_002263795.1_ARS-UCD1.2	mammals
+GCF_002263795.2_ARS-UCD1.3	mammals
 GCF_002532875.1_vjacob_1.0	invertebrate
 GCF_002571385.1_Stylophora_pistillata_v1	invertebrate
 GCF_002706865.1_ASM270686v1	invertebrate
@@ -336,6 +346,7 @@ GCF_016920785.1_Ixodes_scapularus_ComboLowHiFi	invertebrate
 GCF_017639655.1_bFalNau1.pat	birds
 GCF_021218885.1_Marmota_monax_Labrador192_V1.0	mammals
 GCF_021288785.1_ASM2128878v2	mammals
+GCF_022539665.1_CSIRO_AGI_Dcar_v0.2	invertebrate
 GCF_023065955.1_UrsArc1.0	mammals
 GCF_900094665.1_CAROLI_EIJ_v1.1	mammals
 GCF_900246225.1_fAstCal1.2	fish
