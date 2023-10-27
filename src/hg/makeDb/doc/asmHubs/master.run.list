@@ -509,6 +509,7 @@
 ./runBuild GCA_010127505.1_ASM1012750v1 plants Solanum_tuberosum
 ./runBuild GCA_010203745.1_Muccir1_3 fungi Mucor_lusitanicus
 ./runBuild GCA_010261695.1_La_Amiga3.1 plants Lupinus_albus
+./runBuild GCA_010365825.1_OtuSun1.0 birds Otus_sunia
 ./runBuild GCA_010367685.1_ASM1036768v1 invertebrate Bursaphelenchus_xylophilus
 ./runBuild GCA_010909745.1_sAmbRad1.alt vertebrate Amblyraja_radiata
 ./runBuild GCA_010909765.1_sAmbRad1.pri vertebrate Amblyraja_radiata
