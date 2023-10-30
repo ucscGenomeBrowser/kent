@@ -4,10 +4,11 @@ use strict;
 use warnings;
 
 sub usage {
-  printf STDERR "usage: gff3ToRefLink.pl [raFile.txt] [ncbi.gff.gz] [pragmaLabels.txt] > refLink.tab\n";
+  printf STDERR "usage: gff3ToRefLink.pl [raFile.txt] [ncbi.gff.gz] [pragmaLabels.txt] [continueOnParentErrors] > refLink.tab\n";
   printf STDERR "- raFile.txt is the output of gbProcess \${asmId}_rna.gbff.gz\n";
   printf STDERR "- ncbi.gff.gz is \${asmId}_genomic.gff.gz\n";
   printf STDERR "- pragmaLabels.txt has words that appear before '::' within ##*-START/##*-END\n";
+  printf STDERR "- continueOnParentErrors is a flag to tell the script to continue when a child is defined before it's parent\n";
   printf STDERR "  text in \${asmId}_rna.gbff.gz, one label per line.\n";
   printf STDERR "output to stdout is the tab separated ncbiRefSeqLink data for each item\n";
   printf STDERR "This is intended to be called by doNcbiRefSeq.pl.\n";
@@ -66,10 +67,10 @@ sub mustOpen ($) {
   return $fh;
 } # mustOpen
 
-sub parseGff3($) {
+sub parseGff3($;$) {
 # Parse GFF3 into a tree structure using parent pointers.  Store only tags of interest.
 # Children store only tags that are not present or differ from the parent's tags.
-  my ($gffFile) = @_;
+  my ($gffFile, $continueOnParentErrors) = @_;
   my %gff;
   my @topLevelIds;
   my $fh = mustOpen($gffFile);
@@ -87,6 +88,10 @@ sub parseGff3($) {
         if ($tagsOfInterest{$tag}) {
           $tags{$tag} = $val;
         }
+      } elsif ($tagEqVal eq "") {
+        # NCBI historical refseq transcripts can have multiple ';;' in a row
+        # for some reason, so skip those empty tags
+        next;
       } else {
         die "parse error: expecting tag=val, got '$tagEqVal'";
       }
@@ -110,7 +115,11 @@ sub parseGff3($) {
       my $parentId = $tags{parent};
       # We're counting on NCBI's GFF to define parents before children.
       if (! exists($gff{$parentId})) {
-        die "ID $id: Parent ID $parentId has not already been defined in GFF.";
+        if (not defined  $continueOnParentErrors) {
+          die "ID $id: Parent ID $parentId has not already been defined in GFF.";
+        } else {
+          push @topLevelIds, $id;
+        }
       }
       push @{$gff{$parentId}->{children}}, $id;
     } else {
@@ -355,7 +364,7 @@ sub printOutput($$$$) {
     my $missingData = "";
     printf "%s", $id;    # first column
     # second column is the gene reviewed 'status'
-    if (exists($statusData->{$id})) {
+    if (exists($statusData->{$id}) && defined $statusData->{$id}) {
       printf "\t%s", $statusData->{$id};
     } else { printf "\tUnknown"; }
     # Make sure we found the corresponding protein for each coding transcript.
@@ -400,16 +409,19 @@ sub printOutput($$$$) {
 # MAIN
 
 my $argc = scalar(@ARGV);
-if ($argc != 3) {
+if ($argc != 3 && $argc != 4) {
   &usage;
 }
-my ($raFile, $gffFile, $labelFile) = @ARGV;
+my ($raFile, $gffFile, $labelFile, $continueOnParentErrors) = @ARGV;
+if (defined $continueOnParentErrors && $continueOnParentErrors ne "continueOnParentErrors") {
+  &usage;
+}
 
 printf STDERR "# raFile: %s\n", $raFile;
 printf STDERR "# gffFile: %s\n", $gffFile;
 printf STDERR "# labelFile: %s\n", $labelFile;
 
-my ($gff, $topLevelIds) = parseGff3($gffFile);
+my ($gff, $topLevelIds) = parseGff3($gffFile, $continueOnParentErrors);
 my ($outColumns) = collectColumns($gff, $topLevelIds);
 my ($descriptionData, $statusData, $proteinId) = parseRaFile($labelFile, $raFile);
 
