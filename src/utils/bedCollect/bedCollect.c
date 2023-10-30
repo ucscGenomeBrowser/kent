@@ -10,7 +10,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedCollect - collect overlapping beds into a single bed\n"
+  "bedCollect - collect overlapping beds into a chainArrange.as structure\n"
   "usage:\n"
   "   bedCollect input.bed output.bed\n"
   "note: input beds need to be sorted with bedSort\n"
@@ -37,9 +37,11 @@ struct dyString *dy = newDyString(100);
 for(; names; names = names->next)
     {
     dyStringAppend(dy, names->name);
-    dyStringAppend(dy, ",");
+    if (names->next)
+        dyStringAppend(dy, ",");
     }
 bed->name = dy->string;
+//fprintf(f, "%s %d %d arr%d %d + %d %d 0 %s %d %d-%dbp\n", bed->chrom, bed->chromStart, bed->chromEnd, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name, sizeQuery, bed->score, sizeQuery );
 fprintf(f, "%s %d %d arr%d %d + %d %d 0 %s %d\n", bed->chrom, bed->chromStart, bed->chromEnd, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name, sizeQuery);
 //bedOutputN(bed, 5, f, '\t', '\n');
 }
