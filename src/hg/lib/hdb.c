@@ -1471,10 +1471,13 @@ char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
     return path;
 
-freeMem(path);
-path = replaceChars(fileName, "/gbdb/", newGbdbLoc2);
-if (cfgOptionBooleanDefault("traceGbdb", FALSE))
-    fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+if (newGbdbLoc2!=NULL)
+    {
+    freeMem(path);
+    path = replaceChars(fileName, "/gbdb/", newGbdbLoc2);
+    if (cfgOptionBooleanDefault("traceGbdb", FALSE))
+        fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+    }
 
 return path;
 }
