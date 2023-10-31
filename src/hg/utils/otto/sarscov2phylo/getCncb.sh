@@ -83,7 +83,7 @@ set -o pipefail
 for acc in $(cat missingGenBaseIds); do
     curlRetry "$genBaseFileApiBase$acc" \
     | sed -re '/^>/  s/ .*//;'
-    sleep 10
+    sleep 5
 done > new.accs.fa
 
 cat <(xzcat ../cncb.latest/cncb.nonGenBank.acc.fasta.xz) new.accs.fa \
@@ -92,7 +92,8 @@ mv cncb.nonGenBank.acc.fasta.new.xz cncb.nonGenBank.acc.fasta.xz
 
 xzcat cncb.nonGenBank.acc.fasta.xz \
 | faSomeRecords stdin <(cut -f 1 accToNameBarAcc.tsv) stdout \
-| faRenameRecords stdin accToNameBarAcc.tsv cncb.nonGenBank.fasta
+| faRenameRecords stdin accToNameBarAcc.tsv stdout \
+| xz -T 20 > cncb.nonGenBank.fasta.xz
 
 # Run nextclade
 cp ../cncb.latest/nextclade.full.tsv.gz .

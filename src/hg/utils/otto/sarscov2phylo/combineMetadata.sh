@@ -88,7 +88,8 @@ else
     touch cogUkToNextclade
 fi
 #*** Could also add sequence length to metadata from faSizes output...
-tail -n+2 $cogUkDir/cog_metadata.csv \
+zcat $cogUkDir/cog_metadata.csv.gz \
+| tail -n+2 \
 | awk -F, -v 'OFS=\t' '{print $1, "", $5, $3, "", "", "", $7; }' \
 | sed -re 's/UK-ENG/England/; s/UK-NIR/Northern Ireland/; s/UK-SCT/Scotland/; s/UK-WLS/Wales/;' \
 | sort \
