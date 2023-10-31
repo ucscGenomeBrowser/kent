@@ -10,10 +10,10 @@
 <h2>Overview</h2>
 </p><p>
 The genome browser&lsquo;s primary way to annotate the genome uses colored rectangles
-(&ldquo;exons&rdquo; for gene tracks) linked by thin lines (&ldquo;introns&rdquo;), often stored as
+(&quot;exons&quot; for gene tracks) linked by thin lines (&quot;introns&quot;), often stored as
 a bigBed. These were originally used for genes but then evolved to cover other types of annotations,
 e.g. enhancers, chromatin modifications, or single nucleotide variants. We usually call these
-annotations &ldquo;features&rdquo;. Each rectangle (&ldquo;exon&rdquo;) of a feature has the same
+annotations &quot;features&quot;. Each rectangle (&quot;exon&quot;) of a feature has the same
 color and individual parts cannot be highlighted. If you wanted to highlight parts of the features,
 traditionally this required a second track.</p>
 <div class="text-center">
@@ -29,21 +29,21 @@ and the user cannot click these sub-features. The primary use case driving this 
 protein-domains drawn on top of gene models, but we have found many other applications since then,
 e.g. drawing summits on ATAC peaks or highlighting selenocysteines on transcripts.</p>
 <p>
-Track decorators can be shown in two styles, &ldquo;block&rdquo; and &ldquo;glyph&rdquo; style. The
-&ldquo;block&rdquo; style option can be used to color exons and introns and can display a label for
-them. For example, the &ldquo;block&rdquo; track decorator could be used to overlay protein domain
+Track decorators can be shown in two styles, &quot;block&quot; and &quot;glyph&quot; style. The
+&quot;block&quot; style option can be used to color exons and introns and can display a label for
+them. For example, the &quot;block&quot; track decorator could be used to overlay protein domain
 boundaries on transcripts where usually one would use an entirely different track for the domains.
 </p>
 <div class="text-center">
         <img src="../../images/runx2_decorator.png" style="width:80%;max-width:1083px">
 </div>
 
-<p>The &ldquo;glyph&rdquo; style option offers 8 different types of glyphs and the color of choice.
+<p>The &quot;glyph&quot; style option offers 8 different types of glyphs and the color of choice.
 </p>
 <div class="text-center">
         <img src="../../images/glyphsEx.png" style="width:40%;max-width:1083px">
 </div>
-<p>The &ldquo;glyph&rdquo; style option can be used to draw entirely new symbols, for example, to
+<p>The &quot;glyph&quot; style option can be used to draw entirely new symbols, for example, to
 indicate insertion positions on the genome with small triangles. We appreciate user feedback. If
 you have glyph questions, glyph style requests, or have found new glyph applications, please
 contact our <a href="mailto:genome@soe.ucsc.edu">mailing list</a>.
@@ -62,38 +62,35 @@ multiple decorators in the future.  For now, all decorator settings must use the
 prefix "decorator.default".</p>
 <p>
 <h2>Hub trackDb settings</h2>
-<pre>
-<code>track testTrack
+<pre>track testTrack
 type bigBed 12
 bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb
 itemRgb on
-</code></pre>
+</pre>
 The above trackDb statement provides a basic entry for a bigBed track. To add a decorator to
 this track, we can start by adding <b>decorator.default.bigDataUrl</b> as a setting, which will
 point to the bigBed file containing decorations.
-<pre>
-<code>track testTrack
+<pre>track testTrack
 type bigBed 12
 bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb
 itemRgb on
 decorator.default.bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb
-</code></pre>
+</pre>
 Other settings are available to further configure decorators.  Each may be applied to the
 decorator instead of the primary track by prepending "decorator.default." to the setting.  For
 example, to set up a
 <a href="hubQuickStartFilter.html#filterValues">filterValues filter</a>
 on the "keywords" field of the decorator, allowing the
-user to filter to any combination of three classes "Type1", "Type2", and "Type3", the following
+user to filter to any combination of three classes &quot;Type1&quot;, &quot;Type2&quot;, and &quot;Type3&quot;, the following
 trackDb entry could be used.
-<pre>
-<code>track testTrack
+<pre>track testTrack
 type bigBed 12
 bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb
 itemRgb on
 decorator.default.bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb
 decorator.default.filterValues.keywords Type1,Type2,Type3
 decorator.default.filterType.keywords multipleListOr
-</code></pre>
+</pre>
 Please note that this would also require building an extra <code>keywords</code> field into the decorator
 bigBed to hold those values, see Example #3 for more details. A full list of supported decorator
 settings is available in the
@@ -112,7 +109,7 @@ within that other track it annotates.
 <p>
 The full .as format for decorator bigBed files is as follows:
 <pre>
-<code>    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string name;       "Name of item"
@@ -128,7 +125,7 @@ The full .as format for decorator bigBed files is as follows:
     string style;      "Draw style for the decoration (e.g. block, glyph)"
     string fillColor;  "Secondary color to use for filling decoration, blocks, supports RGBA"
     string glyph;  "The glyph to draw in glyph mode; ignored for other styles"
-</code></pre>
+</pre>
 A copy of this file can be found <a href="examples/decorator/decoration.as">here</a>.
 <p>
 Valid values for the style field are "block" and "glyph".  Valid glyph entries include "Circle",
@@ -143,15 +140,15 @@ the decorated item).
 <p>
 Here is an example of how to use this format.  Consider a BED item like the following in our main track:
 <pre>
-<code>chr1 1000 2000 MyItem 0 + 1000 2000 0 2 400,400 0,600
-</code></pre>
+chr1 1000 2000 MyItem 0 + 1000 2000 0 2 400,400 0,600
+</pre>
 We can take this <a href="examples/decorator/main.bed">BED file</a> and construct a
 <a href="examples/decorator/main.bb">bigBed</a> from it as described in the <a href="bigBed.html">bigBed</a>
 documentation.  After that, if we wanted to add a decoration to this item that highlighted the region from
 base 1200 to base 1800, we could create a corresponding item in a decorator bigBed file like this:
 <pre>
-<code>chr1 1200 1800 MyDecoration 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:MyItem block 255,0,0,128 Ignored
-</code></pre>
+chr1 1200 1800 MyDecoration 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:MyItem block 255,0,0,128 Ignored
+</pre>
 The first color, <code>255,0,0,255</code> specifies that the decoration outline will be in solid red (255 red,
 0 green, 0 blue, 255 alpha).  The second color <code>255,0,0,128</code>, specifies that the interior of the
 decoration will be shaded toward pure red, but that the decorated item will still be partially visible behind it
@@ -162,14 +159,12 @@ base 2000.  The final <code>Ignored</code> value is not used here because we are
 <p>
 To add a glyph decoration to our file that marked the final base of the transcript with a green circle,
 we could also include the following line in our BED file of decorations:
-<pre>
-<code>chr1 1999 2000 MySecondDecoration 0 + 1999 2000 0,255,0,255 1 1 0 chr1:1000-2000:MyItem glyph 0,255,0,255 Circle
-</code></pre>
+<pre>chr1 1999 2000 MySecondDecoration 0 + 1999 2000 0,255,0,255 1 1 0 chr1:1000-2000:MyItem glyph 0,255,0,255 Circle
+</pre>
 If we store both of those decorations in a file named <a href="examples/decorator/input.bed">input.bed</a>, we can
 then build a <a href="examples/decorator/decorations.bb">bigBed file</a> from it with the following command:
-<pre>
-<code>bedToBigBed -type=bed12+ -as=decoration.as input.bed hg38.chrom.sizes decorations.bb
-</code></pre>
+<pre>bedToBigBed -type=bed12+ -as=decoration.as input.bed hg38.chrom.sizes decorations.bb
+</pre>
 
 <a name="Example2"></a>
 <h3>Example &num;2: Create a Custom Track</h3>
@@ -181,8 +176,8 @@ Create a decorator bigBed custom track using the decorator bigBed file from Exam
   <li>
   Construct a track line that references the <a href="examples/decorator/main.bb">bigBed</a>
   and <a href="examples/decorator/decorations.bb">decorator bigBed file</a>:</p>
-  <pre><code>browser position chr1:1000-2000
-track type=bigBed name=&quot;Decorators Example Two&quot; description=&quot;bigBed with decorators&quot; visibility=pack bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb decorator.default.bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb</code></pre>
+  <pre>browser position chr1:1000-2000
+track type=bigBed name=&quot;Decorators Example Two&quot; description=&quot;bigBed with decorators&quot; visibility=pack bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb decorator.default.bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb</pre>
   <li>
   Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track
   page</a> for the human assembly, hg38.</li>
@@ -193,8 +188,8 @@ track type=bigBed name=&quot;Decorators Example Two&quot; description=&quot;bigB
 Custom tracks can also be loaded via one URL line. The link below loads the same bigBed with decorators track
 and sets additional parameters in the URL:</p>
 <a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigBed%20bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb%20decorator.default.bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb&position=chr1:1000-2000"
-target="_blank"><pre><code>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;hgct_customText=track%20type=bigBed%20bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb%20decorator.default.bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb&amp;position=chr1:1000-2000
-</code></pre></a>
+target="_blank"><pre>https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;hgct_customText=track%20type=bigBed%20bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb%20decorator.default.bigDataUrl=https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb&amp;position=chr1:1000-2000
+</pre></a>
 
 <a name="Example3"></a>
 <h3>Example &num;3: Create a decorator bigBed with extra (custom) fields</h3>
@@ -204,15 +199,15 @@ be used at all by default.  Adding fields allows you to set up custom filtering 
 displayed.  For example, to include a "keywords" field you could add the following to the end of
 the decoration.as file:</p>
 <pre>
-<code>    int numKeywords;  "Number of keywords"
+    int numKeywords;  "Number of keywords"
     string[numKeywords] keywords;  "Keywords for this decorator"
-</code></pre>
+</pre>
 You would then modify your input.bed file to include an additional fields at the end of each line, detailing which keywords
 apply to each of the decorations.
 <pre>
-<code>chr1 1200 1800 MyDecoration 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:MyItem block 255,0,0,128 Ignored 1 Type1
+chr1 1200 1800 MyDecoration 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:MyItem block 255,0,0,128 Ignored 1 Type1
 chr1 1999 2000 MySecondDecoration 0 + 1999 2000 0,255,0,255 1 0 1 chr1:1000-2000:MyItem glyph 0,255,0,255 Circle 2 Type2,Type3
-</code></pre>
+</pre>
 After rebuilding the decorations.bb file, you could then use the filterValues version of the trackDb
 entry from the Hub trackDb settings section to create your track.
 <h2>Troubleshooting</h2>
