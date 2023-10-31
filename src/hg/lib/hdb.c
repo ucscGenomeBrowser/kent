@@ -788,7 +788,7 @@ centralDb = cfgOption2(centralProfile, "db");
 centralCc = sqlConnCacheNewProfile(centralProfile);
 sqlSetParanoid(TRUE);
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
-if ((conn == NULL) || !cartTablesOk(conn))
+if ((conn == NULL) || (cgiIsOnWeb() && !cartTablesOk(conn)))
     {
     fprintf(stderr, "hConnectCentral failed over to backupcentral "
             "pid=%ld\n", (long)getpid());
