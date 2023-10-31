@@ -1394,7 +1394,6 @@ else if (hDbHasNcbiRefSeq(db))
             {
             // maybe it is a deprecated transcript
             sqlSafef(query, sizeof(query), "select name from ncbiRefSeqHistorical where name like '%s.%%'", acc);
-            struct sqlConnection *conn = hAllocConn(db);
             normalizedAcc = sqlQuickString(conn, query);
             }
         hFreeConn(&conn);

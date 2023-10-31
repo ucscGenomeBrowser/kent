@@ -35,7 +35,7 @@ cd $mapScriptDir
 rm -rf input/$today
 mkdir input/$today
 cd input/$today
-ln -sf $cncbDir/cncb.nonGenBank.fasta .
+ln -sf $cncbDir/cncb.nonGenBank.fasta.xz .
 ln -sf $ncbiDir/genbank.fa.xz .
 ln -sf $cogUkDir/cog_all.fasta.xz .
 ln -sf $nextfasta .

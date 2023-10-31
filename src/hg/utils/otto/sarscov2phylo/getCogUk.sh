@@ -42,13 +42,13 @@ function curlRetry {
 
 curlRetry $cogUrlBase/cog_all.fasta.gz
 curlRetry $cogUrlBase/cog_metadata.csv.gz
-gunzip -f cog_metadata.csv.gz
 curlRetry $cogUrlBase/cog_global_tree.newick
 
 zcat cog_all.fasta.gz | xz -T 20 > cog_all.fasta.xz
 rm cog_all.fasta.gz
 
-tail -n +2 cog_metadata.csv \
+zcat cog_metadata.csv.gz \
+| tail -n +2 \
 | awk -F, '{print $1 "\t" $5;}' | sort > cogUkToDate
 
 # Reuse nextclade assignments for older sequences; compute nextclade assignments for new seqs.
