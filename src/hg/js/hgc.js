@@ -274,7 +274,7 @@ function makeHPRCTable() {
 // on page load initialize VEP, Population Frequency and Haplotype Tables
 // for gnomAD v3.1.1 track
 $(document).ready(function() {
-    if (doHPRCTable) {
+    if (typeof doHPRCTable !== "undefined") {
         makeHPRCTable();
     }
     if ($("#svgTable") !== null) {

@@ -1882,6 +1882,10 @@ for (;col != NULL && count < fieldCount;col=col->next)
         if (new)
             {
             new->encodedTbl = fields[ix];
+            // this field will get printed later somehow, so make sure the
+            // rest of this code knows to not open more table tags and close
+            // the correct ones
+            printCount++;
             continue;
             }
         }
@@ -1936,7 +1940,6 @@ if (sepFields)
 if (embeddedTblFields)
     {
     printf("<br><table class='bedExtraTbl'>\n");
-    printf("</table>\n");
 
     struct embeddedTbl *thisTbl;
     struct dyString *tableLabelsDy = dyStringNew(0);
