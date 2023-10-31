@@ -15,7 +15,7 @@ cron_output="/usr/local/apache/htdocs-genecats/qa/qaCrons/cron_output"
 # Bash series of commands that will save both region size and session cart dump for each session into file
 # Output example: 192728	http://genome.ucsc.edu/cgi-bin/cartDump?hgS_doLoadUrl=submit&hgS_loadUrlName=...
 for url in  $(grep -o 'href=\"[^\"]*\"'  "$index_file" | awk -F '"' '{print $2}' \
-            | sed "s|/hgTracks|/cartDump|"); do curl -s $url  | grep 'position ' \
+            | sed "s|/hgTracks|/cartDump|"); do curl -Ls $url  | grep 'position ' \
             |  awk '{$1=$1}1' OFS="\t" | cut -f2 | tr ":" "\t" | tr "-" "\t" \
             |  awk ' { print $3 -$2"\t"session }' session=$url; \
             done > "$regionSessions_file"
@@ -30,15 +30,16 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 done < "$regionSessions_file"
 
 # Get the first 10 slowest sessions and append it to a file
-echo The 10 slowest sessions > "$cron_output"
+echo The 10 slowest sessions: > "$cron_output"
 head -n 10 "$filter_file" >> "$cron_output"
 
 echo "" >> "$cron_output"
 # Get 20 random sessions and append it to a file
-echo "20 random sessions" >> "$cron_output"
+echo 20 random sessions: >> "$cron_output"
 tail -n +11 "$filter_file" | shuf | head -n 20 >> "$cron_output"
 rm /hive/users/qateam/cronCartDumps/regionSessions.txt
 rm /hive/users/qateam/cronCartDumps/filter_file
 
-echo "Check https://genecats.gi.ucsc.edu/qa/qaCrons/cron_output for long-running sessions"
+cat "$cron_output"
+echo ""
 echo "Archive for the most recent long-running sessions can be found here: https://genecats.gi.ucsc.edu/qa/qaCrons/cronCartDumps/index.html"
