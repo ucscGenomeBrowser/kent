@@ -5850,6 +5850,16 @@ return (hTableExists(db, "ncbiRefSeq") && hTableExists(db, "ncbiRefSeqPsl") &&
         hTableExists(db, "seqNcbiRefSeq") && hTableExists(db, "extNcbiRefSeq"));
 }
 
+boolean hDbHasNcbiRefSeqHistorical(char *db)
+/* Return TRUE if db has NCBI's Historical RefSeq alignments and annotations. */
+{
+// hTableExists() caches results so this shouldn't make for loads of new SQL queries if called
+// more than once.
+return (hTableExists(db, "ncbiRefSeqHistorical") && hTableExists(db, "ncbiRefSeqPslHistorical") &&
+        hTableExists(db, "ncbiRefSeqCdsHistorical") && hTableExists(db, "ncbiRefSeqLinkHistorical") &&
+        hTableExists(db, "seqNcbiRefSeqHistorical") && hTableExists(db, "extNcbiRefSeqHistorical"));
+}
+
 char *hRefSeqAccForChrom(char *db, char *chrom)
 /* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
  * db must never change. */

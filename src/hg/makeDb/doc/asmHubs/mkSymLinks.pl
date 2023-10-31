@@ -72,7 +72,7 @@ foreach my $asmId (@orderList) {
   my $trackDb = "$buildDir/$asmId.trackDb.txt";
   if ( ! -s "${trackDb}" ) {
     printf STDERR "# %03d not built yet: %s\n", $orderIndex, $asmId;
-    printf STDERR "# missing tdb: '%s'\n", $trackDb;
+    printf STDERR "# error missing tdb: '%s'\n", $trackDb;
     next;
   }
   ++$buildDone;
@@ -135,13 +135,13 @@ foreach my $asmId (@orderList) {
    if (-s "${buildDir}/${asmId}.fa.gz") {
       `ln -s "${buildDir}/${asmId}.fa.gz" "${destDir}/${accessionId}.fa.gz"`;
    } else {
-      printf STDERR "# missing ${asmId}.fa.gz\n";
+      printf STDERR "# error missing ${asmId}.fa.gz\n";
    }
   `ln -s "${buildDir}/${asmId}.chrNames.fa.gz" "${destDir}/${accessionId}.chrNames.fa.gz"` if (-s "${buildDir}/${asmId}.chrNames.fa.gz");
    if (-s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt") {
       `ln -s "${buildDir}/trackData/addMask/${asmId}.masked.2bit.bpt" "${destDir}/${accessionId}.2bit.bpt"`;
    } else {
-      printf STDERR "# missing ${asmId}.masked.2bit.bpt\n";
+      printf STDERR "# error missing ${asmId}.masked.2bit.bpt\n";
    }
   `ln -s "${buildDir}/${asmId}.chrNames.2bit" "${destDir}/${accessionId}.chrNames.2bit"` if (-s "${buildDir}/${asmId}.chrNames.2bit");
    if (-s "${buildDir}/${accessionId}.untrans.gfidx") {

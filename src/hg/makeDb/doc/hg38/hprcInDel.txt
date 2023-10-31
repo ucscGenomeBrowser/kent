@@ -1,10 +1,7 @@
 VERSION=V1
 inserts=hprcInserts$VERSION
-insertsLarge=hprcInsertsLarge$VERSION
 deletions=hprcDeletions$VERSION
-deletionsLarge=hprcDeletionsLarge$VERSION
 double=hprcDouble$VERSION
-doubleLarge=hprcDoubleLarge$VERSION
 
 cd /cluster/data/hg38/bed/hprc/inDels
 
@@ -22,36 +19,18 @@ done > indel.jobs
 para make indel.jobs
 
 sort -S 50G -k1,1 -k2,2n -k3,3n -k5,5n indels/* > sortIndels.bed
-awk '{if (($3 > $2) && ($5 == 0)) print}' sortIndels.bed > inserts.bed
-awk '{if (($3 - $2 < 20)) print}' inserts.bed | bedCollect -exact stdin $inserts.bed
-bedToBigBed  $inserts.bed /cluster/data/hg38/chrom.sizes $inserts.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+1
-rm -f  /gbdb/hg38/hprcArr$VERSION/$inserts.bb
-ln -s `pwd`/$inserts.bb /gbdb/hg38/hprcArr$VERSION
 
-awk '{if (($3 - $2 >= 20)) print}' inserts.bed | bedCollect -exact stdin $insertsLarge.bed
-bedToBigBed  $insertsLarge.bed /cluster/data/hg38/chrom.sizes $insertsLarge.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+1
-rm -f  /gbdb/hg38/hprcArr$VERSION/$insertsLarge.bb
-ln -s `pwd`/$insertsLarge.bb /gbdb/hg38/hprcArr$VERSION
-
-awk '{if ($3 == $2) print}' sortIndels.bed > deletes.bed
-awk '{if ($5 < 20) print}' deletes.bed | bedCollect -exact stdin $deletions.bed
-bedToBigBed  $deletions.bed /cluster/data/hg38/chrom.sizes $deletions.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+2
-rm  -f /gbdb/hg38/hprcArr$VERSION/$deletions.bb
+awk '{if (($3 > $2) && ($5 == 0)) print}' sortIndels.bed | bedCollect -exact stdin stdout | awk '{print $0,$5"-"$3 - $2"bp" }' > $deletions.bed
+bedToBigBed  $deletions.bed /cluster/data/hg38/chrom.sizes $deletions.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+3
+rm -f  /gbdb/hg38/hprcArr$VERSION/$deletions.bb
 ln -s `pwd`/$deletions.bb /gbdb/hg38/hprcArr$VERSION
 
-awk '{if ($5 >= 20) print}' deletes.bed | bedCollect -exact stdin $deletionsLarge.bed
-bedToBigBed  $deletionsLarge.bed /cluster/data/hg38/chrom.sizes $deletionsLarge.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+2
-rm  -f /gbdb/hg38/hprcArr$VERSION/$deletionsLarge.bb
-ln -s `pwd`/$deletionsLarge.bb /gbdb/hg38/hprcArr$VERSION
+awk '{if ($3 == $2) print}' sortIndels.bed | bedCollect -exact stdin stdout | awk '{print $0,$5"-"$11"bp" }' >$inserts.bed
+bedToBigBed  $inserts.bed /cluster/data/hg38/chrom.sizes $inserts.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+3
+rm  -f /gbdb/hg38/hprcArr$VERSION/$inserts.bb
+ln -s `pwd`/$inserts.bb /gbdb/hg38/hprcArr$VERSION
 
-awk '{if (($3 > $2) && ($5 != 0)) print}' sortIndels.bed > double.bed
-awk '{if (($3 - $2 < 20) && ($5 < 20)) print}' double.bed | bedCollect -exact stdin $double.bed
-bedToBigBed  $double.bed /cluster/data/hg38/chrom.sizes $double.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+2
+awk '{if (($3 > $2) && ($5 != 0)) print}' sortIndels.bed | bedCollect -exact stdin stdout | awk '{print $0,$5"-"$11"bp-"$3-$2"bp" }' >$double.bed
+bedToBigBed  $double.bed /cluster/data/hg38/chrom.sizes $double.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+3
 rm  -f /gbdb/hg38/hprcArr$VERSION/$double.bb
 ln -s `pwd`/$double.bb /gbdb/hg38/hprcArr$VERSION
-
-awk '{if (($3 - $2 >= 20) || ($5 >= 20)) print}' double.bed | bedCollect -exact stdin $doubleLarge.bed
-bedToBigBed  $doubleLarge.bed /cluster/data/hg38/chrom.sizes $doubleLarge.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+2
-rm  -f /gbdb/hg38/hprcArr$VERSION/$doubleLarge.bb
-ln -s `pwd`/$doubleLarge.bb /gbdb/hg38/hprcArr$VERSION
-

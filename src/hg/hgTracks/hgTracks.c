@@ -1,4 +1,4 @@
-/* hgTracks - the /riginal, and still the largest module for the UCSC Human Genome
+/* hgTracks - the original, and still the largest module for the UCSC Human Genome
  * Browser main cgi script.  Currently contains most of the track framework, though
  * there's quite a bit of other framework type code in simpleTracks.c.  The main
  * routine got moved to create a new entry point to the bulk of the code for the
@@ -8380,7 +8380,9 @@ if (track->hasUi)
     freeMem(longLabel);
     }
 
-hPrintf("%s", track->shortLabel);
+char *encodedShortLabel = htmlEncode(track->shortLabel);
+hPrintf("%s", encodedShortLabel);
+freeMem(encodedShortLabel);
 if (track->hasUi)
     hPrintf("</A>");
 
