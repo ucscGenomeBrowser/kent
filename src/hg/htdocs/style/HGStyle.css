@@ -1162,3 +1162,9 @@ span.gbSessionChanged {
     visibility: visible;
     opacity: 0.9;
 }
+
+.chainBreak {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    row-gap: 10px;
+}  
