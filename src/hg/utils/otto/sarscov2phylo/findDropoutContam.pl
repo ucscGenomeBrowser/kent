@@ -16,18 +16,18 @@ my $maxReversions = 5;
 # Column offsets:
 #0       seqName
 #1       clade
-#18      privateNucMutations.reversionSubstitutions
-#19      privateNucMutations.labeledSubstitutions
-#30      nonACGTNs
+#22      privateNucMutations.reversionSubstitutions
+#23      privateNucMutations.labeledSubstitutions
+#34      nonACGTNs
 
 # Examples values for a seq assigned to 21J (Delta) but with a suspicious number of Omicron muts
 # (and Delta back-muts):
 # reversions example: T4181G,T7124C,T8986C,T9053G,T16466C,G21618C,C27638T,T27752C,T29402G
 # labeled example: T5386G|21K,G8393A|21K,C10449A|21K&21L&21M,A11537G|21K,T13195C|21K&21M,A17236G|21J,A18163G|21K&21L,C21762T|21K&21D&21M,C23525T|21K&20J&21L&21M,T23599G|21K&21L&21M,G23604A|20I&21K&21H&21L&21E&21M,G23948T|21K&21L,C24130A|21K&21M,C24503T|21K,A26530G|21K&21M,C26577G|21K&21L&21M,T27291C|21J,-28271T|21K&21G&21L&21M,C28311T|21K&21F&21G&21L&21M,T28881A|20I&21K&20B&20J&20F&20D&21G&21L&21E&21M
 
-my $reversionsIx = 18;
-my $labeledIx = 19;
-my $ambigIx = 30;
+my $reversionsIx = 22;
+my $labeledIx = 23;
+my $ambigIx = 34;
 
 sub cladeIsOmicron($) {
   my ($clade) = @_;

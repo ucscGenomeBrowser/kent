@@ -32,6 +32,8 @@ minReal=20000
 ref2bit=/hive/data/genomes/wuhCor1/wuhCor1.2bit
 epiToPublic=$gisaidDir/epiToPublicAndDate.latest
 
+lineageProposalsRecombinants=https://raw.githubusercontent.com/sars-cov-2-variants/lineage-proposals/main/recombinants.tsv
+
 scriptDir=$(dirname "${BASH_SOURCE[0]}")
 source $scriptDir/util.sh
 
@@ -82,7 +84,7 @@ if [ -s epi.removed.acc ]; then
     grep -Fwf epi.removed.acc prevIdToName | cut -f 2 >> prevNameToRemove
 fi
 cut -f 1 prevIdToNameDeDup | grep -E '^(England|Northern|Scotland|Wales)' > cog.acc
-comm -13 <(cut -d, -f 1 $cogUkDir/cog_metadata.csv | sort) cog.acc > cog.removed.acc
+comm -13 <(zcat $cogUkDir/cog_metadata.csv.gz | cut -d, -f 1 | sort) cog.acc > cog.removed.acc
 if [ -s cog.removed.acc ]; then
     grep -Fwf cog.removed.acc prevIdToName \
     | grep -vE '^([A-Z]{2}[0-9]{6}\.[0-9]+|EPI_ISL_)' \
@@ -146,7 +148,8 @@ cut -f 1 accToPrevDedupName | grep -vE '^([A-Z]{2}[0-9]{6}\.[0-9]+|COG:|EPI_ISL_
 gbAccCogRenaming < prevGbAcc > accToNewName
 gbAccNonCogRenaming < prevGbAcc >> accToNewName
 # Restore the COG:isolate format for non-GenBank COG-UK sequences:
-grep -Fwf prevCogUk $cogUkDir/cog_metadata.csv \
+zcat $cogUkDir/cog_metadata.csv.gz \
+| grep -Fwf prevCogUk \
 | awk -F, '{print $1 "\t" $1 "|" $5;}' \
 | sed -re 's@^(England|Northern_?Ireland|Scotland|Wales)/([A-Z]+[_-]?[A-Za-z0-9]+)/[0-9]+@COG:\2@;' \
     >> accToNewName
@@ -197,7 +200,7 @@ zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
 | join -t $'\t' <(cut -f 1,3 $ncbiDir/ncbi_dataset.plusBioSample.tsv | sort) - \
 | $scriptDir/findRefBackfill.pl > gb.refBackfill
 zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
-| join -t $'\t' <(cut -d, -f 1,5 $cogUkDir/cog_metadata.csv | tr , $'\t' | sort) - \
+| join -t $'\t' <(zcat $cogUkDir/cog_metadata.csv.gz | cut -d, -f 1,5 | tr , $'\t' | sort) - \
 | $scriptDir/findRefBackfill.pl > cog.refBackfill
 zcat $cncbDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
 | join -t$'\t' <(cut -f 2,10 $cncbDir/cncb.metadata.tsv | sort) - \
@@ -205,6 +208,9 @@ zcat $cncbDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
 cut -f 1 *.refBackfill > refBackfill.ids
 sort -u ../tooManyEpps.ids ../badBranchSeed.ids dropoutContam.ids refBackfill.ids \
 | grep -vFwf <(tail -n+2 $scriptDir/includeRecombinants.tsv | cut -f 1) \
+| grep -vFwf <(curl -sS $lineageProposalsRecombinants  | tail -n+2 | cut -f 1 \
+               | sed -re 's/.*(EPI_ISL_[0-9]+|[A-Z]{2}[0-9]+{6}(\.[0-9]+)?).*/\1/;
+                          s@(England|Northern[ _]?Ireland|Scotland|Wales)/([A-Z0-9_-]+).*@\2@;') \
     > exclude.ids
 
 # Get new GenBank sequences with at least $minReal non-N bases.
@@ -223,7 +229,7 @@ faSize newGenBank.filtered.fa
 fastaNames $cogUkDir/cog_all.fasta.xz \
 | grep -vFwf prevCogUk \
 | grep -vFwf exclude.ids \
-| grep -Fwf <(cut -d, -f 1 $cogUkDir/cog_metadata.csv) \
+| grep -Fwf <(zcat $cogUkDir/cog_metadata.csv.gz | cut -d, -f 1) \
     > newCogUk.accs
 xzcat $cogUkDir/cog_all.fasta.xz \
 | faSomeRecords stdin newCogUk.accs newCogUk.fa
@@ -272,7 +278,7 @@ cp /dev/null $renaming
 if [ -s newCogUk.filtered.fa ]; then
     set +o pipefail
     fastaNames newCogUk.filtered.fa \
-    | grep -Fwf - $cogUkDir/cog_metadata.csv \
+    | grep -Fwf - <(zcat $cogUkDir/cog_metadata.csv.gz) \
     | awk -F, '{print $1 "\t" $1 "|" $5;}' \
         >> $renaming
     set -o pipefail

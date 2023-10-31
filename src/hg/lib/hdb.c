@@ -788,7 +788,7 @@ centralDb = cfgOption2(centralProfile, "db");
 centralCc = sqlConnCacheNewProfile(centralProfile);
 sqlSetParanoid(TRUE);
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
-if ((conn == NULL) || !cartTablesOk(conn))
+if ((conn == NULL) || (cgiIsOnWeb() && !cartTablesOk(conn)))
     {
     fprintf(stderr, "hConnectCentral failed over to backupcentral "
             "pid=%ld\n", (long)getpid());
@@ -1105,7 +1105,7 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE && !trackHubDatabase(db))
+if (cfgOptionBooleanDefault("forceTwoBit", TRUE) == TRUE && !trackHubDatabase(db))
     {
     char buf[HDB_MAX_PATH_STRING];
     safef(buf, HDB_MAX_PATH_STRING, "/gbdb/%s/%s.2bit", db, db);
@@ -1471,10 +1471,13 @@ char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
     return path;
 
-freeMem(path);
-path = replaceChars(fileName, "/gbdb/", newGbdbLoc2);
-if (cfgOptionBooleanDefault("traceGbdb", FALSE))
-    fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+if (newGbdbLoc2!=NULL)
+    {
+    freeMem(path);
+    path = replaceChars(fileName, "/gbdb/", newGbdbLoc2);
+    if (cfgOptionBooleanDefault("traceGbdb", FALSE))
+        fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+    }
 
 return path;
 }
