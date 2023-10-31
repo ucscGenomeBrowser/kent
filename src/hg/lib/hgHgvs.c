@@ -1390,10 +1390,10 @@ else if (hDbHasNcbiRefSeq(db))
         sqlSafef(query, sizeof(query), "select name from ncbiRefSeq where name like '%s.%%'", acc);
         struct sqlConnection *conn = hAllocConn(db);
         normalizedAcc = sqlQuickString(conn, query);
-        if (isNotEmpty(normalizedAcc) && hDbHasNcbiRefSeqHistorical(db))
+        if (isEmpty(normalizedAcc) && hDbHasNcbiRefSeqHistorical(db))
             {
             // maybe it is a deprecated transcript
-            sqlSafef(query, sizeof(query), "select name from ncbiRefSeqHistorical where name like '%s.%%'", acc);
+            sqlSafef(query, sizeof(query), "select name from ncbiRefSeqHistorical where name like '%s.%%' order by name desc", acc);
             normalizedAcc = sqlQuickString(conn, query);
             }
         hFreeConn(&conn);
