@@ -1,4 +1,4 @@
-/* bedCollect - collect overlapping beds into a single bed. */
+/* chainArrangeCollect - collect overlapping beds into a single bed. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -10,9 +10,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedCollect - collect overlapping beds into a chainArrange.as structure\n"
+  "chainArrangeCollect - collect overlapping beds into a chainArrange.as structure\n"
   "usage:\n"
-  "   bedCollect input.bed output.bed\n"
+  "   chainArrangeCollect input.bed output.bed\n"
   "note: input beds need to be sorted with bedSort\n"
   "options:\n"
   "   -exact       overlapping blocks must be exactly the same range and score\n"
@@ -41,13 +41,14 @@ for(; names; names = names->next)
         dyStringAppend(dy, ",");
     }
 bed->name = dy->string;
-//fprintf(f, "%s %d %d arr%d %d + %d %d 0 %s %d %d-%dbp\n", bed->chrom, bed->chromStart, bed->chromEnd, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name, sizeQuery, bed->score, sizeQuery );
+
+// we're actually not outputting chainArrange structure because the label is coming
+// from an external program currently
 fprintf(f, "%s %d %d arr%d %d + %d %d 0 %s %d\n", bed->chrom, bed->chromStart, bed->chromEnd, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name, sizeQuery);
-//bedOutputN(bed, 5, f, '\t', '\n');
 }
 
-void bedCollect(char *inFile, char *outFile)
-/* bedCollect - collect overlapping beds into a single bed. */
+void chainArrangeCollect(char *inFile, char *outFile)
+/* chainArrangeCollect - collect overlapping beds into a single bed. */
 {
 struct bed *allBeds = bedLoadAll(inFile);
 FILE *f = mustOpen(outFile, "w");
@@ -105,6 +106,6 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 exact = optionExists("exact");
-bedCollect(argv[1], argv[2]);
+chainArrangeCollect(argv[1], argv[2]);
 return 0;
 }
