@@ -224,3 +224,36 @@ bedGraphToBigWig *.bed ../../../chrom.sizes mutConstraint.bw
 
 
 bedGraphToBigWig *.bed ../../../chrom.sizes mutConstraint.bw
+##############################################################################
+# gnomAD v4 - Nov 1, 2023 - ChrisL - DONE
+##############################################################################
+# See /hive/data/outside/gnomAD.4/make.txt for how to download
+# the new version
+# Make the work dir:
+mkdir -p /hive/data/inside/gnomAD/v4
+cd /hive/data/inside/gnomAD/v4
+
+# for each vcf in the download  dirs, install files into /gbdb and load up a table with the pointers
+gbdbPath="/gbdb/hg38/gnomAD/v4/"
+dataPath="/hive/data/outside/gnomAD.4/"
+for tbl in exomes genomes
+do
+    mkdir -p ${gbdbPath}${tbl}
+    ln -s ${dataPath}${tbl}/*.vcf.bgz* ${gbdbPath}${tbl}
+    cp /dev/null ${tbl}.txt
+    if [ ${tbl} == "exomes" ]; then
+        for c in {1..22} X Y
+        do
+            f=${gbdbPath}${tbl}/gnomad.exomes.v4.0.sites.chr${c}.vcf.bgz
+            echo -e "${f}\tchr${c}" >> ${tbl}.txt
+        done
+    else
+        for c in {1..22} X
+        do
+            f=${gbdbPath}${tbl}/gnomad.genomes.v4.0.sites.chr${c}.vcf.bgz
+            echo -e "${f}\tchr${c}" >> ${tbl}.txt
+        done
+    fi
+done
+hgLoadSqlTab hg38 gnomadGenomesV4 ~/kent/src/hg/lib/bbiChroms.sql genomes.txt
+hgLoadSqlTab hg38 gnomadExomesV4 ~/kent/src/hg/lib/bbiChroms.sql exomes.txt
