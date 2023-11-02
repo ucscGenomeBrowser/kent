@@ -66,23 +66,25 @@ prefix "decorator.default".</p>
 type bigBed 12
 bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb
 itemRgb on
-</pre>
+</pre></p>
+<p>
 The above trackDb statement provides a basic entry for a bigBed track. To add a decorator to
 this track, we can start by adding <b>decorator.default.bigDataUrl</b> as a setting, which will
-point to the bigBed file containing decorations.
+point to the bigBed file containing decorations.</p>
 <pre>track testTrack
 type bigBed 12
 bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb
 itemRgb on
 decorator.default.bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/decorations.bb
 </pre>
+<p>
 Other settings are available to further configure decorators.  Each may be applied to the
 decorator instead of the primary track by prepending "decorator.default." to the setting.  For
 example, to set up a
 <a href="hubQuickStartFilter.html#filterValues">filterValues filter</a>
 on the "keywords" field of the decorator, allowing the
 user to filter to any combination of three classes &quot;Type1&quot;, &quot;Type2&quot;, and &quot;Type3&quot;, the following
-trackDb entry could be used.
+trackDb entry could be used.</p>
 <pre>track testTrack
 type bigBed 12
 bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/decorator/main.bb
@@ -91,6 +93,7 @@ decorator.default.bigDataUrl https://genome.ucsc.edu/goldenPath/help/examples/de
 decorator.default.filterValues.keywords Type1,Type2,Type3
 decorator.default.filterType.keywords multipleListOr
 </pre>
+<p>
 Please note that this would also require building an extra <code>keywords</code> field into the decorator
 bigBed to hold those values, see Example #3 for more details. A full list of supported decorator
 settings is available in the
@@ -126,7 +129,8 @@ The full .as format for decorator bigBed files is as follows:
     string fillColor;  "Secondary color to use for filling decoration, blocks, supports RGBA"
     string glyph;  "The glyph to draw in glyph mode; ignored for other styles"
 </pre>
-A copy of this file can be found <a href="examples/decorator/decoration.as">here</a>.
+<p>
+A copy of this file can be found <a href="examples/decorator/decoration.as">here</a>.</p>
 <p>
 Valid values for the style field are "block" and "glyph".  Valid glyph entries include "Circle",
 "Square", "Diamond", "Triangle", "InvTriangle", "Octagon", "Star", and "Pentagram".  If the text isn't
@@ -142,27 +146,30 @@ Here is an example of how to use this format.  Consider a BED item like the foll
 <pre>
 chr1 1000 2000 MyItem 0 + 1000 2000 0 2 400,400 0,600
 </pre>
+<p>
 We can take this <a href="examples/decorator/main.bed">BED file</a> and construct a
 <a href="examples/decorator/main.bb">bigBed</a> from it as described in the <a href="bigBed.html">bigBed</a>
 documentation.  After that, if we wanted to add a decoration to this item that highlighted the region from
-base 1200 to base 1800, we could create a corresponding item in a decorator bigBed file like this:
+base 1200 to base 1800, we could create a corresponding item in a decorator bigBed file like this:</p>
 <pre>
 chr1 1200 1800 MyDecoration 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:MyItem block 255,0,0,128 Ignored
 </pre>
+<p>
 The first color, <code>255,0,0,255</code> specifies that the decoration outline will be in solid red (255 red,
 0 green, 0 blue, 255 alpha).  The second color <code>255,0,0,128</code>, specifies that the interior of the
 decoration will be shaded toward pure red, but that the decorated item will still be partially visible behind it
 (due to the alpha value of 128).  The <code>chr1:1000-2000:MyItem</code> entry describes which item in the main
 track is to be annotated.  In this case, it's an item with the name "MyItem" that spans chr1 from base 1000 to
 base 2000.  The final <code>Ignored</code> value is not used here because we are creating a block decoration
-(a decoration that annotates a range of bases).
+(a decoration that annotates a range of bases).:</p>
 <p>
 To add a glyph decoration to our file that marked the final base of the transcript with a green circle,
 we could also include the following line in our BED file of decorations:
 <pre>chr1 1999 2000 MySecondDecoration 0 + 1999 2000 0,255,0,255 1 1 0 chr1:1000-2000:MyItem glyph 0,255,0,255 Circle
 </pre>
+<p>
 If we store both of those decorations in a file named <a href="examples/decorator/input.bed">input.bed</a>, we can
-then build a <a href="examples/decorator/decorations.bb">bigBed file</a> from it with the following command:
+then build a <a href="examples/decorator/decorations.bb">bigBed file</a> from it with the following command::</p>
 <pre>bedToBigBed -type=bed12+ -as=decoration.as input.bed hg38.chrom.sizes decorations.bb
 </pre>
 
@@ -202,14 +209,15 @@ the decoration.as file:</p>
     int numKeywords;  "Number of keywords"
     string[numKeywords] keywords;  "Keywords for this decorator"
 </pre>
+<p>
 You would then modify your input.bed file to include an additional fields at the end of each line, detailing which keywords
-apply to each of the decorations.
+apply to each of the decorations.:</p>
 <pre>
 chr1 1200 1800 MyDecoration 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:MyItem block 255,0,0,128 Ignored 1 Type1
 chr1 1999 2000 MySecondDecoration 0 + 1999 2000 0,255,0,255 1 0 1 chr1:1000-2000:MyItem glyph 0,255,0,255 Circle 2 Type2,Type3
 </pre>
-After rebuilding the decorations.bb file, you could then use the filterValues version of the trackDb
-entry from the Hub trackDb settings section to create your track.
+<p>After rebuilding the decorations.bb file, you could then use the filterValues version of the trackDb
+entry from the Hub trackDb settings section to create your track.</p>
 <h2>Troubleshooting</h2>
 <p>
 If you get an error when you run the <code>bedToBigBed</code> program, please check your input BED file for
