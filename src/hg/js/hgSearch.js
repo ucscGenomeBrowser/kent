@@ -807,6 +807,7 @@ var hgSearch = (function() {
             if (typeof cartJson.warning !== "undefined") {
                 alert("Warning: " + cartJson.warning);
             }
+            checkJsonData(cartJson, "init");
             // check right away for a special redirect to hgTracks:
             if (typeof cartJson.warning === "undefined" &&
                     typeof cartJson.positionMatches !== "undefined" &&

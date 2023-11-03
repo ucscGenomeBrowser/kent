@@ -150,6 +150,48 @@ for (table = hgp->tableList; table != NULL; table = table->next)
     jsonWriteListEnd(jw); // end positionMatches
 }
 
+static struct hgPositions *collapseHgpList(struct hgPositions *hgpList, struct jsonWrite *jw, char *searchTerm, char *db)
+/* Combine a bunch of singlePos hgps together */
+{
+struct hgPositions *hgp = hgpList, *final = NULL;
+AllocVar(final);
+final->query = searchTerm;
+final->database = cloneString(hgp->database);
+final->tableList = hgp->tableList;
+final->posCount = hgp->posCount;
+final->singlePos = hgp->singlePos;
+final->extraCgi = cloneString(final->extraCgi);
+final->useAlias = hgp->useAlias;
+final->shortCircuited = hgp->shortCircuited;
+
+struct dyString *newHighlight = dyStringNew(0);
+dyStringPrintf(newHighlight, "%s", hgp->singlePos->highlight);
+struct dyString *newPosNames = dyStringNew(0);
+dyStringPrintf(newPosNames, "%s", hgp->singlePos->name);
+for (hgp = hgpList->next; hgp != NULL; hgp = hgp->next)
+    {
+    if (!hgp->singlePos ||
+            (final && !(sameString(final->singlePos->chrom, hgp->singlePos->chrom))))
+        {
+        jsonWriteStringf(jw, "error", "collapsing hgps for hits on different chromsomes, database: '%s', searchTerm: '%s'", db, searchTerm);
+        return NULL;
+        }
+    else
+        {
+        dyStringPrintf(newHighlight, "|%s", hgp->singlePos->highlight);
+        dyStringPrintf(newPosNames, ",%s", hgp->singlePos->name);
+        final->posCount += hgp->posCount;
+        if (final->singlePos->chromStart > hgp->singlePos->chromStart)
+            final->singlePos->chromStart = hgp->singlePos->chromStart;
+        if (final->singlePos->chromEnd < hgp->singlePos->chromEnd)
+            final->singlePos->chromEnd = hgp->singlePos->chromEnd;
+        }
+    }
+final->singlePos->highlight = dyStringCannibalize(&newHighlight);
+final->singlePos->name = dyStringCannibalize(&newPosNames);
+return final;
+}
+
 struct hgPositions *genomePosCJ(struct jsonWrite *jw,
 				       char *db, char *spec, char **retChromName,
 				       int *retWinStart, int *retWinEnd, struct cart *cart, struct searchCategory *categories, boolean categorySearch)
@@ -169,6 +211,7 @@ boolean measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
 char *terms[16];
 int termCount = chopByChar(cloneString(spec), ';', terms, ArraySize(terms));
 boolean multiTerm = (termCount > 1);
+struct hgPositions *hgpList = NULL; // if a multiTerm search we need to collapse the hgps together
 
 int i = 0;
 for (i = 0;  i < termCount;  i++)
@@ -203,6 +246,10 @@ for (i = 0;  i < termCount;  i++)
             start = hgp->singlePos->chromStart;
         if (hgp->singlePos->chromEnd > end)
             end = hgp->singlePos->chromEnd;
+        if (multiTerm)
+            {
+            slAddHead(&hgpList, hgp);
+            }
         }
     else
         {
@@ -223,6 +270,10 @@ if (hgp != NULL)
     *retChromName = chrom;
     *retWinStart  = start;
     *retWinEnd    = end;
+    }
+if (multiTerm && hgpList != NULL)
+    {
+    return collapseHgpList(hgpList, jw, spec, db);
     }
 return hgp;
 }
