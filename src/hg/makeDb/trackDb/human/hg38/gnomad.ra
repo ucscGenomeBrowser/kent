@@ -6,7 +6,7 @@ superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
-html gnomadV3_1_1
+html gnomadV4
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -218,6 +218,8 @@ maxWindowToDraw 200000
 visibility hide
 dataVersion Release 4.0.0 (November 1, 2023)
 priority 1
+url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r4&ignore=$$
+urlLabel gnomAD:
 html gnomadV4.html
 
     track gnomadGenomesV4

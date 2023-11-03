@@ -3897,7 +3897,7 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
 
     // the page is scrolled or otherwise off the screen
     if (topOffset <= 0) {
-        topOffset = mouseY - window.scrollY + popUpRect.height;
+        topOffset = mouseY - window.scrollY;
     }
 
     if (leftOffset < 0) {
