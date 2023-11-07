@@ -345,7 +345,9 @@ for (group = groupList; group != NULL; group = group->next)
                         cartSetString(cart, parentTdb->track,
                                     changeVis == tvHide ? "hide" : "show");
                     }
-                else // Not super  child
+                // if we're called on the path that has excludeHash set
+                // we also want to set the supertrack children's visbilities
+                if (!tdbIsSuperTrackChild(tdb) || (excludeHash != NULL))
                     {
                     if (changeVis == tdb->visibility)
                         /* remove if setting to default vis */
