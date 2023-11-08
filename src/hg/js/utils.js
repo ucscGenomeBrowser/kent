@@ -4108,12 +4108,14 @@ function titleTagToMouseover(mapEl) {
 }
 
 function convertTitleTagsToMouseovers() {
-    /* make all the title tags in the ideogram or main image have mouseovers */
-    $("[name=ideoMap]>[title],#imgTbl [title]").each(function(i, a) {
+    /* make all the title tags in the document have mouseovers */
+    $("[[title]").each(function(i, a) {
         if (a.title !== undefined && a.title.length > 0) {
             titleTagToMouseover(a);
         }
     });
+
+    /* make the above mouseovers go away if we are in an input or select menu */
     const inps = document.getElementsByTagName("input");
     const sels = document.getElementsByTagName("select");
     for (let inp of inps) {
@@ -4138,6 +4140,8 @@ function convertTitleTagsToMouseovers() {
             canShowNewMouseover = true;
         });
     }
+
+    /* for hgTracks specifically, we also need to deal with the special contextmenu */
     let imgTbl = document.getElementById("imgTbl");
     if (imgTbl) {
         imgTbl.addEventListener("contextmenu", function(e) {
