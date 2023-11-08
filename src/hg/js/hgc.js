@@ -150,7 +150,7 @@ function makeVisInput(parentEl, name, trackName="", defaultVis="Hide") {
         ctrl.type = "radio";
         ctrl.name = name;
         ctrl.value = vis;
-        if (defaultVis == vis) {
+        if (defaultVis.toLowerCase() === vis.toLowerCase()) {
             ctrl.checked = true;
         }       
         ctrl.setAttribute("data-default", ctrl.checked);
@@ -221,7 +221,9 @@ function makeHPRCTable() {
             trackTextDiv.append(asmSafe + " display mode:");
             newTblDiv.append(trackTextDiv);
             let trackCtrlDiv = document.createElement("div");
-            makeVisInput(trackCtrlDiv, asmSafe+"SetVis", trackName=asm);
+            let defaultVis = "Hide";
+            if (typeof chainVis !== "undefined" && asm in chainVis) {defaultVis = chainVis[asm];}
+            makeVisInput(trackCtrlDiv, asmSafe+"SetVis", trackName=asm, defaultVis=defaultVis);
             newTblDiv.append(trackCtrlDiv);
             trackTextDiv.classList.add("gridItem");
             trackCtrlDiv.classList.add("gridItem");
