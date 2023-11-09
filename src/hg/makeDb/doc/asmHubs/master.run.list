@@ -1424,6 +1424,7 @@
 ./runBuild GCF_000002775.5_P.trichocarpa_v4.1 plants Populus_trichocarpa
 ./runBuild GCF_000002845.2_ASM284v2 invertebrate Leishmania_braziliensis_MHOM/BR/75/M2904
 ./runBuild GCF_000002855.3_ASM285v2 fungi Aspergillus_niger_CBS_513.88
+./runBuild GCF_000002855.4_ASM285v2 fungi Aspergillus_niger
 ./runBuild GCF_000002875.2_ASM287v2 invertebrate Leishmania_infantum_JPCM5
 ./runBuild GCF_000002945.1_ASM294v2 fungi Schizosaccharomyces_pombe
 ./runBuild GCF_000002985.6_WBcel235 invertebrate Caenorhabditis_elegans
