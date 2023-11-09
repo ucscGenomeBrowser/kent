@@ -2675,6 +2675,7 @@
 ./runBuild GCF_004010195.1_ASM401019v2 vertebrate Chiloscyllium_plagiosum
 ./runBuild GCF_004010815.1_ASM401081v1 invertebrate Aphis_gossypii
 ./runBuild GCF_004011695.1_Arabiei_Me14 fungi Ascochyta_rabiei
+./runBuild GCF_004011695.2_ASM401169v2 fungi Ascochyta_rabiei
 ./runBuild GCF_004022145.1_Paevar1 fungi Byssochlamys_spectabilis
 ./runBuild GCF_004027225.1_bStrHab1_v1.p vertebrate Strigops_habroptila
 ./runBuild GCF_004027225.2_bStrHab1.2.pri birds Strigops_habroptila
