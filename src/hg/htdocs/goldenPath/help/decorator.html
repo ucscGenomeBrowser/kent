@@ -161,7 +161,7 @@ decoration will be shaded toward pure red, but that the decorated item will stil
 (due to the alpha value of 128).  The <code>chr1:1000-2000:MyItem</code> entry describes which item in the main
 track is to be annotated.  In this case, it's an item with the name "MyItem" that spans chr1 from base 1000 to
 base 2000.  The final <code>Ignored</code> value is not used here because we are creating a block decoration
-(a decoration that annotates a range of bases).:</p>
+(a decoration that annotates a range of bases).</p>
 <p>
 To add a glyph decoration to our file that marked the final base of the transcript with a green circle,
 we could also include the following line in our BED file of decorations:
@@ -169,7 +169,7 @@ we could also include the following line in our BED file of decorations:
 </pre>
 <p>
 If we store both of those decorations in a file named <a href="examples/decorator/input.bed">input.bed</a>, we can
-then build a <a href="examples/decorator/decorations.bb">bigBed file</a> from it with the following command::</p>
+then build a <a href="examples/decorator/decorations.bb">bigBed file</a> from it with the following command:</p>
 <pre>bedToBigBed -type=bed12+ -as=decoration.as input.bed hg38.chrom.sizes decorations.bb
 </pre>
 
@@ -211,7 +211,7 @@ the decoration.as file:</p>
 </pre>
 <p>
 You would then modify your input.bed file to include an additional fields at the end of each line, detailing which keywords
-apply to each of the decorations.:</p>
+apply to each of the decorations.</p>
 <pre>
 chr1 1200 1800 MyDecoration 0 + 1200 1800 255,0,0,255 1 600 0 chr1:1000-2000:MyItem block 255,0,0,128 Ignored 1 Type1
 chr1 1999 2000 MySecondDecoration 0 + 1999 2000 0,255,0,255 1 0 1 chr1:1000-2000:MyItem glyph 0,255,0,255 Circle 2 Type2,Type3
