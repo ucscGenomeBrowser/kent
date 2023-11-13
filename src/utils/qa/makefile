@@ -41,6 +41,7 @@ install:
 	cp -p --remove-destination checkSync.csh           ${SCRIPTS}
 	cp -p --remove-destination checkSyncAll.csh        ${SCRIPTS}
 	cp -p --remove-destination checkSyncAndMetaDataAll.py ${SCRIPTS}
+	cp -p --remove-destination checkSyncMetaDataWrapper.py ${SCRIPTS}
 	cp -p --remove-destination checkTableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination checkTrackUiLinks.csh   ${SCRIPTS}
 	cp -p --remove-destination checkWigFiles.csh       ${SCRIPTS}

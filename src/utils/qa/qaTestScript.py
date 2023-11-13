@@ -180,6 +180,7 @@ n = driver.find_element_by_id("tableBrowserMenuLink")
 # hover over element and click
 a.move_to_element(n).click().perform()
 driver.find_element_by_id("hgta_doSchema").click()
+driver.find_element_by_xpath("//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/a").click() #schema page check
 driver.get(machine + "/cgi-bin/hgTables?db=oviAri4")
 driver.find_element_by_name("hgta_doSummaryStats").click()
 
@@ -310,17 +311,6 @@ driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element_by_name("hgt.positionInput").clear()
 driver.find_element_by_name("hgt.positionInput").send_keys("ATDI01079686")
 driver.find_element_by_name("goButton").click()
-time.sleep(5)
-driver.find_element_by_id("hgt.out1").click()
-time.sleep(5)
-# Tests track hub annotation for specific machine
-if 'hub_26485' in driver.page_source:
-     driver.find_element_by_xpath("//td[@id='td_data_hub_26485_assembly']/div[2]/map/area[3]").click()
-elif 'hub_11450' in driver.page_source:
-     driver.find_element_by_xpath("//td[@id='td_data_hub_11450_assembly']/div[2]/map/area[3]").click()
-
-else:
-     driver.find_element_by_xpath("//td[@id='td_data_hub_4081003_assembly']/div[2]/map/area[3]").click()
 time.sleep(2)
 
 # Tests HGVS searches
@@ -543,8 +533,6 @@ driver.find_element_by_id("positionInput").clear()
 driver.find_element_by_id("positionInput").send_keys("scaffold_3:1,888,907-1,888,948")
 driver.find_element_by_id("goButton").click()
 time.sleep(3)
-driver.find_element_by_id("hgt.out1").click()
-time.sleep(3)
 # Tests track hub annotation if it is on the RR  
 if 'hub_129603_daph scaffold_3' in driver.page_source:
      driver.find_element_by_xpath("//td[@id='td_data_hub_129603_myTrack']/div[2]/map/area").click()
@@ -559,7 +547,6 @@ driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element_by_id("positionInput").clear()
 driver.find_element_by_id("positionInput").send_keys("chr10:69,644,427-69,678,147")
 driver.find_element_by_id("goButton").click()
-driver.find_element_by_id("hgt.out1").click()
 time.sleep(3)
 # Tests track hub annotation if it is on the RR   
 if 'hub_336627' in driver.page_source:
@@ -586,6 +573,11 @@ driver.find_element_by_name("userSeq").send_keys("MIPDTDLQVQLASRNRVGECSCQVSLMLQS
 driver.find_element_by_name("Submit").click()
 driver.find_element_by_id("res0").click()
 time.sleep(3)
+
+# Tests hgFind.matches cart variable
+cartReset()
+driver.get(machine + "/cgi-bin/hgTracks?position=chr2:25,485,759-25,487,667&ignoreCookie=1&db=hg19&hgFind.matches=this&filterAlign=pack")
+driver.find_element_by_id("goButton").click()
 
 # Closes the current window on which Selenium is running
 driver.close()
