@@ -251,7 +251,8 @@ GCA_004026885.1_MegLyr_v1_BIUU	Indian false vampire
 GCF_902729225.1_Ma_sr-lr_union100	Indian flying fox
 GCA_004027635.1_CroInd_v1_BIUU	Indochinese shrew (US011 2019 Broad)
 GCA_004363435.1_PlaMin_v1_BIUU	Indus River dolphin
-GCA_004023805.1_PanOnc_v1_BIUU	jaguar
+GCA_004023805.1_PanOnc_v1_BIUU	jaguar (BS21 2019)
+GCF_028533385.1_Panthera_onca_HiC	jaguar (Sample0147 2023)
 GCF_014898765.1_PumYag	jaguarundi
 GCF_014825515.1_WHU_Ajam_v2	Jamaican fruit-eating bat (1a 2020 Wuhan U)
 GCF_021234435.1_CSHL_Jam_final	Jamaican fruit-eating bat (2021)
@@ -275,7 +276,8 @@ GCF_000147115.1_Myoluc2.0	little brown bat
 GCA_024363435.1_mPerLon1.0.a	little pocket mouse (longimembris alternate hap 2022)
 GCA_024363575.1_mPerLon1.0.p	little pocket mouse (longimembris primary hap 2022)
 GCA_004026665.1_MurFea_v1_BIUU	little tube-nosed bat
-GCF_006547405.1_ASM654740v1	long-finned pilot whale
+GCF_963455315.1_mGloMel1.1	long-finned pilot whale (primary hap 2023)
+GCF_006547405.1_ASM654740v1	long-finned pilot whale (X-22926-18 2019)
 GCF_000276665.1_ChiLan1.0	long-tailed chinchilla
 GCA_004027375.1_MacSob_v1_BIUU	long-tongued fruit bat (US102 2019 Broad)
 GCA_004365215.1_CunPac_v1_BIUU	Lowland paca
@@ -291,6 +293,7 @@ GCA_950005055.1_mBalAcu1.1_alternate_haplotype	minke whale (alternate hap 2023)
 GCF_949987535.1_mBalAcu1.1	minke whale (primary hap 2023)
 GCF_002204375.1_MunDraft-v1.0	Mongolian gerbil (243 2017 Lucigen Corp.)
 GCA_008131255.1_ASM813125v1	Mongolian gerbil (EAM2014 2019 BGI)
+GCF_030254825.1_Bangor_MerUng_6.1	Mongolian gerbil (TT.TT164.6M 2023)
 GCA_019395325.1_mDroGli1.alt	monito del monte (mDroGli1 alternate hap 2021)
 GCF_019393635.1_mDroGli1.pri	monito del monte (mDroGli1 primary hap 2021)
 GCA_004027695.1_CavTsc_v1_BIUU	Montane guinea pig
@@ -309,7 +312,8 @@ GCA_026167925.1_mPerMan1.0.a	North American deer mouse (MVZ:Mamm:240117 alternat
 GCA_026229955.1_mPerMan1.0.p	North American deer mouse (MVZ:Mamm:240117 primary hap 2022)
 GCA_028500835.1_mEreDor1.alt	North American porcupine (mEreDor1 alternate hap 2023)
 GCA_028451465.1_mEreDor1.pri	North American porcupine (mEreDor1 primary hap 2023)
-GCA_028564815.1_mEubGla1.hap2	North Atlantic right whale (mEubGla1 hap2 2023)
+GCA_028571275.1_mEubGla1.hap1	North Atlantic right whale (hap1 2023)
+GCA_028564815.1_mEubGla1.hap2	North Atlantic right whale (hap2 2023)
 GCA_004363455.1_EubJap_v1_BIUU	North Pacific right whale
 GCF_010015895.1_GSC_riverotter_1.0	northern American river otter
 GCA_951640545.1_mEptNil1.1_alternate_haplotype	northern bat (alternate hap 2023)
@@ -392,7 +396,8 @@ GCF_014754425.2_SCBI_Odam_1.1	scimitar-horned oryx
 GCA_004027955.1_ChaVel_v1_BIUU	Screaming hairy armadillo
 GCF_002288905.1_ASM228890v2	sea otter (GAN:26980312 2017 refseq)
 GCA_004027735.1_CarPer_v1_BIUU	Seba's short-tailed bat
-GCA_000298735.2_Oar_v4.0	sheep
+GCF_016772045.2_ARS-UI_Ramb_v3.0	sheep (OAR_USU_Benz2616 2023)
+GCA_000298735.2_Oar_v4.0	sheep (Texel 2015)
 GCF_900095145.1_PAHARI_EIJ_v1.1	shrew mouse
 GCA_004024705.1_MosMos_v1_BIUU	Siberian musk deer (BS20 2019 Broad)
 GCF_000313985.2_ASM31398v2	small Madagascar hedgehog
