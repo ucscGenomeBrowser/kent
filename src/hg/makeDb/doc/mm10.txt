@@ -19233,3 +19233,11 @@ ln -s /hive/data/outside/vistaEnhancers/mm10/vistaEnhancers.bb
 cd ~/kent/src/hg/makeDb/trackDb/mouse/mm10
 vi trackDb.ra
 #############################################################################
+
+#############################################################################
+# JASPAR 2024 bigBed update 11/13/24
+
+cd /hive/data/genomes/mm10/bed/jaspar
+wget https://frigg.uio.no/JASPAR/JASPAR_genome_browser_tracks/current/mm10/JASPAR2024_mm10.bb
+mv JASPAR2024_mm10.bb JASPAR2024.bb
+ln -s JASPAR2024.bb /gbdb/mm10/jaspar/JASPAR2024.bb
