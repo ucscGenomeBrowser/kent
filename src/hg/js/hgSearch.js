@@ -1,3 +1,11 @@
+// Utility JavaScript
+
+// "use strict";
+
+// Don't complain about line break before '||' etc:
+/* jshint -W014 */
+/* jshint -W087 */
+/* jshint esnext: true */
 var db; /* A global variable for the current assembly. Needed when we may not have
            sent a cartJson request yet */
 var hgSearch = (function() {
@@ -109,7 +117,7 @@ var hgSearch = (function() {
             baseUrl = myUrl;
 
         var urlVars;
-        if (oldVars === undefined) {
+        if (typeof oldVars === "undefined") {
             var queryStr = urlParts[1];
             urlVars = deparam(queryStr);
         } else {
@@ -160,9 +168,9 @@ var hgSearch = (function() {
                 return 0;
             }
         } else {
-            if (priorityA === undefined) {
+            if (typeof priorityA === "undefined") {
                 return 1;
-            } else if (priorityB === undefined) {
+            } else if (typeof priorityB === "undefined") {
                 return -1;
             } else if (priorityA < priorityB) {
                 return -1;
@@ -186,7 +194,7 @@ var hgSearch = (function() {
     function sortTrackCategories(trackList) {
         /* Sort the nested track list structure such that within each group
          * the leaves of the tree are sorted by priority */
-        if (trackList.children !== undefined) {
+        if (typeof trackList.children !== "undefined") {
             trackList.children.sort(compareTrack);
             for (var i = 0; i < trackList.children.length; i++) {
                 trackList.children[i] = sortTrackCategories(trackList.children[i]);
@@ -196,7 +204,7 @@ var hgSearch = (function() {
     }
 
     function categoryComp(category) {
-        if (category.priority !== undefined)
+        if (typeof category.priority !== "undefined")
             return category.priority;
         return 1000.0;
     }
@@ -208,7 +216,7 @@ var hgSearch = (function() {
     function addCountAndTimeToLabel(categ) {
         /* Change the text label of the node */
         categ.text = categ.label + " (<span id='" + categ.id + "count'><b>" + categ.numMatches + " results</b></span>";
-        if (categ.searchTime !== undefined && categ.searchTime >= 0) {
+        if (typeof categ.searchTime !== "undefined" && categ.searchTime >= 0) {
             categ.text += ", <span id='" + categ.id + "searchTime'><b>" + categ.searchTime + "ms searchTime</b></span>";
         }
         categ.text += ")";
@@ -249,7 +257,7 @@ var hgSearch = (function() {
                     groups.visible = visibleTrackGroup;
                 }
                 groups.visible.children.push(newCateg);
-                if (newCateg.searchTime !== undefined) {
+                if (typeof newCateg.searchTime !== "undefined") {
                     if (groups.visible.searchTime < 0)
                         groups.visible.searchTime = 0;
                     groups.visible.searchTime += newCateg.searchTime;
@@ -276,7 +284,7 @@ var hgSearch = (function() {
                             addCountAndTimeToLabel(parent);
                             last = parent;
                             doNewComp = true;
-                        } else if (last !== undefined) {
+                        } else if (typeof last !== "undefined") {
                             // if we are processing the first parent, we need to add ourself (last)
                             // as a child so the subtrack list is correct, but we still need
                             // to go up through the parent list and update the summarized counts
@@ -285,16 +293,16 @@ var hgSearch = (function() {
                             }
                             doNewComp = false;
                             parentsHash[parentTrack].numMatches += last.numMatches;
-                            if (last.searchTime !== undefined) {
+                            if (typeof last.searchTime !== "undefined") {
                                 parentsHash[parentTrack].searchTime += last.searchTime;
                             }
                             addCountAndTimeToLabel(parent);
                         }
                     }
                 }
-                if (groups[group] !== undefined && last !== undefined) {
+                if (typeof groups[group] !== "undefined" && typeof last !== "undefined") {
                     groups[group].numMatches += last.numMatches;
-                    if (last.searchTime !== undefined) {
+                    if (typeof last.searchTime !== "undefined") {
                         groups[group].searchTime += last.searchTime;
                     }
                     addCountAndTimeToLabel(groups[group]);
@@ -310,7 +318,7 @@ var hgSearch = (function() {
                     groups[group].numMatches = last.numMatches;
                     groups[group].searchTime = last.searchTime;
                     groups[group].children = [last];
-                    if (trackGroups !== undefined && group in trackGroups) {
+                    if (typeof trackGroups !== "undefined" && group in trackGroups) {
                         groups[group].priority = trackGroups[group].priority;
                         groups[group].label = trackGroups[group].label;
                         addCountAndTimeToLabel(groups[group]);
@@ -338,7 +346,7 @@ var hgSearch = (function() {
             hiddenTrackChildren = sortByTrackGroups(hiddenTrackChildren);
             _.each(hiddenTrackChildren, function(group) {
                 hiddenTrackGroup.children.push(group);
-                if (group.searchTime !== undefined) {
+                if (typeof group.searchTime !== "undefined") {
                     if (hiddenTrackGroup.searchTime < 0) {
                         hiddenTrackGroup.searchTime = 0;
                     }
@@ -409,7 +417,7 @@ var hgSearch = (function() {
             });
         } else {
             resultLi = $('[id="' + node.id + 'Results"');
-            if (resultLi !== undefined) // if we don't have any results for this track resultLi is undefined
+            if (typeof resultLi !== "undefined") // if we don't have any results for this track resultLi is undefined
                 _.each(resultLi, function(li) {
                     li.style = state ? "display" : "display: none";
                 });
@@ -439,7 +447,7 @@ var hgSearch = (function() {
     }
 
     function updateFilters(uiState) {
-        if (uiState.categs !== undefined) {
+        if (typeof uiState.categs !== "undefined") {
             filtersToJstree();
             makeCategoryTree();
         }
@@ -534,13 +542,24 @@ var hgSearch = (function() {
             }
         });
         if (isHidden) {
-            newText = this.nextSibling.innerHTML.replace(/Show/,"Hide");
-            this.nextSibling.innerHTML = newText;
-            this.src = "../images/remove_sm.gif";
+            if (this.nextSibling) {
+                // click on the '+' icon
+                newText = this.nextSibling.innerHTML.replace(/Show/,"Hide");
+                this.nextSibling.innerHTML = newText;
+                this.src = "../images/remove_sm.gif";
+            } else {
+                // click on the link text
+                this.innerHTML = this.innerHTML.replace(/Show/,"Hide");
+            }
         } else {
-            newText = this.nextSibling.innerHTML.replace(/Hide/,"Show");
-            this.nextSibling.innerHTML = newText;
-            this.src = "../images/add_sm.gif";
+            if (this.nextSibling) {
+                // click on the '-' icon
+                newText = this.nextSibling.innerHTML.replace(/Hide/,"Show");
+                this.nextSibling.innerHTML = newText;
+                this.src = "../images/add_sm.gif";
+            } else {
+                this.innerHTML = this.innerHTML.replace(/Hide/,"Show");
+            }
         }
     }
 
@@ -561,7 +580,7 @@ var hgSearch = (function() {
 
     function updateSearchResults(uiState) {
         var parentDiv = $("#searchResults");
-        if (uiState && uiState.search !== undefined) {
+        if (uiState && typeof uiState.search !== "undefined") {
             $("#searchBarSearchString").val(uiState.search);
         } else {
             // back button all the way to the beginning
@@ -601,13 +620,23 @@ var hgSearch = (function() {
                 var subList = document.createElement("ul");
                 printMatches(subList, matches, title, searchDesc);
                 if (matches.length > 10) {
+                    idStr = idAttr.value + "_" + categoryCount;
                     subList.innerHTML += "<li class='liNoStyle'>";
-                    subList.innerHTML += "<input type='hidden' id='" + idAttr.value + "_" + categoryCount +  "showMore' value='0'>";
-                    subList.innerHTML += "<img height='18' width='18' id='" + idAttr.value + "_" + categoryCount + "_showMoreButton' src='../images/add_sm.gif'>";
-                    if (matches.length > 500)
-                        subList.innerHTML += "<div class='showMoreDiv' id='" + idAttr.value+"_"+categoryCount+"_showMoreDiv'>&nbsp;Show 490 (out of " + (matches.length) + " total) more matches for " + searchDesc + "</div></li>";
-                    else
-                        subList.innerHTML += "<div class='showMoreDiv' id='" + idAttr.value+"_"+categoryCount+"_showMoreDiv'>&nbsp;Show " + (matches.length - 10) + " more matches for " + searchDesc + "</div></li>";
+                    subList.innerHTML += "<input type='hidden' id='" + idStr +  "showMore' value='0'>";
+                    subList.innerHTML += "<img height='18' width='18' id='" + idStr + "_showMoreButton' src='../images/add_sm.gif'>";
+                    if (matches.length > 500) {
+                        let newText  = "<div class='showMoreDiv' id='" + idStr +"_showMoreDiv'>";
+                        newText += "&nbsp;<a href='#' id='"+ idStr + "_showMoreLink'>";
+                        newText += "Show 490 (out of " + (matches.length) + " total) more matches for " + searchDesc;
+                        newText += "</a></div></li>";
+                        subList.innerHTML += newText;
+                    } else {
+                        let newText = "<div class='showMoreDiv' id='" + idStr + "_showMoreDiv'>";
+                        newText += "&nbsp;<a href='#' id='"+ idStr + "_showMoreLink'>";
+                        newText += "Show " + (matches.length - 10) + " more matches for " + searchDesc;
+                        newText += "</a></div></li>";
+                        subList.innerHTML += newText;
+                    }
                 }
                 newListObj.append(subList);
                 newList.append(newListObj);
@@ -615,9 +644,10 @@ var hgSearch = (function() {
                 // make result list collapsible:
                 $('#'+idAttr.value+categoryCount+"_button").click(collapseNode);
                 $('#'+idAttr.value+"_" +categoryCount+"_showMoreButton").click(showMoreResults);
+                $('#'+idAttr.value + "_" + categoryCount + "_showMoreLink").click(showMoreResults);
                 categoryCount += 1;
             });
-        } else if (uiState && uiState.search !== undefined) {
+        } else if (uiState && typeof uiState.search !== "undefined") {
             // No results from match
             var msg = "<p>No results</p>";
             parentDiv.empty();
@@ -644,7 +674,7 @@ var hgSearch = (function() {
         // if we are getting here from a change event on the species dropdown
         // and are switching to the default assembly for a species, we can
         // automatically send a search for this organism+assembly
-        if (e !== undefined) {
+        if (typeof e !== "undefined") {
             switchAssemblies($("#dbSelect")[0].value);
         }
     }
@@ -702,7 +732,12 @@ var hgSearch = (function() {
         // Update uiState with new values and update the page.
         _.assign(uiState, jsonData);
         db = uiState.db;
-        if (jsonData.positionMatches !== undefined) {
+        if (typeof jsonData === "undefined" || jsonData === null) {
+            // now that the show more text is a link, a popstate event gets fired because the url changes
+            // we can safely return because there is no state to change
+            return;
+        }
+        if (typeof jsonData.positionMatches !== "undefined") {
             // clear the old resultHash
             uiState.resultHash = {};
             _.each(uiState.positionMatches, function(match) {
@@ -743,7 +778,7 @@ var hgSearch = (function() {
         // term, fire off a search
         cart.debug(debugCartJson);
         var searchTerm = $("#searchBarSearchString").val().replaceAll("\"","");
-        if (searchTerm !== undefined && searchTerm.length > 0) {
+        if (typeof searchTerm !== 'undefined' && searchTerm.length > 0) {
             // put up a loading image
             $("#searchBarSearchButton").after("<i id='spinner' class='fa fa-spinner fa-spin'></i>");
 
