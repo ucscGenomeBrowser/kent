@@ -6,6 +6,10 @@ wiggleRoom=$(date +%s -d"30 days");  # Flag for renewal within 30 days of expiry
 
 output=""
 
+#Removed hgdownload2 on 11/14/23 after consulting the admins and they sharing it is offline
+#hgdownload2.gi.ucsc.edu \
+#hgdownload2.soe.ucsc.edu \
+
 for site in \
 genome.ucsc.edu \
 genome.soe.ucsc.edu \
@@ -21,8 +25,6 @@ cells.ucsc.edu \
 cirm.ucsc.edu \
 cirmdcm.soe.ucsc.edu \
 hgdownload.soe.ucsc.edu \
-hgdownload2.gi.ucsc.edu \
-hgdownload2.soe.ucsc.edu \
 hgdownload-test.gi.ucsc.edu \
 hgdownload-euro.soe.ucsc.edu \
 redmine.soe.ucsc.edu \
