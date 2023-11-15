@@ -208,7 +208,7 @@ unsigned filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    if (bigBedFilterInterval(bedRow, filters))
+    if (bigBedFilterInterval(bbi, bedRow, filters))
         {
         struct encodePeak *peak = encodePeakGeneralLoad(bedRow, pt);
         struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, tg->tdb, scoreMin, scoreMax);

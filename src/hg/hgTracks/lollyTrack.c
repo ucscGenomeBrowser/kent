@@ -366,7 +366,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
     // throw away items that don't pass the filters
-    if (!bigBedFilterInterval(bedRow, filters))
+    if (!bigBedFilterInterval(bbi, bedRow, filters))
         {
         filtered++;
         continue;

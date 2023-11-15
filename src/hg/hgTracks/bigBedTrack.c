@@ -289,9 +289,13 @@ return filters;
 }
 
 
-boolean bigBedFilterInterval(char **bedRow, struct bigBedFilter *filters)
+boolean bigBedFilterInterval(struct bbiFile *bbi, char **bedRow, struct bigBedFilter *filters)
 /* Go through a row and filter based on filters.  Return TRUE if all filters are passed. */
 {
+if ((bbi->definedFieldCount > 3) && (hgFindMatches != NULL) && 
+    (bedRow[3] != NULL)  && hashLookup(hgFindMatches, bedRow[3]) != NULL)
+    return TRUE;
+
 struct bigBedFilter *filter;
 for(filter = filters; filter; filter = filter->next)
     {
@@ -571,13 +575,13 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         // bigDbSnp does not have a score field, but I want to compute the freqSourceIx from
         // trackDb and settings one time instead of for each item, so I'm overloading scoreMin.
         int freqSourceIx = scoreMin;
-        lf = lfFromBigDbSnp(tdb, bb, filters, freqSourceIx);
+        lf = lfFromBigDbSnp(tdb, bb, filters, freqSourceIx, bbi);
         }
     else
 	{
         char startBuf[16], endBuf[16];
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-        if (bigBedFilterInterval(bedRow, filters))
+        if (bigBedFilterInterval(bbi, bedRow, filters))
             {
             if (instaFile)
                 {

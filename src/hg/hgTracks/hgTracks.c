@@ -7751,7 +7751,7 @@ struct mouseOverScheme *mouseScheme = mouseOverSetupForBbi(decoratorTdb, bbi);
 if (track->decoratorGroup == NULL)
     track->decoratorGroup = newDecoratorGroup();
 
-struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi->fieldCount, mouseScheme);
+struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi, mouseScheme);
 track->decoratorGroup->decorators = slCat(track->decoratorGroup->decorators, newDecorators);
 for (struct decorator *d = track->decoratorGroup->decorators; d != NULL; d = d->next)
     d->group = track->decoratorGroup;
