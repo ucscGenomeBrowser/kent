@@ -68,8 +68,8 @@ type bed 3
 
     track hprcDoubleV1
     parent hprcInDelV1
-    shortLabel Double
-    longLabel Double
+    shortLabel Other Rearrangements
+    longLabel Other Rearrangements: Unalignable sequences in both genomes (inversions, partial transpositions)
     bigDataUrl /gbdb/hg38/hprcArrV1/hprcDoubleV1.bb
     type bigBed 9 +
     itemRgb on
