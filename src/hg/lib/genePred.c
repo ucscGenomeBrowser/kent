@@ -2116,7 +2116,8 @@ char *extra = cloneString(bb->rest);
 int numCols = 12 + 8 - 3;
 char *row[numCols];
 int wordCount = chopByChar(extra, '\t', row, numCols);
-assert(wordCount == numCols);
+if (wordCount < numCols)
+    errAbort("expected at least %d columns in bigGenePred, got %d; is this actually a bigGenePred?", numCols, wordCount);
 
 struct genePredExt *gp = bedToGenePredExt(bed);
 
