@@ -248,12 +248,12 @@ do
             echo -e "${f}\tchr${c}" >> ${tbl}.txt
         done
     else
-        for c in {1..22} X
+        for c in {1..22} X Y
         do
             f=${gbdbPath}${tbl}/gnomad.genomes.v4.0.sites.chr${c}.vcf.bgz
             echo -e "${f}\tchr${c}" >> ${tbl}.txt
         done
     fi
+    tName="${tbl^}"
+    hgLoadSqlTab hg38 gnomad${tName}V4 ~/kent/src/hg/lib/bbiChroms.sql genomes.txt
 done
-hgLoadSqlTab hg38 gnomadGenomesV4 ~/kent/src/hg/lib/bbiChroms.sql genomes.txt
-hgLoadSqlTab hg38 gnomadExomesV4 ~/kent/src/hg/lib/bbiChroms.sql exomes.txt
