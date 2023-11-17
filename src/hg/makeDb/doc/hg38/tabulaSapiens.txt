@@ -12,8 +12,7 @@ Download to:
 some doc in https://github.com/czbiohub/tabula-sapiens
 
 metadata:
-  /hive/data/inside/cells/datasets/tabula-sapiens/all/meta.fixed.tsv
-  /hive/data/inside/cells/datasets/tabula-sapiens/orig/metaMerged/cellxgene.tsv
+  /hive/data/inside/cells/datasets/tabula-sapiens/orig/from-cellxgene-all.meta.tsv
 
 # note that smartseq2 BAM can't be erad by samtools or picard due to duplicate
 # chromosomes:
@@ -28,6 +27,10 @@ metadata:
 
 however, intronProspector can read them
 
+Only BAM files in ceelxgene.tsv should be used. There are bam files for wells
+where no cells were sorted and poor quality cells are not annotated.
+
+
 #############################################################################
 # setup for intronProspector runs (markd)
 #############################################################################
@@ -38,6 +41,17 @@ from:
    https://github.com/samtools/htslib/releases/download/1.18/htslib-1.18.tar.bz2
    https://github.com/diekhans/intronProspector/archive/refs/tags/v1.0.3.tar.gz
 
+##
+# get list of BAMs and associate metadata
+# this is tricky because:
+#   - We have BAMs that were rejected and not part of the metadata
+#   - BAM names contain the cell id, plus other information, but metadata doesn't
+#     directly reference the BAM
+#       B107821_A1_S297.homo.gencode.v30.ERCC.chrM ->
+#          Pilot1/alignment-gencode/SS2/B107821_A1_S297.homo.gencode.v30.ERCC.chrM.Aligned.out.sorted.bam
+#       TSP2_Vasculature_aorta_SS2_B114577_B133059_Endothelial_P5_S365 ->
+#          Pilot2/alignment-gencode/smartseq2/batch3/TSP2_Vasculature_aorta_SS2_B114577_B133059_Endothelial_P5_S365.homo.gencode.v30.ERCC.chrM.Aligned.out.sorted.bam
+##
 
 ##
 # run intronProspector
@@ -48,7 +62,16 @@ cd /hive/data/genomes/hg38/bed/tabula-sapiens-dec2022
    intronProspector --genome-fasta=${ref} --skip-missing-targets --min-confidence-score=1.0 \p
                    --intron-calls=${outtsvtmp} ${inbam}
 
+# get list of SS2 cell ids in metadata
+tmlr filter '$method == "smartseq2"' /hive/data/inside/cells/datasets/tabula-sapiens/all/meta.fixed.tsv > smartseq2.metadata.tsv
+
+# get list of all BAMs we have along with id
+
+##### tawk '$3 == "smartseq2"{print $1}' /hive/data/inside/cells/datasets/tabula-sapiens/all/meta.fixed.tsv |head
+
+
 # build jobs
+
 (cd /hive/data/inside/cells/datasets/tabula-sapiens/bam-dec2022 && find Pilot*/alignment-gencode/{smartseq2,SS2} -name '*.bam') | awk '{print "./runIntronProspector", $0}' >smartseq2.jobs
 
 para create smartseq2.jobs -batch=b1

@@ -101,7 +101,7 @@ else if (tg->isBigBed)
     for (bb = bbList; bb != NULL; bb = bb->next)
         {
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-        if (!bigBedFilterInterval(bedRow, filters))
+        if (!bigBedFilterInterval(bbi, bedRow, filters))
             {
             filtered++;
             continue;
