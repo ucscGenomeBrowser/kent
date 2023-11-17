@@ -26,8 +26,8 @@ GCF_905237065.1_Ssal_v3.1	Atlantic salmon (refseq 2021)
 GCF_000233375.1_ICSASG_v2	Atlantic salmon (Sally 2015)
 GCF_013347765.1_ASM1334776v1	Atlantic turbot (AOZZmale01 2020)
 GCF_900080235.1_BallGen_V1	ballan wrasse
-GCA_017976295.1_fToxJac2.alt	banded archerfish (fToxJac2 alternate hap 2021)
-GCF_017976425.1_fToxJac2.pri	banded archerfish (fToxJac2 primary hap 2021)
+GCA_017976295.1_fToxJac2.alt	banded archerfish (alternate hap 2021)
+GCF_017976425.1_fToxJac2.pri	banded archerfish (primary hap 2021 refseq)
 GCA_936446605.1_fBarBab1.1_alternate_haplotype	barbel (alternate hap 2022)
 GCA_936440315.1_fBarBab1.1	barbel (primary hap 2022)
 GCF_001640805.2_TLL_Latcal_v3	barramundi perch (ASB-BC8 2022)
@@ -70,7 +70,7 @@ GCF_019703515.2_UBuf_Myxa_2	Chinese sucker (Aquarium Trade MX2 2022)
 GCF_018296145.1_Otsh_v2.0	Chinook salmon (v2 Ot180627B 2021 male rfseq)
 GCF_002872995.1_Otsh_v1.0	Chinook salmon (v1 2018 female)
 GCA_027409835.1_fScoJap1.alt	chub mackerel (fScoJap1 alternate hap 2022)
-GCF_027409825.1_fScoJap1.pri	chub mackerel (fScoJap1 primary hap 2022)
+GCF_027409825.1_fScoJap1.pri	chub mackerel (primary hap 2022 refseq)
 GCF_012931545.1_Oket_V1	chum salmon (Oke142-1_Chum_Gynogen 2020)
 GCF_023373465.1_Oket_V2	chum salmon (PuntledgeMale-10-30-2019 2022)
 GCA_900324465.3_fAnaTes1.3	climbing perch (v1.3 2021)
@@ -80,19 +80,19 @@ GCF_022539595.1_ASM2253959v1	clown anemonefish (Okinawa individual 3 2022)
 GCF_002021735.2_Okis_V2	coho salmon (150728-3 2019)
 GCF_018340385.1_ASM1834038v1	common carp SPL01 (2021)
 GCA_958295035.1_fSolSol10.1_alternate_haplotype	common sole (alternate hap 2023)
-GCF_958295425.1_fSolSol10.1	common sole (primary hap 2023)
+GCF_958295425.1_fSolSol10.1	common sole (primary hap 2023 refseq)
 GCA_020510965.1_fPhoLeu1.alt	convict blenny (fPhoLeu1 alternate hap 2021)
 GCA_020510985.1_fPhoLeu1.pri	convict blenny (fPhoLeu1 primary hap 2021)
 GCA_017976315.1_fCheRos1.alt	copperband butterflyfish (fCheRos1 alternate hap 2021)
 GCF_017976325.1_fCheRos1.pri	copperband butterflyfish (fCheRos1 primary hap 2021)
 GCA_963082795.1_fCarCar2.1_alternate_haplotype	crucian carp (alternate hap 2023)
-GCF_963082965.1_fCarCar2.1	crucian carp (primary hap 2023)
+GCF_963082965.1_fCarCar2.1	crucian carp (primary hap 2023 refseq)
 GCA_020745675.1_fTauAds1.alt.cur	cunner (fTauAds1 alternate hap 2021)
 GCA_020745685.1_fTauAds1.pri.cur	cunner (fRauAds1 primary hap 2021)
 GCF_015846415.1_ASM1584641v1	Dalai köbertrulling (WHDGS20190420 2020)
 GCA_007224835.1_ASM722483v1	Danionella translucida (Bolton 2019)
 GCA_903798025.1_fDanTra1.1	Danionella translucida (fDanTra1 2020)
-GCF_021462225.1_DD_fGirMul_XY1	dark-edged splitfin
+GCF_021462225.1_DD_fGirMul_XY1	dark-edged splitfin (DD_20200921_A 2022 refseq)
 GCF_021917145.1_fHypTra1	delta smelt
 GCA_900700375.2_fDenClu1.2	denticle herring (v2 2020)
 GCA_900700345.2_fDenClu1.1_alternate_haplotype	denticle herring (alternate hap 2019)
@@ -113,7 +113,7 @@ GCA_949316195.1_fPlaFle2.1_alternate_haplotype	European flounder (alternate hap 
 GCA_949316205.1_fPlaFle2.1	European flounder (primary hap 2023)
 GCF_010015445.1_GENO_Pfluv_1.0	European perch
 GCA_947347695.1_fPlePla1.1_alternate_haplotype	European plaice (alternate hap 2022)
-GCF_947347685.1_fPlePla1.1	European plaice (primary hap 2022)
+GCF_947347685.1_fPlePla1.1	European plaice (primary hap 2022 refseq)
 GCF_905237075.1_dlabrax2021	European seabass (2021)
 GCF_016745375.1_EPA_FHM_2.0	fathead minnow
 GCF_022458985.1_CIBA_Mcephalus_1.1	flathead mullet
@@ -265,13 +265,13 @@ GCA_900651605.1_fBetSpl5.1_alternate_haplotype	Siamese fighting fish (v5.1 alter
 GCA_900651605.2_fBetSpl5.4_alternate_haplotype	Siamese fighting fish (v5.4 alternate hap 2023)
 GCF_023724105.1_carGib1.2-hapl.c	silver crucian carp (wild population from Czech Republic Cgi1373 2022)
 GCA_029633845.1_fLamInc1.hap1	smalleye Pacific opah (hap1 2023)
-GCF_029633865.1_fLamInc1.hap2	smalleye Pacific opah (hap2 2023)
+GCF_029633865.1_fLamInc1.hap2	smalleye Pacific opah (hap2 2023 refseq)
 GCF_021292245.1_ASM2129224v1	smallmouth bass
 GCF_006149115.2_Oner_1.1	sockeye salmon (On170113-E2 v2 2019)
 GCF_902827115.1_fPseGeo1.1	South Georgia icefish
 GCF_002775205.1_X_maculatus-5.0-male	southern platyfish
 GCA_910596085.1_fThuMac1.1_alternate_haplotype	southern bluefin tuna (alternate hap 2021)
-GCF_910596095.1_fThuMac1.1	southern bluefin tuna (primary hap 2021)
+GCF_910596095.1_fThuMac1.1	southern bluefin tuna (primary hap 2021 refseq)
 GCF_001515605.1_SAMN03320099.WGS_v1.1	Southwestern China cavefish
 GCF_002109545.1_ASM210954v1	spiny chromis (Palm Islands 2017)
 GCF_021347895.1_KAUST_Apoly_ChrSc	spiny chromis (Palm Island Apoly-LR-REF 2022)
@@ -281,7 +281,7 @@ GCA_902713435.1_fAciRut3.1_paternal_haplotype	sterlet (paternal 2020)
 GCA_947034905.1_fBarBar1.1_alternate_haplotype	stone loach (alternate hap 2022)
 GCA_947034865.1_fBarBar1.1	stone loach (primary hap 2022)
 GCA_027382375.1_fPanHyp1.alt	striped catfish (fPanHyp1 alternate hap 2022)
-GCF_027358585.1_fPanHyp1.pri	striped catfish (fPanHyp1 primary hap 2022)
+GCF_027358585.1_fPanHyp1.pri	striped catfish (primary hap 2022 refseq)
 GCF_003671635.1_VN_pangasius	striped catfish Vietnam
 GCF_004916995.1_NCSU_SB_2.0	striped sea-bass
 GCF_009078355.1_GENO_Phyp_1.0	striped catfish Indonesia

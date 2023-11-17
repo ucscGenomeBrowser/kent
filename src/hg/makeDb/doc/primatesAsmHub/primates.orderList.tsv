@@ -175,8 +175,8 @@ GCA_023761135.1_ASM2376113v1	siamang (KIZ-2021_26 2022)
 GCA_001262665.1_Eflavifronsk33QCA	Sclater's lemur (Harlow 2015)
 GCF_009828535.3_HMol_V3	silvery gibbon (v3 HMO894 2021 UC Santa Cruz)
 GCA_023783135.1_ASM2378313v1	slender loris (KIZ-2021_12 2022)
-GCA_027406535.1_mNycCou1.alt	slow loris (mNycCou1 alternate hap 2022)
-GCF_027406575.1_mNycCou1.pri	slow loris (mNycCou1 primary hap 2022)
+GCA_027406535.1_mNycCou1.alt	slow loris (alternate hap 2022)
+GCF_027406575.1_mNycCou1.pri	slow loris (primary hap 2022)
 GCF_000181295.1_OtoGar3	small-eared galago
 GCF_000955945.1_Caty_1.0	sooty mangabey
 GCA_023783065.1_ASM2378306v1	southern white-cheeked gibbon (KIZ-2021_17 2022)
@@ -197,4 +197,4 @@ GCF_009663435.1_Callithrix_jacchus_cj1700_1.1	white-tufted-ear marmoset (cj1700 
 GCA_011078405.1_mCalJac1.mat	white-tufted-ear marmoset (maternal 2020)
 GCA_011100535.2_mCalJac1.2.pat	white-tufted-ear marmoset (v1.2 paternal 2021)
 GCA_011100555.1_mCalJac1.pat.X	white-tufted-ear marmoset (paternal X 2020)
-GCF_011100555.1_mCalJa1.2.pat.X	white-tufted-ear marmoset (mCalJac1 2021)
+GCF_011100555.1_mCalJa1.2.pat.X	white-tufted-ear marmoset (v1.2 2021 refseq)
