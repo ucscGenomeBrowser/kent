@@ -4173,15 +4173,12 @@ function convertTitleTagsToMouseovers() {
     }
 }
 
-function tooltipNodesToMouseover() {
+function newTooltips() {
     /* For server side printed tooltip texts, make them work as pop ups.
-     * Note this assumes two siblings nodes placed next to each other:
-     *    <nodeName class="Tooltip">the text or element that is hoverable</nodename>
-     *    <nodeName class="Tooltiptext'>the text/html of the popup itself
      * Please note that the Tooltiptext node can have any arbitrary html in it, like
      * line breaks or links*/
-    $(".Tooltip").each(function(i, n) {
-        tooltiptext = n.getAttribute("mouseoverText");
+    $("[title]").each(function(i, n) {
+        tooltiptext = n.getAttribute("title");
         if (tooltiptext !== null) {
             addMouseover(n, tooltiptext);
         }
