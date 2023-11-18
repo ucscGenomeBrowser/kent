@@ -532,8 +532,9 @@ var hgSearch = (function() {
     }
 
     function showMoreResults() {
-        var trackName = this.id.replace(/Results_.*/, "");
-        var isHidden = $("." + trackName + "_hidden")[0].style.display === "none";
+        let trackName = this.id.replace(/Results_.*/, "");
+        let isHidden = $("." + trackName + "_hidden")[0].style.display === "none";
+        let btnId = this.id.replace(/Link/, "Button");
         _.each($("." + trackName + "_hidden"), function(hiddenLi) {
             if (isHidden) {
                 hiddenLi.style = "display:";
@@ -550,6 +551,8 @@ var hgSearch = (function() {
             } else {
                 // click on the link text
                 this.innerHTML = this.innerHTML.replace(/Show/,"Hide");
+                let img = document.getElementById(btnId);
+                img.src = "../images/remove_sm.gif";
             }
         } else {
             if (this.nextSibling) {
@@ -558,7 +561,8 @@ var hgSearch = (function() {
                 this.nextSibling.innerHTML = newText;
                 this.src = "../images/add_sm.gif";
             } else {
-                this.innerHTML = this.innerHTML.replace(/Hide/,"Show");
+                let img = document.getElementById(btnId);
+                img.src = "../images/add_sm.gif";
             }
         }
     }
