@@ -30,7 +30,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   hubSearchText.o hui.o imageClone.o indelShift.o instaPort.o interact.o interactUi.o itemAttr.o jksql.o joiner.o \
   jsHelper.o kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o lav.o lfs.o liftOver.o liftOverChain.o \
   liftUp.o longRange.o lrg.o lsSnpPdb.o mafFrames.o mafGene.o mafSummary.o makeItemsItem.o mdb.o \
-  microarray.o minChromSize.o netAlign.o netCart.o pepPred.o pgPhenoAssoc.o pgSnp.o pslReader.o qaSeq.o \
+  microarray.o minChromSize.o namedSessionDb.o netAlign.o netCart.o pepPred.o pgPhenoAssoc.o pgSnp.o pslReader.o qaSeq.o \
   rankProp.o refLink.o refSeqStatus.o rikenCluster.o rmskAlign.o rmskJoined.o rmskOut.o rmskOut2.o rnaGene.o sage.o sageCounts.o samAlignment.o \
   sample.o sanger22extra.o scoredRef.o seqWindow.o snakeUi.o snp.o snpExceptions.o soTerm.o spDb.o sqlProg.o \
   sqlSanity.o stanMad.o stsAlias.o stsInfo2.o stsMap.o stsMarker.o tableStatus.o tablesTables.o \
