@@ -18579,7 +18579,10 @@ if (pSnpCodonPos != NULL)
     *pSnpCodonPos = snpCodonPos;
 if (pRefAA != NULL)
     {
-    *pRefAA = lookupCodon(refCodon);
+    if (isMito(seqName))
+        *pRefAA = lookupMitoCodon(refCodon);
+    else
+        *pRefAA = lookupCodon(refCodon);
     if (*pRefAA == '\0') *pRefAA = '*';
     }
 }
@@ -18652,42 +18655,46 @@ for (j = 0;  j < alleleCount;  j++)
 		   (int)(-diff/3), (diff < -3) ?  "s" : "");
 	}
     else if (alSize == 1 && refIsSingleBase)
-	{
-	char snpCodon[4];
-	safecpy(snpCodon, sizeof(snpCodon), refCodon);
-	snpCodon[snpCodonPos] = alBase;
-	char snpAA = lookupCodon(snpCodon);
-	if (snpAA == '\0') snpAA = '*';
-	char refCodonHtml[16], snpCodonHtml[16];
-	safecpy(refCodonHtml, sizeof(refCodonHtml), highlightCodonBase(refCodon, snpCodonPos));
-	safecpy(snpCodonHtml, sizeof(snpCodonHtml), highlightCodonBase(snpCodon, snpCodonPos));
-	if (refAA != snpAA)
-	    {
-	    if (refAA == '*')
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("stop-loss"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    else if (snpAA == '*')
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("nonsense"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    else
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("missense"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    }
-	else
-	    {
-	    if (refAA == '*')
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("stop_retained_variant"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    else
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("coding-synon"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    }
-	}
+        {
+        char snpCodon[4];
+        safecpy(snpCodon, sizeof(snpCodon), refCodon);
+        snpCodon[snpCodonPos] = alBase;
+        char snpAA = '\0';
+        if (isMito(seqName))
+            snpAA = lookupMitoCodon(snpCodon);
+        else
+            snpAA = lookupCodon(snpCodon);
+        if (snpAA == '\0') snpAA = '*';
+        char refCodonHtml[16], snpCodonHtml[16];
+        safecpy(refCodonHtml, sizeof(refCodonHtml), highlightCodonBase(refCodon, snpCodonPos));
+        safecpy(snpCodonHtml, sizeof(snpCodonHtml), highlightCodonBase(snpCodon, snpCodonPos));
+        if (refAA != snpAA)
+            {
+            if (refAA == '*')
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("stop-loss"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            else if (snpAA == '*')
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("nonsense"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            else
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("missense"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            }
+        else
+            {
+            if (refAA == '*')
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("stop_retained_variant"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            else
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("coding-synon"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            }
+        }
     else
 	printf(firstTwoColumnsPctS "%s %s --> %s\n",
 	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"),
