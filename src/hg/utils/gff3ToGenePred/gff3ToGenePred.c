@@ -268,24 +268,29 @@ else
 }
 
 static boolean isGeneWithCdsChildCase(struct gff3Ann* mrna)
-/* is this one of the refseq gene with a direct CDS child? */
+/* is this one of the refseq gene with a direct CDS child  */
 {
-return sameString(mrna->type, gff3FeatGene) && (mrna->children != NULL)
-    && (sameString(mrna->children->ann->type, gff3FeatCDS));
+// NCBI changed the format for YPs around 2020 or so, now they're mrna > exon > CDS, originally Gene > CDS
+// I don't know why the exon level is missing at this point in the code, but it is.
+return ((sameString(mrna->type, gff3FeatGene) || sameString(mrna->type, gff3FeatMRna)) && (mrna->children != NULL)
+    && (sameString(mrna->children->ann->type, gff3FeatCDS)));
 }
 
 static char* refSeqHacksFindName(struct gff3Ann* mrna)
 /* return the value to use for the genePred name field under refSeqHacks
  * rules. */
 {
-// if this is a gene with CDS child, the get the id out of the CDS if it looks like
+// if this is a gene with CDS child or a mRNA > exon > CDS, the get the id out of the CDS if it looks like
 // a refseq accession
 if (isGeneWithCdsChildCase(mrna))
     {
     // is name something like YP_203370.1 (don't try too hard)
     struct gff3Ann *cds = mrna->children->ann;
+    if (!sameString(cds->type, gff3FeatCDS))
+        cds = mrna->children->ann->children->ann; // post-2018-format
+    // Also checking now for 'Y' as a prefix, as otherwise this would apply to all normal transcripts
     if ((cds->name != NULL) && (strlen(cds->name) > 4) && isupper(cds->name[0]) && isupper(cds->name[1])
-        && (cds->name[2] == '_') && isdigit(cds->name[3]))
+        && (cds->name[2] == '_') && isdigit(cds->name[3]) && cds->name[0] == 'Y')
         return cds->name;
     }
 return NULL;
