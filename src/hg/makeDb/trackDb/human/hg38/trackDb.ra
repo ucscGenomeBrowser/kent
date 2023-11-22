@@ -912,7 +912,7 @@ color 12,12,120
 idXref ncbiRefSeqLinkHistorical mrnaAcc name
 baseColorUseCds given
 baseColorDefault genomicCodons
-release alpha
+release alpha, beta
 
 searchTable ncbiRefSeqHistorical
 searchMethod exact

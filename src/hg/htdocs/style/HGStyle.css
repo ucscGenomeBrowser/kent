@@ -1146,7 +1146,7 @@ span.gbSessionChanged {
     visibility: hidden;
     background-color: rgb(238,238,238);
     color: black;
-    text-align: center;
+    text-align: left;
     position: fixed;
     z-index: 1003; /* these indices are all over the place for various things */
     opacity: 0;

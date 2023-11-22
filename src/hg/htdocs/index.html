@@ -67,6 +67,21 @@
       </div> <!-- previewWarningRow -->
       <!--#endif -->
 
+      <!-- warning for mirrors (if applicable) -->
+      <!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME" != /.*.sdsc.edu/
+      && "$SERVER_NAME" != /browser/'-->
+      <!-- 'browser' = GBiB -->
+      <p style="text-align: center;">
+        <strong>This website <em><!--#echo var="HTTP_HOST" --></em> is a &quot;mirror&quot; not run by
+        UCSC.</strong> If you have questions, please try to contact the person who manages this mirror.
+        <br><br>
+        <strong>If you write the UCSC mailing list, please include this mirror's address
+        <em>http://<!--#echo var="HTTP_HOST" --></em> with any questions.</strong></p>
+      <!--#endif -->
+
+  <!-- Meetings and Workshops -->
+  <!--#include virtual="indexMeetings.html"-->
+
   <div class="row">
     <!-- Tools -->
     <!--#include virtual="ourTools.html"-->
