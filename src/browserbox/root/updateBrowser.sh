@@ -529,6 +529,8 @@ mysql hg19 -e 'update trackDb set visibility=0 where tableName like "cons%way"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "ucscRetroAli%"'
 mysql hg38 -e 'update trackDb set visibility=0 where tableName like "omimGene2"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "omimGene2"'
+mysql hg38 -e 'update trackDb set visibility=0 where tableName like "omimAvSnp"'
+mysql hg19 -e 'update trackDb set visibility=0 where tableName like "omimAvSnp"'
 
 # temporary fix for hgdownload problem, Oct 2014
 ls /data/mysql/eboVir3 > /dev/null 2> /dev/null && mysql eboVir3 -e 'drop table if exists history'
