@@ -1,0 +1,4 @@
+dir=`date -I`
+mkdir -p $dir
+HGDB_CONF=/home/qateam/.hgnfs1.hgcentral.conf hgsql -Ne 'select * from namedSessionDb' hgcentral > $dir/namedSesssionDb.txt
+./findMissingCts $dir/namedSesssionDb.txt  > $dir/missing.txt

@@ -364,7 +364,15 @@ for (group = groupList; group != NULL; group = group->next)
                     for (subtrack=track->subtracks;subtrack!=NULL;subtrack=subtrack->next)
                         {
                         if (changeVis == tvHide)               // Since subtrack level vis is an
+                            {
                             cartRemove(cart, subtrack->track); // override, simply remove to hide
+                            if (excludeHash != NULL) // if we're loading an RTS, but probably we should always do this
+                                {
+                                char selName[4096];
+                                safef(selName, sizeof(selName), "%s_sel", subtrack->track);
+                                cartRemove(cart, selName);
+                                }
+                            }
                         else
                             cartSetString(cart, subtrack->track, hStringFromTv(changeVis));
                         subtrack->visibility = changeVis;
@@ -7229,7 +7237,7 @@ if (rtsLoad)  // load a recommended track set using the merge method
         "&" hgsOtherUserName "=%s"
         "&" hgsMergeCart "=on"
         "&" hgsDoOtherUser "=submit"
-	"& hgsid=%s"
+	"&hgsid=%s"
         , otherUserSessionName, otherUserName,cartSessionId(cart));
 
     cartCheckout(&cart);   // make sure cart records all our changes above

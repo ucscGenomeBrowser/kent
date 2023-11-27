@@ -561,6 +561,7 @@ var hgSearch = (function() {
                 this.nextSibling.innerHTML = newText;
                 this.src = "../images/add_sm.gif";
             } else {
+                this.innerHTML = this.innerHTML.replace(/Hide/,"Show");
                 let img = document.getElementById(btnId);
                 img.src = "../images/add_sm.gif";
             }
@@ -630,13 +631,13 @@ var hgSearch = (function() {
                     subList.innerHTML += "<img height='18' width='18' id='" + idStr + "_showMoreButton' src='../images/add_sm.gif'>";
                     if (matches.length > 500) {
                         let newText  = "<div class='showMoreDiv' id='" + idStr +"_showMoreDiv'>";
-                        newText += "&nbsp;<a href='#' id='"+ idStr + "_showMoreLink'>";
+                        newText += "&nbsp;<a id='"+ idStr + "_showMoreLink'>";
                         newText += "Show 490 (out of " + (matches.length) + " total) more matches for " + searchDesc;
                         newText += "</a></div></li>";
                         subList.innerHTML += newText;
                     } else {
                         let newText = "<div class='showMoreDiv' id='" + idStr + "_showMoreDiv'>";
-                        newText += "&nbsp;<a href='#' id='"+ idStr + "_showMoreLink'>";
+                        newText += "&nbsp;<a id='"+ idStr + "_showMoreLink'>";
                         newText += "Show " + (matches.length - 10) + " more matches for " + searchDesc;
                         newText += "</a></div></li>";
                         subList.innerHTML += newText;

@@ -165,7 +165,7 @@ return list;
 }
 
 struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno, 
-	time_t lastAccess)
+	time_t lastAccess, time_t creationTime)
 /* Return a new fileInfo. */
 {
 int len = strlen(name);
@@ -174,6 +174,7 @@ fi->size = size;
 fi->isDir = isDir;
 fi->statErrno = statErrno;
 fi->lastAccess = lastAccess;
+fi->creationTime = creationTime;
 strcpy(fi->name, name);
 return fi;
 }
@@ -244,7 +245,7 @@ while ((de = readdir(d)) != NULL)
 		isDir = TRUE;
 	    if (fullPath)
 		fileName = pathName;
-	    el = newFileInfo(fileName, st.st_size, isDir, statErrno, st.st_atime);
+	    el = newFileInfo(fileName, st.st_size, isDir, statErrno, st.st_atime, st.st_ctime);
 	    slAddHead(&list, el);
 	    }
 	}

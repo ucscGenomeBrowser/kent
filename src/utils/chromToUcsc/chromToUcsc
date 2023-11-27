@@ -109,10 +109,8 @@ def parseAlias(fname):
     logging.debug("alias file is in IGV-format")
     toUcsc = {}
     if fname.startswith("http://") or fname.startswith("https://"):
-        ifh = urlopen(fname)
-        if fname.endswith(".gz"):
-            data = gzip.GzipFile(fileobj=ifh).read().decode()
-            ifh = data.splitlines()
+        data = downloadUrl(fname)
+        ifh = data.splitlines()
     elif fname.endswith(".gz"):
         ifh = gzip.open(fname, "rt")
     else:
