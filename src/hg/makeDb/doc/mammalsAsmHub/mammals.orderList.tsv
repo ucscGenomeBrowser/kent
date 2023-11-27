@@ -103,7 +103,7 @@ GCA_001888835.1_ASM188883v1	Chinese rufous horseshoe bat
 GCF_000334495.1_TupChi_1.0	Chinese tree shrew
 GCA_000400835.1_PHO1.0	chiru
 GCA_028018655.1_mNeoNeb1.alt	clouded leopard (mNeoNeb1 alternate hap 2023)
-GCA_028018385.1_mNeoNeb1.pri	Clouded leopard (mNeoNeb1 primary hap 2023)
+GCF_028018385.1_mNeoNeb1.pri	clouded leopard (mNeoNeb1 primary hap 2023 refseq)
 GCA_011762515.1_mTurTru1.pat	common bottlenose dolphin (paternal 2020)
 GCA_011762535.1_mTurTru1.mat	common bottlenose dolphin (maternal 2020)
 GCF_011762595.1_mTurTru1.mat.Y	common bottlenose dolphin (maternal Y refseq 2020)
@@ -297,7 +297,7 @@ GCF_002204375.1_MunDraft-v1.0	Mongolian gerbil (243 2017 Lucigen Corp.)
 GCA_008131255.1_ASM813125v1	Mongolian gerbil (EAM2014 2019 BGI)
 GCF_030254825.1_Bangor_MerUng_6.1	Mongolian gerbil (TT.TT164.6M 2023)
 GCA_019395325.1_mDroGli1.alt	monito del monte (mDroGli1 alternate hap 2021)
-GCF_019393635.1_mDroGli1.pri	monito del monte (mDroGli1 primary hap 2021)
+GCF_019393635.1_mDroGli1.pri	monito del monte (mDroGli1 primary hap 2021 refseq)
 GCA_004027695.1_CavTsc_v1_BIUU	Montane guinea pig
 GCA_004027875.1_AplRuf_v1_BIUU	mountain beaver
 GCA_004026605.1_OndZib_v1_BIUU	muskrat
