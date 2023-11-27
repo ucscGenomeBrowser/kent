@@ -227,6 +227,7 @@
 2746895	GCA_028017805.1_mBalRic1.hap1	mammals
 82168	GCA_028017835.1_rEmyOrb1.hap1	reptiles
 82168	GCA_028017845.1_rEmyOrb1.hap2	reptiles
+61452	GCF_028018385.1_mNeoNeb1.pri	mammals
 61452	GCA_028018655.1_mNeoNeb1.alt	mammals
 44398	GCA_028018845.1_bMelGeo1.pri	birds
 44398	GCA_028019105.1_bMelGeo1.alt	birds
@@ -246,6 +247,7 @@
 75485	GCA_028500815.1_bRisTri1.patW.cur.20221130	birds
 34844	GCA_028500835.1_mEreDor1.alt	mammals
 75485	GCA_028501385.1_bRisTri1.mat.cur.20221130	birds
+27606	GCA_028571275.1_mEubGla1.hap1	mammals
 27606	GCA_028564815.1_mEubGla1.hap2	mammals
 77598	GCA_028571665.1_mHetBru1.alt	mammals
 77598	GCA_028571685.1_mHetBru1.pri	mammals
@@ -270,6 +272,7 @@
 575201	GCA_030028035.1_mHipAmp2.hap1	mammals
 29137	GCA_030035585.1_mDugDug1.hap1	mammals
 261503	GCA_030035675.1_rRhiFlo1.hap2	reptiles
+1983395	GCA_030028105.1_sMobBir1.hap1	sharks
 1983395	GCA_030035685.1_sMobBir1.hap2	sharks
 261503	GCA_030035715.1_rRhiFlo1.hap1	reptiles
 79690	GCA_030144785.1_sHypSab1.hap2	sharks
