@@ -93,9 +93,10 @@ struct genePredExt
                                    * requested */
     enum cdsStatus cdsStartStat;  /* Status of cdsStart annotation */
     enum cdsStatus cdsEndStat;    /* Status of cdsEnd annotation */
-    int *exonFrames;              /* List of frame for each exon, or -1
-                                   * if no frame or not known. NULL if not
-                                   * available. */
+    int *exonFrames;              /* Reading frame of the start of the CDS region
+                                   * of the exon, in the direction of transcription
+                                   * (0,1,2), or -1 if there is no CDS region.
+                                   * NULL if not available */
     char *type;
     char *geneName;  
     char *geneName2;

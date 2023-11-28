@@ -54,9 +54,7 @@ if (!startsWith(cdwRootDir, path))
     errAbort("expected path=[%s] to start with %s", path, cdwRootDir);
     }
 
-if (unlink(lastPath) == -1)  // drop about to be invalid symlink
-    errnoAbort("unlink failure %s", lastPath);
-copyFile(path, lastPath);
+safeCopyFile(path, lastPath);  // avoid partial copies, only mv temp in after copy is complete, preserves the symlink. helps with control-C or other interruptions.
 touchFileFromFile(path, lastPath);
 chmod(lastPath, 0664);
 

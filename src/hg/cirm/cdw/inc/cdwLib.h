@@ -517,6 +517,10 @@ char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath);
  * This is useful for when target of symlink in cdw/ gets renamed 
  * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
 
+void safeCopyFile(char *source, char *dest);
+/* Copy file from source to dest using temp file. Perform move at the end only when the file is complete.
+ * Prevents partial copies. */
+
 void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean unSymlinkOnly, boolean really);
 /* Remove all records of file from database and from Unix file system if 
  * the really flag is set.  Otherwise just print some info on the file. */
