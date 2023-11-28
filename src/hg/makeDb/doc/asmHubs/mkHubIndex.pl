@@ -94,7 +94,7 @@ if ($vgpIndex) {
      $vgpSubset = "(set of legacy/superseded assemblies)";
   }
   print <<"END";
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -114,7 +114,7 @@ END
 } else {
   if ($ccgpIndex) {
     print <<"END";
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="CCGP -  California Conservation Genomics Project " -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -133,7 +133,7 @@ California Conservation Genomics Project.</a>
 END
   } elsif ($hprcIndex) {
     print <<"END";
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="HPRC - Human Pangenome Reference Consortium" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -152,7 +152,7 @@ Human Pangenome Reference Consortium.</a>
 END
   } else {
     print <<"END";
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -230,7 +230,7 @@ END
 ##############################################################################
 sub startTable() {
 print '
-<table class="sortable" border="1">
+<table class="sortable" style="border: 1px solid black;">
 <thead style="position:sticky; top:0;"><tr><th>count</th>
   <th><span style="float: left;">common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;UCSC&nbsp;browser</span><span style="float: right;">[IGV&nbsp;browser]</span></th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
@@ -403,44 +403,44 @@ sub tableContents() {
        $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
        $browserName = "$commonName ($asmId)";
     }
-    printf "<tr><td align=right>%d</td>\n", ++$rowCount;
+    printf "<tr><td style='text-align: right;'>%d</td>\n", ++$rowCount;
     #  common name and view in browser
     if ( $asmId =~ m/^GC/ ) {
        my $hubTxt = "${hubUrl}/hub.txt";
        my $igvUrl = "https://igv.org/app-test/?hubURL=$hubTxt";
        printf "<td><span style='float: left;'><a href='%s' target=_blank>%s</a></span><span style='float: right;'>[<a href='%s' target=_blank>IGV</a>]</span></td>\n", $browserUrl, $browserName, $igvUrl;
     } else {
-       printf "<td align=center><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
+       printf "<td style='text-align: center;'><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
     }
     # scientific name and data download
-    printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
+    printf "    <td style='text-align: center;'><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     if ($asmId !~ m/^GC/) {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
     } else {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
     }
     # viruses do not appear to have BioSample
     if ($asmHubName ne "viral") {
       if ( $bioSample ne "notFound" ) {
-        printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
+        printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
       } else {
-      printf "    <td align=left>n/a</td>\n";
+      printf "    <td style='text-align: left;'>n/a</td>\n";
       }
     }
     # one broken assembly_report
     $bioProject= "PRJEB25768" if ($accessionId eq "GCA_900324465.2");
     if ($bioProject eq "notFound") {
-      printf "    <td align=left>%s</td>\n", $bioProject;
+      printf "    <td style='text-align: left;'>%s</td>\n", $bioProject;
     } else {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
     }
-    printf "    <td align=center><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
+    printf "    <td style='text-align: center;'><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
     if ("legacy" eq $asmHubName) {
       if (! defined($cladeId{$asmId})) {
          printf STDERR "# ERROR: missing clade definition for %s\n", $asmId;
          exit 255;
       } else {
-         printf "    <td align=center>%s</td>\n", $cladeId{$asmId};
+         printf "    <td style='text-align: center;'>%s</td>\n", $cladeId{$asmId};
       }
     }
     if ($ccgpIndex) {
@@ -454,7 +454,7 @@ sub tableContents() {
       }
 # it isn't clear how we can get these names
 # https://www.ccgproject.org/species/corynorhinus-townsendii-townsends-big-eared-bat
-      printf "    <td align=center><a href='https://www.ccgproject.org/species/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $extraClass{$asmId}
+      printf "    <td style='text-align: center;'><a href='https://www.ccgproject.org/species/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $extraClass{$asmId}
     } elsif ($vgpIndex) {
       my $sciNameUnderscore = $sciName;
       $sciNameUnderscore =~ s/ /_/g;
@@ -464,7 +464,7 @@ sub tableContents() {
          printf STDERR "# ERROR: no 'class' defined for VGP/CCGP assembly %s\n", $asmId;
          exit 255;
       }
-      printf "    <td align=center><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $extraClass{$asmId}
+      printf "    <td style='text-align: center;'><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $extraClass{$asmId}
     }
     printf "</tr>\n";
   }
