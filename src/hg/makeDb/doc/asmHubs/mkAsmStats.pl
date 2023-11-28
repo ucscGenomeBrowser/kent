@@ -76,7 +76,7 @@ if ($vgpIndex) {
      $vgpSubset = "(set of legacy/superseded assemblies)";
   }
   print <<"END"
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hubs, assembly statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -96,7 +96,7 @@ END
 } else {
   if ($hprcIndex) {
     print <<"END"
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="HPRC - Human Pangenome Reference Consortium assembly hubs, assembly statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -115,7 +115,7 @@ Human Pangenome Reference Consortium.</a>
 END
   } else {
     print <<"END"
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="$Name genomes assembly hubs, assembly statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -145,7 +145,7 @@ END
 ##############################################################################
 sub startTable() {
 print <<"END"
-<table class="sortable" border="1">
+<table class="sortable" style="border: 1px solid black;">
 <thead style="position:sticky; top:0;"><tr><th>count</th>
   <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
@@ -175,11 +175,11 @@ if ($asmCount < $assemblyTotal) {
 if ($assemblyTotal > 1) {
   print "
 </tbody>
-<tfoot><tr><th>TOTALS:</th><td align=center colspan=3>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
-  <td align=right>$commaSeqCount</td>
-  <td align=right>$commaNuc</td>
-  <td align=right>$commaGapCount</td>
-  <td align=right>$commaGapSize</td>
+<tfoot><tr><th>TOTALS:</th><td style='text-align: center;' colspan=3>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
+  <td style='text-align: right;'>$commaSeqCount</td>
+  <td style='text-align: right;'>$commaNuc</td>
+  <td style='text-align: right;'>$commaGapCount</td>
+  <td style='text-align: right;'>$commaGapSize</td>
   <td colspan=1>&nbsp;</td>
   </tr>
 ";
@@ -384,20 +384,20 @@ sub tableContents() {
        $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
        $browserName = "$commonName ($asmId)";
     }
-    printf "<tr><td align=right>%d</td>\n", ++$asmCount;
+    printf "<tr><td style='text-align: right;'>%d</td>\n", ++$asmCount;
 #    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $accessionId, $commonName;
-    printf "<td align=center><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
-    printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
+    printf "<td style='text-align: center;'><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
+    printf "    <td style='text-align: center;'><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     if ($asmId !~ m/^GC/) {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
     } else {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
     }
-    printf "    <td align=right>%s</td>\n", commify($seqCount);
-    printf "    <td align=right>%s</td>\n", commify($totalSize);
-    printf "    <td align=right>%s</td>\n", commify($gapCount);
-    printf "    <td align=right>%s</td>\n", commify($gapSize);
-    printf "    <td align=right>%.2f</td>\n", $maskPerCent;
+    printf "    <td style='text-align: right;'>%s</td>\n", commify($seqCount);
+    printf "    <td style='text-align: right;'>%s</td>\n", commify($totalSize);
+    printf "    <td style='text-align: right;'>%s</td>\n", commify($gapCount);
+    printf "    <td style='text-align: right;'>%s</td>\n", commify($gapSize);
+    printf "    <td style='text-align: right;'>%.2f</td>\n", $maskPerCent;
     printf "</tr>\n";
   }
 }	#	sub tableContents()

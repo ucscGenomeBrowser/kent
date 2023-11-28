@@ -2909,6 +2909,13 @@ var rightClick = {
                                                     });
                                                 return true; }
                                         };
+                                        o[rightClick.makeImgTag("magnify.png")+" Choose exon "] =
+                                        {   onclick: function(menuItemClicked, menuObject) {
+                                                rightClick.hit(menuItemClicked, menuObject,
+                                                            "zoomExon",
+                                                            {name: name, table: table});
+                                                return true;}
+                                        };
                                     }
                                 }
                             }

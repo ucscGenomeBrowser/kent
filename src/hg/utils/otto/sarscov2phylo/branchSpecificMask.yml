@@ -67,6 +67,9 @@ BA.2:
              103, 110, 119, 121, 154, 162, 164, 214, 228, 239,
              # amplicon dropout (there are so many more; omitting to avoid recombinant trouble)
              22786, 22882, 23854,
+             # Recurrent multi-muts / misaligned insertions
+             # https://github.com/cov-lineages/pango-designation/issues/2327#issuecomment-1763481773
+             28245, 28251, 28254,
              # 3' UTR
              29760, 29762, 29764,
              29766,                   # only Luxembourg, made a mini-BA.2
@@ -97,6 +100,16 @@ BN.1.2.3:
     representative: England/QEUH-326228D4/2022
     sites: [ 337 # https://github.com/cov-lineages/pango-designation/issues/2016#issuecomment-1626159006
            ]
+
+BA.2.86:
+    # Inherits from BA.2
+    # @Over-There-Is requested 21610 - very messy indeed.
+    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606#issuecomment-1801095482
+    # @aviczhl2 pointed out some recurring reversions:
+    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1072
+    representative: OY747147.1
+    sites: [ 21610 ]
+    reversions: [ T21711C, C22032T, A22033C, G22034A, A23012G, G26610A ]
 
 BA.4:
     # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.
@@ -169,3 +182,12 @@ XBC:
     # https://github.com/cov-lineages/pango-designation/issues/1100#issuecomment-1426502678
     representative: Philippines/PH-VUI-142736/2022
     reversions: [ G5584A, T13019C, T22329C, T25000C, C27718T, T28271A ]
+
+XCK:
+    # Inherits from XBB.1.5
+    # @FedeGueli pointed out that the usher tree had a very flaky 29729. TL;DR mafft is counfounding
+    # two nearby deletions, a new 29726 and the old 29734-29759, and making a false subst by getting
+    # the deletion boundaries wrong.  Mask 29729 here.
+    representative: USA/TX-CDC-QDX84451512/2023
+    representativeBacktrack: 2
+    sites: [ 29729 ]

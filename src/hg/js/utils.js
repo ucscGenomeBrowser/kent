@@ -3698,6 +3698,11 @@ var dragReorder = {
             if (rightClick.currentMapItem) {
                 rightClick.currentMapItem.href = this.href;
                 rightClick.currentMapItem.title = this.title;
+                // if the custom mouseover code has removed this title, check the attr
+                // for the original title
+                if (this.title.length === 0) {
+                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                }
 
                 // Handle linked features with separate clickmaps for each exon/intron
                 if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
@@ -3970,7 +3975,7 @@ function mousemoveHelper(e) {
         // if we are over another mouseable element we want to show that one instead
         // use this timer to do so
         let callback = mousemoveTimerHelper.bind(mouseoverContainer);
-        mousemoveTimer = setTimeout(callback, 500, e);
+        mousemoveTimer = setTimeout(callback, 150, e);
     }
 
     if (mousedNewItem && canShowNewMouseover && !mouseIsOverPopup(e, this, 0)) {
@@ -4087,6 +4092,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
         newDiv.style.display = "inline-block";
         if (ele1.title) {
             newDiv.id = replaceReserved(ele1.title);
+            ele1.setAttribute("originalTitle", ele1.title);
             ele1.title = "";
         } else {
             newDiv.id = replaceReserved(text);
