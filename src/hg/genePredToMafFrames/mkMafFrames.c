@@ -5,7 +5,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "genePred.h"
-#include "frameIncr.h"
+#include "frame.h"
 #include "maf.h"
 #include "dnautil.h"
 #include "orgGenes.h"

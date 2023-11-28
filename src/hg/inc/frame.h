@@ -1,13 +1,13 @@
-/* frameIncr - frame increment and manipulation.  Static functions for 
- * implict inlining */
+/* frame - frame increment and manipulation.  Static functions to inline */
 
 /* Copyright (C) 2006 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
-#ifndef FRAMEINCR_H
-#define FRAMEINCR_H
+
+#ifndef FRAME_H
+#define FRAME_H
 /* Increment a frame by the specified amount, which maybe negative. frame
  * of -1 always returns -1. */
-static inline int frameIncr(int frame, int amt) {
+INLINE int frameIncr(int frame, int amt) {
     if (frame < 0) {
         return frame;  /* no frame not changed */
     } else if (amt >= 0) {
