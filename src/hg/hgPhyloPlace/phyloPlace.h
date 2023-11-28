@@ -157,6 +157,7 @@ struct geneInfo
     struct geneInfo *next;
     struct psl *psl;        // Alignment of transcript to genome
     struct dnaSeq *txSeq;   // Transcript sequence
+    struct genbankCds *cds; // CDS (for those few pathogens that have transcript UTRs)
     };
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,

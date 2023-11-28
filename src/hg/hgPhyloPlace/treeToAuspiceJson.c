@@ -4,6 +4,7 @@
 /* Copyright (C) 2020 The Regents of the University of California */
 
 #include "common.h"
+#include "dnaseq.h"
 #include "errCatch.h"
 #include "hash.h"
 #include "hui.h"
@@ -425,11 +426,11 @@ struct slName *aaChange = NULL;
 if (codonVpTxList != NULL)
     {
     struct vpTx *vpTx = codonVpTxList;
-    int firstAaStart = vpTx->start.txOffset / 3;
+    int firstAaStart = (vpTx->start.txOffset - gi->cds->start) / 3;
     int codonStart = firstAaStart * 3;
-    int codonOffset = vpTx->start.txOffset - codonStart;
+    int codonOffset = vpTx->start.txOffset - gi->cds->start - codonStart;
     char oldCodon[4];
-    safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + codonStart, 3);
+    safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + gi->cds->start + codonStart, 3);
     touppers(oldCodon);
     boolean isRc = (pslOrientation(gi->psl) < 0);
     int codonStartG = isRc ? vpTx->start.gOffset + codonOffset : vpTx->start.gOffset - codonOffset;
@@ -456,11 +457,11 @@ if (codonVpTxList != NULL)
     safecpy(newCodon, sizeof newCodon, oldCodon);
     for (vpTx = codonVpTxList;  vpTx != NULL;  vpTx = vpTx->next)
         {
-        int aaStart = vpTx->start.txOffset / 3;
+        int aaStart = (vpTx->start.txOffset - gi->cds->start) / 3;
         if (aaStart != firstAaStart)
             errAbort("codonVpTxToAaChange: program error: firstAaStart %d != aaStart %d",
                      firstAaStart, aaStart);
-        int codonOffset = vpTx->start.txOffset - codonStart;
+        int codonOffset = vpTx->start.txOffset - gi->cds->start - codonStart;
         // vpTx->txRef[0] is always the reference base, not like singleNucChange parBase,
         // so we can't compare it to expected value as we could for ancMuts above.
         newCodon[codonOffset] = vpTx->txAlt[0];
@@ -480,8 +481,7 @@ return aaChange;
 
 struct slPair *getAaMutations(struct singleNucChange *sncList, struct singleNucChange *ancestorMuts,
                               struct geneInfo *geneInfoList, struct seqWindow *gSeqWin)
-/* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }.
- * Note: this assumes there is no UTR in transcript, only CDS.  True so far for pathogens... */
+/* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
 {
 struct slPair *geneChangeList = NULL;
 struct geneInfo *gi;
@@ -499,9 +499,10 @@ for (gi = geneInfoList;  gi != NULL;  gi = gi->next)
             char gAlt[2];
             safef(gAlt, sizeof(gAlt), "%c", snc->newBase);
             struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &gBed3, gAlt, gi->psl, gi->txSeq);
-            if (vpTx->start.region == vpExon)
+            if (vpTx->start.region == vpExon && vpTx->start.txOffset < gi->cds->end &&
+                vpTx->end.txOffset > gi->cds->start)
                 {
-                int aaStart = vpTx->start.txOffset / 3;
+                int aaStart = (vpTx->start.txOffset - gi->cds->start) / 3;
                 // Accumulate vpTxs in the same codon
                 if (aaStart == prevAaStart || prevAaStart == -1)
                     {
@@ -804,7 +805,14 @@ if (bbi)
         gi->psl = genePredToPsl((struct genePred *)gp, refGenome->size, txLen);
         gi->psl->qName = cloneString(gp->name2);
         gi->txSeq = newDnaSeq(seq, txLen, gp->name2);
-        slAddHead(&geneInfoList, gi);
+        AllocVar(gi->cds);
+        genePredToCds((struct genePred *)gp, gi->cds);
+        int cdsLen = gi->cds->end - gi->cds->start;
+        // Skip genes with no CDS (like RNA genes) or obviously incomplete/incorrect CDS.
+        if (cdsLen > 0 && (cdsLen % 3) == 0)
+            {
+            slAddHead(&geneInfoList, gi);
+            }
         }
     lmCleanup(&lm);
     bigBedFileClose(&bbi);
