@@ -163,7 +163,7 @@ cgiTableField("&nbsp;&nbsp;Minimum hit size in query:");
 cgiSimpleTableFieldStart();
 cgiMakeIntVar(HGLFT_MINSIZEQ,(keepSettings) ? minSizeQ : chain->minSizeQ,4);
 puts("&nbsp;");
-printInfoIcon("In multiple output mode, repeated regions within longer input regions can lead to artefacts. The 'hit size' filter allows to keep only targets with a certain length.");
+printInfoIcon("In multiple output mode, repeated regions within longer input regions can lead to artifacts. The 'hit size' filter allows to keep only targets with a certain length.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
