@@ -3975,7 +3975,7 @@ function mousemoveHelper(e) {
         // if we are over another mouseable element we want to show that one instead
         // use this timer to do so
         let callback = mousemoveTimerHelper.bind(mouseoverContainer);
-        mousemoveTimer = setTimeout(callback, 500, e);
+        mousemoveTimer = setTimeout(callback, 150, e);
     }
 
     if (mousedNewItem && canShowNewMouseover && !mouseIsOverPopup(e, this, 0)) {
