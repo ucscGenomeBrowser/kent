@@ -9,7 +9,7 @@ html tcgaExpr
 group phenDis
 
 track tcgaGeneExpr
-superTrack cancerExpr pack
+parent cancerExpr
 type bigBarChart
 shortLabel Cancer Gene Expr
 longLabel Gene Expression in 33 TCGA Cancer Tissues (GENCODE v23)
@@ -46,7 +46,7 @@ visibility pack
 group phenDis
 
 track tcgaTranscExpr
-superTrack cancerExpr pack
+parent cancerExpr
 type bigBarChart
 shortLabel Cancer Transc Expr
 longLabel Transcript-level Expression in 33 TCGA Cancer Tissues (GENCODE v23)

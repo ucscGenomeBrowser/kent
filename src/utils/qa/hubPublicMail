@@ -20,7 +20,7 @@ that your public track hub at the address:
 
 %s
 
-Has been inaccessible for at least 48 hours. If it continues to be offline, we may need to remove it
+Has been inaccessible for at least 48 consecutive hours. If it continues to be offline, we may have to remove it
 from our public hubs list at https://genome.ucsc.edu/cgi-bin/hgHubConnect
 
 Do not hesitate to let us know if we can help you resolve this situation, e.g. by updating the URL
@@ -97,7 +97,7 @@ def downloadUrls(urls, emails):
         reqFailed = False
         if url.startswith("http"):
             try:
-                f = requests.get(url, verify=False)
+                f = requests.get(url, verify=False, timeout=5)
             except KeyboardInterrupt: # handle ctrl-c for debugging
                 sys.exit(1)
             except:
@@ -186,6 +186,8 @@ def mergeInfo(urls, oldUrlInfo, failedUrls, urlEmails):
 
         if url in failedUrls:
             failCount += 1
+        else:
+            failCount = 0
 
         urlInfo[url] = (email, failCount)
 
@@ -195,7 +197,7 @@ def sendEmails(urlInfo):
     " given dict url -> (email, failCount), send email if failCount > 24 and set failCount = -48 "
     for url, (destEmail, failCount) in urlInfo.items():
         if failCount>24:
-            logging.info("HUB %s BROKEN - sending email to %s" % (url, destEmail))
+            #logging.info("HUB %s BROKEN - sending email to %s" % (url, destEmail)) #Commenting out line to silence email
             emailText = emailTemplate % url
             sendEmail(destEmail, emailText)
             urlInfo[url] = (destEmail, -48)
@@ -227,7 +229,8 @@ def createLockFile(statusFname):
     atexit.register(removeLock)
 
 def removeLock():
-    os.remove(lockFname)
+    if isfile(lockFname):
+        os.remove(lockFname)
 
 def hubPublicMail(centralName, statusFname):
     " send email if a hub fails more than 24 times "
@@ -247,6 +250,7 @@ def hubPublicMail(centralName, statusFname):
     newUrlInfo = sendEmails(newUrlInfo)
 
     writeStatus(newUrlInfo, statusFname)
+    removeLock()
 
 def main():
     args, options = parseArgs()

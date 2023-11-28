@@ -116,11 +116,9 @@ read y m d < <(echo $today | sed -re 's/-/ /g')
 archive=$archiveRoot/$y/$m/$d
 mkdir -p $archive
 gzip -c public-$today.all.nwk > $archive/public-$today.all.nwk.gz
-ln -f `pwd`/public-$today.all.masked.{pb,vcf.gz} $archive/
+ln -f `pwd`/public-$today.all.masked.vcf.gz $archive/
 gzip -c public-$today.all.masked.pb > $archive/public-$today.all.masked.pb.gz
 ln -f `pwd`/public-$today.metadata.tsv.gz $archive/
-gzip -c public-$today.all.masked.nextclade.pangolin.pb \
-    > $archive/public-$today.all.masked.nextclade.pangolin.pb.gz
 gzip -c lineageToPublicName > $archive/lineageToPublicName.tsv.gz
 gzip -c cladeToPublicName > $archive/cladeToPublicName.tsv.gz
 ln -f `pwd`/hgPhyloPlace.description.txt $archive/public-$today.version.txt
@@ -129,7 +127,6 @@ ln -f `pwd`/public-$today.all.masked.ShUShER.pb.gz $archive/
 
 # Update 'latest' in $archiveRoot
 ln -f $archive/public-$today.all.nwk.gz $archiveRoot/public-latest.all.nwk.gz
-ln -f $archive/public-$today.all.masked.pb $archiveRoot/public-latest.all.masked.pb
 ln -f $archive/public-$today.all.masked.pb.gz $archiveRoot/public-latest.all.masked.pb.gz
 ln -f $archive/public-$today.all.masked.vcf.gz $archiveRoot/public-latest.all.masked.vcf.gz
 ln -f $archive/public-$today.metadata.tsv.gz $archiveRoot/public-latest.metadata.tsv.gz

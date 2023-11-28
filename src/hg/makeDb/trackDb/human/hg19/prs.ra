@@ -4,6 +4,7 @@ longLabel Polygenic Risk Scores
 superTrack on
 group phenDis
 type bed 3
+pennantIcon New red ../goldenPath/newsarch.html#102323 "Released Oct. 23, 2023"
 
         track prsEmerge
         shortLabel PRS eMERGE
@@ -17,6 +18,8 @@ type bed 3
         mouseOver ${effectAllele}: weight ${weight}
         dataVersion Received from nlennon@broadinstitute.org, July 13 2023
         html prs
+        skipFields reserved
+        pennantIcon New red ../goldenPath/newsarch.html#102323 "Released Oct. 23, 2023"
         #maxWindowCoverage 40000000
         #maxItems 10000
 
@@ -29,22 +32,29 @@ type bed 3
 
                 track prsAtrialFib
                 shortLabel PRS-E Atrial Fib
-                longLabel Polygenic Risk Scores eMERGE: Atrial Fibrilation
+                longLabel Polygenic Risk Scores eMERGE: Atrial Fibrillation
                 bigDataUrl /gbdb/hg19/prsEmerge/atrial_fibrilation.bb
                 parent prsEmerge pack
                 type bigBed 8 +
 
-                track prsBmi
-                shortLabel PRS-E BMI
-                longLabel Polygenic Risk Scores eMERGE: Body Mass Index
-                bigDataUrl /gbdb/hg19/prsEmerge/bmi.bb
-                parent prsEmerge pack
-                type bigBed 8 +
+                #track prsBmi
+                #shortLabel PRS-E BMI
+                #longLabel Polygenic Risk Scores eMERGE: Body Mass Index
+                #bigDataUrl /gbdb/hg19/prsEmerge/bmi.bb
+                #parent prsEmerge pack
+                #type bigBed 8 +
 
                 track prsBrCancer
                 shortLabel PRS-E Breast Cancer
                 longLabel Polygenic Risk Scores eMERGE: Breast Cancer
                 bigDataUrl /gbdb/hg19/prsEmerge/breast_cancer.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+
+                track prsChKidneyDis
+                shortLabel PRS-E Ch Kidney Dis
+                longLabel Polygenic Risk Scores eMERGE: Chronic Kidney Disease
+                bigDataUrl /gbdb/hg19/prsEmerge/ckd.bb
                 parent prsEmerge pack
                 type bigBed 8 +
 

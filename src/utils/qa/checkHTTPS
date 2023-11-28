@@ -16,12 +16,13 @@ genome-test.soe.ucsc.edu \
 genome-test.gi.ucsc.edu \
 genome-store.ucsc.edu \
 genome-store.soe.ucsc.edu \
+genomewiki.ucsc.edu \
 cells.ucsc.edu \
 cirm.ucsc.edu \
 cirmdcm.soe.ucsc.edu \
-hgdownload.soe.ucsc.edu \
 hgdownload2.gi.ucsc.edu \
 hgdownload2.soe.ucsc.edu \
+hgdownload.soe.ucsc.edu \
 hgdownload-test.gi.ucsc.edu \
 hgdownload-euro.soe.ucsc.edu \
 redmine.soe.ucsc.edu \

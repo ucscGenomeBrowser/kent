@@ -103,8 +103,8 @@ dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
-dbPrefixUrls bigBed bed bigPsl genePred psl
-dbPrefixLabels bigBed bed bigPsl genePred psl
+dbPrefixUrls bigBed bed bigPsl genePred psl bigGenePred
+dbPrefixLabels bigBed bed bigPsl genePred psl bigGenePred
 dbProfile *
 dbTrackType customTracks
 decorator bigBed bed bigPsl genePred bigGenePred psl

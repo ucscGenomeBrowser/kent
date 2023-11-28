@@ -752,3 +752,102 @@ danRer11.downloadDir = danRer11
     # 1679203469 bases of 1679203469 (100.000%) in intersection
 
 #########################################################################
+# LIFTOVER TO danRer7 (DONE - 2022-08-04 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer11/bed/blat.danRer7.2022-08-04
+    cd /hive/data/genomes/danRer11/bed/blat.danRer7.2022-08-04
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/danRer11/jkStuff/danRer11.11.ooc \
+	-target2Bit=/hive/data/genomes/danRer11/danRer11.2bit \
+	-targetSizes=/hive/data/genomes/danRer11/chrom.sizes \
+	-query2Bit=/hive/data/genomes/danRer7/danRer7.2bit \
+	-querySizes=/hive/data/genomes/danRer7/chrom.sizes \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         danRer11 danRer7) > do.log 2>&1
+    # real    230m19.256s
+
+    # verify the convert link on the test browser is now active from danRer11 to
+    # danRer7
+
+##############################################################################
+# crispr whole genome (DONE - 2023-11-04 - Hiram)
+    # redmine issue 21863: https://redmine.soe.ucsc.edu/issues/21863
+
+    mkdir /hive/data/genomes/danRer11/bed/crisprAll
+    cd /hive/data/genomes/danRer11/bed/crisprAll
+
+    # make sure it can get started
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+      -stop=guides -buildDir=`pwd` -smallClusterHub=hgwdev danRer11) \
+           > guides.log 2>&1
+    # real    37m57.115s
+
+    sed -e 's/^/# /;' guides/run.time
+# Completed: 99 of 99 jobs
+# CPU time in finished jobs:       6868s     114.47m     1.91h    0.08d  0.000 y
+# IO & Wait Time:                   234s       3.89m     0.06h    0.00d  0.000 y
+# Average job time:                  72s       1.20m     0.02h    0.00d
+# Longest finished job:             101s       1.68m     0.03h    0.00d
+# Submission to last job:           102s       1.70m     0.03h    0.00d
+
+    # looks good, let it run through the load:
+    time ~/kent/src/hg/utils/automation/doCrispr.pl -continue=specScoreJobList \
+        -stop=load -buildDir=`pwd` -smallClusterHub=hgwdev danRer11) \
+           > load.log 2>&1
+    # real    2471m6.435s
+
+    sed -e 's/^/# /;' specScores/run.time
+# Completed: 721425 of 721425 jobs
+# CPU time in finished jobs:   44390040s  739834.00m 12330.57h  513.77d  1.408 y
+# IO & Wait Time:                872244s   14537.40m   242.29h   10.10d  0.028 y
+# Average job time:                  63s       1.05m     0.02h    0.00d
+# Longest finished job:             148s       2.47m     0.04h    0.00d
+# Submission to last job:        112835s    1880.58m    31.34h    1.31d
+
+    sed -e 's/^/# /;'  effScores/run.time
+# Completed: 11644 of 11644 jobs
+# CPU time in finished jobs:    5938619s   98976.98m  1649.62h   68.73d  0.188 y
+# IO & Wait Time:                 73259s    1220.99m    20.35h    0.85d  0.002 y
+# Average job time:                 516s       8.61m     0.14h    0.01d
+# Longest finished job:            2250s      37.50m     0.62h    0.03d
+# Submission to last job:          9850s     164.17m     2.74h    0.11d
+
+    sed -e 's/^/# /;'  offTargets/run.time
+# Completed: 36072 of 36072 jobs
+# CPU time in finished jobs:     492565s    8209.42m   136.82h    5.70d  0.016 y
+# IO & Wait Time:                126854s    2114.23m    35.24h    1.47d  0.004 y
+# Average job time:                  17s       0.29m     0.00h    0.00d
+# Longest finished job:              25s       0.42m     0.01h    0.00d
+# Submission to last job:          1763s      29.38m     0.49h    0.02d
+
+    # that made the table crispr10K and symlinks in /gbdb/danRer11/crisrp10K/
+    # when it should have been instead crisprAll, reset the links and reload
+    # the correct table:
+mkdir -p /gbdb/danRer11/crisprAll/
+rm -f /gbdb/danRer11/crisprAll/crispr.bb
+rm -f /gbdb/danRer11/crisprAll/crisprDetails.tab
+ln -sf `pwd`/crispr.bb /gbdb/danRer11/crisprAll/crispr.bb
+ln -sf `pwd`/crisprDetails.tab /gbdb/danRer11/crisprAll/crisprDetails.tab
+hgBbiDbLink danRer11 crisprAllTargets /gbdb/danRer11/crisprAll/crispr.bb
+
+    hgsql -e 'drop table crispr10K;' danRer11
+
+    grep -c . effScores.tab
+    # 116454428
+    grep -c . specScores.tab
+    # 53058151
+
+    time (cut -f1-3 crispr.bed | bedSingleCover.pl stdin \
+       | awk '{sum+=$3-$2}END{printf "%d bases\n", sum}') \
+            > coverage.crispr.bed.txt 2>&1
+    1145886525 bases
+    # real    5m14.538s
+
+    ave -col=2 ../../*.sizes | grep total
+    total 1679203469.000000
+
+    # 'featureBits' result:
+    echo "scale+=3; 100.0 * 1145886525 / 1679203469" | bc
+    68.239
+
+##############################################################################

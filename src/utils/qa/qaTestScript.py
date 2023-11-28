@@ -180,6 +180,7 @@ n = driver.find_element_by_id("tableBrowserMenuLink")
 # hover over element and click
 a.move_to_element(n).click().perform()
 driver.find_element_by_id("hgta_doSchema").click()
+driver.find_element_by_xpath("//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/a").click() #schema page check
 driver.get(machine + "/cgi-bin/hgTables?db=oviAri4")
 driver.find_element_by_name("hgta_doSummaryStats").click()
 
@@ -215,6 +216,26 @@ driver.find_element_by_name("Submit").click()
 driver.find_element_by_name("submit").click()
 driver.find_element_by_id("p_btn_ct_hicExampleTWO_9382").click()
 driver.find_element_by_name("ct_hicExampleTWO_9382.color").click()
+# Tests hgCollection with custom tracks
+a = ActionChains(driver)
+#identify element
+m = driver.find_element_by_id("myData")
+##hover over element
+a.move_to_element(m).perform()
+#identify sub menu element
+n = driver.find_element_by_id("customCompositeMenuLink")
+# hover over element and click
+a.move_to_element(n).click().perform()
+driver.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Collected Tracks'])[1]/following::div[2]").click()
+driver.find_element_by_xpath("//input[@id='doNewCollection']").click()
+driver.find_element_by_xpath("//a[@id='ct_10WigglebedGraphfromzero_9682_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_11wigglevariableStep_373_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_12wigglefixedStep_4829_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_15bigWigbedGraphfromzero_9486_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_16bigWigvariableStep_4209_anchor']/i").click()
+driver.find_element_by_xpath("//a[@id='ct_18bigWigfixedSteplog_9103_anchor']/i").click()
+driver.find_element_by_id("goButton").click()
+time.sleep(5)
 
 # Tests small custom track to click into hgTrackUi
 cartReset()
@@ -290,17 +311,6 @@ driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element_by_name("hgt.positionInput").clear()
 driver.find_element_by_name("hgt.positionInput").send_keys("ATDI01079686")
 driver.find_element_by_name("goButton").click()
-time.sleep(3)
-driver.find_element_by_id("hgt.out1").click()
-time.sleep(3)
-# Tests track hub annotation for specific machine
-if 'hub_26485' in driver.page_source:
-     driver.find_element_by_xpath("//td[@id='td_data_hub_26485_assembly']/div[2]/map/area[3]").click()
-elif 'hub_11450' in driver.page_source:
-     driver.find_element_by_xpath("//td[@id='td_data_hub_11450_assembly']/div[2]/map/area[3]").click()
-
-else:
-     driver.find_element_by_xpath("//td[@id='td_data_hub_4081003_assembly']/div[2]/map/area[3]").click()
 time.sleep(2)
 
 # Tests HGVS searches
@@ -310,7 +320,7 @@ driver.find_element_by_name("hgt.positionInput").clear()
 driver.find_element_by_name("hgt.positionInput").send_keys("NM_000310.4(PPT1):c.271_287del17insTT")
 driver.find_element_by_id("goButton").click()
 time.sleep(2)
-driver.find_element_by_xpath("//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/area[12]").click()
+driver.find_element_by_xpath("//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/area[9]").click()
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
 driver.find_element_by_name("hgt.positionInput").clear()
 driver.find_element_by_name("hgt.positionInput").send_keys("NM_007262.5(PARK7):c.-24+75_-24+92dup")
@@ -344,7 +354,7 @@ driver.find_element_by_name("hgt.positionInput").clear()
 driver.find_element_by_name("hgt.positionInput").send_keys("BRCA1 Ala744Cys")
 driver.find_element_by_id("goButton").click()
 time.sleep(2)
-driver.find_element_by_xpath("//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/area[4]").click()
+driver.find_element_by_xpath("//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/area[3]").click()
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38") 
 driver.find_element_by_name("hgt.positionInput").clear()
 time.sleep(3)
@@ -393,7 +403,7 @@ driver.find_element_by_name("Submit").click()
 time.sleep(3)
 driver.find_element_by_xpath("//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/div[2]/pre/a").click()
 time.sleep(3)
-driver.find_element_by_xpath("//td[@id='td_data_altSeqLiftOverPsl']/div[2]/map/area[8]").click()
+driver.find_element_by_xpath("//td[@id='td_data_altSeqLiftOverPsl']/div[2]/map/area[3]").click()
 time.sleep(3)
 driver.find_element_by_link_text("Show chr16_KI270853v1_alt placed on its chromosome").click()
 time.sleep(3)
@@ -416,7 +426,7 @@ driver.find_element_by_name("Submit").click()
 time.sleep(3)
 driver.find_element_by_xpath("//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/div[2]/pre/a").click()
 time.sleep(3)
-driver.find_element_by_xpath("//td[@id='td_data_fixSeqLiftOverPsl']/div[2]/map/area[4]").click()
+driver.find_element_by_xpath("//td[@id='td_data_fixSeqLiftOverPsl']/div[2]/map/area[3]").click()
 driver.find_element_by_link_text("Show chr1_MU273333v1_fix placed on its chromosome").click()
 time.sleep(3)
 
@@ -523,8 +533,6 @@ driver.find_element_by_id("positionInput").clear()
 driver.find_element_by_id("positionInput").send_keys("scaffold_3:1,888,907-1,888,948")
 driver.find_element_by_id("goButton").click()
 time.sleep(3)
-driver.find_element_by_id("hgt.out1").click()
-time.sleep(3)
 # Tests track hub annotation if it is on the RR  
 if 'hub_129603_daph scaffold_3' in driver.page_source:
      driver.find_element_by_xpath("//td[@id='td_data_hub_129603_myTrack']/div[2]/map/area").click()
@@ -539,7 +547,6 @@ driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element_by_id("positionInput").clear()
 driver.find_element_by_id("positionInput").send_keys("chr10:69,644,427-69,678,147")
 driver.find_element_by_id("goButton").click()
-driver.find_element_by_id("hgt.out1").click()
 time.sleep(3)
 # Tests track hub annotation if it is on the RR   
 if 'hub_336627' in driver.page_source:
@@ -566,6 +573,11 @@ driver.find_element_by_name("userSeq").send_keys("MIPDTDLQVQLASRNRVGECSCQVSLMLQS
 driver.find_element_by_name("Submit").click()
 driver.find_element_by_id("res0").click()
 time.sleep(3)
+
+# Tests hgFind.matches cart variable
+cartReset()
+driver.get(machine + "/cgi-bin/hgTracks?position=chr2:25,485,759-25,487,667&ignoreCookie=1&db=hg19&hgFind.matches=this&filterAlign=pack")
+driver.find_element_by_id("goButton").click()
 
 # Closes the current window on which Selenium is running
 driver.close()

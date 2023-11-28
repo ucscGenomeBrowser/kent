@@ -58,13 +58,21 @@ use the Table Browser.</p>
 <a name="video"></a>
 <h2>Video demonstration of the Data Integrator</h2>
 <p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/8ATcoDTOc0g?rel=0" 
-frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> </p>
-<p>Visit our <a 
-href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos" target="_blank">YouTube 
-channel</a> for more videos.
+<!--#if expr="${SERVER_NAME} = /-china/" -->
+    <a href='../../../videos/8ATcoDTOc0g.mp4'>
+    <img src=../../images/videoIcon.png></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our <a href="/videos/" target="_blank">Video Page</a>.
+<!--#else -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/8ATcoDTOc0g?rel=0"
+    frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our
+    <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+    target="_blank">YouTube channel</a>.
+<!--#endif -->
 </p>
-
 
 <a name="GetStarted"></a> 
 <h2>Getting started: performing a simple query</h2> 

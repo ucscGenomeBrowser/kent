@@ -1,4 +1,4 @@
-/* hgTracks - the /riginal, and still the largest module for the UCSC Human Genome
+/* hgTracks - the original, and still the largest module for the UCSC Human Genome
  * Browser main cgi script.  Currently contains most of the track framework, though
  * there's quite a bit of other framework type code in simpleTracks.c.  The main
  * routine got moved to create a new entry point to the bulk of the code for the
@@ -345,7 +345,9 @@ for (group = groupList; group != NULL; group = group->next)
                         cartSetString(cart, parentTdb->track,
                                     changeVis == tvHide ? "hide" : "show");
                     }
-                else // Not super  child
+                // if we're called on the path that has excludeHash set
+                // we also want to set the supertrack children's visbilities
+                if (!tdbIsSuperTrackChild(tdb) || (excludeHash != NULL))
                     {
                     if (changeVis == tdb->visibility)
                         /* remove if setting to default vis */
@@ -362,7 +364,15 @@ for (group = groupList; group != NULL; group = group->next)
                     for (subtrack=track->subtracks;subtrack!=NULL;subtrack=subtrack->next)
                         {
                         if (changeVis == tvHide)               // Since subtrack level vis is an
+                            {
                             cartRemove(cart, subtrack->track); // override, simply remove to hide
+                            if (excludeHash != NULL) // if we're loading an RTS, but probably we should always do this
+                                {
+                                char selName[4096];
+                                safef(selName, sizeof(selName), "%s_sel", subtrack->track);
+                                cartRemove(cart, selName);
+                                }
+                            }
                         else
                             cartSetString(cart, subtrack->track, hStringFromTv(changeVis));
                         subtrack->visibility = changeVis;
@@ -7227,7 +7237,7 @@ if (rtsLoad)  // load a recommended track set using the merge method
         "&" hgsOtherUserName "=%s"
         "&" hgsMergeCart "=on"
         "&" hgsDoOtherUser "=submit"
-	"& hgsid=%s"
+	"&hgsid=%s"
         , otherUserSessionName, otherUserName,cartSessionId(cart));
 
     cartCheckout(&cart);   // make sure cart records all our changes above
@@ -7749,7 +7759,7 @@ struct mouseOverScheme *mouseScheme = mouseOverSetupForBbi(decoratorTdb, bbi);
 if (track->decoratorGroup == NULL)
     track->decoratorGroup = newDecoratorGroup();
 
-struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi->fieldCount, mouseScheme);
+struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi, mouseScheme);
 track->decoratorGroup->decorators = slCat(track->decoratorGroup->decorators, newDecorators);
 for (struct decorator *d = track->decoratorGroup->decorators; d != NULL; d = d->next)
     d->group = track->decoratorGroup;
@@ -8380,7 +8390,9 @@ if (track->hasUi)
     freeMem(longLabel);
     }
 
-hPrintf("%s", track->shortLabel);
+char *encodedShortLabel = htmlEncode(track->shortLabel);
+hPrintf("%s", encodedShortLabel);
+freeMem(encodedShortLabel);
 if (track->hasUi)
     hPrintf("</A>");
 

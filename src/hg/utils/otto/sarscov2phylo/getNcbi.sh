@@ -137,7 +137,7 @@ if [ -e ../ncbi.latest/lineage_report.csv ]; then
     faSomeRecords <(xzcat genbank.fa.xz) pangolin.names stdout \
     | sed -re '/^>/  s/^>([A-Z]{2}[0-9]{6}\.[0-9]+) \|[^,]+/>\1/;' \
         > pangolin.fa
-    pangolin --analysis-mode pangolearn pangolin.fa >& pangolin.log
+    pangolin --skip-scorpio pangolin.fa >& pangolin.log
     tail -n+2 lineage_report.csv >> linRepYesterday
     mv linRepYesterday lineage_report.csv
     rm -f pangolin.fa
@@ -145,7 +145,7 @@ else
     splitDir=splitForPangolin
     rm -rf $splitDir
     mkdir $splitDir
-    faSplit about <(xzcat genbank.fa.xz) 30000000 $splitDir/chunk
+    faSplit about <(xzcat genbank.fa.xz | sed -re '/^>/ s/ .*//;') 30000000 $splitDir/chunk
     find $splitDir -name chunk\*.fa \
     | parallel -j 10 "runPangolin {}"
     head -1 $(ls -1 $splitDir/chunk*.csv | head -1) > lineage_report.csv

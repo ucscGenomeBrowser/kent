@@ -527,6 +527,10 @@ mysql hgcentral -e 'drop table if exists tableList'
 # hide the really big tracks
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "cons%way"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "ucscRetroAli%"'
+mysql hg38 -e 'update trackDb set visibility=0 where tableName like "omimGene2"'
+mysql hg19 -e 'update trackDb set visibility=0 where tableName like "omimGene2"'
+mysql hg38 -e 'update trackDb set visibility=0 where tableName like "omimAvSnp"'
+mysql hg19 -e 'update trackDb set visibility=0 where tableName like "omimAvSnp"'
 
 # temporary fix for hgdownload problem, Oct 2014
 ls /data/mysql/eboVir3 > /dev/null 2> /dev/null && mysql eboVir3 -e 'drop table if exists history'
@@ -568,6 +572,10 @@ if [ ! -f /usr/local/apache/trash/registration.txt ]; then
       fi
    fi
 fi
+
+# Oct 2023: a bug in release 455 (fixed for 456) means that GBIB must have a /gbdb directory, not /data/gbdb. 
+# Adding this symlink now.
+ln -sf /data/gbdb /gbdb
 
 touch /root/lastUpdateTime.flag
 echo - GBiB update done

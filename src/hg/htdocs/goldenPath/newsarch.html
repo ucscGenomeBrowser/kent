@@ -63,6 +63,117 @@ target=_blank>our GitHub page</a>.</p>
 <!-- ============= 2023 archived news ============= -->
 <a name="2023"></a>
 
+<a name="112223"></a>
+<h2>Nov. 22, 2023 &nbsp;&nbsp; CRISPR Targets for Zebrafish (danRer10/danRer11) now available</h2>
+<p>
+We are happy to announce the release of the CRISPR Targets track for the Zebrafish
+<a href="../cgi-bin/hgTrackUi?db=danRer10&g=crisprAllTargets" target="_blank">danRer10</a> and
+<a href="../cgi-bin/hgTrackUi?db=danRer11&g=crisprAllTargets" target="_blank">danRer11</a>
+assemblies. CRISPR-Cas9 has been applied in Zebrafish for gene knockout, gene screening
+and other gene editing studies.</p>
+<p>
+The CRISPR Targets track shows the DNA sequences targetable by CRISPR RNA guides using the Cas9
+enzyme from S. pyogenes (PAM: NGG) over the entire zebrafish genome. CRISPR target sites were
+annotated with predicted specificity (off-target effects) and predicted efficiency (on-target
+cleavage) by various algorithms through the tool
+<a href="http://crispor.tefor.net/" target="_blank">CRISPOR</a>. The target sequence of the guide
+is shown with a thick (exon) bar. The PAM motif match (NGG) is shown with a thinner bar. Guides are
+colored to reflect both predicted specificity and efficiency. Specificity reflects the "uniqueness"
+of a 20mer sequence in the genome; the less unique a sequence is, the more likely it is to cleave
+other locations of the genome (off-target effects). Efficiency is the frequency of cleavage at the
+target site (on-target efficiency).</p>
+<p>
+We would like to thank Maximilian Haeussler, Hiram Clawson, and Gerardo Perez for developing and
+releasing these tracks.</p>
+
+
+<a name="110823"></a>
+<h2>Nov. 08, 2023 &nbsp;&nbsp; New track decorators feature</h2>
+<p>
+We are excited to introduce the new track decorators feature which allows highlighting parts of
+features with colors and/or symbols (glyphs/shapes) within a single track.
+</p>
+<div class="text-center">
+  <a href="http://genome.ucsc.edu/s/gperez2/RM_32467" target="_blank">
+  <img src="../images/newsArchImages/feature_decorators.png" style="width:80%;max-width:1083px"></a>
+</div>
+<p>
+The genome browser&lsquo;s primary way to annotate the genome uses colored rectangles
+(&ldquo;exons&rdquo; for gene tracks) linked by thin lines (&ldquo;introns&rdquo;), often stored
+as a bigBed. These were originally used for genes but then evolved to cover other types of
+annotations, e.g. enhancers, chromatin modifications, or single nucleotide variants. We usually
+call these annotations &ldquo;features&rdquo;. Each rectangle (&ldquo;exon&rdquo;) of a feature has
+the same color and individual parts cannot be highlighted. If you wanted to highlight parts of the
+features, traditionally this required a second track.
+</p>
+<div class="text-center">
+        <img src="../../images/runx2.png" style="width:80%;max-width:1083px">
+</div>
+<p>
+Track decorators change this: in your custom track and track hubs, you can now highlight parts of a
+genome annotation with colors or symbols. Track decorators can be shown in two styles,
+&ldquo;block&rdquo; and &ldquo;glyph&rdquo; style, and can either be overlaid onto the feature or
+shown directly underneath. The &ldquo;block&rdquo; style option can be used to color exons and
+introns and can display a label for them. For example, the &ldquo;block&rdquo; track decorator
+could be used to overlay protein domain boundaries on transcripts where usually one would use an
+entirely different track for the domains.
+</p>
+<div class="text-center">
+        <img src="../../images/runx2_decorator.png" style="width:80%;max-width:1083px">
+</div>
+<p>
+The &ldquo;glyph&rdquo; style option offers 8 different types of glyphs and the color of choice.
+</p>
+<div class="text-center">
+        <img src="../../images/glyphsEx.png" style="width:40%;max-width:1083px">
+</div>
+<p>
+The &ldquo;glyph&rdquo; style option can be used to draw entirely new symbols, for example, to
+indicate insertion positions on the genome with small triangles. For more information, see the
+<a href="/goldenPath/help/decorator.html" target="_blank">Track Decorators help page</a>.</p>
+<p>
+We would like to thank Jonathan Casper, Max Haeussler, Mark Diekhans, and Gerardo Perez for their
+work on this release. We appreciate user feedback. If you have questions, feedback, suggestions,
+glyph style requests, or have found new glyph applications, please contact our
+<a href="mailto:genome@soe.ucsc.edu">mailing list</a>.
+We would appreciate responses on the creative ways of using the new track decorators feature.
+</p>
+
+<a name="102323"></a>
+<h2>Oct. 23, 2023 &nbsp;&nbsp; eMERGE polygenic risk scores for human (hg19)</h2>
+<p>
+We are pleased to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=prsEmerge">eMerge polygenic risk scores</a>
+for the human assembly GRCh37/hg19. Polygenic risk scores (PRS) have clinical utility and are the
+result of many years of GWAS studies. A score is given for a combination of SNPs to calculate the
+risk of getting a disease in a healthy population. These scores work very well for cancer,
+cardiomyopathies, and is extending to other diseases.
+</p>
+<p>
+The Polygenic Risk Scores eMERGE track shows variants that are part of selected polygenic risk
+scores for 8 common diseases. The risk scores were selected by the
+<a href="https://www.genome.gov/Funded-Programs-Projects/Electronic-Medical-Records-and-Genomics-Network-eMERGE"
+target="_blank">NHGRI eMERGE project</a>, and the selection process is described in
+<a href="https://doi.org/10.1101/2023.05.25.23290535" target="_blank">Lennon et al. 2023</a>. Many
+PRS models were evaluated, and the 8 models in this track were selected based on quality:
+</p>
+<ul>
+  <li>Asthma</li>
+  <li>Atrial Fibrillation</li>
+  <li>Breast Cancer</li>
+  <li>Coronary Heart Disease</li>
+  <li>Chronic Kidney Disease</li>
+  <li>Hypercholesterolemia</li>
+  <li>Prostate Cancer</li>
+  <li>T1 Diabetes</li>
+  <li>T2 Diabetes</li>
+</ul>
+<p>
+We would like to thank Elisabeth McNally for providing advice and Niall Lennon for sharing the data
+with the UCSC Genome Browser team. We would also like to thank Zia Truong and Max Haeussler for
+building these tracks, and Jairo Navarro for releasing the tracks.
+</p>
+
 <a name="091923"></a>
 <h2>Sep. 19, 2023 &nbsp;&nbsp; EVA SNP release 5 for 36 assemblies</h2>
 <p>

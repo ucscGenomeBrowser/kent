@@ -34,11 +34,17 @@ errAbort(
   "   -bedPos         With -bed, use chrom:start-end as the fasta ID in output.fa.\n"
   "   -udcDir=/dir/to/cache  Place to put cache for remote bigBed/bigWigs.\n"
   "\n"
+  "Input file can be a URL\n"
   "Sequence and range may also be specified as part of the input\n"
   "file name using the syntax:\n"
   "      /path/input.2bit:name\n"
   "   or\n"
   "      /path/input.2bit:name:start-end\n"
+  "examples:\n"
+  "  wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/latest/hg38.2bit\n"
+  "  twoBitToFa hg38.2bit -seq=chr1 -start=1000000 -end=20000000 out.fa\n"
+  "  echo 'chr1 1 1000 testRegion' > test.bed\n"
+  "  twoBitToFa https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/latest/hg38.2bit -bed=test.bed out.fa\n"
   );
 }
 

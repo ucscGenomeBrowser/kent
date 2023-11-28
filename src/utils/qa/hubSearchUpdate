@@ -13,8 +13,8 @@ then
     # /gbdb/hgFixed/search/hubs/
     # which contains symlinks to /hive/data/inside/search/
     # the contents of /gbdb/hgFixed/search need to be auto-pushed
-    cd /hive/data/inside/search/
-    ./makeTrackHubs.sh
+    cd /hive/data/inside/search/hubs
+    ../makeTrackHubs.sh
     echo "HubSearchText trix indexes cron-updated on `date`. Exit status: $?" >> /hive/groups/browser/hubCrawl/hubSearchText.log
 fi
 

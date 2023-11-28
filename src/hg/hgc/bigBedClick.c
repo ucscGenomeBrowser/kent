@@ -489,6 +489,33 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             }
         if (sameString(tdb->type, "bigGenePred"))
             bigGenePredLinks(tdb->track, item);
+        if (startsWith("hprcDeletions", tdb->track) || startsWith("hprcInserts", tdb->track) || startsWith("hprcArr", tdb->track))
+            {
+            // the source field, which is the first item after the itemRgb will
+            // have all the other chains
+            // TODO: make this controlled by a trackDb setting
+            char *oChainList[2048];
+            int i, numChains = chopCommas(cloneString(restFields[6]), oChainList);
+            char *oChain = NULL;
+            struct dyString *ds = dyStringNew(0);
+            dyStringPrintf(ds, "var chainVis = {");
+            for (i = 0; i < numChains; i++)
+                {
+                oChain = oChainList[i];
+                char *cartVar = catTwoStrings("chainHprc", oChain);
+                char *chainVis = cartOptionalString(cart, cartVar);
+                if (chainVis == NULL)
+                    {
+                    cartVar = catTwoStrings(cartVar, "_sel");
+                    chainVis = cartOptionalString(cart, cartVar);
+                    // TODO: this is not getting the vis right, because _sel is not the
+                    // same as a visibility
+                    }
+                dyStringPrintf(ds, "\"%s\": \"%s\", ", oChain, chainVis != NULL ? hStringFromTv(hTvFromString(chainVis)) : "Hide");
+                }
+            dyStringPrintf(ds, "};\n");
+            jsInline(dyStringCannibalize(&ds));
+            }
         }
     if (isCustomTrack(tdb->track))
 	{

@@ -2796,14 +2796,14 @@ return FALSE;
 }
 
 struct linkedFeatures *lfFromBigDbSnp(struct trackDb *tdb, struct bigBedInterval *bb,
-                                      struct bigBedFilter *filters, int freqSourceIx)
+                                      struct bigBedFilter *filters, int freqSourceIx, struct bbiFile *bbi)
 /* Convert one bigDbSnp item to a linkedFeatures for drawing if it passes filter, else NULL. */
 {
 struct linkedFeatures *lf = NULL;
 char startBuf[16], endBuf[16];
 char *bedRow[32];
 bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-if (bigBedFilterInterval(bedRow, filters))
+if (bigBedFilterInterval(bbi, bedRow, filters))
     {
     struct bigDbSnp *bds = bigDbSnpLoad(bedRow);
     double minMaf = cartUsualDoubleClosestToHome(cart, tdb, FALSE, "minMaf", 0.0);

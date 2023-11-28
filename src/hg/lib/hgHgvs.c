@@ -739,6 +739,12 @@ else if (hTableExists(db, "refGene"))
 else return NULL;
 struct sqlConnection *conn = hAllocConn(db);
 char *npAcc = sqlQuickString(conn, query);
+// if user passed in old versioned transcript, check in *Old tables:
+if (npAcc == NULL && hDbHasNcbiRefSeqHistorical(db) && strchr(nmAcc, '.'))
+    {
+    sqlSafef(query, sizeof(query), "select protAcc from ncbiRefSeqLinkHistorical where id = '%s'", nmAcc);
+    npAcc = sqlQuickString(conn, query);
+    }
 hFreeConn(&conn);
 return npAcc;
 }
@@ -1216,7 +1222,11 @@ else
     {
     struct dnaSeq *cdnaSeq = NULL;
     if (hDbHasNcbiRefSeq(db))
+        {
         cdnaSeq = hDnaSeqGet(db, acc, "seqNcbiRefSeq", "extNcbiRefSeq");
+        if (cdnaSeq == NULL && hDbHasNcbiRefSeqHistorical(db))
+            cdnaSeq = hDnaSeqGet(db, acc, "seqNcbiRefSeqHistorical", "extNcbiRefSeqHistorical");
+        }
     else
         cdnaSeq = hGenBankGetMrna(db, acc, NULL);
     if (cdnaSeq)
@@ -1260,6 +1270,12 @@ else
     struct sqlConnection *conn = hAllocConn(db);
     char cdsBuf[2048];
     cdsStr = sqlQuickQuery(conn, query, cdsBuf, sizeof(cdsBuf));
+    if (isEmpty(cdsStr) && strchr(acc, '.') && hDbHasNcbiRefSeqHistorical(db))
+        {
+        sqlSafef(query, sizeof(query),
+                 "select cds from ncbiRefSeqCdsHistorical where id = '%s'", acc);
+        cdsStr = sqlQuickQuery(conn, query, cdsBuf, sizeof(cdsBuf));
+        }
     hFreeConn(&conn);
     }
 if (isNotEmpty(cdsStr))
@@ -1343,7 +1359,8 @@ static char *normalizeVersion(char *db, char *acc, int *retFoundVersion)
  * ENS accessions must have versions.
  * The user may give us a RefSeq accession with or without a .version.
  * If ncbiRefSeq tables are present, return acc with version, looking up version if necessary.
- * If we look it up and can't find it, this returns NULL.
+ * If we look it up and can't find it, check the *Old tables for the refSeqHistorical
+ *     track. If we can't find it there, this returns NULL.
  * If instead we're using genbank tables, return acc with no version.
  * That ensures that acc will be found in our local tables. */
 {
@@ -1373,6 +1390,12 @@ else if (hDbHasNcbiRefSeq(db))
         sqlSafef(query, sizeof(query), "select name from ncbiRefSeq where name like '%s.%%'", acc);
         struct sqlConnection *conn = hAllocConn(db);
         normalizedAcc = sqlQuickString(conn, query);
+        if (isEmpty(normalizedAcc) && hDbHasNcbiRefSeqHistorical(db))
+            {
+            // maybe it is a deprecated transcript
+            sqlSafef(query, sizeof(query), "select name from ncbiRefSeqHistorical where name like '%s.%%' order by name desc", acc);
+            normalizedAcc = sqlQuickString(conn, query);
+            }
         hFreeConn(&conn);
         }
     if (isNotEmpty(normalizedAcc))
@@ -1892,18 +1915,28 @@ else
             getCds(db, acc, cds);
         txAli = pslForQName(db, pslTable, acc);
         }
-    // As of 9/26/16, ncbiRefSeqPsl is missing some items (#13673#note-443) -- so fall back
-    // on UCSC alignments.
-    if (!txAli && sameString(pslTable, "ncbiRefSeqPsl") && hTableExists(db, "refSeqAli"))
+    // try the old alignments if we can't find it in the current alignments
+    if (!txAli && sameString(pslTable, "ncbiRefSeqPsl"))
         {
-        char *accNoVersion = cloneFirstWordByDelimiter(acc, '.');
-        if (hgvs->type == hgvstCoding)
-            getCds(db, accNoVersion, cds);
-        txAli = pslForQName(db, "refSeqAli", accNoVersion);
-        if (txAli)
+        if (hDbHasNcbiRefSeqHistorical(db))
             {
-            pslTable = "refSeqAli";
-            *pAcc = accNoVersion;
+            txAli = pslForQName(db, "ncbiRefSeqPslHistorical", acc);
+            if (txAli)
+                pslTable = "ncbiRefSeqPslHistorical";
+            }
+        // As of 9/26/16, ncbiRefSeqPsl is missing some items (#13673#note-443) -- so fall back
+        // on UCSC alignments.
+        if (!txAli && hTableExists(db, "refSeqAli"))
+            {
+            char *accNoVersion = cloneFirstWordByDelimiter(acc, '.');
+            if (hgvs->type == hgvstCoding)
+                getCds(db, accNoVersion, cds);
+            txAli = pslForQName(db, "refSeqAli", accNoVersion);
+            if (txAli)
+                {
+                pslTable = "refSeqAli";
+                *pAcc = accNoVersion;
+                }
             }
         }
     if (txAli && retPslTable != NULL)
@@ -1969,14 +2002,26 @@ else if (startsWith("NP_", acc) || startsWith("XP_", acc))
     struct sqlConnection *conn = hAllocConn(db);
     char query[2048];
     if (hDbHasNcbiRefSeq(db))
+        {
         sqlSafef(query, sizeof(query), "select mrnaAcc from ncbiRefSeqLink where protAcc = '%s'",
                  acc);
+        txAcc = sqlQuickString(conn, query);
+        // user may have passed previous versioned transcript, check the *Old tables:
+        if (!txAcc && hDbHasNcbiRefSeqHistorical(db))
+            {
+            sqlSafef(query, sizeof(query), "select mrnaAcc from ncbiRefSeqLinkHistorical where protAcc = '%s'",
+                     acc);
+            txAcc = sqlQuickString(conn, query);
+            }
+        }
     else if (hTableExists(db, "refGene"))
+        {
         sqlSafef(query, sizeof(query), "select mrnaAcc from %s l, refGene r "
                  "where l.protAcc = '%s' and r.name = l.mrnaAcc", refLinkTable, acc);
+        txAcc = sqlQuickString(conn, query);
+        }
     else
         return NULL;
-    txAcc = sqlQuickString(conn, query);
     hFreeConn(&conn);
     }
 if (txAcc)

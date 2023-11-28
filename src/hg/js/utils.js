@@ -3698,6 +3698,11 @@ var dragReorder = {
             if (rightClick.currentMapItem) {
                 rightClick.currentMapItem.href = this.href;
                 rightClick.currentMapItem.title = this.title;
+                // if the custom mouseover code has removed this title, check the attr
+                // for the original title
+                if (this.title.length === 0) {
+                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                }
 
                 // Handle linked features with separate clickmaps for each exon/intron
                 if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
@@ -3873,7 +3878,14 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
     // use firstChild because popUpEl should be a div with a sole child in it
     let popUpRect = popUpEl.firstChild.getBoundingClientRect();
     // position the popUp to the right and above the cursor by default
-    let topOffset = refTop - popUpRect.height;
+    let topOffset;
+    if (refEl.coords !== undefined && refEl.coords.length > 0 && refEl.coords.split(",").length == 4) {
+        // boundingRect has determined exactly as close as we can get to the item without covering
+        topOffset = refTop - popUpRect.height;
+    } else {
+        // just use the mouseY position for placement, the -5 accounts for cursor size
+        topOffset = mouseY - window.scrollY - popUpRect.height - 5;
+    }
     let leftOffset = mouseX + 15; // add 15 for large cursor sizes
 
     // first case, refEl takes the whole width of the image, so not a big deal to cover some of it
@@ -3886,6 +3898,11 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
     if (mouseX > (windowWidth* 0.66)) {
         // move to the left
         leftOffset = mouseX - popUpRect.width;
+    }
+
+    // the page is scrolled or otherwise off the screen
+    if (topOffset <= 0) {
+        topOffset = mouseY - window.scrollY;
     }
 
     if (leftOffset < 0) {
@@ -3920,7 +3937,7 @@ function hideMouseoverText(ele) {
     tooltipTarget.style.visibility = "hidden";
 }
 
-function mouseIsOverPopup(ev, ele, fudgeFactor=45) {
+function mouseIsOverPopup(ev, ele, fudgeFactor=25) {
     /* Is the mouse positioned over the popup? */
     let targetBox = ele.getBoundingClientRect();
     let mouseX = ev.clientX;
@@ -3932,7 +3949,7 @@ function mouseIsOverPopup(ev, ele, fudgeFactor=45) {
     return false;
 }
 
-function mouseIsOverItem(ev, ele, fudgeFactor=45) {
+function mouseIsOverItem(ev, ele, fudgeFactor=25) {
     /* Is the mouse positioned over the item that triggered the popup? */
     let origName = ele.getAttribute("origItemMouseoverId");
     let origTargetBox = boundingRect($("[mouseoverid='"+origName+"']")[0]);
@@ -3958,7 +3975,7 @@ function mousemoveHelper(e) {
         // if we are over another mouseable element we want to show that one instead
         // use this timer to do so
         let callback = mousemoveTimerHelper.bind(mouseoverContainer);
-        mousemoveTimer = setTimeout(callback, 250, e);
+        mousemoveTimer = setTimeout(callback, 500, e);
     }
 
     if (mousedNewItem && canShowNewMouseover && !mouseIsOverPopup(e, this, 0)) {
@@ -3987,7 +4004,7 @@ function showMouseoverText(e) {
     e.preventDefault();
     // the mouseover event will fire all the time, let the mousemove code
     // set the flags for whether its time to show the new mouseover or not
-    if (mousedNewItem && canShowNewMouseover) {
+    if (mousedNewItem && canShowNewMouseover ) {
         referenceElement = e.target;
         if (!e.target.getAttribute("mouseoverid")) {
             // corner case: the side slice and grey control bar slice are weird, the td
@@ -4075,6 +4092,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
         newDiv.style.display = "inline-block";
         if (ele1.title) {
             newDiv.id = replaceReserved(ele1.title);
+            ele1.setAttribute("originalTitle", ele1.title);
             ele1.title = "";
         } else {
             newDiv.id = replaceReserved(text);
@@ -4096,23 +4114,77 @@ function titleTagToMouseover(mapEl) {
 }
 
 function convertTitleTagsToMouseovers() {
-    /* make all the title tags in the ideogram or main image have mouseovers */
-    $("[name=ideoMap]>[title],#imgTbl [title]").each(function(i, a) {
+    /* make all the title tags in the document have mouseovers */
+    $("[[title]").each(function(i, a) {
         if (a.title !== undefined && a.title.length > 0) {
             titleTagToMouseover(a);
         }
     });
+
+    /* make the above mouseovers go away if we are in an input or select menu */
+    const inps = document.getElementsByTagName("input");
+    const sels = document.getElementsByTagName("select");
+    for (let inp of inps) {
+        if (!(inp.type == "hidden" || inp.type == "HIDDEN")) {
+            inp.addEventListener("focus", (ev) => {
+                hideMouseoverText(mouseoverContainer);
+                mousemoveController.abort();
+                canShowNewMouseover = false;
+            });
+            inp.addEventListener("blur", (evt) => {
+                canShowNewMouseover = true;
+            });
+        }
+    }
+    for (let sel of sels) {
+        sel.addEventListener("focus", (ev) => {
+            hideMouseoverText(mouseoverContainer);
+            mousemoveController.abort();
+            canShowNewMouseover = false;
+        });
+        sel.addEventListener("blur", (evt) => {
+            canShowNewMouseover = true;
+        });
+    }
+
+    /* for hgTracks specifically, we also need to deal with the special contextmenu */
+    let imgTbl = document.getElementById("imgTbl");
+    if (imgTbl) {
+        imgTbl.addEventListener("contextmenu", function(e) {
+            hideMouseoverText(mouseoverContainer);
+            mousemoveController.abort();
+            canShowNewMouseover = false;
+            // right-click menu doesn't capture focus so manually catch it
+            document.addEventListener("click", function(ev) {
+                // there is a race condition where the close happens after an inputs
+                // focus happens, which means mouseovers get re-enabled when the focus
+                // on the input should prevent them, catch that here:
+                if (!(document.activeElement.tagName === "INPUT" ||
+                        document.activeElement === "SELECT")) {
+                    canShowNewMouseover = true;
+                }
+            }, {once: true});
+            document.addEventListener("keyup", function(ev) {
+                if (ev.keyCode == 27) {
+                    // there is a race condition where the close happens after an inputs
+                    // focus happens, which means mouseovers get re-enabled when the focus
+                    // on the input should prevent them, catch that here:
+                    if (!(document.activeElement.tagName === "INPUT" ||
+                            document.activeElement === "SELECT")) {
+                        canShowNewMouseover = true;
+                    }
+                }
+            }, {once: true});
+        });
+    }
 }
 
-function tooltipNodesToMouseover() {
+function newTooltips() {
     /* For server side printed tooltip texts, make them work as pop ups.
-     * Note this assumes two siblings nodes placed next to each other:
-     *    <nodeName class="Tooltip">the text or element that is hoverable</nodename>
-     *    <nodeName class="Tooltiptext'>the text/html of the popup itself
      * Please note that the Tooltiptext node can have any arbitrary html in it, like
      * line breaks or links*/
-    $(".Tooltip").each(function(i, n) {
-        tooltiptext = n.getAttribute("mouseoverText");
+    $("[title]").each(function(i, n) {
+        tooltiptext = n.getAttribute("title");
         if (tooltiptext !== null) {
             addMouseover(n, tooltiptext);
         }

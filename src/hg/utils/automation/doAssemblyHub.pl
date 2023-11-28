@@ -1554,12 +1554,12 @@ else
 fi
 
 if [ \$asmId.masked.2bit -nt \$asmId.masked.faSize.txt ]; then
-  twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
+  twoBitToFa \$asmId.masked.2bit stdout | gzip -c > \$asmId.fa.gz
+  touch -r \$asmId.masked.2bit \$asmId.fa.gz
+  faSize \$asmId.fa.gz > \$asmId.masked.faSize.txt
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
   bptForTwoBit \$asmId.masked.2bit \$asmId.masked.2bit.bpt
   touch -r \$asmId.masked.2bit \$asmId.masked.2bit.bpt
-  twoBitToFa \$asmId.masked.2bit stdout | gzip -c > \$asmId.fa.gz
-  touch -r \$asmId.masked.2bit \$asmId.fa.gz
   cp -p \$asmId.fa.gz ../../\$asmId.fa.gz
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
   cp -p \$asmId.masked.2bit.bpt ../../\$asmId.2bit.bpt

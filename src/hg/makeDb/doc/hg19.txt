@@ -35151,5 +35151,13 @@ vi trackDb.ra
 # Polygenic risk scores, Zia Truong (committed by Max)
 # Mon Oct  2 04:44:39 PDT 2023
 cd /hive/data/genomes/hg19/bed/prsEmerge/
+# data is now available from https://github.com/broadinstitute/eMERGE-implemented-PRS-models-Lennon-et-al
+# originally received by email from Niall Lennon
 sh ~/kent/src/hg/makeDb/scripts/prsEmerge/prs2bigBed.sh 
 #############################################################################
+# JASPAR 2024 bigBed update 11/13/24
+
+cd /hive/data/genomes/hg19/bed/jaspar
+wget https://frigg.uio.no/JASPAR/JASPAR_genome_browser_tracks/current/hg19/JASPAR2024_hg19.bb
+mv JASPAR2024_hg19.bb JASPAR2024.bb
+ln -s JASPAR2024.bb /gbdb/hg19/jaspar/JASPAR2024.bb

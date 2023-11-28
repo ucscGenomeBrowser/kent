@@ -1636,7 +1636,14 @@ function downloadGenomes
 
     set +f
 
+    # Alexander Stuy reported that at FSU they had a few mysql databases with incorrect users on them
+    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/
+    
+    startMysql
+
     mysqlCheck
+
+    hideSomeTracks
 
     goOffline # modify hg.conf and remove all statements that use the UCSC download server
 
@@ -1710,6 +1717,28 @@ function mysqlCheck
     mysqlcheck --all-databases --auto-repair --quick --fast --silent
 }
 
+function hideSomeTracks
+# hide the big tracks and the ones that we are not allowed to distribute
+{
+    # these tables are not used for searches by default. Searches are very slow. We focus on genes.
+    notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
+
+    # these tracks are hidden by default
+    hideTracks='intronEst cons100way cons46way ucscRetroAli5 mrna omimGene2 omimAvSnp'
+
+    echo2 Hiding some tracks by default and removing some tracks from searches
+    for db in $DBS; do
+       echo $db
+       for track in $hideTracks; do
+            mysql $db -e 'UPDATE trackDb set visibility=0 WHERE tableName="'$track'"'
+        done
+
+       for track in $notSearchTables; do
+            mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
+        done
+    done
+}
+
 # only download a set of minimal mysql tables, to make a genome browser that is using the mysql failover mechanism
 # faster. This should be fast enough in the US West Coast area and maybe even on the East Coast.
 function downloadMinimal
@@ -1725,12 +1754,6 @@ function downloadMinimal
 
     # only these db tables are copied over by default
     minRsyncOpt="--include=cytoBand.* --include=chromInfo.* --include=cytoBandIdeo.* --include=kgColor.* --include=knownAttrs.* --include=knownGene.* --include=knownToTag.* --include=kgXref.* --include=ensemblLift.* --include=ucscToEnsembl.* --include=wgEncodeRegTfbsCells.* --include=encRegTfbsClusteredSources.* --include=tableList.* --include=refSeqStatus.* --include=wgEncodeRegTfbsCellsV3.* --include=extFile.* --include=trackDb.* --include=grp.* --include=ucscRetroInfo5.* --include=refLink.* --include=ucscRetroSeq5.* --include=ensemblLift.* --include=knownCanonical.* --include=gbExtFile.* --include=flyBase2004Xref --include=hgFindSpec.* --include=ncbiRefSeq*"
-
-    # these tables are not used for searches by default. Searches are very slow. We focus on genes.
-    notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
-
-    # these tracks are hidden by default
-    hideTracks='intronEst cons100way cons46way ucscRetroAli5 mrna'
 
     stopMysql
 
@@ -1748,17 +1771,7 @@ function downloadMinimal
 
     startMysql
 
-    echo2 Hiding some tracks by default and removing some tracks from searches
-    for db in $DBS; do
-       echo $db
-       for track in $hideTracks; do
-            mysql $db -e 'UPDATE trackDb set visibility=0 WHERE tableName="'$track'"'
-        done
-
-       for track in $notSearchTables; do
-            mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
-        done
-    done
+    hideSomeTracks
 
     mysqlCheck
 
@@ -1833,7 +1846,7 @@ function updateBrowser {
 
    # update the mysql DBs
    stopMysql
-   DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(hgcentral)'`
+   DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(multi-master.info)|(sys)|(lost.found)|(hgcentral)'`
    for db in $DBS; do 
        echo2 syncing full mysql database: $db
        $RSYNC --update --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/

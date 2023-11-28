@@ -6,7 +6,7 @@ superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
-html gnomadV3_1_1
+html gnomadV4
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -93,7 +93,7 @@ html gnomadV3_1_1
     searchIndex name,_displayName,rsId
     html gnomadV3_1_1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1.1/genomes.bb
-    priority 1
+    priority 2
     labelFields rsId,_displayName
     defaultLabelFields _displayName
     skipFields _displayName
@@ -204,6 +204,36 @@ html gnomadV3_1_1
         filterByRange._zscore on
         parent gnomadPLI off
         priority 2
+
+track gnomadVariantsV4
+parent gnomadVariants
+compositeTrack on
+shortLabel gnomAD v4 Pre-Release
+longLabel Genome Aggregation Database (gnomAD) Genome Variants v4.0.0 Pre-Release
+type vcfTabix
+showHardyWeinberg on
+configureByPopup off
+maxWindowToDraw 200000
+visibility hide
+dataVersion Release 4.0.0 (November 1, 2023, (chrY Fix November 16, 2023))
+priority 1
+url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r4&ignore=$$
+urlLabel gnomAD:
+html gnomadV4.html
+
+    track gnomadGenomesV4
+    parent gnomadVariantsV4
+    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+    shortLabel gnomAD v4 Genomes Variants
+    longLabel Genome Aggregation Database (gnomAD) Genomes Variants v4.0.0 Pre-Release
+    visibility pack
+
+    track gnomadExomesV4
+    parent gnomadVariantsV4
+    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+    shortLabel gnomAD v4 Exomes Variants
+    longLabel Genome Aggregation Database (gnomAD) Exomes Variants v4.0.0 Pre-Release
+    visibility pack
 
 searchTable pliByTranscript
 searchType bigBed

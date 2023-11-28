@@ -1882,6 +1882,10 @@ for (;col != NULL && count < fieldCount;col=col->next)
         if (new)
             {
             new->encodedTbl = fields[ix];
+            // this field will get printed later somehow, so make sure the
+            // rest of this code knows to not open more table tags and close
+            // the correct ones
+            printCount++;
             continue;
             }
         }
@@ -1936,7 +1940,6 @@ if (sepFields)
 if (embeddedTblFields)
     {
     printf("<br><table class='bedExtraTbl'>\n");
-    printf("</table>\n");
 
     struct embeddedTbl *thisTbl;
     struct dyString *tableLabelsDy = dyStringNew(0);
@@ -18576,7 +18579,10 @@ if (pSnpCodonPos != NULL)
     *pSnpCodonPos = snpCodonPos;
 if (pRefAA != NULL)
     {
-    *pRefAA = lookupCodon(refCodon);
+    if (isMito(seqName))
+        *pRefAA = lookupMitoCodon(refCodon);
+    else
+        *pRefAA = lookupCodon(refCodon);
     if (*pRefAA == '\0') *pRefAA = '*';
     }
 }
@@ -18649,42 +18655,46 @@ for (j = 0;  j < alleleCount;  j++)
 		   (int)(-diff/3), (diff < -3) ?  "s" : "");
 	}
     else if (alSize == 1 && refIsSingleBase)
-	{
-	char snpCodon[4];
-	safecpy(snpCodon, sizeof(snpCodon), refCodon);
-	snpCodon[snpCodonPos] = alBase;
-	char snpAA = lookupCodon(snpCodon);
-	if (snpAA == '\0') snpAA = '*';
-	char refCodonHtml[16], snpCodonHtml[16];
-	safecpy(refCodonHtml, sizeof(refCodonHtml), highlightCodonBase(refCodon, snpCodonPos));
-	safecpy(snpCodonHtml, sizeof(snpCodonHtml), highlightCodonBase(snpCodon, snpCodonPos));
-	if (refAA != snpAA)
-	    {
-	    if (refAA == '*')
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("stop-loss"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    else if (snpAA == '*')
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("nonsense"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    else
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("missense"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    }
-	else
-	    {
-	    if (refAA == '*')
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("stop_retained_variant"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    else
-		printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
-		       geneTrack, geneName, snpMisoLinkFromFunc("coding-synon"),
-		       refAA, refCodonHtml, snpAA, snpCodonHtml);
-	    }
-	}
+        {
+        char snpCodon[4];
+        safecpy(snpCodon, sizeof(snpCodon), refCodon);
+        snpCodon[snpCodonPos] = alBase;
+        char snpAA = '\0';
+        if (isMito(seqName))
+            snpAA = lookupMitoCodon(snpCodon);
+        else
+            snpAA = lookupCodon(snpCodon);
+        if (snpAA == '\0') snpAA = '*';
+        char refCodonHtml[16], snpCodonHtml[16];
+        safecpy(refCodonHtml, sizeof(refCodonHtml), highlightCodonBase(refCodon, snpCodonPos));
+        safecpy(snpCodonHtml, sizeof(snpCodonHtml), highlightCodonBase(snpCodon, snpCodonPos));
+        if (refAA != snpAA)
+            {
+            if (refAA == '*')
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("stop-loss"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            else if (snpAA == '*')
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("nonsense"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            else
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("missense"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            }
+        else
+            {
+            if (refAA == '*')
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("stop_retained_variant"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            else
+                printf(firstTwoColumnsPctS "%s %c (%s) --> %c (%s)\n",
+                       geneTrack, geneName, snpMisoLinkFromFunc("coding-synon"),
+                       refAA, refCodonHtml, snpAA, snpCodonHtml);
+            }
+        }
     else
 	printf(firstTwoColumnsPctS "%s %s --> %s\n",
 	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"),
@@ -26297,6 +26307,20 @@ cartSetString(cart, "i", "PrintAllSequences");
 hgCustom(newCts->tdb->track, NULL);
 }
 
+void doHPRCTable(struct trackDb *tdb, char *itemName)
+/* Put up a generic bigBed details page, with a table of links to turn on related
+ *  * chain tracks with visibility toggles */
+{
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+genericHeader(tdb, itemName);
+genericBigBedClick(NULL, tdb, itemName, start, end, 0);
+printTrackHtml(tdb);
+// tell the javscript to reorganize the column of assemblies:
+jsIncludeFile("hgc.js", NULL);
+jsInlineF("var doHPRCTable = true;\n");
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -26458,18 +26482,22 @@ char* handler = trackDbSetting(tdb, "trackHandler");
 char *table = (tdb ? tdb->table : track);
 if (sameWord(table, "getDna"))
     {
+    htmlDoNotTranslate();
     doGetDna1();
     }
 else if (sameWord(table, "htcGetDna2"))
     {
+    htmlDoNotTranslate();
     doGetDna2();
     }
 else if (sameWord(table, "htcGetDna3"))
     {
+    htmlDoNotTranslate();
     doGetDna3();
     }
 else if (sameWord(table, "htcGetDnaExtended1"))
     {
+    htmlDoNotTranslate();
     doGetDnaExtended1();
     }
 else if (sameWord(table, "buildBigPsl"))
@@ -27677,6 +27705,10 @@ else if (tdb != NULL &&
     {
     doBarChartDetails(tdb, item);
     printTrackHtml(tdb);
+    }
+else if (startsWith("hprcDeletions", table) || startsWith("hprcInserts", table) || startsWith("hprcArr", table))
+    {
+    doHPRCTable(tdb, item);
     }
 else if (tdb != NULL)
     {

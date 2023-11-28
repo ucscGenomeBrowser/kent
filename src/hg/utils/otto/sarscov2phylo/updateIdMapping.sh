@@ -27,15 +27,14 @@ installDir=/hive/users/angie/gisaid
 
 ncbiDir=$ottoDir/ncbi.$today
 cogUkDir=$ottoDir/cogUk.$today
-# Last time I checked, CNCB had not updated since September, just keep using what we have
-cncbDir=$ottoDir/cncb.latest
+cncbDir=$ottoDir/cncb.$today
 
 # Set up input files for Chris's scripts to map GISAID <--> public sequences
 cd $mapScriptDir
 rm -rf input/$today
 mkdir input/$today
 cd input/$today
-ln -sf $cncbDir/cncb.nonGenBank.fasta .
+ln -sf $cncbDir/cncb.nonGenBank.fasta.xz .
 ln -sf $ncbiDir/genbank.fa.xz .
 ln -sf $cogUkDir/cog_all.fasta.xz .
 ln -sf $nextfasta .

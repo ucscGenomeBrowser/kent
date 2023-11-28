@@ -1324,11 +1324,11 @@ There are no extra options that can appear on the type hic line.
 
 <div class="decorator"><span class="types bed bigBed genePred bigGenePred psl bigPsl"></span>
 <div class="format"><code>decorator.default.*</code></div>
-    <p>Decorators allow annotation to be placed on top of linkedFeatures tracks by
-    highlighting regions and adding glyphs on top of them.  The decorators themselves
-    can be configured with a small selection of trackDb settings as follows.  For a
-    more interactive introduction to decorators, see the <a
-    href="../decorator.html">decorator documentation</a>.</p>
+    <p>Decorators allow annotation to be placed on top of BED 12+, bigBed, PSL, and
+    bigGenePred tracks by highlighting regions and adding glyphs on top of them.
+    The decorators themselves can be configured with a small selection of trackDb
+    settings as follows.  For a more interactive introduction to decorators, see the <a
+    href="../decorator.html">Track Decorators</a> help page.</p>
     <p>NB: In all of the following settings, <code>decorator.default.</code> is used as
     a prefix to indicate that the settings should be applied to the decorator and not the
     primary track.  This is necessary because many settings that you can apply to
@@ -1345,7 +1345,8 @@ There are no extra options that can appear on the type hic line.
     <p><code>decorator.default.filterValues &lt;specification&gt;</code></p>
     <p>Decorators support the same filter options that bigBed tracks do.  This includes
     the <code>filter</code>, <code>filterText</code>, and <code>filterValues</code>
-    settings, as described in <a href="../hubQuickStartFilter.html">this document</a>.</p>
+    settings, as described in the
+    <a href="../hubQuickStartFilter.html">Track Hub Filters Quick Start Guide</a>.</p>
     <p><code>decorator.default.mouseOver &lt;specification&gt;</code></p>
     <p>Decorators also support the same <code>mouseOver</code> and <code>mouseOverField</code>
     settings that can be applied to bigBed tracks.</p>

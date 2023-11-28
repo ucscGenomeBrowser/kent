@@ -13,10 +13,19 @@ htdocsHgDownload=/usr/local/apache/htdocs-hgdownload
 hubsDownload=${htdocsHgDownload}/hubs/${name}
 asmHubSrc=/hive/data/genomes/asmHubs/${name}
 
-all:: makeDirs mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
+all:: sanityCheck makeDirs mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
 
 makeDirs:
 	mkdir -p ${destDir}
+
+sanityCheck:
+	@goodBad=$$(cut -d'_' -f1-2 ${orderList} | sort | uniq -c | awk '$$1 > 1' | wc -l); \
+	if [ $$goodBad -ne 0 ]; then \
+	    tsvFile=$$(basename ${orderList}); \
+	    echo "ERROR: duplicate accession in '$$tsvFile'"; \
+	    cut -d'_' -f1-2 ${orderList} | sort | uniq -c | awk '$$1 > 1'; \
+	    exit 255; \
+	fi
 
 sshKeyDownload:
 	ssh -o PasswordAuthentication=no qateam@hgdownload date

@@ -1,4 +1,5 @@
 // "use strict";
+/* jshint esnext: true */
 
 // insert a node after the reference node
 function insertAfter(newNode, referenceNode) {
@@ -139,10 +140,145 @@ function dataToTable(label, data) {
         newTableNode  = makeGenericTable(data);
     return newTableNode ;
 }
+ 
+function makeVisInput(parentEl, name, trackName="", defaultVis="Hide") {
+    ["Hide","Dense","Squish","Pack","Full"].forEach(function(vis) {
+        let label = document.createElement("label");
+        //label.classList.add(name);
+        let ctrl = document.createElement("input");
+        ctrl.classList.add(name);
+        ctrl.type = "radio";
+        ctrl.name = name;
+        ctrl.value = vis;
+        if (defaultVis.toLowerCase() === vis.toLowerCase()) {
+            ctrl.checked = true;
+        }       
+        ctrl.setAttribute("data-default", ctrl.checked);
+        if (trackName.length > 0) {
+            ctrl.setAttribute("data-trackName", trackName);
+        }           
+        label.appendChild(ctrl);
+        label.append(vis);
+        parentEl.append(label);
+    }); 
+}
+
+function makeSetAllDiv(parentEl, text, classPre) {
+    let textDiv = document.createElement("div");
+    textDiv.append(text);
+    textDiv.classList.add(classPre + "Text");
+    textDiv.classList.add("gridItem");
+    let ctrlDiv = document.createElement("div");
+    makeVisInput(ctrlDiv, classPre + "Vis");
+    ctrlDiv.classList.add(classPre + "Ctrl");
+    ctrlDiv.classList.add("gridItem");
+    parentEl.append(textDiv);
+    parentEl.append(ctrlDiv);
+}   
+
+// assume the first row, second column of the first bedExtraTbl is a list of assemblies
+// with corresponding chain tracks
+function makeHPRCTable() {
+    let tbl = $(".bedExtraTbl");
+    if (tbl.length > 0) {
+        tbl = tbl[0];
+        let td = tbl.firstChild.firstChild.children[1];
+        
+        // get the list of assemblies
+        asms = td.innerText;
+        
+        // clear the old text
+        td.replaceChildren();
+        
+        let newForm = document.createElement("form");
+        td.append(newForm);
+        newForm.name = "chainBreak";
+        newForm.action = "../cgi-bin/hgTracks";
+        newForm.method = "POST";
+        
+        // the hidden hgsid for hgTracks
+        let hgsidInput = document.createElement("input");
+        hgsidInput.type = "hidden";
+        hgsidInput.name = "hgsid";
+        hgsidInput.value = common.hgsid;
+        newForm.append(hgsidInput);
+        
+        newForm.innerHTML += "View tracks";
+        let submitBtn = document.createElement("input");
+        submitBtn.type = "submit";
+        newForm.append(submitBtn);
+        
+        let newTblDiv = document.createElement("div");
+        newTblDiv.classList.add("chainBreak");
+        newForm.append(newTblDiv);
+        setAllText = "Change display mode of all assembly chain tracks";
+        makeSetAllDiv(newTblDiv, setAllText, "topSetAll");
+        
+        // go through and make each link
+        asms.split(",").forEach(function(asm) {
+            asmSafe = asm.replaceAll(".","_");
+            let trackTextDiv = document.createElement("div");
+            trackTextDiv.append(asmSafe + " display mode:");
+            newTblDiv.append(trackTextDiv);
+            let trackCtrlDiv = document.createElement("div");
+            let defaultVis = "Hide";
+            if (typeof chainVis !== "undefined" && asm in chainVis) {defaultVis = chainVis[asm];}
+            makeVisInput(trackCtrlDiv, asmSafe+"SetVis", trackName=asm, defaultVis=defaultVis);
+            newTblDiv.append(trackCtrlDiv);
+            trackTextDiv.classList.add("gridItem");
+            trackCtrlDiv.classList.add("gridItem");
+            // TODO: allow makeVisInput to take a default vis
+            $("."+asmSafe+"SetVis").each(function(i, clickedElem) {
+                clickedElem.addEventListener("click", function(e) {
+                   $("[class$=SetAllVis]").each(function(i, radioElem) {
+                        if (radioElem.checked) {
+                            radioElem.checked = false;
+                        }
+                    });
+                });
+            });
+        });
+        if (asms.split(",").length > 25 ) {
+            makeSetAllDiv(newTblDiv, setAllText, "bottomSetAll");
+        }   
+        $("[class$=SetAllVis]").each(function(i, elem) {
+            elem.addEventListener("click", function(e) {
+                // change vis of each track
+                $("[class$=Vis][value="+e.target.value).each(function(i, e) {
+                    e.checked = true;
+                });
+            });
+        });
+        newForm.addEventListener("submit", function(e) {
+            inputs  = e.target.elements;
+            for (let i = 0; i < inputs.length; i++) {
+                input = inputs[i];
+                if (!input.checked) {
+                    // pass hgsid and other variables on through
+                    continue;
+                }
+                if (input.name.endsWith("SetAllVis") || (input.getAttribute("data-default") === input.checked.toString())) {
+                    input.disabled = true;
+                } else {
+                    // change the form name to a track name so the track can be on
+                    trackName = "chainHprc" + input.getAttribute("data-trackName");
+                    input.name = trackName;
+                    input.value = input.value.toLowerCase();
+                }
+            }
+        });
+    }
+}
+
+
+
 
 // on page load initialize VEP, Population Frequency and Haplotype Tables
 // for gnomAD v3.1.1 track
 $(document).ready(function() {
+    if (typeof doHPRCTable !== "undefined") {
+        makeHPRCTable();
+    }
     if ($("#svgTable") !== null) {
         // redraw the svg with appropriate widths for all columns
         // swatchWidth and columnSpacer are taken from svgBarChart() in hgc/barChartClick.c

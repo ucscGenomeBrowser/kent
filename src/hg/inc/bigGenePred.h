@@ -31,7 +31,9 @@ struct bigGenePred
     char *name2;	/* Alternative/human readable name */
     enum cdsStatus  cdsStartStat;	/* enum('none','unk','incmpl','cmpl') */
     enum cdsStatus cdsEndStat;	/* enum('none','unk','incmpl','cmpl') */
-    int *exonFrames;	/* Exon frame {0,1,2}, or -1 if no frame for exon */
+    int *exonFrames;	/* Reading frame of the start of the CDS region of the exon,
+                         * in the direction of transcription (0,1,2), or -1 if there
+                         * is no CDS region. */
     char *type;	/* Transcript type */
     char *geneName;	/* Primary identifier for gene */
     char *geneName2;	/* Alternative/human readable gene name */

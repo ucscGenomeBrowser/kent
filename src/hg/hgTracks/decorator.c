@@ -875,7 +875,7 @@ if (isNotEmpty(mouseOverText))
 }
 
 
-struct decorator *decoratorListFromBbi(struct trackDb *decTdb, char *chrom, struct bigBedInterval *intervalList, struct bigBedFilter *decoratorFilters, int fieldCount, struct mouseOverScheme *mouseScheme)
+struct decorator *decoratorListFromBbi(struct trackDb *decTdb, char *chrom, struct bigBedInterval *intervalList, struct bigBedFilter *decoratorFilters, struct bbiFile *bbi, struct mouseOverScheme *mouseScheme)
 /* Take an intervalList (as retrieved from a bbi file) and turn it into a list of decorations.
  * The resulting decorator should also include a hash table that is keyed on the decorated
  * items of the primary track
@@ -902,10 +902,10 @@ for (thisInterval = intervalList; thisInterval != NULL; thisInterval = thisInter
     {
     if (decoratorFilters != NULL)
         {
-        char *bedRow[fieldCount];
+        char *bedRow[bbi->fieldCount];
         char startBuf[16], endBuf[16];
         bigBedIntervalToRow(thisInterval, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
-        if (!bigBedFilterInterval(bedRow, decoratorFilters))
+        if (!bigBedFilterInterval(bbi, bedRow, decoratorFilters))
             continue;
         }
     struct decoration *newDec = decorationFromInterval(chrom, thisInterval);
