@@ -176,7 +176,7 @@ the column labeled <b>common name and view in browser</b> to view that
 assembly in the genome browser.
 </p>
 
-<h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
+<h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> &lt;== additional information for these assemblies.</h3><br>
 
 <h3>Cite reference: To reference these resources in publications, please credit:</h3>
 <p>
