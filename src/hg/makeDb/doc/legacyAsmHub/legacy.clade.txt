@@ -159,6 +159,7 @@ GCA_027406575.1_mNycCou1.pri	mammals
 GCA_027409825.1_fScoJap1.pri	fish
 GCA_027477595.1_bHaeMex1.pri	birds
 GCA_027579445.1_bAmmNel1.pri	birds
+GCA_027579695.1_fNeoGra1.pri	fish
 GCA_027579735.1_aBomBom1.pri	vertebrate
 GCA_027887145.1_bAmmCau1.pri	birds
 GCA_027887155.1_rMalTer1.hap1	vertebrate
