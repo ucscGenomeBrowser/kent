@@ -142,6 +142,7 @@ GCA_017976375.1_bCucCan1.pri	birds
 GCA_017976425.1_fToxJac2.pri	fish
 GCA_018139145.1_ASM1813914v1	birds
 GCA_018296145.1_Otsh_v2.0	fish
+GCA_019393635.1_mDroGli1.pri	mammals
 GCA_020740725.1_bCorHaw1.pri.cur	birds
 GCA_020740795.1_bApuApu2.pri.cur	birds
 GCA_020826845.1_mDicBic1.mat.cur	mammals
