@@ -964,7 +964,6 @@ urlLabel View on the Vista Enhancer Browser
 bigDataUrl /gbdb/mm9/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
 pennantIcon New red ../goldenPath/newsarch.html
-release alpha
 
 track numtSeq
 compositeTrack on
