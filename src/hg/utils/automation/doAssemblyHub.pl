@@ -1522,6 +1522,8 @@ sub doAddMask {
                     $workhorse, $runDir, $whatItDoes);
 
   my $wmMasked=`grep "masked total" $buildDir/trackData/windowMasker/faSize.$defaultName.cleanWMSdust.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+  chomp $wmMasked;
+  $wmMasked = 0 if ($wmMasked > 98);
   my $rmMasked = 0;
   if (! $noRmsk) {
     $rmMasked=`grep "masked total" $buildDir/trackData/repeatMasker/faSize.rmsk.txt | awk '{print \$1}' | sed -e 's/%//;'`;
