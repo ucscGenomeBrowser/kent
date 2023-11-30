@@ -64,7 +64,7 @@ botDelayMsecs = 0
 # two global variables: the first is the botDelay limit after which the page is slowed down and a warning is shown
 # the second is the limit after which the page is not shown anymore
 botDelayWarn = 1000
-botDelayBlock = 5000
+botDelayBlock = 2000
 
 jksqlTrace = False
 
