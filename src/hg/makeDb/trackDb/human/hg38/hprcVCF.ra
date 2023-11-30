@@ -1,27 +1,28 @@
 track hprcVCF
 superTrack on
-shortLabel HPRC variants
-longLabel HPRC Variants
+shortLabel Short variants
+longLabel Short Variants
 group hprc
 html hprcVCF
 
-    track hprcDecomposed
+
+    track hprcVCFDecomposedUnder4
     parent hprcVCF
-    shortLabel HPRC variants
-    longLabel HPRC Variants decomposed from hprc-v1.0-mc.grch38.vcfbub.a100k.wave.vcf.gz
+    shortLabel HPRC variants <= 3bp
+    longLabel HPRC VCF variants filtered for items size <= 3bp
     type vcfTabix
     showHardyWeinberg on
     configureByPopup off
     maxWindowToDraw 200000
     dataVersion August 2023
-    visibility hide
-    bigDataUrl /gbdb/hg38/hprc/decomposed.vcf.gz
+    visibility pack
+    bigDataUrl /gbdb/hg38/hprc/decomposedUnder4.vcf.gz
     html hprcVCF
 
     track hprcVCFDecomposedOver3
     parent hprcVCF
-    shortLabel HPRC VCF > 3
-    longLabel HPRC VCF filtered for items size > 3
+    shortLabel HPRC variants > 3bp
+    longLabel HPRC VCF variants filtered for items size > 3bp
     type vcfTabix
     showHardyWeinberg on
     configureByPopup off
@@ -31,15 +32,16 @@ html hprcVCF
     bigDataUrl /gbdb/hg38/hprc/decomposedOver3.vcf.gz
     html hprcVCF
 
-    track hprcVCFDecomposedUnder4
+    track hprcDecomposed
     parent hprcVCF
-    shortLabel HPRC VCF > 3
-    longLabel HPRC VCF filtered for items size < 4
+    shortLabel HPRC all variants
+    longLabel HPRC Variants decomposed from hprc-v1.0-mc.grch38.vcfbub.a100k.wave.vcf.gz, no size filtering
     type vcfTabix
     showHardyWeinberg on
     configureByPopup off
     maxWindowToDraw 200000
     dataVersion August 2023
     visibility hide
-    bigDataUrl /gbdb/hg38/hprc/decomposedUnder4.vcf.gz
+    bigDataUrl /gbdb/hg38/hprc/decomposed.vcf.gz
     html hprcVCF
+

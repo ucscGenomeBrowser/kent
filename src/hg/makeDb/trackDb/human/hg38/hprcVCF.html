@@ -1,5 +1,18 @@
 <h2>Description</h2>
 
+<p>
+This track shows short nucleotide variants of a few basepairs when aligning
+HPRC genomes to the hg38 reference assembly. The alignment was made with the
+Minigraph-cactus approach described in the references below.
+</p>
+
+<p>There are three subtracks in this composite container track:
+<ol>
+    <li>All short variants &lt;= 3 bp long
+    <li>All short variants &gt; 3 bp long
+    <li>All short variants up to 50bp, without any length filter
+</ol>
+
 <h2>Methods</h2>
 <p>
 The MAF was obtained from the HPRC v1.0 minigraph-cactus HAL file
@@ -19,7 +32,7 @@ zcat hprc-v1.0-mc-grch38.maf.gz | mafDuplicateFilter -m - -k \
 
 <h2>Credits</h2>
 <p>
-Thank you to Glenn Hickey for providing the HAL file from the HPRC project.
+Thanks to Glenn Hickey for providing the HAL file from the HPRC project and for making these VCFs from them.
 </p>
 
 <h2>References</h2>

@@ -1,0 +1,142 @@
+track mappability
+compositeTrack on
+subGroup1 view Views SR=Single-read MR=Multi-read
+type bigWig
+group map
+shortLabel Mappability
+longLabel Single-read and multi-read mappability by Umap
+visibility hide
+html html/mappability.html
+pennantIcon New red ../goldenPath/newsarch.html "Released November 30th 2023"
+
+    track umapBigBed
+    parent mappability on
+    type bigBed 6
+    visibility squish
+    view SR
+
+        track umap24
+        parent umapBigBed on
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k24.Unique.Mappability.bb
+        shortLabel Umap S24
+        longLabel Single-read mappability with 24-mers
+        subGroups view=SR
+        color 80,20,240
+        priority 1
+
+        track umap36
+        parent umapBigBed off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k36.Unique.Mappability.bb
+        shortLabel Umap S36
+        longLabel Single-read mappability with 36-mers
+        subGroups view=SR
+        color 80,20,240
+        priority 2
+
+        track umap50
+        parent umapBigBed off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k50.Unique.Mappability.bb
+        shortLabel Umap S50
+        longLabel Single-read mappability with 50-mers
+        subGroups view=SR
+        color 80,20,240
+        priority 3
+
+        track umap100
+        parent umapBigBed off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k100.Unique.Mappability.bb
+        shortLabel Umap S100
+        longLabel Single-read mappability with 100-mers
+        subGroups view=SR
+        color 80,20,240
+        priority 4
+
+        track umap150
+        parent umapBigBed off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k150.Unique.Mappability.bb
+        shortLabel Umap S150
+        longLabel Single-read mappability with 150-mers
+        subGroups view=SR
+        color 80,20,240
+        priority 5
+
+        track umap250
+        parent umapBigBed off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k250.Unique.Mappability.bb
+        shortLabel Umap S250
+        longLabel Single-read mappability with 250-mers
+        subGroups view=SR
+        color 80,20,240
+        priority 6
+
+    track umapBigWig
+    parent mappability on
+    type bigWig
+    visibility full
+    viewLimits 0:1
+    view MR
+
+        track umap24Quantitative
+        parent umapBigWig on
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k24.Umap.MultiTrackMappability.bw
+        shortLabel Umap M24
+        longLabel Multi-read mappability with 24-mers
+        subGroups view=MR
+        color 80,70,240
+        type bigWig 0.027778 1.0
+        priority 7
+
+        track umap36Quantitative
+        parent umapBigWig off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k36.Umap.MultiTrackMappability.bw
+        shortLabel Umap M36
+        longLabel Multi-read mappability with 36-mers
+        visibility hide
+        subGroups view=MR
+        color 80,70,240
+        type bigWig 0.027778 1.0
+        priority 8
+
+        track umap50Quantitative
+        parent umapBigWig off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k50.Umap.MultiTrackMappability.bw
+        shortLabel Umap M50
+        longLabel Multi-read mappability with 50-mers
+        visibility hide
+        subGroups view=MR
+        color 80,70,240
+        type bigWig 0.027778 1.0
+        priority 9
+
+        track umap100Quantitative
+        parent umapBigWig off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k100.Umap.MultiTrackMappability.bw
+        shortLabel Umap M100
+        longLabel Multi-read mappability with 100-mers
+        visibility hide
+        subGroups view=MR
+        color 80,70,240
+        type bigWig 0.027778 1.0
+        priority 10
+
+        track umap150Quantitative
+        parent umapBigWig off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k150.Umap.MultiTrackMappability.bw
+        shortLabel Umap M150
+        longLabel Multi-read mappability with 150-mers
+        visibility hide
+        subGroups view=MR
+        color 80,70,240
+        type bigWig 0.027778 1.0
+        priority 11
+
+        track umap250Quantitative
+        parent umapBigWig off
+        bigDataUrl /gbdb/hs1/hoffmanMappability/k250.Umap.MultiTrackMappability.bw
+        shortLabel Umap M250
+        longLabel Multi-read mappability with 250-mers
+        visibility hide
+        subGroups view=MR
+        color 80,70,240
+        type bigWig 0.027778 1.0
+        priority 12
