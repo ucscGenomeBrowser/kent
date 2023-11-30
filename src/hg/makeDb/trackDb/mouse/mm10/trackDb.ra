@@ -435,7 +435,7 @@ longLabel VISTA Enhancers
 group regulation
 url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=2&experiment_id=$<experimentId>
 type bigBed 9 +
-urlLabel Vista Enhancer Browser
+urlLabel View on the Vista Enhancer Browser
 bigDataUrl /gbdb/mm10/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
 pennantIcon New red ../goldenPath/newsarch.html

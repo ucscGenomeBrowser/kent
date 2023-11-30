@@ -1319,8 +1319,16 @@ include altSeqComposite10.ra alpha
 
 include hg19Patch13.ra alpha
 
-track vistaEnhancers override
-url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
+track vistaEnhancersBb
+shortLabel VISTA Enhancers
+longLabel VISTA Enhancers
+group regulation
+url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=1&experiment_id=$<experimentId>
+type bigBed 9 +
+urlLabel View on the Vista Enhancer Browser
+bigDataUrl /gbdb/hg19/vistaEnhancers/vistaEnhancers.bb
+itemRgb on
+pennantIcon New red ../goldenPath/newsarch.html
 
 track evofold override
 mafTrack multiz46way
