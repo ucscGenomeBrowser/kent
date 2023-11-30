@@ -63,6 +63,44 @@ target=_blank>our GitHub page</a>.</p>
 <!-- ============= 2023 archived news ============= -->
 <a name="2023"></a>
 
+<a name="113023"></a>
+<h2>Nov. 30, 2023 &nbsp;&nbsp; Support for previous RefSeq transcripts while searching on hg38</h2>
+<p>
+Have you ever found a variant in a paper and searched for it on the Genome Browser only 
+to receive an error that the sequence cannot be found? Or perhaps looked up a familiar 
+NM_ identifier and suddenly found no results?</p>
+<p>
+We are pleased to share that we now have support for searching previous RefSeq 
+transcript versions on hg38. This support works for both NM_ accessions 
+and <a target="_blank" href="https://hgvs-nomenclature.org/en/latest/">HGVS</a> 
+searching as demonstrated below:</p>
+
+<p>
+<b>Searching for the latest transcript which always worked:</b>
+<ul>
+<li>
+Sequence search: <a target="_blank" 
+href="../cgi-bin/hgSearch?search=NM_198056.3&db=hg38">NM_198056.3</a></li>
+<li>
+HGVS search: <a target="_blank"
+href="../cgi-bin/hgSearch?search=NM_198056.3%3Ac.1A%3EC&db=hg38">NM_198056.3:c.1A>C</a></li></ul></p>
+<p>
+<b>Searching for a previous version that now works::</b>
+<ul>
+<li>
+Sequence search: <a target="_blank"
+href="../cgi-bin/hgSearch?search=NM_198056.3&db=hg38">NM_198056.2</a></li>
+<li>
+HGVS search: <a target="_blank"
+href="../cgi-bin/hgSearch?search=NM_198056.3%3Ac.1A%3EC&db=hg38">NM_198056.2:c.1A>C</a></li></ul></p>
+
+<p>
+We thank <a target="_blank" href="https://www.ncbi.nlm.nih.gov/">NCBI</a> and Terence 
+Murphy for creating the archive of deprecated transcripts that allows this feature 
+to work. We would also like to thank the users who wrote requesting the feature 
+allowing us to prioritize it effectively. Finally, we would like to thank Chris Lee, 
+Max Haeussler, Gerardo Perez, and Lou Nassar for developing and testing this feature.</p>
+
 <a name="112223"></a>
 <h2>Nov. 22, 2023 &nbsp;&nbsp; CRISPR Targets for Zebrafish (danRer10/danRer11) now available</h2>
 <p>
