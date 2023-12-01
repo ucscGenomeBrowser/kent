@@ -1853,6 +1853,8 @@ function updateBrowser {
    done
    startMysql
 
+   hideSomeTracks
+
    echo2 update finished
 }
 
