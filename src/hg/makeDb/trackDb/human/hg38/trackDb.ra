@@ -893,9 +893,13 @@ include hprcChain.ra alpha
 include hprcCoverage97.ra alpha
 
 # other HPRC experiments
+include hprcChainNet.ra alpha
+
+# the hprcChainNet.ra replaces these two:
+# include hprcChains.ra alpha
+# include hprcNets.ra alpha
+
 include chainsHprc.ra alpha
-include hprcChains.ra alpha
-include hprcNets.ra alpha
 include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra alpha
 include hprcArr.ra alpha
