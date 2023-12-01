@@ -598,14 +598,12 @@ def findDot():
     if binPath is not None and binPath.strip()!="":
         return binPath
 
-    installedBin = which("dot")
+    staticPath = join("loader", "dot_static")
+        return staticPath
 
+    installedBin = which("dot")
     if installedBin is None:
-        staticPath = join("loader", "dot_static")
-        if not isfile(staticPath):
-            return None
-        else:
-            return staticPath
+        return None
     else:
         sys.stderr.write("Using graphviz binary %s\n" % installedBin)
         return installedBin
