@@ -27,7 +27,7 @@ html hprcChains
     spectrum on
 
         track chainHprcGCA_018469875v1
-        subTrack hprcChainNetViewchain off
+        subTrack hprcChainNetViewchain
         subGroups view=chain sample=s001 population=afr subpop=gwd hap=mat
         shortLabel HG02622.mat
         longLabel HG02622.mat HG02622.pri.mat.f1_v2 (May 2021 GCA_018469875.1_HG02622.pri.mat.f1_v2) HPRC project computed Chained Alignments
@@ -834,7 +834,7 @@ html hprcChains
     subTrack hprcChainNet
 
         track netHprcGCA_018469875v1
-        subTrack hprcChainNetViewnet off
+        subTrack hprcChainNetViewnet
         subGroups view=net sample=s001 population=afr subpop=gwd hap=mat
         shortLabel HG02622.mat
         longLabel HG02622.mat HG02622.pri.mat.f1_v2 (May 2021 GCA_018469875.1_HG02622.pri.mat.f1_v2) HPRC project computed Chain Nets
