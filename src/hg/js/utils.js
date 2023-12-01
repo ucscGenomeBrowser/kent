@@ -4127,14 +4127,28 @@ function convertTitleTagsToMouseovers() {
         }
     });
 
+    /* Mouseover should clear if you leave the document window altogether */
+    document.body.addEventListener("mouseleave", (ev) => {
+        clearTimeout(mouseoverTimer);
+        mousemoveController.abort();
+        hideMouseoverText(mouseoverContainer);
+        canShowNewMouseover = false;
+        // let mouseovers show up again upon moving back in to the window
+        // but only need the event once
+        document.body.addEventListener("mouseenter", (ev) => {
+            canShowNewMousoever = true;
+        }, {once: true});
+    });
+
     /* make the above mouseovers go away if we are in an input or select menu */
     const inps = document.getElementsByTagName("input");
     const sels = document.getElementsByTagName("select");
     for (let inp of inps) {
         if (!(inp.type == "hidden" || inp.type == "HIDDEN")) {
             inp.addEventListener("focus", (ev) => {
-                hideMouseoverText(mouseoverContainer);
+                clearTimeout(mouseoverTimer);
                 mousemoveController.abort();
+                hideMouseoverText(mouseoverContainer);
                 canShowNewMouseover = false;
             });
             inp.addEventListener("blur", (evt) => {
@@ -4144,8 +4158,9 @@ function convertTitleTagsToMouseovers() {
     }
     for (let sel of sels) {
         sel.addEventListener("focus", (ev) => {
-            hideMouseoverText(mouseoverContainer);
+            clearTimeout(mouseoverTimer);
             mousemoveController.abort();
+            hideMouseoverText(mouseoverContainer);
             canShowNewMouseover = false;
         });
         sel.addEventListener("blur", (evt) => {
@@ -4157,8 +4172,9 @@ function convertTitleTagsToMouseovers() {
     let imgTbl = document.getElementById("imgTbl");
     if (imgTbl) {
         imgTbl.addEventListener("contextmenu", function(e) {
-            hideMouseoverText(mouseoverContainer);
+            clearTimeout(mouseoverTimer);
             mousemoveController.abort();
+            hideMouseoverText(mouseoverContainer);
             canShowNewMouseover = false;
             // right-click menu doesn't capture focus so manually catch it
             document.addEventListener("click", function(ev) {
