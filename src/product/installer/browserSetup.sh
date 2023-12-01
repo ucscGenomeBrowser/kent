@@ -1729,7 +1729,7 @@ function hideSomeTracks
     echo2 Hiding some tracks by default and removing some tracks from searches
     for db in $DBS; do
        echo $db
-       if [ "$db" == "go" -o "$db" == "uniProt" -o "$db" == "visiGene" -o "$db" == "hgFixed" ] ; then
+       if [ "$db" == "go" -o "$db" == "uniProt" -o "$db" == "visiGene" -o "$db" == "hgFixed" -o "$db" == "proteome" ] ; then
                continue
        fi
        for track in $hideTracks; do
