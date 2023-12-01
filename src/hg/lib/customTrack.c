@@ -895,6 +895,7 @@ boolean changedCt = FALSE;
 if (customTracksExist(cart, &ctFileName))
     {
     /* protect against corrupted CT trash file or table, or transient system error */
+    boolean loadFailed = FALSE;
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
@@ -909,8 +910,14 @@ if (customTracksExist(cart, &ctFileName))
              "please reach out to genome-www@soe.ucsc.edu and send us a session link "
              "where this error occurs",
              errCatch->message->string);
+        loadFailed = TRUE;
         }
     errCatchFree(&errCatch);
+    // If there was a failure in loading the custom tracks, return immediately -- don't try to
+    // add or merge in new custom tracks.  The cartRemove statements below will be skipped, so we
+    // can try again next click.
+    if (loadFailed)
+        return NULL;
 
     /* handle selected tracks -- update doc, remove, etc. */
     char *selectedTable = NULL;
