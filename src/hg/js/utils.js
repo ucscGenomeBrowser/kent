@@ -3875,13 +3875,17 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
     let windowHeight = window.innerHeight;
 
     // figure out how large the mouseover will be
-    // use firstChild because popUpEl should be a div with a sole child in it
-    let popUpRect = popUpEl.firstChild.getBoundingClientRect();
+    let popUpRect = popUpEl.getBoundingClientRect();
     // position the popUp to the right and above the cursor by default
+    // tricky: when the mouse enters the element from the top, we want the tooltip
+    // relatively close to the element itself, because the mouse will already be
+    // on top of it, leaving it clickable or interactable. But if we are entering
+    // the element from the bottom, if we position the tooltip close to the mouse,
+    // we obscure the element itself, so we need to leave a bit of extra room
     let topOffset;
-    if (refEl.coords !== undefined && refEl.coords.length > 0 && refEl.coords.split(",").length == 4) {
-        // boundingRect has determined exactly as close as we can get to the item without covering
-        topOffset = refTop - popUpRect.height;
+    if (Math.abs(mouseY - refBottom) < Math.abs(mouseY - refTop)) {
+        // just use the mouseY position for placement, the -15 accounts for enough room
+        topOffset = mouseY - window.scrollY - popUpRect.height - 15;
     } else {
         // just use the mouseY position for placement, the -5 accounts for cursor size
         topOffset = mouseY - window.scrollY - popUpRect.height - 5;
@@ -3975,7 +3979,7 @@ function mousemoveHelper(e) {
         // if we are over another mouseable element we want to show that one instead
         // use this timer to do so
         let callback = mousemoveTimerHelper.bind(mouseoverContainer);
-        mousemoveTimer = setTimeout(callback, 150, e);
+        mousemoveTimer = setTimeout(callback, 300, e);
     }
 
     if (mousedNewItem && canShowNewMouseover && !mouseIsOverPopup(e, this, 0)) {

@@ -897,6 +897,7 @@ visibility hide
 color 50,70,120
 type bed 5 +
 useScore 1
+release alpha
 
 track uc16
 shortLabel Ultra Conserved
