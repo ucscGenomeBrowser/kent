@@ -12,9 +12,6 @@
 #include "trashDir.h"
 #include "vcf.h"
 
-// Parameter constants:
-int minSamplesForOwnTree = 3;  // If user uploads at least this many samples, show tree for them.
-
 static char ***imputedBasesByPosition(struct hash *samplePlacements, struct slName *sampleIds,
                                       int chromSize)
 /* Unpack imputedBases into an array of (a few) arrays indexed by 0-based position and sample index,
@@ -181,41 +178,30 @@ if (anyImputedBases(samplePlacements, sampleIds))
 return ctVcfTn;
 }
 
-static struct phyloTree *uploadedSamplesTree(char *sampleTreeFile, char *bigTreeFile,
-                                             struct slName *sampleIds)
-/* Read in tree from bigTreeFile, prune all nodes that have no leaf descendants in sampleIds,
- * save pruned tree to sampleTreeFile. */
-{
-struct phyloTree *tree = phyloOpenTree(bigTreeFile);
-tree = phyloPruneToIds(tree, sampleIds);
-FILE *f = mustOpen(sampleTreeFile, "w");
-phyloPrintTree(tree, f);
-carefulClose(&f);
-return tree;
-}
-
 static int heightForSampleCount(int fontHeight, int count)
 /* Return a height sufficient for this many labels stacked vertically. */
 {
 return (fontHeight + 1) * count;
 }
 
-static struct phyloTree *addSampleOnlyCustomTrack(FILE *ctF, struct tempName *vcfTn,
-                                                  char *bigTreePlusFile, struct slName *sampleIds,
-                                                  char *geneTrack, int fontHeight, int *pStartTime)
+static void addSampleOnlyCustomTrack(FILE *ctF, struct tempName *vcfTn,
+                                     struct slName *sampleIds, struct phyloTree *sampleTree,
+                                     char *geneTrack, int fontHeight, int *pStartTime)
 /* Make custom track with uploaded VCF.  If there are enough samples to make a non-trivial tree,
  * then make the tree by pruning down the big tree plus samples to only the uploaded samples. */
 {
-struct phyloTree *sampleTree = NULL;
 fprintf(ctF, "track name=uploadedSamples description='Uploaded sample genotypes' "
         "type=vcf visibility=pack "
         "hapClusterEnabled=on hapClusterHeight=%d ",
         heightForSampleCount(fontHeight, slCount(sampleIds)));
-if (slCount(sampleIds) >= minSamplesForOwnTree)
+if (sampleTree != NULL)
     {
+    // Write tree of uploaded samples to a file so we can draw it in left label area.
     struct tempName sampleTreeTn;
     trashDirFile(&sampleTreeTn, "ct", "uploadedSamples", ".nwk");
-    sampleTree = uploadedSamplesTree(sampleTreeTn.forCgi, bigTreePlusFile, sampleIds);
+    FILE *f = mustOpen(sampleTreeTn.forCgi, "w");
+    phyloPrintTree(sampleTree, f);
+    carefulClose(&f);
     fprintf(ctF, "hapClusterMethod='treeFile %s' ", sampleTreeTn.forCgi);
     }
 else
@@ -229,7 +215,6 @@ while (lineFileNext(vcfLf, &line, NULL))
     fprintf(ctF, "%s\n",line);
 lineFileClose(&vcfLf);
 reportTiming(pStartTime, "add custom track for uploaded samples");
-return sampleTree;
 }
 
 static struct vcfFile *parseUserVcf(char *userVcfFile, int chromSize, int *pStartTime)
@@ -537,7 +522,7 @@ reportTiming(pStartTime, "write subtree custom tracks");
 
 struct tempName *writeCustomTracks(char *db, struct tempName *vcfTn, struct usherResults *ur,
                                    struct slName *sampleIds, char *source, int fontHeight,
-                                   struct phyloTree **retSampleTree, int *pStartTime)
+                                   struct phyloTree *sampleTree, int *pStartTime)
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 {
 char *chrom = hDefaultChrom(db);
@@ -560,12 +545,7 @@ else
     printf("<p>Subtree custom tracks are added when there are at most %d subtrees, "
            "but %d subtrees were found.</p>\n",
            MAX_SUBTREE_CTS, subtreeCount);
-struct phyloTree *sampleTree = addSampleOnlyCustomTrack(ctF, ctVcfTn,
-                                                        ur->singleSubtreeInfo->subtreeTn->forCgi,
-                                                        sampleIds, geneTrack, fontHeight,
-                                                        pStartTime);
-if (retSampleTree)
-    *retSampleTree = sampleTree;
+addSampleOnlyCustomTrack(ctF, ctVcfTn, sampleIds, sampleTree, geneTrack, fontHeight, pStartTime);
 carefulClose(&ctF);
 return ctTn;
 }
