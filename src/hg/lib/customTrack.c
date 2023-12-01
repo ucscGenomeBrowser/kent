@@ -894,7 +894,7 @@ boolean removedCt = FALSE;
 boolean changedCt = FALSE;
 if (customTracksExist(cart, &ctFileName))
     {
-    /* protect against corrupted CT trash file or table */
+    /* protect against corrupted CT trash file or table, or transient system error */
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
@@ -904,9 +904,11 @@ if (customTracksExist(cart, &ctFileName))
     errCatchEnd(errCatch);
     if (errCatch->gotError)
         {
-        remove(ctFileName);
-        warn("Custom track error (%s): removing custom tracks",
-                        errCatch->message->string);
+        warn("Custom track loading error (%s): failed to load custom tracks. "
+             "This is an internal error. If you want us to look into it and fix your custom track, "
+             "please reach out to genome-www@soe.ucsc.edu and send us a session link "
+             "where this error occurs",
+             errCatch->message->string);
         }
     errCatchFree(&errCatch);
 
