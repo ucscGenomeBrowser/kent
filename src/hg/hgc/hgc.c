@@ -27706,7 +27706,7 @@ else if (tdb != NULL &&
     doBarChartDetails(tdb, item);
     printTrackHtml(tdb);
     }
-else if (startsWith("hprcDeletions", table) || startsWith("hprcInserts", table) || startsWith("hprcArr", table))
+else if (startsWith("hprcDeletions", table) || startsWith("hprcInserts", table) || startsWith("hprcArr", table)|| startsWith("hprcDouble", table))
     {
     doHPRCTable(tdb, item);
     }
