@@ -3575,7 +3575,7 @@ if (hgvsList)
                 trackTable = "lrgTranscriptAli";
             else if (startsWith("wgEncodeGencode", pslTable))
                 trackTable = pslTable;
-            else if (startsWith("ncbiRefSeqPsl", pslTable))
+            else if (sameString("ncbiRefSeqPsl", pslTable))
                 {
                 if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
                     startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
@@ -3586,6 +3586,8 @@ if (hgvsList)
                 else
                     trackTable = "ncbiRefSeq";
                 }
+            else if (sameString("ncbiRefSeqPslHistorical", pslTable))
+                trackTable = "ncbiRefSeqHistorical";
             else
                 trackTable = "refGene";
             dyStringPrintf(chromPosIndex, "%s%s%d%d", trackTable, mapping->chrom,
