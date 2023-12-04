@@ -4,8 +4,8 @@ setenv LASTREVIEWDAY 2023-11-06             # v457 preview
 setenv previewSubversion       # empty string unless mistake, otherwise .1 etc
 
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
-setenv REVIEW2DAY  2023-11-13               # v457 preview2
-setenv LASTREVIEW2DAY  2023-10-23           # v456 preview2
+setenv REVIEW2DAY  2023-12-04               # v458 preview2
+setenv LASTREVIEW2DAY  2023-11-13           # v457 preview2
 setenv preview2Subversion      # empty string unless mistake, otherwise .1 etc
 
 # set these three for final build:  increment NN and copy date from TODAY to LASTWEEK
