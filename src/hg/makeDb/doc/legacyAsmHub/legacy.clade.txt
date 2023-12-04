@@ -142,6 +142,7 @@ GCA_017976375.1_bCucCan1.pri	birds
 GCA_017976425.1_fToxJac2.pri	fish
 GCA_018139145.1_ASM1813914v1	birds
 GCA_018296145.1_Otsh_v2.0	fish
+GCA_019393635.1_mDroGli1.pri	mammals
 GCA_020740725.1_bCorHaw1.pri.cur	birds
 GCA_020740795.1_bApuApu2.pri.cur	birds
 GCA_020826845.1_mDicBic1.mat.cur	mammals
@@ -159,10 +160,12 @@ GCA_027406575.1_mNycCou1.pri	mammals
 GCA_027409825.1_fScoJap1.pri	fish
 GCA_027477595.1_bHaeMex1.pri	birds
 GCA_027579445.1_bAmmNel1.pri	birds
+GCA_027579695.1_fNeoGra1.pri	fish
 GCA_027579735.1_aBomBom1.pri	vertebrate
 GCA_027887145.1_bAmmCau1.pri	birds
 GCA_027887155.1_rMalTer1.hap1	vertebrate
 GCA_027887165.1_mMonDom1.pri	mammals
+GCA_028018385.1_mNeoNeb1.pri	mammals
 GCA_028018845.1_bMelGeo1.pri	birds
 GCA_028023285.1_mBalRic1.hap2	mammals
 GCA_028500815.1_bRisTri1.patW.cur.20221130	birds

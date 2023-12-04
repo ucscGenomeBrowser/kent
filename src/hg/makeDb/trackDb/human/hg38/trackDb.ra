@@ -182,7 +182,7 @@ longLabel VISTA Enhancers
 group regulation
 url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=1&experiment_id=$<experimentId>
 type bigBed 9 +
-urlLabel Vista Enhancer Browser
+urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg38/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
 pennantIcon New red ../goldenPath/newsarch.html
@@ -893,9 +893,13 @@ include hprcChain.ra alpha
 include hprcCoverage97.ra alpha
 
 # other HPRC experiments
+include hprcChainNet.ra alpha
+
+# the hprcChainNet.ra replaces these two:
+# include hprcChains.ra alpha
+# include hprcNets.ra alpha
+
 include chainsHprc.ra alpha
-include hprcChains.ra alpha
-include hprcNets.ra alpha
 include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra alpha
 include hprcArr.ra alpha

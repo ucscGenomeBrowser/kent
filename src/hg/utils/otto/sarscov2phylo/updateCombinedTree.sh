@@ -46,7 +46,7 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
     # $scriptDir/usherClusterRun.sh $today
     # Instead of the cluster, use Cheng's blazingly fast new usher-sampled:
     time $usher \
-        -T 64 -A -e 5 \
+        -T 50 -A -e 5 \
         -i prevRenamed.pb \
         -v new.masked.vcf.gz \
         -o merged.pb \
@@ -75,8 +75,13 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
         -o gisaidAndPublic.$today.masked.preTrim.pb \
         >& matOptimize.filtered.log
 
+    # Fix grandparent-reversion nodes that cause some lineages to be incorrectly placed as
+    # sublineages of siblings.
+    $matUtils fix -i gisaidAndPublic.$today.masked.preTrim.pb -c 10 \
+        -o gisaidAndPublic.$today.masked.preTrim.fix.pb
+
     # Again prune samples with too many private mutations and internal branches that are too long.
-    $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
+    $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.fix.pb \
         --max-parsimony 20 \
         --max-branch-length 60 \
         --max-path-length 175 \
@@ -183,7 +188,7 @@ usher_to_taxonium --input gisaidAndPublic.$today.masked.pb \
     --name_internal_nodes \
     --title "$today tree with sequences from GISAID, INSDC, COG-UK and CNCB" \
     --output gisaidAndPublic.$today.masked.taxonium.jsonl.gz \
-    >& utt.log
+    >& utt.log &
 
 $scriptDir/extractPublicTree.sh $today $prevDate
 

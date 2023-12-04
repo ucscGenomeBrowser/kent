@@ -164,17 +164,86 @@ char *fileName = bigBedFileName(table, conn);
 struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct asFilter *filter = asFilterFromCart(cart, db, table, as);
-
-/* Get beds a region at a time. */
 struct bed *bedList = NULL;
+
+/* If we're doing a whole-genome query with a name index then use the name index to retrieve items
+ * instead of iterating over regions. */
+struct hash *idHash = NULL;
+if (bbi->definedFieldCount >= 4)
+    idHash = identifierHash(db, table);
+int fieldIx;
+struct bptFile *bpt = NULL;
+struct lm *bbLm = NULL;
+struct bigBedInterval *ivList = NULL;
+if (idHash && isRegionWholeGenome())
+    {
+    bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+    struct slName *nameList = hashSlNameFromHash(idHash);
+    int count = slCount(nameList);
+    char *names[count];
+    int ii;
+    for (ii=0; ii < count; ii++)
+        {
+        names[ii] = nameList->name;
+        nameList = nameList->next;
+        }
+    bbLm = lmInit(0);
+    ivList = bigBedMultiNameQuery(bbi, bpt, fieldIx, names, count, bbLm);
+    }
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
-    addFilteredBedsOnRegion(bbi, region, table, filter, lm, &bedList);
-slReverse(&bedList);
+    {
+    if (bpt)
+        {
+        /*** NOTE: it is inefficient to convert intervals from a name-index query to filtered bed
+         * inside the loop on regionList.  However, bigBedGetFilteredBedsOnRegions is called by
+         * getFilteredBeds on a "regionList" that has been doctored to one region at a time,
+         * so we can do intersection one region at a time.  Since this is called once per region,
+         * we really do need to restrict items to region->chrom, otherwise all items would be
+         * returned for every region.  It is still much more efficient for large bigBeds to do
+         * name-index queries when names are pasted/uploaded than to fetch all intervals in all
+         * regions and then check names.  See MLQ #32625. */
+        char chromBuf[4096];
+        struct bigBedInterval *iv = NULL;
+        char *displayChromName = NULL;
+        int lastChromId = -1;
+        for (iv = ivList; iv != NULL; iv = iv->next)
+            {
+            if (iv->chromId != lastChromId)
+                {
+                bptStringKeyAtPos(bbi->chromBpt, iv->chromId, chromBuf, sizeof chromBuf);
+                displayChromName = chromAliasGetDisplayChrom(database, cart, hgOfficialChromName(database, chromBuf));
+                }
+            if (sameString(displayChromName, region->chrom))
+                {
+                char *row[bbi->fieldCount];
+                char startBuf[16], endBuf[16];
+                bigBedIntervalToRow(iv, displayChromName, startBuf, endBuf, row, bbi->fieldCount);
+                if (asFilterOnRow(filter, row))
+                    {
+                    struct bed *bed = bedLoadN(row, bbi->definedFieldCount);
+                    struct bed *lmBed = lmCloneBed(bed, lm);
+                    slAddHead(&bedList, lmBed);
+                    bedFree(&bed);
+                    }
+                }
+            lastChromId = iv->chromId;
+            }
+        }
+    else
+        {
+        /* Get beds a region at a time. */
+        addFilteredBedsOnRegion(bbi, region, table, filter, lm, &bedList);
+        }
+    slReverse(&bedList);
+    }
 
 /* Clean up and return. */
 if (retFieldCount != NULL)
-	*retFieldCount = bbi->definedFieldCount;
+    *retFieldCount = bbi->definedFieldCount;
+lmCleanup(&bbLm);
+hashFree(&idHash);
+bptFileDetach(&bpt);
 bbiFileClose(&bbi);
 freeMem(fileName);
 return bedList;

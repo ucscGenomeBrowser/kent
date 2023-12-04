@@ -3698,6 +3698,11 @@ var dragReorder = {
             if (rightClick.currentMapItem) {
                 rightClick.currentMapItem.href = this.href;
                 rightClick.currentMapItem.title = this.title;
+                // if the custom mouseover code has removed this title, check the attr
+                // for the original title
+                if (this.title.length === 0) {
+                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                }
 
                 // Handle linked features with separate clickmaps for each exon/intron
                 if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
@@ -3870,13 +3875,17 @@ function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
     let windowHeight = window.innerHeight;
 
     // figure out how large the mouseover will be
-    // use firstChild because popUpEl should be a div with a sole child in it
-    let popUpRect = popUpEl.firstChild.getBoundingClientRect();
+    let popUpRect = popUpEl.getBoundingClientRect();
     // position the popUp to the right and above the cursor by default
+    // tricky: when the mouse enters the element from the top, we want the tooltip
+    // relatively close to the element itself, because the mouse will already be
+    // on top of it, leaving it clickable or interactable. But if we are entering
+    // the element from the bottom, if we position the tooltip close to the mouse,
+    // we obscure the element itself, so we need to leave a bit of extra room
     let topOffset;
-    if (refEl.coords !== undefined && refEl.coords.length > 0 && refEl.coords.split(",").length == 4) {
-        // boundingRect has determined exactly as close as we can get to the item without covering
-        topOffset = refTop - popUpRect.height;
+    if (Math.abs(mouseY - refBottom) < Math.abs(mouseY - refTop)) {
+        // just use the mouseY position for placement, the -15 accounts for enough room
+        topOffset = mouseY - window.scrollY - popUpRect.height - 15;
     } else {
         // just use the mouseY position for placement, the -5 accounts for cursor size
         topOffset = mouseY - window.scrollY - popUpRect.height - 5;
@@ -3970,7 +3979,7 @@ function mousemoveHelper(e) {
         // if we are over another mouseable element we want to show that one instead
         // use this timer to do so
         let callback = mousemoveTimerHelper.bind(mouseoverContainer);
-        mousemoveTimer = setTimeout(callback, 500, e);
+        mousemoveTimer = setTimeout(callback, 300, e);
     }
 
     if (mousedNewItem && canShowNewMouseover && !mouseIsOverPopup(e, this, 0)) {
@@ -4064,7 +4073,9 @@ function addMouseover(ele1, text = null, ele2 = null) {
         mouseoverContainer.style.visibility = "hidden";
         mouseoverContainer.style.opacity = "0";
         mouseoverContainer.id = "mouseoverContainer";
-        mouseoverContainer.style.fontSize = window.browserTextSize + "px";
+        let tooltipTextSize = localStorage.getItem("tooltipTextSize");
+        if (tooltipTextSize === null) {tooltipTextSize = window.browserTextSize;}
+        mouseoverContainer.style.fontSize =  tooltipTextSize + "px";
         document.body.append(mouseoverContainer);
     }
     // create a mouseover element out of text, or, if text is null, use already
@@ -4087,6 +4098,7 @@ function addMouseover(ele1, text = null, ele2 = null) {
         newDiv.style.display = "inline-block";
         if (ele1.title) {
             newDiv.id = replaceReserved(ele1.title);
+            ele1.setAttribute("originalTitle", ele1.title);
             ele1.title = "";
         } else {
             newDiv.id = replaceReserved(text);
@@ -4115,14 +4127,28 @@ function convertTitleTagsToMouseovers() {
         }
     });
 
+    /* Mouseover should clear if you leave the document window altogether */
+    document.body.addEventListener("mouseleave", (ev) => {
+        clearTimeout(mouseoverTimer);
+        mousemoveController.abort();
+        hideMouseoverText(mouseoverContainer);
+        canShowNewMouseover = false;
+        // let mouseovers show up again upon moving back in to the window
+        // but only need the event once
+        document.body.addEventListener("mouseenter", (ev) => {
+            canShowNewMousoever = true;
+        }, {once: true});
+    });
+
     /* make the above mouseovers go away if we are in an input or select menu */
     const inps = document.getElementsByTagName("input");
     const sels = document.getElementsByTagName("select");
     for (let inp of inps) {
         if (!(inp.type == "hidden" || inp.type == "HIDDEN")) {
             inp.addEventListener("focus", (ev) => {
-                hideMouseoverText(mouseoverContainer);
+                clearTimeout(mouseoverTimer);
                 mousemoveController.abort();
+                hideMouseoverText(mouseoverContainer);
                 canShowNewMouseover = false;
             });
             inp.addEventListener("blur", (evt) => {
@@ -4132,8 +4158,9 @@ function convertTitleTagsToMouseovers() {
     }
     for (let sel of sels) {
         sel.addEventListener("focus", (ev) => {
-            hideMouseoverText(mouseoverContainer);
+            clearTimeout(mouseoverTimer);
             mousemoveController.abort();
+            hideMouseoverText(mouseoverContainer);
             canShowNewMouseover = false;
         });
         sel.addEventListener("blur", (evt) => {
@@ -4145,8 +4172,9 @@ function convertTitleTagsToMouseovers() {
     let imgTbl = document.getElementById("imgTbl");
     if (imgTbl) {
         imgTbl.addEventListener("contextmenu", function(e) {
-            hideMouseoverText(mouseoverContainer);
+            clearTimeout(mouseoverTimer);
             mousemoveController.abort();
+            hideMouseoverText(mouseoverContainer);
             canShowNewMouseover = false;
             // right-click menu doesn't capture focus so manually catch it
             document.addEventListener("click", function(ev) {

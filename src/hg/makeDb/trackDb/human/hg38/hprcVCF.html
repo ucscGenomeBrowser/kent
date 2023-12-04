@@ -1,25 +1,31 @@
 <h2>Description</h2>
 
+<p>
+This track shows short nucleotide variants of a few basepairs when aligning
+HPRC genomes to the hg38 reference assembly. The alignment was made with the
+Minigraph-cactus approach described in the references below.
+</p>
+
+<p>There are three subtracks in this composite container track:
+<ol>
+    <li>All short variants &lt;= 3 bp long
+    <li>All short variants &gt; 3 bp long
+    <li>All short variants up to 50bp, without any length filter
+</ol>
+
 <h2>Methods</h2>
 <p>
-The MAF was obtained from the HPRC v1.0 minigraph-cactus HAL file
-using cactus v2.6.4 as follows:
-
-<pre>
-cactus-hal2maf ./js ./hprc-v1.0-mc-grch38.hal \
-  hprc-v1.0-mc-grch38.maf.gz --noAncestors --refGenome GRCh38 \
-    --filterGapCausingDupes --chunkSize 100000 --batchCores 96 \
-      --batchCount 10 --noAncestors --batchParallelTaf 32 \
-         --batchSystem slurm --logFile hprc-v1.0-mc-grch38.maf.gz.log
-
-zcat hprc-v1.0-mc-grch38.maf.gz | mafDuplicateFilter -m - -k \
-   | bgzip &gt; hprc-v1.0-mc-grch38-single-copy.maf.gz
-</pre>
+The Minigraph-Cactus HPRC v1.0 graph was converted to VCF using vg deconstruct.
+This result was further postprocessed using vcfbub to flatten nested sites then
+vcfwave to normalize by realigning alt alleles to the reference.  All steps are
+described in Hickey et al 2023.  The postprocessing command lines and data can be found on 
+<a href="https://github.com/human-pangenomics/hpp_pangenome_resources/blob/main/hprc-v1.0-mc.md#vcf-decomposition">Github</a>.
+Finally, the resulting VCF was filtered by length and split into two VCFs using a cutoff of 3bp.
 </p>
 
 <h2>Credits</h2>
 <p>
-Thank you to Glenn Hickey for providing the HAL file from the HPRC project.
+Thanks to Glenn Hickey for providing the HAL file from the HPRC project and for making these VCFs from them.
 </p>
 
 <h2>References</h2>

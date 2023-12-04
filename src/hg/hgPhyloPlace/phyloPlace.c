@@ -38,12 +38,13 @@ static boolean measureTiming = FALSE;
 // Parameter constants:
 int maxGenotypes = 1000;        // Upper limit on number of samples user can upload at once.
 boolean showParsimonyScore = FALSE;
+int minSamplesForOwnTree = 3;  // If user uploads at least this many samples, show tree for them.
 
 
 struct slName *phyloPlaceDbList(struct cart *cart)
-/* Each subdirectory of PHYLOPLACE_DATA_DIR that contains a config.ra file is a supported db
- * or track hub name (without the hub_number_ prefix).  Return a list of them, or NULL if none
- * are found. */
+/* Each subdirectory of PHYLOPLACE_DATA_DIR that contains a config.ra file is a supported data
+ * source and might also be a db or track hub name (without the hub_number_ prefix).  Return a
+ * list of them, or NULL if none are found. */
 {
 struct slName *dbList = NULL;
 // I was hoping the pattern would be wildMatch'd only against filenames so I could use "config.ra",
@@ -67,6 +68,7 @@ for (path = dataDirPaths;  path != NULL;  path = path->next)
             slNameAddHead(&dbList, db);
         else
             {
+            // Not a db -- see if it's a hub that is already connected:
             struct trackHubGenome *hubGenome = trackHubGetGenomeUndecorated(db);
             if (hubGenome != NULL)
                 slNameAddHead(&dbList, hubGenome->name);
@@ -98,6 +100,11 @@ for (path = dataDirPaths;  path != NULL;  path = path->next)
                     errCatchEnd(errCatch);
                     if (hubDb != NULL)
                         slNameAddHead(&dbList, hubDb);
+                    }
+                else
+                    {
+                    // Doesn't appear to be a hub; count on its config to specify a .2bit file.
+                    slNameAddHead(&dbList, db);
                     }
                 }
             }
@@ -787,10 +794,10 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     int pubsIx = stringArrayIx("publications", headerWords, headerWordCount);
     int nLineageIx = stringArrayIx("Nextstrain_lineage", headerWords, headerWordCount);
     int gnCladeIx = stringArrayIx("goya_nextclade", headerWords, headerWordCount);
-    int rnCladeIx = stringArrayIx("ramaekers_nextclade", headerWords, headerWordCount);
+    int rnCladeIx = stringArrayIx("GCC_nextclade", headerWords, headerWordCount);
     int guCladeIx = stringArrayIx("goya_usher", headerWords, headerWordCount);
-    int ruCladeIx = stringArrayIx("ramaekers_usher", headerWords, headerWordCount);
-    int rtCladeIx = stringArrayIx("ramaekers_tableS1", headerWords, headerWordCount);
+    int ruCladeIx = stringArrayIx("GCC_usher", headerWords, headerWordCount);
+    int rtCladeIx = stringArrayIx("GCC_assigned_2023-11", headerWords, headerWordCount);
     while (lineFileNext(lf, &line, NULL))
         {
         char *words[headerWordCount];
@@ -840,7 +847,7 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
             met->pubs = cloneString(words[pubsIx]);
         if (nLineageIx >= 0)
             met->nLineage = cloneString(words[nLineageIx]);
-        // For RSV, use lineage for Ramaekers clades and nClade for Goya clades.
+        // For RSV, use lineage for GCC clades and nClade for Goya clades.
         // This is getting ugly and we really should specify metadata columns in config.ra files.
         if (gnCladeIx >= 0)
             met->nClade = cloneString(words[gnCladeIx]);
@@ -850,7 +857,7 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
             met->nCladeUsher = cloneString(words[guCladeIx]);
         if (ruCladeIx >= 0)
             met->lineageUsher = cloneString(words[ruCladeIx]);
-        // Uglier still, use gClade to store Ramaekers Table S1 designations because it's left over.
+        // Uglier still, use gClade to store GCC designations because it's left over.
         if (rtCladeIx >= 0)
             met->gClade = cloneString(words[rtCladeIx]);
         // If epiId and/or genbank ID is included, we'll probably be using that to look up items.
@@ -1577,12 +1584,8 @@ if (gotLineages)
     {
     if (isRsv)
          puts("</th>\n<th><a href='https://doi.org/10.1093/ve/veaa052' target=_blank>"
-              "Ramaekers 2020</a> clade"
-             TOOLTIP("The clade described in "
-                     "<a href='https://doi.org/10.1093/ve/veaa052' target=_blank>"
-                     "Ramaekers et al. 2020, "
-                     "&quot;Towards a unified classification for human respiratory syncytial virus "
-                     "genotypes&quot;</a> "
+              "RGCC 2023</a> clade"
+             TOOLTIP("The RSV Genotyping Consensus Consortium clade (manuscript in preparation)"
                      "assigned by placement in the tree"));
    else
         puts("</th>\n<th>Pango lineage"
@@ -3046,7 +3049,51 @@ if (! pthreadMayCreate(pt, NULL, workerFunction, filename))
 return pt;
 }
 
-char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
+static struct dnaSeq *getChromSeq(char *db, char *refName)
+/* Get the reference sequence for refName, using a .2bit file if configured,
+ * otherwise hdb lib functions (requires refName happens to be a real db or hub). */
+{
+char *twoBitName = phyloPlaceDbSettingPath(refName, "twoBitFile");
+char *chrom = phyloPlaceDbSetting(refName, "chrom");
+struct dnaSeq *seq = NULL;
+if (isNotEmpty(twoBitName) && fileExists(twoBitName))
+    {
+    struct slName *seqNames = twoBitSeqNames(twoBitName);
+    if (isEmpty(chrom))
+        chrom = cloneString(seqNames->name);
+    struct twoBitFile *tbf = twoBitOpen(twoBitName);
+    seq = twoBitReadSeqFrag(tbf, chrom, 0, 0);
+    // Convert to lower case so genoFind doesn't index it as containing no tiles.
+    tolowers(seq->dna);
+    twoBitClose(&tbf);
+    slNameFreeList(&seqNames);
+    }
+else if (sameString(db, refName))
+    {
+    if (isEmpty(chrom))
+        chrom = hDefaultChrom(db);
+    seq = hChromSeq(db, chrom, 0, hChromSize(db, chrom));
+    }
+else
+    errAbort("No twoBitFile or db/hub found for %s", refName);
+return seq;
+}
+
+static struct phyloTree *uploadedSamplesTree(char *singleSubtreeFile, struct slName *sampleIds)
+/* If the user uploaded enough samples to make a meaningful tree, then read in singleSubtreeFile
+ * and prune all nodes that have no leaf descendants in sampleIds to get the tree of only the
+ * uploaded samples. */
+{
+struct phyloTree *tree = NULL;
+if (slCount(sampleIds) >= minSamplesForOwnTree)
+    {
+    tree = phyloOpenTree(singleSubtreeFile);
+    tree = phyloPruneToIds(tree, sampleIds);
+    }
+return tree;
+}
+
+char *phyloPlaceSamples(struct lineFile *lf, char *db, char *refName, char *defaultProtobuf,
                         boolean doMeasureTiming, int subtreeSize, int fontHeight,
                         boolean *retSuccess)
 /* Given a lineFile that contains either FASTA, VCF, or a list of sequence names/ids:
@@ -3069,30 +3116,23 @@ char *source = NULL;
 char *metadataFile = NULL;
 char *aliasFile = NULL;
 char *sampleNameFile = NULL;
-struct treeChoices *treeChoices = loadTreeChoices(db);
-getProtobufMetadataSource(db, treeChoices, defaultProtobuf,
+struct treeChoices *treeChoices = loadTreeChoices(refName);
+getProtobufMetadataSource(refName, treeChoices, defaultProtobuf,
                           &protobufPath, &metadataFile, &source, &aliasFile, &sampleNameFile);
 reportTiming(&startTime, "start up and find the tree etc. files");
 struct mutationAnnotatedTree *bigTree = NULL;
 lineFileCarefulNewlines(lf);
-char *chrom = hDefaultChrom(db);
-//#*** Hack for influenza
-if (stringIn("GCF_000865085.1", db))
-    chrom = "NC_007366.1";
-else if (stringIn("GCF_001343785.1", db))
-    chrom = "NC_026433.1";
-int chromSize = hChromSize(db, chrom);
-struct slName **maskSites = getProblematicSites(db, chrom, chromSize);
+struct dnaSeq *refGenome = getChromSeq(db, refName);
+struct slName **maskSites = getProblematicSites(refName, refGenome->name, refGenome->size);
 //#*** TODO: add CGI param option for this almost-never-needed tweak:
 if (0)
     {
     bigTree = parseParsimonyProtobuf(protobufPath);
     reportTiming(&startTime, "parse protobuf file (at startup, for excluding informativeBases "
                  "from maskSites)");
-    informativeBasesFromTree(bigTree->tree, maskSites, chromSize);
+    informativeBasesFromTree(bigTree->tree, maskSites, refGenome->size);
     reportTiming(&startTime, "remove any informative bases in tree from maskSites");
     }
-struct dnaSeq *refGenome = hChromSeq(db, chrom, 0, chromSize);
 boolean isFasta = FALSE;
 boolean subtreesOnly = FALSE;
 struct seqInfo *seqInfoList = NULL;
@@ -3102,9 +3142,9 @@ if (lfLooksLikeFasta(lf))
     struct slPair *failedPsls;
     struct hash *treeNames = NULL;
     // We need to check uploaded names in fasta only for original usher, not usher-sampled(-server).
-    if (!serverIsConfigured(db) && !endsWith(usherPath, "-sampled"))
+    if (!serverIsConfigured(refName) && !endsWith(usherPath, "-sampled"))
         treeNames = getTreeNames(sampleNameFile, protobufPath, &bigTree, FALSE, &startTime);
-    vcfTn = vcfFromFasta(lf, db, refGenome, maskSites, treeNames,
+    vcfTn = vcfFromFasta(lf, refName, refGenome, maskSites, treeNames,
                          &sampleIds, &seqInfoList, &failedSeqs, &failedPsls, &startTime);
     if (failedSeqs)
         {
@@ -3154,13 +3194,13 @@ struct usherResults *results = NULL;
 if (vcfTn)
     {
     fflush(stdout);
-    results = runUsher(db, usherPath, protobufPath, vcfTn->forCgi, subtreeSize, &sampleIds,
+    results = runUsher(refName, usherPath, protobufPath, vcfTn->forCgi, subtreeSize, &sampleIds,
                        treeChoices, &startTime);
     }
 else if (subtreesOnly)
     {
     char *matUtilsPath = getMatUtilsPath(TRUE);
-    results = runMatUtilsExtractSubtrees(db, matUtilsPath, protobufPath, subtreeSize,
+    results = runMatUtilsExtractSubtrees(refName, matUtilsPath, protobufPath, subtreeSize,
                                          sampleIds, treeChoices, &startTime);
     }
 
@@ -3182,14 +3222,14 @@ if (results && results->singleSubtreeInfo)
     if (retSuccess)
         *retSuccess = TRUE;
     puts("<p></p>");
-    readQcThresholds(db);
+    readQcThresholds(refName);
     int subtreeCount = slCount(results->subtreeInfoList);
     // Sort subtrees by number of user samples (largest first).
     slSort(&results->subtreeInfoList, subTreeInfoUserSampleCmp);
     // Make Nextstrain/auspice JSON file for each subtree.
-    char *bigGenePredFile = phyloPlaceDbSettingPath(db, "bigGenePredFile");
+    char *bigGenePredFile = phyloPlaceDbSettingPath(refName, "bigGenePredFile");
     struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
-    struct seqWindow *gSeqWin = memSeqWindowNew(chrom, refGenome->dna);
+    struct seqWindow *gSeqWin = memSeqWindowNew(refGenome->name, refGenome->dna);
     struct hash *sampleUrls = hashNew(0);
     struct tempName *jsonTns[subtreeCount];
     struct subtreeInfo *ti;
@@ -3200,7 +3240,7 @@ if (results && results->singleSubtreeInfo)
         char subtreeName[512];
         safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
         trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
-        treeToAuspiceJson(ti, db, geneInfoList, gSeqWin, sampleMetadata, NULL,
+        treeToAuspiceJson(ti, refName, geneInfoList, gSeqWin, sampleMetadata, NULL,
                           results->samplePlacements, jsonTns[ix]->forCgi, source);
         // Add a link for every sample to this subtree, so the single-subtree JSON can
         // link to subtree JSONs
@@ -3212,14 +3252,15 @@ if (results && results->singleSubtreeInfo)
     struct tempName *singleSubtreeJsonTn;
     AllocVar(singleSubtreeJsonTn);
     trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
-    treeToAuspiceJson(results->singleSubtreeInfo, db, geneInfoList, gSeqWin, sampleMetadata,
+    treeToAuspiceJson(results->singleSubtreeInfo, refName, geneInfoList, gSeqWin, sampleMetadata,
                       sampleUrls, results->samplePlacements, singleSubtreeJsonTn->forCgi, source);
     reportTiming(&startTime, "make Auspice JSON");
     struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
     if (subtreeCount > MAX_SUBTREE_BUTTONS)
         subtreeInfoForButtons = NULL;
+    boolean canDoCustomTracks = (!subtreesOnly && sameString(db, refName));
     makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeInfoForButtons, subtreeSize, isFasta,
-                  !subtreesOnly);
+                  canDoCustomTracks);
     printf("<p>If you have metadata you wish to display, click a 'view subtree in "
            "Nextstrain' button, and then you can drag on a CSV file to "
            "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
@@ -3238,7 +3279,7 @@ if (results && results->singleSubtreeInfo)
     struct tempName *ctTn = NULL;
     if (subtreesOnly)
         {
-        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, db, subtreeSize);
+        summarizeSubtrees(sampleIds, results, sampleMetadata, jsonTns, refName, subtreeSize);
         reportTiming(&startTime, "describe subtrees");
         }
     else
@@ -3246,10 +3287,14 @@ if (results && results->singleSubtreeInfo)
         findNearestNeighbors(results, sampleMetadata);
         reportTiming(&startTime, "find nearest neighbors");
 
-        // Make custom tracks for uploaded samples and subtree(s).
-        struct phyloTree *sampleTree = NULL;
-        ctTn = writeCustomTracks(db, vcfTn, results, sampleIds, source, fontHeight,
-                                 &sampleTree, &startTime);
+        char *singleSubtreeFile = results->singleSubtreeInfo->subtreeTn->forCgi;
+        struct phyloTree *sampleTree = uploadedSamplesTree(singleSubtreeFile, sampleIds);
+        if (sameString(db, refName))
+            {
+            // Make custom tracks for uploaded samples and subtree(s).
+            ctTn = writeCustomTracks(db, vcfTn, results, sampleIds, source, fontHeight,
+                                     sampleTree, &startTime);
+            }
 
         // Make a sample summary TSV file and accumulate S gene changes
         struct hash *seqInfoHash = hashFromSeqInfoListAndIds(seqInfoList, sampleIds);
@@ -3264,14 +3309,14 @@ if (results && results->singleSubtreeInfo)
         int seqCount = slCount(seqInfoList);
         if (seqCount <= MAX_SEQ_DETAILS)
             {
-            char *refAcc = cloneString(chrom);
+            char *refAcc = cloneString(refGenome->name);
             if (regexMatch(refAcc, "v[0-9]+$"))
                 {
                 char *v = strrchr(refAcc, 'v');
                 assert(v != NULL);
                 *v = '.';
                 }
-            summarizeSequences(seqInfoList, isFasta, results, jsonTns, refAcc, db, subtreeSize);
+            summarizeSequences(seqInfoList, isFasta, results, jsonTns, refAcc, refName, subtreeSize);
             reportTiming(&startTime, "write summary table (including reading in lineages)");
             for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
                 {
@@ -3289,7 +3334,7 @@ if (results && results->singleSubtreeInfo)
                 struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
                 subtree = phyloPruneToIds(subtree, ti->subtreeUserSampleIds);
                 describeSamplePlacements(ti->subtreeUserSampleIds, results->samplePlacements,
-                                         subtree, sampleMetadata, source, refAcc, db);
+                                         subtree, sampleMetadata, source, refAcc, refName);
                 }
             reportTiming(&startTime, "describe placements");
             }
@@ -3344,7 +3389,7 @@ if (results && results->singleSubtreeInfo)
         }
     puts("</ul>");
 
-    if (!subtreesOnly)
+    if (ctTn != NULL)
         {
         // Notify in opposite order of custom track creation.
         puts("<h3>Custom tracks for viewing in the Genome Browser</h3>");

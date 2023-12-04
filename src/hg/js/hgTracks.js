@@ -2859,7 +2859,8 @@ var rightClick = {
                                         return true;
                                     }
                                 };
-                            if (rightClick.supportZoomCodon && rec.type.indexOf("genePred") !== -1) {
+                            if (rightClick.supportZoomCodon &&
+                                    (rec.type.indexOf("genePred") !== -1 || rec.type.indexOf("bigGenePred") !== -1)) {
                                 // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
                                 var name, table;
                                 var reg = new RegExp("hgg_gene=([^&]+)");
@@ -2908,6 +2909,13 @@ var rightClick = {
                                                         cache: true
                                                     });
                                                 return true; }
+                                        };
+                                        o[rightClick.makeImgTag("magnify.png")+" Choose exon "] =
+                                        {   onclick: function(menuItemClicked, menuObject) {
+                                                rightClick.hit(menuItemClicked, menuObject,
+                                                            "zoomExon",
+                                                            {name: name, table: table});
+                                                return true;}
                                         };
                                     }
                                 }
