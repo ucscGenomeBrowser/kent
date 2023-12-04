@@ -15,7 +15,7 @@ dbPrefixUrls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$"
 dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer="ZFIN" mm="MGI" xenTro="XenBase"
 
         track ncbiRefSeq
-        parent refSeqComposite off
+        parent refSeqComposite on
         color 12,12,120
         shortLabel RefSeq All
         longLabel NCBI RefSeq genes, curated and predicted (NM_*, XM_*, NR_*, XR_*, NP_*, YP_*)
