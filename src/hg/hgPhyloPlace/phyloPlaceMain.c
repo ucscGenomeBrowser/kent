@@ -61,7 +61,7 @@ if (isHubTrack(db))
     if (! slNameInList(supportedDbs, db))
         errAbort("Can't find db '%s'", db);
     }
-char *ctFile = phyloPlaceSamples(lf, db, protobuf, TRUE, subtreeSize, 9, &success);
+char *ctFile = phyloPlaceSamples(lf, "hg38", db, protobuf, TRUE, subtreeSize, 9, &success);
 if (ctFile)
     printf("ctFile = %s\n", ctFile);
 else

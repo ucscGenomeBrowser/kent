@@ -79,13 +79,22 @@ else if (isNotEmpty(fileBinaryCoords))
 return lf;
 }
 
-static char *labelForDb(char *db)
-/* The assembly hub name is just the accession; make a special label for hMPXV.  Otherwise just
- * return hGenome(db). */
+static char *labelForDb(char *db, boolean addDescription)
+/* If config defines a user-friendly name then return that; otherwise return hGenome(db).
+ * If addDescription is set and config defines a description then tack that on. */
 {
 char *label = phyloPlaceDbSetting(db, "name");
 if (isEmpty(label))
     label = hGenome(db);
+if (addDescription)
+    {
+    char *desc = phyloPlaceDbSetting(db, "description");
+    if (isNotEmpty(desc))
+        {
+        struct dyString *dy = dyStringCreate("%s %s", label, desc);
+        label = dyStringCannibalize(&dy);
+        }
+    }
 return label;
 }
 
@@ -108,7 +117,7 @@ static struct slName *sortByLabel(struct slName *dbList)
 struct slPair *dbLabelList = NULL;
 struct slName *sln;
 for (sln = dbList;  sln != NULL;  sln = sln->next)
-    slPairAdd(&dbLabelList, sln->name, cloneString(labelForDb(sln->name)));
+    slPairAdd(&dbLabelList, sln->name, cloneString(labelForDb(sln->name, TRUE)));
 slSort(&dbLabelList, labelCmp);
 struct slName *newList = NULL;
 struct slPair *slp;
@@ -131,7 +140,8 @@ if (!slNameInList(supportedDbs, *pDb))
     {
     *pDb = cloneString(supportedDbs->name);
     }
-*pLabel = labelForDb(*pDb);
+*pLabel = labelForDb(*pDb, FALSE);
+char *selectVar = "hpp_ref";
 int supportedDbCount = slCount(supportedDbs);
 if (supportedDbCount > 1)
     {
@@ -142,9 +152,8 @@ if (supportedDbCount > 1)
     for (sDb = supportedDbs, i = 0;  i < supportedDbCount;  sDb = sDb->next, i++)
         {
         values[i] = sDb->name;
-        labels[i] = labelForDb(values[i]);
+        labels[i] = labelForDb(values[i], TRUE);
         }
-    char *selectVar = "db";
     struct dyString *dy = jsOnChangeStart();
     jsDropDownCarryOver(dy, selectVar);
     char *js = jsOnChangeEnd(&dy);
@@ -153,7 +162,7 @@ if (supportedDbCount > 1)
     puts("</p>");
     }
 else
-    cgiMakeHiddenVar("db", *pDb);
+    cgiMakeHiddenVar(selectVar, *pDb);
 slNameFreeList(&supportedDbs);
 }
 
@@ -453,8 +462,8 @@ jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
 
-// Hidden form for reloading page when db select is changed
-static char *saveVars[] = { "db" };
+// Hidden form for reloading page when hpp_ref select is changed
+static char *saveVars[] = { "hpp_ref" };
 jsCreateHiddenForm(cart, cgiScriptName(), saveVars, ArraySize(saveVars));
 
 puts("<div class='row'>"
@@ -479,10 +488,21 @@ puts("</div>\n");
 newPageEndStuff();
 }
 
-static void resultsPage(char *db, struct lineFile *lf)
+static void resultsPage(char *db, char *refName, struct lineFile *lf)
 /* QC the user's uploaded sequence(s) or VCF; if input looks valid then run usher
  * and display results. */
 {
+// If refName is a real database or hub then set db to refName.
+if (hDbExists(refName))
+    db = refName;
+else
+    {
+    // Not a db -- see if it's a hub that is already connected:
+    struct trackHubGenome *hubGenome = trackHubGetGenomeUndecorated(db);
+    if (hubGenome != NULL)
+        db = refName;
+    // Otherwise we're counting on the config to specify a .2bit file and we won't make CTs.
+    }
 webStartGbNoBanner(cart, db, "UShER: Results");
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
@@ -508,6 +528,7 @@ puts("<div class='row'>"
 printf("<form action='%s' name='resultsForm' method=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
+cgiMakeHiddenVar("db", db);
 puts("  <div class='gbControl col-md-12'>");
 fflush(stdout);
 
@@ -520,7 +541,7 @@ if (lf != NULL)
     char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
     int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
     boolean success = FALSE;
-    char *ctFile = phyloPlaceSamples(lf, db, phyloPlaceTree, measureTiming, subtreeSize,
+    char *ctFile = phyloPlaceSamples(lf, db, refName, phyloPlaceTree, measureTiming, subtreeSize,
                                      tl.fontHeight, &success);
     if (ctFile)
         {
@@ -695,6 +716,10 @@ cart = theCart;
 char *db = NULL, *genome = NULL;
 // Get the current db from the cart
 getDbAndGenome(cart, &db, &genome, oldVars);
+// The currently selected pathogen reference sequence may or may not be a db/hub.
+char *refName = cartOptionalString(cart, "hpp_ref");
+if (isEmpty(refName))
+    refName = cloneString(db);
 
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
@@ -708,33 +733,33 @@ char *newExampleButton = cgiOptionalString("exampleButton");
 if ((submitLabel && sameString(submitLabel, "try example")) ||
     (newExampleButton && sameString(newExampleButton, "Upload Example File")))
     {
-    char *exampleFile = phyloPlaceDbSettingPath(db, "exampleFile");
+    char *exampleFile = phyloPlaceDbSettingPath(refName, "exampleFile");
     struct lineFile *lf = lineFileOpen(exampleFile, TRUE);
-    resultsPage(db, lf);
+    resultsPage(db, refName, lf);
     }
 else if (cgiOptionalString(remoteFileVar))
     {
     char *url = cgiString(remoteFileVar);
     struct lineFile *lf = netLineFileOpen(url);
-    resultsPage(db, lf);
+    resultsPage(db, refName, lf);
     }
 else if (isNotEmpty(trimSpaces(cgiOptionalString(pastedIdVar))))
     {
     char *pastedIds = cgiString(pastedIdVar);
     struct lineFile *lf = lineFileOnString("pasted names/IDs", TRUE, pastedIds);
-    resultsPage(db, lf);
+    resultsPage(db, refName, lf);
     }
 else if (cgiOptionalString(seqFileVar) || cgiOptionalString(seqFileVar "__filename"))
     {
     struct lineFile *lf = lineFileFromFileInput(cart, seqFileVar);
-    resultsPage(db, lf);
+    resultsPage(db, refName, lf);
     }
 else if (isNotEmpty(cgiOptionalString(serverCommandVar)))
     {
-    sendServerCommand(db);
+    sendServerCommand(refName);
     }
 else
-    mainPage(db);
+    mainPage(refName);
 }
 
 #define LD_LIBRARY_PATH "LD_LIBRARY_PATH"

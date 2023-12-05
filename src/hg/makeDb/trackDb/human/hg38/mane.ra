@@ -12,6 +12,7 @@ defaultLabelFields geneName2
 maxItems 5000
 itemRgb on
 skipFields cdsStartStat,cdsEndStat,exonFrames,geneType,type
+mouseOver $ncbiId, $name
 urls name2="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" geneName="https://www.ensembl.org/homo_sapiens/Gene/Summary?g=$$&db=core" geneName2="https://www.genecards.org/cgi-bin/carddisp.pl?gene=$$" ensemblProtAcc="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" ncbiId="https://www.ncbi.nlm.nih.gov/nuccore/$$" ncbiProtAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
 dataVersion /gbdb/hg38/mane/README_versions.txt
 
