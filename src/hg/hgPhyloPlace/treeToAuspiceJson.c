@@ -194,7 +194,7 @@ jsonWriteListEnd(jw);
 
 static void writeAuspiceMeta(struct jsonWrite *jw, struct slName *subtreeUserSampleIds, char *source,
                              char *db, struct slName *colorFields, struct geneInfo *geneInfoList,
-                             uint genomeSize)
+                             uint genomeSize, boolean isRsv, boolean isFlu)
 /* Write metadata to configure Auspice display. */
 {
 jsonWriteObjectStart(jw, "meta");
@@ -245,7 +245,7 @@ if (sameString(db, "wuhCor1"))
     jsonWriteString(jw, NULL, "Nextstrain_clade_usher");
     jsonWriteString(jw, NULL, "Nextstrain_clade");
     }
-else if (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db) || stringIn("RGCC", db))
+else if (isRsv)
     {
     jsonWriteString(jw, NULL, "GCC_usher");
     jsonWriteString(jw, NULL, "GCC_nextclade");
@@ -253,7 +253,7 @@ else if (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db) || strin
     jsonWriteString(jw, NULL, "goya_usher");
     jsonWriteString(jw, NULL, "goya_nextclade");
     }
-else if (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db))
+else if (isFlu)
     {
     jsonWriteString(jw, NULL, "Nextstrain_clade");
     }
@@ -836,7 +836,9 @@ jsonWriteString(jw, "version", "v2");
 //#*** FIXME: TODO: either pass in along with sampleMetadata, or take from JSON file specified
 //#*** in config, or better yet, compute while building tree object in memory, then write the
 //#*** header object, then write the tree.
-boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db) || stringIn("RGCC", db));
+boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db) ||
+                 startsWith("RGCC", db));
+boolean isFlu = (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db));
 struct slName *colorFields = NULL;
 if (sameString(db, "wuhCor1"))
     {
@@ -855,7 +857,7 @@ else if (isRsv)
     slNameAddHead(&colorFields, "goya_nextclade");
     slNameAddHead(&colorFields, "goya_usher");
     }
-else if (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db))
+else if (isFlu)
     {
     slNameAddHead(&colorFields, "country");
     slNameAddHead(&colorFields, "Nextstrain_clade");
@@ -867,7 +869,7 @@ else
     }
 //#*** END FIXME
 writeAuspiceMeta(jw, sti->subtreeUserSampleIds, source, db, colorFields, geneInfoList,
-                 gSeqWin->end);
+                 gSeqWin->end, isRsv, isFlu);
 jsonWriteObjectStart(jw, "tree");
 int nodeNum = 10000; // Auspice.us starting node number for newick -> json
 int depth = 0;

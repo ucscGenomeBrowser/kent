@@ -1559,7 +1559,8 @@ puts("<th>#SNVs used for placement"
              "(not used for placement) because they occur at known "
              "<a href='https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473/12' "
              "target=_blank>Problematic Sites</a>"));;
-boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db));
+boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db) ||
+                 startsWith("RGCC", db));
 if (gotClades)
     {
     if (sameString(db, "wuhCor1"))
@@ -1583,9 +1584,8 @@ if (gotClades)
 if (gotLineages)
     {
     if (isRsv)
-         puts("</th>\n<th><a href='https://doi.org/10.1093/ve/veaa052' target=_blank>"
-              "RGCC 2023</a> clade"
-             TOOLTIP("The RSV Genotyping Consensus Consortium clade (manuscript in preparation)"
+         puts("</th>\n<th>RGCC 2023 clade"
+             TOOLTIP("The RSV Genotyping Consensus Consortium clade (manuscript in preparation) "
                      "assigned by placement in the tree"));
    else
         puts("</th>\n<th>Pango lineage"
@@ -1599,6 +1599,9 @@ puts("</th>\n<th>Neighboring sample in tree"
 if (sameString(db, "wuhCor1"))
     puts(TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
                  "Pango lineage</a> assigned by pangolin "
+                 "to the nearest neighboring sample already in the tree"));
+else if (isRsv)
+    puts(TOOLTIP("The RGCC 2023 clade assigned by Nextclade "
                  "to the nearest neighboring sample already in the tree"));
 else
     puts(TOOLTIP("The lineage assigned by Nextclade "
@@ -2029,24 +2032,62 @@ boolean gotClades = FALSE, gotLineages = FALSE;
 lookForCladesAndLineages(results->samplePlacements, &gotClades, &gotLineages);
 puts("<table class='seqSummary'><tbody>");
 puts("<tr><th>Sequence</th>");
+boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db) ||
+                 startsWith("RGCC", db));
 if (gotClades)
-    puts("<th>Nextstrain clade (UShER)"
+    {
+    if (sameString(db, "wuhCor1"))
+        puts("<th>Nextstrain clade (UShER)"
      TOOLTIP("The <a href='https://nextstrain.org/blog/2021-01-06-updated-SARS-CoV-2-clade-naming' "
              "target=_blank>Nextstrain clade</a> "
              "assigned to the sequence by UShER according to its place in the phylogenetic tree")
-         "</th>");
+             "</th>");
+    else if (isRsv)
+        puts("<th><a href='https://doi.org/10.1111/irv.12715' target=_blank>"
+             "Goya 2020</a> clade"
+             TOOLTIP("The clade described in "
+                     "<a href='https://doi.org/10.1111/irv.12715' target=_blank>Goya et al. 2020, "
+                     "&quot;Toward unified molecular surveillance of RSV: A proposal for "
+                     "genotype definition&quot;</a> "
+                     "assigned by placement in the tree")
+             "</th>");
+    else
+        puts("<th>Nextstrain lineage"
+             TOOLTIP("The Nextstrain lineage assigned by "
+                     "placement in the tree")
+             "</th>");
+    }
 if (gotLineages)
-    puts("<th>Pango lineage (UShER)"
+    {
+    if (sameString(db, "wuhCor1"))
+        puts("<th>Pango lineage (UShER)"
          TOOLTIP("The <a href='https://cov-lineages.org/' "
                  "target=_blank>Pango lineage</a> "
                  "assigned to the sequence by UShER according to its place in the phylogenetic tree")
+             "</th>");
+    else if (isRsv)
+        puts("<th>RGCC 2023 clade"
+             TOOLTIP("The RSV Genotyping Consensus Consortium clade (manuscript in preparation) "
+                     "assigned by placement in the tree")
+             "</th>");
+    }
+if (sameString(db, "wuhCor1"))
+    puts("<th>Pango lineage (pangolin)"
+         TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
+                 "Pango lineage</a> assigned to the sequence by "
+                 "<a href='https://github.com/cov-lineages/pangolin/' target=_blank>pangolin</a>")
          "</th>");
-puts("<th>Pango lineage (pangolin)"
-     TOOLTIP("The <a href='https://cov-lineages.org/' target=_blank>"
-             "Pango lineage</a> assigned to the sequence by "
-             "<a href='https://github.com/cov-lineages/pangolin/' target=_blank>pangolin</a>")
-     "</th>"
-     "<th>subtree</th></tr>");
+else if (isRsv)
+    puts("<th>RGCC 2023 clade (Nextclade)"
+         TOOLTIP("The RGCC clade assigned by Nextclade "
+                 "to the nearest neighboring sample already in the tree")
+         "</th>");
+else
+    puts("<th>Nextclade lineage"
+         TOOLTIP("The lineage assigned by Nextclade "
+                 "to the nearest neighboring sample already in the tree")
+         "</th>");
+puts("<th>subtree</th></tr>");
 struct slName *si;
 for (si = sampleIds;  si != NULL;  si = si->next)
     {
