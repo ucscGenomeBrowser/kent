@@ -1884,3 +1884,19 @@ If you have the kent git repository cloned:
     package. Install the 'ghostscript' package and verify ps2pdf is
     in: /usr/bin/ps2pdf
 
+# Adding a track hub to your hubPublic table so it appears under My Data > Track Hubs
+
+By default, your browser mirror only comes with our public hubs. You may want
+to remove these and replace them with the hubs in your institution. One idea
+could be to have one hub per research group or department and users connect to them on
+My Data > Track Hubs.
+
+Use hubPublicCheck to create the SQL command to add the hub:
+
+    hubPublicCheck hubPublic -addHub=https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt
+
+Output is:
+
+    insert into hubPublic (hubUrl,descriptionUrl,shortLabel,longLabel,registrationTime,dbCount,dbList) values ("https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt","", "My Hub's Name", "Name up to 80 characters versus shortLabel limited to 17 characters", now(),1, "hg19,"); 
+
+Then we run hubCrawl to get the searches to work (most mirrors do not need this). See <https://genomewiki.ucsc.edu/genecats/index.php/Public_Hub_QA> for more details.
