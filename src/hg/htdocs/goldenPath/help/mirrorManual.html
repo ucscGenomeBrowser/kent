@@ -32,6 +32,7 @@
 <h6><a href='#activating-cram-support-for-the-genome-browser'>Activating CRAM support for the Genome Browser.</a></h6>
 <h6><a href='#using-freetype-font-support-for-anti-aliased-text'>Using FreeType font support for anti-aliased text</a></h6>
 <h6><a href='#building-the-kent-source-tree'>Building the kent source tree.</a></h6>
+<h6><a href='#adding-a-track-hub-to-your-hubpublic-table-so-it-appears-under-my-data-gt-track-hubs'>Adding a track hub to your hubPublic table so it appears under My Data &gt; Track Hubs</a></h6>
 <a name='overview-of-the-genome-browser-directories-and-databases'></a>
 <h2>Overview of the Genome Browser directories and databases</h2>
 
@@ -2565,6 +2566,32 @@ package. Install the &#39;ghostscript&#39; package and verify ps2pdf is
 in: /usr/bin/ps2pdf
 </p></li>
 </ol>
+
+<a name='adding-a-track-hub-to-your-hubpublic-table-so-it-appears-under-my-data-gt-track-hubs'></a>
+<h2>Adding a track hub to your hubPublic table so it appears under My Data &gt; Track Hubs</h2>
+
+<p>
+By default, your browser mirror only comes with our public hubs. You may want
+to remove these and replace them with the hubs in your institution. One idea
+could be to have one hub per research group or department and users connect to them on
+My Data &gt; Track Hubs.
+</p>
+
+<p>
+Use hubPublicCheck to create the SQL command to add the hub:
+</p>
+
+<pre><code>hubPublicCheck hubPublic -addHub=https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</code></pre>
+
+<p>
+Output is:
+</p>
+
+<pre><code>insert into hubPublic (hubUrl,descriptionUrl,shortLabel,longLabel,registrationTime,dbCount,dbList) values (&quot;https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt&quot;,&quot;&quot;, &quot;My Hub&#39;s Name&quot;, &quot;Name up to 80 characters versus shortLabel limited to 17 characters&quot;, now(),1, &quot;hg19,&quot;); </code></pre>
+
+<p>
+Then we run hubCrawl to get the searches to work (most mirrors do not need this). See <a href='https://genomewiki.ucsc.edu/genecats/index.php/Public_Hub_QA' title=''>https://genomewiki.ucsc.edu/genecats/index.php/Public_Hub_QA</a> for more details.
+</p>
 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
