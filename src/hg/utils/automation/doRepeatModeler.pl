@@ -213,7 +213,7 @@ para make $parasolOpts jobList
 para check
 para time > run.time
 cat run.time
-\$rModeler -version > "${runDir}/modelerVersion.txt"
+"${RepeatModeler}" -version > "${runDir}/modelerVersion.txt"
 
 _EOF_
   );
