@@ -3848,7 +3848,7 @@ if (tdb->restrictCount > 0 && chrom != NULL)
 return chromOk;
 }
 
-static boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
+boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
                               struct trackDb **tdbList, struct hash *loaded)
 /* Load a trackDb table, including handling profiles:tbl. Returns
  * TRUE if table exists */
@@ -3883,7 +3883,7 @@ hFreeConn(&conn);
 return exists;
 }
 
-static struct trackDb *loadTrackDb(char *db, char *where)
+struct trackDb *loadTrackDb(char *db, char *where)
 /* Load each trackDb table.  Will put supertracks in parent field of given tracks but
  * these are still in track list. */
 {
