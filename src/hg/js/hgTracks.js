@@ -2228,6 +2228,13 @@ var rightClick = {
         // by prompt in IE 7+.   Callback is called if user presses "OK".
         $("body").append("<div id = 'myPrompt'><div id='dialog' title='Basic dialog'><form>" +
                             msg + "<input id='myPromptText' value=''></form>");
+        $('#myPromptText').bind('keypress', function(e) {
+            if (e.which === 13) {  // listens for return key
+                e.preventDefault();   // prevents return from also submitting whole form
+                $("#myPrompt").dialog("close");
+                callback($("#myPromptText").val());
+            }
+        });
         $("#myPrompt").dialog({
                                 modal: true,
                                 closeOnEscape: true,

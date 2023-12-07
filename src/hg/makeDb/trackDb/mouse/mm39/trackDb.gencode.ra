@@ -5,7 +5,6 @@ group genes
 shortLabel GENCODE Versions
 longLabel Container of all new and previous GENCODE releases
 priority 2.1
-pennantIcon Updated red ../goldenPath/newsarch.html#081823 "Updated Aug. 18, 2023"
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 include wgEncodeGencodeVM26.ra

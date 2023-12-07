@@ -899,6 +899,8 @@ if (customTracksExist(cart, &ctFileName))
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
+        if (cartOptionalString(cart, "ctTest") != NULL)
+            errAbort("ctTest set");
         ctList =
             customFactoryParse(genomeDb, ctFileName, TRUE, retBrowserLines);
         }
