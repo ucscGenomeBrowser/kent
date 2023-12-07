@@ -589,10 +589,15 @@ def findDot():
     It will try to find 'dot' and if it cannot find it, will fall back to cgi-bin/loader/dot_static:
 
         - if anything is specified in hg.conf, it will use that
-        - if it can find "dot" in the PATH, it will use that next (dot
-          installed from the repos will always work)
         - if that doesn't work either, we run cgi-bin/loader/dot_static (our
-          static version may fail due to wrong glibc version) """
+          static version may fail due to wrong glibc version) 
+        - if it can find "dot" in the PATH, it will use that next (dot
+          installed from the repos will always work) - this is for mirrors
+
+    We do not prefer the installed dot because we have different linux versions
+    or packages on genome-asia, genome-euro and hgwdev and so the dot versions
+    differ and produce different images and this is confusing when testing.
+          """
     binPath = cfgOption("graphvizPath")
 
     if binPath is not None and binPath.strip()!="":
