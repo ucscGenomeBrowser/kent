@@ -3975,7 +3975,7 @@ function mousemoveTimerHelper(e) {
 
 function mousemoveHelper(e) {
     /* Helper function for deciding whether to keep a tooltip visible upon a mousemove event */
-    if (mousemoveTimer === undefined) {
+    if (mousemoveTimer === undefined && canShowNewMouseover) {
         // if we are over another mouseable element we want to show that one instead
         // use this timer to do so
         let callback = mousemoveTimerHelper.bind(mouseoverContainer);
@@ -4060,7 +4060,10 @@ function showMouseover(e) {
         // user is moving their mouse around, make sure where they stop is what we show
         clearTimeout(mouseoverTimer);
     }
-    mouseoverTimer = setTimeout(showMouseoverText, 300, e);
+    // prevent attaching a timer if something has focus
+    if (canShowNewMouseover) {
+        mouseoverTimer = setTimeout(showMouseoverText, 300, e);
+    }
 }
 
 function addMouseover(ele1, text = null, ele2 = null) {
@@ -4130,74 +4133,66 @@ function convertTitleTagsToMouseovers() {
     /* Mouseover should clear if you leave the document window altogether */
     document.body.addEventListener("mouseleave", (ev) => {
         clearTimeout(mouseoverTimer);
-        mousemoveController.abort();
+        if (mousemoveController) { mousemoveController.abort(); }
         hideMouseoverText(mouseoverContainer);
         canShowNewMouseover = false;
         // let mouseovers show up again upon moving back in to the window
         // but only need the event once
-        document.body.addEventListener("mouseenter", (ev) => {
-            canShowNewMousoever = true;
-        }, {once: true});
+        // use capture: true to force this event to happen
+        // before the regular mouseover event
+        document.body.addEventListener("mouseover", (evt) => {
+            canShowNewMouseover = true;
+        }, {capture: true, once: true});
     });
 
-    /* make the above mouseovers go away if we are in an input or select menu */
+    /* make the mouseovers go away if we are in an input */
     const inps = document.getElementsByTagName("input");
-    const sels = document.getElementsByTagName("select");
     for (let inp of inps) {
         if (!(inp.type == "hidden" || inp.type == "HIDDEN")) {
-            inp.addEventListener("focus", (ev) => {
+            if (inp.type !== "submit") {
+                inp.addEventListener("focus", (ev) => {
+                    if (mousemoveController) {mousemoveController.abort();}
+                    clearTimeout(mouseoverTimer);
+                    clearTimeout(mousemoveTimer);
+                    hideMouseoverText(mouseoverContainer);
+                    canShowNewMouseover = false;
+                    inp.addEventListener("blur", (evt) => {
+                        canShowNewMouseover = true;
+                    }, {once: true});
+                });
+            } else {
+                // the buttons are inputs that don't blur right away (or ever? I can't tell), so
+                // be sure to restore the tooltips when they are clicked
+                inp.addEventListener("click", (ev) => {
+                    if (mousemoveController) {mousemoveController.abort();}
+                    clearTimeout(mouseoverTimer);
+                    clearTimeout(mousemoveTimer);
+                    hideMouseoverText(mouseoverContainer);
+                    canShowNewMouseover = true;
+                });
+            }
+        }
+    }
+    /* on a select, we can hide the tooltip on focus, but don't disable them
+     * altogether, because it's easy to click out of a select without actually
+     * losing focus, and we can't detect that because the web browser handles
+     * that click separately */
+    const sels = document.getElementsByTagName("select");
+    for (let sel of sels) {
+        sel.addEventListener("focus", (ev) => {
+            if (mousemoveController) {mousemoveController.abort();}
+            clearTimeout(mouseoverTimer);
+            hideMouseoverText(mouseoverContainer);
+            canShowNewMouseover = true;
+        });
+        for (let opt of sel.options) {
+            opt.addEventListener("click", (evt) => {
+                if (mousemoveController) {mousemoveController.abort();}
                 clearTimeout(mouseoverTimer);
-                mousemoveController.abort();
                 hideMouseoverText(mouseoverContainer);
-                canShowNewMouseover = false;
-            });
-            inp.addEventListener("blur", (evt) => {
                 canShowNewMouseover = true;
             });
         }
-    }
-    for (let sel of sels) {
-        sel.addEventListener("focus", (ev) => {
-            clearTimeout(mouseoverTimer);
-            mousemoveController.abort();
-            hideMouseoverText(mouseoverContainer);
-            canShowNewMouseover = false;
-        });
-        sel.addEventListener("blur", (evt) => {
-            canShowNewMouseover = true;
-        });
-    }
-
-    /* for hgTracks specifically, we also need to deal with the special contextmenu */
-    let imgTbl = document.getElementById("imgTbl");
-    if (imgTbl) {
-        imgTbl.addEventListener("contextmenu", function(e) {
-            clearTimeout(mouseoverTimer);
-            mousemoveController.abort();
-            hideMouseoverText(mouseoverContainer);
-            canShowNewMouseover = false;
-            // right-click menu doesn't capture focus so manually catch it
-            document.addEventListener("click", function(ev) {
-                // there is a race condition where the close happens after an inputs
-                // focus happens, which means mouseovers get re-enabled when the focus
-                // on the input should prevent them, catch that here:
-                if (!(document.activeElement.tagName === "INPUT" ||
-                        document.activeElement === "SELECT")) {
-                    canShowNewMouseover = true;
-                }
-            }, {once: true});
-            document.addEventListener("keyup", function(ev) {
-                if (ev.keyCode == 27) {
-                    // there is a race condition where the close happens after an inputs
-                    // focus happens, which means mouseovers get re-enabled when the focus
-                    // on the input should prevent them, catch that here:
-                    if (!(document.activeElement.tagName === "INPUT" ||
-                            document.activeElement === "SELECT")) {
-                        canShowNewMouseover = true;
-                    }
-                }
-            }, {once: true});
-        });
     }
 }
 
