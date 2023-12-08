@@ -201,6 +201,16 @@
 		// Show the context menu
 		show: function(t,e) {
 			var cmenu=this, x=e.pageX, y=e.pageY;
+
+            // prevent tooltips from showing up while contextmenu is open
+            if (typeof showMouseovers !== 'undefined' && showMouseovers) {
+                console.log("right click open, disabling mouseovers");
+                clearTimeout(mouseoverTimer);
+                mousemoveController.abort();
+                hideMouseoverText(mouseoverContainer);
+                canShowNewMouseover = false;
+            }
+
 			cmenu.target = t; // Preserve the object that triggered this context menu so menu item click methods can see it
 			if (cmenu.beforeShow(e)!==false) {
 				// If the menu content is a function, call it to populate the menu each time it is displayed
@@ -262,6 +272,11 @@
 				if (cmenu.shadow) { cmenu.shadowObj[cmenu.hideTransition](cmenu.hideSpeed); }
 			}
 			cmenu.shown = false;
+            // re-enable tooltips on contextmenu close
+            if (typeof showMouseovers !== 'undefined' && showMouseovers) {
+                console.log("contextmenu close, re-enabling tooltips");
+                canShowNewMouseover = true;
+            }
 		}
 	};
 	

@@ -158,6 +158,8 @@ struct geneInfo
     struct psl *psl;        // Alignment of transcript to genome
     struct dnaSeq *txSeq;   // Transcript sequence
     struct genbankCds *cds; // CDS (for those few pathogens that have transcript UTRs)
+    int cdsStart;           // genePred cdsStart (genome coord, really cds end if - strand)
+    int cdsEnd;             // genePred cdsEnd (genome coord, really cds start if - strand)
     };
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
