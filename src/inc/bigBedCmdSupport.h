@@ -8,6 +8,9 @@
 #include "bigBed.h"
 
 void bigBedCmdOutputHeader(struct bbiFile *bbi, FILE *f);
-/* output a header from the autoSql in the file */
+/* output a autoSql-style header from the autoSql in the file */
+
+void bigBedCmdOutputTsvHeader(struct bbiFile *bbi, FILE *f);
+/* output a TSV-style header from the autoSql in the file */
 
 #endif
