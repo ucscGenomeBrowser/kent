@@ -176,19 +176,20 @@ struct bptFile *bpt = NULL;
 struct lm *bbLm = NULL;
 struct bigBedInterval *ivList = NULL;
 if (idHash && isRegionWholeGenome())
-    {
     bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
-    struct slName *nameList = hashSlNameFromHash(idHash);
+if (bpt != NULL)
+    {
+    struct slName *nameList = hashSlNameFromHash(idHash), *name;
     int count = slCount(nameList);
     char *names[count];
     int ii;
-    for (ii=0; ii < count; ii++)
+    for (ii=0, name = nameList; ii < count; ii++, name = name->next)
         {
-        names[ii] = nameList->name;
-        nameList = nameList->next;
+        names[ii] = name->name;
         }
     bbLm = lmInit(0);
     ivList = bigBedMultiNameQuery(bbi, bpt, fieldIx, names, count, bbLm);
+    slNameFreeList(&nameList);
     }
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
