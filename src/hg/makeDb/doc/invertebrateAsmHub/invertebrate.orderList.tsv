@@ -112,6 +112,8 @@ GCA_905220545.1_ilMelAtha1.1	butterfly M.athalia
 GCA_905404155.1_ilPleArgu1.1	butterfly P.argus
 GCF_905475465.1_ilPieNapi1.2	butterfly P.napi (v1.2 refseq 2022)
 GCF_002938995.1_ASM293899v1	butterfly V.tameamea
+GCA_002024145.1_C_fragrantissima_v5	C.fragrantissima (CCCM101 2017)
+GCA_002811645.1_ASM281164v1	C.limacisporum (Hawaii 2017)
 GCF_003590095.1_tn1	cabbage looper
 GCA_905163435.1_ilMamBras1.1	cabbage moth
 GCF_001856805.1_P_rapae_3842_assembly_v2	cabbage white
@@ -309,6 +311,7 @@ GCF_021155765.1_iyDipSimi1.1	hymenopterans (iyDipSimi1 2021)
 GCF_021155785.1_iyNeoFabr1.1	hymenopterans (iyNeoFabr1 2021)
 GCF_021901495.1_iyNeoVirg1.1	hymenopterans (iyNeoVirg1 2022)
 GCF_000612105.2_Oabi_2.0	hymenopterans O.abietinus
+GCA_002811675.1_ASM281167v1	Ichthyosporea XGB-2017a (Hawaii 2017)
 GCF_027563975.1_ilPloInte3.1	Indianmeal moth (USDA-ARS_2022_Savannah primary hap 2023)
 GCF_003227715.2_Hsal_v8.6	Jerdon's jumping ant (DR-91 v8.6 2018)
 GCF_009193385.2_Nvit_psr_1.1	jewel wasp
@@ -500,6 +503,7 @@ GCA_019925205.1_ASM1992520v1	rose-grain aphid (CAU 2021)
 GCF_000002985.6_WBcel235	roundworm
 GCF_001186385.1_Dnoxia_1.0	Russian wheat aphid (RWA2 2015)
 GCA_001465515.1_DiuNox1.0	Russian wheat aphid (2015)
+GCA_008580545.1_SphArc_2.1	S.arctica (3-2015 2019)
 GCF_016086655.3_UVic_Lsal_1.2	salmon louse (v1.2 2020)
 GCA_917862395.1_iHelSar1.1	Sara longwing butterfly (2021)
 GCF_001417965.1_Aiptasia_genome_1.1	sea anemones (CC7 2015 refseq)
