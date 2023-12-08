@@ -1,7 +1,7 @@
 track hprcArrV1
 compositeTrack on
-shortLabel Rearrangments
-longLabel Rearrangments including indels,inversions, and duplications
+shortLabel Rearrangements
+longLabel Rearrangements including indels,inversions, and duplications
 visibility hide 
 group hprc 
 #noInherit on 
