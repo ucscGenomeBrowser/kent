@@ -16,6 +16,9 @@ my %protectedAliases;	# key is the lc(alias) name, value is their destination
                 # don't use them or knock anything out if they are ambiguous
                 # these aliases are pointing to database browser instances
                 # on the RR, they take precedence over any other relationships
+## establish a list of active database browsers
+my %rrActive;	# key is db name from hgcentral where active=1, value is 1
+my %rrCiActive;	# key is lc(db) name for case insensitive matches
 
 sub outOne($$) {
   my ($alias, $destination) = @_;
@@ -24,7 +27,8 @@ sub outOne($$) {
   return if ($lcAlias eq $lcDest);	# no identity functions
   return if (defined($ambiguous{$lcAlias}));	# ignore ambiguous aliases
   return if (defined($ambiguous{$lcDest}));	# ignore ambiguous aliases
-  if (defined($protectedAliases{lc($alias)})) {
+  return if (defined($rrCiActive{$lcAlias}));	# no aliases for UCSC db names
+  if (defined($protectedAliases{$lcAlias})) {
     ## warning if ambiguous
     if ($protectedAliases{lc($alias)} ne lc($destination)) {
       printf STDERR "# WARNING: protected and ambiguous ? %s -> %s %s\n", $alias, $destination, $protectedAliases{lc($alias)};
@@ -80,13 +84,12 @@ sub dbPriority($$) {
   $protectedAliases{lc($a[2])} = lc($db);
 }
 
-## establish a list of active database browsers
-my %rrActive;	# key is db name from hgcentral where active=1, value is 1
 
 open (FH, "hgsql -N -hgenome-centdb -e 'select name from dbDb where active=1;' hgcentral|") or die "can not hgsql select from dbDb.hgcentral";
 while (my $dbName = <FH>) {
   chomp $dbName;
   $rrActive{$dbName} = 1;
+  $rrCiActive{lc($dbName)} = 1;
 }
 close (FH);
 
