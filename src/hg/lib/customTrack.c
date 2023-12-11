@@ -907,8 +907,14 @@ if (customTracksExist(cart, &ctFileName))
     errCatchEnd(errCatch);
     if (errCatch->gotError)
         {
+        if ( errCatch->message->string != NULL)
+            {
+            unsigned len = strlen(errCatch->message->string);
+            if (len > 0) // remove the newline
+                errCatch->message->string[len - 1] = 0;
+            }
         warn("Custom track loading error (%s): failed to load custom tracks. "
-             "This is an internal error. If you want us to look into it and fix your custom track, "
+             "This is a temporary internal error, please refresh your browser. If you continue to experience this issue"
              "please reach out to genome-www@soe.ucsc.edu and send us a session link "
              "where this error occurs",
              errCatch->message->string);
