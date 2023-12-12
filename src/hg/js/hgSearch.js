@@ -542,26 +542,29 @@ var hgSearch = (function() {
                 hiddenLi.style = "display: none";
             }
         });
+        let isIconClick = this.nodeName !== "A";
+        let linkEl = null;
+        if (isIconClick) {linkEl = this.nextSibling.children[0];}
         if (isHidden) {
-            if (this.nextSibling) {
+            if (isIconClick) {
                 // click on the '+' icon
-                newText = this.nextSibling.innerHTML.replace(/Show/,"Hide");
-                this.nextSibling.innerHTML = newText;
+                newText = linkEl.textContent.replace(/Show/,"Hide");
+                linkEl.textContent = newText;
                 this.src = "../images/remove_sm.gif";
             } else {
                 // click on the link text
-                this.innerHTML = this.innerHTML.replace(/Show/,"Hide");
+                this.textContent = this.textContent.replace(/Show/,"Hide");
                 let img = document.getElementById(btnId);
                 img.src = "../images/remove_sm.gif";
             }
         } else {
-            if (this.nextSibling) {
+            if (isIconClick) {
                 // click on the '-' icon
-                newText = this.nextSibling.innerHTML.replace(/Hide/,"Show");
-                this.nextSibling.innerHTML = newText;
+                newText = linkEl.textContent.replace(/Hide/,"Show");
+                linkEl.textContent = newText;
                 this.src = "../images/add_sm.gif";
             } else {
-                this.innerHTML = this.innerHTML.replace(/Hide/,"Show");
+                this.textContent = this.textContent.replace(/Hide/,"Show");
                 let img = document.getElementById(btnId);
                 img.src = "../images/add_sm.gif";
             }
