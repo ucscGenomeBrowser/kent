@@ -407,7 +407,7 @@ touch /data/mysql/hg38/gtexGeneV8.{MYI,MYD,frm}
 touch /data/mysql/hgFixed/gtexTissueV8.{MYI,MYD,frm}
 
 # add encode cCREs track, #32440
-touch /data/mysql/hg38/encRegTfbsClusteredSources.{MYi,MYD,frm}
+touch /data/mysql/hg38/encRegTfbsClusteredSources.{MYI,MYD,frm}
 
 # Feb 2021, knownCds is required for knownGene display
 for db in hg38 mm10; do

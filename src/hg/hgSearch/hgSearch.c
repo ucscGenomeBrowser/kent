@@ -627,7 +627,6 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
     if (hgp->singlePos->highlight)
         cartSetString(cj->cart, "addHighlight", hgp->singlePos->highlight);
     char *trackName = cloneString(hgp->tableList->name);
-    trackHubFixName(trackName);
     struct trackDb *track = NULL;
     if (!sameString(trackName, "chromInfo"))
         {
@@ -637,6 +636,8 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
         if (!track)
             errAbort("no track for table \"%s\" found via a findSpec", trackName);
         }
+    trackName = cloneString(track->track);
+    trackHubFixName(trackName);
     puts("Content-type:text/html\n");
     puts("<HTML>\n<HEAD>\n");
     printf("<script>window.location.href=\"../cgi-bin/hgTracks?");

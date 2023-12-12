@@ -20,6 +20,7 @@ int clStart = -1;
 int clEnd = -1;
 char *clBed = NULL;
 boolean header = FALSE;
+boolean tsv = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +36,7 @@ errAbort(
   "   -bed=in.bed - restrict output to all regions in a BED file\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
   "   -header - output a autoSql-style header (starts with '#').\n"
+  "   -tsv - output a TSV header (without '#').\n"
   );
 }
 
@@ -45,6 +47,7 @@ static struct optionSpec options[] = {
    {"bed", OPTION_STRING},
    {"udcDir", OPTION_STRING},
    {"header", OPTION_BOOLEAN},
+   {"tsv", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -82,6 +85,8 @@ struct bbiFile *bbi = bigBedFileOpen(inFile);
 FILE *f = mustOpen(outFile, "w");
 if (header)
     bigBedCmdOutputHeader(bbi, f);
+else if (tsv)
+    bigBedCmdOutputTsvHeader(bbi, f);
 
 if (clBed != NULL)
     {
@@ -120,6 +125,9 @@ clEnd = optionInt("end", clEnd);
 clBed = optionVal("bed", clBed);
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 header = optionExists("header");
+tsv = optionExists("tsv");
+if (header & tsv)
+    errAbort("can't specify both -header and -tsv");
 if (argc != 3)
     usage();
 bigBedToBed(argv[1], argv[2]);

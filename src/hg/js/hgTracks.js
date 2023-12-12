@@ -3404,7 +3404,10 @@ function showRecTrackSetsPopup() {
         var link = $this.attr("href").replace(/position=.*/, 'position=');
         $this.attr("href", link + genomePos.original);
     });
-    $('#recTrackSetsPopup').dialog({width:'650'});
+    let popUp = document.getElementById("recTrackSetsPopup");
+    title = popUp.title;
+    if (title.length === 0 && popUp.getAttribute("originaltitle") !== "") {title = popUp.getAttribute("originaltitle");}
+    $('#recTrackSetsPopup').dialog({width:'650', title: title});
 }
 
 function removeSessionPanel() {

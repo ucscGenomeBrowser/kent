@@ -70,7 +70,7 @@ setCurrentDir(dirName);
 makeMakefile(programName, "makefile");
 // Change file permissions    
 char cmd[1024]; 
-safef(cmd, 1024, "chmod 755 %s",programName);  
+safef(cmd, 1024, "chmod 775 %s", programName);
 mustSystem(cmd); 
 }
 

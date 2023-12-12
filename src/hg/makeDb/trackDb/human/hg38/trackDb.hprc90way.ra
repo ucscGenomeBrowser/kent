@@ -1,8 +1,8 @@
 track consHprc90way
 compositeTrack on
-shortLabel HPRC 90-way
-longLabel Alignment & Conservation on 90 human genome assemblies
-subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP)
+shortLabel Multiple Alignment
+longLabel Multiple Alignment & Conservation on 90 human genome assemblies
+subGroup1 view Views align=Multiz_Alignment phyloP=Basewise_Conservation_(phyloP)
 dragAndDrop subTracks
 visibility hide
 type bed 4
@@ -10,7 +10,7 @@ group hprc
 html hprc90way
 
     track consHprc90wayViewalign
-    shortLabel HPRC 90-way
+    shortLabel 90-way
     view align
     visibility pack
     viewUi on
@@ -20,8 +20,8 @@ html hprc90way
 
         track hprc90way
         subTrack consHprc90wayViewalign
-        shortLabel HPRC 90-way
-        longLabel Alignment on 90 human genome assemblies
+        shortLabel Multiple Alignment
+        longLabel Multiple Alignment on 90 human genome assemblies
         subGroups view=align
         noInherit on
         type wigMaf 0.0 1.0
@@ -53,8 +53,8 @@ html hprc90way
         track phyloPHprc90way
         subTrack consHprc90wayViewphyloP
         subGroups view=phyloP
-        shortLabel 90-way phyloP
-        longLabel 90 human sequences Basewise Conservation by PhyloP
+        shortLabel phyloP
+        longLabel Basewise Conservation by PhyloP
         configurable on
         noInherit on
         type bigWig -20 11.936
