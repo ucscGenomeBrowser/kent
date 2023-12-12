@@ -1014,8 +1014,10 @@ var vis = {
 ////////////////////////////////////////////////////////////
 var dragSelect = {
 
-    hlColorDefault: '#aaedff', // default highlight color, if nothing specified
-    hlColor :       '#aaedff', // current highlight color
+    //hlColorDefault: '#aaedff', // default highlight color, if nothing specified
+    //hlColor :       '#aaedff', // current highlight color
+    hlColor :       '#aac6ff', // current highlight color
+    hlColorDefault: '#aac6ff', // default highlight color, if nothing specified
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
     originalCursor:  null,
     startTime:       null,
