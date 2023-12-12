@@ -753,6 +753,27 @@ void drawScaledBoxLabel(struct hvGfx *hvg,
      int xOff, int y, int height, Color color, MgFont *font,  char *label);
 /* Draw a box scaled from chromosome to window coordinates and draw a label onto it. */
 
+typedef enum {
+    GLYPH_CIRCLE,
+    GLYPH_TRIANGLE,
+    GLYPH_INV_TRIANGLE,
+    GLYPH_SQUARE,
+    GLYPH_DIAMOND,
+    GLYPH_OCTAGON,
+    GLYPH_STAR,
+    GLYPH_PENTAGRAM
+    } glyphType;
+
+void drawScalledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
+                      int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor);
+/* Draw a glyph as a circle/polygon.  If filled, draw as with fillColor,
+ * which may have transparency.
+ */
+
+glyphType parseGlyphType(char *glyphStr);
+/* Return the enum glyph type for a string specifying a glyph.
+ * Defaults to GLYPH_CIRCLE if the string is unrecognized. */
+
 Color whiteIndex();
 /* Return index of white. */
 
