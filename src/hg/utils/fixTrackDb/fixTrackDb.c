@@ -26,9 +26,9 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-static void drop(char *trackDb, char *name)
+static void drop(char *db, char *trackDb, char *name)
 {
-printf("delete from %s where tableName = '%s';\n", trackDb, name);
+printf("delete from %s.%s where tableName = '%s';\n", db, trackDb, name);
 }
 
 static boolean checkAvail(char *db, char *trackDb, struct trackDb *tdbList, boolean top)
@@ -49,7 +49,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         if (!checkAvail(db, trackDb, tdb->subtracks, FALSE))
             {
             // none of the children exist, drop composite
-            drop(trackDb,tdb->track);
+            drop(db, trackDb,tdb->track);
             continue;
             }
         foundOne = TRUE;
@@ -60,7 +60,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         }
     else
         {
-        drop(trackDb,tdb->track);
+        drop(db, trackDb,tdb->track);
         continue;
         }
 
@@ -85,7 +85,7 @@ if (top)
         {
         // none of the children exist, drop supertrack
         if (hel->val == NULL)
-            drop(trackDb,(char *)hel->name);
+            drop(db, trackDb,(char *)hel->name);
         }
     }
 return foundOne;
