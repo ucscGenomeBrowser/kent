@@ -13,34 +13,6 @@
 // Probably move this to a trackDb variable eventually
 #define MAX_DECORATION_ROWS 3
 
-struct xyPair {
-    double x, y;
-};
-
-struct glyphShape {
-    int nPoints;
-    struct xyPair* points;
-};
-
-/* An obtuse representation, but this is a list of the glyphs we know how to draw along with coordinates for
- * the sequential points of each glyph on the unit square.  Those will then be scaled by whatever the current
- * track height is for actual drawing. */
-struct glyphShape glyphShapes[] = {
-    [DECORATION_GLYPH_CIRCLE] = (struct glyphShape) {0, NULL},
-
-    [DECORATION_GLYPH_TRIANGLE] = (struct glyphShape) {3, (struct xyPair[]) {{0.5,0},{1.07735,1},{-0.07735,1}}},
-    [DECORATION_GLYPH_INV_TRIANGLE] = (struct glyphShape) {3, (struct xyPair[]) {{0.5,1},{1.07735,0},{-0.07735,0}}},
-    [DECORATION_GLYPH_SQUARE] = (struct glyphShape) {4, (struct xyPair[]) {{0,0},{1,0},{1,1},{0,1}}},
-    [DECORATION_GLYPH_DIAMOND] = (struct glyphShape) {4, (struct xyPair[]) {{0.5,0},{1,0.5},{0.5,1},{0,0.5}}},
-    [DECORATION_GLYPH_PENTAGRAM] = (struct glyphShape) {5, (struct xyPair[]) {{0.5,0.0},{0.824920,1.0},{-0.025731,0.381966},
-            {1.02573,0.381966},{0.175080,1}}},
-    [DECORATION_GLYPH_OCTAGON] = (struct glyphShape) {8, (struct xyPair[]) {{0.292893,1},{0.707107,1},{1,0.707107},
-            {1,0.292893},{0.707107,0},{0.292893,0},{0,0.292893},{0,0.707107}}},
-    [DECORATION_GLYPH_STAR] = (struct glyphShape) {10, (struct xyPair[]) {{0.500000,0.000000},{0.624108,0.381966},{1.025731,0.381966},
-            {0.700811,0.618034},{0.824920,1.000000},{0.500000,0.763932},{0.175080,1.000000},{0.299189,0.618034},
-            {-0.025731,0.381966},{0.375892,0.381966}}}
-};
-
 struct point
 // For keeping track of a reverse path for making a polygon when tracing exon blocks.  We draw the top
 // half of the polygon first, then draw its mirror image back for the bottom half.
@@ -1268,46 +1240,17 @@ if (scaledBoxToPixelCoords(startBase, endBase, scale, xOff, &x1, &x2))
 
 
 void drawGlyphDecoration(struct decoration *d, struct hvGfx *hvg, double scale, int xOff, int y,
-        int heightPer, MgFont *font, boolean filled)
-/* Draw a glyph decoration as a circle/polygon.  If filled, draw as a solid block.  Otherwise,
- * draw the outline.
+        int heightPer, boolean filled)
+/* Draw a glyph decoration as a circle/polygon.  If filled, draw as with fillColor,
+ * which may have transparency.
  */
 {
-int glyphHeight = heightPer-1;
-int startX, endX;
-double middleX, middleY = y+heightPer/2.0;
-// A glyph might be defined on a wide range - find the center and draw specifically there
-// so we don't have a glyph shifting if only part of that window is in view.
-int centeredStart, centeredEnd;
-centeredStart = (d->chromStart+d->chromEnd)/2;
-centeredEnd = (d->chromStart+d->chromEnd+1)/2;
-int ptCount, i, x0, y0;
+glyphType glyph = parseGlyphType(d->glyph);
 Color outlineColor = bedColorToGfxColor(d->color);
 Color fillColor = bedColorToGfxColor(bedParseColor(d->fillColor));
-if (!scaledBoxToPixelCoords(centeredStart, centeredEnd, scale, xOff, &startX, &endX))
-    return;  // apparently we don't intersect the window
-middleX = (startX+endX)/2.0;
-decorationGlyphType glyphType = decorationGetGlyphType(d);
-switch (glyphType)
-    {
-    case DECORATION_GLYPH_CIRCLE:
-        hvGfxCircle(hvg, middleX, middleY, heightPer/2, fillColor, TRUE);
-        hvGfxCircle(hvg, middleX, middleY, heightPer/2, outlineColor, FALSE);
-        break;
-    default:
-        ptCount = glyphShapes[glyphType].nPoints;
-        struct gfxPoly *poly = gfxPolyNew();
-        for (i=0; i<ptCount; i++)
-            {
-            x0 = middleX + (glyphShapes[glyphType].points[i].x-0.5)*glyphHeight;
-            y0 = middleY + (glyphShapes[glyphType].points[i].y-0.5)*glyphHeight;
-            gfxPolyAddPoint(poly, x0, y0);
-            }
-        hvGfxDrawPoly(hvg,poly,fillColor,TRUE);
-        hvGfxDrawPoly(hvg,poly,outlineColor,FALSE);
-        gfxPolyFree(&poly);
-        break;
-    }
+drawScalledGlyph(hvg, d->chromStart, d->chromEnd, scale, xOff, y,
+                 heightPer, glyph, filled, outlineColor, fillColor);
+
 }
 
 
@@ -1383,5 +1326,5 @@ void drawDecoration(struct decoration *d, struct hvGfx *hvg, double scale, int x
 if (decorationGetStyle(d) == DECORATION_STYLE_BLOCK)
     drawBlockDecoration(d, hvg, scale, xOff, y, heightPer, font, filled);
 if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH)
-    drawGlyphDecoration(d, hvg, scale, xOff, y, heightPer, font, filled);
+    drawGlyphDecoration(d, hvg, scale, xOff, y, heightPer, filled);
 }

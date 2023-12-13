@@ -25,4 +25,7 @@ struct psl* pslTransMap(unsigned opts, struct psl *inPsl, enum pslType inPslType
 /* map a psl via a mapping psl, a single psl is returned, or NULL if it
  * couldn't be mapped. */
 
+void pslProtToNAConvert(struct psl *psl);
+/* convert a protein/NA or protein/protein alignment to a NA/NA alignment */
+
 #endif
