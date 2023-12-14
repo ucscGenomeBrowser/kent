@@ -26,7 +26,7 @@ include trackDb.gtex.ra
 include trackDb.geneHancer.ra
 
 # NCBI ClinVar
-include clinvar.ra beta,public
+include clinvar.ra alpha,beta,public
 include clinvar.alpha.ra alpha
 
 # NCBI dbVar

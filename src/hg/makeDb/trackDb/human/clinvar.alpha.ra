@@ -9,7 +9,7 @@ noParentConfig on
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 scoreLabel ClinVar Star-Rating (0-4)
-dataVersion /gbdb/$D/bbi/clinvar/version.txt
+dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
 
         track clinvarMain
         parent clinvar
@@ -75,8 +75,8 @@ dataVersion /gbdb/$D/bbi/clinvar/version.txt
         parent clinvar
         shortLabel ClinVar interp
         longLabel ClinVar SNVs submitted interpretations and evidence
-        bigDataUrl /gbdb/$D/clinvarSubLolly/clinvarSubLolly.bb
-        xrefDataUrl /gbdb/$D/clinvarSubLolly/clinvarSub.bb
+        bigDataUrl /gbdb/$D/clinvarSubLollyAlpha/clinvarSubLolly.bb
+        xrefDataUrl /gbdb/$D/clinvarSubLollyAlph/clinvarSub.bb
         type bigLolly
         group phenDis
         lollySizeField 10
