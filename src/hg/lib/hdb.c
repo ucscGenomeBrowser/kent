@@ -3961,7 +3961,16 @@ static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-if ((!tdb->private || privateHost))
+// normally we trust trackDb, but sometimes we don't!
+static boolean checkedTrust = FALSE;
+static boolean trustTrackDb = TRUE;
+if (!checkedTrust)
+    {
+    trustTrackDb = cfgOptionBooleanDefault("trustTrackDb", TRUE);
+    checkedTrust = TRUE;
+    }
+
+if ((!tdb->private || privateHost) && (trustTrackDb || trackDataAccessible(database, tdb)) )
     {
     // we now allow references to native tracks in track hubs (for track collections)
     // so we need to give the downstream code the table name if there is no bigDataUrl.
