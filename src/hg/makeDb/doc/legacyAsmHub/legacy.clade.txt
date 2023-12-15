@@ -146,6 +146,7 @@ GCA_018296145.1_Otsh_v2.0	fish
 GCA_019393635.1_mDroGli1.pri	mammals
 GCA_020740725.1_bCorHaw1.pri.cur	birds
 GCA_020740795.1_bApuApu2.pri.cur	birds
+GCA_020745735.1_sHemOce1.pat.X.cur.	vertebrate
 GCA_020826845.1_mDicBic1.mat.cur	mammals
 GCA_021462225.2_DD_fGirMul_XY1	fish
 GCA_023343835.1_bLagMut1_primary	birds
