@@ -86,6 +86,7 @@ GCA_004024565.1_ZalCal_v1_BIUU	mammals
 GCA_004024665.1_LemCat_v1_BIUU	primates
 GCA_004024745.1_CatWag_v1_BIUU	mammals
 GCA_004024865.1_RouAeg_v1_BIUU	mammals
+GCA_004024905.1_TapInd_v1_BIUU	mammals
 GCA_004025105.1_TamTet_v1_BIUU	mammals
 GCA_004026685.1_MonMon_M_v1_BIUU	mammals
 GCA_004026725.1_OnyTor_v1_BIUU	mammals
@@ -152,6 +153,7 @@ GCA_023634085.1_bFalChe1.pri	birds
 GCA_023634155.1_bFalPer1.pri	birds
 GCA_023638135.1_bFalBia1.pri	birds
 GCA_025265405.1_mMesDen1_primary_haplotype	mammals
+GCA_025583915.1_AnoSag2.1	vertebrate
 GCA_026419915.1_bHarHar1_primary_haplotype	birds
 GCA_026419965.1_mKogBre1_haplotype_1	mammals
 GCA_027172205.1_rPodRaf1.pri	vertebrate

@@ -58,6 +58,7 @@ GCF_000239415.1_AstBur1.0	Burton's mouthbrooder (Broad 2011)
 GCF_018398535.1_NCSU_Asbu1	Burton's mouthbrooder (NCSU 2021)
 GCA_020382915.1_fScaArg1.alt	butterfish (fScaArg1 alternate hap 2021)
 GCF_020382885.2_fScaArg1.pri	butterfish (fScaArg1 primary hap 2021)
+GCA_963422515.1_fBleOce1.1	butterfly blenny (primary hap 2023)
 GCA_022749735.1_fSemPul1.0.a	California sheephead (SPU_LCO1_2020_fin alternate hap 2022)
 GCA_022749685.1_fSemPul1.0.p	California sheephead (SPU_LCO1_2020_fin primary hap 2022)
 GCF_001660625.3_Coco_2.0	channel catfish (USDA103 v2.0 2022)
@@ -117,6 +118,7 @@ GCF_010015445.1_GENO_Pfluv_1.0	European perch
 GCA_947347695.1_fPlePla1.1_alternate_haplotype	European plaice (alternate hap 2022)
 GCF_947347685.1_fPlePla1.1	European plaice (primary hap 2022 refseq)
 GCF_905237075.1_dlabrax2021	European seabass (2021)
+GCA_963457725.1_fSprSpr1.1	European sprat (primary hap 2023)
 GCF_016745375.1_EPA_FHM_2.0	fathead minnow
 GCF_022458985.1_CIBA_Mcephalus_1.1	flathead mullet
 GCF_007364275.1_fArcCen1	flier cichlid (MPI-CPG 2019 refseq)
@@ -141,6 +143,7 @@ GCA_901709685.1_fSynAcu1.1_alternate_haplotype	greater pipefish (v1 alternate ha
 GCA_949358355.1_fHypImm3.1_alternate_haplotype	greater sand-eel (alternate hap 2023)
 GCA_949357725.1_fHypImm3.1	greater sand-eel (primary hap 2023)
 GCF_003331165.1_Xiphophorus_hellerii-4.1	green swordtail
+GCA_963514095.1_fEutGur1.1	grey gurnard (primary hap 2023)
 GCA_949357705.1_fGobGob1.1_alternate_haplotype	gudgeon (alternate hap 2023)
 GCA_949357685.1_fGobGob1.1	gudgeon (primary hap 2023)
 GCF_024217435.1_RoL_Ssco_1.1	Gulf pipefish (RoL_Ssco_1.1 Florida 2022 refseq)
@@ -181,7 +184,8 @@ GCA_900963305.2_fEcheNa1.2	live sharksucker (v2 2021)
 GCA_900963505.1_fEcheNa1.1_alternate_haplotype	live sharksucker (alternate hap 2019)
 GCA_910589325.1_fTauBub2.1_alternate_haplotype	longspined bullhead (fTauBub2.1 alternate hap 2021)
 GCA_910589615.1_fTauBub2.1	longspined bullhead (fTauBub2.1 primary hap 2021)
-GCF_009769545.1_fCycLum1.pri	lumpfish (2019 refseq)
+GCF_009769545.1_fCycLum1.pri	lumpfish (primary hap v1 2019 refseq)
+GCA_963457625.1_fCycLum2.1	lumpfish (primary hap v2.1 2023 genbank)
 GCA_009769515.1_fCycLum1.alt	lumpfish (alternate hap 2019)
 GCF_000239395.1_NeoBri1.0	lyretail cichlid
 GCF_020085105.1_ASM2008510v1	mandarin fish (FFG_IHB_CAS 2021)
@@ -195,6 +199,7 @@ GCA_019721115.1_AMEX_1.1	Mexican tetra (Pach_M1 Pachon cave 2021)
 GCF_023375975.1_AstMex3_surface	Mexican tetra (ESR-SI-001 2022)
 GCF_902362185.1_fChaCha1.1	milkfish (2019)
 GCA_902362175.1_fChaCha1.1_alternate_haplotype	milkfish (alternate hap 2019)
+GCA_963454915.1_fGymMic1.1	minispotted lanternfish (primary hap 2023)
 GCA_023349535.1_fCebVio1.0.a	monkeyface prickleback (CVI_PGR_0920_01 alternate hap 2022)
 GCA_023349555.1_fCebVio1.0.p	monkeyface prickleback (CVI_PGR_0920_01 primary hap 2022)
 GCF_001444195.1_X_couchianus-1.0	Monterrey platyfish
@@ -291,6 +296,8 @@ GCF_018831695.1_ASM1883169v1	Sumatra barb
 GCF_001952655.1_M_albus_1.0	swamp eel
 GCF_016859285.1_ASM1685928v1	swordfish
 GCF_904425465.1_Colossoma_macropomum	tambaqui
+GCA_963457635.1_fMicVar1.1	thickback sole (primary hap 2023)
+GCA_963514085.1_fCheLab1.1	thicklip grey mullet (primary hap 2023)
 GCF_016920845.1_GAculeatus_UGA_version5	three-spined stickleback
 GCA_026437355.1_fEucNew1.0.hap2	tidewater goby (DKJ021-1_F 2022)
 GCA_026437365.1_fEucNew1.0.hap1	tidewater goby (DKJ021-1_F 2022)
