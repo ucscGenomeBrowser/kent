@@ -10914,6 +10914,7 @@ cgiMakeButton("Submit", "submit");
 puts("<P>");
 
 hTableStart();
+puts("<thead style='position:sticky; top:0; background-color: white;'>");
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 puts("Sequence name &nbsp;");
@@ -10934,6 +10935,7 @@ else if (hasAlias)
     cgiTableFieldEnd();
     }
 cgiTableRowEnd();
+puts("</thead>");
 
 if (sameString(database,"hg38"))
     chromInfoRowsChromExt("withAltRandom");
