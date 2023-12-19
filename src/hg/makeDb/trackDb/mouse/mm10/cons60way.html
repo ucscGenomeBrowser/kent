@@ -168,7 +168,10 @@ the conservation score display.</P>
 <P>
 To view detailed information about the alignments at a specific
 position, zoom the display in to 30,000 or fewer bases, then click on
-the alignment.</P>
+the alignment. For the Conserved Elements track, the name, or 'lod' of the items,
+signifies the raw output scores from phastCons. These scores were then transformed
+from 0-1000 for the score column of the track.
+See the methods section for more details.</P>
 
 <H3>Gap Annotation</H3>
 <P>
@@ -269,7 +272,6 @@ nile tilapia, squirrel</TD></TR>
 <P>
 Pairwise alignments with the $organism genome were generated for
 each species using lastz from repeat-masked genomic sequence.
-Lineage-specific repeats were removed prior to alignment, then reinserted.
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.

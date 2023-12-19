@@ -23,6 +23,7 @@
 #include "soTerm.h"
 #include "bigBed.h"
 #include "hubConnect.h"
+#include "chromAlias.h"
 
 
 #define GAP_ITEM_LABEL  "Gaps"
@@ -984,7 +985,7 @@ if (fileName == NULL)
     warn("cannot find summary information in trackDb for track '%s'", track->track);
     return;
     }
-struct bbiFile *bbi =  bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
 char *bedRow[7];
 char startBuf[16], endBuf[16];
@@ -1087,17 +1088,17 @@ if (snpTable == NULL)
 /* Create SQL where clause that will load up just the
  * beds for the species that we are including. */
 conn = hAllocConn(database);
-dyStringAppend(where, "name in (");
+sqlDyStringPrintf(where, "name in (");
 for (mi = miList; mi != NULL; mi = mi->next)
     {
     if (!isPairwiseItem(mi))
 	/* exclude non-species items (e.g. conservation wiggle */
 	continue;
-    dyStringPrintf(where, "'%s'", mi->db);
+    sqlDyStringPrintf(where, "'%s'", mi->db);
     if (mi->next != NULL)
-	dyStringAppend(where, ",");
+	sqlDyStringPrintf(where, ",");
     }
-dyStringAppend(where, ")");
+sqlDyStringPrintf(where, ")");
 /* check for empty where clause */
 if (!sameString(where->string,"name in ()"))
     whereClause = where->string;
@@ -1230,7 +1231,7 @@ if (track->isBigBed)
     {
     struct lm *lm = lmInit(0);
     char *fileName = trackDbSetting(track->tdb, "summary");
-    struct bbiFile *bbi =  bigBedFileOpen(fileName);
+    struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
     struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
     char *bedRow[7];
     char startBuf[16], endBuf[16];
@@ -1251,17 +1252,17 @@ else
     /* Create SQL where clause that will load up just the
      * summaries for the species that we are including. */
     conn = hAllocConn(database);
-    dyStringAppend(where, "src in (");
+    sqlDyStringPrintf(where, "src in (");
     for (mi = miList; mi != NULL; mi = mi->next)
         {
         if (!isPairwiseItem(mi))
             /* exclude non-species items (e.g. conservation wiggle */
             continue;
-        dyStringPrintf(where, "'%s'", mi->db);
+        sqlDyStringPrintf(where, "'%s'", mi->db);
         if (mi->next != NULL)
-            dyStringAppend(where, ",");
+            sqlDyStringPrintf(where, ",");
         }
-    dyStringAppend(where, ")");
+    sqlDyStringPrintf(where, ")");
     /* check for empty where clause */
     if (!sameString(where->string,"src in ()"))
         whereClause = where->string;
@@ -1306,6 +1307,17 @@ for (mi = miList; mi != NULL; mi = mi->next)
         /* ignore item for the score */
         continue;
     summaryList = (struct mafSummary *)hashFindVal(componentHash, mi->db);
+    if (summaryList == NULL)
+        {
+        // sometimes the summary table has the other database without a dot even if it has one
+        char *tryNoDot = cloneString(mi->db);
+        char *dot = strchr(tryNoDot, '.');
+        if (dot != NULL)
+            {
+            *dot = 0;
+            summaryList = (struct mafSummary *)hashFindVal(componentHash, tryNoDot);
+            }
+        }
     if (summaryList == NULL)
         summaryList = (struct mafSummary *)hashFindVal(componentHash, mi->name);
 
@@ -1956,7 +1968,7 @@ return mfList;
 static struct mafFrames *getFramesFromBb(  char *framesTable, char *chromName, int seqStart, int seqEnd, char *component)
 {
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi =  bigBedFileOpen(framesTable);
+struct bbiFile *bbi =  bigBedFileOpenAlias(framesTable, chromAliasFindAliases);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
 char *bedRow[11];
 char startBuf[16], endBuf[16];
@@ -2353,7 +2365,7 @@ for(offset=startSub2*2; (offset < alignLineLength) && (offset < winBaseCount + s
     x2 = ((offset - startSub2 * 2)+1) * width/winBaseCount - 1;
     if (insertCounts[offset] != 0)
 	{
-	struct dyString *label = newDyString(20);
+	struct dyString *label = dyStringNew(20);
 	int haveRoomFor = (width/winBaseCount)/tl.mWidth;
 
 	/* calculate number of AAs instead of bases if it is wigMafProt */
@@ -2433,19 +2445,19 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 
 	if (sameString("codonDefault", codonTransMode))
 	    {
-	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
+	    sqlSafef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
 
 	    found = TRUE;
 	    }
 	else if (sameString("codonFrameDef", codonTransMode))
 	    {
-	    safef(extra, sizeof(extra), "src='%s'",mi->db);
+	    sqlSafef(extra, sizeof(extra), "src='%s'",mi->db);
 
 	    found = FALSE;
 	    }
 	else if (sameString("codonFrameNone", codonTransMode))
 	    {
-	    safef(extra, sizeof(extra), "src='%s'",mi->db);
+	    sqlSafef(extra, sizeof(extra), "src='%s'",mi->db);
 
 	    found = TRUE;
 	    }
@@ -2520,7 +2532,7 @@ tryagain:
 	if (!found)
 	    {
 	    /* try the default species */
-	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
+	    sqlSafef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
 
 	    found = TRUE; /* don't try again */
 	    goto tryagain;
@@ -2743,7 +2755,7 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
 
     //  Manufacture and initialize wiggle subtrack, both tdb and track
     struct trackDb *wigTdb = CloneVar(tdb);
-    wigType = newDyString(64);
+    wigType = dyStringNew(64);
     dyStringPrintf(wigType, "type wig ");
     for (i = 1; i < wordCount; i++)
         dyStringPrintf(wigType, "%s ", words[i]);

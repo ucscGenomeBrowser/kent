@@ -16,40 +16,40 @@
   <div class="col-md-6">
     <ul>
       <li><a href="../goldenPath/help/axt.html">Axt format</a></li>
-      <li><a href="#format5.1">BAM format</a></li>
+      <li><a href="/goldenPath/help/bam.html">BAM format</a></li>
       <li><a href="#format1">BED format</a></li>
       <li><a href="#format1.7">BED detail format</a></li>
-      <li><a href="#format1.8">bedGraph format</a></li>
-      <li><a href="#format21">barChart and bigBarChart format</a></li>
-      <li><a href="#format1.5">bigBed format</a></li>
-      <li><a href="#format9.1">bigGenePred table format</a></li>
-      <li><a href="#format9.2">bigPsl table format</a></li>
-      <li><a href="#format9.3">bigMaf table format</a></li>
-      <li><a href="#format9.4">bigChain table format</a></li>
-      <li><a href="#format9.5">bigNarrowPeak table format</a></li>
-      <li><a href="#format9.6">bigLolly table format</a></li>
-      <li><a href="#format6.1">bigWig format</a></li>
+      <li><a href="/goldenPath/help/bedgraph.html">bedGraph format</a></li>
+      <li><a href="/goldenPath/help/barChart.html">barChart and bigBarChart format</a></li>
+      <li><a href="/goldenPath/help/bigBed.html">bigBed format</a></li>
+      <li><a href="/goldenPath/help/bigGenePred.html">bigGenePred table format</a></li>
+      <li><a href="/goldenPath/help/bigPsl.html">bigPsl table format</a></li>
+      <li><a href="/goldenPath/help/bigMaf.html">bigMaf table format</a></li>
+      <li><a href="/goldenPath/help/bigChain.html">bigChain table format</a></li>
+      <li><a href="/goldenPath/help/bigNarrowPeak.html">bigNarrowPeak table format</a></li>
+      <li><a href="/goldenPath/help/bigLolly.html">bigLolly table format</a></li>
+      <li><a href="/goldenPath/help/bigWig.html">bigWig format</a></li>
       <li><a href="../goldenPath/help/chain.html">Chain format</a></li>
     </ul>
   </div>
   <!-- Right column -->
   <div class="col-md-6">
     <ul>
-      <li><a href="#format5.2">CRAM format</a></li>
+      <li><a href="/goldenPath/help/cram.html">CRAM format</a></li>
       <li><a href="#format9">GenePred table format</a></li>
       <li><a href="#format3">GFF format</a></li>
       <li><a href="#format4">GTF format</a></li>
       <li><a href="#format20">HAL format</a></li>
-      <li><a href="#format23">Hic format</a></li>
-      <li><a href="#format22">Interact and bigInteract format</a></li>
+      <li><a href="/goldenPath/help/hic.html">Hic format</a></li>
+      <li><a href="/goldenPath/help/interact.html">Interact and bigInteract format</a></li>
       <li><a href="#format24">Longrange longTabix format</a></li>
       <li><a href="#format5">MAF format</a></li>
       <li><a href="#format6.5">Microarray format</a></li>
       <li><a href="../goldenPath/help/net.html">Net format</a></li>
       <li><a href="#format10">Personal Genome SNP format</a></li>
       <li><a href="#format2">PSL format</a></li>
-      <li><a href="#format10.1">VCF format</a></li>
-      <li><a href="#format6">WIG format</a></li>
+      <li><a href="/goldenPath/help/vcf.html">VCF format</a></li>
+      <li><a href="/goldenPath/help/wiggle.html">WIG format</a></li>
     </ul>
   </div>
 </div>
@@ -67,8 +67,8 @@
 <h6>Download-only formats</h6>
 <ul>
   <li><a href="#format7">.2bit format</a></li>
-  <li><a href="#format18">.fasta format</a></li>
-  <li><a href="#format19">.fastQ format</a></li>
+  <li><a href="https://arep.med.harvard.edu/seqanal/fasta.html" target="_blank">.fasta format</a></li>
+  <li><a href="http://maq.sourceforge.net/fastq.shtml" target="_blank">.fastQ format</a></li>
   <li><a href="#format8">.nib format</a></li>
 </ul>
 <hr>
@@ -98,7 +98,9 @@ header lines are not permissible in downstream utilities such as bedToBigBed, wh
 BED text to indexed binary files. </p>
 <P>
 If your data set is BED-like, but it is very large (over 50MB) and you would like to keep it on your
-own server, you should use the <a href="../goldenPath/help/bigBed.html">bigBed</a> data format.</p>
+own server, you should use the <a href="../goldenPath/help/bigBed.html">bigBed</a> data format.
+Read a <a href="https://genome-blog.soe.ucsc.edu/blog/2021/08/03/how-make-a-bigbed-file-part-1/"
+target="_blank">blog post</a> for step-by-step instructions.</p>
 <p>
 The first three required BED fields are: </p>
 <ol>
@@ -115,7 +117,7 @@ The first three required BED fields are: </p>
   the first 100 bases of chromosome 1 are defined as <em>chrom=1, chromStart=0, chromEnd=100</em>,
   and span the bases numbered 0-99 in our software (not 0-100), but will represent the
   position notation chr1:1-100. Read more
-  <a href="http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/">here</a>. 
+  <a href="https://genome-blog.gi.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/">here</a>. 
   <br><em>chromStart</em> and <em>chromEnd</em> can be identical, creating a feature of length 0, commonly
   used for insertions. For example, use <em>chromStart=0, chromEnd=0</em> to represent an insertion before the
   first nucleotide of a chromosome.</li>
@@ -245,20 +247,6 @@ chr7    127480532  127481699  Neg4  0  -
 Click <a class="insideLink" href="../cgi-bin/hgTracks?org=human&amp;position=chr7&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/ColorByStrandDemo.txt"
 target="_blank">here</a> to display this track in the Genome Browser.</p>
 
-<a name="format1.5"></a>
-<h2>bigBed format</h2>
-<p>
-The bigBed format stores annotation items that can either be simple, or a linked collection of 
-exons, much as <a href="#format1">bed</a> files do. BigBed files are created initially from bed 
-type files, using the program <code>bedToBigBed</code>. The resulting bigBed files are in an indexed
-binary format. The main advantage of the bigBed files is that only the portions of the files needed 
-to display a particular region are transferred to UCSC, so for large data sets bigBed is 
-considerably faster than regular bed files. The bigBed file remains on your web accessible server 
-(http, https, or ftp), not on the UCSC server. </p>
-<p>
-Click <a href="../goldenPath/help/bigBed.html">here</a> for more information on the bigBed 
-format.</p> 
-
 <a name="format1.7"></a>
 <h2>BED detail format</h2>
 <p>
@@ -284,26 +272,19 @@ chr11&#09;5255660&#09;5255661&#09;HBD c.1 G>A&#09;2659&#09;delta0 thalassemia
 chr11&#09;5247945&#09;5247946&#09;Hb Sheffield&#09;2672&#09;Hemoglobin variant
 chr11&#09;5255415&#09;5255416&#09;Hb A2-Lyon&#09;2676&#09;Hemoglobin variant
 chr11&#09;5248234&#09;5248235&#09;Hb Aix-les-Bains&#09;2677&#09;Hemoglobin variant </code></pre>
-
-<a name="format1.8"></a>
-<h2>bedGraph format</h2>
-<p> 
-The bedGraph format allows display of continuous-valued data in track format. This display type is 
-useful for probability scores and transcriptome data. This track type is similar to the 
-<a href="#format6">WIG</a> format, but unlike the WIG format, data exported in the bedGraph format 
-are preserved in their original state. This can be seen on export using the table browser. For more 
-information about the bedGraph format, please see the 
-<a href="../goldenPath/help/bedgraph.html">bedGraph</a> details page.</p> 
-<p> 
-If you have a very large data set and you would like to keep it on your own server, you should use 
-the <a href="#format6.1">bigWig</a> format.</p>
+<p>
+To see an example of turning a bedDetail custom track into the <code>bigBed</code>
+format, see this <a href="https://genome-blog.soe.ucsc.edu/blog/2021/08/03/how-make-a-bigbed-file-part-1/"
+target="_blank">How to make a bigBed file</a> blog post.</p>
 
 <a name="format2"></a>
 <h2>PSL format</h2>
 <p>
 PSL lines represent alignments, and are typically taken from files generated by BLAT or psLayout. 
 See the <a href="../goldenPath/help/hgTracksHelp.html#BLATAlign" target="_blank">BLAT
-documentation</a> for more details. All of the following fields are required on each data line 
+documentation</a> for more details. PSL data tracks can also be visualized in 
+<a href="../goldenPath/help/chain.html#rearrangement" target="_blank">rearrangement 
+display mode</a>. All of the following fields are required on each data line 
 within a PSL file:</p>
 <ol>
   <li>
@@ -531,34 +512,6 @@ HAL is the native output format of the Progressive Cactus alignment pipeline, an
 the <a href="https://github.com/glennhickey/progressiveCactus" 
 target="_blank">Progressive Cactus</a> installation package.</p>
 
-<a name="format23"></a>
-<h2>Hic format</h2>
-<p>
-Hic files are binary files that store contact matrices from chromatin conformation experiments.
-This format is useful for displaying interactions at a scale and depth that exceeds what can be
-easily visualized with the interact and bigInteract formats.  See the
-<a href="../goldenPath/help/hic.html">hic Track Format</a> help page for more information on
-creating and configuring hic tracks.  More information on the hic format itself can be found in the
-documentation on <a href="https://github.com/aidenlab/juicer/wiki/Data/#hic-files"
-target="_blank">Github</a>.  The hic format was created by the <a href="https://www.aidenlab.org"
-target="_blank">Aiden Lab</a> at <a href="https://www.bcm.edu"
-target="_blank">Baylor College of Medicine</a>.
-</p>
-
-<a name="format22"></a>
-<h2>Interact format</h2>
-<p>
-The interact (and bigInteract) track format displays pairwise interactions as arcs or 
-half-rectangles connecting two genomic regions on the same chromosome.
-Cross-chromosomal interactions can also be represented in this format.
-This format is useful for displaying functional element interactions such
-as SNP/gene interactions, and is also suitable for low-density chromatin interactions,
-such as ChIA-PET, and other use cases with a limited number of interactions on the genome.  
-It is not suitable for high-density chromatin data such as Hi-C.</p>
-<p>
-Click <a href="../goldenPath/help/interact.html">here</a> for more information on the interact and
-bigInteract formats.</p>
-
 <a name="format24"></a>
 <h2>Longrange longTabix format</h2>
 <p>
@@ -584,7 +537,8 @@ issues such as forward and reverse strand directions, multiple pieces to the ali
 forth.</p> 
 <p> 
 <strong>General Structure</strong><br> 
-The <em>.maf</em> format is line-oriented. Each multiple alignment ends with a blank line. Each 
+The <em>.maf</em> format is line-oriented. Each multiple alignment beigns with the reference genome
+line and ends with a blank line. Each 
 sequence in an alignment is on a single line, which can get quite long, but there is no length 
 limit. Words in a line are delimited by any white space. Lines starting with # are considered to be 
 comments. Lines starting with ## can be ignored by most programs, but contain meta-data of one form 
@@ -593,7 +547,8 @@ or another.</p>
 The file is divided into paragraphs that terminate in a blank line.  Within a paragraph, the first 
 word of a line indicates its type. Each multiple alignment is in a separate paragraph that begins 
 with an &quot;a&quot; line and contains an &quot;s&quot; line for each sequence in the multiple 
-alignment. Some MAF files may contain other optional line types: </p>
+alignment. The first sequence must be the reference genome on which the rest of the sequenes map. 
+Some MAF files may contain other optional line types: </p>
 <ul>
   <li>
   an &quot;i&quot; line containing information about what is in the aligned species DNA before and 
@@ -693,8 +648,8 @@ currently defined variables are: </p>
 </code></pre>
 <p> 
 The &quot;s&quot; lines together with the &quot;a&quot; lines define a multiple alignment. 
-The &quot;s&quot; lines have the following fields which are defined by position rather than 
-name=value pairs.</p> 
+The first &quot;s&quot; line must be the reference genome, hg16 in the above example.
+The &quot;s&quot; lines have the following fields which are defined by position.</p> 
 <ul> 
   <li> 
   <strong>src</strong> -- The name of one of the source sequences for the alignment. For sequences 
@@ -902,56 +857,6 @@ s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
 s baboon         249182 13 +   4622798 gcagctgaaaaca
 s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA </code></pre>
 
-<a name="format5.1"></a>
-<h2>BAM format</h2>
-<p>
-BAM is the compressed binary version of the <a href="http://samtools.sourceforge.net/" 
-target="_blank">Sequence Alignment/Map (SAM)</a> format, a compact and index-able representation of 
-nucleotide sequence alignments. Many <a href="http://samtools.sourceforge.net/swlist.shtml" 
-target="_blank">next-generation sequencing and analysis tools</a> work with SAM/BAM. For custom 
-track display, the main advantage of indexed BAM over PSL and other human-readable alignment formats
-is that only the portions of the files needed to display a particular region are transferred to
-UCSC. This makes it possible to display alignments from files that are so large that the connection 
-to UCSC would time out when attempting to upload the whole file to UCSC. Both the BAM file and its 
-associated index file remain on your web-accessible server (http or ftp), not on the UCSC server.
-UCSC temporarily caches the accessed portions of the files to speed up interactive display.</p>
-<p>
-Click <a href="../goldenPath/help/bam.html">here</a> for more information about BAM custom 
-tracks.</p>
-
-<a name="format5.2"></a>
-<h2>CRAM format</h2>
-<p>
-The CRAM file format is a more dense form of <a href="../goldenPath/help/bam.html">BAM</a> files 
-with the benefit of saving much disk space. While BAM files contain all sequence data within a file,
-CRAM files are smaller by taking advantage of an additional external &quot;reference sequence&quot; 
-file. This file is needed to both compress and decompress the read information.</p>
-<p>
-Click <a href="../goldenPath/help/cram.html">here</a> for more information on the CRAM format.</p>
-
-<a name="format6"></a>
-<h2>WIG format</h2>
-<p>
-Wiggle format (WIG) allows the display of continuous-valued data in a track format. Click 
-<a href="../goldenPath/help/wiggle.html">here</a> for more information.</p>
-
-<a name="format6.1"></a>
-<h2>bigWig format</h2> 
-<p>
-The bigWig format is for display of dense, continuous data that will be displayed in the Genome 
-Browser as a graph. BigWig files are created initially from <a href="#format6">wiggle</a> (wig) type
-files, using the program <code>wigToBigWig</code>. Alternatively, bigWig files can be created from 
-<a href="../goldenPath/help/bedgraph.html">bedGraph</a> files, using the program 
-<code>bedGraphToBigWig</code>. In either case, the resulting bigWig files are in an indexed binary 
-format. The main advantage of the bigWig files is that only the portions of the files needed to 
-display a particular region are transferred to UCSC, so for large data sets bigWig is considerably 
-faster than regular wiggle files. The bigWig file remains on your web accessible server (http, 
-https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position
-you are currently viewing is locally cached as a &quot;sparse file&quot;.</p>
-<p>
-Click <a href="../goldenPath/help/bigWig.html">here</a> for more information on the bigWig 
-format.</p>
-
 <a name="format6.5"></a>
 <h2>Microarray format</h2>
 <p>
@@ -1039,7 +944,11 @@ The index is followed by the sequence records, which contain nine fields:</p>
 <p>
 For a complete definition of all fields in the twoBit format, see 
 <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/inc/twoBit.h">this</a> 
-description in the source code.</p>
+description in the source code. Click these links to see examples of using the
+<a href="../../goldenPath/help/twoBit.html" target ="_blank"><code>faToTwoBit</code>,
+<code>twoBitInfo</code>, and <code>twoBitToFa</code></a> commands, and how to
+<a href="../../goldenPath/help/twoBit.html#extract" target="_blank">extract DNA</a> from 2bit
+files, including with our <a href="../../goldenPath/help/api.html" target="_blank">API</a>.</p>
 
 <a name="format8"></a>
 <h2>.nib format</h2>
@@ -1071,7 +980,11 @@ Variations of the genePred format are listed below.</p>
 <p>
 If you would like to obtain browser data in GFF (GTF) format, please refer to 
 <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format" 
-target="_blank">Genes in gtf or gff format</a> on the Wiki.</p>
+target="_blank">Genes in gtf or gff format</a> on the Wiki. There is also a
+format of genePred called <a href="../goldenPath/help/bigGenePred.html"
+target="_blank">bigGenePred</a>, a version of <a href="../goldenPath/help/bigBed.html"
+target="_blank">bigBed</a>, which enables custom tracks to display codon numbers
+and amino acids when zoomed in to the base level.</p>
 
 <a name=GenePredictions></a>
 <p><strong>Gene Predictions</strong></p>
@@ -1120,6 +1033,13 @@ genePredExt format.</p>
     lstring exonFrames; 	"Exon frame offsets {0,1,2}"
     )
 </code></pre>
+<p>The fields cdsStartStat and cdsEndStat can have the following values: 'none' = none,
+'unk' = unknown, 'incmpl' = incomplete, and 'cmpl' = complete. However, the values are not used for
+our display and cannot be used to identify which genes are coding or non-coding. For most purposes,
+to get more information about a transcript, other tables will need to be used.
+For instance, in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the
+Gencode Version number. See this <a href="../../FAQ/FAQgenes.html#coding"
+target="_blank">coding/non-coding genes FAQ</a> for more information.</p>
 
 <a name=RefFlat></a>
 <p><strong>Gene Predictions and RefSeq Genes with Gene Names</strong></p>
@@ -1142,82 +1062,6 @@ alternative-splicing situations, each transcript has a row in this table.</p>
     uint[exonCount] exonEnds;   "Exon end positions"
     )
 </code></pre>
-
-<a name="format9.1"></a>
-<h2>bigGenePred table format</h2>
-<p>
-bigGenePred is a table format commonly used for gene prediction tracks in the Genome Browser. 
-bigGenePred format is a superset of the <a href="FAQformat.html#format9">genePred</a> text-based 
-format supported using the <a href="FAQformat.html#format1.5">bigBed</a> format, so it can be 
-efficiently accessed over a network. </p>
-<p>
-Click <a href="../goldenPath/help/bigGenePred.html">here</a> for more information on the 
-bigGenePred format.</p>
-
-<a name="format21"></a>
-<h2>barChart table format</h2>
-<p>
-The barChart (and bigBarChart) track format displays a graph of category-specific values over genomic
-regions, similar to the 
-<a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&gtexGene=pack">GTEx Gene</a> track. This
-format is useful for displaying gene expression and other datasets where it is desirable to compare
-a set of variables over genomic regions.</p>
-<p>
-Click <a href="../goldenPath/help/barChart.html">here</a> for more information on the barChart and
-bigBarChart formats.</p>
-
-<a name="format9.2"></a>
-<h2>bigPsl table format</h2>
-<p>
-bigPsl is a table format commonly used to store alignments in the Genome Browser. bigPsl format is a
-superset of the <a href="FAQformat.html#format2">PSL</a> text-based format supported using the 
-<a href="FAQformat.html#format1.5">bigBed</a> format, so it can be efficiently accessed over a 
-network. </p>
-<p>
-Click <a href="../goldenPath/help/bigPsl.html">here</a> for more information on the bigPsl 
-format.</p>
-
-<a name="format9.3"></a>
-<h2>bigMaf table format</h2>
-<p>
-bigMaf is a table format commonly used to store multiple alignments in the Genome Browser. bigMaf 
-format is a superset of the <a href="FAQformat.html#format5">MAF</a> text-based format supported 
-using the <a href="FAQformat.html#format1.5">bigBed</a> format, so it can be efficiently accessed 
-over a network. </p>
-<p>
-Click <a href="../goldenPath/help/bigMaf.html">here</a> for more information on the bigMaf 
-format.</p>
-
-<a name="format9.4"></a>
-<h2>bigChain table format</h2>
-<p>
-bigChain is a table format commonly used to store pairwise alignments in the Genome Browser. 
-bigChain format is a superset of the <a href="../goldenPath/help/chain.html">chain</a> text-based 
-format supported using the <a href="FAQformat.html#format1.5">bigBed</a> format, so it can be 
-efficiently accessed over a network.</p> 
-<p>
-Click <a href="../goldenPath/help/bigChain.html">here</a> for more information on the bigChain 
-format.</p>
-
-<a name="format9.5"></a>
-<h2>bigNarrowPeak format</h2>
-<p>
-bigNarrowPeak is a format used to provide called peaks of signal enrichment based on pooled, normalized 
-(interpreted) data. It is a BED6+4 format.
-bigNarrowPeak format is equivalent to the <a href="FAQformat.html#format12">narrowPeak</a> text-based 
-format supported using the <a href="FAQformat.html#format1.5">bigBed</a> format, so it can be 
-efficiently accessed over a network.</p> 
-<p>
-Click <a href="../goldenPath/help/bigNarrowPeak.html">here</a> for more information on the bigNarrowPeak
-format.</p>
-
-<a name="format9.6"></a>
-<h2>bigLolly format</h2>
-<p>
-bigLolly is a format used to draw a lollipop chart.  The data format is a standard bigBed format where by default the score is used to decide how high to draw the lollipop.   There are also trackDb options to specify which fields to use for the height and width of the lollipop, as well as to draw lines on the graph.
-<p>
-Click <a href="../goldenPath/help/bigLolly.html">here</a> for more information on the bigLolly
-format.</p>
 
 <a name="format10"></a>
 <h2>Personal Genome SNP format</h2>
@@ -1279,25 +1123,6 @@ chr21	31812827	31812828	A/T	2	15,5	0,0
 chr21	31812879	31812880	C	1	0	0
 chr21   31812915	31812916	-	1	0	0
 </code></pre>
-
-<a name="format10.1"></a>
-<h2>VCF format</h2>
-<p>
-<a href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
-target="_blank">Variant Call Format (VCF)</a> is a flexible and extendable format (now maintained 
-by the <a href="http://ga4gh.org/#/fileformats-team" target="_blank">GA4GH</a>) for variation data 
-such as single nucleotide variants, insertions/deletions, copy number variants and structural 
-variants. When a VCF file is compressed and indexed using 
-<a href="http://samtools.sourceforge.net/tabix.shtml" target="_blank">tabix</a>, and made 
-web-accessible, the Genome Browser can fetch only the portions of the file necessary to display 
-items in the viewed region. This makes it possible to display alignments from files that are so 
-large that the connection to UCSC would time out when attempting to upload the whole file to UCSC. 
-Both the compressed VCF file and its tabix index file remain on your web-accessible server (http or 
-ftp), not on the UCSC server. UCSC temporarily caches the accessed portions of the files to speed up
-interactive display.</p>
-<p>
-Go to the <a href="../goldenPath/help/vcf.html">VCF Track Format</a> page for more information about
-VCF custom tracks.</p>
 
 <a name="format11"></a>
 <h2>ENCODE RNA elements: BED6 + 3 scores format</h2>
@@ -1380,6 +1205,9 @@ chr1    9356548 9356648 .       0       .       182     5.0945  -1  50
 chr1    9358722 9358822 .       0       .       91      4.6052  -1  40
 chr1    9361082 9361182 .       0       .       182     9.2103  -1  75
 </code></pre>
+There is also a format of narrowPeak called <a href="../goldenPath/help/bigNarrowPeak.html"
+target="_blank">bigNarrowPeak</a>, a version of <a href="../goldenPath/help/bigBed.html"
+target="_blank">bigBed</a>, which enables using this point-source display in Track Hubs.</p>
 
 <a name="format13"></a>
 <h2>ENCODE broadPeak: Broad Peaks (or Regions) format</h2> 
@@ -1574,17 +1402,5 @@ to the genome, with information that is appropriate for assessing the confidence
   <li>
   <strong>peptideRepeatCount</strong> - Indicates how many times this same hit was observed.</li>
 </ol>
-
-<a name="format18"></a>
-<h2>Fasta format</h2>
-<p>
-Click <a href="http://genetics.bwh.harvard.edu/pph/FASTA.html" target="_blank">here</a> for 
-information about fasta format.</p>
-
-<a name="format19"></a>
-<h2>FastQ format</h2>
-<p> 
-Click <a href="http://maq.sourceforge.net/fastq.shtml" target="_blank">here</a> for information
-about fastq format.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

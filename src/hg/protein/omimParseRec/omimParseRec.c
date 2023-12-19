@@ -260,7 +260,7 @@ void omimParseRec(char *omimTextFile, FILE *recFh, FILE *fieldFh)
 {
 struct lineFile *lf = lineFileOpen(omimTextFile, TRUE);
 struct omimRecord *omimr;
-struct dyString *dy = newDyString(4096);
+struct dyString *dy = dyStringNew(4096);
 
 for (;;)
     {

@@ -21,18 +21,6 @@ errAbort(
   );
 }
 
-char *createString = 
-NOSQLINJ "CREATE TABLE fiberMouse (\n"
-    "chrom varchar(255) not null,	# Human chromosome or FPC contig\n"
-    "chromStart int unsigned not null,	# Start position in chromosome\n"
-    "chromEnd int unsigned not null,	# End position in chromosome\n"
-    "name varchar(255) not null,	# Name of other sequence\n"
-              "#Indices\n"
-    "INDEX(chrom(8),chromStart),\n"
-    "INDEX(chrom(8),chromEnd),\n"
-    "INDEX(name(12))\n"
-")\n";
-
 int bedCmp(const void *va, const void *vb);
 
 void hgFiberglass(char *database, char *fileName)
@@ -73,7 +61,20 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 carefulClose(&f);
 
 printf("Loading database\n");
-sqlMaybeMakeTable(conn, "fiberMouse", createString);
+
+sqlSafef(query, sizeof query, 
+"CREATE TABLE fiberMouse (\n"
+    "chrom varchar(255) not null,	# Human chromosome or FPC contig\n"
+    "chromStart int unsigned not null,	# Start position in chromosome\n"
+    "chromEnd int unsigned not null,	# End position in chromosome\n"
+    "name varchar(255) not null,	# Name of other sequence\n"
+              "#Indices\n"
+    "INDEX(chrom(8),chromStart),\n"
+    "INDEX(chrom(8),chromEnd),\n"
+    "INDEX(name(12))\n"
+")\n");
+
+sqlMaybeMakeTable(conn, "fiberMouse", query);
 sqlSafef(query, sizeof query, "LOAD data local infile '%s' into table %s", tabName, "fiberMouse");
 sqlUpdate(conn, query);
 sqlDisconnect(&conn);

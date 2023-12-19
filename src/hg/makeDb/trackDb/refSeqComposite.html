@@ -33,38 +33,42 @@ The possible subtracks include:
     RefSeq.</li>
     <li>
     <em>RefSeq Curated</em> &ndash; subset of <em>RefSeq All</em> that includes only those 
-    annotations whose accessions begin with NM, NR,  NP or YP. <small>(NP and YP are used only for
-    protein-coding genes on the mitochondrion; YP is used for human only.)</small></li>
+    annotations whose accessions begin with NM, NR, NP or YP. <small>(NP and YP are used only for
+    protein-coding genes on the mitochondrion; YP is used for human only.)</small> They were 
+    manually curated, based on publications describing transcripts and manual reviews of 
+    evidence which includes EST and full-length cDNA alignments, protein sequences, splice sites
+    and any other evidence available in databases or the scientific literature. The 
+    resulting sequences can differ from the genome, they exist independently 
+    from a particular human genome build, and so must be aligned to the genome to create a track.
+    The "RefSeq Curated" track is NCBI's mapping of these transcripts to the genome.
+    Another alignment track exists for these, the "UCSC RefSeq" track (see beloow).</li>
     <li>
     <em>RefSeq Predicted</em> &ndash; subset of RefSeq All that includes those annotations whose 
-    accessions begin with XM or XR.</li>
+    accessions begin with XM or XR. They were predicted based on protein, cDNA, EST
+    and RNA-seq alignments to the genome assembly by the NCBI Gnomon prediction software.</li>
     <li>
     <em>RefSeq Other</em> &ndash; all other annotations produced by the RefSeq group that 
     do not fit the requirements for inclusion in the <em>RefSeq Curated</em> or the 
-    <em>RefSeq Predicted</em> tracks.</li>
+    <em>RefSeq Predicted</em> tracks. Examples are untranscribed pseudogenes or gene clusters, such as HOX or protocadherin alpha. They were manually curated from 
+    publications or databases but are not typical transcribed genes.</li>
     <li>
     <em>RefSeq Alignments</em> &ndash; alignments of RefSeq RNAs to the $organism genome provided
     by the RefSeq group, following the display conventions for
 <a href="../goldenPath/help/hgTracksHelp.html#PSLDisplay" target="_blank">PSL tracks</a>.</li>
    <li>
    <em>RefSeq Diffs</em> &ndash; alignment differences between the $organism reference genome(s) 
-   and RefSeq transcripts. <small>(Track not currently available for every assembly.)</small>
+   and RefSeq curated transcripts. <small>(Track not currently available for every assembly.)</small>
    </li>
    <li>
     <em>UCSC RefSeq</em> &ndash; annotations generated from UCSC's realignment of RNAs with NM 
     and NR accessions to the $organism genome. This track was previously known as the &quot;RefSeq 
     Genes&quot; track.</li>
    <li>
-   <em>RefSeq Select+MANE (subset)</em> &ndash; Subset of RefSeq Curated, transcripts marked as 
-   RefSeq Select or MANE Select. 
+   <em>RefSeq Select (subset, only on hg38)</em> &ndash; Subset of RefSeq Curated, transcripts marked as 
+   part of the RefSeq Select dataset. 
    A single <em>Select</em> transcript is chosen as representative for each protein-coding gene. 
-   This track includes transcripts categorized as MANE, which are further agreed upon as 
-   representative by both NCBI RefSeq and Ensembl/GENCODE, and have a 100% identical match 
-   to a transcript in the Ensembl annotation. See <a target="_blank" 
+   See <a target="_blank" 
    href="https://www.ncbi.nlm.nih.gov/refseq/refseq_select/">NCBI RefSeq Select</a>. 
-   Note that we provide a separate track, <a 
-   target=_blank href="hgTrackUi?g=mane&db=hg38&c=chr22">MANE (hg38)</a>, 
-   which contains only the MANE transcripts.
    </li>
    <li>
    <em>RefSeq HGMD (subset)</em> &ndash; Subset of RefSeq Curated, transcripts annotated by the Human
@@ -75,8 +79,8 @@ The possible subtracks include:
 </dl>
 
 <p>
-The <em>RefSeq All</em>, <em>RefSeq Curated</em>, <em>RefSeq Predicted</em>, <em>RefSeq HGMD</em>,
-<em>RefSeq Select/MANE</em> and <em>UCSC RefSeq</em> tracks follow the display conventions for
+The <em>RefSeq All</em>, <em>RefSeq Curated</em>, <em>RefSeq Predicted</em>, and
+<em>UCSC RefSeq</em> tracks follow the display conventions for
 <a href="../goldenPath/help/hgTracksHelp.html#GeneDisplay"
 target="_blank">gene prediction tracks</a>.
 The color shading indicates the level of review the RefSeq record has undergone:
@@ -209,8 +213,6 @@ below. The other subtracks are associated with database tables as follows:</p>
     <li>RefSeq All - <tt>ncbiRefSeq</tt></li>
     <li>RefSeq Curated - <tt>ncbiRefSeqCurated</tt></li>
     <li>RefSeq Predicted - <tt>ncbiRefSeqPredicted</tt></li>
-    <li>RefSeq HGMD - <tt>ncbiRefSeqHgmd</tt></li>
-    <li>RefSeq Select+MANE - <tt>ncbiRefSeqSelect</tt></li>
     <li>UCSC RefSeq - <tt>refGene</tt></li>
   </ul>
   <dt><a href="../../FAQ/FAQformat.html#format2" target="_blank">PSL</a> format:</dt>

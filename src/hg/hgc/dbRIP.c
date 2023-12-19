@@ -159,7 +159,7 @@ struct sqlResult *sr = NULL;
 char table[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 struct dbRIP *loadItem;
-struct dyString *query = newDyString(512);
+struct dyString *query = dyStringNew(512);
 char **row;
 boolean firstTime = TRUE;
 int start = cartInt(cart, "o");

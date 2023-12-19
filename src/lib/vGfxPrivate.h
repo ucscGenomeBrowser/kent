@@ -32,6 +32,7 @@ typedef void (*vg_textInBox)(void *v, int x, int y, int width, int height,
 typedef void (*vg_textCentered)(void *v, int x, int y, int width, int height,
 	int colorIx, void *font, char *text);
 typedef int (*vg_findColorIx)(void *v, int r, int g, int b);
+typedef int (*vg_findAlphaColorIx)(void *v, int r, int g, int b, int a);
 typedef struct rgbColor (*vg_colorIxToRgb)(void *v, int colorIx);
 typedef void (*vg_setClip)(void *v, int x, int y, int width, int height);
 typedef void (*vg_setWriteMode)(void *v, unsigned int writeMode);

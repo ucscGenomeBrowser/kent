@@ -898,7 +898,7 @@ hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq \$db $gbdbDir/se
 hgLoadPsl \$db -table=ncbiRefSeqPsl process/\$asmId.\$db.psl.gz
 
 if [ -s process/\$asmId.rna.cds ]; then
-  zcat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
+  cat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
     | pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
       process/\$asmId.\$db.psl.gz $dbTwoBit \\
         \$db.rna.fa ncbiRefSeqGenomicDiff || true
@@ -943,6 +943,8 @@ sub doCleanup {
   $bossScript->add(<<_EOF_
 gzip -f download/{rna.sizes,*.raFile.txt}
 gzip -f process/*.{tab,txt,gp,gff,psl,cds,bed}
+rm -f $asmId.$db.ncbiRefSeqLink.tab
+ln -f -s process/$asmId.$db.ncbiRefSeqLink.tab.gz .
 # Leave this one uncompressed, gbdb links to it:
 gunzip process/ncbiRefSeqVersion.txt.gz
 _EOF_
@@ -996,7 +998,9 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;
-$dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $db));
+if (! $opt_assemblyHub) {
+  $dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $db));
+}
 
 # Do everything.
 $stepper->execute();

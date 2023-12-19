@@ -110,7 +110,7 @@ if ((dataLength / (1024 * 1024 * 1024)) >= squealSize)
     {
     char msg[256];
     char cmdLine[256];
-    char *emailList = "cluster-admin@soe.ucsc.edu galt@soe.ucsc.edu kuhn@soe.ucsc.edu";
+    char *emailList = "cluster-admin@soe.ucsc.edu galt@soe.ucsc.edu clayfischer@ucsc.edu";
     safef(msg, sizeof(msg), "BIG HGCENTRAL TABLE %s data_length: %lld data_free: %lld\n"
 	, table, dataLength, dataFree);
     printf("%s", msg);
@@ -396,7 +396,8 @@ else  // figure out purge-ranges automatically
     if (sameString(table, userDbTableName))
 	firstUseAge = 365;
 
-    int day = sqlQuickNum(conn, NOSQLINJ "select dayofweek(now())");
+    sqlSafef(query,sizeof(query), "select dayofweek(now())");
+    int day = sqlQuickNum(conn, query);
 
     // These old records take a long time to go through, 5k sessionDb to 55k userDb old recs to look at,
     //  and typically produce only a few hundred deletions.

@@ -8,7 +8,7 @@ sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
 import argparse
 import pipettor
 import tempfile
-from gencode.gencodeProcess import GencodeLiftOver, getEditIdCmd
+from gencode.gencodeProcess import GencodeLiftOver, getEditIdCmd, LiftError
 
 def parseArgs():
     desc = """Convert GENCODE GTF or GFF3 to an genePred and replace ENSTR or
@@ -23,6 +23,8 @@ so we just do a special pass to get these.
 The chains can be generated with buildGencodeToUcscLift
 """
     parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("--debug", action="store_true",
+                        help="""print stack trace on all error""")
     parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
                         help="verbose output for debugging")
     parser.add_argument("--warnAndContinue", dest="warnAndContinue", action="store_true", default=False,
@@ -84,8 +86,14 @@ def convert(hgdb, inGxf, liftFile, outGenePred, unmappedGenePred, verbose, warnA
     os.unlink(tmpGp)
 
 def gencodeGxfToGenePred(opts):
-    convert(opts.hgdb, opts.inGxf, opts.gencodeToUcscChain, opts.outGenePred, opts.unmappedGenePred,
-            opts.verbose, opts.warnAndContinue)
+    try:
+        convert(opts.hgdb, opts.inGxf, opts.gencodeToUcscChain, opts.outGenePred, opts.unmappedGenePred,
+                opts.verbose, opts.warnAndContinue)
+    except LiftError as ex:
+        if opts.debug:
+            raise
+        print(str(ex), file=sys.stderr)
+        exit(1)
 
 
 gencodeGxfToGenePred(parseArgs())

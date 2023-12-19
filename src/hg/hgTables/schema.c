@@ -194,10 +194,10 @@ static void explainCoordSystem()
  * reduce the frequency with which they find this "bug" on their own and
  * we have to explain it on the genome list. */
 {
-puts("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
+printf("<BR><I>Note: all start coordinates in our database are 0-based, not \n"
  "1-based.  See explanation \n"
- "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
-     "here</A>.</I>");
+ "<A HREF=\"http%s://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
+     "here</A>.</I>", cgiAppendSForHttps());
 }
 
 
@@ -355,6 +355,28 @@ if (tdb != NULL && isNotEmpty(tdb->html))
     }
 }
 
+static void addNotesForBbiTables(struct trackDb *tdb, struct sqlConnection *conn)
+/* single-row BBI file pointer tables are confusing, help the users a little here */
+{
+if (tdb != NULL)
+    {
+    boolean isBig = printTypeHelpDesc(tdb->type);
+
+    if (isBig)
+        {
+        char *fileName = trackDbSetting(tdb, "bigDataUrl");
+        if (!fileName) 
+            {
+            char query[1024];
+            sqlSafef(query, sizeof query, "SELECT fileName from %s", tdb->table);
+            char *bbiPath = sqlQuickString(conn, query);
+            printf("The MySQL table contains only a single row with a pointer to the file.<BR>");
+            printf("You can download the binary file from our "
+                    "<a href=\"https://hgdownload.soe.ucsc.edu%s\">Download server</a>.<BR>", bbiPath);
+            }
+        }
+    }
+}
 
 static void showSchemaDb(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
@@ -380,17 +402,29 @@ if (date != NULL)
     printf("&nbsp&nbsp<B> Data last updated:&nbsp;</B>%s<BR>\n", date);
 if (asObj != NULL)
     hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
+
 if (cartTrackDbIsNoGenome(db, table))
     hPrintf(" Note: genome-wide queries are not available for this table.");
-describeFields(db, splitTable, asObj, conn);
-if (tdbForConn != NULL)
+else
     {
-    char *type = tdbForConn->type;
-    if (startsWithWord("bigWig", type))
-	printf("<BR>This table points to a file in "
-	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
-	       "BigWig</A> format.<BR>\n");
+    hPrintf("<B>On download server: </B>");
+    hPrintf("<A HREF='https://hgdownload.soe.ucsc.edu/goldenPath/%s/database/'>MariaDB table dump directory</A><BR>", db);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (sameString(table, "knownGene") && bigDataUrl!=NULL)
+        {
+        hPrintf("This track is available both in ASCII MariaDB table dump format and bigGenePred (bigBed) format.<br>");
+        printDownloadLink("bigBed", bigDataUrl);
+        }
     }
+
+describeFields(db, splitTable, asObj, conn);
+
+if (tdbForConn && sameString(tdbForConn->track, table))
+    {
+    struct trackDb *childTdb = tdbForTrack(db, table, NULL);
+    addNotesForBbiTables(childTdb, conn);
+    }
+
 jpList = joinerRelate(joiner, db, table, NULL);
 
 /* sort and unique list */
@@ -739,14 +773,9 @@ else
     doTableSchema(database, curTable, conn);
 }
 
-struct asObject *asForTable(struct sqlConnection *conn, char *table)
-/* Get autoSQL description if any associated with table. */
-/* Wrap some error catching around asForTable. */
+struct asObject *asForTableNoTdb(struct sqlConnection *conn, char *table)
+/* Get autoSQL description if any associated with table. Don't try tdb */
 {
-struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
-if (tdb != NULL)
-    return asForTdb(conn,tdb);
-
 // Some cases are for tables with no tdb!
 struct asObject *asObj = NULL;
 if (sqlTableExists(conn, "tableDescriptions"))
@@ -777,4 +806,15 @@ if (sqlTableExists(conn, "tableDescriptions"))
     errCatchFree(&errCatch);
     }
 return asObj;
+}
+
+struct asObject *asForTable(struct sqlConnection *conn, char *table)
+/* Get autoSQL description if any associated with table. */
+/* Wrap some error catching around asForTable. */
+{
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+if (tdb != NULL)
+    return asForTdb(conn,tdb);
+
+return asForTableNoTdb(conn, table);
 }

@@ -14,93 +14,121 @@ gencodeGxfToAttrs = ../bin/gencodeGxfToAttrs
 buildGencodeToUcscLift = ../bin/buildGencodeToUcscLift
 gencodeGxfToGenePred = ../bin/gencodeGxfToGenePred
 gencodeExonSupportToTable = ../bin/gencodeExonSupportToTable
-
-ucscGenomeDbHs37 = hg19
-ucscGenomeDbHs38 = hg38
-ucscGenomeDbMm38 = mm10
-
-hg37AsmReport = input/GCF_000001405.25_GRCh37.p13_assembly_report.txt
-hg38AsmReport = input/GCF_000001405.39_GRCh38.p13_assembly_report.txt 
-mm38AsmReport = input/GCF_000001635.26_GRCm38.p6_assembly_report.txt
+gencodeMakeTracks = ../bin/gencodeMakeTracks
+gencodeMakeAttrs = ../bin/gencodeMakeAttrs
+gencodePolyaGxfToGenePred = ../bin/gencodePolyaGxfToGenePred
 
 gencodeToUcscMappingChainHg37 = output/gencodeToUcscMappingHg37.chain
 gencodeToUcscMappingChainHg38 = output/gencodeToUcscMappingHg38.chain
 
 all::
 
-test::  attrsTests buildGencodeToUcscLiftTests genePredTests exonSupportTests
+test:: attrsTests makeTracksTests makeAttrsTests buildGencodeToUcscLiftTests \
+	genePredTests exonSupportTests polyATests
 
 ##
 # attributes tests
 ##
 attrsTests: attrsSet1GtfTest attrsV21GtfTest attrsV21Gff3Test attrsV27ParGtfTest attrsV27ParGff3Test \
-	attrsV19GtfTest attrsTagGtfTests attrsTagGff3Tests attrsPseudoGff3Tests
+	attrsV19GtfTest attrsTagGtfTests attrsTagGff3Tests attrsPseudoGff3Tests \
+	attrsErrorGtfTest attrsErrorGff3Test attrsRankTest
 
 attrsSet1GtfTest: mkdirs
-	${gencodeGxfToAttrs} input/set1.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/set1.gtf output/$@.tsv
 	${diff} expected/$@.tsv output/$@.tsv
-	${diff} expected/$@.attrs output/$@.attrs
-	${diff} expected/$@.tsl output/$@.tsl
-	${diff} expected/$@.tags output/$@.tags
 
 attrsV21GtfTest: mkdirs
-	${gencodeGxfToAttrs} input/v21.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v21.gtf output/$@.tsv
 	${diff} expected/$@.tsv output/$@.tsv
-	${diff} expected/$@.attrs output/$@.attrs
-	${diff} expected/$@.tsl output/$@.tsl
-	${diff} expected/$@.tags output/$@.tags
 
 attrsV21Gff3Test: mkdirs
-	${gencodeGxfToAttrs} input/v21.gff3 output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v21.gff3 output/$@.tsv
 	${diff} expected/$@.tsv output/$@.tsv
-	${diff} expected/$@.attrs output/$@.attrs
-	${diff} expected/$@.tsl output/$@.tsl
-	${diff} expected/$@.tags output/$@.tags
 
 attrsV27ParGtfTest: mkdirs
-	${gencodeGxfToAttrs} input/v27.par.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v27.par.gtf output/$@.tsv
 	${diff} expected/$@.tsv output/$@.tsv
-	${diff} expected/$@.attrs output/$@.attrs
-	${diff} expected/$@.tsl output/$@.tsl
-	${diff} expected/$@.tags output/$@.tags
 
 attrsV27ParGff3Test:mkdirs
-	${gencodeGxfToAttrs} input/v27.par.gff3 output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v27.par.gff3 output/$@.tsv
 	${diff} expected/$@.tsv output/$@.tsv
-	${diff} expected/$@.attrs output/$@.attrs
-	${diff} expected/$@.tsl output/$@.tsl
-	${diff} expected/$@.tags output/$@.tags
 
 # compatiblity with V19 for reloading
 attrsV19GtfTest: mkdirs
-	${gencodeGxfToAttrs} input/v19.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/v19.gtf output/$@.tsv
 	${diff} expected/$@.tsv output/$@.tsv
-	${diff} expected/$@.attrs output/$@.attrs
-	${diff} expected/$@.tsl output/$@.tsl
-	${diff} expected/$@.tags output/$@.tags
 
 attrsTagGtfTests: mkdirs
-	${gencodeGxfToAttrs} input/tags.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/tags.gtf output/$@.tsv
 	${diff} expected/$@.tsv output/$@.tsv
-	${diff} expected/$@.attrs output/$@.attrs
-	${diff} expected/$@.tsl output/$@.tsl
-	${diff} expected/$@.tags output/$@.tags
 
 attrsTagGff3Tests: mkdirs
-	${gencodeGxfToAttrs} input/tags.gff3 output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/tags.gff3 output/$@.tsv
 	${diff} expected/$@.tsv output/$@.tsv
-	${diff} expected/$@.attrs output/$@.attrs
-	${diff} expected/$@.tsl output/$@.tsl
-	${diff} expected/$@.tags output/$@.tags
 
 
 # ENST00000422009.5 pseudo was ending up with wrong transcriptClass
 attrsPseudoGff3Tests: mkdirs
-	${gencodeGxfToAttrs} input/pseudo.gff3 output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${gencodeGxfToAttrs} input/pseudo.gff3 output/$@.tsv
 	${diff} expected/$@.tsv output/$@.tsv
-	${diff} expected/$@.attrs output/$@.attrs
-	${diff} expected/$@.tsl output/$@.tsl
-	${diff} expected/$@.tags output/$@.tags
+
+attrsErrorGtfTest: mkdirs
+	if ${gencodeGxfToAttrs} input/attrErrors.gtf /dev/null >output/$@.err 2>&1 ; \
+	   then echo Error: should fail >&2 ; exit 1 ; else exit 0 ; fi
+	${diff} expected/$@.err output/$@.err
+
+attrsErrorGff3Test: mkdirs
+	if ${gencodeGxfToAttrs} input/attrErrors.gff3 /dev/null >output/$@.err 2>&1 ; \
+	   then echo Error: should fail >&2 ; exit 1 ; else exit 0 ; fi
+	${diff} expected/$@.err output/$@.err
+
+attrsRankTest: mkdirs
+	${gencodeGxfToAttrs} --transcriptRanks=input/v42.transcript_rankings.txt input/v42.gff3 output/$@.tsv
+	${diff} expected/$@.tsv output/$@.tsv
+
+
+
+##
+# generate input need for tests
+#
+set1Gp = output/set1.gp
+set1Attrs = output/set1.attrs.tsv
+
+${set1Gp}: input/set1.gtf ${gencodeToUcscMappingChainHg37} mkdirs
+	${gencodeGxfToGenePred} hg19 input/set1.gtf ${gencodeToUcscMappingChainHg37} $@.tmp
+	mv -f $@.tmp $@
+
+${set1Attrs}: input/set1.gtf mkdirs
+	${gencodeGxfToAttrs} $< $@.tmp
+	mv -f $@.tmp $@
+
+##
+# generate tracks from data parse from gencode
+#
+makeTracksTests: makeTracksPseudoTest makeTracksBasicTest makeTracksCompTest
+
+makeTracksPseudoTest: ${set1Gp} ${set1Attrs} mkdirs
+	${gencodeMakeTracks} pseudogene ${set1Gp} ${set1Attrs} output/$@.gp
+	${diff} expected/$@.gp output/$@.gp
+
+makeTracksBasicTest: ${set1Gp} ${set1Attrs} mkdirs
+	${gencodeMakeTracks} basic ${set1Gp} ${set1Attrs} output/$@.gp
+	${diff} expected/$@.gp output/$@.gp
+
+makeTracksCompTest: ${set1Gp} ${set1Attrs} mkdirs
+	${gencodeMakeTracks} comp ${set1Gp} ${set1Attrs} output/$@.gp
+	${diff} expected/$@.gp output/$@.gp
+
+##
+# generate attribute tracks from parsed data.
+#
+makeAttrsTests: makeAttrsTest
+
+makeAttrsTest: ${set1Gp} ${set1Attrs} mkdirs
+	${gencodeMakeAttrs} ${set1Gp} ${set1Attrs} output/$@.attrs.tab output/$@.tags.tab output/$@.tsl.tab
+	${diff} expected/$@.attrs.tab output/$@.attrs.tab
+	${diff} expected/$@.tags.tab output/$@.tags.tab
+	${diff} expected/$@.tsl.tab output/$@.tsl.tab
 
 ###
 # GENCODE to UCSC liftover
@@ -115,39 +143,44 @@ buildGencodeToUcscLiftTests: \
 
 # hg19/GRCh37
 buildGencodeToUcscLiftHs37Test: mkdirs
-	${buildGencodeToUcscLift} ${ucscGenomeDbHs37} ${hg37AsmReport} output/$@.chain
+	${buildGencodeToUcscLift} hg19 output/$@.chain
 	${diff} expected/$@.chain output/$@.chain
 
 # hg38/GRCh38
 buildGencodeToUcscLiftHs38Test: mkdirs
-	${buildGencodeToUcscLift} ${ucscGenomeDbHs38} ${hg38AsmReport} output/$@.chain
+	${buildGencodeToUcscLift} hg38 output/$@.chain
 	chainStats output/$@.chain >/dev/null
 	${diff} expected/$@.chain output/$@.chain
 
 # mm10/GRCm38
 buildGencodeToUcscLiftMm38Test: mkdirs
-	${buildGencodeToUcscLift} ${ucscGenomeDbMm38} ${mm38AsmReport} output/$@.chain
+	${buildGencodeToUcscLift} mm10 output/$@.chain
 	chainStats output/$@.chain >/dev/null
 	${diff} expected/$@.chain output/$@.chain
 
 ###
-# Creating genePred track
+# Creating genePred file
 ###
-genePredTests: set1AnnotTest ummappingWarnHs38Test specialCases1Test
+genePredTests: set1AnnotTest ummappingWarnHs38Test badMappedErrorsHs38Test specialCases1Test
 
 set1AnnotTest: ${set1Gp} ${gencodeToUcscMappingChainHg37} mkdirs
-	${gencodeGxfToGenePred} ${ucscGenomeDbHs37} input/set1.gtf ${gencodeToUcscMappingChainHg37} output/$@.gp
+	${gencodeGxfToGenePred} hg19 input/set1.gtf ${gencodeToUcscMappingChainHg37} output/$@.gp
 	${diff} expected/$@.gp output/$@.gp
 
 ummappingWarnHs38Test: ${gencodeToUcscMappingChainHg38}
-	${gencodeGxfToGenePred} ${ucscGenomeDbHs38} input/mappingErrorsHs38.gtf ${gencodeToUcscMappingChainHg38} output/$@.gp --unmapped=output/$@.unmapped.gp >output/$@.out 2>&1
+	${gencodeGxfToGenePred} --warnAndContinue hg38 input/missingSeqsHs38.gtf ${gencodeToUcscMappingChainHg38} output/$@.gp --unmapped=output/$@.unmapped.gp >output/$@.out 2>&1
 	${diff} expected/$@.out output/$@.out
 	${diff} expected/$@.gp output/$@.gp
 	${diff} expected/$@.unmapped.gp output/$@.unmapped.gp
 
+badMappedErrorsHs38Test: ${gencodeToUcscMappingChainHg38}
+	if ${gencodeGxfToGenePred} --warnAndContinue hg38 input/mappingErrorsHs38.gtf ${gencodeToUcscMappingChainHg38} output/$@.gp --unmapped=output/$@.unmapped.gp >output/$@.out 2>&1 ; \
+	   then echo Error: should fail >&2 ; exit 1 ; else exit 0 ; fi
+	${diff} expected/$@.out output/$@.out
+
 # chrM, PAR, mapped and unmapped haplotypes and patches
 specialCases1Test: ${gencodeToUcscMappingChainHg37} mkdirs
-	${gencodeGxfToGenePred} --unmapped=output/$@.unmapped.gp ${ucscGenomeDbHs37} input/specialCases1.gtf ${gencodeToUcscMappingChainHg37} output/$@.gp
+	${gencodeGxfToGenePred} --unmapped=output/$@.unmapped.gp hg19 input/specialCases1.gtf ${gencodeToUcscMappingChainHg37} output/$@.gp
 	${diff} expected/$@.gp output/$@.gp
 	${diff} expected/$@.unmapped.gp output/$@.unmapped.gp
 
@@ -160,16 +193,22 @@ exonSupport1Test: ${gencodeToUcscMappingChainHg37}
 	${gencodeExonSupportToTable} input/examples1.Exon_supporting_feature ${gencodeToUcscMappingChainHg37} output/$@.exons
 	${diff} expected/$@.exons output/$@.exons
 
+polyATests: ployAGpTest
+
+ployAGpTest: mkdirs ${gencodeToUcscMappingChainHg38}
+	${gencodePolyaGxfToGenePred} input/polyA.gff3 ${gencodeToUcscMappingChainHg38} output/$@.gp
+	${diff} expected/$@.gp output/$@.gp
+
 ##
 # mapping chains for tests
 ##
 testChains: ${gencodeToUcscMappingChainHg37} ${gencodeToUcscMappingChainHg38}
 ${gencodeToUcscMappingChainHg37}: mkdirs
-	${buildGencodeToUcscLift} ${ucscGenomeDbHs37} ${hg37AsmReport} $@.${tmpExt}
+	${buildGencodeToUcscLift} hg19 $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${gencodeToUcscMappingChainHg38}: mkdirs
-	${buildGencodeToUcscLift} ${ucscGenomeDbHs38} ${hg38AsmReport} $@.${tmpExt}
+	${buildGencodeToUcscLift} hg38 $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 mkdirs:

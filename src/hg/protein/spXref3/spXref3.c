@@ -57,7 +57,7 @@ conn2= hAllocConn(hDefaultDb());
 conn3= hAllocConn(hDefaultDb());
    
 sprintf(proteinDatabaseName, "biosql%s", proteinDataDate);
-sqlSafefFrag(cond_str, sizeof cond_str, "term_name = 'description'");
+sqlSafef(cond_str, sizeof cond_str, "term_name = 'description'");
 ontology_term_id = sqlGetField(proteinDatabaseName, "ontology_term", 
                                "ontology_term_id", cond_str); 
 
@@ -78,7 +78,7 @@ while (row2 != NULL)
 	    "select qualifier_value from biosql%s.bioentry_qualifier_value where bioentry_id=%s and ontology_term_id=%s;",
 	    proteinDataDate, bioentry_id, ontology_term_id);
 
-    sqlSafefFrag(cond_str, sizeof cond_str, "swissprot='%s'", accession);
+    sqlSafef(cond_str, sizeof cond_str, "swissprot='%s'", accession);
     hugoSymbol = sqlGetField(proteinDatabaseName, "hugo", "symbol", cond_str);
     hugoDesc = sqlGetField(proteinDatabaseName, "hugo", "name", cond_str);
 

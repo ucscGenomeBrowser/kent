@@ -1,0 +1,20 @@
+genome GCA_009914755.4
+taxId 9606
+trackDb trackDb.txt
+groups groups.txt
+description T2T-CHM13 v2.0
+twoBitPath GCA_009914755.4.2bit
+twoBitBptUrl GCA_009914755.4.2bit.bpt
+chromSizes GCA_009914755.4.chrom.sizes.txt
+chromAlias GCA_009914755.4.chromAlias.txt
+organism human
+defaultPos CP068269.2:145458455-145495201
+scientificName Homo sapiens
+htmlPath html/GCA_009914755.4_T2T-CHM13v2.0.description.html
+blat dynablat-01.soe.ucsc.edu 4040 dynamic GCA/009/914/755/GCA_009914755.4
+transBlat dynablat-01.soe.ucsc.edu 4040 dynamic GCA/009/914/755/GCA_009914755.4
+isPcr dynablat-01.soe.ucsc.edu 4040 dynamic GCA/009/914/755/GCA_009914755.4
+liftOver.GCA_021950905.1 liftOver/GCA_009914755.4ToGCA_021950905.1.over.chain.gz
+liftOver.GCA_021951015.1 liftOver/GCA_009914755.4ToGCA_021951015.1.over.chain.gz
+liftOver.hg19 liftOver/GCA_009914755.4ToHg19.over.chain.gz
+liftOver.hg38 liftOver/GCA_009914755.4ToHg38.over.chain.gz

@@ -15,10 +15,10 @@ sub usage() {
 sub makeName($$$$) {
   my ($host, $country, $isolate, $year) = @_;
   my @components = ();
-  if ($host) {
+  if ($host && $isolate !~ m@^$host/@) {
     push @components, $host;
   }
-  if ($isolate =~ m@^[A-Za-z]+/.*/\d+$@) {
+  if ($isolate =~ m@^([A-Za-z ]+/)?[A-Za-z]+/.*/\d+$@) {
     push @components, $isolate;
   } else {
     if ($country) {
@@ -52,6 +52,7 @@ my %accToMeta = ();
 while (<$GBMETA>) {
   my ($acc, undef, $date, $geoLoc, $host, $isoName) = split("\t");
   # Trim to just the country
+  $geoLoc =~ s/United Kingdom:(.*)/$1/;
   $geoLoc =~ s/:.*//;
   $geoLoc =~ s/ //g;
   if ($host eq "Homo sapiens") {
@@ -62,8 +63,16 @@ while (<$GBMETA>) {
   $isoName =~ s@^SARS?[- ]Co[Vv]-?2/@@;
   $isoName =~ s@^hCo[Vv]-19/@@;
   $isoName =~ s@^BetaCoV/@@;
-  $isoName =~ s@^human/@@;
+  $isoName =~ s@^[Hh]umans?,?/@@;
   $isoName =~ s@/ENV/@/env/@;
+  $isoName =~ s@Canis lupus familiaris@canine@;
+  $isoName =~ s@Felis catus@cat@;
+  $isoName =~ s@Mustela lutreola@mink@;
+  $isoName =~ s@Neovison vison@mink@;
+  $isoName =~ s@Panthera leo@lion@;
+  $isoName =~ s@Panthera tigris@tiger@;
+  $isoName =~ s@Panthera tigris jacksoni@tiger@;
+  $isoName =~ s@^COG-UK/@@;
   $accToMeta{$acc} = [$date, $geoLoc, $host, $isoName];
 }
 close($GBMETA);
@@ -77,33 +86,7 @@ while (<>) {
       if ($mDate =~ /^(\d\d\d\d)/) {
         $mYear = $1;
       }
-      my $name = $fName;
-      my $year = $mYear;
-      if (! $fName) {
-        $name = makeName($mHost, $mCountry, $mName, $mYear);
-      } else {
-        # If fasta name contains host, country, isolate name, and/or year, use those,
-        # otherwise take from metadata.
-        if ($fName =~ m@^((\w+)/)?(\w+)/[^/]+/(\d+)$@) {
-          # Well-formed; use it.
-          $name = $fName;
-        } else {
-          if ($fName =~ m@/(\d\d\d\d)$@) {
-            if ($1 && $mYear && $1 ne $mYear) {
-              print $STDERR "Year mismatch for $acc: name $name, metadata $mDate";
-            }
-            $fName =~ s@/(\d\d\d\d)$@@;
-            $year = $1;
-          }
-          if ($fName =~ m@^[A-Z]{3}/@) {
-            # Not really well-formed, but at least it starts with a country code so
-            # don't mess it up further.
-            $name = $fName;
-          } else {
-            $name = makeName($mHost, $mCountry, $fName, $year);
-          }
-        }
-      }
+      my $name = makeName($mHost, $mCountry, $mName, $mYear);
       print ">$acc |$name\n";
     } else {
       print STDERR "No metadata for $acc\n";

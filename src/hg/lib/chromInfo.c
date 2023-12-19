@@ -11,7 +11,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "chromInfo.h"
-
+#include "net.h"
 
 void chromInfoStaticLoad(char **row, struct chromInfo *ret)
 /* Load a row from chromInfo table into ret.  The contents of ret will
@@ -140,9 +140,10 @@ char query[256];
 char *res = NULL;
 boolean exists = FALSE;
 
-/* if the database exists, check for the chromInfo file */
-if (sqlDatabaseExists(db))
+/* if the database exists (which it must since we opened the connection above), check for the chromInfo table */
+if (sqlDatabaseExists(db) && sqlTableExists(conn, "chromInfo"))
     {
+    /* the database and chromInfo table exist, look to see if it has our chrom. */
     sqlSafef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
     res = sqlQuickQuery(conn, query, seqFile, 512);
     sqlDisconnect(&conn);
@@ -174,7 +175,11 @@ struct chromInfo *ret = NULL;
 unsigned totalSize = 0;
 /* do the query */
 if (!name || sameWord(name, "all"))
-    sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
+    {
+    char query[1024];
+    sqlSafef(query, sizeof query, "select * from chromInfo");
+    sr = sqlGetResult(conn, query);
+    }
 else
     {
     char select[256];
@@ -249,7 +254,11 @@ struct chromInfo *chromInfoListFromFile(char *fileName)
 /* read chrom info from file and return list of name and size */
 {
 struct chromInfo *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = NULL;
+if (udcIsLocal(fileName))
+    lf = lineFileOpen(fileName, TRUE);
+else
+    lf = netLineFileOpen(fileName);
 char *row[2];
 
 while (lineFileRow(lf, row))

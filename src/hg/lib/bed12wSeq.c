@@ -109,14 +109,14 @@ void bed12wSeqSaveToDb(struct sqlConnection *conn, struct bed12wSeq *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *blockSizesArray, *chromStartsArray;
 blockSizesArray = sqlSignedArrayToString(el->blockSizes, el->blockCount);
 chromStartsArray = sqlSignedArrayToString(el->chromStarts, el->blockCount);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%d,'%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->reserved,  el->blockCount,  blockSizesArray ,  chromStartsArray ,  el->seq1,  el->seq2);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&blockSizesArray);
 freez(&chromStartsArray);
 }

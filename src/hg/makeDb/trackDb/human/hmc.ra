@@ -1,0 +1,18 @@
+track hmc
+shortLabel HMC
+longLabel HMC - Homologous Missense Constraint Score on PFAM domains
+type bigWig
+parent constraintSuper
+visibility full
+#maxWindowToQuery 500000
+color 0,130,0
+html constraintSuper
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+bigDataUrl /gbdb/$D/hmc/hmc.bw
+maxHeightPixels 128:40:8
+viewLimits 0:2
+viewLimitsMax 0:2
+yLineMark 0.8
+yLineOnOff on
+priority 2

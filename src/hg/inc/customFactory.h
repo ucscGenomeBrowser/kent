@@ -150,6 +150,9 @@ boolean isValidBigDataUrl(char *url, boolean doAbort);
 /* return True if the URL is a valid bigDataUrl. 
  * It can be a local filename if this is allowed by udc.localDir 
  */
+
+boolean customFactoryParallelLoad(char *bdu, char *type);
+/* Is this a data type that should be loaded in parallel ? */
 #endif /* CUSTOMFACTORY_H */
 
 

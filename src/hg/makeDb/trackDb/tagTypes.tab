@@ -25,9 +25,10 @@ bamColorMode bam
 bamGrayMode bam
 bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
+barChartBarMinWidth barChart bigBarChart
+barChartBarMinPadding barChart bigBarChart
 barChartColors barChart bigBarChart
 barChartCategoryUrl barChart bigBarChart
-multiRegionsBedUrl *
 barChartFacets barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 barChartMerge barChart bigBarChart
@@ -51,7 +52,7 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed bigLolly
 bedPackDense bed bigBed
-bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio
+bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio 
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -80,13 +81,14 @@ codingAnnoLabel_snp131CodingDbSnp bed
 codingAnnoLabel_snp132CodingDbSnp bed
 codingAnnoLabel_snp134CodingDbSnp bed
 codingAnnotations bed
+colorBy snake
 collapseEmptySubtracks *
 hideEmptySubtracks *
 hideEmptySubtracksLabel *
 hideEmptySubtracksMultiBedUrl *
 hideEmptySubtracksSourcesUrl *
 color *
-colorByStrand bigBed bed genePred
+colorByStrand bigBed bed genePred bigGenePred
 colorChromDefault psl bigPsl
 compareGenomeLinks bed
 compositeTrack *
@@ -101,13 +103,16 @@ dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
-dbPrefixUrls bigBed bed bigPsl genePred psl
-dbPrefixLabels bigBed bed bigPsl genePred psl
+dbPrefixUrls bigBed bed bigPsl genePred psl bigGenePred
+dbPrefixLabels bigBed bed bigPsl genePred psl bigGenePred
 dbProfile *
 dbTrackType customTracks
+decorator bigBed bed bigPsl genePred bigGenePred psl
+decorator.url bigBed bed bigPsl genePred bigGenePred psl
+decorator.* bigBed bed bigPsl genePred bigGenePred psl
 detailsUrls big*
 detailsTabUrls big*
-defaultGeneTracks bed
+defaultGeneTracks bed bigDbSnp
 defaultLabelFields big*
 defaultMaf wigMaf
 defaultMaxWeight bed
@@ -127,6 +132,8 @@ directUrl *
 dividers *
 dragAndDrop *
 drawMode hic
+doWiggle bigBed
+downloadUrl* *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
@@ -220,6 +227,8 @@ hapClusterHeight vcf vcfTabix
 hapmapPhase bed
 hgGene genePred
 hgsid bed genePred bigBed
+hicDistanceMin hic
+hicDistanceMax hic
 highlightBy genePred
 highlightColor genePred
 hoverMetadata wig bigWig
@@ -230,9 +239,9 @@ idInUrlSql altGraphX genePred chain factorSource bed  bigChain
 idXref genePred psl bigGenePred
 iframeUrl *
 iframeOptions *
-indelDoubleInsert psl bam bigBed bigPsl
-indelPolyA psl bam bigPsl
-indelQueryInsert psl bam bigBed bigPsl
+indelDoubleInsert psl bam chain bigBed bigPsl bigChain
+indelPolyA psl bam bigPsl 
+indelQueryInsert psl bam chain bigBed bigPsl bigChain
 informant genePred
 initialPos customTracks
 inputFieldMetaTables *
@@ -249,7 +258,7 @@ interactDirectional interact bigInteract
 interactUp interact bigInteract
 interactMultiRegion interact bigInteract
 intronGap psl genePred bigPsl bigGenePred
-irows wigMaf
+irows wigMaf bigMaf
 isGencode3 genePred bigGenePred
 isGencode2 genePred bigGenePred
 isGencode genePred
@@ -270,10 +279,12 @@ linkIdInName bed bigBed
 labelFields big*
 labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
+logo bigWig
 lollipopField bigBed bigLolly
 lollyField bigBed bigLolly
 lollyMaxSize bigBed bigLolly
 lollySizeField bigBed bigLolly
+logoMaf wig bigWig
 longLabel *
 longlabel genePred
 longLabelClip *
@@ -311,9 +322,10 @@ motifMapTable factorSource
 motifMaxWindow factorSource
 motifDrawDefault factorSource
 mouseOverField big*
-mouseOver bigLolly bigBed bigPsl
+mouseOver bigLolly bigBed bigPsl bigGenePred
 mouseOverFunction bigWig
 msaTable wig wigMafProt wigMaf
+multiRegionsBedUrl *
 ncbiAccXref bed
 negateValues wigMaf bigWig bedGraph wig
 nextExonText *
@@ -322,7 +334,7 @@ noColorTag bam
 noInherit *
 nonBedFieldsLabel bigBed
 noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInteract
-noParentConfig bed bigBed bigLolly
+noParentConfig bed bigBed bigLolly bigWig
 notNCBI bed
 noGenomeReason *
 normalization hic
@@ -335,6 +347,7 @@ orangDb bed
 origAssembly *
 origTrackLine customTracks
 otherDb *
+otherTwoBitUrl *
 otherDbTable bed
 otherOrg netAlign chain bigChain
 otherSpecies halSnake
@@ -367,7 +380,10 @@ vcfChildSample vcfPhasedTrio
 vcfParentSamples vcfPhasedTrio
 vcfUseAltSampleNames vcfPhasedTrio
 saturationScore hic
-sGroup_Afrotheria wigMaf
+sGroup_Afrotheria wigMaf bigMaf
+sGroup_African wigMaf bigMaf
+sGroup_American wigMaf bigMaf
+sGroup_Artiodactyla bigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
 sGroup_Birds wigMaf
@@ -375,6 +391,7 @@ sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Carnivore wigMaf bigMaf
+sGroup_Carnivora wigMaf bigMaf
 sGroup_Cetartiodactyla wigMaf bigMaf
 sGroup_Chiroptera wigMaf bigMaf
 sGroup_CoV_2019 wigMaf
@@ -386,24 +403,28 @@ sGroup_DRC_2007 wigMaf
 sGroup_Deuterostomia wigMaf
 sGroup_Dorylaimia wigMaf
 sGroup_Drosophila wigMaf
+sGroup_East_Asian wigMaf bigMaf
 sGroup_Ebola_2014 wigMaf
-sGroup_Euarchontoglires wigMaf
+sGroup_Euarchontoglires wigMaf bigMaf
 sGroup_fish wigMaf
 sGroup_Fish wigMaf
 sGroup_Gabon wigMaf
-sGroup_Glires wigMaf
+sGroup_Glires wigMaf bigMaf
 sGroup_hiv wigMafProt wigMaf
 sGroup_Holometabola wigMaf
 sGroup_Human wigMaf
-sGroup_Laurasiatheria wigMaf
+sGroup_Laurasiatheria wigMaf bigMaf
 sGroup_Mammal wigMaf
 sGroup_mammal wigMaf
 sGroup_Mammals wigMaf bigMaf
 sGroup_Marburg_1987 wigMaf
+sGroup_Metatheria bigMaf
+sGroup_Monotremata bigMaf
 sGroup_Nematocera wigMaf
 sGroup_Nematode wigMaf
 sGroup_Nematodes wigMaf
 sGroup_Others wigMaf
+sGroup_other wigMaf bigMaf
 sGroup_Percent99 wigMaf
 sGroup_Percent98 wigMaf
 sGroup_Percent97 wigMaf
@@ -422,23 +443,28 @@ sGroup_Placental_Mammals wigMaf
 sGroup_Platyhelminthes wigMaf
 sGroup_Plectida wigMaf
 sGroup_Primate wigMaf bigMaf
-sGroup_Primates wigMaf
+sGroup_Primates wigMaf bigMaf
+sGroup_Primates_catarrhini wigMaf bigMaf
+sGroup_Primates_platyrrhini wigMaf bigMaf
+sGroup_Primates_strepsirrhini wigMaf bigMaf
+sGroup_Primates_tarsiidae wigMaf bigMaf
 sGroup_primate wigMaf
-sGroup_Primates wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
 sGroup_Rodents wigMaf bigMaf
 sGroup_Sarcopterygii wigMaf
+sGroup_South_Asian wigMaf bigMaf
 sGroup_Spirurina wigMaf
 sGroup_Strongylida wigMaf
 sGroup_Sudan_1976-9 wigMaf
 sGroup_Tylenchina wigMaf
 sGroup_vertebrate wigMaf
-sGroup_Vertebrate wigMaf
+sGroup_Vertebrate wigMaf bigMaf
 sGroup_Vertebrates wigMaf
 sGroup_Virus wigMaf
 sGroup_worm wigMaf
+sGroup_Xenarthra bigMaf
 sGroup_Zaire wigMaf
 sGroup_Zaire(DRC)_1976-7 wigMaf
 *Filter bed narrowPeak broadPeak
@@ -455,13 +481,14 @@ scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed bigP
 scoreLabel bed bigBed bigPsl bigGenePred bigLolly
 searchIndex bigBed bigPsl bigGenePred bigBarChart
 searchTrix bigBed bigPsl bigGenePred
+searchTrixContext bigBed bigPsl bigGenePred
 selectSubject psl bigPsl
 seqTable bed
 settingsByView *
 sepFields bigBed bigPsl bigGenePred
 shortLabel *
-showCdsAllScales psl bigPsl
-showCdsMaxZoom psl bigPsl
+showCdsAllScales psl bigPsl chain bigChain
+showCdsMaxZoom psl bigPsl chain bigChain
 showCfg *
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
@@ -471,7 +498,7 @@ showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak broadPeak
 signalFilterLimits bed narrowPeak broadPeak
-skipFields bigBed bigPsl bigGenePred
+skipFields bigBed bigPsl bigGenePred bigLolly
 skipEmptyFields bigBed bigPsl
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
@@ -494,6 +521,9 @@ speciesTarget wigMaf
 speciesTree wigMaf
 speciesUseFile wigMafProt wigMaf
 spectrum *
+squishyPackField  bigBed bigGenePred
+squishyPackPoint bigBed bigGenePred
+squishyPackLabel bigBed bigGenePred
 stripPrefix bam
 subGroup1 *
 subGroup2 *
@@ -527,7 +557,8 @@ transMapSrc psl bigPsl
 transMapTypeDesc psl bigPsl
 transMapSrcSet psl bigPsl
 transformFunc bed bigBed bedGraph wig bigWig barChart bigBarChart
-treeImage wigMaf
+treeImage wigMaf bigMaf
+twoBit snake
 txInfo genePred
 type *
 url *
@@ -563,6 +594,7 @@ wgEncodeGencodePolyAFeature genePred
 wgEncodeGencodeAnnotationRemark genePred
 wgEncodeGencodeTranscriptionSupportLevel genePred
 wgEncodeGencodeEntrezGene genePred
+maxTransEnabled *
 wibFile customTracks
 wigColorBy wig
 wigFile customTracks

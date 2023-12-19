@@ -2,55 +2,67 @@
 <p>
 This track shows genetic variants likely affecting proximal gene expression in 49 human tissues
 from the
-<a target="_blank" href="https://gtexportal.org/home/">Genotype-Tissue Expression (GTEx)</a> V8
-data release.
+<a target="_blank" href="https://gtexportal.org/home/">Genotype-Tissue Expression (GTEx)</a>
+V8 data release.
+
 The data items displayed are gene expression quantitative trait loci within 1MB
 of gene transcription start sites (cis-eQTLs), significantly associated with
 gene expression and in the credible set of variants for the gene at a high
-confidence level, with a causal posterior probability of &gt;0.1. Each eQTL annotation includes the tissue and causal
-posterior probability (CPP, described in
-<a target="_blank" href="https://www.genetics.org/content/198/2/497.long">Hormozdiari et al.</a>)
+confidence level. The data can only be calculated for the autosomes,
+so no data is shown on chrX.
 </p>
 
 <h2>Display Conventions</h2>
 <p>
-The track shows gene/variant pairs for 49 GTEx tissues, following the display
-conventions for
-<a href="../goldenPath/help/interact.html" target="_blank">interact tracks</a>
-where an arc is drawn between the variant and
-gene. Items in the track are colored according to their tissue, with the color
-matching those in the
-<a target="_blank" href="/cgi-bin/hgGtexTrackSettings?g=gtexGeneV8">GTEx Gene V8 Track</a>.
-Hovering over the
-center-point on that arc will display the dbSNP rsID, target gene, tissue, and
-CPP. Clicking an item will show the details of that interaction as well as link
-to view more details on the GTEx website.
+Both the CAVIAR and DAP-G tracks show gene/variant pairs for 49 GTEx tissues.
+Variants are linked to the genes they interact with by a line. Variants
+are represented by thicker-width, single-base items. Genes are represented as
+thinner-width items covering the length of the gene. The direction of the
+chevrons on the line indicate whether the variant is upstream or downstream of
+the gene with the chevrons always pointing from the variant to the gene. If a
+variant is internal to the gene, then the variant is shown as a thicker segment
+than the gene. Items in the track are colored according to their tissue, with
+the color matching those in the <a target="_blank"
+href="/cgi-bin/hgGtexTrackSettings?g=gtexGeneV8">GTEx Gene V8 Track</a>.
+
+<p>
+Hovering over items in the track display will show the variant ID (often a
+dbSNP rsID), the target gene, tissue, and posterior probablity (Causal
+Posterior Probability (CPP) for CAVIAR; SNP Posterior Inclusion Probability
+(PIP) for DAP-G). Clicking an item will show the details of that interaction
+with link outs to view more details on the GTEx website.
 </p>
 
 <p>
-Track configuration supports filtering by tissue, gene, or CPP.
+Track configuration supports filtering by tissue, gene, or posterior probability.
 </p>
 
 <h2>Methods</h2>
 <p>
-Laboratory and RNA-seq analysis methods for GTEx V8 are summarized in the 
-<a target="_blank" href="/cgi-bin/hgGtexTrackSettings?g=gtexGeneV8">GTEx Gene Track</a> description page.
+Details on GTEx v8 analysis, including code, can be found in the
+<a href="https://github.com/hakyimlab/gtex-gwas-analysis/blob/master/README.md"
+target="_blank">GTEx GWAS Analysis Github</a>.
 </p>
 
 <p>
-Cis-eQTL's were identified from GTEx RNA-seq and genotype data (variants with minor allele 
-frequency &gt;= 1%) in 49 tissues (those with sample size &gt;=70) using 
-the <a target="_blank" href="http://fastqtl.sourceforge.net">FastQTL</a> mapper at 5% FDR threshold, 
-as part of the GTEx project v8 analysis.  
-These cis-eQTL's were then analyzed together with genome variation information (LD) using the 
-<a target="_blank" href="http://genetics.cs.ucla.edu/caviar/">CAVIAR</a> statistical framework
-to quantify the probability a variant is causal as part of GTEx downstream analysis.
-The UCSC track was created using the CAVIAR high-confidence set, which
-represents the high causal variants that have a (CPP) of &gt; 0.1).
-</p>
-<p>
 Raw data for these analyses are available from the
 <a href="https://gtexportal.org/home/protectedDataAccess" target="_blank">GTEx Portal</a>.
+</p>
+
+<h3>CAVIAR</h3>
+<p>
+The <a href="http://genetics.cs.ucla.edu/caviar/" target="_blank">CAVIAR</a>
+track at UCSC was created using the CAVIAR high-confidence set, which
+represents the high causal variants that have a causal posterior probability
+(CPP) of &gt; 0.1.
+</p>
+
+<h3>DAP-G</h3>
+<p>
+The <a href="https://github.com/xqwen/dap" target="_blank">DAP-G</a> track at
+UCSC was created using the DAP-G 95% credible set, which represents varaints
+with strong eQTLs signals, which are signal clusters with signal-level
+posterior inclusion probability (SPIP) &gt; 0.95.
 </p>
 
 <h2>Data Access</h2>
@@ -62,17 +74,24 @@ entries in JSON format through our <a href="http://genome.ucsc.edu/goldenPath/he
 JSON API</a>.</p>
 
 <p>
-The data in this track are organized in <a href="../goldenPath/help/interact.html"
-target="_blank">bigInteract</a> file format. The underlying file
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gtex/eQtl/gtexEqtlsCaviarHighConf.interact.bb"
-target="_blank">gtexEqtlsCaviarHighConf.interact.bb</a>
-can be obtained from our downloads server.
+The data in this track are organized in <a href="../goldenPath/help/bigBed.html"
+target="_blank">bigBed</a> file format. The underlying files
+can be obtained from our downloads server:
+<ul>
+  <li>GTEx CAVIAR - <a
+  href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gtex/eQtl/gtexCaviar.bb"
+  target="_blank">gtexCaviar.bb</a>
+  <li>GTEx DAP-G - <a
+  href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gtex/eQtl/gtexDapg.bb"
+  target="_blank">gtexDapg.bb</a>
+</ul>
+
 Individual regions or the whole set of genome-wide annotations can be obtained using our tool
 <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system from the utilities directory linked below. For example, to extract only
 annotations in a given region, you could use the following command:</p>
 <p>
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/gtex/eQtl/gtexEqtlsCaviarHighConf.interact.bb
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/gtex/eQtl/gtexCaviar.bb
 -chrom=chr16 -start=34990190 -end=36727467 stdout</tt></p>
 
 <h2>Credits</h2>
@@ -86,6 +105,22 @@ The GTEx Consortium atlas of genetic regulatory effects across human tissues</a>
 <em>Science</em>. 2020 Sep 11;369(6509):1318-1330.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32913098" target="_blank">32913098</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7737656/" target="_blank">PMC7737656</a>
+</p>
+<p>
+Lee Y, Luca F, Pique-Regi R, Wen X.
+<a href="https://www.biorxiv.org/content/10.1101/316471" target="_blank">
+Bayesian Multi-SNP Genetic Association Analysis: Control of FDR and Use of
+Summary Statistics</a>.
+<em>bioRxiv</em>. 2018 May 8.
+</p>
+<p>
+Wen X, Lee Y, Luca F, Pique-Regi R.
+<a href="https://www.cell.com/ajhg/fulltext/S0002-9297(16)30095-7" target="_blank">
+Efficient Integrative Multi-SNP Association Analysis via Deterministic Approximation of
+Posteriors</a>.
+<em>Am J Hum Genet</em>. 2016 Jun 2;98(6):1114-1129.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27236919" target="_blank">27236919</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4908152/" target="_blank">PMC4908152</a>
 </p>
 <p>
 Ongen H, Buil A, Brown AA, Dermitzakis ET, Delaneau O.

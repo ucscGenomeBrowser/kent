@@ -9,14 +9,13 @@ ottoDir=/hive/data/outside/otto/nextstrainNcov
 chromSizes=/hive/data/genomes/wuhCor1/chrom.sizes
 gbdbDir=/gbdb/wuhCor1/nextstrain
 
-ncovJsonUrl='https://nextstrain.org/charon/getDataset?prefix=/ncov/open/global'
+ncovJsonUrl='https://nextstrain.org/charon/getDataset?prefix=/ncov/open/global/6m'
 
 cd $ottoDir
 
-# The file is named .json, but is actually gzipped, so gunzip it.
 rm -f ncov.json
-curl -s "$ncovJsonUrl" \
-| gunzip -c > ncov.json
+# HT Thomas Sibley: use --compressed flag to send "Accept-Encoding: gzip" and auto-decompress:
+curl -sS --compressed "$ncovJsonUrl" > ncov.json
 curl -s -I "$ncovJsonUrl" \
 | grep Last-Mod | sed -re 's/Last-Modified: //; s/\r//;' \
    > ncov.json.date

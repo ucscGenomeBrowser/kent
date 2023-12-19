@@ -79,7 +79,7 @@ void mafAliToPsl(char *querySrc, char *targetSrc,
 struct mafComp *qc = mafMayFindComponentDb(maf, querySrc);
 struct mafComp *tc = mafMayFindComponentDb(maf, targetSrc);
 
-if ((qc != NULL) && (tc != NULL))
+if ((qc != NULL) && (tc != NULL) && (qc->text != NULL) && (tc->text != NULL))
     convertToPsl(qc, tc, pslFh);
 }
 

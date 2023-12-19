@@ -568,8 +568,8 @@ struct dyString *nList   = NULL;
 for (region=regions; region!=NULL; region=region->next)
     for (site=region->sites; site!=NULL; site=site->next)
 	{
-	seqList = newDyString(32);
-	nList   = newDyString(32);
+	seqList = dyStringNew(32);
+	nList   = dyStringNew(32);
 	for (allele=site->alleles; allele!=NULL; allele=allele->next)
 	    {
 	    dyStringPrintf(seqList, "%s,", allele->seq);
@@ -578,8 +578,8 @@ for (region=regions; region!=NULL; region=region->next)
 	fprintf(f,"%s\t%d\t%d\t%s\t%d\t%s\t%s\t%s\n", 
 		site->chrom, site->chromStart, site->chromEnd, site->name, 
 		site->score, site->strand, seqList->string, nList->string);
-	freeDyString(&seqList);
-	freeDyString(&nList);
+	dyStringFree(&seqList);
+	dyStringFree(&nList);
 	}
 }
 
@@ -645,10 +645,10 @@ if(argc > 3) // multiple files of regions
 	    chopSuffix(inFile);
 	if (endsWith(inFile, ".bed"))
 	    chopSuffix(inFile);
-	outFile = newDyString(32);
+	outFile = dyStringNew(32);
 	dyStringPrintf(outFile, "%s_%s.tajd.bed", variantFile, inFile);
 	printTajD(outFile->string, regions);
-	freeDyString(&outFile);
+	dyStringFree(&outFile);
 //	freeRegions(regions);
 	slFreeList(regions); // memory leak?
 	}
@@ -679,10 +679,10 @@ else
 	chopSuffix(variantFile);
     if (endsWith(variantFile, ".bed"))
 	chopSuffix(variantFile);
-    outFile = newDyString(32);
+    outFile = dyStringNew(32);
     dyStringPrintf(outFile, "%s_%s.tajd", variantFile, inFile);
     printTajD(outFile->string, regions);
-    freeDyString(&outFile);
+    dyStringFree(&outFile);
     }
 return 0;
 }

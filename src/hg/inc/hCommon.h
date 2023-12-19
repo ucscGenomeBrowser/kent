@@ -55,6 +55,12 @@ char *hgIntegratorName();
 char *hgGeneName();
 /* Relative URL to gene details program (hgGene). */
 
+char *hgAbsUrl();
+/* Full absolute URL to current CGI, including the protocol part. Needs to be freed. */
+
+char *hgAbsUrlCgi(char *cgiName);
+/* Full absolute URL to another CGI, including the protocol part. Needs to be freed. Example argument: "hgTracks" */
+
 void fragToCloneName(char *fragName, char cloneName[128]);
 /* Convert fragment name to clone name. */
 

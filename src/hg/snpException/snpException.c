@@ -35,8 +35,9 @@ struct sqlResult     *sr    = NULL;
 char                **row   = NULL;
 struct slName        *list  = NULL;
 struct slName        *el    = NULL;
-char                 *query = NOSQLINJ "select chrom from chromInfo";
 
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row=sqlNextRow(sr))!=NULL)
     {
@@ -80,11 +81,13 @@ struct sqlResult     *sr         = NULL;
 char                **row        = NULL;
 struct snpExceptions *list       = NULL;
 struct snpExceptions *el         = NULL;
-char                  query[256] = NOSQLINJ "select * from snpExceptions";
+char query[256];
 
 if (inputExceptionId>0)
     sqlSafef(query, sizeof(query), 
 	  "select * from snpExceptions where exceptionId=%d", inputExceptionId);
+else
+    sqlSafef(query, sizeof(query), "select * from snpExceptions");
 sr = sqlGetResult(conn, query);
 while ((row=sqlNextRow(sr))!=NULL)
     {
@@ -128,9 +131,12 @@ for (el=exceptionList; el!=NULL; el=el->next)
 	for (chrom=chromList; chrom!=NULL; chrom=chrom->next)
 	    {
 	    fflush(outFile); /* to keep an eye on output progress */
-	    sqlSafef(query, sizeof(query),
-		  "%-s and chrom='%s'", el->query, chrom->name);
-	    sr = sqlGetResult(conn, query);
+
+	    // FYI el->query does not contain printf replace-able parameters, so dynamic format is not required.
+	    struct dyString *query2 = sqlDyStringCreate(el->query,NULL);
+            sqlDyStringPrintf(query2, " and chrom='%s'", chrom->name);
+	    sr = sqlGetResult(conn, dyStringContents(query2));
+	    dyStringFree(&query2);
 	    colCount = sqlCountColumns(sr);
 	    while ((row = sqlNextRow(sr))!=NULL)
 		{

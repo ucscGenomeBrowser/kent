@@ -580,18 +580,18 @@ puts(
 "sagittal brain slices with reverse-complemented mRNA hybridization probes \n"
 "from the <A HREF=\"http://brain-map.org/\" TARGET=_blank>Allen Brain \n"
 "Atlas</A>, courtesy of the <A HREF=\"http://www.alleninstitute.org/\" \n"
-"TARGET=_blank>Allen Institute for Brain Science</A> \n"
+"TARGET=_blank>Allen Institute for Brain Science</A></LI>\n"
 "<LI>Mouse <em>in situ</em> images from the \n"
 "<A HREF=\"http://www.informatics.jax.org/expression.shtml\" \n"
-"TARGET=_blank>Jackson Lab Gene Expression Database</A> (GXD) at MGI \n"
+"TARGET=_blank>Jackson Lab Gene Expression Database</A> (GXD) at MGI </LI>\n"
 "<LI>Transcription factors in mouse embryos from the \n"
-"Mahoney Center for Neuro-Oncology \n"
+"Mahoney Center for Neuro-Oncology </LI>\n"
 "<LI>Mouse head and brain <em>in situ</em> images from the  \n"
 "<A HREF=\"http://www.gensat.org/index.html\" TARGET=_blank>Gene \n"
-"Expression Nervous System Atlas</A> (GENSAT) database \n"
+"Expression Nervous System Atlas</A> (GENSAT) database </LI>\n"
 "<LI><em>Xenopus laevis</em> <em>in situ</em> images from the \n"
 "<A HREF=\"http://xenopus.nibb.ac.jp\" TARGET=_blank>National \n"
-"Institute for Basic Biology</A> (NIBB) XDB project \n"
+"Institute for Basic Biology</A> (NIBB) XDB project </LI>\n"
 "</UL> \n"
 "<H3>Image Navigation</H3>\n"
 "<P> \n"
@@ -632,10 +632,10 @@ puts(
 "click and drag the image using the mouse. Alternatively, the following \n"
 "keyboard shortcuts may be used after clicking on the image: \n"
 "<UL>"
-"<LI><B>Scroll left in the image: </B>Left-arrow key or <em>Home</em> key \n"
-"<LI><B>Scroll right in the image: </B>Right-arrow key or <em>End</em> key \n"
-"<LI><B>Scroll up in the image: </B>Up-arrow key or <em>PgUp</em> key \n"
-"<LI><B>Scroll down in the image: </B>Down-arrow key or <em>PgDn</em> key \n"
+"<LI><B>Scroll left in the image: </B>Left-arrow key or <em>Home</em> key </LI>\n"
+"<LI><B>Scroll right in the image: </B>Right-arrow key or <em>End</em> key </LI>\n"
+"<LI><B>Scroll up in the image: </B>Up-arrow key or <em>PgUp</em> key </LI>\n"
+"<LI><B>Scroll down in the image: </B>Down-arrow key or <em>PgDn</em> key </LI>\n"
 "</UL></P> \n"
 "<B>Downloading the original full-sized image:</B> Most images may be viewed \n"
 "in their original full-sized format by clicking the &quot;download&quot; \n"
@@ -835,7 +835,6 @@ else
 	    {
 	    problemPage("Skip http header problem", url);
     	    }
-	freeMem(newUrl);
 	}
     }
 }

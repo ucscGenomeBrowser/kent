@@ -108,11 +108,11 @@ void oregannoSaveToDb(struct sqlConnection *conn, struct oreganno *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->id,  el->strand,  el->name);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -277,11 +277,11 @@ void oregannoAttrSaveToDb(struct sqlConnection *conn, struct oregannoAttr *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
 	tableName,  el->id,  el->attribute,  el->attrVal);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -434,11 +434,11 @@ void oregannoLinkSaveToDb(struct sqlConnection *conn, struct oregannoLink *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s')", 
 	tableName,  el->id,  el->attribute,  el->raKey,  el->attrAcc);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

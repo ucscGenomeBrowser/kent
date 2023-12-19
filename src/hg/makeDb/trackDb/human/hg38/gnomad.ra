@@ -6,7 +6,7 @@ superTrack on
 shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
-html gnomadV3_1_1
+html gnomadV4
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -80,11 +80,11 @@ html gnomadV3_1_1
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Genes: $genes; Type: $annot; Tag: $FILTER; Allele Frequency: $AF ($AC/$AN)
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
+    detailsStaticTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
 
     track gnomadGenomesVariantsV3_1_1
     parent gnomadVariants
-    visibility pack
+    visibility squish
     shortLabel gnomAD v3.1.1
     longLabel Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
     dataVersion Release v3.1.1 (March 20, 2021) and v3.1 chrM Release (November 17, 2020)
@@ -93,7 +93,7 @@ html gnomadV3_1_1
     searchIndex name,_displayName,rsId
     html gnomadV3_1_1
     bigDataUrl /gbdb/hg38/gnomAD/v3.1.1/genomes.bb
-    priority 1
+    priority 2
     labelFields rsId,_displayName
     defaultLabelFields _displayName
     skipFields _displayName
@@ -111,9 +111,150 @@ html gnomadV3_1_1
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraTableFields _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
+    detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
 
+track gnomadConstraint
+parent gnomadVariants on
+shortLabel gnomAD Mut Constraint
+longLabel Genome Aggregation Database (gnomAD) Genome Mutational Constraint (includes chrX)
+bigDataUrl /gbdb/hg38/gnomAD/mutConstraint/mutConstraint.bw
+type bigWig
+altColor 0,150,0
+color 150,0,0
+maxHeightPixels 128:40:8
+viewLimitsMax -3:3
+autoScale on
+priority 10
+html gnomadV3_1_1
+
+    track gnomadPLI
+    parent gnomadVariants 
+    shortLabel gnomAD Constraint Metrics
+    longLabel Genome Aggregation Database (gnomAD) Predicted Constraint Metrics (pLI and Z-scores)
+    compositeTrack On
+    group varRep
+    type bigBed 12
+    labelFields name,geneName
+    visibility hide
+
+        track pliByGene
+        shortLabel Gene LoF
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI)
+        type bigBed 12 +
+        mouseOverField _mouseOver
+        itemRgb on
+        searchIndex name,geneName
+        bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByGene.bb
+        url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
+        urlLabel View this Gene on the gnomAD browser
+        labelFields name,geneName
+        defaultLabelFields geneName
+        filter._pli 0:1
+        filterLabel._pli Show only items between this pLI range
+        filterByRange._pli on
+        parent gnomadPLI on
+        priority 1
+
+        track missenseByGene
+        shortLabel Gene Missense
+        longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores)
+        type bigBed 12 +
+        mouseOverField _mouseOver
+        searchIndex name,geneName
+        bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByGene.bb
+        url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
+        urlLabel View this Gene on the gnomAD browser
+        labelFields name,geneName
+        filter._zscore -19:11
+        filterLabel._zscore Show only items between this Z-score range
+        filterByRange._zscore on
+        parent gnomadPLI off
+        priority 2
+
+        track pliByTranscript
+        shortLabel Transcript LoF
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI)
+        type bigBed 12 +
+        mouseOverField _mouseOver
+        itemRgb on
+        searchIndex name,geneName
+        bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.bb
+        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
+        urlLabel View this Transcript on the gnomAD browser
+        labelFields name,geneName
+        filter._pli 0:1
+        filterLabel._pli Show only items between this pLI range
+        filterByRange._pli on
+        parent gnomadPLI off
+        priority 2
+
+        track missenseByTranscript
+        shortLabel Transcript Missense
+        longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores)
+        type bigBed 12 +
+        mouseOverField _mouseOver
+        searchIndex name,geneName
+        bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.bb
+        url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
+        urlLabel View this Transcript on the gnomAD browser
+        labelFields name,geneName
+        filter._zscore -20:11
+        filterLabel._zscore Show only items between this Z-score range
+        filterByRange._zscore on
+        parent gnomadPLI off
+        priority 2
+
+track gnomadVariantsV4
+parent gnomadVariants
+compositeTrack on
+shortLabel gnomAD v4 Pre-Release
+longLabel Genome Aggregation Database (gnomAD) Genome Variants v4.0.0 Pre-Release
+type vcfTabix
+showHardyWeinberg on
+configureByPopup off
+maxWindowToDraw 200000
+visibility hide
+dataVersion Release 4.0.0 (November 1, 2023, (chrY Fix November 16, 2023))
+priority 1
+url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r4&ignore=$$
+urlLabel gnomAD:
+html gnomadV4.html
+
+    track gnomadGenomesV4
+    parent gnomadVariantsV4
+    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+    shortLabel gnomAD v4 Genomes Variants
+    longLabel Genome Aggregation Database (gnomAD) Genomes Variants v4.0.0 Pre-Release
+    visibility pack
+
+    track gnomadExomesV4
+    parent gnomadVariantsV4
+    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+    shortLabel gnomAD v4 Exomes Variants
+    longLabel Genome Aggregation Database (gnomAD) Exomes Variants v4.0.0 Pre-Release
+    visibility pack
+
+searchTable pliByTranscript
+searchType bigBed
+searchDescription gnomAD Loss of Function Metrics by Transcript
+
+searchTable pliByGene
+searchType bigBed
+searchDescription gnomAD Loss of Function Metrics by Gene
+
+searchName gnomadGenomesVariantsV3_1_1_displayName
 searchTable gnomadGenomesVariantsV3_1_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
+termRegex ^chr([1-9][0-9]?|[XYM]):[0-9]+-[0-9]+-*
+
+searchName gnomadGenomesVariantsV3_1_1_rsId
+searchTable gnomadGenomesVariantsV3_1_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
+termRegex ^rs*
+
+searchTable gnomadGenomesVariantsV3_1_1_name
 searchType bigBed
 searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1

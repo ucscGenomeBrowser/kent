@@ -1,0 +1,187 @@
+<h2>Description</h2>
+<p>
+  LiftOver alignments are used to map annotations from one human assembly to another one.
+  The subtracks of this track were created by the T2T consortium using the minimap2 aligner and strong filters;
+  it maps CHM13 coordinates to the human assemblies hg19 and hg38.</p>
+
+<p>
+  The T2T pipeline used the minimap2
+  aligner which outputs long alignments that do not require "chaining" of
+  alignments into longer ones, then removed alignments that go to other
+  chromosomes and removed all alignments to alternate haplotypes, fixes
+  (corrections to the assembly) and unplaced contig sequences.</p>
+
+<p>
+  This means that the T2T alignments are tuned for high specificity. These alignments are
+  probably best used for mapping annotations to hg38 in automated pipelines and
+  in cases where the final processing on hg38 does not use alts/fixes/unplaced
+  sequences and when one wants to be sure that annotations that are mapped are
+  as reliable as possible.
+</p>
+<p>
+  Here is an example to illustrate the liftOver track:
+<ul>
+    <li><a target=_blank href="https://genome.ucsc.edu/s/Lou/hs1LiftExample1">Example 1:</a> The <a href="https://en.wikipedia.org/wiki/Centromere#Acrocentric" target=_blank>acrocentric</a>
+    arms of chromosomes 13, 14, 15, 21, 22 and Y where not sequenced in hg38 at all but they are
+    present in CHM13. The T2T liftOver shows that little is mappable there, as
+    the sequence is entirely new.
+    <br>
+    A note on genes: As the link above shows, even though the sequence is new,
+    the T2T group mapped hg38 Gencode 35 gene models into these regions using
+    CAT/LiftOff. This is because CAT and liftOff are using approaches for their
+    lifting of genes / mapping that are not based on the liftOver alignments but sequence homology.
+</ul>
+</p>
+
+<p>
+Also, we created dot plots from these alignments:
+<ul>
+    <li><a href="https://genome-test.gi.ucsc.edu/~hiram/chm13LiftOver/T2T/" target=_blank>Dot-plots for the T2T minimap2 liftOver alignments</a>
+</ul>
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+  The track displays boxes joined together by either single or double lines,
+  with the boxes represent aligning regions, single lines indicating gaps that
+  are largely due to a deletion in the CHM13 v2.0 assembly or an insertion in
+  the GRCh38 or GRCh37, and double lines representing more complex gaps that
+  involve substantial sequence in both assembly.
+</p>
+
+
+<h2>LiftOver chain file downloads</h2>
+One-to-one liftOver chain files to and from GRCh38/hg38 and GRCh37/hg19 are available here:
+<ul>
+  <li> T2T CHM13 v2.0 to GRCh38/hg38 <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/chm13v2-hg38.over.chain.gz">chm13v2-hg38.over.chain.gz</a>
+  <li> T2T CHM13 v2.0 to GRCh37/hg19 <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/chm13v2-hg19.over.chain.gz">chm13v2-hg19.over.chain.gz</a>
+  <li> GRCh38/hg38 to T2T CHM13 v2.0 <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/hg38-chm13v2.over.chain.gz">hg38-chm13v2.over.chain.gz</a>
+  <li> GRCh37/hg19 to T2T CHM13 v2.0 <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/hg19-chm13v2.over.chain.gz">hg19-chm13v2.over.chain.gz</a>
+</ul>
+
+The mask file for GRCh38/hg38
+is <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/hg38.liftover-mask.bed">hg38.liftover-mask.bed</a>.
+
+<h2>Methods</h2>
+<p>
+<h3>T2T GRCh38/hg38 pre-processing</h3>
+<p>
+To prevent ambiguous alignments, all false duplications, as determined by the Genome in a Bottle Consortium
+(<a href="https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/references/GRCh38/GCA_000001405.15_GRCh38_GRC_exclusions_T2Tv2.bed">GCA_000001405.15_GRCh38_GRC_exclusions_T2Tv2.bed</a>), as well as the GRCh38 <a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=1285829831_crE6AIbRoN8GqiiHOPmjhYm2qTq2&db=hg38&c=chrX&g=centromeres">modeled centromeres</a>,
+were masked from the GRCh38/hg38 primary assembly. In addition, unlocalized and unplaced (random) contigs were removed.
+</p>
+
+<h3>T2T GRCh37/hg19 pre-processing</h3>
+<p>
+Unlocalized and unplaced (random) contigs were removed from the GRCh37/hg19 assembly.
+</p>
+
+
+<h3>T2T Alignment and Chain Creation</h3>
+<p>
+For the minimap2-based pipeline, the initial chain file was generated using
+<a href="https://github.com/evotools/nf-LO">nf-LO</a> v1.5.1 with
+<a href="https://github.com/lh3/minimap2">minimap2</a> v2.24 alignments. These chains were then split at all locations that contained unaligned segments greater than 1kbp or gaps greater than 10kbp. Split chain files were then converted to PAF format with extended CIGAR strings using chaintools (https://doi.org/10.5281/zenodo.6342391, v0.1), and alignments between nonhomologous chromosomes were removed. The trim-paf operation of rustybam (https://zenodo.org/record/6342176, v0.1.29) was next used to remove overlapping alignments in the query sequence, and then the target sequence, to create 1:1 alignments. PAF alignments were converted back to the chain format with <a href="https://github.com/AndreaGuarracino/paf2chain">paf2chain</a> commit f68eeca, and finally, chaintools was used to generate the inverted chain file.
+</p>
+
+<p>
+Full commands with parameters used were:
+</p>
+<pre><code>
+    nextflow run main.nf --source GRCh38.fa --target chm13v2.0.fasta --outdir dir -profile local --aligner minimap2
+    python chaintools/src/split.py -c input.chain -o input-split.chain
+    python chaintools/src/to_paf.py -c input-split.chain -t target.fa -q query.fa -o input-split.paf
+    awk '$$1==$$6' input-split.paf | rb break-paf --max-size 10000  | rb trim-paf -r | rb invert | rb trim-paf -r | rb invert > out.paf
+    paf2chain -i out.paf > out.chain
+    python chaintools/src/invert.py -c out.chain -o out_inverted.chain
+</code></pre>
+
+<p>
+The above process does not add chain ids or scores.  The UCSC utilities
+<code>chainMergeSort</code> and <code>chainScore</code> are used to update the
+chains:
+
+<pre><code>
+    chainMergeSort out.chain | chainScore stdin chm13v2.0.2bit hg38.2bit chm13v2.0-hg38.chain
+    chainMergeSort out_inverted.chain | chainScore stdin hg38.2bit chm13v2.0.2bit hg38-chm13v2.0.chain
+</code></pre>
+</p>
+
+<p>
+<a href="https://mrvollger.github.io/rustybam/#align-once">Rustybam trim-paf</a>
+uses dynamic programming and the CIGAR string to find an optimal
+splitting point between overlapping alignments in the query sequence. It
+starts its trimming with the largest overlap and then recursively trims
+smaller overlaps.
+</p>
+
+<p>
+Results were validated by using chaintools to confirm that there were no
+overlapping sequences with respect to both CHM13v2.0 and GRCh38 in the
+released chain file. In addition, trimmed alignments were visually inspected
+with SafFire to confirm their quality.
+</p>
+</ul>
+</p>
+
+<h2>Credits</h2>
+<p>
+The T2T v1_nflo liftOver chains were generated by <a href="mailto:naechyun.chen@gmail.com">Nae-Chyun
+Chen&lt;naechyun.chen@gmail.com&gt;</a> and <a href="mvollger@uw.edu">Mitchell
+Vollger&lt;mvollger@uw.edu&gt;</a>. The UCSC liftOver chains and the dot-plots
+were created by Hiram Clawson.  </p>
+
+<p>
+<b>lastz</b> was developed by Robert Harris, Pennsylvania State University.
+</p>
+<p>
+The <b>axtChain</b> program was developed at the University of California at
+Santa Cruz by Jim Kent with advice from Webb Miller and David Haussler.</p>
+<p>
+The browser display and database storage of the chains and nets were created
+by Robert Baertsch and Jim Kent.</p>
+<p>
+The <b>chainNet</b>, <b>netSyntenic</b>, and <b>netClass</b> programs
+were developed at the University of California
+Santa Cruz by Jim Kent.</p>
+
+<h2>References</h2>
+<p>
+<p>Nurk S, Koren S, Rhie A, Rautiainen M, et al. The complete sequence of a human genome. bioRxiv, 2021.</p>
+</p>
+
+<p>
+Harris, R.S.
+<a href="http://www.bx.psu.edu/~rsharris/lastz/"
+target=_blank>(2007) Improved pairwise alignment of genomic DNA</a>
+Ph.D. Thesis, The Pennsylvania State University
+</p>
+
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<A HREF="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+TARGET=_blank>Scoring pairwise genomic sequence alignments</A>.
+<b>Pac Symp Biocomput</b>. 2002:115-26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<A HREF="https://www.pnas.org/content/100/20/11484"
+TARGET=_blank>Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</A>.
+<b>Proc Natl Acad Sci U S A</b>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<A HREF="https://genome.cshlp.org/content/13/1/103.abstract"
+TARGET=_blank>Human-mouse alignments with BLASTZ</A>.
+<b>Genome Res</b>. 2003 Jan;13(1):103-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>
+

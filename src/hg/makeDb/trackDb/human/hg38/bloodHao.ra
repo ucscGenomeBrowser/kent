@@ -4,7 +4,6 @@ shortLabel Blood (PBMC) Hao
 longLabel Peripheral blood mononuclear cells (PBMC) from Hao et al 2020
 visibility hide
 group singleCell
-pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track bloodHaoCellType
     parent bloodHao

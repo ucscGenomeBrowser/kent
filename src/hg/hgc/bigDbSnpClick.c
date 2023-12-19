@@ -10,6 +10,7 @@
 #include "bPlusTree.h"
 #include "htslib/bgzf.h"
 #include "soTerm.h"
+#include "chromAlias.h"
 
 static struct dbSnpDetails *getDetails(struct bigDbSnp *bds, char *detailsFileOrUrl)
 /* Seek to the offset for this variant in detailsFileOrUrl, read the line and load as
@@ -333,6 +334,34 @@ bptFileDetach(&bpt);
 lmCleanup(&lm);
 }
 
+struct snp125 *bdsTosnp125(struct bigDbSnp *bds)
+/* Copy over the bed6 plus observed fields. */
+{
+struct snp125 *snp125;
+AllocVar(snp125);
+snp125->chrom = cloneString(bds->chrom);
+snp125->chromStart = bds->chromStart;
+snp125->chromEnd = bds->chromEnd;
+snp125->name = cloneString(bds->name);
+snp125->refUCSC = cloneString(bds->ref);
+
+snp125->strand = cloneString("+");
+
+struct dyString *dy = dyStringNew(0);
+int i;
+for (i = 0;  i < bds->altCount;  i++)
+    {
+    char *alt = bds->alts[i];
+    if (i > 0)
+    dyStringPrintf(dy, "/");
+    dyStringPrintf(dy, "%s", alt);
+    }
+snp125->observed = cloneString(dyStringCannibalize(&dy));
+
+return snp125;
+}
+
+
 void doBigDbSnp(struct trackDb *tdb, char *rsId)
 /* Show details for bigDbSnp item. */
 {
@@ -341,7 +370,7 @@ int end = cartInt(cart, "t");
 char *fileOrUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (isEmpty(fileOrUrl))
     errAbort("bigDbSnpClick: trackDb is missing bigDataUrl setting");
-struct bbiFile *bbi = bigBedFileOpen(fileOrUrl);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileOrUrl, chromAliasFindAliases);
 boolean found = FALSE;
 char *chrom = cartString(cart, "c");
 int ivStart = start, ivEnd = end;
@@ -411,8 +440,13 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         printDbSnpDetails(bds, details, tdb);
     printf("<tr><td><b>Variation class/type:</b></td><td>%s</td></tr>\n",
            bigDbSnpClassToString(bds->class));
+
     puts("</table>");
     printUcscNotes(bds->ucscNotes);
+
+    struct snp125 *snp125 = bdsTosnp125(bds);
+    printSnp153Function(tdb, snp125);
+
     printOtherMappings(bbi, bds, tdb);
     }
 if (!found)

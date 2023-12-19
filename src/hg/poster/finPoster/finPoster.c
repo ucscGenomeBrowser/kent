@@ -71,10 +71,10 @@ FILE *dupeFile;
 char *dupeFileName = "dupes.out";
 
 /* Some colors. */
-struct rgbColor rgbRed = {240,0,0};
-struct rgbColor rgbRedOrange = {240, 100, 0};
-struct rgbColor rgbYellow = {255, 255, 0};
-static struct rgbColor blueGene = { 0, 0, 160};
+struct rgbColor rgbRed = {240,0,0,255};
+struct rgbColor rgbRedOrange = {240, 100, 0, 255};
+struct rgbColor rgbYellow = {255, 255, 0, 255};
+static struct rgbColor blueGene = { 0, 0, 160, 255};
 
 void usage()
 /* Explain usage and exit. */
@@ -144,7 +144,7 @@ void makeResolvedDupes(struct hash *hash, struct resolvedDup **retList)
 {
 struct lineFile *lf = lineFileMayOpen(bestDupFile, TRUE);
 char *row[3], *parts[4];
-int wordCount, partCount;
+int partCount;
 struct resolvedDup *rd, *rdList = NULL;
 
 if (lf == NULL)
@@ -298,10 +298,10 @@ char **row;
 char query[256];
 struct genePred *gpList = NULL, *gp;
 char geneName[64];
-static struct rgbColor red = {200, 0, 0};
-static struct rgbColor lightRed = {255, 115, 115};
-static struct rgbColor blue = {0, 0, 180};
-static struct rgbColor lightBlue = {115, 115, 220};
+static struct rgbColor red = {200, 0, 0, 255};
+static struct rgbColor lightRed = {255, 115, 115, 255};
+static struct rgbColor blue = {0, 0, 180, 255};
+static struct rgbColor lightBlue = {115, 115, 220, 255};
 struct rgbColor *col;
 boolean keepGene;
 struct dlList *geneList = newDlList();
@@ -407,7 +407,6 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 
 for (node = geneList->head; !dlEnd(node); node = node->next)
     {
-    int len;
     char *name;
     kg = node->val;
 
@@ -486,7 +485,6 @@ void getRnaGenes(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, 
 char **row;
 int rowOffset;
 struct sqlResult *sr = hChromQuery(conn, "rnaGene", chrom, NULL, &rowOffset);
-char query[256];
 struct rnaGene el;
 int r,g,b;
 
@@ -577,7 +575,6 @@ void netBinKeeperFree(struct binKeeper **pBk)
 /* Get rid of net bin keeper. */
 {
 struct binKeeper *bk = *pBk;
-struct binKeeperCookie *pos;
 int bin;
 
 if (bk == NULL)
@@ -661,8 +658,8 @@ int rowOffset;
 struct sqlResult *sr = hChromQuery(conn, track, chrom, NULL, &rowOffset);
 char **row;
 struct psl *psl;
-int lastEnd = -BIGNUM;
-int sepDistance = 20000;
+//int lastEnd = -BIGNUM;
+//int sepDistance = 20000;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1023,32 +1020,32 @@ return atoi(chrom);
 }
 
 static struct rgbColor chromColorTable[] = {
-	{ 0,0, 0},
-	{ 255,204, 204},  /* light red */
-	{ 204,0, 0},      /* med red */
-	{ 255,0, 0},      /* bright red */
-	{ 255,102,0},     /* bright orange */
-	{ 255,153,0},     /* yellow orange */
-	{ 255,0,204},     /* magenta */
-	{ 255,255,204},   /* light yellow  */
-	{ 255,255,153},   /* med yellow */
-	{ 255,255,0},     /* bright yellow*/
-	{ 0,255,0},       /*bt gr*/
-	{ 204,255,0},     /* yellow green */
-	{ 102,102,0},     /* dark  green*/
-	{ 204,255,255},   /*lt cyan*/
-	{ 153,204,204},   /* gray cyan */
-	{ 0,255,255},     /*med cyan*/
-	{ 153,204,255},   /*light med blue */
-	{ 102,153,255},   /* med blue */
-	{ 0,0 ,204},      /* deep blue */
-	{ 204,153,255},   /*lt violet*/
-	{ 204,051,255},   /* med violet */
-	{ 153,0,204},     /* dark violet */
-	{ 204,204,204},   /* light gray */
-	{ 153,153,153},   /* med gray */
-	{ 102,102,102},   /* dark gray */
-	{ 255,255,255},   /* black */
+	{ 0,0, 0,255},
+	{ 255,204, 204,255},  /* light red */
+	{ 204,0, 0,255},      /* med red */
+	{ 255,0, 0,255},      /* bright red */
+	{ 255,102,0,255},     /* bright orange */
+	{ 255,153,0,255},     /* yellow orange */
+	{ 255,0,204,255},     /* magenta */
+	{ 255,255,204,255},   /* light yellow  */
+	{ 255,255,153,255},   /* med yellow */
+	{ 255,255,0,255},     /* bright yellow*/
+	{ 0,255,0,255},       /*bt gr*/
+	{ 204,255,0,255},     /* yellow green */
+	{ 102,102,0,255},     /* dark  green*/
+	{ 204,255,255,255},   /*lt cyan*/
+	{ 153,204,204,255},   /* gray cyan */
+	{ 0,255,255,255},     /*med cyan*/
+	{ 153,204,255,255},   /*light med blue */
+	{ 102,153,255,255},   /* med blue */
+	{ 0,0 ,204,255},      /* deep blue */
+	{ 204,153,255,255},   /*lt violet*/
+	{ 204,051,255,255},   /* med violet */
+	{ 153,0,204,255},     /* dark violet */
+	{ 204,204,204,255},   /* light gray */
+	{ 153,153,153,255},   /* med gray */
+	{ 102,102,102,255},   /* dark gray */
+	{ 255,255,255,255},   /* black */
 };
 
 struct rgbColor *chromColor(char *chrom)
@@ -1214,7 +1211,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     int start = atoi(row[0]);
     int end = atoi(row[1]);
-    char *label = NULL;
     if (sameString(row[2], "telo"))
 	printTab(f, cg, chrom, start, end, 
 		    "repTelomere", "box", 50, 50, 250, ".");
@@ -1724,7 +1720,9 @@ struct hash *hash = newHash(16);
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, NOSQLINJ "select value from knownToEnsembl");
+char query[1024];
+sqlSafef(query, sizeof query, "select value from knownToEnsembl");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hashAdd(hash, row[0], NULL);
@@ -1740,7 +1738,6 @@ int i;
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *dupHash = newHash(0);
 struct hash *resolvedDupHash = newHash(8);
-struct resolvedDup *rdList = NULL;
 struct hash *diseaseHash = makeSecondColumnHash(diseaseFile);
 struct hash *orthoHash = makeFirstColumnHash(orthoFile);
 struct hash *weedHash = makeFirstColumnHash(weedFile);

@@ -59,7 +59,13 @@ draw_bitmap( struct memGfx *mg, FT_Bitmap*  bitmap, Color color,
     {
     unsigned long src =  bitmap->buffer[q * bitmap->width + p];
     if (src)
-        mixDot(mg, i, j, (double)src / 255, color); 
+        {
+        // have to combine any alpha in the color with the partial intensity
+        // specified in the bitmap, since mixDot assumes you're specifying alpha
+        // separately
+        double alpha = (src/255.0) * (COLOR_32_ALPHA(color)/255.0);
+        mixDot(mg, i, j, alpha, color); 
+        }
     }
   }
 }

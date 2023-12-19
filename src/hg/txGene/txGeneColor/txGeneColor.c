@@ -30,10 +30,10 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct rgbColor black = {0,0,0};
-struct rgbColor trueBlue = {12,12,120};
-struct rgbColor mediumBlue = {80, 80, 160};
-struct rgbColor lightBlue = {130, 130, 210};
+struct rgbColor black = {0,0,0,255};
+struct rgbColor trueBlue = {12,12,120,255};
+struct rgbColor mediumBlue = {80, 80, 160, 255};
+struct rgbColor lightBlue = {130, 130, 210, 255};
 
 void txGeneColor(char *uniProtDb, char *infoFile, char *pickFile, char *outFile)
 /* txGeneColor - Figure out color to draw gene in.. */

@@ -151,7 +151,7 @@ int assocCount = 0;
 struct sqlResult *sr;
 char **row;
 char query[1024];
-sqlSafef(query, sizeof query, "%-s", col->queryFull); // purely for side-effect of adding NOSQLINJ prefix
+sqlSafef(query, sizeof query, col->queryFull, NULL); // trust
 
 /* Build up associations. */
 sr = sqlGetResult(conn, query);
@@ -271,7 +271,7 @@ char query[1024];
 struct sqlResult *sr;
 char **row;
 boolean gotOne = FALSE;
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 char *result = NULL;
 char *key = (col->protKey 
     ? (kgVersion == KG_III ? lookupProtein(conn, gp->name) : gp->protein)
@@ -494,7 +494,7 @@ if (geneId != NULL)
     }
 
 /* Stream through association table counting matches. */
-sqlSafef(query, sizeof(query), "%-s", ord->queryAll);  // purely for side-effect of adding NOSQLINJ prefix
+sqlSafef(query, sizeof(query), ord->queryAll, NULL);  // trust
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

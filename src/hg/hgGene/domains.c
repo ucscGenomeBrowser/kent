@@ -95,7 +95,7 @@ if (kgVersion == KG_III)
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
-	    hPrintf("<A HREF=\"http://pfam.xfam.org/family?acc=%s\" TARGET=_blank>", 
+	    hPrintf("<A HREF=\"https://www.ebi.ac.uk/interpro/entry/pfam/%s\" TARGET=_blank>", 
 	    	    el->name);
 	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	    freez(&description);
@@ -142,7 +142,7 @@ else
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
-	    hPrintf("<A HREF=\"http://pfam.xfam.org/family?acc=%s\" TARGET=_blank>",
+	    hPrintf("<A HREF=\"https://www.ebi.ac.uk/interpro/entry/pfam/%s\" TARGET=_blank>",
 	    	        el->name);
 	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	    freez(&description);
@@ -158,7 +158,6 @@ if (list != NULL)
     struct sqlConnection *conn2 = sqlConnect(db);
     char query[256], **row;
     struct sqlResult *sr;
-    int column = 0, maxColumn=3, rowCount=0;
     hPrintf("<B>Protein Data Bank (PDB) 3-D Structure</B><BR>");
     sqlSafef(query, sizeof(query),
     	"select extAcc1,extAcc2 from extDbRef,extDb"
@@ -170,21 +169,8 @@ if (list != NULL)
     hPrintf("<A href=\"http://mupit.icm.jhu.edu/MuPIT_Interactive/Help.html\" TARGET=_blank>MuPIT help</A>\n");
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	if (++column > maxColumn)
-	    {
-	    hPrintf("</TR><TR>");
-	    column = 1;
-	    if (rowCount == 0)
-	        {
-		hPrintf("<TD ALIGN=CENTER COLSPAN=4><I>To conserve bandwidth, only the images from the first %d structures are shown.</I>", maxColumn);
-		hPrintf("</TR><TR>");
-		}
-	    ++rowCount;
-	    }
 	hPrintf("<TD>");
-	hPrintf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
-	if (rowCount < 1)
-	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_asym_r_250.jpg\"><BR>", row[0]);
+	hPrintf("<A HREF=\"http://www.rcsb.org/structure/%s\" TARGET=_blank>", row[0]);
         hPrintf("%s</A> - %s ", row[0], row[1]);
         // include links to MuPIT (formerly LS-SNP)
         if (lsSnpPdbHasPdb(conn2, row[0]))

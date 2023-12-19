@@ -4,7 +4,6 @@ shortLabel Muscle De Micheli
 longLabel Muscle single cell data from De Micheli et al 2020
 visibility hide
 group singleCell
-pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track muscleDeMicheliCellType
     parent muscleDeMicheli

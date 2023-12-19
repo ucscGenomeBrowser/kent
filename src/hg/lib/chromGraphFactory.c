@@ -472,7 +472,9 @@ static struct hash *chromInfoHash(struct sqlConnection *conn)
 struct sqlResult *sr;
 char **row;
 struct hash *hash = hashNew(0);
-sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromInfo *ci = chromInfoLoad(row);
@@ -656,18 +658,18 @@ struct chromPos *snpIndexLookup(struct sqlConnection *conn, char *table, char *q
  * loading the entire table into a hash from the database became too slow. */
 {
 static struct chromPos pos;
-char fullQuery[256];
-sqlSafef(fullQuery, sizeof fullQuery, query, table);
-sqlSafefAppend(fullQuery, sizeof fullQuery, " where name='%s'", name);
+struct dyString *fullQuery = sqlDyStringCreate(query, table);
+sqlDyStringPrintf(fullQuery, " where name='%s'", name);
 struct sqlResult *sr;
 char **row;
-sr = sqlGetResult(conn, fullQuery);
+sr = sqlGetResult(conn, dyStringContents(fullQuery));
 if ((row = sqlNextRow(sr)) != NULL)
     {
     pos.chrom = cloneString(row[0]);
     pos.pos = sqlUnsigned(row[1]);
     }
 sqlFreeResult(&sr);
+dyStringFree(&fullQuery);
 if (!row)
     return NULL;
 return &pos;

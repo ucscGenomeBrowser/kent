@@ -883,7 +883,7 @@ void spToDb(char *datFile, char *tabDir)
 {
 struct lineFile *lf = lineFileOpen(datFile, TRUE);
 struct spRecord *spr;
-struct dyString *dy = newDyString(4096);
+struct dyString *dy = dyStringNew(4096);
 
 /* We have 25 tables to make this fully relational and not
  * lose any info. Better start opening files. */

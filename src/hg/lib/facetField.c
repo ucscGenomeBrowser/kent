@@ -175,7 +175,7 @@ return result;
 char *linearizeFacetVals(struct facetField *selectedList)
 /* Linearize selected fields vals into a string. fieldVal must be selected. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 struct facetField *sff = NULL;
 for (sff = selectedList; sff; sff=sff->next)
     {

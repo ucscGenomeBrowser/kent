@@ -93,7 +93,7 @@ static void loadDatabaseLink(char *database, char *tab, char *track)
 /* Load database from tab file. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 /* First make table definition. */
 if (sqlTable != NULL)
     {
@@ -114,25 +114,25 @@ else if (!oldTable)
     /* Create definition statement. */
     sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
-       dyStringAppend(dy, "  bin smallint unsigned not null,\n");
-    dyStringAppend(dy, "  tName varchar(255) not null,\n");
-    dyStringAppend(dy, "  tStart int unsigned not null,\n");
-    dyStringAppend(dy, "  tEnd int unsigned not null,\n");
-    dyStringAppend(dy, "  qStart int unsigned not null,\n");
-    dyStringAppend(dy, "  chainId int unsigned not null,\n");
-    dyStringAppend(dy, "#Indices\n");
+       sqlDyStringPrintf(dy, "  bin smallint unsigned not null,\n");
+    sqlDyStringPrintf(dy, "  tName varchar(255) not null,\n");
+    sqlDyStringPrintf(dy, "  tStart int unsigned not null,\n");
+    sqlDyStringPrintf(dy, "  tEnd int unsigned not null,\n");
+    sqlDyStringPrintf(dy, "  qStart int unsigned not null,\n");
+    sqlDyStringPrintf(dy, "  chainId int unsigned not null,\n");
+    sqlDyStringPrintf(dy, "#Indices\n");
     if (tIndex)
         {
 	if (!noBin)
-           dyStringPrintf(dy, "  INDEX(tName(%d),bin),\n", minLength);
+           sqlDyStringPrintf(dy, "  INDEX(tName(%d),bin),\n", minLength);
 	}
     else
 	{
 	if (!noBin)
-	   dyStringAppend(dy, "  INDEX(bin),\n");
+	   sqlDyStringPrintf(dy, "  INDEX(bin),\n");
 	}
-    dyStringAppend(dy, "  INDEX(chainId)\n");
-    dyStringAppend(dy, ")\n");
+    sqlDyStringPrintf(dy, "  INDEX(chainId)\n");
+    sqlDyStringPrintf(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }
 
@@ -146,7 +146,7 @@ static void loadDatabaseChain(char *database, char *tab, char *track, int count)
 /* Load database from tab file. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 /* First make table definition. */
 if (sqlTable != NULL)
     {
@@ -167,43 +167,44 @@ else if (!oldTable)
     /* Create definition statement. */
     sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
-       dyStringAppend(dy, "  bin smallint unsigned not null,\n");
-    dyStringAppend(dy, "  score double not null,\n");
-    dyStringAppend(dy, "  tName varchar(255) not null,\n");
-    dyStringAppend(dy, "  tSize int unsigned not null, \n");
-    dyStringAppend(dy, "  tStart int unsigned not null,\n");
-    dyStringAppend(dy, "  tEnd int unsigned not null,\n");
-    dyStringAppend(dy, "  qName varchar(255) not null,\n");
-    dyStringAppend(dy, "  qSize int unsigned not null,\n");
-    dyStringAppend(dy, "  qStrand char(1) not null,\n");
-    dyStringAppend(dy, "  qStart int unsigned not null,\n");
-    dyStringAppend(dy, "  qEnd int unsigned not null,\n");
-    dyStringAppend(dy, "  id int unsigned not null,\n");
+       sqlDyStringPrintf(dy, "  bin smallint unsigned not null,\n");
+    sqlDyStringPrintf(dy, 
+    "  score double not null,\n"
+    "  tName varchar(255) not null,\n"
+    "  tSize int unsigned not null, \n"
+    "  tStart int unsigned not null,\n"
+    "  tEnd int unsigned not null,\n"
+    "  qName varchar(255) not null,\n"
+    "  qSize int unsigned not null,\n"
+    "  qStrand char(1) not null,\n"
+    "  qStart int unsigned not null,\n"
+    "  qEnd int unsigned not null,\n"
+    "  id int unsigned not null,\n");
     if (normScore)
-	dyStringAppend(dy, "  normScore double not null,\n");
-    dyStringAppend(dy, "#Indices\n");
+	sqlDyStringPrintf(dy, "  normScore double not null,\n");
+    sqlDyStringPrintf(dy, "#Indices\n");
     if (tIndex)
         {
 	if (noBin)
 	    {
-            dyStringPrintf(dy, "  INDEX(tName(%d),tStart),\n", minLength);
-            dyStringPrintf(dy, "  INDEX(tName(%d),tEnd),\n", minLength);
+            sqlDyStringPrintf(dy, "  INDEX(tName(%d),tStart),\n", minLength);
+            sqlDyStringPrintf(dy, "  INDEX(tName(%d),tEnd),\n", minLength);
 	    }
 	else
-           dyStringPrintf(dy, "  INDEX(tName(%d),bin),\n", minLength);
+           sqlDyStringPrintf(dy, "  INDEX(tName(%d),bin),\n", minLength);
 	}
     else
 	{
 	if (noBin)
 	    {
-	    dyStringAppend(dy, "  INDEX(tStart),\n");
-	    dyStringAppend(dy, "  INDEX(tEnd),\n");
+	    sqlDyStringPrintf(dy, "  INDEX(tStart),\n");
+	    sqlDyStringPrintf(dy, "  INDEX(tEnd),\n");
 	    }
 	else
-	   dyStringAppend(dy, "  INDEX(bin),\n");
+	   sqlDyStringPrintf(dy, "  INDEX(bin),\n");
 	}
-    dyStringAppend(dy, "  INDEX(id)\n");
-    dyStringAppend(dy, ")\n");
+    sqlDyStringPrintf(dy, "  INDEX(id)\n");
+    sqlDyStringPrintf(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }
 dyStringClear(dy);

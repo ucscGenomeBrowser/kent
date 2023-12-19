@@ -359,7 +359,7 @@ include chainNetGalGal6.ra
         subGroups view=net species=kcSnake clade=cEutel
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign xenTro9 chainThaSir1
+        type netAlign thaSir1 chainThaSir1
         otherDb thaSir1
 
         track netXenTro10

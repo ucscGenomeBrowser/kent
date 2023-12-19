@@ -1,0 +1,6 @@
+hub GCA_009914755.4 genome assembly
+shortLabel human T2T-CHM13 v2.0
+longLabel human T2T-CHM13 v2.0/Homo sapiens/GCA_009914755.4_T2T-CHM13v2.0 genome assembly
+genomesFile genomes.txt
+email hclawson@ucsc.edu
+descriptionUrl html/GCA_009914755.4_T2T-CHM13v2.0.description.html

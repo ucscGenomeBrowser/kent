@@ -36,6 +36,7 @@
 #include "annoFormatTab.h"
 #include "annoGratorQuery.h"
 #include "windowsToAscii.h"
+#include "chromAlias.h"
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
@@ -922,6 +923,7 @@ void doMainPage()
 {
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+chromAliasSetup(db);
 char *position = windowsToAscii(cartUsualString(cart, "position", hDefaultPos(db)));
 cartSetLastPosition(cart, position, oldVars);
 initGenbankTableNames(db);

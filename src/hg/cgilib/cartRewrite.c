@@ -11,6 +11,7 @@
 
 void cartEdit0(struct cart *cart);
 void cartEdit1(struct cart *cart);
+void cartEdit2(struct cart *cart);
 
 struct cartRewrite
 {
@@ -22,12 +23,13 @@ static struct cartRewrite cartRewrites[] =
 {
 { cartEdit0},
 { cartEdit1},
+{ cartEdit2},
 };
 
 void cartRewrite(struct cart *cart, unsigned trackDbCartVersion, unsigned cartVersion)
 /* Rewrite the cart to update it to expectations of trackDb. */
 {
-if (sameString(cfgOptionDefault("cartVersion", "off"), "off"))
+if (sameString(cfgOptionDefault("cartVersion", "on"), "off"))
     return;
 
 // call the rewrite functions to bring us up to the trackDb cart version

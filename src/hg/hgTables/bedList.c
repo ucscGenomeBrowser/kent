@@ -499,7 +499,7 @@ if (doCt)
     ctNew = newCt(ctName, ctDesc, visNum, ctUrl, fields);
     if (doDataPoints)
 	{
-	struct dyString *wigSettings = newDyString(0);
+	struct dyString *wigSettings = dyStringNew(0);
 	struct tempName tn;
 	trashDirFile(&tn, "ct", hgtaCtTempNamePrefix, ".wib");
 	ctNew->wibFile = cloneString(tn.forCgi);
@@ -724,7 +724,7 @@ for (region = regionList; region != NULL; region = region->next)
     }
 if (!gotResults)
     {
-    hPrintf(NO_RESULTS);
+    explainWhyNoResults(stdout);
     }
 else if (doCt)
     {

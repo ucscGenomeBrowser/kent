@@ -1,3 +1,6 @@
+#PanelApp
+include panelApp.ra
+
 #JASPAR tracks
 include jaspar.ra
 
@@ -23,7 +26,8 @@ include trackDb.gtex.ra
 include trackDb.geneHancer.ra
 
 # NCBI ClinVar
-include trackDb.clinvar.ra 
+include clinvar.ra beta,public
+include clinvar.alpha.ra alpha
 
 # NCBI dbVar
 include trackDb.dbVar.ra
@@ -39,6 +43,12 @@ include cadd.ra
 
 # Revel scores
 include revel.ra
+
+# constraint scores
+include constraintSuper.ra
+
+# GenCC
+include genCC.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -96,7 +106,7 @@ type bed 3
 
 track lrg
 shortLabel LRG Regions
-longLabel Locus Reference Genomic (LRG) Sequences Mapped to $date Assembly
+longLabel Locus Reference Genomic (LRG) / RefSeqGene Sequences Mapped to $date Assembly
 group map
 visibility hide
 type bigBed 12 +
@@ -110,7 +120,7 @@ indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
 color 72,167,38
-searchIndex name
+searchIndex name,ncbiAcc
 
 track gad
 shortLabel GAD View
@@ -122,15 +132,15 @@ type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
 track decipher
-shortLabel Decipher CNVs
-longLabel Decipher CNVs
+shortLabel DECIPHER CNVs
+longLabel DECIPHER CNVs
 group phenDis
 visibility hide
 type bigBed 9 +
 itemRgb on
-tableBrowser off
+tableBrowser off knownCanonToDecipher knownToDecipher decipherRaw
 bigDataUrl /gbdb/$D/decipher/decipherCnv.bb
-url https://decipher.sanger.ac.uk/patient/$$
+url https://www.deciphergenomics.org/patient/$$
 urlLabel Decipher Patient View:
 filter.size 0
 filterByRange.size on
@@ -188,11 +198,13 @@ type bed 3
         exonNumbers off
         mouseOverField _mouseOver
         itemRgb on
-        mmcnt1Filter 0
-        mmcnt2Filter 0
-        mmcnt3Filter 0
+        filter.mmcnt1 0
+        filter.mmcnt2 0
+        filter.mmcnt3 0
         dataVersion /gbdb/$D/bbi/mastermindRelease.txt
         parent varsInPubs pack
+        maxWindowCoverage 40000
+        maxItems 1000000
 
         track avada
         shortLabel Avada Variants
@@ -885,6 +897,7 @@ visibility hide
 color 50,70,120
 type bed 5 +
 useScore 1
+release alpha
 
 track uc16
 shortLabel Ultra Conserved
@@ -1629,11 +1642,12 @@ shortLabel dbSNP 153
 longLabel Short Genetic Variants from dbSNP release 153
 type bed 3
 group varRep
-visibility pack
+visibility hide
 url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 subGroup1 view Views variants=Variants errs=Mapping_Errors
-priority 0.8
+maxWindowCoverage 4000000
+priority 1
 
     track dbSnp153ViewVariants
     view variants
@@ -1702,22 +1716,25 @@ priority 0.8
         shortLabel Common dbSNP(153)
         longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 153
         bigDataUrl /gbdb/$D/snp/dbSnp153Common.bb
+        defaultGeneTracks knownGene
         priority 1
 
         track dbSnp153ClinVar
         parent dbSnp153ViewVariants off
         subGroups view=variants
-        shortLabel ClinVar dbSNP(153)
+        shortLabel dbSNP(153) in ClinVar
         longLabel Short Genetic Variants from dbSNP Release 153 Included in ClinVar
         bigDataUrl /gbdb/$D/snp/dbSnp153ClinVar.bb
+        defaultGeneTracks knownGene
         priority 2
 
         track dbSnp153Mult
         parent dbSnp153ViewVariants off
         subGroups view=variants
-        shortLabel Mult. dbSNP(153)
+        shortLabel dbSNP(153) Mult.
         longLabel Short Genetic Variants from dbSNP Release 153 that Map to Multiple Genomic Loci
         bigDataUrl /gbdb/$D/snp/dbSnp153Mult.bb
+        defaultGeneTracks knownGene
         priority 3
 
         track dbSnp153
@@ -1727,6 +1744,7 @@ priority 0.8
         longLabel All Short Genetic Variants from dbSNP Release 153
         bigDataUrl /gbdb/$D/snp/dbSnp153.bb
         maxWindowToDraw 1000000
+        defaultGeneTracks knownGene
         priority 4
 
     track dbSnp153ViewErrs
@@ -1741,6 +1759,133 @@ priority 0.8
         shortLabel Map Err dbSnp(153)
         longLabel Mappings with Inconsistent Coordinates from dbSNP 153
         bigDataUrl /gbdb/$D/snp/dbSnp153BadCoords.bb
+        type bigBed 4
+        color 100,100,100
+        priority 5
+
+track dbSnp155Composite
+compositeTrack on
+shortLabel dbSNP 155
+longLabel Short Genetic Variants from dbSNP release 155
+type bed 3
+group varRep
+visibility pack
+url https://www.ncbi.nlm.nih.gov/snp/$$
+urlLabel dbSNP: 
+subGroup1 view Views variants=Variants errs=Mapping_Errors
+maxWindowCoverage 4000000
+priority 0.8
+
+    track dbSnp155ViewVariants
+    view variants
+    parent dbSnp155Composite
+    shortLabel Variants
+    visibility dense
+    type bigDbSnp
+    detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp155Details.tab.gz
+    freqSourceOrder 1000Genomes,dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
+    classFilterValues snv,mnv,ins,del,delins,identity
+    classFilterType multipleListOr
+    ucscNotesFilterValues \
+        altIsAmbiguous|Alternate allele contains IUPAC ambiguous base(s),\
+        classMismatch|Variant class/type is inconsistent with allele sizes,\
+        clinvar|Present in ClinVar,\
+        clinvarBenign|ClinVar significance of benign and/or likely benign,\
+        clinvarConflicting|ClinVar includes both benign and pathogenic reports,\
+        clinvarPathogenic|ClinVar significance of pathogenic and/or likely pathogenic,\
+        clusterError|Overlaps a variant with the same type/class and position,\
+        commonAll|MAF >= 1% in all projects that report frequencies,\
+        commonSome|MAF >= 1% in at least one project that reports frequencies,\
+        diffMajor|Different projects report different major alleles,\
+        freqIncomplete|Frequency reported with incomplete allele data,\
+        freqIsAmbiguous|Frequency reported for allele with IUPAC ambiguous base(s),\
+        freqNotMapped|Frequency reported on different assembly but not mapped by dbSNP,\
+        freqNotRefAlt|Reference genome allele is not major allele in at least one project,\
+        multiMap|Variant is placed in more than one genomic position,\
+        otherMapErr|Another mapping of this variant has illegal coords (indel mapping error?),\
+        overlapDiffClass|Variant overlaps other variant(s) of different type/class,\
+        overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,\
+        rareAll|MAF < 1% in all projects that report frequencies (or no frequency data),\
+        rareSome|MAF < 1% in at least one project that reports frequencies,\
+        refIsAmbiguous|Reference genome allele contains IUPAC ambiguous base(s),\
+        refIsMinor|Reference genome allele is minor allele in at least one project that reports frequencies,\
+        refIsRare|Reference genome allele frequency is <1% in at least one project,\
+        refIsSingleton|Reference genome frequency is 0 in all projects that report frequencies,\
+        refMismatch|Reference allele mismatches reference genome sequence,\
+        revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
+#'
+    ucscNotesFilterType multipleListOr
+    maxFuncImpactFilterLabel Greatest functional impact on gene
+    maxFuncImpactFilterValues 0|(not annotated),\
+        0865|frameshift,\
+        1587|stop_gained,\
+        1574|splice_acceptor_variant,\
+        1575|splice_donor_variant,\
+        1821|inframe_insertion,\
+        1583|missense_variant,\
+        1590|terminator_codon_variant,\
+        1819|synonymous_variant,\
+        1580|coding_sequence_variant,\
+        1623|5_prime_UTR_variant,\
+        1624|3_prime_UTR_variant,\
+        1619|nc_transcript_variant,\
+        2|genic_upstream_transcript_variant,\
+        1986|upstream_transcript_variant,\
+        2152|genic_downstream_transcript_variant,\
+        1987|downstream_transcript_variant,\
+        1627|intron_variant
+    maxFuncImpactFilterType multipleListOr
+
+        track dbSnp155Common
+        parent dbSnp155ViewVariants on
+        subGroups view=variants
+        shortLabel Common dbSNP(155)
+        longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 155
+        defaultGeneTracks knownGene
+        bigDataUrl /gbdb/$D/snp/dbSnp155Common.bb
+        showCfg on
+        priority 1
+
+        track dbSnp155ClinVar
+        parent dbSnp155ViewVariants off
+        subGroups view=variants
+        shortLabel ClinVar dbSNP(155)
+        longLabel Short Genetic Variants from dbSNP Release 155 Included in ClinVar
+        defaultGeneTracks knownGene
+        bigDataUrl /gbdb/$D/snp/dbSnp155ClinVar.bb
+        priority 2
+
+        track dbSnp155Mult
+        parent dbSnp155ViewVariants off
+        subGroups view=variants
+        shortLabel Mult. dbSNP(155)
+        longLabel Short Genetic Variants from dbSNP Release 155 that Map to Multiple Genomic Loci
+        defaultGeneTracks knownGene
+        bigDataUrl /gbdb/$D/snp/dbSnp155Mult.bb
+        priority 3
+
+        track dbSnp155
+        parent dbSnp155ViewVariants off
+        subGroups view=variants
+        shortLabel All dbSNP(155)
+        longLabel All Short Genetic Variants from dbSNP Release 155
+        defaultGeneTracks knownGene
+        bigDataUrl /gbdb/$D/snp/dbSnp155.bb
+        maxWindowToDraw 1000000
+        priority 4
+
+    track dbSnp155ViewErrs
+    parent dbSnp155Composite
+    view errs
+    shortLabel Mapping Errors
+    visibility dense
+
+        track dbSnp155BadCoords
+        parent dbSnp155ViewErrs off
+        subGroups view=errs
+        shortLabel Map Err dbSnp(155)
+        longLabel Mappings with Inconsistent Coordinates from dbSNP 155
+        bigDataUrl /gbdb/$D/snp/dbSnp155BadCoords.bb
         type bigBed 4
         color 100,100,100
         priority 5
@@ -2018,8 +2163,7 @@ exonNumbers off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
-dataVersion 2016-05-15
-
+dataVersion 2020-02-25
 
     track dgvMerged
     parent dgvPlus
@@ -3131,7 +3275,7 @@ dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
 track lrgTranscriptAli
 shortLabel LRG Transcripts
-longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
+longLabel Locus Reference Genomic (LRG) / RefSeqGene Fixed Transcript Annotations
 group genes
 visibility hide
 type bigPsl
@@ -3560,7 +3704,7 @@ track omimGene2
 shortLabel OMIM Genes
 longLabel OMIM Gene Phenotypes - Dark Green Can Be Disease-causing
 group phenDis
-visibility hide
+visibility dense
 color 0, 80, 0
 type bed 4
 hgsid on
@@ -3644,7 +3788,7 @@ html lovdComp
         longLabel Leiden Open Variation Database, short < 50 bp variants and insertions of any length
         group phenDis
         visibility hide
-        urls id="http://varcache.lovd.nl/redirect/$$"
+        urls id="https://varcache.lovd.nl/redirect/$$"
         noScoreFilter on
         bigDataUrl /gbdb/$D/lovd/lovd.$D.short.bb
         parent lovdComp
@@ -3655,17 +3799,18 @@ html lovdComp
         longLabel Leiden Open Variation Database Public Variants, long >= 50 bp variants
         group phenDis
         visibility hide
-        urls id="http://varcache.lovd.nl/redirect/$$"
+        urls id="https://varcache.lovd.nl/redirect/$$"
         noScoreFilter on
         bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
         parent lovdComp
         mergeSpannedItems on
 
 track hgmd
-shortLabel HGMD Variants
-longLabel Human Gene Mutation Database Public Variants
+shortLabel HGMD public
+longLabel Human Gene Mutation Database - Public Version Dec 2022
 group phenDis
 visibility hide
+bigDataUrl /gbdb/$D/bbi/hgmd.bb
 itemRgb on
 type bigBed 9 .
 url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
@@ -3674,6 +3819,7 @@ mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
 maxItems 1000
+maxWindowCoverage 10000000
 
 track snpedia
 shortLabel SNPedia
@@ -3713,16 +3859,16 @@ searchTable snpediaAll
 searchMethod exact
 searchType bigBed
 termRegex rs[0-9]+
-searchPriority 1
+searchPriority 14
 padding 50
-#semiShortCircuit 1
+semiShortCircuit 1
 
 searchTable snpediaText
 searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 11.001
+searchPriority 14.001
 padding 50
 
 track interactions
@@ -4015,26 +4161,16 @@ searchPriority 50
 searchTable lrg
 searchMethod exact
 searchType bigBed
-termRegex LRG_[0-9]+
+termRegex (LRG_[0-9]+)|(NG_[0-9]+\.[0-9]+)
 semiShortCircuit 1
 searchPriority 49
-release alpha
 
-searchTable lrgBigPsl
+searchTable lrgTranscriptAli
 searchMethod exact
 searchType bigBed
 termRegex LRG_[0-9]+t[0-9]+
 semiShortCircuit 1
 searchPriority 50
-release alpha
-
-searchTable lrgTranscriptAli
-searchMethod exact
-searchType psl
-termRegex LRG_[0-9]+t[0-9]+
-semiShortCircuit 1
-searchPriority 50
-release beta,public
 
 searchName lrgTranscriptAliNoTNum
 searchTable lrgTranscriptAli
@@ -4233,17 +4369,17 @@ shortCircuit 1
 semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10
-release beta,public
+#release beta,public
 
-searchName omimGene2AccBb
-searchTable omimGene2bb
-searchMethod exact
-searchType bigBed
-shortCircuit 1
-semiShortCircuit 1
-termRegex ([0-9]{6})
-searchPriority 10
-release alpha
+#searchName omimGene2AccBb
+#searchTable omimGene2bb
+#searchMethod exact
+#searchType bigBed
+#shortCircuit 1
+#semiShortCircuit 1
+#termRegex ([0-9]{6})
+#searchPriority 10
+#release alpha
 
 searchName omimGeneLocAcc
 searchTable omimLocation
@@ -4344,7 +4480,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 11
+searchPriority 13
 padding 250
 
 track darned
@@ -4665,7 +4801,7 @@ subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
 sortOrder class=+ level=+ view=+
 type bed 3
-pennantIcon Deprecated red /goldenPath/newsarch.html#093020b "Track no longer updated, see news archive for details"
+pennantIcon snowflake.png /goldenPath/newsarch.html#093020b "ClinGen CNV data are now updated on ClinVar Variants track. See news archive for details."
 
     track iscaViewTotal
     shortLabel Coverage (Graphical)
@@ -4775,7 +4911,7 @@ pennantIcon Deprecated red /goldenPath/newsarch.html#093020b "Track no longer up
         visibility dense
         priority 1
         type bigBed 9 +
-        bigDataUrl /gbdb/hg19/doseSensitivity/clinGenHaploInsufficiency.bb
+        bigDataUrl /gbdb/$D/doseSensitivity/clinGenHaploInsufficiency.bb
         mouseOverField mouseOver
         subGroups view=dose class=path level=cur
 
@@ -4786,7 +4922,7 @@ pennantIcon Deprecated red /goldenPath/newsarch.html#093020b "Track no longer up
         visibility dense
         priority 2
         type bigBed 9 +
-        bigDataUrl /gbdb/hg19/doseSensitivity/clinGenTriploSensitivity.bb
+        bigDataUrl /gbdb/$D/doseSensitivity/clinGenTriploSensitivity.bb
         mouseOverField mouseOver
         subGroups view=dose class=path level=cur
 
@@ -5358,7 +5494,7 @@ padding 100
 searchTable dbSnp153Common
 searchMethod exact
 searchType bigBed
-#semiShortCircuit 1
+shortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9450
 padding 100
@@ -5374,7 +5510,7 @@ padding 100
 searchTable dbSnp153
 searchMethod exact
 searchType bigBed
-semiShortCircuit 1
+shortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9452
 padding 100
@@ -5388,6 +5524,46 @@ searchPriority 12.9453
 padding 100
 
 searchTable dbSnp153BadCoords
+searchMethod exact
+searchType bigBed
+#semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9454
+padding 100
+
+searchTable dbSnp155Common
+searchMethod exact
+searchType bigBed
+#semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9450
+padding 100
+
+searchTable dbSnp155ClinVar
+searchMethod exact
+searchType bigBed
+#semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9451
+padding 100
+
+searchTable dbSnp155
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9452
+padding 100
+
+searchTable dbSnp155Mult
+searchMethod exact
+searchType bigBed
+#semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9453
+padding 100
+
+searchTable dbSnp155BadCoords
 searchMethod exact
 searchType bigBed
 #semiShortCircuit 1
@@ -5428,11 +5604,12 @@ mouseOver $gene $name $rsId Genotype: $genotype; Zygosity: $zygo ; Inheritance: 
 labelFields gene, name
 defaultLabelFields gene, name
 noScoreFilter on
-group covid 
+priority 2.2
+group varRep
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
-multiRegionsBedUrl /gbdb/hg19/covidMuts/covidMuts.regions.bed
+multiRegionsBedUrl /gbdb/$D/covidMuts/covidMuts.regions.bed
  
 track orphadata
 bigDataUrl /gbdb/$D/bbi/orphanet/orphadata.bb
@@ -5451,5 +5628,55 @@ filterValues.assnType Biomarker tested in,Candidate gene tested in,Disease-causi
 filterValues.inheritance Autosomal dominant,Autosomal recessive,Mitochondrial inheritance,Multigenic/multifactorial,No data available,Not applicable,Oligogenic,Semi-dominant,Unknown,X-linked dominant,X-linked recessive,Y-linked
 filterValues.onsetList Adolescent,Adult,All ages,Antenatal,Childhood,Elderly,Infancy,Neonatal,No data available
 itemRgb on
-pennantIcon New red ../goldenPath/newsarch.html#111821 "Released Nov. 18, 2021"
 
+track hgnc
+shortLabel HGNC
+longLabel HUGO Gene Nomenclature 
+bigDataUrl /gbdb/$D/hgnc/hgnc.bb
+type bigBed 9 +
+labelFields symbol, geneName, name, uniprot_ids, ensembl_gene_id, ucsc_id, refseq_accession
+defaultLabelFields symbol
+mouseOver Symbol:$symbol; $name, Alias symbol: $alias_symbol; Previous symbols:$prev_symbol
+filterValues.locus_type RNA Y,RNA cluster,RNA long non-coding,RNA micro,RNA misc,RNA ribosomal,RNA small nuclear,RNA small nucleolar,RNA transfer,RNA vault,T cell receptor gene,T cell receptor pseudogene,complex locus constituent,endogenous retrovirus,fragile site,gene with protein product,immunoglobulin gene,immunoglobulin pseudogene,locus_type,protocadherin,pseudogene,readthrough,region,unknown,virus integration site,
+group genes
+searchIndex name
+searchTrix /gbdb/$D/hgnc/search.ix
+skipEmptyFields on
+itemRgb on
+noScoreFilter on
+
+searchTable hgnc
+searchMethod exact
+searchType bigBed
+
+include ../refSeqComposite.ra
+
+track ncbiRefSeqSelect
+parent refSeqComposite off
+priority 8
+type genePred
+shortLabel RefSeq Select and MANE
+longLabel NCBI RefSeq Select and MANE subset: A single representative transcript
+trackHandler ncbiRefSeq
+idXref ncbiRefSeqLink mrnaAcc name
+color 20,20,160
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+track ncbiRefSeqHistorical
+parent refSeqComposite off
+priority 10000
+type genePred
+shortLabel RefSeq Historical
+longLabel NCBI RefSeq Historical Transcript Versions
+color 12,12,120
+idXref ncbiRefSeqLinkHistorical mrnaAcc name
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchTable ncbiRefSeqHistorical
+searchMethod exact
+searchType genePred
+semiShortCircuit 1
+termRegex [N][MR]_[0-9]{6}[0-9]*\.[0-9]+
+searchPriority 20

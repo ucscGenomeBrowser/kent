@@ -916,7 +916,7 @@ warn("Done");
 void initCountFiles(char *prefix)
 /* open files for probe counts. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 dyStringClear(dy);
 dyStringPrintf(dy, "%s.gcCounts.tab", prefix);
 gcCountFile = mustOpen(dy->string, "w");
@@ -1014,7 +1014,7 @@ void initOutputVals()
 /* Open two files for writing the probe level intensities
    and probabilities to. */
 {
-struct dyString *s = newDyString(512);
+struct dyString *s = dyStringNew(512);
 char *filePrefix = optionVal("outputVals", NULL);
 assert(filePrefix);
 dyStringPrintf(s, "%s.inten", filePrefix);

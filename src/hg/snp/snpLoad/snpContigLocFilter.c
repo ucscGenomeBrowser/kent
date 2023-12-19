@@ -248,8 +248,9 @@ void createTable()
 /* create a ContigLocFilter table */
 {
 struct sqlConnection *conn = hAllocConn();
-char *createString =
-NOSQLINJ "CREATE TABLE ContigLocFilter (\n"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE ContigLocFilter (\n"
 "    snp_id int(11) not null,       \n"
 "    ctg_id int(11) not null,       \n"
 "    chromName varchar(32) not null,\n"
@@ -259,9 +260,9 @@ NOSQLINJ "CREATE TABLE ContigLocFilter (\n"
 "    orientation tinyint(4) not null, \n"
 "    allele blob,\n"
 "    weight int not null\n"
-");\n";
+");\n");
 
-sqlRemakeTable(conn, "ContigLocFilter", createString);
+sqlRemakeTable(conn, "ContigLocFilter", query);
 }
 
 

@@ -1,0 +1,5 @@
+# Max, Fri Sep 30 03:04:16 PDT 2022
+cd /hive/data/genomes/mpxvRivers/bed/viralzoneGenes/
+cat MKPX_transcript.txt | tr ',' '\t' | sed -e 's/NC_063383/NC_063383.1/' | sed -re 's/\t([0-9][0-9][0-9])\t([0-9][0-9][0-9]?)\t([0-9][0-9][0-9]?)/\t\1,\2,\3/' | tr '*' '\t' | tr -s '\t' | tawk '{$11=$5;print}' | cut -f1-4,6- > viralzone.bed
+cat viralzone.bed | tawk '{$2=$2-1; $7=$7-1}' > viralzoneFixed.bed
+bedToBigBed viralzoneFixed.bed ../../chrom.sizes viralzone.bb -type=bed9+ -tab -as=${HOME}/kent/src/hg/makeDb/autoSql/viralzone.as

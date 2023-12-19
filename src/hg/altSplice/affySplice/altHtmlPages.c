@@ -1045,7 +1045,7 @@ void makeJunctExpressedTissues(struct junctSet *js, struct dyString *buff, int j
 {
 int offSet = 100;
 int i = 0;
-struct dyString *dy = newDyString(1048);
+struct dyString *dy = dyStringNew(1048);
 char anchor[128];
 dyStringClear(buff);
 for(i = 0; i < probM->colCount; i++)
@@ -1096,7 +1096,7 @@ void makeJunctNotExpressedTissues(struct junctSet *js, struct dyString *buff, in
 {
 int offSet = 100;
 int i = 0;
-struct dyString *dy = newDyString(1048);
+struct dyString *dy = dyStringNew(1048);
 char anchor[128];
 dyStringClear(buff);
 
@@ -1197,7 +1197,7 @@ void outputLinks(struct junctSet **jsList, struct hash *bedHash, struct resultM 
 {
 struct junctSet *js = NULL;
 int colIx = 0, junctIx = 0;
-struct dyString *dy = newDyString(2048);
+struct dyString *dy = dyStringNew(2048);
 if(optionExists("sortByExonCorr")) 
     slSort(jsList, junctSetExonCorrCmp);
 else if(optionExists("sortByExonPercent"))

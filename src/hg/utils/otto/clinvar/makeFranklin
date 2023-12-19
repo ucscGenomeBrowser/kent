@@ -1,0 +1,40 @@
+{
+if (($2 == store2) && ($5 == store5)) 
+    {
+    count++;
+    names[$4]++;
+    ids[$6]++;
+    scvs[$7]++;
+    }
+else 
+    {
+    out4=""
+    for (ii in names) 
+        out4 = out4 ii"("names[ii]"),";
+    out4 = substr(out4, 1, length(out4)-1);
+    out6=""
+    for (ii in ids) 
+        out6 = out6 ii",";
+    out6 = substr(out6, 1, length(out6)-1);
+    out7=""
+    for (ii in scvs) 
+        out7 = out7 ii",";
+    out7 = substr(out7, 1, length(out7)-1);
+    print store1, store2, store3, "name"NR, store5,count,out4,out6,out7
+    store1=$1
+    store2=$2
+    store3=$3
+    store4=$4
+    store5=$5
+    count=1
+    delete names;
+    names[$4]++;
+    delete ids;
+    ids[$6]++;
+    delete scvs;
+    scvs[$7]++;
+    }
+}
+
+END { print store1, store2, store3, store4, store5,count }
+

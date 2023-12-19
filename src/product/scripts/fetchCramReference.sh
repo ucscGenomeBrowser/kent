@@ -55,12 +55,8 @@ then
     exit 255
 fi
 
-if lockfile -! -r 0 "${PENDING}/fetch.lock" >& /dev/null
-then
-    # echo "${PENDING}/fetch.lock already exists.  Exiting."
-    exit 0
-fi
-
+(
+flock -n 9 || exit 0
 
 # set up cleanup in the event of Ctrl-C
 trap '{rm -f "${PENDING}/*.out"; rm -f ${PENDING}/fetch.lock; exit 1; }' INT
@@ -69,7 +65,7 @@ trap '{rm -f "${PENDING}/*.out"; rm -f ${PENDING}/fetch.lock; exit 1; }' INT
 # Re-add files that previously failed, if they failed long enough ago.
 # Retry after 1 hour; give up after $MAXTRIES attempts
 find ${ERRORDIR} -type f -mmin +60 -printf "%f\0" |
- xargs -0 -n 1 -I % sh -c \
+ xargs -0 -I % sh -c \
 '
     if [ -e "${PENDING}/%.try${MAXTRIES}" ]
     then
@@ -85,7 +81,7 @@ find ${ERRORDIR} -type f -mmin +60 -printf "%f\0" |
 # in your Unix, delete that option to do serial fetch.
 
 ls "$PENDING" | (egrep -v 'fetch.lock|.out|.try' || true) |
-xargs -I % -n 1 -P 5 sh -c \
+xargs -I % -P 5 sh -c \
 '
     if WGETOUT=$(wget -nv -i "${PENDING}/%" -O "${PENDING}/%.out" 2>&1)
     then
@@ -112,5 +108,4 @@ xargs -I % -n 1 -P 5 sh -c \
         rm -f "${PENDING}/%.out"
     fi
 '
-
-rm -f "${PENDING}/fetch.lock"
+) 9>${PENDING}/fetch.lock

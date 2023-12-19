@@ -102,7 +102,7 @@ char *createString =
 "    observed blob\n"
 ");\n";
 
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 safef(tableName, ArraySize(tableName), "chr%s_snpFasta", chromName);
 sqlDyStringPrintf(dy, createString, tableName);
@@ -116,7 +116,7 @@ void addIndex(char *chromName)
 {
 struct sqlConnection *conn = hAllocConn();
 char tableName[64];
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 
 safef (tableName, ArraySize(tableName), "chr%s_snpFasta", chromName);
 sqlDyStringPrintf(dy, "ALTER TABLE %s add index rsId(rsId(12))", tableName);

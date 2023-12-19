@@ -1,4 +1,6 @@
 # Library functions for genome browser CGI scripts written in Python 2.7
+# The new library is hgLib3.py. This file hgLib.py is slowly getting phased out and exists for now
+# during the transition phase.
 
 # Because this library is loaded for every CGI execution, only a
 # fairly minimal set of functions is implemented here, e.g. hg.conf parsing,
@@ -62,7 +64,7 @@ botDelayMsecs = 0
 # two global variables: the first is the botDelay limit after which the page is slowed down and a warning is shown
 # the second is the limit after which the page is not shown anymore
 botDelayWarn = 1000
-botDelayBlock = 5000
+botDelayBlock = 2000
 
 jksqlTrace = False
 
@@ -96,7 +98,7 @@ def parseConf(fname):
                 inclDict = parseConf(absFname)
                 conf.update(inclDict)
         elif "=" in line: # string search for "="
-            key, value = line.split("=")
+            key, value = line.split("=",1)
             conf[key] = value
     return conf
 
@@ -697,27 +699,50 @@ def getCspPolicyString():
     policy += " 'unsafe-inline'"
     # For browsers that DO understand nonces and CSP2, they ignore 'unsafe-inline' in script if nonce is present.
     policy += " " + getNoncePolicy()
-    policy += " code.jquery.com"      # used by hgIntegrator jsHelper and others
-    policy += " www.google-analytics.com" # used by google analytics
+    # used by hgIntegrator jsHelper and others
+    policy += " code.jquery.com/jquery-1.9.1.min.js"
+    policy += " code.jquery.com/jquery-1.12.3.min.js"
+    policy += " code.jquery.com/ui/1.10.3/jquery-ui.min.js"
+    policy += " code.jquery.com/ui/1.11.0/jquery-ui.min.js"
+    policy += " code.jquery.com/ui/1.12.1/jquery-ui.js"
+
+    policy += " www.google-analytics.com/analytics.js" # used by google analytics
+    policy += " www.googletagmanager.com/gtag/js"
+
     #cirm cdw lib and web browse
     policy += " www.samsarin.com/project/dagre-d3/latest/dagre-d3.js"
+
+    policy += " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js"
     policy += " cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"
     policy += " cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"
     policy += " cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"
-    policy += " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js"
     policy += " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+
+
     policy += " login.persona.org/include.js"
     # expMatrix
-    policy +=  " ajax.googleapis.com/ajax"
-    policy += " maxcdn.bootstrapcdn.com/bootstrap"
+    policy += " ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
+    policy += " ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+    policy += " ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"
+    policy += " ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"
+    policy += " ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+
     policy += " d3js.org/d3.v3.min.js"
     # jsHelper
-    policy += " cdn.datatables.net"
+    policy += " cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"
 
     # hgGeneGraph
-    policy += " https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"
-    policy += " http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"
-    policy += " http://cdn.rawgit.com/jedfoster/Readmore.js/master/readmore.min.js"
+
+    policy += " maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+    policy += " maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+    policy += " maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"
+    policy += " maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    policy += " maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+
+
+    policy += " cdn.rawgit.com/jedfoster/Readmore.js/master/readmore.min.js"
 
     policy += ";"
 

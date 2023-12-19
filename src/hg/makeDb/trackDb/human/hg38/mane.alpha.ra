@@ -1,0 +1,21 @@
+track mane
+bigDataUrl /gbdb/hg38/mane/mane.1.0.bb
+shortLabel MANE select v1.0
+longLabel NCBI RefSeq and Ensembl transcripts from the MANE Project (v1.0)
+searchIndex name
+searchTrix /gbdb/hg38/mane/mane.1.0.ix
+type bigGenePred
+visibility hide
+group genes
+labelFields geneName2,name,ensemblProtAcc,geneName,ncbiId,ncbiProtAcc,ncbiGene
+defaultLabelFields geneName2
+maxItems 5000
+skipFields cdsStartStat,cdsEndStat,exonFrames,geneType,type
+urls name2="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" geneName="https://www.ensembl.org/homo_sapiens/Gene/Summary?g=$$&db=core" geneName2="https://www.genecards.org/cgi-bin/carddisp.pl?gene=$$" ensemblProtAcc="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" ncbiId="https://www.ncbi.nlm.nih.gov/nuccore/$$" ncbiProtAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+html mane.alpha
+
+searchTable mane
+searchType bigBed
+searchDescription NCBI RefSeq and Ensembl transcripts from the MANE Project (v1.0)
+searchPriority 1.3
+

@@ -115,7 +115,7 @@ char **row;
 
 sqlDyStringPrintf(query, "select * from %s", table);
 if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
+    sqlDyStringPrintf(query, " where %-s", where);
 sr = sqlGetResult(conn, query->string);
 int off = sqlFieldColumn(sr, "bin") + 1; // offset of data; function returns -1 if no bin
 while ((row = sqlNextRow(sr)) != NULL)
@@ -207,7 +207,7 @@ char *estOrientInfoGetCreateSql(char *table, int chromIdxLen)
 /* Get SQL to create an estOrientInfo table. chromIdxLen is the number of
  * chars at that start of chrom to use for the index. */
 {
-struct dyString *sqlCmd = newDyString(2048);
+struct dyString *sqlCmd = dyStringNew(2048);
 char *sqlCmdStr;
 sqlDyStringPrintf(sqlCmd, createString, table, chromIdxLen, chromIdxLen, chromIdxLen);
 sqlCmdStr = cloneString(sqlCmd->string);

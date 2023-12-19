@@ -117,13 +117,14 @@ void createTable()
 /* create a ContigLocusIdCondense table */
 {
 struct sqlConnection *conn = hAllocConn();
-char *createString =
-NOSQLINJ "CREATE TABLE ContigLocusIdCondense (\n"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE ContigLocusIdCondense (\n"
 "    snp_id int(11) not null,       \n"
 "    fxn_class varchar(255) not null\n"
-");\n";
+");\n");
 
-sqlRemakeTable(conn, "ContigLocusIdCondense", createString);
+sqlRemakeTable(conn, "ContigLocusIdCondense", query);
 }
 
 

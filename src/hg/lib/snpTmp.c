@@ -197,7 +197,7 @@ char *createString =
 "    INDEX         name(name)\n"
 ")\n";
 
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 
 sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);

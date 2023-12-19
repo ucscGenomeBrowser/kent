@@ -1,0 +1,57 @@
+mkdir /hive/data/genomes/hs1
+cd /hive/data/genomes/hs1
+mkdir /gbdb/hs1
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/GCA_009914755.4.chrNames.2bit" -O hs1.2bit
+ln -s `pwd`/hs1.2bit /gbdb/hs1/hs1.2bit
+mkdir hubs
+cd hubs
+ln -s /hive/data/genomes/hs1/hubs /gbdb/hs1/hubs
+
+ln -s /usr/local/apache/htdocs-hgdownload/hubs/GCA/009/914/755/GCA_009914755.4/bbi /gbdb/hs1/bbi
+ln -s /usr/local/apache/htdocs-hgdownload/hubs/GCA/009/914/755/GCA_009914755.4/ixIxx /gbdb/hs1/ixIxx
+
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/GCA_009914755.4.chromAlias.bb" -O chromAlias.bb
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/GCA_009914755.4.chromSizes.txt" -O chromSizes.txt
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/groups.txt"
+
+# get hub and genomes stanza from existing hub
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt" -O - | raToLines /dev/stdin /dev/stdout | egrep "^hub|^genome" | linesToRa /dev/stdin hubAndGenome.txt
+
+mkdir ~/kent/src/hg/makeDb/trackDb/human/hs1
+cd  ~/kent/src/hg/makeDb/trackDb/human/hs1
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt" -O - | raToLines /dev/stdin /dev/stdout | egrep -v "^hub|^genome|^include" | linesToRa /dev/stdin /dev/stdout | sed 's?searchTrix ?& /gbdb/hs1/?' | sed 's?bigDataUrl ?& /gbdb/hs1/?' > trackDb.ra
+
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/GCA_009914755.4.userTrackDb.txt" -O - | sed 's?searchTrix ?& /gbdb/hs1/?' | sed 's?bigDataUrl ?& /gbdb/hs1/?'  >> trackDb.ra
+
+mkdir html
+cp /usr/local/apache/htdocs-hgdownload/hubs/GCA/009/914/755/GCA_009914755.4/html/* html
+
+hgsql -Ne "create database hs1"
+cd  ~/kent/src/hg/makeDb/trackDb
+make DBS=hs1
+# had to fix following errors
+# Duplicate tag shortLabel in record starting line 817 of /cluster/home/braney/kent/src/hg/makeDb/trackDb/human/hs1/trackDb.ra
+
+
+# hgTrackDb doesn't find html if the trackDb has already appended the .html
+# hgTrackDb barfs on dollar signs because it assumes it's a variable (windowmasker, hgLiftOver)
+# Track hs1.T2T_Encode has non-conforming 'cell' tag '22Rv1' (begins with digit)
+# multiple shortLabel lines
+
+# need to add dbDb line
+insert into dbDb values('hs1','hs1 - t2t chm13','hub:/gbdb/hs1/hubs','Human','chrX:15,177,876-15,185,140',1,2003, 'Human','','',0,0,'',1);
+
+# fix paths to chromAlias.bb and twoBitPath and groups
+
+# 2022-07-15 markd:
+# convert bbi and ixIxx to real directories:
+
+  mkdir bbi.new/
+  for f in bbi/* ; do ln -s $(realpath $f) bbi.new/$(basename $f) ;done
+  rm bbi
+  mv bbi.new bbi
+
+  mkdir ixIxx.new
+  for f in ixIxx/* ; do ln -s $(realpath $f) ixIxx.new/$(basename $f) ;done
+  rm ixIxx
+  mv ixIxx.new ixIxx

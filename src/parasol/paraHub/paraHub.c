@@ -1781,7 +1781,7 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 
 	if (mach->deadJobIds != NULL)
 	    {
-	    struct dyString *dy = newDyString(0);
+	    struct dyString *dy = dyStringNew(0);
 	    struct slInt *i = mach->deadJobIds;
 	    dyStringPrintf(dy, "hub: node %s assigned ", name); 
 	    for(i = mach->deadJobIds; i; i = i->next)

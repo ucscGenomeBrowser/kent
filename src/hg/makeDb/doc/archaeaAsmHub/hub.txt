@@ -1,0 +1,6 @@
+hub Archaea genome assemblies
+shortLabel Archaea assemblies
+longLabel Archaea genome assemblies
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html

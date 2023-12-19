@@ -432,11 +432,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 		sqlDyStringPrintf(sql, "select * from %s where %s = ",
 			branch->targetTable, target);
 		if (branch->needsQuote)
-		    dyStringPrintf(sql, "\"%s\"", row[branch->fieldIx]);
+		    sqlDyStringPrintf(sql, "'%s'", row[branch->fieldIx]);
 		else
-		    dyStringPrintf(sql, "%s", row[branch->fieldIx]);
+		    sqlDyStringPrintf(sql, "%s", row[branch->fieldIx]);
 		if (maxList != 0)
-		    dyStringPrintf(sql, " limit %d", maxList);
+		    sqlDyStringPrintf(sql, " limit %d", maxList);
 		rSqlToXml(cc, database, branch->targetTable, branch->targetField, 
 			sql->string, tableHash, branch, f, newDepth);
 		dyStringFree(&sql);
@@ -475,13 +475,14 @@ if (optionExists("query"))
     readInGulp(queryFile, &query, NULL);
     if (!stringIn(table, query))
 	errAbort("No mention of table %s in %s.", table, queryFile);
-    dyStringAppend(sql, query);
+    // Trust reading sql from disk file.
+    sqlDyStringPrintf(sql, query, NULL);
     }
 else
     sqlDyStringPrintf(sql, "select * from %s", table);
 
 if (maxList > 0)
-    dyStringPrintf(sql, " limit %d", maxList);
+    sqlDyStringPrintf(sql, " limit %d", maxList);
 
 if (!sqlTableExists(conn, table))
     errAbort("No table %s in %s", table, database);

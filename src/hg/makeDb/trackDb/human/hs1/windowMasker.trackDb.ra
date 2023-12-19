@@ -1,0 +1,9 @@
+track windowMasker
+shortLabel WM + SDust
+longLabel Genomic Intervals Masked by WindowMasker + SDust
+group varRep
+visibility hide
+type bigBed 3
+bigDataUrl  /gbdb/hs1/bbi/windowMasker.bb
+html html/GCA_009914755.4_T2T-CHM13v2.0.windowMasker
+

@@ -11,18 +11,6 @@
 /* name of the table */
 char *IMAGE_CLONE_TBL = "imageClone";
 
-/* SQL to create the table */
-static char *createSql =
-NOSQLINJ "create table imageClone ("
-"    imageId int not null,"                         /* imageId */
-"    acc char(12) not null,"                        /* GenBank accession */
-"    type enum('EST','mRNA') not null,"             /* EST or mRNA? */
-"    direction enum('5','3','0') not null,"         /* Read direction. */
-"    index(imageId),"
-"    unique(acc),"
-"    index(direction),"
-"    index(type))";
-
 unsigned imageCloneGBParse(char *cloneSpec)
 /* Parse an image clone id from the string take from the genbank
  * /clone field.  There are many weird case, some are handled and some are
@@ -110,7 +98,22 @@ struct imageCloneTbl *imageCloneTblNew(struct sqlConnection *conn,
 struct imageCloneTbl *ict;
 AllocVar(ict);
 if (!sqlTableExists(conn, IMAGE_CLONE_TBL))
-    sqlRemakeTable(conn, IMAGE_CLONE_TBL, createSql);
+    {
+    /* SQL to create the table */
+    char query[1024];
+    sqlSafef(query, sizeof query, 
+    "create table imageClone ("
+    "    imageId int not null,"                         /* imageId */
+    "    acc char(12) not null,"                        /* GenBank accession */
+    "    type enum('EST','mRNA') not null,"             /* EST or mRNA? */
+    "    direction enum('5','3','0') not null,"         /* Read direction. */
+    "    index(imageId),"
+    "    unique(acc),"
+    "    index(direction),"
+    "    index(type))");
+
+    sqlRemakeTable(conn, IMAGE_CLONE_TBL, query);
+    }
 ict->updater = sqlUpdaterNew(IMAGE_CLONE_TBL, tmpDir, verbEnabled, NULL);
 return ict;
 }
@@ -157,7 +160,7 @@ if (!((direction == '5') || (direction == '3') || (direction == '0')))
     errAbort("invalid direction value for imageCLone table: %d", direction);
 
 /* if type changes, entry is already deleted */
-sqlSafefFrag(query, sizeof(query), "imageId = %u, direction = '%c' WHERE acc = '%s'",
+sqlSafef(query, sizeof(query), "imageId = %u, direction = '%c' WHERE acc = '%s'",
       imageId, direction, acc);
 
 sqlUpdaterModRow(ict->updater, 1, "%s", query);

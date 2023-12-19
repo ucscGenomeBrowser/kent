@@ -32,10 +32,10 @@ if (imgDir != NULL && webPath != NULL)
     {
     makeDirsOnPath(imgDir);
     safef(thumbnailPath->forCgi, sizeof(thumbnailPath->forCgi), "%s%s%s.png", imgDir,
-        lastChar(thumbnailPath->forCgi) == '/' ? "" : "/",
+        lastChar(imgDir) == '/' ? "" : "/",
         dyStringContents(base));
-    safef(thumbnailPath->forHtml, sizeof(thumbnailPath->forCgi), "%s%s%s.png", imgDir,
-        lastChar(thumbnailPath->forCgi) == '/' ? "" : "/",
+    safef(thumbnailPath->forHtml, sizeof(thumbnailPath->forCgi), "%s%s%s.png", webPath,
+        lastChar(webPath) == '/' ? "" : "/",
         dyStringContents(base));
     }
 else if (imgDir != NULL || webPath != NULL)

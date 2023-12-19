@@ -50,7 +50,7 @@ xp->atStartTag = atStartTag;
 xp->atEndTag = atEndTag;
 xp->read = read;
 xp->lineIx = 1;
-xp->endTag = newDyString(64);
+xp->endTag = dyStringNew(64);
 if (fileName)
     xp->fileName = cloneString(fileName);
 else
@@ -81,16 +81,16 @@ if (xp != NULL)
         {
 	if (stack->tag == NULL)
 	    break;
-	freeDyString(&stack->tag);
-	freeDyString(&stack->text);
+	dyStringFree(&stack->tag);
+	dyStringFree(&stack->text);
 	}
     for (i=0; i<ArraySize(xp->attDyBuf); ++i)
         {
 	if (xp->attDyBuf[i] == NULL)
 	    break;
-	freeDyString(&xp->attDyBuf[i]);
+	dyStringFree(&xp->attDyBuf[i]);
 	}
-    freeDyString(&xp->endTag);
+    dyStringFree(&xp->endTag);
     freeMem(xp->fileName);
     hashFree(&xp->symHash);
     freez(pXp);
@@ -287,7 +287,7 @@ if (c != '>' && c != '/')
 	    xpError(xp, "Attribute stack overflow");
 	dy = retAttributes[attCount];
 	if (dy == NULL)
-	    dy = retAttributes[attCount] = newDyString(64);
+	    dy = retAttributes[attCount] = dyStringNew(64);
 	else
 	    dyStringClear(dy);
 	++attCount;
@@ -350,7 +350,7 @@ if (c != '>' && c != '/')
 	    xpError(xp, "Attribute stack overflow");
 	dy = retAttributes[attCount];
 	if (dy == NULL)
-	    dy = retAttributes[attCount] = newDyString(64);
+	    dy = retAttributes[attCount] = dyStringNew(64);
 	else
 	    dyStringClear(dy);
 	++attCount;
@@ -504,11 +504,11 @@ for (;;)
 	if (stack < xp->stackBuf)
 	    xpError(xp, "Stack overflow");
 	if (stack->tag == NULL)
-	    stack->tag = newDyString(32);
+	    stack->tag = dyStringNew(32);
 	else
 	    dyStringClear(stack->tag);
 	if (stack->text == NULL)
-	    stack->text = newDyString(256);
+	    stack->text = dyStringNew(256);
 	else
 	    dyStringClear(stack->text);
 	text = stack->text;

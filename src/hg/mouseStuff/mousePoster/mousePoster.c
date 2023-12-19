@@ -72,10 +72,10 @@ char *dupeFileName = "dupes.out";
 //char *gapFile = "centro.tab";
 
 /* Some colors. */
-struct rgbColor rgbRed = {240,0,0};
-struct rgbColor rgbRedOrange = {240, 100, 0};
-struct rgbColor rgbYellow = {255, 255, 0};
-static struct rgbColor blueGene = { 0, 0, 160};
+struct rgbColor rgbRed = {240,0,0, 255};
+struct rgbColor rgbRedOrange = {240, 100, 0, 255};
+struct rgbColor rgbYellow = {255, 255, 0, 255};
+static struct rgbColor blueGene = { 0, 0, 160, 255};
 
 void usage()
 /* Explain usage and exit. */
@@ -210,7 +210,9 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
-sr = sqlGetResult(conn, NOSQLINJ "select LLid, MGIid from MGIid");
+char query[1024];
+sqlSafef(query, sizeof query, "select LLid, MGIid from MGIid");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *jaxId = cloneString(row[1]);
@@ -308,7 +310,9 @@ struct sqlResult *sr;
 char **row;
 
 /* Using ensembl fillFirstColumnHash(diseaseFile, diseaseHash); */
-sr = sqlGetResult(conn, NOSQLINJ "select mrnaAcc,locusLinkId from refLink");
+char query[1024];
+sqlSafef(query, sizeof query, "select mrnaAcc,locusLinkId from refLink");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *acc = row[0];
@@ -420,10 +424,10 @@ char **row;
 char query[256];
 struct genePred *gpList = NULL, *gp;
 char geneName[64];
-static struct rgbColor red = {255, 0, 0};
-static struct rgbColor green = {0, 190, 0};
-static struct rgbColor yellow = {190, 150, 0};
-static struct rgbColor blue = {0, 0, 220};
+static struct rgbColor red = {255, 0, 0, 255};
+static struct rgbColor green = {0, 190, 0, 255};
+static struct rgbColor yellow = {190, 150, 0, 255};
+static struct rgbColor blue = {0, 0, 220, 255};
 struct rgbColor *col;
 boolean keepGene;
 struct dlList *geneList = newDlList();
@@ -981,32 +985,32 @@ return atoi(chrom);
 }
 
 static struct rgbColor chromColorTable[] = {
-	{ 0,0, 0},
-	{ 255,204, 204},  /* light red */
-	{ 204,0, 0},      /* med red */
-	{ 255,0, 0},      /* bright red */
-	{ 255,102,0},     /* bright orange */
-	{ 255,153,0},     /* yellow orange */
-	{ 255,0,204},     /* magenta */
-	{ 255,255,204},   /* light yellow  */
-	{ 255,255,153},   /* med yellow */
-	{ 255,255,0},     /* bright yellow*/
-	{ 0,255,0},       /*bt gr*/
-	{ 204,255,0},     /* yellow green */
-	{ 102,102,0},     /* dark  green*/
-	{ 204,255,255},   /*lt cyan*/
-	{ 153,204,204},   /* gray cyan */
-	{ 0,255,255},     /*med cyan*/
-	{ 153,204,255},   /*light med blue */
-	{ 102,153,255},   /* med blue */
-	{ 0,0 ,204},      /* deep blue */
-	{ 204,153,255},   /*lt violet*/
-	{ 204,051,255},   /* med violet */
-	{ 153,0,204},     /* dark violet */
-	{ 204,204,204},   /* light gray */
-	{ 153,153,153},   /* med gray */
-	{ 102,102,102},   /* dark gray */
-	{ 255,255,255},   /* black */
+	{ 0,0, 0, 255},
+	{ 255,204, 204,255},  /* light red */
+	{ 204,0, 0,255},      /* med red */
+	{ 255,0, 0,255},      /* bright red */
+	{ 255,102,0,255},     /* bright orange */
+	{ 255,153,0,255},     /* yellow orange */
+	{ 255,0,204,255},     /* magenta */
+	{ 255,255,204,255},   /* light yellow  */
+	{ 255,255,153,255},   /* med yellow */
+	{ 255,255,0,255},     /* bright yellow*/
+	{ 0,255,0,255},       /*bt gr*/
+	{ 204,255,0,255},     /* yellow green */
+	{ 102,102,0,255},     /* dark  green*/
+	{ 204,255,255,255},   /*lt cyan*/
+	{ 153,204,204,255},   /* gray cyan */
+	{ 0,255,255,255},     /*med cyan*/
+	{ 153,204,255,255},   /*light med blue */
+	{ 102,153,255,255},   /* med blue */
+	{ 0,0 ,204,255},      /* deep blue */
+	{ 204,153,255,255},   /*lt violet*/
+	{ 204,051,255,255},   /* med violet */
+	{ 153,0,204,255},     /* dark violet */
+	{ 204,204,204,255},   /* light gray */
+	{ 153,153,153,255},   /* med gray */
+	{ 102,102,102,255},   /* dark gray */
+	{ 255,255,255,255},   /* black */
 };
 
 struct rgbColor *chromColor(char *chrom)

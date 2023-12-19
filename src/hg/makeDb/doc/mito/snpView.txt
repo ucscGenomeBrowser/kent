@@ -1,0 +1,158 @@
+### making the snpView for the mito browser
+
+This script demonstrates making the snpView for one of
+the species in the mito browser.   In this case, the hg38a
+species (==hg38 chrM)
+
+This script will be used later with input arg parameters in order to
+make up the snpView for each target reference.
+
+#######################################################################
+
+#!/bin/bash
+
+export allDists="/cluster/bin/phast.build/cornellCVS/phast.2021-06-01/bin/all_dists"
+
+export target="hg38a"
+export Nway="104way"
+export dbTable="${target}_${Nway}"
+export mafFile="/hive/data/genomes/mito/trackData/mafFiles/cactus/${target}.104way.maf"
+
+mkdir -p /hive/data/genomes/mito/bed/snpView/${target}
+cd  /hive/data/genomes/mito/bed/snpView/${target}
+
+mkdir -p /gbdb/mito/maf
+if [ "${mafFile}" -nt species.list ]; then
+rm -f /gbdb/mito/maf/${target}.maf
+
+# translate the names to avoid the underbars and . versions in
+#  the 'species' names
+
+sed -e 's/GCA_\([0-9]\+\)\./GCAu\1v/g; s/GCF_\([0-9]\+\)\./GCFu\1v/g;' \
+   "${mafFile}" > noUnderbar.maf
+
+rm -f mito.${Nway}.nh
+ln -s ../../../findSequences/finalPlus7.nh ./mito.${Nway}.nh
+
+# 'target' species is always 'mito'
+printf "mito\n" > species.list
+
+# order species via their distance in the phylo-tree
+$allDists mito.${Nway}.nh | grep -w "${target}" | sed -e "s/${target}.//;" \
+   | sort -k2,2n | cut -f1 \
+     | sed -e 's/GCA_\([0-9]\+\)\./GCAu\1v/g; s/GCF_\([0-9]\+\)\./GCFu\1v/g;' \
+        >> species.list
+
+ln -s `pwd`/noUnderbar.maf /gbdb/mito/maf/${target}.maf
+
+# temporary load this maf file into 'mito' database for the convenience
+#   of the mafGene command
+hgLoadMaf -pathPrefix=/gbdb/mito/maf \
+   -loadFile=../../mafFiles/cactus/${target}.${Nway}.maf mito ${dbTable}
+
+fi
+
+# the genes for this target
+### XXX should the genes for all the other species also be here ?
+if [ "../../genes/hg38/hg38_chrM.gp.gz" -nt "${target}.gp" ]; then
+  zcat ../../genes/hg38/hg38_chrM.gp.gz > "${target}.gp"
+  touch -r ../../genes/hg38/hg38_chrM.gp.gz "${target}.gp"
+fi
+
+if [ "${target}.gp" -nt nonsyn.faa ]; then
+  mafGene -exons mito ${dbTable} -useFile "${target}.gp" species.list nonsyn.faa
+  touch -r "${target}.gp" nonsyn.faa
+fi
+
+# the 1583 is the soTerm for missense_variant
+if [ nonsyn.faa -nt nonsyn.bed ]; then
+  paSNP species.list nonsyn.faa stdout | sed 's/:/ /' | sed 's/-/ /' \
+        | awk '{printf "%s\t%d\t%d\t%s\t1583\t+\t%d\t%d\t255,0,0\t1\t%d\t0\n", $1, $2-1, $3, $4, $2-1, $3, $3-($2 - 1)}' > nonsyn.bed
+  touch -r nonsyn.faa nonsyn.bed
+fi
+
+if [ "${target}.gp" -nt syn.faa ]; then
+  mafGene -uniqAA -exons mito ${dbTable} -useFile "${target}.gp" species.list syn.faa
+  touch -r "${target}.gp" syn.faa
+fi
+
+# the 1819 is the soTerm for synonymous_variant
+if [ syn.faa -nt syn.bed ]; then
+  paSNP species.list syn.faa stdout | sed 's/:/ /' | sed 's/-/ /' \
+        | awk '{printf "%s\t%d\t%d\t%s\t1819\t+\t%d\t%d\t0,255,0\t1\t%d\t0\n", $1, $2-1, $3, $4, $2-1, $3, $3-($2 - 1)}' > syn.bed
+  touch -r syn.faa syn.bed
+fi
+
+if [ "${target}.gp" -nt single.bed ]; then
+  mafToSnpBed mito noUnderbar.maf "${target}.gp" stdout \
+     | sed -e 's/mito.//;' > single.bed
+  touch -r "${target}.gp" single.bed
+fi
+
+# select out based on 'soTerm' identifier in the last column
+#  soTerms defined in src/hg/inc/soTerm.h
+#     1       2  3         4          5
+# hg38a_chrM 72 73 GCAu018873775v2 1628
+
+if [ single.bed -nt codingVariant.bed ]; then
+  awk '$NF == 1580' single.bed \
+    | awk '{printf "%s\t%d\t%d\t%s\t%d\t+\t%d\t%d\t255,255,0\t1\t%d\t0\n", $1, $2, $3, $4, $5, $2, $3, $3-$2}' \
+       | sed -e 's/GCAu\([0-9]\+\)v/GCA_\1./g; s/GCFu\([0-9]\+\)v/GCF_\1./g;' \
+           | sort -k1,1 -k2,2n > codingVariant.bed
+  touch -r single.bed codingVariant.bed
+fi
+
+if [ single.bed -nt utrVariant.bed ]; then
+  awk '$NF == 1623 || $NF == 1624' single.bed \
+    | awk '{printf "%s\t%d\t%d\t%s\t%d\t+\t%d\t%d\t255,255,0\t1\t%d\t0\n", $1, $2, $3, $4, $5, $2, $3, $3-$2}' \
+       | sed -e 's/GCAu\([0-9]\+\)v/GCA_\1./g; s/GCFu\([0-9]\+\)v/GCF_\1./g;' \
+           | sort -k1,1 -k2,2n > utrVariant.bed
+  touch -r single.bed utrVariant.bed
+fi
+
+if [ single.bed -nt missing.bed ]; then
+  awk '$NF == 0' single.bed \
+    | awk '{printf "%s\t%d\t%d\t%s\t%d\t+\t%d\t%d\t255,255,0\t1\t%d\t0\n", $1, $2, $3, $4, $5, $2, $3, $3-$2}' \
+       | sed -e 's/GCAu\([0-9]\+\)v/GCA_\1./g; s/GCFu\([0-9]\+\)v/GCF_\1./g;' \
+           | sort -k1,1 -k2,2n > missing.bed
+  touch -r single.bed missing.bed
+fi
+
+if [ single.bed -nt intergenic.bed ]; then
+  awk '$NF == 1628' single.bed \
+    | awk '{printf "%s\t%d\t%d\t%s\t%d\t+\t%d\t%d\t255,255,0\t1\t%d\t0\n", $1, $2, $3, $4, $5, $2, $3, $3-$2}' \
+       | sed -e 's/GCAu\([0-9]\+\)v/GCA_\1./g; s/GCFu\([0-9]\+\)v/GCF_\1./g;' \
+           | sort -k1,1 -k2,2n > intergenic.bed
+  touch -r single.bed intergenic.bed
+fi
+
+if [ single.bed -nt intron.bed ]; then
+  awk '$NF == 1627' single.bed \
+    | awk '{printf "%s\t%d\t%d\t%s\t%d\t+\t%d\t%d\t255,255,0\t1\t%d\t0\n", $1, $2, $3, $4, $5, $2, $3, $3-$2}' \
+       | sed -e 's/GCAu\([0-9]\+\)v/GCA_\1./g; s/GCFu\([0-9]\+\)v/GCF_\1./g;' \
+           | sort -k1,1 -k2,2n > intron.bed
+  touch -r single.bed intron.bed
+fi
+
+if [ species.list -nt mito.species.list ]; then
+   grep -v -w mito species.list \
+     | sed -e 's/GCAu\([0-9]\+\)v/GCA_\1./g; s/GCFu\([0-9]\+\)v/GCF_\1./g;' \
+        > mito.species.list
+   touch -r species.list mito.species.list
+fi
+
+if [ syn.bed -nt output.bed -o intergenic.bed -nt output.bed ]; then
+for S in `cat mito.species.list`
+do
+  grep -wh "${S}" nonsyn.bed syn.bed codingVariant.bed utrVariant.bed intron.bed intergenic.bed missing.bed \
+     | bedSmash stdin ../../../chrom.sizes stdout
+done | sort -k1,1 -k2,2n > output.bed
+   touch -r intergenic.bed output.bed
+fi
+
+if [ output.bed -nt load.bed ]; then
+   awk '{print $1,$2,$3,$4,$5}' output.bed | sort -k1,1 -k2,2n > load.bed
+   bedToBigBed -type=bed4+1 -as=snpView.as load.bed \
+      ../../../chrom.sizes mafSnpHg38a.bb
+fi
+##########################################################################

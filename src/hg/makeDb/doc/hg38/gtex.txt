@@ -142,14 +142,15 @@ hgLoadBed hg38 -noBin -tab -type=bed6+4 \
 # See hg/near/makeNear.doc
 
 #############################################################################
-# GTEx V8 cis-eQTLs CAVIAR High Confidence (Sept 2021) Matt
+# GTEx V8 cis-eQTLs CAVIAR High Confidence (Apr 2022) Matt
 
 cd /hive/data/genomes/hg38/bed/gtex/V8/eQtl/finemap_CAVIAR
 
-# Tar files were downloaded from https://gtexportal.org/home/datasets#filesetFilesDiv15
-# This file was used for this track:
+# Download files from
 wget https://storage.googleapis.com/gtex_analysis_v8/single_tissue_qtl_data/GTEx_v8_finemapping_CAVIAR.tar
-# Then unpacked
+# unpack files
+tar xvf GTEx_v8_finemapping_CAVIAR.tar
+
 # Other files used:
 # Lookup table for all variants genotyped in GTEx
 wget https://storage.googleapis.com/gtex_analysis_v8/reference/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz
@@ -175,7 +176,6 @@ wget https://storage.googleapis.com/gtex_analysis_v8/reference/gencode.v26.GRCh3
 # Description from GTEx_v8_finemapping_CAVIAR/README.txt
 # ***CAVIAR_Results_v8_GTEx_LD_ALL_NOCUTOFF_with_Allele.txt.gz  —> is a single file for all GTEx tissues and all eGenes where we reported
 # the CPP (Causal Posterior Probability). Each eQTL contains the allele information. Sample header file:
-
 # TISSUE  GENE    eQTL    CHROM   POS Probability
 # Brain_Caudate_basal_ganglia ENSG00000248485.1   chr1_161274374_G_A_b38  1   161274374   0.157456
 
@@ -194,8 +194,8 @@ zcat CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants_with_Allele.gz | sort | uni
 wc -l dupe_eQtls.txt
 31 dupe_eQtls.txt
 
-# Wrote buildInteract script to help build interact-format tracks from CAVIAR files:
-cat << '_EOF_' > buildInteract
+# Wrote buildGtexEqtlBed script to help build bed files from eQTL files:
+cat << '_EOF_' > buildGtexEqtlBed
 #!/usr/bin/env python3
 
 import sys, gzip
@@ -205,6 +205,11 @@ gpFile = sys.argv[2]
 alleleFile = sys.argv[3]
 qtlIdCol = sys.argv[4] # Column name in file header, e.g. eQTL
 probCol = sys.argv[5] # Column name in file header, e.g. Probability
+# DAP-G files have an extra probability column that we want to capture
+if len(sys.argv) > 6:
+    clusterProbCol = sys.argv[6]
+else:
+    clusterProbCol = False
 
 # Open up all of our files
 qfh = gzip.open(qtlFile,"r") # QTL file
@@ -216,23 +221,299 @@ qtlDict = dict()
 gpDict = dict()
 alleleDict = dict()
 
-# Get indices of eQTL and probability fields
+# Get index of field that we want to replace values in
 header = qfh.readline().decode('ASCII').rstrip().split("\t")
 qtl_col = header.index(qtlIdCol)
 prob_col = header.index(probCol)
+if clusterProbCol:
+    clus_prob_col = header.index(clusterProbCol)
 
 # Process eQTL file
 for line in qfh:
     qtlLine = line.decode('ASCII').strip().split("\t")
     # Skip header line in file
-    if "TISSUE" not in qtlLine:
-        tissue = qtlLine[0]
-        gene = qtlLine[1]
-        e_qtl = qtlLine[qtl_col]
-        # each of these elements on their own aren't unique, but together they are
-        qtlKey = e_qtl + "|" + tissue + "|" + gene
-        # Put these into a dict where key is unique name we've made
-        qtlDict[qtlKey] = qtlLine
+    #if "TISSUE" not in qtlLine:
+    tissue = qtlLine[0]
+    gene = qtlLine[1]
+    e_qtl = qtlLine[qtl_col]
+    # each of these elements on their own aren't unique, but together they are
+    qtlKey = e_qtl + "|" + tissue + "|" + gene
+    # Put these into a dict where key is unique name we've made
+    qtlDict[qtlKey] = qtlLine
+
+# Process genePred file
+for line in gfh:
+    gpLine = line.strip().split("\t")
+    gene_id = gpLine[0]
+    # Put into dict with key on ENSG* ID, e.g.
+    gpDict[gene_id] = gpLine
+
+# Process allele file from GTEx
+for line in afh:
+    # gzip file, so we need to decode to asii first
+    aLine = line.decode('ASCII').strip().split("\t")
+
+    # Key our dict using the allele, which is unique in the file
+    allele = aLine[0]
+    alleleDict[allele] = aLine
+
+for entry in qtlDict:
+    # Get gene information from the genePred dict
+    # eQTL file/dict has ENSG id in it
+    gene_id = qtlDict[entry][1]
+    if gene_id in gpDict.keys():
+        gene_sym = gpDict[gene_id][11]
+        gene_chrom = gpDict[gene_id][1]
+        gene_strand = gpDict[gene_id][2]
+        gene_start = int(gpDict[gene_id][3])
+        gene_end = int(gpDict[gene_id][4])
+    # Check if eQTL is in allele/eQTL dictionary so that we can grab the rsID
+    var_name = qtlDict[entry][qtl_col]
+    if var_name in alleleDict.keys():
+        rsID = alleleDict[var_name][6]
+        if rsID == '.':
+            rsID = var_name
+        var_start = int(alleleDict[var_name][2]) - 1
+        var_end = int(alleleDict[var_name][2])
+        chrom = alleleDict[var_name][1]
+
+    # This block of if/else sets up the blockSizes/blockStart/blockCount for
+    # various orientations of eQTLs/genes
+    if chrom == gene_chrom:
+        # Handles case where eQTL is internal to a gene
+        if var_start > gene_start and var_start < gene_end:
+            chromStart = gene_start
+            chromEnd = gene_end
+            blockCount = "1"
+            blockSizes = gene_end - gene_start
+            blockStarts = "0"
+            strand = "."
+        # Handles case where eQTL is downstream of gene
+        elif var_start > gene_end:
+            chromStart = gene_start
+            chromEnd = var_end
+            bs1 = gene_end - gene_start
+            blockCount = "2"
+            blockSizes = str(bs1) + ",1"
+            blockStarts = "0," + str(var_start - gene_start)
+            strand = "-"
+        # Handles case where eQTL is upstream of gene
+        elif var_start < gene_start:
+            chromStart = var_start
+            chromEnd = gene_end
+            blockCount = "2"
+            bs2 = gene_end - gene_start
+            blockSizes = "1," + str(bs2)
+            blockStarts = "0," + str(gene_start - var_start)
+            strand = "+"
+        # Handles case where eQTL and start of gene overlap
+        elif var_start == gene_start:
+            chromStart = var_start
+            chromEnd = gene_end
+            blockCount = "1"
+            blockSizes = str(gene_end - var_start)
+            blockStarts = "0"
+            strand = "."
+        # Handles case where eQTL and end of gene overlap
+        elif gene_end == var_start:
+            chromStart = gene_start
+            chromEnd = var_end
+            blockCount = "1"
+            blockSizes = str(var_end - gene_start)
+            blockStarts = "0"
+            strand = "."
+
+        # Add each element of our bed line to a list to print later
+        bedLine = list()
+        bedLine.append(chrom) # chrom
+        bedLine.append(chromStart) # chrStart
+        bedLine.append(chromEnd) # chrEnd
+        bedLine.append(rsID + "/" + gene_sym + "/" + qtlDict[entry][0]) # name
+        bedLine.append(int("1000"))# score
+        bedLine.append(strand)# strand
+        bedLine.append(var_start) # thickStart
+        bedLine.append(var_end) # thickEnd
+        bedLine.append("0,0,0") #color - eventually replaced by 'addTissueColors' script
+        bedLine.append(blockCount) # blockCount
+        bedLine.append(blockSizes) # blockSizes
+        bedLine.append(blockStarts) # blockSizes
+        bedLine.append(chrom + ":" + str(var_start+1) + "-" + str(var_end)) # prettified gene pos
+        bedLine.append(rsID) # sourceName
+        bedLine.append(chrom + ":" + str(gene_start+1) + "-" + str(gene_end)) # prettified gene pos
+        bedLine.append(gene_sym) # geneName
+        bedLine.append(gene_id) # geneId
+        bedLine.append(gene_strand) # targetStrand
+        bedLine.append(qtlDict[entry][0]) # tissue
+        bedLine.append(qtlDict[entry][prob_col]) # CAVIAR == Causal Posterior Probability; DAPG == SNP posterior inclusion probability
+        if clusterProbCol:
+            # Signal-level posterior_inclusion probability (sum of the PIPs from all members of the signal cluster)
+            bedLine.append(qtlDict[entry][clus_prob_col])
+
+    # Print bed line to stdout, can redirect to a file to save it
+    print(*bedLine, sep="\t")
+'_EOF_'
+
+
+# Then run buildGtexEqtlBed to build an bed file
+./buildGtexEqtlBed CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants_with_Allele.gz ../gencode.v26.GRCh38.genes.gpExt \
+  ../GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz eQTL Probability | \
+  bedSort stdin gtexCaviar.sorted.bed
+
+# Create script to add colors to bed file
+cat << '_EOF_' > addTissueColors
+
+#!/usr/bin/env python3
+
+####
+# Intially created bed file w/o colors
+# This script will replace col 9 with tissue-specific colors
+####
+
+import sys
+
+bedFile = sys.argv[1]
+colorFile = sys.argv[2]
+
+# Read in color file from //
+cfh = open(colorFile, "r")
+# Process this file and turn it into a dictionary
+colors = dict()
+for line in cfh:
+    splitLine = line.strip().split("\t")
+    # Keys in dictionary are tissue, e.g. Adipose_Subcutaneous
+    colors[splitLine[0]] = splitLine
+
+# Read in bed file
+ifh = open(bedFile, "r")
+for line in ifh:
+    splitLine = line.strip().split("\t")
+    # Extract tisue information from bed file
+    tissue = splitLine[18]
+    # If tissue is in color dict keys, then we're good
+    if tissue in colors.keys():
+        color = colors[tissue][2]
+        # Set color field equal to tissue color
+        splitLine[8] = color
+    # Output modified line to stdout, can save to file by redirecting stdout to a file
+    print(*splitLine, sep="\t")
+
+'_EOF_'
+
+# Then add colors:
+./addTissueColors gtexCaviar.sorted.bed ../gtexTissueColor.v8.tab > gtexCaviar.sorted.colors.bed
+
+# Create custom as file for this bigBed:
+cat << '_EOF_' > dapg.as
+table bed
+"bed12+9 describing interaction between an eQTL and a target gene"
+    (
+    string          chrom;       "Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records"
+    uint            chromStart;  "Start position of eQTL"
+    uint            chromEnd;    "End position of gene"
+    string          name;        "Name of item for display in pattern eQTL name/Gene Symbol/Tissue"
+    uint            score;       "Score. Always 1000."
+    char[1]         strand;      "+ or - for strand"
+    uint            thickStart;  "eQTL start"
+    uint            thickEnd;    "eQTL end"
+    uint            reserved;    "Item color, based on tissue colors GTEx Gene track"
+    int             blockCount;  "Number of blocks"
+    int[blockCount] blockSizes;  "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions of blocks relative to chromStart"
+    string          eqtlPos;     "eQTL position"
+    string          eqtlName;    "eQTL name (most often a dbSNP identifier)"
+    string          genePos;     "Gene position"
+    string          geneName;    "Gene symbol of target gene"
+    string          geneId;      "ENSG ID of target gene"
+    string          geneStrand;  "Strand of target gene"
+    string          tissue;      "Tissue"
+    double          cpp;         "Causal Posterior Probability (CPP) that quantifies the probability that a variant is causal"
+    )
+'_EOF_'
+
+# Build bigBed
+bedToBigBed -as=caviar.as -type=bed12+8 gtexCaviar.sorted.colors.bed /hive/data/genomes/hg38/chrom.sizes gtexCaviar.bb
+
+#############################################################################
+# GTEx V8 cis-eQTLs DAP-G High Confidence (Apr 2022) Matt
+
+cd /hive/data/genomes/hg38/bed/gtex/V8/eQtl/finemap_dap-g
+
+# Download files from
+wget https://storage.googleapis.com/gtex_analysis_v8/single_tissue_qtl_data/GTEx_v8_finemapping_DAPG.tar
+
+# unpack files
+tar xvf GTEx_v8_finemapping_DAPG.tar
+
+# Most files in VCF, but there is which is a TSV, GTEx_v8_finemapping_DAPG.txt.gz
+# Sample header lines
+tissue_id       gene_id cluster_id      cluster_pip     variant_id      variant_pip
+Adipose_Subcutaneous    ENSG00000000457.13      1       1.000   chr1_169891332_G_A_b38  9.881e-01
+Adipose_Subcutaneous    ENSG00000000457.13      1       1.000   chr1_169913898_G_A_b38  1.170e-02
+Adipose_Subcutaneous    ENSG00000000457.13      2       0.994   chr1_169894024_A_C_b38  1.208e-01
+
+# That's a big file:
+zcat GTEx_v8_finemapping_DAPG.txt.gz |wc -l
+21648585
+# How can we filter that down?
+# Looks like they provide a filtered file, GTEx_v8_finemapping_DAPG.CS95.txt.gz,
+# but it's in VCF format. Can we replicate it using their TSV file?
+
+# That VCF is filtered on 'SPIP' only including those clusters with SPIP > 0.95, where
+# SPIP: signal-level posterior_inclusion probability (sum of the PIPs from all members of the signal cluster)
+# SPIP seems equivalent to the 'cluster_pip' in our TSV file
+# So, create a new file where we only include those entries with cluster pip > 0.95
+zcat GTEx_v8_finemapping_DAPG.txt.gz | awk '$4>0.95' | gzip -c > GTEx_v8_finemapping_DAPG.pip_95.txt.gz
+
+# A much smaller file (though still quite a lot of variants!)
+zcat GTEx_v8_finemapping_DAPG.pip_95.txt.gz |wc -l
+7608545
+
+# Wrote buildGtexEqtlBed script to help build bed files from eQTL files:
+cat << '_EOF_' > buildGtexEqtlBed
+#!/usr/bin/env python3
+
+import sys, gzip
+
+qtlFile = sys.argv[1]
+gpFile = sys.argv[2]
+alleleFile = sys.argv[3]
+qtlIdCol = sys.argv[4] # Column name in file header, e.g. eQTL
+probCol = sys.argv[5] # Column name in file header, e.g. Probability
+# DAP-G files have an extra probability column that we want to capture
+if len(sys.argv) > 6:
+    clusterProbCol = sys.argv[6]
+else:
+    clusterProbCol = False
+
+# Open up all of our files
+qfh = gzip.open(qtlFile,"r") # QTL file
+gfh = open(gpFile,"r") # genePred file
+afh = gzip.open(alleleFile,"r") # allele file
+
+# Set up dicts for each
+qtlDict = dict()
+gpDict = dict()
+alleleDict = dict()
+
+# Get index of field that we want to replace values in
+header = qfh.readline().decode('ASCII').rstrip().split("\t")
+qtl_col = header.index(qtlIdCol)
+prob_col = header.index(probCol)
+if clusterProbCol:
+    clus_prob_col = header.index(clusterProbCol)
+
+# Process eQTL file
+for line in qfh:
+    qtlLine = line.decode('ASCII').strip().split("\t")
+    # Skip header line in file
+    #if "TISSUE" not in qtlLine:
+    tissue = qtlLine[0]
+    gene = qtlLine[1]
+    e_qtl = qtlLine[qtl_col]
+    # each of these elements on their own aren't unique, but together they are
+    qtlKey = e_qtl + "|" + tissue + "|" + gene
+    # Put these into a dict where key is unique name we've made
+    qtlDict[qtlKey] = qtlLine
 
 # Process genePred file
 for line in gfh:
@@ -246,14 +527,11 @@ for line in afh:
     # gzip file, so we need to decode to asii first
     aLine = line.decode('ASCII').strip().split("\t")
 
+    # Key our dict using the allele, which is unique in the file
     allele = aLine[0]
     alleleDict[allele] = aLine
-    #7 is rsID
 
 for entry in qtlDict:
-    # Create list to store elements that will become a single interact line
-    # Interact format: http://genome.ucsc.edu/goldenPath/help/interact.html
-
     # Get gene information from the genePred dict
     # eQTL file/dict has ENSG id in it
     gene_id = qtlDict[entry][1]
@@ -264,134 +542,242 @@ for entry in qtlDict:
         gene_start = int(gpDict[gene_id][3])
         gene_end = int(gpDict[gene_id][4])
     # Check if eQTL is in allele/eQTL dictionary so that we can grab the rsID
-    var_pos = qtlDict[entry][2]
-    if var_pos in alleleDict.keys():
-        rsID = alleleDict[var_pos][6]
-    var_start = int(qtlDict[entry][4])
+    var_name = qtlDict[entry][qtl_col]
+    if var_name in alleleDict.keys():
+        rsID = alleleDict[var_name][6]
+        if rsID == '.':
+            rsID = var_name
+        var_start = int(alleleDict[var_name][2]) - 1
+        var_end = int(alleleDict[var_name][2])
+        chrom = alleleDict[var_name][1]
 
-    # Do some things to make sure start isn't ever greater than end for items
-    # Deals with case where eQTL is internal to gene
-    if var_start > gene_start and var_start < gene_end:
-        chromStart = gene_start
-        chromEnd = gene_end
-    # Deals with case where eQTL is downstream
-    elif var_start > gene_end:
-        chromStart = gene_start
-        chromEnd = var_start
-    # Deals with case where eQTL is upstream
-    elif var_start < gene_start:
-        chromStart = var_start - 1
-        chromEnd = gene_end
+    # This block of if/else sets up the blockSizes/blockStart/blockCount for
+    # various orientations of eQTLs/genes
+    if chrom == gene_chrom:
+        # Handles case where eQTL is internal to a gene
+        if var_start > gene_start and var_start < gene_end:
+            chromStart = gene_start
+            chromEnd = gene_end
+            blockCount = "1"
+            blockSizes = gene_end - gene_start
+            blockStarts = "0"
+            strand = "."
+        # Handles case where eQTL is downstream of gene
+        elif var_start > gene_end:
+            chromStart = gene_start
+            chromEnd = var_end
+            bs1 = gene_end - gene_start
+            blockCount = "2"
+            blockSizes = str(bs1) + ",1"
+            blockStarts = "0," + str(var_start - gene_start)
+            strand = "-"
+        # Handles case where eQTL is upstream of gene
+        elif var_start < gene_start:
+            chromStart = var_start
+            chromEnd = gene_end
+            blockCount = "2"
+            bs2 = gene_end - gene_start
+            blockSizes = "1," + str(bs2)
+            blockStarts = "0," + str(gene_start - var_start)
+            strand = "+"
+        # Handles case where eQTL and start of gene overlap
+        elif var_start == gene_start:
+            chromStart = var_start
+            chromEnd = gene_end
+            blockCount = "1"
+            blockSizes = str(gene_end - var_start)
+            blockStarts = "0"
+            strand = "."
+        # Handles case where eQTL and end of gene overlap
+        elif gene_end == var_start:
+            chromStart = gene_start
+            chromEnd = var_end
+            blockCount = "1"
+            blockSizes = str(var_end - gene_start)
+            blockStarts = "0"
+            strand = "."
 
-    interactLine = list()
-    interactLine.append("chr" + qtlDict[entry][3]) # chrom
-    interactLine.append(chromStart) # chrStart
-    interactLine.append(chromEnd) # chrEnd
-    interactLine.append(rsID + "/" + gene_sym + "/" + qtlDict[entry][0]) # name
-    interactLine.append(int("1000")) # Maybe I should scale up to 0-1000 range? # score
-    interactLine.append(qtlDict[entry][prob_col]) # value
-    interactLine.append(qtlDict[entry][0]) # exp
-    interactLine.append("0,0,0") #color - eventually replaced by 'addColor' script
-    interactLine.append(interactLine[0]) # sourceChrom
-    interactLine.append(var_start - 1) # sourceStart
-    interactLine.append(var_start) # sourceEnd
-    interactLine.append(rsID) # sourceName
-    interactLine.append(".") # sourceStrand
-    interactLine.append(gene_chrom) # targetChrom
-    interactLine.append(gene_start) # targetStart
-    interactLine.append(gene_end) # targetEnd
-    interactLine.append(gene_sym) # targetEnd
-    interactLine.append(gene_strand) # targetStrand
+        # Add each element of our bed line to a list to print later
+        bedLine = list()
+        bedLine.append(chrom) # chrom
+        bedLine.append(chromStart) # chrStart
+        bedLine.append(chromEnd) # chrEnd
+        bedLine.append(rsID + "/" + gene_sym + "/" + qtlDict[entry][0]) # name
+        bedLine.append(int("1000"))# score
+        bedLine.append(strand)# strand
+        bedLine.append(var_start) # thickStart
+        bedLine.append(var_end) # thickEnd
+        bedLine.append("0,0,0") #color - eventually replaced by 'addTissueColors' script
+        bedLine.append(blockCount) # blockCount
+        bedLine.append(blockSizes) # blockSizes
+        bedLine.append(blockStarts) # blockSizes
+        bedLine.append(chrom + ":" + str(var_start+1) + "-" + str(var_end)) # prettified gene pos
+        bedLine.append(rsID) # sourceName
+        bedLine.append(chrom + ":" + str(gene_start+1) + "-" + str(gene_end)) # prettified gene pos
+        bedLine.append(gene_sym) # geneName
+        bedLine.append(gene_id) # geneId
+        bedLine.append(gene_strand) # targetStrand
+        bedLine.append(qtlDict[entry][0]) # tissue
+        bedLine.append(qtlDict[entry][prob_col]) # CAVIAR == Causal Posterior Probability; DAPG == SNP posterior inclusion probability
+        if clusterProbCol:
+            # Signal-level posterior_inclusion probability (sum of the PIPs from all members of the signal cluster)
+            bedLine.append(qtlDict[entry][clus_prob_col])
 
-    # Print interact line to stdout, can redirect to a file to save it
-    print(*interactLine, sep="\t")
+    # Print bed line to stdout, can redirect to a file to save it
+    print(*bedLine, sep="\t")
 '_EOF_'
 
-# Script takes in eQTL, SNP info, and GENCODE genepred file
-# Uses this information to build an interact line for each item in the eQTL file
 
-# Need to convert GTF to genePredExt
-# (Kate had converted GTF to genePred for GTEx V8 expression track work, but that didn't include gene name as I was hoping)
-gtfToGenePred -genePredExt -geneNameAsName2 -includeVersion gencode.v26.GRCh38.genes.gtf gencode.v26.GRCh38.genes.gpExt 
+# Then run buildGtexEqtlBed to build an bed file
+./buildGtexEqtlBed GTEx_v8_finemapping_DAPG.pip_95.txt.gz ../gencode.v26.GRCh38.genes.gpExt \
+  ../GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz variant_id variant_pip cluster_pip | \
+  bedSort stdin gtexDapg.sorted.bed
 
-# Build interact files and sort resulting bed file
-./buildInteract CAVIAR_Results_v8_GTEx_LD_HighConfidentVariants_with_Allele.gz ../gencode.v26.GRCh38.genes.gpExt \
-  ../GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz eQTL Probability| \
-    bedSort stdin gtexCaviar.interact.sorted.txt
+# Create script to add colors to bed file
+cat << '_EOF_' > addTissueColors
 
-## Add colors
-# Make list of tissues in V8 file
-zcat GTEx_v8_finemapping_CAVIAR/CAVIAR_Results_v8_GTEx_LD_ALL_NOCUTOFF.txt.gz | cut -f1 -d$'\t' |sort -u |grep -v TISSUE> gtexTissuesV8.txt
-
-# Using GTEx V6p colors, manually match up to names in V8 file
-ln -s /hive/data/outside/GTEx/V6p/eQtl/Caviar2/gtexTissueColor.tab 
-gtexTissueColor.v8.tab 
-
-# Write addColors script to add colors from this file to the interact file:
-cat << '_EOF_' > addColors
-####
-# Intially created interact file w/o colors
-# Wrote this quick script to automatically add them to the interact format
-####
 #!/usr/bin/env python3
+
+####
+# Intially created bed file w/o colors
+# This script will replace col 9 with tissue-specific colors
+####
 
 import sys
 
-interactFile = sys.argv[1]
+bedFile = sys.argv[1]
 colorFile = sys.argv[2]
 
-# Read in color file from gtexTisseColor.v8.tab
+# Read in color file from //
 cfh = open(colorFile, "r")
 # Process this file and turn it into a dictionary
 colors = dict()
 for line in cfh:
     splitLine = line.strip().split("\t")
-    # Keys in dictionary are tissue
+    # Keys in dictionary are tissue, e.g. Adipose_Subcutaneous
     colors[splitLine[0]] = splitLine
 
-# Read in interact file
-ifh = open(interactFile, "r")
+# Read in bed file
+ifh = open(bedFile, "r")
 for line in ifh:
     splitLine = line.strip().split("\t")
-    # Extract tisue information from interact file
-    tissue = splitLine[6]
+    # Extract tisue information from bed file
+    tissue = splitLine[18]
     # If tissue is in color dict keys, then we're good
     if tissue in colors.keys():
         color = colors[tissue][2]
         # Set color field equal to tissue color
-        splitLine[7] = color
+        splitLine[8] = color
     # Output modified line to stdout, can save to file by redirecting stdout to a file
     print(*splitLine, sep="\t")
+
 '_EOF_'
 
-# Run script to add colors
-./addColors gtexCaviar.interact.sorted.txt ../gtexTissueColor.v8.tab > gtexCaviar.interact.sorted.colors.txt
+# Then add colors:
+./addTissueColors gtexDapg.sorted.bed ../gtexTissueColor.v8.tab > gtexDapg.sorted.colors.bed
 
 # Create custom as file for this bigBed:
-cat << '_EOF_' > gtexInteract.as
-table interact
-"Interaction between an eQTL and a target gene"
+cat << '_EOF_' > dapg.as
+table bed
+"bed12+9 describing interaction between an eQTL and a target gene"
     (
-        string chrom;       "Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records"
-        uint chromStart;    "Start position of eQTL."
-        uint chromEnd;      "End position of gene."
-        string name;        "Name of item for display, dbSNP rsID/Gene Symbol/Tissue."
-        uint score;         "Not used, always 1000."
-        double cpp;         "Causal Posterior Probability (CPP) that quantifies the probability of each variant to be causal."
-        string tissue;      "Tissue"
-        string color;       "Item color, based on GTEx Gene expression track colors."
-        string eqtlChrom;   "Chromosome of eQTL."
-        uint eqtlStart;     "Start position of eQTL."
-        uint eqtlEnd;       "End position of eQTL."
-        string eqtlName;    "eQTL name, which is a dbSNP identifier."
-        string eqtlStrand;  "Not applicable, always '.'"
-        string geneChrom;   "Chromosome of target gene."
-        uint geneStart;     "Start position of target gene."
-        uint geneEnd;       "End position of target gene."
-        string geneName;    "Gene symbol of target gene."
-        string geneStrand;  "Strand of target gene."
-        )
+    string          chrom;       "Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records"
+    uint            chromStart;  "Start position of eQTL"
+    uint            chromEnd;    "End position of gene"
+    string          name;        "Name of item for display in pattern eQTL name/Gene Symbol/Tissue"
+    uint            score;       "Score. Always 1000."
+    char[1]         strand;      "+ or - for strand"
+    uint            thickStart;  "eQTL start"
+    uint            thickEnd;    "eQTL end"
+    uint            reserved;    "Item color, based on tissue colors GTEx Gene track"
+    int             blockCount;  "Number of blocks"
+    int[blockCount] blockSizes;  "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions of blocks relative to chromStart"
+    string          eqtlPos;     "eQTL position"
+    string          eqtlName;    "eQTL name (most often a dbSNP identifier)"
+    string          genePos;     "Gene position"
+    string          geneName;    "Gene symbol of target gene"
+    string          geneId;      "ENSG ID of target gene"
+    string          geneStrand;  "Strand of target gene"
+    string          tissue;      "Tissue"
+    double          pip;         "SNP posterior inclusion probability (higher PIP value indicates the SNP is more likely to be the casual eQTL)"
+    double          clusterPip;  "Signal-level posterior inclusion probability (sum of the PIPs from all members of the signal cluster)"
+    )
 '_EOF_'
 
-# Build bigInteract file with colors
-bedToBigBed -as=../gtexInteract.as -type=bed5+13 gtexCaviar.interact.sorted.colors.txt /hive/data/genomes/hg38/chrom.sizes gtexCaviar.interact.colors.bb
+# Build bigBed
+bedToBigBed -as=dapg.as -type=bed12+9 gtexDapg.sorted.colors.bed /hive/data/genomes/hg38/chrom.sizes gtexDapg.bb
+
+#############################################################################
+# GTEx V9 Single Nuclei Expression August 31, 2022 ChrisL
+#############################################################################
+For building single cell rna-seq tracks from this paper:
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9383269/
+
+Files:
+https://storage.googleapis.com/gtex_analysis_v9/snrna_seq_data/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad
+
+WORKDIR=/hive/data/outside/GTEx/V9/snRnaSeq/
+mkdir -p $WORKDIR && cd $WORKDIR
+
+wget https://storage.googleapis.com/gtex_analysis_v9/snrna_seq_data/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad
+
+# Turn scanpy files into matrices and metadata:
+time hcaUnpack5 GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad atlasOut
+# Data on 209126 cells x 17695 genes
+# Sparse matrix with 173681687 elements
+# outputting 17695 row matrix, a dot every 100 rows
+# 
+# real    3m24.718s
+# user    2m39.348s
+# sys 0m27.629s
+
+# Look at the column summaries to see what is interesting:
+./getSimpleMetaStats atlasOut/meta.tsv | less -S
+cd atlasOut
+mkdir bbi
+mkdir clust
+~/bin/x86_64/matrixClusterColumns -makeIndex=clust/exprMatrix.ix exprMatrix.tsv meta.tsv \
+    prep clust/prepMatrix.tsv clust/prepStats.tsv \
+    "Tissue Composition" clust/TissueCompMatrix.tsv clust/TissueCompStats.tsv \
+    "Tissue Site Detail" clust/TissueSiteDetailMatrix.tsv clust/TissueSiteDetailStats.tsv \
+    "Sample Ischemic Time (mins)" clust/SampleIschemicTimeMatrix.tsv clust/SampleIschemicTimeStats.tsv \
+    "Granular cell type" clust/GranularMatrix.tsv clust/GranularStats.tsv \
+    "Broad cell type" clust/BroadCellTypeMatrix.tsv clust/BroadCellTypeStats.tsv \
+    Age_bin clust/Age_binMatrix.tsv clust/Age_binStats.tsv \
+    Sex clust/SexMatrix.tsv clust/SexStats.tsv
+
+# Figure out gene set
+gencodeVersionForGenes gene.lst /hive/data/inside/geneSymVerTx.tsv -bed=mapping.bed
+
+# Turn into bigBarCharts
+for s in prep TissueComp TissueSiteDetail SampleIschemicTime Granular BroadCellType Age_bin Sex
+do
+    matrixToBarChartBed clust/${s}Matrix.tsv mapping.bed clust/${s}.bed -stats=clust/${s}Stats.tsv -trackDb=clust/${s}.ra
+    bedSort clust/${s}.bed clust/${s}.bed
+    bedToBigBed clust/${s}.bed /hive/data/genomes/hg38/chrom.sizes bbi/${s}.bb -type=bed6+3 -as=${HOME}/kent/src/hg/lib/simpleBarChartBed.as
+done
+
+# Make a combined column for facetting
+tawk '{print $0,$31 "-" $46}' meta.tsv > meta.tsv.plusCombined
+~/bin/x86_64/matrixClusterColumns exprMatrix.tsv meta.tsv.plusCombined \
+    "Tissue-Broad cell type" clust/combined.tsv clust/combinedStats.tsv
+matrixToBarChartBed clust/combined.tsv mapping.bed clust/combined.bed -stats=clust/combinedStats.tsv -trackDb=clust/combined.ra
+bedSort clust/combined.bed clust/combined.bed 
+bedToBigBed clust/combined.bed /hive/data/genomes/hg38/chrom.sizes bbi/combined.bb -type=bed6+3 -as=${HOME}/kent/src/hg/lib/simpleBarChartBed.as
+
+# now un extract the original combined columns back into the counted up meta.tsv
+# which will give you the columns to facet on
+echo -e "#Organ and Cell Type	count	total	Organ	Broad_Cell_Type" > combinedStats.withFacets
+paste <(tail -n +2 clust/combinedStats.tsv) <(tail -n +2 meta.tsv | cut -f31,46 | sort -u) >> combinedStats.withFacets
+# manually make cells.colors by taking colors for Broad Cell Type from the paper
+# make categories file for trackDb
+join -t$'\t' -1 5 -2 1 <(grep -v "^#" combinedStats.withFacets | sort -t$'\t' -k5) ../cells.colors | cut -f2,6 | sort > atlasOut.categories
+# Make stats file for trackDb 
+echo -e "#Organ and Cell Type      count   total   Organ   Broad_Cell_Type color" > combinedStats.withFacets.withColors.tsv
+join -t$'\t' -1 5 -2 1 <(grep -v "^#" combinedStats.withFacets | sort -t$'\t' -k5) ../cells.colors | tawk '{print $2,$3,$4,$5,$1,$6}' | sort >> combinedStats.withFacets.withColors.tsv 
+
+# link the tracks
+cd /gbdb/hg38/gtex
+mkdir snRnaSeq
+ln -s /hive/data/outside/gtex/V9/snRnaSeq/atlasOut/bbi/*.bb .

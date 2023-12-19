@@ -40,8 +40,8 @@ static void selectDumpChromAnn(struct chromAnn *ca, char *label)
 {
 if (verboseLevel() >= 2)
     {
-    verbose(2, "%s: %s: %s %c %d-%d\n", label, ca->name, ca->chrom,
-            ((ca->strand == 0) ? '?' : ca->strand), ca->start, ca->end);
+    verbose(2, "%s: %s: %s:%d-%d, %c\n", label, ca->name, ca->chrom, ca->start, ca->end,
+            ((ca->strand == 0) ? '?' : ca->strand));
     if (verboseLevel() >= 3)
         {
         struct chromAnnBlk *cab;
@@ -59,7 +59,7 @@ selectMapEnsure();
 struct chromAnn* ca;
 while ((ca = car->caRead(car)) != NULL)
     {
-    selectDumpChromAnn(ca, "selectAddChromAnn");
+    selectDumpChromAnn(ca, "select");
     chromAnnMapAdd(selectMap, ca);
     }
 }
@@ -197,22 +197,27 @@ struct chromAnnRef *orl;
 for (orl = newRecs; orl != NULL; orl = orl->next)
     chromAnnRefAdd(overlappingRecs, orl->ref);
 }
+
+static void selectOverlappingEntryVerbose(struct chromAnn *inCa, struct chromAnn* selCa, char *result)
+/* verbose tracing for results of guts of overlap check */
+{
+verbose(2, "overlapping: %s: %s:%d-%d, %c  %s\n", selCa->name, selCa->chrom, selCa->start, selCa->end,
+        ((selCa->strand == '\0') ? '?' : selCa->strand), result);
+}
+
 static boolean selectOverlappingEntry(unsigned opts, struct chromAnn *inCa,
                                       struct chromAnn* selCa, struct overlapCriteria *criteria)
 /* select based on a single select chromAnn */
 {
 boolean overlapped = FALSE;
-verbose(2, "\toverlapping: enter %s: %d-%d, %c\n", selCa->name, selCa->start, selCa->end,
-        ((selCa->strand == '\0') ? '?' : selCa->strand));
 if (!passCriteria(opts, inCa, selCa))
     {
-    verbose(2, "\toverlapping: leave %s: fail criteria\n", selCa->name);
+    selectOverlappingEntryVerbose(inCa, selCa, "no (strand or name match criteria)");
     }
 else
     {
     overlapped = isOverlapped(opts, inCa, selCa, criteria);
-    verbose(2, "\toverlapping: leave %s: %s\n", selCa->name,
-            (overlapped ? "yes" : "no"));
+    selectOverlappingEntryVerbose(inCa, selCa, (overlapped ? "yes" : "no"));
     }
 return overlapped;
 }
@@ -258,7 +263,8 @@ boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
  * of the of selected records is returned.  Free with slFreelList. */
 {
 selectMapEnsure();
-selectDumpChromAnn(inCa, "selectIsOverlapped");
+verbose(2, "selectIsOverlapped: enter %s\n", inCa->name);
+selectDumpChromAnn(inCa, "input");
 boolean hit = FALSE;
 struct chromAnnRef *overlapping = chromAnnMapFindOverlap(selectMap, inCa);
 if (overlapping != NULL)

@@ -44,10 +44,10 @@ void cdwRunOnIds(char *program, char *queryString)
 /* cdwRunOnIds - Run a cdw command line program (one that takes startId endId as it's two parameters) for a range of ids, 
  * putting it on cdwJob queue. */
 {
-struct dyString *wrappedQuery = dyStringNew(0);
-sqlDyStringPrintf(wrappedQuery, "%-s", queryString); // trust
+char wrappedQuery[4096];
+sqlSafef(wrappedQuery, sizeof wrappedQuery, queryString, NULL); // trust query from the commandline
 struct sqlConnection *conn = cdwConnectReadWrite();
-struct slName *id, *idList = sqlQuickList(conn, wrappedQuery->string);
+struct slName *id, *idList = sqlQuickList(conn, wrappedQuery);
 for (id = idList; id != NULL; id = id->next)
     {
     char query[512];

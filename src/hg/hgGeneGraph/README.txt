@@ -1,9 +1,11 @@
 The gene graph viewer has three dependencies:
 
-- the "dot" binary from the graphviz package. It requires a rather recent graphviz version.
+- the "dot" binary from the graphviz package.
   The exact location can be specified with the hg.conf option graphvizPath.
-- the Python >2.6 kent-like library "hgLib" from ../pylib
-- the Python >2.6 library "MySQLdb". The makefile in ../pylib will add it to CGI-BIN, as a fallback
+  There is a statically-compiled version in https://hgdownload.soe.ucsc.edu/admin/exe/external.x86_64/loader/
+  Making a static build of graphviz is extremely time consuming, it can easily take a day to get all the 
+  dependencies in the right version. Some documentation is here: http://genomewiki.ucsc.edu/index.php/Graphviz_static_build
+- the Python >3.6 kent-like library "hgLib3" from ../pylib
 
 The gene graph tables are created with the ggTables command. ggTables parses input files
 constructed with various gg* commands, ggGpmlToTag, ggKgmlToTab, ggMsrToTab,

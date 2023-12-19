@@ -125,6 +125,49 @@ if [ "$#" -eq 0 ] ; then
    fi
 fi
 
+# March 02, 2023 - do an update of the underlying Ubuntu operating system
+if [[ "$1" == "vm" ]] ; then
+    # remove swapfile to free up space if it's present
+    swapoff /swapfile
+    rm /swapfile
+
+    # check for upgrades first
+    apt-get install -y --only-upgrade apt
+
+    # remove old packages and linux versions to make sure there is enough free space
+    apt-get clean && sudo apt-get autoremove
+    apt-get purge -y $(dpkg -l linux-{image,headers}-"[0-9]*" | awk '/ii/{print $2}' | grep -ve "$(uname -r | sed -r 's/-[a-z]+//')")
+
+    # add the below to /etc/apt/apt.conf so non-interactive update will work (https://bugs.launchpad.net/ubuntu/+source/ubuntu-release-upgrader/+bug/1640274/comments/5):
+    echo 'Dpkg::Options { "--force-confold"; }' >> /etc/apt/apt.conf
+
+    # finally do the upgrade
+    do-release-upgrade -f DistUpgradeViewNonInteractive
+
+    # restore the swapfile
+    dd if=/dev/zero of=/swapfile bs=1M count=1024
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
+
+    # newer mysql versions require more permissive sql_mode, see #18324
+    sed -Ei '/^.(mysqld|server).$/a sql_mode='  /etc/mysql/my.cnf
+
+    # turn off apparmor because it doesn't play nice with mysql
+    systemctl stop apparmor.service
+    update-rc.d -f apparmor remove
+
+    # do a restart to force apparmor changes
+    # need a flag to tell the OS to restart mysql after the changes
+    touch /root/doRestartMysql
+    shutdown -r now
+fi
+
+if [ -e /root/doRestartMysql ]; then
+    service mysql restart
+    rm -f /root/doRestartMysql
+fi
+
 # unless already calling self, update self and call self unless doing only cgis
 # self-updates are not done when suppressed with notSelf and also not in hgwdev-mode to allow testing of local updateBrowser.sh changes
 # Internal sidenote: if you want hgwdev CGIs and also the current hgwdev update
@@ -363,6 +406,9 @@ touch /data/mysql/hg38/gtexGeneModelV8.{MYI,MYD,frm}
 touch /data/mysql/hg38/gtexGeneV8.{MYI,MYD,frm}
 touch /data/mysql/hgFixed/gtexTissueV8.{MYI,MYD,frm}
 
+# add encode cCREs track, #32440
+touch /data/mysql/hg38/encRegTfbsClusteredSources.{MYI,MYD,frm}
+
 # Feb 2021, knownCds is required for knownGene display
 for db in hg38 mm10; do
     if [ -e "/data/mysql/$db" ] ; then
@@ -481,6 +527,10 @@ mysql hgcentral -e 'drop table if exists tableList'
 # hide the really big tracks
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "cons%way"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "ucscRetroAli%"'
+mysql hg38 -e 'update trackDb set visibility=0 where tableName like "omimGene2"'
+mysql hg19 -e 'update trackDb set visibility=0 where tableName like "omimGene2"'
+mysql hg38 -e 'update trackDb set visibility=0 where tableName like "omimAvSnp"'
+mysql hg19 -e 'update trackDb set visibility=0 where tableName like "omimAvSnp"'
 
 # temporary fix for hgdownload problem, Oct 2014
 ls /data/mysql/eboVir3 > /dev/null 2> /dev/null && mysql eboVir3 -e 'drop table if exists history'
@@ -522,6 +572,10 @@ if [ ! -f /usr/local/apache/trash/registration.txt ]; then
       fi
    fi
 fi
+
+# Oct 2023: a bug in release 455 (fixed for 456) means that GBIB must have a /gbdb directory, not /data/gbdb. 
+# Adding this symlink now.
+ln -sf /data/gbdb /gbdb
 
 touch /root/lastUpdateTime.flag
 echo - GBiB update done

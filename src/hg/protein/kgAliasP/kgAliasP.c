@@ -71,7 +71,7 @@ while (fgets(line, 1000, inf) != NULL)
     *chp = '\0';
     id = strdup(id);
         
-    sqlSafefFrag(cond_str, sizeof cond_str, "proteinID = '%s'", id);
+    sqlSafef(cond_str, sizeof cond_str, "proteinID = '%s'", id);
     answer = sqlGetField(database, "knownGene", "name", cond_str);
     kgID = NULL;
     if (answer != NULL)

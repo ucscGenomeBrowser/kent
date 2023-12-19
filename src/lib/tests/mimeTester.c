@@ -123,7 +123,7 @@ static struct mimePart * cgiParseMultipart(int fd, FILE *out, boolean autoBounda
 {
 char h[1024];  /* hold mime header line */
 char *s = NULL;
-struct dyString *dy = newDyString(256);
+struct dyString *dy = dyStringNew(256);
 struct mimeBuf *mb = NULL;
 struct mimePart *mp = NULL;
 char **env = NULL;
@@ -165,7 +165,7 @@ else
 if(!mp->multi) /* expecting multipart child parts */
     errAbort("Malformatted multipart-form.");
 
-freeDyString(&dy);
+dyStringFree(&dy);
 
 freez(&mb);
 

@@ -16,40 +16,29 @@ if ($argc != 3) {
   exit 255;
 }
 
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
-}
-
 my $asmId = shift;
+my @parts = split('_', $asmId, 3);
+my $accession = "$parts[0]_$parts[1]";
 my $namesFile = shift;
 my $trackDataDir = shift;
 my $xenoRefGeneBbi = "$trackDataDir/xenoRefGene/$asmId.xenoRefGene.bb";
-my $asmType = "refseq";
+my $asmIdPath = &AsmHub::asmIdToPath($asmId);
+my $downloadGtf = "https://hgdownload.soe.ucsc.edu/hubs/$asmIdPath/$accession/genes/$asmId.xenoRefGene.gtf.gz";
 
 if ( ! -s $xenoRefGeneBbi ) {
   printf STDERR "ERROR: can not find $asmId.xenoRefGene.bb file\n";
   exit 255;
 }
 
-my @partNames = split('_', $asmId);
-my $ftpDirPath = sprintf("%s/%s/%s/%s/%s", $partNames[0],
-   substr($partNames[1],0,3), substr($partNames[1],3,3),
-   substr($partNames[1],6,3), $asmId);
-
-$asmType = "genbank" if ($partNames[0] =~ m/GCA/);
 my $totalBases = `ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
 chomp $totalBases;
 my $geneStats = `cat $trackDataDir/xenoRefGene/${asmId}.xenoRefGene.stats.txt | awk '{printf "%d\\n", \$2}' | xargs echo`;
 chomp $geneStats;
 my ($itemCount, $basesCovered) = split('\s+', $geneStats);
 my $percentCoverage = sprintf("%.3f", 100.0 * $basesCovered / $totalBases);
-$itemCount = commify($itemCount);
-$basesCovered = commify($basesCovered);
-$totalBases = commify($totalBases);
+$itemCount = &AsmHub::commify($itemCount);
+$basesCovered = &AsmHub::commify($basesCovered);
+$totalBases = &AsmHub::commify($totalBases);
 
 my $em = "<em>";
 my $noEm = "</em>";
@@ -70,18 +59,17 @@ invertebrate mRNA in
 <a href="https://www.ncbi.nlm.nih.gov/genbank/" target="_blank"> GenBank</a>.
 </p>
 
+<h2>Data Access</h2>
+<p>
+Download <a href='$downloadGtf' target=_blank> $asmId.xenoRefGene.gtf.gz </a> GTF file.
+</p>
+
 <h2>Track statistics summary</h2>
 <p>
 <b>Total genome size: </b>$totalBases<br>
 <b>Gene count: </b>$itemCount<br>
 <b>Bases in genes: </b>$basesCovered<br>
 <b>Percent genome coverage: </b>% $percentCoverage<br>
-</p>
-
-<h2>Search tips</h2>
-<p>
-Please note, the name searching system is not completely case insensitive.
-When in doubt, enter search names in all lower case to find gene names.
 </p>
 
 <h2>Methods</h2>

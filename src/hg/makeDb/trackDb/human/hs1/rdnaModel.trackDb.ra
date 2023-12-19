@@ -1,0 +1,11 @@
+track rdnaModel
+shortLabel rDNA models
+longLabel Consensus rDNA models
+priority 10
+group map
+type bigBed 4
+visibility pack
+itemRgb on
+maxItems 100000
+bigDataUrl /gbdb/hs1/rdnaModel/rdnaModel.bb
+html html/rdnaModel.html

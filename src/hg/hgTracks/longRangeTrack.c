@@ -22,12 +22,7 @@ static Color longRangeItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 struct longRange *lr = item;
 if (lr->hasColor)
     {
-    struct rgbColor itemRgb;
-    // There must be a better way...
-    itemRgb.r = (lr->rgb & 0xff0000) >> 16;
-    itemRgb.g = (lr->rgb & 0xff00) >> 8;
-    itemRgb.b = lr->rgb & 0xff;
-    return hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
+    return bedColorToGfxColor(lr->rgb);
     }
 return tg->ixColor;
 }

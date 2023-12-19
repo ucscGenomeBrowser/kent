@@ -300,42 +300,41 @@
 <DIV class="html"><span class="types all"></span>
 <div class="format"><code>html</code></div>
     <P class="isRequired">Required: No</P>
-    <P>Specifies a file that contains the
-    complete description of a track in HTML format.  The path of this
-    file name is relative to the path of the trackDb file.  The
-    ".html" suffix is implied.</P>
-    <p>To be consistent with standard Genome Browser track descriptions, this description
+    <p>Use the <code>html path/to/explain.html</code> to specify the file
+    that contains the complete description of a track in HTML format.
+    The path of this file name is relative to the path of the trackDb file, or it
+    can be a full URL. It is also possible to have the &quot;.html&quot; suffix implied,
+    for instance just have <code>html explainFile</code>. To further simplify trackDb,
+    if there is a file, <code>nameOfTrack.html</code>, in the same directory as the
+    trackDb matching the name of the track, <code>track nameOfTrack</code>,
+    then the html file does not need to be declared.
+    <p>To help users understand Public Hub data, we request you provide
+    a web page that explains what your Track Hub is presenting.
+    Adding an html page for your Track Hub is also useful to instruct people 
+    on how to cite your data.</p>
+    <p>To be consistent with standard Genome Browser track descriptions, html for tracks
     should contain several sections as seen below. Here is a link to an 
     <a href="../examples/hubExamples/templatePage.html" 
     target="_blank">example template</a> that you can use.</p>
-    <P><B>Description</B></P>
-    <P class="indent1">A few sentences describing the contents of the track and what
-    it attempts to show.  The description can include additional
-    paragraphs giving further details and can include links to outside
-    sources.</P>
-    <P><B>Display Conventions and Configuration</B></P>
-    <P class="indent1">A description of what the display represents. This
-    includes a description of conventions for coloring and any special glyphs used in the track.
-    It may describe how to interpret scores or full signal values.  This
-    section can also be used to describe how to customize the display
-    by using configuration controls.</P>
-    <P><B>Methods</B></P>
-    <P class="indent1">A
-    description of how the data was generated, which may include how
-    physical samples were treated as well as explanations of data-handling algorithms.</P>
-    <P><B>Credits</B></P>
-    <P class="indent1">Names
-    and institutions of those who performed the experiments and/or
-    prepared the data as well as any funding sources.  This section
-    should include a contact email address for questions concerning
-    the data.</P>
-    <P><B>References</B></P>
-    <P class="indent1">References
-    to any published work referring to or dependent upon this data as
-    well as any sources upon which the work is based or can be
-    understood.</P>
-    <P><B>Example:</B></P>
-    <pre>    html docs/myFirstTrack</pre>
+    <div class="indent1">
+    <p><b>Description</b></p>
+    <p class="indent1">A few sentences describing the track.</p>
+    <p><b>Display Conventions and Configuration</b></p>
+    <P class="indent1">If the track has colors, or unusual display properties,
+    explain them in this section, or how to configure special settings.</p>
+    <p><b>Methods</b></p>
+    <p class="indent1">This section can explain data-handling algorithms,
+    or the significance of scores if generated in a special fashion.</p>
+    <p><b>Credits</b></p>
+    <P class="indent1">This section helps people find the contacts
+    for questions about the data. Please include an email or laboratory web page.</p>
+    <p><b>References</b></p>
+    <P class="indent1">Relevant publications regarding the data.</p>
+    </div>
+    <p><b>Example:</b></p>
+    <pre>    html docs/myFirstTrack.html</pre>
+    Or with full path:
+    <pre>    html https://path/to/location/docs/explainMyData.html</pre>
 </DIV>
 
 <DIV class="lessCommon_intro">
@@ -651,6 +650,24 @@
     <pre>   directUrl http://mygenes.org/cgi-bin/geneView/%s</pre>
 </DIV>
 
+<DIV class="downloadUrl"><span class="types all"></span>
+<div class="format"><code>downloadUrl &lt;label&gt; &lt;URL&gt;</code></div>
+    <P>While description HTML pages can contain download instructions, having external file
+    download links directly specified in trackDb makes it possible show these links 
+    outside the description HTML pages. The URLs here are shown above the description page,
+    right under the "data format" link. The <tt>label</tt> can be any string and 
+    the URL should be absolute, including the server. Either one can contain spaces, but they must
+    be double-quoted then.
+    </P>
+    <P>This is one of the few statements that can be specified multiple times. In this case, all 
+    statements must have a .number suffix, e.g. .1, .2, ... </P>
+    <P><B>Example:</B></P>
+    <pre>   downloadUrl GFF https://mywebsite.com/ucscTrack.gff.gz</pre>
+    <B>or</B><br>
+    <pre>   downloadUrl.1 "GFF Format" https://mywebsite.com/ucscTrack.gff.gz</pre>
+    <pre>   downloadUrl.2 "BED Format" https://mywebsite.com/ucscTrack.bed.gz</pre>
+</DIV>
+
 <DIV class="otherSpecies"><span class="types all"></span>
 <div class="format"><code>otherSpecies &lt;otherSpecies&gt;</code></div>
     <P>The name of the other assembly in the pairwise alignment for this track. </P>
@@ -667,6 +684,14 @@
     <P><B>Example:</B></P>
     <pre>   otherDb mm10</pre>
     <P>This example sets the second assembly in the alignment to the mouse mm10 assembly.</P>
+</DIV>
+
+<DIV class="otherTwoBitUrl"><span class="types chain bigChain psl bigPsl"></span>
+<div class="format"><code>otherTwoBitUrl &lt;url/relativePath&gt;</code></div>
+    <P>For pairwise alignment tracks this can specify where to find the query sequence
+    This setting can be used in psl, bigPsl, chain, and bigChain tracks.</P>
+    <P><B>Example:</B></P>
+    <pre>   otherTwoBitUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit</pre>
 </DIV>
 
 <DIV class="origAssembly"><span class="types all"></span>
@@ -764,13 +789,19 @@
 </DIV>
 
 <DIV class="tableBrowser"><span class="types all"></span>
-<div class="format"><code>tableBrowser &lt;off/on/noGenome&gt; [table1 ...]</code></div>
-    <P>The Table Browser typically allows querying and downloading of some or all 
-    of the raw data for a track. The <code>off</code> value blocks Table Browser access to datasets 
-    with restrictions (for example, those with confidentiality or licensing limitations).  
-    The <code>noGenome</code> value allows queries within specific genomic regions,
-    but not genome-wide.
-    By naming additional tables in this setting, access to those 
+<div class="format"><code>tableBrowser &lt;off/on/noGenome/tbNoGenome&gt; [table1 ...]</code></div>
+    <P>The Table Browser (and <a href=../api.html target=_blank>REST API</a>)
+    typically allow querying and downloading of
+    some or all of the raw data for a track. The <code>off</code> value blocks
+    all API getData operations and Table Browser access to datasets with
+    restrictions
+    (for example, those with confidentiality or licensing limitations).  
+    The <code>tbNoGenome</code> value allows unrestricted API getData
+    operations, while limiting the table browser queries within specific
+    genomic regions, but not genome-wide.
+    The <code>noGenome</code> value prohibits API getData operations, while
+    allowing table browser queries within specific genomic regions, but not
+    genome-wide.  By naming additional tables in this setting, access to those 
     tables can be denied as well.</P>
     <P><B>Examples:</B></P>
     <pre>   tableBrowser off decipherRaw knownToDecipher</pre>
@@ -809,6 +840,7 @@
     <LI>  $p - item name portion after first : in name, up to next colon</LI>
     <LI>  $taxId - NCBI Taxon ID of current organism (from hgCentral.dbDb)</LI>
     <LI>  $n - Scientific Name of current organism (from hgCentral.dbDb)</LI>
+    <LI>$&lt;fieldName&gt; - For bigBed based tracks only (so excluding vcf, vcfPhasedTrio, bam/cram and hic), substitute the &lt;fieldName&gt; value from the bigBed.</LI>
     </UL>
     <P>The default prompt the user will see for this url is "outside link:".  Use
     <code>urlLabel</code> to provide a more informative prompt.
@@ -830,7 +862,7 @@
     the obscure setting for them. -->
     <P><B>Example:</B></P>
     <pre>
-    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
+    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=$n&amp;term=$$&amp;extra=$&lt;field2&gt;
     urlLabel NCBI Details:
     idInUrlSql select name from sibTxGraph where id=%s    </pre>
 </DIV>
@@ -862,13 +894,14 @@
     <LI>  $p - item name portion after first : in name, up to next colon</LI>
     <LI>  $taxId - NCBI Taxon ID of current organism (from hgCentral.dbDb)</LI>
     <LI>  $n - Scientific Name of current organism (from hgCentral.dbDb)</LI>
+    <LI>$&lt;fieldName&gt; - For bigBed based tracks only (so excluding vcf, vcfPhasedTrio, bam/cram and hic), substitute the &lt;fieldName&gt; value from the bigBed for this item. Note the preceding '$' before the brackets.</LI>
     </UL>
     <P>The default prompt the user will see for this url is "outside link:".  Use
     <code>urlLabel</code> to provide a more informative prompt.
     </P>
     <P><B>Example:</B></P>
     <pre>
-    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
+    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=$n&amp;term=$$&amp;extra=$&lt;field2&gt;
     urlLabel NCBI Details:    </pre>
 </DIV>
 
@@ -886,17 +919,20 @@
     bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html#Ex3">bigBed documentation</a>.
     The field names from your .as file are the field names referenced in this statement.
     The urls in this statement support the same wildcards as the <A
-    onclick="jumpTo(this)" HREF="#">url</A> statement.  Make sure to enclose
+    onclick="jumpTo(this)" href="#url">url</a> statement.  Make sure to enclose
     the URLs in double quotes.  The default label for the identifier is the field
     description in the .as file (all text after the # mark). 
     </P> 
-    <P>
-    If the field contains a "|" symbol, the part before the symbol is used to
-    replace the $$ wildcard and the part after it as the label. This is similar
-    to how Wikipedia markup encodes links. In the example below, a value for the
-    field pmid of "115330|Doe, J. et al" would create a link with the URL
-    https://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
-    </P>
+    <p>The field can contain multiple values, separated by a comma "," where multiple links
+    will then be created on each item. For instance, a &quot;pmid&quot; field with an
+    entry &quot;11932250,34718705&quot; would create two links.</p>
+    <p>
+    If an entry of comma-separated values contains a &quot;|&quot; symbol, the part before the
+    pipe symbol is used to replace the $$ wildcard and the part after it is used as the label,
+    as opposed to the default label description in the .as file. This pipe substitution
+    is similar to how Wikipedia markup encodes links. In the example below, a value for the
+    field pmid of &quot;11932250|W James Kent&quot; would create a link with the URL
+    https://www.ncbi.nlm.nih.gov/pubmed/11932250 and the label &quot;W James Kent&quot;.</p>
 
     <P><B>Example:</B></P>
     <pre>
@@ -948,12 +984,13 @@
         <code>mouseOverField &lt;fieldName1&gt;</code><BR>
     </div>
         
-    <P>For bigBed files with more than 8 fields, this adds mouse over text that
+    <P>For bigBed files with more than 8 fields (not counting any extra bigBed fields), 
+    this adds mouse over text that
     are different from the "name" field of a bigBed file.  If the field is empty
     then the mouse over will fallback to the name field. </P>
     <P>
     To make this work, create a bigBed file with at least 8 columns and put the
-    text for the mouse over into an extended bigBed field as
+    text for the mouse over into an extra bigBed field as
     explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
     The field name from your .as file is the field name for this statement.
     </P> 
@@ -968,13 +1005,15 @@
     <div class="format">
         <code>mouseOver &lt;pattern&gt;</code><BR>
     </div>
-    <P>For bigBed files this setting creates mouse over text from a pattern based on the values 
+    <P>For bigBed files with more than 8 fields (not counting any extra bigBed fields), 
+    this adds mouse over text 
+    from a pattern based on the values
     of fields in the file.  The pattern is constructed with fieldnames from the .as file, preceded
     by the dollar sign ($), and can include arbitrary text between the fieldnames.</P>
 
     <P><B>Example:</B></P>
     <pre>
-    mouseOver variant $name/$chrom:$chromStart value $score
+    mouseOver variant $name/$chrom:${chromStart} value $score
     </pre>
 </DIV>
 
@@ -1211,7 +1250,7 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="bigDataUrl2"><span class="types bigBed bigWig bam vcfTabix"></span>
 <div class="format">
-    <code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+    <code>bigDataUrl2 &lt;url/relativePath&gt;</code></div>
     <P>This setting is for remote data file type
     tracks (e.g. bigWig) and is fully described in the "<A HREF="#bigDataUrl">Common
     trackDb settings</A>" portion of this document.</P>
@@ -1282,6 +1321,46 @@ There are no extra options that can appear on the type hic line.
     <P><B>Example:</B></P>
     <pre>   denseCoverage 100</pre>
 </DIV>
+
+<div class="decorator"><span class="types bed bigBed genePred bigGenePred psl bigPsl"></span>
+<div class="format"><code>decorator.default.*</code></div>
+    <p>Decorators allow annotation to be placed on top of BED 12+, bigBed, PSL, and
+    bigGenePred tracks by highlighting regions and adding glyphs on top of them.
+    The decorators themselves can be configured with a small selection of trackDb
+    settings as follows.  For a more interactive introduction to decorators, see the <a
+    href="../decorator.html">Track Decorators</a> help page.</p>
+    <p>NB: In all of the following settings, <code>decorator.default.</code> is used as
+    a prefix to indicate that the settings should be applied to the decorator and not the
+    primary track.  This is necessary because many settings that you can apply to
+    decorators are identical to settings that can be applied to tracks.  For example,
+    <code>filterValues</code> can be applied to a main track to filter which items
+    are displayed, but can also be applied to a decorator for that track as
+    <code>decorator.default.filterValues</code> to filter which decorations are drawn.
+    In the future, other names besides "default" may be allowed to permit multiple
+    decorators annotating a single track.</p>
+    <p><strong>Settings</strong></p>
+    <p><code>decorator.default.bigDataUrl &lt;url&gt;</code></p>
+    <p>This setting is required when adding a decorator to a track.  It specifies
+    the path to a bigBed file that contains the decorations.</p>
+    <p><code>decorator.default.filterValues &lt;specification&gt;</code></p>
+    <p>Decorators support the same filter options that bigBed tracks do.  This includes
+    the <code>filter</code>, <code>filterText</code>, and <code>filterValues</code>
+    settings, as described in the
+    <a href="../hubQuickStartFilter.html">Track Hub Filters Quick Start Guide</a>.</p>
+    <p><code>decorator.default.mouseOver &lt;specification&gt;</code></p>
+    <p>Decorators also support the same <code>mouseOver</code> and <code>mouseOverField</code>
+    settings that can be applied to bigBed tracks.</p>
+    <p>There is one more setting that is currently specific to decorators.</p>
+    <p><code>decorator.default.maxLabelBases &lt;integer&gt;</code></p>
+    <p>This setting controls a failsafe option for deactivating the drawing of decoration
+    labels when they're in block mode.  There will also be a checkbox on the track
+    configuration page to deactivate labels manually, but even when that is on, a track
+    display can quickly become unintelligible if the window displayed is too large -
+    there will simply be too many track items and too many decoration labels to process
+    visually.  <code>maxLabelBases</code> sets a maximum window size (in bases) for which
+    labels will be drawn.  If not set, the value will default to 200kb.
+    </p>
+</div>
 
 <DIV class="labelOnFeature"><span class="types bed bigBed"></span>
 <div class="format"><code>labelOnFeature &lt;on/off&gt;</code></div>
@@ -1543,7 +1622,9 @@ There are no extra options that can appear on the type hic line.
     </div>
     <P>There are a number of different filters available for bigBed data. See the 
     <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
-    more info.</P>
+    more info. Note: for configurable features, like filters, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
     <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It requires
     a default value to be passed. A value of 0 (or the lowest value present in the dataset) 
     can be used to enable numerical filtering, but filter nothing by default.</P>
@@ -1634,7 +1715,9 @@ There are no extra options that can appear on the type hic line.
     </div>
     <P>There are a number of different filters available for bigBed data. See the     
     <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
-    more info.</P>
+    more info. Note: for configurable features, like filters, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
     <P><code>filterText.&lt;fieldName&gt;</code> is used to enable text searching in the 
     specified fieldName. It requires a default search string to be passed. An asterisk/wildcard (*)
     can be used to enable text searching, but pass no default value. If a word or string is
@@ -1699,7 +1782,9 @@ There are no extra options that can appear on the type hic line.
     </div>
     <P>There are a number of different filters available for bigBed data. See the     
     <a href="../hubQuickStartFilter.html" target="_blank">Filters Quick Start guide</a> for
-    more info.</P>
+    more info. Note: for configurable features, like filters, an additional period
+    &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
+    for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
     <P><code>filterValues.&lt;fieldName&gt;</code> is used to enable filtering by 
     specified values within a field. It can be used on fields that can contain
     one text value or a list of comma-separated values of text, like "classA,classB".
@@ -1854,7 +1939,7 @@ There are no extra options that can appear on the type hic line.
     <P>Maximum number of items to display individually in full mode.  When the maximum is
     exceeded, the excess items are drawn on top of one another on the last line.
     In packed mode this refers to the number of lines rather than number of items.
-    Default: 250. For <code>type bigBed</code> tracks, this setting can never 
+    Default: 10,000. For <code>type bigBed</code> tracks, this setting can never 
     be larger than than 100,000.</P>
     <P><B>Example:</B>
     </P>
@@ -1865,7 +1950,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>maxWindowCoverage &lt;integer&gt;</code></div>
     <p>When too many individual bed items might be shown in the Browser image
     (such as might occur when a large region of a chromosome is viewed),
-    <code>maxWindowCoverage</code> will switch the track into density covergage plot when
+    <code>maxWindowCoverage</code> will switch the track into density coverage plot when
     the window contains more than the specified number of bases.</p>
     <P><B>Example:</B></P>
     <pre>   maxWindowCoverage 10000000</pre>
@@ -1994,7 +2079,9 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>searchTrix &lt;url/relativePath&gt;</code></div>
     <P> Specifies the URL to a TRIX file that maps free text to
     a set of indices that are assumed to have indicies in the associated
-    bigBed file.  See <A HREF="../trix.html">HERE</A> for instructions on how to build a TRIX file.
+    bigBed file. See <a href="../trix.html">here</a> for instructions on how
+    to build a TRIX file and a <a href="../hubQuickStartSearch.html">Searchable
+    Track Hub Quick Start Guide</a> here.</li>
     <P><B>Example:</B></P>
     <pre>   searchTrix url or relative path </pre>
 </DIV>
@@ -2115,9 +2202,8 @@ There are no extra options that can appear on the type hic line.
 </DIV>
 
 <DIV class="baseColorUseSequence"><span class="types all"></span>
-<div class="format"><I>Related settings:</I><BR>
-    <code>baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; /
-                        hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
+<div class="format"><code>baseColorUseSequence  &lt;extFile {seqTable} /
+                  hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss / 2bit &gt;</code></div>
     <!-- DONNA -- redo -->
     <P>Specifies where
     item sequence can be found (if any) so that item sequence, or
@@ -2146,16 +2232,18 @@ There are no extra options that can appear on the type hic line.
     hg/lib/encode/pairedTagAlign.as)</LI>
     <LI>If <code>ss</code> is specified then a
     user-provided blat sequence is looked for.</LI>
+    <LI>If <code>2bit</code> is specified then looks for sequence in the file specified
+    by the <code>otherTwoBitUrl</code> tag.
     </UL>
 </DIV>
 
 <DIV class="baseColorUseCds"><span class="types bed genePred psl bigPsl"></span>
-<div class="format"><code>baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
+<div class="format"><code>baseColorUseCds &lt;given&gt;</code></div>
     <P>Specifies where coding sequence (CDS)
     coordinates can be found (if any) so that codons can be drawn
-    when viewing a sufficiently small region.  If <code>table</code> is
-    specified, an additional parameter of a table name, in cdsSpec
-    format, is required.</P>
+    when viewing a sufficiently small region.</P>
+    <P><B>Example:</B></P>
+    <pre>   baseColorUseCds given</pre>
 </DIV>
 
 <DIV class="baseColorDefault"><span class="types all"></span>
@@ -2187,7 +2275,6 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="showDiffBasesMaxZoom"><span class="types all"></span>
 <div class="format"><code>showDiffBasesMaxZoom &lt;basesPerPixel&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Show annotations highlighting base or codon differences
     only if current zoom level does not exceed 
     <code>basesPerPixel</code> (a float).  <code>showDiffBasesAllScales</code>
@@ -2196,13 +2283,11 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="showCdsAllScales"><span class="types psl"></span>
 <div class="format"><code>showCdsAllScales on</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Show CDS for PSL tracks at all zoom levels.</P>
 </DIV>
 
 <DIV class="showCdsMaxZoom"><span class="types psl"></span>
 <div class="format"><code>showCdsMaxZoom &lt;basesPerPixel&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Use this setting (a float) to specify the maximum zoom-out allowed for displaying the CDS 
     for psl tracks. 
     In conjunction with this setting, <code>showCdsAllScales</code> must be set on and 
@@ -2519,8 +2604,8 @@ There are no extra options that can appear on the type hic line.
     <code>use vertical viewing range setting</code>.</P>
     <P>NOTE: These options can be misleading if a noisy, low signal
     erroneously appears as significant because there is no high signal in the
-    view window. The "<code>group</code>" option only applies to composite 
-    bigWig tracks.</P>
+    view window. To use the <b>group</b> option declare the setting only in
+    the parent bigWig composite, not in the individual children tracks.</P>
     <p>For Hi-C tracks, higher interaction scores are represented with more
     intense colors.  When this setting is set to "<code>off</code>", the score
     at which the color reaches maximum intensity is a fixed value that can
@@ -2611,6 +2696,16 @@ There are no extra options that can appear on the type hic line.
     can be presented in log scale with this user-configurable setting. Default: NONE.</P>
     <P><B>Example:</B></P>
     <pre>   transformFunc LOG</pre>
+</DIV>
+
+<DIV class="logo"><span class="types bigWig"></span>
+<div class="format"><code>logo on</code></div>
+    <P>The signal can be graphed as reference base nucleotide letters with their heights equal to the
+    signal value within the bigWig track. If not sufficiently zoomed in, the bigWig will
+    revert to bars instead of letters by default. See a working example of the <code>logo</code>
+    dynseq display on the <a href="../bigWig.html#Ex4" target="_blank">bigWig</a> help page.</p>
+    <P><B>Example:</B></P>
+    <pre>   logo on</pre>
 </DIV>
 
 <DIV class="mouseOverFunction"><span class="types wig bigWig bedGraph"></span>
@@ -3646,7 +3741,8 @@ There are no extra options that can appear on the type hic line.
     display gene codon translation.  The reading frame may differ
     between species.  By providing the reading frames information in a
     separate table, the user can choose which frame to use when
-    viewing the data. For bigMaf the value is expected to be a bigBed, for wigMaf it should be a table.</P> 
+    viewing the data. For bigMaf the value is expected to be a bigBed, for wigMaf it should be a table.
+    Read about <a href="../bigMaf.html#frames_summary">bigMaf supporting files</a> on the help page.</p>
     <P><B>Example:</B></P>
     <pre>   frames myCodonFrames</pre>
     <pre>   frames myCodonFrames.bb</pre>
@@ -3774,7 +3870,8 @@ There are no extra options that can appear on the type hic line.
     bigBed containing that information. The summary
     view is used when the browser display is zoomed out to contain a million
     or more basepairs.  A summary table is created from a multiple alignment MAF
-    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed. </P>
+    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed,
+    Read about <a href="../bigMaf.html#frames_summary">bigMaf supporting files</a> on the help page.</p>
     <P><B>Example:</B></P>
     <pre>   summary hg17Maf8waySummary</pre>
 </DIV>
@@ -3977,6 +4074,7 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="extraDetailsTable"><span class="types bigBed"></span>
 <div class="format"><code>extraDetailsTable &lt;url/relativePath&gt;</code></div>
+    <p>This setting was renamed June 2022. Please use <a href="#detailsStaticTable">detailsStaticTable</a> instead.</p>
     <p>
     Provides a template to a tab separated text file where $&lt;fieldName&gt;
     strings will be substituted for data in the bigBed and displayed as an HTML
@@ -3988,12 +4086,13 @@ There are no extra options that can appear on the type hic line.
     <p>
     Note that the same size table is displayed for every item of the bigBed, even
     if there is missing data in that field for a particular item. For variable
-    size tables, please see <a href="#extraTableFields">extraTableFields</a>.
+    size tables, please see <a href="#detailsDynamicTable">detailsDynamicTable</a>.
     </p>
 </DIV>
 
 <DIV class="extraTableFields"><span class="types bigBed"></span>
 <div class="format"><code>extraTableFields &lt;fieldName1|table title,fieldName2|table title,...&gt;</code></div>
+    <p>This setting was renamed June 2022. Please use <a href="#detailsDynamicTable">detailsDynamicTable</a> instead.</p>
     <p>
     Tells the system that the data in &lt;fieldName1,...&gt; contains an <em>encoded</em> table
     that should be turned into a standard HTML table on the details page for that item. If
@@ -4009,10 +4108,93 @@ There are no extra options that can appear on the type hic line.
     corresponding trackDb statements:<br>
     <br>
     trackDb line:
-    <pre>extraDetailsTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
+    <pre>extraTableFields _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
     the two columns from the bigBed (or external file):<br>
     <pre>_jsonField1	tableField2
-{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2:val2
+{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2|val2
+    </pre>
+    And when clicking on an item in the browser, the following would be displayed:<br>
+    <table class='bedExtraTbl'>
+        <tr><td>JSON Title Example</td><td>
+            <table class='bedExtraTbl'>
+                <tr><td>key</td><td>val</td>
+                <tr><td>key1</td><td>val1</td>
+                <tr><td>key2</td><td>val2</td>
+            </table></td></tr>
+        <tr><td>NON-JSON Title Example</td><td>
+            <table class='bedExtraTbl'>
+                <tr><td>key</td><td>val</td>
+                <tr><td>key1</td><td>val1</td>
+                <tr><td>key2</td><td>val2</td>
+            </table></td></tr>
+    </table>
+    Note that the number of columns and rows is variable per item, meaning some items
+    can have different sized tables than other items, contrasting with the extraDetailsTable
+    statement, which enforces the same table size per item. For instance, in the above
+    example, a 3 rows by 2 columns table is created for each field, but if our JSON was
+    instead:
+<pre>{"transcript1": {annot1: val1, annot2: val2}, "transcript2": {annot3: val3}}</pre>
+    then the following nested table would be shown on the details page:
+    <table class='bedExtraTbl'>
+        <tr><td>JSON Title Example</td><td>
+            <table class='jsonTable'>
+                <tr>
+                  <td>transcript1</td><td>
+                    <table class='jsonTable'>
+                        <tr><td>annot1</td><td>val1</td></tr>
+                        <tr><td>annot2</td><td>val2</td></tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td>transcript2</td><td>
+                    <table class='jsonTable'>
+                        <tr><td>annot3</td><td>val3</td></tr>
+                    </table>
+                  </td>
+                </tr>
+            </table></td></tr>
+    </table>
+    </p>
+</DIV>
+<DIV class="detailsStaticTable"><span class="types bigBed"></span>
+<div class="format"><code>detailsStaticTable &lt;url/relativePath&gt;</code></div>
+    <p>
+    Provides a template to a tab separated text file where $&lt;fieldName&gt;
+    strings will be substituted for data in the bigBed and displayed as an HTML
+    table. For an example of this, please see the following text file:
+    <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt">http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt</a>, where
+    the strings such as &quot;${AC_afr}&quot; will be substituted for the data in that
+    field for the particular item from the bigBed.
+    </p>
+    <p>
+    Note that the same size table is displayed for every item of the bigBed, even
+    if there is missing data in that field for a particular item. For variable
+    size tables, please see <a href="#detailsDynamicTable">detailsDynamicTable</a>.
+    </p>
+</DIV>
+
+<DIV class="detailsDynamicTable"><span class="types bigBed"></span>
+<div class="format"><code>detailsDynamicTable &lt;fieldName1|table title,fieldName2|table title,...&gt;</code></div>
+    <p>
+    Tells the system that the data in &lt;fieldName1,...&gt; contains an <em>encoded</em> table
+    that should be turned into a standard HTML table on the details page for that item. If
+    the &lt;fieldName&gt; starts with &quot;_json&quot; or &quot;json&quot;, then the system
+    expects the data in &lt;fieldName&gt; to be valid JSON. If the field name starts with
+    anything else, then the table is formatted using &quot;|&quot; and &quot;;&quot; as field
+    and new row separators. The &quot;table title&quot; part of the statment is optional, if
+    present it will be used as the title for the table, if not, then the title will be taken
+    from the autoSql description of the field name, or if there is no autoSql because the data
+    is from an external file, then the field name will be used.
+
+    <p>An example of both formats is shown below, along with the
+    corresponding trackDb statements:<br>
+    <br>
+    trackDb line:
+    <pre>detailsDynamicTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example</pre>
+    the two columns from the bigBed (or external file):<br>
+    <pre>_jsonField1	tableField2
+{key:val, key1: val1, key2: val2}	key|val;key1|val1;key2|val2
     </pre>
     And when clicking on an item in the browser, the following would be displayed:<br>
     <table class='bedExtraTbl'>
@@ -5100,6 +5282,28 @@ reached.
     </p>
 </div>
 
+<div class="hicDistanceMin"><span class="types hic"></span>
+<div class="format"><code>hicDistanceMin &lt;integer&gt;</code></div>
+    <p>Hi-C tracks have a setting that controls the minimum interaction distance
+in nucleotides for the heatmap.  If a portion of the heatmap represents an interaction
+closer than the value of the minimum distance setting, that portion of the heatmap simply
+isn't drawn.  This setting, hicDistanceMin, controls the default value for that
+minimum (without this setting, the default is 0).  A value of 0 means that no filter
+is applied.
+    </p>
+</div>
+
+<div class="hicDistanceMax"><span class="types hic"></span>
+<div class="format"><code>hicDistanceMax &lt;integer&gt;</code></div>
+    <p>Hi-C tracks have a setting that controls the maximum interaction distance
+in nucleotides for the heatmap.  If a portion of the heatmap represents an interaction
+farther than the value of the maximum distance setting, that portion of the heatmap simply
+isn't drawn.  This setting, hicDistanceMax, controls the default value for that
+maximum (without this setting, the default is 0).  A value of 0 means that no filter
+is applied.
+    </p>
+</div>
+
 <DIV class="hic_example"><span class="types hic"></span>
 <div class="format"><B>Example of a hic track</B></div>
     <pre>
@@ -5125,6 +5329,13 @@ that supports efficient remote access, so the file can be hosted on your web acc
 and displayed at UCSC.
 For the complete bigBarChart format definitions please see the
     <A HREF="../barChart.html">bigBarChart help page</A>.</P>
+</DIV>
+
+<DIV class="barChartBars"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBars &lt;label1 label2...&gt;</code></div>
+    <P>This setting is a list of labels for the categorical variables (bars).
+    It is required for this track type.
+    </P>
 </DIV>
 
 <DIV class="barChartUnit"><span class="types bigBarChart"></span>
@@ -5169,6 +5380,14 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
+<DIV class="barChartStretchToItem"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartStretchToItem on</code></div>
+    <P>This setting extends the barCharts to cover the entire horizontal space available in the graph.
+    This setting is typically used with bar charts with large number of bars so that it is possible
+    to zoom in to see better the individual bars.
+    </P>
+</DIV>
+
 <DIV class="barChartMetric"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
     <P>This setting provides a label for details page information about the barChart values presented.
@@ -5176,12 +5395,6 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
-<DIV class="barChartBars"><span class="types bigBarChart"></span>
-<div class="format"><code>barChartBars &lt;label1 label2...&gt;</code></div>
-    <P>This setting is a list of labels for the categorical variables (bars).
-    It is required for this track type.
-    </P>
-</DIV>
 
 <DIV class="barChartColors"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartColors &lt;color1 color2...&gt;</code></div>
@@ -5227,6 +5440,62 @@ This setting can replace the <code>barChartBars</code> and <code>barChartColors<
 and is particularly useful for tracks with large numbers of categories.
     </P>
 </DIV>
+
+<DIV class="barChartFacets"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartFacets &lt;column1,column2,...columnN&gt;</code></div>
+    <P>This setting turns on the faceted selection on the track details and configure page
+    which is useful for selecting which bars out of a large number to display.  It works
+    with the barChartStatsUrl.  The comma-separated list of columns refer to column names
+    in the tab-separated-value file specified by barChartStatsUrl.
+    See an example with images of barChartFacets on the <a target="_blank"
+    href="../barChart.html#example6">barChart help page</a>.
+    </P>
+</DIV>
+
+<DIV class="barChartStatsUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartStatsUrl &lt;url&gt;</code></div>
+    <P>This setting associates a table in tab-separated-values with the barchart, with one line
+    per bar.  The first line of the file contains the table column names. The first column
+    contains the name of the bar.  The other columns can be in any order.  
+    If a <i>color</i> column is present it will be used for the colors of the bars using the 
+    hexadecimal #RRGGBB format. 
+    (Currently the same names and colors should also be specified in a URL associated with barChartCategoriesUrl tag.) 
+    The <i>count</i> column is required, and contains the number of samples represented in the bar. 
+    Other columns can contain additional data associated with each bar. Typically these are used
+    in coordination with the barChartsFacets tag to specify metadata such as cell types or
+    tissue of origin. See an example with images of barChartStatsUrl on the <a target="_blank"
+    href="../barChart.html#example6">barChart help page</a>.
+    </P>
+</DIV>
+
+<DIV class="barChartMerge"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMerge on</code></div>
+    <P>This setting enables the <i>merge</i> button inside of the faceted selections.  It
+    is particularly useful when there are many bars and many facets. It allows bars that differ 
+    only in that one facet to be merged together. See an example with images of barChartMerge on the
+    <a target="_blank" href="../barChart.html#example6">barChart help page</a>.
+    </P>
+</DIV>
+
+<DIV class="barChartBarMinPadding"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBarMinPadding &lt;num&gt;</code></div>
+    <P>Sets the minimum pixel width between bars to &lt;num&gt; pixels. Typically, this padding is
+    a dynamic calculation dependent on the current window size, the width of the item, and the number of bars for the
+    item. If present, the maximum of this setting and the dynamically calculated padding is used for the display.
+    See an example with images of barChartBarMinPadding on the <a target="_blank"
+    href="../barChart.html#example5">barChart help page</a>.</p>
+</DIV>
+
+<DIV class="barChartBarMinWidth"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBarMinWidth &lt;num&gt;</code></div>
+    <P>Sets the minimum pixel width of the bars in the chart to &lt;num&gt; pixels. Typically, this width is
+    a dynamic calculation dependent on the current window size, the width of the item, and the number of bars for the
+    item. If present, the maximum of this setting and the dynamically calculated width is used for the display.
+    See an example with images of barChartBarMinWidth on the <a target="_blank"
+    href="../barChart.html#example5">barChart help page</a>.
+    </P>
+</DIV>
+
 
 <DIV class="bigBarChart_example"><span class="types bigBarChart"></span>
 <div class="format"><B>Example of a bigBarChart track</B></div>

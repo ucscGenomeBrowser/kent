@@ -11,18 +11,6 @@
 
 
 static char* GB_LOADED_TBL = "gbLoaded";
-static char* createSql =
-NOSQLINJ "create table gbLoaded ("
-  "srcDb enum('GenBank','RefSeq') not null,"   /* source database */
-  "type enum('EST','mRNA') not null,"          /* mRNA or EST */
-  "loadRelease char(8) not null,"              /* release version */
-  "loadUpdate char(10) not null,"              /* update date or full */
-  "accPrefix char(2) not null,"                /* acc prefix for ESTs */
-  "time timestamp not null,"                   /* time entry was added */
-  "extFileUpdated tinyint(1) not null,"        /* has the extFile entries been
-                                                * updated for this partation
-                                                * of the release */
-  "index(srcDb,loadRelease))";
 
 #define KEY_BUF_SIZE 128
 
@@ -132,7 +120,22 @@ loadedTbl->entryHash = hashNew(19);
 loadedTbl->conn = conn;
 
 if (!sqlTableExists(conn, GB_LOADED_TBL))
-    sqlRemakeTable(conn, GB_LOADED_TBL, createSql);
+    {
+    char query[1024];
+    sqlSafef(query, sizeof query, 
+    "create table gbLoaded ("
+    "srcDb enum('GenBank','RefSeq') not null,"   /* source database */
+    "type enum('EST','mRNA') not null,"          /* mRNA or EST */
+    "loadRelease char(8) not null,"              /* release version */
+    "loadUpdate char(10) not null,"              /* update date or full */
+    "accPrefix char(2) not null,"                /* acc prefix for ESTs */
+    "time timestamp not null,"                   /* time entry was added */
+    "extFileUpdated tinyint(1) not null,"        /* has the extFile entries been
+						  * updated for this partation
+						  * of the release */
+    "index(srcDb,loadRelease))");
+    sqlRemakeTable(conn, GB_LOADED_TBL, query);
+    }
 else if (sqlFieldIndex(conn, GB_LOADED_TBL, "extFileUpdated") < 0)
     addedExtFileUpdCol(conn);
 

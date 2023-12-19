@@ -14,6 +14,22 @@
 #include "hic.h"
 #include "htmlColor.h"
 
+static double hicSqueezeFactor(enum trackVisibility vis)
+/* Controls the height multiplier for various draw modes. */
+{
+switch (vis)
+    {
+    case tvDense:
+        return 0.125;
+    case tvSquish:
+        return 0.25;
+    case tvPack:
+        return 0.5;
+    default:
+        return 1.0;
+    };
+    return 1.0;
+}
 
 static int hicTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Calculate height of the track across all windows.  For arc and triangle, this
@@ -38,10 +54,10 @@ while (trackScan != NULL) // ... and look at following windows ...
     trackScan = trackScan->nextWindow;
     }
 
-// Later, try making pack 0.5, squish 0.25, and dense 0.125.  The various
-// draw functions will also have to be modified accordingly.
-if ( tg->visibility == tvDense)
-    maxHeight *= 0.5;
+maxHeight *= hicSqueezeFactor(vis);
+
+if (maxHeight < tg->lineHeight)
+    maxHeight = tg->lineHeight;
 return maxHeight;
 }
 
@@ -111,8 +127,30 @@ if (numRecords > 0)
 
 struct interact *thisHic = hicItems;
 char *drawMode = hicUiFetchDrawMode(cart, tg->tdb);
+struct interact* filteredOut = NULL;
+struct interact** prevNextPtr = &hicItems; // for removing items from the linked list
+
+double maxRange = hicUiMaxInteractionRange(cart, tg->tdb);
+double minRange = hicUiMinInteractionRange(cart, tg->tdb);
+
 while (thisHic != NULL)
     {
+    // Add filtering based on max interaction distance
+    if (sameString(thisHic->sourceChrom, thisHic->targetChrom))
+        {
+        unsigned leftEdge = thisHic->sourceStart < thisHic->targetStart ? thisHic->sourceStart : thisHic->targetStart;
+        unsigned rightEdge = thisHic->sourceEnd > thisHic->targetEnd ? thisHic->sourceEnd : thisHic->targetEnd;
+        if ((maxRange && maxRange < (double)(rightEdge - leftEdge) ) ||
+            (minRange && minRange > (double)(rightEdge - leftEdge) ))
+            {
+            // a bit of pointer play to avoid repeated calls to slRemoveEl
+            *prevNextPtr = thisHic->next; // set prev element's next to the following element
+            slAddHead(&filteredOut, thisHic);
+            thisHic = *prevNextPtr; // restore thisHic to point to the next element
+            continue;
+            }
+        }
+
     if (sameString(drawMode, HIC_DRAW_MODE_ARC))
         {
         // we omit self-interactions in arc mode (they'd just be weird vertical lines)
@@ -134,8 +172,12 @@ while (thisHic != NULL)
 
     if (thisHeight > tg->maxRange)
         tg->maxRange = thisHeight;
+    prevNextPtr = &thisHic->next;
     thisHic = thisHic->next;
     }
+
+if (filteredOut != NULL)
+    interactFreeList(&filteredOut);
 
 // Heuristic for auto-scaling the color gradient based on the scores in view - draw the max color value
 // at or above 2*median score.
@@ -188,6 +230,7 @@ htmlColorToRGB(lowRgbVal, &r, &g, &b);
 rgbLow.r=(unsigned char)r;
 rgbLow.g=(unsigned char)g;
 rgbLow.b=(unsigned char)b;
+rgbLow.a = 255;
 
 struct rgbColor rgbHigh;
 char *highColorText = hicUiFetchDrawColor(cart, tg->tdb); // This is an HTML color like #ffed02
@@ -201,6 +244,7 @@ htmlColorToRGB(highRgbVal, &r, &g, &b);
 rgbHigh.r=(unsigned char)r;
 rgbHigh.g=(unsigned char)g;
 rgbHigh.b=(unsigned char)b;
+rgbHigh.a = 255;
 Color *colorIxs = NULL;
 AllocArray(colorIxs, bucketCount);
 hvGfxMakeColorGradient(hvg, &rgbLow, &rgbHigh, bucketCount, colorIxs);
@@ -246,11 +290,9 @@ int maxHeight = tg->height;
 struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
 int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
+boolean invert = hicUiFetchInverted(cart, tg->tdb);
 
-if (vis == tvDense)
-    {
-    yScale *= 0.5;
-    }
+yScale *= hicSqueezeFactor(vis);
 
 double maxScore = getHicMaxScore(tg);
 Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
@@ -261,7 +303,6 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
     {
     int leftStart, leftEnd, rightStart, rightEnd;
     calcItemLeftRightBoundaries(&leftStart, &leftEnd, &rightStart, &rightEnd, binSize, hicItem);
-
     int colorIx;
     if (hicItem->value > maxScore)
         colorIx = colorIxs[HIC_SCORE_BINS];
@@ -273,22 +314,30 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
     // left point of the diamond
     double x = xScale * (leftStart+rightStart)/2.0;
     double y = yScale * (rightStart-leftStart)/2.0;
-    gfxPolyAddPoint(diamond, (int)x+xOff, maxHeight-(int)y+yOff);
+    if (!invert)
+        y = maxHeight-(int)y;
+    gfxPolyAddPoint(diamond, (int)x+xOff, (int)y+yOff);
 
     // top point of the diamond
     x = xScale * (leftStart+rightEnd)/2.0;
     y = yScale * (rightEnd-leftStart)/2.0;
-    gfxPolyAddPoint(diamond, (int)x+xOff, maxHeight-(int)y+yOff);
+    if (!invert)
+        y = maxHeight-(int)y;
+    gfxPolyAddPoint(diamond, (int)x+xOff, (int)y+yOff);
 
     // right point of the diamond
     x = xScale * ((leftEnd + rightEnd)/2.0);
     y = yScale * (rightEnd-leftEnd)/2.0;
-    gfxPolyAddPoint(diamond, (int)x+xOff, maxHeight-(int)y+yOff);
+    if (!invert)
+        y = maxHeight-(int)y;
+    gfxPolyAddPoint(diamond, (int)x+xOff, (int)y+yOff);
 
     // bottom point of the diamond
     x = xScale * (leftEnd+rightStart)/2.0;
     y = yScale * (rightStart-leftEnd)/2.0;
-    gfxPolyAddPoint(diamond, (int)x+xOff, maxHeight-(int)y+yOff);
+    if (!invert)
+        y = maxHeight-(int)y;
+    gfxPolyAddPoint(diamond, (int)x+xOff, (int)y+yOff);
     hvGfxDrawPoly(hvg, diamond, colorIx, TRUE);
     gfxPolyFree(&diamond);
     }
@@ -307,13 +356,11 @@ int maxHeight = tg->height;
 struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
 int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
+boolean invert = hicUiFetchInverted(cart, tg->tdb);
 if (binSize == 0)
     return;
 
-if (vis == tvDense)
-    {
-    yScale *= 0.5;
-    }
+yScale *= hicSqueezeFactor(vis);
 
 double maxScore = getHicMaxScore(tg);
 Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
@@ -332,17 +379,26 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
         colorIx = colorIxs[(int)(HIC_SCORE_BINS * hicItem->value/maxScore)];
     double x = xScale * leftStart;
     double y = yScale * ((winEnd-winStart)-rightStart);
-    hvGfxBox(hvg, (int)x+xOff, maxHeight-(int)y+yOff, (int)(xScale*(leftEnd-leftStart))+1, (int)(yScale*(rightEnd-rightStart))+1, colorIx);
+    y = maxHeight-(int)y;
+    if (invert)  // when inverted, the top left of the box corresponds to rightEnd instead of rightStart
+        y = yScale * ((winEnd-winStart)-rightEnd);
+    hvGfxBox(hvg, (int)x+xOff, (int)y+yOff, (int)(xScale*(leftEnd-leftStart))+1, (int)(yScale*(rightEnd-rightStart))+1, colorIx);
     if (leftStart != rightStart)
         {
         x = xScale * rightStart;
         y = yScale * ((winEnd-winStart)-leftStart);
-        hvGfxBox(hvg, (int)x+xOff, maxHeight-(int)y+yOff, (int)(xScale*(rightEnd-rightStart))+1, (int)(yScale*(leftEnd-leftStart))+1, colorIx);
+        y = maxHeight-(int)y;
+        if (invert)
+            y = yScale * ((winEnd-winStart)-leftEnd);
+        hvGfxBox(hvg, (int)x+xOff, (int)y+yOff, (int)(xScale*(rightEnd-rightStart))+1, (int)(yScale*(leftEnd-leftStart))+1, colorIx);
         }
     }
     // Draw top-left to bottom-right diagonal axis line in black
     int colorIx = hvGfxFindColorIx(hvg, 0, 0, 0);
-    hvGfxLine(hvg, xOff, yOff, ((winEnd-winStart)*xScale)+xOff, maxHeight+yOff, colorIx);
+    if (invert)  // Draw bottom-left to top-right instead
+        hvGfxLine(hvg, xOff, maxHeight+yOff, ((winEnd-winStart)*xScale)+xOff, yOff, colorIx);
+    else
+        hvGfxLine(hvg, xOff, yOff, ((winEnd-winStart)*xScale)+xOff, maxHeight+yOff, colorIx);
 }
 
 
@@ -369,13 +425,11 @@ int maxHeight = tg->height;
 struct interact *hicItem = NULL;
 struct hicMeta *hicFileInfo = (struct hicMeta*)tg->customPt;
 int binSize = hicUiFetchResolutionAsInt(cart, tg->tdb, hicFileInfo, winEnd-winStart);
+boolean invert = hicUiFetchInverted(cart, tg->tdb);
 if (binSize == 0)
     return;
 
-if (vis == tvDense)
-    {
-    yScale *= 0.5;
-    }
+yScale *= hicSqueezeFactor(vis);
 
 double maxScore = getHicMaxScore(tg);
 Color *colorIxs = colorSetForHic(hvg, tg, HIC_SCORE_BINS+1);
@@ -404,9 +458,14 @@ for (hicItem = (struct interact *)tg->items; hicItem; hicItem = hicItem->next)
     double rightx = xScale * rightMidpoint;
     double midx = xScale * (rightMidpoint+leftMidpoint)/2.0;
     double midy = yScale * (rightMidpoint-leftMidpoint)/2.0;
+    if (!invert)
+        midy = maxHeight-(int)midy;
     midy *= 1.5; // Heuristic scaling for better use of vertical space
-    hvGfxCurve(hvg, (int)leftx+xOff, maxHeight+yOff, (int)midx+xOff, maxHeight-(int)midy+yOff,
-            (int)rightx+xOff, maxHeight+yOff, colorIx, FALSE);
+    int lefty = maxHeight, righty = maxHeight; // the height of the endpoints
+    if (invert)
+        lefty = righty = 0;
+    hvGfxCurve(hvg, (int)leftx+xOff, lefty+yOff, (int)midx+xOff, midy+yOff,
+            (int)rightx+xOff, righty+yOff, colorIx, FALSE);
     }
 }
 

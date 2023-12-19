@@ -104,11 +104,11 @@ void dnaProbeSaveToDb(struct sqlConnection *conn, struct dnaProbe *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%s',%d,%d,'%s',%d,%f,%f,%d,%f,%d,%f)", 
 	tableName,  el->name,  el->dna,  el->size,  el->chrom,  el->start,  el->end,  el->strand,  el->tpDist,  el->tm,  el->pGC,  el->affyHeur,  el->secStruct,  el->blatScore,  el->comparison);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct dnaProbe *dnaProbeCommaIn(char **pS, struct dnaProbe *ret)

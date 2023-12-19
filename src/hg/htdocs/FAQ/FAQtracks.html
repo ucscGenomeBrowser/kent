@@ -10,6 +10,7 @@
 <h2>Topics</h2>
 
 <ul>
+<li><a href="#speed">Why is my tracks display slow?</a></li>
 <li><a href="#tracks0">List of tracks available for a specific assembly</a></li>
 <li><a href="#tracks1">Database/browser start coordinates differ by 1 base</a></li>
 <li><a href="#tracks2">mRNA-associated results</a></li>
@@ -34,6 +35,86 @@ genes</a></li>
 <hr>
 <p>
 <a href="index.html">Return to FAQ Table of Contents</a></p>
+
+<a name="speed"></a>
+<h2>Why is my tracks display slow?</h2>
+<p>
+There are different reasons why the Genome Browser tracks display can become slow. 
+Below is a list of common scenarios alongside potential solutions. The most common
+reason involves the configuration settings that are saved as users interact with
+the Genome Browser, such as track visibilities and custom data. 
+This can be solved by a reset of all your current Genome Browser session
+information although it is important to note that this will reset all
+settings including filters, track order and remove all custom data. To do
+this, click &quot;Genome Browser&quot; &gt; &quot;Reset 
+All User Settings&quot; in the top blue bar menu or
+<a href="../cgi-bin/cartReset" onclick="return confirm('Warning: Reseting all settings '+
+'will return the Genome Browser to a fresh browsing session. All settings including '+
+'filters, visibilities, and custom data will be lost.')">click here</a>.</p>
+<p>
+If none of the scenarios below improve 
+the browsing speed, you may also save a <a href="../cgi-bin/hgSession" 
+target="_blank">session</a> of a display that is slow to load and send it 
+to us as genome-www@soe.ucsc.edu so that we may provide further guidance.</p>
+
+<h6>Problem: Too many tracks on at once, or the viewing window is too large.</h6>
+<p>
+Drawing the tracks image can become a cumbersome task when too many tracks are 
+enabled and/or if the viewing window is too large. Setting some track visibilities 
+to <b>hide</b> or zooming into a smaller window should alleviate this problem. 
+Another consideration is to reduce the visibilities of tracks by by setting them to
+<b>dense</b> visibilitiy instead of full/pack/squish. 
+That will also speed up the drawing.</p>
+
+<h6>Problem: Large amount of <a href="../cgi-bin/hgCustom">custom tracks</a>.</h6>
+<p>
+Having a large number of custom tracks loaded can lead to a slowdown. However, the slowdown 
+should be minimal unless a large number of tracks are turned on. 
+Custom tracks can be hidden like any other track, or they can also be entirely removed 
+from the <a href="../cgi-bin/hgCustom">custom tracks</a> page.</p>
+<p>
+It is also possible to completely reset the Genome Browser
+session, which will remove all settings including filters, track order, 
+and all custom data. To do this, click &quot;Genome Browser&quot; &gt; &quot;Reset
+All User Settings&quot; in the top blue bar menu or
+<a href="../cgi-bin/cartReset" onclick="return confirm('Warning: Reseting all settings '+
+'will return the Genome Browser to a fresh browsing session. All settings including '+
+'filters, visibilities, and custom data will be lost.')">click here</a>.</p>
+
+<h6>Problem: Large amount of big data/remote files, such as 
+<a href="../cgi-bin/hgHubConnect" target="_blank">hubs</a>.</h6>
+<p>
+Like custom tracks, this slowdown should only be a problem if a large number of tracks 
+are turned on. However, with remote data there are other considerations that may speed 
+up performance. When retrieving remote files, consider that you are sending a request 
+to UCSC, which is then asking for the data wherever it is hosted. So the data must regularly 
+travel between the hosting location and the Genome Browser servers in CA (main site), Germany 
+(European mirror), or Japan (Asian mirror). If the hosting connection is unstable, or the 
+distance between any of 
+these steps is great, it can lead to slow data display. Consider that many of our free 
+<a href="../goldenPath/help/hgTrackHubHelp#Hosting" target="_blank">hosting options</a> can 
+inherently be slow as they are designed for accessibility and not speed. Likewise if you 
+are using google/amazon storage consider the performance that was purchased as it could 
+be a playing factor.</p>
+<p>
+While improving the connection of the hosting location may help, there are other solutions 
+which do not require the file to be moved. UCSC hosts mirrors in Europe 
+(https://genome-euro.ucsc.edu/) as well as Asia (https://genome-asia.ucsc.edu/) which should
+be faster. In some 
+extreme circumstances a local installation of the Genome Browser may suit your needs. This 
+would allow you to load all the custom annotations locally without having to traverse over 
+the web. In order to learn more about this option see our 
+<a href="../goldenPath/help/mirror.html" target="_blank">mirroring page</a>.</p>
+
+<h6>Problem: Slow or unreliable internet connection.</h6>
+<p>
+If your connection is slow or unreliable, you may want to consider our mirror sites closer to
+your location. 
+UCSC hosts mirrors in Europe (https://genome-euro.ucsc.edu/) as well as Asia 
+(https://genome-asia.ucsc.edu/) which should be faster. 
+In some extreme circumstances a local installation of the Genome Browser may 
+suit your needs. In order to learn more about this option see our
+<a href="../goldenPath/help/mirror.html" target="_blank">mirroring page</a>.</p>
 
 <a name="tracks0"></a>
 <h2>List of tracks available for a specific assembly</h2>
@@ -69,7 +150,7 @@ any data returned by the browser in position format is 1-based, while data retur
 is 0-based.</p>  
 <p> 
 For a detailed explanation, please see our blog entry for the 
-<a href="http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/"
+<a href="https://genome-blog.gi.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/"
 target="_blank">UCSC Genome Browser coordinate counting systems</a>.</p>
 
 <a name="tracks2"></a>
@@ -346,7 +427,7 @@ UCSC RefSeq track retains the same identifier.</p>
 <p>
 For more information and future plans to integrate coordinate-generated NCBI RefSeq tracks for 
 other assemblies, please see the 
-<a href="http://genome.ucsc.edu/blog/the-new-ncbi-refseq-tracks-and-you/" 
+<a href="https://genome-blog.gi.ucsc.edu/blog/the-new-ncbi-refseq-tracks-and-you/" 
 target="_blank">NCBI RefSeq track blog post</a>.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

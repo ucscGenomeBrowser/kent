@@ -1,0 +1,70 @@
+track hgLiftOver
+compositeTrack on
+shortLabel Human liftOver
+longLabel LiftOver alignments from CHM13 to hg19/hg38 and HG002 with two different pipelines
+visibility hide
+type bigChain hg38
+group map
+html html/hgLiftOver.html
+
+    track t2tHg38LiftOver
+    parent hgLiftOver
+    shortLabel T2T hg38 liftOver
+    longLabel T2T GRCh38/hg38 liftOver alignments: minimap2, no haps/alts, only same chrom
+    type bigChain hg38
+    color 120,20,0
+    visibility dense
+    bigDataUrl /gbdb/hs1/hgLiftOver/chm13v2-hg38.over.chain.bb
+    linkDataUrl /gbdb/hs1/hgLiftOver/chm13v2-hg38.over.link.bb
+    priority 1
+
+    track t2tHg19LiftOver
+    parent hgLiftOver
+    shortLabel T2T hg19 liftOver
+    longLabel T2T GRCh37/hg19 liftOver alignments: minimap2, no haps/alts, only same chrom
+    type bigChain hg19
+    color 120,20,0
+    visibility dense
+    bigDataUrl /gbdb/hs1/hgLiftOver/chm13v2-hg19.over.chain.bb
+    linkDataUrl /gbdb/hs1/hgLiftOver/chm13v2-hg19.over.link.bb
+    priority 2
+
+    track ucscHg19LiftOver
+    parent hgLiftOver
+    shortLabel UCSC hg19 liftOver
+    longLabel UCSC hg19 Lift Over Chained Alignments: lastz, all chroms and haplotypes
+    type bigChain hg19
+    bigDataUrl /gbdb/hs1/chainLiftOverHg19.bb
+    linkDataUrl /gbdb/hs1/chainLiftOverHg19Link.bb
+    otherDb hg19
+    priority 3
+
+    track ucscHg38LiftOver
+    parent hgLiftOver
+    shortLabel UCSC hg38 liftOver
+    longLabel UCSC hg38 liftOver Alignments: lastz, all chroms/patches and haps/alts/fixes
+    type bigChain hg38
+    bigDataUrl /gbdb/hs1/chainLiftOverHg38.bb
+    linkDataUrl /gbdb/hs1/chainLiftOverHg38Link.bb
+    otherDb hg38
+    priority 4
+
+    track GCA_021951015.1liftOver
+    parent hgLiftOver
+    shortLabel UCSC HG002 mat liftOver
+    longLabel UCSC HG002 mat (HPRC GCA_021951015.1) liftOver Alignments: lastz, all chroms
+    type bigChain GCA_021951015.1
+    bigDataUrl /gbdb/hs1/chainLiftOverGCA_021951015.1.bb
+    linkDataUrl /gbdb/hs1/chainLiftOverGCA_021951015.1Link.bb
+    otherDb GCA_021951015.1
+    priority 5
+
+    track chainLiftOverGCA_21950904.1
+    parent hgLiftOver
+    shortLabel UCSC HG002 pat liftOver
+    longLabel UCSC HG002 pat (HPRC GCA_021950905.1) lift Alignments: lastz, all chroms
+    type bigChain GCA_021950905.1
+    bigDataUrl /gbdb/hs1/chainLiftOverGCA_021950905.1.bb
+    linkDataUrl /gbdb/hs1/chainLiftOverGCA_021950905.1Link.bb
+    otherDb GCA_021950905.1
+    priority 6

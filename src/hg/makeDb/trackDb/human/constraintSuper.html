@@ -1,0 +1,324 @@
+<h2>Description</h2>
+
+<p>
+The "Constraint scores" container track includes several subtracks showing the results of
+constraint prediction algorithms. These try to find regions of negative
+selection, where variations likely have functional impact. The algorithms do
+not use multi-species alignments to derive evolutionary constraint, but use
+primarily human variation, usually from variants collected by gnomAD (see the
+gnomAD V2 or V3 tracks on hg19 and hg38) or TOPMED (contained in our dbSNP
+tracks and available as a filter). One of the subtracks is based on UK Biobank
+variants, which are not available publicly, so we have no track with the raw data.
+The number of human genomes that are used as the input for these scores are
+76k, 53k and 110k for gnomAD, TOPMED and UK Biobank, respectively.
+</p>
+
+<p>Note that another important constraint score, gnomAD
+constraint, is not part of this container track but can be found in the hg38 gnomAD
+track.
+</p>
+
+The algorithms included in this track are:
+<ol>
+    <li><b><a href="https://github.com/astrazeneca-cgr-publications/jarvis" target="_blank">
+    JARVIS - "Junk" Annotation genome-wide Residual Variation Intolerance Score</a></b>: 
+    JARVIS scores were created by first scanning the entire genome with a
+    sliding-window approach (using a 1-nucleotide step), recording the number of
+    all TOPMED variants and common variants, irrespective of their predicted effect,
+    within each window, to eventually calculate a single-nucleotide resolution
+    genome-wide residual variation intolerance score (gwRVIS). That score, gwRVIS
+    was then combined with primary genomic sequence context, and additional genomic
+    annotations with a multi-module deep learning framework to infer
+    pathogenicity of noncoding regions that still remains naive to existing
+    phylogenetic conservation metrics. The higher the score, the more deleterious
+    the prediction. This score covers the entire genome, except the gaps.
+
+    <li><b><a href="https://www.cardiodb.org/hmc/" target="_blank">
+    HMC - Homologous Missense Constraint</a></b>:
+    Homologous Missense Constraint (HMC) is a amino acid level measure
+    of genetic intolerance of missense variants within human populations.
+    For all assessable amino-acid positions in Pfam domains, the number of
+    missense substitutions directly observed in gnomAD (Observed) was counted
+    and compared to the expected value under a neutral evolution
+    model (Expected). The upper limit of a 95% confidence interval for the
+    Observed/Expected ratio is defined as the HMC score. Missense variants
+    disrupting the amino-acid positions with HMC&lt;0.8 are predicted to be
+    likely deleterious. This score only covers PFAM domains within coding regions.
+
+    <li><b><a href="https://stuart.radboudumc.nl/metadome/" target="_blank">
+    MetaDome - Tolerance Landscape Score</a> (hg19 only)</b>:
+    MetaDome Tolerance Landscape scores are computed as a missense over synonymous 
+    variant count ratio, which is calculated in a sliding window (with a size of 21 
+    codons/residues) to provide 
+    a per-position indication of regional tolerance to missense variation. The 
+    variant database was gnomAD and the score corrected for codon composition. Scores 
+    &lt;0.7 are considered intolerant. This score covers only coding regions.
+   
+    <li><b><a href="http://biosig.unimelb.edu.au/mtr-viewer/" target="_blank">
+    MTR - Missense Tolerance Ratio</a> (hg19 only)</b>:
+    Missense Tolerance Ratio (MTR) scores aim to quantify the amount of purifying 
+    selection acting specifically on missense variants in a given window of 
+    protein-coding sequence. It is estimated across sliding windows of 31 codons 
+    (default) and uses observed standing variation data from the WES component of 
+    gnomAD / the Exome Aggregation Consortium Database (ExAC), version 2.0. Scores
+    were computed using Ensembl v95 release. The number of gnomAD 2 exomes used here
+    is higher than the number of gnomAD 3 samples (125 exoms versus 76k full genomes), 
+    but this score only covers coding regions.
+
+    <li><b><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9329122/" target="_blank">
+    UK Biobank depletion rank score</a> (hg38 only)</b>:
+    Halldorsson et al. tabulated the number of UK Biobank variants in each
+    500bp window of the genome and compared this number to an expected number
+    given the heptamer nucleotide composition of the window and the fraction of
+    heptamers with a sequence variant across the genome and their mutational
+    classes. A variant depletion score was computed for every overlapping set
+    of 500-bp windows in the genome with a 50-bp step size.  They then assigned
+    a rank (depletion rank (DR)) from 0 (most depletion) to 100 (least
+    depletion) for each 500-bp window. Since the windows are overlapping, we
+    plot the value only in the central 50bp of the 500bp window, following
+    advice from the author of the score,
+    Hakon Jonsson, deCODE Genetics. He suggested that the value of the central
+    window, rather than the worst possible score of all overlapping windows, is
+    the most informative for a position. This score covers almost the entire genome,
+    only very few regions were excluded, where the genome sequence had too many gap characters.</ol>
+
+<h2>Display Conventions and Configuration</h2>
+
+<h3>JARVIS</h3>
+<p>
+JARVIS scores are shown as a signal ("wiggle") track, with one score per genome position.
+Mousing over the bars displays the exact values. The scores were downloaded and converted to a single bigWig file.
+Move the mouse over the bars to display the exact values. A horizontal line is shown at the <b>0.733</b>
+value which signifies the 90th percentile.</p>
+See <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" target=_blank>hg19 makeDoc</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/jarvis.txt" target=_blank>hg38 makeDoc</a>.</p>
+<p>
+<b>Interpretation:</b> The authors offer a suggested guideline of <b> > 0.9998</b> for identifying
+higher confidence calls and minimizing false positives. In addition to that strict threshold, the 
+following two more relaxed cutoffs can be used to explore additional hits. Note that these
+thresholds are offered as guidelines and are not necessarily representative of pathogenicity.</p>
+
+<p>
+<table class="stdTbl">
+    <tr align=left>
+        <th>Percentile</th><th>JARVIS score threshold</th></tr>
+    <tr align=left>
+        <td>99th</td><td>0.9998</td></tr>
+    <tr align=left>
+        <td>95th</td><td>0.9826</td></tr>
+    <tr align=left>
+        <td>90th</td><td>0.7338</td></tr>
+</table>
+</p>
+
+<h3>HMC</h3>
+<p>
+HMC scores are displayed as a signal ("wiggle") track, with one score per genome position.
+Mousing over the bars displays the exact values. The highly-constrained cutoff
+of 0.8 is indicated with a line.</p>
+<p>
+<b>Interpretation:</b> 
+A protein residue with HMC score &lt;1 indicates that missense variants affecting
+the homologous residues are significantly under negative selection (P-value &lt;
+0.05) and likely to be deleterious. A more stringent score threshold of HMC&lt;0.8
+is recommended to prioritize predicted disease-associated variants.
+</p>
+
+<h3>MetaDome</h3>
+</p>
+MetaDome data can be found on two tracks, <b>MetaDome</b> and <b>MetaDome All Data</b>.
+The <b>MetaDome</b> track should be used by default for data exploration. In this track
+the raw data containing the MetaDome tolerance scores were converted into a signal ("wiggle")
+track. Since this data was computed on the proteome, there was a small amount of coordinate
+overlap, roughly 0.42%. In these regions the lowest possible score was chosen for display
+in the track to maintain sensitivity. For this reason, if a protein variant is being evaluated,
+the <b>MetaDome All Data</b> track can be used to validate the score. More information
+on this data can be found in the <a target="_blank"
+href="https://stuart.radboudumc.nl/metadome/faq">MetaDome FAQ</a>.</p>
+<p>
+<b>Interpretation:</b> The authors suggest the following guidelines for evaluating
+intolerance. By default, the <b>MetaDome</b> track displays a horizontal line at 0.7 which 
+signifies the first intolerant bin. For more information see the <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/31116477/">MetaDome publication</a>.</p>
+
+<p>
+<table class="stdTbl">
+    <tr align=left>
+        <th>Classification</th><th>MetaDome Tolerance Score</th></tr>
+    <tr align=left>
+        <td>Highly intolerant</td><td>&le; 0.175</td></tr>
+    <tr align=left>
+        <td>Intolerant</td><td>&le; 0.525</td></tr>
+    <tr align=left>
+        <td>Slightly intolerant</td><td>&le; 0.7</td></tr>
+</table>
+</p>
+
+<h3>MTR</h3>
+<p>
+MTR data can be found on two tracks, <b>MTR All data</b> and <b>MTR Scores</b>. In the
+<b>MTR Scores</b> track the data has been converted into 4 separate signal tracks
+representing each base pair mutation, with the lowest possible score shown when
+multiple transcripts overlap at a position. Overlaps can happen since this score
+is derived from transcripts and multiple transcripts can overlap. 
+A horizontal line is drawn on the 0.8 score line
+to roughly represent the 25th percentile, meaning the items below may be of particular
+interest. It is recommended that the data be explored using
+this version of the track, as it condenses the information substantially while
+retaining the magnitude of the data.</p>
+
+<p>Any specific point mutations of interest can then be researched in the <b>
+MTR All data</b> track. This track contains all of the information from
+<a href="http://biosig.unimelb.edu.au/mtr-viewer/downloads" target="_blank">
+MTRV2</a> including more than 3 possible scores per base when transcripts overlap.
+A mouse-over on this track shows the ref and alt allele, as well as the MTR score
+and the MTR score percentile. Filters are available for MTR score, False Discovery Rate
+(FDR), MTR percentile, and variant consequence. By default, only items in the bottom
+25 percentile are shown. Items in the track are colored according
+to their MTR percentile:</p>
+<ul>
+<li><b><font color=green>Green items</font></b> MTR percentiles over 75
+<li><b><font color=black>Black items</font></b> MTR percentiles between 25 and 75
+<li><b><font color=red>Red items</font></b> MTR percentiles below 25
+<li><b><font color=blue>Blue items</font></b> No MTR score
+</ul>
+<p>
+<b>Interpretation:</b> Regions with low MTR scores were seen to be enriched with
+pathogenic variants. For example, ClinVar pathogenic variants were seen to
+have an average score of 0.77 whereas ClinVar benign variants had an average score
+of 0.92. Further validation using the FATHMM cancer-associated training dataset saw
+that scores less than 0.5 contained 8.6% of the pathogenic variants while only containing
+0.9% of neutral variants. In summary, lower scores are more likely to represent
+pathogenic variants whereas higher scores could be pathogenic, but have a higher chance
+to be a false positive. For more information see the <a target="_blank"
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6602522/">MTR-Viewer publication</a>.</p>
+
+<h2>Methods</h2>
+
+<h3>JARVIS</h3> 
+<p>
+Scores were downloaded and converted to a single bigWig file. See the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
+target=_blank>hg19 makeDoc</a> and the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/jarvis.txt"
+target=_blank>hg38 makeDoc</a> for more info.
+</p>
+
+<h3>HMC</h3>
+<p>
+Scores were downloaded and converted to .bedGraph files with a custom Python 
+script. The bedGraph files were then converted to bigWig files, as documented in our 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt" 
+target=_blank>makeDoc</a> hg19 build log.</p>
+
+<h3>MetaDome</h3>
+<p>
+The authors provided a bed file containing codon coordinates along with the scores. 
+This file was parsed with a python script to create the two tracks. For the first track
+the scores were aggregated for each coordinate, then the lowest score chosen for any
+overlaps and the result written out to bedGraph format. The file was then converted
+to bigWig with the <code>bedGraphToBigWig</code> utility. For the second track the file
+was reorganized into a bed 4+3 and conveted to bigBed with the <code>bedToBigBed</code>
+utility.</p>
+<p>
+See the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
+target=_blank>hg19 makeDoc</a> for details including the build script.</p>
+<p>
+The raw MetaDome data can also be accessed via their <a target="_blank" 
+href="https://zenodo.org/record/6625251">Zenodo handle</a>.</p>
+
+<h3>MTR</h3> 
+<p>
+<a href="http://biosig.unimelb.edu.au/mtr-viewer/downloads" target="_blank">V2
+file</a> was downloaded and columns were reshuffled as well as itemRgb added for the
+<b>MTR All data</b> track. For the <b>MTR Scores</b> track the file was parsed with a python
+script to pull out the highest possible MTR score for each of the 3 possible mutations
+at each base pair and 4 tracks built out of these values representing each mutation.</p>
+<p>
+See the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg
+/makeDb/doc/hg19.txt" target=_blank>hg19 makeDoc</a> entry on MTR for more info.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../hgTables">Table Browser</a>, or
+the <a href="../hgIntegrator">Data Integrator</a>. For automated access, this track, like all
+others, is available via our <a href="../goldenPath/help/api.html">API</a>.  However, for bulk
+processing, it is recommended to download the dataset.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored at UCSC in bigWig and bigBed
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/" target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tools <tt>bigWigToWig</tt>
+or <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features confined to a given range, e.g.,
+<br><br>
+<tt>bigWigToBedGraph -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/hmc/hmc.bw stdout</tt>
+<br>
+</p>
+
+<p>
+Please refer to our
+<a HREF="../FAQ/FAQdownloads.html#download36" target=_blank>Data Access FAQ</a>
+for more information.
+</p>
+
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Jean-Madeleine Desainteagathe (APHP Paris, France) for suggesting the JARVIS, MTR, HMC tracks. Thanks to Xialei Zhang for providing the HMC data file and to Dimitrios Vitsios and Slave Petrovski for helping clean up the hg38 JARVIS files for providing guidance on interpretation. Additional
+thanks to Laurens van de Wiel for providing the MetaDome data as well as guidance on the track development and interpretation. 
+</p>
+
+<h2>References</h2>
+
+<p>
+Vitsios D, Dhindsa RS, Middleton L, Gussow AB, Petrovski S.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33686085" target="_blank">
+    Prioritizing non-coding regions based on human genomic constraint and sequence context with deep
+    learning</a>.
+<em>Nat Commun</em>. 2021 Mar 8;12(1):1504.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33686085" target="_blank">33686085</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7940646/" target="_blank">PMC7940646</a>
+</p>
+
+<p>
+Xiaolei Zhang, Pantazis I. Theotokis, Nicholas Li, the SHaRe Investigators, Caroline F. Wright, Kaitlin E. Samocha, Nicola Whiffin, James S. Ware
+<a href="https://doi.org/10.1101/2022.02.16.22271023" target="_blank">
+Genetic constraint at single amino acid resolution improves missense variant prioritisation and gene discovery</a>.
+<em>Medrxiv</em> 2022.02.16.22271023
+</p>
+
+<p>
+Wiel L, Baakman C, Gilissen D, Veltman JA, Vriend G, Gilissen C.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31116477" target="_blank">
+MetaDome: Pathogenicity analysis of genetic variants through aggregation of homologous human protein
+domains</a>.
+<em>Hum Mutat</em>. 2019 Aug;40(8):1030-1038.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31116477" target="_blank">31116477</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6772141/" target="_blank">PMC6772141</a>
+</p>
+
+<p>
+Silk M, Petrovski S, Ascher DB.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31170280" target="_blank">
+MTR-Viewer: identifying regions within genes under purifying selection</a>.
+<em>Nucleic Acids Res</em>. 2019 Jul 2;47(W1):W121-W126.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31170280" target="_blank">31170280</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6602522/" target="_blank">PMC6602522</a>
+</p>
+
+<p>
+Halldorsson BV, Eggertsson HP, Moore KHS, Hauswedell H, Eiriksson O, Ulfarsson MO, Palsson G,
+Hardarson MT, Oddsson A, Jensson BO <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35859178" target="_blank">
+    The sequences of 150,119 genomes in the UK Biobank</a>.
+<em>Nature</em>. 2022 Jul;607(7920):732-740.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35859178" target="_blank">35859178</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9329122/" target="_blank">PMC9329122</a>
+</p>
+

@@ -117,6 +117,54 @@ char *hgGeneName()
 return _hgGeneName;
 }
 
+char *hgAbsUrl()
+/* absolute URL to current CGI. Needs to be freed. */
+{
+// get the full URL of this hgTracks page, so external page can construct a custom track
+// and link back to us
+char* host = getenv("HTTP_HOST");
+char* reqUrl = getenv("REQUEST_URI");
+char* isHttps = getenv("HTTPS");
+// remove everything after ? in URL
+if (reqUrl) 
+    {
+    char *e = strchr(reqUrl, '?');
+    if (e) *e = 0; 
+    }
+else 
+{
+    // when called from command line, cannot get argv so using dummy name
+    reqUrl = "/cgi-bin/hgTracks";
+    host = "genome.ucsc.edu";
+    isHttps = "on";
+}
+
+char *prot = NULL;
+if (isHttps && sameWord(isHttps, "on"))
+    prot = "https";
+else
+    prot = "http";
+
+char *url = needMem(4000);
+safef(url, 4000, "%s://%s%s", prot, host, reqUrl);
+return url;
+}
+
+char *hgAbsUrlCgi(char *cgiName)
+/* Full absolute URL to another CGI, including the protocol part. Needs to be freed. Example argument: "hgTracks" */
+{
+char *url = hgAbsUrl();
+char *lastSlash = strrchr(url, '/');
+if (lastSlash!=NULL)
+{
+    lastSlash++;
+    *lastSlash = '\0';
+}
+char *newUrl = catTwoStrings(url, cgiName);
+//freeMem(cgiName);
+return newUrl;
+}
+
 static void finishCloneName(char *fragName, char *e, char cloneName[128])
 /* Finish conversion from frag to clone or clone.ver name. */
 {

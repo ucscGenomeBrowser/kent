@@ -23,7 +23,7 @@
 
 #include "dystring.h"
 
-#define MAX_HUB_TRACKDB_FILE_SIZE    64*1024*1024
+#define MAX_HUB_TRACKDB_FILE_SIZE    256*1024*1024
 #define MAX_HUB_GROUP_FILE_SIZE     16*1024*1024
 #define MAX_HUB_GENOME_FILE_SIZE    64*1024*1024
 
@@ -61,6 +61,7 @@ struct trackHubGenome
     char *trackDbFile;	/* The base trackDb.ra file. */
     struct hash *settingsHash;	/* Settings from hub.ra file. */
     char *twoBitPath;  /* URL to twoBit.  If not null, this is an assmebly hub*/
+    char *twoBitBptUrl;  /* URL to twoBit bpt.  May be NULL if no such index exists */
     struct twoBitFile *tbf;  /* open handle to two bit file */
     char *groups;	     /* URL to group.txt file */
     char *defaultPos;        /* default position */
@@ -68,6 +69,7 @@ struct trackHubGenome
     char *description;       /* description, also called freeze name */
     struct trackHub *trackHub; /* associated track hub */
     unsigned orderKey;   /* the orderKey for changing the order from the order in the file */
+    char *chromAuthority;     /* what authority should be used to display sequence names */
     };
 
 void trackHubClose(struct trackHub **pHub);
@@ -81,10 +83,11 @@ struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no
  * such genome. */
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles);
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles, boolean *foundFirstGenome);
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
  * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
- * put the list of included files in there. */
+ * put the list of included files in there.  Only the first example of a genome 
+ * gets to populate groups, the others get a group for the trackHub.  */
 
 void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList);
 /* For a hub named "xyz" add the prefix "hub_xyz_" to each track and parent field. 
@@ -141,13 +144,15 @@ char *trackHubChromSizes(char *database);
  * returns NULL when not present
  */
 
+char *trackHubAliasBbFile(char *database);
+/* see if this assembly hub has an alias bigBed file, return url if present
+ * returns NULL when not present
+ */
+
 char *trackHubAliasFile(char *database);
 /* see if this assembly hub has an alias file, return url if present
  * returns NULL when not present
  */
-
-struct hash *trackHubAllChromAlias(char *database);
-/* Return a hash of chroms with alias names from alias file if present */
 
 struct chromInfo *trackHubAllChromInfo(char *database);
 /* Return a chromInfo structure for all the chroms in this database. */
@@ -186,7 +191,7 @@ struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
 /* Return a dbDb structure for just this database. */
 
 struct hgPositions;
-void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp);
+void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp, boolean measureTiming);
 /* Look for term in track hubs.  Update hgp if found */
 
 void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb);

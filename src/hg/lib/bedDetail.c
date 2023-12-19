@@ -373,7 +373,7 @@ if (wordCount > 8)
     if (comma)
         {
         int rgb = bedParseRgb(row[8]);
-        if (rgb < 0)
+        if (rgb == -1)
             lineFileAbort(lf,
                 "Expecting 3 comma separated numbers for r,g,b bed item color.");
         else

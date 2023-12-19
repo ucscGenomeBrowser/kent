@@ -31,8 +31,8 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 FILE *f;
-struct dyString *ssList = newDyString(255);
-struct dyString *buildList = newDyString(255);
+struct dyString *ssList = dyStringNew(255);
+struct dyString *buildList = dyStringNew(255);
 char *currentSnpString = NULL;
 int currentSnpNum = 0;
 int count = 0;
@@ -93,17 +93,18 @@ void createTable()
 /* create a SNPSubSNPLinkCondense table */
 {
 struct sqlConnection *conn = hAllocConn();
-char *createString =
-NOSQLINJ "CREATE TABLE SNPSubSNPLinkCondense (\n"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE SNPSubSNPLinkCondense (\n"
 "    snp_id int(11) not null,       \n"
 "    subsnpIds blob not null,\n"
 "    buildIds blob not null,\n"
 "    firstBuild int(11) not null,\n"
 "    lastBuild int(11) not null,\n"
 "    count int(4) not null\n"
-");\n";
+");\n");
 
-sqlRemakeTable(conn, "SNPSubSNPLinkCondense", createString);
+sqlRemakeTable(conn, "SNPSubSNPLinkCondense", query);
 }
 
 

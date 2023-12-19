@@ -108,7 +108,7 @@ void putaInfoSaveToDb(struct sqlConnection *conn, struct putaInfo *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *tExonsArray, *qExonsArray, *qBasesArray, *repeatsArray, *stopsArray, *idArray;
 tExonsArray = sqlUnsignedArrayToString(el->tExons, 2);
 qExonsArray = sqlUnsignedArrayToString(el->qExons, 4);
@@ -119,7 +119,7 @@ idArray = sqlDoubleArrayToString(el->id, 2);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->oChrom,  el->oChromStart,  el->oChromEnd,  el->blockCount,  el->stop,  tExonsArray ,  qExonsArray ,  qBasesArray ,  repeatsArray ,  stopsArray ,  idArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&tExonsArray);
 freez(&qExonsArray);
 freez(&qBasesArray);

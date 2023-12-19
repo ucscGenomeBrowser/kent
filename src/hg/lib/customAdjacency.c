@@ -133,7 +133,7 @@ static struct pipeline *adjacencyLoaderPipe(struct customTrack *track)
  *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
 	"-sqlTable=loader/adjacency.sql", "-noBin", "-renameSqlTable", "-trimSqlTable", "-notItemRgb", NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
@@ -144,7 +144,7 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy);
 cmd1[index++] = CUSTOM_TRASH;

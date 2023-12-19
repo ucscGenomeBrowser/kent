@@ -1085,7 +1085,7 @@ void edwValidFileUpdateDb(struct sqlConnection *conn, struct edwValidFile *el, l
 /* Save edwValidFile as a row to the table specified by tableName, replacing existing record at 
  * id. */
 {
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 sqlDyStringPrintf(dy, "update edwValidFile set ");
 // omit id and licensePlate fields - one autoupdates and the other depends on this
 // also omit fileId which also really can't change.
@@ -1115,7 +1115,7 @@ sqlDyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
 #endif
 sqlDyStringPrintf(dy, " where id=%lld\n", (long long)id);
 sqlUpdate(conn, dy->string);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 static char *findTagOrEmpty(struct cgiParsedVars *tags, char *key)

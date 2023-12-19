@@ -3,12 +3,12 @@ CC?=gcc
 # allow the somewhat more modern C syntax, e.g. 'for (int i=5; i<10, i++)'
 CFLAGS += -std=c99
 
+# add additional library paths
+L += ${LDFLAGS}
+
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
     COPT=-O -g
-endif
-ifeq (${CFLAGS},)
-    CFLAGS=
 endif
 ifeq (${MACHTYPE},)
     MACHTYPE:=$(shell uname -m)
@@ -34,36 +34,41 @@ else
   IS_HGWDEV = no
 endif
 
-FREETYPECFLAGS = $(shell freetype-config --cflags  2> /dev/null)
+# Skip freetype for conda build; not needed for utils, and the Mac build environment has
+# freetype installed but we don't want to use the system libraries because they can be
+# for a newer OSX version than the conda build target, and can be incompatible.
+ifneq (${CONDA_BUILD},1)
+  FREETYPECFLAGS = $(shell freetype-config --cflags  2> /dev/null)
 
-# we use our static library on dev
-ifeq (${IS_HGWDEV},no)
-  ifeq (${FREETYPELIBS},)
-    ifeq ($(UNAME_S),Darwin)
-      ifneq ($(wildcard /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a),)
-        ifneq ($(wildcard /usr/local/opt/bzip2/lib/libbz2.a),)
-          FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a /usr/local/opt/bzip2/lib/libbz2.a
+  # we use our static library on dev
+  ifeq (${IS_HGWDEV},no)
+    ifeq (${FREETYPELIBS},)
+      ifeq ($(UNAME_S),Darwin)
+        ifneq ($(wildcard /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a),)
+          ifneq ($(wildcard /usr/local/opt/bzip2/lib/libbz2.a),)
+            FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a /usr/local/opt/bzip2/lib/libbz2.a
+          else
+            FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a -lbz2
+          endif
         else
-          FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a -lbz2
-        endif
-      else
-        ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
-          FREETYPELIBS=/opt/local/lib/libfreetype.a /opt/local/lib/libbz2.a /opt/local/lib/libbrotlidec-static.a /opt/local/lib/libbrotlienc-static.a /opt/local/lib/libbrotlicommon-static.a
+          ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
+            FREETYPELIBS=/opt/local/lib/libfreetype.a /opt/local/lib/libbz2.a /opt/local/lib/libbrotlidec-static.a /opt/local/lib/libbrotlienc-static.a /opt/local/lib/libbrotlicommon-static.a
+          endif
         endif
       endif
-    endif
-    ifeq (${FREETYPELIBS},)
-      FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
+      ifeq (${FREETYPELIBS},)
+        FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
+      endif
     endif
   endif
-endif
 
-ifneq (${FREETYPECFLAGS},)
-FREETYPECFLAGS += -DUSE_FREETYPE
-endif
+  ifneq (${FREETYPECFLAGS},)
+  FREETYPECFLAGS += -DUSE_FREETYPE
+  endif
 
-HG_INC += ${FREETYPECFLAGS}
-L += ${FREETYPELIBS}
+  HG_INC += ${FREETYPECFLAGS}
+  L += ${FREETYPELIBS}
+endif
 
 ifeq (${IS_HGWDEV},yes)
   FULLWARN = yes
@@ -91,18 +96,16 @@ else
   endif
 endif
 
-# autodetect if openssl is installed
-ifeq (${SSLDIR},)
-  SSLDIR = /usr/include/openssl
-endif
-
 # autodetect UCSC installation of hal:
 ifeq (${HALDIR},)
-    HALDIR = /hive/groups/browser/hal/build/hal.2020-12-18
-    ifneq ($(wildcard ${HALDIR}),)
+    # ONLY on hgwdev, not any other machine here (i.e. hgcompute-01)
+    ifeq (${IS_HGWDEV},yes)
+      HALDIR = /hive/groups/browser/hal/build/hal.2020-12-18
+      ifneq ($(wildcard ${HALDIR}),)
         ifeq (${USE_HAL},)
           USE_HAL=1
         endif
+      endif
     endif
 endif
 
@@ -143,27 +146,42 @@ ifeq (${IS_HGWDEV},yes)
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
 else
-   ifneq ($(wildcard /opt/local/lib/libssl.a),)
-       L+=/opt/local/lib/libssl.a
+   ifeq (${CONDA_BUILD},1)
+       L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
    else
-     ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
-	L+=/usr/lib/x86_64-linux-gnu/libssl.a
+     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@3/3.0.7/lib/libssl.a),)
+         L+=/opt/homebrew/Cellar/openssl@3/3.0.7/lib/libssl.a
      else
-        ifneq ($(wildcard /usr/local/opt/openssl/lib/libssl.a),)
-           L+=/usr/local/opt/openssl/lib/libssl.a
-        else
-           L+=-lssl
-        endif
+       ifneq ($(wildcard /opt/local/lib/libssl.a),)
+         L+=/opt/local/lib/libssl.a
+       else
+         ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
+	   L+=/usr/lib/x86_64-linux-gnu/libssl.a
+         else
+           ifneq ($(wildcard /usr/local/opt/openssl/lib/libssl.a),)
+              L+=/usr/local/opt/openssl/lib/libssl.a
+           else
+              L+=-lssl
+           endif
+         endif
+       endif
      endif
-   endif
-   ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
-       L+=/opt/local/lib/libcrypto.a
-   else
-        ifneq ($(wildcard /usr/local/opt/openssl/lib/libcrypto.a),)
-           L+=/usr/local/opt/openssl/lib/libcrypto.a
-        else
-           L+=-lcrypto
-        endif
+     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@3/3.0.7/lib/libcrypto.a),)
+         L+=/opt/homebrew/Cellar/openssl@3/3.0.7/lib/libcrypto.a
+     else
+       ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
+          L+=/opt/local/lib/libcrypto.a
+       else
+          ifneq ($(wildcard /usr/local/opt/openssl/lib/libcrypto.a),)
+             L+=/usr/local/opt/openssl/lib/libcrypto.a
+          else
+             L+=-lcrypto
+          endif
+       endif
+     endif
+     ifneq ($(wildcard /opt/homebrew/Cellar/zstd/1.5.2/lib/libzstd.a),)
+          L+=/opt/homebrew/Cellar/zstd/1.5.2/lib/libzstd.a
+     endif
    endif
 endif
 
@@ -259,12 +277,20 @@ ifneq ($(MAKECMDGOALS),clean)
     endif
   endif
   ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a),)
-          MYSQLLIBS+=/usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a
+    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.9.4/lib/libmariadbclient.a),)
+         MYSQLLIBS+=/usr/local/Cellar/mariadb/10.9.4/lib/libmariadbclient.a
     else
-      ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
-          MYSQLLIBS+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
-       endif
+      ifneq ($(wildcard /usr/local/Cellar/mariadb/10.8.3_1/lib/libmariadbclient.a),)
+           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.8.3_1/lib/libmariadbclient.a
+      else
+        ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a),)
+           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a
+        else
+          ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
+           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
+	  endif
+        endif
+      endif
     endif
   endif
   ifeq (${MYSQLLIBS},)
@@ -305,6 +331,11 @@ ifneq ($(MAKECMDGOALS),clean)
   ifeq (${MYSQLLIBS},)
     ifneq ($(wildcard /opt/local/lib/mysql55/mysql/libmysqlclient.a),)
 	  MYSQLLIBS=/opt/local/lib/mysql55/mysql/libmysqlclient.a
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /opt/local/lib/mariadb-10.10/mysql/libmariadbclient.a),)
+        MYSQLLIBS=/opt/local/lib/mariadb-10.10/mysql/libmariadbclient.a
     endif
   endif
   ifeq (${MYSQLLIBS},)
@@ -357,17 +388,29 @@ endif
 L += $(kentSrc)/htslib/libhts.a
 
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
-HG_INC+=${PNGINCL}
-ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/include/mysql/mysql.h),)
-  HG_INC+=-I/usr/local/Cellar/mariadb/10.6.4/include/mysql
+ifneq ($(wildcard /usr/local/Cellar/mariadb/10.9.4/include/mysql/mysql.h),)
+    HG_INC+=-I/usr/local/Cellar/mariadb/10.9.4/include/mysql
 else
-  ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
-    HG_INC+=-I/usr/local/Cellar/mariadb/10.4.12/include/mysql
+  ifneq ($(wildcard /usr/local/Cellar/mariadb/10.8.3_1/include/mysql/mysql.h),)
+      HG_INC+=-I/usr/local/Cellar/mariadb/10.8.3_1/include/mysql
+  else
+    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/include/mysql/mysql.h),)
+      HG_INC+=-I/usr/local/Cellar/mariadb/10.6.4/include/mysql
+    else
+      ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
+        HG_INC+=-I/usr/local/Cellar/mariadb/10.4.12/include/mysql
+      endif
+    endif
   endif
 endif
-ifneq ($(wildcard /usr/local/opt/openssl/include/openssl/hmac.h),)
-  HG_INC+=-I/usr/local/opt/openssl/include
+ifneq ($(wildcard /opt/homebrew/Cellar/openssl@3/3.0.7/include/openssl/hmac.h),)
+    HG_INC+=-I/opt/homebrew/Cellar/openssl@3/3.0.7/include
+else
+  ifneq ($(wildcard /usr/local/opt/openssl/include/openssl/hmac.h),)
+    HG_INC+=-I/usr/local/opt/openssl/include
+  endif
 endif
+HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
 ifneq (${COREDUMP},)

@@ -10,11 +10,19 @@ testSlow: mm3 multiple
 
 liftOver=${DESTBINDIR}/liftOver
 liftOverMerge=${DESTBINDIR}/liftOverMerge
+# use local binaries if available
+ifneq ($(wildcard ../liftOver),)
+  liftOver=../liftOver
+endif
+ifneq ($(wildcard ../liftOverMerge),)
+  liftOverMerge=../liftOverMerge
+endif
+
 
 zeroWidth:	mkdirs
 	${liftOver} \
             input/zeroWidth.bed \
-            /cluster/data/hg19/bed/liftOver/hg19ToHg38.over.chain.gz \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg19ToHg38.over.chain.gz \
                 output/zeroWidth.good.bed output/zeroWidth.bad.bed 2> /dev/null
 	cat output/zeroWidth.{good,bad}.bed | \
                 diff - expected/zeroWidth.bed 1>&2
@@ -22,7 +30,7 @@ zeroWidth:	mkdirs
 bed12:	mkdirs
 	${liftOver} \
             input/bed12.bed \
-            /cluster/data/hg38/bed/liftOver/hg38ToPanTro6.over.chain.gz \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg38ToPanTro6.over.chain.gz \
                 output/bed12.good.bed output/bed12.bad.bed 2> /dev/null
 	cat output/bed12.{good,bad}.bed | \
                 diff - expected/bed12.bed 1>&2
@@ -30,7 +38,7 @@ bed12:	mkdirs
 bed8:	mkdirs
 	${liftOver} \
             input/bed8.bed \
-            /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain.gz \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg16ToHg17.over.chain.gz \
                 output/bed8.good.bed output/bed8.bad.bed 2> /dev/null
 	cat output/bed8.{good,bad}.bed | \
                 diff - expected/bed8.bed 1>&2
@@ -38,7 +46,7 @@ bed8:	mkdirs
 bin:    mkdirs
 	${liftOver} -hasBin -bedPlus=6\
             input/bin.bed \
-            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/mm2ToMm5.over.chain.gz \
                 output/bin.good.bed output/bin.bad.bed 2> /dev/null
 	cat output/bin.{good,bad}.bed | \
                 diff - expected/bin.bed 1>&2
@@ -46,7 +54,7 @@ bin:    mkdirs
 bedPlus3:	mkdirs
 	${liftOver} -bedPlus=3 \
             input/bedPlus.bed \
-            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/mm2ToMm5.over.chain.gz \
                 output/bedPlus3.good.bed output/bedPlus3.bad.bed 2> /dev/null
 	cat output/bedPlus3.{good,bad}.bed | \
                 diff - expected/bedPlus3.bed 1>&2
@@ -54,7 +62,7 @@ bedPlus3:	mkdirs
 simpleTest:     mkdirs
 	${liftOver} \
             input/mouseRegions.bed \
-                /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr16.chain \
+                 https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/chr16.chain.gz \
                     output/mouseRegions.good.bed \
                     output/mouseRegions.bad.bed 2> /dev/null
 	cat output/mouseRegions.{good,bad}.bed | \
@@ -63,7 +71,7 @@ simpleTest:     mkdirs
 minus:	mkdirs
 	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
                 input/enr223.S.bed \
-                    /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr6.chain \
+                     https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/chr6.chain.gz \
                     output/enr223.S.good.bed \
                     output/enr223.S.bad.bed 2> /dev/null
 	cat output/enr223.S.{good,bad}.bed | \
@@ -73,7 +81,7 @@ minus:	mkdirs
 enm001:	mkdirs
 	${liftOver} -minMatch=.01 \
             input/enm001.bed \
-            /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr7.chain \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/chr7.chain.gz \
                 output/enm001.good.bed output/enm001.bad.bed 2> /dev/null
 	cat output/enm001.{good,bad}.bed | \
                 diff - expected/enm001.bed 1>&2
@@ -81,7 +89,7 @@ enm001:	mkdirs
 chuckTest:	mkdirs
 	${liftOver} \
             input/chuckTest.bed \
-            /cluster/data/mm2/bed/liftOver/mm2.mm5.liftOver/over/chr19.chain \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/mm2.mm5.chr19.chain.gz \
                 output/chuckTest.good.bed output/chuckTest.bad.bed 2> /dev/null
 	cat output/chuckTest.{good,bad}.bed | \
                 diff - expected/chuckTest.bed 1>&2
@@ -89,16 +97,16 @@ chuckTest:	mkdirs
 chuckBigTest:	mkdirs
 	${liftOver} \
             input/chuckBigTest.bed \
-            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/mm2ToMm5.over.chain.gz \
                 output/chuckBigTest.good.bed output/chuckBigTest.bad.bed 2> /dev/null
 	cat output/chuckBigTest.{good,bad}.bed | \
                 diff - expected/chuckBigTest.bed 1>&2
 
-# missing expected file
+# missing expected file, also missing the input/m7rat.bed file ?
 m7rat:	mkdirs
 	${liftOver} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple \
             input/m7rat.bed \
-            /cluster/data/hg16/bed/blastz.rn3/axtChain/subset/chr19.chain \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg16.rn3.chr19.chain.gz \
                 output/m7rat.good.bed output/m7rat.bad.bed 2> /dev/null
 	${liftOverMerge} ${VERBOSE} -mergeGap=2000 \
                 output/m7rat.good.bed output/m7rat.merged.bed
@@ -109,7 +117,7 @@ m7rat:	mkdirs
 m4mouse:	mkdirs
 	${liftOver} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple -chainTable=hg16.chainMm5\
             input/m4mouse.bed \
-            /cluster/data/hg16/bed/blastz.mm5/axtChain/subset/chr22.chain \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/chr22.chain.gz \
                 output/m4mouse.good.bed output/m4mouse.bad.bed 2> /dev/null
 	cat output/m4mouse.{good,bad}.bed | \
                 diff - expected/m4mouse.bed 1>&2
@@ -120,7 +128,7 @@ mergeTest: enm006
 enm006:	mkdirs
 	${liftOver} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple \
             input/enm006.bed \
-            /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chrX.chain \
+             https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/chrX.chain.gz \
                 output/enm006.good.bed output/enm006.bad.bed 2> /dev/null
 	cat output/enm006.{good,bad}.bed | \
                 diff - expected/enm006.bed 1>&2
@@ -129,7 +137,7 @@ enm006:	mkdirs
 enr112:	mkdirs
 	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
                 input/enr112.bed \
-                    /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr2.chain \
+                     https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/chr2.chain.gz \
                     output/enr112.good.bed \
                     output/enr112.bad.bed 2> /dev/null
 	cat output/enr112.{good,bad}.bed | \
@@ -146,7 +154,7 @@ orderTest: enr223
 enr223:	mkdirs
 	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
             input/enr223.bed \
-                /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr6.chain \
+                 https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/chr6.chain.gz \
                     output/enr223.good.bed \
                     output/enr223.bad.bed 2> /dev/null
 	cat output/enr223.{good,bad}.bed | \
@@ -155,8 +163,8 @@ enr223:	mkdirs
 # too slow -- don't use in default test suite
 mm3:	mkdirs
 	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE}\
-                /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed \
-                    /cluster/data/hg16/bed/liftOver/hg16Tomm3.chain \
+                encodeRegions.bed \
+                     https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg16ToMm3.chain.gz \
                     output/mm3.all.good.bed \
                     output/mm3.all.bad.bed
 	cat output/mm3.all.{good,bad}.bed | \
@@ -166,7 +174,7 @@ mm3:	mkdirs
 multiple:	mkdirs
 	${liftOver} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE}\
                 input/mm3.multiple.bed \
-                    /cluster/data/hg16/bed/liftOver/hg16Tomm3.chain \
+                     https://hgdownload.soe.ucsc.edu/admin/exe/testFiles/liftOver/hg16ToMm3.chain.gz \
                     output/mm3.multiple.good.bed \
                     output/mm3.multiple.bad.bed
 	cat output/mm3.multiple.{good,bad}.bed | \

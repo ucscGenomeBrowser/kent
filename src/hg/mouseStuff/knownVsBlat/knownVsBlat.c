@@ -673,7 +673,9 @@ struct sqlResult *sr;
 struct refLink rl;
 char **row;
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from refLink");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from refLink");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     refLinkStaticLoad(row, &rl);

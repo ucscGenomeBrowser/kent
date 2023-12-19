@@ -65,7 +65,6 @@ void chromInfoOutput(struct chromInfo *el, FILE *f, char sep, char lastSep);
 boolean chromSeqFileExists(char *db, char *chrom);
 /* Check whether chromInfo exists for a database, find the path of the */
 /* sequence file for this chromosome and check if the file exists. */
-#endif /* CHROMINFO_H */
 
 struct chromInfo *createChromInfoList(char *name, char *database);
 /* Load up chromosome information for chrom 'name'.
@@ -77,3 +76,11 @@ struct hash *chromHashFromDatabase(char *db);
 
 struct hash *chromHashFromFile(char *fileName);
 /* read chrom info from file and return hash of name and size */
+
+struct chromInfo *chromInfoListFromFile(char *fileName) ;
+/* read chrom info from file and return list of name and size */
+
+struct hash *chromNameAndSizeHashFromList(struct chromInfo *ci);
+/* Return a hash table of chrom key=name, val=size */
+
+#endif /* CHROMINFO_H */

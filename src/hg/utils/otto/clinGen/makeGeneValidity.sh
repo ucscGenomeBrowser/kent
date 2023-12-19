@@ -39,8 +39,8 @@ if [ "${count}" -gt 1 ]; then
     cd $today
     wget -N -q "ftp://ftp.clinicalgenome.org/hg19ClinGenBigBed.bb"
     wget -N -q "ftp://ftp.clinicalgenome.org/hg38ClinGenBigBed.bb"
-    cp ClinGenHub/hg19/hg19ClinGenBigBed.bb ${WORKDIR}/release/hg19/clinGenGeneDisease.bb
-    cp ClinGenHub/hg38/hg38ClinGenBigBed.bb ${WORKDIR}/release/hg38/clinGenGeneDisease.bb
+    cp hg19ClinGenBigBed.bb ${WORKDIR}/release/hg19/clinGenGeneDisease.bb
+    cp hg38ClinGenBigBed.bb ${WORKDIR}/release/hg38/clinGenGeneDisease.bb
     cd ..
     echo "ClinGen Gene-Disease update done: `date`"
 else

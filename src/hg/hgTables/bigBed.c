@@ -25,6 +25,8 @@
 #include "asFilter.h"
 #include "hgTables.h"
 #include "trackHub.h"
+#include "chromAlias.h"
+#include "bPlusTree.h"
 
 
 boolean isBigBed(char *database, char *table, struct trackDb *parent,
@@ -64,7 +66,7 @@ struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn)
 {
 /* Get columns in asObject format. */
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 
 /* Allocate hTableInfo structure and fill in info about bed fields. */
@@ -101,7 +103,7 @@ struct slName *bigBedGetFields(char *table, struct sqlConnection *conn)
 /* Get fields of bigBed as simple name list. */
 {
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct slName *names = asColNames(as);
 freeMem(fileName);
@@ -115,7 +117,7 @@ struct sqlFieldType *bigBedListFieldsAndTypes(struct trackDb *tdb, struct sqlCon
 char *fileOrUrl = bigFileNameFromCtOrHub(tdb->table, conn);
 if (fileOrUrl == NULL)
     fileOrUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-struct bbiFile *bbi = bigBedFileOpen(fileOrUrl);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileOrUrl, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct sqlFieldType *list = sqlFieldTypesFromAs(as);
 bbiFileClose(&bbi);
@@ -159,26 +161,96 @@ struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,
 {
 /* Connect to big bed and get metadata and filter. */
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct asFilter *filter = asFilterFromCart(cart, db, table, as);
-
-/* Get beds a region at a time. */
 struct bed *bedList = NULL;
+
+/* If we're doing a whole-genome query with a name index then use the name index to retrieve items
+ * instead of iterating over regions. */
+struct hash *idHash = NULL;
+if (bbi->definedFieldCount >= 4)
+    idHash = identifierHash(db, table);
+int fieldIx;
+struct bptFile *bpt = NULL;
+struct lm *bbLm = NULL;
+struct bigBedInterval *ivList = NULL;
+if (idHash && isRegionWholeGenome())
+    bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+if (bpt != NULL)
+    {
+    struct slName *nameList = hashSlNameFromHash(idHash), *name;
+    int count = slCount(nameList);
+    char *names[count];
+    int ii;
+    for (ii=0, name = nameList; ii < count; ii++, name = name->next)
+        {
+        names[ii] = name->name;
+        }
+    bbLm = lmInit(0);
+    ivList = bigBedMultiNameQuery(bbi, bpt, fieldIx, names, count, bbLm);
+    slNameFreeList(&nameList);
+    }
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
-    addFilteredBedsOnRegion(bbi, region, table, filter, lm, &bedList);
-slReverse(&bedList);
+    {
+    if (bpt)
+        {
+        /*** NOTE: it is inefficient to convert intervals from a name-index query to filtered bed
+         * inside the loop on regionList.  However, bigBedGetFilteredBedsOnRegions is called by
+         * getFilteredBeds on a "regionList" that has been doctored to one region at a time,
+         * so we can do intersection one region at a time.  Since this is called once per region,
+         * we really do need to restrict items to region->chrom, otherwise all items would be
+         * returned for every region.  It is still much more efficient for large bigBeds to do
+         * name-index queries when names are pasted/uploaded than to fetch all intervals in all
+         * regions and then check names.  See MLQ #32625. */
+        char chromBuf[4096];
+        struct bigBedInterval *iv = NULL;
+        char *displayChromName = NULL;
+        int lastChromId = -1;
+        for (iv = ivList; iv != NULL; iv = iv->next)
+            {
+            if (iv->chromId != lastChromId)
+                {
+                bptStringKeyAtPos(bbi->chromBpt, iv->chromId, chromBuf, sizeof chromBuf);
+                displayChromName = chromAliasGetDisplayChrom(database, cart, hgOfficialChromName(database, chromBuf));
+                }
+            if (sameString(displayChromName, region->chrom))
+                {
+                char *row[bbi->fieldCount];
+                char startBuf[16], endBuf[16];
+                bigBedIntervalToRow(iv, displayChromName, startBuf, endBuf, row, bbi->fieldCount);
+                if (asFilterOnRow(filter, row))
+                    {
+                    struct bed *bed = bedLoadN(row, bbi->definedFieldCount);
+                    struct bed *lmBed = lmCloneBed(bed, lm);
+                    slAddHead(&bedList, lmBed);
+                    bedFree(&bed);
+                    }
+                }
+            lastChromId = iv->chromId;
+            }
+        }
+    else
+        {
+        /* Get beds a region at a time. */
+        addFilteredBedsOnRegion(bbi, region, table, filter, lm, &bedList);
+        }
+    slReverse(&bedList);
+    }
 
 /* Clean up and return. */
 if (retFieldCount != NULL)
-	*retFieldCount = bbi->definedFieldCount;
+    *retFieldCount = bbi->definedFieldCount;
+lmCleanup(&bbLm);
+hashFree(&idHash);
+bptFileDetach(&bpt);
 bbiFileClose(&bbi);
 freeMem(fileName);
 return bedList;
 }
 
-void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
+void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f, char outSep)
 /* Print out selected fields from Big Bed.  If fields is NULL, then print out all fields. */
 {
 if (f == NULL)
@@ -212,14 +284,22 @@ for (i=0; i<fieldCount; ++i)
     }
 
 /* Output row of labels */
-fprintf(f, "#%s", fieldArray[0]);
+fprintf(f, "#");
+if (outSep == ',') fputc('"', f);
+fprintf(f, "%s", fieldArray[0]);
+if (outSep == ',') fputc('"', f);
 for (i=1; i<fieldCount; ++i)
-    fprintf(f, "\t%s", fieldArray[i]);
+    {
+    fputc(outSep, f);
+    if (outSep == ',') fputc('"', f);
+    fprintf(f, "%s", fieldArray[i]);
+    if (outSep == ',') fputc('"', f);
+    }
 fprintf(f, "\n");
 
 /* Open up bigBed file. */
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct asFilter *filter = NULL;
 
@@ -256,15 +336,29 @@ if (bpt) // if we have an index it means we're whole genome and don't need to fi
     struct bigBedInterval *ivList = bigBedMultiNameQuery(bbi, bpt, fieldIx, names, count, lm);
     char chromBuf[4096];
     struct bigBedInterval *interval, *prevInterval = NULL;
+    char * displayChromName = NULL;
     for (interval = ivList; interval != NULL; prevInterval = interval, interval = interval->next)
         {       
-        bigBedIntervalToRowLookupChrom(interval, prevInterval, bbi, chromBuf, sizeof chromBuf, startBuf, endBuf, row, bbi->fieldCount);
+        int lastChromId = (prevInterval == NULL ? -1 : prevInterval->chromId);
+        if (interval->chromId != lastChromId)
+            {
+            bptStringKeyAtPos(bbi->chromBpt, interval->chromId, chromBuf, sizeof chromBuf);
+            displayChromName = chromAliasGetDisplayChrom(database, cart, hgOfficialChromName(database, chromBuf));
+            }
+        bigBedIntervalToRow(interval, displayChromName, startBuf, endBuf, row, bbi->fieldCount);
         if (asFilterOnRow(filter, row))
             {
             int i;
+            if (outSep == ',') fputc('"', f);
             fprintf(f, "%s", row[columnArray[0]]);
+            if (outSep == ',') fputc('"', f);
             for (i=1; i<fieldCount; ++i)
-                fprintf(f, "\t%s", row[columnArray[i]]);
+                {
+                fputc(outSep, f);
+                if (outSep == ',') fputc('"', f);
+                fprintf(f, "%s", row[columnArray[i]]);
+                if (outSep == ',') fputc('"', f);
+                }
             fprintf(f, "\n");
             }
         }
@@ -278,17 +372,25 @@ else
         struct lm *lm = lmInit(0);
         struct bigBedInterval *iv, *ivList = bigBedIntervalQuery(bbi, region->chrom,
             region->start, region->end, 0, lm);
+        char * displayChromName = chromAliasGetDisplayChrom(database, cart, region->chrom);
         for (iv = ivList; iv != NULL; iv = iv->next)
             {
-            bigBedIntervalToRow(iv, region->chrom, startBuf, endBuf, row, bbi->fieldCount);
+            bigBedIntervalToRow(iv, displayChromName, startBuf, endBuf, row, bbi->fieldCount);
             if (asFilterOnRow(filter, row))
                 {
                 if ((idHash != NULL) && (hashLookup(idHash, row[3]) == NULL))
                     continue;
                 int i;
+                if (outSep == ',') fputc('"', f);
                 fprintf(f, "%s", row[columnArray[0]]);
+                if (outSep == ',') fputc('"', f);
                 for (i=1; i<fieldCount; ++i)
-                    fprintf(f, "\t%s", row[columnArray[i]]);
+                    {
+                    fputc(outSep, f);
+                    if (outSep == ',') fputc('"', f);
+                    fprintf(f, "%s", row[columnArray[i]]);
+                    if (outSep == ',') fputc('"', f);
+                    }
                 fprintf(f, "\n");
                 }
             }
@@ -365,7 +467,7 @@ struct slName *randomBigBedIds(char *table, struct sqlConnection *conn, int coun
 /* Figure out bigBed file name and open it.  Get contents for first chromosome as an example. */
 struct slName *idList = NULL;
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct bbiChromInfo *chromList = bbiChromList(bbi);
 struct lm *lm = lmInit(0);
 int orderedCount = count * 4;
@@ -400,7 +502,7 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = hAllocConn(database);
 char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct bbiChromInfo *chromList = bbiChromList(bbi);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *ivList = getNElements(bbi, chromList, lm, 10);
@@ -412,12 +514,15 @@ struct asObject *as = bigBedAsOrDefault(bbi);
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s ", table);
 printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", firstWordInLine(sqlUnixTimeToDate(&timep, FALSE)));
-hPrintf("<B>Big Bed File:</B> %s", fileName);
+
+printDownloadLink("Big Bed", fileName);
+
 if (bbi->version >= 2)
     {
     hPrintf("<BR><B>Item Count:</B> ");
     printLongWithCommas(stdout, bigBedItemCount(bbi));
     }
+printTypeHelpDesc(tdb->type);
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);
 

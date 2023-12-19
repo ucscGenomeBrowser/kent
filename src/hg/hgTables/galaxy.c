@@ -76,7 +76,7 @@ if (isMafTable(database, curTrack, curTable))
     hPrintf("You are about to download a VERY large dataset to Galaxy. "
             "For most usage scenarios it is not necessary as Galaxy already "
             "stores alignments locally. Click here ("
-            "<A HREF=\"http://wiki.galaxyproject.org/Main/MAF%%20Analysis\" TARGET=_blank>http://wiki.galaxyproject.org/Main/MAF%%20Analysis</A>"
+            "<A HREF=\"https://galaxyproject.org/main/maf-analysis/\" TARGET=_blank>https://galaxyproject.org/main/maf-analysis/</A>"
             ") for more information on how to analyze multiple alignments "
             "through Galaxy.\n<BR><BR>");
     }
@@ -104,7 +104,7 @@ if (!cartVarExists(cart, "tool_id"))
     cgiMakeHiddenVar("tool_id", "ucsc_table_direct1");
 else
     cgiMakeHiddenVar("tool_id", cartString(cart, "tool_id"));
-safef(selfUrl, sizeof(selfUrl), "http://%s%s", cgiServerNamePort(), cgiScriptName());
+safef(selfUrl, sizeof(selfUrl), "http%s://%s%s", cgiAppendSForHttps(), cgiServerNamePort(), cgiScriptName());
 cgiMakeHiddenVar("URL", selfUrl);
 hPrintf("\n");
 /* forward user parameters */
@@ -138,6 +138,19 @@ hPrintf("<FORM ACTION=\"%s\" METHOD=GET>\n", cgiScriptName());
 cgiMakeButton(hgtaDoMainPage, "Cancel");
 hPrintf("</FORM>\n");
 }
+
+void verifyGalaxyFormat(const char *output)
+/* print warning about not using hyperlinks output formtat with Galaxy */
+{
+if (sameString(output, outHyperlinks))
+    {
+    htmlOpen("Sorry!");
+    errAbort("Galaxy does not use hyperlinks output format.\n"
+         "Please go back and ensure that hyperlinks output format is not chosen.");
+    htmlClose();
+    }
+}
+
 
 boolean doGalaxy ()
 /* has the send to Galaxy checkbox been selected? */

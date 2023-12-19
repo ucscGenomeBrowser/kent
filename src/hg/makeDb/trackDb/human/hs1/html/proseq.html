@@ -1,0 +1,57 @@
+<h2>Description</h2>
+<p>CHM13 PRO-seq (Precision Run-On sequencing) Bowtie2 alignments to CHM13v2.0 (minus chrY) and unique genome-wide 21mer filtering (stranded)</p>
+<p>PRO-seq detects nascent transcription (including from non-coding) from RNA polymerases with nucleotide resolution at genome-scale.</p>
+
+<h2>Methods</h2>
+<p>The PRO-seq experiment was done on CHM13 cells (in duplicate, A and B) and sequenced from the 3' end for 75bp single-ended reads. Reads were adapter trimmed, quality filtered (-q 20), and length filtered (-m 20) with Cutadapt (v2.7). Trimmed reads were then reverse complemented since they were sequenced in the 3'-->5' direction. D. melanogaster spike-ins were removed with Bowtie2 (v2.3.5.1) and samtools view -f 4 (v1.9). Reads were then mapped with either Bowtie2 (v2.3.5.1) default or -k 100 (allowing up to 100 multi-mappers). Unique genome-wide 21mers were generated through <a href="https://github.com/marbl/meryl" target="_blank">Meryl (https://github.com/marbl/meryl)</a>. 
+The reads mapped with -k 100 were filtered with these unique genome-wide 21mers through one of two methods:</p>
+<ol>
+  <li>Locus-specific unique genome-wide 21mer filtering (overlapSelect -overlapBases=21; <a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/" target="_blank">UCSC tools (GenomeBrowser/20180626)</a>)
+  <li>Read- and locus-specific unique genome-wide 21mer filtering (https://github.com/arangrhie/T2T-Polish/tree/master/marker_assisted, overlapSelect -overlapBases=21)
+</ol>
+
+<h2>Display Conventions and Configuration</h2>
+The tracks labeled as "neg" are negated for viewing. 
+<p></p>
+
+<h2>Data access</h2>
+<p>Raw PRO-seq data filled under BioProject PRJNA559484</p>
+
+<h2>Release history</h2>
+<ol>
+  <li>CHM13v2.0 assembly (minus chrY)
+</ol>
+
+<h2>Credits</h2>
+<p>
+<ul>
+  <li><a href="mailto:savannah.klein@uconn.edu">Savannah Hoyt &lt;savannah.klein@uconn.edu&gt;</a> (PROseq library prep & sequencing; mapping & locus-specific filtering)
+  <li><a href="mailto:rachel.oneill@uconn.edu">Rachel O'Neill &lt;rachel.oneill@uconn.edu&gt;</a>
+  <li><a href="rhiea@nih.gov">Arang Rhie &lt;rhiea@nih.gov&gt;</a> (For generation of unique 21mers & read-specific filtering)
+</ul>
+</p>
+
+<h2>References</h2> 
+<p>
+For generation of unique genome-wide 21mers:
+<ul>
+  <li><a href="https://github.com/arangrhie/T2T-Polish/tree/master/marker_assisted" target="_blank">T2T-Polish GitHub repository</a>
+  <li>Mc Cartney, A.M., et al.
+<a href="https://www.biorxiv.org/content/10.1101/2021.07.02.450803v1" target="_blank">Chasing perfection: validation and polishing strategies for telomere-to-telomere genome assemblies.</a>
+<em>bioRxiv</em> 2021
+</ul>
+</p>
+
+<p>
+For the PRO-seq experimental, mapping, and filtering methods:
+<ul>
+  <li>Hoyt SJ, et al.
+<a href="https://www.biorxiv.org/content/10.1101/2021.07.12.451456v1" target="_blank">
+From telomere to telomere: the transcriptional and epigenetic state of human repeat elements</a>.
+<em>bioRxiv</em>. 2021
+  <li>Hoyt SJ, et al.
+<a href="https://zenodo.org/record/5537106" target="_blank">
+From telomere to telomere: the transcriptional and epigenetic state of human repeat elements analysis code: T2T-CHM13</a>.
+<em>bioRxiv</em>. 2021
+</ul>
+</p>

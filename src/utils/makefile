@@ -67,11 +67,13 @@ UTILS_APPLIST = \
 	faToTab \
 	faToTwoBit \
 	faTrans \
+	findMotif \
 	headRest \
 	htmlCheck \
 	matrixClusterColumns \
 	matrixMarketToTsv \
 	matrixNormalize \
+	matrixToBarChartBed \
 	newProg \
 	newPythonProg \
 	nibFrag \
@@ -81,6 +83,7 @@ UTILS_APPLIST = \
 	pslMap \
 	pslMapPostChain \
 	pslPosTarget \
+	pslProtToRnaCoords \
 	pslRc \
 	pslRemoveFrameShifts \
 	pslScore \
@@ -112,11 +115,6 @@ UTILS_APPLIST = \
 	wigCorrelate \
 	wigToBigWig \
 	wordLine \
-
-# doesn't work on arm64 due to use of SSE
-ifneq (${MACHTYPE},arm64)
-UTILS_APPLIST += findMotif
-endif
 
 # list of utilities to build of interest only at UCSC
 
@@ -170,7 +168,8 @@ USER_APP_SCRIPTS = \
 	tdbSort \
 	webSync \
 	chromToUcsc \
-	bigHeat
+	bigHeat \
+	bigGuessDb
 
 SCRIPT_FILES = \
 	agpToLift \
@@ -211,7 +210,6 @@ SCRIPT_FILES = \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
-	hubPublicMail \
 	browserRace \
 	${USER_APP_SCRIPTS}
 

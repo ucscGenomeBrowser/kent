@@ -132,6 +132,7 @@ struct alObs
     char *allele;   // Variant allele sequence
     int obsCount;   // Number of chromosomes on which allele was observed by a project
     int totalCount; // Number of chromosomes on which project observed some allele of this variant
+    int studyVersion; // Version of this study, there can be multiple for each allele.
     };
 
 struct sharedProps
@@ -325,6 +326,7 @@ struct spdiBed *spdiB = parseSpdis(spdiRef, source, lm);
 obs->allele = spdiB->ins;
 obs->obsCount = jsonQueryInt(obsEl, "alObs", "allele_count", -1, lm);
 obs->totalCount = jsonQueryInt(obsEl, "alObs", "total_count", -1, lm);
+obs->studyVersion = jsonQueryInt(obsEl, "alObs", "study_version", -1, lm);
 if (obs->obsCount < 0)
     errAbort("parseAlObs: allele_count not reported for %s (ins_seq %s)",
              source, obs->allele);
@@ -380,6 +382,57 @@ for (ix = 0;  ix < props->freqSourceCount;  ix++)
         slAddHead(&props->freqSourceSpdis[ix], spdiB);
         slAddHead(&props->freqSourceObs[ix], obs);
         }
+    }
+}
+
+static void stripOldStudyVersions(struct sharedProps *props, char *rsId)
+/* After frequency allele observations have been sorted into per-project lists,
+ * make sure the alleles look like [ACGT]+ and the reported total_counts are consistent.
+ * The sum of obsCounts may be less than total_count (no-calls), but not greater. */
+{
+int ix;
+for (ix = 0;  ix < props->freqSourceCount;  ix++)
+    {
+    int maxStudyVersion = 0;
+    boolean multipleVersions = FALSE;
+    struct alObs *obsList = props->freqSourceObs[ix], *obs;
+    for (obs = obsList;  obs != NULL;  obs = obs->next)
+        {
+	if (obs == obsList)
+	    {
+	    maxStudyVersion = obs->studyVersion;
+	    }
+        else
+	    {
+	    if (obs->studyVersion > maxStudyVersion)
+		{
+		maxStudyVersion = obs->studyVersion;
+		multipleVersions = TRUE;
+		}
+	    else if (obs->studyVersion != maxStudyVersion)
+		{
+		multipleVersions = TRUE;
+		}
+	    }
+        }
+    if (multipleVersions)
+	{
+	struct alObs *newObsList = NULL;
+	struct alObs *nextObs = NULL;
+	struct spdiBed *spdiBList = props->freqSourceSpdis[ix], *spdiB, *nextSpdiB, *newSpdiBList = NULL;
+        for (obs = obsList, spdiB = spdiBList;  obs != NULL; obs = nextObs, spdiB = nextSpdiB)
+	    {
+	    nextObs = obs->next;
+	    nextSpdiB = spdiB->next;
+	    if (obs->studyVersion == maxStudyVersion)
+		{
+		slAddHead(&newObsList, obs);
+		slAddHead(&newSpdiBList, spdiB);
+		}
+	    }
+	props->freqSourceObs[ix]   = newObsList;
+	props->freqSourceSpdis[ix] = newSpdiBList;
+	}
     }
 }
 
@@ -480,6 +533,7 @@ if (obsList != NULL)
             slReverse(&props->freqSourceObs[ix]);
             }
         addMissingRefAllele(props, rsId, lm);
+        stripOldStudyVersions(props, rsId);
         checkFreqSourceObs(props, rsId);
         props->biggestSourceIx = biggestSourceIx;
         }
@@ -893,6 +947,8 @@ if (props->freqSourceCount > 0)
     }
 }
 
+static void dyStringPrintSlNameList(struct dyString *dy, struct slName *list, char *sep); // forward declaration
+
 static struct sharedProps *extractProps(struct jsonElement *top, struct lm *lm)
 /* Extract the properties shared by all mappings of a refsnp from JSON, alloc & return. */
 {
@@ -924,9 +980,68 @@ props->submitters = jsonQueryStrings(top, "top",
 slUniqify(&props->submitters, slNameCmp, NULL);
 props->pubMedIds = jsonQueryInts(top, "top", "citations[*]", lm);
 props->clinVarAccs = jsonQueryStringList(annotationsRef, "annotations",
-                                          "clinical[*].accession_version", lm);
+				    "clinical[*].accession_version", lm);
 props->clinVarSigs = jsonQueryStringList(annotationsRef, "annotations",
                                           "clinical[*].clinical_significances[*]", lm);
+if (slCount(props->clinVarAccs) != slCount(props->clinVarSigs))  // extra steps to deal with rare cases of elements with multiple significances listed.
+    {
+    struct dyString *dy = dyStringNew(256);
+    dyStringClear(dy);
+    dyStringPrintSlNameList(dy, props->clinVarSigs, ",");
+    char *origClinVarSigs = cloneString(dy->string);
+
+    props->clinVarSigs = NULL;
+
+    for (struct slRef *anno=annotationsRef; anno; anno=anno->next)
+	{
+        // to achieve the needed effect, step through the top-level annotationsRef one element at a time, instead of as a list.
+	struct slRef *annoAnnoNext = anno->next;
+	anno->next = NULL;  // suppress the siblings temporarily so we process each element one at a time.
+	for (int c = 0; ; ++c)
+	    {
+	    char queryString[256];
+	    safef(queryString, sizeof queryString, "clinical[%d].clinical_significances[*]", c);
+	    struct slName *theseSigNames = jsonQueryStringList(anno, "annotations", queryString, lm);
+	    if (!theseSigNames)
+		{
+		break;
+		}
+            // re-encode the separation of multiple values with a html encoding instead of a comma
+	    // so they will not mess up the comma-separated list that acts like an array.
+            if (slCount(theseSigNames) >=2)
+		{
+                dyStringClear(dy);
+		for(struct slName *slTemp = theseSigNames; slTemp; slTemp=slTemp->next)
+		    {	
+		    dyStringPrintf(dy, "%s", slTemp->name);
+		    if (slTemp->next)
+			{
+			dyStringPrintf(dy,  "&#44;");
+			}
+		    }
+		slAddHead(&props->clinVarSigs, slNameNew(dy->string));
+                dyStringClear(dy);
+		dyStringPrintSlNameList(dy, theseSigNames, ",");
+		warn("comma separator html-encoded in %s which has multiple clinical_significances [%s]", rsName, dy->string);
+		}
+	    else  // just one on the list
+		{
+		slAddHead(&props->clinVarSigs, theseSigNames);
+		}
+	    }
+	anno->next = annoAnnoNext;  // restore the pointer
+	}
+    slReverse(&props->clinVarSigs);
+    // recreate the error to re-create the original to confirm correct result, with all fields in the same order.
+    dyStringClear(dy);
+    dyStringPrintSlNameList(dy, props->clinVarSigs, ",");
+    char *badReconstruction = replaceChars(dy->string, "&#44;", ",");
+    assert(sameString(origClinVarSigs, badReconstruction));
+    freeMem(badReconstruction);
+    freeMem(origClinVarSigs);
+    dyStringFree(&dy);
+    }
+
 return props;
 }
 
@@ -1639,6 +1754,9 @@ dyStringPrintf(dy, "\t%d\t", slCount(props->clinVarAccs));
 dyStringPrintSlNameList(dy, props->clinVarAccs, ",");
 dyStringAppendC(dy, '\t');
 dyStringPrintSlNameList(dy, props->clinVarSigs, ",");
+
+assert(slCount(props->clinVarAccs) == slCount(props->clinVarSigs));
+
 dyStringPrintf(dy, "\t%d\t", slCount(props->submitters));
 dyStringPrintSlNameList(dy, props->submitters, ",");
 dyStringPrintf(dy, "\t%d\t", slCount(props->pubMedIds));
@@ -1818,14 +1936,16 @@ for (ap = assemblyProps;  ap != NULL;  ap = ap->next)
             }
         }
     errCatchEnd(errCatch);
+    char *rsId = jsonQueryString(top, "top", "refsnp_id", lm);
+    char *seqId = bds ? bds->chrom : "NOSEQ";
     if (errCatch->gotError)
         {
-        char *rsId = jsonQueryString(top, "top", "refsnp_id", lm);
-        char *seqId = bds ? bds->chrom : "NOSEQ";
         fprintf(outStreams->err, "%s\t%s\t%s", rsId, seqId, errCatch->message->string);
         }
     else if (isNotEmpty(errCatch->message->string))
-        fprintf(outStreams->warn, "%s", errCatch->message->string);
+	{
+        fprintf(outStreams->warn, "%s\t%s\t%s", rsId, seqId, errCatch->message->string);
+        }
     errCatchFree(&errCatch);
     }
 dyStringFree(&dyScratch);

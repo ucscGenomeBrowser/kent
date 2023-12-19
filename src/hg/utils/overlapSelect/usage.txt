@@ -25,7 +25,7 @@ Options:
           bed3+ - BED format where only the first three columns are used as the
                   range, the remainder are copied as-is.
           bed6+ - BED format where only the first six columns are used as the
-                  range and strange, the remainder are copied as-is.
+                  range and strand, the remainder are copied as-is.
           chain - chain file format (default from .chain files)
           chainq - chain file format, using query instead of target
   -selectCoordCols=spec - selectFile is tab-separate with coordinates
@@ -54,22 +54,22 @@ Options:
       compute it based on the total number of inFile bases overlap by selectFile
       records. -overlapSimilarity and -mergeOutput will not work with
       this option.
-  -overlapThreshold=0.0 - minimum fraction of an inFile record that
+  -overlapThreshold=N - minimum fraction of an inFile record that
       must be overlapped by a single select record to be considered
       overlapping.  Note that this is only coverage by a single select
-      record, not total coverage.
-  -overlapThresholdCeil=1.1 - select only inFile records with less than
-      this amount of overlap with a single record, provided they are selected
+      record, not total coverage.  Default is 0.0.
+  -overlapThresholdCeil=N - select only inFile records with less than
+      this fraction of overlap with a single record, provided they are selected
       by other criteria.
-  -overlapSimilarity=0.0 - minimum fraction bases in inFile and selectFile
+  -overlapSimilarity=N - minimum fraction bases in inFile and selectFile
       records that overlap the same genomic locations.  This is computed
       by (2*overlapBase)/(inFileBase+selectFileBases).
       Note that this is only coverage by a single select record and this
       is bidirectional inFile and selectFile must overlap by this
       amount.  A value of 1.0 will select identical records (or CDS if
       both CDS options are specified.  Not currently supported with
-      -aggregate.
-  -overlapSimilarityCeil=1.1 - select only inFile records with less than this
+      -aggregate.   Default is 0.0.
+  -overlapSimilarityCeil=N - select only inFile records with less than this
       amount of similarity with a single record. provided they are selected by
       other criteria.
   -overlapBases=-1 - minimum number of bases of overlap, < 0 disables.

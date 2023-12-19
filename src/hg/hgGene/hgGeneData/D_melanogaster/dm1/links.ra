@@ -21,6 +21,10 @@ name uniProt
 tables bdgpGene
 idSql select proteinID from bdgpGene where name = '%s' and proteinId != "n/a"
 
+name alphafold
+tables bdgpGene
+idSql select proteinID from bdgpGene where name = '%s' and proteinId != "n/a"
+
 name refSeq
 shortLabel RefSeq
 tables bdgpToRefSeq
@@ -41,8 +45,8 @@ hide
 name stanfordSource
 hide
 
-name cgap
-hide
+#name cgap
+#hide
 
 name ensembl
 url http://www.ensembl.org/Drosophila_melanogaster/geneview?transcript=%s

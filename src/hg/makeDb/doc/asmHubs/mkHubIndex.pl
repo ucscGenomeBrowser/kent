@@ -5,6 +5,7 @@
 
 use strict;
 use warnings;
+use File::Basename;
 use FindBin qw($Bin);
 use lib "$Bin";
 use commonHtml;
@@ -31,24 +32,31 @@ my $orderList = $inputList;
 if ( ! -s "$orderList" ) {
   $orderList = $toolsDir/$inputList;
 }
+my %cladeId;	# value is asmId, value is clade, useful for 'legacy' index page
 
 printf STDERR "# mkHubIndex %s %s %s %s\n", $Name, $asmHubName, $defaultAssembly, $orderList;
+my $hprcIndex = 0;
+my $ccgpIndex = 0;
 my $vgpIndex = 0;
+$hprcIndex = 1 if ($Name =~ m/hprc/i);
+$ccgpIndex = 1 if ($Name =~ m/ccgp/i);
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
-my %vgpClass;	# key is asmId, value is taxon 'class' as set by VGP project
-if ($vgpIndex) {
-  my $vgpClass = "$home/kent/src/hg/makeDb/doc/vgpAsmHub/vgp.taxId.asmId.class.txt";
-  open (FH, "<$vgpClass") or die "can not read $vgpClass";
+my %extraClass;	# key is asmId, value is taxon 'class' as set by VGP project
+if ($vgpIndex || $ccgpIndex) {
+  my $whichIndex = "vgp";
+  $whichIndex = "ccgp" if ($ccgpIndex);
+  my $extraClass = "$home/kent/src/hg/makeDb/doc/${whichIndex}AsmHub/${whichIndex}.taxId.asmId.class.txt";
+  open (FH, "<$extraClass") or die "can not read $extraClass";
   while (my $line = <FH>) {
     my ($taxId, $asmId, $class) = split('\t', $line);
-    $vgpClass{$asmId} = $class;
+    $extraClass{$asmId} = $class;
   }
   close (FH);
 }
 
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
-my $assemblyCount = 0;
+my $assemblyTotal = 0;
 my %commonName;	# key is asmId, value is a common name, perhaps more appropriate
                 # than found in assembly_report file
 
@@ -86,7 +94,7 @@ if ($vgpIndex) {
      $vgpSubset = "(set of legacy/superseded assemblies)";
   }
   print <<"END";
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -104,8 +112,47 @@ Vertebrate Genomes Project.</a> $vgpSubset
 
 END
 } else {
-  print <<"END";
-<!DOCTYPE HTML 4.01 Transitional>
+  if ($ccgpIndex) {
+    print <<"END";
+<!DOCTYPE HTML>
+<!--#set var="TITLE" value="CCGP -  California Conservation Genomics Project " -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>CCGP -  California Conservation Genomics Project assembly hub</h1>
+<p>
+<a href='https://www.ccgproject.org/' target=_blank>
+<img src='CCGP_logo.png' width=280 alt='CCGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://www.ccgproject.org/' target=_blank>
+California Conservation Genomics Project.</a>
+</p>
+
+END
+  } elsif ($hprcIndex) {
+    print <<"END";
+<!DOCTYPE HTML>
+<!--#set var="TITLE" value="HPRC - Human Pangenome Reference Consortium" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>HPRC - Human Pangenome Reference Consortium assembly hub</h1>
+<p>
+<a href='https://humanpangenome.org/' target=_blank>
+<img src='HPRC_logo.png' width=280 alt='HPRC logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://humanpangenome.org/' target=_blank>
+Human Pangenome Reference Consortium.</a>
+</p>
+
+END
+  } else {
+    print <<"END";
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -117,56 +164,45 @@ Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
 END
+  }
 }
 
 print <<"END";
-<h3>How to view the hub</h3>
+<h3>How to view the assembly of interest</h3>
 <p>
-Options:
-<ol>
-  <li>The links to the genome browser in the table below will attach that
-      one specific assembly to the genome browser.  This is most likely what
-      you want.  Alternatively, the entire set of assemblies can be attached
-      as one group to the genome browser with the following links depending
-      upon which of our mirror site browsers you prefer to use:
-<table border="1">
-<tr>
-  <th>attach all assemblies to selected site:</th>
-  <th>&nbsp;</th>
-  <th><a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-        target="_blank">genome.ucsc.edu</a></th>
-  <th>&nbsp;</th>
-  <th><a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-        target="_blank">genome-euro.ucsc.edu</a></th>
-  <th>&nbsp;</th>
-  <th><a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-        target="_blank">genome-asia.ucsc.edu</a></th>
-</tr>
-</table>
-  </li>
-  <li>To manually attach all the assemblies in this hub to genome browsers
-      that are not one of the three UCSC mirror sites:
-    <ol>
-      <li>From the blue navigation bar, go to
-    <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em></li>
-      <li>Then select the <strong>My Hubs</strong> tab and enter this URL into
-          the textbox:
-    <br><code>https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt</code></li>
-      <li> Once you have added the URL to the entry form,
-           press the <em><strong>Add Hub</strong></em> button to add the hub.</li>
-    </ol>
-  </li>
-</ol>
+The links to the genome browser in the table below will attach that
+one specific assembly to the genome browser.  Use the links in
+the column labeled <b>common name and view in browser</b> to view that
+assembly in the genome browser.
 </p>
 
+<h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> &lt;== additional information for these assemblies.</h3><br>
+
+<h3>Cite reference: To reference these resources in publications, please credit:</h3>
 <p>
-After adding the hub, you will be redirected to the gateway page.  The
-genome assemblies can be selected from the
-<em>${Name} Hub Assembly</em> dropdown menu.
-Instead of adding all the assemblies in one collected group, use the individual
-<em>view in browser</em> in the table below.
+Clawson, H., Lee, B.T., Raney, B.J. et al.
+"<b>GenArk: towards a million UCSC genome browsers</b>.<br><em>Genome Biol</em> 24, 217 (2023).
+<a href='https://doi.org/10.1186/s13059-023-03057-x' target=_blank>
+https://doi.org/10.1186/s13059-023-03057-x</a>
 </p>
-<h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
+END
+
+if ($vgpIndex) {
+  print <<"END";
+<h3>Listings:</h3>&nbsp;&nbsp;<b>(from RepeatModeler masking)</b>
+<p>
+<ul>
+<li><a href='modeler.families.urls.txt' target=_blank>families fasta.gz</a> list of URLs for the custom library created by the RepeatModeler run</li>
+<li><a href='modeler.2bit.urls.txt' target=_blank>assembly 2bit file list</a> of URLs as masked with the RepeatModeler + <b>TRF/simpleRepeats</b> with period of 12 or less</li>
+<li><a href='rmod.log.file.list.txt' target=_blank>the rmod.log files from each RepeatModeler run</a></li>
+<li><a href='default.twoBit.file.list.txt' target=_blank>default GenArk 2bit file list</a> of URLs as masked with the ordinary RepeatMasker + <b>TRF/simpleRepeats</b> with period of 12 or less</li>
+<li><a href='modeler.table.txt' target=_blank>this data table in tab-separated</a> file text format (including TBD not working yet, or in VGP collection but not on the alignment list)</li>
+</ul>
+</p>
+END
+}
+
+print <<"END";
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
 <br>
@@ -194,16 +230,26 @@ END
 ##############################################################################
 sub startTable() {
 print '
-<table class="sortable" border="1">
-<thead><tr><th>count</th>
-  <th>common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;browser</th>
+<table class="sortable" style="border: 1px solid black;">
+<thead style="position:sticky; top:0;"><tr><th>count</th>
+  <th><span style="float: left;">common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;UCSC&nbsp;browser</span><span style="float: right;">[IGV&nbsp;browser]</span></th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
-  <th>BioSample</th><th>BioProject</th>
-  <th>assembly&nbsp;date,<br>source&nbsp;link</th>
+  <th>BioSample</th>
 ';
+if ("viral" ne $asmHubName) {
+  printf "  <th>BioProject</th>\n";
+}
 
-if ($vgpIndex) {
+printf "<th>assembly&nbsp;date,<br>source&nbsp;link</th>\n";
+
+if ("legacy" eq $asmHubName) {
+  printf "<th>clade</th>\n";
+}
+
+if ($ccgpIndex) {
+  printf "<th>class<br>CCGP&nbsp;link</th>\n";
+} elsif ($vgpIndex) {
   printf "<th>class<br>VGP&nbsp;link</th>\n";
 }
 print "</tr></thead><tbody>\n";
@@ -357,37 +403,68 @@ sub tableContents() {
        $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
        $browserName = "$commonName ($asmId)";
     }
-    printf "<tr><td align=right>%d</td>\n", ++$rowCount;
-    printf "<td align=center><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
-    printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
-    if ($asmId !~ m/^GC/) {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
+    printf "<tr><td style='text-align: right;'>%d</td>\n", ++$rowCount;
+    #  common name and view in browser
+    if ( $asmId =~ m/^GC/ ) {
+       my $hubTxt = "${hubUrl}/hub.txt";
+       my $igvUrl = "https://igv.org/app-test/?hubURL=$hubTxt";
+       printf "<td><span style='float: left;'><a href='%s' target=_blank>%s</a></span><span style='float: right;'>[<a href='%s' target=_blank>IGV</a>]</span></td>\n", $browserUrl, $browserName, $igvUrl;
     } else {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
+       printf "<td style='text-align: center;'><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
     }
-    if ( $bioSample ne "notFound" ) {
-    printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
+    # scientific name and data download
+    printf "    <td style='text-align: center;'><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
+    if ($asmId !~ m/^GC/) {
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
     } else {
-    printf "    <td align=left>n/a</td>\n";
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
+    }
+    # viruses do not appear to have BioSample
+    if ($asmHubName ne "viral") {
+      if ( $bioSample ne "notFound" ) {
+        printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
+      } else {
+      printf "    <td style='text-align: left;'>n/a</td>\n";
+      }
     }
     # one broken assembly_report
     $bioProject= "PRJEB25768" if ($accessionId eq "GCA_900324465.2");
     if ($bioProject eq "notFound") {
-      printf "    <td align=left>%s</td>\n", $bioProject;
+      printf "    <td style='text-align: left;'>%s</td>\n", $bioProject;
     } else {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
     }
-    printf "    <td align=center><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
-    if ($vgpIndex) {
+    printf "    <td style='text-align: center;'><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
+    if ("legacy" eq $asmHubName) {
+      if (! defined($cladeId{$asmId})) {
+         printf STDERR "# ERROR: missing clade definition for %s\n", $asmId;
+         exit 255;
+      } else {
+         printf "    <td style='text-align: center;'>%s</td>\n", $cladeId{$asmId};
+      }
+    }
+    if ($ccgpIndex) {
       my $sciNameUnderscore = $sciName;
       $sciNameUnderscore =~ s/ /_/g;
       $sciNameUnderscore = "Strigops_habroptilus" if ($sciName =~ m/Strigops habroptila/);
 
-      if (! defined($vgpClass{$asmId})) {
-         printf STDERR "# ERROR: no 'class' defined for VGP assembly %s\n", $asmId;
+      if (! defined($extraClass{$asmId})) {
+         printf STDERR "# ERROR: no 'class' defined for CCGP assembly %s\n", $asmId;
          exit 255;
       }
-      printf "    <td align=center><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $vgpClass{$asmId}
+# it isn't clear how we can get these names
+# https://www.ccgproject.org/species/corynorhinus-townsendii-townsends-big-eared-bat
+      printf "    <td style='text-align: center;'><a href='https://www.ccgproject.org/species/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $extraClass{$asmId}
+    } elsif ($vgpIndex) {
+      my $sciNameUnderscore = $sciName;
+      $sciNameUnderscore =~ s/ /_/g;
+      $sciNameUnderscore = "Strigops_habroptilus" if ($sciName =~ m/Strigops habroptila/);
+
+      if (! defined($extraClass{$asmId})) {
+         printf STDERR "# ERROR: no 'class' defined for VGP/CCGP assembly %s\n", $asmId;
+         exit 255;
+      }
+      printf "    <td style='text-align: center;'><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $extraClass{$asmId}
     }
     printf "</tr>\n";
   }
@@ -397,16 +474,63 @@ sub tableContents() {
 ### main()
 ##############################################################################
 
+# if there is a 'promoted' list, it has been taken out of the 'orderList'
+# so will need to stuff it back in at the correct ordered location
+my %promotedList;	# key is asmId, value is common name
+my $promotedList = dirname(${orderList}) . "/promoted.list";
+my @promotedList;	# contents are asmIds, in order by lc(common name)
+my $promotedIndex = -1;	# to walk through @promotedList;
+
+if ( -s "${promotedList}" ) {
+  open (FH, "<${promotedList}" ) or die "can not read ${promotedList}";
+  while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($asmId, $commonName) = split('\t', $line);
+    $promotedList{$asmId} = $commonName;
+  }
+  close (FH);
+  foreach my $asmId ( sort { lc($promotedList{$a}) cmp lc($promotedList{$b}) } keys %promotedList) {
+     push @promotedList, $asmId;
+  }
+  $promotedIndex = 0;
+}
+
+my $cladeList = dirname(${orderList}) . "/$asmHubName.clade.txt";
+if ( -s "${cladeList}" ) {
+  open (FH, "<$cladeList") or die "can not read ${cladeList}";
+  while (my $clade = <FH>) {
+    chomp $clade;
+    my @a = split('\t', $clade);
+    $cladeId{$a[0]} = $a[1];
+  }
+  close (FH);
+}
+
 open (FH, "<${orderList}") or die "can not read ${orderList}";
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
   my ($asmId, $commonName) = split('\t', $line);
+  if ( ($promotedIndex > -1) && ($promotedIndex < scalar(@promotedList))) {
+     my $checkInsertAsmId = $promotedList[$promotedIndex];
+     my $checkInsertName = $promotedList{$checkInsertAsmId};
+     # insert before this commonName when alphabetic before
+     if (lc($checkInsertName) lt lc($commonName)) {
+       push @orderList, $checkInsertAsmId;
+       $commonName{$checkInsertAsmId} = $checkInsertName;
+       ++$assemblyTotal;
+       printf STDERR "# inserting '%s' before '%s' at # %03d\n", $checkInsertName, $commonName, $assemblyTotal;
+       ++$promotedIndex;	# only doing one at this time
+                        # TBD: will need to improve this for more inserts
+     }
+  }
   push @orderList, $asmId;
   $commonName{$asmId} = $commonName;
-  ++$assemblyCount;
+  ++$assemblyTotal;
 }
 close (FH);
+# TBD: and would need to check if all promoted assemblies have been included
 
 startHtml();
 startTable();

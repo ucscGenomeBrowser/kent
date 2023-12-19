@@ -1401,6 +1401,32 @@ Your proxy server should have its own logging features.
 
 net.c also responds to environment variables http_proxy, https_proxy, ftp_proxy, no_proxy and log_proxy.
 
+# Support for cloud URLs
+
+The genome browser supports cloud URLs by allowing a mirror to configure a
+command to resolve these URLs to http or https URLs.
+
+For example, URLs with the gs, s3, or drs scheme would be resolved to https:
+URLs.  This may involve conversion to signed https URLs.  The browser caches
+the results under the original URL and will call the resolver command again if
+the signed URL has timed out.
+
+URL resolution is enabled by defining following variables in hg.conf:
+
+- resolvProts: A comma-separated list of URL protocols, without the colon, to
+  resolve with the specified command.
+- resolvCmd: The path to the command to resolve the matching URLs.  It may
+  include space-separated arguments that are passed on to the command
+  unchanged.  The URL to resolve is passed as the last argument.  The command
+  writes the resolved http/https URL to stdout.  If an error occurs, the
+  command should write an error message to stderr and exit with a non-zero
+  status code.
+
+For example:
+
+    resolvProts = gs,drs
+    resolvCmd = /var/www/tools/urlResolver /var/www/tools/config
+
 
 # The UDC local cache directory
 
@@ -1858,3 +1884,19 @@ If you have the kent git repository cloned:
     package. Install the 'ghostscript' package and verify ps2pdf is
     in: /usr/bin/ps2pdf
 
+# Adding a track hub to your hubPublic table so it appears under My Data > Track Hubs
+
+By default, your browser mirror only comes with our public hubs. You may want
+to remove these and replace them with the hubs in your institution. One idea
+could be to have one hub per research group or department and users connect to them on
+My Data > Track Hubs.
+
+Use hubPublicCheck to create the SQL command to add the hub:
+
+    hubPublicCheck hubPublic -addHub=https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt
+
+Output is:
+
+    insert into hubPublic (hubUrl,descriptionUrl,shortLabel,longLabel,registrationTime,dbCount,dbList) values ("https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt","", "My Hub's Name", "Name up to 80 characters versus shortLabel limited to 17 characters", now(),1, "hg19,"); 
+
+Then we run hubCrawl to get the searches to work (most mirrors do not need this). See <https://genomewiki.ucsc.edu/genecats/index.php/Public_Hub_QA> for more details.

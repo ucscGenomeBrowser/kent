@@ -10,13 +10,15 @@
 A Trix index consists of a pair of files that allow for fast look-up of free text associated with a 
 list of identifiers. The index is created from a single line-oriented text file using the program 
 <code>ixIxx</code>. Each line in the text file starts with an identifier, followed by free text 
-associated with the ID. For a more complete description of how to make a searchable track hub (or
+associated with the ID. The search is not case sensitive, so any case-combination of the free text
+entered will be matched. For a more complete description of how to make a searchable track hub (or
 custom track), please visit the <a href="hubQuickStartSearch.html" target="_blank">Quick Start
 Guide to Searchable track hubs</a>.</p>
 <p>
 To complete the steps below you must first download the <code>ixIxx</code> utility. For more 
 information on downloading our command line utilities, see these 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">instructions</a>.</p>
+<h3 id="ex1">Example 1</h3>
 <p>
 To create a Trix index, follow these steps:
 <ol>
@@ -29,10 +31,39 @@ To create a Trix index, follow these steps:
   Run the <code>ixIxx</code> program on your text file.<br>
   <pre><code>    ixIxx input.txt myTrix.ix myTrix.ixx</code></pre></li>
 </ol>
+<h3 id="ex2">Example 2</h3>
+<ol>
+  <li>
+  If you have a bigBed track with unique gene names such as
+  <code>SIRT1, BRCA1, TP53</code> in the fourth name
+  column, and you built the bigBed using the option of
+  <code>-extraIndex=name</code> to index the name field you can create an
+  input.txt such as the following that associates the bigBed name with other
+  identifiers people might search for or with shorter spellings of the names:
+  <pre>
+    SIRT1 sirt1 sir sirt Sirtuin SIR2-Like ENSG00000096717 NM_012238
+    BRCA1 brca1 brca brc breast cancer 1 ENSG00000012048 NM_007300
+    TP53 tp53 tp5 Tumor Protein P53 ENSG00000141510 NM_001126112</pre></li>
+  <li>
+  You would then run the <code>ixIxx</code> program on your text file,
+  taking into account the length of your longest word.<br>
+  <pre><code>    ixIxx input.txt myTrix.ix myTrix.ixx</code></pre></li>
+</ol>
+<p>
+The <code>ixIxx</code> utility has a default of 31 characters for words. If you build an input.txt
+with longer words, such as very long accessions, you neeed to add the option <code>-maxWordLength=N</code>
+to override the default and expand it to the size you are using for the longest words in your index.</p>
+
+<h3 id="resources">Resources and examples</h3>
 <p>
 If you want to use your Trix index in a track hub, see the <code>searchTrix</code> setting in the 
-<a href="trackDb/trackDbHub.html#searchTrix">Track Database Definition Document</a> or the
-<a href="hubQuickStartSearch.html" target="_blank">Quick Start Guide to Searchable track hubs</a>
-for more information.</p>
+<a href="trackDb/trackDbHub.html#searchTrix">Track Database Definition Document</a>.</p>
+<p>
+Review our <a href="hubQuickStartSearch.html" target="_blank">Quick Start Guide to Searchable track hubs</a>
+for illustrated steps building a track hub.</p>
+<p>
+There are also tools available for taking genePred format to trix format, such as
+this <a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/utils/automation/gpToIx.pl"
+target="_blank">gpToIx.pl</a> perl script.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

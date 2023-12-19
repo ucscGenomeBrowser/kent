@@ -24,19 +24,19 @@ char *getStsId(struct sqlConnection *conn3, char *database, char *stsName)
 {
 char cond_str[255];
 char *identNo;
-sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", stsName);
+sqlSafef(cond_str, sizeof(cond_str), "name='%s'", stsName);
 identNo = sqlGetField(database, "stsMapMouseNew", "identNo", cond_str);
 
 if (identNo == NULL) 
     {
     /* check to see if stsAlias has it */
-    sqlSafefFrag(cond_str, sizeof(cond_str), "alias='%s'", stsName);
+    sqlSafef(cond_str, sizeof(cond_str), "alias='%s'", stsName);
     identNo = sqlGetField(database, "stsAlias", "identNo", cond_str);
     
     /* now make sure that stsMapMouseNew has an entry for this identNo */
     if (identNo != NULL)
     	{
-	sqlSafefFrag(cond_str, sizeof(cond_str), "identNo=%s", identNo);
+	sqlSafef(cond_str, sizeof(cond_str), "identNo=%s", identNo);
     	identNo = sqlGetField(database, "stsMapMouseNew", "identNo", cond_str);
     	}
     }

@@ -388,7 +388,7 @@ struct lineFile *chainsLf = lineFileOpen(chains, TRUE);
 struct cseqPair *cspList = NULL, *csp;
 struct seqPair *spList = NULL, *sp;
 struct lineFile *pslLf = pslFileOpen(psls);
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct psl *psl;
 struct hash *pslHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct hash *chainHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */

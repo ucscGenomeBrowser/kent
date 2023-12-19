@@ -235,7 +235,7 @@ return cloneString(buffer);
 char *docIdGetPath(char *docId, char *docIdDir, char *type, char *submitPath)
 {
 char *ptr = docId + strlen(docId) - 1;
-struct dyString *dy = newDyString(20);
+struct dyString *dy = dyStringNew(20);
 char *suffix = docDecorateType(type);
 
 dyStringPrintf(dy, "%s/", docIdDir);

@@ -7,31 +7,64 @@
 
 <h1>Citing the UCSC Browser in a Publication or Web Page</h1>
 <p>
-Follow these citation guidelines when using the Genome Browser tool suite or 
-data from the UCSC Genome Browser database in a research work that will be published in a journal or
-on the Internet.  In addition to the relevant paper, please include a reference to the Genome 
+You are free to use all graphics produced by this website in your published work or on other websites, there
+is no need to contact us to request permission, see the <a href="/license/">license page</a> for details.
+</p>
+<p>
+But the UCSC Genome Browser is exclusively funded by NIH and if research articles do 
+not cite or mention us, we cannot report the citations and it is harder for NIH to justify funding one of the 
+few stable resources in genomics that you can rely on.
+</p>
+
+<p>
+At the moment, the most recent UCSC Genome Browser paper has the <a target=_blank href="https://pubmed.ncbi.nlm.nih.gov/36420891/">PMID 36420891</a>,
+ DOI 10.1093/nar/gkac1072</a>.  In addition, you can include a reference to the Genome 
 Browser website in your manuscript: <a href="index.html" 
-target="_blank">http://genome.ucsc.edu</a>. Permission is granted for reuse of all graphics produced
-by the UCSC Genome Browser website.</p>
-<p>
-Be sure to mention the release date of the genome 
-assembly used in your work to facilitate the examination of your data by reviewers and readers.
-If you would like to add a URL to the Genome Browser displaying a specific location or 
-configuration, please use a <a 
-href="goldenPath/help/hgSessionHelp.html#Introduction">Session URL</a>. This will ensure 
-all data and settings remain fixed. Please do <strong>not</strong> include references 
-to our development servers (such as genome-test.soe.ucsc.edu) in published links or URLs.</p>
-<p>
-For an extended list of publications produced by the UCSC Genome Browser group, see our 
-<a href="goldenPath/pubs.html">Publications</a> page.  It is worth noting that as of
-April 1, 2020, Genome Browser papers have been cited 37,500 times in the literature.  We
-thank authors for the acknowledgement of our efforts.</p>
+target="_blank">http://genome.ucsc.edu</a> or mention in the text that you used the "UCSC Genome Browser". 
+To cite just one of our computational tools, see the <a href="#ref">reference section</a> below.
+</p>
+
+<p>While doing this, you can check if the genome coordinates in your paper are
+clear to the readers and if you specified the genome assembly that you used.
+One cannot mention the genome assembly too often. Computational
+biologists will appreciate if your supplemental files with genome annotations
+include the genome assembly identifier directly in the file name. We keep these 
+identifiers short, currently they are "hg19" and "hg38" for the most common
+human assemblies. In a similar vein, references to nucleotides ideally have the
+full chromosome position in your publication text somewhere or in a
+supplemental table, and not only the position on the transcript and or coding
+sequence, as transcript models can change a lot.
+</p>
+
+<p>To make this even easier, when refering to a gene or genomic location, you can 
+use the menu <a href="../cgi-bin/hgSession">"My Data &gt; My Sessions"</a>, to
+generate a short, stable link to your current genome browser view for your
+publication. In this way, readers can jump from your publication to this
+genome location and get their view configured for your particular message.
+You can even add your own annotations to the UCSC Genome Browser, either as
+very simple text labels, by pasting a line like "chr1 1 1000 my_annotation"
+into the box found under <a href="../cgi-bin/hgCustom">"My Data &gt; Custom
+    Tracks"</a> or by loading all your genomics results into the browser with 
+<a href="https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html">Track Hubs</a>.
+</p>
 
 <a name="ref"></a>
+<h2>Genome Browser software and website references</h2>
 <p>
-<h2>Genome Browser software and website</h2>
+<strong>Most recent UCSC Genome Browser publication:</strong>
+Nassar et al.
+<a href="https://pubmed.ncbi.nlm.nih.gov/36420891/" target="_blank">
+The UCSC Genome Browser database: 2023 update</a>. 
+<em>Nucleic Acids Research</em> 2023 PMID: 36420891, DOI: 10.1093/nar/gkac1072
+</p>
+
 <p>
-<strong>UCSC Genome Browser:</strong>
+All present and past UCSC Genome Browser updates sorted by date can be shown with this 
+<a
+    target=_blank href="https://pubmed.ncbi.nlm.nih.gov/?term=%28%28UCSC+Genome+Browser%5BTitle%5D%29+AND+%28update%5BTitle%5D+OR+updates%5BTitle%5D%29+AND+%22Nucleic+acids+research%22%5BJournal%5D%29+NOT+ENCODE%5BTitle%5D&sort=date">PubMed search</a>.
+</p>
+<p>
+<strong>Original UCSC Genome Browser publication:</strong>
 Kent WJ, Sugnet CW, Furey TS, Roskin KM, Pringle TH, Zahler AM, Haussler D.  
 <a href="http://www.genome.org/cgi/content/abstract/12/6/996" target="_blank">The human genome 
 browser at UCSC</a>. 
@@ -39,11 +72,11 @@ browser at UCSC</a>.
 
 <p>
 <strong>Genome Browser screenshots:</strong>
-Journal-quality screenshots of the Genome Browser can be produced by using the View -&gt;PDF/PS
+Journal-quality screenshots of the Genome Browser can be produced by using the View -&gt;PDF
 utility in the top navigation bar from the tracks page. When including a
 screenshot in your manuscript, reference <em>http://genome.ucsc.edu</em> in the caption and cite
-the Genome Browser paper in the manuscript. We recommend including a <a 
-href="goldenPath/help/hgSessionHelp.html#Introduction">Session URL</a>
+the most recent Genome Browser paper in the manuscript. As mentioned above, we recommend including a <a 
+href="goldenPath/help/hgSessionHelp.html#Introduction">My Data &gt; My Sesssion URL</a>
 of your screenshot to allow readers to interact with your data and get more information.</p>
 <p>
 <strong>BLAT:</strong> 
@@ -85,49 +118,11 @@ Fernandes JD, Hinrichs AS, Clawson H, et al.
 target="_blank">The UCSC SARS-CoV-2 Genome Browser</a>. 
 <em>Nat Genet.</em> 2020 Sept 9; 52:991-998.</p>
 
-
-
-
-<h2>Genome Browser data</h2>
-<p>
-<strong>Annotation data:</strong>
-Cite the most recent UCSC Genome Browser update in the Nucleic Acids Research
-&quot;Database&quot; issue. A list of these papers can be found using this tailored
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=((UCSC+Genome+Browser%5BTitle%5D)+AND+
-(update%5BTitle%5D+OR+updates%5BTitle%5D)+AND+%22Nucleic+acids+research%22%5BJournal%5D)+NOT+
-ENCODE%5BTitle%5D"
-target="_blank">PubMed search</a>. Be sure to sort the page by &quot;Most Recent&quot;.
-<em>(Cite this paper for annotation data extracted from the Genome Browser database. Annotation 
-tracks should also be credited according to their source, which can be found on the track's 
-description page or on the Genome Browser <a href="goldenPath/credits.html">Credits</a> page.</em>)
-</p>
-<p>
-<strong>ENCODE annotation data:</strong> 
-Rosenbloom KR, Sloan CA, Malladi VS, Dreszer TR, Learned K, Kirkup VM, Wong MC, Maddren M, Fang R, 
-Heitner SG, Lee BT, Barber GP, Harte RA, Diekhans M, Long JC, Wilder SP, Zweig AS, Karolchik D, 
-Kuhn RM, Haussler D, Kent WJ.
-<a href="http://nar.oxfordjournals.org/cgi/pmidlookup?view=long&amp;pmid=23193274" 
-target="_blank">ENCODE data in the UCSC Genome Browser: year 5 update</a>.
-<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D56-63.</p>
-<p>
-<strong>Human genome assembly:</strong> 
-The Genome Sequencing Consortium. 
-<a href="http://www.nature.com/nature/journal/v409/n6822/abs/409860a0.html" target="_blank">Initial 
-sequencing and analysis of the human genome</a>.  
-<em>Nature</em>. 2001 Feb 15;409(6822):860-921.</p>
-<p>
-<strong>Very early human genome assemblies:</strong> 
-Kent WJ, Haussler D. 
-<a href="http://www.genome.org/cgi/content/abstract/GR-1832Rv1" target="_blank">Assembly of the 
-working draft of the human genome with gigAssembler</a>. 
-<em>Genome Res</em>. 2001 Sep;11(9)1541-1548.<BR>
-<em> Cite this paper when publishing results pertaining to human genome assemblies prior to the 
-22 Dec. 2001 assembly.</em></p>
-<p>
-<strong>Other genome assemblies:</strong> 
+<p><strong>Other genome assemblies:</strong> 
 Manuscripts that include the use of Genome Browser assembly data from organisms other than human 
-should cite the relevant initial sequencing paper. Often this information can be found on the 
-Genome Browser <a href="goldenPath/credits.html">Credits</a> page or on the GenBank BioProject
-page for the organism.</p>
+should, e.g. one of the thousands of GenArk assemblies that we provide, should cite the relevant sequencing paper. 
+Usually this information can be found on the 
+assembly description that appears when the genome is selected on our gateway page or on the NCBI GenBank BioProject
+page of the assembly.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

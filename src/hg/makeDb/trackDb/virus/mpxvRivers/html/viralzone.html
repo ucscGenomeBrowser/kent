@@ -1,0 +1,70 @@
+<h2>Description</h2>
+
+<p> This track shows the  genome-wide expression map of monkeypox virus.  ORFs
+are selectively expressed at early, intermediate, or late times of infection.
+This is due to stage-specific viral promoters and transcription factors
+associated with the viral DNA-dependent RNA polymerase. ORFs are named
+according to the official nomenclature of orthopoxviruses.
+</p>
+
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+ORFS are colored according to the time of their transcription: green for early genes, blue for intermediate genes, and red for late genes.
+</p>
+
+<h2>Methods</h2>
+<p>
+Expression data were obtained from ribosome profiling data from the Vacinia
+virus study: Deciphering poxvirus gene expression by RNA sequencing and
+ribosome profiling.  The monkexpox data were annotated for similarity. The
+monkexpox genome is very similar to the vaccinia virus genome, and all
+orthopoxviruses share the same expression pattern and replication cycle.
+</p>
+
+<p>
+The gene names follow the universal OPGXXX (OrthoPoxvirus Gene number XXX) convention published in Ancient Gene Capture and Recent Gene Loss Shape the Evolution of Orthopoxvirus-Host Interaction Genes.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables">Table Browser</a> or combined with other datasets in the
+<a href="hgIntegrator">Data Integrator</a> tool.
+For automated analysis, the genome annotation is stored in
+a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/mpxvRivers/">the download server</a>.</p>
+<p>
+Annotations can
+be converted from binary to ASCII text by our command-line tool bigBedToBed.
+Instructions for downloading this command can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities page</a>.
+The tool can also be used to obtain features within a given range without downloading the file,
+for example:</p>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/mpxvRivers/viralzoneGenes/viralzone.bb -chrom=NC_063383.1 -start=0 -end=100000 stdout</code>
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>Credits</h2>
+Many thanks to Philippe Mercier from Viralzone for providing these annotations.
+
+<h2>References</h2>
+<p>
+Zhilong Yang, Shuai Cao, Craig A Martens, Stephen F Porcella, Zhi Xie, Ming Ma, Ben Shen, Bernard Moss
+<a href="https://pubmed.ncbi.nlm.nih.gov/25903347/" target="_blank">
+    Deciphering poxvirus gene expression by RNA sequencing and ribosome profiling
+</a>
+<em>J Virol</em> 2015 Jul;89(13):6874-86.
+</p>
+
+<p>
+Tatiana G Senkevich, Natalya Yutin, Yuri I Wolf, Eugene V Koonin, Bernard Moss
+<a href="https://pubmed.ncbi.nlm.nih.gov/34253028/" target="_blank">
+    Ancient Gene Capture and Recent Gene Loss Shape the Evolution of Orthopoxvirus-Host Interaction Genes
+</a>
+<em>mBio</em> 2021 Aug 31;12(4):e0149521
+</p>

@@ -90,6 +90,9 @@ char *hgFindSpecSettingOrDefault(struct hgFindSpec *hfs, char *name,
 				 char *defaultVal);
 /* Return setting string, or defaultVal if none exists */
 
+int hgFindSpecPriCmp(const void *va, const void *vb);
+/* Compare to sort by assending searchPriority. */
+
 struct hgFindSpec *hgFindSpecGetSpecs(char *db, boolean shortCircuit);
 /* Load all short-circuit (or not) search specs from the current db, sorted by 
  * searchPriority. */

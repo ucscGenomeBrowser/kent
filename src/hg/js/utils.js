@@ -4,8 +4,43 @@
 
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
+/* jshint -W087 */
+/* jshint esnext: true */
 
 var debug = false;
+
+/* Support these formats for range specifiers.  Note the ()'s around chrom,
+ * start and end portions for substring retrieval: */
+var canonicalRangeExp = /^[\s]*([\w._#-]+)[\s]*:[\s]*([-0-9,]+)[\s]*[-_][\s]*([0-9,]+)[\s]*$/;
+var gbrowserRangeExp =  /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\.\.[\s]*([0-9,]+)[\s]*$/;
+var lengthRangeExp =    /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*\+[\s]*([0-9,]+)[\s]*$/;
+var bedRangeExp =       /^[\s]*([\w._#-]+)[\s]+([0-9,]+)[\s]+([0-9,]+)[\s]*$/;
+var sqlRangeExp =       /^[\s]*([\w._#-]+)[\s]*\|[\s]*([0-9,]+)[\s]*\|[\s]*([0-9,]+)[\s]*$/;
+var singleBaseExp =     /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*$/;
+
+function copyToClipboard(ev) {
+    /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
+     * The attribute data-target of this element is the ID of the element that contains the text to copy. 
+     * see C function printCopyToClipboardButton(iconId, targetId);
+     * */
+     
+    var targetId = ev.target.getAttribute("data-target");
+    var textEl = document.getElementById(targetId);
+    var text = textEl.innerText;
+
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    ev.target.innerHTML = 'Copied';
+}
 
 function cfgPageOnVisChange(ev) {
     /* configuration page event listener when user changes visibility in dropdown */
@@ -630,7 +665,7 @@ function validateUrl(url)
 {   // returns true if url is a valid url, otherwise returns false and shows an alert
 
     // I got this regexp from http://stackoverflow.com/questions/1303872/url-validation-using-javascript
-    var regexp = /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
+    var regexp = /^(https?|ftp|gs|s3|drs):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&amp;'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
     if (regexp.test(url)) {
         return true;
     } else {
@@ -761,13 +796,67 @@ if (debug)
 return content;
 }
 
-function notifBoxShow() {
+function notifBoxShow(cgiName, keyName) {
     /* move the notification bar div under '#TrackHeaderForm' */
-    var notifEl = document.getElementById("notifBox");
+    let lsKey = cgiName + "_" + keyName;
+    if (localStorage.getItem(lsKey))
+        return;
+    var notifEl = document.getElementById(lsKey + "notifBox");
+    if (!notifEl) {
+        // missing call to setup function (ie generated server side like a udcTimeout message)
+        notifBoxSetup(cgiName, keyName);
+    }
+    // TODO: make a generic element for positioning this
     var parentEl = document.getElementById('TrackHeaderForm');
-    parentEl.appendChild(notifEl);
-    notifEl.style.display = 'block';
-    //document.getElementById('notifOK').onclick = notifBoxHide;
+    if (parentEl) {
+        parentEl.appendChild(notifEl);
+        notifEl.style.display = 'block';
+    }
+}
+
+function notifBoxSetup(cgiName, keyName, msg) {
+/* Create a notification box if one hasn't been created, and
+ * add msg to the list of shown notifications.
+ * cgiName.keyName will be saved to localStorage in order to show
+ * or hide this notification.
+ * Must call notifBoxShow() in order to display the notification */
+    lsKey = cgiName + "_" + keyName;
+    if (localStorage.getItem(lsKey))
+        return;
+    let alreadyPresent = false;
+    let notifBox = document.getElementById(lsKey+"notifBox");
+    if (notifBox) {
+        alreadyPreset = true;
+        if (msg) {
+            notifBox.innerHTML += "<br>" + msg;
+        }
+    } else {
+        notifBox = document.createElement("div");
+        notifBox.className = "notifBox";
+        notifBox.style.display = "none";
+        notifBox.style.width = "90%";
+        notifBox.style.marginLeft = "100px";
+        notifBox.id = lsKey+"notifBox";
+        if (msg) {
+            notifBox.innerHTML = msg;
+        }
+    }
+    notifBox.innerHTML += "<div style='text-align:center'>"+
+        "<button id='" + lsKey + "notifyHide'>Close</button>&nbsp;"+
+        "<button id='" + lsKey + "notifyHideForever'>Don't show again</button>"+
+        "</div>";
+    if (!alreadyPresent) {
+        document.body.appendChild(notifBox);
+    }
+    $("#"+lsKey+"notifyHide").click({"id":lsKey}, function() {
+        let key = arguments[0].data.id;
+        $("#"+key+"notifBox").remove();
+    });
+    $("#"+lsKey+"notifyHideForever").click({"id": lsKey}, function() {
+        let key = arguments[0].data.id;
+        $("#"+key+"notifBox").remove();
+        localStorage.setItem(key, "1");
+    });
 }
 
 function warnBoxJsSetup()
@@ -1132,6 +1221,16 @@ function getHgsid()
     return "";
 }
 
+function undecoratedDb(db)
+// return the db name with any hub_id_ stripped
+{
+var retDb = db;
+if (db.startsWith("hub_")) {
+    retDb = db.split('_', 3)[2];
+}
+return retDb;
+}
+
 function getDb()
 {
     var db = normed($("input[name='db']").first());
@@ -1151,6 +1250,16 @@ function getDb()
         return db.value;
 
     return "";
+}
+
+function undecoratedTrack(track)
+// return the track name with any hub_id_ stripped
+{
+var retTrack = track;
+if (track.startsWith("hub_")) {
+    retTrack = track.split('_', 3)[2];
+}
+return retTrack;
 }
 
 function getTrack()
@@ -3285,6 +3394,7 @@ var mouse = {
  //// Drag Reorder Code ////
 ///////////////////////////
 var dragReorder = {
+    originalHeights: {}, // trackName: startHeight
 
     setOrder: function (table)
     {   // Sets the 'order' value for the image table after a drag reorder
@@ -3588,6 +3698,11 @@ var dragReorder = {
             if (rightClick.currentMapItem) {
                 rightClick.currentMapItem.href = this.href;
                 rightClick.currentMapItem.title = this.title;
+                // if the custom mouseover code has removed this title, check the attr
+                // for the original title
+                if (this.title.length === 0) {
+                    rightClick.currentMapItem.title = this.getAttribute("originalTitle");
+                }
 
                 // Handle linked features with separate clickmaps for each exon/intron
                 if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
@@ -3615,6 +3730,8 @@ var dragReorder = {
         rightClick.currentMapItem = null;
     },
 
+    
+
     init: function ()
     {   // Make side buttons visible (must also be called when updating rows in the imgTbl).
         var btns = $("p.btn");
@@ -3632,6 +3749,12 @@ var dragReorder = {
 
         // setup mouse callbacks for the area tags
         $("#imgTbl").find("tr").mouseover( dragReorder.trMouseOver );
+        $("#imgTbl").find("tr").each( function (i, row) {
+            // save the original y positions of each row
+            //if (row.id in dragReorder.originalHeights === false) {
+                dragReorder.originalHeights[row.id] = row.getBoundingClientRect().y + window.scrollY;
+            //}
+        });
 
 
         $(".area").each( function(t) {
@@ -3641,3 +3764,479 @@ var dragReorder = {
                         });
     }
 };
+
+function trackHubSkipHubName(name) {
+    // Just like hg/lib/trackHub.c's...
+    var matches;
+    if (name && (matches = name.match(/^hub_[0-9]+_(.*)/)) !== null) {
+        return matches[1];
+    } else {
+        return name;
+    }
+}
+
+function replaceReserved(txt) {
+    /* This should somehow be made more general so we can stop worrying about
+     * user made tracks with whatever characters in it */
+    if (!txt) {
+        throw new Error("trying to replace null txt");
+    }
+    return txt.replace(/[^A-Za-z0-9_]/g, "_");
+}
+
+function boundingRect(refEl) {
+    /* For regular HTML elements, this function wraps getBoundingClientRect(). For area
+     * elements like on hgTracks, getBoundingClientRect() won't work and we have to figure
+     * everything out from the .coords attribute along with taking into account dragReorder,
+     * page scroll, etc */
+    if (! (refEl instanceof Element)) {
+        // not a map/area element, maybe from some other part of the UI
+        console.log("trying to place a mouseover element next to an element that has not been created yet");
+        throw new Error();
+    }
+
+    // obtain coordinates for placing the mouseover
+    let refWidth, refHeight, refX, refY, y1;
+    let refRight, refLeft, refTop, refBottom;
+    let rect;
+    let windowWidth = window.innerWidth;
+    let windowHeight = window.innerHeight;
+    if (refEl.coords !== undefined && refEl.coords.length > 0 && refEl.coords.split(",").length == 4) {
+        // if we are dealing with an <area> element, the refEl width and height
+        // are for the whole image and not for just the area, so
+        // getBoundingClientRect() will return nothing, sad!
+        let refImg = $("[usemap=#" + refEl.parentNode.name + "]")[0];
+        let refImgRect = refImg.getBoundingClientRect();
+        let refImgWidth = refImgRect.width;
+        let refImgHeight = refImgRect.height;
+        let label = $("[id^=td_side]")[0];
+        let btn = $("[id^=td_btn]")[0];
+        let labelWidth = 0, btnWidth = 0;
+        if (label && btn) {
+            labelWidth = label.getBoundingClientRect().width;
+            btnWidth = label.getBoundingClientRect().width;
+        }
+        let imgWidth = refImgWidth;
+        if (refEl.parentNode.name !== "ideoMap") {
+            imgWidth -= labelWidth - btnWidth;
+        }
+        let refImgOffset = refImgRect.y + window.scrollY; // distance from start of image to top of viewport;
+        [x1,y1,x2,y2] = refEl.coords.split(",").map(x => parseInt(x));
+        refX = x1; refY = y1;
+        refWidth = x2 - x1; refHeight = y2 - y1;
+        refRight = x2; refLeft = x1;
+        refTop = y1; refBottom = y2;
+
+        // now we need to offset our coordinates to the track tr, to account for dragReorder
+        let parent = refEl.closest(".trDraggable");
+        let currParentOffset = 0, yDiff = 0;
+        if (refEl.parentNode.name === "ideoMap") {
+            parent = refImg.closest("tr");
+            currParentOffset = parent.getBoundingClientRect().y;
+            yDiff = y1;
+        } else if (parent) {
+            // how far in y direction we are from the tr start in the original image from the server:
+            currParentOffset = parent.getBoundingClientRect().y;
+            yDiff = y1 - hgTracks.trackDb[parent.id.slice(3)].imgOffsetY;
+            // if track labels are on, then the imgOffsetY will be off by the track label amount
+            if (typeof hgTracks.centerLabelHeight !== 'undefined') {
+                yDiff += hgTracks.centerLabelHeight;
+            }
+        }
+        // account for dragReorder and track labels
+        refTop = currParentOffset + yDiff;
+        refBottom = currParentOffset + yDiff + refHeight;
+    } else {
+        rect = refEl.getBoundingClientRect();
+        refX = rect.x; refY = rect.y;
+        refWidth = rect.width; refHeight = rect.height;
+        refRight = rect.right; refLeft = rect.left;
+        refTop = rect.top; refBottom = rect.bottom;
+    }
+    return {bottom: refBottom, height: refHeight,
+            left: refLeft, right: refRight,
+            top: refTop, width: refWidth,
+            x: refX, y: refY};
+}
+
+function positionMouseover(ev, refEl, popUpEl, mouseX, mouseY) {
+    /* The actual mouseover positioning function.
+    * refEl is an already existing element with coords that we use to position popUpEl.
+    * popUpEl will try to be as close to the right/above the refEl, except when:
+    *     it would extend past the screen in which case it would go left/below appropriately.
+    *     the refEl takes up the whole screen, in which case we can cover the refEl
+    *     with no consequence */
+    rect = boundingRect(refEl);
+    refX = rect.x; refY = rect.y;
+    refWidth = rect.width; refHeight = rect.height;
+    refRight = rect.right; refLeft = rect.left;
+    refTop = rect.top; refBottom = rect.bottom;
+    let windowWidth = window.innerWidth;
+    let windowHeight = window.innerHeight;
+
+    // figure out how large the mouseover will be
+    let popUpRect = popUpEl.getBoundingClientRect();
+    // position the popUp to the right and above the cursor by default
+    // tricky: when the mouse enters the element from the top, we want the tooltip
+    // relatively close to the element itself, because the mouse will already be
+    // on top of it, leaving it clickable or interactable. But if we are entering
+    // the element from the bottom, if we position the tooltip close to the mouse,
+    // we obscure the element itself, so we need to leave a bit of extra room
+    let topOffset;
+    if (Math.abs(mouseY - refBottom) < Math.abs(mouseY - refTop)) {
+        // just use the mouseY position for placement, the -15 accounts for enough room
+        topOffset = mouseY - window.scrollY - popUpRect.height - 15;
+    } else {
+        // just use the mouseY position for placement, the -5 accounts for cursor size
+        topOffset = mouseY - window.scrollY - popUpRect.height - 5;
+    }
+    let leftOffset = mouseX + 15; // add 15 for large cursor sizes
+
+    // first case, refEl takes the whole width of the image, so not a big deal to cover some of it
+    // this is most common for the track labels
+    if (mouseX + popUpRect.width >= (windowWidth - 25)) {
+        // move to the left
+        leftOffset = mouseX - popUpRect.width;
+    }
+    // or the mouse is on the right third of the screen
+    if (mouseX > (windowWidth* 0.66)) {
+        // move to the left
+        leftOffset = mouseX - popUpRect.width;
+    }
+
+    // the page is scrolled or otherwise off the screen
+    if (topOffset <= 0) {
+        topOffset = mouseY - window.scrollY;
+    }
+
+    if (leftOffset < 0) {
+        throw new Error("trying to position off of screen to left");
+    }
+    popUpEl.style.left = leftOffset + "px";
+    popUpEl.style.top = topOffset + "px";
+}
+
+// the current mouseover timer, for showing the mouseover after a delay
+var mouseoverTimer;
+// the timer for when a user is moving the mouse after already bringing up
+// a pop up, there may be many items close together and we want the user
+// to bring up those mouseovers
+var mousemoveTimer;
+// flags to help figure out what state the users mouse is in:
+// hovered an item, moving to new item, moving to popup, moving away from popup/item
+var mousedNewItem  = false;
+var canShowNewMouseover = true;
+// signal handler for when mousemove has gone far enough away from the pop up
+// we can't use removeEventListener because the function call is hard to keep
+// track of because of a bounded this keyword
+let mousemoveController;
+// The div that moves around the users screen with the visible mouseover text
+var mouseoverContainer;
+
+function hideMouseoverText(ele) {
+    /* Actually hides the tooltip text */
+    let tooltipTarget = ele;
+    tooltipTarget.classList.remove("isShown");
+    tooltipTarget.style.opacity = "0";
+    tooltipTarget.style.visibility = "hidden";
+}
+
+function mouseIsOverPopup(ev, ele, fudgeFactor=25) {
+    /* Is the mouse positioned over the popup? */
+    let targetBox = ele.getBoundingClientRect();
+    let mouseX = ev.clientX;
+    let mouseY = ev.clientY;
+    if ( (mouseX >= (targetBox.left - fudgeFactor) && mouseX <= (targetBox.right + fudgeFactor) &&
+            mouseY >= (targetBox.top - fudgeFactor) && mouseY <= (targetBox.bottom + fudgeFactor)) ) {
+        return true;
+    }
+    return false;
+}
+
+function mouseIsOverItem(ev, ele, fudgeFactor=25) {
+    /* Is the mouse positioned over the item that triggered the popup? */
+    let origName = ele.getAttribute("origItemMouseoverId");
+    let origTargetBox = boundingRect($("[mouseoverid='"+origName+"']")[0]);
+    let mouseX = ev.clientX;
+    let mouseY = ev.clientY;
+    if ( (mouseX >= (origTargetBox.left - fudgeFactor) && mouseX <= (origTargetBox.right + fudgeFactor) &&
+            mouseY >= (origTargetBox.top - fudgeFactor) && mouseY <= (origTargetBox.bottom + fudgeFactor)) ) {
+        return true;
+    }
+    return false;
+}
+
+function mousemoveTimerHelper(e) {
+    /* user has moved the mouse and then stopped moving for long enough. */
+    clearTimeout(mousemoveTimer);
+    canShowNewMouseover = true;
+    mousemoveTimer = undefined;
+}
+
+function mousemoveHelper(e) {
+    /* Helper function for deciding whether to keep a tooltip visible upon a mousemove event */
+    if (mousemoveTimer === undefined && canShowNewMouseover) {
+        // if we are over another mouseable element we want to show that one instead
+        // use this timer to do so
+        let callback = mousemoveTimerHelper.bind(mouseoverContainer);
+        mousemoveTimer = setTimeout(callback, 300, e);
+    }
+
+    if (mousedNewItem && canShowNewMouseover && !mouseIsOverPopup(e, this, 0)) {
+        // the !mouseIsOverPopup() check catches the corner case where the mouse
+        // was moved slowly enough to the popup to set off the mousemoveTimer, but
+        // is now over the pop up itself
+        hideMouseoverText(this);
+        mousemoveController.abort();
+    } else {
+        if (mouseIsOverPopup(e, this) || mouseIsOverItem(e, this)) {
+            // the mouse is in the general area of the popup/item
+            // the mouse needs to stop moving and then the flag will
+            // get set by the mousemoveTimer
+            canShowNewMouseover = false;
+            return;
+        } else {
+            hideMouseoverText(this);
+            mousemoveController.abort();
+            canShowNewMouseover = true;
+        }
+    }
+}
+
+function showMouseoverText(e) {
+    // actually show the mouseover text
+    e.preventDefault();
+    // the mouseover event will fire all the time, let the mousemove code
+    // set the flags for whether its time to show the new mouseover or not
+    if (mousedNewItem && canShowNewMouseover ) {
+        referenceElement = e.target;
+        if (!e.target.getAttribute("mouseoverid")) {
+            // corner case: the side slice and grey control bar slice are weird, the td
+            // container has the title tag, while the img or a element receives the mouseover
+            // event, so we need to go back up the tree to find the mouseoverid for those elems
+            while (referenceElement.parentElement && !referenceElement.getAttribute("mouseoverid")) {
+                referenceElement = referenceElement.parentElement;
+            }
+        }
+        let tooltipDivId = "#" + referenceElement.getAttribute("mouseoverid");
+        let tooltipDiv = $(tooltipDivId)[0];
+        mouseoverContainer.replaceChildren();
+        let divCpy = tooltipDiv.cloneNode(true);
+        divCpy.childNodes.forEach(function(n) {
+            mouseoverContainer.appendChild(n);
+        });
+        positionMouseover(e, referenceElement, mouseoverContainer, e.pageX, e.pageY);
+        mouseoverContainer.classList.add("isShown");
+        mouseoverContainer.style.opacity = "1";
+        mouseoverContainer.style.visibility = "visible";
+        mouseoverContainer.setAttribute("origItemMouseoverId", referenceElement.getAttribute("mouseoverid"));
+
+        // Events all get their own unique id but they are tough to keep track of if we
+        // want to remove one. We can use the AbortController interface to let the
+        // web browser automatically raise a signal when the event is fired and remove
+        // appropriate event
+        mousemoveController = new AbortController();
+        let callback = mousemoveHelper.bind(mouseoverContainer);
+
+        mousedNewItem = false;
+        canShowNewMouseover = false;
+        clearTimeout(mouseoverTimer);
+        mouseoverTimer = undefined;
+        // allow the user to mouse over the mouse over, (eg. clicking a link or selecting text)
+        document.addEventListener("mousemove", callback, {signal: mousemoveController.signal});
+        document.addEventListener("scroll", callback, {signal: mousemoveController.signal});
+    }
+}
+
+function showMouseover(e) {
+    /* Helper function for showing a mouseover. Uses a timeout function to allow
+     * user to not immediately see all available tooltips. */
+    e.preventDefault();
+    // if a tooltip is currently visible, we need to wait for its mousemove
+    // event to clear it before we can show this one, ie a user "hovers"
+    // this element on their way to mousing over the shown mouseover
+    mousedNewItem = true;
+    if (mouseoverTimer) {
+        // user is moving their mouse around, make sure where they stop is what we show
+        clearTimeout(mouseoverTimer);
+    }
+    // prevent attaching a timer if something has focus
+    if (canShowNewMouseover) {
+        mouseoverTimer = setTimeout(showMouseoverText, 300, e);
+    }
+}
+
+function addMouseover(ele1, text = null, ele2 = null) {
+    /* Adds wrapper elements to control various mouseover events */
+    if (!mouseoverContainer) {
+        mouseoverContainer = document.createElement("div");
+        mouseoverContainer.className = "tooltip";
+        mouseoverContainer.style.position = "fixed";
+        mouseoverContainer.style.display = "inline-block";
+        mouseoverContainer.style.visibility = "hidden";
+        mouseoverContainer.style.opacity = "0";
+        mouseoverContainer.id = "mouseoverContainer";
+        let tooltipTextSize = localStorage.getItem("tooltipTextSize");
+        if (tooltipTextSize === null) {tooltipTextSize = window.browserTextSize;}
+        mouseoverContainer.style.fontSize =  tooltipTextSize + "px";
+        document.body.append(mouseoverContainer);
+    }
+    // create a mouseover element out of text, or, if text is null, use already
+    // created ele2 and just show it
+    newEl = ele2;
+    if (text !== null) {
+        newEl = document.createElement("span");
+        newEl.style = "max-width: 400px"; // max width of the mouseover text
+        newEl.innerHTML = text;
+    } else {
+        text = ele2.innerHTML;
+        // if newEl was already created (as in on the server side), then
+        // it may have had it's visibility hidden by default for page load purposes
+        newEl.style.display = "inline-block";
+    }
+    if (ele1) {
+        newDiv = document.createElement("div");
+        newDiv.className = "tooltip";
+        newDiv.style.position = "fixed";
+        newDiv.style.display = "inline-block";
+        if (ele1.title) {
+            newDiv.id = replaceReserved(ele1.title);
+            ele1.setAttribute("originalTitle", ele1.title);
+            ele1.title = "";
+        } else {
+            newDiv.id = replaceReserved(text);
+        }
+        if (ele1.coords) {
+            newDiv.id += "_" + ele1.coords.replaceAll(",","_");
+        }
+        ele1.setAttribute("mouseoverid", newDiv.id);
+        newDiv.append(newEl);
+        ele1.parentNode.append(newDiv);
+        ele1.addEventListener("mouseover", showMouseover);
+    }
+}
+
+function titleTagToMouseover(mapEl) {
+    /* for a given area tag, extract the title text into a div that can be positioned
+    * like a standard tooltip mouseover next to the item */
+    addMouseover(mapEl, mapEl.title);
+}
+
+function convertTitleTagsToMouseovers() {
+    /* make all the title tags in the document have mouseovers */
+    $("[[title]").each(function(i, a) {
+        if (a.title !== undefined && a.title.length > 0) {
+            titleTagToMouseover(a);
+        }
+    });
+
+    /* Mouseover should clear if you leave the document window altogether */
+    document.body.addEventListener("mouseleave", (ev) => {
+        clearTimeout(mouseoverTimer);
+        if (mousemoveController) { mousemoveController.abort(); }
+        hideMouseoverText(mouseoverContainer);
+        canShowNewMouseover = false;
+        // let mouseovers show up again upon moving back in to the window
+        // but only need the event once
+        // use capture: true to force this event to happen
+        // before the regular mouseover event
+        document.body.addEventListener("mouseover", (evt) => {
+            canShowNewMouseover = true;
+        }, {capture: true, once: true});
+    });
+
+    /* make the mouseovers go away if we are in an input */
+    const inps = document.getElementsByTagName("input");
+    for (let inp of inps) {
+        if (!(inp.type == "hidden" || inp.type == "HIDDEN")) {
+            if (inp.type !== "submit") {
+                inp.addEventListener("focus", (ev) => {
+                    if (mousemoveController) {mousemoveController.abort();}
+                    clearTimeout(mouseoverTimer);
+                    clearTimeout(mousemoveTimer);
+                    hideMouseoverText(mouseoverContainer);
+                    canShowNewMouseover = false;
+                    inp.addEventListener("blur", (evt) => {
+                        canShowNewMouseover = true;
+                    }, {once: true});
+                });
+            } else {
+                // the buttons are inputs that don't blur right away (or ever? I can't tell), so
+                // be sure to restore the tooltips when they are clicked
+                inp.addEventListener("click", (ev) => {
+                    if (mousemoveController) {mousemoveController.abort();}
+                    clearTimeout(mouseoverTimer);
+                    clearTimeout(mousemoveTimer);
+                    hideMouseoverText(mouseoverContainer);
+                    canShowNewMouseover = true;
+                });
+            }
+        }
+    }
+    /* on a select, we can hide the tooltip on focus, but don't disable them
+     * altogether, because it's easy to click out of a select without actually
+     * losing focus, and we can't detect that because the web browser handles
+     * that click separately */
+    const sels = document.getElementsByTagName("select");
+    for (let sel of sels) {
+        sel.addEventListener("focus", (ev) => {
+            if (mousemoveController) {mousemoveController.abort();}
+            clearTimeout(mouseoverTimer);
+            hideMouseoverText(mouseoverContainer);
+            canShowNewMouseover = true;
+        });
+        for (let opt of sel.options) {
+            opt.addEventListener("click", (evt) => {
+                if (mousemoveController) {mousemoveController.abort();}
+                clearTimeout(mouseoverTimer);
+                hideMouseoverText(mouseoverContainer);
+                canShowNewMouseover = true;
+            });
+        }
+    }
+}
+
+function newTooltips() {
+    /* For server side printed tooltip texts, make them work as pop ups.
+     * Please note that the Tooltiptext node can have any arbitrary html in it, like
+     * line breaks or links*/
+    $("[title]").each(function(i, n) {
+        tooltiptext = n.getAttribute("title");
+        if (tooltiptext !== null) {
+            addMouseover(n, tooltiptext);
+        }
+    });
+}
+
+function parseUrl(url) {
+    // turn a url into some of it's components like server, query-string, etc
+    let protocol, serverName, pathInfo, queryString;
+    let temp;
+    temp = url.split("?");
+    if (temp.length > 1)
+        queryString = temp.slice(1).join("?");
+    temp = temp[0].split("/");
+    protocol = temp[0]; // "https:"
+    serverName = temp[2]; // "genome-test.gi.ucsc.edu"
+    pathInfo = temp.slice(3).join("/"); // "cgi-bin/hgTracks"
+    return {protocol: protocol, serverName: serverName, pathInfo: pathInfo, queryString: queryString};
+}
+
+function dumpCart(seconds, skipNotification) {
+    // dump current cart
+    let currUrl = parseUrl(window.location.href);
+    logUrl = currUrl.protocol + "//" + currUrl.serverName + "/" + currUrl.pathInfo + "?hgsid=" + getHgsid() + "&_dumpCart=" + encodeURIComponent(seconds) + "&skipNotif=" + skipNotification;
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", logUrl, true);
+    xmlhttp.send();  // sends request and exits this function
+}
+
+function writeToApacheLog(msg) {
+    // send msg to web servers error_log
+    // first need to figure out what server and CGI we are requesting:
+    let currUrl = parseUrl(window.location.href);
+    logUrl = currUrl.protocol + "//" + currUrl.serverName + "/" + currUrl.pathInfo + "?_dumpToLog=" + encodeURIComponent(msg);
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", logUrl, true);
+    xmlhttp.send();  // sends request and exits this function
+}

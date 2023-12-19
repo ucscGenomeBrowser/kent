@@ -678,13 +678,13 @@ return  &ret;
 void killSubmission(struct submission *sub)
 /* Kill a submission. */
 {
-struct dyString *cmd = newDyString(256);
+struct dyString *cmd = dyStringNew(256);
 int err;
 dyStringPrintf(cmd, "%s %s", killCommand, sub->id);
 err = system(cmd->string);
 if (err != 0)
    warn("Couldn't kill job id %s", sub->id);
-freeDyString(&cmd);
+dyStringFree(&cmd);
 }
 
 void markRunJobStatus(struct jobDb *db)

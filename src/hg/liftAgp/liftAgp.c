@@ -525,7 +525,7 @@ void liftAgp(char *oldAgpFile, char *newAgpFile, int numFiles, char *oldBedFiles
 {
 struct bedStub *bsList = NULL, *bs = NULL, *bsNext = NULL;
 struct bedStub *convertedList = NULL;
-struct dyString *bedFile = newDyString(1024);
+struct dyString *bedFile = dyStringNew(1024);
 int bedCount = 0;
 int convertedBedCount = 0;
 int i=0;

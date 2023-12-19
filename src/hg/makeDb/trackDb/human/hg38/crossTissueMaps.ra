@@ -1,0 +1,71 @@
+track crossTissueMaps
+superTrack on
+shortLabel Cross Tissue Nuclei
+longLabel Single Nuclei sequenced across many tissues
+visibility hide
+group singleCell
+configureByPopup off
+
+    track crossTissueMapsTissueCellType
+    parent crossTissueMaps
+    html crossTissueMaps
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=tabula-sapiens+all&gene=$<name2>
+    urlLabel View on the UCSC Cell Browser: $<name2>
+    visibility pack
+    shortLabel Cross Tissue Nuclei
+    longLabel Cross tissue nuclei RNA by tissue and cell type
+    priority 1
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/crossTissueMaps/tissue_cell_type.bb
+    barChartStatsUrl /gbdb/hg38/bbi/crossTissueMaps/tissue_cell_type.facets
+    barChartCategoryUrl /gbdb/hg38/bbi/crossTissueMaps/tissue_cell_type.categories
+    barChartFacets tissue,cell_class,cell_subclass,cell_type
+    barChartStretchToItem on
+    barChartMerge on
+
+    track crossTissueMapsFullDetails
+    parent crossTissueMaps
+    html crossTissueMaps
+    type bigBarChart
+    url https://cells.ucsc.edu/?ds=tabula-sapiens+all&gene=$<name2>
+    urlLabel View on the UCSC Cell Browser: $<name2>
+    visibility hide
+    shortLabel Cross Tissue Details
+    longLabel Cross tissue nuclei full details
+    priority 2
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/crossTissueMaps/facet_detailed.bb
+    barChartStatsUrl /gbdb/hg38/bbi/crossTissueMaps/facet_detailed.facets
+    barChartCategoryUrl /gbdb/hg38/bbi/crossTissueMaps/facet_detailed.categories
+    barChartFacets tissue,cell_class,cell_subclass,cell_type,granular_cell_type,sex,donor
+    maxWindowToDraw 10000000
+    barChartStretchToItem on
+    barChartMerge on
+
+    track gtexImmuneAtlasFullDetails
+    parent crossTissueMaps
+    html crossTissueMaps
+    type bigBarChart
+    visibility pack
+    url https://cells.ucsc.edu/?ds=tabula-sapiens+all&gene=$<name2>
+    urlLabel View on the UCSC Cell Browser: $<name2>
+    shortLabel GTEx Immune Atlas
+    longLabel GTEx single nuclei immune expression
+    priority 3
+    barChartMetric gene/genome
+    barChartUnit parts per million
+    defaultLabelFields name
+    labelFields name,name2
+    bigDataUrl /gbdb/hg38/bbi/gtexImmuneAtlas/facet_detailed_class.bb
+    barChartStatsUrl /gbdb/hg38/bbi/gtexImmuneAtlas/facet_detailed_class.facets
+    barChartCategoryUrl /gbdb/hg38/bbi/gtexImmuneAtlas/facet_detailed.categories
+    barChartFacets tissue,cell_type,cell_class,sex,donor
+    barChartStretchToItem on
+    barChartMerge on

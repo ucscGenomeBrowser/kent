@@ -52,7 +52,7 @@ if (gp->txStart == gp->cdsStart && gp->txEnd == gp->cdsEnd)
     return NULL;
 if (gp->cdsStart >= gp->cdsEnd)
     return NULL;
-dy = newDyString(4*1024);
+dy = dyStringNew(4*1024);
 
 /* Figure out which end we want. */
 if (sameWord(which, "utr3"))

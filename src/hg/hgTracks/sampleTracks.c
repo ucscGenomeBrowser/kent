@@ -487,7 +487,7 @@ if(tg->visibility == tvDense)
     {
     if(hasDense != NULL)
 	{
-	sqlSafefFrag(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	sqlSafef(query, sizeof(query), " name = '%s' ", tg->shortLabel);
 	where = cloneString(query);
 	}
     }
@@ -571,7 +571,6 @@ int rowOffset;
 struct sample *sample;
 struct linkedFeatures *lfList = NULL, *lf;
 char *hasDense = NULL;
-char *where = NULL;
 char tableName[256];
 int z;
 
@@ -599,7 +598,7 @@ else
 //printf("(%s)", tableName );
 
 sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
-    where, &rowOffset);
+    NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sample = sampleLoad(row+rowOffset);
@@ -607,8 +606,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&lfList, lf);
     sampleFree(&sample);
     }
-if(where != NULL)
-    freez(&where);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&lfList);
@@ -789,7 +786,7 @@ if(tg->visibility == tvDense)
     {
     if(hasDense != NULL)
 	{
-	sqlSafefFrag(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	sqlSafef(query, sizeof(query), " name = '%s' ", tg->shortLabel);
 	where = cloneString(query);
 	}
     }
@@ -892,7 +889,7 @@ if(tg->visibility == tvDense)
     {
     if(hasDense != NULL)
 	{
-	sqlSafefFrag(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	sqlSafef(query, sizeof(query), " name = '%s' ", tg->shortLabel);
 	where = cloneString(query);
 	}
     }

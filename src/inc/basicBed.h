@@ -12,6 +12,7 @@
 
 #include "psl.h"
 #include "asParse.h"
+#include "memgfx.h"
 
 struct bed
 /* Browser extensible data */
@@ -266,14 +267,27 @@ struct hash *readBedToBinKeeper(char *sizeFileName, char *bedFileName, int wordC
  * See also bedsIntoKeeperHash, which takes the beds read into a list already, but
  * dispenses with the need for the sizeFile. */
 
-int bedParseRgb(char *itemRgb);
-/*	parse a string: "r,g,b" into three unsigned char values
-	returned as 24 bit number, or -1 for failure */
+unsigned int bedParseRgb(char *itemRgb);
+/*      parse a string: "r,g,b" with optional ",a" into three or four unsigned
+ *      char values returned as 32 bit number, or -1 for failure.  Byte order
+ *      has alpha in the highest-order byte, then r, then g, then b in the
+ *      lowest-order byte. This is a "bed" concept of an unsigned color,
+ *      which may not match the way the graphics libraries handle color bytes. */
 
-int bedParseColor(char *colorSpec);
-/* Parse an HTML color string, a  string of 3 comma-sep unsigned color values 0-255, 
+unsigned int bedParseColor(char *colorSpec);
+/* Parse an HTML color string, a  string of 3 or 4 comma-sep unsigned color values 0-255, 
  * or a 6-digit hex string  preceded by #. 
  * O/w return unsigned integer value.  Return -1 on error */
+
+struct rgbColor bedColorToRgb(unsigned int color);
+/* Convert from the bed concept of a color uint, where the rgb bits
+ * are always in the same order, to a memgfx color structure. */
+
+Color bedColorToGfxColor(unsigned int color);
+/* Convert from the bed concept of a color uint, where the rgb bits
+ * are always in the same order, to a memgfx concept of color where
+ * the bit order depends on architecture. Assumes that a bed color
+ * will never have 0 alpha. */
 
 void bedOutputRgb(FILE *f, unsigned int color);
 /*      Output a string: "r,g,b" for 24 bit number */

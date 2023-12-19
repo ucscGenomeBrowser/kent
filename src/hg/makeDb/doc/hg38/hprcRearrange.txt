@@ -1,0 +1,56 @@
+# 2023-08-12 braney
+
+VERSION=V1
+inversion=hprcArrInv$VERSION
+duplication=hprcArrDup$VERSION
+all=hprcArrAll$VERSION
+
+mkdir -p /cluster/data/hg38/bed/hprc/rearrange
+cd /cluster/data/hg38/bed/hprc/rearrange
+
+# grab the chains
+ls ../chain/*.chain > chain.lst
+
+rm -rf inversions duplications
+mkdir inversions duplications
+
+# make the job that will figure out the inversions and duplications in each assembly
+while read chain 
+do
+name=`basename $chain | sed 's?.*chainHprc??' | sed 's/\.chain//'`
+echo chainArrange $chain $name inversions/$name.txt duplications/$name.txt
+done < chain.lst > jobs
+
+para make jobs
+
+# create the inversion bigBed and bigWig
+cat inversions/* |sort -k1,1 -k2,2n -k3,3n -k5,5n | chainArrangeCollect stdin stdout | awk '{print $0,$5}' >  $inversion.bed
+bedToBigBed  $inversion.bed /cluster/data/hg38/chrom.sizes $inversion.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+3
+cat inversions/* | sort -k1,1 | bedItemOverlapCount hg38 stdin > $inversion.bedGraph
+bedGraphToBigWig $inversion.bedGraph /cluster/data/hg38/chrom.sizes $inversion.bw
+mkdir -p /gbdb/hg38/hprcArr$VERSION
+rm -f  /gbdb/hg38/hprcArr$VERSION/$inversion.*
+ln -s `pwd`/$inversion.bw /gbdb/hg38/hprcArr$VERSION
+ln -s `pwd`/$inversion.bb /gbdb/hg38/hprcArr$VERSION
+
+# create the duplications bigBed and bigWig
+cat duplications/* |sort -k1,1 -k2,2n -k3,3n -k5,5n | chainArrangeCollect stdin stdout | awk '{print $0,$5}' > $duplication.bed
+bedToBigBed  $duplication.bed /cluster/data/hg38/chrom.sizes $duplication.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+3
+cat duplications/* | sort -k1,1 | bedItemOverlapCount hg38 stdin > $duplication.bedGraph
+bedGraphToBigWig $duplication.bedGraph /cluster/data/hg38/chrom.sizes $duplication.bw
+mkdir -p /gbdb/hg38/hprcArr$VERSION
+rm -f  /gbdb/hg38/hprcArr$VERSION/$duplication.*
+ln -s `pwd`/$duplication.bw /gbdb/hg38/hprcArr$VERSION
+ln -s `pwd`/$duplication.bb /gbdb/hg38/hprcArr$VERSION
+
+# create the sum of duplications and inversions bigBed and bigWig
+cat inversions/* duplications/* |sort -k1,1 -k2,2n | chainArrangeCollect stdin stdout | awk '{print $0,$5}' > $all.bed
+bedToBigBed  $all.bed /cluster/data/hg38/chrom.sizes $all.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+1
+cat inversions/* duplications/* | sort -k1,1 | bedItemOverlapCount hg38 stdin > $all.bedGraph
+bedGraphToBigWig $all.bedGraph /cluster/data/hg38/chrom.sizes $all.bw
+mkdir -p /gbdb/hg38/hprcArr$VERSION
+rm -f  /gbdb/hg38/hprcArr$VERSION/$all.*
+ln -s `pwd`/$all.bw /gbdb/hg38/hprcArr$VERSION
+ln -s `pwd`/$all.bb /gbdb/hg38/hprcArr$VERSION
+
+

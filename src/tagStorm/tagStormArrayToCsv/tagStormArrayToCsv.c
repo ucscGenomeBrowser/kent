@@ -108,7 +108,7 @@ if (arrayHash->elCount > 0)
     /* Clean up stuff we have to do for stanzas with arrays */
     hashFree(&valHash);
     hashFree(&uniqHash);
-    dyStringFreeList(&valList);
+    dyStringListFree(&valList);
     }
 
 /* Clean up stuff we have to do for all stanzas */

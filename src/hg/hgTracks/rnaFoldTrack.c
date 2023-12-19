@@ -47,7 +47,7 @@ if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
 optionScore = cartUsualInt(cart, option, optionScore);
 
-safef(extraWhere, size, "score >= %d",optionScore);
+sqlSafef(extraWhere, size, "score >= %d",optionScore);
 }
 
 

@@ -1,0 +1,83 @@
+##############################################################################
+# LASTZ Zebrafish DanRer11 vs. D. melanogaster Dm6
+#    (DONE - 2022-09-13 - hiram)
+# per user request redmine #29981
+
+    mkdir /hive/data/genomes/danRer11/bed/lastzDm6.2022-09-13
+    cd /hive/data/genomes/danRer11/bed/lastzDm6.2022-09-13
+
+    printf '# D. melanogaster Dm6 vs. Zebrafish DanRer11
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Zebrafish  danRer11
+SEQ1_DIR=/hive/data/genomes/danRer11/danRer11.2bit
+SEQ1_LEN=/hive/data/genomes/danRer11/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: D. melanogaster  dm6
+SEQ2_DIR=/hive/data/genomes/dm6/dm6.2bit
+SEQ2_LEN=/hive/data/genomes/dm6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/danRer11/bed/lastzDm6.2022-09-13
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	13m28.637s
+
+    sed -e 's/^/    # /;' fb.danRer11.chainDm6Link.txt
+    # 9922943 bases of 1674677181 (0.593%) in intersection
+    sed -e 's/^/    # /;' fb.danRer11.chainSynDm6Link.txt
+    # 65331 bases of 1674677181 (0.004%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        danRer11 dm6) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	11m31.879s
+
+    sed -e 's/^/    # /;' fb.danRer11.chainRBest.Dm6.txt
+    # 3483314 bases of 1674677181 (0.208%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/dm6/bed/blastz.danRer11.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/danRer11/bed/lastzDm6.2022-09-13/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	1m12.711s
+
+    sed -e 's/^/    # /;' fb.dm6.chainDanRer11Link.txt
+    # 4086744 bases of 142573024 (2.866%) in intersection
+    sed -e 's/^/    # /;' fb.dm6.chainSynDanRer11Link.txt
+    # 42241 bases of 142573024 (0.030%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   dm6 danRer11) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	8m35.092s
+
+    sed -e 's/^/    # /;' fb.dm6.chainRBest.DanRer11.txt
+    # 3396581 bases of 142573024 (2.382%) in intersection
+
+real	34m48.592s
+user	0m0.866s
+sys	0m0.812s
+##############################################################################

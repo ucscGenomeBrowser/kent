@@ -1,0 +1,29 @@
+track hprcCoverage89Super
+compositeTrack on
+shortLabel HPRC Coverage 89
+longLabel HPRC Coverage - 89 samples
+group x
+type bed 3 +
+html hprcCoverage89
+
+    track hprcCoverage89
+    subTrack hprcCoverage89Super
+    shortLabel HPRC Coverage 89
+    longLabel HPRC Coverage - 89 samples
+    color 0,0,64
+    type bigWig 0 1
+    maxHeightPixels 128:64:16
+    viewLimits 0.0:1.0
+    graphTypeDefault bar
+    bigDataUrl /gbdb/hg38/hprc/hprcCoverage89.bw
+
+    track hprcComplement89
+    subTrack hprcCoverage89Super
+    shortLabel HPRC Complement 89
+    longLabel HPRC Complement - 89 samples (== 1.0 - coverage score)
+    color 64,0,0
+    type bigWig 0 1
+    maxHeightPixels 128:64:16
+    viewLimits 0.0:1.0
+    graphTypeDefault bar
+    bigDataUrl /gbdb/hg38/hprc/hprcComplement89.bw

@@ -11,7 +11,7 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgCollection hgConvert \
 	encode/hgEncodeDataVersions encode/hgEncodeVocab encode/hgEncodeApi \
 	phyloPng hgCustom hgPal hgFileUi hgFileSearch makeDb/hgCgiData \
 	js htdocs/style hgMirror hgBeacon hgGtexTrackSettings pyLib \
-	hgGeneGraph hgs hubApi hgPhyloPlace
+	hgGeneGraph hgs hubApi hgPhyloPlace gar hgSearch
 
 ifdef LOWELAB
     BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg
@@ -24,12 +24,14 @@ ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
 endif
 
 
-TEST_DIRS = lib cgilib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
+TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToBed genePredToGtf \
-	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross liftOver \
+	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross \
             mouseStuff mrnaToGene pslCDnaFilter pslDiff pslHisto \
             pslPartition pslSelect pslStats pslToBed spideyToPsl \
 	    sqlToXml xmlToSql utils
+
+TEST_EXTRA = cgilib liftOver
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
 
@@ -50,6 +52,11 @@ ifeq ($(UNAME_S),Darwin)
   buildRefresh=
 else
   buildRefresh=encode3
+endif
+
+# in the kent-core version of the tree, there is no encode3 directory
+ifeq ($(wildcard encode3/*),)
+  buildRefresh=
 endif
 
 # List of directories to build for userApps
@@ -105,6 +112,8 @@ UTILS_APPLIST = \
 	pslSelect \
 	pslSomeRecords \
 	pslSort \
+	pslSortAcc \
+	pslSplitOnTarget \
 	pslStats \
 	pslToBed \
 	pslToChain \
@@ -227,7 +236,9 @@ all::    cgi utils
 
 hgLib:
 	cd lib && ${MAKE}
+ifneq ($(wildcard cgilib/makefile),)
 	cd cgilib && ${MAKE}
+endif
 
 userApps: $(UTILS_APPLIST:%=%.userApp)
 	cd altSplice/lib && $(MAKE)
@@ -235,12 +246,14 @@ userApps: $(UTILS_APPLIST:%=%.userApp)
 	cd mouseStuff && $(MAKE) userApps
 	cd ratStuff && $(MAKE) userApps
 
+# tolerate missing directories, as some were removed in kent-core
 %.userApp: hgLib
-	cd $* && echo $* && $(MAKE)
+	if test -d $* ; then cd $* && echo $* && $(MAKE) ; fi
 
 utils: $(APPS:%=%.utils)
+# tolerate missing directories, as some were removed in kent-core
 %.utils: hgLib
-	cd $* && echo $* && $(MAKE)
+	if test -d $* ; then cd $* && echo $* && $(MAKE) ; fi
 
 # Compile only, the cgi's for those builds without write access
 #	to apache cgi-bin directories  (this compiles and links executables)
@@ -286,20 +299,25 @@ clean::
 
 clean_utils::
 	@for D in ${UTIL_DIRS}; do \
+		if test ! -s $${D} ; then continue ; fi; \
 		(cd $${D} && ${MAKE} clean;) \
 	done
 
-clean::	${TEST_DIRS:%=%.clean}
+clean::	${TEST_DIRS:%=%.clean} ${TEST_EXTRA:%=%.cleanExtra}
 
 %.clean:
 	cd $* && ${MAKE} clean
+
+# these directories are absent in the kent-core repo due to license issues
+%.cleanExtra:
+	@test -s $*/makefile && (cd $* && ${MAKE} clean) || true
 
 testAll: $(APPS:%=%.testAll)
 
 %.testAll:
 	@test -s $*/tests/makefile && (echo $*; cd $* && $(MAKE) test) || true
 
-test::	${TEST_DIRS:%=%.test} testAll
+test::	${TEST_DIRS:%=%.test} ${TEST_EXTRA:%=%.test} testAll
 
 %.test: hgLib
 	cd $* && ${MAKE} test

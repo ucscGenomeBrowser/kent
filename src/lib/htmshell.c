@@ -27,6 +27,10 @@ static bool NoEscape = FALSE;
 
 static bool errorsNoHeader = FALSE;
 
+static char *analyticsKey = NULL;
+
+static bool doNotTranslate = FALSE;
+
 void htmlSuppressErrors()
 /* Do not output a http header for error messages. Makes sure that very early
  * errors are not shown back to the user but trigger a 500 error, */
@@ -44,6 +48,13 @@ void htmlDoEscape()
 NoEscape = FALSE;
 }
 
+void htmlDoNotTranslate()
+/* add <html> and <head> tags to tell browsers and chrome in particular not to translate this page. 
+ * DNA is recognized as Swedish otherwise and the translate will remove nucleotides */
+{
+    doNotTranslate = TRUE;
+}
+
 void htmlVaEncodeErrorText(char *format, va_list args)
 /* Write an error message encoded against XSS. */
 {
@@ -51,7 +62,7 @@ va_list argscp;
 va_copy(argscp, args);
 char warning[1024];
 
-struct dyString *ds = newDyString(1024);
+struct dyString *ds = dyStringNew(1024);
 vaHtmlDyStringPrintf(ds, format, args);
 int n = ds->stringSize;
 int nLimit = sizeof(warning) - 1;
@@ -60,7 +71,7 @@ if (ds->stringSize > nLimit)
 safencpy(warning, sizeof warning, ds->string, n);
 if (ds->stringSize > nLimit)
     strcpy(warning+n-5,"[...]");  // indicated trucation
-freeDyString(&ds);
+dyStringFree(&ds);
 
 fprintf(stdout, "%s\n", warning);
 /* write warning/error message to stderr so they get logged. */
@@ -659,7 +670,7 @@ htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[1024];
 
 // html-encode arguments to fight XSS
-struct dyString *ds = newDyString(1024);
+struct dyString *ds = dyStringNew(1024);
 vaHtmlDyStringPrintf(ds, format, args);
 int n = ds->stringSize;
 int nLimit = sizeof(warning) - 1;
@@ -668,7 +679,7 @@ if (ds->stringSize > nLimit)
 safencpy(warning, sizeof warning, ds->string, n);
 if (ds->stringSize > nLimit)
     strcpy(warning+n-5,"[...]"); // show truncation
-freeDyString(&ds);
+dyStringFree(&ds);
 
 // Replace newlines with BR tag
 char *warningBR = htmlWarnEncode(warning); 
@@ -711,7 +722,7 @@ void htmlVaBadRequestAbort(char *format, va_list args)
 puts("Status: 400\r");
 puts("Content-Type: text/plain; charset=UTF-8\r");
 puts("\r");
-if (format != NULL && args != NULL)
+if (format != NULL)
     {
     vfprintf(stdout, format, args);
     fprintf(stdout, "\n");
@@ -802,6 +813,12 @@ void htmlSetFormClass(char *formClass)
 /* Set class in the BODY part. */
 {
 htmlFormClass = formClass;
+}
+
+void htmlSetGa4Key(char *key)
+/* Set GA4 key. Needs to be called before htmlStart or htmShell. */
+{
+analyticsKey = key;
 }
 
 void htmlSetStyleTheme(char *style)
@@ -960,24 +977,63 @@ dyStringAppend(policy, " 'unsafe-inline'");
 char *noncePolicy=getNoncePolicy();
 dyStringPrintf(policy, " %s", noncePolicy);
 freeMem(noncePolicy);
-dyStringAppend(policy, " code.jquery.com");          // used by hgIntegrator jsHelper and others
-dyStringAppend(policy, " www.google-analytics.com"); // used by google analytics
+
+/* Rules for adding 3rd party javascript libraries to the CSP policy:
+ 1. Do not include the http:// or https:// from the beginning of the URL
+ 2. Keep the domain on through the rest of the path through to the .js ending.
+ 3. Delete any parameters from the end that rare CGI URLs have like ?somvar=someval 
+ 4. For security reasons, do not add just a domain, because hackers have found ways to 
+     dynamically insert into the page script tags that load other buggy libraries hosted at the same public site 
+     that they can combine to do XSS javascript injection which we want to avoid.
+*/
+
+// used by hgIntegrator jsHelper and others
+dyStringAppend(policy, " code.jquery.com/jquery-1.9.1.min.js");
+dyStringAppend(policy, " code.jquery.com/jquery-1.12.3.min.js");
+dyStringAppend(policy, " code.jquery.com/ui/1.10.3/jquery-ui.min.js");
+dyStringAppend(policy, " code.jquery.com/ui/1.11.0/jquery-ui.min.js");
+dyStringAppend(policy, " code.jquery.com/ui/1.12.1/jquery-ui.js");
+
+// used by google analytics
+dyStringAppend(policy, " www.google-analytics.com/analytics.js");
+
+// used by google tag manager (new version of analytics)
+dyStringAppend(policy, " www.googletagmanager.com/gtag/js");
+
 // cirm cdw lib and web browse
 dyStringAppend(policy, " www.samsarin.com/project/dagre-d3/latest/dagre-d3.js");
+
+dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js");
-dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js");
-dyStringAppend(policy, " login.persona.org/include.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js");
+
+dyStringAppend(policy, " login.persona.org/include.js");
+
 // expMatrix
-dyStringAppend(policy, " ajax.googleapis.com");
-dyStringAppend(policy, " maxcdn.bootstrapcdn.com");
+dyStringAppend(policy, " ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js");
+dyStringAppend(policy, " ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
+dyStringAppend(policy, " ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js");
+dyStringAppend(policy, " ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js");
+dyStringAppend(policy, " ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js");
+
+dyStringAppend(policy, " maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js");
+dyStringAppend(policy, " maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js");
+dyStringAppend(policy, " maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js");
+dyStringAppend(policy, " maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js");
+dyStringAppend(policy, " maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js");
+
 dyStringAppend(policy, " d3js.org/d3.v3.min.js");
+
 // jsHelper
-dyStringAppend(policy, " cdn.datatables.net");
+dyStringAppend(policy, " cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js");
+
+// shephered js for tutorial overlay
+dyStringAppend(policy, " cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js");
+dyStringAppend(policy, " www.google.com/recaptcha/api.js");
 
 dyStringAppend(policy, ";");
 
@@ -1027,7 +1083,7 @@ return dyStringCannibalize(&policy);
 char *getCspMetaString(char *policy)
 /* get the policy string as an html header meta tag */
 {
-char meta[1024];
+char meta[4096];
 safef(meta, sizeof meta, "<meta http-equiv='Content-Security-Policy' content=\"%s\">\n", policy); 
 // use double quotes around policy because it contains single-quoted values.
 return cloneString(meta);
@@ -1078,8 +1134,17 @@ if (printDocType)
     // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
 #endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     }
-fputs("<HTML>\n", f);
+
+if (doNotTranslate)
+    fputs("<HTML lang='en' class='notranslate' translate='no'>\n", f); // switches off auto-translation question
+else
+    fputs("<HTML>\n", f);
+
 fputs("<HEAD>\n", f);
+
+if (doNotTranslate)
+    fputs("<meta name='google' content='notranslate' />\n", f); // switches off translation bar in Chrome and related browsers
+
 // CSP header
 generateCspMetaHeader(f);
 
@@ -1094,6 +1159,8 @@ if (htmlStyleSheet != NULL)
     fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n", htmlStyleSheet);
 if (htmlStyleTheme != NULL)
     fputs(htmlStyleTheme, f);
+if (analyticsKey)
+    fprintf(f, "<script async src=\"https://www.googletagmanager.com/gtag/js?id=%s\"></script>\n", analyticsKey);
 
 fputs("</HEAD>\n\n",f);
 printBodyTag(f);
@@ -1612,10 +1679,10 @@ va_end(args);
 void vaHtmlFprintf(FILE *f, char *format, va_list args)
 /* fprintf using html encoding types */
 {
-struct dyString *ds = newDyString(1024);
+struct dyString *ds = dyStringNew(1024);
 vaHtmlDyStringPrintf(ds, format, args);
 fputs(ds->string, f);  // does not append newline
-freeDyString(&ds);
+dyStringFree(&ds);
 }
 
 

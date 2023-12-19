@@ -1,0 +1,783 @@
+<h2>Description</h2>
+<p>
+This track shows short genetic variants
+(up to approximately 50 base pairs) from
+<A HREF="https://www.ncbi.nlm.nih.gov/SNP/" target=_blank>dbSNP</A>
+build 155:
+single-nucleotide variants (SNVs),
+small insertions, deletions, and complex deletion/insertions (indels),
+relative to the reference genome assembly.
+Most variants in dbSNP are rare, not true polymorphisms,
+and some variants are known to be pathogenic.
+</p><p>
+For hg38 (GRCh38), approximately 998 million distinct variants
+(RefSNP clusters with rs# ids)
+have been mapped to more than 1.06 billion genomic locations
+including alternate haplotype and fix patch sequences.
+dbSNP remapped variants from hg38 to hg19 (GRCh37);
+approximately 981 million distinct variants were mapped to
+more than 1.02 billion genomic locations
+including alternate haplotype and fix patch sequences (not
+all of which are included in UCSC's hg19).
+</p>
+<p>
+This track includes four subtracks of variants:
+  <ul>
+    <li><b>All dbSNP (155)</b>: the entire set (1.02 billion for hg19, 1.06 billion for hg38)
+    </li>
+    <li><b>Common dbSNP (155)</b>: approximately 15 million variants with a minor allele
+      frequency (MAF) of at least 1% (0.01) in the 1000 Genomes Phase 3 dataset.
+      Variants in the Mult. subset (below) are excluded.
+    </li>
+    <li><b>ClinVar dbSNP (155)</b>: approximately 820,000 variants mentioned in ClinVar.
+      <b>Note:</b> that includes both benign and pathogenic (as well as uncertain) variants.
+      Variants in the Mult. subset (below) are excluded.
+    </li>
+    <li><b>Mult. dbSNP (155)</b>: variants that have been mapped to multiple chromosomes,
+      for example chr1 and chr2,
+      raising the question of whether the variant is really a variant or just a difference
+      between duplicated sequences.
+      There are some exceptions in which a variant is mapped to more than one reference
+      sequence, but not culled into this set:
+      <ul>
+        <li>A variant may appear in both X and Y
+          pseudo-autosomal regions (PARs) without being included in this set.
+        </li>
+        <li>A variant may also appear in a main chromosome as well as an alternate haplotype
+          or fix patch sequence assigned to that chromosome.
+        </li>
+      </ul>
+    </li>
+  </ul>
+</p>
+<p>
+A fifth subtrack highlights coordinate ranges to which dbSNP mapped a variant but with genomic
+coordinates that are not internally consistent, i.e. different coordinate ranges were provided
+when describing different alleles.  This can occur due to a bug with mapping variants from one
+assembly sequence to another when there is an indel difference between the assembly sequences:
+  <ul>
+    <li><b>Map Err (155)</b>: around 134,000 mappings of 88,000 distinct rsIDs for hg19
+      and 178,000 mappings of 108,000 distinct rsIDs for hg38.
+  </ul>
+</p>
+
+<h2>Interpreting and Configuring the Graphical Display</h2>
+<p>
+SNVs and pure deletions are displayed as boxes covering the affected base(s).
+Pure insertions are drawn as single-pixel tickmarks between
+the base before and the base after the insertion.
+</p><p>
+Insertions and/or deletions in repetitive regions may be represented by a half-height box
+showing uncertainty in placement, followed by a full-height box showing the number of deleted
+bases, or a full-height tickmark to indicate an insertion.
+When an insertion or deletion falls in a repetitive region, the placement may be ambiguous.
+For example, if the reference genome contains "TAAAG" but some
+individuals have "TAAG" at the same location, then the variant is a deletion of a single
+A relative to the reference genome.
+However, which A was deleted?  There is no way to tell whether the first, second or third A
+was removed.
+Different variant mapping tools may place the deletion at different bases in the reference genome.
+To reduce errors in merging variant calls made with different left vs. right biases,
+dbSNP made a major change in its representation of deletion/insertion variants in build 152.
+Now, instead of assigning a single-base genomic location at one of the A's,
+dbSNP expands the coordinates to encompass the whole repetitive region,
+so the variant is represented as a deletion of 3 A's combined with an insertion of 2 A's.
+In the track display, there will be a half-height box covering the first two A's,
+followed by a full-height box covering the third A, to show a net loss of one base
+but an uncertain placement within the three A's.
+</p>
+<p>
+Variants are colored according to functional effect on genes annotated by dbSNP:
+</p>
+
+<p><b><font color=red>Protein-altering variants and splice site variants are
+red</font></b>.
+<br><b><font color=green>Synonymous codon variants are
+green</font></b>.
+<br><b><font color=blue>
+Non-coding transcript or Untranslated Region (UTR) variants are
+blue</font></b>.
+</p>
+<p>
+On the track controls page, several variant properties can be included or excluded from
+the item labels:
+rs# identifier assigned by dbSNP,
+reference/alternate alleles,
+major/minor alleles (when available) and
+minor allele frequency (when available).
+Allele frequencies are reported independently by the project
+(some of which may have overlapping sets of samples):
+<ul>
+<li>
+<a href="https://www.internationalgenome.org/" target=_blank>1000Genomes</a>:
+The 1000 Genomes dataset contains data for 2,504 individuals from 26 populations.
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/snp/docs/gsr/alfa/" target=_blank>dbGaP_PopFreq</a>:
+The new source of dbGaP aggregated frequency data (>1 Million Subjects) provided by dbSNP.
+</li>
+<li>
+<a href="https://www.nhlbiwgs.org/" target=_blank>TOPMED</a>:
+The TOPMED dataset contains freeze 8 panel that includes about 158,000 individuals. The approximate ethnic breakdown is European(41%), African (31%), Hispanic or Latino (15%), East Asian (9%), and unknown (4%) ancestry.
+</li>
+<li>
+<a href="https://academic.oup.com/database/article/doi/10.1093/database/baz146/5775747" target=_blank>KOREAN</a>:
+The Korean Reference Genome Database contains data for 1,465 Korean individuals.
+</li>
+<li>
+<a href="https://www.simonsfoundation.org/simons-genome-diversity-project/" target=_blank>SGDP_PRJ</a>:
+The Simons Genome Diversity Project dataset contains 263 C-panel fully public samples and 16 B-panel
+fully public samples for a total of 279 samples.
+</li>
+<li>
+<a href="https://geneticmedicine.weill.cornell.edu/research/population-genetics" target=_blank>Qatari</a>:
+The dataset contains initial mappings of the genomes of more than 1,000 Qatari nationals.
+</li>
+<li>
+<a href="https://swefreq.nbis.se/dataset/SweGen" target=_blank>NorthernSweden</a>:
+The dataset contains 300 whole-genome sequenced human samples from the county of Vasterbotten in
+northern Sweden.
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA267856" target=_blank>Siberian</a>:
+The dataset contains paired-end whole-genome sequencing data of 28 modern-day humans from Siberia
+and Western Russia.
+</li>
+<li>
+<a href="https://twinsuk.ac.uk/" target=_blank>TWINSUK</a>:
+The UK10K - TwinsUK project contains 1854 samples from the Department of Twin Research and Genetic Epidemiology (DTR). The dataset contains data obtained from the 11,000 identical and non-identical twins between the ages of 16 and 85 years old.
+</li>
+<li>
+<a href="https://jmorp.megabank.tohoku.ac.jp/201905/downloads/" target=_blank>TOMMO</a>:
+The Tohoku Medical Megabank Project contains an allele frequency panel of 3552 Japanese individuals,
+including the X chromosome.
+</li>
+<li>
+<a href="https://www.bristol.ac.uk/alspac/" target=_blank>ALSPAC</a>:
+The UK10K - Avon Longitudinal Study of Parents and Children project contains 1927 sample including individuals obtained from the ALSPAC population. This population contains more than 14,000 mothers enrolled during pregnancy in 1991 and 1992.
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJEB19794" target=_blank>GENOME_DK</a>:
+The dataset contains the sequencing of Danish parent-offspring trios to determine genomic variation
+within the Danish population.
+</li>
+<li>
+<a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD</a>:
+The gnomAD genome dataset includes a catalog containing 602M SNVs and 105M indels based on the
+whole-genome sequencing of 71,702 samples mapped to the GRCh38 build of the human reference genome.
+</li>
+<li>
+<a href="https://www.rug.nl/research/genetics/databases/genomeofthenetherlands/" target=_blank>GoNL</a>:
+The Genome of the Netherlands (GoNL) Project characterizes DNA sequence variation, common and rare,
+for SNVs and short insertions and deletions (indels) and large deletions in 769 individuals of Dutch
+ancestry selected from five biobanks under the auspices of the Dutch hub of the Biobanking and
+Biomolecular Research Infrastructure (BBMRI-NL).
+</li>
+<li>
+<a href="https://www.geenivaramu.ee/en" target=_blank>Estonian</a>:
+The dataset contains genetic variation in the Estonian population: pharmacogenomics study of adverse
+drug effects using electronic health records.
+</li>
+<li>
+<a href="http://genomes.vn/" target=_blank>Vietnamese</a>:
+The Kinh Vietnamese database contains 24.81 million variants (22.47 million single nucleotide
+polymorphisms (SNPs) and 2.34 million indels), of which 0.71 million variants are novel.
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA609628" target=_blank>Korea1K</a>:
+The dataset contains 1,094 Korean personal genomes with clinical information.
+</li>
+<li>
+<a href="https://hapmap.ncbi.nlm.nih.gov/" target=_blank>HapMap</a>:
+(HapMap is being retired.) The International HapMap Project contains samples from African, Asian,
+or European populations.
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJEB36033" target=_blank>PRJEB36033</a>:
+The dataset contains ancient Sardinia genome-wide 1240k capture data from 70 ancient Sardinians.
+</li>
+<li>
+<a href="https://www.hagsc.org/hgdp/" target=_blank>HGDP_Stanford</a>:
+The Stanford HGDP SNP genotyping data consists of ~660,918 tag SNPs in autosomes, chromosome X and
+Y, the pseudoautosomal region, and mitochondrial DNA, typed across 1043 individuals from all panel
+populations.
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/576826" target=_blank>Daghestan</a>:
+The dataset contains genotypes of  >550 000 autosomal single-nucleotide polymorphisms (SNPs) in a
+set of 14 population isolates speaking Nakh-Daghestanian (ND) languages.
+</li>
+<li>
+<a href="https://www.pagestudy.org/" target=_blank>PAGE_STUDY</a>:
+The PAGE Study: How Genetic Diversity Improves Our Understanding of the Architecture of Complex Traits.
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/577585" target=_blank>Chileans</a>:
+The dataset consists of genetic variation on the Chileans using genotype data on ~685,944 SNPs from
+313 individuals across the whole-continental country.
+</li>
+<li>
+<a href="https://www.clinbioinfosspa.es/content/medical-genome-project" target=_blank>MGP</a>:
+MGP contains aggregated information on 267 healthy individuals, representative of the Spanish population that were used as controls in the MGP (Medical Genome Project).
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJEB37584" target=_blank>PRJEB37584</a>:
+The dataset contains genome-wide genotype analysis that identified copy number variations in cranial
+meningiomas in Chinese patients, and demonstrated diverse CNV burdens among individuals with diverse clinical features.
+</li>
+<li>
+<a href="https://esp.gs.washington.edu/" target=_blank>GoESP</a>:
+The NHLBI Grand Opportunity Exome Sequencing Project (GO-ESP) dataset contains 6503 samples drawn from multiple ESP cohorts and represents all of the ESP exome variant data.
+</li>
+<li>
+<a href="https://exac.broadinstitute.org" target=_blank>ExAC</a>:
+The Exome Aggregation Consortium (ExAC) dataset contains 60,706 unrelated individuals sequenced as part of various disease-specific and population genetic studies. Individuals affected by severe pediatric disease have been removed.
+</li>
+<li>
+<a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD_exomes</a>:
+The gnomAD v2.1 exome dataset comprises a total of 16 million SNVs and 1.2 million indels from
+125,748 exomes in 14 populations.
+</li>
+<li>
+<a href="https://thl.fi/en/web/thlfi-en/research-and-development/research-and-projects/the-national-finrisk-study" target=_blank>FINRISK</a>:
+The FINRISK cohorts comprise the respondents of representative, cross-sectional population surveys
+that are carried out every 5 years since 1972, to assess the risk factors of chronic diseases (e.g.
+CVD, diabetes, obesity, cancer) and health behavior in the working age population.
+</li>
+<li>
+<a href="https://www.pharmgkb.org" target=_blank>PharmGKB</a>:
+The dataset contains aggregated frequency data for all PharmGKB submissions.
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJEB37766" target=_blank>PRJEB37766</a>:
+The Mexican Genomic Database for Addiction Research.
+</li>
+</ul>
+
+The project from which to take allele frequency data defaults to 1000 Genomes
+but can be set to any of those projects.
+</p>
+<p>
+Using the track controls, variants can be filtered by
+
+  <ul>
+    <li>minimum minor allele frequency (MAF)
+    </li>
+    <li>variation class/type (e.g. SNV, insertion, deletion)
+    </li>
+    <li>functional effect on a gene (e.g. synonymous, frameshift, intron, upstream)
+    </li>
+    <li>assorted features and anomalies noted by UCSC during processing of dbSNP's data
+    </li>
+  </ul>
+</p>
+
+<a name="ucscNotes">
+<h3>Interesting and anomalous conditions noted by UCSC</h3>
+<p>
+While processing the information downloaded from dbSNP,
+UCSC annotates some properties of interest.
+These are noted on the item details page,
+and may be useful to include or exclude affected variants.
+
+<p>
+Some are purely informational:
+</p>
+<table style="width:1250px" class="descTbl">
+  <tr><th>keyword in data file (dbSnp155.bb)</th>
+    <th># in hg19</th><th># in hg38</th><th>description</th></tr>
+
+  <tr>
+<td>clinvar</td>
+<td class="number">627817</td>
+<td class="number">630503</td>
+<td>Variant is in ClinVar.
+</td>
+  </tr>
+  <tr>
+<td>clinvarBenign</td>
+<td class="number">275541</td>
+<td class="number">276409</td>
+<td>Variant is in ClinVar with clinical significance of benign and/or likely benign.
+</td>
+  </tr>
+  <tr>
+<td>clinvarConflicting</td>
+<td class="number">16925</td>
+<td class="number">16834</td>
+<td>Variant is in ClinVar with reports of both benign and pathogenic significance.
+</td>
+  </tr>
+  <tr>
+<td>clinvarPathogenic</td>
+<td class="number">56373</td>
+<td class="number">56475</td>
+<td>Variant is in ClinVar with clinical significance of pathogenic and/or likely pathogenic.
+</td>
+  </tr>
+  <tr>
+<td>commonAll</td>
+<td class="number">14904503</td>
+<td class="number">15862783</td>
+<td>Variant is "common", i.e. has a Minor Allele Frequency of at least 1% in all projects reporting frequencies.
+</td>
+  </tr>
+  <tr>
+<td>commonSome</td>
+<td class="number">59633864</td>
+<td class="number">62095091</td>
+<td>Variant is "common", i.e. has a Minor Allele Frequency of at least 1% in some, but not all, projects reporting frequencies.
+</td>
+  </tr>
+  <tr>
+<td>diffMajor</td>
+<td class="number">12748733</td>
+<td class="number">13073288</td>
+<td>Different frequency sources have different major alleles.
+</td>
+  </tr>
+  <tr>
+<td>overlapDiffClass</td>
+<td class="number">198945442</td>
+<td class="number">207101421</td>
+<td>This variant overlaps another variant with a different type/class.
+</td>
+  </tr>
+  <tr>
+<td>overlapSameClass</td>
+<td class="number">29281958</td>
+<td class="number">30301090</td>
+<td>This variant overlaps another with the same type/class but different start/end.
+</td>
+  </tr>
+  <tr>
+<td>rareAll</td>
+<td class="number">906113910</td>
+<td class="number">938985356</td>
+<td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1% in all projects reporting frequencies, or has no frequency data.
+</td>
+  </tr>
+  <tr>
+<td>rareSome</td>
+<td class="number">950843271</td>
+<td class="number">985217664</td>
+<td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1% in some, but not all, projects reporting frequencies, or has no frequency data.
+</td>
+  </tr>
+  <tr>
+<td>revStrand</td>
+<td class="number">5540864</td>
+<td class="number">6770772</td>
+<td>Alleles are displayed on the + strand at the current position. dbSNP's alleles are displayed on the + strand of a different assembly sequence, so dbSNP's variant page shows alleles that are reverse-complemented with respect to the alleles displayed above.
+</td>
+  </tr>
+</table>
+
+<p>
+while others may indicate that the reference genome contains a rare variant or sequencing issue:
+</p>
+<table style="width:1250px" class="descTbl">
+  <tr><th>keyword in data file (dbSnp155.bb)</th>
+    <th># in hg19</th><th># in hg38</th><th>description</th></tr>
+
+  <tr>
+<td>refIsAmbiguous</td>
+<td class="number">19</td>
+<td class="number">41</td>
+<td>The reference genome allele contains an IUPAC ambiguous base (e.g. 'R' for 'A or G', or 'N' for 'any base').
+</td>
+  </tr>
+  <tr>
+<td>refIsMinor</td>
+<td class="number">14950212</td>
+<td class="number">15386394</td>
+<td>The reference genome allele is not the major allele in at least one project.
+</td>
+  </tr>
+  <tr>
+<td>refIsRare</td>
+<td class="number">793081</td>
+<td class="number">822757</td>
+<td>The reference genome allele is rare (i.e. allele frequency < 1%).
+</td>
+  </tr>
+  <tr>
+<td>refIsSingleton</td>
+<td class="number">694310</td>
+<td class="number">712794</td>
+<td>The reference genome allele has never been observed in a population sequencing project reporting frequencies.
+</td>
+  </tr>
+  <tr>
+<td>refMismatch</td>
+<td class="number">1</td>
+<td class="number">18</td>
+<td>The reference genome allele reported by dbSNP differs from the GenBank assembly sequence. This is very rare and in all cases observed so far, the GenBank assembly has an 'N' while the RefSeq assembly used by dbSNP has a less ambiguous character such as 'R'.
+</td>
+  </tr>
+</table>
+
+<p>
+and others may indicate an anomaly or problem with the variant data:
+</p>
+<table style="width:1250px" class="descTbl">
+  <tr><th>keyword in data file (dbSnp155.bb)</th>
+    <th># in hg19</th><th># in hg38</th><th>description</th></tr>
+
+  <tr>
+<td>altIsAmbiguous</td>
+<td class="number">5294</td>
+<td class="number">5361</td>
+<td>At least one alternate allele contains an IUPAC ambiguous base (e.g. 'R' for 'A or G'). For alleles containing more than one ambiguous base, this may create a combinatoric explosion of possible alleles.
+</td>
+  </tr>
+  <tr>
+<td>classMismatch</td>
+<td class="number">13289</td>
+<td class="number">18475</td>
+<td>Variation class/type is inconsistent with alleles mapped to this genome assembly.
+</td>
+  </tr>
+  <tr>
+<td>clusterError</td>
+<td class="number">373258</td>
+<td class="number">459130</td>
+<td>This variant has the same start, end and class as another variant; they probably should have been merged into one variant.
+</td>
+  </tr>
+  <tr>
+<td>freqIncomplete</td>
+<td class="number">0</td>
+<td class="number">0</td>
+<td>At least one project reported counts for only one allele which implies that at least one allele is missing from the report; that project's frequency data are ignored.
+</td>
+  </tr>
+  <tr>
+<td>freqIsAmbiguous</td>
+<td class="number">4332</td>
+<td class="number">4399</td>
+<td>At least one allele reported by at least one project that reports frequencies contains an IUPAC ambiguous base.
+</td>
+  </tr>
+  <tr>
+<td>freqNotMapped</td>
+<td class="number">1149972</td>
+<td class="number">1141935</td>
+<td>At least one project reported allele frequencies relative to a different assembly; However, dbSNP does not include a mapping of this variant to that assembly, which implies a problem with mapping the variant across assemblies. The mapping on this assembly may have an issue; evaluate carefully vs. original submissions, which you can view by clicking through to dbSNP above.
+</td>
+  </tr>
+  <tr>
+<td>freqNotRefAlt</td>
+<td class="number">74139</td>
+<td class="number">110646</td>
+<td>At least one allele reported by at least one project that reports frequencies does not match any of the reference or alternate alleles listed by dbSNP.
+</td>
+  </tr>
+  <tr>
+<td>multiMap</td>
+<td class="number">799777</td>
+<td class="number">286666</td>
+<td>This variant has been mapped to more than one distinct genomic location.
+</td>
+  </tr>
+  <tr>
+<td>otherMapErr</td>
+<td class="number">91260</td>
+<td class="number">195051</td>
+<td>At least one other mapping of this variant has erroneous coordinates. The mapping(s) with erroneous coordinates are excluded from this track and are included in the Map Err subtrack. Sometimes despite this mapping having legal coordinates, there may still be an issue with this mapping's coordinates and alleles; you may want to click through to dbSNP to compare the initial submission's coordinates and alleles. In hg19, 55454 distinct rsIDs are affected; in hg38, 86636. 
+</td>
+  </tr>
+</table>
+
+<h2>Data Sources and Methods</h2>
+<p>
+dbSNP has collected genetic variant reports from researchers worldwide for 
+<a href="https://ncbiinsights.ncbi.nlm.nih.gov/2019/10/07/dbsnp-celebrates-20-years/"
+   target=_blank>more than 20 years</a>.
+Since the advent of next-generation sequencing methods and the population sequencing efforts
+that they enable, dbSNP has grown exponentially, requiring a new data schema, computational pipeline,
+web infrastructure, and download files.
+(Holmes <em>et al.</em>)
+The same challenges of exponential growth affected UCSC's presentation of dbSNP variants,
+so we have taken the opportunity to change our internal representation and import pipeline.
+Most notably, flanking sequences are no longer provided by dbSNP,
+because most submissions have been genomic variant calls in VCF format as opposed to
+independent sequences.
+</p>
+<p>
+We downloaded JSON files available from dbSNP at
+<a href="http://ftp.ncbi.nlm.nih.gov/snp/archive/b155/JSON/"
+target=_blank>http://ftp.ncbi.nlm.nih.gov/snp/archive/b155/JSON/</a>,
+extracted a subset of the information about each variant, and collated
+it into a bigBed file using the
+<a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/bigDbSnp.as"
+target=_blank>bigDbSnp.as</a> schema with the information
+necessary for filtering and displaying the variants,
+as well as a separate file containing more detailed information to be
+displayed on each variant's details page
+(<a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/dbSnpDetails.as"
+target=_blank>dbSnpDetails.as</a> schema).
+
+<h2>Data Access</h2>
+<p>
+<b>Note:</b> It is not recommeneded to use LiftOver to convert SNPs between assemblies,
+and more information about how to convert SNPs between assemblies can be found on the following
+<a href="/FAQ/FAQreleases.html#snpConversion">FAQ entry</a>.</p>
+<p>
+Since dbSNP has grown to include over 1 billion variants, the size of the All dbSNP (155)
+subtrack can cause the
+<a href="../../cgi-bin/hgTables" target=_blank>Table Browser</a> and
+<a href="../../cgi-bin/hgIntegrator" target=_blank>Data Integrator</a>
+to time out, leading to a blank page or truncated output,
+unless queries are restricted to a chromosomal region, to particular defined regions, to a specific set 
+of rs# IDs (which can be pasted/uploaded into the Table Browser),
+or to one of the subset tracks such as Common (~15 million variants) or ClinVar (~0.8M variants).
+</p><p>
+For automated analysis, the track data files can be downloaded from the downloads server for
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/" target=_blank>hg19</a> and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/" target=_blank>hg38</a>.
+<table class="descTbl">
+  <tr>
+    <th colspan=3>file</th>
+    <th>format</th>
+    <th>subtrack</th>
+  </tr>
+  <tr>
+    <td>dbSnp155.bb</td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp155.bb"
+           target=_blank>hg19</a></td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155.bb"
+           target=_blank>hg38</a></td>
+    <td>bigDbSnp (bigBed4+13)</td>
+    <td>All dbSNP (155)</td>
+  </tr>
+  <tr>
+    <td>dbSnp155ClinVar.bb</td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp155ClinVar.bb"
+           target=_blank>hg19</a></td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155ClinVar.bb"
+           target=_blank>hg38</a></td>
+    <td>bigDbSnp (bigBed4+13)</td>
+    <td>ClinVar dbSNP (155)</td>
+  </tr>
+  <tr>
+    <td>dbSnp155Common.bb</td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp155Common.bb"
+           target=_blank>hg19</a></td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155Common.bb"
+           target=_blank>hg38</a></td>
+    <td>bigDbSnp (bigBed4+13)</td>
+    <td>Common dbSNP (155)</td>
+  </tr>
+  <tr>
+    <td>dbSnp155Mult.bb</td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp155Mult.bb"
+           target=_blank>hg19</a></td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155Mult.bb"
+           target=_blank>hg38</a></td>
+    <td>bigDbSnp (bigBed4+13)</td>
+    <td>Mult. dbSNP (155)</td>
+  </tr>
+  <tr>
+    <td>dbSnp155BadCoords.bb</td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/dbSnp155BadCoords.bb"
+           target=_blank>hg19</a></td>
+    <td><a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155BadCoords.bb"
+           target=_blank>hg38</a></td>
+    <td>bigBed4</td>
+    <td>Map Err (155)</td>
+  </tr>
+  <tr>
+    <td colspan=3>
+      <a href="http://hgdownload.soe.ucsc.edu/gbdb/hgFixed/dbSnp/dbSnp155Details.tab.gz"
+         target=_blank>dbSnp155Details.tab.gz</a>
+    </td>
+    <td>gzip-compressed tab-separated text</td>
+    <td>Detailed variant properties, independent of genome assembly version</td>
+  </tr>
+</table>
+</p>
+<p>
+Several utilities for working with bigBed-formatted binary files can be downloaded
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+   target=_blank>here</a>.
+Run a utility with no arguments to see a brief description of the utility and its options.
+<ul>
+  <li><b>bigBedInfo</b> provides summary statistics about a bigBed file including the number of
+    items in the file.  With the <b>-as</b> option, the output includes an
+    autoSql
+    definition of data columns, useful for interpreting the column values.</li>
+  <li><b>bigBedToBed</b> converts the binary bigBed data to tab-separated text.
+    Output can be restricted to a particular region by using the -chrom, -start
+    and -end options.</li>
+  <li><b>bigBedNamedItems</b> extracts rows for one or more rs# IDs.</li>
+</ul>
+</p>
+
+<h4>Example: retrieve all variants in the region chr1:200001-200400</h4>
+
+<pre><tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155.bb -chrom=chr1 -start=200000 -end=200400 stdout</tt></pre>
+
+<h4>Example: retrieve variant rs6657048</h4>
+
+<pre><tt>bigBedNamedItems dbSnp155.bb rs6657048 stdout</tt></pre>
+
+<h4>Example: retrieve all variants with rs# IDs in file myIds.txt</h4>
+
+<pre><tt>bigBedNamedItems -nameFile dbSnp155.bb myIds.txt dbSnp155.myIds.bed</tt></pre>
+
+<p>
+The columns in the bigDbSnp/bigBed files and dbSnp155Details.tab.gz file are described in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/lib/bigDbSnp.as"
+   target=_blank>bigDbSnp.as</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/lib/dbSnpDetails.as"
+   target=_blank>dbSnpDetails.as</a> respectively.
+
+For columns that contain lists of allele frequency data, the order of projects
+providing the data listed is as follows:
+<ol>
+<li>
+<a href="https://www.internationalgenome.org/" target=_blank>1000Genomes</a>
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/snp/docs/gsr/alfa/" target=_blank>dbGaP_PopFreq</a>
+</li>
+<li>
+<a href="https://www.nhlbiwgs.org/" target=_blank>TOPMED</a>
+</li>
+<li>
+<a href="https://academic.oup.com/database/article/doi/10.1093/database/baz146/5775747" target=_blank>KOREAN</a>
+</li>
+<li>
+<a href="https://www.simonsfoundation.org/simons-genome-diversity-project/" target=_blank>SGDP_PRJ</a>
+</li>
+<li>
+<a href="https://geneticmedicine.weill.cornell.edu/research/population-genetics" target=_blank>Qatari</a>
+</li>
+<li>
+<a href="https://swefreq.nbis.se/dataset/SweGen" target=_blank>NorthernSweden</a>
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA267856" target=_blank>Siberian</a>
+</li>
+<li>
+<a href="https://twinsuk.ac.uk/" target=_blank>TWINSUK</a>
+</li>
+<li>
+<a href="https://jmorp.megabank.tohoku.ac.jp/201905/downloads/" target=_blank>TOMMO</a>
+</li>
+<li>
+<a href="https://www.bristol.ac.uk/alspac/" target=_blank>ALSPAC</a>
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJEB19794" target=_blank>GENOME_DK</a>
+</li>
+<li>
+<a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD</a>
+</li>
+<li>
+<a href="https://www.rug.nl/research/genetics/databases/genomeofthenetherlands/" target=_blank>GoNL</a>
+</li>
+<li>
+<a href="https://www.geenivaramu.ee/en" target=_blank>Estonian</a>
+</li>
+<li>
+<a href="http://genomes.vn/" target=_blank>Vietnamese</a>
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA609628" target=_blank>Korea1K</a>
+</li>
+<li>
+<a href="https://hapmap.ncbi.nlm.nih.gov/" target=_blank>HapMap</a>
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJEB36033" target=_blank>PRJEB36033</a>
+</li>
+<li>
+<a href="https://www.hagsc.org/hgdp/" target=_blank>HGDP_Stanford</a>
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/576826" target=_blank>Daghestan</a>
+</li>
+<li>
+<a href="https://www.pagestudy.org/" target=_blank>PAGE_STUDY</a>
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/577585" target=_blank>Chileans</a>
+</li>
+<li>
+<a href="https://www.clinbioinfosspa.es/content/medical-genome-project" target=_blank>MGP</a>
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJEB37584" target=_blank>PRJEB37584</a>
+</li>
+<li>
+<a href="https://esp.gs.washington.edu/" target=_blank>GoESP</a>
+</li>
+<li>
+<a href="https://exac.broadinstitute.org" target=_blank>ExAC</a>
+</li>
+<li>
+<a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD_exomes</a>
+</li>
+<li>
+<a href="https://thl.fi/en/web/thlfi-en/research-and-development/research-and-projects/the-national-finrisk-study" target=_blank>FINRISK</a>
+</li>
+<li>
+<a href="https://www.pharmgkb.org" target=_blank>PharmGKB</a>
+</li>
+<li>
+<a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJEB37766" target=_blank>PRJEB37766</a>
+</li>
+</ol>
+The functional effect (maxFuncImpact) for each variant contains the
+<a href="http://www.sequenceontology.org/browser/obob.cgi" target="_blank">Sequence
+Ontology (SO)</a> ID for the greatest functional impact on the gene. This field
+contains a 0 when no SO terms are annotated on the variant.
+</p><p>
+UCSC also has an
+<a href="../goldenPath/help/api.html"
+   target=_blank>API</a>
+that can be used to retrieve values from a particular chromosome range.
+</p><p>
+A list of rs# IDs can be pasted/uploaded in the
+<a href="hgVai" target=_blank>Variant Annotation Integrator</a>
+tool to find out which genes (if any) the variants are located in,
+as well as functional effect such as intron, coding-synonymous, missense, frameshift, etc.
+</p><p>
+Please refer to our searchable
+<A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/?hl=en&fromgroups#!search/download+snps"
+target=_blank>mailing list archives</a>
+for more questions and example queries, or our
+<a HREF="../FAQ/FAQdownloads.html#download36" target=_blank>Data Access FAQ</a>
+for more information.
+</p>
+
+<h2>References</h2>
+
+<p>
+Holmes JB, Moyer E, Phan L, Maglott D, Kattman B.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btz856"
+target="_blank">
+SPDI: Data Model for Variants and Applications at NCBI</a>.
+<em>Bioinformatics</em>. 2019 Nov 18;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31738401" target="_blank">31738401</a>
+</p>
+<p>
+Sayers EW, Agarwala R, Bolton EE, Brister JR, Canese K, Clark K, Connor R, Fiorini N, Funk K,
+Hefferon T <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gky1069" target="_blank">
+Database resources of the National Center for Biotechnology Information</a>.
+<em>Nucleic Acids Res</em>. 2019 Jan 8;47(D1):D23-D28.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30395293" target="_blank">30395293</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323993/" target="_blank">PMC6323993</a>
+</p>
+<p>
+Sherry ST, Ward MH, Kholodov M, Baker J, Phan L, Smigielski EM, Sirotkin K.
+<a HREF="https://academic.oup.com/nar/article/29/1/308/1116004/dbSNP-the-NCBI-database-of-
+genetic-variation" target="_blank">dbSNP: the NCBI database of genetic variation</a>.
+<em>Nucleic Acids Res</em>. 2001 Jan 1;29(1):308-11.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11125122" target="_blank">11125122</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC29783/" target="_blank">PMC29783</a>
+</p>
+

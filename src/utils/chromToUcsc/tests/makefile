@@ -27,6 +27,9 @@ all:
 	python3 ${DESTBINDIR}/chromToUcsc -s -i in/mm10.bad-names.bed -a mm10.chromAlias.tsv -o out/mm10.bad-names.bed >& out/mm10.bad-names.err
 	diff expected/mm10.bad-names.err out/mm10.bad-names.err
 	diff expected/mm10.bad-names.bed out/mm10.bad-names.bed
+	python3 ${DESTBINDIR}/chromToUcsc -s -i in/genark.bed -a GCF_002742125.1.chromAlias.txt -o out/genark.bed >& out/genark.err
+	diff expected/genark.err out/genark.err
+	diff expected/genark.bed out/genark.bed
 
 test: all
 

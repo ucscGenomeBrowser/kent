@@ -160,12 +160,12 @@ else
     }
 if (isRgdGene(conn))
     {
-    sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", geneId);
+    sqlSafef(condStr, sizeof(condStr), "name='%s'", geneId);
     spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
     }
 else
     {
-    sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    sqlSafef(condStr, sizeof(condStr), "kgID='%s'", geneId);
     spID = sqlGetField(sqlGetDatabase(conn), "kgXref", "spID", condStr);
     }
 
@@ -176,7 +176,7 @@ if (spID != NULL)
     if (chp != NULL) *chp = '\0';
     
     hPrintf(
-    "<BR>Protein %s (<A href=\"http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=%s\" TARGET=_blank>Reactome details)</A> participates in the following event(s):<BR><BR>" 
+    "<BR>Protein %s (<A href=\"https://reactome.org/content/query?q=%s\" TARGET=_blank>Reactome details)</A> participates in the following event(s):<BR><BR>" 
     , spID, spID);
 
     conn2= hAllocConn(database);
@@ -299,12 +299,12 @@ else
 
 if (isRgdGene(conn))
     {
-    sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", geneId);
+    sqlSafef(condStr, sizeof(condStr), "name='%s'", geneId);
     spID = sqlGetField(sqlGetDatabase(conn), "rgdGene2ToUniProt", "value", condStr);
     }
 else
     {
-    sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    sqlSafef(condStr, sizeof(condStr), "kgID='%s'", geneId);
     spID = sqlGetField(sqlGetDatabase(conn), "kgXref", "spID", condStr);
     }
 

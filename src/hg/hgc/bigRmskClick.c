@@ -12,9 +12,34 @@
 #include "hgc.h"
 #include "rmskAlign.h"
 #include "hCommon.h"
+#include "chromAlias.h"
 
 
-void printAlignmentBR (struct rmskAlign *ra)
+struct bigRmskAlignRecord
+    {
+    char *chrom;           /*Reference sequence chromosome or scaffold*/
+    unsigned chromStart;   /*Start position of alignment on chromosome*/
+    unsigned chromEnd;     /*End position of alignment on chromosome*/
+    unsigned chromRemain;  /*Remaining bp in the chromosome or scaffold*/
+    float score;           /*alignment score (sw, bits or evalue)*/
+    float percSubst;       /*Base substitution percentage*/
+    float percDel;         /*Base deletion percentage*/
+    float percIns;         /*Bases insertion percentage*/
+    char strand[2];        /*Strand - either + or -*/
+    char *repName;         /*Name of repeat*/
+    char *repType;         /*Type of repeat*/
+    char *repSubtype;      /*Subtype of repeat*/
+    unsigned repStart;     /*Start in repeat sequence*/
+    unsigned repEnd;       /*End in repeat sequence*/
+    unsigned repRemain;    /*Remaining unaligned bp in the repeat sequence*/
+    unsigned id;           /*The ID of the hit. Used to link related fragments*/
+    char *calignData;      /*The alignment data stored as a single string*/
+    };
+
+
+void printAlignmentBR (char strand, char * genoName, uint genoStart, uint genoEnd, 
+                       char *repName, uint repStart, uint repEnd,
+                       char *calignData )
 /*
  * Print RepeatMasker alignment data stored in RM's cAlign format.
  * The format is basically a lightly compressed diff format where
@@ -37,28 +62,28 @@ int aIdx = 0;
 int sIdx = 0;
 int qCnt = 0;
 int sCnt = 0;
-int qStart = ra->genoStart;
-int sStart = ra->repStart;
-if (ra->strand[0] == '-')
-    sStart = ra->repEnd;
+uint qStart = genoStart;
+uint sStart = repStart;
+if (strand == '-')
+    sStart = repEnd;
 
 int maxNameLen =
-    (strlen (ra->genoName) >
-     strlen (ra->repName) ? strlen (ra->genoName) : strlen (ra->repName));
+    (strlen(genoName) >
+     strlen(repName) ? strlen(genoName) : strlen(repName));
 
-while (ra->alignment[aIdx] != '\0')
+while (calignData[aIdx] != '\0')
     {
-    if (ra->alignment[aIdx] == '/')
+    if (calignData[aIdx] == '/')
         inSub = 1;
-    else if (ra->alignment[aIdx] == '-')
+    else if (calignData[aIdx] == '-')
         inDel ^= 1;
-    else if (ra->alignment[aIdx] == '+')
+    else if (calignData[aIdx] == '+')
         inIns ^= 1;
     else
 	{
 	if (inSub)
 	    {
-	    subjSeq[sIdx - 1] = ra->alignment[aIdx];
+	    subjSeq[sIdx - 1] = calignData[aIdx];
 	    if ((querySeq[sIdx - 1] == 'C' &&
 		 subjSeq[sIdx - 1] == 'T') ||
 		(querySeq[sIdx - 1] == 'T' &&
@@ -76,7 +101,7 @@ while (ra->alignment[aIdx] != '\0')
 	    }
 	else if (inDel)
 	    {
-	    querySeq[sIdx] = ra->alignment[aIdx];
+	    querySeq[sIdx] = calignData[aIdx];
 	    subjSeq[sIdx] = '-';
 	    diffSeq[sIdx] = '-';
 	    qCnt++;
@@ -85,7 +110,7 @@ while (ra->alignment[aIdx] != '\0')
 	else if (inIns)
 	    {
 	    querySeq[sIdx] = '-';
-	    subjSeq[sIdx] = ra->alignment[aIdx];
+	    subjSeq[sIdx] = calignData[aIdx];
 	    diffSeq[sIdx] = '-';
 	    sCnt++;
 	    sIdx++;
@@ -93,8 +118,8 @@ while (ra->alignment[aIdx] != '\0')
 	else
 	    {
 	    diffSeq[sIdx] = ' ';
-	    querySeq[sIdx] = ra->alignment[aIdx];
-	    subjSeq[sIdx] = ra->alignment[aIdx];
+	    querySeq[sIdx] = calignData[aIdx];
+	    subjSeq[sIdx] = calignData[aIdx];
 	    sCnt++;
 	    qCnt++;
 	    sIdx++;
@@ -104,18 +129,18 @@ while (ra->alignment[aIdx] != '\0')
 	    querySeq[sIdx] = '\0';
 	    diffSeq[sIdx] = '\0';
 	    subjSeq[sIdx] = '\0';
-	    printf ("%*s %10d %s %d\n", maxNameLen, ra->genoName, qStart,
+	    printf ("%*s %10d %s %d\n", maxNameLen, genoName, qStart,
 		    querySeq, (qStart + qCnt - 1));
 	    printf ("%*s            %s\n", maxNameLen, " ", diffSeq);
-	    if (ra->strand[0] == '+')
-	        printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart,
+	    if (strand == '+')
+	        printf ("%*s %10d %s %d\n", maxNameLen, repName, sStart,
 		    subjSeq, (sStart + sCnt - 1));
 	    else
-	        printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart,
+	        printf ("%*s %10d %s %d\n", maxNameLen, repName, sStart,
 		    subjSeq, (sStart - sCnt + 1));
 	    printf ("\n");
 	    qStart += qCnt;
-	    if (ra->strand[0] == '+')
+	    if (strand == '+')
 	        sStart += sCnt;
 	    else
 	        sStart -= sCnt;
@@ -131,16 +156,15 @@ if (sIdx)
     querySeq[sIdx] = '\0';
     diffSeq[sIdx] = '\0';
     subjSeq[sIdx] = '\0';
-    printf ("%*s %10d %s %d\n", maxNameLen, ra->genoName, qStart, querySeq,
+    printf ("%*s %10d %s %d\n", maxNameLen, genoName, qStart, querySeq,
 	    (qStart + qCnt - 1));
     printf ("%*s            %s\n", maxNameLen, " ", diffSeq);
-    if (ra->strand[0] == '+')
-        printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart, subjSeq,
+    if (strand == '+')
+        printf ("%*s %10d %s %d\n", maxNameLen, repName, sStart, subjSeq,
 	    (sStart + sCnt - 1));
     else
-        printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart, subjSeq,
+        printf ("%*s %10d %s %d\n", maxNameLen, repName, sStart, subjSeq,
 	    (sStart - sCnt + 1));
-    ;
     }
 }
 
@@ -204,10 +228,11 @@ cartWebStart (cart, database, "%s", tdb->longLabel);
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-char *fileName = trackDbSetting(tdb, "bigDataUrl");
 
-/* Open BigWig file and get interval list. */
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+
+/* Open bigBed file and get interval list. */
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName,chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
@@ -217,7 +242,7 @@ struct bigBedInterval *bb;
 const char *data_style = "style=\"padding:0px 6px;\"";
 int bedSize = bbi->fieldCount;
 char *fields[bedSize];
-char startBuf[16], endBuf[16];
+char startBuf[17], endBuf[17];
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields,
@@ -300,69 +325,87 @@ else
 lmCleanup(&lm);
 bbiFileClose(&bbi);
 
-    /*
-     * Locate *.align data for this element
-     */
-/* 
- * DISABLED FOR NOW, this might be part of a future enhancement if we create a auxilary bigBed file to
- * contain this data
- *
-    if (hTableExists (database, alignTable))
-	{
-	struct rmskAlign *ro;
-	if (!hFindSplitTable (database, seqName, alignTable, qTable, sizeof(qTable), &hasBin))
-	    errAbort("track %s not found", alignTable);
-	sqlSafef (query, sizeof (query),
-	       "select * from %s where genoName = '%s' and genoStart >= %d"
-	       " and id = %s", qTable, seqName, start-1, repeat);
-	sr2 = sqlGetResult (conn2, query);
-	printf ("<h4>RepeatMasker Alignments:</h4>\n");
-	printf
-	    ("The raw alignment data used by RepeatMasker to generate "
+/*
+ * Locate *.align data for this element
+ */
+char *xrefDataUrl = trackDbSetting(tdb, "xrefDataUrl");
+if ( xrefDataUrl ) 
+    {
+    //struct bbiFile *abbi = bigBedFileOpen(xrefDataUrl);
+    struct bbiFile *abbi = bigBedFileOpenAlias(xrefDataUrl,chromAliasFindAliases);
+    struct lm *alm = lmInit(0);
+    struct bigBedInterval *abbList = bigBedIntervalQuery(abbi, chrom, start, end, 0, alm);
+
+    printf ("<h4>RepeatMasker Alignments:</h4>\n");
+    printf ("The raw alignment data used by RepeatMasker to generate "
 	     "the final annotation call for this element. NOTE: The "
 	     "aligned sequence names and consensus positions may differ "
 	     "from the final annotation.<p>\n");
-	printf ("<table>\n");
-	while ((row = sqlNextRow (sr2)) != NULL)
-	    {
-	    ro = rmskAlignLoad (row + hasBin);
+    printf ("<table>\n");
+
+    struct bigRmskAlignRecord *arec = NULL;
+    AllocVar(arec);
+    for (bb = abbList; bb != NULL; bb = bb->next)
+        {
+        char *afields[abbi->fieldCount];
+        bigBedIntervalToRow(bb, chrom, startBuf, endBuf, afields,
+                            abbi->fieldCount);
+        if ( sameOk(afields[15], item) )
+            {
+            arec->chrom = afields[0];
+            arec->chromStart = sqlUnsigned(afields[1]);
+            arec->chromEnd = sqlUnsigned(afields[2]);
+            arec->chromRemain = sqlUnsigned(afields[3]);
+            arec->score = sqlFloat(afields[4]);
+            arec->percSubst = sqlFloat(afields[5]);
+            arec->percDel = sqlFloat(afields[6]);
+            arec->percIns = sqlFloat(afields[7]);
+            safef(arec->strand, sizeof(arec->strand), "%s", afields[8]);
+            arec->repName = afields[9];
+            arec->repType = afields[10];
+            arec->repSubtype = afields[11];
+            arec->repStart = sqlUnsigned(afields[12]);
+            arec->repEnd = sqlUnsigned(afields[13]);
+            arec->repRemain = sqlUnsigned(afields[14]);
+            arec->id = sqlUnsigned(afields[15]);
+            arec->calignData = afields[16];
+
 	    printf ("  <tr>\n");
-	    printf ("    <td>%d</td>\n", ro->swScore);
-	    printf ("    <td>%3.2f</td>\n",
-		    (double) ro->milliDiv * (double) 0.01);
-	    printf ("    <td>%3.2f</td>\n",
-		    (double) ro->milliDel * (double) 0.01);
-	    printf ("    <td>%3.2f</td>\n",
-		    (double) ro->milliIns * (double) 0.01);
-	    printf ("    <td>%s</td>\n", ro->genoName);
-	    printf ("    <td>%d</td>\n", ro->genoStart + 1);
-	    printf ("    <td>%d</td>\n", ro->genoEnd);
-	    printf ("    <td>(%d)</td>\n", ro->genoLeft);
-	    printf ("    <td>%s</td>\n", ro->strand);
-	    printf ("    <td>%s</td>\n", ro->repName);
-	    printf ("    <td>%s/%s</td>\n", ro->repClass, ro->repFamily);
-	    if (ro->strand[0] == '-')
+	    printf ("    <td>%.2f</td>\n", arec->score);
+	    printf ("    <td>%3.2f</td>\n", arec->percSubst);
+	    printf ("    <td>%3.2f</td>\n", arec->percDel);
+	    printf ("    <td>%3.2f</td>\n", arec->percIns);
+	    printf ("    <td>%s</td>\n", arec->chrom);
+	    printf ("    <td>%d</td>\n", arec->chromStart + 1);
+	    printf ("    <td>%d</td>\n", arec->chromEnd);
+	    printf ("    <td>(%d)</td>\n", arec->chromRemain);
+	    printf ("    <td>%s</td>\n", arec->strand);
+	    printf ("    <td>%s</td>\n", arec->repName);
+	    printf ("    <td>%s/%s</td>\n", arec->repType, arec->repSubtype);
+	    if (arec->strand[0] == '-')
 		{
-		printf ("    <td>(%d)</td>\n", ro->repLeft);
-		printf ("    <td>%d</td>\n", ro->repEnd);
-		printf ("    <td>%d</td>\n", ro->repStart);
+		printf ("    <td>(%d)</td>\n", arec->repRemain);
+		printf ("    <td>%d</td>\n", arec->repEnd);
+		printf ("    <td>%d</td>\n", arec->repStart);
 		}
 	    else
 		{
-		printf ("    <td>%d</td>\n", ro->repStart);
-		printf ("    <td>%d</td>\n", ro->repEnd);
-		printf ("    <td>(%d)</td>\n", ro->repLeft);
+		printf ("    <td>%d</td>\n", arec->repStart);
+		printf ("    <td>%d</td>\n", arec->repEnd);
+		printf ("    <td>(%d)</td>\n", arec->repRemain);
 		}
-	    printf ("    <td>%d</td>\n", ro->id);
+	    printf ("    <td>%d</td>\n", arec->id);
 	    printf ("    </tr><tr><td colspan=\"15\"><pre>\n");
-	    printAlignment (ro);
+            printAlignmentBR ( 
+                       arec->strand[0], arec->chrom, arec->chromStart, arec->chromEnd, 
+                       arec->repName, arec->repStart, arec->repEnd,
+                       arec->calignData );
 	    printf ("    </pre><td></tr>\n");
 	    }
-	sqlFreeResult (&sr2);
-	printf ("</table>\n");
-	}
-    hFreeConn (&conn2);
-    }
-    */
-printTrackHtml (tdb);
+        } //for(bb = abblist....
+    printf ("</table>\n");
+    lmCleanup(&alm);
+    bbiFileClose(&abbi);
+    } // if ( xref...
+printTrackHtml(tdb);
 }

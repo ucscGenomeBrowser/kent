@@ -4044,4 +4044,98 @@ TMPDIR=/dev/shm
     cat fb.danRer10.chainRBest.GalGal6.txt
     #	55546117 bases of 1369683683 (4.055%) in intersection
 
-#############################################################################
+##############################################################################
+# LASTZ Gallus gallus chicken (matHap) GCF_016699485.2 vs. galGal6
+#	(DONE - 2021-10-14 - hiram)
+
+    cd /cluster/home/hiram/kent/src/hg/makeDb/doc/galGal6
+
+    time (~/kent/src/hg/utils/automation/pairLastz.sh galGal6 \
+      GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b \
+         other other) > galGal6.GCF_016699485.2.log 2>&1 &
+
+    #	real	408m10.031s
+    #	user	0m1.547s
+    #	sys	0m1.169s
+
+    # the following make doc is in that log file, copied here:
+
+##############################################################################
+# LASTZ Chicken GalGal6 vs. chicken GCF_016699485.2 (DONE - 2021-10-14 - hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzGCF_016699485.2.2021-10-14
+    cd /hive/data/genomes/galGal6/bed/lastzGCF_016699485.2.2021-10-14
+
+    printf '# chicken GCF_016699485.2 vs. Chicken GalGal6
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Chicken GalGal6
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: chicken GCF_016699485.2
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/016/699/485/GCF_016699485.2/GCF_016699485.2.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/016/699/485/GCF_016699485.2/GCF_016699485.2.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/galGal6/bed/lastzGCF_016699485.2.2021-10-14
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	267m30.440s
+
+    sed -e 's/^/    # /;' fb.galGal6.chainGCF_016699485.2Link.txt
+    # 1038112746 bases of 1065365425 (97.442%) in intersection
+    sed -e 's/^/    # /;' fb.galGal6.chainSynGCF_016699485.2Link.txt
+    # 1024082754 bases of 1065365425 (96.125%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/016/699/485/GCF_016699485.2/GCF_016699485.2.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/016/699/485/GCF_016699485.2/GCF_016699485.2.chrom.sizes.txt" \
+        galGal6 GCF_016699485.2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	32m59.747s
+
+    sed -e 's/^/    # /;' fb.galGal6.chainRBest.GCF_016699485.2.txt
+    # 1017174748 bases of 1065365425 (95.477%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/016/699/485/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b/trackData/blastz.galGal6.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b /hive/data/genomes/galGal6/bed/lastzGCF_016699485.2.2021-10-14/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	74m58.936s
+
+    sed -e 's/^/    # /;' fb.GCF_016699485.2.chainGalGal6Link.txt
+    # 1037750321 bases of 1053332251 (98.521%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_016699485.2.chainSynGalGal6Link.txt
+    # 1023011548 bases of 1053332251 (97.121%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/016/699/485/GCF_016699485.2/GCF_016699485.2.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/016/699/485/GCF_016699485.2/GCF_016699485.2.chrom.sizes.txt" \
+   GCF_016699485.2 galGal6) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	32m40.423s
+
+    sed -e 's/^/    # /;' fb.GCF_016699485.2.chainRBest.GalGal6.txt
+    # 1017361581 bases of 1053332251 (96.585%) in intersection
+
+##############################################################################

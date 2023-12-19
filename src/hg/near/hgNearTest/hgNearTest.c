@@ -376,7 +376,7 @@ safef(accFilter, sizeof(accFilter), "near.as.%s.wild", accColumn);
 
 /* Set up filter for all genes in list. */
     {
-    struct dyString *dy = newDyString(0);
+    struct dyString *dy = dyStringNew(0);
     int geneCount = slCount(geneList);
     for (gene = geneList; gene != NULL; gene = gene->next)
 	dyStringPrintf(dy, "%s ", gene->name);
@@ -397,7 +397,7 @@ safef(accFilter, sizeof(accFilter), "near.as.%s.wild", accColumn);
 
 /* Set up filter for wildcard in list. */
     {
-    struct dyString *dy = newDyString(0);
+    struct dyString *dy = dyStringNew(0);
     char len = strlen(geneList->name);
     dyStringAppendN(dy, geneList->name, len-1);
     dyStringAppendC(dy, '*');

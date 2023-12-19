@@ -16,7 +16,7 @@ struct wigCartOptions
     enum wiggleGridOptEnum horizontalGrid;	/*  grid lines, ON/OFF */
     enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
     enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
-    enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min */
+    enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min,sum */
     enum wiggleSmoothingEnum smoothingWindow;	/*  N: [1:15] */
     enum wiggleYLineMarkEnum yLineOnOff;	/*  OFF/ON	*/
     enum wiggleAlwaysZeroEnum alwaysZero;	/*  OFF/ON	*/
@@ -33,6 +33,8 @@ struct wigCartOptions
     boolean isMultiWig;	/*      If true it's a multi-wig. */
     enum wiggleAggregateFunctionEnum aggregateFunction;	/*  NONE/TRANSPARENT/STACKED	*/
     boolean doNegative; /*      should we negate the values */
+    struct mafBaseProbs *baseProbs;  /* if we're in logoMaf mode, this will hold the base probabilities. */
+    boolean doSequenceLogo; /*      should we draw a sequence logo when near baselevel? */
     };
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[]);
@@ -193,4 +195,7 @@ int normalizeCount(struct preDrawElement *el, double countFactor,
     double minVal, double maxVal, double sumData, double sumSquares);
 /* Normalize statistics to be based on an integer number of valid bases.
  * Integer value is the smallest integer not less than countFactor. */
+
+void wigLogoMafCheck(struct track *tg,  int start, int end);
+/* Check to see if we should draw a sequence logo for the wiggle contents. */
 #endif /* WIGCOMMON_H */

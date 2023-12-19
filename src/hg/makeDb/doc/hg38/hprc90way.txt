@@ -1,0 +1,427 @@
+#######  MAF file for HPRC - 90 genome assemblies
+###############################################################################
+
+# starting with this file:
+
+# -rw-r--r-- 1  11788468388 Aug 16 20:05 hprc-v1.0-mc-grch38.single-copy.maf.gz
+
+# as supplied from Glenn.
+###############################################################################
+
+mkdir -p /hive/data/genomes/hg38/bed/hprc/mafFile
+cd /hive/data/genomes/hg38/bed/hprc/mafFile
+
+### worked up this name translation table from existing trackDb entries:
+
+### head db.hgMatPat.asmName.longLabel.txt
+GCA_018466835.1 HG02257.pat     HG02257#1       HG02257.alt.pat.f1_v2 (May 2021 GCA_018466835.1_HG02257.alt.pat.f1_v2) HPRC project computed Chain Nets
+GCA_018466845.1 HG02257.mat     HG02257#2       HG02257.pri.mat.f1_v2 (May 2021 GCA_018466845.1_HG02257.pri.mat.f1_v2) HPRC project computed Chain Nets
+GCA_018466855.1 HG02559.pat     HG02559#1       HG02559.alt.pat.f1_v2 (May 2021 GCA_018466855.1_HG02559.alt.pat.f1_v2) HPRC project computed Chain Nets
+...
+GCA_018506955.1_HG00733.alt.pat.f1_v2) HPRC project computed Chain Nets
+GCA_018506975.1 HG00733.mat     HG00733#2       HG00733.pri.mat.f1_v2 (May 2021 GCA_018506975.1_HG00733.pri.mat.f1_v2) HPRC project computed Chain Nets
+GCA_018852585.1 HG02145.mat     HG02145#2       HG02145.pri.mat.f1_v2 (Jun. 2021 GCA_018852585.1_HG02145.pri.mat.f1_v2) HPRC project computed Chain Nets
+GCA_018852595.1 HG02145.pat     HG02145#1       HG02145.alt.pat.f1_v2 (Jun. 2021 GCA_018852595.1_HG02145.alt.pat.f1_v2) HPRC project computed Chain Nets
+
+### rework the assembly names with this perl script reName.pl
+
+###############################################################################
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %asmNameDb;  # key is asmName in the hal file, value is dbName at UCSC
+
+open (my $fh, "<", "db.hgMatPat.asmName.longLabel.txt") or die "can not read db.hgMatPat.asmName.longLabel.txt";
+while (my $line = <$fh>) {
+  chomp $line;
+  my @a = split('\t', $line);
+  $asmNameDb{$a[2]} = $a[0];
+}
+close ($fh);
+$asmNameDb{'GRCh38'} = "hg38";
+$asmNameDb{'CHM13'} = "hs1";
+
+# foreach my $asmName (sort keys %asmNameDb) {
+#  printf "%s\t%s\n", $asmName, $asmNameDb{$asmName};
+# }
+
+open ($fh, "-|", "zcat hprc-v1.0-mc-grch38.single-copy.maf.gz") or die "can not zcat hprc-v1.0-mc-grch38.single-copy.maf.gz";
+while (my $line = <$fh>) {
+  chomp $line;
+  if ($line =~ m/^s\t/) {
+    my @a = split('\t', $line, 3);
+    my $asmName = $a[1];
+    $asmName =~ s/\..*//;
+    my $seqName = "hg38";
+    if (!defined($asmNameDb{$asmName})) {
+      printf "no equivalent name for: '%s'\n", $asmName;
+      exit 255;
+    }
+    $seqName = $asmNameDb{$asmName} if ($asmName ne "GRCh38");
+    $a[1] =~ s/^$asmName/$seqName/;
+    printf "%s\n", join("\t", @a);
+  } else {
+    printf "%s\n", $line;
+  }
+}
+close ($fh);
+###############################################################################
+
+
+   time ./reName.pl > reNamed.maf
+# real    25m41.974s
+
+###############################################################################
+### then, split that reNamed file:
+mkdir /hive/data/genomes/hg38/bed/hprc/mafFile/perChrom
+cd /hive/data/genomes/hg38/bed/hprc/mafFile/perChrom
+time  mafSplit -useFullSequenceName -byTarget /dev/null . ../reNamed.maf
+real    29m13.295s
+
+###############################################################################
+### loading this maf file
+
+[hiram@hgwdev /hive/data/genomes/hg38/bed/hprc/mafFile/perChrom] ln -s `pwd`/chr*.maf /gbdb/hg38/hprc/cactus90way
+
+cd /dev/shm
+time (hgLoadMaf -pathPrefix=/gbdb/hg38/hprc/cactus90way hg38 hprc90way) > load90way.log 2>&1 &
+# Loaded 1571098 mafs in 64 files from /gbdb/hg38/hprc/cactus90way
+# real    20m32.061s
+
+#  -rw-rw-r--    1   84132726 Aug 21 11:56 hprc90way.tab
+
+###############################################################################
+# summary table loaded after failed experiment below (DONE - 2023-10-09 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/hprc/mafFile/summary
+    cd /hive/data/genomes/hg38/bed/hprc/mafFile/summary
+    # script to operate the translation of the GC names into something
+    # that hgLoadMafSummary can work correctly with.
+    printf '#!/bin/bash
+
+set -beEu -o pipefail
+
+export mafFile=${1}
+export B="${mafFile%.maf}"
+
+sed -e 's/GC\([AF]\)_\([0-9]\+\)./GC\1\2v/;' ../iRows/result/${mafFile} \
+  | hgLoadMafSummary -test -verbose=2 -minSize=30000 \
+     -mergeGap=1500 -maxSize=200000 hg38 "hprc90${B}Summary" stdin 2> /dev/null
+
+sed -e 's/GC\([AF]\)\([0-9]\+\)v/GC\1_\2./g;' "hprc90${B}Summary.tab" \
+      > "${B}.summary.tab"
+
+rm -f "hprc90${B}Summary.tab"
+' > runOne
+    chmod +x runOne
+
+    ls ../iRows/result | grep maf > maf.list
+    printf '#LOOP
+./runOne $(path1)
+#ENDLOOP
+' > template
+    gensub2 maf.list single template jobList
+
+    time (perlPara.pl 17 jobList) > 17.log 2>&1 &
+    #  real    10m34.640s
+
+    # when done
+    sort -k2,2 -k3,3n chr*.summary.tab > ../hprc90waySummary.tab
+    cd ..
+    hgLoadSqlTab hg38 hprc90waySummary ~/kent/src/hg/lib/mafSummary.sql \
+          hprc90waySummary.tab
+
+###############################################################################
+### and the summary table (did not work with the GCA_0123.1 dot suffix
+###    the .1 got trimmed off the names)
+time (cat /gbdb/hg38/hprc/cactus90way/*.maf \
+    | hgLoadMafSummary -verbose=2 -minSize=30000 \
+      -mergeGap=1500 -maxSize=200000 hg38 hprc90waySummary stdin) > do.log 2>&1
+# Created 7864892 summary blocks from 135565223 components and 1571098 mafs from stdin
+# real    44m52.247s
+
+# -rw-rw-r--    1  417328380 Aug 21 12:44 hprc90waySummary.tab
+
+
+### use this perl script to add the .1 to the GCA names
+##############################################################################
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (my $fh, "<", "hprc90waySummary.tab") or die "can not read hprc90waySummary.tab";
+while (my $line = <$fh>) {
+  chomp $line;
+  my @a = split('\s+', $line);
+  if ($a[4] =~ m/GCA_/) {
+     $a[4] .= ".1";
+  }
+  printf "%s\t\t\n", join("\t", @a);
+}
+close ($fh);
+##############################################################################
+
+   cd /dev/shm
+   ./addDot1.pl > withDot1.hprc90waySummary.tab
+
+   # reload the table
+   hgLoadSqlTab hg38 hprc90waySummary ~/kent/src/hg/lib/mafSummary.sql  \
+        withDot1.hprc90waySummary.tab
+
+__END__
+
+###############################################################################
+### adding iRows
+###
+    mkdir /hive/data/genomes/hg38/bed/hprc/mafFile/iRows
+    cd /hive/data/genomes/hg38/bed/hprc/mafFile/iRows
+
+    ### create N.bed files
+    ls /hive/data/genomes/hg38/bed/hprc/2bits/*.2bit | while read TB
+do
+  S=`basename $TB | sed -e 's/.2bit//;'`
+  twoBitInfo -nBed ${TB} ${S}.N.bed
+done
+
+    ### and sizes .len files:
+   ls /hive/data/genomes/hg38/bed/hprc/2bits/*.2bit | while read TB
+do
+  S=`basename $TB | sed -e 's/.2bit//;'`
+  twoBitInfo ${TB} stdout | sort -k2,2nr > ${S}.len
+done
+
+    ### and the two special ones:
+    ln -s /hive/data/genomes/hg38/chrom.sizes hg38.len
+    ln -s /hive/data/genomes/hs1/chrom.sizes hs1.len
+    twoBitInfo -nBed /hive/data/genomes/hg38/hg38.2bit hg38.N.bed
+    twoBitInfo -nBed /hive/data/genomes/hs1/hs1.2bit hs1.N.bed
+    ls *.len > sizes
+    ls *.N.bed > nBeds
+
+    printf '#LOOP
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/hg38/hg38.2bit {check out line+ result/$(file1)}
+#ENDLOOP
+' > template
+
+    ls ../perChrom/chr*.maf > maf.list
+    gensub2 maf.list single template jobList
+    para -ram=64g create jobList
+    mkdir result
+    para push
+    ### at 6g limit, 19 failed:
+Completed: 45 of 64 jobs
+Crashed: 19 jobs
+CPU time in finished jobs:        224s       3.74m     0.06h    0.00d  0.000 y
+IO & Wait Time:                   138s       2.30m     0.04h    0.00d  0.000 y
+Average job time:                   8s       0.13m     0.00h    0.00d
+Longest finished job:              80s       1.33m     0.02h    0.00d
+Submission to last job:           115s       1.92m     0.03h    0.00d
+
+    ### finished the 19 with 64g limit:
+Completed: 19 of 19 jobs
+CPU time in finished jobs:       2958s      49.29m     0.82h    0.03d  0.000 y
+IO & Wait Time:                  1005s      16.76m     0.28h    0.01d  0.000 y
+Average job time:                 209s       3.48m     0.06h    0.00d
+Longest finished job:             335s       5.58m     0.09h    0.00d
+Submission to last job:           346s       5.77m     0.10h    0.00d
+
+    cd result
+    rm /gbdb/hg38/hprc/cactus90way/chr*.maf
+    ln -s `pwd`/chr*.maf /gbdb/hg38/hprc/cactus90way
+
+     ### reload these iRow annotated maf files:
+
+    cd /dev/shm
+time (hgLoadMaf -pathPrefix=/gbdb/hg38/hprc/cactus90way hg38 hprc90way) > load90way.log 2>&1 &
+
+time (cat /gbdb/hg38/hprc/cactus90way/*.maf \
+    | hgLoadMafSummary -verbose=2 -minSize=30000 \
+      -mergeGap=1500 -maxSize=200000 hg38 hprc90waySummary stdin) > do.log 2>&1
+###############################################################################
+### add gene reading frames
+
+    mkdir /hive/data/genomes/hg38/bed/hprc/mafFile/frames
+    cd /hive/data/genomes/hg38/bed/hprc/mafFile/frames
+
+    ### running this script to get genePred out of all the ensGene gtf files:
+   grep GCA_ asm.name.list | while read asmName
+do
+  gcX="${asmName:0:3}"
+  d0="${asmName:4:3}"
+  d1="${asmName:7:3}"
+  d2="${asmName:10:3}"
+   ls -d /hive/data/genomes/asmHubs/genbankBuild/$gcX/$d0/$d1/$d2/${asmName}_* | while read buildDir
+   do
+  if [ ! -d "${buildDir}" ]; then
+     printf "not found: %s\n" "${buildDir}"
+  else
+     asmId=`basename $buildDir`
+     printf "%s\n" "${asmId}"
+     if [ -d "${buildDir}/trackData/ensGene" ]; then
+        gtfToGenePred ${buildDir}/trackData/ensGene/${asmId}.ensGene*.gtf.gz stdout | gzip -c > genes/${asmName}.gp.gz
+     else
+       printf "# can not find $asmId ensGene\n"
+     fi
+  fi
+   done
+done
+
+    # two of them didn't have ensGene, but they do have ebiGene:
+    bigGenePredToGenePred /hive/data/genomes/asmHubs/genbankBuild/GCA/018/469/865/GCA_018469865.1_HG01358.pri.mat.f1_v2.1/trackData/ebiGene/HG01358.2.ensembl_genes.bb stdout | genePredSingleCover stdin stdout | gzip -c > genes/GCA_018469865.1.gp.gz
+    bigGenePredToGenePred /hive/data/genomes/asmHubs/genbankBuild/GCA/018/471/515/GCA_018471515.1_HG00438.pri.mat.f1_v2/trackData/ebiGene/HG00438.2.ensembl_genes.bb stdout | genePredSingleCover stdin stdout | gzip -c > genes/GCA_018471515.1.gp.gz
+
+     ## and hg38 from ncbiRefSeq
+    for db in hg38
+ do
+    asmName="${db}"
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq" ${db} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${asmName}.gp.gz
+    echo -n "# ${asmName}: "
+    genePredCheck -db=${db} genes/${asmName}.gp.gz
+done
+
+    ## and hs1 from ncbiRefSeq
+    genePredSingleCover \
+   /hive/data/genomes/hs1/bed/ncbiRefSeq.2023-05-25/process/hs1.ncbiRefSeq.gp \
+      stdout | gzip -2c > genes/hs1.gp.gz
+
+    ### verify they all look sane:
+    for G in genes/*.gp.gz
+do
+    B=`basename ${G} | sed -e 's/.gp.gz//;'`
+    printf "# ${B}: "
+    genePredCheck -chromSizes=../iRows/${B}.len ${G}
+done
+# GCA_018466835.1: checked: 19526 failed: 0
+# GCA_018466845.1: checked: 19508 failed: 0
+# GCA_018466855.1: checked: 19515 failed: 0
+# GCA_018466985.1: checked: 19624 failed: 0
+# GCA_018467005.1: checked: 18809 failed: 0
+# GCA_018467015.1: checked: 19459 failed: 0
+# GCA_018467155.1: checked: 19498 failed: 0
+# GCA_018467165.1: checked: 19574 failed: 0
+# GCA_018469405.1: checked: 19530 failed: 0
+# GCA_018469415.1: checked: 19708 failed: 0
+...
+# GCA_018505865.1: checked: 19585 failed: 0
+# GCA_018506125.1: checked: 19564 failed: 0
+# GCA_018506155.1: checked: 18717 failed: 0
+# GCA_018506165.1: checked: 19541 failed: 0
+# GCA_018506955.1: checked: 19553 failed: 0
+# GCA_018506975.1: checked: 19481 failed: 0
+# GCA_018852585.1: checked: 19446 failed: 0
+# GCA_018852595.1: checked: 18813 failed: 0
+# hg38: checked: 22882 failed: 0
+# hs1: checked: 19828 failed: 0
+
+#############################################################################
+### calculate snpView - WORKING - 2023-08-31 - Hiram
+#############################################################################
+    mkdir /hive/data/genomes/hg38/bed/hprc/snpView
+    cd /hive/data/genomes/hg38/bed/hprc/snpView
+
+    zgrep "^s" ../mafFile/reNamed.maf.gz | cut -f2 | sort -u > name.survey
+    grep  "^GC" name.survey  | cut -d'.' -f1-2 | sort -u > species.list
+    grep -v "^GC" name.survey  | cut -d'.' -f1 | sort -u >> species.list
+    wc -l species.list
+    # 90 species.list
+
+    zcat ../../ncbiRefSeq.p14.2023-03-29/process/hg38.ncbiRefSeq.gp.gz \
+       > ncbiRefSeq.gp
+
+    time mafGene -exons hg38 hprc90way -useFile ncbiRefSeq.gp \
+       species.list nonsyn.faa
+    real    174m8.912s
+
+XXX - need to transform the GCA_ and GCF_ names before paSNP
+XXX - maybe even before mafGene in the hprc90way table
+    paSNP species.list nonsyn.faa stdout | sed 's/:/ /' | sed 's/-/ /' \
+        | awk '{printf "%s\t%d\t%d\t%s\t1583\t+\t%d\t%d\t255,0,0\t1\t%d\t0\n", $1, $2-1, $3, $4, $2-1, $3, $3-($2 - 1)}' > nonsyn.bed
+
+        | awk '{print $1, $2-1, $3, $4, 1583, "+", $2-1, $3, "255,0,0", 1, $3-($2 - 1), 0}' > nonsyn.bed
+
+mafGene -uniqAA -exons eboVir3 multiz160way ncbiGene species.list syn.faa
+
+paSNP species.list syn.faa stdout | sed 's/:/ /' | sed 's/-/ /' | awk '{print $1, $2-1, $3, $4, 1819, "+", $2-1, $3, "0,255,0", 1, $3 - ($2 - 1), 0}' > syn.bed
+
+mafToSnpBed eboVir3 ../multiz160way/defraged.multiz160way.maf ../ncbiGene/ncbiGene.gp stdout |  sed 's/eboVir3.//' > single.bed
+
+#these should all disappear on the merge
+grep "1580$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' > codingVariant.bed
+
+grep "1623$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' > utrVariant.bed
+grep "1624$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' >> utrVariant.bed
+
+grep " 0$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "240,240,180", 1, $3 -$2, 0}' > missing.bed
+
+grep "1628$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' > intergenic.bed
+
+grep "1627$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' > intron.bed
+
+echo "select * from chromInfo" | hgsql eboVir3 | tail -n +2 > chrom.sizes
+rm output.bed
+for i in `cat species.list`
+do
+echo $i
+grep -wh "$i" nonsyn.bed syn.bed codingVariant.bed utrVariant.bed intron.bed intergenic.bed missing.bed | bedSmash stdin chrom.sizes stdout >>  output.bed
+done
+
+awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
+
+cat load.bed | sed -f ~/kent/src/hg/makeDb/doc/eboVir3/ucscName.strainName.sed \
+  | sed -e 's/G3686v1_2014/KM034562v1/' \
+  > strainLoad.bed
+
+hgLoadBed eboVir3 mafSnp160way load.bed
+hgLoadBed eboVir3 mafSnpStrainName160way strainLoad.bed
+
+###############################################################################
+## VCF tracks ( DONE - 2023-09-13 - Hiram)
+
+    mkdir  /hive/data/genomes/hg38/bed/hprc/VCF
+
+# file obtained from Glenn:
+    wget --timestamping \
+https://zenodo.org/record/6797328/files/cactus_filtered_ids.vcf.gz
+
+# -rw-rw-r-- 1 1598805305 Aug  8 14:04 cactus_filtered_ids.vcf.gz
+
+    zcat cactus_filtered_ids.vcf.gz > hprcCactusIds.vcf
+
+    bgzip -f hprcCactusIds.vcf
+    tabix -p vcf hprcCactusIds.vcf.gz
+
+    rm -f /gbdb/hg38/hprc/hprcCactusIds.vcf.gz \
+      /gbdb/hg38/hprc/hprcCactusIds.vcf.gz.tbi
+    ln -s `pwd`/hprcCactusIds.vcf.gz /gbdb/hg38/hprc
+    ln -s `pwd`/hprcCactusIds.vcf.gz.tbi /gbdb/hg38/hprc
+
+    zgrep  "^#" hprcCactusIds.vcf.gz > overSize3.vcf
+
+    zgrep -v "^#" hprcCactusIds.vcf.gz | awk 'length($4) > 3'  >> overSize3.vcf
+
+    zgrep  "^#" hprcCactusIds.vcf.gz > underSize4.vcf
+
+    zgrep -v "^#" hprcCactusIds.vcf.gz | awk 'length($4) < 4'  >> underSize4.vcf
+
+# -rw-rw-r-- 1 5095959238 Sep 13 10:35 overSize3.vcf
+# -rw-rw-r-- 1 2860716095 Sep 13 10:36 underSize4.vcf
+
+    bgzip -f overSize3.vcf
+    tabix -p vcf overSize3.vcf.gz
+    bgzip -f underSize4.vcf
+    tabix -p vcf underSize4.vcf.gz
+
+    rm -f /gbdb/hg38/hprc/overSize3.vcf.gz \
+	/gbdb/hg38/hprc/overSize3.vcf.gz.tbi \
+	/gbdb/hg38/hprc/underSize4.vcf.gz \
+	/gbdb/hg38/hprc/underSize4.vcf.gz.tbi
+    ln -s `pwd`/underSize4.vcf.gz /gbdb/hg38/hprc
+    ln -s `pwd`/underSize4.vcf.gz.tbi /gbdb/hg38/hprc
+    ln -s `pwd`/overSize3.vcf.gz /gbdb/hg38/hprc
+    ln -s `pwd`/overSize3.vcf.gz.tbi /gbdb/hg38/hprc
+
+###############################################################################

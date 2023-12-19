@@ -130,11 +130,11 @@ void encodePrimateAllelesSaveToDb(struct sqlConnection *conn, struct encodePrima
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%c','%c','%c','%s',%u,'%c','%s',%u,'%s',%u,'%c','%s',%u)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->refAllele,  el->otherAllele,  el->chimpChrom,  el->chimpPos,  el->chimpStrand,  el->chimpAllele,  el->chimpQual,  el->rhesusChrom,  el->rhesusPos,  el->rhesusStrand,  el->rhesusAllele,  el->rhesusQual);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

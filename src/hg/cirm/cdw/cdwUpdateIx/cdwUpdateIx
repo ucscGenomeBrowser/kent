@@ -13,7 +13,7 @@ if ($status) then
     echo "Error running cdwTextForIndex."
     exit 1
 endif
-ixIxx ${outname} ${outname}.ix ${outname}.ixx
+ixIxx -maxWordLength=132 ${outname} ${outname}.ix ${outname}.ixx
 if ($status) then
     echo "Error running ixIxx."
     exit 1

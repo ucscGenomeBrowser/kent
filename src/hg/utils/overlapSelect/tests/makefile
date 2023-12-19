@@ -259,7 +259,8 @@ colStats: mkout
 # CDS overlap tests
 ###
 cdsOverlapTests: cdsOverlapCdsCds cdsOverlapCdsExon \
-		cdsOverlapExonCds noCdsSelect noCdsSelectNoOver
+		cdsOverlapExonCds noCdsSelect noCdsSelectNoOver \
+		cdsOverlapGpBed12
 
 # CDS doesn't overlap
 cdsOverlapCdsCds: mkout
@@ -281,6 +282,11 @@ noCdsSelect: mkout
 noCdsSelectNoOver: mkout
 	${overlapSelect} -nonOverlapping -selectCds input/noCds.gp input/noCds2.gp output/$@.gp
 	${DIFF} expected/$@.gp output/$@.gp
+
+# regression dected overlapped in introns and UTR
+cdsOverlapGpBed12: mkout
+	${overlapSelect} -selectCds input/cds-overlap.gencode.gp input/cds-overlap.rmsk.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
 
 ###
 # -merge tests

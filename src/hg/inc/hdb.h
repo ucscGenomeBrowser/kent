@@ -59,6 +59,7 @@ struct blatServerTable
     char *host;		/* Name of machine hosting server. */
     char *port;		/* Port that hosts server. */
     char *nibDir;	/* Directory of sequence files. */
+    boolean isDynamic;  /* Is this a dynamic server? */
 };
 
 struct hTableInfo
@@ -1051,6 +1052,9 @@ char *hFindLatestGencodeTableConn(struct sqlConnection *conn, char *suffix);
 
 boolean hDbHasNcbiRefSeq(char *db);
 /* Return TRUE if db has NCBI's RefSeq alignments and annotations. */
+
+boolean hDbHasNcbiRefSeqHistorical(char *db);
+/* Return TRUE if db has NCBI's Historical RefSeq alignments and annotations. */
 
 char *hRefSeqAccForChrom(char *db, char *chrom);
 /* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.

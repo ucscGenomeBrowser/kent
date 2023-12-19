@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use File::Basename;
 use FindBin qw($Bin);
 use lib "$Bin";
 use commonHtml;
@@ -33,6 +34,8 @@ my %commonName;	# key is asmId, value is a common name, perhaps more appropriate
                 # than found in assembly_report file
 my $vgpIndex = 0;
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
+my $hprcIndex = 0;
+$hprcIndex = 1 if ($Name =~ m/hprc/i);
 
 my $assemblyTotal = 0;	# complete list of assemblies in this group
 my $asmCount = 0;	# count of assemblies completed and in the table
@@ -73,7 +76,7 @@ if ($vgpIndex) {
      $vgpSubset = "(set of legacy/superseded assemblies)";
   }
   print <<"END"
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hubs, assembly statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -91,8 +94,28 @@ Vertebrate Genomes Project.</a> $vgpSubset
 
 END
 } else {
-  print <<"END"
-<!DOCTYPE HTML 4.01 Transitional>
+  if ($hprcIndex) {
+    print <<"END"
+<!DOCTYPE HTML>
+<!--#set var="TITLE" value="HPRC - Human Pangenome Reference Consortium assembly hubs, assembly statistics" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>VGP - Human Pangenome Reference Consortium assembly hubs, assembly statistics</h1>
+<p>
+<a href='https://humanpangenome.org/' target=_blank>
+<img src='HPRC_logo.png' width=280 alt='HPRC logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://humanpangenome.org/' target=_blank>
+Human Pangenome Reference Consortium.</a>
+</p>
+
+END
+  } else {
+    print <<"END"
+<!DOCTYPE HTML>
 <!--#set var="TITLE" value="$Name genomes assembly hubs, assembly statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -104,6 +127,7 @@ Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
 END
+  }
 }
 
   print <<"END"
@@ -121,8 +145,8 @@ END
 ##############################################################################
 sub startTable() {
 print <<"END"
-<table class="sortable" border="1">
-<thead><tr><th>count</th>
+<table class="sortable" style="border: 1px solid black;">
+<thead style="position:sticky; top:0;"><tr><th>count</th>
   <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
@@ -151,11 +175,11 @@ if ($asmCount < $assemblyTotal) {
 if ($assemblyTotal > 1) {
   print "
 </tbody>
-<tfoot><tr><th>TOTALS:</th><td align=center colspan=3>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
-  <td align=right>$commaSeqCount</td>
-  <td align=right>$commaNuc</td>
-  <td align=right>$commaGapCount</td>
-  <td align=right>$commaGapSize</td>
+<tfoot><tr><th>TOTALS:</th><td style='text-align: center;' colspan=3>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
+  <td style='text-align: right;'>$commaSeqCount</td>
+  <td style='text-align: right;'>$commaNuc</td>
+  <td style='text-align: right;'>$commaGapCount</td>
+  <td style='text-align: right;'>$commaGapSize</td>
   <td colspan=1>&nbsp;</td>
   </tr>
 ";
@@ -360,20 +384,20 @@ sub tableContents() {
        $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
        $browserName = "$commonName ($asmId)";
     }
-    printf "<tr><td align=right>%d</td>\n", ++$asmCount;
+    printf "<tr><td style='text-align: right;'>%d</td>\n", ++$asmCount;
 #    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $accessionId, $commonName;
-    printf "<td align=center><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
-    printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
+    printf "<td style='text-align: center;'><a href='%s' target=_blank>%s</a></td>\n", $browserUrl, $browserName;
+    printf "    <td style='text-align: center;'><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     if ($asmId !~ m/^GC/) {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s_%s</a></td>\n", $gcPrefix, $asmAcc, $accessionId, $asmName;
     } else {
-      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
+      printf "    <td style='text-align: left;'><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
     }
-    printf "    <td align=right>%s</td>\n", commify($seqCount);
-    printf "    <td align=right>%s</td>\n", commify($totalSize);
-    printf "    <td align=right>%s</td>\n", commify($gapCount);
-    printf "    <td align=right>%s</td>\n", commify($gapSize);
-    printf "    <td align=right>%.2f</td>\n", $maskPerCent;
+    printf "    <td style='text-align: right;'>%s</td>\n", commify($seqCount);
+    printf "    <td style='text-align: right;'>%s</td>\n", commify($totalSize);
+    printf "    <td style='text-align: right;'>%s</td>\n", commify($gapCount);
+    printf "    <td style='text-align: right;'>%s</td>\n", commify($gapSize);
+    printf "    <td style='text-align: right;'>%.2f</td>\n", $maskPerCent;
     printf "</tr>\n";
   }
 }	#	sub tableContents()
@@ -382,11 +406,46 @@ sub tableContents() {
 ### main()
 ##############################################################################
 
+# if there is a 'promoted' list, it has been taken out of the 'orderList'
+# so will need to stuff it back in at the correct ordered location
+my %promotedList;	# key is asmId, value is common name
+my $promotedList = dirname(${orderList}) . "/promoted.list";
+my @promotedList;	# contents are asmIds, in order by lc(common name)
+my $promotedIndex = -1;	# to walk through @promotedList;
+
+if ( -s "${promotedList}" ) {
+  open (FH, "<${promotedList}" ) or die "can not read ${promotedList}";
+  while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($asmId, $commonName) = split('\t', $line);
+    $promotedList{$asmId} = $commonName;
+  }
+  close (FH);
+  foreach my $asmId ( sort { lc($promotedList{$a}) cmp lc($promotedList{$b}) } keys %promotedList) {
+     push @promotedList, $asmId;
+  }
+  $promotedIndex = 0;
+}
+
 open (FH, "<${orderList}") or die "can not read ${orderList}";
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
   my ($asmId, $commonName) = split('\t', $line);
+  if ( ($promotedIndex > -1) && ($promotedIndex < scalar(@promotedList))) {
+     my $checkInsertAsmId = $promotedList[$promotedIndex];
+     my $checkInsertName = $promotedList{$checkInsertAsmId};
+     # insert before this commonName when alphabetic before
+     if (lc($checkInsertName) lt lc($commonName)) {
+       push @orderList, $checkInsertAsmId;
+       $commonName{$checkInsertAsmId} = $checkInsertName;
+       ++$assemblyTotal;
+       printf STDERR "# inserting '%s' before '%s' at # %03d\n", $checkInsertName, $commonName, $assemblyTotal;
+       ++$promotedIndex;	# only doing one at this time
+                        # TBD: will need to improve this for more inserts
+     }
+  }
   push @orderList, $asmId;
   $commonName{$asmId} = $commonName;
   ++$assemblyTotal;

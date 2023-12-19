@@ -1,110 +1,34 @@
 track pond
-shortLabel Natural Selection
+shortLabel Nat. Selection (Pond)
 longLabel Natural selection analysis from Sergei Pond's research group
 visibility hide
-type bigBed 6 +
+type bigBed 8 +
 priority 1
 compositeTrack on       
 group varRep
-spectrum on
+#spectrum on
 exonArrows off
+filter.p 0:0.00001
+filterByRange.p on
+filterLimits.p 0:0.01
+filterLabel.p p-Value range to filter
+maxItems 1000000
         
-        track Common_Variants
-        parent pond
-        shortLabel Common Variants
-        longLabel Common Variants implicated in data from Sergei Pond's research group
-        visibility dense
-        type bigBed 6 +
-        priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/Common_Variant.bb
-
-        
-        track Increasing_frequency
-        parent pond
-        shortLabel Increasing frequency
-        longLabel Increasing frequency sites implicated in data from Sergei Pond's research group
-        visibility dense
-        type bigBed 6 +
-        priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/Increasing_frequency.bb
-        
-        track Intra_host_variants
-        parent pond
-        shortLabel Intra host variants
-        longLabel Intra-host variants implicated in data from Sergei Pond's research group
-        visibility dense
-        type bigBed 6 +
-        priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/Intra_host_variants.bb
-        
-        track Multiple_Clades
-        parent pond
-        shortLabel Multiple Clades
-        longLabel Sites implicated in multiple clades by Sergei Pond's research group
-        visibility dense
-        type bigBed 6 +
-        priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/Multiple_Clades.bb
-
         track Negative_Selection
         parent pond
         shortLabel Negative Selection
         longLabel Sites of negative selection implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed 6 +
+        type bigBed 8 +
         priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/Negative_Selection.bb
-        
-        track pond_New
-        parent pond
-        shortLabel New
-        longLabel Sites implicated in data from Sergei Pond's research group
-        visibility dense
-        type bigBed 6 +
-        priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/New.bb
+        bigDataUrl /gbdb/wuhCor1/pond/neg.bb
         
         track Positive_Selection
         parent pond
         shortLabel Positive Selection
         longLabel Sites of positive selection implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed 6 +
+        type bigBed 8 +
         priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/Positive_Selection.bb
+        bigDataUrl /gbdb/wuhCor1/pond/pos.bb
         
-        track predicted_CTL_epitopes
-        parent pond
-        shortLabel predicted CTL epitopes
-        longLabel Predicted CTL epitopes implicated in data from Sergei Pond's research group
-        visibility dense
-        type bigBed 6 +
-        priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/predicted_CTL_epitopes.bb
-        
-        track Selected_in_animals
-        parent pond
-        shortLabel Selected in animals
-        longLabel Sites of selection in animals implicated in data from Sergei Pond's research group
-        visibility dense
-        type bigBed 6 +
-        priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/Selected_in_animals.bb
-        
-        track Selection_Sites
-        parent pond
-        shortLabel Selection Sites
-        longLabel Sites of selection implicated in data from Sergei Pond's research group
-        visibility dense
-        type bigBed 6 +
-        priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/Selection.bb
-        
-        track Unexpected_residues
-        parent pond
-        shortLabel Unexpected residues
-        longLabel Unexpected residues implicated in data from Sergei Pond's research group
-        visibility dense
-        type bigBed 6 +
-        priority 1
-        bigDataUrl /gbdb/wuhCor1/bbi/pond/Unexpected_residues.bb

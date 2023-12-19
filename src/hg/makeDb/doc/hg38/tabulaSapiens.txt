@@ -1,0 +1,117 @@
+This describes building tabula-sapiens related tracks
+
+
+#############################################################################
+# bam-dec2022 download (Max)
+#############################################################################
+
+
+Download to:
+  /hive/data/inside/cells/datasets/tabula-sapiens/bam-dec2022/
+
+some doc in https://github.com/czbiohub/tabula-sapiens
+
+metadata:
+  /hive/data/inside/cells/datasets/tabula-sapiens/orig/from-cellxgene-all.meta.tsv
+
+# note that smartseq2 BAM can't be erad by samtools or picard due to duplicate
+# chromosomes:
+    cd /hive/data/inside/cells/datasets/tabula-sapiens/bam-dec2022/Pilot1/alignment-gencode/
+
+    % samtools view -H  ./smartseq2/B107813_G5_S31.homo.covid19.Aligned.out.sorted.bam| head
+    [E::sam_hrecs_refs_from_targets_array] Duplicate entry "NC_040671" in target list
+    samtools view: failed to add PG line to the header
+
+    % picard ValidateSamFile I=./smartseq2/B107813_G5_S31.homo.covid19.Aligned.out.sorted.bam
+    ERROR	2023-02-08 21:44:44	ValidateSamFile	Cannot add sequence that already exists in SAMSequenceDictionary: NC_040671
+
+however, intronProspector can read them
+
+Only BAM files in ceelxgene.tsv should be used. There are bam files for wells
+where no cells were sorted and poor quality cells are not annotated.
+
+
+#############################################################################
+# setup for intronProspector runs (markd)
+#############################################################################
+
+Install htslib-1.18 and intronProspector-1.0.3 in /cluster/software/. Obtain
+from:
+
+   https://github.com/samtools/htslib/releases/download/1.18/htslib-1.18.tar.bz2
+   https://github.com/diekhans/intronProspector/archive/refs/tags/v1.0.3.tar.gz
+
+##
+# get list of BAMs and associate metadata
+# this is tricky because:
+#   - We have BAMs that were rejected and not part of the metadata
+#   - BAM names contain the cell id, plus other information, but metadata doesn't
+#     directly reference the BAM
+#       B107821_A1_S297.homo.gencode.v30.ERCC.chrM ->
+#          Pilot1/alignment-gencode/SS2/B107821_A1_S297.homo.gencode.v30.ERCC.chrM.Aligned.out.sorted.bam
+#       TSP2_Vasculature_aorta_SS2_B114577_B133059_Endothelial_P5_S365 ->
+#          Pilot2/alignment-gencode/smartseq2/batch3/TSP2_Vasculature_aorta_SS2_B114577_B133059_Endothelial_P5_S365.homo.gencode.v30.ERCC.chrM.Aligned.out.sorted.bam
+##
+
+##
+# run intronProspector
+## 
+cd /hive/data/genomes/hg38/bed/tabula-sapiens-dec2022
+
+# script runIntronProspector is run on each BAM like
+   intronProspector --genome-fasta=${ref} --skip-missing-targets --min-confidence-score=1.0 \p
+                   --intron-calls=${outtsvtmp} ${inbam}
+
+# get list of SS2 cell ids in metadata
+tmlr filter '$method == "smartseq2"' /hive/data/inside/cells/datasets/tabula-sapiens/all/meta.fixed.tsv > smartseq2.metadata.tsv
+
+# get list of all BAMs we have along with id
+
+##### tawk '$3 == "smartseq2"{print $1}' /hive/data/inside/cells/datasets/tabula-sapiens/all/meta.fixed.tsv |head
+
+
+# build jobs
+
+(cd /hive/data/inside/cells/datasets/tabula-sapiens/bam-dec2022 && find Pilot*/alignment-gencode/{smartseq2,SS2} -name '*.bam') | awk '{print "./runIntronProspector", $0}' >smartseq2.jobs
+
+para create smartseq2.jobs -batch=b1
+para push -maxPush=1000000 -batch=b1
+
+##
+# metadata check
+##
+find tmp -name "*.tsv" | sed -E -e 's#^.+/##' -e 's#.homo.gencode.+$##' > calls-cells.tab
+
+tmlr filter '$method == "smartseq2"' /hive/data/inside/cells/datasets/tabula-sapiens/all/meta.fixed.tsv > smartseq2.metadata.tsv
+
+have: selectById 1 smartseq2.metadata.tsv 1 calls-cells.tab |twc
+missing: selectById -not 1 smartseq2.metadata.tsv 1 calls-cells.tab |twc
+
+    calls-cells.tab:         84877
+    smartseq2.metadata.tsv:  27052
+    diff                     57825
+
+    have:                    23213
+    missing:                 61664
+
+# list of missing
+selectById -not 1 smartseq2.metadata.tsv  1 calls-cells.tab >missing.tab
+
+# count per Pilot
+for p in $(cd tmp && echo *) ; do find tmp/$p -name "*.tsv" | sed -E -e 's#^.+/##' -e 's#.homo.gencode.+$##' > calls-cells.$p.tab ; done&
+for f in calls-cells.*.tab; do  selectById -not 1 smartseq2.metadata.tsv  1 $f | (echo -n $f ' ' ; twc -l) ; done >&pilot.metadata.cnts
+    calls-cells.Pilot1.tab          15338
+    calls-cells.Pilot2.tab          12302
+    calls-cells.Pilot3.tab          2276
+    calls-cells.Pilot4.tab          4096
+    calls-cells.Pilot5.tab          629
+    calls-cells.Pilot6.tab          1881
+    calls-cells.Pilot7.tab          1436
+    calls-cells.Pilot8.tab          518
+    calls-cells.Pilot9.tab          1058
+    calls-cells.Pilot10.tab         1556
+    calls-cells.Pilot11.tab         428
+    calls-cells.Pilot12.tab         490
+    calls-cells.Pilot13.tab         978
+    calls-cells.Pilot14.tab         18678
+

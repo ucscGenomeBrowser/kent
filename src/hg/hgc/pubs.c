@@ -271,26 +271,26 @@ static char *makeSqlMarkerList(void)
 /* return list of sections from cgi vars, format like "'abstract','header'" */
 {
 int secCount = sizeof(pubsSecNames)/sizeof(char *);
-struct slName *names = NULL;
+struct dyString *dy = dyStringNew(1024);
 int i;
+int found = 0;
 for (i=0; i<secCount; i++) 
-{
+    {
     // add ' around name and add to list
     char *secName = pubsSecNames[i];
     if (cgiOptionalInt(secName, pubsSecChecked[i]))
-    {
-        char nameBuf[100];
-        safef(nameBuf, sizeof(nameBuf), "'%s'", secName);
-        slAddHead(&names, slNameNew(nameBuf));
+	{
+	if (i != 0)
+	    sqlDyStringPrintf(dy, ",");
+        sqlDyStringPrintf(dy, "'%s'", secName);
+	++found;
+	}
     }
-}
 
-if (names==0)
+if (found==0)
     errAbort("You need to specify at least one article section.");
 
-char *nameListString = slNameListToString(names, ',');
-slNameFree(names);
-return nameListString;
+return dyStringCannibalize(&dy);
 }
 
 
@@ -300,30 +300,33 @@ static struct sqlResult *queryMarkerRows(struct sqlConnection *conn, char *marke
  * optionally filter on sections or just a single article
  * */
 {
-char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
-//sqlUpdate(conn, NOSQLINJ "SET SESSION group_concat_max_len = 100000");
+//sqlSafef(query, sizeof query, "SET SESSION group_concat_max_len = 100000");
+//sqlUpdate(conn, query);
  
-char artFilterSql[4000];
-artFilterSql[0] = 0;
-if (isNotEmpty(artExtIdFilter))
-    safef(artFilterSql, sizeof(artFilterSql), " AND extId='%s' ", artExtIdFilter);
+struct dyString *query = dyStringNew(4000);
 
 // no need to check for illegal characters in sectionList
-sqlSafef(query, sizeof(query), "SELECT distinct %s.articleId, url, title, authors, citation, year, "  
+sqlDyStringPrintf(query, "SELECT distinct %s.articleId, url, title, authors, citation, year, "  
     "pmid FROM %s "
     //"group_concat(snippet, concat(\" (section: \", section, \")\") SEPARATOR ' (...) ') FROM %s "
     "JOIN %s USING (articleId) "
-    "WHERE markerId='%s' AND section in (%-s) "
-    "%-s"
+    "WHERE markerId='%s' AND section in (%-s) ",
+    markerTable, markerTable, articleTable, item, sectionList);
+
+if (isNotEmpty(artExtIdFilter))
+    sqlDyStringPrintf(query, " AND extId='%s' ", artExtIdFilter);
+
+sqlDyStringPrintf(query,
     //"GROUP by articleId "
     "ORDER BY year DESC "
-    "LIMIT %d",
-    markerTable, markerTable, articleTable, item, sectionList, artFilterSql, itemLimit);
+    "LIMIT %d", 
+     itemLimit);
 
-    printDebug(query);
+    printDebug(dyStringContents(query));
 
-struct sqlResult *sr = sqlGetResult(conn, query);
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
+dyStringFree(&query);
 
 return sr;
 }

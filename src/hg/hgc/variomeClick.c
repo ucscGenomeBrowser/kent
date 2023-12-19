@@ -313,7 +313,7 @@ char *phen = cartCgiUsualString(cart, "variome.pheno", NULL);
 char *comm = cartCgiUsualString(cart, NEW_ITEM_COMMENT, NULL);
 char *pos = cartCgiUsualString(cart, "getDnaPos", NULL);
 char *strand = cartCgiUsualString(cart, NEW_ITEM_STRAND, NULL);
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 /* make sure defined & defaults have changed for required fields */
 if (hgvs == NULL || sameString(hgvs, "required"))
     errAbort("The HGVS name is a required field\n");

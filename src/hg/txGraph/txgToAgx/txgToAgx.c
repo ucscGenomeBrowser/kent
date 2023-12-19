@@ -95,6 +95,7 @@ for (sourceIx=0; sourceIx<sourceCount; ++sourceIx)
     {
     struct txSource *source = &tx->sources[sourceIx];
     ag->mrnaRefs[sourceIx] = cloneString(source->accession);
+    replaceChar(ag->mrnaRefs[sourceIx], ',', '_');
     }
 
 /* Deal with tissues and libs by just making arrays of all zero. */

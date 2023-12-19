@@ -1,0 +1,25 @@
+track cpgIslands
+compositeTrack on
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+group regulation
+visibility hide
+type bigBed 4 +
+html html/GCA_009914755.4_T2T-CHM13v2.0.cpgIslands
+
+    track cpgIslandExt
+    parent cpgIslands off
+    shortLabel CpG Islands
+    longLabel CpG Islands (Islands < 300 Bases are Light Green)
+    type bigBed 4 +
+    priority 1
+    bigDataUrl  /gbdb/hs1/bbi/cpgIslandExt.bb
+
+    track cpgIslandExtUnmasked
+    parent cpgIslands on
+    shortLabel Unmasked CpG
+    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
+    type bigBed 4 +
+    priority 2
+    bigDataUrl  /gbdb/hs1/bbi/cpgIslandExtUnmasked.bb
+

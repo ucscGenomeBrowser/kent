@@ -66,11 +66,11 @@ void gtexAseSaveToDb(struct sqlConnection *conn, struct gtexAse *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%g,%g,%u,%u,%g,%g,%g,%g,%g)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->itemRgb,  el->medianASE,  el->coverage,  el->samples,  el->donors,  el->minASE,  el->q1ASE,  el->q3ASE,  el->maxASE,  el->stdASE);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct gtexAse *gtexAseLoad(char **row)

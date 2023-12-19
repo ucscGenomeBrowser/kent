@@ -87,7 +87,9 @@ char **row;
 conn = hAllocConn(database);
 ret = newHash(0);
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
@@ -288,7 +290,7 @@ static void loadDatabase(char *database, char *track, struct wiggleStub *wiggleL
 /* Load database from wiggleList. */
 {
 struct sqlConnection *conn = (struct sqlConnection *)NULL;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *tab = (char *)NULL;
 
 if (! noLoad)
@@ -318,28 +320,29 @@ if ((!oldTable) && (!noLoad))
 	    database, track);
     sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
-       dyStringAppend(dy, "  bin smallint unsigned not null,\n");
-    dyStringAppend(dy, "  chrom varchar(255) not null,\n");
-    dyStringAppend(dy, "  chromStart int unsigned not null,\n");
-    dyStringAppend(dy, "  chromEnd int unsigned not null,\n");
-    dyStringAppend(dy, "  name varchar(255) not null,\n");
-    dyStringAppend(dy, "  span int unsigned not null,\n");
-    dyStringAppend(dy, "  count int unsigned not null,\n");
-    dyStringAppend(dy, "  offset int unsigned not null,\n");
-    dyStringAppend(dy, "  file varchar(255) not null,\n");
-    dyStringAppend(dy, "  lowerLimit double not null,\n");
-    dyStringAppend(dy, "  dataRange double not null,\n");
-    dyStringAppend(dy, "  validCount int unsigned not null,\n");
-    dyStringAppend(dy, "  sumData double not null,\n");
-    dyStringAppend(dy, "  sumSquares double not null,\n");
-    dyStringAppend(dy, "#Indices\n");
+       sqlDyStringPrintf(dy, "  bin smallint unsigned not null,\n");
+    sqlDyStringPrintf(dy, 
+    "  chrom varchar(255) not null,\n"
+    "  chromStart int unsigned not null,\n"
+    "  chromEnd int unsigned not null,\n"
+    "  name varchar(255) not null,\n"
+    "  span int unsigned not null,\n"
+    "  count int unsigned not null,\n"
+    "  `offset` int unsigned not null,\n"
+    "  file varchar(255) not null,\n"
+    "  lowerLimit double not null,\n"
+    "  dataRange double not null,\n"
+    "  validCount int unsigned not null,\n"
+    "  sumData double not null,\n"
+    "  sumSquares double not null,\n"
+    "#Indices\n");
     if (!noBin)
-	dyStringPrintf(dy, "  INDEX(chrom(%d),bin)\n", indexLen);
+	sqlDyStringPrintf(dy, "  INDEX(chrom(%d),bin)\n", indexLen);
     else
 	{
-	dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart)\n", indexLen);
+	sqlDyStringPrintf(dy, "  INDEX(chrom(%d),chromStart)\n", indexLen);
 	}
-    dyStringAppend(dy, ")\n");
+    sqlDyStringPrintf(dy, ")\n");
     verbose(2, "%s", dy->string);
     sqlRemakeTable(conn, track, dy->string);
     }

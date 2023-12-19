@@ -5,8 +5,8 @@
 #ifndef WGENCODEGENCODEATTRS_H
 #define WGENCODEGENCODEATTRS_H
 
-#define WGENCODEGENCODEATTRS_NUM_COLS 14
-#define WGENCODEGENCODEATTRS_NO_PROTEIN_ID_NUM_COLS 13  // older tables
+#define WGENCODEGENCODEATTRS_NUM_COLS 15
+#define WGENCODEGENCODEATTRS_MIM_NUM_COLS 13  // older tables
 
 extern char *wgEncodeGencodeAttrsCommaSepFieldNames;
 
@@ -28,6 +28,7 @@ struct wgEncodeGencodeAttrs
     int level;	/* GENCODE level: 1 = experimental confirmed, 2 = manual, 3 = automated */
     char *transcriptClass;	/* high level type of transcript */
     char *proteinId;	/* Protein identifier (not loaded on many older versions of GENCODE) */
+    int transcriptRank;	/* Rank of transcript within the gene, smaller is more preferred, (not loaded on many older versions of GENCODE, in which case -1) */
     };
 
 void wgEncodeGencodeAttrsStaticLoad(char **row, int numColumns, struct wgEncodeGencodeAttrs *ret);
@@ -49,11 +50,6 @@ struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsLoadAllByChar(char *fileName, c
 #define wgEncodeGencodeAttrsLoadAllByTab(a) wgEncodeGencodeAttrsLoadAllByChar(a, '\t');
 /* Load all wgEncodeGencodeAttrs from tab separated file.
  * Dispose of this with wgEncodeGencodeAttrsFreeList(). */
-
-struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsCommaIn(char **pS, struct wgEncodeGencodeAttrs *ret);
-/* Create a wgEncodeGencodeAttrs out of a comma separated string. 
- * This will fill in ret if non-null, otherwise will
- * return a new wgEncodeGencodeAttrs */
 
 void wgEncodeGencodeAttrsFree(struct wgEncodeGencodeAttrs **pEl);
 /* Free a single dynamically allocated wgEncodeGencodeAttrs such as created

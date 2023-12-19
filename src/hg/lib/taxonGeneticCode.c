@@ -106,11 +106,11 @@ void taxonGeneticCodeSaveToDb(struct sqlConnection *conn, struct taxonGeneticCod
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->abbr,  el->name,  el->tranlsation,  el->starts,  el->comments);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct taxonGeneticCode *taxonGeneticCodeCommaIn(char **pS, struct taxonGeneticCode *ret)

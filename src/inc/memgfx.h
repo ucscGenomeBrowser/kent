@@ -66,7 +66,7 @@ typedef unsigned int Color;
 
 struct rgbColor
     {
-    unsigned char r, g, b;
+    unsigned char r, g, b, a;
     };
 
 /* HSV and HSL structs can be used for changing lightness, darkness, or
@@ -82,12 +82,14 @@ struct hsvColor
     {
     double h;
     unsigned short s, v;
+    unsigned char alpha;
     };
 
 struct hslColor
     {
     double h;
     unsigned short s, l;
+    unsigned char alpha;
     };
 
 extern struct rgbColor mgFixedColors[9];  /* Contains MG_WHITE - MG_GRAY */
@@ -417,6 +419,33 @@ struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx);
 struct rgbColor colorIxToRgb(int colorIx);
 /* Return rgb value at color index. */
 
+INLINE void mixColor(Color *d, Color s)
+/* Blend the color at s into d, respecting alpha */
+{
+/* algorithm borrowed from https://en.wikipedia.org/wiki/Alpha_compositing */
+int aA = COLOR_32_ALPHA(s);
+int rA = COLOR_32_RED(s);
+int gA = COLOR_32_GREEN(s);
+int bA = COLOR_32_BLUE(s);
+
+int aB = COLOR_32_ALPHA(*d);
+int rB = COLOR_32_RED(*d);
+int gB = COLOR_32_GREEN(*d);
+int bB = COLOR_32_BLUE(*d);
+
+double aOut = aA + (aB * (255.0 - aA) / 255);
+int rOut, gOut, bOut;
+if (aOut == 0)
+    rOut = gOut = bOut = 0;
+else
+    {
+    rOut = (rA * aA + rB * aB * (255 - aA) / 255)/aOut ;
+    gOut = (gA * aA + gB * aB * (255 - aA) / 255)/aOut ;
+    bOut = (bA * aA + bB * aB * (255 - aA) / 255)/aOut ;
+    }
+*d = MAKECOLOR_32_A(rOut,gOut,bOut,aOut);
+}
+
 INLINE void mixDot(struct memGfx *img, int x, int y,  float frac, Color col)
 /* Puts a single dot on the image, mixing it with what is already there
  * based on the frac argument. */
@@ -427,27 +456,12 @@ if ((x < img->clipMinX) || (x >= img->clipMaxX) || (y < img->clipMinY) || (y >= 
 
 Color *pt = _mgPixAdr(img,x,y);
 
-/* algorithm borrowed from https://en.wikipedia.org/wiki/Alpha_compositing */
 int aA = frac * 255;
 int rA = COLOR_32_RED(col);
 int gA = COLOR_32_GREEN(col);
 int bA = COLOR_32_BLUE(col);
+int tempC = MAKECOLOR_32_A(rA, gA, bA, aA);
 
-int aB = COLOR_32_ALPHA(*pt);
-int rB = COLOR_32_RED(*pt);
-int gB = COLOR_32_GREEN(*pt);
-int bB = COLOR_32_BLUE(*pt);
-
-int aOut = aA + (aB * (255 - aA) / 255);
-int rOut, gOut, bOut;
-if (aOut == 0)
-    rOut = gOut = bOut = 0;
-else
-    {
-    rOut = (rA * aA + rB * aB * (255 - aA) / 255)/aOut ;
-    gOut = (gA * aA + gB * aB * (255 - aA) / 255)/aOut ;
-    bOut = (bA * aA + bB * aB * (255 - aA) / 255)/aOut ;
-    }
-mgPutDot(img,x,y,MAKECOLOR_32_A(rOut,gOut,bOut,aOut));
+mixColor(pt, tempC);
 }
 #endif /* MEMGFX_H */

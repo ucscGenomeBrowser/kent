@@ -26,6 +26,7 @@
 #include "knetUdc.h"
 #include "udc.h"
 #include "memgfx.h"
+#include "chromAlias.h"
 
 // Russ Corbett-Detig suggested darker shades for coloring non-synonymous variants green
 Color darkerShadesOfGreenOnWhite[EXPR_DATA_SHADES];
@@ -824,15 +825,15 @@ return txiList;
 static void txiInfoAppendIdList(struct dyString *query, struct txInfo *txiList)
 /* Append a paren-enclosed list of quoted transcript IDs to query. */
 {
-dyStringAppendC(query, '(');
+sqlDyStringPrintf(query, "(");
 struct txInfo *txi;
 for (txi = txiList;  txi != NULL;  txi = txi->next)
     {
     if (txi != txiList)
-        dyStringAppend(query, ", ");
-    dyStringPrintf(query, "'%s'", txi->psl->qName);
+        sqlDyStringPrintf(query, ", ");
+    sqlDyStringPrintf(query, "'%s'", txi->psl->qName);
     }
-dyStringAppendC(query, ')');
+sqlDyStringPrintf(query, ")");
 }
 
 static void txInfoAddCdsFromQuery(struct hash *txiHash, struct sqlConnection *conn, char *query)
@@ -861,12 +862,19 @@ if (!trackHubDatabase(database) && hDbHasNcbiRefSeq(database))
     {
     struct sqlConnection *conn = hAllocConn(database);
     struct hash *txiHash = hashNew(0);
-    char *extraWhere = NULL;
+    char extraWhere[1024];
+    char *extra = NULL;
     if (sameString(gTdb->track, "ncbiRefSeqCurated"))
-        extraWhere = "qName not like 'X%'";
+	{
+        sqlSafef(extraWhere, sizeof extraWhere, "qName not like 'X%%'");
+	extra = extraWhere;
+	}
     else if (sameString(gTdb->track, "ncbiRefSeqPredicted"))
-        extraWhere = "qName like 'X%'";
-    txiList = txInfoInitFromPsl(conn, "ncbiRefSeqPsl", extraWhere, &txiHash);
+	{
+        sqlSafef(extraWhere, sizeof extraWhere, "qName like 'X%%'");
+	extra = extraWhere;
+	}
+    txiList = txInfoInitFromPsl(conn, "ncbiRefSeqPsl", extra, &txiHash);
     if (txiList)
         {
         // Now get CDS for each psl/txi:
@@ -960,7 +968,7 @@ if (fileName == NULL)
     fileName = cloneString(trackDbSetting(gTdb, "bigGeneDataUrl"));
 if (isNotEmpty(fileName))
     {
-    struct bbiFile *bbi = bigBedFileOpen(hReplaceGbdb(fileName));
+    struct bbiFile *bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasFindAliases);
     struct lm *lm = lmInit(0);
     struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chromName, winStart,
                                                         winEnd, 0, lm);
@@ -1546,8 +1554,8 @@ if (*retHapColorMode == functionMode)
         {
         makeRedGreenShades(hvg);
         // Make darkerShadesOfGreenOnWhite for local use
-        static struct rgbColor white  = {255, 255, 255};
-        static struct rgbColor darkerGreen  = {0, 210, 0};
+        static struct rgbColor white  = {255, 255, 255, 255};
+        static struct rgbColor darkerGreen  = {0, 210, 0, 255};
         hvGfxMakeColorGradient(hvg, &white, &darkerGreen,  EXPR_DATA_SHADES,
                                darkerShadesOfGreenOnWhite);
         }
@@ -1991,7 +1999,7 @@ if (!sampleColors)
     // Misuse the branch length value as RGB color (if it's the typical small number, will still
     // draw as approximately black):
     unsigned int rgb = node->ident->length;
-    color = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+    color = hvGfxFindColorIx(hvg, ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
     }
 if (node->numEdges > 0)
     {
@@ -2030,7 +2038,7 @@ else
         yText += 2;
     if (highlightSamples && node->ident->name && hashLookup(highlightSamples, node->ident->name))
         hvGfxBox(hvg, leftLabelX, yBox, leftLabelWidth, pxPerHap,
-                 MAKECOLOR_32_A(170, 255, 255, 128));
+                 hvGfxFindAlphaColorIx(hvg, 170, 255, 255, 128));
     if (sampleColors != NULL)
         color = (Color)hashIntValDefault(sampleColors, node->ident->name, MG_BLACK);
     hvGfxLine(hvg, x, yLine, x+branchW, yLine, color);
@@ -2080,7 +2088,7 @@ else
         {
         struct nodeCoords *coords = node->priv;
         int y = yOff + (coords->rank * pxPerHap);
-        hvGfxBox(hvg, insideX, y, insideWidth, pxPerHap, MAKECOLOR_32_A(170, 255, 255, 128));
+        hvGfxBox(hvg, insideX, y, insideWidth, pxPerHap, hvGfxFindAlphaColorIx(hvg, 170, 255, 255, 128));
         }
     }
 }
@@ -2115,8 +2123,8 @@ if (isNotEmpty(setting))
             lineFileExpectWords(lf, 2, wordCount);
             char *sample = words[0];
             char *colorStr = words[1];
-            int rgb = bedParseColor(colorStr);
-            Color color = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+            unsigned int rgb = bedParseColor(colorStr);
+            Color color = bedColorToGfxColor(rgb);
             hashAddInt(sampleColors, sample, color);
             }
         lineFileClose(&lf);
@@ -2858,7 +2866,7 @@ double yHap2 = sampleHeight - track->lineHeight; // relative offset of second li
 struct slPair *name;
 int i, y1, y2;
 struct rgbColor yellow = lightRainbowAtPos(0.2);
-int transYellow = MAKECOLOR_32_A(yellow.r, yellow.g, yellow.b, 100);
+int transYellow = hvGfxFindAlphaColorIx(hvg, yellow.r, yellow.g, yellow.b, 100);
 
 boolean useDefaultLabel = FALSE;
 if (cartVarExistsAnyLevel(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR))
@@ -2874,8 +2882,8 @@ for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     y2 = yOff + yHap2 + (i * sampleHeight);
     retYOffsets[2*i] = y1;
     retYOffsets[(2*i) + 1] = y2;
-    // make the background of every other lane light yellow, but only when NOT doing PDF/EPS output
-    if (hvg->pixelBased && sameString(childSample, name->name))
+    // make the background of every other lane light yellow
+    if (sameString(childSample, name->name))
         {
         hvGfxBox(hvg, xOff, y1-(track->lineHeight), width, (y2 + track->lineHeight) - (y1-track->lineHeight), transYellow);
         }

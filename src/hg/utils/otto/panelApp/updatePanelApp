@@ -1,0 +1,93 @@
+#!/hive/data/outside/otto/panelApp/venv/bin/python3
+from datetime import date
+import os
+import shutil
+
+# the script uses relative pathnames, so make sure we're always in the right directory
+os.chdir("/hive/data/outside/otto/panelApp")
+
+# The code came in three files from Beagan with a lot of code duplication
+# One per subtrack
+# This is why it's still split over three separate Python files
+import genes
+import tandRep
+import cnv
+
+def getArchDir(db):
+    " return hgwdev archive directory given db "
+    dateStr = date.today().strftime("%Y-%m-%d")
+    archDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/panelApp/%s" % (db, dateStr)
+    if not os.path.isdir(archDir):
+        os.makedirs(archDir)
+    return archDir
+
+def writeBb(hg19Table, hg38Table, subTrack):
+    " sort the pandas tables, write to BED and convert "
+    for db in ["hg19", "hg38"]:
+        archDir = getArchDir(db)
+
+        bedFname = "current/%s/%s.bed" % (db, subTrack)
+        bbFname = "current/%s/%s.bb.tmp" % (db, subTrack)
+
+        if db=="hg19":
+            pdTable = hg19Table
+        else:
+            pdTable = hg38Table
+
+        # for cnvs, one of the arguments can be None
+        if pdTable is None:
+            continue
+
+        pdTable.sort_values(by=['chrom','chromStart'], ascending = (True, True), inplace=True)
+        pdTable.to_csv(bedFname, sep='\t', index=False, header=None)
+
+        asFname = subTrack+".as"
+
+        # -extraIndex=geneName 
+        cmd = "bedToBigBed -tab -as=%s -type=bed9+26 %s /hive/data/genomes/%s/chrom.sizes %s" % (asFname, bedFname, db, bbFname)
+        assert(os.system(cmd)==0)
+
+        # put a copy into the archive
+        archBbFname = archDir+"/%s.bb" % subTrack
+        shutil.copyfile(bbFname, archBbFname)
+
+def updateGbdbSymlinks():
+    " update the symlinks in /gbdb. Not really necessary but kept this code just in case. "
+    for db in ["hg19", "hg38"]:
+        archDir = getArchDir(db)
+        for subTrack in ["genes", "tandRep", "cnv"]:
+            if subTrack=="cnv" and db=="hg19":
+                continue # no cnv on hg19
+            cmd = "ln -sf `pwd`/current/%s/%s.bb /gbdb/%s/panelApp/%s.bb" % (db, subTrack, db, subTrack)
+            assert(os.system(cmd)==0)
+
+def flipFiles():
+    " rename the .tmp files to the final filenames "
+    for db in ["hg19", "hg38"]:
+        archDir = getArchDir(db)
+        for subTrack in ["genes", "tandRep", "cnv"]:
+            if db=="hg19" and subTrack=="cnv":
+                # no cnvs for hg19 yet
+                continue
+            oldFname = "current/%s/%s.bb.tmp" % (db, subTrack)
+            newFname = "current/%s/%s.bb" % (db, subTrack)
+            os.replace(oldFname, newFname)
+
+def main():
+    " create the 2 x three BED files and convert each to bigBed and update the archive "
+    hg19Bed, hg38Bed = genes.downloadGenes()
+    writeBb(hg19Bed, hg38Bed, "genes")
+
+    hg19Bed, hg38Bed = tandRep.downloadTandReps()
+    writeBb(hg19Bed, hg38Bed, "tandRep")
+
+    hg38Bed = cnv.downloadCnvs()
+    # no hg19 CNV data yet from PanelApp
+    writeBb(None, hg38Bed, "cnv")
+
+    flipFiles()
+    updateGbdbSymlinks()
+
+    print("PanelApp otto update: OK")
+
+main()

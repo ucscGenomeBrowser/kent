@@ -297,7 +297,9 @@ while(1)
     if (errCatchStart(errCatch))
         {
         pfd->done = FALSE;
-        struct trackDb *tdbList = hubAddTracks(hst->hub, database);
+        boolean foundFirstGenome = FALSE;
+        struct hash *trackDbNameHash = newHash(5);
+        struct trackDb *tdbList = hubAddTracks(hst->hub, database, &foundFirstGenome, trackDbNameHash);
         if (measureTiming)
             measureTime("After connecting to hub %s: '%d': ", hst->hubUrl, hst->hubId);
         // get composite and subtracks into trackList
@@ -479,14 +481,11 @@ struct dyString *extra = dyStringNew(0);
 if (nameList)
     {
     struct slName *tmp = NULL;
-    char escapedInput[512];
     for (tmp = nameList; tmp != NULL; tmp = tmp->next)
         {
-        // escape user input manually:
-        sqlSafefFrag(escapedInput, sizeof(escapedInput), "%s", tmp->name);
-        dyStringPrintf(extra, "label like '%%%s%%'", escapedInput);
+        sqlDyStringPrintf(extra, "label like '%%%s%%'", tmp->name);
         if (tmp->next)
-            dyStringPrintf(extra, " and ");
+            sqlDyStringPrintf(extra, " and ");
         }
     }
 
@@ -1053,9 +1052,10 @@ makeGlobalTrackHash(trackList);
 parentChildCartCleanup(trackList,cart,oldVars);
 
 slSort(&groupList, gCmpGroup);
+struct hash *superHash = hashNew(8);
 for (group = groupList; group != NULL; group = group->next)
     {
-    groupTrackListAddSuper(cart, group);
+    groupTrackListAddSuper(cart, group, superHash);
     if (group->trackList != NULL)
         {
         groups[numGroups] = cloneString(group->name);
@@ -1065,6 +1065,7 @@ for (group = groupList; group != NULL; group = group->next)
             internalErr();
         }
     }
+hashFree(&superHash);
 
 safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly",
       organism, hFreezeFromDb(database));

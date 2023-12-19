@@ -118,7 +118,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 int scoreMin = 0;
 int scoreMax = 99999;
 
-safef(where, ArraySize(where), "db='%s'", database);
+sqlSafef(where, ArraySize(where), "db='%s'", database);
 
 sr = hRangeQuery(wikiConn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -187,7 +187,7 @@ char **row;
 char where[256];
 int rowOffset;
 
-safef(where, ArraySize(where), "db='%s'", database);
+sqlSafef(where, ArraySize(where), "db='%s'", database);
 
 sr = hRangeQuery(wikiConn, table, chromName, start, end, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)

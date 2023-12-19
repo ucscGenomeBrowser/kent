@@ -11,6 +11,7 @@
 #include "hgc.h"
 #include "knetUdc.h"
 #include "udc.h"
+#include "chromAlias.h"
 
 
 #include "hgBam.h"
@@ -21,6 +22,7 @@ struct bamTrackData
     int itemStart;
     char *itemName;
     struct hash *pairHash;
+    boolean foundIt;
     };
 
 /* Maybe make this an option someday -- for now, I find it too confusing to deal with
@@ -142,6 +144,7 @@ if (core->flag & BAM_FUNMAP)
 struct bamTrackData *btd = (struct bamTrackData *)data;
 if (sameString(bam1_qname(bam), btd->itemName))
     {
+    btd->foundIt = TRUE;
     if (btd->pairHash == NULL || (core->flag & BAM_FPAIRED) == 0)
 	{
 	if (core->pos == btd->itemStart)
@@ -189,9 +192,8 @@ safef(varName, sizeof(varName), "%s_pairEndsByName", tdb->track);
 boolean isPaired = cartUsualBoolean(cart, varName,
 				    (trackDbSetting(tdb, "pairEndsByName") != NULL));
 char position[512];
-safef(position, sizeof(position), "%s:%d-%d", seqName, winStart, winEnd);
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
-struct bamTrackData btd = {start, item, pairHash};
+struct bamTrackData btd = {start, item, pairHash, FALSE};
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
     {
@@ -210,7 +212,22 @@ if (fileName == NULL)
 char *indexName = hReplaceGbdb(trackDbSetting(tdb, "bigDataIndex"));
 char *cacheDir =  cfgOption("cramRef");
 char *refUrl = trackDbSetting(tdb, "refUrl");
-bamAndIndexFetchPlus(fileName, indexName, position, oneBam, &btd, NULL, refUrl, cacheDir);
+
+struct slName *aliasList = chromAliasFindAliases(seqName);
+struct slName *nativeName = newSlName(seqName);
+slAddHead(&aliasList, nativeName);
+
+char *chromName = NULL;
+for (; aliasList; aliasList = aliasList->next)
+    {
+    chromName = aliasList->name;
+    safef(position, sizeof(position), "%s:%d-%d", chromName, winStart, winEnd);
+
+    bamAndIndexFetchPlus(fileName, indexName, position, oneBam, &btd, NULL, refUrl, cacheDir);
+    if (btd.foundIt)
+        break;
+    }
+
 if (isPaired)
     {
     char *setting = trackDbSettingOrDefault(tdb, "pairSearchRange", "20000");
@@ -220,9 +237,9 @@ if (isPaired)
 	// Repeat the search for item in a larger window:
 	struct hash *newPairHash = hashNew(0);
 	btd.pairHash = newPairHash;
-	safef(position, sizeof(position), "%s:%d-%d", seqName,
+	safef(position, sizeof(position), "%s:%d-%d", chromName,
 	      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetch(fileName, position, oneBam, &btd, NULL);
+        bamAndIndexFetchPlus(fileName, indexName, position, oneBam, &btd, NULL, refUrl, cacheDir);
 	}
     struct hashEl *hel;
     struct hashCookie cookie = hashFirst(btd.pairHash);

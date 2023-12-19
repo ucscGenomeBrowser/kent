@@ -8,10 +8,10 @@
 #include "bedCart.h"
 
 // we distinguish between four levels of impact factors <1, <3, <10 and >10
-static struct rgbColor impact1Color  = {80, 80, 80};
-static struct rgbColor impact2Color  = {0, 80, 255};
-static struct rgbColor impact3Color  = {0, 100, 0};
-static struct rgbColor impact4Color  = {255, 255, 0};
+static struct rgbColor impact1Color  = {80, 80, 80, 255};
+static struct rgbColor impact2Color  = {0, 80, 255, 255};
+static struct rgbColor impact3Color  = {0, 100, 0, 255};
+static struct rgbColor impact4Color  = {255, 255, 0, 255};
 
 static char *pubsArticleTable(struct track *tg)
 /* return the name of the pubs articleTable, either
@@ -75,7 +75,8 @@ if (!sqlTableExists(conn, "pubsClassColors"))
     {
     return;
     }
-char *query = NOSQLINJ "SELECT class, rgbColor FROM pubsClassColors";
+char query[1024];
+sqlSafef(query, sizeof query, "SELECT class, rgbColor FROM pubsClassColors");
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -239,17 +240,6 @@ lf->extra = extra;
 hFreeConn(&conn);
 }
 
-static void sqlDyStringPrintfWithSep(struct dyString *ds, char* sep, char *format, ...)
-/*  Printf to end of dyString. Prefix with sep if dyString is not empty. */
-{
-if (ds->stringSize!=0)
-    dyStringAppend(ds, sep);
-va_list args;
-va_start(args, format);
-vaSqlDyStringPrintfFrag(ds, format, args);
-va_end(args);
-}
-
 struct hash* searchForKeywords(struct sqlConnection* conn, char *articleTable, char *keywords)
 /* return hash with the articleIds that contain a given keyword in the abstract/title/authors */
 {
@@ -316,15 +306,23 @@ else
         // new table schema: filter fields are on main bed table
         {
         if (isNotEmpty(yearFilter))
-            sqlDyStringPrintfWithSep(extraDy, " AND ", " year >= '%s'", yearFilter);
+	    {
+	    if (dyStringLen(extraDy) > 0)
+		sqlDyStringPrintf(extraDy, " AND ");
+            sqlDyStringPrintf(extraDy, " year >= '%s'", yearFilter);
+	    }
         if (isNotEmpty(publFilter))
-            sqlDyStringPrintfWithSep(extraDy, " AND ", " publisher = '%s'", publFilter);
+	    {
+	    if (dyStringLen(extraDy) > 0)
+		sqlDyStringPrintf(extraDy, " AND ");
+            sqlDyStringPrintf(extraDy, " publisher = '%s'", publFilter);
+	    }
         }
     else
         // old table schema, filter by doing a join on article table
         {
         if(isNotEmpty(yearFilter))
-            sqlDyStringPrintfFrag(extraDy, "name IN (SELECT articleId FROM %s WHERE year>='%s')", articleTable, \
+            sqlDyStringPrintf(extraDy, "name IN (SELECT articleId FROM %s WHERE year>='%s')", articleTable, \
                 yearFilter);
         }
 
@@ -337,7 +335,7 @@ else
     int rowOffset = 0;
     struct sqlResult *sr = hExtendedRangeQuery(conn, tg->table, chromName, winStart, winEnd, extra,
                                                FALSE, NULL, &rowOffset);
-    freeDyString(&extraDy);
+    dyStringFree(&extraDy);
 
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -457,16 +455,16 @@ static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* 
     sqlDyStringPrintf(dy, "SELECT annotId, ");
 
      if (getSnippet)
-        dyStringAppend(dy, "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")" );
+        sqlDyStringPrintf(dy, "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")" );
     else
-        dyStringAppend(dy, "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))" );
+        sqlDyStringPrintf(dy, "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))" );
     sqlDyStringPrintf(dy, " FROM %s WHERE articleId='%s' ", sequenceTable, articleId);
     // end sql injection fix
 
     struct hash *seqIdHash = sqlQuickHash(conn, dy->string);
 
     //freeMem(sequenceTable); // trackDbRequiredSetting returns a value in a hash, so do not free
-    freeDyString(&dy);
+    dyStringFree(&dy);
     return seqIdHash;
 }
 
@@ -512,7 +510,7 @@ tg->longLabel = catTwoStrings("Individual matches for article ", dispLabel);
 
 // filter and load items for this articleId
 char where[256];
-safef(where, sizeof(where), " articleId=%s ", articleId);
+sqlSafef(where, sizeof(where), " articleId='%s' ", articleId);
 
 int rowOffset = 0;
 struct sqlResult *sr = NULL;

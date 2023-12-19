@@ -27,7 +27,7 @@ if (hTableExists(sqlGetDatabase(conn), "all_mrna"))
     struct psl *psl;
     int rowOffset;
     char extra[64];
-    safef(extra, sizeof(extra), "strand='%c'", curGenePred->strand[0]);
+    sqlSafef(extra, sizeof(extra), "strand='%c'", curGenePred->strand[0]);
     sr = hRangeQuery(conn, "all_mrna", curGeneChrom, curGeneStart, curGeneEnd,
     	extra, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)

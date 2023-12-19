@@ -14,6 +14,10 @@ boolean geoMirrorEnabled();
 char *geoMirrorNode();
 // return which geo mirror node this is (or NULL if geo mirroring is turned off)
 
+char *geoMirrorCountry6(struct sqlConnection *centralConn, char *ipStr);
+/* Return 2 letter country code for given IP. user has already checked table geoIpCountry6 exists.
+ * Return error string otherwise. Free the response string. */
+
 int geoMirrorDefaultNode(struct sqlConnection *centralConn, char *ipStr);
 // return default node for given IP
 

@@ -1,0 +1,141 @@
+<h2>
+Description</h2>
+<p>
+This track collection shows data from 
+<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9383269/"
+target="_blank"><em>Single-nucleus cross-tissue molecular reference maps toward
+understanding disease gene function</em></a>. The dataset covers ~200,000 single nuclei
+from a total of 16 human donors across 25 samples, using 4 different sample preparation
+protocols followed by droplet based single-cell RNA-seq. The samples were obtained from
+frozen tissue as part of the Genotype-Tissue Expression (GTEx) project.
+Samples were taken from the esophagus, skeletal muscle, heart, lung, prostate, breast,
+and skin. The dataset includes 43 broad cell classes, some specific to certain tissues
+and some shared across all tissue types.
+</p>
+
+<p>
+This track collection contains three bar chart tracks of RNA expression. The first track,
+<a href="hgTrackUi?g=crossTissueMapsTissueCellType" target="_blank">Cross Tissue Nuclei</a>, allows
+cells to be grouped together and faceted on up to 4 categories: tissue, cell class, cell subclass,
+and cell type. The second track,
+<a href="hgTrackUi?g=crossTissueMapsFullDetails" target="_blank">Cross Tissue Details</a>, allows
+cells to be grouped together and faceted on up to 7 categories: tissue, cell class, cell subclass,
+cell type, granular cell type, sex, and donor. The third track,
+<a href="hgTrackUi?g=gtexImmuneAtlasFullDetails" target="_blank">GTEx Immune Atlas</a>,
+allows cells to be grouped together and faceted on up to 5 categories: tissue, cell type, cell
+class, sex, and donor.
+</p>
+
+<p>
+Please see the
+<a href="https://gtexportal.org/home/singleCellOverviewPage" target="_blank">GTEx portal</a>
+for further interactive displays and additional data. </p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Tissue-cell type combinations in the Full and Combined tracks are
+colored by which cell type they belong to in the below table:
+<p>
+<table cellpadding='2'>
+  <thead>
+    <tr>
+      <th style="border-bottom: 2px solid;">Color</th>
+      <th style="border-bottom: 2px solid;">Cell Type</th>
+    </tr>
+  </thead>
+  <tr><td style="background-color: #00ff00;"></td><td>Endothelial</td></tr>
+  <tr><td style="background-color: #0000ff;"></td><td>Epithelial</td></tr>
+  <tr><td style="background-color: #00d000;"></td><td>Glia</td></tr>
+  <tr><td style="background-color: #ff0000;"></td><td>Immune</td></tr>
+  <tr><td style="background-color: #ffee00;"></td><td>Neuron</td></tr>
+  <tr><td style="background-color: #cc00cc;"></td><td>Stromal</td></tr>
+  <tr><td style="background-color: #888888;"></td><td>Other</td></tr>
+</table>
+</p>
+
+<p>
+Tissue-cell type combinations in the Immune Atlas track are shaded according
+to the below table:
+<table cellpadding='2'>
+  <thead>
+    <tr>
+      <th style="border-bottom: 2px solid;">Color</th>
+      <th style="border-bottom: 2px solid;">Cell Type</th>
+    </tr>
+  </thead>
+  <tr><td style="background-color: rgb(192,173,208);"></td><td>Inflammatory Macrophage</td></tr>
+  <tr><td style="background-color: rgb(47,101,149);"></td><td>Lung Macrophage</td></tr>
+  <tr><td style="background-color: rgb(225,133,52);"></td><td>Monocyte/Macrophage FCGR3A High</td></tr>
+  <tr><td style="background-color: rgb(83,151,67);"></td><td>Monocyte/Macrophage FCGR3A Low</td></tr>
+  <tr><td style="background-color: rgb(180,197,221);"></td><td>Macrophage HLAII High</td></tr>
+  <tr><td style="background-color: rgb(238,165,160);"></td><td>Macrophage LYVE1 High</td></tr>
+  <tr><td style="background-color: rgb(134,105,180);"></td><td>Proliferating Macrophage</td></tr>
+  <tr><td style="background-color: rgb(126,96,87);"></td><td>Dendritic Cell 1</td></tr>
+  <tr><td style="background-color: rgb(181,160,151);"></td><td>Dendritic Cell 2</td></tr>
+  <tr><td style="background-color: rgb(240,189,206);"></td><td>Mature Dendritic Cell</td></tr>
+  <tr><td style="background-color: rgb(199,133,179);"></td><td>Langerhans</td></tr>
+  <tr><td style="background-color: rgb(172,215,165);"></td><td>CD14+ Monocyte</td></tr>
+  <tr><td style="background-color: rgb(188,49,44);"></td><td>CD16+ Monocyte</td></tr>
+  <tr><td style="background-color: rgb(242,196,146);"></td><td>LAM-like</td></tr>
+  <tr><td style="background-color: #888888;"></td><td>Other</td></tr>
+</table>
+</p>
+
+<h2>Methods</h2>
+<p>
+Using the previously collected tissue samples from the Genotype-Tissue Expression
+project, nuclei were isolated using four different protocols and sequenced
+using droplet based single cell RNA-seq. CellBender v2.1 and other standard quality
+control techniques were applied, resulting in 209,126 nuclei profiles across eight
+tissues, with a mean of 918 genes and 1519 transcripts per profile.
+</p>
+
+<p>
+Data from all samples was integrated with a conditional variation autoencoder
+in order to correct for multiple sources of variation like sex, and protocol
+while preserving tissue and cell type specific effects.
+</p>
+
+<p>
+For detailed methods, please refer to Eraslan <em>et al</em>, or the
+<a href="https://gtexportal.org/home/datasets">
+GTEx portal</a> website.
+</p>
+
+<h3>UCSC Methods</h3>
+<p>
+The gene expression files were downloaded from the
+<a href="https://gtexportal.org/home/datasets">
+GTEx portal</a>. The UCSC command line utilities <code>matrixClusterColumns</code>,
+<code>matrixToBarChartBed</code>, and <code>bedToBigBed</code> were used to transform
+these into a bar chart format bigBed file that can be visualized.
+The UCSC utilities can be found on
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">our download server</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw <a href="/goldenPath/help/barChart.html">bar chart</a> data can be
+explored interactively with the <a href="../cgi-bin/hgTables">Table
+Browser</a> or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a
+href="/goldenPath/help/api.html">REST API</a>. Please refer to our <a
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing
+list archives</a> for questions or our <a
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.</p>
+
+<h2>Credits</h2>
+<p>Thanks to the GTEx Consortium for creating and analyzing these data.</p>
+
+<h2>References</h2>
+<p>
+Eraslan G, Drokhlyansky E, Anand S, Fiskin E, Subramanian A, Slyper M, Wang J, Van Wittenberghe N,
+Rouhana JM, Waldman J <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35549429" target="_blank">
+Single-nucleus cross-tissue molecular reference maps toward understanding disease gene function</a>.
+<em>Science</em>. 2022 May 13;376(6594):eabl4290.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35549429" target="_blank">35549429</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9383269/" target="_blank">PMC9383269</a>
+</p>

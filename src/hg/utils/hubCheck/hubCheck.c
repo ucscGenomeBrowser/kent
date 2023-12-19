@@ -659,7 +659,7 @@ if (errCatchStart(errCatch))
                 {
                 char *col = sortOrder->column[i];
                 if ( (!sameString(col, SUBTRACK_COLOR_SUBGROUP)) && (membership == NULL || stringArrayIx(col, membership->subgroups, membership->count) == -1))
-                    errAbort("%s not a member of sortOrder subgroup %s", subtrackName, col);
+                    warn("%s not a member of sortOrder subgroup %s", subtrackName, col);
                 }
             }
 
@@ -671,14 +671,24 @@ if (errCatchStart(errCatch))
                 char *subgroupName = membersForAll->members[i]->groupTag;
                 if (stringArrayIx(subgroupName, membership->subgroups, membership->count) == -1)
                     {
-                    errAbort("subtrack %s not a member of subgroup %s", subtrackName, subgroupName);
+                    warn("subtrack %s not a member of subgroup %s", subtrackName, subgroupName);
                     }
+                }
+            }
+
+        // check that the subtrack does not have any bogus subgroups that don't exist in the parent
+        for (i = 0; i < membership->count; i++)
+            {
+            char *subgroupName = membership->subgroups[i];
+            if (!subgroupingExists(tdb->parent, subgroupName))
+                {
+                warn("subtrack \"%s\" has a subgroup \"%s\" not defined at parent level", subtrackName, subgroupName);
                 }
             }
         }
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError)
+if (errCatch->gotError || errCatch->gotWarning)
     {
     retVal = 1;
     trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
@@ -761,6 +771,38 @@ else if (tdb->subtracks != NULL)
     }
 }
 
+boolean checkTypeLine(struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors, struct trackHubCheckOptions *options)
+{
+boolean retVal = FALSE;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *type = trackDbRequiredSetting(tdb, "type");
+    char *splitType[4];
+    int numWords = chopByWhite(cloneString(type), splitType, sizeof(splitType));
+    if (sameString(splitType[0], "bigBed"))
+        {
+        if (numWords > 1 && (strchr(splitType[1], '+') || strchr(splitType[1], '.')))
+            {
+            errAbort("error in type line \"%s\" for track \"%s\". "
+                "A space is needed after the \"+\" or \".\" character.", type, tdb->track);
+            }
+        if (numWords > 2 && (!sameString(splitType[2], "+") && !sameString(splitType[2], ".")))
+            {
+            errAbort("error in type line \"%s\" for track \"%s\". "
+                "Only \"+\" or \".\" is allowed after bigBed numFields setting.", type, tdb->track);
+            }
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
+    retVal = TRUE;
+    }
+return retVal;
+}
+
 int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb,
                         struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check track settings and optionally, files */
@@ -820,6 +862,9 @@ if (options->htmlOut)
 
 if (errCatchStart(errCatch))
     {
+    if (tdb->errMessage)  // if we found any errors when first reading in the trackDb
+        errAbort("%s",tdb->errMessage);
+
     hubCheckParentsAndChildren(tdb);
     if (trackIsContainer)
         retVal |= hubCheckCompositeSettings(genome, tdb, errors, options);
@@ -827,13 +872,36 @@ if (errCatchStart(errCatch))
     if (tdbIsSubtrack(tdb))
         retVal |= hubCheckSubtrackSettings(genome, tdb, errors, options);
 
-    if (options->checkFiles)
+    // check that type line is syntactically correct regardless of
+    // if we actually want to check the data file itself
+    boolean foundTypeError = checkTypeLine(genome, tdb, errors, options);
+
+    // No point in checking the data file if the type setting is incorrect,
+    // since hubCheckBigDataUrl will error out early with a less clear message
+    // if the type line is messed up. This has the added benefit of providing
+    // consistent messaging on command line interface vs web interface
+    if (!foundTypeError && options->checkFiles)
         hubCheckBigDataUrl(hub, genome, tdb);
+
     if (!sameString(tdb->track, "cytoBandIdeo"))
         {
         trackHubAddDescription(genome->trackDbFile, tdb);
         if (!tdb->html)
             warn("warning: missing description page for track: '%s'", tdb->track);
+        }
+
+    if (!trackIsContainer && sameString(trackDbRequiredSetting(tdb, "type"), "bigWig"))
+        {
+        char *autoScaleSetting = trackDbLocalSetting(tdb, "autoScale");
+        if (autoScaleSetting && !sameString(autoScaleSetting, "off") && !sameString(autoScaleSetting, "on"))
+            {
+            errAbort("track \"%s\" has value \"%s\" for autoScale setting, "
+                    "valid autoScale values for individual bigWig tracks are \"off\" or \"on\" only. "
+                    "If \"%s\" is part of a bigWig composite track and you want to use the "
+                    "\"%s\" setting, only declare \"autoScale group\" in the parent stanza",
+                    trackHubSkipHubName(tdb->track), autoScaleSetting, trackHubSkipHubName(tdb->track), 
+                    autoScaleSetting);
+            }
         }
     }
 errCatchEnd(errCatch);
@@ -902,7 +970,8 @@ if (errCatchStart(errCatch))
         else if (!extFileExists(htmlPath))
             warn("warning: '%s' htmlPath file does not exist or is not accessible: '%s'", genome->name, htmlPath);
         }
-    tdbList = trackHubTracksForGenome(hub, genome, NULL);
+    boolean foundFirstGenome = FALSE;
+    tdbList = trackHubTracksForGenome(hub, genome, NULL, &foundFirstGenome);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
     trackHubPolishTrackNames(hub, tdbList);
@@ -1200,7 +1269,7 @@ if (optionExists("settings"))
 
 // hgHubConnect specific option for generating a jstree of the hub errors
 checkOptions->htmlOut = optionExists("htmlOut");
-struct dyString *errors = newDyString(1024);
+struct dyString *errors = dyStringNew(1024);
 if (trackHubCheck(argv[1], checkOptions, errors) || checkOptions->htmlOut)
     {
     if (checkOptions->htmlOut) // just dump errors string to stdout

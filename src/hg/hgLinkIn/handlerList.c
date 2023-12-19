@@ -84,14 +84,14 @@ while (thisName != NULL)
     {
     if (firstName)
         {
-        sqlDyStringPrintfFrag(query, "'%s'", thisName->name);
+        sqlDyStringPrintf(query, "'%s'", thisName->name);
         firstName = FALSE;
         }
     else
-        sqlDyStringPrintfFrag(query, ",'%s'", thisName->name);
+        sqlDyStringPrintf(query, ",'%s'", thisName->name);
     thisName = thisName->next;
     }
-sqlDyStringPrintfFrag(query, ")");
+sqlDyStringPrintf(query, ")");
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -130,14 +130,14 @@ while (thisName != NULL)
     {
     if (firstName)
         {
-        sqlDyStringPrintfFrag(query, "'%s'", thisName->name);
+        sqlDyStringPrintf(query, "'%s'", thisName->name);
         firstName = FALSE;
         }
     else
-        sqlDyStringPrintfFrag(query, ",'%s'", thisName->name);
+        sqlDyStringPrintf(query, ",'%s'", thisName->name);
     thisName = thisName->next;
     }
-sqlDyStringPrintfFrag(query, ")");
+sqlDyStringPrintf(query, ")");
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)

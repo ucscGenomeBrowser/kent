@@ -1,0 +1,4 @@
+# Max Fri Apr  8 08:28:57 PDT 2022
+python ~/kent/src/hg/makeDb/scripts/hmc/hmcToWig.py hg38 
+bedSort hmc.wig hmc.wig
+bedGraphToBigWig hmc.wig ../../chrom.sizes hmc.bw

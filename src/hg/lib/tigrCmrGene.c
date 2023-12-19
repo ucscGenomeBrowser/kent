@@ -136,11 +136,11 @@ void tigrCmrGeneSaveToDb(struct sqlConnection *conn, struct tigrCmrGene *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %d,'%s',%u,%u,'%s',%u,'%s',%s,'%s','%s','%s',%u,%u,%s,%s,'%s','%s',%f,%f,%f,'%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->tigrCommon,  el->tigrGene,  el->tigrECN,  el->primLocus,  el->tigrLength,  el->tigrPepLength,  el->tigrMainRole,  el->tigrSubRole,  el->swissProt,  el->genbank,  el->tigrMw,  el->tigrPi,  el->tigrGc,  el->goTerm);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

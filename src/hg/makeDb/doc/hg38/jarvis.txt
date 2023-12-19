@@ -1,0 +1,6 @@
+Jarvis track, Max, 03-28-22
+# downloaded version v1.1 from https://az.app.box.com/v/jarvis-gwrvis-scores/folder/159706242087
+# overlaps were removed and the files are sorted, unlike 1.0
+cd /hive/data/genomes/hg38/bed/jarvis/
+zcat `ls -rtd orig/* | sort | grep tsv.gz` | tawk '{print "chr"$1, $2-1, $2, $3}' > jarvis.bedGraph
+bedGraphToBigWig jarvis.bedGraph  ../chrom.sizes jarvis.bw

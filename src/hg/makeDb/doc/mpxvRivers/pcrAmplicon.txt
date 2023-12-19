@@ -1,0 +1,36 @@
+# by Braney, for the Chen et al protocol
+mkdir /hive/data/genomes/mpxvRivers/bed/pcrAmplicon
+cd /hive/data/genomes/mpxvRivers/bed/pcrAmplicon
+
+# grab this file:     https://www.protocols.io/view/monkeypox-virus-multiplexed-pcr-amplicon-sequencin-5qpvob1nbl4o/v2/materials/MPXV-primer_genome-positions.tsv
+
+dos2unix MPXV-primer_genome-positions.tsv
+
+# convert left and right primers on separate lines to the one line formation isPcr expects
+grep LEFT MPXV-primer_genome-positions.tsv > left
+grep RIGHT MPXV-primer_genome-positions.tsv > right
+paste left right | tawk '{print $1, $3, $12}' > query.txt
+
+# do the isPcr
+isPcr ../../mpxvRivers.2bit query.txt ispcr.out
+
+# convert isPcr fasta output to bed12 with left and right as two "exons" plus two extra fields with sequence in them
+grep ">" ispcr.out | tr -d '>' | tr ':' ' ' | awk '/+/ {strand="PS"} /-/ {strand="MS"} {print $1, $2, $3, strand, $4,$5,$6}' | tr '-' ' ' | tr '+' ' ' | sed 's/bp//' | awk '{$2=$2-1;print $1, $2, $3, $4, 0, $5, $2,$3, "0,0,0", 2, length($7) "," length($8), 0 "," $3 - length($8) - $2,$7,$8}' | sed 's/MS/-/' | sed 's/PS/+/' | sed 's/_LEFT//' | sort -k1,1 -k2,2n > pcrAmplicon.bed
+
+# Sep 30: fixed up pcrAmplicon manually, added _102 pair as left primer cannot be found by isPCR, there is a mutation in the genome.
+# would have needed to change isPrimer options rather than add manually, noticed too late.
+
+bedToBigBed pcrAmplicon.bed ../../chrom.sizes pcrAmplicon.bb -as=pcrAmplicon.as -type=bed12+2
+
+# for the Welkers et al protocol
+# Max, Tue Sep 20 08:05:32 PDT 2022
+cd /hive/data/genomes/mpxvRivers/bed/pcrWelkers
+# downloaded pool1.tsv and pool2.tsv manually
+cat pool1.tsv pool2.tsv | tawk '{print ">"$1"\n"$3}' > primers.fa
+cat pool*.tsv | grep -v name | grep LEFT | cut -f1,3 > left.tmp
+cat pool*.tsv | grep -v name | grep RIGHT | cut -f1,3 > right.tmp
+paste left.tmp right.tmp | cut -f1,2,4 | sed -e 's/_LEFT//g' > query.txt
+isPcr ../../mpxvRivers.2bit query.txt ispcr.out
+cat ispcr.out | grep \>  | tr -d '>' | sed -re 's/(NC_063383.1):/\1\t/g' | sed -re 's/([0-9]+)[+-]([0-9]+)/\1\t\2/' | tr ' ' '\t' | tawk '{$8=$4; print }' | sed -e 's/monkeypox-2500_//' | tawk '{size=$5; prim1=$6; prim2=$7; name=$8; $5="1000"; $6="+"; $7=$2; $8=$3; $9="0"; $10="2"; $11=length(prim1)","length(prim2); $12="0,"($3-$2-length(prim2)); $13=name; $14=size; $15=prim1; $16=prim2; print}' > pcrWelkers.bed
+bedSort pcrWelkers.bed pcrWelkers.bed 
+bedToBigBed pcrWelkers.bed ../../chrom.sizes pcrWelkers.bb -tab -as=~/kent/src/hg/makeDb/doc/mpxvRivers/pcrPrimers.as -type=bed4+

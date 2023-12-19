@@ -28,36 +28,22 @@ if [ ! -d "${WORKDIR}" ]; then
 fi
 
 cd "${WORKDIR}"
+curl --silent -K curl.config -o decipher-variants-grch38.bed
 
-#ftppass=`cat ftp.pwd`
-#gpgpass=`cat gpg.pwd`
-
-perl login.perl > /dev/null 2>&1
-
-if test decipher-variants*.gpg -nt lastUpdate
+if [ ! -s decipher-variants-grch38.md5 ] || ! md5sum -c --status decipher-variants-grch38.md5
 then
+    mkdir -p ${WORKDIR}/release/hg38
+
     today=`date +%F`
     mkdir -p $today
-
-    CNV=decipher-cnvs*.gpg
-    SNV=decipher-snvs*.gpg
-    cp -p $CNV $SNV $today
-
+    cp -p decipher-variants-grch38.bed $today
     cd $today
 
-    # unpack the gpg encrypted file
-    gpg --batch --passphrase-file "../gpg.pwd.new" ${CNV}
-    gpg --batch --passphrase-file "../gpg.pwd.new" ${SNV}
-
-    mkdir -p ${WORKDIR}/release/{hg38,hg19}
-
     # build the new DECIPHER track tables (builds bigBed for cnv's)
-    ../buildDecipher `basename $CNV .gpg` `basename $SNV .gpg`
-    ../validateDecipher.sh hg38
-    #../validateDecipher.sh hg19
+    ../buildDecipher decipher-variants-grch38.bed
+    ../validateDecipher.sh
 
     # now install
-    #for db in hg38 hg19
     for db in hg38
     do
         for i in `cat ../decipher.tables`
@@ -67,14 +53,16 @@ then
         hgsqlSwapTables $db $n $i $o -dropTable3
         done
     done
+    cp -p --remove-destination decipherCnv.bb ../release/hg38/decipherCnv.bb
 
     echo "DECIPHER Installed `date`" 
 
-    # Variants BED will be updated for both CNV and SNV updates
     cd ${WORKDIR}
-    cp -p decipher-var*.gpg lastUpdate
-else
-    echo "No update"
+    # Update our md5sum record
+    md5sum decipher-variants-grch38.bed > decipher-variants-grch38.md5
+#Commenting out heartbeat message below so as not to get spam.
+#else
+#    echo "No update"
 fi
 
-rm decipher-*
+rm decipher-variants-grch38.bed

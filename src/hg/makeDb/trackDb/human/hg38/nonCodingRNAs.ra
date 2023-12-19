@@ -53,7 +53,7 @@ longLabel RNA sequences that do not code for a protein
     subGroup2 tissueType Tissue_Type adipose=Adipose adrenal=Adrenal brain=Brain brain_r=Brain_R breast=Breast colon=Colon foreskin_r=Foreskin_R heart=Heart hlf_r1=hLF_r1 hlf_r2=hLF_r2 kidney=Kidney liver=Liver lung=Lung lymphnode=LymphNode ovary=Ovary placenta_r=Placenta_R prostate=Prostate skeletalmuscle=SkeletalMuscle testes=Testes testes_r=Testes_R thyroid=Thyroid whitebloodcell=WhiteBloodCell
     sortOrder view=+ tissueType=+
     dimensions dimensionY=tissueType
-    priority 0
+    priority 1.1
     dragAndDrop subTracks
     configurable on
     noInherit on

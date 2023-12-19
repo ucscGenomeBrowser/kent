@@ -1,0 +1,83 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how we made the browser database on
+# NCBI build 38 (December 2013 freeze) aka:
+#	GRCh38 - Genome Reference Consortium Human Reference 38
+#	Assembly Accession: GCA_000001405.2
+
+#############################################################################
+## Single Cell Merged - DONE - 2022-04-11 (Jim, Brittney, Jonathan)
+# Make working directory for a new browser track that merges together many individual
+# single cell datasets
+
+# Existing tracks being incorporated into this merged set: bloodHao, pancreasBaron,
+# placentaVentoTormo10x, fetalGeneAtlas, kidneySteward, muscleDeMicheli, ileumWang,
+# cortexVelmeshev, colonWang, heartCellAtlas, liverMacParland, rectumWang,
+# lungTravaglini2020droplet, skinSoleBoldo
+
+mkdir  /hive/data/genomes/hg38/bed/singleCell/merged
+cd  /hive/data/genomes/hg38/bed/singleCell/merged
+
+# Each dataset can have an independent gene set.  So, we need to make up a common gene
+# set they all can map to.
+
+# Reuse some of the code for creating gene sets from collections of mRNA to create
+# a graph of genes with slight differences in which gene was chosen looking a lot like
+# splice variants
+txBedToGraph \
+    /hive/data/genomes/hg38/bed/singleCell/bloodHao/mapping.bed /hive/data/genomes/hg38/bed/singleCell/bloodHao/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/pancreasBaron/mapping.bed /hive/data/genomes/hg38/bed/singleCell/pancreasBaron/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/placentaVentoTormo/10x/mapping.bed /hive/data/genomes/hg38/bed/singleCell/placentaVentoTormo/10x/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/fetalGeneAtlas/mapping.bed /hive/data/genomes/hg38/bed/singleCell/fetalGeneAtlas/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/kidneyStewart/mapping.bed /hive/data/genomes/hg38/bed/singleCell/kidneyStewart/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/muscleDeMicheli/mapping.bed /hive/data/genomes/hg38/bed/singleCell/muscleDeMicheli/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/ileumWang/mapping.bed /hive/data/genomes/hg38/bed/singleCell/ileumWang/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/cortexVelmeshev/mapping.bed /hive/data/genomes/hg38/bed/singleCell/cortexVelmeshev/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/colonWang/mapping.bed /hive/data/genomes/hg38/bed/singleCell/colonWang/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/heartCellAtlas/mapping.bed /hive/data/genomes/hg38/bed/singleCell/heartCellAtlas/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/liverMacParland/mapping.bed /hive/data/genomes/hg38/bed/singleCell/liverMacParland/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/rectumWang/mapping.bed /hive/data/genomes/hg38/bed/singleCell/rectumWang/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/lungTravaglini2020/droplet/mapping.bed /hive/data/genomes/hg38/bed/singleCell/lungTravaglini2020/droplet/mapping.bed \
+    /hive/data/genomes/hg38/bed/singleCell/skinSoleBoldo/mapping.bed /hive/data/genomes/hg38/bed/singleCell/skinSoleBoldo/mapping.bed \
+    all_mapping.txg
+
+# Hand wrangle copies of the existing cell_type.stats files for each of those data sets, creating
+# "cell_type.stats.detailed" files, which include data about organ, stage, cell class, subclass,
+# cell type, average total, and color (copied from the trackDb entries for the relevant tracks, so that
+# the merged track colors match those in the individual tracks).
+
+# Create a unify.tsv that references those files to then run hcaUnifyMatrix.  The weight values will
+# be ignored when we renormalize.
+
+printf "Blood   6       33.5    /hive/data/genomes/hg38/bed/singleCell/bloodHao/mapping.bed     /hive/data/genomes/hg38/bed/singleCell/bloodHao/clust/cell_type.matrix  /hive/data/genomes/hg38/bed/singleCell/bloodHao/clust/cell_type.refStats        /hive/data/genomes/hg38/bed/singleCell/bloodHao/bbi/cell_type.stats.detailed
+Brain   9       20      /hive/data/genomes/hg38/bed/singleCell/cortexVelmeshev/mapping.bed      /hive/data/genomes/hg38/bed/singleCell/cortexVelmeshev/clust/cell_type.matrix   /hive/data/genomes/hg38/bed/singleCell/cortexVelmeshev/clust/cell_type.refStats /hive/data/genomes/hg38/bed/singleCell/cortexVelmeshev/bbi/cell_type.stats.detailed
+Colon   5       40      /hive/data/genomes/hg38/bed/singleCell/colonWang/mapping.bed    /hive/data/genomes/hg38/bed/singleCell/colonWang/clust/cell_type.matrix /hive/data/genomes/hg38/bed/singleCell/colonWang/clust/cell_type.refStats       /hive/data/genomes/hg38/bed/singleCell/colonWang/bbi/cell_type.stats.detailed
+Fetal   12      22.5    /hive/data/genomes/hg38/bed/singleCell/fetalGeneAtlas/mapping.bed       /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas/clust/cell_type.matrix    /hive/data/genomes/hg19/bed/singleCell/fetalGeneAtlas/clust/cell_type.refStats  /hive/data/genomes/hg38/bed/singleCell/fetalGeneAtlas/bbi/cell_type.stats.detailed
+Heart   1       40      /hive/data/genomes/hg38/bed/singleCell/heartCellAtlas/mapping.bed       /hive/data/genomes/hg38/bed/singleCell/heartCellAtlas/clust/cell_type.matrix    /hive/data/genomes/hg38/bed/singleCell/heartCellAtlas/clust/cell_type.refStats  /hive/data/genomes/hg38/bed/singleCell/heartCellAtlas/bbi/cell_type.stats.detailed
+Ileum   5       40      /hive/data/genomes/hg38/bed/singleCell/ileumWang/mapping.bed    /hive/data/genomes/hg38/bed/singleCell/ileumWang/clust/cell_type.matrix /hive/data/genomes/hg38/bed/singleCell/ileumWang/clust/cell_type.refStats       /hive/data/genomes/hg38/bed/singleCell/ileumWang/bbi/cell_type.stats.detailed
+Kidney  7       50      /hive/data/genomes/hg38/bed/singleCell/kidneyStewart/mapping.bed        /hive/data/genomes/hg38/bed/singleCell/kidneyStewart/clust/cell_type.matrix     /hive/data/genomes/hg38/bed/singleCell/kidneyStewart/clust/cell_type.refStats   /hive/data/genomes/hg38/bed/singleCell/kidneyStewart/bbi/cell_type.stats.detailed
+Liver   3       66.5    /hive/data/genomes/hg38/bed/singleCell/liverMacParland/mapping.bed      /hive/data/genomes/hg38/bed/singleCell/liverMacParland/clust/cell_type.matrix   /hive/data/genomes/hg38/bed/singleCell/liverMacParland/clust/cell_type.refStats /hive/data/genomes/hg38/bed/singleCell/liverMacParland/bbi/cell_type.stats.detailed
+Lung    10      30      /hive/data/genomes/hg38/bed/singleCell/lungTravaglini2020/droplet/mapping.bed   /hive/data/genomes/hg38/bed/singleCell/lungTravaglini2020/droplet/clust/cell_type.matrix        /hive/data/genomes/hg38/bed/singleCell/lungTravaglini2020/droplet/clust/cell_type.refStats      /hive/data/genomes/hg38/bed/singleCell/lungTravaglini2020/droplet/bbi/cell_type.stats.detailed
+Muscle  8       50      /hive/data/genomes/hg38/bed/singleCell/muscleDeMicheli/mapping.bed      /hive/data/genomes/hg38/bed/singleCell/muscleDeMicheli/clust/cell_type.matrix   /hive/data/genomes/hg38/bed/singleCell/muscleDeMicheli/clust/cell_type.refStats /hive/data/genomes/hg38/bed/singleCell/muscleDeMicheli/bbi/cell_type.stats.detailed
+Pancreas        2       40      /hive/data/genomes/hg38/bed/singleCell/pancreasBaron/mapping.bed        /hive/data/genomes/hg38/bed/singleCell/pancreasBaron/clust/cell_type.matrix     /hive/data/genomes/hg38/bed/singleCell/pancreasBaron/clust/cell_type.refStats   /hive/data/genomes/hg38/bed/singleCell/pancreasBaron/bbi/cell_type.stats.detailed
+Placenta        4       50      /hive/data/genomes/hg38/bed/singleCell/placentaVentoTormo/10x/mapping.bed       /hive/data/genomes/hg38/bed/singleCell/placentaVentoTormo/10x/clust/cell_type.matrix    /hive/data/genomes/hg38/bed/singleCell/placentaVentoTormo/10x/clust/cell_type.refStats  /hive/data/genomes/hg38/bed/singleCell/placentaVentoTormo/10x/bbi/cell_type.stats.detailed
+Rectum  5       40      /hive/data/genomes/hg38/bed/singleCell/rectumWang/mapping.bed   /hive/data/genomes/hg38/bed/singleCell/rectumWang/clust/cell_type.matrix        /hive/data/genomes/hg38/bed/singleCell/rectumWang/clust/cell_type.refStats      /hive/data/genomes/hg38/bed/singleCell/rectumWang/bbi/cell_type.stats.detailed
+Skin    11      80      /hive/data/genomes/hg38/bed/singleCell/skinSoleBoldo/mapping.bed        /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo/clust/cell_type.matrix     /hive/data/genomes/hg19/bed/singleCell/skinSoleBoldo/clust/cell_type.refStats   /hive/data/genomes/hg38/bed/singleCell/skinSoleBoldo/bbi/cell_type.stats.detailed" > unify.tsv
+
+# Create a merged matrix out of individual matrices which are specified in unify.tsv
+hcaUnifyMatrix all_mapping.txg unify.tsv outMatrix.tsv -bed=out.bed -empty=0 -trackDb=out.ra -stats=singleCellMerged.stats
+
+# Convert merged gene matrix and gene sets into a bigBarChart
+matrixToBarChartBed outMatrix.tsv out.bed barChart.bed
+bedSort barChart.bed barChart.bed
+bedToBigBed barChart.bed /hive/data/genomes/hg38/chrom.sizes singleCellMerged.bb -type=bed6+3 -as=/cluster/home/kent/src/hg/lib/simpleBarChartBed.as
+
+# Link bigBed and also stats file used by faceted details page to runtime accessible directory
+ln -s /hive/data/genomes/hg38/bed/singleCell/merged/singleCellMerged.bb /gbdb/hg38/bbi/singleCellMerged/
+ln -s /hive/data/genomes/hg38/bed/singleCell/merged/singleCellMerged.stats /gbdb/hg38/bbi/singleCellMerged/
+
+# Add the contents of out.ra to the hg38 trackDb.ra settings along with references to the above files and
+# some useful barChart track settings.
+
+#############################################################################
+

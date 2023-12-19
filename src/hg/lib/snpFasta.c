@@ -167,8 +167,9 @@ fputc(lastSep,f);
 void snpFastaTableCreate(struct sqlConnection *conn)
 /* create a snpFasta table */
 {
-char *createString =
-NOSQLINJ "CREATE TABLE snpFasta (\n"
+char query[1024];
+sqlSafef(query, sizeof query,
+"CREATE TABLE snpFasta (\n"
 "    rsId varchar(255) not null,       \n"
 "    chrom varchar(255) not null,       \n"
 "    molType varchar(255) not null, \n"
@@ -177,8 +178,9 @@ NOSQLINJ "CREATE TABLE snpFasta (\n"
 "    leftFlank longblob not null, \n"
 "    rightFlank longblob not null, \n"
 "    INDEX rsId(rsId(12))\n"
-");\n";
+");\n");
 
-sqlRemakeTable(conn, "snpFasta", createString);
+sqlRemakeTable(conn, "snpFasta", query);
+
 }
 

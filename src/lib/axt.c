@@ -737,7 +737,7 @@ static int trans[4] = {'a', 'c', 'g', 't'};
 
 AllocVar(ss);
 ss->extra = NULL;
-struct dyString *dyExtra = newDyString(128);
+struct dyString *dyExtra = dyStringNew(128);
 
 int wordCount = lineFileChopNext(lf, row, ArraySize(row));
 if (!wordCount)
@@ -749,7 +749,7 @@ while (! done)
     if (stringIn("=",row[0]) || (wordCount > 1 && stringIn("=", row[1])))
          {
          // collapse words to eliminate white space confusion
-         struct dyString *dy = newDyString(128);
+         struct dyString *dy = dyStringNew(128);
          for (i = 0; i < wordCount; ++i)
              {
              dyStringPrintf(dy, "%s", row[i]);

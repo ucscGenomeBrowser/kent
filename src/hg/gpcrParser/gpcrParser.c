@@ -89,7 +89,7 @@ fprintf(outfile, "\t\t\t");
 void populateXMLFile(FILE *outfile, int tmNumber, char *proteinID, char *path)
 /** Adds the number of TM helices and sequence the the xml file */
 {
-struct dyString *filename = newDyString(128);
+struct dyString *filename = dyStringNew(128);
     if(path == NULL)
         dyStringPrintf(filename, "%s.seq", proteinID);
     else
@@ -101,13 +101,13 @@ fprintf(outfile,
        );
 catSeqFile(outfile, filename->string);
 fprintf(outfile, "\n\n\t\t</residue-codes>\n\n\t\t<secondary-structure>\n\n");
-freeDyString(&filename);
+dyStringFree(&filename);
 }
 
 FILE* createXMLFile(char* proteinID, char *path)
 {
 FILE* outfile;
-struct dyString *filename = newDyString(128);
+struct dyString *filename = dyStringNew(128);
     if(path == NULL)
         dyStringPrintf(filename, "%s.xml", proteinID);
     else
@@ -119,7 +119,7 @@ fprintf(outfile,
     " xsi:noNamespaceSchemaLocation=\"H:\\dev\\crover\\xml\\xsd\\residue-based-diagram.xsd\">\n\n"
     "\t<diagram-layout>\n\n\t\t<tm-bundle tm-number=\""
        );
-freeDyString(&filename);
+dyStringFree(&filename);
 return outfile;
 }
 
@@ -128,7 +128,7 @@ void getTransFromFile(FILE* infile, char *path)
 FILE* outfile = NULL;
 int start, end, tmNumber, count, seqLength;
 char *line, *token;
-struct dyString *proteinID = newDyString(24);
+struct dyString *proteinID = dyStringNew(24);
 start = end = tmNumber = count = seqLength = 0;
 while( ( line  = readLine(infile) ) != NULL )
     {  /*grab the protein ID after each <PRE> tag*/
@@ -178,13 +178,13 @@ while( ( line  = readLine(infile) ) != NULL )
         } /*end inner while*/
     }   /*end outer while*/
     freeMem(line);
-    freeDyString(&proteinID);
+    dyStringFree(&proteinID);
 }
 
 int main(int argc, char** argv)
 {
 FILE *infile;
-struct dyString *path = newDyString(128);
+struct dyString *path = dyStringNew(128);
 usage(argv);
     if(argv[2] != NULL)
         {
@@ -195,7 +195,7 @@ usage(argv);
 infile = mustOpen(argv[1], "r");
 getTransFromFile(infile, path->string);
 carefulClose(&infile);
-freeDyString(&path);
+dyStringFree(&path);
 return 0;
 }
 

@@ -73,6 +73,7 @@ for row in reader:
     urlSuffix = urlSuffix.replace("ref=cvr", "ref=ucsc")
     assert(urlSuffix!=mmuri3)
 
+    mmid3 = mmid3.replace(",", "&#44;")
     url = urlSuffix+"|"+mmid3
     outRow = [chrom, str(start), str(end), name, score, strand, str(start), str(end), itemRgb, url, gene, mmcnt1, mmcnt2, mmcnt3, mouseOver]
     ofh.write("\t".join(outRow))

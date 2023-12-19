@@ -32,7 +32,7 @@ if (stack < xap->stackBuf)
     xapError(xap, "xap stack overflow");
 ++xap->stackDepth;
 if (stack->text == NULL)
-    stack->text = newDyString(256);
+    stack->text = dyStringNew(256);
 stack->elName = (char*)name;
 if (xap->skipDepth == 0)
     stack->object = xap->startHandler(xap, (char*)name, (char**)atts);
@@ -105,7 +105,7 @@ if (xap != NULL)
     for (stack = xap->stackBuf; stack < xap->endStack; ++stack)
         {
 	if (stack->text != NULL)
-	   freeDyString(&stack->text);
+	   dyStringFree(&stack->text);
 	}
     xpFree(&xap->xp);
     freeMem(xap->fileName);

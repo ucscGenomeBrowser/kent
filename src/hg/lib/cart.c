@@ -12,6 +12,7 @@
 #include "htmshell.h"
 #include "hgConfig.h"
 #include "cart.h"
+#include "verbose.h"
 #include "net.h"
 #include "web.h"
 #include "hdb.h"
@@ -32,6 +33,7 @@
 #include "customComposite.h"
 #include "regexHelper.h"
 #include "windowsToAscii.h"
+#include "jsonWrite.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -65,7 +67,7 @@ void cartHubWarn(char *format, va_list args)
 char warning[1024];
 vsnprintf(warning,sizeof(warning),format, args);
 if (hubWarnDy == NULL)
-    hubWarnDy = newDyString(100);
+    hubWarnDy = dyStringNew(100);
 dyStringPrintf(hubWarnDy, "%s\n", warning);
 }
 
@@ -166,13 +168,29 @@ if (!sqlTableExists(conn, sessionDbTable()))
 return TRUE;
 }
 
-void cartParseOverHash(struct cart *cart, char *contents)
-/* Parse cgi-style contents into a hash table.  This will *not*
- * replace existing members of hash that have same name, so we can
- * support multi-select form inputs (same var name can have multiple
- * values which will be in separate hashEl's). */
+static void mergeHash(struct hash *origHash, struct hash *overlayHash)
+/* Merge one hash on top of another. */
 {
-struct hash *hash = cart->hash;
+struct hashCookie cookie = hashFirst(overlayHash);
+struct hashEl *helOverlay;
+while ((helOverlay = hashNext(&cookie)) != NULL)
+    {
+    char *varName = helOverlay->name;
+    struct hashEl *helOrig = hashLookup(origHash, varName);
+    if (helOrig)
+        {
+        // we don't want to hide a track that's visible in the overlay
+        if (differentString("hide", helOverlay->val))
+            hashReplace(origHash, helOverlay->name, helOverlay->val);
+        }
+    else 
+        hashAdd(origHash, varName, helOverlay->val);
+    }
+}
+
+static void loadHash(struct hash *hash, char *contents)
+/* Load a hash from a cart-like string. */
+{
 char *namePt, *dataPt, *nextNamePt;
 namePt = contents;
 while (namePt != NULL && namePt[0] != 0)
@@ -190,6 +208,34 @@ while (namePt != NULL && namePt[0] != 0)
     hashAdd(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
     }
+}
+
+void cartParseOverHashExt(struct cart *cart, char *contents, boolean merge)
+/* Parse cgi-style contents into a hash table.  If merge is FALSE, this will *not*
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). If merge is TRUE, we
+ * replace existing values with new values */
+{
+if (merge)
+    {
+    struct hash *newHash = newHash(8);
+
+    loadHash(newHash, contents);
+    mergeHash(newHash, cart->hash);
+    cart->hash = newHash;
+    }
+else
+    loadHash(cart->hash, contents);
+}
+
+void cartParseOverHash(struct cart *cart, char *contents)
+/* Parse cgi-style contents into a hash table.  This will *not*
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). */
+{
+cartParseOverHashExt(cart, contents, FALSE);
 }
 
 static boolean looksCorrupted(struct cartDb *cdb)
@@ -233,12 +279,12 @@ else
     struct dyString *where = dyStringNew(256);
     char *sessionKey = NULL;	    
     unsigned int id = cartDbParseId(secureId, &sessionKey);
-    sqlDyStringPrintfFrag(where, "id = %u", id);
+    sqlDyStringPrintf(where, "id = %u", id);
     if (cartDbUseSessionKey())
 	{
 	if (!sessionKey)
 	    sessionKey = "";
-	sqlDyStringPrintfFrag(where, " and sessionKey='%s'", sessionKey);
+	sqlDyStringPrintf(where, " and sessionKey='%s'", sessionKey);
 	}
     cdb = cartDbLoadWhere(conn, table, where->string);
     dyStringFree(&where);
@@ -262,12 +308,13 @@ char *contents = "";
 char *table = defaultCartTable();
 if (sqlTableExists(conn, table))
     {
-    char buffer[16 * 1024];
     char query[1024];
 
+    sqlSafef(query, sizeof query, "select length(contents) from %s", table);
+    int length = sqlQuickNum(conn, query) + 1;
+    contents = needLargeMem(length);
     sqlSafef(query, sizeof query, "select contents from %s", table);
-    sqlQuickQuery(conn, query, buffer, sizeof buffer);
-    contents = cloneString(buffer);
+    sqlQuickQuery(conn, query, contents, length);
     }
 return contents;
 }
@@ -318,6 +365,17 @@ void cartExclude(struct cart *cart, char *var)
 hashAdd(cart->exclude, var, NULL);
 }
 
+
+static char *_cartNamedSessionDbTable = NULL;
+
+char *cartNamedSessionDbTable()
+/* Get the name of the table that lists named sessions.  Don't free the result. */
+{
+if (_cartNamedSessionDbTable == NULL)
+    _cartNamedSessionDbTable = cfgOptionEnvDefault("HGDB_NAMED_SESSION_DB", namedSessionDbTableConfVariable,
+                                             defaultNamedSessionDb);
+return _cartNamedSessionDbTable;
+}
 
 void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 			 char *encSessionName)
@@ -546,14 +604,15 @@ assert(hashNumEntries(hash) == 0);
 }
 
 #ifndef GBROWSE
-void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
+void cartLoadUserSessionExt(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
-			 struct hash *oldVars, char *actionVar)
+			 struct hash *oldVars, char *actionVar, boolean merge)
 /* If permitted, load the contents of the given user's session, and then
  * reload the CGI settings (to support override of session settings).
  * If non-NULL, oldVars will contain values overloaded when reloading CGI.
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
- * CGI action variable that sent us here. */
+ * CGI action variable that sent us here. 
+ * If merge is TRUE, then don't clear the cart first. */
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -585,8 +644,13 @@ if ((row = sqlNextRow(sr)) != NULL)
     pubSessionsTableString = cloneString(pubSessionsTableString);
 	struct sqlConnection *conn2 = hConnectCentral();
 	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
-	cartRemoveLike(cart, "*");
-	cartParseOverHash(cart, row[1]);
+        if (!merge)
+            {
+            cartRemoveLike(cart, "*");
+            cartParseOverHash(cart, row[1]);
+            }
+        else
+            cartParseOverHashExt(cart, row[1], TRUE);
 	cartSetString(cart, sessionVar, hgsid);
 	if (sessionTableString != NULL)
 	    cartSetString(cart, hgSessionTableState, sessionTableString);
@@ -610,6 +674,20 @@ else
 	     sessionName, sessionOwner);
 sqlFreeResult(&sr);
 freeMem(encSessionName);
+}
+
+void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
+			 char *sessionName, struct cart *cart,
+			 struct hash *oldVars, char *actionVar)
+/* If permitted, load the contents of the given user's session, and then
+ * reload the CGI settings (to support override of session settings).
+ * If non-NULL, oldVars will contain values overloaded when reloading CGI.
+ * If non-NULL, actionVar is a cartRemove wildcard string specifying the
+ * CGI action variable that sent us here. */
+{
+cartLoadUserSessionExt(conn, sessionOwner,
+			 sessionName, cart,
+			 oldVars, actionVar, FALSE);
 }
 #endif /* GBROWSE */
 
@@ -1329,6 +1407,9 @@ if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
     htmlSuppressErrors();
 setUdcCacheDir();
 
+netSetTimeoutErrorMsg("A connection timeout means that either the server is offline or its firewall, the UCSC firewall or any router between the two blocks the connection.");
+
+
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
@@ -1370,9 +1451,10 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	{
 	char *otherUser = cartString(cart, hgsOtherUserName);
 	char *sessionName = cartString(cart, hgsOtherUserSessionName);
+	boolean mergeCart = cartUsualBoolean(cart, hgsMergeCart, FALSE);
 	struct sqlConnection *conn2 = hConnectCentral();
-	cartLoadUserSession(conn2, otherUser, sessionName, cart,
-			    oldVars, hgsDoOtherUser);
+	cartLoadUserSessionExt(conn2, otherUser, sessionName, cart,
+			    oldVars, hgsDoOtherUser, mergeCart);
 	hDisconnectCentral(&conn2);
 	cartTrace(cart, "after cartLUS", conn);
 	didSessionLoad = TRUE;
@@ -1396,16 +1478,14 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 #endif /* GBROWSE */
 
 /* wire up the assembly hubs so we can operate without sql */
-setUdcTimeout(cart);
+setUdcOptions(cart);
 if (cartVarExists(cart, hgHubDoDisconnect))
     doDisconnectHub(cart);
 
 if (didSessionLoad)
     cartCopyCustomComposites(cart);
 
-pushWarnHandler(cartHubWarn);
 char *newDatabase = hubConnectLoadHubs(cart);
-popWarnHandler();
 
 if (newDatabase != NULL)
     {
@@ -1445,7 +1525,7 @@ static void updateOne(struct sqlConnection *conn,
 	char *table, struct cartDb *cdb, char *contents, int contentSize)
 /* Update cdb in database. */
 {
-struct dyString *dy = newDyString(4096);
+struct dyString *dy = dyStringNew(4096);
 sqlDyStringPrintf(dy, "UPDATE %s SET contents='", table);
 sqlDyAppendEscaped(dy, contents);
 sqlDyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
@@ -1485,7 +1565,7 @@ static void saveState(struct cart *cart)
 /* Save out state to permanent storage in both user and session db. */
 {
 struct sqlConnection *conn = cartDefaultConnector();
-struct dyString *encoded = newDyString(4096);
+struct dyString *encoded = dyStringNew(4096);
 
 /* Make up encoded string holding all variables. */
 cartEncodeState(cart, encoded);
@@ -1667,6 +1747,25 @@ for (el = elList; el != NULL; el = el->next)
 hashElFreeList(&elList);
 return cartVars;
 }
+
+void cartCloneVarsWithPrefix(struct cart *cart, char *prefix, char *newPrefix)
+/* Add a copy of all vars that start with prefix to cart.  The new vars will
+ * start with newPrefix instead of prefix */
+{
+int prefixSize = strlen(prefix);
+struct dyString *buf = dyStringNew(0);
+struct slPair *pair, *pairList = cartVarsWithPrefix(cart, prefix);
+for (pair = pairList; pair != NULL; pair = pair->next)
+    {
+    dyStringClear(buf);
+    dyStringAppend(buf, newPrefix);
+    dyStringAppend(buf, pair->name + prefixSize);
+    cartAddString(cart, buf->string, pair->val);
+    }
+slFreeList(&pairList);
+dyStringFree(&buf);
+}
+
 
 struct slPair *cartVarsWithPrefixLm(struct cart *cart, char *prefix, struct lm *lm)
 /* Return list of cart vars that begin with prefix allocated in local memory.
@@ -2257,6 +2356,45 @@ if (loginSystemEnabled())
     }
 }
 
+static void cartJsonStart()
+/* Write the necessary headers for Apache */
+{
+puts("Content-Type: application/json\n");
+}
+
+static void cartJsonEnd(struct jsonWrite *jw)
+/* Write the final string which may have nothing in it */
+{
+if (jw)
+    puts(jw->dy->string);
+}
+
+static void dumpCartWithTime(struct cart *cart, char *timeStr)
+/* Dump out the current cart to trash named by how long a page draw took using it. */
+{
+char prefix[128];
+
+// zero pad so the files will alphanumerically sort by elapsed time
+sprintf(prefix, "%06d.", atoi(timeStr));
+
+// make a temp file in trash
+struct tempName hubTn;
+trashDirDateFile(&hubTn, "cartDumps", prefix , ".txt");
+char *dumpName = cloneString(hubTn.forCgi);
+
+// write out the cart into the tempfile
+FILE *f = mustOpen(dumpName, "w");
+
+struct hashEl *el;
+struct hashEl *elList = hashElListHash(cart->hash);
+for (el = elList; el != NULL; el = el->next)
+    fprintf(f, "%s %s\n", el->name, (char *)el->val);
+fclose(f);
+
+// put something in the log to say we did this
+fprintf(stderr, "warnTiming %s time=%s skipNotif=%s\n", getSessionId(), timeStr, cartUsualString(cart, "skipNotif", "null"));
+}
+
 struct cart *cartForSession(char *cookieName, char **exclude,
                             struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
@@ -2298,13 +2436,44 @@ char *logProxy = cfgOption("logProxy");
 if (logProxy)
     setenv("log_proxy", logProxy, TRUE);
 
+/* noSqlInj settings so they are accessible in src/lib too */
+char *noSqlInj_level = cfgOption("noSqlInj.level");
+if (noSqlInj_level)
+    setenv("noSqlInj_level", noSqlInj_level, TRUE);
+char *noSqlInj_dumpStack = cfgOption("noSqlInj.dumpStack");
+if (noSqlInj_dumpStack)
+    setenv("noSqlInj_dumpStack", noSqlInj_dumpStack, TRUE);
+
+
 // if ignoreCookie is on the URL, don't check for cookies
 char *hguid = NULL;
 if ( cgiOptionalString("ignoreCookie") == NULL )
     hguid = getCookieId(cookieName);
+
+// if _dumpToLog is on the URL, we can exit early with whatever
+// message we are trying to write to the stderr/error_log
+char *logMsg = NULL;
+if ( (logMsg = cgiOptionalString("_dumpToLog")) != NULL)
+    {
+    cartJsonStart();
+    fprintf(stderr, "%s", logMsg);
+    cartJsonEnd(NULL);
+    exit(0);
+    }
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
+
+char *timeStr;
+if ( (timeStr = cgiOptionalString("_dumpCart")) != NULL)
+    {
+    dumpCartWithTime(cart, timeStr);
+    exit(0);
+    }
+
+// activate optional debuging output for CGIs
+verboseCgi(cartCgiUsualString(cart, "verbose", NULL));
+
 return cart;
 }
 
@@ -2479,6 +2648,16 @@ popWarnHandler();
 inWeb = FALSE;
 }
 
+void cartWebEndExtra(char *footer)
+/* Write out HTML footer and get rid or error handler, with extra text
+ * at the end of the page as desired.
+ */
+{
+webEndExtra(footer);
+popWarnHandler();
+inWeb = FALSE;
+}
+
 void cartFooter(void)
 /* Write out HTML footer, possibly with googleAnalytics too */
 {
@@ -2513,7 +2692,7 @@ char *cartTheme = cartOptionalString(cart, "theme");
 // XXXX which setting should take precedence? Currently browser.theme does.
 
 char *styleFile = cfgOption("browser.style");
-if(styleFile != NULL)
+if (styleFile != NULL)
     {
     char buf[512];
     safef(buf, sizeof(buf), "<link rel='stylesheet' href='%s' type='text/css'>", styleFile);
@@ -2522,7 +2701,7 @@ if(styleFile != NULL)
     webSetStyle(copy);       // for web.c, used by hgc
     }
 
-if(isNotEmpty(cartTheme))
+if (isNotEmpty(cartTheme))
     {
     char *themeKey = catTwoStrings("browser.theme.", cartTheme);
     styleFile = cfgOption(themeKey);
@@ -2530,8 +2709,8 @@ if(isNotEmpty(cartTheme))
     if (isEmpty(styleFile))
         return;
 
-    char * link = webTimeStampedLinkToResourceOnFirstCall(styleFile, TRUE); // resource file link wrapped in html
-    if (link != NULL)
+    char * link = webCssLink(styleFile, FALSE); // resource file link wrapped in html
+    if (link != NULL && !sameOk(link, "<>")) // "<>" means "default settings" = "no file"
         {
         htmlSetStyleTheme(link); // for htmshell.c, used by hgTracks
         webSetStyle(link);       // for web.c, used by hgc
@@ -2572,7 +2751,10 @@ cartSetLastPosition(cart, pos, oldVars);
 safef(titlePlus, sizeof(titlePlus), "%s %s %s %s", 
                     org ? trackHubSkipHubName(org) : "", db ? db : "",  pos ? pos : "", title);
 popWarnHandler();
+
 setThemeFromCart(cart);
+googleAnalyticsSetGa4Key();
+
 htmStartWithHead(stdout, head, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
@@ -2674,10 +2856,13 @@ if (parentLevel)
 for ( ; tdb != NULL; tdb = tdb->parent)
     {
     char buf[512];
+    char *trackName = tdb->track;
+    if (tdb->originalTrack)
+        trackName = tdb->originalTrack;
     if (suffix[0] == '.' || suffix[0] == '_')
-        safef(buf, sizeof buf, "%s%s", tdb->track,suffix);
+        safef(buf, sizeof buf, "%s%s", trackName,suffix);
     else
-        safef(buf, sizeof buf, "%s.%s", tdb->track,suffix);
+        safef(buf, sizeof buf, "%s.%s", trackName,suffix);
     char *cartSetting = hashFindVal(cart->hash, buf);
     if (cartSetting != NULL)
         {
@@ -3563,7 +3748,7 @@ void cartSetDbPosition(struct cart *cart, char *database, struct cart *lastDbPos
 {
 char dbPosKey[256];
 safef(dbPosKey, sizeof dbPosKey, "position.%s", database);
-struct dyString *dbPosValue = newDyString(4096);
+struct dyString *dbPosValue = dyStringNew(4096);
 cartEncodeState(lastDbPosCart, dbPosValue);
 cartSetString(cart, dbPosKey, dbPosValue->string);
 }

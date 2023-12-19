@@ -25,6 +25,9 @@
 #include "trashDir.h"
 #include "jsonWrite.h"
 #include "dnaMotif.h"
+#include "maf.h"
+#include "hgMaf.h"
+#include "chromAlias.h"
 
 struct wigItem
 /* A wig track item. */
@@ -46,6 +49,13 @@ struct wigItem
     double graphUpperLimit;	/* filled in by DrawItems	*/
     double graphLowerLimit;	/* filled in by DrawItems	*/
     };
+
+static boolean doLogo(struct track *tg)
+/* Are we going to draw a logo? */
+{
+struct wigCartOptions *wigCart = tg->wigCartData;
+return trackDbSettingOn(tg->tdb, "logo") || ((trackDbSetting(tg->tdb, "logoMaf") != NULL) && wigCart->doSequenceLogo); 
+}
 
 static void wigFillInColorLfArray(struct track *wigTrack, Color *colArray, int colSize,
 				  struct track *colorTrack)
@@ -411,7 +421,6 @@ char **row;
 int rowOffset;
 struct wiggle wiggle;
 struct wigItem *wiList = NULL;
-char *whereNULL = NULL;
 int itemsLoaded = 0;
 struct hash *spans = NULL;	/* Spans encountered during load */
 /*	Check our scale from the global variables that exist in
@@ -421,8 +430,6 @@ struct hash *spans = NULL;	/* Spans encountered during load */
  *	level exists.
  */
 int basesPerPixel = (int)((double)(winEnd - winStart)/(double)insideWidth);
-char *span1K = "Span >= 1000 limit 1";
-char *spanOver1K = "Span >= 1000";
 char whereSpan[SMALLBUF];
 int spanMinimum = 1;
 char *dbTableName = NULL;
@@ -470,7 +477,7 @@ spanMinimum = max(1,
 	minSpan(conn, dbTableName, chromName, winStart, winEnd, cart, tdb));
 
 itemsLoaded = 0;
-sqlSafefFrag(whereSpan, sizeof(whereSpan), "span=%d limit 1", spanMinimum);
+sqlSafef(whereSpan, sizeof(whereSpan), "span=%d limit 1", spanMinimum);
 
 sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
     whereSpan, &rowOffset);
@@ -490,8 +497,9 @@ if (itemsLoaded < 1)
 itemsLoaded = 0;
 if (basesPerPixel >= 1000)
     {
+    sqlSafef(whereSpan, sizeof(whereSpan), "Span >= 1000 limit 1");
     sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
-	span1K, &rowOffset);
+	whereSpan, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	    ++itemsLoaded;
     sqlFreeResult(&sr);
@@ -508,13 +516,14 @@ if (basesPerPixel >= 1000)
  * would simplify drawing logic. */
 if (itemsLoaded)
     {
+    sqlSafef(whereSpan, sizeof(whereSpan), "Span >= 1000");
     sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
-	     spanOver1K, &rowOffset);
+	     whereSpan, &rowOffset);
     }
 else
     {
     sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
-	whereNULL, &rowOffset);
+	NULL, &rowOffset);
     }
 
 /*	Allocate trackSpans one time only	*/
@@ -614,6 +623,9 @@ for (i = 0; i < preDrawSize; ++i)
                 else
 		    dataValue = preDraw[i].max;
 		break;
+	    case wiggleWindowingSum:
+		dataValue = preDraw[i].sumData;
+                break;
 	    case wiggleWindowingMean:
 	    case wiggleWindowingWhiskers:
 		dataValue =
@@ -875,7 +887,7 @@ for (x1 = 0; x1 < width; ++x1)
             {
             if (p->count > 0)	/* allow any number of values to display */
                 {
-                double thisValue = p->sumData/p->count;	/*average if count > 1*/
+                double thisValue = p->smooth;
                 if (mouseOverX2 < 0)    /* first valid data found */
                     {
                     struct wigMouseOver *dataItem;
@@ -1183,39 +1195,103 @@ for (x1 = 0; x1 < width; ++x1)
 return(mouseOverData);
 }	/*	graphPreDraw()	*/
 
+struct probVal // the probability of a certain nucleotide being seen in a column
+    {
+    struct probVal *next;
+    char *nuc;
+    double prob;
+    unsigned long color;
+    };
+
+struct probVal probVals[4]; // one per nucleotide
+struct probVal *probList = probVals;  // a sortable list 
+
+static int probListCmp(const void *va, const void *vb)
+/* Compare probabilities for sorting. */
+{
+const struct probVal *a = *((struct probVal **)va);
+const struct probVal *b = *((struct probVal **)vb);
+    
+if (a->prob < b->prob)
+    return 1;
+return -1;
+}
+
+
 static struct wigMouseOver *logoPreDrawContainer(struct preDrawContainer *preDrawContainer,
     int preDrawZero, int width, struct track *tg, struct hvGfx *hvg,
     int xOff, int yOff, double graphUpperLimit, double graphLowerLimit,
     double graphRange, enum trackVisibility vis, struct wigCartOptions *wigCart, int seqStart, int seqEnd)
 {
+boolean baseCmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
 struct preDrawElement *preDraw = preDrawContainer->preDraw;
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 //struct wigMouseOver *mouseOverData = NULL;
 unsigned numBases = seqEnd - seqStart;
 struct dnaSeq *seq = hChromSeq(database, chromName, seqStart, seqEnd);
+if (baseCmpl)
+    complement(seq->dna, seq->size);
+
 struct pixelCountBin *pixelBins = wgo->pixelBins;
 double *yOffsets = wgo->yOffsets;
 int numTrack = wgo->numTrack;
 Color clipColor = MG_MAGENTA;
-WigVerticalLineVirtual vLine = wgo->vLine;
-void *image = wgo->image;
 #define doLine(image, x, y, height, color) {vLine(image, x, y, height, color); }
 
 int h = tg->lineHeight;	/*	the height of our drawing window */
 double scaleFactor = h/graphRange;
 struct wigMouseOver *mouseOverData = getMouseOverData(tg, preDraw, width, xOff, preDrawZero);
 
+struct mafBaseProbs *baseProbs = wigCart->baseProbs;
+if (baseProbs != NULL)
+    {
+    // initialize our nucleotide probability data structure
+    probVals[0].next = &probVals[1];
+    probVals[1].next = &probVals[2];
+    probVals[2].next = &probVals[3];
+    probVals[3].next = NULL;
+
+    boolean baseCmpl = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
+    if (baseCmpl)
+        {
+        probVals[3].nuc = "A";
+        probVals[3].color = MG_RED;
+        probVals[2].nuc = "C";
+        probVals[2].color = MG_BROWN;
+        probVals[1].nuc = "G";
+        probVals[1].color = MG_BLUE;
+        probVals[0].nuc = "T";
+        probVals[0].color = MG_GREEN;
+        }
+    else
+        {
+        probVals[0].nuc = "A";
+        probVals[0].color = MG_RED;
+        probVals[1].nuc = "C";
+        probVals[1].color = MG_BROWN;
+        probVals[2].nuc = "G";
+        probVals[2].color = MG_BLUE;
+        probVals[3].nuc = "T";
+        probVals[3].color = MG_GREEN;
+        }
+    probList = probVals;  // a sortable list 
+    }
+
 double xIncr = (double)width / numBases;
+int baseWidth = xIncr;
+int letterWidth = baseWidth - 1;
+if (h < letterWidth)
+    letterWidth = h;
 unsigned baseNum;
-int lastX = xOff;
+
 for(baseNum = 0; baseNum < numBases; baseNum++)
     {
-    int x1 = baseNum * xIncr;
+    int x1 = ceil(baseNum * xIncr);
     int x = x1 + xOff;
-    int width = x - lastX;
     int base = seq->dna[baseNum];
-    lastX = x;
-    int preDrawIndex = x1 + preDrawZero;
+    // grab our data value from the middle of a zoomed-in region because the edges may be rounded off 
+    // by the math function
+    int preDrawIndex = ceil(x1 + xIncr/2)  + preDrawZero; 
     struct preDrawElement *p = &preDraw[preDrawIndex];
 
     assert(x1/pixelBins->binSize < pixelBins->binCount);
@@ -1255,9 +1331,15 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
 
         if (vis == tvFull || vis == tvPack)
             {
+            double origDataValue = dataValue;  // save our original data value to draw the "clipped" lines
 #define scaleHeightToPixels(val) (min(BIGNUM,(scaleFactor * (graphUpperLimit - (val)) + yOff)))
 #define doLine(image, x, y, height, color) {vLine(image, x, y, height, color); }
                 {
+                // since we're drawing a sequence logo, we want to scale by the part of the line within the clipping window
+                if (dataValue > graphUpperLimit)
+                    dataValue = graphUpperLimit;
+                else if (dataValue < graphLowerLimit)
+                    dataValue = graphLowerLimit;
                 int y0 = graphUpperLimit * scaleFactor;
                 int y1 = (graphUpperLimit - dataValue)*scaleFactor;
                 if (yOffsets)
@@ -1270,54 +1352,111 @@ for(baseNum = 0; baseNum < numBases; baseNum++)
                     }
 
                 int boxHeight = max(1,abs(y1 - y0));
+                // if our viewing region is clipped on the lower end we need to shrink
+                // the box to fit all the letters into it
+                if (graphLowerLimit > 0 ) 
+                    boxHeight -=  graphLowerLimit * scaleFactor;
                 int boxTop = min(y1,y0);
+                if (graphUpperLimit < 0 )
+                    {
+                    // if our viewing region is clipped on the upper end we need to shrink
+                    // the box AND lower the bottom of the box to fit all the letters into it
+                    boxHeight +=  graphUpperLimit * scaleFactor;
+                    boxTop -=  graphUpperLimit * scaleFactor;
+                    }
 
                 //	positive data value exactly equal to Bottom pixel
                 //  make sure it draws at least a pixel there
                 if (boxTop == h)
                     boxTop = h - 1;
 
+                unsigned color = MG_BLACK;
+
+                char *setting;
+                if (tg->tdb->parent && ((setting = trackDbSetting(tg->tdb->parent,"container")) != NULL) && startsWith("multiWig", setting))
+                    {
+                    /* for multiwig display, use track colors */
+                    if (dataValue < 0)
+                        color = tg->ixAltColor;
+                    else
+                        color = tg->ixColor;
+
+                    switch(numTrack)
+                        {
+                        case 3: if (baseCmpl) base='t'; else base='a';break;
+                        case 2: if (baseCmpl) base='g'; else base='c';break;
+                        case 1: if (baseCmpl) base='c'; else base='g';break;
+                        case 0: if (baseCmpl) base='a'; else base='t';break;
+                        }
+                    }
+                else  /* hard-coded colors for dynSeq display */
+                    {
+                    if (base == 'a')
+                        color = MG_RED;
+                    else if (base == 't')
+                        color = MG_GREEN;
+                    else if (base == 'c')
+                        color = MG_BROWN;
+                    else if (base == 'g')
+                        color = MG_BLUE;
+                    }
+
                 char string[2];
                 string[0] = toupper(base);
                 string[1] = 0;
                 MgFont *font = tl.font;
-                int height = dataValue * scaleFactor;
-                unsigned color = MG_BLACK;
-                if (base == 'a')
-                    color = MG_RED;
-                else if (base == 't')
-                    color = MG_GREEN;
-                else if (base == 'c')
-                    color = MG_BROWN;
-                else if (base == 'g')
-                    color = MG_BLUE;
-                if (abs(dataValue) > 0.1)
+                if (boxHeight != 0)
                     {
-                    if (dataValue < 0)
+                    if (baseProbs)
                         {
-                        hvGfxTextInBox(hvg, x, yOff+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
-                            color, font, string);
+                        int thisHeight;
+
+                        // we want a sorted list so the most probable gets drawn on top
+                        probVals[0].prob = baseProbs[baseNum].aProb;
+                        probVals[1].prob = baseProbs[baseNum].cProb;
+                        probVals[2].prob = baseProbs[baseNum].gProb;
+                        probVals[3].prob = baseProbs[baseNum].tProb;
+                        slSort(&probList,probListCmp);
+
+                        int y = yOff+boxTop;
+                        struct probVal *pl = probList;
+                        for(; pl; pl = pl->next)
+                            {
+                            thisHeight = pl->prob * boxHeight;
+                            if (thisHeight)
+                                hvGfxTextInBox(hvg, x + (baseWidth - letterWidth)/2, y, letterWidth, thisHeight,
+                                    pl->color, font, pl->nuc);
+                            y += thisHeight;
+                            }
                         }
                     else
                         {
-                        hvGfxTextInBox(hvg, x, yOff-height+graphUpperLimit * scaleFactor, width - 1, dataValue * scaleFactor,
-                            color, font, string);
+                        if (dataValue < 0)
+                            {
+                            hvGfxTextInBox(hvg, x + (baseWidth - letterWidth)/2, yOff+boxTop, letterWidth, -boxHeight,
+                                color, font, string);
+                            }
+                        else
+                            {
+                            hvGfxTextInBox(hvg, x + (baseWidth - letterWidth)/2, yOff+boxTop, letterWidth, boxHeight,
+                                color, font, string);
+                            }
                         }
                     }
                 if (((boxTop+boxHeight) == 0) && !isnan(dataValue))
                     boxHeight += 1;
                 }
-	    double stackValue = dataValue;
+	    double stackValue = origDataValue;
 
-	    if ((yOffsets != NULL) && (numTrack > 0))
-		stackValue += yOffsets[(numTrack-1) *  width + x1];
+	    //if ((yOffsets != NULL) && (numTrack > 0))
+		//stackValue += yOffsets[(numTrack-1) *  width + x1];
 	    if (stackValue > graphUpperLimit)
                 {
-		doLine(image, x, yOff, 2, clipColor);
+                hvGfxLine(hvg, x, yOff, x+baseWidth, yOff, clipColor);
                 }
 	    else if (stackValue < graphLowerLimit)
                 {
-		doLine(image, x, yOff + h - 1, 2, clipColor);
+                hvGfxLine(hvg, x, yOff + h - 1, x+baseWidth, yOff + h - 1, clipColor);
                 }
 #undef scaleHeightToPixels	/* No longer use this symbol */
             }   /*	vis == tvFull || vis == tvPack */
@@ -1595,8 +1734,7 @@ graphRange = graphUpperLimit - graphLowerLimit;
 wigTrackSetGraphOutputDefault(tg, xOff, yOff, width, hvg);
 
 struct wigMouseOver *mouseOverData = NULL;
-//if (zoomedToCodonLevel && trackDbSettingOn(tg->tdb, "logo"))
-if (zoomedToBaseLevel && trackDbSettingOn(tg->tdb, "logo"))
+if (zoomedToCodonLevel && doLogo(tg) && vis != tvDense && vis != tvSquish)
     mouseOverData = logoPreDrawContainer(preContainer,
         preDrawZero, width, tg, hvg, xOff, yOff,
         graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart, seqStart, seqEnd);
@@ -1830,11 +1968,37 @@ if (wibFH > 0)
 return pre;
 }
 
+void wigLogoMafCheck(struct track *tg,  int start, int end)
+/* Check to see if we should draw a sequence logo for the wiggle contents. */
+{
+char *logoMaf = trackDbSetting(tg->tdb, "logoMaf");
+
+if (logoMaf != NULL)
+    {
+    struct wigCartOptions *wigCart = tg->wigCartData;
+    if (wigCart->doSequenceLogo)
+        {
+        // see if the MAF is a bigBed
+        if (endsWith(logoMaf, ".bb") || endsWith(logoMaf, ".bigMaf"))
+            {
+            struct bbiFile *bbi = bigBedFileOpenAlias(logoMaf, chromAliasFindAliases);
+            wigCart->baseProbs = hgBigMafProbs(database, bbi, chromName, start, end, '+');
+            bbiFileClose(&bbi);
+            tg->bbiFile = NULL;
+            }
+        else  // otherwise it's a table
+            wigCart->baseProbs = hgMafProbs(database, logoMaf, chromName, start, end, '+');
+        }
+    }
+}
+
 static void wigPreDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw wiggle items that resolve to doing a box for each pixel. */
 {
+wigLogoMafCheck(tg, seqStart, seqEnd);
+
 struct preDrawContainer *pre = wigLoadPreDraw(tg, seqStart, seqEnd, width);
 if (pre != NULL)
     {
@@ -2057,6 +2221,8 @@ wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->track, (char **) N
 wigCart->alwaysZero = (enum wiggleAlwaysZeroEnum)wigFetchAlwaysZeroWithCart(cart,tdb,tdb->track, (char **) NULL);
 wigCart->transformFunc = (enum wiggleTransformFuncEnum)wigFetchTransformFuncWithCart(cart,tdb,tdb->track, (char **) NULL);
 wigCart->doNegative = wigFetchDoNegativeWithCart(cart,tdb,tdb->track, (char **) NULL);
+if (zoomedToCodonLevel)
+    wigCart->doSequenceLogo = wigFetchDoSequenceLogoWithCart(cart,tdb,tdb->track, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;

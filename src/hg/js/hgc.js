@@ -1,4 +1,5 @@
 // "use strict";
+/* jshint esnext: true */
 
 // insert a node after the reference node
 function insertAfter(newNode, referenceNode) {
@@ -139,11 +140,196 @@ function dataToTable(label, data) {
         newTableNode  = makeGenericTable(data);
     return newTableNode ;
 }
+ 
+function makeVisInput(parentEl, name, trackName="", defaultVis="Hide") {
+    ["Hide","Dense","Squish","Pack","Full"].forEach(function(vis) {
+        let label = document.createElement("label");
+        //label.classList.add(name);
+        let ctrl = document.createElement("input");
+        ctrl.classList.add(name);
+        ctrl.type = "radio";
+        ctrl.name = name;
+        ctrl.value = vis;
+        if (defaultVis.toLowerCase() === vis.toLowerCase()) {
+            ctrl.checked = true;
+        }       
+        ctrl.setAttribute("data-default", ctrl.checked);
+        if (trackName.length > 0) {
+            ctrl.setAttribute("data-trackName", trackName);
+        }           
+        label.appendChild(ctrl);
+        label.append(vis);
+        parentEl.append(label);
+    }); 
+}
+
+function makeSetAllDiv(parentEl, text, classPre) {
+    let textDiv = document.createElement("div");
+    textDiv.append(text);
+    textDiv.classList.add(classPre + "Text");
+    textDiv.classList.add("gridItem");
+    let ctrlDiv = document.createElement("div");
+    makeVisInput(ctrlDiv, classPre + "Vis");
+    ctrlDiv.classList.add(classPre + "Ctrl");
+    ctrlDiv.classList.add("gridItem");
+    parentEl.append(textDiv);
+    parentEl.append(ctrlDiv);
+}   
+
+// assume the first row, second column of the first bedExtraTbl is a list of assemblies
+// with corresponding chain tracks
+function makeHPRCTable() {
+    let tbl = $(".bedExtraTbl");
+    if (tbl.length > 0) {
+        tbl = tbl[0];
+        let td = tbl.firstChild.firstChild.children[1];
+        
+        // get the list of assemblies
+        asms = td.innerText;
+        
+        // clear the old text
+        td.replaceChildren();
+        
+        let newForm = document.createElement("form");
+        td.append(newForm);
+        newForm.name = "chainBreak";
+        newForm.action = "../cgi-bin/hgTracks";
+        newForm.method = "POST";
+        
+        // the hidden hgsid for hgTracks
+        let hgsidInput = document.createElement("input");
+        hgsidInput.type = "hidden";
+        hgsidInput.name = "hgsid";
+        hgsidInput.value = common.hgsid;
+        newForm.append(hgsidInput);
+        
+        newForm.innerHTML += "View tracks";
+        let submitBtn = document.createElement("input");
+        submitBtn.type = "submit";
+        newForm.append(submitBtn);
+        
+        let newTblDiv = document.createElement("div");
+        newTblDiv.classList.add("chainBreak");
+        newForm.append(newTblDiv);
+        setAllText = "Change display mode of all assembly chain tracks";
+        makeSetAllDiv(newTblDiv, setAllText, "topSetAll");
+        
+        // go through and make each link
+        asms.split(",").forEach(function(asm) {
+            asmSafe = asm.replaceAll(".","_");
+            let trackTextDiv = document.createElement("div");
+            trackTextDiv.append(asmSafe + " display mode:");
+            newTblDiv.append(trackTextDiv);
+            let trackCtrlDiv = document.createElement("div");
+            let defaultVis = "Hide";
+            if (typeof chainVis !== "undefined" && asm in chainVis) {defaultVis = chainVis[asm];}
+            makeVisInput(trackCtrlDiv, asmSafe+"SetVis", trackName=asm, defaultVis=defaultVis);
+            newTblDiv.append(trackCtrlDiv);
+            trackTextDiv.classList.add("gridItem");
+            trackCtrlDiv.classList.add("gridItem");
+            // TODO: allow makeVisInput to take a default vis
+            $("."+asmSafe+"SetVis").each(function(i, clickedElem) {
+                clickedElem.addEventListener("click", function(e) {
+                   $("[class$=SetAllVis]").each(function(i, radioElem) {
+                        if (radioElem.checked) {
+                            radioElem.checked = false;
+                        }
+                    });
+                });
+            });
+        });
+        if (asms.split(",").length > 25 ) {
+            makeSetAllDiv(newTblDiv, setAllText, "bottomSetAll");
+        }   
+        $("[class$=SetAllVis]").each(function(i, elem) {
+            elem.addEventListener("click", function(e) {
+                // change vis of each track
+                $("[class$=Vis][value="+e.target.value).each(function(i, e) {
+                    e.checked = true;
+                });
+            });
+        });
+        newForm.addEventListener("submit", function(e) {
+            inputs  = e.target.elements;
+            for (let i = 0; i < inputs.length; i++) {
+                input = inputs[i];
+                if (!input.checked) {
+                    // pass hgsid and other variables on through
+                    continue;
+                }
+                if (input.name.endsWith("SetAllVis") || (input.getAttribute("data-default") === input.checked.toString())) {
+                    input.disabled = true;
+                } else {
+                    // change the form name to a track name so the track can be on
+                    trackName = "chainHprc" + input.getAttribute("data-trackName");
+                    input.name = trackName;
+                    input.value = input.value.toLowerCase();
+                }
+            }
+        });
+    }
+}
+
+
+
 
 // on page load initialize VEP, Population Frequency and Haplotype Tables
 // for gnomAD v3.1.1 track
 $(document).ready(function() {
-    if (_jsonHgcLabels !== null) {
+    if (typeof doHPRCTable !== "undefined") {
+        makeHPRCTable();
+    }
+    if ($("#svgTable") !== null) {
+        // redraw the svg with appropriate widths for all columns
+        // swatchWidth and columnSpacer are taken from svgBarChart() in hgc/barChartClick.c
+        // they should probably be dynamically determined
+        var swatchWidth = 20.0;
+        var columnSpacer = 4.0;
+        var maxSampleWidth = 0.0;
+
+        // determine the size taken up by the sample names
+        $(".sampleLabel").each(function(s) {
+            if ((sampleLength = this.getComputedTextLength()) >= maxSampleWidth) {
+                maxSampleWidth = sampleLength;
+            }
+        });
+
+        // determine the size taken up by the 'N' counts
+        var maxStatsWidth = 0.0;
+        $(".statsLabel").each(function(s) {
+            if ((statWidth = this.getComputedTextLength()) >= maxStatsWidth) {
+                maxStatsWidth = statWidth;
+            }
+        });
+
+        // the stat is right aligned so take into account it's width as well
+        statsRightOffset = swatchWidth + maxSampleWidth + (2 * columnSpacer) + maxStatsWidth;
+
+        // The white band that separates every other row needs to be resized
+        $(".sampleBand").each(function(s) {
+            this.setAttribute("width", statsRightOffset - swatchWidth);
+        });
+
+        // now move the stat number
+        $(".statsLabel").each(function(s) {
+            this.setAttribute("x", statsRightOffset);
+        });
+
+        // now shift the actual bars (plus value) over if necessary
+        $(".valueLabel").each(function(s) {
+            barName = "#bar" + s;
+            var barWidth = 0;
+            var newX = statsRightOffset + (2 * columnSpacer);
+            if ($(barName).length > 0) {
+                barWidth = parseInt($(barName)[0].getAttribute("width"));
+                $(barName)[0].setAttribute("x", newX);
+                this.setAttribute("x", newX + barWidth + 2 * columnSpacer);
+            } else { // the header label only
+                this.setAttribute("x", newX + barWidth);
+            }
+        });
+    }
+    if (typeof _jsonHgcLabels !== "undefined") {
         var obj, o;
         for (obj in _jsonHgcLabels) {
             // build up the new table:

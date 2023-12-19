@@ -6,7 +6,7 @@ set -beEu -o pipefail
 export TOP="/hive/data/outside/otto/grcIncidentDb"
 
 export bbiInfo="/cluster/bin/x86_64/bigBedInfo"
-export failMail="hiram@soe.ucsc.edu,lrnassar@ucsc.edu"
+export failMail="hiram@soe.ucsc.edu,otto-group@ucsc.edu"
 
 if [ $# -ne 4 ]; then
   echo "usage: grcUpdate.sh <workDir> <db> <issueName> <ftpPath>" 1>&2
@@ -42,10 +42,18 @@ export YM=`date "+%Y/%m"`
 mkdir -p ${YM}
 export DS=`date "+%F"`
 
+if [ $debug -ne 0 ]; then
+  printf "# %s\n" "https://ftp.ncbi.nlm.nih.gov/pub/grc/${ftpPath}" 1>&2
+  printf "# into ${YM}/${GRC_issue}.${DS}.gff\n" 1>&2
+fi
+
 wget --timestamping \
  https://ftp.ncbi.nlm.nih.gov/pub/grc/${ftpPath} \
    -O ${YM}/${GRC_issue}.${DS}.gff > /dev/null 2>&1
 gzip -f ${YM}/${GRC_issue}.${DS}.gff
+if [ $debug -ne 0 ]; then
+  ls -og ${YM}/${GRC_issue}.${DS}.gff.gz 1>&2
+fi
 
 if [ $debug -ne 0 ]; then
   printf "# fetched into ${workDir}/${YM}/${GRC_issue}.${DS}.gff\n" 1>&2
@@ -103,7 +111,8 @@ else
       "`${bbiInfo} -udcDir=./udcCache ${Db}.grcIncidentDb.bb`" \
 	| /usr/sbin/sendmail -t -oi
    rm -fr ./udcCache
-   /cluster/bin/scripts/gwUploadFile ${Db}.grcIncidentDb.bb ${Db}.grcIncidentDb.bb > /dev/null 2>&1
+# no longer necessary
+   # /cluster/bin/scripts/gwUploadFile ${Db}.grcIncidentDb.bb ${Db}.grcIncidentDb.bb > /dev/null 2>&1
    url=`/cluster/bin/x86_64/hgsql -N -e "select * from grcIncidentDb;" $db`
    rm -fr ./udcCache
    mkdir ./udcCache

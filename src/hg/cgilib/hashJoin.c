@@ -73,10 +73,10 @@ for (dtf = valDtfs;  dtf != NULL;  dtf = dtf->next)
         errAbort("hashJoinNew: inconsistent key field (%s.%s.%s) and value field (%s.%s.%s)",
                  keyDtf->database, keyDtf->table, keyDtf->field,
                  dtf->database, dtf->table, dtf->field);
-    dyStringAppendC(query, ',');
-    dyStringAppend(query, dtf->field);
+    sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%s", dtf->field);
     }
-dyStringPrintf(query, " from %s", self->table);
+sqlDyStringPrintf(query, " from %s", self->table);
 self->query = dyStringCannibalize(&query);
 self->naForMissing = naForMissing;
 return self;
@@ -109,7 +109,9 @@ static void hashJoinLoad(struct hashJoin *self)
 if (self->loaded)
     errAbort("hashJoinLoad: loaded flag already set");
 struct sqlConnection *conn = hAllocConn(self->db);
-int rowCount = sqlRowCount(conn, self->table);
+char queryTblSafe[1024];
+sqlSafef(queryTblSafe, sizeof queryTblSafe, "%s", self->table);
+int rowCount = sqlRowCount(conn, queryTblSafe);
 int hashSize = min(digitsBaseTwo(rowCount), hashMaxSize);
 self->hash = hashNew(hashSize);
 char **row;
@@ -193,8 +195,8 @@ for (matchIx = matchCount - 1;  matchIx >= 0;  matchIx--)
                 else
                     {
                     if (colDyLen > 0)
-                        dyStringAppendC(colDy, ',');
-                    dyStringAppend(colDy, val);
+			dyStringAppendC(colDy, ',');
+		    dyStringAppend(colDy, val);
                     }
                 }
             }

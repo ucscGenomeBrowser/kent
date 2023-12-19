@@ -1,0 +1,93 @@
+track refSeqComposite
+compositeTrack on
+shortLabel NCBI RefSeq
+longLabel RefSeq gene predictions from NCBI
+group genes
+visibility pack
+type bigBed
+dragAndDrop subTracks
+allButtonPair on
+dataVersion NCBI Homo sapiens Updated Annotation Release 110 (2022-04-12)
+html html/GCA_009914755.4_T2T-CHM13v2.0.refSeqComposite
+priority 2
+
+        track ncbiRefSeq
+        parent refSeqComposite on
+        color 12,12,120
+        altColor 120,12,12
+        shortLabel RefSeq All
+        type bigGenePred
+        labelFields name,geneName,geneName2
+        searchIndex name
+        searchTrix  /gbdb/hs1/ncbiRefSeq/ncbiRefSeq.ix
+        bigDataUrl  /gbdb/hs1/ncbiRefSeq/ncbiRefSeq.bb
+        longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
+        idXref ncbiRefSeqLink mrnaAcc name
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+        priority 1
+
+        track ncbiRefSeqCurated
+        color 12,12,120
+        parent refSeqComposite on
+        shortLabel RefSeq Curated
+        longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
+        type bigGenePred
+        labelFields name,geneName,geneName2
+        searchIndex name
+        searchTrix  /gbdb/hs1/ncbiRefSeq/ncbiRefSeqCurated.ix
+        idXref ncbiRefSeqLink mrnaAcc name
+        bigDataUrl  /gbdb/hs1/ncbiRefSeq/ncbiRefSeqCurated.bb
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+        priority 2
+
+        track ncbiRefSeqPredicted
+        color 12,12,120
+        parent refSeqComposite on
+        shortLabel RefSeq Predicted
+        longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
+        type bigGenePred
+        labelFields name,geneName,geneName2
+        searchIndex name
+        searchTrix  /gbdb/hs1/ncbiRefSeq/ncbiRefSeqPredicted.ix
+        idXref ncbiRefSeqLink mrnaAcc name
+        bigDataUrl  /gbdb/hs1/ncbiRefSeq/ncbiRefSeqPredicted.bb
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+        priority 3
+
+        track ncbiRefSeqOther
+        color 32,32,32
+        parent refSeqComposite on
+        shortLabel RefSeq Other
+        longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
+        priority 4
+        searchIndex name
+        searchTrix  /gbdb/hs1/ncbiRefSeq/ncbiRefSeqOther.ix
+        bigDataUrl  /gbdb/hs1/ncbiRefSeq/ncbiRefSeqOther.bb
+        type bigBed 12 +
+        labelFields gene
+        skipEmptyFields on
+        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/$$" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" FlyBase="http://flybase.org/reports/$$" WormBase="http://www.wormbase.org/db/gene/gene?name=$$" RGD="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" SGD="https://www.yeastgenome.org/locus/$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" ZFIN="https://zfin.org/$$" MGI="http://www.informatics.jax.org/marker/$$"
+
+        track ncbiRefSeqPsl
+        priority 5
+        parent refSeqComposite off
+        shortLabel RefSeq Alignments
+        longLabel RefSeq Alignments of RNAs
+        type bigPsl
+        searchIndex name
+        bigDataUrl  /gbdb/hs1/ncbiRefSeq/ncbiRefSeqPsl.bb
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        showCdsMaxZoom 10000.0
+        showCdsAllScales .
+        baseColorDefault diffCodons
+        pslSequence no
+        baseColorUseSequence lfExtra
+        baseColorUseCds table given
+        color 0,0,0
+

@@ -1,0 +1,33 @@
+#!/bin/bash -e
+
+user=$1
+trackDb=$2
+db=$3
+
+hubParent=/gbdb/$db/hubs
+hubDir=$hubParent/$user
+
+# check if a database exists, print note and return non-zero if it doesn't
+dbExists() {
+    local db="$1"
+    local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
+    if [ -z "$dbChk" ] ; then
+        echo "Note: database $db does not exist, skipping"
+        return 1
+    else
+        return 0
+    fi
+}
+
+if dbExists $db ; then
+    if test -d $hubParent
+    then
+        #rm -rf $hubDir
+
+        trackDbToTxt $db $trackDb $hubDir
+        # creates $hubDir/hubAndGenome.txt 
+        dbDbToHubTxt $db genome-www@soe.ucsc.edu ../groups.txt $hubDir/hubAndGenome.txt
+        cat $hubDir/hubAndGenome.txt $hubDir/trackDb.txt > $hubDir/hub.txt
+    fi
+fi
+

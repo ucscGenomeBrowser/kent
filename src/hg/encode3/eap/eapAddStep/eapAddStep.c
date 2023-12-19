@@ -223,7 +223,7 @@ if (outCount != matchCount)
 	    outCount, matchCount, init->name);
 
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "select count(*) from eapStep where name='%s'", init->name);
+sqlDyStringPrintf(query, "select count(*) from eapStep where name='%s'", init->name);
 int existingCount = sqlQuickNum(conn, query->string);
 if (existingCount > 0)
     {
@@ -242,7 +242,7 @@ for (i=0; i<softwareCount; ++i)
     {
     char *name = softwareArray[i];
     dyStringClear(query);
-    dyStringPrintf(query, "select id from eapSoftware where name='%s'", name);
+    sqlDyStringPrintf(query, "select id from eapSoftware where name='%s'", name);
     unsigned softwareId = sqlQuickNum(conn, query->string);
     if (softwareId == 0)
         errAbort("Software %s doesn't exist by that name in eapSoftware", name);
@@ -251,31 +251,31 @@ for (i=0; i<softwareCount; ++i)
 
 /* Make step record. */
 dyStringClear(query);
-dyStringAppend(query,
+sqlDyStringPrintf(query,
 	"insert eapStep (name,cpusRequested,description,"
         " inCount,inputTypes,inputFormats,inputDescriptions,"
 	" outCount,outputNamesInTempDir,outputTypes,outputFormats,outputDescriptions)"
 	" values (");
-dyStringPrintf(query, "'%s',", init->name);
-dyStringPrintf(query, "%d,", init->cpusRequested);
-dyStringPrintf(query, "\"%s\",", init->description);
-dyStringPrintf(query, "%d,", inCount);
-dyStringPrintf(query, "'%s',", init->inputTypes);
-dyStringPrintf(query, "'%s',", init->inputFormats);
-dyStringPrintf(query, "\"%s\",", init->inputDescriptions);
-dyStringPrintf(query, "%d,", outCount);
-dyStringPrintf(query, "'%s',", init->outputNamesInTempDir);
-dyStringPrintf(query, "'%s',", init->outputTypes);
-dyStringPrintf(query, "'%s',", init->outputFormats);
-dyStringPrintf(query, "\"%s\"", init->outputDescriptions);
-dyStringPrintf(query, ")");
+sqlDyStringPrintf(query, "'%s',", init->name);
+sqlDyStringPrintf(query, "%d,", init->cpusRequested);
+sqlDyStringPrintf(query, "\"%s\",", init->description);
+sqlDyStringPrintf(query, "%d,", inCount);
+sqlDyStringPrintf(query, "'%s',", init->inputTypes);
+sqlDyStringPrintf(query, "'%s',", init->inputFormats);
+sqlDyStringPrintf(query, "\"%s\",", init->inputDescriptions);
+sqlDyStringPrintf(query, "%d,", outCount);
+sqlDyStringPrintf(query, "'%s',", init->outputNamesInTempDir);
+sqlDyStringPrintf(query, "'%s',", init->outputTypes);
+sqlDyStringPrintf(query, "'%s',", init->outputFormats);
+sqlDyStringPrintf(query, "\"%s\"", init->outputDescriptions);
+sqlDyStringPrintf(query, ")");
 sqlUpdate(conn, query->string);
 
 /* Make software/step associations. */
 for (i=0; i<softwareCount; ++i)
     {
     dyStringClear(query);
-    dyStringPrintf(query, "insert eapStepSoftware (step,software) values ('%s','%s')",
+    sqlDyStringPrintf(query, "insert eapStepSoftware (step,software) values ('%s','%s')",
 	    init->name, softwareArray[i]);
     sqlUpdate(conn, query->string);
     }

@@ -27,27 +27,62 @@ if ($argc != 2) {
     exit 255;
 }
 
+sub verifyTargetDir($) {
+  my ($td) = @_;
+  if ( ! -d $td ) {
+    printf STDERR "ERROR: can not find target genome directory:\n\n";
+    printf STDERR "$td\n\n";
+    usage;
+    exit 255;
+  }
+  return 0;
+}
+
+sub asmHubPath($) {
+  my ($accessionId) = @_;
+  my $gcX = substr($accessionId,0,3);
+  my $d0 = substr($accessionId,4,3);
+  my $d1 = substr($accessionId,7,3);
+  my $d2 = substr($accessionId,10,3);
+  my $gcPath = "/hive/data/genomes/asmHubs/allBuild/$gcX/$d0/$d1/$d2";
+  my $targetDir = `ls -rtd $gcPath/${accessionId}_* | tail -1`;
+  chomp $targetDir;
+  return $targetDir;
+}
+
 my $targetDb = shift;
 my $queryDb = shift;
 
 my $targetDir = "$hiveData/$targetDb";
+my $searchDir = "";
+my $chainFile = "";
 
-if ( ! -d $targetDir ) {
-    printf STDERR "ERROR: can not find target genome directory:\n\n";
-    printf STDERR "$targetDir\n\n";
-    usage;
-    exit 255;
+# check for assembly hub GCx identifier
+if ($targetDb =~ m/^GC/) {
+  $targetDir = asmHubPath($targetDb);
+  verifyTargetDir($targetDir);
+  $chainFile = `ls -rtd $targetDir/trackData/lastz.$queryDb/axtChain/run/chain.csh | tail -1`;
+  chomp $chainFile;
+} else {
+  verifyTargetDir($targetDir);
+  $searchDir = "$targetDir/bed/*lastz.$queryDb/axtChain/run";
+  $chainFile = `ls -rtd $searchDir/chain.csh 2> /dev/null | tail -1`;
+  chomp $chainFile;
 }
 
-my $searchDir = "$targetDir/bed/*lastz.$queryDb/axtChain/run";
-my $chainFile = `ls -rtd $searchDir/chain.csh 2> /dev/null | tail -1`;
-chomp $chainFile;
 # maybe reverse target and query to find result
 if (length($chainFile) < 1) {
     $targetDir = "$hiveData/$queryDb";
-    $searchDir = "$targetDir/bed/*lastz.$targetDb/axtChain/run";
-    $chainFile = `ls -rtd $searchDir/chain.csh 2> /dev/null | tail -1`;
-    chomp $chainFile;
+    if ($queryDb =~ m/^GC/) {
+      $targetDir = asmHubPath($queryDb);
+      verifyTargetDir($targetDir);
+      $chainFile = `ls -rtd $targetDir/trackData/lastz.$targetDb/axtChain/run/chain.csh | tail -1`;
+      chomp $chainFile;
+    } else {
+      $searchDir = "$targetDir/bed/*lastz.$targetDb/axtChain/run";
+      $chainFile = `ls -rtd $searchDir/chain.csh 2> /dev/null | tail -1`;
+      chomp $chainFile;
+    }
 }
 # ancient style of running blastz
 if (length($chainFile) < 1) {

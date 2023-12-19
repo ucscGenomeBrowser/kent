@@ -1,0 +1,16 @@
+# masking of the genome, Max, Thu Oct 13 02:19:25 PDT 2022
+
+# squirrel
+wget https://raw.githubusercontent.com/aineniamh/squirrel/main/squirrel/data/to_mask.csv
+cat to_mask.csv  | grep -v Maximum | awk -F, '{IFS=","; OFS="\t"; print "NC_063383.1", $3-1, $4, $1}' > squirrel.bed
+bedSort squirrel.bed squirrel.bed
+bedToBigBed squirrel..bed ../../chrom.sizes squirrel..bb -type=bed4 -tab
+
+# nextstrain
+curl https://raw.githubusercontent.com/nextstrain/monkeypox/master/config/mask.bed  > nextstrain.bed
+grep -v Chrom nextstrain.bed | tawk '{print "NC_063383.1", $2, $3, $5}' | sed -e 's/indel variation and long//g'   > nextstrain2.bed
+bedToBigBed nextstrain2.bed ../../chrom.sizes nextstrain2.bb -type=bed4 -tab
+
+# ITR annotations from Alex Gener
+# typed up itr.bed from email
+# converted to bigBed using mpxvAnnots.as to itr.bb

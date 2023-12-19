@@ -1,0 +1,11 @@
+cd trackDb/virus/wuhCor1
+curl ftp://xfer13.crg.eu/ucsc/track.ra > galaxyEna.ra
+sed -i 's#bigDataUrl #bigDataUrl /gbdb/wuhCor1/galaxyEna/#' galaxyEna.ra
+cd /hive/data/genomes/wuhCor1/bed/galaxyEna
+lftp ftp://xfer13.crg.eu/ucsc/ -e 'mirror .'
+cd /gbdb/wuhCor1/galaxyEna
+# add symlinks
+for i in /hive/data/genomes/wuhCor1/bed/galaxyEna/data*; do cd `basename $i`; for x in $i/*.bb; do ln -s $x; done; cd ..; done
+# also had to adapt description page links
+cd kent/src/hg/makeDb/trackDb/
+sed -i 's/html track_description/html galaxyEna/g' virus/wuhCor1/galaxyEna.ra

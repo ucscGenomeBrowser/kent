@@ -71,10 +71,14 @@ while (lineFileNextReal(lf, &line))
     char *h = strchr(line, '#');
     if (h != NULL)
         *h = '\0';
-    sqlDyStringPrintf(sql, "%-s", line); // trusting the input
+    dyStringPrintf(sql, "%s", line);
     }
 lineFileClose(&lf);
-return dyStringCannibalize(&sql);
+// TRUST input off disk file
+char query[4096];
+sqlSafef(query, sizeof query, sql->string, NULL);
+dyStringFree(&sql);
+return cloneString(query);
 }
 
 void testDb(char *testDb, char *testTbl, char* sqlFile,

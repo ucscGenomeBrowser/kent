@@ -1432,4 +1432,29 @@ CREATE TABLE ucscToEnsembl (
 
     # verify the blue bar "ensembl" link is now available under the 'View'
     # tab
-#############################################################################
+##############################################################################
+# LIFTOVER TO mm9 (DONE - 2022-10-25 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm39/bed/blat.mm9.2022-10-25
+    cd /hive/data/genomes/mm39/bed/blat.mm9.2022-10-25
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/mm39/mm39.2bit \
+        -querySizes=/hive/data/genomes/mm39/chrom.sizes \
+        -target2Bit=/hive/data/genomes/mm9/mm9.2bit \
+        -targetSizes=/hive/data/genomes/mm9/chrom.sizes \
+        -ooc=/hive/data/genomes/mm39/jkStuff/mm39.11.ooc \
+         mm39 mm9
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/mm39/mm39.2bit \
+        -querySizes=/hive/data/genomes/mm39/chrom.sizes \
+        -target2Bit=/hive/data/genomes/mm9/mm9.2bit \
+        -targetSizes=/hive/data/genomes/mm9/chrom.sizes \
+        -ooc=/hive/data/genomes/mm39/jkStuff/mm39.11.ooc \
+         mm39 mm9) > doLiftOverToMm9.log 2>&1
+    # real    246m16.388s
+
+    # see if the liftOver menus function in the browser from mm39 to mm9
+
+##############################################################################

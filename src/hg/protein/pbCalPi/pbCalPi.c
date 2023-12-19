@@ -101,7 +101,9 @@ char *outfName  = argv[2];
 FILE *f = mustOpen(outfName, "w");
 
 struct sqlConnection *conn = sqlConnect(spDb);
-struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select acc,val from protein");
+char query[1024];
+sqlSafef(query, sizeof query, "select acc,val from protein");
+struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {

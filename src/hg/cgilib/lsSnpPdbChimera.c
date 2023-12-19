@@ -106,7 +106,7 @@ void lsSnpPdbChimeraSnpAnn(struct sqlConnection *conn,
 {
 getOutFile(pdbId, primarySnpId, outName);
 char where[512];
-sqlSafefFrag(where, sizeof(where), "(pdbId=\"%s\")", pdbId);
+sqlSafef(where, sizeof(where), "(pdbId=\"%s\")", pdbId);
 chimeraxGen(conn, pdbId, where, primarySnpId, outName->forCgi);
 }
 

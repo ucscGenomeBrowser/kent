@@ -15,6 +15,7 @@
 #include "hgConfig.h"
 #include "regexHelper.h"
 #include "customComposite.h"
+#include "chromAlias.h"
 
 // Note: when right-click View image (or pdf output) then theImgBox==NULL, so it will be rendered as a single simple image
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
@@ -32,7 +33,10 @@ struct flatTracks *flatTrack;
 AllocVar(flatTrack);
 flatTrack->track = track;
 char var[256];  // The whole reason to do this is to reorder tracks/subtracks in the image!
-safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
+if (track->originalTrack != NULL)
+    safef(var,sizeof(var),"%s_%s",track->originalTrack,IMG_ORDER_VAR);
+else
+    safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
 flatTrack->order = cartUsualInt(cart, var,IMG_ANYORDER);
 if (flatTrack->order >= IMG_ORDERTOP)
     {
@@ -61,7 +65,11 @@ int flatTracksCmp(const void *va, const void *vb)
 const struct flatTracks *a = *((struct flatTracks **)va);
 const struct flatTracks *b = *((struct flatTracks **)vb);
 if (a->order == b->order)
+    {
+    if ((a->track->originalTrack != NULL) || (b->track->originalTrack != NULL))
+        return a->track->visibility - b->track->visibility;
     return tgCmpPriority(&(a->track),&(b->track));
+    }
 return (a->order - b->order);
 }
 
@@ -477,7 +485,7 @@ static struct dyString *addIndent(struct dyString **dy,int indent)
 {
 struct dyString *myDy = (dy ? *dy : NULL);
 if (dy == NULL || *dy == NULL)
-    myDy = newDyString(256);
+    myDy = dyStringNew(256);
 else
     dyStringAppend(myDy,"<br>");
 dyStringAppend(myDy,"<code>");
@@ -996,6 +1004,8 @@ int imgTrackOrderCmp(const void *va, const void *vb)
 {
 const struct imgTrack *a = *((struct imgTrack **)va);
 const struct imgTrack *b = *((struct imgTrack **)vb);
+if (a->order == b->order)
+    return a->vis - b->vis;
 return (a->order - b->order);
 }
 
@@ -1383,6 +1393,12 @@ if (sameString(imgBox->chrom, MULTI_REGION_VIRTUAL_CHROM_NAME))
 else
     {
     struct chromInfo *chrInfo = hGetChromInfo(imgBox->db,imgBox->chrom);
+    if (chrInfo == NULL)
+        {
+        char *native = chromAliasFindNative(imgBox->chrom);
+        if (native != NULL)
+            chrInfo = hGetChromInfo(imgBox->db, native);
+        }
     if (chrInfo == NULL)
 	{
 	*chromStart = imgBox->chromStart;
@@ -1798,11 +1814,18 @@ for (;item!=NULL;item=item->next)
 
     if (item->title != NULL && strlen(item->title) > 0)
         {
-        // for TITLEs, which we use for mouseOvers,  since they can't have HTML in 
-        // them, we substitute a unicode new line for <br> after we've encoded it.  
-        // This is stop-gap until we start doing mouseOvers entirely in Javascript
         char *encodedString = attributeEncode(item->title);
-        hPrintf(" TITLE='%s'", replaceChars(encodedString,"&#x3C;br&#x3E;", "&#8232;"));
+        if (cfgOptionBooleanDefault("showMouseovers", FALSE))
+            {
+            hPrintf(" TITLE='%s'", encodedString);
+            }
+        else
+            {
+            // for TITLEs, which we use for mouseOvers,  since they can't have HTML in
+            // them, we substitute a unicode new line for <br> after we've encoded it.
+            // This is stop-gap until we start doing mouseOvers entirely in Javascript
+            hPrintf(" TITLE='%s'", replaceChars(encodedString,"&#x3C;br&#x3E;", "&#8232;"));
+            }
         }
     if (item->id != NULL)
         hPrintf(" id='%s'", item->id);
@@ -1881,7 +1904,7 @@ else
 #define ELLIPSIS_TO_USE(browser) ((browser) == btFF ? "" : "...")
 
 static void sliceAndMapDraw(struct imgBox *imgBox,struct imgTrack *imgTrack,
-                            enum sliceType sliceType,char *name,boolean scrollHandle)
+                            enum sliceType sliceType,char *name,boolean scrollHandle, struct jsonElement *ele)
 // writes a slice of an image and any assocated image map as HTML
 {
 if (imgBox==NULL || imgTrack==NULL)
@@ -1963,12 +1986,51 @@ else if (slice->link != NULL)
     hPrintf(">\n" );
     }
 
+char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
+struct jsonElement *trackHash = jsonFindNamedField(ele, "trackDb", trackName);
+jsonObjectAdd(trackHash, "imgOffsetY", newJsonNumber(offsetY));
 imageDraw(imgBox,imgTrack,slice,name,offsetX,offsetY,useMap);
 if (slice->link != NULL)
     hPrintf("</A>");
 
 if (slice->parentImg)
     hPrintf("</div>");
+}
+
+struct imgTrack *smashSquish(struct imgTrack *imgTrackList)
+/* Javascript doesn't know about our trick to do squishyPack so we need to pass it a single div instead of two. 
+ * We assume that the linked track immediately follows the original track in the sorted list. */
+{
+struct imgTrack *nextImg, *imgTrack;
+
+for (imgTrack = imgTrackList; imgTrack!=NULL;imgTrack = nextImg)
+    {
+    nextImg = imgTrack->next;
+    boolean joinNext =  ((nextImg != NULL)  && nextImg->linked);
+
+    if (joinNext)  // Smash these together
+        {
+        struct imgSlice *packedSlices = imgTrack->slices;
+        struct imgSlice *squishSlices = imgTrack->next->slices;
+        
+        if ((packedSlices == NULL) || (squishSlices == NULL) ||
+           (slCount(packedSlices) != slCount(squishSlices)))
+           continue;
+        for(; packedSlices && squishSlices; packedSlices = packedSlices->next, squishSlices = squishSlices->next)
+            {
+            if (packedSlices->type != stCenter)
+                {
+                if ((packedSlices->map != NULL) && (squishSlices->map != NULL))
+                    packedSlices->map->items = slCat(packedSlices->map->items, squishSlices->map->items);
+                packedSlices->height += squishSlices->height;
+                }
+            }
+        imgTrack->next = nextImg->next;
+        nextImg = nextImg->next;
+        }
+    }
+
+return imgTrackList;
 }
 
 void imageBoxDraw(struct imgBox *imgBox)
@@ -2037,7 +2099,7 @@ struct jsonElement *jsonTdbVars = newJsonObject(newHash(8));
 jsonTdbSettingsInit(jsonTdbVars);
 
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
-struct imgTrack *imgTrack = imgBox->imgTracks;
+struct imgTrack *imgTrack = smashSquish(imgBox->imgTracks);
 for (;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
@@ -2054,7 +2116,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         // button
         safef(name, sizeof(name), "btn_%s", trackName);
         hPrintf(" <TD id='td_%s'%s>\n",name,(imgTrack->reorderable ? " class='dragHandle'" : ""));
-        sliceAndMapDraw(imgBox,imgTrack,stButton,name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stButton,name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
@@ -2063,7 +2125,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
                     name,attributeEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
-        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         }
 
@@ -2074,12 +2136,12 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
     if (imgTrack->hasCenterLabel)
         {
         safef(name, sizeof(name), "center_%s", trackName);
-        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,TRUE);
+        sliceAndMapDraw(imgBox,imgTrack,stCenter,name,TRUE, jsonTdbVars);
         hPrintf("\n");
         }
     // data image
     safef(name, sizeof(name), "data_%s", trackName);
-    sliceAndMapDraw(imgBox,imgTrack,stData,name,(imgTrack->order>0));
+    sliceAndMapDraw(imgBox,imgTrack,stData,name,(imgTrack->order>0), jsonTdbVars);
     hPrintf("</TD>\n");
 
     if (imgBox->showSideLabel && !imgTrack->plusStrand)
@@ -2091,12 +2153,12 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
                     name,attributeEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
-        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         // button
         safef(name, sizeof(name), "btn_%s", trackName);
         hPrintf(" <TD id='td_%s'%s>\n",name,(imgTrack->reorderable ? " class='dragHandle'" : ""));
-        sliceAndMapDraw(imgBox,imgTrack,stButton, name,FALSE);
+        sliceAndMapDraw(imgBox,imgTrack,stButton, name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         }
     hPrintf("</TR>\n");

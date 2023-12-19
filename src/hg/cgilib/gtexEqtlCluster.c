@@ -41,7 +41,7 @@ void gtexEqtlClusterSaveToDb(struct sqlConnection *conn, struct gtexEqtlCluster 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *expNamesArray, *expScoresArray, *expPvalsArray, *expProbsArray;
 expNamesArray = sqlStringArrayToString(el->expNames, el->expCount);
 expScoresArray = sqlFloatArrayToString(el->expScores, el->expCount);
@@ -50,7 +50,7 @@ expProbsArray = sqlFloatArrayToString(el->expProbs, el->expCount);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%d,%g,'%s',%g,%u,'%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->targetId,  el->target,  el->distance,  el->maxEffect,  el->effectType,  el->maxPvalue,  el->expCount,  expNamesArray ,  expScoresArray ,  expPvalsArray ,  expProbsArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&expNamesArray);
 freez(&expScoresArray);
 freez(&expPvalsArray);

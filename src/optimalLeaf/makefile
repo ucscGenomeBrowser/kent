@@ -7,10 +7,10 @@ include ../inc/common.mk
 #************************************************************************
 
 
-CC= g++
+CXX= g++
 SRC= Tree.cc Leaf.cc readFile.cc SimMat.cc bestArr.cc
 O= Tree.o Leaf.o readFile.o SimMat.o bestArr.o 
-CFLAGS= -g 
+CXXFLAGS= -g 
 
 
 #all: ${OBJ}
@@ -24,19 +24,19 @@ $(MACHTYPE):
 	mkdir $(MACHTYPE)
 
 Leaf.o : Leaf.cc Leaf.hh 
-	${CC} -c  ${CFLAGS}  Leaf.cc
+	${CXX} -c  ${CXXFLAGS}  Leaf.cc
 
 Tree.o : Tree.cc Tree.hh Leaf.hh
-	${CC} -c  ${CFLAGS}  Tree.cc
+	${CXX} -c  ${CXXFLAGS}  Tree.cc
 
 readFile.o : readFile.cc readFile.hh 
-	${CC} -c  ${CFLAGS}  readFile.cc
+	${CXX} -c  ${CXXFLAGS}  readFile.cc
 
 SimMat.o : SimMat.cc SimMat.hh readFile.hh 
-	${CC} -c  ${CFLAGS}  SimMat.cc
+	${CXX} -c  ${CXXFLAGS}  SimMat.cc
 
 bestArr.o : bestArr.cc  Tree.hh SimMat.hh
-	${CC} -c  ${CFLAGS}  bestArr.cc
+	${CXX} -c  ${CXXFLAGS}  bestArr.cc
 
 #***********************************************************************
 #                         EOF

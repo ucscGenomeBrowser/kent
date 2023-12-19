@@ -50,6 +50,9 @@ void bigWigFileCreate(
 /* Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format. */
 
+struct bbiFile *bigWigFileOpenAlias(char *fileName, aliasFunc aliasFunc);
+/* Open up big wig file.   Free this up with bbiFileClose.  Use aliasFunc if non-NULL  */
+
 struct bbiFile *bigWigFileOpen(char *fileName);
 /* Open up big wig file.   Free this up with bbiFileClose */
 

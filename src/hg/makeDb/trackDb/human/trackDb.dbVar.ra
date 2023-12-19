@@ -106,27 +106,34 @@ longLabel NCBI Curated Common Structural Variants from dbVar
 searchTable dbVar_common_gnomad
 searchMethod exact
 searchType bigBed
+termRegex ^[ne]ssv[0-9]+
 
 searchTable dbVar_common_1000g
 searchMethod exact
 searchType bigBed
+termRegex ^[ne]ssv[0-9]+
 
 searchTable dbVar_common_decipher
 searchMethod exact
 searchType bigBed
+termRegex ^[ne]ssv[0-9]+
 
 searchTable dbVar_common_european
 searchMethod exact
 searchType bigBed
+termRegex ^[ne]ssv[0-9]+
 
 searchTable dbVar_common_african
 searchMethod exact
 searchType bigBed
+termRegex ^[ne]ssv[0-9]+
 
 searchTable dbVar_common_global
 searchMethod exact
 searchType bigBed
+termRegex ^[ne]ssv[0-9]+
 
 searchTable dbVar_conflict_pathogenic
 searchMethod exact
 searchType bigBed
+termRegex ^[ne]ssv[0-9]+

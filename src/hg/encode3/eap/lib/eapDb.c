@@ -59,11 +59,11 @@ void eapJobSaveToDb(struct sqlConnection *conn, struct eapJob *el, char *tableNa
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d,'%s')", 
 	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->cpusRequested,  el->parasolId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapJob *eapJobLoad(char **row)
@@ -238,11 +238,11 @@ void eapSoftwareSaveToDb(struct sqlConnection *conn, struct eapSoftware *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s')", 
 	tableName,  el->id,  el->name,  el->url,  el->email,  el->metaUuid);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapSoftware *eapSoftwareLoad(char **row)
@@ -409,11 +409,11 @@ void eapSwVersionSaveToDb(struct sqlConnection *conn, struct eapSwVersion *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%d,'%s','%s')", 
 	tableName,  el->id,  el->software,  el->version,  el->md5,  el->redoPriority,  el->notes,  el->metaUuid);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapSwVersion *eapSwVersionLoad(char **row)
@@ -576,7 +576,7 @@ void eapStepSaveToDb(struct sqlConnection *conn, struct eapStep *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *inputTypesArray, *inputFormatsArray, *inputDescriptionsArray, *outputNamesInTempDirArray, *outputFormatsArray, *outputTypesArray, *outputDescriptionsArray;
 inputTypesArray = sqlStringArrayToString(el->inputTypes, el->inCount);
 inputFormatsArray = sqlStringArrayToString(el->inputFormats, el->inCount);
@@ -588,7 +588,7 @@ outputDescriptionsArray = sqlStringArrayToString(el->outputDescriptions, el->out
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%d,'%s',%u,'%s','%s','%s',%u,'%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->name,  el->cpusRequested,  el->description,  el->inCount,  inputTypesArray ,  inputFormatsArray ,  inputDescriptionsArray ,  el->outCount,  outputNamesInTempDirArray ,  outputFormatsArray ,  outputTypesArray ,  outputDescriptionsArray ,  el->metaUuid);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&inputTypesArray);
 freez(&inputFormatsArray);
 freez(&inputDescriptionsArray);
@@ -994,11 +994,11 @@ void eapStepSoftwareSaveToDb(struct sqlConnection *conn, struct eapStepSoftware 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
 	tableName,  el->id,  el->step,  el->software);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapStepSoftware *eapStepSoftwareLoad(char **row)
@@ -1148,11 +1148,11 @@ void eapStepVersionSaveToDb(struct sqlConnection *conn, struct eapStepVersion *e
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u)", 
 	tableName,  el->id,  el->step,  el->version);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapStepVersion *eapStepVersionLoad(char **row)
@@ -1299,11 +1299,11 @@ void eapStepSwVersionSaveToDb(struct sqlConnection *conn, struct eapStepSwVersio
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u)", 
 	tableName,  el->id,  el->stepVersionId,  el->swVersionId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapStepSwVersion *eapStepSwVersionLoad(char **row)
@@ -1454,11 +1454,11 @@ void eapRunSaveToDb(struct sqlConnection *conn, struct eapRun *el, char *tableNa
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,'%s',%u,'%s',%d,'%s')", 
 	tableName,  el->id,  el->jobId,  el->experiment,  el->analysisStep,  el->stepVersionId,  el->tempDir,  el->assemblyId,  el->jsonResult,  el->createStatus,  el->metaUuid);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapRun *eapRunLoad(char **row)
@@ -1646,11 +1646,11 @@ void eapInputSaveToDb(struct sqlConnection *conn, struct eapInput *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%u,'%s')", 
 	tableName,  el->id,  el->runId,  el->name,  el->ix,  el->fileId,  el->val);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapInput *eapInputLoad(char **row)
@@ -1815,11 +1815,11 @@ void eapOutputSaveToDb(struct sqlConnection *conn, struct eapOutput *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%u,'%s')", 
 	tableName,  el->id,  el->runId,  el->name,  el->ix,  el->fileId,  el->val);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapOutput *eapOutputLoad(char **row)
@@ -1989,11 +1989,11 @@ void eapPhantomPeakStatsSaveToDb(struct sqlConnection *conn, struct eapPhantomPe
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%d,%g,%d,%g,%g,%g,%d)", 
 	tableName,  el->fileId,  el->numReads,  el->estFragLength,  el->corrEstFragLen,  el->phantomPeak,  el->corrPhantomPeak,  el->argMinCorr,  el->minCorr,  el->nsc,  el->rsc,  el->qualityTag);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct eapPhantomPeakStats *eapPhantomPeakStatsLoad(char **row)

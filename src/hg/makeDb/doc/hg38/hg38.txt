@@ -3648,6 +3648,7 @@ _EOF_
 # LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/25/19 angie)
 # Redmine #13359, #24285 -- otto-mate To Do #17877
 # previously done 7/7/14, 9/9/16, 5/30/18
+# THIS IS NOW AN OTTO JOB !!
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg38/bed/lrg/$today
     cd /hive/data/genomes/hg38/bed/lrg/$today
@@ -3686,8 +3687,12 @@ _EOF_
     #	Gene name
 
     # Load LRG regions:
+    #bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
+    #-tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    # after ML #29689, added ncbiAcc field, Max, July 1, 2022
+    # changed to:
     bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
-      -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name,ncbiAcc
     ln -sf `pwd`/lrg.bb /gbdb/hg38/bbi/lrg.bb
     hgBbiDbLink hg38 lrg /gbdb/hg38/bbi/lrg.bb
 
@@ -6966,5 +6971,301 @@ _EOF_
     hgLoadChain hg38 -tIndex chainHg19ReMapAxtChain remap.axtChain.hg38.hg19.chain
 #Loading 2115 chains into hg38.chainHg19ReMapAxtChain
 
+###################################################
+#Agilent SNP/CNV arrays 3/11/21
+#Downloaded by web browser
+cd /hive/data/genomes/hg38/bed/agilentProbes/genetiSureCyto
+fetchChromSizes hg38 > hg38.chrom.sizes
+bedSort hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bed hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bed
+uniq hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bed >hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.uniq.bed
+bedToBigBed hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.uniq.bed hg38.chrom.sizes hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bb
+bedSort hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bed hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bed
+uniq hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bed > hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.uniq.bed
+bedToBigBed hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.uniq.bed hg38.chrom.sizes hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bb
+bedSort hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bed hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bed
+uniq hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bed > hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.uniq.bed
+bedToBigBed hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.uniq.bed hg38.chrom.sizes hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bb
+mkdir -p /gbdb/hg38/snpCnvArrays/agilent
+cd /gbdb/hg38/snpCnvArrays/agilent
+ln -s /hive/data/genomes/hg38/bed/agilentProbes/genetiSureCyto/hg38.GenetiSure_Cyto_CGH+SNP_Microarray_4x180K_085591_D_BED_20200302.bb
+ln -s /hive/data/genomes/hg38/bed/agilentProbes/genetiSureCyto/hg38.GenetiSure_Cyto_CGH_Microarray_8x60K_085590_D_BED_20200302.bb
+ln -s /hive/data/genomes/hg38/bed/agilentProbes/genetiSureCyto/hg38.GenetiSure_Cyto_CGH_Microarray_4x180K_085589_D_BED_20200302.bb
+vi ~/kent/src/hg/makeDb/trackDb/human/hg38/trackDb.ra
 
 #########################################################################
+# DECIPHER CNV & SNV - initial build (DONE 2022-04-08 Jonathan)
+# RM 29130
+
+cd /hive/data/genomes/outside/otto/decipher
+mkdir 2022-04-05
+cd 2022-04-05
+
+# manually fetch decipher-variants-grch38-2022-04-03.bed from DECIPHER
+../buildDecipher decipher-variants-grch38-2022-04-03.bed
+
+for i in `cat ../decipher.tables`
+        do
+        n=$i"New"
+        o=$i"Old"
+        hgsqlSwapTables hg38 $n $i $o -dropTable3
+        done
+
+mkdir -p /gbdb/hg38/decipher
+cd /gbdb/hg38/decipher
+ln -s /hive/data/outside/otto/decipher/2022-04-05/decipherCnv.bb .
+
+#########################################################################
+# COSMIC (DONE 07-11-2023)
+# RM 29625
+
+#Fetch file
+cd /hive/data/outside/cosmic/hg38/v98/
+wget 'https://cog.sanger.ac.uk/cosmic/GRCh38/ucsc/v98/ucsc_export.bed.gz?AWSAccessKeyId=KRV7P7QR9DL41J9EWGA2&Expires=1686847188&Signature=4YV3CuFKudxIhqVdWAaCe0CMAiY%3D' -O ucsc_export.bed.gz
+wget 'https://cog.sanger.ac.uk/cosmic/GRCh38/ucsc/v98/ucsc_export.bed.gz?AWSAccessKeyId=KRV7P7QR9DL41J9EWGA2&Expires=1687525456&Signature=jBdJOlOOaqmMWNnOtJUyNRptVj4%3D'
+mv ucsc_export.bed.gz\?AWSAccessKeyId\=KRV7P7QR9DL41J9EWGA2\&Expires\=1687525456\&Signature\=jBdJOlOOaqmMWNnOtJUyNRptVj4\= ucsc_export.bed.gz
+
+#Reorder to columns to conform to bed 6+3
+zcat ucsc_export.bed.gz | awk -F'\t' -v OFS="\t" '{ print $1, $2, $3, $7, 0, $6, $4, $5, $8 }' | sort -k1,1 -k2,2n > cosmic.bed
+
+#Tiny bit of python to identify the broken lines in the file where chromStart > chromEnd
+
+#for line in myFile:
+#    newLine = line.split("\t")
+#    if int(newLine[1]) > int(newLine[2]):
+#        print(line)
+#        n+=1
+#print(n)
+
+#remove those broken records from the file
+cat cosmic.bed | grep -vf badRecords.bed > cosmic.fixed.bed
+
+#subtract to conform to bed format for all the items that have same star and endPos
+
+cat cosmic.fixed.bed | awk 'BEGIN {OFS="\t"} {
+if ($2 == $3)
+        print $1,$2-1,$3,$4,$5,$6,$7,$8,$9;
+else
+        print $0;
+}' > cosmic.fixedPos.bed
+
+bedToBigBed -type=bed6+3 -as=/hive/data/outside/cosmic/hg38/v98/cosmic.as /hive/data/outside/cosmic/hg38/v98/cosmic.fixedPos.bed /hive/data/genomes/hg38/chrom.sizes /hive/data/outside/cosmic/hg38/v98/cosmic.bb -tab
+
+#make symlink
+ln -s /hive/data/outside/cosmic/hg38/v98/cosmic.bb /gbdb/hg38/cosmic/cosmic.bb
+
+#This data has since been updated, see new makedoc doc/hg38/cosmicV98.txt and rm #32430
+
+##############################################################################
+# LIFTOVER TO GCA_018873775.2_hg01243.v3.0 (DONE - 2023-08-13 - Hiram)
+    ssh hgwdev
+    # going to need an ooc for hg38.p14.2bit
+    cd /hive/data/genomes/hg38
+    time blat hg38.p14.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=hg38.p14.ooc -repMatch=1024
+    # Wrote 36808 overused 11-mers to hg38.p14.ooc
+    # real    0m50.753s
+
+    # and ooc for this GenArk hub
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0
+  time blat GCA_018873775.2_hg01243.v3.0.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=GCA_018873775.2_hg01243.v3.0.ooc -repMatch=1024
+# Wrote 39087 overused 11-mers to GCA_018873775.2_hg01243.v3.0.ooc
+# real    0m49.426s
+
+  mkdir /hive/data/genomes/hg38/bed/blat.GCA_018873775.2_hg01243.v3.0.2023-08-13
+    cd /hive/data/genomes/hg38/bed/blat.GCA_018873775.2_hg01243.v3.0.2023-08-13
+
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.ooc \
+         hg38 GCA_018873775.2
+
+    # trying -ram=6g to get full use of hgwdev kluster nodes
+    time (~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+        -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.ooc \
+         hg38 GCA_018873775.2) > doLiftOverToGCA_018873775.2.log 2>&1
+    # real    12654m58.134s
+
+    # broken after the alignment was done, with the parasol endless loop
+    # error message in the log file:
+    #  select failure in rudp: Invalid argument
+    # killed that, cleaned the 4Tb log file, and gave up on this alignment
+    # since the lastz/chain/net is much better
+
+    # see if the liftOver menus function in the browser from hg38
+    #    to GCA_018873775.2
+
+##############################################################################
+# LIFTOVER GCA_018873775.2_hg01243.v3.0 to hg38 (DONE - 2023-08-13 - Hiram)
+    ssh hgwdev
+
+    mkdir /hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/trackData/blat.hg38.2023-08-13
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/trackData/blat.hg38.2023-08-13
+
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.chrom.sizes \
+        -query2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -querySizes=/hive/data/genomes/hg38/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.ooc \
+         GCA_018873775.2 hg38
+
+    # trying -ram=6g to get full use of hgwdev kluster nodes
+    time (~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+        -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.chrom.sizes \
+        -query2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -querySizes=/hive/data/genomes/hg38/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/873/775/GCA_018873775.2_hg01243.v3.0/GCA_018873775.2_hg01243.v3.0.ooc \
+         GCA_018873775.2 hg38) > doLiftOverToHg38.log 2>&1
+
+    # broken after the alignment was done, with the parasol endless loop
+    # error message in the log file:
+    #  select failure in rudp: Invalid argument
+    # killed that, cleaned the 4Tb log file, and gave up on this alignment
+    # since the lastz/chain/net is much better
+    # real    193m24.137s
+
+    # see if the liftOver menus function in the browser from GCA_018873775.2
+    #    to hg38
+
+##############################################################################
+# LIFTOVER TO GCA_018503275.1_NA19240.pri.mat.f1_v2 (TBD - 2023-08-14 - Hiram)
+    ssh hgwdev
+
+    # ooc for this GenArk hub
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2
+  time blat GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit /dev/null /dev/null \
+      -tileSize=11 -repMatch=1024 \
+      -makeOoc=GCA_018503275.1_NA19240.pri.mat.f1_v2.11.ooc
+  # Wrote 35866 overused 11-mers to GCA_018503275.1_NA19240.pri.mat.f1_v2.11.ooc
+    # real    0m32.298s
+
+  mkdir /hive/data/genomes/hg38/bed/blat.GCA_018503275.1_NA19240.pri.mat.f1_v2.2023-08-14
+  cd /hive/data/genomes/hg38/bed/blat.GCA_018503275.1_NA19240.pri.mat.f1_v2.2023-08-14
+
+    ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl -verbose=2 \
+        -buildDir=`pwd` -ram=4g -chainRam=16g \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.ooc \
+         hg38 GCA_018503275.1
+
+    # trying -ram=4g to get full use of hgwdev kluster nodes
+    time (~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+        -verbose=2 -buildDir=`pwd` -ram=4g -chainRam=16g \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.ooc \
+         hg38 GCA_018503275.1) > doLiftOverToGCA_018503275.1.log 2>&1
+    # real    11370m18.026s
+
+    # broken after the alignment was done, with the parasol endless loop
+    # error message in the log file:
+    #  select failure in rudp: Invalid argument
+    # killed that, cleaned the 4Tb log file, and gave up on this alignment
+    # since the lastz/chain/net is much better
+    # -rw-rw-r-- 1 4363949695640 Aug 22 09:16 doLiftOverToGCA_018503275.1.log
+
+    # see if the liftOver menus function in the browser from hg38
+    #    to GCA_018503275.1
+
+##############################################################################
+# LIFTOVER GCA_018503275.1_NA19240.pri.mat.f1_v2 to hg38 (DONE - 2023-08-14 - Hiram)
+    ssh hgwdev
+
+    mkdir /hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/trackData/blat.hg38.2023-08-14
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/trackData/blat.hg38.2023-08-14
+
+    ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl -verbose=2 \
+        -buildDir=`pwd` -ram=4g -chainRam=16g \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.chrom.sizes \
+        -query2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -querySizes=/hive/data/genomes/hg38/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.11.ooc \
+         GCA_018503275.1 hg38
+
+    time (~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl -verbose=2 \
+        -buildDir=`pwd` -ram=4g -chainRam=16g \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.chrom.sizes \
+        -query2Bit=/hive/data/genomes/hg38/hg38.2bit \
+        -querySizes=/hive/data/genomes/hg38/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/genbankBuild/GCA/018/503/275/GCA_018503275.1_NA19240.pri.mat.f1_v2/GCA_018503275.1_NA19240.pri.mat.f1_v2.11.ooc \
+         GCA_018503275.1 hg38) > liftOverToHg38.log 2>&1
+    # real    5082m17.500s
+
+    # this is interesting, this alignment completed and actually has good
+    # coverage:
+    cat fb.GCA_018503275.1.chain.Hg38Link.txt
+    # 2928654519 bases of 3032066086 (96.589%) in intersection
+
+    # see if the liftOver menus function in the browser from GCA_018503275.1
+    #    to hg38
+
+##############################################################################
+## update grp table add new row for HPRC (DONE - 2023-08-29 - Hiram)
+## existing structure:
+
+    hgsql -e 'desc grp;' hg38
+
++-----------------+-----------+------+-----+---------+-------+
+| Field           | Type      | Null | Key | Default | Extra |
++-----------------+-----------+------+-----+---------+-------+
+| name            | char(255) | NO   | PRI |         |       |
+| label           | char(255) | NO   |     |         |       |
+| priority        | float     | NO   |     | 0       |       |
+| defaultIsClosed | int(11)   | YES  |     | NULL    |       |
++-----------------+-----------+------+-----+---------+-------+
+
+    #  add one new row:
+    hgsql hg38 \
+      -e "INSERT INTO grp VALUES ('hprc', 'Human Pangenome - HPRC', 3.6, 0);"
+
+    # resulting table:
+
+    hgsql -e 'select * from grp order by priority;' hg38
++------------+------------------------------------+----------+-----------------+
+| name       | label                              | priority | defaultIsClosed |
++------------+------------------------------------+----------+-----------------+
+| user       | Custom Tracks                      |        1 |               0 |
+| remc       | Reference Epigenome Mapping Center |      1.2 |               1 |
+| map        | Mapping and Sequencing             |        2 |               0 |
+| genes      | Genes and Gene Predictions         |        3 |               0 |
+| phenDis    | Phenotype and Literature           |      3.4 |               0 |
+| pub        | Literature                         |      3.5 |               0 |
+| hprc       | Human Pangenome - HPRC             |      3.6 |               0 |
+| covid      | COVID-19                           |      3.6 |               0 |
+| singleCell | Single Cell RNA-seq                |      3.7 |               0 |
+| rna        | mRNA and EST                       |        4 |               0 |
+| expression | Expression                         |      4.5 |               0 |
+| regulation | Regulation                         |        5 |               0 |
+| compGeno   | Comparative Genomics               |        6 |               0 |
+| varRep     | Variation                          |        7 |               0 |
+| rep        | Repeats                            |        8 |               0 |
+| x          | Experimental                       |       10 |               1 |
++------------+------------------------------------+----------+-----------------+
+
+##############################################################################

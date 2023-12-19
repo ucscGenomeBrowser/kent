@@ -53,3 +53,4 @@ include chainNetInsects.ra
 include chainNetSynInsects.ra
 include chainNetRBestInsects.ra
 include ../../crispr10K.ra alpha
+include reMap.ra

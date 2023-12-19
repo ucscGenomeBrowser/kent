@@ -7,7 +7,6 @@ longLabel Integrated Regulation from ENCODE
 group regulation
 priority 1
 canPack On
-pennantIcon Updated red ../goldenPath/newsarch.html added Trancscription Factor ChIP-seq Clusters and Peaks from ENCODE 3 tracks
 
 include wgEncodeRegDnase.ra
 

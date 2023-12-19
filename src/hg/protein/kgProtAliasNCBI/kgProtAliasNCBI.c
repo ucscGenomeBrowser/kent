@@ -53,7 +53,7 @@ while (row2 != NULL)
     proteinID = row2[1];
 
     // get RefSeq protein AC numbers (NP_xxxxx) if they exist
-    sqlSafefFrag(cond_str, sizeof cond_str, "kgID='%s'", kgID);
+    sqlSafef(cond_str, sizeof cond_str, "kgID='%s'", kgID);
     proteinAC = sqlGetField(database, "kgXref", "protAcc", cond_str);
     if (proteinAC != NULL)
 	{

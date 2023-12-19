@@ -1902,7 +1902,7 @@ done
 	    gzip -c > protAA/$C.protAA.fa.gz"
     done > $gp.$mz.prot.jobs
 
-    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
     # 267m58.813s
 
     rm *.known.bed
@@ -1941,7 +1941,7 @@ done
 	    gzip -c > exonAA/$C.exonAA.fa.gz"
     done > $gp.$mz.jobs
 
-    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
     # 267m58.813s
 
     rm *.known.bed
@@ -2083,3 +2083,361 @@ done
 	| sed -e 's/^/hg38./;' > redmine.20216.table.list
 
 ############################################################################
+# SSREV model phyloFit for 30-way (DONE - 2021-10-26 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/multiz30way/4dSSREV
+    cd /hive/data/genomes/hg38/bed/multiz30way/4dSSREV
+
+    # re-use the mfa file from the first 4d calculation:
+
+    /hive/data/genomes/hg38/bed/multiz30way/4dSSREV
+    ln -s ../4d/4d.all.mfa .
+    ln -s ../4d/treeCommas.nh .
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod SSREV \
+		--tree tree-commas.nh 4d.all.mfa
+    #   real    4m51.712s
+
+    mv phyloFit.mod all.SSREV.mod
+
+    grep TREE all.SSREV.mod
+# ((((((((((((hg38:0.0101822,panTro5:0.0025629):0.00183633,
+# panPan2:0.00255247):0.00567321,gorGor5:0.00857341):0.00933067,
+# ponAbe2:0.0183779):0.00329369,nomLeu3:0.022487):0.0111263,
+# (((((rheMac8:0.00266035,(macFas5:0.0021818,
+# macNem1:0.00424292):0.00180259):0.00606931,cerAty1:0.00671163):0.00176629,
+# papAnu3:0.00691103):0.00179762,(chlSab2:0.0163484,
+# manLeu1:0.00699997):0.0016666):0.00933071,((nasLar1:0.00767798,
+# colAng1:0.0163858):0.00172077,(rhiRox1:0.00212606,
+# rhiBie1:0.00222663):0.00577192):0.0104159):0.0214006):0.020624,
+# (((calJac3:0.0358326,saiBol1:0.0323928):0.00177708,
+# cebCap1:0.0283119):0.00205848,aotNan1:0.0232272):0.0378502):0.060658,
+# tarSyr2:0.142136):0.0112106,(((micMur3:0.056364,
+# proCoq1:0.0388123):0.00536667,(eulMac1:0.00218455,
+# eulFla1:0.00228788):0.0410379):0.0371557,
+# otoGar3:0.132659):0.0335083):0.0179418,mm10:0.344669):0.0240895,
+# canFam3:0.163925):0.0880641,dasNov3:0.0880641);
+
+    # compare these calculated lengths to what was calculated before:
+
+    grep TREE ../4d/all.mod | sed -e 's/TREE: //;' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep hg38 \
+          | sed -e "s/hg38.//;"  | sort > original.dists
+
+    grep TREE all.SSREV.mod | sed -e 's/TREE: //;' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep hg38 \
+          | sed -e "s/hg38.//;"  | sort > SSREV.dists
+
+    # printing out the 'original', the 'new' the 'difference' and
+    #    percent difference/delta
+    join original.dists SSREV.dists | awk '{
+  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }'       | sort -k4n
+#       panTro5 0.012747        0.012745        0.000002        0.015692
+#       panPan2 0.014424        0.014571        -0.000147       -1.008853
+#       gorGor5 0.026112        0.026265        -0.000153       -0.582524
+#       ponAbe2 0.045247        0.045400        -0.000153       -0.337004
+#       nomLeu3 0.052648        0.052803        -0.000155       -0.293544
+#       manLeu1 0.080673        0.080840        -0.000167       -0.206581
+#       papAnu3 0.080660        0.080882        -0.000222       -0.274474
+#       rhiRox1 0.081014        0.081157        -0.000143       -0.176202
+#       rhiBie1 0.081111        0.081257        -0.000146       -0.179677
+#       cerAty1 0.082107        0.082449        -0.000342       -0.414802
+#       nasLar1 0.082467        0.082658        -0.000191       -0.231073
+#       rheMac8 0.084120        0.084467        -0.000347       -0.410811
+#       macFas5 0.085357        0.085791        -0.000434       -0.505881
+#       macNem1 0.087416        0.087852        -0.000436       -0.496289
+#       chlSab2 0.090031        0.090189        -0.000158       -0.175188
+#       colAng1 0.091177        0.091365        -0.000188       -0.205768
+#       aotNan1 0.122992        0.123144        -0.000152       -0.123433
+#       cebCap1 0.130086        0.130287        -0.000201       -0.154275
+#       saiBol1 0.135917        0.136145        -0.000228       -0.167469
+#       calJac3 0.139357        0.139585        -0.000228       -0.163341
+#       eulMac1 0.247615        0.247821        -0.000206       -0.083125
+#       eulFla1 0.247716        0.247925        -0.000209       -0.084300
+#       proCoq1 0.248499        0.248778        -0.000279       -0.112148
+#       tarSyr2 0.264791        0.264860        -0.000069       -0.026051
+#       micMur3 0.266045        0.266330        -0.000285       -0.107010
+#       otoGar3 0.300022        0.300102        -0.000080       -0.026658
+#       canFam3 0.339655        0.339891        -0.000236       -0.069434
+#       dasNov3 0.351919        0.352094        -0.000175       -0.049703
+#       mm10    0.496188        0.496546        -0.000358       -0.072098
+
+#########################################################################
+# phyloP SSREV for 30-way (DONE - 2021-10-26 - Hiram)
+#
+    # re-use the split SS files from before
+    # split SS files into 1M chunks, this business needs smaller files
+    #   to complete
+
+    mkdir  /hive/data/genomes/hg38/bed/multiz30way/phyloP.SSREV
+    cd  /hive/data/genomes/hg38/bed/multiz30way/phyloP.SSREV
+
+    # run phyloP with score=LRT
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACK ../../4dSSREV/all.SSREV.mod
+    #   BACKGROUND: 0.207173 0.328301 0.237184 0.227343
+
+    grep BACKGROUND ../../4dSSREV/all.SSREV.mod \
+       | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.565
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../4dSSREV/all.SSREV.mod 0.565 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #	BACKGROUND: 0.217500 0.282500 0.282500 0.217500
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set ssFile = $1:t
+set out = $2
+set cName = $f:h
+set n = $f:r:e
+set grp = $cwd:t
+set prevCons = /hive/data/genomes/hg38/bed/multiz30way/consPhyloP
+set cons = /hive/data/genomes/hg38/bed/multiz30way/phyloP.SSREV
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "$prevCons/ss/$cName/$ssFile"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $ssFile.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$ssFile.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+' > doPhyloP.csh
+
+    chmod +x doPhyloP.csh
+
+    # re-use list of chunks
+    ln -s ../../consPhyloP/run.phyloP/ss.list .
+
+    # make sure the list looks good
+    wc -l ss.list
+    #	3308 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    printf '#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+' > template
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/hg38/bed/multiz30way/phyloP.SSREV/all
+    cd /hive/data/genomes/hg38/bed/multiz30way/phyloP.SSREV/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # beware overloading the cluster with these quick and high I/O jobs
+    para -ram=32g create jobList
+    para try ... check ...
+    para push
+    para time > run.time
+
+# Completed: 3308 of 3308 jobs
+# CPU time in finished jobs:     682943s   11382.39m   189.71h    7.90d  0.022 y
+# IO & Wait Time:                 22200s     369.99m     6.17h    0.26d  0.001 y
+# Average job time:                 213s       3.55m     0.06h    0.00d
+# Longest finished job:             405s       6.75m     0.11h    0.00d
+# Submission to last job:          3562s      59.37m     0.99h    0.04d
+
+
+    mkdir downloads
+    time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
+do
+    echo "working: $D" 1>&2
+    find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+        | gzip -c > downloads/${D}.phyloP30way.wigFix.gz
+done
+    #   real    31m52.226s
+
+    du -hsc downloads
+    #   4.2G    downloads
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/*.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/hg38/chrom.sizes \
+	phyloP30way.bw) > bigWig.log 2>&1
+XXX - working - Tue Oct 26 12:43:42 PDT 2021
+
+
+    egrep "real|VmPeak" bigWig.log
+    # pid=78042: VmPeak:    33938800 kB
+    #  real    34m4.165s
+
+    bigWigInfo phyloP30way.bw  | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 5,762,987,667
+# primaryIndexSize: 93,404,704
+# zoomLevels: 10
+# chromCount: 355
+# basesCovered: 2,955,660,581
+# mean: 0.100336
+# min: -20.000000
+# max: 1.226000
+# std: 0.723021
+
+    #	encode those files into wiggle data
+    time (zcat downloads/*.wigFix.gz \
+	| wigEncode stdin phyloPSSREV30way.wig phyloPSSREV30way.wib)
+
+# Converted stdin, upper limit 1.23, lower limit -20.00
+# real    13m31.412s
+# -rw-rw-r--   1 2955660581 Oct 27 12:23 phyloPSSREV30way.wib
+# -rw-rw-r--   1  318831430 Oct 27 12:23 phyloPSSREV30way.wig
+
+    du -hsc *.wi?
+    # 2.8G    phyloP30way.wib
+    # 305M    phyloP30way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloPSSREV30way.wib /gbdb/hg38/multiz30way/phyloPSSREV30way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz30way hg38 \
+	phyloPSSREV30way phyloPSSREV30way.wig
+    # real    0m18.359s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh hg38 phyloPSSREV30way
+# db.table                min   max     mean       count     sumData
+# hg38.phyloPSSREV30way   -20 1.226 0.100336 2955660581 2.96558e+08
+#       stdDev viewLimits
+#      0.723021 viewLimits=-3.51477:1.226
+# hg38.phyloP30way  -20 1.312 0.0978331 2955660581 2.89162e+08
+#     0.727453 viewLimits=-3.53943:1.312
+
+    #	that range is: 20+1.226= 21.226 for hBinSize=0.021226
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram \
+	-hBinSize=0.021226 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
+	    -db=hg38 phyloPSSREV30way > histogram.data 2>&1
+    #   real    1m54.621s
+
+    # xaxis range:
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
+	| sed -e 's/^/# /;'
+# Q1 -10.947100
+# median -6.892945
+# Q3 -2.838780
+# average -6.908920
+# min -20.000000
+# max 1.204770
+# count 764
+# total -5278.414760
+# standard deviation 4.715614
+
+# Q1 -10.953050
+# median -6.861155
+# Q3 -2.769245
+# average -6.875971
+# min -20.000000
+# max 1.312000
+# count 768
+# total -5280.745380
+# standard deviation 4.757034
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
+      | sed -e 's/^/# /;'
+# Q1 0.000000
+# median 0.000001
+# Q3 0.000126
+# average 0.001309
+# min 0.000000
+# max 0.022808
+# count 764
+# total 0.999990
+# standard deviation 0.003612
+
+# Q1 0.000000
+# median 0.000001
+# Q3 0.000140
+# average 0.001302
+# min 0.000000
+# max 0.023556
+# count 768
+# total 0.999975
+# standard deviation 0.003490
+
+    #	create plot of histogram:
+    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
+
+    printf 'set terminal pngcairo size 900,400 background "#000000" \\
+font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human hg38 Histogram phyloPSSREV30way track"
+set xlabel " phyloPSSREV30way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set xrange [-5:1.5]
+set yrange [0:0.04]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+' | gnuplot > histo.png
+
+    # verify it looks sane
+    display histo.png &
+
+#############################################################################
+# sequence logo
+    mkdir /hive/data/genomes/hg38/bed/multiz30way/logo
+    cd /hive/data/genomes/hg38/bed/multiz30way/logo
+    mkdir wigs bw 
+
+    ls ../maf/* | awk '{printf "./makeWig.sh %s ../consPhyloP/all/phyloP30way.bw ../../../chrom.sizes\n", $1}' > jobs
+
+    cat << '_EOF_' > makeWig.sh
+maf=$1
+scale=$2
+chromSizes=$3
+outRoot=`basename $1 .maf`
+mafCounts -scale=$scale $maf wigs/$outRoot
+for i in A C G T
+do
+    wigToBigWig -keepAllChromosomes -fixedSummaries wigs/$outRoot.$i.wig $chromSizes bw/$outRoot.$i.bw
+done
+'_EOF_'
+
+    chmod +x makeWig.sh
+
+    ssh ku "cd /hive/data/genomes/hg38/bed/multiz30way/logo; para make jobs"
+
+    for i in A C G T
+    do
+        bigWigCat multiz30Logo.$i.bw bw/*.$i.bw &
+    done
+
+    wait
+
+    for i in A C G T
+    do
+        ln -s `pwd`/multiz30Logo.$i.bw /gbdb/hg38/multiz30way/
+    done
+

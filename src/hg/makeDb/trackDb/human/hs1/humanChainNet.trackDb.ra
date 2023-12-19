@@ -1,0 +1,416 @@
+track GCA_009914755.4_T2T-CHM13v2.0ChainNet
+compositeTrack on
+shortLabel Human Chain/Net
+longLabel Chain and Net alignments to target sequence: GCA_009914755.4_T2T-CHM13v2.0
+subGroup1 view Views chain=Chains net=Nets
+subGroup2 species Species s000=GCA_021950905.1 s001=GCA_021951015.1 s002=hg19 s003=hg38
+subGroup3 clade Clade c00=human
+dragAndDrop subTracks
+visibility full
+group compGeno
+color 0,0,0
+altColor 255,255,0
+type bed 3
+dimensions dimensionX=clade dimensionY=species
+sortOrder species=+ view=+ clade=+
+configurable on
+html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+priority 1
+
+    track GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain
+    shortLabel  Chains
+    view chain
+    visibility pack
+    subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNet
+    spectrum on
+
+        track chainGCA_021950905.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s000 clade=c00
+        shortLabel HG002 pat Chain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Chained Alignments
+        type bigChain GCA_021950905.1
+        bigDataUrl  /gbdb/hs1/bbi/chainGCA_021950905.1.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainGCA_021950905.1Link.bb
+        otherDb GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 1
+
+        track chainSynGCA_021950905.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s000 clade=c00
+        shortLabel HG002 pat synChain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Syntenic Chained Alignments
+        type bigChain GCA_021950905.1
+        bigDataUrl  /gbdb/hs1/bbi/chainSynGCA_021950905.1.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainSynGCA_021950905.1Link.bb
+        otherDb GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 2
+
+        track chainRBestGCA_021950905.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s000 clade=c00
+        shortLabel HG002 pat rbChain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Reciprocal Best Chained Alignments
+        type bigChain GCA_021950905.1
+        bigDataUrl  /gbdb/hs1/bbi/chainRBestGCA_021950905.1.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainRBestGCA_021950905.1Link.bb
+        otherDb GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 3
+
+        #track chainLiftOverGCA_021950905.1
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        #subGroups view=chain species=s000 clade=c00
+        #shortLabel HG002 pat loChain
+        #longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
+        #type bigChain GCA_021950905.1
+        #bigDataUrl  /gbdb/hs1/bbi/chainLiftOverGCA_021950905.1.bb
+        #linkDataUrl  /gbdb/hs1/bbi/chainLiftOverGCA_021950905.1Link.bb
+        #otherDb GCA_021950905.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 4
+
+        track chainGCA_021951015.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel HG002 mat Chain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Chained Alignments
+        type bigChain GCA_021951015.1
+        bigDataUrl  /gbdb/hs1/bbi/chainGCA_021951015.1.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainGCA_021951015.1Link.bb
+        otherDb GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 5
+
+        track chainSynGCA_021951015.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel HG002 mat synChain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Syntenic Chained Alignments
+        type bigChain GCA_021951015.1
+        bigDataUrl  /gbdb/hs1/bbi/chainSynGCA_021951015.1.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainSynGCA_021951015.1Link.bb
+        otherDb GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 6
+
+        track chainRBestGCA_021951015.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel HG002 mat rbChain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Reciprocal Best Chained Alignments
+        type bigChain GCA_021951015.1
+        bigDataUrl  /gbdb/hs1/bbi/chainRBestGCA_021951015.1.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainRBestGCA_021951015.1Link.bb
+        otherDb GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 7
+
+        #track chainLiftOverGCA_021951015.1
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        #subGroups view=chain species=s001 clade=c00
+        #shortLabel HG002 mat loChain
+        #longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
+        #type bigChain GCA_021951015.1
+        #bigDataUrl  /gbdb/hs1/bbi/chainLiftOverGCA_021951015.1.bb
+        #linkDataUrl  /gbdb/hs1/bbi/chainLiftOverGCA_021951015.1Link.bb
+        #otherDb GCA_021951015.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 8
+
+        track chainHg19
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel hg19 Chain
+        longLabel hg19 (Feb. 2009) Chained Alignments
+        type bigChain hg19
+        bigDataUrl  /gbdb/hs1/bbi/chainHg19.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainHg19Link.bb
+        otherDb hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 9
+
+        track chainSynHg19
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel hg19 synChain
+        longLabel hg19 (Feb. 2009) Syntenic Chained Alignments
+        type bigChain hg19
+        bigDataUrl  /gbdb/hs1/bbi/chainSynHg19.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainSynHg19Link.bb
+        otherDb hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 10
+
+        track chainRBestHg19
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel hg19 rbChain
+        longLabel hg19 (Feb. 2009) Reciprocal Best Chained Alignments
+        type bigChain hg19
+        bigDataUrl  /gbdb/hs1/bbi/chainRBestHg19.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainRBestHg19Link.bb
+        otherDb hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 11
+
+        #track chainLiftOverHg19
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        #subGroups view=chain species=s002 clade=c00
+        #shortLabel hg19 loChain
+        #longLabel hg19 (Feb. 2009) Lift Over Chained Alignments
+        #type bigChain hg19
+        #bigDataUrl  /gbdb/hs1/bbi/chainLiftOverHg19.bb
+        #linkDataUrl  /gbdb/hs1/bbi/chainLiftOverHg19Link.bb
+        #otherDb hg19
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 12
+
+        track chainHg38
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel hg38 Chain
+        longLabel hg38 (Dec. 2013) Chained Alignments
+        type bigChain hg38
+        bigDataUrl  /gbdb/hs1/bbi/chainHg38.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainHg38Link.bb
+        otherDb hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 13
+
+        track chainSynHg38
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel hg38 synChain
+        longLabel hg38 (Dec. 2013) Syntenic Chained Alignments
+        type bigChain hg38
+        bigDataUrl  /gbdb/hs1/bbi/chainSynHg38.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainSynHg38Link.bb
+        otherDb hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 14
+
+        track chainRBestHg38
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel hg38 rbChain
+        longLabel hg38 (Dec. 2013) Reciprocal Best Chained Alignments
+        type bigChain hg38
+        bigDataUrl  /gbdb/hs1/bbi/chainRBestHg38.bb
+        linkDataUrl  /gbdb/hs1/bbi/chainRBestHg38Link.bb
+        otherDb hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 15
+
+        #track chainLiftOverHg38
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain on
+        #subGroups view=chain species=s003 clade=c00
+        #shortLabel hg38 loChain
+        #longLabel hg38 (Dec. 2013) Lift Over Chained Alignments
+        #type bigChain hg38
+        #bigDataUrl  /gbdb/hs1/bbi/chainLiftOverHg38.bb
+        #linkDataUrl  /gbdb/hs1/bbi/chainLiftOverHg38Link.bb
+        #otherDb hg38
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 16
+
+    track GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+    shortLabel Nets
+    view net
+    visibility hide
+    subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNet
+
+        track netGCA_021950905.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s000 clade=c00
+        shortLabel HG002 pat Net
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/GCA_021950905.1.net.bb
+        summary /gbdb/hs1/bbi/GCA_021950905.1.net.summary.bb
+        speciesOrder GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 1
+
+        track synNetGCA_021950905.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s000 clade=c00
+        shortLabel HG002 pat synNet
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/GCA_021950905.1.synNet.bb
+        summary /gbdb/hs1/bbi/GCA_021950905.1.synNet.summary.bb
+        speciesOrder GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 2
+
+        track rbestNetGCA_021950905.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s000 clade=c00
+        shortLabel HG002 pat rbestNet
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/GCA_021950905.1.rbestNet.bb
+        summary /gbdb/hs1/bbi/GCA_021950905.1.rbestNet.summary.bb
+        speciesOrder GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 3
+
+        #track liftOverNetGCA_021950905.1
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s000 clade=c00
+        #shortLabel HG002 pat liftOverNet
+        #longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl  /gbdb/hs1/bbi/GCA_021950905.1.liftOverNet.bb
+        #summary /gbdb/hs1/bbi/GCA_021950905.1.liftOverNet.summary.bb
+        #speciesOrder GCA_021950905.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 4
+
+        track netGCA_021951015.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s001 clade=c00
+        shortLabel HG002 mat Net
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/GCA_021951015.1.net.bb
+        summary /gbdb/hs1/bbi/GCA_021951015.1.net.summary.bb
+        speciesOrder GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 5
+
+        track synNetGCA_021951015.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s001 clade=c00
+        shortLabel HG002 mat synNet
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/GCA_021951015.1.synNet.bb
+        summary /gbdb/hs1/bbi/GCA_021951015.1.synNet.summary.bb
+        speciesOrder GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 6
+
+        track rbestNetGCA_021951015.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s001 clade=c00
+        shortLabel HG002 mat rbestNet
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/GCA_021951015.1.rbestNet.bb
+        summary /gbdb/hs1/bbi/GCA_021951015.1.rbestNet.summary.bb
+        speciesOrder GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 7
+
+        #track liftOverNetGCA_021951015.1
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s001 clade=c00
+        #shortLabel HG002 mat liftOverNet
+        #longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl  /gbdb/hs1/bbi/GCA_021951015.1.liftOverNet.bb
+        #summary /gbdb/hs1/bbi/GCA_021951015.1.liftOverNet.summary.bb
+        #speciesOrder GCA_021951015.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 8
+
+        track netHg19
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s002 clade=c00
+        shortLabel hg19 Net
+        longLabel hg19 (Feb. 2009) Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/hg19.net.bb
+        summary /gbdb/hs1/bbi/hg19.net.summary.bb
+        speciesOrder hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 9
+
+        track synNetHg19
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s002 clade=c00
+        shortLabel hg19 synNet
+        longLabel hg19 (Feb. 2009) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/hg19.synNet.bb
+        summary /gbdb/hs1/bbi/hg19.synNet.summary.bb
+        speciesOrder hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 10
+
+        track rbestNetHg19
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s002 clade=c00
+        shortLabel hg19 rbestNet
+        longLabel hg19 (Feb. 2009) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/hg19.rbestNet.bb
+        summary /gbdb/hs1/bbi/hg19.rbestNet.summary.bb
+        speciesOrder hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 11
+
+        #track liftOverNetHg19
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s002 clade=c00
+        #shortLabel hg19 liftOverNet
+        #longLabel hg19 (Feb. 2009) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl  /gbdb/hs1/bbi/hg19.liftOverNet.bb
+        #summary /gbdb/hs1/bbi/hg19.liftOverNet.summary.bb
+        #speciesOrder hg19
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 12
+
+        track netHg38
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s003 clade=c00
+        shortLabel hg38 Net
+        longLabel hg38 (Dec. 2013) Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/hg38.net.bb
+        summary /gbdb/hs1/bbi/hg38.net.summary.bb
+        speciesOrder hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 13
+
+        track synNetHg38
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s003 clade=c00
+        shortLabel hg38 synNet
+        longLabel hg38 (Dec. 2013) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/hg38.synNet.bb
+        summary /gbdb/hs1/bbi/hg38.synNet.summary.bb
+        speciesOrder hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 14
+
+        track rbestNetHg38
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s003 clade=c00
+        shortLabel hg38 rbestNet
+        longLabel hg38 (Dec. 2013) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl  /gbdb/hs1/bbi/hg38.rbestNet.bb
+        summary /gbdb/hs1/bbi/hg38.rbestNet.summary.bb
+        speciesOrder hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 15
+
+        #track liftOverNetHg38
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s003 clade=c00
+        #shortLabel hg38 liftOverNet
+        #longLabel hg38 (Dec. 2013) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl  /gbdb/hs1/bbi/hg38.liftOverNet.bb
+        #summary /gbdb/hs1/bbi/hg38.liftOverNet.summary.bb
+        #speciesOrder hg38
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 16
+

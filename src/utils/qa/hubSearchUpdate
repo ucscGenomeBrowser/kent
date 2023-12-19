@@ -1,11 +1,20 @@
-# Updates hubSearchText table, run by cron for auto-push
-# Created by Dan 4/20/21, deleted and remade 5/18/21
-
 #!/bin/sh -e
-PATH=/cluster/bin/x86_64:$PATH
+# Updates hubSearchText table, run by cron for auto-push
 
-date
+date >> /hive/groups/browser/hubCrawl/hubSearchText.log
 cd /hive/groups/browser/hubCrawl
 nohup ./doPublicCrawl &> /dev/null #Send stdout & stderr to /dev/null
-echo $? >> /hive/groups/browser/hubCrawl/hubSearchText.log #Return exit status of prev command, 0 = no issue
-echo "HubSearchText Dev cron-updated on `date`" >> /hive/groups/browser/hubCrawl/hubSearchText.log
+EXIT_STATUS=$?
+echo "HubSearchText Dev cron-updated on `date`. Exit status: $EXIT_STATUS" >> /hive/groups/browser/hubCrawl/hubSearchText.log 
+#Return exit status of prev command, 0 = no issue
+if [ $EXIT_STATUS -eq 0 ];
+then
+    # the below command updates the files in the following directory:
+    # /gbdb/hgFixed/search/hubs/
+    # which contains symlinks to /hive/data/inside/search/
+    # the contents of /gbdb/hgFixed/search need to be auto-pushed
+    cd /hive/data/inside/search/hubs
+    ../makeTrackHubs.sh
+    echo "HubSearchText trix indexes cron-updated on `date`. Exit status: $?" >> /hive/groups/browser/hubCrawl/hubSearchText.log
+fi
+

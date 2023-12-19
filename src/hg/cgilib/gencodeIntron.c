@@ -110,11 +110,11 @@ void gencodeIntronSaveToDb(struct sqlConnection *conn, struct gencodeIntron *el,
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s','%s','%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->status,  el->strand,  el->transcript,  el->geneId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -218,7 +218,7 @@ char *createString =
 "    INDEX(chrom(%d),chromStart),\n"
 "    INDEX(chrom(%d),chromEnd)\n"
 ")\n";
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

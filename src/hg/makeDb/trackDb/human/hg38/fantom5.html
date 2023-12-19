@@ -1,0 +1,137 @@
+<H2>Description</H2>
+<p>
+The FANTOM5 track shows mapped transcription start sites (TSS) and their usage in primary cells,
+cell lines, and tissues to produce a comprehensive overview of gene expression across the human
+body by using single molecule sequencing.
+</p>
+
+<h2> Display Conventions and Configuration </h2>
+
+<p> Items in this track are colored according to their strand orientation. <b><font color=blue>Blue
+indicates alignment to the negative strand</font></b>, and <b><font color=red>red indicates
+alignment to the positive strand</font></b>.
+</p>
+
+<h2>Methods</h2>
+<h4>Protocol </h4>
+<p> Individual biological states are profiled by HeliScopeCAGE, which is a variation of the CAGE
+(Cap Analysis Gene Expression) protocol based on a single molecule sequencer. The standard protocol
+requiring 5 &micro;g of total RNA as a starting material is referred to as <b>hCAGE</b>, and an
+optimized version for a lower quantity (~ 100 ng) is referred to as <b>LQhCAGE</b> (Kanamori-Katyama
+et al. 2011).
+<ul>
+<li>hCAGE</li>
+<li>LQhCAGE</li>
+</ul>
+</p>
+<h4>Samples</h4>
+<p>Transcription start sites (TSSs) were mapped and their usage in human and mouse primary cells,
+cell lines, and tissues was to produce a comprehensive overview of mammalian gene expression across the
+human body. 5&prime;-end of the mapped CAGE reads are counted at a single base pair resolution
+(CTSS, CAGE tag starting sites) on the genomic coordinates, which represent TSS activities in the
+sample. Individual samples shown in "TSS activity" tracks are grouped as below.
+<ul>
+<li>Primary cell</li>
+<li>Tissue</li>
+<li>Cell Line</li>
+<li>Time course</li>
+<li>Fractionation</li>
+</ul>
+</p>
+<h4>TSS peaks</h4>
+<p>TSS (CAGE) peaks across the panel of the biological states (samples) are identified by DPI
+(decomposition based peak identification, Forrest et al. 2014), where each of the peaks consists of
+neighboring and related TSSs. The peaks are used as anchors to define promoters and units of
+promoter-level expression analysis. Two subsets of the peaks are defined based on evidence of read
+counts, depending on scopes of subsequent analyses, and the first subset (referred as a
+<b>robust set</b> of the peaks, thresholded for expression analysis is shown as TSS peaks. They are
+named "p#@GENE_SYMBOL" if associated with 5'-end of known genes, or "p@CHROM:START..END,STRAND"
+otherwise. The summary tracks consist of the TSS (CAGE) peaks and summary profiles of TSS
+activities (total and maximum values). The summary track consists of the following tracks.
+<ul>
+<li> TSS (CAGE) peaks
+<ul>
+  <li> the robust peaks </li>
+</ul>
+</li>
+<li> TSS summary profiles
+<ul>
+<li> Total counts and TPM (tags per million) in all the samples </li>
+<li> Maximum counts and TPM among the samples </li>
+</ul>
+</li>
+</ul>
+
+<h4>TSS activity</h4>
+<p>
+5&prime;-end of the mapped CAGE reads are counted at a single base pair resolution (CTSS, CAGE tag starting sites) on the genomic coordinates, which represent TSS activities in the sample. The read counts tracks indicate raw counts of CAGE reads, and the TPM tracks indicate normalized counts as TPM (tags per million).
+</p>
+
+<dl>
+<dt> Categories of individual samples </dt>
+<dd>- Cell Line hCAGE</dd>
+<dd>- Cell Line LQhCAGE</dd>
+<dd>- fractionation hCAGE</dd>
+<dd>- Primary cell hCAGE</dd>
+<dd>- Primary cell LQhCAGE</dd>
+<dd>- Time course hCAGE</dd>
+<dd>- Tissue hCAGE</dd>
+</dl>
+
+<h2>Data Access</h2>
+<p>
+FANTOM5 data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> and cross-referenced with the 
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For programmatic access,
+the track can be accessed using the Genome Browser&apos;s
+<a href="../../goldenPath/help/api.html">REST API</a>.
+ReMap annotations can be downloaded from the
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/reMap">Genome Browser's download server</a>
+as a bigBed file. This compressed binary format can be remotely queried through
+command line utilities. Please note that some of the download files can be quite large.</p>
+
+<p>
+The FANTOM5 reprocessed data can be found and downloaded on the <a href="https://fantom.gsc.riken.jp/5/datafiles/reprocessed/"
+target="_blank">FANTOM website.</a></p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to the <a href="https://fantom.gsc.riken.jp/5/" target=_blank>FANTOM5 consortium</a>,
+the Large Scale Data Managing Unit and Preventive Medicine and
+Applied Genomics Unit, the <a href="http://www.riken.jp/en/research/labs/ims/" 
+target=_blank>Center for Integrative Medical Sciences (IMS)</a>, and
+<a href="http://www.riken.jp/" target=_blank>RIKEN</a> for providing this data
+and its analysis.</p>
+
+<h2>References</h2>
+<p>
+FANTOM Consortium and the RIKEN PMI and CLST (DGT), Forrest AR, Kawaji H, Rehli M, Baillie JK, de
+Hoon MJ, Haberle V, Lassmann T, Kulakovskiy IV, Lizio M <em>et al</em>.
+<a href="https://doi.org/10.1038/nature13182" target="_blank">
+A promoter-level mammalian expression atlas</a>.
+<em>Nature</em>. 2014 Mar 27;507(7493):462-70.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24670764" target="_blank">24670764</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4529748/" target="_blank">PMC4529748</a>
+</p>
+
+<p>
+Kanamori-Katayama M, Itoh M, Kawaji H, Lassmann T, Katayama S, Kojima M, Bertin N, Kaiho A, Ninomiya
+N, Daub CO <em>et al</em>.
+<a href="http://genome.cshlp.org/cgi/pmidlookup?view=long&amp;pmid=21596820" target="_blank">
+Unamplified cap analysis of gene expression on a single-molecule sequencer</a>.
+<em>Genome Res</em>. 2011 Jul;21(7):1150-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21596820" target="_blank">21596820</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3129257/" target="_blank">PMC3129257</a>
+</p>
+
+<p>
+Lizio M, Harshbarger J, Shimoji H, Severin J, Kasukawa T, Sahin S, Abugessaisa I, Fukuda S, Hori F,
+Ishikawa-Kato S <em>et al</em>.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0560-6"
+target="_blank">
+Gateways to the FANTOM5 promoter level mammalian expression atlas</a>.
+<em>Genome Biol</em>. 2015 Jan 5;16(1):22.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25723102" target="_blank">25723102</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4310165/" target="_blank">PMC4310165</a>
+</p>

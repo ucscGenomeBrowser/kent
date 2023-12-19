@@ -28,7 +28,7 @@ if (sqlTableExists(conn, "gadAll") == TRUE)
     geneSymbol = sqlQuickString(conn, query);
     if (geneSymbol != NULL) return(TRUE);
 /*
-    sqlSafefFrag(condStr, sizeof(condStr), 
+    sqlSafef(condStr, sizeof(condStr), 
     "k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
     geneSymbol = sqlGetField(database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
 */
@@ -69,15 +69,15 @@ if (url != NULL && url[0] != 0)
 	}
     currentCgiUrl = cgiUrlString();
    
-    printf("<B>Genetic Association Database (archive): ");
+    printf("<B>Genetic Association Database (archive): </B>");
     printf("<A HREF=\"%s\" target=_blank>", url);
-    printf("%s</B></A>\n", itemName);
+    printf("%s</A>\n", itemName);
 
-    printf("<BR><B>CDC HuGE Published Literature:  ");
+    printf("<BR><B>CDC HuGE Published Literature:  </B>");
     printf("<A HREF=\"https://phgkb.cdc.gov/PHGKB/searchSummary.action"
         "?Mysubmit=Search&firstQuery=%s&__checkbox_gwas=true\" target=_blank>",
         itemName);
-    printf("%s</B></A>\n", itemName);
+    printf("%s</A>\n", itemName);
 
     /* List diseases associated with the gene */
     sqlSafef(query, sizeof(query),
@@ -92,7 +92,7 @@ if (url != NULL && url[0] != 0)
 	touppers(upperDisease);
 	printf("<BR><B>Positive Disease Associations:  </B>");
 	printf("<A HREF=\"http://geneticassociationdb.nih.gov\" target=_blank>");
-	printf("%s</B></A>\n", row[0]);
+	printf("%s</A>\n", row[0]);
         row = sqlNextRow(sr);
     	}
     while (row != NULL)
@@ -100,7 +100,7 @@ if (url != NULL && url[0] != 0)
 	upperDisease = replaceChars(row[0], "'", "''");
 	touppers(upperDisease);
 	printf(", <A HREF=\"http://geneticassociationdb.nih.gov\" target=_blank>");
-	printf("%s</B></A>\n", row[0]);
+	printf("%s</A>\n", row[0]);
         row = sqlNextRow(sr);
 	}
     sqlFreeResult(&sr);
@@ -124,7 +124,7 @@ if (url != NULL && url[0] != 0)
 	    printf("<A HREF=\"%s%s%s'\" target=_blank>",
 	    "https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=Abstract&list_uids=",
 	    row[4],"&query_hl=1&itool=genome.ucsc.edu");
-	    printf("%s</B></A>]\n", row[4]);
+	    printf("%s</A>]\n", row[4]);
 	    }
 	printf("<br><i>%s</i>\n", row[5]);
 	

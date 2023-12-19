@@ -213,3 +213,47 @@ time sort --merge joined/*.bed | grep -v "^#" > gnomad.v3.1.1.genomes.joined.bed
 
 # and lastly turn the merged bed into a bigBed:
 time (bedToBigBed -type=bed9+15 -tab -as=genomes.as -extraIndex=name,rsId,_displayName gnomad.v3.1.1.genomes.joined.bed /hive/data/genomes/hg38/chrom.sizes genomes.bb) &> bigBed.log &
+
+# Max Tue Apr  5 04:14:40 PDT 2022 - adding mutation constraint subtrack
+cd /hive/data/genomes/hg38/bed/gnomad/constraint
+# Downloaded BED file from https://www.biorxiv.org/content/10.1101/2022.03.20.485034v1.supplementary-material
+# got chrX scores from konrad.j.karczewski@gmail.com because they feel unsure about them
+cat Supplementary_Data_2.bed constraint_z_genome_1kb_chrx.bed > mutConstraint.bed
+bedSort mutConstraint.bed mutConstraint.bed
+bedGraphToBigWig *.bed ../../../chrom.sizes mutConstraint.bw
+
+
+bedGraphToBigWig *.bed ../../../chrom.sizes mutConstraint.bw
+##############################################################################
+# gnomAD v4 - Nov 1, 2023 - ChrisL - DONE
+##############################################################################
+# See /hive/data/outside/gnomAD.4/make.txt for how to download
+# the new version
+# Make the work dir:
+mkdir -p /hive/data/inside/gnomAD/v4
+cd /hive/data/inside/gnomAD/v4
+
+# for each vcf in the download  dirs, install files into /gbdb and load up a table with the pointers
+gbdbPath="/gbdb/hg38/gnomAD/v4/"
+dataPath="/hive/data/outside/gnomAD.4/"
+for tbl in exomes genomes
+do
+    mkdir -p ${gbdbPath}${tbl}
+    ln -s ${dataPath}${tbl}/*.vcf.bgz* ${gbdbPath}${tbl}
+    cp /dev/null ${tbl}.txt
+    if [ ${tbl} == "exomes" ]; then
+        for c in {1..22} X Y
+        do
+            f=${gbdbPath}${tbl}/gnomad.exomes.v4.0.sites.chr${c}.vcf.bgz
+            echo -e "${f}\tchr${c}" >> ${tbl}.txt
+        done
+    else
+        for c in {1..22} X Y
+        do
+            f=${gbdbPath}${tbl}/gnomad.genomes.v4.0.sites.chr${c}.vcf.bgz
+            echo -e "${f}\tchr${c}" >> ${tbl}.txt
+        done
+    fi
+    tName="${tbl^}"
+    hgLoadSqlTab hg38 gnomad${tName}V4 ~/kent/src/hg/lib/bbiChroms.sql genomes.txt
+done

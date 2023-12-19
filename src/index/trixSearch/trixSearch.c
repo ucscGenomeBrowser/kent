@@ -29,20 +29,17 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void dumpTsList(struct trixSearchResult *tsList)
+void dumpTsList(struct trixSearchResult *tsList, int showCount, int matchCount)
 /* Dump out contents of tsList to stdout. */
 {
 struct trixSearchResult *ts;
-int matchCount = slCount(tsList);
-int showCount = min(matchCount, maxReturn);
-int ix=0;
 
 if (full)
     {
     printf("#showing %d of %d matches\n", showCount, matchCount);
-    printf("#identifier\tspan\tordered\tpos\n");
+    printf("#identifier\tunordered_span\tordered_span\tpos\tsnippet\n");
     }
-for (ts = tsList, ix=0; ts != NULL && ix<maxReturn; ts = ts->next, ++ix)
+for (ts = tsList; ts != NULL; ts = ts->next)
     {
     if (full)
 	{
@@ -51,7 +48,15 @@ for (ts = tsList, ix=0; ts != NULL && ix<maxReturn; ts = ts->next, ++ix)
 	    printf("n/a");
 	else
 	    printf("%d", ts->orderedSpan);
-	printf("\t%d\n", ts->wordPos);
+    int i = 0;
+    printf("\t");
+    for (i = 0; i < ts->wordPosSize; i++)
+        {
+        printf("%d", ts->wordPos[i]);
+        if (i + 1 < ts->wordPosSize)
+            printf(",");
+        }
+	printf("\t%s\n",ts->snippet);
 	}
     else
         printf("%s\n", ts->itemId);
@@ -71,7 +76,14 @@ for (i=0; i<wordCount; ++i)
     tolowers(words[i]);
 trix = trixOpen(ixFile);
 tsList = trixSearch(trix, wordCount, words, tsmExpand);
-dumpTsList(tsList);
+int matchCount = slCount(tsList);
+int showCount = min(matchCount, maxReturn);
+struct trixSearchResult *tsr = slElementFromIx(tsList, maxReturn-1);
+if (tsr)
+    tsr->next = NULL;
+if (full)
+    addSnippetsToSearchResults(tsList, trix);
+dumpTsList(tsList, showCount, matchCount);
 trixSearchResultFreeList(&tsList);
 trixClose(&trix);
 }

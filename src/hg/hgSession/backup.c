@@ -910,7 +910,7 @@ struct sqlResult *sr = NULL;
 
 
 // Initialize .progress channel file
-struct dyString *dyProg = newDyString(256);
+struct dyString *dyProg = dyStringNew(256);
 dyStringPrintf(dyProg, "please wait, dumping data to archive ...<br>\n");
 updateProgessFile(backgroundProgress, dyProg);
 lazarusLives(20 * 60);

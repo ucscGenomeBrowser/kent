@@ -165,7 +165,7 @@ else
 	    }
 #endif /* DEBUG */
 
-	int s = start, e = end;
+	int s = start;
 	for (existing = existingList; existing != NULL; existing = existing->next)
 	    {
 	    /* Deal with start of new range that comes before existing */
@@ -187,21 +187,136 @@ else
 		existing->start = s;
 		rbTreeAdd(tree, r);
 		}
+	    if (existing->start < end && existing->end > end)
+	        {
+		lmAllocVar(tree->lm, r);
+		r->start = end;
+		r->end = existing->end;
+		r->val = existing->val;
+		existing->end = end;
+		rbTreeAdd(tree, r);
+		}
 	    existing->val = (char *)(existing->val) + 1;
 	    s = existing->end;
 	    }
-	if (s < e)
+	if (s < end)
 	/* Deal with end of new range that doesn't overlap with anything. */
 	    {
 	    lmAllocVar(tree->lm, r);
 	    r->start = s;
-	    r->end = e;
+	    r->end = end;
 	    r->val = intToPt(1);
 	    rbTreeAdd(tree, r);
 	    }
 	}
     }
 
+}
+
+void rangeTreeAddToCoverageList(struct rbTree *tree, int start, int end, void *val)
+/* Add area from start to end to a tree that is being built up to store the
+ * list of items in each range. Recover list by looking at range->val as list head */
+{
+struct range q;
+q.start = start;
+q.end = end;
+
+struct lm *lm = tree->lm;
+struct range *r, *existing = rbTreeFind(tree, &q);
+if (existing == NULL)
+    {
+    lmAllocVar(lm, r);
+    r->start = start;
+    r->end = end;
+    r->val = lmSlRef(lm, val);
+    rbTreeAdd(tree, r);
+    }
+else
+    {
+    if (existing->start <= start && existing->end >= end)
+    /* The existing one completely encompasses us */
+        {
+	/* Make a new section for the bit before start. */
+	if (existing->start < start)
+	    {
+	    lmAllocVar(lm, r);
+	    r->start = existing->start;
+	    r->end = start;
+	    r->val = existing->val;
+	    existing->start = start;
+	    rbTreeAdd(tree, r);
+	    }
+	/* Make a new section for the bit after end. */
+	if (existing->end > end)
+	    {
+	    lmAllocVar(lm, r);
+	    r->start = end;
+	    r->end = existing->end;
+	    r->val = existing->val;
+	    existing->end = end;
+	    rbTreeAdd(tree, r);
+	    }
+	lmRefAdd(lm, (struct slRef **)&existing->val, val);
+	}
+    else
+    /* In general case fetch list of regions that overlap us. 
+       Remaining cases to handle are: 
+	     r >> e     rrrrrrrrrrrrrrrrrrrr
+			     eeeeeeeeee
+
+	     e < r           rrrrrrrrrrrrrrr
+			eeeeeeeeeeee
+
+	     r < e      rrrrrrrrrrrr
+			     eeeeeeeeeeeee
+     */
+	{
+	struct range *existingList = rangeTreeAllOverlapping(tree, start, end);
+	int s = start;
+	for (existing = existingList; existing != NULL; existing = existing->next)
+	    {
+	    /* Deal with start of new range that comes before existing */
+	    if (s < existing->start)
+	        {
+		lmAllocVar(tree->lm, r);
+		r->start = s;
+		r->end = existing->start;
+		r->val = lmSlRef(lm, val);
+		s = existing->start;
+		rbTreeAdd(tree, r);
+		}
+	    else if (s > existing->start)
+	        {
+		lmAllocVar(tree->lm, r);
+		r->start = existing->start;
+		r->end = s;
+		r->val = existing->val;
+		existing->start = s;
+		rbTreeAdd(tree, r);
+		}
+	    if (existing->start < end && existing->end > end)
+	        {
+		lmAllocVar(tree->lm, r);
+		r->start = end;
+		r->end = existing->end;
+		r->val = existing->val;
+		existing->end = end;
+		rbTreeAdd(tree, r);
+		}
+	    lmRefAdd(lm, (struct slRef **)&existing->val, val);
+	    s = existing->end;
+	    }
+	if (s < end)
+	/* Deal with end of new range that doesn't overlap with anything. */
+	    {
+	    lmAllocVar(tree->lm, r);
+	    r->start = s;
+	    r->end = end;
+	    r->val = lmSlRef(lm, val);
+	    rbTreeAdd(tree, r);
+	    }
+	}
+    }
 }
 
 boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end)

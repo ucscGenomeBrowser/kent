@@ -49,6 +49,7 @@
 #include "wikiLink.h"
 #include "cheapcgi.h"
 #include "chromAlias.h"
+#include "asmEquivalent.h"
 
 
 #ifdef LOWELAB
@@ -198,12 +199,6 @@ char *hgOfficialChromName(char *db, char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
-/* aliasHash will be initialized if chromAlias table exists
- *   or track chromAlias file exists
- *  hash key is alias name, hash value is chromosome name
- */
-static struct hash *aliasHash = NULL;
-
 if (strlen(name) > HDB_MAX_CHROM_STRING)
     return NULL;
 struct chromInfo *ci = NULL;
@@ -213,53 +208,8 @@ buf[HDB_MAX_CHROM_STRING-1] = 0;
 ci = hGetChromInfo(db, buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
-else
-    {
-    if (!aliasHash && trackHubDatabase(db))
-	{
-        aliasHash = newHash(4); /* could remain empty if no hubHash which
-	 * will prevent getting into this initalization again and all hash
-	 * lookups will return NULL.
-	 * hub hash is different than what we want here, its key is
-         * the chrom name with a hash value of: struct chromAlias *
-         */
-        struct hash *hubHash = trackHubAllChromAlias(db);
-        if (hubHash)
-	    {
-	    /* rearrange hubHash into the hash we need here */
-	    struct hashCookie cookie = hashFirst(hubHash);
-	    struct hashEl *hel;
-	    while ((hel = hashNext(&cookie)) != NULL)
-		{
-		struct chromAlias *ca = (struct chromAlias *)hel->val;
-		hashAdd(aliasHash, ca->alias, cloneString(ca->chrom));
-		}
-	    }
-	}
-    if (aliasHash || hTableExists(db, "chromAlias"))
-       {
-       if (! aliasHash)	/* first time, initialize aliasHash */
-	    {
-            aliasHash = newHash(4);
-	    struct sqlConnection *conn = hAllocConn(db);
-	    char query[512];
-	    sqlSafef(query, sizeof(query), "select * from chromAlias");
-	    struct sqlResult *sr = sqlGetResult(conn, query);
-	    char **row;
-	    while ((row = sqlNextRow(sr)) != NULL)
-		{
-		struct chromAlias *ca = chromAliasLoad(row);
-		hashAdd(aliasHash, ca->alias, cloneString(ca->chrom));
-		}
-	    sqlFreeResult(&sr);
-	    hFreeConn(&conn);
-	    }
-	char *chrom = (char *)hashFindVal(aliasHash, name);
-       if (isNotEmpty(chrom))
-         return cloneString(chrom);
-       }
-    }
-return NULL;
+
+return cloneString(chromAliasFindNative(name));
 }	/*	char *hgOfficialChromName(char *db, char *name)	*/
 
 boolean hgIsOfficialChromName(char *db, char *name)
@@ -620,7 +570,11 @@ if (hel->val == NULL)
     {
     struct sqlConnection *conn = hAllocConn(db);
     if (sqlTableExists(conn, "chromInfo"))
-	hel->val = sqlQuickString(conn, NOSQLINJ "select chrom from chromInfo limit 1");
+	{
+	char query[1024];
+	sqlSafef(query, sizeof query, "select chrom from chromInfo limit 1");
+	hel->val = sqlQuickString(conn, query);
+	}
     hFreeConn(&conn);
     }
 return hel->val;
@@ -632,7 +586,9 @@ int hChromCount(char *db)
 if (trackHubDatabase(db))
     return trackHubChromCount(db);
 struct sqlConnection *conn = hAllocConn(db);
-int count = sqlQuickNum(conn, NOSQLINJ "select count(*) from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select count(*) from chromInfo");
+int count = sqlQuickNum(conn, query);
 hFreeConn(&conn);
 return count;
 }
@@ -646,7 +602,7 @@ struct dbToGcf
     };
 static struct dbToGcf dbToGcf[] =
     {
-    { "hg38", "GCF_000001405.37" },
+    { "hg38", "GCF_000001405.40" },
     { "hg19", "GCF_000001405.25" },
     { "mm10", "GCF_000001635.26" },
     { "danRer11", "GCF_000002035.6" },
@@ -673,6 +629,8 @@ for (i = 0;  dbToGcf[i].db != NULL;  i++)
         gcf = cloneString(dbToGcf[i].gcf);
         break;
         }
+if (NULL == gcf)
+    gcf = asmEquivalentUcscToNCBI(db, "refseq");
 return gcf;
 }
 
@@ -695,6 +653,8 @@ if (! trackHubDatabase(db))
         }
     hDisconnectCentral(&conn);
     }
+if (NULL == gca)
+    gca = asmEquivalentUcscToNCBI(db, "genbank");
 return gca;
 }
 
@@ -828,7 +788,7 @@ centralDb = cfgOption2(centralProfile, "db");
 centralCc = sqlConnCacheNewProfile(centralProfile);
 sqlSetParanoid(TRUE);
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
-if ((conn == NULL) || !cartTablesOk(conn))
+if ((conn == NULL) || (cgiIsOnWeb() && !cartTablesOk(conn)))
     {
     fprintf(stderr, "hConnectCentral failed over to backupcentral "
             "pid=%ld\n", (long)getpid());
@@ -932,7 +892,8 @@ if (trackHubDatabase(db))
     if (hub != NULL)
         {
         struct trackHubGenome *hubGenome = trackHubFindGenome(hub, db);
-        struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome, NULL), *tdb;
+        boolean foundFirstGenome = FALSE;
+        struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome, NULL, &foundFirstGenome), *tdb;
         for (tdb = tdbList;  tdb != NULL;  tdb = tdb->next)
             {
             hashAdd(dbTblHash, tdb->table, slNameNew(tdb->table));
@@ -1144,7 +1105,7 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE && !trackHubDatabase(db))
+if (cfgOptionBooleanDefault("forceTwoBit", TRUE) == TRUE && !trackHubDatabase(db))
     {
     char buf[HDB_MAX_PATH_STRING];
     safef(buf, HDB_MAX_PATH_STRING, "/gbdb/%s/%s.2bit", db, db);
@@ -1301,7 +1262,7 @@ if(bed->blockCount == 0)
 else
     {
     int offSet = bed->chromStart;
-    struct dyString *currentSeq = newDyString(2048);
+    struct dyString *currentSeq = dyStringNew(2048);
     hNibForChrom(db, bed->chrom, fileName);
     for(i=0; i<bed->blockCount; i++)
 	{
@@ -1451,7 +1412,9 @@ struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, NOSQLINJ "select chrom from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct slName *el = slNameNew(row[0]);
@@ -1495,22 +1458,26 @@ char *hReplaceGbdb(char* fileName)
 {
 if (fileName == NULL)
     return fileName;
-if (!startsWith("/gbdb/", fileName))
+
+// if the gbdbLoc1/gbdbLoc2 system is not used at all, like on the RR, do nothing and stop now. 
+// This is important, as we would be doing tens of thousands of stats
+// otherwise on the RR when we parse trackDb
+char* newGbdbLoc1 = cfgOption("gbdbLoc1");
+char* newGbdbLoc2 = cfgOption("gbdbLoc2");
+if ((newGbdbLoc1 == NULL && newGbdbLoc2==NULL) || !startsWith("/gbdb/", fileName))
     return cloneString(fileName);
 
 char *path = hReplaceGbdbLocal(fileName);
 if (fileExists(path))
     return path;
 
-// if the file did not exist, replace with gbdbLoc2
-char* newGbdbLoc = cfgOption("gbdbLoc2");
-if (newGbdbLoc==NULL)
-    return path;
-
-freeMem(path);
-path = replaceChars(fileName, "/gbdb/", newGbdbLoc);
-if (cfgOptionBooleanDefault("traceGbdb", FALSE))
-    fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+if (newGbdbLoc2!=NULL)
+    {
+    freeMem(path);
+    path = replaceChars(fileName, "/gbdb/", newGbdbLoc2);
+    if (cfgOptionBooleanDefault("traceGbdb", FALSE))
+        fprintf(stderr, "REDIRECT gbdbLoc2 %s ", path);
+    }
 
 return path;
 }
@@ -2175,7 +2142,7 @@ struct bed *hGetCtBedRange(char *db, char *browserDb, char *table, char *chrom, 
  * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
  * WARNING: this does not use the bin column and maybe slower than you would like. */
 {
-struct dyString *query = newDyString(512);
+struct dyString *query = dyStringNew(512);
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 struct hTableInfo *hti;
@@ -2215,33 +2182,33 @@ sqlDyStringPrintf(query, "SELECT %s,%s", hti->startField, hti->endField);
 if (hti->nameField[0] != 0)
     sqlDyStringPrintf(query, ",%s", hti->nameField);
 else
-    dyStringAppend(query, ",0");
+    sqlDyStringPrintf(query, ",0");
 // row[3] -> score or placeholder
 if (hti->scoreField[0] != 0)
     sqlDyStringPrintf(query, ",%s", hti->scoreField);
 else
-    dyStringAppend(query, ",0");
+    sqlDyStringPrintf(query, ",0");
 // row[4] -> strand or placeholder
 if (hti->strandField[0] != 0)
     sqlDyStringPrintf(query, ",%s", hti->strandField);
 else
-    dyStringAppend(query, ",0");
+    sqlDyStringPrintf(query, ",0");
 // row[5], row[6] -> cdsStart, cdsEnd or placeholders
 if (hti->cdsStartField[0] != 0)
     sqlDyStringPrintf(query, ",%s,%s", hti->cdsStartField, hti->cdsEndField);
 else
-    dyStringAppend(query, ",0,0");
+    sqlDyStringPrintf(query, ",0,0");
 // row[7], row[8], row[9] -> count, starts, ends/sizes or empty.
 if (hti->startsField[0] != 0)
     sqlDyStringPrintf(query, ",%s,%s,%s", hti->countField, hti->startsField,
 		   hti->endsSizesField);
 else
-    dyStringAppend(query, ",0,0,0");
+    sqlDyStringPrintf(query, ",0,0,0");
 // row[10] -> tSize for PSL '-' strand coord-swizzling only:
 if (sameString("tStarts", hti->startsField))
-    dyStringAppend(query, ",tSize");
+    sqlDyStringPrintf(query, ",tSize");
 else
-    dyStringAppend(query, ",0");
+    sqlDyStringPrintf(query, ",0");
 sqlDyStringPrintf(query, " FROM %s", fullTableName);
 if (chromEnd != 0)
     {
@@ -2251,14 +2218,20 @@ if (chromEnd != 0)
     }
 if (hti->chromField[0] != 0)
     {
-    sqlDyStringPrintf(query, " %s %s = '%s'",
-		   (gotWhere ? "AND" : "WHERE"), hti->chromField, chrom);
+    if (gotWhere)
+	sqlDyStringPrintf(query, " AND ");
+    else
+	sqlDyStringPrintf(query, " WHERE ");
+    sqlDyStringPrintf(query, "%s = '%s'", hti->chromField, chrom);
     gotWhere = TRUE;
     }
 if (useSqlConstraints)
     {
-    dyStringPrintf(query, " %s %s",
-		   (gotWhere ? "AND" : "WHERE"), sqlConstraints);
+    if (gotWhere)
+	sqlDyStringPrintf(query, " AND ");
+    else
+	sqlDyStringPrintf(query, " WHERE ");
+    sqlDyStringPrintf(query, "%-s", sqlConstraints);
     gotWhere = TRUE;
     }
 
@@ -2427,7 +2400,7 @@ int hGetBedRangeCount(char *db, char *table, char *chrom, int chromStart,
  * WARNING: this does not use the bin column and maybe slower than you would like.
  * C.f. hGetBedRange() but returns only the result of SELECT COUNT(*) FROM ...  */
 {
-struct dyString *query = newDyString(512);
+struct dyString *query = dyStringNew(512);
 struct sqlConnection *conn = hAllocConn(db);
 struct hTableInfo *hti;
 char parsedChrom[HDB_MAX_CHROM_STRING];
@@ -2458,14 +2431,20 @@ if (chromEnd != 0)
     }
 if (hti->chromField[0] != 0)
     {
-    sqlDyStringPrintf(query, " %s %s = '%s'",
-		   (gotWhere ? "AND" : "WHERE"), hti->chromField, chrom);
+    if (gotWhere)
+	sqlDyStringPrintf(query, " AND ");
+    else
+	sqlDyStringPrintf(query, " WHERE ");
+    sqlDyStringPrintf(query, "%s = '%s'", hti->chromField, chrom);
     gotWhere = TRUE;
     }
 if (useSqlConstraints)
     {
-    dyStringPrintf(query, " %s %s",
-		   (gotWhere ? "AND" : "WHERE"), sqlConstraints);
+    if (gotWhere)
+	sqlDyStringPrintf(query, " AND ");
+    else
+	sqlDyStringPrintf(query, " WHERE ");
+    sqlDyStringPrintf(query, "%-s", sqlConstraints);
     gotWhere = TRUE;
     }
 
@@ -2515,7 +2494,7 @@ struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr;
 char **row;
 char *ret = NULL;
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 
 if (database != NULL)
     sqlDyStringPrintf(dy, "select description from %s where name = '%s'", dbDbTable(), database);
@@ -2528,7 +2507,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     ret = cloneString(row[0]);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
-freeDyString(&dy);
+dyStringFree(&dy);
 return ret;
 }
 
@@ -2612,7 +2591,7 @@ return res;
 char *hDbDbOptionalField(char *database, char *field)
  /* Look up in the regular central database. */
 {
-if (trackHubDatabase(database))
+if (trackHubDatabase(database) && !hubConnectIsCurated(trackHubSkipHubName(database)))
     {
     // In dbDb the genome field is the name of the organism, but
     // genome is the name of the assembly in track hubs.
@@ -2623,7 +2602,7 @@ if (trackHubDatabase(database))
     return trackHubAssemblyField(database, field);
     }
 
-char *res = hCentralDbDbOptionalField(database, field);
+char *res = hCentralDbDbOptionalField(trackHubSkipHubName(database), field);
 
 return res;
 }
@@ -2853,12 +2832,13 @@ struct dbDb *dbList = NULL, *db;
 struct hash *hash = sqlHashOfDatabases();
 
 char query[1024];
-safef(query, sizeof query,  NOSQLINJ "select * from %s order by orderKey,name desc", dbDbTable());
+sqlSafef(query, sizeof query,  "select * from %s order by orderKey,name desc", dbDbTable());
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
-    if (!doCheck || hashLookup(hash, db->name))
+    boolean isGenarkHub = sameOk(db->nibPath, "genark");
+    if (!doCheck || (isGenarkHub || hashLookup(hash, db->name)))
         {
 	slAddHead(&dbList, db);
 	}
@@ -3634,24 +3614,24 @@ int startBin = (start>>bFirstShift), endBin = ((end-1)>>bFirstShift);
 int i, levels = binLevels();
 
 if (selfContained)
-    dyStringAppend(query, "(");
+    sqlDyStringPrintf(query, "(");
 for (i=0; i<levels; ++i)
     {
     int offset = binOffset(i);
     if (i != 0)
-        dyStringAppend(query, " or ");
+        sqlDyStringPrintf(query, " or ");
     if (startBin == endBin)
-        dyStringPrintf(query, "%s=%u", binField, startBin + offset);
+        sqlDyStringPrintf(query, "%s=%u", binField, startBin + offset);
     else
-        dyStringPrintf(query, "%s>=%u and %s<=%u",
+        sqlDyStringPrintf(query, "%s>=%u and %s<=%u",
 		binField, startBin + offset, binField, endBin + offset);
     startBin >>= bNextShift;
     endBin >>= bNextShift;
     }
 if (selfContained)
     {
-    dyStringPrintf(query, " or %s=%u )", binField, _binOffsetOldToExtended);
-    dyStringAppend(query, " and ");
+    sqlDyStringPrintf(query, " or %s=%u )", binField, _binOffsetOldToExtended);
+    sqlDyStringPrintf(query, " and ");
     }
 }
 
@@ -3663,19 +3643,19 @@ int bFirstShift = binFirstShift(), bNextShift = binNextShift();
 int startBin = (start>>bFirstShift), endBin = ((end-1)>>bFirstShift);
 int i, levels = binLevelsExtended();
 
-dyStringAppend(query, "(");
+sqlDyStringPrintf(query, "(");
 
 if (start < BINRANGE_MAXEND_512M)
     {
     hAddBinToQueryStandard(binField, start, BINRANGE_MAXEND_512M, query, FALSE);
-    dyStringAppend(query, " or ");
+    sqlDyStringPrintf(query, " or ");
     }
 
 for (i=0; i<levels; ++i)
     {
     int offset = binOffsetExtended(i);
     if (i != 0)
-	dyStringAppend(query, " or ");
+	sqlDyStringPrintf(query, " or ");
     if (startBin == endBin)
         sqlDyStringPrintf(query, "%s=%u", binField, startBin + offset);
     else
@@ -3684,8 +3664,8 @@ for (i=0; i<levels; ++i)
     startBin >>= bNextShift;
     endBin >>= bNextShift;
     }
-dyStringAppend(query, ")");
-dyStringAppend(query, " and ");
+sqlDyStringPrintf(query, ")");
+sqlDyStringPrintf(query, " and ");
 }
 
 void hAddBinToQueryGeneral(char *binField, int start, int end,
@@ -3718,7 +3698,7 @@ char *db = sqlGetDatabase(conn);
 /* call hFindTableInfoWithConn() to support tracks may from different hosts */
 struct hTableInfo *hti = hFindTableInfoWithConn(conn, chrom, rootTable);
 struct sqlResult *sr = NULL;
-struct dyString *query = newDyString(1024);
+struct dyString *query = dyStringNew(1024);
 char *table = NULL;
 char fullTable[HDB_MAX_TABLE_STRING];
 int rowOffset = 0;
@@ -3726,13 +3706,12 @@ int rowOffset = 0;
 if (fields == NULL) fields = "*";
 if (hti == NULL)
     {
-    warn("table %s doesn't exist in %s database, or hFindTableInfoDb failed", rootTable, db);
+    warn("hExtendedRangeQuery: table %s doesn't exist in %s database, or hFindTableInfoWithConn failed", rootTable, db);
     }
 else
     {
-    if (!sameString(fields,"*"))
-	sqlCkIl(fields);
-    sqlDyStringPrintf(query, "select %-s from ", fields);
+    sqlCkIl(fieldsSafe,fields)
+    sqlDyStringPrintf(query, "select %-s from ", fieldsSafe);
     if (hti->isSplit)
 	{
 	safef(fullTable, sizeof(fullTable), "%s_%s", chrom, rootTable);
@@ -3765,16 +3744,16 @@ if (table != NULL)
     if (extraWhere)
         {
         /* allow more flexible additions to where clause */
-        if (!startsWith("order", extraWhere) &&
-            !startsWith("limit", extraWhere))
-                dyStringAppend(query, " and ");
-        dyStringPrintf(query, " %s", extraWhere);
+        if (!startsWith(NOSQLINJ "order", extraWhere) &&
+            !startsWith(NOSQLINJ "limit", extraWhere))
+                sqlDyStringPrintf(query, " and ");
+        sqlDyStringPrintf(query, " %-s", extraWhere);
         }
     if (order)
         sqlDyStringPrintf(query, " order by %s", hti->startField);
     sr = sqlGetResult(conn, query->string);
     }
-freeDyString(&query);
+dyStringFree(&query);
 if (retRowOffset != NULL)
     *retRowOffset = rowOffset;
 return sr;
@@ -3814,7 +3793,7 @@ struct sqlResult *hExtendedChromQuery(
 char *db = sqlGetDatabase(conn);
 struct hTableInfo *hti = hFindTableInfo(db, chrom, rootTable);
 struct sqlResult *sr = NULL;
-struct dyString *query = newDyString(1024);
+struct dyString *query = dyStringNew(1024);
 int rowOffset = 0;
 
 if (fields == NULL) fields = "*";
@@ -3827,26 +3806,24 @@ else
     rowOffset = hti->hasBin;
     if (hti->isSplit)
 	{
-	if (!sameString(fields,"*"))
-	    sqlCkIl(fields);
-        sqlDyStringPrintf(query, "select %-s from %s_%s", fields, chrom, rootTable);
+        sqlCkIl(fieldsSafe,fields)
+        sqlDyStringPrintf(query, "select %-s from %s_%s", fieldsSafe, chrom, rootTable);
 	if (extraWhere != NULL)
-	    dyStringPrintf(query, " where %s", extraWhere);
+	    sqlDyStringPrintf(query, " where %-s", extraWhere);
 	}
     else
 	{
-	if (!sameString(fields,"*"))
-	    sqlCkIl(fields);
+        sqlCkIl(fieldsSafe,fields)
         sqlDyStringPrintf(query, "select %-s from %s where %s='%s'",
-		fields, hti->rootName, hti->chromField, chrom);
+		fieldsSafe, hti->rootName, hti->chromField, chrom);
 	if (extraWhere != NULL)
-	    dyStringPrintf(query, " and (%s)", extraWhere);
+	    sqlDyStringPrintf(query, " and (%-s)", extraWhere);
 	}
     if (order)
         sqlDyStringPrintf(query, " order by %s", hti->startField);
     sr = sqlGetResult(conn, query->string);
     }
-freeDyString(&query);
+dyStringFree(&query);
 if (retRowOffset != NULL)
     *retRowOffset = rowOffset;
 return sr;
@@ -3871,7 +3848,7 @@ if (tdb->restrictCount > 0 && chrom != NULL)
 return chromOk;
 }
 
-static boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
+boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
                               struct trackDb **tdbList, struct hash *loaded)
 /* Load a trackDb table, including handling profiles:tbl. Returns
  * TRUE if table exists */
@@ -3906,7 +3883,7 @@ hFreeConn(&conn);
 return exists;
 }
 
-static struct trackDb *loadTrackDb(char *db, char *where)
+struct trackDb *loadTrackDb(char *db, char *where)
 /* Load each trackDb table.  Will put supertracks in parent field of given tracks but
  * these are still in track list. */
 {
@@ -3942,7 +3919,7 @@ boolean trackDataAccessibleHash(char *database, struct trackDb *tdb, struct hash
  *
  * if gbdbHash is not NULL, use it when looking for the file */
 {
-if (startsWith("mathWig", tdb->type) || startsWith("cartVersion", tdb->type)) 
+if (startsWith("mathWig", tdb->type) || startsWith("cartVersion", tdb->type)|| startsWith("instaPort", tdb->type)   ) 
     return TRUE; // assume mathWig data is available.  Fail at load time if it isn't
     // cartVersion is a pseudo trackDb entry with no data
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
@@ -3962,9 +3939,6 @@ if (bigDataUrl != NULL)
     }
 else
     {
-    // we now allow references to native tracks in track hubs
-    tdb->table = trackHubSkipHubName(tdb->table);
-
     // if it's copied from a custom track, wait to find data later
     if (isCustomTrack(tdb->table))
         return TRUE;
@@ -3987,8 +3961,24 @@ static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-if ((!tdb->private || privateHost) && trackDataAccessible(database, tdb))
+// normally we trust trackDb, but sometimes we don't!
+static boolean checkedTrust = FALSE;
+static boolean trustTrackDb = TRUE;
+if (!checkedTrust)
+    {
+    trustTrackDb = cfgOptionBooleanDefault("trustTrackDb", TRUE);
+    checkedTrust = TRUE;
+    }
+
+if ((!tdb->private || privateHost) && (trustTrackDb || trackDataAccessible(database, tdb)) )
+    {
+    // we now allow references to native tracks in track hubs (for track collections)
+    // so we need to give the downstream code the table name if there is no bigDataUrl.
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl == NULL)
+        tdb->table = trackHubSkipHubName(tdb->table);
     slAddHead(tdbRetList, tdb);
+    }
 else if (tdbIsDownloadsOnly(tdb))
     {
     // While it would be good to make table NULL, since we should support tracks
@@ -4066,6 +4056,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	if (tdbIsSuperTrack(tdb->parent))
 	    /* Do supertrack-specific inheritance. */
 	    inheritFromSuper(tdb, tdb->parent);
+        // make sure composite subtracks inherit from their parents too:
+        trackDbFieldsFromSettings(tdb);
 	}
     rInheritFields(tdb->subtracks);
     }
@@ -4295,7 +4287,7 @@ static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn,
 struct trackDb *trackTdb = NULL;
 char where[256];
 
-sqlSafefFrag(where, sizeof(where), "tableName = '%s'", track);
+sqlSafef(where, sizeof(where), "tableName = '%s'", track);
 trackTdb = loadAndLookupTrackDb(conn, where);
 if (!trackTdb)
     return NULL;
@@ -4735,17 +4727,18 @@ struct slPair *hGetCladeOptions()
  * useful for constructing a clade menu. */
 {
 // get only the clades that have actual active genomes
-char *query = NOSQLINJ ""
+char query[4096];
+sqlSafef(query, sizeof query, 
     "SELECT DISTINCT(c.name), c.label "
-    // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
     ", c.priority "
     "FROM %s c, %s g, %s d "
     "WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 "
-    "ORDER BY c.priority";
-char queryBuf[4096];
-safef(queryBuf, sizeof queryBuf, query, cladeTable(),  genomeCladeTable(), dbDbTable());
+    "ORDER BY c.priority"
+    , cladeTable(),  genomeCladeTable(), dbDbTable());
+// mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+
 struct sqlConnection *conn = hConnectCentral();
-struct slPair *nativeClades = sqlQuickPairList(conn, queryBuf);
+struct slPair *nativeClades = sqlQuickPairList(conn, query);
 hDisconnectCentral(&conn);
 struct slPair *trackHubClades = trackHubGetCladeLabels();
 return slCat(nativeClades, trackHubClades);
@@ -4993,15 +4986,16 @@ struct sqlResult *sr;
 char **row;
 struct dbDb *dbList = NULL, *db;
 
+char query[1024];
 /* Get hash of active blat servers. */
-sr = sqlGetResult(conn, NOSQLINJ "select db from blatServers");
+sqlSafef(query,  sizeof query, "select db from blatServers");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], NULL);
 sqlFreeResult(&sr);
 
 /* Scan through dbDb table, keeping ones that are indexed. */
-char query[1024];
-safef(query,  sizeof query, NOSQLINJ "select * from %s order by orderKey,name desc", dbDbTable());
+sqlSafef(query,  sizeof query, "select * from %s order by orderKey,name desc", dbDbTable());
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -5060,7 +5054,7 @@ if (!sqlExists(conn, query))
 /* Do a little join to get data to fit into the blatServerTable. */
 sqlSafef(query, sizeof(query),
                "select d.name,d.description,blatServers.isTrans"
-               ",blatServers.host,blatServers.port,d.nibPath "
+               ",blatServers.host,blatServers.port,d.nibPath, blatServers.dynamic "
 	       "from %s d,blatServers where blatServers.isTrans = %d and "
 	       "d.name = '%s' and d.name = blatServers.db",
 	        dbDbTable(), isTrans, db);
@@ -5076,6 +5070,7 @@ st.isTrans = atoi(row[2]);
 st.host = cloneString(row[3]);
 st.port = cloneString(row[4]);
 st.nibDir = cloneString(row[5]);
+st.isDynamic = atoi(row[6]);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;
@@ -5093,8 +5088,9 @@ char **row;
 char *answer;
 
 answer = NULL;
+sqlCkIl(tblNameSafe,tblName)
 sqlSafef(query, sizeof(query), "select %s from %-s  where %-s;",
-      fldName,  sqlCheckIdentifiersList(tblName), condition);  // note some callers pass an entire tables list with aliases in tblName
+      fldName,  tblNameSafe, condition);  // note some callers pass an entire tables list with aliases in tblName
 sr  = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -5115,7 +5111,9 @@ struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(0);
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom,size from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAddInt(hash, row[0], sqlUnsigned(row[1]));
 sqlFreeResult(&sr);
@@ -5139,7 +5137,9 @@ struct slName *hChromList(char *db)
 /* Get the list of chrom names from the database's chromInfo table. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-struct slName *list = sqlQuickList(conn, NOSQLINJ "select chrom from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom from chromInfo");
+struct slName *list = sqlQuickList(conn, query);
 hFreeConn(&conn);
 return list;
 }
@@ -5859,6 +5859,16 @@ return (hTableExists(db, "ncbiRefSeq") && hTableExists(db, "ncbiRefSeqPsl") &&
         hTableExists(db, "seqNcbiRefSeq") && hTableExists(db, "extNcbiRefSeq"));
 }
 
+boolean hDbHasNcbiRefSeqHistorical(char *db)
+/* Return TRUE if db has NCBI's Historical RefSeq alignments and annotations. */
+{
+// hTableExists() caches results so this shouldn't make for loads of new SQL queries if called
+// more than once.
+return (hTableExists(db, "ncbiRefSeqHistorical") && hTableExists(db, "ncbiRefSeqPslHistorical") &&
+        hTableExists(db, "ncbiRefSeqCdsHistorical") && hTableExists(db, "ncbiRefSeqLinkHistorical") &&
+        hTableExists(db, "seqNcbiRefSeqHistorical") && hTableExists(db, "extNcbiRefSeqHistorical"));
+}
+
 char *hRefSeqAccForChrom(char *db, char *chrom)
 /* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
  * db must never change. */
@@ -5875,8 +5885,9 @@ if (checkExistence && !trackHubDatabase(db) && hTableExists(db, "chromAlias"))
     {
     firstDb = db;
     struct sqlConnection *conn = hAllocConn(db);
-    accHash = sqlQuickHash(conn,
-                           NOSQLINJ "select chrom, alias from chromAlias where source = 'refseq'");
+    char query[1024];
+    sqlSafef(query, sizeof query, "select chrom, alias from chromAlias where source = 'refseq'");
+    accHash = sqlQuickHash(conn, query);
     if (hashNumEntries(accHash) == 0)
         // No RefSeq accessions -- make accHash NULL
         hashFree(&accHash);

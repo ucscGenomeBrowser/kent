@@ -4,7 +4,7 @@ shortLabel Fetal Gene Atlas
 longLabel Fetal Gene Atlas from Cao et al 2020
 visibility hide
 group singleCell
-pennantIcon 19.jpg liftover.html "lifted from hg19" ; New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021" 
+pennantIcon 19.jpg liftover.html "lifted from hg19"
 type bigBarChart
 
     track fetalGeneAtlasCellType

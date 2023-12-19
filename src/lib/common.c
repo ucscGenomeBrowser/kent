@@ -341,6 +341,21 @@ while (next != NULL)
 *ppt = NULL;
 }
 
+void slFreeListWithFunc(void *listPt, void (*freeFunc)())
+/* Free a list by calling freeFunc on each element.
+ * listPt must be a pointer to a pointer to some slList-compatible struct (&list).
+ * freeFunc must take one arg: a pointer to a pointer to the item it is going to free. */
+{
+struct slList **pList = (struct slList**)listPt;
+struct slList *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    freeFunc(&el);
+    }
+*pList = NULL;
+}
+
 void slSort(void *pList, int (*compare )(const void *elem1,  const void *elem2))
 /* Sort a singly linked list with Qsort and a temporary array. */
 {
@@ -2855,9 +2870,10 @@ void mustReadFd(int fd, void *buf, size_t size)
 ssize_t actualSize;
 char *cbuf = buf;
 // using a loop because linux was not returning all data in a single request when request size exceeded 2GB.
+// MacOS complains invalid argument if it is over 2GB
 while (size > 0)
     {
-    actualSize = read(fd, cbuf, size);
+    actualSize = read(fd, cbuf, min(0x7FFF000,size));  // max 2GB 0x7FFF000 MAX_RW_COUNT = (INT_MAX & PAGE_MASK)
     if (actualSize < 0)
 	errnoAbort("Error reading %lld bytes", (long long)size);
     if (actualSize == 0)
@@ -3740,28 +3756,13 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
-time_t mktimeFromUtc (struct tm *t)
-/* Return time_t for tm in UTC (GMT)
- * Useful for stuff like converting to time_t the
- * last-modified HTTP response header
- * which is always GMT. Returns -1 on failure of mktime */
+
+time_t mktimeFromUtc(struct tm *tm)
+// convert UTC time to UTC time_t 
+// The timegm function is available on Linux and BSD and MacOS/Darwin
+// This is thread-safe and avoids setenv
 {
-    time_t time;
-    char *tz;
-    char save_tz[100];
-    tz=getenv("TZ");
-    if (tz)
-        safecpy(save_tz, sizeof(save_tz), tz);
-    setenv("TZ", "GMT0", 1);
-    tzset();
-    t->tm_isdst = 0;
-    time=mktime(t);
-    if (tz)
-        setenv("TZ", save_tz, 1);
-    else
-        unsetenv("TZ");
-    tzset();
-    return (time);
+return timegm(tm);
 }
 
 

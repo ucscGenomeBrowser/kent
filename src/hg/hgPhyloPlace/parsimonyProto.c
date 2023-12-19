@@ -251,10 +251,11 @@ struct protobufFieldDef nodeMutsField = { &condNodeField, "node_mutations", 2, p
 struct protobufFieldDef newickField = { &nodeMutsField, "newick", 1, pbdtString, NULL, FALSE };
 struct protobufDef def = { NULL, "data", &newickField };
 // Parse the protobuf file into protobuf data structures
-long long bytesLeft = BIGNUM;
+long long bytesLeft = BIGLONGLONG;
 struct protobuf *data = protobufParse(f, &def, &bytesLeft);
 if (fgetc(f) != EOF)
-    errAbort("Why did we not get EOF starting out with BIGNUM?");
+    errAbort("Protobuf size exceeded %lx bytes, please report this error to "
+             "genome-www@soe.ucsc.edu.", BIGLONGLONG);
 carefulClose(&f);
 // Convert the protobuf data structures into friendlier data structures
 struct parsimonyData *parData = parsimonyDataFromProtobuf(data);

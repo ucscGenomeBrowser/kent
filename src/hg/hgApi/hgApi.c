@@ -43,7 +43,7 @@ codonToPos: returns genomic position for given exon; parameters: exon, table and
 int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
-struct dyString *output = newDyString(10000);
+struct dyString *output = dyStringNew(10000);
 
 setUdcCacheDir();
 cgiSpoof(&argc, argv);

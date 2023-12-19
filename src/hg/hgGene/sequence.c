@@ -19,6 +19,18 @@
 #include "hgGene.h"
 
 
+void printPrimer3Anchor(char *table, char *itemName,
+	char *chrom, int start, int end)
+/* Print primer3 sequence export anchor. */
+{
+hPrintf("<A HREF=\"%s?%s", hgcName(),
+   cartSidUrlString(cart));
+hPrintf("&g=htcDnaNearGene&i=%s", itemName);
+hPrintf("&c=%s&l=%d&r=%d", chrom, start, end);
+hPrintf("&o=%s&table=%s&primer3=1", table, table);
+hPrintf("\">");
+}
+
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
 /* Print genomic sequence anchor. */
@@ -116,7 +128,7 @@ void sequenceTablePrint(struct section *section, struct sqlConnection *conn,
 /* Print the sequence table. */
 {
 char *table = genomeSetting("knownGene");
-struct dyString *query = newDyString(0);
+struct dyString *query = dyStringNew(0);
 char **row;
 struct sqlResult *sr;
 char *chrom;
@@ -148,7 +160,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     hFreeConn(&conn2);
     }
 sqlFreeResult(&sr);
-freeDyString(&query);
+dyStringFree(&query);
 }
 
 struct section *sequenceSection(struct sqlConnection *conn,

@@ -62,7 +62,7 @@ static char *createString =
     "    numRefs int unsigned not null,	# Number of references\n"
     "    refs longblob not null	# Reference numbers\n"
     ")\n";
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

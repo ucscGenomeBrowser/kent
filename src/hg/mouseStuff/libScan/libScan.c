@@ -100,7 +100,8 @@ struct hash *libHash = newHash(0);
 FILE *f = mustOpen(outName, "w");
 boolean isEst;
 
-sr = sqlGetResult(conn, NOSQLINJ "select id,name from library");
+sqlSafef(query, sizeof query, "select id,name from library");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(lib);
@@ -112,7 +113,8 @@ sqlFreeResult(&sr);
 slReverse(&libList);
 printf("Got %d libraries in %s\n", slCount(libList), database);
 
-sr = sqlGetResult(conn, NOSQLINJ "select type,library,author,acc from mrna");
+sqlSafef(query, sizeof query, "select type,library,author,acc from mrna");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     dotOut();

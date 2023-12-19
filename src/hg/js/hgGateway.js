@@ -30,6 +30,37 @@ window.surveyLink=null;
 window.surveyLabel=null;
 window.surveyLabelImage=null;
 
+function setCopyLinks() {
+  // add onclick to class 'copyLink' buttons, there could be more than one.
+  addOnClick = function(){copyToClipboard(event);};
+  copySpan = document.getElementsByClassName('copyLinkSpan');
+  for (i = 0; i < copySpan.length; i++) {
+    dataTarget = copySpan[i].getAttribute('data-target');
+    hostName = window.location.hostname;
+    targetSpan = document.getElementById(dataTarget);
+    targetSpan.innerText = targetSpan.innerText.replace("http_host", hostName);
+    aButton = document.createElement('button');
+    aButton.type = "button";
+    aButton.title = "Copy URL to clipboard";
+    aButton.id = "copyIcon" + i;
+    aButton.className = "copyLink";
+    aButton.onclick = addOnClick;
+    aButton.setAttribute('data-target', dataTarget);
+    svgComment = document.createTextNode("<!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->");
+    svgEl = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svgEl.setAttributeNS(null, 'style', 'width:0.9em');
+    svgEl.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.w3.org/2000/svg');
+    svgEl.setAttributeNS(null, 'viewBox', '0 0 512 512');
+    pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathEl.setAttribute("d", 'M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z');
+    svgEl.appendChild(svgComment);
+    svgEl.appendChild(pathEl);
+    buttonText = document.createTextNode(" Copy");
+    aButton.append(svgEl);
+    aButton.append(buttonText);
+    copySpan[i].append(aButton);
+  }     //      for (i = 0; i < copySpan.length; i++)
+}       //      function setCopyLinks()
 
 function svgCreateEl(type, config) {
     // Helper function for creating a new SVG element and initializing its
@@ -305,20 +336,27 @@ var speciesTree = (function() {
         // "Hub Genomes" link instead of a tree.
         var y = yIn;
         var hub, i, textX, textY, lineX1, lineY, lineX2;
+        var countNonCurated = 0;
         if (hubList && hubList.length) {
             for (i = 0;  i < hubList.length;  i++) {
                 hub = hubList[i];
-                addHubLabel(svg, hub, y);
+                // is this a curated assembly hub? If so, don't list it
+                if (!hub.hubUrl.startsWith("/gbdb")) {
+                    addHubLabel(svg, hub, y);
+                    y += cfg.labelLineHeight;
+                    countNonCurated++;
+                }
+            }
+            if (countNonCurated) {
+                textX = cfg.labelRightX + cfg.speciesLineOffsetX;
+                textY = (yIn + y - cfg.labelLineHeight) / 2;
+                addTrackHubsLink(svg, textX, textY);
+                lineX1 = cfg.hubLineOffset;
+                lineY = y - cfg.halfTextHeight;
+                lineX2 = cfg.containerWidth - cfg.speciesLineOffsetX;
+                addLine(svg, lineX1, lineY, lineX2, lineY);
                 y += cfg.labelLineHeight;
             }
-            textX = cfg.labelRightX + cfg.speciesLineOffsetX;
-            textY = (yIn + y - cfg.labelLineHeight) / 2;
-            addTrackHubsLink(svg, textX, textY);
-            lineX1 = cfg.hubLineOffset;
-            lineY = y - cfg.halfTextHeight;
-            lineX2 = cfg.containerWidth - cfg.speciesLineOffsetX;
-            addLine(svg, lineX1, lineY, lineX2, lineY);
-            y += cfg.labelLineHeight;
         }
         return y;
     }
@@ -687,7 +725,7 @@ var hgGateway = (function() {
             if (activeTaxIds[taxId]) {
                 // When user clicks on icon, set the taxId (default database);
                 // scroll the image to that species and clear the species autocomplete input.
-                onClick = setTaxId.bind(null, taxId, null, true, true);
+                onClick = setTaxId.bind(null, taxId, null, null, true, true);
                 // Onclick for both the icon and its sibling label:
                 $('.jwIconSprite' + name).parent().children().click(onClick);
                 haveIcon = true;
@@ -1078,10 +1116,16 @@ var hgGateway = (function() {
         var newPosComma = addCommasToPosition(newPos);
         var settings;
         $('#positionDisplay').text(newPosComma);
+        function onSuccess(jqXHR, textStatus) {
+            goToHgTracks();
+        }
+        function onFail(jqXHR, textStatus) {
+            cart.defaultErrorCallback(jqXHR, textStatus);
+        }
         if (uiState.suggestTrack) {
             settings = { 'hgFind.matches': item.internalId };
             settings[uiState.suggestTrack] = 'pack';
-            cart.send({ cgiVar: settings });
+            cart.send({ cgiVar: settings }, onSuccess , onFail);
             cart.flush();
         }
         function overwriteWithGene() {
@@ -1116,16 +1160,6 @@ var hgGateway = (function() {
             }
         }
         $('#selectAssemblyLabel').text(assemblySelectLabel);
-    }
-
-    function trackHubSkipHubName(name) {
-        // Just like hg/lib/trackHub.c's...
-        var matches;
-        if (name && (matches = name.match(/^hub_[0-9]+_(.*)/)) !== null) {
-            return matches[1];
-        } else {
-            return name;
-        }
     }
 
     function setAssemblyDescriptionTitle(db, genome) {
@@ -1172,6 +1206,7 @@ var hgGateway = (function() {
         // Apply square bullet style to all ul's in description.
         $('#descriptionText ul').addClass('jwNoBullet');
         $('#descriptionText li').addClass('jwSquareBullet');
+        setCopyLinks();
     }
 
     function initFindPositionContents() {
@@ -1194,7 +1229,7 @@ var hgGateway = (function() {
         // Make matching part of the gene symbol bold
         _.each(results, function(item) {
             if (_.startsWith(item.value.toUpperCase(), term.toUpperCase())) {
-                item.value = '<b>' + item.value.substring(0, term.length) + '</b>' +
+                item.label = '<b>' + item.value.substring(0, term.length) + '</b>' +
                              item.value.substring(term.length);
             }
         });
@@ -1371,14 +1406,14 @@ var hgGateway = (function() {
         clearWatermarkInput($('#positionInput'), positionWatermark);
     }
 
-    function setTaxId(taxId, db, doScrollToItem, doClearSpeciesInput) {
+    function setTaxId(taxId, db, org, doScrollToItem, doClearSpeciesInput) {
         // The user has selected a species (and possibly even a particular database) --
         // if we're not already using it, change to it.
         var cmd;
-        if (taxId !== uiState.taxId || (db && db !== uiState.db)) {
+        if (uiState.hubUrl !== null || taxId !== uiState.taxId || (db && db !== uiState.db)) {
             uiState.taxId = taxId;
             uiState.hubUrl = null;
-            cmd = { setTaxId: { taxId: '' + taxId } };
+            cmd = { setTaxId: { taxId: '' + taxId, org: org } };
             if (db) {
                 uiState.db = db;
                 cmd.setTaxId.db = db;
@@ -1393,7 +1428,7 @@ var hgGateway = (function() {
         }
   }
 
-    function setHubDb(hubUrl, taxId, db, hubName, isAutocomplete) {
+    function setHubDb(hubUrl, taxId, db, hubName, org, isAutocomplete) {
         // User clicked on a hub name (switch to its default genome) or selected an
         // assembly hub from autocomplete (switch to that assembly hub db).
         var cmd;
@@ -1425,13 +1460,14 @@ var hgGateway = (function() {
         // It might be a taxId and/or db from dbDb, or it might be a hub db.
         var taxId = item.taxId || -1;
         var db = item.db;
+        var org = item.org;
         if (item.hubUrl) {
             // The autocomplete sends the hub database from hubPublic.dbList,
             // without the hub prefix -- restore the prefix here.
             db = item.hubName + '_' + item.db;
-            setHubDb(item.hubUrl, taxId, db, item.hubName, true);
+            setHubDb(item.hubUrl, taxId, db, item.hubName, org, true);
         } else {
-            setTaxId(taxId, item.db, true, false);
+            setTaxId(taxId, item.db, org, true, false);
         }
     }
 
@@ -1439,7 +1475,7 @@ var hgGateway = (function() {
         // When user clicks on a label, use that taxId (default db);
         // don't scroll to the label because if they clicked on it they can see it already;
         // do clear the autocomplete input.
-        setTaxId(taxId, null, false, true);
+        setTaxId(taxId, null, null, false, true);
     }
 
     function onClickHubName(hubUrl, taxId, db, hubName) {
@@ -1473,21 +1509,21 @@ var hgGateway = (function() {
 
     function goToHgTracks() {
         // Create and submit a form for hgTracks with hidden inputs for org, db and position.
+        var goDirectlyToHgTracks = false;
         var position = $('#positionInput').val();
+        var searchTerm = encodeURIComponent(position.replace(/^[\s]*/,'').replace(/[\s]*$/,''));
         var posDisplay = $('#positionDisplay').text();
         var pix = uiState.pix || calculateHgTracksWidth();
-        var $form;
+        var oldCgi = cart.cgi();
+        cart.setCgi('hgSearch');
         if (! position || position === '' || position === positionWatermark ||
             position === selectedGene) {
             position = posDisplay;
+            goDirectlyToHgTracks = true;
         } else {
             position = position.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
         }
-
-        // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
-        $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
-        // Make a form and submit it.  In order for this to work in IE, the form
-        // must be appended to the body.
+        var $form;
         $form = $('<form action="hgTracks" method=GET id="mainForm">' +
                   '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
                   '<input type=hidden name="org" value="' + uiState.genome + '">' +
@@ -1495,8 +1531,54 @@ var hgGateway = (function() {
                   '<input type=hidden name="position" value="' + position + '">' +
                   '<input type=hidden name="pix" value="' + pix + '">' +
                   '</form>');
-        $('body').append($form);
-        $form.submit();
+        // helper functions for checking whether a plain chrom name was searched for
+        function onSuccess(jqXHR, textStatus) {
+            if (jqXHR.chromName !== null) {
+                $('body').append($form);
+                $form.submit();
+            } else  {
+                window.location.assign("../cgi-bin/hgSearch?search=" + searchTerm  + "&hgsid="+ window.hgsid );
+            }
+        }
+        function onFail(jqXHR, textStatus) {
+            window.location.assign("../cgi-bin/hgSearch?search=" + searchTerm  + "&hgsid="+ window.hgsid );
+        }
+        var canonMatch = position.match(canonicalRangeExp);
+        var gbrowserMatch = position.match(gbrowserRangeExp);
+        var lengthMatch = position.match(lengthRangeExp);
+        var bedMatch = position.match(bedRangeExp);
+        var sqlMatch = position.match(sqlRangeExp);
+        var singleMatch = position.match(singleBaseExp);
+        var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+        if (positionMatch !== null || goDirectlyToHgTracks) {
+            // We already have a position from either selecting a suggestion or the user just typed a regular
+            // old position, so go to hgTracks at that location
+            // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
+            $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
+            // Make a form and submit it.  In order for this to work in IE, the form
+            // must be appended to the body.
+            $('body').append($form);
+            $form.submit();
+        } else {
+            // User has entered a search term with no suggestion, go to the disambiguation
+            // page so the user can choose a position
+            // redirect to hgBlat if the input looks like a DNA sequence
+            // minimum length=19 so we do not accidentally redirect to hgBlat for a gene identifier 
+            // like ATG5
+            var dnaRe = new RegExp("^(>[^\n\r ]+[\n\r ]+)?(\\s*[actgnACTGN \n\r]{19,}\\s*)$");
+            if (dnaRe.test(searchTerm)) {
+                var blatUrl = "hgBlat?type=BLAT%27s+guess&userSeq="+searchTerm;
+                window.location.href = blatUrl;
+                return false;
+            }
+
+            // also check if just a plain chromosome name was entered:
+            $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
+            cmd = {getChromName: {'searchTerm': searchTerm, 'db': uiState.db}};
+            cart.send(cmd, onSuccess, onFail);
+            cart.flush();
+        }
+        cart.setCgi(oldCgi);
     }
 
     function replaceHgsidInLinks() {
@@ -1556,7 +1638,7 @@ var hgGateway = (function() {
                                    watermark: speciesWatermark,
                                    onSelect: setDbFromAutocomplete,
                                    onServerReply: processSpeciesResults,
-                                   enterSelectsIdentical: true });
+                                   enterSelectsIdentical: false });
             $('#selectAssembly').change(onChangeDbMenu);
             $('#positionDisplay').click(onClickCopyPosition);
             $('#copyPosition').click(onClickCopyPosition);

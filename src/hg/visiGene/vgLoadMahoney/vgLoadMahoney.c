@@ -196,7 +196,7 @@ void processWholeMounts(struct hash *mahoneyHash,
 	char *inFull, char *outDir)
 /* Output database files for whole mounts. */
 {
-struct slName *imageFileList = NULL, *imageFile;
+struct slName *imageFileList = NULL;
 char outRa[PATH_LEN], outTab[PATH_LEN];
 
 imageFileList = listDir(inFull, "*.jpg");
@@ -212,13 +212,12 @@ void slicesTab(struct slName *inList, char *inFull,
 {
 struct slName *in;
 FILE *f = mustOpen(outFile, "w");
-char lastStage = 0;
 fprintf(f, "#fileName\tsubmitId\tgene\tlocusLink\trefSeq\tgenbank\tfPrimer\trPrimer\tage\tminAge\tmaxAge\tsectionSet\tsectionIx\timageWidth\timageHeight\n");
 for (in = inList; in != NULL; in = in->next)
     {
     char hex[8];
     char mtf[5];
-    char stage = '1', sliceNo, nextSliceNo = '1';
+    char stage = '1';
     int id;
     struct mahoney *m;
     int imageWidth = 0, imageHeight = 0;
@@ -235,7 +234,6 @@ for (in = inList; in != NULL; in = in->next)
 	if (anyGeneId(m))
 	    {
 	    stage = in->name[5];
-	    sliceNo = in->name[6];
 	    fprintf(f, "%s\t%d\t", in->name, id);
 	    fprintf(f, "%s\t", m->geneName);
 	    if (startsWith("NM_", m->genbank))
@@ -274,7 +272,7 @@ void processSlices(struct hash *mahoneyHash,
 	char *inFull, char *outDir)
 /* Output database files for slices. */
 {
-struct slName *imageFileList = NULL, *imageFile;
+struct slName *imageFileList = NULL;
 char outRa[PATH_LEN], outTab[PATH_LEN];
 
 imageFileList = listDir(inFull, "*.jpg");
@@ -351,7 +349,9 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(17);
 
-sr = sqlGetResult(conn, NOSQLINJ "select mrnaAcc,name,locusLinkId from refLink where name != ''");
+char query[1024];
+sqlSafef(query, sizeof query, "select mrnaAcc,name,locusLinkId from refLink where name != ''");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct refSeqInfo *rsi;
@@ -372,7 +372,9 @@ struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(17);
 
-sr = sqlGetResult(conn, NOSQLINJ "select mrnaAcc,name,locusLinkId from refLink where locusLinkId != 0");
+char query[1024];
+sqlSafef(query, sizeof query, "select mrnaAcc,name,locusLinkId from refLink where locusLinkId != 0");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct refSeqInfo *rsi;
@@ -504,7 +506,6 @@ for (m = mahoneyList; m != NULL; m = m->next)
     char buf[9];
     safef(mtf, sizeof(mtf), "%d", m->mtf);
     struct rnaList *rl;
-    boolean gotConflict = FALSE;
     rl = hashFindVal(pcrHash, mtf);
 
     /* Look for conflicts between refSeq and locusLink representations. 

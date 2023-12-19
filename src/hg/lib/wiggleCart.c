@@ -320,6 +320,22 @@ else
 return(cloneString(ret));
 }
 
+boolean wigFetchDoSequenceLogoWithCart(struct cart *theCart, struct trackDb *tdb, char *name,char **optString)
+/*	doSequenceLogo - true by default **********************************/
+{
+boolean parentLevel = isNameAtParentLevel(tdb,name);
+char *doSequenceLogoDefault = trackDbSettingClosestToHome(tdb, DOSEQUENCELOGOMODE);
+char *doSequenceLogo = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, DOSEQUENCELOGOMODE));
+
+if ((doSequenceLogo == NULL) && (doSequenceLogoDefault != NULL))
+    doSequenceLogo = cloneString(doSequenceLogoDefault);
+
+if (doSequenceLogo == NULL)
+    return TRUE;
+
+return sameString(doSequenceLogo, "1") || sameString(doSequenceLogo, "on");
+}
+
 boolean wigFetchDoNegativeWithCart(struct cart *theCart, struct trackDb *tdb, char *name,char **optString)
 /*	doNegative - false by default **********************************/
 {
@@ -433,7 +449,7 @@ if (!autoScale) /*      if nothing from the Cart, check trackDb/settings */
     char * tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, AUTOSCALE, "NONE");
     if (sameWord(tdbDefault,"on"))
 	autoScale = cloneString(autoString);
-    else if (sameWord(tdbDefault,"group"))
+    else if (sameWord(tdbDefault,"group") && (tdb->parent != NULL))
         autoScale = cloneString(cumulativeString);
     else if (sameWord(tdbDefault,"off"))
 	autoScale = cloneString(manualString);

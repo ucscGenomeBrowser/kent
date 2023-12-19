@@ -48,8 +48,8 @@ struct pipeline
     pid_t groupLeader;         /* process group id, or -1 if not set. This is pid of group leader */
     unsigned int timeout;      /* timeout, in seconds, or zero */
     char *procName;            /* name to use in error messages. */
-    int pipeFd;                /* fd of pipe to/from process, -1 if none */
     unsigned options;          /* options */
+    int pipeFd;                /* fd of pipe to/from process, -1 if none */
     FILE* pipeFh;              /* optional stdio around pipe */
     char* stdioBuf;            /* optional stdio buffer */
     struct lineFile *pipeLf;   /* optional lineFile around pipe */
@@ -86,6 +86,9 @@ static void closeNonStdDescriptors(void)
 long maxFd = sysconf(_SC_OPEN_MAX);
 if (maxFd < 0)
     maxFd = 4096;  // shouldn't really happen
+if (maxFd > 4096)	// this does happen on Mac OSX arm64/M1 machine
+    maxFd = 4096;	// under some condition in the browser while making
+			// custom tracks.  It returns: 2^63 - 1
 int fd;
 for (fd = STDERR_FILENO+1; fd < maxFd; fd++)
     close(fd);
@@ -417,7 +420,8 @@ static void groupApoptosis(int signum)
 fprintf(stderr, "pipeline timeout kill after %d seconds: %s\n", groupApoptosisPipeline->timeout,
         pipelineDesc(groupApoptosisPipeline));
 fflush(stderr);
-(int)kill(0, SIGKILL); // kill off process group
+// the (void) tells the compiler we know we are ignoring the return value
+(void)kill(0, SIGKILL); // kill off process group
 }
 
 static void setupTimeout(struct pipeline* pl)
@@ -573,7 +577,8 @@ if (opts & pipelineRead)
 else
     otherEndFd = (otherEndFile == NULL) ? STDOUT_FILENO : openWrite(otherEndFile, append);
 struct pipeline *pl = pipelineOpenFd(cmds, opts, otherEndFd, stderrFd, timeout);
-safeClose(&otherEndFd);
+if (otherEndFile != NULL)
+    safeClose(&otherEndFd);
 if (stderrFile != NULL)
     safeClose(&stderrFd);
 return pl;

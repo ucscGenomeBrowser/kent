@@ -28,7 +28,7 @@ static struct optionSpec options[] = {
 void calc(int wordCount, char *words[])
 /* calc - Little command line calculator. */
 {
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 int i;
 
 for (i=0; i<wordCount; ++i)

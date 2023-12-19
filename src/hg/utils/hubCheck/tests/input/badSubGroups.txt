@@ -1,0 +1,30 @@
+hub badSubGroups
+email email
+shortLabel bad subgroup definitions
+longLabel bad subgroup definitions
+useOneFile on
+
+genome test
+
+track subgroupsComp
+compositeTrack on
+shortLabel Parent Track
+longLabel Parent Track
+subGroup1 view Views SuperEnhancers=ROSE
+type bigBed 3 +
+
+track state1
+shortLabel state1shortLabel
+longLabel state1LongLabel
+subGroups view=SuperEnhancers bogus=BOGUS bogus2=BOGUS2
+type bigBed 3 +
+bigDataUrl http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12383_25state_dense_Gateway_SuperEnhancers.bigBed
+parent subgroupsComp
+
+track state2
+shortLabel state2shortLabel
+longLabel state2longLabel
+subGroups view=SuperEnhancers
+type bigBed 3 +
+bigDataUrl  http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12690_25state_dense_Gateway_SuperEnhancers.bigBed
+parent subgroupsComp

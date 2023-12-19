@@ -36,7 +36,6 @@ void doQuery(char *database, char *table, char *chrom, int start, int end)
 {
 struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
-char *empty = NULL;
 int rowOffset = 0;
 // char **row;
 // int count = 0;
@@ -52,7 +51,7 @@ conn = sqlConnect(database);
 for (i = 0; i < iterations; i++)
 {
   startTime = clock1000();
-  sr = hRangeQuery(conn, table, chrom, start, end, empty, &rowOffset);
+  sr = hRangeQuery(conn, table, chrom, start, end, NULL, &rowOffset);
   deltaTime = clock1000() - startTime;
   printf("time for hRangeQuery = %0.3fs\n", ((double)deltaTime)/1000.0);
   end++;

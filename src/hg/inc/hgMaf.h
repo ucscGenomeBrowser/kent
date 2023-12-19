@@ -51,6 +51,41 @@ struct mafAli *axtLoadAsMafInRegion(struct sqlConnection *conn, char *table,
 	char *tPrefix, char *qPrefix, int tSize,  struct hash *qSizeHash);
 /* Return list of alignments in region from axt external file as a maf. */
 
+struct mafBaseProbs 
+// the probability of each nucleotide being in a certain colum
+    {
+    double aProb, cProb, gProb, tProb;
+    };
+
+struct mafBaseProbs *hgBigMafProbs(
+	char *database,     /* Database, must already have hSetDb to this */
+        struct bbiFile *bbi,
+	char *chrom, 	    /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+	char strand 	    /* Chromosome strand. */
+        );
+/* calculate the probability of each nucleotide in each column of a bigMaf. */
+
+struct mafBaseProbs *hgMafProbs(
+	char *database,     /* Database, must already have hSetDb to this */
+	char *track, 	    /* Name of MAF track */
+	char *chrom, 	    /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+	char strand 	    /* Chromosome strand. */
+        );
+/* calculate the probability of each nucleotide in each column of a maf. */
+
+struct mafAli *hgBigMafFrag(
+	char *database,     /* Database, must already have hSetDb to this */
+        struct bbiFile *bbi,
+	char *chrom, 	    /* Chromosome (in database genome) */
+	int start, int end, /* start/end in chromosome */
+	char strand, 	    /* Chromosome strand. */
+	char *outName, 	    /* Optional name to use in first component */
+	struct slName *orderList /* Optional order of organisms. */
+	);
+/* hgBigMafFrag - Extract maf sequences for a region from a bigMaf and call hgMafFragHelper. */
+
 struct mafAli *hgMafFrag(
 	char *database,     /* Database, must already have hSetDb to this */
 	char *track, 	    /* Name of MAF track */

@@ -221,11 +221,11 @@ void affy120KDetailsSaveToDb(struct sqlConnection *conn, struct affy120KDetails 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s',%f,%f,%f,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->affyId,  el->rsId,  el->baseA,  el->baseB,  el->sequenceA,  el->sequenceB,  el->enzyme,  el->minFreq,  el->hetzyg,  el->avHetSE,  el->NA04477,  el->NA04479,  el->NA04846,  el->NA11036,  el->NA11038,  el->NA13056,  el->NA17011,  el->NA17012,  el->NA17013,  el->NA17014,  el->NA17015,  el->NA17016,  el->NA17101,  el->NA17102,  el->NA17103,  el->NA17104,  el->NA17105,  el->NA17106,  el->NA17201,  el->NA17202,  el->NA17203,  el->NA17204,  el->NA17205,  el->NA17206,  el->NA17207,  el->NA17208,  el->NA17210,  el->NA17211,  el->NA17212,  el->NA17213,  el->PD01,  el->PD02,  el->PD03,  el->PD04,  el->PD05,  el->PD06,  el->PD07,  el->PD08,  el->PD09,  el->PD10,  el->PD11,  el->PD12,  el->PD13,  el->PD14,  el->PD15,  el->PD16,  el->PD17,  el->PD18,  el->PD19,  el->PD20,  el->PD21,  el->PD22,  el->PD23,  el->PD24);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

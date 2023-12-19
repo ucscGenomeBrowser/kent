@@ -54,7 +54,7 @@ while (row2 != NULL)
     chp = strstr(gbID, ".");
     if (chp != NULL) *chp = '\0';
 
-    sqlSafefFrag(cond_str, sizeof cond_str, "name = '%s';", gbID);
+    sqlSafef(cond_str, sizeof cond_str, "name = '%s';", gbID);
     knownGeneID = sqlGetField(dbName, "knownGene", "name", cond_str);
     if (knownGeneID != NULL)
 	{
@@ -146,24 +146,24 @@ while (row2 != NULL)
     hasKGmRNA = checkMrna(locusID);	
 
     /* check if this RefSeq has 'g' type sequence(s) referenced */
-    sqlSafefFrag(cond_str, sizeof cond_str, "locusID=%s and seqType='g';", locusID);
+    sqlSafef(cond_str, sizeof cond_str, "locusID=%s and seqType='g';", locusID);
     gseq = sqlGetField(tempDbName, "locus2Acc0", "gbac", cond_str);
 
     /* process only 'g' type record which does not have corresponding KG entry */
     if ((!hasKGmRNA) && (gseq != NULL))
 	{
-	sqlSafefFrag(cond_str, sizeof cond_str, "name='%s'", refAC);
+	sqlSafef(cond_str, sizeof cond_str, "name='%s'", refAC);
 	hseq = sqlGetField(genomeReadOnly, "refGene", "name", cond_str);
 	if (hseq != NULL)
 	    {
-	    sqlSafefFrag(cond_str, sizeof cond_str, "refseq='%s';", refAC);
+	    sqlSafef(cond_str, sizeof cond_str, "refseq='%s';", refAC);
 	    swissprot = sqlGetField(protDbName, "hugo", "swissprot", cond_str);
 	    if (swissprot != NULL) 
 		{
 		if (strlen(swissprot) >0)	
 		    {
 		    // HUGO has an entry with swissprot ID, get display ID
-		    sqlSafefFrag(cond_str, sizeof cond_str, "accession='%s';", swissprot);
+		    sqlSafef(cond_str, sizeof cond_str, "accession='%s';", swissprot);
 		    proteinDisplayID = sqlGetField(protDbName, 
 						   "spXref2", "displayID", cond_str);
 		    if (proteinDisplayID == NULL) 
@@ -194,7 +194,7 @@ while (row2 != NULL)
                     gbAC = row3[0];
 		    chp = strstr(gbAC, ".");
 		    if (chp != NULL) *chp = '\0';
-		    sqlSafefFrag(cond_str, sizeof cond_str, "extAC='%s'", gbAC);
+		    sqlSafef(cond_str, sizeof cond_str, "extAC='%s'", gbAC);
 		    proteinDisplayID = sqlGetField(protDbName, 
 						   "spXref2", "displayID", cond_str);
 		    if (proteinDisplayID == NULL) 

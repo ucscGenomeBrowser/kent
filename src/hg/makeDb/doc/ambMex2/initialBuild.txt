@@ -71,7 +71,7 @@ faSize G*v2_genomic.fna.gz
 #    real    6m32.968s
 
 #############################################################################
-# establish config.ra file (TBD - Hiram - 2018-10-11)
+# establish config.ra file (DONE - Hiram - 2019-04-09)
     cd /hive/data/genomes/ambMex2
     ~/kent/src/hg/utils/automation/prepConfig.pl ambMex2 vertebrate axolotl \
        genbank/*_assembly_report.txt > ambMex2.config.ra
@@ -108,7 +108,7 @@ genBankAccessionID GCA_002915635.2
 taxId 8296
 
 #############################################################################
-# setup UCSC named files (TBD - 2018-10-11 - Hiram)
+# setup UCSC named files (DONE - 2019-03-26 - Hiram)
 
     mkdir /hive/data/genomes/ambMex2/ucsc
     cd /hive/data/genomes/ambMex2/ucsc
@@ -629,11 +629,13 @@ XXX - this standard run is useless, note the custom library used next procedure
     # 18368939458 bases of 32396387346 (56.701%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2018-10-11 - Hiram)
+# cpgIslands - (WORKING - 2018-10-11 - Hiram)
     mkdir /hive/data/genomes/ambMex2/bed/cpgIslands
     cd /hive/data/genomes/ambMex2/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku ambMex2) > do.log 2>&1
+XXX - running last18 manually on hgwdev 2020-12-11 - Hiram
+something is too large MALLOC failure reqesting -2147483648 bytes - aborting
     # real    2m5.105s
 
     cat fb.ambMex2.cpgIslandExt.txt

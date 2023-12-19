@@ -41,32 +41,33 @@ else
 // The maximum number of words per line that can be lifted:
 #define LIFTOVER_MAX_WORDS 2048
 
+void liftOverAddChainHash(struct hash *chainHash, struct chain *chain)
+/* Add this chain to the hash of chains used by remapBlockedBed */
+{       
+struct chromMap *map;
+        
+if ((map = hashFindVal(chainHash, chain->tName)) == NULL)
+    {   
+    AllocVar(map);
+    map->bk = binKeeperNew(0, chain->tSize);
+    hashAddSaveName(chainHash, chain->tName, map, &map->name);
+    }
+binKeeperAdd(map->bk, chain->tStart, chain->tEnd, chain);
+}
+
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */
 {
-
 struct lineFile *lf;
-struct netParsedUrl *npu;
 if (udcIsLocal(fileName))
     lf = lineFileOpen(fileName, TRUE);
 else
-    lf = netHttpLineFileMayOpen(fileName, &npu);
+    lf = netLineFileOpen(fileName);
 
 struct chain *chain;
-struct chromMap *map;
-int chainCount = 0;
 
 while ((chain = chainRead(lf)) != NULL)
-    {
-    if ((map = hashFindVal(chainHash, chain->tName)) == NULL)
-	{
-	AllocVar(map);
-	map->bk = binKeeperNew(0, chain->tSize);
-	hashAddSaveName(chainHash, chain->tName, map, &map->name);
-	}
-    binKeeperAdd(map->bk, chain->tStart, chain->tEnd, chain);
-    ++chainCount;
-    }
+    liftOverAddChainHash(chainHash, chain);
 }
 
 static struct binElement *findRange(struct hash *chainHash, 
@@ -712,13 +713,24 @@ static struct liftRange *bedToRangeList(struct bed *bed)
 struct liftRange *range, *rangeList = NULL;
 int bedStart = bed->chromStart;
 int i, count = bed->blockCount, start;
-for (i=0; i<count; ++i)
+if (count == 0)
     {
     AllocVar(range);
-    start = bedStart + bed->chromStarts[i];
+    start =  bed->chromStart;
     range->start = start;
-    range->end = start + bed->blockSizes[i];
+    range->end = bed->chromEnd;
     slAddHead(&rangeList, range);
+    }
+else
+    {
+    for (i=0; i<count; ++i)
+        {
+        AllocVar(range);
+        start = bedStart + bed->chromStarts[i];
+        range->start = start;
+        range->end = start + bed->blockSizes[i];
+        slAddHead(&rangeList, range);
+        }
     }
 slReverse(&rangeList);
 return rangeList;
@@ -996,8 +1008,13 @@ static int sumBedBlocks(struct bed *bed)
 /* Calculate sum of all block sizes in bed. */
 {
 int i, total = 0;
-for (i=0; i<bed->blockCount; ++i)
-    total += bed->blockSizes[i];
+if (bed->blockCount == 0)
+    total = bed->chromEnd - bed->chromStart;
+else
+    {
+    for (i=0; i<bed->blockCount; ++i)
+        total += bed->blockSizes[i];
+    }
 return total;
 }
 
@@ -1041,7 +1058,7 @@ if (*retError == NULL)
 /* Convert rangeList back to bed blocks.  Also calculate start and end. */
 if (*retError == NULL)
     {
-    int i, start, end = 0;
+    int i, start, end = rangeList->end;
     if (chain->qStrand == '-')
 	{
 	rangeList = reverseRangeList(rangeList, chain->qSize);
@@ -1049,13 +1066,17 @@ if (*retError == NULL)
 	bed->strand[0] = otherStrand(bed->strand[0]);
 	}
     bed->chromStart = start = rangeList->start;
-    bed->blockCount = slCount(rangeList);
-    for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
-	{
-	end = range->end;
-	bed->blockSizes[i] = end - range->start;
-	bed->chromStarts[i] = range->start - start;
-	}
+    //if (slCount(rangeList) > 1)
+    if (bed->blockSizes != NULL)
+        {
+        bed->blockCount = slCount(rangeList);
+        for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
+            {
+            end = range->end;
+            bed->blockSizes[i] = end - range->start;
+            bed->chromStarts[i] = range->start - start;
+            }
+        }
     if (!sameString(chain->qName, chain->tName))
 	{
 	freeMem(bed->chrom);
@@ -1070,7 +1091,7 @@ slFreeList(&badRanges);
 *pRangeList = NULL;
 }
 
-static char *remapBlockedBed(struct hash *chainHash, struct bed *bed, 
+char *remapBlockedBed(struct hash *chainHash, struct bed *bed, 
                              double minMatch, double minBlocks, bool fudgeThick,
                              bool multiple, char *db, char *chainTable)
 /* Remap blocks in bed, and also chromStart/chromEnd.  If multiple, then bed->next may be
@@ -1407,35 +1428,36 @@ enum liftOverFileType liftOverSniff(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line = NULL;
-char *chrom, *start, *end;
+char *chrom = NULL, *start = NULL, *end = NULL;
 boolean isPosition = FALSE;
 lineFileNextReal(lf, &line);
 if (!line)
     return 0;
-chrom = line;
-start = strchr(chrom, ':');
-if (start)
+chrom = cloneString(line);
+char *words[3];
+int numWords = chopLine(line, words);
+if (numWords < 3)
     {
-    *start++ = 0;
-    end = strchr(start, '-');
-    if (end)
-	{
-	*end++ = 0;
-	isPosition = TRUE;
-	}
-    else 
-	return 0;
+    start = strchr(chrom, ':');
+    if (start)
+        {
+        *start++ = 0;
+        end = strchr(start, '-');
+        if (end)
+            {
+            *end++ = 0;
+            isPosition = TRUE;
+            }
+        else
+            return 0;
+        }
     }
 else
     {
-    char *words[3];
-    int numWords = chopLine(line, words);
-    if (numWords < 3)
-	return 0;
     start = words[1];
     end = words[2];
     }
-if (!isdigit(start[0]) || !isdigit(end[0]))
+if ((start && !isdigit(start[0])) || (end && !isdigit(end[0])))
     return none;
 lineFileClose(&lf);
 if (isPosition)
@@ -1782,8 +1804,9 @@ struct liftOverChain *liftOverChainList()
 {
 struct sqlConnection *conn = hConnectCentral();
 struct liftOverChain *list = NULL;
-
-list = liftOverChainLoadByQuery(conn, NOSQLINJ "select * from liftOverChain");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from liftOverChain");
+list = liftOverChainLoadByQuery(conn, query);
 hDisconnectCentral(&conn);
 return list;
 }
@@ -1836,7 +1859,7 @@ if (isNotEmpty(fromDb))
     sqlSafef(query, sizeof(query), "select * from liftOverChain where fromDb='%s'",
 	  fromDb);
 else
-    safecpy(query, sizeof(query), NOSQLINJ "select * from liftOverChain");
+    sqlSafef(query, sizeof(query), "select * from liftOverChain");
 list = liftOverChainLoadByQuery(conn, query);
 hDisconnectCentral(&conn);
 return list;

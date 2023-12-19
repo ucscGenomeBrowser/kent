@@ -12,6 +12,11 @@ position of an assembly by clicking the &quot;Go&quot;
 button or you can specify a particular genome position in a variety of formats. These same
 formats are valid in the search bar above the main 
 <a href="../../cgi-bin/hgTracks">Genome Browser track display</a>.</p>
+<p>
+In addition to the positional queries described below, any search term can be used to 
+find matches in track data, track names and/or descriptions, help docs, and public hub 
+track names and/or descriptions. See our <a href="/cgi-bin/hgSearch">search
+page</a> for more details on the search functionality.</p>
  
 <p> 
 Valid position queries can include:</p> 
@@ -30,6 +35,8 @@ Valid position queries can include:</p>
   Keywords from the GenBank description of an mRNA</li> 
   <li>
   <a href="http://varnomen.hgvs.org/" target="_blank">HGVS</a> terms</li>
+  <li>
+  HGVS and accession searches on outdated RefSeq accession versions is available on hg38</li>
 </ul> 
 <p> 
 To specify a genome position:</p> 
@@ -42,12 +49,26 @@ To specify a genome position:</p>
   <li>
   Click the &quot;Go&quot; button</li> 
 </ol> 
+
 <p> 
-Note: A query may have multiple results. If this is the case, a results page will appear listing 
+A query may have multiple results. If this is the case, a results page will appear listing 
 each result along with the track it is associated with. Once selected, the result will be displayed 
-in the Browser with a highlighted tag, making it easier to identify. Also, if you have further
+in the Browser with a highlighted label, making it easier to identify. If you have further
 questions, you can search the <a href="/FAQ/index.html" target="_blank">Genome Browser FAQ</a>
-page and find links to further resources.</p>
+page and find links to further resources. Also, developers of track hubs can create
+<a href="hubQuickStartSearch.html" target="_blank">searchable track hubs</a> using the
+<a href="trix.html" target="_blank"><code>searchTrix</code></a> setting.</p>
+
+<p>
+To quickly jump to a codon or exon of a gene transcript:</p> 
+<ol> 
+  <li>
+  Use one of the searches below to jump to a gene, to show all transcripts of a gene or range of interest
+  <li>
+  Right-click any transcript, select "Choose exon" or "Zoom to codon" and enter the exon
+  or codon position of interest
+</ol>
+</p>
 
 <h2>Sample queries</h2> 
 <p> 
@@ -123,6 +144,9 @@ different types of queries that can be performed.
     RH80175, or chromosome<br> bands 15q11 to 15q13, or SNPs NM_000310.4 and NM_012090.5. This syntax
     may also be used for other range queries,<br>such as between uniquely determined ESTs, mRNAs, 
     refSeqs, SNPS, etc.</td></tr>
+  <tr>
+    <td>NR_026861.1:1-1000</td>
+    <td>Works with any other type of accession from this page: Displays the first 1000bp of NR_026861.1</td></tr> 
   <tr id="HGVS">
     <td nowrap>NM_000310.4(PPT1):c.271_287del17insTT<br> NM_007262.5(PARK7):c.-24+75_-24+92dup<br>
     NM_006172.4(NPPA):c.456_*1delAA<br> MYH11:c.503-14_503-12del<br> 
@@ -134,6 +158,10 @@ different types of queries that can be performed.
     NM_001372044:c.1528_1530del</td>
     <td>Displays the region that matches the <a href="http://varnomen.hgvs.org/" target="_blank">HGVS</a> 
         expression, usually in the format <tt>&lt;transcript or protein&gt;:&lt;position&gt; &lt;amino acid or nucleotide change&gt;</tt><br>If a gene symbol is used, HGVS search will try all RefSeq transcripts to find the nucleotide or amino acid at the position indicated in the expression. If there are multiple matches, a disambiguation page will be shown. If the RefSeq sequence differs from the genome sequence, then currently the search will use the genome, not the transcript, for codon counting and amino acid / nucleotide  comparison. Please contact us if this is inconvenient.</td></tr> 
+  <tr>
+    <td>NM_198056.2:c.1A&gt;C</td>
+    <td>An example of an HGVS search on a previous NM version that is now outdated. 
+        Support for previous NM accessions is only available on hg38.</td></tr>
 <!-- commented out -- not working 
   <tr> 
     <td>15q11;15q13</td>

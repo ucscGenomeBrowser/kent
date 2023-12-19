@@ -413,7 +413,7 @@ struct sqlConnection *conn = sqlConnect(db);
 if (conn == NULL)
     errAbort("Can't connect to database %s\n", db);
 char where[256];
-safef(where, sizeof(where), "tableName='%s'", track);
+sqlSafef(where, sizeof(where), "tableName='%s'", track);
 // WARNING: this will break in sandboxes unless trackDb entry is pushed to hgwdev.
 // The fix of using hTrackDbList() would slow for all users, so leaving as is.
 #define TRACKDB "trackDb"
@@ -423,7 +423,7 @@ char *parent = trackDbLocalSetting(tdb, "parent");
 struct trackDb *parentTdb;
 if (parent)
     {
-    safef(where, sizeof(where), "tableName='%s'", parent);
+    sqlSafef(where, sizeof(where), "tableName='%s'", parent);
     parentTdb = trackDbLoadWhere(conn, TRACKDB, where);
     if (parentTdb)
         tdb->parent = parentTdb;

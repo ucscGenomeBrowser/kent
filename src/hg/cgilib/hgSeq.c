@@ -3,8 +3,10 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
+#include "hCommon.h"
 #include "dnautil.h"
 #include "dnaseq.h"
+#include "dystring.h"
 #include "cart.h"
 #include "cheapcgi.h"
 #include "hdb.h"
@@ -252,10 +254,47 @@ else
 hgSeqOptionsHtiCart(hti, cart);
 }
 
+static struct dyString *genPrimer3Exons(int rCount, unsigned *rStarts, unsigned *rSizes, boolean *exonFlags, int seqStart) 
+/* generate string with exon positions on transcript sequence, format <relExonStart>-<relExonEnd,... e.g. "10-20,30-40," and return.
+ * Result must be freed.*/
+{
+struct dyString* exonStr = dyStringNew(1024);
+for (int i=0;  i < rCount;  i++)
+{
+    int start = rStarts[i] - seqStart;
+    int size  = rSizes[i];
+    if (exonFlags[i])
+        dyStringPrintf(exonStr, "%d-%d,", start, size);
+}
+return exonStr;
+}
+
+static void printPrimerForm(char *seq, char *exons, char *db, char strand, char *returnUrl) {
+    /* print the form to send arguments to primer3 and click the submit button */
+    puts("<form id='primer3Form' method='POST' action='https://dev.primer3plus.com/primer3plus/api/v1/upload'>\n");
+
+    printf("<input type='hidden' name='SEQUENCE_TEMPLATE' value='%s'>\n", seq);
+    printf("<input type='hidden' name='P3P_GB_EXONS' value='%s'>\n", exons);
+    printf("<input type='hidden' name='P3P_GB_DB' value='%s'>\n", db);
+    printf("<input type='hidden' name='P3P_GB_ORIENTATION' value='%c'>\n", strand);
+    printf("<input type='hidden' name='P3P_GB_RETURN_PATH' value='%s'>\n", returnUrl);
+
+    char *chrom = cgiString("c");
+    char *winLeft = cgiString("l");
+    char *winRight = cgiString("r");
+
+    printf("<input type='hidden' name='P3P_GB_POSITION' value='%s:%s-%s'>\n", chrom, winLeft, winRight);
+    puts("<input style='display:none' type='submit' value='Submit'>");
+    puts("</form>");
+    jsInline("document.getElementById(\"primer3Form\").submit();\n");
+}
+
 static void hgSeqConcatRegionsDb(char *db, char *chrom, int chromSize, char strand, char *name,
 			  int rCount, unsigned *rStarts, unsigned *rSizes,
-			  boolean *exonFlags, boolean *cdsFlags)
-/* Concatenate and print out dna for a series of regions. */
+			  boolean *exonFlags, boolean *cdsFlags, boolean toPrimer3)
+/* Concatenate and print out dna for a series of regions. 
+ *
+ * If toPrimer3 is true, will send them to primer3, overriding most arguments to allow exon-exon primers..*/
 {
 // Note: this code use to generate different sequence ids if the global
 // database in hdb was different than the db parameter.  This functionality
@@ -268,13 +307,28 @@ char recName[256];
 int seqStart, seqEnd;
 int offset, cSize;
 int i;
-boolean isRc     = (strand == '-') || cgiBoolean("hgSeq.revComp");
-boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
-int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
-int padding3     = cgiOptionalInt("hgSeq.padding3", 0);
-char *casing     = cgiString("hgSeq.casing");
-char *repMasking = cgiString("hgSeq.repMasking");
+boolean isRc       = (strand == '-') || cgiBoolean("hgSeq.revComp");
+int padding5       = cgiOptionalInt("hgSeq.padding5", 0);
+int padding3       = cgiOptionalInt("hgSeq.padding3", 0);
 char *granularity  = cgiOptionalString("hgSeq.granularity");
+
+char *casing, *repMasking;
+boolean maskRep;
+
+if (toPrimer3) 
+    {
+    casing = "lower";
+    maskRep = TRUE;
+    repMasking = "upper";
+    granularity = "gene";
+    } 
+else 
+    {
+    casing       = cgiString("hgSeq.casing");
+    repMasking   = cgiString("hgSeq.repMasking");
+    maskRep    = cgiBoolean("hgSeq.maskRepeats");
+    }
+
 boolean concatRegions = granularity && sameString("gene", granularity);
 
 if (rCount < 1)
@@ -308,6 +362,7 @@ if ((chromSize > 0) && (seqEnd > chromSize))
 	padding3 += (chromSize - seqEnd);
     seqEnd = chromSize;
     }
+
 if (seqEnd <= seqStart)
     {
     printf("# Null range for %s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d) (may indicate a query-side insert)\n",
@@ -317,6 +372,7 @@ if (seqEnd <= seqStart)
 	   padding5, padding3);
     return;
     }
+
 if (maskRep)
     {
     rSeq = hDnaFromSeq(db, chrom, seqStart, seqEnd, dnaMixed);
@@ -332,6 +388,7 @@ else
 
 /* Handle casing and compute size of concatenated sequence */
 cSize = 0;
+
 for (i=0;  i < rCount;  i++)
     {
     if ((sameString(casing, "exon") && exonFlags[i]) ||
@@ -342,16 +399,19 @@ for (i=0;  i < rCount;  i++)
 	}
     cSize += rSizes[i];
     }
+
 cSize += (padding5 + padding3);
 AllocVar(cSeq);
 cSeq->dna = needLargeMem(cSize+1);
 cSeq->size = cSize;
 
 offset = 0;
+
 for (i=0;  i < rCount;  i++)
     {
     int start = rStarts[i] - seqStart;
     int size  = rSizes[i];
+
     if (i == 0)
 	{
 	start -= (isRc ? padding3 : padding5);
@@ -365,38 +425,48 @@ for (i=0;  i < rCount;  i++)
     memcpy(cSeq->dna+offset, rSeq->dna+start, size);
     offset += size;
     }
+
 assert(offset == cSeq->size);
 cSeq->dna[offset] = 0;
 freeDnaSeq(&rSeq);
 
-if (isRc)
+if (isRc && !toPrimer3)
     reverseComplement(cSeq->dna, cSeq->size);
 
-safef(recName, sizeof(recName),
-      "%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d "
-      "strand=%c repeatMasking=%s",
-      db, 
-      name,
-      chrom, seqStart+1, seqEnd,
-      padding5, padding3,
-      (isRc ? '-' : '+'),
-      (maskRep ? repMasking : "none"));
-faWriteNext(stdout, recName, cSeq->dna, cSeq->size);
-freeDnaSeq(&cSeq);
+if (toPrimer3)
+{
+    struct dyString* primer3Exons = genPrimer3Exons(rCount, rStarts, rSizes, exonFlags, seqStart);
+    printPrimerForm(cSeq->dna, primer3Exons->string, db, strand, hgAbsUrlCgi("hgTracks"));
+    dyStringFree(&primer3Exons);
+}
+else
+{
+    safef(recName, sizeof(recName),
+          "%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d "
+          "strand=%c repeatMasking=%s",
+          db, 
+          name,
+          chrom, seqStart+1, seqEnd,
+          padding5, padding3,
+          (isRc ? '-' : '+'),
+          (maskRep ? repMasking : "none"));
+    faWriteNext(stdout, recName, cSeq->dna, cSeq->size);
+    freeDnaSeq(&cSeq);
+}
 }
 
 
 static void hgSeqRegionsAdjDb(char *db, char *chrom, int chromSize, char strand, char *name,
 		       boolean concatRegions, boolean concatAdjacent,
 		       int rCount, unsigned *rStarts, unsigned *rSizes,
-		       boolean *exonFlags, boolean *cdsFlags)
+		       boolean *exonFlags, boolean *cdsFlags, boolean toPrimer3)
 /* Concatenate and print out dna for a series of regions, 
  * optionally concatenating adjacent exons. */
 {
 if (concatRegions || (rCount == 1))
     {
     hgSeqConcatRegionsDb(db, chrom, chromSize, strand, name,
-			 rCount, rStarts, rSizes, exonFlags, cdsFlags);
+			 rCount, rStarts, rSizes, exonFlags, cdsFlags, toPrimer3);
     }
 else
     {
@@ -427,7 +497,7 @@ else
 	lo  = (isRc ? (jEnd + 1) : j);
 	hgSeqConcatRegionsDb(db, chrom, chromSize, strand, rName,
 			     len, &rStarts[lo], &rSizes[lo], &exonFlags[lo],
-			     &cdsFlags[lo]);
+			     &cdsFlags[lo], toPrimer3);
 	}
     }
 }
@@ -439,7 +509,7 @@ static void hgSeqRegionsDb(char *db, char *chrom, int chromSize, char strand, ch
 /* Concatenate and print out dna for a series of regions. */
 {
 hgSeqRegionsAdjDb(db, chrom, chromSize, strand, name, concatRegions, FALSE,
-		  rCount, rStarts, rSizes, exonFlags, cdsFlags);
+		  rCount, rStarts, rSizes, exonFlags, cdsFlags, FALSE);
 }
 
 static int maxStartsOffset = 0;
@@ -500,21 +570,43 @@ unsigned *sizes = NULL;
 boolean *exonFlags = NULL;
 boolean *cdsFlags = NULL;
 int i, rowCount, totalCount;
+
 boolean promoter   = cgiBoolean("hgSeq.promoter");
 boolean intron     = cgiBoolean("hgSeq.intron");
 boolean utrExon5   = cgiBoolean("hgSeq.utrExon5");
-boolean utrIntron5 = utrExon5 && intron;
 boolean cdsExon    = cgiBoolean("hgSeq.cdsExon");
-boolean cdsIntron  = cdsExon && intron;
 boolean utrExon3   = cgiBoolean("hgSeq.utrExon3");
-boolean utrIntron3 = utrExon3 && intron;
 boolean downstream = cgiBoolean("hgSeq.downstream");
+
 int promoterSize   = cgiOptionalInt("hgSeq.promoterSize", 0);
 int downstreamSize = cgiOptionalInt("hgSeq.downstreamSize", 0);
 char *granularity  = cgiOptionalString("hgSeq.granularity");
+
+boolean toPrimer3  = cgiBoolean("primer3");
+if (toPrimer3) 
+{
+    promoter = FALSE;
+    utrExon5 = TRUE;
+    intron = TRUE;
+    cdsExon = TRUE;
+    utrExon3 = TRUE;
+    downstream = FALSE;
+    downstreamSize = 0;
+    promoterSize = 0;
+    granularity = "gene";
+}
+
+boolean utrIntron3 = utrExon3 && intron;
+boolean utrIntron5 = utrExon5 && intron;
+boolean cdsIntron  = cdsExon && intron;
+
 boolean concatRegions = granularity && sameString("gene", granularity);
 boolean concatAdjacent = (cgiBooleanDefined("hgSeq.splitCDSUTR") &&
 			  (! cgiBoolean("hgSeq.splitCDSUTR")));
+
+if (toPrimer3)
+    concatAdjacent = TRUE;
+
 boolean isCDS, doIntron;
 boolean canDoUTR, canDoIntrons;
 
@@ -774,7 +866,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	safef(itemName, sizeof(itemName), "%s_%d", hti->rootName, rowCount);
     hgSeqRegionsAdjDb(db, bedItem->chrom, chromSize, bedItem->strand[0], itemName,
 		      concatRegions, concatAdjacent,
-		      count, starts, sizes, exonFlags, cdsFlags);
+		      count, starts, sizes, exonFlags, cdsFlags, toPrimer3);
     rowCount++;
     totalCount += count;
     freeMem(starts);

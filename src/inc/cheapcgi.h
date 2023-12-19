@@ -29,6 +29,12 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
+void jsOnEventBySelector(char *eventName, char *query, char *jsText);
+/* Add js mapping for inline event given a query selector, e.g. '.className' */
+
+void jsAddEventForId(char *eventName, char *idText, char *jsText);
+/* Add js mapping for inline event, adding multiple events as needed */
+
 void jsOnEventById(char *event, char *idText, char *jsText);
 /* Add js mapping for inline event */
 
@@ -659,4 +665,7 @@ char *cgiScriptDirUrl();
  * in external URLs to this webserver.
  * e.g. if CGI is called via http://localhost/subdir/cgi-bin/cgiTest
  * the returned string is /subdir/. Must be free'd. */
+
+void cgiChangeVar(char *varName, char *value);
+/* An entry point to change the value of a something passed to us on the URL. */
 #endif /* CHEAPCGI_H */

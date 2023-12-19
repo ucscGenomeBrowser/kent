@@ -16,6 +16,7 @@
 #include "obscure.h"
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
+#include "snake.h"
 
 #define SEQ_DELIM '~'
 
@@ -100,7 +101,7 @@ else if (tg->isBigBed)
     for (bb = bbList; bb != NULL; bb = bb->next)
         {
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-        if (!bigBedFilterInterval(bedRow, filters))
+        if (!bigBedFilterInterval(bbi, bedRow, filters))
             {
             filtered++;
             continue;
@@ -539,6 +540,7 @@ if(tg->extraUiData)
     filterBed(tg, &lfList);
 slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
+maybeLoadSnake(tg);   // if we're in snake mode, change the methods
 }
 
 void bedDrawSimpleAt(struct track *tg, void *item,
@@ -738,6 +740,8 @@ tg->drawItems = bedDrawSimple;
 tg->drawItemAt = bedDrawSimpleAt;
 tg->itemName = bedName;
 tg->mapItemName = bedName;
+tg->drawItemLabel = genericDrawItemLabel;
+tg->doItemMapAndArrows = genericItemMapAndArrows;
 tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;

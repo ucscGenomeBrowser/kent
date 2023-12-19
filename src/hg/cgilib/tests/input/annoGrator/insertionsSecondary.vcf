@@ -1,5 +1,5 @@
 ##fileformat=VCFv4.0
-#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 # Test intersections of nonzero regions (some adjacent but not overlapping,
 # some substitutions and some deletions) and zero-length insertions:
 # primary    ><pil       -------p------            ><pi

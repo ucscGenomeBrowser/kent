@@ -1,0 +1,18 @@
+track constraintSuper
+shortLabel Constraint scores
+longLabel Human constraint scores
+superTrack on hide
+type bed
+visibility hide
+group phenDis
+
+# Jarvis scores
+include jarvis.ra
+# HMC scores
+include hmc.ra
+# MetaDome scores
+include metaDome.ra
+# MTR scores
+include mtr.ra
+# UKB Depletion rank score
+include ukbDepletion.ra

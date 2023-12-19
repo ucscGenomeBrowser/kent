@@ -1,0 +1,52 @@
+<h2>Description</h2>
+<p>
+This track shows recombination breakpoints inferred by the RIPPLES software from a phylogenetic tree of 1.6 million SARS-CoV-2 sequences, described by Thurakia et al, Nature 2022.
+</p>
+
+<p>The track is in &quot;density&quot; mode by default, it shows the density of recombinated
+sequences per nucleotide. By deactivating the &quot;Density plot&quot; checkbox on the configuration
+page, all recombinations can be shown.
+</p>
+
+
+<h2>Methods</h2>
+From Thurakia et al, Nature 2022: &quot;We developed a new method for detecting recombination in pandemic-scale
+phylogenies, Recombination Inference using Phylogenetic PLacEmentS, RIPPLES. Because recombination
+violates the central assumption of many phylogenetic methods, that is, that a single evolutionary
+history is shared across the genome, recombinant lineages arising from diverse genomes will often
+be found on 'long branches', which result from accommodating the divergent evolutionary histories
+of the two parental haplotypes. Note that as long as recombination is relatively uncommon,
+phylogenetic inference is expected to remain accurate even when branch lengths are artifactually
+expanded. RIPPLES exploits that signal by first identifying long branches on a comprehensive
+SARS-CoV-2 mutation-annotated tree. RIPPLES then exhaustively breaks the potential recombinant
+sequence into distinct segments and replaces each onto a global phylogeny using maximum parsimony.
+RIPPLES reports the two parental nodes-hereafter termed donor and acceptor-that result in the
+highest parsimony score improvement relative to the original placement on the global phylogeny. Our
+approach therefore leverages phylogenetic signals for each parental lineage and the spatial
+correlation of markers along the genome. We establish significance using a null model conditioned
+on the inferred site-specific rates of de novo mutation.&quot;
+
+<h2>Data Access</h2>
+<p>
+You can download the bigBed file underlying this track (primers) from our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/recomb/" 
+target=_blank>Download Server</a>.
+The data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can also be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Bryan Thornlow for sharing the data.
+<h2>References</h2>
+<p>
+Turakhia Y, Thornlow B, Hinrichs A, McBroome J, Ayala N, Ye C, Smith K, De Maio N, Haussler D,
+Lanfear R <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35952714" target="_blank">
+Pandemic-scale phylogenomics reveals the SARS-CoV-2 recombination landscape</a>.
+<em>Nature</em>. 2022 Sep;609(7929):994-997.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35952714" target="_blank">35952714</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9519458/" target="_blank">PMC9519458</a>
+</p>
+<!-- Can't find original article link for https://www.ncbi.nlm.nih.gov/pubmed/35952714 -->
+

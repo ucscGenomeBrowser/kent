@@ -87,11 +87,11 @@ void affyAtlasSaveToDb(struct sqlConnection *conn, struct affyAtlas *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%f,'%s',%f,'%s')", 
 	tableName,  el->annName,  el->probeSet,  el->signal,  el->detection,  el->pval,  el->tissue);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

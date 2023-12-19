@@ -1,0 +1,21 @@
+$5 == "Affects" {doPrint=1; color = "155,155,155"; score = 0}
+$5 == "Benign" {doPrint=1; color = "0,210,0"; score=1}
+$5 == "ENIGMA rules, 2015" {doPrint=1; color = "210,0,0"; score=5}
+$5 == "Likely benign" {doPrint=1;color = "0,210,0"; score=2}
+$5 == "Likely pathogenic" {doPrint=1;color = "210,0,0"; score=4}
+$5 == "Pathogenic" {doPrint=1;color = "210,0,0"; score=5}
+$5 == "Uncertain significance" {doPrint=1;color = "0,0,128"; score=3}
+$5 == "association" {doPrint=1; color = "155,155,155"; score = 0}
+$5 == "association not found" {doPrint=1; color = "155,155,155"; score = 0}
+$5 == "drug response" {doPrint=1; color = "155,155,155"; score = 0}
+$5 == "not provided" {doPrint=1; color = "155,155,155"; score = 0}
+$5 == "other" {doPrint=1; color = "155,155,155"; score = 0}
+$5 == "protective" {doPrint=1; color = "155,155,155"; score = 0}
+$5 == "risk factor" {doPrint=1; color = "155,155,155"; score = 0}
+{
+size = 5;
+if ($6 > 2) size=7;
+if ($6 > 7) size=10;
+if (doPrint)
+print $1,$2,$3,$4,score,".",0,0,color,size,$7,$8,$9;
+}

@@ -1,0 +1,30 @@
+track pcrAmplicon
+shortLabel PCR Sequencing
+longLabel PCR Sequencing Protocols: Amplicons and Primers
+group map
+visibility dense
+type bigBed 12 +
+compositeTrack on
+html html/pcrAmplicon
+
+        track pcrWelkers
+        shortLabel Welkers et al
+        longLabel PCR Amplicons: Welkers et al. 2022 V1
+        parent pcrAmplicon on
+        noScoreFilter on
+        group map
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/mpxvRivers/pcrAmplicon/pcrWelkers.bb
+        html html/pcrAmplicon
+
+        track pcrChen
+        shortLabel Yale hMPXV
+        longLabel PCR Amplicons: Yale hMPXV Amplicon Scheme (Chen et al. 2022 V2)
+        parent pcrAmplicon on
+        noScoreFilter on
+        group map
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/mpxvRivers/pcrAmplicon/pcrAmplicon.bb
+        html html/pcrAmplicon

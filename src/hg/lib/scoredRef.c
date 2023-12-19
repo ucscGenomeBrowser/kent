@@ -134,7 +134,7 @@ static char *createString =
 "    chromStart int unsigned not null,	# Start position in chromosome (forward strand)\n"
 "    chromEnd int unsigned not null,	# End position in chromosome\n"
 "    extFile int unsigned not null,	# Pointer to associated MAF file\n"
-"    offset bigint not null,	# Offset in MAF file\n"
+"    `offset` bigint not null,	# Offset in MAF file\n"
 "    score double not null,	# Score\n"
 "              #Indices\n"
 "    INDEX(chrom(%d),bin)\n"
@@ -144,7 +144,7 @@ static char *createString =
 "    INDEX(chrom(%d),chromEnd)\n"
 #endif /* OLD */
 ")\n";
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

@@ -1,0 +1,9 @@
+track dbSNP155
+shortLabel dbSNP 155
+longLabel dbSNP 155 (lifted)
+type vcfTabix
+hapClusterEnabled false
+maxWindowToDraw 3000000
+bigDataUrl /gbdb/hs1/dbSNP155/chm13v2.0_dbSNPv155.vcf.gz
+html html/dbSNP155.html
+group varRep

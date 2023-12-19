@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-import sys, os, urllib2, argparse, re, cgi, textwrap
+import sys, os, urllib2, argparse, re, cgi, textwrap, requests
 from xml.etree import ElementTree as ET
 
 def parsePubmed(doc, id):
@@ -21,6 +21,8 @@ def parsePubmed(doc, id):
                     if (j.attrib['Name'] == 'pubmed'):
                         infoDict[j.attrib['Name']] = j.text
                     if (j.attrib['Name'] == 'pmc'):
+                        infoDict[j.attrib['Name']] = j.text
+                    if (j.attrib['Name'] == 'doi'):
                         infoDict[j.attrib['Name']] = j.text
                 continue
             if i.attrib['Name'] in attribList:
@@ -62,7 +64,7 @@ def parseInit(id):
 def htmlEscape(str):
     return cgi.escape(str).encode('ascii', 'xmlcharrefreplace')
 
-def makeHtml(infoDict, plain, verbose):
+def makeHtml(infoDict, plain, verbose, doi):
     authors = list()
     authcount = 0
     etal = 0
@@ -109,27 +111,42 @@ def makeHtml(infoDict, plain, verbose):
     idStr = "PMID: <a href=\"%s\" target=\"_blank\">%s</a>" % (htmlEscape(infoDict['url']), infoDict['pubmed'])
     if 'pmc' in infoDict:
         idStr = idStr + "; PMC: <a href=\"https://www.ncbi.nlm.nih.gov/pmc/articles/%s/\" target=\"_blank\">%s</a>" % (infoDict['pmc'], infoDict['pmc'])
+    if doi and 'doi' in infoDict:
+        idStr = ("DOI: <a href=\"https://doi.org/%s\" target=\"_blank\">%s</a>; " % (htmlEscape(infoDict['doi']), infoDict['doi'] ) ) + idStr
 
     # now that the pubmed link has been constructed, we can overwrite the url in infoDict with the original article URL
 
     # make sure the portlet that generates outlinks for PubMed didn't fail.  If it did, try again until
     # it works or we give up.
+    # Note: no longer sure this is necessary - seems like NCBI is doing something different now, but at
+    # any rate urllib2 no longer seems to fetch the links list in at least some cases.  Requests works.
+    origUrl = infoDict['url']
     for try_count in range(10):
         origComment = ""
-        fetch = urllib2.urlopen(infoDict['url'])
-        doc = fetch.read()
-        m = re.search('<div class="icons portlet".*Full text links</span></h3></div></div><a href="(\S+)"', doc)
-        if m:
-            if m.group(1):
-                # Rhetorical: how can m match without m.group(1) being defined for this regex? Anyway ....
-                infoDict['url'] = m.group(1).replace("&amp;", "&")
-            break
-        else:
-            origComment = "<!-- Can't find original article link for %s -->" % infoDict['url']
-            #n = re.search('<div class="icons"></div>', doc) # another possible detection of failed portlet
-            p = re.search('Default output of portlet NCBIPageSection', doc)
-            if p is None:
+        infoDict['url'] = origUrl
+        fetch = requests.get(infoDict['url'])
+        try:
+	    m = re.search('<div class="full-text-links-list">\s*<a\s+(class="[^"]*"\s+)?href="(\S+)"', fetch.text)
+            if m:
+                if m.group(2):
+                    # Rhetorical: how can m match without m.group(1) being defined for this regex? Anyway ....
+                    infoDict['url'] = m.group(2).replace("&amp;", "&")
                 break
+            else:
+                #n = re.search('<div class="icons"></div>', doc) # another possible detection of failed portlet
+                p = re.search('Default output of portlet NCBIPageSection', doc)
+                if p is None:
+                    break
+        except:
+	    try:
+		m = re.search('<div class="full-text-links-list">\s*<a\s+(class="[^"]*"\s+)?href="(.+)"', fetch.text)
+                if m:
+                    if m.group(2):
+                        # Rhetorical: how can m match without m.group(1) being defined for this regex? Anyway ....
+                        infoDict['url'] = m.group(2).replace("&amp;", "&").replace(" ", "%20").replace("///","//")
+                    break
+            except:
+                print "Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link."
     else:
         print "Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link."
 
@@ -146,6 +163,8 @@ def makeHtml(infoDict, plain, verbose):
         idStr = "PMID: %s" % infoDict['pubmed'];
         if 'pmc' in infoDict:
             idStr = idStr + "; PMC: %s" % infoDict['pmc']
+        if 'doi' in infoDict:
+            idStr = ("DOI: %s; " % infoDict['doi']) + idStr
         htmlLines.append("%s %s. %s. %s %s. %s" % (authStr, title, journal, dateStr, idStr, infoDict['url']))
     if not plain and origComment:
         htmlLines.append("%s" %  origComment)
@@ -167,13 +186,14 @@ def main():
     parser.add_argument('ids', metavar='IDs', type=str, nargs='+', help='The list of PubMed and PubMedCentral Ids')
     parser.add_argument('-p', '--plain', action="store_true", default=0, help="Output the references in plain-text instead of html.")
     parser.add_argument('-v', '--verbose', action="store_true", default=0, help="Output the full author list instead of truncating after the first 10.")
+    parser.add_argument('-d', '--doi', action="store_true", default=0, help="Include a DOI link.")
     args = parser.parse_args()
     ids = args.ids
     references = dict()
 
     for i in ids:
         infoDict = parseInit(i)
-        html, authStr = makeHtml(infoDict, args.plain, args.verbose)
+        html, authStr = makeHtml(infoDict, args.plain, args.verbose, args.doi)
         references[authStr] = html
     print "\n"
     for i in sorted(references.keys()):

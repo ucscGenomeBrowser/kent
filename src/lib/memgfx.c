@@ -126,18 +126,28 @@ Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned 
 return MAKECOLOR_32(r,g,b);
 }
 
+Color mgFindAlphaColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+/* Returns closest color in color map to rgba values.  If it doesn't
+ * already exist in color map and there's room, it will create
+ * exact color in map. */
+{
+return MAKECOLOR_32_A(r,g,b,a);
+}
+
 struct rgbColor colorIxToRgb(int colorIx)
 /* Return rgb value at color index. */
 {
-static struct rgbColor rgb;
+struct rgbColor rgb;
 #ifdef MEMGFX_BIGENDIAN
 rgb.r = (colorIx >> 24) & 0xff;
 rgb.g = (colorIx >> 16) & 0xff;
 rgb.b = (colorIx >> 8) & 0xff;
+rgb.a = (colorIx >> 0) & 0xff;
 #else
 rgb.r = (colorIx >> 0) & 0xff;
 rgb.g = (colorIx >> 8) & 0xff;
 rgb.b = (colorIx >> 16) & 0xff;
+rgb.a = (colorIx >> 24) & 0xff;
 #endif
 return rgb;
 }
@@ -190,7 +200,12 @@ int i;
 for (i=0; i<width; ++i)
     {
     if ((c = s[i]) != MG_WHITE)
-        d[i] = c;
+        {
+        if (COLOR_32_ALPHA(c) == 0xff)
+            d[i] = c;
+        else
+            mixColor(&d[i], c);
+        }
     }
 }
 
@@ -218,8 +233,9 @@ if (width > 0)
         nonZeroCopy(pt, dots, width);
     else
         {
-        width *= sizeof(Color);
-        memcpy(pt, dots, width * sizeof(Color));
+        int i;
+        for (i=0; i<width; i++)
+            mixColor(&pt[i], dots[i]);
         }
     }
 }
@@ -239,11 +255,8 @@ while (--height >= 0)
 
 void mgDrawBoxNormal(struct memGfx *mg, int x, int y, int width, int height, Color color)
 {
-int i;
-Color *pt;
 int x2 = x + width;
 int y2 = y + height;
-int wrapCount;
 
 if (x < mg->clipMinX)
     x = mg->clipMinX;
@@ -264,20 +277,15 @@ if (y2 > mg->clipMaxY)
     y2 = mg->clipMaxY;
 width = x2-x;
 height = y2-y;
-if (width > 0 && height > 0)
+
+for (int i=x; i<x2; i++)
     {
-    pt = _mgPixAdr(mg,x,y);
-    /*colorBin[x][color]++;  increment color count for this pixel */
-    wrapCount = _mgBpr(mg) - width;
-    while (--height >= 0)
-	{
-        //Color src = *pt;
-	i = width;
-	while (--i >= 0)
-	    *pt++ = color;
-	pt += wrapCount;
-	}
+    for (int j=y; j<y2; j++)
+        {
+        mixDot(mg, i, j, COLOR_32_ALPHA(color)/255.0, color);
+        }
     }
+
 }
 
 void mgDrawBoxMultiply(struct memGfx *mg, int x, int y, int width, int height, Color color)
@@ -511,7 +519,7 @@ else
 		    mgDrawBox(mg,x1,y1,1,yBase-y1,color);
 		}
 	    else
-		mgPutDot(mg,x1,y1,color);
+		mixDot(mg,x1,y1,COLOR_32_ALPHA(color)/255.0,color);
 	    duty_cycle -= delta_y;
 	    x1 += 1;
 	    if (duty_cycle < 0)
@@ -532,7 +540,7 @@ else
 		    mgDrawBox(mg,x1,y1,1,yBase-y1,color);
 		}
 	    else
-		mgPutDot(mg,x1,y1,color);
+		mixDot(mg,x1,y1,COLOR_32_ALPHA(color)/255.0,color);
 	    duty_cycle += delta_x;
 	    y1+=incy;
 	    if (duty_cycle > 0)
@@ -611,7 +619,7 @@ if (y >= mg->clipMinY && y < mg->clipMaxY)
 	else
 	    {
 	    while (--w >= 0)
-		*pt++ = color;
+                mixColor(pt++, color);
 	    }
 	}
     }
@@ -644,6 +652,8 @@ return (*h > 0 && *w > 0);
 }
 
 #ifdef SOON /* Simple but as yet untested blit function. */
+/* Note - these haven't been modified to have blit respect alpha in the blitted object - they
+ * would need to start calling mixDot instead of just smashing the previous content with memcpy. */
 void mgBlit(int width, int height, 
     struct memGfx *source, int sourceX, int sourceY,
     struct memGfx *dest, int destX, int destY)
@@ -687,7 +697,7 @@ while (--height >= 0)
     while (--i >= 0)
 	{
 	if (inBit & inByte)
-	    *out = color;
+            mixColor(out, color);
 	++out;
 	if ((inBit >>= 1) == 0)
 	    {
@@ -723,7 +733,11 @@ while (--height >= 0)
     int i = width;
     while (--i >= 0)
 	{
-	*out++ = ((inBit & inByte) ? color : backgroundColor);
+        if (inBit & inByte)
+            mixColor(out, color);
+        else
+            mixColor(out, backgroundColor);
+        out++;
 	if ((inBit >>= 1) == 0)
 	    {
 	    inByte = *in++;
@@ -967,7 +981,7 @@ return mgFontForSizeAndStyle(textSize, "medium");
 void mgSlowDot(struct memGfx *mg, int x, int y, int colorIx)
 /* Draw a dot when a macro won't do. */
 {
-mgPutDot(mg, x, y, colorIx);
+mixDot(mg, x, y, COLOR_32_ALPHA(colorIx)/255.0, colorIx);
 }
 
 int mgSlowGetDot(struct memGfx *mg, int x, int y)
@@ -1027,6 +1041,7 @@ vg->textRight = (vg_textRight)mgTextRight;
 vg->textCentered = (vg_textCentered)mgTextCentered;
 vg->textInBox = (vg_textInBox)mgTextInBox;
 vg->findColorIx = (vg_findColorIx)mgFindColor;
+vg->findAlphaColorIx = (vg_findAlphaColorIx)mgFindAlphaColor;
 vg->colorIxToRgb = (vg_colorIxToRgb)mgColorIxToRgb;
 vg->setWriteMode = (vg_setWriteMode)mgSetWriteMode;
 vg->setClip = (vg_setClip)mgSetClip;
@@ -1056,7 +1071,7 @@ unsigned char rgbMin = min3(rgb.r, rgb.g, rgb.b);
 unsigned char delta = rgbMax - rgbMin;
 unsigned short minMax = rgbMax + rgbMin;
 int divisor;
-struct hslColor hsl = { 0.0, 0, (1000*minMax+255)/(2*255) }; // round up
+struct hslColor hsl = { 0.0, 0, (1000*minMax+255)/(2*255), rgb.a }; // round up
 
 // if max=min then no saturation, and this is gray
 if (rgbMax == rgbMin)
@@ -1098,7 +1113,7 @@ struct hsvColor mgRgbToHsv(struct rgbColor rgb)
 unsigned char rgbMax = max3(rgb.r, rgb.g, rgb.b);
 unsigned char rgbMin = min3(rgb.r, rgb.g, rgb.b);
 unsigned char delta = rgbMax - rgbMin;
-struct hsvColor hsv = {0.0, 0, 1000*rgbMax/255};
+struct hsvColor hsv = {0.0, 0, 1000*rgbMax/255, rgb.a};
 
 if (hsv.v == 0) 
     return hsv;
@@ -1137,7 +1152,7 @@ double r, g, b;
 double tR, tG, tB;
 
 if( hsl.s == 0 ) // achromatic (grey)
-    return (struct rgbColor) {(255*hsl.l+500)/1000, (255*hsl.l+500)/1000, (255*hsl.l+500)/1000};
+    return (struct rgbColor) {(255*hsl.l+500)/1000, (255*hsl.l+500)/1000, (255*hsl.l+500)/1000, hsl.alpha};
 if (hsl.l <= 500)
     q = hsl.l + (hsl.l*hsl.s+500)/1000;
 else
@@ -1186,7 +1201,7 @@ else if (tB < 2/3.0)
     b = p + (q-p)*6*(2/3.0 - tB);
 else
     b = p;
-return (struct rgbColor) {(255*r+500)/1000, (255*g+500)/1000, (255*b+500)/1000}; // round up
+return (struct rgbColor) {(255*r+500)/1000, (255*g+500)/1000, (255*b+500)/1000, hsl.alpha}; // round up
 }
 
 
@@ -1198,7 +1213,7 @@ double f;
 unsigned short low, q, t, r, g, b;
 
 if( hsv.s == 0 ) // achromatic (grey)
-    return (struct rgbColor) {(255*hsv.v+500)/1000, (255*hsv.v+500)/1000, (255*hsv.v+500)/1000};
+    return (struct rgbColor) {(255*hsv.v+500)/1000, (255*hsv.v+500)/1000, (255*hsv.v+500)/1000, hsv.alpha};
 hsv.h /= 60.0; 
 i = (int) hsv.h;                     // floor the floating point value, sector 0 to 5
 f = hsv.h - i;                       // fractional part (distance) from hue 
@@ -1241,7 +1256,7 @@ switch( i )
         b = q;
         break;
     }
-return (struct rgbColor) {(255*r+500)/1000, (255*g+500)/1000, (255*b+500)/1000};
+return (struct rgbColor) {(255*r+500)/1000, (255*g+500)/1000, (255*b+500)/1000, hsv.alpha};
 }
 
 
@@ -1310,13 +1325,13 @@ void mgEllipse(struct memGfx *mg, int x0, int y0, int x1, int y1, Color color,
            {
            if (mode == ELLIPSE_BOTTOM || mode == ELLIPSE_FULL) 
                {
-               mgPutDot(mg, x1, y0, color); /*   I. Quadrant */
-               mgPutDot(mg, x0, y0, color); /*  II. Quadrant */
+               mixDot(mg, x1, y0, COLOR_32_ALPHA(color)/255.0, color); /*   I. Quadrant */
+               mixDot(mg, x0, y0, COLOR_32_ALPHA(color)/255.0, color); /*  II. Quadrant */
                }
            if (mode == ELLIPSE_TOP || mode == ELLIPSE_FULL) 
                {
-               mgPutDot(mg, x0, y1, color); /* III. Quadrant */
-               mgPutDot(mg, x1, y1, color); /*  IV. Quadrant */
+               mixDot(mg, x0, y1, COLOR_32_ALPHA(color)/255.0, color); /* III. Quadrant */
+               mixDot(mg, x1, y1, COLOR_32_ALPHA(color)/255.0, color); /*  IV. Quadrant */
                }
            }
        e2 = 2*err;
@@ -1327,10 +1342,10 @@ void mgEllipse(struct memGfx *mg, int x0, int y0, int x1, int y1, Color color,
    while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
        if (!isDashed && (++dots % 3))
            {
-           mgPutDot(mg, x0-1, y0, color); /* -> finish tip of ellipse */
-           mgPutDot(mg, x1+1, y0++, color);
-           mgPutDot(mg, x0-1, y1, color);
-           mgPutDot(mg, x1+1, y1--, color);
+           mixDot(mg, x0-1, y0, COLOR_32_ALPHA(color)/255.0, color); /* -> finish tip of ellipse */
+           mixDot(mg, x1+1, y0++, COLOR_32_ALPHA(color)/255.0, color);
+           mixDot(mg, x0-1, y1, COLOR_32_ALPHA(color)/255.0, color);
+           mixDot(mg, x1+1, y1--, COLOR_32_ALPHA(color)/255.0, color);
            }
    }
 }

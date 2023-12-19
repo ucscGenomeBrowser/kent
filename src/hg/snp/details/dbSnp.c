@@ -88,11 +88,12 @@ struct sqlResult *sr;
 char **row = NULL;
 struct slName *list = NULL;
 struct slName *el = NULL;
-char  *queryString = NOSQLINJ "select   chrom "
-                     "from     chromInfo "
-                     "where    chrom not like '%random' " 
-                     "order by size desc";
-sr = sqlGetResult(conn, queryString);
+char query[1024];
+sqlSafef(query, sizeof query, 
+    "select  chrom from chromInfo "
+    "where chrom not like '%%random' " 
+    "order by size desc");
+sr = sqlGetResult(conn, query);
 while ((row=sqlNextRow(sr)))
     {
     el = newSlName(row[0]);
@@ -125,7 +126,7 @@ long int addSnpsFromChrom(char *chromName, struct dnaSeq *seq,
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row = NULL;
-struct dyString *query = newDyString(256);
+struct dyString *query = dyStringNew(256);
 char   rsId[20];
 unsigned long int snpCount = 0;
 
@@ -151,7 +152,7 @@ while ((row=sqlNextRow(sr)))
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-freeDyString(&query);
+dyStringFree(&query);
 return snpCount;
 }
 

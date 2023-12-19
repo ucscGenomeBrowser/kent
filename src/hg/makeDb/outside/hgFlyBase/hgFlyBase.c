@@ -119,7 +119,7 @@ return NULL;
 char *ungreek(char *s)
 /* Get rid of greek characters and unwanted tags. */
 {
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 char *result;
 char c;
 while ((c = *s++) != 0)
@@ -210,9 +210,10 @@ struct ref
 void remakeTables(struct sqlConnection *conn)
 /* Remake all our tables. */
 {
-sqlRemakeTable(conn, "fbGene", 
+char query[1024];
+sqlSafef(query, sizeof query, 
 "#Links FlyBase IDs, gene symbols and gene names\n"
-NOSQLINJ "CREATE TABLE fbGene (\n"
+"CREATE TABLE fbGene (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    geneSym varchar(255) not null,	# Short gene symbol\n"
 "    geneName varchar(255) not null,	# Gene name - up to a couple of words\n"
@@ -221,30 +222,33 @@ NOSQLINJ "CREATE TABLE fbGene (\n"
 "    INDEX(geneSym(8)),\n"
 "    INDEX(geneName(12))\n"
 ")\n");
+sqlRemakeTable(conn, "fbGene", query); 
 
-sqlRemakeTable(conn, "fbTranscript", 
+sqlSafef(query, sizeof query, 
 "#Links FlyBase gene IDs and BDGP transcripts\n"
-NOSQLINJ "CREATE TABLE fbTranscript (\n"
+"CREATE TABLE fbTranscript (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    transcriptId varchar(255) not null,	# BDGP Transcript ID\n"
 "              #Indices\n"
 "    PRIMARY KEY(transcriptId(11)),\n"
 "    INDEX(transcriptId(11))\n"
 ")\n");
+sqlRemakeTable(conn, "fbTranscript", query); 
 
-sqlRemakeTable(conn, "fbSynonym", 
+sqlSafef(query, sizeof query, 
 "#Links all the names we call a gene to it's flybase ID\n"
-NOSQLINJ "CREATE TABLE fbSynonym (\n"
+"CREATE TABLE fbSynonym (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    name varchar(255) not null,	# A name (synonym or real\n"
 "              #Indices\n"
 "    INDEX(geneId(11)),\n"
 "    INDEX(name(12))\n"
 ")\n");
+sqlRemakeTable(conn, "fbSynonym", query);
 
-sqlRemakeTable(conn, "fbAllele", 
+sqlSafef(query, sizeof query, 
 "#The alleles of a gene\n"
-NOSQLINJ "CREATE TABLE fbAllele (\n"
+"CREATE TABLE fbAllele (\n"
 "    id int not null,	# Allele ID\n"
 "    geneId varchar(255) not null,	# Flybase ID of gene\n"
 "    name varchar(255) not null,	# Allele name\n"
@@ -252,19 +256,21 @@ NOSQLINJ "CREATE TABLE fbAllele (\n"
 "    PRIMARY KEY(id),\n"
 "    INDEX(geneId(11))\n"
 ")\n");
+sqlRemakeTable(conn, "fbAllele", query); 
 
-sqlRemakeTable(conn, "fbRef", 
+sqlSafef(query, sizeof query, 
 "#A literature or sometimes database reference\n"
-NOSQLINJ "CREATE TABLE fbRef (\n"
+"CREATE TABLE fbRef (\n"
 "    id int not null,	# Reference ID\n"
 "    text longblob not null,	# Usually begins with flybase ref ID, but not always\n"
 "              #Indices\n"
 "    PRIMARY KEY(id)\n"
 ")\n");
+sqlRemakeTable(conn, "fbRef", query);
 
-sqlRemakeTable(conn, "fbRole", 
+sqlSafef(query, sizeof query, 
 "#Role of gene in wildType\n"
-NOSQLINJ "CREATE TABLE fbRole (\n"
+"CREATE TABLE fbRole (\n"
 "    geneId varchar(255) not null,	# Flybase Gene ID\n"
 "    fbAllele int not null,	# ID in fbAllele table or 0 if not allele-specific\n"
 "    fbRef int not null,	# ID in fbRef table\n"
@@ -272,10 +278,11 @@ NOSQLINJ "CREATE TABLE fbRole (\n"
 "              #Indices\n"
 "    INDEX(geneId(11))\n"
 ")\n");
+sqlRemakeTable(conn, "fbRole", query);
 
-sqlRemakeTable(conn, "fbPhenotype", 
+sqlSafef(query, sizeof query, 
 "#Observed phenotype in mutant.  Sometimes contains gene function info\n"
-NOSQLINJ "CREATE TABLE fbPhenotype (\n"
+"CREATE TABLE fbPhenotype (\n"
 "    geneId varchar(255) not null,	# Flybase Gene ID\n"
 "    fbAllele int not null,	# ID in fbAllele table or 0 if not allele-specific\n"
 "    fbRef int not null,	# ID in fbRef table\n"
@@ -283,10 +290,11 @@ NOSQLINJ "CREATE TABLE fbPhenotype (\n"
 "              #Indices\n"
 "    INDEX(geneId(11))\n"
 ")\n");
+sqlRemakeTable(conn, "fbPhenotype", query);
 
-sqlRemakeTable(conn, "fbGo", 
+sqlSafef(query, sizeof query, 
 "#Links FlyBase gene IDs and GO IDs/aspects\n"
-NOSQLINJ "CREATE TABLE fbGo (\n"
+"CREATE TABLE fbGo (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    goId varchar(255) not null,	# GO ID\n"
 "    aspect varchar(255) not null,      # P (process), F (function) or C (cellular component)"
@@ -294,16 +302,18 @@ NOSQLINJ "CREATE TABLE fbGo (\n"
 "    INDEX(geneId(11)),\n"
 "    INDEX(goId(10))\n"
 ")\n");
+sqlRemakeTable(conn, "fbGo", query);
 
-sqlRemakeTable(conn, "fbUniProt", 
+sqlSafef(query, sizeof query, 
 "#Links FlyBase gene IDs and UniProt IDs/aspects\n"
-NOSQLINJ "CREATE TABLE fbUniProt (\n"
+"CREATE TABLE fbUniProt (\n"
 "    geneId varchar(255) not null,	# FlyBase ID\n"
 "    uniProtId varchar(255) not null,	# UniProt ID\n"
 "              #Indices\n"
 "    INDEX(geneId(11)),\n"
 "    INDEX(uniProtId(6))\n"
 ")\n");
+sqlRemakeTable(conn, "fbUniProt", query);
 }
 
 struct geneAlt

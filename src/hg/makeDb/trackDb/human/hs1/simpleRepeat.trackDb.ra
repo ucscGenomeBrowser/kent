@@ -1,0 +1,9 @@
+track simpleRepeat
+shortLabel Simple Repeats
+longLabel Simple Tandem Repeats by TRF
+group varRep
+visibility hide
+type bigBed 4 +
+bigDataUrl  /gbdb/hs1/bbi/simpleRepeat.bb
+html html/GCA_009914755.4_T2T-CHM13v2.0.simpleRepeat
+

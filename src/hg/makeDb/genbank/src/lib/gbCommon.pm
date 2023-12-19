@@ -270,6 +270,7 @@ sub gbError($) {
 
     # see perlvar man page about why this is needed
     if (defined($^S)) {
+        prMsg($msg);
         if ($gbCommon::verbose) {
             confess();
         }
@@ -520,7 +521,9 @@ sub runPipe($) {
 sub md5Files($@) {
     my($outFile, @files) = @_;
     my $tmpFile = "$outFile.tmp";
-    runProg("md5sum " . join(' ',sort(@files)) . " >$tmpFile");
+    foreach my $file (@files) {
+        runProg("md5sum " . $file . " >>$tmpFile");
+    }
     gbChmod($tmpFile);
     renameFile($tmpFile, $outFile);
 }

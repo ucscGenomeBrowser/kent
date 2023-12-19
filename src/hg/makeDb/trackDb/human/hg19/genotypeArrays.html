@@ -217,6 +217,33 @@ target="_blank">Agilent Catalog Oligonucleotide Microarrays</a>.  The following 
 	<td>Yes</td>
 	<td>0</td>
 </tr>
+<tr style="background-color: #d9e4ff">
+	<td>GenetiSure Cyto CGH+SNP 4x180K</td>
+	<td>085591</td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<tr style="background-color: #d9f8e4">
+	<td>GenetiSure Cyto CGH 4x180K</td>
+	<td>085589</td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<tr style="background-color: #d9e4ff">
+	<td>GenetiSure Cyto CGH 8x60k</td>
+	<td>085590</td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
 </tbody>
 </table>
 
@@ -310,6 +337,31 @@ of the array chosen by the <a href="https://allofus.nih.gov/" target="_blank">Al
 Program and is designed to capture a wider range of the world's populationsthan traditional
 microarrays.</p>
 
+<h4>Illumina 450k and 850k Methylation Arrays</h4>
+<p>
+With the <a href="https://www.illumina.com/products/by-type/microarray-kits/infinium-methylation-epic.html"
+target="_blank">Infinium MethylationEPIC BeadChip Kit</a>, researchers can interrogate over 850,000
+methylation sites quantitatively across the genome at single-nucleotide resolution. Multiple
+samples, including FFPE, can be analyzed in parallel to deliver high-throughput power while
+minimizing the cost per sample. These tracks show positions being measured on the Illumina 450k and
+850k (EPIC) microarray tracks. More information about the arrays can be found on the
+<a href="https://www.illumina.com/products/by-type/microarray-kits/infinium-methylation-epic.html"
+target="_blank">Infinium MethylationEPIC Kit</a> website.
+
+<h4>Illumina CytoSNP 850K Probe Array</h4>
+<p>
+The <a href="https://www.illumina.com/products/by-type/clinical-research-products/infinium-cytosnp-850k.html"
+target="_blank">Infinium CytoSNP-850K v1.2 BeadChip</a> provides comprehensive coverage of
+cytogenetically relevant genes on a proven platform, helping researchers find valuable information
+that may be missed by other technologies. It contains approximately 850,000 empirically selected
+single nucleotide polymorphisms (SNPs) spanning the entire genome with enriched coverage for 3,262
+genes of known cytogenetics relevance in both constitutional and cancer applications. Items in this
+track are colored according to their strand orientation. <b><font color=blue>Blue indicates
+alignment to the negative strand</font></b>, and <b><font color=red>red indicates alignment to the
+positive strand</font></b>.
+</p>
+
+
 <H2>Methods</H2>
 <P>
 Position, strand, and polymorphism data were obtained from Affymetrix and 
@@ -371,6 +423,42 @@ green and orange to highlight track boundaries. SNP subtracks
 are colored blue with SNP probes colored dark blue and 
 CGH probes colored light blue. The track consists of the 
 following subtracks:
+</P>
+<p>
+The Illumina 450k track was created using a <a target="_blank"
+href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=rhead&
+hgS_otherUserSessionName=450k.EPIC.beadchip">custom track</a> by Brooke Rhead (<A HREF="mailto:
+&#98;&#114;&#104;e&#97;d&#64;&#103;&#109;&#97;&#105;l.
+&#99;o&#109;">
+&#98;&#114;&#104;e&#97;d&#64;&#103;&#109;&#97;&#105;l.
+&#99;o&#109;</A>) and then converted into a bigBed.
+</p>
+<p>
+The Illumina 850k (EPIC) track was created using a few columns from the
+<a href="https://support.illumina.com/array/array_kits/infinium-methylationepic-beadchip-kit/downloads.html"
+target="_blank">Infinium MethylationEPIC v1.0 B5 Manifest File (CSV Format)</a>
+and was then converted into a bigBed.</p>
+<p>
+The Illumina CytoSNP-850K track was created by downloading the
+<a href="https://webdata.illumina.com/downloads/productfiles/cytosnp-850k/v1-2/cytosnp-850k-v1-2-ns550-d2-manifest-file-csv.zip"
+target="_blank">CytoSNP-850K v1.2 Manifest File (CSV Format)</a> file and then converted into a
+bigBed file using the hg19 coordinates.
+</p>
+
+
+<h2>Data Access</h2>
+<P>
+The raw data can be explored interactively with the
+<a target="_blank" href="/cgi-bin/hgTables">Table Browser</a> or the
+<a target="_blank" href="/cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated analysis, the data may be queried from our
+<a target="_blank" href="/goldenPath/help/api.html">REST API</a>
+or downloaded from our <a target="_blank" href="https://hgdownload.soe.ucsc.edu/gbdb/hg19/">
+Downloads site</a>. Please refer to our
+<a target="_blank" href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
+mailing list archives</a> for questions, or our
+<a target="_blank" href="/FAQ/FAQdownloads.html#downloads36">
+Data Access FAQ</a> for more information.
 </P>
 
 <H2>References</H2>

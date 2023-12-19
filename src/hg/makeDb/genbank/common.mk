@@ -47,7 +47,7 @@ GB_LIBARCH = ${GB_LIBDIR}/${MACHTYPE}
 LIBGENBANK = $(GB_LIBARCH)/libgenbank.a
 
 MYLIBDIR = ${KENT}/lib/$(MACHTYPE)
-JKLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+JKLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a $(MYLIBDIR)/jkhgapcgi.a
 
 LIBS = $(LIBGENBANK) ${JKLIBS}  ${MYSQLLIBS} -lm ${L}
 TESTBIN = ${GBROOT}/tests/bin

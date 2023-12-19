@@ -200,9 +200,9 @@ struct genePred *trackTableGetGenes(struct track *track,
 {
 char where[128];
 if (strand == ignoredStrand)
-    sqlSafefFrag(where, sizeof(where), "chrom = '%s'", chrom);
+    sqlSafef(where, sizeof(where), "chrom = '%s'", chrom);
 else
-    sqlSafefFrag(where, sizeof(where), "chrom = '%s' and strand = '%c'", chrom, strand);
+    sqlSafef(where, sizeof(where), "chrom = '%s' and strand = '%c'", chrom, strand);
 return genePredReaderLoadQuery(conn, track->table,  where);
 }
 

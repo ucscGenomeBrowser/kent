@@ -32,7 +32,7 @@ errAbort(
 void intronEnds(char *database, char *table)
 /* intronEnds - Gather stats on intron ends.. */
 {
-struct dyString *query = newDyString(1024);
+struct dyString *query = dyStringNew(1024);
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
@@ -52,10 +52,10 @@ rowOffset = hOffsetPastBin(database, NULL, table);
 conn = hAllocConn(database);
 sqlDyStringPrintf(query, "select * from %s", table);
 if (chromName != NULL)
-    dyStringPrintf(query, " where chrom = '%s'", chromName);
+    sqlDyStringPrintf(query, " where chrom = '%s'", chromName);
 if (cgiBoolean("withUtr"))
     {
-    dyStringPrintf(query, " %s txStart != cdsStart", 
+    sqlDyStringPrintf(query, " %s txStart != cdsStart", 
         (chromName == NULL ? "where" : "and"));
     }
 sr = sqlGetResult(conn, query->string);

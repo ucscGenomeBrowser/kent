@@ -25,7 +25,7 @@ sub otherHubLinks($$) {
   my ($vgpIndex, $asmHubName) = @_;
 
 my %asmCounts;	# key is hubName, value is number of assemblies
-my @hubList = qw(primates mammals birds fish vertebrate invertebrate plants fungi);
+my @hubList = qw(primates mammals birds fish vertebrate invertebrate plants fungi viral bacteria);
 foreach my $hubName (@hubList) {
   my $asmCount = `grep -v "^#" ../${hubName}AsmHub/${hubName}.orderList.tsv | wc -l`;
   chomp $asmCount;
@@ -34,14 +34,20 @@ foreach my $hubName (@hubList) {
 my $vgpCount = `grep -h -v "^#" ../vgpAsmHub/vgp.*.orderList.tsv | wc -l`;
 chomp $vgpCount;
 $asmCounts{'vgp'} = $vgpCount;
-my $legacyCount = `grep -h -v "^#" ../legacyAsmHub/legacy.orderList.tsv | wc -l`;
+my $hprcCount = `grep -c -h -v "^#" ../hprcAsmHub/hprc.orderList.tsv`;
+chomp $hprcCount;
+$asmCounts{'hprc'} = $hprcCount;
+my $ccgpCount = `grep -c -h -v "^#" ../ccgpAsmHub/ccgp.orderList.tsv`;
+chomp $ccgpCount;
+$asmCounts{'ccgp'} = $ccgpCount;
+my $legacyCount = `grep -c -h -v "^#" ../legacyAsmHub/legacy.orderList.tsv`;
 chomp $legacyCount;
 $asmCounts{'legacy'} = $legacyCount;
 
 # different table output for VGP index
 
-if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
-  printf "<p>\n<table border='1' style='margin-left:auto; margin-right:auto;'><thead>\n";
+if ((0 == $vgpIndex)) {
+  printf "<p>\n<table style='border: 1px solid black; margin-left:auto; margin-right:auto;'><thead>\n";
   printf "<tr><th colspan=4 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
   printf "<tr><th>Collection</th>\n";
   printf "    <th>Hub index pages:</th>\n";
@@ -55,6 +61,10 @@ if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
       printf "<tr><th>Fishes</th>\n";
     } elsif ($hubName =~ m/invertebrate/) {
       printf "<tr><th>Invertebrates</th>\n";
+    } elsif ($hubName =~ m/viral/) {
+      printf "<tr><th>Viruses</th>\n";
+    } elsif ($hubName =~ m/bacteria/) {
+      printf "<tr><th>Bacteria</th>\n";
     } else {
       printf "<tr><th>%s</th>\n", ucfirst($hubName);
     }
@@ -63,18 +73,33 @@ if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
     printf "    <th><a href='../%s/trackData.html'>track stats</a></th>\n", $hubName;
     printf "</tr>\n";
   }
+  printf "<tr><th>legacy/superseded</th>\n";
+  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "legacy", $asmCounts{'legacy'};
+  printf "    <th><a href='../legacy/asmStats.html'>assembly stats</a></th>\n";
+  printf "    <th><a href='../legacy/trackData.html'>track stats</a></th>\n";
+  printf "</tr>\n";
+
+  printf "<tr>
+    <th style='text-align:center;' colspan=4>collections below are subsets of the assemblies above</th>
+</tr>\n";
+
   printf "<tr><th>VGP - Vertebrate Genome Project</th>\n";
   printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "VGP", $asmCounts{'vgp'};
   printf "    <th><a href='../VGP/asmStats.html'>assembly stats</a></th>\n";
   printf "    <th><a href='../VGP/trackData.html'>track stats</a></th>\n";
   printf "</tr>\n";
-  printf "<tr><th>legacy/superseded</th>\n";
-  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "legacy", $asmCounts{'legacy'};
-  printf "    <th><a href='../legacy/asmStats.html'>assembly stats</a></th>\n";
-  printf "    <th><a href='../legacy/trackData.html'>track stats</a></th>\n";
+  printf "<tr><th>CCGP - The California Conservation Genomics Project</th>\n";
+  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "CCGP", $asmCounts{'ccgp'};
+  printf "    <th><a href='../CCGP/asmStats.html'>assembly stats</a></th>\n";
+  printf "    <th><a href='../CCGP/trackData.html'>track stats</a></th>\n";
+  printf "</tr>\n";
+  printf "<tr><th>HPRC - Human Pangenome Reference Consortium</th>\n";
+  printf "    <th style='text-align:right'><a href='../%s/index.html'>%d assemblies</a></th>\n", "HPRC", $asmCounts{'hprc'};
+  printf "    <th><a href='../HPRC/asmStats.html'>assembly stats</a></th>\n";
+  printf "    <th><a href='../HPRC/trackData.html'>track stats</a></th>\n";
   printf "</tr></thead>\n</table>\n</p>\n";
 } elsif (1 == $vgpIndex) {
-  printf "<p>\n<table border='1'><thead>\n";
+  printf "<p>\n<table style='border: 1px solid black;'><thead>\n";
   printf "<tr><th colspan=5 style='text-align:center;'>Alternate sets of VGP assemblies</th><th style='text-align:center;'>NCBI Refseq</th></tr>\n";
   printf "<tr><th>Index pages:&nbsp;</th>\n";
   printf "<th><a href='index.html'>primary assembly</a></th>\n";
@@ -113,7 +138,7 @@ print <<"END"
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
 </div><!-- closing container-fluid from gbPageStartHardcoded.html -->
 <!--#include virtual="\$ROOT/inc/gbFooterHardcoded.html"-->
-<script type="text/javascript" src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
+<script src="<!--#echo var="ROOT" -->/js/sorttable.js"></script>
 </body></html>
 END
 }

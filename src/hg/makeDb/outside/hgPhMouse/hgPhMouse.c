@@ -43,7 +43,7 @@ void loadDatabase(char *database, char *track, char *tabName)
 /* Load up database from tab-file. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 
 if (!cgiBoolean("add"))

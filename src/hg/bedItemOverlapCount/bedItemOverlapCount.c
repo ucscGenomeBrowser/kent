@@ -110,7 +110,9 @@ else
 
 ret = newHash(0);
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);

@@ -138,11 +138,11 @@ void genotypeFreqsSaveToDb(struct sqlConnection *conn, struct genotypeFreqs *el,
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d,'%c','%s','%s','%s','%s','%s','%s',%f,%d,'%s',%f,%d,'%s',%f,%d,%d,%f)", 
 	tableName,  el->rsId,  el->chrom,  el->chromStart,  el->strand,  el->assembly,  el->center,  el->protLSID,  el->assayLSID,  el->panelLSID,  el->majGt,  el->majFreq,  el->majCount,  el->hetGt,  el->hetFreq,  el->hetCount,  el->minGt,  el->minFreq,  el->minCount,  el->totCount,  el->minAlFreq);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

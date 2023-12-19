@@ -67,30 +67,30 @@ int main(int argc, char *argv[])
 	desc		= strdup("");
 	protAcc		= strdup("");
 
-        sqlSafefFrag(cond_str, sizeof cond_str, "displayID='%s'", spDisplayID);
+        sqlSafef(cond_str, sizeof cond_str, "displayID='%s'", spDisplayID);
         spID = sqlGetField(proteinDB, "spXref3", "accession", cond_str);
         
 	/* use description for the protein as default, replace it with HUGO desc if available. */
-	sqlSafefFrag(cond_str, sizeof cond_str, "displayID='%s'", spDisplayID);
+	sqlSafef(cond_str, sizeof cond_str, "displayID='%s'", spDisplayID);
         desc  = sqlGetField(proteinDB, "spXref3", "description", cond_str);
         
-	sqlSafefFrag(cond_str, sizeof cond_str, "name='%s' and seqType='g'", kgID);
+	sqlSafef(cond_str, sizeof cond_str, "name='%s' and seqType='g'", kgID);
         seqType = sqlGetField(database, "knownGeneLink", "seqType", cond_str);
 
         if (seqType != NULL)
             {
 	    leg = 1;
             /* special processing for RefSeq DNA based genes */
-            sqlSafefFrag(cond_str, sizeof cond_str, "mrnaAcc = '%s'", kgID);
+            sqlSafef(cond_str, sizeof cond_str, "mrnaAcc = '%s'", kgID);
             refSeqName = sqlGetField(ro_DB, "refLink", "name", cond_str);
             if (refSeqName != NULL)
                 {
                 geneSymbol = cloneString(refSeqName);
 		refseqID   = kgID;
-            	sqlSafefFrag(cond_str, sizeof cond_str, "mrnaAcc = '%s'", kgID);
+            	sqlSafef(cond_str, sizeof cond_str, "mrnaAcc = '%s'", kgID);
             	desc = sqlGetField(ro_DB, "refLink", "product", cond_str);
 		
-		sqlSafefFrag(cond_str, sizeof cond_str, "mrnaAcc='%s'", refseqID);
+		sqlSafef(cond_str, sizeof cond_str, "mrnaAcc='%s'", refseqID);
         	answer = sqlGetField(ro_DB, "refLink", "protAcc", cond_str);
         	if (answer != NULL)
             	    {
@@ -100,25 +100,25 @@ int main(int argc, char *argv[])
             }
         else
             {
-            sqlSafefFrag(cond_str, sizeof cond_str, "displayID = '%s'", spDisplayID);
+            sqlSafef(cond_str, sizeof cond_str, "displayID = '%s'", spDisplayID);
             hugoID = sqlGetField(proteinDB, "spXref3", "hugoSymbol", cond_str);
             if (!((hugoID == NULL) || (*hugoID == '\0')) )
                 {
 		leg = 21;
                 geneSymbol = cloneString(hugoID);
 
-            	sqlSafefFrag(cond_str, sizeof cond_str, "displayID = '%s'", spDisplayID);
+            	sqlSafef(cond_str, sizeof cond_str, "displayID = '%s'", spDisplayID);
             	desc = sqlGetField(proteinDB, "spXref3", "hugoDesc", cond_str);
 		}
 
-            sqlSafefFrag(cond_str, sizeof cond_str, "mrna = '%s'", kgID);
+            sqlSafef(cond_str, sizeof cond_str, "mrna = '%s'", kgID);
             answer = sqlGetField(database, "mrnaRefseq", "refseq", cond_str);
 	    if (answer != NULL) 
 		{
 		leg = 22;
 		refseqID = strdup(answer);
 		
-		sqlSafefFrag(cond_str, sizeof cond_str, "mrnaAcc='%s'", refseqID);
+		sqlSafef(cond_str, sizeof cond_str, "mrnaAcc='%s'", refseqID);
         	answer = sqlGetField(ro_DB, "refLink", "protAcc", cond_str);
         	if (answer != NULL)
             	    {
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 		leg = 23;
 		if (strlen(refseqID) != 0)
 			{
-			sqlSafefFrag(cond_str, sizeof cond_str, "mrnaAcc = '%s'", refseqID);
+			sqlSafef(cond_str, sizeof cond_str, "mrnaAcc = '%s'", refseqID);
 			answer = sqlGetField(ro_DB, "refLink", "name", cond_str);
 			if (answer != NULL) 
 				{

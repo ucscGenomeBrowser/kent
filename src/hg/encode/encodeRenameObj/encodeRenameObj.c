@@ -348,7 +348,7 @@ for(el=list; el; el=el->next)
 
 
 // make sure all the files are there
-struct dyString *newFileNames = newDyString(256);
+struct dyString *newFileNames = dyStringNew(256);
 for(el=list; el; el=el->next)
     {
 

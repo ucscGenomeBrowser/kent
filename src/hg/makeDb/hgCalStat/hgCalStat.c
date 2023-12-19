@@ -100,7 +100,7 @@ while (fgets(line, 1000, inf) != NULL)
     sprintf(line, "%s_random", chrom);
     chromRandom = strdup(line);
     
-    sqlSafefFrag(cond_str, sizeof cond_str, "chrom='%s'", chrom);
+    sqlSafef(cond_str, sizeof cond_str, "chrom='%s'", chrom);
 
     /* reformat and output the first 9 columns */
     chp = strstr(chrom, "chr")+strlen("chr");
@@ -117,7 +117,7 @@ while (fgets(line, 1000, inf) != NULL)
 
     chromSize = atoi(sqlGetField(genomeDBname, "chromInfo", "size", cond_str));
 
-    sqlSafefFrag(cond_str, sizeof cond_str, "chrom='%s'", chromRandom);
+    sqlSafef(cond_str, sizeof cond_str, "chrom='%s'", chromRandom);
     if (sqlGetField(genomeDBname, "chromInfo", "size", cond_str) != NULL)
     	{
 	hasRandom = TRUE;
@@ -129,7 +129,7 @@ while (fgets(line, 1000, inf) != NULL)
         chromRandomSize = 0;
 	}
     
-    sqlSafefFrag(cond_str, sizeof cond_str, "chrom='%s'", chrom);
+    sqlSafef(cond_str, sizeof cond_str, "chrom='%s'", chrom);
     ctgCnt = sqlGetField(genomeDBname, "ctgPos", "count(*)", cond_str);
 
     fprintf(outf,"%12s", ctgCnt);
@@ -164,7 +164,7 @@ while (fgets(line, 1000, inf) != NULL)
     /* calculate N50 for random contigs */
     if (hasRandom)
 	{
-        sqlSafefFrag(cond_str, sizeof cond_str, "chrom='%s'", chromRandom);
+        sqlSafef(cond_str, sizeof cond_str, "chrom='%s'", chromRandom);
         ctgRandomCnt = sqlGetField(genomeDBname, "ctgPos", "count(*)", cond_str);
 	
     	sqlSafef(query2, sizeof query2,

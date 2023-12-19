@@ -56,7 +56,7 @@ void loadDatabase(char *database, char *tab, char *track)
 /* Load database from tab file. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 /* First make table definition. */
 if (sqlTable != NULL)
     {
@@ -77,37 +77,39 @@ else if (!oldTable)
     verbose(1, "Creating table definition for %s\n", track);
     sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
-	dyStringAppend(dy, "  bin smallint unsigned not null,\n");
-    dyStringAppend(dy, "  level int unsigned not null,\n");
-    dyStringAppend(dy, "  tName varchar(255) not null,\n");
-    dyStringAppend(dy, "  tStart int unsigned not null,\n");
-    dyStringAppend(dy, "  tEnd int unsigned not null,\n");
-    dyStringAppend(dy, "  strand char(1) not null,\n");
-    dyStringAppend(dy, "  qName varchar(255) not null,\n");
-    dyStringAppend(dy, "  qStart int unsigned not null,\n");
-    dyStringAppend(dy, "  qEnd int unsigned not null,\n");
-    dyStringAppend(dy, "  chainId int unsigned not null,\n");
-    dyStringAppend(dy, "  ali int unsigned not null,\n");
-    dyStringAppend(dy, "  score double not null,\n");
-    dyStringAppend(dy, "  qOver int not null, \n");
-    dyStringAppend(dy, "  qFar int not null, \n");
-    dyStringAppend(dy, "  qDup int not null, \n");
-    dyStringAppend(dy, "  type varchar(255) not null,\n");
-    dyStringAppend(dy, "  tN int not null, \n");
-    dyStringAppend(dy, "  qN int not null, \n");
-    dyStringAppend(dy, "  tR int not null, \n");
-    dyStringAppend(dy, "  qR int not null, \n");
-    dyStringAppend(dy, "  tNewR int not null, \n");
-    dyStringAppend(dy, "  qNewR int not null, \n");
-    dyStringAppend(dy, "  tOldR int not null, \n");
-    dyStringAppend(dy, "  qOldR int not null, \n");
-    dyStringAppend(dy, "  tTrf int not null, \n");
-    dyStringAppend(dy, "  qTrf int not null, \n");
-    dyStringAppend(dy, "#Indices\n");
+	sqlDyStringPrintf(dy, "  bin smallint unsigned not null,\n");
+    sqlDyStringPrintf(dy,
+    "  level int unsigned not null,\n"
+    "  tName varchar(255) not null,\n"
+    "  tStart int unsigned not null,\n"
+    "  tEnd int unsigned not null,\n"
+    "  strand char(1) not null,\n"
+    "  qName varchar(255) not null,\n"
+    "  qStart int unsigned not null,\n"
+    "  qEnd int unsigned not null,\n"
+    "  chainId int unsigned not null,\n"
+    "  ali int unsigned not null,\n"
+    "  score double not null,\n"
+    "  qOver int not null, \n"
+    "  qFar int not null, \n"
+    "  qDup int not null, \n"
+    "  type varchar(255) not null,\n"
+    "  tN int not null, \n"
+    "  qN int not null, \n"
+    "  tR int not null, \n"
+    "  qR int not null, \n"
+    "  tNewR int not null, \n"
+    "  qNewR int not null, \n"
+    "  tOldR int not null, \n"
+    "  qOldR int not null, \n"
+    "  tTrf int not null, \n"
+    "  qTrf int not null, \n"
+    "#Indices\n");
     if (!noBin)
-	dyStringAppend(dy, "  INDEX(tName(16),bin),\n");
-    dyStringAppend(dy, "  INDEX(tName(16),tStart)\n");
-    dyStringAppend(dy, ")\n");
+	sqlDyStringPrintf(dy, "  INDEX(tName(16),bin),\n");
+    sqlDyStringPrintf(dy,
+    "  INDEX(tName(16),tStart)\n"
+    ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }
 

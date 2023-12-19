@@ -30,7 +30,9 @@ hgLib:
 ifneq ($(wildcard hg/makefile),)
 	@./hg/sqlEnvTest.sh
 	cd hg/lib && ${MAKE}
+ifneq ($(wildcard hg/cgilib/makefile),)
 	cd hg/cgilib && ${MAKE}
+endif
 endif
 
 libs: topLibs hgLib optLib
@@ -94,6 +96,7 @@ userApps: topLibs hgLib destBin
 	@for P in ${BLAT_APPLIST}; do \
 	    ( cd $${P} && echo $${P} && ${MAKE} ) ; \
 	done
+	cd tabFile && echo tabFile && ${MAKE} userApps
 	cd utils/userApps && echo utils/userApps && ${MAKE}
 
 destBin:
@@ -122,13 +125,13 @@ endif
 	rm -f tags TAGS
 	rm -f cscope.out cscope.files cscope.po.out
 
-testDirs = lib utils blat gfServer hg
+testDirs = blat gfServer hg lib utils
 test:: $(testDirs:%=%.test)
 %.test:
-	cd $* && ${MAKE} test
+	if test -d $* ; then cd $* && ${MAKE} test; fi
 
 LIB_TAGS_IN = lib/*.[hc] */lib/*.[hc] */*/lib/*.[hc] */*/*/lib/*.[hc] jkOwnLib/*.c \
-	inc/*.h */inc/*.h */*/inc/*.h */*/*/inc/*.h
+	inc/*.h */inc/*.h */*/inc/*.h */*/*/inc/*.h */cgilib/*.[hc]
 
 # build tags for libraries
 .PHONY: tags
@@ -149,7 +152,7 @@ etags:
 # build tags for all files
 .PHONY: tags-all
 tags-all:
-	find . -name '*.[ch]' | ctags -L -
+	find . -name '*.[ch]' | grep -v "/userApps/" | ctags -L -
 
 # build emacs tags for all files
 .PHONY: etags-all
@@ -166,9 +169,7 @@ utils: libs destBin
             fi ;\
 	done
 	cd utils && ${MAKE}
-ifneq ($(wildcard jkOwnLib/*),)
 	cd hg && ${MAKE} utils
-endif
 
 utils-alpha: check-alpha libs destBin
 	${MKDIR} ${SCRIPTS}

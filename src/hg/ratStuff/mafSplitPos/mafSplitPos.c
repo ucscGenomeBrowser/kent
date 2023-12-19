@@ -50,21 +50,21 @@ char **row;
 int pos = -1;
 int start, end;
 struct hTableInfo *hti = hFindTableInfo(db, chrom, "gap");
-struct dyString *query = newDyString(1024);
+struct dyString *query = dyStringNew(1024);
 
 if (hti == NULL)
     errAbort("table %s.gap doesn't exist", db);
 sqlDyStringPrintf(query, "select chromStart,chromEnd from ");
 if (hti->isSplit)
-    dyStringPrintf(query, "%s_gap where ", chrom);
+    sqlDyStringPrintf(query, "%s_gap where ", chrom);
 else
-    dyStringPrintf(query, "gap where %s='%s' AND ", hti->chromField, chrom);
+    sqlDyStringPrintf(query, "gap where %s='%s' AND ", hti->chromField, chrom);
 
-dyStringPrintf(query, "(chromStart >= %d and chromEnd-chromStart > %d)\
+sqlDyStringPrintf(query, "(chromStart >= %d and chromEnd-chromStart > %d)\
     order by chromStart limit 1",
         desiredPos, minGap);
 sr = sqlGetResult(conn, query->string);
-freeDyString(&query);
+dyStringFree(&query);
 
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -84,23 +84,23 @@ char **row;
 int pos = -1;
 int start, end;
 struct hTableInfo *hti = hFindTableInfo(db, chrom, "rmsk");
-struct dyString *query = newDyString(1024);
+struct dyString *query = dyStringNew(1024);
 
 if (hti == NULL)
     errAbort("table %s.rmsk doesn't exist", db);
 sqlDyStringPrintf(query, "select genoStart,genoEnd from ");
 if (hti->isSplit)
-    dyStringPrintf(query, "%s_rmsk where ", chrom);
+    sqlDyStringPrintf(query, "%s_rmsk where ", chrom);
 else
-    dyStringPrintf(query, "rmsk where %s='%s' AND ", hti->chromField, chrom);
-dyStringPrintf(query,
+    sqlDyStringPrintf(query, "rmsk where %s='%s' AND ", hti->chromField, chrom);
+sqlDyStringPrintf(query,
     "(genoStart >= %d AND \
     milliDiv=0 AND \
     repClass<>'Simple_repeat' AND repClass<>'Low_complexity' AND \
     genoEnd-genoStart>%d) order by genoStart limit 1",
         desiredPos, minRepeat);
 sr = sqlGetResult(conn, query->string);
-freeDyString(&query);
+dyStringFree(&query);
 
 if ((row = sqlNextRow(sr)) != NULL)
     {

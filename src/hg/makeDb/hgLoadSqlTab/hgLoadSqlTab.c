@@ -62,7 +62,7 @@ if (word == NULL || !sameWord(word, "table"))
 word = nextWord(&line);
 if (word == NULL)
     errAbort("Expecting table name on same line as CREATE TABLE");
-sqlDyStringPrintf(dy, "CREATE TABLE %s ", table);
+dyStringPrintf(dy, "CREATE TABLE %s ", table);   // trust .sql file off disk.
 if (line != NULL)
     dyStringAppend(dy, line);
 dyStringAppendC(dy, '\n');
@@ -92,9 +92,14 @@ if (! optionExists("notOnServer"))
 
 if (! oldTable)
     {
+    sqlCkId(table);   
     struct dyString *dy = readAndReplaceTableName(createFile, table);
-    sqlRemakeTable(conn, table, dy->string);
+    // trust sql loaded from disk file
+    struct dyString *dyTrust = dyStringNew(1024);
+    sqlDyStringPrintf(dyTrust, dy->string, NULL);
+    sqlRemakeTable(conn, table, dyTrust->string);
     dyStringFree(&dy);
+    dyStringFree(&dyTrust);
     }
 verbose(1, "Scanning through %d files\n", inCount);
 for (i=0;  i < inCount;  i++)

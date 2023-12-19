@@ -1,0 +1,36 @@
+VERSION=V1
+inserts=hprcInserts$VERSION
+deletions=hprcDeletions$VERSION
+double=hprcDouble$VERSION
+
+cd /cluster/data/hg38/bed/hprc/inDels
+
+rm -rf topLevel
+mkdir topLevel
+for i in ../chain/*.chain; do f=`basename $i .chain`;echo netChainSubset ../net/$f.net $i topLevel/$f.chain -type=top; done > subset.jobs
+para make subset.jobs
+
+rm -rf indels
+mkdir indels
+for chain in topLevel/*.chain; do 
+name=`basename $chain | sed 's?.*chainHprc??' | sed 's/\.chain//'`
+echo chainInDel $chain $name indels/$name.txt
+done > indel.jobs
+para make indel.jobs
+
+sort -S 50G -k1,1 -k2,2n -k3,3n -k5,5n indels/* > sortIndels.bed
+
+awk '{if (($3 > $2) && ($5 == 0)) print}' sortIndels.bed | chainArrangeCollect -exact stdin stdout | awk '{$11=$3-$2;print $0,$5"-"$3 - $2"bp" }' > $deletions.bed
+bedToBigBed  $deletions.bed /cluster/data/hg38/chrom.sizes $deletions.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+3
+rm -f  /gbdb/hg38/hprcArr$VERSION/$deletions.bb
+ln -s `pwd`/$deletions.bb /gbdb/hg38/hprcArr$VERSION
+
+awk '{if ($3 == $2) print}' sortIndels.bed | chainArrangeCollect -exact stdin stdout | awk '{print $0,$5"-"$11"bp" }' >$inserts.bed
+bedToBigBed  $inserts.bed /cluster/data/hg38/chrom.sizes $inserts.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+3
+rm  -f /gbdb/hg38/hprcArr$VERSION/$inserts.bb
+ln -s `pwd`/$inserts.bb /gbdb/hg38/hprcArr$VERSION
+
+awk '{if (($3 > $2) && ($5 != 0)) print}' sortIndels.bed | chainArrangeCollect -exact stdin stdout | awk '{print $0,$5"-"$11"bp-"$3-$2"bp" }' >$double.bed
+bedToBigBed  $double.bed /cluster/data/hg38/chrom.sizes $double.bb -as=$HOME/kent/src/hg/lib/chainArrange.as -type=bed9+3
+rm  -f /gbdb/hg38/hprcArr$VERSION/$double.bb
+ln -s `pwd`/$double.bb /gbdb/hg38/hprcArr$VERSION

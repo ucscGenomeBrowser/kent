@@ -192,7 +192,7 @@ char **row;
 sqlDyStringPrintf(query, "select id, acc, version, type from gbSeq where (srcDb=\"%s\")",
                gbSrcDbName(select->release->srcDb));
 if (select->release->srcDb == GB_REFSEQ)
-    dyStringPrintf(query, " and ((type=\"mRNA\") or (type=\"PEP\"))");
+    sqlDyStringPrintf(query, " and ((type=\"mRNA\") or (type=\"PEP\"))");
 else
     sqlDyStringPrintf(query, " and (type=\"%s\")", gbTypeName(select->type));
 if (select->accPrefix != NULL)
@@ -200,13 +200,13 @@ if (select->accPrefix != NULL)
 
 if (extFiles != NULL)
     {
-    dyStringPrintf(query, " and gbExtFile not in (");
+    sqlDyStringPrintf(query, " and gbExtFile not in (");
     for (ef = extFiles; ef != NULL; ef = ef->next)
         {
-        dyStringPrintf(query, "%s%d", sep, ef->extFile->id);
+        sqlDyStringPrintf(query, "%s%d", sep, ef->extFile->id);
         sep = ",";
         }
-    dyStringPrintf(query, ")");
+    sqlDyStringPrintf(query, ")");
     }
 result = sqlGetResult(conn, query->string);
 dyStringFree(&query);

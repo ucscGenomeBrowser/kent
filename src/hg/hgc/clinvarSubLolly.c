@@ -9,6 +9,7 @@
 #include "subText.h"   
 #include "trackHub.h"   
 #include "clinvarSubLolly.h"   
+#include "chromAlias.h"
 
 char *statusByScore[] =
 {
@@ -29,7 +30,7 @@ void printSubmissions(struct trackDb *tdb, char *chrom, int start, int end, unsi
  */
 {
 char *xrefDataUrl = hReplaceGbdb(trackDbSetting(tdb, "xrefDataUrl"));
-struct bbiFile *bbi = bigBedFileOpen(xrefDataUrl);
+struct bbiFile *bbi =  bigBedFileOpenAlias(xrefDataUrl, chromAliasFindAliases);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
@@ -80,7 +81,7 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-struct bbiFile *bbi = bigBedFileOpen(hReplaceGbdb(fileName));
+struct bbiFile *bbi =  bigBedFileOpenAlias(hReplaceGbdb(fileName), chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 

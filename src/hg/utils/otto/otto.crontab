@@ -4,12 +4,23 @@
 # and then ssh otto@hgwdev and run crontab on the edited and checked in file,
 # for example crontab ~lrnassar/kent/src/hg/utils/otto/otto.crontab
 
+# To save the current crontab back into git:
+# crontab -l > ~max/kent/src/hg/utils/otto/otto.crontab
+# logout
+# cd ~max/kent/src/hg/utils/otto/
+# git commit otto.crontab -m 'updating crontab'
+
+
+# Note that you can see the list of auto-pushes of files from hgwdev to the RR by running:
+# cat /etc/crontab
+# on Hgwdev.
+
 TMPDIR=/data/tmp
-ottomeister=lrnassar@ucsc.edu
+ottomeister=otto-group@ucsc.edu
 
 #Format: Minute - Hour - DayofMonth month Day-of-week
 
-MAILTO=lrnassar@ucsc.edu
+MAILTO=otto-group@ucsc.edu
 #Daily sandbox update
 41 07 * * 1-5 /cluster/home/otto/bin/sandboxupdate
 
@@ -26,13 +37,17 @@ MAILTO=lrnassar@ucsc.edu
 
 SHELL=/bin/sh
 PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin
-MAILTO=lrnassar@ucsc.edu
+MAILTO=otto-group@ucsc.edu
 
-#Update check
-0 5 1 */3 * mail -s "OMIM/GWAS CHECK - DID DBSNP UPDATE?" lrnassar@ucsc.edu < /cluster/home/chmalee/crontabs/dbSnpCheck.txt
+#md5sum checker script - makes sure otto scripts in hive match git tree
+0 0 * * 1-5 ~/kent/src/hg/utils/otto/ottoCompareGitVsHiveFiles.py
 
-#DECIPHER
-#11 4 * * * /hive/data/outside/otto/decipher/decipherWrapper.sh
+# PanelApp
+MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
+10 10 * * 2 /hive/data/outside/otto/panelApp/updatePanelApp
+
+#DECIPHER - Reactivated 5/13/2022 by Lou
+11 4 * * * /hive/data/outside/otto/decipher/decipherWrapper.sh
 
 #GWAS Catalog
 41 4 * * 3  /hive/data/outside/otto/gwas/gwasWrapper.sh
@@ -41,7 +56,7 @@ MAILTO=lrnassar@ucsc.edu
 00 8 * * 2 /hive/data/outside/otto/geneReviews/geneReviewsWrapper.sh
 
 #LRG
-57 9 1 * * /hive/data/outside/otto/lrg/lrgWrapper.sh
+57 9 1 4,6,12 * /hive/data/outside/otto/lrg/lrgWrapper.sh
 
 #dbVar
 13 8 2 * * /hive/data/outside/otto/dbVar/dbVarWrapper.sh
@@ -50,8 +65,14 @@ MAILTO=lrnassar@ucsc.edu
 10 7 10 * * /hive/data/outside/otto/orphanet/orphanetWrapper.sh
 
 #ClinVar
-MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
+MAILTO=otto-group@ucsc.edu
 08 00 8 * * umask 002; /hive/data/outside/otto/clinvar/doUpdate.sh
+
+#MANE
+11 5 * * 1 python3 /hive/data/outside/otto/mane/doMane.py
+
+#GenCC
+11 5 * * 2 python3 /hive/data/outside/otto/genCC/doGenCC.py
 
 #OMIM
 17 4 * * *  /hive/data/outside/otto/omim/omimWrapper.sh 2>&1
@@ -60,26 +81,40 @@ MAILTO=max@soe.ucsc.edu,lrnassar@ucsc.edu
 14 13 * * mon /hive/data/outside/otto/lovd/doUpdate.sh
 
 #Mastermind
-05 8 8  */3 * /hive/data/outside/otto/mastermind/buildMastermind.sh
+05 8 8  * * /hive/data/outside/otto/mastermind/buildMastermind.sh
 
 #wuhCor1 uniprot otto cron by Max, May 2021
 00 4 * * * /hive/data/outside/otto/uniprot/covidCheck.sh
 
 #ClinGen
-MAILTO=abenet@ucsc.edu,lrnassar@ucsc.edu
 00 9 * * * /hive/data/outside/otto/clinGen/clinGenWrapper.sh
 
 #GRC Incident
-MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
-33 09 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
+MAILTO=hiram@soe.ucsc.edu,otto-group@ucsc.edu
+33 06 * * * /hive/data/outside/otto/grcIncidentDb/runUpdate.sh makeItSo
+
+# GenArk update hgcentral.genark table, once a week on Tuesday
+# the script itself sends email for notices about activity
+37 10 * * 2 /hive/data/inside/GenArk/updateHgcentral.sh makeItSo
 
 #NCBI RefSeq
-MAILTO=lrnassar@ucsc.edu,hiram@soe.ucsc.edu
 23 8 * * 3 /hive/data/outside/otto/ncbiRefSeq/ottoNcbiRefSeq.sh
 
+#Index page public session thumbnails update
+MAILTO=otto-group@ucsc.edu
+11 1 * * 4 /cluster/software/bin/python3.6 /cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py /usr/local/apache/htdocs/
+
 #OMIM Upload
-MAILTO=lrnassar@ucsc.edu
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
+
+# UniProt massive 110+ database update, takes 3-4 days.
+#Format: Minute - Hour - DayofMonth month Day-of-week
+MAILTO=max@soe.ucsc.edu,otto-group@ucsc.edu
+00 11 16 * * /hive/data/outside/otto/uniprot/doUpdate.sh run
+
+MAILTO=bwick@ucsc.edu
+# Cell Browser news sec update by Matt/Brittney Sept 2022
+04 12 * * 1-5 ~bwick/cellBrowser/ucsc/updateNewsSec -r
 
 #Format: Minute - Hour - DayofMonth month Day-of-week

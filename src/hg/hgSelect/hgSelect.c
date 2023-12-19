@@ -76,9 +76,9 @@ static void addWhereOrAnd(struct dyString *query, int clauseCnt)
 /* add a `where' or `and' to the query as indicated by clauseCnt  */
 {
 if (clauseCnt == 0)
-    dyStringAppend(query, " where");
+    sqlDyStringPrintf(query, " where");
 else
-    dyStringAppend(query, " and");
+    sqlDyStringPrintf(query, " and");
 }
 
 static void addWhereClause(struct hTableInfo *tblInfo,
@@ -91,7 +91,7 @@ int clauseCnt = 0;
 if (where != NULL)
     {
     addWhereOrAnd(query, clauseCnt++);
-    dyStringPrintf(query, " %s", where);
+    sqlDyStringPrintf(query, " %-s", where);
     }
 if (!tblInfo->isSplit && noRandom)
     {
@@ -112,7 +112,10 @@ static void selectFromTable(char *table, struct hTableInfo *tblInfo,
 struct dyString *query = dyStringNew(0);
 sqlDyStringPrintf(query, "SELECT %s.* FROM %s", table, table);
 if (joinTbls != NULL)
-    dyStringPrintf(query, ",%s", sqlCkIl(joinTbls));
+    {
+    sqlCkIl(joinTblsSafe,joinTbls)
+    sqlDyStringPrintf(query, ",%-s", joinTblsSafe);
+    }
 addWhereClause(tblInfo, query);
 verbose(2, "query: %s\n", query->string);
 
@@ -169,6 +172,13 @@ if (argc != 4)
 noRandom = optionExists("noRandom");
 noHap = optionExists("noHap");
 where = optionVal("where", NULL);
+// TRUST commandline SQL where clause.
+if (where)
+    {
+    struct dyString *dyWhere = sqlDyStringCreate(where, NULL);
+    where = dyStringCannibalize(&dyWhere);
+    }
+
 joinTbls = optionVal("joinTbls", NULL);
 
 hgSelect(argv[1], argv[2], argv[3]);

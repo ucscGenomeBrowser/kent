@@ -306,8 +306,8 @@ struct axt *pslToAxt(struct psl *psl, struct hash *qHash, char *tNibDir,
 {
 static char *tName = NULL, *qName = NULL;
 static struct dnaSeq *tSeq = NULL;
-struct dyString *q = newDyString(16*1024);
-struct dyString *t = newDyString(16*1024);
+struct dyString *q = dyStringNew(16*1024);
+struct dyString *t = dyStringNew(16*1024);
 int blockIx;
 int qs, ts ;
 int lastQ = 0, lastT = 0, size;
@@ -635,8 +635,8 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
     for (el = elist; el != NULL ; el = el->next)
         {
         int i, scoreRetro=0, scoreParent=0, scoreNeither=0;
-        struct dyString *parentMatch = newDyString(16*1024);
-        struct dyString *retroMatch = newDyString(16*1024);
+        struct dyString *parentMatch = dyStringNew(16*1024);
+        struct dyString *retroMatch = dyStringNew(16*1024);
         mPsl = el->val;
 
         if (mAxt != NULL)

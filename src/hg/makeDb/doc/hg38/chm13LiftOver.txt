@@ -1,0 +1,53 @@
+#############################################################################
+# chm13 liftover alignments  (2022-03-29 markd)
+
+# preliminary CHM13 <-> hg38 liftOver chains until NCBI produces consensus alignments
+# provide by Nae-Chyun Chen <naechyun.chen@gmail.com>
+
+    mkdir -p /hive/data/genomes/hg38/bed/chm13LiftOver
+    cd /hive/data/genomes/hg38/bed/chm13LiftOver
+
+# originally Obtain GRCh37 from T2T Globus: team-liftover/v1_nflo/grch38-chm13v2.chain
+
+# 2022-04-09 updated due to discovery that chrM was missing
+# 2022-04-19 it was discover that chains render oddly due to the lack of chain ids.  Use chainMergeSort
+# obtain updated chains from 
+
+  cp /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/trackData/hgLiftOver/hg38-chm13v2.over.chain.gz .
+
+# make NCBI query names as well, since chromAlias doesn't work yet for click-through
+# note doc is wrong in chromToPsl PSL query is 10
+
+    chainToPslBasic hg38-chm13v2.over.chain.gz stdout | chromToUcsc -k 10 -a /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt | pslToChain stdin stdout | pigz -c > hg38-chm13v2.ncbi-qnames.over.chain.gz
+
+# build bigChain files:
+    hgLoadChain -noBin -test none bigChain hg38-chm13v2.over.chain.gz 
+    sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../../chrom.sizes hg38-chm13v2.over.chain.bb
+    tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab  ../../chrom.sizes hg38-chm13v2.over.link.bb
+
+# build bigChain with NCBI names files:
+    hgLoadChain -noBin -test none bigChain hg38-chm13v2.ncbi-qnames.over.chain.gz 
+    sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../../chrom.sizes hg38-chm13v2.ncbi-qnames.over.chain.bb
+    tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab  ../../chrom.sizes hg38-chm13v2.ncbi-qnames.over.link.bb
+
+    rm *.tab
+
+# link to gbdb
+  mkdir -p /gbdb/hg38/bbi/chm13LiftOver
+  ln -sf $(pwd)/*.bb /gbdb/hg38/bbi/chm13LiftOver/
+
+# make downloads, can't add to liftOver directory due to license in that directory
+  mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/chm13LiftOver/
+  ln -sf $(pwd)/hg38-chm13v2.*.chain.gz /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/chm13LiftOver/
+  
+# push these files
+  /gbdb/hg38/bbi/chm13LiftOver/hg38-chm13v2.ncbi-qnames.over.chain.bb
+  /gbdb/hg38/bbi/chm13LiftOver/hg38-chm13v2.ncbi-qnames.over.link.bb
+  /gbdb/hg38/bbi/chm13LiftOver/hg38-chm13v2.over.chain.bb
+  /gbdb/hg38/bbi/chm13LiftOver/hg38-chm13v2.over.link.bb
+  /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/chm13LiftOver/hg38-chm13v2.ncbi-qnames.over.chain.gz
+  /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/chm13LiftOver/hg38-chm13v2.over.chain.gz

@@ -267,6 +267,9 @@ void pslRecalcBounds(struct psl *psl);
 /* Calculate qStart/qEnd tStart/tEnd at top level to be consistent
  * with blocks. */
 
+void pslRecalcBaseCounts(struct psl *psl);
+/* Update match/mismatch base counts in PSL, assuming everything is a match */
+
 int pslCheck(char *pslDesc, FILE* out, struct psl* psl);
 /* Validate a PSL for consistency.  pslDesc is printed the error messages
  * to file out (open /dev/null to discard). Return count of errors. */
@@ -356,7 +359,46 @@ return psl->qStarts[blkIdx] + psl->blockSizes[blkIdx];
 INLINE unsigned pslTEnd(struct psl *psl, int blkIdx)
 /* return target end for the given block */
 {
-return psl->tStarts[blkIdx] + psl->blockSizes[blkIdx];
+if (pslIsProtein(psl))
+    return psl->tStarts[blkIdx] + 3 * psl->blockSizes[blkIdx];
+else
+    return psl->tStarts[blkIdx] + psl->blockSizes[blkIdx];
+}
+
+INLINE unsigned pslQStartForStrand(struct psl *psl, int blkIdx, char strand)
+/* return query start for the given block, mapped to specified strand, */
+{
+if (pslQStrand(psl) == strand)
+    return psl->qStarts[blkIdx];
+else
+    return psl->qSize - pslQEnd(psl, blkIdx);
+}
+
+INLINE unsigned pslQEndForStrand(struct psl *psl, int blkIdx, char strand)
+/* return query end for the given block, mapped to specified strand */
+{
+if (pslQStrand(psl) == strand)
+    return pslQEnd(psl, blkIdx);
+else
+    return psl->qSize - pslQStart(psl, blkIdx);
+}
+
+INLINE unsigned pslTStartForStrand(struct psl *psl, int blkIdx, char strand)
+/* return target start for the given block, mapped to specified strand */
+{
+if (pslTStrand(psl) == strand)
+    return psl->tStarts[blkIdx];
+else
+    return psl->tSize - pslTEnd(psl, blkIdx);
+}
+
+INLINE unsigned pslTEndForStrand(struct psl *psl, int blkIdx, char strand)
+/* return target end for the given block, mapped to specified strand */
+{
+if (pslTStrand(psl) == strand)
+    return pslTEnd(psl, blkIdx);
+else
+    return psl->tSize - pslTStart(psl, blkIdx);
 }
 
 struct psl* pslClone(struct psl *psl);

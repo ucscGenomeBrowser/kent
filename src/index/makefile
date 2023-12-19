@@ -12,6 +12,7 @@ all:
 	cd stToXao && ${MAKE}
 	cd trixContextIndex && ${MAKE}
 	cd trixSearch && ${MAKE}
+	cd trixMultiSearch && ${MAKE}
 
 clean::
 	cd bptForTwoBit && ${MAKE} clean
@@ -27,3 +28,4 @@ clean::
 	cd stToXao && ${MAKE} clean
 	cd trixContextIndex && ${MAKE} clean
 	cd trixSearch && ${MAKE} clean
+	cd trixMultiSearch && ${MAKE} clean

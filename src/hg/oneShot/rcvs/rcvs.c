@@ -31,7 +31,6 @@ struct sqlConnection *conn = sqlConnect("mgsc");
 struct sqlResult *sr;
 char **row;
 char *words[16];
-int wordCount;
 struct lineFile *lf;
 int codingSpliced = 0;
 int noncodingSpliced = 0;
@@ -39,14 +38,17 @@ int codingNonspliced = 0;
 int noncodingNonspliced = 0;
 
 /* Read id's into hash */
-sr = sqlGetResult(conn, NOSQLINJ "select id1,id2 from rikenIds");
+char query[1024];
+sqlSafef(query, sizeof query, "select id1,id2 from rikenIds");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(idHash, row[0], cloneString(row[1]));
 sqlFreeResult(&sr);
 
 /* Read spliced into hash */
-sr = sqlGetResult(conn,
-	NOSQLINJ "select name from rikenOrientInfo where intronOrientation != 0");
+sqlSafef(query, sizeof query, 
+	"select name from rikenOrientInfo where intronOrientation != 0");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(splicedHash, row[0], NULL);
 sqlFreeResult(&sr);

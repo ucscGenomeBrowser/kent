@@ -1,0 +1,3504 @@
+
+track sgdpCopyNumber
+compositeTrack off
+shortLabel SGDP copy number
+longLabel  SGDP copy number estimates
+type bigBed 9 +
+noScoreFilter on
+filter.name 0
+filterLabel.name Minimum copy number
+itemRgb on
+group varRep
+maxItems 100000
+priority 101
+html html/sgdpCopyNumber.html
+
+    track EUR_Adygei_LP6005441-DNA_A01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A01_wssd.bb
+    shortLabel EUR_Adygei_LP6005441-DNA_A01 wssd CN
+    longLabel EUR_Adygei_LP6005441-DNA_A01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track OCN_Bougainville_LP6005441-DNA_A03_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A03_wssd.bb
+    shortLabel OCN_Bougainville_LP6005441-DNA_A03 wssd CN
+    longLabel OCN_Bougainville_LP6005441-DNA_A03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track AMR_Piapoco_LP6005441-DNA_A04_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A04_wssd.bb
+    shortLabel AMR_Piapoco_LP6005441-DNA_A04 wssd CN
+    longLabel AMR_Piapoco_LP6005441-DNA_A04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EUR_French_LP6005441-DNA_A05_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A05_wssd.bb
+    shortLabel EUR_French_LP6005441-DNA_A05 wssd CN
+    longLabel EUR_French_LP6005441-DNA_A05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EUR_Bergamo_LP6005441-DNA_A06_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A06_wssd.bb
+    shortLabel EUR_Bergamo_LP6005441-DNA_A06 wssd CN
+    longLabel EUR_Bergamo_LP6005441-DNA_A06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track AFR_Mbuti_LP6005441-DNA_A08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A08_wssd.bb
+    shortLabel AFR_Mbuti_LP6005441-DNA_A08 wssd CN
+    longLabel AFR_Mbuti_LP6005441-DNA_A08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Naxi_LP6005441-DNA_A09_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A09_wssd.bb
+    shortLabel EAS_Naxi_LP6005441-DNA_A09 wssd CN
+    longLabel EAS_Naxi_LP6005441-DNA_A09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track OCN_Papuan_LP6005441-DNA_A10_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A10_wssd.bb
+    shortLabel OCN_Papuan_LP6005441-DNA_A10 wssd CN
+    longLabel OCN_Papuan_LP6005441-DNA_A10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track AFR_Ju_hoan_North_LP6005441-DNA_A11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A11_wssd.bb
+    shortLabel AFR_Ju_hoan_North_LP6005441-DNA_A11 wssd CN
+    longLabel AFR_Ju_hoan_North_LP6005441-DNA_A11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track AMR_Surui_LP6005441-DNA_A12_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A12_wssd.bb
+    shortLabel AMR_Surui_LP6005441-DNA_A12 wssd CN
+    longLabel AMR_Surui_LP6005441-DNA_A12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EUR_Adygei_LP6005441-DNA_B01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B01_wssd.bb
+    shortLabel EUR_Adygei_LP6005441-DNA_B01 wssd CN
+    longLabel EUR_Adygei_LP6005441-DNA_B01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track AFR_BantuKenya_LP6005441-DNA_B02_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B02_wssd.bb
+    shortLabel AFR_BantuKenya_LP6005441-DNA_B02 wssd CN
+    longLabel AFR_BantuKenya_LP6005441-DNA_B02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track OCN_Bougainville_LP6005441-DNA_B03_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B03_wssd.bb
+    shortLabel OCN_Bougainville_LP6005441-DNA_B03 wssd CN
+    longLabel OCN_Bougainville_LP6005441-DNA_B03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track AMR_Piapoco_LP6005441-DNA_B04_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B04_wssd.bb
+    shortLabel AMR_Piapoco_LP6005441-DNA_B04 wssd CN
+    longLabel AMR_Piapoco_LP6005441-DNA_B04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EUR_French_LP6005441-DNA_B05_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B05_wssd.bb
+    shortLabel EUR_French_LP6005441-DNA_B05 wssd CN
+    longLabel EUR_French_LP6005441-DNA_B05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EUR_Bergamo_LP6005441-DNA_B06_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B06_wssd.bb
+    shortLabel EUR_Bergamo_LP6005441-DNA_B06 wssd CN
+    longLabel EUR_Bergamo_LP6005441-DNA_B06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Lahu_LP6005441-DNA_B07_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B07_wssd.bb
+    shortLabel EAS_Lahu_LP6005441-DNA_B07 wssd CN
+    longLabel EAS_Lahu_LP6005441-DNA_B07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track AFR_Mbuti_LP6005441-DNA_B08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B08_wssd.bb
+    shortLabel AFR_Mbuti_LP6005441-DNA_B08 wssd CN
+    longLabel AFR_Mbuti_LP6005441-DNA_B08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Naxi_LP6005441-DNA_B09_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B09_wssd.bb
+    shortLabel EAS_Naxi_LP6005441-DNA_B09 wssd CN
+    longLabel EAS_Naxi_LP6005441-DNA_B09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track OCN_Papuan_LP6005441-DNA_B10_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B10_wssd.bb
+    shortLabel OCN_Papuan_LP6005441-DNA_B10 wssd CN
+    longLabel OCN_Papuan_LP6005441-DNA_B10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track AFR_Ju_hoan_North_LP6005441-DNA_B11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B11_wssd.bb
+    shortLabel AFR_Ju_hoan_North_LP6005441-DNA_B11 wssd CN
+    longLabel AFR_Ju_hoan_North_LP6005441-DNA_B11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track AMR_Surui_LP6005441-DNA_B12_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B12_wssd.bb
+    shortLabel AMR_Surui_LP6005441-DNA_B12 wssd CN
+    longLabel AMR_Surui_LP6005441-DNA_B12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EUR_Basque_LP6005441-DNA_C02_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C02_wssd.bb
+    shortLabel EUR_Basque_LP6005441-DNA_C02 wssd CN
+    longLabel EUR_Basque_LP6005441-DNA_C02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track SAS_Brahui_LP6005441-DNA_C03_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C03_wssd.bb
+    shortLabel SAS_Brahui_LP6005441-DNA_C03 wssd CN
+    longLabel SAS_Brahui_LP6005441-DNA_C03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Han_LP6005441-DNA_C05_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C05_wssd.bb
+    shortLabel EAS_Han_LP6005441-DNA_C05 wssd CN
+    longLabel EAS_Han_LP6005441-DNA_C05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Japanese_LP6005441-DNA_C06_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C06_wssd.bb
+    shortLabel EAS_Japanese_LP6005441-DNA_C06 wssd CN
+    longLabel EAS_Japanese_LP6005441-DNA_C06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track SAS_Makrani_LP6005441-DNA_C07_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C07_wssd.bb
+    shortLabel SAS_Makrani_LP6005441-DNA_C07 wssd CN
+    longLabel SAS_Makrani_LP6005441-DNA_C07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Miao_LP6005441-DNA_C08_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C08_wssd.bb
+    shortLabel EAS_Miao_LP6005441-DNA_C08 wssd CN
+    longLabel EAS_Miao_LP6005441-DNA_C08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EUR_Orcadian_LP6005441-DNA_C09_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C09_wssd.bb
+    shortLabel EUR_Orcadian_LP6005441-DNA_C09 wssd CN
+    longLabel EUR_Orcadian_LP6005441-DNA_C09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track SAS_Pathan_LP6005441-DNA_C10_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C10_wssd.bb
+    shortLabel SAS_Pathan_LP6005441-DNA_C10 wssd CN
+    longLabel SAS_Pathan_LP6005441-DNA_C10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EUR_Sardinian_LP6005441-DNA_C11_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C11_wssd.bb
+    shortLabel EUR_Sardinian_LP6005441-DNA_C11 wssd CN
+    longLabel EUR_Sardinian_LP6005441-DNA_C11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track SAS_Balochi_LP6005441-DNA_D01_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D01_wssd.bb
+    shortLabel SAS_Balochi_LP6005441-DNA_D01 wssd CN
+    longLabel SAS_Balochi_LP6005441-DNA_D01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EUR_Basque_LP6005441-DNA_D02_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D02_wssd.bb
+    shortLabel EUR_Basque_LP6005441-DNA_D02 wssd CN
+    longLabel EUR_Basque_LP6005441-DNA_D02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track SAS_Brahui_LP6005441-DNA_D03_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D03_wssd.bb
+    shortLabel SAS_Brahui_LP6005441-DNA_D03 wssd CN
+    longLabel SAS_Brahui_LP6005441-DNA_D03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Dai_LP6005441-DNA_D04_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D04_wssd.bb
+    shortLabel EAS_Dai_LP6005441-DNA_D04 wssd CN
+    longLabel EAS_Dai_LP6005441-DNA_D04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Han_LP6005441-DNA_D05_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D05_wssd.bb
+    shortLabel EAS_Han_LP6005441-DNA_D05 wssd CN
+    longLabel EAS_Han_LP6005441-DNA_D05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Japanese_LP6005441-DNA_D06_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D06_wssd.bb
+    shortLabel EAS_Japanese_LP6005441-DNA_D06 wssd CN
+    longLabel EAS_Japanese_LP6005441-DNA_D06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track SAS_Makrani_LP6005441-DNA_D07_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D07_wssd.bb
+    shortLabel SAS_Makrani_LP6005441-DNA_D07 wssd CN
+    longLabel SAS_Makrani_LP6005441-DNA_D07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track EAS_Miao_LP6005441-DNA_D08_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D08_wssd.bb
+    shortLabel EAS_Miao_LP6005441-DNA_D08 wssd CN
+    longLabel EAS_Miao_LP6005441-DNA_D08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Orcadian_LP6005441-DNA_D09_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D09_wssd.bb
+    shortLabel EUR_Orcadian_LP6005441-DNA_D09 wssd CN
+    longLabel EUR_Orcadian_LP6005441-DNA_D09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Pathan_LP6005441-DNA_D10_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D10_wssd.bb
+    shortLabel SAS_Pathan_LP6005441-DNA_D10 wssd CN
+    longLabel SAS_Pathan_LP6005441-DNA_D10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Sardinian_LP6005441-DNA_D11_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D11_wssd.bb
+    shortLabel EUR_Sardinian_LP6005441-DNA_D11 wssd CN
+    longLabel EUR_Sardinian_LP6005441-DNA_D11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Tu_LP6005441-DNA_D12_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_D12_wssd.bb
+    shortLabel EAS_Tu_LP6005441-DNA_D12 wssd CN
+    longLabel EAS_Tu_LP6005441-DNA_D12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_BedouinB_LP6005441-DNA_E02_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_E02_wssd.bb
+    shortLabel EUR_BedouinB_LP6005441-DNA_E02 wssd CN
+    longLabel EUR_BedouinB_LP6005441-DNA_E02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Burusho_LP6005441-DNA_E03_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_E03_wssd.bb
+    shortLabel SAS_Burusho_LP6005441-DNA_E03 wssd CN
+    longLabel SAS_Burusho_LP6005441-DNA_E03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Hazara_LP6005441-DNA_E05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_E05_wssd.bb
+    shortLabel SAS_Hazara_LP6005441-DNA_E05 wssd CN
+    longLabel SAS_Hazara_LP6005441-DNA_E05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Kalash_LP6005441-DNA_E06_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_E06_wssd.bb
+    shortLabel SAS_Kalash_LP6005441-DNA_E06 wssd CN
+    longLabel SAS_Kalash_LP6005441-DNA_E06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mandenka_LP6005441-DNA_E07_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_E07_wssd.bb
+    shortLabel AFR_Mandenka_LP6005441-DNA_E07 wssd CN
+    longLabel AFR_Mandenka_LP6005441-DNA_E07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Mongola_LP6005441-DNA_E08_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_E08_wssd.bb
+    shortLabel SIB_Mongola_LP6005441-DNA_E08 wssd CN
+    longLabel SIB_Mongola_LP6005441-DNA_E08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Oroqen_LP6005441-DNA_E09_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_E09_wssd.bb
+    shortLabel EAS_Oroqen_LP6005441-DNA_E09 wssd CN
+    longLabel EAS_Oroqen_LP6005441-DNA_E09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Pima_LP6005441-DNA_E10_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_E10_wssd.bb
+    shortLabel AMR_Pima_LP6005441-DNA_E10 wssd CN
+    longLabel AMR_Pima_LP6005441-DNA_E10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_BantuHerero_LP6005441-DNA_F01_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F01_wssd.bb
+    shortLabel AFR_BantuHerero_LP6005441-DNA_F01 wssd CN
+    longLabel AFR_BantuHerero_LP6005441-DNA_F01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_BedouinB_LP6005441-DNA_F02_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F02_wssd.bb
+    shortLabel EUR_BedouinB_LP6005441-DNA_F02 wssd CN
+    longLabel EUR_BedouinB_LP6005441-DNA_F02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Burusho_LP6005441-DNA_F03_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F03_wssd.bb
+    shortLabel SAS_Burusho_LP6005441-DNA_F03 wssd CN
+    longLabel SAS_Burusho_LP6005441-DNA_F03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Daur_LP6005441-DNA_F04_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F04_wssd.bb
+    shortLabel EAS_Daur_LP6005441-DNA_F04 wssd CN
+    longLabel EAS_Daur_LP6005441-DNA_F04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Hazara_LP6005441-DNA_F05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F05_wssd.bb
+    shortLabel SAS_Hazara_LP6005441-DNA_F05 wssd CN
+    longLabel SAS_Hazara_LP6005441-DNA_F05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Kalash_LP6005441-DNA_F06_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F06_wssd.bb
+    shortLabel SAS_Kalash_LP6005441-DNA_F06 wssd CN
+    longLabel SAS_Kalash_LP6005441-DNA_F06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mandenka_LP6005441-DNA_F07_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F07_wssd.bb
+    shortLabel AFR_Mandenka_LP6005441-DNA_F07 wssd CN
+    longLabel AFR_Mandenka_LP6005441-DNA_F07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Mongola_LP6005441-DNA_F08_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F08_wssd.bb
+    shortLabel SIB_Mongola_LP6005441-DNA_F08 wssd CN
+    longLabel SIB_Mongola_LP6005441-DNA_F08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Oroqen_LP6005441-DNA_F09_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F09_wssd.bb
+    shortLabel EAS_Oroqen_LP6005441-DNA_F09 wssd CN
+    longLabel EAS_Oroqen_LP6005441-DNA_F09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Pima_LP6005441-DNA_F10_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F10_wssd.bb
+    shortLabel AMR_Pima_LP6005441-DNA_F10 wssd CN
+    longLabel AMR_Pima_LP6005441-DNA_F10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Tujia_LP6005441-DNA_F12_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_F12_wssd.bb
+    shortLabel EAS_Tujia_LP6005441-DNA_F12 wssd CN
+    longLabel EAS_Tujia_LP6005441-DNA_F12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Biaka_LP6005441-DNA_G02_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G02_wssd.bb
+    shortLabel AFR_Biaka_LP6005441-DNA_G02 wssd CN
+    longLabel AFR_Biaka_LP6005441-DNA_G02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Cambodian_LP6005441-DNA_G03_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G03_wssd.bb
+    shortLabel EAS_Cambodian_LP6005441-DNA_G03 wssd CN
+    longLabel EAS_Cambodian_LP6005441-DNA_G03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Druze_LP6005441-DNA_G04_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G04_wssd.bb
+    shortLabel EUR_Druze_LP6005441-DNA_G04 wssd CN
+    longLabel EUR_Druze_LP6005441-DNA_G04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Hezhen_LP6005441-DNA_G05_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G05_wssd.bb
+    shortLabel EAS_Hezhen_LP6005441-DNA_G05 wssd CN
+    longLabel EAS_Hezhen_LP6005441-DNA_G05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Karitiana_LP6005441-DNA_G06_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G06_wssd.bb
+    shortLabel AMR_Karitiana_LP6005441-DNA_G06 wssd CN
+    longLabel AMR_Karitiana_LP6005441-DNA_G06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Mayan_LP6005441-DNA_G07_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G07_wssd.bb
+    shortLabel AMR_Mayan_LP6005441-DNA_G07 wssd CN
+    longLabel AMR_Mayan_LP6005441-DNA_G07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mozabite_LP6005441-DNA_G08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G08_wssd.bb
+    shortLabel AFR_Mozabite_LP6005441-DNA_G08 wssd CN
+    longLabel AFR_Mozabite_LP6005441-DNA_G08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Palestinian_LP6005441-DNA_G09_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G09_wssd.bb
+    shortLabel EUR_Palestinian_LP6005441-DNA_G09 wssd CN
+    longLabel EUR_Palestinian_LP6005441-DNA_G09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Russian_LP6005441-DNA_G10_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G10_wssd.bb
+    shortLabel EUR_Russian_LP6005441-DNA_G10 wssd CN
+    longLabel EUR_Russian_LP6005441-DNA_G10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Sindhi_LP6005441-DNA_G11_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G11_wssd.bb
+    shortLabel SAS_Sindhi_LP6005441-DNA_G11 wssd CN
+    longLabel SAS_Sindhi_LP6005441-DNA_G11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Tuscan_LP6005441-DNA_G12_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_G12_wssd.bb
+    shortLabel EUR_Tuscan_LP6005441-DNA_G12 wssd CN
+    longLabel EUR_Tuscan_LP6005441-DNA_G12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Biaka_LP6005441-DNA_H02_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H02_wssd.bb
+    shortLabel AFR_Biaka_LP6005441-DNA_H02 wssd CN
+    longLabel AFR_Biaka_LP6005441-DNA_H02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Cambodian_LP6005441-DNA_H03_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H03_wssd.bb
+    shortLabel EAS_Cambodian_LP6005441-DNA_H03 wssd CN
+    longLabel EAS_Cambodian_LP6005441-DNA_H03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Hezhen_LP6005441-DNA_H05_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H05_wssd.bb
+    shortLabel EAS_Hezhen_LP6005441-DNA_H05 wssd CN
+    longLabel EAS_Hezhen_LP6005441-DNA_H05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Karitiana_LP6005441-DNA_H06_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H06_wssd.bb
+    shortLabel AMR_Karitiana_LP6005441-DNA_H06 wssd CN
+    longLabel AMR_Karitiana_LP6005441-DNA_H06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Mayan_LP6005441-DNA_H07_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H07_wssd.bb
+    shortLabel AMR_Mayan_LP6005441-DNA_H07 wssd CN
+    longLabel AMR_Mayan_LP6005441-DNA_H07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mozabite_LP6005441-DNA_H08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H08_wssd.bb
+    shortLabel AFR_Mozabite_LP6005441-DNA_H08 wssd CN
+    longLabel AFR_Mozabite_LP6005441-DNA_H08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Palestinian_LP6005441-DNA_H09_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H09_wssd.bb
+    shortLabel EUR_Palestinian_LP6005441-DNA_H09 wssd CN
+    longLabel EUR_Palestinian_LP6005441-DNA_H09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Russian_LP6005441-DNA_H10_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H10_wssd.bb
+    shortLabel EUR_Russian_LP6005441-DNA_H10 wssd CN
+    longLabel EUR_Russian_LP6005441-DNA_H10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Sindhi_LP6005441-DNA_H11_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H11_wssd.bb
+    shortLabel SAS_Sindhi_LP6005441-DNA_H11 wssd CN
+    longLabel SAS_Sindhi_LP6005441-DNA_H11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Tuscan_LP6005441-DNA_H12_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_H12_wssd.bb
+    shortLabel EUR_Tuscan_LP6005441-DNA_H12 wssd CN
+    longLabel EUR_Tuscan_LP6005441-DNA_H12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Yoruba_LP6005442-DNA_A02_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_A02_wssd.bb
+    shortLabel AFR_Yoruba_LP6005442-DNA_A02 wssd CN
+    longLabel AFR_Yoruba_LP6005442-DNA_A02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Bulgarian_LP6005442-DNA_A03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_A03_wssd.bb
+    shortLabel EUR_Bulgarian_LP6005442-DNA_A03 wssd CN
+    longLabel EUR_Bulgarian_LP6005442-DNA_A03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Georgian_LP6005442-DNA_A04_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_A04_wssd.bb
+    shortLabel EUR_Georgian_LP6005442-DNA_A04 wssd CN
+    longLabel EUR_Georgian_LP6005442-DNA_A04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Hungarian_LP6005442-DNA_A08_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_A08_wssd.bb
+    shortLabel EUR_Hungarian_LP6005442-DNA_A08 wssd CN
+    longLabel EUR_Hungarian_LP6005442-DNA_A08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Australian_LP6005442-DNA_A09_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_A09_wssd.bb
+    shortLabel OCN_Australian_LP6005442-DNA_A09 wssd CN
+    longLabel OCN_Australian_LP6005442-DNA_A09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Esan_LP6005442-DNA_A10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_A10_wssd.bb
+    shortLabel AFR_Esan_LP6005442-DNA_A10 wssd CN
+    longLabel AFR_Esan_LP6005442-DNA_A10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Spanish_LP6005442-DNA_A11_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_A11_wssd.bb
+    shortLabel EUR_Spanish_LP6005442-DNA_A11 wssd CN
+    longLabel EUR_Spanish_LP6005442-DNA_A11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Punjabi_LP6005442-DNA_A12_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_A12_wssd.bb
+    shortLabel SAS_Punjabi_LP6005442-DNA_A12 wssd CN
+    longLabel SAS_Punjabi_LP6005442-DNA_A12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Uygur_LP6005442-DNA_B01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_B01_wssd.bb
+    shortLabel EAS_Uygur_LP6005442-DNA_B01 wssd CN
+    longLabel EAS_Uygur_LP6005442-DNA_B01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Yoruba_LP6005442-DNA_B02_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_B02_wssd.bb
+    shortLabel AFR_Yoruba_LP6005442-DNA_B02 wssd CN
+    longLabel AFR_Yoruba_LP6005442-DNA_B02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Bulgarian_LP6005442-DNA_B03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_B03_wssd.bb
+    shortLabel EUR_Bulgarian_LP6005442-DNA_B03 wssd CN
+    longLabel EUR_Bulgarian_LP6005442-DNA_B03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Georgian_LP6005442-DNA_B04_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_B04_wssd.bb
+    shortLabel EUR_Georgian_LP6005442-DNA_B04 wssd CN
+    longLabel EUR_Georgian_LP6005442-DNA_B04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Hungarian_LP6005442-DNA_B08_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_B08_wssd.bb
+    shortLabel EUR_Hungarian_LP6005442-DNA_B08 wssd CN
+    longLabel EUR_Hungarian_LP6005442-DNA_B08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Esan_LP6005442-DNA_B10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_B10_wssd.bb
+    shortLabel AFR_Esan_LP6005442-DNA_B10 wssd CN
+    longLabel AFR_Esan_LP6005442-DNA_B10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Spanish_LP6005442-DNA_B11_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_B11_wssd.bb
+    shortLabel EUR_Spanish_LP6005442-DNA_B11 wssd CN
+    longLabel EUR_Spanish_LP6005442-DNA_B11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Punjabi_LP6005442-DNA_B12_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_B12_wssd.bb
+    shortLabel SAS_Punjabi_LP6005442-DNA_B12 wssd CN
+    longLabel SAS_Punjabi_LP6005442-DNA_B12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Abkhasian_LP6005442-DNA_C02_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_C02_wssd.bb
+    shortLabel EUR_Abkhasian_LP6005442-DNA_C02 wssd CN
+    longLabel EUR_Abkhasian_LP6005442-DNA_C02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Iranian_LP6005442-DNA_C04_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_C04_wssd.bb
+    shortLabel EUR_Iranian_LP6005442-DNA_C04 wssd CN
+    longLabel EUR_Iranian_LP6005442-DNA_C04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Ami_LP6005442-DNA_C07_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_C07_wssd.bb
+    shortLabel EAS_Ami_LP6005442-DNA_C07 wssd CN
+    longLabel EAS_Ami_LP6005442-DNA_C07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Finnish_LP6005442-DNA_C10_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_C10_wssd.bb
+    shortLabel EUR_Finnish_LP6005442-DNA_C10 wssd CN
+    longLabel EUR_Finnish_LP6005442-DNA_C10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Kinh_LP6005442-DNA_C11_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_C11_wssd.bb
+    shortLabel EAS_Kinh_LP6005442-DNA_C11 wssd CN
+    longLabel EAS_Kinh_LP6005442-DNA_C11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Xibo_LP6005442-DNA_D01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_D01_wssd.bb
+    shortLabel EAS_Xibo_LP6005442-DNA_D01 wssd CN
+    longLabel EAS_Xibo_LP6005442-DNA_D01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Abkhasian_LP6005442-DNA_D02_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_D02_wssd.bb
+    shortLabel EUR_Abkhasian_LP6005442-DNA_D02 wssd CN
+    longLabel EUR_Abkhasian_LP6005442-DNA_D02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Chechen_LP6005442-DNA_D03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_D03_wssd.bb
+    shortLabel EUR_Chechen_LP6005442-DNA_D03 wssd CN
+    longLabel EUR_Chechen_LP6005442-DNA_D03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Icelandic_LP6005442-DNA_D08_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_D08_wssd.bb
+    shortLabel EUR_Icelandic_LP6005442-DNA_D08 wssd CN
+    longLabel EUR_Icelandic_LP6005442-DNA_D08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Somali_LP6005442-DNA_D09_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_D09_wssd.bb
+    shortLabel AFR_Somali_LP6005442-DNA_D09 wssd CN
+    longLabel AFR_Somali_LP6005442-DNA_D09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Finnish_LP6005442-DNA_D10_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_D10_wssd.bb
+    shortLabel EUR_Finnish_LP6005442-DNA_D10 wssd CN
+    longLabel EUR_Finnish_LP6005442-DNA_D10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Kinh_LP6005442-DNA_D11_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_D11_wssd.bb
+    shortLabel EAS_Kinh_LP6005442-DNA_D11 wssd CN
+    longLabel EAS_Kinh_LP6005442-DNA_D11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Jordanian_LP6005442-DNA_E04_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_E04_wssd.bb
+    shortLabel EUR_Jordanian_LP6005442-DNA_E04 wssd CN
+    longLabel EUR_Jordanian_LP6005442-DNA_E04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Atayal_LP6005442-DNA_E07_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_E07_wssd.bb
+    shortLabel EAS_Atayal_LP6005442-DNA_E07 wssd CN
+    longLabel EAS_Atayal_LP6005442-DNA_E07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_English_LP6005442-DNA_E10_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_E10_wssd.bb
+    shortLabel EUR_English_LP6005442-DNA_E10 wssd CN
+    longLabel EUR_English_LP6005442-DNA_E10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Luhya_LP6005442-DNA_E11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_E11_wssd.bb
+    shortLabel AFR_Luhya_LP6005442-DNA_E11 wssd CN
+    longLabel AFR_Luhya_LP6005442-DNA_E11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Tubalar_LP6005442-DNA_E12_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_E12_wssd.bb
+    shortLabel SIB_Tubalar_LP6005442-DNA_E12 wssd CN
+    longLabel SIB_Tubalar_LP6005442-DNA_E12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Yakut_LP6005442-DNA_F01_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_F01_wssd.bb
+    shortLabel SIB_Yakut_LP6005442-DNA_F01 wssd CN
+    longLabel SIB_Yakut_LP6005442-DNA_F01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Altaian_LP6005442-DNA_F02_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_F02_wssd.bb
+    shortLabel SIB_Altaian_LP6005442-DNA_F02 wssd CN
+    longLabel SIB_Altaian_LP6005442-DNA_F02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Jordanian_LP6005442-DNA_F04_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_F04_wssd.bb
+    shortLabel EUR_Jordanian_LP6005442-DNA_F04 wssd CN
+    longLabel EUR_Jordanian_LP6005442-DNA_F04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Luo_LP6005442-DNA_F09_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_F09_wssd.bb
+    shortLabel AFR_Luo_LP6005442-DNA_F09 wssd CN
+    longLabel AFR_Luo_LP6005442-DNA_F09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_English_LP6005442-DNA_F10_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_F10_wssd.bb
+    shortLabel EUR_English_LP6005442-DNA_F10 wssd CN
+    longLabel EUR_English_LP6005442-DNA_F10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Luhya_LP6005442-DNA_F11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_F11_wssd.bb
+    shortLabel AFR_Luhya_LP6005442-DNA_F11 wssd CN
+    longLabel AFR_Luhya_LP6005442-DNA_F11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Tubalar_LP6005442-DNA_F12_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_F12_wssd.bb
+    shortLabel SIB_Tubalar_LP6005442-DNA_F12 wssd CN
+    longLabel SIB_Tubalar_LP6005442-DNA_F12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Yi_LP6005442-DNA_G01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_G01_wssd.bb
+    shortLabel EAS_Yi_LP6005442-DNA_G01 wssd CN
+    longLabel EAS_Yi_LP6005442-DNA_G01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Armenian_LP6005442-DNA_G02_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_G02_wssd.bb
+    shortLabel EUR_Armenian_LP6005442-DNA_G02 wssd CN
+    longLabel EUR_Armenian_LP6005442-DNA_G02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Estonian_LP6005442-DNA_G03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_G03_wssd.bb
+    shortLabel EUR_Estonian_LP6005442-DNA_G03 wssd CN
+    longLabel EUR_Estonian_LP6005442-DNA_G03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Lezgin_LP6005442-DNA_G04_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_G04_wssd.bb
+    shortLabel EUR_Lezgin_LP6005442-DNA_G04 wssd CN
+    longLabel EUR_Lezgin_LP6005442-DNA_G04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Greek_LP6005442-DNA_G07_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_G07_wssd.bb
+    shortLabel EUR_Greek_LP6005442-DNA_G07 wssd CN
+    longLabel EUR_Greek_LP6005442-DNA_G07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Bengali_LP6005442-DNA_G09_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_G09_wssd.bb
+    shortLabel SAS_Bengali_LP6005442-DNA_G09 wssd CN
+    longLabel SAS_Bengali_LP6005442-DNA_G09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Gambian_LP6005442-DNA_G10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_G10_wssd.bb
+    shortLabel AFR_Gambian_LP6005442-DNA_G10 wssd CN
+    longLabel AFR_Gambian_LP6005442-DNA_G10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mende_LP6005442-DNA_G11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_G11_wssd.bb
+    shortLabel AFR_Mende_LP6005442-DNA_G11 wssd CN
+    longLabel AFR_Mende_LP6005442-DNA_G11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Ulchi_LP6005442-DNA_G12_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_G12_wssd.bb
+    shortLabel SIB_Ulchi_LP6005442-DNA_G12 wssd CN
+    longLabel SIB_Ulchi_LP6005442-DNA_G12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Yi_LP6005442-DNA_H01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_H01_wssd.bb
+    shortLabel EAS_Yi_LP6005442-DNA_H01 wssd CN
+    longLabel EAS_Yi_LP6005442-DNA_H01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Estonian_LP6005442-DNA_H03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_H03_wssd.bb
+    shortLabel EUR_Estonian_LP6005442-DNA_H03 wssd CN
+    longLabel EUR_Estonian_LP6005442-DNA_H03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Lezgin_LP6005442-DNA_H04_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_H04_wssd.bb
+    shortLabel EUR_Lezgin_LP6005442-DNA_H04 wssd CN
+    longLabel EUR_Lezgin_LP6005442-DNA_H04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Bengali_LP6005442-DNA_H09_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_H09_wssd.bb
+    shortLabel SAS_Bengali_LP6005442-DNA_H09 wssd CN
+    longLabel SAS_Bengali_LP6005442-DNA_H09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Gambian_LP6005442-DNA_H10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_H10_wssd.bb
+    shortLabel AFR_Gambian_LP6005442-DNA_H10 wssd CN
+    longLabel AFR_Gambian_LP6005442-DNA_H10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mende_LP6005442-DNA_H11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_H11_wssd.bb
+    shortLabel AFR_Mende_LP6005442-DNA_H11 wssd CN
+    longLabel AFR_Mende_LP6005442-DNA_H11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Ulchi_LP6005442-DNA_H12_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005442-DNA_H12_wssd.bb
+    shortLabel SIB_Ulchi_LP6005442-DNA_H12 wssd CN
+    longLabel SIB_Ulchi_LP6005442-DNA_H12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_BantuKenya_LP6005443-DNA_A01_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_A01_wssd.bb
+    shortLabel AFR_BantuKenya_LP6005443-DNA_A01 wssd CN
+    longLabel AFR_BantuKenya_LP6005443-DNA_A01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Tujia_LP6005443-DNA_A02_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_A02_wssd.bb
+    shortLabel EAS_Tujia_LP6005443-DNA_A02 wssd CN
+    longLabel EAS_Tujia_LP6005443-DNA_A02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Aleut_LP6005443-DNA_A03_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_A03_wssd.bb
+    shortLabel SIB_Aleut_LP6005443-DNA_A03 wssd CN
+    longLabel SIB_Aleut_LP6005443-DNA_A03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Greek_LP6005443-DNA_A06_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_A06_wssd.bb
+    shortLabel EUR_Greek_LP6005443-DNA_A06 wssd CN
+    longLabel EUR_Greek_LP6005443-DNA_A06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Thai_LP6005443-DNA_A07_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_A07_wssd.bb
+    shortLabel EAS_Thai_LP6005443-DNA_A07 wssd CN
+    longLabel EAS_Thai_LP6005443-DNA_A07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_A08_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_A08_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_A08 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_A08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Zapotec_LP6005443-DNA_A12_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_A12_wssd.bb
+    shortLabel AMR_Zapotec_LP6005443-DNA_A12 wssd CN
+    longLabel AMR_Zapotec_LP6005443-DNA_A12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Dai_LP6005443-DNA_B01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_B01_wssd.bb
+    shortLabel EAS_Dai_LP6005443-DNA_B01 wssd CN
+    longLabel EAS_Dai_LP6005443-DNA_B01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Uygur_LP6005443-DNA_B02_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_B02_wssd.bb
+    shortLabel EAS_Uygur_LP6005443-DNA_B02 wssd CN
+    longLabel EAS_Uygur_LP6005443-DNA_B02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Eskimo_Sireniki_LP6005443-DNA_B03_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_B03_wssd.bb
+    shortLabel SIB_Eskimo_Sireniki_LP6005443-DNA_B03 wssd CN
+    longLabel SIB_Eskimo_Sireniki_LP6005443-DNA_B03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Even_LP6005443-DNA_B04_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_B04_wssd.bb
+    shortLabel SIB_Even_LP6005443-DNA_B04 wssd CN
+    longLabel SIB_Even_LP6005443-DNA_B04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Icelandic_LP6005443-DNA_B06_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_B06_wssd.bb
+    shortLabel EUR_Icelandic_LP6005443-DNA_B06 wssd CN
+    longLabel EUR_Icelandic_LP6005443-DNA_B06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Thai_LP6005443-DNA_B07_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_B07_wssd.bb
+    shortLabel EAS_Thai_LP6005443-DNA_B07 wssd CN
+    longLabel EAS_Thai_LP6005443-DNA_B07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_B08_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_B08_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_B08 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_B08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Dinka_LP6005443-DNA_B09_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_B09_wssd.bb
+    shortLabel AFR_Dinka_LP6005443-DNA_B09 wssd CN
+    longLabel AFR_Dinka_LP6005443-DNA_B09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Iranian_LP6005443-DNA_B10_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_B10_wssd.bb
+    shortLabel EUR_Iranian_LP6005443-DNA_B10 wssd CN
+    longLabel EUR_Iranian_LP6005443-DNA_B10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Daur_LP6005443-DNA_C01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_C01_wssd.bb
+    shortLabel EAS_Daur_LP6005443-DNA_C01 wssd CN
+    longLabel EAS_Daur_LP6005443-DNA_C01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Xibo_LP6005443-DNA_C02_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_C02_wssd.bb
+    shortLabel EAS_Xibo_LP6005443-DNA_C02 wssd CN
+    longLabel EAS_Xibo_LP6005443-DNA_C02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Chukchi_LP6005443-DNA_C03_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_C03_wssd.bb
+    shortLabel SIB_Chukchi_LP6005443-DNA_C03 wssd CN
+    longLabel SIB_Chukchi_LP6005443-DNA_C03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Even_LP6005443-DNA_C04_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_C04_wssd.bb
+    shortLabel SIB_Even_LP6005443-DNA_C04 wssd CN
+    longLabel SIB_Even_LP6005443-DNA_C04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Korean_LP6005443-DNA_C06_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_C06_wssd.bb
+    shortLabel EAS_Korean_LP6005443-DNA_C06 wssd CN
+    longLabel EAS_Korean_LP6005443-DNA_C06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_C07_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_C07_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_C07 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_C07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_C08_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_C08_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_C08 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_C08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Kusunda_LP6005443-DNA_C09_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_C09_wssd.bb
+    shortLabel SAS_Kusunda_LP6005443-DNA_C09 wssd CN
+    longLabel SAS_Kusunda_LP6005443-DNA_C09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Druze_LP6005443-DNA_D01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_D01_wssd.bb
+    shortLabel EUR_Druze_LP6005443-DNA_D01 wssd CN
+    longLabel EUR_Druze_LP6005443-DNA_D01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Yakut_LP6005443-DNA_D02_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_D02_wssd.bb
+    shortLabel SIB_Yakut_LP6005443-DNA_D02 wssd CN
+    longLabel SIB_Yakut_LP6005443-DNA_D02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Eskimo_Chaplin_LP6005443-DNA_D03_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_D03_wssd.bb
+    shortLabel SIB_Eskimo_Chaplin_LP6005443-DNA_D03 wssd CN
+    longLabel SIB_Eskimo_Chaplin_LP6005443-DNA_D03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Itelman_LP6005443-DNA_D04_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_D04_wssd.bb
+    shortLabel SIB_Itelman_LP6005443-DNA_D04 wssd CN
+    longLabel SIB_Itelman_LP6005443-DNA_D04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Tlingit_LP6005443-DNA_D05_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_D05_wssd.bb
+    shortLabel SIB_Tlingit_LP6005443-DNA_D05 wssd CN
+    longLabel SIB_Tlingit_LP6005443-DNA_D05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Korean_LP6005443-DNA_D06_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_D06_wssd.bb
+    shortLabel EAS_Korean_LP6005443-DNA_D06 wssd CN
+    longLabel EAS_Korean_LP6005443-DNA_D06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_D07_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_D07_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_D07 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_D07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_D08_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_D08_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_D08 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_D08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Kusunda_LP6005443-DNA_D09_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_D09_wssd.bb
+    shortLabel SAS_Kusunda_LP6005443-DNA_D09 wssd CN
+    longLabel SAS_Kusunda_LP6005443-DNA_D09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Lahu_LP6005443-DNA_E01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_E01_wssd.bb
+    shortLabel EAS_Lahu_LP6005443-DNA_E01 wssd CN
+    longLabel EAS_Lahu_LP6005443-DNA_E01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_BantuHerero_LP6005443-DNA_E02_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_E02_wssd.bb
+    shortLabel AFR_BantuHerero_LP6005443-DNA_E02 wssd CN
+    longLabel AFR_BantuHerero_LP6005443-DNA_E02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Tlingit_LP6005443-DNA_E05_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_E05_wssd.bb
+    shortLabel SIB_Tlingit_LP6005443-DNA_E05 wssd CN
+    longLabel SIB_Tlingit_LP6005443-DNA_E05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Masai_LP6005443-DNA_E06_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_E06_wssd.bb
+    shortLabel AFR_Masai_LP6005443-DNA_E06 wssd CN
+    longLabel AFR_Masai_LP6005443-DNA_E06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_E07_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_E07_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_E07 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_E07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_E08_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_E08_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_E08 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_E08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Naxi_LP6005443-DNA_E09_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_E09_wssd.bb
+    shortLabel EAS_Naxi_LP6005443-DNA_E09 wssd CN
+    longLabel EAS_Naxi_LP6005443-DNA_E09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_North_Ossetian_LP6005443-DNA_E10_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_E10_wssd.bb
+    shortLabel EUR_North_Ossetian_LP6005443-DNA_E10 wssd CN
+    longLabel EUR_North_Ossetian_LP6005443-DNA_E10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Mixe_LP6005443-DNA_E11_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_E11_wssd.bb
+    shortLabel AMR_Mixe_LP6005443-DNA_E11 wssd CN
+    longLabel AMR_Mixe_LP6005443-DNA_E11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_She_LP6005443-DNA_F01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_F01_wssd.bb
+    shortLabel EAS_She_LP6005443-DNA_F01 wssd CN
+    longLabel EAS_She_LP6005443-DNA_F01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_BantuTswana_LP6005443-DNA_F02_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_F02_wssd.bb
+    shortLabel AFR_BantuTswana_LP6005443-DNA_F02 wssd CN
+    longLabel AFR_BantuTswana_LP6005443-DNA_F02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Eskimo_Naukan_LP6005443-DNA_F03_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_F03_wssd.bb
+    shortLabel SIB_Eskimo_Naukan_LP6005443-DNA_F03 wssd CN
+    longLabel SIB_Eskimo_Naukan_LP6005443-DNA_F03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Mansi_LP6005443-DNA_F04_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_F04_wssd.bb
+    shortLabel SIB_Mansi_LP6005443-DNA_F04 wssd CN
+    longLabel SIB_Mansi_LP6005443-DNA_F04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Masai_LP6005443-DNA_F06_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_F06_wssd.bb
+    shortLabel AFR_Masai_LP6005443-DNA_F06 wssd CN
+    longLabel AFR_Masai_LP6005443-DNA_F06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_F07_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_F07_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_F07 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_F07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_F08_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_F08_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_F08 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_F08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_North_Ossetian_LP6005443-DNA_F10_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_F10_wssd.bb
+    shortLabel EUR_North_Ossetian_LP6005443-DNA_F10 wssd CN
+    longLabel EUR_North_Ossetian_LP6005443-DNA_F10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Mixe_LP6005443-DNA_F11_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_F11_wssd.bb
+    shortLabel AMR_Mixe_LP6005443-DNA_F11 wssd CN
+    longLabel AMR_Mixe_LP6005443-DNA_F11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_She_LP6005443-DNA_G01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_G01_wssd.bb
+    shortLabel EAS_She_LP6005443-DNA_G01 wssd CN
+    longLabel EAS_She_LP6005443-DNA_G01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_BantuTswana_LP6005443-DNA_G02_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_G02_wssd.bb
+    shortLabel AFR_BantuTswana_LP6005443-DNA_G02 wssd CN
+    longLabel AFR_BantuTswana_LP6005443-DNA_G02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Eskimo_Naukan_LP6005443-DNA_G03_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_G03_wssd.bb
+    shortLabel SIB_Eskimo_Naukan_LP6005443-DNA_G03 wssd CN
+    longLabel SIB_Eskimo_Naukan_LP6005443-DNA_G03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Mansi_LP6005443-DNA_G04_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_G04_wssd.bb
+    shortLabel SIB_Mansi_LP6005443-DNA_G04 wssd CN
+    longLabel SIB_Mansi_LP6005443-DNA_G04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Ami_LP6005443-DNA_G05_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_G05_wssd.bb
+    shortLabel EAS_Ami_LP6005443-DNA_G05 wssd CN
+    longLabel EAS_Ami_LP6005443-DNA_G05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_G07_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_G07_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_G07 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_G07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Ju_hoan_North_LP6005443-DNA_G08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_G08_wssd.bb
+    shortLabel AFR_Ju_hoan_North_LP6005443-DNA_G08 wssd CN
+    longLabel AFR_Ju_hoan_North_LP6005443-DNA_G08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Mixtec_LP6005443-DNA_G11_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_G11_wssd.bb
+    shortLabel AMR_Mixtec_LP6005443-DNA_G11 wssd CN
+    longLabel AMR_Mixtec_LP6005443-DNA_G11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Tu_LP6005443-DNA_H01_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_H01_wssd.bb
+    shortLabel EAS_Tu_LP6005443-DNA_H01 wssd CN
+    longLabel EAS_Tu_LP6005443-DNA_H01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Aleut_LP6005443-DNA_H02_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_H02_wssd.bb
+    shortLabel SIB_Aleut_LP6005443-DNA_H02 wssd CN
+    longLabel SIB_Aleut_LP6005443-DNA_H02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Eskimo_Sireniki_LP6005443-DNA_H03_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_H03_wssd.bb
+    shortLabel SIB_Eskimo_Sireniki_LP6005443-DNA_H03 wssd CN
+    longLabel SIB_Eskimo_Sireniki_LP6005443-DNA_H03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Czech_LP6005443-DNA_H05_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_H05_wssd.bb
+    shortLabel EUR_Czech_LP6005443-DNA_H05 wssd CN
+    longLabel EUR_Czech_LP6005443-DNA_H05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Papuan_LP6005443-DNA_H07_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_H07_wssd.bb
+    shortLabel OCN_Papuan_LP6005443-DNA_H07 wssd CN
+    longLabel OCN_Papuan_LP6005443-DNA_H07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Dinka_LP6005443-DNA_H08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_H08_wssd.bb
+    shortLabel AFR_Dinka_LP6005443-DNA_H08 wssd CN
+    longLabel AFR_Dinka_LP6005443-DNA_H08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Mixtec_LP6005443-DNA_H11_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005443-DNA_H11_wssd.bb
+    shortLabel AMR_Mixtec_LP6005443-DNA_H11 wssd CN
+    longLabel AMR_Mixtec_LP6005443-DNA_H11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Nahua_LP6005519-DNA_A03_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_A03_wssd.bb
+    shortLabel AMR_Nahua_LP6005519-DNA_A03 wssd CN
+    longLabel AMR_Nahua_LP6005519-DNA_A03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Kapu_LP6005519-DNA_A04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_A04_wssd.bb
+    shortLabel SAS_Kapu_LP6005519-DNA_A04 wssd CN
+    longLabel SAS_Kapu_LP6005519-DNA_A04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Relli_LP6005519-DNA_A05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_A05_wssd.bb
+    shortLabel SAS_Relli_LP6005519-DNA_A05 wssd CN
+    longLabel SAS_Relli_LP6005519-DNA_A05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Burmese_LP6005519-DNA_A06_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_A06_wssd.bb
+    shortLabel EAS_Burmese_LP6005519-DNA_A06 wssd CN
+    longLabel EAS_Burmese_LP6005519-DNA_A06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Kongo_LP6005519-DNA_A09_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_A09_wssd.bb
+    shortLabel AFR_Kongo_LP6005519-DNA_A09 wssd CN
+    longLabel AFR_Kongo_LP6005519-DNA_A09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mursi_LP6005519-DNA_A10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_A10_wssd.bb
+    shortLabel AFR_Mursi_LP6005519-DNA_A10 wssd CN
+    longLabel AFR_Mursi_LP6005519-DNA_A10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Kikuyu_LP6005519-DNA_A11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_A11_wssd.bb
+    shortLabel AFR_Kikuyu_LP6005519-DNA_A11 wssd CN
+    longLabel AFR_Kikuyu_LP6005519-DNA_A11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Igbo_LP6005519-DNA_A12_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_A12_wssd.bb
+    shortLabel AFR_Igbo_LP6005519-DNA_A12 wssd CN
+    longLabel AFR_Igbo_LP6005519-DNA_A12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Nahua_LP6005519-DNA_B03_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_B03_wssd.bb
+    shortLabel AMR_Nahua_LP6005519-DNA_B03 wssd CN
+    longLabel AMR_Nahua_LP6005519-DNA_B03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Kapu_LP6005519-DNA_B04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_B04_wssd.bb
+    shortLabel SAS_Kapu_LP6005519-DNA_B04 wssd CN
+    longLabel SAS_Kapu_LP6005519-DNA_B04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Relli_LP6005519-DNA_B05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_B05_wssd.bb
+    shortLabel SAS_Relli_LP6005519-DNA_B05 wssd CN
+    longLabel SAS_Relli_LP6005519-DNA_B05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Burmese_LP6005519-DNA_B06_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_B06_wssd.bb
+    shortLabel EAS_Burmese_LP6005519-DNA_B06 wssd CN
+    longLabel EAS_Burmese_LP6005519-DNA_B06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mada_LP6005519-DNA_B08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_B08_wssd.bb
+    shortLabel AFR_Mada_LP6005519-DNA_B08 wssd CN
+    longLabel AFR_Mada_LP6005519-DNA_B08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mursi_LP6005519-DNA_B10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_B10_wssd.bb
+    shortLabel AFR_Mursi_LP6005519-DNA_B10 wssd CN
+    longLabel AFR_Mursi_LP6005519-DNA_B10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Kikuyu_LP6005519-DNA_B11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_B11_wssd.bb
+    shortLabel AFR_Kikuyu_LP6005519-DNA_B11 wssd CN
+    longLabel AFR_Kikuyu_LP6005519-DNA_B11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Igbo_LP6005519-DNA_B12_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_B12_wssd.bb
+    shortLabel AFR_Igbo_LP6005519-DNA_B12 wssd CN
+    longLabel AFR_Igbo_LP6005519-DNA_B12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Tajik_LP6005519-DNA_C03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_C03_wssd.bb
+    shortLabel EUR_Tajik_LP6005519-DNA_C03 wssd CN
+    longLabel EUR_Tajik_LP6005519-DNA_C03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Yadava_LP6005519-DNA_C04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_C04_wssd.bb
+    shortLabel SAS_Yadava_LP6005519-DNA_C04 wssd CN
+    longLabel SAS_Yadava_LP6005519-DNA_C04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Irula_LP6005519-DNA_C05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_C05_wssd.bb
+    shortLabel SAS_Irula_LP6005519-DNA_C05 wssd CN
+    longLabel SAS_Irula_LP6005519-DNA_C05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Igorot_LP6005519-DNA_C06_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_C06_wssd.bb
+    shortLabel OCN_Igorot_LP6005519-DNA_C06 wssd CN
+    longLabel OCN_Igorot_LP6005519-DNA_C06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Tikar_South_LP6005519-DNA_C10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_C10_wssd.bb
+    shortLabel AFR_Tikar_South_LP6005519-DNA_C10 wssd CN
+    longLabel AFR_Tikar_South_LP6005519-DNA_C10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Ogiek_LP6005519-DNA_C11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_C11_wssd.bb
+    shortLabel AFR_Ogiek_LP6005519-DNA_C11 wssd CN
+    longLabel AFR_Ogiek_LP6005519-DNA_C11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Hadza_LP6005519-DNA_C12_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_C12_wssd.bb
+    shortLabel AFR_Hadza_LP6005519-DNA_C12 wssd CN
+    longLabel AFR_Hadza_LP6005519-DNA_C12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Chane_LP6005519-DNA_D01_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_D01_wssd.bb
+    shortLabel AMR_Chane_LP6005519-DNA_D01 wssd CN
+    longLabel AMR_Chane_LP6005519-DNA_D01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Tajik_LP6005519-DNA_D03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_D03_wssd.bb
+    shortLabel EUR_Tajik_LP6005519-DNA_D03 wssd CN
+    longLabel EUR_Tajik_LP6005519-DNA_D03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Yadava_LP6005519-DNA_D04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_D04_wssd.bb
+    shortLabel SAS_Yadava_LP6005519-DNA_D04 wssd CN
+    longLabel SAS_Yadava_LP6005519-DNA_D04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Irula_LP6005519-DNA_D05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_D05_wssd.bb
+    shortLabel SAS_Irula_LP6005519-DNA_D05 wssd CN
+    longLabel SAS_Irula_LP6005519-DNA_D05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Igorot_LP6005519-DNA_D06_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_D06_wssd.bb
+    shortLabel OCN_Igorot_LP6005519-DNA_D06 wssd CN
+    longLabel OCN_Igorot_LP6005519-DNA_D06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Kaba_LP6005519-DNA_D08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_D08_wssd.bb
+    shortLabel AFR_Kaba_LP6005519-DNA_D08 wssd CN
+    longLabel AFR_Kaba_LP6005519-DNA_D08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Aari_LP6005519-DNA_D09_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_D09_wssd.bb
+    shortLabel AFR_Aari_LP6005519-DNA_D09 wssd CN
+    longLabel AFR_Aari_LP6005519-DNA_D09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Tikar_South_LP6005519-DNA_D10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_D10_wssd.bb
+    shortLabel AFR_Tikar_South_LP6005519-DNA_D10 wssd CN
+    longLabel AFR_Tikar_South_LP6005519-DNA_D10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Ogiek_LP6005519-DNA_D11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_D11_wssd.bb
+    shortLabel AFR_Ogiek_LP6005519-DNA_D11 wssd CN
+    longLabel AFR_Ogiek_LP6005519-DNA_D11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Mala_LP6005519-DNA_E04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_E04_wssd.bb
+    shortLabel SAS_Mala_LP6005519-DNA_E04 wssd CN
+    longLabel SAS_Mala_LP6005519-DNA_E04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Khonda_Dora_LP6005519-DNA_E05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_E05_wssd.bb
+    shortLabel SAS_Khonda_Dora_LP6005519-DNA_E05 wssd CN
+    longLabel SAS_Khonda_Dora_LP6005519-DNA_E05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Dusun_LP6005519-DNA_E06_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_E06_wssd.bb
+    shortLabel OCN_Dusun_LP6005519-DNA_E06 wssd CN
+    longLabel OCN_Dusun_LP6005519-DNA_E06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Bulala_LP6005519-DNA_E08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_E08_wssd.bb
+    shortLabel AFR_Bulala_LP6005519-DNA_E08 wssd CN
+    longLabel AFR_Bulala_LP6005519-DNA_E08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Agaw_LP6005519-DNA_E09_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_E09_wssd.bb
+    shortLabel AFR_Agaw_LP6005519-DNA_E09 wssd CN
+    longLabel AFR_Agaw_LP6005519-DNA_E09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Ngumba_LP6005519-DNA_E10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_E10_wssd.bb
+    shortLabel AFR_Ngumba_LP6005519-DNA_E10 wssd CN
+    longLabel AFR_Ngumba_LP6005519-DNA_E10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Rendille_LP6005519-DNA_E11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_E11_wssd.bb
+    shortLabel AFR_Rendille_LP6005519-DNA_E11 wssd CN
+    longLabel AFR_Rendille_LP6005519-DNA_E11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Armenian_LP6005519-DNA_F03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_F03_wssd.bb
+    shortLabel EUR_Armenian_LP6005519-DNA_F03 wssd CN
+    longLabel EUR_Armenian_LP6005519-DNA_F03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Mala_LP6005519-DNA_F04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_F04_wssd.bb
+    shortLabel SAS_Mala_LP6005519-DNA_F04 wssd CN
+    longLabel SAS_Mala_LP6005519-DNA_F04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Dusun_LP6005519-DNA_F06_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_F06_wssd.bb
+    shortLabel OCN_Dusun_LP6005519-DNA_F06 wssd CN
+    longLabel OCN_Dusun_LP6005519-DNA_F06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Bulala_LP6005519-DNA_F08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_F08_wssd.bb
+    shortLabel AFR_Bulala_LP6005519-DNA_F08 wssd CN
+    longLabel AFR_Bulala_LP6005519-DNA_F08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Agaw_LP6005519-DNA_F09_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_F09_wssd.bb
+    shortLabel AFR_Agaw_LP6005519-DNA_F09 wssd CN
+    longLabel AFR_Agaw_LP6005519-DNA_F09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Ngumba_LP6005519-DNA_F10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_F10_wssd.bb
+    shortLabel AFR_Ngumba_LP6005519-DNA_F10 wssd CN
+    longLabel AFR_Ngumba_LP6005519-DNA_F10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Rendille_LP6005519-DNA_F11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_F11_wssd.bb
+    shortLabel AFR_Rendille_LP6005519-DNA_F11 wssd CN
+    longLabel AFR_Rendille_LP6005519-DNA_F11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Quechua_LP6005519-DNA_G02_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_G02_wssd.bb
+    shortLabel AMR_Quechua_LP6005519-DNA_G02 wssd CN
+    longLabel AMR_Quechua_LP6005519-DNA_G02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Brahmin_LP6005519-DNA_G03_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_G03_wssd.bb
+    shortLabel SAS_Brahmin_LP6005519-DNA_G03 wssd CN
+    longLabel SAS_Brahmin_LP6005519-DNA_G03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Madiga_LP6005519-DNA_G04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_G04_wssd.bb
+    shortLabel SAS_Madiga_LP6005519-DNA_G04 wssd CN
+    longLabel SAS_Madiga_LP6005519-DNA_G04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Baka_LP6005519-DNA_G06_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_G06_wssd.bb
+    shortLabel AFR_Baka_LP6005519-DNA_G06 wssd CN
+    longLabel AFR_Baka_LP6005519-DNA_G06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Laka_LP6005519-DNA_G08_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_G08_wssd.bb
+    shortLabel AFR_Laka_LP6005519-DNA_G08 wssd CN
+    longLabel AFR_Laka_LP6005519-DNA_G08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Amhara_LP6005519-DNA_G09_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_G09_wssd.bb
+    shortLabel AFR_Amhara_LP6005519-DNA_G09 wssd CN
+    longLabel AFR_Amhara_LP6005519-DNA_G09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Elmolo_LP6005519-DNA_G10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_G10_wssd.bb
+    shortLabel AFR_Elmolo_LP6005519-DNA_G10 wssd CN
+    longLabel AFR_Elmolo_LP6005519-DNA_G10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Sengwer_LP6005519-DNA_G11_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_G11_wssd.bb
+    shortLabel AFR_Sengwer_LP6005519-DNA_G11 wssd CN
+    longLabel AFR_Sengwer_LP6005519-DNA_G11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Brahmin_LP6005519-DNA_H03_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_H03_wssd.bb
+    shortLabel SAS_Brahmin_LP6005519-DNA_H03 wssd CN
+    longLabel SAS_Brahmin_LP6005519-DNA_H03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Madiga_LP6005519-DNA_H04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_H04_wssd.bb
+    shortLabel SAS_Madiga_LP6005519-DNA_H04 wssd CN
+    longLabel SAS_Madiga_LP6005519-DNA_H04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Amhara_LP6005519-DNA_H09_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_H09_wssd.bb
+    shortLabel AFR_Amhara_LP6005519-DNA_H09 wssd CN
+    longLabel AFR_Amhara_LP6005519-DNA_H09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Elmolo_LP6005519-DNA_H10_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_H10_wssd.bb
+    shortLabel AFR_Elmolo_LP6005519-DNA_H10 wssd CN
+    longLabel AFR_Elmolo_LP6005519-DNA_H10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Sandawe_LP6005519-DNA_H12_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005519-DNA_H12_wssd.bb
+    shortLabel AFR_Sandawe_LP6005519-DNA_H12 wssd CN
+    longLabel AFR_Sandawe_LP6005519-DNA_H12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Finnish_LP6005592-DNA_A02_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_A02_wssd.bb
+    shortLabel EUR_Finnish_LP6005592-DNA_A02 wssd CN
+    longLabel EUR_Finnish_LP6005592-DNA_A02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Punjabi_LP6005592-DNA_A04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_A04_wssd.bb
+    shortLabel SAS_Punjabi_LP6005592-DNA_A04 wssd CN
+    longLabel SAS_Punjabi_LP6005592-DNA_A04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Norwegian_LP6005592-DNA_B01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_B01_wssd.bb
+    shortLabel EUR_Norwegian_LP6005592-DNA_B01 wssd CN
+    longLabel EUR_Norwegian_LP6005592-DNA_B01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Maori_LP6005592-DNA_B02_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_B02_wssd.bb
+    shortLabel OCN_Maori_LP6005592-DNA_B02 wssd CN
+    longLabel OCN_Maori_LP6005592-DNA_B02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Palestinian_LP6005592-DNA_B03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_B03_wssd.bb
+    shortLabel EUR_Palestinian_LP6005592-DNA_B03 wssd CN
+    longLabel EUR_Palestinian_LP6005592-DNA_B03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Punjabi_LP6005592-DNA_B04_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_B04_wssd.bb
+    shortLabel SAS_Punjabi_LP6005592-DNA_B04 wssd CN
+    longLabel SAS_Punjabi_LP6005592-DNA_B04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Saami_LP6005592-DNA_C01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_C01_wssd.bb
+    shortLabel EUR_Saami_LP6005592-DNA_C01 wssd CN
+    longLabel EUR_Saami_LP6005592-DNA_C01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Japanese_LP6005592-DNA_C02_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_C02_wssd.bb
+    shortLabel EAS_Japanese_LP6005592-DNA_C02 wssd CN
+    longLabel EAS_Japanese_LP6005592-DNA_C02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mbuti_LP6005592-DNA_C03_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_C03_wssd.bb
+    shortLabel AFR_Mbuti_LP6005592-DNA_C03 wssd CN
+    longLabel AFR_Mbuti_LP6005592-DNA_C03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Khomani_San_LP6005592-DNA_C05_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_C05_wssd.bb
+    shortLabel AFR_Khomani_San_LP6005592-DNA_C05 wssd CN
+    longLabel AFR_Khomani_San_LP6005592-DNA_C05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Saami_LP6005592-DNA_D01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_D01_wssd.bb
+    shortLabel EUR_Saami_LP6005592-DNA_D01 wssd CN
+    longLabel EUR_Saami_LP6005592-DNA_D01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EAS_Dai_LP6005592-DNA_D03_wssd
+    priority 3
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_D03_wssd.bb
+    shortLabel EAS_Dai_LP6005592-DNA_D03 wssd CN
+    longLabel EAS_Dai_LP6005592-DNA_D03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Samaritan_LP6005592-DNA_D04_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_D04_wssd.bb
+    shortLabel EUR_Samaritan_LP6005592-DNA_D04 wssd CN
+    longLabel EUR_Samaritan_LP6005592-DNA_D04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Iraqi_Jew_LP6005592-DNA_E01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_E01_wssd.bb
+    shortLabel EUR_Iraqi_Jew_LP6005592-DNA_E01 wssd CN
+    longLabel EUR_Iraqi_Jew_LP6005592-DNA_E01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Polish_LP6005592-DNA_E02_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_E02_wssd.bb
+    shortLabel EUR_Polish_LP6005592-DNA_E02 wssd CN
+    longLabel EUR_Polish_LP6005592-DNA_E02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Sherpa_LP6005592-DNA_E05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_E05_wssd.bb
+    shortLabel SAS_Sherpa_LP6005592-DNA_E05 wssd CN
+    longLabel SAS_Sherpa_LP6005592-DNA_E05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Iraqi_Jew_LP6005592-DNA_F01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_F01_wssd.bb
+    shortLabel EUR_Iraqi_Jew_LP6005592-DNA_F01 wssd CN
+    longLabel EUR_Iraqi_Jew_LP6005592-DNA_F01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Even_LP6005592-DNA_F03_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_F03_wssd.bb
+    shortLabel SIB_Even_LP6005592-DNA_F03 wssd CN
+    longLabel SIB_Even_LP6005592-DNA_F03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Sherpa_LP6005592-DNA_F05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_F05_wssd.bb
+    shortLabel SAS_Sherpa_LP6005592-DNA_F05 wssd CN
+    longLabel SAS_Sherpa_LP6005592-DNA_F05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Yemenite_Jew_LP6005592-DNA_G01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_G01_wssd.bb
+    shortLabel EUR_Yemenite_Jew_LP6005592-DNA_G01 wssd CN
+    longLabel EUR_Yemenite_Jew_LP6005592-DNA_G01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Jordanian_LP6005592-DNA_G03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_G03_wssd.bb
+    shortLabel EUR_Jordanian_LP6005592-DNA_G03 wssd CN
+    longLabel EUR_Jordanian_LP6005592-DNA_G03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Tibetan_LP6005592-DNA_G05_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_G05_wssd.bb
+    shortLabel SAS_Tibetan_LP6005592-DNA_G05 wssd CN
+    longLabel SAS_Tibetan_LP6005592-DNA_G05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Yemenite_Jew_LP6005592-DNA_H01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_H01_wssd.bb
+    shortLabel EUR_Yemenite_Jew_LP6005592-DNA_H01 wssd CN
+    longLabel EUR_Yemenite_Jew_LP6005592-DNA_H01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Hawaiian_LP6005592-DNA_H03_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005592-DNA_H03_wssd.bb
+    shortLabel OCN_Hawaiian_LP6005592-DNA_H03 wssd CN
+    longLabel OCN_Hawaiian_LP6005592-DNA_H03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SAS_Tibetan_LP6005619-DNA_A01_wssd
+    priority 6
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005619-DNA_A01_wssd.bb
+    shortLabel SAS_Tibetan_LP6005619-DNA_A01 wssd CN
+    longLabel SAS_Tibetan_LP6005619-DNA_A01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Saharawi_LP6005619-DNA_B01_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005619-DNA_B01_wssd.bb
+    shortLabel AFR_Saharawi_LP6005619-DNA_B01 wssd CN
+    longLabel AFR_Saharawi_LP6005619-DNA_B01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Saharawi_LP6005619-DNA_C01_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005619-DNA_C01_wssd.bb
+    shortLabel AFR_Saharawi_LP6005619-DNA_C01 wssd CN
+    longLabel AFR_Saharawi_LP6005619-DNA_C01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track LP6005619-DNA_D01_wssd
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005619-DNA_D01_wssd.bb
+    shortLabel LP6005619-DNA_D01 wssd CN
+    longLabel LP6005619-DNA_D01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Kyrgyz_LP6005677-DNA_A02_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_A02_wssd.bb
+    shortLabel SIB_Kyrgyz_LP6005677-DNA_A02 wssd CN
+    longLabel SIB_Kyrgyz_LP6005677-DNA_A02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Turkish_LP6005677-DNA_A03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_A03_wssd.bb
+    shortLabel EUR_Turkish_LP6005677-DNA_A03 wssd CN
+    longLabel EUR_Turkish_LP6005677-DNA_A03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Fulani_LP6005677-DNA_A04_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_A04_wssd.bb
+    shortLabel AFR_Fulani_LP6005677-DNA_A04 wssd CN
+    longLabel AFR_Fulani_LP6005677-DNA_A04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Albanian_LP6005677-DNA_B01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_B01_wssd.bb
+    shortLabel EUR_Albanian_LP6005677-DNA_B01 wssd CN
+    longLabel EUR_Albanian_LP6005677-DNA_B01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track SIB_Kyrgyz_LP6005677-DNA_B02_wssd
+    priority 7
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_B02_wssd.bb
+    shortLabel SIB_Kyrgyz_LP6005677-DNA_B02 wssd CN
+    longLabel SIB_Kyrgyz_LP6005677-DNA_B02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Fulani_LP6005677-DNA_B04_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_B04_wssd.bb
+    shortLabel AFR_Fulani_LP6005677-DNA_B04 wssd CN
+    longLabel AFR_Fulani_LP6005677-DNA_B04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Turkish_LP6005677-DNA_C03_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_C03_wssd.bb
+    shortLabel EUR_Turkish_LP6005677-DNA_C03 wssd CN
+    longLabel EUR_Turkish_LP6005677-DNA_C03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Lemande_LP6005677-DNA_C04_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_C04_wssd.bb
+    shortLabel AFR_Lemande_LP6005677-DNA_C04 wssd CN
+    longLabel AFR_Lemande_LP6005677-DNA_C04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Zapotec_LP6005677-DNA_D01_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_D01_wssd.bb
+    shortLabel AMR_Zapotec_LP6005677-DNA_D01 wssd CN
+    longLabel AMR_Zapotec_LP6005677-DNA_D01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Khomani_San_LP6005677-DNA_D03_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_D03_wssd.bb
+    shortLabel AFR_Khomani_San_LP6005677-DNA_D03 wssd CN
+    longLabel AFR_Khomani_San_LP6005677-DNA_D03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Lemande_LP6005677-DNA_D04_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_D04_wssd.bb
+    shortLabel AFR_Lemande_LP6005677-DNA_D04 wssd CN
+    longLabel AFR_Lemande_LP6005677-DNA_D04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Quechua_LP6005677-DNA_E01_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_E01_wssd.bb
+    shortLabel AMR_Quechua_LP6005677-DNA_E01 wssd CN
+    longLabel AMR_Quechua_LP6005677-DNA_E01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Baka_LP6005677-DNA_E03_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_E03_wssd.bb
+    shortLabel AFR_Baka_LP6005677-DNA_E03 wssd CN
+    longLabel AFR_Baka_LP6005677-DNA_E03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Laka_LP6005677-DNA_E04_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_E04_wssd.bb
+    shortLabel AFR_Laka_LP6005677-DNA_E04 wssd CN
+    longLabel AFR_Laka_LP6005677-DNA_E04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AMR_Quechua_LP6005677-DNA_F01_wssd
+    priority 2
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_F01_wssd.bb
+    shortLabel AMR_Quechua_LP6005677-DNA_F01 wssd CN
+    longLabel AMR_Quechua_LP6005677-DNA_F01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Bakola_LP6005677-DNA_F03_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_F03_wssd.bb
+    shortLabel AFR_Bakola_LP6005677-DNA_F03 wssd CN
+    longLabel AFR_Bakola_LP6005677-DNA_F03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Luo_LP6005677-DNA_G01_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_G01_wssd.bb
+    shortLabel AFR_Luo_LP6005677-DNA_G01 wssd CN
+    longLabel AFR_Luo_LP6005677-DNA_G01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Bakola_LP6005677-DNA_G03_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_G03_wssd.bb
+    shortLabel AFR_Bakola_LP6005677-DNA_G03 wssd CN
+    longLabel AFR_Bakola_LP6005677-DNA_G03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Bedzan_LP6005677-DNA_H03_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005677-DNA_H03_wssd.bb
+    shortLabel AFR_Bedzan_LP6005677-DNA_H03 wssd CN
+    longLabel AFR_Bedzan_LP6005677-DNA_H03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Crete_LP6007068-DNA_A01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6007068-DNA_A01_wssd.bb
+    shortLabel EUR_Crete_LP6007068-DNA_A01 wssd CN
+    longLabel EUR_Crete_LP6007068-DNA_A01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track EUR_Crete_LP6007069-DNA_A01_wssd
+    priority 4
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6007069-DNA_A01_wssd.bb
+    shortLabel EUR_Crete_LP6007069-DNA_A01 wssd CN
+    longLabel EUR_Crete_LP6007069-DNA_A01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Mbuti_SS6004471_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/SS6004471_wssd.bb
+    shortLabel AFR_Mbuti_SS6004471 wssd CN
+    longLabel AFR_Mbuti_SS6004471 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Australian_SS6004477_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/SS6004477_wssd.bb
+    shortLabel OCN_Australian_SS6004477 wssd CN
+    longLabel OCN_Australian_SS6004477 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track OCN_Australian_SS6004478_wssd
+    priority 5
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/SS6004478_wssd.bb
+    shortLabel OCN_Australian_SS6004478 wssd CN
+    longLabel OCN_Australian_SS6004478 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track AFR_Dinka_SS6004480_wssd
+    priority 1
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/SS6004480_wssd.bb
+    shortLabel AFR_Dinka_SS6004480 wssd CN
+    longLabel AFR_Dinka_SS6004480 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility hide
+
+    track CHM13_kmer_wssd
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/CHM13_kmer_wssd.bb
+    shortLabel CHM13_kmer wssd CN
+    longLabel CHM13_kmer Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track GRCh38_kmer_wssd
+    parent sgdpCopyNumber
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/GRCh38_kmer_wssd.bb
+    shortLabel GRCh38_kmer wssd CN
+    longLabel GRCh38_kmer Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+track sgdpCopyNumber_subset
+compositeTrack off
+shortLabel SGDP copy number subset
+longLabel  SGDP copy number estimates subset
+priority 102
+type bigBed 9 +
+noScoreFilter on
+filter.name 0
+filterLabel.name Minimum copy number
+itemRgb on
+maxItems 100000
+group varRep
+html html/sgdpCopyNumber.html
+
+    track subset_CHM13_kmer_wssd
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/CHM13_kmer_wssd.bb
+    shortLabel CHM13_kmer wssd CN
+    longLabel CHM13_kmer Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_GRCh38_kmer_wssd
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/GRCh38_kmer_wssd.bb
+    shortLabel GRCh38_kmer wssd CN
+    longLabel GRCh38_kmer Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EUR_Adygei_LP6005441-DNA_A01_wssd
+    priority 4
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A01_wssd.bb
+    shortLabel EUR_Adygei_LP6005441-DNA_A01 wssd CN
+    longLabel EUR_Adygei_LP6005441-DNA_A01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_OCN_Bougainville_LP6005441-DNA_A03_wssd
+    priority 5
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A03_wssd.bb
+    shortLabel OCN_Bougainville_LP6005441-DNA_A03 wssd CN
+    longLabel OCN_Bougainville_LP6005441-DNA_A03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_AMR_Piapoco_LP6005441-DNA_A04_wssd
+    priority 2
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A04_wssd.bb
+    shortLabel AMR_Piapoco_LP6005441-DNA_A04 wssd CN
+    longLabel AMR_Piapoco_LP6005441-DNA_A04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EUR_French_LP6005441-DNA_A05_wssd
+    priority 4
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A05_wssd.bb
+    shortLabel EUR_French_LP6005441-DNA_A05 wssd CN
+    longLabel EUR_French_LP6005441-DNA_A05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EUR_Bergamo_LP6005441-DNA_A06_wssd
+    priority 4
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A06_wssd.bb
+    shortLabel EUR_Bergamo_LP6005441-DNA_A06 wssd CN
+    longLabel EUR_Bergamo_LP6005441-DNA_A06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_AFR_Mbuti_LP6005441-DNA_A08_wssd
+    priority 1
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A08_wssd.bb
+    shortLabel AFR_Mbuti_LP6005441-DNA_A08 wssd CN
+    longLabel AFR_Mbuti_LP6005441-DNA_A08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EAS_Naxi_LP6005441-DNA_A09_wssd
+    priority 3
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A09_wssd.bb
+    shortLabel EAS_Naxi_LP6005441-DNA_A09 wssd CN
+    longLabel EAS_Naxi_LP6005441-DNA_A09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_OCN_Papuan_LP6005441-DNA_A10_wssd
+    priority 5
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A10_wssd.bb
+    shortLabel OCN_Papuan_LP6005441-DNA_A10 wssd CN
+    longLabel OCN_Papuan_LP6005441-DNA_A10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_AFR_Ju_hoan_North_LP6005441-DNA_A11_wssd
+    priority 1
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A11_wssd.bb
+    shortLabel AFR_Ju_hoan_North_LP6005441-DNA_A11 wssd CN
+    longLabel AFR_Ju_hoan_North_LP6005441-DNA_A11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_AMR_Surui_LP6005441-DNA_A12_wssd
+    priority 2
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_A12_wssd.bb
+    shortLabel AMR_Surui_LP6005441-DNA_A12 wssd CN
+    longLabel AMR_Surui_LP6005441-DNA_A12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EUR_Adygei_LP6005441-DNA_B01_wssd
+    priority 4
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B01_wssd.bb
+    shortLabel EUR_Adygei_LP6005441-DNA_B01 wssd CN
+    longLabel EUR_Adygei_LP6005441-DNA_B01 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_AFR_BantuKenya_LP6005441-DNA_B02_wssd
+    priority 1
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B02_wssd.bb
+    shortLabel AFR_BantuKenya_LP6005441-DNA_B02 wssd CN
+    longLabel AFR_BantuKenya_LP6005441-DNA_B02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_OCN_Bougainville_LP6005441-DNA_B03_wssd
+    priority 5
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B03_wssd.bb
+    shortLabel OCN_Bougainville_LP6005441-DNA_B03 wssd CN
+    longLabel OCN_Bougainville_LP6005441-DNA_B03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_AMR_Piapoco_LP6005441-DNA_B04_wssd
+    priority 2
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B04_wssd.bb
+    shortLabel AMR_Piapoco_LP6005441-DNA_B04 wssd CN
+    longLabel AMR_Piapoco_LP6005441-DNA_B04 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EUR_French_LP6005441-DNA_B05_wssd
+    priority 4
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B05_wssd.bb
+    shortLabel EUR_French_LP6005441-DNA_B05 wssd CN
+    longLabel EUR_French_LP6005441-DNA_B05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EUR_Bergamo_LP6005441-DNA_B06_wssd
+    priority 4
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B06_wssd.bb
+    shortLabel EUR_Bergamo_LP6005441-DNA_B06 wssd CN
+    longLabel EUR_Bergamo_LP6005441-DNA_B06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EAS_Lahu_LP6005441-DNA_B07_wssd
+    priority 3
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B07_wssd.bb
+    shortLabel EAS_Lahu_LP6005441-DNA_B07 wssd CN
+    longLabel EAS_Lahu_LP6005441-DNA_B07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_AFR_Mbuti_LP6005441-DNA_B08_wssd
+    priority 1
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B08_wssd.bb
+    shortLabel AFR_Mbuti_LP6005441-DNA_B08 wssd CN
+    longLabel AFR_Mbuti_LP6005441-DNA_B08 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EAS_Naxi_LP6005441-DNA_B09_wssd
+    priority 3
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B09_wssd.bb
+    shortLabel EAS_Naxi_LP6005441-DNA_B09 wssd CN
+    longLabel EAS_Naxi_LP6005441-DNA_B09 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_OCN_Papuan_LP6005441-DNA_B10_wssd
+    priority 5
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B10_wssd.bb
+    shortLabel OCN_Papuan_LP6005441-DNA_B10 wssd CN
+    longLabel OCN_Papuan_LP6005441-DNA_B10 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_AFR_Ju_hoan_North_LP6005441-DNA_B11_wssd
+    priority 1
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B11_wssd.bb
+    shortLabel AFR_Ju_hoan_North_LP6005441-DNA_B11 wssd CN
+    longLabel AFR_Ju_hoan_North_LP6005441-DNA_B11 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_AMR_Surui_LP6005441-DNA_B12_wssd
+    priority 2
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_B12_wssd.bb
+    shortLabel AMR_Surui_LP6005441-DNA_B12 wssd CN
+    longLabel AMR_Surui_LP6005441-DNA_B12 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EUR_Basque_LP6005441-DNA_C02_wssd
+    priority 4
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C02_wssd.bb
+    shortLabel EUR_Basque_LP6005441-DNA_C02 wssd CN
+    longLabel EUR_Basque_LP6005441-DNA_C02 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_SAS_Brahui_LP6005441-DNA_C03_wssd
+    priority 6
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C03_wssd.bb
+    shortLabel SAS_Brahui_LP6005441-DNA_C03 wssd CN
+    longLabel SAS_Brahui_LP6005441-DNA_C03 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EAS_Han_LP6005441-DNA_C05_wssd
+    priority 3
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C05_wssd.bb
+    shortLabel EAS_Han_LP6005441-DNA_C05 wssd CN
+    longLabel EAS_Han_LP6005441-DNA_C05 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_EAS_Japanese_LP6005441-DNA_C06_wssd
+    priority 3
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C06_wssd.bb
+    shortLabel EAS_Japanese_LP6005441-DNA_C06 wssd CN
+    longLabel EAS_Japanese_LP6005441-DNA_C06 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+
+    track subset_SAS_Makrani_LP6005441-DNA_C07_wssd
+    priority 6
+    parent sgdpCopyNumber_subset
+    bigDataUrl /gbdb/hs1/sgdpCopyNumber/LP6005441-DNA_C07_wssd.bb
+    shortLabel SAS_Makrani_LP6005441-DNA_C07 wssd CN
+    longLabel SAS_Makrani_LP6005441-DNA_C07 Copy Number
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+

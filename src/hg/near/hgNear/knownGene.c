@@ -212,11 +212,11 @@ struct genePos *knownPosAll(struct sqlConnection *conn)
 /* Get all positions in knownGene table. */
 {
 char query[1024];
-// just for side-effect of adding NOSQLINJ prefix
+// These sql querys are safe since it is from an .ra file on disk.
 if (showOnlyCanonical())
-    sqlSafef(query, sizeof query, "%-s", genomeSetting("allGeneQuery"));       
+    sqlSafef(query, sizeof query, genomeSetting("allGeneQuery"),NULL);       
 else
-    sqlSafef(query, sizeof query, "%-s", genomeSetting("allTranscriptQuery"));
+    sqlSafef(query, sizeof query, genomeSetting("allTranscriptQuery"),NULL);
 return genePosFromQuery(conn, query, FALSE);
 }
 
@@ -232,8 +232,7 @@ struct genePos *knownPosFirst(struct sqlConnection *conn)
 /* Get first gene in known gene table. */
 {
 char query[1024];
-// just for side-effect of adding NOSQLINJ prefix
-sqlSafef(query, sizeof query, "%-s", genomeSetting("allGeneQuery"));       
+sqlSafef(query, sizeof query, genomeSetting("allGeneQuery"), NULL); 
 struct genePos *gp = genePosFromQuery(conn, query, TRUE);
 return gp;
 }
@@ -253,13 +252,14 @@ static void linkToDetailsCellPrint(struct column *col, struct genePos *gp,
 char *s = col->cellVal(col, gp, conn);
 fillInKnownPos(gp, conn);
 hPrintf("<TD>");
-hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\">", 
+hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d&%s=%s\">", 
 	cartSidUrlString(cart), 
 	"db", database,
 	"hgg_gene", gp->name,
 	"hgg_chrom", gp->chrom,
 	"hgg_start", gp->start,
-	"hgg_end", gp->end);
+	"hgg_end", gp->end,
+        "hgg_type", genomeSetting("geneTable"));
 if (s == NULL) 
     {
     hPrintf("n/a");

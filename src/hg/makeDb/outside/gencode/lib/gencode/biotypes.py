@@ -10,10 +10,11 @@ class GencodeGenesException(Exception):
     pass
 
 class BioType(SymEnum):
-    overlapping_ncRNA_3prime = SymEnumValue(auto(), "3prime_overlapping_ncRNA")
+    ambiguous_orf = auto()
     antisense = auto()
     antisense_RNA = antisense
     bidirectional_promoter_lncRNA = auto()
+    disrupted_domain = auto()
     IG_C_gene = auto()
     IG_C_pseudogene = auto()
     IG_D_gene = auto()
@@ -31,9 +32,11 @@ class BioType(SymEnum):
     misc_RNA = auto()
     Mt_rRNA = auto()
     Mt_tRNA = auto()
+    Mt_tRNA_pseudogene = auto()
     non_coding = auto()
     nonsense_mediated_decay = auto()
     non_stop_decay = auto()
+    overlapping_ncRNA_3prime = SymEnumValue(auto(), "3prime_overlapping_ncRNA")
     polymorphic_pseudogene = auto()
     processed_pseudogene = auto()
     processed_transcript = auto()
@@ -66,9 +69,13 @@ class BioType(SymEnum):
     unprocessed_pseudogene = auto()
     vaultRNA = auto()
     vault_RNA = auto()
+    protein_coding_LoF = auto()
+    artifact = auto()
+    artifactual_duplication = auto()
+    protein_coding_CDS_not_defined = auto()
 
 
-GencodeFunction = SymEnum("GencodeFunction", ("pseudo", "coding", "nonCoding", "other"))
+GencodeFunction = SymEnum("GencodeFunction", ("pseudo", "coding", "nonCoding", "problem"))
 
 bioTypesCoding = frozenset([BioType.IG_C_gene,
                             BioType.IG_D_gene,
@@ -82,7 +89,9 @@ bioTypesCoding = frozenset([BioType.IG_C_gene,
                             BioType.TR_D_gene,
                             BioType.TR_J_gene,
                             BioType.TR_V_gene,
-                            BioType.non_stop_decay])
+                            BioType.non_stop_decay,
+                            BioType.protein_coding_LoF,
+                            BioType.protein_coding_CDS_not_defined])
 bioTypesNonCoding = frozenset([BioType.antisense,
                                BioType.lincRNA,
                                BioType.lncRNA,
@@ -106,8 +115,6 @@ bioTypesNonCoding = frozenset([BioType.antisense,
                                BioType.vaultRNA,
                                BioType.vault_RNA,
                                BioType.bidirectional_promoter_lncRNA])
-bioTypesOther = frozenset([BioType.retained_intron,
-                           BioType.TEC])
 bioTypesPseudo = frozenset([BioType.IG_J_pseudogene,
                             BioType.IG_pseudogene,
                             BioType.IG_V_pseudogene,
@@ -118,6 +125,7 @@ bioTypesPseudo = frozenset([BioType.IG_J_pseudogene,
                             BioType.transcribed_unprocessed_pseudogene,
                             BioType.unitary_pseudogene,
                             BioType.transcribed_unitary_pseudogene,
+                            BioType.Mt_tRNA_pseudogene,
                             BioType.unprocessed_pseudogene,
                             BioType.IG_C_pseudogene,
                             BioType.IG_D_pseudogene,
@@ -126,8 +134,14 @@ bioTypesPseudo = frozenset([BioType.IG_J_pseudogene,
                             BioType.translated_processed_pseudogene,
                             BioType.translated_unprocessed_pseudogene,
                             ])
+bioTypesProblem = frozenset([BioType.retained_intron,
+                             BioType.TEC,
+                             BioType.disrupted_domain,
+                             BioType.ambiguous_orf,
+                             BioType.artifact,
+                             BioType.artifactual_duplication])
 
-assert((len(bioTypesCoding) + len(bioTypesNonCoding) + len(bioTypesOther) + len(bioTypesPseudo)) == len(list(BioType)))
+assert (bioTypesCoding | bioTypesNonCoding | bioTypesProblem | bioTypesPseudo) == frozenset(BioType)
 
 bioTypesTR = frozenset((BioType.TR_C_gene,
                         BioType.TR_D_gene,
@@ -175,8 +189,8 @@ def getFunctionForBioType(bt):
         return GencodeFunction.nonCoding
     elif bt in bioTypesPseudo:
         return GencodeFunction.pseudo
-    elif bt in bioTypesOther:
-        return GencodeFunction.other
+    elif bt in bioTypesProblem:
+        return GencodeFunction.problem
     else:
         raise GencodeGenesException("unknown biotype: " + str(bt))
 

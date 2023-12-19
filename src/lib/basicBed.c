@@ -22,7 +22,7 @@
 #include "asParse.h"
 #include "htmlColor.h"
 #include "basicBed.h"
-
+#include "memgfx.h"
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1026,19 +1026,44 @@ lineFileClose(&lf);
 return hash;
 }
 
-void bedOutputRgb(FILE *f, unsigned int color)
-/*      Output a string: "r,g,b" for 24 bit number */
+struct rgbColor bedColorToRgb(unsigned int color)
+/* Convert from the bed concept of a color uint, where the rgb bits
+ * are always in the same order, to a memgfx color structure. */
 {
-int colorIx = (int)color;
-struct rgbColor rgb = colorIxToRgb(colorIx);
-//fprintf(f, "%d,%d,%d", rgb.r, rgb.g, rgb.b);
-// FIXME: endian issue ??
-fprintf(f, "%d,%d,%d", rgb.b, rgb.g, rgb.r);
+    Color gfxColor = bedColorToGfxColor(color);
+    return colorIxToRgb(gfxColor);
 }
 
-int bedParseRgb(char *itemRgb)
-/*      parse a string: "r,g,b" into three unsigned char values
-        returned as 24 bit number, or -1 for failure */
+Color bedColorToGfxColor(unsigned int color)
+/* Convert from the bed concept of a color uint, where the rgb bits
+ * are always in the same order, to a memgfx concept of color where
+ * the bit order depends on architecture. Assumes that a bed color
+ * will never have 0 alpha. */
+{
+    int r,g,b,a;
+    a = (color & 0xff000000) >> 24;
+    if (a == 0)
+        a = 0xff;
+    r = (color & 0xff0000) >> 16;
+    g = (color & 0xff00) >> 8;
+    b = (color & 0xff);
+    return MAKECOLOR_32_A(r,g,b,a);
+}
+
+void bedOutputRgb(FILE *f, unsigned int color)
+/*      Output a string: "r,g,b" for 24 bit number.  Note
+ *      that this ignores any associated alpha value. */
+{
+struct rgbColor rgb = bedColorToRgb(color);
+fprintf(f, "%d,%d,%d", rgb.r, rgb.g, rgb.b);
+}
+
+unsigned int bedParseRgb(char *itemRgb)
+/*      parse a string: "r,g,b" with optional ",a" into three or four unsigned
+ *      char values returned as 32 bit number, or -1 for failure.  Byte order
+ *      has alpha in the highest-order byte, then r, then g, then b in the
+ *      lowest-order byte. This is a "bed" concept of an unsigned color,
+ *      which may not match the way the graphics libraries handle color bytes. */
 {
 char dupe[64];
 int wordCount;
@@ -1047,17 +1072,24 @@ char *row[4];
 strncpy(dupe, itemRgb, sizeof(dupe));
 wordCount = chopString(dupe, ",", row, ArraySize(row));
 
-if ((wordCount != 3) || (!isdigit(row[0][0]) ||
-    !isdigit(row[1][0]) || !isdigit(row[2][0])))
-        return (-1);
+if ((wordCount == 3) && (isdigit(row[0][0]) &&
+    isdigit(row[1][0]) && isdigit(row[2][0])))
+        return ( ((atoi(row[0]) & 0xff) << 16) |
+                ((atoi(row[1]) & 0xff) << 8) |
+                (atoi(row[2]) & 0xff) );
 
-return ( ((atoi(row[0]) & 0xff) << 16) |
-        ((atoi(row[1]) & 0xff) << 8) |
-        (atoi(row[2]) & 0xff) );
+if ((wordCount == 4) && (isdigit(row[0][0]) &&
+    isdigit(row[1][0]) && isdigit(row[2][0]) && isdigit(row[3][0])))
+        return ( ((atoi(row[0]) & 0xff) << 16) |
+                ((atoi(row[1]) & 0xff) << 8) |
+                (atoi(row[2]) & 0xff) |
+                ((atoi(row[3]) & 0xff) << 24) );
+
+return (-1);
 }
 
-int bedParseColor(char *colorSpec)
-/* Parse an HTML color string, a  string of 3 comma-sep unsigned color values 0-255, 
+unsigned int bedParseColor(char *colorSpec)
+/* Parse an HTML color string, a  string of 3 or 4 comma-sep unsigned color values 0-255, 
  * or a 6-digit hex string  preceded by #. 
  * O/w return unsigned integer value.  Return -1 on error */
 {
@@ -1486,10 +1518,17 @@ if (bedFieldCount > 8)
 	int numColors = lineFileAllIntsArray(lf, row, 8, colors, sizeof colors, FALSE, 1, "integer", FALSE);
 	if (numColors == 3)
 	    {
-	    bed->itemRgb = (((unsigned)colors[0]) << 2*8) | (((unsigned)colors[1]) << 1*8) | (unsigned)colors[2];
+	    bed->itemRgb = (0xff << 3*8) | (((unsigned)colors[0]) << 2*8) | (((unsigned)colors[1]) << 1*8) | (unsigned)colors[2];
 	    }
 	else
-	    lineFileAbort(lf, "Expecting color to consist of r,g,b values from 0 to 255. Got [%s]", saveColorString);
+            {
+            if (numColors == 4)
+                {
+                bed->itemRgb = (((unsigned)colors[3]) << 3*8) | (((unsigned)colors[0]) << 2*8) | (((unsigned)colors[1]) << 1*8) | (unsigned)colors[2];
+                }
+            else
+                lineFileAbort(lf, "Expecting color to consist of r,g,b values from 0 to 255. Got [%s]", saveColorString);
+            }
 	freeMem(saveColorString);
 	}
     else 

@@ -59,7 +59,7 @@ void loadIntoDatabase(char *database, char *createString, char *table, char *tab
 /* Load tabbed file into database table. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *ds = newDyString(2048);
+struct dyString *ds = dyStringNew(2048);
 sqlDyStringPrintf(ds, createString, table);
 sqlRemakeTable(conn, table, ds->string);
 dyStringClear(ds);
@@ -67,7 +67,7 @@ sqlDyStringPrintf(ds,
    "LOAD data local infile '%s' into table %s", tabName, table);
 sqlUpdate(conn, ds->string);
 sqlDisconnect(&conn);
-freeDyString(&ds);
+dyStringFree(&ds);
 }
 
 boolean lineToGffFields(struct lineFile *lf, char *line, char *fields[9])

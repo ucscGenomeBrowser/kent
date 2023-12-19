@@ -21,6 +21,8 @@
 #include "liftOverChain.h"
 #include "chromInfo.h"
 #include "net.h"
+#include "genark.h"
+#include "trackHub.h"
 
 
 /* CGI Variables */
@@ -260,7 +262,7 @@ return chainList;
 static void doConvert(char *fromPos)
 /* Actually do the conversion */
 {
-struct dbDb *fromDb = hDbDb(database), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
+struct dbDb *fromDb = hDbDb(trackHubSkipHubName(database)), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
 char *fileName = liftOverChainFile(fromDb->name, toDb->name);
 fileName = hReplaceGbdbMustDownload(fileName);
 char *chrom;
@@ -304,11 +306,25 @@ else
            database exists.
            If these conditions are met then print position link to
            browser for toDb, otherwise just print position without link. */
-        if (hDbIsActive(toDb->name) && chromSeqExists)
+        boolean startedAnchor = FALSE;
+        if ((hDbIsActive(toDb->name) && chromSeqExists) || startsWith("hub:",toDb->nibPath))
+            {
 	    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
 		   hgTracksName(), toDb->name, chain->qName, qStart+1, qEnd);
+            startedAnchor = TRUE;
+            }
+        else if (sameString(toDb->nibPath, "genark"))
+            {
+            char *hubUrl = genarkUrl(toDb->name);
+            if (hubUrl)
+                {
+                startedAnchor = TRUE;
+                printf("<A HREF=\"%s?genome=%s&hubUrl=%s&position=%s:%d-%d\">",
+		   hgTracksName(), toDb->name, hubUrl, chain->qName, qStart+1, qEnd);
+                }
+            }
 	printf("%s:%d-%d",  chain->qName, qStart+1, qEnd);
-        if (hDbIsActive(toDb->name) && chromSeqExists)
+        if (startedAnchor)
 	    printf("</A>");
 	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
 	    100.0 * blockSize/origSize,
@@ -354,7 +370,7 @@ if (cartVarExists(cart, HGLFT_DO_CONVERT))
     doConvert(fromPos);
 else
     {
-    struct liftOverChain *checkLiftOverList = liftOverChainListForDbFiltered(database);
+    struct liftOverChain *checkLiftOverList = liftOverChainListForDbFiltered(trackHubSkipHubName(database));
     struct liftOverChain *liftOverList = cleanLiftOverList(checkLiftOverList);
     struct liftOverChain *choice = defaultChoices(liftOverList, organism, database);
     if (choice == NULL)

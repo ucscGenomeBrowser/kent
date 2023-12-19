@@ -14,4 +14,4 @@ clean::
 
 lint:
 
-	python3 -m flake8 ${pyprogs} lib
+	python3 -m flake8 --color=never ${pyprogs} lib

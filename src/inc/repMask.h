@@ -52,5 +52,8 @@ void repeatMaskOutOutput(struct repeatMaskOut *el, FILE *f, char sep, char lastS
 #define repeatMaskOutCommaOut(el,f) repeatMaskOutOutput(el,f,',',',');
 /* Print out repeatMaskOut as a comma separated list including final comma. */
 
+struct lineFile *rmskLineFileOpen(char *fileName);
+/* open a repeat masker .out file or die trying */
+
 #endif /* REPMASK_H */
 

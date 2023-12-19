@@ -1,0 +1,27 @@
+track metaDome
+shortLabel MetaDome
+longLabel MetaDome - Tolerance Landscape score
+type bigWig
+parent constraintSuper
+visibility full
+color 0,105,145
+html constraintSuper
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+bigDataUrl /gbdb/$D/metaDome/metaDome.bw
+maxHeightPixels 128:40:8
+viewLimits 0:1
+viewLimitsMax 0:9
+yLineMark 0.7
+yLineOnOff on
+priority 2.5
+
+track metaDomeAllScores
+shortLabel MetaDome All Data
+longLabel MetaDome - Tolerance Landscape score all annotations
+parent constraintSuper
+visibility hide
+type bigBed 4 + 3
+bigDataUrl /gbdb/$D/metaDome/metaDome.bb
+html constraintSuper
+priority 2.6

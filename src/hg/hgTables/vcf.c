@@ -14,6 +14,7 @@
 #include "obscure.h"
 #include "vcf.h"
 #include "web.h"
+#include "trackHub.h"
 
 #define VCFDATALINE_NUM_COLS 10
 
@@ -266,10 +267,10 @@ int maxOut = bigFileMaxOutput();
 // Include the header, absolutely necessary for VCF parsing.
 boolean printedHeader = FALSE;
 // Temporary storage for row-ification:
-struct dyString *dyAlt = newDyString(1024);
-struct dyString *dyFilter = newDyString(1024);
-struct dyString *dyInfo = newDyString(1024);
-struct dyString *dyGt = newDyString(1024);
+struct dyString *dyAlt = dyStringNew(1024);
+struct dyString *dyFilter = dyStringNew(1024);
+struct dyString *dyInfo = dyStringNew(1024);
+struct dyString *dyGt = dyStringNew(1024);
 struct vcfRecord *rec;
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
@@ -362,10 +363,10 @@ struct lm *lm = lmInit(0);
 char *row[VCFDATALINE_NUM_COLS];
 char numBuf[VCF_NUM_BUF_SIZE];
 // Temporary storage for row-ification:
-struct dyString *dyAlt = newDyString(1024);
-struct dyString *dyFilter = newDyString(1024);
-struct dyString *dyInfo = newDyString(1024);
-struct dyString *dyGt = newDyString(1024);
+struct dyString *dyAlt = dyStringNew(1024);
+struct dyString *dyFilter = dyStringNew(1024);
+struct dyString *dyInfo = dyStringNew(1024);
+struct dyString *dyGt = dyStringNew(1024);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
@@ -468,17 +469,17 @@ return idList;
 void showSchemaVcf(char *table, struct trackDb *tdb, boolean isTabix)
 /* Show schema on vcf. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = hAllocConn(database);
 char *fileName = vcfMustFindFileName(conn, table, hDefaultChrom(database), isTabix);
 
 struct asObject *as = vcfAsObj();
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s<br>", table);
-hPrintf("<B>VCF File:</B> %s", fileName);
+printDownloadLink("VCF", fileName);
 hPrintf("<BR>\n");
 hPrintf("<B>Format description:</B> %s<BR>", as->comment);
-hPrintf("See the <A HREF=\"%s\" target=_blank>Variant Call Format specification</A> for  more details<BR>\n",
-	"http://www.1000genomes.org/wiki/analysis/vcf4.0");
 
 /* Put up table that describes fields. */
 hTableStart();

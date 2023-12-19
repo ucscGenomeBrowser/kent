@@ -77,8 +77,8 @@ else
 return TRUE;
 }
 
-struct bbiFile *bbiFileOpen(char *fileName, bits32 sig, char *typeName)
-/* Open up big wig or big bed file. */
+struct bbiFile *bbiFileOpenAlias(char *fileName, bits32 sig, char *typeName, aliasFunc aliasFunc)
+/* Open up big wig or big bed file using a chrom alias hash if non-NULL */
 {
 /* This code needs to agree with code in two other places currently - bigBedFileCreate,
  * and bigWigFileCreate.  I'm thinking of refactoring to share at least between
@@ -88,6 +88,7 @@ struct bbiFile *bbiFileOpen(char *fileName, bits32 sig, char *typeName)
  * footprint by a factor of 2 or 4.  Still, for now it works. -JK */
 struct bbiFile *bbi;
 AllocVar(bbi);
+bbi->aliasFunc = aliasFunc;
 bbi->fileName = cloneString(fileName);
 struct udcFile *udc = bbi->udc = udcFileOpen(fileName, udcDefaultDir());
 
@@ -150,6 +151,12 @@ bbi->chromBpt =  bptFileAttach(fileName, udc);
 return bbi;
 }
 
+struct bbiFile *bbiFileOpen(char *fileName, bits32 sig, char *typeName)
+/* Open up big wig or big bed file. */
+{
+return bbiFileOpenAlias(fileName, sig, typeName, NULL);
+}
+
 void bbiFileClose(struct bbiFile **pBwf)
 /* Close down a big wig/big bed file. */
 {
@@ -177,21 +184,53 @@ if (isSwapped)
 }
 
 
+static struct bbiChromIdSize *getChromIdSize(struct bbiFile *bbi, char *chrom)
+/* Return idSize for given chrom, using chrom alias if available. */
+{
+struct bbiChromIdSize *idSize;
+AllocVar(idSize);
+
+// first look for the given chrom name
+if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), idSize, sizeof(idSize)))
+    {
+    if (bbi->aliasFunc)
+        {
+        // didn't find chrom name, but have an alias function.  Try the aliases it returns.
+	struct slName *aliases = (*bbi->aliasFunc)(chrom);
+
+	for(; aliases; aliases = aliases->next)
+            {
+            char *alias = aliases->name;
+            if (bptFileFind(bbi->chromBpt, alias, strlen(alias), idSize, sizeof(idSize)))
+                break;
+            }
+        if (aliases == NULL)   // did we run out of aliases to try?
+            return NULL;
+        }
+    else
+        {
+        // if chrom is not found and the chrom starts with "chr", try without "chr"
+        if (!startsWith("chr", chrom) || !bptFileFind(bbi->chromBpt, &chrom[3], strlen(chrom) - 3, idSize, sizeof(idSize)))
+            return NULL;
+        }
+    }
+chromIdSizeHandleSwapped(bbi->isSwapped, idSize);
+
+return idSize;
+}
+
 struct fileOffsetSize *bbiOverlappingBlocks(struct bbiFile *bbi, struct cirTreeFile *ctf,
 	char *chrom, bits32 start, bits32 end, bits32 *retChromId)
 /* Fetch list of file blocks that contain items overlapping chromosome range. */
 {
-struct bbiChromIdSize idSize;
-if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
-    {
-    // if chrom is not found and the chrom starts with "chr", try without "chr"
-    if (!startsWith("chr", chrom) || !bptFileFind(bbi->chromBpt, &chrom[3], strlen(chrom) - 3, &idSize, sizeof(idSize)))
-        return NULL;
-    }
-chromIdSizeHandleSwapped(bbi->isSwapped, &idSize);
+struct bbiChromIdSize *idSize = getChromIdSize(bbi, chrom);
+
+if (idSize == NULL)
+    return NULL;
+
 if (retChromId != NULL)
-    *retChromId = idSize.chromId;
-return cirTreeFindOverlappingBlocks(ctf, idSize.chromId, start, end);
+    *retChromId = idSize->chromId;
+return cirTreeFindOverlappingBlocks(ctf, idSize->chromId, start, end);
 }
 
 struct chromNameCallbackContext
@@ -230,11 +269,12 @@ return context.list;
 bits32 bbiChromSize(struct bbiFile *bbi, char *chrom)
 /* Return chromosome size, or 0 if no such chromosome in file. */
 {
-struct bbiChromIdSize idSize;
-if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
+struct bbiChromIdSize *idSize = getChromIdSize(bbi, chrom);
+
+if (idSize == NULL)
     return 0;
-chromIdSizeHandleSwapped(bbi->isSwapped, &idSize);
-return idSize.chromSize;
+
+return idSize->chromSize;
 }
 
 void bbiChromInfoFree(struct bbiChromInfo **pInfo)
@@ -503,11 +543,12 @@ return validCount;
 static int bbiChromId(struct bbiFile *bbi, char *chrom)
 /* Return chromosome Id */
 {
-struct bbiChromIdSize idSize;
-if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
+struct bbiChromIdSize *idSize = getChromIdSize(bbi, chrom);
+
+if (idSize == NULL)
     return -1;
-chromIdSizeHandleSwapped(bbi->isSwapped, &idSize);
-return idSize.chromId;
+
+return idSize->chromId;
 }
 
 static boolean bbiSummaryArrayFromZoom(struct bbiZoomLevel *zoom, struct bbiFile *bbi, 

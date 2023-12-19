@@ -118,7 +118,7 @@ return sequences;
 }
 
 static int countDiffs(struct dnaSeq *ref, struct dnaSeq *seq)
-/* Return the number of bases that differ between ref and seq ignoring 'N'. */
+/* Return the number of bases that differ between ref and seq ignoring 'N' and '-'. */
 {
 if (ref->size != seq->size)
     errAbort("countDiffs: expecting equally sized sequences but %s size %d != %s size %d",
@@ -129,7 +129,7 @@ for (i = 0;  i < ref->size;  i++)
     {
     char refBase = toupper(ref->dna[i]);
     char seqBase = toupper(seq->dna[i]);
-    if (refBase != 'N' && seqBase != 'N' && seqBase != refBase)
+    if (refBase != 'N' && seqBase != 'N' && seqBase != '-' && seqBase != refBase)
         diffs++;
     }
 return diffs;

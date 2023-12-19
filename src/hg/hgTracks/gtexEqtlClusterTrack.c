@@ -141,8 +141,7 @@ assert(i>=0);
 struct gtexEqtlClusterTrack *extras = (struct gtexEqtlClusterTrack *)track->extraUiData;
 struct gtexTissue *tis = (struct gtexTissue *)hashFindVal(extras->tissueHash, eqtl->expNames[i]);
 assert (tis);
-return (struct rgbColor){.r=COLOR_32_BLUE(tis->color), .g=COLOR_32_GREEN(tis->color), 
-                .b=COLOR_32_RED(tis->color)};
+return bedColorToRgb(tis->color);
 }
 
 static char *eqtlSourcesLabel(struct gtexEqtlCluster *eqtl)
@@ -184,7 +183,7 @@ char *where = NULL;
 if (gene)
     {
     struct dyString *ds = dyStringNew(0);
-    sqlDyStringPrintfFrag(ds, "%s = '%s'", GTEX_EQTL_GENE_FIELD, gene); 
+    sqlDyStringPrintf(ds, "%s = '%s'", GTEX_EQTL_GENE_FIELD, gene); 
     where = dyStringCannibalize(&ds);
     isFiltered = TRUE;
     }

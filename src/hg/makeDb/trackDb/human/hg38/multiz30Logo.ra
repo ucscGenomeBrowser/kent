@@ -1,0 +1,48 @@
+track multiz30Logo
+container multiWig
+noInherit on
+type bigWig -10 10
+shortLabel Multiz 30 Logo
+longLabel Sequence Logo from 30-way scaled by PhyloP Value
+aggregate stacked
+autoScale on
+logo on
+group compGeno
+visibility hide
+
+	track multiz30LogoA
+	shortLabel multiz30LogoA
+	longLabel multiz30LogoA
+	parent multiz30Logo
+        type bigWig -10 10
+	priority 1
+	bigDataUrl /gbdb/hg38/multiz30way/logo/multiz30Logo.A.bw
+	color 255,0,0
+
+	track multiz30LogoC
+	shortLabel multiz30LogoC
+	longLabel multiz30LogoC
+	parent multiz30Logo
+        type bigWig -10 10
+	priority 2
+	bigDataUrl /gbdb/hg38/multiz30way/logo/multiz30Logo.C.bw
+	color 160, 0,160
+
+	track multiz30LogoG
+	shortLabel multiz30LogoG
+	longLabel multiz30LogoG
+	parent multiz30Logo
+        type bigWig -10 10
+	priority 3
+	bigDataUrl /gbdb/hg38/multiz30way/logo/multiz30Logo.G.bw
+	color 0, 0,255
+
+	track multiz30LogoT
+	shortLabel multiz30LogoT
+	longLabel multiz30LogoT
+	parent multiz30Logo
+        type bigWig -10 10
+	priority 4
+	bigDataUrl /gbdb/hg38/multiz30way/logo/multiz30Logo.T.bw
+	color  0,255,0
+

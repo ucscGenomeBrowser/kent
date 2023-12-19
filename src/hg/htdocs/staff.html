@@ -5,6 +5,8 @@
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
+<!--#include virtual="$ROOT/redmineWidget.html" -->
+
 <h1>UCSC Genome Browser Project Team</h1>
 
 <h2>Questions</h2>
@@ -25,6 +27,10 @@ Note that this is our public mailing list, learn more on our
   <a href="http://www.soe.ucsc.edu/~kent" target="_blank">Jim Kent</a>: 
   Professional Research Scientist, PI, Architect of the UCSC Genome Browser, CIRM &amp; HCA projects.
   <li>
+  <a href="mailto:&#109;a&#120;&#64;&#115;&#111;&#101;.uc&#115;&#99;.&#101;&#100;u"
+  target="_blank">Max Haeussler</a>: UCSC Genome Browser Co-PI, GBiB and GBiC creator,
+  text mining, CIRM &amp; HCA projects.
+  <li>
   <a href="mailto:&#103;&#97;&#108;t&#64;&#115;&#111;&#101;.&#117;&#99;&#115;&#99;.&#101;d&#117;"
   target="_blank">Galt Barber</a>: Senior Genome Browser Engineer. 
   <li>
@@ -38,24 +44,13 @@ Note that this is our public mailing list, learn more on our
   target="_blank">Hiram Clawson</a>: Senior Genome Browser Engineer.
   <li>
   <a href="mailto:&#099;&#108;&#109;&#102;&#105;&#115;&#099;&#104;&#064;&#117;&#099;&#115;&#099;&#046;&#101;&#100;&#117;"
-  target="_blank">Clayton Fischer</a>: Project Manager, HCA.
-  <li>
-  <a href="mailto:&#109;a&#120;&#64;&#115;&#111;&#101;.uc&#115;&#99;.&#101;&#100;u"
-  target="_blank">Max Haeussler</a>: Assistant Research Scientist, GBiB and GBiC creator, 
-  text mining, CIRM &amp; HCA projects.
+  target="_blank">Clayton Fischer</a>: Senior Project Manager & Engineering Manager, Genome Browser
   <li>
   <a href="https://hausslergenomics.ucsc.edu/people/david-haussler/"
   target="_blank">David Haussler</a>: Scientific Director, Genomics Institute, HHMI investigator. 
   <li>
   <a href="mailto:&#97;&#110;&#103;&#105;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.&#101;&#100;&#117;"
   target="_blank">Angie Hinrichs</a>: Genome Browser Architect.
-  <li>
-  <a href="mailto:&#107;&#117;h&#110;&#64;&#115;&#111;&#101;.u&#99;&#115;&#99;.&#101;du"
-  target="_blank">Robert Kuhn</a>: 
-  Associate Director of UCSC Genome Browser, Training and Outreach, Genome Browser licensing.
-  <li>
-  <a href="mailto:&#98;r&#105;&#97;n&#108;&#101;&#101;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.e&#100;&#117;"
-  target="_blank">Brian Lee</a>: Genome Browser, Senior Bioinformatics Writing & QA Specialist, mailing list support.
   <li>
   <a href="mailto:&#99;&#104;ma&#108;&#101;&#101;&#64;&#117;&#99;&#115;&#99;.e&#100;u"
   target="_blank">Christopher Lee</a>: Genome Browser Engineer.
@@ -75,23 +70,14 @@ Note that this is our public mailing list, learn more on our
   <a href="mailto:&#98;&#114;&#97;ne&#121;&#64;&#115;&#111;&#101;.&#117;c&#115;&#99;.ed&#117;"
   target="_blank">Brian Raney</a>: Senior Genome Browser Engineer.
   <li>
-  <a href="mailto:&#100;&#115;c&#104;&#109;&#101;&#108;&#116;&#64;&#117;&#99;&#115;&#99;.e&#100;u"
-  target="_blank">Daniel Schmelter</a>: Genome Browser QA, mailing list support.
-  <li>
   <a href="mailto:rachelschwartz@&#117;&#99;&#115;&#99;.e&#100;u"
   target="_blank">Rachel Schwartz</a>: Data Wrangler, HCA.
-  <li>
-  <a href="mailto:&#109;s&#112;&#101;&#105;&#114;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.e&#100;&#117;"
-  target="_blank">Matthew Speir</a>: CIRM &amp; HCA QA, mailing list support.
   <li>
   <a href="mailto:&#119;&#105;&#115;u&#108;&#108;i&#118;&#64;&#117;&#99;&#115;&#99;.&#101;d&#117;"
   target="_blank">William Sullivan</a>: Senior Data Wrangler and Tuatara Developer, CIRM &amp; HCA projects.
   <li>
   <a href="mailto:bwick@&#117;&#99;&#115;&#99;.e&#100;u"
   target="_blank">Brittney Wick</a>: Data Wrangler, Genome Browser.
-  <li>
-  <a href="mailto:&#97;&#122;&#119;&#101;&#105;g&#64;&#117;&#99;s&#99;.&#101;&#100;u"
-  target="_blank">Ann Zweig</a>: Senior Program Manager. 
 </ul>
 </div>
 
@@ -118,9 +104,6 @@ target="_blank"><img src= "images/staff2021.jpg" width="391" height="675"></a>
   <li>
   <a href="mailto:&#106;&#103;a&#114;&#99;&#105;a&#64;&#115;&#111;&#101;.uc&#115;&#99;.&#101;&#100;&#117;"
   target="_blank">Jorge Garcia</a>: Systems Administrator. 
-  <li>
-  <a href="mailto:&#104;ai&#102;&#97;&#110;&#103;&#64;&#115;&#111;&#101;.&#117;c&#115;c.&#101;d&#117;"
-  target="_blank">Haifang Telc</a>: Systems Administrator.
   <li>
   <a href="mailto:&#119;&#101;&#105;l&#101;r&#64;&#115;o&#101;.&#117;c&#115;c.&#101;&#100;&#117;"
   target="_blank">Erich Weiler</a>: Systems Administrator.
@@ -161,19 +144,19 @@ Ron Chao, Chad Chen, Vege Clerisse, Melissa Cline, Antonio Coelho,
 Mark Diekhans, Tim Dreszer, Jenny Draper,
 Phoenix Eagleshadow, Chris Eisenhart, Katy Elliott, Ruihua Fang, Pauline Fujita, Terry Furey,
 Patrick Gavin, Mary Goldman, Danielle Gomez, Rob Gravell, Luvina Guruvadoo, Rachel Harte, 
-Steve Heitner, Fan Hsu, Jennifer Jackson, Donna Karolchik, Scot Kennedy, 
-Andy Kern, Alexa Lakey, Katrina Learned, Chin Li, Victoria Lin, Nick Littlestone, 
+Steve Heitner, Fan Hsu, Jennifer Jackson, Donna Karolchik, Robert Kuhn, Scot Kennedy, 
+Andy Kern, Alexa Lakey, Katrina Learned, Brian Lee, Chin Li, Victoria Lin, Nick Littlestone, 
 Jeff Long,
 Craig Lowe, Yontao Lu, Crystal Lynch, Jian Ma, Morgan Maddren, Venkat Malladi,
 Chester Manuel, Larry Meyer, Karen Miga, Gary Moro, Max Nash, Jakob Pedersen,
 Mike Pheasant, Andy Pohl, Katie Pollard, Conner Powell, Thomas Pringle, Ruth Rabinowitz, 
 Brooke Rhead, Greg Roe, Sanja Rogic, Susan Rose, Kate Rosenbloom Pohl, Krishna Roskin, Zack Sanborn,
-Matt Schwartz, Adam Siepel, Cricket Alicia Sloan, Kayla Smith, Chuck Sugnet, 
-Bernard Suh, Ali Sultan-Qurraie, Vanessa Swing, Paul Tatarksy,
+Matt Schwartz, Adam Siepel, Cricket Alicia Sloan, Daniel Schmelter, Kayla Smith, Matthew Speir, Chuck Sugnet, 
+Bernard Suh, Ali Sultan-Qurraie, Vanessa Swing, Paul Tatarksy, Haifang Telc,
 Archana Thakkapallayil, Daryl Thomas, Aaron Tomb, 
 Heather Trumbower, Cath Tyner, Chris Villarreal, Branwyn Wagman, Sandra Walton, Ting Wang,
 Ryan Weber, Alexander Wolfe, Matt Wong, Wei Wu, Matt Xia, 
-Chen-Hsiang Yeang, Zheng-Willy Zhang, and Degui Zhi.</p>
+Chen-Hsiang Yeang, Zheng-Willy Zhang, Degui Zhi, and Ann Zweig.</p>
 </div>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

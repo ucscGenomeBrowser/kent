@@ -1,5 +1,6 @@
 /* cds.c - code for coloring of bases, codons, or alignment differences. */
 
+
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
@@ -19,6 +20,7 @@
 #include "cds.h"
 #include "genbank.h"
 #include "twoBit.h"
+#include "cacheTwoBit.h"
 #include "hgTracks.h"
 #include "cdsSpec.h"
 #include "axt.h"
@@ -56,6 +58,60 @@ assert(index < CDS_NUM_COLORS);
 return cdsColor[index];
 }
 
+boolean pslTargetToQueryRangeMap(struct psl *psl, int tStart, int tEnd, 
+    int *retQStart, int *retQEnd)
+/* Comes up with qStart/qEnd that corresponds to tStart/tEnd in psl. Returns
+ * FALSE if there's no corresponding part for target in query */
+{
+if (rangeIntersection(tStart, tEnd, psl->tStart, psl->tEnd) <= 0)
+    return FALSE;
+int qStart = psl->qStart, qEnd = psl->qEnd;
+boolean foundStart = FALSE, foundEnd = FALSE;
+int lastBqEnd = psl->qStart;
+int i;
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int bSize = psl->blockSizes[i];
+    int bqStart = psl->qStarts[i];
+    int bqEnd = bqStart + bSize;
+    int btStart = psl->tStarts[i];
+    int btEnd = btStart + bSize;
+    if (!foundStart)
+	{
+	if (btStart <= tStart && tStart < btEnd)
+	    {
+	    qStart = bqStart + (tStart - btStart);
+	    foundStart = TRUE;
+	    }
+	else if (btStart >= tStart)
+	    {
+	    qStart = bqStart;
+	    foundStart = TRUE;
+	    }
+	}
+    if (!foundEnd)
+        {
+	if (btStart < tEnd && tEnd <= btEnd)
+	    {
+	    qEnd = bqStart + (tEnd - btStart);
+	    foundEnd = TRUE;
+	    break;
+	    }
+	else if (btStart >= tEnd)
+	    {
+	    qEnd = lastBqEnd;
+	    foundEnd = TRUE;
+	    break;
+	    }
+	}
+    lastBqEnd = bqEnd;
+    }
+*retQStart = qStart;
+*retQEnd = qEnd;
+return TRUE;
+}
+
+
 static void drawScaledBoxWithText(struct hvGfx *hvg, 
                                         int chromStart, int chromEnd,
                                         double scale, int xOff, int y,
@@ -65,7 +121,6 @@ static void drawScaledBoxWithText(struct hvGfx *hvg,
 /* Draw a box scaled from chromosome to window coordinates with
    a codon or set of 3 or less bases drawn in the box. */
 {
-
 /*first draw the box itself*/
 drawScaledBox(hvg, chromStart, chromEnd, scale, xOff, y, height, 
 		    color);
@@ -333,6 +388,8 @@ else
 }
 
 
+#ifdef UNUSED
+#endif /* UNUSED */
 static void drawVertLine(struct linkedFeatures *lf, struct hvGfx *hvg,
                          int chromStart, int xOff, int y,
 			 int height, double scale, Color color)
@@ -343,6 +400,7 @@ static void drawVertLine(struct linkedFeatures *lf, struct hvGfx *hvg,
 {
 int thisX = round((double)(chromStart-winStart)*scale) + xOff;
 int thisY = y;
+height -= 1;
 int thisHeight = height;
 if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
     {
@@ -351,17 +409,60 @@ if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
     thisY += height/4;
     thisHeight = height - height/2;
     }
-hvGfxLine(hvg, thisX, thisY, thisX, thisY+thisHeight, color);
+hvGfxBox(hvg, thisX-1, thisY, 2, thisHeight, color);
 }
+
+static void drawMidNumber(struct linkedFeatures *lf, struct hvGfx *hvg,
+                         int chromStart, int xOff, int y,
+			 int height, double scale, Color color, MgFont *font, int size)
+/* Draw a short string encoding size around chromStart */
+/* Draw a 1-pixel wide vertical line at the given chromosomal coord.
+ * The line is 0 bases wide (chromStart==chromEnd) but that doesn't
+ * matter if we're zoomed out to >1base/pixel, so this is OK for diffs
+ * when zoomed way out and for insertion points at any scale. */
+{
+char sizeString[32];
+safef(sizeString, sizeof(sizeString), "%d", size);
+drawScaledBoxLabel(hvg,  chromStart-1, chromStart+1, 
+    scale, xOff, y, height, color, font, sizeString);
+}
+
+#ifdef SOON
+static void drawLeftNumber(struct linkedFeatures *lf, struct hvGfx *hvg,
+                         int chromStart, int xOff, int y,
+			 int height, double scale, Color color, MgFont *font, int size)
+/* Draw a short string encoding size around chromStart */
+/* Draw a 1-pixel wide vertical line at the given chromosomal coord.
+ * The line is 0 bases wide (chromStart==chromEnd) but that doesn't
+ * matter if we're zoomed out to >1base/pixel, so this is OK for diffs
+ * when zoomed way out and for insertion points at any scale. */
+{
+drawMidNumber(lf, hvg, chromStart+1, xOff, y, height, scale, color, font, size);
+}
+#endif /* SOON */
+
+#ifdef SOON
+static void drawRightNumber(struct linkedFeatures *lf, struct hvGfx *hvg,
+                         int chromStart, int xOff, int y,
+			 int height, double scale, Color color, MgFont *font, int size)
+/* Draw a short string encoding size around chromStart */
+/* Draw a 1-pixel wide vertical line at the given chromosomal coord.
+ * The line is 0 bases wide (chromStart==chromEnd) but that doesn't
+ * matter if we're zoomed out to >1base/pixel, so this is OK for diffs
+ * when zoomed way out and for insertion points at any scale. */
+{
+drawMidNumber(lf, hvg, chromStart-1, xOff, y, height, scale, color, font, size);
+}
+#endif /* SOON */
 
 
 static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
 	struct linkedFeatures *lf,
 	struct hvGfx *hvg, int xOff,
 	int y, double scale, int heightPer,
-	struct dnaSeq *mrnaSeq, struct psl *psl,
+	struct dnaSeq *qSeq, int qOffset, struct psl *psl,
 	int winStart)
-/* Draw 1-pixel wide red lines only where mRNA bases differ from genomic.  
+/* Draw thin vertical red lines only where mRNA bases differ from genomic.  
  * This assumes that lf has been drawn already, we're zoomed out past 
  * zoomedToBaseLevel, we're not in dense mode etc. */
 {
@@ -386,18 +487,23 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
       continue;
     if (e > s)
 	{
-	int mrnaS = -1;
+	int mrnaS = -1, mrnaE = 0;
 	if (psl)
-	    mrnaS = convertCoordUsingPsl(s, psl);
+	    {
+	    // mrnaS = convertCoordUsingPsl(s, psl);
+	    pslTargetToQueryRangeMap(psl, s, e, &mrnaS, &mrnaE);
+	    }
 	else
+	    {
 	    mrnaS = sf->qStart + (s - sf->start);
+	    }
 	if(mrnaS >= 0)
 	    {
 	    int i;
 	    for (i=0; i < (e - s); i++)
 		{
-		if (mrnaSeq->dna[mrnaS+i] != winDna[s-winStart+i])
-		    drawVertLine(lf, hvg, s+i, xOff, y+1, heightPer-2, scale, c);
+		if (qSeq->dna[mrnaS+i-qOffset] != winDna[s-winStart+i])
+		    drawScaledBox(hvg,  s+i, s+i+1, scale, xOff, y+1, heightPer-2, c);
 		}
 	    }
 	}
@@ -405,17 +511,19 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 }
 
 
-static void maskDiffString( char *retStr, char *s1, char *s2, char mask )
+static void maskDiffString( char *retStr, char *s1, char *s2, char mask, int size)
 /*copies s1, masking off similar characters, and returns result into retStr.
  *if strings are of different size it stops after s1 is done.*/
 {
-int s1Len = strlen(s1);
-memset(retStr, mask, s1Len);
+memset(retStr, mask, size);
 int i;
-for (i=0; i < s1Len; i++)
+for (i=0; i < size; i++)
     {
-    if (s1[i] != s2[i])
-	retStr[i] = s1[i];
+    char c = s1[i];
+    if (c != s2[i])
+	{
+	retStr[i] = c;
+	}
     }
 retStr[i] = '\0';
 }
@@ -866,12 +974,29 @@ char *pslFileName, *primerFileName;
 struct targetDb *target;
 if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     return NULL;
-char *fPrimer, *rPrimer;
-pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
+char *fPrimer = NULL, *rPrimer = NULL, *nonCompRPrimer = NULL;
+char *primerKey = NULL;
+if (lf->original && stringIn("_", ((struct psl *)lf->original)->qName))
+    {
+    // we can use the qName to extract the primer sequence, which
+    // may be different from the primers the user pasted in!
+    struct psl *psl = (struct psl *)lf->original;
+    fPrimer = cloneString(psl->qName);
+    char *under = strchr(fPrimer, '_');
+    *under = 0;
+    rPrimer = under + 1;
+    }
+else
+    pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer, primerKey);
+if ((fPrimer == NULL) || (rPrimer == NULL))
+        return NULL;
 int fPrimerSize = strlen(fPrimer);
 int rPrimerSize = strlen(rPrimer);
+// we need to reverse complement the sequence for the display, but we
+// don't want to when we do the lookup in the psl file
+nonCompRPrimer = cloneString(rPrimer);
 reverseComplement(rPrimer, rPrimerSize);
-if (target != NULL)
+if (lf->name && isNotEmpty(lf->name))
     {
     struct psl *tpsl;
     char *words[3];
@@ -881,10 +1006,10 @@ if (target != NULL)
 		 (char *)lf->extra);
     char *displayName = words[0];
     int ampStart = atoi(words[1]), ampEnd = atoi(words[2]);
-    char *realName = pcrResultItemAccName(lf->name, displayName);
+    char *realName = pcrResultItemAccName(lf->name, displayName, NULL);
     /* isPcr results are so sparse that I think the performance impact 
      * of re-reading the psl file in the draw function is negligible. */
-    pcrResultGetPsl(pslFileName, target, realName, chromName, ampStart, ampEnd, &tpsl, NULL);
+    pcrResultGetPsl(pslFileName, target, realName, chromName, ampStart, ampEnd, &tpsl, NULL, fPrimer, nonCompRPrimer);
     /* Use seq+extFile if specified; otherwise just retrieve from seqFile. */
     if (isNotEmpty(target->seqTable) && isNotEmpty(target->extFileTable))
 	{
@@ -945,71 +1070,103 @@ if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
 return hDnaSeqGet(database, name, words[1], words[2]);
 }
 
-static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,
-				       char *tableName, struct track *tg)
+
+struct cacheTwoBitRanges *cdsQueryCache = NULL;
+
+static struct dnaSeq *fetchCachedTwoBitSeq(char *url, char *seqName, 
+    int seqStart, int seqEnd, boolean doRc, int *retSeqOffset)
+/* fetch a sequence from a 2bit.  Caches open two bit files and sequence in 
+ * both forward and reverse strand */
+{
+/* Init static url cache */
+if (cdsQueryCache == NULL)
+    cdsQueryCache = cacheTwoBitRangesNew(TRUE);
+return cacheTwoBitRangesMayFetch(cdsQueryCache, url, seqName, seqStart, seqEnd, doRc, retSeqOffset);
+}
+
+static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf, 
+		    char *mrnaName, int mrnaStart, int mrnaEnd,
+		    char *tableName, struct track *tg, boolean doRc, int *retMrnaOffset)
 /* Look up the sequence in genbank tables (hGenBankGetMrna also searches 
  * seq if it can't find it in GB tables) or user's blat sequence, 
  * uppercase and return it if we find it, return NULL if we don't find it. */
 {
+boolean doUpper = TRUE;
 struct dnaSeq *mrnaSeq = NULL;
-char *name = getItemDataName(tg, lf->name);
-char *seqSource = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE);
+char *name = getItemDataName(tg, mrnaName);
 if (sameString(tableName,"refGene") || sameString(tableName,"refSeqAli"))
     mrnaSeq = hGenBankGetMrna(database, name, "refMrna");
-else if (sameString(seqSource, "ss"))
-    mrnaSeq = maybeGetUserSeq(name);
-#ifndef GBROWSE
-else if (sameString(seqSource, PCR_RESULT_TRACK_NAME))
-    mrnaSeq = maybeGetPcrResultSeq(lf);
-#endif /* GBROWSE */
-else if (startsWith("extFile", seqSource))
-    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
-else if (endsWith("ExtFile", seqSource))
-    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
-else if (sameString("nameIsSequence", seqSource))
-    {
-    mrnaSeq = newDnaSeq(cloneString(name), strlen(name), name);
-    if (lf->orientation == -1)
-	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
-    }
-else if (sameString("seq1Seq2", seqSource))
-    {
-    mrnaSeq = lf->extra;
-    if (lf->orientation == -1)
-	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
-    }
-else if (sameString("lfExtra", seqSource))
-    {
-    if (lf->extra == NULL)
-        errAbort("baseColorDrawSetup: sequence for track '%s' not loaded when sequence option is set in trackDb\n", tg->track);
-    mrnaSeq = newDnaSeq(cloneString(lf->extra), strlen(lf->extra), lf->extra);
-    if (lf->orientation == -1)
-	reverseComplement(mrnaSeq->dna, mrnaSeq->size);
-    }
-else if (sameString("lrg", seqSource))
-    {
-    struct lrg *lrg = lf->original;
-    mrnaSeq = lrgReconstructSequence(lrg, database);
-    }
-else if (startsWith("table ", seqSource))
-    {
-    char *table = seqSource;
-    nextWord(&table);
-    mrnaSeq = hGenBankGetMrna(database, name, table);
-    }
-else if (startsWithWord("db", seqSource))
-    {
-    char *sourceDb = seqSource;
-    nextWord(&sourceDb);
-    if (isEmpty(sourceDb))
-        sourceDb = database;
-    mrnaSeq = hChromSeq(sourceDb, name, 0, 0);
-    }
 else
-    mrnaSeq = hGenBankGetMrna(database, name, NULL);
-
-if (mrnaSeq != NULL)
+    {
+    char *seqSource = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE);
+    if (seqSource != NULL)
+	{
+	if (sameString(seqSource, "ss"))
+	    mrnaSeq = maybeGetUserSeq(name);
+#ifndef GBROWSE
+	else if (sameString(seqSource, PCR_RESULT_TRACK_NAME))
+	    mrnaSeq = maybeGetPcrResultSeq(lf);
+#endif /* GBROWSE */
+	else if (startsWith("extFile", seqSource))
+	    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
+	else if (endsWith("ExtFile", seqSource))
+	    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
+	else if (sameString("nameIsSequence", seqSource))
+	    {
+	    mrnaSeq = newDnaSeq(cloneString(name), strlen(name), name);
+	    if (lf->orientation == -1)
+		reverseComplement(mrnaSeq->dna, mrnaSeq->size);
+	    }
+	else if (sameString("seq1Seq2", seqSource))
+	    {
+	    mrnaSeq = lf->extra;
+	    if (lf->orientation == -1)
+		reverseComplement(mrnaSeq->dna, mrnaSeq->size);
+	    }
+	else if (sameString("lfExtra", seqSource))
+	    {
+	    if (lf->extra == NULL)
+		errAbort("baseColorDrawSetup: sequence for track '%s' not loaded when sequence option is set in trackDb\n", tg->track);
+	    mrnaSeq = newDnaSeq(cloneString(lf->extra), strlen(lf->extra), lf->extra);
+	    if (lf->orientation == -1)
+		reverseComplement(mrnaSeq->dna, mrnaSeq->size);
+	    }
+	else if (sameString("lrg", seqSource))
+	    {
+	    struct lrg *lrg = lf->original;
+	    mrnaSeq = lrgReconstructSequence(lrg, database);
+	    }
+	else if (sameString("2bit", seqSource))
+	    {
+	    char *url = trackDbSetting(tg->tdb, "otherTwoBitUrl");
+	    if (url == NULL)
+		errAbort("missing otherTwoBitUrl in baseColorUseSequence 2bit trackDb setting");
+	    mrnaSeq = fetchCachedTwoBitSeq(url, name, mrnaStart, mrnaEnd, doRc, retMrnaOffset);
+	    doRc = FALSE;	    // Handled it already
+	    doUpper = FALSE;    // Handled it already
+	    }
+	else if (startsWith("table ", seqSource))
+	    {
+	    char *table = seqSource;
+	    nextWord(&table);
+	    mrnaSeq = hGenBankGetMrna(database, name, table);
+	    }
+	else if (startsWithWord("db", seqSource))
+	    {
+	    char *sourceDb = seqSource;
+	    nextWord(&sourceDb);
+	    if (isEmpty(sourceDb))
+		sourceDb = database;
+	    mrnaSeq = hChromSeq(sourceDb, name, 0, 0);
+	    }
+	else
+	    mrnaSeq = hGenBankGetMrna(database, name, NULL);
+	}
+    }
+if (mrnaSeq != NULL && doUpper)
     touppers(mrnaSeq->dna);
+if (mrnaSeq != NULL && doRc)
+    reverseComplement(mrnaSeq->dna, mrnaSeq->size);
 return mrnaSeq;
 }
 
@@ -1385,7 +1542,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 }
 
 
-static void getMrnaBases(struct psl *psl, struct dnaSeq *mrnaSeq,
+static void getMrnaBases(struct psl *psl, struct dnaSeq *mrnaSeq, int mrnaOffset,
 			 int mrnaS, int s, int e, boolean isRc,
 			 char retMrnaBases[4], boolean *retQueryInsertion)
 /* Get mRNA bases for the current mRNA codon triplet.  If this is a split
@@ -1431,13 +1588,13 @@ if(size < 3)
 	if (!appendAtStart)
             {
 	    newIdx = mrnaS + size;
-	    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS], size);
-	    memcpy(retMrnaBases+size, &mrnaSeq->dna[newIdx], 3-size);
+	    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS - mrnaOffset], size);
+	    memcpy(retMrnaBases+size, &mrnaSeq->dna[newIdx - mrnaOffset], 3-size);
             }
 	else
             {
 	    newIdx = mrnaS - (3 - size);
-	    memcpy(retMrnaBases, &mrnaSeq->dna[newIdx], 3);
+	    memcpy(retMrnaBases, &mrnaSeq->dna[newIdx - mrnaOffset], 3);
             }
         }
     else
@@ -1446,7 +1603,7 @@ if(size < 3)
 	}
     }
 else
-    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS], 3);
+    memcpy(retMrnaBases, &mrnaSeq->dna[mrnaS - mrnaOffset], 3);
 retMrnaBases[3] = '\0';
 if (isRc)
     reverseComplement(retMrnaBases, strlen(retMrnaBases));
@@ -1455,18 +1612,27 @@ if (isRc)
 static void drawDiffTextBox(struct hvGfx *hvg, int xOff, int y, 
         double scale, int heightPer, MgFont *font, Color color, 
         char *chrom, unsigned s, unsigned e, struct simpleFeature *sf, struct psl *psl, 
-        struct dnaSeq *mrnaSeq, struct linkedFeatures *lf,
+        struct dnaSeq *mrnaSeq, int mrnaOffset, struct linkedFeatures *lf,
         int grayIx, enum baseColorDrawOpt drawOpt,
         int maxPixels, Color *trackColors, Color ixColor)
 {
-int mrnaS = -1;
+int mrnaS = -1, mrnaE = -1;
+/* Clip s and e to what is actually visible */
+if (s < winStart) s = winStart;
+if (e > winEnd) e = winEnd;
 if (psl)
-    mrnaS = convertCoordUsingPsl( s, psl ); 
+    pslTargetToQueryRangeMap(psl, max(psl->tStart, s), min(psl->tEnd, e), 
+	&mrnaS, &mrnaE);
 else if (sf)
     mrnaS = sf->qStart;
-if(mrnaS >= 0)
+if (mrnaS >= 0)
     {
-    struct dyString *dyMrnaSeq = newDyString(256);
+    if (mrnaS < mrnaOffset)
+         {
+	 warn("curious mrnaS %d < mrnaOffest %d\n", mrnaS, mrnaOffset);
+	 mrnaS = mrnaOffset;
+	 }
+    struct dyString *dyMrnaSeq = dyStringNew(256);
     char mrnaBases[4];
     char genomicCodon[2];
     char mrnaCodon[2]; 
@@ -1475,12 +1641,12 @@ if(mrnaS >= 0)
 
     mrnaBases[0] = '\0';
     if (psl && isCoding)
-	getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
+	getMrnaBases(psl, mrnaSeq, mrnaOffset, mrnaS, s, e, (lf->orientation == -1),
 		    mrnaBases, &queryInsertion);
     if (queryInsertion && isCoding)
 	color = cdsColor[CDS_QUERY_INSERTION];
 
-    dyStringAppendN(dyMrnaSeq, (char*)&mrnaSeq->dna[mrnaS], e-s);
+    dyStringAppendN(dyMrnaSeq, (char*)&mrnaSeq->dna[mrnaS - mrnaOffset], e-s);
 
     if (drawOpt == baseColorDrawItemBases)
 	{
@@ -1518,7 +1684,8 @@ if(mrnaS >= 0)
 	char *diffStr = NULL;
 	char *genoDna = getCachedDna(s, e);
 	diffStr = needMem(sizeof(char) * (e - s + 1));
-	maskDiffString(diffStr, dyMrnaSeq->string, genoDna, ' ');
+	maskDiffString(diffStr, dyMrnaSeq->string, genoDna, ' ', dyMrnaSeq->stringSize);
+	// fprintf(stderr, "drawOpt =- diffBases. %d %d %d %d\n", (int)strlen(genoDna), (int)strlen(dyMrnaSeq->string), (int)dyMrnaSeq->stringSize, e-s);
 	if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(diffStr, strlen(diffStr));
 	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
@@ -1560,10 +1727,13 @@ if(mrnaS >= 0)
     }
 else
     {
-    /*show we have an error by coloring entire exon block yellow*/
-    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
-    // FIXME: this shouldn't ever happen, should be an errAbort
-    warn("Bug: drawDiffTextBox: convertCoordUsingPsl failed<br>\n");
+    if (s < e)
+	{
+	/*show we have an error by coloring entire exon block yellow*/
+	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
+	// FIXME: this shouldn't ever happen, should be an errAbort
+	warn("Bug: drawDiffTextBox: convertCoordUsingPsl failed<br>\n");
+	}
     }
 }
 
@@ -1571,7 +1741,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 		       int grayIx, struct hvGfx *hvg, int xOff, 
                        int y, double scale, MgFont *font, int s, int e, 
                        int heightPer, boolean zoomedToCodonLevel, 
-                       struct dnaSeq *mrnaSeq, struct simpleFeature *sf, struct psl *psl, 
+                       struct dnaSeq *qSeq, int qOffset, struct simpleFeature *sf, struct psl *psl, 
 		       enum baseColorDrawOpt drawOpt,
                        int maxPixels, int winStart, 
                        Color originalColor)
@@ -1605,7 +1775,7 @@ if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
 				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
 	}
     }
-else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
+else if (qSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
 	 drawOpt != baseColorDrawGenomicCodons && drawOpt != baseColorDrawOff)
     {
     if (lf->highlightColor)
@@ -1613,14 +1783,14 @@ else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProce
 	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, 
 			    lf->highlightColor);
 	drawDiffTextBox(hvg, xOff+1, y+1, scale, heightPer-2, font, 
-			color, chromName, s, e, sf, psl, mrnaSeq, lf,
+			color, chromName, s, e, sf, psl, qSeq, qOffset, lf,
 			grayIx, drawOpt, maxPixels,
 			tg->colorShades, originalColor);
 	}
     else
 	{
 	drawDiffTextBox(hvg, xOff, y, scale, heightPer, font, 
-			color, chromName, s, e, sf, psl, mrnaSeq, lf,
+			color, chromName, s, e, sf, psl, qSeq, qOffset, lf,
 			grayIx, drawOpt, maxPixels,
 			tg->colorShades, originalColor);
 	}
@@ -1637,8 +1807,7 @@ else
 	}
     else
 	{
-	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, 
-			    color);
+	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
 	}
     }
 }
@@ -1647,7 +1816,7 @@ else
 static void drawCdsDiffCodonsOnly(struct track *tg,  struct linkedFeatures *lf,
 			   struct hvGfx *hvg, int xOff,
 			   int y, double scale, int heightPer,
-			   struct dnaSeq *mrnaSeq, struct psl *psl,
+			   struct dnaSeq *qSeq, int qOffset, struct psl *psl,
 			   int winStart)
 /* Draw red boxes only where mRNA codons differ from genomic.  This assumes
  * that lf has been drawn already, we're zoomed out past zoomedToCdsColorLevel,
@@ -1678,7 +1847,7 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 	    char genomicCodon[2], mrnaCodon;
 	    boolean queryInsertion = FALSE;
 	    Color color = cdsColor[CDS_STOP];
-	    getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
+	    getMrnaBases(psl, qSeq, qOffset, mrnaS, s, e, (lf->orientation == -1),
 			 mrnaBases, &queryInsertion);
 	    if (queryInsertion)
 		color = cdsColor[CDS_QUERY_INSERTION];
@@ -1710,7 +1879,7 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
 			   struct hvGfx *hvg, int xOff,
 			   int y, double scale, int heightPer,
-			   struct dnaSeq *mrnaSeq, struct psl *psl,
+			   struct dnaSeq *qSeq, int qOffset, struct psl *psl,
 			   int winStart, enum baseColorDrawOpt drawOpt)
 /* If we're drawing different bases/codons, and zoomed out past base/codon 
  * level, draw 1-pixel wide red lines only where bases/codons differ from 
@@ -1728,12 +1897,12 @@ if ((showDiffBasesMaxZoom >= 0.0)
 if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel && lf->codons && enabled)
     {
     drawCdsDiffCodonsOnly(tg, lf, hvg, xOff, y, scale,
-			  heightPer, mrnaSeq, psl, winStart);
+			  heightPer, qSeq, qOffset, psl, winStart);
     }
 if (drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel && enabled)
     {
     drawCdsDiffBaseTickmarksOnly(tg, lf, hvg, xOff, y, scale,
-				 heightPer, mrnaSeq, psl, winStart);
+				 heightPer, qSeq, qOffset, psl, winStart);
     }
 }
 
@@ -1741,8 +1910,8 @@ if (drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel && enabled)
 void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
 			      struct hvGfx *hvg, int xOff,
 			      int y, double scale, int heightPer,
-			      struct dnaSeq *mrnaSeq, struct psl *psl,
-			      int winStart, enum baseColorDrawOpt drawOpt,
+			      struct dnaSeq *qSeq, int qOffset, struct psl *psl,
+			      MgFont *font, int winStart, enum baseColorDrawOpt drawOpt,
 			      boolean indelShowQInsert, boolean indelShowPolyA)
 /* If applicable, draw 1-pixel wide orange lines for query insertions in the
  * middle of the query, 1-pixel wide blue lines for query insertions at the 
@@ -1755,7 +1924,7 @@ int s;
 int lastBlk = psl->blockCount - 1;
 boolean gotPolyAStart=FALSE, gotPolyAEnd=FALSE;
 
-if (indelShowPolyA && mrnaSeq)
+if (indelShowPolyA && qSeq)
     {
     /* Draw green lines for polyA first, so if the entire transcript is 
      * jammed into one pixel and the other end has a blue line, blue is 
@@ -1764,14 +1933,14 @@ if (indelShowPolyA && mrnaSeq)
 	{
 	/* Query is -.  We reverse-complemented in baseColorDrawSetup,
 	 * so test for polyT head: */
-	int polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
+	int polyTSize = headPolyTSizeLoose(qSeq->dna, qSeq->size);
 	if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
 	    {
 	    if (psl->strand[1] == '-')
 		s = psl->tSize - psl->tStarts[0] - 1;
 	    else
 		s = psl->tStarts[0];
-	    drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
+	    drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
 			 cdsColor[CDS_POLY_A]);
 	    gotPolyAStart = TRUE;
 	    }
@@ -1783,14 +1952,14 @@ if (indelShowPolyA && mrnaSeq)
 	    {
 	    /* Query is + but target is -.  We reverse-complemented in
 	     * baseColorDrawSetup, so test for polyT head: */
-	    int polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
+	    int polyTSize = headPolyTSizeLoose(qSeq->dna, qSeq->size);
 	    int rcQStart = (psl->qSize -
 			(psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]));
 	    if (polyTSize > 0 && (polyTSize + 3) >= rcQStart)
 		{
 		s = psl->tStart;
-		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-			     cdsColor[CDS_POLY_A]);
+	        drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
+			 cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;
 		}
 	    }
@@ -1798,15 +1967,16 @@ if (indelShowPolyA && mrnaSeq)
 	    {
 	    /* Both are +.  We didn't reverse-complement in
 	     * baseColorDrawSetup, so test for polyA tail: */
-	    int polyASize = tailPolyASizeLoose(mrnaSeq->dna, mrnaSeq->size);
+	    int polyASize = tailPolyASizeLoose(qSeq->dna, qSeq->size);
 	    if (polyASize > 0 &&
 		((polyASize + 3) >= 
 		 (psl->qSize -
 		  (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
 		{
 		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
-		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-			     cdsColor[CDS_POLY_A]);
+	        drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
+			 cdsColor[CDS_POLY_A]);
+		gotPolyAEnd = TRUE;
 		gotPolyAEnd = TRUE;
 		}
 	    }
@@ -1815,14 +1985,16 @@ if (indelShowPolyA && mrnaSeq)
 
 if (indelShowQInsert)
     {
-    if (psl->qStarts[0] != 0 && !gotPolyAStart)
+    int qStart = psl->qStarts[0];
+    if (qStart != 0 && !gotPolyAStart)
 	{
 	/* Insert at beginning of query -- draw vertical blue line 
 	 * unless it's polyA. */
 	s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[0] - 1) :
 				      psl->tStarts[0];
-	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
+        Color color = cdsColor[CDS_QUERY_INSERTION_AT_END];
+	drawVertLine(lf, hvg, s, xOff, y, heightPer, scale, color);
+	// drawLeftNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, qStart);
 	}
     for (i = 1;  i < psl->blockCount;  i++)
 	{
@@ -1839,8 +2011,9 @@ if (indelShowQInsert)
 		/* Insert in query only -- draw vertical orange line. */
 		s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[i] - 1) :
 					      psl->tStarts[i];
-		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-			     cdsColor[CDS_QUERY_INSERTION]);
+		Color color = cdsColor[CDS_QUERY_INSERTION];
+		drawMidNumber(lf, hvg, s, xOff, y, heightPer, scale, color, 
+		    font, qBlkStart - qPrevBlkEnd);
 		}
 	    }
 	/* Note: if qBlkStart < qPrevBlkEnd, then we have overlap on query,
@@ -1849,16 +2022,17 @@ if (indelShowQInsert)
 	 * think this is the place to do it.  Should be caught by 
 	 * pre-screening table data for block coords that overlap. */
 	}
-    if (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk] != psl->qSize &&
-	!gotPolyAEnd)
+    int missingAtEnd = psl->qSize - (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]);
+    if (missingAtEnd != 0 && !gotPolyAEnd)
 	{
 	/* Insert at end of query -- draw vertical blue line unless it's 
 	 * all polyA. */
-	s = (psl->strand[1] == '-') ?
+	s = (psl->strand[1] == '-') ? 
 	    (psl->tSize - (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk])) :
 	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk]);
-	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
-		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
+        Color color = cdsColor[CDS_QUERY_INSERTION_AT_END];
+	// drawRightNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, missingAtEnd);
+	drawVertLine(lf, hvg, s, xOff, y, heightPer, scale, color);
 	}
     }
 }
@@ -1918,9 +2092,80 @@ if (initedTrack == NULL || differentString(tg->track, initedTrack))
 	     tg->track, what);
 }
 
+struct psl *linkedFeatureToPsl(struct linkedFeatures *lf, char *qName, char *tName, int tSize)
+/* Fake up a psl from linked features */
+{
+/* Go through link features counting up components and doing min/maxes */
+int tStart = BIGNUM, qStart = BIGNUM, tEnd = 0, qEnd = 0;
+int blockCount = 0;
+struct simpleFeature *sf;
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    if (tStart > sf->start) tStart = sf->start;
+    if (tEnd < sf->end) tEnd = sf->end;
+    if (qStart > sf->qStart) qStart = sf->qStart;
+    if (qEnd < sf->qEnd) qEnd = sf->qEnd;
+    blockCount += 1;
+    }
+
+struct psl *psl;
+AllocVar(psl);
+psl->strand[0] = (lf->orientation < 0 ? '-' : '+');
+
+psl->qName = cloneString(qName);
+psl->qSize = lf->qSize;
+psl->qStart = qStart;
+psl->qEnd = qEnd;
+
+psl->tName = cloneString(tName);
+psl->tSize = tSize;
+psl->tStart = tStart;
+psl->tEnd = tEnd;
+
+/* Set block count and allocate block-by-block arrays */
+psl->blockCount = blockCount;
+unsigned *blockSizes = AllocArray(psl->blockSizes, blockCount);
+unsigned *qStarts = AllocArray(psl->qStarts, blockCount);
+unsigned *tStarts = AllocArray(psl->tStarts, blockCount);
+
+/* Go through link features filling in blockSizes, qStarts, qEnds */
+int i;
+unsigned totalSize = 0;
+for (i=0, sf = lf->components; sf != NULL; sf = sf->next, ++i)
+    {
+    int size = sf->end - sf->start;
+    totalSize += size;
+    blockSizes[i] = size;
+    qStarts[i] = sf->qStart;
+    tStarts[i] = sf->start;
+    }
+psl->match = totalSize;  /* May want to redo later */
+
+/* Go through linked features one last time filling in gap info */
+struct simpleFeature *prev = lf->components;
+for (sf = prev->next; sf != NULL; sf = sf->next)
+    {
+    int qInsertSize = sf->qStart - prev->qStart;
+    if (qInsertSize > 0)
+	{
+        psl->qNumInsert += 1;
+	psl->qBaseInsert += qInsertSize;
+	}
+    int tInsertSize = sf->start - prev->end;
+    if (tInsertSize > 0)
+	{
+        psl->tNumInsert += 1;
+	psl->tBaseInsert += tInsertSize;
+	}
+    prev = sf;
+    }
+
+return psl;
+}
+
 enum baseColorDrawOpt baseColorDrawSetup(struct hvGfx *hvg, struct track *tg,
 			struct linkedFeatures *lf,
-			struct dnaSeq **retMrnaSeq, struct psl **retPsl)
+			struct dnaSeq **retMrnaSeq, int *retMrnaOffset, struct psl **retPsl)
 /* Returns the CDS coloring option, allocates colors if necessary, and 
  * returns the sequence and psl record for the given item if applicable. 
  * Note: even if base coloring is not enabled, this will return psl and 
@@ -1939,39 +2184,59 @@ if (drawOpt <= baseColorDrawOff && !(indelShowQueryInsert || indelShowPolyA))
 checkTrackInited(tg, "calling baseColorDrawSetup");
 
 /* If we are using item sequence, fetch alignment and sequence: */
-if ((drawOpt > baseColorDrawOff && (startsWith("psl", tg->tdb->type) ||
-				    sameString("bigPsl", tg->tdb->type) ||
-				    sameString("lrg", tg->tdb->track)))
-    || indelShowQueryInsert || indelShowPolyA)
+struct psl *psl = NULL;
+struct dnaSeq *mrnaSeq = NULL;
+int mrnaOffset = 0;
+int mrnaStart = 0, mrnaEnd = 0;
+if (indelShowQueryInsert || indelShowPolyA || drawOpt > baseColorDrawOff)
     {
+    char *type = tg->tdb->type;
+    boolean needPsl = FALSE;
+    char *qName = lf->name;
     if (sameString("lrg", tg->tdb->track))
-	*retPsl = lrgToPsl(lf->original, hChromSize(database, chromName));
-    else
-	*retPsl = (struct psl *)(lf->original);
-    if (*retPsl == NULL)
-	return baseColorDrawOff;
-    }
-if (drawOpt == baseColorDrawItemBases ||
-    drawOpt == baseColorDrawDiffBases ||
-    drawOpt == baseColorDrawItemCodons ||
-    drawOpt == baseColorDrawDiffCodons ||
-    indelShowPolyA)
-    {
-    *retMrnaSeq = maybeGetSeqUpper(lf, tg->table, tg);
-    if (*retMrnaSeq != NULL && *retPsl != NULL) // we have both sequence and PSL
 	{
-        if ((*retMrnaSeq)->size != (*retPsl)->qSize)
-            errAbort("baseColorDrawSetup: %s: mRNA size (%d) != psl qSize (%d)",
-                     (*retPsl)->qName, (*retMrnaSeq)->size, (*retPsl)->qSize);
-	if ((*retPsl)->strand[0] == '-' || (*retPsl)->strand[1] == '-')
-	    reverseComplement((*retMrnaSeq)->dna, strlen((*retMrnaSeq)->dna));
+	psl = lrgToPsl(lf->original, hChromSize(database, chromName));
+	needPsl = TRUE;
 	}
-    // if no sequence, no base color drawing
-    // Note: we could have sequence but no PSL (eg, tagAlign format)
-    else if (*retMrnaSeq == NULL) 
-	return baseColorDrawOff;
+    else if (startsWith("psl", type) || sameString("bigPsl", type) || startsWithWord("bam", type))
+	{
+	psl = (struct psl *)(lf->original);
+	needPsl = TRUE;
+	}
+    else if (startsWithWord("chain", type) || startsWithWord("bigChain", type))
+	{
+	qName = cloneFirstWord(lf->name);
+        psl = linkedFeatureToPsl(lf, qName, chromName, hChromSize(database, chromName));
+	needPsl = TRUE;
+	}
+    boolean doRc = FALSE;
+    if (needPsl)
+	{
+        if (psl == NULL)
+	    drawOpt = baseColorDrawOff;
+	else
+	    {
+	    doRc = (psl->strand[0] == '-' || psl->strand[1] == '-');
+	    pslTargetToQueryRangeMap(psl, max(psl->tStart, winStart), min(psl->tEnd, winEnd),
+		&mrnaStart, &mrnaEnd);
+	    }
+	}
+    /* Do we need the sequence for display, if so get it */
+    if (drawOpt == baseColorDrawItemBases ||
+	drawOpt == baseColorDrawDiffBases ||
+	drawOpt == baseColorDrawItemCodons ||
+	drawOpt == baseColorDrawDiffCodons || indelShowPolyA)
+	{
+	mrnaSeq = maybeGetSeqUpper(lf, qName, mrnaStart, mrnaEnd, tg->table, tg, doRc, &mrnaOffset);
+	if (mrnaSeq == NULL) 
+	    {
+	    drawOpt = baseColorDrawOff;
+	    }
+	}
     }
-
+*retPsl = psl;
+*retMrnaSeq = mrnaSeq;
+*retMrnaOffset = mrnaOffset;
 return drawOpt;
 }
 
@@ -2003,17 +2268,6 @@ for (sf = sfList; sf != NULL; sf = sf->next)
     }
 }
 
-
-void baseColorDrawCleanup(struct linkedFeatures *lf, struct dnaSeq **pMrnaSeq,
-			  struct psl **pPsl)
-/* Free structures allocated just for base/cds coloring. */
-{
-// We could free lf->original here (either genePredFree or pslFree, depending
-// on the type -- but save time by skipping that.  Maybe we should save time
-// by skipping this free too:
-if (pMrnaSeq != NULL)
-    dnaSeqFree(pMrnaSeq);
-}
 
 void baseColorSetCdsBounds(struct linkedFeatures *lf, struct psl *psl,
                            struct track *tg)

@@ -27,6 +27,7 @@ results</a></li>
 <li><a href="#blat11">Approximating web-based BLAT results using gfServer/gfClient</a></li>
 <li><a href="#blat12">Standalone or gfServer/gfClient result start positions off by one</a></li>
 <li><a href="#blat13">Protein-translated BLAT having different results</a></li>
+<li><a href="#blat14">Querying BLAT programmatically using URLs</a></li>
 
 </ul>
 <hr>
@@ -116,11 +117,11 @@ use one of the default 11.ooc repeat masking files.</p>
 <h6>I am seeing two or more matches in the genome although there should only be one. What are these 
 extra matches?</h6>
 <p>
-This usually occurs on the newer genome assmeblies, such as hg38, when you search a sequence that 
+This usually occurs on the newer genome assemblies, such as hg38, when you search a sequence that
 has an &quot;alternate&quot; or &quot;fix&quot; sequence. To improve the quality of the these 
 assemblies, curators have added multiple versions of some important loci, e.g. the MHC regions. 
 They also add fix sequences to resolve errors without changing the reference. See our <a 
-target="_blank" href="http://genome.ucsc.edu/blog/patches/">patches blog post</a> for more 
+target="_blank" href="https://genome-blog.gi.ucsc.edu/blog/patches/">patches blog post</a> for more 
 information.</p>
 <p>
 When you blat or isPCR a sequence which matches a chromosome location that also has a fix or alt 
@@ -477,6 +478,25 @@ NCBI website</a>. Additional details on mitochondria codon tables can be found o
 the <a target="_blank"
 href="https://www.wikiwand.com/en/DNA_and_RNA_codon_tables">Wikiwand website</a>.
 </p>
+
+<a name="blat14"></a>
+<h2>Querying BLAT programmatically using URLs</h2>
+<p>
+For programmatic access, BLAT supports URL queries which are returned as psl format in a JSON structure. 
+The URL requires three variables: the sequence to blat, the type of query and the database, as follows</p>
+<pre>
+https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=[seq]&amp;type=[type]&amp;db=[database]&amp;output=json</pre>
+<p>
+If the sequence is longer than 8kbp, the request must be sent via HTTP POST.
+</p>
+<p>
+Query types include DNA, protein, translated RNA and translated DNA:</p>
+<pre>
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=GACCTCGGCGTGGCCTAGCG&amp;type=DNA&amp;db=hg38&amp;output=json</a>
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=IGCLPAHLLGDMWGRFWTNLYSLTVPFGQKPNIDVTDAMVDQAWDAQRIFKEAEKFFVSVGLPNM&amp;type=protein&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=IGCLPAHLLGDMWGRFWTNLYSLTVPFGQKPNIDVTDAMVDQAWDAQRIFKEAEKFFVSVGLPNM&amp;type=protein&amp;db=hg38&amp;output=json</a>
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=UUUCCCUUCCCCACUGUAGUGGGAGAGAAGGGAGUGGCCAUACCAUAUUUUUCUCGUGGGCCGUUGUAGUCAUAAGGCCUUCCUUUGCGGAAAAUUUUCAGGGUGGGAUA&amp;type=translated%20RNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=UUUCCCUUCCCCACUGUAGUGGGAGAGAAGGGAGUGGCCAUACCAUAUUUUUCUCGUGGGCCGUUGUAGUCAUAAGGCCUUCCUUUGCGGAAAAUUUUCAGGGUGGGAUA&type=translated%20RNA&db=hg38&output=json</a>
+<a href="https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=TTTCCCTTCCCCACTGTAGTGGGAGAGAAGGGAGTGGCCATACCATATTTTTCTCGTGGGCCGTTGTAGTCATAAGGCCTTCCTTTGCGGAAAATTTTCAGGGTGGGATA&amp;type=translated%20DNA&amp;db=hg38&amp;output=json">https://genome.ucsc.edu/cgi-bin/hgBlat?userSeq=TTTCCCTTCCCCACTGTAGTGGGAGAGAAGGGAGTGGCCATACCATATTTTTCTCGTGGGCCGTTGTAGTCATAAGGCCTTCCTTTGCGGAAAATTTTCAGGGTGGGATA&amp;type=translated%20DNA&amp;db=hg38&amp;output=json</a>
+</pre>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 </body>

@@ -152,14 +152,14 @@ else
     {
     char table[HDB_MAX_TABLE_STRING];
     boolean hasBin;
-    struct dyString *query = newDyString(1024);
+    struct dyString *query = dyStringNew(1024);
     /* Do black and white on single track.  Fetch less than we need from database. */
     if (hFindSplitTable(database, chromName, tg->table, table, sizeof table, &hasBin))
         {
 	sqlDyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
 	if (hasBin)
 	    hAddBinToQuery(winStart, winEnd, query);
-	dyStringPrintf(query, "genoStart<%u and genoEnd>%u ", winEnd, winStart);
+	sqlDyStringPrintf(query, "genoStart<%u and genoEnd>%u ", winEnd, winStart);
 	/* if we're using a single rmsk table, add genoName to the where clause */
 	if (startsWith("rmsk", table))
 	    sqlDyStringPrintf(query, " and genoName = '%s' ", chromName);

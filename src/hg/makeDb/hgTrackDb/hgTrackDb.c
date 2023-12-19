@@ -53,8 +53,9 @@ errAbort(
   "  -release=alpha|beta|public - Include trackDb entries with this release tag only.\n"
   "  -settings - for trackDb scanning, output table name, type line,\n"
   "            -  and settings hash to stderr while loading everything.\n"
-  "  -gbdbList - list of files to confirm existance of bigDataUrl files\n"
+  "  -gbdbList=list - list of files to confirm existance of bigDataUrl files\n"
   "  -addVersion - add cartVersion pseudo-table\n"
+  "  -noHtmlCheck - don't check for HTML even if strict is set\n"
   );
 }
 
@@ -65,6 +66,7 @@ static struct optionSpec optionSpecs[] = {
     {"settings", OPTION_BOOLEAN},
     {"gbdbList", OPTION_STRING},
     {"addVersion", OPTION_BOOLEAN},
+    {"noHtmlCheck", OPTION_BOOLEAN},
     {NULL,      0}
 };
 
@@ -75,6 +77,7 @@ static char *release = "alpha";
 static char *gbdbList = NULL;
 static struct hash *gbdbHash = NULL;
 static boolean addVersion = FALSE;
+static boolean noHtmlCheck = FALSE;
 
 // release tags
 #define RELEASE_ALPHA  (1 << 0)
@@ -318,12 +321,11 @@ void updateBigTextField(struct sqlConnection *conn, char *table,
 /* Generate sql code to update a big text field that may include
  * newlines and stuff. */
 {
-struct dyString *dy = newDyString(4096);
-sqlDyStringPrintf(dy, "update %s set %s=", table, textField);
-dyStringQuoteString(dy, '"', textVal);
-dyStringPrintf(dy, " where %s = '%s'", whereField, whereVal);
+struct dyString *dy = dyStringNew(4096);
+sqlDyStringPrintf(dy, "update %s set %s='%s'", table, textField, textVal);
+sqlDyStringPrintf(dy, " where %s = '%s'", whereField, whereVal);
 sqlUpdate(conn, dy->string);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 char *substituteTrackName(char *create, char *tableName)
@@ -350,7 +352,7 @@ if(rear == NULL)
 front += 5;
 *front = '\0';
 
-sqlSafef(newCreate, length , "%-s %s %-s", create, tableName, rear);
+safef(newCreate, length , "%s %s %s", create, tableName, rear);
 return cloneString(newCreate);
 }
 
@@ -454,7 +456,9 @@ for (td = tdbList; td != NULL; td = td->next)
         if (htmlName == NULL)
             htmlName = td->track;
 	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
-	if (fileExists(fileName))
+	if (!fileExists(fileName))
+            safef(fileName, sizeof(fileName), "%s/%s", dirName, htmlName);
+	if (fileExists(fileName) && !isDirectory(fileName))
             {
 	    td->html = readHtmlRecursive(fileName, database, td);
             // Check for note ASCII characters at higher levels of verboseness.
@@ -875,6 +879,12 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	subChar(td->longLabel, '\t', ' ');	/* Tabs confuse things. */
 	trackDbTabOut(td, f);
         td->html = hold;
+        // be sure to change the settings hash with the updated substituted settings
+        if (td->settingsHash)
+            {
+            hashReplace(td->settingsHash, "shortLabel", cloneString(td->shortLabel));
+            hashReplace(td->settingsHash, "longLabel", cloneString(td->longLabel));
+            }
         }
     carefulClose(&f);
     verbose(2, "Wrote tab representation to %s\n", tab);
@@ -883,7 +893,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 /* Update database */
     {
     char *create, *end;
-    char query[256];
+    char query[2048];
     struct sqlConnection *conn = sqlConnect(database);
 
     /* Load in table definition. */
@@ -892,7 +902,8 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
     create = substituteTrackName(create, trackDbName);
     end = create + strlen(create)-1;
     if (*end == ';') *end = 0;
-    sqlRemakeTable(conn, trackDbName, create);
+    sqlSafef(query, sizeof(query), create, NULL);
+    sqlRemakeTable(conn, trackDbName, query);
 
     /* Load in regular fields. */
     sqlSafef(query, sizeof(query), "load data local infile '%s' into table %s", tab, trackDbName);
@@ -905,7 +916,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	{
         if (isEmpty(td->html))
 	    {
-	    if (strict && !trackDbLocalSetting(td, "parent") && !trackDbLocalSetting(td, "superTrack") &&
+	    if (strict && !noHtmlCheck && !trackDbLocalSetting(td, "parent") && !trackDbLocalSetting(td, "superTrack") &&
 	        !sameString(td->track,"cytoBandIdeo"))
 		{
 		fprintf(stderr, "Warning: html missing for %s %s %s '%s'\n",org, database, td->track, td->shortLabel);
@@ -936,7 +947,8 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    }
 	}
 
-    sqlUpdate(conn, NOSQLINJ "flush tables");
+    sqlSafef(query, sizeof(query), "flush tables");
+    sqlUpdate(conn, query);
     sqlDisconnect(&conn);
     verbose(1, "Loaded database %s\n", database);
     }
@@ -986,6 +998,7 @@ release = optionVal("release", release);
 releaseBit = getReleaseBit(release);
 gbdbList = optionVal("gbdbList", gbdbList);
 addVersion = optionExists("addVersion");
+noHtmlCheck = optionExists("noHtmlCheck");
 
 if (gbdbList)
     gbdbHash = hashLines(gbdbList);

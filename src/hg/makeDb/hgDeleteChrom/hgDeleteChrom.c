@@ -42,7 +42,9 @@ for (i=0;  i < chromCount;  i++)
 	errAbort("Error: \"%s\" is not a chromosome in %s.",
 		 chromNames[i], db);
     printf("delete from %s.chromInfo where chrom = \"%s\";\n", db, chrom);
-    sr = sqlGetResult(conn, NOSQLINJ "SHOW TABLES");
+    char query[1024];
+    sqlSafef(query, sizeof query, "SHOW TABLES");
+    sr = sqlGetResult(conn, query);
     while((row = sqlNextRow(sr)) != NULL)
 	{
 	char *table = row[0];

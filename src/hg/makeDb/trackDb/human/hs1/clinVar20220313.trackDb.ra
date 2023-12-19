@@ -1,0 +1,9 @@
+track clinVar20220313
+shortLabel ClinVar Variants
+longLabel ClinVar Variants 20220313 (lifted)
+type vcfTabix
+hapClusterEnabled false
+maxWindowToDraw 3000000
+bigDataUrl /gbdb/hs1/clinVar20220313/chm13v2.0_ClinVar20220313.vcf.gz
+html html/clinVar20220313.html
+group phenDis

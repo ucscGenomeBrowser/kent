@@ -404,7 +404,7 @@ int deletedBases, addedBases;
 FILE *outChains = mustOpen(outChainName, "w");
 struct seqPair *spList = NULL, *sp;
 struct lineFile *pslLf = pslFileOpen(psls);
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct psl *psl;
 struct hash *pslHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct chain *chain, *chainList = NULL;

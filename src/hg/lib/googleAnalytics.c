@@ -5,7 +5,15 @@
 #include "hgConfig.h"
 #include "hPrint.h"
 #include "googleAnalytics.h"
+#include "htmshell.h"
 
+void googleAnalyticsSetGa4Key()
+/* if the google analytics key is a GA4 key, set the variable in htmlshell */
+{
+char *analyticsKey = cfgOption("analyticsKey");
+if (analyticsKey && startsWith("G-", analyticsKey))
+    htmlSetGa4Key(analyticsKey);
+}
 
 void googleAnalytics()
 /* check for analytics configuration item and output google hooks if OK */
@@ -19,16 +27,41 @@ done = TRUE;	/*	do not repeat this by mistake	*/
 
 char *analyticsKey = cfgOption("analyticsKey");
 
-// link tracking broke in Firefox once. In case this ever happens again, we can
-// now switch off outlink tracking quickly
-boolean trackClicks = cfgOptionBooleanDefault("analytics.trackClicks", TRUE);
-boolean trackButtons = cfgOptionBooleanDefault("analytics.trackButtons", TRUE);
-
 /*	if config is missing or empty, nothing happens here	*/
 if (isEmpty(analyticsKey))
     return;
 
-/* updated to Universal Analytics code 2014-06-19 */
+char* scriptName = getenv("SCRIPT_NAME");
+if (!scriptName)
+    return;
+char* cgiName = basename(scriptName);
+
+// new GA4 tags start with G- and should be used with the entirely new system called Google Tag Manager,
+// which is a different Javascript, new functions, totally different features.
+if (startsWith("G-", analyticsKey))
+    {
+    jsInlineF(
+        "// Google tag load (gtag.js)\n"
+        "   window.dataLayer = window.dataLayer || [];\n"
+        "   function gtag(){dataLayer.push(arguments);}\n"
+        "   gtag('js', new Date()); gtag('config', '%s');\n"
+        "// Google tag load end\n", analyticsKey);
+
+    if (sameWord(cgiName, "hgTracks"))
+        jsInlineF(
+        "  $(document).ready(function() {\n"
+        "          if (gtag) {\n" // When using an Adblocker, the ga object does not exist
+        "              /* send db to ga4 as an event on page load */\n"
+        "              gtag('event', 'hgTracksLoad', {'db': getDb()})\n"
+        "          };\n"
+        "  });");
+    return;
+    }
+
+// link tracking broke in Firefox once. In case this ever happens again, we can
+// now switch off outlink tracking quickly
+boolean trackClicks = cfgOptionBooleanDefault("analytics.trackClicks", TRUE);
+boolean trackButtons = cfgOptionBooleanDefault("analytics.trackButtons", TRUE);
 
 // replace analytics.js below with analytics_debug.js to activate ga debugging
 // It will log all events and all data that is sent to the javascript console, very handy
@@ -44,12 +77,6 @@ jsInlineF(
 "\n"
 , analyticsKey);
 
-// to reduce the risk of breaking existing click handlers, only track links on hgc and hgTracks pages
-char* scriptName = getenv("SCRIPT_NAME");
-if (!scriptName)
-    return;
-
-char* cgiName = basename(scriptName);
 if (sameWord(cgiName, "hgc") || sameWord(cgiName, "hgTracks") || 
         sameWord(cgiName, "hgGene") || sameWord(cgiName, "hgTrackUi"))
 {

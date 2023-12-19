@@ -59,7 +59,7 @@ hgMapToGene -geneTableType=genePred  -type=psl -tempDb=$tempDb $db all_mrna know
 # makes kgXref.tab  knownCanonical.tab knownIsoforms.tab kgColor.tab  
 makeGencodeKnownGene $db $tempDb $GENCODE_VERSION txToAcc.tab
 
-hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql kgXref.tab
+sort kgXref.tab | uniq | hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql stdin
 hgLoadSqlTab -notOnServer $tempDb knownCanonical $kent/src/hg/lib/knownCanonical.sql knownCanonical.tab
 sort knownIsoforms.tab | uniq | hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql stdin
 
@@ -89,7 +89,7 @@ hgLoadSqlTab -notOnServer $tempDb knownCds $kent/src/hg/lib/knownCds.sql knownCd
 hgsql -e "select * from wgEncodeGencodeTag$GENCODE_VERSION" --skip-column-names $db |  sort | uniq  > knownToTag.tab
 hgLoadSqlTab -notOnServer $tempDb knownToTag $kent/src/hg/lib/knownTo.sql knownToTag.tab
 
-hgsql $tempDb -Ne "select k.name, g.geneId, g.geneStatus, g.geneType,g.transcriptName,g.transcriptType,g.transcriptStatus, g.havanaGeneId,  g.ccdsId, g.level, g.transcriptClass from knownGene k, $db.wgEncodeGencodeAttrs$GENCODE_VERSION g where k.name=g.transcriptId" | sort | uniq > knownAttrs.tab
+hgsql $tempDb -Ne "select k.name, g.geneId, g.geneStatus, g.geneType,g.transcriptName,g.transcriptType,g.transcriptStatus, g.havanaGeneId,  g.ccdsId, g.level, g.transcriptClass, g.transcriptRank from knownGene k, $db.wgEncodeGencodeAttrs$GENCODE_VERSION g where k.name=g.transcriptId" | sort | uniq > knownAttrs.tab
 
 hgLoadSqlTab -notOnServer $tempDb knownAttrs $kent/src/hg/lib/knownAttrs.sql knownAttrs.tab
 
@@ -122,7 +122,8 @@ hgLoadSqlTab -notOnServer $tempDb kg${PREV_GENCODE_VERSION}ToKg${GENCODE_VERSION
 
 
 hgsql $tempDb -Ne "select kgId, geneSymbol, spID from kgXref" > geneNames.txt
-genePredToBigGenePred -colors=colors.txt -geneNames=geneNames.txt -known -cds=knownCds.tab   knownGene.gp  stdout | sort -k1,1 -k2,2n >  gencodeAnnot$GENCODE_VERSION.bgpInput
+hgsql $db -Ne "select transcriptId, geneType from wgEncodeGencodeAttrs$GENCODE_VERSION" | sort > geneType.txt
+genePredToBigGenePred -geneType=geneType.txt -colors=colors.txt -geneNames=geneNames.txt -known -cds=knownCds.tab   knownGene.gp  stdout | sort -k1,1 -k2,2n >  gencodeAnnot$GENCODE_VERSION.bgpInput
 
 # build bigGenePred
 tawk '{print $4,$0}' gencodeAnnot$GENCODE_VERSION.bgpInput | sort > join1
@@ -141,7 +142,9 @@ tawk '{print $5,0,"canonical"}'  knownCanonical.tab | sort > canonical.txt
 tawk '{print $4,2,"all"}' gencodeAnnot$GENCODE_VERSION.bgpInput | sort > all.txt
 sort -k1,1 -k2,2n basic.txt canonical.txt all.txt | tawk '{if ($1 != last) {print last,buff; buff=$3}else {buff=buff "," $3} last=$1} END {print last,buff}' | tail -n +2  > tier.txt
 join -t $'\t'   join6 tier.txt > join7
-cut -f 2- -d $'\t' join7 | sort -k1,1 -k2,2n > bgpInput.txt
+hgsql $db -Ne "select transcriptId, transcriptRank from wgEncodeGencodeAttrs$GENCODE_VERSION" | sort > rank.txt
+join -t $'\t'   join7 rank.txt > join8
+cut -f 2- -d $'\t' join8 | sort -k1,1 -k2,2n > bgpInput.txt
 
 bedToBigBed -extraIndex=name -type=bed12+16 -tab -as=$HOME/kent/src/hg/lib/gencodeBGP.as bgpInput.txt /cluster/data/$db/chrom.sizes $db.gencode$GENCODE_VERSION.bb
 
@@ -155,9 +158,13 @@ join tempSearch2.txt tempSearch3.txt | sort > knownGene.txt
 rm tempSearch2.txt tempSearch3.txt
 
 ixIxx knownGene.txt knownGene${GENCODE_VERSION}.ix knownGene${GENCODE_VERSION}.ixx
-rm -rf /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
+trixContextIndex knownGene.txt knownGene${GENCODE_VERSION}
+rm -rf /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx /gbdb/$db/knownGene.offsets /gbdb/$db/knownGene.offsets.ixx /gbdb/$db/knownGene.txt
+ln -s `pwd`/knownGene.txt /gbdb/$db/knownGene.txt
 ln -s `pwd`/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene.ix
 ln -s `pwd`/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene.ixx
+ln -s `pwd`/knownGene${GENCODE_VERSION}.offsets /gbdb/$db/knownGene.offsets
+ln -s `pwd`/knownGene${GENCODE_VERSION}.offsets.ixx /gbdb/$db/knownGene.offsets.ixx
 #rm -rf /gbdb/$db/knownGene${GENCODE_VERSION}.ix /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
 #ln -s `pwd`/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene${GENCODE_VERSION}.ix
 #ln -s `pwd`/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
@@ -167,9 +174,13 @@ tawk '{print $5}' knownCanonical.tab | sort > knownCanonicalId.txt
 tawk '$11 == "pseudo" {print $1}' knownAttrs.tab | sort > pseudo.txt
 join knownCanonicalId.txt knownGene.txt | join -v 1 /dev/stdin pseudo.txt > knownGeneFast.txt
 ixIxx knownGeneFast.txt knownGeneFast${GENCODE_VERSION}.ix knownGeneFast${GENCODE_VERSION}.ixx
-rm -rf /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx
+trixContextIndex knownGeneFast.txt knownGeneFast${GENCODE_VERSION}
+rm -rf /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.offsets /gbdb/$db/knownGeneFast${GENCODE_VERSION}.offsets.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.txt
+ln -s $dir/knownGeneFast.txt  /gbdb/$db/knownGeneFast${GENCODE_VERSION}.txt
 ln -s $dir/knownGeneFast${GENCODE_VERSION}.ix  /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ix
 ln -s $dir/knownGeneFast${GENCODE_VERSION}.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.ixx
+ln -s $dir/knownGeneFast${GENCODE_VERSION}.offsets /gbdb/$db/knownGeneFast${GENCODE_VERSION}.offsets
+ln -s $dir/knownGeneFast${GENCODE_VERSION}.offsets.ixx /gbdb/$db/knownGeneFast${GENCODE_VERSION}.offsets.ixx
 
 bedToPsl /cluster/data/$db/chrom.sizes ucscGenes.bed ucscGenes.psl
 pslRecalcMatch ucscGenes.psl /cluster/data/$db/$db.2bit ucscGenes.fa kgTargetAli.psl

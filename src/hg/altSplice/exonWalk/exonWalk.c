@@ -971,7 +971,7 @@ return ep;
 void exonPathCreateStringRep(struct exonPath *ep)
 /** Loop through the nodes in this path and create a string of exons. */
 {
-struct dyString *dy = newDyString(256);
+struct dyString *dy = dyStringNew(256);
 struct exonNode *en = NULL;
 if(ep->path != NULL)
     freez(&ep->path);
@@ -980,7 +980,7 @@ for(en = ep->nodes; en != NULL; en = en->next)
     dyStringPrintf(dy, "%d-%d", en->startClass, en->endClass);
     }
 ep->path = cloneString(dy->string);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 void finishPath(struct exonGraph *eg, struct exonPath **epList, struct exonPath *ep,

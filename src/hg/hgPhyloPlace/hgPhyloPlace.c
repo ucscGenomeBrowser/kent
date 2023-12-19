@@ -1,6 +1,6 @@
-/* hgPhyloPlace - Upload SARS-CoV-2 sequence for placement in phylo tree. */
+/* hgPhyloPlace - Upload SARS-CoV-2 or MPXV sequence for placement in phylo tree. */
 
-/* Copyright (C) 2020 The Regents of the University of California */
+/* Copyright (C) 2020-2022 The Regents of the University of California */
 
 #include "common.h"
 #include "botDelay.h"
@@ -9,10 +9,13 @@
 #include "cheapcgi.h"
 #include "hCommon.h"
 #include "hash.h"
+#include "hgConfig.h"
+#include "htmshell.h"
 #include "hui.h"
 #include "jsHelper.h"
 #include "knetUdc.h"
 #include "linefile.h"
+#include "md5.h"
 #include "net.h"
 #include "options.h"
 #include "phyloPlace.h"
@@ -20,6 +23,7 @@
 #include "trackLayout.h"
 #include "udc.h"
 #include "web.h"
+#include "wikiLink.h"
 
 /* Global Variables */
 struct cart *cart = NULL;      // CGI and other variables
@@ -35,6 +39,10 @@ static long enteredMainTime = 0;
 #define seqFileVar "sarsCoV2File"
 #define pastedIdVar "namesOrIds"
 #define remoteFileVar "remoteFile"
+#define serverCommandVar "hgpp_serverCommand"
+#define serverCommentVar "hgpp_serverComment"
+#define serverPlainVar "hgpp_serverPlain"
+#define serverSaltyVar "hgpp_serverSalty"
 
 static struct lineFile *lineFileFromFileInput(struct cart *cart, char *fileVar)
 /* Return a lineFile on data from an uploaded file with cart variable name fileVar.
@@ -69,6 +77,93 @@ else if (isNotEmpty(fileBinaryCoords))
     lf = lineFileDecompressMem(TRUE, mem, size);
     }
 return lf;
+}
+
+static char *labelForDb(char *db, boolean addDescription)
+/* If config defines a user-friendly name then return that; otherwise return hGenome(db).
+ * If addDescription is set and config defines a description then tack that on. */
+{
+char *label = phyloPlaceDbSetting(db, "name");
+if (isEmpty(label))
+    label = hGenome(db);
+if (addDescription)
+    {
+    char *desc = phyloPlaceDbSetting(db, "description");
+    if (isNotEmpty(desc))
+        {
+        struct dyString *dy = dyStringCreate("%s %s", label, desc);
+        label = dyStringCannibalize(&dy);
+        }
+    }
+return label;
+}
+
+static int labelCmp(const void *va, const void *vb)
+/* Compare two slPairs on their string values -- but treat SARS-CoV-2 as more important. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+if (sameString((char *)(a->val), "SARS-CoV-2"))
+    return -1;
+else if (sameString((char *)(b->val), "SARS-CoV-2"))
+    return 1;
+return strcmp((char *)(a->val), (char *)(b->val));
+}
+
+
+static struct slName *sortByLabel(struct slName *dbList)
+/* Return a newly allocated version of dbList, sorted by labelForDb value -- but favor SARS-CoV-2. */
+{
+struct slPair *dbLabelList = NULL;
+struct slName *sln;
+for (sln = dbList;  sln != NULL;  sln = sln->next)
+    slPairAdd(&dbLabelList, sln->name, cloneString(labelForDb(sln->name, TRUE)));
+slSort(&dbLabelList, labelCmp);
+struct slName *newList = NULL;
+struct slPair *slp;
+for (slp = dbLabelList;  slp != NULL;  slp = slp->next)
+    slAddHead(&newList, slNameNew(slp->name));
+slReverse(&newList);
+slPairFreeValsAndList(&dbLabelList);
+return newList;
+}
+
+static void selectDb(char **pDb, char **pLabel)
+/* Search for assembly config.ra files in hgPhyloPlaceData.  If there is more than one
+ * supported assembly, then make a menu / select input for supported  assemblies;
+ * reload the page on change. */
+{
+struct slName *supportedDbs = sortByLabel(phyloPlaceDbList(cart));
+if (supportedDbs == NULL)
+    errAbort("Sorry, this server is not configured to perform phylogenetic placement.");
+if (!slNameInList(supportedDbs, *pDb))
+    {
+    *pDb = cloneString(supportedDbs->name);
+    }
+*pLabel = labelForDb(*pDb, FALSE);
+char *selectVar = "hpp_ref";
+int supportedDbCount = slCount(supportedDbs);
+if (supportedDbCount > 1)
+    {
+    char *labels[supportedDbCount];
+    char *values[supportedDbCount];
+    struct slName *sDb;
+    int i;
+    for (sDb = supportedDbs, i = 0;  i < supportedDbCount;  sDb = sDb->next, i++)
+        {
+        values[i] = sDb->name;
+        labels[i] = labelForDb(values[i], TRUE);
+        }
+    struct dyString *dy = jsOnChangeStart();
+    jsDropDownCarryOver(dy, selectVar);
+    char *js = jsOnChangeEnd(&dy);
+    puts("<p>Choose your pathogen: ");
+    cgiMakeDropListFull(selectVar, labels, values, supportedDbCount, *pDb, "change", js);
+    puts("</p>");
+    }
+else
+    cgiMakeHiddenVar(selectVar, *pDb);
+slNameFreeList(&supportedDbs);
 }
 
 static void newPageStartStuff()
@@ -148,6 +243,15 @@ puts("<style>\n"
 "}\n"
 "h2 { font-size: 18px; }\n"
 "h3 { font-size: 16px; }\n"
+"table.invisalign {\n"
+"    border: 0px;\n"
+"}\n"
+"table.invisalign td {\n "
+"    padding: 5px;\n"
+"}\n"
+"button.fullwidth {\n "
+"    width: 100%;\n"
+"}\n"
 "</style>\n"
      );
 
@@ -183,18 +287,20 @@ webEndJWest();
     "     return false; " \
     "   } else { loadingImage.run(); return true; } }"
 
-static void inputForm()
+static void inputForm(char *db)
 /* Ask the user for FASTA or VCF. */
 {
 printf("<form action='%s' name='mainForm' method=POST enctype='multipart/form-data'>\n\n",
        "hgPhyloPlace");
 cartSaveSession(cart);
-char *db = "wuhCor1";
-cgiMakeHiddenVar("db", db);
 puts("<div class='readableWidth'>");
 puts("  <div class='gbControl col-md-12'>");
 puts("<div style='font-size: 20px; font-weight: 500; margin-top: 15px; margin-bottom: 10px;'>"
-     "Place your SARS-CoV-2 sequences in a global phylogenetic tree</div>");
+     "Place your sequences in a global phylogenetic tree</div>");
+// If db is not a supported db then switch to the default supported db, and if multiple dbs are
+// supported then make a menu so the user can select.
+char *label = NULL;
+selectDb(&db, &label);
 printf("<p>Select your FASTA, VCF or list of sequence names/IDs: ");
 printf("<input type='file' id='%s' name='%s'>",
        seqFileVar, seqFileVar);
@@ -212,17 +318,28 @@ if (treeChoices)
 puts("</p><p>");
 printf("Number of samples per subtree showing sample placement: ");
 int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
-cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
-                        "Number of samples in subtree showing neighborhood of placement",
-                        5, 10, 5000);
+struct dyString *dy = dyStringCreate("Number of samples in subtree showing neighborhood of "
+                                     "placement (max: %d", MAX_SUBTREE_SIZE);
+if (microbeTraceHost() != NULL)
+    dyStringPrintf(dy, "; max for MicrobeTrace: %d)", MAX_MICROBETRACE_SUBTREE_SIZE);
+else
+    dyStringAppend(dy, ")");
+cgiMakeIntVarWithLimits("subtreeSize", subtreeSize, dy->string, 5, 10, MAX_SUBTREE_SIZE);
 puts("</p><p>");
 cgiMakeOnClickSubmitButton(CHECK_FILE_OR_PASTE_INPUT_JS(seqFileVar, pastedIdVar),
                            "submit", "Upload");
-puts("&nbsp;&nbsp;");
-cgiMakeOnClickSubmitButton("{ loadingImage.run(); return true; }",
-                           "exampleButton", "Upload Example File");
-puts("&nbsp;&nbsp;");
-puts("<a href='https://github.com/russcd/USHER_DEMO/' target=_blank>More example files</a>");
+char *exampleFile = phyloPlaceDbSettingPath(db, "exampleFile");
+if (isNotEmpty(exampleFile))
+    {
+    puts("&nbsp;&nbsp;");
+    cgiMakeOnClickSubmitButton("{ loadingImage.run(); return true; }",
+                               "exampleButton", "Upload Example File");
+    if (sameString(db, "wuhCor1"))
+        {
+        puts("&nbsp;&nbsp;");
+        puts("<a href='https://github.com/russcd/USHER_DEMO/' target=_blank>More example files</a>");
+        }
+    }
 puts("</p>");
 // Add a loading image to reassure people that we're working on it when they upload a big file
 printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
@@ -238,19 +355,31 @@ puts("</div>");
 puts("<div class='readableWidth'>");
 puts("  <div class='gbControl col-md-12'>");
 puts("<h2>More information</h2>");
-puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most similar\n"
-     "complete, high-coverage samples from \n"
-     "<a href='https://www.gisaid.org/' target='_blank'>GISAID</a>\n"
-     "or from public sequence databases ("
-     "<a href='https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049' "
-     "target=_blank>NCBI Virus / GenBank</a>,\n"
-     "<a href='https://www.cogconsortium.uk/data/' target=_blank>COG-UK</a> and the\n"
-     "<a href='https://bigd.big.ac.cn/ncov/release_genome' "
-     "target=_blank>China National Center for Bioinformation</a>), "
-     "and your sequence's placement in the phylogenetic tree generated by the\n"
-     "<a href='https://github.com/roblanf/sarscov2phylo' target='_blank'>sarscov2phylo</a>\n"
-     "pipeline.\n"
-     "Placement is performed by\n"
+printf("<p>Upload your %s sequence (FASTA or VCF file) to find the most similar\n"
+       "complete, high-coverage samples from \n", label);
+if (sameString(db, "wuhCor1"))
+    {
+    puts("<a href='https://www.gisaid.org/' target='_blank'>GISAID</a>\n"
+         "or from public sequence databases (INSDC: GenBank/ENA/DDBJ accessed using "
+         "<a href='https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049' "
+         "target=_blank>NCBI Virus</a>,\n"
+         "<a href='https://www.cogconsortium.uk/data/' target=_blank>COG-UK</a> and the\n"
+         "<a href='https://bigd.big.ac.cn/ncov/release_genome' "
+         "target=_blank>China National Center for Bioinformation</a>), "
+         "and your sequence's placement in the phylogenetic tree generated by the\n"
+         "<a href='https://github.com/roblanf/sarscov2phylo' target='_blank'>sarscov2phylo</a>\n"
+         "pipeline.\n");
+    }
+else
+    {
+    //#*** TODO get NCBI link from db not hardcoded
+    puts("public sequence databases (INSDC: GenBank/ENA/DDBJ accessed using "
+         "<a href='https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=Monkeypox%20virus%20(monkeypox),%20taxid:10244' "
+         "target=_blank>NCBI Virus</a>)\n"
+         "and your sequence's placement in a global phylogenetic tree.\n"
+         );
+    }
+puts("Placement is performed by\n"
      "<a href='https://github.com/yatisht/usher' target=_blank>"
      "Ultrafast Sample placement on Existing tRee (UShER)</a> "
      "(<a href='https://www.nature.com/articles/s41588-021-00862-7' target=_blank>"
@@ -260,16 +389,26 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "<a href='https://nextstrain.org' target=_blank>Nextstrain</a>'s interactive display "
      "which supports "
      "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' "
-     "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
-puts("<p>\n"
-     "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
-     "<a href='https://www.gisaid.org/registration/terms-of-use/' target=_blank>"
-     "Terms and Conditions</a>.\n"
-     "SARS-CoV-2 genome sequences and metadata are available for download from\n"
-     "<a href='https://gisaid.org' target=_blank>GISAID</a> EpiCoV&trade;.\n"
-     "</p>");
-puts("<p>\n"
-     "<a href='/covid19.html'>COVID-19 Pandemic Resources at UCSC</a></p>\n");
+     "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.\n");
+if (microbeTraceHost())
+    printf("If the subtree size is set to %d or smaller, then subtrees can also be visualized in "
+           "<a href='https://github.com/CDCgov/MicrobeTrace/wiki' target=_blank>MicrobeTrace</a>, "
+           "a network visualization tool that integrates and overlays genomic, laboratory, and "
+           "epidemiologic data and offers multiple visualization options of your combined data.\n",
+           MAX_MICROBETRACE_SUBTREE_SIZE);
+puts("</p>");
+if (sameString(db, "wuhCor1"))
+    {
+    puts("<p>\n"
+         "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
+         "<a href='https://www.gisaid.org/registration/terms-of-use/' target=_blank>"
+         "Terms and Conditions</a>.\n"
+         "SARS-CoV-2 genome sequences and metadata are available for download from\n"
+         "<a href='https://gisaid.org' target=_blank>GISAID</a> EpiCoV&trade;.\n"
+         "</p>");
+    puts("<p>\n"
+         "<a href='/covid19.html'>COVID-19 Pandemic Resources at UCSC</a></p>\n");
+    }
 puts("</div>");
 puts("</div>");
 puts("<div class='readableWidth'>");
@@ -285,21 +424,22 @@ puts("<h3>Please do not upload "
      "<p>We do not store your information "
      "(aside from the information necessary to display results)\n"
      "and will not share it with others unless you choose to share your Genome Browser view.</p>\n"
-     "<p>In order to enable rapid progress in SARS-CoV-2 research and genomic contact tracing,\n"
-     "please share your SARS-CoV-2 sequences by submitting them to an "
+     "<p>In order to enable rapid progress in pandemic research and genomic contact tracing,\n"
+     "please share your sequences by submitting them to an "
      "<a href='https://ncbiinsights.ncbi.nlm.nih.gov/2020/08/17/insdc-covid-data-sharing/' "
      "target=_blank>INSDC</a> member institution\n"
      "(<a href='https://submit.ncbi.nlm.nih.gov/sarscov2/' target=_blank>NCBI</a>,\n"
      "<a href='https://www.covid19dataportal.org/submit-data' target=_blank>EMBL-EBI</a>\n"
-     "or <a href='https://www.ddbj.nig.ac.jp/ddbj/websub.html' target=_blank>DDBJ</a>)\n"
-     "and <a href='https://www.gisaid.org/' target=_blank>GISAID</a>.\n"
-     "</p>\n");
+     "or <a href='https://www.ddbj.nig.ac.jp/ddbj/websub.html' target=_blank>DDBJ</a>)\n");
+if (sameString(db, "wuhCor1"))
+    puts("and <a href='https://www.gisaid.org/' target=_blank>GISAID</a>\n");
+puts(".</p>\n");
 puts("</div>");
 puts("  </div>");
 puts("<div class='readableWidth'>");
 puts("<div class='gbControl col-md-12'>");
 puts("<h2>Tutorial</h2>");
-puts("<iframe width='267' height='150' src='https://www.youtube.com/embed/humQ1NyZOUM' "
+puts("<iframe width='950' height='535' src='https://www.youtube.com/embed/humQ1NyZOUM' "
      "frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; "
      "gyroscope; picture-in-picture' allowfullscreen></iframe>\n"
      "<h3><a href='https://www.cdc.gov/amd/pdf/slidesets/ToolkitModule_3.3-508C.pdf' "
@@ -317,9 +457,14 @@ static void mainPage(char *db)
 {
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "UShER: Upload");
+jsInit();
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 newPageStartStuff();
+
+// Hidden form for reloading page when hpp_ref select is changed
+static char *saveVars[] = { "hpp_ref" };
+jsCreateHiddenForm(cart, cgiScriptName(), saveVars, ArraySize(saveVars));
 
 puts("<div class='row'>"
      "  <div class='row gbSectionBannerLarge'>\n"
@@ -330,7 +475,7 @@ puts("<div class='row'>"
      "<div class='row'>\n");
 if (hgPhyloPlaceEnabled())
     {
-    inputForm();
+    inputForm(db);
     }
 else
     {
@@ -343,10 +488,21 @@ puts("</div>\n");
 newPageEndStuff();
 }
 
-static void resultsPage(char *db, struct lineFile *lf)
+static void resultsPage(char *db, char *refName, struct lineFile *lf)
 /* QC the user's uploaded sequence(s) or VCF; if input looks valid then run usher
  * and display results. */
 {
+// If refName is a real database or hub then set db to refName.
+if (hDbExists(refName))
+    db = refName;
+else
+    {
+    // Not a db -- see if it's a hub that is already connected:
+    struct trackHubGenome *hubGenome = trackHubGetGenomeUndecorated(db);
+    if (hubGenome != NULL)
+        db = refName;
+    // Otherwise we're counting on the config to specify a .2bit file and we won't make CTs.
+    }
 webStartGbNoBanner(cart, db, "UShER: Results");
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("ajax.js", NULL);
@@ -372,6 +528,7 @@ puts("<div class='row'>"
 printf("<form action='%s' name='resultsForm' method=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
+cgiMakeHiddenVar("db", db);
 puts("  <div class='gbControl col-md-12'>");
 fflush(stdout);
 
@@ -384,7 +541,7 @@ if (lf != NULL)
     char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
     int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
     boolean success = FALSE;
-    char *ctFile = phyloPlaceSamples(lf, db, phyloPlaceTree, measureTiming, subtreeSize,
+    char *ctFile = phyloPlaceSamples(lf, db, refName, phyloPlaceTree, measureTiming, subtreeSize,
                                      tl.fontHeight, &success);
     if (ctFile)
         {
@@ -401,7 +558,7 @@ if (lf != NULL)
         puts("  </div>");
         puts("</form>");
         // Let the user upload something else and try again:
-        inputForm();
+        inputForm(db);
         }
     }
 else
@@ -411,19 +568,158 @@ else
     // Let the user try again:
     puts("  </div>");
     puts("</form>");
-    inputForm();
+    inputForm(db);
     }
 puts("</div>\n");
 
 newPageEndStuff();
 }
 
+static boolean serverAuthOk(char *plain, char *salty)
+/* Construct a salted hash of plain and compare it to salty. */
+{
+char *salt = cfgOption(CFG_LOGIN_COOKIE_SALT);
+if (! salt)
+    salt = "";
+char *plainMd5 = md5HexForString(plain);
+struct dyString *dySalted = dyStringCreate("%s-%s", salt, plainMd5);
+char *rightSalty = md5HexForString(dySalted->string);
+boolean ok = sameOk(salty, rightSalty);
+dyStringFree(&dySalted);
+return ok;
+}
+
+INLINE void maybeComment(char *comment)
+/* If comment is nonempty, append it to stderr.  Then print a newline regardless of comment. */
+{
+if (isNotEmpty(comment))
+    fprintf(stderr, ": %s", comment);
+fputc('\n', stderr);
+}
+
+#define CONTENT_TYPE "Content-Type: text/plain\n\n"
+
+static void sendServerCommand(char *db)
+/* If a recognized server command is requested (with minimal auth to prevent DoS), and usher server
+ * is configured, then send the command to the usher server's manager fifo. */
+{
+pushWarnHandler(htmlVaBadRequestAbort);
+pushAbortHandler(htmlVaBadRequestAbort);
+char *plain = cgiOptionalString(serverPlainVar);
+char *salty = cgiOptionalString(serverSaltyVar);
+if (isNotEmpty(plain) && isNotEmpty(salty) && serverAuthOk(plain, salty))
+    {
+    if (serverIsConfigured(db))
+        {
+        char *command = cgiString(serverCommandVar);
+        char *comment = cgiOptionalString(serverCommentVar);
+        struct tempName tnCheckServer;
+        trashDirFile(&tnCheckServer, "ct", "usher_check_server", ".txt");
+        FILE *errFile = mustOpen(tnCheckServer.forCgi, "w");
+        boolean serverUp = serverIsRunning(db, errFile);
+        carefulClose(&errFile);
+        if (sameString(command, "start"))
+            {
+            // This one is really a command for the CGI not the server manager fifo (because the
+            // server is not yet running and needs to be started at this point), but uses the
+            // same CGI interface.
+            struct treeChoices *treeChoices = loadTreeChoices(db);
+            if (treeChoices != NULL)
+                {
+                if (serverUp)
+                    errAbort("Server is already running for db %s, see %s",
+                             db, tnCheckServer.forCgi);
+                struct tempName tnServerStartup;
+                trashDirFile(&tnServerStartup, "ct", "usher_server_startup", ".txt");
+                errFile = mustOpen(tnServerStartup.forCgi, "w");
+                fprintf(stderr, "Usher server start for %s", db);
+                maybeComment(comment);
+                boolean success = startServer(db, treeChoices, errFile);
+                carefulClose(&errFile);
+                if (success)
+                    {
+                    fprintf(stderr, "Spawned usher server background process, details in %s",
+                            tnServerStartup.forCgi);
+                    printf(CONTENT_TYPE"Started server for %s\n", db);
+                    }
+                else
+                    errAbort("Unable to spawn usher server background process, details in %s",
+                             tnServerStartup.forCgi);
+                }
+            else
+                errAbort("No treeChoices for db=%s", db);
+            }
+        else if (serverUp)
+            {
+            if (sameString(command, "reload"))
+                {
+                struct treeChoices *treeChoices = loadTreeChoices(db);
+                fprintf(stderr, "Usher server reload for %s", db);
+                maybeComment(comment);
+                serverReloadProtobufs(db, treeChoices);
+                printf(CONTENT_TYPE"Sent reload command for %s\n", db);
+                }
+            else if (sameString(command, "stop"))
+                {
+                fprintf(stderr, "Usher server stop for %s", db);
+                maybeComment(comment);
+                serverStop(db);
+                printf(CONTENT_TYPE"Sent stop command for %s\n", db);
+                }
+            else
+                {
+                char commandCopy[16];
+                safecpy(commandCopy, sizeof commandCopy, command);
+                char *words[3];
+                int wordCount = chopLine(commandCopy, words);
+                int val;
+                if (wordCount == 2 && (val = atol(words[1])) > 0)
+                    {
+                    if (sameString(words[0], "thread"))
+                        {
+                        fprintf(stderr, "Usher server thread count set to %d", val);
+                        maybeComment(comment);
+                        serverSetThreadCount(db, val);
+                        printf(CONTENT_TYPE"Sent thread %d command for %s\n", val, db);
+                        }
+                    else if (sameString(words[0], "timeout"))
+                        {
+                        fprintf(stderr, "Usher server timeout set to %d", val);
+                        maybeComment(comment);
+                        serverSetTimeout(db, val);
+                        printf(CONTENT_TYPE"Sent timeout %d command for %s\n", val, db);
+                        }
+                    else
+                        errAbort("Unrecognized command '%s'", command);
+                    }
+                else
+                    errAbort("Unrecognized command '%s'", command);
+                }
+            }
+        else
+            errAbort("Server for %s is down (see %s), cannot send command '%s'",
+                     db, tnCheckServer.forCgi, command);
+        }
+    else
+        errAbort("Usher server mode not configured for db=%s", db);
+    }
+else
+    errAbort("Bad request");
+popWarnHandler();
+popAbortHandler();
+}
+
 static void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 cart = theCart;
-char *db = NULL, *genome = NULL, *clade = NULL;
-getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+char *db = NULL, *genome = NULL;
+// Get the current db from the cart
+getDbAndGenome(cart, &db, &genome, oldVars);
+// The currently selected pathogen reference sequence may or may not be a db/hub.
+char *refName = cartOptionalString(cart, "hpp_ref");
+if (isEmpty(refName))
+    refName = cloneString(db);
 
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
@@ -437,29 +733,33 @@ char *newExampleButton = cgiOptionalString("exampleButton");
 if ((submitLabel && sameString(submitLabel, "try example")) ||
     (newExampleButton && sameString(newExampleButton, "Upload Example File")))
     {
-    char *exampleFile = phyloPlaceDbSettingPath(db, "exampleFile");
+    char *exampleFile = phyloPlaceDbSettingPath(refName, "exampleFile");
     struct lineFile *lf = lineFileOpen(exampleFile, TRUE);
-    resultsPage(db, lf);
+    resultsPage(db, refName, lf);
     }
 else if (cgiOptionalString(remoteFileVar))
     {
     char *url = cgiString(remoteFileVar);
     struct lineFile *lf = netLineFileOpen(url);
-    resultsPage(db, lf);
+    resultsPage(db, refName, lf);
     }
 else if (isNotEmpty(trimSpaces(cgiOptionalString(pastedIdVar))))
     {
     char *pastedIds = cgiString(pastedIdVar);
     struct lineFile *lf = lineFileOnString("pasted names/IDs", TRUE, pastedIds);
-    resultsPage(db, lf);
+    resultsPage(db, refName, lf);
     }
 else if (cgiOptionalString(seqFileVar) || cgiOptionalString(seqFileVar "__filename"))
     {
     struct lineFile *lf = lineFileFromFileInput(cart, seqFileVar);
-    resultsPage(db, lf);
+    resultsPage(db, refName, lf);
+    }
+else if (isNotEmpty(cgiOptionalString(serverCommandVar)))
+    {
+    sendServerCommand(refName);
     }
 else
-    mainPage(db);
+    mainPage(refName);
 }
 
 #define LD_LIBRARY_PATH "LD_LIBRARY_PATH"
@@ -490,7 +790,8 @@ int main(int argc, char *argv[])
 /* Null terminated list of CGI Variables we don't want to save to cart */
 char *excludeVars[] = {"submit", "Submit",
                        seqFileVar, seqFileVar "__binary", seqFileVar "__filename",
-                       pastedIdVar,
+                       pastedIdVar, remoteFileVar,
+                       serverCommandVar, serverCommentVar, serverPlainVar, serverSaltyVar,
                        NULL};
 enteredMainTime = clock1000();
 issueBotWarning = earlyBotCheck(enteredMainTime, "hgPhyloPlace", delayFraction, 0, 0, "html");
@@ -498,6 +799,7 @@ issueBotWarning = earlyBotCheck(enteredMainTime, "hgPhyloPlace", delayFraction, 
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
 addLdLibraryPath();
+
 cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgPhyloPlace", enteredMainTime);
 return 0;

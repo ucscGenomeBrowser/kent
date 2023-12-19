@@ -75,11 +75,11 @@ struct gtexGeneInfo
 /***********************************************/
 /* Color gene models using GENCODE conventions */
 
-static struct rgbColor codingColor = {12, 12, 120}; // #0C0C78
-static struct rgbColor nonCodingColor = {0, 100, 0}; // #006400
-static struct rgbColor pseudoColor = {255,51,255}; // #FF33FF
-static struct rgbColor problemColor = {254, 0, 0}; // #FE0000
-static struct rgbColor unknownColor = {1, 1, 1};
+static struct rgbColor codingColor = {12, 12, 120, 255}; // #0C0C78
+static struct rgbColor nonCodingColor = {0, 100, 0, 255}; // #006400
+static struct rgbColor pseudoColor = {255,51,255, 255}; // #FF33FF
+static struct rgbColor problemColor = {254, 0, 0, 255}; // #FE0000
+static struct rgbColor unknownColor = {1, 1, 1, 255};
 
 static struct statusColors
 /* Color values for gene models */
@@ -190,9 +190,7 @@ if (!extras->colors)
     int i = 0;
     for (tissue = tissues; tissue != NULL; tissue = tissue->next)
         {
-        // TODO: reconcile 
-        extras->colors[i] = (struct rgbColor){.r=COLOR_32_BLUE(tissue->color), .g=COLOR_32_GREEN(tissue->color), .b=COLOR_32_RED(tissue->color)};
-        //colors[i] = mgColorIxToRgb(NULL, tissue->color);
+        extras->colors[i] = bedColorToRgb(tissue->color);
         i++;
         }
     }

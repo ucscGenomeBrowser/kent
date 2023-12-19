@@ -12,376 +12,376 @@ compositeTrack on
   parent gtexCov
   shortLabel Adip Subcut
   longLabel Adipose Subcutaneous
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-NFK9-0326-SM-3MJGV.Adipose_Subcutaneous.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-NFK9-0326-SM-3MJGV.Adipose_Subcutaneous.RNAseq.bw
   color 255,165,79
 
   track gtexCovAdiposeVisceralOmentum
   parent gtexCov
   shortLabel Adip Visc Om
   longLabel Adipose Visceral Omentum - GTEX-14BMU-0626-SM-73KZ6
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-14BMU-0626-SM-73KZ6.Adipose_Visceral_Omentum.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-14BMU-0626-SM-73KZ6.Adipose_Visceral_Omentum.RNAseq.bw
   color 238,154,0
 
   track gtexCovAdrenalGland
   parent gtexCov
   shortLabel Adren Gland
   longLabel Adrenal Gland
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-Y5LM-0126-SM-4VBRL.Adrenal_Gland.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-Y5LM-0126-SM-4VBRL.Adrenal_Gland.RNAseq.bw
   color 143,188,143
 
   track gtexCovArteryAorta
   parent gtexCov
   shortLabel Artery Aorta
   longLabel Artery Aorta
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-WYVS-0426-SM-4ONDL.Artery_Aorta.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-WYVS-0426-SM-4ONDL.Artery_Aorta.RNAseq.bw
   color 139,28,98
 
   track gtexCovArteryCoronary
   parent gtexCov
   shortLabel Artery Coron
   longLabel Artery Coronary
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1GMR3-0626-SM-9WYT3.Artery_Coronary.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1GMR3-0626-SM-9WYT3.Artery_Coronary.RNAseq.bw
   color 238,106,80
 
   track gtexCovArteryTibial
   parent gtexCov
   shortLabel Artery Tibia
   longLabel Artery Tibial
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-XPT6-2226-SM-4B66R.Artery_Tibial.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-XPT6-2226-SM-4B66R.Artery_Tibial.RNAseq.bw
   color 255,0,0
 
   track gtexCovBladder
   parent gtexCov
   shortLabel Bladder
   longLabel Bladder
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-S3XE-1226-SM-4AD4L.Bladder.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-S3XE-1226-SM-4AD4L.Bladder.RNAseq.bw
   color 205,183,158
 
   track gtexCovBrainAmygdala
   parent gtexCov
   shortLabel Brain Amygd
   longLabel Brain Amygdala
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-T5JC-0011-R4A-SM-32PLT.Brain_Amygdala.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-T5JC-0011-R4A-SM-32PLT.Brain_Amygdala.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainAnteriorcingulatecortexBA24
   parent gtexCov
   shortLabel Brain Ant cin cort
   longLabel Brain Anterior cingulate cortex BA24
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-14PN4-0011-R3b-SM-686ZU.Brain_Anterior_cingulate_cortex_BA24.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-14PN4-0011-R3b-SM-686ZU.Brain_Anterior_cingulate_cortex_BA24.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainCaudatebasalganglia
   parent gtexCov
   shortLabel Brain Caud bas gangl
   longLabel Brain Caudate basal ganglia
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1HGF4-0011-R5b-SM-CM2ST.Brain_Caudate_basal_ganglia.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1HGF4-0011-R5b-SM-CM2ST.Brain_Caudate_basal_ganglia.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainCerebellarHemisphere
   parent gtexCov
   shortLabel Brain Cereb Hemisph
   longLabel Brain Cerebellar Hemisphere
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-13X6J-0011-R11a-SM-5P9HE.Brain_Cerebellar_Hemisphere.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-13X6J-0011-R11a-SM-5P9HE.Brain_Cerebellar_Hemisphere.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainCerebellum
   parent gtexCov
   shortLabel Brain Cereb
   longLabel Brain Cerebellum
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-145MH-2926-SM-5Q5D2.Brain_Cerebellum.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-145MH-2926-SM-5Q5D2.Brain_Cerebellum.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainCortex
   parent gtexCov
   shortLabel Brain Cortex
   longLabel Brain Cortex
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-UTHO-3026-SM-3GAFB.Brain_Cortex.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-UTHO-3026-SM-3GAFB.Brain_Cortex.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainFrontalCortexBA9
   parent gtexCov
   shortLabel Brain Front Cortex
   longLabel Brain Frontal Cortex BA9
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-T5JC-0011-R10A-SM-32PM2.Brain_Frontal_Cortex_BA9.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-T5JC-0011-R10A-SM-32PM2.Brain_Frontal_Cortex_BA9.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainHippocampus
   parent gtexCov
   shortLabel Brain Hippocamp
   longLabel Brain Hippocampus
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1HSKV-0011-R1b-SM-CMKH7.Brain_Hippocampus.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1HSKV-0011-R1b-SM-CMKH7.Brain_Hippocampus.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainHypothalamus
   parent gtexCov
   shortLabel Brain Hypothal
   longLabel Brain Hypothalamus
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-T5JC-0011-R8A-SM-32PLM.Brain_Hypothalamus.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-T5JC-0011-R8A-SM-32PLM.Brain_Hypothalamus.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainNucleusaccumbensbasalganglia
   parent gtexCov
   shortLabel Brain Nucl acc bas gang
   longLabel Brain Nucleus accumbens basal ganglia
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-14BIN-0011-R6a-SM-5S2RH.Brain_Nucleus_accumbens_basal_ganglia.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-14BIN-0011-R6a-SM-5S2RH.Brain_Nucleus_accumbens_basal_ganglia.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainPutamenbasalganglia
   parent gtexCov
   shortLabel Brain Put bas gang
   longLabel Brain Putamen basal ganglia
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1HFI6-0011-R7b-SM-CM2SS.Brain_Putamen_basal_ganglia.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1HFI6-0011-R7b-SM-CM2SS.Brain_Putamen_basal_ganglia.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainSpinalcordcervicalc-1
   parent gtexCov
   shortLabel Brain Spinal cord cerv
   longLabel Brain Spinal cord cervical c-1
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-YFC4-0011-R9a-SM-4SOK4.Brain_Spinal_cord_cervical_c-1.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-YFC4-0011-R9a-SM-4SOK4.Brain_Spinal_cord_cervical_c-1.RNAseq.bw
   color 238,238,0
 
   track gtexCovBrainSubstantianigra
   parent gtexCov
   shortLabel Brain Subst nigr
   longLabel Brain Substantia nigra
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-Z93S-0011-R2a-SM-4RGNG.Brain_Substantia_nigra.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-Z93S-0011-R2a-SM-4RGNG.Brain_Substantia_nigra.RNAseq.bw
   color 238,238,0
 
   track gtexCovBreastMammaryTissue
   parent gtexCov
   shortLabel Breast Mammary
   longLabel Breast Mammary Tissue
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-ZT9W-2026-SM-51MRA.Breast_Mammary_Tissue.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-ZT9W-2026-SM-51MRA.Breast_Mammary_Tissue.RNAseq.bw
   color 0,205,205
 
   track gtexCovCellsCulturedfibroblasts
   parent gtexCov
   shortLabel Cells fibrobl cult
   longLabel Cells Cultured fibroblasts
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-117XS-0008-SM-5Q5DQ.Cells_Cultured_fibroblasts.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-117XS-0008-SM-5Q5DQ.Cells_Cultured_fibroblasts.RNAseq.bw
   color 154,192,205
 
   track gtexCovCellsEBV-transformedlymphocytes
   parent gtexCov
   shortLabel Cells EBV lymphoc
   longLabel Cells EBV-transformed lymphocytes
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1122O-0003-SM-5Q5DL.Cells_EBV-transformed_lymphocytes.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1122O-0003-SM-5Q5DL.Cells_EBV-transformed_lymphocytes.RNAseq.bw
   color 238,130,238
 
   track gtexCovCervixEctocervix
   parent gtexCov
   shortLabel Cervix Ectocerv
   longLabel Cervix Ectocervix
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-S341-1126-SM-4AD6T.Cervix_Ectocervix.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-S341-1126-SM-4AD6T.Cervix_Ectocervix.RNAseq.bw
   color 238,213,210
 
   track gtexCovCervixEndocervix
   parent gtexCov
   shortLabel Cervix Endocerv
   longLabel Cervix Endocervix
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-ZPIC-1326-SM-DO91Y.Cervix_Endocervix.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-ZPIC-1326-SM-DO91Y.Cervix_Endocervix.RNAseq.bw
   color 238,213,210
 
   track gtexCovColonSigmoid
   parent gtexCov
   shortLabel Colon Sigmoid
   longLabel Colon Sigmoid
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1KXAM-1926-SM-D3LAG.Colon_Sigmoid.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1KXAM-1926-SM-D3LAG.Colon_Sigmoid.RNAseq.bw
   color 205,183,158
 
   track gtexCovColonTransverse
   parent gtexCov
   shortLabel Colon Transverse
   longLabel Colon Transverse
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1IDJC-1326-SM-CL53H.Colon_Transverse.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1IDJC-1326-SM-CL53H.Colon_Transverse.RNAseq.bw
   color 238,197,145
 
   track gtexCovEsophagusGastroesophagealJunction
   parent gtexCov
   shortLabel Esoph Gastroes Junc
   longLabel Esophagus Gastroesophageal Junction
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1I1GU-1226-SM-A9SKT.Esophagus_Gastroesophageal_Junction.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1I1GU-1226-SM-A9SKT.Esophagus_Gastroesophageal_Junction.RNAseq.bw
   color 139,115,85
 
   track gtexCovEsophagusMucosa
   parent gtexCov
   shortLabel Esoph Mucosa
   longLabel Esophagus Mucosa
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-11NSD-1126-SM-5N9BQ.Esophagus_Mucosa.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-11NSD-1126-SM-5N9BQ.Esophagus_Mucosa.RNAseq.bw
   color 139,115,85
 
   track gtexCovEsophagusMuscularis
   parent gtexCov
   shortLabel Esoph Muscularis
   longLabel Esophagus Muscularis
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1C475-0726-SM-73KVL.Esophagus_Muscularis.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1C475-0726-SM-73KVL.Esophagus_Muscularis.RNAseq.bw
   color 205,170,125
 
   track gtexCovFallopianTube
   parent gtexCov
   shortLabel Fallopian Tube
   longLabel Fallopian Tube
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-OHPK-2326-SM-3MJH2.Fallopian_Tube.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-OHPK-2326-SM-3MJH2.Fallopian_Tube.RNAseq.bw
   color 238,213,210
 
   track gtexCovHeartAtrialAppendage
   parent gtexCov
   shortLabel Heart Atr Append
   longLabel Heart Atrial Appendage
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-13S86-0326-SM-5SI6K.Heart_Atrial_Appendage.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-13S86-0326-SM-5SI6K.Heart_Atrial_Appendage.RNAseq.bw
   color 180,82,205
 
   track gtexCovHeartLeftVentricle
   parent gtexCov
   shortLabel Heart Left Ventr
   longLabel Heart Left Ventricle
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-NFK9-0926-SM-2HMJU.Heart_Left_Ventricle.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-NFK9-0926-SM-2HMJU.Heart_Left_Ventricle.RNAseq.bw
   color 122,55,139
 
   track gtexCovKidneyCortex
   parent gtexCov
   shortLabel Kidney Cortex
   longLabel Kidney Cortex
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-13OVI-1126-SM-5KLZF.Kidney_Cortex.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-13OVI-1126-SM-5KLZF.Kidney_Cortex.RNAseq.bw
   color 205,183,158
 
   track gtexCovKidneyMedulla
   parent gtexCov
   shortLabel Kidney Medulla
   longLabel Kidney Medulla
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-T5JC-1626-SM-EZ6KW.Kidney_Medulla.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-T5JC-1626-SM-EZ6KW.Kidney_Medulla.RNAseq.bw
   color 205,183,158
 
   track gtexCovLiver
   parent gtexCov
   shortLabel Liver
   longLabel Liver
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-Y5LM-0426-SM-4VBRO.Liver.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-Y5LM-0426-SM-4VBRO.Liver.RNAseq.bw
   color 205,183,158
 
   track gtexCovLung
   parent gtexCov
   shortLabel Lung
   longLabel Lung
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-Y5V5-0826-SM-4VBQD.Lung.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-Y5V5-0826-SM-4VBQD.Lung.RNAseq.bw
   color 154,205,50
 
   track gtexCovMinorSalivaryGland
   parent gtexCov
   shortLabel Minor Saliv Gland
   longLabel Minor Salivary Gland
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-Y5LM-1826-SM-4VDT9.Minor_Salivary_Gland.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-Y5LM-1826-SM-4VDT9.Minor_Salivary_Gland.RNAseq.bw
   color 205,183,158
 
   track gtexCovMuscleSkeletal
   parent gtexCov
   shortLabel Muscle Skeletal
   longLabel Muscle Skeletal
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-NFK9-0626-SM-2HMIV.Muscle_Skeletal.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-NFK9-0626-SM-2HMIV.Muscle_Skeletal.RNAseq.bw
   color 122,103,238
 
   track gtexCovNerveTibial
   parent gtexCov
   shortLabel Nerve Tibial
   longLabel Nerve Tibial
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-TML8-1626-SM-32QOO.Nerve_Tibial.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-TML8-1626-SM-32QOO.Nerve_Tibial.RNAseq.bw
   color 255,215,0
 
   track gtexCovOvary
   parent gtexCov
   shortLabel Ovary
   longLabel Ovary
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-ZVT2-0326-SM-5E44G.Ovary.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-ZVT2-0326-SM-5E44G.Ovary.RNAseq.bw
   color 255,182,193
 
   track gtexCovPancreas
   parent gtexCov
   shortLabel Pancreas
   longLabel Pancreas
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1H1E6-0826-SM-9WG83.Pancreas.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1H1E6-0826-SM-9WG83.Pancreas.RNAseq.bw
   color 205,155,29
 
   track gtexCovPituitary
   parent gtexCov
   shortLabel Pituitary
   longLabel Pituitary
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-Y111-2926-SM-4TT25.Pituitary.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-Y111-2926-SM-4TT25.Pituitary.RNAseq.bw
   color 180,238,180
 
   track gtexCovProstate
   parent gtexCov
   shortLabel Prostate
   longLabel Prostate
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-14DAR-1026-SM-73KV3.Prostate.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-14DAR-1026-SM-73KV3.Prostate.RNAseq.bw
   color 217,217,217
 
   track gtexCovSkinNotSunExposedSuprapubic
   parent gtexCov
   shortLabel Skin not sun exp
   longLabel Skin Not Sun Exposed Suprapubic
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1JN76-0626-SM-CKZOQ.Skin_Not_Sun_Exposed_Suprapubic.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1JN76-0626-SM-CKZOQ.Skin_Not_Sun_Exposed_Suprapubic.RNAseq.bw
   color 58,95,205
 
   track gtexCovSkinSunExposedLowerleg
   parent gtexCov
   shortLabel Skin sun exp
   longLabel Skin Sun Exposed Lower leg
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1C475-1826-SM-73KWA.Skin_Sun_Exposed_Lower_leg.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1C475-1826-SM-73KWA.Skin_Sun_Exposed_Lower_leg.RNAseq.bw
   color 30,144,255
 
   track gtexCovSmallIntestineTerminalIleum
   parent gtexCov
   shortLabel Small Intestine
   longLabel Small Intestine Terminal Ileum
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1PIEJ-1526-SM-E6CP8.Small_Intestine_Terminal_Ileum.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1PIEJ-1526-SM-E6CP8.Small_Intestine_Terminal_Ileum.RNAseq.bw
   color 205,183,158
 
   track gtexCovSpleen
   parent gtexCov
   shortLabel Spleen
   longLabel Spleen
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-14PKU-0526-SM-6871A.Spleen.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-14PKU-0526-SM-6871A.Spleen.RNAseq.bw
   color 205,183,158
 
   track gtexCovStomach
   parent gtexCov
   shortLabel Stomach
   longLabel Stomach
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-NFK9-1526-SM-3LK7B.Stomach.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-NFK9-1526-SM-3LK7B.Stomach.RNAseq.bw
   color 255,211,155
 
   track gtexCovTestis
   parent gtexCov
   shortLabel Testis
   longLabel Testis
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1JKYN-1026-SM-CGQG4.Testis.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1JKYN-1026-SM-CGQG4.Testis.RNAseq.bw
   color 166,166,166
 
   track gtexCovThyroid
   parent gtexCov
   shortLabel Thyroid
   longLabel Thyroid
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1HSGN-0726-SM-A9G2F.Thyroid.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1HSGN-0726-SM-A9G2F.Thyroid.RNAseq.bw
   color 0, 139, 69
 
   track gtexCovUterus
   parent gtexCov
   shortLabel Uterus
   longLabel Uterus
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1MA7W-1526-SM-DHXKS.Uterus.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1MA7W-1526-SM-DHXKS.Uterus.RNAseq.bw
   color 238,213,210
 
   track gtexCovVagina
   parent gtexCov
   shortLabel Vagina
   longLabel Vagina
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1IDJU-1026-SM-AHZ2U.Vagina.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1IDJU-1026-SM-AHZ2U.Vagina.RNAseq.bw
   color 238,213,210
 
   track gtexCovWholeBlood
   parent gtexCov
   shortLabel Whole Blood
   longLabel Whole Blood
-  bigDataUrl /gbdb/hg38/gtex/cov/GTEX-1LG7Z-0005-SM-DKPQ6.Whole_Blood.RNAseq.bw
+  bigDataUrl /gbdb/$D/gtex/cov/GTEX-1LG7Z-0005-SM-DKPQ6.Whole_Blood.RNAseq.bw
   color 255,0,255

@@ -103,8 +103,8 @@
 #PAR#1   NC_000024.10:10000:2781479
 #PAR#2   NC_000023.11:155701382:156030895
 #PAR#2   NC_000024.10:56887902:57217415
-    echo "NC_000023.11:10000:2781479\tNC_000024.10:10000:2781479" >> equivRegions.tab
-    echo "NC_000023.11:155701382:156030895\tNC_000024.10:56887902:57217415" >> equivRegions.tab
+    echo -e "NC_000023.11:10000:2781479\tNC_000024.10:10000:2781479" >> equivRegions.tab
+    echo -e "NC_000023.11:155701382:156030895\tNC_000024.10:56887902:57217415" >> equivRegions.tab
 
 
     # Run doBigDbSnp.pl...
@@ -500,5 +500,385 @@
     grep otherMapErr hg38.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
 #86636
 
-
 ##############################################################################
+# dbSnp155: dbSNP build 155 (IN-PROGRESS 11/25/19 galt)
+
+    topDir=/hive/data/outside/dbSNP/155
+    mkdir -p $topDir/json
+    cd $topDir/json
+
+    wget --timestamping -nd ftp://ftp.ncbi.nih.gov/snp/latest_release/JSON/\*
+    md5sum -c CHECKSUMS
+#refsnp-chr10.json.bz2: OK
+#...
+#refsnp-withdrawn.json.bz2: OK
+
+
+
+    # jsonQuery commands to figure out what assemblies, SO terms and frequency sources are in there,
+    # by sampling first 10,000 variants on an arbitrary chrom:
+    assemblyPath="primary_snapshot_data.placements_with_allele[*].placement_annot.seq_id_traits_by_assembly[*].assembly_name"
+    rnaSoPath="primary_snapshot_data.allele_annotations[*].assembly_annotation[*].genes[*].rnas[*].sequence_ontology[*].accession"
+    proteinSoPath="primary_snapshot_data.allele_annotations[*].assembly_annotation[*].genes[*].rnas[*].protein.sequence_ontology[*].accession"
+    freqSourcePath="primary_snapshot_data.allele_annotations[*].frequency[*].study_name"
+    for jPath in "$assemblyPath" "$rnaSoPath" "$proteinSoPath" "$freqSourcePath"; do
+      echo "$jPath"
+      bzcat refsnp-chr3.json.bz2 \
+      | head -10000 \
+      | jsonQuery -countUniq -verbose=2 /dev/stdin "$jPath" stdout \
+      | sort -nr
+      echo ""
+    done
+    # Assemblies:
+#     10232 "GRCh38.p13"
+#     10111 "GRCh37.p13"
+
+    # RNA SO terms -- make sure all of these appear in soTerm.[ch]:
+
+#    144288 "SO:0001627"
+#     25829 "SO:0002153"
+#     19729 "SO:0002152"
+#      8506 "SO:0001624" 
+#      3112 "SO:0001986"
+#      2648 "SO:0001580"
+#      1769 "SO:0001619"
+#      1712 "SO:0001987"
+#       878 "SO:0001623"
+#        30 "SO:0001575"
+#        10 "SO:0001574"
+#         4 "SO:0001590"
+
+    # Made sure all RNA SO terms are found in hg/{inc,lib}/soTerm.[ch] (nothing new since b152)
+
+
+    # Protein SO terms -- make sure all of these appear in soTerm.[ch]:
+
+#       770 "SO:0001819"
+#       726 "SO:0001583"
+#         6 "SO:0001821"
+#         5 "SO:0001587"
+#         2 "SO:0000865"
+
+    # Made sure all Protein SO terms are found in hg/{inc,lib}/soTerm.[ch] (nothing new since b152)
+
+
+    # Projects reporting allele counts/frequencies:
+
+#     34713 "TOPMED"
+#     22432 "dbGaP_PopFreq"
+#     21128 "KOREAN"
+#     17553 "SGDP_PRJ"
+#     17470 "1000Genomes"
+#     17069 "Qatari"
+#     16284 "NorthernSweden"
+#     16074 "Siberian"
+#     15948 "TWINSUK"
+#     15948 "TOMMO"
+#     15948 "ALSPAC"
+#     15408 "GENOME_DK"
+#     15356 "GnomAD"
+#     15340 "GoNL"
+#     15198 "Estonian"
+#     13086 "Vietnamese"
+#     12000 "Korea1K"
+#     11238 "HapMap"
+#      3406 "PRJEB36033"
+#      2454 "HGDP_Stanford"
+#      2018 "Daghestan"
+#      1846 "PAGE_STUDY"
+#      1204 "Chileans"
+#      1134 "MGP"
+#      1116 "PRJEB37584"
+#       474 "GoESP"
+#       468 "ExAC"
+#       460 "GnomAD_exomes"
+#       318 "FINRISK"
+#        46 "PharmGKB"
+#         6 "PRJEB37766"
+
+    # This time the JSON downloads include a file frequency_studies.json that describes each study.
+    # Will be useful for making a details page, but some descriptions are just study names.
+
+    # Got total_count values from refsnp-chr3.json.bz2 above, put ALFA 2.0 (dbGaP_PopFreq) first, then order by
+
+    # decreasing total_count:
+
+#     22432 "dbGaP_PopFreq"
+#     34713 "TOPMED"
+#     21128 "KOREAN"
+#     17553 "SGDP_PRJ"
+#     17470 "1000Genomes"
+#     17069 "Qatari"
+#     16284 "NorthernSweden"
+#     16074 "Siberian"
+#     15948 "TWINSUK"
+#     15948 "TOMMO"
+#     15948 "ALSPAC"
+#     15408 "GENOME_DK"
+#     15356 "GnomAD"
+#     15340 "GoNL"
+#     15198 "Estonian"
+#     13086 "Vietnamese"
+#     12000 "Korea1K"
+#     11238 "HapMap"
+#      3406 "PRJEB36033"
+#      2454 "HGDP_Stanford"
+#      2018 "Daghestan"
+#      1846 "PAGE_STUDY"
+#      1204 "Chileans"
+#      1134 "MGP"
+#      1116 "PRJEB37584"
+#       474 "GoESP"
+#       468 "ExAC"
+#       460 "GnomAD_exomes"
+#       318 "FINRISK"
+#        46 "PharmGKB"
+#         6 "PRJEB37766"
+
+
+
+#NOTE freqSourceOrder with ALFA2 aka dbGaP_PopFreq as the primary study. This was later abandoned since the common set was much smaller, went back to putting 1000Genomes first later on.
+    freqSourceOrder=dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,1000Genomes,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
+
+    # Hmm, the PAGE study is a population genetics study.  It excludes caucasians:
+    # https://www.biorxiv.org/content/biorxiv/early/2018/10/17/188094.full.pdf
+    # "Genotyped individuals self-identified as Hispanic/Latino (N=22,216),
+    #  African American (N=17,299), Asian (N=4,680), Native Hawaiian (N=3,940),
+    #  Native American (N=652), or Other (N=1,052, primarily South Asian or mixed heritage,
+    #  as well as participants who did not identify with any of the available options."
+    # They didn't attempt to make balanced global (non-caucasian) populations (e.g. almost
+    # as many Native Hawaiians as Asians), so I'll keep 1000Genomes first.
+
+    cd $topDir
+
+    # dbSnp has changed since v152, it now uses patch13 too, so "GRCh38.p13" instead of "GRCh38.p12"
+
+    # Construct a mapping from RefSeq accessions like NC_000... to assembly, 2bit, and UCSC name.
+    hgsql hg38 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source);' \
+    | tawk '{print $1, "GRCh38.p13", "/hive/data/genomes/hg38/hg38.2bit", $2;}' \
+      > refSeqToUcsc.tab
+    hgsql hg19 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source);' \
+    | tawk '{print $1, "GRCh37.p13", "/hive/data/genomes/hg19/hg19.2bit", $2;}' \
+      >> refSeqToUcsc.tab
+
+    # has 45 more alts and fixes for hg38 just as expected for patch13.
+    
+
+    #make equivRegions.tab
+
+    # hg38 patch13 RefSeq assembly accession: GCF_000001405.39 (latest)
+
+    # Construct a mapping of equivalent RefSeq assembly regions for GRCh38 and GRCh37,
+    # so we can distinguish multiple mappings to PAR/alts/fixes from plain old multiple mappings.
+    refseqAssemblies=/hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Homo_sapiens/all_assembly_versions
+    grep -v ^# \
+      $refseqAssemblies/GCF_000001405.{25_GRCh37.p13,39_GRCh38.p13}/*_assembly_structure/all_alt_scaffold_placement.txt \
+    | tawk '{print $7, $12-1, $13, $4, $10-1, $11;}' \
+    | sort -k 1,1 -k2n,2n \
+    | tawk '{print $1 ":" $2 ":" $3, $4 ":" $5 ":" $6;}' \
+      > equivRegions.tab
+
+    # Add PARs:
+    grep -w PAR \
+      $refseqAssemblies/GCF_000001405.25_GRCh37.p13/*_assembly_regions.txt \
+    | sort \
+    | sed -e 's/X/NC_000023.10/; s/Y/NC_000024.9/;' \
+    | tawk '{print $1, $2 ":" $3 - 1 ":" $4;}'
+
+#PAR#1   NC_000023.10:60000:2699520
+#PAR#1   NC_000024.9:10000:2649520
+#PAR#2   NC_000023.10:154931043:155260560
+#PAR#2   NC_000024.9:59034049:59363566
+    echo -e "NC_000023.10:60000:2699520\tNC_000024.9:10000:2649520" >> equivRegions.tab
+    echo -e "NC_000023.10:154931043:155260560\tNC_000024.9:59034049:59363566" >> equivRegions.tab
+
+    grep -w PAR \
+      $refseqAssemblies/GCF_000001405.39_GRCh38.p13/*_assembly_regions.txt \
+    | sort \
+    | sed -e 's/X/NC_000023.11/; s/Y/NC_000024.10/;' \
+    | tawk '{print $1, $2 ":" $3 - 1 ":" $4;}'
+
+#PAR#1   NC_000023.11:10000:2781479
+#PAR#1   NC_000024.10:10000:2781479
+#PAR#2   NC_000023.11:155701382:156030895
+#PAR#2   NC_000024.10:56887902:57217415
+    echo -e "NC_000023.11:10000:2781479\tNC_000024.10:10000:2781479" >> equivRegions.tab
+    echo -e "NC_000023.11:155701382:156030895\tNC_000024.10:56887902:57217415" >> equivRegions.tab
+
+    # Patch doBigDbSnp.pl to update the default hg38 assembly to p13.
+    vi $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl
+    # around line 47, change to GRCh38.p13 and save and commit and push this new default.
+    -my $assemblyList = 'GRCh37.p13,GRCh38.p12';
+    +my $assemblyList = 'GRCh37.p13,GRCh38.p13';
+
+
+    # Run doBigDbSnp.pl (first with -debug to make runDir
+    # FYI the system is currently using ku cluster to run parasol jobs.
+
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder -debug
+# *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2021-09-30
+    cd /hive/data/outside/dbSNP/155/bigDbSnp.2021-09-30
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder -stop install \
+      >& do.log &
+    tail -f do.log
+
+
+convert step choked because the step above for create equivRegions.tab lacked -e on echo statement
+which meant that the "\t" was NOT converted to an actual tab. Must re-run.
+
+Re-ran from start but died on step fixHg19ChrM which was looking for NC_012920 but that has been renamed to just chrMT in the dbsnp data for hg19.
+fixed doFixHg19ChrM.sh by tweaking the doBigDbSnp.pl that creates it.
+
+Even though perhaps $freqSourceOrder is only needed for the convert step,
+the script requires it.
+
+Lame that after starting up screen, it lost my local variables,
+so I had to redefine topDir and freqSourceOrder after launching screen program for running background jobs.
+
+# resuming
+    cd /hive/data/outside/dbSNP/155/bigDbSnp.2021-09-30
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder\
+      -buildDir=`pwd` -continue check -stop install \
+      >& check.log &
+    tail -f check.log
+
+ *** All done !  (through the 'install' step)  Elapsed time: 408m55s
+ *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2021-09-30
+
+# GALT 2022-05-14
+
+    # FYI
+    # split   step runs on hgwdev
+    # convert step runs on ku  which has 32 machines that have 32 CPUs each.
+    # fixed freqSoureOrder changed, back to using 1000Genomes as the primary study, instead of ALFA2 dbGaP_PopFreq
+
+    topDir=/hive/data/outside/dbSNP/155
+    # after trying ALFA2 as primary study, it did not have enought SNPs, so I am going back to using 1000Genomes as the primary study.
+    freqSourceOrder=1000Genomes,dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
+    # Run doBigDbSnp.pl (first with -debug to make runDir):
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder -debug
+
+# *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2022-05-14
+
+
+    cd /hive/data/outside/dbSNP/155/bigDbSnp.2022-05-14
+    # Link to ../bigDbSnp.2021-09-30/split, -continue convert to avoid re-splitting (the slowest part of the process):
+    rmdir split
+    ln -s ../bigDbSnp.2021-09-30/split split
+    rmdir splitProcessed
+    ln -s ../bigDbSnp.2021-09-30/splitProcessed splitProcessed
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder \
+      -buildDir=`pwd` -continue convert -stop install \
+      >& do.log &
+    tail -f do.log
+    # crashed on the mergeToChrom step
+
+    # NOTICE that on mergeToChrom it uses /dev/shm/ virtual memory disk for temp files,
+    # and it can run out of space, and if you have to stop and restart it,
+    # be sure to clean it out properly like this:
+# para stop  # seems to flush results too.
+# para freeBatch  # should also fix any sick batches and machines.
+#
+# TO CLEAN:
+# rm -fr /dev/shm/dbSnpMergeSortBed.*/
+# rm -fr /dev/shm/dbSnpMergeSort.*/
+#
+# Note that it also overflowed the relatively small space in /scratch/tmp/ which
+# is used by sort in the sort command.  So I had to drastically reduce the maximum
+# number of simultaneous jobs, all the way down to just 6 jobs!
+# added -maxJob=6 to the para make jobList command in doMergeToChrom.sh
+/parasol/bin/para make -maxJob=6 jobList
+# and cleaning out temp files in /dev/shm/ and then para stop, para freeBatch, 
+# and finally I re-ran doMergeToChrom.sh manually.
+
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder \
+      -buildDir=`pwd` -continue mergeChroms -stop install \
+      >& do2.log &
+    tail -f do2.log
+
+# step bigBed choked on hg19 because of a subtle bug in resSizes counting which is now fixed.
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder \
+      -buildDir=`pwd` -continue bigBed -stop install \
+      >& do3.log &
+    tail -f do3.log
+
+ *** All done !  (through the 'install' step)  Elapsed time: 326m34s
+ *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2022-05-14
+
+    wc -l dbSnp155Errors.tab
+
+#13318 dbSnp155Errors.tab
+# nearly all of these "Errors" are because a small study called 'ChromosomeY' was not picked up
+# in our scan of the first 10000 lines of chrom 3 that we used above. However, this study is not big enough to be important.
+1011954 NOSEQ   freqSourceOrder does not contains 'ChromosomeY'
+
+I copied track description page fron 153 and updated the content
+src/hg/makeDb/trackDb/human/dbSnp155Composite.html
+
+Informally, I made a couple of scripts in here to help update the studies list and the keywords counts sections of the description page.
+/hive/data/outside/dbSNP/155/json/
+
+
+
+redoing for 2023-03-15
+   # re-do since commas in clinicalSignificance needed htmlencoding so main utility was updated.
+
+    topDir=/hive/data/outside/dbSNP/155
+    # after trying ALFA2 as primary study, it did not have enought SNPs, so I am going back to using 1000Genomes as the primary study.
+    freqSourceOrder=1000Genomes,dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
+    # Run doBigDbSnp.pl (first with -debug to make runDir):
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder -debug
+
+# *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-15
+
+    cd /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-15
+
+    # Link to ../bigDbSnp.2021-09-30/split, -continue convert to avoid re-splitting (the slowest part of the process):
+    rmdir split
+    ln -s ../bigDbSnp.2021-09-30/split split
+    rmdir splitProcessed
+    ln -s ../bigDbSnp.2021-09-30/splitProcessed splitProcessed
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder \
+      -buildDir=`pwd` -continue convert -stop install \
+      >& do.log &
+    tail -f do.log
+
+ # convert step runs on ku kluster
+
+   ssh ku
+
+[ku.gi.ucsc.edu:~> parasol list batches
+#user     run   wait   done crash pri max cpu  ram  plan min batch
+galt      461   9755    334     0  10  -1   1  8.0g  496  10 /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-15/run.convert/
+
+
+
+redoing for 2023-03-26
+     # re-do since the clinicalSignificance fix had to be re-done in a completely different way that should be good now.
+
+    topDir=/hive/data/outside/dbSNP/155
+    # after trying ALFA2 as primary study, it did not have enought SNPs, so I am going back to using 1000Genomes as the primary study.
+    freqSourceOrder=1000Genomes,dbGaP_PopFreq,TOPMED,KOREAN,SGDP_PRJ,Qatari,NorthernSweden,Siberian,TWINSUK,TOMMO,ALSPAC,GENOME_DK,GnomAD,GoNL,Estonian,Vietnamese,Korea1K,HapMap,PRJEB36033,HGDP_Stanford,Daghestan,PAGE_STUDY,Chileans,MGP,PRJEB37584,GoESP,ExAC,GnomAD_exomes,FINRISK,PharmGKB,PRJEB37766
+    # Run doBigDbSnp.pl (first with -debug to make runDir):
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder -debug
+
+# *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-26
+
+    cd /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-26
+
+    # Link to ../bigDbSnp.2021-09-30/split, -continue convert to avoid re-splitting (the slowest part of the process):
+    rmdir split
+    ln -s ../bigDbSnp.2021-09-30/split split
+    rmdir splitProcessed
+    ln -s ../bigDbSnp.2021-09-30/splitProcessed splitProcessed
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 155 $freqSourceOrder \
+      -buildDir=`pwd` -continue convert -stop install \
+      >& do.log &
+    tail -f do.log
+
+ *** All done !  (through the 'install' step)  Elapsed time: 1028m23s
+ *** Steps were performed in /hive/data/outside/dbSNP/155/bigDbSnp.2023-03-26
+
+    # checked errors and warnings, did not see anything concerning.
+
+#############################################################################

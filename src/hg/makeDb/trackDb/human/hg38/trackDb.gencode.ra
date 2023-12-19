@@ -2,13 +2,12 @@ track wgEncodeGencodeSuper
 superTrack on
 trackHandler wgEncodeGencode
 group genes
-shortLabel All GENCODE
-longLabel All GENCODE transcripts, including comprehensive set and previous version
+shortLabel GENCODE Versions
+longLabel Container of all new and previous GENCODE releases
 # don't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
-include wgEncodeGencodeV19.ra
 include wgEncodeGencodeV20.ra
-include wgEncodeGencodeV21.ra alpha
+include wgEncodeGencodeV21.ra
 include wgEncodeGencodeV22.ra
 include wgEncodeGencodeV23.ra
 include wgEncodeGencodeV24.ra
@@ -27,4 +26,10 @@ include wgEncodeGencodeV36.ra
 include wgEncodeGencodeV37.ra
 include wgEncodeGencodeV38.ra
 include wgEncodeGencodeV39.ra
+include wgEncodeGencodeV40.ra
+include wgEncodeGencodeV41.ra
+include wgEncodeGencodeV42.ra
+include wgEncodeGencodeV43.ra
+include wgEncodeGencodeV44.ra
+include wgEncodeGencodeV45.ra
 

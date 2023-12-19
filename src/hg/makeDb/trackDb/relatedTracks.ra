@@ -14,12 +14,20 @@ hg38 liftHg38 revel Revel scores were lifted using UCSC liftOver chains from hg3
 hg38 revel caddSuper CADD, a similar deleteriousness score, and not used as an input by REVEL
 hg38 caddSuper revel REVEL, a similar deleteriousness score
 
-hg38 liftOverHg38 grcIncidentDb GRC Incident database, to explore reasons why the assembly was changed
-hg38 grcIncidentDb liftOverHg38 LiftOver for hg38, explores how incident regions aligned between human assemblies
+hg38 liftHg19 grcIncidentDb GRC Incident database, to explore reasons why the assembly was changed
+hg38 grcIncidentDb liftHg19 LiftOver for hg38, explores how incident regions aligned between human assemblies
 
-hg38 grcIncidentDb liftOverHg19 LiftOver alignments between hg19 and hg38, to explore how the GRC incident assembly changes affect whole-genome alignments between hg19 and hg38 used for lifting data from hg19
-hg38 liftOverHg19 grcIncidentDb GRC IncidentDb shows version issues, to explore alignment between human assemblies
+hg38 ReMap liftHg19 NCBI ReMap, even though it has the same name, is a liftOver-like hg19/hg38 alignment, and unrelated to the ReMap database
+hg38 liftHg19 ReMap ReMap, even though it has the same name, is a database of transcription factor binding sites, unrelated to NCBI ReMap
 
+hg38 ReMap jaspar JASPAR is a database of predicted TF binding sites, based on short DNA matches. Unlike ReMap, the data is purely computational.
+
+hg38 jaspar ReMap ReMap is a database of TF binding sites inferred from ChIP-Seq Data. Unlike JASPAR predictions, these sites are supported by functional assay
+
+hg38 problematic mappability The mappability track contains regions where short sequencing reads are hard to align
+hg38 mappability problematic The problematic regions track contains various gene clusters and the ENCODE blacklist
+hg38 problematic grcIncidentDb The GRC (Genome Reference Consortium) incidents track contains regions that were flagged by the group that puts together the genome 
+hg38 grcIncidentDb problematic The problematic regions track lists unusual regions and the ones that often lead to artefacts when aligning reads to the reference genome
 
 # hg19:
 hg19 caddSuper gnomad View associated variants
@@ -31,12 +39,20 @@ hg19 gnomadPLI decipherHaploIns Compare constraint metrics as defined by DECIPHE
 hg19 revel caddSuper CADD, a similar deleteriousness score, and not used as an input by REVEL
 hg19 caddSuper revel REVEL, a similar deleteriousness score
 
-hg19 liftOverHg38 grcIncidentDb GRC Incident database, to explore reasons why the assembly was changed
-hg19 grcIncidentDb liftOverHg38 LiftOver alignments between hg38 and hg38 to explore how the GRC incident assembly changes affect whole-genome alignments between hg19 and hg38 used for lifting data from hg19
+hg19 liftHg38 grcIncidentDb GRC Incident database, to explore reasons why the assembly was changed
+hg19 grcIncidentDb liftHg38 LiftOver alignments between hg38 and hg38 to explore how the GRC incident assembly changes affect whole-genome alignments between hg19 and hg38 used for lifting data from hg19
 
-hg19 fixSeqLiftOverPsl liftOverHg38 Investigate how patches affect the whole-genome alignment used for liftOver
-hg19 liftOverHg38 fixSeqLiftOverPsl Investigate how assembly patches affect the liftOver alignment
+hg19 fixSeqLiftOverPsl liftHg38 Investigate how patches affect the whole-genome alignment used for liftOver
+hg19 liftHg38 fixSeqLiftOverPsl Investigate how assembly patches affect the liftOver alignment
 
-hg19 liftOverHg38 hg38ContigDiff Hg38 Diff shows contigs that were changed from hg19 to hg38
-hg19 hg38ContigDiff liftOverHg38 Investigate how contig changes affect the liftOver alignments
+hg19 liftHg38 hg38ContigDiff Hg38 Diff shows contigs that were changed from hg19 to hg38
+hg19 hg38ContigDiff liftHg38 Investigate how contig changes affect the liftOver alignments
 
+hg19 jaspar ReMap ReMap is a database of TF binding sites inferred from ChIP-Seq Data. Unlike JASPAR predictions, these sites are supported by functional assay
+hg19 ReMap jaspar JASPAR is a database of predicted TF binding sites, based on short DNA matches. Unlike ReMap, the data is purely computational.
+
+hg19 ReMap liftHg38 NCBI ReMap, even though it has the same name, is a liftOver-like hg19/hg38 alignment, and unrelated to the ReMap database
+hg19 liftHg38 ReMap ReMap, even though it has the same name, is a database of transcription factor binding sites, unrelated to NCBI ReMap
+
+hg19 refSeqComposite pseudoYale60 NCBI RefSeq Curated and RefSeq Other contains pseudogenes, but the Yale annotation should be more comprehensive for this transcript type
+hg19 pseudoYale60 refSeqComposite NCBI RefSeq Curated and RefSeq Other also contain some transcribed and untranscribed pseudogenes, respectively.

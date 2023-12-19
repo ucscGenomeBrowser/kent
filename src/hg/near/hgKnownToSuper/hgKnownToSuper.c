@@ -57,9 +57,13 @@ struct hash *ensPepToKnown(struct sqlConnection *conn, boolean chopVersion)
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(16);
+char query[1024];
+sqlSafef(query, sizeof query, "select transcript,protein from ensGtp");
 struct hash *tnToPep = 
-	hashTwoColumn(conn, NOSQLINJ "select transcript,protein from ensGtp", chopVersion);
-sr = sqlGetResult(conn, NOSQLINJ "select name,value from knownToEnsembl");
+	hashTwoColumn(conn, query, chopVersion);
+
+sqlSafef(query, sizeof query, "select name,value from knownToEnsembl");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *protein;

@@ -94,7 +94,7 @@ if (gg != NULL)
     struct chromGraphBin *cgb = gg->cgb;
     struct chromGraphSettings *cgs = gg->settings;
     int maxGapToFill = cgs->maxGapToFill;
-    static struct rgbColor missingDataColor = { 180, 180, 120};
+    static struct rgbColor missingDataColor = { 180, 180, 120, 255};
     Color missingColor = hvGfxFindRgb(hvg, &missingDataColor);
     double pixelsPerBase = 1.0/gl->basesPerPixel;
     double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
@@ -103,7 +103,7 @@ if (gg != NULL)
     /* Draw significance threshold as a light blue line */
     if (leftLabel)
         {
-	static struct rgbColor guidelineColor = { 220, 220, 255};
+	static struct rgbColor guidelineColor = { 220, 220, 255, 255};
 	Color lightBlue = hvGfxFindRgb(hvg, &guidelineColor);
 	struct slRef *ref;
 	struct genoLayChrom *chrom;
@@ -504,16 +504,15 @@ struct tempName psTn;
 char *pdfFile = NULL;
 trashDirFile(&psTn, "hgg", "hgg", ".eps");
 cartWebStart(cart, database, "%s Genome Graphs", genome);
-printf("<H1>PostScript/PDF Output</H1>\n");
-printf("PostScript images can be printed at high resolution "
-       "and edited by many drawing programs such as Adobe "
-       "Illustrator.<BR>");
+printf("<H1>PDF Output</H1>\n");
 
 boolean result = renderGraphic(conn, psTn.forCgi);
 if (result)
     {
-    printf("<A HREF=\"%s\">Click here</A> "
-	   "to download the current browser graphic in PostScript.  ", psTn.forCgi);
+    printf("EPS (PostScript) output has been discontinued in pursuit of additional features\n");
+    printf("that are not PostScript-compatible.  If you require PostScript output for your\n");
+    printf("workflow, please <a href='https://genome.ucsc.edu/contacts.html'>reach out to us</a>\n");
+    printf("and let us know what your needs are - we may be able to help.\n");
     pdfFile = convertEpsToPdf(psTn.forCgi);
     if(pdfFile != NULL)
 	{

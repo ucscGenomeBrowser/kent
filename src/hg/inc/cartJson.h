@@ -6,6 +6,7 @@
 #include "cart.h"
 #include "hash.h"
 #include "jsonWrite.h"
+#include "hgFind.h"
 
 #define CARTJSON_COMMAND "cjCmd"
 
@@ -42,10 +43,34 @@ char *cartJsonRequiredParam(struct hash *paramHash, char *name, struct jsonWrite
 void cartJsonRegisterHandler(struct cartJson *cj, char *command, CartJsonHandler *handler);
 /* Associate handler with command; when javascript sends command, handler will be executed. */
 
+boolean cartJsonIsNoWarns();
+/* Return TRUE if there are no warnings present */
+
+void cartJsonPrintWarnings(struct jsonWrite *jw);
+/* If there are warnings, write them out as JSON: */
+
+void cartJsonPushErrHandlers();
+/* Push warn and abort handlers for errAbort. */
+
+void cartJsonPopErrHandlers();
+/* Pop warn and abort handlers for errAbort. */
+
 void cartJsonExecute(struct cartJson *cj);
 /* Get commands from cgi, print Content-type, execute commands, print results as JSON. */
 
 void cartJsonFree(struct cartJson **pCj);
 /* Close **pCj's contents and nullify *pCj. */
+
+struct hgPositions *genomePosCJ(struct jsonWrite *jw, char *db, char *spec, char **retChromName,
+                               int *retWinStart, int *retWinEnd, struct cart *cart, struct searchCategory *categories, boolean categorySearch);
+/* Search for positions in genome that match user query.
+ * Return an hgp unless there is a problem.  hgp->singlePos will be set if a single
+ * position matched. categorySearch determines whether to error out if we can't
+ * uniquely determine a position for a multiTerm search
+ * Otherwise display list of positions, put # of positions in retWinStart,
+ * and return NULL. */
+
+void hgPositionsJson(struct jsonWrite *jw, char *db, struct hgPositions *hgp, struct cart *cart);
+/* Write out JSON description of multiple position matches. */
 
 #endif /* CARTJSON_H */

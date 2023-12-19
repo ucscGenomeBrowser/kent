@@ -648,7 +648,9 @@ static void visiGeneMatchYear(struct visiSearcher *searcher,
 /* Fold in matches to a year. */
 {
 struct slName *word;
-char *now = sqlQuickString(conn, NOSQLINJ "select now()");
+char query[1024];
+sqlSafef(query, sizeof query, "select now()");
+char *now = sqlQuickString(conn, query);
 int currentYear = atoi(now);
 int maxYear = currentYear+1;	/* May be slightly ahead of publication */
 int minYear = 1988;	/* Oldest record in Jackson Labs database. */

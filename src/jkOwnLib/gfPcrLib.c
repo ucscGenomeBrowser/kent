@@ -149,7 +149,7 @@ int productSize = out->rPos - out->fPos;
 char *dna = cloneStringZ(out->dna, productSize);
 char *rrPrimer = cloneString(out->rPrimer);
 char *ffPrimer = cloneString(out->fPrimer);
-struct dyString *faLabel = newDyString(0);
+struct dyString *faLabel = dyStringNew(0);
 char *name = out->name;
 
 /* Create fasta header with position, possibly empty name, and upper cased primers with position optionally hyperlinked. */
@@ -183,7 +183,7 @@ faWriteNext(f, faLabel->string, dna, productSize);
 freez(&dna);
 freez(&rrPrimer);
 freez(&ffPrimer);
-dyStringFree(&faLabel)
+dyStringFree(&faLabel);
 }
 
 static int countMatch(char *a, char *b, int size)
@@ -245,7 +245,12 @@ int rPrimerSize = strlen(out->rPrimer);
 int bothSize = fPrimerSize + rPrimerSize;
 int gapSize = size - bothSize;
 char *name = out->name;
-if (name == NULL) name = "n/a";
+if (name == NULL)
+    {
+    struct dyString *dy = dyStringNew(0);
+    dyStringPrintf(dy, "%s_%s", out->fPrimer, out->rPrimer);
+    name = dyStringCannibalize(&dy);;
+    }
 match = countMatch(out->dna, out->fPrimer, fPrimerSize);
 reverseComplement(out->rPrimer, rPrimerSize);
 assert(size > 0);
@@ -327,7 +332,7 @@ void gfPcrOutputWriteAll(struct gfPcrOutput *outList,
  * to file.  If url is non-null it should be a printf formatted
  * string that takes %s, %d, %d for chromosome, start, end. */
 {
-FILE *f = mustOpen(fileName, "w");
+FILE *f = mustOpen(fileName, "a");
 gfPcrOutputWriteList(outList, outType, url, f);
 carefulClose(&f);
 }

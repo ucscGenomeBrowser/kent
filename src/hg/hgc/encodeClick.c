@@ -12,6 +12,7 @@
 #include "web.h"
 #include "encode/encodePeak.h"
 #include "peptideMapping.h"
+#include "chromAlias.h"
 
 #ifdef UNUSED
 static boolean pairInList(struct slPair *pair, struct slPair *list)
@@ -116,7 +117,7 @@ if (peakType == 0)
     errAbort("unrecognized peak type from table %s", tdb->table);
 genericHeader(tdb, NULL);  // genericClickHandlerPlus gets there first anyway (maybe except for encodePeak custom tracks).
 char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 int fieldCount = 10;

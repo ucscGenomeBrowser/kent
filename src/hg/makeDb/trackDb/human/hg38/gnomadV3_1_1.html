@@ -6,12 +6,33 @@ v3 release. For more detailed information on gnomAD v3.1, see the related <a tar
 href="https://gnomad.broadinstitute.org/blog/2020-10-gnomad-v3-1/">blog post</a>.</p>
 
 <p>
-On the gnomAD side, the gnomAD v3.1.1 track contains the same underlying data as v3.1, but
+The gnomAD v3.1.1 track contains the same underlying data as v3.1, but
 with minor corrections to the VEP annotations and dbSNP rsIDs. On the UCSC side, we have now
 included the mitochondrial chromosome data that was released as part of gnomAD v3.1 (but after
 the UCSC version of the track was released). For more information about gnomAD v3.1.1, please
 see the related
 <a target="_blank" href="https://gnomad.broadinstitute.org/news/2021-03-gnomad-v3-1-1/">changelog</a>.</p>
+
+<p>GnomAD Genome Mutational Constraint is based on v3.1.2 and is available only on hg38. 
+It shows the reduced variation caused by purifying
+natural selection. This is similar to negative selection on loss-of-function
+(LoF) for genes, but can be calculated for non-coding regions too. 
+Positive values are red and reflect stronger mutation constraint (and less variation), indicating 
+higher natural selection pressure in a region. Negative values are green and 
+reflect lower mutation constraint 
+(and more variation), indicating less selection pressure and less functional effect.
+Briefly, for any 1kbp window in
+the genome, a model based on trinucleotide sequence context, base-level
+methylation, and regional genomic features predicts expected number of mutations,
+and compares this number to the observed number of mutations using a Z-score (see preprint
+in the Reference section for details). The chrX scores were added as received from the authors,
+as there are no de novo mutation data available on chrX (for estimating the effects of regional 
+genomic features on mutation rates), they are more speculative than the ones on the autosomes.</p>
+
+<p>
+The gnomAD Predicted Constraint Metrics track contains metrics of pathogenicity per-gene as 
+predicted for gnomAD v2.1.1 and identifies genes subject to strong selection against various 
+classes of mutation. This includes data on both the gene and transcript level.</p>
 
 <p>
 The gnomAD v2 tracks show variants from 125,748 exomes and 15,708 whole genomes, all mapped to
@@ -30,6 +51,7 @@ target="_blank">README</a>.</p>
 gnomAD v2 data are based on the GRCh37/hg19 assembly. These tracks display the
 GRCh38/hg38 lift-over provided by gnomAD on their downloads site.
 </p>
+
 <p>
 For questions on the gnomAD data, also see the <a target="_blank"
 href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a>.</p>
@@ -52,6 +74,7 @@ number of items in the bigBed.
 display, and one with the information necessary for the details page. For more information on
 this data format, please see the <a href="#dataAccess">Data Access</a> section below.
 <li>The VEP annotation is shown as a table instead of spread across multiple fields.
+<li>Intergenic variants have not been pre-filtered.
 </ol>
 
 <h3>gnomAD v3.1</h3>
@@ -83,12 +106,10 @@ type:
 
 <h4>Label Options</h4>
 <p>
-By default, variants are labeled according to their chromosomal position followed by the reference
-and alternate alleles, for example &quot;chr1:1234-1235 T/CAG&quot;.
-</p>
-
-<p>
-dbSNP rsID's are also available as an additional label, if the variant is present in dbSnp.
+To maintain consistency with the gnomAD website, variants are by default labeled according
+to their chromosomal start position followed by the reference and alternate alleles,
+for example &quot;chr1-1234-T-CAG&quot;. dbSNP rsID's are also available as an additional
+label, if the variant is present in dbSnp.
 </p>
 
 <h4>Filtering Options</h4>
@@ -108,18 +129,18 @@ Three filters are available for these tracks:
 </ul>
 There is one additional configurable filter on the minimum minor allele frequency.
 
-<p>
-
 <h3>gnomAD v2.1.1</h3>
-The gnomAD v2.1.1 track follows the standard display and configuration options available for <a href="/goldenPath/help/hgVcfTrackHelp.html">VCF tracks</a>, briefly explained below.
-<dl>
-  <dt></dt>
-  <dd><li>In <button type="button">dense</button> mode, a vertical line is drawn at the position of
+<p>
+The gnomAD v2.1.1 track follows the standard display and configuration options available for
+<a href="/goldenPath/help/hgVcfTrackHelp.html">VCF tracks</a>, briefly explained below.
+</p>
+<ul>
+  <li>In <button type="button">dense</button> mode, a vertical line is drawn at the position of
     each variant.</li>
   <li>In <button type="button">pack</button> mode, &quot;ref&quot; and &quot;alt&quot; alleles are
     displayed to the left of a vertical line with colored portions corresponding to allele counts.
-    Hovering the mouse pointer over a variant pops up a display of alleles and counts.</li></dd>
-</dl>
+    Hovering the mouse pointer over a variant pops up a display of alleles and counts.</li>
+</ul>
 
 <h4>Filtering Options</h4>
 <p>
@@ -139,7 +160,10 @@ There are two additional filters available, one for the minimum minor allele fre
 <a name="UCSCMethods">
 <h2>UCSC Methods</h2>
 <p>
-For the v3.1 update, In order to cut down on the amount of displayed data, the following variant
+The gnomAD v3.1.1 data is unfiltered. </p>
+<p>
+For the v3.1 update only, in order to cut 
+down on the amount of displayed data, the following variant
 types have been filtered out, but are still viewable in the gnomAD browser:
 <ul>
     <li>Regulatory Region Variants
@@ -198,12 +222,18 @@ our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
 target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
 href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
 
+<p>The mutational constraints score was updated in October 2022 from a previous,
+now deprecated, pre-publication version. The old version can be found in our
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/hg38/gnomad/">archive
+directory</a> on the download server. It can be loaded by copying the URL into
+our "Custom tracks" input box.</p>
+
 <h2>Credits</h2>
 <p>
 Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
 Database Consortium</a> for making these data available. The data are released under the <a
 href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
-(OBdL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
+(ODbL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
 </p>
 
 <h2>References</h2>
@@ -222,4 +252,9 @@ AJ, Cummings BB <em>et al</em>.
 genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
 PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>
+<p>
+Chen S, Francioli L, Goodrich J, Collins R, Wang Q, Alfoldi J, Watts N, Vittal C, Gauthier L, Poterba T, Wilson M
+<a href="https://www.biorxiv.org/content/10.1101/2022.03.20.485034.abstract" target="_blank">
+A genome-wide mutational constraint map quantified from variation in 76,156 human genomes</a>. <em>Biorxiv 2022</em> 
 </p>

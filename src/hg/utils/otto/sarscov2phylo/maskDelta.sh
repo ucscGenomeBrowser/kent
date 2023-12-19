@@ -1,8 +1,13 @@
 #!/bin/bash
 set -beEu -x -o pipefail
 
-#	Do not modify this script, modify the source tree copy:
-#	kent/src/hg/utils/otto/sarscov2phylo/maskDelta.sh
+# NOTE: in case you found this script by following a github link from a discussion about
+# branch-specific masking in the UShER SARS-CoV-2 tree, the old contents of this script
+# have been replaced by a data file describing the branches and masked sites:
+#   branchSpecificMask.yml
+# and a script that interprets the data file and applies the masking:
+#   branchSpecificMask.py
+# See discussion in https://github.com/yatisht/usher/issues/324
 
 usage() {
     echo "usage: $0 treeIn.pb treeOut.pb"
@@ -16,37 +21,7 @@ fi
 treeInPb=$1
 treeOutPb=$2
 
-ottoDir=/hive/data/outside/otto/sarscov2phylo
+scriptDir=$(dirname "${BASH_SOURCE[0]}")
+export PATH=~angie/github/usher/build:"$PATH"
 
-usherDir=~angie/github/usher
-matUtils=$usherDir/build/matUtils
-matOptimize=$usherDir/build/matOptimize
-
-# I wish there were a less hacky method to identify the node for Delta, but since mutation
-# paths can change as new samples are added, this is the most stable method I have at the moment:
-# make sample-paths, grep for basal sample IND/GBRC714b/2021 (USA/WI-CDC-FG-038252/2021 would also
-# work in case that one goes away for any reason), use the final node in path.
-samplePaths=$treeInPb.sample-paths
-$matUtils extract -i $treeInPb -S $samplePaths
-deltaNode=$(grep IND/GBRC714b/2021 $samplePaths | awk '{print $NF;}' | sed -re 's/:.*//;')
-
-# Delta has deletions at S:157-158 (22029-22034), ORF8:119-120 (28248-28253) and 28271.
-# Mask those locations and some adjacent bases where we get a ton of spurious "mutations".
-maskFile=$(basename $treeInPb .pb).maskForDelta.tsv
-set +x
-for ((i=22027;  $i <= 22034;  i++)); do
-    echo -e "N${i}N\t$deltaNode"
-done > $maskFile
-for ((i=28246;  $i <= 28253;  i++)); do
-    echo -e "N${i}N\t$deltaNode"
-done >> $maskFile
-echo -e "N28271N\t$deltaNode" >> $maskFile
-set -x
-
-# S:95 (21846) is also very unreliably detected in Delta.  Mask it off to avoid tree trouble,
-# like split AY.100.
-echo -e "N21846N\t$deltaNode" >> $maskFile
-
-time $matUtils mask -i $treeInPb \
-    -m $maskFile \
-    -o $treeOutPb
+$scriptDir/branchSpecificMask.py $treeInPb $scriptDir/branchSpecificMask.yml $treeOutPb

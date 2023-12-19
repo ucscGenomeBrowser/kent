@@ -1,0 +1,199 @@
+<h2>Description</h2>
+<p>
+This track represents the <a href="https://remap.univ-amu.fr/"
+target="_blank">ReMap Atlas</a> of regulatory regions, which consists of a
+large-scale integrative analysis of all Public ChIP-seq data for transcriptional
+regulators from GEO, ArrayExpress, and ENCODE. 
+</p>
+
+<p>
+Below is a schematic diagram of the types of regulatory regions: 
+<ul>
+<li>ReMap 2022 Atlas (all peaks for each analyzed data set)</li> 
+<li>ReMap 2022 Non-redundant peaks (merged similar target)</li>
+<li>ReMap 2022 Cis Regulatory Modules</li>
+</ul>
+</p>
+
+<img style='margin-left: 40px;' height=229 width=500
+src="../images/reMap_schema_datatype.png">
+
+<h2> Display Conventions and Configuration </h2>
+<ul>
+<li>
+Each transcription factor follows a specific RGB color.
+</li>
+<li>
+ChIP-seq peak summits are represented by vertical bars.
+</li>
+<li>
+Hsap: A data set is defined as a ChIP/Exo-seq experiment in a given
+GEO/ArrayExpress/ENCODE series (e.g. GSE41561), for a given TF (e.g. ESR1), in
+a particular biological condition (e.g. MCF-7).
+<br>Data sets are labeled with the concatenation of these three pieces of
+information (e.g. GSE41561.ESR1.MCF-7).
+</li>
+<li>
+Atha: The data set is defined as a ChIP-seq experiment in a given series
+(e.g. GSE94486), for a given target (e.g. ARR1), in a particular biological
+condition (i.e. ecotype, tissue type, experimental conditions; e.g.
+Col-0_seedling_3d-6BA-4h).
+<br>Data sets are labeled with the concatenation of these three pieces of
+information (e.g. GSE94486.ARR1.Col-0_seedling_3d-6BA-4h).
+</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+This 4th release of ReMap (2022) presents the analysis of a total of 8,103 
+quality controlled ChIP-seq (n=7,895) and ChIP-exo (n=208) data sets from public
+sources (GEO, ArrayExpress, ENCODE). The ChIP-seq/exo data sets have been mapped
+to the GRCh38/hg38 human assembly. The data set is defined as a ChIP-seq 
+experiment in a given series (e.g. GSE46237), for a given TF (e.g. NR2C2), in a
+particular biological condition (i.e. cell line, tissue type, disease state, or
+experimental conditions; e.g. HELA). Data sets were labeled by concatenating
+these three pieces of information, such as GSE46237.NR2C2.HELA. 	
+</p>
+<p>Those merged analyses cover a total of 1,211 DNA-binding proteins
+(transcriptional regulators) such as a variety of transcription factors (TFs),
+transcription co-activators (TCFs), and chromatin-remodeling factors (CRFs) for
+182 million peaks. 
+</p>
+
+<img style='margin-left: 40px;' height=300 width=500
+src="../images/humanReMap.png">
+
+<h4>GEO & ArrayExpress</h4>
+<p>
+Public ChIP-seq data sets were extracted from Gene Expression Omnibus (GEO) and
+ArrayExpress (AE) databases. For GEO, the query
+<code>
+&apos;(&apos;chip seq&apos; OR &apos;chipseq&apos; OR
+&apos;chip sequencing&apos;) AND &apos;Genome binding/occupancy profiling by high throughput
+sequencing&apos; AND &apos;homo sapiens&apos;[organism] AND NOT &apos;ENCODE&apos;[project]&apos;
+</code>
+was used to return a list of all potential data sets to analyze, which were then manually 
+assessed for further analyses. Data sets involving polymerases (i.e. Pol2 and
+Pol3), and some mutated or fused TFs (e.g. KAP1 N/C terminal mutation, GSE27929)
+were excluded.
+</p>
+
+<h4>ENCODE</h4>
+<p>
+Available ENCODE ChIP-seq data sets for transcriptional regulators from the
+<a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a> were processed with the
+standardized ReMap pipeline. The list of ENCODE data was retrieved as FASTQ files from the
+<a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a>
+using the following filters:
+<ul>
+  <li>Assay: &quot;ChIP-seq&quot;</li>
+  <li>Organism: &quot;Homo sapiens&quot;</li>
+  <li>Target of assay: &quot;transcription factor&quot;</li>
+  <li>Available data: &quot;fastq&quot; on 2016 June 21st</li>
+</ul>
+Metadata information in JSON format and FASTQ files
+were retrieved using the Python requests module.
+</p>
+
+<h4>ChIP-seq processing</h4>
+<p>
+Both Public and ENCODE data were processed similarly. Bowtie 2 (<a href=
+"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3322381/" target="_blank"
+>PMC3322381</a>) (version 2.2.9) with options -end-to-end -sensitive was used to align all
+reads on the genome. Biological and technical
+replicates for each unique combination of GSE/TF/Cell type or Biological condition
+were used for peak calling. TFBS were identified using MACS2 peak-calling tool
+(<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3120977/" target="_blank"
+>PMC3120977</a>) (version 2.1.1.2) in order to follow ENCODE ChIP-seq guidelines,
+with stringent thresholds (MACS2 default thresholds, p-value: 1e-5). An input data
+set was used when available.
+</p>
+
+
+<h4>Quality assessment</h4>
+<p>
+To assess the quality of public data sets, a score was computed based on the
+cross-correlation and the FRiP (fraction of reads in peaks) metrics developed by
+the ENCODE Consortium (<a href="https://genome.ucsc.edu/ENCODE/qualityMetrics.html"
+target="_blank">https://genome.ucsc.edu/ENCODE/qualityMetrics.html</a>). Two
+thresholds were defined for each of the two cross-correlation ratios (NSC,
+normalized strand coefficient: 1.05 and 1.10; RSC, relative strand coefficient:
+0.8 and 1.0). Detailed descriptions of the ENCODE quality coefficients can be
+found at <a href="https://genome.ucsc.edu/ENCODE/qualityMetrics.html"
+target="_blank">https://genome.ucsc.edu/ENCODE/qualityMetrics.html</a>. The
+phantompeak tools suite was used
+(<a href="https://code.google.com/p/phantompeakqualtools/"
+target="_blank">https://code.google.com/p/phantompeakqualtools/</a>) to compute
+RSC and NSC.
+</p>
+<p> 
+Please refer to the ReMap 2022, 2020, and 2018 publications for more details
+(citation below).
+</p>
+
+<!--
+<p>
+<img src="http://pedagogix-tagc.univ-mrs.fr/remap2/hubDirectory/trackhub/img/remap2_figure3_web.png" alt="Detailled view of FOXA1" align="middle">
+</p>
+This is a detailled view of the data increase in ReMap v2 with FOXA1 peaks at a specific location. 
+<br>
+-->
+
+<h2>Data Access</h2>
+<p>
+ReMap Atlas of regulatory regions data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> and cross-referenced with the 
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For programmatic access,
+the track can be accessed using the Genome Browser&apos;s
+<a href="../../goldenPath/help/api.html">REST API</a>.
+ReMap annotations can be downloaded from the
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/reMap">Genome Browser's download server</a>
+as a bigBed file. This compressed binary format can be remotely queried through
+command line utilities. Please note that some of the download files can be quite large.</p>
+
+<p>
+Individual BED files for specific TFs, cells/biotypes, or data sets can be
+found and downloaded on the <a href="https://remap.univ-amu.fr/download_page"
+target="_blank">ReMap website</a>.
+</p>
+
+<h2>References</h2>
+
+<p>
+Ch&#232;neby J, Gheorghe M, Artufel M, Mathelier A, Ballester B.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29126285" target="_blank">
+ReMap 2018: an updated atlas of regulatory regions from an integrative analysis of DNA-binding ChIP-
+seq experiments</a>.
+<em>Nucleic Acids Res</em>. 2018 Jan 4;46(D1):D267-D275.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29126285" target="_blank">29126285</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5753247/" target="_blank">PMC5753247</a>
+</p>
+<p>
+Ch&#232;neby J, M&#233;n&#233;trier Z, Mestdagh M, Rosnet T, Douida A, Rhalloussi W, Bergon A, Lopez
+F, Ballester B.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31665499" target="_blank">
+ReMap 2020: a database of regulatory regions from an integrative analysis of Human and Arabidopsis
+DNA-binding sequencing experiments</a>.
+<em>Nucleic Acids Res</em>. 2020 Jan 8;48(D1):D180-D188.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31665499" target="_blank">31665499</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7145625/" target="_blank">PMC7145625</a>
+</p>
+<p>
+Griffon A, Barbier Q, Dalino J, van Helden J, Spicuglia S, Ballester B.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/25477382" target="_blank">
+Integrative analysis of public ChIP-seq experiments reveals a complex multi-cell regulatory
+landscape</a>.
+<em>Nucleic Acids Res</em>. 2015 Feb 27;43(4):e27.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25477382" target="_blank">25477382</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4344487/" target="_blank">PMC4344487</a>
+</p>
+<p>
+Hammal F, de Langen P, Bergon A, Lopez F, Ballester B.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/34751401" target="_blank">
+ReMap 2022: a database of Human, Mouse, Drosophila and Arabidopsis regulatory regions from an
+integrative analysis of DNA-binding sequencing experiments</a>.
+<em>Nucleic Acids Res</em>. 2022 Jan 7;50(D1):D316-D325.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34751401" target="_blank">34751401</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8728178/" target="_blank">PMC8728178</a>
+</p>
+

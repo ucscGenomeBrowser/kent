@@ -81,7 +81,7 @@ void sendHogMessage(char *hogHost)
 dasHead(DAS_OK, TRUE);
 printf("Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
-       "Please contact genome@soe.ucsc.edu to ask that your site "
+       "Please contact genome-www@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
        "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
        hogHost);
@@ -122,10 +122,19 @@ dasHelp("UCSC DAS Server.\n"
     "(http://genome.ucsc.edu/FAQ/FAQdownloads#download29).\n\n"
     "Note that DAS is an inefficient protocol which does not support\n"
     "all types of annotation in our database.  We recommend you\n"
-    "access the UCSC database by downloading the tab-separated files in\n"
+    "1) use our API at https://api.genome.ucsc.edu/\n"
+    "2) access the UCSC database by downloading the tab-separated files in\n"
     "the downloads section (http://hgdownload.soe.ucsc.edu/downloads.html)\n"
-    "or by using the Table Browser (http://genome.ucsc.edu/cgi-bin/hgTables)\n"
-    "instead of DAS in most circumstances.");
+    "3) use the Table Browser (http://genome.ucsc.edu/cgi-bin/hgTables)\n"
+    "instead of DAS in most circumstances.\n"
+    "4) alternatively, use our command line tools. They can all load data directly from a URL,\n"
+    "e.g. \n"
+    "  wget https://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa\n"
+    "  chmod a+x twoBitToFa\n"
+    "  twoBitToFa https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/latest/hg38.2bit -bed=test.bed out.fa\n"
+    "See also the 'Data Access' section of any genome browser track with details on how to\n"
+    "access the annotation data using our tools or contact us by email so we can suggest the fastest way forward..\n"
+    );
 exit(0);
 }
 
@@ -316,7 +325,9 @@ char *table, *root;
 boolean isSplit, hasBin;
 char chromField[32], startField[32], endField[32];
 
-sr = sqlGetResult(conn, NOSQLINJ "show tables");
+char query[1024];
+sqlSafef(query, sizeof query, "show tables"); 
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     table = root = row[0];
@@ -981,7 +992,9 @@ printf("<DASEP>\n");
 printf("<ENTRY_POINTS href=\"%s\" version=\"7.00\">\n",
 	currentUrl());
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ci = chromInfoLoad(row);
@@ -1093,10 +1106,6 @@ if (cgiVarExists("verbose"))
     verboseSetLevel(cgiInt("verbose"));
 if (argc == 2)
     path = argv[1];
-/* Temporary measure to shut down abusive clients */
-#if 0
-   blockHog("pix39.systemsbiology.net", "198.107.152.39");
-#endif
 
 int delay = hgBotDelayTimeFrac(0.03);
 if (delay > 2000)

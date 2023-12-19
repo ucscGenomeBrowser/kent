@@ -1,0 +1,32 @@
+track hgUnique
+compositeTrack on
+shortLabel CHM13 unique
+longLabel  CHM13 unique in comparison to GRCh38/hg38 and GRCh37/hg19
+priority 3
+group map
+type bigBed 3
+visibility pack
+html html/hgUnique.html
+
+    track hgUniqueHg38
+    parent hgUnique on
+    shortLabel CHM13 unique for hg38
+    longLabel  CHM13 unique in comparison to GRCh38/hg38
+    priority 1
+    group compGeno
+    type bigBed 3
+    color 100,0,200
+    bigDataUrl /gbdb/hs1/hgUnique/hgUnique.hg38.bb
+
+    track hgUniquehg19
+    parent hgUnique off
+    shortLabel CHM13 unique for hg19
+    longLabel  CHM13 unique in comparison to GRCh37/hg19
+    priority 2
+    group compGeno
+    type bigBed 3
+    color 200,0,100
+    bigDataUrl /gbdb/hs1/hgUnique/hgUnique.hg19.bb
+    
+
+

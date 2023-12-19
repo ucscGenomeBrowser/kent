@@ -43,13 +43,13 @@ void barChartBedSaveToDb(struct sqlConnection *conn, struct barChartBed *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *expScoresArray;
 expScoresArray = sqlFloatArrayToString(el->expScores, el->expCount);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,'%s',%lld,%d)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->name2,  el->expCount,  expScoresArray ,  el->_dataOffset,  el->_dataLen);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&expScoresArray);
 }
 

@@ -187,7 +187,7 @@ struct sage *loadSageData(char *table, struct slName *nmList)
 char *user = cfgOption("db.user");
 char *password = cfgOption("db.password");
 struct sqlConnection *sc = NULL;
-struct dyString *query = newDyString(2048);
+struct dyString *query = dyStringNew(2048);
 struct sage *sgList = NULL, *sg=NULL;
 struct slName *nm =NULL;
 char *db = cgiUsualString("db", "hgFixed");
@@ -216,7 +216,7 @@ while((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 sqlDisconnect(&sc);
 slReverse(&sgList);
-freeDyString(&query);
+dyStringFree(&query);
 return sgList;
 }
 

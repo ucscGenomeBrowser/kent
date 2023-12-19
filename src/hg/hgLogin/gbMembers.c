@@ -61,11 +61,11 @@ void gbMembersSaveToDb(struct sqlConnection *conn, struct gbMembers *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->idx,  el->userName,  el->realName,  el->password,  el->email,  el->lastUse,  el->newPassword,  el->newPasswordExpire,  el->dateActivated,  el->emailToken,  el->emailTokenExpires,  el->passwordChangeRequired,  el->accountActivated);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

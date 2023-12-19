@@ -1,4 +1,4 @@
-/* hgTracks - the /riginal, and still the largest module for the UCSC Human Genome
+/* hgTracks - the original, and still the largest module for the UCSC Human Genome
  * Browser main cgi script.  Currently contains most of the track framework, though
  * there's quite a bit of other framework type code in simpleTracks.c.  The main
  * routine got moved to create a new entry point to the bulk of the code for the
@@ -65,6 +65,7 @@
 #include "extTools.h"
 #include "basicBed.h"
 #include "customFactory.h"
+#include "dupTrack.h"
 #include "genbank.h"
 #include "bigWarn.h"
 #include "wigCommon.h"
@@ -74,6 +75,13 @@
 #include "customComposite.h"
 #include "chromAlias.h"
 #include "jsonWrite.h"
+#include "cds.h"
+#include "cacheTwoBit.h"
+#include "cartJson.h"
+#include "wikiLink.h"
+#include "decorator.h"
+#include "decoratorUi.h"
+#include "mouseOver.h"
 
 //#include "bed3Sources.h"
 
@@ -95,7 +103,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
-            "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",
+            "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",hgsMergeCart,"ctTest",
             NULL };
 
 boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
@@ -136,7 +144,7 @@ char *rulerMenu[] =
     };
 
 char *protDbName;               /* Name of proteome database for this genome. */
-#define MAX_CONTROL_COLUMNS 6
+#define MAX_CONTROL_COLUMNS 8
 #define LOW 1
 #define MEDIUM 2
 #define BRIGHT 3
@@ -252,14 +260,16 @@ else
    return 1;
 }
 
-void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
+void changeTrackVisExclude(struct group *groupList, char *groupTarget, int changeVis, struct hash *excludeHash)
 /* Change track visibilities. If groupTarget is
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should
  * be tvHide, tvDense, etc.
  * If we are going back to default visibility, then reset the track
- * ordering also. */
+ * ordering also. 
+ * If excludeHash is not NULL then don't change the visibility of the group names in that hash.
+ */
 {
 struct group *group;
 if (changeVis == -2)
@@ -267,6 +277,9 @@ if (changeVis == -2)
 for (group = groupList; group != NULL; group = group->next)
     {
     struct trackRef *tr;
+    if (excludeHash && hashLookup(excludeHash, group->name))
+        continue;
+
     if (groupTarget == NULL || sameString(group->name,groupTarget))
         {
         static char pname[512];
@@ -332,7 +345,9 @@ for (group = groupList; group != NULL; group = group->next)
                         cartSetString(cart, parentTdb->track,
                                     changeVis == tvHide ? "hide" : "show");
                     }
-                else // Not super  child
+                // if we're called on the path that has excludeHash set
+                // we also want to set the supertrack children's visbilities
+                if (!tdbIsSuperTrackChild(tdb) || (excludeHash != NULL))
                     {
                     if (changeVis == tdb->visibility)
                         /* remove if setting to default vis */
@@ -349,7 +364,15 @@ for (group = groupList; group != NULL; group = group->next)
                     for (subtrack=track->subtracks;subtrack!=NULL;subtrack=subtrack->next)
                         {
                         if (changeVis == tvHide)               // Since subtrack level vis is an
+                            {
                             cartRemove(cart, subtrack->track); // override, simply remove to hide
+                            if (excludeHash != NULL) // if we're loading an RTS, but probably we should always do this
+                                {
+                                char selName[4096];
+                                safef(selName, sizeof(selName), "%s_sel", subtrack->track);
+                                cartRemove(cart, selName);
+                                }
+                            }
                         else
                             cartSetString(cart, subtrack->track, hStringFromTv(changeVis));
                         subtrack->visibility = changeVis;
@@ -360,6 +383,18 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 slSort(&groupList, gCmpPriority);
+}
+
+void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
+/* Change track visibilities. If groupTarget is
+ * NULL then set visibility for tracks in all groups.  Otherwise,
+ * just set it for the given group.  If vis is -2, then visibility is
+ * unchanged.  If -1 then set visibility to default, otherwise it should
+ * be tvHide, tvDense, etc.
+ * If we are going back to default visibility, then reset the track
+ * ordering also. */
+{
+changeTrackVisExclude(groupList, groupTarget, changeVis, NULL);
 }
 
 int trackOffsetX()
@@ -416,7 +451,7 @@ else
     hPrintf("HREF=\"%s?complement_%s=%d", hgTracksName(), database,
             !cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE));
     hPrintf("&%s\"", ui->string);
-    freeDyString(&ui);
+    dyStringFree(&ui);
     if (message != NULL)
         mapStatusMessage("%s", message);
     hPrintf(">\n");
@@ -432,7 +467,7 @@ char *hgTrackUi = hTrackUiForTrack(mapName);
 if(chromName == NULL)
     safef(buf, sizeof(buf), "%s?%s=%s&db=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), database, encodedMapName);
 else
-    safef(buf, sizeof(buf), "%s?%s=%s&db=%s&c=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), database, chromName, encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&db=%s&c=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), database, cgiEncode(chromName), encodedMapName);
 freeMem(encodedMapName);
 return(cloneString(buf));
 }
@@ -723,16 +758,16 @@ if(doIdeo)
     if (virtMode)
 	{
     	if (!sameString(virtModeShortDescr,""))
-    	    safef(title, sizeof(title), "%s (%s)", chromName, virtModeShortDescr);
+    	    safef(title, sizeof(title), "%s (%s)", displayChromName, virtModeShortDescr);
 	else
-    	    safef(title, sizeof(title), "%s (%s)", chromName, virtModeType);
+    	    safef(title, sizeof(title), "%s (%s)", displayChromName, virtModeType);
 	}
     else if (isEmpty(startBand))
-        safef(title, sizeof(title), "%s", chromName);
+        safef(title, sizeof(title), "%s", displayChromName);
     else if (sameString(startBand, endBand))
-        safef(title, sizeof(title), "%s (%s)", chromName, startBand);
+        safef(title, sizeof(title), "%s (%s)", displayChromName, startBand);
     else
-        safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
+        safef(title, sizeof(title), "%s (%s-%s)", displayChromName, startBand, endBand);
     textWidth = mgFontStringWidth(font, title);
     hvGfxTextCentered(hvg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, title);
     // cytoBandDrawAt() clips x based on insideX+insideWidth,
@@ -796,7 +831,7 @@ char *pcrResultMapItemName(struct track *tg, void *item)
 /* Stitch accession and display name back together (if necessary). */
 {
 struct linkedFeatures *lf = item;
-return pcrResultItemAccName(lf->name, lf->extra);
+return pcrResultItemAccName(lf->name, lf->extra, (struct psl *)lf->original);
 }
 
 void pcrResultLoad(struct track *tg)
@@ -810,62 +845,70 @@ if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target)
 /* Don't free psl -- used in drawing phase by baseColor code. */
 struct psl *pslList = pslLoadAll(pslFileName), *psl;
 struct linkedFeatures *itemList = NULL;
-if (target != NULL)
+struct sqlConnection *conn = NULL;
+struct sqlResult *sr;
+for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    int rowOffset = hOffsetPastBin(database, chromName, target->pslTable);
-    struct sqlConnection *conn = hAllocConn(database);
-    struct sqlResult *sr;
-    char **row;
-    char query[2048];
-    struct psl *tpsl;
-    for (tpsl = pslList;  tpsl != NULL;  tpsl = tpsl->next)
-	{
-	char *itemAcc = pcrResultItemAccession(tpsl->tName);
-	char *itemName = pcrResultItemName(tpsl->tName);
-	/* Query target->pslTable to get target-to-genomic mapping: */
-	sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'",
-	      target->pslTable, itemAcc);
-	sr = sqlGetResult(conn, query);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    struct psl *gpsl = pslLoad(row+rowOffset);
-	    if (sameString(gpsl->tName, chromName) && gpsl->tStart < winEnd && gpsl->tEnd > winStart)
-		{
-		struct psl *trimmed = pslTrimToQueryRange(gpsl, tpsl->tStart,
-				      tpsl->tEnd);
-		struct linkedFeatures *lf;
-		char *targetStyle = cartUsualString(cart,
-		     PCR_RESULT_TARGET_STYLE, PCR_RESULT_TARGET_STYLE_DEFAULT);
-		if (sameString(targetStyle, PCR_RESULT_TARGET_STYLE_TALL))
-		    {
-		    lf = lfFromPslx(gpsl, 1, FALSE, FALSE, tg);
-		    lf->tallStart = trimmed->tStart;
-		    lf->tallEnd = trimmed->tEnd;
-		    }
-		else
-		    {
-		    lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
-		    }
-		lf->name = cloneString(itemAcc);
-		char extraInfo[512];
-		safef(extraInfo, sizeof(extraInfo), "%s|%d|%d",
-		      (itemName ? itemName : ""), tpsl->tStart, tpsl->tEnd);
-		lf->extra = cloneString(extraInfo);
-		slAddHead(&itemList, lf);
-		}
-	    }
-	}
-    hFreeConn(&conn);
-    }
-else
-    for (psl = pslList;  psl != NULL;  psl = psl->next)
-    if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
+    // pcr result matches to a targetDb are of the format transcript__gene
+    if (stringIn("__", psl->tName))
+        {
+        if (conn == NULL)
+            conn = hAllocConn(database);
+        int rowOffset = hOffsetPastBin(database, chromName, target->pslTable);
+        char **row;
+        char query[2048];
+        char *itemAcc = pcrResultItemAccession(psl->tName);
+        char *itemName = pcrResultItemName(psl->tName);
+        /* Query target->pslTable to get target-to-genomic mapping: */
+        sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'",
+              target->pslTable, itemAcc);
+        sr = sqlGetResult(conn, query);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            struct psl *gpsl = pslLoad(row+rowOffset);
+            if (sameString(gpsl->tName, chromName) && gpsl->tStart < winEnd && gpsl->tEnd > winStart)
+                {
+                struct psl *trimmed = pslTrimToQueryRange(gpsl, psl->tStart,
+                              psl->tEnd);
+                struct linkedFeatures *lf;
+                char *targetStyle = cartUsualString(cart,
+                     PCR_RESULT_TARGET_STYLE, PCR_RESULT_TARGET_STYLE_DEFAULT);
+                if (sameString(targetStyle, PCR_RESULT_TARGET_STYLE_TALL))
+                    {
+                    lf = lfFromPslx(gpsl, 1, FALSE, FALSE, tg);
+                    lf->tallStart = trimmed->tStart;
+                    lf->tallEnd = trimmed->tEnd;
+                    }
+                else
+                    {
+                    lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
+                    }
+                lf->name = cloneString(itemAcc);
+                char extraInfo[512];
+                safef(extraInfo, sizeof(extraInfo), "%s|%d|%d",
+                      (itemName ? itemName : ""), psl->tStart, psl->tEnd);
+                lf->extra = cloneString(extraInfo);
+                        // now that there may be more than one primer pair result
+                        // in the pcrResults list, we need make sure we are using the
+                        // right primer pair later
+                        ((struct psl *)(lf->original))->qName = cloneString(psl->qName);
+                slAddHead(&itemList, lf);
+                }
+            }
+        }
+    else
+        {
+        if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
             {
             struct linkedFeatures *lf = lfFromPslx(psl, 1, FALSE, FALSE, tg);
             lf->name = cloneString("");
             lf->extra = cloneString("");
+            lf->original = psl;
             slAddHead(&itemList, lf);
             }
+        }
+    }
+hFreeConn(&conn);
 slSort(&itemList, linkedFeaturesCmp);
 tg->items = itemList;
 }
@@ -919,9 +962,11 @@ tg->colorShades = NULL;
 tg->color.r = r;
 tg->color.g = g;
 tg->color.b = b;
+tg->color.a = 255;
 tg->altColor.r = (r+255)/2;
 tg->altColor.g = (g+255)/2;
 tg->altColor.b = (b+255)/2;
+tg->altColor.a = 255;
 }
 
 void parseSs(char *ss, char **retPsl, char **retFa)
@@ -975,6 +1020,16 @@ while ((psl = pslNext(f)) != NULL)
 	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE, tg);
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
+
+        // set mouse over and color to indicate query position and strand
+        char over[256];
+        safef(over, sizeof over, "%d-%d of %d bp, strand %c", psl->qStart, psl->qEnd, psl->qSize, psl->strand[0]);
+        lf->mouseOver = cloneString(over);
+        if (sameString(psl->strand, "+"))
+            lf->filterColor = MAKECOLOR_32(0,0,0);
+        else
+            lf->filterColor = MAKECOLOR_32(0,0,150);
+
 	slAddHead(&lfList, lf);
 	/* Don't free psl -- used in drawing phase by baseColor code. */
 	}
@@ -1630,7 +1685,7 @@ track->drawItems(track, winStart, winEnd, hvg, insideX, y, insideWidth,
 if (measureTiming && lastTime)
     {
     long thisTime = clock1000();
-    track->drawTime = thisTime - *lastTime;
+    track->drawTime += thisTime - *lastTime;
     *lastTime = thisTime;
     }
 hvGfxUnclip(hvg);
@@ -2110,7 +2165,7 @@ for (track = trackList; track != NULL; track = track->next)
 static void logTrackVisibilities (char *hgsid, struct track *trackList, char *position)
 /* log visibile tracks and hgsid */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 // build up dyString
 logTrackList(dy, trackList);
@@ -2130,7 +2185,7 @@ for(ptr=begin; ((ptr = strchr(ptr, ',')) != NULL); ptr++)
 	}
     }
 fprintf(stderr, "trackLog %d %s %s %s\n", count++, database, hgsid, begin);
-fprintf(stderr, "trackLog position %s %s %s\n",  database, hgsid, position);
+fprintf(stderr, "trackLog position %s %s %s %s\n",  database, hgsid, position, CGI_VERSION);
 
 dyStringFree(&dy);
 }
@@ -2170,7 +2225,7 @@ struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
 if(highlightDef)
     {
-    char *hlArr[256];
+    char *hlArr[4096];
     int hlCount = chopByChar(cloneString(highlightDef), '|', hlArr, ArraySize(hlArr));
     int i;
     for (i=0; i<hlCount; i++)
@@ -2247,8 +2302,8 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                 char position[1024];
                 safef(position, sizeof position, "%s:%ld-%ld", h->chrom, h->chromStart, h->chromEnd);
                 char *newPosition = undisguisePosition(position); // UN-DISGUISE VMODE
-                if (startsWith(MULTI_REGION_CHROM, newPosition))
-                   newPosition = replaceChars(position, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
+                if (startsWith(OLD_MULTI_REGION_CHROM, newPosition))
+                   newPosition = replaceChars(newPosition, OLD_MULTI_REGION_CHROM, MULTI_REGION_CHROM);
                 if (startsWith(MULTI_REGION_CHROM, newPosition))
                     {
                     parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
@@ -2261,7 +2316,6 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
         &&  (h->chromEnd != 0)
         &&  (h->chromStart <= virtWinEnd && h->chromEnd >= virtWinStart))
             {
-
             h->chromStart = max(h->chromStart, virtWinStart);
             h->chromEnd = min(h->chromEnd, virtWinEnd);
             double pixelsPerBase = (double)fullInsideWidth/(virtWinEnd - virtWinStart);
@@ -2273,13 +2327,13 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                 width = 2;
 
             // Default color to light blue, but if setting has color, use it.
-            unsigned int hexColor = MAKECOLOR_32(170, 255, 255);
+            // 179 for alpha because javascript uses 0.7 opacity, *255 ~= 179
+            unsigned int hexColor = MAKECOLOR_32_A(170, 255, 255,179);
             if (h->hexColor)
                 {
                 long rgb = strtol(h->hexColor,NULL,16); // Big and little Endians
-                hexColor = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+                hexColor = MAKECOLOR_32_A( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff), 179 );
                 }
-
             hvGfxBox(hvg, fullInsideX + startPixels, 0, width, imagePixelHeight, hexColor);
             }
         }
@@ -3632,7 +3686,7 @@ virtRegionList = NULL;
 struct sqlResult *sr;
 char **row;
 int rowOffset = 0;
-char query[256];
+struct dyString *query = NULL;
 int padding = emPadding;
 if (sameString(virtModeType, "geneMostly"))
     padding = gmPadding;
@@ -3641,46 +3695,49 @@ struct hash *kcHash = NULL;
 if (knownCanonical) // filter out alt splicing variants
     {
     // load up hash of canonical transcriptIds
-    sqlSafef(query, sizeof(query), "select transcript from %s"
+    query = sqlDyStringCreate("select transcript from %s"
 	//" where chrom not like '%%_hap_%%' and chrom not like '%%_random'"
 	, knownCanonical);
     if (virtualSingleChrom())
-	sqlSafefAppend(query, sizeof(query), " where chrom='%s'", chromName);
+	sqlDyStringPrintf(query, " where chrom='%s'", chromName);
     kcHash = newHash(10);
-    sr = sqlGetResult(conn, query);
+    sr = sqlGetResult(conn, dyStringContents(query));
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	hashAdd(kcHash, row[0], NULL);
 	}
     sqlFreeResult(&sr);
+    dyStringFree(&query);
     }
 // knownToTag basic hash
 struct hash *ktHash = NULL;
 if (knownToTag) // filter out all but Basic
     {
     // load up hash of canonical transcriptIds
-    sqlSafef(query, sizeof(query), "select name from %s where value='basic'", knownToTag);
+    query = sqlDyStringCreate("select name from %s where value='basic'", knownToTag);
     ktHash = newHash(10);
-    sr = sqlGetResult(conn, query);
+    sr = sqlGetResult(conn, dyStringContents(query));
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	hashAdd(ktHash, row[0], NULL);
 	}
     sqlFreeResult(&sr);
+    dyStringFree(&query);
     }
 setEMGeneTrack();
 if (!emGeneTable)
     errAbort("Unexpected error, emGeneTable=NULL in initVirtRegionsFromEMGeneTableExons");
 if (hIsBinned(database, emGeneTable)) // skip first bin column if any
     ++rowOffset;
-sqlSafef(query, sizeof(query), "select * from %s", emGeneTable);
+query = sqlDyStringCreate("select * from %s", emGeneTable);
 if (virtualSingleChrom())
-    sqlSafefAppend(query, sizeof(query), " where chrom='%s'", chromName);
+    sqlDyStringPrintf(query, " where chrom='%s'", chromName);
 // TODO GALT may have to change this to in-memory sorting?
 // refGene is out of order because of genbank continuous loading
 // also, using where chrom= causes it to use indexes which disturb order returned.
-sqlSafefAppend(query, sizeof(query), " order by chrom, txStart");
-sr = sqlGetResult(conn, query);
+sqlDyStringPrintf(query, " order by chrom, txStart");
+sr = sqlGetResult(conn, dyStringContents(query));
+dyStringFree(&query);
 
 char chrom[256] = "";
 int start = -1;
@@ -3899,6 +3956,7 @@ currentWindow = window;
 organism  = window->organism;
 database  = window->database;
 chromName = window->chromName;
+displayChromName = chromAliasGetDisplayChrom(database, cart, window->chromName);
 winStart  = window->winStart;
 winEnd    = window->winEnd;
 insideX   = window->insideX;
@@ -3937,11 +3995,13 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int winCount = 0;
-char *query =
-NOSQLINJ "select chrom, size from chromInfo"
-" where chrom     like 'chr%'"
-" and   chrom not like '%_random'"
-" and   chrom not like 'chrUn%'";
+char query[1024];
+sqlSafef(query, sizeof query,
+"select chrom, size from chromInfo"
+" where chrom     like 'chr%%'"
+" and   chrom not like '%%_random'"
+" and   chrom not like 'chrUn%%'"
+);
 // allow alternate haplotypes for now
 //" and   chrom not like '%_hap%'"
 //" and   chrom not like '%_alt'"
@@ -4670,7 +4730,7 @@ if (!multiBedFile)
 // TODO: filters here ?
 // TODO:  protect against temporary network error ? */
 struct lm *lm = lmInit(0);
-struct bbiFile *bbi = bigBedFileOpen(multiBedFile);
+struct bbiFile *bbi =  bigBedFileOpenAlias(multiBedFile, chromAliasFindAliases);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *row[bbi->fieldCount];
 char startBuf[16], endBuf[16];
@@ -4705,6 +4765,74 @@ while ((ct = lineFileChopNext(lf, words, sizeof words)) != 0)
     }
 lineFileClose(&lf);
 return nonEmptySubtracksHash;
+}
+
+static void expandSquishyPackTracks(struct track *trackList)
+/* Step through track list and duplicated tracks with squishyPackPoint defined */
+{
+if (windows->next)   // don't go into squishyPack mode if in multi-exon mode.
+    return;
+struct track *nextTrack = NULL, *track;
+for (track = trackList; track != NULL; track = nextTrack)
+    {
+    nextTrack = track->next;
+
+    if ((track->visibility != tvPack) || checkIfWiggling(cart, track))
+        continue;
+
+    char *string = cartOrTdbString(cart, track->tdb,  "squishyPackPoint", NULL);
+    if (string != NULL)
+        {
+        double squishyPackPoint = atof(string);
+
+        /* clone the track */
+        char buffer[strlen(track->track) + strlen("Squinked") + 1];
+        safef(buffer, sizeof buffer, "%sSquinked", track->track);
+
+        struct track *squishTrack = CloneVar(track);
+        squishTrack->tdb = CloneVar(track->tdb);
+        squishTrack->tdb->originalTrack = squishTrack->tdb->track;
+        squishTrack->tdb->track = cloneString(buffer);
+        squishTrack->tdb->next = NULL;
+        squishTrack->visibility = tvSquish;
+        squishTrack->limitedVis = tvSquish;
+        hashAdd(trackHash, squishTrack->tdb->track, squishTrack);
+        struct linkedFeatures *lf = track->items;
+
+        /* distribute the items based on squishyPackPoint */
+        track->items = NULL;
+        squishTrack->items = NULL;
+        struct linkedFeatures *nextLf;
+        for(; lf; lf = nextLf)
+            {
+            nextLf = lf->next;
+
+            // if this is a hgFind match, it always is in pack, not squish
+            if ((hgFindMatches != NULL) && hashLookup(hgFindMatches, lf->name))
+                slAddHead(&track->items, lf);
+            else if (lf->squishyPackVal > squishyPackPoint)
+                slAddHead(&squishTrack->items, lf);
+            else
+                slAddHead(&track->items, lf);
+            }
+
+        // if the squish track has no items, don't bother including it
+        if (slCount(squishTrack->items) == 0)
+            continue;
+
+        slReverse(&track->items);
+        slReverse(&squishTrack->items);
+        
+        squishTrack->track = cloneString(buffer);
+        squishTrack->originalTrack = cloneString(track->track);
+        squishTrack->shortLabel = cloneString(track->shortLabel);
+        squishTrack->longLabel = cloneString(track->longLabel);
+
+        /* insert the squished track */
+        track->next = squishTrack;
+        squishTrack->next = nextTrack;
+        }
+    }
 }
 
 void makeActiveImage(struct track *trackList, char *psOutput)
@@ -4838,6 +4966,7 @@ if (rulerMode != tvHide)
         }
     }
 
+expandSquishyPackTracks(trackList);
 
 /* Hash tracks/subtracks, limit visibility and calculate total image height: */
 
@@ -5099,9 +5228,6 @@ initColors(hvg);
 /* Start up client side map. */
 hPrintf("<MAP id='map' Name=%s>\n", mapName);
 
-if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
-    drawHighlights(cart, hvg, imagePixelHeight);
-
 for (window=windows; window; window=window->next)
     {
     /* Find colors to draw in. */
@@ -5134,6 +5260,8 @@ if (theImgBox)
             int order = flatTrack->order;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,
                                                isCenterLabelIncluded(track),order);
+            if (flatTrack->track->originalTrack != NULL)
+                curImgTrack->linked = TRUE;
             }
         }
     }
@@ -5207,6 +5335,9 @@ if (withLeftLabels && psOutput == NULL)
 
             if (track->hasUi)
                 {
+                char *title = track->track;
+                if (track->originalTrack != NULL)
+                    title = track->originalTrack;
                 if (tdbIsCompositeChild(track->tdb))
                     {
                     struct trackDb *parent = tdbGetComposite(track->tdb);
@@ -5214,8 +5345,8 @@ if (withLeftLabels && psOutput == NULL)
                                   parent->track, parent->shortLabel, track->track);
                     }
                 else
-                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track,
-                                  track->shortLabel, track->track);
+                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, title,
+                                  track->shortLabel, title);
                 }
             }
         }
@@ -5272,7 +5403,7 @@ if (withLeftLabels)
         if (baseShowRuler)
             {
             char rulerLabel[SMALLBUF];
-            char *shortChromName = cloneString(chromName);
+            char *shortChromName = cloneString(displayChromName );
             safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
             int labelWidth = mgFontStringWidth(font,rulerLabel);
             while ((labelWidth > 0) && (labelWidth > leftLabelWidth))
@@ -5430,6 +5561,8 @@ if (withGuidelines)
         }
     }
 
+if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
+    drawHighlights(cart, hvg, imagePixelHeight);
 
 /* Draw ruler */
 
@@ -5730,6 +5863,8 @@ if(sameString(type, "jsonp"))
 else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "eps"))
     {
     // following code bypasses html and return png's directly - see redmine 4888
+    // NB: Pretty sure the pdf and eps options here are never invoked.  I don't see any
+    // calls that would activate eps output, and pdf is locked behind an unused ifdef
     char *file;
     if(sameString(type, "pdf"))
         {
@@ -6587,6 +6722,93 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
+static void rHashList(struct hash *hash, struct track *list)
+/* Add list of tracks to hash including subtracks */
+{
+struct track *track;
+for (track = list; track != NULL; track = track->next)
+    {
+    hashAdd(hash, track->track, track);
+    if (track->subtracks != NULL)
+       rHashList(hash, track->subtracks);
+    }
+}
+
+static struct hash *hashTracksAndSubtracksFromList(struct track *list)
+/* Make a hash and put all of tracks and subtracks on it. */
+{
+struct hash *hash = hashNew(12);
+rHashList(hash, list);
+return hash;
+}
+
+void makeDupeTracks(struct track **pTrackList)
+/* Make up dupe tracks and append to list. Have to also crawl
+ * through list to add subtracks */
+{
+if (!dupTrackEnabled())
+    return;
+
+struct dupTrack *dupList = dupTrackListFromCart(cart);
+if (dupList == NULL)
+    return;
+
+/* Make up hash of tracks for quick finding of sources */
+struct hash *trackHash = hashTracksAndSubtracksFromList(*pTrackList);
+
+struct dupTrack *dup;
+for (dup = dupList; dup != NULL; dup = dup->next)
+    {
+    struct track *source = hashFindVal(trackHash, dup->source);
+    if (source != NULL)
+        {
+	struct track *track = CloneVar(source);
+	struct trackDb *tdb = track->tdb = dupTdbFrom(source->tdb, dup);
+	track->track = dup->name;
+	track->shortLabel = tdb->shortLabel;
+	track->longLabel = tdb->longLabel;
+	struct trackDb *parentTdb = tdb->parent;
+	if (parentTdb == NULL)
+	    slAddHead(pTrackList, track);
+	else
+	    {
+	    if (tdbIsFolder(parentTdb))
+	        {
+		refAdd(&parentTdb->children, tdb);
+		slAddHead(pTrackList, track);
+		}
+	    else
+	        {
+		/* Add to parent Tdb */
+		slAddHead(&parentTdb->subtracks, tdb);
+
+		/* The parentTrack may correspond to the parent or grandParent tdb, look both places */
+		struct track *parentTrack = hashFindVal(trackHash, parentTdb->track);
+		if (parentTrack == NULL && parentTdb->parent != NULL)
+		    parentTrack = hashFindVal(trackHash, parentTdb->parent->track);
+
+		if (parentTrack != NULL)
+		    slAddHead(&parentTrack->subtracks, track);
+		else
+		    warn("can't find parentTdb %s in makeDupeTracks", parentTdb->track);
+		}
+	    }
+
+        if (track->wigCartData)
+            {
+            char *typeLine = tdb->type, *words[8];
+            int wordCount = 0;
+            words[0] = NULL;
+            if (typeLine != NULL)
+                wordCount = chopLine(cloneString(typeLine), words);
+            track->wigCartData = wigCartOptionsNew(cart, track->tdb, wordCount, words);
+            }
+	}
+    }
+hashFree(&trackHash);
+}
+
+
 void loadTrackHubs(struct track **pTrackList, struct grp **pGrpList)
 /* Load up stuff from data hubs and append to lists. */
 {
@@ -6679,6 +6901,7 @@ for (grp = grps; grp != NULL; grp = grp->next)
     group->defaultPriority = grp->priority;
     group->priority = priority;
     group->defaultIsClosed = grp->defaultIsClosed;
+    group->errMessage = grp->errMessage;
     slAddHead(&list, group);
     hashAdd(hash, grp->name, group);
     }
@@ -6703,6 +6926,7 @@ for(; grpList; grpList = grpList->next)
     group->name = cloneString(grpList->name);
     group->label = cloneString(grpList->label);
     group->defaultPriority = group->priority = priority;
+    group->errMessage = grpList->errMessage;
     priority += priorityInc;
     slAddHead(&list, group);
     hashAdd(hash, group->name, group);
@@ -6817,7 +7041,7 @@ hashFree(&hash);
 *pGroupList = list;
 }
 
-void groupTrackListAddSuper(struct cart *cart, struct group *group)
+void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash)
 /* Construct a new track list that includes supertracks, sort by priority,
  * and determine if supertracks have visible members.
  * Replace the group track list with this new list.
@@ -6826,7 +7050,6 @@ void groupTrackListAddSuper(struct cart *cart, struct group *group)
  * supertracks) are invoked. */
 {
 struct trackRef *newList = NULL, *tr, *ref;
-struct hash *superHash = hashNew(8);
 
 if (!group || !group->trackList)
     return;
@@ -6873,7 +7096,6 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         }
     }
 slSort(&newList, trackRefCmpPriority);
-hashFree(&superHash);
 /* we could free the old track list here, but it's a trivial amount of mem */
 group->trackList = newList;
 }
@@ -6986,8 +7208,45 @@ if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
     loadTrackHubs(&trackList, &grpList);
     }
 loadCustomTracks(&trackList);
+makeDupeTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
+char *rtsLoad = cgiOptionalString( "rtsLoad");
+if (rtsLoad)  // load a recommended track set using the merge method
+    {
+    // store session name and user
+    char *otherUserName = cartOptionalString(cart, hgsOtherUserName);
+    char *otherUserSessionName = rtsLoad;
+
+    // Hide all tracks except custom tracks
+    struct hash *excludeHash = newHash(2);
+    hashStore(excludeHash, "user");
+    changeTrackVisExclude(groupList, NULL, tvHide, excludeHash);
+
+    // delete any ordering we have
+    char wildCard[32];
+    safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
+    cartRemoveLike(cart, wildCard);
+
+    // now we have to restart to load the session since that happens at cart initialization
+    
+    char newUrl[4096];
+    safef(newUrl, sizeof newUrl,
+        "./hgTracks?"
+        hgsOtherUserSessionName "=%s"
+        "&" hgsOtherUserName "=%s"
+        "&" hgsMergeCart "=on"
+        "&" hgsDoOtherUser "=submit"
+	"&hgsid=%s"
+        , otherUserSessionName, otherUserName,cartSessionId(cart));
+
+    cartCheckout(&cart);   // make sure cart records all our changes above
+
+    // output the redirect and exit
+    printf("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">", newUrl);
+    exit(0);
+    }
+
 boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
 if (hideTracks)
     changeTrackVis(groupList, NULL, tvHide);    // set all top-level tracks to hide
@@ -7193,22 +7452,14 @@ if (cg->columnIx == cg->columns)
     controlGridEndRow(cg);
 if (!cg->rowOpen)
     {
-#if 0
-    /* This is unnecessary, b/c we can just use a blank display attribute to show the element rather
-       than figuring out what the browser specific string is to turn on display of the tr;
-       however, we may want to put in browser specific strings in the future, so I'm leaving this
-       code in as a reference. */
-    char *ua = getenv("HTTP_USER_AGENT");
-    char *display = ua && stringIn("MSIE", ua) ? "block" : "table-row";
-#endif
     // use counter to ensure unique tr id's (prefix is used to find tr's in javascript).
     printf("<tr %sid='%s-%d'>", isOpen ? "" : "style='display: none' ", id, counter++);
     cg->rowOpen = TRUE;
     }
 if (cg->align)
-    printf("<td align=%s>", cg->align);
+    printf("<td class='trackLabelTd' align=%s>", cg->align);
 else
-    printf("<td>");
+    printf("<td class='trackLabelTd'>");
 }
 
 static void pruneRedundantCartVis(struct track *trackList)
@@ -7374,17 +7625,8 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
-return (startsWith("big", track->tdb->type)
-     || startsWithWord("mathWig"  , track->tdb->type)
-     || startsWithWord("bam"     , track->tdb->type)
-     || startsWithWord("halSnake", track->tdb->type)
-     || startsWithWord("bigRmsk", track->tdb->type)
-     || startsWithWord("bigLolly", track->tdb->type)
-     || startsWithWord("vcfTabix", track->tdb->type))
-     // XX code-review: shouldn't we error abort if the URL is not valid?
-     && (bdu && isValidBigDataUrl(bdu, FALSE))
-     && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
-     && (track->subtracks == NULL);
+
+return customFactoryParallelLoad(bdu, track->tdb->type) && (track->subtracks == NULL);
 }
 
 static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList)
@@ -7450,6 +7692,81 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     }
 }
 
+
+int tdbHasDecorators(struct track *track)
+{
+struct slName *decoratorSettings = trackDbSettingsWildMatch(track->tdb, "decorator.*");
+if (decoratorSettings)
+    {
+    slNameFreeList(&decoratorSettings);
+    return 1;
+    }
+return 0;
+}
+
+
+void loadDecorators(struct track *track)
+/* Load decorations from a source (file) and put them in a decorator, then add that
+ * decorator to the list of the track's decorators.  Within the new decorator, each
+ * of the decorations should have been entered into a hash table that is indexed by the
+ * name of the linked feature.  That way when we're drawing the linked feature, we'll
+ * be able to quickly locate the associated decorations.
+ *
+ * Note that this will need amendment when multiple decoration sources are possible.
+ */
+{
+char *decoratorUrl = trackDbSetting(track->tdb, "decorator.default.bigDataUrl");
+if (!decoratorUrl)
+    {
+    errAbort ("Decorator tags are present in track %s, but no decorator file specified (decorator.default.bigDataUrl is missing)",
+            track->track);
+    return;
+    }
+
+struct bbiFile *bbi = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (isValidBigDataUrl(decoratorUrl,TRUE))
+        bbi = bigBedFileOpenAlias(decoratorUrl, chromAliasFindAliases);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    errAbort ("Network error while attempting to retrieve decorations from %s (track %s) - %s",
+            decoratorUrl, track->track, dyStringContents(errCatch->message));
+    return;
+    }
+errCatchFree(&errCatch);
+
+struct asObject *decoratorFileAsObj = asParseText(bigBedAutoSqlText(bbi));
+if (!asColumnNamesMatchFirstN(decoratorFileAsObj, decorationAsObj(), DECORATION_NUM_COLS))
+    {
+    errAbort ("Decoration file associated with track %s (%s) does not match the expected format - see decoration.as",
+            track->track, decoratorUrl);
+    return;
+    }
+
+struct trackDb *decoratorTdb = getTdbForDecorator(track->tdb);
+struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, decoratorTdb);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *result = bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+
+struct mouseOverScheme *mouseScheme = mouseOverSetupForBbi(decoratorTdb, bbi);
+
+// insert resulting entries into track->decorators, leaving room for having multiple sources applied
+// to the same track in the future.
+if (track->decoratorGroup == NULL)
+    track->decoratorGroup = newDecoratorGroup();
+
+struct decorator* newDecorators = decoratorListFromBbi(decoratorTdb, chromName, result, filters, bbi, mouseScheme);
+track->decoratorGroup->decorators = slCat(track->decoratorGroup->decorators, newDecorators);
+for (struct decorator *d = track->decoratorGroup->decorators; d != NULL; d = d->next)
+    d->group = track->decoratorGroup;
+lmCleanup(&lm);
+bigBedFileClose(&bbi);
+}
+
 static void *remoteParallelLoad(void *threadParam)
 /* Each thread loads tracks in parallel until all work is done. */
 {
@@ -7488,9 +7805,19 @@ while(1)
 	checkMaxWindowToDraw(pfd->track);
 	checkHideEmptySubtracks(pfd->track);
 	pfd->track->loadItems(pfd->track);
+        if (tdbHasDecorators(pfd->track))
+            {
+            loadDecorators(pfd->track);
+            decoratorMethods(pfd->track);
+            }
 	pfd->done = TRUE;
 	}
     errCatchEnd(errCatch);
+    if (errCatch->gotWarning)
+        {
+        // do something intelligent to permit reporting of warnings
+        // Can't pass it to warn yet - the fancy warnhandlers aren't ready
+        }
     if (errCatch->gotError)
 	{
 	pfd->track->networkErrMsg = cloneString(errCatch->message->string);
@@ -7994,7 +8321,7 @@ cgiDecodeFull(cartString, curSessCart, MAX_SESSION_LEN);
 char *curSessVisTracks = cgiTrackVisString(curSessCart);
 
 // get track-related vars from current cart
-struct dyString *dsCgiVars = newDyString(0);
+struct dyString *dsCgiVars = dyStringNew(0);
 cartEncodeState(cart, dsCgiVars);
 outDefaultTracks(cart, dsCgiVars);
 char *this = dyStringCannibalize(&dsCgiVars);
@@ -8025,9 +8352,20 @@ hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf
             "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
+static void printTrackDelIcon(struct track *track)
+/* little track icon after track name. Github uses SVG elements for all icons, apparently that is faster */
+/* we probably should have a library with all the icons, at least for the <svg> part */
+{
+    hPrintf("<div title='Delete this custom track' data-track='%s' class='trackDeleteIcon'><svg xmlns='http://www.w3.org/2000/svg' height='0.8em' viewBox='0 0 448 512'><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z'/></svg></div>", track->track);
+
+}
+
 static void printTrackLink(struct track *track)
 /* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
 {
+if (sameOk(track->groupName, "user"))
+    printTrackDelIcon(track);
+
 if (track->hasUi)
     {
     char *url = trackUrl(track->track, chromName);
@@ -8046,19 +8384,22 @@ if (track->hasUi)
     // Print icons before the title when any are defined
     hPrintIcons(track->tdb);
 
-    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, dyStringCannibalize(&dsMouseOver));
+    hPrintf("<A class='trackLink' HREF=\"%s\" data-group='%s' data-track='%s' title=\"%s\">", url, track->groupName, track->track, dyStringCannibalize(&dsMouseOver));
 
     freeMem(url);
     freeMem(longLabel);
     }
 
-hPrintf("%s", track->shortLabel);
+char *encodedShortLabel = htmlEncode(track->shortLabel);
+hPrintf("%s", encodedShortLabel);
+freeMem(encodedShortLabel);
 if (track->hasUi)
     hPrintf("</A>");
+
 hPrintf("<BR>");
 }
 
-void printSearchHelpLink()
+static void printSearchHelpLink()
 /* print the little search help link next to the go button */
 {
 char *url = cfgOptionDefault("searchHelpUrl","../goldenPath/help/query.html");
@@ -8068,6 +8409,71 @@ if (!url || isEmpty(url))
 
 printf("<div id='searchHelp'><a target=_blank title='Documentation on what you can enter into the Genome Browser search box' href='%s'>%s</a></div>", url, label);
 }
+
+static void printPatchNote()
+{
+    if (endsWith(chromName, "_fix") || endsWith(chromName, "_alt") || endsWith(chromName, "_hap"))
+        {
+        puts("<span id='patchNote'><svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z'/></svg>");
+        puts("<a href='https://genome.ucsc.edu/FAQ/FAQreleases.html#patches' target=_blank>");
+        //puts("<svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm169.8-90.7c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z'/></svg>");
+        puts("Patch sequence</a></span>");
+        }
+}
+
+static void printDatabaseInfoHtml(char* database) 
+/* print database-specific piece of HTML defined in hg.conf, works also with Genark hubs */
+{
+char *cfgPrefix = database;
+if (trackHubDatabase(cfgPrefix))
+    // hub IDs look like hub_1234_GCA_1232.2, so skip the hub_1234 part
+    cfgPrefix = hubConnectSkipHubPrefix(cfgPrefix);
+char *cfgName = catTwoStrings(cfgPrefix,"_html");
+char *html = cfgOption(cfgName);
+if (html)
+    puts(html);
+}
+
+void printShortcutButtons(struct cart *cart, bool hasCustomTracks, bool revCmplDisp, bool multiRegionButtonTop)
+/* Display bottom control panel. */
+{
+if (isSearchTracksSupported(database,cart))
+    {
+    cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
+    }
+
+
+hPrintf("&nbsp;");
+hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");
+
+hPrintf(" ");
+hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
+        hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
+        hasCustomTracks ? "Manage your custom tracks - keyboard shortcut: c, then t" : "Add your own custom tracks - keyboard shortcut: c, then t");
+jsOnEventById("click", "ct_add", "document.customTrackForm.submit(); return false;");
+
+hPrintf(" ");
+hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection - keyboard shortcut: c, then f");
+hPrintf(" ");
+
+if (!multiRegionButtonTop)
+    {
+    printMultiRegionButton();
+    hPrintf(" ");
+    }
+hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
+                       revCmplDisp ? "Show forward strand at this location - keyboard shortcut: r, then v"
+                                   : "Show reverse strand at this location - keyboard shortcut: r, then v",
+                       NULL, revCmplDisp);
+hPrintf(" ");
+
+hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
+
+// put the track download interface behind hg.conf control
+if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
+    jsInline("var showDownloadButton = true;\n");
+}
+
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
@@ -8082,7 +8488,7 @@ boolean hideTracks = cgiOptionalString( "hideTracks") != NULL;
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
-boolean multiRegionButtonTop = cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, FALSE);
+boolean multiRegionButtonTop = cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP, TRUE);
 long thisTime = 0, lastTime = 0;
 
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);
@@ -8187,7 +8593,7 @@ for (track = trackList; track != NULL; track = track->next)
 
 if (cartUsualBoolean(cart, "dumpTracks", FALSE))
     {
-    struct dyString *dy = newDyString(1024);
+    struct dyString *dy = dyStringNew(1024);
     logTrackList(dy, trackList);
 
     printf("Content-type: text/html\n\n");
@@ -8353,6 +8759,11 @@ for (window=windows; window; window=window->next)
 		if (!loadHack)
 		    {
 		    track->loadItems(track);
+                    if (tdbHasDecorators(track))
+                        {
+                        loadDecorators(track);
+                        decoratorMethods(track);
+                        }
 		    }
 		else
 		    {
@@ -8391,7 +8802,6 @@ for (window=windows; window; window=window->next)
 	if (measureTiming)
 	    measureTime("Waiting for parallel (%d threads for %d tracks) remote data fetch", ptMax, pfdListCount);
 	}
-
     }
 trackLoadingInProgress = FALSE;
 
@@ -8434,8 +8844,8 @@ printTrackInitJavascript(trackList);
    but required b/c we have two different navigation forms on this page, but
    we want open/close changes in the bottom form to be submitted even if the user
    submits via the top form. */
-struct dyString *trackGroupsHidden1 = newDyString(1000);
-struct dyString *trackGroupsHidden2 = newDyString(1000);
+struct dyString *trackGroupsHidden1 = dyStringNew(1000);
+struct dyString *trackGroupsHidden2 = dyStringNew(1000);
 for (group = groupList; group != NULL; group = group->next)
     {
     if (group->trackList != NULL)
@@ -8584,8 +8994,20 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
         freezeName = "Unknown";
-    hPrintf("<span style='font-size:x-large;'><B>");
-    if (startsWith("zoo",database) )
+    hPrintf("<span style='font-size:large;'><B>");
+
+    // for these assemblies, we do not display the year, to save space and reduce clutter
+    // Their names must include a "(" character
+    char* noYearDbs[] = { "hg19", "hg38", "mm39", "mm10" };
+
+    if ( stringArrayIx(database, noYearDbs, ArraySize(noYearDbs)) != -1 )
+        {
+        // freezeName is e.g. "Feb. 2009 (GRCh37/hg19)"
+        char *afterParen = skipBeyondDelimit(freezeName, '(');
+        afterParen--; // move back one char
+        hPrintf("%s %s on %s %s", organization, browserName, organism, afterParen);
+        }
+    else if (startsWith("zoo",database) )
         {
 	hPrintf("%s %s on %s June 2002 Assembly %s target1",
 	    organization, browserName, organism, freezeName);
@@ -8600,14 +9022,16 @@ if (!hideControls)
 	else
 	    {
 	    if (stringIn(database, freezeName))
-		hPrintf("%s %s on %s %s Assembly",
+		hPrintf("%s %s on %s %s",
 			organization, browserName, organism, freezeName);
 	    else
-		hPrintf("%s %s on %s %s Assembly (%s)",
+		hPrintf("%s %s on %s %s (%s)",
 			organization, browserName, trackHubSkipHubName(organism), freezeName, trackHubSkipHubName(database));
 	    }
 	}
     hPrintf("</B></SPAN>");
+
+    printDatabaseInfoHtml(database);
 
     // Disable recommended track set panel when changing tracks, session, database
     char *sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
@@ -8708,8 +9132,8 @@ if (!hideControls)
         hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n",
                 hgTracksName());
 	    hPrintf("%s", trackGroupsHidden2->string);
-	    freeDyString(&trackGroupsHidden1);
-	    freeDyString(&trackGroupsHidden2);
+	    dyStringFree(&trackGroupsHidden1);
+	    dyStringFree(&trackGroupsHidden2);
 	if (!psOutput) cartSaveSession(cart);   /* Put up hgsid= as hidden variable. */
 	hPrintf("<CENTER>");
 	}
@@ -8760,6 +9184,7 @@ if (!hideControls)
 
         printSearchHelpLink();
 
+        printPatchNote();
 
 	if (!trackHubDatabase(database))
 	    {
@@ -8772,6 +9197,7 @@ if (!hideControls)
 
         // database-specific link: 2 hg.conf settings, format <db>_TopLink{Label}
         struct slName *dbLinks = cfgNamesWithPrefix(database);
+
         struct slName *link;
         char *dbTopLink = NULL, *dbTopLinkLabel = NULL;
         for (link = dbLinks; link != NULL; link = link->next)
@@ -8788,6 +9214,7 @@ if (!hideControls)
             hPrintf("&nbsp;&nbsp;<a href='%s' target='_blank'><em><b>%s</em></b></a>\n",
                 dbTopLink, dbTopLinkLabel);
             }
+        
         // generic link
 	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
 	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
@@ -8795,6 +9222,12 @@ if (!hideControls)
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'>"
                     "<A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n",
                     survey, surveyLabel ? surveyLabel : "Take survey");
+
+        // a piece of HTML, can be a link or anything else
+	char *hgTracksNoteHtml = cfgOption("hgTracksNoteHtml");
+	if (hgTracksNoteHtml)
+            puts(hgTracksNoteHtml);
+
 	hPutc('\n');
 	}
     }
@@ -8899,7 +9332,7 @@ if (!hideControls)
             tl.picWidth, 27);
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
-    hPrintf("move start<BR>");
+    hPrintf("<span class='moveButtonText'>move start</span><br>");
     hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left",
                        "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
@@ -8910,16 +9343,18 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
-    hWrites("Click+shift+drag to zoom in. ");
-    hWrites("Click side bars for track options. ");
+    hWrites("Shift+click+drag to zoom in. ");
+    hWrites("Click grey side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
     hWrites("Drag tracks left or right to new position. ");
     hWrites("Press \"?\" for keyboard shortcuts. ");
+    hWrites("Use drop-down controls below and press refresh to alter tracks displayed. ");
+
     hPrintf("</TD>");
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
-    hPrintf("move end<BR>");
+    hPrintf("<span class='moveButtonText'>move end</span><br>");
     hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left",
                        "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
@@ -8929,56 +9364,6 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
 
-    /* Display bottom control panel. */
-    if (isSearchTracksSupported(database,cart))
-        {
-        cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
-        hPrintf(" ");
-        }
-    hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks");
-    hPrintf("&nbsp;");
-    hButtonWithMsg("hgt.defaultImgOrder", "default order",
-                   "Display current tracks in their default order");
-    // if (showTrackControls)  - always show "hide all", Hiram 2008-06-26
-        {
-        hPrintf("&nbsp;");
-        hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visibile tracks");
-        }
-
-    hPrintf(" ");
-    hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
-            hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
-            hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
-    jsOnEventById("click", "ct_add", "document.customTrackForm.submit(); return false;");
-
-    hPrintf(" ");
-    if (hubConnectTableExists())
-        {
-        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='track hubs' title='Import tracks from hubs'>");
-	jsOnEventById("click", "th_form", "document.trackHubForm.submit();");
-        hPrintf(" ");
-        }
-
-    hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
-    hPrintf(" ");
-
-    if (!multiRegionButtonTop)
-        {
-        printMultiRegionButton();
-        hPrintf(" ");
-        }
-    hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
-                           revCmplDisp ? "Show forward strand at this location"
-                                       : "Show reverse strand at this location",
-                           NULL, revCmplDisp);
-    hPrintf(" ");
-
-    hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
-    hPrintf(" ");
-
-    hButtonWithMsg("hgt.refresh", "refresh","Refresh image");
-
-    hPrintf("<BR>\n");
 
     if( chromosomeColorsMade )
         {
@@ -9008,18 +9393,17 @@ if (!hideControls)
 	/* Display viewing options for each track. */
         /* Chuck: This is going to be wrapped in a table so that
          * the controls don't wrap around randomly */
-        hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
+        hPrintf("<table id='trackCtrlTable' border=0 cellspacing=1 cellpadding=1>\n");
         hPrintf("<tr><td align='left'>\n");
 
         hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups",
                            "return vis.expandAllGroups(false)");
         hPrintf("</td>");
 
-        hPrintf("<td colspan='%d' class='infoText' align='CENTER' nowrap>"
-                "Use drop-down controls below and press refresh to alter tracks "
-                "displayed.<BR>"
-                "Tracks with lots of items will automatically be displayed in "
-                "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
+        hPrintf("<td colspan='%d' class='controlButtons' align='CENTER' nowrap>\n", MAX_CONTROL_COLUMNS - 2);
+
+        printShortcutButtons(cart, hasCustomTracks, revCmplDisp, multiRegionButtonTop);
+        hPrintf("</td>\n");
 
         hPrintf("<td align='right'>");
         hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups",
@@ -9027,9 +9411,10 @@ if (!hideControls)
         hPrintf("</td></tr>");
 
         cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+        struct hash *superHash = hashNew(8);
 	for (group = groupList; group != NULL; group = group->next)
 	    {
-	    if (group->trackList == NULL)
+	    if ((group->trackList == NULL) && (group->errMessage == NULL))
 		continue;
 
 	    struct trackRef *tr;
@@ -9043,7 +9428,10 @@ if (!hideControls)
 				    &indicator, &otherState);
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
-            hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
+            if (group->errMessage)
+                hPrintf("<th align=\"left\" colspan=%d class='redToggleBar'>",MAX_CONTROL_COLUMNS);
+            else
+                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
 
@@ -9103,9 +9491,16 @@ if (!hideControls)
 
 	    /* Add supertracks to track list, sort by priority and
 	     * determine if they have visible member tracks */
-	    groupTrackListAddSuper(cart, group);
+	    groupTrackListAddSuper(cart, group, superHash);
 
 	    /* Display track controls */
+            if (group->errMessage)
+                {
+		myControlGridStartCell(cg, isOpen, group->name);
+                hPrintf("%s", group->errMessage);
+		controlGridEndCell(cg);
+                }
+
 	    for (tr = group->trackList; tr != NULL; tr = tr->next)
 		{
 		struct track *track = tr->track;
@@ -9137,10 +9532,12 @@ if (!hideControls)
 		    hPrintf("[No data-%s]", chromName);
 		controlGridEndCell(cg);
 		}
+
 	    /* now finish out the table */
 	    if (group->next != NULL)
 		controlGridEndRow(cg);
 	    }
+        hashFree(&superHash);
 	endControlGrid(&cg);
 	}
 
@@ -9166,6 +9563,10 @@ if (sameString(database, "wuhCor1"))
          "<a href='https://gisaid.org' target=_blank>GISAID</a> EpiCoV&trade;.\n"
          "</p>");
     }
+
+// add hidden link as a trap for web spiders, for log analysis one day to get an idea what the spider IPs 
+// are
+hPrintf("<a href='/notExist.html' style='display:none'>Invisible link</a>");
 
 hPrintf("</CENTER>\n");
 
@@ -9215,6 +9616,10 @@ cgiMakeHiddenVar(hgHubDoDisconnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 cartSaveSession(cart);
 puts("</FORM>");
+
+// put the track download interface behind hg.conf control
+if (cfgOptionBooleanDefault("showMouseovers", FALSE))
+    jsInline("var showMouseovers = true;\n");
 
 // TODO GALT nothing to do here.
 pruneRedundantCartVis(trackList);
@@ -9378,14 +9783,11 @@ if (pdfFile != NULL)
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
-    // postscript
-    printf("EPS (Postscript) images are a variant of PDF and easier to import into some "
-            "drawing programs.\n");
-    printf("<UL style=\"margin-top: 5px;\">\n");
-    printf("<LI>Download <A HREF=\"%s\">the current browser graphic in EPS</A>", psTn.forCgi);
-    if (strlen(ideoPsTn.forCgi))
-        printf("<LI>Download <A HREF=\"%s\">the current chromosome ideogram in EPS</A>", ideoPsTn.forCgi);
-    printf("</UL>\n");
+
+    printf("EPS (PostScript) output has been discontinued in pursuit of additional features\n");
+    printf("that are not PostScript-compatible.  If you require PostScript output for your\n");
+    printf("workflow, please <a href='https://genome.ucsc.edu/contacts.html'>reach out to us</a>\n");
+    printf("and let us know what your needs are - we may be able to help.\n");
 
     // see redmine #1077
     printf("<div style=\"margin-top:15px\">Tips for producing quality images for publication:</div>\n");
@@ -9455,11 +9857,10 @@ boolean resolved = TRUE;
 struct dyString *dyWarn = dyStringNew(0);
 boolean noShort = (cartOptionalString(cart, "noShort") != NULL);
 hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName(), dyWarn);
+displayChromName = chromAliasGetDisplayChrom(database, cart, chromName);
 if (isNotEmpty(dyWarn->string))
     {
-    if (noShort) // we're on the second pass of the search
-        hgp->posCount = 0; // hgFindSearch gives us a bogus hgp if the warn string is set
-    else
+    if (!noShort) // we're not on the second pass of the search
         warn("%s", dyWarn->string);
     }
 
@@ -9519,6 +9920,7 @@ if (!dash)
 *colon = 0;
 *dash = 0;
 chromName = cloneString(vPos);
+displayChromName = chromAliasGetDisplayChrom(database, cart, chromName);
 winStart = atol(colon+1) - 1;
 winEnd = atol(dash+1);
 }
@@ -9585,6 +9987,21 @@ if (h && h->db && sameString(h->db, database))
 	cartRemove(cart, "highlight");
 	}
     }
+}
+
+static void setupTimeWarning()
+/* add javascript that outputs a warning message if page takes too long to load */
+{
+char *maxTimeStr = cfgOption("warnSeconds");
+if (!maxTimeStr)
+    return;
+
+double maxTime = atof(maxTimeStr);
+struct dyString *dy = dyStringNew(150);
+dyStringPrintf(dy, "var warnTimingTimer = setTimeout( function() { hgtWarnTiming(0)}, %f);\n", maxTime);
+dyStringPrintf(dy, "$(document).ready( function() { clearTimeout(warnTimingTimer); hgtWarnTiming(%f)});\n", maxTime);
+jsInline(dy->string);
+dyStringFree(&dy);
 }
 
 
@@ -9863,7 +10280,7 @@ else
 if (virtMode)
     virtChromName = MULTI_REGION_CHROM;
 else
-    virtChromName = chromName;
+    virtChromName = displayChromName;
 
 virtWinBaseCount = virtWinEnd - virtWinStart;
 
@@ -10082,6 +10499,7 @@ if (gotExtTools)
     printExtMenuData(chromName);
 if (recTrackSetsEnabled())
     printRecTrackSets();
+setupTimeWarning();
 }
 
 static void chromInfoTotalRow(int count, long long total, boolean hasAlias)
@@ -10104,24 +10522,32 @@ if (hasAlias)
 cgiTableRowEnd();
 }
 
-static char *chrAliases(struct hash *aliasHash, char *sequenceName)
-/* lookup the sequenceName in the aliasHash and return csv string
- * of alias names
+static char *chrAliases(struct slName *names, char *sequenceName)
+/* names is already a list of aliases, return csv string
+ * of alias names and avoid reproducing the sequenceName
  */
 {
-if (NULL == aliasHash)
+/* to avoid duplicate names in the returned list, remember them */
+struct hash *nameHash = newHashExt(8, TRUE);	/* TRUE == on stack memory */
+if (NULL == names)
     return NULL;
+if (isNotEmpty(sequenceName))
+    hashAddInt(nameHash, sequenceName, 1);
 struct dyString *returned = dyStringNew(512);
-struct hashEl *hel = hashLookup(aliasHash, sequenceName);
-if (hel)
+int wordCount = 0;
+for( ; names; names = names->next)
     {
-    dyStringPrintf(returned, "%s", ((struct chromAlias *)hel->val)->alias);
-    hel = hashLookupNext(hel);
-    while (hel != NULL)
-        {
-        dyStringPrintf(returned, ", %s",((struct chromAlias *)hel->val)->alias);
-        hel = hashLookupNext(hel);
-        }
+    if (hashLookup(nameHash, names->name) != NULL)
+	continue;
+    if (isNotEmpty(names->name))
+	{
+	if (wordCount)
+	    dyStringPrintf(returned, ", %s",names->name);
+        else
+	    dyStringPrintf(returned, "%s", names->name);
+	++wordCount;
+	hashAddInt(nameHash, names->name, 1);
+	}
     }
 return dyStringCannibalize(&returned);
 }
@@ -10133,7 +10559,6 @@ struct slName *chromList = hAllChromNames(database);
 struct slName *chromPtr = NULL;
 long long total = 0;
 boolean hasAlias = hTableExists(database, "chromAlias");
-struct hash *aliasHash = chromAliasMakeReverseLookupTable(database);
 /* key is database sequence name, value is an alias name, can be multiple
  *   entries for the same sequence name.  NULL if no chromAlias available
  */
@@ -10148,7 +10573,7 @@ else
 for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     unsigned size = hChromSize(database, chromPtr->name);
-    char *aliasNames = chrAliases(aliasHash, chromPtr->name);
+    char *aliasNames = chrAliases(chromAliasFindAliases(chromPtr->name), chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
@@ -10190,17 +10615,13 @@ const struct chromInfo *b = *((struct chromInfo **)vb);
 return b->size - a->size;
 }
 
-void chromInfoRowsNonChromTrackHub(int limit)
+void chromInfoRowsNonChromTrackHub(boolean hasAlias, int limit)
 /* Make table rows of non-chromosomal chromInfo name & size */
 /* leaks chromInfo list */
 {
 struct chromInfo *chromInfo = trackHubAllChromInfo(database);
 slSort(&chromInfo, chromInfoCmpSize);
 int seqCount = slCount(chromInfo);
-struct hash *aliasHash = trackHubAllChromAlias(database);
-boolean hasAlias = FALSE;
-if (aliasHash)
-    hasAlias = TRUE;
 long long total = 0;
 char msg1[512], msg2[512];
 boolean truncating;
@@ -10213,7 +10634,7 @@ for( ;lineCount < seqCount && (chromInfo != NULL); ++lineCount, chromInfo = chro
     unsigned size = chromInfo->size;
     if (lineCount < limit)
 	{
-	char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
+	char *aliasNames = chrAliases(chromAliasFindAliases(chromInfo->chrom), chromInfo->chrom);
 	cgiSimpleTableRowStart();
 	cgiSimpleTableFieldStart();
 	htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
@@ -10276,18 +10697,16 @@ else
     }
 }
 
-void chromInfoRowsNonChrom(int limit)
+void chromInfoRowsNonChrom(boolean hasAlias, int limit)
 /* Make table rows of non-chromosomal chromInfo name & size, sorted by size. */
 {
 if (trackHubDatabase(database))
     {
-    chromInfoRowsNonChromTrackHub(limit);
+    chromInfoRowsNonChromTrackHub(hasAlias, limit);
     return;
     }
 
 struct sqlConnection *conn = hAllocConn(database);
-boolean hasAlias = hTableExists(database, "chromAlias");
-struct hash *aliasHash = chromAliasMakeReverseLookupTable(database);
 /* key is database sequence name, value is an alias name, can be multiple
  *   entries for the same sequence name.  NULL if no chromAlias available
  */
@@ -10299,12 +10718,14 @@ char msg1[512], msg2[512];
 int seqCount = 0;
 boolean truncating;
 
-seqCount = sqlQuickNum(conn, NOSQLINJ "select count(*) from chromInfo");
+sqlSafef(query, sizeof query, "select count(*) from chromInfo");
+seqCount = sqlQuickNum(conn, query);
 truncating = (limit > 0) && (seqCount > limit);
 
 if (!truncating)
     {
-    sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo order by size desc");
+    sqlSafef(query, sizeof query, "select chrom,size from chromInfo order by size desc");
+    sr = sqlGetResult(conn, query);
     }
 else
     {
@@ -10321,7 +10742,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
-    char *aliasNames = chrAliases(aliasHash, row[0]);
+    char *aliasNames = chrAliases(chromAliasFindAliases(row[0]), row[0]);
     cgiTableFieldEnd();
     cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
@@ -10389,27 +10810,28 @@ hFreeConn(&conn);
 static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
-if (! trackHubDatabase(database))
+if (! trackHubDatabase(database) || hubConnectIsCurated(trackHubSkipHubName(database)))
     {
+    char *db = trackHubSkipHubName(database);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
-           hDownloadsServer(), database, database, database);
+    printf("<a href='http%s://%s/goldenPath/%s/bigZips/%s.chrom.sizes' target=_blank>%s.chrom.sizes</a>",
+           cgiAppendSForHttps(), hDownloadsServer(), db, db, db);
     cgiTableFieldEnd();
     if (hasAlias)
 	{
 	cgiSimpleTableFieldStart();
 	/* see if this database has the chromAlias.txt download file */
 	char aliasFile[1024];
-        safef(aliasFile, sizeof aliasFile, "http://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), database, database);
+        safef(aliasFile, sizeof aliasFile, "http%s://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", cgiAppendSForHttps(), hDownloadsServer(), db, db);
         struct udcFile *file = udcFileMayOpen(aliasFile, udcDefaultDir());
 	if (file)
 	    {
 	    udcFileClose(&file);
-	    printf("<A HREF='%s'>%s.chromAlias.txt</A>", aliasFile, database);
+	    printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasFile, db);
 	    }
 	else
 	    puts("&nbsp");
@@ -10426,14 +10848,20 @@ else if (hubAliasFile)
     cgiSimpleTableFieldStart();
     if (chromSizesFile)
 	{
-        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</A>", chromSizesFile, trackHubSkipHubName(database));
+        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</a>", chromSizesFile, trackHubSkipHubName(database));
         puts("&nbsp;&nbsp;");
 	}
     else
         puts("&nbsp");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", hubAliasFile, trackHubSkipHubName(database));
+    char *aliasUrl = cloneString(hubAliasFile);
+    /* this URL reference needs to be a text file to work as a click in the
+     *    html page.  Both files chromAlias.bb and chromAlias.txt exist.
+     */
+    if (endsWith(hubAliasFile, "chromAlias.bb"))
+       aliasUrl = replaceChars(hubAliasFile, "chromAlias.bb", "chromAlias.txt");
+    printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasUrl, trackHubSkipHubName(database));
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
@@ -10446,10 +10874,16 @@ boolean hasAlias = FALSE;
 char *chromSizesFile = NULL;
 char *aliasFile = NULL;
 if (trackHubDatabase(database))
-    {
+    {	/* either one of these files present will work */
     aliasFile = trackHubAliasFile(database);
     if (aliasFile)
-        hasAlias = TRUE;
+        {
+            hasAlias = TRUE;
+        } else {
+            aliasFile = trackHubAliasBbFile(database);
+            if (aliasFile)
+               hasAlias = TRUE;
+        }
     chromSizesFile = trackHubChromSizes(database);
     }
 else
@@ -10480,6 +10914,7 @@ cgiMakeButton("Submit", "submit");
 puts("<P>");
 
 hTableStart();
+puts("<thead style='position:sticky; top:0; background-color: white;'>");
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 puts("Sequence name &nbsp;");
@@ -10500,16 +10935,17 @@ else if (hasAlias)
     cgiTableFieldEnd();
     }
 cgiTableRowEnd();
+puts("</thead>");
 
 if (sameString(database,"hg38"))
     chromInfoRowsChromExt("withAltRandom");
 else if (trackHubDatabase(database))
-    chromInfoRowsNonChrom(1000);
+    chromInfoRowsNonChrom(hasAlias, 1000);
 else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
     hChromCount(database) < 100)
     chromInfoRowsChrom();
 else
-    chromInfoRowsNonChrom(1000);
+    chromInfoRowsNonChrom(hasAlias, 1000);
 chromSizesDownloadRow(hasAlias, aliasFile, chromSizesFile);
 
 hTableEnd();
@@ -10578,13 +11014,13 @@ dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').submit().click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').submit().click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('#defaultTracksMenuLink')[0].click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('#defaultTrackOrderMenuLink')[0].click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').submit().click(); }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]')[0].click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('v d', function() { gotoGetDnaPage() }); \n"); // anon. function because gotoGetDnaPage is sometimes not loaded yet.
 
@@ -10682,14 +11118,12 @@ if (newHighlight)
     }
 }
 
-void notify (char *msg)
+void notify (char *msg, char *msgId)
 /* print a message into a hidden DIV tag, and call Javascript to move the DIV under the
  * tableHeaderForm element and un-hide it. Less obtrusive than a warn() message but still hard to miss. */
 {
-puts("<div style='display:none' id='notifBox'>");
-puts(msg);
-puts("</div>");
-jsInline("notifBoxShow();\n");
+jsInlineF("notifBoxSetup(\"hgTracks\", \"%s\", \"%s\");\n", msgId, msg);
+jsInlineF("notifBoxShow(\"hgTracks\", \"%s\");\n", msgId);
 }
 
 extern boolean issueBotWarning;
@@ -10700,9 +11134,9 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
-    measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
+    measureTime("Startup (bottleneck delay %d ms, not applied if under %d) ", botDelayMillis, hgBotDelayCurrWarnMs()) ;
 
-char *mouseOverEnabled = cfgOption("mouseOverEnabled");
+char *mouseOverEnabled = cfgOptionDefault("mouseOverEnabled", "on");
 if (sameWordOk(mouseOverEnabled, "on"))
     {
     /* can not use mouseOver in any virtual mode */
@@ -10745,6 +11179,11 @@ printf("State: %s\n", cgiUrlString()->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);
+if (measureTiming)
+    measureTime("before chromAliasSetup");
+chromAliasSetup(database);
+if (measureTiming)
+    measureTime("after chromAliasSetup");
 
 genomeIsRna = !isHubTrack(database) && hgPdbOk(database);
 
@@ -10831,6 +11270,26 @@ if(!trackImgOnly)
         webIncludeResourceFile("ui.dropdownchecklist.css");
         jsIncludeFile("ui.dropdownchecklist.js", NULL);
         jsIncludeFile("ddcl.js", NULL);
+        if (cfgOptionBooleanDefault("showTutorial", FALSE))
+            {
+            puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
+            puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
+            jsIncludeFile("tutorial.js",NULL);
+            // if the user is logged in, we won't show the notification
+            // that a tutorial is available, just leave the link in the
+            // blue bar under "Help"
+            if (wikiLinkUserName())
+                jsInline("var userLoggedIn = true;");
+            // if the CGI variable startTutorial=true is present (in that exact
+            // spelling/case), immediately start the tutorial, for example
+            // when the user clicks a link from a help page. Note that this
+            // means it is a one time link that won't work on refresh because
+            // the variable isn't saved onto the URL
+            if (sameOk(cgiOptionalString("startTutorial"), "true"))
+                {
+                jsInline("var startTutorialOnLoad = true;");
+                }
+            }
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
@@ -10936,12 +11395,19 @@ if (prevColor)
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
 
+// add the center label height if center labels are present
+if (withCenterLabels)
+    jsonObjectAdd(jsonForClient, "centerLabelHeight",
+              newJsonNumber(tl.fontHeight));
+
 struct dyString *dy = dyStringNew(1024);
 jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
 jsInline(dy->string);
 dyStringFree(&dy);
 
 dy = dyStringNew(1024);
+// always write the font-size, it's useful for other javascript functions
+dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
 // do not have a JsonFile available when PDF/PS output
 if (enableMouseOver && isNotEmpty(mouseOverJsonFile->forCgi))
     {
@@ -10956,7 +11422,6 @@ if (enableMouseOver && isNotEmpty(mouseOverJsonFile->forCgi))
 
     hPrintf("<div id='mouseOverVerticalLine' class='mouseOverVerticalLine'></div>\n");
     hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
-    dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
     dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
     }
 else
@@ -10976,8 +11441,12 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"This is useful when developing hubs, but it reduces "
 	"performance. To clear the setting, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
-    notify(buf);
+    notify(buf, "udcTimeout");
     }
+#ifdef DEBUG
+if (cdsQueryCache != NULL)
+    cacheTwoBitRangesPrintStats(cdsQueryCache, stderr);
+#endif /* DEBUG */
 }
 
 void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
@@ -11018,6 +11487,18 @@ if (parentTdb)
     parentTdb->longLabel = labelAddNote(parentTdb->longLabel, EMPTY_SUBTRACKS_HIDDEN);
 else
     tg->longLabel = labelAddNote(tg->longLabel, EMPTY_SUBTRACKS_HIDDEN);
+}
+
+void labelTrackAsDensity(struct track *tg)
+/* Add text to track long label to indicate density mode */
+{
+tg->longLabel = labelAddNote(tg->longLabel, "item density shown");
+}
+
+void labelTrackAsDensityWindowSize(struct track *tg)
+/* Add text to track long label to indicate density mode because window size exceeds some threshold */
+{
+tg->longLabel = labelAddNote(tg->longLabel, "item density shown - zoom in for individual items");
 }
 
 

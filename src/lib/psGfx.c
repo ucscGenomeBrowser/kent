@@ -13,7 +13,6 @@
 #include "linefile.h"
 #include "pipeline.h"
 
-
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
  * precision. */
@@ -36,11 +35,12 @@ psWhOut(ps, width, height);
 fprintf(f, "rectclip\n");
 }
 
-static void psWriteHeader(FILE *f, double width, double height)
+static void psWriteHeader(struct psGfx *ps, double width, double height)
 /* Write postScript header.  It's encapsulated PostScript
  * actually, so you need to supply image width and height
  * in points. */
 {
+FILE *f = ps->f;
 char *s =
 #include "common.pss"
 ;
@@ -48,6 +48,8 @@ char *s =
 fprintf(f, "%%!PS-Adobe-3.1 EPSF-3.0\n");
 fprintf(f, "%%%%BoundingBox: 0 0 %d %d\n", (int)ceil(width), (int)ceil(height));
 fprintf(f, "%%%%LanguageLevel: 3\n\n");
+if (ps->newTransOps)
+    fprintf(f, "0 .pushpdf14devicefilter\n");
 fprintf(f, "%s", s);
 }
 
@@ -55,6 +57,27 @@ void psSetLineWidth(struct psGfx *ps, double factor)
 /* Set line width to factor * a single pixel width. */
 {
 fprintf(ps->f, "%f setlinewidth\n", factor * ps->xScale);
+}
+
+boolean supportNewTrans(void)
+/* Check the version of GS and return whether it supports the newer transparency operators */
+{
+boolean support = FALSE;
+char *versionCmd[] = { "gs", "--version", NULL };
+struct pipeline *pl = pipelineOpen1(versionCmd, pipelineRead, "/dev/null", NULL, 0);
+if (pl)
+    {
+    struct lineFile *lf = pipelineLineFile(pl);
+    char *versionString;
+    lineFileNext(lf, &versionString, NULL);
+    char *minorVersion = NULL;
+    if (strchr(versionString, '.'))
+        minorVersion = strchr(versionString, '.') + 1;
+    if ((atoi(versionString) > 9) || (atoi(versionString) == 9 && minorVersion && atoi(minorVersion) > 51))
+        support = TRUE;
+    pipelineClose(&pl);
+    }
+return support;
 }
 
 struct psGfx *psOpen(char *fileName, 
@@ -95,7 +118,8 @@ ps->fontHeight = 10;
 ps->yScale = -ps->yScale;
 ps->yOff = ps->ptHeight - ps->yOff;
 
-psWriteHeader(ps->f, ptWidth, ptHeight);
+ps->newTransOps = supportNewTrans();
+psWriteHeader(ps, ptWidth, ptHeight);
 
 /* adding a gsave here fixes an old ghostview bug with cliprestore */
 fprintf(ps->f, "gsave\n");
@@ -122,6 +146,8 @@ void psClose(struct psGfx **pPs)
 struct psGfx *ps = *pPs;
 if (ps != NULL)
     {
+    if (ps->newTransOps)
+        fprintf(ps->f, ".poppdf14devicefilter\n");
     carefulClose(&ps->f);
     freez(pPs);
     }
@@ -337,6 +363,18 @@ fprintf(ps->f, ") show\n");
 fprintf(ps->f, "grestore\n");
 }
 
+void psSetColorAlpha(struct psGfx *ps, int a)
+/* Sets alpha in the output if transparency is enabled, otherwise does nothing */
+{
+FILE *f = ps->f;
+double scale = 1.0/255;
+if (ps->newTransOps)
+    {
+    fprintf(f, "%f .setfillconstantalpha\n", scale * a);
+    fprintf(f, "%f .setstrokeconstantalpha\n", scale * a);
+    }
+}
+
 void psSetColor(struct psGfx *ps, int r, int g, int b)
 /* Set current color. */
 {
@@ -505,8 +543,18 @@ pdfName = addSuffix(pdfTmpName, ".pdf");
 char widthBuff[1024], heightBuff[1024];
 safef(widthBuff, sizeof widthBuff, "-dDEVICEWIDTHPOINTS=%d", round(width));
 safef(heightBuff, sizeof heightBuff, "-dDEVICEHEIGHTPOINTS=%d", round(height));
-char *pipeCmd[] = { "ps2pdf", widthBuff, heightBuff, epsFile, pdfName, NULL } ;
-struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite, "/dev/null", NULL, 0);
+struct pipeline *pl = NULL;
+boolean newTrans = supportNewTrans();
+if (newTrans)
+    {
+    char *pipeCmd[] = { "ps2pdf", "-dALLOWPSTRANSPARENCY", widthBuff, heightBuff, epsFile, pdfName, NULL } ;
+    pl = pipelineOpen1(pipeCmd, pipelineWrite, "/dev/null", NULL, 0);
+    }
+else
+    {
+    char *pipeCmd[] = { "ps2pdf", widthBuff, heightBuff, epsFile, pdfName, NULL } ;
+    pl = pipelineOpen1(pipeCmd, pipelineWrite, "/dev/null", NULL, 0);
+    }
 sysVal = pipelineWait(pl);
 if(sysVal != 0)
     freez(&pdfName);

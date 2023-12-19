@@ -232,7 +232,11 @@ int end = chromEnd + UPDOWN_FUDGE;
 struct sqlResult *sr = hRangeQuery(conn, table, chrom, start, end, NULL, &binOffset);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
-    slAddHead(&pslList, pslLoad(row+binOffset));
+    {
+    // Exclude XM_ and XR_ transcripts if any
+    if (!startsWith("X", row[binOffset+9]))
+        slAddHead(&pslList, pslLoad(row+binOffset));
+    }
 hFreeConn(&conn);
 return pslList;
 }

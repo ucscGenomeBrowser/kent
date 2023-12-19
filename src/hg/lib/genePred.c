@@ -17,43 +17,6 @@
 #include "chromInfo.h"
 
 
-/* SQL to create a genePred table */
-static char *createSql = 
-"CREATE TABLE %s ("
-"   %-s"                                 /* bin column goes here */
-"   name varchar(255) not null,"	/* mrna accession of gene */
-"   chrom varchar(255) not null,"	/* Chromosome name */
-"   strand char(1) not null,"		/* + or - for strand */
-"   txStart int unsigned not null,"	/* Transcription start position */
-"   txEnd int unsigned not null,"	/* Transcription end position */
-"   cdsStart int unsigned not null,"	/* Coding region start */
-"   cdsEnd int unsigned not null,"	/* Coding region end */
-"   exonCount int unsigned not null,"	/* Number of exons */
-"   exonStarts longblob not null,"	/* Exon start positions */
-"   exonEnds longblob not null,"	/* Exon end positions */
-"   INDEX(name)";
-
-static char *binFieldSql = 
-"    bin smallint unsigned not null,"
-"    INDEX(chrom,bin),";
-
-static char *noBinIndexSql = 
-"   INDEX(chrom,txStart),";
-
-static char *scoreFieldSql = 
-"   ,score int";
-
-static char *name2FieldSql = 
-"  ,name2 varchar(255) not null,"    /* Secondary name. (e.g. name of gene) or NULL if not available */
-"   INDEX(name2)";
-
-static char *cdsStatFieldSql = 
-"  ,cdsStartStat enum('none', 'unk', 'incmpl', 'cmpl') not null,"    /* Status of cdsStart annotation */
-"   cdsEndStat enum('none', 'unk', 'incmpl', 'cmpl') not null";     /* Status of cdsEnd annotation */
-
-static char *exonFramesFieldSql = 
-"   ,exonFrames longblob not null";    /* List of frame for each exon, or -1 if no frame or not known. NULL if not available. */
-
 struct genePred *genePredLoad(char **row)
 /* Load a genePred from row fetched with select * from genePred
  * from database.  Dispose of this with genePredFree(). 
@@ -1281,20 +1244,53 @@ char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options,
  * is now ignored.. */
 {
 /* the >= is used so that we create preceeding fields. */
-char sqlCmd[1024];
+struct dyString *dy = sqlDyStringCreate(
+"CREATE TABLE %s (", table);
 
-sqlSafef(sqlCmd, sizeof(sqlCmd), createSql, table,
-      ((options & genePredWithBin) ? binFieldSql : noBinIndexSql));
+/* bin column goes here */
+if (options & genePredWithBin)
+    sqlDyStringPrintf(dy,
+"    bin smallint unsigned not null,"
+"    INDEX(chrom,bin),");
+else
+    sqlDyStringPrintf(dy,
+"   INDEX(chrom,txStart),");
+
+sqlDyStringPrintf(dy,
+"   name varchar(255) not null,"	/* mrna accession of gene */
+"   chrom varchar(255) not null,"	/* Chromosome name */
+"   strand char(1) not null,"		/* + or - for strand */
+"   txStart int unsigned not null,"	/* Transcription start position */
+"   txEnd int unsigned not null,"	/* Transcription end position */
+"   cdsStart int unsigned not null,"	/* Coding region start */
+"   cdsEnd int unsigned not null,"	/* Coding region end */
+"   exonCount int unsigned not null,"	/* Number of exons */
+"   exonStarts longblob not null,"	/* Exon start positions */
+"   exonEnds longblob not null,"	/* Exon end positions */
+"   INDEX(name)"
+);
+
 if (optFields >= genePredScoreFld)
-    safecat(sqlCmd, sizeof(sqlCmd), scoreFieldSql);
+    sqlDyStringPrintf(dy,
+"   ,score int");
+
 if (optFields >= genePredName2Fld)
-    safecat(sqlCmd, sizeof(sqlCmd), name2FieldSql);
+    sqlDyStringPrintf(dy,
+"  ,name2 varchar(255) not null,"    /* Secondary name. (e.g. name of gene) or NULL if not available */
+"   INDEX(name2)");
+
 if (optFields >= genePredCdsStatFld)
-    safecat(sqlCmd, sizeof(sqlCmd), cdsStatFieldSql);
+    sqlDyStringPrintf(dy,
+"  ,cdsStartStat enum('none', 'unk', 'incmpl', 'cmpl') not null,"    /* Status of cdsStart annotation */
+"   cdsEndStat enum('none', 'unk', 'incmpl', 'cmpl') not null");     /* Status of cdsEnd annotation */
+
 if (optFields >= genePredExonFramesFld)
-    safecat(sqlCmd, sizeof(sqlCmd), exonFramesFieldSql);
-safecat(sqlCmd, sizeof(sqlCmd), ")");
-return cloneString(sqlCmd);
+    sqlDyStringPrintf(dy,
+"   ,exonFrames longblob not null");    /* List of frame for each exon, or -1 if no frame or not known. NULL if not available. */
+
+sqlDyStringPrintf(dy, ")");
+
+return cloneString(dyStringCannibalize(&dy));
 }
 
 // FIXME: this really doesn't belong in this module
@@ -2111,6 +2107,32 @@ if (isCoding != NULL && codingBasesSoFar > 0)
     return codingBasesSoFar;
     }
 return -1;  // introns not okay
+}
+
+struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, struct bigBedInterval *bb)
+/* build a genePred from a bigGenePred and a bed file */
+{
+char *extra = cloneString(bb->rest);
+int numCols = 12 + 8 - 3;
+char *row[numCols];
+int wordCount = chopByChar(extra, '\t', row, numCols);
+if (wordCount < numCols)
+    errAbort("expected at least %d columns in bigGenePred, got %d; is this actually a bigGenePred?", numCols, wordCount);
+
+struct genePredExt *gp = bedToGenePredExt(bed);
+
+gp->name2 = cloneString(row[ 9]);
+
+int numBlocks;
+sqlSignedDynamicArray(row[ 12],  &gp->exonFrames, &numBlocks);
+gp->optFields |= genePredExonFramesFld;
+//assert (numBlocks == gp->exonCount);
+
+gp->type = cloneString(row[13]);
+gp->geneName = cloneString(row[14]);
+gp->geneName2 = cloneString(row[15]);
+
+return gp;
 }
 
 struct genePredExt  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb)

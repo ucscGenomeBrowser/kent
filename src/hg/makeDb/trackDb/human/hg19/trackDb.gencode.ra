@@ -1,8 +1,8 @@
 track wgEncodeGencodeSuper
 superTrack on
 group genes
-shortLabel GENCODE
-longLabel GENCODE Gene Annotation 
+shortLabel GENCODE Versions
+longLabel Container of all new and previous GENCODE releases
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 # GENCODE genes on alpha only (wrangler: markd)
@@ -36,4 +36,10 @@ include wgEncodeGencodeV35lift37.ra
 include wgEncodeGencodeV36lift37.ra
 include wgEncodeGencodeV37lift37.ra
 include wgEncodeGencodeV38lift37.ra
-
+include wgEncodeGencodeV39lift37.ra
+include wgEncodeGencodeV40lift37.ra
+include wgEncodeGencodeV41lift37.ra
+include wgEncodeGencodeV42lift37.ra
+include wgEncodeGencodeV43lift37.ra
+include wgEncodeGencodeV44lift37.ra
+include wgEncodeGencodeV45lift37.ra

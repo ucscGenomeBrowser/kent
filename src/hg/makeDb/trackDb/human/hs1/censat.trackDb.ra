@@ -1,0 +1,12 @@
+track censat
+shortLabel CenSat Annotation
+longLabel Centromeric Satellite Annotation
+group map
+visibility pack
+itemRgb on
+maxItems 100000
+type bigBed 9 +
+bigDataUrl /gbdb/hs1/censat/censat.bb
+html html/censat.html
+mouseOverField component
+priority 2

@@ -6,6 +6,9 @@
 #include "openssl/ssl.h"
 #include "openssl/err.h"
 
+#include "openssl/x509v3.h"
+#include "openssl/x509_vfy.h"
+
 #include <sys/socket.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -17,6 +20,15 @@
 #include "hash.h"
 #include "net.h"
 
+char *https_cert_check = "log";                 // DEFAULT certificate check is log.
+char *https_cert_check_depth = "9";             // DEFAULT depth check level is 9.
+char *https_cert_check_verbose = "off";         // DEFAULT verbose is off.
+char *https_cert_check_domain_exceptions = "";  // DEFAULT space separated list is empty string.
+
+char *https_proxy = NULL;
+char *log_proxy = NULL;
+
+char *SCRIPT_NAME = NULL;
 
 // For use with callback. Set a variable into the connection itself,
 // and then use that during the callback.
@@ -74,6 +86,15 @@ fprintf(stderr, "%s\n", msg); fflush(stderr);
 
 void initDomainWhiteListHash();   // forward declaration
 
+void myGetenv(char **pMySetting, char *envSetting)
+/* avoid setenv which causes problems in multi-threaded programs
+ * cloning the env var helps isolate it from other threads activity. */
+{
+char *value = getenv(envSetting);
+if (value)
+     *pMySetting = cloneString(value);
+}
+
 void openSslInit()
 /* do only once */
 {
@@ -82,6 +103,15 @@ static pthread_mutex_t osiMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_lock( &osiMutex );
 if (!done)
     {
+    // setenv avoided since not thread-safe
+    myGetenv(&https_cert_check,                   "https_cert_check");
+    myGetenv(&https_cert_check_depth,             "https_cert_check_depth");
+    myGetenv(&https_cert_check_verbose,           "https_cert_check_verbose");
+    myGetenv(&https_cert_check_domain_exceptions, "https_cert_check_domain_exceptions");
+    myGetenv(&https_proxy, "https_proxy");
+    myGetenv(&log_proxy,   "log_proxy");
+    myGetenv(&SCRIPT_NAME, "SCRIPT_NAME");
+
     SSL_library_init();
     ERR_load_crypto_strings();
     ERR_load_SSL_strings();
@@ -144,8 +174,8 @@ while (1)
     if (srd == 0)
 	FD_SET(params->sv[1], &readfds);
 
-    tv.tv_sec = (long) (DEFAULTCONNECTTIMEOUTMSEC/1000);  // timeout default 10 seconds
-    tv.tv_usec = (long) (((DEFAULTCONNECTTIMEOUTMSEC/1000)-tv.tv_sec)*1000000);
+    tv.tv_sec = 90; // timeout 90 seconds needed for slow CGIs respsonse time.
+    tv.tv_usec = 0;
 
     err = select(max(fd,params->sv[1]) + 1, &readfds, &writefds, NULL, &tv);
 
@@ -224,35 +254,7 @@ while (1)
 	    // write the https data received immediately back on socket to user, and it's ok if it blocks.
 	    while(bwt < brd)
 		{
-		// NOTE: Intended as a thread-specific library-safe way not to ignore SIG_PIPE for the entire application.
-		// temporarily block sigpipe on this thread
-		sigset_t sigpipe_mask;
-		sigemptyset(&sigpipe_mask);
-		sigaddset(&sigpipe_mask, SIGPIPE);
-		sigset_t saved_mask;
-		if (pthread_sigmask(SIG_BLOCK, &sigpipe_mask, &saved_mask) == -1) {
-		    perror("pthread_sigmask");
-		    exit(1);
-		}
 		int bwtx = write(params->sv[1], bbuf+bwt, brd-bwt);
-		int saveErrno = errno;
-		if ((bwtx == -1) && (saveErrno == EPIPE))
-		    { // if there was a EPIPE, accept and consume the SIGPIPE now.
-		    int sigErr, sig;
-		    if ((sigErr = sigwait(&sigpipe_mask, &sig)) != 0) 
-			{
-			errno = sigErr;
-			perror("sigwait");
-			exit(1);
-			}
-		    }
-		// restore signal mask on this thread
-		if (pthread_sigmask(SIG_SETMASK, &saved_mask, 0) == -1) 
-		    {
-		    perror("pthread_sigmask");
-		    exit(1);
-		    }
-		errno = saveErrno;
 		if (bwtx == -1)
 		    {
 		    if ((errno != 104)  // udcCache often closes causing "Connection reset by peer"
@@ -313,24 +315,24 @@ ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
 myData = SSL_get_ex_data(ssl, myDataIndex);
 
 
-if (depth > atoi(getenv("https_cert_check_depth")))
+if (depth > atoi(https_cert_check_depth))
     {
     preverify_ok = 0;
     err = X509_V_ERR_CERT_CHAIN_TOO_LONG;
     X509_STORE_CTX_set_error(ctx, err);
     }
-if (sameString(getenv("https_cert_check_verbose"), "on"))
+if (sameString(https_cert_check_verbose, "on"))
     {
     fprintf(stderr,"depth=%d:%s\n", depth, buf);
     }
 if (!preverify_ok) 
     {
-    if (getenv("SCRIPT_NAME"))  // CGI mode
+    if (SCRIPT_NAME)  // CGI mode
 	{
 	fprintf(stderr, "verify error:num=%d:%s:depth=%d:%s hostName=%s CGI=%s\n", err,
-	    X509_verify_cert_error_string(err), depth, buf, myData->hostName, getenv("SCRIPT_NAME"));
+	    X509_verify_cert_error_string(err), depth, buf, myData->hostName, SCRIPT_NAME);
 	}
-    if (!sameString(getenv("https_cert_check"), "log"))
+    if (!sameString(https_cert_check, "log"))
 	{
 	char *cn = strstr(buf, "/CN=");
 	if (cn) cn+=4;  // strlen /CN=
@@ -346,7 +348,7 @@ if (!preverify_ok && (err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT))
     X509_NAME_oneline(X509_get_issuer_name(cert), buf, 256);
     fprintf(stderr, "issuer= %s\n", buf);
     }
-if (sameString(getenv("https_cert_check"), "warn") || sameString(getenv("https_cert_check"), "log"))
+if (sameString(https_cert_check, "warn") || sameString(https_cert_check, "log"))
     return 1;
 else
     return preverify_ok;
@@ -363,7 +365,7 @@ domainWhiteList = hashNew(8);
 
 // whitelisted domain exceptions set in hg.conf
 // space separated list.
-char *dmwl = cloneString(getenv("https_cert_check_domain_exceptions"));
+char *dmwl = cloneString(https_cert_check_domain_exceptions);
 int wordCount = chopByWhite(dmwl, NULL, 0);
 if (wordCount > 0)
     {
@@ -383,26 +385,55 @@ freez(&dmwl);
 if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))  
     {
     // Hardwired exceptions whitelist
-    // openssl automatically whitelists domains which are given as IPv4 or IPv6 addresses
+    // whitelist domains used in URLs given as IPv4 or IPv6 addresses
+    hashStoreName(domainWhiteList, "141.80.181.46");
+    hashStoreName(domainWhiteList, "119.17.138.121");
+    hashStoreName(domainWhiteList, "132.198.67.10");
+    hashStoreName(domainWhiteList, "133.9.148.160");
+    hashStoreName(domainWhiteList, "143.225.99.51");
+    hashStoreName(domainWhiteList, "147.139.138.179");
+    hashStoreName(domainWhiteList, "149.129.235.214");
+    hashStoreName(domainWhiteList, "161.116.70.109");
+    hashStoreName(domainWhiteList, "193.166.24.115");
+    hashStoreName(domainWhiteList, "66.154.14.49");
+    hashStoreName(domainWhiteList, "*.altius.org");
+    hashStoreName(domainWhiteList, "*.apps.wistar.org");
+    hashStoreName(domainWhiteList, "*.bio.ed.ac.uk");
     hashStoreName(domainWhiteList, "*.cbu.uib.no");
     hashStoreName(domainWhiteList, "*.clinic.cat");
+    hashStoreName(domainWhiteList, "*.crg.eu");
+    hashStoreName(domainWhiteList, "*.dwf.go.th");
     hashStoreName(domainWhiteList, "*.ezproxy.u-pec.fr");
     hashStoreName(domainWhiteList, "*.genebook.com.cn");
     hashStoreName(domainWhiteList, "*.jncasr.ac.in");
+    hashStoreName(domainWhiteList, "*.sund.ku.dk");
+    hashStoreName(domainWhiteList, "*.wistar.upenn.edu");
+    hashStoreName(domainWhiteList, "11plusprepschool.com");
+    hashStoreName(domainWhiteList, "52128.bham.ac.uk");
+    hashStoreName(domainWhiteList, "Hakeemacademy.jo");
     hashStoreName(domainWhiteList, "annotation.dbi.udel.edu");
-    hashStoreName(domainWhiteList, "apprisws.bioinfo.cnio.es");
     hashStoreName(domainWhiteList, "arn.ugr.es");
+    hashStoreName(domainWhiteList, "b2b.hci.utah.edu");
+    hashStoreName(domainWhiteList, "bibliopam.ec-lyon.fr");
     hashStoreName(domainWhiteList, "bic2.ibi.upenn.edu");
-    hashStoreName(domainWhiteList, "bioinfo2.ugr.es");
+    hashStoreName(domainWhiteList, "bifx-core3.bio.ed.ac.uk");
+    hashStoreName(domainWhiteList, "biodb.kaist.ac.kr");
+    hashStoreName(domainWhiteList, "bioinfo.gwdg.de");
     hashStoreName(domainWhiteList, "bioinfo5.ugr.es");
+    hashStoreName(domainWhiteList, "bioinformaticspa.com");
     hashStoreName(domainWhiteList, "bioshare.genomecenter.ucdavis.edu");
-    hashStoreName(domainWhiteList, "biowebport.com");
+    hashStoreName(domainWhiteList, "bricweb.sund.ku.dk");
+    hashStoreName(domainWhiteList, "bsaa.edu.ru");
     hashStoreName(domainWhiteList, "bx.bio.jhu.edu");
-    hashStoreName(domainWhiteList, "ccg.epfl.ch");
-    hashStoreName(domainWhiteList, "cctop.cos.uni-heidelberg.de");
-    hashStoreName(domainWhiteList, "cluster.hpcc.ucr.edu");
+    hashStoreName(domainWhiteList, "cbio.ensmp.fr");
+    hashStoreName(domainWhiteList, "cell-innovation.nig.ac.jp");
+    hashStoreName(domainWhiteList, "chopchop.cbu.uib.no.");
+    hashStoreName(domainWhiteList, "clip.korea.ac.kr");
+    hashStoreName(domainWhiteList, "cloud.brc.hu");
+    hashStoreName(domainWhiteList, "coppolalab.ucla.edu");
     hashStoreName(domainWhiteList, "costalab.ukaachen.de");
-    hashStoreName(domainWhiteList, "data.rc.fas.harvard.edu");
+    hashStoreName(domainWhiteList, "cvmfs-hubs.vhost38.genap.ca");
+    hashStoreName(domainWhiteList, "darned.ucc.ie");
     hashStoreName(domainWhiteList, "datahub-7ak6xof0.udes.genap.ca");
     hashStoreName(domainWhiteList, "datahub-7mu6z13t.udes.genap.ca");
     hashStoreName(domainWhiteList, "datahub-bx3mvzla.udes.genap.ca");
@@ -411,63 +442,116 @@ if (!hashLookup(domainWhiteList, "noHardwiredExceptions"))
     hashStoreName(domainWhiteList, "datahub-kazb7g4u.udes.genap.ca");
     hashStoreName(domainWhiteList, "datahub-nyt53rix.udes.genap.ca");
     hashStoreName(domainWhiteList, "datahub-ruigbdoq.udes.genap.ca");
-    hashStoreName(domainWhiteList, "dev.herv.img.cas.cz");
+    hashStoreName(domainWhiteList, "debass.ga");
     hashStoreName(domainWhiteList, "dev.stanford.edu");
     hashStoreName(domainWhiteList, "dice-green.liai.org");
+    hashStoreName(domainWhiteList, "dinglab.rimuhc.ca");
+    hashStoreName(domainWhiteList, "dip.mbi.ucla.edu");
     hashStoreName(domainWhiteList, "dropbox.ogic.ca");
-    hashStoreName(domainWhiteList, "dropfile.hpc.qmul.ac.uk");
+    hashStoreName(domainWhiteList, "edbc.org");
     hashStoreName(domainWhiteList, "edn.som.umaryland.edu");
-    hashStoreName(domainWhiteList, "epd.epfl.ch");
-    hashStoreName(domainWhiteList, "expiereddnsmanager.com");
+    hashStoreName(domainWhiteList, "epigenomegateway.wustl.edu");
+    hashStoreName(domainWhiteList, "fhlife.nojo.kr");
+    hashStoreName(domainWhiteList, "flamingo.psychiatry.uiowa.edu");
+    hashStoreName(domainWhiteList, "flash.biohpc.swmed.edu");
+    hashStoreName(domainWhiteList, "flu-infection.vhost38.genap.ca");
     hashStoreName(domainWhiteList, "frigg.uio.no");
-    hashStoreName(domainWhiteList, "ftp--ncbi--nlm--nih--gov.ibrowse.co");
-    hashStoreName(domainWhiteList, "ftp.science.ru.nl");
+    hashStoreName(domainWhiteList, "ftp.fidelitypensionmanagers.com");
+    hashStoreName(domainWhiteList, "ftp.stowers.org");
+    hashStoreName(domainWhiteList, "galaxy.anunna.wur.nl");
+    hashStoreName(domainWhiteList, "galaxy.genome.uab.edu");
     hashStoreName(domainWhiteList, "galaxy.med.uvm.edu");
-    hashStoreName(domainWhiteList, "garfield.igh.cnrs.fr");
     hashStoreName(domainWhiteList, "gcp.wenglab.org");
-    hashStoreName(domainWhiteList, "genap.ca");
     hashStoreName(domainWhiteList, "genemo.ucsd.edu");
     hashStoreName(domainWhiteList, "genome-tracks.ngs.omrf.in");
+    hashStoreName(domainWhiteList, "genome.senckenberg.de");
     hashStoreName(domainWhiteList, "genomics.virus.kyoto-u.ac.jp");
     hashStoreName(domainWhiteList, "genomicsdata.cs.ucl.ac.uk");
-    hashStoreName(domainWhiteList, "gsmplot.deqiangsun.org");
-    hashStoreName(domainWhiteList, "hgdownload--soe--ucsc--edu.ibrowse.co");
-    hashStoreName(domainWhiteList, "herv.img.cas.cz");
+    hashStoreName(domainWhiteList, "gwdu100.gwdg.de");
+    hashStoreName(domainWhiteList, "hcampanha.dyndns.org");
     hashStoreName(domainWhiteList, "hci-bio-app.hci.utah.edu");
+    hashStoreName(domainWhiteList, "hilbert.bio.ifi.lmu.de");
+    hashStoreName(domainWhiteList, "hiview.case.edu");
     hashStoreName(domainWhiteList, "hkgateway.med.umich.edu");
-    hashStoreName(domainWhiteList, "hsb.upf.edu");
+    hashStoreName(domainWhiteList, "hpc.bmrn.com");
+    hashStoreName(domainWhiteList, "iamelf.com");
     hashStoreName(domainWhiteList, "icbi.at");
-    hashStoreName(domainWhiteList, "lichtlab.cancer.ufl.edu");
-    hashStoreName(domainWhiteList, "manticore.niehs.nih.gov");
-    hashStoreName(domainWhiteList, "metamorf.hb.univ-amu.fr");
+    hashStoreName(domainWhiteList, "jadhavserver.usc.edu");
+    hashStoreName(domainWhiteList, "key2hair.com");
+    hashStoreName(domainWhiteList, "ki-data.mit.edu");
+    hashStoreName(domainWhiteList, "lapti.ucc.ie");
+    hashStoreName(domainWhiteList, "login.bases-doc.univ-lorraine.fr");
+    hashStoreName(domainWhiteList, "longlab.uchicago.edu");
+    hashStoreName(domainWhiteList, "lvgsrv1.epfl.ch");
+    hashStoreName(domainWhiteList, "lyncoffee.cafe24.com");
+    hashStoreName(domainWhiteList, "mbdata.upc.edu");
+    hashStoreName(domainWhiteList, "medinfo.hebeu.edu.cn");
+    hashStoreName(domainWhiteList, "members.cbio.mines-paristech.fr");
     hashStoreName(domainWhiteList, "microb215.med.upenn.edu");
-    hashStoreName(domainWhiteList, "mitranscriptome.path.med.umich.edu");
+    hashStoreName(domainWhiteList, "mitranscriptome.org");
+    hashStoreName(domainWhiteList, "mydrive.unilim.fr");
     hashStoreName(domainWhiteList, "nextgen.izkf.rwth-aachen.de");
-    hashStoreName(domainWhiteList, "oculargenomics.meei.harvard.edu");
+    hashStoreName(domainWhiteList, "nucleome.dcmb.med.umich.edu");
+    hashStoreName(domainWhiteList, "nucleus.ics.hut.fi");
+    hashStoreName(domainWhiteList, "numbzone.com");
+    hashStoreName(domainWhiteList, "omics.bioch.ox.ac.uk");
     hashStoreName(domainWhiteList, "onesgateway.med.umich.edu");
-    hashStoreName(domainWhiteList, "openslice.fenyolab.org");
-    hashStoreName(domainWhiteList, "peromyscus.rc.fas.harvard.edu");
     hashStoreName(domainWhiteList, "pgv19.virol.ucl.ac.uk");
     hashStoreName(domainWhiteList, "pricenas.biochem.uiowa.edu");
-    hashStoreName(domainWhiteList, "redirect.medsch.ucla.edu");
+    hashStoreName(domainWhiteList, "psangle.co.kr");
+    hashStoreName(domainWhiteList, "public.scg.stanford.edu");
+    hashStoreName(domainWhiteList, "q10marketing.com");
+    hashStoreName(domainWhiteList, "rewrite.bcgsc.ca");
+    hashStoreName(domainWhiteList, "rloop.hamadalab.com");
     hashStoreName(domainWhiteList, "rnaseqhub.brain.mpg.de");
+    hashStoreName(domainWhiteList, "rsousaluis.co.uk");
+    hashStoreName(domainWhiteList, "ruoho.uta.fi");
+    hashStoreName(domainWhiteList, "sbwdev.stanford.edu");
     hashStoreName(domainWhiteList, "schatzlabucscdata.yalespace.org.s3.amazonaws.com");
-    hashStoreName(domainWhiteList, "sharing.biotec.tu-dresden.de");
+    hashStoreName(domainWhiteList, "seanryderlab.org");
+    hashStoreName(domainWhiteList, "sendfiles.salk.edu");
+    hashStoreName(domainWhiteList, "share.ics.aalto.fi");
+    hashStoreName(domainWhiteList, "sheba-cancer.org.il");
+    hashStoreName(domainWhiteList, "shop.vbc.ac.at");
+    hashStoreName(domainWhiteList, "si-ru.kr");
     hashStoreName(domainWhiteList, "silo.bioinf.uni-leipzig.de");
-    hashStoreName(domainWhiteList, "snpinfo.niehs.nih.gov");
     hashStoreName(domainWhiteList, "spades.cgi.bch.uconn.edu");
+    hashStoreName(domainWhiteList, "stockcenter.vdrc.at");
+    hashStoreName(domainWhiteList, "swaruplab.bio.uci.edu");
+    hashStoreName(domainWhiteList, "test.phenogen.org");
+    hashStoreName(domainWhiteList, "thebasicsofit.com");
+    hashStoreName(domainWhiteList, "ucsc-track-hubs.scicore.unibas.ch");
     hashStoreName(domainWhiteList, "v91rc2.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v91rc3.master.demo.encodedcc.org");
     hashStoreName(domainWhiteList, "v94.rc2.demo.encodedcc.org");
+    hashStoreName(domainWhiteList, "varbank.ccg.uni-koeln.de");
     hashStoreName(domainWhiteList, "virtlehre.informatik.uni-leipzig.de");
-    hashStoreName(domainWhiteList, "web1.bx.bio.jhu.edu");
+    hashStoreName(domainWhiteList, "vm-galaxy-prod.toulouse.inra.fr");
+    hashStoreName(domainWhiteList, "vm10-dn4.qub.ac.uk");
+    hashStoreName(domainWhiteList, "webdisk.rsousaluis.co.uk");
+    hashStoreName(domainWhiteList, "webserver-schilder-ukdri.dsi.ic.ac.uk");
+    hashStoreName(domainWhiteList, "www-ncbi-nlm-nih-gov.bases-doc.univ-lorraine.fr");
+    hashStoreName(domainWhiteList, "www.51766.net");
+    hashStoreName(domainWhiteList, "www.bio.ifi.lmu.de");
+    hashStoreName(domainWhiteList, "www.crustcorporate.com");
     hashStoreName(domainWhiteList, "www.datadepot.rcac.purdue.edu");
-    hashStoreName(domainWhiteList, "www.isical.ac.in");
+    hashStoreName(domainWhiteList, "www.edbc.org");
+    hashStoreName(domainWhiteList, "www.epigenomes.ca");
+    hashStoreName(domainWhiteList, "www.healthstoriesonline.com");
+    hashStoreName(domainWhiteList, "www.morgridge.net");
     hashStoreName(domainWhiteList, "www.morgridge.us");
+    hashStoreName(domainWhiteList, "www.nitrofish.de");
     hashStoreName(domainWhiteList, "www.ogic.ca");
+    hashStoreName(domainWhiteList, "www.proshoetech.com");
     hashStoreName(domainWhiteList, "www.v93rc2.demo.encodedcc.org");
-    hashStoreName(domainWhiteList, "xinglabtrackhub.research.chop.edu");
-    hashStoreName(domainWhiteList, "ydna-warehouse.org");
+    hashStoreName(domainWhiteList, "xyz.com");
+    hashStoreName(domainWhiteList, "yakuba.uchicago.edu");
+    hashStoreName(domainWhiteList, "yama-arashi.info");
+    hashStoreName(domainWhiteList, "yardsacres.com");
+    hashStoreName(domainWhiteList, "yoda.ust.hk");
+    hashStoreName(domainWhiteList, "zdzlab.einsteinmed.edu");
+    hashStoreName(domainWhiteList, "zhaohua.urmc.rochester.edu");
+    hashStoreName(domainWhiteList, "zhoulab.whu.edu.cn");
     hashStoreName(domainWhiteList, "zlab-trackhub.umassmed.edu");
     hashStoreName(domainWhiteList, "zlab.umassmed.edu");
     }
@@ -492,26 +576,16 @@ if (!result)
 return result;
 }
 
-int netConnectHttps(char *hostName, int port, boolean noProxy)
-/* Return socket for https connection with server or -1 if error. */
+int netConnectHttps(char *hostName, int port, boolean noProxy, char *httpProtocol)
+/* Return socket for https connection with server or -1 if error.
+ * httpProtocol is HTTP/1.0 or HTTP/1.1.  
+ * 1.1 may only be used for non-persistent connections. Chunked encoding also not supported yet. */
 {
 
 int fd=0;
 
 // https_cert_check env var can be abort warn or none.
 
-setenv("https_cert_check", "log", 0);      // DEFAULT certificate check is log.
-
-setenv("https_cert_check_depth", "9", 0);   // DEFAULT depth check level is 9.
-
-setenv("https_cert_check_verbose", "off", 0);   // DEFAULT verbose is off.
-
-setenv("https_cert_check_domain_exceptions", "", 0);   // DEFAULT space separated list is empty string.
-
-char *proxyUrl = getenv("https_proxy");
-
-if (noProxy)
-    proxyUrl = NULL;
 char *connectHost;
 int connectPort;
 
@@ -520,7 +594,12 @@ BIO *sbio=NULL;  // ssl bio
 SSL_CTX *ctx;
 SSL *ssl;
 
-openSslInit();
+openSslInit();   // call early since it initializes vars from env vars in a thread-safe way.
+
+char *proxyUrl = https_proxy;
+
+if (noProxy)
+    proxyUrl = NULL;
 
 ctx = SSL_CTX_new(SSLv23_client_method());
 
@@ -532,18 +611,29 @@ struct timeval tv;
 struct myData myData;
 boolean doSetMyData = FALSE;
 
-if (!sameString(getenv("https_cert_check"), "none"))
+X509_VERIFY_PARAM *param = NULL;
+
+if (!sameString(https_cert_check, "none"))
     {
     if (checkIfInHashWithWildCard(hostName))
 	{
 	// old existing domains which are not (yet) compatible with openssl.
-	if (getenv("SCRIPT_NAME"))  // CGI mode
+	if (SCRIPT_NAME)  // CGI mode
 	    {
 	    fprintf(stderr, "domain %s cert check skipped because it is white-listed as an exception.\n", hostName);
 	    }
 	}
     else
 	{
+
+	/* Enable automatic hostname checks */
+	param = SSL_CTX_get0_param(ctx);
+	X509_VERIFY_PARAM_set_hostflags(param, X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS);
+	if (!X509_VERIFY_PARAM_set1_host(param, hostName, 0))   // some had strlen(hostName)
+	    {
+	    warn("SSL hostName for verify failed");
+	    return 0;
+	    }
 
 	// verify peer cert of the server.
 	// Set TRUSTED_FIRST for openssl 1.0
@@ -563,7 +653,7 @@ if (!sameString(getenv("https_cert_check"), "none"))
 	 * Let the verify_callback catch the verify_depth error so that we get
 	 * an appropriate error in the logfile.
 	 */
-	SSL_CTX_set_verify_depth(ctx, atoi(getenv("https_cert_check_depth")) + 1);
+	SSL_CTX_set_verify_depth(ctx, atoi(https_cert_check_depth) + 1);
 
 	// VITAL FOR PROPER VERIFICATION OF CERTS
 	if (!SSL_CTX_set_default_verify_paths(ctx)) 
@@ -610,11 +700,10 @@ if (fd == -1)
 
 if (proxyUrl)
     {
-    char *logProxy = getenv("log_proxy");
-    if (sameOk(logProxy,"on"))
-	verbose(1, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", hostName, port, connectHost,connectPort);
-    struct dyString *dy = newDyString(512);
-    dyStringPrintf(dy, "CONNECT %s:%d HTTP/1.0\r\n", hostName, port);
+    if (sameOk(log_proxy,"on"))
+	verbose(1, "CONNECT %s:%d %s via %s:%d\n", hostName, port, httpProtocol, connectHost,connectPort);
+    struct dyString *dy = dyStringNew(512);
+    dyStringPrintf(dy, "CONNECT %s:%d %s\r\n", hostName, port, httpProtocol);
     setAuthorization(pxy, "Proxy-Authorization", dy);
     dyStringAppend(dy, "\r\n");
     mustWriteFd(fd, dy->string, dy->stringSize);
@@ -705,6 +794,7 @@ while (1)
 	FD_SET(fd, &readfds);
 	FD_SET(fd, &writefds);
 	}
+
     tv.tv_sec = (long) (DEFAULTCONNECTTIMEOUTMSEC/1000);  // timeout default 10 seconds
     tv.tv_usec = (long) (((DEFAULTCONNECTTIMEOUTMSEC/1000)-tv.tv_sec)*1000000);
 
@@ -728,9 +818,10 @@ params->sbio = sbio;
 
 socketpair(AF_UNIX, SOCK_STREAM, 0, params->sv);
 
-// netBlockBrokenPipes(); works, but is heavy handed 
-//  and ignores SIGPIPE on all connections for all threads in the entire application. 
-// We are trying something more subtle and library and thread-friendly instead.
+netBlockBrokenPipes();
+// we had a version that was more sophisticated about blocking only the current thread,
+// but it only worked for Linux, and fixing it for MacOS would futher increase complexity with little benefit.
+// SIGPIPE is often more of a hassle than a help in may cases, so we can just ignore it.
 
 int rc;
 rc = pthread_create(&params->thread, NULL, netConnectHttpsThread, (void *)params);

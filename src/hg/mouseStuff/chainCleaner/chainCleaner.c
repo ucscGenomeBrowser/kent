@@ -1110,7 +1110,7 @@ void getFillGapAndValidBreaks(char *netFile) {
    fillGapInfoHash = newHash(0);            /* Hash keyed chainId, stores a list of fillGapInfo structs */
    AllocArray(depth2gap, maxNetDepth);      /* information about the current gap at each depth (hash key) */
    for (i=0; i<maxNetDepth; i++)
-      depth2gap[i] = newDyString(200);
+      depth2gap[i] = dyStringNew(200);
    AllocArray(depth2chainId, maxNetDepth);  /* information about which chain ID is the fill at each depth (hash key) */
 
    /* now parse all the nets, fill the fillGapInfo struct for every chain at depth>1 */
@@ -1161,7 +1161,7 @@ void getFillGapAndValidBreaks(char *netFile) {
 
    /* free arrays that hold values per depth */
    for (i=0; i<maxNetDepth; i++)
-      freeDyString(&depth2gap[i]);
+      dyStringFree(&depth2gap[i]);
    freez(&depth2gap);
    freez(&depth2chainId);
 
@@ -1638,7 +1638,7 @@ void loopOverBreaks() {
 ****************************************************************/
 void netInputChains (char *chainFile) {
    int fd = 0, retVal = 0;
-   struct dyString* cmd = newDyString(500);
+   struct dyString* cmd = dyStringNew(500);
    char netFile[200];
 
    /* must have the t/q sizes */
@@ -1657,13 +1657,26 @@ void netInputChains (char *chainFile) {
    }
 
    dyStringClear(cmd);
-   dyStringPrintf(cmd, "set -o pipefail; chainNet -minScore=0 %s %s %s stdout /dev/null | NetFilterNonNested.perl /dev/stdin -minScore1 3000 > %s", chainFile, tSizes, qSizes, netFile);
+   dyStringPrintf(cmd, "chainNet -minScore=0 %s %s %s %s.raw /dev/null", chainFile, tSizes, qSizes, netFile);
    verbose(3, "\t\trunning netting command: %s\n", cmd->string);
    retVal = system(cmd->string);
    if (0 != retVal)
-      errAbort("ERROR: chainNet | NetFilterNonNested.perl failed. Cannot net the chains. Command: %s\n", cmd->string);
-   verbose(3, "\t\tnetting done\n");
+      errAbort("ERROR: chainNet failed. Cannot net the chains. Command: %s\n", cmd->string);
+   dyStringClear(cmd);
 
+   dyStringPrintf(cmd, "NetFilterNonNested.perl %s.raw -minScore1 3000 > %s", netFile, netFile);
+   verbose(3, "\t\trunning NetFilterNonNested.perl command: %s\n", cmd->string);
+   retVal = system(cmd->string);
+   if (0 != retVal)
+      errAbort("ERROR: NetFilterNonNested.perl failed. Cannot filter the nets. Command: %s\n", cmd->string);
+   verbose(3, "\t\tnetting done\n");
+   dyStringClear(cmd);
+   
+   dyStringPrintf(cmd, "rm -f %s.raw", netFile);
+   verbose(3, "\t\trunning %s\n", cmd->string);
+   retVal = system(cmd->string);
+   dyStringClear(cmd);
+   
    inNetFile = cloneString(netFile);
 }
 
@@ -1683,7 +1696,7 @@ char *scoreSchemeName = NULL;
 optionHash(&argc, argv);
 struct twoBitFile *tbf;
 boolean didNetMyself = FALSE;  /* flag. True if we did the netting */
-struct dyString* cmd = newDyString(500);   /* for chainSort */
+struct dyString* cmd = dyStringNew(500);   /* for chainSort */
 int retVal = 0;
 char outChainFileUnsorted [500];
 

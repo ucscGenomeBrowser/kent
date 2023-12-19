@@ -50,11 +50,11 @@ void barChartSampleSaveToDb(struct sqlConnection *conn, struct barChartSample *e
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s')", 
 	tableName,  el->sample,  el->category);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct barChartSample *barChartSampleLoad(char **row)

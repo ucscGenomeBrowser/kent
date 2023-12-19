@@ -224,7 +224,7 @@ while (lineFileNext(lf, &line, &lineSize))
 void loadOneTable(char *database, struct sqlConnection *conn, char *tempName, char *tableName)
 /* Load .tab file tempName into tableName and remove tempName. */
 {
-struct dyString *query = newDyString(1024);
+struct dyString *query = dyStringNew(1024);
 
 verbose(1, "Loading up table %s\n", tableName);
 if (sqlTableExists(conn, tableName))

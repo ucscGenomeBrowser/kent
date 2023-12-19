@@ -1,19 +1,21 @@
 <H2>Description</H2>
 <P>
-<p>This track shows data from  Pond <i>et al</i>, 2020 <a target="_blank" 
-href = "https://observablehq.com/@spond/natural-selection-analysis-of-sars-cov-2-covid-19">
-"Natural selection analysis of SARS-CoV-2/COVID-19"</a>
+<p>This track shows data from Sergei Pond's research group, updated several
+times between 2020 and 2022, with results published in 2022. The current
+dataset is from February 2022 and is scheduled to be updated soon. Contact us
+or Sergei if you believe that the data shown is too outdated for your analyses. 
+</p>
 
-<p>The authors use several statistical techniques to identify selection sites of interest in 
-SARS-CoV-2 data from <a target="_blank" href="https://www.gisaid.org/about-us/mission/">GISAID</a>.
-Each site receives points for eight different categories, explained below, and sites with 
-the most points are ranked higher.</p>
+<p>The authors use several statistical techniques to identify selection sites
+of interest in SARS-CoV-2 data from <a target="_blank"
+href="https://www.gisaid.org/about-us/mission/">GISAID</a>.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
  
-<p>The gray to black color scale denotes increasing scores for selection sites 
-where each site has the potential to receive one additional point for any of the 
-eight following categories.</p>
+<p>
+This track has two subtracks:
+</p>
 
 <p><b>Positive Selection:</b> &quot;On average along interior 
 tree branches, this site has a dN/dS&gt;1 is accumulating non-synonymous changes (some 
@@ -21,59 +23,31 @@ of which might have a functional impact, but most probably don't) faster
 relative to synonymous changes than would be expected under neutral evolution.&quot;</p>
 
 <p><b>Negative Selection:</b> &quot;On average along interior 
-tree branches, this site has a dN/dS&lt;1, meaning that it conserved, i.e. 
+tree branches, this site has a dN/dS&lt;1, meaning that it is conserved, i.e. 
 non-synonymous changes might be selected against. Note that sites with no 
 changes (i.e. perfectly conserved sites) cannot be detected by dN/dS based methods&quot;</p>
 
-<p><b>Multiple Clades:</b> &quot;If a site belongs to this 
-category, then at least two internal branches in the tree are inferred to be 
-subject to positive selection, implying several selective events (not just a 
-single introduction)&quot;</p>
-
-<p><b>Increasing frequency:</b> &quot;When a site belongs to 
-this category, alternative amino-acids at this site has an increasing frequency 
-trend (based on applying the Jonckheere-Terpstra test to 10-day intervals)&quot;</p>
-
-<p><b>Predicted CTL epitopes:</b> &quot;This site belongs to 
-one or more CTL linear epitopes that are predicted to be recognized by one or 
-more HLA alleles reported in Campbell <i>et al</i>&quot;</p>
-
-<p><b>Intra-host variants:</b> &quot;When a site belongs to 
-this category, there is at least one deep sequencing dataset that shows the presence 
-of intra-host variation at the same site at between 2 and 90%.&quot;</p>
-
-<p><b>Unexpected residues:</b> &quot;When a site belongs to 
-this category, there is at least one amino-acid present in more than one 
-sequence that was not predicted to occur at this site based on the evolution 
-of other betacoronaviruses. It might indicate evolutionary events that we 
-have not observed in similar viruses before.&quot;</p>
-
-<p><b>Selected in animals:</b> &quot;There is evidence of 
-positive selection or differential selection acting on the bat/pangolin isolates 
-closely related to the SARS-CoV-2 genome based on data from Boni <i>et al</i>&quot;</p>
-
-<p><b>New</b> is any site that was recently detected as of June 30th, 2020.</p>  
-
-<p><b>Selection</b> is any site at which positive or negative selection occurs.</p>
-
-<p>For representation purposes scores (0-7) have been scaled to 500-1000.</p>
-
 <h2>Methods</h2>
-<p>The JSON used to generate the Genomic Coordinates of selection sites was parsed 
-and the position, gene, site_in_gene, kind, score, and type fields were used to 
-generate the resulting fields provided for each &quot;kind&quot; provided in the data.</p>
+<p>The CSV used to generate the genomic coordinates of selection sites was parsed 
+and the position, gene, site_in_gene, score, and type fields were used to 
+generate the resulting fields provided for each site in the data.</p>
 
 <h2>References</h2>
 <p>Pond <i>et al</i>, 2020 <a target="_blank" 
 href = "https://observablehq.com/@spond/natural-selection-analysis-of-sars-cov-2-covid-19">
 "Natural selection analysis of SARS-CoV-2/COVID-19"</a></p>
 
-<p>For questions, email 
-<A HREF="mailto:&#110;&#109;&#97;&#117;&#108;&#100;in&#64;&#117;&#99;s&#99;.
-&#101;d&#117;">
-&#110;&#109;&#97;&#117;&#108;&#100;in&#64;&#117;&#99;s&#99;.
-&#101;d&#117;</A> or 
-<A HREF="mailto:&#106;&#102;&#101;&#114;&#110;a1&#48;&#64;&#117;&#99;&#115;c.
-e&#100;&#117;">
-&#106;&#102;&#101;&#114;&#110;a1&#48;&#64;&#117;&#99;&#115;c.
-e&#100;&#117;</A>.</p>
+<p>Pond <i>et al</i>, 2020 <a target="_blank" 
+href = "https://observablehq.com/@spond/revised-sars-cov-2-analytics-page">
+"Natural selection analysis of SARS-CoV-2/COVID-19, V2"</a></p>
+
+<p>
+Martin DP, Lytras S, Lucaci AG, Maier W, Gr&#252;ning B, Shank SD, Weaver S, MacLean OA, Orton RJ,
+Lemey P <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35325204" target="_blank">
+    Selection Analysis Identifies Clusters of Unusual Mutational Changes in Omicron Lineage BA.1 That
+    Likely Impact Spike Function</a>.
+<em>Mol Biol Evol</em>. 2022 Apr 11;39(4).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35325204" target="_blank">35325204</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9037384/" target="_blank">PMC9037384</a>
+</p>

@@ -15,7 +15,8 @@ all::
 test:: patch1test grch38ToGrch37Test
 
 patch1test: mkout
-	${gff3ToPsl} input/chrom.sizes input/chrom.sizes input/haploMaps.gff stdout | sort -k 14 >  output/$@.psl
+	${gff3ToPsl} input/chrom.sizes input/chrom.sizes input/haploMaps.gff output/$@.unsorted.psl
+	sort -k 14 output/$@.unsorted.psl >  output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff expected/$@.psl output/$@.psl
 #	some more extensive testing commented out

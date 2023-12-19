@@ -124,7 +124,7 @@ if (dif == 0)
 return dif;
 }
 
-void hicTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
+void hicTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f, char outSep)
 /* Print out selected fields from hic.  If fields is NULL, then print out all fields. */
 {
 if (f == NULL)
@@ -155,9 +155,17 @@ for (i=0; i<fieldCount; ++i)
     }
 
 /* Output row of labels */
-fprintf(f, "#%s", fieldArray[0]);
+fprintf(f, "#");
+if (outSep == ',') fputc('"', f);
+fprintf(f, "%s", fieldArray[0]);
+if (outSep == ',') fputc('"', f);
 for (i=1; i<fieldCount; ++i)
-    fprintf(f, "\t%s", fieldArray[i]);
+    {
+    fputc(outSep, f);
+    if (outSep == ',') fputc('"', f);
+    fprintf(f, "%s", fieldArray[i]);
+    if (outSep == ',') fputc('"', f);
+    }
 fprintf(f, "\n");
 
 struct asObject *as = interactAsObj();
@@ -202,9 +210,16 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
 	if (asFilterOnRow(filter, row))
 	    {
 	    int i;
+            if (outSep == ',') fputc('"', f);
 	    fprintf(f, "%s", row[columnArray[0]]);
+            if (outSep == ',') fputc('"', f);
 	    for (i=1; i<fieldCount; ++i)
-		fprintf(f, "\t%s", row[columnArray[i]]);
+                {
+                fputc(outSep, f);
+                if (outSep == ',') fputc('"', f);
+		fprintf(f, "%s", row[columnArray[i]]);
+                if (outSep == ',') fputc('"', f);
+                }
 	    fprintf(f, "\n");
 	    maxOut --;
 	    }
@@ -354,12 +369,11 @@ if (errMsg != NULL)
 else
     {
     /* Print sample lines. */
-    struct hash *chromAliasHash = chromAliasMakeLookupTable(database);
     char *chrName = fileInfo->chromNames[1]; // Skip 0, which is "All"
-    struct chromAlias *a = hashFindVal(chromAliasHash, chrName);
+    char *nativeChrom = chromAliasFindNative(chrName);
     char *ucscChrName = NULL;
-    if (a != NULL)
-        ucscChrName = a->chrom;
+    if (nativeChrom != NULL)
+        ucscChrName = nativeChrom;
     else
         ucscChrName = chrName;
 

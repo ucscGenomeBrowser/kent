@@ -17,6 +17,7 @@ install:
 	cp -p --remove-destination bigPush.sh              ${SCRIPTS}
 	cp -p --remove-destination blatPing.csh            ${SCRIPTS}
 	cp -p --remove-destination browserUsage.csh        ${SCRIPTS}
+	cp -p --remove-destination buildPublicSessionThumbnailsIndexPage.py        ${SCRIPTS}
 	cp -p --remove-destination catchBot.csh            ${SCRIPTS}
 	cp -p --remove-destination chain.csh               ${SCRIPTS}
 	cp -p --remove-destination chain2.csh              ${SCRIPTS}
@@ -40,6 +41,7 @@ install:
 	cp -p --remove-destination checkSync.csh           ${SCRIPTS}
 	cp -p --remove-destination checkSyncAll.csh        ${SCRIPTS}
 	cp -p --remove-destination checkSyncAndMetaDataAll.py ${SCRIPTS}
+	cp -p --remove-destination checkSyncMetaDataWrapper.py ${SCRIPTS}
 	cp -p --remove-destination checkTableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination checkTrackUiLinks.csh   ${SCRIPTS}
 	cp -p --remove-destination checkWigFiles.csh       ${SCRIPTS}
@@ -63,6 +65,7 @@ install:
 	cp -p --remove-destination doGenbankTests          ${SCRIPTS}
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination dumpEmpty.csh           ${SCRIPTS}
+	cp -p --remove-destination filterCartDumps.sh      ${SCRIPTS}
 	cp -p --remove-destination findDbPartners.csh      ${SCRIPTS}
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}
 	cp -p --remove-destination findBlatServer.csh      ${SCRIPTS}
@@ -102,10 +105,14 @@ install:
 	cp -p --remove-destination getVersion.csh          ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination graph.csh               ${SCRIPTS}
+	cp -p --remove-destination hubCheckDraftEmails.py  ${SCRIPTS}
+	cp -p --remove-destination hubCheckPublicHubs.sh   ${SCRIPTS}
+	cp -p --remove-destination hubPublicMail           ${SCRIPTS}
 	cp -p --remove-destination hubPublicAutoUpdate     ${SCRIPTS}
 	cp -p --remove-destination hubSearchUpdate         ${SCRIPTS}
 	cp -p --remove-destination igtc.csh                ${SCRIPTS}
 	cp -p --remove-destination idHitter.csh            ${SCRIPTS}
+	cp -p --remove-destination imageComp.py            ${SCRIPTS}
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
 	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
 	cp -p --remove-destination kgTables                ${SCRIPTS}
@@ -113,11 +120,13 @@ install:
 	cp -p --remove-destination pbTables                ${SCRIPTS}
 	cp -p --remove-destination knownGene.csh           ${SCRIPTS}
 	cp -p --remove-destination linkCheckExclude        ${SCRIPTS}
+	cp -p --remove-destination longSessionCartDumps.sh ${SCRIPTS}
 	cp -p --remove-destination makeCytoBandIdeo.csh    ${SCRIPTS}
 	cp -p --remove-destination makeFilledBlockBed.csh  ${SCRIPTS}
 	cp -p --remove-destination makeTouchCommands.csh   ${SCRIPTS}
 	cp -p --remove-destination makeUniProtFile.csh     ${SCRIPTS}
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
+	cp -p --remove-destination pairLastzWrapper.py     ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
 	cp -p --remove-destination printMan.csh            ${SCRIPTS}
 	cp -p --remove-destination qaAutoTrack.sh          ${SCRIPTS}
@@ -126,6 +135,7 @@ install:
 	cp -p --remove-destination qaGbTracks              ${SCRIPTS}
 	cp -p --remove-destination qaEncodeTracks.csh      ${SCRIPTS}
 	cp -p --remove-destination qaEnsGenes.csh          ${SCRIPTS}
+	cp -p --remove-destination qaTestScript.py         ${SCRIPTS}
 	cp -p --remove-destination qaThis.csh              ${SCRIPTS}
 	cp -p --remove-destination realTime.csh            ${SCRIPTS}
 	cp -p --remove-destination removeAlphas            ${SCRIPTS}
@@ -134,6 +144,7 @@ install:
 	cp -p --remove-destination runCheckHgFindSpec      ${SCRIPTS}
 	cp -p --remove-destination runJoiner.csh           ${SCRIPTS}
 	cp -p --remove-destination runQaAutoTrack.sh       ${SCRIPTS}
+	cp -p --remove-destination searchedTermsCron.py    ${SCRIPTS}
 	cp -p --remove-destination sessionStats.csh        ${SCRIPTS}
 	cp -p --remove-destination showLastGit.csh         ${SCRIPTS}
 	cp -p --remove-destination showProcesslist.csh     ${SCRIPTS}
@@ -142,6 +153,7 @@ install:
 	cp -p --remove-destination trackDbGlobal.csh       ${SCRIPTS}
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.sh        ${SCRIPTS}
+	cp -p --remove-destination userLookup              ${SCRIPTS}
 	cp -p --remove-destination whoMadeIt.csh           ${SCRIPTS}
 	@echo Reminder: was your sandbox up to date?
 

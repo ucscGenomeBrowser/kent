@@ -1,0 +1,46 @@
+track rnaseq
+compositeTrack off
+visibility hide
+shortLabel CHM13 RNA-Seq
+longLabel CHM13 RNA-Seq (paired-end) unique genome-wide kmer filtering (unstranded)
+color 255,0,0
+type bigWig
+group rna
+priority 30
+html html/rnaseq.html
+    
+    track rnaseq_default
+    parent rnaseq
+    shortLabel RNA-Seq default
+    longLabel RNA-Seq default no kmer filtering
+    type bigWig 
+    visibility dense
+    negateValues off
+    bigDataUrl /gbdb/hs1/rnaseq/RNAseq_default.bw
+
+    track rnaseq_k100
+    parent rnaseq
+    shortLabel RNA-Seq k100
+    longLabel RNA-Seq k100 no kmer filtering
+    type bigWig 
+    visibility dense
+    negateValues off
+    bigDataUrl /gbdb/hs1/rnaseq/RNAseq_k100.bw
+
+    track rnaseq_k100-21mer
+    parent rnaseq
+    shortLabel RNA-Seq k100 21mer
+    longLabel RNA-Seq k100 21mer filtering
+    type bigWig 
+    visibility dense
+    negateValues off
+    bigDataUrl /gbdb/hs1/rnaseq/RNAseq_k100_21mer.bw
+    
+    track rnaseq_k100-dual-21mer
+    parent rnaseq
+    shortLabel RNA-Seq k100 dual 21mer
+    longLabel RNA-Seq k100 dual 21mer filtering
+    type bigWig 
+    visibility dense
+    negateValues off
+    bigDataUrl /gbdb/hs1/rnaseq/RNAseq_k100_dual_21mer.bw

@@ -13,6 +13,8 @@
 #include "hui.h"
 #include "subText.h"
 #include "web.h"
+#include "chromAlias.h"
+#include "instaPort.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -281,7 +283,7 @@ for (i=0; i<fieldCount; i++)
         }
     else
         {
-        printf("<tr><td>%s</td>\n", name);
+        printFieldLabel(name);
         printf("<td>%s</td></tr>\n", val);
         }
     printCount++;
@@ -361,7 +363,7 @@ static void bigBedClick(char *fileName, struct trackDb *tdb,
 char *chrom = cartString(cart, "c");
 
 /* Open BigWig file and get interval list. */
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 int ivStart = start, ivEnd = end;
 char *itemForUrl = item;
@@ -371,7 +373,13 @@ if (start == end)
     ivStart = max(0, start-1);
     ivEnd++;
     }
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
+char *instaFile = cloneString(trackDbSetting(tdb, "instaPortUrl"));
+struct hash *chainHash = NULL;
+struct bigBedInterval *bbList = NULL;
+if (instaFile)
+    bbList = instaIntervals(instaFile, bbi, chrom, ivStart, ivEnd, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 
 /* Get bedSize if it's not already defined. */
 if (bedSize == 0)
@@ -390,8 +398,6 @@ boolean firstTime = TRUE;
 struct bigBedInterval *bb;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    if (!(bb->start == start && bb->end == end))
-	continue;
     if (bedSize > 3)
 	{
 	char *name = cloneFirstWordByDelimiterNoSkip(bb->rest, '\t');
@@ -436,8 +442,19 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         errAbort("Disagreement between trackDb field count (%d) and %s fieldCount (%d)",
 		bedSize, fileName, bbFieldCount);
 	}
-    struct bed *bed = bedLoadN(fields, bedSize);
-    if (bedSize >= 6 && scoreFilter && bed->score < minScore)
+    struct bed *bed = NULL;
+    if (instaFile)
+        {
+        if ((bed = instaBed(bbi, chainHash, bb)) == NULL)
+            errAbort("can't port %s",fields[3]);
+        }
+    else
+        {
+        bed = bedLoadN(fields, bedSize);
+        }
+    if ((bed == NULL) || (bedSize >= 6 && scoreFilter && bed->score < minScore))
+        continue;
+    if (!(bed->chromStart == start && bed->chromEnd == end))
 	continue;
 
     // if there are extra fields, load them up because we may want to use them in URL:
@@ -473,6 +490,33 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             }
         if (sameString(tdb->type, "bigGenePred"))
             bigGenePredLinks(tdb->track, item);
+        if (startsWith("hprcDeletions", tdb->track) || startsWith("hprcInserts", tdb->track) || startsWith("hprcArr", tdb->track))
+            {
+            // the source field, which is the first item after the itemRgb will
+            // have all the other chains
+            // TODO: make this controlled by a trackDb setting
+            char *oChainList[2048];
+            int i, numChains = chopCommas(cloneString(restFields[6]), oChainList);
+            char *oChain = NULL;
+            struct dyString *ds = dyStringNew(0);
+            dyStringPrintf(ds, "var chainVis = {");
+            for (i = 0; i < numChains; i++)
+                {
+                oChain = oChainList[i];
+                char *cartVar = catTwoStrings("chainHprc", oChain);
+                char *chainVis = cartOptionalString(cart, cartVar);
+                if (chainVis == NULL)
+                    {
+                    cartVar = catTwoStrings(cartVar, "_sel");
+                    chainVis = cartOptionalString(cart, cartVar);
+                    // TODO: this is not getting the vis right, because _sel is not the
+                    // same as a visibility
+                    }
+                dyStringPrintf(ds, "\"%s\": \"%s\", ", oChain, chainVis != NULL ? hStringFromTv(hTvFromString(chainVis)) : "Hide");
+                }
+            dyStringPrintf(ds, "};\n");
+            jsInline(dyStringCannibalize(&ds));
+            }
         }
     if (isCustomTrack(tdb->track))
 	{

@@ -1,0 +1,213 @@
+<h2>Description</h2>
+<p>
+This track contains mappings of single nucleotide variants
+and small insertions and deletions (indels)
+from the European Variation Archive
+(<a href="https://www.ebi.ac.uk/eva/" target="_blank">EVA</A>)
+Release 5 for the $organism $db genome. The dbSNP database at NCBI no longer
+hosts non-human variants.
+</p>
+
+<h2>Interpreting and Configuring the Graphical Display</h2>
+<p>
+Variants are shown as single tick marks at most zoom levels.
+When viewing the track at or near base-level resolution, the displayed
+width of the SNP variant corresponds to the width of the variant in the
+reference sequence. Insertions are indicated by a single tick mark displayed
+between two nucleotides, single nucleotide polymorphisms are displayed as the
+width of a single base, and multiple nucleotide variants are represented by a
+block that spans two or more bases. The display is set to automatically collapse to 
+dense visibility when there are more than 100k variants in the window. 
+When the window size is more than 250k bp, the display is switched to density graph mode.
+</p>
+
+<h3>Searching, details, and filtering</h3>
+<p>
+Navigation to an individual variant can be accomplished by typing or copying
+the variant identifier (rsID) or the genomic coordinates into the Position/Search box on the                                                       
+Browser.</p>
+
+<p>
+A click on an item in the graphical display displays a page with data about
+that variant.  Data fields include the Reference and Alternate Alleles, the
+class of the variant as reported by EVA, the source of the data, the amino acid
+change, if any, and the functional class as determined by UCSC's Variant Annotation
+Integrator.
+</p>
+
+<p>Variants can be filtered using the track controls to show subsets of the 
+data by either EVA Sequence Ontology (SO) term, UCSC-generated functional effect, or
+by color, which bins the UCSC functional effects into general classes.</p>
+
+<h3>Mouse-over</h3>
+<p>
+Mousing over an item shows the ucscClass, which is the consequence according to the
+<a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a>, and
+the aaChange when one is available, which is the change in amino acid in HGVS.p
+terms. Items may have multiple ucscClasses, which will all be shown in the mouse-over
+in a comma-separated list. Likewise, multiple HGVS.p terms may be shown for each rsID
+separated by spaces describing all possible AA changes.</p>
+<p>
+Multiple items may appear due to different variant predictions on multiple gene transcripts.
+For all organisms the gene models used were the NCBI RefSeq curated when available, if not then 
+ensembl genes, or finally UCSC mappings of RefSeq if neither of the previous models was possible.
+</p>
+
+<h3>Track colors</h3>
+
+<p>
+Variants are colored according to the most potentially deleterious functional effect prediction
+according to the Variant Annotation Integrator. Specific bins can be seen in the Methods section
+below.
+</p>
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Variant Type</th>
+  </tr></thead>
+  <tr><td style="background-color: red"></td><td>Protein-altering variants and splice site variants</td></tr>
+  <tr><td style="background-color: green"></td><td>Synonymous codon variants</td></tr>
+  <tr><td style="background-color: blue"></td><td>Non-coding transcript or Untranslated Region (UTR) variants</td></tr>
+  <tr><td style="background-color: black"></td><td>Intergenic and intronic variants</td></tr>
+</table>
+</p>
+
+<h3>Sequence ontology (SO)</h3>
+
+<p>
+Variants are classified by EVA into one of the following <a target="_blank"
+href="http://www.sequenceontology.org/">sequence ontology</a> terms:
+</p>
+
+<ul>
+  <li> <b>substitution</b> &mdash;
+       A single nucleotide in the reference is replaced by another, alternate allele
+  <li> <b>deletion</b> &mdash; 
+       One or more nucleotides is deleted.  The representation in the database is to
+       display one additional nucleotide in both the Reference field (Ref) and the 
+       Alternate Allele field (Alt).  E.g. a variant that is a deletion of an A
+       maybe be represented as Ref = GA and Alt = G.
+  <li> <b>insertion</b> &mdash; 
+       One or more nucleotides is inserted.  The representation in the database is to
+       display one additional nucleotide in both the Reference field (Ref) and the 
+       Alternate Allele field (Alt).  E.g. a variant that is an insertion of a T maybe 
+       be represented as Ref = G and Alt = GT 
+  <li> <b>delins</b> &mdash; 
+       Similar to tandemRepeat, in that the runs of Ref and Alt Alleles are of
+       different length, except that there is more than one type of nucleotide,
+       e.g., Ref = CCAAAAACAAAAACA, Alt = ACAAAAAC.
+  <li> <b>multipleNucleotideVariant</b> &mdash; 
+       More than one nucleotide is substituted by an equal number of different 
+       nucleotides, e.g.,  Ref = AA, Alt = GC.
+  <li> <b>sequence alteration</b> &mdash;
+       A parent term meant to signify a deviation from another sequence. Can be
+       assigned to variants that have not been characterized yet.
+</ul>
+</p>
+
+<h2>Methods</h2>
+<p>
+Data were downloaded from the European Variation Archive EVA release 5 (2023-9-7)
+<a href="https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_5/by_assembly/"
+target="_blank">current_ids.vcf.gz</a> files corresponding to the proper assembly.</p>
+<p>
+Chromosome names were converted to UCSC-style
+and the variants passed through the
+<a target="_blank" href="/cgi-bin/hgVai">Variant Annotation Integrator</a> to
+predict consequence. For every organism the NCBI RefSeq curated models were used when available, 
+followed by ensembl genes, and finally UCSC mapping of RefSeq when neither of the previous models
+were possible.</p>
+<p>
+Variants were then colored according to their predicted consequence in the following fashion:
+<ul>
+<li><b><font color=red>Protein-altering variants</font></b> and 
+  <b><font color=red> splice site variants</font></b> 
+- exon_loss_variant, frameshift_variant, 
+inframe_deletion, inframe_insertion, initiator_codon_variant, missense_variant, 
+splice_acceptor_variant, splice_donor_variant, splice_region_variant, stop_gained, 
+stop_lost, coding_sequence_variant, transcript_ablation</li>
+<li><b><font color=green>Synonymous codon variants</font></b>
+- synonymous_variant, stop_retained_variant</li>
+<li><b><font color=blue>Non-coding transcript </font></b> or
+    <b><font color=blue>Untranslated Region (UTR) variants</font></b>
+- 5_prime_UTR_variant,
+3_prime_UTR_variant, complex_transcript_variant, non_coding_transcript_exon_variant</li>
+<li><b>Intergenic and intronic variants</b> - upstream_gene_variant, downstream_gene_variant,
+intron_variant, intergenic_variant, NMD_transcript_variant, no_sequence_alteration</li></ul>
+</p>
+
+<p>
+Sequence Ontology (&quot;<a href="http://www.sequenceontology.org/browser/current_release"
+target="_blank">SO</a>:&quot;)
+terms were converted to the variant classes, then the files were converted to BED,
+and then bigBed format.
+</p>
+<p>
+No functional annotations were provided by the EVA (e.g., missense, nonsense, etc).
+These were computed using UCSC's Variant Annotation Integrator (Hinrichs, et al., 2016).
+Amino-acid substitutions for missense variants are based
+on RefSeq alignments of mRNA transcripts, which do not always match the amino acids
+predicted from translating the genomic sequence.  Therefore, in some instances, the
+variant and the genomic nucleotide and associated amino acid may be reversed.
+E.g., a Pro &gt; Arg change from the perspective of the mRNA would be Arg &gt; Pro from
+the persepective the genomic sequence. Also, in  bosTau9, galGal5, rheMac8, 
+danRer10 and danRer11 the mitochondrial sequence was removed or renamed to match UCSC. 
+For complete documentation of the processing of these tracks, read the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/evaSnp5.txt">
+EVA Release 5 MakeDoc</a>.</p>
+
+<h2>Data Access</h2>
+<p>
+<b>Note:</b> It is not recommeneded to use LiftOver to convert SNPs between assemblies,
+and more information about how to convert SNPs between assemblies can be found on the following
+<a href="/FAQ/FAQreleases.html#snpConversion">FAQ entry</a>.</p>
+<p>
+The data can be explored interactively with the <a href="/cgi-bin/hgTables">Table Browser</a>,
+or the <a href="/cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis, the data may be
+queried from our <a href="/goldenPath/help/api.html">REST API</a>. Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our <a href="/FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
+information.</p>
+
+<p>
+For automated download and analysis, this annotation is stored in a bigBed file that
+can be downloaded from <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/"
+target="_blank">our download server</a>. The file for this track is called <tt>evaSnp5.bb</tt>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, e.g.
+<br><br>
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/evaSnp5.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<h2>Credits</h2>
+<p>
+This track was produced from the <a target="_blank" href="https://www.ebi.ac.uk/eva/">European
+Variation Archive release 5</a> data. Consequences were predicted using UCSC's Variant Annotation
+Integrator and NCBI's RefSeq as well as ensembl gene models. 
+</p>
+
+<h2>References</h2>
+<p>
+Cezard T, Cunningham F, Hunt SE, Koylass B, Kumar N, Saunders G, Shen A, Silva AF,
+Tsukanov K, Venkataraman S <em>et al.</em> <a href="https://doi.org/10.1093/nar/gkab960"
+target="_blank">The European Variation Archive: a FAIR resource of genomic variation for all
+species</a>.  <em>Nucleic Acids Res.</em> 2021 Oct 28:gkab960.
+<a href="https://doi.org/10.1093/nar/gkab960" target="_blank">doi:10.1093/nar/gkab960</a>.
+Epub ahead of print. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/34718739/"
+target="_blank">34718739</a>. PMID: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/pmc8728205/"
+target="_blank">PMC8728205</a>.
+</p>
+<p>
+Hinrichs AS, Raney BJ, Speir ML, Rhead B, Casper J, Karolchik D, Kuhn RM, Rosenbloom KR, Zweig AS,
+Haussler D, Kent WJ.
+<a href="https://academic.oup.com/bioinformatics/article/32/9/1430/1744314/"
+target="_blank">UCSC Data Integrator and Variant Annotation Integrator</a>.
+<em>Bioinformatics</em>. 2016 May 1;32(9):1430-2.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26740527" target="_blank">26740527</a>; PMC:
+<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4848401/" target="_blank">PMC4848401</a>
+</p>

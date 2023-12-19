@@ -123,7 +123,7 @@ jsOnEventById(event,groupVar,groupScript);
 for (group = groupList; group != NULL; group = group->next)
     {
     if (allTablesOk || differentString(group->name, "allTables"))
-        hPrintf(" <OPTION VALUE=%s%s>%s\n", group->name,
+        hPrintf(" <OPTION VALUE=%s%s>%s</OPTION>\n", group->name,
                 (group == selGroup ? " SELECTED" : ""),
                 group->label);
     }
@@ -180,7 +180,7 @@ if (sameString(selGroup->name, "allTables"))
     jsOnEventById(event, trackVar, trackScript);
     for (db = dbList; db != NULL; db = db->next)
 	{
-	hPrintf(" <OPTION VALUE=%s%s>%s\n", db->name,
+	hPrintf(" <OPTION VALUE=%s%s>%s</OPTION>\n", db->name,
 		(sameString(db->name, selDb) ? " SELECTED" : ""),
 		db->name);
 	}
@@ -318,7 +318,7 @@ for (name = nameList; name != NULL; name = name->next)
     hPrintf("<OPTION VALUE=\"%s\"", name->name);
     // Disable options for related tables that are noGenome -- if a non-positional table
     // is selected then we output its entire contents.
-    if (cartTrackDbIsNoGenome(database, name->name) &&
+    if (cartTrackDbIsNoGenome(database, name->name) && fullGenomeRegion() &&
         (track == NULL || differentString(track->table, name->name)))
         hPrintf(" DISABLED"NO_GENOME_CLASS);
     else if (sameString(selTable, name->name))
@@ -328,11 +328,12 @@ for (name = nameList; name != NULL; name = name->next)
         }
     if (tdb != NULL)
 	if ((curTrack == NULL) || differentWord(tdb->shortLabel, curTrack->shortLabel))
-	    hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
+	    hPrintf(">%s (%s)", tdb->shortLabel, name->name);
 	else
-	    hPrintf(">%s\n", name->name);
+	    hPrintf(">%s", name->name);
     else
-	hPrintf(">%s\n", name->name);
+	hPrintf(">%s", name->name);
+    hPrintf("</OPTION>\n");
     }
 hPrintf("</SELECT>\n");
 if (!trackHubDatabase(database))
@@ -383,7 +384,7 @@ for (ot = otList; ot != NULL; ot = ot->next)
 	hPrintf(" SELECTED");
     if (sameString(ot->name, outBed) || sameString(ot->name, outWigBed))
         hPrintf(" id=\"outBed\"");
-    hPrintf(">%s\n", ot->label);
+    hPrintf(">%s</OPTION>\n", ot->label);
     }
 hPrintf("</SELECT>\n");
 hPrintf(" ");
@@ -393,29 +394,54 @@ hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 
         "If you are looking for fully formatted "
         "gene model files for use in genome analysis pipelines,<br>check the "
         "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/genes'>bigZips/genes</a> "
-        "directory on our download server.</DIV>", database);
+        "directory on our download server.</DIV>", trackHubSkipHubName(database));
+hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='wigNote'>"
+        "<b>Signal data points format:</b> The Table Browser outputs signal track data in "
+        "<a href='../goldenPath/help/wiggle.html' target=_blank>wiggle</a> format by default. You can also use the "
+        "Table Browser <b>filter</b> feature to designate a value threshold and then output that as BED format. The "
+        "Table Browser will then create a BED file with an entry for every value that passes the filter. Our command line tool "
+        "<a href=\"../goldenPath/help/bigWig.html#Extract\" target=_blank>bigWigToBedGraph</a> can also be used "
+        "to convert wig files directly. Contact us at genome@soe.ucsc.edu for help with data extraction or conversion.</div>");
 hPrintf(" ");
 
-jsInline("function checkGtfNote() {"
-    "if (document.getElementById('outputTypeDropdown').value==='gff') "
-    "    document.getElementById('gffNote').style.display=''; "
-    "else "
-    "    document.getElementById('gffNote').style.display='none'; "
-    "}"
-    "$(document).ready(checkGtfNote);\n"
+// we should make an hgTables.js one day, this is ugly
+jsInline("function checkOutputNotes(event) {\n"
+    "var outType=document.getElementById('outputTypeDropdown').value;\n"
+    "if (outType==='gff')\n"
+    "    document.getElementById('gffNote').style.display='';\n"
+    "else if (outType==='wigData')\n"
+    "    document.getElementById('wigNote').style.display='';\n"
+    "else\n"
+    "    $('.outputNote').hide();\n" // a lot shorter with Jquery than without
+    "}\n"
+    "$(document).ready(checkOutputNotes);\n"
 );
-jsOnEventById("change", "outputTypeDropdown", "checkGtfNote()");
+jsAddEventForId("change", "outputTypeDropdown", "checkOutputNotes");
 
-jsInline("function checkSnpTablesNote() {"  
-    "var trackName = document.getElementById('hgta_track').value;"
-    "if (trackName.startsWith('dbSnp') || trackName.startsWith('snp')) "
-    "    document.getElementById('snpTablesNote').style.display=''; "
-    "else "
-    "    document.getElementById('snpTablesNote').style.display='none'; "
-    "}"
+jsInline("function checkSnpTablesNote(event) {\n"  
+    "var trackName = document.getElementById('hgta_track').value;\n"
+    "if (trackName.startsWith('dbSnp') || trackName.startsWith('snp'))\n"
+    "    document.getElementById('snpTablesNote').style.display='';\n"
+    "else\n"
+    "    document.getElementById('snpTablesNote').style.display='none';\n"
+    "}\n"
     "$(document).ready(checkSnpTablesNote);\n"
 );
-jsOnEventById("change", "outputTypeDropdown", "checkSnpTablesNote()");
+jsAddEventForId("change", "outputTypeDropdown", "checkSnpTablesNote");
+
+jsInlineF("function checkForCsv(event) {\n"
+    "var outputType = document.getElementById('outputTypeDropdown').value;\n"
+    "if (outputType === 'primaryTable' || outputType === 'selectedFields') {\n"
+    "   document.getElementById('%s').parentElement.style.display='';\n"
+    "   document.getElementById('excelOutNote').style.display='';\n"
+    "} else {\n"
+    "   document.getElementById('%s').parentElement.style.display='none';\n"
+    "   document.getElementById('excelOutNote').style.display='none';\n"
+    "}\n"
+    "}\n"
+    "$(document).ready(checkForCsv);\n"
+    , hgtaOutSep, hgtaOutSep);
+jsAddEventForId("change", "outputTypeDropdown", "checkForCsv");
 
 if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     {
@@ -671,7 +697,7 @@ printStep(stepNumber++);
         {
         isChromGraphCt = isChromGraph(tdb);
         }
-    cgiMakeButton(hgtaDoSchema, "describe table schema");
+    cgiMakeButton(hgtaDoSchema, "data format description");
     hPrintf("</TD></TR>\n");
     }
 
@@ -916,20 +942,31 @@ showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, is
 
 /* Print output destination line. */
     {
-    char *compressType =
-	cartUsualString(cart, hgtaCompressType, textOutCompressNone);
+    char *compressType = cartUsualString(cart, hgtaCompressType, textOutCompressNone);
+    char *fieldSep = cartUsualString(cart, hgtaOutSep, outTab);
     char *fileName = cartUsualString(cart, hgtaOutFileName, "");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>output filename:</B>&nbsp;");
     cgiMakeTextVar(hgtaOutFileName, fileName, 29);
-    hPrintf("&nbsp;(leave blank to keep output in browser)</TD></TR>\n");
+    hPrintf("&nbsp;(<span id='excelOutNote' style='display:none'>add .csv extension if opening in Excel, </span>leave blank to keep output in browser)</TD></TR>\n");
+    hPrintf("<TR><TD>\n");
+    hPrintf("<B>output field separator:&nbsp;</B>");
+
+    // tab or csv output
+    cgiMakeRadioButton(hgtaOutSep, outTab, sameWord(outTab, fieldSep));
+    hPrintf("&nbsp;tsv (tab-separated)&nbsp&nbsp;");
+
+    cgiMakeRadioButton(hgtaOutSep, outCsv, sameWord(outCsv, fieldSep));
+    hPrintf("&nbsp;csv (for excel)&nbsp;");
+
+    hPrintf("</TD></TR>\n");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>file type returned:&nbsp;</B>");
     cgiMakeRadioButton(hgtaCompressType, textOutCompressNone,
-	sameWord(textOutCompressNone, compressType));
-    hPrintf("&nbsp;plain text&nbsp&nbsp");
+        sameWord(textOutCompressNone, compressType));
+    hPrintf("&nbsp;plain text&nbsp;");
     cgiMakeRadioButton(hgtaCompressType, textOutCompressGzip,
-	sameWord(textOutCompressGzip, compressType));
+        sameWord(textOutCompressGzip, compressType));
     hPrintf("&nbsp;gzip compressed");
     hPrintf("</TD></TR>\n");
     }
@@ -1031,9 +1068,9 @@ hPrintf(
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
   "Bulk download of track data is available from the "
-  "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html\""
+  "<A HREF=\"http%s://hgdownload.soe.ucsc.edu/downloads.html\""
   ">Sequence and Annotation Downloads</A> page.</span>"
-   , getGenomeSpaceText()
+   , getGenomeSpaceText(), cgiAppendSForHttps()
 );
 hPrintf(" <span id='tbHelpLess' class='blueLink' style='display:none'>Less...</span>");
 
@@ -1069,7 +1106,7 @@ jsInline(
     "function maybeDisableNoGenome() {\n"
     "   var regionTypeSelected = $('input[name=\"hgta_regionType\"]:checked').val();\n"
     "   var regionIsGenome = (regionTypeSelected === 'genome');\n"
-    "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome');\n"
+    "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome,select[name=\"hgta_table\"] option.hgtaNoGenome');\n"
     "   $noGenomeOptions.attr('disabled', regionIsGenome)\n"
     "                   .css('color', regionIsGenome ? '' : 'black');\n"
     "}\n"

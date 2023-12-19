@@ -139,7 +139,7 @@ void autoTestSaveToDb(struct sqlConnection *conn, struct autoTest *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *aliasesArray, *ptsArray, *difsArray, *valsArray;
 aliasesArray = sqlStringArrayToString(el->aliases, 3);
 ptsArray = sqlShortArrayToString(el->pts, el->ptCount);
@@ -148,7 +148,7 @@ valsArray = sqlStringArrayToString(el->vals, el->valCount);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%d,'%s',%d,'%s', NULL ,%d,'%s')", 
 	tableName,  el->id,  el->shortName,  el->longName,  aliasesArray ,  el->ptCount,  ptsArray ,  el->difCount,  difsArray ,  el->valCount,  valsArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&aliasesArray);
 freez(&ptsArray);
 freez(&difsArray);

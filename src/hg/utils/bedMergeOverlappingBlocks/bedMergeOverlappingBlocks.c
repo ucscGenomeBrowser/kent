@@ -113,7 +113,7 @@ while (lineFileNext(lf, &line, NULL))
 	continue;
     if (numFields < 12)
 	errAbort("file %s doesn't appear to be in blocked-bed format. At least 12 fields required, got %d", inBed, numFields);
-    if (bedParseRgb(row[8]))
+    if (bedParseRgb(row[8]) != -1)
 	isItemRgb = TRUE;
     bed = bedLoadN(row, numFields);
     badBeds += fixBed(bed, lf->lineIx, log);

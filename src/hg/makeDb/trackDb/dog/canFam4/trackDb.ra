@@ -17,3 +17,5 @@ include filledGaps.ra
 include uuGene.ra
 include structVar.ra
 include altAllele.ra
+
+include ../../refSeqComposite.ra

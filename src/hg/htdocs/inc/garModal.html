@@ -1,0 +1,27 @@
+<div id="modalWrapper">
+<div id="modalWindow">
+
+<div style="text-align: right;"><a id="modalClose" href="#">close <b>X</b></a></div>
+
+<p>Complete this form to request a Genome Browser for this assembly:</p>
+
+<form id="modalFeedback" method="GET" action="" accept-charset="UTF-8">
+<p><label>Your Name<strong>*</strong><br>
+<input type="text" autofocus required size="48" name="name" value=""></label></p>
+<p><label>Email Address<strong>*</strong><br>
+<input type="email" required title="Please enter a valid email address" size="48" name="email" value=""></label></p>
+<p><label>Suggestion for common name:<br>
+<input type="betterCommonName" size="48" name="betterCommonName" id="betterCommonName"  value=""></label></p>
+<p><label>Other comments:<br>
+<textarea type="comment" cols="48" rows="8" id="comment" name="comment"></textarea></label></p>
+<ul class="noBullets">
+<li><div><span id="commonName">&nbsp;</span></div></li>
+<li><div><span id="formSciName">&nbsp;</span></div></li>
+<li><div><span id="formAsmId">&nbsp;</span></div></li>
+</ul>
+<p><input type="submit" id="submitButton" name="feedBackForm" value="Submit request"></p>
+<p>After we review your request, you will receive an acknowledgment email response to indicate we have received your request.</p>
+</form>
+
+</div> <!-- #modalWindow -->
+</div> <!-- #modalWrapper -->

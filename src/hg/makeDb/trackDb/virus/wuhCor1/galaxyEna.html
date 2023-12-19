@@ -1,0 +1,101 @@
+<h2>Description</h2>
+<p>
+This track represents parts of the <a href="https://galaxyproject.org/projects/covid19/" target="_blank">SARS-CoV-2 analysis efforts of the GalaxyProject</a> [<a href="#Ref1">1</a>].
+
+This project aims at fully open and transparent, high-quality reanalysis of public raw sequencing data deposited in <a href="https://www.insdc.org/" target="_blank">INSDC</a> databases on ready-to-use public infrastructure [<a href="#Ref2">2</a>].
+It restricts itself to data deposited by national genome surveillance projects that are providing sufficient sample metadata (along with the submitted data or through personal communication) to allow for best-practice analysis and reporting (for examples see [<a href="#Ref3">3</a>, <a href="#Ref4">4</a>, <a href="#Ref5">5</a>]).</p>
+
+<p>Required metadata are:
+<ul>
+<li>Sample collection date</li>
+<li>Sequencing platform, library layout and strategy (currently reanalysis is done for ampliconic paired-end Illumina and ONT data)</li>
+<li>the primer scheme used for the generation of amplicons (this information is used to trim primer sequences from the data before variant calling; reanalysis can be done for any primer scheme with publicly available primer binding site information)</li>
+<li>some kind of discernible batch information (e.g. a library identifier) that can be used to form batches of samples for reanalysis and batch-level reporting</li>
+</ul>
+</p>
+<p>
+Analysis is performed on public <a href="https://galaxyproject.org" target="_blank">Galaxy</a> <a href="https://galaxyproject.org/use/" target="_blank">servers</a> with only open-source tools orchestrated through public, community-developed, reproducible workflows available from <a href="https://workflowhub.eu/collections/2" target="_blank">WorkflowHub</a> and <a href="https://dockstore.org/organizations/iwc/collections/Covid" target="_blank">Dockstore</a> and includes mutation calling for all samples, generation of per-sample and batch-level mutation reports and plots, generation of consensus sequences and pangolin lineage assignments.
+Key results and metadata are hosted on a <a target="_blank" href="ftp://xfer13.crg.eu">public FTP server</a> provided by the <a href="https://www.crg.eu/" target="_blank">Centre for Genomic Regulation</a> and the <a href="https://www.bsc.es/" target="_blank">Barcelona Supercomputing Centre</a> and form the basis of these UCSC genome browser tracks.
+The project web site has <a href="https://galaxyproject.org/projects/covid19/data/" target="_blank">more information</a> about available results data.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<h3>Track structure</h3>
+<p>
+The <b>GalaxyProject SARS-CoV-2 mutations tracking</b> effort comes as a supertrack containing four subtracks that represent mutation data from SARS-CoV-2 samples collected in different 3-months periods of the Covid-19 pandemic.
+The quarters are redefined with each data update with the latest/current quarter starting 3 months prior to the day of the update. The end date displayed on the current quarter track corresponds to the collection date of the most recent analyzed sample on the day of the update.
+</p>
+
+<p>Each quarter's subtrack is, in turn, composed of separate mutation data tracks for the five most common pangolin lineages observed in the data for that quarter.</p>
+<p>Together the tracks can be used to explore the change of dominating lineages (and their associated mutation patterns) over time and, for lineages dominant over multiple quarters, to search for evidence of emerging within-lineage mutations.
+
+<h3>Mutation feature display</h3>
+<p>To facilitate such search the <em>shading</em> of mutation features reflects the mutation's <em>observed frequency</em> among the samples of a given lineage in the given quarter, which means that lineage defining mutations should be displayed in dark grey/black, while newly emerging mutations or non-systematic variant calling artefacts should appear in lighter shades of grey.</p>
+<p>Mutation features are labeled with their effects at the amino acid level and, for SNV mutations, the feature as a whole will extend across the base triplet encoding the affected amino acid, while the <em>thick</em> part of the feature will indicate the precise base that gets changed by the mutation. For deletions, the whole feature will have a <em>thick</em> rendering, while insertions will be displayed all <em>thin</em>.
+
+<h3>Mutation details</h3>
+<p><em>Hovering</em> over any mutation feature (in dense or full display mode of the track) will reveal <em>details</em> of the mutation and the associated statistics, in particular:
+<ul>
+<li>the precise value for its <em>observed frequency in the lineage and quarter</em></li>
+<li>the <em>intra-sample allele frequency</em> (median and lower/upper quartile) at which the mutation has been called in the samples in which it has been detected.</li>
+<li>the <em>collection date</em> and the collecting <em>country</em> of the sample, in which this mutation was first (ever) detected in the context of the lineage. Note that for older, still circulating lineages the collection date of that sample can be older than the start of the earliest quarter displayed in the genome browser (since our complete surveillance data goes back further than four quarters).</li>
+</ul>
+</p>
+
+<h3>Filtering Mutations</h3>
+<p>Mutation features displayed in each subtrack can be filtered by
+<ul>
+<li><em>country</em> or combination of countries in which samples of the given lineage and collection quarter with the mutation have been collected. You could for example filter all current quarter lineage tracks to show only mutations that have been found (in their respective lineage) in the UK.</li>
+<li><em>within-lineage frequency</em>. By default only mutations are shown that have been observed in at least 5% of the samples assigned to the given lineage in the given quarter (0.05 default filter setting). You can lower or increase that threshold as you see fit. Note however, that the underlying bigbed data of the tracks is filtered to contain only data for mutations above a threshold of 0.1% (i.e. a 0.001 hard filter is always in effect).</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+For analyses, batches of raw sequencing data get downloaded from public databases (in particular, from the <a target="_blank" href="ftp://ftp.sra.ebi.ac.uk">FTP server</a> of the <a href="https://www.ebi.ac.uk/ena/browser/home" target="_blank">European Nucleotide Archive</a>) onto one of several public Galaxy instances.
+The data gets processed with a sequencing platform-specific variation analysis workflow (one for <a href="https://workflowhub.eu/workflows/110" target="_blank">paired-end Illumina</a> data, another one for <a href="https://workflowhub.eu/workflows/111" target="_blank">ONT</a> data), which performs QC, read mapping, mapped reads postprocessing including primer trimming, variant calling and annotation and results in a collection of VCF files, one for each sample in the batch.
+This output gets picked up by a <a href="https://workflowhub.eu/workflows/109" target="_blank">reporting workflow</a>, which generates per-sample and per-batch mutation reports and a per-batch allele-frequency plot for a quick overview over variant patterns in the batch. In parallel, the outputs of the variation analysis workflow are also used by a <a href="https://workflowhub.eu/workflows/138" target="_blank">consensus workflow</a> to produce a FASTA consensus sequence for every sample in the batch.
+
+Sequencing data downloads, execution of the three types of workflows, and export of key results files are orchestrated by <a href="https://github.com/usegalaxy-eu/ena-cog-uk-wfs" target="_blank">bot scripts</a>, which can be used together with the public workflows to set up the complete analysis system on any Galaxy server.
+
+The bot accounts on participating Galaxy servers are checked on a roughly weekly basis for newly finished analysis histories, then
+<ol>
+<li>those histories are made publicly accessible on their server</li>
+<li>batch information, i.e., samples analyzed and their metadata, links to the histories, etc. are added to <pre>ftp://xfer13.crg.eu/gx-surveillance.json</pre></li>
+<li>pangolin lineage assignment is (re)performed for the entire collection of samples ever analyzed</li>
+<li>the genome browser tracks get recalculated by
+    <ol>
+    <li>parsing all analyzed data on the ftp server</li>
+    <li>determining the five most frequently observed pangolin lineages for each of the last four quarters, starting from the current date</li>
+    <li>extracting all mutations seen in each quarter for each of the five top lineages in that quarter</li>
+    <li>rebuilding the bigbed files and track files</li>
+    </ol>
+</li>
+</ol>
+</p>
+
+<h2>Credits</h2>
+<p>
+The analysis behind these tracks is the result of joint efforts of the <a href="https://galaxyproject.org/community/" target="_blank">Galaxy community</a> at large, the <a href="https://usegalaxy.org" target="_blank">usegalaxy.org</a> and <a href="https://galaxyproject.eu/people" target="_blank">usegalaxy.eu</a> teams, the <a href="https://galaxyproject.org/iuc/" target="_blank">IUC</a>, and the <a href="https://github.com/galaxyproject/iwc/" target="_blank">IWC</a>.
+</p>
+<p>
+The infrastructure and development work behind the project was made possible by <a href="https://galaxyproject.org/projects/covid19/#our-sponsors">generous support from funding agencies around the world</a>.
+</p>
+<p>
+For questions regarding SARS-CoV-2 data analysis and its automation with Galaxy, please join us in the <a href="https://matrix.to/#/#galaxyproject_Public-Health:gitter.im" target="_blank">GalaxyProject Public Health matrix channel</a>.
+</p>
+<p>The project would not be possible without the sequencing data provided by genome surveillance initiatives that have decided to make their data and metadata publically available by depositing it in INSDC databases. In particular we would like to thank:
+<ul>
+<li id="Ref3"><a href="https://www.cogconsortium.uk/">The COVID-19 Genomics UK Consortium (COG-UK)</a></li>
+<li id="Ref4"><a href="https://covid19dataportal.ee/en/genomics_transcriptomics/">The Estonian KoroGeno-EST initiative</a></li>
+<li id="Ref5"><a href="https://greecevscorona.gr/">The Greece vs Corona project</a></li>
+</ul>
+
+<h2>References</h2>
+
+<p>
+<ol>
+<li id="Ref1">Baker, D.; van den Beek, M.; Blankenberg, D.; Bouvier, D.; Chilton, J.; Coraor, N.; Coppens, F.; Eguinoa, I.; Gladman, S.; Grüning, B.; Keener, N.; Lariviere, D.; Lonie, A.; Kosakovsky Pond, S.; Maier, W.; Nekrutenko, A.; Taylor, J. & Weaver, S. (2020): No more business as usual: Agile and effective responses to emerging pathogen threats require open data and open analytics. PLoS Pathogens 16(8):e1008643. DOI: <a href="https://doi.org/10.1371/journal.ppat.1008643">10.1371/journal.ppat.1008643</a></li>
+<li id="Ref2">Maier, W.; Bray, S.; van den Beek, M.; Bouvier, D.; Coraor, N.; Miladi, M.; Singh, B.; Argila, J. R. D.; Baker, D.; Roach, N.; Gladman, S.; Coppens, F.; Martin, D. P.; Lonie, A.; Grüning, B.; Pond, S. L. K. & Nekrutenko, A. (2021): Ready-to-use public infrastructure for global SARS-CoV-2 monitoring. Nature Biotechnology 39, 1178-1179. DOI: <a href="https://doi.org/10.1038/s41587-021-01069-1">10.1038/s41587-021-01069-1</a></li>
+</ol>
+</p>

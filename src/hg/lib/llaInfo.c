@@ -110,14 +110,14 @@ void llaInfoSaveToDb(struct sqlConnection *conn, struct llaInfo *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *corrNamesArray, *corrsArray;
 corrNamesArray = sqlStringArrayToString(el->corrNames, el->numCorrs);
 corrsArray = sqlFloatArrayToString(el->corrs, el->numCorrs);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%f,%f,%f,%f,%f,%f,%f,%f,%u,%u,%f,%f,%f,%s,%s,%u,'%s','%s')", 
 	tableName,  el->name,  el->type,  el->SnTm,  el->SnGc,  el->SnSc,  el->Sn3pSc,  el->AsnTm,  el->AsnGc,  el->AsnSc,  el->Asn3pSc,  el->prodLen,  el->ORFLen,  el->meltTm,  el->frcc,  el->fr3pcc,  el->SnSeq,  el->AsnSeq,  el->numCorrs,  corrNamesArray ,  corrsArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&corrNamesArray);
 freez(&corrsArray);
 }

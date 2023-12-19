@@ -966,6 +966,82 @@ searchPriority 8
             -workhorse=hgwdev) > cleanup.log 2>&1 &
 
 ##############################################################################
+# crispr whole genome (DONE - 2022-03-01 - Hiram)
+    mkdir /hive/data/genomes/bosTau9/bed/crisprAll
+    cd /hive/data/genomes/bosTau9/bed/crisprAll
+
+    # the large shoulder argument will cause the entire genome to be scanned
+    # this takes a while for a new genome to get the bwa indexing done
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
+    bosTau9 -tableName=crisprAll \
+    -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > indexFa.log 2>&1
+    # real    1m10.666s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+    -continue=ranges bosTau9 -tableName=crisprAll \
+    -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > ranges.log 2>&1
+    # real    8554m11.613s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+    -continue=effScores bosTau9 -tableName=crisprAll \
+    -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > effScores.log 2>&1
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+    -continue=offTargets bosTau9 -tableName=crisprAll \
+    -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > offTargets.log 2>&1
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+    -continue=load bosTau9 -tableName=crisprAll \
+    -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > load.log 2>&1
+
+    cat guides/run.time | sed -e 's/^/# /;'
+# Completed: 100 of 100 jobs
+# CPU time in finished jobs:      12054s     200.90m     3.35h    0.14d  0.000 y
+# IO & Wait Time:                   282s       4.70m     0.08h    0.00d  0.000 y
+# Average job time:                 123s       2.06m     0.03h    0.00d
+# Longest finished job:             432s       7.20m     0.12h    0.01d
+# Submission to last job:           434s       7.23m     0.12h    0.01d
+
+    cat specScores/run.time | sed -e 's/^/# /;'
+# Completed: 841413 of 841413 jobs
+# CPU time in finished jobs:   71934084s 1198901.39m 19981.69h  832.57d  2.281 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                  85s       1.41m     0.02h    0.00d
+# Longest finished job:             170s       2.83m     0.05h    0.00d
+# Submission to last job:        203959s    3399.32m    56.66h    2.36d
+
+    grep -c . effScores.tab
+    # 288692962
+    grep -c . specScores.tab 
+    # 218717447
+
+    cat effScores/run.time | sed -e 's/^/# /;'
+# Completed: 28864 of 28864 jobs
+# CPU time in finished jobs:   12570265s  209504.41m  3491.74h  145.49d  0.399 y
+# IO & Wait Time:                 45737s     762.29m    12.70h    0.53d  0.001 y
+# Average job time:                 437s       7.28m     0.12h    0.01d
+# Longest finished job:            7448s     124.13m     2.07h    0.09d
+# Submission to last job:         31650s     527.50m     8.79h    0.37d
+
+    cat offTargets/run.time | sed -e 's/^/# /;'
+# Completed: 145438 of 145438 jobs
+# CPU time in finished jobs:    2306725s   38445.42m   640.76h   26.70d  0.073 y
+# IO & Wait Time:                901605s   15026.74m   250.45h   10.44d  0.029 y
+# Average job time:                  22s       0.37m     0.01h    0.00d
+# Longest finished job:             133s       2.22m     0.04h    0.00d
+# Submission to last job:         14396s     239.93m     4.00h    0.17d
+
+##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2018-11-08 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
@@ -1096,4 +1172,29 @@ ls: cannot access no: No such file or directory
 /hive/data/genomes/bosTau9/pushQ/redmine.bosTau9.releaseLog.txt
 /hive/data/genomes/bosTau9/pushQ/redmine.bosTau9.table.list
 
-#########################################################################
+##############################################################################
+# LIFTOVER TO bosTau4 (DONE - 2022-12-06 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bosTau9/bed/blat.bosTau4.2022-12-06
+    cd /hive/data/genomes/bosTau9/bed/blat.bosTau4.2022-12-06
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/bosTau9/bosTau9.2bit \
+        -targetSizes=/hive/data/genomes/bosTau9/chrom.sizes \
+        -query2Bit=/hive/data/genomes/bosTau4/bosTau4.2bit \
+        -querySizes=/hive/data/genomes/bosTau4/chrom.sizes \
+        -ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
+         bosTau9 bosTau4
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/bosTau9/bosTau9.2bit \
+        -targetSizes=/hive/data/genomes/bosTau9/chrom.sizes \
+        -query2Bit=/hive/data/genomes/bosTau4/bosTau4.2bit \
+        -querySizes=/hive/data/genomes/bosTau4/chrom.sizes \
+        -ooc=/hive/data/genomes/bosTau9/jkStuff/bosTau9.11.ooc \
+         bosTau9 bosTau4) > doLiftOverToBosTau9.log 2>&1
+    # real    384m15.787s
+
+    # see if the liftOver menus function in the browser from bosTau9 to bosTau4
+
+##############################################################################

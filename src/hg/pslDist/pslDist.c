@@ -114,8 +114,8 @@ void pslDist(char *inPsl, int numDirs, char *outRoot)
 /* pslDist - distribute psl alignments into dirs by tName and qName. */
 {
 struct lineFile *pslLf = pslFileOpen(inPsl);
-struct dyString *dy = newDyString(256);
-struct dyString *dy2 = newDyString(256);
+struct dyString *dy = dyStringNew(256);
+struct dyString *dy2 = dyStringNew(256);
 struct hash *dirHash = newHash(8);  
 struct psl *psl;
 char *file;

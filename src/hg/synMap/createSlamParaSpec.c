@@ -39,7 +39,8 @@ void makeSubDirs(char *db)
 struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
 char **row;
-char *query = NOSQLINJ "select chrom from chromInfo";
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom from chromInfo");
 hSetDb(db);
 conn = hAllocConn();
 sr = sqlGetResult(conn, query);
@@ -75,7 +76,7 @@ void createSlamParaSpec(int maxFaSize, char *resultsDir, char *refNibDir, char *
 {
 struct synMap *smList = NULL, *sm = NULL;
 struct synMap *tmpList = NULL, *smNext = NULL;
-struct dyString *command = newDyString(4096);
+struct dyString *command = dyStringNew(4096);
 char *out1 = NULL, *out2 = NULL;
 FILE *out = NULL;
 int synSize = 0;

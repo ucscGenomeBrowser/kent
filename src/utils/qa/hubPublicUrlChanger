@@ -1,0 +1,66 @@
+# bin/bash
+# hubUrlChanger 
+# Daniel Schmelter 1/13/22
+# This script is used when a publicHub contributor asks to swap their hubUrl.
+#
+set -eEu -o pipefail
+#Hard fail if command fails or variable not set
+
+echo -e "\nCaution, this script will update hubPublic tabe on Dev, Beta, and RR"
+echo -e "It is to be used when you want to change a hubUrl entry in hubPublic\n"
+echo -e "This script assumes that the current/old hub URL at least has a unique shortLabel"
+
+read -p 'Enter the old hubPublic URL: ' oldUrl
+read -p 'Enter the new URL: ' newUrl
+
+#DEV
+echo "Checking hubPublic before DEV update"
+hgsql -e "select * from hubPublic where hubUrl='$oldUrl'\G" hgcentraltest
+while true
+do
+    read -r -p 'Continue? Y or y accepted:  ' choiceDev
+    case "$choiceDev" in
+      y|Y) break ;;
+      *) echo 'Response not valid';;
+    esac
+done
+
+hgsql  -e "update hubPublic set hubUrl='$newUrl' where hubUrl='$oldUrl';" hgcentraltest
+hgsql  -e "select * from hubPublic where hubUrl='$newUrl'\G" hgcentraltest
+echo ""
+
+#BETA
+echo "Checking hubPublic before BETA update"
+hgsql -h hgwbeta -e "select * from hubPublic where hubUrl='$oldUrl'\G" hgcentralbeta
+while true
+do
+    read -r -p 'Continue? Y or y accepted:  ' choiceBeta
+    case "$choiceBeta" in
+      y|Y) break ;;
+      *) echo 'Response not valid';;
+    esac
+done
+
+echo "Update and check hubPublic hubUrl"
+hgsql -h hgwbeta -e "update hubPublic set hubUrl='$newUrl' where hubUrl='$oldUrl';" hgcentralbeta
+hgsql -h hgwbeta -e "select * from hubPublic where hubUrl='$newUrl'\G" hgcentralbeta
+echo ""
+
+#RR
+echo "Checking hubPublic before RR update"
+hgsql -h genome-centdb -e "select * from hubPublic where hubUrl='$oldUrl'\G" hgcentral
+while true
+do
+    read -r -p 'Continue? Y or y accepted:  ' choiceRr
+    case "$choiceRr" in
+      y|Y) break ;;
+      *) echo 'Response not valid';;
+    esac
+done
+
+
+echo "Update and check hubPublic hubUrl"
+hgsql -h genome-centdb -e "update hubPublic set hubUrl='$newUrl' where hubUrl='$oldUrl';" hgcentral
+hgsql -h genome-centdb -e "select * from hubPublic where hubUrl='$newUrl'\G" hgcentral
+
+echo "You are DONE! Check the RR hgHubConnect to verify."

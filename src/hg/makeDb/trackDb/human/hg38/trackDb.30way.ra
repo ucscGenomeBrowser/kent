@@ -53,7 +53,26 @@ sGroup_Primates panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 nasLar1 rhiBie1 rhiRox1 
         longLabel 30 mammals Basewise Conservation by PhyloP (27 primates)
         noInherit on
         configurable on
-        type wig -14.191 1.199
+        type wig -20 1.312
+        maxHeightPixels 100:50:11
+        viewLimits -3:1
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+        logoMaf multiz30way
+
+
+        track phyloPSSREV30way
+        subTrack cons30wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel Cons 30 Mammals
+        longLabel 30 mammals Basewise Conservation by PhyloP SSREV model (27 primates)
+        noInherit on
+        configurable on
+        type wig -20 1.226
         maxHeightPixels 100:50:11
         viewLimits -3:1
         autoScale off

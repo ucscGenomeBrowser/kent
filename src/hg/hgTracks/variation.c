@@ -599,8 +599,8 @@ static Color snp132ColorByAlleleFreq(struct snp132Ext *snp, struct hvGfx *hvg)
 {
 static boolean colorsInited = FALSE;
 static Color redToBlue[EXPR_DATA_SHADES];
-static struct rgbColor red = {255, 0, 0};
-static struct rgbColor blue = {0, 0, 255};
+static struct rgbColor red = {255, 0, 0, 255};
+static struct rgbColor blue = {0, 0, 255, 255};
 if (!colorsInited)
     hvGfxMakeColorGradient(hvg, &red, &blue, EXPR_DATA_SHADES, redToBlue);
 if (snp->alleleFreqCount > 0)
@@ -1553,10 +1553,10 @@ int colorLookup[256];
 void ldShadesInit(struct track *tg, struct hvGfx *hvg, boolean isDprime)
 /* Allocate the LD for positive and negative values, and error cases */
 {
-static struct rgbColor white = {255, 255, 255};
-static struct rgbColor red   = {255,   0,   0};
-static struct rgbColor green = {  0, 255,   0};
-static struct rgbColor blue  = {  0,   0, 255};
+static struct rgbColor white = {255, 255, 255, 255};
+static struct rgbColor red   = {255,   0,   0, 255};
+static struct rgbColor green = {  0, 255,   0, 255};
+static struct rgbColor blue  = {  0,   0, 255, 255};
 char *ldPos = NULL;
 
 ldPos = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "_pos", ldPosDefault);
@@ -2796,14 +2796,14 @@ return FALSE;
 }
 
 struct linkedFeatures *lfFromBigDbSnp(struct trackDb *tdb, struct bigBedInterval *bb,
-                                      struct bigBedFilter *filters, int freqSourceIx)
+                                      struct bigBedFilter *filters, int freqSourceIx, struct bbiFile *bbi)
 /* Convert one bigDbSnp item to a linkedFeatures for drawing if it passes filter, else NULL. */
 {
 struct linkedFeatures *lf = NULL;
 char startBuf[16], endBuf[16];
 char *bedRow[32];
 bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-if (bigBedFilterInterval(bedRow, filters))
+if (bigBedFilterInterval(bbi, bedRow, filters))
     {
     struct bigDbSnp *bds = bigDbSnpLoad(bedRow);
     double minMaf = cartUsualDoubleClosestToHome(cart, tdb, FALSE, "minMaf", 0.0);

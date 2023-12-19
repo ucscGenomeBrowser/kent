@@ -1,0 +1,6 @@
+hub HPRC
+shortLabel HPRC
+longLabel The Human Pangenome Reference Consortium
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html

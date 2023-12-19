@@ -1972,6 +1972,33 @@ done | tr '[\t]' '[ ]' >> README.txt
     cat exonAA/c*.gz > $gp.$mz.exonAA.fa.gz 
     cat exonNuc/c*.gz > $gp.$mz.exonNuc.fa.gz 
 
+
+    mkdir protAA protNuc
+
+    ls knownCanonical/*.known.bed | while read F
+    do
+      if [ -s $F ]; then
+         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
+      fi
+    done | while read C
+    do
+	echo "date"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
+	    gzip -c > protNuc/$C.protNuc.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed $db $mz knownGene order.list stdout | \
+	    gzip -c > protAA/$C.protAA.fa.gz"
+    done > $gp.$mz.prot.jobs
+
+    time (sh -x $gp.$mz.jobs) > $gp.$mz.prot.job.log
+    # real    230m33.479s
+
+    export mz=multiz100way
+    export gp=knownCanonical
+    export db=hg38
+    zcat protAA/c*.gz | gzip -c > $gp.$mz.protAA.fa.gz &
+    zcat protNuc/c*.gz | gzip -c > $gp.$mz.protNuc.fa.gz &
+    # about 6 minutes
+
     rm -rf exonAA exonNuc
 
     export mz=multiz100way

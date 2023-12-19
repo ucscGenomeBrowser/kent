@@ -1,0 +1,44 @@
+
+# viewing HPRC chain files constructed by HPRC (DONE - Hiram - 2023-03-15)
+
+mkdir /hive/data/genomes/hg38/bed/hprc/bigChains
+cd /hive/data/genomes/hg38/bed/hprc/bigChains
+
+### fetch the HPRC files:
+
+for N in `cut -f2 /cluster/home/hiram/kent/src/hg/makeDb/doc/hprcAsmHub/assembly.hprcName.asmId.txt`
+do
+  printf "%s\n" "${N}"
+  wget --timestamping "https://s3-us-west-2.amazonaws.com/human-pangenomics/submissions/A512ED34-9A91-4FC1-91A5-7AA162D7AFB2--Y1-BIGCHAINS/GRCh38-f1g-90-mc-aug11/aggr_bigchains/GRCh38/${N}-to-GRCh38.bigChain.bb"
+  wget --timestamping "https://s3-us-west-2.amazonaws.com/human-pangenomics/submissions/A512ED34-9A91-4FC1-91A5-7AA162D7AFB2--Y1-BIGCHAINS/GRCh38-f1g-90-mc-aug11/aggr_bigchains/GRCh38/${N}-to-GRCh38.bigLink.bb"
+done
+
+
+### symlink those files into gbdb for use in a composite track:
+### (DONE - Hiram - 2023-03-15)
+
+egrep -v "NA19240.1|NA19240.2|HG005.1|HG005.2|HG002.1|HG002.2" /cluster/home/hiram/kent/src/hg/makeDb/doc/hprcAsmHub/assembly.hprcName.asmId.txt | while read L
+do
+  gbdb="/gbdb/hg38/chainNet"
+  TOP="/hive/data/genomes/hg38/bed/hprc/bigChains"
+  accession=`echo ${L} | cut -d' ' -f1`
+  hprc=`echo ${L} | cut -d' ' -f2`
+  asmId=`echo ${L} | cut -d' ' -f3`
+  chainFile="${hprc}-to-GRCh38.bigChain.bb"
+  linkFile="${hprc}-to-GRCh38.bigLink.bb"
+  destChain="hg38.chainHprc${accession}.bb"
+  destLink="hg38.chainHprc${accession}Link.bb"
+  if [ ! -s "${linkFile}" ]; then
+    printf "# missing: %s\n" "${linkFile}" 1>&2
+    exit 255
+  fi
+  if [ ! -s "${chainFile}" ]; then
+    printf "# missing: %s\n" "${chainFile}" 1>&2
+  else
+    printf "ln -s %s %s\n" "$TOP/$chainFile" "$gbdb/${destChain}"
+    printf "ln -s %s %s\n" "$TOP/$linkFile" "$gbdb/${destLink}"
+    ln -s "$TOP/$chainFile" "$gbdb/${destChain}"
+    ln -s "$TOP/$linkFile" "$gbdb/${destLink}"
+  fi
+done
+

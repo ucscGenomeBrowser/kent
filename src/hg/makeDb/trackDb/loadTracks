@@ -16,6 +16,7 @@ release=''
 settings=''
 local=''
 strict=''
+noHtmlCheck=''
 raName=''
 grpSql=''
 gbdbList=''
@@ -26,6 +27,8 @@ while [[ $1 == -* ]] ; do
             release=$(echo $1 | sed 's/-release=//') ;;
         -strict)
             strict=yes;;
+        -noHtmlCheck)
+            noHtmlCheck=yes;;
         -addVersion)
             addVersion=yes;;
         -settings)
@@ -87,6 +90,9 @@ loadDbTracks() {
         fopts="$fopts -release=$release"
         qopts="$qopts -release=$release"
     fi
+    if [ -n "$noHtmlCheck" ] ; then
+        topts="$topts -noHtmlCheck"
+    fi
     if [ -n "$addVersion" ] ; then
         topts="$topts -addVersion"
     fi
@@ -117,7 +123,7 @@ loadDbTracks() {
     cmd="hgFindSpec $fopts $org $db $hgFindSpec ${sqlDir}/hgFindSpec.sql ."
     echo $cmd
     eval $cmd
-    if [ -z "$strict" -a -f $dbpath/description.html ] ; then
+    if [ -n "$noHtmlCheck" -a -f $dbpath/description.html ] ; then
 	if [ "X${UNAME_N}Y" = "XhgwdevY" ]; then
 	    if [ ! -L /gbdb/$db/html -a -d /hive/data/genomes/$db/html ]; then
 		rm -f /gbdb/$db/html/description.html

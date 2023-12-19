@@ -132,10 +132,13 @@ return fetchQualifiers("utr5", qualifier, extra, retSize);
 
 
 
-boolean fbUnderstandTrack(char *db, char *track)
+boolean fbUnderstandTrack(char *db, struct trackDb *tdb)
 /* Return TRUE if can turn track into a set of ranges or bits. */
 {
-struct hTableInfo *hti = hFindTableInfo(db, NULL, track);
+if ((tdb != NULL) && startsWith("big", tdb->type) && !startsWith("bigWig", tdb->type)) 
+	return TRUE;
+
+struct hTableInfo *hti = hFindTableInfo(db, NULL, tdb->table);
 
 if (hti == NULL)
     return FALSE;
@@ -473,10 +476,12 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	sizes  = bed->blockSizes;
 	for (i=1; i<count; ++i)
 	    {
+            // the -1 is because we output intron numbers starting at 0
+            int intronNum = bed->strand[0] == '+' ? i - 1 : count - 1 - i;
 	    s = bed->chromStart + starts[i-1] + sizes[i-1];
 	    e = bed->chromStart + starts[i];
 	    safef(nameBuf, sizeof(nameBuf), "%s_intron_%d_%d_%s_%d_%c", 
-		    bed->name, i-1, extraSize, bed->chrom, s+1,
+		    bed->name, intronNum, extraSize, bed->chrom, s+1,
 		    frForStrand(bed->strand[0]));
 	    setRangePlusExtra(db, &fbList, nameBuf, bed->chrom, s, e,
 			      bed->strand[0], extraSize, extraSize,
@@ -536,8 +541,10 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		    }
 		if (!doScore || (doScore && bed->score >= scoreThreshold))
 		    {
+                    // the -1 is because we output exon numbers starting at 0
+                    int exonNum = bed->strand[0] == '+' ? i : count - 1 - i;
 		    safef(nameBuf, sizeof(nameBuf), "%s_%s_%d_%d_%s_%d_%c", 
-			    bed->name, fName, i, extraSize, bed->chrom, s+1,
+			    bed->name, fName, exonNum, extraSize, bed->chrom, s+1,
 			    frForStrand(bed->strand[0]));
 		    setRangePlusExtra(db, &fbList, nameBuf, bed->chrom, s, e,
 				      bed->strand[0], extraSize, extraSize,

@@ -1051,15 +1051,17 @@ char *accActStatus = "N";
 if (sameWord(returnAddr, "NOEMAIL"))
     accActStatus = "Y";
 
-sqlSafef(query,sizeof(query), "INSERT INTO gbMembers SET "
+struct dyString *query2 = sqlDyStringCreate(
+    "INSERT INTO gbMembers SET "
     "userName='%s',realName='%s',password='%s',email='%s',"
     "lastUse=NOW(),accountActivated='%s'",
     user,user,encPwd,email,accActStatus);
 // set the recov email only if we got one (and we only got one if the table has this field)
 if (!isEmpty(recovEmail))
-    sqlSafefAppend(query, sizeof(query), ",recovEmail='%s'", recovEmail);
+    sqlDyStringPrintf(query2, ",recovEmail='%s'", recovEmail);
 
-sqlUpdate(conn, query);
+sqlUpdate(conn, dyStringContents(query2));
+dyStringFree(&query2);
 
 if (sameWord(returnAddr, "NOEMAIL"))
     {

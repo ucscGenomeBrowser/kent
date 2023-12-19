@@ -15,6 +15,35 @@
 #define HLTOGA_MAXCHAR 255
 
 
+struct togaDataBB
+{
+    char *projection;
+    char *ref_trans_id;
+    char *ref_region;
+    char *query_region;
+    char *chain_score;
+    char *chain_synteny;
+    char *chain_flank;
+    char *chain_gl_cds_fract;
+    char *chain_loc_cds_fract;
+    char *chain_exon_cov;
+    char *chain_intron_cov;
+    char *status;
+    char *perc_intact_ign_M;
+    char *perc_intact_int_M;
+    char *intact_codon_prop;
+    char *ouf_prop;
+    char *mid_intact;
+    char *mid_pres;
+    char *prot_alignment;
+    char *svg_line;
+    char *ref_link;
+    char *inact_mut_html_table;
+    char *exon_ali_html;
+};
+
+
+
 struct togaData
 {
     char *projection;
@@ -67,9 +96,18 @@ struct togaInactMut
 };
 
 
+struct togaDataBB *togaDataBBLoad(char **row);
+/* Load a togaData from row fetched with select * from togaData
+ * from database.  Dispose of this with togaDataFree(). */
+
+
 struct togaData *togaDataLoad(char **row);
 /* Load a togaData from row fetched with select * from togaData
  * from database.  Dispose of this with togaDataFree(). */
+
+void togaDataBBFree(struct togaDataBB **pEl);
+/* Free a single dynamically allocated togaDatasuch as created
+ * with togaDataLoad(). */
 
 void togaDataFree(struct togaData **pEl);
 /* Free a single dynamically allocated togaDatasuch as created
@@ -95,7 +133,8 @@ void extractHLTOGAsuffix(char *suffix);
 /* Extract suffix from TOGA table name.
 Prefix must be HLTOGAannot */
 
-void doHillerLabTOGAGene(struct trackDb *tdb, char *item, char *table_name);
+// void doHillerLabTOGAGene(struct trackDb *tdb, char *item, char *table_name);  // old
+void doHillerLabTOGAGene(char *database, struct trackDb *tdb, char *item, char *table_name);
 /* Put up TOGA Gene track info. */
 
 #endif  // TOGACLICK_H

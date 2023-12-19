@@ -115,7 +115,7 @@ void chromFeatDna(char *table, char *chrom, FILE *f)
  * are part of feature of interest to upper case, and then scan 
  * for blocks of lower upper case and output them. If not merging
  * then just output dna for features directly. */
-struct dyString *query = newDyString(512);
+struct dyString *query = dyStringNew(512);
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
@@ -149,9 +149,9 @@ if (breakUp)
 	{
 	sqlDyStringPrintf(query, "select * from %s where tStart >= %d and tEnd < %d",
 	    table, chromStart, chromEnd);
-	dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
+	sqlDyStringPrintf(query, " and %s = '%s'", chromField, chrom);
 	if (where != NULL)
-	    dyStringPrintf(query, " and %s", where);
+	    sqlDyStringPrintf(query, " and %-s", where);
 	sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -180,9 +180,9 @@ if (breakUp)
         {
 	sqlDyStringPrintf(query, "select * from %s where txStart >= %d and txEnd < %d",
 	    table, chromStart, chromEnd);
-	dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
+	sqlDyStringPrintf(query, " and %s = '%s'", chromField, chrom);
 	if (where != NULL)
-	    dyStringPrintf(query, " and %s", where);
+	    sqlDyStringPrintf(query, " and %-s", where);
 	sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -208,9 +208,9 @@ else
     sqlDyStringPrintf(query, "select %s,%s from %s where %s >= %d and %s < %d", 
 	    startField, endField, table,
 	    startField, chromStart, endField, chromEnd);
-    dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
+    sqlDyStringPrintf(query, " and %s = '%s'", chromField, chrom);
     if (where != NULL)
-	dyStringPrintf(query, " and %s", where);
+	sqlDyStringPrintf(query, " and %-s", where);
     sr = sqlGetResult(conn, query->string);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -311,7 +311,16 @@ if (argc != 5)
     usage();
 chromStart = cgiUsualInt("chromStart", chromStart);
 chromEnd = cgiUsualInt("chromEnd", chromEnd);
+
 where = cgiOptionalString("where");
+if (where)
+    {
+    char whereSafe[4096];
+    // TRUST command-line SQL where clause
+    sqlSafef(whereSafe, sizeof whereSafe, where, NULL);
+    where = whereSafe;
+    }
+
 breakUp = cgiBoolean("breakUp");
 merge = cgiUsualInt("merge", merge);
 database = argv[1];

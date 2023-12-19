@@ -98,7 +98,7 @@ while (row2 != NULL)
 	numCdsIntrons = atoi(row3[18]);
 	causes    = row3[21];
 	
-	sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", acc);
+	sqlSafef(condStr, sizeof(condStr), "name='%s'", acc);
 	answer = sqlGetField(genomeDb, "refGene", "name", condStr);
  	if (answer != NULL) 
 	    {

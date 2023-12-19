@@ -188,7 +188,7 @@ void makeGoldAndGap(struct sqlConnection *conn, char *chromDir)
 /* Read in .agp files in chromDir and use them to create the
  * gold and gap tables for the corresponding chromosome(s). */
 {
-struct dyString *ds = newDyString(2048);
+struct dyString *ds = dyStringNew(2048);
 struct fileInfo *fiList, *fi;
 char dir[256], chrom[128], ext[64];
 char goldName[128], gapName[128];
@@ -244,7 +244,10 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     /* Create gap table and load it up. */
     dyStringClear(ds);
     sqlDyStringPrintf(ds, createGap, gapName);
-    dyStringAppend(ds, gapSplitIndex);
+    sqlDyStringPrintf(ds, 
+    "   INDEX(bin),\n"
+    "   UNIQUE(chromStart)\n"
+    ")\n");
     verbose(2, "%s", ds->string);
     if (! noLoad)
 	{
@@ -260,7 +263,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 	remove(gapFileName);
 	}
     }
-freeDyString(&ds);
+dyStringFree(&ds);
 }
 
 void addGlBin(char *in, char *out)
@@ -289,7 +292,7 @@ void makeGl(struct sqlConnection *conn, char *chromDir,
 /* Read in .gl files in chromDir and use them to create the
  * gl tables for the corresponding chromosome(s). */
 {
-struct dyString *ds = newDyString(2048);
+struct dyString *ds = dyStringNew(2048);
 struct fileInfo *fiList, *fi;
 char dir[256], chrom[128], ext[64];
 char *glFileName;
@@ -322,7 +325,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     if (! noLoad)
 	sqlUpdate(conn, ds->string);
     }
-freeDyString(&ds);
+dyStringFree(&ds);
 }
 
 void makeCloneVerHash(char *fileName, struct hash *cloneVerHash)

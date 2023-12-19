@@ -16,11 +16,13 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded command path:
-my $RepeatMaskerPath = "/hive/data/staging/data/RepeatMasker";
+my $RepeatMaskerPath = "/hive/data/staging/data/RepeatMasker221107";
 my $RepeatMasker = "$RepeatMaskerPath/RepeatMasker";
-my $RepeatMaskerEngine = "-engine crossmatch -s";
-# Let parasol pick defaults
-my $parasolRAM = "";
+# default engine changed from crossmatch to rmblast as of 2022-12
+# with RM version 4.1.4
+my $RepeatMaskerEngine = "-engine rmblast -pa 1";
+# per RM doc, rmblast uses 4 CPUs for each job
+my $parasolRAM = "-cpu=4 -ram=32g";
 
 # Option variable names, both common and peculiar to this script:
 use vars @HgAutomate::commonOptionVars;
@@ -35,6 +37,7 @@ use vars qw/
     $opt_customLib
     $opt_useHMMER
     $opt_useRMBlastn
+    $opt_useCrossMatch
     $opt_splitTables
     $opt_noSplit
     $opt_updateTable
@@ -89,7 +92,8 @@ options:
     -unmaskedSeq seq.2bit Use seq.2bit as the unmasked input sequence instead
                           of default ($unmaskedSeq).
     -customLib lib.fa     Use custom repeat library instead of RepeatMaskers\'s.
-    -useRMBlastn          Use NCBI rmblastn instead of crossmatch
+    -useRMBlastn          This is the default as of 2022-12 == NCBI rmblastn
+    -useCrossMatch        Use crossmatch instead of NCBI rmblastn
     -useHMMER             Use hmmer instead of crossmatch ( currently for human only )
     -updateTable          load into table name rmskUpdate (default: rmsk)
     -splitTables          split the _rmsk tables (default is not split)
@@ -140,6 +144,7 @@ sub checkOptions {
 		      'unmaskedSeq=s',
 		      'customLib=s',
                       'useRMBlastn',
+                      'useCrossMatch',
                       'useHMMER',
 		      'splitTables',
 		      'noSplit',
@@ -205,11 +210,11 @@ sub doCluster {
   # updated for ku kluster operation -cpu option instead of ram option
   if ( $opt_useRMBlastn ) {
     $RepeatMaskerEngine = "-engine rmblast -pa 1";
+    $parasolRAM = "-cpu=4 -ram=32g";
+  } elsif ( $opt_useCrossMatch ) {
+    $RepeatMaskerEngine = "-engine crossmatch -s";
     $parasolRAM = "-cpu=1";
-  }
-
-  # updated for ku kluster operation -cpu option instead of ram option
-  if ( $opt_useHMMER ) {
+  } elsif ( $opt_useHMMER ) {
     # NOTE: This is only applicable for 8gb one-job-per-node scheduling
     $RepeatMaskerEngine = "-engine hmmer -pa 4";
     $parasolRAM = "-cpu=4 -ram=32g";
@@ -224,6 +229,7 @@ sub doCluster {
   print $fh <<_EOF_
 #!/bin/csh -ef
 
+set path = (/cluster/software/bin \$path)
 $RepeatMasker $RepeatMaskerEngine $repeatLib /dev/null
 _EOF_
   ;
@@ -233,6 +239,8 @@ _EOF_
   $fh = &HgAutomate::mustOpen(">$runDir/RMRun.csh");
   print $fh <<_EOF_
 #!/bin/csh -ef
+
+set path = (/cluster/software/bin \$path)
 
 set finalOut = \$1
 
@@ -315,13 +323,16 @@ and runs it on the cluster with the most available bandwidth.";
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
+
+set path = (/cluster/software/bin \$path)
+
 chmod a+x dummyRun.csh
 chmod a+x RMRun.csh
 
 # Record RM version used:
 printf "The repeat files provided for this assembly were generated using RepeatMasker.\\
   Smit, AFA, Hubley, R & Green, P.,\\
-  RepeatMasker Open-4.0.\\
+  RepeatMasker version 4.1.4\\
   1996-2010 <http://www.repeatmasker.org>.\\
 \\
 VERSION:\\n" > ../versionInfo.txt
@@ -329,24 +340,30 @@ VERSION:\\n" > ../versionInfo.txt
 ./dummyRun.csh | grep -v "dev/null" >> ../versionInfo.txt
 
 $RepeatMasker -v >> ../versionInfo.txt
-grep RELEASE $RepeatMaskerPath/Libraries/RepeatMaskerLib.embl >> ../versionInfo.txt
+printf "# RMRBMeta.embl library version: %s\\n" "`grep RELEASE $RepeatMaskerPath/Libraries/RMRBMeta.embl`" >> ../versionInfo.txt
 printf "# RepeatMasker engine: %s\\n" "${RepeatMaskerEngine}" >> ../versionInfo.txt
 
 ls -ld $RepeatMaskerPath $RepeatMasker
 $RepeatMasker -v
-grep RELEASE $RepeatMaskerPath/Libraries/RepeatMaskerLib.embl
+echo -n "# RMRBMeta.embl library version: "
+grep RELEASE $RepeatMaskerPath/Libraries/RMRBMeta.embl | sed -e 's/  *\\*\$//;'
 echo "# RepeatMasker engine: $RepeatMaskerEngine"
 _EOF_
   );
-  if ($opt_useRMBlastn) {
+  if ($opt_useCrossMatch) {
     $bossScript->add(<<_EOF_
-printf "# using rmblastn:\\n" >> ../versionInfo.txt
-echo "# useRMBlastn: rmblastn:"
-grep RMBLAST_DIR $RepeatMaskerPath/RepeatMaskerConfig.pm | grep rmblastn-2 | awk '{print \$NF}' >> ../versionInfo.txt
+printf "# using engine crossmatch\\n" >> ../versionInfo.txt
+echo "# useCrossMatch crossmatch"
 _EOF_
     );
-  }
-  if ($opt_useHMMER) {
+  } elsif ($opt_useRMBlastn) {
+    $bossScript->add(<<_EOF_
+printf "# using engine rmblastn:\\t" >> ../versionInfo.txt
+echo "# useRMBlastn: rmblastn:"
+grep -w value $RepeatMaskerPath/RepeatMaskerConfig.pm | grep rmblastn | awk '{print \$NF}' >> ../versionInfo.txt
+_EOF_
+    );
+  } elsif ($opt_useHMMER) {
     $bossScript->add(<<_EOF_
 printf "# using Dfam library and HMMER3:\\n" >> ../versionInfo.txt
 echo "# useHMMER: Dfam library: "
@@ -570,17 +587,17 @@ sub doMask {
 
   my $whatItDoes = "It makes a masked .2bit in this build directory.";
   my $workhorse = &HgAutomate::chooseWorkhorse();
-  my $bossScript = new HgRemoteScript("$runDir/doMask.csh", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/doMask.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-twoBitMask $unmaskedSeq $db.sorted.fa.out $db.rmsk$updateTable.2bit
-twoBitToFa $db.rmsk$updateTable.2bit stdout | faSize stdin > faSize.rmsk$updateTable.txt
+export db=$db
+twoBitMask $unmaskedSeq \$db.sorted.fa.out \$db.rmsk$updateTable.2bit
+twoBitToFa \$db.rmsk$updateTable.2bit stdout | faSize stdin > faSize.rmsk$updateTable.txt
 _EOF_
   );
   $bossScript->execute();
 } # doMask
-
 
 #########################################################################
 # * step: install [dbHost, maybe fileServer]
@@ -602,9 +619,22 @@ sub doInstall {
   $bossScript->add(<<_EOF_
 export db=$db
 
+# ensure sort functions properly despite kluster node environment
+export LC_COLLATE=C
+
 hgLoadOut -table=rmsk$updateTable $split \$db \$db.sorted.fa.out
 hgLoadOut -verbose=2 -tabFile=\$db.rmsk$updateTable.tab -table=rmsk$updateTable -nosplit \$db \$db.sorted.fa.out 2> \$db.bad.records.txt
 # construct bbi files for assembly hub
+$RepeatMaskerPath/util/rmToTrackHub.pl -out \$db.sorted.fa.out -align \$db.fa.align
+# in place same file sort using the -o output option
+sort -k1,1 -k2,2n -o \$db.fa.align.tsv \$db.fa.align.tsv &
+sort -k1,1 -k2,2n -o \$db.sorted.fa.join.tsv \$db.sorted.fa.join.tsv
+wait
+bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigRmskAlignBed.as -type=bed3+14 \\
+  \$db.fa.align.tsv ../../chrom.sizes \$db.rmsk.align.bb &
+bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigRmskBed.as -type=bed9+5 \\
+  \$db.sorted.fa.join.tsv ../../chrom.sizes \$db.rmsk.bb
+wait
 rm -fr classBed classBbi rmskClass
 mkdir classBed classBbi rmskClass
 sort -k12,12 \$db.rmsk$updateTable.tab \\
@@ -688,12 +718,13 @@ _EOF_
     $whatItDoes =
 "It splits $db.sorted.fa.out into per-chromosome files in chromosome directories\n" .
 "where makeDownload.pl will expect to find them.\n";
-    my $bossScript = new HgRemoteScript("$runDir/doSplit.csh", $fileServer,
+    my $bossScript = newBash HgRemoteScript("$runDir/doSplit.bash", $fileServer,
 					$runDir, $whatItDoes);
     $bossScript->add(<<_EOF_
-head -3 $db.sorted.fa.out > /tmp/rmskHead.txt
-tail -n +4 $db.sorted.fa.out \\
-| splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
+export db=$db
+head -3 \$db.sorted.fa.out > /tmp/rmskHead.txt
+tail -n +4 \$db.sorted.fa.out \\
+| splitFileByColumn -col=5 stdin /cluster/data/\$db -chromDirs \\
     -ending=.fa.out -head=/tmp/rmskHead.txt
 _EOF_
     );

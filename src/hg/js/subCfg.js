@@ -17,6 +17,13 @@
 // populate: act of filling a subtrack cfg with controls
 // fauxVis: fake control for subtrack visDD, which will be replaced with true vis when clicked.
 //
+// NOTE: there is code inside hgTracks and cart.c that is removing subtrack values in the cart
+//    hgTracks.c::parentChildCartCleanup() uses oldVars and calls cart.c::cartTdbTreeCleanupOverrides().
+//    It seems to have a long-existing bug such that if you make two changes to the view level at once before submitting,
+//    the cart ends up with incorrect state as seen by reloading in hgTrackUi.
+//    Making one change to view and one change to subtrack and then submitting also causes the problem.
+//    If you only make one change at a time to an element and submit then it works.
+//
 // NOTE:
 // Current implementation relies upon '.' delimiter in name and no '_-' in name.
 //   Nothing breaks rule yet...
@@ -746,7 +753,7 @@ var subCfg = { // subtrack config module.
 
     cfgToggle: function (wrench,subtrack)
     { // Opens/closes subtrack cfg dialog, populating if empty
-        var cfg = normed($("div#div_cfg_"+subtrack));
+        var cfg = normed($(document.getElementById("div_cfg_"+subtrack)));
         if (!cfg) {
             warn("DEBUG: Can't find div_cfg_"+subtrack);
             return false;

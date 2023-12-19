@@ -68,8 +68,8 @@ else
         > gbToLineage
 fi
 wc -l gbToLineage
-if [ -e $ncbiDir/nextclade.tsv ]; then
-    sort -u $ncbiDir/nextclade.tsv > gbToNextclade
+if [ -e $ncbiDir/nextclade.full.tsv.gz ]; then
+    zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,2 | sed -re 's/"//g;' | sort -u > gbToNextclade
 else
     touch gbToNextclade
 fi
@@ -82,13 +82,14 @@ join -t$'\t' -a 1 gb.metadata gbToNextclade \
 | uniq \
     >> gisaidAndPublic.$today.metadata.tsv
 # COG-UK metadata:
-if [ -e $cogUkDir/nextclade.tsv ]; then
-    sort $cogUkDir/nextclade.tsv > cogUkToNextclade
+if [ -e $cogUkDir/nextclade.full.tsv.gz ]; then
+    zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,2 | sed -re 's/"//g' | sort -u > cogUkToNextclade
 else
     touch cogUkToNextclade
 fi
 #*** Could also add sequence length to metadata from faSizes output...
-tail -n+2 $cogUkDir/cog_metadata.csv \
+zcat $cogUkDir/cog_metadata.csv.gz \
+| tail -n+2 \
 | awk -F, -v 'OFS=\t' '{print $1, "", $5, $3, "", "", "", $7; }' \
 | sed -re 's/UK-ENG/England/; s/UK-NIR/Northern Ireland/; s/UK-SCT/Scotland/; s/UK-WLS/Wales/;' \
 | sort \
@@ -111,4 +112,4 @@ zcat $gisaidDir/metadata_batch_$today.tsv.gz \
 | tawk '{print $1 "|" $3 "|" $5, "", $5, $7, $15, $13, $14, $18, $19;}' \
     >> gisaidAndPublic.$today.metadata.tsv
 wc -l gisaidAndPublic.$today.metadata.tsv
-gzip -f gisaidAndPublic.$today.metadata.tsv
+pigz -p 8 -f gisaidAndPublic.$today.metadata.tsv

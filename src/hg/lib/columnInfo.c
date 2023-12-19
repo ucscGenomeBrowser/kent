@@ -99,11 +99,11 @@ void columnInfoSaveToDb(struct sqlConnection *conn, struct columnInfo *el, char 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->name,  el->type,  el->nullAllowed,  el->key,  el->defaultVal,  el->extra);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct columnInfo *columnInfoCommaIn(char **pS, struct columnInfo *ret)

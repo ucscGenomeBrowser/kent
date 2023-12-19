@@ -1,0 +1,46 @@
+track cactus
+compositeTrack on
+shortLabel Cactus Alignment
+longLabel Cactus Alignment
+group compGeno
+subGroup1 view Track_Type Snake=Alignments
+subGroup2 orgs Organisms hs1=hs1 hg38=hg38
+dragAndDrop subTracks
+dimensions dimensionX=view dimensionY=orgs
+noInherit on
+centerLabelsDense on
+visibility hide
+type bigBed 3
+priority 2
+html  html/hgCactus.html
+
+    track cactusAlignments
+    shortLabel Alignments
+    view Alignments
+    visibility full
+    subTrack cactus
+
+        track snakeHg38
+        longLabel Cactus GRCh37/hg38
+        shortLabel hg38
+        otherSpecies hg38
+        visibility full
+        parent cactusAlignments on
+        priority 1
+        bigDataUrl /gbdb/hs1/hgCactus/t2tChm13.v2.0.hal
+        type halSnake
+        group compGeno
+        subGroups view=Snake orgs=hg38
+
+        track snakehs1
+        longLabel Cactus CHM13/hs1
+        shortLabel CHM13/hs1
+        otherSpecies hs1
+        visibility hide
+        parent cactusAlignments off
+        priority 2
+        bigDataUrl /gbdb/hs1/hgCactus/t2tChm13.v2.0.hal
+        type halSnake
+        group compGeno
+        subGroups view=Snake orgs=hs1
+

@@ -619,7 +619,7 @@ void newStitch(char *axtFile, char *output)
 /* newStitch - Experiments with new ways of stitching together alignments. */
 {
 struct hash *pairHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
 struct axt *axt;
 struct seqPair *spList = NULL, *sp;

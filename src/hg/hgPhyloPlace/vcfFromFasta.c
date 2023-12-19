@@ -11,12 +11,6 @@
 #include "psl.h"
 #include "trashDir.h"
 
-// Globals
-extern int chromSize;
-
-// wuhCor1-specific:
-int minSeqSize = 10000;
-int maxSeqSize = 35000;
 double maxNs = 0.5;
 
 // Using blat defaults for these:
@@ -36,11 +30,34 @@ int gfMinScore = 50;
 int gfIMinMatch = 30;
 
 
+static void replaceNewickChars(char *seqName)
+/* If seqName includes any characters with special meaning in the Newick format, then substitute
+ * _ for each problematic character in seqName. */
+{
+if (strchr(seqName, '(') || strchr(seqName, ')') || strchr(seqName, ':') || strchr(seqName, ';') ||
+    strchr(seqName, ','))
+    {
+     subChar(seqName, '(', '_');
+     subChar(seqName, ')', '_');
+     subChar(seqName, ':', '_');
+     subChar(seqName, ';', '_');
+     subChar(seqName, ',', '_');
+     // Strip any underscores from beginning/end; strip double-underscores
+     while (seqName[0] == '_')
+         memmove(seqName, seqName+1, strlen(seqName)+1);
+     char *p;
+     while (*(p = seqName + strlen(seqName) - 1) == '_')
+         *p = '\0';
+     strSwapStrs(seqName, strlen(seqName), "__", "_");
+    }
+}
+
 static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct hash *treeNames,
-                                      struct slPair **retFailedSeqs)
+                                      int minSeqSize, int maxSeqSize, struct slPair **retFailedSeqs)
 /* Return a list of sequences that pass basic QC checks (appropriate size etc).
  * If any sequences have names that are already in the tree, add a prefix so usher doesn't
- * reject them.
+ * reject them.  If any sequence name contains characters that have special meaning in the Newick
+ * format, replace them with something harmless.
  * Set retFailedSeqs to the list of sequences that failed checks. */
 {
 struct seqInfo *filteredSeqs = NULL;
@@ -111,6 +128,7 @@ for (seq = seqs;  seq != NULL;  seq = nextSeq)
             ambigCount++;
     if (passes)
         {
+        replaceNewickChars(seq->name);
         if (hashLookup(uniqNames, seq->name))
             {
             struct dyString *dy = dyStringCreate("Sequence name '%s' has already been used; "
@@ -121,7 +139,8 @@ for (seq = seqs;  seq != NULL;  seq = nextSeq)
             }
         else
             {
-            if (isInternalNodeName(seq->name, 0) || hashLookup(treeNames, seq->name))
+            if (treeNames &&
+                (isInternalNodeName(seq->name, 0) || hashLookup(treeNames, seq->name)))
                 {
                 // usher will reject any sequence whose name is already in the tree, even a
                 // numeric internal node name.  Add a prefix so usher won't reject sequence.
@@ -148,7 +167,7 @@ hashFree(&uniqNames);
 return filteredSeqs;
 }
 
-static struct psl *alignSequences(char *db, struct dnaSeq *refGenome, struct seqInfo *seqs,
+static struct psl *alignSequences(struct dnaSeq *refGenome, struct seqInfo *seqs,
                                   int *pStartTime)
 /* Use BLAT server to align seqs to reference; keep only the best alignment for each seq.
  * (In normal usage, there should be one very good alignment per seq.) */
@@ -374,11 +393,10 @@ return -1;
 }
 
 static void extractSnvs(struct psl *psls, struct dnaSeq *ref, struct seqInfo *querySeqs,
-                        struct snvInfo **snvsByPos, boolean *informativeBases,
-                        struct slName **maskSites)
+                        struct snvInfo **snvsByPos, struct slName **maskSites)
 /* For each PSL, find single-nucleotide differences between ref and query (one of querySeqs),
  * building up target position-indexed array of snvInfo w/genotypes in same order as querySeqs.
- * Add explicit no-calls for unaligned positions in informativeBases. */
+ * Add explicit no-calls for unaligned positions that are not masked. */
 {
 int gtCount = slCount(querySeqs);
 struct psl *psl;
@@ -392,7 +410,7 @@ for (psl = psls;  psl != NULL;  psl = psl->next)
     int tStart;
     for (tStart = 0;  tStart < psl->tStart;  tStart++)
         {
-        if (informativeBases[tStart])
+        if (!maskSites[tStart])
             {
             char refBase = ref->dna[tStart];
             addCall(snvsByPos, tStart, refBase, '-', gtIx, gtCount);
@@ -430,7 +448,7 @@ for (psl = psls;  psl != NULL;  psl = psl->next)
             // Add no-calls for unaligned bases between this block and the next
             for (;  tStart < psl->tStarts[blkIx+1];  tStart++)
                 {
-                if (informativeBases[tStart])
+                if (!maskSites[tStart])
                     {
                     char refBase = ref->dna[tStart];
                     addCall(snvsByPos, tStart, refBase, '-', gtIx, gtCount);
@@ -439,9 +457,9 @@ for (psl = psls;  psl != NULL;  psl = psl->next)
             }
         }
     // Add no-calls for unaligned bases after last block
-    for (tStart = psl->tEnd;  tStart < chromSize;  tStart++)
+    for (tStart = psl->tEnd;  tStart < ref->size;  tStart++)
         {
-        if (informativeBases[tStart])
+        if (!maskSites[tStart])
             {
             char refBase = ref->dna[tStart];
             addCall(snvsByPos, tStart, refBase, '-', gtIx, gtCount);
@@ -509,13 +527,13 @@ carefulClose(&f);
 }
 
 static void pslSnvsToVcfFile(struct psl *psls, struct dnaSeq *ref, struct seqInfo *querySeqs,
-                             char *vcfFileName, boolean *informativeBases, struct slName **maskSites)
+                             char *vcfFileName, struct slName **maskSites)
 /* Find single-nucleotide differences between each query sequence and reference, and
  * write out a VCF file with genotype columns for the queries. */
 {
 struct snvInfo *snvsByPos[ref->size];
 memset(snvsByPos, 0, sizeof snvsByPos);
-extractSnvs(psls, ref, querySeqs, snvsByPos, informativeBases, maskSites);
+extractSnvs(psls, ref, querySeqs, snvsByPos, maskSites);
 int sampleCount = slCount(querySeqs);
 char *sampleNames[sampleCount];
 struct seqInfo *qSeq;
@@ -588,8 +606,7 @@ for (si = filteredSeqs;  si != NULL;  si = si->next)
 }
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
-                              boolean *informativeBases, struct slName **maskSites,
-                              struct hash *treeNames,
+                              struct slName **maskSites, struct hash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime)
@@ -600,19 +617,31 @@ struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refG
 struct tempName *tn = NULL;
 struct slName *sampleIds = NULL;
 struct dnaSeq *allSeqs = faReadAllMixedInLf(lf);
-struct seqInfo *filteredSeqs = checkSequences(allSeqs, treeNames, retFailedSeqs);
+int minSeqSize = 0, maxSeqSize = 0;
+// Default to SARS-CoV-2 or hMPXV values if setting is missing from config.ra.
+char *minSeqSizeSetting = phyloPlaceDbSetting(db, "minSeqSize");
+if (isEmpty(minSeqSizeSetting))
+    minSeqSize = sameString(db, "wuhCor1") ? 10000 : 100000;
+else
+    minSeqSize = atoi(minSeqSizeSetting);
+char *maxSeqSizeSetting = phyloPlaceDbSetting(db, "maxSeqSize");
+if (isEmpty(maxSeqSizeSetting))
+    maxSeqSize = sameString(db, "wuhCor1") ? 35000 : 220000;
+else
+    maxSeqSize = atoi(maxSeqSizeSetting);
+struct seqInfo *filteredSeqs = checkSequences(allSeqs, treeNames, minSeqSize, maxSeqSize,
+                                              retFailedSeqs);
 reportTiming(pStartTime, "read and check uploaded FASTA");
 if (filteredSeqs)
     {
-    struct psl *alignments = alignSequences(db, refGenome, filteredSeqs, pStartTime);
+    struct psl *alignments = alignSequences(refGenome, filteredSeqs, pStartTime);
     struct psl *filteredAlignments = checkAlignments(alignments, filteredSeqs, retFailedPsls);
     removeUnalignedSeqs(&filteredSeqs, filteredAlignments, retFailedSeqs);
     if (filteredAlignments)
         {
         AllocVar(tn);
         trashDirFile(tn, "ct", "pp", ".vcf");
-        pslSnvsToVcfFile(filteredAlignments, refGenome, filteredSeqs, tn->forCgi, informativeBases,
-                         maskSites);
+        pslSnvsToVcfFile(filteredAlignments, refGenome, filteredSeqs, tn->forCgi, maskSites);
         struct psl *psl;
         for (psl = filteredAlignments;  psl != NULL;  psl = psl->next)
             slNameAddHead(&sampleIds, psl->qName);

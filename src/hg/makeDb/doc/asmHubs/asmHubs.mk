@@ -13,14 +13,37 @@ htdocsHgDownload=/usr/local/apache/htdocs-hgdownload
 hubsDownload=${htdocsHgDownload}/hubs/${name}
 asmHubSrc=/hive/data/genomes/asmHubs/${name}
 
-all:: makeDirs mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
+all:: sanityCheck makeDirs mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
 
 makeDirs:
 	mkdir -p ${destDir}
 
+sanityCheck:
+	@goodBad=$$(cut -d'_' -f1-2 ${orderList} | sort | uniq -c | awk '$$1 > 1' | wc -l); \
+	if [ $$goodBad -ne 0 ]; then \
+	    tsvFile=$$(basename ${orderList}); \
+	    echo "ERROR: duplicate accession in '$$tsvFile'"; \
+	    cut -d'_' -f1-2 ${orderList} | sort | uniq -c | awk '$$1 > 1'; \
+	    exit 255; \
+	fi
+
+sshKeyDownload:
+	ssh -o PasswordAuthentication=no qateam@hgdownload date
+
+sshKeyDynablat:
+	ssh -o PasswordAuthentication=no qateam@dynablat-01 date
+
+sshKeyCheck: sshKeyDownload sshKeyDynablat
+	@printf "# ssh keys to hgdownload and dynablat-01 are good\n"
+
 mkGenomes::
+	@printf "# starting mkGenomes " 1>&2
+	@date "+%s %F %T" 1>&2
 	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
-	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/download.${genomesTxt}.txt
+	rm -f ${destDir}/download.${genomesTxt}.txt
+	cp -p ${destDir}/${genomesTxt}.txt ${destDir}/download.${genomesTxt}.txt
+	@printf "# finished mkGenomes " 1>&2
+	@date "+%s %F %T" 1>&2
 
 symLinks::
 	${toolsDir}/mkSymLinks.pl ${orderList}
@@ -64,6 +87,7 @@ hubTxt:
 # all hubs have the same set of groups, no need for any name customization
 groupsTxt:
 	rm -f ${destDir}/groups.txt
+	rm -f ${destDir}/groups.txt
 	cp -p ${toolsDir}/groups.txt ${destDir}/groups.txt
 
 clean::
@@ -76,7 +100,7 @@ clean::
 	rm -f ${destDir}/${statsName}.html
 	rm -f ${destDir}/${testStatsName}.html
 
-sendDownload::
+sendDownload:: sshKeyCheck
 	${toolsDir}/mkSendList.pl ${orderList} | while read F; do \
 	  ${toolsDir}/sendToHgdownload.sh $$F < /dev/null; done
 	rsync -L -a -P \
@@ -105,7 +129,7 @@ verifyDownload:
 	${toolsDir}/verifyOnDownload.sh apibeta.soe.ucsc.edu ${orderList}
 
 verifyDynamicBlat:
-	cut -d'_' -f1-2 ${orderList} | while read asmId; do \
+	grep -v "^#" ${orderList} | cut -d'_' -f1-2 | while read asmId; do \
 	  ${toolsDir}/testDynBlat.sh $$asmId < /dev/null; done
 
 sendIndexes::

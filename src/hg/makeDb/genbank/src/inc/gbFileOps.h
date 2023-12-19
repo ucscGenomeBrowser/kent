@@ -13,10 +13,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-/* Table of RNA bases that are allowed.  Lower-case only, plus some special
- * meta characters. Call allowedRNABasesInit before using directly.*/
-bool gAllowedRNABases[256];
-
 void allowedRNABasesInit();
 /* initialize allowed RNA bases */
 

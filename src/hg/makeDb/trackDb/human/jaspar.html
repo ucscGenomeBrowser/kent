@@ -91,9 +91,23 @@ Zoom to a smaller region and click into an item to see more detail.</p>
 
 <h2>Methods</h2>
 <p>
+The JASPAR 2024 update expanded the JASPAR CORE collection by 20% (329 added and 72 upgraded
+profiles). The new profiles were introduced after manual curation, in which 26 629 TF binding
+motifs were curated and obtained as PFMs or discovered from ChIP-seq/-exo or DAP-seq data. 2500
+profiles from JASPAR 2022 were revised to either promote them to the CORE collection, update the
+associated metadata, or remove them because of validation inconsistencies or poor quality. The
+JASPAR database stores and focuses mostly on PFMs as the model of choice for TF-DNA interactions.
+More information on the methods can be found in the
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkad1059" target="_blank">
+JASPAR 2024 publication</a> or on the
+<a href="https://jaspar.genereg.net/" target="_blank">JASPAR website</a>.</p>
+
+<p>
 JASPAR 2022 contains updated transcription factor binding sites
-with additional transcription factor profiles. More information on
-the methods can be found in their upcoming publication or on the
+with additional transcription factor profiles. More information on the methods can be found in the
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/34850907" target="_blank">
+JASPAR 2022 publication</a>
+JASPAR 2022 publication or on the
 <a href="https://jaspar.genereg.net/" target="_blank">JASPAR website</a>.</p>
 
 <p>
@@ -122,15 +136,40 @@ details (citation below).</p>
 
 <h2>Data Access</h2>
 <p>
-JASPAR Transcription Factor Binding data can be explored interactively with the 
+JASPAR Transcription Factor Binding data includes billions of items. Limited regions can 
+be explored interactively with the 
 <a href="../cgi-bin/hgTables">Table Browser</a> and cross-referenced with 
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For programmatic access, 
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, although positional
+queries that are too big can lead to timing out. This results in a black page
+or truncated output. In this case, you may try reducing the chromosomal query to
+a smaller window.</p>
+<p>
+For programmatic access, 
 the track can be accessed using the Genome Browser's 
 <a href="../../goldenPath/help/api.html">REST API</a>. 
 JASPAR annotations can be downloaded from the
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/jaspar">Genome Browser's download server</a>
 as a bigBed file. This compressed binary format can be remotely queried through
 command line utilities. Please note that some of the download files can be quite large.</p>
+<p>
+The utilities for working with bigBed-formatted binary files can be downloaded
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+   target=_blank>here</a>.
+Run a utility with no arguments to see a brief description of the utility and its options.
+<ul>
+  <li><b>bigBedInfo</b> provides summary statistics about a bigBed file including the number of
+    items in the file.  With the <b>-as</b> option, the output includes an
+    autoSql
+    definition of data columns, useful for interpreting the column values.</li>
+  <li><b>bigBedToBed</b> converts the binary bigBed data to tab-separated text.
+    Output can be restricted to a particular region by using the -chrom, -start
+    and -end options.</li>
+</ul>
+</p>
+
+<h4>Example: retrieve all JASPAR items in chr1:200001-200400</h4>
+
+<pre><tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/jaspar/JASPAR2024.bb -chrom=chr1 -start=200000 -end=200400 stdout</tt></pre>
 
 <p> 
 All data are freely available.
@@ -260,4 +299,14 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29140473"
 target="_blank">29140473</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5753243/" 
 target="_blank">PMC5753243</a>
+</p>
+
+<p>
+Rauluseviciute I, Riudavets-Puig R, Blanc-Mathieu R, Castro-Mondragon JA, Ferenc K, Kumar V, Lemma
+RB, Lucas J, Ch&#232;neby J, Baranasic D <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkad1059" target="_blank">
+JASPAR 2024: 20th anniversary of the open-access database of transcription factor binding
+profiles</a>.
+<em>Nucleic Acids Res</em>. 2023 Nov 14;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37962376" target="_blank">37962376</a>
 </p>

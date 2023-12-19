@@ -173,7 +173,7 @@ struct hash *faHash = newHash(0);
 struct hash *chainHash = newHash(0);
 FILE *faF;
 struct seqPair *spList = NULL, *sp;
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct lineFile *chainsLf = lineFileOpen(chainIn, TRUE);
 struct twoBitFile *tTbf = twoBitOpen(tTwoBitFile);
 struct twoBitFile *qTbf = NULL;

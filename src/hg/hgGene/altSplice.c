@@ -41,7 +41,7 @@ int intersect, bestIntersect = 0;
 char extra[64];
 char *ret = NULL;
 
-safef(extra, sizeof(extra), "strand='%s'", gp->strand);
+sqlSafef(extra, sizeof(extra), "strand='%s'", gp->strand);
 sr = hRangeQuery(conn, "agxBed", gp->chrom, gp->txStart, gp->txEnd,
 	extra, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)

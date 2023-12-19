@@ -25,6 +25,7 @@ errAbort(
   "    -geneNames=geneNames  geneNames is a three column file with id's mapping to two gene names\n"
   "    -colors=colors        colors is a four column file with id's mapping to r,g,b\n"
   "    -cds=cds              cds is a five column file with id's mapping to cds status codes and exonFrames (see knownCds.as)\n"
+  "    -geneType=geneType              geneType is a two column file with id's mapping to geneType\n"
   );
 }
 
@@ -49,6 +50,7 @@ struct hash *colorsHash = NULL;
 struct hash *scoreHash = NULL;
 struct hash *geneHash = NULL;
 struct hash *cdsHash = NULL;
+struct hash *geneTypeHash = NULL;
 boolean isKnown;
 
 /* Command line validation table. */
@@ -58,6 +60,7 @@ static struct optionSpec options[] = {
    {"geneNames", OPTION_STRING},
    {"colors", OPTION_STRING},
    {"cds", OPTION_STRING},
+   {"geneType", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -104,9 +107,14 @@ bgp.itemRgb = 0; // BLACK
 if (colorsHash)
     {
     struct rgbColor *color = hashFindVal(colorsHash, gp->name);
-    bgp.itemRgb = ( ((color->r) & 0xff) << 16) |
+    if (color == NULL)
+        warn("Warning: no color found for %s", gp->name);
+    else
+        {
+        bgp.itemRgb = ( ((color->r) & 0xff) << 16) |
             (((color->g) & 0xff) << 8) |
-                    ((color->b) & 0xff) ;
+            ((color->b) & 0xff);
+        }
     }
 bgp.blockCount = gp->exonCount;
 bgp.blockSizes = (unsigned *)blockSizes;
@@ -128,11 +136,18 @@ bgp.geneName2 = gp->name2;
 if (geneHash)
     {
     struct geneNames *gn = hashFindVal(geneHash, gp->name);
-    bgp.geneName = gn->name;
-    bgp.geneName2 = gn->name2;
+    if (gn == NULL)
+        warn("Warning: no gene name found for %s", gp->name);
+    else
+        {
+        bgp.geneName = gn->name;
+        bgp.geneName2 = gn->name2;
+        }
     }
 
 bgp.geneType = NULL;
+if (geneTypeHash)
+    bgp.geneType = hashFindVal(geneTypeHash, gp->name);
 
 bigGenePredOutput(&bgp, fp, '\t', '\n');
 }
@@ -212,6 +227,7 @@ while (lineFileChopTab(lf, row))
     color->r = atoi(row[1]);
     color->g = atoi(row[2]);
     color->b = atoi(row[3]);
+    color->a = 255;
     hashAdd(hash, name, color);
     }
 lineFileClose(&lf);
@@ -230,6 +246,10 @@ isKnown = optionExists("known");
 char *scoreFile = optionVal("score", NULL);
 if (scoreFile != NULL)
     scoreHash = hashTwoColumnFile(scoreFile);
+
+char *geneTypeFile = optionVal("geneType", NULL);
+if (geneTypeFile != NULL)
+    geneTypeHash = hashTwoColumnFile(geneTypeFile);
 
 char *geneNames = optionVal("geneNames", NULL);
 if (geneNames != NULL)

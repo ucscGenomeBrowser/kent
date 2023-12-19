@@ -1,0 +1,4 @@
+echo "RR updated:"
+hgsql -h genome-centdb -Ne 'SELECT update_time  FROM information_schema.tables  WHERE table_schema = "hgcentral" and table_name = "hubSearchText"' hgcentral
+echo "Dev hubCrawl ran:"
+tail -n1 /hive/groups/browser/hubCrawl/hubSearchText.log

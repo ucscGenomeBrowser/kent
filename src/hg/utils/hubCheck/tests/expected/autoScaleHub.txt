@@ -1,0 +1,10 @@
+Found 9 problems:
+track "badTrack1" has value "group" for autoScale setting, valid autoScale values for individual bigWig tracks are "off" or "on" only. If "badTrack1" is part of a bigWig composite track and you want to use the "group" setting, only declare "autoScale group" in the parent stanza
+track "badTrack2" has value "group" for autoScale setting, valid autoScale values for individual bigWig tracks are "off" or "on" only. If "badTrack2" is part of a bigWig composite track and you want to use the "group" setting, only declare "autoScale group" in the parent stanza
+warning: missing description page for track: 'badTrack1'
+warning: missing description page for track: 'badTrack2'
+warning: missing description page for track: 'compBad'
+warning: missing description page for track: 'compGood'
+warning: missing description page for track: 'goodTrack1'
+warning: missing description page for track: 'goodTrack2'
+warning: missing hub overview description page (descriptionUrl setting)

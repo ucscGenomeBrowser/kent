@@ -90,7 +90,7 @@ char **row;
 
 sqlDyStringPrintf(query, "select * from %s", table);
 if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
+    sqlDyStringPrintf(query, " where %-s", where);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -279,7 +279,7 @@ static char *tmpFa = NULL;
 static char *tmpOrf = NULL;
 struct borf *borf = NULL;
 struct dnaSeq *seq = NULL;
-struct dyString *cmd = newDyString(256);
+struct dyString *cmd = dyStringNew(256);
 int retVal = 0;
 if(tmpFa == NULL)
     tmpFa = cloneString(rTempName("/tmp", "borf", ".fa"));

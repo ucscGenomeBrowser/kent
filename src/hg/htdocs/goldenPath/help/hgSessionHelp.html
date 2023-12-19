@@ -69,9 +69,9 @@ This User's Guide provides a few examples that introduce the features of the Ses
 by detailed directions on creating, saving, modifying and sharing sessions.</p>
 <p>
 You may also wish to reivew two blog posts,
-<a href="http://genome.ucsc.edu/blog/how-to-share-your-ucsc-screenthoughts/"
+<a href="https://genome-blog.gi.ucsc.edu/blog/how-to-share-your-ucsc-screenthoughts/"
 target="_blank">How to share your UCSC screenthoughts</a> and
-<a href="http://genome.ucsc.edu/blog/sharing-data-with-sessions-and-urls/"
+<a href="https://genome-blog.gi.ucsc.edu/blog/sharing-data-with-sessions-and-urls/"
 target="_blank">Sharing Data with Sessions and URLs</a> for more discussions about sessions.</p>
 
 <!-- ====Example======================== -->
@@ -277,12 +277,20 @@ cat *.ct > hg38_all.ct</code></pre>
 
 <a name="CreateVid"></a>
 <h2>Creating a session &mdash; video demonstration</h2>
+
 <p>
+<!--#if expr="${SERVER_NAME} = /-china/" -->
+    <a href='../../../videos/d5rHBLXwraM.mp4'>
+    <img src=../../images/videoIcon.png></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our <a href="/videos/" target="_blank">Video Page</a>.
+<!--#else -->
 <iframe width="560" height="350" src="https://www.youtube.com/embed/d5rHBLXwraM?rel=0" 
 frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 allowfullscreen></iframe> </p>
 <p> Visit our <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
 target="_blank">YouTube channel</a> for more videos.
+<!--#endif -->
 </p>
 
 
@@ -412,7 +420,9 @@ There are five ways to let others know about your saved sessions:
   &quot;<a href="../../../cgi-bin/hgPublicSessions">Public Sessions</a>&quot; tool allows you to 
   post and share your exciting and interesting Browser snapshots with the world. After having saved 
   your session, you can add it to this public listing by checking the box in the column under 
-  &quot;post in public listing?&quot;.</li>
+  &quot;post in public listing?&quot;. People can then find your sesssion by entering a search term.
+  You can even create a <a href="sessions.html#lab" target="_blank">gallery of Public Sessions</a>
+  related to your search by using a unique string in your descriptions.</li>
 </ul>
 
 <!-- =====Opening a Shared Session======================= -->
@@ -640,17 +650,35 @@ tracks, such as changing the track height or type of graph.</p>
   <li>
     <strong>Save your session</strong><br>
     Go to the <strong>Save Settings</strong> section and in the
-    <em>Save current settings as named session</em> text box, enter a name for your session. When
+    <em>Save current settings as named session</em> text box, and enter a name for your session. When
     saving the session, be sure to have the
     &quot;<em>allow this session to be loaded by others</em>&quot; option checked and then click
-    <em><strong>submit</strong></em>.</li>
+    <em><strong>submit</strong></em>.
+    <ul>
+      <li>You should then be able to copy and share a link similar
+      to the following: <code>http://genome.ucsc.edu/s/YourUserName/YourSessionName</code></p></li>
+    </ul>
   <li>
     <strong>Edit the session description</strong><br>
-    Once the session is created, you can click the <em><strong>details</strong></em> button to add
-    a description to the session. If you eventually make a Public Session, and provide a detailed
-    description, anyone can find it by searching for terms you share. For example, navigate to the
-    <a href="../../cgi-bin/hgPublicSessions">Public Sessions</a> page and search &quot;NAR&quot; to
-    see some example sessions.</li>
+    Once the session is created, under the &quot;view/edit details&quot; column you can click
+    the <em><strong>view/edit</strong></em> button to add a description to the session.</li>
+  <hr>
+  <li>
+    <strong>Publish your session as a Public Session for public discovery</strong><br>
+    If you eventually make a Public Session of your session after your paper is published, and
+    provide a detailed description, anyone can find it by searching for terms you share.
+    <ul>
+      <li>For example, navigate to the <a href="../../cgi-bin/hgPublicSessions">Public Sessions</a>
+      page and search &quot;NAR&quot; to see some example sessions. Or click this link, which adds
+      <a href="../../cgi-bin/hgPublicSessions?search=NAR" target="_blank"><code>?search=NAR</code></a>
+      to the URL.</li>
+      <li>As a Public Session, your session can then be found by anyone entering a search term, where you
+      can even create a <a href="sessions.html#lab" target="_blank">gallery of Public Sessions</a>
+      related to your search by using a unique string in your descriptions.</li>
+      <li>Here is an example &quot;gallery&quot; of all sessions that have the word &quot;sessionView&quot;
+      in their descriptions: <a href="http://genome.ucsc.edu/cgi-bin/hgPublicSessions?search=sessionView"
+      target="_blank">http://genome.ucsc.edu/cgi-bin/hgPublicSessions?search=sessionView</a></li>
+   </ul>
 </ol>
 
 <!-- ====Sharing the session===================== -->

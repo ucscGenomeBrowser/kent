@@ -4,6 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "linefile.h"
+#include "chromInfo.h"
 #include "hash.h"
 #include "options.h"
 #include "rbTree.h"
@@ -22,6 +23,7 @@ char *qNewR = NULL;
 boolean noAr = FALSE;
 char *qRepeatTable = NULL;
 char *tRepeatTable = NULL;
+char *qSizes = NULL;
 struct hash *liftHashT = NULL;
 struct hash *liftHashQ = NULL;
 
@@ -37,6 +39,7 @@ static struct optionSpec optionSpecs[] = {
     {"tRepeats", OPTION_STRING},
     {"liftT", OPTION_STRING},
     {"liftQ", OPTION_STRING},
+    {"qSizes", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -61,6 +64,8 @@ errAbort(
   "                     file.lft (for accessing chrom-level coords in qDb)\n"
   "   -liftT=file.lft - Lift in.net's target coords to chrom-level using\n"
   "                     file.lft (for accessing chrom-level coords in tDb)\n"
+  "   -qSizes=chrom.sizes - file with query chrom.sizes instead of reading\n"
+  "                   - the chromInfo table from the database\n"
   );
 }
 
@@ -146,7 +151,9 @@ struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from gap order by chrom");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from gap order by chrom");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct agpGap gap;
@@ -218,8 +225,11 @@ struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;
 
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,chromStart,chromEnd from simpleRepeat"
+char query[1024];
+sqlSafef(query, sizeof query, 
+"select chrom,chromStart,chromEnd from simpleRepeat"
 		  " order by chrom,chromStart");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (prevChrom == NULL)
@@ -330,9 +340,11 @@ struct rbTree *newTree = rbTreeNewDetailed(simpleRangeCmp, qLm, newstack);
 char *prevChrom = NULL;
 struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 
-sr = sqlGetResult(conn,
-    NOSQLINJ "select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk "
+char query[1024];
+sqlSafef(query, sizeof query, 
+    "select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk "
     "order by genoName,genoStart");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct simpleRange *range;
@@ -658,7 +670,9 @@ else if (sqlTableExists(qConn, "ancientRepeat"))
 else
     errAbort("Can't find ancientRepeat table in %s or %s",
 	     sqlGetDatabase(tConn), sqlGetDatabase(qConn));
-sr = sqlGetResult(conn, NOSQLINJ "select name,family,class from ancientRepeat");
+char query[1024];
+sqlSafef(query, sizeof query, "select name,family,class from ancientRepeat");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sprintf(key, "%s.%s.%s", row[0], row[1], row[2]);
@@ -668,24 +682,42 @@ sqlFreeResult(&sr);
 return hash;
 }
 
-void getChroms(struct sqlConnection *conn, struct hash **retHash,
-	       struct chrom **retList)
-/* Get hash of chromosomes from database. */
+static void getChroms(struct sqlConnection *conn, struct hash **retHash,
+	       struct chrom **retList, char *sizes)
+/* Get hash of chromosomes from database or from sizes file if given. */
 {
-struct sqlResult *sr;
-char **row;
 struct chrom *chromList = NULL, *chrom;
 struct hash *hash = hashNew(8);
 
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
-while ((row = sqlNextRow(sr)) != NULL)
+if (sizes)
     {
-    AllocVar(chrom);
-    hashAddSaveName(hash, row[0], chrom, &chrom->name);
-    chrom->size = atoi(row[1]);
-    slAddHead(&chromList, chrom);
+    struct chromInfo *list = chromInfoListFromFile(sizes);
+    struct chromInfo *ci = NULL;
+    for (ci = list; ci; ci=ci->next)
+	{
+	AllocVar(chrom);
+	hashAddSaveName(hash, ci->chrom, chrom, &chrom->name);
+	chrom->size = ci->size;
+	slAddHead(&chromList, chrom);
+	}
     }
-sqlFreeResult(&sr);
+else
+    {
+    struct sqlResult *sr;
+    char **row;
+    char query[1024];
+    sqlSafef(query, sizeof query, "select chrom,size from chromInfo");
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	AllocVar(chrom);
+	hashAddSaveName(hash, row[0], chrom, &chrom->name);
+	chrom->size = atoi(row[1]);
+	slAddHead(&chromList, chrom);
+	}
+    sqlFreeResult(&sr);
+    }
+
 slReverse(&chromList);
 *retHash = hash;
 *retList = chromList;
@@ -872,7 +904,7 @@ qLm = lmInit(0);
 if (!noAr)
     arHash = getAncientRepeats(tConn, qConn);
 
-getChroms(qConn, &qChromHash, &qChromList);
+getChroms(qConn, &qChromHash, &qChromList, qSizes);
 
 verbose(1, "Reading gaps in %s\n", qDb);
 if (sqlTableExists(qConn, "gap"))
@@ -977,6 +1009,7 @@ qRepeatTable = optionVal("qRepeats", qRepeatTable);
 tRepeatTable = optionVal("tRepeats", tRepeatTable);
 liftFileQ = optionVal("liftQ", liftFileQ);
 liftFileT = optionVal("liftT", liftFileT);
+qSizes = optionVal("qSizes", qSizes);
 if (liftFileQ != NULL)
     {
     struct liftSpec *lifts = readLifts(liftFileQ);

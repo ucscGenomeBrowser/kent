@@ -2,11 +2,17 @@
 track wgEncodeGencodeSuper
 superTrack on hide
 group genes
-shortLabel All GENCODE
-longLabel All GENCODE transcripts, including comprehensive set and previous version
+shortLabel GENCODE Versions
+longLabel Container of all new and previous GENCODE releases
 priority 2.1
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 include wgEncodeGencodeVM26.ra
 include wgEncodeGencodeVM27.ra
 include wgEncodeGencodeVM28.ra
+include wgEncodeGencodeVM29.ra
+include wgEncodeGencodeVM30.ra
+include wgEncodeGencodeVM31.ra
+include wgEncodeGencodeVM32.ra
+include wgEncodeGencodeVM33.ra
+include wgEncodeGencodeVM34.ra

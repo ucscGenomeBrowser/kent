@@ -1,0 +1,42 @@
+# build curated assembly from hub https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/hub.txt
+
+hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/
+rsyncUrl=rsync://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/
+id=GCF_014621545.1
+ucscName=mpxvRivers
+assName="Monkeypox virus genome assembly ASM1462154v1"
+org="Monkeypox"
+orderKey=22325
+defaultPos=NC_063383.1:65,736-75,736
+taxId=10244
+
+hgsql "" -Ne "create database $ucscName"
+
+mkdir /gbdb/$ucscName
+mkdir /cluster/data/genomes/$ucscName
+cd /cluster/data/genomes/$ucscName
+
+wget $hubUrl/$id.2bit -O $ucscName.2bit
+ln -s `pwd`/$ucscName.2bit /gbdb/$ucscName
+
+mkdir hubs
+ln -s /hive/data/genomes/$ucscName/hubs /gbdb/$ucscName/hubs
+
+rsync -rav $rsyncUrl/bbi .
+ln -s /hive/data/genomes/$ucscName/bbi /gbdb/$ucscName/bbi
+
+rsync -rav $rsyncUrl/ixIxx .
+ln -s /hive/data/genomes/$ucscName/ixIxx /gbdb/$ucscName/ixIxx
+
+rsync -rav $rsyncUrl/$id.chromAlias.bb hubs/chromAlias.bb 
+rsync -rav $rsyncUrl/groups.txt hubs/groups.txt
+
+mkdir ~/kent/src/hg/makeDb/trackDb/virus/mpxvRivers
+cd  ~/kent/src/hg/makeDb/trackDb/virus/mpxvRivers
+
+ wget -q -O /dev/stdout "https://hgdownload.soe.ucsc.edu/hubs/GCF/014/621/545/GCF_014621545.1/hub.txt" | raToLines /dev/stdin /dev/stdout |  grep "^ *track"| linesToRa /dev/stdin /dev/stdout |  sed "s?searchTrix ?& /gbdb/$ucscName/?" | sed "s?bigDataUrl ?& /gbdb/$ucscName/?" > trackDb.ra 
+
+echo "insert into dbDb values(\"$ucscName\", \"$assName\", \"hub:/gbdb/$ucscName/hubs\", \"$org\", \"$defaultPos\", 1, \"$orderKey\", \"$org\", \"$org\", \"/gbdb/$ucscName/html/description.html\", 0, 1, \"$org\", \"$taxId\");" > insertDbDb.txt
+
+echo "insert into blatServers values(\"$ucscName\", \"dynablat-01\", 4040, 1, 0, 1);" > blatServer.txt
+echo "insert into blatServers values(\"$ucscName\", \"dynablat-01\", 4040, 0, 1, 1);" >> blatServer.txt

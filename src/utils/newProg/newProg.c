@@ -254,7 +254,7 @@ makeMakefile(fileOnly, "makefile");
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-struct dyString *ds = newDyString(1024);
+struct dyString *ds = dyStringNew(1024);
 int i;
 
 optionInit(&argc, argv, options);

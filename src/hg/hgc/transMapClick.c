@@ -40,6 +40,7 @@
 #include "transMapSrc.h"
 #include "transMapGene.h"
 #include "genbank.h"
+#include "chromAlias.h"
 
 enum geneSrcSetType
 /* constants for source sets */
@@ -218,7 +219,7 @@ AllocVar(bag);
 
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 char *chrom = cartString(cart, "c");
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 int fieldIx;
 struct bptFile *bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);

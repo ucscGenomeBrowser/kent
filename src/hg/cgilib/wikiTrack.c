@@ -127,11 +127,11 @@ void wikiTrackSaveToDb(struct sqlConnection *conn, struct wikiTrack *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->db,  el->owner,  el->color,  el->class,  el->creationDate,  el->lastModifiedDate,  el->descriptionKey,  el->id,  el->geneSymbol);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -533,11 +533,11 @@ while (NULL != (found = stringBetween(begin, end, stripped)) )
     {
     if (strlen(found) > 0)
 	{
-	struct dyString *rm = newDyString(1024);
+	struct dyString *rm = dyStringNew(1024);
 	dyStringPrintf(rm, "%s%s%s", begin, found, end);
 	stripString(stripped, rm->string);
 	freeMem(found);
-	freeDyString(&rm);
+	dyStringFree(&rm);
 	}
     }
 
@@ -548,11 +548,11 @@ while (NULL != (found = stringBetween(begin, end, stripped)) )
     {
     if (strlen(found) > 0)
 	{
-	struct dyString *rm = newDyString(1024);
+	struct dyString *rm = dyStringNew(1024);
 	dyStringPrintf(rm, "%s%s%s", begin, found, end);
 	stripString(stripped, rm->string);
 	freeMem(found);
-	freeDyString(&rm);
+	dyStringFree(&rm);
 	}
     }
 
@@ -595,7 +595,7 @@ safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php?title=%s&action=raw",
 	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
 struct lineFile *lf = netLineFileMayOpen(wikiPageUrl);
 
-struct dyString *wikiPage = newDyString(1024);
+struct dyString *wikiPage = dyStringNew(1024);
 if (lf)
     {
     char *line;
@@ -614,7 +614,7 @@ if (wikiPage->string)
 	return NULL;
     rawText = dyStringCannibalize(&wikiPage);
     }
-freeDyString(&wikiPage);
+dyStringFree(&wikiPage);
 
 return rawText;
 }
@@ -629,7 +629,7 @@ safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=render",
 	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
 struct lineFile *lf = netLineFileMayOpen(wikiPageUrl);
 
-struct dyString *wikiPage = newDyString(1024);
+struct dyString *wikiPage = dyStringNew(1024);
 if (lf)
     {
     char *line;
@@ -643,7 +643,7 @@ if (lf)
 char *strippedRender = NULL;
 if (wikiPage->string)
     strippedRender = stripEditURLs(wikiPage->string);
-freeDyString(&wikiPage);
+dyStringFree(&wikiPage);
 
 return strippedRender;
 }
@@ -720,7 +720,7 @@ void prefixComments(struct wikiTrack *item, char *comments, char *userName,
 if (NULL == comments)
     return;
 
-struct dyString *content = newDyString(1024);
+struct dyString *content = dyStringNew(1024);
 
 struct htmlPage *page = fetchEditPage(item->descriptionKey);
 
@@ -769,7 +769,7 @@ if (!(wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2)))
 	userSignature = cloneString("~~~~");
     else
 	{
-	struct dyString *tt = newDyString(1024);
+	struct dyString *tt = dyStringNew(1024);
 	dyStringPrintf(tt, "[[User:%s|%s]] ", item->owner, item->owner);
 	dyStringPrintf(tt, "%s", item->creationDate);
 	userSignature = dyStringCannibalize(&tt);
@@ -840,7 +840,7 @@ freeMem(fixedString);
 if (NULL == editPage)
     errAbort("prefixComments: the edit is failing ?");
 
-freeDyString(&content);
+dyStringFree(&content);
 }	/*	void prefixComments()	*/
 
 
@@ -850,7 +850,7 @@ void addDescription(struct wikiTrack *item, char *userName,
 /* add description to the end of an existing wiki item */
 {
 char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
-struct dyString *content = newDyString(1024);
+struct dyString *content = dyStringNew(1024);
 
 /* was nothing changed in the add comments entry box ? */
 if (sameWord(ADD_ITEM_COMMENT_DEFAULT,newComments))
@@ -906,7 +906,7 @@ else
 	userSignature = cloneString("~~~~");
     else
 	{
-	struct dyString *tt = newDyString(1024);
+	struct dyString *tt = dyStringNew(1024);
 	dyStringPrintf(tt, "[[User:%s|%s]] ", item->owner, item->owner);
 	dyStringPrintf(tt, "%s", item->creationDate);
 	userSignature = dyStringCannibalize(&tt);
@@ -980,7 +980,7 @@ freeMem(fixedString);
 if (NULL == editPage)
     errAbort("addDescription: the edit is failing ?");
 
-freeDyString(&content);
+dyStringFree(&content);
 }	/*	void addDescription()	*/
 
 char *encodedReturnUrl(char *(*hgUrl)())

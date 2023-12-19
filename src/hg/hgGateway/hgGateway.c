@@ -137,7 +137,7 @@ else
     jsonWriteString(jw, "genome", genome);
     struct slPair *dbOptions = NULL;
     char genomeLabel[PATH_LEN*4];
-    if (isNotEmpty(hubUrl))
+    if (isNotEmpty(hubUrl) && !startsWith("/gbdb", hubUrl))
         {
         struct trackHub *hub = hubConnectGetHub(hubUrl);
         if (hub == NULL)
@@ -152,14 +152,14 @@ else
         }
     else
         {
-        dbOptions = hGetDbOptionsForGenome(genome);
+        dbOptions = hGetDbOptionsForGenome(trackHubSkipHubName(genome));
         safecpy(genomeLabel, sizeof(genomeLabel), genome);
         }
     jsonWriteValueLabelList(jw, "dbOptions", dbOptions);
     jsonWriteString(jw, "genomeLabel", genomeLabel);
     jsonWriteString(jw, "position", position);
     char *suggestTrack = NULL;
-    if (! trackHubDatabase(db))
+    if (! trackHubDatabase(db) && (sqlMayConnect(db) != NULL))
         suggestTrack = assemblyGeneSuggestTrack(db);
     jsonWriteString(jw, "suggestTrack", suggestTrack);
     char *description = maybeGetDescriptionText(db);
@@ -174,6 +174,7 @@ static void setTaxId(struct cartJson *cj, struct hash *paramHash)
 {
 char *taxIdStr = cartJsonRequiredParam(paramHash, "taxId", cj->jw, "setTaxId");
 char *db = cartJsonOptionalParam(paramHash, "db");
+char *organism = cartJsonOptionalParam(paramHash, "org");
 int taxId = atoi(taxIdStr);
 if (isEmpty(db))
     db = hDbForTaxon(taxId);
@@ -183,6 +184,8 @@ else
     {
     writeFindPositionInfo(cj->jw, db, taxId, NULL, hDefaultPos(db));
     cartSetString(cart, "db", db);
+    if (!isEmpty(organism))
+        cartSetString(cart, "org", organism);
     cartSetString(cart, "position", hDefaultPos(db));
     }
 }
@@ -267,10 +270,11 @@ struct sqlConnection *conn = hConnectCentral();
 // may be used for different assemblies of the same species.  Using defaultDb means that
 // we send a taxId consistent with the taxId of the assembly that we'll change to when
 // the species is selected from the tree.
-char *query = NOSQLINJ "select dbDb.genome, taxId, dbDb.name from dbDb, defaultDb "
+struct dyString *query = sqlDyStringCreate(
+    "select dbDb.genome, taxId, dbDb.name from dbDb, defaultDb "
     "where defaultDb.name = dbDb.name and active = 1 "
-    "and taxId > 1;"; // filter out experimental hgwdev-only stuff with invalid taxIds
-struct sqlResult *sr = sqlGetResult(conn, query);
+    "and taxId > 1;"); // filter out experimental hgwdev-only stuff with invalid taxIds
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -283,6 +287,7 @@ hDisconnectCentral(&conn);
 jsonWriteObjectEnd(jw);
 dyStringAppend(dy, jw->dy->string);
 jsonWriteFree(&jw);
+dyStringFree(&query);
 }
 
 static void doMainPage()
@@ -505,6 +510,14 @@ static char *boldTerm(char *target, char *term, int offset, enum dbDbMatchType t
 {
 int termLen = strlen(term);
 int targetLen = strlen(target);
+if (type == ddmtDescription)
+    {
+    // Search of dbDb->description skips the date that precedes the actual description which is
+    // in parentheses.  Adjust offset accordingly.
+    char *leftP = strchr(target, '(');
+    if (leftP)
+        offset += (leftP+1 - target);
+    }
 if (offset + termLen > targetLen)
     errAbort("boldTerm: invalid offset (%d) for term '%s' (length %d) in target '%s' (length %d)",
              offset, term, termLen, target, targetLen);
@@ -601,6 +614,7 @@ else
              match->type, dbDb->name, term);
 jsonWriteString(jw, "label", label);
 jsonWriteString(jw, "value", value);
+jsonWriteString(jw, "org", dbDb->organism);
 jsonWriteNumber(jw, "taxId", dbDb->taxId);
 if (isNotEmpty(category))
     jsonWriteString(jw, "category", category);
@@ -695,10 +709,17 @@ for (dbDb = dbDbList;  dbDb != NULL; dbDb = dbDb->next)
         checkTerm(term, dbDb->genome, ddmtGenome, dbDb, matchHash, &matchList);
         checkTerm(term, dbDb->scientificName, ddmtSciName, dbDb, matchHash, &matchList);
         }
-    // dbDb.description is a little too much for autocomplete ("br" would match dozens
-    // of Broad assemblies), but we do need to recognize "GRC".
-    if (startsWith("GR", term))
-        checkTerm(term, dbDb->description, ddmtDescription, dbDb, matchHash, &matchList);
+    // dbDb.description has dozens of matches for some institutions like Broad, so suppress
+    // it for search terms that would get too many probably unwanted matches.
+    if (! (startsWith(term, "BRO") || startsWith(term, "WU") || startsWith(term, "BAY") ||
+           startsWith(term, "AGE")))
+        {
+        // dbDb.description also starts with dates followed by actual description in parentheses,
+        // so search only the part in parentheses to avoid month prefix matches.
+        char *leftP = strchr(dbDb->description, '(');
+        char *toSearch = leftP ? leftP+1 : dbDb->description;
+        checkTerm(term, toSearch, ddmtDescription, dbDb, matchHash, &matchList);
+        }
     }
 slSort(&matchList, dbDbMatchCmp);
 return matchList;
@@ -775,7 +796,8 @@ struct aHubMatch *aHubMatchList = NULL;
 struct hash *localDbs = hashNew(0);
 struct dbDb *dbDb;
 for (dbDb = dbDbList;  dbDb != NULL;  dbDb = dbDb->next)
-    hashStore(localDbs, dbDb->name);
+    if (!sameString(dbDb->nibPath, "genark"))
+        hashStore(localDbs, dbDb->name);
 struct hash *dbLabel = NULL;
 struct hash *hubToDb = unpackHubDbUrlList(hubDbUrlList, &dbLabel);
 // Build up a query to find shortLabel and dbList for each hubUrl.
@@ -790,12 +812,12 @@ while ((hel = hashNext(&cookie)) != NULL)
     if (isFirst)
         isFirst = FALSE;
     else
-        dyStringAppend(query, ", ");
-    dyStringPrintf(query, "'%s'", hel->name);
+        sqlDyStringPrintf(query, ", ");
+    sqlDyStringPrintf(query, "'%s'", hel->name);
     }
-dyStringAppendC(query, ')');
+sqlDyStringPrintf(query, ")");
 struct sqlConnection *conn = hConnectCentral();
-struct sqlResult *sr = sqlGetResult(conn, query->string);
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -826,6 +848,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&aHubMatchList);
 hDisconnectCentral(&conn);
+dyStringFree(&query);
 return aHubMatchList;
 }
 
@@ -887,7 +910,9 @@ static char *getSearchTermUpperCase()
 {
 pushWarnHandler(htmlVaBadRequestAbort);
 pushAbortHandler(htmlVaBadRequestAbort);
-char *term = cgiOptionalString(SEARCH_TERM);
+char *cgiTerm = cgiOptionalString(SEARCH_TERM);
+char *term = skipLeadingSpaces(cgiTerm);
+eraseTrailingSpaces(term);
 touppers(term);
 if (isEmpty(term))
     errAbort("Missing required CGI parameter %s", SEARCH_TERM);

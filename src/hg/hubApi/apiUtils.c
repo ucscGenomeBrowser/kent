@@ -307,7 +307,8 @@ if (db)
     tdb = hTrackDb(db);
 else
     {
-    tdb = trackHubTracksForGenome(genome->trackHub, genome, NULL);
+    boolean foundFirstGenome = FALSE;
+    tdb = trackHubTracksForGenome(genome->trackHub, genome, NULL, &foundFirstGenome);
     tdb = trackDbLinkUpGenerations(tdb);
     tdb = trackDbPolishAfterLinkup(tdb, genome->name);
     }
@@ -365,9 +366,9 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
 if (allowedBigBedType(trackType))
-    bbi = bigBedFileOpen(bigDataUrl);
+    bbi = bigBedFileOpenAlias(bigDataUrl, chromAliasFindAliases);
 else if (startsWith("bigWig", trackType))
-    bbi = bigWigFileOpen(bigDataUrl);
+    bbi = bigWigFileOpenAlias(bigDataUrl, chromAliasFindAliases);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -428,7 +429,7 @@ if (wordCount)
     }
 
 int extrasFound = 0;
-struct dyString *extras = newDyString(128);
+struct dyString *extras = dyStringNew(128);
 struct cgiVar *varList = cgiVarList();
 struct cgiVar *var = varList;
 for ( ; var; var = var->next)
@@ -436,6 +437,8 @@ for ( ; var; var = var->next)
     if (sameWord("cgiSpoof", var->name))
 	continue;
     if (sameWord("debug", var->name))
+	continue;
+    if (sameWord("cmd", var->name))
 	continue;
     if (sameWord("measureTiming", var->name))
 	continue;
@@ -618,47 +621,10 @@ else
     return TRUE;	/* might be true */
 }
 
-boolean protectedTrack(struct trackDb *tdb, char *tableName)
+boolean protectedTrack(char *db, struct trackDb *tdb, char *tableName)
 /* determine if track is off-limits protected data */
 {
-boolean ret = FALSE;
-
-/* this is a fixed list for now since there are so few and this
- * takes care of the situation where the tableName might be for a table
- * that has no trackDb entry
- */
-if (sameOk(tableName, "cosmicRegions"))
-  ret = TRUE;
-else if (sameOk(tableName, "decipherRaw"))
-  ret = TRUE;
-else if (sameOk(tableName, "knownToDecipher"))
-  ret = TRUE;
-else if (sameOk(tableName, "knownCanonToDecipher"))
-  ret = TRUE;
-else if (sameOk(tableName, "decipherSnvsRaw"))
-  ret = TRUE;
-else if (sameOk(tableName, "lovd"))
-  ret = TRUE;
-else if (sameOk(tableName, "lovdShort"))
-  ret = TRUE;
-else if (sameOk(tableName, "lovdLong"))
-  ret = TRUE;
-else if (sameOk(tableName, "lovdComp"))
-  ret = TRUE;
-else if (sameOk(tableName, "hgmd"))
-  ret = TRUE;
-else
-    {
-    if (tdb)	/* may not have a tdb at this time */
-	{
-	char *tbOff = trackDbSetting(tdb, "tableBrowser");
-	if (tbOff && startsWithWord("off", tbOff))
-	    ret = TRUE;
-	if (tbOff && startsWithWord("noGenome", tbOff))
-	    ret = TRUE;
-	}
-    }
-return ret;
+return cartTrackDbIsAccessDenied(db, tableName) || cartTrackDbIsNoGenome(db, tableName);
 }
 
 boolean isWiggleDataTable(char *type)
@@ -673,4 +639,111 @@ if (startsWith("wig", type))
     }
 else
      return FALSE;
+}
+
+char *chrOrAlias(char *db, char *hubUrl)
+/* get incoming chr name, may be an alias, return the native chr name
+ * might be given a db, maybe not
+ * might be given a hubUrl, maybe not
+ */
+{
+char *cartChr = cgiOptionalString("chrom");
+if (isEmpty(cartChr))
+   return NULL;
+char *chrom = cartChr;
+if (isEmpty(hubUrl))
+    {
+    if (isEmpty(db))
+       return chrom;
+    chromAliasSetup(db);
+    chrom = hgOfficialChromName(db, chrom);
+    }
+else
+    {
+/*
+    not sure if the 'curated' hub situation has been solved yet
+    if (sameString("hs1", db)) {
+      chromAliasSetup("hub_25359_hs1");
+    } else {
+      chromAliasSetup(db);
+    }
+*/
+    chrom = chromAliasFindNative(chrom);
+    }
+if (isEmpty(chrom))	// can't find it here, return the name from the cart
+    chrom = cartChr;
+return chrom;
+}
+struct trackHubGenome *hubGenome = NULL;
+
+void hubAliasSetup(struct trackHubGenome *hubGenome)
+/* see if this hub has an alias file and run chromAliasSetupBb() for it */
+{
+if (hubGenome->settingsHash)
+    {
+    char *aliasFile = hashFindVal(hubGenome->settingsHash, "chromAliasBb");
+    char *absFileName = NULL;
+    if (aliasFile)
+       absFileName = trackHubRelativeUrl((hubGenome->trackHub)->url, aliasFile);
+    if (absFileName)
+        {
+        chromAliasSetupBb(NULL, absFileName);
+        }
+    }
+}
+
+char *genArkPath(char *genome)
+/* given a GenArk hub genome name, e.g. GCA_021951015.1 return the path:
+ *               GCA/021/951/015/GCA_021951015.1
+ * prefix that with desired server URL: https://hgdownload.soe.ucsc.edu/hubs/
+ *   if desired.  Or suffix add /hub.txt to get the hub.txt URL
+ *
+ *   already been proven that genome is a GCx_ name prefix before calling
+ */
+{
+struct dyString *genArkPath = dyStringNew(0);
+
+char tmpBuf[4];
+safencpy(tmpBuf, sizeof(tmpBuf), genome, 3);
+dyStringPrintf(genArkPath, "%s/", tmpBuf);
+safencpy(tmpBuf, sizeof(tmpBuf), genome+4, 3);
+dyStringPrintf(genArkPath, "%s/", tmpBuf);
+safencpy(tmpBuf, sizeof(tmpBuf), genome+7, 3);
+dyStringPrintf(genArkPath, "%s/", tmpBuf);
+safencpy(tmpBuf, sizeof(tmpBuf), genome+10, 3);
+dyStringPrintf(genArkPath, "%s", tmpBuf);
+
+return dyStringCannibalize(&genArkPath);
+}
+
+static struct dyString *textOutput = NULL;
+
+void textLineOut(char *lineOut)
+/* accumulate text lines for output in the dyString textOutput */
+{
+if (NULL == textOutput)
+    {
+    char outString[1024];
+    textOutput = dyStringNew(0);
+    time_t timeNow = time(NULL);
+    struct tm tm;
+    gmtime_r(&timeNow, &tm);
+    safef(outString, sizeof(outString),
+       "# downloadTime: \"%d:%02d:%02dT%02d:%02d:%02dZ\"",
+        1900+tm.tm_year, tm.tm_mon+1, tm.tm_mday, tm.tm_hour, tm.tm_min,
+         tm.tm_sec);
+    dyStringPrintf(textOutput, "%s\n", outString);
+    safef(outString, sizeof(outString), "# downloadTimeStamp: %lld",
+        (long long) timeNow);
+    dyStringPrintf(textOutput, "%s\n", outString);
+    }
+
+dyStringPrintf(textOutput, "%s\n", lineOut);
+}
+
+void textFinishOutput()
+/* all done with text output, print it all out */
+{
+puts("Content-Type:text/plain\n");
+printf("%s", dyStringCannibalize(&textOutput));
 }

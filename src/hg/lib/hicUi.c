@@ -158,6 +158,15 @@ else if (sameWordOk(selected, HIC_DRAW_MODE_TRIANGLE))
 return result;
 }
 
+boolean hicUiFetchInverted(struct cart *cart, struct trackDb *tdb)
+/* Check if the user has set this track to draw in inverted mode.
+ * Ideally this would also be available via a trackDb setting, but
+ * this is the first pass at this feature. */
+{
+boolean defaultVal = FALSE;
+return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_DRAW_INVERTED, defaultVal);
+}
+
 
 void hicUiDrawMenu(struct cart *cart, struct trackDb *tdb)
 /* Draw the list of draw mode options for Hi-C tracks.  Square is the
@@ -173,6 +182,10 @@ safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_MODE);
 char *menu[] = {HIC_DRAW_MODE_SQUARE, HIC_DRAW_MODE_TRIANGLE, HIC_DRAW_MODE_ARC};
 char* selected = hicUiFetchDrawMode(cart, tdb);
 cgiMakeDropList(cartVar, menu, 3, selected);
+puts("&nbsp;&nbsp;");
+printf("<b>Invert:</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_INVERTED);
+cgiMakeCheckBox(cartVar, hicUiFetchInverted(cart, tdb));
 }
 
 
@@ -321,6 +334,48 @@ printf("</div>\n");
 printf("<p>For questions concerning the content of a file's metadata header, please contact the file creator.</p>\n");
 }
 
+double hicUiMaxInteractionRange(struct cart *cart, struct trackDb *tdb)
+/* Retrieve the maximum range for an interaction to be drawn.  Range is
+ * calculated from the left-most start to the right-most end of the interaction. */
+{
+double defaultValue = 0, returnVal = 0;
+char *tdbString = trackDbSetting(tdb, HIC_TDB_MAX_DISTANCE);
+if (!isEmpty(tdbString))
+    defaultValue = atof(tdbString);
+returnVal = cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MAX_DISTANCE, defaultValue);
+if (returnVal < 0)
+    return 0;
+return returnVal;
+}
+
+double hicUiMinInteractionRange(struct cart *cart, struct trackDb *tdb)
+/* Retrieve the minimum range for an interaction to be drawn.  Range is
+ * calculated from the left-most start to the right-most end of the interaction. */
+{
+double defaultValue = 0, returnVal = 0;
+char *tdbString = trackDbSetting(tdb, HIC_TDB_MIN_DISTANCE);
+if (!isEmpty(tdbString))
+    defaultValue = atof(tdbString);
+returnVal = cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MIN_DISTANCE, defaultValue);
+if (returnVal < 0)
+    return 0;
+return returnVal;
+}
+
+void hicUiMinMaxRangeMenu(struct cart *cart, struct trackDb *tdb)
+{
+char cartVar[2048];
+double minRange = hicUiMinInteractionRange(cart, tdb);
+double maxRange = hicUiMaxInteractionRange(cart, tdb);
+printf("<b>Filter by interaction distance in bp (0 for no limit):</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_MIN_DISTANCE);
+printf("minimum ");
+cgiMakeDoubleVarWithMin(cartVar, minRange, NULL, 0, 0);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_MAX_DISTANCE);
+printf(" maximum ");
+cgiMakeDoubleVarWithMin(cartVar, maxRange, NULL, 0, 0);
+}
+
 void hicCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
                         char *title, boolean boxed)
 /* Draw the list of track configuration options for Hi-C tracks */
@@ -349,6 +404,8 @@ hicUiResolutionMenu(cart, tdb, trackMeta);
 puts("&nbsp;&nbsp;");
 hicUiColorMenu(cart, tdb);
 puts("</p><p>\n");
+hicUiMinMaxRangeMenu(cart, tdb);
+puts("</p><p>\n");
 hicUiFileDetails(trackMeta);
 cfgEndBox(boxed);
 }
@@ -368,6 +425,10 @@ hicUiDrawMenu(cart, tdb);
 puts("&nbsp;&nbsp;");
 hicUiColorMenu(cart, tdb);
 puts("</p><p>\n");
+hicUiMinMaxRangeMenu(cart, tdb);
+puts("</p><p>\n");
 puts("Subtracks below have additional file-specific configuration options for resolution and normalization.\n</p>");
 cfgEndBox(boxed);
 }
+
+

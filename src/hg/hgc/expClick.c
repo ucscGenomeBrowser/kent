@@ -25,6 +25,7 @@ static struct rgbColor getColorForExprBed(float val, float max,
 {
 float absVal = fabs(val);
 struct rgbColor color;
+color.a = 255;
 int colorIndex = 0;
 
 /* if log score is -10000 data is missing */

@@ -12,8 +12,10 @@
 #include "cirTree.h"
 #include "bPlusTree.h"
 #include "bbiFile.h"
+#include "bbiAlias.h"
 #include "net.h"
 #include "obscure.h"
+#include "bigBed.h"
 
 void bbiWriteDummyHeader(FILE *f)
 /* Write out all-zero header, just to reserve space for it. */
@@ -55,10 +57,12 @@ struct bbiChromUsage *usage;
 
 /* Allocate and fill in array from list. */
 struct bbiChromInfo *chromInfoArray = NULL;
+struct bbiChromUsage **usageArray = NULL;
 int maxChromNameSize = 0;
 if (chromCount > 0)
     {
     AllocArray(chromInfoArray, chromCount);
+    AllocArray(usageArray, chromCount);
     int i;
     for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
 	{
@@ -69,10 +73,20 @@ if (chromCount > 0)
 	chromInfoArray[i].name = chromName;
 	chromInfoArray[i].id = usage->id;
 	chromInfoArray[i].size = usage->size;
+        usageArray[i] = usage;
 	}
 
     /* Sort so the b-Tree actually works. */
     qsort(chromInfoArray, chromCount, sizeof(chromInfoArray[0]), bbiChromInfoCmp);
+    /* Now we remap the chromId's so they reflect the order in the bTree */
+    for (i=0, usage = usageList; i<chromCount; ++i, usage = usage->next)
+        {
+        if ( usageArray[chromInfoArray[i].id]->id != i)
+            {
+            usageArray[chromInfoArray[i].id]->id = i;
+            chromInfoArray[i].id = i;
+            }
+        }
     }
 
 /* Write chromosome bPlusTree */
@@ -83,6 +97,7 @@ bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount
     f);
 
 freeMem(chromInfoArray);
+freeMem(usageArray);
 }
 
 void bbiWriteFloat(FILE *f, float val)
@@ -169,7 +184,8 @@ for (i=0; i<eim->indexCount; ++i)
     }
 }
 
-struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
+struct bbiChromUsage *bbiChromUsageFromBedFileInternal(struct lineFile *lf, 
+        bbiChromSizeFunc chromSizeFunc,  void *chromSizeClosure,
 	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount, boolean tabSep)
 /* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
  * collect max field sizes there too. */
@@ -181,6 +197,7 @@ int lastStart = -1;
 bits32 id = 0;
 bits64 totalBases = 0, bedCount = 0;
 int minDiff = BIGNUM;
+struct hash *usedHash = newHash(0);
 
 lineFileRemoveInitialCustomTrackLines(lf);
 
@@ -209,16 +226,15 @@ for (;;)
     totalBases += (end - start);
     if (usage == NULL || differentString(usage->name, chrom))
         {
-	/* make sure chrom names are sorted in ASCII order */
-	if ((usage != NULL) && strcmp(usage->name, chrom) > 0)
-	    {
-	    errAbort("%s is not case-sensitive sorted at line %d.  Please use \"sort -k1,1 -k2,2n\" with LC_COLLATE=C,  or bedSort and try again.",
-	    	lf->fileName, lf->lineIx);
-	    }
-	struct hashEl *chromHashEl = hashLookup(chromSizesHash, chrom);
-	if (chromHashEl == NULL)
-	    errAbort("%s is not found in chromosome sizes file", chrom);
-	int chromSize = ptToInt(chromHashEl->val);
+        if (hashLookup(usedHash, chrom))
+            {
+	    errAbort("Error: All data for each sequence needs to be sorted together in file %s.  Found sequence named %s not in single block on line %d.  Please use \"LC_ALL=C sort -k1,1 -k2,2n\" or bedSort and try again.", lf->fileName, chrom, lf->lineIx);
+            }
+        hashStore(usedHash, chrom);
+	int chromSize = (*chromSizeFunc)(chromSizeClosure, chrom, lf->lineIx);
+        if (chromSize == 0)
+            errAbort("%s is not found in chromosome sizes file", chrom);
+       
 	AllocVar(usage);
 	usage->name = cloneString(chrom);
 	usage->id = id++;
@@ -250,6 +266,66 @@ if (bedCount > 0)
 *retAveSize = aveSize;
 *retBedCount = bedCount;
 return usageList;
+}
+
+struct chromSizeClosure  // a structure that contains the data we need to get a chromosome size from a bigBed
+{ 
+    struct bbiFile *bbi;
+    struct bptIndex *bptIndex;
+    struct lm *lm;
+    struct hash *usedAlias;
+};
+
+static int bbChromSizeFunc(void *closure, char *chrom, int lineIx)
+/* A function to return the size of a given sequence. */
+{
+struct chromSizeClosure *bbChromSizeClosure = (struct chromSizeClosure *)closure;
+
+return bbiAliasChromSizeExt(bbChromSizeClosure->bbi, bbChromSizeClosure->bptIndex, bbChromSizeClosure->lm, chrom, bbChromSizeClosure->usedAlias, lineIx);
+}
+
+struct bbiChromUsage *bbiChromUsageFromBedFileAlias(struct lineFile *lf, char *chromAliasBb,
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount, boolean tabSep)
+/* A wrapper for bbiChromUsageFromBedFile that uses a bigBed to find chromosome sizes. */
+{
+struct chromSizeClosure *bbChromSizeClosure = NULL;
+
+AllocVar(bbChromSizeClosure);
+bbChromSizeClosure->bbi = bigBedFileOpen(chromAliasBb);
+bbChromSizeClosure->bptIndex = bbiAliasOpenExtra(bbChromSizeClosure->bbi);
+bbChromSizeClosure->lm = lmInit(0);
+bbChromSizeClosure->usedAlias = hashNew(0);
+
+struct bbiChromUsage *usageList = bbiChromUsageFromBedFileInternal(lf, bbChromSizeFunc, bbChromSizeClosure, eim, retMinDiff, retAveSize, retBedCount, tabSep);
+
+bbiFileClose(&bbChromSizeClosure->bbi);
+struct bptIndex *next, *bptIndex = bbChromSizeClosure->bptIndex;
+for(; bptIndex; bptIndex = next)
+    {
+    next = bptIndex->next;
+    freez(&bptIndex);
+    }
+lmCleanup(&bbChromSizeClosure->lm);
+
+return usageList;
+}
+
+static int chromHashSizeFunc(void *closure, char *chrom, int lineIx)
+/* Function to find the size of sequence using a hash passed in as a closure. */
+{
+struct hash *chromSizesHash = (struct hash *)closure;
+struct hashEl *chromHashEl = hashLookup(chromSizesHash, chrom);
+if (chromHashEl == NULL)
+    errAbort("%s is not found in chromosome sizes file", chrom);
+return ptToInt(chromHashEl->val);
+}
+
+struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount, boolean tabSep)
+/* A wrapper for bbiChromUsageFromBedFile that uses a hash to find chromosome sizes. */
+{
+return bbiChromUsageFromBedFileInternal(lf, chromHashSizeFunc, chromSizesHash,
+	eim, retMinDiff, retAveSize, retBedCount, tabSep);
 }
 
 int bbiCalcResScalesAndSizes(int aveSize, 
@@ -302,7 +378,7 @@ int bbiWriteZoomLevels(
 {
 /* Write out first zoomed section while storing in memory next zoom level. */
 assert(resTryCount > 0);
-int maxReducedSize = dataSize/2;
+bits64 maxReducedSize = dataSize/2;
 int initialReduction = 0, initialReducedCount = 0;
 
 /* Figure out initialReduction for zoom - one that is maxReducedSize or less. */
@@ -334,7 +410,8 @@ if (initialReduction == 0)
 /* Call routine to make the initial zoom level and also a bit of work towards further levels. */
 struct lm *lm = lmInit(0);
 int zoomIncrement = bbiResIncrement;
-lineFileRewind(lf);
+if (lf->lineIx != 0) // only seek on the input if it's not already at the beginning
+    lineFileRewind(lf);
 struct bbiSummary *rezoomedList = writeReducedOnceReturnReducedTwice(usageList, fieldCount,
 	lf, initialReduction, initialReducedCount,
 	zoomIncrement, blockSize, itemsPerSlot, doCompress, lm, 

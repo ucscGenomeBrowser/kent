@@ -69,11 +69,18 @@ For instructions on creating a saved session, go to the
 <a href="../goldenPath/help/hgSessionHelp.html#Create" target ="_blank">session user guide</a>.
 If you want to specify track settings in a URL directly, please read the section on 
 <a href="#trackViz">setting track visibility via URL</a> for a complete description. </p>
-
+<h6> Loading sessions on other tools</h6>
 <p>
 Or if you prefer the older style, which allows you to link to different tools, you may use the 
-following format:</p>
-<p><code>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=&lt;userName&gt;&amp;gS_otherUserSessionName=&lt;sessionName&gt;</code></p>
+following parameters:</p>
+<ul>
+  <li id="hgS_otherUserName"><code>hgS_otherUserName=&lt;userName&gt</code></li>
+  <li id="hgS_otherUserSessionName"><code>hgS_otherUserSessionName=&lt;sessionName&gt;</code></li>
+  <li id="hgS_doOtherUser"><code>hgS_doOtherUser=submit</code></li>
+</ul>
+<p>
+Here is an example:</p>
+<p><code>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=&lt;userName&gt;&amp;hgS_otherUserSessionName=&lt;sessionName&gt;</code></p>
 <p>
 This longer format has the flexibility of replacing &quot;hgTracks&quot; with different tool names to share 
 saved settings on the Table Browser (hgTables), Variant Annotation Integrator (hgVai), or Data 
@@ -87,6 +94,13 @@ characters separating different parameters like so: </p>
 <p><code><a href=http://genome.ucsc.edu/s/view/clinicalzoom?textSize=18>http://genome.ucsc.edu/s/view/clinicalzoom?textSize=18</a></code></p>
 <p>Both formats require an ampersand between each additional parameter, seen in the longer format like so:</p>
 <p><code><a href=http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18>http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&amp;hgS_otherUserName=view&amp;hgS_otherUserSessionName=clinicalzoom&amp;textSize=18</a></code></p>
+<p>
+Another option for sessions is to download the file and host it in an external location and load it with
+<code id="hgS_doLoadUrl">hgS_doLoadUrl=submit</code> and
+<code id="hgS_loadUrlName">hgS_loadUrlName=&lt;URL&gt;</code> allowing you to externally maintain your session,
+or update it as you wish. Here is an example:</p>
+<p><code><a href="https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.stopCodons">
+https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.stopCodons</a></code></p>
 
 <a name="link2"></a>
 <h2>Linking to the Browser at a specific position, or default position</h2>
@@ -98,12 +112,12 @@ the <code>db=</code> and <code>position=</code> parameters.</p>
 <p>
 Where:</p>
 <ul>
-  <li>
+  <li id="db">
   <code>db</code> - designates a specific genome assembly. For example, <code>db=hg19</code> 
   refers to the Feb. 2009 human genome release. For a list of db parameter values that 
   correspond to UCSC assemblies, see the <a href="FAQreleases.html#release1">list of UCSC 
   releases</a>.</li>
-  <li><code>position</code> - can be any search term for the genome specified, including
+  <li id="position"><code>position</code> - can be any search term for the genome specified, including
   a position range or a gene identifier. This often takes the form of
   <code>position=chr1:35000-40000</code>.</li>
 </ul>
@@ -131,10 +145,10 @@ but you can always zoom in or out with <code>hgt.out1=submit</code> or <code>hgt
 The numbers 1 through 4 zoom in or out corresponding to the buttons above the track window.
 The following lists the zoom levels of each number, applicable to zooming in or out:</p>
 <ul>
-<li><code>hgt.out1=submit</code> zooms out 1.5x</li>
-<li><code>hgt.out2=submit</code> zooms out 3x</li>
-<li><code>hgt.out3=submit</code> zooms out 10x</li>
-<li><code>hgt.out4=submit</code> zooms out 100x</li>
+<li id="hgt.out1"><code>hgt.out1=submit</code> zooms out 1.5x</li>
+<li id="hgt.out2"><code>hgt.out2=submit</code> zooms out 3x</li>
+<li id="hgt.out3"><code>hgt.out3=submit</code> zooms out 10x</li>
+<li id="hgt.out4"><code>hgt.out4=submit</code> zooms out 100x</li>
 </ul>
 <p>
 The following link is an example which leads to the variant NM_00257:c.1208G&gt;T and zooms 
@@ -152,14 +166,14 @@ each linked by the "&amp;" sign, similar to position parameters. For more inform
 the <a href="../goldenPath/help/customTrack.html#optParams" target ="_blank">optional URL 
 parameters</a> section of the Custom Tracks User's Guide.</p>
 <ul>
-<li><code>hideTracks=1</code> - hides all tracks</li>
+<li id="hideTracks"><code>hideTracks=1</code> - hides all tracks</li>
 <li><code>&lt;trackName&gt;=hide|dense|pack|full</code> - sets specified track or subtrack to a
 chosen visibility</li>
-<li><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18,
+<li id="textSize"><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18,
 24, or 34. Default is a textSize of 12.</li>
 <li><code>&lt;trackName&gt;.heightPer=&lt;###&gt;</code> - sets a bigWig track's height to a 
 particular number of pixels (between 20-100)</li>
-<li><code>ignoreCookie=1</code> - removes pre-existing user settings like track selection, custom
+<li id="ignoreCookie"><code>ignoreCookie=1</code> - removes pre-existing user settings like track selection, custom
 tracks, and track hubs</li>
 </ul>
 <p>
@@ -245,6 +259,100 @@ hub's directory</a>. For more information on assembly hubs in general, please se
 href="../goldenPath/help/hgTrackHubHelp.html">track hub user guide</a>,
 or the <a href=../goldenPath/help/hubQuickStartAssembly.html>quick start guide
 to assembly hubs</a>.
+</p>
+<h6 id="hubClear">Use <code>hubClear=</code> to remove hubs at the same location</h6>
+<p>
+Another feature one can use in place of <code>hubUrl=</code> is
+<code>hubClear=</code>, which will load a hub while simultaneously disconnecting
+or clearing, hubs located at the same location. For example, adding
+<code>hubClear=http://university.edu/lab/folder/hub10.txt</code> would connect the
+referenced hub10.txt while simultaneously disconnecting any hubs that might be
+displayed from  the same <code>http://university.edu/lab/folder/</code> directory
+(for example, hub1.txt, hub2.txt, etc.). This feature can be useful for dynamically
+generated hubs that might collect in the browser otherwise.
+</p>
+<h6>Additional hub connection parameters</h6>
+<p>
+Alongside <code>hubUrl</code> and <code>hubClear</code> there are other parameters
+you can add to either if you wished, for instance, to attach an assembly hub and
+display the Gateway page, while also sharing your contact email.</p>
+<ul>
+<li id="hgHubConnect.remakeTrackHub"><code>hgHubConnect.remakeTrackHub=on</code>
+acts to connect when pointed to /hgHubConnect</li>
+<li id="hgHub_do_firstDb"><code>hgHub_do_firstDb=1</code>
+uses the first database in genomes.txt</li>
+<li id="hgHub_do_redirect"><code>hgHub_do_redirect=on</code>
+redirects the attached hub to the Gateway page</li>
+</ul>
+<p>
+By pointing the URL to <code>/cgi-bin/hgHubConnect</code> the hub would be connected to
+and then redirect to the Gateway page to display the page in <code>genomes.txt</code> defined
+by the <code>htmlPath ../newOrg.html</code> line. Here is an example:</p>
+<pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt"
+target="_blank">http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&<strong>hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</strong></a></code>
+</pre>
+<h6 id="genome">Use <code>genome=</code> for assembly hubs</h6>
+<p>
+There is also another way to connect an assembly hub using the <code>genome=</code> to arrive at
+the Gateway page if you know the genome in <code>genomes.txt</code> that you wish to display.
+For instance, the below link skips the redirection step, where your
+<code>hub.txt</code> contact email gets displayed, by pointing to the
+<code>/cgi-bin/hgGateway</code> page:</p>
+<pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt"
+target="_blank"><strong>http://genome.ucsc.edu/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</strong></a> </code></pre>
+ 
+<a name="trackHubLoading"></a>
+<h3>Attaching a track hub to an assembly hub</h3>
+<h6>How do I attach a track hub to an assembly hub?</h6>
+<p>
+It is possible to attach a track hub to an assembly hub via the URL using a combination of the
+<code>hubUrl=</code> and <code>genome=</code> URL parameters. For example, using the following
+assembly hub and track hub:
+</p>
+<pre>
+<b>Arabidopsis thaliana assembly hub</b>
+https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/hub.txt
+</pre>
+<pre>
+<b>ReMap2020 Reg. Atlas track hub</b>
+https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubRemap/remap.txt
+</pre>
+<p>
+The combination of the two hubs, along with <code>genome=araTha1</code>, allows for the creation of
+the following URL that can load both hubs on the Genome Browser.
+</p>
+<pre>
+<a href="/cgi-bin/hgTracks?genome=araTha1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/hub.txt&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubRemap/remap.txt" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/hub.txt&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubRemap/remap.txt</a>
+</pre>
+
+<a name="genArkTrackHub"></a>
+<h3>Creating a track hub for a GenArk assembly</h3>
+<h6>Can I add my own tracks to a GenArk assembly hub?</h6>
+<p>
+When creating a track hub for a GenArk assembly, there is no need to do any attaching of the
+assembly hub itself via the <code>hubUrl=</code> URL parameter. GenArk hubs will automatically
+attach themselves if the track hub mentions the GCA_ or GCF_ name identifier of the assembly hub.
+Simply load the track hub on the Genome Browser, and the assembly hub will automatically appear. For
+example, the following <a href="https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGenArkExample/genArkTrackHub/hub.txt"
+target="_blank">example track hub</a> will load an additional track for the pig (GCA_002844635.1)
+GenArk assembly.
+</p>
+<p>
+To create a link to the track hub that references a GenArk assembly, the
+<code>genome=GCA_002844635.1</code> and <code>hubUrl=</code> URL parameters can be used like in the
+following example:
+</p>
+<pre>
+<a href="/cgi-bin/hgTracks?genome=GCA_002844635.1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGenArkExample/genArkTrackHub/hub.txt" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?genome=GCA_002844635.1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGenArkExample/genArkTrackHub/hub.txt</a>
+</pre>
+<p>
+You can also read a blog post,
+<a href="https://genome-blog.soe.ucsc.edu/blog/2021/08/13/sharing-data-with-sessions-and-urls"
+target="_blank">Sharing Data with Sessions and URLs</a>, about how to
+<a href="https://genome-blog.soe.ucsc.edu/blog/2021/08/13/sharing-data-with-sessions-and-urls/#assemblyHubs"
+target="_blank">build URLs to track hubs on assembly hubs</a> or see further examples of
+<a href="https://genome-blog.soe.ucsc.edu/blog/2021/08/13/sharing-data-with-sessions-and-urls/#GenArk"
+target="_blank">GenArk hubs</a> loaded with custom data.</p>
 
 <a name="genes"></a>
 <a name="link3"></a>
@@ -306,31 +414,45 @@ u&#99;&#115;c.&#101;&#100;&#117;</a></p>
 <h3>Video demonstration: Links: Understanding the URL </h3>
 <p>
 
-</p><p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/p6TPvHDmpJk?rel=0"
-frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Visit our
-<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
-target="_blank">YouTube channel</a>.
 </p>
+<!--#if expr="${SERVER_NAME} = /-china/" -->
+    <a href='../videos/p6TPvHDmpJk.mp4' title="UCSC Genome Browser Links">
+    <img src=../images/videoIcon.png alt='UCSC Genome Browser Basics Part 1 tutorial video'></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our <a href="/videos/" target="_blank">Video Page</a>.
+<!--#else -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/p6TPvHDmpJk?rel=0"
+    frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our
+    <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+    target="_blank">YouTube channel</a>.
+</p>
+<!--#endif -->
+</p>
+
 
 <a name="LinkVid2"></a>
 <p>
 </p>
 <h3>Video demonstration: Links: Jump into genes </h3>
 <p>
-</p><p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xmcyz2GyRKA?rel=0"
-frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe>
+<!--#if expr="${SERVER_NAME} = /-china/" -->
+    <a href='../videos/xmcyz2GyRKA.mp4' title="UCSC Genome Browser Links">
+    <img src=../images/videoIcon.png alt='UCSC Genome Browser Jump into genes'></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our <a href="../videos/" target="_blank">Video Page</a>.
+<!--#else -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/xmcyz2GyRKA?rel=0"
+    frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Visit our
-<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
-target="_blank">YouTube channel</a>.
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our
+    <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+    target="_blank">YouTube channel</a>.
+<!--#endif -->
 </p>
  
 
@@ -339,14 +461,21 @@ target="_blank">YouTube channel</a>.
 <h3>Video demonstration: Links: Composites, custom tracks, spreadsheets</h3>
 <br>
 <p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Yy4UmepYs2Q?rel=0"
-frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe>
+<!--#if expr="$SERVER_NAME = /-china/" -->
+    <a href='../videos/Yy4UmepYs2Q.mp4' title="UCSC Genome Composites">
+    <img src=../images/videoIcon.png alt='UCSC Genome Browser Jump into genes'></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our <a href="../videos/" target="_blank">Video Page</a>.
+<!--#else -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Yy4UmepYs2Q?rel=0"
+    frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Visit our
-<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
-target="_blank">YouTube channel</a>.
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our
+    <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+    target="_blank">YouTube channel</a>.
+<!--#endif -->
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -1,0 +1,16 @@
+body.hgTracks {
+        font-family:arial, Geneva, Helvetica, san-serif; 
+        color: white;
+       background: black;
+    }
+
+td > a:link {
+        color : white;
+}
+td a {
+        color : white;
+}
+
+#notifBox {
+        color: black
+}

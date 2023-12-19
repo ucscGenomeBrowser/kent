@@ -1,0 +1,47 @@
+<h2>Description</h2>
+<p>
+The <a href="https://www.genenames.org/tools/search" target="_blank">HGNC</a> is 
+responsible for approving unique symbols and names for human loci, including protein 
+coding genes, ncRNA genes and pseudogenes, to allow unambiguous scientific communication.
+<p>
+For each known human gene, the HGNC approves a gene name and symbol (short-form abbreviation).
+All approved symbols are stored in the HGNC database, <a href="https://genenames.org" 
+target="_blank">www.genenames.org</a>, a curated online repository of HGNC-approved gene 
+nomenclature, gene groups and associated resources including links to genomic, proteomic, 
+and phenotypic information. Each symbol is unique and we ensure that each gene is only 
+given one approved gene symbol. It is necessary to provide a unique symbol for each gene 
+so that we and others can talk about them, and this also facilitates electronic data 
+retrieval from publications and databases. In preference, each symbol maintains 
+parallel construction in different members of a gene family and can also be 
+used in other species, especially other vertebrates including mouse.
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables"
+target="_blank">Table Browser</a>, or the <a href="../cgi-bin/hgIntegrator"
+target="_blank">Data Integrator</a>. For computational analysis, genome annotations are stored in
+a bigBigFile file that can be downloaded from the
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/hgnc/hgnc.bb" target="_blank">download
+server</a>. Regional or genome-wide annotations can be converted from binary data to human readable
+text using our command line utility <em>bigBedToBed</em> which can be compiled from source code or
+downloaded as a precompiled binary for your system. Files and instructions can be found in the
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">utilities directory</a>.
+
+The utility can be used to obtain features within a given range, for example:</p>
+<code>bigBedToBed -chrom=chr6 -start=0 -end=1000000 http://hgdownload.soe.ucsc.edu/gbdb/hg38/hgnc/hgnc.bb stdout</code>
+
+<p>
+
+<p>
+Please refer to our <a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a>
+for more information or our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list</a> for archived user questions.</p>
+
+<h2>Credits</h2>
+<p>
+HGNC Database, HUGO Gene Nomenclature Committee (HGNC), European Molecular Biology Laboratory, European Bioinformatics Institute (EMBL-EBI), Wellcome Genome Campus, Hinxton, Cambridge CB10 1SD, United Kingdom <a href="/">www.genenames.org</a>.
+
+<h2>References</h2>
+<p>
+Tweedie S, Braschi B, Gray KA, Jones TEM, Seal RL, Yates B, Bruford EA. <strong>Genenames.org: the HGNC and VGNC resources in 2021.</strong> Nucleic Acids Res. PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33152070">33152070</a> PMCID: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7779007/">PMC7779007</a> DOI: <a href="https://dx.doi.org/10.1093%2Fnar%2Fgkaa980">10.1093/nar/gkaa980</a>
+</p>

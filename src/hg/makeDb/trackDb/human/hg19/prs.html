@@ -1,0 +1,68 @@
+<h2>Description</h2>
+<p>
+The Polygenic Risk Scores eMERGE track shows variants that are part of selected polygenic risk
+scores for ten common diseases. Polygenic risk scores (PRS) have clinical utility and are the result
+of many years of GWAS studies. A score is given for a combination of SNPs to calculate the risk of
+getting a disease in a healthy population. The risk scores were selected by the <a
+href="https://www.genome.gov/Funded-Programs-Projects/Electronic-Medical-Records-and-Genomics-Network-eMERGE"
+target="_blank">NHGRI eMERGE project</a>, and the selection process is described in
+<a href='#ref'>Lennon et al. 2023</a>. Many PRS models were evaluated, and the 9 models shown here
+were selected based on quality and are part of this track:
+</p>
+<ul>
+  <li>Asthma</li>
+  <li>Atrial Fibrillation</li>
+  <li>Breast Cancer</li>
+  <li>Coronary Heart Disease</li>
+  <li>Chronic Kidney Disease</li>
+  <li>Hypercholesterolemia</li>
+  <li>Prostate Cancer</li>
+  <li>T1 Diabetes</li>
+  <li>T2 Diabetes</li>
+</ul>
+<p>The BMI (body mass index) model cannot currently be shown on the browser, pending publication.</p>
+
+<h2>Methods</h2>
+<p>
+Text files provided by eMerge were converted to bigBed format. The scripts are available in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/prsEmerge"
+target="_blank">GitHub repo</a>.
+</p>
+
+<h2>Data access</h2>
+<p>
+The raw data can be explored interactively with the <a href="/cgi-bin/hgTables">Table Browser</a>
+or the <a href="/cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from scripts
+through our <a href="/cgi-bin/hubApi">API</a>, the track name is &quot;prsEmerge&quot;.
+</p>
+
+<p>
+For automated download and analysis, the genome annotations are stored in files that can be
+obtained from <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/prsEmerge" target="_blank">our
+download server</a>. The data is stored in our <a href="/goldenPath/help/bigBed.html">bigBed</a>
+format. Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can be used to obtain all features or only features within a given range, e.g.
+<br>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/prsEmerge/t2d.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Elisabeth McNally for advice, to Zia Truong for building this track and to Niall Lennon
+for sharing the data with us.
+</p>
+
+<h2 id="ref">References</h2>
+<p>
+Lennon NJ, Kottyan LC, Kachulis C, Abul-Husn N, Arias J, Belbin G, Below JE, Berndt S, Chung W,
+Cimino JJ <em>et al</em>.
+<a href="https://doi.org/10.1101/2023.05.25.23290535" target="_blank">
+Selection, optimization, and validation of ten chronic disease polygenic risk scores for clinical
+implementation in diverse populations</a>.
+<em>medRxiv</em>. 2023 Jun 5;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37333246" target="_blank">37333246</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10275001/" target="_blank">PMC10275001</a>
+</p>

@@ -13807,6 +13807,13 @@ cd /hive/data/genomes/hg19/bed/agilentProbes
 ln -s 030587_D_BED_20101006_Colored.bed agilentCghSnpCancer4x180k.bed
 tail +3 agilentCghSnpCancer4x180k.bed | hgLoadBed hg19 agilentCghSnpCancer4x180k stdin
 
+### Update (2022-03-07 Max Haeussler and Daniel Schmelter)
+cd /hive/data/genomes/hg19/bed/agilentProbes/genetiSureCyto
+for i in hg19*.bed; do egrep -v 'browser|track' $i > /tmp/temp.bed; bedSort /tmp/temp.bed /tmp/temp.bed; bedToBigBed /tmp/temp.bed ../../../chrom.sizes `basename $i .bed`.bb; done
+mkdir /gbdb/hg19/genotypeArrays
+cd /gbdb/hg19/genotypeArrays
+for $i in /hive/data/genomes/hg19/bed/agilentProbes/genetiSureCyto/*.bb; do ln -s $i; done
+
 
 #################################################################################
 # Rfam (2011-11-30 Melissa Cline)
@@ -28479,6 +28486,7 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 _EOF_
 #########################################################################
 # LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/25/19 angie)
+# THIS IS NOW AN OTTO JOB !
 # Redmine #13359, #24285 -- otto-mate To Do #17877
 # previously done 7/7/14, 9/9/16, 5/30/18
     screen -S lrg -t lrg
@@ -28512,8 +28520,11 @@ _EOF_
 #   888 lrg.bed
 
     # Load LRG regions:
+    #bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
+    #-tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    # adding ncbi acc field to search, ML #29689, Max July 1st 2022
     bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
-      -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+         -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name,ncbiAcc
     ln -sf `pwd`/lrg.bb /gbdb/hg19/bbi/lrg.bb
     hgBbiDbLink hg19 lrg /gbdb/hg19/bbi/lrg.bb
 
@@ -32185,8 +32196,10 @@ csh $bin/getxEqtlLoadTissues.csh UCSC_output >&! loadTissuesV2.log &
 # HGMD (updated 12/10/19 max)
 # HGMD (updated 01/25/18 max)
 # HGMD (updated 12/12/20 max)
+# HGMD (updated 08/18/23 max)
 # got hgmd from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
 # see also the file hg38/hgmd.txt
+# Got it from Georgios.Stamoulis@qiagen.com
 year=2020
 cd /hive/data/genomes/hg19/bed/hgmd
 cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg19.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
@@ -32197,22 +32210,23 @@ hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
 bigBedToBed /gbdb/hg19/bbi/hgmd.bb /tmp/temp.bed
 python2 /usr/local/apache/cgi-bin/hgBeacon -f hgmd /tmp/temp.bed hgmd
 # Forgot, finally done June 26: updated GBIB as qateam
-scp /gbdb/hg19/bbi/hgmd.bb hgdownload:/usr/local/apache/gbib/prot/
+scp /gbdb/hg19/bbi/hgmd.bb hgdownload:/usr/local/apache/htdocs/gbib/prot/
 # next restrict RefSeq down to HGMD subset
 
-# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019
-cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27/
-year=2019
+# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019, again Aug 2023
+cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2022-03-16/
 # change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019
 # adding "." so NM_123 doesn't match NM_123123
 cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
-cat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
+zcat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
 hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
 $ wc -l hgmd.curated.gp
 7965 hgmd.curated.gp in 2019
 8971 hgmd.curated.gp in 2020
+10451 hgmd.curated.gp in 2021
 
 # now continue the process at ../hg38/hgmd.txt
+# or ideally make a shell script for all this...
 
 #############################################################################
 # LASTZ human/hg19 vs. pig/susScr11 - (DONE - 2018-04-02 - Hiram)
@@ -33672,6 +33686,24 @@ for i in /hive/data/genomes/hg19/bed/specialRegions/bb/filter*.bb;  do ln -s $i;
 bedSort orig/hg19-blacklist.v2.bed orig/hg19-blacklist.v2.bed
 bedToBigBed orig/hg19-blacklist.v2.bed /hive/data/genomes/hg19/chrom.sizes  bb/encBlacklist.bb -tab
 
+# a few special regions and manual regions - extract a few from NCBI and chromInfo first
+
+hgsql hg19 -e 'select * from chromInfo' | grep chrUn | cut -f-2 |tawk '{$3=$2; $2=0; $4="unplaced"; $5="ChrUn contains clone contigs that cannot be confidently placed on a specific chromosome."; $6="none"; print}' > chrUn.bed
+hgsql hg19 -e 'select * from chromInfo' | grep fixed | cut -f-2 |tawk '{$3=$2; $2=0; $4="fix"; $5="The chr_fix chromosomes, such as chr1_KN538361v1_fix, are fix patches currently available for the hg19 and hg38 assemblies that represent changes to the existing sequence. These are generally error corrections (such as base changes, component replacements/updates, switch point updates or tiling path changes) or assembly improvements (such as extension of sequence into gaps). These fix patch scaffold sequences are given chromosome context through alignments to the corresponding chromosome regions."; $6="none"; print}' > chrFix.bed
+hgsql hg19 -e 'select * from chromInfo' | grep alt | cut -f-2 |tawk '{$3=$2; $2=0; $4="alt"; $5="The chr_alt chromosomes, such as chr5_KI270794v1_alt, are alternative sequences that differ from the reference genome currently available for a few assemblies including danRer11, hg19, and hg38. These are regions of the genome that exhibit sufficient variability to prevent adequate representation by a single sequence. UCSC labels these haplotype sequences by appending "_alt" to their names. These alternative loci scaffolds (such as KI270794.1 in the hg38 assembly, referenced as chr5_KI270794v1_alt in the browser), are mapped to the genome and provide suppemental genomic information on these variable locations. To find the regions these alternate sequences correspond to in the genome you may use the Alt Haplotypes track if one is available."; $6="none"; print}'  > chrAlt.bed
+hgsql hg19 -e 'select * from chromInfo' | grep chrUn | cut -f-2 |tawk '{$3=$2; $2=0; $4="unplaced"; $5="ChrUn contains clone contigs that cannot be confidently placed on a specific chromosome."; $6="none"; print}' > chrUn.bed 
+bigBedToBed /gbdb/hg19/ncbiRefSeq/ncbiRefSeqOther.bb stdout  | less | grep -v pseudo | grep -v "T cell" -i  | grep -v tRNA | grep -v immuno | grep -v constant | grep -v miR | grep -v UGT1A | cut -f1-4,18 | tawk '{$5=$5" HGNC ID:"$4" This is a cluster of many very similar genes based on the <b>NCBI RefSeq Other</b> Track"; $4="cluster"; print}' > chrClusters.bed
+
+# manual.bed was manually typed up, based on what I know from textbooks, from email from HGNC and reading Wikipedia
+
+# put these together
+cat manual.bed chr*.bed | sort -k1,1 -k2,2n | tawk '{desc=$5; desc2=$6; $5="0"; $6="+"; $7=$2; $8=$3; $9="0,0,0"; $10=desc; $11=desc2; print}' > all.bed 
+bedToBigBed all.bed /hive/data/genomes/hg19/chrom.sizes comments.bb -tab -as=manual.as -type=bed9+ -extraIndex=name
+
+cut -f4,10 all.bed > notes.txt
+ixIxx notes.txt notes.ix notes.ixx
+
+
 #############################################################################
 # GTEx V8 (April 2020) Kate
 # Create BED from hgFixed tables (see doc/gtex)
@@ -33783,7 +33815,7 @@ hgLoadBed hg19 -noBin -tab -type=bed6+4 \
     ln -sf `pwd`/$pre.bb /gbdb/hg19/ncbiRefSeq/$pre.bb
 
 #############################################################################
-# clinvarSubLolly track  DONE BRANEY 12/14/2020
+# clinvarSubLolly track  DONE BRANEY 10/08/22
 mkdir /cluster/data/hg19/bed/clinvarSubLolly
 cd /cluster/data/hg19/bed/clinvarSubLolly
 bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed
@@ -34068,6 +34100,17 @@ Track: Twist - Exome 2.1
 Download: curl https://www.twistbioscience.com/sites/default/files/resources/2021-10/hg38_Twist_exome_2_1_annotated_targets.bed | cut -f1-3 > TwistExome21.bed
 bedToBigBed TwistExome21.bed ../../chrom.sizes TwistExome21.bb -type=bed3
 
+# Updated on Feb 1, 2021 (max): got a corrected file from Tina Han <than@twistbioscience.com>
+To stay consistent, I kept the original filename TwistExome21.bb even though this 
+is not the 2.1 version anymore. Confusing, Twist went from 2.0 to 2.1 and then to 2.0.1 (!!)
+So 2.0.1 is more recent than 2.1.
+Original filename from Tina was: hg19_exome_v2.0.2_targets_sorted_validated.annotated.bed.gz
+
+mv TwistExome21.bb TwistExome21.old.bb
+cut TwistExome202.bed -f1-3 > TwistExome202.cut.bed
+bedToBigBed TwistExome202.cut.bed ../../chrom.sizes TwistExome21.bb -type=bed3
+
+
 # MGI Datasets:
 
 Track: MGI - Easy Exome Capture V4 Target Regions
@@ -34080,6 +34123,10 @@ File name: MGI_Exome_Capture_V5.bed
 
 # Agilent Datasets:
 Download for all Agilent files: https://earray.chem.agilent.com/suredesign/ - Password needed (from Ana)
+
+to get them:
+go to https://earray.chem.agilent.com/suredesign/ then select Find Designs -> CGH -> Agilent Catalog
+(HT to Daniel)
 
 Track: Agilent - SureSelect Clinical Research Exome Covered by Probes
 File name: S06588914_Covered.bed
@@ -34564,18 +34611,19 @@ miRNA
 
 ##############################################################################
 # Add Revel track, Max, Thu Apr 15 03:33:49 PDT 2021
+# UPDATE: Adding overlap track after request from NHS, Max, Mon May 23 07:50:02 PDT 2022
+# There was a new REVEL release with transcript IDs! Obviously no one told us
 cd /hive/data/genomes/hg19/bed/revel
-aria2c https://rothsj06.u.hpc.mssm.edu/revel_grch38_all_chromosomes.csv.zip
-unzip revel_grch38_all_chromosomes.csv.zip
-# make sure that no weird chroms and no weird multi-nucleotide changes
-cat revel_grch38_all_chromosomes.csv  | tr ',' '\t' | cut -f5 | grep -v alt | awk '{print length($1)}' | uniq > lens.tmp &
-cut -d, revel_grch38_all_chromosomes.csv -f1 | uniq | sort | uniq -c > chroms.tmp &
-pigz revel_grch38_all_chromosomes.csv
-time python revelToWig.py revel_grch38_all_chromosomes.csv.gz hg19
+wget https://rothsj06.u.hpc.mssm.edu/revel-v1.3_all_chromosomes.zip
+unzip *.zip
+python ~/kent/src/hg/makeDb/revel/revelToWig.py revel_with_transcript_ids hg19 
 wigToBigWig t.wig ../../chrom.sizes t.bw &
 wigToBigWig c.wig ../../chrom.sizes c.bw  &
 wigToBigWig a.wig ../../chrom.sizes a.bw &
 wigToBigWig g.wig ../../chrom.sizes g.bw &
+bedSort overlap.bed overlap.bed
+bedToBigBed overlap.bed -as=~/kent/src/hg/makeDb/revel/revel.as ../../../chrom.sizes overlap.bb -tab -type=bed8+
+
 ##############################################################################
 # LASTZ human/hg19 Gorilla/gorGor6 - (DONE - 2021-06-28 - Gerardo)
     mkdir /hive/data/genomes/hg19/bed/lastzGorGor6.2021-06-28/
@@ -34711,3 +34759,405 @@ rm JASPAR2022.bb
 mv JASPAR2022_hg19.bb JASPAR2022.bb
 ls -lh
 ls -lh /gbdb/hg19/jaspar
+
+###################################################
+
+# PanelApp refs #25568 3/10/22
+cd /hive/data/genomes/hg19/bed 
+mkdir panelApp
+cd panelApp
+wget https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg19/panel_hg19.bb
+wget https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg19/str_hg19.bb
+mv panel_hg19.bb genesPanel.bb
+mv str_hg19.bb STRsPanel.bb
+cd /gbdb/hg19
+mkdir panelApp
+cd panelApp
+ln -s /hive/data/genomes/hg19/bed/panelApp/genesPanel.bb
+ln -s /hive/data/genomes/hg19/bed/panelApp/STRsPanel.bb
+cd ~/kent/src/hg/makeDb/trackDb/human/hg19
+wget https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg19/panelapp.html
+cd ~/kent/src/hg/makeDb/trackDb
+mv human/hg19/panelapp.html human/hg19/panelApp.html
+curl https://hgwdev.gi.ucsc.edu/~bnguy/panel/hg19/trackDb.txt >> trackDb.ra
+vi trackDb.ra
+make alpha DBS=hg19
+
+###############################################
+
+#Probe and Microarray data sets addition 3/11/21
+
+###############################################
+# Jarvis, Max, 03/28/22
+cd /hive/data/genomes/hg19/bed/jarvis
+# downloaded from https://az.app.box.com/v/jarvis-gwrvis-scores/folder/146728772904 by Luis into orig/
+cd orig
+zcat `ls | sort | grep bed` > ../jarvis.bed
+bedGraphToBigWig jarvis.bed ../chrom.sizes jarvis.bw
+# Go to Brian's cube, push "that was easy" button
+
+#############################################################################
+# chm13 liftover alignments  (2022-03-29 markd)
+
+# preliminary CHM13 <-> hg19 liftOver chains until NCBI produces consensus alignments
+# provide by Nae-Chyun Chen <naechyun.chen@gmail.com>
+
+    mkdir -p /hive/data/genomes/hg19/bed/chm13LiftOver
+    cd /hive/data/genomes/hg19/bed/chm13LiftOver
+
+# originally Obtain GRCh37 from T2T Globus: team-liftover/v1_nflo/hg19-chm13v2.chain
+
+# 2022-04-09 updated due to discovery that chrM was missing
+# 2022-04-19 it was discover that chains render oddly due to the lack of chain ids.
+# obtain updated chains from 
+
+  cp /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/trackData/hgLiftOver/hg19-chm13v2.over.chain.gz .
+
+# make NCBI query names as well, since chromAlias doesn't work yet for click-through
+# note doc is wrong in chromToPsl PSL query is 10
+    chainToPslBasic hg19-chm13v2.over.chain.gz stdout | chromToUcsc -k 10 -a /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt | pslToChain stdin stdout | pigz -c > hg19-chm13v2.ncbi-qnames.over.chain.gz
+
+# build bigChain files:
+    hgLoadChain -noBin -test none bigChain hg19-chm13v2.over.chain.gz 
+    sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../../chrom.sizes hg19-chm13v2.over.chain.bb
+    tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab  ../../chrom.sizes hg19-chm13v2.over.link.bb
+
+# build bigChain with NCBI names files:
+    hgLoadChain -noBin -test none bigChain hg19-chm13v2.ncbi-qnames.over.chain.gz 
+    sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../../chrom.sizes hg19-chm13v2.ncbi-qnames.over.chain.bb
+    tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab  ../../chrom.sizes hg19-chm13v2.ncbi-qnames.over.link.bb
+
+    rm *.tab
+   
+# link to gbdb
+  mkdir -p /gbdb/hg19/bbi/chm13LiftOver
+  ln -sf $(pwd)/*.bb /gbdb/hg19/bbi/chm13LiftOver/
+
+# make downloads, can't add to liftOver directory due to license in that directory
+  mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/chm13LiftOver/
+  ln -sf $(pwd)/hg19-chm13v2.*.chain.gz /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/chm13LiftOver/
+  
+# push these files
+  /gbdb/hg19/bbi/chm13LiftOver/hg19-chm13v2.ncbi-qnames.over.chain.bb
+  /gbdb/hg19/bbi/chm13LiftOver/hg19-chm13v2.ncbi-qnames.over.link.bb
+  /gbdb/hg19/bbi/chm13LiftOver/hg19-chm13v2.over.chain.bb
+  /gbdb/hg19/bbi/chm13LiftOver/hg19-chm13v2.over.link.bb
+  /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/chm13LiftOver/hg19-chm13v2.ncbi-qnames.over.chain.gz
+  /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/chm13LiftOver/hg19-chm13v2.over.chain.gz
+
+
+
+#############################################################################
+# HMC constraint scores, Max Fri Apr  8 08:30:49 PDT 2022
+# downloaded V2 from https://zenodo.org/record/6392153#.Yk8KeflBzIU)
+python ~/kent/src/hg/makeDb/scripts/hmc/hmcToWig.py hg19
+bedGraphToBigWig hmc.wig ../../chrom.sizes hmc.bw
+
+#############################################################################
+# ReMap refs #28960 (2022-04-12 Gerardo)
+cd /hive/data/genomes/hg19/bed
+mkdir reMap
+cd reMap
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/hg19/bigBed/remap2022_all_macs2_hg19_v1_0.bb
+mv remap2022_all_macs2_hg19_v1_0.bb remap2022.bb
+wget https://remap.univ-amu.fr/storage/public/hubReMap2022/hg19/bigBed/hg19.bw
+mv hg19.bw reMapDensity2022.bw
+cd /gbdb/hg19
+mkdir reMap
+cd reMap
+ln -s /hive/data/genomes/hg19bed/reMap/reMap2022.bb
+ln -s /hive/data/genomes/hg19/bed/reMap/reMapDensity2022.bw
+cd ~/kent/src/hg/makeDb/trackDb
+curl https://remap.univ-amu.fr/storage/public/hubReMap2022/hg19/trackDb.txt > human/hg19/reMap.ra
+vi human/hg19/reMap.ra
+vi human/hg19/trackDb.ra
+
+#############################################################################
+# MTR scores refs #29152 (2022-05-9 Lou)
+mkdir /hive/data/outside/mtr
+cd /hive/data/outside/mtr
+wget http://biosig.unimelb.edu.au/mtr-viewer/static/mtrtable_2.0_ens95.txt.gz
+gunzip mtrtable_2.0_ens95.txt.gz
+chromToUcsc --get hg19
+chromToUcsc -i mtrtable_2.0_ens95.txt -i mtrUcsc.txt -a hg19.chromAlias.tsv
+~/kent/src/hg/makeDb/scripts/mtr/buildMTRbedTrack.py
+~/kent/src/hg/makeDb/scripts/mtr/buildMTRwigTracks.py
+fetchChromSizes hg19 > chrom.sizes
+wigToBigWig a.wig chrom.sizes a.bw
+wigToBigWig c.wig chrom.sizes c.bw
+wigToBigWig t.wig chrom.sizes t.bw
+wigToBigWig g.wig chrom.sizes g.bw
+bedToBigBed -type=bed9+10 -tab -as=mtr.as mtr2.bed chrom.sizes mtr2.bb
+ln -s /hive/data/outside/mtr2.bb /gbdb/hg19/bbi/
+ln -s /hive/data/outside/*.bw /gbdb/hg19/bbi/
+
+#############################################################################
+# Illumina Infinium Microarrays - May 2022 - Jairo
+# 
+
+# Download the custom tracks using the Table Browser
+Illumina_450k.bed
+Illumina_EPIC.bed
+
+# Sorting the bed files
+sort -k1,1 -k2,2n Illumina_450k.bed > illumina_450k.bed.sorted
+sort -k1,1 -k2,2n Illumina_EPIC.bed > illumina_EPIC.bed.sorted
+
+# creating a bigBed from the bed files
+wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes
+bedToBigBed -type=bed4 illumina_450k.bed.sorted hg19.chrom.sizes illumina_450k.hg19.bb
+bedToBigBed -type=bed4 illumina_EPIC.bed.sorted hg19.chrom.sizes illumina_EPIC.hg19.bb
+
+# Moving data into /hive and creating symlinks in /gbdb
+cp illumina_450k.hg19.bb /hive/data/genomes/hg19/bed/illumina/illumina_450K.bb
+cp illumina_EPIC.hg19.bb /hive/data/genomes/hg19/bed/illumina/illumina_EPIC_850K.bb
+
+ln -s /hive/data/genomes/hg19/bed/illumina/illumina_450K.bb /gbdb/hg19/bbi/illumina/ilumina450K.bb
+ln -s /hive/data/genomes/hg19/bed/illumina/illumina_EPIC_850K.bb /gbdb/hg19/bbi/illumina/epic850K.bb
+
+#############################################################################
+# MetaDome refs #23883 (2022-06-29 Lou)
+
+mkdir /hive/data/genomes/hg19/bed/metaDome/
+cd /hive/data/genomes/hg19/bed/metaDome/
+#scp the data to the dir provided by author via email
+
+#create .as file for bigBed
+#table metaDome
+#"MetaDome constraint metrics"
+#(
+#string  chrom;          "Reference sequence chromosome or scaffold"
+#uint    chromStart;     "Start position of feature on chromosome"
+#uint    chromEnd;       "End position of feature on chromosome"
+#string  name;           "Combination of chrom+chromStart"
+#float    score;         "MetaDome tolerance score"
+#char[1] strand;         "+ or - for strand"
+#float    spID;          "Coverage score of homologous positions"
+#)
+
+fetchChromSizes hg19 > hg19.chrom.sizes
+python3 ~/kent/src/hg/makeDb/scripts/metaDome/buildMetaDomeTracks.py
+
+#############################################################################
+# Illumina CytoSNP-850K Probe Array - June 2022- Jairo
+# 
+unzip cytosnp-850k-v1-2-ns550-d1-manifest-file-csv.zip
+
+# Rename the file
+mv CytoSNP-850Kv1-2_NS550_D1\ CSV.csv cytosnp-850k-hg19.csv
+
+# Removing the header from the csv file
+vi cytosnp-850k-hg19.csv
+
+# Replace commas with tabs
+sed -i 's/,/\t/g' cytosnp-850k-hg19.csv
+
+# Get the neccessary columns in a bed format
+cat cytosnp-850k-hg19.csv | awk -F'\t' -vOFS='\t' '{ print "chr"$10,$11-1,$11,$1,0,$21,$3,$2,$4,$5,$6,$7,$8,$12,$14,$15,$16,$17,$18,$19,$20 }' > cytoSnp.bed
+
+# Sort the bed file
+sort -k1,1 -k2,2n cytoSnp.bed > cytoSnp.bed.sorted
+
+# Remove unsupported chromosomes
+cat cytoSnp.bed.sorted | grep -vw "chr\|chr0\|chrXY" > cytoSnp.bed.final
+
+
+# Create the bigBed
+bedToBigBed -tab -type=bed6+15 -as=../cytoSNP.as cytoSnp.bed.final http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes cytoSnp.bb
+
+# Move the bigBed into /hive and create symlinks to /gbdb
+cp cytoSnp.bb /hive/data/genomes/hg19/bed/cytoSnp/cytoSnp850k.bb
+ln -s /hive/data/genomes/hg19/bed/cytoSnp/cytoSnp850k.bb /gbdb/hg19/bbi/cytoSnp/cytoSnp850k.bb
+
+#############################################################################
+# hgnc
+
+mkdir -p /cluster/data/hg19/bed/hgnc
+cd /cluster/data/hg19/bed/hgnc
+
+# get the data
+wget "http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/tsv/hgnc_complete_set.txt"
+
+# generate trix file with symbol, alias, and previos values
+tail -n +2 hgnc_complete_set.txt | tawk '{print $1, $2 " " $9 " " $11;}' | tr -d '"' | tr '|' ' ' > trixInput.txt
+ixIxx trixInput.txt search.hg19.ix search.hg19.ixx
+
+# look at field names and create proto AS file
+#tawk '{for(ii=1;  ii <= NF; ii++) print ii, $ii; exit}' hgnc_complete_set.txt
+#tawk '{for(ii=1;  ii <= NF; ii++) printf "\tstring %s; \"%s\"\n", $ii,$ii; exit}' *comple* > asSkeleton.as
+
+# create input file without header and sorted by first field ( HGNC:### )
+tail -n +2 hgnc_complete_set.txt | sort -k 1b,1 > input.txt
+
+# put black for every type for the moment.  This should be based on GENCODE colors
+tawk '{print $5}' input.txt | sort -u | awk '{printf "s/%s/0,0,0/\n", $0}' > color.sed.txt
+tawk '{print $1,$5}' input.txt | sed -f color.sed.txt | sort -k 1b,1 > id.color.txt
+join -j 1 -t $'\t' input.txt id.color.txt > inputColor.txt
+
+# put refseq ID as first field for joins
+tawk '{if ($24 != "")  print $24,$0}' inputColor.txt | sort -k 1b,1 > refSeq.hgnc.txt
+
+# get NG_* positions from LRG track
+bigBedToBed /gbdb/hg19/bbi/lrg.bb stdout | tawk '{split($18,a,"."); print a[1],$1,$2,$3}' | sort -k 1b,1 > refSeqGene.hg19.txt
+
+# get NM, NR, XR, XM, YP, etc from ncbiRefSeq track
+hgsql hg19 -Ne "select * from ncbiRefSeq" | tawk '{split($2,a,"."); print a[1],$3,$5,$6}' | sort -k 1b,1 > refSeq.hg19.txt
+
+# merge positions
+sort -k 1b,1 refSeqGene.hg19.txt refSeq.hg19.txt > refSeq.all.hg19.txt
+
+# add position information to HGNC information
+join -j 1 -t $'\t' refSeq.all.hg19.txt refSeq.hgnc.txt | cut -f 2- > positioned.hg19.txt
+
+# build first nine fields of bigbed
+tawk '{print $1, $2, $3, $4, 0, "+", 0,0, $58}' positioned.hg19.txt > tmp1
+
+# add the rest of the HGNC fields as extra fields except the id and color which are in the first nine
+tawk '{for(ii=5; ii <= 56; ii++) printf("%s\t", $ii); print $ii}' positioned.hg19.txt > tmp2
+paste tmp1 tmp2 | sort -k1,1 -k2,2n > input.bed
+
+# let's do this thing!
+bedToBigBed -extraIndex=name -tab -type=bed9+53 input.bed /cluster/data/hg19/chrom.sizes hgnc.hg19.bb -as=$HOME/kent/src/hg/lib/hgncBig62.as
+
+# put the files into /gbdb
+mkdir -p /gbdb/hg19/hgnc
+rm -rf /gbdb/hg19/hgnc/hgnc.bb
+ln -s `pwd`/hgnc.hg19.bb /gbdb/hg19/hgnc/hgnc.bb 
+
+rm -rf /gbdb/hg19/hgnc/search.ix /gbdb/hg19/hgnc/search.ixx
+ln -s `pwd`/search.hg19.ix /gbdb/hg19/hgnc/search.ix
+ln -s `pwd`/search.hg19.ixx /gbdb/hg19/hgnc/search.ixx
+
+#######
+#  HGNC   Done (braney 2022-09-07)
+#
+mkdir -p /cluster/data/hg19/bed/hgnc
+cd /cluster/data/hg19/bed/hgnc
+
+# get the HGNC data
+wget "http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/tsv/hgnc_complete_set.txt"
+
+# get the Entrez data
+wget "https://ftp.ncbi.nih.gov/refseq/H_sapiens/annotation/GRCh37_latest/refseq_identifiers/GRCh37_latest_genomic.gff.gz"
+zcat GRCh37_latest_genomic.gff.gz | grep "GeneID:" | tawk '{print $1, $4, $5}' >  positions.txt
+zcat GRCh37_latest_genomic.gff.gz |  grep "GeneID:" | sed 's/.*GeneID://' | sed 's/,.*//' | sed 's/;.*//' > geneIds.txt
+paste positions.txt geneIds.txt | tawk '{print $4, $1,$2,$3, $3 - $2}' | sort -k 1,1 -k 5,5nr | tawk '{if (seen[$1] != 1) print $1, $2, $3,$4; seen[$1] = 1}' > entrezToLocNcbi.txt
+
+# substitute UCSC names
+tawk '{print $2,$1}' /cluster/data/hg19/bed/chromAlias/ucsc.refseq.p13.plusMT.tab > ncbiToUcsc.map
+subColumn -skipMiss -miss=idMiss.txt 2 entrezToLocNcbi.txt ncbiToUcsc.map entrezToLoc.txt
+
+# separate human accessions in the Entrez data
+grep "^9606" gene2accession >  human.gene2accession
+
+# generate trix file with symbol, alias, and previous values
+tail -n +2 hgnc_complete_set.txt | tawk '{print $1, $2 " " $9 " " $11;}' | tr -d '"' | tr '|' ' ' > trixInput.txt
+ixIxx trixInput.txt search.hg19.ix search.hg19.ixx
+
+# look at field names and create proto AS file (just done the first time)
+#tawk '{for(ii=1;  ii <= NF; ii++) print ii, $ii; exit}' hgnc_complete_set.txt
+#tawk '{for(ii=1;  ii <= NF; ii++) printf "\tstring %s; \"%s\"\n", $ii,$ii; exit}' *comple* > asSkeleton.as
+
+# create input file without header and sorted by first field ( HGNC:### )
+tail -n +2 hgnc_complete_set.txt | sort -k 1b,1 > input.txt
+
+# put black for every type for the moment.  This should be based on GENCODE colors
+#tawk '{print $5}' input.txt | sort -u | awk '{printf "s/%s/0,0,0/\n", $0}' > color.sed.txt
+
+#manually fixed colors for coding, pseudogene, and non-coding
+
+cp /cluster/data/hg38/bed/hgnc/color.sed.txt .
+tawk '{print $1,$5}' input.txt | sed -f color.sed.txt | sort -k 1b,1 > id.color.txt
+
+# build hgnc file with assigned colors as the 58th field
+join -j 1 -t $'\t' input.txt id.color.txt > inputColor.txt
+
+# put entrez ID as first field for joins
+tawk '{if ($19 != "")  print $19,$0}' inputColor.txt | sort -k 1b,1 > entrez.hgnc.txt
+
+# add position information to HGNC information
+join -j 1 -t $'\t' entrezToLoc.txt  entrez.hgnc.txt | cut -f 2- > positioned.hg19.txt
+
+# build first nine fields of bigbed
+tawk '{print $1, $2, $3, $4, 0, "+", 0,0, $58}' positioned.hg19.txt > tmp1
+
+# add the rest of the HGNC fields as extra fields except the id and color which are in the first nine
+tawk '{for(ii=5; ii <= 56; ii++) printf("%s\t", $ii); print $ii}' positioned.hg19.txt > tmp2
+paste tmp1 tmp2 | sort -k1,1 -k2,2n > input.bed
+
+# let's do this thing!
+bedToBigBed -extraIndex=name -tab -type=bed9+53 input.bed /cluster/data/hg19/chrom.sizes hgnc.hg19.bb -as=$HOME/kent/src/hg/lib/hgncBig62.as
+
+# put the files into /gbdb
+mkdir -p /gbdb/hg19/hgnc
+rm -rf /gbdb/hg19/hgnc/hgnc.bb
+ln -s `pwd`/hgnc.hg19.bb /gbdb/hg19/hgnc/hgnc.bb 
+
+rm -rf /gbdb/hg19/hgnc/search.ix /gbdb/hg19/hgnc/search.ixx
+ln -s `pwd`/search.hg19.ix /gbdb/hg19/hgnc/search.ix
+ln -s `pwd`/search.hg19.ixx /gbdb/hg19/hgnc/search.ixx
+#############################################################################
+# FANTOM5 refs #21605 (2023-06-09 Gerardo)
+cd /hive/data/outside/
+mkdir fantom5
+cd fantom5
+hubClone -download https://fantom.gsc.riken.jp/5/datahub/hub.txt
+cd /gbdb/hg19
+mkdir fantom5
+cd fantom5
+# Making symlinks for big files
+for file in $(ls /hive/data/outside/fantom5/riken_f5/hg19/*.b*) ; do ln -s $file; done
+cd /hive/data/outside/fantom5/riken_f5/hg19/
+cp trackDb.txt fantom5.ra
+vi fantom5.ra
+# Indented subtracks
+# Changing bigDataUrl
+# Removing non-alpha characters
+cd ~/kent/src/hg/makeDb/trackDb/human/hg19
+cp /hive/data/outside/fantom5/riken_f5/hg19/fantom5.ra .
+vi trackDb.ra
+#include fantom5.ra alpha
+#############################################################################
+# VISTA Enhancers track refs #16044  (2023-09-20 Gerardo)
+cd /hive/data/outside/
+mkdir vistaEnhancers; cd vistaEnhancers
+mkdir hg19; cd hg19
+wget -O enhancerbrowser.datadownload.txt 'https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?page=1;action=search;form=search;page_size=100;search.form=no;show=1;search.result=yes;search.sequence=1'
+cat enhancerbrowser.datadownload.txt \
+        | grep ">" \
+        | sed -e 's#^<pre>##' \
+        | sed -e 's#</pre>$##' \
+        | grep "^>Human" \
+        | sed -e 's#^>Human|##' \
+        | tr :- ' ' \
+        | sed -e 's/positive/positive\t255,0,0/'\
+        | sed -e 's/negative/negative\t0,0,255/' \
+        | awk '{print $1"\t"($2-1)"\t"$3"\ths"$6"\t0\t.\t"$2"\t"$3"\t"$9"\t"$8"\t"$6}' \
+        | grep -P -v "^chr\t" \
+        > vistaEnhancers.bed
+bedSort vistaEnhancers.bed sortedVistaEnhancers.bed
+bedToBigBed -tab -type=bed9+ -as=vistaEnhancers.as sortedVistaEnhancers.bed https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes vistaEnhancers.bb
+cd /gbdb/hg19
+mkdir vistaEnhancers; cd vistaEnhancers
+# Making symlink for big files
+ln -s /hive/data/outside/vistaEnhancers/hg19/vistaEnhancers.bb
+cd ~/kent/src/hg/makeDb/trackDb/human/hg19
+vi trackDb.ra
+#############################################################################
+# Polygenic risk scores, Zia Truong (committed by Max)
+# Mon Oct  2 04:44:39 PDT 2023
+cd /hive/data/genomes/hg19/bed/prsEmerge/
+# data is now available from https://github.com/broadinstitute/eMERGE-implemented-PRS-models-Lennon-et-al
+# originally received by email from Niall Lennon
+sh ~/kent/src/hg/makeDb/scripts/prsEmerge/prs2bigBed.sh 
+#############################################################################
+# JASPAR 2024 bigBed update 11/13/24
+
+cd /hive/data/genomes/hg19/bed/jaspar
+wget https://frigg.uio.no/JASPAR/JASPAR_genome_browser_tracks/current/hg19/JASPAR2024_hg19.bb
+mv JASPAR2024_hg19.bb JASPAR2024.bb
+ln -s JASPAR2024.bb /gbdb/hg19/jaspar/JASPAR2024.bb

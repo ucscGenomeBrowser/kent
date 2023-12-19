@@ -48,7 +48,9 @@ bed->chrom = chrom;
 
 printf("<pre>");
 /* output the alignments */
-if (palOutPredsInBeds(conn, cart, bed, track) == 0)
+int result =palOutPredsInBeds(conn, cart, bed, track);
+printf("</pre>");
+if (result == 0)
     printf("<B>No coding region in gene '%s'</B><BR>",item);
 
 cartHtmlEnd();

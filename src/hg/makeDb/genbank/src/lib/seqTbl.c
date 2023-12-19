@@ -18,27 +18,6 @@
 
 /* name of gbSeqTbl */
 char* SEQ_TBL = "gbSeq";
-static char* createSql =
-/* This keeps track of a sequence. */
-NOSQLINJ "create table gbSeq ("
-  "id int unsigned not null primary key," /* Unique ID across all tables. */
-  "acc char(12) not null,"                /* Unique accession. */
-  "version smallint unsigned not null,"   /* genbank version number */
-  "size int unsigned not null,"           /* Size of sequence in bases. */
-  "gbExtFile int unsigned not null,"      /* File it is in. */
-  "file_offset bigint not null,"          /* Offset in file. */
-  "file_size int unsigned not null,"      /* Size in file. */
-  "type enum('EST','mRNA', 'PEP')"        /* Sequence type */
-  "          not null,"
-  "srcDb enum('GenBank','RefSeq',"        /* Source database */
-  "           'Other') not null,"
-
-  /* Extra indices. */
-  "unique(acc),"
-  /* Index for selecting ESTs based on first two letters of the accession */
-  "index typeSrcDbAcc2(type, srcDb, acc(2)),"
-  "index(gbExtFile))";  /* for finding seqs associated with a file */
-
 /* Values for type field */
 char *SEQ_MRNA = "mRNA";
 char *SEQ_EST  = "EST";
@@ -63,7 +42,30 @@ if (tmpDir != NULL)
     seqTbl->tmpDir = cloneString(tmpDir);
 if (!sqlTableExists(conn, SEQ_TBL))
     {
-    sqlRemakeTable(conn, SEQ_TBL, createSql);
+    /* This keeps track of a sequence. */
+    char query[1024];
+    sqlSafef(query, sizeof query, 
+
+    "create table gbSeq ("
+    "id int unsigned not null primary key," /* Unique ID across all tables. */
+    "acc char(12) not null,"                /* Unique accession. */
+    "version smallint unsigned not null,"   /* genbank version number */
+    "size int unsigned not null,"           /* Size of sequence in bases. */
+    "gbExtFile int unsigned not null,"      /* File it is in. */
+    "file_offset bigint not null,"          /* Offset in file. */
+    "file_size int unsigned not null,"      /* Size in file. */
+    "type enum('EST','mRNA', 'PEP')"        /* Sequence type */
+    "          not null,"
+    "srcDb enum('GenBank','RefSeq',"        /* Source database */
+    "           'Other') not null,"
+
+    /* Extra indices. */
+    "unique(acc),"
+    /* Index for selecting ESTs based on first two letters of the accession */
+    "index typeSrcDbAcc2(type, srcDb, acc(2)),"
+    "index(gbExtFile))");  /* for finding seqs associated with a file */
+
+    sqlRemakeTable(conn, SEQ_TBL, query);
     seqTbl->nextId = 1;
     }
 else

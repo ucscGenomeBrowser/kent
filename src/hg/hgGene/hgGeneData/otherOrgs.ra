@@ -9,7 +9,7 @@ pepTable knownGenePep
 geneTable knownGene
 genomeUrl ../cgi-bin/hgTracks?org=Human&position=%s
 otherUrl https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
-otherIdSql select mRNA from KNOWNDB.kgXref where kgID='%s'
+otherIdSql select mRNA from kgXref where kgID='%s'
 otherName GenBank
 priority 10
 

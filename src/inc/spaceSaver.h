@@ -1,4 +1,4 @@
-/* spaceSaver - routines that help layout 1-D objects into a
+/* spaceSaver - routines that help layout 2-D objects into a
  * minimum number of tracks so that no two objects overlap
  * within a single track. 
  *
@@ -9,7 +9,7 @@
 #define SPACESAVER_H
 
 struct spaceSaver
-/* Help layout 1-D objects onto multiple tracks so that
+/* Help layout 2-D objects onto multiple tracks so that
  * no two objects overlap on a single track. */
     {
     struct spaceSaver *next;	/* Next in list. */
@@ -23,6 +23,7 @@ struct spaceSaver
     double scale;             /* What to scale by to get to cell coordinates. */
     int maxRows;	      /* Maximum number of rows.  */
     boolean isFull;	      /* Set to true if can't fit data into maxRows. */
+    boolean hasOverflowRow;   /* Set to true if an overflow row was used. */
     int vis;                  /* Remember visibility used */
     void *window;             /* Remember window used */
     };
@@ -31,7 +32,8 @@ struct spaceNode
 /* Which row is this one on? */
     {
     struct spaceNode *next;	  /* Next in list. */
-    int row;			  /* Which row, starting at zero. */
+    int row;			  /* Which row does it start on, starting at zero. */
+    int height;                   /* How many rows does it occupy. */
     void *val;
     struct spaceSaver *parentSs;  /* Useful for adding to parent spaceSaver with multiple windows */
     bool noLabel;                 /* Suppress label if TRUE in pack */
@@ -51,6 +53,7 @@ struct spaceRange
     int start;
     int end;
     int width;
+    int height;
     };
 
 
@@ -69,7 +72,7 @@ struct spaceNode *spaceSaverAdd(struct spaceSaver *ss, int start, int end, void 
 struct spaceNode *spaceSaverAddMulti(struct spaceSaver *ss, struct spaceRange *rangeList, struct spaceNode *nodeList);
 /* Add new nodes for multiple windows to space saver. */
 
-struct spaceNode *spaceSaverAddOverflowExtended(struct spaceSaver *ss, int start, int end, 
+struct spaceNode *spaceSaverAddOverflowExtended(struct spaceSaver *ss, int start, int end, int height,
 					void *val, boolean allowOverflow, struct spaceSaver *parentSs, bool noLabel);
 /* Add a new node to space saver. Returns NULL if can't fit item in
  * and allowOverflow == FALSE. If allowOverflow == TRUE then put items

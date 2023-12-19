@@ -16,6 +16,7 @@ CREATE TABLE knownAttrs (
     ccdsId varchar(255) not null,	# CCDS project Id
     supportLevel varchar(255) not null,	# transcript support level
     transcriptClass varchar(255) not null,	# pseudo, nonCoding, coding, or problem
+    transcriptRank int not null,	# transcript rank
               #Indices
     PRIMARY KEY(kgID)
 );

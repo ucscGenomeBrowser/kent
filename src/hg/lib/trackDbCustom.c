@@ -244,7 +244,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bigLolly", s) || 
                    sameString("bigRmsk", s) || 
                    sameString("peptideMapping", s) || sameString("barChart", s) ||
-                   sameString("interact", s) ||
+                   sameString("interact", s) || sameString("hic", s) ||
                    (!startsWithWord("bigWig", s) && startsWith("big", s))
                    );
 freeMem(t);
@@ -702,7 +702,7 @@ else if(startsWith("wig", type) || startsWith("mathWig", type) || startsWith("bi
     cType = cfgWig;
 else if(startsWith("bigGenePred", type))
     cType = cfgGenePred;
-else if(startsWith("chain",type) || startsWith("bigChain",type))
+else if(startsWith("chain",type) || startsWith("bigChain",type) || startsWith("snake", type))
     cType = cfgChain;
 else if (startsWith("psl", type) || startsWith("bigPsl", type))
     cType = cfgPsl;
@@ -1587,9 +1587,11 @@ boolean trackSettingIsFile(char *setting)
 {
 return endsWith(setting, "Url") ||
     sameString(setting, "bigDataIndex") ||
+    sameString(setting, "instaPort") ||
     sameString(setting, "frames") ||
     sameString(setting, "summary") ||
-    sameString(setting, "searchTrix");
+    sameString(setting, "searchTrix") ||
+    (startsWith("decorator.", setting) && endsWith(setting, ".url"));
 }
 
 char *labelAsFilteredNumber(char *label, unsigned numOut)

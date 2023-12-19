@@ -249,7 +249,7 @@ return sg;
 void splicePathCreateStringRep(struct splicePath *sp)
 /** Loop through the nodes in this path and create a string of exons. */
 {
-struct dyString *dy = newDyString(256);
+struct dyString *dy = dyStringNew(256);
 struct spliceNode *sn = NULL;
 if(sp->path != NULL)
     freez(&sp->path);
@@ -258,7 +258,7 @@ for(sn = sp->nodes; sn != NULL; sn = sn->next)
     dyStringPrintf(dy, "%d-", sn->class);
     }
 sp->path = cloneString(dy->string);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 char *getRefForNode(struct spliceGraph *sg, int id)

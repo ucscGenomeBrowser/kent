@@ -11,9 +11,11 @@
 #include "bigWig.h"
 #include "bwgInternal.h"
 #include "zlibFace.h"
+#include "portable.h"
 
-char *version = "2.8";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
+char *version = "2.9";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
 /* Version history from 2.8 on at least -
+ * 2.9 - ability to specify chromAlias bigBed as chromSizes file
  * 2.8  sync up version numbers with bedToBigBed 
  */
 
@@ -23,6 +25,7 @@ static boolean clipDontDie = FALSE;
 static boolean doCompress = FALSE;
 static boolean fixedSummaries = FALSE;
 static boolean keepAllChromosomes = FALSE;
+//static boolean sizesIsBb = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -48,6 +51,7 @@ errAbort(
   "                  that are not in the chrom.sizes file.\n"
   "   -unc - If set, do not use compression.\n"
   "   -fixedSummaries - If set, use a predefined sequence of summary levels.\n"
+  //"   -sizesIsBb  -- If set, the chrom.sizes file is assumed to be a bigBed file.\n"
   "   -keepAllChromosomes - If set, store all chromosomes in b-tree."
   , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
@@ -58,6 +62,7 @@ static struct optionSpec options[] = {
    {"itemsPerSlot", OPTION_INT},
    {"clip", OPTION_BOOLEAN},
    {"unc", OPTION_BOOLEAN},
+   //{"sizesIsBb", OPTION_BOOLEAN},
    {"fixedSummaries", OPTION_BOOLEAN},
    {"keepAllChromosomes", OPTION_BOOLEAN},
    {NULL, 0},
@@ -67,6 +72,7 @@ void wigToBigWig(char *inName, char *chromSizes, char *outName)
 /* wigToBigWig - Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format.. */
 {
+mustBeReadableAndRegularFile(inName);
 bigWigFileCreateEx(inName, chromSizes, blockSize, itemsPerSlot, clipDontDie, doCompress, keepAllChromosomes, fixedSummaries, outName);
 }
 

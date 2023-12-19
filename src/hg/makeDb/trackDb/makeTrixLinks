@@ -26,9 +26,12 @@ makeTrixLinks() {
     local db="$1"
     local trixName="$2"
     local outPath="$3"
-    rm -f /gbdb/$db/$trixName.ix /gbdb/$db/$trixName.ixx
+    rm -f /gbdb/$db/$trixName.ix /gbdb/$db/$trixName.ixx /gbdb/$db/$trixName.offsets /gbdb/$db/$trixName.offsets.ixx /gbdb/$db/$trixName.txt
     ln -s $outPath/${db}_$trixName.ix /gbdb/$db/$trixName.ix
     ln -s $outPath/${db}_$trixName.ixx /gbdb/$db/$trixName.ixx
+    ln -s $outPath/${db}_$trixName.offsets /gbdb/$db/$trixName.offsets
+    ln -s $outPath/${db}_$trixName.offsets.ixx /gbdb/$db/$trixName.offsets.ixx
+    ln -s $outPath/${db}_$trixName.txt /gbdb/$db/$trixName.txt
 }
 
 for db in $dbs ; do

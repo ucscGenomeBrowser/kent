@@ -250,14 +250,14 @@ void retroMrnaInfoSaveToDb(struct sqlConnection *conn, struct retroMrnaInfo *el,
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *blockSizesArray, *chromStartsArray;
 blockSizesArray = sqlSignedArrayToString(el->blockSizes, el->blockCount);
 chromStartsArray = sqlSignedArrayToString(el->chromStarts, el->blockCount);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%d,'%s','%s',%d,%d,'%s','%s',%d,%d,'%s',%u,%u,%u,%d,%d,%u,%u,%u,%u,%u,%u,%d,%d,%u,%d,%u,%u,%d,%d,%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%d,'%s',%d,%g,%u,%g)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->reserved,  el->blockCount,  blockSizesArray ,  chromStartsArray ,  el->retroExonCount,  el->axtScore,  el->type,  el->gChrom,  el->gStart,  el->gEnd,  el->gStrand,  el->parentSpliceCount,  el->geneOverlap,  el->polyA,  el->polyAstart,  el->exonCover,  el->intronCount,  el->bestAliCount,  el->matches,  el->qSize,  el->qEnd,  el->tReps,  el->overlapRhesus,  el->overlapMouse,  el->coverage,  el->label,  el->milliBad,  el->oldScore,  el->oldIntronCount,  el->processedIntrons,  el->conservedSpliceSites,  el->maxOverlap,  el->refSeq,  el->rStart,  el->rEnd,  el->mgc,  el->mStart,  el->mEnd,  el->kgName,  el->kStart,  el->kEnd,  el->overName,  el->overStart,  el->overExonCover,  el->overStrand,  el->overlapDog,  el->posConf,  el->polyAlen,  el->kaku);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&blockSizesArray);
 freez(&chromStartsArray);
 }

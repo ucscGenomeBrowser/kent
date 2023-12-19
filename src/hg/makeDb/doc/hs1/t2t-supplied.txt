@@ -1,0 +1,418 @@
+T2T project supplied tracks for T2T-CHM13v2.0
+
+Note that some of these instructions were originally done for the GenArk
+promoted hub.  These files were then copied over and this text edited.
+However, they were not rebuilt, so this maybe result in some of the file paths
+being incorrect.
+
+T2T CHM13 track spreadsheet:
+
+   https://docs.google.com/spreadsheets/d/13BXuEFB904aje6zWXyZ0znZnXvQiu1qxKADA2uV2JU4/
+
+
+The following bash function is used to link files to /gbdb/hs1/bbi that include
+that track directory.  Must call in the form
+
+   lngbdb censat/censat.bb 
+
+lngbdb() {
+   local bb gdir
+   for bb in $* ; do
+      gdir=/gbdb/hs1/$(dirname $bb)
+      mkdir -p $gdir
+      ln -s $(realpath $bb) $gdir/
+    done
+}
+
+# to use hubCheck
+
+   hubCheck /gbdb/hs1/hubs/$USER/hub.txt 
+
+================================================================
+proseq (2022-02-21 markd)
+----------------------------------------------------------------
+Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
+from T2T Globus /team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
+trackData/proseq
+
+renaming files to something not as long
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-chm13v1.1_neg.bigwig                              -> PROseq_default_neg.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-chm13v1.1_pos.bigwig                              -> PROseq_default_pos.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_meryl-21mer-chm13v1.1_neg.bigwig   -> PROseq_k100_21mer_neg.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_meryl-21mer-chm13v1.1_pos.bigwig   -> PROseq_k100_21mer_pos.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_neg.bigwig                         -> PROseq_k100_neg.bw
+    CHM13-AB_proseq_cutadapt-q20-m20_bt2-vs-dM_bt2-k100-chm13v1.1_pos.bigwig                         -> PROseq_k100_pos.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig                                 -> PROseq_k100_dual-21mer_neg.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig                                 -> PROseq_k100_dual-21mer_pos.bw
+
+Note: PROseq_k100_dual-21mer_*.bw accidental had inconsistent names
+
+lngbdb proseq/*.bw
+
+================================================================
+rnaseq (2022-03-02 markd)
+----------------------------------------------------------------
+Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
+/team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/RNAseq_Bowtie2/
+
+renaming files to something not as long
+    CHM13_S182-183_rnaseq_cutadapt-q20-m100_bt2-chm13v1.1_F1548.bigwig                               -> RNAseq_default.bw
+    CHM13_S182-183_rnaseq_cutadapt-q20-m100_bt2-k100-chm13v1.1_F1548.bigwig                          -> RNAseq_k100.bw
+    CHM13_S182-S183_rnaseq_cutadapt-q20-m100_bt2-k100-chm13v1.1-F1548_meryl-21mer-chm13v1.1.bigwig   -> RNAseq_k100_21mer.bw
+    RNAseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1.bigwig                                     -> RNAseq_k100_dual_21mer.bw
+
+lngbdb rnaseq/*.bw
+
+================================================================
+cytoBandsMapped (2022-02-22 markd)
+----------------------------------------------------------------
+cytoBand tracks from T2T project mapped from GRCh38
+Supplied by Nick Altemose <nickaltemose@gmail.com>, <altemose@stanford.edu>
+Delivered via Slack, but available from
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v2.0_cytobands_allchrs.bed
+
+This track was generated using liftOver using the T2T GRCh38/hg38 minimap2
+liftover alignments and manually modifying them, as described in
+chm13v2.0_CytoBandMapping.xlsx
+The main sheet is also in chm13v2.0_CytoBandMapping.main.tsv 
+
+bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/cytoBand.as chm13v2.0_cytobands_allchrs.bed../chromAlias/ucsc.sizes.txt cytoBandMapped.bb
+
+trackData/cytoBandMapped
+lngbdb cytoBandMapped/*.bb
+
+================================================================
+sedefSegDups (2022-02-24 markd)
+----------------------------------------------------------------
+Supplied by Mitchell Robert Vollger <mvollger@uw.edu>
+team-segdups/Assembly_analysis/SEDEF/T2T-CHM13v2.SDs.bed
+
+    bedToBigBed -as=${kentDir}/src/hg/makeDb/doc/GCA_009914755.4_T2T-CHM13v2.0/schema/sedefSegDups.as -type=bed9+ T2T-CHM13v2.SDs.bed../chromAlias/ucsc.sizes.txt sedefSegDups.bb
+
+lngbdb sedefSegDups/*.bb
+
+================================================================
+rdnaModel (2022-03-02 markd)
+----------------------------------------------------------------
+from Adam Phillippy
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v1.1.rdna_model.bed
+
+    bedToBigBed -type=bed4 chm13v1.1.rdna_model.bed../chromAlias/ucsc.sizes.txt rdnaModel.bb
+    lngbdb rnaseq/*.bb
+    
+================================================================
+catLiftOffGenesV1 (2022-03-15 markd)
+----------------------------------------------------------------
+from Marina Haukness <mhauknes@ucsc.edu>
+
+http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.bb
+http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.gff3
+
+rename to
+  catLiftOffGenesV1.bb
+  catLiftOffGenesV1.gff3.gz
+
+# create GTF
+  zcat catLiftOffGenesV1.gff3.gz | gffread /dev/stdin -T -o catLiftOffGenesV1.gtf
+  pigz catLiftOffGenesV1.gtf 
+
+
+# obtain sequence fastas
+   http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.fasta
+   http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/annotation_set/CHM13.v2.0.protein.fasta
+
+   mv CHM13.v2.0.fasta catLiftOffGenesV1.rna.fa
+   mv CHM13.v2.0.protein.fasta  catLiftOffGenesV1.protein.fa
+   pigz *.fa
+   
+lngbdb catLiftOffGenesV1/*.bb
+
+================================================================
+* hgLiftOver (2022-03-26 markd)
+----------------------------------------------------------------
+GRCh38 & GRCh37 Nae-Chyun Chen <naechyun.chen@gmail.com>
+
+# 2022-04-09 it was noted that chrM was left out of above alignments, so obtain them and repeat
+# 2022-04-19 it was discover that chains render oddly due to the lack of chain ids.  Use chainMergeSort
+# to fix this
+
+globus: /team-liftover/v1_nflo/with_chrM/
+    chm13v2-grch38.chain
+    grch38-chm13v2.chain
+    chm13v2-hg19_chrM.chain
+    chm13v2-hg19_chrMT.chain
+    hg19_chrM-chm13v2.chain
+    hg19_chrMT-chm13v2.chain
+
+   cd trackData/hgLiftOver
+
+# rename to match UCSC conventions
+    mv chm13v2-grch38.chain chm13v2-hg38.over.no-id.chain
+    mv grch38-chm13v2.chain hg38-chm13v2.over.no-id.chain
+    mv chm13v2-hg19_chrM.chain chm13v2-hg19_chrM.over.no-id.chain
+    mv chm13v2-hg19_chrMT.chain chm13v2-hg19_chrMT.over.no-id.chain
+    mv hg19_chrM-chm13v2.chain hg19_chrM-chm13v2.over.no-id.chain
+    mv hg19_chrMT-chm13v2.chain  hg19_chrMT-chm13v2.over.no-id.chain
+
+# add chain ids and score
+    chainMergeSort chm13v2-hg19_chrM.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg19/hg19.2bit chm13v2-hg19_chrM.over.chain &
+    chainMergeSort chm13v2-hg19_chrMT.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg19/hg19.2bit chm13v2-hg19_chrMT.over.chain &
+    chainMergeSort chm13v2-hg38.over.no-id.chain | chainScore stdin ../ucscChromNames/t2t-chm13-v2.0.2bit /hive/data/genomes/hg38/hg38.2bit chm13v2-hg38.over.chain &
+
+    chainMergeSort hg19_chrM-chm13v2.over.no-id.chain | chainScore stdin /hive/data/genomes/hg19/hg19.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit hg19_chrM-chm13v2.over.chain &
+    chainMergeSort hg19_chrMT-chm13v2.over.no-id.chain | chainScore stdin /hive/data/genomes/hg19/hg19.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit  hg19_chrMT-chm13v2.over.chain &
+    chainMergeSort hg38-chm13v2.over.no-id.chain | chainScore stdin /hive/data/genomes/hg38/hg38.2bit ../ucscChromNames/t2t-chm13-v2.0.2bit hg38-chm13v2.over.chain &
+
+
+# create hg19 chains that combine chrM and chrMT for use in browser.
+   chainFilter -q=chrMT chm13v2-hg19_chrMT.over.chain | chainMergeSort stdin chm13v2-hg19_chrM.over.chain > chm13v2-hg19.over.chain
+   chainFilter -t=chrMT hg19_chrMT-chm13v2.over.chain | chainMergeSort stdin  hg19_chrM-chm13v2.over.chain > hg19-chm13v2.over.chain
+
+   pigz *.chain
+
+# build tracks
+    hgLoadChain -noBin -test none bigChain chm13v2-hg38.over.chain.gz 
+    sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.chain.bb
+    tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg38.over.link.bb
+
+    hgLoadChain -noBin -test none bigChain chm13v2-hg19.over.chain.gz 
+    sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > bigChainIn.tab
+    bedToBigBed -type=bed6+6 -as=${HOME}/kent/src/hg/lib/bigChain.as -tab bigChainIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.chain.bb
+    tawk '{print $1, $2, $3, $5, $4}' link.tab | csort -k1,1 -k2,2n --parallel=64 > bigLinkIn.tab
+    bedToBigBed -type=bed4+1 -as=${HOME}/kent/src/hg/lib/bigLink.as -tab bigLinkIn.tab ../chromAlias/ucsc.sizes.txt chm13v2-hg19.over.link.bb
+
+    rm *.tab
+
+   # make available is liftOver directory as we
+   ln -f *.over.chain.gz ../../liftOver/
+
+# GRCh38 mask used in liftover. This is based on:
+#  https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/references/GRCh38/GCA_000001405.15_GRCh38_GRC_exclusions_T2Tv2.bed
+#  plus UCSC hg38 centromeres track
+
+   GRCh38: /team-liftover/grch38_masked_fasta/grch38-centromere_and_falsedup.bed (edited)
+   rename to hg38.liftover-mask.bed
+   ln -f hg38.liftover-mask.bed ../../liftOver/
+
+
+lngbdb hgLiftOver/chm13v2-hg*.bb
+
+================================================================
+* hgCactus (2022-03-28 markd)
+----------------------------------------------------------------
+# HAL from Marina Haukness <mhauknes@ucsc.edu>
+
+   http://courtyard.gi.ucsc.edu/~mhauknes/T2T/t2t_Y/t2tChm13.v2.0.hal
+
+# rename genomes to match browser, in renameFile.tab put
+GRCh38	hg38
+CHM13	hs1
+
+    halRenameGenomes t2tChm13.v2.0.hal renameFile.tab 
+
+lngbdb hgCactus/t2tChm13.v2.0.hal 
+================================================================
+* hgUnique (2022-03-30 markd)
+----------------------------------------------------------------
+regions not in hg38:
+original version in:
+globus: /team-liftover/v1_nflo/T2T-CHM13v2.0_new_and_non_syntenic_regions.bed
+         chm13v2-unique_to_hg19.bed
+         chm13v2-unique_to_hg38.bed
+
+#
+chainToPslBasic ../hgLiftOver/chm13v2-hg38.over.chain.gz stdout \
+  | pslToBed stdin stdout \
+  | bedtools sort -i - -g ../ucscChromNames/t2t-chm13-v2.0.sizes \
+  | bedtools merge \
+  | bedtools complement -i - -g ../ucscChromNames/t2t-chm13-v2.0.sizes \
+  | bedtools merge \
+  | sort -k1,1 -k2,2n \
+  > chm13v2-unique_to_hg38.bed
+
+chainToPslBasic ../hgLiftOver/chm13v2-hg19.over.chain.gz stdout \
+  | pslToBed stdin stdout \
+  | bedtools sort -i - -g ../ucscChromNames/t2t-chm13-v2.0.sizes \
+  | bedtools merge \
+  | bedtools complement -i - -g ../ucscChromNames/t2t-chm13-v2.0.sizes \
+  | bedtools merge \
+  | sort -k1,1 -k2,2n \
+  > chm13v2-unique_to_hg19.bed
+
+
+bedToBigBed -type=bed3 -tab chm13v2-unique_to_hg38.bed ../chromAlias/ucsc.sizes.txt hgUnique.hg38.bb
+bedToBigBed -type=bed3 -tab chm13v2-unique_to_hg19.bed ../chromAlias/ucsc.sizes.txt hgUnique.hg19.bb
+lngbdb hgUnique/hgUnique.hg*.bb
+
+================================================================
+* censat (2022-03-29 markd)
+----------------------------------------------------------------
+from Nick Altemose <nickaltemose@gmail.com> via Slack:
+   t2t_censat_CHM13v2.0_trackv2.0.10col.bed
+   t2t_censat_CHM13v2.0_trackv2.0_description.html
+
+   cd censat/
+
+   # drop track header
+   tawk 'NR>1' t2t_censat_CHM13v2.0_trackv2.0.10col.bed | csort -k1,1 -k2,2n  >tmp.bed
+   bedToBigBed -type=bed9+1 -as=${HOME}/compbio/t2t/projs/chm13-v2.0/makeDir/schema/cenSat.as -tab tmp.bed ../chromAlias/ucsc.sizes.txt censat.bb
+   lngbdb censat/censat.bb
+   
+================================================================
+* dbSNP155 (2022-03-29 markd)
+----------------------------------------------------------------
+
+# dbSNP Variants	Lifted+Recovered	Dylan Taylor
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/liftover/chm13v2.0_dbSNPv155.vcf.gz
+dbSNP_lifted-recovered.html
+
+
+# need to use NCBI names until supported by chromAlias
+   zcat chm13v2.0_dbSNPv155.vcf.gz  | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_dbSNPv155.ncbi-names.vcf.gz
+
+tabix -p vcf chm13v2.0_dbSNPv155.vcf.gz &
+tabix -p vcf chm13v2.0_dbSNPv155.ncbi-names.vcf.gz &
+
+lngbdb dbSNP155/*.vcf*
+================================================================
+* clinVar20220313 (2022-03-29 markd)
+----------------------------------------------------------------
+ClinVar	Lifted+Recovered	Dylan Taylor
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/liftover/chm13v2.0_ClinVar20220313.vcf.gz
+
+   zcat chm13v2.0_ClinVar20220313.vcf.gz | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz
+
+tabix -p vcf chm13v2.0_ClinVar20220313.vcf.gz &
+tabix -p vcf chm13v2.0_ClinVar20220313.ncbi-names.vcf.gz &
+
+lngbdb clinVar20220313/*.vcf*
+
+================================================================
+* gwasSNPs2022-03-08 (2022-03-29 markd)
+----------------------------------------------------------------
+GWAS SNPs	Lifted+Recovered	TBD	Dylan Taylor
+
+https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/liftover/chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz
+gwas_catalog_lifted-recovered.html											
+
+# need to use NCBI names until supported by chromAlias
+   zcat chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz  | chromToUcsc --chromAlias=../chromAlias/GCA_009914755.4_T2T-CHM13v2.0.chromAlias.txt /dev/stdin | bgzip -c >chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.ncbi-names.vcf.gz
+
+tabix -p vcf  chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.ncbi-names.vcf.gz&
+tabix -p vcf  chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz&
+
+lngbdb gwasSNPs2022-03-08/*.vcf*
+================================================================
+* microsatellites (2022-04-17 markd)
+----------------------------------------------------------------
+Arang Rhie
+
+doc https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/microsatellite.html
+
+GA https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/chm13v2.0.microsatellite.GA.128.wig
+TC https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/chm13v2.0.microsatellite.TC.128.wig
+GC https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/chm13v2.0.microsatellite.GC.128.wig
+AT https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/pattern/chm13v2.0.microsatellite.AT.128.wig
+
+# convert to bigWi
+for f in *.wig ; do wigToBigWig -clip $f ../ucscChromNames/t2t-chm13-v2.0.sizes  $(basename $f .wig).bw ; done
+pigz *.wig
+lngbdb microsatellites/*.bw
+
+================================================================
+* sgdpCopyNumber (2022-04-25 markd)
+----------------------------------------------------------------
+SGDP copy number estimates
+Mitchell R. Vollger, William Harvey
+
+https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/SGDP_CN/hub.txt
+https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/SGDP_CN/trackDb.t2t-chm13-v2.0.txt
+https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/SGDP_CN/bigbed/description.html
+
+download the 348 bigBeds in trackDb from 
+  https://eichlerlab.gs.washington.edu/help/mvollger/share/tracks/t2t-chm13-v2.0/SGDP_CN/bigbed/
+lngbdb sgdpCopyNumber/*.bb
+
+================================================================
+* encode (2022-04-26 markd)
+----------------------------------------------------------------
+Michael Sauria
+in hub https://bx.bio.jhu.edu/track-hubs/T2T/hub.txt
+pull from https://bx.bio.jhu.edu/track-hubs/T2T/chm13v2.0/encode/
+
+lngbdb encode/*/*.bb encode/*/*.bw
+
+
+================================================================
+* t2tRepeatMasker (2022-04-25 markd)
+----------------------------------------------------------------
+Savannah Hoyt, Jessica Storer, Robert Hubley
+http://www.repeatmasker.org/~rhubley/forMark.tar.gz
+
+    chm13v2.0_RMSK_ALIGN.bb
+    chm13v2.0_RMSK.bb
+    combo.align.gz
+    combo.out.gz
+    notebook
+
+Original version was missing chrY in bigBed (find in out and align), got new one from:
+
+http://www.repeatmasker.org/~rhubley/forMark2.tar.gz
+
+rename these
+    mv chm13v2.0_RMSK_ALIGN.bb  chm13v2.0_rmsk.align.bb
+    mv chm13v2.0_RMSK.bb        chm13v2.0_rmsk.bb
+    mv combo.align.gz           chm13v2.0_rmsk.align.gz
+    mv combo.out.gz             chm13v2.0_rmsk.out.gz
+
+Track documentation was received from Savannah and updated from DFAM public
+hub documentation.  Download images from DFAM hub, base64 encode them and
+insert in html/t2tRepeatMasker.html with src="data:image/png;base64,...".
+This makes page independent of location installed.
+
+
+# notes from Robert on how tracks were created:
+    # Build trackHub tsv files from the combo* files:
+    /home/rhubley/projects/RepeatMasker/util/rmToTrackHub2.pl \
+      -out combo.out \
+      -align combo.align
+
+    # Sort tsv files
+    sort -k1,1 -k2,2n  combo.join.tsv >  combo.join.tsv.sorted
+    sort -k1,1 -k2,2n  combo.align.tsv >  combo.align.tsv.sorted
+
+    # Convert to bigRmskBed and bigRmskAlignBed files
+    /usr/local/ucscTools/bedToBigBed -tab -as=bigRmskAlignBed.as -type=bed3+14  combo.align.tsv.sorted chrom.sizes chm13v2.0_RMSK_ALIGN.bb
+    /usr/local/ucscTools/bedToBigBed -tab -as=bigRmskBed.as -type=bed9+5 combo.join.tsv.sorted chrom.sizes chm13v2.0_RMSK.bb
+
+2022-05-23
+# due to the number of problems with the bigRmsk code, we are temporarily converting it to
+# a bigBed and added colors.
+
+  cd /hive/data/genomes/asmHubs/genbankBuild/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/trackData/t2tRepeatMasker
+  bigBedToBed chm13v2.0_rmsk.align.bb stdout |  awk -f addItemRgb.awk >chm13v2.0_rmsk.align.rgb.bed
+
+
+lngbdb t2tRepeatMasker/*.bb
+
+================================================================
+Problems:
+- hub groups doesn't have phenDis, so put clinvar and GWAS in varRep
+  FIX THIS
+================================================================
+
+================================================================
+proseq update (2023-08-15 markd)
+----------------------------------------------------------------
+Supplied by Savannah Hoyt <savannah.klein@uconn.edu>
+two files were discovered to be missing chr1 and recreated.
+
+from T2T Globus /team-epigenetics/PROseq-RNAseq_chm13v1.1/MappedToCHM13v1.1/PROseq_Bowtie2/
+renaming files to something not as long
+
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_neg.bigwig -> PROseq_k100_dual-21mer_neg.bw
+    PROseq_k100_AB.markersandlength_meryl-21mer-chm13v1.1_pos.bigwig -> PROseq_k100_dual-21mer_pos.bw
+
+and put in /hive/data/genomes/hs1/bed/proseq/, which still symlinked in /gbdb/

@@ -24,6 +24,7 @@
 #include <signal.h>
 #include "trackHub.h"
 #include "botDelay.h"
+#include "chromAlias.h"
 
 static long loadTime = 0;
 static boolean issueBotWarning = FALSE;
@@ -123,15 +124,16 @@ puts(" Data must be formatted in\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/cram.html'>CRAM</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format3'>GFF</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format4'>GTF</A>,\n"
-" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format23'>hic</A>,\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/hic.html'>hic</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/interact.html'>interact</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format5'>MAF</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format12'>narrowPeak</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format2'>PSL</A>,\n"
 " or <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>\n"
-" formats.<br>"
-" <li>You can paste just the URL to the file, without a \"track\" line, for bigBed, bigWig, bigGenePred, BAM and VCF.<br>"
+" formats.<br>\n"
+" <ul>\n"
+" <li>You can paste just the URL to the file, without a \"track\" line, for bigBed, bigWig, bigGenePred, BAM and VCF.<br></li>"
 " <li>To configure the display, set\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
 " and"
@@ -141,7 +143,8 @@ puts(" Data must be formatted in\n"
 " Examples are\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n"
 " If you do not have web-accessible data storage available, please see the\n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html#Hosting'>Hosting</A> section of the Track Hub Help documentation.\n<br><br>"
+" <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html#Hosting'>Hosting</A> section of the Track Hub Help documentation.\n<br><br></li>"
+" </ul>\n"
 " Please note a much more efficient way to load data is to use\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html'>Track Hubs</A>, which are loaded\n" 
 " from the <A TARGET=_BLANK HREF='hgHubConnect'>Track Hubs Portal</A> found in the menu under My Data.\n"
@@ -223,10 +226,8 @@ puts("<P>");
 /* row for error message */
 if (isNotEmpty(err))
     {
-    char *fullErrString = replaceChars(err, "\n", "<br>\n");
     printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:%s; font-style:italic;'>"
-           "%s</span><P>%s</B><P>", warnOnly ? "ORANGE" : "RED", warnOnly ? "Warning" : "Error", fullErrString);
-    freeMem(fullErrString);
+           "%s</span><P>%s</B><P>", warnOnly ? "ORANGE" : "RED", warnOnly ? "Warning" : "Error", htmlEncode(err));
     /* send two lines of the message to the apache error log also: */
     char *tmpString = replaceChars(err, "\n", " ");
     fprintf(stderr, "hgCustom load error: %s\n", tmpString);
@@ -321,7 +322,22 @@ else
     puts("Or upload: ");
     cgiMakeFileEntry(hgCtDataFile);
     cgiTableFieldEnd();
+    jsInline(
+            "$(\"[name='hgt.customFile']\").change(function(ev) { \n"
+            "   var fname = ev.target.files[0].name; \n"
+            "   var ext = fname.split('.').pop().toLowerCase(); \n"
+            "   var warnExts = ['bigbed', 'bb', 'bam', 'bigwig', 'bw', 'jpeg', 'pdf', 'jpg', 'png', 'hic', 'cram'];\n"
+            "   if (warnExts.indexOf(ext) >= 0) {\n"
+            "       alert('You are trying to upload a binary file on this page, but the Genome Browser server needs access to binary files via the internet.'+"
+            "          ' Therefore, you will need to store the files on a web server, then paste the URLs to them on this page, or upload a text file with \"track\" lines '+"
+            "          ' and configuration settings that point to the file URLs. Please read the documentation'+"
+            "          ' referenced at the top of this page or contact us for more information.');\n"
+            "       $(\"[name='hgt.customFile']\")[0].value = '';"
+            "   }\n"
+            "});\n"
+            );
     }
+
 if (!isUpdateForm)
     {
     cgiSimpleTableFieldStart();
@@ -412,6 +428,7 @@ else
     {
     cgiMakeTextArea(hgCtDocText, cartUsualString(cart, hgCtDocText, ""),
                                     TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
+    cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
     cgiSimpleTableStart();
     cgiSimpleTableRowStart();
@@ -711,7 +728,9 @@ printf("view in ");
 // Construct a menu of destination CGIs
 puts(cgiMakeSingleSelectDropList(hgCtNavDest, valsAndLabels, selected, NULL, NULL,
  "change", "var newVal = $('#navSelect').val(); $('#navForm').attr('action', newVal);", NULL, "navSelect"));
-cgiMakeButton("submit", "go");
+cgiMakeButton("submit", "go to first annotation");
+puts("&nbsp;<input type='submit' name='submit' id='submitGoBack' value='return to current position'>");
+jsOnEventByIdF("click", "submitGoBack", "$('#navForm > [name=position]').remove()");
 puts("</FORM>");
 }
 
@@ -1046,7 +1065,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char var[256];
     safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->track);
-    if (cartBoolean(cart, var))
+    if (cartUsualBoolean(cart, var, FALSE))
 	slRemoveEl(&ctList, ct);
     }
 }
@@ -1178,6 +1197,7 @@ cart = theCart;
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 initialDb = cloneString(cartUsualString(cart, "db", ""));
 getDbAndGenome(cart, &database, &organism, oldVars);
+chromAliasSetup(database);
 
 customFactoryEnableExtraChecking(TRUE);
 
@@ -1319,6 +1339,8 @@ else
         if (!nextTok)
             nextTok = strchr(db, 0);
         db = cloneStringZ(db,nextTok-db);
+        stripChar(db, '\'');
+        stripChar(db, '"');
         if (!sameString(db,database))
             err = "Invalid configuration found - remove db= or return it to its original value. ";
         }

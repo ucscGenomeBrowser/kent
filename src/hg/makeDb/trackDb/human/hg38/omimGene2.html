@@ -47,30 +47,33 @@ the corresponding RefSeq Gene locations:
 <LI>For each OMIM gene in the <TT>omim2gene</TT> table, the
 <A HREF="https://www.ncbi.nlm.nih.gov/gene" TARGET=_blank>Entrez Gene ID</A> was used to get the
 corresponding <A HREF="https://www.ncbi.nlm.nih.gov/RefSeq/" TARGET=_blank>RefSeq Gene ID</A> via
-the <TT>refLink</TT> table, and the RefSeq ID was used to get the genomic location from the
-<TT>refGene</TT> table.* The OMIM gene IDs and corresponding RefSeq Gene locations were loaded into
+the <TT>ncbiRefLink</TT> table, and the RefSeq ID was used to get the genomic location from the
+<TT>ncbiRefSeq</TT> table. The OMIM gene IDs and corresponding RefSeq Gene locations were loaded into
 the <TT>omimGene2</tt> table, the primary table for this track.
 </P>
 </UL>
-<P>
-*The locations in the <TT>refGene</TT> table are from alignments of RefSeq Genes to the reference
-genome using BLAT.
-</P>
 
 <h2>Data Access</h2>
 <p>
-Since OMIM has only allowed Data queries within individual chromosomes, no download files are
+Because OMIM has only allowed Data queries within individual chromosomes, no download files are
 available from the Genome Browser. Full genome datasets can be downloaded directly from the
 <a href="https://omim.org/downloads/" target="_blank">OMIM Downloads page</a>.
 All genome-wide downloads are freely available from OMIM after registration.</p>
 <p>
-UCSC offers queries within chromosomes from 
+If you need the OMIM data in exactly the format of the UCSC Genome Browser,
+for example if you are running a UCSC Genome Browser local installation (a partial &quot;mirror&quot;),
+please create a user account on omim.org and contact OMIM via
+<a href="https://omim.org/contact" target="_blank">https://omim.org/contact</a>. Send them your OMIM
+account name and request access to the UCSC Genome Browser &quot;entitlement&quot;. They will
+then grant you access to a MySQL/MariaDB data dump that contains all UCSC
+Genome Browser OMIM tables.</p>
+<p>
+UCSC offers queries within chromosomes from
 <a href="hgTables" target=_blank>Table Browser</a> that include a variety
 of filtering options and cross-referencing other datasets using our
-<a href="hgIntegrator" target=_blank>Data Integrator</a> tool. 
+<a href="hgIntegrator" target=_blank>Data Integrator</a> tool.
 UCSC also has an <a href="../goldenPath/help/api.html" target=_blank>API</a>
 that can be used to retrieve data in JSON format from a particular chromosome range.</p>
-
 <p>
 Please refer to our searchable
 <A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/?hl=en&fromgroups#!search/download+snps"

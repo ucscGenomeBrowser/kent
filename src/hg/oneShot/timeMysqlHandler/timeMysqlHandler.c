@@ -314,14 +314,14 @@ if (! region->isGenome)
     {
     if (sameString(table, "knownGene"))
 //#*** Presence of chromEnd index for knownGene screws up sorting for region=chr2, ugh!
-	dyStringAppend(dy, "IGNORE INDEX (chrom_2) ");
-    dyStringPrintf(dy, "where %s = '%s'", hti->chromField, region->chrom);
+	sqlDyStringPrintf(dy, "IGNORE INDEX (chrom_2) ");
+    sqlDyStringPrintf(dy, "where %s = '%s'", hti->chromField, region->chrom);
     if (! region->isWholeChrom)
 	{
-	dyStringAppend(dy, " and ");
+	sqlDyStringPrintf(dy, " and ");
 	if (hti->hasBin)
 	    hAddBinToQuery(region->start, region->end, dy);
-	dyStringPrintf(dy, "%s > %u and %s < %u ",
+	sqlDyStringPrintf(dy, "%s > %u and %s < %u ",
 		       hti->endField, region->start, hti->startField, region->end);
 	}
     }

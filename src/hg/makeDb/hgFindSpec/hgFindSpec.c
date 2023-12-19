@@ -197,12 +197,11 @@ void updateBigTextField(struct sqlConnection *conn, char *table,
 /* Generate sql code to update a big text field that may include
  * newlines and stuff. */
 {
-struct dyString *dy = newDyString(4096);
-sqlDyStringPrintf(dy, "update %s set %s=", table, textField);
-dyStringQuoteString(dy, '"', textVal);
-dyStringPrintf(dy, " where %s = '%s'", whereField, whereVal);
+struct dyString *dy = dyStringNew(4096);
+sqlDyStringPrintf(dy, "update %s set %s='%s'", table, textField, textVal);
+sqlDyStringPrintf(dy, " where %s = '%s'", whereField, whereVal);
 sqlUpdate(conn, dy->string);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 char *subTrackName(char *create, char *tableName)
@@ -229,7 +228,8 @@ if(rear == NULL)
 front += 5;
 *front = '\0';
 
-sqlSafef(newCreate, length , "%-s %s %-s", create, tableName, rear);
+// create argument from trusted source .sql file on disk
+safef(newCreate, length, "%s %s %s", create, tableName, rear);  
 return cloneString(newCreate);
 }
 
@@ -309,7 +309,7 @@ if (verboseLevel() > 0)
 /* Update database */
     {
     char *create, *end;
-    char query[256];
+    char query[2048];
     struct sqlConnection *conn = sqlConnect(database);
 
     /* Load in table definition. */
@@ -318,7 +318,8 @@ if (verboseLevel() > 0)
     create = subTrackName(create, hgFindSpecName);
     end = create + strlen(create)-1;
     if (*end == ';') *end = 0;
-    sqlRemakeTable(conn, hgFindSpecName, create);
+    sqlSafef(query, sizeof query, create, NULL);
+    sqlRemakeTable(conn, hgFindSpecName, query);
 
     /* Load in regular fields. */
     sqlSafef(query, sizeof query, "load data local infile '%s' into table %s", tab,
@@ -338,7 +339,8 @@ if (verboseLevel() > 0)
 	    }
 	}
 
-    sqlUpdate(conn, NOSQLINJ "flush tables");
+    sqlSafef(query, sizeof query, "flush tables");
+    sqlUpdate(conn, query);
     sqlDisconnect(&conn);
     if (verboseLevel() > 0)
 	printf("Loaded database %s\n", database);

@@ -1,0 +1,84 @@
+# must not use the track name "recombRate" as there is some special code 
+# that leads to crashes if I use that name.
+track recombRate2
+shortLabel Recomb Rate
+longLabel Recombination rate: Genetic maps from deCODE and 1000 Genomes
+type bed
+superTrack on hide
+group map
+visibility hide
+color 0,130,0
+
+    track recombAvg
+    parent recombRate2
+    shortLabel Recomb. deCODE Avg
+    longLabel Recombination rate: deCODE Genetics, average from paternal and maternal (mat for chrX)
+    type bigWig
+    bigDataUrl /gbdb/hg38/recombRate/recombAvg.bw
+    visibility full
+    maxHeightPixels 128:60:8
+    viewLimits 0.0:100
+    viewLimitsMax 0:150000
+    priority 1
+    html recombRate2.html
+
+    track recombPat
+    parent recombRate2
+    shortLabel Recomb. deCODE Pat
+    longLabel Recombination rate: deCODE Genetics, paternal
+    type bigWig
+    bigDataUrl /gbdb/hg38/recombRate/recombPat.bw
+    visibility full
+    maxHeightPixels 128:60:8
+    viewLimits 0.0:100
+    viewLimitsMax 0:150000
+    priority 2
+    html recombRate2.html
+
+    track recombMat
+    parent recombRate2
+    shortLabel Recomb. deCODE Mat
+    longLabel Recombination rate: deCODE Genetics, maternal
+    type bigWig
+    bigDataUrl /gbdb/hg38/recombRate/recombMat.bw
+    visibility full
+    maxHeightPixels 128:60:8
+    viewLimits 0.0:100
+    viewLimitsMax 0:150000
+    priority 3
+    html recombRate2.html
+
+    track recombEvents
+    parent recombRate2
+    shortLabel Recomb. deCODE Evts
+    longLabel Recombination events in deCODE Genetic Map (zoom to < 10kbp to see the events)
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/recombRate/events.bb
+    visibility hide
+    priority 4
+    html recombRate2.html
+
+    track recombDnm
+    parent recombRate2
+    shortLabel Recomb. deCODE Dmn
+    longLabel Recombination rate: De-novo mutations found in deCODE samples
+    type bigBed 4 +
+    bigDataUrl /gbdb/hg38/recombRate/recombDenovo.bb
+    visibility hide
+    priority 5
+    html recombRate2.html
+
+    track recomb1000GAvg
+    parent recombRate2
+    shortLabel Recomb. 1k Genomes
+    longLabel Recombination rate: 1000 Genomes, lifted from hg19 (PR Loh)
+    type bigWig
+    bigDataUrl /gbdb/hg38/recombRate/recomb1000GAvg.bw
+    visibility full
+    maxHeightPixels 128:60:8
+    viewLimits 0.0:100
+    viewLimitsMax 0:150000
+    priority 6
+    html recombRate2.html
+
+

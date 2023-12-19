@@ -15,10 +15,10 @@
 <div class="col-md-4">
 
 
-<h6><a href="#What">What does the Genome Browser do?</a></h6> 
-<h6><a href="#FineTuning">Configuring the Genome Browser display</a></h6> 
-<h6><a href="#IndivTracks">Annotation track descriptions</a></h6> 
-<h6><a href="#BLATAlign">Using BLAT alignments</a></h6> 
+<h6><a href="#What">What does the Genome Browser do?</a></h6>
+<h6><a href="#FineTuning">Configuring the Genome Browser display</a></h6>
+<h6><a href="#IndivTracks">Annotation track descriptions</a></h6>
+<h6><a href="#BLATAlign">Using BLAT alignments</a></h6>
 <h6>Getting Started with:</h6>
 <ul>
   <li> <h6><a href="#GetStarted">Genome Browser Gateway</a></h6>
@@ -27,11 +27,12 @@
   <li> <h6><a href="hgGeneGraph.html">Gene and Pathway Viewer</a></h6>
   <li> <h6><a href="#GenomeGraphs">Genome Graphs</a></h6>
 </ul>
-<h6><a href="#TrackFormatDNA">DNA text formatting</a></h6> 
-<h6><a href="#Convert">Converting data between assemblies</a></h6> 
-<h6><a href="#Download">Downloading genome data</a></h6> 
-<h6><a href="#CustomTracks">Creating and managing custom annotation tracks</a></h6> 
-<h6><a href="#TrackHubs">Getting started on Track Hubs</a></h6> 
+<h6><a href="#TrackFormatDNA">DNA text formatting</a></h6>
+<h6><a href="#Convert">Converting data between assemblies</a></h6>
+<h6><a href="#Download">Downloading genome data</a></h6>
+<h6><a href="#CustomTracks">Creating and managing custom annotation tracks</a></h6>
+<h6><a href="#TrackHubs">Getting started on Track Hubs</a></h6>
+<h6><a href="#GenArkTrackHubs">Track Hubs for <em>GenArk</em> assembly hub</a></h6>
 <h6><a href="#UseOneFile">Track Hubs in a single file</a></h6>
 <h6><a href="#VisiGeneHelp">Using the VisiGene Image Browser</a></h6>
 
@@ -39,407 +40,419 @@
 <div class="col-md-8">
 
 <form name="googleForm1" method="get" action="https://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">
-  <p> 
-  Search the Genome Browser help pages: &nbsp; 
-  <input type="hidden" name="q" value=""> 
-  <input type="hidden" name="num" value="10"> 
-  <input type="hidden" name="filter" value="0"> 
-  <input type=text name=qq size=30 maxlength=255 value=""> 
-  <input type="submit" value="Submit"> 
-  </p>
-</form> 
-
-<form name="googleForm2" method="GET" action="https://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:genome.ucsc.edu/';">
-  <p> 
-  Search the entire Genome Browser website: &nbsp; 
-  <input type="hidden" name="q" value=""> 
-  <input type="hidden" name="num" value="10"> 
-  <input type="hidden" name="filter" value="0"> 
-  <input type=text name=qq size=30 maxlength=255 value=""> 
-  <input type="submit" value="Submit"> 
+  <p>
+  Search the Genome Browser help pages: &nbsp;
+  <input type="hidden" name="q" value="">
+  <input type="hidden" name="num" value="10">
+  <input type="hidden" name="filter" value="0">
+  <input type=text name=qq size=30 maxlength=255 value="">
+  <input type="submit" value="Submit">
   </p>
 </form>
 
-<p> 
-<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" target="_blank">Browse</a> 
-the Genome Browser mailing list.</p>  
-<p> 
+<form name="googleForm2" method="GET" action="https://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:genome.ucsc.edu/';">
+  <p>
+  Search the entire Genome Browser website: &nbsp;
+  <input type="hidden" name="q" value="">
+  <input type="hidden" name="num" value="10">
+  <input type="hidden" name="filter" value="0">
+  <input type=text name=qq size=30 maxlength=255 value="">
+  <input type="submit" value="Submit">
+  </p>
+</form>
+
+<p>
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" target="_blank">Browse</a>
+the Genome Browser mailing list.</p>
+<p>
 <a href="../../contacts.html">Questions and feedback are welcome</a>.</p>
 
  </div>
 </div>
 
-<!-- =======What does the Genome Browser do?======= --> 
+<!-- =======What does the Genome Browser do?======= -->
 <a name="What"></a>
 <h2>What does the Genome Browser do?</h2>
 <p>
-As vertebrate genome sequences near completion and research re-focuses on their analysis, the issue 
-of effective sequence display becomes critical: it is not helpful to have 3 billion letters of 
-genomic DNA shown as plain text! As an alternative, the UCSC Genome Browser provides a rapid and 
-reliable display of any requested portion of genomes at any scale, together with dozens of aligned 
-annotation tracks (known genes, predicted genes, ESTs, mRNAs, CpG islands, assembly gaps and 
+As vertebrate genome sequences near completion and research re-focuses on their analysis, the issue
+of effective sequence display becomes critical: it is not helpful to have 3 billion letters of
+genomic DNA shown as plain text! As an alternative, the UCSC Genome Browser provides a rapid and
+reliable display of any requested portion of genomes at any scale, together with dozens of aligned
+annotation tracks (known genes, predicted genes, ESTs, mRNAs, CpG islands, assembly gaps and
 coverage, chromosomal bands, mouse homologies, and more). Half of the annotation tracks are computed
-at UCSC from publicly available sequence data. The remaining tracks are provided by collaborators 
+at UCSC from publicly available sequence data. The remaining tracks are provided by collaborators
 worldwide. Users can also add their own custom tracks to the browser for educational or research
 purposes.</p>
 <p>
-The Genome Browser stacks annotation tracks beneath genome coordinate positions, allowing rapid 
-visual correlation of different types of information. The user can look at a whole chromosome to 
-get a feel for gene density, open a specific cytogenetic band to see a positionally mapped disease 
-gene candidate, or zoom in to a particular gene to view its spliced ESTs and possible alternative 
-splicing. The Genome Browser itself does not draw conclusions; rather, it collates all relevant 
+The Genome Browser stacks annotation tracks beneath genome coordinate positions, allowing rapid
+visual correlation of different types of information. The user can look at a whole chromosome to
+get a feel for gene density, open a specific cytogenetic band to see a positionally mapped disease
+gene candidate, or zoom in to a particular gene to view its spliced ESTs and possible alternative
+splicing. The Genome Browser itself does not draw conclusions; rather, it collates all relevant
 information in one location, leaving the exploration and interpretation to the user.</p>
 <p>
-The Genome Browser supports text and sequence based searches that provide quick, precise access to 
-any region of specific interest. Secondary links from individual entries within annotation tracks 
-lead to sequence details and supplementary off-site databases. To control information overload, 
-tracks need not be displayed in full. Tracks can be hidden, collapsed into a condensed or 
-single-line display, or filtered according to the user's criteria. Zooming and scrolling controls 
-help to narrow or broaden the displayed chromosomal range to focus on the exact region of interest. 
-Clicking on an individual item within a track opens a details page containing a summary of 
-properties and links to off-site repositories such as PubMed, GenBank, Entrez, and OMIM. The page 
-provides item-specific information on position, cytoband, strand, data source, and encoded protein, 
+The Genome Browser supports text and sequence based searches that provide quick, precise access to
+any region of specific interest. Secondary links from individual entries within annotation tracks
+lead to sequence details and supplementary off-site databases. To control information overload,
+tracks need not be displayed in full. Tracks can be hidden, collapsed into a condensed or
+single-line display, or filtered according to the user's criteria. Zooming and scrolling controls
+help to narrow or broaden the displayed chromosomal range to focus on the exact region of interest.
+Clicking on an individual item within a track opens a details page containing a summary of
+properties and links to off-site repositories such as PubMed, GenBank, Entrez, and OMIM. The page
+provides item-specific information on position, cytoband, strand, data source, and encoded protein,
 mRNA, genomic sequence and alignment, as appropriate to the nature of the track.</p>
 <p>
-A blue navigation bar at the top of the browser provides links to several other tools and data 
-sources. For instance, under the &quot;View&quot; menu, the &quot;DNA&quot; link enables the user 
-to view the raw genomic DNA sequence for the coordinate range displayed in the browser window. This 
-DNA can encode track features via elaborate text formatting options. Other links tie the Genome 
+A blue navigation bar at the top of the browser provides links to several other tools and data
+sources. For instance, under the &quot;View&quot; menu, the &quot;DNA&quot; link enables the user
+to view the raw genomic DNA sequence for the coordinate range displayed in the browser window. This
+DNA can encode track features via elaborate text formatting options. Other links tie the Genome
 Browser to the BLAT alignment tool, provide access to the underlying relational database via the
-Table Browser, convert coordinates across different assembly dates, and open the window at the 
-complementary <a href="http://www.ensembl.org/" target="_blank">Ensembl</a> or 
+Table Browser, convert coordinates across different assembly dates, and open the window at the
+complementary <a href="http://www.ensembl.org/" target="_blank">Ensembl</a> or
 <a href="https://www.ncbi.nlm.nih.gov/genome/gdv/" target="_blank">NCBI Genome Data Viewer</a> annotation.</p>
 <p>
-The browser data represents an immense <a href="../credits.html">collaborative effort</a> involving 
-thousands of people from the international biomedical research community. The UCSC Bioinformatics 
+The browser data represents an immense <a href="../credits.html">collaborative effort</a> involving
+thousands of people from the international biomedical research community. The UCSC Bioinformatics
 Group itself does no sequencing. Although it creates the majority of the annotation tracks in-house,
-the annotations are based on publicly available data contributed by many labs and research groups 
-throughout the world. Several of the Genome Browser annotations are generated in collaboration with 
-outside individuals or are contributed wholly by external research groups. UCSC's other major roles 
-include building genome assemblies, creating the Genome Browser work environment, and serving it 
-online. The majority of the sequence data, annotation tracks, and even software are in the public 
-domain and are available for anyone to <a href="#Download">download</a>.</p> 
+the annotations are based on publicly available data contributed by many labs and research groups
+throughout the world. Several of the Genome Browser annotations are generated in collaboration with
+outside individuals or are contributed wholly by external research groups. UCSC's other major roles
+include building genome assemblies, creating the Genome Browser work environment, and serving it
+online. The majority of the sequence data, annotation tracks, and even software are in the public
+domain and are available for anyone to <a href="#Download">download</a>.</p>
 <p>
 In addition to the Genome Browser, the UCSC Genome Bioinformatics group provides several other tools
-for viewing and interpreting genome data: 
+for viewing and interpreting genome data:
 <ul>
   <li>
   <a href="../../cgi-bin/hgBlat?command=start">BLAT</a> - a fast sequence-alignment tool similar
   to BLAST. <a href="#BLATAlign">Read more</a>.</li>
   <li>
-  <a href="../../cgi-bin/hgTables">Table Browser</a> - convenient text-based access to the 
+  <a href="../../cgi-bin/hgTables">Table Browser</a> - convenient text-based access to the
   database underlying the Genome Browser. <a href="hgTablesHelp.html">Read more</a>.</li>
   <li>
-  <a href="../../cgi-bin/hgGenome">Genome Graphs</a> - a tool that allows you to upload and display 
-  genome-wide data sets such as the results of genome-wide SNP association studies, linkage studies 
+  <a href="../../cgi-bin/hgGenome">Genome Graphs</a> - a tool that allows you to upload and display
+  genome-wide data sets such as the results of genome-wide SNP association studies, linkage studies
   and homozygosity mapping.  <a href="hgGenomeHelp.html">Read more</a>.</li>
-  <li>  
-  <a href="../../cgi-bin/hgNear">Gene Sorter</a> - expression, homology, and other information on 
+  <li>
+  <a href="../../cgi-bin/hgNear">Gene Sorter</a> - expression, homology, and other information on
   groups of genes that can be related in many ways. <a href="hgNearHelp.html">Read more</a>.</li>
 </ul>
 
-<!-- =======Getting Started: Genome Browser gateway======= --> 
-<a name="GetStarted"></a> 
+<!-- =======Getting Started: Genome Browser gateway======= -->
+<a name="GetStarted"></a>
 <h2>Getting started: Genome Browser gateway</h2>
 <p>
-The UCSC Genome Bioinformatics <a href="../../index.html" target="_blank">home page</a> provides 
-access to Genome Browsers on several different genome assemblies. To get started, click the Browser 
-link on the blue sidebar. This will take you to a Gateway page where you can select which genome to 
-display. Note that there are also official <a href="genomeEuro.html">mirror sites</a> in Europe and 
-Asia for users who are geographically closer to those continents than to the western United 
+The UCSC Genome Bioinformatics <a href="../../index.html" target="_blank">home page</a> provides
+access to Genome Browsers on several different genome assemblies. To get started, click the Browser
+link on the blue sidebar. This will take you to a Gateway page where you can select which genome to
+display. Note that there are also official <a href="genomeEuro.html">mirror sites</a> in Europe and
+Asia for users who are geographically closer to those continents than to the western United
 States.</p>
 
 <h6>Opening the Genome Browser at a specific position</h6>
 <p>
-To get oriented in using the Genome Browser, try viewing a gene or region of the genome with which 
+To get oriented in using the Genome Browser, try viewing a gene or region of the genome with which
 you are already familiar, or use the default position. To open the Genome Browser window:</p>
-<ol> 
-  <li> 
-  Select the clade, genome and assembly that you wish to display from the corresponding pull-down 
-  menus. Assemblies are typically named by the first three characters of an organism's genus and 
+<ol>
+  <li>
+  Select the clade, genome and assembly that you wish to display from the corresponding pull-down
+  menus. Assemblies are typically named by the first three characters of an organism's genus and
   species names. For older assemblies that are no longer available from the menu, the data may still
-  be available on our <a href="http://hgdownload.soe.ucsc.edu/downloads.html" 
+  be available on our <a href="http://hgdownload.soe.ucsc.edu/downloads.html"
   target="_blank">Downloads</a> page.</li>
-  <li> 
-  Specify the genome location you'd like the Genome Browser to open to. To select a location, enter 
-  a valid position query in the <em>search term</em> text box at the top of the Gateway page or 
-  accept the default position already displayed. The search supports several different types of 
-  <a href="query.html">queries</a>: gene symbols, mRNA or EST accession numbers, chromosome bands, 
+  <li>
+  Specify the genome location you'd like the Genome Browser to open to. To select a location, enter
+  a valid position query in the <em>search term</em> text box at the top of the Gateway page or
+  accept the default position already displayed. The search supports several different types of
+  <a href="query.html">queries</a>: gene symbols, mRNA or EST accession numbers, chromosome bands,
   descriptive terms likely to occur in GenBank text, or specific chromosomal ranges.</li>
-  <li> 
-  Click the <em>submit</em> button to open up the Genome Browser window to the requested location. 
-  In cases where a specific term (accession, gene name, etc.) was queried, the item will be 
+  <li>
+  Click the <em>submit</em> button to open up the Genome Browser window to the requested location.
+  In cases where a specific term (accession, gene name, etc.) was queried, the item will be
   highlighted in the display.</li>
 </ol>
 <p>
 Occasionally the Gateway page returns a list of several matches in response to a search, rather than
-immediately displaying the Genome Browser window. When this occurs, click on the item in which 
+immediately displaying the Genome Browser window. When this occurs, click on the item in which
 you're interested and the Genome Browser will open to that location.</p>
 <p>
-The search mechanism is not a site-wide search engine. Instead, it primarily searches GenBank mRNA 
-records whose text annotations can include gene names, gene symbols, journal title words, author 
-names, and RefSeq mRNAs. Searches on other selected identifiers, such as NP and NM accession 
-numbers, OMIM identifiers, and Entrez Gene IDs are supported. However, some types of queries will 
-return an error, e.g. post-assembly GenBank entries, withdrawn gene names, and abandoned synonyms. 
-If your initial query is unsuccessful, try entering a different related term that may produce the 
-same location. For example, if a query on a gene symbol produces no results, try entering an mRNA 
+The search mechanism is not a site-wide search engine. Instead, it primarily searches GenBank mRNA
+records whose text annotations can include gene names, gene symbols, journal title words, author
+names, and RefSeq mRNAs. Searches on other selected identifiers, such as NP and NM accession
+numbers, OMIM identifiers, and Entrez Gene IDs are supported. However, some types of queries will
+return an error, e.g. post-assembly GenBank entries, withdrawn gene names, and abandoned synonyms.
+If your initial query is unsuccessful, try entering a different related term that may produce the
+same location. For example, if a query on a gene symbol produces no results, try entering an mRNA
 accession, gene ID number, or descriptive words associated with the gene.</p>
 
-<p><iframe width="560" height="315" src="https://www.youtube.com/embed/5zc9sqd4SD4?rel=0" 
+<p>
+<!--#if expr="${SERVER_NAME} = /-china/" -->
+    <a href='../../../videos/5zc9sqd4SD4.mp4'>
+    <img src=../../images/videoIcon.png></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our <a href="/videos/" target="_blank">Video Page</a>.
+<!--#else -->
+<iframe width="560" height="350" src="https://www.youtube.com/embed/5zc9sqd4SD4?rel=0" 
 frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen></iframe></p>
+allowfullscreen></iframe> </p>
+<p> Visit our <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a> for more videos.
+<!--#endif -->
+</p>
+
 
 <h6>Finding a genome location using BLAT</h6>
 <p>
-If you have genomic, mRNA, or protein sequence, but don't know the name or the location to which it 
-maps in the genome, the <a href="../../cgi-bin/hgBlat">BLAT</a> tool will rapidly locate the 
-position by homology alignment, provided that the region has been sequenced. This search will find 
-close members of the gene family, as well as assembly duplication artifacts. An entire set of query 
-sequences can be looked up simultaneously when provided in fasta format.</p> 
+If you have genomic, mRNA, or protein sequence, but don't know the name or the location to which it
+maps in the genome, the <a href="../../cgi-bin/hgBlat">BLAT</a> tool will rapidly locate the
+position by homology alignment, provided that the region has been sequenced. This search will find
+close members of the gene family, as well as assembly duplication artifacts. An entire set of query
+sequences can be looked up simultaneously when provided in fasta format.</p>
 <p>
-A successful BLAT search returns a list of one or more genome locations that match the input 
-sequence. To view one of the alignments in the Genome Browser, click the <em>browser</em> link for 
-the match. The <em>details</em> link can be used to preview the alignment to determine if it is of 
-sufficient match quality to merit viewing in the Genome Browser. If too many BLAT hits occur, try 
-narrowing the search by filtering the sequence in slow mode with 
-<a href="http://www.repeatmasker.org" target="_blank">RepeatMasker</a>, then rerunning the BLAT 
-search.</p> 
+A successful BLAT search returns a list of one or more genome locations that match the input
+sequence. To view one of the alignments in the Genome Browser, click the <em>browser</em> link for
+the match. The <em>details</em> link can be used to preview the alignment to determine if it is of
+sufficient match quality to merit viewing in the Genome Browser. If too many BLAT hits occur, try
+narrowing the search by filtering the sequence in slow mode with
+<a href="http://www.repeatmasker.org" target="_blank">RepeatMasker</a>, then rerunning the BLAT
+search.</p>
 <p>
-For more information on conducting and fine-tuning BLAT searches, refer to the 
+For more information on conducting and fine-tuning BLAT searches, refer to the
 <a href="#BLATAlign">BLAT section</a> of this document.</p>
 
 <h6>Opening the Genome Browser with a custom annotation track</h6>
 <p>
-You can open the Genome Browser window with a custom annotation track displayed by using the Add 
-Custom Tracks feature available from the gateway and annotation tracks pages. For more information 
-on creating and using custom annotation tracks, refer to the <a href="#CustomTracks">Creating 
+You can open the Genome Browser window with a custom annotation track displayed by using the Add
+Custom Tracks feature available from the gateway and annotation tracks pages. For more information
+on creating and using custom annotation tracks, refer to the <a href="#CustomTracks">Creating
 custom annotation tracks</a> section.</p>
 <p>
 Annotation track data can be entered in one of three ways:</p>
-<ul> 
+<ul>
   <li>
   Enter the file name for an annotation track source file in the Annotation File text box.</li>
-  <li> 
-  Type or paste the annotation track data into the large text box.</li> 
-  <li> 
-  If the annotation data are accessible through a URL, enter the URL name in the large text 
+  <li>
+  Type or paste the annotation track data into the large text box.</li>
+  <li>
+  If the annotation data are accessible through a URL, enter the URL name in the large text
   box.</li>
 </ul>
 <p>
-Once you've entered the annotation information, click the <em>submit</em> button at the top of 
+Once you've entered the annotation information, click the <em>submit</em> button at the top of
 the Gateway page to open up the Genome Browser with the annotation track displayed.</p>
 <p>
-The Genome Browser also provides a <a href="../customTracks/custTracks.html" 
-target="_blank">collection of custom annotation tracks</a> contributed by the UCSC Genome 
-Bioinformatics group and the research community.</p> 
+The Genome Browser also provides a <a href="../customTracks/custTracks.html"
+target="_blank">collection of custom annotation tracks</a> contributed by the UCSC Genome
+Bioinformatics group and the research community.</p>
 <p>
-<strong>NOTE:</strong> If an annotation track does not display correctly when you attempt to upload 
-it, you may need to reset the Genome Browser to its default settings, then reload the track. For 
-information on troubleshooting display problems with custom annotation tracks, refer to the 
-troubleshooting section in the <a href="#CustomTracks">Creating custom annotation tracks</a> 
+<strong>NOTE:</strong> If an annotation track does not display correctly when you attempt to upload
+it, you may need to reset the Genome Browser to its default settings, then reload the track. For
+information on troubleshooting display problems with custom annotation tracks, refer to the
+troubleshooting section in the <a href="#CustomTracks">Creating custom annotation tracks</a>
 section.</p>
 
 <h6>Viewing genome data as text</h6>
 <p>
-The <a href="../../cgi-bin/hgTables" target="_blank">Table Browser</a>, a portal to the underlying 
+The <a href="../../cgi-bin/hgTables" target="_blank">Table Browser</a>, a portal to the underlying
 open source <a href="http://www.mariadb.org" target="_blank">MariaDB</a> relational database driving the
-Genome Browser, displays genomic data as columns of text rather than as graphical tracks. For more 
-information on using the Table Browser, see the section <a href="#TableBrowser">Getting started: on 
+Genome Browser, displays genomic data as columns of text rather than as graphical tracks. For more
+information on using the Table Browser, see the section <a href="#TableBrowser">Getting started: on
 the Table Browser</a>.</p>
 
 <h6>Opening the Genome Browser from external gateways</h6>
 <p>
-Several external gateways provide direct links into the Genome Browser. Examples include: 
-<a href="https://www.ncbi.nlm.nih.gov/entrez/" target="_blank">Entrez Gene</a>, 
-<a href="https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/index.html" target="_blank">AceView</a>, 
-<a href="http://www.ensembl.org/" target="_blank">Ensembl</a>, 
-<a href="http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/" target="_blank">SuperFamily</a>, and 
-<a href="http://www.genecards.org/" target="_blank">GeneCards</a>. Journal articles can also link 
-to the browser and provide custom tracks. Be sure to use the assembly date appropriate to the 
+Several external gateways provide direct links into the Genome Browser. Examples include:
+<a href="https://www.ncbi.nlm.nih.gov/entrez/" target="_blank">Entrez Gene</a>,
+<a href="https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/index.html" target="_blank">AceView</a>,
+<a href="http://www.ensembl.org/" target="_blank">Ensembl</a>,
+<a href="http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/" target="_blank">SuperFamily</a>, and
+<a href="http://www.genecards.org/" target="_blank">GeneCards</a>. Journal articles can also link
+to the browser and provide custom tracks. Be sure to use the assembly date appropriate to the
 provided coordinates when using data from a journal source.</p>
 
 <h6>Tips for Use</h6>
 <p>
-To facilitate your return to regions of interest within the Genome Browser, save the coordinate 
-range or bookmark the page of displays that you plan to revisit or wish to share with others.</p> 
+To facilitate your return to regions of interest within the Genome Browser, save the coordinate
+range or bookmark the page of displays that you plan to revisit or wish to share with others.</p>
 <p>
-It is usually best to work with the most recent assembly even though a full set of tracks might not 
-yet be ready. Be aware that the coordinates of a given feature on an unfinished chromosome may 
-change from one assembly to the next as gaps are filled, artifactual duplications are reduced, and 
-strand orientations are corrected. The Genome Browser offers multiple tools that can correctly 
+It is usually best to work with the most recent assembly even though a full set of tracks might not
+yet be ready. Be aware that the coordinates of a given feature on an unfinished chromosome may
+change from one assembly to the next as gaps are filled, artifactual duplications are reduced, and
+strand orientations are corrected. The Genome Browser offers multiple tools that can correctly
 convert coordinates between different assembly releases. For more information on conversion tools,
 see the section <a href="#Convert">Converting data between assemblies</a>.</p>
 <p>
-To ensure uninterrupted browser services for your research during UCSC server maintenance and power 
-outages, bookmark a <a href="../../mirror.html" target="_blank">mirror</a> site that replicates the 
-UCSC genome browser.</p> 
+To ensure uninterrupted browser services for your research during UCSC server maintenance and power
+outages, bookmark a <a href="../../mirror.html" target="_blank">mirror</a> site that replicates the
+UCSC genome browser.</p>
 <p>
-Bear in mind that the Genome Browser cannot outperform the underlying quality of the draft genome. 
-Assembly errors and sequence gaps may still occur well into the sequencing process due to regions 
-that are intrinsically difficult to sequence. Artifactual duplications arise as unavoidable 
+Bear in mind that the Genome Browser cannot outperform the underlying quality of the draft genome.
+Assembly errors and sequence gaps may still occur well into the sequencing process due to regions
+that are intrinsically difficult to sequence. Artifactual duplications arise as unavoidable
 compromises during a build, causing misleading matches in genome coordinates found by alignment.</p>
 
-<!-- =======Interpreting and configuring the Genome Browser ======= --> 
+<!-- =======Interpreting and configuring the Genome Browser ======= -->
 <a name="FineTuning"></a>
 <h2>Interpreting and fine-tuning the Genome Browser display</h2>
 <p>
-The Genome Browser annotation tracks page displays a genome location specified through a Gateway 
-search, a BLAT search, or an uploaded custom annotation track. There are five main features on this 
+The Genome Browser annotation tracks page displays a genome location specified through a Gateway
+search, a BLAT search, or an uploaded custom annotation track. There are five main features on this
 page: a set of <a href="#NAV">navigation controls</a>, a chromosome ideogram, the annotations tracks
-image, <a href="#TRACK_CONFIG">display configuration buttons</a>, and a set of track 
+image, <a href="#TRACK_CONFIG">display configuration buttons</a>, and a set of track
 <a href="#TRACK_CONT">display controls</a>.</p>
 <p>
-The first time you open the Genome Browser, it will use the application default values to configure 
-the annotation tracks display. By manipulating the navigation, configuration and display controls, 
-you can customize the annotation tracks display to suit your needs. For a complete description of 
-the annotation tracks available in all assembly versions supported by the Genome Browser, see the 
+The first time you open the Genome Browser, it will use the application default values to configure
+the annotation tracks display. By manipulating the navigation, configuration and display controls,
+you can customize the annotation tracks display to suit your needs. For a complete description of
+the annotation tracks available in all assembly versions supported by the Genome Browser, see the
 <a href="#IndivTracks"> Annotation Track Descriptions</a> section.</p>
 <p>
-The Genome Browser retains user preferences from session to session within the same web browser, 
-although it never monitors or records user activities or submitted data. To restore the default 
-settings, click the &quot;Click here to reset&quot; link on the Genome Browser Gateway page. To 
-return the display to the default set of tracks (but retain custom tracks and other configured 
+The Genome Browser retains user preferences from session to session within the same web browser,
+although it never monitors or records user activities or submitted data. To restore the default
+settings, click the &quot;Reset All User Settings&quot; under the top blue Genome Browser menu. To
+return the display to the default set of tracks (but retain custom tracks and other configured
 Genome Browser settings), click the <em>default tracks</em> button on the Genome Browser page.</p>
 
 <h3>Annotation track display conventions</h3>
 <p>
-  <strong>Annotation track descriptions:</strong> Each annotation track has an associated 
-  description page that contains a discussion of the track, the methods used to create the 
-  annotation, the data sources and credits for the track, and (in some cases) filter and 
+  <strong>Annotation track descriptions:</strong> Each annotation track has an associated
+  description page that contains a discussion of the track, the methods used to create the
+  annotation, the data sources and credits for the track, and (in some cases) filter and
   configuration options to fine-tune the information displayed in the track. To view the description
-  page, click on the mini-button to the left of a displayed track or on the label for the track in 
+  page, click on the mini-button to the left of a displayed track or on the label for the track in
   the Track Controls section.</p>
-  <p> 
-  <strong>Annotation track details pages:</strong> When an annotation track is displayed in full, 
-  pack, or squish mode, each line item within the track has an associated details page that can be 
-  displayed by clicking on the item or its label. The information contained in the details page 
-  varies by annotation track, but may include basic position information about the item, related 
+  <p>
+  <strong>Annotation track details pages:</strong> When an annotation track is displayed in full,
+  pack, or squish mode, each line item within the track has an associated details page that can be
+  displayed by clicking on the item or its label. The information contained in the details page
+  varies by annotation track, but may include basic position information about the item, related
   links to outside sites and databases, links to genomic alignments, or links to corresponding mRNA,
   genomic, and protein sequences.</p>
   <p>
   <a name="GeneDisplay"></a><strong>Gene prediction tracks:</strong> Coding exons are represented by
-  blocks connected by horizontal lines representing introns. The 5' and 3' untranslated regions 
-  (UTRs) are displayed as thinner blocks on the leading and trailing ends of the aligning regions. 
-  In full display mode, arrowheads on the connecting intron lines indicate the direction of 
-  transcription. In situations where no intron is visible (e.g. single-exon genes, extremely 
+  blocks connected by horizontal lines representing introns. The 5' and 3' untranslated regions
+  (UTRs) are displayed as thinner blocks on the leading and trailing ends of the aligning regions.
+  In full display mode, arrowheads on the connecting intron lines indicate the direction of
+  transcription. In situations where no intron is visible (e.g. single-exon genes, extremely
   zoomed-in displays), the arrowheads are displayed on the exon block itself.</p>
-  <p> 
-  <a name="PSLDisplay"></a><strong>Pattern Space Layout (PSL) alignment tracks:</strong> Aligning 
-  regions (usually exons when the query is cDNA) are shown as black blocks. In dense display mode, 
-  the degree of darkness corresponds to the number of features aligning to the region or the degree 
+  <p>
+  <a name="PSLDisplay"></a><strong>Pattern Space Layout (PSL) alignment tracks:</strong> Aligning
+  regions (usually exons when the query is cDNA) are shown as black blocks. In dense display mode,
+  the degree of darkness corresponds to the number of features aligning to the region or the degree
   of quality of the match. In pack or full display mode, the aligning regions are connected by lines
-  representing gaps in the alignment (typically spliced-out introns), with arrowheads indicating 
-  the orientation of the alignment, pointing right if the query sequence was aligned to the forward 
-  strand of the genome and left if aligned to the reverse strand. Two parallel lines are drawn over 
-  double-sided alignment gaps, which skip over unalignable sequence in both target and query. For 
-  alignments of ESTs, the arrows may be reversed to show the apparent direction of transcription 
-  deduced from splice junction sequences. In situations where no gap lines are visible, the 
-  arrowheads are displayed on the block itself. To prevent display problems, the Genome Browser 
-  imposes an upper limit on the number of alignments that can be viewed simultaneously within the 
-  tracks image. When this limit is exceeded, the Browser displays the best several hundred 
-  alignments in a condensed display mode, then lists the number of undisplayed alignments in the 
-  last row of the track. In this situation, try zooming in to display more entries or to return the 
-  track to full display mode. For some PSL tracks, <a href="hgCodonColoringMrna.html">extra 
+  representing gaps in the alignment (typically spliced-out introns), with arrowheads indicating
+  the orientation of the alignment, pointing right if the query sequence was aligned to the forward
+  strand of the genome and left if aligned to the reverse strand. Two parallel lines are drawn over
+  double-sided alignment gaps, which skip over unalignable sequence in both target and query. For
+  alignments of ESTs, the arrows may be reversed to show the apparent direction of transcription
+  deduced from splice junction sequences. In situations where no gap lines are visible, the
+  arrowheads are displayed on the block itself. To prevent display problems, the Genome Browser
+  imposes an upper limit on the number of alignments that can be viewed simultaneously within the
+  tracks image. When this limit is exceeded, the Browser displays the best several hundred
+  alignments in a condensed display mode, then lists the number of undisplayed alignments in the
+  last row of the track. In this situation, try zooming in to display more entries or to return the
+  track to full display mode. For some PSL tracks, <a href="hgCodonColoringMrna.html">extra
   coloring</a> to indicate mismatching bases and query-only gaps may be available.</p>
   <p>
-  <a name="ChainDisplay"></a><strong>Chain tracks (2-species alignment):</strong> Chain tracks 
-  display boxes joined together by either single or double lines. The boxes represent aligning 
-  regions. Single lines indicate gaps that are largely due to a deletion in the genome of the first 
-  species or an insertion in the genome of the second species. Double lines represent more complex 
-  gaps that involve substantial sequence in both species. This may result from inversions, 
-  overlapping deletions, an abundance of local mutation, or an unsequenced gap in one species. In 
-  cases where there are multiple chains over a particular portion of the genome, chains with 
-  single-lined gaps are often due to processed pseudogenes, while chains with double-lined gaps are 
-  more often due to paralogs and unprocessed pseudogenes. In the fuller display modes, the 
+  <a name="ChainDisplay"></a><strong>Chain tracks (2-species alignment):</strong> Chain tracks
+  display boxes joined together by either single or double lines. The boxes represent aligning
+  regions. Single lines indicate gaps that are largely due to a deletion in the genome of the first
+  species or an insertion in the genome of the second species. Double lines represent more complex
+  gaps that involve substantial sequence in both species. This may result from inversions,
+  overlapping deletions, an abundance of local mutation, or an unsequenced gap in one species. In
+  cases where there are multiple chains over a particular portion of the genome, chains with
+  single-lined gaps are often due to processed pseudogenes, while chains with double-lined gaps are
+  more often due to paralogs and unprocessed pseudogenes. In the fuller display modes, the
   individual feature names indicate the chromosome, strand, and location (in thousands) of the match
   for each matching alignment.</p>
-  <p> 
-  <a name="NetDisplay"></a><strong>Net tracks (2-species alignment):</strong> Boxes represent 
-  ungapped alignments, while lines represent gaps. Clicking on a box displays detailed information 
-  about the chain as a whole, while clicking on a line shows information on the gap. The detailed 
-  information is useful in determining the cause of the gap or, for lower level chains, the genomic 
-  rearrangement. Individual items in the display are categorized as one of four types (other than 
-  gap):</p> 
-  <ul> 
+  <p>
+  <a name="NetDisplay"></a><strong>Net tracks (2-species alignment):</strong> Boxes represent
+  ungapped alignments, while lines represent gaps. Clicking on a box displays detailed information
+  about the chain as a whole, while clicking on a line shows information on the gap. The detailed
+  information is useful in determining the cause of the gap or, for lower level chains, the genomic
+  rearrangement. Individual items in the display are categorized as one of four types (other than
+  gap):</p>
+  <ul>
     <li>
-    <em>Top</em> - The best, longest match. Displayed on level 1.</li> 
+    <em>Top</em> - The best, longest match. Displayed on level 1.</li>
     <li>
-    <em>Syn</em> - Lineups on the same chromosome as the gap in the level above it.</li>  
+    <em>Syn</em> - Lineups on the same chromosome as the gap in the level above it.</li>
     <li>
-    <em>Inv</em> - A lineup on the same chromosome as the gap above it, but in the opposite 
-    orientation.</li>  
+    <em>Inv</em> - A lineup on the same chromosome as the gap above it, but in the opposite
+    orientation.</li>
     <li>
-    <em>NonSyn</em> - A match to a chromosome different from the gap in the level above.</li>  
+    <em>NonSyn</em> - A match to a chromosome different from the gap in the level above.</li>
   </ul>
   <p>
-  <a name="SnakeDisplay"></a><strong>Snake tracks:</strong> The snake alignment track (or snake 
-  track) shows the relationship between the chosen Browser genome (reference genome) and another 
-  genome (query genome). A snake is a way of viewing a set of pairwise gapless alignments that may 
+  <a name="SnakeDisplay"></a><strong>Snake tracks:</strong> The snake alignment track (or snake
+  track) shows the relationship between the chosen Browser genome (reference genome) and another
+  genome (query genome). A snake is a way of viewing a set of pairwise gapless alignments that may
   overlap on both the reference and query genomes. Alignments are always represented as being on the
   positive strand of the reference species, but can be on either strand on the query sequence.</p>
-  <p> 
+  <p>
   In full display mode, a snake track can be decomposed into two drawing elements: segments (colored
-  rectangles) and adjacencies (lines connecting the segments). Segments represent subsequences of 
-  the target genome aligned to the given portion of the reference genome. Adjacencies represent the 
-  covalent bonds between the aligned subsequences of the target genome.</p> 
-  <p> 
-  Red tick-marks within segments represent substitutions with respect to the reference, shown in 
-  windows of the reference of (by default) up to 50 Kb. Zoomed in to the base level, these 
-  substitutions are labeled with the non-reference base.</p> 
-  <p> 
-  An insertion in the reference relative to the query creates a gap between abutting segment sides 
-  that is connected by an adjacency. An insertion in the query relative to the reference is 
-  represented by an orange tick-mark that splits a segment at the location the extra bases would be 
-  inserted. Simultaneous independent insertions in both query and reference look like an insertion 
-  in the reference relative to the target, except that the corresponding adjacency connecting the 
-  two segments is colored orange. More complex structural rearrangements create adjacencies that 
-  connect the sides of non-abutting segments in a natural fashion.</p> 
-  <p> 
-  Pack mode can be used to display a larger number of snake tracks in the limited vertical browser. 
-  This mode eliminates the adjacencies from the display and forces the segments onto as few rows as 
-  possible, given the constraint of still showing duplications in the query sequence.</p> 
-  <p> 
+  rectangles) and adjacencies (lines connecting the segments). Segments represent subsequences of
+  the target genome aligned to the given portion of the reference genome. Adjacencies represent the
+  covalent bonds between the aligned subsequences of the target genome.</p>
+  <p>
+  Red tick-marks within segments represent substitutions with respect to the reference, shown in
+  windows of the reference of (by default) up to 50 Kb. Zoomed in to the base level, these
+  substitutions are labeled with the non-reference base.</p>
+  <p>
+  An insertion in the reference relative to the query creates a gap between abutting segment sides
+  that is connected by an adjacency. An insertion in the query relative to the reference is
+  represented by an orange tick-mark that splits a segment at the location the extra bases would be
+  inserted. Simultaneous independent insertions in both query and reference look like an insertion
+  in the reference relative to the target, except that the corresponding adjacency connecting the
+  two segments is colored orange. More complex structural rearrangements create adjacencies that
+  connect the sides of non-abutting segments in a natural fashion.</p>
+  <p>
+  Pack mode can be used to display a larger number of snake tracks in the limited vertical browser.
+  This mode eliminates the adjacencies from the display and forces the segments onto as few rows as
+  possible, given the constraint of still showing duplications in the query sequence.</p>
+  <p>
   Dense mode further eliminates these duplications so that each snake track is compactly represented
   along just one row.</p>
-  <p> 
-  <strong>Wiggle tracks:</strong> These tracks plot a continuous function along a chromosome. Data 
+  <p>
+  <strong>Wiggle tracks:</strong> These tracks plot a continuous function along a chromosome. Data
   is displayed in windows of a set number of base pairs in width. The score for each window displays
-  as &quot;mountain ranges&quot; The display characteristics vary among the tracks in this group. 
-  See the individual track descriptions for more information on interpreting the display. If the 
-  peak is taller or shorter than what can be shown in the display, it is clipped and colored 
+  as &quot;mountain ranges&quot; The display characteristics vary among the tracks in this group.
+  See the individual track descriptions for more information on interpreting the display. If the
+  peak is taller or shorter than what can be shown in the display, it is clipped and colored
   magenta.</p>
 
 <a name="TRACK_CONT"></a>
 <h3>Annotation track display modes</h3>
 <p>
-Each annotation track within the window may have up to five display modes: 
+Each annotation track within the window may have up to five display modes:
 <p>
 <ul class="gbsNoBullet">
   <li>
   <strong>Hide:</strong> the track is not displayed at all. To hide all the annotation tracks, click
   the <em>hide all</em> button. This mode is useful for restricting the display to only those tracks
-  in which you are interested. For example, someone who is not interested in SNPs or mouse synteny 
-  may want to hide these tracks to reduce track clutter and improve speed. There are a few 
-  annotation tracks that pertain only to one specific chromosome, e.g. Sanger22, Rosetta. In these 
-  cases, the track and its associated controller will be hidden automatically when the track window 
+  in which you are interested. For example, someone who is not interested in SNPs or mouse synteny
+  may want to hide these tracks to reduce track clutter and improve speed. There are a few
+  annotation tracks that pertain only to one specific chromosome, e.g. Sanger22, Rosetta. In these
+  cases, the track and its associated controller will be hidden automatically when the track window
   is not open to the relevant chromosome.</li>
   <li>
-  <strong>Dense:</strong> the track is displayed with all features collapsed into a single line. 
-  This mode is useful for reducing the amount of space used by a track when you don't need 
-  individual line item details or when you just want to get an overall view of an annotation. For 
-  example, by opening an entire chromosome and setting the RefSeq Genes track to dense, you can get 
+  <strong>Dense:</strong> the track is displayed with all features collapsed into a single line.
+  This mode is useful for reducing the amount of space used by a track when you don't need
+  individual line item details or when you just want to get an overall view of an annotation. For
+  example, by opening an entire chromosome and setting the RefSeq Genes track to dense, you can get
   a feel for the known gene density of the chromosome without displaying excessive detail. <br>
   <img src="../../images/dense14_800_gc29.png" width="800px">
   </li>
   <li>
-  <strong>Full:</strong> the track is displayed with each annotation feature on a separate line. It 
-  is recommended that you use this option sparingly, due to the large number of individual track 
-  items that may potentially align at the selected position. For example, hundreds of ESTs might 
-  align with a specified gene. When the number of lines within a requested track location exceeds 
-  250, the track automatically defaults to a more tightly-packed display mode. In this situation, 
-  you can restore the track display to full mode by narrowing the chromosomal range displayed or by 
-  using a track filter to reduce the number of items displayed. On tracks that contain only hide, 
-  dense, and full modes, you can toggle between full and dense display modes by clicking on the 
+  <strong>Full:</strong> the track is displayed with each annotation feature on a separate line. It
+  is recommended that you use this option sparingly, due to the large number of individual track
+  items that may potentially align at the selected position. For example, hundreds of ESTs might
+  align with a specified gene. When the number of lines within a requested track location exceeds
+  250, the track automatically defaults to a more tightly-packed display mode. In this situation,
+  you can restore the track display to full mode by narrowing the chromosomal range displayed or by
+  using a track filter to reduce the number of items displayed. On tracks that contain only hide,
+  dense, and full modes, you can toggle between full and dense display modes by clicking on the
   track's center label.<br>
   <img src="../../images/full14_800_gc29-1.png" width="800px">
   </li>
@@ -447,126 +460,170 @@ Each annotation track within the window may have up to five display modes:
   <strong>Squish:</strong> the track is displayed with each annotation feature shown separately, but
   at 50% the height of full mode. Features are unlabeled, and more than one may be drawn on the same
   line. This mode is useful for reducing the amount of space used by a track when you want to view a
-  large number of individual features and get an overall view of an annotation. It is particularly 
-  good for displaying tracks in which a large number of features align to a particular section of a 
+  large number of individual features and get an overall view of an annotation. It is particularly
+  good for displaying tracks in which a large number of features align to a particular section of a
   chromosome, e.g. EST tracks.<br>
   <img src="../../images/squish14_800_gc29-1.png" width="800px">
   </li>
   <li>
-  <strong>Pack:</strong> the track is displayed with each annotation feature shown separately and 
-  labeled, but not necessarily displayed on a separate line. This mode is useful for reducing the 
-  amount of space used by a track when you want to view the large number of individual features 
-  allowed by squish mode, but need the labeling and display size provided by full mode. When the 
-  number of lines within the requested track location exceeds 250, the track automatically defaults 
-  to squish display mode. In this situation, you can restore the track display to pack mode by 
+  <strong>Pack:</strong> the track is displayed with each annotation feature shown separately and
+  labeled, but not necessarily displayed on a separate line. This mode is useful for reducing the
+  amount of space used by a track when you want to view the large number of individual features
+  allowed by squish mode, but need the labeling and display size provided by full mode. When the
+  number of lines within the requested track location exceeds 250, the track automatically defaults
+  to squish display mode. In this situation, you can restore the track display to pack mode by
   narrowing the chromosomal range displayed or by using a track filter to reduce the number of items
   displayed. To toggle between pack and full display modes, click on the track's center label.<br>
- 
+
   <img src="../../images/pack14_800_gc29-1.png" width="800px" >
   </li>
- 
+
 
 </ul>
 <p>
-The track display controls are grouped into categories that reflect the type of data in the track, 
+The track display controls are grouped into categories that reflect the type of data in the track,
 e.g., Gene Prediction Tracks, mRNA and EST tracks, etc. To change the display mode for a track, find
-the track's controller in the Track Controls section at the bottom of the Genome Browser page, 
+the track's controller in the Track Controls section at the bottom of the Genome Browser page,
 select the desired mode from the control's display menu, and then click the <em>refresh</em> button.
-Alternatively, you can change the display mode by using the Genome Browser's 
-<a href="#RIGHT_CLICK_NAV">right-click navigation</a> feature, or can toggle between dense and full 
-modes for a displayed track (or pack mode when available) by clicking on the optional center label 
+Alternatively, you can change the display mode by using the Genome Browser's
+<a href="#RIGHT_CLICK_NAV">right-click navigation</a> feature, or can toggle between dense and full
+modes for a displayed track (or pack mode when available) by clicking on the optional center label
 for the track.</p>
+
+<a name="duplicate"></a>
+<h3>Duplicating a track</h3>
+<p>
+Tracks that are not inside of composite or supertracks can be duplicated to allow for independent
+track settings for a track. To duplicate a track, go to the track settings page for the track and
+there will be a link, &quot;Duplicate track&quot;, next to the Display mode setting:</p>
+<p class="text-center"><img src="/images/duplicateDisplay.png"></p>
+<p>
+Clicking the link will take you to the new track
+settings page for the duplicate track with the additional text, &quot;(duplicate #1)&quot;. This number
+will increment by one for each additional copy of the track. After creating the copy, a
+&quot;Remove duplicate&quot; link will also appear on the track settings page for when you wish to
+remove the duplicated track. As an example, duplicating the GENCODE track on hg38 allows users to
+have two tracks, one in 'squish' mode and a second track in 'full' mode as a 'density graph'.</p>
+<div class="row">
+  <div class="col-md-6">
+    <p class="text-center"><img src="/images/duplicateTrackUi_GENCODEV43.png" width="550px"></p>
+  </div>
+  <div class="col-md-6">
+    <p class="text-center"><img src="/images/removeDuplicateTrackUi_GENCODEV43.png" width="550px"></p>
+  </div>
+</div>
+<p>
+ Each copy of the track will have it's
+own independent settings to allow for multiple display views without having to revert back to an
+alternate view for the dataset.</p>
+<p class="text-center">
+<img src="/images/duplicationHgTracks_GENCODEV43.png" width="800px">
+</p>
+
 
 <h3>Changing the display mode for a group of tracks</h3>
 <p>
-Track display modes may be set individually or as a group on the Genome Browser Track Configuration 
+Track display modes may be set individually or as a group on the Genome Browser Track Configuration
 page. To access the configuration page, click the <em>configure</em> button on the annotation tracks
-page or the <em>configure tracks and display</em> button on the Gateway page. Exercise caution when 
-using the <em>show all</em> buttons on track groups or assemblies that contain a large number 
-tracks; this may seriously impact the display performance of the Genome Browser or cause your 
+page or the <em>configure tracks and display</em> button on the Gateway page. Exercise caution when
+using the <em>show all</em> buttons on track groups or assemblies that contain a large number
+tracks; this may seriously impact the display performance of the Genome Browser or cause your
 Internet browser to time out.</p>
 
 <h3>Hiding the track display controls</h3>
 <p>
-The entire set of track display controls at the bottom of the annotation tracks page may be hidden 
-from view by checking the <em>Show track controls under main graphic</em> option in the Configure 
+The entire set of track display controls at the bottom of the annotation tracks page may be hidden
+from view by checking the <em>Show track controls under main graphic</em> option in the Configure
 Image section of the Track Configuration page.</p>
 
 <h3>Changing the display of a track by using filters and configuration options</h3>
 <p>
-Some tracks have additional filter and configuration capabilities, e.g., EST tracks, mRNA tracks, 
-NC160, etc. These options let the user modify the color or restrict the data displayed within an 
+Some tracks have additional filter and configuration capabilities, e.g., EST tracks, mRNA tracks,
+NC160, etc. These options let the user modify the color or restrict the data displayed within an
 annotation track. Filters are useful for focusing attention on items relevant to the current task in
-tracks that contain large amounts of data. For example, to highlight ESTs expressed in the liver, 
+tracks that contain large amounts of data. For example, to highlight ESTs expressed in the liver,
 set the EST track filter to display items in a different color when the associated tissue keyword is
-&quot;liver&quot; Configuration options let the user adjust the display to best show the data of 
-interest. For example, the min vertical viewing range value on wiggle tracks can be used to 
-establish a data threshold. By setting the min value to &quot;50&quot;, only data values greater 
-than 50 percent will display.</p>  
+&quot;liver&quot; Configuration options let the user adjust the display to best show the data of
+interest. For example, the min vertical viewing range value on wiggle tracks can be used to
+establish a data threshold. By setting the min value to &quot;50&quot;, only data values greater
+than 50 percent will display.</p>
 <p>
 To access filter and configuration options for a specific annotation track, open the track's
-description page by clicking the label for the track's control menu under the Track Controls 
-section, the mini-button to the left of the displayed track, or the &quot;Configure...&quot; option 
-from the Genome Browser's <a href="#RIGHT_CLICK_NAV">right-click</a> popup menu. The filter and 
-configration section is located at the top of the description page. In most instances, more 
-information about the configuration options is available within the description text or through a 
-special help link located in the configuration section.</p> 
+description page by clicking the label for the track's control menu under the Track Controls
+section, the mini-button to the left of the displayed track, or the &quot;Configure...&quot; option
+from the Genome Browser's <a href="#RIGHT_CLICK_NAV">right-click</a> popup menu. The filter and
+configration section is located at the top of the description page. In most instances, more
+information about the configuration options is available within the description text or through a
+special help link located in the configuration section.</p>
 <p>
-Filter and configuration settings are persistent from session to session on the same web browser. 
-To return the Genome Browser display to the default set of tracks (but retain custom tracks and 
-other configured Genome Browser settings), click the <em>default tracks</em> button on the Genome 
-Browser tracks page. To remove all user configuration settings and custom tracks, and completely 
-restore the defaults, click the &quot;Click here to reset&quot; link on the Genome Browser Gateway 
-page.</p>
+Filter and configuration settings are persistent from session to session on the same web browser.
+To return the Genome Browser display to the default set of tracks (but retain custom tracks and
+other configured Genome Browser settings), click the <em>default tracks</em> button on the Genome
+Browser tracks page. To remove all user configuration settings and custom tracks, and completely
+restore the defaults, click the &quot;Reset All User Settings&quot; under the top blue Genome
+Browser menu.</p>
 
 <h3> Video tutorial on changing track display modes</h3>
-<p><iframe width="560" height="315" src="https://www.youtube.com/embed/jKix2B3hwnw?rel=0" 
+
+<p>
+<!--#if expr="${SERVER_NAME} = /-china/" -->
+    <a href='../../../videos/jKix2B3hwnw.mp4'>
+    <img src=../../images/videoIcon.png></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Visit our <a href="/videos/" target="_blank">Video Page</a>.
+<!--#else -->
+<iframe width="560" height="350" src="https://www.youtube.com/embed/jKix2B3hwnw?rel=0" 
 frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen></iframe></p>
+allowfullscreen></iframe> </p>
+<p> Visit our <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a> for more videos.
+<!--#endif -->
+</p>
+
 
 <a name="NAV"></a>
 <h3>Zooming and scrolling the tracks display</h3>
 <p>
-At times you may want to adjust the amount of flanking region displayed in the annotation tracks 
-window or adjust the scale of the display. At a scale of 1 pixel per base pair, the window 
-accurately displays the width of exons and introns, and indicates the direction of transcription 
-(using arrowheads) for multi-exon features. At a grosser scale, certain features - such as thin 
-exons - may disappear. Also, some exons may falsely appear to fall within RepeatMasker features at 
-some scales.</p> 
+At times you may want to adjust the amount of flanking region displayed in the annotation tracks
+window or adjust the scale of the display. At a scale of 1 pixel per base pair, the window
+accurately displays the width of exons and introns, and indicates the direction of transcription
+(using arrowheads) for multi-exon features. At a grosser scale, certain features - such as thin
+exons - may disappear. Also, some exons may falsely appear to fall within RepeatMasker features at
+some scales.</p>
 <p>
-Click the <em>zoom in</em> and <em>zoom out</em> buttons at the top of the Genome Browser page to 
-zoom in or out on the center of the annotation tracks window by 1.5, 3 or 10-fold. Alternatively, 
+Click the <em>zoom in</em> and <em>zoom out</em> buttons at the top of the Genome Browser page to
+zoom in or out on the center of the annotation tracks window by 1.5, 3 or 10-fold. Alternatively,
 you can zoom in 3-fold on the display by clicking anywhere on the Base Position track. In this case,
-the zoom is centered on the coordinate of the mouse click. To view the base composition of the 
-sequence underlying the current annotation track display, click the <em>base</em> button.</p> 
+the zoom is centered on the coordinate of the mouse click. To view the base composition of the
+sequence underlying the current annotation track display, click the <em>base</em> button.</p>
 <p>
-Quickly zoom to a specific region of interest by using the browser's &quot;drag-and-select&quot; 
-feature. To define the region you wish to zoom to, click and hold the mouse button on one edge of 
-the desired zoom area in the Base Position track, drag the mouse right or left to highlight the 
-selection area, then release the mouse button. A &quot;drag-and-select&quot; popup will appear. 
-Click on the &quot;Zoom In&quot; button to zoom in on the selected region. To disable the 
+Quickly zoom to a specific region of interest by using the browser's &quot;drag-and-select&quot;
+feature. To define the region you wish to zoom to, click and hold the mouse button on one edge of
+the desired zoom area in the Base Position track, drag the mouse right or left to highlight the
+selection area, then release the mouse button. A &quot;drag-and-select&quot; popup will appear.
+Click on the &quot;Zoom In&quot; button to zoom in on the selected region. To disable the
 drag-and-select popup, check the &quot;Don't show this dialog again and always zoom&quot; checkbox.
-To drag-and-select (zoom) on a part of the image other than the Base Position track, depress the 
-shift key before clicking and dragging the mouse. Note that the <em>Enable advanced javascript 
-features</em> option on the Track Configuration page must be toggled on to use this feature.</p> 
+To drag-and-select (zoom) on a part of the image other than the Base Position track, depress the
+shift key before clicking and dragging the mouse. Note that the <em>Enable advanced javascript
+features</em> option on the Track Configuration page must be toggled on to use this feature.</p>
 <p>
-To scroll (pan) the view of the entire tracks image horizontally, click on the image and drag the 
-cursor to the left or right, then release the mouse button, to shift the displayed region in the 
+To scroll (pan) the view of the entire tracks image horizontally, click on the image and drag the
+cursor to the left or right, then release the mouse button, to shift the displayed region in the
 corresponding direction. The view may be scrolled by up to one image width. To scroll the annotation
-tracks horizontally by set increments of 10%, 50%, or 95% of the displayed size (as given in base 
+tracks horizontally by set increments of 10%, 50%, or 95% of the displayed size (as given in base
 pairs), click the corresponding <em>move</em> arrow. It is also possible to scroll the left or right
-side of the tracks by a specified number of vertical gridlines while keeping the position of the 
-opposite side fixed. To do this, click the appropriate <em>move start</em> or <em>move end</em> 
-arrow, located under the annotation tracks window. For example, to keep the left-hand display 
-coordinate fixed but increase the right-hand coordinate, you would click the right-hand <em>move 
-end</em> arrow. To increase or decrease the gridline scroll interval, edit the value in the 
-<em>move start</em> or <em>move end</em> text box.</p> 
+side of the tracks by a specified number of vertical gridlines while keeping the position of the
+opposite side fixed. To do this, click the appropriate <em>move start</em> or <em>move end</em>
+arrow, located under the annotation tracks window. For example, to keep the left-hand display
+coordinate fixed but increase the right-hand coordinate, you would click the right-hand <em>move
+end</em> arrow. To increase or decrease the gridline scroll interval, edit the value in the
+<em>move start</em> or <em>move end</em> text box.</p>
 
 <a name="Highlight"></a>
 <h3>Highlighting a region</h3>
 <p>
 The browser's &quot;drag-and-select&quot; pop-up menu provides options to add single or
-multiple vertical highlights to selected regions, as described below:</p>  
+multiple vertical highlights to selected regions, as described below:</p>
 
 <p>
 Main features in drag-and-select menu:</p>
@@ -613,211 +670,234 @@ In the genome browser, there are also options for right-clicking:</p>
 
 <h3>Changing the displayed track position</h3>
 <p>
-To display a completely different position in the genome, enter the new query in the 
-<em>position/search</em> text box, then click the <em>jump</em> button. For more information on 
+To display a completely different position in the genome, enter the new query in the
+<em>position/search</em> text box, then click the <em>jump</em> button. For more information on
 valid entries for this text box, refer to the <a href="#GetStarted">Getting started</a> section.</p>
 <p>
-If a chromosome image (ideogram) is available above the track display, click anywhere on the 
-chromosome to  move to that position (the current window size will be maintained). Select a region 
-of any size by clicking and dragging in the image. Finally, hold the &quot;control&quot; key while 
+If a chromosome image (ideogram) is available above the track display, click anywhere on the
+chromosome to  move to that position (the current window size will be maintained). Select a region
+of any size by clicking and dragging in the image. Finally, hold the &quot;control&quot; key while
 clicking on a chromosome band to select the entire band.</p>
 
 <h3>Changing the order of the displayed tracks</h3>
 <p>
-To vertically reposition a track in the annotation track window, click-and-hold the mouse button on 
-the side label, then drag the highlighted track up or down within the image. Release the mouse 
+To vertically reposition a track in the annotation track window, click-and-hold the mouse button on
+the side label, then drag the highlighted track up or down within the image. Release the mouse
 button when the track is in the desired position. To move an entire group of associated tracks (such
-as all the displayed subtracks in a composite track), click-and-hold the gray mini-button to the 
+as all the displayed subtracks in a composite track), click-and-hold the gray mini-button to the
 left of the tracks, then drag.</p>
 
 <a name="TRACK_CONFIG"></a>
 <h3>Viewing multiple regions</h3>
 <p>
-To remove intronic or intergenic regions from the display or to view only custom specified regions, 
-click the <em>multi-region</em> button under the track image. For human assemblies hg17 and later, 
-you may also replace a section of the reference genome with an alternate haplotype chromosome in 
-order to view annotations upstream and downstream of the sequence. For more information about the 
+To remove intronic or intergenic regions from the display or to view only custom specified regions,
+click the <em>multi-region</em> button under the track image. For human assemblies hg17 and later,
+you may also replace a section of the reference genome with an alternate haplotype chromosome in
+order to view annotations upstream and downstream of the sequence. For more information about the
 multi-region feature see the <a href="./multiRegionHelp.html">multi-region help</a> page.</p>
 
-<h3>Changing the width of the annotation track window</h3>
+<h3 id="config">Configuration panel</h3>
+<div class="text-center">
+  <a href ="/cgi-bin/hgTracks?hgTracksConfigPage=configure">
+    <img src="../../images/configureMenu.png" alt="Configuration menu options" width="700">
+  </a>
+</div>
+
+<h4>Changing the width of the annotation track window</h4>
 <p>
 The first time the annotation track window is displayed, or after the Genome Browser has been reset,
-the size of the track window is set by default to the width that best fits your Internet browser 
-window. If you horizontally resize the browser window, you can automatically adjust the annotation 
-track image size to the new width by clicking the <em>resize</em> button under the track image. To 
-manually override the default width, enter a new value in the <em>image width</em> text box on the 
+the size of the track window is set by default to the width that best fits your Internet browser
+window. If you horizontally resize the browser window, you can automatically adjust the annotation
+track image size to the new width by clicking the <em>resize</em> button under the track image. To
+manually override the default width, enter a new value in the <em>image width</em> text box on the
 Track Configuration page, then click the <em>submit</em> button. The maximum supported width is 5000
 pixels.</p>
 
-<h3>Changing the width of the label area to the left of the image</h3>
+<h4>Changing the width of the label area to the left of the image</h4>
 <p>
-The item labels (or track label, when viewed in dense mode) are displayed to the left of the 
-annotation image. The width of this area is set to 17 characters by default. To change the width, 
+The item labels (or track label, when viewed in dense mode) are displayed to the left of the
+annotation image. The width of this area is set to 17 characters by default. To change the width,
 edit the value in the <em>label area width</em> text box on the Track Configuration page, then click
 <em>Submit</em>.</p>
 
-<h3>Changing the text size in the annotation track image</h3>
+<h4>Changing the text size, font, in the annotation track image</h4>
 <p>
-The annotation track image may be adjusted to display text in a range of fonts from &quot;tiny&quot;
-to &quot;huge&quot;. To change the size of the text, select an option from the <em>text size</em> 
-pull-down menu on the Track Configuration page, then click <em>Submit</em>. The text size is set to
-&quot;small&quot; by default.</p>
+The annotation track image may be adjusted to display text in a range of fonts from
+AvantGarde, Courier, and Times. To change the size of the text, select an option from
+the <em>text size</em> pull-down menu on the Browser Configuration page, which you can
+find under the top blue &quot;Genome Browser&quot; menu by clicking <a target="_blank"
+href="/cgi-bin/hgTracks?hgTracksConfigPage=configure"><em>Configure</em></a>.
+Once you have made your selection, which can also include <em>style</em> click <em>submit</em>.
+The text size is set to &quot;12&quot; and &quot;Helvetica&quot; by default.</p>
 
-<h3>Hiding the annotation track labels</h3>
+<h4>Hiding the chromosome ideogram</h4>
 <p>
-The track and element labels displayed above and to the left of the tracks in the annotation tracks 
-image may be hidden from view by unchecking the <em>Display track descriptions above each track</em>
-and <em>Display labels to the left of items in tracks</em> boxes, respectively, on the Track 
-Configuration page.</p>
-
-<h3>Hiding the display grid on the annotation tracks image</h3>
-<p>
-The light blue vertical guidelines on the annotation tracks image may be removed by unchecking the 
-<em>Show light blue vertical guidelines</em> box on the Track Configuration page.</p>
-
-<h3>Hiding the chromosome ideogram</h3>
-<p>
-The chromosome ideogram, located just above the annotation tracks image, provides a graphical 
-overview of the features on the selected chromosome, including its bands, the position of the 
-centromere, and an indication of the region currently displayed in the annotation tracks image. To 
-hide the ideogram, uncheck the <em>Display chromosome ideogram above main graphic</em> box on the 
+The chromosome ideogram, located just above the annotation tracks image, provides a graphical
+overview of the features on the selected chromosome, including its bands, the position of the
+centromere, and an indication of the region currently displayed in the annotation tracks image. To
+hide the ideogram, uncheck the <em>Display chromosome ideogram above main graphic</em> box on the
 Tracks Configuration page.</p>
 
-<h3>Enabling item and exon navigation</h3>
+<h4>Hiding the light blue vertical guidelines</h4>
 <p>
-When the <em>Next/previous item navigation</em> configuration option is toggled on, on the Track 
-Configuration page,  gray double-headed arrows display in the Genome Browser tracks image on both 
-sides of the track labels of gene, mRNA and EST tracks (or any standard tracks based on BED, PSL or 
-genePred format). Clicking on the gray arrows shifts the image window toward that end of the 
-chromosome so that the next item in the track is displayed. Similarly, the <em>Next/previous exon 
+The light blue vertical guidelines on the annotation tracks image may be removed by unchecking the
+<em>Show light blue vertical guidelines</em> box on the Track Configuration page.</p>
+
+<h4>Hiding the annotation track labels and description</h4>
+<p>
+The track and element labels displayed above and to the left of the tracks in the annotation tracks
+image may be hidden from view by unchecking the <em>Display track descriptions above each track</em>
+and <em>Display labels to the left of items in tracks</em> boxes, respectively, on the Track
+Configuration page.</p>
+
+<h4 id="nextItem">Enabling next/previous item and exon navigation</h4>
+<div class="text-center">
+  <a href ="/cgi-bin/hgTracks?db=hg38&position=chr10:67,881,992-67,890,592&hideTracks=1&knownGene=pack&omimAvSnp=pack&nextItemArrows=1">
+  <img src="../../images/nextItem.png" alt="Ex. white/gray arrows for next/previous exon/item" width="700"></a>
+  <p class="gbsCaption text-center">Gray arrows jump to the next item,
+  while white arrows advance to the next exon.</p>
+</div>
+<p>
+When the <em>Next/previous item navigation</em> configuration option is toggled on, on the Track
+Configuration page,  gray double-headed arrows display in the Genome Browser tracks image on both
+sides of the track labels of gene, mRNA and EST tracks (or any standard tracks based on BED, PSL or
+genePred format). Clicking on the gray arrows shifts the image window toward that end of the
+chromosome so that the next item in the track is displayed. Similarly, the <em>Next/previous exon
 navigation</em> configuration option displays white double-headed arrows on the end of any item that
-extends off the edge of the current image. Clicking on one of the white arrows shifts the image 
-window to the next exon in the indicated direction, unless the image window interrupts an exon, in 
-which case the window shifts to the edge of the current exon. If the image window happens to be 
-within a 5' or 3' UTR, then clicking the arrows shifts the image window towards the start or end of 
+extends off the edge of the current image. Clicking on one of the white arrows shifts the image
+window to the next exon in the indicated direction, unless the image window interrupts an exon, in
+which case the window shifts to the edge of the current exon. If the image window happens to be
+within a 5' or 3' UTR, then clicking the arrows shifts the image window towards the start or end of
 the next coding region, not the end of the exon.</p>
 
 <a name="RIGHT_CLICK_NAV"></a>
-<h3>Enabling the right-click navigation feature</h3>
+<h3>Using the right-click navigation feature</h3>
 <p>
-Several of the common display and navigation operations offered on the Genome Browser tracks page 
-may be quickly accessed by right-clicking on a feature on the tracks image and selecting an option 
-from the displayed popup menu. Depending on context, the right-click feature allows the user
+Several of the common display and navigation operations offered on the Genome Browser tracks page
+may be quickly accessed by right-clicking on a feature on the tracks image and selecting an option
+from the displayed popup menu.</p>
+<div class="text-center">
+  <a target="_blank" href="/cgi-bin/hgTracks?db=hg38&position=chr21%3A31657975-31667213&hgt.reset=1&hgFind.matches=ENST00000270142.11&knownGene.show.noncoding=0&knownGene.show.spliceVariants=0">
+  <img src="../../images/right_click_example.png" alt="Example right-click to highlight a gene" width="700">
+  </a>
+</div>
+<p>
+Depending on context, the right-click feature allows the user
 to:</p>
+
 <ul>
   <li>
   change the track display mode</li>
   <li>
   zoom in or out to the exact position coordinates of the feature</li>
   <li>
-  open the &quot;Get DNA&quot; window at the feature's coordinates</li>
+  highlight the feature</li>
+  <li>
+  open the &quot;Get DNA for...&quot; link for the feature's coordinates</li>
   <li>
   display details about the feature </li>
   <li>
-  open a popup window to configure the track's display</li>
+  open a popup window to configure the track's display of the feature</li>
   <li>
-  display the entire tracks image in a separate window for inclusion in spreadsheets or other 
-  documents. (Note that the Genome Browser &quot;PDF/PS&quot; described below can also be used to 
-  generate a high-quality annotation tracks image suitable for printing.)</li>
+  display the entire tracks image in a separate window for inclusion in spreadsheets or other
+  documents. The Genome Browser <a href="#print">PDF</a> option under the View menu
+  can also be used to generate a high-quality annotation tracks image suitable for printing.</li>
 </ul>
 <p>
-To use the right-click feature, make sure the <em>Enable advanced javascript features</em> option on
-the Track Configuration page is checked, and configure your internet browser to allow the display of
-popup windows from genome.ucsc.edu. When enabled, the right-click navigation feature replaces the 
-default contextual popup menu typically displayed by the Internet browser when a user right-clicks 
+To use the right-click feature, make sure your internet browser allows the display of
+popup windows from genome.ucsc.edu. When enabled, the right-click navigation feature replaces the
+default contextual popup menu typically displayed by the Internet browser when a user right-clicks
 on the tracks image. A few combinations of the Mozilla Firefox browser on Mac OS do not support the
-right-click menu functionality using secondary click; in these instances, ctrl+left-click must be 
-used to display the menu.</p> 
+right-click menu functionality using secondary click; in these instances, ctrl+left-click must be
+used to display the menu.</p>
 
-<h3>Printing a copy of the annotation track window</h3>
+<h3 id="print">Printing a copy of the annotation track window</h3>
 <p>
-The Genome Browser provides a mechanism for saving a copy of the currently displayed annotation 
-tracks image to a file that can be printed or edited. Images saved in PostScript format can be 
-printed at high resolution and edited by drawing programs such as Adobe Illustrator. This is useful 
-for generating figures intended for publication. Images can also be saved in PDF format for viewing 
-by Adobe Acrobat Reader.</p>  
+The Genome Browser provides a mechanism for saving a copy of the currently displayed annotation
+tracks image to a PDF file that can be printed or edited by drawing programs such as Adobe
+Illustrator or Inkscape. This is useful for generating figures intended for publication.</p>
 <p>
 To print or save the image to a file:
 <ol>
-  <li> 
-  In the blue navigation bar at the top of the screen, from the &quot;View&quot; menu, click the 
-  &quot;PDF/PS&quot; link.</li> 
   <li>
-  Click one of the PDF or EPS links.</li>
+  In the blue navigation bar at the top of the screen, from the &quot;View&quot; menu, click the
+  &quot;PDF&quot; link.</li>
+  <li>
+  Click one of the PDF links.</li>
 </ol>
 <p>
 NOTE: If you have configured your browser image to use one of the larger font sizes, the text in the
-resulting screen shot may not display correctly. If you encounter this problem, reduce the Genome 
-Browser font size using the <a href="#TRACK_CONFIG">Configuration utility</a>, then repeat the 
+resulting screen shot may not display correctly. If you encounter this problem, reduce the Genome
+Browser font size using the <a href="#TRACK_CONFIG">Configuration utility</a>, then repeat the
 save/print process.</p>
 
 <!-- =======BLAT======= -->
 <a name="BLATAlign"></a>
 <h2>Using BLAT alignments</h2>
 <p>
-BLAT (BLAST-Like Alignment Tool) is a very fast sequence alignment tool similar to BLAST. For more 
-information on BLAT's internal scoring schemes and its overall n-mer alignment seed strategy, refer 
-to W. James Kent (2002) <a href="http://www.genome.org/cgi/content/abstract/12/4/656" 
+BLAT (BLAST-Like Alignment Tool) is a very fast sequence alignment tool similar to BLAST. For more
+information on BLAT's internal scoring schemes and its overall n-mer alignment seed strategy, refer
+to W. James Kent (2002) <a href="http://www.genome.org/cgi/content/abstract/12/4/656"
 target="_blank">BLAT - The BLAST-Like Alignment Tool</a>, <em>Genome Res</em> 12:4 656-664.</p>
 <p>
-On DNA queries, BLAT is designed to quickly find sequences with 95% or greater similarity of length 
-25 bases or more. It may miss genomic alignments that are more divergent or shorter than these 
-minimums, although it will find perfect sequence matches of 32 bases and sometimes as few as 22 
-bases. The tool is capable of aligning sequences that contain large introns. On protein queries, 
-BLAT rapidly locates genomic sequences with 80% or greater similarity of length 20 amino acids or 
-more. In general, gene family members that arose within the last 350 million years can generally be 
-detected. More divergent sequences can be aligned to the human genome by using NCBI's BLAST and 
-psi-BLAST, then using BLAT to align the resulting match onto the UCSC genome assembly. In practice 
-DNA Blat works well on primates, and protein Blat works well on land vertebrates.</p> 
+On DNA queries, BLAT is designed to quickly find sequences with 95% or greater similarity of length
+25 bases or more. It may miss genomic alignments that are more divergent or shorter than these
+minimums, although it will find perfect sequence matches of 32 bases and sometimes as few as 22
+bases. The tool is capable of aligning sequences that contain large introns. On protein queries,
+BLAT rapidly locates genomic sequences with 80% or greater similarity of length 20 amino acids or
+more. In general, gene family members that arose within the last 350 million years can generally be
+detected. More divergent sequences can be aligned to the human genome by using NCBI's BLAST and
+psi-BLAST, then using BLAT to align the resulting match onto the UCSC genome assembly. In practice
+DNA Blat works well on primates, and protein Blat works well on land vertebrates.</p>
 <p>
-Some common uses of BLAT include:</p> 
-<ul> 
-  <li> 
+Some common uses of BLAT include:</p>
+<ul>
+  <li>
   finding the genomic coordinates of mRNA or protein within a given assembly</li>
-  <li> 
+  <li>
   determining the exon structure of a gene</li>
   <li>
   displaying a coding region within a full-length gene</li>
   <li>
   isolating an EST of special interest as its own track</li>
-  <li> 
+  <li>
   searching for gene family members</li>
   <li>
   finding human homologs of a query from another species</li>
   <li>
   finding homologs of a query in all species hosted on the UCSC Genome Browser</li>
-  
+
 </ul>	
 	
 <h3>Making a BLAT query</h3>
 <p>
-To locate a nucleotide or protein within a genome using BLAT:</p> 
-<ol> 
-  <li> 
-  Open the <a href="../../cgi-bin/hgBlat?command=start" target="_blank">BLAT Search Genome page</a> 
+To locate a nucleotide or protein within a genome using BLAT:</p>
+<ol>
+  <li>
+  Open the <a href="../../cgi-bin/hgBlat?command=start" target="_blank">BLAT Search Genome page</a>
   by clicking on the &quot;Tools&quot; pulldown in the top blue menu bar of the Genome Browser.</li>
-  <li> 
-  <b>Blat a single genome</b> &ndash; Select the genome, assembly, query type, output sort order, and 
-   output type. To order the search 
-  results based on the closeness of the sequence match, choose one of the score options in the 
-  <em>Sort output</em> menu. The score is determined by the number of matches vs. mismatches in the 
+  <li>
+  <b>Blat a single genome</b> &ndash; Select the genome, assembly, query type, output sort order, and
+   output type. To order the search
+  results based on the closeness of the sequence match, choose one of the score options in the
+  <em>Sort output</em> menu. The score is determined by the number of matches vs. mismatches in the
   final alignment of the query to the genome. <br/>
- <b>Blat ALL genomes</b> &ndash; The "Search ALL" 
+ <b>Blat ALL genomes</b> &ndash; The "Search ALL"
  checkbox above the Genome drop-down list allows you to search
- the genomes of the default assemblies for all of our organisms. This shows you an ordered list of 
+ the genomes of the default assemblies for all of our organisms. This shows you an ordered list of
 the default assemblies having the greatest similarity with your query sequence. Additionally, the
 <em>Search ALL</em> feature searches any attached hubs' blat servers, meaning you can search
-your user-generated assembly hubs.  </li>  
-  <li> 
-  If the sequence to be uploaded is in an unformatted plain text file, enter the file name in the 
-  <em>Upload sequence</em> text box, then click the <em>submit file</em> button. Otherwise, paste 
-  the sequence or fasta-formatted list into the large edit box, and then click the <em>submit</em> 
+your user-generated assembly hubs.  </li>
+  <li>
+  If the sequence to be uploaded is in an unformatted plain text file, enter the file name in the
+  <em>Upload sequence</em> text box, then click the <em>submit file</em> button. Otherwise, paste
+  the sequence or fasta-formatted list into the large edit box, and then click the <em>submit</em>
   button. Input sequence can be obtained from the Genome Browser as well as from a custom annotation
   track.</li>
-</ol> 
+</ol>
 <p>
-Header lines may be included in the input text if they are preceded by > and contain unique names. 
-Multiple sequences may be submitted at the same time if they are of the same type and are preceded 
+Header lines may be included in the input text if they are preceded by > and contain unique names.
+Multiple sequences may be submitted at the same time if they are of the same type and are preceded
 by unique header lines. Numbers, spaces, and extraneous characters are ignored:</p>
 <pre><code>>sequence_1
 ATGCAGAGCAAGGTGCTGCTGGCCGTCGCCCTGTGGCTCTGCGTGGAGAC
@@ -832,280 +912,280 @@ CGCGGCGTCCCCGCTCCTGCTGCTGCTGCTGCTGCTCGCCTGGTGCGCGG
 
 <h3>BLAT limitations</h3>
 <p>
-DNA input sequences are limited to a maximum length of 25,000 bases. Protein or translated input 
-sequences must not exceed 10,000 letters. As many as 25 multiple sequences may be submitted at the 
-same time. The maximum combined length of DNA input for multiple sequence submissions is 50,000 
-bases (with a 25,000 base limit per individual sequence). For protein or translated input, the 
-maximum combined input length is 25,000 letters (with a 5000 letter limit per individual 
-sequence).</p> 
+DNA input sequences are limited to a maximum length of 25,000 bases. Protein or translated input
+sequences must not exceed 10,000 letters. As many as 25 multiple sequences may be submitted at the
+same time. The maximum combined length of DNA input for multiple sequence submissions is 50,000
+bases (with a 25,000 base limit per individual sequence). For protein or translated input, the
+maximum combined input length is 25,000 letters (with a 5000 letter limit per individual
+sequence).</p>
 <p>
-NOTE: Program-driven BLAT use is limited to a maximum of one hit every 15 seconds and no more than 
+NOTE: Program-driven BLAT use is limited to a maximum of one hit every 15 seconds and no more than
 5000 hits per day.</p>
 
 <h3>BLAT query search results</h3>
 <p>
-If a query returns successfully, BLAT will display a flat database file that summarizes the 
-alignments found. A BLAT query often generates multiple hits. This can happen when the genome 
-contains multiple copies of a sequence, paralogs, pseudogenes, statistical coincidences, 
-artifactual assembly duplications, or when the query itself contains repeats or common 
-retrotransposons. When too many hits occur, try resubmitting the query sequence after filtering in 
-slow mode with RepeatMasker.</p> 
+If a query returns successfully, BLAT will display a flat database file that summarizes the
+alignments found. A BLAT query often generates multiple hits. This can happen when the genome
+contains multiple copies of a sequence, paralogs, pseudogenes, statistical coincidences,
+artifactual assembly duplications, or when the query itself contains repeats or common
+retrotransposons. When too many hits occur, try resubmitting the query sequence after filtering in
+slow mode with RepeatMasker.</p>
 <p>
-Items in the search results list are ordered by the criteria specified in the <em>Sort output</em> 
-menu. Each line item provides links to view the details of the sequence alignment or to open the 
-corresponding view in the Genome Browser. The <em>details</em> link gives the letter-by-letter 
+Items in the search results list are ordered by the criteria specified in the <em>Sort output</em>
+menu. Each line item provides links to view the details of the sequence alignment or to open the
+corresponding view in the Genome Browser. The <em>details</em> link gives the letter-by-letter
 alignment of the sequence to the genome. It is recommended that you first examine the details of the
-alignment for match quality before viewing the sequence in the Genome Browser.</p> 
+alignment for match quality before viewing the sequence in the Genome Browser.</p>
 <p>
 When several nearby BLAT matches occur on a single chromosome, a simple trick can be used to quickly
-adjust the Genome Browser track window to display all of them: open the Genome Browser with the 
-match that has the lowest chromosome start coordinate, paste in the highest chromosome end 
-coordinate from the list of matches, then click the <em>jump</em> button. 
+adjust the Genome Browser track window to display all of them: open the Genome Browser with the
+match that has the lowest chromosome start coordinate, paste in the highest chromosome end
+coordinate from the list of matches, then click the <em>jump</em> button.
 
 <h3>Creating a custom annotation track from BLAT output</h3>
 <p>
-To make a custom track directly from BLAT, select the 
+To make a custom track directly from BLAT, select the
 <a href="../../FAQ/FAQformat.html#format2">PSL format</a> output option. The resulting PSL track can
 be uploaded into the Genome Browser by pasting the data into the data text box on the Genome Browser
-<a href="../../cgi-bin/hgCustom?">Add Custom Tracks</a> page, accessed via the &quot;add custom 
-tracks&quot; button on the Browser gateway and annotation tracks pages. See the 
+<a href="../../cgi-bin/hgCustom?">Add Custom Tracks</a> page, accessed via the &quot;add custom
+tracks&quot; button on the Browser gateway and annotation tracks pages. See the
 <a href="#CustomTracks">Creating custom annotation tracks</a> section for more information.</p>
 
 
 <h3>Using BLAT for large batch jobs or commercial use</h3>
 <p>
-For large batch jobs or internal parameter changes, it is best to install command line BLAT on your 
-own Linux server. Sources and executables are free for academic, personal, and non-profit purposes. 
+For large batch jobs or internal parameter changes, it is best to install command line BLAT on your
+own Linux server. Sources and executables are free for academic, personal, and non-profit purposes.
 BLAT source may be downloaded from <a href="https://genome-test.gi.ucsc.edu/~kent/src/"
-target="_blank">https://genome-test.gi.ucsc.edu/~kent/src/</a> 
-(look for the <em>blatSrc*.zip</em> file with the 
-most recent date). For BLAT executables, go to <a href="http://genome-test.soe.ucsc.edu/~kent/exe/" 
-target="_blank">http://genome-test.soe.ucsc.edu/~kent/exe/</a>; binaries are sorted by platform. 
-Non-exclusive commercial licenses are available from the <a href="http://www.kentinformatics.com/" 
-target="_blank">Kent Informatics</a> website.</p>  
+target="_blank">https://genome-test.gi.ucsc.edu/~kent/src/</a>
+(look for the <em>blatSrc*.zip</em> file with the
+most recent date). For BLAT executables, go to <a href="http://genome-test.soe.ucsc.edu/~kent/exe/"
+target="_blank">http://genome-test.soe.ucsc.edu/~kent/exe/</a>; binaries are sorted by platform.
+Non-exclusive commercial licenses are available from the <a href="http://www.kentinformatics.com/"
+target="_blank">Kent Informatics</a> website.</p>
 
 <h3>BLAT documentation</h3>
 <p>
-For more information on the BLAT suite of programs, see the <a href="blatSpec.html">BLAT Program 
-Specifications</a> and the <a href="../../FAQ/FAQblat.html">Blat section</a> of the Genome 
+For more information on the BLAT suite of programs, see the <a href="blatSpec.html">BLAT Program
+Specifications</a> and the <a href="../../FAQ/FAQblat.html">Blat section</a> of the Genome
 Browser FAQ.</p>
 
 <a name="IndivTracks"></a>
 <h2>Annotation track descriptions</h2>
 <p>
-Detailed information about an individual annotation track, including display characteristics, 
-configuration information, and associated database tables, may be obtained from the track 
-description page accessed by clicking the mini-button to the left of the displayed track in the 
-Genome Browser, or by selecting the &quot;Open details...&quot; or &quot;Show details...&quot; 
-option from the Genome Browser's <a href="#RIGHT_CLICK_NAV">right-click</a> menu. Click the 
-&quot;View table schema&quot; link on the track description page to display additional information 
-about the primary database table underlying the track. Table schema information may also be accessed
-via the &quot;describe table schema&quot; button in the <a href="#TableBrowser">Table Browser</a>. 
-For more information on configuring and using the tracks displayed in the Genome Browser track 
-window, see the section <a href="#FineTuning">Interpreting and Fine-tuning the Genome Browser 
+Detailed information about an individual annotation track, including display characteristics,
+configuration information, and associated database tables, may be obtained from the track
+description page accessed by clicking the mini-button to the left of the displayed track in the
+Genome Browser, or by selecting the &quot;Open details...&quot; or &quot;Show details...&quot;
+option from the Genome Browser's <a href="#RIGHT_CLICK_NAV">right-click</a> menu. Click the
+&quot;View data format description&quot; link on the track description page to display additional information
+about the primary database table underlying the track. Data format information may also be accessed
+via the &quot;data format description&quot; button in the <a href="#TableBrowser">Table Browser</a>.
+For more information on configuring and using the tracks displayed in the Genome Browser track
+window, see the section <a href="#FineTuning">Interpreting and Fine-tuning the Genome Browser
 display</a>.</p>
 
 <h3>Tips for viewing annotation track data</h3>
-<ul> 
+<ul>
   <li>
-  To display a description page with more information about the track, click on the mini-button to 
-  the left of a track.</li> 
+  To display a description page with more information about the track, click on the mini-button to
+  the left of a track.</li>
   <li>
   To display a details page with additional information about a specific line item within a track in
   full display mode, click on the item or its label.</li>
   <li>
-  A track does not appear in the browser if its display mode is set to <em>hide</em>. To restrict 
+  A track does not appear in the browser if its display mode is set to <em>hide</em>. To restrict
   the browser's display to only those tracks in which you're interested, set the display mode of the
   unwanted tracks to <em>hide</em>.</li>
-  <li> 
-  A track set to <em>full</em> display mode will default to a more tightly packed display mode if 
-  the total number of lines in the track exceeds 250.</li> 
   <li>
-  To quickly toggle between <em>full</em> and <em>dense</em> or <em>pack</em> display modes, click 
+  A track set to <em>full</em> display mode will default to a more tightly packed display mode if
+  the total number of lines in the track exceeds 250.</li>
+  <li>
+  To quickly toggle between <em>full</em> and <em>dense</em> or <em>pack</em> display modes, click
   on the track's center label.</li>
-  <li> 
-  Only the most recent assemblies are fully active. The data for older assemblies may be available 
-  on our <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a> 
+  <li>
+  Only the most recent assemblies are fully active. The data for older assemblies may be available
+  on our <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a>
   page.</li>
-  <li> 
-  Not all tracks appear in all assemblies. Only a basic set of tracks appears initially in a new 
+  <li>
+  Not all tracks appear in all assemblies. Only a basic set of tracks appears initially in a new
   assembly.</li>
-  <li> 
+  <li>
   Track data can be viewed as text tables using the <a href="#TableBrowser">Table Browser</a>.</li>
-  <li> 
+  <li>
   <a href="../credits.html" target="_blank">Credit</a> goes to many individuals and institutions for
-  generously contributing the tracks. For specific information about the contributors of a given 
+  generously contributing the tracks. For specific information about the contributors of a given
   track, look at the Credits section on a track's description page.</li>
-</ul> 
+</ul>
 
 <a name="TableBrowser"></a>
 <h2>Getting started on the Table Browser</h2>
 <p>
-The <a href="../../cgi-bin/hgTables" target="_blank">Table Browser</a> provides text-based access 
-to the genome assemblies and annotation data stored in the Genome Browser database. As a flexible 
-alternative to the graphical-based Genome Browser, this tool offers an enhanced level of query 
-support that includes restrictions based on field values, free-form SQL queries, and combined 
-queries on multiple tables. Output can be filtered to restrict the fields and lines returned, and 
-may be organized into one of several formats, including a simple tab-delimited file that can be 
-loaded into a spreadsheet or database as well as advanced formats that may be uploaded into the 
-Genome Browser as custom annotation tracks. The Table Browser provides a convenient alternative to 
-downloading and manipulating the entire genome and its massive data tracks. (See the 
-<a href="#Download">Downloading Genome Data</a> section.)</p> 
+The <a href="../../cgi-bin/hgTables" target="_blank">Table Browser</a> provides text-based access
+to the genome assemblies and annotation data stored in the Genome Browser database. As a flexible
+alternative to the graphical-based Genome Browser, this tool offers an enhanced level of query
+support that includes restrictions based on field values, free-form SQL queries, and combined
+queries on multiple tables. Output can be filtered to restrict the fields and lines returned, and
+may be organized into one of several formats, including a simple tab-delimited file that can be
+loaded into a spreadsheet or database as well as advanced formats that may be uploaded into the
+Genome Browser as custom annotation tracks. The Table Browser provides a convenient alternative to
+downloading and manipulating the entire genome and its massive data tracks. (See the
+<a href="#Download">Downloading Genome Data</a> section.)</p>
 <p>
-For information on using the Table Browser features, refer to the 
+For information on using the Table Browser features, refer to the
 <a href="hgTablesHelp.html">Table Browser User Guide</a>.</p>
 
 <a name="Sessions"></a>
 <h2>Getting started using Sessions</h2>
 <p>
-The <a href="../../cgi-bin/hgSession" target="_blank">Sessions tool</a> allows users to configure 
+The <a href="../../cgi-bin/hgSession" target="_blank">Sessions tool</a> allows users to configure
 their browsers with specific track combinations, including custom tracks, and save the configuration
-options. Multiple sessions may be saved for future reference, for comparison of scenarios or for 
+options. Multiple sessions may be saved for future reference, for comparison of scenarios or for
 sharing with colleagues. Saved sessions  <A href="hgSessionHelp.html#Lifespan">will not be expired</a>,
 however we still recommend that you keep local back-ups of your session contents and any associated
-custom tracks. <a href="/goldenPath/help/hgSessionHelp.html#CTs">User-generated tracks</a> can be saved 
+custom tracks. <a href="/goldenPath/help/hgSessionHelp.html#CTs">User-generated tracks</a> can be saved
 within sessions.</p>
 <p>
-This tool may be accessed by clicking the &quot;My Data&quot; pulldown in the top blue navigation 
-bar in any assembly and then selecting <strong>Sessions</strong>. To ensure privacy and security, 
-you must <a href="../../cgi-bin/hgSession" target="_blank">create an account</a> and/or 
-<a href="../../cgi-bin/hgSession" target="_blank">log in</a> to use the	Session tool. Individual 
-sessions may be designated by the user as either &quot;shared&quot; or &quot;non-shared&quot; to 
-protect the privacy of confidential data. To avoid having a new shared session from someone else 
-override existing Genome Browser settings, users are encouraged to open a new web-browser instance 
+This tool may be accessed by clicking the &quot;My Data&quot; pulldown in the top blue navigation
+bar in any assembly and then selecting <strong>Sessions</strong>. To ensure privacy and security,
+you must <a href="../../cgi-bin/hgSession" target="_blank">create an account</a> and/or
+<a href="../../cgi-bin/hgSession" target="_blank">log in</a> to use the	Session tool. Individual
+sessions may be designated by the user as either &quot;shared&quot; or &quot;non-shared&quot; to
+protect the privacy of confidential data. To avoid having a new shared session from someone else
+override existing Genome Browser settings, users are encouraged to open a new web-browser instance
 or to save existing settings in a session before loading a new shared session.</p>
 <p>
-For more detailed information on using the Session tool, see the 
-<a href="hgSessionHelp.html">Sessions User Guide</a>.</p> 
+For more detailed information on using the Session tool, see the
+<a href="hgSessionHelp.html">Sessions User Guide</a>.</p>
 
 <a name="GenomeGraphs"></a>
 <h2>Getting started on Genome Graphs</h2>
 <p>
-The <a href="../../cgi-bin/hgGenome" target="_blank">Genome Graphs</a> tool can be used to display 
-genome-wide data sets such as the results of genome-wide SNP association studies, linkage studies, 
-and homozygosity mapping. This tool is not pre-loaded with any sample data; instead, you can upload 
+The <a href="../../cgi-bin/hgGenome" target="_blank">Genome Graphs</a> tool can be used to display
+genome-wide data sets such as the results of genome-wide SNP association studies, linkage studies,
+and homozygosity mapping. This tool is not pre-loaded with any sample data; instead, you can upload
 your own data for display by the tool.</p>
 <p>
-Once you have uploaded your data, you can view it in a variety of ways. You can view multiple sets 
-of genome-wide data simultaneously either as superimposed graphs or side-by-side graphs. Once you 
-see an area of interest in the Genome Graphs view, you can click on it to go directly to the Genome 
-Browser at that position. You can also set a significance threshold for your data and view only 
+Once you have uploaded your data, you can view it in a variety of ways. You can view multiple sets
+of genome-wide data simultaneously either as superimposed graphs or side-by-side graphs. Once you
+see an area of interest in the Genome Graphs view, you can click on it to go directly to the Genome
+Browser at that position. You can also set a significance threshold for your data and view only
 regions or gene sets that meet that threshold.</p>
 <p>
-For information on using the Genome Graphs features, refer to the 
-<a href="hgGenomeHelp.html">Genome Graphs User Guide</a>.</p> 
+For information on using the Genome Graphs features, refer to the
+<a href="hgGenomeHelp.html">Genome Graphs User Guide</a>.</p>
 
 <a name="VisiGeneHelp"></a>
 <h2>Using the VisiGene Image Browser</h2>
 <p>
 <a href="../../cgi-bin/hgVisiGene">VisiGene</a> is a browser for viewing <em>in situ</em> images. It
-enables the user to examine cell-by-cell as well as tissue-by-tissue expression patterns. The 
-browser serves as a virtual microscope, allowing users to retrieve images that meet specific search 
+enables the user to examine cell-by-cell as well as tissue-by-tissue expression patterns. The
+browser serves as a virtual microscope, allowing users to retrieve images that meet specific search
 criteria, then interactively zoom and scroll across the collection.</p>
 <p>
-To start the VisiGene browser, click the VisiGene link in the left-hand sidebar menu on the 
+To start the VisiGene browser, click the VisiGene link in the left-hand sidebar menu on the
 <a href="../../index.html">Genome Browser</a> home page.</p>
 
 <h3>Images Available</h3>
 <p>
-The following image collections are currently available for browsing:</p> 
+The following image collections are currently available for browsing:</p>
 <ul>
   <li>
-  High-quality high-resolution images of eight-week-old male mouse sagittal brain slices with 
-  reverse-complemented mRNA hybridization probes from the <a href="http://brain-map.org/" 
-  target="_blank">Allen Brain Atlas</a>, courtesy of the <a href="http://www.alleninstitute.org/" 
-  target="_blank">Allen Institute for Brain Science</a></li> 
+  High-quality high-resolution images of eight-week-old male mouse sagittal brain slices with
+  reverse-complemented mRNA hybridization probes from the <a href="http://brain-map.org/"
+  target="_blank">Allen Brain Atlas</a>, courtesy of the <a href="http://www.alleninstitute.org/"
+  target="_blank">Allen Institute for Brain Science</a></li>
   <li>
-  Mouse <em>in situ</em> images from the <a href="http://www.informatics.jax.org/expression.shtml" 
-  target="_blank">Jackson Lab Gene Expression Database</a> (GXD) at MGI</li> 
+  Mouse <em>in situ</em> images from the <a href="http://www.informatics.jax.org/expression.shtml"
+  target="_blank">Jackson Lab Gene Expression Database</a> (GXD) at MGI</li>
   <li>
   Transcription factors in mouse embryos from the Mahoney Center for Neuro-Oncology</li>
   <li>
-  Mouse head and brain <em>in situ</em> images from NCBI's 
-  <a href="https://www.ncbi.nlm.nih.gov/projects/gensat/" target="_blank">Gene Expression Nervous 
+  Mouse head and brain <em>in situ</em> images from NCBI's
+  <a href="https://www.ncbi.nlm.nih.gov/projects/gensat/" target="_blank">Gene Expression Nervous
   System Atlas</a> (GENSAT) database</li>
   <li>
-  <em>Xenopus laevis in situ</em> images from the <a href="http://www.nibb.ac.jp/en/" 
-  target="_blank">National Institute for Basic Biology</a> (NIBB) XDB project</li> 
+  <em>Xenopus laevis in situ</em> images from the <a href="http://www.nibb.ac.jp/en/"
+  target="_blank">National Institute for Basic Biology</a> (NIBB) XDB project</li>
 </ul>
 
 <h3>Searching the Image Database</h3>
 <p>
-The image database may be searched by gene symbols, authors, years of publication, body parts, 
-GenBank or UniProtKB accessions, organisms, 
-<a href="http://www.emouseatlas.org/emap/ema/theiler_stages/StageDefinition/stagedefinition.html" 
-target="_blank">Theiler stages</a> (mice), and <a href="http://www.xenbase.org/anatomy/alldev.do" 
-target="_blank">Nieuwkoop/Faber stages</a> (frogs). The search returns only those images that match 
+The image database may be searched by gene symbols, authors, years of publication, body parts,
+GenBank or UniProtKB accessions, organisms,
+<a href="http://www.emouseatlas.org/emap/ema/theiler_stages/StageDefinition/stagedefinition.html"
+target="_blank">Theiler stages</a> (mice), and <a href="http://www.xenbase.org/anatomy/alldev.do"
+target="_blank">Nieuwkoop/Faber stages</a> (frogs). The search returns only those images that match
 all the specified criteria. For a list of sample search strings, see the VisiGene Gateway page.</p>
 <p>
-The wildcard characters * and ? are supported for gene name searches. For example, to view the 
-images of all genes in the Hox A cluster, search for <em>hoxa*</em>. When searching on author names 
+The wildcard characters * and ? are supported for gene name searches. For example, to view the
+images of all genes in the Hox A cluster, search for <em>hoxa*</em>. When searching on author names
 that include initials, use the format <em>Smith AJ</em>.</p>
 
 <h3>Image Navigation</h3>
 <p>
-Following a successful search, VisiGene displays a list of thumbnails of images matching the search 
-criteria in the lefthand pane of the browser. By default, the image corresponding to the first 
-thumbnail in the list is displayed in the main image pane. If more than 25 images meet the search 
-criteria, links at the bottom of the thumbnail pane allow the user to toggle among pages of search 
+Following a successful search, VisiGene displays a list of thumbnails of images matching the search
+criteria in the lefthand pane of the browser. By default, the image corresponding to the first
+thumbnail in the list is displayed in the main image pane. If more than 25 images meet the search
+criteria, links at the bottom of the thumbnail pane allow the user to toggle among pages of search
 results. To display a different image in the main browser pane, click the thumbnail of the image you
 wish to view. </p>
 <p>
-By default, an image is displayed at a resolution that provides optimal viewing of the overall 
-image. This size varies among images. The image may be zoomed in or out, sized to match the 
-resolution of the original image or best fit the image display window, and moved or scrolled in any 
+By default, an image is displayed at a resolution that provides optimal viewing of the overall
+image. This size varies among images. The image may be zoomed in or out, sized to match the
+resolution of the original image or best fit the image display window, and moved or scrolled in any
 direction to focus on areas of interest. The original full-sized image may also be downloaded.</p>
 <p>
-<strong>Zooming in:</strong> To enlarge the image by 2X, click the Zoom <em>in</em> button above 
-the image or click on the image using the left mouse button. Alternatively, the + key may be used 
+<strong>Zooming in:</strong> To enlarge the image by 2X, click the Zoom <em>in</em> button above
+the image or click on the image using the left mouse button. Alternatively, the + key may be used
 to zoom in when the main image pane is the active window.</p>
 <p>
-<strong>Zooming out:</strong> To reduce the image by 2X, click the Zoom <em>out</em> button above 
-the image or click on the image using the right mouse button. Alternatively, the - key may be used 
-to zoom out when the main image pane is the active window. </p> 
+<strong>Zooming out:</strong> To reduce the image by 2X, click the Zoom <em>out</em> button above
+the image or click on the image using the right mouse button. Alternatively, the - key may be used
+to zoom out when the main image pane is the active window. </p>
 <p>
-<strong>Sizing to full resolution:</strong> Click the Zoom <em>full</em> button above the image to 
-resize the image such that each pixel on the screen corresponds to a pixel in the digitized 
-image.</p> 
+<strong>Sizing to full resolution:</strong> Click the Zoom <em>full</em> button above the image to
+resize the image such that each pixel on the screen corresponds to a pixel in the digitized
+image.</p>
 <p>
-<strong>Sizing to best fit:</strong> Click the Zoom <em>fit</em> button above the image to zoom the 
-image to the size that best fits the main image pane.</p> 
+<strong>Sizing to best fit:</strong> Click the Zoom <em>fit</em> button above the image to zoom the
+image to the size that best fits the main image pane.</p>
 <p>
-<strong>Moving the image:</strong> To move the image viewing area in any direction, click and drag 
-the image using the mouse. Alternatively, the following keyboard shortcuts may be used after 
-clicking on the image: 
+<strong>Moving the image:</strong> To move the image viewing area in any direction, click and drag
+the image using the mouse. Alternatively, the following keyboard shortcuts may be used after
+clicking on the image:
 <ul>
   <li>
-  <strong>Scroll left in the image:</strong> Left-arrow key or <em>Home</em> key</li> 
+  <strong>Scroll left in the image:</strong> Left-arrow key or <em>Home</em> key</li>
   <li>
-  <strong>Scroll right in the image:</strong> Right-arrow key or <em>End</em> key</li> 
+  <strong>Scroll right in the image:</strong> Right-arrow key or <em>End</em> key</li>
   <li>
-  <strong>Scroll up in the image:</strong> Up-arrow key or <em>PgUp</em> key</li> 
+  <strong>Scroll up in the image:</strong> Up-arrow key or <em>PgUp</em> key</li>
   <li>
-  <strong>Scroll down in the image:</strong> Down-arrow key or <em>PgDn</em> key</li> 
+  <strong>Scroll down in the image:</strong> Down-arrow key or <em>PgDn</em> key</li>
 </ul>
 <p>
-<strong>Downloading the original full-sized image:</strong> Most images may be viewed in their 
-original full-sized format by clicking the &quot;download&quot; link at the bottom of the image 
-caption. NOTE: due to the large size of some images, this action may take a long time and could 
+<strong>Downloading the original full-sized image:</strong> Most images may be viewed in their
+original full-sized format by clicking the &quot;download&quot; link at the bottom of the image
+caption. NOTE: due to the large size of some images, this action may take a long time and could
 potentially exceed the capabilities of some Internet browsers.</p>
 <p>
-If you have an image set you would like to contribute for display in the VisiGene Browser, contact 
+If you have an image set you would like to contribute for display in the VisiGene Browser, contact
 <a href="mailto:kent@soe.ucsc.edu">Jim Kent</a>.</p>
 
 <a name="TrackFormatDNA"></a>
 <h2>DNA text formatting</h2>
 <p>
-The Genome Browser provides a feature to configure the retrieval, formatting, and coloring of the 
-text used to depict the DNA sequence underlying the features in the displayed annotation tracks 
-window. Retrieval options allow the user to add a padding of extra bases to the upstream or 
-downstream end of the sequence. Formatting options range from simply displaying exons in upper case 
-to elaborately marking up a sequence according to multiple track data. The DNA sequence covered by 
+The Genome Browser provides a feature to configure the retrieval, formatting, and coloring of the
+text used to depict the DNA sequence underlying the features in the displayed annotation tracks
+window. Retrieval options allow the user to add a padding of extra bases to the upstream or
+downstream end of the sequence. Formatting options range from simply displaying exons in upper case
+to elaborately marking up a sequence according to multiple track data. The DNA sequence covered by
 various tracks can be highlighted by case, underlining, bold or italic fonts, and color.</p>
 <p>
 The DNA display configuration feature can be useful to highlight features within a genomic sequence,
 point out overlaps between two types of features (for example, known genes vs. gene predictions), or
-mask out unwanted features.</p>  
+mask out unwanted features.</p>
 
 <h3>Using the DNA text formatting feature</h3>
 <p>
@@ -1113,143 +1193,202 @@ To access the feature, click on the &quot;View&quot; pulldown on the top blue me
 Browser page and select &quot;DNA&quot;, or select the &quot;Get DNA...&quot; option from the Genome
 Browser's <a href="#RIGHT_CLICK_NAV">right-click</a> menu depending on context. &quot;The Get DNA in
 Window&quot; page that appears contains sections for configuring the retrieval and output
-format.</p> 
+format.</p>
 <p>
-To display extra bases upstream of the 5' end of your sequence or downstream of the 3' end of the 
-sequence, enter the number of bases in the corresponding text box. This option is useful in looking 
+To display extra bases upstream of the 5' end of your sequence or downstream of the 3' end of the
+sequence, enter the number of bases in the corresponding text box. This option is useful in looking
 for regulatory regions.</p>
 <p>
-The Sequence Formatting section lists several options for adjusting the case of all or part of the 
-DNA sequence. To choose one of these formats, click the corresponding option button, then click the 
-<em>get DNA</em> button. To access a table of extended formatting options, click the <em>Extended 
-case/color options</em> button.</p> 
+The Sequence Formatting section lists several options for adjusting the case of all or part of the
+DNA sequence. To choose one of these formats, click the corresponding option button, then click the
+<em>get DNA</em> button. To access a table of extended formatting options, click the <em>Extended
+case/color options</em> button.</p>
 <p>
-The Extended DNA Case/Color page presents a table with many more format options. The page provides 
-instructions for using the formatting table, as well as examples of its use. The list of tracks in 
-the Track Name column is automatically generated from the list of tracks available on the current 
+The Extended DNA Case/Color page presents a table with many more format options. The page provides
+instructions for using the formatting table, as well as examples of its use. The list of tracks in
+the Track Name column is automatically generated from the list of tracks available on the current
 genome.</p>
 
 <h3>Tips for Use</h3>
 <p>
-A few caveats mentioned on the Extended DNA Case/Color page bear repeating. Keep the formatting 
-simple at first: it is easy to make a display that is pretty to look at but is also completely 
-cryptic. Also, be careful when requesting complex formatting for a large chromosomal region: when 
-all the HTML tags have been added to the output page, the file size may exceed the size limits that 
-your Internet browser, clipboard, and other software can safely display. The maximum size of genome 
+A few caveats mentioned on the Extended DNA Case/Color page bear repeating. Keep the formatting
+simple at first: it is easy to make a display that is pretty to look at but is also completely
+cryptic. Also, be careful when requesting complex formatting for a large chromosomal region: when
+all the HTML tags have been added to the output page, the file size may exceed the size limits that
+your Internet browser, clipboard, and other software can safely display. The maximum size of genome
 that can be formatted by the tool is approximately 10 Mbp.</p>
 
 <a name="Convert"></a>
 <h2>Converting data between assemblies</h2>
 <p>
-Coordinates of features frequently change from one assembly to the next as gaps are closed, strand 
-orientations are corrected, and duplications are reduced. Occasionally, a chunk of sequence may be 
-moved to an entirely different chromosome as the map is refined. There are three different methods 
-available for migrating data from one assembly to another: BLAT alignment, coordinate conversion, 
-and coordinate lifting. The BLAT alignment tool is described in the section 
-<a href="#BLATAlign">Using BLAT alignments</a>.</p>  
+Coordinates of features frequently change from one assembly to the next as gaps are closed, strand
+orientations are corrected, and duplications are reduced. Occasionally, a chunk of sequence may be
+moved to an entirely different chromosome as the map is refined. There are three different methods
+available for migrating data from one assembly to another: BLAT alignment, coordinate conversion,
+and coordinate lifting. The BLAT alignment tool is described in the section
+<a href="#BLATAlign">Using BLAT alignments</a>.</p>
 
 <h3>Coordinate conversion</h3>
 <p>
-The Genome Browser Convert utility is useful for locating the position of a feature of interest in 
-a different release of the same genome or (in some cases) in a genome assembly of another species.  
-During the conversion process, portions of the genome in the coordinate range of the original 
-assembly are aligned to the new assembly while preserving their order and orientation. In general, 
-it is easier to achieve successful conversions with shorter sequences.</p> 
+The Genome Browser Convert utility is useful for locating the position of a feature of interest in
+a different release of the same genome or (in some cases) in a genome assembly of another species.
+During the conversion process, portions of the genome in the coordinate range of the original
+assembly are aligned to the new assembly while preserving their order and orientation. In general,
+it is easier to achieve successful conversions with shorter sequences.</p>
 <p>
-When coordinate conversion is available for an assembly, click on the &quot;View&quot; pulldown on 
-the top blue menu bar on the Genome Browser page and select the &quot;In Other Genomes 
-(Convert)&quot; link. You will be presented with a list of the genome/assembly conversion options 
-available for the current assembly. Select the genome and assembly to which you'd like to convert 
-the coordinates, then click the Submit button. If the conversion is successful, the browser will 
-return a list of regions in the new assembly, along with the percent of bases and span covered by 
-that region. Click on a region to display it in the browser. If the conversion is unsuccessful, the 
+When coordinate conversion is available for an assembly, click on the &quot;View&quot; pulldown on
+the top blue menu bar on the Genome Browser page and select the &quot;In Other Genomes
+(Convert)&quot; link. You will be presented with a list of the genome/assembly conversion options
+available for the current assembly. Select the genome and assembly to which you'd like to convert
+the coordinates, then click the <button>Submit</button> button. If the conversion is successful,
+ the browser will
+return a list of regions in the new assembly, along with the percent of bases and span covered by
+that region. Click on a region to display it in the browser. If the conversion is unsuccessful, the
 utility returns a failure message.</p>
 
 <a name="Liftover"></a>
 <h3>Lifting coordinates</h3>
 <p>
-The liftOver tool is useful if you wish to convert a large number of coordinate ranges between 
-assemblies. This tool is available in both web-based and command line forms, and supports 
+The liftOver tool is useful if you wish to convert a large number of coordinate ranges between
+assemblies. This tool is available in both web-based and command line forms, and supports
 forward/reverse conversions as well as conversions between species. You can use the
 <a href="../../FAQ/FAQformat.html#format1">BED format</a> (e.g. &quot;chr4 100000 100001&quot;,
 0-based) or directly paste text from the position box (&quot;chr4:100,001-100,001&quot;, 1-based).
-See our <a href="http://genome.ucsc.edu/blog/patches/">Coordinate Counting</a> blog post
+See our <a href="https://genome-blog.gi.ucsc.edu/blog/patches/">Coordinate Counting</a> blog post
 for a discussion of the difference. If the coordinates do not cover a single base pair e.g.
 &quot;chr4 100000 100000&quot; (BED) or &quot;chr4:100,001-100,000&quot; (text), this tool
 automatically extends them to at least one base pair.</p>
+<p>
+<b>Note:</b> It is not recommeneded to use LiftOver to convert SNPs between assemblies,
+and more information about how to convert SNPs between assemblies can be found on the following
+<a href="/FAQ/FAQreleases.html#snpConversion">FAQ entry</a>.</p>
 
 <h3>Web-based coordinate lifting</h3>
-<p> 
-To access the graphical version of the liftOver tool, click on &quot;Tools&quot; pulldown in the 
-top blue menu bar of the Genome Browser, then select 
-<a href="http://genome.ucsc.edu/cgi-bin/hgLiftOver">LiftOver</a> from the menu.</p>  
 <p>
-To convert one or more coordinate ranges using the default conversion settings:</p> 
+To access the graphical version of the liftOver tool, click on &quot;Tools&quot; pulldown in the
+top blue menu bar of the Genome Browser, then select
+<a href="http://genome.ucsc.edu/cgi-bin/hgLiftOver">LiftOver</a> from the menu.
+Note that the web tool has an input file size limit of 500Mb, larger files will require
+using the command-line version.</p>
+<p>
+To convert one or more coordinate ranges using the default conversion settings:</p>
 <ol>
   <li>
   Select the genome and assembly from which the ranges were taken (&quot;Original&quot;), as well as
-  the genome and assembly to which the coordinates should be converted (&quot;New&quot;).</li> 
+  the genome and assembly to which the coordinates should be converted (&quot;New&quot;).</li>
   <li>
-  Select the Data Format option: Browser Extensible Data format 
-  (<a href="../../FAQ/FAQformat.html#format1">BED</a>) or position (coordinates of the form 
-  <em>chrN:start-end</em>).</li> 
+  Select the Data Format option: Browser Extensible Data format
+  (<a href="../../FAQ/FAQformat.html#format1">BED</a>) or position (coordinates of the form
+  <em>chrN:start-end</em>).</li>
   <li>
   Enter coordinate ranges in the selected data format into the large text box, one per line.</li>
   <li>
-  Click Submit.</li> 
+  Click Submit.</li>
 </ol>
 <p>
-Alternatively, you may load the coordinate ranges from an existing data file by entering the file 
-name in the upload box at the bottom of the screen, then clicking the Submit File button.</p> 
+Alternatively, you may load the coordinate ranges from an existing data file by entering the file
+name in the upload box at the bottom of the screen, then clicking the Submit File button.</p>
+
+<a name="liftParameters"></a>
+<h3>LiftOver parameters</h3>
 <p>
-The default parameter settings are recommended for general purpose use of the liftOver tool. 
-However, you may want to customize settings if you have several very large regions to convert. 
-<!--
+The default parameters for LiftOver are recommended for general use of the LiftOver tool. However,
+you may want to customize settings if you have several very large regions to convert.</p>
+<p>
+Although the LiftOver program accepts position ranges as input, some settings are only available
+when using a <a href="/FAQ/FAQformat.html#format1">BED line with standard columns</a>. The following
+describes each setting and the input requirements to use each setting.
+</p>
 <ul>
-<li><strong>Minimum ratio of bases that must remap</strong> (default 0.95)<strong>:</strong> It may 
-be beneficial to reduce this value when working with poor-quality assemblies or
-cross-species conversions. For large-area conversions under these conditions,
-a value as low as 0.01 may be used.
-<li><strong>Minimum chain size in target</strong> (default 0)<strong>:</strong> This parameter is 
-applied only when the &quot;Allow multiple output regions&quot; option is 
-checked. This setting may be increased to reduce fragmentation. For example, 
-when doing large-scale conversions, we have found that a setting of 4000
-worked well for this option.
-<li><strong>Minimum hit size in query</strong> (default 0)<strong>:</strong> This parameter is 
-applied only when the &quot;Allow multiple output regions&quot; option is 
-checked. 
-<li><strong>Allow multiple output regions</strong> (default off)<strong>:</strong> By default, 
-liftOver does not return a match if the region is split in the new assembly. 
-Consider checking this option for conversions involving high-quality data 
-within the same species. This option should not be used when mapping large 
-regions, doing cross-species conversions or using fragmented poor-quality 
-assemblies.
-<li><strong>Min ratio of alignment blocks/exons that must map</strong> (default
-1)<strong>:</strong>
-<li><strong>If thickStart/thickEnd is not mapped, use the closest mapped bas</strong>
-(default off)<strong>:</strong>
+  <li>
+    <b>Position Coordinates or BED with 3 standard columns:</b>
+    <dl>
+      <dt>Minimum ratio of bases that must remap</dt>
+        <dd>
+        It may be beneficial to reduce this value when working with poor-quality assemblies or
+        cross-species conversions. For large-area conversions under these conditions, a value as low
+        as 0.01 may be used.
+        </dd>
+        <dd><i>[default: 0.95]</i></dd>
+    </dl>
+  </li>
+  <li>
+    <b>BED with 4 standard columns or greater:</b>
+    <dl>
+      <dt>Allow multiple output regions</dt>
+        <dd>
+        By default, liftOver does not return a match if the region is split in the new assembly. If
+        LiftOver can map a region more than once, and this setting isn't on, there will be no output
+        for the region. Consider checking this option for conversions involving high-quality data
+        within the same species. This option should not be used when mapping large regions, doing
+        cross-species conversions, or using fragmented poor-quality assemblies.
+        </dd>
+        <dd><i>[default: off]</i></dd>
+      <dt>Minimum chain size in target</dt>
+        <dd>
+        Only applicable when the &quot;Allow multiple output regions&quot; option is checked.
+        Increasing the minimum chain size in the target may reduce fragmentation. A low-complexity
+        or repetitive region may have lots of little matches across the genome that don't
+        necessarily imply the regions had a common ancestor or are orthologous. For example, when
+        doing large-scale conversions, we have found that a setting of 4,000 worked well for this
+        option.
+        </dd>
+        <dd><i>[default: 0]</i></dd>
+      <dt>Minimum hit size in query</dt>
+        <dd>
+        Only applicable when the &quot;Allow multiple output regions&quot; option is checked.
+        Consider using this filter to remove small targets below a certain length that may be
+        introduced by a repeat/transposon within a longer input region.
+        </dd>
+        <dd><i>[default: 0]</i></dd>
+    </dl>
+  </li>
+  <li>
+  <b>BED with 12 standard columns:</b>
+    <dl>
+      <dt>Min ratio of alignment blocks/exons that must map</dt>
+        <dd>
+        The minimum ratio of the number of exons (not their bases) covered by the alignment.
+        Transcripts lower than this will not be output at all. For example, with a value of 3, there
+        must be 3 exons from the transcript covered in the alignment to produce output. With a value
+        of 0.5, only half of an exon must be covered in the alignment.
+        </dd>
+        <dd><i>[default: 1]</i></dd>
+      <dt>If thickStart/thickEnd is not mapped, use the closest mapped base</dt>
+        <dd>
+        Recommended if adjusting the &quot;minimum ratio of alignment blocks/exons that must
+        map&quot;. By default, if an exon (defined by thickStart to thickEnd in the BED) is not
+        alignable at all, it will be skipped in the alignment. If this option is checked, the exon
+        is lifted to the closest alignable base.
+        </dd>
+        <dd><i>[default: off]</i></dd>
+    </dl>
+  </li>
 </ul>
--->
 
 <h3>Command-line coordinate lifting</h3>
 <p>
-The command-line version of liftOver offers the increased flexibility and performance gained by 
-running the tool on your local server. This utility requires access to a Linux platform. The 
+The command-line version of liftOver offers the increased flexibility and performance gained by
+running the tool on your local server. See an example of
+<a href="../../FAQ/FAQdownloads.html#liftOver">running the liftOver tool</a> on the command line.
+This utility requires access to a Linux platform. The
 executable file may be downloaded <a href="https://genome-store.ucsc.edu">here</a>.
-Command-line liftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated 
-files for a given assembly can be accessed from the assembly's &quot;LiftOver files&quot; link on 
-the <a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads</a> page. If the desired 
-conversion file is not listed, send a request to the <a href="../../contacts.html">genome mailing 
-list</a> and we may be able to generate one for you.</p> 
+Command-line liftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated
+files for a given assembly can be accessed from the assembly's &quot;LiftOver files&quot; link on
+the <a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads</a> page. If the desired
+conversion file is not listed, send a request to the <a href="../../contacts.html">genome mailing
+list</a> and we may be able to generate one for you. For use of the command-line
+version of LiftOver, we require all for-profit businesses or commercial companies to
+<a href="https://genome-store.ucsc.edu/">purchase a license</a> to support our small team.</p>
 
 <a name="Download"></a>
 <h2>Downloading genome data</h2>
 <p>
-Most of the underlying tables containing the genomic sequence and annotation data displayed in the 
-Genome Browser can be downloaded. All of the tables are freely usable for any purpose except as 
-indicated in the README.txt file in the download directories. This data was contributed by many 
-researchers, as listed on the Genome Browser <a href="../credits.html" target="_blank">Credits</a> 
-page. Please acknowledge the contributor(s) of the data you use.  
+Most of the underlying tables containing the genomic sequence and annotation data displayed in the
+Genome Browser can be downloaded. All of the tables are freely usable for any purpose except as
+indicated in the README.txt file in the download directories. This data was contributed by many
+researchers, as listed on the Genome Browser <a href="../credits.html" target="_blank">Credits</a>
+page. Please acknowledge the contributor(s) of the data you use.
 
 <h3>Downloading the data</h3>
 <p>
@@ -1301,122 +1440,160 @@ servers, hgdownload, hgdownload2, and hgdownload-euro.</p>
 
 <h3>Types of data available</h3>
 <p>
-There may be several download directories associated with each version of a genome assembly: the 
-full data set <em>(bigZips)</em>, the full data set by chromosome <em>(chromosome)</em>, the 
-annotation database tables <em>(database)</em>, and one or more sets of comparative cross-species 
-alignments.</p> 
+There may be several download directories associated with each version of a genome assembly: the
+full data set <em>(bigZips)</em>, the full data set by chromosome <em>(chromosome)</em>, the
+annotation database tables <em>(database)</em>, and one or more sets of comparative cross-species
+alignments.</p>
 <p>
 <em>BigZips</em> contains the entire draft of the genome in chromosome and/or contig form. Depending
 on the genome, this directory may contain some or all of the following files:</p>
-<ul> 
+<ul>
   <li>
-  <strong>chromAgp.zip:</strong> Description of how the assembly was generated, unpacking to one 
-  file per chromosome.</li> 
-  <li> 
-  <strong>chromFa.zip:</strong> The assembly sequence chromosomes, in one file per chromosome. 
-  Repeats from RepeatMasker and Tandem Repeats Finder are shown in lower case; non-repeating 
-  sequence is in upper case. The main assembly is contained in the <em>chrN.fa</em> files, where 
-  <em>chrN</em> is the name of the chromosome.  The <em>chrN_random.fa</em> files contain clones 
-  that are not yet finished or cannot be placed with certainty at a specific place on the 
-  chromosome. In some cases, including the human HLA region on chromosome 6, the 
+  <strong>chromAgp.zip:</strong> Description of how the assembly was generated, unpacking to one
+  file per chromosome.</li>
+  <li>
+  <strong>chromFa.zip:</strong> The assembly sequence chromosomes, in one file per chromosome.
+  Repeats from RepeatMasker and Tandem Repeats Finder are shown in lower case; non-repeating
+  sequence is in upper case. The main assembly is contained in the <em>chrN.fa</em> files, where
+  <em>chrN</em> is the name of the chromosome.  The <em>chrN_random.fa</em> files contain clones
+  that are not yet finished or cannot be placed with certainty at a specific place on the
+  chromosome. In some cases, including the human HLA region on chromosome 6, the
   <em>chrN_random.fa</em> files also contain haplotypes that differ from the main assembly.</li>
-  <li> 
+  <li>
   <strong>chromFaMasked.zip:</strong> The assembly sequence chromosomes, in one file per chromosome.
   Repeats are masked by capital Ns; non-repeating sequence is shown in upper case.</li>
-  <li> 
-  <strong>chromOut.zip:</strong> RepeatMasker <em>.out</em> file for chromosomes, generated by 
+  <li>
+  <strong>chromOut.zip:</strong> RepeatMasker <em>.out</em> file for chromosomes, generated by
   RepeatMasker at the <em>-s</em> sensitive setting.</li>
-  <li> 
-  <strong>chromTrf.zip:</strong> Tandem Repeats Finder locations, filtered to keep repeats with 
+  <li>
+  <strong>chromTrf.zip:</strong> Tandem Repeats Finder locations, filtered to keep repeats with
   period less than or equal to 12, translated into one <em>.bed</em> file per chromosome.</li>
   <li>
-  <strong>contigAgp.zip:</strong> Description of how the assembly was generated from fragments at a 
-  contig layout level.</li> 
-  <li> 
-  <strong>contigFa.zip:</strong> The assembly sequence contigs, in one file per contig. All contigs 
+  <strong>contigAgp.zip:</strong> Description of how the assembly was generated from fragments at a
+  contig layout level.</li>
+  <li>
+  <strong>contigFa.zip:</strong> The assembly sequence contigs, in one file per contig. All contigs
   are in forward orientation relative to the chromosome. In some cases, this means that contigs will
-  be reversed relative to their orientation in the NCBI assembly. Repeats are shown in lower case; 
-  non-repeating sequence is shown in upper case.</li> 
-  <li> 
-  <strong>contigFaMasked.zip:</strong> The assembly sequence contigs, in one file per contig. 
+  be reversed relative to their orientation in the NCBI assembly. Repeats are shown in lower case;
+  non-repeating sequence is shown in upper case.</li>
+  <li>
+  <strong>contigFaMasked.zip:</strong> The assembly sequence contigs, in one file per contig.
   Repeats are masked by capital <em>N</em>s; non-repeating sequence is shown in upper case.</li>
-  <li> 
-  <strong>contigOut.zip:</strong> RepeatMasker <em>.out</em> file for contigs, generated by 
+  <li>
+  <strong>contigOut.zip:</strong> RepeatMasker <em>.out</em> file for contigs, generated by
   RepeatMasker at the <em>-s</em> sensitive setting.</li>
-  <li> 
-  <strong>contigTrf.zip:</strong> Tandem Repeats Finder locations, filtered to keep repeats with 
+  <li>
+  <strong>contigTrf.zip:</strong> Tandem Repeats Finder locations, filtered to keep repeats with
   period less than or equal to 12, and translated into one <em>.bed</em> file per contig.</li>
-  <li> 
-  <strong>database.zip:</strong> The Genome Browser database as tab-delimited files and associated 
+  <li>
+  <strong>database.zip:</strong> The Genome Browser database as tab-delimited files and associated
   MariaDB (MySQL) table-creation tiles (eliminated in later assemblies due to size restrictions).</li>
-  <li> 
-  <strong>est.fa.zip:</strong> Sequences of all GenBank ESTs for the selected species.</li> 
-  <li> 
+  <li>
+  <strong>est.fa.zip:</strong> Sequences of all GenBank ESTs for the selected species.</li>
+  <li>
   <strong>liftAll.zip:</strong> The offsets of contigs within chromosomes.</li>
-  <li> 
-  <strong>mrna.zip:</strong> mRNAs in GenBank from the selected species.</li> 
-  <li> 
+  <li>
+  <strong>mrna.zip:</strong> mRNAs in GenBank from the selected species.</li>
+  <li>
   <strong>refmrna.zip:</strong> RefSeq mRNAs from the selected species.</li>
-  <li> 
-  <strong>upstream1000.zip:</strong> Sequences 1000 bases upstream of annotated transcription start 
-  of RefSeq genes. This includes only cases where the transcription start is annotated separately 
+  <li>
+  <strong>upstream1000.zip:</strong> Sequences 1000 bases upstream of annotated transcription start
+  of RefSeq genes. This includes only cases where the transcription start is annotated separately
   from the coding region start.</li>
-  <li> 
-  <strong>upstream2000.zip:</strong> Same as upstream1000, but with 2000 bases.</li> 
-  <li> 
-  <strong>upstream5000.zip:</strong> Same as upstream1000, but with 5000 bases.</li> 
-  <li> 
-  <strong>xenoMrna.zip:</strong> All GenBank mRNAs from species other than that of the selected 
+  <li>
+  <strong>upstream2000.zip:</strong> Same as upstream1000, but with 2000 bases.</li>
+  <li>
+  <strong>upstream5000.zip:</strong> Same as upstream1000, but with 5000 bases.</li>
+  <li>
+  <strong>xenoMrna.zip:</strong> All GenBank mRNAs from species other than that of the selected
   one.</li>
-</ul> 
+</ul>
 <p>
-<em>Chromosomes</em> contains the assembled sequence for the genome in separate files for each 
-chromosome in a zipped fasta format. The main assembly can be found in the <em>chrN.fa</em> files, 
-where <em>N</em> is the name of the chromosome.  The <em>chrN_random.fa</em> files contain clones 
-that are not yet finished or cannot be placed with certainty at a specific place on the chromosome. 
-In some cases, the <em>chrN_random.fa</em> files also contain haplotypes that differ from the main 
+<em>Chromosomes</em> contains the assembled sequence for the genome in separate files for each
+chromosome in a zipped fasta format. The main assembly can be found in the <em>chrN.fa</em> files,
+where <em>N</em> is the name of the chromosome.  The <em>chrN_random.fa</em> files contain clones
+that are not yet finished or cannot be placed with certainty at a specific place on the chromosome.
+In some cases, the <em>chrN_random.fa</em> files also contain haplotypes that differ from the main
 assembly.</p>
 <p>
-<em>Database</em> contains all of the positional and non-positional tables in the genome annotation 
+<em>Database</em> contains all of the positional and non-positional tables in the genome annotation
 database. Each table is represented by 2 files:</p>
-<ul> 
+<ul>
   <li><strong>.sql file:</strong> the SQL commands used to create the table.</li>
   <li>
-  <strong>.txt.gz file:</strong> the MariaDB database table data in tab-delimited format and 
+  <strong>.txt.gz file:</strong> the MariaDB database table data in tab-delimited format and
   compressed with gzip.</li>
-</ul> 
+</ul>
 <p>
-Schema descriptions for all tables in the genome annotation database may be viewed by using the 
-&quot;describe table schema&quot; button in the <a href="#TableBrowser">Table Browser</a>.</p> 
+Schema descriptions for all tables in the genome annotation database may be viewed by using the
+&quot;data format description&quot; button in the <a href="#TableBrowser">Table Browser</a>.</p>
 <p>
-<em>Cross-species alignments</em> directories, such as the <em>vsMm4</em> and <em>humorMm3Rn3</em> 
-directories in the hg16 assembly, contain pairwise and multiple species alignments and filtered 
-alignment files used to produce cross-species annotations. For more information, refer to the 
-READMEs in these directories and the description of the 
+<em>Cross-species alignments</em> directories, such as the <em>vsMm4</em> and <em>humorMm3Rn3</em>
+directories in the hg16 assembly, contain pairwise and multiple species alignments and filtered
+alignment files used to produce cross-species annotations. For more information, refer to the
+READMEs in these directories and the description of the
 <a href "../../FAQformat.html#format5">Multiple Alignment Format</a> (MAF).</p>
 
 <!-- =======Custom tracks======= -->
 <a name="CustomTracks"></a>
 <h2>Creating custom annotation tracks</h2>
-<!--#include virtual="customTrackText.html"--> 
+<!--#include virtual="customTrackText.html"-->
 
 <a name="TrackHubs"></a>
 <h2>Getting started on Track Hubs</h2>
 <p>
-Track hubs are web-accessible directories of genomic data that can be viewed on the UCSC Genome 
-Browser alongside native annotation tracks. Hubs are a useful tool for visualizing a large number 
-of genome-wide data sets. The <a href="../../cgi-bin/hgHubConnect" target="_blank">Track Hub</a> 
-utility allows efficient access to data sets from around the world through the familiar Genome 
-Browser interface. Browser users can display tracks from any public track hub that has been 
-registered with UCSC. Additionally, users can import data from unlisted hubs or can set up, display,
-and share their own track hubs.</p>
+Track hubs are web-accessible directories of genomic data that can be viewed on the UCSC Genome
+Browser alongside native annotation tracks. Hubs are a useful tool for visualizing a large number
+of genome-wide data sets. The <a href="../../cgi-bin/hgHubConnect" target="_blank">Track Hub</a>
+utility allows efficient access to data sets from around the world through the familiar Genome
+Browser interface. Browser users can display tracks from any public track hub that has been
+registered with UCSC. We offer <a href="publicHubGuidelines.html" target="_blank"> guidelines</a>
+for those who want to make a hub a public track hub. Additionally, users can import data from
+unlisted hubs or can set up, display, and share their own track hubs.</p>
 <p>
-For information on using the Track Hub features, refer to the <a href="hgTrackHubHelp.html">Genome 
-Browser Track Hub User Guide</a>. For specific information on configuring your trackDb.txt file, 
-refer to the <a href="trackDb/trackDbHub.html">Track Database Definition Document</a>. See also the 
-<a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a>, 
-<a href="hubQuickStartGroups.html" target="_blank">Quick Start Guide to Organizing Track Hubs into 
-Groupings</a>, <a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs</a> and <a href="hubQuickStartSearch.html" target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
+For information on using the Track Hub features, refer to the <a href="hgTrackHubHelp.html">Genome
+Browser Track Hub User Guide</a>. For specific information on configuring your trackDb.txt file,
+refer to the <a href="trackDb/trackDbHub.html">Track Database Definition Document</a>. See also the
+<a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a>,
+<a href="hubQuickStartGroups.html" target="_blank">Quick Start Guide to Organizing Track Hubs into
+Groupings</a>, <a href="https://genome-blog.soe.ucsc.edu/blog/2022/06/28/track-hub-settings/"
+target="_blank">Track hub settings blog post</a>, <a href="hubQuickStartAssembly.html"
+target="_blank">Quick Start Guide to Assembly Hubs</a>, <a href="hubQuickStartSearch.html"
+target="_blank">Quick Start Guide to Searchable Track Hubs</a>, and <a href="/FAQ/FAQlink#hubUrl"
+target="_blank">Loading Track Hubs and Assembly Hubs with the URL</a>.</p>
+
+<a name="GenArkTrackHubs"></a>
+<h2>Track Hubs for <em>GenArk</em> assembly hub</h2>
+<p>
+To construct a track hub that will display on a
+<a href='https://hgdownload.soe.ucsc.edu/hubs/'
+target=_blank>GenArk Assembly</a> hub, specify the <em>GenArk</em> assembly
+name in the <b>genome</b> statement in your <b>hub.txt</b> file as
+<a href='#UseOneFile'>described below</a>.
+For example, a reference such as:
+</p>
+<pre>
+genome GCA_021951015.1
+</pre>
+<p>
+will direct your track hub to display on the human
+<b>Feb. 2022 - GCA_021951015.1 - HG002.mat.cur.20211005</b> genome assembly.
+</p>
+<p>
+To share your track hub with your audience of interest, when you publish
+the URL to your track hub, that <b>genome</b> reference in your track
+<b>hub.txt</b> file will cause that associated assembly hub to display in the
+genome browser with your track hub annotations on that genome browser.  There
+is no need to otherwise reference the assembly hub, it will automatically
+attach
+itself.
+</p>
+<p>
+A complete list of all available <em>GenArk</em> assemblies available can
+be seen in the text file
+<a href='https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt'
+target=_blank>UCSC_GI.assemblyHubList.txt</a>.
+</p>
 
 <a name="UseOneFile"></a>
 <h2>Track Hubs in a single file</h2>
@@ -1434,7 +1611,7 @@ myHub/          - directory containing track hub files
 <p>
 Now, there is a trackDb option to have your entire track hub inside of one file,
 <code>useOneFile on</code>. Adding the <code>useOneFile on</code> line to the hub.txt section of the
-file allows the contents of all three files to be referenced inside of one file. We recommend the 
+file allows the contents of all three files to be referenced inside of one file. We recommend the
 single hub.txt file's contents be in the following order: hub.txt, genomes.txt, then trackDb.txt.
 </p>
 <pre>
@@ -1481,7 +1658,7 @@ genomes.txt files.</p>
 Converting an existing track hub to use the new setting does not require much editing. Simply
 concatenate the three files into one, with the contents of hub.txt, genomes.txt, and trackDb.txt, in
 that order. Using the URL to the single file on the
-<a href="../../cgi-bin/hgHubConnect?#unlistedHubs">My Hubs</a> page will allow you to view your
+<a href="../../cgi-bin/hgHubConnect?#unlistedHubs">Connected Hubs</a> page will allow you to view your
 track hub.</p>
 
 

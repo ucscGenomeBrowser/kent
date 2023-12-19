@@ -15,26 +15,7 @@
 #include "hdb.h"
 
 
-static char extFileCreate[] =
-/* This keeps track of external files and directories. */
-"create table %s ("
-  "id int unsigned not null primary key,"  /* Unique ID across all tables. */
-  "name varchar(64) not null,"	  /* Symbolic name of file.  */
-  "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
-  "size bigint unsigned not null,"           /* Size of file (checked) */
-                   /* Extra indices. */
-  "index (name))";
 
-static char historyCreate[] =	
-/* This contains a row for each update made to database. */
-NOSQLINJ "create table history ("
-  "ix int not null auto_increment primary key,"  /* Update number. */
-  "startId int unsigned not null,"              /* Start this session's ids. */
-  "endId int unsigned not null,"                /* First id for next session. */
-  "who varchar(255) not null,"         /* User who updated. */
-  "what varchar(255) not null,"        /* What they did. */
-  "modTime timestamp not null,"        /* Modification time. */
-  "errata varchar(255) )";            /* Deleted data */
 
 HGID hgGetMaxId(struct sqlConnection *conn, char *tableName)
 /* get the maximum value of the id column in a table or zero if empry  */
@@ -64,7 +45,18 @@ static void ensureHistoryTableExists(struct sqlConnection *conn)
 static boolean first = TRUE;
 if (first)
     {
-    sqlMaybeMakeTable(conn, "history", historyCreate);
+    char query[1024];
+    sqlSafef(query, sizeof query, 
+    /* This contains a row for each update made to database. */
+    "create table history ("
+    "ix int not null auto_increment primary key,"  /* Update number. */
+    "startId int unsigned not null,"              /* Start this session's ids. */
+    "endId int unsigned not null,"                /* First id for next session. */
+    "who varchar(255) not null,"         /* User who updated. */
+    "what varchar(255) not null,"        /* What they did. */
+    "modTime timestamp not null,"        /* Modification time. */
+    "errata varchar(255) )");            /* Deleted data */
+    sqlMaybeMakeTable(conn, "history", query);
     first = FALSE;
     }
 }
@@ -204,14 +196,23 @@ int hgAddToExtFileTbl(char *path, struct sqlConnection *conn, char *extFileTbl)
  * Returns extFile id. */
 {
 char root[128], ext[64], name[256];
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 long long size = fileSize(path);
 
 /* create table if it doesn't exist */
 if (!sqlTableExists(conn, extFileTbl))
     {
     char query[1024];
-    sqlSafef(query, sizeof(query), extFileCreate, extFileTbl);
+    sqlSafef(query, sizeof query, 
+    /* This keeps track of external files and directories. */
+    "create table %s ("
+    "id int unsigned not null primary key,"  /* Unique ID across all tables. */
+    "name varchar(64) not null,"	  /* Symbolic name of file.  */
+    "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
+    "size bigint unsigned not null,"           /* Size of file (checked) */
+                   /* Extra indices. */
+    "index (name))"
+    , extFileTbl);
     sqlMaybeMakeTable(conn, extFileTbl, query);
     }
 
@@ -247,7 +248,7 @@ void hgPurgeExtFileTbl(int id, struct sqlConnection *conn, char *extFileTbl)
  * when there is an error loading the referenced file
  */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 /* Delete it from database. */
 sqlDyStringPrintf(dy, "delete from %s where id = '%d'", extFileTbl, id);

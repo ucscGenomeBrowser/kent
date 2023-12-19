@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Public Hub Guidelines" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>Public Hub Guidelines</h1>
+<p>
+The Genome Browser provides links to a collection of public hubs that have been registered
+with UCSC and are available to view on the <a target="_blank"
+href="../../cgi-bin/hgHubConnect?#publicHubs" >Public Hubs page</a>.
+Here are guidelines for those who are trying to make a hub a UCSC public hub. If you have created a
+hub that meets the requirements and is of general interest to the research community, please
+contact us at
+<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;&#111;&#101;.
+uc&#115;&#99;.
+&#101;&#100;&#117;">
+&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;&#111;&#101;.uc&#115;&#99;.&#101;&#100;&#117;
+</A> to have it added to the list.
+
+<p>As a reference for interpreting trackDb.txt settings, use the Hub Track Database Definition <a
+target="_blank" href="trackDb/trackDbHub.html#loc">glossary</a>. For information on using the Track
+Hub features, refer to the <a href="hgTrackHubHelp.html">Genome Browser Track Hub User Guide</a>.
+See also the <a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a>, <a
+href="hubQuickStartGroups.html" target="_blank">Quick Start Guide to Organizing Track Hubs into 
+Groupings</a>, <a href="https://genome-blog.soe.ucsc.edu/blog/2022/06/28/track-hub-settings/"
+target="_blank">Track hub settings blog post</a>, <a href="hubQuickStartAssembly.html"
+target="_blank">Quick Start Guide to Assembly Hubs</a> and <a href="hubQuickStartSearch.html"
+target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
+</p>
+
+<h2>Contents</h2>
+
+<h6><a href="#requiredGuidelines">Required Guidelines</a></h6>
+<h6><a href="#recommendedGuidelines">Recommended Guidelines</a></h6>
+<h6><a href="#publicHubExamples">Public Hub Examples</a></h6>
+
+<a id="requiredGuidelines"></a>
+<h2>Required Guidelines</h2>
+<p>The following guidelines must be met before your hub will be added to our public list:</p>
+<p style="text-indent: 20px"><b>Required for both track and assembly hubs:</b></p>
+<ul>
+ <li>You MUST have a description page for every configuration page (composite, superTrack or stand
+     alone track). Note that multiple tracks and/or composites can use the same description page
+     with the <a target="_blank" href="trackDb/trackDbHub.html#html">"html" setting</a>. You can
+     find more information on creating track description pages in the
+     <a href="#recommendedGuidelines">recommendations</a> section below.
+ </li>
+ <li>All of your description pages MUST have a contact email address prominently displayed.
+ </li>
+ <li>At least one track should have a <a target="_blank"
+     href="trackDb/trackDbHub.html#visibility">visibility</a> set to display (in full, pack, 
+     squish, or dense), and try to have no more than 10 tracks enabled by default upon first 
+     connecting your hub.
+ </li>
+ <li>Have a descriptionUrl html page specified in your hub.txt. This should be a URL to a description
+     page for your entire hub, often public hubs will link to a full-text paper or to their
+     laboratory webpage that describes the research presented in the hub. These links are presented
+     on the Public Hubs page as a hyperlink on the longLabel presented in the hub.txt, while the
+     shortLabel is a hyperlink to the hub.txt location.
+ </li>
+</ul>
+
+<p style="text-indent: 20px"><b>Required for only assembly hubs:</b></p>
+<ul>
+ <li>Add a gateway page for each assembly by having a htmlPath line for each genome not already
+     hosted by UCSC in the <a target="_blank"
+     href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs#genomes.txt">genomes.txt</a>.
+ </li>
+ <li>The following settings should properly be set in your genomes.txt (The last 3 settings will make
+     it easier to find assembly hub species in hgGateway by UI search):
+ </li>
+ <ul>
+  <li>defaultPos</li>
+  <li>scientificName</li>
+  <li>organism</li>
+  <li>description</li>
+ </ul>
+</ul>
+
+<a id="recommendedGuidelines"></a>
+<h2>Recommended Guidelines</h2>
+<p>These guidelines in the following sections are recommended to improve user experience, but are
+   not required to be implemented before the hub is added to our list of Public Hubs.</p>
+<h3>Track organization recommendations</h3>
+<p>
+Related tracks can be grouped in a few different ways, namely <a href="trackDb/trackDbHub.html#superTrack"
+target="_blank">superTracks</a>, <a href="trackDb/trackDbHub.html#aggregate"
+target="_blank">multiWigs</a>, and <a href="trackDb/trackDbHub.html#compositeTrack"
+target="_blank">composites</a>. If your hub includes a large number of tracks, the grouping of
+tracks may be necessary. This will prevent your hub's track group from being an overwhelming mess
+of individual tracks and can make user configuration of your tracks easier.</p>
+
+<h6>Composite tracks</h6>
+<p>
+Related tracks of the same data type (e.g. a set of related bigBed tracks) should be combined into
+<a href="trackDb/trackDbHub.html#compositeTrack" target="_blank">composites</a> where
+appropriate.</p>
+<ul>
+ <li>Have <a href="trackDb/trackDbHub.html#view" target="_blank">multi-view</a> only when there is
+     more than one view. Views ideally give alternate access to the same data (e.g. signals and
+     called peaks). Keep in mind that the value of views is that they allow for more than one
+     data/configuration type (e.g. bigBed and bigWig) in a single composite. All subtracks of a
+     view must have the same data type. Likewise, all subtracks of a non-multi-view composite must
+     be the same type.</li>
+ <li>Recommendations for using dimensions with your composite tracks:</li>
+  <ul>
+  <li>There should be no <a href="trackDb/trackDbHub.html#dimensions" target="_blank">
+      dimensions</a> with a single entry (do not have only one cell line represented in dimX=cell),
+      unless data growth is expected to fill in additional entries.</li>
+  <li>Using only one dimension: preferably use dimX (e.g. dimensions dimX=cell). This saves vertical
+      User Interface space, but is not always the best choice.</li>
+  <li>Using two dimensions: use dimX and dimY (e.g. dimensions dimX=cell dimY=mark)</li>
+  <li>Using more than two: use dimX, dimY on the most important dimensions. Then use dimA,B,C as
+      needed on lesser dimensions. (e.g. dimensions dimX=cell dimY=mark dimA=donor_id)</li>
+  <li>The A,B,C dimensions should probably use <a href="trackDb/trackDbHub.html#filterComposite"
+      target="_blank">filterComposite</a> (e.g. filterComposite dimA)</li>
+  <li>Each dimension and views should be represented in sortOrder, ideally in order of dimX, dimY,
+      dimA,B,C, view (e.g. sortOrder cell_type=+ mark=+ donor_id=+ view=+).
+  <li>Tags of subGroup/dimension should be short and sweet with no special chars. Also labels can
+      have HTML codes embedded (e.g. NOT CPG_methylation_%=CPG_methylation_% RATHER
+      mpct=CPG_methylation_&_#37)</li>
+  <li>Never represent the same subgroup in both view and as a dimension (e.g. NOT dimensions
+      dimX=view). A subgroup should never be in two dimensions (e.g. NOT dimensions
+      dimX=cell dimY=mark dimA=cell). The composite will appear to function but multiple ways of
+      selecting the same thing will create a confusing and inconsistent user interface.</li>
+ </ul>
+</ul>
+
+<h6>Super tracks</h6>
+<p>
+Extremely large hubs may use  <a href="trackDb/trackDbHub.html#superTrack"
+target="_blank">superTracks</a> as well to achieve a meaningful hierarchy. Super tracks
+can be used to group together any type of related tracks; for example, you could combine a multiWig,
+a composite, and a bigBed track together into a single superTrack.</p>
+
+<h3>Track display recommendations</h3>
+<ul>
+ <li>Avoid setting a composite track and all of its subtracks to the same visibility. When you have
+     composite tracks that are hidden by default, it is best to still designate some subtracks to
+     display when the composite track is turned on (visibility dense, versus the default of hide).
+     This provides an example of your track data to users who turn on your composite track. If no
+     subtracks are turned on by default, a user who changes your composite track visibility to
+     "show" won't see anything.</li>
+ <li>The shortLabel text should be under 20 characters, or meaningful information may be cut off
+     from display when tracks are set to "dense" visibility.</li>
+</ul>
+
+<h3>Track description page recommendations</h3>
+<ul>
+ <li>The description page should preferably contain UCSC's standard track description, Display
+     Conventions and Configuration, Methods, Credits, and References. More information can be
+     found on the <a href="examples/hubExamples/templatePage.html"
+     target="_blank">template page</a>.</li>
+ <li>Your track description pages should provide meaningful documentation for your tracks.
+ <ul>
+ <li>If you are creating a hub based on a paper, use the paper's abstract as a starting point for
+     your track's description section</li>
+ <li>The Methods section expand upon the overview of the Description section and provide more
+     details about how the data for the track was produced</li>
+ <li>You should assume a broad audience of students and researchers will use your hubs. You should
+     spell out common acronyms for those who may be new to genomics. For example, you might write
+     out a term and its acronym as follows "Fluorescent in situ hybridization (FISH)" which spells
+     it out and then provides the acronym that you can use throughout the rest of your description
+     page.</li>
+ </ul>
+ <li>It might be a good idea to include a "Data Access" section on your track description page
+     which describes how to access the data in your hub and where to download the raw data for the
+     tracks in your hub.</li>
+</ul>
+
+<a id="publicHubExamples"></a>
+<h2>Public Hub Examples</h2>
+
+<p>Many of the <a target="_blank" href="../../cgi-bin/hgHubConnect?#publicHubs" >public hubs</a> in
+the Genome Browser provide excellent examples or templates for creating your own hub. As a
+reference for interpreting trackDb.txt lines used in these example hubs, please refer to the Hub
+Track Database Definition <a target="_blank" href="trackDb/trackDbHub.html#loc">glossary</a>.</p>
+
+<p>Some Hub Track Database Definition settings like <a target="_blank"
+href="hubQuickStartFilter.html">filters</a> have additional help documentation. Also note that if
+you are only displaying one genome you can use the <a target="_blank"
+href="hgTracksHelp.html#UseOneFile">useOneFile on</a> setting.</p>
+
+<h3>Example Track Hubs</h3>
+<h6>Example 1</h6>
+<p>The <a href="../../cgi-bin/hgTracks?db=hg38&hubUrl=http://apprisws.bioinfo.cnio.es/trackHub/hub.txt"
+target="_blank"> Principal Splice Isoforms APPRIS hub</a> provides a good example of basic hub that
+includes a few different annotation tracks. Each track includes its own description page and is
+colored in such a way that distinguishes it from the other tracks in the hub and native track in
+the UCSC Genome Browser.</p>
+
+<p>Here are some links to their configuration files and some description pages:</p>
+<ul>
+ <li><a href="http://apprisws.bioinfo.cnio.es/trackHub/hub.txt" target="_blank">hub.txt</a></li>
+ <li><a href="http://apprisws.bioinfo.cnio.es/trackHub/genomes.txt" target="_blank">
+     genomes.txt</a></li>
+ <li><a href="http://apprisws.bioinfo.cnio.es/trackHub/trackDb.hg38.txt" target="_blank">trackDb.txt
+     </a>for the default hub assembly, hg38</li>
+ <li>Description page for <a href="http://apprisws.bioinfo.cnio.es/trackHub/docs/APPRIS.html"
+     target="_blank">APPRIS - Principal Isoforms track</a></li>
+ <li>The <a href=
+     "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&hubUrl=http://apprisws.bioinfo.cnio.es/trackHub/hub.txt&g=hub_67585_PrincipalIsoformsAPPRIS"
+     target="_blank">track description</a> on the human GRCh38/hg38 Genome Browser</li>
+</ul>
+
+<h6>Example 2</h6>
+<p>The <a href="../../cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapIntegrative.txt"
+target="_blank">Roadmap Epigenomics Integrative Analysis Hub</a> provides a great example of how
+you might use organize your hub if you have thousands of different tracks. The hub uses composites
+with dimensions to organize thousands of different tracks across a number of cell lines and uses
+supertracks to group these tracks even further.</p>
+
+<p>Here are some links to their configuration files and some description pages:</p>
+<ul>
+ <li><a href="http://vizhub.wustl.edu/VizHub/RoadmapIntegrative.txt" target="_blank">hub.txt</a>
+     named "RoadmapIntegrative.txt"</li>
+ <li><a href="http://vizhub.wustl.edu/VizHub/roadmapintegrativeall.txt" target="_blank">
+     genomes.txt</a> named "roadmapintegrativeall.txt"</li>
+ <li><a href="http://vizhub.wustl.edu/VizHub/hg19/roadmap_both_02182015_trackDb.txt" target="_blank"
+     >trackDb.txt</a> named "roadmap_both_02182015_trackDb.txt" for hg19</li>
+ <li>The <a href=
+     "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&hubUrl=http://apprisws.bioinfo.cnio.es/trackHub/hub.txt&g=hub_3482037_RoadmapConsolidatedAssay"
+     target="_blank">track description</a> on the human GRCh37/hg19 Genome Browser</li>
+</ul>
+
+<h3>Example Assembly Hub</h3>
+<p>The <a href=
+"../../cgi-bin/hgTracks?genome=CB4856Princeton_JR-contig&hubUrl=http://waterston.gs.washington.edu/trackhubs/isolates/hub.txt"
+target="_blank">C elegans isolates hub</a> provides an excellent example of what your assembly hub could
+look like. The hub creators provide a detailed description page for each assembly, many different annotations
+tracks each with their own description page, and clearly defined track groups with those related
+tracks grouped together.</p>
+
+<p>Here are some links to their configuration files and some description pages:</p>
+<ul>
+ <li><a href="http://waterston.gs.washington.edu/trackhubs/isolates/hub.txt" target="_blank">hub.txt
+     </a></li>
+ <li><a href="http://waterston.gs.washington.edu/trackhubs/isolates/genomes.txt" target="_blank">
+     genomes.txt</a></li>
+ <li><a href=
+    "http://waterston.gs.washington.edu/trackhubs/isolates/CB4856Princeton_JR-contig/trackDb.txt"
+    target="_blank">trackDb.txt</a> for the primary genome in the hub, CB4856Princeton_JR-contig</li>
+ <li><a href=
+     "http://waterston.gs.washington.edu/trackhubs/isolates/CB4856Princeton_JR-contig/groups.txt"
+     target="_blank">groups.txt</a> that defines track groups for CB4856Princeton_JR-contig</li>
+ <li><a href=
+     "http://waterston.gs.washington.edu/trackhubs/isolates/CB4856Princeton_JR-contig/description.html"
+     target="_blank">Description page</a> for CB4856Princeton_JR-contig genome</li> 
+ <li><a href=
+     "../../cgi-bin/hgGateway?genome=CB4856Princeton_JR-contig&hubUrl=http://waterston.gs.washington.edu/trackhubs/isolates/hub.txt"
+     target="_blank">Gateway page</a></li>
+ <li>The <a href=
+     "http://waterston.gs.washington.edu/trackhubs/isolates/CB4856Princeton_JR-contig/Rajewsky.description.html"
+     target="_blank">description page</a> for Rajewsky Mixed Stage RNAseq. The
+     <a href=
+     "http://genome.ucsc.edu/cgi-bin/hgTrackUi?genome=CB4856Princeton_JR-contig&hubUrl=http://waterston.gs.washington.edu/trackhubs/isolates/hub.txt&g=hub_17367_Rajewsky"
+     target="_blank">track description</a> on the Genome Browser</li>
+ <li>The <a href=
+     "http://waterston.gs.washington.edu/trackhubs/isolates/CB4856Princeton_JR-contig/Rajewsky.description.html"
+     target="_blank">description page</a> for WS230 cDNA blat Annotations. The
+     <a href=
+     "http://genome.ucsc.edu/cgi-bin/hgTrackUi?genome=CB4856Princeton_JR-contig&hubUrl=http://waterston.gs.washington.edu/trackhubs/isolates/hub.txt&g=hub_17367_blat_N2_cDNA_models"
+     target="_blank">track description</a> on the Genome Browser</li>
+</ul>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -128,7 +128,7 @@ extern char **environ;	/* The environment strings. */
 char **hashToEnviron(struct hash *hash)
 /* Create an environ formatted string from hash. */
 {
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 struct hashEl *list = hashElListHash(hash), *el;
 char **newEnv;
 int envCount = slCount(list), i;
@@ -141,7 +141,7 @@ for (i=0, el=list; i<envCount; ++i, el = el->next)
     dyStringAppend(dy, el->val);
     newEnv[i] = cloneString(dy->string);
     }
-freeDyString(&dy);
+dyStringFree(&dy);
 hashElFreeList(&list);
 return newEnv;
 }
@@ -252,7 +252,7 @@ void updatePath(struct hash *hash, char *userPath,
 /* Prepend userPath and system path to existing path. 
  * Add homeDir in front of all elements of user path. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *s, *e;
 char *oldPath;
 

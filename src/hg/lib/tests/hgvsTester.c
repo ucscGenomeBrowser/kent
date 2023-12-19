@@ -10,6 +10,7 @@
 #include "linefile.h"
 #include "memalloc.h"
 #include "options.h"
+#include "chromAlias.h"
 
 static struct optionSpec optionSpecs[] = {
     {NULL, 0}
@@ -95,6 +96,7 @@ char *db = argv[1];
 char *inputFile = argv[2];
 // Set up environment
 pushCarefulMemHandler(LIMIT_2or6GB);
+chromAliasSetup(db);
 initGenbankTableNames(db);
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);

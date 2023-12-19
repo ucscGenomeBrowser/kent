@@ -138,7 +138,7 @@ static void findSimilarities(struct geneSimilarities *gss,
 /* find genes similar to the query in gss and add them. */
 {
 char where[64];
-sqlSafefFrag(where, sizeof(where), "strand = \"%s\"", gss->query->strand);
+sqlSafef(where, sizeof(where), "strand = \"%s\"", gss->query->strand);
 int start = gss->cdsSim ? gss->query->cdsStart :gss->query->txStart;
 int end = gss->cdsSim ? gss->query->cdsEnd :gss->query->txEnd;
 
@@ -180,7 +180,7 @@ struct geneSimilarities *geneSimilaritiesBuildAt(struct sqlConnection *conn,
  * find similar genes in targetGeneTbl. */
 {
 char where[256];
-sqlSafefFrag(where, sizeof(where), "(chrom = \"%s\") and (txStart = %d)", queryChrom, queryStart);
+sqlSafef(where, sizeof(where), "(chrom = \"%s\") and (txStart = %d)", queryChrom, queryStart);
 struct genePred *query = genePredReaderLoadQuery(conn, queryGeneTbl, where);
 if (query == NULL)
     errAbort("gene %s starting at %s:%d not found in %s", queryName,
@@ -203,7 +203,7 @@ struct geneSimilarities *geneSimilaritiesBuildAll(struct sqlConnection *conn,
 {
 struct geneSimilarities *gssList = NULL;
 char where[64];
-sqlSafefFrag(where, sizeof(where), "name = \"%s\"", queryName);
+sqlSafef(where, sizeof(where), "name = \"%s\"", queryName);
 struct genePred *queries = genePredReaderLoadQuery(conn, queryGeneTbl, where);
 struct genePred *query;
 while ((query = slPopHead(&queries)) != NULL)

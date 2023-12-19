@@ -100,11 +100,11 @@ void interactionSaveToDb(struct sqlConnection *conn, struct interaction *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%g)", 
 	tableName,  el->fromX,  el->toY,  el->score);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

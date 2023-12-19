@@ -1,0 +1,106 @@
+track clinvar
+compositeTrack on
+shortLabel ClinVar Variants ALPHA
+longLabel ClinVar Variants ALPHA
+group phenDis
+visibility hide
+type bed 12 +
+noParentConfig on
+itemRgb on
+urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
+scoreLabel ClinVar Star-Rating (0-4)
+dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
+
+        track clinvarMain
+        parent clinvar
+        shortLabel ClinVar SNVs
+        longLabel ClinVar Short Variants < 50bp
+        visibility hide
+        group phenDis
+        itemRgb on
+        priority 1
+        type bigBed 12 +
+        showCfg on
+        # note that you cannot change these values. Old carts will contain them. If you must change these, you'll have to rename
+        # the field, which will reset the cart variables. Or use the cart rewrite mechanism. You can add more values, though
+        filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,RF|risk factor,OT|other,VUS|vus
+        filterType._clinSignCode multiple
+        filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,UNK|unknown
+        filterType._originCode multiple
+        filterLabel._originCode Alelle Origin
+        filterValues._allTypeCode SUBST|single nucleotide variant - SUBST,STRUCT|translocation and fusion - STRUCT,LOSS|deletion and copy loss - LOSS,GAIN|duplication and copy gain - GAIN,INS|indel and insertion - INS,INV|inversion - INV,SEQALT|undetermined - SEQALT,SEQLEN|repeat change - SEQLEN
+        filterType._allTypeCode multiple
+        filter._varLen 0
+        skipFields rcvAcc
+        filterByRange._varLen on
+        filterLimits._varLen 0:49
+        filterValues.molConseq genic downstream transcript variant|genic downstream transcript variant,no sequence alteration|no sequence alteration,inframe indel|inframe indel,stop lost|stop lost,genic upstream transcript variant|genic upstream transcript variant,initiatior codon variant|initiatior codon variant,inframe insertion|inframe insertion,inframe deletion|inframe deletion,splice acceptor variant|splice acceptor variant,splice donor variant|splice donor variant,5 prime UTR variant|5 prime UTR variant,nonsense|nonsense,non-coding transcript variant|non-coding transcript variant,3 prime UTR variant|3 prime UTR variant,frameshift variant|frameshift variant,intron variant|intron variant,synonymous variant|synonymous variant,missense variant|missense variant,|unknown,initiator codon variant|initiator codon variant
+        mouseOverField _mouseOver
+        bigDataUrl /gbdb/$D/bbi/clinvarAlpha/clinvarMain.bb
+        urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
+        noScoreFilter on
+        searchIndex _dbVarSsvId
+        maxWindowCoverage 10000000
+
+        track clinvarCnv
+        parent clinvar
+        shortLabel ClinVar CNVs
+        longLabel ClinVar Copy Number Variants >= 50bp
+        visibility hide
+        type bigBed 12 +
+        itemRgb on
+        group phenDis
+        priority 2
+        skipFields rcvAcc
+        # note that you cannot change these values. Old carts will contain them. If you must change these, you'll have to rename
+        # the field, which will reset the cart variables. Or use the cart rewrite mechanism. You can add more values, though
+        filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
+        filterType._originCode multiple
+        filterLabel._originCode Alelle Origin
+        filterValues._allTypeCode SUBST|single nucleotide variant - SUBST,STRUCT|translocation and fusion - STRUCT,LOSS|deletion and copy loss - LOSS,GAIN|duplication and copy gain - GAIN,INS|indel and insertion - INS,INV|inversion - INV,SEQALT|undetermined - SEQALT,SEQLEN|repeat change - SEQLEN
+        filterType._allTypeCode multiple
+        filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
+        filterType._clinSignCode multiple
+        filter._varLen 50:999999999
+        filterByRange._varLen on
+        filterLimits._varLen 50:999999999
+        mouseOverField _mouseOver
+        bigDataUrl /gbdb/$D/bbi/clinvarAlpha/clinvarCnv.bb
+        mergeSpannedItems on
+        urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
+        noScoreFilter on
+        searchIndex _dbVarSsvId
+
+        track clinvarSubLolly
+        parent clinvar
+        shortLabel ClinVar interp
+        longLabel ClinVar SNVs submitted interpretations and evidence
+        bigDataUrl /gbdb/$D/clinvarSubLollyAlpha/clinvarSubLolly.bb
+        xrefDataUrl /gbdb/$D/clinvarSubLollyAlph/clinvarSub.bb
+        type bigLolly
+        group phenDis
+        lollySizeField 10
+        yAxisNumLabels off
+        lollyNoStems on
+        configurable off
+        skipFields reviewStatus
+        yAxisLabel.0 0 on 150,150,150 OTH
+        yAxisLabel.1 1 on 150,150,150 B
+        yAxisLabel.2 2 on 150,150,150 LB
+        yAxisLabel.3 3 on 150,150,150 VUS
+        yAxisLabel.4 4 on 150,150,150 LP
+        yAxisLabel.5 5 on 150,150,150 P
+        lollyMaxSize 10
+        viewLimits 0:5
+        mouseOverField _mouseOver
+        urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
+
+searchTable clinvarCnv
+searchType bigBed
+searchDescription ClinVar Copy Number Variants 
+termRegex ^[ne]ssv[0-9]+
+
+searchTable clinvarMain
+searchType bigBed
+searchDescription ClinVar Copy Number Variants
+termRegex ^[ne]ssv[0-9]+

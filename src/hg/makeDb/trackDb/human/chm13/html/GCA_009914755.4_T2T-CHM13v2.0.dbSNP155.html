@@ -1,0 +1,14 @@
+<h2>Description</h2>
+<p>dbSNP build 155 (ftp.ncbi.nih.gov/snp/archive/b155/) was lifted over from GRCh38 to the T2T-CHM13v2.0 assembly. Only variants on the primary assemblies for Chromosomes 1-22, Chromsome X and Chromosome Y were lifted over. This track contains dbSNP variants that lifted over from GRCh38 to the T2T-CHM13 assembly. This includes variants that lifted over perfectly, as well as variants that failed initial liftover due to reference/alternative allele swaps but were recovered on subsequent liftover, with reference and alternative alleles swapped appropriately.</br></br>
+These two sets of variants are included together in this track. If you are interested in downloading these sets separately (i.e., variants that lifted over perfectly vs. recovered variants with ref/alt allele swaps) they can be accessed here: <a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=T2T/CHM13/assemblies/annotation/liftover/">https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=T2T/CHM13/assemblies/annotation/liftover/</a>.</p>
+
+<h2>Methods</h2>
+<p>We performed liftover using the GATK release 4.1.9 LiftoverVcf (Picard Version 2.23.3) tool with the default parameters. This successfully lifts over variants that map exactly from GRCh38 to T2T-CHM13v2.0 but does not recover variants with swapped reference and alternative alleles. To recover variants with swapped reference/alternative alleles, we ran LiftoverVCF again, with the <code>RECOVER_SWAPPED_REF_ALT</code> flag. Notably, this feature does not recover multiallelic variants, so to recover these variants, we first separated them into multiple biallelic variants, performed liftover using the <code>RECOVER_SWAPPED_REF_ALT</code> tag, and converted them back to their multiallelic representations.</p>
+
+<h2>Contacts</h2>
+<ul>
+  <li><a href="mailto:dtaylo95@jhu.edu">Dylan Taylor &lt;dtaylo95 at jhu.edu&gt;</a>
+  <li><a href="mailto:rmccoy22@jhu.edu">Rajiv McCoy &lt;rmccoy22 at jhu.edu&gt;</a>
+</ul>
+<h2>References</h2>
+<p>Van der Auwera GA & O'Connor BD. (2020). Genomics in the Cloud: Using Docker, GATK, and WDL in Terra (1st Edition). O'Reilly Media.</p>

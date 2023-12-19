@@ -5,7 +5,6 @@ longLabel JASPAR Transcription Factor Binding Site Database
 group regulation
 visibility hide
 type bigBed 6 .
-pennantIcon New red ../goldenPath/newsarch.html#010522 "Released Jan. 6, 2022"
 url http://jaspar.genereg.net/search?q=$$&collection=all&tax_group=all&tax_id=all&type=all&class=all&family=all&version=all
 urlLabel View on JASPAR:
 filter.score 400
@@ -14,12 +13,29 @@ maxItems 100000
 maxWindowCoverage 50000
 exonArrows on
 spectrum on
+noParentConfig on
+
+        track jaspar2024
+        parent jaspar on
+        release alpha
+        priority 1
+        shortLabel JASPAR 2024 TFBS
+        longLabel JASPAR CORE 2024 - Predicted Transcription Factor Binding Sites
+        html ../jaspar.alpha
+        type bigBed 6 +
+        labelFields TFName
+        visibility pack
+        bigDataUrl /gbdb/$D/jaspar/JASPAR2024.bb
+        motifPwmTable hgFixed.jasparCore2024
+        maxItems 100000
+        filter.score 400
+        filterByRange.score 0:1000
 
 	track jaspar2022
 	parent jaspar on
         shortLabel JASPAR 2022 TFBS
         longLabel JASPAR CORE 2022 - Predicted Transcription Factor Binding Sites
-        priority 1
+        priority 2
         type bigBed 6 +
         visibility pack
         motifPwmTable hgFixed.jasparCore2022
@@ -31,7 +47,7 @@ spectrum on
 	parent jaspar off
         shortLabel JASPAR 2020 TFBS
         longLabel JASPAR CORE 2020 - Predicted Transcription Factor Binding Sites
-        priority 2
+        priority 3
         type bigBed 6 +
         visibility hide
         bigDataUrl /gbdb/$D/jaspar/JASPAR2020.bb

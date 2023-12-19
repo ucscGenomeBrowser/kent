@@ -331,11 +331,12 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
     if (newContents->stringSize > contentLength)
 	errAbort("ERROR: Uh, why is newContents (%ld) longer than original (%d)",
 		 newContents->stringSize, contentLength);
-    sqlDyStringPrintf(update, "UPDATE %s set contents='", savedSessionTable);
-    dyStringAppendN(update, newContents->string, newContents->stringSize);
-    dyStringPrintf(update, "', lastUse=now(), useCount=useCount+1 "
+    // It is probably  safe to just encode the string as usual.
+    // It seems like we do not actually use the "hardcore" feature here anyways.
+    sqlDyStringPrintf(update, "UPDATE %s set contents='%s', lastUse=now(), useCount=useCount+1 "
 		   "where userName=\"%s\" and sessionName=\"%s\";",
-		   userName, sessionName);
+		    savedSessionTable, newContents->string, userName, sessionName);
+
     verbose(3, "Removing one or more dead CT file settings from %s %s "
 	    "(original length %d, now %ld)\n", 
 	    userName, sessionName,

@@ -13,14 +13,17 @@
 #include "jsonWrite.h"
 #include "suggest.h"
 #include "genbank.h"
+#include "hgFind.h"
+#include "trix.h"
 
 // Optional CGI param type can specify what kind of thing to suggest (default: gene)
 #define ALT_OR_PATCH "altOrPatch"
+#define HELP_DOCS "helpDocs"
 
 void suggestGene(char *database, char *table, char *prefix)
 /* Print out a Javascript list of objects describing genes that start with prefix. */
 {
-struct dyString *str = newDyString(10000);
+struct dyString *str = dyStringNew(10000);
 dyStringPrintf(str, "[\n");
 
 int exact = cgiOptionalInt("exact", 0);
@@ -33,13 +36,13 @@ if(exact)
     // using it so we still support it.
     if(hasKnownCanonical)
         sqlSafef(query, sizeof(query),
-                 "select x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description "
+                 "select distinct x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description "
                  "from knownCanonical k, knownGene kg, kgXref x "
                  "where k.transcript = x.kgID and k.transcript = kg.name and x.geneSymbol = '%s' "
                  "order by x.geneSymbol, k.chrom, kg.txEnd - kg.txStart desc", prefix);
     else
         sqlSafef(query, sizeof(query),
-                 "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
+                 "select distinct r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
                  "from %s r, %s g, %s d "
                  "where r.name2 = '%s' and g.acc = r.name and g.description = d.id "
                  "order by r.name2, r.chrom, r.txEnd - r.txStart desc",
@@ -53,13 +56,13 @@ else
     // 3 POU5F1's in hg19); we return all of them (#5962).
     if(hasKnownCanonical)
         sqlSafef(query, sizeof(query),
-                 "select x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description "
+                 "select distinct x.geneSymbol, k.chrom, kg.txStart, kg.txEnd, x.kgID, x.description "
                  "from knownCanonical k, knownGene kg, kgXref x "
                  "where k.transcript = x.kgID and k.transcript = kg.name "
                  "and x.geneSymbol LIKE '%s%%' "
                  "order by x.geneSymbol, k.chrom, kg.txStart", prefix);
     else
-        sqlSafef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
+        sqlSafef(query, sizeof(query), "select distinct r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
                  "from %s r, %s g, %s d "
                  "where r.name2 LIKE '%s%%' and g.acc = r.name and g.description = d.id "
                  "order by r.name2, r.chrom, r.txStart",
@@ -224,6 +227,31 @@ puts(jw->dy->string);
 jsonWriteFree(&jw);
 }
 
+void suggestHelpPage(char *prefix)
+/* Print out a Javascript list of objects describing help pages that start with prefix. */
+{
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteListStart(jw, NULL);
+char *lowered = cloneString(prefix);
+char *keyWords[16];
+int keyCount;
+tolowers(lowered);
+keyCount = chopLine(lowered, keyWords);
+struct trix *helpTrix = openStaticTrix(helpDocsTrix);
+struct trixSearchResult *tsr, *tsrList = trixSearch(helpTrix, keyCount, keyWords, tsmExpand);
+int i;
+for (i = 0, tsr = tsrList; i < 25 && tsr != NULL; i++, tsr = tsr->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "value", tsr->itemId); // value is necessary
+    jsonWriteString(jw, "category", "helpDocs"); // hardcode this for client
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+}
+
 char *checkParams(char *database, char *prefix, char *type)
 /* If we don't have valid CGI parameters, quit with a Bad Request HTTP response. */
 {
@@ -233,10 +261,10 @@ if(prefix == NULL || database == NULL)
     errAbort("%s", "Missing prefix and/or db CGI parameter");
 if (! hDbIsActive(database))
     errAbort("'%s' is not a valid, active database", htmlEncode(database));
-if (isNotEmpty(type) && differentString(type, ALT_OR_PATCH))
+if (isNotEmpty(type) && differentString(type, ALT_OR_PATCH) && differentString(type, HELP_DOCS))
     errAbort("'%s' is not a valid type", type);
 char *table = NULL;
-if (! sameOk(type, ALT_OR_PATCH))
+if (! sameOk(type, ALT_OR_PATCH) && !sameOk(type, HELP_DOCS))
     {
     char *knownDatabase = hdbDefaultKnownDb(database);
     struct sqlConnection *conn = hAllocConn(knownDatabase);
@@ -265,6 +293,8 @@ puts("\n");
 
 if (sameOk(type, ALT_OR_PATCH))
     suggestAltOrPatch(database, prefix);
+else if (sameOk(type, HELP_DOCS))
+    suggestHelpPage(prefix);
 else
     suggestGene(database, table, prefix);
 

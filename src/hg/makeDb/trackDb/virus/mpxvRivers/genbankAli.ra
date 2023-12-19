@@ -1,0 +1,10 @@
+track genbankAli
+longLabel Genbank Alignments: alignments of sequences in Genbank to the reference
+shortLabel Genbank Alignments
+visibility squish
+#colorByStrand 150,100,30 230,170,40
+color 150,100,30
+#altColor 230,170,40
+bigDataUrl  /gbdb/mpxvRivers/genbankAli/seqs.bb
+type bigPsl
+group map

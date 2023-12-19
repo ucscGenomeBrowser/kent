@@ -627,7 +627,7 @@ The following track line attribute=value pairs are defined in the Genome Browser
   annotation track. The default is &quot;0&quot;.</li>  
   <li>
   <strong>maxItems=<<em>&#35;</em>></strong> - Defines the maximum number of items the track can 
-  contain. The default value is 250. Be aware that tracks with an extremely large number of items 
+  contain. The default value is 10,000. Be aware that tracks with an extremely large number of items 
   can cause system instability. The 
   <a href="http://genomewiki.ucsc.edu/index.php/Kent_source_utilities" target="_blank"> Kent source 
   utility</a> bedItemOverlapCount can assist in analyzing base overlap with large tracks.</li> 
@@ -648,6 +648,14 @@ The following track line attribute=value pairs are defined in the Genome Browser
   <a href="../help/bigWig.html" target="_blank">bigWig</a> or
   <a href="../help/vcf.html" target="_blank">VCF</a> tracks. This is a required attribute for those 
   track types. There is no default for this attribute.</li>
+  <li>
+  <strong>bigDataIndex=<<em>external_url</em>></strong> - Optional. The URL of the BAI/TBI index file for 
+  <a href="../help/bam.html" target="_blank">BAM</a> and
+  <a href="../help/cram.html" target="_blank">CRAM</a> files. By default, these index files are assumed
+  to be at the same URL as the data file, but with the extension .bai. For example, if the data file is
+  https://genome.gov/genome.bam, the index file by default must be at https://genome.gov/genome.bam.bai.
+  If that is not the case, the bigDataIndex option must be used to point to the index file.
+  </li>
   <li>
   <strong>doWiggle=<<em>on</em>></strong> - The doWiggle setting enables BAM custom tracks
   to be displayed as bar graphs where the height is proportional to the number of reads mapped
@@ -698,10 +706,19 @@ The URL must contain 3 pieces of information specific to your annotation data:</
   position=chr22:15916196-31832390.</li>
   <li>
   The URL of the annotation file on your web site. This information is of the form
-  <code>hgt.customText=&lt;url&gt;</code>, where <em>url</em> points to the annotation file on your website.
+  <code>hgt.customText=&lt;url&gt;</code> or <code>hgct_customText=&lt;url&gt;</code>,
+  where <em>url</em> points to the annotation file on your website.
   An example of an annotation file URL is <a href="test.bed"
   target="_blank">http://genome.ucsc.edu/goldenPath/help/test.bed</a>.</li>
 </ul>
+<p>
+A special blog post discusses and provides examples of many of these parameters such as
+<code>hgct_customText=&lt;url&gt;</code>, <code>db=&lt;databaseName&gt;</code>,
+<code>hubUrl=&lt;url&gt;</code>, and <code>genome=&lt;databaseName&gt;</code> to attach
+custom tracks, track hubs, assembly hubs, and even track hubs to assembly hubs, all in a
+single URL. Read an overview of ways to share Genome Browser data views in the
+<a href="https://genome-blog.soe.ucsc.edu/blog/2021/08/13/sharing-data-with-sessions-and-urls/"
+target="_blank">Sharing Data with Sessions and URLs</a> blog post.
 
 <a name="optParams"></a>
 <p>
@@ -756,7 +773,10 @@ cart variables, for example having both hide all and highlight features.)
   wants to link to the Genome Browser, starting with a "clean slate" but
   believes the user will come back to the Genome Browser expecting the
   changes to still be there. </li>
-
+  <li>
+  <code>ruler=hide</code> - hide the ruler at the top of the browser image -
+  <a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene_imgOrd=2&knownGene=pack&gtexGeneV8=full&gtexGeneV8_imgOrd=1&ruler=hide"
+  target="_blank">example link</a> to hide the ruler</li>
   <li>
   <code>oligoMatch=pack&amp;hgt.oligoMatch=&lt;dnaSeq&gt;</code> - switch on the Short Match track and 
   highlight a matching sequence - 
@@ -770,7 +790,6 @@ cart variables, for example having both hide all and highlight features.)
   <code>textSize=&lt;number&gt;</code> - set the size of text font - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&textSize=12" 
   target="_blank">example link</a> to increase the text font size to 12 pixels</li>
-
   <li>
   <code>&lt;trackName&gt;=full|pack|dense|hide</code> - show your current tracks, adding a track 
   and set it to full, pack or dense visibility or hide it, respectively - 
@@ -782,8 +801,12 @@ cart variables, for example having both hide all and highlight features.)
   <code>ct_name_####</code> assigned by our system.   You can determine the name for a custom track 
   using the url, <a href = "https://genome.ucsc.edu/cgi-bin/cartDump">
   https://genome.ucsc.edu/cgi-bin/cartDump</a>.
-
-
+  <li>
+  <code>&lt;trackName&gt;_imgOrd=&lt;number&gt;</code> - vertically orders the tracks on the image
+  based on the numbers provided. You need to specify an order for every visible track when using this
+  parameter -
+  <a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene_imgOrd=2&knownGene=pack&gtexGeneV8=full&gtexGeneV8_imgOrd=1"
+  target="_blank">example link</a> to show two show knownGene track being listed second with gtex first</li>
   <li>
   <code>&lt;trackName&gt;.heightPer=&lt;number&gt;</code> - sets the height of the a bigWig track
   in pixels - <a 
@@ -931,7 +954,7 @@ make sure that you haven't accidentally set the display mode for the track to <e
 are using the Annotation File box on the Genome Browser Gateway page to upload the track, check that
 you've entered the correct file name. If neither of these is the cause of the problem, try resetting
 the Genome Browser to clear any settings that may be preventing the annotation to display. To reset 
-the Genome Browser, click the <em>Click here to reset</em> link on the Gateway page. If the 
+the Browser, click the &quot;Reset All User Settings&quot; under the top blue Genome Browser menu. If the
 annotation track still doesn't display, you may need to clear the cookies in your Internet browser 
 as well (refer to your Internet browser's documentation for further information).</p>
 <p>
@@ -951,8 +974,8 @@ https://www.ncbi.nlm.nih.gov/geosuppl/...</code></pre>
 it go away! How do I remove an annotation track from my Genome Browser display?<br>
 <strong><em>Solution:</em></strong> To remove only one track, click the <em>Manage Custom 
 Tracks</em> button and delete the desired track using the checkbox and Delete button. To quickly 
-remove all of your custom tracks, reset the Genome Browser to its default settings by clicking the 
-<em>Click here to reset</em> link on the Gateway page. Note that this reset will also remove any 
+remove all of your custom tracks, reset the Genome Browser to its default settings by clicking on
+&quot;Reset All User Settings&quot; under the top blue Genome Browser menu. This reset will also remove any 
 other customizations you have made to your Genome Browser display.</p> 
 <p>
 <strong><em>Problem:</em></strong> I put my custom track files on Dropbox,

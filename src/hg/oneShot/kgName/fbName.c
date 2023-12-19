@@ -61,7 +61,7 @@ char *getSwiss( struct sqlConnection *conn , char *id)
 {
 char cond_str[256];
 
-sqlSafefFrag(cond_str, sizeof cond_str, "mrnaID='%s'", id);
+sqlSafef(cond_str, sizeof cond_str, "mrnaID='%s'", id);
 return sqlGetField(conn, database, "spMrna", "spID", cond_str);
 }
 

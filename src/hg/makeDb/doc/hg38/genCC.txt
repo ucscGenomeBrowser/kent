@@ -1,0 +1,20 @@
+#Lou 5/24/2022
+
+mkdir /hive/data/genomes/hg38/bed/genCC
+cd /hive/data/genomes/hg38/bed/genCC
+
+wget https://search.thegencc.org/download/action/submissions-export-tsv
+
+#At this stage I had to do some manual curation of the file. Mostly there were a bunch
+#of newlines in the 'info' column of the file which were being parsed as new entries.
+#Also there were some extra tab characters present in a few of the fields. In total
+#fewer than 20 changes were made directly to the file
+
+#Both hg19 and hg38 tracks were created by creating a bed file out of the hg38 MANE1.0 bigBed
+#and running the following python3 script
+
+kent/src/hg/makeDb/scripts/genCC/doGenCC.py
+
+#Lastly symbolic links were made
+ln -s /hive/data/genomes/hg38/bed/genCC/hg38genCC.bb /gbdb/hg38/bbi/genCC.bb
+ln -s /hive/data/genomes/hg38/bed/genCC/hg19genCC.bb /gbdb/hg19/bbi/genCC.bb

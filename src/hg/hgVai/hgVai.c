@@ -41,6 +41,7 @@
 #include "annoStreamVcf.h"
 #include "windowsToAscii.h"
 #include "obscure.h"
+#include "chromAlias.h"
 
 #include "libifyMe.h"
 
@@ -808,8 +809,9 @@ static struct slName *tagVersions = NULL;
 if (tagVersions == NULL && !startsWith(hubTrackPrefix, database))
     {
     struct sqlConnection *conn = hAllocConn(database);
-    struct slName *tagTables = sqlQuickList(conn,
-                                            NOSQLINJ "show tables like '"GENCODE_PREFIX"Tag%'");
+    char query[1024];
+    sqlSafef(query, sizeof query, "show tables like '"GENCODE_PREFIX"Tag%%'");
+    struct slName *tagTables = sqlQuickList(conn, query);
     int offset = strlen(GENCODE_PREFIX"Tag");
     struct slName *tt;
     for (tt = tagTables;  tt != NULL;  tt = tt->next)
@@ -2330,10 +2332,12 @@ struct slName *id;
 for (id = rsIds;  id != NULL;  id = id->next)
     {
     tolowers(id->name);
-    dyStringPrintf(dq, "%s'%s'", (id != rsIds ? "," : ""), id->name);
+    if (id != rsIds)
+	sqlDyStringPrintf(dq, ",");
+    sqlDyStringPrintf(dq, "'%s'", id->name);
     hashStoreName(idHash, id->name);
     }
-dyStringAppend(dq, ");");
+sqlDyStringPrintf(dq, ");");
 struct sqlResult *sr = sqlGetResult(conn, dq->string);
 // Construct a minimal VCF row to make a vcfRecord for each variant.
 char *vcfRow[9];
@@ -2414,7 +2418,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	for (i = 0;  i < altAlCount;  i++)
 	    {
 	    if (i > 0)
-		dyStringAppendC(dyAltAlStr, ',');
+		dyStringPrintf(dyAltAlStr, ",");
             dyStringPrintf(dyAltAlStr, "%c%s", leftBase, altAls[i]);
 	    }
 	}
@@ -2424,12 +2428,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	for (i = 0;  i < altAlCount;  i++)
 	    {
 	    if (i > 0)
-		dyStringAppendC(dyAltAlStr, ',');
-	    dyStringAppend(dyAltAlStr, altAls[i]);
+		dyStringPrintf(dyAltAlStr, ",");
+	    dyStringPrintf(dyAltAlStr, "%s", altAls[i]);
 	    }
 	}
     if (altAlCount == 0)
-        dyStringAppendC(dyAltAlStr, '.');
+        dyStringPrintf(dyAltAlStr, ".");
     char vcfStartStr[64];
     safef(vcfStartStr, sizeof(vcfStartStr), "%d", vcfStart);
     vcfRow[0] = chrom;
@@ -3040,6 +3044,7 @@ if (startsWith(    MULTI_REGION_CHROM, cartUsualString(cart, "position", ""))
 
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);
+chromAliasSetup(database);
 initGenbankTableNames(database);
 regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeGenome);
 if (isEmpty(cartOptionalString(cart, hgvaRange)))

@@ -850,51 +850,39 @@ canFam4.perChromTables = no
     # 49999966 bases of 2481941580 (2.015%) in intersection
 
 #########################################################################
-# ncbiRefSeq (TBD - 2019-11-20 - Hiram)
-    ### XXX ### Not available on GCA/genbank assemblies
+# ncbiRefSeq (DONE - 2022-01-26 - Hiram)
 
-    mkdir /hive/data/genomes/canFam4/bed/ncbiRefSeq
-    cd /hive/data/genomes/canFam4/bed/ncbiRefSeq
-    # running step wise just to be careful
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Gorilla_gorilla \
-      GCA_008122165.1_Kamilah_GGO_v0 canFam4) > download.log 2>&1
-    # real    1m37.523s
+    mkdir /hive/data/genomes/canFam4/bed/ncbiRefSeq.2022-01-26
+    cd /hive/data/genomes/canFam4/bed/ncbiRefSeq.2022-01-26
 
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Gorilla_gorilla \
-      GCF_008122165.1_Kamilah_GGO_v0 canFam4) > process.log 2>&1
-    # real    2m9.450s
+    time( /cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -stop=process \
+       -buildDir=`pwd` GCF_011100685.1_UU_Cfam_GSD_1.0 canFam4) \
+          > process.log 2>&1
+    # real    5m26.149s
+    time( /cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -continue=load \
+       -buildDir=`pwd` GCF_011100685.1_UU_Cfam_GSD_1.0 canFam4) \
+          > load.log 2>&1
+    # real    0m30.847s
 
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Gorilla_gorilla \
-      GCF_008122165.1_Kamilah_GGO_v0 canFam4) > load.log 2>&1
-    # real    0m21.982s
-
-    cat fb.ncbiRefSeq.canFam4.txt
-    #  74279781 bases of 2999027915 (2.477%) in intersection
+    sed -e 's/^/    # /;' fb.ncbiRefSeq.canFam4.txt
+    # 92130212 bases of 2481941580 (3.712%) in intersection
 
     # add: include ../../refSeqComposite.ra alpha
-    # to the gorilla/canFam4/trackDb.ra to turn on the track in the browser
-
-    # XXX 2019-11-20 - ready for this after genbank runs
+    # to the dog/canFam4/trackDb.ra to turn on the track in the browser
 
     featureBits -enrichment canFam4 refGene ncbiRefSeq 
- # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
+ # refGene 0.130%, ncbiRefSeq 3.712%, both 0.129%, cover 99.24%, enrich 26.73x
+
     featureBits -enrichment canFam4 ncbiRefSeq refGene
- # ncbiRefSeq 3.148%, refGene 0.402%, both 0.402%, cover 12.76%, enrich 31.73x
+ # ncbiRefSeq 3.712%, refGene 0.130%, both 0.129%, cover 3.48%, enrich 26.73x
 
     featureBits -enrichment canFam4 ncbiRefSeqCurated refGene
- # ncbiRefSeqCurated 0.401%, refGene 0.402%, both 0.400%, cover 99.66%, enrich 247.79x
+ # ncbiRefSeqCurated 0.145%, refGene 0.130%, both 0.125%, cover 86.14%, enrich 661.86x
 
     featureBits -enrichment canFam4 refGene ncbiRefSeqCurated
- # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
+ # refGene 0.130%, ncbiRefSeqCurated 0.145%, both 0.125%, cover 96.29%, enrich 661.86x
 
 #########################################################################
 # LIFTOVER TO canFam6 (DONE - 2021-05-17 - Hiram)

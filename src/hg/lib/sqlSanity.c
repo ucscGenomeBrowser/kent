@@ -35,34 +35,42 @@ kxTokIncludeQuotes(TRUE);
 tokList = kxTokenizeFancy(rawQuery, TRUE, TRUE, TRUE);
 
 /* to be extra conservative, wrap the whole expression in parens. */
-dyStringAppend(clause, "(");
+sqlDyStringPrintf(clause, "(");
 numLeftParen = numRightParen = 0;
 for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
     {
     if (tokPtr->spaceBefore)
-        dyStringAppendC(clause, ' ');
-    if ((tokPtr->type == kxtEquals) ||
-	(tokPtr->type == kxtGT) ||
-	(tokPtr->type == kxtGE) ||
-	(tokPtr->type == kxtLT) ||
-	(tokPtr->type == kxtLE) ||
-	(tokPtr->type == kxtAnd) ||
-	(tokPtr->type == kxtOr) ||
-	(tokPtr->type == kxtNot) ||
-	(tokPtr->type == kxtAdd) ||
-	(tokPtr->type == kxtSub) ||
-	(tokPtr->type == kxtDiv))
-	{
-	dyStringAppend(clause, tokPtr->string);
-	}
+        sqlDyStringPrintf(clause, " ");
+    if (tokPtr->type == kxtEquals)
+	sqlDyStringPrintf(clause, "=");
+    else if (tokPtr->type == kxtGT)
+	sqlDyStringPrintf(clause, ">");
+    else if (tokPtr->type == kxtGE)
+	sqlDyStringPrintf(clause, ">=");
+    else if (tokPtr->type == kxtLT)
+	sqlDyStringPrintf(clause, "<");
+    else if (tokPtr->type == kxtLE)
+	sqlDyStringPrintf(clause, "<=");
+    else if (tokPtr->type == kxtAnd)
+	sqlDyStringPrintf(clause, "AND");
+    else if (tokPtr->type == kxtOr)
+	sqlDyStringPrintf(clause, "OR");
+    else if (tokPtr->type == kxtNot)
+	sqlDyStringPrintf(clause, "!");
+    else if (tokPtr->type == kxtAdd)
+	sqlDyStringPrintf(clause, "+");
+    else if (tokPtr->type == kxtSub)
+	sqlDyStringPrintf(clause, "-");
+    else if (tokPtr->type == kxtDiv)
+	sqlDyStringPrintf(clause, "/");
     else if (tokPtr->type == kxtOpenParen)
 	{
-	dyStringAppend(clause, tokPtr->string);
+	sqlDyStringPrintf(clause, "(");
 	numLeftParen++;
 	}
     else if (tokPtr->type == kxtCloseParen)
 	{
-	dyStringAppend(clause, tokPtr->string);
+	sqlDyStringPrintf(clause, ")");
 	numRightParen++;
 	}
     else if ((tokPtr->type == kxtWildString) ||
@@ -110,23 +118,36 @@ for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
 	else if (sameString("*", tokPtr->string))
 	    {
 	    // special case for multiplication in a wildcard world
-	    dyStringPrintf(clause, "%s", tokPtr->string);
+	    sqlDyStringPrintf(clause, "*");
 	    }
 	else
 	    {
-	    /* Replace normal wildcard characters with SQL: */
-	    while ((ptr = strchr(tokPtr->string, '?')) != NULL)
-		*ptr = '_';
-	    while ((ptr = strchr(tokPtr->string, '*')) != NULL)
-	    *ptr = '%';
-	    dyStringPrintf(clause, "%s", tokPtr->string);
+	    if (tokPtr->string[0] == '\'' || tokPtr->string[0] == '"') //  quoted string
+		{
+		/* Replace normal wildcard characters with SQL: */
+		while ((ptr = strchr(tokPtr->string, '?')) != NULL)
+		    *ptr = '_';
+		while ((ptr = strchr(tokPtr->string, '*')) != NULL)
+		    *ptr = '%';
+		int len = strlen(tokPtr->string);
+		if ((len > 1) && (tokPtr->string[len-1] == tokPtr->string[0]))
+		    tokPtr->string[len-1] = 0;  // erase trailing quote if found.
+		if (tokPtr->string[0] == '\'')
+		    sqlDyStringPrintf(clause, "'%s'", tokPtr->string+1);
+		else
+		    sqlDyStringPrintf(clause, "\"%s\"", tokPtr->string+1);
+		}
+	    else
+		{
+		sqlDyStringPrintf(clause, "%s", tokPtr->string);
+		}
 	    }
 	}
     else if (tokPtr->type == kxtPunct &&
 	     sameString(",", tokPtr->string))
 	{
 	/* Don't take just any old punct, but allow comma for in-lists. */
-	dyStringAppend(clause, tokPtr->string);
+	sqlDyStringPrintf(clause, ",");
 	}
     else if (tokPtr->type == kxtEnd)
 	{
@@ -138,7 +159,7 @@ for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
 		 tokPtr->string);
 	}
     }
-dyStringAppend(clause, ")");
+sqlDyStringPrintf(clause, ")");
 
 if (numLeftParen != numRightParen)
     errAbort("Unequal number of left parentheses (%d) and right parentheses (%d) in free-form query expression",

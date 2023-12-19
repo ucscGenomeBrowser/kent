@@ -58,15 +58,15 @@ again:
 
     if (chp == NULL) continue;
 
-    sqlSafefFrag(cond_str, sizeof cond_str, "alias='%s'", refseqID);
+    sqlSafef(cond_str, sizeof cond_str, "alias='%s'", refseqID);
     kgID=sqlGetField(genomeDBname, "kgAlias", "kgID", cond_str);
 
     // check with refLink if not found in kgAlias
     if (kgID == NULL)
 	{
-    	sqlSafefFrag(cond_str, sizeof cond_str, "mrnaAcc='%s'", refseqID);
+    	sqlSafef(cond_str, sizeof cond_str, "mrnaAcc='%s'", refseqID);
     	geneSymbol=sqlGetField(genomeDBname, "refLink", "name", cond_str);
-    	sqlSafefFrag(cond_str, sizeof cond_str, "alias='%s'", geneSymbol);
+    	sqlSafef(cond_str, sizeof cond_str, "alias='%s'", geneSymbol);
     	kgID=sqlGetField(genomeDBname, "kgAlias", "kgID", cond_str);
 	}
 

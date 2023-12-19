@@ -4,6 +4,7 @@
 #define _PHYLO_PLACE_H_
 
 #include "common.h"
+#include "cart.h"
 #include "dnaseq.h"
 #include "hash.h"
 #include "linefile.h"
@@ -16,15 +17,23 @@
 
 // Allow users to upload a lot of sequences, but put limits on how much detail we'll show and
 // how many custom tracks we'll create.
+#define MAX_SUBTREE_SIZE 5000
+#define MAX_MICROBETRACE_SUBTREE_SIZE 500
 #define MAX_SUBTREE_BUTTONS 5
-#define MAX_SEQ_DETAILS 100
+#define MAX_SEQ_DETAILS 1000
 #define MAX_SUBTREE_CTS 10
 
 // For usher's -K option (single subtree):
 #define SINGLE_SUBTREE_SIZE "2000"
+#define USHER_NUM_THREADS "16"
+#define USHER_SERVER_CHILD_TIMEOUT "600"
+#define USHER_DEDUP_PREFIX "uploaded_"
 
 #define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
+#define NEXTSTRAIN_URL_PARAMS "?f_userOrOld=uploaded%20sample"
+#define MICROBETRACE_URL_PARAMS ""
 #define OUTBREAK_INFO_URLBASE "https://outbreak.info/situation-reports?pango="
+#define PANGO_DESIGNATION_ISSUE_URLBASE "https://github.com/cov-lineages/pango-designation/issues/"
 
 // usher now preprends "node_" to node numbers when parsing protobuf, although they're still stored
 // numeric in the protobuf.
@@ -38,6 +47,7 @@ struct treeChoices
     char **sources;            // GISAID or public
     char **descriptions;       // Menu labels to describe the options to the user
     char **aliasFiles;         // Two-column files associating IDs/aliases with full tree names
+    char **sampleNameFiles;    // One-column files with full tree names
     int count;                 // Number of choices (and size of each array)
 };
 
@@ -136,6 +146,9 @@ struct sampleMetadata
     char *region;       // Continent on which sample was collected
     char *nCladeUsher;  // Nextstrain clade according to annotated tree
     char *lineageUsher; // Pango lineage according to annotated tree
+    char *authors;      // Sequence submitters/authors
+    char *pubs;         // PubMed ID numbers of publications associated with sequences
+    char *nLineage;     // Nextstrain letter-dot-numbers lineage assigned by nextclade
     };
 
 struct geneInfo
@@ -144,11 +157,13 @@ struct geneInfo
     struct geneInfo *next;
     struct psl *psl;        // Alignment of transcript to genome
     struct dnaSeq *txSeq;   // Transcript sequence
+    struct genbankCds *cds; // CDS (for those few pathogens that have transcript UTRs)
+    int cdsStart;           // genePred cdsStart (genome coord, really cds end if - strand)
+    int cdsEnd;             // genePred cdsEnd (genome coord, really cds start if - strand)
     };
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
-                              boolean *informativeBases, struct slName **maskSites,
-                              struct hash *treeNames,
+                              struct slName **maskSites, struct hash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime);
@@ -156,22 +171,47 @@ struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refG
  * percentage of N's.  Align to reference, extract SNVs from alignment, and save as VCF
  * with sample genotype columns. */
 
-struct usherResults *runUsher(char *usherPath, char *usherAssignmentsPath, char *vcfFile,
-                              int subtreeSize, struct slName *userSampleIds,
-                              struct hash *condensedNodes, int *pStartTime);
+struct usherResults *runUsher(char *db, char *usherPath, char *usherAssignmentsPath, char *vcfFile,
+                              int subtreeSize, struct slName **pUserSampleIds,
+                              struct treeChoices *treeChoices, int *pStartTime);
 /* Open a pipe from Yatish Turakhia's usher program, save resulting big trees and
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
- * and parse other results out of stderr output. */
+ * and parse other results out of stderr output.  The usher-sampled version of usher might
+ * modify userSampleIds, adding a prefix if a sample with the same name is already in the tree. */
 
-struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
+struct usherResults *runMatUtilsExtractSubtrees(char *db, char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
-                                                struct hash *condensedNodes, int *pStartTime);
+                                                struct treeChoices *treeChoices, int *pStartTime);
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
 
-struct slPair *getAaMutations(struct singleNucChange *sncList, struct geneInfo *geneInfoList,
-                              struct seqWindow *gSeqWin);
+boolean serverIsConfigured(char *db);
+/* Return TRUE if all necessary configuration settings are in place to run usher-sampled-server. */
+
+boolean serverIsRunning(char *db, FILE *errFile);
+/* Return TRUE if we can find a PID for server and that PID looks alive according to /proc. */
+
+boolean startServer(char *db, struct treeChoices *treeChoices, FILE *errFile);
+/* Start up an usher-sampled-server process to run in the background. */
+
+void serverReloadProtobufs(char *db, struct treeChoices *treeChoices);
+/* Send a reload command and list of protobufs for db to usher server. */
+
+void serverStop(char *db);
+/* Send stop command to usher server. */
+
+void serverSetThreadCount(char *db, int val);
+/* Send thread command and value to usher server. */
+
+void serverSetTimeout(char *db, int val);
+/* Send timeout command and value (in seconds) to usher server. */
+
+char *microbeTraceHost();
+/* Return the MicrobeTrace hostname from an hg.conf param, or NULL if missing. Do not free result. */
+
+struct slPair *getAaMutations(struct singleNucChange *sncList, struct singleNucChange *ancestorMuts,
+                              struct geneInfo *geneInfoList, struct seqWindow *gSeqWin);
 /* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
 
 struct geneInfo *getGeneInfoList(char *bigGenePredFile, struct dnaSeq *refGenome);
@@ -179,14 +219,14 @@ struct geneInfo *getGeneInfoList(char *bigGenePredFile, struct dnaSeq *refGenome
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
                        struct seqWindow *gSeqWin, struct hash *sampleMetadata,
-                       struct hash *sampleUrls, char *jsonFile, char *source);
+                       struct hash *sampleUrls, struct hash *samplePlacements,
+                       char *jsonFile, char *source);
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
-struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *ur,
-                                   struct slName *sampleIds, struct mutationAnnotatedTree *bigTree,
-                                   char *source, int fontHeight, struct phyloTree **retSampleTree,
-                                   int *pStartTime);
+struct tempName *writeCustomTracks(char *db, struct tempName *vcfTn, struct usherResults *ur,
+                                   struct slName *sampleIds, char *source, int fontHeight,
+                                   struct phyloTree *sampleTree, int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 
 
@@ -195,6 +235,11 @@ struct sampleMetadata *metadataForSample(struct hash *sampleMetadata, char *samp
 
 struct phyloTree *phyloPruneToIds(struct phyloTree *node, struct slName *sampleIds);
 /* Prune all descendants of node that have no leaf descendants in sampleIds. */
+
+struct slName *phyloPlaceDbList(struct cart *cart);
+/* Each subdirectory of PHYLOPLACE_DATA_DIR that contains a config.ra file is a supported db
+ * or track hub name (without the hub_number_ prefix).  Return a list of them, or NULL if none
+ * are found. */
 
 char *phyloPlaceDbSetting(char *db, char *settingName);
 /* Return a setting from hgPhyloPlaceData/<db>/config.ra or NULL if not found. */
@@ -216,7 +261,7 @@ void reportTiming(int *pStartTime, char *message);
 boolean hgPhyloPlaceEnabled();
 /* Return TRUE if hgPhyloPlace is enabled in hg.conf and db wuhCor1 exists. */
 
-char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
+char *phyloPlaceSamples(struct lineFile *lf, char *db, char *refName, char *defaultProtobuf,
                         boolean doMeasureTiming, int subtreeSize, int fontHeight,
                         boolean *retSuccess);
 /* Given a lineFile that contains either FASTA, VCF, or a list of sequence names/ids:

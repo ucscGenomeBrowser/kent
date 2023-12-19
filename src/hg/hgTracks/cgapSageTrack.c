@@ -25,8 +25,9 @@ static struct hash *libTissueHash(struct sqlConnection *conn)
 {
 struct hash *ret = newHash(9);
 struct sqlResult *sr = NULL;
-char query[49] = NOSQLINJ "select libId,tissue from cgapSageLib";
+char query[49];
 char **row;
+sqlSafef(query, sizeof query, "select libId,tissue from cgapSageLib");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(ret, row[0], cloneString(row[1]));
@@ -242,7 +243,9 @@ return libList;
 struct hash *getTotTagsHashFromTable(struct sqlConnection *conn)
 /* Load the cgapSageLib table for the db then call getTotTagsHash. */
 {
-struct cgapSageLib *libs = cgapSageLibLoadByQuery(conn, NOSQLINJ "select * from cgapSageLib");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from cgapSageLib");
+struct cgapSageLib *libs = cgapSageLibLoadByQuery(conn, query);
 struct hash *libTotHash = getTotTagsHash(libs);
 cgapSageLibFreeList(&libs);
 return libTotHash;
@@ -294,8 +297,8 @@ void cgapSageDrawItems(struct track *tg,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Initialize the colors, then do the normal drawing. */
 {
-static struct rgbColor lowerColor = {205, 191, 191};
-static struct rgbColor cgapRed = {205, 0, 0};
+static struct rgbColor lowerColor = {205, 191, 191, 255};
+static struct rgbColor cgapRed = {205, 0, 0, 255};
 hvGfxMakeColorGradient(hvg, &lowerColor, &cgapRed, 10, cgapShadesOfRed);
 genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }

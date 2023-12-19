@@ -1,0 +1,129 @@
+<h2>Description</h2>
+
+<p>
+This track shows annotations from <a target="_blank"
+href="https://thegencc.org/">The Gene Curation Coalition (GenCC)</a>.
+The GenCC provides information pertaining to the validity of gene-disease relationships, 
+with a current focus on Mendelian diseases. Curated gene-disease relationships are submitted 
+by GenCC member organizations that currently provide online resources (e.g. ClinGen, DECIPHER, 
+Orphanet, etc.), as well as diagnostic laboratories that have committed to sharing their internal 
+curated gene-level knowledge (e.g. Ambry Genetics, Illumina, Invitae, etc.).</p>
+<p>
+The GenCC aims to clarify overlap between gene curation efforts and develop
+consistent terminology for validity, allelic requirement and mechanism
+of disease. Each item on this track corresponds with a gene, and contains
+a large number of information such as associated disease, evidence classification,
+specific submission notes and identifiers from different databases. In cases where
+multiple annotations exist for the same gene, multiple items are displayed.</p> 
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item displayed represents a submission to the GenCC database. The displayed 
+name is a combination of the gene symbol and the disease's original submission ID. 
+This submission ID is either the OMIM#, MONDO# or Orphanet#. Clicking
+on any item will display the complete meta data for that item, including
+linkouts to the GenCC, NCBI, Ensembl, HGNC, GeneCards, Pombase (MONDO),
+and Human Phenotype Ontology (HPO). Mousing over any item will display the
+associated disease title, the classification title, and the mode of inheritance
+title.</p>
+
+<p>
+Items are colored based on the GenCC classification, or validation, of the
+evidence in the color scheme seen in the table below. 
+For more information on this process, see the <a target="_blank"
+href="https://thegencc.org/faq.html#validity-termsdelphi-survey">GenCC
+validity terms FAQ</a>. A filter for the track is also available
+to display a subset of the items based on their classification.</p>
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Evidence classification</th>
+  </tr></thead>
+  <tr><td style="background-color: #27C149"></td><td>Definitive</td></tr>
+  <tr><td style="background-color: #38A169"></td><td>Strong</td></tr>
+  <tr><td style="background-color: #68D391"></td><td>Moderate</td></tr>
+  <tr><td style="background-color: #63B3ED"></td><td>Supportive</td></tr>
+  <tr><td style="background-color: #FC8181"></td><td>Limited</td></tr>
+  <tr><td style="background-color: #E53E3E"></td><td>Disputed Evidence</td></tr>
+  <tr><td style="background-color: #9B2C2C"></td><td>Refuted Evidence</td></tr>
+  <tr><td style="background-color: #718096"></td><td>No Known Disease Relationship</td></tr>
+</table>
+</p>
+
+<p>
+<b>Limitations:</b> Most entries include both NM_ accessions as well as ENST and ENSG identifiers.
+From the original file, which contains no coordinates, two genes were not mapped
+to the hg38 genome, SLCO1B7 and ATXN8. This means that the hg38 track has 2 fewer items
+than what can be found in the GenCC download file. For hg19, one additional
+gene was not mapped, KCNJ18. In addition to this, the GenCC data in the Genome
+Browser does not include OMIM data due to licensing restrictions. For more
+information, see the Methods section below.</p>
+
+<h2>Data Access</h2>
+<p>
+The source data can be explored in <a target="_blank" href="https://search.thegencc.org/">
+GenCC database</a>. The source files can also be found on the <a target="_blank"
+href="https://search.thegencc.org/download">GenCC downloads page</a>.</p>
+
+<p>
+The GenCC data on the UCSC Genome Browser can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated download and analysis, the genome annotation is stored at UCSC in bigBed
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/genCC.bb" target="_blank">our download server</a>.
+The data may also be explored interactively using our
+<a href="../goldenPath/help/api.html" target="_blank">REST API</a>.</p>
+
+<p>
+The file for this track may also be locally explored using our tools <tt>bigBedToBed</tt> 
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features confined to a given range, e.g.,
+<br><br>
+<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/genCC.bb stdout</tt></p>
+
+<h2>Methods</h2>
+<p>
+The data were downloaded from the <a target="_blank" 
+href="https://search.thegencc.org/download">GenCC downloads page</a> in tsv format. Manual
+curation was performed on the file to remove newline characters and tab characters present in 
+the submission notes, in total fewer than 20 manual edits were made.</p>
+<p>
+The track was first built on hg38 by associating the gene symbols with the NCBI MANE 1.0 
+release transcripts. These coordinates were added to the items as well as the NM_ accession,
+ENST ID and ENSG ID. For items where there was no gene symbol match in MANE (~130), the gene
+symbols were queried against GENCODEv40 comprehensive set release. In places where multiple
+transcript matches were found, the earliest transcription start and latest end site was used
+from among the transcripts to encompass the entire gene coordinates. Two genes were not able
+to be mapped for hg38, SLCO1B7 and ATXN8, resulting in two missing submissions in the Genome
+Browser when compared to the raw file. Lastly, the items were colored according to their
+evidence classification as seen on the GenCC database.</p>
+<p>
+For hg19, the hg38 NM_ accessions were used to convert the item coordinates according to the
+latest hg19 refseq release. For items that failed to convert, the gene symbols were queried
+using the GENCODEv40 hg19 lift comprehensive set. One additional gene symbol failed to map in
+hg19, KCNJ18, leading to 3 fewer items on this track when compared to the raw file.</p>
+<p>
+For both assemblies, GenCC OMIM data is excluded do to data restrictions.
+For complete documentation of the processing of these tracks, read the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/genCC.txt">
+GenCC MakeDoc</a>.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the entire <a target="_blank" href="https://thegencc.org/about.html">GenCC
+committee</a> for creating these annotations and making them available.</p>
+
+<h2>References</h2>
+<p>
+DiStefano MT, Goehringer S, Babb L, Alkuraya FS, Amberger J, Amin M, Austin-Tse C, Balzotti M, Berg
+JS, Birney E <em>et al</em>.
+<a href="https://www.gimjournal.org/article/S1098-3600(22)00746-8/fulltext" target="_blank">
+The Gene Curation Coalition: A global effort to harmonize gene-disease evidence resources</a>.
+<em>Genet Med</em>. 2022 May 4;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35507016" target="_blank">35507016</a>
+</p>

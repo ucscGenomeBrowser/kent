@@ -86,7 +86,7 @@ char *createString =
 "    strand enum('?','+','-') not null default '?'\n"
 ");\n";
 
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 safef(tableName, ArraySize(tableName), "%s_snp125hg17ortho", chromName);
 sqlDyStringPrintf(dy, createString, tableName);

@@ -45,6 +45,10 @@
 <DIV class="trackDbHub_intro">
 <H1>Hub Track Database Definition (<SPAN id="trackDbHub_version">v3</SPAN>)</H1>
 <H2>How to declare Dataset Display Settings in Genome Browser Hubs</H2>
+
+    <p>For returning readers: We keep a <a href="changes.html">list of
+        changes</a> to the trackDb specification below.</p>
+
     <P>This document describes how to set dataset display characteristics
     using "track database" or "trackDb" settings through key-value pair
     associations used in a Track Hub's trackDb.txt file.
@@ -65,7 +69,7 @@
         shortLabel Example Data
         longLabel The data in this track is format "bigBed 3".    </pre>
 
-    <P>A basic track stanza should have these five above settings
+    <P>Every track stanza should have these five settings
     (<code>track type bigDataUrl shortLabel longLabel</code>).
     The first line's <code>track</code> key value (<code>myFirstTrack</code>) is the
     identifier for the dataset given to the Browser and it must be
@@ -109,7 +113,9 @@
     <a href="http://genomewiki.ucsc.edu/index.php/Genome_Browser_Software_Features"
     target="_blank">software release log</a> or view news at a collaborative
     <a href="http://groups.google.com/a/soe.ucsc.edu/group/track-hubs"
-    target="_blank"> track hub mailing list</a>.
+    target="_blank"> track hub mailing list</a>. You can also see the
+    <a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/commits/master/src/hg/htdocs/goldenPath/help/trackDb/trackDbLibrary.shtml"
+    target="_blank">commit history</a> of recent changes to the document library.
     </P>
     <p>
     You can use the <code>hubCheck</code> utility to check the compatibility of your hub and its
@@ -117,9 +123,49 @@
     Our <a href="../hgTrackHubHelp.html#Compatibility">track hub help page</a>
     provides some examples of how you might use <code>hubCheck</code> to do this and
     you can read more in this related
-    <a href="http://genome.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/"
+    <a href="https://genome-blog.gi.ucsc.edu/blog/how-portable-is-your-track-hub-use-hubcheck-to-find-out/"
     target="_blank">blog post.</a></p>
 </DIV>
+
+<h3 id="useOneFile">Use <b><code>useOneFile on</code></b> for hubs with only one genome</h3>
+<p>
+This page focuses on the settings found in the <a target="_blank"
+href="../hgTrackHubHelp.html#trackDb.txt"><code>trackDb.txt</code></a> file;
+however, all hubs must include a top-level <a target="_blank"
+href="../hgTrackHubHelp.html#hub.txt"><code>hub.txt</code></a>.
+If your hub is only displaying one genome, there is a way to put the <a target="_blank"
+href="../hgTrackHubHelp.html#genomes.txt"><code>genomes.txt</code></a> and
+<a target="_blank" href="../hgTrackHubHelp.html#trackDb.txt"><code>trackDb.txt</code></a>
+all into one file. Read about the special <a target="_blank"
+href="../hgTracksHelp.html#UseOneFile"><code>useOneFile on</code></a> setting to
+allow all a hub to exist in one file. Load a working example <a target="_blank"
+href="../examples/hubExamples/hubUseOneFile/singleFileHubExample.txt">here</a>.</p>
+
+<h3 id="assembly_hubs">Assembly Hubs</h3>
+<p>
+This page focuses on the settings found in the <a target="_blank"
+href="../hgTrackHubHelp.html#trackDb.txt"><code>trackDb.txt</code></a> file used in
+both Track Hubs and Assembly Hubs; however, this page does not describe the settings unique to
+Assembly Hubs. Track Hubs can display novel genomes, through a type of hub called an
+<a href="../hgTrackHubHelp.html#Assembly" target="_blank">Assembly Hub</a>.
+The <a href="../hgTrackHubHelp.html#example_genomes.txt"
+target="_blank"><code>genomes.txt</code></a> file for an Assembly Hub involves
+many additional settings not described on this page, such as
+<a href="../hgTrackHubHelp.html#twoBitPath" target="_blank"><code>twoBitPath</code></a> and
+<a href="../hgTrackHubHelp.html#defaultPos" target="_blank"><code>defaultPos</code></a> to
+identify the location of the sequence for the novel assembly and what default position to
+display. The <code>genomes.txt</code> file in Assembly Hubs also requires display information
+such as <a href="../hgTrackHubHelp.html#organism" target="_blank"><code>organism</code></a>,
+<a href="../hgTrackHubHelp.html#scientificName" target="_blank"><code>scientificName</code></a>,
+<a href="../hgTrackHubHelp.html#description" target="_blank"><code>description</code></a>,
+and <a href="../hgTrackHubHelp.html#htmlPath" target="_blank"><code>htmlPath</code></a> to
+label the novel assembly on the gateway page. A special <a href="../hgTrackHubHelp.html#groups"
+target="_blank"><code>groups</code></a> setting in Assembly Hubs points to a separate text
+document that defines track groups under the main image (such as the first &quot;Mapping and
+Sequencing&quot; group found on almost all Browsers). Read the <a target="_blank"
+href="../hgTrackHubHelp.html#genomes.txt">&quot;Create the genomes.txt file&quot;</a> section
+of the Track Hub User Guide for more information, and see examples in the <a target="_blank"
+href="../hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs<a>.</p>
 
 <P>The remainder of this document is divided into the following sections and should be
 used as a ready reference.</P>
@@ -236,6 +282,9 @@ in the sections below.</I>
         <A name="directUrl"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">directUrl &lt;url&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="downloadUrl"><A name="downloadUrl"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">downloadUrl &lt;label&gt; &lt;URL&gt;</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="iframeUrl"><A name="iframeUrl"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">iframeUrl &lt;url&gt;</code></div>
     </TD></TR>
@@ -254,12 +303,15 @@ in the sections below.</I>
     <TR VALIGN=TOP><TD class="otherDb"><A name="otherDb"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">otherDb &lt;otherDb&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="otherTwoBitUrl"><A name="otherTwoBitUrl"></A><IMG class='toggle detail'>
+	<div class="format"><code class="level-new">otherTwoBitUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="pennantIcon"><A name="pennantIcon"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">pennantIcon &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]
         [; &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="tableBrowser"><A name="tableBrowser"></A><IMG class='toggle detail'>
-        <div class="format"><code>tableBrowser &lt;off/on/noGenome&gt; [table1 ...]</code></div>
+        <div class="format"><code>tableBrowser &lt;off/on/noGenome/tbNoGenome&gt; [table1 ...]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="url_for_hubs">
             <A name="url"></A>
@@ -436,6 +488,29 @@ are described below along with settings specific to their types.</P>
     <div class="format"><code class="level-full">
         barChartSizeWindows &lt;largeMax&gt; &lt;smallMin&gt;</code>
     </div>
+<tr valign=top><td class="barChartStretchToItem"><a name="barChartStretchToItem"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-new">
+        barChartStretchToItem on</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartFacets"><a name="barChartFacets"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-new">
+        barChartFacets on</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartStatsUrl"><a name="barChartStatsUrl"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-new">
+        barChartStatsUrl on</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartMerge"><a name="barChartMerge"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-new">
+        barChartMerge on</code>
+    </div>
 </td></tr>
 <tr valign=top><td class="barChartMetric"><a name="barChartMetric"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">barChartMetric &lt;metric&gt;</code>
@@ -453,6 +528,16 @@ are described below along with settings specific to their types.</P>
 <tr valign=top><td class="barChartSampleUrl"><a name="barChartSampleUrl"></a>
         <img class='toggle detail'>
     <div class="format"><code class="level-full">barChartSampleUrl &lt;url/relativePath&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartBarMinPadding"><a name="barChartBarMinPadding"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-new">barChartBarMinPadding &lt;num&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartBarMinWidth"><a name="barChartBarMinWidth"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-new">barChartBarMinWidth &lt;num&gt;</code>
     </div>
 </td></tr>
 <tr valign=top><td class="maxLimit"><A name="maxLimit"></A><img class='toggle detail'>
@@ -501,11 +586,19 @@ are described below along with settings specific to their types.</P>
         <div class="format"><code class="level-full">labelOnFeature &lt;on/off&gt;</code></div>
     </TD></TR>
     <tr valign=top><td class="extraDetailsTable"><a name="extraDetailsTable"></a><img class='toggle detail'>
-        <div class="format"><code class="level-new">extraDetailsTable &lt;url/relativePath&gt;</code>
+        <div class="format"><code class="level-deprecated">extraDetailsTable &lt;url/relativePath&gt;</code>
         </div>
     </td></tr>
     <tr valign=top><td class="extraTableFields"><a name="extraTableFields"></a><img class='toggle detail'>
-        <div class="format"><code class="level-new">extraTableFields &lt;fieldName1|table title,fieldName2|table title,...&gt;</code>
+        <div class="format"><code class="level-deprecated">extraTableFields &lt;fieldName1|table title,fieldName2|table title,...&gt;</code>
+        </div>
+    </td></tr>
+    <tr valign=top><td class="detailsStaticTable"><a name="detailsStaticTable"></a><img class='toggle detail'>
+        <div class="format"><code class="level-new">detailsStaticTable &lt;url/relativePath&gt;</code>
+        </div>
+    </td></tr>
+    <tr valign=top><td class="detailsDynamicTable"><a name="detailsDynamicTable"></a><img class='toggle detail'>
+        <div class="format"><code class="level-new">detailsDynamicTable &lt;fieldName1|table title,fieldName2|table title,...&gt;</code>
         </div>
     </td></tr>
     <TR VALIGN=TOP><TD class="exonArrows"><A name="exonArrows"></A><IMG class='toggle detail'>
@@ -550,6 +643,9 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="thickDrawItem"><A name="thickDrawItem"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">thickDrawItem &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="decorator"><A name="decorator"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">decorator.*</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="searchIndex"><A name="searchIndex"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">searchIndex &lt;str&gt;</code></div>
@@ -655,7 +751,27 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="linkDataUrl"><A name="linkDataUrl"</A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">linkDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="otherTwoBitUrl"><A name="otherTwoBitUrl"</A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">otherTwoBitUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorUseSequence"><A name="baseColorUseSequence"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; / 
+                                hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss / 2bit &gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorDefault"><A name="baseColorDefault"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">baseColorDefault &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="indelDoubleInsert">
+            <A name="indelDoubleInsert"></A>
+            <A name="indelQueryInsert"></A>
+            <A name="indelPolyA"></A><IMG class='toggle detail'>
+        <div class="format">
+            <span class="indelDoubleInsert"><code class="level-full">indelDoubleInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelQueryInsert"><code class="level-full">indelQueryInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelPolyA"><code class="level-full">indelPolyA &lt;off/on&gt;</code></span></div>
+    </TD></TR>
 </TABLE>
+
 <BR><BR>
 
 
@@ -685,6 +801,10 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="labelSeparator"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">labelSeparator &lt;text&gt;</code></div>
     </TD></TR>
+<tr valign=top><td>
+        <p>Additional settings defined in other sections are also
+        available for displaying bigGenePred tracks.</p>
+        <a onclick="return jumpTo(this);" HREF="#">decorator</a>
 </TABLE>
 <BR><BR>
 
@@ -796,7 +916,7 @@ are described below along with settings specific to their types.</P>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="baseColorUseCds"><A name="baseColorUseCds"><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
+        <div class="format"><code class="level-full">baseColorUseCds &lt;given&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="baseColorUseSequence"><A name="baseColorUseSequence"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; / 
@@ -808,6 +928,27 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="showDiffBasesAllScales"><A name="showDiffBasesAllScales"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">showDiffBasesAllScales on</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="indelDoubleInsert">
+            <A name="indelDoubleInsert"></A>
+            <A name="indelQueryInsert"></A>
+            <A name="indelPolyA"></A><IMG class='toggle detail'>
+        <div class="format">
+            <span class="indelDoubleInsert"><code class="level-full">indelDoubleInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelQueryInsert"><code class="level-full">indelQueryInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelPolyA"><code class="level-full">indelPolyA &lt;off/on&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="pslSequence"><A name="pslSequence"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">pslSequence &lt;no/all/different&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showCdsAllScales"><A name="showCdsAllScales"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">showCdsAllScales on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showCdsMaxZoom"><A name="showCdsMaxZoom"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">showCdsMaxZoom &lt;basesPerPixel&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showDiffBasesMaxZoom"><A name="showDiffBasesMaxZoom"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">showDiffBasesMaxZoom &lt;basesPerPixel&gt;</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="labelFields"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">labelFields &lt;fieldName[,fieldName]&gt;</code></div>
     </TD></TR>
@@ -817,6 +958,13 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="labelSeparator"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">labelSeparator &lt;text&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="otherTwoBitUrl"><A name="otherTwoBitUrl"</A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">otherTwoBitUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+<tr valign=top><td>
+        <p>Additional settings defined in other sections are also
+        available for displaying bigPsl tracks.</p>
+        <a onclick="return jumpTo(this);" HREF="#">decorator</a>
 </TABLE>
 <BR><BR>
 
@@ -869,6 +1017,10 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="transformFunc">
         <A name="transformFunc"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">transformFunc &lt;NONE/LOG&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="logo">
+        <A name="logo"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">logo on</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="windowingFunction">
         <A name="windowingFunction"></A><IMG class='toggle detail'>
@@ -959,6 +1111,12 @@ are described below along with settings specific to their types.</P>
     </td></tr>
     <tr valign=top><td class="autoScale"><a name="autoScale"></a><img class='toggle detail'>
         <div class="format"><code class="level-base">autoScale &lt;off/on/group&gt;</code></div>
+    </td></tr>
+    <tr valign=top><td class="hicDistanceMin"><a name="hicDistanceMin"></a><img class='toggle detail'>
+        <div class="format"><code class="level-new">hicDistanceMin &lt;integer&gt;</code></div>
+    </td></tr>
+    <tr valign=top><td class="hicDistanceMax"><a name="hicDistanceMax"></a><img class='toggle detail'>
+        <div class="format"><code class="level-new">hicDistanceMax &lt;integer&gt;</code></div>
     </td></tr>
     <tr class="examples" valign=top><td class="hic_example"><img class='toggle detail'>
         <div class="format"><b>Example of a hic track</b></div>

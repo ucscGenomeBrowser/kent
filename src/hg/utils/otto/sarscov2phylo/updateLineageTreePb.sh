@@ -24,18 +24,23 @@ matUtils=$usherDir/build/matUtils
 today=$(date +%F)
 cd $ottoDir/$buildDate
 
-# Get node ID for root of lineage A, used as reference/root by Pangolin:
-if [ ! -s clade-paths ]; then
-    $matUtils extract -i gisaidAndPublic.$buildDate.masked.pb -C clade-paths
-fi
-lineageARoot=$(grep ^A$'\t' clade-paths | cut -f 2)
-
-# Reroot protobuf to lineage A:
+# Remove sequences that have two or more reversions relative to their assigned clade/lineage.
+$matUtils extract -i gisaidAndPublic.$buildDate.masked.pb --node-stats node-stats
+tawk '$5 > 1 {print $1;}' node-stats > pruneRevs
 $matUtils extract -i gisaidAndPublic.$buildDate.masked.pb \
-    --reroot $lineageARoot \
-    -o gisaidAndPublic.$buildDate.masked.reroot.pb
+    -p -s pruneRevs -O -o gisaidAndPublic.$buildDate.masked.pruneRevs.pb
 
-# Reroot pango.clade-mutations.tsv:
+# Get node ID for root of lineage A, used as reference/root by Pangolin:
+$matUtils extract -i gisaidAndPublic.$buildDate.masked.pruneRevs.pb -C clade-paths.prunedRevs
+lineageARoot=$(grep ^A$'\t' clade-paths.prunedRevs | cut -f 2)
+
+# Reroot protobuf to lineage A and restrict to low mutation density (highly supported nodes):
+$matUtils extract -i gisaidAndPublic.$buildDate.masked.pruneRevs.pb \
+    --reroot $lineageARoot \
+    --max-mutation-density 2 \
+    -O -o gisaidAndPublic.$buildDate.masked.reroot.pb
+
+# Reroot pango.clade-mutations.tsv
 grep -w ^A $scriptDir/pango.clade-mutations.tsv \
 | sed -re 's/T28144C( > )?//;  s/C8782T( > )?//;' \
     > pango.clade-mutations.reroot.tsv
@@ -45,18 +50,28 @@ grep -vw ^A $scriptDir/pango.clade-mutations.tsv \
 
 # Mask additional bases at the beginning and end of the genome that pangolin masks after
 # aligning input sequences.
+set +x
 for ((i=56;  $i <= 265;  i++)); do
     echo -e "N${i}N"
 done > maskPangoEnds
 for ((i=29674;  $i < 29804;  i++)); do
     echo -e "N${i}N"
 done >> maskPangoEnds
+set -x
 $matUtils mask -i gisaidAndPublic.$buildDate.masked.reroot.pb \
     -m maskPangoEnds -o gisaidAndPublic.$buildDate.masked.reroot.pangoMasked.pb
 
+# Preserve lineage annotations that survived rerooting and pango-masking
+$matUtils extract -i gisaidAndPublic.$buildDate.masked.reroot.pangoMasked.pb \
+    -C clade-paths.reroot.pangoMasked
+tail -n+2 clade-paths.reroot.pangoMasked \
+| grep '^[A-Za-z]' \
+| cut -f 1,3 > lineageToPath.reroot.pangoMasked
+
 # Assign updated lineages on the rerooted & pango-masked tree, pango-only for pangolin:
-time $matUtils annotate -T 50 \
+time $matUtils annotate -T 80 \
     -i gisaidAndPublic.$buildDate.masked.reroot.pangoMasked.pb \
+    -P lineageToPath.reroot.pangoMasked \
     -M pango.clade-mutations.reroot.tsv \
     -l \
     -c lineageToName \
@@ -86,8 +101,8 @@ done
 conda activate pangolin
 for i in 0 1 2 3 4 5 6 7 8 9; do
     echo test.50.$i.simp
-    time pangolin -t 50 --usher-tree test.50.$i.simp.pb \
-        --skip-designation-hash --no-temp --outdir subset_10000_0.pusher.test.50.$i.simp.out \
+    time pangolin -t 80 --usher-tree test.50.$i.simp.pb \
+        --skip-designation-cache --no-temp --outdir subset_10000_0.pusher.test.50.$i.simp.out \
         ../pangolin_eval/subset_10000_0.fa
 done
 

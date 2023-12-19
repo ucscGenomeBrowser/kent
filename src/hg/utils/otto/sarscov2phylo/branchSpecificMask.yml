@@ -1,0 +1,193 @@
+# Trying out a more data-driven approach to identifying nodes, sites and specific mutations
+# for branch-specific masking.
+
+version: 0
+
+B.1.1.7:
+    representative: Italy/TAA-1900553896/2021
+    representativeBacktrack: 1    # use the parent node of representative's node
+    ranges: [ [ 11288, 11296] ]   # recurring deletion found in many VoCs
+
+B.1.351:
+    representative: SouthAfrica/CERI-KRISP-K012031/2021
+    ranges: [ [ 11288, 11296] ]
+
+P.1:
+    representative: FRA/IHUCOVID-005193-N1/2021
+    ranges: [ [ 11288, 11296] ]
+
+B.1.617.2:
+    representative: IND/GBRC714b/2021
+    # Deletions at S:157-158 (22029-22034), ORF8:119-120 (28248-28253); mask adjacent noisy bases too
+    ranges: [ [ 22027, 22034], [28246, 28254] ]
+    sites: [ 21302, 21304, 21305, # https://github.com/cov-lineages/pango-designation/issues/398
+             21846,               # S:95 noisy -- caused split AY.100
+             28461,               # https://github.com/cov-lineages/pango-designation/issues/435
+             28271 ]              # deletion
+
+BA.1:
+    representative: England/DHSC-CYBJ4Y8/2022
+    ranges: [ [ 6513, 6515 ],
+              [ 11283, 11291 ],   # https://github.com/cov-lineages/pango-designation/issues/361
+              [ 21765, 21770 ],
+              [ 21988, 21995 ],
+              [ 22194, 22217 ],   # deletion 22194-22196, insertion after 22204, big mess after that
+              [ 28362, 28370 ] ]
+    sites: [ 203, 22813, 22898, 22882, 23854 ]
+
+BA.1.1:
+    # On the BA.1 branch, so it inherits BA.1 masking.
+    representative: England/ALDP-2BEB0A0/2021
+    ranges: [ [ 76, 77 ] ]
+    reversions: [ G26530A ]       # false reversions on this really messed up the BA.1.1.1 branch.
+                                  # XD should have this reversion, oh well.
+
+BA.2:
+    # I'm including some 5' UTR and 3' UTR sites now; in retrospect could have started earlier.
+    # I would mask 210 too but it's useful for finding breakpoints of Delta/BA.2 recombinants.
+    # 212 is also noisy but I'm leaving it in as a red flag for 210 mutations that might be noise.
+    representative: England/DHSC-CYBAB7G/2022
+    representativeBacktrack: 1
+    ranges: [ # 5' UTR
+              [ 76, 81 ], [83, 86 ], [ 88, 89 ], [ 91, 94 ], [ 96, 101 ], [ 105, 106 ],
+              [ 123, 124 ], [ 126, 127 ], [ 129, 136 ], [ 139, 141 ], [ 143, 148 ], [ 151, 152 ],
+              [ 157, 159 ], [ 179, 180 ], [ 197, 201 ], [ 203, 204], [ 206, 207 ], [ 216, 219 ],
+              [ 221, 225 ], [ 230, 233 ], [ 241, 243 ], [ 245, 246 ],
+              # deletions
+              [ 11288, 11296 ], [ 21633, 21641 ], [ 28361, 28371 ], [ 29734, 29759 ],
+              # 28877 and 28878 together are highly homoplasic in all of B.1.1 (28881-28883).
+              # They seem to be found very consistently in P.1*, but pop up in many places in Alpha
+              # and Omicrons.  I haven't looked closely at the Alpha instances but they caused
+              # some mini-Omicrons (https://github.com/cov-lineages/pango-designation/issues/988).
+              # Possibly could also mask in B.1.1.7 and BA.1 but those are old news.
+              [ 28877, 28878 ],
+              # 3'UTR
+              [ 29769, 29779 ], [ 29781, 29782 ] ]
+    sites: [ # 5'UTR
+             103, 110, 119, 121, 154, 162, 164, 214, 228, 239,
+             # amplicon dropout (there are so many more; omitting to avoid recombinant trouble)
+             22786, 22882, 23854,
+             # Recurrent multi-muts / misaligned insertions
+             # https://github.com/cov-lineages/pango-designation/issues/2327#issuecomment-1763481773
+             28245, 28251, 28254,
+             # 3' UTR
+             29760, 29762, 29764,
+             29766,                   # only Luxembourg, made a mini-BA.2
+             29767, 29784, 29786, 29793, 29800, 29803 ]
+
+BA.2.75:
+    # Inherits BA.2 masking but has so many problems with false reversions I'm adding a ton here.
+    representative: India/WB-INSACOG-1931503209307/2022
+    reversions: [ # BA.2-level but not masked BA.2-wide to avoid messing up recombinants:
+                  G670T, T2790C, T3037C, T4321C, G9424A, T9534C, T9866C, T10029C, T10198C,
+                  G18163A, T19955C, G20055A, T21618C, G22200T, A22578G, T22674C, C22679T,
+                  T22686C, G22688A, A22775G, T22813G, A22992G, A22995C, C23013A, G23055A,
+                  T23063A, C23075T, G23403A, T23525C, G23599T, A23604C, T23948G, T24424A,
+                  A24469T, T25000C, T26270C, G26577C, T27807C, T28271A, C29510A,
+                  # BA.2.75-defining, very dropout-prone:
+                  T4586C, G22001A, C22016T, A22033C, G22190A, C22577G, G26275A,
+                  # BA.2.75-defining, bad but maybe not quite as bad:
+                  T3796C, T3927C, T5183C, G12444A, A15451G, G22190A, A22331G, A22898G,
+                  G22942T, C23013A ]
+    # False muts in re-placed (from BA.5) recombinants:
+    # XBD: A26275G
+    # XBP: G22331A, G22577C, G22898A, A26275G
+    # XBR: A22190G, G22331A, G22577C, G22898A, A26275G
+    # XBS: A22190G, G22331A, G22577C, G22898A, A26275G
+
+BN.1.2.3:
+    # Inherits from BA.2.75
+    representative: England/QEUH-326228D4/2022
+    sites: [ 337 # https://github.com/cov-lineages/pango-designation/issues/2016#issuecomment-1626159006
+           ]
+
+BA.2.86:
+    # Inherits from BA.2
+    # @Over-There-Is requested 21610 - very messy indeed.
+    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606#issuecomment-1801095482
+    # @aviczhl2 pointed out some recurring reversions:
+    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1072
+    representative: OY747147.1
+    sites: [ 21610 ]
+    reversions: [ T21711C, C22032T, A22033C, G22034A, A23012G, G26610A ]
+
+BA.4:
+    # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.
+    representative: SouthAfrica/NICD-N41664/2022
+    ranges: [ [ 686, 694 ], [ 21765, 21770 ] ]
+
+BA.5:
+    # BA.5 is placed on the BA.2 branch so it inherits all the BA.2 sites.
+    representative: England/PHEP-YYFJPAM/2022
+    ranges: [ [ 21765, 21770 ] ]
+    # Some of these should be reverted in recombinants, but we're pretty much past the point of
+    # simultaneous Delta/Omicron and the noise from false reversions is so intolerable that we'll
+    # just have to watch out for missing reversions when working with recombinants.
+    # False muts in recombinants that were later re-placed in BA.2.75:
+    # XBD: G12160A, T22917G, T23018G
+    # XBP: G12160A,
+    # XBR: G12160A
+    # XBS: G12160A
+    reversions: [ G670T, T2790C, T3037C, A4184G, T4321C, G9424A, T9534C, T10198C, A12160G,
+                  T15714C, T17410C, G18163A, T19955C, G20055A, T21618C, G22200T, A22578G,
+                  T22674C, C22679T, T22686C, G22688A, A22775G, T22813G, G22882T, G22917T,
+                  A22992G, A22995C, C23013A, G23018T, G23055A, T23063A, C23075T, G23403A,
+                  T23525C, G23599T, A23604C, T25000C, A26529G, G26577C, A26709G, T27807C,
+                  T27889C, T28271A, C29510A ]
+
+BQ.1:
+    # Inherits from BA.5
+    # Mask some suspicious run-of-nearby-site mutations that cause a mini-BQ.1 branch and
+    # caused trouble when minimizing the tree for pango-designation v1.18.1 pangolin-data release.
+    representative: England/PHEP-YYGYEQS/2022
+    sites: [ 114, 117, 244, 256, 258, 261, 264 ]
+
+BQ.1.1:
+    # Inherits from BQ.1
+    representative: England/DHSC-CYF1KSU/2022
+    reversions: [ C22893A, A22942T ]
+
+XBB:
+    # Inherits from BA.2
+    # Lots of false reversions; I would also mask G405A except that would be wrong for XBN.
+    representative: BGD/icddrb_TND_06_1053/2022
+    # Homopolymer run 21999-22005 causes big trouble for Ion Torrent & nanopore, leading to false
+    # substitutions in 21994, 21995 and 21998 as discussed in pango-designation issues 1882, 1503,
+    # 1999, 1918.  21998 in particular crops up a lot, all over XBB, interfering with many sublins.
+    # Also, XBB.1.9, XBB.1.16 and XBB.2.3 sequences all seem to have del21991-21993 though very few
+    # XBB.1.5 polytomy sequences seem to have it.  Mask anyway, causing trouble.
+    ranges: [ [ 21991, 21995 ] ]
+    sites: [ 21998 ]
+    reversions: [ T2790C, T3037C, A4184G, T4321C, T9344C, G9424A, T10198C, C17859T, G19326A,
+                  T21618C, C21810T, A22000C, G22109C, C22577G, A22578G, C22599G, A22664C, C22679T,
+                  T22686C, G22688A, T22813G, C22895G, C22896T, A22898G, G22942T, A22992G, A22995C,
+                  C23013A, C23019T, C23031T, T24424A, A24469T, T25000C, T26060C, G26577C, A26709G,
+                  T26858C, T27807C ]
+XBB.1:
+    # Inherits from XBB
+    # Here I'm going a bit past the technical start of XBB.1, to include G27915T to be more sure
+    # that it's XBB.1 before we mask out the defining mutation of XBB.1
+    representative: England/LSPA-32578111/2022
+    reversions: [ T22317G ]
+
+XBB.1.5:
+    # Inherits from XBB.1
+    # Don't believe reversions on 27915 once we're as far as XBB.1.*
+    representative: England/BRBR-32671539/2022
+    reversions: [ T27915G ]
+
+XBC:
+    # Inherits nothing!  Should find out its deletions.
+    # Cornelius Roemer requested to mask several reversions in
+    # https://github.com/cov-lineages/pango-designation/issues/1100#issuecomment-1426502678
+    representative: Philippines/PH-VUI-142736/2022
+    reversions: [ G5584A, T13019C, T22329C, T25000C, C27718T, T28271A ]
+
+XCK:
+    # Inherits from XBB.1.5
+    # @FedeGueli pointed out that the usher tree had a very flaky 29729. TL;DR mafft is counfounding
+    # two nearby deletions, a new 29726 and the old 29734-29759, and making a false subst by getting
+    # the deletion boundaries wrong.  Mask 29729 here.
+    representative: USA/TX-CDC-QDX84451512/2023
+    representativeBacktrack: 2
+    sites: [ 29729 ]

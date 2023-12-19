@@ -196,11 +196,11 @@ fputs("\n", f);
 }
 
 
-static struct rgbColor pink = {255,51,255};
-static struct rgbColor black = {0,0,0};
-static struct rgbColor trueBlue = {12,12,120};
-static struct rgbColor mediumBlue = {80, 80, 160};
-static struct rgbColor lightBlue = {130, 130, 210};
+static struct rgbColor pink = {255,51,255, 255};
+static struct rgbColor black = {0,0,0, 255};
+static struct rgbColor trueBlue = {12,12,120, 255};
+static struct rgbColor mediumBlue = {80, 80, 160, 255};
+static struct rgbColor lightBlue = {130, 130, 210, 255};
 
 static void outputKnownGeneColor( struct genePred *compGenePreds, struct hashes *hashes)
 /* Output the kgColor table. */
@@ -549,6 +549,8 @@ for (gp = compGenePreds; gp; gp = gp->next)
 	}
     for(; hel; hel = hel->next)
 	{
+	if (differentString(gp->name, hel->name))
+            continue;
 	char *tag = (char *)hel->val;
 
 	AllocVar(ti);
@@ -562,7 +564,9 @@ for (gp = compGenePreds; gp; gp = gp->next)
 	ti->gp = gp;
 	ti->ucscId = ucscId;
 
-	if (startsWith("appris_principal", tag))
+        if (startsWith("MANE", tag))
+	    ti->tagVal = 110;
+        else if (startsWith("appris_principal", tag))
 	    ti->tagVal = 100;
 	else if (startsWith("appris_alternative", tag))
 	    ti->tagVal = 90;
@@ -587,7 +591,6 @@ for(ti=tiList; ti; ti = ti->next)
 	    clusterId, ti->transcriptId, ti->geneId);
 
 	clusterId++;
-//	printf("%s %s %s %d\n", ti->geneId, ti->transcriptId, ti->tag, ti->length);
 	}
     }
 for (gp = compGenePreds; gp; gp = gp->next)

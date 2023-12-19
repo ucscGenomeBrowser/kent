@@ -20,6 +20,10 @@ name uniProt
 tables flyBaseToUniProt
 idSql select alias from flyBaseToUniProt where name = '%s'
 
+name alphafold
+tables flyBaseToUniProt
+idSql select alias from flyBaseToUniProt where name = '%s'
+
 name refSeq
 shortLabel RefSeq
 tables flyBaseToRefSeq
@@ -40,8 +44,8 @@ hide
 name stanfordSource
 hide
 
-name cgap
-hide
+#name cgap
+#hide
 
 name ensembl
 url http://www.ensembl.org/Drosophila_melanogaster/geneview?transcript=%s

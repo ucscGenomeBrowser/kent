@@ -209,8 +209,11 @@ while ((stanza = raNextRecord(lf)) != NULL)
         includeFile = hashLookup(stanza, "include");
         if (includeFile != NULL)
             {
-            char *newUrl = trackHubRelativeUrl(url, includeFile->val);
-            printOneFile(newUrl, f, oneFile, downloadDir);
+            for(; includeFile; includeFile = includeFile->next)
+                {
+                char *newUrl = trackHubRelativeUrl(url, includeFile->val);
+                printOneFile(newUrl, f, oneFile, downloadDir);
+                }
             }
         else
             printGenericStanza(stanza, f, url);

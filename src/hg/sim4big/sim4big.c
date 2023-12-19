@@ -278,7 +278,7 @@ struct lineFile *gLf = lineFileOpen(genomicFile, TRUE), *mLf = NULL;
 struct dnaSeq gSeq, mSeq;
 char gTempName[512], mTempName[512], sTempName[512];
 char gSeqName[512];
-struct dyString *command = newDyString(512);
+struct dyString *command = dyStringNew(512);
 FILE *f = mustOpen(outputFile, "w");
 ZeroVar(&gSeq);
 ZeroVar(&mSeq);
@@ -314,7 +314,7 @@ while (faMixedSpeedReadNext(gLf, &gSeq.dna, &gSeq.size, &gSeq.name))
 if (dotEvery > 0)
     printf("\n");
 lineFileClose(&gLf);
-freeDyString(&command);
+dyStringFree(&command);
 carefulClose(&f);
 remove(gTempName);
 remove(mTempName);

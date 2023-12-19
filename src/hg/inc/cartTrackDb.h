@@ -10,6 +10,10 @@ void cartTrackDbInit(struct cart *cart, struct trackDb **retFullTrackList,
  * If useAccessControl, exclude tracks with 'tableBrowser off' nor tables listed
  * in the table tableAccessControl. */
 
+void cartTrackDbInitForApi(struct cart *cart, char *db, struct trackDb **retFullTrackList,
+                     struct grp **retFullGroupList, boolean useAccessControl);
+/* Similar to cartTrackDbInit, but allow cart to be NULL */
+
 boolean cartTrackDbIsAccessDenied(char *db, char *table);
 /* Return TRUE if useAccessControl=TRUE was passed to cartTrackDbInit and
  * if access to table is denied (at least on this host) by 'tableBrowser off'

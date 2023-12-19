@@ -28,10 +28,10 @@ static void themeDropDown(struct cart* cart)
  * */
 {
 struct slName* themes = cfgNamesWithPrefix("browser.theme.");
-//struct slName* themes = cfgNames();
 if (themes==NULL)
     return;
 
+slNameSort(&themes);
 hPrintf("<TR><TD>website style:");
 hPrintf("<TD style=\"text-align: right\">");
 
@@ -43,8 +43,10 @@ el = themes;
 for (el = themes; el != NULL && i<50; el = el->next)
     {
     char* name = el->name;
-    name = chopPrefix(name); // chop off first two words
+    name = chopPrefix(name); // chop off first three words
     name = chopPrefix(name);
+    name = chopPrefix(name);
+    replaceChar(name, '_', ' ');
     labels[i] = name;
     i++;
     }
@@ -260,6 +262,7 @@ cgiMakeHiddenVar(configGroupTarget, "none");
 
 // Now all groups are in a single table, divided by an empty borderless row
 hPrintf("<TABLE BORDER='0' CELLSPACING='0' class='groupLists'>\n");
+struct hash *superHash = hashNew(8);
 for (group = groupList; group != NULL; group = group->next)
     {
     struct trackRef *tr;
@@ -344,7 +347,7 @@ for (group = groupList; group != NULL; group = group->next)
      * tracks, and to insert a track in the list for the supertrack.
      * Sort tracks and supertracks together by priority */
     makeGlobalTrackHash(trackList);
-    groupTrackListAddSuper(cart, group);
+    groupTrackListAddSuper(cart, group, superHash);
 
     if (!withPriorityOverride)
         {
@@ -446,6 +449,7 @@ for (group = groupList; group != NULL; group = group->next)
     cgiDown(0.9);
     hPrintf("</td></tr>\n");
     }
+hashFree(&superHash);
 hPrintf("</TABLE>\n");
 
 jsInline("$(document).ready( cfgPageAddListeners )");
@@ -625,6 +629,53 @@ if (freeTypeOn())
     textStyleDropDown();
     hPrintf("</TR>");
     hPrintf("</TR>");
+    }
+
+if (cfgOptionBooleanDefault("showMouseovers", FALSE))
+    {
+    /* I predict most people will want the browser text size as the tooltip text size
+     * but just in case, users can change the value and it will remain independent
+     * of the font size by saving to localStorage. */
+    hPrintf("<tr><td>tooltip text size:</td>");
+    hPrintf("<td style=\"text-align: right\">");
+    static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
+    int i;
+    hPrintf("<select name='tooltipTextSize'>");
+    for (i = 0; i < ArraySize(sizes); i++)
+        {
+        hPrintf("<option ");
+        if (sameString(tl.textSize,sizes[i])) {hPrintf("selected");}
+        hPrintf(">%s</option>", sizes[i]);
+        }
+    hPrintf("</select>");
+    hPrintf("</td>");
+    hPrintf("</tr>");
+    jsInlineF(""
+        "function updateSelectedTooltipSize(newSize) {\n"
+        "    let options = document.getElementsByName('tooltipTextSize')[0];\n"
+        "    let i = 0;\n"
+        "    for (i; i < options.length; i++) {\n"
+        "        if (options[i].value === newSize) {\n"
+        "            options[i].selected = true;\n"
+        "            localStorage.setItem('tooltipTextSize', options[i].value);\n"
+        "        } else {\n"
+        "            options[i].selected = false;\n"
+        "        }\n"
+        "    }\n"
+        "}\n"
+        "\n"
+        "// set the tooltip text size based on localStorage values\n"
+        "let currTooltipSize = localStorage.getItem('tooltipTextSize');\n"
+        "let browserTextSize = document.getElementsByName('textSize')[0];\n"
+        "if (currTooltipSize === null) {\n"
+        "    localStorage.setItem('tooltipTextSize', browserTextSize.value);\n"
+        "} else {\n"
+        "    updateSelectedTooltipSize(currTooltipSize);\n"
+        "}"
+        "document.getElementsByName('tooltipTextSize')[0].addEventListener('change', function(e) {\n"
+        "    updateSelectedTooltipSize(document.getElementsByName('tooltipTextSize')[0].selectedOptions[0].value);\n"
+        "});\n"
+        );
     }
 
 themeDropDown(cart);

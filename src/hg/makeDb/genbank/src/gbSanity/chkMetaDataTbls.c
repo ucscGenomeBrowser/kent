@@ -81,34 +81,31 @@ static void loadGbCdnaInfoData(struct metaDataTbls* metaDataTbls,
                                struct gbSelect* select, struct sqlConnection* conn)
 /* load the gbCdnaInfo table */
 {
-char accWhere[64];
-char query[512];
 struct sqlResult* result;
 char** row;
 
 gbVerbMsg(2, "load gbCdnaInfo table data");
-// FIXME: might be better as sqlDyString
-accWhere[0] = '\0';
-if (select->accPrefix != NULL)
-    sqlSafefFrag(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
-          select->accPrefix);
-sqlSafef(query, sizeof(query), 
+struct dyString *query = sqlDyStringCreate(
       "SELECT acc,id,version,moddate,type,direction,"
       /*        0  1       2       3    4         5 */
       "source,organism,library,mrnaClone,sex,tissue,development,cell,cds,"
       /*    6        7       8         9  10     11          12   13  14 */
       "keyword,description,geneName,productName,author "
       /*    15          16       17          18     19 */
-      "FROM gbCdnaInfo WHERE (type='%s')%-s",
-      ((select->type == GB_MRNA) ? "mRNA" : "EST"), accWhere);
+      "FROM gbCdnaInfo WHERE (type='%s')",
+      (select->type == GB_MRNA) ? "mRNA" : "EST");
+if (select->accPrefix)
+    sqlDyStringPrintf(query, " AND (acc LIKE '%s%%')", select->accPrefix);
+
 /* mrna doesn't have a srcDb, so we guess from acc */
-result = sqlGetResult(conn, query);
+result = sqlGetResult(conn, dyStringContents(query));
 while ((row = sqlNextRow(result)) != NULL)
     {
     if (gbGuessSrcDb(row[0]) == select->release->srcDb)
         loadGbCdnaInfoRow(metaDataTbls, conn, row);
     }
 sqlFreeResult(&result);
+dyStringFree(&query);
 }
 
 static void loadRefSeqStatusRow(struct metaDataTbls* metaDataTbls,
@@ -142,7 +139,9 @@ char** row;
 
 gbVerbMsg(2, "load refSeqStatus table data");
 
-result = sqlGetResult(conn, NOSQLINJ "SELECT mrnaAcc,status FROM refSeqStatus");
+char query[1024];
+sqlSafef(query, sizeof query, "SELECT mrnaAcc,status FROM refSeqStatus");
+result = sqlGetResult(conn, query);
 while ((row = sqlNextRow(result)) != NULL)
     loadRefSeqStatusRow(metaDataTbls, conn, row);
 sqlFreeResult(&result);
@@ -198,8 +197,11 @@ char** row;
 
 gbVerbMsg(2, "load relLink table data");
 
-result = sqlGetResult(conn, NOSQLINJ "SELECT mrnaAcc,name,product,protAcc,geneName,"
+char query[1024];
+sqlSafef(query, sizeof query, 
+    "SELECT mrnaAcc,name,product,protAcc,geneName,"
                       "prodName,locusLinkId,omimId from refLink");
+result = sqlGetResult(conn, query);
 while ((row = sqlNextRow(result)) != NULL)
     loadRefLinkRow(metaDataTbls, conn, row);
 sqlFreeResult(&result);
@@ -276,28 +278,23 @@ static void loadGbStatus(struct metaDataTbls* metaDataTbls,
                          struct sqlConnection* conn)
 /* load the gbStatus table */
 {
-char accWhere[64];
-char query[512];
 struct sqlResult* result;
 char** row;
 
 gbVerbMsg(2, "load gbStatus table data");
-// FIXME: might be better as sqlDyString
-accWhere[0] = '\0';
-if (select->accPrefix != NULL)
-    sqlSafefFrag(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
-          select->accPrefix);
-sqlSafef(query, sizeof(query), 
+struct dyString *query = sqlDyStringCreate(
       "SELECT acc,version,modDate,type,srcDb,orgCat,gbSeq,numAligns "
-      "FROM gbStatus WHERE (type='%s') AND (srcDb='%s')%-s",
+      "FROM gbStatus WHERE (type='%s') AND (srcDb='%s')",
       ((select->type == GB_MRNA) ? "mRNA" : "EST"),
-      ((select->release->srcDb == GB_GENBANK) ? "GenBank" : "RefSeq"),
-      accWhere);
+      ((select->release->srcDb == GB_GENBANK) ? "GenBank" : "RefSeq"));
+if (select->accPrefix != NULL)
+    sqlDyStringPrintf(query, " AND (acc LIKE '%s%%')", select->accPrefix);
 
-result = sqlGetResult(conn, query);
+result = sqlGetResult(conn, dyStringContents(query));
 while ((row = sqlNextRow(result)) != NULL)
     loadGbStatusRow(metaDataTbls, conn, row, descOrgCats);
 sqlFreeResult(&result);
+dyStringFree(&query);
 }
 
 static void chkGbStatusGbEntry(struct gbSelect* select, struct gbEntry* entry,

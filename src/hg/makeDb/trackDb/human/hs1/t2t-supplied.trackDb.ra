@@ -1,0 +1,21 @@
+# tracks supplied by the T2T project
+
+include catLiftOffGenesV1.trackDb.ra
+include censat.trackDb.ra
+include clinVar20220313.trackDb.ra
+include cytoBandMapped.trackDb.ra
+include dbSNP155.trackDb.ra
+include encode.trackDb.ra
+include gwasSNPs2022-03-08.trackDb.ra
+include hgCactus.trackDb.ra
+include hgLiftOver.trackDb.ra
+include hgUnique.trackDb.ra
+include microsatellites.trackDb.ra
+include proseq.trackDb.ra
+include rdnaModel.trackDb.ra
+include rnaseq.trackDb.ra
+include sedefSegDups.trackDb.ra
+include sgdpCopyNumber.trackDb.ra
+include t2tRepeatMasker.trackDb.ra
+
+

@@ -6,7 +6,7 @@ longLabel All GENCODE annotations from VM19 (Ensembl 94)
 group genes
 dragAndDrop subTracks
 priority 2.965
-visibility pack
+visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
 allButtonPair on

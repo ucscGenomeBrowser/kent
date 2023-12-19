@@ -1,0 +1,48 @@
+track microsatellites
+compositeTrack on
+visibility hide
+shortLabel Microsatellites
+longLabel Microsatellite repeats
+type bigWig
+group map
+html html/microsatellites.html
+    
+    track microsatellites_GA
+    parent microsatellites
+    shortLabel GA Microsatellites
+    longLabel GA Microsatellite repeats
+    type bigWig 
+    visibility dense
+    color 83,105,255
+    priority 1
+    bigDataUrl /gbdb/hs1/microsatellites/chm13v2.0.microsatellite.GA.128.bw
+    
+    track microsatellites_TC
+    parent microsatellites
+    shortLabel TC Microsatellites
+    longLabel TC Microsatellite repeats
+    type bigWig 
+    visibility dense
+    color 102,0,102
+    priority 2
+    bigDataUrl /gbdb/hs1/microsatellites/chm13v2.0.microsatellite.TC.128.bw
+    
+    track microsatellites_GC
+    parent microsatellites
+    shortLabel GC Microsatellites
+    longLabel GC Microsatellite repeats
+    type bigWig 
+    visibility dense
+    color 188,115,19
+    priority 3
+    bigDataUrl /gbdb/hs1/microsatellites/chm13v2.0.microsatellite.GC.128.bw
+
+    track microsatellites_AT
+    parent microsatellites
+    shortLabel AT Microsatellites
+    longLabel AT Microsatellite repeats
+    type bigWig 
+    visibility dense
+    color 51,102,0
+    priority 4
+    bigDataUrl /gbdb/hs1/microsatellites/chm13v2.0.microsatellite.AT.128.bw

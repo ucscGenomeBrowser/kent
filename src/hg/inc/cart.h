@@ -16,6 +16,9 @@ struct cart;         // forward definition for use in trackDb.h
 #include "linefile.h"
 #include "trackDb.h"
 
+#define namedSessionDbTableConfVariable    "namedSessionDbName"
+#define defaultNamedSessionDb              "namedSessionDb"
+
 // If cgi set as CART_VAR_EMPTY, then removed from cart
 // If If cgi created new and oldVars are stored, then will be CART_VAR_EMPTY in old vars
 #define CART_VAR_EMPTY "[]"
@@ -125,6 +128,10 @@ struct slPair *cartVarsWithPrefix(struct cart *cart, char *prefix);
 struct slPair *cartVarsWithPrefixLm(struct cart *cart, char *prefix, struct lm *lm);
 /* Return list of cart vars that begin with prefix allocated in local memory.
  * Quite a lot faster than cartVarsWithPrefix. */
+
+void cartCloneVarsWithPrefix(struct cart *cart, char *prefix, char *newPrefix);
+/* Add a copy of all vars that start with prefix to cart.  The new vars will
+ * start with newPrefix instead of prefix */
 
 void cartRemoveLike(struct cart *cart, char *wildCard);
 /* Remove all variable from cart that match wildCard. */
@@ -410,6 +417,11 @@ void cartWebEnd();
 /* End out pretty wrapper around things when working
  * from cart. */
 
+void cartWebEndExtra(char *footer);
+/* Write out HTML footer and get rid or error handler, with extra text
+ * at the end of the page as desired.
+ */
+
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
         char *cookieName, char **exclude, struct hash *oldVars);
 /* Load cart from cookie and session cgi variable.  Write web-page
@@ -469,13 +481,14 @@ void cartSetDbDisconnector(DbDisconnect disconnector);
 
 #define hgsOtherUserName hgSessionPrefix "otherUserName"
 #define hgsOtherUserSessionName hgSessionPrefix "otherUserSessionName"
+#define hgsMergeCart hgSessionPrefix "merge"
 #define hgsOtherUserSessionLabel hgSessionPrefix "otherUserSessionLabel"
 #define hgsDoOtherUser hgSessionPrefix "doOtherUser"
 
 #define hgsLoadUrlName hgSessionPrefix "loadUrlName"
 #define hgsDoLoadUrl hgSessionPrefix "doLoadUrl"
 
-#define namedSessionTable "namedSessionDb"
+#define namedSessionTable cartNamedSessionDbTable()
 
 void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 			 char *encSessionName);
@@ -673,5 +686,8 @@ void cartTurnOnSuper(struct cart *cart, char **trackNames, unsigned numTracks, c
 /* Turn on a supertrack if any of the subtracks are not hidden.  ASSUMES ALL TRACKS ARE HIDDEN
  * by default.
  */
+
+char *cartNamedSessionDbTable();
+/* Get the name of the table that lists named sessions.  Don't free the result. */
 #endif /* CART_H */
 

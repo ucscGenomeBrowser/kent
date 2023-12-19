@@ -24,6 +24,7 @@ UTILS_APPLIST = \
 	bedWeedOverlapping \
 	bedMergeAdjacent \
 	bedPartition \
+	bigChainBreaks \
 	bigGenePredToGenePred \
 	bigMafToMaf \
 	bigPslToPsl \
@@ -37,6 +38,7 @@ UTILS_APPLIST = \
 	genePredFilter \
 	genePredToBigGenePred \
 	genePredToProt \
+	gencodeVersionForGenes \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
@@ -50,12 +52,15 @@ UTILS_APPLIST = \
 	oligoMatch \
 	overlapSelect \
 	positionalTblCheck \
+	pslLiftSubrangeBlat \
 	pslToBigPsl \
+	raSqlQuery \
+	rmskAlignToPsl \
 	tdbQuery \
 	transMapPslToGenePred \
-	raSqlQuery \
-	pslLiftSubrangeBlat \
-	twoBitMask
+	twoBitMask \
+	vcfToBed \
+	fixTrackDb
 
 USER_APP_SCRIPTS = \
 	vai.pl
@@ -114,8 +119,9 @@ APPS = $(DIRS) $(UTILS_APPLIST)
 all:: utils
 
 utils: $(APPS:%=%.utils) $(APP_SCRIPTS:%=%.appScript)
+# tolerate missing directories, as some were removed in kent-core
 %.utils:
-	cd $* && echo $* && $(MAKE)
+	if test -d $* ; then cd $* && echo $* && $(MAKE) ; fi
 %.appScript:
 	chmod +x $*
 	rm -f ${DESTDIR}${SCRIPTS}/$*
@@ -123,7 +129,7 @@ utils: $(APPS:%=%.utils) $(APP_SCRIPTS:%=%.appScript)
 
 userApps: $(UTILS_APPLIST:%=%.userApp) $(USER_APP_SCRIPTS:%=%.userAppScript)
 %.userApp:
-	cd $* && echo $* && $(MAKE)
+	if test -d $* ; then cd $* && echo $* && $(MAKE) ; fi
 %.userAppScript:
 	chmod +x $*
 	rm -f ${DESTDIR}${BINDIR}/$*
@@ -144,7 +150,7 @@ test::	${TEST_DIRS:%=%.test}
 clean:: $(APPS:%=%.clean)
 	- find . -name '*.o' -exec rm {} \;
 %.clean:
-	(cd $* && ${MAKE} clean)
+	(if test -d $* ; then cd $* && echo $* && $(MAKE) clean; fi)
 
 compile:: $(APPS:%=%.compile)
 	- find . -name '*.o' -exec rm {} \;

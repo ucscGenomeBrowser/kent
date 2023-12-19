@@ -8,9 +8,6 @@
 #include "jksql.h"
 #include "transMapGene.h"
 
-char *transMapGeneCommaSepFieldNames4 = "id,cds,db,geneName";   // previous version without geneId column
-char *transMapGeneCommaSepFieldNames = "id,cds,db,geneName,geneId";
-
 void transMapGeneStaticLoad(char **row, struct transMapGene *ret)
 /* Load a row from transMapGene table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -158,11 +155,11 @@ struct transMapGene *transMapGeneQuery(struct sqlConnection *geneConn,
 if (sqlFieldIndex(geneConn, table, "geneId") >= 0)
     return sqlQueryObjs(geneConn, (sqlLoadFunc)transMapGeneLoad,
                         sqlQuerySingle,
-                        "SELECT %-s FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
-                        transMapGeneCommaSepFieldNames, table, srcDb, srcId);
+                        "SELECT id,cds,db,geneName,geneId FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
+                        table, srcDb, srcId);
 else
     return sqlQueryObjs(geneConn, (sqlLoadFunc)transMapGeneLoad,
                         sqlQuerySingle,
-                        "SELECT %-s,\"\" FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
-                        transMapGeneCommaSepFieldNames4, table, srcDb, srcId);
+                        "SELECT id,cds,db,geneName,\"\" FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
+                        table, srcDb, srcId);
 }

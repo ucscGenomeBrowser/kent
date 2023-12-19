@@ -16,6 +16,9 @@ boolean pthreadMayCreate(pthread_t *thread, const pthread_attr_t *attr,
 	void *(*start_routine)(void *), void *arg);
 /* Create a thread.  Warn and return FALSE if there is a problem. */
 
+void pthreadJoin(pthread_t *thread, void **retVal);
+/* Wait for thread to complete and optionally get its return value, or die. */
+
 void pthreadMutexInit(pthread_mutex_t *mutex);
 /* Initialize mutex or die trying */
 

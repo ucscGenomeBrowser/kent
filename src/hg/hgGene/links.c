@@ -146,7 +146,7 @@ if (sameString(link->name, "tbSchema"))
     struct dyString *dy = NULL;
     if (tdb == NULL)
 	return NULL;
-    dy = newDyString(256);
+    dy = dyStringNew(256);
     dyStringPrintf(dy, link->url, tdb->grp, geneTable, geneTable);
     trackDbFree(&tdb);
     addLinkExtras(link, dy);
@@ -159,8 +159,9 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL && row[0][0] != 0) /* If not null or empty */
     {
-    struct dyString *dy = newDyString(0);
+    struct dyString *dy = dyStringNew(0);
     char *name = cloneAndCut(row[0], link->postCutAt);
+    eraseTrailingSpaces(link->url); // sometimes people accidentally leave trailing spaces in the .ra
     dyStringPrintf(dy, link->url, name, row[1], row[2], row[3]);
     addLinkExtras(link, dy);
     url = dyStringCannibalize(&dy);

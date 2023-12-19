@@ -4,8 +4,6 @@ shortLabel Rectum Wang
 longLabel Rectum single cell sequencing from Wang et al 2020
 visibility hide
 group singleCell
-priority 13
-pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track rectumWangCellType
     parent rectumWang

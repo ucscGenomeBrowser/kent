@@ -219,12 +219,15 @@ genePredCheck -db=hg38 ncbiRefSeqOther
 # addition of HGMD-restricted subset, Max, Jan 29 2019
 # updated Dec 2019
 # updated Dec 2020
+# updated Aug 2023
 cd /hive/data/genomes/hg38/bed/ncbiRefSeq.p13.2020-10-27/
 # change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019?
 # adding "." so NM_123 doesn't match NM_123123                                                                             
 cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
 zcat process/hg38.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
 hgLoadGenePred -genePredExt hg38 ncbiRefSeqHgmd hgmd.curated.gp
+# wc -l says:
+10772 hgmd.curated.gp for the 2021 version
 #############################################################################
 # ncbiRefSeq.p13 update (DONE - 2019-12-06 - Hiram)
 
@@ -353,3 +356,117 @@ wc -l refseqSelect.curated.gp
   # 137385668 bases of 3110768607 (4.416%) in intersection
 
 #############################################################################
+
+#############################################################################
+# Add psuedo-track of old transcripts (DONE - ChrisL - 2023-09-21)
+# Updated ChrisL 2023-10-06
+#############################################################################
+# see also /hive/data/outside/refSeqHistorical/newBuild.sh
+# get the gff3
+wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/historical/GRCh38/current/GCF_000001405.40-RS_2023_03_genomic.gff.gz
+wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/historical/GRCh38/current/GCF_000001405.40-RS_2023_03_knownrefseq_alns.bam
+wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/historical/GRCh38/current/GCF_000001405.40-RS_2023_03_knownrefseq_alns.bam.bai
+wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/historical/GRCh38/GCF_000001405.40-RS_2023_03_historical/GCF_000001405.40-RS_2023_03_knownrefseq_rna.gbff.gz
+
+# extract the sequences
+cp /hive/data/genomes/hg38/goldenPath/bigZips/p14/hg38.p14.chromAlias.txt chromAlias.txt
+samtools fasta GCF_000001405.40-RS_2023_03_knownrefseq_alns.bam > refSeqHistorical.fa
+faToTwoBit -ignoreDups refSeqHistorical.fa refSeqHistorical.2bit
+bamToPsl -nohead -chromAlias=chromAlias.txt \
+        -allowDups GCF_000001405.40-RS_2023_03_knownrefseq_alns.bam out.psl 
+~/kent/src/hg/utils/automation/gbffToCds.pl GCF_000001405.40-RS_2023_03_knownrefseq_rna.gbff.gz \
+    | sort > refSeqHistorical.cds
+# Check our cds is correct:
+hgsql -Ne "select * from ncbiRefSeqCds where id like 'NM%' order by rand() limit 6" hg38
+# +----------------+-----------+
+# | NM_001110798.2 | 263..1552 |
+# | NM_001190818.2 | 181..2766 |
+# | NM_002009.4    | 466..1050 |
+# | NM_006896.4    | 131..823  |
+# | NM_025190.4    | 193..4254 |
+# | NM_177402.5    | 215..1474 |
+# +----------------+-----------+
+grep "NM_025190.4\|NM_001110798.2\|NM_006896.4\|NM_177402.5\|NM_002009.4\|NM_001190818.2" refSeqHistorical.cds
+# NM_001110798.2    263..1552
+# NM_001190818.2  181..2766
+# NM_002009.4 466..1050
+# NM_006896.4 131..823
+# NM_025190.4 193..4254
+# NM_177402.5 215..1474
+
+# Now we have psl and cds for searching, make a genePred track for display
+zcat GCF_000001405.40-RS_2023_03_genomic.gff.gz \
+    | gff3ToGenePred -maxParseErrors=-1 -maxConvertErrors=-1 -warnAndContinue \
+        -attrsOut=attrs.out -unprocessedRootsOut=unprocessedRoots.out \
+        -refseqHacks stdin out.gp 2>err
+
+# rename chromosomes to ucsc names, and remove the ids
+# from the current version of the refSeq track
+hgsql -Ne "select distinct(name) from ncbiRefSeq" hg38 | sort > ncbiRefSeq.currentIds
+chromToUcsc -k 2 -a chromAlias.txt -i out.gp \
+    | sort > out.ucscChrom.gp
+chromToUcsc -k 14 -a chromAlias.txt -i out.psl \
+    | sort > out.ucscChrom.psl
+cut -f10 out.ucscChrom.psl | sort -u | comm -23 - ncbiRefSeq.currentIds > old.ids
+grep -Fwf old.ids out.ucscChrom.gp > refSeqHistorical.gp
+grep -Fwf old.ids out.ucscChrom.psl > refSeqHistorical.psl
+# make sure we have the right sequences:
+twoBitToFa -seqList=old.ids refSeqHistorical.2bit refSeqHistorical.deDuped.fa
+
+# make the bed file for the track
+hgLoadGenePred -genePredExt hg38 ncbiRefSeqHistorical refSeqHistorical.gp
+#genePredToBigGenePred refSeqHistorical.gp stdout | sort -k1,1 -k2,2n > refSeqHistorical.bigGp
+#bedToBigBed -type=bed12+8 -tab -sizesIsChromAliasBb \
+#    -as=$HOME/kent/src/hg/lib/bigGenePred.as -extraIndex=name \
+#    refSeqHistorical.bigGp \
+#    /hive/data/genomes/hg38/goldenPath/bigZips/p14/hg38.p14.chromAlias.bb \
+#    refSeqHistorical.bb
+
+# ensure only coding transcripts have a cds
+awk -F$'\\t' '$6 != $7 {print $1;}' refSeqHistorical.gp | sort -u > coding.cds.names
+join -t$'\t' coding.cds.names <(sort -u refSeqHistorical.cds) > refSeqHistorical.cds.coding
+
+# load psl table
+hgLoadPsl hg38 -table=ncbiRefSeqPslHistorical refSeqHistorical.psl 
+
+# load cds table
+hgLoadSqlTab hg38 ncbiRefSeqCdsHistorical ~/kent/src/hg/lib/cdsSpec.sql refSeqHistorical.cds.coding
+
+# load seq and ext tables
+ln -sf `pwd`/refSeqHistorical.deDuped.fa /gbdb/hg38/ncbiRefSeq/refSeqHistorical.fa
+hgLoadSeq -drop -seqTbl=seqNcbiRefSeqHistorical -extFileTbl=extNcbiRefSeqHistorical hg38 /gbdb/hg38/ncbiRefSeq/refSeqHistorical.fa
+
+# link the files into /gbdb
+ln -s `pwd`/refSeqHistorical.bb /gbdb/hg38/ncbiRefSeq/refSeqHistorical.bb
+
+# Update 10-10-2023, need to build the ncbiRefSeqOld and ncbiRefSeqLinkOld
+# tables for associated hgvs searching
+# extract labels from semi-structured text in gbff COMMENT/description sections:
+zcat GCF_000001405.40-RS_2023_03_knownrefseq_rna.gbff.gz \
+  | (grep ' :: ' || true) \
+  | perl -wpe 's/\\s+::.*//; s/^\\s+//;' \
+  | sort -u > pragmaLabels.txt
+# genbank processor extracts infomation about the RNAs
+/hive/data/outside/genbank/bin/x86_64/gbProcess \
+    /dev/null raFile.txt GCF_000001405.40-RS_2023_03_knownrefseq_rna.gbff.gz \
+    2>gbProcess.err
+# Processing GCF_000001405.40-RS_2023_03_knownrefseq_rna.gbff.gz into /dev/null and raFile.txt
+
+# gbProcess has a bunch of bogus info, trim it to what we need:
+cat /hive/data/outside/refSeqHistorical/pragmaLabels.txt \
+    | tr -s '[:blank:]' \
+    | cut -d':' -f1 \
+    | sort -u \
+    | cut -d' ' -f2- > pragmaLabels.cleaned.txt
+~/kent/src/hg/utils/automation/gff3ToRefLink.pl \
+    raFile.txt \
+    GCF_000001405.40-RS_2023_03_genomic.gff.gz \
+    pragmaLabels.cleaned.txt \
+    continueOnParentErrors \
+    2> refLink.stderr \
+    | sort > refLink.tab
+# join the refLink metadata with curated+predicted names
+cut -f1 refSeqHistorical.gp | sort -u > name.list
+join -t$'\t' name.list refLink.tab > ncbiRefSeqLinkOld.tab
+# loading the cross reference data
+hgLoadSqlTab hg38 ncbiRefSeqLinkHistorical ~/kent/src/hg/lib/ncbiRefSeqLink.sql ncbiRefSeqLinkOld.tab

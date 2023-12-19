@@ -177,7 +177,7 @@ void altGraphXSaveToDb(struct sqlConnection *conn, struct altGraphX *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *vTypesArray, *vPositionsArray, *edgeStartsArray, *edgeEndsArray, *edgeTypesArray, *mrnaRefsArray, *mrnaTissuesArray, *mrnaLibsArray;
 vTypesArray = sqlUbyteArrayToString(el->vTypes, el->vertexCount);
 vPositionsArray = sqlSignedArrayToString(el->vPositions, el->vertexCount);
@@ -190,7 +190,7 @@ mrnaLibsArray = sqlSignedArrayToString(el->mrnaLibs, el->mrnaRefCount);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s',%u,'%s',%u,'%s','%s',%u,'%s','%s', NULL ,'%s',%d,'%s','%s','%s')", 
 	tableName,  el->tName,  el->tStart,  el->tEnd,  el->name,  el->id,  el->strand,  el->vertexCount,  vTypesArray ,  vPositionsArray ,  el->edgeCount,  edgeStartsArray ,  edgeEndsArray ,  edgeTypesArray ,  el->mrnaRefCount,  mrnaRefsArray ,  mrnaTissuesArray ,  mrnaLibsArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&vTypesArray);
 freez(&vPositionsArray);
 freez(&edgeStartsArray);
@@ -474,7 +474,7 @@ struct dyString *names = NULL;
 struct evidence *ev = NULL, *evNew = NULL;
 int i;
 assert(ag);
-names = newDyString(256);
+names = dyStringNew(256);
 agNew = CloneVar(ag);
 agNew->tName = cloneString(ag->tName);
 agNew->name = cloneString(ag->name);

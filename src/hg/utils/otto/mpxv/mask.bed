@@ -1,0 +1,17 @@
+NC_063383.1	0	1500	nextstrain: from_beginning
+NC_063383.1	2300	2600	nextstrain: potential sequencing errors in CH sequence
+NC_063383.1	4679	4806	squirrel: repetitive region
+NC_063383.1	6400	7500	nextstrain: very diverse region
+NC_063383.1	16608	16622	squirrel: repetitive region
+NC_063383.1	29748	29762	squirrel: repetitive region
+NC_063383.1	133050	133250	nextstrain: indel variation and long homopolymers
+NC_063383.1	136512	136569	squirrel: repetitive region
+NC_063383.1	146847	146912	squirrel: repetitive region
+NC_063383.1	148333	148351	squirrel: homopolymeric runs
+NC_063383.1	150541	150628	squirrel: repetitive region
+NC_063383.1	163189	163214	squirrel: repetitive region
+NC_063383.1	169720	169774	squirrel: repetitive region
+NC_063383.1	173250	173460	nextstrain: indel variation and long repetitive elements
+NC_063383.1	174517	174545	squirrel: repetitive region
+NC_063383.1	179056	179245	squirrel: repetitive region
+NC_063383.1	190787	197209	nextstrain: from_end

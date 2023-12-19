@@ -21,17 +21,19 @@ mapped through these alignments to the genome.
   </tr>
   <tr>
     <td>UCSC Alignment, SwissProt = curated protein sequences</td>
-    <td>Protein sequences from SwissProt mapped onto the genome. All other
+    <td>Protein sequences from SwissProt mapped to the genome. All other
         tracks are (start,end) SwissProt annotations on these sequences mapped
-        using this track. Protein sequences without a single curated 
-    annotation were not added to this track.</td> </tr>
+        through this alignment. Even protein sequences without a single curated 
+    annotation (splice isoforms) are visible in this track. Each UniProt protein 
+    has one main isoform, which is colored in dark. Alternative isoforms are 
+    sequences that do not have annotations on them and are colored in light-blue. 
+    They can be hidden with the TrEMBL/Isoform filter (see below).</td> </tr>
 <tr>
     <td>UCSC Alignment, TrEMBL = predicted protein sequences</td>
-    <td>Protein sequences from TrEMBL mapped onto the genome. All other tracks
+    <td>Protein sequences from TrEMBL mapped to the genome. All other tracks
         below are (start,end) TrEMBL annotations mapped to the genome using
         this track. This track is hidden by default. To show it, click its
-        checkbox on the track configuration page. Protein sequences without a single 
-        predicted annotation on them were not added to this track.</td></tr>
+        checkbox on the track configuration page. </td></tr>
   <tr>
     <td>UniProt Signal Peptides</td>
     <td>Regions found in proteins destined to be secreted, generally cleaved from mature protein.</td>
@@ -90,7 +92,8 @@ mapped through these alignments to the genome.
   </tr>
 </table>
 <p>
-For consistency, the subtrack &quot;UniProt/SwissProt Variants&quot; is a copy of the track
+For consistency and convenience for users of mutation-related tracks,
+the subtrack &quot;UniProt/SwissProt Variants&quot; is a copy of the track
 &quot;UniProt Variants&quot; in the track group &quot;Phenotype and Literature&quot;, or 
 &quot;Variation and Repeats&quot;, depending on the assembly.
 </p>
@@ -127,57 +130,148 @@ In the &quot;UniProt Modifications&quot; track, lipoification sites are highligh
 Duplicate annotations are removed as far as possible: if a TrEMBL annotation
 has the same genome position and same feature type, comment, disease and
 mutated amino acids as a SwissProt annotation, it is not shown again. Two
-annotations mapped through different transcripts but with the same genome
+annotations mapped through different protein sequence alignments but with the same genome
 coordinates are only shown once.  </p>
 
-<p>Note that only for the human hg38 assembly and SwissProt annotations, there
+<p>On the configuration page of this track, you can choose to hide any TrEMBL annotations.
+This filter will also hide the UniProt alternative isoform protein sequences because
+both types of information are less relevant to most users. Please contact us if you
+want more detailed filtering features.</p>
+
+<p>Note that for the human hg38 assembly and SwissProt annotations, there
 also is a <a
-href="hgTracks?db=hg38&hubUrl=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/genome_annotation_tracks/UP000005640_9606_hub/hub.txt">public
+href="hgTracks?db=hg38&hubUrl=https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/genome_annotation_tracks/UP000005640_9606_hub/hub.txt" target=_blank>public
 track hub</a> prepared by UniProt itself, with 
 genome annotations maintained by UniProt using their own mapping
 method based on those Gencode/Ensembl gene models that are annotated in UniProt
-for a given protein.</p>
+for a given protein. For proteins that differ from the genome, UniProt's mapping method
+will, in most cases, map a protein and its annotations to an unexpected location
+(see below for details on UCSC's mapping method).</p>
 
 <h2>Methods</h2>
 
 <p>
-UniProt sequences were aligned to one of UCSC, Gencode, Ensembl or Augustus transcript sequences, first with
-BLAT, filtered with pslReps (93% query coverage, within top 1% score), lifted
-to genome positions with pslMap and filtered again.  UniProt annotations were
-obtained from the UniProt XML file.  The UniProt annotations were then mapped to the
-genome through the alignment using the pslMap program.  This mapping approach
-draws heavily on the <A HREF="https://modbase.compbio.ucsf.edu/LS-SNP/"
-TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. For human and mouse, the
-alignments were filtered by retaining only proteins annotated with
-a given transcript in the Genome Browser table kgXref. Like all Genome Browser
-source code, the main script used to build this track can be found on 
-<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/uniprot/doUniprot">github</a>.
+Briefly, UniProt protein sequences were aligned to the transcripts associated
+with the protein, the top-scoring alignments were retained, and the result was
+projected to the genome through a transcript-to-genome alignment.
+Depending on the genome, the transcript-genome alignments was either
+provided by the source database (NBCI RefSeq), created at UCSC (UCSC RefSeq) or
+derived from the transcripts (Ensembl/Augustus).  The transcript set is NCBI
+RefSeq for hg38, UCSC RefSeq for hg19 (due to alt/fix haplotype misplacements 
+in the NCBI RefSeq set on hg19). For other genomes, RefSeq, Ensembl and Augustus 
+are tried, in this order. The resulting protein-genome alignments of this process 
+are available in the file formats for liftOver or pslMap from our data archive
+(see "Data Access" section below).
 </p>
+
+<p>An important step of the mapping process protein -&gt; transcript -&gt;
+genome is filtering the alignment from protein to transcript. Due to
+differences between the UniProt proteins and the transcripts (proteins were
+made many years before the transcripts were made, and human genomes have
+variants), the transcript with the highest BLAST score when aligning the
+protein to all transcripts is not always the correct transcript for a protein
+sequence.  Therefore, the protein sequence is aligned to only a very short list
+of one or sometimes more transcripts, selected by a three-step procedure:
+<ol>
+    <li>Use transcripts directly annotated by UniProt: for organisms that have a RefSeq transcript track,
+proteins are aligned to the RefSeq transcripts that are annotated
+by UniProt for this particular protein.
+    <li>Use transcripts for NCBI Gene ID annotated by UniProt: If no transcripts are annotated on the
+protein, or the annotated ones have been deprecated by NCBI, but a NCBI Gene ID is
+annotated, the RefSeq transcripts for this Gene ID are used. This can result in multiple matching transcripts for a protein.
+    <li>Use best matching transcript: If no NCBI Gene is
+annotated, then BLAST scores are used to pick the transcripts. There can be multiple transcripts for one
+protein, as their coding sequences can be identical. All transcripts within 1% of the highest observed BLAST score are used.
+</ol>
+</p>
+
+<p>
+For strategy 2 and 3, many of the transcripts found do not differ in coding
+sequence, so the resulting alignments on the genome will be identical.
+Therefore, any identical alignments are removed in a final filtering step. The
+details page of these alignments will contain a list of all transcripts that
+result in the same protein-genome alignment.  On hg38, only a handful of edge
+cases (pseudogenes, very recently added proteins) remain in 2023 where strategy
+3 has to be used.</p>
+
+<p>In other words, when an NCBI or UCSC RefSeq track is used for the mapping and to align a
+protein sequence to the correct transcript, we use a three stage process:
+<ol>
+    <li>If UniProt has annotated a given RefSeq transcript for a given protein
+    sequence, the protein is aligned to this transcript. Any difference in the
+    version suffix is tolerated in this comparison.  
+    <li>If no transcript is annotated or the transcript cannot be found in the
+    NCBI/UCSC RefSeq track, the UniProt-annotated NCBI Gene ID is resolved to a
+    set of NCBI RefSeq transcript IDs via the most current version of NCBI
+    genes tables. Only the top match of the resulting alignments and all
+    others within 1% of its score are used for the mapping.
+    <li>If no transcript can be found after step (2), the protein is aligned to all transcripts,
+    the top match, and all others within 1% of its score are used.
+</ol>
+
+<p>This system was designed to resolve the problem of incorrect mappings of
+proteins, mostly on hg38, due to differences between the SwissProt
+sequences and the genome reference sequence, which has changed since the
+proteins were defined. The problem is most pronounced for gene families
+composed of either very repetitive or very similar proteins. To make sure that
+the alignments always go to the best chromosome location, all _alt and _fix
+reference patch sequences are ignored for the alignment, so the patches are
+entirely free of UniProt annotations. Please contact us if you have feedback on
+this process or example edge cases. We are not aware of a way to evaluate the
+results completely and in an automated manner.</p>
+<p>
+Proteins were aligned to transcripts with TBLASTN, converted to PSL, filtered
+with pslReps (93% query coverage, keep alignments within top 1% score), lifted to genome
+positions with pslMap and filtered again with pslReps.  UniProt annotations were
+obtained from the UniProt XML file.  The UniProt annotations were then mapped to the
+genome through the alignment described above using the pslMap program.  This approach
+draws heavily on the <A HREF="https://modbase.compbio.ucsf.edu/LS-SNP/"
+TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans.
+Like all Genome Browser source code, the main script used to build this track
+can be found on <a
+href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/uniprot/doUniprot">Github</a>.
+</p>
+
+<h2>Older releases</h2>
+<p>
+This track is automatically updated on an ongoing basis, every 2-3 months.
+The current version name is always shown on the track details page, it includes the
+release of UniProt, the version of the transcript set and a unique MD5 that is
+based on the protein sequences, the transcript sequences, the mapping file
+between both and the transcript-genome alignment. The exact transcript
+that was used for the alignment is shown when clicking a protein alignment
+in one of the two alignment tracks.
+</p>
+
+<p>
+For reproducibility of older analysis results and for manual inspection, previous versions of this track
+are available for browsing in the form of the <a
+    href="hgTracks?db=$db&hubUrl=https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/uniprot/hub.txt"
+    target=_blank> UCSC UniProt Archive Track Hub</a> (click this link to connect the hub now). The underlying data of
+    all releases of this track (past and current) can be obtained from our <a
+    href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/uniprot"
+target=_blank>downloads server</a>, including the UniProt
+protein-to-genome alignment.</p>
 
 <h2>Data Access</h2>
 
 <p>
-The raw data can be explored interactively with the
+The raw data of the current track can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a>, or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
 For automated analysis, the genome annotation is stored in a bigBed file that 
 can be downloaded from the
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/uniprot/" target="_blank">download server</a>.
 The exact filenames can be found in the 
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/trackDb.uniprot.ra">track configuration file</a>. 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/uniprot.ra">track configuration file</a>. 
 Annotations can be converted to ASCII text by our tool <tt>bigBedToBed</tt>
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, for example:
-<br> 
+<p>
 <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/uniprot/unipStruct.bb -chrom=chr6 -start=0 -end=1000000 stdout</tt> 
-<br>
-This track is updated every month. The MySQL table hgFixed.trackVersion
-contains the name of the currently available data on the website. Older
-versions of the data files can be downloaded from the <a
-href="http://hgdownload.soe.ucsc.edu/goldenPath/$db/archive/">archive
-folder</a> of our downloads server.  <br>
+</p>
 Please refer to our
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
 for questions, or our
@@ -185,12 +279,32 @@ for questions, or our
 for more information. 
 </p>
 
+<p>
+
+<h2>Lifting from UniProt to genome coordinates in pipelines</h2>
+<p>To facilitate mapping protein coordinates to the genome, we provide the
+alignment files in formats that are suitable for our command line tools. Our
+command line programs liftOver or pslMap can be used to map
+coordinates on protein sequences to genome coordinates. The filenames are
+unipToGenome.over.chain.gz (liftOver) and unipToGenomeLift.psl.gz (pslMap).</p>
+
+<p>Example commands:
+<pre>
+wget -q https://hgdownload.soe.ucsc.edu/goldenPath/archive/hg38/uniprot/2022_03/unipToGenome.over.chain.gz
+wget -q https://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/liftOver
+chmod a+x liftOver
+echo 'Q99697 1 10 annotationOnProtein' &gt; prot.bed
+liftOver prot.bed unipToGenome.over.chain.gz genome.bed
+cat genome.bed
+</pre>
+</p>
+
 <h2>Credits</h2>
 
 <p>
-This track was created by Maximilian Haeussler at UCSC, with help from Chris
-Lee, Mark Diekhans and Brian Raney, feedback from the UniProt staff and Alejo
-Mujica, Regeneron Pharmaceuticals.  Thanks to UniProt for making all data
+This track was created by Maximilian Haeussler at UCSC, with a lot of input from Chris
+Lee, Mark Diekhans and Brian Raney, feedback from the UniProt staff, Alejo
+Mujica, Regeneron Pharmaceuticals and Pia Riestra, GeneDx. Thanks to UniProt for making all data
 available for download.
 </p>
 

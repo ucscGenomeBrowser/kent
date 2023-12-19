@@ -267,10 +267,10 @@ dlSort(geneList, knownGeneCmpPos);
 //char *gapFile = "centro.tab";
 
 /* Some colors. */
-struct rgbColor rgbRed = {240,0,0};
-struct rgbColor rgbRedOrange = {240, 100, 0};
-struct rgbColor rgbYellow = {255, 255, 0};
-static struct rgbColor blueGene = { 0, 0, 160};
+struct rgbColor rgbRed = {240,0,0,255};
+struct rgbColor rgbRedOrange = {240, 100, 0, 255};
+struct rgbColor rgbYellow = {255, 255, 0, 255};
+static struct rgbColor blueGene = { 0, 0, 160, 255};
 
 void usage()
 /* Explain usage and exit. */
@@ -474,7 +474,7 @@ char **row;
 char query[256];
 struct genePred *gpList = NULL, *gp;
 char geneName[64];
-static struct rgbColor diseaseColor = {255, 0, 0};
+static struct rgbColor diseaseColor = {255, 0, 0, 255};
 struct rgbColor *col;
 boolean keepGene;
 int lastStart = -BIGNUM;
@@ -1383,7 +1383,9 @@ char query[256];
 char geneName[256];
 
 printf("Looking for duplicated HUGO genes:\n");
-sr = sqlGetResult(conn, NOSQLINJ "select name from genieKnown");
+char query[1024];
+sqlSafef(query, sizeof query, "select name from genieKnown");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     txId = newSlName(row[0]);

@@ -41,7 +41,7 @@ void loadIntoDb(char *tabFile, char *database, char *table, boolean clear)
 /* Load database table from tab file. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *dy = newDyString(2048);
+struct dyString *dy = dyStringNew(2048);
 
 sqlDyStringPrintf(dy, createString, table);
 sqlMaybeMakeTable(conn, table, dy->string);

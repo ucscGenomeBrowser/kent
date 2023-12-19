@@ -331,7 +331,12 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = hAllocConn(db);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
-struct asObject *asObj = asForTable(conn, rootTable);
+struct asObject *asObj = NULL;
+
+if (sameString("knownGene", rootTable))  // temporary hack to get table description from knownGene table instead of bigGenePred
+    asObj = asForTableNoTdb(conn, rootTable);
+else
+    asObj = asForTable(conn, rootTable);
 boolean showItemRgb = FALSE;
 
 showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
@@ -515,6 +520,8 @@ char *ptr = NULL;
 safef(dbTable, sizeof(dbTable), "%s", dbTableField);
 ptr = strstr(dbTable, ".hub_");
 if (ptr == NULL)
+    ptr = strstr(dbTable, ".ct_");
+if (ptr == NULL)
     ptr = strchr(dbTable, '.');
 if (ptr == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find first .",
@@ -567,7 +574,8 @@ if (fieldList == NULL)
 slReverse(&fieldList);
 
 /* Do output. */
-tabOutSelectedFields(db, table, NULL, fieldList);
+char sep = sameString(cartUsualString(cart, hgtaOutSep, outTab), outTab) ? '\t' : ',';
+sepOutSelectedFields(db, table, NULL, fieldList, sep);
 
 /* Clean up. */
 slFreeList(&fieldList);
@@ -664,6 +672,7 @@ char *logOpMenu[] =
 };
 int logOpMenuSize = 2;
 
+// If you change this operator list, be sure to update the secureCmpOp() function too.
 char *cmpOpMenu[] =
 {
     "ignored",
@@ -1012,12 +1021,16 @@ if (!(isWig||isBedGr||isBam||isVcf||isLongTabix||isHic))
     name = filterFieldVarName(db, rootTable, "", filterRawLogicVar);
     cgiMakeDropList(name, logOpMenu, logOpMenuSize,
 		cartUsualString(cart, name, logOpMenu[0]));
-    hPrintf(" Free-form query: ");
+    hPrintf(" Free-form SQL query: ");
     name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
     char *val = cartUsualString(cart, name, "");
-    // escape double quotes to avoid HTML parse trouble in the text input.
-    val = htmlEncode(val);
     cgiMakeTextVar(name, val, 50);
+    hPrintf("<br> &nbsp;&nbsp;Must be a correctly formatted SQL language clause. Here are some Examples:<br>");
+    hPrintf(" &nbsp;&nbsp; name like 'ENST%%' <br>");
+    hPrintf(" &nbsp;&nbsp; name like \"ENST*\" <br>");
+    hPrintf(" &nbsp;&nbsp; name = 'ENST00000693149.1_1' <br>");
+    hPrintf(" &nbsp;&nbsp; (name = 'ENST00000693149.1_1' and score < 100) or (name = 'ENST00000691165.1_1' and score < 1000) <br>");
+    
     hPrintf("</TD></TR></TABLE>\n");
     }
 
@@ -1277,6 +1290,27 @@ static boolean cmpReal(char *pat, char *cmpOp)
 return isNotEmpty(pat) && stringArrayIx(cmpOp, cmpOpMenu, cmpOpMenuSize) > 0;
 }
 
+static void secureCmpOp(struct dyString *dy, char *cmpOp)
+/* Add SQL opterator securely. */
+{
+//  "in range"  handled separately.
+if (sameString(cmpOp, "<"))
+    sqlDyStringPrintf(dy, "<");
+else if (sameString(cmpOp, "<="))
+    sqlDyStringPrintf(dy, "<=");
+else if (sameString(cmpOp, "="))
+    sqlDyStringPrintf(dy, "=");
+else if (sameString(cmpOp, "!="))
+    sqlDyStringPrintf(dy, "!=");
+else if (sameString(cmpOp, ">="))
+    sqlDyStringPrintf(dy, ">=");
+else if (sameString(cmpOp, ">="))
+    sqlDyStringPrintf(dy, ">=");
+else if (sameString(cmpOp, ">"))
+    sqlDyStringPrintf(dy, ">");
+sqlDyStringPrintf(dy, " ");
+}
+
 static boolean filteredOrLinked(char *db, char *table)
 /* Return TRUE if this table is the table to be filtered or if it is to be
  * linked with that table, and is not disabled due to region==genome and 'tableBrowser noGenome'. */
@@ -1508,35 +1542,35 @@ for (var = varList; var != NULL; var = var->next)
 	    boolean neg = sameString(ddVal, ddOpMenu[1]);
 	    char *fieldType = getSqlType(conn, explicitDbTable, field);
 	    boolean needOr = FALSE;
-	    if (needAnd) dyStringAppend(dy, " and ");
+	    if (needAnd) sqlDyStringPrintf(dy, " and ");
 	    needAnd = TRUE;
-	    if (neg) dyStringAppend(dy, "not ");
+	    if (neg) sqlDyStringPrintf(dy, "not ");
 	    boolean composite = (slCount(patList) > 1);
-	    if (composite || neg) dyStringAppendC(dy, '(');
+	    if (composite || neg) sqlDyStringPrintf(dy, "(");
 	    struct slName *pat;
 	    for (pat = patList;  pat != NULL;  pat = pat->next)
 		{
 		char *sqlPat = sqlLikeFromWild(pat->name);
 		if (needOr)
-		    dyStringAppend(dy, " OR ");
+		    sqlDyStringPrintf(dy, " OR ");
 		needOr = TRUE;
 		if (isSqlSetType(fieldType))
 		    {
-		    sqlDyStringPrintfFrag(dy, "FIND_IN_SET('%s', %s.%s)>0 ",
+		    sqlDyStringPrintf(dy, "FIND_IN_SET('%s', %s.%s)>0 ",
 				   sqlPat, explicitDbTable , field);
 		    }
 		else
 		    {
-		    sqlDyStringPrintfFrag(dy, "%s.%s ", explicitDbTable, field);
+		    sqlDyStringPrintf(dy, "%s.%s ", explicitDbTable, field);
 		    if (sqlWildcardIn(sqlPat))
-			dyStringAppend(dy, "like ");
+			sqlDyStringPrintf(dy, "like ");
 		    else
-			dyStringAppend(dy, "= ");
+			sqlDyStringPrintf(dy, "= ");
 		    sqlDyStringPrintf(dy, "'%s'", sqlPat);
 		    }
 		freez(&sqlPat);
 		}
-	    if (composite || neg) dyStringAppendC(dy, ')');
+	    if (composite || neg) sqlDyStringPrintf(dy, ")");
 	    }
 	}
     else if (sameString(type, filterCmpVar))
@@ -1546,7 +1580,7 @@ for (var = varList; var != NULL; var = var->next)
 	char *cmpVal = cartString(cart, var->name);
 	if (cmpReal(pat, cmpVal))
 	    {
-	    if (needAnd) dyStringAppend(dy, " and ");
+	    if (needAnd) sqlDyStringPrintf(dy, " and ");
 	    needAnd = TRUE;
 	    if (sameString(cmpVal, "in range"))
 	        {
@@ -1560,13 +1594,13 @@ for (var = varList; var != NULL; var = var->next)
 		if (strchr(pat, '.')) /* Assume floating point */
 		    {
 		    double a = atof(words[0]), b = atof(words[1]);
-		    sqlDyStringPrintfFrag(dy, "%s.%s >= %f && %s.%s <= %f",
+		    sqlDyStringPrintf(dy, "%s.%s >= %f && %s.%s <= %f",
 		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		else
 		    {
 		    int a = atoi(words[0]), b = atoi(words[1]);
-		    sqlDyStringPrintfFrag(dy, "%s.%s >= %d && %s.%s <= %d",
+		    sqlDyStringPrintf(dy, "%s.%s >= %d && %s.%s <= %d",
 		    	explicitDbTable, field, a, explicitDbTable, field, b);
 		    }
 		freez(&dupe);
@@ -1574,11 +1608,12 @@ for (var = varList; var != NULL; var = var->next)
 	    else
 	        {
 		// cmpVal has been checked already above in cmpReal for legal values.
-		sqlDyStringPrintfFrag(dy, "%s.%s %-s ", explicitDbTable, field, cmpVal);
+		sqlDyStringPrintf(dy, "%s.%s ", explicitDbTable, field);
+		secureCmpOp(dy, cmpVal);
 		if (strchr(pat, '.'))	/* Assume floating point. */
-		    dyStringPrintf(dy, "%f", atof(pat));
+		    sqlDyStringPrintf(dy, "%f", atof(pat));
 		else
-		    dyStringPrintf(dy, "%d", atoi(pat));
+		    sqlDyStringPrintf(dy, "%d", atoi(pat));
 		}
 	    }
 	}
@@ -1593,7 +1628,7 @@ for (var = varList; var != NULL; var = var->next)
     query = trimSpaces(cartOptionalString(cart, varName));
     if (query != NULL && query[0] != 0)
         {
-	if (needAnd) dyStringPrintf(dy, " %s ", logic);
+	if (needAnd) sqlDyStringPrintf(dy, " %s ", logic);
 	sqlSanityCheckWhere(query, dy);
 	}
     }
@@ -1609,7 +1644,7 @@ if (dy->stringSize == 0)
 else
     {
     if (isNotEmpty(extraClause))
-	dyStringPrintf(dy, " and %s", extraClause);
+	sqlDyStringPrintf(dy, " and %-s", extraClause);
     return dyStringCannibalize(&dy);
     }
 }

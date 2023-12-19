@@ -9,7 +9,10 @@
 <p>
 The bigWig format is useful for dense, continuous data that will be displayed in the Genome 
 Browser as a graph. BigWig files are created from <a href="wiggle.html">wiggle</a> (wig) 
-type files using the program <code>wigToBigWig</code>.</p>
+type files using the program <code>wigToBigWig</code>. Alternatively, bigWig files can be created
+from <a href="/goldenPath/help/bedgraph.html">bedGraph</a> files, using the program
+<code>bedGraphToBigWig</code>.
+</p>
 <p>
 The bigWig files are in an indexed binary format. The main advantage of this format is that only 
 those portions of the file needed to display a particular region are transferred to the Genome 
@@ -206,11 +209,44 @@ To create a bigWig track from a bedGraph file, follow these steps:</p>
   track management page</a>.</li>
 </ol>
 
+<a name=dynseq></a>
+<h3 id=Ex4>Example #4</h3>
+<p>
+In this example, we will display a bigWig with a dynamic sequence logo (Motif Logo)  using
+<code>logo=on</code>.</p>
+<p>
+<ol>
+  <li>
+  Construct a track line that references the <em>bigWigExample.bw</em> file:
+  <pre><code>track type=bigWig logo=on name="Example dynseq" description="A bigWig file with logo=on dynseq" visibility=full autoScale=off bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw</code></pre></li>
+  <li>
+  Include the following browser line to ensure that the custom track opens at the correct
+  position:
+  <pre><code>browser position chr21:33,037,000-33,037,050</code></pre></li>
+  <li>
+  Paste the browser and track lines onto the <a href="../../cgi-bin/hgCustom?db=hg19">custom track
+  management page</a> for the human assembly hg19 (Feb.  2009), click the &quot;submit&quot; button,
+  then click the &quot;chr21&quot; link in the custom track listing to view the bigWig track in the
+  Genome Browser.</li>
+</ol>
+<p>
+You can also load the above by clicking this <a target="_blank"
+href="../../cgi-bin/hgTracks?db=hg19&position=chr21:33,037,000-33,037,050&hgct_customText=track%20type%3DbigWig%20logo%3Don%20name%3D%22Example%20dynseq%22%20description%3D%22A%20bigWig%20file%20with%20logo%3Don%20dynseq%22%20visibility%3Dfull%20autoScale%3Doff%20bigDataUrl%3Dhttp%3A%2F%2Fgenome.ucsc.edu%2FgoldenPath%2Fhelp%2Fexamples%2FbigWigExample.bw">link</a>.</p>
+<div class="text-center">
+ <img src="../../images/dynseq.png" alt="Example4 of dynseq logo=on setting" width="700">
+</div>
+<p>
+This <a href="https://kundajelab.github.io/dynseq-pages/" target="_blank">dynseq</a>
+display scales nucleotide characters by user-specified, base-resolution scores and
+was developed by the <a href="https://kundajelab.github.io/about/"
+target="_blank">Kundaje Lab</a>.</p>
+
 <h2>Sharing your data with others</h2>
 <p>
 If you would like to share your bigWig data track with a colleague, learn how to create a URL by 
 looking at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
 
+<a name="Extract"></a>
 <h2>Extracting data from the bigWig format</h2>
 <p>
 Because bigWig files are indexed binary files, it can be difficult to extract data from them. 

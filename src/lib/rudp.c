@@ -479,7 +479,7 @@ for (;;)
     ackHead = *head;
     ackHead.type = rudpAck;
     err = sendto(ru->socket, &ackHead, sizeof(ackHead), 0, 
-	(struct sockaddr *)&sai, sizeof(sai));
+	(struct sockaddr *)&sai, getSockSize6n4(&sai));
     if (err < 0)
 	{
 	warn("problem sending ack in rudpRecieve: %s", strerror(errno));

@@ -399,11 +399,11 @@ proteinID = cartOptionalString(cart, "proteinID");
 
 /* check proteinID to see if it is a valid SWISS-PROT/TrEMBL accession or display ID */
 /* then assign the accession number to global variable proteinID */
-sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+sqlSafef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
 if (proteinAC == NULL)
     {
-    sqlSafefFrag(cond_str, sizeof(cond_str), "displayID='%s'", proteinID);
+    sqlSafef(cond_str, sizeof(cond_str), "displayID='%s'", proteinID);
     proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
@@ -417,13 +417,13 @@ if (proteinAC == NULL)
     }
 else
     {
-    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    sqlSafef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     protDisplayID = sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     }
 
 if (spFindAcc(spConn, proteinID) == NULL)
     {
-    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    sqlSafef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     answer = sqlGetField(protDbName, "spXref3", "biodatabaseID", cond_str);
     if (sameWord(answer, "3"))
         {
@@ -448,16 +448,16 @@ else
   }
 if (kgVersion == KG_III)
     {
-    sqlSafefFrag(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
+    sqlSafef(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
     mrnaID = sqlGetField(database, "kgXref", "kgId", cond_str);
     }
 else
     {
-    sqlSafefFrag(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
+    sqlSafef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
     mrnaID = sqlGetField(database, "knownGene", "name", cond_str);
     }
 
-sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+sqlSafef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 description = sqlGetField(protDbName, "spXref3", "description", cond_str);
 
 /* obtain previous genome position range selected by the Genome Browser user */

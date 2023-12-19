@@ -10,7 +10,7 @@
 
 
 
-char *wgEncodeGencodeAttrsCommaSepFieldNames = "geneId,geneName,geneType,geneStatus,transcriptId,transcriptName,transcriptType,transcriptStatus,havanaGeneId,havanaTranscriptId,ccdsId,level,transcriptClass,proteinId";
+char *wgEncodeGencodeAttrsCommaSepFieldNames = "geneId,geneName,geneType,geneStatus,transcriptId,transcriptName,transcriptType,transcriptStatus,havanaGeneId,havanaTranscriptId,ccdsId,level,transcriptClass,proteinId,transcriptRank";
 
 void wgEncodeGencodeAttrsStaticLoad(char **row, int numColumns, struct wgEncodeGencodeAttrs *ret)
 /* Load a row from wgEncodeGencodeAttrs table into ret.  The contents of ret will
@@ -32,6 +32,10 @@ ret->level = sqlSigned(row[11]);
 ret->transcriptClass = row[12];
 if (numColumns > 13)
     ret->proteinId = row[13];
+if (numColumns > 14)
+    ret->transcriptRank = sqlSigned(row[14]);
+else
+    ret->transcriptRank = 0;
 }
 
 struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsLoad(char **row, int numColumns)
@@ -56,6 +60,10 @@ ret->level = sqlSigned(row[11]);
 ret->transcriptClass = cloneString(row[12]);
 if (numColumns > 13)
     ret->proteinId = cloneString(row[13]);
+if (numColumns > 14)
+    ret->transcriptRank = sqlSigned(row[14]);
+else
+    ret->transcriptRank = 0;
 return ret;
 }
 
@@ -93,33 +101,6 @@ while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
 lineFileClose(&lf);
 slReverse(&list);
 return list;
-}
-
-struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsCommaIn(char **pS, struct wgEncodeGencodeAttrs *ret)
-/* Create a wgEncodeGencodeAttrs out of a comma separated string. 
- * This will fill in ret if non-null, otherwise will
- * return a new wgEncodeGencodeAttrs */
-{
-char *s = *pS;
-
-if (ret == NULL)
-    AllocVar(ret);
-ret->geneId = sqlStringComma(&s);
-ret->geneName = sqlStringComma(&s);
-ret->geneType = sqlStringComma(&s);
-ret->geneStatus = sqlStringComma(&s);
-ret->transcriptId = sqlStringComma(&s);
-ret->transcriptName = sqlStringComma(&s);
-ret->transcriptType = sqlStringComma(&s);
-ret->transcriptStatus = sqlStringComma(&s);
-ret->havanaGeneId = sqlStringComma(&s);
-ret->havanaTranscriptId = sqlStringComma(&s);
-ret->ccdsId = sqlStringComma(&s);
-ret->level = sqlSignedComma(&s);
-ret->transcriptClass = sqlStringComma(&s);
-ret->proteinId = sqlStringComma(&s);
-*pS = s;
-return ret;
 }
 
 void wgEncodeGencodeAttrsFree(struct wgEncodeGencodeAttrs **pEl)
@@ -214,6 +195,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->proteinId);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->transcriptRank);
 fputc(lastSep,f);
 }
 

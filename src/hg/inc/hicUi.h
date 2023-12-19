@@ -22,6 +22,8 @@
 #define HIC_TDB_MAX_VALUE       "saturationScore"
 #define HIC_TDB_AUTOSCALE       "autoScale"
 #define HIC_TDB_COLOR           "color"
+#define HIC_TDB_MAX_DISTANCE    "hicDistanceMax"
+#define HIC_TDB_MIN_DISTANCE    "hicDistanceMin"
 
 
 /* Cart variables */
@@ -31,6 +33,7 @@
 #define HIC_DRAW_MODE_SQUARE        "square"
 #define HIC_DRAW_MODE_ARC           "arc"
 #define HIC_DRAW_MODE_DEFAULT       HIC_DRAW_MODE_TRIANGLE
+#define HIC_DRAW_INVERTED           "inverted"
 #define HIC_NORMALIZATION           "normalization"
 #define HIC_RESOLUTION              "resolution"
 #define HIC_DRAW_AUTOSCALE          "autoscale"
@@ -41,6 +44,8 @@
 /* Default to drawing red on a white background */
 #define HIC_DRAW_COLOR_DEFAULT      "#ff0000"
 #define HIC_DRAW_BG_COLOR_DEFAULT   "#ffffff"
+#define HIC_DRAW_MAX_DISTANCE       "maxDistance"
+#define HIC_DRAW_MIN_DISTANCE       "minDistance"
 
 
 void hicCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
@@ -76,6 +81,11 @@ char *hicUiFetchDrawMode(struct cart *cart, struct trackDb *tdb);
 /* Return the current draw mode selection, or the default if none
  * has been selected. */
 
+boolean hicUiFetchInverted(struct cart *cart, struct trackDb *tdb);
+/* Check if the user has set this track to draw in inverted mode.
+ * Ideally this would also be available via a trackDb setting, but
+ * this is the first pass at this feature. */
+
 char *hicUiFetchDrawColor(struct cart *cart, struct trackDb *tdb);
 /* Retrieve the HTML hex code for the color to draw the
  * track values in (e.g., #00ffa1) */
@@ -93,5 +103,13 @@ double  hicUiFetchMaxValue(struct cart *cart, struct trackDb *tdb);
 /* Retrieve the score value at which the draw color reaches its
  * its maximum intensity.  Any scores above this value will
  * share that same draw color. */
+
+double hicUiMaxInteractionRange(struct cart *cart, struct trackDb *tdb);
+/* Retrieve the maximum range for an interaction to be drawn.  Range is
+ * calculated from the left-most start to the right-most end of the interaction. */
+
+double hicUiMinInteractionRange(struct cart *cart, struct trackDb *tdb);
+/* Retrieve the minimum range for an interaction to be drawn.  Range is
+ * calculated from the left-most start to the right-most end of the interaction. */
 
 #endif

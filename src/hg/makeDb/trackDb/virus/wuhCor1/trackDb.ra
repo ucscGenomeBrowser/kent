@@ -454,7 +454,7 @@ vcfDoQual off
 vcfDoFilter off
 geneTrack ncbiGeneBGP
 group varRep
-visibility squish
+visibility hide
 priority 0.1
 dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/public.all.version.txt
 release alpha
@@ -506,7 +506,6 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion v8 (2021-10-27)
-pennantIcon Updated red ../goldenPath/newsarch.html "Updated Nov. 11, 2021"
 
     track problematicSitesMask
     shortLabel Mask
@@ -583,20 +582,6 @@ type vcfTabix
 release alpha
 bigDataUrl /hive/data/outside/otto/sarscov2phylo/26-10-20/danishMink.vcf.gz
 
-track lineageB_1_1_7_US
-shortLabel B.1.1.7 in USA
-longLabel Early Lineage B.1.1.7 (a.k.a. 501Y.V1, VOC 202012/01) Sequences in the United States: SNVs and Deletions
-type vcfTabix
-bigDataUrl /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.vcf.gz
-hapClusterEnabled on
-hapClusterMethod treeFile /gbdb/wuhCor1/lineageB_1_1_7_US/lineageB_1_1_7_US_first9.nwk
-hapClusterHeight 160
-hapClusterColorBy function
-geneTrack ncbiGeneBGP
-vcfDoQual off
-vcfDoFilter off
-group varRep
-
 track spikeMuts
 shortLabel Spike Mutations
 longLabel Spike protein mutations from community annotation (Feb 2021)
@@ -618,6 +603,29 @@ searchDescription Spike protein mutations
 searchMethod fuzzy
 padding 5
 
+track resist
+shortLabel Drug Resistance Mutations
+longLabel Mutations that confer drug resistance (Anna Niewiadomska, BV-BRC)
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/resist/resist.bb
+itemRgb on
+bedNameLabel Mutation
+urls urls=$$
+mouseOver $comments
+noScoreFilter on
+group varRep
+visibility dense
+
+track resistPred
+shortLabel Predicted Resistance
+longLabel Mutations that may confer drug resistance - from Coronavirus3d.org (label: count of GISAID sequences with mutation, Feb 2022)
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/resistPred/resistPred.bb
+itemRgb on
+bedNameLabel Mutation
+mouseOver $changeFreq
+group varRep
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
@@ -637,7 +645,20 @@ include pbm.ra
 include pbmShanghai.ra
 include abEscape.ra
 include bloom.ra
-include variantMutsV2.ra
+include variantMuts.ra
+include galaxyEna.ra
+include varskip.ra
 
 include vaccines.ra
 include mutCons.ra
+
+track recomb
+shortLabel Recomb. Breakpoints
+longLabel Recombination Breakpoints from Thurakia et al 2022
+type bigBed 6 +
+bigDataUrl /gbdb/wuhCor1/recomb/ripples_breakpoints.bb
+doWiggle on
+group varRep
+visibility dense
+priority 100
+maxHeightPixels 100:40:8

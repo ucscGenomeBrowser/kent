@@ -9,6 +9,7 @@
 #include "portable.h"
 #include "hdb.h"
 #include "customFactory.h"
+#include "chromAlias.h"
 
 
 void usage()
@@ -108,6 +109,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 char *db = optionVal("db", hDefaultDb());
+chromAliasSetup(db);
 if (argc < 2)
     usage();
 char *task = argv[1];

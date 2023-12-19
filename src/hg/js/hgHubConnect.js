@@ -29,7 +29,7 @@ function makeIframe(ev) {
 
 
     // when the waiting page has finished loading, load the hub checker page
-    var finalUrl = waitUrl + '&validateHubUrl='+hubUrl;
+    var finalUrl = waitUrl + '&validateHubUrl='+encodeURIComponent(hubUrl);
     var alreadyRun = false;
     node.addEventListener("load", function() {
         if (! alreadyRun)
@@ -105,6 +105,42 @@ $(document).ready(function() {
             $('input[name="hubSearchButton"]').focus().click(); // clicks db filter button
         }
     });
+    $('.pasteIcon').bind('click', function(e) {
+        // The hgTracks link is in the <A> element two elements before the icon SVG:
+        // <td>
+        // <a class='hgTracksLink' href="hgTracks?hubUrl=https://hgwdev-kent.gi.ucsc.edu/~kent/t2t/hub/hub2.txt&amp;genome=hub_25068_GCA_009914755&amp;position=lastDbPos">GCA_009914755</a>
+        // <input type="hidden" value="https://hgwdev-kent.gi.ucsc.edu/~kent/t2t/hub/hub2.txt">
+        // <svg class="pasteIcon">...</svg>    <--- this is e.target of the click handler
+        // </td>
+        var inputEl = e.target.closest("svg").previousSibling;
+        var connectUrl = inputEl.previousSibling.href;
+
+        // the url is in the <input> element just before the SVG
+        var oldVal = inputEl.value;
+        // display:none does not work,
+        // see https://stackoverflow.com/questions/31593297/using-execcommand-javascript-to-copy-hidden-text-to-clipboard
+        inputEl.style = "position: absolute; left: -1000px; top: -1000px";
+        inputEl.value = connectUrl;
+        inputEl.type = 'text';
+        inputEl.select();
+        inputEl.setSelectionRange(0, 99999); /* For mobile devices */
+        document.execCommand('copy');
+
+        inputEl.type = 'hidden';
+        inputEl.value = oldVal;
+        alert("Copied Genome Browser hub connection URL to clipboard");
+    });
+
+    $('.shortPlus').bind('click', function(ev) {
+        ev.target.parentElement.style.display = 'none';
+        ev.target.parentElement.nextSibling.style.display = 'inline';
+    });
+    $('.fullMinus').bind('click', function(ev) {
+        ev.target.parentElement.style.display = 'none';
+        ev.target.parentElement.previousSibling.style.display = 'inline';
+    });
+
+
 });
 
 var hubSearchTree = (function() {

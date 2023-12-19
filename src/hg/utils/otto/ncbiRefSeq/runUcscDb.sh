@@ -14,7 +14,7 @@ export gffFile="$6"
 export msgFile="/tmp/refSeqUpdateNotice.msg.txt"
 
 function prevCompleted() {
-  printf "To: hclawson@ucsc.edu,lrnassar@ucsc.edu\n" > ${msgFile}
+  printf "To: hclawson@ucsc.edu,otto-group@ucsc.edu\n" > ${msgFile}
   printf "From: hiram@soe.ucsc.edu\n" >> ${msgFile}
   printf "Subject: $db ncbiRefSeq is not needed\n" >> ${msgFile}
   printf "\n" >> ${msgFile}
@@ -23,7 +23,7 @@ function prevCompleted() {
 }
 
 function inProgress() {
-  printf "To: hclawson@ucsc.edu,lrnassar@ucsc.edu\n" > ${msgFile}
+  printf "To: hclawson@ucsc.edu,otto-group@ucsc.edu\n" > ${msgFile}
   printf "From: hiram@soe.ucsc.edu\n" >> ${msgFile}
   printf "Subject: ALERT: $db ncbiRefSeq update in progress\n" >> ${msgFile}
   printf "\n" >> ${msgFile}
@@ -57,7 +57,7 @@ cd $wrkDir
      printf "%s\n" "${srcSum}" > "${sumFile}"
      /hive/data/outside/ncbi/genomes/ncbiRefSeq/archiveOne.sh "${wrkDir}"
   fi
-else
-  prevCompleted $db
+# else
+#   prevCompleted $db
 fi
 

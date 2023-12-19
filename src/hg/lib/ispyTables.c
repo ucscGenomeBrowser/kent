@@ -100,11 +100,11 @@ void patientSaveToDb(struct sqlConnection *conn, struct patient *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
 	tableName,  el->ispyId,  el->DataExtractDt,  el->Inst_ID);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -289,11 +289,11 @@ void patientInfoSaveToDb(struct sqlConnection *conn, struct patientInfo *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s',%g,'%s','%s',%d)", 
 	tableName,  el->ispyId,  el->DataExtractDt,  el->Inst_ID,  el->AgeCat,  *(el->Age),  el->Race_id,  el->Sstat,  *(el->SurvDtD));
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -478,11 +478,11 @@ void chemoSaveToDb(struct sqlConnection *conn, struct chemo *el, char *tableName
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Chemo,  el->ChemoCat,  el->DoseDenseAnthra,  el->DoseDenseTaxane,  el->Tam,  el->Herceptin);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -709,11 +709,11 @@ void onStudySaveToDb(struct sqlConnection *conn, struct onStudy *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s',%d,%d,'%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->MenoStatus,  el->SentinelNodeSample,  el->SentinelNodeResult,  el->HistTypeInvOS,  el->HistologicGradeOS,  *(el->ER_TS),  *(el->PgR_TS),  el->ERpos,  el->PgRpos,  el->Her2CommunityPos,  el->Her2CommunityMethod,  el->pCR);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -980,11 +980,11 @@ void postSurgerySaveToDb(struct sqlConnection *conn, struct postSurgery *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s',%g,'%s',%d,%d,'%s','%s','%s')", 
 	tableName,  el->ispyId,  el->SurgeryLumpectomy,  el->SurgeryMastectomy,  el->InitLump_FupMast,  el->Surgery,  el->DCISonly,  *(el->PTumor1Szcm_Micro),  el->HistologicTypePS,  *(el->HistologicGradePS),  *(el->NumPosNodes),  el->NodesExamined,  el->PathologyStage,  el->ReasonNoSurg);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -1201,11 +1201,11 @@ void followUpSaveToDb(struct sqlConnection *conn, struct followUp *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->RtTherapy,  el->RtBreast,  el->RtBoost,  el->RtAxilla,  el->RtSNode,  el->RtIMamNode,  el->RTChestW,  el->RtOther);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -1422,11 +1422,11 @@ void respEvalSaveToDb(struct sqlConnection *conn, struct respEval *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%g,%g,'%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  *(el->TSizeClinical),  *(el->NSizeClinical),  el->StageTe,  el->StageNe,  el->StageMe,  el->ClinicalStage,  el->ClinRespT1_T2,  el->ClinRespT1_T3,  el->ClinRespT1_T4);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -1761,11 +1761,11 @@ void mrSaveToDb(struct sqlConnection *conn, struct mr *el, char *tableName, int 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s',%d,%d,%d,%d,%g,%g,%g,%g,%g,%g,'%s','%s')", 
 	tableName,  el->ispyId,  el->ChemoCat,  el->DoseDenseAnthra,  el->DoseDenseTaxane,  el->LES_T1,  el->LES_T2,  el->LES_T3,  el->LES_T4,  *(el->LD_T1),  *(el->LD_T2),  *(el->LD_T3),  *(el->LD_T4),  *(el->LD_T1_T2_PERCT),  *(el->LD_T1_T3_PERCT),  *(el->LD_T1_T4_PERCT),  *(el->LD_T2_T3_PERCT),  *(el->LD_T2_T4_PERCT),  *(el->LD_T3_T4_PERCT),  el->Mri_Pattern_Code,  el->Mri_Pattern_Desc);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -2002,11 +2002,11 @@ void cdnaSaveToDb(struct sqlConnection *conn, struct cdna *el, char *tableName, 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Cdna_T1,  el->Cdna_T2,  el->Cdna_T3,  el->Cdna_T4);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -2173,11 +2173,11 @@ void agiSaveToDb(struct sqlConnection *conn, struct agi *el, char *tableName, in
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Agi_T1,  el->Agi_T2,  el->Agi_T3,  el->Agi_T4);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -2344,11 +2344,11 @@ void ihcSaveToDb(struct sqlConnection *conn, struct ihc *el, char *tableName, in
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Ihc_T1,  el->Ihc_T2,  el->Ihc_T3,  el->Ihc_T4);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -2515,11 +2515,11 @@ void fishSaveToDb(struct sqlConnection *conn, struct fish *el, char *tableName, 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->Fish_T1,  el->Fish_T2,  el->Fish_T3,  el->Fish_T4);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -2686,11 +2686,11 @@ void labTrackSaveToDb(struct sqlConnection *conn, struct labTrack *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->ispyId,  el->trackId,  el->coreType,  el->timePoint,  el->section);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

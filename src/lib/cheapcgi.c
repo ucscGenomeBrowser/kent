@@ -192,12 +192,26 @@ if (!findJsEvent(event))
 freeMem (event);
 }
 
+void jsAddEventForId(char *eventName, char *idText, char *jsText)
+{
+checkValidEvent(eventName);
+jsInlineF("document.getElementById('%s').addEventListener('%s', %s);\n", idText, eventName, jsText);
+}
+
 void jsOnEventById(char *eventName, char *idText, char *jsText)
 /* Add js mapping for inline event */
 {
 checkValidEvent(eventName);
 jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", idText, eventName, jsText);
 }
+
+void jsOnEventBySelector(char *eventName, char *query, char *jsText)
+/* Add js mapping for inline event given a query selector, e.g. '.className' */
+{
+checkValidEvent(eventName);
+jsInlineF("document.querySelector('%s').addEventListener( '%s', function(event) { %s };\n", eventName, query, jsText);
+}
+
 
 void jsOnEventByIdF(char *eventName, char *idText, char *format, ...)
 /* Add js mapping for inline event with printf formatting */
@@ -332,7 +346,7 @@ char *cgiServerNamePort()
 {
 char *port = cgiServerPort();
 char *name = cgiServerName();
-struct dyString *result = newDyString(256);
+struct dyString *result = dyStringNew(256);
 char *defaultPort = "80";
 if (cgiServerHttpsIsOn())
     defaultPort = "443";
@@ -541,7 +555,7 @@ static void cgiParseMultipart(struct hash **retHash, struct cgiVar **retList)
 {
 char h[1024];  /* hold mime header line */
 char *s = NULL, *ct = NULL;
-struct dyString *dy = newDyString(256);
+struct dyString *dy = dyStringNew(256);
 struct mimeBuf *mb = NULL;
 struct mimePart *mp = NULL;
 char **env = NULL;
@@ -581,7 +595,7 @@ mb = initMimeBuf(STDIN_FILENO);
 //fprintf(stderr,"got past initMimeBuf(STDIN_FILENO)\n");
 //fflush(stderr);
 mp = parseMultiParts(mb, cloneString(dy->string)); /* The Alternate Header will get freed */
-freeDyString(&dy);
+dyStringFree(&dy);
 if(!mp->multi) /* expecting multipart child parts */
     errAbort("Malformatted multipart-form.");
 
@@ -1865,7 +1879,7 @@ htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' ID='%s|attr|' SIZE=%d VALUE='%s|att
 	varName, varName, charSize, initialVal);
 if (isNotEmpty(script))
     jsOnEventById("keypress", varName, script);
-printf(">\n");
+printf(">");
 }
 
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
@@ -2400,6 +2414,23 @@ if (cgiVarExists(varName))
     cgiMakeHiddenVarWithIdExtra(varName, varName, cgiString(varName), NULL);
 }
 
+void cgiChangeVar(char *varName, char *value)
+/* An entry point to change the value of a something passed to us on the URL. */
+{
+if (cgiVarExists(varName))
+    {
+    struct cgiVar *el = inputList;
+    for(; el; el = el->next)
+        {
+        if (sameString(el->name, varName))
+            {
+            el->val = cloneString(value);
+            break;
+            }
+        }
+    }
+}
+
 void cgiVarExclude(char *varName)
 /* If varName exists, remove it. */
 {
@@ -2452,7 +2483,7 @@ hashAddSaveName(inputHash, varName, var, &var->name);
 struct dyString *cgiUrlString()
 /* Get URL-formatted that expresses current CGI variable state. */
 {
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 struct cgiVar *cv;
 char *e;
 

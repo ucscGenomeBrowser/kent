@@ -1,0 +1,31 @@
+# Nextstrain excludes this as over diverged / misdated:
+OK649675.1
+# I'm excluding these because I think they're synthetic (some are from patents):
+JC603426.1
+JC603427.1
+JC603428.1
+JC603429.1
+JC603430.1
+KJ817798.1
+KJ817799.1
+KJ817800.1
+KJ817801.1
+MK733766.1
+MK733767.1
+MK733768.1
+MK733769.1
+# These mess up the RSV-A tree, adding long jagged branches to GA.2 and GA.3.0.[1-4]
+GU591758.1
+GU591759.1
+GU591760.1
+GU591761.1
+GU591762.1
+GU591763.1
+GU591764.1
+GU591765.1
+GU591766.1
+GU591767.1
+GU591768.1
+GU591769.1
+GU591770.1
+GU591771.1

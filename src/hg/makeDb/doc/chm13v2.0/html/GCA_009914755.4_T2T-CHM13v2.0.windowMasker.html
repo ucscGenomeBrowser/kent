@@ -1,0 +1,38 @@
+<h2>Description</h2>
+<p>
+This track depicts masked sequence as determined by <a href="
+http://bioinformatics.oxfordjournals.org/content/22/2/134.full" target="_blank">WindowMasker</a> on the
+the 24 Jan 2022 <em>Homo sapiens</em>/GCA_009914755.4_T2T-CHM13v2.0/GCA_009914755.4 genome assembly.
+The WindowMasker tool is included in the NCBI C++ toolkit. The source code
+for the entire toolkit is available from the NCBI
+<a href="ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools++/CURRENT/" target="_blank">
+FTP site</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+To create this track, WindowMasker was run with the following parameters:
+<pre>
+windowmasker -mk_counts true -input GCA_009914755.4_T2T-CHM13v2.0.unmasked.fa -output wm_counts
+windowmasker -ustat wm_counts -sdust true -input GCA_009914755.4_T2T-CHM13v2.0.unmasked.fa -output windowmasker.intervals
+perl -wpe 'if (s/^>lcl\|(.*)\n$//) { $chr = $1; } \
+   if (/^(\d+) - (\d+)/) { \
+   $s=$1; $e=$2+1; s/(\d+) - (\d+)/$chr\t$s\t$e/; 
+   }' windowmasker.intervals > windowmasker.sdust.bed
+</pre>
+The windowmasker.sdust.bed included masking for areas of the
+assembly that are gap.  The file was 'cleaned' to remove those areas
+of masking in gaps, leaving only the sequence masking.  The final
+result covers 1,297,712,987 bases in the assembly size 3,117,292,070 for
+a percent coverage of % 41.63.
+</p>
+
+<h2>References</h2>
+
+<p>
+Morgulis A, Gertz EM, Sch&auml;ffer AA, Agarwala R.
+<a href="http://bioinformatics.oxfordjournals.org/content/22/2/134.full" target="_blank">
+WindowMasker: window-based masker for sequenced genomes</a>.
+<em>Bioinformatics</em>. 2006 Jan 15;22(2):134-41.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16287941" target="_blank">16287941</a>
+</p>

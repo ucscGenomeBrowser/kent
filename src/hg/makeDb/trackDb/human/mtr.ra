@@ -1,0 +1,77 @@
+track mtrBed
+shortLabel MTR All Data 
+longLabel MTR -  Missense Tolerance Ratio Scores all annotations
+parent constraintSuper
+visibility hide
+type bigBed 9 + 10
+itemRgb on
+mouseOver $ref>$alt $MTR ${MTR_centile}
+bigDataUrl /gbdb/$D/bbi/mtr2.bb
+html constraintSuper
+filter.MTR_centile 0.001:25
+filterByRange.MTR_centile on
+filterLimits.MTR_centile 0:100
+filterLabel.MTR_centile MTR Score percentile
+filter.MTR 0
+filterLabel.MTR MTR Score
+filter.FDR 0
+filterLabel.FDR False discovery rate
+filterValues.consequence missense_variant|Missense variant,synonymous_variant|Synonymous variant,stop_gained|Stop gained,NMD_transcript_variant|NMD transcript variant,splice_region_variant|Splice region variant,start_lost|Start lost,stop_retained_variant|Stop regained variant,incomplete_terminal_codon_variant|Incomplete codon variant,coding_sequence_variant|Coding sequence variant,splice_donor_variant|Splice donor variant,splice_acceptor_variant|Splice acceptor variant
+filterLabel.consequence Consequence
+priority 9.5
+
+track mtrScores
+shortLabel MTR Scores
+longLabel MTR - Missense Tolerance Ratio Scores by base
+type bigWig
+compositeTrack on
+parent constraintSuper
+visibility full
+maxWindowToQuery 500000
+group phenDis
+color 124,39,175
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+html constraintSuper
+viewLimits 0:1.1
+viewLimitsMax 0:1.56
+yLineMark 0.8
+yLineOnOff on
+autoScale group
+priority 9.2
+
+        track mtrA
+        shortLabel Mutation: A
+        longLabel MTR Score: Mutation is A
+        type bigWig
+        parent mtrScores on
+        visibility full
+        bigDataUrl /gbdb/$D/mtr/a.bw
+        maxHeightPixels 128:40:8
+
+        track mtrC
+        shortLabel Mutation: C
+        longLabel MTR Score: Mutation is C
+        type bigWig
+        parent mtrScores on
+        visibility full
+        bigDataUrl /gbdb/$D/mtr/c.bw
+        maxHeightPixels 128:40:8
+
+        track mtrG
+        shortLabel Mutation: G
+        longLabel MTR Score: Mutation is G
+        type bigWig
+        parent mtrScores on
+        visibility full
+        bigDataUrl /gbdb/$D/mtr/g.bw
+        maxHeightPixels 128:40:8
+
+        track mtrT
+        shortLabel Mutation: T
+        longLabel MTR Score: Mutation is T
+        type bigWig
+        parent mtrScores on
+        visibility full
+        bigDataUrl /gbdb/$D/mtr/t.bw
+        maxHeightPixels 128:40:8

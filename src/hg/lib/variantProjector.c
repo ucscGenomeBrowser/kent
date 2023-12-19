@@ -965,7 +965,7 @@ struct vpPep *vpTranscriptToProtein(struct vpTx *vpTx, struct genbankCds *cds,
 //#*** This will produce incorrect results for the rare cds with join(...) unless we make a more
 //#*** complicated cds data structure to represent those (basically list of cds's) and use it here.
 {
-if (cds == NULL || cds->start == -1 || cds->end == -1 || !cds->startComplete)
+if (cds == NULL || cds->start == -1 || cds->end == -1)
     return NULL;
 if (txSeq == NULL)
     errAbort("vpTranscriptToProtein: txSeq must not be NULL");
@@ -975,14 +975,14 @@ vpPep->name = cloneString(protSeq->name);
 uint txStart = vpTx->start.txOffset;
 uint txEnd = vpTx->end.txOffset;
 // If the variant starts and ends within exon(s) and overlaps CDS then predict protein change.
-if (txStart >= cds->start && txStart < cds->end && txEnd > cds->start &&
+if (cds->startComplete && (txStart >= cds->start && txStart < cds->end && txEnd > cds->start &&
     ((vpTx->start.region == vpExon && vpTx->end.region == vpExon) ||
      // Insertion at exon boundary -- it doesn't disrupt the splice site so assume its effect
      // is on the exon, in the spirit of HGVS's 3' exception rule
      (vpTxPosIsInsertion(&vpTx->start, &vpTx->end) &&
       (vpTx->start.region == vpExon || vpTx->end.region == vpExon)) ||
      (vpTx->start.region == vpUpstream && vpTx->end.region == vpDownstream && isEmpty(vpTx->txAlt))
-     ))
+     )))
     {
     uint startInCds = max(txStart, cds->start) - cds->start;
     uint endInCds = min(txEnd, cds->end) - cds->start;
@@ -1050,29 +1050,37 @@ if (txStart >= cds->start && txStart < cds->end && txEnd > cds->start &&
         freeMem(alt);
         safecpy(altCodons+altCodonsEnd, sizeof(altCodons)-altCodonsEnd, txSeq->dna + txEnd);
         alt = translateString(altCodons);
+        // But there might not be enough 3'UTR sequence to find a new stop codon...
+        if (endsWith(vpPep->ref, "X") && !endsWith(alt, "X"))
+            {
+            vpPep->cantPredict = TRUE;
+            }
         }
-    vpPep->alt = alt;
-    int refLen = strlen(vpPep->ref), altLen = strlen(vpPep->alt);
-    if (differentString(vpPep->ref, vpPep->alt))
+    if (! vpPep->cantPredict)
         {
-        // If alt has a stop codon, temporarily disguise it so it can't get trimmed
-        char *altStop = strchr(vpPep->alt, 'X');
-        if (altStop)
-            *altStop = 'Z';
-        trimRefAlt(vpPep->ref, vpPep->alt, &vpPep->start, &vpPep->end, &refLen, &altLen);
-        if (altStop)
-            *strchr(vpPep->alt, 'Z') = 'X';
+        vpPep->alt = alt;
+        int refLen = strlen(vpPep->ref), altLen = strlen(vpPep->alt);
+        if (differentString(vpPep->ref, vpPep->alt))
+            {
+            // If alt has a stop codon, temporarily disguise it so it can't get trimmed
+            char *altStop = strchr(vpPep->alt, 'X');
+            if (altStop)
+                *altStop = 'Z';
+            trimRefAlt(vpPep->ref, vpPep->alt, &vpPep->start, &vpPep->end, &refLen, &altLen);
+            if (altStop)
+                *strchr(vpPep->alt, 'Z') = 'X';
+            }
+        if (indelShiftIsApplicable(refLen, altLen))
+            {
+            struct seqWindow *pSeqWin = memSeqWindowNew(vpPep->name, pSeq);
+            vpPep->rightShiftedBases = indelShift(pSeqWin, &vpPep->start, &vpPep->end,
+                                                  vpPep->alt, INDEL_SHIFT_NO_MAX, isdRight);
+            freeMem(vpPep->ref);
+            vpPep->ref = cloneStringZ(pSeq+vpPep->start, vpPep->end - vpPep->start);
+            memSeqWindowFree(&pSeqWin);
+            }
+        dnaSeqFree((struct dnaSeq **)&txTrans);
         }
-    if (indelShiftIsApplicable(refLen, altLen))
-        {
-        struct seqWindow *pSeqWin = memSeqWindowNew(vpPep->name, pSeq);
-        vpPep->rightShiftedBases = indelShift(pSeqWin, &vpPep->start, &vpPep->end,
-                                              vpPep->alt, INDEL_SHIFT_NO_MAX, isdRight);
-        freeMem(vpPep->ref);
-        vpPep->ref = cloneStringZ(pSeq+vpPep->start, vpPep->end - vpPep->start);
-        memSeqWindowFree(&pSeqWin);
-        }
-    dnaSeqFree((struct dnaSeq **)&txTrans);
     }
 else
     {
@@ -1534,7 +1542,7 @@ else if (cds && cds->end > cds->start)
             gpFxSetNoncodingInfo(fxList, startExonIx, exonCount, vpTx->start.txOffset,
                                  vpTx->txRef, vpTx->txAlt, lm);
             }
-        else
+        else if (vpPep)
             fxList = vpTxToFxUtrCds(vpTx, psl, cds, txSeq, vpPep, protSeq, lm);
         }
     else if (vpTx->end.txOffset > cds->end)
@@ -1545,14 +1553,14 @@ else if (cds && cds->end > cds->start)
             gpFxSetNoncodingInfo(fxList, startExonIx, exonCount, vpTx->start.txOffset,
                                  vpTx->txRef, vpTx->txAlt, lm);
             }
-        else
+        else if (vpPep)
             fxList = vpTxToFxUtrCds(vpTx, psl, cds, txSeq, vpPep, protSeq, lm);
         }
-    else
+    else if (vpPep)
         {
         fxList = vpTxToFxCds(vpTx, psl, cds, txSeq, vpPep, protSeq, lm);
         }
-    if (pslNmdTarget(psl, cds, MIN_INTRON))
+    if (pslNmdTarget(psl, cds, MIN_INTRON) && fxList)
         fxList->soNumber = NMD_transcript_variant;
     }
 else
@@ -1868,6 +1876,13 @@ if (vpTx->start.region == vpTx->end.region ||
     errAbort("vpTxSplitByRegion: don't call this if start and end region (%s, %s) are the same, "
              "if vpTx is an insertion, or if vpTx deletes the entire transcript",
              vpTxRegionToString(vpTx->start.region), vpTxRegionToString(vpTx->end.region));
+// Even if vpTxPosIsInsertion() is false because this is not an insertion into the transcript,
+// it might still be an insertion into the genome, e.g. danRer11's rs499587024 with NCBI's
+// alignment of NM_001002580.1 that places a 12-base "exon" after a double-sided gap "intron"
+// that skips 400-odd transcript bases, with rs499587024 at the "exon"/"intron" boundary.
+// In this case start > end in tx coords, not equal, so vpTxPosIsInsertion returns false.
+if (vpTx->start.gOffset == vpTx->end.gOffset)
+    return NULL;
 // If start region and end region are different then at least one of them should be exon or
 // they should have at least one exon in the middle, so txRef should not be NULL.
 if (vpTx->txRef == NULL)

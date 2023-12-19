@@ -1,12 +1,48 @@
 + /src/
 + /src/hg/
-+ /src/hg/autoSql/
-+ /src/hg/autoXml/
+#+ /src/hg/autoSql/
+#+ /src/hg/autoXml/
 # modifier is H so the directories are deleted if you add something
 # We cannot use --delete-excluded because we need to completely ignore the .git directories
-H /src/hg/*/
+# H /src/hg/*/
 
-# not useful
+# as instructed by the list in src/hg/LICENCE
+
+H /src/hg/cgilib
+H /src/hg/hgApi
+H /src/hg/hgCollection
+H /src/hg/hgFileSearch
+H /src/hg/hgFileUi
+H /src/hg/hgGateway
+H /src/hg/hgGene
+H /src/hg/hgGenome
+H /src/hg/hgIntegrator
+H /src/hg/hgPal
+H /src/hg/hgPcr
+H /src/hg/hgPhyloPlace
+H /src/hg/hgPublicSessions
+H /src/hg/hgSession
+H /src/hg/hgSuggest
+H /src/hg/hgTables
+H /src/hg/hgTrackUi
+H /src/hg/hgTracks
+H /src/hg/hgVai
+H /src/hg/hgc
+H /src/hg/hubApi
+H /src/hg/near
+H /src/hg/visiGene
+H /src/hg/liftOver
+
+# not useful for command-line use
+H /src/hg/htdocs
+H /src/hg/makeDb/doc
+H /src/hg/makeDb/trackDb
+H /src/hg/js
+
+# not useful for non-UCSC users
+H /src/hg/cirm
+H /src/hg/encode
+H /src/hg/encode3
 H /python/
 H /java/
 H /build/
@@ -15,16 +51,30 @@ H /src/ai/
 H /src/kehayden/
 H /pre-commit-prevent-large-files.sh
 H /confs/
+H /src/browserbox
+H /src/utils/qa/weeklybld/
+H /src/penn
+H /src/utils/qa
+H /src/hg/hgTablesTest
+- /README
 
-# blat suite
+# not useful for anyone
+H /src/hg/gsid/
+
+# blat suite - definitely not MIT licence, see top-level LICENCE file
 H /src/jkOwnLib/
 H /src/blat/*
 H /src/blatz/
 H /src/isPcr/
 H /src/gfClient/
 H /src/gfServer/
+H /src/webBlat/
 
-# these sometimes appear
+# uses BLAT libraries
+H /src/hg/mouseStuff/chainBridge
+H /src/hg/utils/blatServersCheck
+
+# these sometimes appear on UCSC nfs file systems
 H .nfs*
 
 # This is essential

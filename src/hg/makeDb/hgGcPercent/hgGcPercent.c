@@ -384,7 +384,8 @@ if (!noLoad)
     sqlSafef(query, sizeof(query), createTable, indexLen);
     verbose(1, "#\tLoading gcPercent table\n");
     sqlRemakeTable(conn, "gcPercent", query);
-    sqlUpdate(conn, NOSQLINJ "DELETE from gcPercent");
+    sqlSafef(query, sizeof(query), "DELETE from gcPercent");
+    sqlUpdate(conn, query);
     sqlSafef(query, sizeof(query),
 	  "LOAD data local infile '%s' into table gcPercent", tabFileName);
     sqlUpdate(conn, query);

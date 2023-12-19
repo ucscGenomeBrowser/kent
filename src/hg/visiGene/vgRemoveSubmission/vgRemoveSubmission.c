@@ -109,14 +109,21 @@ if (imageList != NULL)
 /* Delete expressionLevel's tied to imageProbes. */
 if (imageProbeList != NULL)
     {
-    int oldExpLevel = sqlQuickNum(conn, NOSQLINJ "select count(*) from expressionLevel");
+
+    dyStringClear(query);
+    sqlDyStringPrintf(query, 
+	"select count(*) from expressionLevel");
+    int oldExpLevel = sqlQuickNum(conn, query->string);
     int newExpLevel;
     dyStringClear(query);
     sqlDyStringPrintf(query, 
 	"delete from expressionLevel where imageProbe ");
     intInClause(query, imageProbeList);
     maybeUpdate(conn, query->string);
-    newExpLevel = sqlQuickNum(conn, NOSQLINJ "select count(*) from expressionLevel");
+    dyStringClear(query);
+    sqlDyStringPrintf(query, 
+	"select count(*) from expressionLevel");
+    newExpLevel = sqlQuickNum(conn, query->string);
     verbose(1, "Deleted %d expressionLevels\n", oldExpLevel - newExpLevel);
     }
 

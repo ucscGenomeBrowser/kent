@@ -113,7 +113,7 @@ do
 	}
     if (fileId == lastFileId)
 	{
-	sqlDyStringPrintf(groupList, ",");
+	dyStringPrintf(groupList, ",");
 	}
     else
 	{
@@ -196,7 +196,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct slName *fNames = sqlFieldNames(conn, fullTable);
 sqlDisconnect(&conn);
 
-struct dyString *dy = newDyString(128);
+struct dyString *dy = dyStringNew(128);
 char *fieldNames[128];
 char *tempFileTableFields = cloneString(facetFieldsCsv);
 int fieldCount = chopString(tempFileTableFields, ",", fieldNames, ArraySize(fieldNames));
@@ -268,12 +268,16 @@ struct dyString *query = dyStringNew(0);
 // Functions in src/lib/tabToSql.c cannot use functions like sqlSafef
 // since they are in src/hg/lib/ which is not available. 
 // That is why we see NOSQLINJ exposed here.
-dyStringAppend(query, NOSQLINJ);
+// Otherwise, we would be free to use sqlSafef v2 functions in 
+// tagStormToSqlCreate and tagStanzaToSqlInsert.
 tagStormToSqlCreate(tagStorm, fullTable, ttiList, ttiHash, 
     keyFields, ArraySize(keyFields), query);
 verbose(2, "%s\n", query->string);
 verboseTime(2, "creating query string and tab-sep file");
-sqlRemakeTable(conn, fullTable, query->string);
+
+char trustedQuery[query->stringSize + NOSQLINJ_SIZE + 1];
+safef(trustedQuery, sizeof trustedQuery, NOSQLINJ "%s", query->string);
+sqlRemakeTable(conn, fullTable, trustedQuery);
 verboseTime(2, "sqlRemakeTable");
 
 /* Do insert statements for each accessioned file in the system */
@@ -283,9 +287,12 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     {
     struct tagStanza *stanza = stanzaRef->val;
     dyStringClear(query);
-    dyStringAppend(query, NOSQLINJ);
     tagStanzaToSqlInsert(stanza, fullTable, query);
-    sqlUpdate(conn, query->string);
+
+    char trustedQuery[query->stringSize + NOSQLINJ_SIZE + 1];
+    safef(trustedQuery, sizeof trustedQuery, NOSQLINJ "%s", query->string);
+    sqlUpdate(conn, trustedQuery);
+
     }
 slFreeList(&stanzaList);
 verboseTime(2, "sql inserts");
@@ -297,7 +304,8 @@ facetFieldsCsv = facetFieldFilter(facetFieldsCsv, database, fullTable);
 
 verbose(2, "making %s table for faceting\n", facetTable);
 struct dyString *facetCreate = dyStringNew(0);
-sqlDyStringPrintf(facetCreate, "create table %s as select %-s from %s", facetTable, sqlCkIl(facetFieldsCsv), fullTable);
+sqlCkIl(facetFieldsCsvSafe,facetFieldsCsv)
+sqlDyStringPrintf(facetCreate, "create table %s as select %-s from %s", facetTable, facetFieldsCsvSafe, fullTable);
 sqlRemakeTable(conn, facetTable, facetCreate->string);
 dyStringFree(&facetCreate);
 

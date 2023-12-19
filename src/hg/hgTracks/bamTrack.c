@@ -22,6 +22,7 @@
 #include "bigWarn.h"
 #include "errCatch.h"
 #include "hgConfig.h"
+#include "chromAlias.h"
 
 
 struct bamTrackData
@@ -436,7 +437,7 @@ if (ret == 0)
 return ret;
 }
 
-static int linkedFeaturesCmpScore(const void *va, const void *vb)
+int linkedFeaturesCmpScore(const void *va, const void *vb)
 /* Help sort linkedFeatures by score (descending), then by starting pos. */
 {
 const struct linkedFeatures *a = *((struct linkedFeatures **)va);
@@ -513,28 +514,38 @@ if (errCatchStart(errCatch))
     char *baiFileOrUrl = hReplaceGbdb(trackDbSetting(tg->tdb, "bigDataIndex"));
 
     char posForBam[512];
-    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
     char *cacheDir =  cfgOption("cramRef");
     char *refUrl = trackDbSetting(tg->tdb, "refUrl");
-    if (!isPaired)
-	bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBam, &btd, NULL, refUrl, cacheDir);
-    else
-	{
-	char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
-	int pairSearchRange = atoi(setting);
-	if (pairSearchRange > 0)
-	    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
-		  max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBamPaired, &btd, NULL, refUrl, cacheDir);
-	struct hashEl *hel;
-	struct hashCookie cookie = hashFirst(btd.pairHash);
-	while ((hel = hashNext(&cookie)) != NULL)
-	    {
-	    struct linkedFeatures *lf = hel->val;
-	    if (lf->start < winEnd && lf->end > winStart)
-		slAddHead(&(tg->items), lfsFromLf(lf));
-	    }
-	}
+
+    struct slName *aliasList = chromAliasFindAliases(chromName);
+    struct slName *nativeName = newSlName(chromName);
+    slAddHead(&aliasList, nativeName);
+    for (; aliasList; aliasList = aliasList->next)
+        {
+        safef(posForBam, sizeof(posForBam), "%s:%d-%d", aliasList->name, winStart, winEnd);
+        if (!isPaired)
+            bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBam, &btd, NULL, refUrl, cacheDir);
+        else
+            {
+            char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
+            int pairSearchRange = atoi(setting);
+            if (pairSearchRange > 0)
+                safef(posForBam, sizeof(posForBam), "%s:%d-%d", aliasList->name,
+                      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
+            bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBamPaired, &btd, NULL, refUrl, cacheDir);
+            struct hashEl *hel;
+            struct hashCookie cookie = hashFirst(btd.pairHash);
+            while ((hel = hashNext(&cookie)) != NULL)
+                {
+                struct linkedFeatures *lf = hel->val;
+                if (lf->start < winEnd && lf->end > winStart)
+                    slAddHead(&(tg->items), lfsFromLf(lf));
+                }
+            }
+
+        if (tg->items != NULL)
+            break;
+        }
     freez(&fileName2);
 
     if (tg->visibility != tvDense)
@@ -601,7 +612,8 @@ char *exonArrowsDense = trackDbSettingClosestToHome(tg->tdb, "exonArrowsDense");
 boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL && SETTING_IS_ON(exonArrowsDense));
 boolean exonArrows = (tg->exonArrows &&
 		      (vis != tvDense || exonArrowsEvenWhenDense));
-struct dnaSeq *mrnaSeq = NULL;
+struct dnaSeq *qSeq = NULL;
+int qOffset = 0;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 struct psl *psl = (struct psl *)(lf->original);
@@ -609,10 +621,10 @@ char *colorMode = cartOrTdbString(cart, tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_
 char *grayMode = cartOrTdbString(cart, tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
 bool baseQualMode = (sameString(colorMode, BAM_COLOR_MODE_GRAY) &&
 		     sameString(grayMode, BAM_GRAY_MODE_BASE_QUAL));
-char *qSeq = lf->extra;
-if (vis != tvDense && isNotEmpty(qSeq) && !sameString(qSeq, "*"))
+char *qSeqName = lf->extra;
+if (vis != tvDense && isNotEmpty(qSeqName) && !sameString(qSeqName, "*"))
     {
-    drawOpt = baseColorDrawSetup(hvg, tg, lf, &mrnaSeq, &psl);
+    drawOpt = baseColorDrawSetup(hvg, tg, lf, &qSeq, &qOffset, &psl);
     if (drawOpt > baseColorDrawOff)
 	exonArrows = FALSE;
     }
@@ -648,7 +660,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (baseQualMode)
 	color = tg->colorShades[sf->grayIx];
     baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
-		      zoomedToCodonLevel, mrnaSeq, sf, psl, drawOpt, MAXPIXELS, winStart, color);
+		      zoomedToCodonLevel, qSeq, qOffset, sf, psl, drawOpt, MAXPIXELS, winStart, color);
     if (tg->exonArrowsAlways ||
 	(exonArrows &&
 	 (sf->start <= winStart || sf->start == lf->start) &&
@@ -675,10 +687,9 @@ if (vis != tvDense)
      * zoomed way out, this must be done in a separate pass after exons are
      * drawn so that exons sharing the pixel don't overdraw differences. */
     if ((indelShowQueryInsert || indelShowPolyA) && psl)
-	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer, mrnaSeq, psl, winStart,
+	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer, qSeq, qOffset, psl, font, winStart,
 				 drawOpt, indelShowQueryInsert, indelShowPolyA);
-    baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer, mrnaSeq, psl, winStart, drawOpt);
-    baseColorDrawCleanup(lf, &mrnaSeq, &psl);
+    baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer, qSeq, qOffset, psl, winStart, drawOpt);
     }
 }
 

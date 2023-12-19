@@ -258,7 +258,7 @@ for (;;)
 void addJob(int argc, char *argv[], boolean printId, boolean verbose)
 /* Tell hub about a new job. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *in = optionVal("in", "/dev/null"); 
 char *out = optionVal("out", "/dev/null"); 
 char *err = optionVal("err", NULL);
@@ -301,7 +301,7 @@ freez(&jobIdString);
 void clearSickBatch()
 /* Tell hub to clear sick stats on a batch. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *response;
 char results[PATH_LEN];
 getResultsFile(results);
@@ -473,7 +473,7 @@ hubCommandAndPrint("pstat");
 void pstat2()
 /* Send status command to hub and print. */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char results[PATH_LEN];
 getResultsFile(results);
 dyStringPrintf(dy, "pstat2 %s %s", userName, results);

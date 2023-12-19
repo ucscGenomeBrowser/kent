@@ -450,13 +450,25 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 fclose(f);
 }
 
-static void maybeBedGraph(int col, struct dyString *dy, char *colDefinition)
+static void maybeBedGraph(int col, struct dyString *dy, char *format, ...)
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
+static void maybeBedGraph(int col, struct dyString *dy, char *format, ...)
 /* output definition "default" for column "col" when not bedGraph */
 {
 if (col == bedGraph)
-    dyStringAppend(dy, "  dataValue float not null,\n");
+    sqlDyStringPrintf(dy, "  dataValue float not null,\n");
 else
-    dyStringAppend(dy, colDefinition);
+    {
+    // use format varargs
+    va_list args;
+    va_start(args, format);
+    vaSqlDyStringPrintf(dy, format, args);
+    va_end(args);
+    }
 }
 
 static boolean colAlreadyThere(struct sqlConnection *conn, char *tableName, char *col)
@@ -522,7 +534,7 @@ static void loadDatabase(char *database, char *track, int bedSize, struct bedStu
 /* Load database from bedList. */
 {
 struct sqlConnection *conn;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *tab = (char *)NULL;
 int loadOptions = (optionExists("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
 
@@ -564,8 +576,8 @@ if (sqlTable != NULL && !oldTable)
             sql = replaceChars(oldSql, tableName, track);
             }
         verbose(1, "Creating table definition for %s from sql: %s\n", track, sqlTable);
-	// add NOSQLINJ tag
-	sqlDyStringPrintf(dy, "%-s", sql);
+	// from trusted .sql disk source.
+	sqlDyStringPrintf(dy, sql, NULL);
         sqlRemakeTable(conn, track, dy->string);
         if (!noBin) 
 	    addBinToEmptyTable(conn, track);
@@ -590,10 +602,10 @@ else if (!oldTable)
     verbose(1, "Creating table definition for %s, bedSize: %d\n", track, bedSize);
     sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
-       dyStringAppend(dy, "  bin smallint unsigned not null,\n");
-    dyStringAppend(dy, "  chrom varchar(255) not null,\n");
-    dyStringAppend(dy, "  chromStart int unsigned not null,\n");
-    dyStringAppend(dy, "  chromEnd int unsigned not null,\n");
+       sqlDyStringPrintf(dy, "  bin smallint unsigned not null,\n");
+    sqlDyStringPrintf(dy, "  chrom varchar(255) not null,\n");
+    sqlDyStringPrintf(dy, "  chromStart int unsigned not null,\n");
+    sqlDyStringPrintf(dy, "  chromEnd int unsigned not null,\n");
     if (bedSize >= 4)
        maybeBedGraph(4, dy, "  name varchar(255) not null,\n");
     if (bedSize >= 5)
@@ -624,18 +636,18 @@ else if (!oldTable)
        maybeBedGraph(14, dy, "  expIds longblob not null,\n");
     if (bedSize >= 15)
        maybeBedGraph(15, dy, "  expScores longblob not null,\n");
-    dyStringAppend(dy, "#Indices\n");
+    sqlDyStringPrintf(dy, "#Indices\n");
     if (nameIx && (bedSize >= 4) && (0 == bedGraph))
-       dyStringAppend(dy, "  INDEX(name(16)),\n");
+       sqlDyStringPrintf(dy, "  INDEX(name(16)),\n");
     if (noBin)
 	{
-	dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart)\n", minLength);
+	sqlDyStringPrintf(dy, "  INDEX(chrom(%d),chromStart)\n", minLength);
 	}
     else
 	{
-        dyStringPrintf(dy, "  INDEX(chrom(%d),bin)\n", minLength);
+        sqlDyStringPrintf(dy, "  INDEX(chrom(%d),bin)\n", minLength);
 	}
-    dyStringAppend(dy, ")\n");
+    sqlDyStringPrintf(dy, ")\n");
     if (noLoad)
 	verbose(2,"%s", dy->string);
     else

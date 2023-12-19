@@ -19,6 +19,8 @@
 #include "mathWig.h"
 #include "float.h"
 #include "hubConnect.h"
+#include "chromAlias.h"
+#include "hgMaf.h"
 
 struct preDrawContainer *bigWigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
 /* Do bits that load the predraw buffer tg->preDrawContainer. */
@@ -82,6 +84,8 @@ static void bigWigPreDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
+wigLogoMafCheck(tg, seqStart, seqEnd);
+
 if (tg->networkErrMsg == NULL)
     {
     /* Call pre graphing routine. */
@@ -114,7 +118,7 @@ static void bigWigOpenCatch(struct track *tg, char *fileName)
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    struct bbiFile *bbiFile = bigWigFileOpen(fileName);
+    struct bbiFile *bbiFile = bigWigFileOpenAlias(fileName, chromAliasFindAliases);
     slAddHead(&tg->bbiFile, bbiFile);
     }
 errCatchEnd(errCatch);

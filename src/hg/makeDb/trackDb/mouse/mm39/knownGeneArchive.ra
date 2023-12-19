@@ -1,0 +1,81 @@
+
+track knownGeneArchive
+superTrack on
+shortLabel GENCODE Archive
+longLabel GENCODE Archive
+group genes
+type bed 6 +
+html ../../knownGeneArchive
+
+
+    track knownGeneVM27
+    #table knownGene
+    shortLabel GENCODE VM27
+    longLabel GENCODE VM27
+    parent knownGeneArchive
+    priority 5
+    visibility hide
+    type bigGenePred
+    bigDataUrl /gbdb/mm39/gencode/gencodeVM27.bb
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneVM27
+    maxItems 50000
+    html knownGene
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+
+    track knownGeneVM30
+    #table knownGene
+    shortLabel GENCODE VM30
+    longLabel GENCODE VM30
+    parent knownGeneArchive
+    priority 5
+    visibility pack
+    type bigGenePred
+    bigDataUrl /gbdb/mm39/gencode/gencodeVM30.bb
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneVM30
+    maxItems 50000
+    html knownGeneVM30
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+
+    track knownGeneVM32
+    shortLabel GENCODE VM32
+    longLabel GENCODE VM32
+    parent knownGeneArchive
+    priority 5
+    visibility pack
+    type bigGenePred
+    bigDataUrl /gbdb/mm39/gencode/gencodeVM32.bb
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneVM32
+    maxItems 50000
+    html knownGeneVM32
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+

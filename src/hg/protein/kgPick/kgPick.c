@@ -67,7 +67,7 @@ while (row != NULL)
 	}
     
     /* get protein display ID */
-    sqlSafefFrag(condStr, sizeof condStr, "acc='%s'", protAcc);
+    sqlSafef(condStr, sizeof condStr, "acc='%s'", protAcc);
     displayId = sqlGetField(spDb, "displayId", "val", condStr);
     if (displayId == NULL) displayId = protAcc;
     
@@ -169,7 +169,7 @@ while (row2 != NULL)
 	    if (!gotRefseq)
 	    	{
 		/* double check again to see if the RefSeq is still valid */
-    		sqlSafefFrag(condStr, sizeof condStr, "name='%s'", mrnaID);
+    		sqlSafef(condStr, sizeof condStr, "name='%s'", mrnaID);
     		refseqId = sqlGetField(roDb, "refGene", "name", condStr);
 		if (refseqId != NULL)
 		    {

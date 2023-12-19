@@ -277,12 +277,18 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         }
     else if (sameWord(val, "$ncbiGca"))
         {
-        char *gca = hNcbiGcaId(db);
-        if (gca)
-            val = gca;
+        char *gcf = hNcbiGcfId(db);	/* GCF takes priority over GCA */
+        if (gcf)
+            val = gcf;
         else
-            // Really we shouldn't be making this entire form... pass db as hail-mary
-            val = db;
+	    {
+	    char *gca = hNcbiGcaId(db);
+	    if (gca)
+		val = gca;
+	    else
+    // Really we shouldn't be making this entire form... pass db as hail-mary
+		val = db;
+	    }
         }
     else if (sameWord(val, "$ncbiGcf"))
         {

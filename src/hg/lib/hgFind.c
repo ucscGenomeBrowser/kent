@@ -41,11 +41,16 @@
 #include "hubConnect.h"
 #include "bigBedFind.h"
 #include "genbank.h"
+#include "chromAlias.h"
+#include "cart.h"
+#include "cartTrackDb.h"
+#include "jsonParse.h"
 
 // Exhaustive searches can lead to timeouts on CGIs (#11626).
 // However, hgGetAnn requires exhaustive searches (#11665).
 #define NONEXHAUSTIVE_SEARCH_LIMIT 500
 #define EXHAUSTIVE_SEARCH_REQUIRED  -1
+#define SNIPPET_LIMIT 100
 
 char *hgAppName = "";
 
@@ -56,7 +61,7 @@ static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL };
 static char *mrnaLabels[] = { "mRNAs", "Other mRNAs", NULL };
 static struct dyString *hgpMatchNames = NULL;
 
-static void hgPosFree(struct hgPos **pEl)
+void hgPosFree(struct hgPos **pEl)
 /* Free up hgPos. */
 {
 struct hgPos *el;
@@ -105,6 +110,23 @@ for (el = *pList; el != NULL; el = next)
     hgPosTableFree(&el);
     }
 *pList = NULL;
+}
+
+void searchCategoryFree(struct searchCategory **el)
+{
+struct searchCategory *pEl = *el;
+if (pEl != NULL)
+    {
+    freeMem(pEl->id);
+    freeMem(pEl->name);
+    freeMem(pEl->searchString);
+    freeMem(pEl->label);
+    freeMem(pEl->description);
+    freeMem(pEl->groupName);
+    trixClose(&pEl->trix);
+    slNameFreeList(pEl->parents);
+    slNameFreeList(pEl->errors);
+    }
 }
 
 
@@ -396,29 +418,48 @@ freeMem(escapedKey);
 return idList;
 }
 
+static struct hgPosTable *findTable(struct hgPosTable *list, char *name)
+/* Find first table in list that matches name */
+{
+struct hgPosTable *ret = NULL;
+for (ret = list; ret != NULL; ret = ret->next)
+    {
+    if (sameString(ret->name, name))
+        return ret;
+    }
+return NULL;
+}
+
 static struct hgPosTable *addKnownGeneTable(char *db, struct hgPositions *hgp, char *name)
 /* Create new table for known genes matches, add it to hgp, and return it. */
 {
+// we may be coming here a second time, after already hitting knownGeneFast
+// add non duplicate results to the end of our hgp
 struct hgPosTable *table;
-AllocVar(table);
-if (differentString(name, "knownGene"))
+table = findTable(hgp->tableList, name);
+if (table == NULL)
     {
-    char *masterGeneTrack = hdbGetMasterGeneTrack(name);
+    AllocVar(table);
+    table->searchTime = -1;
+    if (differentString(name, "knownGene"))
+        {
+        char *masterGeneTrack = hdbGetMasterGeneTrack(name);
 
-    table->description = cloneString(masterGeneTrack);
-    table->name = cloneString(masterGeneTrack);
-    }
-else
-    {
-    if (hTableExists(db, "knownAttrs"))
-        table->description = cloneString("Gencode Genes");
-    else if (hTableExists(db, "kgProtMap2"))
-        table->description = cloneString("UCSC Genes");
+        table->description = cloneString(masterGeneTrack);
+        table->name = cloneString(masterGeneTrack);
+        }
     else
-        table->description = cloneString("Known Genes");
-    table->name = cloneString("knownGene");
+        {
+        if (hTableExists(db, "knownAttrs"))
+            table->description = cloneString("Gencode Genes");
+        else if (hTableExists(db, "kgProtMap2"))
+            table->description = cloneString("UCSC Genes");
+        else
+            table->description = cloneString("Known Genes");
+        table->name = cloneString("knownGene");
+        }
+    slAddHead(&hgp->tableList, table);
     }
-slAddHead(&hgp->tableList, table);
 return table;
 }
 
@@ -457,27 +498,6 @@ struct tsrPos
     struct hgPos *posList;		/* Associated list of positions. */
     };
 
-static boolean isCanonical(struct sqlConnection *conn, char *geneName)
-/* Look for the name in knownCannonical, return true if found */
-{
-boolean foundIt = FALSE;
-if (sqlTableExists(conn, "knownCanonical"))
-    {
-    char query[512];
-    sqlSafef(query, sizeof(query), "select transcript from knownCanonical"
-	  " where transcript = '%s'", geneName);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-	foundIt = TRUE;
-	}
-    sqlFreeResult(&sr);
-    }
-return foundIt;
-}
-
-
 static int hgPosCmpCanonical(const void *vhg1, const void *vhg2)
 // Compares two hgPos structs and returns an integer
 {
@@ -496,19 +516,10 @@ if (diff == 0)
 return diff;
 }
 
-
 static void addKnownGeneItems(struct hgPosTable *table,
-	struct trixSearchResult *tsrList, struct sqlConnection *conn, struct sqlConnection *conn2, char *name)
+	struct trixSearchResult *tsrList, struct sqlConnection *conn, char *name, struct trix *trix, struct hgFindSpec *hfs)
 /* Convert tsrList to posList, and hang posList off of table. */
 {
-/* This code works with just two SQL queries no matter how
- * big the search result list is.  For cases where the search 
- * result list is big (say 100 or 1000 items) this is noticably
- * faster than the simpler-to-code approach that would do two 
- * queries for each search result.  We pay for this speed tweak
- * by having to construct a more elaborate query, and by having
- * to maintain a hash to connect the query results back to the
- * individual positions. */
 struct dyString *dy = dyStringNew(0);
 struct trixSearchResult *tsr;
 struct hash *hash = hashNew(16);
@@ -527,11 +538,22 @@ else
 
 if (slCount(tsrList) > maxToReturn)
     {
-    warn("Search terms are not very specific, only showing first %d matching UCSC Genes.",
-    	maxToReturn);
+    //warn("Search terms are not very specific, only showing first %d matching UCSC Genes.",
+   // 	maxToReturn);
     tsr = slElementFromIx(tsrList, maxToReturn-1);
     tsr->next = NULL;
     }
+// allow supporting snippet file to not exist, if there are no
+// snippets then the below code will use the description from
+// kgXref
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *context = hgFindSpecSetting(hfs, "searchTrixContext");
+    if (context && sameString(context, "on"))
+        addSnippetsToSearchResults(tsrList, trix);
+    }
+errCatchEnd(errCatch);
 
 /* Make hash of all search results - one for each known gene ID. */
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
@@ -544,8 +566,12 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
 
 /* Stream through knownGenes table and make up a pos
  * for each mapping of each gene matching search. */
-sqlDyStringPrintf(dy, 
-	"select name,chrom,txStart,txEnd from %s.knownGene where name in (", dbName);
+sqlDyStringPrintf(dy,
+	"select kg.name,kg.chrom,kg.txStart,kg.txEnd,geneSymbol,description,kc.transcript from %s.knownGene kg "
+        "join %s.kgXref on kg.name = %s.kgXref.kgID "
+        "left join %s.knownCanonical kc on "
+            "kc.transcript = kg.name and kc.chrom=kg.chrom and kc.chromStart = kg.txStart "
+        "where name in (", dbName, dbName, dbName, dbName);
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {
     sqlDyStringPrintf(dy, "'%s'", tsr->itemId);
@@ -559,51 +585,26 @@ sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tp = hashFindVal(hash, row[0]);
+    char nameBuf[256];
     if (tp == NULL)
         internalErr();
-    AllocVar(pos);
-    pos->chrom = cloneString(row[1]);
-    pos->chromStart = sqlUnsigned(row[2]);
-    pos->chromEnd = sqlUnsigned(row[3]);
-    pos->tp = tp;
-    slAddHead(&tp->posList, pos);
-    }
-sqlFreeResult(&sr);
-
-/* Stream through kgXref table adding description and geneSymbol */
-dyStringClear(dy);
-sqlDyStringPrintf(dy, 
-	"select kgID,geneSymbol,description from %s.kgXref where kgID in (", dbName);
-for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
-    {
-    sqlDyStringPrintf(dy, "'%s'", tsr->itemId);
-    if (tsr->next != NULL)
-        sqlDyStringPrintf(dy, ",");
-    }
-sqlDyStringPrintf(dy, ")");
-
-sr = sqlGetResult(conn, dy->string);
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    tp = hashFindVal(hash, row[0]);
-    if (tp == NULL)
-        internalErr();
-    for (pos = tp->posList; pos != NULL; pos = pos->next)
+    else
         {
-	char nameBuf[256];
-	safef(nameBuf, sizeof(nameBuf), "%s (%s)", row[1], row[0]);
-	pos->name = cloneString(nameBuf);
-	if (isCanonical(conn2,row[0]))
-	    {
-	    pos->canonical = TRUE;
-	    }
-	else{
-	    pos->canonical = FALSE;
-	    }
-	pos->description = cloneString(row[2]);
-	pos->browserName = cloneString(row[0]);
-	}
+        AllocVar(pos);
+        pos->chrom = cloneString(row[1]);
+        pos->chromStart = sqlUnsigned(row[2]);
+        pos->chromEnd = sqlUnsigned(row[3]);
+        pos->tp = tp;
+        slAddHead(&tp->posList, pos);
+        safef(nameBuf, sizeof(nameBuf), "%s (%s)", row[4], row[0]);
+        pos->name = cloneString(nameBuf);
+        pos->browserName = cloneString(row[0]);
+        if (tp->tsr->snippet)
+            pos->description = tp->tsr->snippet;
+        else
+            pos->description = cloneString(row[5]);
+        pos->canonical = row[6] != NULL;
+       }
     }
 sqlFreeResult(&sr);
 
@@ -619,20 +620,45 @@ for (tp = tpList; tp != NULL; tp = tp->next)
     }
 
 slSort(&posList, hgPosCmpCanonical);
-table->posList = posList;
+// we may have already been here (ex: queried knownGeneFast first), if so,
+// we need to put the new list of results behind the old list, since the
+// old results had a higher priority. We can now rank results to knownGene
+// by putting what we want users to find first in different search specs
+if (table->posList == NULL)
+    table->posList = posList;
+else
+    {
+    struct hash *prevHash = hashNew(0);
+    struct hgPos *newPosList = NULL, *next;
+    for (pos = table->posList; pos != NULL; pos = pos->next)
+        {
+        hashAdd(prevHash, pos->name, pos);
+        }
+    for (pos = posList; pos != NULL; pos = next)
+        {
+        next = pos->next;
+        if (!hashLookup(prevHash, pos->name))
+            slAddHead(&newPosList, pos);
+        }
+    slReverse(&newPosList);
+    table->posList = slCat(table->posList, newPosList);
+    }
 
 hashFree(&hash);
-dyStringFree(&dy); }
+dyStringFree(&dy);
+}
 
-static boolean findKnownGeneFullText(char *db, char *term,struct hgPositions *hgp, char *name, char *path)
+static boolean findKnownGeneFullText(char *db, char *term,struct hgPositions *hgp, char *name, char *path, struct hgFindSpec *hfs, boolean measureTiming)
 /* Look for position in full text. */
 {
+long startTime = clock1000();
 boolean gotIt = FALSE;
 struct trix *trix;
 struct trixSearchResult *tsrList;
 char *lowered = cloneString(term);
 char *keyWords[HGFIND_MAX_KEYWORDS];
 int keyCount;
+struct hgPosTable *table = NULL;
 
 trix = trixOpen(path);
 tolowers(lowered);
@@ -640,17 +666,24 @@ keyCount = chopLine(lowered, keyWords);
 tsrList = trixSearch(trix, keyCount, keyWords, tsmExpand);
 if (tsrList != NULL)
     {
-    struct hgPosTable *table = addKnownGeneTable(db, hgp, name);
+    table = addKnownGeneTable(db, hgp, name);
     struct sqlConnection *conn = hAllocConn(db);
-    struct sqlConnection *conn2 = hAllocConn(db);
-    addKnownGeneItems(table, tsrList, conn, conn2, name);
+    addKnownGeneItems(table, tsrList, conn, name, trix, hfs);
     hFreeConn(&conn);
-    hFreeConn(&conn2);
     gotIt = TRUE;
     }
 freez(&lowered);
 trixSearchResultFreeList(&tsrList);
 trixClose(&trix);
+// This is hacky but rely on knownGene table being at head of list
+// for timing. TODO: make this more robust
+if (measureTiming && table != NULL)
+    {
+    if (table->searchTime == -1)
+        table->searchTime = clock1000() - startTime;
+    else
+        table->searchTime += clock1000() - startTime;
+    }
 return gotIt;
 }
 
@@ -661,8 +694,8 @@ static struct dyString *dy = NULL;
 static char *s = NULL;
 if (dy == NULL)
     {
-    dy = newDyString(64);
-    if (cart != NULL)
+    dy = dyStringNew(64);
+    if (cart != NULL && cart->sessionId != NULL)
 	dyStringPrintf(dy, "%s=%s", cartSessionVarName(), cartSessionId(cart));
     s = dy->string;
     }
@@ -1013,18 +1046,20 @@ return pslList;
 }
 
 static void addPslResultToHgp(struct cart *cart, struct hgPositions *hgp, char *db, char *tableName,
-			      char *shortLabel, char *acc, struct psl *pslList)
+			      char *shortLabel, char *acc, struct psl *pslList, boolean measureTiming)
 
 /* Create an hgPosTable for the given psl search results, and add it to hgp->tableList. */
 {
 if (pslList == NULL)
     return;
+long startTime = clock1000();
 struct hgPosTable *table;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 struct psl *psl;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 char *ui = getUiUrl(cart);
 AllocVar(table);
+table->searchTime = -1;
 table->htmlStart = mrnaHtmlStart;
 table->htmlEnd = mrnaHtmlEnd;
 table->htmlOnePos = mrnaHtmlOnePos;
@@ -1060,10 +1095,12 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     slAddHead(&table->posList, pos);
     }
 slReverse(&table->posList);
-freeDyString(&dy);
+if (measureTiming)
+    table->searchTime = clock1000() - startTime;
+dyStringFree(&dy);
 }
 
-static boolean findMrnaPos(struct cart *cart, char *db, char *acc,  struct hgPositions *hgp)
+static boolean findMrnaPos(struct cart *cart, char *db, char *acc,  struct hgPositions *hgp, boolean measureTiming)
 /* Find MRNA or EST position(s) from accession number.
  * Look to see if it's an mRNA or EST.  Fill in hgp and return
  * TRUE if it is, otherwise return FALSE. */
@@ -1129,7 +1166,7 @@ while ((tableName = *tables++) != NULL)
     if (pslList == NULL)
 	continue;
     gotResults = TRUE;
-    addPslResultToHgp(cart, hgp, db, tableName, label, acc, pslList);
+    addPslResultToHgp(cart, hgp, db, tableName, label, acc, pslList, measureTiming);
     if (!sameString(tableName, "intronEst"))
 	/* for speed -- found proper table, so don't need to look farther */
 	break;
@@ -1249,7 +1286,6 @@ struct hash *hash = newHash(0);
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
-char query[256];
 char *field;
 int i;
 
@@ -1276,13 +1312,14 @@ for (i = 0;
          idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-	sqlSafef(query, sizeof(query),
+	struct dyString *query = sqlDyStringCreate(
 	      "select acc, organism from %s where %s = '%s' "
 	      " and type = 'mRNA'", gbCdnaInfoTable, skipDb(field), idEl->name);
         // limit results to avoid CGI timeouts (#11626).
         if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
-            sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
-	sr = sqlGetResult(conn, query);
+            sqlDyStringPrintf(query, " limit %d", limitResults);
+	sr = sqlGetResult(conn, dyStringContents(query));
+        dyStringFree(&query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    char *acc = row[0];
@@ -1351,14 +1388,15 @@ static int addMrnaPositionTable(char *db, struct hgPositions *hgp,
                                 struct slName **pAccList,
 				struct hash *accOrgHash, struct cart *cart,
                                 struct sqlConnection *conn, char *hgAppName,
-                                boolean aligns, boolean isXeno)
+                                boolean aligns, boolean isXeno, boolean measureTiming)
 /* Generate table of positions that match criteria.
  * Add to hgp if any found. Return number found */
 {
 struct hgPosTable *table = NULL;
 struct slName *el = NULL;
 struct slName *elToFree = NULL;
-struct dyString *dy = newDyString(256);
+long startTime = clock1000();
+struct dyString *dy = dyStringNew(256);
 char *ui = getUiUrl(cart);
 int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
 int alignCount = 0;
@@ -1367,6 +1405,7 @@ char *mrnaTable = isXeno ? "xenoMrna" : "all_mrna";
 boolean mrnaTableExists = hTableExists(hgp->database, mrnaTable);
 
 AllocVar(table);
+table->searchTime = -1;
 
 /* Examine all accessions to see if they fit criteria for
  * this table. Add all matching to the position list, and
@@ -1471,7 +1510,7 @@ if (alignCount > 0)
               aligns ?  "A" : "Una");
         char *acc = table->posList->name;
         struct psl *pslList = getPslFromTable(conn, hgp->database, mrnaTable, acc);
-        addPslResultToHgp(cart, hgp, hgp->database, mrnaTable, shortLabel, acc, pslList);
+        addPslResultToHgp(cart, hgp, hgp->database, mrnaTable, shortLabel, acc, pslList, measureTiming);
         if (hgp->tableList)
             alignCount = slCount(hgp->tableList->posList);
         else 
@@ -1491,12 +1530,14 @@ if (alignCount > 0)
         }
     freeMem(organism);
     }
-freeDyString(&dy);
+if (measureTiming)
+    table->searchTime = clock1000() - startTime;
+dyStringFree(&dy);
 return alignCount;
 }
 
 static boolean findMrnaKeys(struct cart *cart, char *db, struct hgFindSpec *hfs,
-			    char *keys, int limitResults, struct hgPositions *hgp)
+			    char *keys, int limitResults, struct hgPositions *hgp, boolean measureTiming)
 /* Find mRNA that has keyword in one of its fields. */
 {
 int alignCount;
@@ -1563,10 +1604,10 @@ if (allKeysList == NULL)
 /* generate position lists and add to hgp */
 /* organism aligning */
 alignCount = addMrnaPositionTable(db, hgp, &allKeysList, allKeysHash, cart, conn,
-				  hgAppName, TRUE, FALSE);
+				  hgAppName, TRUE, FALSE, measureTiming);
 /* organism non-aligning */
 addMrnaPositionTable(db, hgp, &allKeysList, allKeysHash, cart, conn,
-		     hgAppName, FALSE, FALSE);
+		     hgAppName, FALSE, FALSE, measureTiming);
 /* xeno aligning */
 /* NOTE: to suppress display of xeno mrna's in non-model organisms
  * (RT 801 and 687), uncommented the following...
@@ -1574,7 +1615,7 @@ addMrnaPositionTable(db, hgp, &allKeysList, allKeysHash, cart, conn,
  * already listed as aligning (low number of own mRna's for this organism) */
 if (alignCount < 20)
     addMrnaPositionTable(db, hgp, &allKeysList, allKeysHash, cart, conn,
-			 hgAppName, TRUE, TRUE);
+			 hgAppName, TRUE, TRUE, measureTiming);
 hashFree(&allKeysHash);
 hFreeConn(&conn);
 return(found);
@@ -1633,11 +1674,12 @@ for (accEl = accList;  accEl != NULL;  accEl = accEl->next)
 }
 
 static boolean findRefGenes(char *db, struct hgFindSpec *hfs, char *spec,
-			    struct hgPositions *hgp)
+			    struct hgPositions *hgp, boolean measureTiming)
 /* Look up refSeq genes in table. */
 {
+long startTime = clock1000();
 struct sqlConnection *conn = hAllocConn(db);
-struct dyString *ds = newDyString(256);
+struct dyString *ds = dyStringNew(256);
 struct refLink *rlList = NULL, *rl;
 boolean gotRefLink = sqlTableExists(conn, refLinkTable);
 boolean found = FALSE;
@@ -1669,8 +1711,8 @@ if (gotRefLink && isNotEmpty(specNoVersion))
     else 
 	{
 	char *indexFile = getGenbankGrepIndex(db, hfs, refLinkTable, "mrnaAccProduct");
-	sqlDyStringPrintf(ds, "select * from %s where name like '%s%%'",
-		       refLinkTable, specNoVersion);
+	sqlDyStringPrintf(ds, "select * from %s where name like '%s%%' limit %d",
+		       refLinkTable, specNoVersion, NONEXHAUSTIVE_SEARCH_LIMIT);
 	addRefLinks(conn, ds, &rlList);
 	if (indexFile != NULL)
 	    {
@@ -1681,8 +1723,8 @@ if (gotRefLink && isNotEmpty(specNoVersion))
 	else
 	    {
 	    dyStringClear(ds);
-	    sqlDyStringPrintf(ds, "select * from %s where product like '%%%s%%'",
-			   refLinkTable, specNoVersion);
+	    sqlDyStringPrintf(ds, "select * from %s where product like '%%%s%%' limit %d",
+			   refLinkTable, specNoVersion, NONEXHAUSTIVE_SEARCH_LIMIT);
 	    addRefLinks(conn, ds, &rlList);
 	    }
 	}
@@ -1705,7 +1747,7 @@ if (rlList != NULL)
             }
 
         hashAdd(hash, rl->mrnaAcc, rl);
-        sqlSafefFrag(where, sizeof where, "name = '%s'", rl->mrnaAcc);
+        sqlSafef(where, sizeof where, "name = '%s'", rl->mrnaAcc);
         gpr = genePredReaderQuery(conn, hfs->searchTable, where);
 	while ((gp = genePredReaderNext(gpr)) != NULL)
 	    {
@@ -1715,6 +1757,7 @@ if (rlList != NULL)
 		{
 		char desc[256];
 		AllocVar(table);
+                table->searchTime = -1;
 		table->name = cloneString(hfs->searchTable);
 		if (startsWith("xeno", hfs->searchTable))
                     safef(desc, sizeof(desc), "Non-%s RefSeq Genes", hOrganism(db));
@@ -1737,10 +1780,12 @@ if (rlList != NULL)
 	    }
         genePredReaderFree(&gpr);
 	}
+    if (table != NULL && measureTiming)
+        table->searchTime = clock1000() - startTime;
     refLinkFreeList(&rlList);
     freeHash(&hash);
     }
-freeDyString(&ds);
+dyStringFree(&ds);
 hFreeConn(&conn);
 return(found);
 }
@@ -1766,7 +1811,7 @@ static void findTigrGenes(char *db, char *spec, struct hgPositions *hgp)
 {
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
-struct dyString *ds = newDyString(256);
+struct dyString *ds = dyStringNew(256);
 char **row;
 struct hgPosTable *table = NULL;
 struct hgPos *pos;
@@ -1826,7 +1871,7 @@ if (tigrList != NULL)
     tigrCmrGeneFreeList(&tigrList);
     freeHash(&hash);
     }
-freeDyString(&ds);
+dyStringFree(&ds);
 hFreeConn(&conn);
 }
 
@@ -1846,7 +1891,7 @@ struct hgPos *pos = NULL;
 if (!hTableExists(db, tableName))
     return FALSE;
 conn = hAllocConn(db);
-query = newDyString(256);
+query = dyStringNew(256);
 sqlDyStringPrintf(query,
 	      "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'",
 	      tableName, pattern);
@@ -1859,9 +1904,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (table == NULL)
 	    {
 	    AllocVar(table);
-	    dyStringClear(query);
-	    dyStringPrintf(query, "%s Gene Predictions", tableName);
-	    table->description = cloneString(query->string);
+	    struct dyString *desc = dyStringNew(256);
+	    dyStringPrintf(desc, "%s Gene Predictions", tableName);
+	    table->description = dyStringCannibalize(&desc);
 	    table->name = cloneString(tableName);
 	    slAddHead(&hgp->tableList, table);
 	    }
@@ -1877,7 +1922,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 if (table != NULL)
     slReverse(&table->posList);
-freeDyString(&query);
+dyStringFree(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ok;
@@ -1951,7 +1996,7 @@ if (hTableExists(db, "sgdGene"))
 	struct hgPos *pos;
 	for (pos = table->posList; pos != NULL; pos = pos->next)
 	    {
-	    struct dyString *dy = newDyString(1024);
+	    struct dyString *dy = dyStringNew(1024);
 	    if (gotNames)
 		{
 		sqlSafef(query, sizeof(query),
@@ -2124,6 +2169,7 @@ int end = 0;
 char *terms[16];
 int termCount = chopByChar(cloneString(spec), ';', terms, ArraySize(terms));
 boolean multiTerm = (termCount > 1);
+boolean measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
 if (retIsMultiTerm)
     *retIsMultiTerm = multiTerm;
 if (retMultiChrom)
@@ -2137,7 +2183,7 @@ for (i = 0;  i < termCount;  i++)
     // Append warning messages to dyWarn, but allow errAborts to continue
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
-        hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm);
+        hgp = hgPositionsFind(db, terms[i], "", hgAppName, cart, multiTerm, measureTiming, NULL);
     errCatchEnd(errCatch);
     if (errCatch->gotError)
         errAbort("%s", errCatch->message->string);
@@ -2158,7 +2204,7 @@ for (i = 0;  i < termCount;  i++)
         break;
     }
 if (retChromName)
-    *retChromName = chrom;
+    *retChromName = (chrom == NULL) ? chrom : hgOfficialChromName(db, chrom);
 if (retWinStart)
     *retWinStart  = start;
 if (retWinEnd)
@@ -2294,18 +2340,18 @@ return sameString(hfs->searchType, "bigBed")
 }
 
 static boolean findBigBed(struct cart *cart, char *db, struct hgFindSpec *hfs, char *spec,
-			    struct hgPositions *hgp)
+			    struct hgPositions *hgp, boolean measureTiming)
 /* Look up items in bigBed  */
 {
 struct trackDb *tdb = tdbFindOrCreate(db, NULL, hfs->searchTable);
 
-return findBigBedPosInTdbList(cart, db, tdb, spec, hgp, hfs);
+return findBigBedPosInTdbList(cart, db, tdb, spec, hgp, hfs, measureTiming);
 }
 
 boolean searchSpecial(struct cart *cart,
                              char *db, struct hgFindSpec *hfs, char *term, int limitResults,
 			     struct hgPositions *hgp, boolean relativeFlag,
-			     int relStart, int relEnd, boolean *retFound)
+			     int relStart, int relEnd, boolean *retFound, boolean measureTiming)
 /* Handle searchTypes for which we have special code.  Return true if 
  * we have special code.  Set retFind according to whether we find term. */
 {
@@ -2321,15 +2367,15 @@ if (startsWith("knownGene", hfs->searchType))
     if (indexPath == NULL)
         indexPath = makeIndexPath(db, name);
     if (gotFullText(db, indexPath))
-	found = findKnownGeneFullText(db, term, hgp, name, indexPath);
+	found = findKnownGeneFullText(db, term, hgp, name, indexPath, hfs, measureTiming);
     }
 else if (sameString(hfs->searchType, "refGene"))
     {
-    found = findRefGenes(db, hfs, term, hgp);
+    found = findRefGenes(db, hfs, term, hgp, measureTiming);
     }
 else if (isBigFileFind(hfs))
     {
-    found = findBigBed(cart, db, hfs, term, hgp);
+    found = findBigBed(cart, db, hfs, term, hgp, measureTiming);
     }
 else if (sameString(hfs->searchType, "cytoBand"))
     {
@@ -2358,11 +2404,11 @@ else if (sameString(hfs->searchType, "gold"))
     }
 else if (sameString(hfs->searchType, "mrnaAcc"))
     {
-    found = findMrnaPos(cart, db, term, hgp);
+    found = findMrnaPos(cart, db, term, hgp, measureTiming);
     }
 else if (sameString(hfs->searchType, "mrnaKeyword"))
     {
-    found = findMrnaKeys(cart, db, hfs, upcTerm, limitResults, hgp);
+    found = findMrnaKeys(cart, db, hfs, upcTerm, limitResults, hgp, measureTiming);
     }
 else if (sameString(hfs->searchType, "sgdGene"))
     {
@@ -2387,20 +2433,28 @@ struct sqlResult *sr = NULL;
 char **row;
 boolean isFuzzy = sameWord(hfs->searchMethod, "fuzzy");
 
-// TODO wonder if we could re-work this better to get to upstream sql creation and 
+// TODO we could re-work this better to get to upstream sql creation and 
 //  then be able to avoid this complexity:?
 // hfs->refTable sometimes contains a comma-separated table list
-// but we do not have control over the original sql since it is in trackDb.ra 
+// in trackDb.ra and hgFindSpec table.
 
 // example from human/hg19/trackDb.ra
 // xrefTable kgXref, ucscRetroInfo5
 // xrefQuery select ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID
 
+// NOTE this also goes into hgFindSpec table as hti fields hfs->xrefTable and hfs->xrefQuery.
+// hfs->xrefTable is sometimes a comma-separated list of fields
+//  xrefTable = [hgFixed.refLink, ucscRetroInfo8]
+
 struct dyString *dy = dyStringNew(256);
-dyStringAppend(dy, NOSQLINJ "");
-// in particular, if we could get to the upstream and change the first %s to %-s for the param corresponding to xrefTable, 
-// that would be nice.
-dyStringPrintf(dy, hfs->xrefQuery, sqlCkIl(hfs->xrefTable), sqlEscapeString(term)); // keep this sqlEscape
+sqlCkIl(xrefTableSafe, hfs->xrefTable)
+// Replace the %s with %-s if it has not already been done in the upstream source .ra files
+// it would be better to do this upstream in .ra and hgFindSpec
+char *update = replaceChars(hfs->xrefQuery, " from %s ", " from %-s ");  // this patches older values that still need it.
+sqlDyStringPrintf(dy, update, xrefTableSafe, term);
+sqlDyStringPrintf(dy, " limit %d", NONEXHAUSTIVE_SEARCH_LIMIT);
+freeMem(update);
+
 sr = sqlGetResult(conn, dy->string);
 dyStringFree(&dy);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2431,7 +2485,7 @@ return dyStringCannibalize(&dy);
 static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *term,
 		       struct hgPositions *hgp,
 		       boolean relativeFlag, int relStart, int relEnd,
-		       boolean multiTerm, int limitResults)
+		       boolean multiTerm, int limitResults, boolean measureTiming)
 /* Perform a query as specified in hfs, assuming table existence has been 
  * checked and xref'ing has been taken care of. */
 {
@@ -2448,6 +2502,7 @@ int padding = isEmpty(paddingStr) ? 0 : atoi(paddingStr);
 boolean found = FALSE;
 char *description = NULL;
 char buf[2048];
+long startTime = clock1000();
 
 if (isNotEmpty(termPrefix) && startsWith(termPrefix, term))
     term += strlen(termPrefix);
@@ -2468,57 +2523,58 @@ if (hgp->tableList != NULL &&
 for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
     {
     // we do not have control over the original sql since it comes from trackDb.ra or elsewhere?
-    char query[2048];
-    sqlSafef(query, sizeof(query), hfs->query, tPtr->name, term);
+    struct dyString *query = sqlDyStringCreate(hfs->query, tPtr->name, term);
     if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
-        sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
-    sr = sqlGetResult(conn, query);
+        sqlDyStringPrintf(query, " limit %d", limitResults);
+    sr = sqlGetResult(conn, dyStringContents(query));
+    dyStringFree(&query);
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	if(table == NULL)
-	    {
-	    AllocVar(table);
-	    table->description = description;
-	    table->name = cloneString(hfs->searchTable);
-	    slAddHead(&hgp->tableList, table);
-	    }
-	found = TRUE;
-	AllocVar(pos);
-	pos->chrom = cloneString(row[0]);
-	pos->chromStart = atoi(row[1]);
-	pos->chromEnd = atoi(row[2]);
-	if (isNotEmpty(xrefTerm))
-	    truncatef(buf, sizeof(buf), xrefTerm);
-	else
-	    safef(buf, sizeof(buf), "%s%s",
-		  termPrefix ? termPrefix : "", row[3]);
-	pos->name = cloneString(buf);
-	pos->browserName = cloneString(row[3]);
-	if (isNotEmpty(xrefTerm))
-	    {
-	    safef(buf, sizeof(buf), "(%s%s)",
-		  termPrefix ? termPrefix : "", row[3]);
-	    pos->description = cloneString(buf);
-	    }
-	if (relativeFlag && (pos->chromStart + relEnd) <= pos->chromEnd)
-	    {
-	    pos->chromEnd   = pos->chromStart + relEnd;
-	    pos->chromStart = pos->chromStart + relStart;
-	    }
-	else if (padding > 0 && !multiTerm)
-	    {
+        {
+        if(table == NULL)
+            {
+            AllocVar(table);
+            table->searchTime = -1;
+            table->description = description;
+            table->name = cloneString(hfs->searchTable);
+            slAddHead(&hgp->tableList, table);
+            }
+        found = TRUE;
+        AllocVar(pos);
+        pos->chrom = cloneString(row[0]);
+        pos->chromStart = atoi(row[1]);
+        pos->chromEnd = atoi(row[2]);
+        if (isNotEmpty(xrefTerm))
+            truncatef(buf, sizeof(buf), xrefTerm);
+        else
+            safef(buf, sizeof(buf), "%s%s",
+                  termPrefix ? termPrefix : "", row[3]);
+        pos->name = cloneString(buf);
+        pos->browserName = cloneString(row[3]);
+        if (isNotEmpty(xrefTerm))
+            {
+            safef(buf, sizeof(buf), "(%s%s)",
+                  termPrefix ? termPrefix : "", row[3]);
+            pos->description = cloneString(buf);
+            }
+        if (relativeFlag && (pos->chromStart + relEnd) <= pos->chromEnd)
+            {
+            pos->chromEnd   = pos->chromStart + relEnd;
+            pos->chromStart = pos->chromStart + relStart;
+            }
+        else if (padding > 0 && !multiTerm)
+            {
             // highlight the item bases to distinguish from padding
             pos->highlight = addHighlight(db, pos->chrom, pos->chromStart, pos->chromEnd);
-	    int chromSize = hChromSize(db, pos->chrom);
-	    pos->chromStart -= padding;
-	    pos->chromEnd   += padding;
-	    if (pos->chromStart < 0)
-		pos->chromStart = 0;
-	    if (pos->chromEnd > chromSize)
-		pos->chromEnd = chromSize;
-	    }
-	slAddHead(&table->posList, pos);
-	}
+            int chromSize = hChromSize(db, pos->chrom);
+            pos->chromStart -= padding;
+            pos->chromEnd   += padding;
+            if (pos->chromStart < 0)
+                pos->chromStart = 0;
+            if (pos->chromEnd > chromSize)
+                pos->chromEnd = chromSize;
+            }
+        slAddHead(&table->posList, pos);
+        }
 
     }
 if (table != NULL)
@@ -2526,13 +2582,15 @@ if (table != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slFreeList(&tableList);
+if (measureTiming && table)
+    table->searchTime += clock1000() - startTime;
 return(found);
 }
 
 static boolean hgFindUsingSpec(struct cart *cart,
                         char *db, struct hgFindSpec *hfs, char *term, int limitResults,
 			struct hgPositions *hgp, boolean relativeFlag,
-			int relStart, int relEnd, boolean multiTerm)
+			int relStart, int relEnd, boolean multiTerm, boolean measureTiming)
 /* Perform the search described by hfs on term.  If successful, put results
  * in hgp and return TRUE.  (If not, don't modify hgp.) */
 {
@@ -2557,9 +2615,8 @@ if ((!(sameString(hfs->searchType, "mrnaKeyword") || sameString(hfs->searchType,
         return(FALSE);
     }
 
-if (isNotEmpty(hfs->searchType) && searchSpecial(cart,
-                                                 db, hfs, term, limitResults, hgp, relativeFlag,
-						 relStart, relEnd, &found))
+if (isNotEmpty(hfs->searchType) && searchSpecial(cart, db, hfs, term, limitResults,
+                        hgp, relativeFlag, relStart, relEnd, &found, measureTiming))
     return(found);
 
 if (isNotEmpty(hfs->xrefTable))
@@ -2582,7 +2639,7 @@ else
 for (xrefPtr = xrefList;  xrefPtr != NULL;  xrefPtr = xrefPtr->next)
     {
     found |= doQuery(db, hfs, xrefPtr->name, (char *)xrefPtr->val, hgp,
-		     relativeFlag, relStart, relEnd, multiTerm, limitResults);
+		     relativeFlag, relStart, relEnd, multiTerm, limitResults, measureTiming);
     }
 slPairFreeValsAndList(&xrefList);
 return(found);
@@ -2592,39 +2649,39 @@ return(found);
 /* Support these formats for range specifiers.  Note the ()'s around chrom,
  * start and end portions for substring retrieval: */
 char *canonicalRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([-0-9,]+)"
 		     "[[:space:]]*[-_][[:space:]]*"
 		     "([0-9,]+)$";
 char *gbrowserRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)"
 		     "[[:space:]]*\\.\\.[[:space:]]*"
 		     "([0-9,]+)$";
 char *lengthRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)"
 		     //"[[:space:]]*\\^[[:space:]]*"
 		     "[[:space:]]*\\+[[:space:]]*"
 		     "([0-9,]+)$";
 char *bedRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]+"
 		     "([0-9,]+)"
 		     "[[:space:]]+"
 		     "([0-9,]+)$";
 char *sqlRangeExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*\\|[[:space:]]*"
 		     "([0-9,]+)"
 		     "[[:space:]]*\\|[[:space:]]*"
 		     "([0-9,]+)$";
 
 char *singleBaseExp = 
-		     "^([[:alnum:]._\\-]+)"
+		     "^([[:alnum:]._#\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)$";
 
@@ -2706,9 +2763,727 @@ for (el = list; el != NULL; el = el->next)
 return NULL;
 }
 
+static void myLoadFindSpecs(char *db, struct searchCategory *categories, struct hgFindSpec **quickList, struct hgFindSpec **fullList)
+/* Get all find specs where the search table or search name is what we want */
+{
+struct hgFindSpec *shortList = NULL, *longList = NULL;
+struct dyString *clause = dyStringNew(0);
+struct searchCategory *categ;
+struct sqlConnection *conn = hAllocConn(db);
+struct sqlResult *sr = NULL;
+struct slName *tbl, *tblList = hTrackDbList();
+for (tbl = tblList; tbl != NULL; tbl = tbl->next)
+    {
+    dyStringClear(clause);
+    char *tblName = replaceChars(tbl->name, "trackDb", "hgFindSpec");
+    if (hTableExists(db, tblName))
+        {
+        sqlDyStringPrintf(clause, "select * from %s where searchName in (", tblName);
+        for (categ = categories; categ != NULL; categ = categ->next)
+            {
+            sqlDyStringPrintf(clause, "'%s'", categ->id);
+            if (categ->next)
+                sqlDyStringPrintf(clause, ",");
+            }
+        sqlDyStringPrintf(clause, ") or searchTable in (");
+        for (categ = categories; categ != NULL; categ = categ->next)
+            {
+            if (sameString(categ->id, "mrna"))
+                sqlDyStringPrintf(clause, "'all_mrna'");
+            else
+                sqlDyStringPrintf(clause, "'%s'", categ->id);
+            if (categ->next)
+                sqlDyStringPrintf(clause, ",");
+            }
+        sqlDyStringPrintf(clause, ")");
+        sr = sqlGetResult(conn, dyStringContents(clause));
+        char **row = NULL;
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            struct hgFindSpec *hfs = hgFindSpecLoad(row);
+            if (hfs->shortCircuit)
+                slAddHead(&shortList, hfs);
+            else
+                slAddHead(&longList, hfs);
+            }
+        sqlFreeResult(&sr);
+        }
+    }
+hFreeConn(&conn);
+dyStringFree(&clause);
+
+if (quickList != NULL)
+    {
+    slSort(&shortList, hgFindSpecPriCmp);
+    *quickList = shortList;
+    }
+else
+    hgFindSpecFreeList(&shortList);
+if (fullList != NULL)
+    {
+    slSort(&longList, hgFindSpecPriCmp);
+    *fullList = longList;
+    }
+else
+    hgFindSpecFreeList(&longList);
+}
+
+static bool subtrackEnabledInTdb(struct trackDb *subTdb)
+/* Return TRUE unless the subtrack was declared with "subTrack ... off". */
+{
+bool enabled = TRUE;
+char *words[2];
+char *setting;
+if ((setting = trackDbLocalSetting(subTdb, "parent")) != NULL)
+    {
+    if (chopLine(cloneString(setting), words) >= 2)
+        if (sameString(words[1], "off"))
+            enabled = FALSE;
+    }
+else
+    return subTdb->visibility != tvHide;
+
+return enabled;
+}
+
+static bool isSubtrackVisible(struct cart *cart, struct trackDb *tdb)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ *  * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+bool enabledInTdb = subtrackEnabledInTdb(tdb);
+char option[1024];
+safef(option, sizeof(option), "%s_sel", tdb->track);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+if (overrideComposite)
+    enabled = TRUE;
+return enabled;
+}
+
+static bool isParentVisible(struct cart *cart, struct trackDb *tdb)
+// Are this track's parents visible?
+{
+if (tdb->parent == NULL)
+    return TRUE;
+
+if (!isParentVisible(cart, tdb->parent))
+    return FALSE;
+
+char *cartVis = cartOptionalString(cart, tdb->parent->track);
+boolean vis;
+if (cartVis != NULL)
+    vis =  differentString(cartVis, "hide");
+else if (tdbIsSuperTrack(tdb->parent))
+    vis = tdb->parent->isShow;
+else
+    vis = tdb->parent->visibility != tvHide;
+return vis;
+}
+
+static bool isTrackVisible(struct cart *cart, struct trackDb *tdb)
+/* Is a track visible? */
+{
+boolean isVisible = FALSE;
+if (tdb->parent == NULL)
+    {
+    char *cartVis = cartOptionalString(cart, tdb->track);
+    if (cartVis == NULL)
+        isVisible =  tdb->visibility != tvHide;
+    else
+        isVisible =  differentString(cartVis, "hide");
+    }
+else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
+    isVisible = TRUE;
+return isVisible;
+}
+
+struct hash *hgFindTrackHash = NULL;
+struct hash *hgFindGroupHash = NULL;
+
+int cmpCategories(const void *a, const void *b)
+/* Compare two categories for uniquifying */
+{
+struct searchCategory *categA = *(struct searchCategory **)a;
+struct searchCategory *categB = *(struct searchCategory **)b;
+return strcmp(categA->id, categB->id);
+}
+
+static struct searchableTrack *getSearchableTracks(struct cart *cart, char *database)
+/* Return the list of all tracks with an hgFindSpec available */
+{
+if (trackHubDatabase(database))
+    return NULL;
+struct searchableTrack *ret = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+struct slName *tbl, *tblList = hTrackDbList();
+for (tbl = tblList; tbl != NULL; tbl = tbl->next)
+    {
+    char *tdbName, *findSpecName;
+    tdbName = tbl->name;
+    findSpecName = replaceChars(tbl->name, "trackDb", "hgFindSpec");
+    if (hTableExists(database, findSpecName))
+        {
+        char query[1024];
+        sqlSafef(query, sizeof(query), "select distinct "
+            "tableName,shortLabel,longLabel,searchDescription,priority "
+            "from %s join %s on "
+            "%s.searchTable=%s.tableName or "
+            "%s.searchName=%s.tableName or "
+            "%s.searchTable = concat('all_', %s.tableName) "
+            "where searchTable !='knownGene' and searchName != 'knownGene' "
+            "order by priority,shortLabel",
+            findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName);
+        struct sqlResult *sr = sqlGetResult(conn, query);
+        char **row = NULL;
+        struct trackDb *tdb = NULL;
+        while ( (row = sqlNextRow(sr)) != NULL)
+            {
+            if ( (tdb = hashFindVal(hgFindTrackHash, row[0])) != NULL)
+                {
+                struct searchableTrack *track = NULL;
+                AllocVar(track);
+                track->track = cloneString(row[0]);
+                track->shortLabel = cloneString(row[1]);
+                track->longLabel = cloneString(row[2]);
+                track->description = cloneString(row[3]);
+                track->visibility = isTrackVisible(cart, tdb);
+                track->priority = sqlDouble(row[4]);
+                track->grp = tdb->grp;
+                slAddHead(&ret, track);
+                }
+            }
+        sqlFreeResult(&sr);
+        }
+    }
+hFreeConn(&conn);
+slReverse(&ret);
+return ret;
+}
+
+static struct trackDb *hubCategoriesToTdbList(struct searchCategory *categories)
+/* Make a list of trackDbs for the selected tracks */
+{
+struct trackDb *ret = NULL;
+struct searchCategory *categ;
+for (categ = categories; categ != NULL; categ = categ->next)
+    {
+    if (startsWith("hub_", categ->id))
+        slAddHead(&ret, categ->tdb);
+    }
+return ret;
+}
+
+static struct searchCategory *searchCategoryFromTdb(struct trackDb *tdb, struct searchableTrack *searchTrack, int visibility)
+/* Make a searchCategory from a leaf tdb, use searchCategory settings if possible, as they
+ * have more accurate visibilities and labels */
+{
+struct searchCategory *category = NULL;
+AllocVar(category);
+category->tdb = tdb;
+if (sameString(tdb->track, "mrna") || sameString(tdb->track, "est"))
+    {
+    char tableName[10];
+    safef(tableName, sizeof(tableName), "all_%s", tdb->track);
+    category->id = cloneString(tableName);
+    }
+else
+    category->id = tdb->track;
+category->name = searchTrack != NULL ? searchTrack->shortLabel : tdb->shortLabel;
+category->visibility = searchTrack != NULL ? searchTrack->visibility: tdb->visibility;
+if (visibility > 0) // for when tdb is from a hub track
+    category->visibility = visibility;
+category->priority = searchTrack != NULL ? searchTrack->priority : tdb->priority;
+if (slCount(category->errors) == 0)
+    {
+    category->label = searchTrack != NULL ? searchTrack->shortLabel: tdb->shortLabel;
+    category->description = searchTrack != NULL ? searchTrack->description: tdb->longLabel;
+    category->groupName = searchTrack != NULL ? searchTrack->grp: tdb->grp;
+    category->parents = NULL;
+    while (tdb->parent)
+        {
+        slNameAddHead(&category->parents, tdb->parent->track);
+        slNameAddHead(&category->parents, tdb->parent->shortLabel);
+        tdb = tdb->parent;
+        }
+    if (category->parents)
+        slReverse(&category->parents);
+    }
+return category;
+}
+
+struct trix *openStaticTrix(char *trixName)
+/* Open up a trix file in hgFixed */
+{
+char trixPath[PATH_LEN];
+safef(trixPath, sizeof(trixPath), "%s%s.ix", hgFixedTrix, trixName);
+struct trix *ret = trixOpen(trixPath);
+return ret;
+}
+
+static struct searchCategory *makeTrixCategory(char *indexName, char *database)
+/* Fill out the fields for a category filter for the UI. */
+{
+struct searchCategory *category = NULL;
+AllocVar(category);
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (sameString(indexName, "publicHubs"))
+        {
+        category->id = "publicHubs";
+        category->name = "publicHubs";
+        category->label = "Public Hubs";
+        category->description = "Track names and descriptions of public hubs";
+        category->priority = 4.0;
+        category->trix = openStaticTrix(publicHubsTrix);
+        }
+    else if (sameString(indexName, "helpDocs"))
+        {
+        category->id = "helpDocs";
+        category->name = "helpDocs";
+        category->label = "Help Pages";
+        category->description = "Help documentation";
+        category->visibility = 1;
+        category->priority = 5.0;
+        category->trix = openStaticTrix(helpDocsTrix);
+        }
+    else if (startsWith("trackDb", indexName))
+        {
+        category->id = "trackDb";
+        category->name = "trackDb";
+        category->visibility = 1;
+        category->priority = 3.0;
+        char trixPath[PATH_LEN];
+        safef(trixPath, sizeof(trixPath), "%s Track Labels/Descriptions", database);
+        category->label = cloneString(trixPath);
+        category->description = "Track names or descriptions";
+        safef(trixPath, sizeof(trixPath), "/gbdb/%s/trackDb.ix", database);
+        category->trix = trixOpen(trixPath);
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    slAddHead(&category->errors, slNameNew(errCatch->message->string));
+return category;
+}
+
+static struct searchCategory *makeCategoryForTrack(struct trackDb *tdb, struct searchableTrack *searchTrack)
+/* Make a searchCategory from a track. If the track is any type of container,
+ * we will recurse down all the way to subtracks, as only leaf nodes have searchSpecs */
+{
+struct trackDb *sub;
+struct searchCategory *ret = NULL;
+if (tdb->subtracks)
+    {
+    for (sub = tdb->subtracks; sub != NULL; sub = sub->next)
+        {
+        if (sub->subtracks)
+            {
+            struct searchCategory *temp = makeCategoryForTrack(sub, searchTrack);
+            if (temp)
+                slAddHead(&ret, temp);
+            }
+        else
+            {
+            struct searchCategory *temp = searchCategoryFromTdb(sub, NULL, 0);
+            if (temp)
+                slAddHead(&ret, temp);
+            }
+        }
+    }
+else
+    ret = searchCategoryFromTdb(tdb, searchTrack, 0);
+return ret;
+}
+
+struct searchCategory *makeCategory(struct cart *cart, char *categName, struct searchableTrack *searchTrack, char *db,
+                                    struct hash *groupHash)
+/* Make a single searchCategory, unless the requested categName is a container
+ * track or track group (for example all phenotype tracks), in which case we make
+ * categories for each subtrack */
+{
+struct searchCategory *ret = NULL;
+
+if (sameString(categName, "helpDocs"))
+    ret = makeTrixCategory("helpDocs", NULL);
+else if (sameString(categName, "publicHubs"))
+    ret = makeTrixCategory("publicHubs", NULL);
+else if (startsWith("trackDb", categName))
+    ret = makeTrixCategory("trackDb", db);
+else if (hashLookup(groupHash, categName) != NULL)
+    {
+    // add all tracks for this track grouping
+    struct hashEl *hel, *helList = hashElListHash(hgFindTrackHash);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+        struct trackDb *tdb = hel->val;
+        if (isTdbSearchable(tdb) && sameString(tdb->grp, categName))
+            {
+            struct searchCategory *temp = makeCategoryForTrack(tdb, searchTrack);
+            if (temp)
+                slAddHead(&ret, temp);
+            }
+        }
+    }
+else
+    {
+    // must be a track, ret will contain subtracks if necessary
+    struct trackDb *tdb = hashFindVal(hgFindTrackHash, categName);
+    if (tdb)
+        ret = makeCategoryForTrack(tdb, searchTrack);
+    }
+return ret;
+}
+
+struct searchCategory *getCategsForNonDb(struct cart *cart, char *db, struct hash *groupHash)
+/* Return the default categories for all databases */
+{
+struct searchCategory *ret = NULL;
+struct searchCategory *kgCategory = makeCategory(cart, "knownGene", NULL, db, groupHash);
+if (kgCategory)
+    slAddHead(&ret, kgCategory);
+struct searchCategory *helpDocCategory = makeCategory(cart, "helpDocs", NULL, db, groupHash);
+if (helpDocCategory)
+    slAddHead(&ret, helpDocCategory);
+struct searchCategory *publicHubCategory = makeCategory(cart, "publicHubs", NULL, db, groupHash);
+if (publicHubCategory)
+    slAddHead(&ret, publicHubCategory);
+char trackDbIndexName[2048];
+safef(trackDbIndexName, sizeof(trackDbIndexName), "trackDb%s", db);
+struct searchCategory *tdbCategory = makeCategory(cart, trackDbIndexName, NULL, db, groupHash);
+if (tdbCategory)
+    slAddHead(&ret, tdbCategory);
+return ret;
+}
+
+static struct searchableTrack *makeGenbankSearchableTrack(struct trackDb *tdb, struct cart *cart)
+{
+struct searchableTrack *track = NULL;
+AllocVar(track);
+track->track = cloneString(tdb->track);
+track->shortLabel = cloneString(tdb->shortLabel);
+track->longLabel = cloneString(tdb->longLabel);
+track->description = cloneString(tdb->longLabel);
+track->visibility = isTrackVisible(cart, tdb);
+track->priority = tdb->priority;
+track->grp = tdb->grp;
+return track;
+}
+
+struct searchCategory *getCategsForDatabase(struct cart *cart, char *db, struct hash *groupHash)
+/* Get the track categories to search for a particular database */
+{
+struct searchCategory *ret = NULL;
+struct trackDb *tdb = NULL;
+
+struct searchableTrack *track = NULL, *searchableTracks = getSearchableTracks(cart, db);
+for (track = searchableTracks; track != NULL; track = track->next)
+    {
+    struct searchCategory *trackCategory = makeCategory(cart, track->track, track, db, groupHash);
+    if (trackCategory)
+        {
+        if (ret)
+            slCat(&ret, trackCategory);
+        else
+            ret = trackCategory;
+        }
+    }
+
+// only the all_mrna table will have a valid struct searchableTrack added, we need
+// to make some for the rest of the searchable genbank mrna/est tracks:
+char *table = NULL;
+char **tables = mrnaTables;
+while ((table = *tables++) != NULL)
+    {
+    if (!sameString(table, "all_mrna") && (tdb = hashFindVal(hgFindTrackHash, table)) != NULL)
+        {
+        struct searchableTrack *tmp = makeGenbankSearchableTrack(tdb, cart);
+        struct searchCategory *category = makeCategory(cart, tmp->track, tmp, db, groupHash);
+        if (category)
+            slAddHead(&ret, category);
+        }
+    }
+tables = estTables;
+while ((table = *tables++) != NULL)
+    {
+    if ( (tdb = hashFindVal(hgFindTrackHash, table)) != NULL)
+        {
+        struct searchableTrack  *tmp = makeGenbankSearchableTrack(tdb, cart);
+        struct searchCategory *category = makeCategory(cart, tmp->track, tmp, db, groupHash);
+        if (category)
+            slAddHead(&ret, category);
+        }
+    }
+
+// add hub tracks to list
+struct trackDb *hubList = hubCollectTracks(db, NULL);
+hubList = getSearchableBigBeds(hubList);
+for (tdb = hubList; tdb != NULL; tdb = tdb->next)
+    {
+    int visibility = isTrackVisible(cart, tdb);
+    struct searchCategory *tmp = searchCategoryFromTdb(tdb, NULL, visibility);
+    if (tmp)
+        slAddHead(&ret, tmp);
+    }
+return ret;
+}
+
+struct searchCategory *getAllCategories(struct cart *cart, char *db, struct hash *groupHash)
+/* Return all searchable stuff, both current db specific tracks, and things like hubs that searchable
+ * no matter the current database */
+{
+struct searchCategory *ret = NULL;
+struct searchCategory *tdbCategories = getCategsForDatabase(cart, db, groupHash);
+if (tdbCategories)
+    ret = tdbCategories;
+struct searchCategory *staticCategs = getCategsForNonDb(cart, db, groupHash);
+if (staticCategs)
+    {
+    if (ret)
+        slCat(&ret, staticCategs);
+    else
+        ret = staticCategs;
+    }
+return ret;
+}
+
+static struct hash *hubLabelHash = NULL;
+
+/* struct hubLabel: a helper struct for making links to hubs in the search result list */
+struct hubLabel
+    {
+    char *shortLabel;
+    char *longLabel;
+    char *hubId;
+    };
+
+
+static void getLabelsForHubs()
+/* Hash up the shortLabels, longLabels and hub_id for a hubUrl */
+{
+if (hubLabelHash != NULL)
+    return;
+hubLabelHash = hashNew(0);
+struct sqlConnection *conn = hConnectCentral();
+char **row;
+struct sqlResult *sr;
+char query[2048];
+sqlSafef(query, sizeof(query), "select hp.hubUrl, hp.shortLabel, hp.longLabel, concat('hub_',id) from hubPublic hp join hubStatus hs on hp.hubUrl=hs.hubUrl");
+sr = sqlGetResult(conn, query);
+while ( (row = sqlNextRow(sr)) != NULL)
+    {
+    struct hubLabel *label = NULL;
+    AllocVar(label);
+    label->shortLabel = cloneString(row[1]);
+    label->longLabel = cloneString(row[2]);
+    label->hubId = cloneString(row[3]);
+    char *hubUrl = cloneString(row[0]);
+    hashAdd(hubLabelHash, hubUrl, label);
+    }
+hDisconnectCentral(&conn);
+}
+
+static struct hubLabel *getLabelForHub(char *hubUrl)
+/* Look up the shortLabel, longLabel, and hub_id for a hubUrl */
+{
+if (!hubLabelHash)
+    getLabelsForHubs();
+return (struct hubLabel *)hashFindVal(hubLabelHash, hubUrl);
+}
+
+static boolean fillOutTrackDbHgPos(struct hgPos *this, struct trixSearchResult *tsr)
+{
+boolean foundIt = FALSE;
+struct trackDb *tdb = (struct trackDb *)hashFindVal(hgFindTrackHash, this->name);
+if (tdb)
+    {
+    struct dyString *tdbLabels = dyStringNew(0);
+    dyStringPrintf(tdbLabels, "%s:%s:%s", tsr->itemId, tdb->shortLabel, tdb->longLabel);
+    this->name = dyStringCannibalize(&tdbLabels);
+    foundIt = TRUE;
+    }
+return foundIt;
+}
+
+static boolean fillOutPublicHubsHgPos(struct hgPos *this, struct trixSearchResult *tsr)
+{
+boolean foundIt = FALSE;
+char *itemId[5];
+int numItems = chopString(tsr->itemId, ":", itemId, ArraySize(itemId));
+struct dyString *hubLabel = dyStringNew(0);
+char hubUrl[PATH_LEN];
+safef(hubUrl, sizeof(hubUrl), "%s:%s", itemId[0], itemId[1]);
+struct hubLabel *label = getLabelForHub(hubUrl);
+if (!label)
+    return foundIt;
+else
+    foundIt = TRUE;
+char *db = "";
+struct dyString *track = dyStringNew(0);
+if (numItems > 2)
+    db = itemId[2] != NULL ? itemId[2] : "";
+if (numItems > 3)
+    dyStringPrintf(track, "%s_%s", label->hubId, itemId[3]);
+dyStringPrintf(hubLabel, "%s:%s:%s:%s:%s", hubUrl, db, dyStringCannibalize(&track), label->shortLabel, label->longLabel);
+this->name = dyStringCannibalize(&hubLabel);
+return foundIt;
+}
+
+static boolean doTrixQuery(struct searchCategory *category, char *searchTerm, struct hgPositions *hgp, char *database, boolean measureTiming)
+/* Get a trix search result and potentially snippets for an hgFixed trix index.
+ * TODO: return an error message if there is a problem with the trix index or snippet index */
+{
+long startTime = clock1000();
+boolean ret = FALSE;
+char *lowered = cloneString(searchTerm);
+char *keyWords[16];
+int keyCount;
+tolowers(lowered);
+keyCount = chopLine(lowered, keyWords);
+// TODO: let the user control this:
+int maxReturn = SNIPPET_LIMIT;
+struct trixSearchResult *tsrList = NULL;
+if (category->trix)
+    {
+    tsrList = trixSearch(category->trix, keyCount, keyWords, tsmExpand);
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        initSnippetIndex(category->trix);
+    errCatchEnd(errCatch);
+    // silently return if there was a problem opening the snippet index
+    if (errCatch->gotError || errCatch->gotWarning)
+        return FALSE;
+    errCatchFree(&errCatch);
+    }
+struct trixSearchResult *tsr = NULL;
+int len = 0;
+struct hgPosTable *table = NULL;
+AllocVar(table);
+table->searchTime = -1;
+table->name = cloneString(category->name);
+table->description = cloneString(category->description);
+for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+    {
+    if (startsWith(category->name,"publicHubs"))
+        {
+        // Check that this public hubs result is for our current database
+        char *itemId[5];
+        int numItems = chopString(cloneString(tsr->itemId), ":", itemId, ArraySize(itemId));
+        if (numItems <= 2 || isEmpty(itemId[2]) || !sameString(itemId[2], database))
+            continue;
+        }
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        addSnippetForResult(tsr, category->trix);
+        }
+    errCatchEnd(errCatch);
+    // silently return if there was a problem getting a single snippet, there is
+    // probably a data error with the rest of the index if so
+    if (errCatch->gotError || errCatch->gotWarning)
+        return FALSE;
+    errCatchFree(&errCatch);
+    struct hgPos *this = NULL;
+    AllocVar(this);
+    this->name = tsr->itemId;
+    this->description = tsr->snippet;
+    if (startsWith(category->name, "trackDb"))
+        {
+        boolean addedTdbFields = fillOutTrackDbHgPos(this, tsr);
+        if (!addedTdbFields)
+            continue;
+        }
+    if (sameString(category->name, "publicHubs"))
+        {
+        boolean addedHubFields = fillOutPublicHubsHgPos(this, tsr);
+        if (!addedHubFields)
+            continue;
+        }
+    slAddHead(&table->posList, this);
+
+    len++;
+    if (len > maxReturn)
+        break;
+    }
+
+if (table->posList != NULL)
+    {
+    slReverse(&table->posList);
+    if (measureTiming)
+        table->searchTime = clock1000() - startTime;
+    slAddHead(&hgp->tableList, table);
+    ret = TRUE;
+    }
+return ret;
+}
+
+static boolean userDefinedSearch(char *db, char *term, int limitResults, struct cart *cart,
+                            struct hgPositions *hgp, struct searchCategory *categories, boolean multiTerm, boolean measureTiming)
+/* If a search type(s) is specified in the cart, perform that search.
+ * If the search is successful, fill in hgp and return TRUE. */
+{
+boolean foundIt = FALSE;
+struct hash *foundSpecHash = hashNew(0);
+struct hgFindSpec *shortList = NULL, *longList = NULL;
+struct trackDb *hubCategoryList = NULL;
+// get all the lists of what to query:
+if (!trackHubDatabase(db))
+    {
+    if (categories)
+        myLoadFindSpecs(db, categories, &shortList, &longList);
+    else
+        hgFindSpecGetAllSpecs(db, &shortList, &longList);
+    }
+// lastly search any included track hubs, or in the case of an assembly hub, any of the tracks
+hubCategoryList = hubCategoriesToTdbList(categories);
+struct hgFindSpec *hfs;
+for (hfs = shortList; hfs != NULL; hfs = hfs->next)
+    {
+    boolean foundSpec = hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, multiTerm, measureTiming);
+    if (foundSpec)
+        hashAdd(foundSpecHash, hfs->searchTable, hfs->searchTable);
+    foundIt |= foundSpec;
+
+    // for multiTerm searches (like '15q11;15q13'), each individual component
+    // must resolve to a single position, so break once we find the first match
+    if (multiTerm && foundSpec)
+        break;
+    }
+if (!(multiTerm) || (multiTerm && !foundIt))
+    {
+    for (hfs = longList; hfs != NULL; hfs = hfs->next)
+        {
+        if (hashFindVal(foundSpecHash, hfs->searchTable) != NULL && !sameString(hfs->searchTable, "knownGene"))
+            continue;
+        foundIt |= hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, multiTerm, measureTiming);
+        }
+    // lastly search any included track hubs, or in the case of an assembly hub, any of the tracks
+    if (hubCategoryList)
+        foundIt |= findBigBedPosInTdbList(cart, db, hubCategoryList, term, hgp, NULL, measureTiming);
+    }
+
+// multiTerm searches must resolve to a single range on a chromosome, so don't
+// do these non positional searches if a multiTerm was requested
+if (!multiTerm)
+    {
+    getLabelsForHubs();
+    struct searchCategory *category;
+    for (category = categories; category != NULL; category = category->next)
+        {
+        if (startsWith("trackDb", category->id)
+                || sameString(category->id, "helpDocs")
+                || sameString(category->id, "publicHubs"))
+            {
+            foundIt |= doTrixQuery(category, term, hgp, db, measureTiming);
+            }
+        }
+    }
+
+return foundIt;
+}
 
 static boolean singleSearch(char *db, char *term, int limitResults, struct cart *cart,
-                            struct hgPositions *hgp)
+                            struct hgPositions *hgp, boolean measureTiming)
 /* If a search type is specified in the CGI line (not cart), perform that search. 
  * If the search is successful, fill in hgp as a single-pos result and return TRUE. */
 {
@@ -2728,7 +3503,7 @@ else
     if (hfs == NULL)
 	hfs = hfsFind(longList, search);
     if (hfs != NULL)
-	foundIt = hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0,0, FALSE);
+	foundIt = hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0,0, FALSE, measureTiming);
     else
 	warn("Unrecognized singleSearch=%s in URL", search);
     }
@@ -2755,7 +3530,8 @@ struct hgvsHelper
     boolean mapError; // does this hgvs mapping result in a map error?
     };
 
-static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
+static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp,
+                            boolean measureTiming)
 /* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature
  * See http://varnomen.hgvs.org/
  * If search term is a pseudo hgvs term like GeneName AminoAcidPosition (RUNX2 Arg155) and
@@ -2763,6 +3539,7 @@ static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPos
  * can choose where to go, otherwise return a singlePos */
 {
 boolean foundIt = FALSE;
+long startTime = clock1000();
 struct hgvsVariant *hgvsList = hgvsParseTerm(term);
 if (hgvsList == NULL)
     hgvsList = hgvsParsePseudoHgvs(db, term);
@@ -2773,6 +3550,7 @@ if (hgvsList)
     struct hgPosTable *table;
     AllocVar(table);
     table->description = "HGVS";
+    table->searchTime = -1;
     int padding = 5;
     int mapErrCnt = 0;
     struct dyString *dyWarn = dyStringNew(0);
@@ -2797,7 +3575,7 @@ if (hgvsList)
                 trackTable = "lrgTranscriptAli";
             else if (startsWith("wgEncodeGencode", pslTable))
                 trackTable = pslTable;
-            else if (startsWith("ncbiRefSeqPsl", pslTable))
+            else if (sameString("ncbiRefSeqPsl", pslTable))
                 {
                 if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
                     startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
@@ -2808,6 +3586,8 @@ if (hgvsList)
                 else
                     trackTable = "ncbiRefSeq";
                 }
+            else if (sameString("ncbiRefSeqPslHistorical", pslTable))
+                trackTable = "ncbiRefSeqHistorical";
             else
                 trackTable = "refGene";
             dyStringPrintf(chromPosIndex, "%s%s%d%d", trackTable, mapping->chrom,
@@ -2838,6 +3618,7 @@ if (hgvsList)
         // at least one of the hgvs terms mapped sucessfully, so we can go to that spot
         // or let the user pick a location
         {
+        int numPositions = 0;
         struct hashEl *hel, *helList= hashElListHash(uniqHgvsPos);
         for (hel = helList; hel != NULL; hel = hel->next)
             {
@@ -2860,8 +3641,11 @@ if (hgvsList)
                 // highlight the mapped bases to distinguish from padding
                 hgp->tableList->posList->highlight = addHighlight(db, helper->chrom,
                                                         helper->chromStart, helper->chromEnd);
+                numPositions++;
                 }
             }
+        if (numPositions > 1)
+            table->description = "HGVS search resulted in multiple positions, please select a transcript below";
         }
     else
         // all of the positions mapped incorrectly, so the term was bad. However, we may
@@ -2907,12 +3691,14 @@ if (hgvsList)
         }
     dyStringFree(&dyWarn);
     dyStringFree(&allWarnings);
+    if (measureTiming && hgp && hgp->tableList)
+        table->searchTime = clock1000() - startTime;
     }
 return foundIt;
 }
 
 struct hgPositions *hgPositionsFind(char *db, char *term, char *extraCgi,
-	char *hgAppNameIn, struct cart *cart, boolean multiTerm)
+	char *hgAppNameIn, struct cart *cart, boolean multiTerm, boolean measureTiming, struct searchCategory *categories)
 /* Return container of tracks and positions (if any) that match term. */
 {
 struct hgPositions *hgp = NULL, *hgpItem = NULL;
@@ -2946,8 +3732,46 @@ if (extraCgi == NULL)
     extraCgi = "";
 hgp->extraCgi = cloneString(extraCgi);
 
-if (singleSearch(db, term, limitResults, cart, hgp))
+if (singleSearch(db, term, limitResults, cart, hgp, measureTiming))
     return hgp;
+
+if (categories != NULL)
+    {
+    char *originalTerm = term;
+    if (hgOfficialChromName(db, term) != NULL) // this mangles the term
+        {
+        char *chrom;
+        int start, end;
+
+        hgParseChromRange(db, term, &chrom, &start, &end);
+        if (relativeFlag)
+            {
+            int chromSize = end;
+            end = start + relEnd;
+            start = start + relStart;
+            if (end > chromSize)
+                end = chromSize;
+            if (start < 0)
+                start = 0;
+            }
+        singlePos(hgp, "Chromosome Range", NULL, "chromInfo", originalTerm,
+              "", chrom, start, end);
+        }
+    else if (!matchesHgvs(cart, db, term, hgp, measureTiming))
+        userDefinedSearch(db, term, limitResults, cart, hgp, categories, multiTerm, measureTiming);
+    slReverse(&hgp->tableList);
+    if (multiTerm)
+        collapseSamePos(hgp);
+    fixSinglePos(hgp);
+    if (cart && hgp->singlePos && isNotEmpty(hgp->singlePos->highlight))
+        cartSetString(cart, "addHighlight", hgp->singlePos->highlight);
+    if (hgp->posCount > 0)
+        return hgp;
+    else
+        // if categories was passed in we should explicitly return no results
+        // if there weren't any
+        return NULL;
+    }
 
 /* Allow any search term to end with a :Start-End range -- also support stuff 
  * pasted in from BED (chrom start end) or SQL query (chrom | start | end).  
@@ -2973,22 +3797,22 @@ if ((canonicalSpec =
     relStart = atoi(stripCommas(term+substrs[2].rm_so));
     term[substrs[3].rm_eo] = 0;
     if (singleBaseSpec)
-	{
-	relEnd   = relStart;
-	relStart--;
-	}
+        {
+        relEnd   = relStart;
+        relStart--;
+        }
     else
-	relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
-    if (relStart > relEnd)
-	{
-	int tmp  = relStart;
-	relStart = relEnd;
-	relEnd   = tmp;
-	}
-    if (canonicalSpec || gbrowserSpec || lengthSpec)
-	relStart--;
+        relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
     if (lengthSpec)
         relEnd += relStart;
+    if (relStart > relEnd)
+        {
+        int tmp  = relStart;
+        relStart = relEnd;
+        relEnd   = tmp;
+        }
+    if (canonicalSpec || gbrowserSpec || lengthSpec)
+        relStart--;
     relativeFlag = TRUE;
     }
 term = cloneString(term); // because hgOfficialChromName mangles it
@@ -3012,7 +3836,7 @@ if (hgOfficialChromName(db, term) != NULL) // this mangles the term
     singlePos(hgp, "Chromosome Range", NULL, "chromInfo", originalTerm,
 	      "", chrom, start, end);
     }
-else if (!matchesHgvs(cart, db, term, hgp))
+else if (!matchesHgvs(cart, db, term, hgp, measureTiming))
     {
     struct hgFindSpec *shortList = NULL, *longList = NULL;
     struct hgFindSpec *hfs;
@@ -3035,7 +3859,7 @@ else if (!matchesHgvs(cart, db, term, hgp))
         for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
             {
             if (hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
-                                multiTerm))
+                                multiTerm, measureTiming))
                 {
                 done = TRUE;
                 if (! hgFindSpecSetting(hfs, "semiShortCircuit"))
@@ -3051,21 +3875,21 @@ else if (!matchesHgvs(cart, db, term, hgp))
 	for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	    {
 	    hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
-			    multiTerm);
+			    multiTerm, measureTiming);
 	    }
 	/* Lowe lab additions -- would like to replace these with specs, but 
 	 * will leave in for now. */
 	if (!trackHubDatabase(db))
 	    findTigrGenes(db, term, hgp);
 
-	trackHubFindPos(cart, db, term, hgp);
+	trackHubFindPos(cart, db, term, hgp, measureTiming);
 	}
     hgFindSpecFreeList(&shortList);
     hgFindSpecFreeList(&longList);
     if (cart != NULL)
         {
         if(hgpMatchNames == NULL)
-            hgpMatchNames = newDyString(256);
+            hgpMatchNames = dyStringNew(256);
         dyStringClear(hgpMatchNames);
         int matchCount = 0;
         for(hgpItem = hgp; hgpItem != NULL; hgpItem = hgpItem->next)

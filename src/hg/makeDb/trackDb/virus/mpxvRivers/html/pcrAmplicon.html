@@ -1,0 +1,78 @@
+<h2>Description</h2>
+
+<p> This track shows the amplicons and primers for PCR-based genome
+amplification schemes. The track contains one subtrack for each sequencing protocol
+primers set. By configuring the track, one can show or hide each set
+individually. The primer sets are labeled with the name of the first author of
+the protocol.</p>
+
+<p>
+<b>Yale hMPXV Amplicon Scheme (Chen et al 2022)</b>: This is a primer set for Illumina sequencers,
+ it was tested on a MiSeq with 2x150nt read lengths.
+  It is available from <a href="https://www.protocols.io/view/monkeypox-virus-multiplexed-pcr-amplicon-sequencin-5qpvob1nbl4o/v2"
+     target="_blank">Protocols.io</a>.
+Based on initial validation, the
+ approach shows notably higher depth and breadth of coverage across the genome,
+ particularly with higher PCR cycle threshold (Ct) samples, as compared to
+ metagenomic sequencing. The average amplicon size is ~2.5kB.<br>As the primers were designed for the pre-outbreak sequence MT903345, there
+ is one single mismatch in the genome, for MPXV_102. Its left primer is cagcgtgtataggatggTgacg but the genome is cagcgtgtataggatggCgacg. </p>
+
+ <b>Welkers et al</b>: This is a primer set for Oxford Nanopore sequencers. It
+ is also available from
+ <a href="https://www.protocols.io/view/monkeypox-virus-whole-genome-sequencing-using-comb-n2bvj6155lk5/v1?step=1.1"
+ target=_blank>Protocols.io</a>. Amplicon size is ~2.5kB.
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Genomic locations of the amplicons are highlighted. Thick rectangles indicate the primers, intervening amplicon sequence is shown with lines and arrows. A click on the amplicons shows both primer sequences. 
+</p>
+
+<h2>Methods</h2>
+<p>
+Primer sequences and names were download from the source publications 
+<a href="https://www.protocols.io/view/monkeypox-virus-multiplexed-pcr-amplicon-sequencin-5qpvob1nbl4o/v2/materials" target=_blank>(Chen et al)</a>
+and <a href="https://www.protocols.io/view/monkeypox-virus-whole-genome-sequencing-using-comb-n2bvj6155lk5/v1?step=1"
+target=_blank>(Welkers et al)</a>, aligned to the Rivers reference with our
+isPcr tool and converted to bigBed with AWK.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables">Table Browser</a> or combined with other datasets in the
+<a href="hgIntegrator">Data Integrator</a> tool.
+For automated analysis, the genome annotation is stored in
+a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/mpxvRivers/pcrAmplicon/">the download server</a>.</p>
+<p>
+Annotations can
+be converted from binary to ASCII text by our command-line tool bigBedToBed.
+Instructions for downloading this command can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities page</a>.
+The tool can also be used to obtain features within a given range without downloading the file,
+for example:</p>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/mpxvRivers/pcrAmplicon/pcrAmplicon.bb -chrom=NC_063383.1 -start=0 -end=100000 stdout</code>
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>References</h2>
+<p>
+Chen NFG et al
+<a href="https://www.protocols.io/view/monkeypox-virus-multiplexed-pcr-amplicon-sequencin-5qpvob1nbl4o/v2/materials" target="_blank">
+Monkeypox virus multiplexed PCR amplicon sequencing
+</a>
+<em>Protocols.io</em> V2 July 26, 2022
+</p>
+
+<p>
+Welkers M et al
+<a href="https://www.protocols.io/view/monkeypox-virus-whole-genome-sequencing-using-comb-n2bvj6155lk5/v1" target="_blank">
+Monkeypox virus whole genome sequencing using combination of NextGenPCR and Oxford Nanopore
+</a>
+<em>Protocols.io</em> V1, July 12, 2022
+</p>
+

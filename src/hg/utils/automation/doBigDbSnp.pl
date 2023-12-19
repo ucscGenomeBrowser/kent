@@ -92,7 +92,7 @@ Steps:
     convert: runs dbSnpJsonToTab on chunks.
     mergeToChrom: merges chunk result files into per-chrom results files.
     mergeChroms: merges per-chrom results files.
-    fixHg19ChrM: if annotations on hg19 are included, then liftOver NC_012920 to hg19 chrM.
+    fixHg19ChrM: if annotations on hg19 are included, then liftOver chrMT (NC_012920) to hg19 chrM.
     check: runs checkBigDbSnp to add ucscNotes about overlapping items and clustering anomalies.
     bigBed: Converts BED4+ .bigDbSnp files into bigBed.
     install: installs links to files in /gbdb.
@@ -477,18 +477,18 @@ _EOF_
 sub doFixHg19ChrM {
   my $runDir = $buildDir;
   if (grep(/hg19/, @dbList)) {
-    my $whatItDoes = "It does a liftOver from NC_012920.1 to hg19 chrM.";
+    my $whatItDoes = "It does a liftOver from chrMT (old name NC_012920) to hg19 chrM.";
     my $bossScript = newBash HgRemoteScript("$runDir/doFixHg19ChrM.sh", $workhorse,
                                             $runDir, $whatItDoes);
     $bossScript->add(<<_EOF_
-# For hg19, liftOver NC_012920.1 annotations to hg19 chrM.
-sed -e 's/NC_012920 /NC_012920.1 /' \\
+# For hg19, liftOver chrMT annotations to hg19 chrM.
+sed -e 's/NC_012920 /chrMT /' \\
   /hive/data/outside/dbSNP/131/human/NC_012920ToChrM.over.chain \\
   > hg19.mitoLiftover.chain
 # For liftOver, convert 0-base fully-closed to 0-based half-open because liftOver
 # doesn't deal with 0-base items.
 mv hg19.$outRoot.bigDbSnp hg19.preChrMFix.$outRoot.bigDbSnp
-time (grep ^NC_012920 hg19.preChrMFix.$outRoot.bigDbSnp \\
+time (grep ^chrMT hg19.preChrMFix.$outRoot.bigDbSnp \\
       | awk -F"\t" 'BEGIN{OFS="\t";} {\$3 += 1; print;}' \\
       | liftOver -tab -bedPlus=3 stdin \\
           hg19.mitoLiftover.chain stdout chrM.unmapped \\
@@ -496,7 +496,7 @@ time (grep ^NC_012920 hg19.preChrMFix.$outRoot.bigDbSnp \\
       | sort -k2n,2n \\
         > hg19.chrM.$outRoot.bigDbSnp)
 wc -l hg19.chrM.$outRoot.bigDbSnp chrM.unmapped
-time grep -v ^NC_012920 hg19.preChrMFix.$outRoot.bigDbSnp \\
+time grep -v ^chrMT hg19.preChrMFix.$outRoot.bigDbSnp \\
      | sort --merge -k1,1 -k2n,2n - hg19.chrM.$outRoot.bigDbSnp \\
        > hg19.$outRoot.bigDbSnp
 _EOF_

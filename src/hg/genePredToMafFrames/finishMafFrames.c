@@ -4,7 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "finishMafFrames.h"
-#include "frameIncr.h"
+#include "frame.h"
 #include "orgGenes.h"
 #include "chromBins.h"
 #include "binRange.h"

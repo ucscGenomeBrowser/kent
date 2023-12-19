@@ -1,0 +1,598 @@
+track assembly
+longLabel Assembly from NCBI Genbank Sequences
+shortLabel Assembly
+visibility hide
+colorByStrand 150,100,30 230,170,40
+color 150,100,30
+altColor 230,170,40
+bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.assembly.bb
+type bigBed 6
+html html/GCA_009914755.4_T2T-CHM13v2.0.assembly
+searchIndex name
+searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.assembly.ix
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel NCBI Nucleotide database
+group map
+
+track gc5Base
+shortLabel GC Percent
+longLabel GC Percent in 5-Base Windows
+group map
+visibility hide
+autoScale Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,0,0
+altColor 128,128,128
+viewLimits 30:70
+type bigWig 0 100
+bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.gc5Base.bw
+html html/GCA_009914755.4_T2T-CHM13v2.0.gc5Base
+
+track simpleRepeat
+shortLabel Simple Repeats
+longLabel Simple Tandem Repeats by TRF
+group varRep
+visibility hide
+type bigBed 4 +
+bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.simpleRepeat.bb
+html html/GCA_009914755.4_T2T-CHM13v2.0.simpleRepeat
+
+track cpgIslands
+compositeTrack on
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+group regulation
+visibility hide
+type bigBed 4 +
+html html/GCA_009914755.4_T2T-CHM13v2.0.cpgIslands
+
+    track cpgIslandExt
+    parent cpgIslands off
+    shortLabel CpG Islands
+    longLabel CpG Islands (Islands < 300 Bases are Light Green)
+    type bigBed 4 +
+    priority 1
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.cpgIslandExt.bb
+
+    track cpgIslandExtUnmasked
+    parent cpgIslands on
+    shortLabel Unmasked CpG
+    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
+    type bigBed 4 +
+    priority 2
+    bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.cpgIslandExtUnmasked.bb
+
+track windowMasker
+shortLabel WM + SDust
+longLabel Genomic Intervals Masked by WindowMasker + SDust
+group varRep
+visibility hide
+type bigBed 3
+bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.windowMasker.bb
+html html/GCA_009914755.4_T2T-CHM13v2.0.windowMasker
+
+track xenoRefGene
+shortLabel RefSeq mRNAs
+longLabel RefSeq mRNAs mapped to this assembly
+group rna
+visibility hide
+color 180,0,0
+type bigGenePred
+bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene.bb
+labelFields name,geneName,geneName2
+searchIndex name
+searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene.ix
+html html/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene
+
+track GCA_009914755.4_T2T-CHM13v2.0ChainNet
+compositeTrack on
+shortLabel Human Chain/Net
+longLabel Chain and Net alignments to target sequence: GCA_009914755.4_T2T-CHM13v2.0
+subGroup1 view Views chain=Chains net=Nets
+subGroup2 species Species s000=GCA_021950905.1 s001=GCA_021951015.1 s002=hg19 s003=hg38
+subGroup3 clade Clade c00=human
+dragAndDrop subTracks
+visibility full
+group compGeno
+color 0,0,0
+altColor 255,255,0
+type bed 3
+dimensions dimensionX=clade dimensionY=species
+sortOrder species=+ view=+ clade=+
+configurable on
+html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+
+    track GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain
+    shortLabel  Chains
+    view chain
+    visibility pack
+    subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNet
+    spectrum on
+
+        track chainGCA_021950905.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s000 clade=c00
+        shortLabel HG002 pat Chain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Chained Alignments
+        type bigChain GCA_021950905.1
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainGCA_021950905.1.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainGCA_021950905.1Link.bb
+        otherDb GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 1
+
+        track chainSynGCA_021950905.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s000 clade=c00
+        shortLabel HG002 pat synChain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Syntenic Chained Alignments
+        type bigChain GCA_021950905.1
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynGCA_021950905.1.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynGCA_021950905.1Link.bb
+        otherDb GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 2
+
+        track chainRBestGCA_021950905.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s000 clade=c00
+        shortLabel HG002 pat rbChain
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Reciprocal Best Chained Alignments
+        type bigChain GCA_021950905.1
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestGCA_021950905.1.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestGCA_021950905.1Link.bb
+        otherDb GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 3
+
+        #track chainLiftOverGCA_021950905.1
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        #subGroups view=chain species=s000 clade=c00
+        #shortLabel HG002 pat loChain
+        #longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
+        #type bigChain GCA_021950905.1
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021950905.1.bb
+        #linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021950905.1Link.bb
+        #otherDb GCA_021950905.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 4
+
+        track chainGCA_021951015.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel HG002 mat Chain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Chained Alignments
+        type bigChain GCA_021951015.1
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainGCA_021951015.1.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainGCA_021951015.1Link.bb
+        otherDb GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 5
+
+        track chainSynGCA_021951015.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel HG002 mat synChain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Syntenic Chained Alignments
+        type bigChain GCA_021951015.1
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynGCA_021951015.1.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynGCA_021951015.1Link.bb
+        otherDb GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 6
+
+        track chainRBestGCA_021951015.1
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel HG002 mat rbChain
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Reciprocal Best Chained Alignments
+        type bigChain GCA_021951015.1
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestGCA_021951015.1.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestGCA_021951015.1Link.bb
+        otherDb GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 7
+
+        #track chainLiftOverGCA_021951015.1
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        #subGroups view=chain species=s001 clade=c00
+        #shortLabel HG002 mat loChain
+        #longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Chained Alignments
+        #type bigChain GCA_021951015.1
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021951015.1.bb
+        #linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverGCA_021951015.1Link.bb
+        #otherDb GCA_021951015.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 8
+
+        track chainHg19
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel hg19 Chain
+        longLabel hg19 (Feb. 2009) Chained Alignments
+        type bigChain hg19
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainHg19.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainHg19Link.bb
+        otherDb hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 9
+
+        track chainSynHg19
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel hg19 synChain
+        longLabel hg19 (Feb. 2009) Syntenic Chained Alignments
+        type bigChain hg19
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynHg19.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynHg19Link.bb
+        otherDb hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 10
+
+        track chainRBestHg19
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel hg19 rbChain
+        longLabel hg19 (Feb. 2009) Reciprocal Best Chained Alignments
+        type bigChain hg19
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestHg19.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestHg19Link.bb
+        otherDb hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 11
+
+        #track chainLiftOverHg19
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        #subGroups view=chain species=s002 clade=c00
+        #shortLabel hg19 loChain
+        #longLabel hg19 (Feb. 2009) Lift Over Chained Alignments
+        #type bigChain hg19
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg19.bb
+        #linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg19Link.bb
+        #otherDb hg19
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 12
+
+        track chainHg38
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel hg38 Chain
+        longLabel hg38 (Dec. 2013) Chained Alignments
+        type bigChain hg38
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainHg38.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainHg38Link.bb
+        otherDb hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 13
+
+        track chainSynHg38
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel hg38 synChain
+        longLabel hg38 (Dec. 2013) Syntenic Chained Alignments
+        type bigChain hg38
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynHg38.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainSynHg38Link.bb
+        otherDb hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 14
+
+        track chainRBestHg38
+        subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel hg38 rbChain
+        longLabel hg38 (Dec. 2013) Reciprocal Best Chained Alignments
+        type bigChain hg38
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestHg38.bb
+        linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainRBestHg38Link.bb
+        otherDb hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 15
+
+        #track chainLiftOverHg38
+        #subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain on
+        #subGroups view=chain species=s003 clade=c00
+        #shortLabel hg38 loChain
+        #longLabel hg38 (Dec. 2013) Lift Over Chained Alignments
+        #type bigChain hg38
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg38.bb
+        #linkDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.chainLiftOverHg38Link.bb
+        #otherDb hg38
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 16
+
+    track GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+    shortLabel Nets
+    view net
+    visibility hide
+    subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNet
+
+        track netGCA_021950905.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s000 clade=c00
+        shortLabel HG002 pat Net
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.net.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.net.summary.bb
+        speciesOrder GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 1
+
+        track synNetGCA_021950905.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s000 clade=c00
+        shortLabel HG002 pat synNet
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.synNet.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.synNet.summary.bb
+        speciesOrder GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 2
+
+        track rbestNetGCA_021950905.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s000 clade=c00
+        shortLabel HG002 pat rbestNet
+        longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.rbestNet.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.rbestNet.summary.bb
+        speciesOrder GCA_021950905.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 3
+
+        #track liftOverNetGCA_021950905.1
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s000 clade=c00
+        #shortLabel HG002 pat liftOverNet
+        #longLabel HG002 pat GCA_021950905.1_HG002.pat.cur.20211005 (2022-02-04) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.liftOverNet.bb
+        #summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021950905.1.liftOverNet.summary.bb
+        #speciesOrder GCA_021950905.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 4
+
+        track netGCA_021951015.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s001 clade=c00
+        shortLabel HG002 mat Net
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.net.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.net.summary.bb
+        speciesOrder GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 5
+
+        track synNetGCA_021951015.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s001 clade=c00
+        shortLabel HG002 mat synNet
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.synNet.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.synNet.summary.bb
+        speciesOrder GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 6
+
+        track rbestNetGCA_021951015.1
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s001 clade=c00
+        shortLabel HG002 mat rbestNet
+        longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.rbestNet.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.rbestNet.summary.bb
+        speciesOrder GCA_021951015.1
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 7
+
+        #track liftOverNetGCA_021951015.1
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s001 clade=c00
+        #shortLabel HG002 mat liftOverNet
+        #longLabel HG002 mat GCA_021951015.1_HG002.mat.cur.20211005 (2022-02-04) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.liftOverNet.bb
+        #summary bbi/GCA_009914755.4_T2T-CHM13v2.0.GCA_021951015.1.liftOverNet.summary.bb
+        #speciesOrder GCA_021951015.1
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 8
+
+        track netHg19
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s002 clade=c00
+        shortLabel hg19 Net
+        longLabel hg19 (Feb. 2009) Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.net.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.net.summary.bb
+        speciesOrder hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 9
+
+        track synNetHg19
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s002 clade=c00
+        shortLabel hg19 synNet
+        longLabel hg19 (Feb. 2009) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.synNet.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.synNet.summary.bb
+        speciesOrder hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 10
+
+        track rbestNetHg19
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s002 clade=c00
+        shortLabel hg19 rbestNet
+        longLabel hg19 (Feb. 2009) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.rbestNet.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.rbestNet.summary.bb
+        speciesOrder hg19
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 11
+
+        #track liftOverNetHg19
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s002 clade=c00
+        #shortLabel hg19 liftOverNet
+        #longLabel hg19 (Feb. 2009) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.liftOverNet.bb
+        #summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg19.liftOverNet.summary.bb
+        #speciesOrder hg19
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 12
+
+        track netHg38
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s003 clade=c00
+        shortLabel hg38 Net
+        longLabel hg38 (Dec. 2013) Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.net.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.net.summary.bb
+        speciesOrder hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 13
+
+        track synNetHg38
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s003 clade=c00
+        shortLabel hg38 synNet
+        longLabel hg38 (Dec. 2013) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.synNet.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.synNet.summary.bb
+        speciesOrder hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 14
+
+        track rbestNetHg38
+        parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        subGroups view=net species=s003 clade=c00
+        shortLabel hg38 rbestNet
+        longLabel hg38 (Dec. 2013) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.rbestNet.bb
+        summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.rbestNet.summary.bb
+        speciesOrder hg38
+        html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        priority 15
+
+        #track liftOverNetHg38
+        #parent GCA_009914755.4_T2T-CHM13v2.0MafNetViewnet
+        #subGroups view=net species=s003 clade=c00
+        #shortLabel hg38 liftOverNet
+        #longLabel hg38 (Dec. 2013) Lift Over Net Alignment
+        #type bigMaf
+        #bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.liftOverNet.bb
+        #summary bbi/GCA_009914755.4_T2T-CHM13v2.0.hg38.liftOverNet.summary.bb
+        #speciesOrder hg38
+        #html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+        #priority 16
+
+track refSeqComposite
+compositeTrack on
+shortLabel NCBI RefSeq
+longLabel RefSeq gene predictions from NCBI
+group genes
+visibility pack
+type bigBed
+dragAndDrop subTracks
+allButtonPair on
+dataVersion NCBI Homo sapiens Updated Annotation Release 110 (2022-04-12)
+html html/GCA_009914755.4_T2T-CHM13v2.0.refSeqComposite
+priority 2
+
+        track ncbiRefSeq
+        parent refSeqComposite on
+        color 12,12,120
+        altColor 120,12,12
+        shortLabel RefSeq All
+        type bigGenePred
+        labelFields name,geneName,geneName2
+        searchIndex name
+        searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeq.ix
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeq.bb
+        longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
+        idXref ncbiRefSeqLink mrnaAcc name
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+        priority 1
+
+        track ncbiRefSeqCurated
+        color 12,12,120
+        parent refSeqComposite on
+        shortLabel RefSeq Curated
+        longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
+        type bigGenePred
+        labelFields name,geneName,geneName2
+        searchIndex name
+        searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqCurated.ix
+        idXref ncbiRefSeqLink mrnaAcc name
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqCurated.bb
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+        priority 2
+
+        track ncbiRefSeqPredicted
+        color 12,12,120
+        parent refSeqComposite on
+        shortLabel RefSeq Predicted
+        longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
+        type bigGenePred
+        labelFields name,geneName,geneName2
+        searchIndex name
+        searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqPredicted.ix
+        idXref ncbiRefSeqLink mrnaAcc name
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqPredicted.bb
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+        priority 3
+
+        track ncbiRefSeqOther
+        color 32,32,32
+        parent refSeqComposite on
+        shortLabel RefSeq Other
+        longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
+        priority 4
+        searchIndex name
+        searchTrix ixIxx/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqOther.ix
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.ncbiRefSeqOther.bb
+        type bigBed 12 +
+        labelFields gene
+        skipEmptyFields on
+        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/$$" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" FlyBase="http://flybase.org/reports/$$" WormBase="http://www.wormbase.org/db/gene/gene?name=$$" RGD="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" SGD="https://www.yeastgenome.org/locus/$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" ZFIN="https://zfin.org/$$" MGI="http://www.informatics.jax.org/marker/$$"
+
+        track ncbiRefSeqPsl
+        priority 5
+        parent refSeqComposite off
+        shortLabel RefSeq Alignments
+        longLabel RefSeq Alignments of RNAs
+        type bigPsl
+        searchIndex name
+        bigDataUrl bbi/GCA_009914755.4_T2T-CHM13v2.0.bigPsl.bb
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        showCdsMaxZoom 10000.0
+        showCdsAllScales .
+        baseColorDefault diffCodons
+        pslSequence no
+        baseColorUseSequence lfExtra
+        baseColorUseCds table given
+        color 0,0,0
+
+include GCA_009914755.4.userTrackDb.txt

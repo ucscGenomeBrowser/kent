@@ -5,7 +5,7 @@
 #ifndef GBSQL_H
 #define GBSQL_H
 
-struct sqlConnection *conn;
+#include "jksql.h"
 
 void gbSqlDupTableDef(struct sqlConnection *conn, char* table, char* newTable);
 /* create a duplicate of a table with the right indices. */

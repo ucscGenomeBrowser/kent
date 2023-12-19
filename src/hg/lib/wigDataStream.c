@@ -166,15 +166,14 @@ else
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *op, char *right)
 {
-struct dyString *constrain = dyStringNew(256);
+struct dyString *constraint = dyStringNew(256);
 if (wds->sqlConstraint)
-    dyStringPrintf(constrain, "%s AND ", wds->sqlConstraint);
+    sqlDyStringPrintf(constraint, "%-s AND ", wds->sqlConstraint);
 
-sqlDyStringPrintfFrag(constrain, "%s %-s \"%s\"", left, op, right);
+sqlDyStringPrintf(constraint, "%s %-s '%s'", left, op, right);
 
 freeMem(wds->sqlConstraint);	/*	potentially previously existing */
-wds->sqlConstraint = cloneString(constrain->string);
-dyStringFree(&constrain);
+wds->sqlConstraint = dyStringCannibalize(&constraint);
 }
 
 /*	*row[] is artifically one too big to allow for a potential bin
@@ -377,39 +376,46 @@ else
     {
     struct dyString *query = dyStringNew(256);
     sqlDyStringPrintf(query, "select * from %s", wds->tblName);
+    char op[1+NOSQLINJ_SIZE+1];
     if (wds->chrName)
-	addConstraint(wds, "chrom", "=", wds->chrName);
+	{
+	sqlSafef(op, sizeof op, "=");
+	addConstraint(wds, "chrom", op, wds->chrName);
+	}
     if (wds->winEnd)
 	{
 	char limits[256];
 	safef(limits, ArraySize(limits), "%d", wds->winEnd );
-	addConstraint(wds, "chromStart", "<", limits);
+	sqlSafef(op, sizeof op, "<");
+	addConstraint(wds, "chromStart", op, limits);
 	safef(limits, ArraySize(limits), "%d", wds->winStart );
-	addConstraint(wds, "chromEnd", ">", limits);
+	sqlSafef(op, sizeof op, ">");
+	addConstraint(wds, "chromEnd", op, limits);
 	}
     if (wds->spanLimit)
 	{
 	struct dyString *dyTmp = dyStringNew(256);
 	dyStringPrintf(dyTmp, "%u", wds->spanLimit);
-	addConstraint(wds, "span", "=", dyTmp->string);
+	sqlSafef(op, sizeof op, "=");
+	addConstraint(wds, "span", op, dyTmp->string);
 	dyStringFree(&dyTmp);
 	}
     if (wds->sqlConstraint)
 	{
-	dyStringPrintf(query, " where ");
+	sqlDyStringPrintf(query, " where ");
 	if (wds->winEnd)
 	    {
 	    hAddBinToQuery(wds->winStart, wds->winEnd, query);
 	    }
-	dyStringPrintf(query, " (%s)",
+	sqlDyStringPrintf(query, " (%-s)",
 	    wds->sqlConstraint);
 	}
-    dyStringPrintf(query, " order by ");
+    sqlDyStringPrintf(query, " order by ");
     if (!wds->chrName)
-	dyStringPrintf(query, " chrom ASC,");
+	sqlDyStringPrintf(query, " chrom ASC,");
     if (!wds->spanLimit)
-	dyStringPrintf(query, " span ASC,");
-    dyStringPrintf(query, " chromStart ASC");
+	sqlDyStringPrintf(query, " span ASC,");
+    sqlDyStringPrintf(query, " chromStart ASC");
 
     verbose(VERBOSE_SQL_ROW_LEVEL, "#\t%s\n", query->string);
     if (!wds->conn)

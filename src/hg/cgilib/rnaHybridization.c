@@ -134,11 +134,11 @@ void rnaHybridizationSaveToDb(struct sqlConnection *conn, struct rnaHybridizatio
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s',%g,%u,%u)", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->dummy,  el->strand,  el->chromTarget,  el->chromStartTarget,  el->chromEndTarget,  el->strandTarget,  el->refSeqTarget,  el->aorfTarget,  el->igenicsTarget,  el->trnaTarget,  el->JGITarget,  el->patternSeq,  el->targetSeq,  el->gcContent,  el->matchLength,  el->targetAnnotation);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

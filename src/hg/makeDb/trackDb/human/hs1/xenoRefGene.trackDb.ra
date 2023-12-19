@@ -1,0 +1,13 @@
+track xenoRefGene
+shortLabel RefSeq mRNAs
+longLabel RefSeq mRNAs mapped to this assembly
+group rna
+visibility hide
+color 180,0,0
+type bigGenePred
+bigDataUrl  /gbdb/hs1/bbi/xenoRefGene.bb
+labelFields name,geneName,geneName2
+searchIndex name
+searchTrix  /gbdb/hs1/ixIxx/xenoRefGene.ix
+html html/GCA_009914755.4_T2T-CHM13v2.0.xenoRefGene
+

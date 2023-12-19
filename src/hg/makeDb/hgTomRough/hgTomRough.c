@@ -33,7 +33,9 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr = NULL;
 char **row;
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
@@ -55,7 +57,9 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr = NULL;
 char **row;
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from cytoBand");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from cytoBand");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = cytoBandLoad(row);

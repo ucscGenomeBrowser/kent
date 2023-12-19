@@ -20,22 +20,6 @@ you wish to hide.</P>
 </ul>
     
 <dl>
-    <dt><i>2-way</i></dt> 
-</dl>
-<ul>
-    <li><em>GENCODE 2-way Pseudogenes</em> contains pseudogenes predicted by both the 
-        <a href="https://academic.oup.com/bioinformatics/article-abstract/22/12/1437/207326">Yale
-        PseudoPipe</a> and
-        <a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-9-466">
-        UCSC RetroFinder</a> pipelines. The set was derived by looking for 50 base pairs
-        of overlap between pseudogenes derived from both sets based on their 
-        chromosomal coordinates.  When multiple PseudoPipe
-        predictions map to a single RetroFinder prediction, only one match is kept
-        for the 2-way consensus set.
-    </li>
-</ul>
-
-<dl>
     <dt><i>PolyA</i></dt>
 </dl>
 <ul>
@@ -44,6 +28,14 @@ you wish to hide.</P>
     transcripts containing at least 3 A's not matching the genome.</li>
 </ul>
 
+<p>
+<b>Maximum number of transcripts to display</b>
+is available for the items in the GENCODE Basic, Comprehensive and Pseudogene tracks.
+Starting with the GENCODE human V42 and mouse VM31 releases, 
+transcripts are assigned rank within the gene. The ranks may be used to filter the number of transcripts
+displayed in a principled manner.  Transcript ranking is not available in the <em>lift37</em> releases.
+See <a href="#Methods">Methods</a> for details of rank assignment.
+</p>
 
 <p><b>Filtering</b> is available for the items in the GENCODE Basic, Comprehensive and Pseudogene tracks
 using the following criteria:</p>
@@ -83,11 +75,10 @@ using the following criteria:</p>
   <li><font color="#006400"><b>non-coding</b></font> 
   <li><font color="#ff33ff"><b>pseudogene</b></font> 
   <li><font color="#fe0000"><b>problem</b></font>
-  <li><font color="#ff33ff"><b>all 2-way pseudogenes</b></font>
   <li><font color="#000000"><b>all polyA annotations</b></font>
 </ul>
 
-<h2>Methods</h2>
+<h2 id="Methods">Methods</h2>
 
 <p>
 The GENCODE project aims to annotate all evidence-based gene features on the 
@@ -136,7 +127,7 @@ gene locus.
 <P>
 <b>Non-coding transcript categorization:</b> 
 Non-coding transcripts are categorized using
-their <a href="https://www.gencodegenes.org/gencode_biotypes.html" target="_blank">Biotype</a>
+their <a href="https://www.gencodegenes.org/pages/biotypes.html" target="_blank">biotype</a>
 and the following criteria:
 </p>
 <ul>
@@ -144,8 +135,41 @@ and the following criteria:
   <li> poorly characterized: <em>3prime_overlapping_ncrna, lincRNA, misc_RNA, non_coding, processed_transcript, sense_intronic, sense_overlapping</em></li>
 </ul>
 
+<p><b>Transcript ranking:</b>
+Within each gene, transcripts have been ranked according to the 
+following criteria.  The ranking approach is preliminary and will
+change is future releases.
+</p>
+
+<ul>
+  <li> Protein_coding genes
+    <ol>
+      <li> MANE or Ensembl canonical<br>
+        -1st: MANE Select / Ensembl canonical<br>
+        -2nd: MANE Plus Clinical<br>
+      <li>Coding biotypes<br>
+        -1st: protein_coding and protein_coding_LoF<br>
+        -2nd: NMDs and NSDs<br>
+        -3rd: retained intron and protein_coding_CDS_not_defined<br>
+      <li>Completeness<br>
+        -1st: full length<br>
+        -2nd: CDS start/end not found<br>
+      <li> CARS score (only for coding transcripts)<br>
+      <li> Transcript genomic span and length (only for non-coding transcripts)<br>
+    </ol>
+<li> Non-coding genes
+  <ol>
+    <li> Transcript biotype<br>
+      -1st: transcript biotype identical to gene biotype
+    <li> Ensembl canonical
+    <li> GENCODE basic
+    <li> Transcript genomic span
+    <li> Transcript length
+  </ol>
+</ul>
+
 <p>
-<b><a name="tsl">Transcription Support Level (TSL):</a></b>
+<a name="tsl"><b>Transcription Support Level (TSL):</b></a>
 It is important that users understand how to assess transcript annotations
 that they see in GENCODE. While some transcript models have a high level of
 support through the full length of their exon structure, there are also

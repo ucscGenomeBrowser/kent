@@ -7,6 +7,7 @@ include ${kentSrc}/inc/common.mk
 
 # List of directories to build for userApps
 UTILS_APPLIST = \
+	dbDbToHubTxt \
 	hgBbiDbLink \
 	hgFakeAgp \
 	hgFindSpec \
@@ -73,7 +74,8 @@ DIRS = \
 	tfbsConsSort \
 	outside \
         trackDbRaFormat \
-	trackDbPatch
+	trackDbPatch \
+	trackDbToTxt
 
 USE_DIRS = $(DIRS) $(UTILS_APPLIST)
 

@@ -56,7 +56,7 @@ colors <- c(
 15652306,
 16711935)
 
-colorsHex<-paste("#",as.character(as.hexmode(colors)), sep="")
+colorsHex<-paste("#",format(as.hexmode(colors), width=6), sep="")
 
 # again, but replace yellow with dark gray
 darkerColors <- c(
@@ -115,7 +115,7 @@ darkerColors <- c(
 15652306,
 16711935)
 
-darkerColorsHex<-paste("#",as.character(as.hexmode(darkerColors)), sep="")
+darkerColorsHex<-paste("#",format(as.hexmode(darkerColors), width=6), sep="")
 
 # Get the below list by querying the gtexTissueV8 table:
 # hgsql -Ne "select description from gtexTissueV8 order by id" hgFixed | \

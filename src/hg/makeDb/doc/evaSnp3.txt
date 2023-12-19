@@ -1,0 +1,830 @@
+# Track for EVA snp release 3, which was released 2/24/2022 - https://www.ebi.ac.uk/eva/?RS-Release&releaseVersion=3
+# Tracks built by Lou on 4/19/2022
+
+# Assemblies were the following: mm39, danRer11, bosTau9, dm6, mm10, galGal6, susScr11, rn6, 
+# rn7, danRer10, equCab3, rheMac10, macFas5, oviAri4, felCat9, galGal5
+
+# The GCA accession on the eva release by accession list (https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/)
+# were compared to each of our dbs genome accessions with at least 100 hits/month to create that list
+
+# All assemblies were passed by the python pipeline described below. 3 assemblies required some 
+# variants to be removed (danRer11, dm6, oviAri4) due to issues with hgVai, see RM #29262.
+# The removed variants were done so after initial data download and noted in the code comment
+
+#####################################
+#### Beginning of python3 code ######
+#####################################
+
+import subprocess,sys,argparse,os
+
+#All databases with monthly hit counts of at least 100
+
+#mm39 - Completes
+# url = "http://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/mus_musculus/GCA_000001635.9/GCA_000001635.9_current_ids.vcf.gz"
+# dbs='mm39'
+
+#danRer11 - Completes if I remove rs499587024 
+#url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000002035.4/GCA_000002035.4_current_ids.vcf.gz"
+#dbs='danRer11'
+
+#bosTau9 - completes
+#url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_002263795.2/GCA_002263795.2_current_ids.vcf.gz"
+#dbs="bosTau9"
+
+#dm6 - Completes if I remove /hive/data/outside/eva/dm6/problematicRSIDs.txt 
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000001215.4/GCA_000001215.4_current_ids.vcf.gz"
+# dbs = "dm6"
+
+#mm10 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000001635.6/GCA_000001635.6_current_ids.vcf.gz"
+# dbs = "mm10"
+
+# #galGal6 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000002315.5/GCA_000002315.5_current_ids.vcf.gz"
+# dbs = "galGal6"
+
+# #susScr11 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000003025.6/GCA_000003025.6_current_ids.vcf.gz"
+# dbs = "susScr11"
+
+# rn6 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000001895.4/GCA_000001895.4_current_ids.vcf.gz"
+# dbs = "rn6"
+
+# rn7 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_015227675.2/GCA_015227675.2_current_ids.vcf.gz"
+# dbs = "rn7
+
+# danRer10 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000002035.3/GCA_000002035.3_current_ids.vcf.gz"
+# dbs = "danRer10"
+
+# equCab3 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_002863925.1/GCA_002863925.1_current_ids.vcf.gz"
+# dbs = "equCab3"
+
+# rheMac10 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_003339765.3/GCA_003339765.3_current_ids.vcf.gz"
+# dbs = "rheMac10"
+
+# macFas5 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000364345.1/GCA_000364345.1_current_ids.vcf.gz"
+# dbs = "macFas5"
+
+# oviAri4 - Completes if removed rs1089233242
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000298735.2/GCA_000298735.2_current_ids.vcf.gz"
+# dbs = "oviAri4"
+
+# felCat9 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000181335.4/GCA_000181335.4_current_ids.vcf.gz"
+# dbs = "felCat9"
+
+# galGal5 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000002315.3/GCA_000002315.3_current_ids.vcf.gz"
+# dbs = "galGal5"
+
+workDir = "/hive/data/outside/eva/"+dbs
+if workDir[-1] != "/":
+    workDir=workDir+"/"
+
+def checkDirMakeDir(workDir):
+    if not os.path.isdir(workDir):
+        os.mkdir(workDir)
+
+def bash(cmd):
+    """Run the cmd in bash subprocess"""
+    try:
+        rawBashOutput = subprocess.run(cmd, check=True, shell=True,\
+                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
+        bashStdoutt = rawBashOutput.stdout
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    return(bashStdoutt)
+
+def wgetFile(url, workDir):
+    bash("wget %s -P %s" % (url, workDir))
+    fileName = workDir+url.split("/")[-1]
+    return(fileName)
+    
+def checkDupsAndUnzip(fileName,workDir):
+    """Check for duplicate lines (common in EVA), and unzip file"""
+    lineCount = bash("zcat %s | wc -l" % (fileName)).rstrip()
+    uniqCount = bash("zcat %s | uniq | wc -l" % (fileName)).rstrip()
+    currentFileName = workDir+"evaSnps.vcf"
+    if lineCount != uniqCount:
+        print("There are duplicated entries.\nOriginal file:%s\nUniq file:%s\nCreating new file." % (lineCount, uniqCount))
+        bash("zcat %s | uniq > %s" % (fileName,currentFileName))
+    else:
+        bash("zcat %s > %s" % (fileName,currentFileName))
+    return(currentFileName)
+
+def sanitizeChromNames(currentFileName):
+    """Swaps the chrom IDs with the accession names which are indexed in chromAlias"""
+    inputFile = open(currentFileName,'r')
+    outputFile = open(currentFileName+".fixed","w")
+    IDtoAccessionDic = {}
+    
+    for line in inputFile:
+        if line.startswith("##contig"):
+            ID = line.split('=')[2].split(',')[0]
+            accession = line.split('=')[3].split('"')[1]
+            IDtoAccessionDic[ID] = accession
+            outputFile.write(line)
+        elif line.startswith("#"):
+            outputFile.write(line)
+        else:
+            line = line.split("\t")
+            line[0] = IDtoAccessionDic[line[0]]
+            line = "\t".join(line)
+            outputFile.write(line)
+    inputFile.close()
+    outputFile.close()
+    #Replacing the same name because chromAlias should be updated soon and this function will be removed
+    bash("mv %s.fixed %s" % (currentFileName,currentFileName))
+
+def convertChromToUcsc(currentFileName,dbs,workDir):
+    """Convert to UCSC-style chroms"""
+    bash("chromToUcsc --get %s" % (dbs))
+    bash("chromToUcsc -i %s -o %sevaSnps.ucscChroms.vcf -a %s" % (currentFileName,workDir,dbs+".chromAlias.tsv"))
+    bash("rm %s" % (dbs+".chromAlias.tsv"))
+    currentFileName = workDir+"evaSnps.ucscChroms.vcf"
+    return(currentFileName)
+                               
+def convertVcfToBed(currentFileName,workDir):
+    """Convert to bed keeping only VC and SID fields"""
+    bash("bgzip %s" % (currentFileName))
+    bash("tabix -p vcf %s" % (currentFileName+".gz"))
+    bash("vcfToBed %s %sevaSnp -fields=VC,SID" % (currentFileName+".gz",workDir))
+    currentFileName = workDir+"evaSnp.bed"
+    return(currentFileName)
+
+def splitChromsAndRunHgVai(workDir,dbs):
+    """Split all the chroms in tenths in order to be able to run hgVai without running out of memory"""
+    chromSizes = bash("fetchChromSizes %s" % (dbs)).split("\n")
+    inputFile = workDir+"evaSnps.ucscChroms.vcf.gz"
+    outputFile = workDir+"evaSnps"+dbs+"VaiResults.vep"
+    for chrom in chromSizes[1:-1]:
+        chrom = chrom.split("\t")
+        chromName = chrom[0]
+        print("Running "+chromName)
+        if int(chrom[1]) < 1000000: #Don't worry about splitting if chrom is less than 1M bp
+            if dbs == 'mm39':
+                bash("vai.pl --variantLimit=200000000 --position=%s:0-%s --geneTrack=ncbiRefSeqSelect --hgvsG=off --hgvsCN=off \
+            --hgvsP=on %s %s >> %s" % (chromName,chrom[1],dbs,inputFile,outputFile))
+            else:
+                bash("vai.pl --variantLimit=200000000 --position=%s:0-%s --geneTrack=ncbiRefSeqCurated --hgvsG=off --hgvsCN=off \
+            --hgvsP=on %s %s >> %s" % (chromName,chrom[1],dbs,inputFile,outputFile))
+        else:
+            breakPoints = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
+            for part in breakPoints:
+                startCoord = round(int(chrom[1])*(part-.1))+1
+                endCoord = round(int(chrom[1])*part)
+                if part == breakPoints[0]: #Special exception for start
+                    if dbs == 'mm39':
+                        bash("vai.pl --variantLimit=200000000 --position=%s:0-%s --geneTrack=ncbiRefSeqSelect --hgvsG=off --hgvsCN=off \
+                    --hgvsP=on %s %s >> %s" % (chromName,endCoord,dbs,inputFile,outputFile))
+                    else:
+                        bash("vai.pl --variantLimit=200000000 --position=%s:0-%s --geneTrack=ncbiRefSeqCurated --hgvsG=off --hgvsCN=off \
+                    --hgvsP=on %s %s >> %s" % (chromName,endCoord,dbs,inputFile,outputFile))
+                else:
+                    if dbs == 'mm39':
+                        bash("vai.pl --variantLimit=200000000 --position=%s:%s-%s --geneTrack=ncbiRefSeqSelect --hgvsG=off --hgvsCN=off \
+                    --hgvsP=on %s %s >> %s" % (chromName,startCoord,endCoord,dbs,inputFile,outputFile))  
+                    else:
+                        bash("vai.pl --variantLimit=200000000 --position=%s:%s-%s --geneTrack=ncbiRefSeqCurated --hgvsG=off --hgvsCN=off \
+                    --hgvsP=on %s %s >> %s" % (chromName,startCoord,endCoord,dbs,inputFile,outputFile))                    
+    return(outputFile)
+
+def splitVepFileByChrom(hgVaiResultsFile,workDir):
+    """Split the vep file to one file per chrom in order to index entire chrom into a dic and quickly lookup the rsIDs"""
+    splitChromDir = workDir+"splitChroms/"
+    checkDirMakeDir(splitChromDir)
+    vepFile = open(hgVaiResultsFile,"r")
+    for line in vepFile:
+        if line.startswith("#") or line.startswith("Uploaded"):
+            continue
+        else:
+            #Need to compute itemRGB, aaChange, and ucscClass
+            lineContents = line.rstrip().split("\t")
+            chrom = lineContents[1].split(":")[0]
+            outFile = open(splitChromDir+"evaSnpVaiResults."+chrom+".vep","a")
+            outFile.write(line)
+            outFile.close()
+    vepFile.close()
+
+def fetchUcscClassAndAaChange(name,chrom,currentChrom,currentVepDic):             
+    """Build dictionary out of vep results with rsID as index, populate aaChange and ucscClassList"""
+    prevName = name
+    #Check if chrom has changed and index current chrom
+    if chrom != currentChrom:
+        currentVepFile = open(workDir+"splitChroms/evaSnpVaiResults."+chrom+".vep","r")
+        currentVepDic = {}
+        for entry in currentVepFile:
+            entry = entry.rstrip().split("\t")
+            rsID = entry[0]
+            if rsID not in currentVepDic.keys():
+                currentVepDic[rsID] = {}
+                currentVepDic[rsID]['ucscClassList'] = []
+                currentVepDic[rsID]['ucscClassList'].append(entry[6])
+                currentVepDic[rsID]['aaChange'] = []
+                if entry[13] != '-' and 'p' in entry[13] and '?' not in entry[13]:
+                    currentVepDic[rsID]['aaChange'].append(entry[13].split(";")[0].split("=")[1].split(":")[1])
+            else:
+                if entry[6] not in currentVepDic[rsID]['ucscClassList']:
+                    currentVepDic[rsID]['ucscClassList'].append(entry[6])
+                if entry[13] != '-' and 'p' in entry[13] and '?' not in entry[13]:
+                    if entry[13].split(";")[0].split("=")[1] not in currentVepDic[rsID]['aaChange']:
+                        currentVepDic[rsID]['aaChange'].append(entry[13].split(";")[0].split("=")[1].split(":")[1])
+        currentChrom=chrom
+        currentVepFile.close()
+                
+    ucscClass = ",".join(currentVepDic[name]['ucscClassList'])
+    aaChange = " ".join(currentVepDic[name]['aaChange'])
+    
+    return(prevName,currentChrom,currentVepDic,ucscClass,aaChange) 
+
+def assignRGBcolorByConsequence(currentVepDic,name):
+    """Assign color based on most serious hgVai predicted consequence"""
+
+    redVars = ['exon_loss_variant','frameshift_variant','inframe_deletion','inframe_insertion','initiator_codon_variant',
+               'missense_variant','splice_acceptor_variant','splice_donor_variant','splice_region_variant','stop_gained',
+               'stop_lost','coding_sequence_variant','transcript_ablation']
+    greenVars = ['synonymous_variant','stop_retained_variant']
+    blueVars = ['5_prime_UTR_variant','3_prime_UTR_variant','complex_transcript_variant',
+                'non_coding_transcript_exon_variant']
+    blackVars = ['upstream_gene_variant','downstream_gene_variant','intron_variant','intergenic_variant',
+                 'NMD_transcript_variant','no_sequence_alteration']
+    
+    if any(item in currentVepDic[name]['ucscClassList'] for item in redVars):
+        itemRgb = '255,0,0'
+    elif any(item in currentVepDic[name]['ucscClassList'] for item in greenVars):
+        itemRgb = '0,128,0'
+    elif any(item in currentVepDic[name]['ucscClassList'] for item in blueVars):
+        itemRgb = '0,0,255'
+    elif any(item in currentVepDic[name]['ucscClassList'] for item in blackVars):
+        itemRgb = '0,0,0'
+    else:
+        sys.exit("One of the following consequences not found in color list, please add: "+str(currentVepDic[name]['ucscClassList']))
+        
+    return(itemRgb)
+
+def convertSOnumberToName(varClass):
+    soDic={"SO:0001483": 'substitution', "SO:0000667": 'insertion', "SO:0000159": 'deletion', 
+           "SO:0001059": 'sequence alteration',"SO:1000032": 'delins',"SO:0002007": 'MNV'}
+    varClass = soDic[varClass]
+    return(varClass)
+
+def createFinalBedWithVepAnnotations(currentFileName,workDir):
+    """Parse bed file and output final file without FILTER field, and with SO name, item RGB, and aaChange/ucscClass from hgVai"""
+
+    inputFile = open(currentFileName,"r")
+    outputFile = open(workDir+"evaSnp.final.bed","w")
+    prevName = ""
+    currentChrom = ""
+    currentVepDic = {}
+    n=0
+
+    for line in inputFile:
+        n+=1
+        if n%5000000 == 0:
+            print("Current line count: "+str(n))
+        if line.startswith("#") or line.startswith("Uploaded"):
+            continue
+        else:
+        #Desired schema chrom chromStart chromEnd name score strand thickStart thickEnd itemRgb ref alt varClass submitters ucscClass aaChange
+        #Need to compute itemRGB, aaChange, and ucscClass. Also need to change SO terms
+        
+            lineContents = line.rstrip().split("\t")
+            chrom = lineContents[0]
+            chromStart = lineContents[1]
+            chromEnd = lineContents[2]
+            name = lineContents[3]
+            ref = lineContents[9]
+            alt = lineContents[10]
+            varClass = lineContents[12]
+            submitters = lineContents[13]
+            
+            #Convert from SO term to name. e.g. SO:0001483 to substitution
+            varClass = convertSOnumberToName(varClass)
+        
+            #Check if is the same rsID, they are repeated in ~5% of file
+            if prevName == name:
+                outputFile.write(chrom+"\t"+chromStart+"\t"+chromEnd+"\t"+name+"\t0\t.\t"+chromStart+"\t"+chromEnd+"\t"+
+                                 itemRgb+"\t"+ref+"\t"+alt+"\t"+varClass+"\t"+submitters+"\t"+ucscClass+"\t"+aaChange+"\n")
+            else:        
+                #Find the aaChange and ucscClass                
+                prevName,currentChrom,currentVepDic,ucscClass,aaChange = fetchUcscClassAndAaChange(name,chrom,currentChrom,currentVepDic)
+                itemRgb = assignRGBcolorByConsequence(currentVepDic,name)
+                outputFile.write(chrom+"\t"+chromStart+"\t"+chromEnd+"\t"+name+"\t0\t.\t"+chromStart+"\t"+chromEnd+"\t"+
+                                 itemRgb+"\t"+ref+"\t"+alt+"\t"+varClass+"\t"+submitters+"\t"+ucscClass+"\t"+aaChange+"\n")
+
+    inputFile.close()
+    outputFile.close()
+
+def validateFinalFile(workDir,url):
+    """Compare and make sure that the final bed rsID# matches the input file"""
+    originalDownloadFileName = workDir+url.split("/")[-1]
+    bedFile = workDir+"evaSnp.final.bed"
+    originalRsIDCount = bash("zcat %s | grep -v '^#' | cut -f3 | sort | uniq | wc -l" % (originalDownloadFileName))
+    finalBedRsIDCount = bash("cut -f4 %s | sort | uniq | wc -l" % (bedFile))
+    if originalRsIDCount != finalBedRsIDCount:
+        sys.exit("There was an error in the pipeline, the initial numer of uniq RS IDs does not match the final bed file.\n\n"\
+    "%s - %s%s - %s" % (originalDownloadFileName,str(originalRsIDCount),bedFile,str(finalBedRsIDCount)))
+    
+def createBigBed(workDir,dbs):
+    bedFile = workDir+"evaSnp.final.bed"
+    bash("bedSort %s %s" % (bedFile,bedFile))
+    bash("bedToBigBed -tab -as=$HOME/kent/src/hg/lib/evaSnp.as -type=bed9+6 -extraIndex=name \
+    %s http://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.chrom.sizes %sevaSnp.bb" % (bedFile,dbs,dbs,workDir))
+    
+checkDirMakeDir(workDir)
+fileName = wgetFile(url, workDir)
+fileName = workDir+url.split("/")[-1]
+print("Got file")
+currentFileName = checkDupsAndUnzip(fileName,workDir)
+print("File unzipped")
+try:
+    currentFileName = convertChromToUcsc(currentFileName,dbs,workDir)
+    print("Chroms converted")
+except:
+    sanitizeChromNames(currentFileName)
+    print("Chroms sanitized")
+    currentFileName = convertChromToUcsc(currentFileName,dbs,workDir)
+    print("Chroms converted")
+currentFileName = convertVcfToBed(currentFileName,workDir)    
+print("File converted to bed")
+hgVaiResultsFile = splitChromsAndRunHgVai(workDir,dbs)
+print("hgVai done")
+splitVepFileByChrom(hgVaiResultsFile,workDir)
+print("hgVai file split")
+currentFileName = workDir+"evaSnp.bed"
+createFinalBedWithVepAnnotations(currentFileName,workDir)
+print("Validating file")
+validateFinalFile(workDir,url)
+print("Created final file")
+createBigBed(workDir,dbs)
+print("bigBed made")
+
+#####################################
+######### End of python3 code ######
+#####################################
+
+# Lastly links were made with a file containing the 16 assemblies:
+
+for dbs in $(cat $1);
+do
+ln -s /hive/data/outside/eva/$dbs/evaSnp.bb /gbdb/$dbs/bbi/;
+done
+
+#######################
+
+# On 5/3 the tracks were rebuilt to add better logic handling for multi-allele variants (rsIDs 
+# that come up multiple times in the file). These IDs now get matched with their unique 
+# hgVai alts. See #29031 for more info. Entire new updated pipeline included below.
+# canFam3 was also added to the pipeline.
+
+#####################################
+#########  Start of python3 #########
+#####################################
+
+import subprocess,sys,argparse,os
+
+#All databases with monthly hit counts of at least 100
+
+# mm39 - Completes
+# url = "http://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/mus_musculus/GCA_000001635.9/GCA_000001635.9_current_ids.vcf.gz"
+# dbs='mm39'
+
+#danRer11 - Completes if I remove rs499587024 
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000002035.4/GCA_000002035.4_current_ids.vcf.gz"
+# dbs='danRer11'
+
+#bosTau9 - completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_002263795.2/GCA_002263795.2_current_ids.vcf.gz"
+# dbs="bosTau9"
+
+#dm6 - Completes if I remove /hive/data/outside/eva/dm6/problematicRSIDs.txt 
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000001215.4/GCA_000001215.4_current_ids.vcf.gz"
+# dbs = "dm6"
+
+#mm10 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000001635.6/GCA_000001635.6_current_ids.vcf.gz"
+# dbs = "mm10"
+
+# #galGal6 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000002315.5/GCA_000002315.5_current_ids.vcf.gz"
+# dbs = "galGal6"
+
+# #susScr11 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000003025.6/GCA_000003025.6_current_ids.vcf.gz"
+# dbs = "susScr11"
+
+# rn6 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000001895.4/GCA_000001895.4_current_ids.vcf.gz"
+# dbs = "rn6"
+
+# rn7 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_015227675.2/GCA_015227675.2_current_ids.vcf.gz"
+# dbs = "rn7
+
+# danRer10 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000002035.3/GCA_000002035.3_current_ids.vcf.gz"
+# dbs = "danRer10"
+
+# equCab3 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_002863925.1/GCA_002863925.1_current_ids.vcf.gz"
+# dbs = "equCab3"
+
+# rheMac10 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_003339765.3/GCA_003339765.3_current_ids.vcf.gz"
+# dbs = "rheMac10"
+
+# macFas5 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000364345.1/GCA_000364345.1_current_ids.vcf.gz"
+# dbs = "macFas5"
+
+# oviAri4 - Completes if removed rs1089233242
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000298735.2/GCA_000298735.2_current_ids.vcf.gz"
+# dbs = "oviAri4"
+
+# felCat9 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000181335.4/GCA_000181335.4_current_ids.vcf.gz"
+# dbs = "felCat9"
+
+# galGal5 - Completes
+# url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_assembly/GCA_000002315.3/GCA_000002315.3_current_ids.vcf.gz"
+# dbs = "galGal5"
+
+# canFam3
+url = "https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/GCA_000002285.2_current_ids.vcf.gz"
+dbs = "canFam3"
+
+workDir = "/hive/data/outside/eva/"+dbs
+if workDir[-1] != "/":
+    workDir=workDir+"/"
+
+def checkDirMakeDir(workDir):
+    if not os.path.isdir(workDir):
+        os.mkdir(workDir)
+
+def bash(cmd):
+    """Run the cmd in bash subprocess"""
+    try:
+        rawBashOutput = subprocess.run(cmd, check=True, shell=True,\
+                                       stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
+        bashStdoutt = rawBashOutput.stdout
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    return(bashStdoutt)
+
+def wgetFile(url, workDir):
+    bash("wget %s -P %s" % (url, workDir))
+    fileName = workDir+url.split("/")[-1]
+    return(fileName)
+    
+def checkDupsAndUnzip(fileName,workDir):
+    """Check for duplicate lines (common in EVA), and unzip file"""
+    lineCount = bash("zcat %s | wc -l" % (fileName)).rstrip()
+    uniqCount = bash("zcat %s | uniq | wc -l" % (fileName)).rstrip()
+    currentFileName = workDir+"evaSnps.vcf"
+    if lineCount != uniqCount:
+        print("There are duplicated entries.\nOriginal file:%s\nUniq file:%s\nCreating new file." % (lineCount, uniqCount))
+        bash("zcat %s | uniq > %s" % (fileName,currentFileName))
+    else:
+        bash("zcat %s > %s" % (fileName,currentFileName))
+    return(currentFileName)
+
+def sanitizeChromNames(currentFileName):
+    """Swaps the chrom IDs with the accession names which are indexed in chromAlias"""
+    inputFile = open(currentFileName,'r')
+    outputFile = open(currentFileName+".fixed","w")
+    IDtoAccessionDic = {}
+    
+    for line in inputFile:
+        if line.startswith("##contig"):
+            ID = line.split('=')[2].split(',')[0]
+            accession = line.split('=')[3].split('"')[1]
+            IDtoAccessionDic[ID] = accession
+            outputFile.write(line)
+        elif line.startswith("#"):
+            outputFile.write(line)
+        else:
+            line = line.split("\t")
+            line[0] = IDtoAccessionDic[line[0]]
+            line = "\t".join(line)
+            outputFile.write(line)
+    inputFile.close()
+    outputFile.close()
+    #Replacing the same name because chromAlias should be updated soon and this function will be removed
+    bash("mv %s.fixed %s" % (currentFileName,currentFileName))
+
+def convertChromToUcsc(currentFileName,dbs,workDir):
+    """Convert to UCSC-style chroms"""
+    bash("chromToUcsc --get %s" % (dbs))
+    bash("chromToUcsc -i %s -o %sevaSnps.ucscChroms.vcf -a %s" % (currentFileName,workDir,dbs+".chromAlias.tsv"))
+    bash("rm %s" % (dbs+".chromAlias.tsv"))
+    currentFileName = workDir+"evaSnps.ucscChroms.vcf"
+    return(currentFileName)
+                               
+def convertVcfToBed(currentFileName,workDir):
+    """Convert to bed keeping only VC and SID fields"""
+    bash("bgzip %s" % (currentFileName))
+    bash("tabix -p vcf %s" % (currentFileName+".gz"))
+    bash("vcfToBed %s %sevaSnp -fields=VC,SID" % (currentFileName+".gz",workDir))
+    currentFileName = workDir+"evaSnp.bed"
+    return(currentFileName)
+
+def splitChromsAndRunHgVai(workDir,dbs):
+    """Split all the chroms in tenths in order to be able to run hgVai without running out of memory"""
+    chromSizes = bash("fetchChromSizes %s" % (dbs)).split("\n")
+    inputFile = workDir+"evaSnps.ucscChroms.vcf.gz"
+    outputFile = workDir+"evaSnps"+dbs+"VaiResults.vep"
+    for chrom in chromSizes[1:-1]:
+        chrom = chrom.split("\t")
+        chromName = chrom[0]
+        print("Running "+chromName)
+        if int(chrom[1]) < 1000000: #Don't worry about splitting if chrom is less than 1M bp
+            if dbs == 'mm39':
+                bash("vai.pl --variantLimit=200000000 --position=%s:0-%s --geneTrack=ncbiRefSeqSelect --hgvsG=off --hgvsCN=off \
+            --hgvsP=on %s %s >> %s" % (chromName,chrom[1],dbs,inputFile,outputFile))
+            else:
+                bash("vai.pl --variantLimit=200000000 --position=%s:0-%s --geneTrack=ncbiRefSeqCurated --hgvsG=off --hgvsCN=off \
+            --hgvsP=on %s %s >> %s" % (chromName,chrom[1],dbs,inputFile,outputFile))
+        else:
+            breakPoints = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1]
+            for part in breakPoints:
+                startCoord = round(int(chrom[1])*(part-.1))+1
+                endCoord = round(int(chrom[1])*part)
+                if part == breakPoints[0]: #Special exception for start
+                    if dbs == 'mm39':
+                        bash("vai.pl --variantLimit=200000000 --position=%s:0-%s --geneTrack=ncbiRefSeqSelect --hgvsG=off --hgvsCN=off \
+                    --hgvsP=on %s %s >> %s" % (chromName,endCoord,dbs,inputFile,outputFile))
+                    else:
+                        bash("vai.pl --variantLimit=200000000 --position=%s:0-%s --geneTrack=ncbiRefSeqCurated --hgvsG=off --hgvsCN=off \
+                    --hgvsP=on %s %s >> %s" % (chromName,endCoord,dbs,inputFile,outputFile))
+                else:
+                    if dbs == 'mm39':
+                        bash("vai.pl --variantLimit=200000000 --position=%s:%s-%s --geneTrack=ncbiRefSeqSelect --hgvsG=off --hgvsCN=off \
+                    --hgvsP=on %s %s >> %s" % (chromName,startCoord,endCoord,dbs,inputFile,outputFile))  
+                    else:
+                        bash("vai.pl --variantLimit=200000000 --position=%s:%s-%s --geneTrack=ncbiRefSeqCurated --hgvsG=off --hgvsCN=off \
+                    --hgvsP=on %s %s >> %s" % (chromName,startCoord,endCoord,dbs,inputFile,outputFile))                    
+    return(outputFile)
+
+def splitVepFileByChrom(hgVaiResultsFile,workDir):
+    """Split the vep file to one file per chrom in order to index entire chrom into a dic and quickly lookup the rsIDs"""
+    splitChromDir = workDir+"splitChroms/"
+    checkDirMakeDir(splitChromDir)
+    vepFile = open(hgVaiResultsFile,"r")
+    for line in vepFile:
+        if line.startswith("#") or line.startswith("Uploaded"):
+            continue
+        else:
+            #Need to compute itemRGB, aaChange, and ucscClass
+            lineContents = line.rstrip().split("\t")
+            chrom = lineContents[1].split(":")[0]
+            outFile = open(splitChromDir+"evaSnpVaiResults."+chrom+".vep","a")
+            outFile.write(line)
+            outFile.close()
+    vepFile.close()
+
+def fetchUcscClassAndAaChange(name,alt,nameAlt,chrom,currentChrom,currentVepDic,tryAttempts):             
+    """Build dictionary out of vep results with rsID as index, populate aaChange and ucscClassList"""
+    prevName = nameAlt
+    #Check if chrom has changed and index current chrom
+    if chrom != currentChrom:
+        currentVepFile = open(workDir+"splitChroms/evaSnpVaiResults."+chrom+".vep","r")
+        currentVepDic = {}
+        for entry in currentVepFile:
+            entry = entry.rstrip().split("\t")
+            rsID = entry[0]
+            rsIDAlt = entry[0]+entry[2]
+            #print(rsID)
+            #altAllele = entry[2]
+
+            if rsIDAlt not in currentVepDic.keys():
+                currentVepDic[rsIDAlt] = {}
+                currentVepDic[rsIDAlt]['ucscClassList'] = []
+                currentVepDic[rsIDAlt]['ucscClassList'].append(entry[6])
+                currentVepDic[rsIDAlt]['aaChange'] = []
+                if entry[13] != '-' and 'p' in entry[13] and '?' not in entry[13]:
+                    currentVepDic[rsIDAlt]['aaChange'].append(entry[13].split(";")[0].split("=")[1].split(":")[1])
+            else:
+                if entry[6] not in currentVepDic[rsIDAlt]['ucscClassList']:
+                    currentVepDic[rsIDAlt]['ucscClassList'].append(entry[6])
+                if entry[13] != '-' and 'p' in entry[13] and '?' not in entry[13]:
+                    if entry[13].split(";")[0].split("=")[1] not in currentVepDic[rsIDAlt]['aaChange']:
+                        currentVepDic[rsIDAlt]['aaChange'].append(entry[13].split(";")[0].split("=")[1].split(":")[1])
+
+            if rsID not in currentVepDic.keys():
+                currentVepDic[rsID] = {}
+                currentVepDic[rsID]['ucscClassList'] = []
+                currentVepDic[rsID]['ucscClassList'].append(entry[6])
+                currentVepDic[rsID]['aaChange'] = []
+                if entry[13] != '-' and 'p' in entry[13] and '?' not in entry[13]:
+                    currentVepDic[rsID]['aaChange'].append(entry[13].split(";")[0].split("=")[1].split(":")[1])
+            else:
+                if entry[6] not in currentVepDic[rsID]['ucscClassList']:
+                    currentVepDic[rsID]['ucscClassList'].append(entry[6])
+                if entry[13] != '-' and 'p' in entry[13] and '?' not in entry[13]:
+                    if entry[13].split(";")[0].split("=")[1] not in currentVepDic[rsID]['aaChange']:
+                        currentVepDic[rsID]['aaChange'].append(entry[13].split(";")[0].split("=")[1].split(":")[1])
+                        
+        currentChrom=chrom
+        currentVepFile.close()
+        
+    try:
+        ucscClass = ",".join(currentVepDic[nameAlt]['ucscClassList'])
+        aaChange = " ".join(currentVepDic[nameAlt]['aaChange'])
+    except:
+        tryAttempts+=1
+        ucscClass = ",".join(currentVepDic[name]['ucscClassList'])
+        aaChange = " ".join(currentVepDic[name]['aaChange'])
+       
+    return(prevName,currentChrom,currentVepDic,ucscClass,aaChange,tryAttempts) 
+
+def assignRGBcolorByConsequence(currentVepDic,name,alt,nameAlt):
+    """Assign color based on most serious hgVai predicted consequence"""
+
+    redVars = ['exon_loss_variant','frameshift_variant','inframe_deletion','inframe_insertion','initiator_codon_variant',
+               'missense_variant','splice_acceptor_variant','splice_donor_variant','splice_region_variant','stop_gained',
+               'stop_lost','coding_sequence_variant','transcript_ablation']
+    greenVars = ['synonymous_variant','stop_retained_variant']
+    blueVars = ['5_prime_UTR_variant','3_prime_UTR_variant','complex_transcript_variant',
+                'non_coding_transcript_exon_variant']
+    blackVars = ['upstream_gene_variant','downstream_gene_variant','intron_variant','intergenic_variant',
+                 'NMD_transcript_variant','no_sequence_alteration']
+    
+    try:
+        if any(item in currentVepDic[nameAlt]['ucscClassList'] for item in redVars):
+            itemRgb = '255,0,0'
+        elif any(item in currentVepDic[nameAlt]['ucscClassList'] for item in greenVars):
+            itemRgb = '0,128,0'
+        elif any(item in currentVepDic[nameAlt]['ucscClassList'] for item in blueVars):
+            itemRgb = '0,0,255'
+        elif any(item in currentVepDic[nameAlt]['ucscClassList'] for item in blackVars):
+            itemRgb = '0,0,0'
+        else:
+            sys.exit("One of the following consequences not found in color list, please add: "+str(currentVepDic[name]['ucscClassList']))
+    except:
+        if any(item in currentVepDic[name]['ucscClassList'] for item in redVars):
+            itemRgb = '255,0,0'
+        elif any(item in currentVepDic[name]['ucscClassList'] for item in greenVars):
+            itemRgb = '0,128,0'
+        elif any(item in currentVepDic[name]['ucscClassList'] for item in blueVars):
+            itemRgb = '0,0,255'
+        elif any(item in currentVepDic[name]['ucscClassList'] for item in blackVars):
+            itemRgb = '0,0,0'
+        else:
+            sys.exit("One of the following consequences not found in color list, please add: "+str(currentVepDic[name]['ucscClassList']))
+        
+            
+    return(itemRgb)
+
+def convertSOnumberToName(varClass):
+    soDic={"SO:0001483": 'substitution', "SO:0000667": 'insertion', "SO:0000159": 'deletion', 
+           "SO:0001059": 'sequence alteration',"SO:1000032": 'delins',"SO:0002007": 'MNV', "SO:0000705": 'tandem_repeat'}
+    varClass = soDic[varClass]
+    return(varClass)
+
+def buildDuplicateRsIDset(currentFileName):
+    """Look for multi-allelic variants to then try and more accurately match those hgVai results"""
+    duplicateSet = set()
+    inputFile = open(currentFileName,"r")
+    prevName = False
+    for line in inputFile:
+        if line.startswith("#") or line.startswith("Uploaded"):
+            continue
+        else:
+            lineContents = line.rstrip().split("\t")
+            name = lineContents[3]
+            if prevName == name:
+                duplicateSet.add(name)
+            prevName = name
+    print("Total number of multi-allelic variants: "+str(len(duplicateSet)))
+    return(duplicateSet)
+        
+
+def createFinalBedWithVepAnnotations(currentFileName,workDir):
+    """Parse bed file and output final file without FILTER field, and with SO name, item RGB, and aaChange/ucscClass from hgVai"""
+
+    inputFile = open(currentFileName,"r")
+    outputFile = open(workDir+"evaSnp.final.bed","w")
+    prevName = ""
+    currentChrom = ""
+    currentVepDic = {}
+    n=0
+    tryAttempts=0
+    duplicateSet = buildDuplicateRsIDset(currentFileName)
+    
+    for line in inputFile:
+        n+=1
+        if n%5000000 == 0:
+            print("Current line count: "+str(n))
+        if line.startswith("#") or line.startswith("Uploaded"):
+            continue
+        else:
+        #Desired schema chrom chromStart chromEnd name score strand thickStart thickEnd itemRgb ref alt varClass submitters ucscClass aaChange
+        #Need to compute itemRGB, aaChange, and ucscClass. Also need to change SO terms
+        
+            lineContents = line.rstrip().split("\t")
+            chrom = lineContents[0]
+            chromStart = lineContents[1]
+            chromEnd = lineContents[2]
+            name = lineContents[3]
+            ref = lineContents[9]
+            alt = lineContents[10]
+            varClass = lineContents[12]
+            submitters = lineContents[13]
+            
+            #Convert from SO term to name. e.g. SO:0001483 to substitution
+            varClass = convertSOnumberToName(varClass)
+        
+            #Check if is the same rsID, they are repeated in ~5% of file
+            if prevName == name:
+                print("Repeated prevName: "+prevName)
+                outputFile.write(chrom+"\t"+chromStart+"\t"+chromEnd+"\t"+name+"\t0\t.\t"+chromStart+"\t"+chromEnd+"\t"+
+                                 itemRgb+"\t"+ref+"\t"+alt+"\t"+varClass+"\t"+submitters+"\t"+ucscClass+"\t"+aaChange+"\n")
+            elif name in duplicateSet:        
+                #Find the aaChange and ucscClass
+                #Try and match the allele with what hgVai outputs
+                if varClass == "insertion":
+                    if ',' in alt:
+                        nameAlt = name+alt.split(",")[0][1:]
+                    elif len(alt)-1 >= 59:
+                        nameAlt = name+alt[len(ref):25]+"..."+alt[len(alt)-24:]+"("+str(len(alt)-1)+" nt)"
+                    else:
+                        nameAlt = name+alt[1:]
+                elif varClass == "deletion":
+                    nameAlt = name+"-"
+                elif varClass == "tandem_repeat":
+                    if len(alt) > len(ref):
+                        nameAlt = name+alt[len(ref):]
+                    else:
+                        nameAlt = name+"-"
+                else:
+                    nameAlt = name+alt
+          
+                prevName,currentChrom,currentVepDic,ucscClass,aaChange,tryAttempts = fetchUcscClassAndAaChange(name,alt,nameAlt,chrom,currentChrom,currentVepDic,tryAttempts)
+                itemRgb = assignRGBcolorByConsequence(currentVepDic,name,alt,nameAlt)
+                outputFile.write(chrom+"\t"+chromStart+"\t"+chromEnd+"\t"+name+"\t0\t.\t"+chromStart+"\t"+chromEnd+"\t"+
+                                 itemRgb+"\t"+ref+"\t"+alt+"\t"+varClass+"\t"+submitters+"\t"+ucscClass+"\t"+aaChange+"\n")
+            else:
+                nameAlt = name
+                prevName,currentChrom,currentVepDic,ucscClass,aaChange,tryAttempts = fetchUcscClassAndAaChange(name,alt,nameAlt,chrom,currentChrom,currentVepDic,tryAttempts)
+                itemRgb = assignRGBcolorByConsequence(currentVepDic,name,alt,nameAlt)
+                outputFile.write(chrom+"\t"+chromStart+"\t"+chromEnd+"\t"+name+"\t0\t.\t"+chromStart+"\t"+chromEnd+"\t"+
+                                 itemRgb+"\t"+ref+"\t"+alt+"\t"+varClass+"\t"+submitters+"\t"+ucscClass+"\t"+aaChange+"\n")
+
+    print("Total number of try attempts = "+str(tryAttempts))
+    print("Total number of lines in output file = "+str(n))
+    inputFile.close()
+    outputFile.close()
+
+def validateFinalFile(workDir,url):
+    """Compare and make sure that the final bed rsID# matches the input file"""
+    originalDownloadFileName = workDir+url.split("/")[-1]
+    bedFile = workDir+"evaSnp.final.bed"
+    originalRsIDCount = bash("zcat %s | grep -v '^#' | cut -f3 | sort | uniq | wc -l" % (originalDownloadFileName))
+    finalBedRsIDCount = bash("cut -f4 %s | sort | uniq | wc -l" % (bedFile))
+    if originalRsIDCount != finalBedRsIDCount:
+        sys.exit("There was an error in the pipeline, the initial numer of uniq RS IDs does not match the final bed file.\n\n"\
+    "%s - %s%s - %s" % (originalDownloadFileName,str(originalRsIDCount),bedFile,str(finalBedRsIDCount)))
+    
+def createBigBed(workDir,dbs):
+    bedFile = workDir+"evaSnp.final.bed"
+    bash("bedSort %s %s" % (bedFile,bedFile))
+    bash("bedToBigBed -tab -as=$HOME/kent/src/hg/lib/evaSnp.as -type=bed9+6 -extraIndex=name \
+    %s http://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.chrom.sizes %sevaSnp.bb" % (bedFile,dbs,dbs,workDir))
+    
+checkDirMakeDir(workDir)
+fileName = wgetFile(url, workDir)
+fileName = workDir+url.split("/")[-1]
+print("Got file")
+currentFileName = checkDupsAndUnzip(fileName,workDir)
+print("File unzipped")
+try:
+    currentFileName = convertChromToUcsc(currentFileName,dbs,workDir)
+    print("Chroms converted")
+except:
+    sanitizeChromNames(currentFileName)
+    print("Chroms sanitized")
+    currentFileName = convertChromToUcsc(currentFileName,dbs,workDir)
+    print("Chroms converted")
+currentFileName = convertVcfToBed(currentFileName,workDir)    
+print("File converted to bed")
+hgVaiResultsFile = splitChromsAndRunHgVai(workDir,dbs)
+print("hgVai done")
+splitVepFileByChrom(hgVaiResultsFile,workDir)
+print("hgVai file split")
+currentFileName = workDir+"evaSnp.bed"
+createFinalBedWithVepAnnotations(currentFileName,workDir)
+print("Validating file")
+validateFinalFile(workDir,url)
+print("Created final file")
+createBigBed(workDir,dbs)
+print("bigBed made")
+
+#####################################
+#### End of python3 code ############
+#####################################

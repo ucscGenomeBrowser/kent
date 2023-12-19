@@ -128,6 +128,10 @@ struct section *ctdSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create CTD section. */
 
+struct section *primersSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create primers section. */
+
 struct section *ctdRgdGene2Section(struct sqlConnection *conn, 
 	struct hash *sectionRa);
 /* Create CTD section. */
@@ -225,6 +229,10 @@ char *getFlyBaseId(struct sqlConnection *conn, char *geneId);
 void showSeqFromTable(struct sqlConnection *conn, char *geneId,
 	char *geneName, char *table);
 /* Show some sequence from given table. */
+
+void printPrimer3Anchor(char *table, char *itemName,
+	char *chrom, int start, int end);
+/* Print primer3 sequence export anchor. */
 
 void printGenomicSeqLink(struct sqlConnection *conn, char *geneId,
 	char *chrom, int start, int end);

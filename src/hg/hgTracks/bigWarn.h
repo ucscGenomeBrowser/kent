@@ -23,4 +23,7 @@ int bigWarnTotalHeight(struct track *tg, enum trackVisibility vis);
 /* Return total height. Called before and after drawItems.
  * Must set the following variables: height, lineHeight, heightPer. */
 
+void bigWarnMethods(struct track *track);
+/* Set up bigWarn methods. */
+
 #endif /* BIGWARN_H */

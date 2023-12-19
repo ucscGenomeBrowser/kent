@@ -11,27 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 #include "rmskOut.h"
-
-
-char *createRmskOut = "CREATE TABLE %s (\n"
-"   bin smallint unsigned not null,     # bin index field for range queries\n"
-"   swScore int unsigned not null,	# Smith Waterman alignment score\n"
-"   milliDiv int unsigned not null,	# Base mismatches in parts per thousand\n"
-"   milliDel int unsigned not null,	# Bases deleted in parts per thousand\n"
-"   milliIns int unsigned not null,	# Bases inserted in parts per thousand\n"
-"   genoName varchar(255) not null,	# Genomic sequence name\n"
-"   genoStart int unsigned not null,	# Start in genomic sequence\n"
-"   genoEnd int unsigned not null,	# End in genomic sequence\n"
-"   genoLeft int not null,		# -#bases after match in genomic sequence\n"
-"   strand char(1) not null,		# Relative orientation + or -\n"
-"   repName varchar(255) not null,	# Name of repeat\n"
-"   repClass varchar(255) not null,	# Class of repeat\n"
-"   repFamily varchar(255) not null,	# Family of repeat\n"
-"   repStart int not null,		# Start (if strand is +) or -#bases after match (if strand is -) in repeat sequence\n"
-"   repEnd int not null,		# End in repeat sequence\n"
-"   repLeft int not null,		# -#bases after match (if strand is +) or start (if strand is -) in repeat sequence\n"
-"   id char(1) not null,		# First digit of id field in RepeatMasker .out file.  Best ignored.\n"
-"             #Indices\n";
+#include "repMask.h"
 
 boolean noBin = FALSE;
 boolean split = FALSE;
@@ -63,7 +43,9 @@ errAbort(
   "options:\n"
   "   -tabFile=text.tab - don't actually load database, just create tab file\n"
   "   -split - load chrN_rmsk separate tables even if a single file is given\n"
-  "   -table=name - use a different suffix other than the default (rmsk)");
+  "   -table=name - use a different suffix other than the default (rmsk)\n"
+  "note: the input file.out can also be a compressed file.out.gz file,\n"
+  "      or a URL to a file.out or file.out.gz");
 }
 
 void badFormat(struct lineFile *lf, int id)
@@ -181,19 +163,7 @@ char *line, *words[24];
 int lineSize, wordCount;
 
 /* Open .out file and process header. */
-lf = lineFileOpen(rmskFile, TRUE);
-if (!lineFileNext(lf, &line, &lineSize))
-    errAbort("Empty %s", lf->fileName);
-if (!(startsWith("   SW  perc perc", line) ||
-      startsWith("   SW   perc perc", line) ||
-      startsWith("    SW   perc perc", line) ||
-      startsWith("  bit   perc perc", line)))
-    {
-    errAbort("%s doesn't seem to be a RepeatMasker .out file, first "
-             "line seen:\n%s", lf->fileName, line);
-    }
-lineFileNext(lf, &line, &lineSize);
-lineFileNext(lf, &line, &lineSize);
+lf = rmskLineFileOpen(rmskFile);
 
 /* Process line oriented records of .out file. */
 while (lineFileNext(lf, &line, &lineSize))
@@ -258,7 +228,7 @@ while (lineFileNext(lf, &line, &lineSize))
 void loadOneTable(char *database, struct sqlConnection *conn, char *tempName, char *tableName)
 /* Load .tab file tempName into tableName and remove tempName. */
 {
-struct dyString *query = newDyString(1024);
+struct dyString *query = dyStringNew(1024);
 
 verbose(1, "Loading up table %s\n", tableName);
 if (sqlTableExists(conn, tableName))
@@ -269,12 +239,32 @@ if (sqlTableExists(conn, tableName))
 
 /* Create first part of table definitions, the fields. */
 dyStringClear(query);
-sqlDyStringPrintf(query, createRmskOut, tableName);
+sqlDyStringPrintf(query, 
+"CREATE TABLE %s (\n"
+"   bin smallint unsigned not null,     # bin index field for range queries\n"
+"   swScore int unsigned not null,	# Smith Waterman alignment score\n"
+"   milliDiv int unsigned not null,	# Base mismatches in parts per thousand\n"
+"   milliDel int unsigned not null,	# Bases deleted in parts per thousand\n"
+"   milliIns int unsigned not null,	# Bases inserted in parts per thousand\n"
+"   genoName varchar(255) not null,	# Genomic sequence name\n"
+"   genoStart int unsigned not null,	# Start in genomic sequence\n"
+"   genoEnd int unsigned not null,	# End in genomic sequence\n"
+"   genoLeft int not null,		# -#bases after match in genomic sequence\n"
+"   strand char(1) not null,		# Relative orientation + or -\n"
+"   repName varchar(255) not null,	# Name of repeat\n"
+"   repClass varchar(255) not null,	# Class of repeat\n"
+"   repFamily varchar(255) not null,	# Family of repeat\n"
+"   repStart int not null,		# Start (if strand is +) or -#bases after match (if strand is -) in repeat sequence\n"
+"   repEnd int not null,		# End in repeat sequence\n"
+"   repLeft int not null,		# -#bases after match (if strand is +) or start (if strand is -) in repeat sequence\n"
+"   id char(1) not null,		# First digit of id field in RepeatMasker .out file.  Best ignored.\n"
+"             #Indices\n"
+, tableName);
 
 /* Create the indexes */
 if (!noSplit)
     {
-    dyStringAppend(query, "   INDEX(bin))\n");
+    sqlDyStringPrintf(query, "   INDEX(bin))\n");
     }
 else
     {

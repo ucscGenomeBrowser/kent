@@ -46,24 +46,24 @@ void makeCustomTable(char *database, char *table, char *defString)
 /* create/recreate table. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *ds = newDyString(2048);
+struct dyString *ds = dyStringNew(2048);
 
 sqlDyStringPrintf(ds, defString, table);
 sqlRemakeTable(conn, table, ds->string);
 sqlDisconnect(&conn);
-freeDyString(&ds);
+dyStringFree(&ds);
 }
 
 void loadTableFromTabFile(char *database, char *table, char *tabFile)
 /* Load up table from tab file. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *ds = newDyString(2048);
+struct dyString *ds = dyStringNew(2048);
 sqlDyStringPrintf(ds, 
    "load data local infile '%s' into table %s", tabFile, table);
 sqlUpdate(conn, ds->string);
 sqlDisconnect(&conn);
-freeDyString(&ds);
+dyStringFree(&ds);
 }
 
 char *createString = 

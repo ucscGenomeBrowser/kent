@@ -576,8 +576,8 @@ void prettyOne(struct psl *psl, struct hash *qHash, struct hash *tHash,
 {
 static char *tName = NULL, *qName = NULL;
 static struct dnaSeq *tSeq = NULL, *qSeq = NULL;
-struct dyString *q = newDyString(16*1024);
-struct dyString *t = newDyString(16*1024);
+struct dyString *q = dyStringNew(16*1024);
+struct dyString *t = dyStringNew(16*1024);
 int blockIx;
 int qs, ts;
 int lastQ = 0, lastT = 0, size;

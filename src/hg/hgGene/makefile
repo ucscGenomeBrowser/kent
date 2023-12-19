@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgapcgi.a $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = hgGene
 
-O = hgGene.o alleles.o altSplice.o ctd.o dnaBindMotif.o domains.o gad.o malaCards.o\
+O = hgGene.o alleles.o altSplice.o ctd.o dnaBindMotif.o domains.o primers.o gad.o malaCards.o\
     flyBaseInfo.o gtex.o go.o info.o links.o microarray.o \
     method.o localization.o mrnaDescriptions.o otherOrgs.o\
     pathways.o pseudoGene.o rgdInfo.o rnaStructure.o sequence.o swissProtComments.o \

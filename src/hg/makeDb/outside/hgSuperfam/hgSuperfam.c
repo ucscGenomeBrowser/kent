@@ -73,12 +73,12 @@ while (row2 != NULL)
 
     if (hTableExists(genomeDb, "ensGeneXref"))
         {
-        sqlSafefFrag(cond_str, sizeof(cond_str), "transcript_name='%s'", name);
+        sqlSafef(cond_str, sizeof(cond_str), "transcript_name='%s'", name);
         translation_name = sqlGetField(genomeDb, "ensGeneXref", "translation_name", cond_str);
         }
     if (hTableExists(genomeDb,"ensemblXref3") && translation_name == NULL)
         {
-        sqlSafefFrag(cond_str, sizeof(cond_str), "transcript='%s'", name);
+        sqlSafef(cond_str, sizeof(cond_str), "transcript='%s'", name);
         translation_name = sqlGetField(genomeDb, "ensemblXref3", "protein", cond_str);
         }
     if (translation_name == NULL) 
@@ -109,7 +109,7 @@ while (row2 != NULL)
  	    sfID	= row[5];
  	    sfDesc	= row[6];	/* 0302 and other supfam releases has an error here */
 		
-	    sqlSafefFrag(cond_str, sizeof cond_str, "id=%s", sfID);
+	    sqlSafef(cond_str, sizeof cond_str, "id=%s", sfID);
 	    sfDesc  = sqlGetField(superfamDb, "des", "description", cond_str);
 
 	    E = atof(eValue);

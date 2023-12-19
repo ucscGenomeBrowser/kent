@@ -20,10 +20,16 @@
 #include "bbiFile.h"
 #include "bigBed.h"
 
+struct bbiFile *bigBedFileOpenAlias(char *fileName, aliasFunc aliasFunc)
+/* Open up big bed file with chrom alias hash. */
+{
+return bbiFileOpenAlias(fileName, bigBedSig, "big bed", aliasFunc);
+}
+
 struct bbiFile *bigBedFileOpen(char *fileName)
 /* Open up big bed file. */
 {
-return bbiFileOpen(fileName, bigBedSig, "big bed");
+return bigBedFileOpenAlias(fileName, NULL);
 }
 
 boolean bigBedFileCheckSigs(char *fileName)
@@ -298,20 +304,21 @@ slRefFreeListAndVals(&blockList);
 return fosList;
 }
 
-typedef boolean (*BbFirstWordMatch)(char *line, int fieldIx, void *target);
+typedef boolean (*BbFirstWordMatch)(char *origLine, int fieldIx, void *target);
 /* A function that returns TRUE if first word in tab-separated line matches target. */
 
-static void extractField(char *line, int fieldIx, char **retField, int *retFieldSize)
+static void extractField(char *origLine, int fieldIx, char **retField, int *retFieldSize)
 /* Go through tab separated line and figure out start and size of given field. */
 {
 int i;
 fieldIx -= 3;	/* Skip over chrom/start/end, which are not in line. */
+char *line = origLine;
 for (i=0; i<fieldIx; ++i)
     {
     line = strchr(line, '\t');
     if (line == NULL)
         {
-	warn("Not enough fields in extractField of %s", line);
+	warn("Not enough fields in extractField of %s", origLine);
 	internalErr();
 	}
     line += 1;

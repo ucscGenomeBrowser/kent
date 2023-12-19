@@ -33,7 +33,7 @@ table clinVarBed
     string numSubmit;         "Number of submitters"
     string lastEval;         "Last evaluation"
     string guidelines;         "Guidelines"
-    lstring otherIds;         "Other identifiers e.g. OMIM IDs, etc."
+    lstring otherIds;         "Other identifiers (ClinGen, OMIM, etc.)"
     lstring _mouseOver;        "Mouse over text"
     string _clinSignCode;        "Clinical Significance"
     string _originCode;        "Allele Origin Code"

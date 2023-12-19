@@ -248,6 +248,22 @@ table->startsSharp = startsSharp;
 return table;
 }
 
+struct fieldedTable *fieldedTableAttach(struct lineFile  *lf,  char *requiredFields[], int requiredCount)
+/* Read table from tab-separated file with a #header line that defines the fields
+ * from already open lineFile..  Ensures all requiredFields (if any) are present.  
+ * should be NULL for most purposes.  */
+{
+struct fieldedTable *table = fieldedTableReadTabHeader(lf, requiredFields, requiredCount);
+char numColumns = table->fieldCount + 1;  // + 1 so we'll see lines that are too long
+char *row[numColumns];
+int wordsRead;
+while ((wordsRead = lineFileChopNextTab(lf, row, numColumns)) != 0)
+    {
+    fieldedTableAdd(table, row, wordsRead, lf->lineIx);
+    }
+return table;
+}
+
 struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *reportFileName, 
     char *requiredFields[], int requiredCount)
 /* Read table from tab-separated file with a #header line that defines the fields.  Ensures
@@ -273,15 +289,11 @@ else
     reportFileName = fileName;
     }
 
-struct fieldedTable *table = fieldedTableReadTabHeader(lf, requiredFields, requiredCount);
-char *row[table->fieldCount];
-while (lineFileNextRowTab(lf, row, table->fieldCount))
-    {
-    fieldedTableAdd(table, row, table->fieldCount, lf->lineIx);
-    }
+struct fieldedTable *table = fieldedTableAttach(lf, requiredFields, requiredCount);
 
 /* Clean up and go home. */
 lineFileClose(&lf);
+
 return table;
 }
 

@@ -64,7 +64,8 @@ if ( $status ) then
   echo
 else
   rm -f $outpath/gbdbDiff.$todayDate
-  echo "\n  files match: $file1 $file2\n"
+#  Comment out this line so have silent output
+#  echo "\n  files match: $file1 $file2\n"
 endif
 
 # remove files a year old

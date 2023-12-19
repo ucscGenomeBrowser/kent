@@ -122,11 +122,11 @@ void encodeRnaSaveToDb(struct sqlConnection *conn, struct encodeRna *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s',%g,%u,%u,%u,%u,'%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->source,  el->type,  el->fullScore,  el->isPsuedo,  el->isRmasked,  el->isTranscribed,  el->isPrediction,  el->transcribedIn);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use File::Basename;
 
+my %commonName;	# key is asmId, value is common name
+my @monthNumber = qw( Zero Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sep. Oct. Nov. Dec. );
+
 my $argc = scalar(@ARGV);
 if ($argc != 3) {
   printf STDERR "mkGenomes.pl blatHost blatPort [two column name list] > .../hub/genomes.txt\n";
@@ -24,14 +27,38 @@ my $downloadHost = "hgwdev";
 my @blatHosts = qw( dynablat-01 dynablat-01 );
 my @blatPorts = qw( 4040 4040 );
 my $blatHostDomain = ".soe.ucsc.edu";
+my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
 ################### writing out hub.txt file, twice ##########################
-sub singleFileHub($$$$$$$$$$) {
-  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $defPos, $taxId, $trackDb, $accessionDir) = @_;
+sub singleFileHub($$$$$$$$$$$$$) {
+  my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $asmDate, $defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority) = @_;
   my @fhN;
   push @fhN, $fh1;
   push @fhN, $fh2;
 
+  my %liftOverChain;	# key is 'otherDb' name, value is bbi path
+  my %liftOverGz;	# key is 'otherDb' name, value is lift.over.gz file path
+  my $hasChainNets = `ls -d $buildDir/trackData/lastz.* 2> /dev/null | wc -l`;
+  chomp $hasChainNets;
+  if ($hasChainNets) {
+    printf STDERR "# hasChainNets: %d\t%s\n", $hasChainNets, $asmId;
+    open (CH, "ls -d $buildDir/trackData/lastz.*|") or die "can not ls -d $buildDir/trackData/lastz.*";
+    while (my $line = <CH>) {
+      chomp $line;
+      my $otherDb = basename($line);
+      $otherDb =~ s/lastz.//;
+      my $OtherDb = ucfirst($otherDb);
+      my $bbiPath = "$buildDir/bbi/${asmId}.chainLiftOver${OtherDb}.bb";
+      if (-s "${bbiPath}") {
+        $liftOverChain{$otherDb} = "bbi/${asmId}.chainLiftOver${OtherDb}.bb";
+      }
+     my $loPath = "$buildDir/liftOver/${accessionId}To${OtherDb}.over.chain.gz";
+      if (-s "${loPath}") {
+    $liftOverGz{$otherDb} = "liftOver/${accessionId}To${OtherDb}.over.chain.gz";
+      }
+    }
+    close (CH);
+  }
   my $fileCount = 0;
   my @tdbLines;
   open (TD, "<$trackDb") or die "can not read trackDb: $trackDb";
@@ -40,6 +67,8 @@ sub singleFileHub($$$$$$$$$$) {
      push @tdbLines, $tdbLine;
   }
   close (TD);
+  my $assemblyName = $asmId;
+  $assemblyName =~ s/${accessionId}_//;
   foreach my $fh (@fhN) {
     printf $fh "hub %s genome assembly\n", $accessionId;
     printf $fh "shortLabel %s\n", $orgName;
@@ -53,9 +82,17 @@ sub singleFileHub($$$$$$$$$$) {
     printf $fh "groups groups.txt\n";
     printf $fh "description %s\n", $orgName;
     printf $fh "twoBitPath %s.2bit\n", $accessionId;
+    printf $fh "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
     printf $fh "chromSizes %s.chrom.sizes.txt\n", $accessionId;
-    printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
-    printf $fh "organism %s\n", $descr;
+    if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+      printf $fh "chromAliasBb %s.chromAlias.bb\n", $accessionId;
+    } else {
+      printf $fh "chromAlias %s.chromAlias.txt\n", $accessionId;
+    }
+    if ($chromAuthority =~ m/^chromAuthority/) {
+       printf $fh "%s\n", $chromAuthority;
+    }
+    printf $fh "organism %s %s\n", $assemblyName, $asmDate;
     printf $fh "defaultPos %s\n", $defPos;
     printf $fh "scientificName %s\n", $descr;
     printf $fh "htmlPath html/%s.description.html\n", $asmId;
@@ -64,6 +101,9 @@ sub singleFileHub($$$$$$$$$$) {
       printf $fh "blat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
       printf $fh "transBlat %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
       printf $fh "isPcr %s%s %s dynamic $accessionDir/$accessionId\n", $blatHosts[$fileCount], $blatHostDomain, $blatPorts[$fileCount];
+    }
+    foreach my $otherDb (sort keys %liftOverGz) {
+       printf $fh "liftOver.%s %s\n", $otherDb, $liftOverGz{$otherDb};
     }
     printf $fh "\n";
     foreach my $tdbLine (@tdbLines) {
@@ -85,7 +125,6 @@ if ( ! -s "$orderList" ) {
   $orderList = $toolsDir/$inputList;
 }
 
-my %commonName;	# key is asmId, value is common name
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
 my $assemblyCount = 0;
@@ -117,6 +156,9 @@ my $orderKey = 0;
 foreach my $asmId (@orderList) {
   ++$orderKey;
   next if ($asmId !~ m/^GC/);
+  my $chromAuthority = "";
+  $chromAuthority = `~/kent/src/hg/makeDb/doc/asmHubs/chromAuthority.pl $asmId 2> /dev/null`;
+  chomp $chromAuthority;
   my ($gcPrefix, $accession, undef) = split('_', $asmId);
   my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
   my $accessionDir = substr($asmId, 0 ,3);
@@ -136,6 +178,10 @@ foreach my $asmId (@orderList) {
     printf STDERR "# ERROR: missing ${asmId}.chromAlias.txt in\n# ${buildDir}\n";
     next;
   }
+  if ( ! -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+    printf STDERR "# ERROR: missing ${asmId}.chromAlias.bb in\n# ${buildDir}\n";
+    next;
+  }
   my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
   my $trackDb = "$buildDir/$asmId.trackDb.txt";
   if ( ! -s "${trackDb}" ) {
@@ -148,16 +194,28 @@ foreach my $asmId (@orderList) {
     next;
   }
   ++$buildDone;
-printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessionId;
+printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $accessionId, ($chromAuthority =~ m/^chromAuthority/) ?  "chromAuthority ucsc" : "no authority";
   my $taxId=`grep -i "taxid:" $asmReport | head -1 | awk '{printf \$(NF)}' | tr -d \$'\\r'`;
   chomp $taxId;
-  my $descr=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
+  my $descr=`grep -i "organism name:" $asmReport | head -1 | tr -d \$'\\r' | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
   chomp $descr;
-  my $orgName=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.* name: .* (##; s#).*##;'`;
+  my $orgName=`grep -i "organism name:" $asmReport | head -1 | tr -d \$'\\r' | sed -e 's#.* name: .* (##; s#).*##;'`;
   chomp $orgName;
+  my $asmDate=`grep -i "Date:" $asmReport | head -1 | tr -d \$'\\r'`;
+  chomp $asmDate;
+  $asmDate =~ s/.*Date:\s+//;
+  my ($year, $month, $day) = split('-', $asmDate);
+  if (defined($month)) {
+    $asmDate = sprintf("%s %s", $monthNumber[$month], $year);
+  } else {
+    printf STDERR "# error: can not find month in $asmDate in $asmReport\n";
+  }
+
   if (defined($commonName{$asmId})) {
      $orgName = $commonName{$asmId};
   }
+  my $assemblyName = $asmId;
+  $assemblyName =~ s/${accessionId}_//;
 
   printf "genome %s\n", $accessionId;
   printf "taxId %s\n", $taxId if (length($taxId) > 1);
@@ -165,9 +223,20 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf "groups groups.txt\n";
   printf "description %s\n", $orgName;
   printf "twoBitPath ../%s/%s/%s.2bit\n", $accessionDir, $accessionId, $accessionId;
+  printf "twoBitBptUrl ../%s/%s/%s.2bit.bpt\n", $accessionDir, $accessionId, $accessionId;
   printf "chromSizes ../%s/%s/%s.chrom.sizes.txt\n", $accessionDir, $accessionId, $accessionId;
-  printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
-  printf "organism %s\n", $descr;
+
+  # wait until code gets out for v429 release before using chromAlias.bb
+  # for the chromInfoPage display of hgTracks
+  if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+    printf "chromAliasBb ../%s/%s/%s.chromAlias.bb\n", $accessionDir, $accessionId, $accessionId;
+  } else {
+    printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
+  }
+  if ($chromAuthority =~ m/^chromAuthority/) {
+     printf "%s\n", $chromAuthority;
+  }
+  printf "organism %s %s\n", $assemblyName, $asmDate;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
   my $bigChrom=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$NF}'`;
@@ -176,8 +245,8 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   my $tenK = $oneThird + 10000;
   $tenK = $bigChrom if ($tenK > $bigChrom);
   my $defPos="${chrName}:${oneThird}-${tenK}";
-  if ( -s "$asmId/defaultPos.txt" ) {
-    $defPos=`cat "$asmId/defaultPos.txt"`;
+  if ( -s "$buildDir/defaultPos.txt" ) {
+    $defPos=`cat "$buildDir/defaultPos.txt"`;
     chomp $defPos;
   }
   printf "defaultPos %s\n", $defPos;
@@ -211,8 +280,8 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   $localHubTxt = "$buildDir/${asmId}.singleFile.hub.txt";
   open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
 
-  singleFileHub(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId,
-	$defPos, $taxId, $trackDb, $accessionDir);
+  singleFileHub(\*HT, \*DL, $accessionId, $orgName, $descr, $asmId, $asmDate,
+	$defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority);
 
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
   open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
@@ -222,9 +291,17 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf GF "groups groups.txt\n";
   printf GF "description %s\n", $orgName;
   printf GF "twoBitPath %s.2bit\n", $accessionId;
+  printf GF "twoBitBptUrl %s.2bit.bpt\n", $accessionId;
   printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
-  printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
-  printf GF "organism %s\n", $descr;
+  if ( -s "${buildDir}/${asmId}.chromAlias.bb" ) {
+    printf GF "chromAliasBb %s.chromAlias.bb\n", $accessionId;
+  } else {
+    printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
+  }
+  if ($chromAuthority =~ m/^chromAuthority/) {
+     printf GF "%s\n", $chromAuthority;
+  }
+  printf GF "organism %s %s\n", $assemblyName, $asmDate;
   printf GF "defaultPos %s\n", $defPos;
   printf GF "scientificName %s\n", $descr;
   printf GF "htmlPath html/%s.description.html\n", $asmId;
@@ -240,49 +317,8 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
 
   my $localGroups = "$buildDir/${asmId}.groups.txt";
   open (GR, ">$localGroups") or die "can not write to $localGroups";
-  print GR <<_EOF_
-name user
-label Custom Tracks
-priority 1
-defaultIsClosed 1
-
-name map
-label Mapping and Sequencing
-priority 2
-defaultIsClosed 0
-
-name genes
-label Genes and Gene Predictions
-priority 3
-defaultIsClosed 0
-
-name rna
-label mRNA and EST
-priority 4
-defaultIsClosed 0
-
-name regulation
-label Regulation
-priority 5
-defaultIsClosed 0
-
-name compGeno
-label Comparative Genomics
-priority 6
-defaultIsClosed 0
-
-name varRep
-label Variation
-priority 7
-defaultIsClosed 0
-
-name x
-label Experimental
-priority 10
-defaultIsClosed 1
-_EOF_
-   ;
-   close (GR);
+  printf GR "%s", $groupsTxt;
+  close (GR);
 }
 
 __END__

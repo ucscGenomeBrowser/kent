@@ -1,0 +1,9 @@
+track chm13LiftOver
+shortLabel CHM13 alignments
+longLabel CHM13 (GCA_009914755.4) v1_nfLO liftOver alignments
+type bigChain GCA_009914755.4
+color 120,20,0
+visibility hide
+bigDataUrl /gbdb/hg38/bbi/chm13LiftOver/hg38-chm13v2.ncbi-qnames.over.chain.bb
+linkDataUrl /gbdb/hg38/bbi/chm13LiftOver/hg38-chm13v2.ncbi-qnames.over.link.bb
+group compGeno

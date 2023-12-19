@@ -1,0 +1,177 @@
+###Lou 5/12/2022 refs #29358
+#Porting gnomadPli from hg19 to hg38
+
+mkdir /hive/data/genomes/hg38/bed/gnomAD.2.1.1
+cd /hive/data/genomes/hg38/bed/gnomAD.2.1.1
+ln -s /hive/data/outside/gnomAD.2/constraint/*.bgz /hive/data/genomes/hg38/bed/gnomAD.2.1.1/
+cp /hive/data/outside/gnomAD.2/*.as .
+
+hgsql -Ne "select name from wgEncodeGencodeCompV40" hg38 | tr '.' '\t' | cut -f1 > hg38.gencodeV40.transcripts
+
+transcriptFile=gnomad.v2.1.1.lof_metrics.by_transcript.txt.bgz
+geneFile=gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz
+
+hgsql -Ne "select name from wgEncodeGencodeCompV40" hg38 | tr '.' '\t' | cut -f1 > hg38.gencodeV40.transcripts
+hgsql -Ne "select * from wgEncodeGencodeCompV40" hg38 | cut -f2- | genePredToBed stdin stdout | sed -Ee 's/\.[0-9]+//' | sort -k4 > hg38.gencodeV40.bed12
+
+gzip -cd $geneFile | tail -n +2 \
+    | tawk '{print $75,$76,$77,$64,$65,$1,$2,$3,$4,$5,$33,$12,$13,$14,$32,$17,$20,$21,$24,$25,$26,$27,$28,$29,$30}' \
+    | sort -k7 | join -t $'\t' -1 4 -2 7 hg38.gencodeV40.bed12 - \
+    | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=false 2>genes.chromMismatches
+
+gzip -cd $transcriptFile | tail -n +2 \
+    | tawk '{print $76,$77,$78,$65,$66,$1,$2,$4,$5,$6,$34,$13,$14,$15,$33,$18,$21,$22,$25,$26,$27,$28,$29,$30,$31}' \
+    | sort -k7 | join -t $'\t' -1 4 -2 7 hg38.gencodeV40.bed12 - \
+    | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=true 2>transcripts.chromMismatches
+
+sort -k1,1 -k2,2n pliByTranscript.tab > pliByTranscript.bed
+sort -k1,1 -k2,2n missenseByTranscript.tab > missenseByTranscript.bed
+sort -k1,1 -k2,2n pliByGene.tab > pliByGene.bed
+sort -k1,1 -k2,2n missenseByGene.tab > missenseByGene.bed
+
+sizes=/hive/data/genomes/hg38/chrom.sizes
+bedToBigBed -type=bed12+6 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByGene.bed $sizes pliByGene.bb
+bedToBigBed -type=bed12+6 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByTranscript.bed $sizes pliByTranscript.bb
+bedToBigBed -type=bed12+5 -as=missenseMetrics.as -tab -extraIndex=name,geneName missenseByGene.bed $sizes missenseByGene.bb
+bedToBigBed -type=bed12+5 -as=missenseMetrics.as -tab -extraIndex=name,geneName missenseByTranscript.bed $sizes missenseByTranscript.bb
+
+cd /gbdb/hg38/gnomAD/pLI/
+ln -s /hive/data/genomes/hg38/bed/gnomAD.2.1.1/pliByGene.bb
+ln -s /hive/data/genomes/hg38/bed/gnomAD.2.1.1/pliByTranscript.bb
+ln -s /hive/data/genomes/hg38/bed/gnomAD.2.1.1/missenseByGene.bb
+ln -s /hive/data/genomes/hg38/bed/gnomAD.2.1.1/missenseByTranscript.bb
+
+###Update 8/29/2023 refs #31989
+#After an MLQ we decided to rerun this pipeline to match many missing transcripts and genes
+#This was done for transcripts by comparing against all versions of GENCODE, giving newer versions priority
+#For genes this was done by trying to match on ENSG IDs across all versions, and then trying to match 
+#On gene symbols across all GENCODE versions
+
+#First the creation of the transcripts track
+
+transcriptFile=gnomad.v2.1.1.lof_metrics.by_transcript.txt.bgz
+
+#Create transcript file
+
+for table in $(hgsql -e "show tables" hg38 | grep "wgEncodeGencodeComp" | sort -r);
+do
+
+hgsql -Ne "select * from $table" hg38 | cut -f2- | genePredToBed stdin stdout | sed -Ee 's/\.[0-9]+//' | sort -k4 > hg38.$table.bed12
+
+gzip -cd $transcriptFile | tail -n +2 \
+    | tawk '{print $76,$77,$78,$65,$66,$1,$2,$4,$5,$6,$34,$13,$14,$15,$33,$18,$21,$22,$25,$26,$27,$28,$29,$30,$31}' \
+    | sort -k7 | join -t $'\t' -1 4 -2 7 hg38.$table.bed12 - \
+    | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=true 2>transcripts.chromMismatches
+
+cat pliByTranscript.tab >> pliByTranscript.all.bed
+cat missenseByTranscript.tab >> missenseByTranscript.all.bed
+
+done
+
+python3 removeDuplicateTranscripts.py missenseByTranscript.all.bed missenseByTranscript.all.unique.bed
+python3 removeDuplicateTranscripts.py pliByTranscript.all.bed pliByTranscript.all.unique.bed
+
+sort -k1,1 -k2,2n missenseByTranscript.all.unique.bed > missenseByTranscript.bed
+sort -k1,1 -k2,2n pliByTranscript.all.unique.bed > pliByTranscript.bed
+
+sizes=/hive/data/genomes/hg38/chrom.sizes
+bedToBigBed -type=bed12+6 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByTranscript.bed $sizes pliByTranscript.bb
+bedToBigBed -type=bed12+5 -as=missenseMetrics.as -tab -extraIndex=name,geneName missenseByTranscript.bed $sizes missenseByTranscript.bb
+
+#The invoked python script
+import sys
+
+file = open(sys.argv[1],'r')
+resultsFile = open(sys.argv[2],'w')
+idList = []
+for line in file:
+    parseLine = line.rstrip().split("\t")
+    ID = parseLine[3]
+    if ID not in idList:
+        resultsFile.write(line)
+        idList.append(ID)
+
+resultsFile.close()
+file.close()
+
+#####
+#Creation of the genes track
+#This part was run in ipython, it is all python code except where a "!" is present which is a bash command. It could be subsittuted with a sys call for python functionality
+
+#Make a unique gene file:
+allGencodeVersions = ! hgsql -e "show tables" hg38 | grep "wgEncodeGencodeComp" | sort -r | grep -o "V.*"
+
+#Make a dic with all unique ENSG IDs
+uniqueGeneDic = {}
+
+for version in allGencodeVersions:
+    table1 = "wgEncodeGencodeAttrs"+version
+    table2 = "wgEncodeGencodeComp"+version
+    ! hgsql -Ne "select l.geneId, e.chrom, e.strand, e.txStart, e.txEnd, e.cdsStart, e.cdsEnd, e.exonCount, e.exonStarts, e.exonEnds, e.score, e.name2, e.cdsStartStat, e.exonFrames from $table1 l, $table2 e where l.transcriptId = e.name" hg38 | genePredToBed stdin stdout | sed -Ee 's/\.[0-9]+//' > /hive/users/lrnassar/temp/gnomADexperiment/currentTransTable.temp
+    
+    currentGeneFile = open("/hive/users/lrnassar/temp/gnomADexperiment/currentTransTable.temp","r")
+    for line in currentGeneFile:
+        ENSGid = line.rstrip().split("\t")[3]
+        if ENSGid not in uniqueGeneDic.keys():
+            uniqueGeneDic[ENSGid] = line
+    print("Done with "+version)
+    currentGeneFile.close()
+
+#Make a dic with all unique gene symbols
+uniqueGeneSymbolDic = {}
+
+for version in allGencodeVersions:
+    table1 = "wgEncodeGencodeAttrs"+version
+    table2 = "wgEncodeGencodeComp"+version
+    ! hgsql -Ne "select l.geneName, e.chrom, e.strand, e.txStart, e.txEnd, e.cdsStart, e.cdsEnd, e.exonCount, e.exonStarts, e.exonEnds, e.score, e.name2, e.cdsStartStat, e.exonFrames from $table1 l, $table2 e where l.transcriptId = e.name" hg38 | genePredToBed stdin stdout > /hive/users/lrnassar/temp/gnomADexperiment/currentTransTable.temp
+    
+    currentGeneFile = open("/hive/users/lrnassar/temp/gnomADexperiment/currentTransTable.temp","r")
+    for line in currentGeneFile:
+        geneSymbol = line.rstrip().split("\t")[3]
+        if geneSymbol not in uniqueGeneSymbolDic.keys():
+            uniqueGeneSymbolDic[geneSymbol] = line
+    print("Done with "+version)
+    currentGeneFile.close()
+    
+#Reformat original file
+! gzip -cd /hive/users/lrnassar/temp/gnomADexperiment/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz | tail -n +2 | tawk '{print $75,$76,$77,$64,$65,$1,$2,$3,$4,$5,$33,$12,$13,$14,$32,$17,$20,$21,$24,$25,$26,$27,$28,$29,$30}' | sort -k7 > /hive/users/lrnassar/temp/gnomADexperiment/gnomadFileReformat.temp
+
+reformatGeneFile = open("/hive/users/lrnassar/temp/gnomADexperiment/gnomadFileReformat.temp","r")
+outputfile = open("/hive/users/lrnassar/temp/gnomADexperiment/noMatchENSGids.txt","w")
+resultsFile = open("/hive/users/lrnassar/temp/gnomADexperiment/results.txt","w")
+
+n=0
+nn=0
+nnn=0
+for line in reformatGeneFile:
+    ENSGid = line.rstrip().split("\t")[3]
+    ENSTid = line.rstrip().split("\t")[6]
+    geneSymbol = line.rstrip().split("\t")[5]
+
+    if ENSGid in uniqueGeneDic.keys():
+        n+=1
+        resultsFile.write(ENSTid+"\t"+"\t".join(uniqueGeneDic[ENSGid].split("\t")[0:3])+"\t"+"\t".join(uniqueGeneDic[ENSGid].split("\t")[4:]).rstrip()+"\t"+"\t".join(line.split("\t")[0:6])+"\t"+"\t".join(line.split("\t")[7:]))
+    elif geneSymbol in uniqueGeneSymbolDic.keys():
+        nn+=1
+        resultsFile.write(ENSTid+"\t"+"\t".join(uniqueGeneSymbolDic[geneSymbol].split("\t")[0:3])+"\t"+"\t".join(uniqueGeneSymbolDic[geneSymbol].split("\t")[4:]).rstrip()+"\t"+"\t".join(line.split("\t")[0:6])+"\t"+"\t".join(line.split("\t")[7:]))
+    
+    else:
+        nnn+=1
+        outputfile.write(ENSGid+"\n")        
+        
+print(n,nn,nnn)
+    
+resultsFile.close()
+outputfile.close()
+reformatGeneFile.close()
+
+####END OF IPYTHON
+#Create the final bigBed files
+cat /hive/users/lrnassar/temp/gnomADexperiment/results.txt | sort -k7 | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=false 2>genes.chromMismatches
+
+sort -k1,1 -k2,2n pliByGene.tab > pliByGene.bed
+sort -k1,1 -k2,2n missenseByGene.tab > missenseByGene.bed
+
+sizes=/hive/data/genomes/hg38/chrom.sizes
+bedToBigBed -type=bed12+6 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByGene.bed $sizes pliByGene.bb
+bedToBigBed -type=bed12+5 -as=missenseMetrics.as -tab -extraIndex=name,geneName missenseByGene.bed $sizes missenseByGene.bb

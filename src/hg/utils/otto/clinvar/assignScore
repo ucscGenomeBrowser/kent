@@ -1,0 +1,17 @@
+$15 == "Affects" {$5 = 0}
+$15 == "Benign" {$5=1}
+$15 == "ENIGMA rules, 2015" {$5=5}
+$15 == "Likely benign" {$5=2}
+$15 == "Likely pathogenic" {$5=4}
+$15 == "Pathogenic" {$5=5}
+$15 == "Uncertain significance" {$5=3}
+$15 == "association" {$5 = 0}
+$15 == "association not found" {$5 = 0}
+$15 == "drug response" {$5 = 0}
+$15 == "not provided" {$5 = 0}
+$15 == "other" {$5 = 0}
+$15 == "protective" {$5 = 0}
+$15 == "risk factor" {$5 = 0}
+{
+print;
+}

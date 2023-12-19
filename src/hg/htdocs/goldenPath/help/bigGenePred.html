@@ -9,7 +9,10 @@
 <p>
 The bigGenePred format stores positional annotations for collections of exons in a compressed
 format, similar to how <a href="../../FAQ/FAQformat.html#format1">BED</a> files are compressed
-into bigBeds. The bigGenePred format includes 8 additional fields that contain details about coding
+into bigBeds. The bigGenePred format is a superset of the
+<a href="/FAQ/FAQformat.html#format9">genePred</a> text-based format supported using the
+<a href="/goldenPath/help/bigBed.html">bigBed</a> format, so it can be efficiently accessed over a
+network. The bigGenePred format includes 8 additional fields that contain details about coding
 frames, annotation status, and other gene-specific information. This is commonly used in the Browser
 to display start codons, stop codons, and amino acid translations.</p>
 <p>
@@ -58,6 +61,21 @@ is pulled in when the <code>bedToBigBed</code> utility is run with the
     string geneType;    	"Gene type"
     )  </code></pre>
 
+<p>The field <pre>exonFrames</pre> is a comma-separated list of the numbers 0, 1, 2 or -1, one per exon, in order of transcription.
+This order means that the first value for a transcript on the - strand is the exon most on the right of the screen 
+on the Genome Browser. A value of zero means that the first codon of the exon starts at the first nucleotide of the
+exon. A value of one means that the first codon starts after the first nucleotide and a value of two means
+that it starts after the second nucleotide. UTRs are non-coding and their exonFrame value is -1.
+</p>
+
+values indicate the offset of the first codon in nucleotides at the start of the exon. 
+<p>The fields cdsStartStat and cdsEndStat have the following values: 'none' = none,
+'unk' = unknown, 'incmpl' = incomplete, and 'cmpl' = complete. The
+values, however, are not used for our display and cannot be used to identify coding or non-coding genes.
+For most purposes, to get more information about a transcript, other tables will need to be used. For
+instance, in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the Gencode Version number.
+See this <a href="../../FAQ/FAQgenes.html#coding" target="_blank">coding/non-coding genes FAQ</a>
+for more information.</p>
 <p>
 The following bed12+8 is an example of a <a href="examples/bigGenePred.txt">pre-bigGenePred text file
 </a>.</p>

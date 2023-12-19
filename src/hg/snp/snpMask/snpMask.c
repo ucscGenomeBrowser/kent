@@ -518,7 +518,7 @@ if (startExon == endExon)
 // printf("not simple case; flank in multiple exons\n");
 // printf("startExon = %d; endExon = %d\n", startExon, endExon);
 // append to dyString
-dy = newDyString(512);
+dy = dyStringNew(512);
 
 // remainder of first exon
 exonEnd = gene->exonEnds[startExon-1];

@@ -20,8 +20,7 @@ include trackDb.transMap.ra
 
 include trackDb.nt.ra
 include trackDb.genbank.ra 
-include trackDb.uniprot.ra public,beta
-include uniprot.ra alpha
+include uniprot.ra
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
@@ -261,7 +260,7 @@ baseColorDefault diffBases
 baseColorUseSequence db
 color 0,0,100
 visibility pack
-pennantIcon p13 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p13 patch sequences"; Updated red ../goldenPath/newsarch.html#101221 "Updated Oct. 12, 2021"
+pennantIcon p14 black https://genome-blog.gi.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p14 patch sequences"
 
 track fixSeqLiftOverPsl
 shortLabel Fix Patches
@@ -280,7 +279,7 @@ color 231,203,21
 darkerLabels on
 priority 1
 visibility pack
-pennantIcon p13 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p13 patch sequences"; Updated red ../goldenPath/newsarch.html#101221 "Updated Oct. 12, 2021"
+pennantIcon p14 black https://genome-blog.gi.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p14 patch sequences"
 
 track knownAlt
 shortLabel UCSC Alt Events
@@ -342,6 +341,7 @@ group genes
 visibility hide
 type bed 3
 html crispors
+release alpha
 
     track crisprEnsembl
     parent crispors
@@ -351,6 +351,7 @@ html crispors
     type bigBed 9 +
     colorByStrand 0,0,128 128,0,0
     priority 1
+    release alpha
 
     track crisprKmers
     parent crispors
@@ -360,6 +361,7 @@ html crispors
     type bigBed 9 .
     itemRgb on
     priority 2
+    release alpha
 
 include crisprAll.ra
 include crispr10K.ra 
@@ -2798,7 +2800,7 @@ longLabel Pfam Domains in UCSC Genes
 group genes
 type bed 12
 color 20,0,250
-url http://pfam.xfam.org/family/$$
+url https://www.ebi.ac.uk/interpro/search/text/$$/?page=1#table
 
 track numtSeq2012
 compositeTrack on
@@ -2928,42 +2930,7 @@ urls variationId="http://www.uniprot.org/uniprot/$$" uniProtId="http://www.unipr
 mouseOverField comments
 exonNumbers off
 noScoreFilter on
-
-track spUniprot
-shortLabel UniProt
-longLabel UniProt/SwissProt Annotations
-group genes
-visibility hide
-type bigBed 12 +
-itemRgb on
-exonNumbers off
-compositeTrack on
-
-        track spAnnot
-        shortLabel UniProt Annot.
-        longLabel UniProt/SwissProt Protein Annotations
-        parent spUniprot
-        group genes
-        visibility hide
-        type bigBed 12 +
-        itemRgb on
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        mouseOverField comments
-        noScoreFilter on
-        exonNumbers off
-
-        track spStruct
-        shortLabel UniProt Structure
-        longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
-        parent spUniprot
-        group genes
-        visibility hide
-        type bigBed 12 +
-        itemRgb on
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        mouseOverField comments
-        noScoreFilter on
-        exonNumbers off
+maxWindowCoverage 10000000
 
 track ncbiRefOverlap
 shortLabel NCBI Overlaps
@@ -3038,3 +3005,106 @@ longLabel Repeats by tantan
 group varRep
 visibility hide
 type bed 3 .
+
+track evaSnp
+shortLabel EVA SNP Release 3
+longLabel Short Genetic Variants from European Variant Archive Release 3
+type bigBed 9 +
+group varRep
+visibility hide
+itemRgb on
+mouseOver $ref>$alt $ucscClass $aaChange
+bigDataUrl /gbdb/$D/bbi/evaSnp.bb
+url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
+filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
+filterLabel.varClass Variant class from EVA SO term
+filterLabel.ucscClass Functional effect per UCSC Variant Annotation
+filterValues.ucscClass downstream_gene_variant|Downstream gene variant,upstream_gene_variant|Upstream gene variant,intron_variant|Intron variant,NMD_transcript_variant|Nonsense-mediated mRNA decay (NMD) variant,5_prime_UTR_variant|5 prime UTR variant,3_prime_UTR_variant|3 prime UTR variant,missense_variant|Missense variant,synonymous_variant|Synonymous variant,non_coding_transcript_exon_variant|Non-coding transcript exon variant,no_sequence_alteration|No sequence alteration,splice_region_variant|Splice region variant,frameshift_variant|Frameshift variant,stop_gained|Stop gained,splice_acceptor_variant|Splice acceptor variant,inframe_deletion|Inframe deletion,inframe_insertion|Inframe insertion,splice_donor_variant|Splice donor variant,coding_sequence_variant|Coding sequence variant,initiator_codon_variant|Initiator codon variant,stop_lost|Stop lost,stop_retained_variant|Stop retained variant,intergenic_variant|Intergenic variant
+filterType.ucscClass multipleListOnlyOr
+filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Synonymous variants,0,,0,,255|Non-coding transcripts or UTR variants,0,,0,,0|Intergenic and intronic variants
+filterLabel.itemRgb General variant types by color grouping
+maxWindowCoverage 250000
+maxItems 1000000
+
+searchTable evaSnp
+searchType bigBed
+searchMethod exact
+padding 20
+
+track evaSnp4
+shortLabel EVA SNP Release 4
+longLabel Short Genetic Variants from European Variant Archive Release 4
+type bigBed 9 +
+group varRep
+visibility hide
+itemRgb on
+mouseOver $ref>$alt $ucscClass $aaChange
+bigDataUrl /gbdb/$D/bbi/evaSnp4.bb
+url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
+filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
+filterLabel.varClass Variant class from EVA SO term
+filterLabel.ucscClass Functional effect per UCSC Variant Annotation
+filterValues.ucscClass downstream_gene_variant|Downstream gene variant,upstream_gene_variant|Upstream gene variant,intron_variant|Intron variant,NMD_transcript_variant|Nonsense-mediated mRNA decay (NMD) variant,5_prime_UTR_variant|5 prime UTR variant,3_prime_UTR_variant|3 prime UTR variant,missense_variant|Missense variant,synonymous_variant|Synonymous variant,non_coding_transcript_exon_variant|Non-coding transcript exon variant,no_sequence_alteration|No sequence alteration,splice_region_variant|Splice region variant,frameshift_variant|Frameshift variant,stop_gained|Stop gained,splice_acceptor_variant|Splice acceptor variant,inframe_deletion|Inframe deletion,inframe_insertion|Inframe insertion,splice_donor_variant|Splice donor variant,coding_sequence_variant|Coding sequence variant,initiator_codon_variant|Initiator codon variant,stop_lost|Stop lost,stop_retained_variant|Stop retained variant,intergenic_variant|Intergenic variant
+filterType.ucscClass multipleListOnlyOr
+filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Synonymous variants,0,,0,,255|Non-coding transcripts or UTR variants,0,,0,,0|Intergenic and intronic variants
+filterLabel.itemRgb General variant types by color grouping
+maxWindowCoverage 250000
+maxItems 1000000
+
+searchTable evaSnp4
+searchType bigBed
+searchMethod exact
+padding 20
+
+track evaSnp5
+shortLabel EVA SNP Release 5
+longLabel Short Genetic Variants from European Variant Archive Release 5
+type bigBed 9 +
+group varRep
+visibility dense
+itemRgb on
+mouseOver $ref>$alt $ucscClass $aaChange
+bigDataUrl /gbdb/$D/bbi/evaSnp5.bb
+url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
+filterValues.varClass deletion|Deletion,delins|Deletion-Insertion,insertion|Insertion,multipleNucleotideSubstitution|Multiple nucleotide substitution,substitution|Substitution,sequence alteration|Sequence alteration
+filterLabel.varClass Variant class from EVA SO term
+filterLabel.ucscClass Functional effect per UCSC Variant Annotation
+filterValues.ucscClass downstream_gene_variant|Downstream gene variant,upstream_gene_variant|Upstream gene variant,intron_variant|Intron variant,NMD_transcript_variant|Nonsense-mediated mRNA decay (NMD) variant,5_prime_UTR_variant|5 prime UTR variant,3_prime_UTR_variant|3 prime UTR variant,missense_variant|Missense variant,synonymous_variant|Synonymous variant,non_coding_transcript_exon_variant|Non-coding transcript exon variant,no_sequence_alteration|No sequence alteration,splice_region_variant|Splice region variant,frameshift_variant|Frameshift variant,stop_gained|Stop gained,splice_acceptor_variant|Splice acceptor variant,inframe_deletion|Inframe deletion,inframe_insertion|Inframe insertion,splice_donor_variant|Splice donor variant,coding_sequence_variant|Coding sequence variant,initiator_codon_variant|Initiator codon variant,stop_lost|Stop lost,stop_retained_variant|Stop retained variant,intergenic_variant|Intergenic variant
+filterType.ucscClass multipleListOnlyOr
+filterValues.itemRgb 255,,0,,0|Protein-altering and splice variants,0,,128,,0|Synonymous variants,0,,0,,255|Non-coding transcripts or UTR variants,0,,0,,0|Intergenic and intronic variants
+filterLabel.itemRgb General variant types by color grouping
+maxWindowCoverage 250000
+maxItems 1000000
+
+searchTable evaSnp5
+searchType bigBed
+searchMethod exact
+padding 20
+
+track HLTOGAannotvHg38v1
+bigDataUrl /gbdb/$D/TOGAvHg38v1/HLTOGAannotVsHg38v1.bb
+shortLabel TOGA vs. hg38
+longLabel TOGA annotations using human/hg38 as reference
+group genes
+visibility hide
+itemRgb on
+type bigBed 12
+searchIndex name
+searchTrix  /gbdb/$D/TOGAvHg38v1/HLTOGAannotVsHg38v1.ix
+html TOGAannotation
+
+# searchTable HLTOGAannotvsHg38v1BIG
+# searchType bigBed
+# searchMethod fuzzy
+
+track HLTOGAannotvGalGal6v1
+bigDataUrl /gbdb/$D/TOGAvGalGal6v1/HLTOGAannotVsgalGal6v1.bb
+shortLabel TOGA vs. galGal6
+longLabel TOGA annotations using chicken/galGal6 as reference
+group genes
+visibility hide
+itemRgb on
+type bigBed 12
+searchIndex name
+searchTrix  /gbdb/$D/TOGAvGalGal6v1/HLTOGAannotVsgalGal6v1.ix
+html TOGAannotation

@@ -1,0 +1,22 @@
+# 3/7/2022 - Lou
+cd /hive/data/genomes/mm39/bed/ncbiRefSeq.2020-10-27
+#From following link: https://www.ncbi.nlm.nih.gov/nuccore/?term=mouse%5Borgn%5D+refseq_select%5Bfilter%5D
+#Send to -> Complete record -> File -> Format: Accession list
+#Saved as mm39RefSeqSelect.seq
+zcat /hive/data/genomes/mm39/bed/ncbiRefSeq.2020-10-27/process/mm39.curated.gp.gz | fgrep -f mm39RefSeqSelect.seq > refseqSelect.curated.gp
+wc -l refseqSelect.curated.gp
+20584 refseqSelect.curated.gp
+hgLoadGenePred -genePredExt mm39 ncbiRefSeqSelect refseqSelect.curated.gp
+
+# trackDb entry added to mouse/trackDb.ra for both mm10+mm39, and html copied from hg19 (no mention of MANE)
+track ncbiRefSeqSelect
+parent refSeqComposite off
+priority 8
+type genePred
+shortLabel RefSeq Select
+longLabel NCBI RefSeq Select: One representative transcript per protein-coding gene
+trackHandler ncbiRefSeq
+idXref ncbiRefSeqLink mrnaAcc name
+color 20,20,160
+baseColorUseCds given
+baseColorDefault genomicCodons

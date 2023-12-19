@@ -10,6 +10,8 @@ group singleCell
     parent tabulaSapiens
     html tabulaSapiens
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=tabula-sapiens+all&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility pack
     shortLabel Tabula Tissue Cell
     longLabel Tabula sapiens RNA by tissue and cell type
@@ -18,8 +20,8 @@ group singleCell
     defaultLabelFields name
     labelFields name,name2
     bigDataUrl /gbdb/$D/bbi/tabulaSapiens/tissue_cell_type.bb
-    barChartStatsUrl /gbdb/$D/bbi/tabulaSapiens/tissue_cell_type.facets
-    barChartCategoryUrl /gbdb/$D/bbi/tabulaSapiens/tissue_cell_type.categories
+    barChartStatsUrl /gbdb/$D/bbi/tabulaSapiens/bw_edit_tissue_cell_type.facets
+    barChartCategoryUrl /gbdb/$D/bbi/tabulaSapiens/bw_edit_tissue_cell_type.categories
     barChartFacets tissue,cell_class,cell_type
     barChartStretchToItem on
 
@@ -27,6 +29,8 @@ group singleCell
     parent tabulaSapiens
     html tabulaSapiens
     type bigBarChart
+    url https://cells.ucsc.edu/?ds=tabula-sapiens+all&gene=$$
+    urlLabel View on the UCSC Cell Browser:
     visibility hide
     shortLabel Tabula Details
     longLabel Tabula sapiens full details view
@@ -38,6 +42,6 @@ group singleCell
     barChartStatsUrl /gbdb/$D/bbi/tabulaSapiens/facet_detailed.facets
     barChartCategoryUrl /gbdb/$D/bbi/tabulaSapiens/facet_detailed.categories
     barChartFacets tissue,subtissue,cell_class,cell_type,sex,donor,assay
-    barChartMerge on
     maxWindowToDraw 10000000
     barChartStretchToItem on
+    barChartMerge on

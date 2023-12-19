@@ -141,7 +141,8 @@ if (!extras->colors)
     int i = 0;
     for (categ = categs; categ != NULL; categ = categ->next)
         {
-        extras->colors[i] = (struct rgbColor){.r=COLOR_32_BLUE(categ->color), .g=COLOR_32_GREEN(categ->color), .b=COLOR_32_RED(categ->color)};
+        // takes advantage of bedColorToRgb assuming alpha will never be 0, and assigning 0xff instead
+        extras->colors[i] = bedColorToRgb(categ->color);
         i++;
         }
     }
@@ -151,7 +152,7 @@ return extras->colors;
 static void fillInTables(struct track *tg, struct barChartTrack *extras)
 /* Fill in statTable and facetsTable on extras */
 {
-char *barChartStatsUrl = trackDbSetting(tg->tdb, "barChartStatsUrl");
+char *barChartStatsUrl = hReplaceGbdb(trackDbSetting(tg->tdb, "barChartStatsUrl"));
 if (barChartStatsUrl != NULL)
     {
     extras->statsTable = fieldedTableFromTabFile(barChartStatsUrl,
@@ -389,7 +390,12 @@ static int windowsTotalIntersection(struct window *list, char *chrom, int chromS
 /* Return total size all bits of region defined by chrom/start/end that intersects windows list */
 {
 if (list == NULL || list->next == NULL)
-    return (double)insideWidth * (chromEnd - chromStart) / (winEnd - winStart);
+    {
+    double scale = scaleForWindow(insideWidth, winStart, winEnd);
+    int leftBlank = round(scale * (max(winStart, chromStart) - winStart));
+    int rightBlank = round(scale * (winEnd - min(winEnd, chromEnd)));
+    return insideWidth - leftBlank - rightBlank;
+    }
 long long totalGenoSize = 0;
 int totalPixelSize = 0;
 struct window *w;
@@ -425,6 +431,16 @@ if (extras->stretchToItem)
     return max(standardSize, itemSize);
 else
     return standardSize;
+}
+
+static int chartWidthToBarWidth(struct track *tg, int graphWidth)
+/* After possibly expanding the size of a particular item's graph to fit the item,
+ * we may need a revised calculation for the size of the bars in that chart */
+{
+struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
+int barCount = filteredCategoryCount(extras);
+int spaceForBars = graphWidth - 2 - (barCount-1)*extras->padding;
+return spaceForBars/barCount;
 }
 
 
@@ -548,6 +564,10 @@ if (bedList != NULL)
 
 int barCount = filteredCategoryCount(extras);
 
+// users can set minimum bar width and padding in trackDb
+char *userSettingMinBarWidth = trackDbSetting(tdb, BAR_CHART_USER_BAR_MIN_WIDTH);
+char *userSettingMinBarPadding = trackDbSetting(tdb, BAR_CHART_USER_BAR_MIN_PADDING);
+
 /* Scaling here is pretty ad-hoc! */
 double scale = 1.0;
 if (barCount <= 20)
@@ -611,6 +631,7 @@ else
     extras->padding = MIN_GRAPH_PADDING * scale;
     extras->maxHeight = tl.fontHeight * 4;
     }
+
 if (extras->barWidth > 1)
     extras->barWidth = floor(extras->barWidth);
     
@@ -620,9 +641,22 @@ if (extras->barWidth <= 1 && extras->padding == 1)
    extras->padding = 0;
    }
 if (extras->barWidth < 1)
+    {
+    extras->barWidth = 1;
     extras->padding = 0;
+    }
 else
     extras->barWidth = round(extras->barWidth);
+if (userSettingMinBarWidth)
+    {
+    int userMinBarWidth = sqlUnsigned(userSettingMinBarWidth);
+    extras->barWidth = max(userMinBarWidth, extras->barWidth);
+    }
+if (userSettingMinBarPadding)
+    {
+    int userMinBarPadding = sqlUnsigned(userSettingMinBarPadding);
+    extras->padding = max(userMinBarPadding, extras->padding);
+    }
 
 extras->modelHeight =  extras->boxModelHeight + 3;
 extras->margin = 1;
@@ -649,8 +683,9 @@ tg->items = list;
 static int barChartX(struct bed *bed)
 /* Locate chart on X, relative to viewport. */
 {
-// int start = max(bed->chromStart, winStart);	// Consider making this simply bed->chromStart -jk
-int start = bed->chromStart;
+// use the max() here because otherwise items that begin to the left
+// of the window may not be visible
+int start = max(bed->chromStart, winStart);
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 int x1 = round((start - winStart) * scale);
 return x1;
@@ -725,8 +760,6 @@ struct barChartItem *itemInfo = (struct barChartItem *)item;
 struct bed *bed = itemInfo->bed;
 int topGraphHeight = chartHeight(tg, itemInfo);
 int graphWidth = chartWidth(tg, itemInfo);
-#ifdef OLD
-#endif /* OLD */
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 
@@ -740,7 +773,7 @@ if (!extras->noWhiteout)
 
 struct rgbColor lineColor = {.r=0};
 int lineColorIx = hvGfxFindColorIx(hvg, lineColor.r, lineColor.g, lineColor.b);
-int barWidth = extras->barWidth;
+int barWidth = chartWidthToBarWidth(tg, graphWidth);
 char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, BAR_CHART_COLORS, 
                         BAR_CHART_COLORS_DEFAULT);
 Color clipColor = MG_MAGENTA;
@@ -749,12 +782,18 @@ Color clipColor = MG_MAGENTA;
 int i;
 int expCount = bed->expCount;
 struct barChartCategory *categ;
-int barCount = filteredCategoryCount(extras), barsDrawn = 0;
-double invCount = 1.0/barCount;
+
 for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=categ->next)
     {
     if (!filterCategory(extras, categ->name))
         continue;
+
+    // note - removed userMinBarWidth here, as it's already been imposed in the initial barWidth calculation.
+    // Stretch mode only ever extends bars, not shrinks them, so the minimum doesn't need to be re-imposed here.
+    // stop before going off the right edge
+    if (x1 + barWidth > x0 + graphWidth)
+        break;
+
     struct rgbColor fillColor = extras->colors[i];
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = bed->expScores[i];
@@ -762,25 +801,16 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
                                         extras->maxHeight, extras->doLogTransform);
     boolean isClipped = (!extras->doLogTransform && expScore > extras->maxViewLimit);
     int barTop = yZero - height + 1;
+
     if (extras->padding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
-	{
-	int cStart = barsDrawn * graphWidth * invCount;
-	int cEnd = (barsDrawn+1) * graphWidth * invCount;
-	x1 = cStart + x0;
-	barWidth = cEnd - cStart - extras->padding;
         hvGfxBox(hvg, x1, barTop, barWidth, height, fillColorIx);
-	if (isClipped)
-	    hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
-	barsDrawn += 1;
-	}
     else
-	{
         hvGfxOutlinedBox(hvg, x1, barTop, barWidth, height, fillColorIx, lineColorIx);
-	// mark clipped bar with magenta tip
-	if (isClipped)
-	    hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
-	x1 = x1 + barWidth + extras->padding;
-	}
+
+    // mark clipped bar with magenta tip
+    if (isClipped)
+        hvGfxBox(hvg, x1, barTop, barWidth, 2, clipColor);
+    x1 += barWidth + extras->padding;
     }
 }
 
@@ -882,29 +912,28 @@ if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per
     struct barChartCategory *categs = getCategories(tg);
     struct barChartCategory *categ = NULL;
     int x0 = insideX + graphX;
-    double invCount = 1.0/barCount;
-    int i = 0, barsDrawn = 0;
+    int x1 = x0;
+    int i = 0, barWidth = max(1,chartWidthToBarWidth(tg, graphWidth));
     int extraAtTop = 4;
     for (categ = categs; categ != NULL; categ = categ->next, i++)
-	{
-	if (!filterCategory(extras, categ->name))
-	    continue;
-	x1 = barsDrawn * graphWidth * invCount;
-	barsDrawn += 1;
-	x2 = barsDrawn * graphWidth * invCount;
-	int width = max(1, x2-x1);
-	double expScore = bed->expScores[i];
-	int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
-					    extras->maxHeight, extras->doLogTransform);
-	height = min(height+extraAtTop, extras->maxHeight);
-	mapBoxHc(hvg, itemStart, itemEnd, x0 + x1, yZero-height, width, height, 
-			    tg->track, mapItemName, chartMapText(tg, categ, expScore));
-	}
+        {
+        if (!filterCategory(extras, categ->name))
+            continue;
+        double expScore = bed->expScores[i];
+        int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
+                                            extras->maxHeight, extras->doLogTransform);
+        height = min(height+extraAtTop, extras->maxHeight);
+        mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, barWidth, height,
+                            tg->track, mapItemName, chartMapText(tg, categ, expScore));
+        x1 += barWidth + extras->padding;
+        }
     safef(label, sizeof(label), 
 	"%s - click for faceted view or hover over a bar for sample values", 
 	itemName);
     }
 else
+    // We should never get here; chartWidth always returns a value where at least one pixel
+    // of width is allocated to every category being drawn
     safef(label, sizeof(label), 
 	    "%s - zoom in to resolve individual bars or click for details", 
 	    itemName);

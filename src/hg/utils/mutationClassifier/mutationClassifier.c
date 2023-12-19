@@ -593,7 +593,7 @@ else
     {
     char where[256];
     struct sqlConnection *conn = sqlConnect(database);
-    sqlSafefFrag(where, sizeof(where), "name = '%s'", name);
+    sqlSafef(where, sizeof(where), "name = '%s'", name);
     struct dnaMotif *motif = dnaMotifLoadWhere(conn, "transRegCodeMotifPseudoCounts", where);
     hashAdd(motifHash, name, (void *) motif);
     sqlDisconnect(&conn);
@@ -715,7 +715,7 @@ if(motifTable)
     sqlFreeResult(&sr);
     for(motifName = motifNames; motifName != NULL; motifName = motifName->next)
         {
-        sqlSafefFrag(where, sizeof(where), "name = '%s'", motifName->name);
+        sqlSafef(where, sizeof(where), "name = '%s'", motifName->name);
         motif = dnaMotifLoadWhere(conn, motifTable, where);
         if(motif == NULL)
             errAbort("couldn't find motif '%s'", motifName->name);

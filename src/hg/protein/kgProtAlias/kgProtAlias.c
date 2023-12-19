@@ -63,13 +63,13 @@ int main(int argc, char *argv[])
 
 	fprintf(o1, "%s\t%s\t%s\n", kgID, displayID, displayID);
        
-        sqlSafefFrag(cond_str, sizeof cond_str, "displayID = '%s'", displayID);
+        sqlSafef(cond_str, sizeof cond_str, "displayID = '%s'", displayID);
         proteinAC = sqlGetField(proteinDB, "spXref3", "accession", cond_str);
         if (proteinAC != NULL)
 		{
 		fprintf(o1, "%s\t%s\t%s\n", kgID, displayID, proteinAC);
         
-		sqlSafefFrag(cond_str, sizeof cond_str, "acc = '%s' and extDb=1", proteinAC);
+		sqlSafef(cond_str, sizeof cond_str, "acc = '%s' and extDb=1", proteinAC);
         	ncbiProtAc = sqlGetField(spDB, "extDbRef", "extAcc2", cond_str);
 		if (ncbiProtAc != NULL)
 		    {

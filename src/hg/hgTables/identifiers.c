@@ -122,8 +122,8 @@ if (aliasField != NULL)
     }
 else
     hPrintf(".\n");
-hPrintf("(The \"describe table schema\" button shows more information about "
-	"the table fields.)\n");
+hPrintf("(The \"data format description\" button shows more information about "
+	"the fields in the data.)\n");
 
 // on a browserbox, db is on the UCSC server, so cannot select into db, even if temporary
 if (!isCustomTrack(curTable) && !hIsBrowserbox() && (conn == NULL || sqlCanCreateTemp(conn)))
@@ -261,7 +261,7 @@ for (table = tableList;  table != NULL;  table = table->next)
     dyStringClear(query);
     sqlDyStringPrintf(query, "select %s from %s", idField, table->name);
     if (extraWhere != NULL)
-	dyStringPrintf(query, " where %s", extraWhere);
+	sqlDyStringPrintf(query, " where %s %-s", idField, extraWhere);
     sr = sqlGetResult(conn, query->string);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -297,11 +297,16 @@ else
 	  xrefTable, curTable,
 	  xrefTable, xrefIdField, curTable, idField);
 if (extraWhere != NULL)
+    {
     // extraWhere begins w/ID field of curTable=xrefTable.  Skip that field name and
     // use "xrefTable.aliasField" with the IN (...) condition that follows:
-    sqlDyStringPrintf(query, " %s %s.%s %-s",
-		   (sameString(xrefTable, curTable) ? "where" : "and"),
-		   xrefTable, aliasField, skipToSpaces(extraWhere));
+    if (sameString(xrefTable, curTable)) 
+	sqlDyStringPrintf(query, " where "); 
+    else
+	sqlDyStringPrintf(query, " and ");
+    sqlDyStringPrintf(query, "%s.%s %-s",
+		   xrefTable, aliasField, extraWhere);
+    }
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -351,12 +356,12 @@ if (sameWord(curTable, WIKI_TRACK_TABLE))
 return matchHash;
 }
 
-static char *slNameToInExpression(char *field, struct slName *allTerms)
+static char *slNameToInExpression(struct slName *allTerms)
 /* Given an slName list, return a SQL "field IN ('term1', 'term2', ...)" expression
  * to be used in a WHERE clause. */
 {
 struct dyString *dy = dyStringNew(0);
-sqlDyStringPrintfFrag(dy, "%s in (", field);
+sqlDyStringPrintf(dy, " in (");
 boolean first = TRUE;
 struct slName *term;
 for (term = allTerms;  term != NULL;  term = term->next)
@@ -364,10 +369,10 @@ for (term = allTerms;  term != NULL;  term = term->next)
     if (first)
 	first = FALSE;
     else
-	dyStringAppend(dy, ", ");
+	sqlDyStringPrintf(dy, ", ");
     sqlDyStringPrintf(dy, "'%s'", term->name);
     }
-dyStringAppend(dy, ")");
+sqlDyStringPrintf(dy, ")");
 return dyStringCannibalize(&dy);
 }
 
@@ -425,7 +430,7 @@ if (isNotEmpty(idText))
     char *extraWhere = NULL;
     int maxIdsInWhere = cartUsualInt(cart, "hgt_maxIdsInWhere", DEFAULT_MAX_IDS_IN_WHERE);
     if (totalTerms > 0 && totalTerms <= maxIdsInWhere)
-	extraWhere = slNameToInExpression(idField, allTerms);
+	extraWhere = slNameToInExpression(allTerms);
 
     struct lm *lm = lmInit(0);
     struct hash *matchHash = getAllPossibleIds(conn, lm, idField, extraWhere);
@@ -501,8 +506,8 @@ if (isNotEmpty(idText))
 
 	warn("Note: %d of the %d given identifiers have no match in "
 	     "table %s, field %s%s%s%s%s.  "
-	     "Try the \"describe table schema\" button for more "
-	     "information about the table and field.\n"
+	     "Try the \"data format description\" button for more "
+	     "information about the data fields and their contents.\n"
 	     "%d %smissing identifier(s):\n"
 	     "%s\n"
 	     "<a href='%s|none|'>Complete list of missing identifiers<a>\n",
@@ -588,7 +593,7 @@ int maxIdsInWhere = cartUsualInt(cart, "hgt_maxIdsInWhere", DEFAULT_MAX_IDS_IN_W
 if (numIds > 0 && numIds <= maxIdsInWhere)
     {
     struct dyString *dy = dyStringNew(16 * numIds);
-    dyStringPrintf(dy, "%s in (", idField);
+    sqlDyStringPrintf(dy, "%s in (", idField);
     struct hashCookie hc = hashFirst(idHash);
     boolean first = TRUE;
     char *id;
@@ -597,10 +602,10 @@ if (numIds > 0 && numIds <= maxIdsInWhere)
 	if (first)
 	    first = FALSE;
 	else
-	    dyStringAppend(dy, ", ");
-	dyStringPrintf(dy, "'%s'", id);
+	    sqlDyStringPrintf(dy, ", ");
+	sqlDyStringPrintf(dy, "'%s'", id);
 	}
-    dyStringAppend(dy, ")");
+    sqlDyStringPrintf(dy, ")");
     return dyStringCannibalize(&dy);
     }
 return NULL;

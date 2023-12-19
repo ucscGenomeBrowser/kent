@@ -51,6 +51,35 @@ These genomic positions, together with the corresponding OMIM IDs, were loaded i
 &quot;OMIM Genes&quot; track were then excluded from the <TT>omimLocation</TT> table.
 </UL>
 
+<h2>Data Access</h2>
+<p>
+Because OMIM has only allowed Data queries within individual chromosomes, no download files are
+available from the Genome Browser. Full genome datasets can be downloaded directly from the
+<a href="https://omim.org/downloads/" target="_blank">OMIM Downloads page</a>.
+All genome-wide downloads are freely available from OMIM after registration.</p>
+<p>
+If you need the OMIM data in exactly the format of the UCSC Genome Browser,
+for example if you are running a UCSC Genome Browser local installation (a partial &quot;mirror&quot;),
+please create a user account on omim.org and contact OMIM via
+<a href="https://omim.org/contact" target="_blank">https://omim.org/contact</a>. Send them your OMIM
+account name and request access to the UCSC Genome Browser 'entitlement'. They will
+then grant you access to a MySQL/MariaDB data dump that contains all UCSC
+Genome Browser OMIM tables.</p>
+<p>
+UCSC offers queries within chromosomes from
+<a href="hgTables" target=_blank>Table Browser</a> that include a variety
+of filtering options and cross-referencing other datasets using our
+<a href="hgIntegrator" target=_blank>Data Integrator</a> tool.
+UCSC also has an <a href="../goldenPath/help/api.html" target=_blank>API</a>
+that can be used to retrieve data in JSON format from a particular chromosome range.</p>
+<p>
+Please refer to our searchable
+<A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/?hl=en&fromgroups#!search/download+snps"
+target=_blank>mailing list archives</a>
+for more questions and example queries, or our
+<a HREF="../FAQ/FAQdownloads.html#download36" target=_blank>Data Access FAQ</a>
+for more information.</p>
+
 <H2>Credits</H2>
 <P>
 Thanks to OMIM and NCBI for the use of their data. This track was constructed by Fan Hsu,

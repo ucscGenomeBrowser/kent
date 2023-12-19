@@ -22,6 +22,7 @@ errAbort(
     "usage:\n"
     "    vcfToBed in.vcf outPrefix\n"
     "options:\n"
+    "    -fixChromNames If present, prepend 'chr' to chromosome names\n"
     "    -fields=comma-sep list of tags to include in the bed file, other fields will be placed into\n"
     "           out.extraFields.tab\n"
     "\n"
@@ -33,6 +34,7 @@ errAbort(
 /* Command line validation table. */
 static struct optionSpec options[] = {
     {"fields", OPTION_STRING},
+    {"fixChromNames", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -153,7 +155,7 @@ fprintf(outBed, "\n");
 }
 
 void vcfLinesToBed(struct vcfFile *vcff, char **keepFields, int extraFieldCount,
-                    FILE *outBed) //, FILE *outExtra)
+                    boolean fixChromNames, FILE *outBed) //, FILE *outExtra)
 /* Turn a VCF line into a bed9+ line */
 {
 struct dyString *name = dyStringNew(0);
@@ -168,7 +170,9 @@ while (lineFileNext(vcff->lf, &line, NULL))
     int fieldCount = chopTabs(line, chopped);
     if (fieldCount < 8)
         errAbort("ERROR: malformed VCF, missing fields at line: '%d'", vcff->lf->lineIx);
-    char *chrom = fixupChromName(chopped[0]);
+    char *chrom = chopped[0];
+    if (fixChromNames)
+        chrom = fixupChromName(chrom);
     int start = atoi(chopped[1]) - 1;
     int end = start;
     char *ref = cloneString(chopped[3]);
@@ -197,7 +201,7 @@ while (lineFileNext(vcff->lf, &line, NULL))
     }
 }
 
-void vcfToBed(char *vcfFileName, char *outPrefix, char *tagsToKeep)
+void vcfToBed(char *vcfFileName, char *outPrefix, char *tagsToKeep, boolean fixChromNames)
 /* vcfToBed - Convert VCF to BED9+ with optional extra fields.
  * Extra VCF tags get placed into a separate tab file for later indexing. */
 {
@@ -250,7 +254,7 @@ for (i = 0; i < keepCount; i++)
         verbose(2, "found tag: '%s'\n", keepFields[i]);
 
 printHeaders(vcff, keepFields, keepCount, outBed);
-vcfLinesToBed(vcff, keepFields, keepCount, outBed);
+vcfLinesToBed(vcff, keepFields, keepCount, fixChromNames, outBed);
 vcfFileFree(&vcff);
 carefulClose(&outBed);
 }
@@ -262,6 +266,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 char *fields = optionVal("fields", NULL);
-vcfToBed(argv[1],argv[2], fields);
+boolean fixChromNames = optionExists("fixChromNames");
+vcfToBed(argv[1],argv[2], fields, fixChromNames);
 return 0;
 }

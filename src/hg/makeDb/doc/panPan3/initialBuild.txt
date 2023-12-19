@@ -451,22 +451,22 @@ ucscToRefSeq.bed:chrM   0       16563   NC_001644.1
     grep -v "^#" \
       ../../refseq/G*0_assembly_report.txt \
        | awk -F$'\t' '{printf "%s\t%s\n", $7,$1}' \
-         | sort > refseq.sequenceName.txt
+         | sort > refseq.assembly.txt
 
     # do *not* need the ones that have identical names to UCSC names
-    join -2 2 -t$'\t' refseq.sequenceName.txt <(sort -k2,2 ucsc.refseq.tab) \
+    join -2 2 -t$'\t' refseq.assembly.txt <(sort -k2,2 ucsc.refseq.tab) \
       | awk -F$'\t' '{printf "%s\t%s\n", $3, $2}' \
-        | awk -F$'\t' '$1 != $2' | sort > ucsc.sequenceName.tab
+        | awk -F$'\t' '$1 != $2' | sort > ucsc.assembly.tab
 
     wc -l *.tab | sed -e 's/^/#   /;'
 #     4293 ucsc.genbank.tab
 #     4293 ucsc.refseq.tab
-#     4271 ucsc.sequenceName.tab
+#     4271 ucsc.assembly.tab
 
     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
         > panPan3.chromAlias.tab
 
-for t in refseq genbank sequenceName
+for t in refseq genbank assembly
 do
   c0=`cat ucsc.$t.tab | wc -l`
   c1=`grep $t panPan3.chromAlias.tab | wc -l`
@@ -478,12 +478,12 @@ do
 done
 # checking refseq: 4293 =? 4293 OK
 # checking genbank: 4293 =? 4293 OK
-# # checking sequenceName: 4271 =? 4271 OK
+# # checking assembly: 4271 =? 4271 OK
 
     # verify chrM is here properly:
     grep chrM panPan3.chromAlias.tab  | sed -e 's/^/# /;'
 # D38116.1        chrM    genbank
-# MT      chrM    sequenceName
+# MT      chrM    assembly
 # NC_001644.1     chrM    refseq
 
     hgLoadSqlTab panPan3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \

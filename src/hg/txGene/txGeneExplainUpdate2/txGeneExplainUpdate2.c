@@ -133,7 +133,7 @@ char *diffNote(struct bed *oldBed, struct bed *newBed)
 boolean oldIsCoding = (oldBed->thickStart < oldBed->thickEnd);
 boolean newIsCoding = (newBed->thickStart < newBed->thickEnd);
 boolean bothCoding = (oldIsCoding && newIsCoding);
-struct dyString *dy = newDyString(64);
+struct dyString *dy = dyStringNew(64);
 int numNotes = 0;
 
 if (oldIsCoding != newIsCoding)

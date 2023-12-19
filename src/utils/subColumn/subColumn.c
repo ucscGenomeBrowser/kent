@@ -12,6 +12,7 @@
 
 
 boolean isList = FALSE;
+boolean skipMiss = FALSE;
 FILE *fMiss = NULL;
 
 void usage()
@@ -29,12 +30,14 @@ errAbort(
   "options:\n"
   "   -list - Column is a comma-separated list.  Substitute all elements in list\n"
   "   -miss=fileName - Print misses to this file instead of aborting\n"
+  "   -skipMiss -- skip missing id's instead of outputting them\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"list", OPTION_BOOLEAN},
    {"miss", OPTION_STRING},
+   {"skipMiss", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -91,6 +94,7 @@ else
     column -= 1;
 char *row[1024*4];
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
+struct dyString *dy = dyStringNew(1024);
 FILE *f = mustOpen(outFile, "w");
 int rowCount;
 while ((rowCount = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
@@ -114,10 +118,15 @@ while ((rowCount = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
 		char *sub = hashFindVal(subHash, s);
 		if (sub == NULL)
 		    {
-		    if (fMiss)
+		    if (fMiss || skipMiss)
 			{
-		        fprintf(fMiss, "%s\n", s);
-			++missCount;
+                        if (fMiss)
+                            {
+                            fprintf(fMiss, "%s\n", s);
+                            ++missCount;
+                            }
+                        if (skipMiss)
+                            goto out;
 			}
 		    else
 			errAbort("%s not in %s line %d of %s", s, subFile, lf->lineIx, lf->fileName);
@@ -126,12 +135,15 @@ while ((rowCount = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
 		    s = sub;
 		}
 	    }
-	fputs(s, f);
+        dyStringAppend(dy, s);
 	if (i == rowCount-1)
-	    fputc('\n', f);
+            dyStringAppendC(dy, '\n');
 	else
-	    fputc('\t', f);
+            dyStringAppendC(dy, '\t');
 	}
+    fputs(dy->string, f);
+out:
+    dyStringResize(dy, 0);
     }
 carefulClose(&f);
 }
@@ -146,6 +158,7 @@ isList = optionExists("list");
 char *fileName = optionVal("miss", NULL);
 if (fileName != NULL)
     fMiss = mustOpen(fileName, "w");
+skipMiss = optionExists("skipMiss");
 subColumn(argv[1], argv[2], argv[3], argv[4]);
 if (fMiss != NULL)
     {

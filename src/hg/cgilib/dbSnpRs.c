@@ -112,11 +112,11 @@ void dbSnpRsSaveToDb(struct sqlConnection *conn, struct dbSnpRs *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s',%f,%f,'%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->rsId,  el->avHet,  el->avHetSE,  el->valid,  el->allele1,  el->allele2,  el->assembly,  el->alternate,  el->func);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

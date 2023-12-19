@@ -11,14 +11,10 @@ chainSwap = ${DESTBINDIR}/chainSwap
 all:
 
 test:	gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
-	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName
-
-# things with large files that we want to remove their big history from cvs
-# but soon will replace with short versions and no big history.
-# temporarily moved to /hive/users/galt/largeCvsFiles/kent/...
-# input/kgMRna.psl
-# input/negQ.chain
-testnot: kgProt negQChain
+	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName \
+	kgProt negQChain testProtPort_ProtNa testProtPort_ProtProt \
+	testProtNa_NaNa testProtProt_NaNa \
+	testTypeErr testProtTrans
 
 # basic tests of protein -> mrna -> genome mapping
 kgProt: mkdirs
@@ -96,7 +92,52 @@ retroParent: mkdirs
 
 # -mapFileWithInQName
 testMapFileWithInQName: mkdirs
-	${pslMap} -mapFileWithInQName input/gencode.src.psl input/gencode.blocks.qName-psl output/$@.psl
+	${pslMap} -mapFileWithInQName -mapInfo=output/$@.mapinfo input/gencode.src.psl input/gencode.blocks.qName-psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.mapinfo output/$@.mapinfo
+
+# swissprot canonical features that were mapped to isoform with protein
+# isoforms aligned to gencode RNAs.  Mapping these resulted in overlapping
+# blocks.  This tests block adjustments as well
+#    prot_prot   prot_na     cds_na
+testProtPort_ProtNa: mkdirs
+	${pslMap} -inType=prot_prot -mapInfo=output/$@.mapinfo input/spAnnotIso.psl input/spGencode.psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.mapinfo output/$@.mapinfo
+
+# Mapping protein alignments with protein alignments, just done with swapped PSL as map
+# This mainly tests options, as there is no difference between this and NA mappings.  
+#   prot_prot   prot_prot   prot_prot
+testProtPort_ProtProt: mkdirs
+	pslSwap input/spAnnotIso.psl output/$@.mapping.psl
+	${pslMap} -inType=prot_prot -mapType=prot_prot input/spAnnotIso.psl output/$@.mapping.psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
+# prot_na     na_na       cds_na
+testProtNa_NaNa: mkdirs
+	${pslMap} -inType=prot_na -mapType=na_na input/spGencode.psl input/gencodeGenome.psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
+# prot_prot   na_na       cds_na
+testProtProt_NaNa: mkdirs
+	${pslMap} -inType=prot_prot -mapType=na_na input/spAnnotIso.psl expected/testProtNa_NaNa.psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
+# implied types will not work with prot_na map:
+#    prot_prot   prot_na     cds_na
+testTypeErr: mkdirs
+	if ${pslMap} input/spAnnotIso.psl input/spGencode.psl output/$@.psl  2> output/$@.err ; then  echo "Error: should have failed" >&2; false ; else true ; fi
+	diff expected/$@.err output/$@.err
+
+# bug where swissprot feature to protein is mapped via protein to transcript, genereated
+# an invalid PSL with an overlapping block
+testProtTrans: mkdirs
+	${pslMap} -inType=prot_prot -mapType=prot_na input/annotProt.psl input/protGencode.psl output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 

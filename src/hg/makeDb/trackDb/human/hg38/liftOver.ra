@@ -10,7 +10,7 @@ compositeTrack on
         shortLabel UCSC liftOver to hg19
         longLabel UCSC liftOver alignments to hg19
         priority 1
-        type chain hg38
+        type chain hg19
         matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
         matrixHeader A, C, G, T
         otherDb hg19

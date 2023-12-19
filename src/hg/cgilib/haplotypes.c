@@ -462,7 +462,7 @@ if (popGroups == 0)
 // NOTE: overkill in memory accounting instead of dyString to:
 //       1) ensure result is in he->lm, 2) use nifty strSwapStrs()
 // Build the query string, converting NA18519-a,NA18519-b... to 'NA18519-a','NA18519-b'...
-int sizeQ = strlen(NOSQLINJ "") + strlen(POP_QUERY_BEG) + strlen(POP_QUERY_END)
+int sizeQ = NOSQLINJ_SIZE + strlen(POP_QUERY_BEG) + strlen(POP_QUERY_END)
           + strlen(haplo->subjectIds) + (haplo->subjects * 3) + (strlen(pop) * 2);
 
 char *popQuery = lmAlloc(he->lm,sizeQ);
@@ -474,7 +474,7 @@ safecpy(p,sizeQ - (p - popQuery),haplo->subjectIds);
 size_t count = strSwapStrs(p,sizeQ - (p - popQuery),",","','");
 assert(count == haplo->subjects - 1);
 p += strlen(p);
-sqlSafefFrag(p,sizeQ - (p - popQuery),POP_QUERY_END);//,pop);
+sqlSafef(p,sizeQ - (p - popQuery),POP_QUERY_END);//,pop);
 
 // Do our best to calculate memory size for results string
 int sizeR = (popGroups + 1) * 12;
@@ -3254,7 +3254,7 @@ return haploCount;
 int haploSetsWriteToTable(struct haploExtras *he, struct haplotypeSet *haploSets)
 // Load database table from bedList.
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *tab = NULL;
 int loadOptions = 0;
 

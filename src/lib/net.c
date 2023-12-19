@@ -21,6 +21,8 @@
 #include "obscure.h"
 #include "errCatch.h"
 
+char *timeoutErrorMessage = "";
+
 /* Brought errno in to get more useful error messages */
 extern int errno;
 
@@ -123,12 +125,13 @@ if (res < 0)
 	remainingTime.tv_usec = (long) (((msTimeout/1000)-remainingTime.tv_sec)*1000000);
 	while (1) 
 	    {
-	    fd_set mySet;
+	    fd_set mySet, exceptSet;
 	    FD_ZERO(&mySet);
 	    FD_SET(sd, &mySet);
+            exceptSet = mySet;
 	    // use tempTime (instead of using remainingTime directly) because on some platforms select() may modify the time val.
 	    struct timeval tempTime = remainingTime;
-	    res = select(sd+1, NULL, &mySet, &mySet, &tempTime);  
+	    res = select(sd+1, NULL, &mySet, &exceptSet, &tempTime);  
 	    if (res < 0) 
 		{
 		if (errno == EINTR)  // Ignore the interrupt 
@@ -173,7 +176,7 @@ if (res < 0)
 		}
 	    else
 		{
-		dyStringPrintf(dy, "TCP non-blocking connect() to %s IP %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, ipStr, msTimeout);
+		dyStringPrintf(dy, "TCP non-blocking connect() to %s IP %s timed-out in select() after %ld milliseconds. %s", hostName, ipStr, msTimeout, timeoutErrorMessage);
 		return -1;
 		}
 	    }
@@ -207,7 +210,7 @@ if (hostName == NULL)
 if (!internetGetAddrInfo6n4(hostName, portStr, &addressList))
     return -1;
 
-struct dyString *errMsg = newDyString(256);
+struct dyString *errMsg = dyStringNew(256);
 for (address = addressList; address; address = address->ai_next)
     {
     if ((sd = netStreamSocketFromAddrInfo(address)) < 0)
@@ -716,7 +719,7 @@ safecpy(parsed->host, sizeof(parsed->host), s);
 char *urlFromNetParsedUrl(struct netParsedUrl *npu)
 /* Build URL from netParsedUrl structure */
 {
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 
 dyStringAppend(dy, npu->protocol);
 dyStringAppend(dy, "://");
@@ -817,7 +820,7 @@ static boolean receiveFtpReply(int sd, char *cmd, struct dyString **retReply, in
  * warn and return FALSE if not desired reply.  If retReply is non-NULL, store reply text there. */
 {
 char *startLastLine = NULL;
-struct dyString *rs = newDyString(4*1024);
+struct dyString *rs = dyStringNew(4*1024);
 while (1)
     {
     int readSize = 0;
@@ -1268,7 +1271,7 @@ else
 }
 
 
-int connectNpu(struct netParsedUrl npu, char *url, boolean noProxy)
+int connectNpu(struct netParsedUrl npu, char *url, boolean noProxy, char *httpProtocol)
 /* Connect using NetParsedUrl. */
 {
 int sd = -1;
@@ -1278,7 +1281,7 @@ if (sameString(npu.protocol, "http"))
     }
 else if (sameString(npu.protocol, "https"))
     {
-    sd = netConnectHttps(npu.host, atoi(npu.port), noProxy);
+    sd = netConnectHttps(npu.host, atoi(npu.port), noProxy, httpProtocol);
     }
 else
     {
@@ -1332,10 +1335,12 @@ int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *o
 {
 struct netParsedUrl npu;
 struct netParsedUrl pxy;
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 int sd = -1;
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
+
+
 
 boolean noProxy = checkNoProxy(npu.host);
 char *proxyUrl = getenv("http_proxy");
@@ -1348,14 +1353,14 @@ if (proxyUrl)
     netParseUrl(proxyUrl, &pxy);
     if (!sameString(pxy.protocol, "http"))
 	errAbort("Unknown proxy protocol %s in %s.", pxy.protocol, proxyUrl);
-    sd = connectNpu(pxy, url, noProxy);
+    sd = connectNpu(pxy, url, noProxy, protocol);
     char *logProxy = getenv("log_proxy");
     if (sameOk(logProxy,"on"))
 	verbose(1, "%s via proxy %s\n", url, proxyUrl);
     }
 else
     {
-    sd = connectNpu(npu, url, noProxy);
+    sd = connectNpu(npu, url, noProxy, protocol);
     }
 if (sd < 0)
     return -1;
@@ -1407,11 +1412,14 @@ if (npu.byteRangeStart != -1)
 
 if (optionalHeader)
     dyStringAppend(dy, optionalHeader);
+if (sameString(protocol, "HTTP/1.1"))
+    dyStringAppend(dy, "Connection: close\r\n");  // NON-persistent HTTP 1.1 connection
 
 /* finish off the header with final blank line */
 dyStringAppend(dy, "\r\n");
 
 mustWriteFd(sd, dy->string, dy->stringSize);
+
 
 /* Clean up and return handle. */
 dyStringFree(&dy);
@@ -1530,7 +1538,7 @@ struct dyString *netSlurpFile(int sd)
 {
 char buf[4*1024];
 int readSize;
-struct dyString *dy = newDyString(4*1024);
+struct dyString *dy = dyStringNew(4*1024);
 
 /* Slurp file into dy and return. */
 while ((readSize = read(sd, buf, sizeof(buf))) > 0)
@@ -2199,7 +2207,7 @@ void netHttpGet(struct lineFile *lf, struct netParsedUrl *npu,
 		boolean keepAlive)
 /* Send a GET request, possibly with Keep-Alive. */
 {
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 
 /* Ask remote server for the file/query. */
 dyStringPrintf(dy, "GET %s HTTP/1.1\r\n", npu->file);
@@ -2249,7 +2257,7 @@ int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
   struct slName *qPtr;
   struct lineFile *lf;
   struct netParsedUrl *npu;
-  struct dyString *dyQ    = newDyString(512);
+  struct dyString *dyQ    = dyStringNew(512);
   struct dyString *body;
   char *base;
   char *hdr;
@@ -2325,3 +2333,6 @@ boolean hasProtocol(char *urlOrPath)
 return stringIn("://", urlOrPath) != NULL;
 }
 
+void netSetTimeoutErrorMsg(char *msg) {
+    timeoutErrorMessage = msg;
+}

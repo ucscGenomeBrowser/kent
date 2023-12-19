@@ -7,8 +7,8 @@ priority 10
 idSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXref where uniProt.extDb.val = 'RGD' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 url http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=%s
 
-name cgap
-url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Rn&CID=%s
+#name cgap
+#url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Rn&CID=%s
 
 name reactome
 shortLabel Reactome
@@ -28,9 +28,9 @@ url http://www.genenetwork.org/webqtl/WebQTL.py?cmd=sch&refseq=%s&species=rat
 priority 10
 
 name stanfordSource
-shortLabel Stanford SOURCE
+shortLabel SOURCE
 tables kgXref
 idSql select mRNA from kgXref where kgID = '%s'
-url http://smd.stanford.edu/cgi-bin/source/sourceResult?organism=Rn&option=Number&criteria=%s&choice=Gene
+url http://source-search.princeton.edu/cgi-bin/source/sourceResult?organism=Rn&option=Number&criteria=%s&choice=Gene
 priority 10
 

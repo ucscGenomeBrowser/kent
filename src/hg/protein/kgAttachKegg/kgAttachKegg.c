@@ -36,7 +36,9 @@ verbose(1, "Got %d items in %s\n", llToKegg->elCount, locusLinkToPathway);
 /* Build up hash keyed by refSeq accession (without version) with UCSC known gene values. */
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *ucscToRef = hashNew(16);
-struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from knownToRefSeq");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from knownToRefSeq");
+struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(ucscToRef, row[0], cloneString(row[1]));
@@ -45,14 +47,16 @@ sqlFreeResult(&sr);
 
 /* Build up hash keyed by refSeq accessions with locus link values. */
 struct hash *refToLl = hashNew(16);
-sr = sqlGetResult(conn, NOSQLINJ "select mrnaAcc,locusLinkId from refLink");
+sqlSafef(query, sizeof query, "select mrnaAcc,locusLinkId from refLink");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(refToLl, row[0], cloneString(row[1]));
 sqlFreeResult(&sr);
 verbose(1, "Got %d items in %s.refLink\n", refToLl->elCount, database);
 
 /* Stream through kgTxInfo table getting ones that are _primarily_ refSeq. */
-sr = sqlGetResult(conn, NOSQLINJ "select name from kgTxInfo where isRefSeq=1");
+sqlSafef(query, sizeof query, "select name from kgTxInfo where isRefSeq=1");
+sr = sqlGetResult(conn, query);
 FILE *f = mustOpen(knownToKegg, "w");
 while ((row = sqlNextRow(sr)) != NULL)
     {

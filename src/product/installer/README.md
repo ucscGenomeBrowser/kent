@@ -145,6 +145,10 @@ you will want to disable on-the-fly loading, like so:
 
     sudo bash browserSetup.sh -o
 
+If you notice that BLAT no longer works for your assembly while in offline-mode, you may have to
+update your GBiC mirror to restore functionality. Patch sequences are often added to assemblies
+which may result in errors if your CGIs and 2bit files have not been updated to the latest version.
+
 The full assembly download for hg19 is >7TB. Limit this
 to 2TB or less with the `-t` option: 
 

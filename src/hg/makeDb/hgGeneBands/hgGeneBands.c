@@ -32,7 +32,7 @@ char **row;
 struct genePred *gp;
 char query[512];
 int count = 0;
-struct dyString *bands = newDyString(0);
+struct dyString *bands = dyStringNew(0);
 char band[64];
 
 sqlSafef(query, sizeof query, "select * from refGene where name = '%s'", rl->mrnaAcc);
@@ -63,7 +63,9 @@ char **row;
 struct refLink rl;
 FILE *f = mustOpen(outFile, "w");
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from refLink");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from refLink");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     refLinkStaticLoad(row, &rl);

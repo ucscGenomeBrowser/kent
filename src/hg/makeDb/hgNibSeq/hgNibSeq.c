@@ -47,7 +47,7 @@ char *createSql =
 void createTable(struct sqlConnection *conn)
 /* Make table. */
 {
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 sqlDyStringPrintf(dy, createSql, tableName, tableIndex);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

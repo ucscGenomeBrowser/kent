@@ -6,7 +6,6 @@ shortLabel ENCODE Regulation
 longLabel Integrated Regulation from ENCODE
 group regulation
 priority 1
-pennantIcon Updated red ../goldenPath/newsarch.html Added Transcription Factor ChIP-seq Clusters from ENCODE 3
 canPack On
 
     track wgEncodeRegTxn

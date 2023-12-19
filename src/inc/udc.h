@@ -73,6 +73,14 @@ char *udcReadLine(struct udcFile *file);
 char *udcReadStringAndZero(struct udcFile *file);
 /* Read in zero terminated string from file.  Do a freeMem of result when done. */
 
+char *udcFileReadAllIfExists(char *url, char *cacheDir, size_t maxSize, size_t *retSize);
+/* Read a complete file via UDC. Return NULL if the file doesn't exist.  The
+ * cacheDir may be null in which case udcDefaultDir() will be used.  If
+ * maxSize is non-zero, check size against maxSize and abort if it's bigger.
+ * Returns file data (with an extra terminal for the common case where it's
+ * treated as a C string).  If retSize is non-NULL then returns size of file
+ * in *retSize. Do a freeMem or freez of the returned buffer when done. */
+
 char *udcFileReadAll(char *url, char *cacheDir, size_t maxSize, size_t *retSize);
 /* Read a complete file via UDC. The cacheDir may be null in which case udcDefaultDir()
  * will be used.  If maxSize is non-zero, check size against maxSize
@@ -117,6 +125,9 @@ char *udcDefaultDir();
 
 void udcSetDefaultDir(char *path);
 /* Set default directory for cache */
+
+void udcSetResolver(char *prots, char *cmd);
+/* Set protocols and local wrapper program to resolve s3:// and similar URLs to HTTPS */
 
 void udcDisableCache();
 /* Switch off caching. Re-enable with udcSetDefaultDir */
@@ -183,5 +194,7 @@ void *udcMMapFetch(struct udcFile *file, bits64 offset, bits64 size);
  * maybe returned.  Maybe called multiple times on a range or overlapping
  * returns. */
 
+bool udcIsResolvable(char *url);
+/* check if third-party protocol resolving (e.g. for "s3://") is enabled and if a URL can be resolved this way to HTTP */
 
 #endif /* UDC_H */

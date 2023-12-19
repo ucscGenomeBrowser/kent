@@ -169,11 +169,11 @@ if (id == 0)
     struct dyString *dy = dyStringNew(0);
     sqlDyStringPrintf(dy,
         "insert into submissionSource values(default, ");
-    dyStringPrintf(dy, "\"%s\", ", name);
-    dyStringPrintf(dy, "\"%s\", ", acknowledgement);
-    dyStringPrintf(dy, "\"%s\", ", setUrl);
-    dyStringPrintf(dy, "\"%s\",", itemUrl);
-    dyStringPrintf(dy, "\"%s\")", abUrl);
+    sqlDyStringPrintf(dy, "\"%s\", ", name);
+    sqlDyStringPrintf(dy, "\"%s\", ", acknowledgement);
+    sqlDyStringPrintf(dy, "\"%s\", ", setUrl);
+    sqlDyStringPrintf(dy, "\"%s\",", itemUrl);
+    sqlDyStringPrintf(dy, "\"%s\")", abUrl);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
@@ -198,9 +198,9 @@ else
 	{
 	dyStringClear(dy);
 	sqlDyStringPrintf(dy, "insert into journal set");
-	dyStringPrintf(dy, " id=default,\n");
-	dyStringPrintf(dy, " name=\"%s\",\n", name);
-	dyStringPrintf(dy, " url=\"%s\"\n", url);
+	sqlDyStringPrintf(dy, " id=default,\n");
+	sqlDyStringPrintf(dy, " name=\"%s\",\n", name);
+	sqlDyStringPrintf(dy, " url=\"%s\"\n", url);
 	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	id = sqlLastAutoId(conn);
@@ -726,7 +726,7 @@ int doImageFile(struct lineFile *lf, struct sqlConnection *conn,
 /* Update image file record if necessary and return image file ID. */
 {
 int imageFileId = 0;
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 
 sqlDyStringPrintf(dy, "select id from imageFile where ");
 sqlDyStringPrintf(dy, "fileName='%s' and fullLocation=%d", 
@@ -759,7 +759,7 @@ int doStrain(struct lineFile *lf, struct sqlConnection *conn, char *taxon,
 /* Return strain id, creating a new table entry if necessary. */
 {
 int id = 0;
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 
 sqlDyStringPrintf(dy, "select id from strain where ");
 sqlDyStringPrintf(dy, "taxon=%s and name='%s'", taxon, strain);
@@ -786,9 +786,9 @@ int doGenotype(struct lineFile *lf, struct sqlConnection *conn,
  * alleles then genotype, and return genotypeId. */
 {
 int id = 0;
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 struct slName *geneAlleleList = commaSepToSlNames(genotype), *el;
-struct dyString *alphabetical = newDyString(0);
+struct dyString *alphabetical = dyStringNew(0);
 
 slSort(&geneAlleleList, slNameCmp);
 for (el = geneAlleleList; el != NULL; el = el->next)
@@ -894,7 +894,7 @@ int doSpecimen(struct lineFile *lf, struct sqlConnection *conn,
 /* Add specimen to table if it doesn't already exist. */
 {
 int id = 0;
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 
 if (minAge[0] == 0) minAge = age;
 if (maxAge[0] == 0) maxAge = age;
@@ -937,7 +937,7 @@ int doPreparation(struct lineFile *lf, struct sqlConnection *conn,
 /* Add preparation to table if it doesn't already exist. */
 {
 int id = 0;
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 
 sqlDyStringPrintf(dy, "select id from preparation where ");
 sqlDyStringPrintf(dy, "fixation = %d and ", fixation);
@@ -970,7 +970,7 @@ int doImage(struct lineFile *lf, struct sqlConnection *conn,
 /* Update image table. */
 {
 int id = 0;
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 
 sqlDyStringPrintf(dy, "select id from image where ");
 sqlDyStringPrintf(dy, "submissionSet = %d and ", submissionSet);

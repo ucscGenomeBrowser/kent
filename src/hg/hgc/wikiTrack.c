@@ -47,8 +47,8 @@ static char *encodedHgcReturnUrl(int id, char *table)
 {
 char retBuf[1024];
 int o = cartUsualInt(cart, "o", winStart);
-safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgc?%s&g=%s&c=%s&o=%d&l=%d&r=%d&db=%s&i=%d",
-    cgiServerNamePort(), cartSidUrlString(cart), table, seqName,
+safef(retBuf, sizeof(retBuf), "http%s://%s/cgi-bin/hgc?%s&g=%s&c=%s&o=%d&l=%d&r=%d&db=%s&i=%d",
+    cgiAppendSForHttps(), cgiServerNamePort(), cartSidUrlString(cart), table, seqName,
 	o, winStart, winEnd, database, id);
 return cgiEncode(retBuf);
 }   
@@ -75,7 +75,7 @@ char *wikiHost = wikiLinkHost();
 char *loginUrl = wikiTrackUserLoginUrl(id, table);
 printf("<P>Please login to %s the annotation track.</P>\n", loginType);
 printf("<P>The login page is handled by our "
-       "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
+       "<A HREF=\"http%s://%s/\" TARGET=_BLANK>wiki system</A>:\n", cgiAppendSForHttps(), wikiHost);
 printf("<A HREF=\"%s\"><B>click here to login.</B></A><BR>\n", loginUrl);
 printf("The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n</P>\n");

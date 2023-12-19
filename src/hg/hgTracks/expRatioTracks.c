@@ -977,10 +977,10 @@ else
 void makeLoweShades(struct hvGfx *hvg)
 /* Allocate the  shades of Red, Green and Blue */
 {
-static struct rgbColor black = {0, 0, 0};
-static struct rgbColor shade1 = {120, 255, 255};
-static struct rgbColor shade2 = {80,200, 255};
-static struct rgbColor shade3 = {0,60, 255};
+static struct rgbColor black = {0, 0, 0, 255};
+static struct rgbColor shade1 = {120, 255, 255, 255};
+static struct rgbColor shade2 = {80,200, 255, 255};
+static struct rgbColor shade3 = {0,60, 255, 255};
 hvGfxMakeColorGradient(hvg, &black, &shade1, 11, shadesOfLowe1);
 hvGfxMakeColorGradient(hvg, &black, &shade2, 11, shadesOfLowe2);
 hvGfxMakeColorGradient(hvg, &black, &shade3, 11, shadesOfLowe3);

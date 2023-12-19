@@ -123,6 +123,15 @@ rowBuf->ix = 0;
 lmCleanup(&(rowBuf->lm));
 }
 
+static void rowBufInit(struct rowBuf *rowBuf, int size)
+/* Clean up rowBuf and give it a new lm and buffer[size]. */
+{
+resetRowBuf(rowBuf);
+rowBuf->lm = lmInit(0);
+rowBuf->size = size;
+lmAllocArray(rowBuf->lm, rowBuf->buf, size);
+}
+
 static void resetChunkState(struct annoStreamDb *self)
 /* Reset members that track chunked queries. */
 {
@@ -173,9 +182,23 @@ asdUpdateBaselineQuery(self);
 }
 
 static char **nextRowFromSqlResult(struct annoStreamDb *self)
-/* Stream rows directly from self->sr. */
+/* Stream rows directly from self->sr, but copy into rowBuf in case we need extra columns for
+ * hashJoin. */
 {
-return sqlNextRow(self->sr);
+// If we passed a position filter, we may have reset the rowBuf, so re-initialize
+if (self->rowBuf.buf == NULL)
+    rowBufInit(&self->rowBuf, 1);
+// Use only the first row in rowBuf.
+if (self->rowBuf.buf[0] == NULL)
+    lmAllocArray(self->rowBuf.lm, self->rowBuf.buf[0], self->bigRowSize);
+char **row = sqlNextRow(self->sr);
+if (row)
+    {
+    CopyArray(row, self->rowBuf.buf[0], self->sqlRowSize);
+    return self->rowBuf.buf[0];
+    }
+else
+    return NULL;
 }
 
 INLINE boolean useSplitTable(struct annoStreamDb *self, struct joinerDtf *dtf)
@@ -224,7 +247,7 @@ if (dt == NULL || useSplitTable(self, dt))
     safecpy(dbTable, sizeof(dbTable), self->table);
 else
     joinerDtfToSqlTableString(dt, self->db, dbTable, sizeof(dbTable));
-dyStringAppend(query, dbTable);
+sqlDyStringPrintf(query, "%s", dbTable);
 ignoreEndIndexIfNecessary(self, dbTable, query);
 }
 
@@ -247,14 +270,14 @@ for (jp = routeList;  jp != NULL;  jp = jp->next)
     {
     struct joinerField *jfB = joinerSetFindField(jp->identifier, jp->b);
     if (! jfB->full)
-        dyStringAppend(query, " left");
-    dyStringAppend(query, " join ");
+	sqlDyStringPrintf(query, " left");
+    sqlDyStringPrintf(query, " join ");
     if (jp->child)
         {
-        dyStringAppendC(query, '(');
+        sqlDyStringPrintf(query, "(");
         appendOneTable(self, jp->child->a, query);
         appendJoin(self, jp->child, query);
-        dyStringAppendC(query, ')');
+        sqlDyStringPrintf(query, ")");
         }
     else
         appendOneTable(self, jp->b, query);
@@ -263,9 +286,9 @@ for (jp = routeList;  jp != NULL;  jp = jp->next)
     splitOrDtfToSqlField(self, jp->b, fieldB, sizeof(fieldB));
     struct joinerField *jfA = joinerSetFindField(jp->identifier, jp->a);
     if (sameOk(jfA->separator, ","))
-        dyStringPrintf(query, " on find_in_set(%s, %s)", fieldB, fieldA);
+        sqlDyStringPrintf(query, " on find_in_set(%s, %s)", fieldB, fieldA);
     else
-        dyStringPrintf(query, " on %s = %s", fieldA, fieldB);
+        sqlDyStringPrintf(query, " on %s = %s", fieldA, fieldB);
     }
 }
 
@@ -316,7 +339,9 @@ if (self->relatedDtfList)
                                               joinerDtfCloneList(self->relatedDtfList));
     if (self->joiner == NULL)
         self->joiner = joinerRead(joinerFilePath());
-    int expectedRows = sqlRowCount(self->conn, self->table);
+    char queryTblSafe[1024];
+    sqlSafef(queryTblSafe, sizeof queryTblSafe, "%s", self->table);
+    int expectedRows = sqlRowCount(self->conn, queryTblSafe);
     self->joinMixer = joinMixerNew(self->joiner, self->db, self->table, outputFieldList,
                                    expectedRows, self->naForMissing);
     joinerPairListToTree(self->joinMixer->sqlRouteList);
@@ -351,17 +376,9 @@ static void addBinToQuery(struct annoStreamDb *self, uint start, uint end, struc
 {
 if (self->hasBin)
     {
-    // Get the bin constraints with no table specification:
-    struct dyString *binConstraints = dyStringNew(0);
-    hAddBinToQuery(start, end, binConstraints);
-    // Swap in explicit table name for bin field:
     char tableDotBin[PATH_LEN];
     safef(tableDotBin, sizeof(tableDotBin), "%s.bin", self->table);
-    struct dyString *explicitBinConstraints = dyStringSub(binConstraints->string,
-                                                          "bin", tableDotBin);
-    dyStringAppend(query, explicitBinConstraints->string);
-    dyStringFree(&explicitBinConstraints);
-    dyStringFree(&binConstraints);
+    hAddBinToQueryGeneral(tableDotBin, start, end, query);
     }
 }
 
@@ -413,7 +430,7 @@ static void asdDoQuerySimple(struct annoStreamDb *self, char *minChrom, uint min
 {
 struct annoStreamer *streamer = &(self->streamer);
 boolean hasWhere = self->baselineQueryHasWhere;
-struct dyString *query = dyStringCreate("%s", self->baselineQuery);
+struct dyString *query = sqlDyStringCreate("%-s", self->baselineQuery);
 if (!streamer->positionIsGenome)
     {
     if (minChrom && differentString(minChrom, streamer->chrom))
@@ -436,20 +453,11 @@ else if (self->notSorted || self->hasLeftJoin)
     sqlDyStringPrintf(query, " order by %s.%s,%s.%s",
                       self->table, self->chromField, self->table, self->startField);
 if (self->maxOutRows > 0)
-    dyStringPrintf(query, " limit %d", self->maxOutRows);
+    sqlDyStringPrintf(query, " limit %d", self->maxOutRows);
 struct sqlResult *sr = sqlGetResult(self->conn, query->string);
 dyStringFree(&query);
 self->sr = sr;
 self->needQuery = FALSE;
-}
-
-static void rowBufInit(struct rowBuf *rowBuf, int size)
-/* Clean up rowBuf and give it a new lm and buffer[size]. */
-{
-resetRowBuf(rowBuf);
-rowBuf->lm = lmInit(0);
-rowBuf->size = size;
-lmAllocArray(rowBuf->lm, rowBuf->buf, size);
 }
 
 static void updateNextChunkState(struct annoStreamDb *self, int queryMaxItems)
@@ -616,7 +624,7 @@ static void asdDoQueryChunking(struct annoStreamDb *self, char *minChrom, uint m
 {
 struct annoStreamer *sSelf = &(self->streamer);
 boolean hasWhere = self->baselineQueryHasWhere;
-struct dyString *query = dyStringCreate("%s", self->baselineQuery);
+struct dyString *query = sqlDyStringCreate("%-s", self->baselineQuery);
 if (sSelf->chrom != NULL && self->rowBuf.size > 0 && !self->doNextChunk)
     {
     // We're doing a region query, we already got some rows, and don't need another chunk:
@@ -1215,7 +1223,7 @@ static char *sqlExplain(struct sqlConnection *conn, char *query)
 {
 char *trimmedQuery = query;
 if (startsWith(NOSQLINJ, trimmedQuery))
-    trimmedQuery = trimmedQuery + strlen(NOSQLINJ);
+    trimmedQuery = trimmedQuery + NOSQLINJ_SIZE;
 struct dyString *dy = dyStringCreate("# Output of 'explain %s':\n", trimmedQuery);
 char explainQuery[PATH_LEN*8];
 safef(explainQuery, sizeof(explainQuery), NOSQLINJ "explain %s", trimmedQuery);
@@ -1248,10 +1256,15 @@ static char *asdGetHeader(struct annoStreamer *sSelf)
 {
 struct annoStreamDb *self = (struct annoStreamDb *)sSelf;
 // Add a fake constraint on chromField because a real one is added to baselineQuery.
-char queryWithChrom[PATH_LEN*4];
-safef(queryWithChrom, sizeof(queryWithChrom), "%s %s %s.%s = 'someValue'", self->baselineQuery,
-      (strstr(self->baselineQuery, "where") ? "and" : "where"), self->table, self->chromField);
-char *explanation = sqlExplain(self->conn, queryWithChrom);
+struct dyString *queryWithChrom = dyStringNew(1024);
+sqlDyStringPrintf(queryWithChrom, "%-s ", self->baselineQuery);
+if (strstr(self->baselineQuery, "where"))
+    sqlDyStringPrintf(queryWithChrom, "and ");
+else
+    sqlDyStringPrintf(queryWithChrom, "where ");
+sqlDyStringPrintf(queryWithChrom, "%s.%s = 'someValue'", self->table, self->chromField);
+char *explanation = sqlExplain(self->conn, dyStringContents(queryWithChrom));
+dyStringFree(&queryWithChrom);
 return explanation;
 }
 
@@ -1323,6 +1336,7 @@ if (slCount(self->chromList) > 1000)
     // Assembly has many sequences (e.g. scaffold-based assembly) --
     // don't break up into per-sequence queries.  Take our chances
     // with mysql being unhappy about the sqlResult being open too long.
+    rowBufInit(&self->rowBuf, 1);
     self->doQuery = asdDoQuerySimple;
     self->nextRowRaw = nextRowFromSqlResult;
     }

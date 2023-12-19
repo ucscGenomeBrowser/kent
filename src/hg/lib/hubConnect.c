@@ -25,6 +25,8 @@
 #include "udc.h"
 #include "hubPublic.h"
 #include "genark.h"
+#include "asmAlias.h"
+#include "cheapcgi.h"
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -146,6 +148,7 @@ struct errCatch *errCatch = errCatchNew();
 struct trackHub *tHub = NULL;
 boolean gotWarning = FALSE;
 char *url = hubStatus->hubUrl;
+*errorMessage = NULL;
 
 char hubName[64];
 safef(hubName, sizeof(hubName), "hub_%d", hubStatus->id);
@@ -194,7 +197,7 @@ if (row != NULL)
     hub->hubUrl = cloneString(row[0]);
     hub->status = sqlUnsigned(row[1]);
     hub->errorMessage = cloneString(row[2]);
-    char *shortLabel = row[4];
+    hub->shortLabel = cloneString(row[4]);
     if (isEmpty(row[2]) || hubTimeToCheck(hub, row[3]))
 	{
 	char *errorMessage = NULL;
@@ -211,8 +214,9 @@ if (row != NULL)
          "Collection</b></a> that has expired and been removed. Track Collections "
          "expire 48 hours after their last use. <a href=\"/cgi-bin/hgSession\"><b>"
          "Save your session</b></a> to preserve collections long-term and to allow sharing.");
-            else
-                warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
+            // commenting this out, but leaving it in the source because we might use it later.
+            //else
+                //warn("Could not connect to hub \"%s\": %s", hub->shortLabel, hub->errorMessage);
 	    }
 	}
     }
@@ -375,7 +379,10 @@ struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database,
 unsigned hubId = hubIdFromTrackName(trackName);
 struct hubConnectStatus *hub = hubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
-struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL);
+if (hubGenome == NULL)
+    errAbort("Cannot find genome %s in hub %s", database, hub->hubUrl);
+boolean foundFirstGenome = FALSE;
+struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL, &foundFirstGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
 //this next line causes warns to print outside of warn box on hgTrackUi
@@ -407,7 +414,7 @@ static char *getDbList(struct trackHub *tHub, int *pCount)
 /* calculate dbList for hubStatus table from trackHub */
 {
 struct hashEl *hel;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 struct hashCookie cookie = hashFirst(tHub->genomeHash);
 int dbCount = 0;
 while ((hel = hashNext(&cookie)) != NULL)
@@ -515,6 +522,8 @@ hub->hubUrl = cloneString(url);
 struct trackHub *tHub = fetchHub( hub, &errorMessage);
 if (tHub != NULL)
     hub->trackHub = tHub;
+if (errorMessage != NULL)
+    hub->errorMessage = cloneString(errorMessage);
 
 /* update the status table with the lastest label and database information */
 hubUpdateStatus( errorMessage, hub);
@@ -632,6 +641,8 @@ for(; urls; urls = urls->next)
                     {
                     if (sameString(assemblyDb, hubConnectSkipHubPrefix(genomeList->name)))
                         {
+                        if (hub->errorMessage)
+                            errAbort("Hub error: %s", hub->errorMessage);
                         newDatabase = genomeList->name;
                         break;
                         }
@@ -742,16 +753,23 @@ else if (tHub != NULL)
 hDisconnectCentral(&conn);
 }
 
-struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database)
-/* Load up stuff from data hub and return list. */
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boolean *foundFirstGenome, struct hash *trackDbNameHash)
+/* Load up stuff from data hub and append to list. The hubUrl points to
+ * a trackDb.ra format file. Only the first example of a genome gets to 
+ * populate groups, the others get a group for the trackHub.  A particular 
+ * trackDb is only read once even if referenced from more than one hub.  */
 {
-/* Load trackDb.ra file and make it into proper trackDb tree */
 struct trackDb *tdbList = NULL;
 struct trackHub *trackHub = hub->trackHub;
 
 if (trackHub != NULL)
     {
     struct trackHubGenome *hubGenome = trackHubFindGenome(trackHub, database);
+    if ((hubGenome == NULL) || hashLookup(trackDbNameHash,  hubGenome->trackDbFile))
+        hubGenome = NULL; // we already saw this trackDb, so ignore this stanza
+    else
+        hashStore(trackDbNameHash,  hubGenome->trackDbFile);
+
     if (hubGenome != NULL)
 	{
         boolean doCache = trackDbCacheOn();
@@ -774,8 +792,8 @@ if (trackHub != NULL)
             memCheckPoint(); // we want to know how much memory is used to build the tdbList
             }
 
-        struct dyString *incFiles = newDyString(4096);
-        tdbList = trackHubTracksForGenome(trackHub, hubGenome, incFiles);
+        struct dyString *incFiles = dyStringNew(4096);
+        tdbList = trackHubTracksForGenome(trackHub, hubGenome, incFiles, foundFirstGenome);
         tdbList = trackDbLinkUpGenerations(tdbList);
         tdbList = trackDbPolishAfterLinkup(tdbList, database);
         trackDbPrioritizeContainerItems(tdbList);
@@ -796,7 +814,7 @@ AllocVar(grp);
 char name[16];
 safef(name, sizeof(name), "hub_%d", hub->id);
 grp->name = cloneString(name);
-grp->label = cloneString(hub->trackHub->shortLabel);
+grp->label = cloneString(hub->shortLabel);
 return grp;
 }
 
@@ -817,6 +835,8 @@ if (hubTrackDbs != NULL)
 
 struct hubConnectStatus *hub, *hubList =  hubConnectGetHubs();
 struct trackDb *tdbList = NULL;
+boolean foundFirstGenome = FALSE;
+struct hash *trackDbNameHash = newHash(5);
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
     if (isEmpty(hub->errorMessage))
@@ -825,7 +845,7 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
 	    {
-	    struct trackDb *thisList = hubAddTracks(hub, database);
+	    struct trackDb *thisList = hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash);
 	    tdbList = slCat(tdbList, thisList);
 	    }
         errCatchEnd(errCatch);
@@ -843,6 +863,13 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 
         errCatchFree(&errCatch);
 	}
+    else
+        {
+        /* create an empty group to hold the error message. */
+        struct grp *grp = grpFromHub(hub);
+        grp->errMessage = hub->errorMessage;
+        slAddHead(&hubGroups, grp);
+        }
     }
 
 hubTrackDbs = tdbList;
@@ -922,6 +949,7 @@ for(hub = hubList; hub; hub = hub->next)
         {
         char *name = genome->name;
 
+        name = asmAliasFind(name);
         if (!hDbIsActive(name) )
             {
             char buffer[4096];
@@ -968,11 +996,163 @@ hDisconnectCentral(&conn);
 return added;
 }
 
+static char *getCuratedHubPrefix()
+/* figure out what sandbox we're in. */
+{
+char *curatedHubPrefix = cfgOption("curatedHubPrefix");
+if (isEmpty(curatedHubPrefix))
+    curatedHubPrefix = "public";
+
+return curatedHubPrefix;
+}
+
+
+boolean hubConnectGetCuratedUrl(char *db, char **hubUrl)
+/* Check to see if this db is a curated hub and if so return its hubUrl */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[4096];
+sqlSafef(query, sizeof query, "SELECT nibPath from %s where name = '%s' AND nibPath like '%s%%'",
+          dbDbTable(), db, hubCuratedPrefix);
+
+char *dir = sqlQuickString(conn, query);
+boolean ret = !isEmpty(dir);
+hDisconnectCentral(&conn);
+
+if (hubUrl != NULL) // if user passed in hubUrl, calculate what it should be
+    {
+    *hubUrl = NULL;
+    if (!isEmpty(dir))   // this is a curated hub
+        {
+        char *path = dir + sizeof(hubCuratedPrefix) - 1;
+        char url[4096];
+        safef(url, sizeof url, "%s/%s/hub.txt", path, getCuratedHubPrefix());
+        *hubUrl = cloneString(url);
+        }
+    }
+
+return ret;
+}
+
+boolean hubConnectIsCurated(char *db)
+/* Look in the dbDb table to see if this hub is curated. */
+{
+return hubConnectGetCuratedUrl(db, NULL);
+}
+
+static int lookForCuratedHubs(struct cart *cart, char *db,  char *curatedHubPrefix)
+/* Check to see if db is a curated hub which will require the hub to be attached. 
+ * The variable curatedHubPrefix has the release to use (alpha, beta, public, or a user name ) */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[4096];
+sqlSafef(query, sizeof query, "SELECT nibPath from %s where name = '%s' AND nibPath like '%s%%'",
+          dbDbTable(), db, hubCuratedPrefix);
+
+char *dir = cloneString(sqlQuickString(conn, query));
+hDisconnectCentral(&conn);
+
+if (!isEmpty(dir))
+    {
+    char *path = &dir[sizeof hubCuratedPrefix - 1];
+    char url[4096];
+    safef(url, sizeof url, "%s/%s/hub.txt", path, curatedHubPrefix);
+
+    struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
+
+    if (status && isEmpty(status->errorMessage))
+        {
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "hub_%d_%s", status->id, db);
+
+        cartSetString(cart, "db", buffer);
+        if (cgiOptionalString("db"))
+            {
+            /* user specified db on URL, we need to decorate and put it back. */
+            cgiVarSet("db",  cloneString(buffer));
+            }
+
+        return status->id;
+        }
+    else
+        {
+        if (!isEmpty(status->errorMessage))
+            errAbort("Hub error: url %s: error  %s.", url, status->errorMessage);
+        else
+            errAbort("Cannot open hub %s.", url);
+        }
+
+    }
+return 0;
+}
+
+static void portHubStatus(struct cart *cart)
+/* When a session has been saved on a different host it may have cart variables that reference hubStatus id's
+ * that are different than what the local machine has.  Look for these cases using the "assumesHub" cart variable
+ * that maps id numbers to URL's. */
+{
+char *assumesHubStr = cartOptionalString(cart, "assumesHub");
+if (assumesHubStr == NULL)
+    return;
+
+struct slPair *pairs = slPairListFromString(assumesHubStr, FALSE);
+for(; pairs; pairs = pairs->next)
+    {
+    char *url = (char *)pairs->val;
+    unsigned sessionHubId = atoi(pairs->name);
+    char *errMessage;
+    unsigned localHubId = hubFindOrAddUrlInStatusTable(cart, url, &errMessage);
+
+    if (localHubId != sessionHubId)  // the hubStatus id on the local machine is different than in the session
+        {
+        // first look for visibility and settings for tracks on this hub
+        char wildCard[4096];
+
+        safef(wildCard, sizeof wildCard, "hub_%d_*", sessionHubId);
+        struct slPair *cartVars = cartVarsLike(cart, wildCard);
+
+        for(; cartVars; cartVars = cartVars->next)
+            {
+            char *rest = trackHubSkipHubName(cartVars->name);
+            char newVarName[4096];
+            
+            // add the new visibility/setting
+            safef(newVarName, sizeof newVarName, "hub_%d_%s", localHubId, rest);
+            cartSetString(cart, newVarName, cartVars->val);
+
+            // remove the old visibility/setting
+            cartRemove(cart, cartVars->name);
+            }
+
+        // turn on this remapped hub
+        char hubName[4096];
+        cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+        safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, localHubId);
+        cartSetString(cart, hubName, "1");
+
+        // remove the old hub connection
+        safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, sessionHubId);
+        cartRemove(cart, hubName);
+        }
+    }
+
+cartRemove(cart, "assumesHub");
+}
+
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
+char *dbSpec = asmAliasFind(cartOptionalString(cart, "db"));
+char *curatedHubPrefix = getCuratedHubPrefix();
+if (dbSpec != NULL)
+    lookForCuratedHubs(cart, trackHubSkipHubName(dbSpec), curatedHubPrefix);
+
 char *newDatabase = checkForNew( cart);
+newDatabase = asmAliasFind(newDatabase);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+
+portHubStatus(cart);
+
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
 
 char *genarkPrefix = cfgOption("genarkHubPrefix");

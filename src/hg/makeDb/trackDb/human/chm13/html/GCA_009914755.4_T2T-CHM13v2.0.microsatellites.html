@@ -1,0 +1,31 @@
+<h2>Description</h2>
+<p>This track represents % of simple-sequence (2-mer) repeat pattern. Sequences composed of GA/TC/GC/AT bases are counted if one of the bases repeats (e.g. AAAATTTTAAATT are counted as 13 ATs). Patterns are obtained from every non-verlapping 128 bp window. Values displayed are the % of bases forming the specific repeat type, with a maximum value of 100. These sequence patterns are useful for predicting HiFi or ONT coverage biases, as described in Nurk et al. 2022 (Fig. 3) and Mc Cartney et al., 2022.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<!-- if there are special conventions, like colors, describe them here -->
+<ul>
+<li><span style='border: 1px inset #000000; background-color:#5369FF;'>&nbsp;  &nbsp;</span> - GA
+<li><span style='border: 1px inset #000000; background-color:#660066;'>&nbsp;  &nbsp;</span> - TC
+<li><span style='border: 1px inset #000000; background-color:#BC7313;'>&nbsp;  &nbsp;</span> - GC
+<li><span style='border: 1px inset #000000; background-color:#336600;'>&nbsp;  &nbsp;</span> - AT
+</ul>
+
+<h2>Methods</h2>
+<p>The track was generated using <a href="https://github.com/marbl/seqrequester">Seqrequester</a>, a Meryl and Canu utility module. The tracks can be generated using <code>seqrequester microsatellite</code>. The code to generate these patterns can be found at <a href="https://github.com/arangrhie/T2T-Polish/tree/master/pattern">T2T-Polish/pattern</a>.</p>
+
+<h2>Release history</h2>
+<ul>
+  <li>2021/05/24, Microsatellite tracks for chm13.v1.0 assembly.</li>
+  <li>2021/10/13, Microsatellite tracks for chm13.v1.1 assembly.</li>
+  <li>2022/03/29, Microsatellite tracks for chm13.v2.0 assembly.</li>
+</ul>
+
+<h2>Credits</h2>
+<p>For inquiries, please contact us at <a href="https://github.com/marbl/seqrequester">Seqrequester</a> or <a href="https://github.com/arangrhie/T2T-Polish">T2T-Polish</a>.</p>
+
+<h2>References</h2>
+<ol>
+  <li>Nurk S, Koren S, Rhie A, Rautiainen M <em>et al</em>. The complete sequence of a human genome. <em>Science</em> (2022) doi: <a href="https://doi.org/10.1126/science.abj6987">10.1126/science.abj6987</a></li>
+  <li>Mc Cartney AM, Shafin K, Alonge M <em>et al</em>. Chasing perfection: validation and polishing strategies for telomere-to-telomere genome assemblies. <em>Nat. Methods</em> (2022) doi: <a href="https://doi.org/10.1038/s41592-022-01440-3">10.1038/s41592-022-01440-3</a></li>
+</p>

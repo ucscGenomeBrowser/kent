@@ -51,6 +51,7 @@
 #include "interactUi.h"
 #include "hic.h"
 #include "cgiApoptosis.h"
+#include "chromAlias.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -176,6 +177,9 @@ if (startsWith(trashDir(), url) ||
     (isNotEmpty(sessionDataDirOld) && startsWith(sessionDataDirOld, url)))
     return TRUE;
 
+if (udcIsResolvable(url))
+    return TRUE;
+
 char *prefix = cfgOption("udc.localDir");
 if (prefix == NULL)
     {
@@ -183,15 +187,17 @@ if (prefix == NULL)
         errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
     return FALSE;
     }
-
-if (!startsWith(prefix, url))
+else if (!startsWith(prefix, url))
     {
     if (doAbort)
-        errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
+        errAbort("bigDataUrl '%s' is not an internet URL but udc.localDir is set in cgi-bin/hg.conf of this " \
+                "UCSC Genome Browser, so the bigDataUrl can be a file " \
+                "on the local hard disk of this UCSC Genome Browser instance. However, for such a file path to be acceptable from  "
+                "the local file system, bigDataUrl has to start with the prefix set by udc.localDir, which is '%s' on this Genome Browser.", url, prefix);
     return FALSE;
     }
-
-return TRUE;
+else
+    return TRUE;
 }
 
 static void checkAllowedBigDataUrlProtocols(char *url)
@@ -339,7 +345,7 @@ static struct pipeline *bedLoaderPipe(struct customTrack *track)
  * -customTrackLoader turns on options: -noNameIx -noHistory -ignoreEmpty
  *	-allowStartEqualEnd -allowNegativeScores -verbose=0
  */
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 int index = 3; /* verify this references the first NULL as cmd1[index] */
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
 	"-lineLimit=50000000", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
@@ -350,9 +356,9 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 if(startsWithWord("bedGraph", track->dbTrackType))
     {
     /* we currently assume that last field is the bedGraph field. */
@@ -378,7 +384,7 @@ return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
 void pipelineFailExit(struct customTrack *track)
 /* show up to three lines of error message to stderr and errAbort */
 {
-struct dyString *errDy = newDyString(0);
+struct dyString *errDy = dyStringNew(0);
 struct lineFile *lf;
 char *line;
 int i;
@@ -534,7 +540,7 @@ if (wordCount > 8)
     if (comma)
 	{
 	int rgb = bedParseRgb(row[8]);
-	if (rgb < 0)
+	if (rgb == -1)
 	    lineFileAbort(lf,
 	        "Expecting 3 comma separated numbers for r,g,b bed item color.");
 	else
@@ -759,7 +765,7 @@ static struct pipeline *encodePeakLoaderPipe(struct customTrack *track)
  *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-sqlTable=loader/encodePeak.sql",
                 "-renameSqlTable", "-trimSqlTable", "-notItemRgb",
                 NULL, NULL, NULL, NULL, NULL, NULL};
@@ -771,7 +777,7 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy);
 cmd1[index++] = CUSTOM_TRASH;
@@ -864,6 +870,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     slAddHead(&peakList, peak);
     }
 slReverse(&peakList);
+track->bedList = (struct bed *)peakList;
 return encodePeakFinish(track, peakList, pt);
 }
 
@@ -922,7 +929,7 @@ static struct pipeline *bedDetailLoaderPipe(struct customTrack *track)
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
 
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 //bed size can vary
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-tab", "-noBin",
 	"-sqlTable=loader/bedDetail.sql", "-renameSqlTable", "-trimSqlTable", "-bedDetail", NULL, NULL, NULL, NULL, NULL, NULL};
@@ -934,7 +941,7 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy);
 cmd1[index++] = CUSTOM_TRASH;
@@ -1128,7 +1135,7 @@ static struct pipeline *pgSnpLoaderPipe(struct customTrack *track)
  *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
 	"-sqlTable=loader/pgSnp.sql", "-renameSqlTable", "-trimSqlTable", "-notItemRgb", NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
@@ -1139,7 +1146,7 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&tmpDy);
 cmd1[index++] = CUSTOM_TRASH;
@@ -1364,16 +1371,16 @@ char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", NULL,
                 NULL, NULL, NULL, NULL, NULL, NULL};
 
 char *schemaFile = "barChartBed.sql";
-struct dyString *ds = newDyString(0);
+struct dyString *ds = dyStringNew(0);
 dyStringPrintf(ds, "-sqlTable=loader/%s", schemaFile);
 cmd1[2] = dyStringCannibalize(&ds);
 
 int index = 7;
-ds = newDyString(0);
+ds = dyStringNew(0);
 dyStringPrintf(ds, "-tmpDir=%s", tmpDir);
 cmd1[index++] = dyStringCannibalize(&ds);
 
-ds = newDyString(0);
+ds = dyStringNew(0);
 dyStringPrintf(ds, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&ds);
 
@@ -1553,16 +1560,16 @@ char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", NULL,
                 NULL, NULL, NULL, NULL, NULL, NULL};
 
 char *schemaFile = "interact.sql";
-struct dyString *ds = newDyString(0);
+struct dyString *ds = dyStringNew(0);
 dyStringPrintf(ds, "-sqlTable=loader/%s", schemaFile);
 cmd1[2] = dyStringCannibalize(&ds);
 
 int index = 6;
-ds = newDyString(0);
+ds = dyStringNew(0);
 dyStringPrintf(ds, "-tmpDir=%s", tmpDir);
 cmd1[index++] = dyStringCannibalize(&ds);
 
-ds = newDyString(0);
+ds = dyStringNew(0);
 dyStringPrintf(ds, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[index++] = dyStringCannibalize(&ds);
 
@@ -2200,7 +2207,7 @@ static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
 {
 customFactorySetupDbTrack(track);
 
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 char *cmd1[] = {"loader/hgLoadMaf", "-verbose=0", "-custom",  NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 char **cmds[] = {cmd1, NULL};
@@ -2214,13 +2221,13 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-loadFile=%s", mafFile);
-cmd1[4] = dyStringCannibalize(&tmpDy);  tmpDy = newDyString(0);
+cmd1[4] = dyStringCannibalize(&tmpDy);  tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-refDb=%s", track->genomeDb);
-cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxNameLen=%d", track->maxChromName);
-cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-defPos=%s", tn.forCgi);
 cmd1[7] = dyStringCannibalize(&tmpDy);
 cmd1[8] = CUSTOM_TRASH;
@@ -2240,9 +2247,9 @@ char *line;
 int size;
 
 lineFileNeedNext(lf, &line, &size);
+ctAddToSettings(track, "firstItemPos", cloneString(line));
 lineFileClose(&lf);
 unlink(tn.forCgi);
-ctAddToSettings(track, "firstItemPos", cloneString(line));
 }
 
 static struct customTrack *mafLoader(struct customFactory *fac,
@@ -2350,7 +2357,7 @@ static struct pipeline *wigLoaderPipe(struct customTrack *track)
  *	    -maxChromNameLength=${nameLength} -chromInfoDb=${database} \
  *	    -pathPrefix=[.|/] ${db} ${table} stdin
  */
-struct dyString *tmpDy = newDyString(0);
+struct dyString *tmpDy = dyStringNew(0);
 char *cmd1[] = {"loader/wigEncode", "-verbose=0", "-wibSizeLimit=300000000",
 	"stdin", "stdout", NULL, NULL};
 char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", "-noHistory", NULL, NULL,
@@ -2365,9 +2372,9 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
-cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = dyStringNew(0);
 // hgLoadWiggle doesn't know about assembly hubs so disable size check
 if (trackHubDatabase(track->genomeDb))
     {
@@ -2712,7 +2719,7 @@ checkAllowedBigDataUrlProtocols(bigDataUrl);
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    track->bbiFile = bigWigFileOpen(bigDataUrl);
+    track->bbiFile = bigWigFileOpenAlias(bigDataUrl, chromAliasFindAliases);
     setBbiViewLimits(track);
     }
 errCatchEnd(errCatch);
@@ -2856,7 +2863,7 @@ checkAllowedBigDataUrlProtocols(bigDataUrl);
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    track->bbiFile = bigBedFileOpen(bigDataUrl);
+    track->bbiFile = bigBedFileOpenAlias(bigDataUrl, chromAliasFindAliases);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -4141,6 +4148,26 @@ pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
+boolean customFactoryParallelLoad(char *bdu, char *type)
+/* Is this a data type that should be loaded in parallel ? */
+{
+if ((type == NULL) || (bdu == NULL))
+    return FALSE;
+
+return (startsWith("big", type)
+     || startsWithWord("mathWig"  , type)
+     || startsWithWord("bam"     , type)
+     || startsWithWord("halSnake", type)
+     || startsWithWord("bigRmsk", type)
+     || startsWithWord("bigLolly", type)
+     || startsWithWord("vcfTabix", type))
+     // XX code-review: shouldn't we error abort if the URL is not valid?
+     && (bdu && isValidBigDataUrl(bdu, FALSE))
+     && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
+     && (!startsWith("bigInteract", type))
+     && (!startsWith("bigMaf", type));
+}
+
 static struct customTrack *customFactoryParseOptionalDb(char *genomeDb, char *text,
 	boolean isFile, struct slName **retBrowserLines,
 	boolean mustBeCurrentDb, boolean doParallelLoad)
@@ -4199,7 +4226,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
     if (lf->fileName && (
             startsWith("http://" , lf->fileName) ||
             startsWith("https://", lf->fileName) ||
-            startsWith("ftp://"  , lf->fileName)
+            startsWith("ftp://"  , lf->fileName) ||
+            udcIsResolvable(lf->fileName)
             ))
         dataUrl = cloneString(lf->fileName);
     if (startsWithWord("track", line))
@@ -4307,14 +4335,24 @@ while ((line = customPpNextReal(cpp)) != NULL)
 			lf->lineIx, fileName, emptyForNull(line));
 		    }
 		}
-	    else
+	    else if (bigDataUrl)
 		{
-		errAbort("Unrecognized format type=%s line %d of %s",
-			 (type? type : "NULL"),
-			 (lf ? lf->lineIx : 0), (lf ? lf->fileName : "NULL file"));
+#define TYPE_NOT_BIGDATAURL "Type '%s' is not a bigDataUrl type.  Please see the documentation links above."
+                if (lf)
+                    lineFileAbort(lf, TYPE_NOT_BIGDATAURL, type);
+                else
+                    errAbort(TYPE_NOT_BIGDATAURL, type);
 		}
+            else
+                {
+#define TYPE_UNRECOGNIZED "Unrecognized format 'type=%s'.  Please see the documentation links above."
+                if (lf)
+                    lineFileAbort(lf, TYPE_UNRECOGNIZED, type);
+                else
+                    errAbort(TYPE_UNRECOGNIZED, type);
+                }
 	    }
-	if (bigDataUrl && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
+	if (customFactoryParallelLoad(bigDataUrl, type) && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
                                        //  (unless ptMax == 0 which means turn parallel loading off)
             {
             if (doParallelLoad)

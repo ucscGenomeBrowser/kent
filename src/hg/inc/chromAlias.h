@@ -64,16 +64,27 @@ void chromAliasJsonOutput(struct chromAlias *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct hash *chromAliasMakeLookupTable(char *database);
-/* Given a database name and a connection to that database, construct a lookup table
- * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
- * if the given database does not have a chromAlias table. */
+void chromAliasSetupBb(char *database, char *bbFile);
+/* Look for a chromAlias bigBed file and open it. */
 
-struct hash *chromAliasMakeReverseLookupTable(char *database);
-/* Given a database name and a connection to that database, construct a lookup table
- * that takes the actual assembly chromosome names to struct chromAliases.  Because a
- * chromosome name may well have multiple aliases, repeated calls to hashLookupNext
- * may be required to see them all.  Returns NULL if the given database does not have
- * a chromAlias table. */
+void chromAliasSetup(char *database);
+/* Read in the chromAlias file/table for this database. */
+
+char *chromAliasFindNative(char *name);
+/* Find the native seqName for a given alias. */
+
+struct slName *chromAliasFindAliases(char *seqName);
+/* Get the list of aliases for this sequence name. */
+
+char *chromAliasFindSingleAlias(char *seqName, char *authority);
+/* Find the aliases for a given seqName from a given authority. */
+
+char *chromAliasGetDisplayChrom(char *db, struct cart *cart, char *seqName);
+/* Return the sequence name to display based on the database and cart. */
+
+char *chromAliasNCBI(char *db, char *chr, char *gcX);
+/* given the database and the chrom name, find the NCBI equivalent chr name
+ *   gcX helps determine if RefSeq/GCF or GenBank/GCA
+ */
 
 #endif /* CHROMALIAS_H */

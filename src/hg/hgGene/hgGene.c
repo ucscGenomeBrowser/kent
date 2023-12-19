@@ -14,6 +14,7 @@
 #include "hui.h"
 #include "dbDb.h"
 #include "hdb.h"
+#include "dupTrack.h"
 #include "web.h"
 #include "botDelay.h"
 #include "ra.h"
@@ -432,6 +433,7 @@ addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(domainsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(primersSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(flyBaseRolesSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(flyBasePhenotypesSection(conn, sectionRa), conn, &sectionList);
@@ -723,6 +725,7 @@ else
     if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 
     char *tableName = cartUsualString(cart, hggType, NULL);
+    tableName = dupTrackSkipToSourceName(tableName);
     char *knownDb = hdbDefaultKnownDb(database);
 
     // if no table has been given to us, try knownGene

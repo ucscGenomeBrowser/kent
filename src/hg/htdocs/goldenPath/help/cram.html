@@ -12,12 +12,13 @@ files contain all sequence data within a file, CRAM files are smaller by taking 
 additional external &quot;reference sequence&quot; file. This file is needed to both compress and 
 decompress the read information.</p>
 <p>
-Since CRAM files are more dense than BAM files, many groups are switching to the CRAM format to save
-disk space. For CRAM tracks to load there is an expectation that the checksum of the reference 
-sequence used to create the CRAM will be in the CRAM header. A file with a matching checksum is also
-expected to be accessible from the EBI CRAM reference registry (see <a href="#refs">References</a> 
-for CRAM resources). Otherwise, users must specify a <code>refUrl</code> setting that will point to 
-a server that is offering up the reference sequences (see <a href="#example4">Example Four</a>).</p>
+Since CRAM files are more dense than <a href="/goldenPath/help/bam.html">BAM</a> files, many groups
+are switching to the CRAM format to save disk space. For CRAM tracks to load there is an expectation
+that the checksum of the reference sequence used to create the CRAM will be in the CRAM header. A
+file with a matching checksum is also expected to be accessible from the EBI CRAM reference registry
+(see <a href="#refs">References</a> for CRAM resources). Otherwise, users must specify a
+<code>refUrl</code> setting that will point to a server that is offering up the reference sequences
+(see <a href="#example4">Example Four</a>).</p>
 <p>
 Since the loading of CRAM data requires the specific reference sequence used to create the CRAM 
 file, it is very important that the exact same reference sequence is used for compression and 
@@ -44,7 +45,8 @@ as text into the <a href="/cgi-bin/hgCustom?db=hg19" target="_blank">Custom Trac
 <pre><code>track type=bam db=hg19 name=exampleCRAM bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram </code></pre>
 <p>
 Please note at the above URL location there is also a 
-<code>http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram.crai</code> file.</p>
+<code>http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram.crai</code> file. If this .crai file is at a different URL,
+the <code>bigDataIndex=&lt;URL&gt;</code> option must be added.</p>
 <p>
 Clicking this following link will also load the above track. The information following 
 <code>hgct_customText</code> is equivalent to pasting the text in to the Custom Tracks page:</p> 

@@ -178,7 +178,7 @@ struct genePredReader *gpr;
 struct genePred *ccdsGene = NULL, *kgGene = NULL;
 
 /* get ccds genePred to get location */
-sqlSafefFrag(where, sizeof(where), "chrom = '%s' and name = '%s'", seqName, ccdsId);
+sqlSafef(where, sizeof(where), "chrom = '%s' and name = '%s'", seqName, ccdsId);
 gpr = genePredReaderQuery(conn, "ccdsGene", where);
 ccdsGene = genePredReaderAll(gpr);
 genePredReaderFree(&gpr);
@@ -188,7 +188,7 @@ else if (ccdsGene->next != NULL)
     errAbort("multiple %s rows found in ccdsGene table for chrom %s", ccdsId, seqName);
 
 /* get KG genePred, as need exact location for link */
-sqlSafefFrag(where, sizeof(where), "name = '%s' and strand = '%s'", kgId,
+sqlSafef(where, sizeof(where), "name = '%s' and strand = '%s'", kgId,
       ccdsGene->strand);
 gpr = genePredReaderRangeQuery(conn, "knownGene", seqName,
                                ccdsGene->txStart, ccdsGene->txEnd, where);

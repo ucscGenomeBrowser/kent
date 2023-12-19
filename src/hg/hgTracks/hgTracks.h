@@ -59,7 +59,7 @@
 #define MAXPIXELS 14000
 #endif
 
-#define BIGBEDMAXIMUMITEMS 100000
+#define BIGBEDMAXIMUMITEMS 1000000
 
 #define MULTI_REGION_VIRTUAL_CHROM_NAME "multi"
 // original name was 'virt'
@@ -71,6 +71,7 @@
 extern long enteredMainTime;
 
 #include "lolly.h"
+#include "spaceSaver.h"
 
 struct track
 /* Structure that displays of tracks. The central data structure
@@ -100,6 +101,7 @@ struct track
     /* loadItems loads up items for the chromosome range indicated.   */
 
     void *items;               /* Some type of slList of items. */
+    struct decoratorGroup *decoratorGroup;   /* Some type of slList of decoration sets for items. */
 
     char *(*itemName)(struct track *tg, void *item);
     /* Return name of one of an item to display on left side. */
@@ -139,6 +141,18 @@ struct track
     /* Draw a single item.  This is optional, but if it's here
      * then you can plug in genericDrawItems into the drawItems,
      * which takes care of all sorts of things including packing. */
+
+    void (*drawItemLabel)(struct track *tg, struct spaceNode *sn,
+                          struct hvGfx *hvg, int xOff, int y, int width,
+                          MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                          double scale, boolean withLeftLabels);
+    /* Draw the label for an item */
+
+    void (*doItemMapAndArrows)(struct track *tg, struct spaceNode *sn,
+                               struct hvGfx *hvg, int xOff, int y, int width,
+                               MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                               double scale, boolean withLeftLabels);
+    /* Handle item map and exon arrows for an item */
 
     int (*itemStart)(struct track *tg, void *item);
     /* Return start of item in base pairs. */
@@ -299,6 +313,8 @@ struct track
     boolean subTrackVis;        /* if we calculated it, what is it */
 
     struct lollyCartOptions *lollyCart;
+    double squishyPackPoint;    /* the value at which we switch to squish mode. */
+    char * originalTrack;       /* the name of the original track if this a pseduo-duplicate track used for squishyPack */
     };
 
 struct window  // window in multiwindow image
@@ -347,7 +363,8 @@ struct group
     float priority;        /* Display order, 0 is on top. */
     float defaultPriority; /* original priority before reordering */
     struct trackRef *trackList;  /* List of tracks. */
-    boolean defaultIsClosed;
+    boolean defaultIsClosed; /* close the track group by default. */
+    char *errMessage;      /* any error messages that came up during trackDb parsing. */
     };
 
 struct simpleFeature
@@ -405,6 +422,9 @@ struct linkedFeatures
 #endif
     boolean isBigGenePred;
     char *label;                        /* Label for bigBeds. */
+    int qSize;				/* Query size for chain/bigChain */
+    double squishyPackVal;              /* the squishyPoint value for this item. */
+    struct snakeInfo *snakeInfo;           /* if we're in snake mode, here's the deets */
     };
 
 struct linkedFeaturesSeries
@@ -539,6 +559,7 @@ extern struct hash *oldVars;       /* List of vars from previous cart. */
 extern struct track *trackList;    /* List of all tracks. */
 extern struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
+extern char *displayChromName;	  /* Name of chromosome sequence to display . */
 extern char *database;	  /* Name of database we're using. */
 extern char *organism;	  /* Name of organism we're working on. */
 extern char *browserName;              /* Test or public browser */
@@ -628,7 +649,7 @@ struct track *getTrackList(struct group **pGroupList, int vis);
  * If vis is -1, restore default groups to tracks.
  * Shared by hgTracks and configure page. */
 
-void groupTrackListAddSuper(struct cart *cart, struct group *group);
+void groupTrackListAddSuper(struct cart *cart, struct group *group, struct hash *superHash);
 /* Construct a new track list that includes supertracks, sort by priority,
  * and determine if supertracks have visible members.
  * Replace the group track list with this new list.
@@ -681,6 +702,20 @@ void mapBoxHgcOrHgGene(struct hvGfx *hvg, int start, int end, int x, int y, int 
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 
+void genericDrawItemLabel(struct track *tg, struct spaceNode *sn,
+                    struct hvGfx *hvg, int xOff, int y, int width,
+                    MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                    double scale, boolean withLeftLabels);
+/* Generic function for writing out an item label */
+
+
+void genericItemMapAndArrows(struct track *tg, struct spaceNode *sn,
+                    struct hvGfx *hvg, int xOff, int y, int width,
+                    MgFont *font, Color color, Color labelColor, enum trackVisibility vis,
+                    double scale, boolean withLeftLabels);
+/* Generic function for putting down a mapbox with a label and drawing exon arrows */
+
+
 void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 		    char *itemName, char *mapItemName, int start, int end,
 		    int x, int y, int width, int height);
@@ -717,6 +752,27 @@ void drawScaledBoxLabel(struct hvGfx *hvg,
      int chromStart, int chromEnd, double scale,
      int xOff, int y, int height, Color color, MgFont *font,  char *label);
 /* Draw a box scaled from chromosome to window coordinates and draw a label onto it. */
+
+typedef enum {
+    GLYPH_CIRCLE,
+    GLYPH_TRIANGLE,
+    GLYPH_INV_TRIANGLE,
+    GLYPH_SQUARE,
+    GLYPH_DIAMOND,
+    GLYPH_OCTAGON,
+    GLYPH_STAR,
+    GLYPH_PENTAGRAM
+    } glyphType;
+
+void drawScalledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
+                      int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor);
+/* Draw a glyph as a circle/polygon.  If filled, draw as with fillColor,
+ * which may have transparency.
+ */
+
+glyphType parseGlyphType(char *glyphStr);
+/* Return the enum glyph type for a string specifying a glyph.
+ * Defaults to GLYPH_CIRCLE if the string is unrecognized. */
 
 Color whiteIndex();
 /* Return index of white. */
@@ -804,8 +860,7 @@ void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis);
  * be tvHide, tvDense, etc.
  */
 
-void genericDrawItems(struct track *tg,
-                      int seqStart, int seqEnd,
+void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
                       struct hvGfx *hvg, int xOff, int yOff, int width,
                       MgFont *font, Color color, enum trackVisibility vis);
 /* Draw generic item list.  Features must be fixed height
@@ -930,8 +985,14 @@ void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList);
 int simpleFeatureCmp(const void *va, const void *vb);
 /* Compare to sort based on start. */
 
+int linkedFeaturesCmpScore(const void *va, const void *vb);
+/* Help sort linkedFeatures by score (descending), then by starting pos. */
+
 int linkedFeaturesCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
+
+int linkedFeaturesCmpName(const void *va, const void *vb);
+/* Help sort linkedFeatures by name. */
 
 int linkedFeaturesCmpStart(const void *va, const void *vb);
 /* Help sort linkedFeatures by starting pos. */
@@ -1286,6 +1347,13 @@ void bamLinkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      MgFont *font, Color color, enum trackVisibility vis);
 /* Draw BAM linked features series items. */
 
+void chainDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis);
+/* Draw chained features. This loads up the simple features from
+ * the chainLink table, calls linkedFeaturesDraw, and then
+ * frees the simple features again. */
+
 void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis);
@@ -1597,6 +1665,10 @@ void gtexEqtlClusterMethods(struct track *tg);
 void gtexEqtlTissueMethods(struct track *tg);
 /* Install handler for GTEx eQTL Tissues track */
 
+void instaPortMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* instaPort track type methods */
+
 void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Lollipop track type methods */
@@ -1632,6 +1704,9 @@ int tgCmpPriority(const void *va, const void *vb);
 
 void printMenuBar();
 /* Put up the menu bar. */
+
+boolean winTooBigDoWiggle(struct cart *cart, struct track *tg);
+/* return true if we wiggle because the window size exceeds a certain threshold */
 
 boolean checkIfWiggling(struct cart *cart, struct track *tg);
 /* Check to see if a track should be drawing as a wiggle. */
@@ -1710,6 +1785,12 @@ void labelTrackAsFiltered(struct track *tg);
 
 void labelTrackAsHideEmpty(struct track *tg);
 /* add text to track long label to indicate empty subtracks are hidden */
+
+void labelTrackAsDensity(struct track *tg);
+/* Add text to track long label to indicate density mode */
+
+void labelTrackAsDensityWindowSize(struct track *tg);
+/* Add text to track long label to indicate density mode because window size exceeds some threshold */
 
 void setupHotkeys(boolean gotExtTools);
 /* setup keyboard shortcuts and a help dialog for it */

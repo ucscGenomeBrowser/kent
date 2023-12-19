@@ -42,25 +42,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *createString = 
-"CREATE TABLE %s (\n"
-"    chrom varchar(255) not null,       # Chromosome\n"
-"    chromStart int not null,   # Start coordinate\n"
-"    val double not null,        # Value at coordinate\n"
-"              #Indices\n"
-"    PRIMARY KEY(chrom(%d),chromStart)\n"
-");\n";
-
-char *metaCreateString = 
-NOSQLINJ "CREATE TABLE metaChromGraph (\n"
-"    name varchar(255) not null,        # Corresponds to chrom graph table name\n"
-"    minVal double not null,    # Minimum value observed\n"
-"    maxVal double not null,    # Maximum value observed\n"
-"    binaryFile varchar(255) not null,  # Location of binary data point file if any\n"
-"              #Indices\n"
-"    PRIMARY KEY(name(32))\n"
-");\n";
-
 void checkTableForFields(struct sqlConnection *conn, char *tableName)
 /* Do basic checks on the table to make sure it's kosher. i.e. */
 /* chrom, chromStart, name all exist along with the table itself. */
@@ -184,7 +165,15 @@ if (doLoad)
 
     /* Set up connection to database and create main table. */
     conn = hAllocConn(db);
-    sqlDyStringPrintf(dy, createString, track, hGetMinIndexLength(db));
+    sqlDyStringPrintf(dy, 
+    "CREATE TABLE %s (\n"
+    "    chrom varchar(255) not null,       # Chromosome\n"
+    "    chromStart int not null,   # Start coordinate\n"
+    "    val double not null,        # Value at coordinate\n"
+    "              #Indices\n"
+    "    PRIMARY KEY(chrom(%d),chromStart)\n"
+    ");\n"
+    , track, hGetMinIndexLength(db));
     sqlRemakeTable(conn, track, dy->string);
 
     /* Load main table and clean up file handle. */
@@ -193,7 +182,19 @@ if (doLoad)
 
     /* If need be create meta table.  If need be delete old row. */
     if (!sqlTableExists(conn, "metaChromGraph"))
-	sqlUpdate(conn, metaCreateString);
+	{
+	dyStringClear(dy);
+	sqlDyStringPrintf(dy,
+	"CREATE TABLE metaChromGraph (\n"
+	"    name varchar(255) not null,        # Corresponds to chrom graph table name\n"
+	"    minVal double not null,    # Minimum value observed\n"
+	"    maxVal double not null,    # Maximum value observed\n"
+	"    binaryFile varchar(255) not null,  # Location of binary data point file if any\n"
+	"              #Indices\n"
+	"    PRIMARY KEY(name(32))\n"
+	");\n");
+	sqlUpdate(conn, dy->string);
+	}
     else
         {
 	dyStringClear(dy);

@@ -1,17 +1,23 @@
 /* Invoke usher to place user's uploaded samples in the phylogenetic tree & parse output files. */
 
-/* Copyright (C) 2020 The Regents of the University of California */
+/* Copyright (C) 2020-2022 The Regents of the University of California */
 
 #include "common.h"
 #include "dnautil.h"
 #include "hash.h"
+#include "hgConfig.h"
 #include "linefile.h"
 #include "obscure.h"
 #include "parsimonyProto.h"
 #include "phyloPlace.h"
 #include "regexHelper.h"
 #include "pipeline.h"
+#include "trackHub.h"
 #include "trashDir.h"
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 // Keywords in stderr output of usher:
 #define sampleIdPrefix "Sample name:"
@@ -71,6 +77,42 @@ if (regexMatchSubstr(sncStr, "^([ACGT])([0-9]+)([ACGT])$", substrs, ArraySize(su
 return snc;
 }
 
+static struct baseVal *bvListFromSemiColonSep(char *mutStr)
+/* Parse a string of ;-sep'd position:allele & return a list of struct baseVal. */
+{
+char *muts[strlen(mutStr) / 4];
+int mutCount = chopString(mutStr, ";", muts, ArraySize(muts));
+struct baseVal *bvList = NULL;
+int i;
+for (i = 0;  i < mutCount;  i++)
+    {
+    boolean problem = FALSE;
+    char *colon = strchr(muts[i], ':');
+    if (colon)
+        {
+        int pos = atoi(muts[i]);
+        char *val = cloneString(colon+1);
+        if (pos < 1)
+            problem = TRUE;
+        else if (!isAllNt(val, strlen(val)))
+            problem = TRUE;
+        else
+            {
+            struct baseVal *bv;
+            AllocVar(bv);
+            bv->chromStart = pos - 1;
+            bv->val = val;
+            slAddHead(&bvList, bv);
+            }
+        }
+    if (problem)
+        errAbort("Problem parsing stderr output of usher: "
+                 "expected imputed mutation to be number:base, but got '%s'", muts[i]);
+    }
+slReverse(&bvList);
+return bvList;
+}
+
 static boolean parseImputedMutations(char **words, struct placementInfo *info)
 /* If words[] looks like it defines imputed mutations of the most recently named sample,
  * then parse out the list and add to info->imputedBases and return TRUE. */
@@ -82,37 +124,7 @@ boolean matches = FALSE;
 if (stringIn(imputedMutsPrefix, words[0]))
     {
     matches = TRUE;
-    char *muts[strlen(words[1]) / 4];
-    int mutCount = chopString(words[1], ";", muts, ArraySize(muts));
-    struct baseVal *bvList = NULL;
-    int i;
-    for (i = 0;  i < mutCount;  i++)
-        {
-        boolean problem = FALSE;
-        char *colon = strchr(muts[i], ':');
-        if (colon)
-            {
-            int pos = atoi(muts[i]);
-            char *val = cloneString(colon+1);
-            if (pos < 1)
-                problem = TRUE;
-            else if (!isAllNt(val, strlen(val)))
-                problem = TRUE;
-            else
-                {
-                struct baseVal *bv;
-                AllocVar(bv);
-                bv->chromStart = pos - 1;
-                bv->val = val;
-                slAddHead(&bvList, bv);
-                }
-            }
-        if (problem)
-            errAbort("Problem parsing stderr output of usher: "
-                     "expected imputed mutation to be number:base, but got '%s'", muts[i]);
-        }
-    slReverse(&bvList);
-    info->imputedBases = bvList;
+    info->imputedBases = bvListFromSemiColonSep(words[1]);
     }
 return matches;
 }
@@ -147,6 +159,97 @@ while (lineFileNext(lf, &line, &size))
         parseImputedMutations(words, info);
         }
     }
+}
+
+static void parsePlacements(char *outDirName, char *stderrName, struct hash *samplePlacements,
+                            struct slName **pSampleIds)
+/* If usher created the file outdir/placement_stats.tsv then parse its contents into
+ * samplePlacements; otherwise parse the same info out of the stderr output.
+ * Check placements vs. *pSampleIds; if usher renamed a sample with prefix to avoid clash with
+ * sample already in the tree then rename the sample in *pSampleIds. */
+{
+char placementsFileName[PATH_LEN];
+safef(placementsFileName, sizeof placementsFileName, "%s/placement_stats.tsv", outDirName);
+int placementCount = 0;
+if (fileExists(placementsFileName))
+    {
+    // Frustratingly, the file from server can exist but appear to be empty for a couple seconds!
+    // Worse, it might have a multiple-of-4096 size yet still be incomplete!
+    // If we don't get this file's data, then we'll run into errors when parsing subsequent files.
+    // So wait a while if the size seems suspicious.
+    int maxTries = 30;
+    int nx = 0;
+    long long size = 0;
+    while ((size = fileSize(placementsFileName)) % 4096 == 0 && nx < maxTries)
+        {
+        fprintf(stderr, "parsePlacements: after %ds, %s has multiple-of-4096 size %lld.\n",
+                nx, placementsFileName, size);
+        sleep(1);
+        nx++;
+        }
+    if ((size % 4096) == 0)
+        {
+        fprintf(stderr, "parsePlacements: %s still has multiple-of-4096 size %lld but we've waited "
+                "a long time (%ds), proceed.\n",
+                placementsFileName, size, nx);
+        }
+    else if (nx > 0)
+        fprintf(stderr, "parsePlacements: after %ds, %s size is %lld, getting started.\n",
+                nx, placementsFileName, size);
+    struct lineFile *lf = lineFileOpen(placementsFileName, TRUE);
+    char *line;
+    while (lineFileNext(lf, &line, NULL))
+        {
+        char *words[5];
+        int wordCount = chopTabs(line, words);
+        lineFileExpectAtLeast(lf, 4, wordCount);
+        char *sampleId = words[0];
+        struct placementInfo *info;
+        AllocVar(info);
+        hashAdd(samplePlacements, sampleId, info);
+        info->sampleId = cloneString(sampleId);
+        info->parsimonyScore = atoi(words[1]);
+        info->bestNodeCount = atoi(words[2]);
+        info->imputedBases = bvListFromSemiColonSep(words[3]);
+        placementCount++;
+        }
+    lineFileClose(&lf);
+    }
+else
+    {
+    fprintf(stderr, "parsePlacements: No %s, reading stderr %s\n", placementsFileName, stderrName);
+    parseStderr(stderrName, samplePlacements);
+    }
+// Check whether we placed all samples, and whether any sample names have the USHER_DEDUP_PREFIX
+// in usher results files.
+struct slName *newSampleIds = NULL;
+struct slName *sample, *next = NULL;
+for (sample = *pSampleIds;  sample != NULL;  sample = next)
+    {
+    next = sample->next;
+    if (!hashLookup(samplePlacements, sample->name))
+        {
+        // Usher might have added a prefix to distinguish from a sequence with the same name
+        // already in the tree.
+        char nameWithPrefix[strlen(USHER_DEDUP_PREFIX) + strlen(sample->name) + 1];
+        safef(nameWithPrefix, sizeof nameWithPrefix, "%s%s", USHER_DEDUP_PREFIX, sample->name);
+        if (!hashLookup(samplePlacements, nameWithPrefix))
+            {
+            warn("parsePlacements: did not find placement for sample '%s'", sample->name);
+            slAddHead(&newSampleIds, sample);
+            }
+        else
+            {
+            warn("Renamed %s to %s to distinguish it from sequence already in the tree",
+                 sample->name, nameWithPrefix);
+            slNameAddHead(&newSampleIds, nameWithPrefix);
+            }
+        }
+    else
+        slAddHead(&newSampleIds, sample);
+    }
+slReverse(&newSampleIds);
+*pSampleIds = newSampleIds;
 }
 
 static void parseVariantPaths(char *filename, struct hash *samplePlacements)
@@ -331,193 +434,55 @@ slReverse(&subtreeSampleIds);
 return subtreeSampleIds;
 }
 
-static int hashElIntCmpDesc(const void *va, const void *vb)
-/* Compare two hashEl by integer value, descending. */
+static struct hash *hashVpnList(struct variantPathNode *vpnList)
+/* Return a hash of nodeName to sncList for each variantPathNode in vpnList. */
 {
-const struct hashEl *a = *((struct hashEl **)va);
-const struct hashEl *b = *((struct hashEl **)vb);
-return b->val - a->val;
+struct hash *vpnHash = hashNew(13);
+struct variantPathNode *vpn;
+for (vpn = vpnList;  vpn != NULL;  vpn = vpn->next)
+    hashAdd(vpnHash, vpn->nodeName, vpn);
+return vpnHash;
 }
 
-static char *summarizeCountries(struct slName *idList)
-/* If enough sample names in idList have identifiable countries, then return a summary string,
- * else NULL. */
+static void addMutationsToTree(struct phyloTree *node, struct hash *subtreeMutHash)
+/* Store the list of mutations associated with each node in node->priv, removing node from
+ * subtreeMutHash so we can check that it's empty when done with tree. */
 {
-char *summary = NULL;
-int idCount = slCount(idList);
-int idWithCountryCount = 0;
-struct hash *countryCounts = hashNew(0);
-struct slName *id;
-for (id = idList;  id != NULL;  id = id->next)
-    {
-    regmatch_t substrs[2];
-    if (regexMatchSubstr(id->name, "([A-Za-z_]+)/[^/]+/20", substrs, ArraySize(substrs)))
-        {
-        char country[256];
-        regexSubstringCopy(id->name, substrs[1], country, sizeof country);
-        idWithCountryCount++;
-        hashIncInt(countryCounts, country);
-        }
-    }
-if ((double)idWithCountryCount / idCount >= 0.5)
-    {
-    struct dyString *dy = dyStringCreate("%d from ", idCount);
-    struct hashEl *helList = hashElListHash(countryCounts);
-    if (helList->next == NULL)
-        dyStringAppend(dy, helList->name);
-    else
-        {
-        slSort(&helList, hashElIntCmpDesc);
-        struct hashEl *hel;
-        for (hel = helList;  hel != NULL;  hel = hel->next)
-            {
-            if (hel != helList)
-                dyStringAppend(dy, "+");
-            dyStringAppend(dy, hel->name);
-            int count = ptToInt(hel->val);
-            if (count > 1)
-                dyStringPrintf(dy, "[%d]", count);
-            if (dyStringLen(dy) > 100)
-                {
-                dyStringAppend(dy, "+...");
-                break;
-                }
-            }
-        }
-    // Labels have to be unique -- tack on an example ID
-    dyStringPrintf(dy, " eg %s", idList->name);
-    summary = dyStringCannibalize(&dy);
-    subChar(summary, ' ', '_');
-    }
-return summary;
-}
-
-static char *expandCondensedNodeName(struct hash *condensedNodes, char *name)
-/* If name is found in condensedNodes, then return an expanded name that indicates countries of
- * origin (if we can find them) and an example ID.  Otherwise return NULL. */
-{
-char *expandedName = NULL;
-struct slName *nodeList = hashFindVal(condensedNodes, name);
-if (nodeList)
-    {
-    char *summary = summarizeCountries(nodeList);
-    if (summary)
-        expandedName = summary;
-    else
-        {
-        int nodeCount = slCount(nodeList);
-        struct dyString *dy = dyStringCreate("%s_and_%d_others", nodeList->name, nodeCount-1);
-        expandedName=  dyStringCannibalize(&dy);
-        }
-    }
-return expandedName;
-}
-
-static struct hash *expandCondensedNodeNames(struct hash *condensedNodes, struct slName *idList)
-/* If idList contains names found in condensedNodes, then hash those names to new names that are
- * _-sep strings from the lists in condensedNodes.  Return hash (which may have no elements
- * if nothing in idList is found in condensedNodes). */
-{
-struct hash *hash = hashNew(0);
-struct slName *id;
-for (id = idList;  id != NULL;  id = id->next)
-    {
-    char *expandedName = expandCondensedNodeName(condensedNodes, id->name);
-    if (expandedName)
-        hashAdd(hash, id->name, expandedName);
-    }
-return hash;
-}
-
-static void rSubstTreeNames(struct phyloTree *node, struct hash *nameSubstitutions)
-/* If node or descendants have names in nameSubstitutions, then substitute those names. */
-{
-if (node->ident->name)
-    {
-    char *subst = hashFindVal(nameSubstitutions, node->ident->name);
-    if (subst)
-        node->ident->name = subst;
-    }
-int i;
-for (i = 0;  i < node->numEdges;  i++)
-    rSubstTreeNames(node->edges[i], nameSubstitutions);
-}
-
-static struct tempName *substituteTreeNames(struct phyloTree *tree, char *treeName,
-                                            struct hash *nameSubstitutions)
-/* If tree has any nodes whose names are in nameSubstitutions, then substitute those names.
- * Write tree out to a trash file and return its location. */
-{
-rSubstTreeNames(tree, nameSubstitutions);
-struct tempName *newTn;
-AllocVar(newTn);
-trashDirFile(newTn, "ct", treeName, ".nwk");
-FILE *f = mustOpen(newTn->forCgi, "w");
-phyloPrintTree(tree, f);
-carefulClose(&f);
-return newTn;
-}
-
-static struct slName *substituteNameList(struct slName *idList, struct hash *nameSubstitutions)
-/* Return a new list that is just like idList, except if any item in idList has a value in
- * nameSubstitutions, then the item is replaced by the substitution. */
-{
-struct slName *newList = NULL;
-struct slName *id;
-for (id = idList;  id != NULL;  id = id->next)
-    {
-    char *subst = hashFindVal(nameSubstitutions, id->name);
-    slNameAddHead(&newList, subst ? subst : id->name);
-    }
-slReverse(&newList);
-return newList;
-}
-
-static void addMutationsToTree(struct phyloTree *node, struct variantPathNode **pNodeMutList)
-/* Store the list of mutations associated with each node in node->priv. */
-{
-struct variantPathNode *nodeMuts = slPopHead(pNodeMutList);
-if (! nodeMuts)
-    errAbort("addMutationsToTree: subtree mutation list has fewer nodes than subtree");
-if (node->ident->name && ! sameString(nodeMuts->nodeName, node->ident->name))
-    errAbort("addMutationsToTree: subtree node name is '%s' but subtree mutation list item is '%s'",
-             node->ident->name, nodeMuts->nodeName);
+if (! node->ident->name)
+    errAbort("addMutationsToTree: node name is NULL but I need a node name to find mutations");
 if (node->priv != NULL)
-    errAbort("addMutationsToTree: node already has mutations assigned");
+    errAbort("addMutationsToTree: node '%s' already has mutations assigned (duplicated in tree?)",
+             node->ident->name);
+struct variantPathNode *nodeMuts = hashFindVal(subtreeMutHash, node->ident->name);
+if (! nodeMuts)
+    errAbort("addMutationsToTree: can't find node '%s' in subtree mutations file",
+             node->ident->name);
+hashRemove(subtreeMutHash, node->ident->name);
 node->priv = nodeMuts->sncList;
 int i;
 for (i = 0;  i < node->numEdges;  i++)
-    addMutationsToTree(node->edges[i], pNodeMutList);
+    addMutationsToTree(node->edges[i], subtreeMutHash);
 }
 
 static struct subtreeInfo *parseOneSubtree(struct tempName *subtreeTn, char *subtreeName,
                                            struct variantPathNode *subtreeMuts,
-                                           struct slName *userSampleIds, struct hash *condensedNodes)
-/* Parse usher's subtree output, figure out which user samples are in subtree and expand names
- * of condensed nodes. */
+                                           struct slName *userSampleIds)
+/* Parse usher's subtree output and figure out which user samples are in subtree. */
 {
 struct subtreeInfo *ti;
 AllocVar(ti);
 ti->subtreeTn = subtreeTn;
 ti->subtree = phyloOpenTree(ti->subtreeTn->forCgi);
-addMutationsToTree(ti->subtree, &subtreeMuts);
-if (subtreeMuts != NULL)
-    errAbort("addMutationsToTree: subtreeMutationList has more nodes than subtree");
-struct slName *subtreeIdList = phyloLeafNames(ti->subtree);
-// Don't do name substitutions on condensed node names in subtreeIdToIx since the IDs have to
-// match those in the original tree from protobuf.
-ti->subtreeIdToIx = slNameListToIxHash(subtreeIdList);
+struct hash *subtreeMutHash = hashVpnList(subtreeMuts);
+addMutationsToTree(ti->subtree, subtreeMutHash);
+if (hashNumEntries(subtreeMutHash) != 0)
+    errAbort("addMutationsToTree: subtree has fewer nodes than defined in subtree mutations file");
+ti->subtreeNameList = phyloLeafNames(ti->subtree);
+ti->subtreeIdToIx = slNameListToIxHash(ti->subtreeNameList);
 ti->subtreeUserSampleIds = getSubtreeSampleIds(userSampleIds, ti->subtreeIdToIx);
 if (slCount(ti->subtreeUserSampleIds) == 0)
-    errAbort("No user sample IDs found in subtree file %s", ti->subtreeTn->forCgi);
-// Substitute in nicer node names for condensed nodes for displaying to the user in
-// custom tracks and Nextstrain/auspice JSON.
-struct hash *nameSubstitutions = expandCondensedNodeNames(condensedNodes, subtreeIdList);
-if (nameSubstitutions->elCount > 0)
-    ti->subtreeTn = substituteTreeNames(ti->subtree, subtreeName, nameSubstitutions);
-ti->subtreeNameList = substituteNameList(subtreeIdList, nameSubstitutions);
-hashFree(&nameSubstitutions);
-slFreeList(&subtreeIdList);
+    errAbort("No user sample IDs (out of %d) found in subtree file %s", slCount(userSampleIds), ti->subtreeTn->forCgi);
+hashFree(&subtreeMutHash);
 return ti;
 }
 
@@ -525,9 +490,9 @@ static struct subtreeInfo *parseSubtrees(int subtreeCount, struct tempName *sing
                                          struct variantPathNode *singleSubtreeMuts,
                                          struct tempName *subtreeTns[],
                                          struct variantPathNode *subtreeMuts[],
-                                         struct slName *userSampleIds, struct hash *condensedNodes)
-/* Parse usher's subtree output, figure out which user samples are in each subtree, expand names
- * of condensed nodes.  Add parsed singleSubtree at head of list, followed by numbered subtrees. */
+                                         struct slName *userSampleIds)
+/* Parse usher's subtree output and figure out which user samples are in each subtree.
+ * Add parsed singleSubtree at head of list, followed by numbered subtrees. */
 {
 struct subtreeInfo *subtreeInfoList = NULL;
 int sIx;
@@ -536,12 +501,12 @@ for (sIx = 0;  sIx < subtreeCount;  sIx++)
     char subtreeName[512];
     safef(subtreeName, sizeof(subtreeName), "subtree%d", sIx+1);
     struct subtreeInfo *ti = parseOneSubtree(subtreeTns[sIx], subtreeName, subtreeMuts[sIx],
-                                             userSampleIds, condensedNodes);
+                                             userSampleIds);
     slAddHead(&subtreeInfoList, ti);
     }
 slReverse(&subtreeInfoList);
 struct subtreeInfo *ti = parseOneSubtree(singleSubtreeTn, "singleSubtree", singleSubtreeMuts,
-                                         userSampleIds, condensedNodes);
+                                         userSampleIds);
 slAddHead(&subtreeInfoList, ti);
 return subtreeInfoList;
 }
@@ -566,29 +531,41 @@ while (lineFileNext(lf, &line, NULL))
         // whitespace trouble; tweak it back.
         if (sameString(words[1], "20E.EU1"))
             words[1] = "20E (EU1)";
+        // Chop extra chars in usher-sampled clades.txt output
+        char *ptr = strstr(words[1], "*|");
+        if (ptr)
+            *ptr = '\0';
         info->nextClade = hashStoreName(wordStore, words[1]);
         }
     if (wordCount > 2)
+        {
+        // Chop extra chars in usher-sampled clades.txt output
+        char *ptr = strstr(words[2], "*|");
+        if (ptr)
+            *ptr = '\0';
         info->pangoLineage = hashStoreName(wordStore, words[2]);
+        }
     }
 lineFileClose(&lf);
 }
 
 static char *dirPlusFile(struct dyString *dy, char *dir, char *file)
-/* Write dir/file into dy and return pointer to dy->string. */
+/* Write dir/file into dy and return pointer to dy->string.  Do not free result! */
 {
 dyStringClear(dy);
 dyStringPrintf(dy, "%s/%s", dir, file);
 return dy->string;
 }
 
+#define USHER_SAMPLED_TREE_PREFIX "tree-0-"
+
 static int processOutDirFiles(struct usherResults *results, char *outDir,
                               struct tempName **retSingleSubtreeTn,
                               struct variantPathNode **retSingleSubtreeMuts,
                               struct tempName *subtreeTns[], struct variantPathNode *subtreeMuts[],
                               int maxSubtrees)
-/* Get paths to files in outDir; parse them, move files that we'll keep up to trash/ct/,
- * remove outDir. */
+/* Get paths to files in outDir; parse them and move files that we'll keep up to trash/ct/,
+ * leaving behind files that we will remove when done. */
 {
 int subtreeCount = 0;
 memset(subtreeTns, 0, maxSubtrees * sizeof(*subtreeTns));
@@ -602,14 +579,19 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         {
         mustRename(path, results->bigTreePlusTn->forCgi);
         }
-    else if (sameString(file->name, "mutation-paths.txt"))
+    else if (sameString(file->name, "mutation-paths.txt") ||  // original usher
+             sameString(file->name, "mutation-paths-1.txt"))  // usher-sampled(-server)
         {
         parseVariantPaths(path, results->samplePlacements);
         }
-    else if (startsWith("subtree-", file->name))
+    else if (startsWith("subtree-", file->name) ||
+             startsWith(USHER_SAMPLED_TREE_PREFIX "subtree-", file->name))
         {
         char fnameCpy[strlen(file->name)+1];
-        safecpy(fnameCpy, sizeof fnameCpy, file->name);
+        if (startsWith(USHER_SAMPLED_TREE_PREFIX, file->name))
+            safecpy(fnameCpy, sizeof fnameCpy, file->name + strlen(USHER_SAMPLED_TREE_PREFIX));
+        else
+            safecpy(fnameCpy, sizeof fnameCpy, file->name);
         char *parts[4];
         int partCount = chopString(fnameCpy, "-", parts, ArraySize(parts));
         if (partCount == 2)
@@ -620,6 +602,9 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
                 {
                 *dot = '\0';
                 int subtreeIx = atol(parts[1]) - 1;
+                if (subtreeIx < 0)
+                    errAbort("processOutDirFiles: expected subtree file names to have numbers "
+                             "starting with 1, but found one with 0 (%s)", file->name);
                 if (subtreeIx >= maxSubtrees)
                     errAbort("Too many subtrees in usher output (max %d)", maxSubtrees);
                 if (subtreeIx >= subtreeCount)
@@ -637,6 +622,9 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
             {
             // Expect "subtree-N-mutations.txt" or "subtree-N-expanded.txt"
             int subtreeIx = atol(parts[1]) - 1;
+            if (subtreeIx < 0)
+                errAbort("processOutDirFiles: expected subtree file names to have numbers "
+                         "starting with 1, but found one with 0 (%s)", file->name);
             if (subtreeIx >= maxSubtrees)
                 errAbort("Too many subtrees in usher output (max %d)", maxSubtrees);
             if (subtreeIx >= subtreeCount)
@@ -655,11 +643,15 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         else
             warn("Unexpected filename '%s' from usher, ignoring", file->name);
         }
-    else if (startsWith("single-subtree", file->name))
+    else if (startsWith("single-subtree", file->name) ||
+             startsWith(USHER_SAMPLED_TREE_PREFIX "single-subtree", file->name))
         {
         // One subtree to bind them all
         char fnameCpy[strlen(file->name)+1];
-        safecpy(fnameCpy, sizeof fnameCpy, file->name);
+        if (startsWith(USHER_SAMPLED_TREE_PREFIX, file->name))
+            safecpy(fnameCpy, sizeof fnameCpy, file->name + strlen(USHER_SAMPLED_TREE_PREFIX));
+        else
+            safecpy(fnameCpy, sizeof fnameCpy, file->name);
         char *parts[4];
         int partCount = chopString(fnameCpy, "-", parts, ArraySize(parts));
         if (partCount == 2)
@@ -699,15 +691,15 @@ for (file = outDirFiles;  file != NULL;  file = file->next)
         parseClades(path, results->samplePlacements);
         }
     else if (sameString(file->name, "final-tree.nh") ||
+             sameString(file->name, "current-tree.nh") ||
              sameString(file->name, "placement_stats.tsv"))
         {
-        // Don't need this, just remove it.
+        // Don't need this (or already parsed it elsewhere not here), just remove it.
         }
     else
         warn("Unexpected filename '%s' from usher, ignoring", file->name);
-    unlink(path);
     }
-rmdir(outDir);
+dyStringFree(&dyScratch);
 // Make sure we got a complete range of subtrees [0..subtreeCount-1]
 int i;
 for (i = 0;  i < subtreeCount;  i++)
@@ -720,53 +712,589 @@ for (i = 0;  i < subtreeCount;  i++)
 return subtreeCount;
 }
 
+static void removeOutDir(char *outDir)
+/* Remove outDir and its files. */
+{
+struct slName *outDirFiles = listDir(outDir, "*"), *file;
+struct dyString *dyScratch = dyStringNew(0);
+for (file = outDirFiles;  file != NULL;  file = file->next)
+    {
+    char *path = dirPlusFile(dyScratch, outDir, file->name);
+    unlink(path);
+    }
+dyStringFree(&dyScratch);
+rmdir(outDir);
+}
+
+static void runUsherCommand(char *cmd[], char *stderrFile, int *pStartTime)
+/* Run the standalone usher command with its stderr output redirected to stderrFile. */
+{
+char **cmds[] = { cmd, NULL };
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, stderrFile, 0);
+pipelineClose(&pl);
+reportTiming(pStartTime, "run usher");
+}
+
+boolean serverIsConfigured(char *db)
+/* Return TRUE if all necessary configuration settings are in place to run usher-sampled-server. */
+{
+char *serverDir = cfgOption("hgPhyloPlaceServerDir");
+if (isNotEmpty(serverDir))
+    {
+    char *usherServerEnabled = phyloPlaceDbSetting(db, "usherServerEnabled");
+    if (isNotEmpty(usherServerEnabled) && SETTING_IS_ON(usherServerEnabled) &&
+        fileExists(PHYLOPLACE_DATA_DIR "/usher-sampled-server"))
+        {
+        return TRUE;
+        }
+    }
+return FALSE;
+}
+
+static char *getUsherServerFilePath(char *db, char *file)
+/* Alloc & return the path to special server file in $hgPhyloPlaceServerDir/$db/ . */
+{
+char *serverDir = cfgOption("hgPhyloPlaceServerDir");
+// We need host name in order to prevent clashes between hgw1 and hgw2 sharing the same hg.conf
+// contents and NFS filesystem.  And not the vhost name from getHost(), the real base host name.
+char host[PATH_LEN];
+int ret = gethostname(host, sizeof host);
+if (ret != 0)
+    safecpy(host, sizeof host, "hostunknown");
+char *p = strchr(host, '.');
+if (p)
+    *p = '\0';
+struct dyString *dyPath = dyStringCreate("%s/%s/%s.%s",
+                                         serverDir, trackHubSkipHubName(db), host, file);
+return dyStringCannibalize(&dyPath);
+}
+
+static char *getUsherServerMfifoPath(char *db)
+/* Alloc & return path to server manager fifo file for db. */
+{
+return getUsherServerFilePath(db, "server.fifo");
+}
+
+static char *getUsherServerSocketPath(char *db)
+/* Alloc & return path to server socket file for db. */
+{
+return getUsherServerFilePath(db, "server.socket");
+}
+
+static char *getUsherServerLogPath(char *db)
+/* Alloc & return path to server log file (very important because it tells us the pid) for db. */
+{
+return getUsherServerFilePath(db, "server.log");
+}
+
+boolean serverIsRunning(char *db, FILE *errFile)
+/* Return TRUE if logFile exists and its first line specifies a pid as expected from daemonishSpawn,
+ * and that pid looks alive according to /proc. */
+{
+boolean pidIsLive = FALSE;
+char *logFile = getUsherServerLogPath(db);
+struct lineFile *lf = lineFileMayOpen(logFile, TRUE);
+if (lf)
+    {
+    char *line;
+    if (lineFileNext(lf, &line, NULL))
+        {
+        if (isAllDigits(line))
+            {
+            int pid = atol(line);
+            if (pid > 1)
+                {
+                char procStatus[PATH_LEN];
+                safef(procStatus, sizeof procStatus, "/proc/%d/status", pid);
+                struct lineFile *psLf = lineFileMayOpen(procStatus, TRUE);
+                if (psLf)
+                    {
+                    const static char *statePrefix ="State:\t";
+                    boolean foundState = FALSE;
+                    while (lineFileNext(psLf, &line, NULL))
+                        {
+                        if (startsWith(statePrefix, line))
+                            {
+                            foundState = TRUE;
+                            char state = *(line + strlen(statePrefix));
+                            // State Running, Sleep or Deep (uninterruptible) sleep is OK
+                            if (state == 'R' || state == 'S' || state == 'D')
+                                {
+                                pidIsLive = TRUE;
+                                fprintf(errFile, "serverIsRunning: Found pid %d with state %c.\n",
+                                        pid, state);
+                                }
+                            else
+                                {
+                                // State sTopped or Zombie not OK
+                                fprintf(errFile, "serverIsRunning: WARNING: pid %d has state %c.\n",
+                                        pid, state);
+                                }
+                            }
+                        }
+                    lineFileClose(&psLf);
+                    if (!foundState)
+                        fprintf(errFile,
+                                "serverIsRunning: No line of %s begins with '%s', "
+                                "can't find process state.\n",
+                                procStatus, statePrefix);
+                    }
+                else
+                    fprintf(errFile, "serverIsRunning: Can't open %s, looks like server is dead.\n",
+                            procStatus);
+                }
+            else
+                fprintf(errFile, "serverIsRunning: expected number greater than 1 (pid) in "
+                        "first line of log file %s, but got '%s'\n", logFile, line);
+            }
+        else
+            {
+            fprintf(errFile, "serverIsRunning: First line of log file %s has unexpected format '%s' "
+                    "(expected to begin with pid)\n",
+                    logFile, line);
+            }
+        }
+    else
+        fprintf(errFile, "serverIsRunning: log file '%s' appears empty\n", logFile);
+    lineFileClose(&lf);
+    }
+else
+    fprintf(errFile, "serverIsRunning: Can't open log file '%s'\n", logFile);
+return pidIsLive;
+}
+
+
+//******************* BEGIN copied from lib/pipeline.c, consider libifying these ***************
+static void closeNonStdDescriptors(void)
+/* close non-standard file descriptors */
+{
+long maxFd = sysconf(_SC_OPEN_MAX);
+if (maxFd < 0)
+    maxFd = 4096;  // shouldn't really happen
+int fd;
+for (fd = STDERR_FILENO+1; fd < maxFd; fd++)
+    close(fd);
+}
+
+static int openRead(char *fname)
+/* open a file for reading */
+{
+int fd = open(fname, O_RDONLY);
+if (fd < 0)
+    errnoAbort("can't open for read access: %s", fname);
+return fd;
+}
+
+static int openWrite(char *fname, boolean append)
+/* open a file for write access */
+{
+int flags = O_WRONLY|O_CREAT;
+if (append)
+    flags |= O_APPEND;
+else
+    flags |= O_TRUNC;
+int fd = open(fname, flags, 0666);
+if (fd < 0)
+    errnoAbort("can't open for write access: %s", fname);
+return fd;
+}
+//******************* END copied from lib/pipeline.c, consider libifying these ***************
+
+
+static void daemonishInit(int newStderr)
+/* Isolate a double-fork-spawned process from its parent processes by closing file descriptors,
+ * setting stderr to errlogFile, resetting umask etc.
+ * See "man 7 daemon".  This function is "daemonish" because I'm not doing 100% of the recommended
+ * initialization things from "man 7 daemon", because I'm not running a Linux system service,
+ * just a program that needs to remain running in the background after this CGI exits.
+ * This errAborts if setting stdin, stdout or stderr fails, and ignores any other failures. */
+{
+// Set stdin and stdout to /dev/null, stderr to errlogFile, close all other possibly open fds.
+int newStdin = openRead("/dev/null");
+if (dup2(newStdin, STDIN_FILENO) < 0)
+    errnoAbort("daemonishInit: can't dup2 to stdin");
+int newStdout = openWrite("/dev/null", TRUE);
+if (dup2(newStdout, STDOUT_FILENO) < 0)
+    errnoAbort("daemonishInit: can't dup2 to stdout");
+if (dup2(newStderr, STDERR_FILENO) < 0)
+    errnoAbort("daemonishInit: can't dup2 to stderr");
+closeNonStdDescriptors();
+
+// Reset all signal handlers to their default.
+#ifndef SIGRTMAX   // may not have real-time extensions
+#define SIGRTMAX SIGUSR2
+#endif
+
+int ix;
+for (ix = 0;  ix <= SIGRTMAX;  ix++)
+    signal(ix, SIG_DFL);
+
+// Reset the signal mask
+sigset_t sigset;
+sigemptyset(&sigset);
+sigprocmask(SIG_SETMASK, &sigset, NULL);
+
+// Reset the umask
+umask(0);
+}
+
+int daemonishSpawn(char *cmd[], char *errlogFile)
+/* Use a double fork & setgid to create a process with parent process group = initd so it has
+ * no controlling terminal and so the CGI won't become a zombie process when done.
+ * See "man 7 daemon".  This function is "daemonish" because I'm not doing 100% of the recommended
+ * initialization things from "man 7 daemon", because I'm not running a Linux system service,
+ * just a program that needs to remain running in the background after this CGI exits.
+ * Double-fork grandchild execs cmd, uses /dev/null for stdin and stdout, and sends stderr
+ * to errlogFile -- after first writing its pid to errlogFile so that later processes can use
+ * errlogFile to check whether the spawned process is still running.
+ * Calling process/first fork parent returns result of first fork (pid for success, -1 for error) */
+{
+int fork1 = fork();
+if (fork1 < 0)
+    errnoWarn("first fork failed (%d)", fork1);
+else if (fork1 == 0)
+    {
+    // First fork child will setsid and fork again
+    if (setsid() < 0)
+        errnoAbort("setsid failed; first fork child errAborting");
+    else
+        {
+        int fork2 = fork();
+        if (fork2 < 0)
+            errnoAbort("second fork failed (%d); first fork child errAborting", fork2);
+        else if (fork2 > 0)
+            {
+            // First fork child / second fork parent is all done. Use _exit not exit so we
+            // don't close mysql connections etc.
+            _exit(EXIT_SUCCESS);
+            }
+        else
+            {
+            // Second fork child sets stdin and stdout to /dev/null, stderr to errLogFile (after
+            // writing pid), then becomes cmd using execvp.
+            int newStderr = openWrite(errlogFile, FALSE);
+            char pidBuf[16];
+            safef(pidBuf, sizeof pidBuf, "%llu\n", (long long unsigned)getpid());
+            write(newStderr, pidBuf, strlen(pidBuf));
+            daemonishInit(newStderr);
+            execvp(cmd[0], cmd);
+            }
+        }
+    }
+return fork1;
+}
+
+boolean startServer(char *db, struct treeChoices *treeChoices, FILE *errFile)
+/* Start up an usher-sampled-server process to run in the background. */
+{
+boolean success = FALSE;
+if (serverIsConfigured(db))
+    {
+    char *serverDir = cfgOption("hgPhyloPlaceServerDir");
+    if (! fileExists(serverDir))
+        makeDir(serverDir);
+    char path[PATH_LEN];
+    safef(path, sizeof path, "%s/%s", serverDir, db);
+    if (! fileExists(path))
+        makeDir(path);
+
+    char *usherServerPath = PHYLOPLACE_DATA_DIR "/usher-sampled-server";
+    // Each protobuf file from treeChoices must appear as a separate arg after -l,
+    // so we have to dynamically build up serverCmd, but can use a static for the first args.
+    char *serverCmdBase[] = { usherServerPath,
+                              "-m", getUsherServerMfifoPath(db),
+                              "-s", getUsherServerSocketPath(db),
+                              "-T", USHER_NUM_THREADS,
+                              "-t", USHER_SERVER_CHILD_TIMEOUT,
+                              "-l" };
+    size_t serverCmdBaseSize = ArraySize(serverCmdBase);
+    size_t serverCmdSize = serverCmdBaseSize + treeChoices->count + 1;
+    char *serverCmd[serverCmdSize];
+    int ix;
+    for (ix = 0;  ix < serverCmdBaseSize;   ix++)
+        serverCmd[ix] = serverCmdBase[ix];
+    for (ix = 0;  ix < treeChoices->count;  ix++)
+        serverCmd[serverCmdBaseSize + ix] = treeChoices->protobufFiles[ix];
+    serverCmd[serverCmdBaseSize + ix] = NULL;
+
+    fputs("Spawning server with command: ", errFile);
+    for (ix = 0;  serverCmd[ix] != NULL;  ix++)
+        {
+        fputc(' ', errFile);
+        fputs(serverCmd[ix], errFile);
+        }
+    fputc('\n', errFile);
+    success = (daemonishSpawn(serverCmd, getUsherServerLogPath(db)) > 0);
+    if (success)
+        fputs("Server spawned; first fork returned successfully.\n", errFile);
+    else
+        fputs("Server spawn failed at first fork!\n", errFile);
+    }
+else
+    errAbort("Usher server is not configured for %s, not starting", db);
+return success;
+}
+
+void serverReloadProtobufs(char *db, struct treeChoices *treeChoices)
+/* Send a reload command and list of protobufs for db to usher server. */
+{
+char *usherServerMfifoPath = getUsherServerMfifoPath(db);
+FILE *mf = fopen(usherServerMfifoPath, "a");
+if (mf)
+    {
+    fprintf(mf, "reload\n");
+    int ix;
+    for (ix = 0;  ix < treeChoices->count;  ix++)
+        fprintf(mf, "%s\n", treeChoices->protobufFiles[ix]);
+    fputc('\n', mf);
+    carefulClose(&mf);
+    }
+else
+    warn("serverReload: unable to open '%s', command not sent", usherServerMfifoPath);
+}
+
+void serverStop(char *db)
+/* Send stop command to usher server. */
+{
+char *usherServerMfifoPath = getUsherServerMfifoPath(db);
+FILE *mf = fopen(usherServerMfifoPath, "a");
+if (mf)
+    {
+    fprintf(mf, "stop\n");
+    carefulClose(&mf);
+    }
+else
+    warn("serverStop: unable to open '%s', command not sent", usherServerMfifoPath);
+}
+
+void serverSetThreadCount(char *db, int val)
+/* Send thread command and value to usher server. */
+{
+char *usherServerMfifoPath = getUsherServerMfifoPath(db);
+FILE *mf = fopen(usherServerMfifoPath, "a");
+if (mf)
+    {
+    if (val > 0)
+        fprintf(mf, "thread %d\n", val);
+    else
+        errAbort("Bad value %d passed to serverSetThreadCount, not sending", val);
+    carefulClose(&mf);
+    }
+else
+    warn("serverSetTimeout: unable to open '%s', command not sent", usherServerMfifoPath);
+}
+
+void serverSetTimeout(char *db, int val)
+/* Send timeout command and value (in seconds) to usher server. */
+{
+char *usherServerMfifoPath = getUsherServerMfifoPath(db);
+FILE *mf = fopen(usherServerMfifoPath, "a");
+if (mf)
+    {
+    if (val > 0)
+        fprintf(mf, "timeout %d\n", val);
+    else
+        errAbort("Bad value %d passed to serverSetTimeout, not sending", val);
+    carefulClose(&mf);
+    }
+else
+    warn("serverSetTimeout: unable to open '%s', command not sent", usherServerMfifoPath);
+}
+
+static int getServerSocket(char *db, struct treeChoices *treeChoices, FILE *errFile)
+/* Try to connect to server; attempt to restart server and then connect if it seems like the server
+ * is down.  Return -1 if unable to connect. */
+{
+int socketFd = socket(AF_UNIX, SOCK_STREAM, 0);
+if (socketFd < 0)
+    {
+    // OS-level failure, not anything we can do about it
+    fprintf(errFile, "Failed to create a UNIX socket: %s\n", strerror(errno));
+    }
+else
+    {
+    // From "man 7 unix":
+    // struct sockaddr_un {
+    //     sa_family_t sun_family;               /* AF_UNIX */
+    //     char        sun_path[UNIX_PATH_MAX];  /* pathname */
+    // };
+    struct sockaddr_un addr;
+    addr.sun_family=AF_UNIX;
+    char *usherServerSocketPath = getUsherServerSocketPath(db);
+    safecpy(addr.sun_path, sizeof(addr.sun_path), usherServerSocketPath);
+    int ret = connect(socketFd, (struct sockaddr *)&addr, sizeof(addr));
+    if (ret < 0)
+        {
+        fprintf(errFile, "Cannot connect socket %d to path '%s': %s\n",
+                socketFd, usherServerSocketPath, strerror(errno));
+        // Does the server need to be restarted, or (in case another web request prompted some
+        // other hgPhyloPlace process to restart it but it isn't quite up yet) should we wait a
+        // few seconds and try again?
+        if (serverIsRunning(db, errFile) ||
+            startServer(db, treeChoices, errFile))
+            {
+            sleep(5);
+            ret = connect(socketFd, (struct sockaddr *)&addr, sizeof(addr));
+            if (ret < 0)
+                {
+                // Give up - fall back on regular usher command
+                fprintf(errFile, "Second attempt to connect socket %d to path '%s' failed: %s\n",
+                        socketFd, usherServerSocketPath, strerror(errno));
+                socketFd = -1;
+                }
+            }
+        }
+    }
+return socketFd;
+}
+
+// Server sends ASCII EOT character (4) when done. Sadly I can't find a header file that defines EOT.
+#define EOT 4
+
+static boolean sendQuery(int socketFd, char *cmd[], char *db, struct treeChoices *treeChoices,
+                         FILE *errFile, boolean addNoIgnorePrefix)
+/* Send command to socket, read response on socket, return TRUE if we get a successful response. */
+{
+boolean success = FALSE;
+struct dyString *dyMessage = dyStringNew(0);
+int ix;
+for (ix = 0;  cmd[ix] != NULL;  ix++)
+    {
+    // Don't include args from -T onward; server rejects requests with -T or --optimization_radius
+    if (sameString("-T", cmd[ix]))
+        break;
+    dyStringPrintf(dyMessage, "%s\n", cmd[ix]);
+    }
+if (addNoIgnorePrefix)
+    // Needed when placing uploaded sequences, but not when finding uploaded names
+    dyStringPrintf(dyMessage, "--no-ignore-prefix\n"USHER_DEDUP_PREFIX"\n");
+dyStringAppendC(dyMessage, '\n');
+boolean serverError = FALSE;
+int bytesWritten = write(socketFd, dyMessage->string, dyMessage->stringSize);
+if (bytesWritten == dyMessage->stringSize)
+    {
+    struct lineFile *lf = lineFileAttach("server socket", TRUE, socketFd);
+    if (lf)
+        {
+        char *line;
+        while (lineFileNext(lf, &line, NULL))
+            {
+            if (startsWith("Tree", line) && endsWith(line, "not found"))
+                {
+                // Tell the server to reload the latest protobufs
+                serverReloadProtobufs(getUsherServerMfifoPath(db), treeChoices);
+                // Reloading multiple trees takes a while, so fall back on standalone usher(-sampled)
+                serverError = TRUE;
+                // Continue reading output from server.
+                }
+            else if (line[0] == EOT)
+                {
+                success = ! serverError;
+                break;
+                }
+            else if (isNotEmpty(line))
+                fprintf(errFile, "%s\n", line);
+            }
+        }
+    else
+        fprintf(errFile, "Failed to attach linefile to socket %d.\n", socketFd);
+    }
+else
+    fprintf(errFile, "Failed to send query to socket %d: attempted to write %ld bytes, ret=%d\n",
+            socketFd, dyMessage->stringSize, bytesWritten);
+dyStringFree(&dyMessage);
+return success;
+}
+
+static boolean runUsherServer(char *db, char *cmd[], char *stderrFile,
+                              struct treeChoices *treeChoices, int *pStartTime)
+/* Start the server if necessary, connect to it, send a query, get response and return TRUE if.
+ * all goes well. If unsuccessful, write reasons to errFile and return FALSE. */
+{
+boolean success = FALSE;
+if (serverIsConfigured(db))
+    {
+    FILE *errFile = mustOpen(stderrFile, "w");
+    int serverSocket = getServerSocket(db, treeChoices, errFile);
+
+    reportTiming(pStartTime, "get socket");
+    if (serverSocket > 0)
+        {
+        success = sendQuery(serverSocket, cmd, db, treeChoices, errFile, TRUE);
+        close(serverSocket);
+        reportTiming(pStartTime, "send query");
+        }
+    carefulClose(&errFile);
+    }
+return success;
+}
+
 #define MAX_SUBTREES 1000
 
-struct usherResults *runUsher(char *usherPath, char *usherAssignmentsPath, char *vcfFile,
-                              int subtreeSize, struct slName *userSampleIds,
-                              struct hash *condensedNodes, int *pStartTime)
+struct usherResults *runUsher(char *db, char *usherPath, char *usherAssignmentsPath, char *vcfFile,
+                              int subtreeSize, struct slName **pUserSampleIds,
+                              struct treeChoices *treeChoices, int *pStartTime)
 /* Open a pipe from Yatish Turakhia's usher program, save resulting big trees and
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
- * and parse other results out of stderr output. */
+ * and parse other results out of stderr output.  The usher-sampled version of usher might
+ * modify userSampleIds, adding a prefix if a sample with the same name is already in the tree. */
 {
 struct usherResults *results = usherResultsNew();
 char subtreeSizeStr[16];
 safef(subtreeSizeStr, sizeof subtreeSizeStr, "%d", subtreeSize);
-char *numThreadsStr = "16";
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "usher_outdir", ".dir");
 char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOutDir.forCgi,
-                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr, "-u",
+                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE, "-u",
+                "-T", USHER_NUM_THREADS,       // Don't pass args from -T onward to server
+                "--optimization_radius", "0",  // Don't pass these to original usher, only -sampled
+                "--no-ignore-prefix", USHER_DEDUP_PREFIX,
                 NULL };
-char **cmds[] = { cmd, NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");
-struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
-pipelineClose(&pl);
-reportTiming(pStartTime, "run usher");
-parseStderr(tnStderr.forCgi, results->samplePlacements);
+struct tempName tnServerStderr;
+trashDirFile(&tnServerStderr, "ct", "usher_server_stderr", ".txt");
+char *stderrFile = tnServerStderr.forCgi;
+if (! runUsherServer(db, cmd, tnServerStderr.forCgi, treeChoices, pStartTime))
+    {
+    if (!endsWith(usherPath, "-sampled"))
+        {
+        // Truncate cmd for original usher: remove usher-sampled-specific option
+        int ix = stringArrayIx("--optimization_radius", cmd, ArraySize(cmd)-1);
+        if (ix > 0)
+            cmd[ix] = NULL;
+        }
+    runUsherCommand(cmd, tnStderr.forCgi, pStartTime);
+    stderrFile = tnStderr.forCgi;
+    }
 
 struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
-int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
-                                      subtreeTns, subtreeMuts, MAX_SUBTREES);
-if (singleSubtreeTn == NULL)
+parsePlacements(tnOutDir.forCgi, stderrFile, results->samplePlacements, pUserSampleIds);
+int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn,
+                                      &singleSubtreeMuts, subtreeTns, subtreeMuts, MAX_SUBTREES);
+if (singleSubtreeTn)
     {
-    warn("Sorry, there was a problem running usher.  "
-         "Please ask genome-www@soe.ucsc.edu to take a look at %s.", tnStderr.forCgi);
-    return NULL;
+    results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
+                                             subtreeTns, subtreeMuts, *pUserSampleIds);
+    results->singleSubtreeInfo = results->subtreeInfoList;
+    results->subtreeInfoList = results->subtreeInfoList->next;
+    removeOutDir(tnOutDir.forCgi);
     }
-results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
-                                         subtreeTns, subtreeMuts, userSampleIds, condensedNodes);
-results->singleSubtreeInfo = results->subtreeInfoList;
-results->subtreeInfoList = results->subtreeInfoList->next;
+else
+    {
+    results = NULL;
+    warn("Sorry, there was a problem running usher.  "
+         "Please ask genome-www@soe.ucsc.edu to take a look at %s.", stderrFile);
+    }
+reportTiming(pStartTime, "parse results from usher");
 return results;
 }
 
 static void addEmptyPlacements(struct slName *sampleIds, struct hash *samplePlacements)
 /* Parsing an usher-style clades.txt file from matUtils extract requires samplePlacements to
  * have placementInfo for each sample.  When running usher, those are added when we parse
- * usher stderr; when running matUtils, just allocate one for each sample. */
+ * placement_stats.tsv; when running matUtils, just allocate one for each sample. */
 {
 struct slName *sample;
 for (sample = sampleIds;  sample != NULL;  sample = sample->next)
@@ -778,9 +1306,58 @@ for (sample = sampleIds;  sample != NULL;  sample = sample->next)
     }
 }
 
-struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protobufPath,
+static void runMatUtilsExtractCommand(char *matUtilsPath, char *protobufPath,
+                                      char *subtreeSizeStr, struct tempName *tnSamples,
+                                      struct tempName *tnOutDir, int *pStartTime)
+/* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
+ * containing sampleIds, save resulting subtrees to trash files, return subtree results.
+ * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
+{
+char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir->forCgi,
+                "-s", tnSamples->forCgi,
+                "-x", subtreeSizeStr, "-X", SINGLE_SUBTREE_SIZE, "-T", USHER_NUM_THREADS,
+                "--usher-clades-txt", NULL };
+char **cmds[] = { cmd, NULL };
+struct tempName tnStderr;
+trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
+pipelineClose(&pl);
+reportTiming(pStartTime, "run matUtils");
+}
+
+static boolean runMatUtilsServer(char *db, char *protobufPath, char *subtreeSizeStr,
+                                 struct tempName *tnSamples, struct tempName *tnOutDir,
+                                 struct treeChoices *treeChoices, int *pStartTime)
+/* Cheng Ye added a 'matUtils mode' to usher-sampled-server so we can get subtrees super-fast
+ * for uploaded sample names too. */
+{
+boolean success = FALSE;
+char *cmd[] = { "usher-sampled-server", "-i", protobufPath, "-d", tnOutDir->forCgi,
+                "-k", subtreeSizeStr, "-K", SINGLE_SUBTREE_SIZE,
+                "--existing_samples", tnSamples->forCgi, "-D",
+                NULL };
+struct tempName tnErrFile;
+trashDirFile(&tnErrFile, "ct", "matUtils_server_stderr", ".txt");
+if (serverIsConfigured(db))
+    {
+    FILE *errFile = mustOpen(tnErrFile.forCgi, "w");
+    int serverSocket = getServerSocket(db, treeChoices, errFile);
+
+    reportTiming(pStartTime, "get socket");
+    if (serverSocket > 0)
+        {
+        success = sendQuery(serverSocket, cmd, db, treeChoices, errFile, FALSE);
+        close(serverSocket);
+        reportTiming(pStartTime, "send query");
+        }
+    carefulClose(&errFile);
+    }
+return success;
+}
+
+struct usherResults *runMatUtilsExtractSubtrees(char *db, char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
-                                                struct hash *condensedNodes, int *pStartTime)
+                                                struct treeChoices *treeChoices, int *pStartTime)
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
@@ -788,7 +1365,6 @@ struct usherResults *runMatUtilsExtractSubtrees(char *matUtilsPath, char *protob
 struct usherResults *results = usherResultsNew();
 char subtreeSizeStr[16];
 safef(subtreeSizeStr, sizeof subtreeSizeStr, "%d", subtreeSize);
-char *numThreadsStr = "16";
 struct tempName tnSamples;
 trashDirFile(&tnSamples, "ct", "matUtilsExtractSamples", ".txt");
 FILE *f = mustOpen(tnSamples.forCgi, "w");
@@ -798,24 +1374,19 @@ for (sample = sampleIds;  sample != NULL;  sample = sample->next)
 carefulClose(&f);
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "matUtils_outdir", ".dir");
-char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir.forCgi,
-                "-s", tnSamples.forCgi,
-                "-x", subtreeSizeStr, "-X", SINGLE_SUBTREE_SIZE, "-T", numThreadsStr,
-                "--usher-clades-txt", NULL };
-char **cmds[] = { cmd, NULL };
-struct tempName tnStderr;
-trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
-struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
-pipelineClose(&pl);
-reportTiming(pStartTime, "run matUtils");
+if (! runMatUtilsServer(db, protobufPath, subtreeSizeStr, &tnSamples, &tnOutDir, treeChoices,
+                        pStartTime))
+    runMatUtilsExtractCommand(matUtilsPath, protobufPath, subtreeSizeStr, &tnSamples, &tnOutDir,
+                              pStartTime);
 addEmptyPlacements(sampleIds, results->samplePlacements);
 struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];
 int subtreeCount = processOutDirFiles(results, tnOutDir.forCgi, &singleSubtreeTn, &singleSubtreeMuts,
                                       subtreeTns, subtreeMuts, MAX_SUBTREES);
 results->subtreeInfoList = parseSubtrees(subtreeCount, singleSubtreeTn, singleSubtreeMuts,
-                                         subtreeTns, subtreeMuts, sampleIds, condensedNodes);
+                                         subtreeTns, subtreeMuts, sampleIds);
 results->singleSubtreeInfo = results->subtreeInfoList;
 results->subtreeInfoList = results->subtreeInfoList->next;
+reportTiming(pStartTime, "process results from matUtils");
 return results;
 }

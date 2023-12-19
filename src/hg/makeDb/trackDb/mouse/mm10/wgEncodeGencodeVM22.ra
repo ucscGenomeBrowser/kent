@@ -6,7 +6,7 @@ longLabel All GENCODE annotations from VM22 (Ensembl 97)
 group genes
 dragAndDrop subTracks
 priority 2.962
-visibility pack
+visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
 allButtonPair on

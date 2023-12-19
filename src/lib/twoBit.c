@@ -517,7 +517,10 @@ struct twoBitFile *twoBitOpenExternalBptIndex(char *twoBitName, char *bptName)
  * bpt index.   Beware if you use this the indexList field will be NULL
  * as will the hash. */
 {
-struct twoBitFile *tbf = twoBitOpenReadHeader(twoBitName, FALSE);
+boolean useUdc = FALSE;
+if (hasProtocol(twoBitName))
+    useUdc = TRUE;
+struct twoBitFile *tbf = twoBitOpenReadHeader(twoBitName, useUdc);
 tbf->bpt = bptFileOpen(bptName);
 if (tbf->seqCount != tbf->bpt->itemCount)
     errAbort("%s and %s don't have same number of sequences!", twoBitName, bptName);
@@ -552,12 +555,27 @@ for (;;)
     }
 }
 
+boolean twoBitHasSeq(struct twoBitFile *tbf, char *name)
+/* Return TRUE if sequence of given name exists in two bit file */
+{
+if (tbf->bpt)
+    {
+    bits64 offset;
+    return bptFileFind(tbf->bpt, name, strlen(name), &offset, sizeof(offset));
+    }
+else
+    {
+    struct twoBitIndex *index = hashFindVal(tbf->hash, name);
+    return index != NULL;
+    }
+}
+
 static void twoBitSeekTo(struct twoBitFile *tbf, char *name)
 /* Seek to start of named record.  Abort if can't find it. */
 {
 if (tbf->bpt)
     {
-    bits32 offset;
+    bits64 offset;
     if (!bptFileFind(tbf->bpt, name, strlen(name), &offset, sizeof(offset)))
 	 errAbort("%s is not in %s", name, tbf->bpt->fileName);
     (*tbf->ourSeek)(tbf->f, offset);
@@ -1312,6 +1330,11 @@ return totalSize;
 boolean twoBitIsSequence(struct twoBitFile *tbf, char *chromName)
 /* Return TRUE if chromName is in 2bit file. */
 {
+if (tbf->bpt)
+    {
+    bits64 offset;
+    return  bptFileFind(tbf->bpt, chromName, strlen(chromName), &offset, sizeof(offset));
+    }
 return (hashFindVal(tbf->hash, chromName) != NULL);
 }
 

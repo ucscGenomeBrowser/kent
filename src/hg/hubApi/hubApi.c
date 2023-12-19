@@ -47,8 +47,10 @@ char *argListHubGenomes[] = { argHubUrl, NULL };
 char *argListTracks[] = { argGenome, argHubUrl, argTrackLeavesOnly, NULL };
 char *argListChromosomes[] = { argGenome, argHubUrl, argTrack, NULL };
 char *argListSchema[] = { argGenome, argHubUrl, argTrack, NULL };
+char *argListFiles[] = { argGenome, argMaxItemsOutput, argFormat, NULL };
 char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argMaxItemsOutput, argJsonOutputArrays, NULL };
 char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, NULL };
+char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -249,14 +251,14 @@ char *genome = NULL;
 if (hub)
     genome = hub->genomeList->name;
 
-struct dyString *extraDyFlags = newDyString(128);
+struct dyString *extraDyFlags = dyStringNew(128);
 if (debug)
     dyStringAppend(extraDyFlags, ";debug=1");
 if (jsonOutputArrays)
     dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
 char *extraFlags = dyStringCannibalize(&extraDyFlags);
 
-if (protectedTrack(tdb, tdb->track))
+if (protectedTrack(db, tdb, tdb->track))
     hPrintf("<li>%s : %s &lt;protected data&gt;</li>\n", tdb->track, tdb->type);
 else if (db)
     {
@@ -297,10 +299,10 @@ else
     hPrintf("<li>%s : %s not db hub track ?</li>\n", tdb->track, tdb->type);
 }
 
-static void hubSampleUrl(struct trackHub *hub, struct trackDb *tdb,
+static void hubSampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb,
     long chromCount, long itemCount, char *genome, char *errorString)
 {
-struct dyString *extraDyFlags = newDyString(128);
+struct dyString *extraDyFlags = dyStringNew(128);
 if (debug)
     dyStringAppend(extraDyFlags, ";debug=1");
 if (jsonOutputArrays)
@@ -327,7 +329,7 @@ if (chromCount > 0 || itemCount > 0)
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld count ", chromCount, itemCount);
     }
 
-if (protectedTrack(tdb, tdb->track))
+if (protectedTrack(db, tdb, tdb->track))
     hPrintf("    <li><b>%s</b>: %s protected data</li>\n", tdb->track, tdb->type);
 else if (isSupportedType(tdb->type))
     {
@@ -504,7 +506,7 @@ if (tdb->subtracks)
             char *bigDataUrl = trackDbSetting(tdbEl, "bigDataUrl");
             char *longName = NULL;
             unsigned longSize = 0;
-            struct dyString *errors = newDyString(1024);
+            struct dyString *errors = dyStringNew(1024);
             (void) bbiBriefMeasure(tdbEl->type, bigDataUrl, bigDataIndex, &chromCount, &itemCount, errors, &longName, &longSize);
             chromSize = longSize;
             chromName = longName;
@@ -514,7 +516,7 @@ if (tdb->subtracks)
 	else
 	    {
 	    if (isSupportedType(tdbEl->type))
-		hubSampleUrl(hub, tdbEl, chromCount, itemCount, genome, errorString);
+		hubSampleUrl(hub, db, tdbEl, chromCount, itemCount, genome, errorString);
 	    else
 		hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
 	    }
@@ -555,11 +557,11 @@ if (tdb->subtracks)
 hPrintf("    </ul></li>\n");
 }
 
-static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
+static void trackSettings(char *db, struct trackDb *tdb, struct hash *countTracks)
 /* process the settingsHash for a trackDb, recursive when subtracks */
 {
 hPrintf("    <li><ul>\n");
-boolean protectedData = protectedTrack(tdb, tdb->track);
+boolean protectedData = protectedTrack(db, tdb, tdb->track);
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(tdb->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
@@ -585,7 +587,7 @@ if (tdb->subtracks)
 	{
         hPrintf("<li>subtrack: %s of parent: %s : type: '%s' (TBD: sample data)</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
 	hashCountTrack(tdbEl, countTracks);
-	trackSettings(tdbEl, countTracks);
+	trackSettings(db, tdbEl, countTracks);
 	}
     }
 hPrintf("    </ul></li>\n");
@@ -605,7 +607,7 @@ hashCountTrack(tdb, countTracks);
 long chromCount = 0;
 long itemCount = 0;
 
-struct dyString *errors = newDyString(1024);
+struct dyString *errors = dyStringNew(1024);
 
 /* if given a chromSize, it belongs to a UCSC db and this is *not* an
  *   assembly hub, otherwise, look up a chrom and size in the bbi file
@@ -625,7 +627,7 @@ if (! (compositeContainer || compositeView) )
 if (depthSearch && bigDataUrl)
     {
     if (isSupportedType(tdb->type))
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome, errors->string);
+	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome, errors->string);
     }
 else
     {
@@ -636,7 +638,7 @@ else
     else if (superChild)
 	{
 	if (isSupportedType(tdb->type))
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome,  errors->string);
+	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome,  errors->string);
 	else
 	    hPrintf("    <li><b>%s</b>: %s : superTrack child of parent: %s</li>\n", tdb->track, tdb->type, tdb->parent->track);
 	}
@@ -644,14 +646,14 @@ else
 	{
         if (isSupportedType(tdb->type))
 	    {
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome, errors->string);
+	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome, errors->string);
 	    }
 	}
     else
 	{
         if (isSupportedType(tdb->type))
 	    {
-	    hubSampleUrl(hub, tdb, chromCount, itemCount, genome, errors->string);
+	    hubSampleUrl(hub, db, tdb, chromCount, itemCount, genome, errors->string);
 	    }
 	else
 	    hPrintf("    <li><b>%s</b>: %s (what is this)</li>\n", tdb->track, tdb->type);
@@ -660,7 +662,7 @@ else
 if (allTrackSettings)
     {
     hPrintf("    <li><ul>\n");
-    trackSettings(tdb, countTracks); /* show all settings */
+    trackSettings(db, tdb, countTracks); /* show all settings */
     hPrintf("    </ul></li>\n");
     }
 else if (tdb->subtracks)
@@ -684,7 +686,7 @@ boolean compositeContainer = tdbIsComposite(tdb);
 boolean compositeView = tdbIsCompositeView(tdb);
 boolean superChild = tdbIsSuperTrackChild(tdb);
 boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
-boolean protectedData = protectedTrack(tdb, tdb->track);
+boolean protectedData = protectedTrack(db, tdb, tdb->track);
 hashCountTrack(tdb, countTracks);
 
 if (compositeContainer)
@@ -716,7 +718,7 @@ else
 if (allTrackSettings)
     {
     hPrintf("    <li><ul>\n");
-    trackSettings(tdb, countTracks); /* show all settings */
+    trackSettings(db, tdb, countTracks); /* show all settings */
     hPrintf("    </ul></li>\n");
     }
 else if (tdb->subtracks)
@@ -967,6 +969,7 @@ if (apiFunctionHash)
 apiFunctionHash = hashNew(0);
 hashAdd(apiFunctionHash, "list", &apiList);
 hashAdd(apiFunctionHash, "getData", &apiGetData);
+hashAdd(apiFunctionHash, "search", &apiSearch);
 }
 
 static struct hashEl *parsePathInfo(char *pathInfo, char *words[MAX_PATH_INFO])
@@ -1067,7 +1070,7 @@ static void sendJsonHogMessage(char *hogHost)
 {
 apiErrAbort(err429, err429Msg, "Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
-       "Please contact genome@soe.ucsc.edu to ask that your site "
+       "Please contact genome-www@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
        "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
        hogHost);
@@ -1089,7 +1092,7 @@ hPrintf("<title>Status %d %s</title></head>\n", err429, err429Msg);
 hPrintf("<body><h1>Status %d %s</h1><p>\n", err429, err429Msg);
 hPrintf("Your host, %s, has been sending too many requests lately and is "
        "unfairly loading our site, impacting performance for other users. "
-       "Please contact genome@soe.ucsc.edu to ask that your site "
+       "Please contact genome-www@soe.ucsc.edu to ask that your site "
        "be reenabled.  Also, please consider downloading sequence and/or "
        "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
        hogHost);
@@ -1244,15 +1247,29 @@ char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
 char *db = cgiOptionalString("genome");
 char *hubUrl = cgiOptionalString("hubUrl");
-struct dyString *errorMsg = newDyString(128);
+struct dyString *errorMsg = dyStringNew(128);
+
+// first check for curated hubs
+if (isEmpty(hubUrl) && isNotEmpty(db))
+    {
+    char *newHubUrl;
+    if (hubConnectGetCuratedUrl(db, &newHubUrl))
+        {
+        hubUrl = newHubUrl;  // use curated hub hubUrl
+        cgiVarSet("hubUrl", hubUrl);   // subsequent code grabs hubUrl from env
+        }
+    }
 
 if (isEmpty(hubUrl) && isNotEmpty(db))
     {
-    struct sqlConnection *conn = hAllocConnMaybe(db);
-    if (NULL == conn)
-        dyStringPrintf(errorMsg, "can not find genome genome='%s' for endpoint '%s'", db, pathInfo);
-    else
-        hFreeConn(&conn);
+    if ( ! isGenArk(db) )
+	{
+	struct sqlConnection *conn = hAllocConnMaybe(db);
+	if (NULL == conn)
+	    dyStringPrintf(errorMsg, "can not find genome='%s' for endpoint '%s'", db, pathInfo);
+	else
+	    hFreeConn(&conn);
+	}
     }
 if (isNotEmpty(start) || isNotEmpty(end))
     {
@@ -1581,8 +1598,11 @@ setUdcCacheDir();
 initSupportedTypes();
 
 char *pathInfo = getenv("PATH_INFO");
+char *cmd;
 if (isNotEmpty(pathInfo)) /* can get to this immediately, no cart needed */
     apiRequest(pathInfo);
+else if ((cmd = cgiOptionalString("cmd")) != NULL)
+    apiRequest(cmd);
 else
     {
     char *allowApiHtml = cfgOptionDefault("hubApi.allowHtml", "off");

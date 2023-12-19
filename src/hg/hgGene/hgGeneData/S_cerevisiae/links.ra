@@ -20,14 +20,18 @@ name uniProt
 tables sgdGene
 idSql select proteinID from sgdGene where name = '%s'
 
+name alphafold
+tables sgdGene
+idSql select proteinID from sgdGene where name = '%s'
+
 name geneCards
 hide
 
 name stanfordSource
 hide
 
-name cgap
-hide
+#name cgap
+#hide
 
 name ensembl
 hide

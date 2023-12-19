@@ -43,7 +43,7 @@ my $stepper = new HgStepManager(
 # Option defaults:
 my $dbHost = 'hgwdev';
 
-my ($dbExists, $qDbExists);
+my ($dbExists, $qDbExists, $tChromInfoExists, $qChromInfoExists);
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -279,7 +279,7 @@ wget --no-check-certificate -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitl
 wget --no-check-certificate -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
 mafToBigMaf $tDb $tDb.$qDb.rbestNet.maf.gz stdout \\
   | sort -k1,1 -k2,2n > $tDb.$qDb.rbestNet.txt
-bedToBigBed -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.rbestNet.txt \\
+bedToBigBed -itemsPerSlot=4 -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.rbestNet.txt \\
   $targetSizes $tDb.$qDb.rbestNet.bb
 hgLoadMafSummary -minSeqSize=1 -test $tDb $tDb.$qDb.rbestNet.summary \\
         $tDb.$qDb.rbestNet.maf.gz
@@ -404,7 +404,7 @@ hgLoadChain -tIndex $tDb chainRBest$QDb $tDb.$qDb.rbest.chain.gz
 _EOF_
     );
 
-    if ($qDbExists) {
+    if ($qDbExists && $qChromInfoExists) {
     $bossScript->add(<<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
@@ -441,6 +441,18 @@ set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 10
 printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainRBest.$QDb.txt
 rm -f link.tab
 rm -f chain.tab
+if ( -s "$buildDir/axtChain/chainRBest${QDb}.bb" ) then
+  mkdir -p /gbdb/$tDb/chainNet
+  rm -f "/gbdb/$tDb/chainNet/$tDb.chainRBest$QDb.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest${QDb}Link.bb"
+  ln -s "$buildDir/axtChain/chainRBest${QDb}.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest$QDb.bb"
+   ln -s "$buildDir/axtChain/chainRBest${QDb}Link.bb" "/gbdb/$tDb/chainNet/$tDb.chainRBest${QDb}Link.bb"
+endif
+if ( -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" ) then
+  mkdir -p /gbdb/$tDb/chainNet
+  rm -f "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.summary.bb"
+  ln -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.bb"
+  ln -s "$buildDir/bigMaf/$tDb.$qDb.rbestNet.summary.bb" "/gbdb/$tDb/chainNet/$tDb.$qDb.rbestNet.summary.bb"
+endif
 _EOF_
       );
   }	# else if (! $opt_trackHub && $dbExists)
@@ -482,9 +494,24 @@ _EOF_
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;
 $dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
+# db might exist, but it may not have chromInfo table (promoted hub)
+$tChromInfoExists = 0;
+if ($dbExists) {
+  $tChromInfoExists = 1 if (&HgAutomate::dbTableExists($dbHost, $tDb, "chromInfo"));
+}
 # may be working with a query that has no database
 $qDbExists = 0;
 $qDbExists = 1 if (&HgAutomate::databaseExists($dbHost, $qDb));
+$qChromInfoExists = 0;
+if ($qDbExists) {
+  $qChromInfoExists = 1 if (&HgAutomate::dbTableExists($dbHost, $qDb, "chromInfo"));
+}
+
+printf STDERR "# target db exists: %s\n", $dbExists ? "TRUE" : "FALSE";
+printf STDERR "# target chromInfo exists: %s\n", $tChromInfoExists ? "TRUE" : "FALSE";
+printf STDERR "# query db exists: %s\n", $qDbExists ? "TRUE" : "FALSE";
+printf STDERR "# query chromInfo exists: %s\n", $qChromInfoExists ? "TRUE" : "FALSE";
+printf STDERR "# trackHub: %s\n", $opt_trackHub ? "TRUE" : "FALSE";
 
 $QDb = ucfirst($qDb);
 

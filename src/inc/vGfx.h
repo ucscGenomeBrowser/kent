@@ -59,6 +59,10 @@ struct vGfx
     /* Find color in map if possible, otherwise create new color or
      * in a pinch a close color. */
 
+    int (*findAlphaColorIx)(void *v, int r, int g, int b, int a);
+    /* Find color in map if possible, otherwise create new color or
+     * in a pinch a close color. This one includes an alpha value. */
+
     struct rgbColor (*colorIxToRgb)(void *v, int colorIx);
     /* Return rgb values for given color index. */
 
@@ -164,6 +168,9 @@ void vgClose(struct vGfx **pVg);
 #define vgFindColorIx(v,r,g,b) v->findColorIx(v->data, r, g, b)
 /* Find index of RGB color.  */
 
+#define vgFindAlphaColorIx(v,r,g,b,a) v->findAlphaColorIx(v->data, r, g, b, a)
+/* Find index of RGBA color.  */
+
 #define vgColorIxToRgb(v,colorIx) v->colorIxToRgb(v->data, colorIx)
 /* Return rgb values for given color index. */
 
@@ -231,10 +238,10 @@ void vgClose(struct vGfx **pVg);
         v->setFontMethod(v->data,method,fontName,fontFile)
 
 int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb);
-/* Find color index corresponding to rgb color. */
+/* Find color index corresponding to rgba color. */
 
 Color vgContrastingColor(struct vGfx *vg, int backgroundIx);
 /* Return black or white whichever would be more visible over
- * background. */
+ * background. Note: ignores alpha. */
 
 #endif /* VGFX_H */

@@ -1988,5 +1988,29 @@ hgsql bosTau4 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
     md5sum bosTau4ToBosTau6.over.chain.gz >> md5sum.txt
     popd
 
-#########################################################################
+##############################################################################
+# LIFTOVER TO bosTau9 (DONE - 2022-12-06 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bosTau4/bed/blat.bosTau9.2022-12-06
+    cd /hive/data/genomes/bosTau4/bed/blat.bosTau9.2022-12-06
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/bosTau4/bosTau4.2bit \
+        -targetSizes=/hive/data/genomes/bosTau4/chrom.sizes \
+        -query2Bit=/hive/data/genomes/bosTau9/bosTau9.2bit \
+        -querySizes=/hive/data/genomes/bosTau9/chrom.sizes \
+        -ooc=/hive/data/genomes/bosTau4/bosTau4.11.ooc \
+         bosTau4 bosTau9
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/bosTau4/bosTau4.2bit \
+        -targetSizes=/hive/data/genomes/bosTau4/chrom.sizes \
+        -query2Bit=/hive/data/genomes/bosTau9/bosTau9.2bit \
+        -querySizes=/hive/data/genomes/bosTau9/chrom.sizes \
+        -ooc=/hive/data/genomes/bosTau4/bosTau4.11.ooc \
+         bosTau4 bosTau9) > doLiftOverToBosTau9.log 2>&1
+    # real    963m57.013s
 
+    # see if the liftOver menus function in the browser from bosTau4 to bosTau9
+
+##############################################################################

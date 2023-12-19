@@ -9,6 +9,7 @@
 #include "obscure.h"
 #include "targetDb.h"
 #include "pcrResult.h"
+#include "trackHub.h"
 
 
 char *pcrResultCartVar(char *db)
@@ -50,7 +51,7 @@ char *pslFile = words[0];
 char *primerFile = words[1];
 char *targetName = (wordCount > 2) ? words[2] : NULL;
 struct targetDb *target = NULL;
-if (isNotEmpty(targetName))
+if (!trackHubDatabase(db))
     target = targetDbLookup(db, targetName);
 
 if (!fileExists(pslFile) || !fileExists(primerFile) ||
@@ -70,34 +71,63 @@ if (retTarget == NULL)
 return TRUE;
 }
 
-void pcrResultGetPrimers(char *fileName, char **retFPrimer, char **retRPrimer)
+void pcrResultGetPrimers(char *fileName, char **retFPrimer, char **retRPrimer, char *primerKey)
 /* Given a file whose first line is 2 words (forward primer, reverse primer)
- * set the ret's to upper-cased primer sequences.  
+ * set the ret's to upper-cased primer sequences. If primerKey is non NULL, the
+ * first two words of the line joined with "_" must equal the primerKey:
+ * primerKey == word1_word2
+ * Used when there are multiple pcr results in a single track
  * Do not free the statically allocated ret's. */
 {
 static char fPrimer[1024], rPrimer[1024];;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct dyString *primerPair = dyStringNew(0);
 char *words[2];
-if (! lineFileRow(lf, words))
-    lineFileAbort(lf, "Couldn't read primers");
-if (retFPrimer != NULL)
+while (lineFileRow(lf, words))
     {
-    safecpy(fPrimer, sizeof(fPrimer), words[0]);
-    touppers(fPrimer);
-    *retFPrimer = fPrimer;
+    dyStringClear(primerPair);
+    dyStringPrintf(primerPair, "%s_%s", words[0], words[1]);
+    if (!primerKey || (primerKey && sameString(primerPair->string, primerKey)))
+        {
+        if (retFPrimer != NULL)
+            {
+            safecpy(fPrimer, sizeof(fPrimer), words[0]);
+            touppers(fPrimer);
+            *retFPrimer = fPrimer;
+            }
+        if (retRPrimer != NULL)
+            {
+            safecpy(rPrimer, sizeof(rPrimer), words[1]);
+            touppers(rPrimer);
+            *retRPrimer = rPrimer;
+            }
+        break;
+        }
     }
-if (retRPrimer != NULL)
-    {
-    safecpy(rPrimer, sizeof(rPrimer), words[1]);
-    touppers(rPrimer);
-    *retRPrimer = rPrimer;
-    }
+dyStringFree(&primerPair);
 lineFileClose(&lf);
+}
+
+static boolean checkPcrResultCoordinates(boolean targetSearchResult, char *tName, int tStart,
+            int tEnd, char *item, int itemStart, int itemEnd, char *chrom)
+/* Check the coordinates of a pcrResult match so we know which list of psls
+ * to add the match to */
+{
+if (targetSearchResult)
+    {
+    if (sameString(tName, item) && tStart == itemStart && tEnd == itemEnd)
+        return TRUE;
+    }
+else if (sameString(tName, chrom) && tStart == itemStart && tEnd == itemEnd)
+    {
+    return TRUE;
+    }
+return FALSE;
 }
 
 void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
 		     char *chrom, int itemStart, int itemEnd,
-		     struct psl **retItemPsl, struct psl **retOtherPsls)
+		     struct psl **retItemPsl, struct psl **retOtherPsls, char *fPrimer, char *rPrimer)
 /* Read in psl from file.  If a psl matches the given item position, set 
  * retItemPsl to that; otherwise add it to retOtherPsls.  Die if no psl
  * matches the given item position. */
@@ -105,32 +135,50 @@ void pcrResultGetPsl(char *fileName, struct targetDb *target, char *item,
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct psl *itemPsl = NULL, *otherPsls = NULL;
 char *pslFields[21];
+boolean targetSearchResult = stringIn("__", item) != NULL;
 while (lineFileRow(lf, pslFields))
     {
     struct psl *psl = pslLoad(pslFields);
     boolean gotIt = FALSE;
-    if (target != NULL)
-	{
-	if (sameString(psl->tName, item) && psl->tStart == itemStart && psl->tEnd == itemEnd)
-	    gotIt = TRUE;
-	}
-    else if (sameString(psl->tName, chrom) && psl->tStart == itemStart &&
-	     psl->tEnd == itemEnd)
-	gotIt = TRUE;
-    if (gotIt)
-	itemPsl = psl;
+    // if "_" is in the item name, we look up the result(s) by the primer pair, else
+    // we just show all psls
+    if (stringIn("_", item) && !sameString(psl->qName, "n/a"))
+        {
+        char *pair = cloneString(psl->qName);
+        char *under = strchr(pair, '_');
+        *under = '\0';
+        char *thisFPrimer = pair;
+        char *thisRPrimer = under+1;
+        if (!differentWord(thisFPrimer, fPrimer) && !differentWord(thisRPrimer, rPrimer))
+            {
+            gotIt = checkPcrResultCoordinates(targetSearchResult, psl->tName, psl->tStart,
+                    psl->tEnd, item, itemStart, itemEnd, chrom);
+            if (gotIt)
+                itemPsl = psl;
+            else
+                slAddHead(&otherPsls, psl);
+            }
+        }
     else
-	slAddHead(&otherPsls, psl);
+        {
+        gotIt = checkPcrResultCoordinates(targetSearchResult, psl->tName, psl->tStart,
+                psl->tEnd, item, itemStart, itemEnd, chrom);
+        if (gotIt)
+            itemPsl = psl;
+        else if (!(fPrimer && rPrimer))
+            slAddHead(&otherPsls, psl);
+        }
+
     }
 lineFileClose(&lf);
 if (itemPsl == NULL)
     {
     if (target != NULL)
-	errAbort("Did not find record for amplicon in %s sequence %s",
-		 target->description, item);
+        errAbort("Did not find record for amplicon in %s sequence %s",
+             target->description, item);
     else
-	errAbort("Did not find record for amplicon at %s:%d-%d",
-		 chrom, itemStart, itemEnd);
+        errAbort("Did not find record for amplicon at %s:%d-%d",
+             chrom, itemStart, itemEnd);
     }
 if (retItemPsl != NULL)
     *retItemPsl = itemPsl;
@@ -174,14 +222,17 @@ hashAdd(tdb->settingsHash, "nextItemButton", cloneString("off"));
 return tdb;
 }
 
-char *pcrResultItemAccName(char *acc, char *name)
+char *pcrResultItemAccName(char *acc, char *name, struct psl *origPsl)
 /* If a display name is given in addition to the acc, concatenate them
  * into a single name that must match a non-genomic target item's name
  * in the targetDb .2bit.  Do not free the result. */
 {
 static char accName[256];
 if (isEmpty(name))
-    safecpy(accName, sizeof(accName), acc);
+    if (origPsl)
+        return cloneString(origPsl->qName);
+    else
+        safecpy(accName, sizeof(accName), acc);
 else
     safef(accName, sizeof(accName), "%s__%s", acc, name);
 return accName;

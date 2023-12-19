@@ -180,7 +180,7 @@ char *dmSvr = getGenomeSpaceConfig("dmServer");
 char personalDirectoryUrl[1024];
 safef(personalDirectoryUrl, sizeof personalDirectoryUrl, "%s/v1.0/personaldirectory", dmSvr);
     
-struct dyString *reqExtra = newDyString(256);
+struct dyString *reqExtra = dyStringNew(256);
 dyStringPrintf(reqExtra, "Cookie: gs-token=%s\r\n", gsToken);
     
 int sd = netOpenHttpExt(personalDirectoryUrl, "GET", reqExtra->string);
@@ -306,7 +306,7 @@ safef(uploadUrl, sizeof(uploadUrl),
     );
 
 
-struct dyString *reqExtra = newDyString(256);
+struct dyString *reqExtra = dyStringNew(256);
 dyStringPrintf(reqExtra, "Cookie: gs-token=%s\r\n", gsToken);
 
 int sd = netOpenHttpExt(uploadUrl, "GET", reqExtra->string);
@@ -334,7 +334,7 @@ char *gsS3Upload(char *s3UploadUrl, char *inputFileName, off_t contentLength, ch
 {
 // S3 UPLOAD  to Amazon Storage
 
-struct dyString *reqExtra = newDyString(256);
+struct dyString *reqExtra = dyStringNew(256);
 dyStringPrintf(reqExtra, "Content-Length: %lld\r\n", (long long)contentLength);
 dyStringPrintf(reqExtra, "Content-MD5: %s\r\n", base64Md5);
 dyStringPrintf(reqExtra, "Content-Type: %s\r\n", contentType);

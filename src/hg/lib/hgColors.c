@@ -19,6 +19,7 @@ for (i=0; i<=maxShade; ++i)
     int level = 255 - (255*i/maxShade);
     if (level < 0) level = 0;
     rgb.r = rgb.g = rgb.b = level;
+    rgb.a = 255;
     shades[i] = hvGfxFindRgb(hvg, &rgb);
     }
 }

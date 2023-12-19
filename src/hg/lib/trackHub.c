@@ -76,7 +76,7 @@ if (hasProtocol(path))
     return cloneString(path);
 
 /* If it's a remote hub, let html path expander handle it. */
-if (hasProtocol(hubUrl))
+if (hasProtocol(hubUrl) && !startsWith("/gbdb",path))
     return expandUrlOnBase(hubUrl, path);
 
 /* If we got to here hub is local, and so is path.  Do standard
@@ -348,6 +348,15 @@ slFreeList(&chromList);
 return defaultName;
 }
 
+static struct twoBitFile *openTwoBit(struct trackHubGenome *genome)
+/* Open a twoBit file that may or may not have a bpt index. */
+{
+if (genome->twoBitBptUrl)
+    return twoBitOpenExternalBptIndex(genome->twoBitPath, genome->twoBitBptUrl);
+else
+    return twoBitOpen(genome->twoBitPath);
+}
+
 struct chromInfo *trackHubMaybeChromInfo(char *database, char *chrom)
 /* Return a chromInfo structure for just this chrom in this database. 
  * Return NULL if chrom doesn't exist. */
@@ -357,7 +366,7 @@ if (genome == NULL)
     return NULL;
 
 if (genome->tbf == NULL)
-    genome->tbf = twoBitOpen(genome->twoBitPath);
+    genome->tbf = openTwoBit(genome);
 if (!twoBitIsSequence(genome->tbf, chrom))
     return NULL;
 
@@ -381,77 +390,6 @@ if (ci == NULL)
 
 return ci;
 }
-
-static struct hash *readAliasFile(char *url)
-/* given the URL (might be a file) read and process into chromAlias hash
- * file structure:  lines of white space separated words
- * first word is the sequence name in the assembly, words following are
- * alias names for that sequences name.  Same format as use by IGV
- * returned hash is key: sequence chrom name, hash value struct chromAlias *
- */
-{
-struct hash *aliasHash = NULL;
-struct dyString *ds = NULL;
-
-/* adding error trapping because various net.c functions can errAbort */
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    int sd = netUrlOpen(url);
-    if (sd >= 0)
-        {
-        char *newUrl = NULL;
-        int newSd = 0;
-        if (netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
-            {
-            if (newUrl)	/* redirect can modify the url */
-                {
-                freeMem(newUrl);
-                sd = newSd;
-                }
-            ds = netSlurpFile(sd);
-            close(sd);
-            }
-        }
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    warn("%s", errCatch->message->string);
-errCatchFree(&errCatch);
-/* if the read worked, process it */
-if (ds)
-    {
-    char *words[1024];	/* process lines, no more than 1,024 words on a line */
-    char *line;
-    int size;
-    aliasHash = hashNew(0);
-    struct lineFile *lf = lineFileOnString("chromAlias", TRUE,
-                                            dyStringCannibalize(&ds));
-    while (lineFileNext(lf, &line, &size))
-    {
-    int wordCount = chopByWhite(line, words, ArraySize(words));
-    if (wordCount > 1)
-	{
-	int i = 1;
-        for ( ; i < wordCount; ++i )
-	    {
-	    if (isNotEmpty(words[i]))
-		{
-		struct chromAlias *ali;
-		AllocVar(ali);
-		ali->alias = cloneString(words[i]);
-		ali->chrom = cloneString(words[0]);
-		ali->source = cloneString("asmHub");
-		hashAdd(aliasHash, words[0], ali);
-		}
-	    }
-	}
-    }
-    lineFileClose(&lf);  /* frees cannibalized ds string */
-    }
-
-return aliasHash;
-}	/*	static struct hash *readAliasFile(char *url)	*/
 
 static char *assemblyHubGenomeSetting(char *database, char *tagName)
 /* see if this assembly hub has specified tagName, return url if present
@@ -481,6 +419,14 @@ char *trackHubChromSizes(char *database)
 return assemblyHubGenomeSetting(database, "chromSizes");
 }
 
+char *trackHubAliasBbFile(char *database)
+/* see if this assembly hub has an alias bigBed file, return url if present
+ * returns NULL when not present
+ */
+{
+return assemblyHubGenomeSetting(database, "chromAliasBb");
+}
+
 char *trackHubAliasFile(char *database)
 /* see if this assembly hub has an alias file, return url if present
  * returns NULL when not present
@@ -488,16 +434,6 @@ char *trackHubAliasFile(char *database)
 {
 return assemblyHubGenomeSetting(database, "chromAlias");
 }
-
-struct hash *trackHubAllChromAlias(char *database)
-/* Return a hash of chroms with alias names from alias file if present */
-{
-char *aliasFile = trackHubAliasFile(database);
-if (aliasFile == NULL)
-    return NULL;
-
-return readAliasFile(aliasFile);
-}	/*	struct hash *trackHubAllChromAlias(char *database)	*/
 
 struct chromInfo *trackHubAllChromInfo(char *database)
 /* Return a chromInfo structure for all the chroms in this database. */
@@ -507,7 +443,7 @@ if (genome == NULL)
     return NULL;
 
 if (genome->tbf == NULL)
-    genome->tbf = twoBitOpen(genome->twoBitPath);
+    genome->tbf = openTwoBit(genome);
 struct chromInfo *ci, *ciList = NULL;
 struct slName *chromList = twoBitSeqNames(genome->twoBitPath);
 
@@ -686,15 +622,18 @@ while ((ra = raNextRecord(lf)) != NULL)
         break;
 
     char *twoBitPath = hashFindVal(ra, "twoBitPath");
+    char *twoBitBptUrl = hashFindVal(ra, "twoBitBptUrl");
     char *genome, *trackDb;
     if (twoBitPath != NULL)
 	genome = addHubName(hashFindVal(ra, "genome"), hub->name);
     else
-	genome = hashFindVal(ra, "genome");
+        genome = hashFindVal(ra, "genome");
     if (hub->defaultDb == NULL)
 	hub->defaultDb = genome;
     if (genome == NULL)
         badGenomeStanza(lf);
+    if (hasWhiteSpace(genome))
+        errAbort("Bad genome name: \"%s\". Only alpha-numeric characters and \"_\" are allowed ([A-Za-z0-9_]).", genome);
     if (hashLookup(hash, genome) != NULL)
         errAbort("Duplicate genome %s in stanza ending line %d of %s",
 		genome, lf->lineIx, lf->fileName);
@@ -711,6 +650,7 @@ while ((ra = raNextRecord(lf)) != NULL)
     el->trackDbFile = trackHubRelativeUrl(url, trackDb);
     el->trackHub = hub;
     hashAdd(hash, el->name, el);
+    hashAdd(hash, hubConnectSkipHubPrefix(el->name), el);
     slAddHead(&list, el);
     char *orderKey = hashFindVal(ra, "orderKey");
     if (orderKey != NULL)
@@ -731,6 +671,8 @@ while ((ra = raNextRecord(lf)) != NULL)
 	    errAbort("must have 'defaultPos' set in assembly hub in stanza ending line %d of %s",
 		     lf->lineIx, lf->fileName);
 	el->twoBitPath = trackHubRelativeUrl(url, twoBitPath);
+        if (twoBitBptUrl != NULL)
+            el->twoBitBptUrl = trackHubRelativeUrl(url, twoBitBptUrl);
 
 	char *htmlPath = hashFindVal(ra, "htmlPath");
 	if (htmlPath != NULL)
@@ -741,6 +683,7 @@ while ((ra = raNextRecord(lf)) != NULL)
 	}
     el->settingsHash = ra;
     hashAdd(ra, "hubName", hub->shortLabel);
+    el->chromAuthority = hashFindVal(ra, "chromAuthority");
     }
 
 /* Clean up and go home. */
@@ -1025,6 +968,7 @@ else
                   startsWithWord("bigInteract", type) ||
                   startsWithWord("hic", type) ||
                   startsWithWord("bigDbSnp", type) ||
+                  startsWithWord("instaPort", type) ||
                   startsWithWord("bam", type)))
                     {
                     errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
@@ -1106,7 +1050,16 @@ markContainers(hub, genome, tdbList);
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    validateOneTrack(hub, genome, tdb);
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        validateOneTrack(hub, genome, tdb);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        {
+        tdb->errMessage = cloneString(errCatch->message->string);
+        }
 
     // clear these two pointers which we set in markContainers
     tdb->subtracks = NULL;
@@ -1114,10 +1067,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles)
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome, struct dyString *incFiles, boolean *foundFirstGenome)
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
  * types.  Do a few other quick checks to catch errors early. If incFiles is not NULL,
- * put the list of included files in there. */
+ * put the list of included files in there.  Only the first example of a genome 
+ * gets to populate groups, the others get a group for the trackHub.  */
 {
 struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
 struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL, incFiles);
@@ -1149,8 +1103,10 @@ validateTracks(hub, genome, tdbList);
 trackDbAddTableField(tdbList);
 if (!isEmpty(hub->name))
     trackHubAddNamePrefix(hub->name, tdbList);
-if (genome->twoBitPath == NULL)
+if (genome->twoBitPath == NULL || *foundFirstGenome)
     trackHubAddGroupName(hub->name, tdbList);
+else
+    *foundFirstGenome = TRUE;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     trackDbFieldsFromSettings(tdb);
@@ -1235,7 +1191,7 @@ if (!endsWith(url, ".html"))
     safef(buffer, sizeof buffer, "%s.html", url);
     fixedUrl = buffer;
     }
-tdb->html = netReadTextFileIfExists(fixedUrl);
+tdb->html = udcFileReadAllIfExists(fixedUrl, NULL, 0, NULL);
 freez(&url);
 }
 
@@ -1325,19 +1281,10 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 
 
 
-void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
+void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp, boolean measureTiming)
 /* Look for term in track hubs.  Update hgp if found */
 {
-struct trackDb *tdbList = NULL;
-if (trackHubDatabase(db))
-    {
-    struct trackHubGenome *genome = trackHubGetGenome(db);
-    tdbList = trackHubTracksForGenome(genome->trackHub, genome, NULL);
-    }
-else
-    tdbList = hubCollectTracks(db, NULL);
-
-findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
+findBigBedPosInTdbList(cart, db, hubCollectTracks(db, NULL), term, hgp, NULL, measureTiming);
 }
 
 static void parseBlatPcrParams(char *database, char *type, char *setting,

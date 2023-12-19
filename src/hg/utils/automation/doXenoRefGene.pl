@@ -36,6 +36,8 @@ my $stepper = new HgStepManager(
 my $bigClusterHub = 'ku';
 my $workhorse = 'hgwdev';
 my $dbHost = 'hgwdev';
+my $ram = '4g';
+my $cpu = 1;
 my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $mrnas = "/hive/data/genomes/asmHubs/xenoRefSeq";
@@ -68,6 +70,8 @@ _EOF_
 
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
                                 'bigClusterHub' => $bigClusterHub,
+                                'ram' => $ram,
+                                'cpu' => $cpu,
                                 'workhorse' => $defaultWorkhorse);
   print STDERR "
 Automates construction of a xeno RefSeq gene track from RefSeq mRNAs.  Steps:
@@ -220,7 +224,7 @@ _EOF_
   $whatItDoes = "Operate the blat run of the mRNAs query sequence to the target split sequence.";
   $bossScript = newBash HgRemoteScript("$runDir/runBlat.bash", $paraHub,
 				      $runDir, $whatItDoes);
-  my $paraRun = &HgAutomate::paraRun();
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   $bossScript->add(<<_EOF_
 
 chmod +x blatOne
@@ -271,7 +275,7 @@ _EOF_
 } # doFilterPsl
 
 #########################################################################
-# * step: make gp [workhorse]
+# * step: make gp [dbHost]
 sub doMakeGp {
   my $runDir = $buildDir;
   &HgAutomate::mustMkdir($runDir);
@@ -288,7 +292,7 @@ sub doMakeGp {
   }
 
   my $whatItDoes = "Makes bigGenePred.bb file from filterPsl output.";
-  my $bossScript = newBash HgRemoteScript("$runDir/makeGp.bash", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/makeGp.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_

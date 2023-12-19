@@ -70,7 +70,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
     visibility hide
 
         track nextstrainSamples19A
-        parent nextstrainSamplesViewNewClades on
+        parent nextstrainSamplesViewNewClades
         subGroups view=newClades
         shortLabel 19A Mutations
         longLabel Mutations in Clade 19A Nextstrain Subset of GISAID EpiCoV TM Samples
@@ -80,7 +80,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         priority 10
 
         track nextstrainSamples19B
-        parent nextstrainSamplesViewNewClades on
+        parent nextstrainSamplesViewNewClades
         subGroups view=newClades
         shortLabel 19B Mutations
         longLabel Mutations in Clade 19B Nextstrain Subset of GISAID EpiCoV TM Samples
@@ -90,7 +90,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         priority 20
 
         track nextstrainSamples20A
-        parent nextstrainSamplesViewNewClades on
+        parent nextstrainSamplesViewNewClades
         subGroups view=newClades
         shortLabel 20A Mutations
         longLabel Mutations in Clade 20A Nextstrain Subset of GISAID EpiCoV TM Samples
@@ -100,7 +100,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         priority 30
 
         track nextstrainSamples20B
-        parent nextstrainSamplesViewNewClades on
+        parent nextstrainSamplesViewNewClades
         subGroups view=newClades
         shortLabel 20B Mutations
         longLabel Mutations in Clade 20B Nextstrain Subset of GISAID EpiCoV TM Samples
@@ -110,7 +110,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         priority 40
 
         track nextstrainSamples20C
-        parent nextstrainSamplesViewNewClades on
+        parent nextstrainSamplesViewNewClades
         subGroups view=newClades
         shortLabel 20C Mutations
         longLabel Mutations in Clade 20C Nextstrain Subset of GISAID EpiCoV TM Samples
@@ -120,7 +120,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         priority 50
 
         track nextstrainSamples20D
-        parent nextstrainSamplesViewNewClades on
+        parent nextstrainSamplesViewNewClades
         subGroups view=newClades
         shortLabel 20D Mutations
         longLabel Mutations in Clade 20D Nextstrain Subset of GISAID EpiCoV TM Samples
@@ -130,7 +130,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         priority 50
 
         track nextstrainSamples20E_EU1
-        parent nextstrainSamplesViewNewClades on
+        parent nextstrainSamplesViewNewClades
         subGroups view=newClades
         shortLabel 20E/EU1 Mutations
         longLabel Mutations in Clade 20E/EU1 Nextstrain Subset of GISAID EpiCoV TM Samples
@@ -140,7 +140,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         priority 50
 
         track nextstrainSamples20F
-        parent nextstrainSamplesViewNewClades on
+        parent nextstrainSamplesViewNewClades
         subGroups view=newClades
         shortLabel 20F Mutations
         longLabel Mutations in Clade 20F Nextstrain Subset of GISAID EpiCoV TM Samples
@@ -150,7 +150,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         priority 50
 
         track nextstrainSamples20G
-        parent nextstrainSamplesViewNewClades on
+        parent nextstrainSamplesViewNewClades
         subGroups view=newClades
         shortLabel 20G Mutations
         longLabel Mutations in Clade 20G Nextstrain Subset of GISAID EpiCoV TM Samples
@@ -159,34 +159,234 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20G.vcf.gz
         priority 50
 
-        track nextstrainSamples20H_501Y_V2
+        track nextstrainSamples20H_Beta
         parent nextstrainSamplesViewNewClades on
         subGroups view=newClades
-        shortLabel 20H/501Y.V2 Mutations
-        longLabel Mutations in Clade 20H/501Y.V2 Nextstrain Subset of GISAID EpiCoV TM Samples
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20H_501Y.V2.nh
+        shortLabel 20H/Beta Mutations
+        longLabel Mutations in Clade 20H/501Y.V2/Beta Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20H_Beta_V2.nh
         hapClusterHeight 300
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20H_501Y.V2.vcf.gz
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20H_Beta_V2.vcf.gz
         priority 50
 
-        track nextstrainSamples20I_501Y_V1
+        track nextstrainSamples20I_Alpha
         parent nextstrainSamplesViewNewClades on
         subGroups view=newClades
-        shortLabel 20I/501Y.V1 Mutations
-        longLabel Mutations in Clade 20I/501Y.V1 Nextstrain Subset of GISAID EpiCoV TM Samples
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20I_501Y.V1.nh
+        shortLabel 20I/Alpha Mutations
+        longLabel Mutations in Clade 20I/501Y.V1/Alpha Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20I_Alpha_V1.nh
         hapClusterHeight 300
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20I_501Y.V1.vcf.gz
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20I_Alpha_V1.vcf.gz
         priority 50
 
-        track nextstrainSamples20J_501Y_V3
+        track nextstrainSamples20J_Gamma
         parent nextstrainSamplesViewNewClades on
         subGroups view=newClades
-        shortLabel 20J/501Y.V3 Mutations
-        longLabel Mutations in Clade 20J/501Y.V3 Nextstrain Subset of GISAID EpiCoV TM Samples
-        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20J_501Y.V3.nh
+        shortLabel 20J/Gamma Mutations
+        longLabel Mutations in Clade 20J/501Y.V3/Gamma Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20J_Gamma_V3.nh
         hapClusterHeight 300
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20J_501Y.V3.vcf.gz
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20J_Gamma_V3.vcf.gz
+        priority 50
+
+        track nextstrainSamples21A_Delta
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21A/Delta Mutations
+        longLabel Mutations in Clade 21A/Delta Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21A_Delta.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21A_Delta.vcf.gz
+        priority 50
+
+        track nextstrainSamples21B_Kappa
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21B/Kappa Mutations
+        longLabel Mutations in Clade 21B/Kappa Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21B_Kappa.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21B_Kappa.vcf.gz
+        priority 50
+
+        track nextstrainSamples21C_Epsilon
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21C/Epsilon Mutations
+        longLabel Mutations in Clade 21C/Epsilon Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21C_Epsilon.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21C_Epsilon.vcf.gz
+        priority 50
+
+        track nextstrainSamples21D_Eta
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21D/Eta Mutations
+        longLabel Mutations in Clade 21D/Eta Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21D_Eta.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21D_Eta.vcf.gz
+        priority 50
+
+        track nextstrainSamples21E_Theta
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21E/Theta Mutations
+        longLabel Mutations in Clade 21E/Theta Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21E_Theta.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21E_Theta.vcf.gz
+        priority 50
+
+        track nextstrainSamples21F_Iota
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21F/Iota Mutations
+        longLabel Mutations in Clade 21F/Iota Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21F_Iota.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21F_Iota.vcf.gz
+        priority 50
+
+        track nextstrainSamples21G_Lambda
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21G/Lambda Mutations
+        longLabel Mutations in Clade 21G/Lambda Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21G_Lambda.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21G_Lambda.vcf.gz
+        priority 50
+
+        track nextstrainSamples21H_Mu
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21H/Mu Mutations
+        longLabel Mutations in Clade 21H/Mu Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21H_Mu.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21H_Mu.vcf.gz
+        priority 50
+
+        track nextstrainSamples21I_Delta
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21I/Delta Mutations
+        longLabel Mutations in Clade 21I/Delta Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21I_Delta.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21I_Delta.vcf.gz
+        priority 50
+
+        track nextstrainSamples21J_Delta
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21J/Delta Mutations
+        longLabel Mutations in Clade 21J/Delta Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21J_Delta.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21J_Delta.vcf.gz
+        priority 50
+
+        track nextstrainSamples21K_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21K/BA.1 Mutations
+        longLabel Mutations in Clade 21K/Omicron/BA.1 Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21K_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21K_Omicron.vcf.gz
+        priority 50
+
+        track nextstrainSamples21L_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21L/BA.2 Mutations
+        longLabel Mutations in Clade 21L/Omicron/BA.2 Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21L_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21L_Omicron.vcf.gz
+        priority 50
+
+        track nextstrainSamples21M_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 21M/B.1.1.529 Mutations
+        longLabel Mutations in Clade 21M/Omicron/B.1.1.529 Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain21M_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21M_Omicron.vcf.gz
+        priority 50
+
+        track nextstrainSamples22A_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 22A/BA.4 Mutations
+        longLabel Mutations in Clade 22A/Omicron/BA.4 Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain22A_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22A_Omicron.vcf.gz
+        priority 50
+
+        track nextstrainSamples22B_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 22B/BA.5 Mutations
+        longLabel Mutations in Clade 22B/Omicron/BA.5 Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain22B_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22B_Omicron.vcf.gz
+        priority 50
+
+        track nextstrainSamples22C_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 22C/BA.2.12.1 Mutations
+        longLabel Mutations in Clade 22C/Omicron/BA.2.12.1 Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain22C_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22C_Omicron.vcf.gz
+        priority 50
+
+        track nextstrainSamples22D_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 22D/BA.2.75 Mutations
+        longLabel Mutations in Clade 22D/Omicron/BA.2.75 Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain22D_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22D_Omicron.vcf.gz
+        priority 50
+
+        track nextstrainSamples22E_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 22E/BQ.1 Mutations
+        longLabel Mutations in Clade 22E/Omicron/BQ.1 Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain22E_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22E_Omicron.vcf.gz
+        priority 50
+
+        track nextstrainSamples22F_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 22F/XBB Mutations
+        longLabel Mutations in Clade 22F/Omicron/XBB Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain22F_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22F_Omicron.vcf.gz
+        priority 50
+
+        track nextstrainSamples23A_Omicron
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 23A/XBB.1.5 Mutations
+        longLabel Mutations in Clade 23A/Omicron/XBB.1.5 Nextstrain Subset of GISAID EpiCoV TM Samples
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain23A_Omicron.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples23A_Omicron.vcf.gz
         priority 50
 
 
@@ -316,31 +516,231 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
         subGroups view=newClades
         priority 50
 
-        track nextstrainFreq20H_501Y.V2
-        shortLabel 20H/501Y.V2
-        longLabel Nextstrain, 20H/501Y.V2 clade: Alternate allele frequency
+        track nextstrainFreq20H_Beta
+        shortLabel 20H/Beta
+        longLabel Nextstrain, 20H/501Y.V2/Beta clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20H_501Y.V2.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20H_Beta_V2.bigWig
         visibility dense
         parent nextstrainFreqViewNewClades
         subGroups view=newClades
         priority 50
 
-        track nextstrainFreq20J_501Y.V3
-        shortLabel 20J/501Y.V3
-        longLabel Nextstrain, 20J/501Y.V3 clade: Alternate allele frequency
+        track nextstrainFreq20I_Alpha
+        shortLabel 20I/Alpha
+        longLabel Nextstrain, 20I/501Y.V1/Alpha clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20J_501Y.V3.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20I_Alpha_V1.bigWig
         visibility dense
         parent nextstrainFreqViewNewClades
         subGroups view=newClades
         priority 50
 
-        track nextstrainFreq20J_501Y_V3
-        shortLabel 20J/501Y.V3
-        longLabel Nextstrain, 20J/501Y.V3 clade: Alternate allele frequency
+        track nextstrainFreq20J_Gamma
+        shortLabel 20J/Gamma
+        longLabel Nextstrain, 20J/501Y.V3/Gamma clade: Alternate allele frequency
         type bigWig
-        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20J_501Y.V3.bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20J_Gamma_V3.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21A_Delta
+        shortLabel 21A/Delta
+        longLabel Nextstrain, 21A/Delta clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21A_Delta.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21B_Kappa
+        shortLabel 21B/Kappa
+        longLabel Nextstrain, 21B/Kappa clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21B_Kappa.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21C_Epsilon
+        shortLabel 21C/Epsilon
+        longLabel Nextstrain, 21C/Epsilon clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21C_Epsilon.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21D_Eta
+        shortLabel 21D/Eta
+        longLabel Nextstrain, 21D/Eta clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21D_Eta.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21E_Theta
+        shortLabel 21E/Theta
+        longLabel Nextstrain, 21E/Theta clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21E_Theta.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21F_Iota
+        shortLabel 21F/Iota
+        longLabel Nextstrain, 21F/Iota clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21F_Iota.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21G_Lambda
+        shortLabel 21G/Lambda
+        longLabel Nextstrain, 21G/Lambda clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21G_Lambda.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21H_Mu
+        shortLabel 21H/Mu
+        longLabel Nextstrain, 21H/Mu clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21H_Mu.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21I_Delta
+        shortLabel 21I/Delta
+        longLabel Nextstrain, 21I/Delta clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21I_Delta.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21J_Delta
+        shortLabel 21J/Delta
+        longLabel Nextstrain, 21J/Delta clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21J_Delta.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21K_Omicron
+        shortLabel 21K/BA.1
+        longLabel Nextstrain, 21K/Omicron/BA.1 clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21K_Omicron.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21L_Omicron
+        shortLabel 21L/BA.2
+        longLabel Nextstrain, 21L/Omicron/BA.2 clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21L_Omicron.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq21M_Omicron
+        shortLabel 21M/B.1.1.529
+        longLabel Nextstrain, 21M/Omicron/B.1.1.529 clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples21M_Omicron.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq22A_Omicron
+        shortLabel 22A/BA.4
+        longLabel Nextstrain, 22A/Omicron/BA.4 clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22A_Omicron.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq22B_Omicron
+        shortLabel 22B/BA.5
+        longLabel Nextstrain, 22B/Omicron/BA.5 clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22B_Omicron.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq22C_Omicron
+        shortLabel 22C/BA.2.12.1
+        longLabel Nextstrain, 22C/Omicron/BA.2.12.1 clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22C_Omicron.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq22D_Omicron
+        shortLabel 22D/BA.2.75
+        longLabel Nextstrain, 22D/Omicron/BA.2.75 clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22D_Omicron.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq22E_Omicron
+        shortLabel 22E/BQ.1
+        longLabel Nextstrain, 22E/Omicron/BQ.1 clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22E_Omicron.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq22F_Omicron
+        shortLabel 22F/XBB
+        longLabel Nextstrain, 22F/Omicron/XBB clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples22F_Omicron.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+        track nextstrainFreq23A_Omicron
+        shortLabel 23A/XBB.1.5
+        longLabel Nextstrain, 23A/Omicron/XBB.1.5 clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples23A_Omicron.bigWig
         visibility dense
         parent nextstrainFreqViewNewClades
         subGroups view=newClades

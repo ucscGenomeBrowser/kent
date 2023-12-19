@@ -76,22 +76,22 @@ verbose(1, "Connected to central database %s\n", sqlGetDatabase(conn));
 /* First make table definition. */
 if (!sqlTableExists(conn, TABLE_NAME))
     {
-    struct dyString *dy = newDyString(1024);
-    /* Create definition statement and make table */
     verbose(1, "Creating table %s\n", TABLE_NAME);
-    sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", TABLE_NAME);
-    dyStringPrintf(dy, "  fromDb varchar(255) not null,\n");
-    dyStringPrintf(dy, "  toDb varchar(255) not null,\n");
-    dyStringPrintf(dy, "  path longblob not null,\n");
-    dyStringPrintf(dy, "  minMatch float not null,\n");
-    dyStringPrintf(dy, "  minChainT int unsigned not null,\n");
-    dyStringPrintf(dy, "  minSizeQ int unsigned not null,\n");
-    dyStringPrintf(dy, "  multiple char(1) not null,\n");
-    dyStringPrintf(dy, "  minBlocks float not null,\n");
-    dyStringPrintf(dy, "  fudgeThick char(1) not null\n");
-    dyStringAppend(dy, ")\n");
+    /* Create definition statement and make table */
+    struct dyString *dy = sqlDyStringCreate(
+    "CREATE TABLE %s (\n"
+    "  fromDb varchar(255) not null,\n"
+    "  toDb varchar(255) not null,\n"
+    "  path longblob not null,\n"
+    "  minMatch float not null,\n"
+    "  minChainT int unsigned not null,\n"
+    "  minSizeQ int unsigned not null,\n"
+    "  multiple char(1) not null,\n"
+    "  minBlocks float not null,\n"
+    "  fudgeThick char(1) not null\n"
+    ")\n", TABLE_NAME);
     sqlRemakeTable(conn, TABLE_NAME, dy->string);
-    freeDyString(&dy);
+    dyStringFree(&dy);
     }
 
 if (liftOverChainExists(conn, TABLE_NAME, fromDb, toDb))

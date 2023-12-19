@@ -39,6 +39,7 @@
 #include "hex.h"
 #include <dirent.h>
 #include <openssl/sha.h>
+#include <sys/wait.h>
 
 /* The stdio stream we'll use to output statistics on file i/o.  Off by default. */
 FILE *udcLogStream = NULL;
@@ -92,6 +93,7 @@ struct connInfo
     bits64 offset;		/* Current file offset of socket. */
     int ctrlSocket;             /* (FTP only) Control socket descriptor or 0. */
     char *redirUrl;             /* (HTTP(S) only) use redirected url */
+    char *resolvedUrl;          /* resolved HTTPS URL, if url is a pseudo-URL (s3://) */
     };
 
 typedef int (*UdcDataCallback)(char *url, bits64 offset, int size, void *buffer,
@@ -132,6 +134,7 @@ struct udcFile
     char *bitmapFileName;	/* Name of bitmap file. */
     char *sparseFileName;	/* Name of sparse data file. */
     char *redirFileName;	/* Name of redir file. */
+    char *resolvedFileName;     /* Name of file that stores final, resolved URL */
     int fdSparse;		/* File descriptor for sparse data file. */
     boolean sparseReadAhead;    /* Read-ahead has something in the buffer */
     char *sparseReadAheadBuf;   /* Read-ahead buffer, if any */
@@ -161,10 +164,35 @@ struct udcBitmap
 static char *bitmapName = "bitmap";
 static char *sparseDataName = "sparseData";
 static char *redirName = "redir";
+static char *resolvedName = "resolv";
+
 #define udcBitmapHeaderSize (64)
 static int cacheTimeout = 0;
 
 #define MAX_SKIP_TO_SAVE_RECONNECT (udcMaxBytesPerRemoteFetch / 2)
+
+/* pseudo-URLs with this prefix (e.g. "s3://" get run through a command to get resolved to real HTTPS URLs) */
+struct slName *resolvProts = NULL;
+static char *resolvCmd = NULL;
+
+bool udcIsResolvable(char *url) 
+/* check if third-party protocol resolving (e.g. for "s3://") is enabled and if the url starts with a protocol handled by the resolver */
+{
+if (!resolvProts || !resolvCmd)
+    return FALSE;
+
+char *colon = strchr(url, ':');
+if (!colon)
+    return FALSE;
+
+int colonPos = colon - url;
+char *protocol = cloneStringZ(url, colonPos);
+bool isFound = (slNameFind(resolvProts, protocol) != NULL);
+if (isFound)
+    verbose(4, "Check: URL %s has special protocol://, will need resolving\n", url);
+freez(&protocol);
+return isFound;
+}
 
 static off_t ourMustLseek(struct ioStats *ioStats, int fd, off_t offset, int whence)
 {
@@ -434,6 +462,13 @@ return TRUE;
 static char *defaultDir = "/tmp/udcCache";
 static bool udcInitialized = FALSE;
 
+void udcSetResolver(char *prots, char *cmd)
+/* Set protocols and local wrapper program to resolve s3:// and similar URLs to HTTPS */
+{
+    resolvProts = slNameListFromString(cloneString(prots), ',');
+    resolvCmd = trimSpaces(cloneString(cmd));
+}
+
 static void initializeUdc()
 /* Use the $TMPDIR environment variable, if set, to amend the default location
  * of the cache */
@@ -477,12 +512,106 @@ static bool udcCacheEnabled()
 return (defaultDir != NULL);
 }
 
+static void makeUdcTmp(char tmpPath[PATH_LEN])
+/* create a URL temporary file */
+{
+safef(tmpPath, PATH_LEN, "%s/udcTmp-XXXXXX", getTempDir());
+int fd = mkstemp(tmpPath);
+if (fd < 0)
+    errnoAbort("udc:makeUdcTmp: creating temporary file failed: %s", tmpPath);
+close(fd);
+}
+
+static void resolveUrlExec(char *url, char *stdoutTmp, char *stderrTmp)
+/* exec child process to resolve URL */
+{
+if ((dup2(mustOpenFd("/dev/null", O_RDONLY), STDIN_FILENO) < 0) ||
+    (dup2(mustOpenFd(stdoutTmp, O_WRONLY), STDOUT_FILENO) < 0) ||
+    (dup2(mustOpenFd(stderrTmp, O_WRONLY), STDERR_FILENO) < 0))
+    errnoAbort("udc:resolveUrlExec: dup2 failed");
+
+// parse into words to get any arguments encoded in string
+int numWords = chopByWhite(cloneString(resolvCmd), NULL, 0);
+char *words[numWords + 1];
+chopByWhite(resolvCmd, words, numWords);
+
+char* args[numWords + 2];
+CopyArray(words, args, numWords);
+args[numWords] = url;
+args[numWords + 1] = NULL;
+
+execv(resolvCmd, args);
+errnoAbort("udc:resolveUrlExec  failed: %s", resolvCmd);
+exit(1); // should never make it here
+}
+
+static char* resolveUrl(char *url) 
+/* return the HTTPS URL given a pseudo-URL e.g. s3://xxxx. Result must be freed. */
+{
+// Max tried to do this with pipeline but there is some hard to find bug with it and threads
+char stdoutTmp[PATH_LEN], stderrTmp[PATH_LEN];
+makeUdcTmp(stdoutTmp);
+makeUdcTmp(stderrTmp);
+    
+verbose(4, "Resolving url %s using command %s\n", url, resolvCmd);
+
+pid_t pid = fork();
+if (pid < 0)
+    errnoAbort("udc:resolveUrl: error in fork");
+if (pid == 0)
+    {
+    // child process
+    resolveUrlExec(url, stdoutTmp, stderrTmp);
+    }
+
+// pid > 0 = main process
+int status;
+if (waitpid(pid, &status, 0) < 0)
+    errnoAbort("udc:resolveUrl: waitpid failed");
+if (WIFSIGNALED(status))
+    errAbort("udc:resolveUrl: resolver signaled (%d)", WTERMSIG(status));
+if (WIFSTOPPED(status))
+    errAbort("udc:resolveUrl: resolver unexpectedly stop");
+if (WIFEXITED(status) && (WEXITSTATUS(status) != 0))
+    {
+    char* errMsg;
+    readInGulp(stderrTmp, &errMsg, NULL);
+    errAbort("udc:resolveUrl: resolve program failed %s: %s", resolvCmd, errMsg);
+    }
+
+// sucesss; got URL
+char* newUrl = NULL;
+readInGulp(stdoutTmp, &newUrl, NULL);
+trimSpaces(newUrl);
+if (strlen(newUrl) == 0)
+    errAbort("Got empty URL from URL resolve program: %s %s", resolvCmd, url);
+
+unlink(stdoutTmp);
+unlink(stderrTmp);
+    
+verbose(4, "Resolved url: %s -> %s\n", url, newUrl);
+return newUrl;
+}
+
 int udcDataViaHttpOrFtp( char *url, bits64 offset, int size, void *buffer, struct udcFile *file)
 /* Fetch a block of data of given size into buffer using url's protocol,
  * which must be http, https or ftp.  Returns number of bytes actually read.
  * Does an errAbort on error.
  * Typically will be called with size in the 8k-64k range. */
 {
+if (udcIsResolvable(url)) 
+    {
+        if (file->connInfo.resolvedUrl) {
+            verbose(4, "URL %s was already resolved to %s\n", url, file->connInfo.resolvedUrl);
+            url = file->connInfo.resolvedUrl;
+        }
+        else
+            {
+            url = resolveUrl(url);
+            file->connInfo.resolvedUrl = url;
+            }
+    }
+
 if (startsWith("http://",url) || startsWith("https://",url) || startsWith("ftp://",url))
     verbose(4, "reading http/https/ftp data - %d bytes at %lld - on %s\n", size, offset, url);
 else
@@ -519,6 +648,24 @@ int redirectCount = 0;
 struct hash *hash;
 int status;
 char *sizeString = NULL;
+char *origUrl = url;
+
+// an unusual case, usually deactivated: URLS of the style s3:// or similar
+bool needsResolving = udcIsResolvable(url);
+if (needsResolving)
+    {
+    if (retInfo->ci.resolvedUrl) 
+        {
+        verbose(4, "udcInfoViaHttp: URL %s was already resolved to %s\n", url, retInfo->ci.resolvedUrl);
+        url = retInfo->ci.resolvedUrl;
+        }
+    else 
+        {
+        url = resolveUrl(url); // url is never freed 
+        retInfo->ci.resolvedUrl = url;
+        }
+    }
+
 /*
  For caching, sites should support byte-range and last-modified.
  However, several groups including ENCODE have made sites that use CGIs to 
@@ -527,9 +674,12 @@ char *sizeString = NULL;
  so they do without them, effectively defeat caching. Every 5 minutes (udcTimeout),
  they get re-downloaded, even when the data has not changed.  
 */
+
 while (TRUE)
     {
     hash = newHash(0);
+
+    verbose(4, "HTTP HEAD for %s\n", url);
     status = netUrlHead(url, hash);
     sizeString = hashFindValUpperCase(hash, "Content-Length:");
     if (status == 200 && sizeString)
@@ -545,6 +695,7 @@ while (TRUE)
     */
     if (status == 403 || (status==200 && !sizeString))
 	{ 
+        verbose(4, "Got 403 or no size from HEAD, trying netUrlFakeHeadByGet = HTTP GET with byterange 0-0 to get size, URL %s\n", url);
 	hashFree(&hash);
 	hash = newHash(0);
 	status = netUrlFakeHeadByGet(url, hash);
@@ -552,6 +703,15 @@ while (TRUE)
 	    break;
 	if (status == 200)  // helps get more info to user
 	    break;
+        verbose(4, "netUrlFakeHeadByGet: got status %d for URL %s\n", status, url);
+        // presigned Amazon URLs return 403 after they are expired
+        if (status == 403 && needsResolving)
+            {
+            verbose(4, "403 = expired URL: need to resolve URL %s again\n", origUrl);
+            url = resolveUrl(origUrl); // XX url is never freed
+            retInfo->ci.resolvedUrl = url;
+            continue;
+            }
 	}
     if (status != 301 && status != 302 && status != 307 && status != 308)
 	return FALSE;
@@ -561,7 +721,9 @@ while (TRUE)
 	warn("code %d redirects: exceeded limit of 5 redirects, %s", status, url);
 	return FALSE;
 	}
+
     char *newUrl = hashFindValUpperCase(hash, "Location:");
+
      if (!newUrl)
 	{
 	warn("code %d redirects: redirect location missing, %s", status, url);
@@ -848,7 +1010,7 @@ else if (sameString(upToColon, "slow"))
     prot->fetchInfo = udcInfoViaSlow;
     prot->type = "slow";
     }
-else if (sameString(upToColon, "http") || sameString(upToColon, "https"))
+else if (sameString(upToColon, "http") || sameString(upToColon, "https") || (resolvProts && slNameFind(resolvProts, upToColon)))
     {
     prot->fetchData = udcDataViaHttpOrFtp;
     prot->fetchInfo = udcInfoViaHttp;
@@ -1062,7 +1224,7 @@ static char *longDirHash(char *cacheDir, char *name)
 int maxLen = pathconf(cacheDir, _PC_NAME_MAX);
 if (maxLen < 0)   // if we can't get the real system max, assume it's 255
     maxLen = 255;
-struct dyString *dy = newDyString(strlen(name));
+struct dyString *dy = dyStringNew(strlen(name));
 char *ptr = strchr(name, '/');
 
 while(ptr)
@@ -1090,11 +1252,13 @@ char *hashedAfterProtocol = longDirHash(cacheDir, afterProtocol);
 int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(hashedAfterProtocol) + 1;
 file->cacheDir = needMem(len);
 safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, hashedAfterProtocol);
+verbose(4, "UDC dir: %s\n", file->cacheDir);
 
 /* Create file names for bitmap and data portions. */
 file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
 file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
 file->redirFileName = fileNameInCacheDir(file, redirName);
+file->resolvedFileName = fileNameInCacheDir(file, resolvedName);
 }
 
 static long long int udcSizeAndModTimeFromBitmap(char *bitmapFileName, time_t *retTime)
@@ -1111,6 +1275,33 @@ if (bits != NULL)
     }
 udcBitmapClose(&bits);
 return ret;
+}
+
+void udcLoadCachedResolvedUrl(struct udcFile *file)
+/* load resolved URL from cache or create a new one file and write it */
+{
+char *cacheFname = file->resolvedFileName;
+
+if (!cacheFname)
+    return; // URL does not need resolving
+
+if (fileExists(cacheFname)) 
+    {
+    // read URL from cache
+    char *newUrl = NULL;
+    readInGulp(cacheFname, &newUrl, NULL);
+    verbose(4, "Read resolved URL %s from cache", newUrl);
+    file->connInfo.resolvedUrl = newUrl;
+    }
+else if (file->connInfo.resolvedUrl)
+    {
+    // write URL to cache
+    char *newUrl = file->connInfo.resolvedUrl;
+    char *temp = catTwoStrings(cacheFname, ".temp");
+    writeGulp(temp, newUrl, strlen(newUrl));
+    rename(temp, cacheFname);
+    freeMem(temp);
+    }
 }
 
 static void udcTestAndSetRedirect(struct udcFile *file, char *protocol, boolean useCacheInfo)
@@ -1198,6 +1389,11 @@ if (!isTransparent)
 	}
     }
 
+if (useCacheInfo)
+    verbose(4, "Cache is used for %s", url);
+else
+    verbose(4, "Cache is not used for %s", url);
+
 /* Allocate file object and start filling it in. */
 struct udcFile *file;
 AllocVar(file);
@@ -1219,6 +1415,11 @@ if (isTransparent)
 else 
     {
     udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
+
+    file->connInfo.resolvedUrl = info.ci.resolvedUrl; // no need to resolve again if udcInfoViaHttp already did that
+    if (udcIsResolvable(file->url) && !file->connInfo.resolvedUrl)
+        udcLoadCachedResolvedUrl(file);
+
     if (!useCacheInfo)
 	{
 	file->updateTime = info.updateTime;
@@ -1243,7 +1444,6 @@ else
 
 	// update redir with latest redirect status	
 	udcTestAndSetRedirect(file, protocol, useCacheInfo);
-	
         }
 
     }
@@ -1875,15 +2075,17 @@ freeMem(longBuf);
 return retString;
 }
 
-char *udcFileReadAll(char *url, char *cacheDir, size_t maxSize, size_t *retSize)
-/* Read a complete file via UDC. The cacheDir may be null in which case udcDefaultDir()
- * will be used.  If maxSize is non-zero, check size against maxSize
- * and abort if it's bigger.  Returns file data (with an extra terminal for the
- * common case where it's treated as a C string).  If retSize is non-NULL then
- * returns size of file in *retSize. Do a freeMem or freez of the returned buffer
- * when done. */
+char *udcFileReadAllIfExists(char *url, char *cacheDir, size_t maxSize, size_t *retSize)
+/* Read a complete file via UDC. Return NULL if the file doesn't exist.  The
+ * cacheDir may be null in which case udcDefaultDir() will be used.  If
+ * maxSize is non-zero, check size against maxSize and abort if it's bigger.
+ * Returns file data (with an extra terminal for the common case where it's
+ * treated as a C string).  If retSize is non-NULL then returns size of file
+ * in *retSize. Do a freeMem or freez of the returned buffer when done. */
 {
-struct udcFile  *file = udcFileOpen(url, cacheDir);
+struct udcFile  *file = udcFileMayOpen(url, cacheDir);
+if (file == NULL)
+    return NULL;
 size_t size = file->size;
 if (maxSize != 0 && size > maxSize)
     errAbort("%s is %lld bytes, but maxSize to udcFileReadAll is %lld",
@@ -1897,12 +2099,26 @@ if (retSize != NULL)
 return buf;
 }
 
+char *udcFileReadAll(char *url, char *cacheDir, size_t maxSize, size_t *retSize)
+/* Read a complete file via UDC. The cacheDir may be null in which case udcDefaultDir()
+ * will be used.  If maxSize is non-zero, check size against maxSize
+ * and abort if it's bigger.  Returns file data (with an extra terminal for the
+ * common case where it's treated as a C string).  If retSize is non-NULL then
+ * returns size of file in *retSize. Do a freeMem or freez of the returned buffer
+ * when done. */
+{
+char *buf = udcFileReadAllIfExists(url, cacheDir, maxSize, retSize);
+if (buf == NULL)
+    errAbort("Couldn't open %s", url);
+return buf;
+}
+
 struct lineFile *udcWrapShortLineFile(char *url, char *cacheDir, size_t maxSize)
 /* Read in entire short (up to maxSize) url into memory and wrap a line file around it.
  * The cacheDir may be null in which case udcDefaultDir() will be used.  If maxSize
- * is zero then a default value (currently 64 meg) will be used. */
+ * is zero then a default value (currently 256 meg) will be used. */
 {
-if (maxSize == 0) maxSize = 64 * 1024 * 1024;
+if (maxSize == 0) maxSize = 256 * 1024 * 1024;
 char *buf = udcFileReadAll(url, cacheDir, maxSize, NULL);
 return lineFileOnString(url, TRUE, buf);
 }
@@ -2050,6 +2266,7 @@ off_t udcFileSize(char *url)
 /* fetch file size from given URL or local path 
  * returns -1 if not found. */
 {
+verbose(4, "getting file size for %s", url);
 if (udcIsLocal(url))
     return fileSize(url);
 
@@ -2061,7 +2278,7 @@ if (cacheSize!=-1)
 off_t ret = -1;
 struct udcRemoteFileInfo info;
 
-if (startsWith("http://",url) || startsWith("https://",url))
+if (startsWith("http://",url) || startsWith("https://",url) || udcIsResolvable(url) )
     {
     if (udcInfoViaHttp(url, &info))
 	ret = info.size;

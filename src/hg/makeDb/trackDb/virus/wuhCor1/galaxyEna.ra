@@ -1,0 +1,484 @@
+track galaxyEna
+superTrack on
+shortLabel Galaxy ENA mutations
+longLabel GalaxyProject surveillance of SARS-CoV-2 mutations through consistent processing of public raw sequencing data
+type bed
+group varRep
+visibility dense
+
+# the internal name, not visible in the UI, used for URL arguments. No special characters.
+track Q0_tracks
+parent galaxyEna
+shortLabel Galaxy ENA mutations in top lineages - current quarter
+longLabel Most frequent lineages of current quarter
+html galaxyEna
+compositeTrack on
+type bigBed 8 +
+priority 10
+# color 231,125,99
+allButtonPair on
+visibility pack
+filterValues.countries EE|Estonia,GB|United Kingdom,GR|Greece,IE|Ireland,ZA|South Africa
+filterType.countries multipleListOr
+filterValuesDefault.countries EE,GB,GR,ZA
+filter.withinLineageFrequency 0.05
+filterByRange.withinLineageFrequency on
+filterLimits.withinLineageFrequency 0:2
+
+    track galaxyEnaQ0Ba-2
+    parent Q0_tracks on
+    shortLabel BA.2 mutations
+    longLabel Mutations (amino acid level) in BA.2 between 2022-01-05 and 2022-03-12
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q0/00_BA.2_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 10
+    color 0,99,116
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ0Ba-1-1
+    parent Q0_tracks on
+    shortLabel BA.1.1 mutations
+    longLabel Mutations (amino acid level) in BA.1.1 between 2022-01-05 and 2022-03-06
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q0/01_BA.1.1_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 20
+    color 184,133,10
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ0Ba-1-17
+    parent Q0_tracks on
+    shortLabel BA.1.17 mutations
+    longLabel Mutations (amino acid level) in BA.1.17 between 2022-01-05 and 2022-03-01
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q0/02_BA.1.17_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 30
+    color 60,60,60
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ0Ba-1
+    parent Q0_tracks on
+    shortLabel BA.1 mutations
+    longLabel Mutations (amino acid level) in BA.1 between 2022-01-05 and 2022-03-09
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q0/03_BA.1_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 40
+    color 162,53,130
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ0Ba-1-1-11
+    parent Q0_tracks on
+    shortLabel BA.1.1.11 mutations
+    longLabel Mutations (amino acid level) in BA.1.1.11 between 2022-01-05 and 2022-03-09
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q0/04_BA.1.1.11_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 50
+    color 89,47,13
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+# the internal name, not visible in the UI, used for URL arguments. No special characters.
+track Q1_tracks
+parent galaxyEna
+shortLabel Galaxy ENA mutations in top lineages - a quarter ago
+longLabel Most frequent lineages of a quarter ago
+html galaxyEna
+compositeTrack on
+type bigBed 8 +
+priority 20
+# color 213,78,94
+allButtonPair on
+visibility dense
+filterValues.countries EE|Estonia,GB|United Kingdom,GR|Greece,IE|Ireland,ZA|South Africa
+filterType.countries multipleListOr
+filterValuesDefault.countries EE,GB,GR,ZA
+filter.withinLineageFrequency 0.05
+filterByRange.withinLineageFrequency on
+filterLimits.withinLineageFrequency 0:2
+
+    track galaxyEnaQ1Ay-4
+    parent Q1_tracks on
+    shortLabel AY.4 mutations
+    longLabel Mutations (amino acid level) in AY.4 between 2021-10-05 and 2022-01-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q1/00_AY.4_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 10
+    color 89,30,113
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ1Ay-4-2
+    parent Q1_tracks on
+    shortLabel AY.4.2 mutations
+    longLabel Mutations (amino acid level) in AY.4.2 between 2021-10-05 and 2022-01-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q1/01_AY.4.2_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 20
+    color 140,8,0
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ1Ba-1-17
+    parent Q1_tracks on
+    shortLabel BA.1.17 mutations
+    longLabel Mutations (amino acid level) in BA.1.17 between 2021-10-05 and 2022-01-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q1/02_BA.1.17_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 30
+    color 60,60,60
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ1Ay-43
+    parent Q1_tracks on
+    shortLabel AY.43 mutations
+    longLabel Mutations (amino acid level) in AY.43 between 2021-10-05 and 2022-01-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q1/03_AY.43_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 40
+    color 18,113,28
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ1Ay-4-2-2
+    parent Q1_tracks on
+    shortLabel AY.4.2.2 mutations
+    longLabel Mutations (amino acid level) in AY.4.2.2 between 2021-10-05 and 2022-01-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q1/04_AY.4.2.2_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 50
+    color 177,64,13
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+# the internal name, not visible in the UI, used for URL arguments. No special characters.
+track Q2_tracks
+parent galaxyEna
+shortLabel Galaxy ENA mutations in top lineages - two quarters ago
+longLabel Most frequent lineages of two quarters ago
+html galaxyEna
+compositeTrack on
+type bigBed 8 +
+priority 30
+# color 169,57,109
+allButtonPair on
+visibility dense
+filterValues.countries EE|Estonia,GB|United Kingdom,GR|Greece,IE|Ireland,ZA|South Africa
+filterType.countries multipleListOr
+filterValuesDefault.countries EE,GB,GR,ZA
+filter.withinLineageFrequency 0.05
+filterByRange.withinLineageFrequency on
+filterLimits.withinLineageFrequency 0:2
+
+    track galaxyEnaQ2Ay-4
+    parent Q2_tracks on
+    shortLabel AY.4 mutations
+    longLabel Mutations (amino acid level) in AY.4 between 2021-07-05 and 2021-10-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q2/00_AY.4_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 10
+    color 89,30,113
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ2Ay-5
+    parent Q2_tracks on
+    shortLabel AY.5 mutations
+    longLabel Mutations (amino acid level) in AY.5 between 2021-07-05 and 2021-10-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q2/01_AY.5_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 20
+    color 0,28,127
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ2Ay-6
+    parent Q2_tracks on
+    shortLabel AY.6 mutations
+    longLabel Mutations (amino acid level) in AY.6 between 2021-07-05 and 2021-10-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q2/02_AY.6_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 30
+    color 0,99,116
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ2Ay-120
+    parent Q2_tracks on
+    shortLabel AY.120 mutations
+    longLabel Mutations (amino acid level) in AY.120 between 2021-07-05 and 2021-10-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q2/03_AY.120_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 40
+    color 184,133,10
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ2Ay-122
+    parent Q2_tracks on
+    shortLabel AY.122 mutations
+    longLabel Mutations (amino acid level) in AY.122 between 2021-07-05 and 2021-10-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q2/04_AY.122_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 50
+    color 60,60,60
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+# the internal name, not visible in the UI, used for URL arguments. No special characters.
+track Q3_tracks
+parent galaxyEna
+shortLabel Galaxy ENA mutations in top lineages - three quarters ago
+longLabel Most frequent lineages of three quarters ago
+html galaxyEna
+compositeTrack on
+type bigBed 8 +
+priority 40
+# color 122,45,111
+allButtonPair on
+visibility dense
+filterValues.countries EE|Estonia,GB|United Kingdom,GR|Greece,IE|Ireland,ZA|South Africa
+filterType.countries multipleListOr
+filterValuesDefault.countries EE,GB,GR,ZA
+filter.withinLineageFrequency 0.05
+filterByRange.withinLineageFrequency on
+filterLimits.withinLineageFrequency 0:2
+
+    track galaxyEnaQ3Ay-4
+    parent Q3_tracks on
+    shortLabel AY.4 mutations
+    longLabel Mutations (amino acid level) in AY.4 between 2021-04-05 and 2021-07-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q3/00_AY.4_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 10
+    color 89,30,113
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ3B-1-1-7
+    parent Q3_tracks on
+    shortLabel B.1.1.7 mutations
+    longLabel Mutations (amino acid level) in B.1.1.7 between 2021-04-05 and 2021-07-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q3/01_B.1.1.7_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 20
+    color 162,53,130
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ3B-1-617-2
+    parent Q3_tracks on
+    shortLabel B.1.617.2 mutations
+    longLabel Mutations (amino acid level) in B.1.617.2 between 2021-04-05 and 2021-07-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q3/02_B.1.617.2_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 30
+    color 89,47,13
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ3Ay-5
+    parent Q3_tracks on
+    shortLabel AY.5 mutations
+    longLabel Mutations (amino acid level) in AY.5 between 2021-04-05 and 2021-07-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q3/03_AY.5_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 40
+    color 0,28,127
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+
+    track galaxyEnaQ3Ay-9
+    parent Q3_tracks on
+    shortLabel AY.9 mutations
+    longLabel Mutations (amino acid level) in AY.9 between 2021-04-05 and 2021-07-05
+    html galaxyEna
+    # the location of the data file, can be a full URL or just the filename, if the file is locate
+    # in the same directory as the hub.txt file
+    bigDataUrl /gbdb/wuhCor1/galaxyEna/data_Q3/04_AY.9_data.bb
+    # the format of the file. The number of fields needs to be specified for bigBed
+    # The "+" is important, it indicates that the file has more than 12 fields and that these
+    # should be shown on the click details page
+    type bigBed 8 +
+    priority 50
+    color 89,30,113
+    # automatically switch off the track if the window size is 200kbp. Rarely needed, but useful if
+    # you show a ton of data or your files are on a very slow webserver
+    #maxWindowToDraw 200000
+    mouseOver $gene:$name | Nuc change: $nucChange | $lineage Frequency (this quarter): $withinLineageFrequency | Intrasample AF (this quarter): $medianAF ($q25AF - $q75AF) | First observed (ever): $earliestDateseen ($earliestCountryseen)
+    spectrum on
+

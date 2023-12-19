@@ -109,10 +109,10 @@ static char *expectedNewSql[] = {
 static void testOneSql(int start, int end, char *expected)
 {
 struct dyString *sqlQuery;
-sqlQuery = newDyString(1024);
+sqlQuery = dyStringNew(1024);
 hAddBinToQuery(start, end, sqlQuery);
 if (NULL != expected)
-    if (differentString(sqlQuery->string,expected))
+    if (differentString(sqlQuery->string + NOSQLINJ_SIZE,expected))  // skip sql no inj prefix
 	{
 	verbose(2,"#\tERROR: SQL incorrect at (%d, %d)\n",
 	    start, end);
@@ -120,7 +120,7 @@ if (NULL != expected)
 	}
 
 verbose(3,"# (%d, %d):\nsql:\"%s\",\n", start, end, sqlQuery->string);
-freeDyString(&sqlQuery);
+dyStringFree(&sqlQuery);
 }
 
 static void testOneBin(int start, int end, int expected)

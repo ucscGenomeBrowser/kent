@@ -40,13 +40,13 @@ while (my $line = <FH>) {
     $size = $end - $start;
     if (length($chr) > 1) {
 	if ($chr ne $c) {
-	    printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
+	    printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size if ($size > 0);
 	    $chr = $c; $start = $s; $end = $e;
 	} else {
 	    if ($s <= $end) {
 		$end = $e if ($e > $end);
 	    } else {
-		printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
+		printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size if ($size > 0);
 		$chr = $c; $start = $s; $end = $e;
 	    }
 	}
@@ -55,5 +55,5 @@ while (my $line = <FH>) {
     }
 }
 $size = $end - $start;
-printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
+printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size if ($size > 0);
 close (FH);

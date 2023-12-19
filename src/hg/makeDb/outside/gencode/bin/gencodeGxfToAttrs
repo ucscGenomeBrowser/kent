@@ -2,41 +2,45 @@
 
 import sys
 import os
+import argparse
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.extend((os.path.join(myBinDir, "../lib"),
                 os.path.expanduser("~markd/compbio/code/pycbio/lib")))
 from collections import defaultdict
 from dataclasses import dataclass
-import argparse
 from pycbio.sys import fileOps
+from pycbio.tsv import TsvReader
 from gencode import gencodeGxfParserFactory
-from gencode.gencodeGxfParser import ParseException
+from gencode.gencodeGxfParser import ParseException, GxfValidateException, GxfRecordValidator
 from gencode.biotypes import BioType, getTranscriptFunction
 
 def parseArgs():
-    desc = """Extract attributes from a GENCODE GTF or GFF3 into a tab-separate file for loading into
-the gencodeAttrs, gencodeTranscriptSupport (TSL), and gencodeTag tables.  It
-also output the attributes in TSV format for use by other programs before loading
-into the table.
-"""
+    desc = """Extract attributes from a GENCODE GTF or GFF3 into a tab-separate file for
+use by other programs."""
     parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("--debug", action="store_true",
+                        help="""print stack trace on all error""")
+    parser.add_argument("--transcriptRanks",
+                        help="""the gencode.v??.transcript_rankings.txt.gz file""")
     parser.add_argument("gencodeGxf",
                         help="""GENCODE GTF or GFF3 file""")
     parser.add_argument("attrsTsv",
                         help="""write attributes to this TSV file""")
-    parser.add_argument("attrsTab",
-                        help="""write attributes to this file""")
-    parser.add_argument("tslTab",
-                        help="""write TSLs to this file""")
-    parser.add_argument("tagTab",
-                        help="""write tags to this file""")
     return parser.parse_args()
 
 
-unused = ""
-
 def emptyIfNone(v):
     return v if v is not None else ""
+
+def loadTranscriptRanks(transcriptRanksTab):
+    "load transcript ranks"
+    cols = ("chrom", "geneId", "geneType", "rank", "transcriptId", "transcriptType", "carsScore", "extraInfo")
+    typeMap = {
+        "rank": int,
+        "carsScore": float
+    }
+    return {rec.transcriptId: rec for rec in TsvReader(transcriptRanksTab,
+                                                       columns=cols, typeMap=typeMap)}
 
 @dataclass
 class Transcript:
@@ -47,30 +51,21 @@ class Transcript:
     geneId: str
     geneName: str
     geneType: str
+    source: str
+    havanaGeneId: str
+    havanaTranscriptId: str
     ccdsId: str
     level: int
-    transcriptSupportLevel: str
     proteinId: str
+    transcriptSupportLevel: str
+    transcriptRank: int
     tags: set
 
-    def writeAttrs(self, fh):
-        """must match autoSql, which includes unused columns to match old table"""
-        fileOps.prRowv(fh, self.geneId, self.geneName, self.geneType, unused,
-                       self.transcriptId, self.transcriptName, self.transcriptType,
-                       unused, unused, unused, emptyIfNone(self.ccdsId), self.level,
-                       self.transcriptClass, emptyIfNone(self.proteinId))
-
-    def writeTsl(self, fh):
-        fileOps.prRowv(fh, self.transcriptId, self.transcriptSupportLevel)
-
-    def writeTags(self, fh):
-        for tag in sorted(self.tags):
-            fileOps.prRowv(fh, self.transcriptId, tag)
-
-
 class GencodeGxfToAttrs(object):
-    def __init__(self, gxfParser):
+    def __init__(self, gxfParser, transcriptRanks=None):
         self.gxfParser = gxfParser
+        self.recValidator = GxfRecordValidator(sys.stderr)
+        self.transcriptRanks = transcriptRanks
         self.errorCnt = 0
         self.unknownGeneTypes = set()
         self.unknownTranscriptTypes = set()
@@ -82,30 +77,44 @@ class GencodeGxfToAttrs(object):
         for tag in rec.attributes.tags:
             geneTags.add(tag)
 
+    def _getTranscriptRank(self, transcriptId):
+        if self.transcriptRanks is None:
+            return 0
+        rankRec = self.transcriptRanks.get(transcriptId)
+        if rankRec is None:
+            raise ParseException(f"no transcript rank found for {transcriptId}")
+        return rankRec.rank
+
     def _processTransRec(self, rec):
         attrs = rec.attributes
         trans = self.transcripts.get(attrs.transcript_id)
         if trans is None:
+            # older GENCODEs had transcript id twice because of PAR
             trans = Transcript(transcriptId=attrs.transcript_id,
                                transcriptName=attrs.transcript_name,
                                transcriptType=attrs.transcript_type,
                                geneId=attrs.gene_id,
                                geneName=attrs.gene_name,
                                geneType=attrs.gene_type,
+                               source=rec.source,
+                               havanaGeneId=attrs.havana_gene,
+                               havanaTranscriptId=attrs.havana_transcript,
                                ccdsId=attrs.ccdsid,
                                level=attrs.level,
                                transcriptSupportLevel=attrs.transcript_support_level,
                                proteinId=attrs.protein_id,
+                               transcriptRank=self._getTranscriptRank(attrs.transcript_id),
                                tags=set())
             self.transcripts[attrs.transcript_id] = trans
-        # due to PAR, we have to handle multiple tags for the same
-        # transcript_id, which might be different (mainly the PAR tag), so
-        # always add
+        # due to PAR naming on older GENCODES, we have to handle multiple
+        # tags for the same transcript_id, which might be different (mainly
+        # the PAR tag), so always add they now have modified ids
         for tag in attrs.tags:
             trans.tags.add(tag)
 
     def _processRec(self, rec):
         try:
+            self.recValidator.validate(rec)
             if rec.feature == "gene":
                 self._processGeneRec(rec)
             elif rec.feature == "transcript":
@@ -119,30 +128,12 @@ class GencodeGxfToAttrs(object):
             trans.tags |= self.geneTags[trans.geneId]
 
     def _assignFunction(self, trans):
-        # convert and report unknown biotypes, only report once
-        try:
-            geneBioType = BioType(trans.geneType)
-        except ValueError:
-            if trans.geneType not in self.unknownGeneTypes:
-                sys.stderr.write("Error: unknown gene biotype, update gencode/biotypes.py: {}\n".format(trans.geneType))
-                self.unknownGeneTypes.add(trans.geneType)
-            self.errorCnt += 1
-            return
-        try:
-            transcriptBioType = BioType(trans.transcriptType)
-        except ValueError:
-            if trans.transcriptType not in self.unknownTranscriptTypes:
-                sys.stderr.write("Error: unknown transcript biotype, update gencode/biotypes.py: {}\n".format(trans.transcriptType))
-                self.unknownTranscriptType.add(trans.transcriptType)
-            self.errorCnt += 1
-            return
-        trans.transcriptClass = getTranscriptFunction(geneBioType, transcriptBioType)
+        trans.transcriptClass = getTranscriptFunction(BioType(trans.geneType),
+                                                      BioType(trans.transcriptType))
 
     def _assignFunctions(self):
         for trans in self.transcripts.values():
             self._assignFunction(trans)
-        if self.errorCnt > 0:
-            raise Exception("{} biotypes errors in {}".format(self.errorCnt, self.gxfParser.getFileName()))
 
     def parse(self):
         for rec in self.gxfParser.reader():
@@ -151,39 +142,45 @@ class GencodeGxfToAttrs(object):
                 break
         if self.errorCnt > 0:
             raise Exception("{} parse errors in {}".format(self.errorCnt, self.gxfParser.getFileName()))
+        self.recValidator.reportErrors()
         self._mergeGeneTags()
         self._assignFunctions()
 
-    def writeAttrs(self, fh):
-        for transId in sorted(self.transcripts.keys()):
-            self.transcripts[transId].writeAttrs(fh)
+    @staticmethod
+    def _writeAttrsTsvRow(tr, fh):
+        fileOps.prRowv(fh, tr.geneId, tr.geneName, tr.geneType,
+                       tr.transcriptId, tr.transcriptName, tr.transcriptType,
+                       tr.source, tr.havanaGeneId, tr.havanaTranscriptId,
+                       emptyIfNone(tr.ccdsId), tr.level,
+                       tr.transcriptClass, emptyIfNone(tr.proteinId),
+                       tr.transcriptRank, tr.transcriptSupportLevel,
+                       ",".join(map(str, sorted(tr.tags))))
 
     def writeAttrsTsv(self, fh):
-        fileOps.prRowv(fh, "geneId", "geneName", "geneType", "unused1",
-                       "transcriptId", "transcriptName", "unused2", "unused3", "unused4",
-                       "transcriptType", "ccdsId", "level", "transcriptClass", "proteinId")
-        self.writeAttrs(fh)
-
-    def writeTsls(self, fh):
-        for transId in sorted(self.transcripts.keys()):
-            self.transcripts[transId].writeTsl(fh)
-
-    def writeTags(self, fh):
-        for transId in sorted(self.transcripts.keys()):
-            self.transcripts[transId].writeTags(fh)
-
+        fileOps.prRowv(fh, "geneId", "geneName", "geneType",
+                       "transcriptId", "transcriptName", "transcriptType",
+                       "source", "havanaGeneId", "havanaTranscriptId",
+                       "ccdsId", "level", "transcriptClass", "proteinId",
+                       "transcriptRank", "tsl", "tags")
+        for transcript in sorted(self.transcripts.values(),
+                                 key=lambda t: (t.geneId, t.transcriptId)):
+            self._writeAttrsTsvRow(transcript, fh)
 
 def gencodeGxfToAttrs(opts):
-    parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True))
-    parser.parse()
-    with open(opts.attrsTsv, "w") as fh:
-        parser.writeAttrsTsv(fh)
-    with open(opts.attrsTab, "w") as fh:
-        parser.writeAttrs(fh)
-    with open(opts.tslTab, "w") as fh:
-        parser.writeTsls(fh)
-    with open(opts.tagTab, "w") as fh:
-        parser.writeTags(fh)
+    try:
+        transcriptRanks = None
+        if opts.transcriptRanks is not None:
+            transcriptRanks = loadTranscriptRanks(opts.transcriptRanks)
+        parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True),
+                                   transcriptRanks)
+        parser.parse()
+        with open(opts.attrsTsv, "w") as fh:
+            parser.writeAttrsTsv(fh)
+    except GxfValidateException as ex:
+        if opts.debug:
+            raise
+        print(str(ex), file=sys.stderr)
+        exit(1)
 
 
 gencodeGxfToAttrs(parseArgs())

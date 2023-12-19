@@ -1,0 +1,6 @@
+# Tue Sep 27 00:28:11 PDT 2022
+# Max
+# got ripples_breakpoints.bed from Russ Corbet at UCSC and Bryan Thornlow by email
+bedSort ripples_breakpoints.bed ripples_breakpoints.bed
+bedToBigBed ripples_breakpoints.bed ../../chrom.sizes ripples_breakpoints.bb
+

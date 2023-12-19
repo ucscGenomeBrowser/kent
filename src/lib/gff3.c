@@ -20,14 +20,6 @@
 // FIXME: spec unclear on attribute of discontinuous features.
 // FIXME: should spaces be striped from attributes?
 
-/*
- * Notes:
- *   - a separate feature object that linked discontinuous feature annotations
- *     was not used because it create more complexity with the linking of parents
- *     and the fact that the restriction on discontinguous features attributes is
- *     not clearly defined.
- */
-
 static const int gffNumCols = 9;
 
 /* standard attribute names */
@@ -46,12 +38,20 @@ char *gff3AttrIsCircular = "Is_circular";
 /* commonly used features names */
 char *gff3FeatGene = "gene";
 char *gff3FeatPseudogene = "pseudogene";
+char *gff3FeatNCRnaGene ="ncRNA_gene";
 char *gff3FeatNCRna ="ncRNA";
 char *gff3FeatRRna = "rRNA";
 char *gff3FeatTRna = "tRNA";
 char *gff3FeatMRna = "mRNA";
+char *gff3FeatLncRna = "lnc_RNA";
+char *gff3FeatPseudogenicTranscript = "pseudogenic_transcript";
+char *gff3FeatScRna = "scRNA";
+char *gff3FeatSnRna = "snRNA";
+char *gff3FeatSnoRna = "snoRNA";
+char *gff3FeatUnconfirmedTranscript = "unconfirmed_transcript";
 char *gff3FeatExon = "exon";
 char *gff3FeatCDS = "CDS";
+char *gff3FeatUTR = "UTR";
 char *gff3FeatThreePrimeUTR = "three_prime_UTR";
 char *gff3FeatFivePrimeUTR = "five_prime_UTR";
 char *gff3FeatStartCodon = "start_codon";
@@ -896,7 +896,7 @@ if ((ver != NULL) && (*ver != '\0'))
     *ver++ = '\0';
     ver = trimSpaces(ver);
     }
-if (!(sameString(line, "##gff-version") && sameString(ver, "3")))
+if (!(sameString(line, "##gff-version") && ( sameString(ver, "3") || (startsWith("3.", ver)))))
     {
     gff3FileErr(g3f, FALSE, "invalid GFF3 header");
     errAbort("may not be a GFF3 file");
@@ -931,11 +931,19 @@ return cnt;
 static void discontinFeatureCheck(struct gff3Ann *g3a)
 /* sanity check linked gff3Ann discontinuous features */
 {
-struct gff3Ann *g3a2;
-for (g3a2 = g3a->nextPart; (g3a2 != NULL) && !gff3FileStopDueToErrors(g3a->file); g3a2 = g3a2->nextPart)
+// Add non-spec restriction on only one parent id to make parent id checks easier
+if (slCount(g3a->parentIds) > 1)
+    gff3AnnErr(g3a, FALSE, "Annotation records for discontinuous features with ID=\"%s\" must have one and only one parent", g3a->id);
+for (struct gff3Ann *g3a2 = g3a->nextPart; (g3a2 != NULL) && !gff3FileStopDueToErrors(g3a->file); g3a2 = g3a2->nextPart)
     {
-    if (!sameString(g3a->type, g3a2->type))
-        gff3AnnErr(g3a, FALSE, "Annotation records for discontinuous features with ID=\"%s\" do not have the same type, found \"%s\" and \"%s\"", g3a->id, g3a->type, g3a2->type);
+    if (slCount(g3a2->parentIds) > 1)
+        gff3AnnErr(g3a2, FALSE, "Annotation records for discontinuous features with ID=\"%s\" must have one and only one parent", g3a2->id);
+    else if (!sameString(g3a->type, g3a2->type))
+        gff3AnnErr(g3a2, FALSE, "Annotation records for discontinuous features with ID=\"%s\" do not have the same type, found \"%s\" and \"%s\"", g3a->id, g3a->type, g3a2->type);
+    else if ((slCount(g3a2->parentIds) > 0) &&
+             !sameString(g3a2->parentIds->name, g3a->parentIds->name))
+        gff3AnnErr(g3a2, FALSE, "Annotation records for discontinuous features with ID=\"%s\" must have same parent, found: \"%s\" and \"%s\"", g3a->id,
+                   g3a2->parentIds->name, g3a->parentIds->name);
     }
 }
 

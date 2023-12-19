@@ -15,7 +15,7 @@ canPack On
     superTrack wgEncodeReg hide
     shortLabel Transcription
     longLabel Transcription Levels Assayed by RNA-seq on 9 Cell Lines from ENCODE
-    visibility full
+    visibility hide
     maxHeightPixels 100:30:11
     showSubtrackColorOnUi on
     aggregate transparentOverlay
@@ -325,7 +325,7 @@ canPack On
     inputTableFieldDisplay cellType treatment lab
     sourceTable wgEncodeRegDnaseClusteredSources
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility dense
+    visibility hide
     useScore 1
     scoreFilter 100
     scoreFilterLimits 100:1000
@@ -369,7 +369,7 @@ canPack On
     url http://www.factorbook.org/mediawiki/index.php/$$
     idInUrlSql select value from factorbookGeneAlias where name='%s'
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility dense
+    visibility hide
     useScore 1
     priority 1.71
     maxWindowToDraw 10000000

@@ -4,7 +4,8 @@ records parsed from either GTF or GFF3 files.  This is not general
 class Attributes(object):
     "attributes and values"
 
-    stdAttrs = frozenset(("gene_id", "gene_name", "gene_type", "gene_status", "transcript_id", "transcript_name", "transcript_type", "transcript_status", "havana_gene", "havana_transcript", "ccdsid", "level", "exon_id", "protein_id", "transcript_support_level", "ID", "Parent"))
+    stdAttrs = frozenset(("gene_id", "gene_name", "gene_type", "gene_status", "transcript_id", "transcript_name", "transcript_type", "transcript_status", "havana_gene", "havana_transcript", "ccdsid", "level", "exon_id", "protein_id",
+                          "transcript_support_level", "ID", "Parent", "hgnc_id"))
     singleValueAttrs = frozenset(stdAttrs)
     multiValueAttrs = frozenset(["tag", "ont"])
     ignoredAttrs = frozenset(["exon_number"])
@@ -35,10 +36,11 @@ class Attributes(object):
 class Record(object):
     "one record of a GTF or GFF3"
 
-    def __init__(self, line, lineFileOffset, lineFileLength, seqname, source, feature, start, end, score, strand, frame, attrVals):
+    __slots__ = ("line", "lineNumber", "seqname", "source", "feature", "start", "end", "score", "strand", "phase", "attributes")
+
+    def __init__(self, line, lineNumber, seqname, source, feature, start, end, score, strand, phase, attrVals):
         self.line = line
-        self.lineFileOffset = lineFileOffset  # location in file
-        self.lineFileLength = lineFileLength  # length in file, including terminator
+        self.lineNumber = lineNumber
         self.seqname = seqname
         self.source = source
         self.feature = feature
@@ -46,7 +48,7 @@ class Record(object):
         self.end = end
         self.score = score
         self.strand = strand
-        self.frame = feature
+        self.phase = phase
         self.attributes = Attributes(attrVals)
 
     def __str__(self):

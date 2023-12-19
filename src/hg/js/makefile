@@ -7,11 +7,11 @@ include subdirs.mk
 
 # UCSC js files must pass jshint
 UCSC_JS_FILES=ajax.js alleles.js autocomplete.js autocompleteCat.js edwPersona.js \
-    hgCustom.js hgCollection.js  hgGateway.js hgGtexTrackSettings.js \
+    gar.js hgCustom.js hgCollection.js  hgGateway.js hgGtexTrackSettings.js \
     hgHubConnect.js hgTracks.js hgc.js \
     hgVai.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js d3.dendrograms.js \
-	cdwSummaryJs.js spectrum.min.js
+	cdwSummaryJs.js spectrum.min.js hgSearch.js
 
 # STATIC files must pass jshint
 STATIC_FILES=staticDoc.js dbDbTaxonomy.js analytics.js
@@ -31,7 +31,7 @@ JQUERY_FILES=${JQUERY_FILES_UNTOUCHED} ${JQUERY_FILES_MODIFIED}
 
 # SYMLINKED files are include in CGIs via a version or timestamped symlink
 #           to force client side updates
-SYMLINKED_FILES=${UCSC_JS_FILES} ${JQUERY_FILES}
+SYMLINKED_FILES=${UCSC_JS_FILES} ${JQUERY_FILES} tutorial.js
 
 ifdef LOWELAB
     # LOWE lab files should be forced through jshint (but currently aren't)

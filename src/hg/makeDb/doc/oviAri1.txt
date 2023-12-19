@@ -732,4 +732,78 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	/gbdb/oviAri1/liftOver/oviAri1ToOviAri3.over.chain.gz
     # and try out the conversion on genome-test from oviAri1 to oviAri3
 
-############################################################################
+##############################################################################
+# LIFTOVER TO GCF_016772045.1_ARS-UI_Ramb_v2.0 (WORKING - 2023-01-19 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/oviAri1/bed/blat.GCF_016772045.1.2023-01-19
+    cd /hive/data/genomes/oviAri1/bed/blat.GCF_016772045.1.2023-01-19
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/oviAri1/oviAri1.2bit \
+        -targetSizes=/hive/data/genomes/oviAri1/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.chrom.sizes \
+        -ooc=/hive/data/genomes/oviAri1/jkStuff/oviAri1.11.ooc \
+         oviAri1 GCF_016772045.1
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/oviAri1/oviAri1.2bit \
+        -targetSizes=/hive/data/genomes/oviAri1/chrom.sizes \
+ -query2Bit=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.2bit \
+ -querySizes=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.chrom.sizes \
+        -ooc=/hive/data/genomes/oviAri1/jkStuff/oviAri1.11.ooc \
+         oviAri1 GCF_016772045.1) > doLiftOverToGCF_016772045.1.log 2>&1
+    # real    149m54.568s
+
+    # see if the liftOver menus function in the browser from oviAri1
+    #    to GCF_016772045.1
+
+##############################################################################
+# LIFTOVER TO oviAri1 (WORKING - 2023-01-19 - Hiram)
+    ssh hgwdev
+    # going to need an ooc for this GenArk hub
+    cd  /hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0
+
+    # what is the 'real' size of this genome (without gaps):
+    head -1 *.faSize.txt
+# 2628146905 bases (42000 N's 2628104905 real 1396540621 upper 1231564284 lower)
+#    in 142 sequences in 1 files
+    # note the 'real' size is 2628104905
+    # ratio to standard human size: 2861349177
+    # from:  featureBits -noRandom -noHap hg19 gap
+
+    calc \(  2628104905 / 2861349177 \) \* 1024
+    # ( 2628104905 / 2861349177 ) * 1024 = 940.528141
+    # round repMatch up to 1000
+
+    time blat GCF_016772045.1_ARS-UI_Ramb_v2.0.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=GCF_016772045.1_ARS-UI_Ramb_v2.0.11.ooc -repMatch=1000
+
+    # should be a 'reasonable' number of 11-mers (10,000 to 30,000 or so)
+# Wrote 28017 overused 11-mers to GCF_016772045.1_ARS-UI_Ramb_v2.0.11.ooc
+# real    0m24.648s
+
+    mkdir /hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/trackData/blat.oviAri1.2023-01-19
+    cd /hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/trackData/blat.oviAri1.2023-01-19
+    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.chrom.sizes \
+        -query2Bit=/hive/data/genomes/oviAri1/oviAri1.2bit \
+        -querySizes=/hive/data/genomes/oviAri1/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.11.ooc \
+         GCF_016772045.1 oviAri1
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+ -target2Bit=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.2bit \
+ -targetSizes=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.chrom.sizes \
+        -query2Bit=/hive/data/genomes/oviAri1/oviAri1.2bit \
+        -querySizes=/hive/data/genomes/oviAri1/chrom.sizes \
+        -ooc=/hive/data/genomes/asmHubs/refseqBuild/GCF/016/772/045/GCF_016772045.1_ARS-UI_Ramb_v2.0/GCF_016772045.1_ARS-UI_Ramb_v2.0.11.ooc \
+         GCF_016772045.1 oviAri1) > doLiftOverToOviAri1.log 2>&1
+    # real    55m5.324s
+
+    # see if the liftOver menus function in the browser from oviAri1
+    #    to GCF_016772045.1
+
+##############################################################################

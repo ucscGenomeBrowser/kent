@@ -76,7 +76,7 @@ char *exe = optionVal("exe", "paraNode");
 char *rsh = optionVal("rsh", "rsh");
 struct lineFile *lf = lineFileOpen(machineList, TRUE);
 char *row[2];
-struct dyString *dy = newDyString(256);
+struct dyString *dy = dyStringNew(256);
 
 while (lineFileRow(lf, row))
     {
@@ -100,7 +100,7 @@ while (lineFileRow(lf, row))
     (void) system(dy->string); // ignore return value
     }
 lineFileClose(&lf);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 int main(int argc, char *argv[])

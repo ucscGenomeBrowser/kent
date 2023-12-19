@@ -32,14 +32,14 @@ return vg;
 }
 
 int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb)
-/* Find color index corresponding to rgb color. */
+/* Find color index corresponding to rgba color. */
 {
-return vgFindColorIx(vg, rgb->r, rgb->g, rgb->b);
+return vgFindAlphaColorIx(vg, rgb->r, rgb->g, rgb->b, rgb->a);
 }
 
 Color vgContrastingColor(struct vGfx *vg, int backgroundIx)
 /* Return black or white whichever would be more visible over
- * background. */
+ * background. Note: ignores alpha. */
 {
 struct rgbColor c = vgColorIxToRgb(vg, backgroundIx);
 int val = (int)c.r + c.g + c.g + c.b;

@@ -38,7 +38,7 @@ struct chainNet *chainNetLoadChrom(char *database, char *track,
 	char *chrom, char *extraWhere);
 /* Load net on whole chromosome. */
 
-struct chain *chainLoadIdRangeHub(char *database, char *track, char *chrom, 
+struct chain *chainLoadIdRangeHub(char *database, char *fileName, char *track, char *chrom, 
 	int start, int end, int id);
 /* Load parts of chain of given ID from bigChain file.  Note the chain header
  * including score, tStart, tEnd, will still reflect the whole chain,

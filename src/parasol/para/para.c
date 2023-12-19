@@ -771,7 +771,7 @@ return db;
 void sendSetPriorityMessage(int priority)
 /* Tell hub to change priority on batch */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *result;
 if ((priority < 1) || (priority > MAX_PRIORITY))
     errAbort("Priority %d out of range, should be 1 to %d",priority,MAX_PRIORITY);
@@ -812,7 +812,7 @@ if (optionVal("priority",NULL)!=NULL)
 void sendSetMaxJobMessage(int maxJob)
 /* Tell hub to change maxJob on batch */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *result;
 if (maxJob <-1) 
     errAbort("maxJob %d out of range, should be >=-1", maxJob);
@@ -961,7 +961,7 @@ time_t now = time(NULL);
 long queryTime = clock1000();
 
 /* Get job list from paraHub. */
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "pstat2 %s %s", getUser(), resultsName);
 struct slName *lineList = hubMultilineQuery(dy->string), *lineEl;
 dyStringFree(&dy);
@@ -1131,7 +1131,7 @@ void showSickNodes(boolean showSummary)
 /* Tell hub to show sick nodes on batch. */
 {
 int count = 0;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "showSickNodes %s %s", getUser(), resultsName);
 struct slName *lineList = hubMultilineQuery(dy->string), *lineEl;
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
@@ -1290,7 +1290,7 @@ jobDbFree(&db);
 void clearSickNodes()
 /* Tell hub to clear sick nodes on batch */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *result;
 dyStringPrintf(dy, "clearSickNodes %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);
@@ -1671,7 +1671,7 @@ printf("total %s running: %d\n", !minTimeS ? "jobs" : "hippos", runCount);
 void sendChillMessage()
 /* Tell hub to chill out on job */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *result;
 dyStringPrintf(dy, "chill %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);
@@ -1685,7 +1685,7 @@ verbose(1, "Told hub to chill out\n");
 void paraResetCounts()
 /* Send msg to hub to reset done and crashed counts on batch */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *result;
 dyStringPrintf(dy, "resetCounts %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);
@@ -1700,7 +1700,7 @@ verbose(1, "Told hub to reset done and crashed counts on batch %s\n", batchDir);
 void freeBatch()
 /* Send msg to hub to reset done and crashed counts on batch */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *result;
 dyStringPrintf(dy, "freeBatch %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);
@@ -1723,7 +1723,7 @@ freez(&result);
 void flushResults()
 /* Send msg to hub to flush results file */
 {
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *result;
 dyStringPrintf(dy, "flushResults %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);

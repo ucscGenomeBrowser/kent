@@ -3295,4 +3295,114 @@ TMPDIR=/scratch/tmp
     # setup trackDb for canFam2
 
 
-############################################################################
+##############################################################################
+# LIFTOVER TO canFam6 (DONE - 2022-12-07 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam2/bed/blat.canFam6.2022-12-07
+    cd /hive/data/genomes/canFam2/bed/blat.canFam6.2022-12-07
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/canFam2/canFam2.2bit \
+        -targetSizes=/hive/data/genomes/canFam2/chrom.sizes \
+        -query2Bit=/hive/data/genomes/canFam6/canFam6.2bit \
+        -querySizes=/hive/data/genomes/canFam6/chrom.sizes \
+        -ooc=/hive/data/genomes/canFam2/11.ooc \
+         canFam2 canFam6
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/canFam2/canFam2.2bit \
+        -targetSizes=/hive/data/genomes/canFam2/chrom.sizes \
+        -query2Bit=/hive/data/genomes/canFam6/canFam6.2bit \
+        -querySizes=/hive/data/genomes/canFam6/chrom.sizes \
+        -ooc=/hive/data/genomes/canFam2/11.ooc \
+         canFam2 canFam6) > doLiftOverToCanFam6.log 2>&1
+    # this was a difficult alignment, must be some unmasked repeats
+    # in canFam2
+    # real    4625m38.987s
+
+    # see if the liftOver menus function in the browser from canFam2 to canFam6
+
+##############################################################################
+# LASTZ Dog CanFam2 vs. dog GCF_014441545.1
+#    (DONE - 2023-11-08 - Gerardo)
+
+    mkdir /hive/data/genomes/canFam2/bed/lastzGCF_014441545.1.2023-11-08
+    cd /hive/data/genomes/canFam2/bed/lastzGCF_014441545.1.2023-11-08
+
+    printf '# dog GCF_014441545.1 vs. Dog CanFam2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Dog  canFam2
+SEQ1_DIR=/hive/data/genomes/canFam2/canFam2.2bit
+SEQ1_LEN=/hive/data/genomes/canFam2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: dog 2020-09-03 GCF_014441545.1_ROS_Cfam_1.0
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/canFam2/bed/lastzGCF_014441545.1.2023-11-08
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_014441545.1_ROS_Cfam_1.0 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	257m35.316s
+
+    sed -e 's/^/    # /;' fb.canFam2.chainGCF_014441545.1Link.txt
+    # 2334249436 bases of 2531673953 (92.202%) in intersection
+    sed -e 's/^/    # /;' fb.canFam2.chainSynGCF_014441545.1Link.txt
+    # 2316480942 bases of 2531673953 (91.500%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.chrom.sizes.txt" \
+        canFam2 GCF_014441545.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	70m15.920s
+
+    sed -e 's/^/    # /;' fb.canFam2.chainRBest.GCF_014441545.1.txt
+    # 2304295799 bases of 2531673953 (91.019%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/014/441/545/GCF_014441545.1_ROS_Cfam_1.0/trackData/blastz.canFam2.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCF_014441545.1_ROS_Cfam_1.0 /hive/data/genomes/canFam2/bed/lastzGCF_014441545.1.2023-11-08/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	97m27.443s
+
+    sed -e 's/^/    # /;' fb.GCF_014441545.1.chainCanFam2Link.txt
+    # 2350434832 bases of 2396858295 (98.063%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_014441545.1.chainSynCanFam2Link.txt
+    # 2339910188 bases of 2396858295 (97.624%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/014/441/545/GCF_014441545.1/GCF_014441545.1.chrom.sizes.txt" \
+   GCF_014441545.1 canFam2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	53m18.324s
+
+    sed -e 's/^/    # /;' fb.GCF_014441545.1.chainRBest.CanFam2.txt
+    # 2302822304 bases of 2396858295 (96.077%) in intersection
+
+real	478m44.165s
+user	0m2.752s
+sys	0m3.409s
+##############################################################################

@@ -27,6 +27,8 @@
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
 #include "variation.h"
+#include "chromAlias.h"
+#include "instaPort.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -287,9 +289,13 @@ return filters;
 }
 
 
-boolean bigBedFilterInterval(char **bedRow, struct bigBedFilter *filters)
+boolean bigBedFilterInterval(struct bbiFile *bbi, char **bedRow, struct bigBedFilter *filters)
 /* Go through a row and filter based on filters.  Return TRUE if all filters are passed. */
 {
+if ((bbi->definedFieldCount > 3) && (hgFindMatches != NULL) && 
+    (bedRow[3] != NULL)  && hashLookup(hgFindMatches, bedRow[3]) != NULL)
+    return TRUE;
+
 struct bigBedFilter *filter;
 for(filter = filters; filter; filter = filter->next)
     {
@@ -381,7 +387,7 @@ if (bbi == NULL)
     #include "gbib.c"
     #endif
 
-    bbi = track->bbiFile = bigBedFileOpen(fileName);
+    bbi = track->bbiFile = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
     }
 return bbi;
 }
@@ -419,7 +425,6 @@ if (errCatchStart(errCatch))
 	else
 	    freez(&track->summary);
 	}
-    bbiFileClose(&bbi);
     track->bbiFile = NULL;
     }
 errCatchEnd(errCatch);
@@ -460,7 +465,6 @@ void bigBedAddLinkedFeaturesFromExt(struct track *track,
 {
 struct lm *lm = lmInit(0);
 struct trackDb *tdb = track->tdb;
-struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
 char *mouseOverField = cartOrTdbString(cart, track->tdb, "mouseOverField", NULL);
 
 // check if this track can merge large items, this setting must be allowed in the trackDb
@@ -493,6 +497,17 @@ if (errCatch->gotError)
     return;
     }
 errCatchFree(&errCatch);
+
+struct bigBedInterval *bb, *bbList; 
+char *instaFile = cloneString(trackDbSetting(track->tdb, "instaPortUrl"));
+struct hash *chainHash = NULL;
+if (instaFile)
+    bbList = instaIntervals(instaFile, bbi, chromName, winStart, winEnd, &chainHash);
+else
+    bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
+
+char *squishField = cartOrTdbString(cart, track->tdb, "squishyPackField", NULL);
+int squishFieldIdx = bbExtraFieldIndex(bbi, squishField);
 
 int seqTypeField =  0;
 if (sameString(track->tdb->type, "bigPsl"))
@@ -529,6 +544,7 @@ if (!mouseOverIdx)
 // a fake item that is the union of the items that span the current  window
 struct linkedFeatures *spannedLf = NULL;
 unsigned filtered = 0;
+struct bed *bed = NULL, *bedCopy = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
@@ -559,18 +575,35 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         // bigDbSnp does not have a score field, but I want to compute the freqSourceIx from
         // trackDb and settings one time instead of for each item, so I'm overloading scoreMin.
         int freqSourceIx = scoreMin;
-        lf = lfFromBigDbSnp(tdb, bb, filters, freqSourceIx);
+        lf = lfFromBigDbSnp(tdb, bb, filters, freqSourceIx, bbi);
         }
     else
 	{
         char startBuf[16], endBuf[16];
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-        if (bigBedFilterInterval(bedRow, filters))
+        if (bigBedFilterInterval(bbi, bedRow, filters))
             {
-            struct bed *bed = bedLoadN(bedRow, fieldCount);
-            lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
-                scoreMin, scoreMax, useItemRgb);
+            if (instaFile)
+                {
+                if ((bed = instaBed(bbi, chainHash, bb)) != NULL)
+                    {
+                    bedCopy = cloneBed(bed);
+                    lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
+                        scoreMin, scoreMax, useItemRgb);
+                    }
+                }
+            else
+                {
+                bed = bedLoadN(bedRow, fieldCount);
+                bedCopy = cloneBed(bed);
+                lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
+                    scoreMin, scoreMax, useItemRgb);
+                }
             }
+
+        if (lf && squishFieldIdx)
+            lf->squishyPackVal = atof(restField(bb, squishFieldIdx));
+
         if (track->visibility != tvDense && lf && doWindowSizeFilter && bb->start < winStart && bb->end > winEnd)
             {
             mergeCount++;
@@ -585,6 +618,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                     spannedLf->end = tmp->end;
                 if (fieldCount > 9) // average the colors in the merged item
                     {
+                    // Not sure how averaging alphas in the merged item would work; probably better
+                    // to ignore it.
                     struct rgbColor itemColor = colorIxToRgb(lf->filterColor);
                     struct rgbColor currColor = colorIxToRgb(spannedLf->filterColor);
                     int r = currColor.r + round((itemColor.r - currColor.r) / mergeCount);
@@ -619,9 +654,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
     if (lf->label == NULL)
         lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
-    if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
+    if (startsWith("bigGenePred", track->tdb->type) || startsWith("genePred", track->tdb->type))
         {
-        lf->original = genePredFromBigGenePred(chromName, bb); 
+        lf->original = genePredFromBedBigGenePred(chromName, bedCopy, bb); 
         }
 
     if (lf->mouseOver == NULL)
@@ -637,6 +672,11 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 if (filtered)
    labelTrackAsFilteredNumber(track, filtered);
 
+if (cartOrTdbBoolean(cart, track->tdb, "doWiggle", FALSE))
+    labelTrackAsDensity(track);
+else if (winTooBigDoWiggle(cart, track))
+    labelTrackAsDensityWindowSize(track);
+    
 if (doWindowSizeFilter)
     // add the number of merged items to the track longLabel
     {

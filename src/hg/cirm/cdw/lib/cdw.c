@@ -51,11 +51,11 @@ void cdwSettingsSaveToDb(struct sqlConnection *conn, struct cdwSettings *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
 	tableName,  el->id,  el->name,  el->val);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwSettings *cdwSettingsLoad(char **row)
@@ -207,11 +207,11 @@ void cdwUserSaveToDb(struct sqlConnection *conn, struct cdwUser *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s',%d,%u)", 
 	tableName,  el->id,  el->email,  el->uuid,  el->isAdmin,  el->primaryGroup);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwUser *cdwUserLoad(char **row)
@@ -368,11 +368,11 @@ void cdwGroupSaveToDb(struct sqlConnection *conn, struct cdwGroup *el, char *tab
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
 	tableName,  el->id,  el->name,  el->description);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwGroup *cdwGroupLoad(char **row)
@@ -521,11 +521,11 @@ void cdwGroupFileSaveToDb(struct sqlConnection *conn, struct cdwGroupFile *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u)", 
 	tableName,  el->fileId,  el->groupId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwGroupFile *cdwGroupFileLoad(char **row)
@@ -664,11 +664,11 @@ void cdwGroupUserSaveToDb(struct sqlConnection *conn, struct cdwGroupUser *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u)", 
 	tableName,  el->userId,  el->groupId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwGroupUser *cdwGroupUserLoad(char **row)
@@ -810,11 +810,11 @@ void cdwLabSaveToDb(struct sqlConnection *conn, struct cdwLab *el, char *tableNa
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s')", 
 	tableName,  el->id,  el->name,  el->pi,  el->institution,  el->url);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwLab *cdwLabLoad(char **row)
@@ -981,11 +981,11 @@ void cdwScriptRegistrySaveToDb(struct sqlConnection *conn, struct cdwScriptRegis
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s',%d)", 
 	tableName,  el->id,  el->userId,  el->name,  el->description,  el->secretHash,  el->submitCount);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwScriptRegistry *cdwScriptRegistryLoad(char **row)
@@ -1157,11 +1157,11 @@ void cdwHostSaveToDb(struct sqlConnection *conn, struct cdwHost *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%lld,'%s',%lld,%lld,%lld,%d)", 
 	tableName,  el->id,  el->name,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  el->errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits,  el->paraFetchStreams);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwHost *cdwHostLoad(char **row)
@@ -1346,11 +1346,11 @@ void cdwSubmitDirSaveToDb(struct sqlConnection *conn, struct cdwSubmitDir *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%lld,%lld,%lld,'%s',%lld,%lld,%lld)", 
 	tableName,  el->id,  el->url,  el->hostId,  el->lastOkTime,  el->lastNotOkTime,  el->firstAdded,  el->errorMessage,  el->openSuccesses,  el->openFails,  el->historyBits);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwSubmitDir *cdwSubmitDirLoad(char **row)
@@ -1528,11 +1528,11 @@ void cdwMetaTagsSaveToDb(struct sqlConnection *conn, struct cdwMetaTags *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
 	tableName,  el->id,  el->md5,  el->tags);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwMetaTags *cdwMetaTagsLoad(char **row)
@@ -1697,11 +1697,11 @@ void cdwFileSaveToDb(struct sqlConnection *conn, struct cdwFile *el, char *table
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s',%u,'%s','%s',%u,%d,%d,%d)", 
 	tableName,  el->id,  el->submitId,  el->submitDirId,  el->userId,  el->submitFileName,  el->cdwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->metaTagsId,  el->errorMessage,  el->deprecated,  el->replacedBy,  el->userAccess,  el->groupAccess,  el->allAccess);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwFile *cdwFileLoad(char **row)
@@ -1941,11 +1941,11 @@ void cdwSubmitSaveToDb(struct sqlConnection *conn, struct cdwSubmit *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u,%u,'%s')", 
 	tableName,  el->id,  el->url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->manifestFileId,  el->metaFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  el->errorMessage,  el->fileIdInTransit,  el->metaChangeCount,  el->wrangler);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwSubmit *cdwSubmitLoad(char **row)
@@ -2162,11 +2162,11 @@ void cdwSubscriberSaveToDb(struct sqlConnection *conn, struct cdwSubscriber *el,
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%g,'%s','%s','%s','%s')", 
 	tableName,  el->id,  el->name,  el->runOrder,  el->filePattern,  el->dirPattern,  el->tagPattern,  el->onFileEndUpload);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwSubscriber *cdwSubscriberLoad(char **row)
@@ -2346,11 +2346,11 @@ void cdwAssemblySaveToDb(struct sqlConnection *conn, struct cdwAssembly *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s',%u,%lld,%lld,%u)", 
 	tableName,  el->id,  el->taxon,  el->name,  el->ucscDb,  el->twoBitId,  el->baseCount,  el->realBaseCount,  el->seqCount);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwAssembly *cdwAssemblyLoad(char **row)
@@ -2521,11 +2521,11 @@ void cdwBiosampleSaveToDb(struct sqlConnection *conn, struct cdwBiosample *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s')", 
 	tableName,  el->id,  el->term,  el->taxon,  el->sex);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwBiosample *cdwBiosampleLoad(char **row)
@@ -2684,11 +2684,11 @@ void cdwExperimentSaveToDb(struct sqlConnection *conn, struct cdwExperiment *el,
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->accession,  el->dataType,  el->lab,  el->biosample,  el->rfa,  el->assayType,  el->ipTarget,  el->control);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwExperiment *cdwExperimentLoad(char **row)
@@ -2896,11 +2896,11 @@ void cdwValidFileSaveToDb(struct sqlConnection *conn, struct cdwValidFile *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d,'%s','%s',%d,%g,'%s')", 
 	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->part,  el->pairedEnd,  el->qaVersion,  el->uniqueMapRatio,  el->lane);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwValidFile *cdwValidFileLoad(char **row)
@@ -3150,7 +3150,7 @@ void cdwFastqFileSaveToDb(struct sqlConnection *conn, struct cdwFastqFile *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 char  *qualPosArray, *aAtPosArray, *cAtPosArray, *gAtPosArray, *tAtPosArray, *nAtPosArray;
 qualPosArray = sqlDoubleArrayToString(el->qualPos, el->readSizeMax);
 aAtPosArray = sqlDoubleArrayToString(el->aAtPos, el->readSizeMax);
@@ -3161,7 +3161,7 @@ nAtPosArray = sqlDoubleArrayToString(el->nAtPos, el->readSizeMax);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%lld,%lld,'%s',%lld,%lld,%g,%g,%d,%d,%g,%g,%g,%g,'%s',%d,%g,%g,%g,%g,%g,%g,'%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->fileId,  el->sampleCount,  el->basesInSample,  el->sampleFileName,  el->readCount,  el->baseCount,  el->readSizeMean,  el->readSizeStd,  el->readSizeMin,  el->readSizeMax,  el->qualMean,  el->qualStd,  el->qualMin,  el->qualMax,  el->qualType,  el->qualZero,  el->atRatio,  el->aRatio,  el->cRatio,  el->gRatio,  el->tRatio,  el->nRatio,  qualPosArray ,  aAtPosArray ,  cAtPosArray ,  gAtPosArray ,  tAtPosArray ,  nAtPosArray );
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 freez(&qualPosArray);
 freez(&aAtPosArray);
 freez(&cAtPosArray);
@@ -3579,11 +3579,11 @@ void cdwBamFileSaveToDb(struct sqlConnection *conn, struct cdwBamFile *el, char 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%d,%d,%lld,%lld,%lld,%lld,%g,%g,%d,%d,%d,%d,%g,%lld,%u)", 
 	tableName,  el->id,  el->fileId,  el->isPaired,  el->isSortedByTarget,  el->readCount,  el->readBaseCount,  el->mappedCount,  el->uniqueMappedCount,  el->readSizeMean,  el->readSizeStd,  el->readSizeMin,  el->readSizeMax,  el->u4mReadCount,  el->u4mUniquePos,  el->u4mUniqueRatio,  el->targetBaseCount,  el->targetSeqCount);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwBamFile *cdwBamFileLoad(char **row)
@@ -3805,11 +3805,11 @@ void cdwVcfFileSaveToDb(struct sqlConnection *conn, struct cdwVcfFile *el, char 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%d,%d,%d,%lld,%d,%lld,%g,%lld,%g,%lld,%lld,%d,%d,%d,%lld,%g,%lld,%g,%d,%g,%g,%g,%g)", 
 	tableName,  el->id,  el->fileId,  el->vcfMajorVersion,  el->vcfMinorVersion,  el->genotypeCount,  el->itemCount,  el->chromsHit,  el->passItemCount,  el->passRatio,  el->snpItemCount,  el->snpRatio,  el->sumOfSizes,  el->basesCovered,  el->xBasesCovered,  el->yBasesCovered,  el->mBasesCovered,  el->haploidCount,  el->haploidRatio,  el->phasedCount,  el->phasedRatio,  el->gotDepth,  el->depthMin,  el->depthMean,  el->depthMax,  el->depthStd);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwVcfFile *cdwVcfFileLoad(char **row)
@@ -4042,11 +4042,11 @@ void cdwQaFailSaveToDb(struct sqlConnection *conn, struct cdwQaFail *el, char *t
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s')", 
 	tableName,  el->id,  el->fileId,  el->qaVersion,  el->reason);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaFail *cdwQaFailLoad(char **row)
@@ -4199,11 +4199,11 @@ void cdwQaEnrichTargetSaveToDb(struct sqlConnection *conn, struct cdwQaEnrichTar
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%u,%lld)", 
 	tableName,  el->id,  el->assemblyId,  el->name,  el->fileId,  el->targetSize);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaEnrichTarget *cdwQaEnrichTargetLoad(char **row)
@@ -4363,11 +4363,11 @@ void cdwQaEnrichSaveToDb(struct sqlConnection *conn, struct cdwQaEnrich *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%g,%g,%g)", 
 	tableName,  el->id,  el->fileId,  el->qaEnrichTargetId,  el->targetBaseHits,  el->targetUniqHits,  el->coverage,  el->enrichment,  el->uniqEnrich);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaEnrich *cdwQaEnrichLoad(char **row)
@@ -4530,11 +4530,11 @@ void cdwQaContamTargetSaveToDb(struct sqlConnection *conn, struct cdwQaContamTar
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u)", 
 	tableName,  el->id,  el->assemblyId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaContamTarget *cdwQaContamTargetLoad(char **row)
@@ -4675,11 +4675,11 @@ void cdwQaContamSaveToDb(struct sqlConnection *conn, struct cdwQaContam *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g)", 
 	tableName,  el->id,  el->fileId,  el->qaContamTargetId,  el->mapRatio);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaContam *cdwQaContamLoad(char **row)
@@ -4828,11 +4828,11 @@ void cdwQaRepeatSaveToDb(struct sqlConnection *conn, struct cdwQaRepeat *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s',%g)", 
 	tableName,  el->id,  el->fileId,  el->repeatClass,  el->mapRatio);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaRepeat *cdwQaRepeatLoad(char **row)
@@ -4987,11 +4987,11 @@ void cdwQaPairSampleOverlapSaveToDb(struct sqlConnection *conn, struct cdwQaPair
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%lld,%lld,%lld,%g)", 
 	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->elderSampleBases,  el->youngerSampleBases,  el->sampleOverlapBases,  el->sampleSampleEnrichment);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaPairSampleOverlap *cdwQaPairSampleOverlapLoad(char **row)
@@ -5154,11 +5154,11 @@ void cdwQaPairCorrelationSaveToDb(struct sqlConnection *conn, struct cdwQaPairCo
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%g)", 
 	tableName,  el->id,  el->elderFileId,  el->youngerFileId,  el->pearsonInEnriched,  el->pearsonOverall,  el->pearsonClipped);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaPairCorrelation *cdwQaPairCorrelationLoad(char **row)
@@ -5320,11 +5320,11 @@ void cdwQaPairedEndFastqSaveToDb(struct sqlConnection *conn, struct cdwQaPairedE
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%g,%g,%g,%d)", 
 	tableName,  el->id,  el->fileId1,  el->fileId2,  el->concordance,  el->distanceMean,  el->distanceStd,  el->distanceMin,  el->distanceMax,  el->recordComplete);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaPairedEndFastq *cdwQaPairedEndFastqLoad(char **row)
@@ -5498,11 +5498,11 @@ void cdwQaWigSpotSaveToDb(struct sqlConnection *conn, struct cdwQaWigSpot *el, c
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%lld,%lld,%g,%g)", 
 	tableName,  el->id,  el->wigId,  el->spotId,  el->spotRatio,  el->enrichment,  el->basesInGenome,  el->basesInSpots,  el->sumSignal,  el->spotSumSignal);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaWigSpot *cdwQaWigSpotLoad(char **row)
@@ -5685,11 +5685,11 @@ void cdwQaDnaseSingleStats5mSaveToDb(struct sqlConnection *conn, struct cdwQaDna
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%g,%g,%lld,%lld,%g,%g,'%s','%s',%d,%g,%d,%g,%g,%g,%d)", 
 	tableName,  el->id,  el->fileId,  el->sampleReads,  el->spotRatio,  el->enrichment,  el->basesInGenome,  el->basesInSpots,  el->sumSignal,  el->spotSumSignal,  el->estFragLength,  el->corrEstFragLen,  el->phantomPeak,  el->corrPhantomPeak,  el->argMinCorr,  el->minCorr,  el->nsc,  el->rsc,  el->rscQualityTag);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwQaDnaseSingleStats5m *cdwQaDnaseSingleStats5mLoad(char **row)
@@ -5904,11 +5904,11 @@ void cdwJobSaveToDb(struct sqlConnection *conn, struct cdwJob *el, char *tableNa
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d,%d)", 
 	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid,  el->submitId);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwJob *cdwJobLoad(char **row)
@@ -6081,11 +6081,11 @@ void cdwTrackVizSaveToDb(struct sqlConnection *conn, struct cdwTrackViz *el, cha
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s','%s')", 
 	tableName,  el->id,  el->fileId,  el->shortLabel,  el->longLabel,  el->type,  el->bigDataFile);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwTrackViz *cdwTrackVizLoad(char **row)
@@ -6258,11 +6258,11 @@ void cdwDatasetSaveToDb(struct sqlConnection *conn, struct cdwDataset *el, char 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->name,  el->label,  el->description,  el->pmid,  el->pmcid,  el->metaDivTags,  el->metaLabelTags);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwDataset *cdwDatasetLoad(char **row)
@@ -6450,11 +6450,11 @@ void cdwJointDatasetSaveToDb(struct sqlConnection *conn, struct cdwJointDataset 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->name,  el->label,  el->description,  el->childrenNames,  el->metaDivTags);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct cdwJointDataset *cdwJointDatasetLoad(char **row)

@@ -571,6 +571,8 @@ static struct tdbRecord *findParent(struct tdbRecord *rec,
  * match parents and children from the same release if possible.  Our
  * strategy is to just ignore records from the wrong release. */
 {
+if (rec->override)  // don't do these
+    return NULL;
 if (clNoCompSub)
     return NULL;
 struct tdbField *parentField = tdbRecordField(rec, parentFieldName);

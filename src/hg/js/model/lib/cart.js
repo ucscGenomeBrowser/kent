@@ -43,6 +43,7 @@ var cart = (function() {
     var cgiBinUrl = '../cgi-bin/';
     // cart.setCgi(name) sets this to cgiBinUrl + name, and must be called before sending requests:
     var cgiUrl;
+    var cgiName; // get sets by cart.setCgi()
 
     // accumulator for cgiVars passed in to send() before flush() is called:
     var cgiVars = {};
@@ -202,9 +203,18 @@ var cart = (function() {
     // Return cart object with public methods.
     return {
 
+        defaultErrorCallback: function (jqXHR, textStatus) {
+            defaultErrorCallback(jqXHR, textStatus);
+        },
+
+        cgi: function() {
+            return cgiName;
+        },
+
         setCgi: function(newCgi) {
             // Sets the name of the CGI (e.g. hgIntegrator, hgChooseDb etc).
             // This must be called before cart.send.
+            cgiName = newCgi;
             cgiUrl = cgiBinUrl + newCgi;
         },
 
@@ -216,7 +226,7 @@ var cart = (function() {
             // If this request contained only cgiVars (empty cmdObjNoCgiVar) then let those
             // go out with other requests.  Below, flush will make sure that at least one request
             // is sent out if there are cgiVars.
-            if (! _.isEmpty(cmdObjNoCgiVar)) {
+            if (! _.isEmpty(cmdObjNoCgiVar) || successCallback || errorCallback) {
                 requestQueue.push({ commandObj: cmdObjNoCgiVar,
                                     successCallback: successCallback,
                                     errorCallback: errorCallback });

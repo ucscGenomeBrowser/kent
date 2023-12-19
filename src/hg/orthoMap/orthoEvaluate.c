@@ -479,7 +479,7 @@ static char *tmpFa = NULL;
 static char *tmpOrf = NULL;
 struct borf *borf = NULL;
 struct dnaSeq *seq = NULL;
-struct dyString *cmd = newDyString(256);
+struct dyString *cmd = dyStringNew(256);
 int retVal = 0;
 if(tmpFa == NULL)
     tmpFa = optionVal("tmpFa", cloneString(rTempName("/tmp", "borf", ".fa")));

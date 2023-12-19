@@ -134,7 +134,7 @@ void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedL
 /* Load database from bedList. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 char *tab = "sample.tab";
 
 /* First make table definition. */
@@ -157,29 +157,29 @@ else if (!oldTable)
     verbose(1, "Creating table definition for \n");
     sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
-       dyStringAppend(dy, "  bin smallint unsigned not null,\n");
-    dyStringAppend(dy, "  chrom varchar(255) not null,\n");
-    dyStringAppend(dy, "  chromStart int unsigned not null,\n");
-    dyStringAppend(dy, "  chromEnd int unsigned not null,\n");
+       sqlDyStringPrintf(dy, "  bin smallint unsigned not null,\n");
+    sqlDyStringPrintf(dy, "  chrom varchar(255) not null,\n");
+    sqlDyStringPrintf(dy, "  chromStart int unsigned not null,\n");
+    sqlDyStringPrintf(dy, "  chromEnd int unsigned not null,\n");
     if (bedSize >= 4)
-       dyStringAppend(dy, "  name varchar(255) not null,\n");
+       sqlDyStringPrintf(dy, "  name varchar(255) not null,\n");
     if (bedSize >= 5)
-       dyStringAppend(dy, "  score int unsigned not null,\n");
+       sqlDyStringPrintf(dy, "  score int unsigned not null,\n");
     if (bedSize >= 6)
-       dyStringAppend(dy, "  strand char(1) not null,\n");
+       sqlDyStringPrintf(dy, "  strand char(1) not null,\n");
     if (bedSize >= 7)
-       dyStringAppend(dy, "  sampleCount int unsigned not null,\n");
+       sqlDyStringPrintf(dy, "  sampleCount int unsigned not null,\n");
     if (bedSize >= 8)
-       dyStringAppend(dy, "  samplePosition longblob not null,\n");
+       sqlDyStringPrintf(dy, "  samplePosition longblob not null,\n");
     if (bedSize >= 9)
-       dyStringAppend(dy, "  sampleHeight longblob not null,\n");
-    dyStringAppend(dy, "#Indices\n");
+       sqlDyStringPrintf(dy, "  sampleHeight longblob not null,\n");
+    sqlDyStringPrintf(dy, "#Indices\n");
     if (!noBin)
-       dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
+       sqlDyStringPrintf(dy, "  INDEX(chrom(8),bin),\n");
     if (bedSize >= 4)
-       dyStringAppend(dy, "  INDEX(name(16)),\n");
-    dyStringAppend(dy, "  INDEX(chrom(8),chromStart)\n");
-    dyStringAppend(dy, ")\n");
+       sqlDyStringPrintf(dy, "  INDEX(name(16)),\n");
+    sqlDyStringPrintf(dy, "  INDEX(chrom(8),chromStart)\n");
+    sqlDyStringPrintf(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }
 

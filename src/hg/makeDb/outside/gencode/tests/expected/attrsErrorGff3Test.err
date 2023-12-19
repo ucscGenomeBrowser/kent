@@ -1,0 +1,9 @@
+Error: unknown gene_type 'fred', first occurrence on line 35 update gencode/biotypes.py or fix data:
+chr1	HAVANA	gene	29554	31109	.	+	.	ID=ENSG00000243485.5;gene_id=ENSG00000243485.5;gene_type=fred;gene_name=MIR1302-2HG;level=2;hgnc_id=HGNC:52482;tag=ncRNA_host;havana_gene=OTTHUMG00000000959.2
+Error: unknown gene_type 'barney', first occurrence on line 105 update gencode/biotypes.py or fix data:
+chr1	HAVANA	exon	131025	134836	.	+	.	ID=exon:ENST00000442987.3:1;Parent=ENST00000442987.3;gene_id=ENSG00000233750.3;transcript_id=ENST00000442987.3;gene_type=barney;gene_name=CICP27;transcript_type=processed_pseudogene;transcript_name=CICP27-201;exon_number=1;exon_id=ENSE00001625118.3;level=1;transcript_support_level=NA;hgnc_id=HGNC:48835;ont=PGO:0000004;tag=pseudo_consens,basic,Ensembl_canonical;havana_gene=OTTHUMG00000001257.3;havana_transcript=OTTHUMT00000003691.3
+Error: unknown transcript_type 'wilma', first occurrence on line 124 update gencode/biotypes.py or fix data:
+chr1	HAVANA	transcript	146386	173862	.	-	.	ID=ENST00000466557.6;Parent=ENSG00000241860.7;gene_id=ENSG00000241860.7;transcript_id=ENST00000466557.6;gene_type=lncRNA;gene_name=ENSG00000241860;transcript_type=wilma;transcript_name=ENST00000466557;level=2;transcript_support_level=5;tag=not_best_in_genome_evidence,basic,Ensembl_canonical;havana_gene=OTTHUMG00000002480.4;havana_transcript=OTTHUMT00000007037.2
+Error: unknown tag 'cosmo', first occurrence on line 302 update gencode/biotypes.py or fix data:
+chr1	HAVANA	transcript	925150	935793	.	+	.	ID=ENST00000437963.5;Parent=ENSG00000187634.13;gene_id=ENSG00000187634.13;transcript_id=ENST00000437963.5;gene_type=protein_coding;gene_name=SAMD11;transcript_type=protein_coding;transcript_name=SAMD11-203;level=2;protein_id=ENSP00000393181.1;transcript_support_level=5;hgnc_id=HGNC:28706;tag=alternative_5_UTR,cosmo,cds_end_NF;havana_gene=OTTHUMG00000040719.11;havana_transcript=OTTHUMT00000097862.5
+found 4 attribute errors

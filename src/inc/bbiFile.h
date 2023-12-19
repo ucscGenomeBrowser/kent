@@ -101,12 +101,16 @@ struct bbiZoomLevel *bbiBestZoom(struct bbiZoomLevel *levelList, int desiredRedu
 /* Return zoom level that is the closest one that is less than or equal to 
  * desiredReduction. */
 
+typedef struct slName *(*aliasFunc) (char *);   // A function that passed a native seqName returns a list of aliases
+typedef int (*bbiChromSizeFunc) (void *closure, char *, int);   // A function that passed its closure, a line number, and an alias or a native seqName returns its size
+
 struct bbiFile 
 /* An open bbiFile */
     {
     struct bbiFile *next;	/* Next in list. */
     char *fileName;		/* Name of file - for better error reporting. */
     struct udcFile *udc;	/* Open UDC file handle. */
+    aliasFunc aliasFunc;        /* our aliasFunc or NULL. */
     bits32 typeSig;		/* bigBedSig or bigWigSig for now. */
     boolean isSwapped;		/* If TRUE need to byte swap everything. */
     struct bptFile *chromBpt;	/* Index of chromosomes. */
@@ -131,6 +135,9 @@ struct bbiFile
     bits64 extraIndexListOffset;    /* Offset to list of extra indexes */
     };
 
+
+struct bbiFile *bbiFileOpenAlias(char *fileName, bits32 sig, char *typeName, aliasFunc aliasFunc);
+/* Open up big wig or big bed file with chrom alias hash. */
 
 struct bbiFile *bbiFileOpen(char *fileName, bits32 sig, char *typeName);
 /* Open up big wig or big bed file. */
@@ -379,7 +386,7 @@ struct bbExIndexMaker
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
 	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount, boolean tabSep);
 /* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
- * collect max field sizes there too. */
+ * collect max field sizes there too. Use chromSizesHash to find chrom sizes.  */
 
 #define bbiMaxZoomLevels 10	/* Max number of zoom levels */
 #define bbiResIncrement 4	/* Amount to reduce at each zoom level */
@@ -451,4 +458,7 @@ struct bbiSummary *bbiSummariesInRegion(struct bbiZoomLevel *zoom, struct bbiFil
         int chromId, bits32 start, bits32 end);
 /* Return list of all summaries in region at given zoom level of bbiFile. */
 
+struct bbiChromUsage *bbiChromUsageFromBedFileAlias(struct lineFile *lf, char *chromAliasBb,
+        struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount, boolean tabSep);
+/* A wrapper for bbiChromUsageFromBedFileInternal that uses a bigBed to find chromosome sizes. */
 #endif /* BBIFILE_H */

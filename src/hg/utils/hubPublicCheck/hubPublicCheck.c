@@ -86,7 +86,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("update %s set longLabel=\"%s\" where hubUrl=\"%s\";\n",table, tHub->longLabel, url);
 	}
 
-    struct dyString *dy = newDyString(1024);
+    struct dyString *dy = dyStringNew(1024);
     struct trackHubGenome *genome = tHub->genomeList;
 
     unsigned dbCount = 0;
@@ -137,7 +137,7 @@ errCatchFree(&errCatch);
 if (gotWarning)
     return 1;
 
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 struct trackHubGenome *list;
 for(list = tHub->genomeList; list;  list = list->next)

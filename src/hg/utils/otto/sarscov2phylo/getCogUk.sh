@@ -16,57 +16,63 @@ mkdir -p $ottoDir/cogUk.$today
 cd $ottoDir/cogUk.$today
 
 # Sometimes the curl fails with a DNS error, regardless of whether my previous cron job with
-# curl -I succeeded.  Do multiple retries for the first URL; once it's working, it should
-# continue to work for the other URLs (she said hopefully).
-attempt=0
-maxAttempts=5
-retryDelay=60
-while [[ $((++attempt)) -le $maxAttempts ]]; do
-    echo "curl attempt $attempt"
-    if curl -S -s $cogUrlBase/cog_all.fasta | xz -T 8 > cog_all.fasta.xz; then
-        break
-    else
-        echo "FAILED; will try again after $retryDelay seconds"
-        rm -f cog_all.fasta.xz
-        sleep $retryDelay
+# curl -I succeeded.  Do multiple retries per URL -- sometimes even after one succeeds, the
+# next can still fail e.g. with "curl: (6) Could not resolve host: cog-uk.s3.climb.ac.uk".
+# On some days, the fetch started but failed partway through, even after 5 tries, so
+# keep the partial result around and try again with '-C -'.
+function curlRetry {
+    local url=$*
+    local attempt=0
+    local maxAttempts=100
+    local retryDelay=60
+    while [[ $((++attempt)) -le $maxAttempts ]]; do
+        echo "curl attempt $attempt"
+        if curl -S -s -C - -O $url; then
+            break
+        else
+            echo "FAILED; will try again after $retryDelay seconds"
+            sleep $retryDelay
+        fi
+    done
+    if [[ $attempt -gt $maxAttempts ]]; then
+        echo "curl failed $maxAttempts times; quitting."
+        exit 1
     fi
-done
-if [[ ! -f cog_all.fasta.xz ]]; then
-    echo "curl failed $maxAttempts times; quitting."
-    exit 1
-fi
-curl -S -s $cogUrlBase/cog_metadata.csv > cog_metadata.csv
-curl -S -s $cogUrlBase/cog_global_tree.newick > cog_global_tree.newick
+}
 
-tail -n +2 cog_metadata.csv \
+curlRetry $cogUrlBase/cog_all.fasta.gz
+curlRetry $cogUrlBase/cog_metadata.csv.gz
+curlRetry $cogUrlBase/cog_global_tree.newick
+
+zcat cog_all.fasta.gz | xz -T 20 > cog_all.fasta.xz
+rm cog_all.fasta.gz
+
+zcat cog_metadata.csv.gz \
+| tail -n +2 \
 | awk -F, '{print $1 "\t" $5;}' | sort > cogUkToDate
 
 # Reuse nextclade assignments for older sequences; compute nextclade assignments for new seqs.
-cp $ottoDir/cogUk.latest/nextclade.tsv .
-comm -13 <(cut -f 1 nextclade.tsv | sort) <(fastaNames cog_all.fasta.xz | sort) \
+zcat $ottoDir/cogUk.latest/nextclade.full.tsv.gz > nextclade.full.tsv
+cp $ottoDir/cogUk.latest/nextalign.fa.xz .
+comm -13 <(cut -f 1 nextclade.full.tsv | sort) <(fastaNames cog_all.fasta.xz | sort) \
     > seqsForNextclade
 if [ -s seqsForNextclade ]; then
-    faSomeRecords <(xzcat cog_all.fasta.xz) seqsForNextclade seqsForNextclade.fa
-    splitDir=splitForNextclade
-    rm -rf $splitDir
-    mkdir $splitDir
-    faSplit about seqsForNextclade.fa 30000000 $splitDir/chunk
     nDataDir=~angie/github/nextclade/data/sars-cov-2
-    outDir=$(mktemp -d)
     outTsv=$(mktemp)
-    for chunkFa in $splitDir/chunk*.fa; do
-        nextclade -j 50 -i $chunkFa \
-            --input-root-seq $nDataDir/reference.fasta \
-            --input-tree $nDataDir/tree.json \
-            --input-qc-config $nDataDir/qc.json \
-            --output-dir $outDir \
-            --output-tsv $outTsv >& nextclade.log
-        cut -f 1,2 $outTsv | tail -n+2 | sed -re 's/"//g;' >> nextclade.tsv
-        rm $outTsv
-    done
-    rm -rf $outDir
-    rm -rf $splitDir
+    outFa=$(mktemp)
+    faSomeRecords <(xzcat cog_all.fasta.xz) seqsForNextclade stdout \
+    | nextclade run -j 30 \
+        --input-dataset $nDataDir \
+        --output-fasta $outFa \
+        --output-tsv $outTsv >& nextclade.log
+    tail -n+2 $outTsv | sed -re 's/"//g;' >> nextclade.full.tsv
+    xz -T 20 < $outFa >> nextalign.fa.xz
+    rm -f $outTsv $outFa
 fi
+pigz -f -p 8 nextclade.full.tsv
 
 rm -f $ottoDir/cogUk.latest
 ln -s cogUk.$today $ottoDir/cogUk.latest
+
+rm -f ~angie/public_html/sarscov2phylo/cogUk.$today
+ln -s $ottoDir/cogUk.$today ~angie/public_html/sarscov2phylo/cogUk.$today

@@ -13,6 +13,7 @@ body.hgTracks {
 	background: url("../../images/internal_bg1.jpg") repeat-x fixed left bottom #F9F9F7;
 }
 
+
 body.training {
         background: url("../../images/internal_bg1.jpg") repeat-x fixed left bottom #F9F9F7;
 }
@@ -26,6 +27,60 @@ body.training {
 a:link {
         color: #121E9A; 
         text-decoration: underline
+}
+
+input[type="submit"], input[type="button"], button {
+    border: 1px solid rgba(100, 100, 100, .5);
+    border-radius: 3px;
+    margin: 0;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: #EEE;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover, button:hover {
+    background-color: #E8E8E8;
+}
+
+#trackCtrlTable {
+        width: 90%;
+
+}
+
+.moveButtonText {
+        font-size: 80%
+}
+
+.infoText { 
+        font-size: 90%;
+        text-align: center;
+}
+
+.infoText > input {
+    margin-left: 3px;
+    margin-right: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+#patchNote {
+    margin-left: 3em;
+}
+
+.trackLabelTd {
+        max-width: 14em;
+        vertical-align: top;
+        word-break: break-all;
+}
+
+.trackDeleteIcon {
+        margin-right: 4px;
+        display: inline;
+        cursor: pointer;
+}
+
+.controlButtons {
+    margin-bottom: 6px;
 }
 
 .blueLink {
@@ -106,6 +161,8 @@ A:visited IMG { border-width: 0px; padding: 0px; margin: 0px;}
 A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
 
 /* A toggle bar can be seen in hgTracks, under the image groups that can be opened and closed. */
+.redToggleBar {font-weight: bold; color:#FFFFFF; background-color:#ff0000; height:28px; width:100%;
+                text-align:center; vertical-align:middle; white-space:nowrap;}
 .blueToggleBar {font-weight: bold; color:#FFFFFF; background-color:#536ED3; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap;}
 .toggleButton  {height: 20px; width: 20px; vertical-align:middle;}
@@ -248,6 +305,16 @@ table.bedExtraTbl td:first-child {
 table.bedExtraTbl tbody {
     background-color: #fffadb;
 }
+
+.bedExtraTblNote {
+    font-size: small;
+    font-weight: normal;
+}
+
+.bedExtraTblVal {
+        word-wrap: break-word;
+}
+
 
 /* used by transMap details page in hgc */
 TABLE.transMap, TABLE.transMap TH, TABLE.transMap TD {
@@ -436,7 +503,6 @@ table.descTbl td.number { text-align: right; }
 .blueBox   { border: 4px inset #000088; } /* cfg box */
 .redBox    { border: 3px ridge #AA0000; background-color: #FFF9D2; padding: 10px; margin: 10px; text-align: left; } /* Special alert */
 
-
 /* Experiments with squeezing giant matrices */
 .up45 { text-align: left; vertical-align: middle; width: 20px; margin: 0px; padding: 10px 3px 0px 3px; white-space: nowrap;
            position: relative; top: 0.8em;  left: -0.4em;
@@ -487,6 +553,7 @@ div.sliceDiv { overflow:hidden; }
 div.highlightItem { opacity:0.7; border-style:none; position:absolute; overflow:hidden; }
 div.loading { position: absolute; opacity: 0.75; z-index: 15; 
               background: white url("/images/loading.gif") no-repeat center;   }
+#imgTbl map {position: relative; z-index:11}
 
 /* These are for imageV2 sideButtons: */
 .btn  { border-style: outset; background-color: #CCCCCC; border-color: #CCCCCC; } /* border-color: works for FF but screws up IE */
@@ -559,8 +626,10 @@ td.disabled   { color: gray; }
 
 .positionDisplay {
     display: inline-block;
-    padding: 5px;
+    padding: 3px;
+    /* border-radius: 3px; */
     border: lightgray 1px solid;
+    font-size: 90%;
 }
 
 .positionDisplay:hover {
@@ -568,9 +637,31 @@ td.disabled   { color: gray; }
 }
 
 .positionInput {
-        padding: 7px; -moz-border-radius: 3px; border-radius: 3px;
+        padding: 3px;
+        /* border-radius: 3px; */
         border: gray 1px solid;
 }
+
+#hgt\.left3, #hgt\.in1, #hgt\.out1 {
+        border-right: 1px solid lightgray;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+}
+#hgt\.left2, #hgt\.left1, #hgt\.right1, #hgt\.right2, #hgt\.in2, #hgt\.in3, #hgt\.out2, #hgt\.out3 {
+        border-right: 1px solid lightgray;
+        border-left: 1px solid lightgray;
+        border-radius: 0px;
+}
+#hgt\.right3, #hgt\.inBase, #hgt\.out4 {
+        border-left: 1px solid lightgray;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+}
+
 
 .pennantIconText {
     text-decoration: none;
@@ -749,12 +840,12 @@ body.oldStaticPage .sectionContent {
 }
 
 /* like warnBox, but under the menu, not in the middle of the screen */
-#notifBox {
+.notifBox {
     background-color: beige;
     border: 1px solid grey;
     padding: 5px; 
     margin: 5px;
-    text-align: left;
+    text-align: center;
 }
 
 /* For jquery-ui dialog box */
@@ -1049,5 +1140,31 @@ span.gbSessionChanged {
     visibility: visible;
 }
 
+/* Tooltips - Note these are just general rules all the tooltips will have, the
+ * exact positioning is set by associated javascript in utils.js */
+.tooltip {
+    visibility: hidden;
+    background-color: rgb(238,238,238);
+    color: black;
+    text-align: left;
+    position: fixed;
+    z-index: 1003; /* these indices are all over the place for various things */
+    opacity: 0;
+    line-height: 1em;
+    padding: 3px;
+    border: 1px solid black;
+    border-radius: 2px;
+    box-shadow: 0px 1px 2px darkgrey;
+    max-width: 400px;
+}
 
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 0.9;
+}
 
+.chainBreak {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    row-gap: 10px;
+}  

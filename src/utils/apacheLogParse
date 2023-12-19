@@ -20,9 +20,6 @@ removeTmpName = None
 # where do we store the raw apache logfiles
 baseLogDir = "/hive/data/inside/wwwstats/RR"
 
-# years to analyze
-years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
-
 # list of servers to analyze
 # change these for debugging or if need to focus on single servers
 servNames = ["hgw1", "hgw2", "hgw3", "hgw4", "hgw5", "hgw6", "hgw7", "hgw8"]
@@ -118,7 +115,7 @@ def parseApacheLine(fields):
     # GET cgi-bin/hgTracks?hgsid=xxxx&xxx HTTP1.1
     reqRest = req.split(" ", 1)
     if len(reqRest)!=2:
-        logging.warn("no space in request field %s" % fields)
+        logging.warn("not two fields: %s" % fields)
         return None
 
     reqType, rest = reqRest
@@ -131,7 +128,12 @@ def parseApacheLine(fields):
     #reqType, reqUrl, httpVer = reqFields
 
     # split into cgi as a string and the params as a dict, e.g. "cgi-bin/hgXXX" and {'hgsid':'1233'}
-    filePath, paramStr = urlparse.urlsplit(reqUrl)[2:4]
+    try:
+        filePath, paramStr = urlparse.urlsplit(reqUrl)[2:4]
+    except ValueError:
+        logging.error("Invalid reqUrl %s" % reqUrl)
+        return None
+
     cgi = basename(filePath)
     params = urlparse.parse_qs(paramStr)
     paramList = []
@@ -267,19 +269,28 @@ def inOutTab(outDir):
         os.makedirs(outDir)
 
     fnames = []
+
+    years = os.listdir(baseLogDir)
+    years = [x for x in years if x.isdigit()]
+    years.sort()
+    logging.info("Processing years %s" % years)
+
     for year in years:
         yearDir = join(baseLogDir, year)
         for servName in servNames:
             servDir = join(yearDir, servName)
             inFnames = glob.glob(join(servDir, "access_log.*.gz"))
+            logging.info("Found %d infiles in %s" % (len(inFnames), servDir))
             for inFname in inFnames:
                 # access_log.20130317.gz
                 day =os.path.basename(inFname).split(".")[1]
-                outFname = "%s_%s.botIps.txt" % (day, servName) # this is also used a flag file. job writes most data to <day>_<server>_<realWeekDate>.tab.gz
+                outFname = "%s_%s.botIps.txt" % (day, servName) # this has data, but is also used a flag file. 
+                # jobs writes most data to <day>_<server>_<realWeekDate>.tab.gz, not to this file
                 outFname = join(outDir, outFname)
                 fnames.append ( (inFname, outFname) )
+            logging.info("Found %d logfiles in %s" % (len(inFnames), yearDir))
 
-    print "Found %d logfiles in %s" % (len(fnames), yearDir)
+    logging.info("Found %d input/output file pairs" % len(fnames))
     return fnames
 
 def inOutCount(catDir, outDir):
@@ -335,8 +346,8 @@ def submitJobs(headNode, jobOutDir, job, fnames):
         cmdLine = "%s %s %s %s {check out exists %s}\n" % \
                 (sys.executable, abspath(__file__), job, inFname, outPath)
         jobLines.append(cmdLine)
-    logging.info("%d logfiles, skipped %d (already converted), %d files to convert" % \
-        (len(fnames), skipCount, len(jobLines)))
+    logging.info("%d logfiles, skipped %d (already converted), %d files to convert, outdir %s" % \
+        (len(fnames), skipCount, len(jobLines), jobOutDir))
 
     if len(jobLines)==0:
         logging.info("No new logfiles to convert")
@@ -727,9 +738,12 @@ def apacheToTab(inFname, outBotIpsFname):
     baseOut = outBotIpsFname.replace(".botIps.txt","")
     fileHandles = {} # cache the file handles
 
+    # https://stackoverflow.com/a/27146123/233871
+    lines = (line.replace('\0','') for line in ifh.read().splitlines())
+
     count = 0
     botIps = set()
-    for row in csv.reader(ifh, delimiter = " ", escapechar='\\'):
+    for row in csv.reader(lines, delimiter = " ", escapechar='\\'):
         # parse apache log line
         count += 1
         if count % 20000 == 0:
@@ -737,7 +751,6 @@ def apacheToTab(inFname, outBotIpsFname):
 
         log = parseApacheLine(row)
         if log==None:
-            #logging.info("parse error: %s" % row)
             continue
 
         weekDate = dateToWeek(log.time)

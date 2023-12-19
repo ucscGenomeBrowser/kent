@@ -11,7 +11,7 @@ name omim
 shortLabel OMIM
 tables hgFixed.refLink kgXref
 idSql select hgFixed.refLink.omimId from kgXref,hgFixed.refLink where kgID = '%s' and kgXref.refseq = hgFixed.refLink.mrnaAcc and hgFixed.refLink.omimId != 0
-url http://omim.org/%s
+url http://omim.org/entry/%s
 priority 10
 
 name huge
@@ -49,9 +49,6 @@ idSql select hgncId from kgXref,proteome.hgncXref where kgID = '%s' and geneSymb
 url http://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/%s
 priority 10
 
-name cgap
-url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s
-
 name hprd
 shortLabel HPRD
 tables knownToHprd 
@@ -87,7 +84,7 @@ name jaxOrtholog
 shortLabel MGI
 tables kgXref
 idSql select geneSymbol from kgXref x, knownGene k where kgID = '%s' and name= kgID and cdsStart <> cdsEnd
-url http://www.informatics.jax.org/searchtool/Search.do?query=%s
+url http://www.informatics.jax.org/quicksearch/summary?queryType=exactPhrase&query=%s&submit=Quick%0D%0ASearch
 priority 10
 
 name HInv
@@ -106,10 +103,10 @@ priority 10
 
 # stopped working in late 2020
 #name stanfordSource
-#shortLabel Stanford SOURCE
+#shortLabel SOURCE
 #tables kgXref
 #idSql select mRNA from kgXref where kgID = '%s'
-#url http://smd.stanford.edu/cgi-bin/source/sourceResult?organism=Hs&option=Number&criteria=%s&choice=Gene
+#url http://source-search.princeton.edu/cgi-bin/source/sourceResult?organism=Hs&option=Number&criteria=%s&choice=Gene
 #priority 10
 
 name nextProt

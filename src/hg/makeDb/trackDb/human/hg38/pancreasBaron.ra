@@ -4,13 +4,12 @@ shortLabel Pancreas Baron
 longLabel Pancreas single cell sequencing from Baron et al 2016
 visibility hide
 group singleCell
-pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track pancreasBaronCellType
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
-    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    url https://cells.ucsc.edu/?ds=human-pancreas&gene=$$
     urlLabel View on the UCSC Cell Browser: 
     visibility pack
     shortLabel Pancreas Cells
@@ -31,7 +30,7 @@ pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
-    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    url https://cells.ucsc.edu/?ds=human-pancreas&gene=$$
     urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Details
@@ -51,7 +50,7 @@ pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
-    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    url https://cells.ucsc.edu/?ds=human-pancreas&gene=$$
     urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Batch
@@ -76,7 +75,7 @@ pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
     parent pancreasBaron
     html pancreasBaron
     type bigBarChart
-    url https://cells.ucsc.edu/?dscovid19atlas+c19a-baron16=&gene=$$
+    url https://cells.ucsc.edu/?ds=human-pancreas&gene=$$
     urlLabel View on the UCSC Cell Browser: 
     visibility hide
     shortLabel Pancreas Donor

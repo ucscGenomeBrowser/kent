@@ -1,0 +1,38 @@
+mkdir /hive/data/genomes/chm13
+cd /hive/data/genomes/chm13
+mkdir /gbdb/chm13
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/GCA_009914755.4.2bit" -O chm13.2bit
+ln -s `pwd`/chm13.2bit /gbdb/chm13/chm13.2bit
+mkdir hubs
+cd hubs
+ln -s /hive/data/genomes/chm13/hubs /gbdb/chm13/hubs
+
+ln -s /usr/local/apache/htdocs-hgdownload/hubs/GCA/009/914/755/GCA_009914755.4/bbi /gbdb/chm13/bbi
+ln -s /usr/local/apache/htdocs-hgdownload/hubs/GCA/009/914/755/GCA_009914755.4/ixIxx /gbdb/chm13/ixIxx
+
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/GCA_009914755.4.chromAlias.txt"
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/groups.txt"
+
+# get hub and genomes stanza from existing hub
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt" -O - | raToLines /dev/stdin /dev/stdout | egrep "^hub|^genome" | linesToRa /dev/stdin hubAndGenome.txt
+
+mkdir ~/kent/src/hg/makeDb/trackDb/human/chm13
+cd  ~/kent/src/hg/makeDb/trackDb/human/chm13
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/hub.txt" -O - | raToLines /dev/stdin /dev/stdout | egrep -v "^hub|^genome|^include" | linesToRa /dev/stdin /dev/stdout | sed 's?searchTrix ?& /gbdb/chm13/?' | sed 's?bigDataUrl ?& /gbdb/chm13/?' > trackDb.ra
+
+wget "https://hgdownload.soe.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/GCA_009914755.4.userTrackDb.txt" -O - | sed 's?searchTrix ?& /gbdb/chm13/?' | sed 's?bigDataUrl ?& /gbdb/chm13/?'  >> trackDb.ra
+
+mkdir html
+cp /usr/local/apache/htdocs-hgdownload/hubs/GCA/009/914/755/GCA_009914755.4/html/* html
+
+hgsql -Ne "create database chm13"
+cd  ~/kent/src/hg/makeDb/trackDb
+make DBS=chm13
+# had to fix following errors
+# Duplicate tag shortLabel in record starting line 817 of /cluster/home/braney/kent/src/hg/makeDb/trackDb/human/chm13/trackDb.ra
+
+
+# hgTrackDb doesn't find html if the trackDb has already appended the .html
+# hgTrackDb barfs on dollar signs because it assumes it's a variable (windowmasker, hgLiftOver)
+# Track chm13.T2T_Encode has non-conforming 'cell' tag '22Rv1' (begins with digit)
+# multiple shortLabel lines

@@ -1,12 +1,12 @@
 <!-- gbPageStartHardcoded.html - Include file for GB static pages on hgdownload to return to https:genome.ucsc.edu-->
 
-<html>
+<html lang='en'>
     <head>
         <meta charset="UTF-8">
         <title>
             <!--#echo var="TITLE" -->
         </title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:700%7CLato:700,700italic,300,400,400italic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
         <!-- Redirects don't forward ROOT, so can't determine relative paths -->
@@ -37,9 +37,9 @@
       <!-- Hardcoded version of Blue menu bar / hotlinks developed for hgdownload server -->
 
         <noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
-        <script type='text/javascript' SRC="<!--#echo var="ROOT" -->/js/jquery.js"></script>
-        <script type='text/javascript' SRC="<!--#echo var="ROOT" -->/js/jquery.plugins.js"></script>
-        <script type='text/javascript' SRC="<!--#echo var="ROOT" -->/js/analytics.js"></script>
+        <script SRC="<!--#echo var="ROOT" -->/js/jquery.js"></script>
+        <script SRC="<!--#echo var="ROOT" -->/js/jquery.plugins.js"></script>
+        <script SRC="<!--#echo var="ROOT" -->/js/analytics.js"></script>
         <div id="main-menu-whole">
           <div id="main-menu"><div id="block-nice_menus-1" class="clear-block block block-nice_menus">
               <div class="upcorner"></div>
@@ -55,6 +55,7 @@
             <ul style="display: none; visibility: hidden;">
               <li class="first"><a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&amp;position=lastDbPos">Human GRCh38/hg38</a></li>
               <li><a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
+              <li><a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hub_3671779_hs1&position=lastDbPos">Human T2T-CHM13/hs1</a></li>
               <li><a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm39&amp;position=lastDbPos">Mouse GRCm39/mm39</a></li>
               <li><a href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
 	      <li><a href="https://hgdownload.soe.ucsc.edu/hubs/">Genome Archive GenArk</a></li>
@@ -134,8 +135,9 @@
               <li class="even"><a href="https://genome.ucsc.edu/goldenPath/releaseLog.html">Release Log</a></li>
               <li class="odd"><a href="https://genome.ucsc.edu/staff.html">Staff</a></li>
               <li class="even"><a href="https://genome.ucsc.edu/conditions.html">Conditions of Use</a></li>
-              <li class="odd"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
-              <li class="even last"><a href="https://genome.ucsc.edu/license/">Licenses</a></li>
+              <li class="odd"><a href="https://genome.ucsc.edu/goldenPath/history.html">Our History</a></li>
+              <li class="even"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
+              <li class="odd last"><a href="https://genome.ucsc.edu/license/">Licenses</a></li>
               <li><a href="https://genome.ucsc.edu/contacts.html">Contact Us</a></li>
             </ul>
           </li>

@@ -131,7 +131,8 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	}
     }
 if (!gotResults)
-    hPrintf(NO_RESULTS);
+    explainWhyNoResults(stdout);
+
 hashFree(&protHash);
 hashFree(&uniqHash);
 }
@@ -155,7 +156,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	}
     }
 if (!gotResults)
-    hPrintf(NO_RESULTS);
+    explainWhyNoResults(stdout);
 hashFree(&uniqHash);
 }
 
@@ -217,7 +218,7 @@ else
 	sqlFreeResult(&sr);
 	hashFree(&hash);
 	if (!gotResults)
-	    hPrintf(NO_RESULTS);
+            explainWhyNoResults(stdout);
 	}
     else
 	{
@@ -275,7 +276,7 @@ for (region = regionList; region != NULL; region = region->next)
     lmCleanup(&lm);
     }
 if (!resultCount)
-    hPrintf(NO_RESULTS);
+    explainWhyNoResults(stdout);
 }
 
 void doGenePredSequence(struct sqlConnection *conn)

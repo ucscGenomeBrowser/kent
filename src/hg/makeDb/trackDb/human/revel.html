@@ -9,9 +9,9 @@ the deleteriousness of each nucleotide change in the genome.
 REVEL is an ensemble method for predicting the pathogenicity of missense variants 
 based on a combination of scores from 13 individual tools: MutPred, FATHMM v2.3, 
 VEST 3.0, PolyPhen-2, SIFT, PROVEAN, MutationAssessor, MutationTaster, LRT, GERP++, 
-SiPhy, phyloP, and phastCons.  REVEL was trained using recently discovered pathogenic 
+SiPhy, phyloP, and phastCons. REVEL was trained using recently discovered pathogenic 
 and rare neutral missense variants, excluding those previously used to train its 
-constituent tools.  The REVEL score for an individual missense variant can range 
+constituent tools. The REVEL score for an individual missense variant can range 
 from 0 to 1, with higher scores reflecting greater likelihood that the variant is 
 disease-causing. 
 </p>
@@ -29,21 +29,54 @@ the reference below)
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-There are four subtracks for this track: one for every nucleotide showing
-a score for the mutation represented by a mutation from the reference to that
-nucleotide. All subtracks show the REVEL ensemble score on mouseover, representing
-each of the possible &#126;9 billion SNVs in the genome. The score is an aggregation 
-of the outputs of the 13 tools.  
+There are five subtracks for this track:
+<ul>
+<li>
+<p>Four lettered subtracks, one for every nucleotide, showing
+scores for mutation from the reference to that
+nucleotide. All subtracks show the REVEL ensemble score on mouseover. Across the exome, 
+there are three values per position, one for every possible
+nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing
+the reference allele, e.g. A to A, is always set to zero, "0.0". REVEL only
+takes into account amino acid changes, so a nucleotide change that results in no
+amino acid change (synonymous) also receives the score "0.0". 
+</p><p>
+In rare cases, two scores are output for the same variant at a 
+genome position. This happens when there are two transcripts with
+different splicing patterns and since some input scores for REVEL take into account
+the sequence context, the same mutation can get two different scores. In these cases,
+only the maximum score is shown in the four per-nucleotide subtracks. The complete set of 
+scores are shown in the Overlaps track.
 </p>
 
-<p>
-For single nucleotide variants (SNV), at every
-genome position, there are three values per position, one for every possible
-nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing 
-the reference allele, e.g. A to A, is always set to zero, "0.0". REVEL only 
-takes into account amino acid changes, so a nucleotide change that results in no
-amino acid change (synonymous) also receives the score "0.0".
+<li>
+<p>One subtrack, Overlaps, shows alternate REVEL scores when applicable. 
+In rare cases (0.05% of genome positions), multiple scores exist with a single variant, 
+due to multiple, overlapping transcripts. For example, if there are 
+two transcripts and one covers only half of an exon, then the amino acids
+that overlap both transcripts will get two different REVEL scores, since some of the underlying 
+scores (polyPhen for example) take into account the amino acid sequence context and 
+this context is different depending on the transcript.
+For these cases, this subtrack contains at least two
+graphical features, for each affected genome position. Each feature is labeled
+with the mutation (A, C, T or G). The transcript IDs and resulting score is 
+shown when hovering over the feature or clicking
+it. For the large majority of the genome, this subtrack has no features.
+This is because REVEL usually outputs only a single score per nucleotide and 
+most transcript-derived amino acid sequence contexts are identical.
 </p>
+<p>
+Note that in most diagnostic assays, variants are called using WGS
+pipelines, not RNA-seq. As a result, variants are originally located on the
+genome, not on transcripts, and the choice of transcript is made by
+a variant calling software using a heuristic. In addition, clinically, in the
+field, some transcripts have been agreed-on as more relevant for a disease, e.g.
+because only certain transcripts may be expressed in the relevant tissue. So
+the choice of the most relevant transcript, and as such the REVEL score, may be
+a question of manual curation standards rather than a result of the variant itself.
+</p>
+</ul>
+
 <p>
 When using this track, zoom in until you can see every basepair at the
 top of the display. Otherwise, there are several nucleotides per pixel under 

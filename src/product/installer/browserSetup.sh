@@ -1,14 +1,18 @@
 #!/bin/bash
 
 # script to install/setup dependencies for the UCSC genome browser CGIs
-# call it like this as root from a command line: bash browserInstall.sh
+# call it like this as root from a command line: bash browserSetup.sh
 
-# you can easily debug this script with 'bash -x browserInstall.sh', it 
+# you can easily debug this script with 'bash -x browserSetup.sh', it 
 # will show all commands then
 
-exec > >(tee -a "${HOME}/browserInstall.log") 2>&1
+exec > >(tee -a "${HOME}/browserSetup.sh") 2>&1
 
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
+
+# set all locale settings to English
+# searching for certain strings in command output might fail, if locale is different
+export LANG=C
 
 exitHandler() {
     if [ "$1" == "100" -o "$1" == "0" ] ; then
@@ -350,6 +354,8 @@ browser.indelOptions=on
 freeType=on
 freeTypeDir=../htdocs/urw-fonts
 
+cramRef=$APACHEDIR/userdata/cramCache
+
 EOF_HGCONF
 
 read -r -d '' HELP_STR << EOF_HELP
@@ -398,7 +404,8 @@ examples:
 All options have to precede the command.
 
 options:
-  -a   - use alternative download server at SDSC
+  -a   - use alternative download server at Univ Bielefeld, Germany
+         (used by default if faster ping time than to UCSC)
   -b   - batch mode, do not prompt for key presses
   -t   - For the "mirror" command: Track selection, requires a value.
          This option is only useful for Human/Mouse assemblies.
@@ -509,20 +516,37 @@ function waitKey ()
 # set MYCNF to the path to my.cnf
 function setMYCNF ()
 {
-    if [ -f /etc/my.cnf ] ; then
-	# Centos 6-8
+    if [ -f /etc/my.cnf.d/mariadb-server.cnf ] ; then
+	# Centos 8 stream: This has to be first, because /etc/my.cnf exists on Centos 8 Stream, but it contains a mysqld section
+        # by default and somehow the section doesn't seem to take effect since a specific [mariadb] section also exists in the mariadb-server.cnf.
+        # As a result, we only modify the mariadb-server config file
+    	MYCNF=/etc/my.cnf.d/mariadb-server.cnf 
+    elif [ -f /etc/mysql/mariadb.conf.d/*-server.cnf ] ; then
+	# Ubuntu with mariadb. Must come before etc/my.cnf
+	MYCNF=/etc/mysql/mariadb.conf.d/*-server.cnf
+    elif [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ] ; then
+	# Ubuntu 16, 18, 20 with mysqld
+    	MYCNF=/etc/mysql/mysql.conf.d/mysqld.cnf
+    elif [ -f /etc/my.cnf ] ; then
+	# generic Centos 6-8
     	MYCNF=/etc/my.cnf
     elif [ -f /etc/mysql/my.cnf ] ; then
-        # Ubuntu 14
+        # generic Ubuntu 14
     	MYCNF=/etc/mysql/my.cnf
-    elif [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ] ; then
-	# Ubuntu 16, 18, 20
-    	MYCNF=/etc/mysql/mysql.conf.d/mysqld.cnf
     else
     	echo Could not find my.cnf. Adapt 'setMYCNF()' in browserSetup.sh and/or contact us.
     	exit 1
     fi
     echo Found Mariadb config file: $MYCNF
+}
+
+function mysqlStrictModeOff () 
+{
+# make sure that missing values in mysql insert statements do not trigger errors, #18368 = deactivate strict mode
+# This must happen before Mariadb is started or alternative Mariadb must be restarted after this has been done
+setMYCNF
+echo Deactivating MySQL strict mode
+sed -Ei '/^.(mysqld|server).$/a sql_mode='  $MYCNF
 }
 
 function mysqlAllowOldPasswords
@@ -729,7 +753,7 @@ function installRedhat () {
        service iptables restart
     fi
     
-    # MYSQL INSTALL ON REDHAT, quite involved, as MariaDB is increasingly the default
+    # MYSQL INSTALL ON REDHAT
 
     # centos7 provides only a package called mariadb-server
     # Mysql 8 does not allow copying MYISAM files anymore into the DB. 
@@ -743,7 +767,7 @@ function installRedhat () {
         exit 100
     fi
     
-    # even mariadb packages currently call their binary /usr/bin/mysqld_safe
+    # even mariadb packages currently call their main wrapper /usr/bin/mysqld_safe
     if [ ! -f /usr/bin/mysqld_safe ]; then
         echo2 
         echo2 Installing the Mysql or MariaDB server and make it start at boot.
@@ -762,11 +786,15 @@ function installRedhat () {
         # start mysql on boot
         chkconfig --level 2345 $MYSQLD on 
 
+        # make sure that missing values in Mysql insert statements do not trigger errors, #18368: deactivate strict mode
+        mysqlStrictModeOff
+
         # start mysql now
-        /sbin/service $MYSQLD start
+        startMysql
 
         secureMysql
         SET_MYSQL_ROOT=1
+
     else
         echo2 Mysql already installed
     fi
@@ -791,7 +819,7 @@ function installRedhat () {
             if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
                 echo /usr/include/mysql/mysql.h already has reconnect attribute
             else
-                sed '/st_mysql_options options;/a    bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
+                sed '/st_mysql_options options;/a    my_bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
             fi
 
 	    # fedora > 34 doesn't have any pip2 package anymore so install it now
@@ -942,10 +970,10 @@ function installOsx ()
 function installDebian ()
 {
     # update repos
-    if [ ! -f /tmp/browserInstall.aptGetUpdateDone ]; then
+    if [ ! -f /tmp/browserSetup.aptGetUpdateDone ]; then
        echo2 Running apt-get update
        apt-get update
-       touch /tmp/browserInstall.aptGetUpdateDone
+       touch /tmp/browserSetup.aptGetUpdateDone
     fi
 
     echo2 Installing ghostscript and imagemagick
@@ -1020,9 +1048,9 @@ function installDebian ()
 	# -> we require mariaDb now
         # apt-get --assume-yes install mysql-server
         apt-get --assume-yes install mariadb-server
-        # make sure that missing values do not trigger errors, #18368
-	setMYCNF
-        sed -i '/^.mysqld.$/a sql_mode=' $MYCNF
+
+        mysqlStrictModeOff
+        startMysql
         # flag so script will set mysql root password later to a random value
         SET_MYSQL_ROOT=1
     fi
@@ -1274,8 +1302,8 @@ function mysqlDbSetup ()
     #       to all database tables.  
 
     mysqlVer=`mysql -e 'SHOW VARIABLES LIKE "version";' -NB | cut -f2 | cut -d- -f1 | cut -d. -f-2`
-    if [[ $mysqlVer == "5.6" ]] ; then
-       # centos7 uses mysql 5.6 which doesn't have IF EXISTS so work around that here
+    if [[ $mysqlVer == "5.6" || $mysqlVer == "5.5" ]] ; then
+       # centos7 uses mysql 5.5 or 5.6 which doesn't have IF EXISTS so work around that here
        $MYSQL -e 'DELETE from mysql.user where user="browser" or user="readonly" or user="readwrite" or user="ctdbuser"'
     else
        $MYSQL -e "DROP USER IF EXISTS browser@localhost"
@@ -1408,6 +1436,10 @@ function installBrowser ()
 
     mysqlDbSetup
 
+    # setup the cram cache so remote cram files will load correctly
+    mkdir -p $APACHEDIR/userdata/cramCache/{error,pending}
+    chmod -R 777 $APACHEDIR/userdata/cramCache
+
     # -------------------
     # CGI installation
     # -------------------
@@ -1467,6 +1499,9 @@ function installBrowser ()
         # don't download RNAplot, it's a 32bit binary that won't work anywhere anymore but at UCSC
         # this means that hgGene cannot show RNA structures but that's not a big issue
         $RSYNC -avzP --exclude=RNAplot $HGDOWNLOAD::cgi-bin/ $CGIBINDIR/
+        # now add the binaries for dot and RNAplot 
+        $RSYNC -avzP $HGDOWNLOAD::genome/admin/exe/external.x86_64/RNAplot $CGIBINDIR/
+        $RSYNC -avzP $HGDOWNLOAD::genome/admin/exe/external.x86_64/loader/dot_static $CGIBINDIR/loader/
     fi
 
     # download the html docs, exclude some big files on OSX
@@ -1601,6 +1636,15 @@ function downloadGenomes
 
     set +f
 
+    # Alexander Stuy reported that at FSU they had a few mysql databases with incorrect users on them
+    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/
+    
+    startMysql
+
+    mysqlCheck
+
+    hideSomeTracks
+
     goOffline # modify hg.conf and remove all statements that use the UCSC download server
 
     echo2
@@ -1644,7 +1688,7 @@ function stopMysql
             # at least seen in Fedora 17
             systemctl stop mysql
     else
-        echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
+        echo2 Could not find mysql nor mysqld file in /etc/init.d nor a systemd command. Please email genome-mirror@soe.ucsc.edu.
     fi
 }
 
@@ -1662,8 +1706,40 @@ function startMysql
             # at least seen in Fedora 17
             systemctl start mysql
     else
-        echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
+        echo2 Could not find mysql nor mysqld file in /etc/init.d nor a systemd command. Please email genome-mirror@soe.ucsc.edu.
     fi
+}
+
+function mysqlCheck
+# check all mysql tables. Rarely, some of them are in an unclosed state on the download server, this command will close them
+{
+    echo2 Checking all mysql tables after the download to make sure that they are closed
+    mysqlcheck --all-databases --auto-repair --quick --fast --silent
+}
+
+function hideSomeTracks
+# hide the big tracks and the ones that we are not allowed to distribute
+{
+    # these tables are not used for searches by default. Searches are very slow. We focus on genes.
+    notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
+
+    # these tracks are hidden by default
+    hideTracks='intronEst cons100way cons46way ucscRetroAli5 mrna omimGene2 omimAvSnp'
+
+    echo2 Hiding some tracks by default and removing some tracks from searches
+    for db in $DBS; do
+       echo $db
+       if [ "$db" == "go" -o "$db" == "uniProt" -o "$db" == "visiGene" -o "$db" == "hgFixed" -o "$db" == "proteome" ] ; then
+               continue
+       fi
+       for track in $hideTracks; do
+            mysql $db -e 'UPDATE trackDb set visibility=0 WHERE tableName="'$track'"'
+        done
+
+       for track in $notSearchTables; do
+            mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
+        done
+    done
 }
 
 # only download a set of minimal mysql tables, to make a genome browser that is using the mysql failover mechanism
@@ -1682,12 +1758,6 @@ function downloadMinimal
     # only these db tables are copied over by default
     minRsyncOpt="--include=cytoBand.* --include=chromInfo.* --include=cytoBandIdeo.* --include=kgColor.* --include=knownAttrs.* --include=knownGene.* --include=knownToTag.* --include=kgXref.* --include=ensemblLift.* --include=ucscToEnsembl.* --include=wgEncodeRegTfbsCells.* --include=encRegTfbsClusteredSources.* --include=tableList.* --include=refSeqStatus.* --include=wgEncodeRegTfbsCellsV3.* --include=extFile.* --include=trackDb.* --include=grp.* --include=ucscRetroInfo5.* --include=refLink.* --include=ucscRetroSeq5.* --include=ensemblLift.* --include=knownCanonical.* --include=gbExtFile.* --include=flyBase2004Xref --include=hgFindSpec.* --include=ncbiRefSeq*"
 
-    # these tables are not used for searches by default. Searches are very slow. We focus on genes.
-    notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
-
-    # these tracks are hidden by default
-    hideTracks='intronEst cons100way cons46way ucscRetroAli5 mrna'
-
     stopMysql
 
     for db in $DBS; do
@@ -1699,21 +1769,14 @@ function downloadMinimal
     echo2 Copying hgFixed.trackVersion, required for most tracks
     $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/trackVersion.* $MYSQLDIR/hgFixed/ 
     echo2 Copying hgFixed.refLink, required for RefSeq tracks across all species
-    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
+    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/
+    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
 
     startMysql
 
-    echo2 Hiding some tracks by default and removing some tracks from searches
-    for db in $DBS; do
-       echo $db
-       for track in $hideTracks; do
-            mysql $db -e 'UPDATE trackDb set visibility=0 WHERE tableName="'$track'"'
-        done
+    hideSomeTracks
 
-       for track in $notSearchTables; do
-            mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
-        done
-    done
+    mysqlCheck
 
     echo2 
     echo2 The mirror should be functional now. It contains some basic assembly tables 
@@ -1786,12 +1849,14 @@ function updateBrowser {
 
    # update the mysql DBs
    stopMysql
-   DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(hgcentral)'`
+   DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(multi-master.info)|(sys)|(lost.found)|(hgcentral)'`
    for db in $DBS; do 
        echo2 syncing full mysql database: $db
        $RSYNC --update --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
    done
    startMysql
+
+   hideSomeTracks
 
    echo2 update finished
 }
@@ -1839,9 +1904,6 @@ while getopts ":baeut:hof" opt; do
       }
       ;;
     a)
-      HGDOWNLOAD=hgdownload-sd.sdsc.edu
-      ;;
-    e)
       HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
       ;;
     t)

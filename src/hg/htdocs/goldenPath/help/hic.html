@@ -10,18 +10,29 @@
 <a href="https://github.com/aidenlab/juicer/wiki/Data/#hic-files" target="_blank">Hic format</a>
 is an indexed binary format designed to permit fast random access to contact matrix heatmaps.  The
 format was designed by the <a href="https://www.aidenlab.org/" target="_blank">Aiden Lab</a>
-at <a href="https://www.bcm.edu/" target="_blank">Baylor College of Medicine</a>.  
-</p><p>
-The format is used for displaying chromatin conformation data in the browser.  After running a
-chromatin conformation experiment such as <em>in situ</em> Hi-C, researchers can pass their results through
-the <a href="https://github.com/aidenlab/juicer/wiki" target="_blank">Juicer</a> pipeline to 
+at <a href="https://www.bcm.edu/" target="_blank">Baylor College of Medicine</a>. More information
+on the hic format itself can be found in the documentation on
+<a href="https://github.com/aidenlab/juicer/wiki/Data/#hic-files" target="_blank">Github</a>.
+</p>
+<p>
+The format is used for displaying chromatin conformation data in the browser. This format is useful
+for displaying interactions at a scale and depth that exceeds what can be easily visualized with the
+interact and bigInteract formats. After running a chromatin conformation experiment such as
+<em>in situ</em> Hi-C, researchers can pass their results through the
+<a href="https://github.com/aidenlab/juicer/wiki" target="_blank">Juicer</a> pipeline to
 produce a hic file. Due to the large size of many of these files, UCSC is not able to support
 direct upload via our Custom Track interface. Instead, users should place their Hic files in a 
 web-accessible space and enter the URL as a bigDataUrl. If you do not have access to a 
 web-accessible server and need hosting space for your Hic files, please see the 
 <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>
 
-<p>The UCSC tools currently support hic versions 6-8.</p>
+<p>The UCSC tools currently support hic versions 6-8.
+The <a target="_blank" href="hgHicTrackHelp.html">hic track configuration</a> help page
+describes hic display options.
+</p>
+<div class='text-center'>
+  <img src="../../images/hicDrawModes.png" alt="hic draw modes">
+</div>
 
 <h2>Generating a hic track</h2>
 <p>
@@ -123,6 +134,11 @@ mode alongside the other tracks in this hub. You can find more Track Hub hic dis
 Document</a> page.</p>
 <pre><code><a href="../../cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt"
 target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</a> </code></pre>
+<div class="text-center">
+  <a href="../../cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt">
+   <img src="../../images/hic_image" alt="Ex hic image from track hub" width="700">
+  </a>
+</div>
 
 <h2>Sharing Your Data with Others</h2>
 <p>

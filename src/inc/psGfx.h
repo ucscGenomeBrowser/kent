@@ -18,6 +18,7 @@ struct psGfx
     double xScale, yScale;        /* Conversion from pixels to points. */
     double xOff, yOff;            /* Offset from pixels to points. */
     double fontHeight;		  /* Height of current font. */
+    boolean newTransOps;          /* Local GS supports newer transparency operators */
     };
 
 struct psGfx *psOpen(char *fileName, 
@@ -92,6 +93,9 @@ void psTimesFont(struct psGfx *ps, double size);
 
 void psSetColor(struct psGfx *ps, int r, int g, int b);
 /* Set current color. r/g/b values are between 0 and 255. */
+
+void psSetColorAlpha(struct psGfx *ps, int a);
+/* Set current color alpha. a values are between 0 (transparent) and 255 (opaque). */
 
 void psSetGray(struct psGfx *ps, double grayVal);
 /* Set gray value (between 0.0 and 1.0. */

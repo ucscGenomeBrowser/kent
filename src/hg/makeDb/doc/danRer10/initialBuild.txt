@@ -600,4 +600,83 @@ searchPriority 8
     hgLoadSqlTab danRer10 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         danRer10.chromAlias.tab
 
-#########################################################################
+##############################################################################
+# crispr whole genome (DONE - 2023-11-04 - Hiram)
+    # redmine issue 21863: https://redmine.soe.ucsc.edu/issues/21863
+
+    mkdir /hive/data/genomes/danRer10/bed/crisprAll
+    cd /hive/data/genomes/danRer10/bed/crisprAll
+
+    # make sure it can get started
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+      -stop=guides -buildDir=`pwd` -smallClusterHub=hgwdev danRer10) \
+           > guides.log 2>&1
+    # real    30m39.710s
+    sed -e 's/^/# /;' guides/run.time
+# Completed: 99 of 99 jobs
+# CPU time in finished jobs:       5510s      91.83m     1.53h    0.06d  0.000 y
+# IO & Wait Time:                   273s       4.55m     0.08h    0.00d  0.000 y
+# Average job time:                  58s       0.97m     0.02h    0.00d
+# Longest finished job:              96s       1.60m     0.03h    0.00d
+# Submission to last job:           105s       1.75m     0.03h    0.00d
+
+    # looks good, let it run through the load:
+    time ~/kent/src/hg/utils/automation/doCrispr.pl -continue=specScoreJobList \
+        -stop=load -buildDir=`pwd` -smallClusterHub=hgwdev danRer10) \
+           > load.log 2>&1
+    # real    2523m24.976s
+
+    sed -e 's/^/# /;' specScores/run.time
+# Completed: 840309 of 840309 jobs
+# CPU time in finished jobs:   46880766s  781346.10m 13022.43h  542.60d  1.487 y
+# IO & Wait Time:               1164411s   19406.85m   323.45h   13.48d  0.037 y
+# Average job time:                  57s       0.95m     0.02h    0.00d
+# Longest finished job:             145s       2.42m     0.04h    0.00d
+# Submission to last job:        116299s    1938.32m    32.31h    1.35d
+
+    sed -e 's/^/# /;'  effScores/run.time
+# Completed: 9536 of 9536 jobs
+# CPU time in finished jobs:    4820886s   80348.09m  1339.13h   55.80d  0.153 y
+# IO & Wait Time:                 41241s     687.36m    11.46h    0.48d  0.001 y
+# Average job time:                 510s       8.50m     0.14h    0.01d
+# Longest finished job:            2057s      34.28m     0.57h    0.02d
+# Submission to last job:          9265s     154.42m     2.57h    0.11d
+
+    sed -e 's/^/# /;'  offTargets/run.time
+# Completed: 42016 of 42016 jobs
+# CPU time in finished jobs:     558233s    9303.88m   155.06h    6.46d  0.018 y
+# IO & Wait Time:                309956s    5165.94m    86.10h    3.59d  0.010 y
+# Average job time:                  21s       0.34m     0.01h    0.00d
+# Longest finished job:              34s       0.57m     0.01h    0.00d
+# Submission to last job:          1102s      18.37m     0.31h    0.01d
+
+
+    # that made the table crispr10K and symlinks in /gbdb/danRer10/crisrp10K/
+    # when it should have been instead crisprAll, reset the links and reload
+    # the correct table:
+mkdir -p /gbdb/danRer10/crisprAll/
+rm -f /gbdb/danRer10/crisprAll/crispr.bb
+rm -f /gbdb/danRer10/crisprAll/crisprDetails.tab
+ln -sf `pwd`/crispr.bb /gbdb/danRer10/crisprAll/crispr.bb
+ln -sf `pwd`/crisprDetails.tab /gbdb/danRer10/crisprAll/crisprDetails.tab
+hgBbiDbLink danRer10 crisprAllTargets /gbdb/danRer10/crisprAll/crispr.bb
+
+    hgsql -e 'drop table crispr10K;' danRer10
+
+    grep -c . effScores.tab
+    # 95378380
+    grep -c . specScores.tab
+    # 61805075
+
+    time (cut -f1-3 crispr.bed | bedSingleCover.pl stdin \
+       | awk '{sum+=$3-$2}END{printf "%d bases\n", sum}') \
+            > coverage.crispr.bed.txt 2>&1
+    936176533 bases
+    real    4m42.959s
+    ave -col=2 ../../*.sizes | grep total
+    total 1371719383.000000
+    # 'featureBits' result:
+    echo "scale+=3; 100.0 * 936176533 / 1371719383" | bc
+    68.248
+
+##############################################################################

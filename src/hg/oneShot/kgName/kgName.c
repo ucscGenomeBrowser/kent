@@ -52,7 +52,7 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
     struct sqlResult *sr;
     char **row;
 
-    sqlSafefFrag(cond_str, sizeof cond_str, "name='%s' and seqType='g'", id);
+    sqlSafef(cond_str, sizeof cond_str, "name='%s' and seqType='g'", id);
     seqType = sqlGetField(conn, database, "knownGeneLink", "seqType", cond_str);
 
     if (seqType != NULL)
@@ -67,10 +67,10 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
 	}
     else if (protDbName != NULL)
 	{
-	sqlSafefFrag(cond_str, sizeof cond_str, "mrnaID='%s'", id);
+	sqlSafef(cond_str, sizeof cond_str, "mrnaID='%s'", id);
 	proteinID = sqlGetField(conn, database, "spMrna", "spID", cond_str);
 
-	sqlSafefFrag(cond_str, sizeof cond_str, "displayID = '%s'", proteinID);
+	sqlSafef(cond_str, sizeof cond_str, "displayID = '%s'", proteinID);
 	hugoID = sqlGetField(conn, protDbName, "spXref3", "hugoSymbol", cond_str);
 	if (!((hugoID == NULL) || (*hugoID == '\0')) )
 	    {

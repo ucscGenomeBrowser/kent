@@ -118,11 +118,11 @@ void chicken13kInfoSaveToDb(struct sqlConnection *conn, struct chicken13kInfo *e
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s','%s',%s,'%s',%s,%s,%s)", 
 	tableName,  el->id,  el->source,  el->pcr,  el->library,  el->clone,  el->gbkAcc,  el->blat,  el->sourceAnnot,  el->tigrTc,  el->tigrTcAnnot,  el->blastAnnot,  el->comment);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

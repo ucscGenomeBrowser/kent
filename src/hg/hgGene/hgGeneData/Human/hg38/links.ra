@@ -18,8 +18,8 @@ priority 10
 
 name gencode
 shortLabel Gencode
-tables knownToGencodeV20
-idSql select value from knownToGencodeV20 where name = '%s';
+tables knownToGencodeV39
+idSql select value from knownToGencodeV39 where name = '%s';
 url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
 priority 10
 

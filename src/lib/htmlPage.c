@@ -1323,7 +1323,7 @@ char *htmlFormCgiVars(struct htmlPage *page, struct htmlForm *form,
 /* Return cgi vars in name=val format from use having pressed
  * submit button of given name and value. */
 {
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 struct htmlFormVar *var;
 boolean isMime = isMimeEncoded(form);
 int mimeParts = 0;

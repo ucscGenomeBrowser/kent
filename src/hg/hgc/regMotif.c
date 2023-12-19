@@ -98,7 +98,7 @@ struct dnaMotif *loadDnaMotif(char *motifName, char *motifTable)
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct dnaMotif *motif;
-sqlSafefFrag(query, sizeof query, "name = '%s'", motifName);
+sqlSafef(query, sizeof query, "name = '%s'", motifName);
 motif = dnaMotifLoadWhere(conn, motifTable, query);
 hFreeConn(&conn);
 return motif;
@@ -223,7 +223,7 @@ printTrackHtml(tdb);
 void doFlyreg(struct trackDb *tdb, char *item)
 /* flyreg.org: Drosophila DNase I Footprint db. */
 {
-struct dyString *query = newDyString(256);
+struct dyString *query = dyStringNew(256);
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
@@ -660,9 +660,11 @@ if (probe != NULL)
     /* Fold in motif hits in region. */
     if (sqlTableExists(conn, codeTable))
         {
+	char sqlClause[1024];
+        sqlSafef(sqlClause, sizeof sqlClause, "chipEvidence != 'none'");
 	sr = hRangeQuery(conn, codeTable,
 		probe->chrom, probe->chromStart, probe->chromEnd,
-		"chipEvidence != 'none'", &rowOffset);
+		sqlClause, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    trc = transRegCodeLoad(row+rowOffset);

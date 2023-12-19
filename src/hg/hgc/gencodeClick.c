@@ -5,6 +5,7 @@
 #include "common.h"
 #include "hgc.h"
 #include "gencodeClick.h"
+#include "gencodeTracksCommon.h"
 #include "ccdsClick.h"
 #include "genePred.h"
 #include "genePredReader.h"
@@ -25,6 +26,7 @@
 #include "encode/wgEncodeGencodeEntrezGene.h"
 #include "encode/wgEncodeGencodeAnnotationRemark.h"
 #include "encode/wgEncodeGencodeTranscriptionSupportLevel.h"
+#include "encode/wgEncodeGencodeGeneSymbol.h"
 
 /*
  * General notes:
@@ -53,40 +55,34 @@ static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/pages/biotypes.ht
 static char *gencodeTagsUrl = "http://www.gencodegenes.org/pages/tags.html";
 
 static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
-static char *hgncUrl = " https://www.genenames.org/data/gene-symbol-report/#!/symbol/%s";
+static char *apprisHomeUrl = "https://appris.bioinfo.cnio.es/#/";
+static char *apprisGeneUrl = "https://appris.bioinfo.cnio.es/#/database/id/%s/%s?sc=ensembl";
+
+// species-specific
+static char *hgncByIdUrl = "https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/%s";
+static char *hgncBySymUrl = " https://www.genenames.org/data/gene-symbol-report/#!/symbol/%s";
 static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s";
-static char *apprisHomeUrl = "http://appris-tools.org/";
-static char *apprisGeneUrl = "http://appris-tools.org/#/database/id/%s/%s?sc=ensembl";
+static char *mgiBySymUrl = "http://www.informatics.jax.org/quicksearch/summary?queryType=exactPhrase&query=%s";
+static char *mgiByIdUrl = "http://www.informatics.jax.org/accession/%s";
 
 static char* UNKNOWN = "unknown";
 
-static char *getBaseAcc(char *acc, char *accBuf, int accBufSize)
-/* get the accession with version number dropped. */
+static boolean isGrcHuman()
+/* is this a GRC human assembly? */
 {
-safecpy(accBuf, accBufSize, acc);
-char *dot = strchr(accBuf, '.');
-if (dot != NULL)
-    *dot = '\0';
-return accBuf;
+if (startsWith("hg", database))
+    return TRUE;
+else if (startsWith("mm", database))
+    return FALSE;
+else
+    errAbort("BUG: gencodeClick on wrong database: %s", database);
+    return FALSE;
 }
 
-static bool haveGencodeTable(struct trackDb *tdb, char *tableBase)
-/* determine if table is in settings and thus in this gencode release */
+static bool haveGencodeTable(struct sqlConnection *conn, struct trackDb *tdb, char *tableBase)
+/* determine if a gencode table exists; it might be option or not in older releases */
 {
-return trackDbSetting(tdb, tableBase) != NULL;
-}
-
-static char *getGencodeTable(struct trackDb *tdb, char *tableBase)
-/* get a table name from the settings. */
-{
-return trackDbRequiredSetting(tdb, tableBase);
-}
-
-static char* getGencodeVersion(struct trackDb *tdb)
-/* get the GENCODE version or NULL for < V7, which is not supported
- * by this module. */
-{
-return trackDbSetting(tdb, "wgEncodeGencodeVersion");
+return sqlTableExists(conn, gencodeGetTableName(tdb, tableBase));
 }
 
 static boolean isGrcH37Native(struct trackDb *tdb)
@@ -94,16 +90,30 @@ static boolean isGrcH37Native(struct trackDb *tdb)
 {
 // check for non-lifted GENCODE on GRCh37/hg19
 if (sameString(database, "hg19"))
-    return stringIn("lift37", getGencodeVersion(tdb)) == NULL;
+    return stringIn("lift37", gencodeGetVersion(tdb)) == NULL;
 else
     return FALSE;
 }
 
-static boolean isFakeGeneSymbol(char* sym)
-/* is this a static gene symbol? */
+static boolean isRealGeneSymbol(char* geneName, boolean haveGeneSymbolSource,
+                                struct wgEncodeGencodeGeneSymbol *geneSymbolSource)
+/* Attempt to determine if this is a gene symbol assigned by HGNC/MGI or a
+ * generate one.  newer versions of GENCODE have wgEncodeGencodeGeneSymbol,
+ * which has the definitions.  With older version of GENCODE guess a guess
+ * is make by trying to match older clone-based names ones.
+ */
 {
-static const char *regexp = "^AC[0-9]+\\.[0-9]+$";
-return regexMatch(sym, regexp);
+if (haveGeneSymbolSource)
+    {
+    return geneSymbolSource != NULL;
+    }
+else
+    {
+    // 'A' followed by one or more letters, then followed by numbers and a '.',
+    // followed by an incrementing gene number.
+    static const char *regexp = "^A[A-Z]+[0-9]+\\.[0-9]+$1)";
+    return regexMatch(geneName, regexp);
+    }
 }
 
 static int transAnnoCmp(const void *va, const void *vb)
@@ -133,7 +143,7 @@ static struct genePred *transAnnoLoad(struct sqlConnection *conn, struct trackDb
 {
 // must check chrom due to PAR
 char where[256];
-sqlSafefFrag(where, sizeof(where), "(chrom = \"%s\") and (name = \"%s\")", seqName, gencodeId);
+sqlSafef(where, sizeof(where), "(chrom = \"%s\") and (name = \"%s\")", seqName, gencodeId);
 struct genePred *transAnno = genePredReaderLoadQuery(conn, tdb->track, where);
 slSort(&transAnno, transAnnoCmp);
 return transAnno;
@@ -144,12 +154,12 @@ static struct wgEncodeGencodeAttrs *transAttrsLoad(struct trackDb *tdb, struct s
 {
 char query[1024];
 sqlSafef(query, sizeof(query), "select * from %s where transcriptId = \"%s\"",
-         getGencodeTable(tdb, "wgEncodeGencodeAttrs"), gencodeId);
+         gencodeGetTableName(tdb, "wgEncodeGencodeAttrs"), gencodeId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("gencode transcript %s not found in %s", gencodeId,
-             getGencodeTable(tdb, "wgEncodeGencodeAttrs"));
+             gencodeGetTableName(tdb, "wgEncodeGencodeAttrs"));
 // older version don't have proteinId column.
 struct wgEncodeGencodeAttrs *transAttrs = wgEncodeGencodeAttrsLoad(row, sqlCountColumns(sr));
 sqlFreeResult(&sr);
@@ -162,7 +172,7 @@ static void getGeneBounds(struct trackDb *tdb, struct sqlConnection *conn, struc
 {
 // must check chrom due to PAR
 char where[256];
-sqlSafefFrag(where, sizeof(where), "(chrom = \"%s\") and (name2 = \"%s\")", seqName, transAnno->name2);
+sqlSafef(where, sizeof(where), "(chrom = \"%s\") and (name2 = \"%s\")", seqName, transAnno->name2);
 struct genePred *geneAnnos = genePredReaderLoadQuery(conn, tdb->track, where);
 struct genePred *geneAnno;
 *geneChromStart = transAnno->txStart;
@@ -179,7 +189,7 @@ static void *metaDataLoad(struct trackDb *tdb, struct sqlConnection *conn, char 
 /* load autoSql objects for gencode meta data. */
 {
 return sqlQueryObjs(conn, loadFunc, queryOpts, "select * from %s where %s = \"%s\"",
-                    getGencodeTable(tdb, tableBase), keyCol, gencodeId);
+                    gencodeGetTableName(tdb, tableBase), keyCol, gencodeId);
 }
 
 static int uniProtDatasetCmp(const void *va, const void *vb)
@@ -301,7 +311,7 @@ subChar(speciesArg, ' ', '_');
 
 char accBuf[64];
 printf("<td><a href=\"");
-printf(urlTemplate, speciesArg, getBaseAcc(id, accBuf, sizeof(accBuf)));
+printf(urlTemplate, speciesArg, gencodeBaseAcc(id, accBuf, sizeof(accBuf)));
 printf("\" target=_blank>%s</a>", label);
 
 freeMem(speciesArg);
@@ -319,11 +329,11 @@ static bool geneHasApprisTranscripts(struct trackDb *tdb, struct sqlConnection *
 /* check if any transcript in a gene has an APPRIS tags */
 {
 char query[1024];
-sqlSafefFrag(query, sizeof(query),
+sqlSafef(query, sizeof(query),
       "%s tag where tag.tag like 'appris%%' and transcriptId in "
       "(select transcriptId from %s where geneId='%s')",
-      getGencodeTable(tdb, "wgEncodeGencodeTag"),
-      getGencodeTable(tdb, "wgEncodeGencodeAttrs"),
+      gencodeGetTableName(tdb, "wgEncodeGencodeTag"),
+      gencodeGetTableName(tdb, "wgEncodeGencodeAttrs"),
       transAttrs->geneId);
 return sqlRowCount(conn, query) > 0;
 }
@@ -376,11 +386,58 @@ else
 printf("</tr>\n");
 }
 
+
+static void writeHumanGeneLinkout(struct wgEncodeGencodeAttrs *transAttrs,
+                                  boolean haveGeneSymbolSource, struct wgEncodeGencodeGeneSymbol *geneSymbolSource)
+/* Write external gene database links for human if they appear to be a real
+ * gene symbol Getting it wrong is not a disaster, as the target database will
+ * just report not found.
+ */
+{
+boolean isReal = isRealGeneSymbol(transAttrs->geneName, haveGeneSymbolSource, geneSymbolSource);
+printf("<tr><th>HGNC gene information<td colspan=2>");
+if (isReal)
+    {
+    if (haveGeneSymbolSource)
+        prExtIdAnchor(geneSymbolSource->geneId, hgncByIdUrl);
+    else
+        prExtIdAnchor(transAttrs->geneName, hgncBySymUrl);
+
+    }
+printf("</tr>\n");
+
+printf("<tr><th>GeneCards<td colspan=2>");
+if (isReal)
+    prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
+printf("</tr>\n");
+}
+
+static void writeMouseGeneLinkout(struct wgEncodeGencodeAttrs *transAttrs,
+                                  boolean haveGeneSymbolSource, struct wgEncodeGencodeGeneSymbol *geneSymbolSource)
+/* Write external gene database links for mouse if they appear to be a real
+ * gene symbol Getting it wrong is not a disaster, as the target database will
+ * just report not found.
+ */
+{
+boolean isReal = isRealGeneSymbol(transAttrs->geneName, haveGeneSymbolSource, geneSymbolSource);
+printf("<tr><th>MGI gene information<td colspan=2>");
+if (isReal)
+    {
+    if (haveGeneSymbolSource)
+        prExtIdAnchor(geneSymbolSource->geneId, mgiByIdUrl);
+    else
+        prExtIdAnchor(transAttrs->geneName, mgiBySymUrl);
+    }
+printf("</tr>\n");
+
+}
+
 static void writeBasicInfoHtml(struct sqlConnection *conn, struct trackDb *tdb, char *gencodeId, struct genePred *transAnno,
                                struct wgEncodeGencodeAttrs *transAttrs,
                                int geneChromStart, int geneChromEnd,
                                struct wgEncodeGencodeGeneSource *geneSource, struct wgEncodeGencodeTranscriptSource *transcriptSource,
-                               struct wgEncodeGencodeTag *tags, bool haveTsl, struct wgEncodeGencodeTranscriptionSupportLevel *tsl)
+                               struct wgEncodeGencodeTag *tags, bool haveTsl, struct wgEncodeGencodeTranscriptionSupportLevel *tsl,
+                               boolean haveGeneSymbolSource, struct wgEncodeGencodeGeneSymbol *geneSymbolSource)
 /* write basic HTML info for all genes */
 {
 // basic gene and transcript information
@@ -435,10 +492,12 @@ if (haveTsl)
     char *tslDesc = getSupportLevelDesc(tsl);
     printf("<tr><th><a href=\"#tsl\">Transcription Support Level</a><td><a href=\"#%s\">%s</a><td></tr>\n", tslDesc, tslDesc);
     }
-printf("<tr><th>HGNC gene symbol<td colspan=2>");
-if (!isFakeGeneSymbol(transAttrs->geneName))
-    prExtIdAnchor(transAttrs->geneName, hgncUrl);
-printf("</tr>\n");
+
+if (isGrcHuman())
+    writeHumanGeneLinkout(transAttrs, haveGeneSymbolSource, geneSymbolSource);
+else
+    writeMouseGeneLinkout(transAttrs, haveGeneSymbolSource, geneSymbolSource);
+
 
 printf("<tr><th>CCDS<td>");
 if (!isEmpty(transAttrs->ccdsId))
@@ -448,11 +507,12 @@ if (!isEmpty(transAttrs->ccdsId))
     printf("\" target=_blank>%s</a>", transAttrs->ccdsId);
     }
 printf("<td></tr>\n");
-
-printf("<tr><th>GeneCards<td colspan=2>");
-if (!isFakeGeneSymbol(transAttrs->geneName))
-    prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
-printf("</tr>\n");
+if (transAttrs->transcriptRank > 0)
+    {
+    // older versions will have rank of zero
+    printf("<tr><th>Transcript rank<td>%d<td></tr>\n",
+           transAttrs->transcriptRank);
+    }
 
 if (isProteinCodingTrans(transAttrs))
     writeAprrisRow(conn, tdb, transAttrs, tags);
@@ -522,7 +582,7 @@ while ((pdb != NULL) || (rowCnt == 0))
         printf("<td width=\"33.33%%\">");
         if (pdb != NULL)
             {
-            printf("<a href=\"http://www.rcsb.org/pdb/cgi/explore.cgi?job=graphics&pdbId=%s\" target=_blank>%s</a>", pdb->pdbId, pdb->pdbId);
+            printf("<a href=\"https://www.rcsb.org/structure/%s\" target=_blank>%s</a>", pdb->pdbId, pdb->pdbId);
             pdb = pdb->next;
             }
         }
@@ -842,29 +902,31 @@ struct wgEncodeGencodeAttrs *transAttrs = transAttrsLoad(tdb, conn, gencodeId);
 char *gencodeGeneId = transAttrs->geneId;
 struct wgEncodeGencodeGeneSource *geneSource = metaDataLoad(tdb, conn, gencodeGeneId, "wgEncodeGencodeGeneSource", "geneId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeGeneSourceLoad);
 struct wgEncodeGencodeTranscriptSource *transcriptSource = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptSource", "transcriptId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeTranscriptSourceLoad);
-bool haveRemarks = haveGencodeTable(tdb, "wgEncodeGencodeAnnotationRemark");
+bool haveRemarks = haveGencodeTable(conn, tdb, "wgEncodeGencodeAnnotationRemark");
 struct wgEncodeGencodeAnnotationRemark *remarks = haveRemarks ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeAnnotationRemark", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeAnnotationRemarkLoad) : NULL;
 struct wgEncodeGencodePdb *pdbs = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodePdb", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePdbLoad);
 struct wgEncodeGencodePubMed *pubMeds = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodePubMed", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePubMedLoad);
-bool haveEntrezGene = haveGencodeTable(tdb, "wgEncodeGencodeEntrezGene");
+bool haveEntrezGene = haveGencodeTable(conn, tdb, "wgEncodeGencodeEntrezGene");
 struct wgEncodeGencodeEntrezGene *entrezGenes = haveEntrezGene ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeEntrezGene", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeEntrezGeneLoad) : NULL;
 struct wgEncodeGencodeRefSeq *refSeqs = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeRefSeq", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeRefSeqLoad);
 struct wgEncodeGencodeTag *tags = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTag", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTagLoad);
 struct wgEncodeGencodeTranscriptSupport *transcriptSupports = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTranscriptSupportLoad);
 struct wgEncodeGencodeExonSupport *exonSupports = NULL;
 // exonSupports not available in back mapped GENCODE releases
-if (haveGencodeTable(tdb, "wgEncodeGencodeExonSupport"))
+if (haveGencodeTable(conn, tdb, "wgEncodeGencodeExonSupport"))
     exonSupports = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeExonSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeExonSupportLoad);
 struct wgEncodeGencodeUniProt *uniProts = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeUniProt", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeUniProtLoad);
 slSort(&uniProts, uniProtDatasetCmp);
-bool haveTsl = haveGencodeTable(tdb, "wgEncodeGencodeTranscriptionSupportLevel");
+bool haveTsl = haveGencodeTable(conn, tdb, "wgEncodeGencodeTranscriptionSupportLevel");
 struct wgEncodeGencodeTranscriptionSupportLevel *tsl = haveTsl ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptionSupportLevel", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeTranscriptionSupportLevelLoad) : NULL;
-
+boolean haveGeneSymbolSource = haveGencodeTable(conn, tdb, "wgEncodeGencodeGeneSymbol");
+struct wgEncodeGencodeGeneSymbol *geneSymbolSource = haveGeneSymbolSource ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeGeneSymbol", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeGeneSymbolLoad) : NULL;
+    
 int geneChromStart, geneChromEnd;
 getGeneBounds(tdb, conn, transAnno, &geneChromStart, &geneChromEnd);
 
 char title[256];
-safef(title, sizeof(title), "GENCODE V%s Transcript Annotation", getGencodeVersion(tdb));
+safef(title, sizeof(title), "GENCODE V%s Transcript Annotation", gencodeGetVersion(tdb));
 char header[256];
 safef(header, sizeof(header), "%s %s", title, gencodeId);
 if (!isEmpty(transAttrs->geneName))
@@ -874,7 +936,8 @@ else
 cartWebStart(cart, database, "%s", header);
 printf("<H2>%s</H2>\n", header);
 
-writeBasicInfoHtml(conn, tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource, tags, haveTsl, tsl);
+writeBasicInfoHtml(conn, tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource, tags,
+                   haveTsl, tsl, haveGeneSymbolSource, geneSymbolSource);
 writeTagLinkHtml(tags);
 writeSequenceHtml(tdb, gencodeId, transAnno);
 if (haveRemarks)
@@ -900,6 +963,7 @@ wgEncodeGencodeRefSeqFreeList(&refSeqs);
 wgEncodeGencodeTranscriptSupportFreeList(&transcriptSupports);
 wgEncodeGencodeExonSupportFreeList(&exonSupports);
 wgEncodeGencodeUniProtFreeList(&uniProts);
+wgEncodeGencodeGeneSymbolFreeList(&geneSymbolSource);
 wgEncodeGencodeTranscriptionSupportLevelFreeList(&tsl);
 }
 
@@ -956,5 +1020,5 @@ bool isNewGencodeGene(struct trackDb *tdb)
 /* is this a new-style gencode (>= V7) track, as indicated by
  * the presence of the wgEncodeGencodeVersion setting */
 {
-return getGencodeVersion(tdb) != NULL;
+return trackDbSetting(tdb, "wgEncodeGencodeVersion") != NULL;
 }

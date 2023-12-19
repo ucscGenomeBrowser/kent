@@ -138,7 +138,7 @@ fputc(lastSep,f);
 void chainDbAddBlocks(struct chain *chain, char *track, struct sqlConnection *conn)
 /* Add blocks to chain header. */
 {
-struct dyString *query = newDyString(1024);
+struct dyString *query = dyStringNew(1024);
 struct sqlResult *sr = NULL;
 char **row;
 struct cBlock *b;

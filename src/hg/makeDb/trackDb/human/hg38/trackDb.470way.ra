@@ -1,0 +1,176 @@
+track cons470way
+compositeTrack on
+shortLabel Multiz 470-way
+longLabel Multiz Alignment & Conservation (470 mammals)
+subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
+dragAndDrop subTracks
+visibility hide
+type bed 4
+group compGeno
+
+    track cons470wayViewalign
+    shortLabel Multiz 470-way
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons470way
+
+        track multiz470way
+        subTrack cons470wayViewalign on
+        shortLabel Multiz 470-way
+        longLabel Multiz Alignments of 470 mammals
+        priority 5
+        subGroups view=align
+        noInherit on
+        type bigMaf
+        viewUi on
+        treeImage phylo/hg38_470way.png
+        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf
+        summary https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470waySummary.bb
+        frames https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470wayFrames.bb
+        irows on
+        itemFirstCharCase noChange
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        speciesCodonDefault hg38
+        speciesGroups Primates Euarchontoglires Carnivore Laurasiatheria Cetartiodactyla Artiodactyla Xenarthra Chiroptera Glires Afrotheria Metatheria Monotremata
+       sGroup_Primates panTro6 panPan3 gorGor6 ponAbe3 HLnomLeu4 HLhylMol2 rheMac10 HLmacFas6 HLtheGel1 HLmacFus1 HLrhiRox2 chlSab2 HLpapAnu5 cerAty1 HLmanSph1 macNem1 HLtraFra1 HLpygNem1 HLpilTep2 HLeryPat1 HLallNig1 rhiBie1 HLcerMon1 manLeu1 HLsemEnt1 colAng1 HLcerNeg1 HLpitPit1 HLateGeo1 HLsapApe1 HLaloPal1 HLpleDon1 cebCap1 HLcalJac4 aotNan1 HLsagImp1 HLcalPym1 HLcebAlb1 nasLar1 HLsaiBol1 saiBol1 HLdauMad1 tarSyr2 HLindInd1 HLmirZaz1 eulMac1 micMur3 HLproSim1 HLeulFla1 HLmirCoq1 HLlemCat1 HLcheMed1 HLmicSpe31 HLeulFul1 eulFla1 HLmicTav1 HLeulMon1 proCoq1 HLnycCou1 otoGar3
+       sGroup_Euarchontoglires HLgalVar2 tupChi1 tupBel1
+       sGroup_Carnivore HLphoVit1 HLzalCal1 HLodoRos1 HLursArc1 HLeumJub1 odoRosDiv1 neoSch1 HLcalUrs1 HLmirLeo1 HLursThi1 HLeriBar1 HLhalGry1 HLmirAng2 ursMar1 HLursAme2 HLailMel2 felCat9 HLneoNeb1 HLaciJub2 HLpanPar1 HLpanLeo1 HLursAme1 HLlynCan1 HLpumYag1 lepWed1 panTig1 HLpanOnc1 HLpanOnc2 HLarcGaz2 HLcryFer2 canFam4 HLlynPar1 HLpriBen1 enhLutKen1 canFam5 HLailFul2 HLcanLupDin1 HLlonCan1 HLlutLut1 HLvulVul1 HLpumCon1 HLmusErm1 HLpotFla1 HLpteBra2 HLlycPic3 HLhyaHya1 enhLutNer1 HLpteBra1 HLfelNig1 HLmelCap1 HLmusFur2 HLmarZib1 HLvulLag1 HLmusPut1 HLcroCro1 HLparHer1 HLgulGul1 HLneoVis1 HLsurSur1 HLmunMug1 HLbasSum1 HLspiGra1 HLhelPar1 HLsurSur2 HLtaxTax1 HLnasNar1 HLproLot1 HLlycPic2
+       sGroup_Laurasiatheria HLdicBic1 cerSim1 HLrhiUni1 HLdicSum1 HLtapInd1 HLtapTer1 HLtapInd2 equCab3 HLcerSimCot1 HLequAsi1 HLequQuaBoe1 HLequAsiAsi2 equPrz1 HLmanPen2 HLphaTri2 HLmanJav1 HLmanJav2 HLmanTri1 manPen1 HLsolPar1 HLtalOcc1 HLscaAqu1 HLuroGra1 conCri1 sorAra2 eriEur2
+       sGroup_Cetartiodactyla HLescRob1 HLphyCat2 HLhipAmp3 HLdelLeu2 HLturTru4 phyCat1 HLturAdu2 orcOrc1 HLsouChi1 lipVex1 HLturAdu1 HLbalBon1 HLphoPho1 HLphoPho2 HLturTru3 turTru2 HLcamDro2 HLhipAmp1 HLcamFer3 HLcamBac1 vicPac2 susScr11 bosTau9 HLbubBub2 HLodoVir3 HLelaDav1 HLbosInd2 HLoviAri5 HLcapHir2 HLodoVir2 HLbosMut2 HLcapAeg1 HLammLer1 panHod1 HLgirTip1 HLoviCan2 HLokaJoh2 HLtraStr1 HLoviAmm1
+       sGroup_Artiodactyla HLbalMus1 HLeubGla1 HLbalEde1 balAcu1 HLeubJap1 HLmegNov1 HLmonMon1 HLphoSin1 HLlagObl1 HLgloMel1 HLpepEle1 HLbalMys1 HLneoAsi1 HLplaMin1 HLbalPhy1 HLmesBid1 HLkogBre1 HLlniGeo1 HLlamGuaCac1 HLvicVicMen1 HLvicPacHua3 HLlamGlaCha1 HLponBla1 HLzipCav1 HLlamGla1 HLcerHanYar1 HLmunMun1 HLbosGau1 HLaxiPor1 HLranTarGra2 HLranTar1 HLoviOri1 HLgirCam1 HLsynCaf1 HLoryDam1 HLcapSib1 HLmunRee1 HLcatWag1 HLhipEqu1 HLhipNig1 HLcapPyg1 HLhydIne1 HLodoVir1 HLprzAlb1 HLgirCam2 HLhemHyl1 HLmosMos1 HLbeaHun1 HLalcAlc1 HLoviNivLyd1 HLconTau2 HLdamLun1 HLodoHem1 HLoryGaz1 HLkobLecLec1 HLantAme1 HLbosFro1 HLeudTho1 HLkobEll1 HLlitWal1 HLoreAme1 HLbosGru1 bisBis1 HLmosBer1 HLcepHar1 HLaepMel1 HLantMar1 HLoviCan1 HLoreOre1 HLmunCri1 HLproPrz1 HLmadKir1 HLsylGri1 HLtraJav1 HLredRed1 HLsaiTat1 HLtraScr1 HLcerEla1 HLneoMos1 HLnanGra1 HLtraImb1 HLneoPyg1 HLphiMax1 HLrapCam1 HLtraKan1 HLmosChr1 HLcapIbe1
+       sGroup_Xenarthra HLchoDid2 HLchoHof3 HLchoDid1 HLtamTet1 HLmyrTri1 dasNov3 HLtolMat1
+       sGroup_Chiroptera HLrhiFer5 HLrhiSin1 HLptePse1 HLpteGig1 pteAle1 HLpteRuf1 HLhipGal1 HLrouAeg4 HLpteVam2 HLrouLes1 HLhipArm1 HLeonSpe1 HLeidDup1 HLmacSob1 HLeidHel2 HLtadBra1 HLrouMad1 HLdesRot2 HLmolMol2 HLphyDis3 HLlepYer1 HLmorBla1 HLmegLyr2 HLtonSau1 HLanoCau1 HLcarPer3 HLartJam2 HLminNat1 ptePar1 HLartJam1 HLminSch1 HLmacCal1 HLstuHon1 HLcynBra1 HLmyoMyo6 HLmicHir1 HLcraTho1 HLmyoSep1 myoBra1 eptFus1 HLmyoLuc1 myoLuc2 HLnocLep1 myoDav1 HLmurAurFea1 HLnycHum2 HLantPal1 HLaeoCin1 HLlasBor1 HLpipKuh2 HLpipPip2 HLpipPip1
+       sGroup_Glires HLsciCar1 HLsciVul1 HLmarMon2 HLmarFla1 HLxerIna1 HLmarMar1 HLcynGun1 HLmarMon1 HLmarHim1 HLspeDau1 HLmarVan1 HLuroPar1 speTri2 HLereDor1 HLaplRuf1 HLpedCap1 HLgliGli1 hetGla2 HLhysCri1 HLcoePre1 chiLan1 HLdasPun1 HLcasCan3 HLoryCunCun4 HLgraMur1 HLdinBra1 HLfukDam2 oryCun2 HLlepAme1 HLhydHyd1 HLsylBac1 HLcavTsc1 HLdolPat1 cavPor3 HLmusAve1 HLoryCun3 HLlepTim1 octDeg1 HLcteGun1 HLcteSoc1 HLpetTyp1 nanGal1 HLthrSwi1 HLmyoCoy1 HLperCal2 HLperCri1 HLperManBai2 HLperPol1 HLperNas1 HLperLeu1 HLperEre1 HLrhiPru1 HLonyTor1 HLallBul1 jacJac1 HLcriGam1 HLcriGri3 HLondZib1 ochPri3 HLgraSur1 HLarvAmp1 HLarvNil1 HLellTal1 mm10 mm39 HLdipSte1 dipOrd2 HLacoRus1 HLmasCou1 HLzapHud1 HLmicAgr2 HLpsaObe1 HLmusSpr1 HLmyoGla2 HLmusCar1 micOch1 HLratNor7 HLellLut1 HLmusPah1 HLrhoOpi1 HLacoCah1 rn6 HLmusSpi1 HLmicFor1 HLmicArv1 HLmicOec1 HLsigHis1 HLratRat7 HLneoLep1 mesAur1 HLmerUng1 HLperLonPac1 cavApe1 HLapoSyl1
+       sGroup_Afrotheria triMan1 HLloxAfr4 HLeleMax1 HLdugDug1 oryAfe1 HLproCap3 HLhetBru1 chrAsi1 echTel2 HLhydGig1 eleEdw1 HLmicTal1
+       sGroup_Metatheria HLvomUrs1 HLphaCin1 HLtriVul1 HLgymLea1 HLmacGig1 HLphaGym1 HLnotEug3 HLantFla1 HLmacFul1 HLsarHar2 HLpseCup1 monDom5 HLgraAgi1 HLospRuf1 HLdidVir1 HLpseCor1 HLpseOcc1 HLthyCyn1 macEug2
+       sGroup_Monotremata HLornAna3 HLtacAcu1
+        speciesDefaultOff panPan3 gorGor6 ponAbe3 HLnomLeu4 HLhylMol2 macNem1 HLtheGel1 HLmacFas6 HLcerMon1 HLpilTep2 colAng1 manLeu1 cerAty1 HLpapAnu5 HLmanSph1 HLsemEnt1 HLmacFus1 HLtraFra1 rhiBie1 HLrhiRox2 HLpygNem1 HLcerNeg1 nasLar1 HLallNig1 chlSab2 HLeryPat1 HLpitPit1 HLateGeo1 aotNan1 HLpleDon1 HLaloPal1 HLsaiBol1 HLsagImp1 saiBol1 HLcalJac4 HLcalPym1 HLsapApe1 cebCap1 HLcebAlb1 HLdauMad1 proCoq1 HLgalVar2 HLindInd1 HLeulFul1 eulFla1 HLlemCat1 HLproSim1 HLeulMon1 HLeulFla1 HLcheMed1 eulMac1 tarSyr2 micMur3 HLmirZaz1 HLmirCoq1 HLmicSpe31 HLmicTav1 HLnycCou1 otoGar3 HLtapTer1 HLrhiUni1 HLtapInd1 HLtapInd2 HLdicBic1 HLdicSum1 HLcerSimCot1 cerSim1 HLequQuaBoe1 equPrz1 HLequAsi1 HLequAsiAsi2 HLeubGla1 HLsciCar1 HLeubJap1 HLsciVul1 balAcu1 HLbalBon1 HLxerIna1 HLmegNov1 HLbalPhy1 HLbalMys1 tupChi1 HLbalEde1 HLaplRuf1 HLescRob1 HLmarFla1 phyCat1 HLphyCat2 HLmarMar1 HLmesBid1 HLchoHof3 HLchoDid2 HLmarVan1 HLplaMin1 HLmarHim1 HLspeDau1 HLmarMon1 HLmarMon2 HLzipCav1 HLuroPar1 lipVex1 HLdelLeu2 HLlniGeo1 HLcynGun1 HLmonMon1 HLhipAmp3 HLhipAmp1 speTri2 HLneoAsi1 HLpumCon1 panTig1 HLkogBre1 HLneoNeb1 HLpanPar1 HLphoSin1 HLeriBar1 HLmanTri1 HLgliGli1 HLdugDug1 HLphaTri2 HLpanOnc1 HLphoVit1 HLaciJub2 HLhalGry1 HLchoDid1 HLpedCap1 HLphoPho2 HLphoPho1 neoSch1 lepWed1 HLpanOnc2 HLponBla1 HLpriBen1 HLcamFer3 orcOrc1 HLmanPen2 HLcasCan3 HLursThi1 HLrhiSin1 HLlynPar1 HLmirLeo1 HLlynCan1 HLmirAng2 HLpanLeo1 HLcamBac1 HLsouChi1 manPen1 HLodoRos1 HLcalUrs1 odoRosDiv1 HLvicPacHua3 HLhipArm1 HLlamGla1 HLailMel2 HLzalCal1 HLeumJub1 felCat9 HLpumYag1 pteAle1 HLursArc1 ursMar1 HLpepEle1 HLgloMel1 HLrhiFer5 HLarcGaz2 HLcamDro2 HLlagObl1 HLptePse1 HLmanJav1 HLmanJav2 vicPac2 HLvicVicMen1 HLlamGuaCac1 HLlamGlaCha1 HLturTru4 HLturAdu1 HLturAdu2 HLursAme1 HLursAme2 triMan1 HLtadBra1 HLpteVam2 turTru2 HLpteRuf1 HLpteGig1 HLturTru3 HLfelNig1 HLeidDup1 HLeidHel2 HLeleMax1 HLhipGal1 HLloxAfr4 tupBel1 HLcynBra1 HLeonSpe1 HLcryFer2 HLgraMur1 HLmyrTri1 oryAfe1 HLrouLes1 HLrouAeg4 HLrouMad1 HLvulVul1 HLvulLag1 HLlycPic3 HLtamTet1 HLcanLupDin1 canFam5 HLpotFla1 HLhydGig1 HLmegLyr2 HLlycPic2 HLailFul2 HLmolMol2 HLcroCro1 HLmacSob1 HLhyaHya1 HLlepTim1 susScr11 HLminSch1 HLparHer1 HLminNat1 HLlepAme1 HLcraTho1 HLcatWag1 HLmorBla1 HLoryCunCun4 ptePar1 oryCun2 HLoryCun3 HLsylBac1 HLnasNar1 HLhysCri1 HLereDor1 HLcoePre1 HLmarZib1 HLgulGul1 HLproLot1 HLbasSum1 HLspiGra1 HLtaxTax1 HLmelCap1 HLmusAve1 HLsurSur2 HLsurSur1 HLmunMug1 HLhelPar1 HLscaAqu1 HLlonCan1 HLpteBra2 HLpteBra1 enhLutNer1 enhLutKen1 HLlutLut1 HLmyoMyo6 hetGla2 myoBra1 HLdesRot2 HLtalOcc1 HLgirCam1 HLokaJoh2 HLmacCal1 HLmusErm1 HLmyoSep1 HLneoVis1 HLgirCam2 HLgirTip1 HLmyoLuc1 myoLuc2 HLmusPut1 HLmusFur2 HLlepYer1 myoDav1 HLsynCaf1 HLbubBub2 HLmosBer1 HLmosMos1 HLmosChr1 HLcerHanYar1 HLmicHir1 HLbosInd2 chrAsi1 HLbosGau1 HLanoCau1 HLbosFro1 HLbosMut2 HLprzAlb1 HLmurAurFea1 HLnocLep1 HLhipEqu1 HLcepHar1 HLhipNig1 HLbosGru1 HLoryDam1 HLsylGri1 HLphiMax1 HLoryGaz1 HLtraStr1 HLantAme1 HLmunRee1 HLmunCri1 HLcerEla1 HLtraImb1 HLconTau2 HLtraScr1 HLkobEll1 HLmunMun1 HLammLer1 HLdamLun1 HLoviCan1 HLkobLecLec1 HLcapPyg1 HLcapHir2 HLcapAeg1 panHod1 HLalcAlc1 HLbeaHun1 HLaepMel1 HLodoHem1 HLredRed1 HLfukDam2 HLcapSib1 HLodoVir3 HLranTarGra2 HLranTar1 HLoreOre1 HLhydIne1 HLoviCan2 HLoviNivLyd1 HLneoMos1 HLodoVir2 HLodoVir1 HLhemHyl1 HLoviOri1 HLoviAri5 HLneoPyg1 nanGal1 HLnanGra1 HLproPrz1 HLrapCam1 HLeudTho1 HLantMar1 chiLan1 HLdasPun1 HLcteGun1 HLlitWal1 HLmadKir1 HLcarPer3 HLaxiPor1 HLphyDis3 HLtonSau1 HLtraJav1 HLartJam1 HLartJam2 HLhetBru1 HLuroGra1 HLtraKan1 conCri1 HLstuHon1 HLoreAme1 HLallBul1 HLelaDav1 HLsaiTat1 HLaeoCin1 HLdipSte1 dipOrd2 HLtolMat1 HLantPal1 HLrhiPru1 HLnycHum2 HLoviAmm1 HLcapIbe1 HLdinBra1 jacJac1 HLzapHud1 HLdolPat1 HLlasBor1 HLpipKuh2 HLperLonPac1 HLhydHyd1 HLpipPip1 HLpipPip2 ochPri3 eleEdw1 cavApe1 HLpetTyp1 HLcavTsc1 cavPor3 HLthrSwi1 octDeg1 HLcriGam1 HLneoLep1 HLcteSoc1 HLmyoCoy1 echTel2 eriEur2 HLperNas1 HLcriGri3 HLperCri1 HLondZib1 HLperCal2 HLperEre1 HLonyTor1 mesAur1 HLperLeu1 HLellTal1 HLperPol1 HLperManBai2 HLsigHis1 HLellLut1 HLmyoGla2 HLarvAmp1 HLpsaObe1 HLacoRus1 HLgraSur1 HLarvNil1 HLmicOec1 HLmicTal1 HLmicAgr2 HLmicFor1 HLacoCah1 HLmicArv1 micOch1 HLrhoOpi1 HLmasCou1 HLmerUng1 HLratRat7 HLratNor7 rn6 HLmusPah1 HLmusCar1 HLmusSpi1 mm10 HLmusSpr1 HLapoSyl1 sorAra2 HLvomUrs1 HLphaCin1 HLgraAgi1 HLtriVul1 HLdidVir1 HLphaGym1 monDom5 HLgymLea1 HLthyCyn1 HLpseCup1 HLmacGig1 HLpseCor1 HLmacFul1 HLnotEug3 HLospRuf1 HLpseOcc1 macEug2 HLantFla1 HLornAna3 HLtacAcu1
+        speciesDefaultOn panTro6 rheMac10 canFam4 equCab3 HLsolPar1 bosTau9 HLbalMus1 bisBis1 dasNov3 eptFus1 mm39 HLproCap3 HLsarHar2 HLtacAcu1
+        speciesLabels HLnomLeu4="northern white-cheeked gibbon" HLhylMol2="silvery gibbon" HLtheGel1=gelada HLmacFas6="crab-eating macaque" HLcerMon1="Mona monkey" HLpilTep2="Ugandan red Colobus" HLpapAnu5="olive baboon" HLmanSph1=mandrill HLsemEnt1="Hanuman langur" HLmacFus1="Japanese macaque" HLtraFra1="Francois's langur" HLrhiRox2="golden snub-nosed monkey" HLpygNem1="Red shanked douc langur" HLcerNeg1="De Brazza's monkey" HLallNig1="Allen's swamp monkey" HLeryPat1="red guenon" HLpitPit1="white-faced saki" HLateGeo1="black-handed spider monkey" HLpleDon1="Bolivian titi" HLaloPal1="mantled howler monkey" HLsaiBol1="Bolivian squirrel monkey" HLsagImp1=tamarin HLcalJac4="white-tufted-ear marmoset" HLcalPym1="pygmy marmoset" HLsapApe1="tufted capuchin" HLcebAlb1="white-fronted capuchin" HLdauMad1=aye-aye HLgalVar2="Sunda flying lemur" HLindInd1=babakoto HLeulFul1="brown lemur" HLlemCat1="Ring-tailed lemur" HLproSim1="greater bamboo lemur" HLeulMon1="mongoose lemur" HLeulFla1="Sclater's lemur" HLcheMed1="Lesser dwarf lemur" HLmirZaz1="Northern giant mouse lemur" HLmirCoq1="Coquerel's mouse lemur" HLmicSpe31="mouse lemur" HLmicTav1="Northern rufous mouse lemur" HLnycCou1="slow loris" HLtapTer1="Brazilian tapir" HLrhiUni1="greater Indian rhinoceros" HLtapInd1="Asiatic tapir" HLtapInd2="Asiatic tapir" HLdicBic1="black rhinoceros" HLdicSum1="Sumatran rhinoceros" HLcerSimCot1="northern white rhinoceros" HLequQuaBoe1="Equus burchelli boehmi" HLequAsi1=ass HLequAsiAsi2=donkey HLeubGla1="North Atlantic right whale" HLsciCar1="gray squirrel" HLeubJap1="North Pacific right whale" HLsciVul1="Eurasian red squirrel" HLbalBon1="Antarctic minke whale" HLxerIna1="South African ground squirrel" HLmegNov1="humpback whale" HLbalPhy1="Fin whale" HLbalMys1="bowhead whale" HLbalMus1="Blue whale" HLbalEde1="pygmy Bryde's whale" HLaplRuf1="mountain beaver" HLescRob1="grey whale" HLmarFla1="yellow-bellied marmot" HLphyCat2="sperm whale" HLmarMar1="Alpine marmot" HLmesBid1="Sowerby's beaked whale" HLchoHof3="Hoffmann's two-fingered sloth" HLchoDid2="southern two-toed sloth" HLmarVan1="Vancouver Island marmot" HLplaMin1="Indus River dolphin" HLmarHim1="Himalayan marmot" HLspeDau1="Daurian ground squirrel" HLmarMon1=woodchuck HLmarMon2=woodchuck HLzipCav1="Cuvier's beaked whale" HLuroPar1="Arctic ground squirrel" HLdelLeu2="beluga whale" HLlniGeo1=boutu HLcynGun1="Gunnison's prairie dog" HLmonMon1=narwhal HLhipAmp3=hippopotamus HLhipAmp1=hippopotamus HLneoAsi1="Yangtze finless porpoise" HLpumCon1=puma HLkogBre1="pygmy sperm whale" HLneoNeb1="Clouded leopard" HLpanPar1=leopard HLphoSin1=vaquita HLeriBar1="bearded seal" HLmanTri1="Tree pangolin" HLgliGli1="Fat dormouse" HLdugDug1=dugong HLphaTri2="Tree pangolin" HLpanOnc1=jaguar HLphoVit1="harbor seal" HLaciJub2=cheetah HLhalGry1="gray seal" HLchoDid1="southern two-toed sloth" HLpedCap1=springhare HLphoPho2="harbor porpoise" HLphoPho1="harbor porpoise" HLpanOnc2=jaguar HLponBla1=franciscana HLpriBen1="Amur leopard cat" HLcamFer3="Wild Bactrian camel" HLmanPen2="Chinese pangolin" HLcasCan3="American beaver" HLursThi1="Asian black bear" HLrhiSin1="Chinese rufous horseshoe bat" HLlynPar1="Spanish lynx" HLmirLeo1="Southern elephant seal" HLlynCan1="Canada lynx" HLmirAng2="Northern elephant seal" HLpanLeo1=lion HLcamBac1="Bactrian camel" HLsouChi1="Indo-pacific humpbacked dolphin" HLodoRos1=walrus HLcalUrs1="northern fur seal" HLvicPacHua3="Lama pacos huacaya" HLhipArm1="great roundleaf bat" HLlamGla1=llama HLailMel2="giant panda" HLzalCal1="California sea lion" HLeumJub1="Steller sea lion" HLpumYag1=jaguarundi HLursArc1="grizzly bear" HLpepEle1="melon-headed whale" HLgloMel1="long-finned pilot whale" HLrhiFer5="greater horseshoe bat" HLarcGaz2="antarctic fur seal" HLcamDro2="Arabian camel" HLlagObl1="Pacific white-sided dolphin" HLptePse1="Bonin flying fox" HLmanJav1="Malayan pangolin" HLmanJav2="Malayan pangolin" HLvicVicMen1="Vicugna mensalis" HLlamGuaCac1=guanaco HLlamGlaCha1=llama HLturTru4="common bottlenose dolphin" HLturAdu1="Indo-pacific bottlenose dolphin" HLturAdu2="Indo-pacific bottlenose dolphin" HLursAme1="American black bear" HLursAme2="American black bear" HLtadBra1="Brazilian free-tailed bat" HLpteVam2="large flying fox" HLpteRuf1="Malagasy flying fox" HLpteGig1="Indian flying fox" HLturTru3="common bottlenose dolphin" HLfelNig1="black-footed cat" HLeidDup1="Malagasy straw-colored fruit bat" HLeidHel2="straw-colored fruit bat" HLeleMax1="Asiatic elephant" HLhipGal1="Cantor's roundleaf bat" HLloxAfr4="African savanna elephant" HLcynBra1="lesser short-nosed fruit bat" HLeonSpe1="lesser dawn bat" HLcryFer2=fossa HLgraMur1="woodland dormouse" HLmyrTri1="giant anteater" HLrouLes1="Leschenault's rousette" HLrouAeg4="Egyptian rousette" HLrouMad1="Madagascan rousette" HLvulVul1="red fox" HLvulLag1="Arctic fox" HLlycPic3="African hunting dog" HLtamTet1="southern tamandua" HLcanLupDin1=dingo HLpotFla1=kinkajou HLhydGig1="Steller's sea cow" HLmegLyr2="Indian false vampire" HLlycPic2="African hunting dog" HLailFul2="lesser panda" HLmolMol2="Pallas's mastiff bat" HLcroCro1="spotted hyena" HLmacSob1="long-tongued fruit bat" HLhyaHya1="striped hyena" HLlepTim1="Mountain hare" HLminSch1="Schreibers' long-fingered bat" HLparHer1="Asian palm civet" HLminNat1="Miniopterus schreibersii natalensis" HLlepAme1="snowshoe hare" HLcraTho1="hog-nosed bat" HLcatWag1="Chacoan peccary" HLmorBla1="Antillean ghost-faced bat" HLoryCunCun4="European rabbit" HLoryCun3=rabbit HLsylBac1="brush rabbit" HLnasNar1="White-nosed coati" HLhysCri1="crested porcupine" HLereDor1="North American porcupine" HLcoePre1="Brazilian porcupine" HLmarZib1=sable HLsolPar1="Hispaniolan solenodon" HLgulGul1=wolverine HLproLot1=raccoon HLbasSum1=Cacomistle HLspiGra1="western spotted skunk" HLtaxTax1="North American badger" HLmelCap1=ratel HLmusAve1="hazel dormouse" HLsurSur2=meerkat HLsurSur1=meerkat HLmunMug1="banded mongoose" HLhelPar1="dwarf mongoose" HLscaAqu1="eastern mole" HLlonCan1="Northern American river otter" HLpteBra2="giant otter" HLpteBra1="giant otter" HLlutLut1="Eurasian river otter" HLmyoMyo6="greater mouse-eared bat" HLdesRot2="common vampire bat" HLtalOcc1="Iberian mole" HLgirCam1=giraffe HLokaJoh2=okapi HLmacCal1="California big-eared bat" HLmusErm1=ermine HLmyoSep1="Northern long-eared myotis" HLneoVis1="American mink" HLgirCam2=giraffe HLgirTip1="Masai giraffe" HLmyoLuc1="little brown bat" HLmusPut1="European polecat" HLmusFur2="domestic ferret" HLlepYer1="Lesser long-nosed bat" HLsynCaf1="African buffalo" HLbubBub2="water buffalo" HLmosBer1="Chinese forest musk deer" HLmosMos1="Siberian musk deer" HLmosChr1="alpine musk deer" HLcerHanYar1="Yarkand deer" HLmicHir1="Schizostoma hirsutum" HLbosInd2="zebu cattle" HLbosGau1=gaur HLanoCau1="tailed tailless bat" HLbosFro1=gayal HLbosMut2="wild yak" HLprzAlb1="white-lipped deer" HLmurAurFea1="Murina feae" HLnocLep1="greater bulldog bat" HLhipEqu1="roan antelope" HLcepHar1="Harvey's duiker" HLhipNig1="sable antelope" HLbosGru1="domestic yak" HLoryDam1="scimitar-horned oryx" HLsylGri1="bush duiker" HLphiMax1="Maxwell's duiker" HLoryGaz1=gemsbok HLtraStr1="greater kudu" HLantAme1=pronghorn HLmunRee1="Reeves' muntjac" HLmunCri1="black muntjac" HLcerEla1="Central European red deer" HLtraImb1="lesser kudu" HLconTau2="brindled gnu" HLtraScr1=bushbuck HLkobEll1=waterbuck HLmunMun1=muntjak HLammLer1=aoudad HLdamLun1=topi HLoviCan1="bighorn sheep" HLkobLecLec1=lechwe HLcapPyg1="Eastern roe deer" HLcapHir2=goat HLcapAeg1="wild goat" HLalcAlc1="Eurasian elk" HLbeaHun1="Cobus hunteri" HLaepMel1=impala HLodoHem1="mule deer" HLredRed1="Bohar reedbuck" HLfukDam2="Damara mole-rat" HLcapSib1="Siberian ibex" HLodoVir3="white-tailed deer" HLranTarGra2="porcupine caribou" HLranTar1=reindeer HLoreOre1=klipspringer HLhydIne1="Chinese water deer" HLoviCan2="bighorn sheep" HLoviNivLyd1="snow sheep" HLneoMos1=suni HLodoVir2="white-tailed deer" HLodoVir1="white-tailed deer" HLhemHyl1="Nilgiri tahr" HLoviOri1="Asiatic mouflon" HLoviAri5=sheep HLneoPyg1="royal antelope" HLnanGra1="Grant's gazelle" HLproPrz1="Przewalski's gazelle" HLrapCam1=steenbok HLeudTho1="Thomson's gazelle" HLantMar1=springbok HLdasPun1="punctate agouti" HLcteGun1="northern gundi" HLlitWal1=gerenuk HLmadKir1="Kirk's dik-dik" HLcarPer3="Seba's short-tailed bat" HLaxiPor1="Hog deer" HLphyDis3="pale spear-nosed bat" HLtonSau1="stripe-headed round-eared bat" HLtraJav1="Java mouse-deer" HLartJam1="Jamaican fruit-eating bat" HLartJam2="Jamaican fruit-eating bat" HLhetBru1="yellow-spotted hyrax" HLproCap3="Cape rock hyrax" HLuroGra1="gracile shrew mole" HLtraKan1="lesser mouse-deer" HLstuHon1="Honduran yellow-shouldered bat" HLoreAme1="mountain goat" HLallBul1="Gobi jerboa" HLelaDav1="Pere David's deer" HLsaiTat1="saiga antelope" HLaeoCin1="hoary bat" HLdipSte1="Stephens's kangaroo rat" HLtolMat1="Southern three-banded armadillo" HLantPal1="pallid bat" HLrhiPru1="hoary bamboo rat" HLnycHum2="evening bat" HLoviAmm1=argali HLcapIbe1="Alpine ibex" HLdinBra1=pacarana HLzapHud1="meadow jumping mouse" HLdolPat1="Patagonian cavy" HLlasBor1="red bat" HLpipKuh2="Kuhl's pipistrelle" HLperLonPac1="Pacific pocket mouse" HLhydHyd1=capybara HLpipPip1="common pipistrelle" HLpipPip2="common pipistrelle" HLpetTyp1=dassie-rat HLcavTsc1="Montane guinea pig" HLthrSwi1="Greater cane rat" HLcriGam1="Gambian giant pouched rat" HLneoLep1="desert woodrat" HLcteSoc1="social tuco-tuco" HLmyoCoy1=nutria HLperNas1="northern rock mouse" HLcriGri3="Chinese hamster" HLperCri1="Hesperomys crinitus" HLondZib1=muskrat HLperCal2="Peromyscus californicus subsp. insignis" HLperEre1="cactus mouse" HLonyTor1="southern grasshopper mouse" HLperLeu1="white-footed mouse" HLellTal1="Northern mole vole" HLperPol1="oldfield mouse" HLperManBai2="prairie deer mouse" HLsigHis1="hispid cotton rat" HLellLut1="Transcaucasian mole vole" HLmyoGla2="Bank vole" HLarvAmp1="Eurasian water vole" HLpsaObe1="fat sand rat" HLacoRus1="golden spiny mouse" HLgraSur1="African woodland thicket rat" HLarvNil1="African grass rat" HLmicOec1="root vole" HLmicTal1="Talazac's shrew tenrec" HLmicAgr2="short-tailed field vole" HLmicFor1="reed vole" HLacoCah1="Egyptian spiny mouse" HLmicArv1="Common vole" HLrhoOpi1="great gerbil" HLmasCou1="southern multimammate mouse" HLmerUng1="Mongolian gerbil" HLratRat7="black rat" HLratNor7="Norway rat" HLmusPah1="shrew mouse" HLmusCar1="Ryukyu mouse" HLmusSpi1="steppe mouse" HLmusSpr1="western wild mouse" HLapoSyl1="European woodmouse" HLvomUrs1="common wombat" HLphaCin1=koala HLgraAgi1="Agile Gracile Mouse Opossum" HLtriVul1="common brushtail" HLdidVir1="North American opossum" HLphaGym1="ground cuscus" HLgymLea1="Leadbeater's possum" HLthyCyn1="Tasmanian wolf" HLpseCup1="coppery ringtail possum" HLmacGig1="eastern gray kangaroo" HLpseCor1="golden ringtail possum" HLmacFul1="western gray kangaroo" HLnotEug3="tammar wallaby" HLospRuf1="red kangaroo" HLpseOcc1="Western ringtail oppossum" HLantFla1="yellow-footed antechinus" HLsarHar2="Tasmanian devil" HLornAna3=platypus HLtacAcu1="Australian echidna"
+
+    # PhyloP conservation
+    track cons470wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons470way
+    viewLimits -20.0:11.936
+    viewLimitsMax -20:11.936
+
+        #track phyloP470wayBW
+        track phyloP470wayBW
+        subTrack cons470wayViewphyloP
+        subGroups view=phyloP
+        shortLabel 470 phyloP
+        longLabel 470 mammals Basewise Conservation by PhyloP
+        configurable on
+        type bigWig -20 11.936
+        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP470way/hg38.phyloP470way.bw
+        #bigDataUrl /gbdb/hg38/multiz470way/phyloP470way.bw
+        maxHeightPixels 100:50:11
+        viewLimits -4.5:7.5
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+        logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf
+
+    # phastCons conservation
+    track cons470wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons470way
+
+        track phastCons470way
+        subTrack cons470wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel Cons 470 Mammals
+        longLabel 470 mammals conservation by PhastCons
+        noInherit on
+        configurable on
+        type bigWig 0 1
+        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons470way/hg38.phastCons470way.bw
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 8
+
+    # Conserved Elements (Most Conserved)
+    track cons470wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons470way
+
+        track phastConsElements470way
+        subTrack cons470wayViewelements off
+        subGroups view=elements
+        shortLabel 470 Mamm. El
+        longLabel 470 mammals Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bigBed 5 .
+        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phastCons470way/hg38.phastConsElements470way.bb
+        priority 9
+
+track multiz470Logo
+container multiWig
+noInherit on
+type bigWig -10 10
+shortLabel Multiz 470 Logo
+longLabel Sequence Logo from 470-way scaled by PhyloP Value
+aggregate stacked
+autoScale on
+logo on
+group compGeno
+visibility hide
+release alpha
+
+	track multiz470LogoA
+	shortLabel multiz470LogoA
+	longLabel multiz470LogoA
+	parent multiz470Logo
+        type bigWig -10 10
+	priority 1
+	bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470Logo.A.bw
+	color 255,0,0
+        release alpha
+
+	track multiz470LogoC
+	shortLabel multiz470LogoC
+	longLabel multiz470LogoC
+	parent multiz470Logo
+        type bigWig -10 10
+	priority 2
+	bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470Logo.C.bw
+	color 160, 0,160
+        release alpha
+
+	track multiz470LogoG
+	shortLabel multiz470LogoG
+	longLabel multiz470LogoG
+	parent multiz470Logo
+        type bigWig -10 10
+	priority 3
+	bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470Logo.G.bw
+	color 0, 0,255
+        release alpha
+
+	track multiz470LogoT
+	shortLabel multiz470LogoT
+	longLabel multiz470LogoT
+	parent multiz470Logo
+        type bigWig -10 10
+	priority 4
+	bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470Logo.T.bw
+	color  0,255,0
+        release alpha

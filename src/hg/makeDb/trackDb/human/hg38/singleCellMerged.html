@@ -1,38 +1,308 @@
-<H2>Description</H2>
-<P>
-This track displays single cell data from 12 papers covering 14 organs.  Cells are grouped 
-together by organ and cell type.  The cell types are based on annotations published alongside
-the papers.  These were curated at UCSC to as much as possible use the same cell type 
-terminanologies across papers and organs.  In some cases we merged together small populations
-of cells annotated as distict but related types into a single type so as to have enough cells 
+<h2>Description</h2>
+<p>
+This track displays single-cell data from 12 papers covering 14 organs. Cells are grouped 
+together by organ and cell type. The cell types are based on annotations published alongside
+the papers. These were curated at UCSC as much as possible to use the same cell type 
+terminologies across papers and organs. In some cases, we merged together small populations
+of cells annotated as distinct and related types into a single type so as to have enough cells 
 to call gene expression levels accurate.
 
-The gene expression levels are normalized so that that total level of expression for all genes in a
+The gene expression levels are normalized so that the total level of expression for all genes in a
 single cell or cell type adds up to one million. 
-</P>
-
-<H2>Display Conventions and Configuration</H2>
-<P>
-</P>
-<H2>Methods</H2>
-<P>
-Each organ (or tissue) was integreted and curated into the Genome Browser indiviually.  (Make table of contributing tracks here).   All components were normalized to be in parts per million using
-the matrixNormalize command available from UCSC.  Metadata was cleaned up using the tabToTabDir 
-tool.  The major clean ups were unpacking abbreviations, replacing jargon with standard English, 
-choosing shorted terms to shorten long labels, labeling outliers, etc. Before integration we 
-invited the original data producers as well as local biologists and informaticions to view the
-data.
-</P>
-<H2>Credits</H2>
-Many thanks to the data contributing labs for sharing their high quality research.  
-Thanks to the Cell Browser team including Matt Speir and Max Haeussler, for their work
-in integratinging these sets into the cell browser.  In most cases their efforts were
-ahead of our own, and we could leverage their work making the job much easier.  With the
-Genome Browser group Jim Kent did initial wrangling,  Brittney Wick did substantial data
-cleanup and coordination with the labs.  Jonathan Spear ...  
-<P>
-</P>
-
-<H2>References</H2>
-<p>
 </p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The cell types are colored by which class they belong to according to the following table.
+</p>
+<p>
+<b>Please note,</b> the coloring algorithm allows cells that show some mixed characteristics to =
+show blended colors so there will be some color variation within a class. In addition,
+cells with less than 100 transcripts will be a lighter shade and less 
+concentrated in color to represent a low number of transcripts.  
+
+<p>
+<table cellpadding='2'>
+  <thead><tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;">Cell classification</th>
+  </tr></thead>
+  <tr><td style='background-color: #F0C000;'></td><td>neural</td></tr>
+  <tr><td style="background-color: #FF8838;"></td><td>adipose</td></tr>
+  <tr><td style="background-color: #B05020;"></td><td>fibroblast</td></tr>
+  <tr><td style="background-color: #F01111;"></td><td>immune</td></tr>
+  <tr><td style="background-color: #C000C0;"></td><td>muscle</td></tr>
+  <tr><td style="background-color: #6000B0;"></td><td>hepatocyte</td></tr>
+  <tr><td style="background-color: #5020E0;"></td><td>trophoblast</td></tr>
+  <tr><td style="background-color: #0050FF;"></td><td>secretory</td></tr>
+  <tr><td style="background-color: #0072D6;"></td><td>ciliated</td></tr>
+  <tr><td style="background-color: #0099C0;"></td><td>epithelial</td></tr>
+  <tr><td style="background-color: #00C000;"></td><td>endothelial</td></tr>
+  <tr><td style="background-color: #80D000;"></td><td>glia</td></tr>
+  <tr><td style="background-color: #707070;"></td><td>stem cell or progenitor cell</td></tr>
+</table>
+</p>
+
+<h2>Methods</h2>
+<p>
+Each organ or tissue was integrated and curated into the Genome Browser indiviually. 
+
+<ul>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=bloodHao&position=default">Blood (PBMC) Hao</a>
+- This track displays peripheral blood mononuclear cell expression data from 
+<a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/34062119/">Hao <em>et al.</em>, 2020</a> 
+for 3 levels of cell type annotations, donor, phase, and time.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=colonWang&position=default">Colon Wang</a> 
+- This track shows colon expression data from 
+<a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/31753849/">Wang <em>et al.</em>, 2020</a> 
+grouped by cell type and donor.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=cortexVelmeshev&position=default">Cortex Velmeshev </a> 
+- This track shows cortex expression data from 
+<a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/31097668/">Velmeshev <em>et al.</em>, 2019</a> 
+grouped by cell type, sex, sample, donor, and diagnosis.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=fetalGeneAtlas&position=default">Fetal Gene Atlas</a> 
+- This track shows expression data from 
+<a target="_blank" href="https://pubmed.ncbi.nlm.nih.gov/33184181/">Cao <em>et al.</em>, 2020</a> 
+binned by cell type and other categories including sex, organ, experiment, donor, etc.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=heartCellAtlas&position=default">Heart Cell Atlas</a> 
+- This track shows heart expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/32971526/">Litvi&#328;ukov&#225 <em>et
+al.</em>, 2020</a> binned by cell type and various categories including cell
+state, sample, region, donor, age, etc.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=ileumWang&position=default">Ileum Wang</a> -
+This track shows ileum expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/31753849/">Wang <em>et al.</em>, 2020</a>
+grouped by cell type and donor.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=kidneyStewart&position=default">Kidney
+Stewart</a> - This track shows kidney expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/31604275/">Stewart <em>et al.</em>,
+2019</a> grouped by cell type, detailed cell type, project, experiment, etc.
+</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=liverMacParland&position=default">Liver
+MacParland</a> - This track shows liver expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/30348985/">MacParland <em>et al.</em>,
+2018</a> grouped by cell type, broad cell type, and donor.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=lungTravaglini2020&position=default">Lung
+Travaglini</a> - This track shows lung expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/33208946/"> Travaglini <em>et al.</em>,
+2020</a> binned by categories such as cell type, sample, donor, compartment,
+etc. using both 10x and Smart-seq2 library preparation methods.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=muscleDeMicheli&position=default">Muscle De
+Micheli</a> - This track shows muscle expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/32624006/">De Micheli <em>et al.</em>,
+2020</a> grouped by cell type and sample.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=pancreasBaron&position=default">Pancreas
+Baron</a> - This track shows pancreas expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/27667365/">Baron <em>et al.</em>, 2016
+</a> grouped by cell type, detailed cell type, donor, and batch.
+</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=placentaVentoTormo&position=default">Placenta
+Vento-Tormo</a> - This track shows placenta and matched decidua and maternal
+PBMCs expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/30429548/"> Vento-Tormo <em>et al.</em>,
+2018</a> grouped by cell type, detailed cell type, stage, etc. using both 10x
+and Smart-seq2 library preparation methods.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=rectumWang&position=default">Rectum Wang</a>
+- This track shows rectum expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/31753849/"> Wang <em>et al.</em>,
+2020</a> grouped by cell type and donor.</li>
+<li>
+<a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg38&g=skinSoleBoldo&position=default">Skin
+Sole-Boldo</a> - This track shows skin expression data from <a target="_blank"
+href="https://pubmed.ncbi.nlm.nih.gov/32327715/"> Sol&#233-Boldo <em>et
+al.</em>, 2020</a> grouped by cell type, cell type with donor's age, donor, and
+age.</li>
+</ul>
+ 
+All components were normalized to be in parts per million using the
+matrixNormalize command available from UCSC. Metadata was cleaned up using the
+tabToTabDir tool. The major clean-ups were unpacking abbreviations, replacing
+jargon with standard English, choosing shorted terms to shorten long labels,
+labeling outliers, etc. Before integration we invited the original data
+producers as well as local biologists and informaticions to view the
+data.</p>
+
+<h2>Credits</h2>
+<p>
+Many thanks to the data contributing labs for sharing their high quality research. 
+Thanks to the Cell Browser team including Matt Speir and Max Haeussler, for their work
+in integratinging these datasets into the Cell Browser. In most cases, their efforts were
+ahead of our own and we could leverage their work making the job much easier. Within the
+Genome Browser group, Jim Kent did the initial wrangling, and Brittney Wick did substantial data
+cleanup and coordination with the labs.
+</p>
+
+<h2>References</h2>
+
+<!--pancreasBaron.html-->
+
+<p>
+Baron M, Veres A, Wolock SL, Faust AL, Gaujoux R, Vetere A, Ryu JH, Wagner BK, Shen-Orr SS, Klein AM
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27667365" target="_blank">
+A Single-Cell Transcriptomic Map of the Human and Mouse Pancreas Reveals Inter- and Intra-cell
+Population Structure</a>.
+<em>Cell Syst</em>. 2016 Oct 26;3(4):346-360.e4.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27667365" target="_blank">27667365</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5228327/" target="_blank">PMC5228327</a></p>
+
+<!--fetalGeneAtlas.html-->
+
+<p>
+Cao J, O'Day DR, Pliner HA, Kingsley PD, Deng M, Daza RM, Zager MA, Aldinger KA, Blecher-Gonen R,
+Zhang F <em>et al</em>.
+<a href="https://www.science.org/doi/10.1126/science.aba7721" target="_blank">
+A human cell atlas of fetal gene expression</a>.
+<em>Science</em>. 2020 Nov 13;370(6518).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33184181" target="_blank">33184181</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7780123/" target="_blank">PMC7780123</a>
+</p>
+
+<p>
+Cao J, Spielmann M, Qiu X, Huang X, Ibrahim DM, Hill AJ, Zhang F, Mundlos S, Christiansen L,
+Steemers FJ <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30787437" target="_blank">
+The single-cell transcriptional landscape of mammalian organogenesis</a>.
+<em>Nature</em>. 2019 Feb;566(7745):496-502.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30787437" target="_blank">30787437</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6434952/" target="_blank">PMC6434952</a>
+</p>
+
+<!--muscleDeMicheli.html-->
+
+<p>
+De Micheli AJ, Spector JA, Elemento O, Cosgrove BD.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32624006" target="_blank">
+A reference single-cell transcriptomic atlas of human skeletal muscle tissue reveals bifurcated
+muscle stem cell populations</a>.
+<em>Skelet Muscle</em>. 2020 Jul 6;10(1):19.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32624006" target="_blank">32624006</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7336639/" target="_blank">PMC7336639</a></p>
+
+<!--bloodHao.html-->
+
+<p>
+Hao Y, Hao S, Andersen-Nissen E, Mauck WM 3rd, Zheng S, Butler A, Lee MJ, Wilk AJ, Darby C, Zager M
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/34062119" target="_blank">
+Integrated analysis of multimodal single-cell data</a>.
+<em>Cell</em>. 2021 Jun 24;184(13):3573-3587.e29.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34062119" target="_blank">34062119</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8238499/" target="_blank">PMC8238499</a>
+</p>
+
+<!--heartCellAtlas.html-->
+
+<p>
+Litvi&#328;ukov&#225; M, Talavera-L&#243;pez C, Maatz H, Reichart D, Worth CL, Lindberg EL, Kanda M,
+Polanski K, Heinig M, Lee M <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32971526" target="_blank">
+Cells of the adult human heart</a>.
+<em>Nature</em>. 2020 Dec;588(7838):466-472.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32971526" target="_blank">32971526</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7681775/" target="_blank">PMC7681775</a>
+</p>
+
+
+<!--liverMacParland.html-->
+
+<p>
+MacParland SA, Liu JC, Ma XZ, Innes BT, Bartczak AM, Gage BK, Manuel J, Khuu N, Echeverri J, Linares
+I <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30348985" target="_blank">
+Single cell RNA sequencing of human liver reveals distinct intrahepatic macrophage populations</a>.
+<em>Nat Commun</em>. 2018 Oct 22;9(1):4383.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30348985" target="_blank">30348985</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6197289/" target="_blank">PMC6197289</a></p>
+
+
+<!--skinSoleBoldo.html-->
+
+<p>
+Sol&#233;-Boldo L, Raddatz G, Sch&#252;tz S, Mallm JP, Rippe K, Lonsdorf AS, Rodr&#237;guez-Paredes
+M, Lyko F.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32327715" target="_blank">
+Single-cell transcriptomes of the human skin reveal age-related loss of fibroblast priming</a>.
+<em>Commun Biol</em>. 2020 Apr 23;3(1):188.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32327715" target="_blank">32327715</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7181753/" target="_blank">PMC7181753</a>
+</p>
+
+<!--kidneyStewart.html-->
+
+<p>
+Stewart BJ, Ferdinand JR, Young MD, Mitchell TJ, Loudon KW, Riding AM, Richoz N, Frazer GL,
+Staniforth JUL, Vieira Braga FA <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31604275" target="_blank">
+Spatiotemporal immune zonation of the human kidney</a>.
+<em>Science</em>. 2019 Sep 27;365(6460):1461-1466.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31604275" target="_blank">31604275</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7343525/" target="_blank">PMC7343525</a>
+</p>
+
+<!--lungTravaglini2020.html-->
+
+<p>
+Travaglini KJ, Nabhan AN, Penland L, Sinha R, Gillich A, Sit RV, Chang S, Conley SD, Mori Y, Seita J
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33208946" target="_blank">
+A molecular cell atlas of the human lung from single-cell RNA sequencing</a>.
+<em>Nature</em>. 2020 Nov;587(7835):619-625.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33208946" target="_blank">33208946</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7704697/" target="_blank">PMC7704697</a>
+</p>
+
+<!--cortexVelmeshev.html-->
+
+<p>
+Velmeshev D, Schirmer L, Jung D, Haeussler M, Perez Y, Mayer S, Bhaduri A, Goyal N, Rowitch DH,
+Kriegstein AR.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31097668" target="_blank">
+Single-cell genomics identifies cell type-specific molecular changes in autism</a>.
+<em>Science</em>. 2019 May 17;364(6441):685-689.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31097668" target="_blank">31097668</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7678724/" target="_blank">PMC7678724</a>
+</p>
+
+<!--placentaVentoTormo.html-->
+
+<p>
+Vento-Tormo R, Efremova M, Botting RA, Turco MY, Vento-Tormo M, Meyer KB, Park JE, Stephenson E,
+Pola&#324;ski K, Goncalves A <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30429548" target="_blank">
+Single-cell reconstruction of the early maternal-fetal interface in humans</a>.
+<em>Nature</em>. 2018 Nov;563(7731):347-353.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30429548" target="_blank">30429548</a>
+</p>
+
+<!--colonWang.html, ileumWang.html, rectumWang.html-->
+<p>
+Wang Y, Song W, Wang J, Wang T, Xiong X, Qi Z, Fu W, Yang X, Chen YG.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31753849" target="_blank">
+Single-cell transcriptome analysis reveals differential nutrient absorption functions in human
+intestine</a>.
+<em>J Exp Med</em>. 2020 Feb 3;217(2).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31753849" target="_blank">31753849</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7041720/" target="_blank">PMC7041720</a></p>

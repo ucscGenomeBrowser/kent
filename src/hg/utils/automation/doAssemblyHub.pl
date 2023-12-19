@@ -28,6 +28,7 @@ use vars qw/
     $opt_sourceDir
     $opt_species
     $opt_rmskSpecies
+    $opt_runRepeatModeler
     $opt_ncbiRmsk
     $opt_noRmsk
     $opt_augustusSpecies
@@ -35,7 +36,7 @@ use vars qw/
     $opt_xenoRefSeq
     $opt_noXenoRefSeq
     $opt_ucscNames
-    $opt_asmHubName
+    $opt_dbName
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -47,6 +48,7 @@ my $stepper = new HgStepManager(
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'cytoBand',   func => \&doCytoBand },
       { name => 'gc5Base',   func => \&doGc5Base },
+      { name => 'repeatModeler',   func => \&doRepeatModeler },
       { name => 'repeatMasker',   func => \&doRepeatMasker },
       { name => 'simpleRepeat',   func => \&doSimpleRepeat },
       { name => 'allGaps',   func => \&doAllGaps },
@@ -71,6 +73,7 @@ my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $species = "";       # usually found in asmId_assembly_report.txt
 my $ftpDir = "";	# will be determined from given asmId
 my $rmskSpecies = "";
+my $runRepeatModeler = 0;       # default off
 my $noRmsk = 0;	# when RepeatMasker is not possible, such as bacteria
 my $ncbiRmsk = 0;	# when =1 call doRepeatMasker.pl
                         # with -ncbiRmsk=path.out.gz and -liftSpec=...
@@ -79,7 +82,8 @@ my $xenoRefSeq = "/hive/data/genomes/asmHubs/xenoRefSeq";
 my $noAugustus = 0;     # bacteria do *not* create an augustus track
 my $noXenoRefSeq = 0;	# bacteria do *not* create a xenoRefSeq track
 my $ucscNames = 0;  # default 'FALSE' (== 0)
-my $asmHubName = "n/a";  # directory name in: /gbdb/hubs/asmHubName
+my $dbName = "";  # default uses NCBI asmId for name, can specify: abcDef1
+my $defaultName = "";  # will be asmId or dbName if present
 my $workhorse = "hgwdev";  # default workhorse when none chosen
 my $fileServer = "hgwdev";  # default when none chosen
 my $bigClusterHub = "ku";  # default when none chosen
@@ -111,13 +115,15 @@ options:
        $sourceDir/GC[AF]/123/456/789/asmId
     -ucscNames        Translate NCBI/INSDC/RefSeq names to UCSC names
                       default is to use the given NCBI/INSDC/RefSeq names
-    -asmHubName <name>  directory name in: /gbdb/hubs/asmHubName
+    -dbName <name>    name for UCSC style database name, e.g. 'abcDef1'
     -species <name>   use this species designation if there is no
                       asmId_assembly_report.txt with an
                       'Organism name:' entry to obtain species
     -rmskSpecies <name> to override default 'species' name for repeat masker
                       the default is found in the asmId_asssembly_report.txt
                       e.g. -rmskSpecies=viruses
+    -runRepeatModeler run RepeatModeler to supply custom lib to RepeatMasker,
+                      default is to not run RepeatModeler
     -noRmsk           when RepeatMasker is not possible, such as bacteria
     -ncbiRmsk         use NCBI rm.out.gz file instead of local cluster run
                       for repeat masking
@@ -143,9 +149,14 @@ Automates build of assembly hub.  Steps:
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
     chromAlias:  construct asmId.chromAlias.txt for alias name recognition
-    gatewayPage: create html/asmId.description.html contents (USE: asmHubName)
+    gatewayPage: create html/asmId.description.html contents
     cytoBand: create cytoBand track and navigation ideogram
     gc5Base: create bigWig file for gc5Base track
+    repeatModeler: optionally, run RepeatModeler to construct custom library
+                   for repeatMasker run.  Use: -runRepeatModeler to perform
+                   this procedure, warning: can take a considerable amount
+                   of time (12 to 48 hours or more), and consumes an entire
+                   ku cluster node
     repeatMasker: run repeat masker cluster run and create bigBed files for
                   the composite track categories of repeats
     simpleRepeat: run trf cluster run and create bigBed file for simple repeats
@@ -194,7 +205,7 @@ Assumptions:
 # Command line args: asmId
 my ( $asmId);
 # Other:
-my ($buildDir, $secondsStart, $secondsEnd, $assemblySource);
+my ($buildDir, $secondsStart, $secondsEnd, $assemblySource, $asmReport);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -202,11 +213,12 @@ sub checkOptions {
 		      'buildDir=s',
 		      'sourceDir=s',
 		      'rmskSpecies=s',
+		      'runRepeatModeler',
 		      'noRmsk',
 		      'ncbiRmsk',
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
-		      'asmHubName=s',
+		      'dbName=s',
 		      'noXenoRefSeq',
 		      'noAugustus',
 		      'ucscNames',
@@ -457,16 +469,18 @@ sub readAltPlacement($$) {
   while (my $line = <AP>) {
     chomp $line;
     next if ($line =~ m/^#/);
+    my $fixAlt = "alt";
+    $fixAlt = "fix" if ($altPlacementFile =~ m/PATCH/);
     my ($alt_asm_name, $prim_asm_name, $alt_scaf_name, $alt_scaf_acc, $parent_type, $parent_name, $parent_acc, $region_name, $ori, $alt_scaf_start, $alt_scaf_stop, $parent_start, $parent_stop, $alt_start_tail, $alt_stop_tail) = split('\t', $line);
     my $acc = $alt_scaf_acc;
     $alt_scaf_acc = $acc;
     my $ucscName = $acc;
-    if ($ucscNames) {
-      $alt_scaf_acc =~ s/\./v/;
-      $ucscName = sprintf("chr%s_%s_alt", $parent_name, $alt_scaf_acc);
-      if ( $prim_asm_name ne "Primary Assembly" ) {
-        $ucscName = sprintf("%s_alt", $alt_scaf_acc);
-      }
+    # should always be calculating UCSC names here, the resulting names
+    # can be used for either naming scheme later in AGP and FA processing
+    $alt_scaf_acc =~ s/\./v/;
+    $ucscName = sprintf("chr%s_%s_%s", $parent_name, $alt_scaf_acc, $fixAlt);
+    if ( $prim_asm_name ne "Primary Assembly" ) {
+      $ucscName = sprintf("%s_%s", $alt_scaf_acc, $fixAlt);
     }
     $accToChr->{$acc} = $ucscName;
     printf STDERR "# warning: name longer than 31 characters: '%s'\n# in: '%s'\n", $ucscName, $altPlacementFile if (length($ucscName) > 31);
@@ -487,7 +501,11 @@ sub processAltAgp($$$) {
     my $ncbiAcc = $a[0];
     next if (exists($dupAccessionList{$ncbiAcc}));
     my $ucscName = $nameHash->{$ncbiAcc};
-    printf $fh "%s", $ucscName;  # begin AGP line with accession nam
+    if ($ucscNames) {
+      printf $fh "%s", $ucscName;  # begin AGP line with accession nam
+    } else {
+      printf $fh "%s", $ncbiAcc;  # begin AGP line with accession nam
+    }
     for (my $i = 1; $i < scalar(@a); ++$i) {  # the reset of the AGP line
       printf $fh "\t%s", $a[$i];
     }
@@ -506,11 +524,16 @@ sub processAltFasta($$$) {
   while (my $line = <FF>) {
     if ($line =~ m/^>/) {
       chomp $line;
-      $line =~ s/^>//;
-      $line =~ s/ .*//;
-      die "ERROR: can not find accession $line in nameHash" if (! exists($nameHash->{$line}));
-      my $ucscName = $nameHash->{$line};
-      printf $fh ">%s\n", $ucscName;
+      my $ncbiAcc = $line;
+      $ncbiAcc =~ s/^>//;
+      $ncbiAcc =~ s/ .*//;
+      die "ERROR: can not find accession $ncbiAcc in nameHash" if (! exists($nameHash->{$ncbiAcc}));
+      my $ucscName = $nameHash->{$ncbiAcc};
+      if ($ucscNames) {
+        printf $fh ">%s\n", $ucscName;
+      } else {
+        printf $fh ">%s\n", $ncbiAcc;
+      }
     } else {
       print $fh $line;
     }
@@ -860,9 +883,9 @@ sub doSequence {
 
   $bossScript->add(<<_EOF_
 export asmId="$asmId"
+export dbName="$defaultName"
 
-
-if [ -s ../\$asmId.chrom.sizes ]; then
+if [ -s ../\$dbName.chrom.sizes ]; then
   printf "sequence step previously completed\\n" 1>&2
   exit 0
 fi
@@ -896,30 +919,30 @@ printf STDERR "partsDone: %d\n", $partsDone;
   }
 
   $bossScript->add(<<_EOF_
-zcat *.agp.gz | gzip > ../\$asmId.agp.gz
-faToTwoBit *.fa.gz ../\$asmId.2bit
-faToTwoBit -noMask *.fa.gz ../\$asmId.unmasked.2bit
-twoBitDup ../\$asmId.unmasked.2bit > \$asmId.dups.txt
+zcat *.agp.gz | gzip > ../\$dbName.agp.gz
+faToTwoBit *.fa.gz ../\$dbName.2bit
+faToTwoBit -noMask *.fa.gz ../\$dbName.unmasked.2bit
+twoBitDup ../\$dbName.unmasked.2bit > \$asmId.dups.txt
 if [ -s "\$asmId.dups.txt" ]; then
-  printf "ERROR: duplicate sequences found in ../\$asmId.unmasked.2bit\\n" 1>&2
+  printf "ERROR: duplicate sequences found in ../\$dbName.unmasked.2bit\\n" 1>&2
   cat \$asmId.dups.txt 1>&2
   awk '{print \$1}' \$asmId.dups.txt > \$asmId.remove.dups.list
-  mv ../\$asmId.unmasked.2bit ../\$asmId.unmasked.dups.2bit
-  twoBitToFa ../\$asmId.unmasked.dups.2bit stdout | faSomeRecords -exclude \\
+  mv ../\$dbName.unmasked.2bit ../\$dbName.unmasked.dups.2bit
+  twoBitToFa ../\$dbName.unmasked.dups.2bit stdout | faSomeRecords -exclude \\
     stdin \$asmId.remove.dups.list stdout | gzip -c > \$asmId.noDups.fasta.gz
-  rm -f ../\$asmId.2bit ../\$asmId.unmasked.2bit
-  faToTwoBit \$asmId.noDups.fasta.gz ../\$asmId.2bit
-  faToTwoBit -noMask \$asmId.noDups.fasta.gz ../\$asmId.unmasked.2bit
+  rm -f ../\$dbName.2bit ../\$dbName.unmasked.2bit
+  faToTwoBit \$asmId.noDups.fasta.gz ../\$dbName.2bit
+  faToTwoBit -noMask \$asmId.noDups.fasta.gz ../\$dbName.unmasked.2bit
 fi
 gzip -f \$asmId.dups.txt
-touch -r ../download/\$asmId.2bit ../\$asmId.2bit
-touch -r ../download/\$asmId.2bit ../\$asmId.unmasked.2bit
-touch -r ../download/\$asmId.2bit ../\$asmId.agp.gz
-twoBitInfo ../\$asmId.2bit stdout | sort -k2nr > ../\$asmId.chrom.sizes
-touch -r ../\$asmId.2bit ../\$asmId.chrom.sizes
+touch -r ../download/\$asmId.2bit ../\$dbName.2bit
+touch -r ../download/\$asmId.2bit ../\$dbName.unmasked.2bit
+touch -r ../download/\$asmId.2bit ../\$dbName.agp.gz
+twoBitInfo ../\$dbName.2bit stdout | sort -k2nr > ../\$dbName.chrom.sizes
+touch -r ../\$dbName.2bit ../\$dbName.chrom.sizes
 # verify everything is there
 twoBitInfo ../download/\$asmId.2bit stdout | sort -k2nr > source.\$asmId.chrom.sizes
-export newTotal=`ave -col=2 ../\$asmId.chrom.sizes | grep "^total"`
+export newTotal=`ave -col=2 ../\$dbName.chrom.sizes | grep "^total"`
 export oldTotal=`ave -col=2 source.\$asmId.chrom.sizes | grep "^total"`
 if [ "\$newTotal" != "\$oldTotal" ]; then
   printf "# ERROR: sequence construction error: not same totals source vs. new:\\n" 1>&2
@@ -927,20 +950,20 @@ if [ "\$newTotal" != "\$oldTotal" ]; then
   exit 255
 fi
 rm source.\$asmId.chrom.sizes
-export checkAgp=`checkAgpAndFa ../\$asmId.agp.gz ../\$asmId.2bit 2>&1 | tail -1`
+export checkAgp=`checkAgpAndFa ../\$dbName.agp.gz ../\$dbName.2bit 2>&1 | tail -1`
 if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ]; then
-  printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\\n" 1>&2
+  printf "# ERROR: checkAgpAndFa \$dbName.agp.gz \$dbName.2bit failing\\n" 1>&2
   exit 255
 fi
 _EOF_
   );
   if ($ucscNames) {
     $bossScript->add(<<_EOF_
-join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
-join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$1,\$2,\$3,\$2}' > \$asmId.ucscToNcbi.lift
+join -t\$'\\t' <(sort ../\$dbName.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
+join -t\$'\\t' <(sort ../\$dbName.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$1,\$2,\$3,\$2}' > \$asmId.ucscToNcbi.lift
 export c0=`cat \$asmId.ncbiToUcsc.lift | wc -l`
 export c1=`cat \$asmId.ucscToNcbi.lift | wc -l`
-export c2=`cat ../\$asmId.chrom.sizes | wc -l`
+export c2=`cat ../\$dbName.chrom.sizes | wc -l`
 # verify all names are accounted for
 if [ "\$c0" -ne "\$c2" ]; then
   printf "# ERROR: not all names accounted for in \$asmId.ncbiToUcsc.lift" 1>&2
@@ -954,10 +977,10 @@ _EOF_
     );
   }
   $bossScript->add(<<_EOF_
-twoBitToFa ../\$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
-touch -r ../\$asmId.2bit \$asmId.faCount.txt.gz
+twoBitToFa ../\$dbName.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
+touch -r ../\$dbName.2bit \$asmId.faCount.txt.gz
 zgrep -P "^total\t" \$asmId.faCount.txt.gz > \$asmId.faCount.signature.txt
-touch -r ../\$asmId.2bit \$asmId.faCount.signature.txt
+touch -r ../\$dbName.2bit \$asmId.faCount.signature.txt
 _EOF_
   );
   $bossScript->execute();
@@ -974,7 +997,7 @@ sub doAssemblyGap {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId="$defaultName"
 
 if [ ../../\$asmId.agp.gz -nt \$asmId.assembly.bb ]; then
 
@@ -1024,15 +1047,32 @@ sub doChromAlias {
 
   $bossScript->add(<<_EOF_
 export buildDir=$buildDir
-export asmId=$asmId
+export asmId="$defaultName"
 
 \$HOME/kent/src/hg/utils/automation/asmHubChromAlias.pl \\
-    \${asmId} | sort > \${asmId}.chromAlias.txt
+    \${asmId} $asmId | sort > \${asmId}.chromAlias.txt
+
+\$HOME/kent/src/hg/utils/automation/aliasTextToBed.pl \\
+  -chromSizes=\$buildDir/\$asmId.chrom.sizes \\
+    -aliasText=\${asmId}.chromAlias.txt \\
+      -aliasBed=\${asmId}.chromAlias.bed \\
+        -aliasAs=\${asmId}.chromAlias.as \\
+        -aliasBigBed=\${asmId}.chromAlias.bb
+
+bigBedToBed -header \${asmId}.chromAlias.bb test.chromAlias.bed
+\$HOME/kent/src/hg/utils/automation/aliasBedToCt.pl \\
+  test.chromAlias.bed \${asmId}.chromAlias.bb .
+
 # verify each sequence name has an alias
-export sizeCount=`cat ../../\${asmId}.chrom.sizes | wc -l`
-export aliasCount=`grep -v "^#" \${asmId}.chromAlias.txt | wc -l`
+export sizeCount=`grep -c . ../../\${asmId}.chrom.sizes`
+export aliasCount=`grep -c -v "^#" \${asmId}.chromAlias.txt`
+export testCount=`grep -c -v "^#" test.chromAlias.bed`
 if [ "\${sizeCount}" -ne "\${aliasCount}" ]; then
   printf "ERROR: chromAlias: incorrect number of aliases chromSizes %d > %d aliasCount\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
+  exit 255
+fi
+if [ "\${sizeCount}" -ne "\${testCount}" ]; then
+  printf "ERROR: chromAlias: incorrect number of aliases chromSizes %d > %d testCount in bigBed file\\n" "\${sizeCount}" "\${testCount}" 1>&2
   exit 255
 fi
 
@@ -1046,14 +1086,10 @@ _EOF_
 #########################################################################
 # * step: gatewayPage [workhorse]
 sub doGatewayPage {
-  if ($asmHubName eq "n/a") {
-    printf STDERR "ERROR: step gatewayPage needs argument -asmHubName <name>\n";
-    exit 255;
-  }
   my $runDir = "$buildDir/html";
   &HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes = "construct html/$asmId.description.html";
+  my $whatItDoes = "construct html/$defaultName.description.html";
   my $bossScript = newBash HgRemoteScript("$runDir/doGatewayPage.bash",
                     $workhorse, $runDir, $whatItDoes);
 
@@ -1062,26 +1098,31 @@ sub doGatewayPage {
   my $photoLink = "";
   my $speciesNoBlank = $species;
   $speciesNoBlank =~ s/ /_/g;
+printf STDERR "# looking for photo species: %s\n", ${speciesNoBlank};
   if ( -s "$runDir/../photo/$speciesNoBlank.jpg" ) {
-     $photoJpg = "../photo/\${species}.jpg";
+     $photoJpg = "../photo/${speciesNoBlank}.jpg";
      $photoCredit = "../photo/photoCredits.txt";
-     $photoLink = "rm -f \${species}.jpg; ln -s ../photo/\${species}.jpg ."
+     $photoLink = "rm -f ${speciesNoBlank}.jpg; ln -s ../photo/${speciesNoBlank}.jpg ."
   } else {
      printf STDERR "# gatewayPage: warning: no photograph available\n";
   }
 
+printf STDERR "# asmId: %s\n", $defaultName;
+printf STDERR "# asmReport %s\n", $asmReport;
+printf STDERR "# chrom.sizes: ../%s.chrom.sizes\n", $defaultName;
+printf STDERR "# photoJpg %s\n", $photoJpg;
+printf STDERR "# photoCredit %s\n", $photoCredit;
+
   $bossScript->add(<<_EOF_
-export asmId=$asmId
-export species=$speciesNoBlank
+export asmId="$defaultName"
+export asmReport="$asmReport"
 
 \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
-     $asmHubName ../download/\${asmId}_assembly_report.txt \\
-       ../\${asmId}.chrom.sizes \\
+     \${asmReport} ../\${asmId}.chrom.sizes \\
          $photoJpg $photoCredit \\
            > \$asmId.description.html 2> \$asmId.names.tab
 \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
        ../\$asmId.chrom.sizes 2> \$asmId.build.stats.txt
-touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
 $photoLink
 _EOF_
   );
@@ -1098,14 +1139,14 @@ sub doCytoBand {
   my $bossScript = newBash HgRemoteScript("$runDir/doCytoBand.bash",
                     $workhorse, $runDir, $whatItDoes);
 
-  if ( ! -s "$buildDir/$asmId.chrom.sizes" ) {
+  if ( ! -s "$buildDir/$defaultName.chrom.sizes" ) {
       printf STDERR "ERROR: sequence step not completed\n";
-      printf STDERR "can not find: $buildDir/$asmId.chrom.sizes\n";
+      printf STDERR "can not find: $buildDir/$defaultName.chrom.sizes\n";
       exit 255;
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ ../../\$asmId.chrom.sizes -nt \$asmId.cytoBand.bb ]; then
   awk '{printf "%s\\t0\\t%d\\t\\tgneg\\n", \$1, \$2}' ../../\$asmId.chrom.sizes | sort -k1,1 -k2,2n > \$asmId.cytoBand.bed
@@ -1132,7 +1173,7 @@ sub doGc5Base {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ ../../\$asmId.2bit -nt \$asmId.gc5Base.bw ]; then
   hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \\
@@ -1149,6 +1190,41 @@ _EOF_
   );
   $bossScript->execute();
 } # gc5Base
+
+#########################################################################
+# * step: repeatModeler [workhorse, bigClusterHub]
+sub doRepeatModeler {
+  if (! $runRepeatModeler) {
+       &HgAutomate::verbose(1, "# RepeatModeler not being run, add argument: -runRepeatModeler to run this step before RepeatMasker\n");
+	return;
+  }
+  my $runDir = "$buildDir/trackData/repeatModeler";
+  #  check if been run before
+  if ( -d "${runDir}" ) {
+    if ( -s "${runDir}/${defaultName}-families.fa" ) {
+      &HgAutomate::verbose(1, "\nRepeatModeler step previously completed\n");
+      return;
+    } elsif ( -s "$buildDir/trackData/repeatModeler/blastDb.bash" ) {
+        &HgAutomate::verbose(1, "\nERROR: repeatModeler step may be running\n");
+         exit 255;
+    }
+  }
+  &HgAutomate::mustMkdir($runDir);
+  my $whatItDoes = "run RepeatModeler on sequence to prepare RepeatMasker custom library";
+  my $bossScript = newBash HgRemoteScript("$runDir/doRepeatModeler.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId="${defaultName}"
+export buildDir="${buildDir}"
+
+doRepeatModeler.pl -buildDir=`pwd` \\
+  -unmaskedSeq=\$buildDir/\$asmId.unmasked.2bit \\
+    -bigClusterHub=$bigClusterHub -workhorse=$workhorse \$asmId
+_EOF_
+  );
+  $bossScript->execute();
+}	# sub doRepeatModeler
 
 #########################################################################
 # * step: repeatMasker [workhorse]
@@ -1171,6 +1247,11 @@ sub doRepeatMasker {
   my $bossScript = newBash HgRemoteScript("$runDir/doRepeatMasker.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $repeatModeler = "$buildDir/trackData/repeatModeler";
+  my $customLib = "";
+  if ( -s "${repeatModeler}/${defaultName}-families.fa" ) {
+     $customLib = "-customLib=\"${repeatModeler}/${defaultName}-families.fa\"";
+  }
   my $rmskOpts = "";
   if ($ncbiRmsk) {
      if ( -s "$buildDir/download/${asmId}_rm.out.gz" ) {
@@ -1187,8 +1268,13 @@ sub doRepeatMasker {
      }
   }
 
+  my $speciesOrLib = "-species=\"\$species\"";
+  if ( length(${customLib}) ) {
+     $speciesOrLib = "${customLib}";
+  }
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
+export ncbiAsmId=$asmId
 
 if [ $buildDir/\$asmId.2bit -nt faSize.rmsk.txt ]; then
 export species=`echo $rmskSpecies | sed -e 's/_/ /g;'`
@@ -1196,7 +1282,7 @@ export species=`echo $rmskSpecies | sed -e 's/_/ /g;'`
 rm -f versionInfo.txt
 
 doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit $rmskOpts \\
-  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse $speciesOrLib \$asmId
 
 if [ -s "\$asmId.fa.out" ]; then
   gzip \$asmId.fa.out
@@ -1204,11 +1290,11 @@ fi
 gzip \$asmId.sorted.fa.out \$asmId.nestedRepeats.bed
 
 doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit $rmskOpts \\
-  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse $speciesOrLib \$asmId
 
 if [ ! -s versionInfo.txt ]; then
-  if [ -s ../../download/${asmId}_rm.run ]; then
-    ln -s ../../download/${asmId}_rm.run versionInfo.txt
+  if [ -s ../../download/\${ncbiAsmId}_rm.run ]; then
+    ln -s ../../download/\${ncbiAsmId}_rm.run versionInfo.txt
   fi
 fi
 
@@ -1234,12 +1320,12 @@ sub doSimpleRepeat {
 
   my $trfClusterHub = $smallClusterHub;
 
-  my $seqCount = `cat $buildDir/$asmId.chrom.sizes | wc -l`;
+  my $seqCount = `cat $buildDir/$defaultName.chrom.sizes | wc -l`;
   chomp $seqCount;
   # check for large seqCount and large genome, then use bigCluster
   # the 100000 and 20000000 are from doSimpleRepeat.pl
   if ( $seqCount > 100000 ) {
-     my $genomeSize = `ave -col=2 $buildDir/$asmId.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
+     my $genomeSize = `ave -col=2 $buildDir/$defaultName.chrom.sizes | grep -w total | awk '{printf "%d", \$NF}'`;
      chomp $genomeSize;
      if ($genomeSize > 200000000) {
 	$trfClusterHub = $bigClusterHub;
@@ -1247,7 +1333,7 @@ sub doSimpleRepeat {
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export buildDir=$buildDir
 
 if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
@@ -1259,7 +1345,15 @@ if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
     -continue=cleanup -stop=cleanup -unmaskedSeq=\$buildDir/\$asmId.2bit \\
       -trf409=6 -dbHost=$dbHost -smallClusterHub=$trfClusterHub \\
         -workhorse=$workhorse \$asmId
-  gzip simpleRepeat.bed trfMask.bed
+  if [ -s simpleRepeat.bed ]; then
+    gzip simpleRepeat.bed &
+  else
+    rm -f simpleRepeat.bed
+  fi
+  if [ -s trfMask.bed ]; then
+    gzip trfMask.bed &
+  fi
+  wait
 fi
 _EOF_
   );
@@ -1285,7 +1379,7 @@ sub doAllGaps {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export buildDir=$buildDir
 
 if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
@@ -1299,9 +1393,9 @@ if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
     bedIntersect -minCoverage=0.0000000014 \$asmId.allGaps.bed \$asmId.gap.bed \\
       \$asmId.verify.annotated.gap.bed
     gapTrackCoverage=`awk '{print \$3-\$2}' \$asmId.gap.bed \\
-      | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+      | ave stdin | grep "^total" | awk '{print \$NF}' | sed -e 's/.000000//;'`
     intersectCoverage=`ave -col=5 \$asmId.verify.annotated.gap.bed \\
-      | grep "^total" | sed -e 's/.000000//;'`
+      | grep "^total" | awk '{print \$NF}' | sed -e 's/.000000//;'`
     if [ \$gapTrackCoverage -ne \$intersectCoverage ]; then
       printf "ERROR: 'all' gaps does not include gap track coverage\\n" 1>&2
       printf "gapTrackCoverage: \$gapTrackCoverage != \$intersectCoverage intersection\\n" 1>&2
@@ -1316,9 +1410,9 @@ if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
   #   sum of both sizes should equal genome size
   both=`cat \$asmId.NOT.allGaps.bed \$asmId.allGaps.bed \\
     | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
-    | sed -e 's/.000000//;'`
+      | awk '{print \$NF}' | sed -e 's/.000000//;'`
   genomeSize=`ave -col=2 ../../\$asmId.chrom.sizes | grep "^total" \\
-    | sed -e 's/.000000//;'`
+    | awk '{print \$NF}' | sed -e 's/.000000//;'`
   if [ \$genomeSize -ne \$both ]; then
      printf "ERROR: bedInvert.pl did not function correctly on allGaps.bed\n" 1>&2
      printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
@@ -1329,7 +1423,7 @@ if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
   # again, verify bedInvert is working correctly, sum of both == genomeSize
   both=`cat \$asmId.NOT.gap.bed \$asmId.gap.bed \\
     | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
-    | sed -e 's/.000000//;'`
+      | awk '{print \$NF}' | sed -e 's/.000000//;'`
   if [ \$genomeSize -ne \$both ]; then
      printf "ERROR: bedInvert did not function correctly on gap.bed\n" 1>&2
      printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
@@ -1340,9 +1434,9 @@ if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
   # verify the intersect functioned correctly
   # sum of new gaps plus gap track should equal all gaps
   allGapCoverage=`awk '{print \$3-\$2}' \$asmId.allGaps.bed \\
-     | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+     | ave stdin | grep "^total" | awk '{print \$NF}' | sed -e 's/.000000//;'`
   both=`cat \$asmId.notAnnotated.gap.bed \$asmId.gap.bed \\
-    | awk '{print \$3-\$2}' | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" | awk '{print \$NF}' | sed -e 's/.000000//;'`
   if [ \$allGapCoverage -ne \$both ]; then
      printf "ERROR: bedIntersect to identify new gaps did not function correctly\n" 1>&2
      printf "allGaps: \$allGapCoverage != \$both (new + gap track)\n" 1>&2
@@ -1364,11 +1458,11 @@ _EOF_
 # * step: idKeys [workhorse]
 sub doIdKeys {
   my $runDir = "$buildDir/trackData/idKeys";
-  if (! -s "$buildDir/$asmId.2bit") {
-    &HgAutomate::verbose(1, "ERROR: idKeys can not find $asmId.2bit\n");
+  if (! -s "$buildDir/$defaultName.2bit") {
+    &HgAutomate::verbose(1, "ERROR: idKeys can not find $defaultName.2bit\n");
     exit 255;
   }
-  if (! needsUpdate("$buildDir/$asmId.2bit", "$runDir/$asmId.keySignature.txt")) {
+  if (! needsUpdate("$buildDir/$defaultName.2bit", "$runDir/$defaultName.keySignature.txt")) {
      &HgAutomate::verbose(1, "# idKeys step previously completed\n");
      return;
   }
@@ -1379,11 +1473,11 @@ sub doIdKeys {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export twoBit=$buildDir/\$asmId.2bit
 
 if [ ../../\$asmId.2bit -nt \$asmId.keySignature.txt ]; then
-  doIdKeys.pl \$asmId -buildDir=`pwd` -twoBit=\$twoBit
+  doIdKeys.pl -bigClusterHub=$bigClusterHub \$asmId -buildDir=`pwd` -twoBit=\$twoBit
   touch -r \$twoBit \$asmId.keySignature.txt
 else
   printf "# idKeys step previously completed\\n" 1>&2
@@ -1401,20 +1495,20 @@ sub doAddMask {
 
   my $goNoGo = 0;
   if (! $noRmsk) {
-    if ( ! -s "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit" ) {
+    if ( ! -s "$buildDir/trackData/repeatMasker/$defaultName.rmsk.2bit" ) {
        printf STDERR "ERROR: repeatMasker step not completed\n";
-       printf STDERR "can not find: $buildDir/trackData/repeatMasker/$asmId.rmsk.2bit\n";
+       printf STDERR "can not find: $buildDir/trackData/repeatMasker/$defaultName.rmsk.2bit\n";
        $goNoGo = 1;
     }
   }
-  if ( ! -s "$buildDir/trackData/windowMasker/$asmId.cleanWMSdust.2bit" ) {
+  if ( ! -s "$buildDir/trackData/windowMasker/$defaultName.cleanWMSdust.2bit" ) {
       printf STDERR "ERROR: windowMasker step not completed\n";
-      printf STDERR "can not find: $buildDir/trackData/windowMasker/$asmId.cleanWMSdust.2bit\n";
+      printf STDERR "can not find: $buildDir/trackData/windowMasker/$defaultName.cleanWMSdust.2bit\n";
       $goNoGo = 1;
   }
-  if ( ! -s "$buildDir/trackData/simpleRepeat/trfMask.bed.gz" ) {
+  if ( ! -s "$buildDir/trackData/simpleRepeat/doCleanup.csh" ) {
       printf STDERR "ERROR: simpleRepeat step not completed\n";
-      printf STDERR "can not find: $buildDir/trackData/simpleRepeat/trfMask.bed.gz\n";
+      printf STDERR "can not find: $buildDir/trackData/simpleRepeat/doCleanup.csh\n";
       $goNoGo = 1;
   }
   if ($goNoGo) {
@@ -1427,27 +1521,50 @@ sub doAddMask {
   my $bossScript = newBash HgRemoteScript("$runDir/doAddMask.bash",
                     $workhorse, $runDir, $whatItDoes);
 
-  my $wmMasked=`grep "masked total" $buildDir/trackData/windowMasker/faSize.$asmId.cleanWMSdust.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+  my $wmMasked=`grep "masked total" $buildDir/trackData/windowMasker/faSize.$defaultName.cleanWMSdust.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+  chomp $wmMasked;
+  $wmMasked = 0 if ($wmMasked > 98);
   my $rmMasked = 0;
   if (! $noRmsk) {
     $rmMasked=`grep "masked total" $buildDir/trackData/repeatMasker/faSize.rmsk.txt | awk '{print \$1}' | sed -e 's/%//;'`;
   }
 
-  my $src2BitToMask = "../repeatMasker/$asmId.rmsk.2bit";
+  my $src2BitToMask = "../repeatMasker/$defaultName.rmsk.2bit";
   if ($noRmsk || ($wmMasked > $rmMasked)) {
-    $src2BitToMask = "../windowMasker/$asmId.cleanWMSdust.2bit";
+    $src2BitToMask = "../windowMasker/$defaultName.cleanWMSdust.2bit";
+  }
+
+  my $accessionId = $defaultName;
+  if ($accessionId =~ m/^GC[AF]_/) {
+     my @a = split('_', $defaultName);
+     $accessionId = sprintf("%s_%s", $a[0], $a[1]);
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
-export accessionId=`echo \$asmId | cut -d'_' -f1-2`
+export asmId=$defaultName
+export src2Bit=$src2BitToMask
+export accessionId=$accessionId
 
-if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
-  twoBitMask $src2BitToMask -type=.bed \\
-     -add ../simpleRepeat/trfMask.bed.gz \$asmId.masked.2bit
-  twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
+# if simple repeat has a result, add it, otherwise no add
+if [ -s ../simpleRepeat/trfMask.bed.gz ]; then
+  if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
+    twoBitMask \$src2Bit -type=.bed \\
+       -add ../simpleRepeat/trfMask.bed.gz \$asmId.masked.2bit
+  fi
+else
+  cp -p \$src2Bit \$asmId.masked.2bit
+fi
+
+if [ \$asmId.masked.2bit -nt \$asmId.masked.faSize.txt ]; then
+  twoBitToFa \$asmId.masked.2bit stdout | gzip -c > \$asmId.fa.gz
+  touch -r \$asmId.masked.2bit \$asmId.fa.gz
+  faSize \$asmId.fa.gz > \$asmId.masked.faSize.txt
   touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
+  bptForTwoBit \$asmId.masked.2bit \$asmId.masked.2bit.bpt
+  touch -r \$asmId.masked.2bit \$asmId.masked.2bit.bpt
+  cp -p \$asmId.fa.gz ../../\$asmId.fa.gz
   cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
+  cp -p \$asmId.masked.2bit.bpt ../../\$asmId.2bit.bpt
   size=`grep -w bases \$asmId.masked.faSize.txt | cut -d' ' -f1`
   if [ \$size -lt 4294967297 ]; then
     ln \$asmId.masked.2bit \$accessionId.2bit
@@ -1482,9 +1599,8 @@ sub doWindowMasker {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
-### if [ ../../\$asmId.unmasked.2bit -nt fb.\$asmId.rmsk.windowmaskerSdust.txt ]; then
 if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.cleanWMSdust.txt ]; then
   \$HOME/kent/src/hg/utils/automation/doWindowMasker.pl -stop=twobit -buildDir=`pwd` -dbHost=$dbHost \\
     -workhorse=$workhorse -unmaskedSeq=$buildDir/\$asmId.unmasked.2bit \$asmId
@@ -1496,15 +1612,23 @@ if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.cleanWMSdust.txt ]; then
     \$asmId.cleanWMSdust.2bit
   twoBitToFa \$asmId.cleanWMSdust.2bit stdout \\
     | faSize stdin > faSize.\$asmId.cleanWMSdust.txt
+  export intersectRmskWM=0
   if [ -s ../repeatMasker/\$asmId.sorted.fa.out.gz ]; then
     zcat ../repeatMasker/\$asmId.sorted.fa.out.gz | sed -e 's/^  *//; /^\$/d;' \\
-      | egrep -v "^SW|^score" | awk '{printf "%s\\t%d\\t%d\\n", \$5, \$6-1, \$7}' \\
+      | (egrep -v "^SW|^score" || true) | awk '{printf "%s\\t%d\\t%d\\n", \$5, \$6-1, \$7}' \\
         | bedSingleCover.pl stdin > rmsk.bed
-    intersectRmskWM=`bedIntersect -minCoverage=0.0000000014 cleanWMask.bed \\
-      rmsk.bed stdout | bedSingleCover.pl stdin | ave -col=4 stdin \\
-       | grep "^total" | awk '{print \$2}' | sed -e 's/.000000//;'`
-  else
-    intersectRmskWM=0
+    if [ -s rmsk.bed ]; then
+      anyOneHome=`bedIntersect -minCoverage=0.0000000014 cleanWMask.bed \\
+          rmsk.bed stdout | bedSingleCover.pl stdin | wc -l`
+      if [ \$anyOneHome -gt 0 ]; then
+       intersectRmskWM=`bedIntersect -minCoverage=0.0000000014 cleanWMask.bed \\
+          rmsk.bed stdout | bedSingleCover.pl stdin | ave -col=4 stdin \\
+           | grep "^total" | awk '{print \$2}' | sed -e 's/.000000//;'`
+       if [ "x\${intersectRmskWM}y" == "xy" ]; then
+         intersectRmskWM=0
+       fi
+      fi
+    fi
   fi
   chromSize=`ave -col=2 ../../\$asmId.chrom.sizes \\
      | grep "^total" | awk '{print \$2}' | sed -e 's/.000000//;'`
@@ -1536,7 +1660,7 @@ sub doGapOverlap {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ ../../\$asmId.unmasked.2bit -nt \$asmId.gapOverlap.bed.gz ]; then
   doGapOverlap.pl -buildDir=`pwd` -bigClusterHub=$bigClusterHub -smallClusterHub=$smallClusterHub -workhorse=$workhorse -twoBit=../../\$asmId.2bit \$asmId
@@ -1553,23 +1677,23 @@ _EOF_
 # * step: tandemDups [workhorse]
 sub doTandemDups {
   my $runDir = "$buildDir/trackData/tandemDups";
-  if (! -s "$buildDir/$asmId.unmasked.2bit") {
+  if (! -s "$buildDir/$defaultName.unmasked.2bit") {
     &HgAutomate::verbose(1,
-	"ERROR: tandemDups: can not find $buildDir/$asmId.unmasked.2bit\n");
+	"ERROR: tandemDups: can not find $buildDir/$defaultName.unmasked.2bit\n");
     exit 255;
   }
-  my $ctgCount = `grep -c '^' $buildDir/$asmId.chrom.sizes`;
+  my $ctgCount = `grep -c '^' $buildDir/$defaultName.chrom.sizes`;
   chomp $ctgCount;
   if ( $ctgCount > 100000) {
    &HgAutomate::verbose(1, "# tandemDups step too many contigs at $ctgCount\n");
        return;
   }
   if (-d "${runDir}" ) {
-     if (! -s "$runDir/$asmId.tandemDups.bb") {
+     if (! -s "$runDir/$defaultName.tandemDups.bb") {
        &HgAutomate::verbose(1,
        "WARNING tandemDups step may already be running, but not completed ?\n");
        return;
-     } elsif (! needsUpdate("$buildDir/$asmId.unmasked.2bit", "$runDir/$asmId.tandemDups.bb")) {
+     } elsif (! needsUpdate("$buildDir/$defaultName.unmasked.2bit", "$runDir/$defaultName.tandemDups.bb")) {
        &HgAutomate::verbose(1, "# tandemDups step previously completed\n");
        return;
      }
@@ -1582,7 +1706,7 @@ sub doTandemDups {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export twoBit=$buildDir/\$asmId.unmasked.2bit
 
 if [ \$twoBit -nt \$asmId.tandemDups.bb ]; then
@@ -1609,7 +1733,7 @@ sub doCpgIslands {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 mkdir -p masked unmasked
 cd unmasked
@@ -1662,17 +1786,17 @@ sub doNcbiGene {
   }
   my $runDir = "$buildDir/trackData/ncbiGene";
   if (-d "${runDir}" ) {
-     if (! -s "$runDir/$asmId.ncbiGene.bb") {
+     if (! -s "$runDir/$defaultName.ncbiGene.bb") {
        &HgAutomate::verbose(1,
        "WARNING ncbiGene step may already be running, but not completed ?\n");
        return;
-     } elsif (! needsUpdate("$gffFile", "$runDir/$asmId.ncbiGene.bb")) {
+     } elsif (! needsUpdate("$gffFile", "$runDir/$defaultName.ncbiGene.bb")) {
        &HgAutomate::verbose(1, "# ncbiGene step previously completed\n");
        return;
      }
   }
-  if (! -s "$buildDir/$asmId.faSize.txt") {
-    &HgAutomate::verbose(1, "# step ncbiGene: can not find faSize.txt at:\n#  $buildDir/$asmId.faSize.txt\n");
+  if (! -s "$buildDir/$defaultName.faSize.txt") {
+    &HgAutomate::verbose(1, "# step ncbiGene: can not find faSize.txt at:\n#  $buildDir/$defaultName.faSize.txt\n");
     exit 255;
   }
 
@@ -1688,7 +1812,7 @@ sub doNcbiGene {
   }
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 export gffFile=$gffFile
 
 function cleanUp() {
@@ -1715,7 +1839,7 @@ _EOF_
   if ($ucscNames) {
     $bossScript->add(<<_EOF_
   liftUp -extGenePred -type=.gp stdout \\
-    ../../sequence/\$asmId.ncbiToUcsc.lift warn \\
+    ../../sequence/$asmId.ncbiToUcsc.lift warn \\
       \$asmId.ncbiGene.genePred.gz | gzip -c \\
         > \$asmId.ncbiGene.ucsc.genePred.gz
   ncbiGenePred="\$asmId.ncbiGene.ucsc.genePred.gz"
@@ -1789,10 +1913,10 @@ sub doNcbiRefSeq {
 
   my $liftSpec = "";
   if ($ucscNames) {
-    $liftSpec="-liftFile=\"\$buildDir/sequence/\$asmId.ncbiToUcsc.lift\"";
+    $liftSpec="-liftFile=\"\$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
   }
   $bossScript->add(<<_EOF_
-export asmId="$asmId"
+export asmId="$defaultName"
 export buildDir="$buildDir"
 export liftSpec="$liftSpec"
 export target2bit="\$buildDir/\$asmId.2bit"
@@ -1803,7 +1927,7 @@ if [ $buildDir/\$asmId.2bit -nt \$asmId.ncbiRefSeq.bb ]; then
       -assemblyHub -bigClusterHub=$bigClusterHub -dbHost=$dbHost $liftSpec \\
       -target2bit="\$target2bit" \\
       -stop=load -fileServer=$fileServer -smallClusterHub=$smallClusterHub -workhorse=$workhorse \\
-      \$asmId \$asmId
+      $asmId \$asmId
 else
   printf "# ncbiRefSeq step previously completed\\n" 1>&2
 fi
@@ -1820,17 +1944,17 @@ sub doAugustus {
 	return;
   }
   my $runDir = "$buildDir/trackData/augustus";
-  if (! -s "$buildDir/$asmId.2bit") {
+  if (! -s "$buildDir/$defaultName.2bit") {
     &HgAutomate::verbose(1,
-	"ERROR: augustus step can not find $buildDir/$asmId.2bit\n");
+	"ERROR: augustus step can not find $buildDir/$defaultName.2bit\n");
     exit 255;
   }
   if (-d "${runDir}" ) {
-     if (! -s "$runDir/$asmId.augustus.bb") {
+     if (! -s "$runDir/$defaultName.augustus.bb") {
        &HgAutomate::verbose(1,
        "WARNING augustus step may already be running, but not completed ?\n");
        return;
-     } elsif (! needsUpdate("$buildDir/$asmId.2bit", "$runDir/$asmId.augustus.bb")) {
+     } elsif (! needsUpdate("$buildDir/$defaultName.2bit", "$runDir/$defaultName.augustus.bb")) {
        &HgAutomate::verbose(1, "# augustus step previously completed\n");
        return;
      }
@@ -1843,10 +1967,10 @@ sub doAugustus {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.augustus.bb ]; then
-  time (~/kent/src/hg/utils/automation/doAugustus.pl -stop=makeGp -buildDir=`pwd` -dbHost=$dbHost \\
+  time (~/kent/src/hg/utils/automation/doAugustus.pl -ram=6g -stop=makeGp -buildDir=`pwd` -dbHost=$dbHost \\
     -bigClusterHub=$bigClusterHub -species=$augustusSpecies -workhorse=$workhorse \\
     -noDbGenePredCheck -maskedSeq=$buildDir/\$asmId.2bit \$asmId) > makeDb.log 2>&1
   time (~/kent/src/hg/utils/automation/doAugustus.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` -dbHost=$dbHost \\
@@ -1876,7 +2000,7 @@ sub doXenoRefGene {
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-export asmId=$asmId
+export asmId=$defaultName
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.xenoRefGene.bb ]; then
   time (~/kent/src/hg/utils/automation/doXenoRefGene.pl -buildDir=`pwd` -dbHost=$dbHost \\
@@ -1905,17 +2029,23 @@ sub doTrackDb {
   my $bossScript = newBash HgRemoteScript("$runDir/doTrackDb.bash",
                     $workhorse, $runDir, $whatItDoes);
 
-  if (! -s "${buildDir}/trackData/chromAlias/${asmId}.chromAlias.txt" ) {
-    die "ERROR: can not find ${asmId}.chromAlias.txt in\n# ${buildDir}/trackData/chromAlias/\n";
+  if (! -s "${buildDir}/trackData/chromAlias/${defaultName}.chromAlias.txt" ) {
+    die "ERROR: can not find ${defaultName}.chromAlias.txt in\n# ${buildDir}/trackData/chromAlias/\n";
   }
 
   $bossScript->add(<<_EOF_
+export defaultName=$defaultName
 export asmId=$asmId
+export buildDir=$buildDir
 
-rm -f \$asmId.chromAlias.txt
-ln -s trackData/chromAlias/\${asmId}.chromAlias.txt .
-\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
-   > \$asmId.trackDb.txt
+rm -f \$defaultName.chromAlias.txt
+ln -s trackData/chromAlias/\${defaultName}.chromAlias.txt .
+if [ -s trackData/chromAlias/\${defaultName}.chromAlias.bb ]; then
+  rm -f \${defaultName}.chromAlias.bb
+  ln -s trackData/chromAlias/\${defaultName}.chromAlias.bb .
+fi
+\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$defaultName \$asmId \$buildDir \\
+   > \$defaultName.trackDb.txt
 
 _EOF_
   );
@@ -1975,7 +2105,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 
 $sourceDir = $opt_sourceDir ? $opt_sourceDir : $sourceDir;
 $assemblySource = $opt_sourceDir ? "$opt_sourceDir" : "$sourceDir/$ftpDir";
-my $asmReport = "$assemblySource/${asmId}_assembly_report.txt";
+$asmReport = "$assemblySource/${asmId}_assembly_report.txt";
 
 $species = $opt_species ? $opt_species : $species;
 
@@ -1993,7 +2123,9 @@ if (length($species) < 1) {
   }
 }
 
+$dbName = $opt_dbName ? $opt_dbName : $dbName;
 $rmskSpecies = $opt_rmskSpecies ? $opt_rmskSpecies : $species;
+$runRepeatModeler = $opt_runRepeatModeler ? $opt_runRepeatModeler : $runRepeatModeler;
 $augustusSpecies = $opt_augustusSpecies ? $opt_augustusSpecies : $augustusSpecies;
 $xenoRefSeq = $opt_xenoRefSeq ? $opt_xenoRefSeq : $xenoRefSeq;
 $ucscNames = $opt_ucscNames ? 1 : $ucscNames;   # '1' == 'TRUE'
@@ -2003,17 +2135,22 @@ $workhorse = $opt_workhorse ? $opt_workhorse : $workhorse;
 $bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
 $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHub;
 $fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
-$asmHubName = $opt_asmHubName ? $opt_asmHubName : $asmHubName;
 $ncbiRmsk = $opt_ncbiRmsk ? 1 : 0;
 $noRmsk = $opt_noRmsk ? 1 : 0;
+$defaultName = $asmId;
+$defaultName = $dbName if (length($dbName));
+
 
 die "can not find assembly source directory\n$assemblySource" if ( ! -d $assemblySource);
 printf STDERR "# buildDir: %s\n", $buildDir;
 printf STDERR "# sourceDir %s\n", $sourceDir;
+if (length($dbName)) {
+printf STDERR "# dbName %s - building in /hive/data/genomes/%s\n", $dbName, $dbName;
+}
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
 printf STDERR "# xenoRefSeq %s\n", $xenoRefSeq;
 printf STDERR "# assemblySource: %s\n", $assemblySource;
-printf STDERR "# asmHubName %s\n", $asmHubName;
+printf STDERR "# runRepeatModeler %s\n", $runRepeatModeler ? "TRUE" : "FALSE";
 printf STDERR "# rmskSpecies %s\n", $rmskSpecies;
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
 printf STDERR "# ncbiRmsk %s\n", $ncbiRmsk ? "TRUE" : "FALSE";

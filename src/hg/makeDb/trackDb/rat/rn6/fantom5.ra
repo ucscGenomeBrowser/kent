@@ -1,0 +1,823 @@
+track fantom5
+dataVersion FANTOM5 reprocessed7
+longLabel FANTOM5
+group regulation
+superTrack on
+#dimensions dimX=group
+html fantom5.html
+shortLabel FANTOM5
+visibility hide
+#subGroup1 group Group peaks=Peaks counts=Counts
+
+	track robustPeaks
+	dataVersion FANTOM5 phase2.5
+	type bigBed 8 +
+	longLabel FANTOM5 DPI peak, robust set
+	#thickDrawItem on
+	bigDataUrl /gbdb/rn6/fantom5/rn6.cage_peak.bb
+	superTrack fantom5 dense
+	subGroups group=peaks
+	searchTrix rn6.cage_peak.bb.ix
+	itemRgb on
+	priority 1.2
+	exonArrows on
+	#showTopScorers 20
+	#exonArrowsDense on
+	searchIndex name
+	shortLabel TSS peaks
+	visibility dense
+	colorByStrand 255,0,0 0,0,255
+	showSubtrackColorOnUi on
+	boxedCfg on
+        html fantom5.html
+	
+	track Total_counts_multiwig
+	dataVersion FANTOM5 phase2.5
+	type bigWig 0 100
+	longLabel Total counts of CAGE reads
+	viewLimits 0:100
+	autoScale off
+	superTrack fantom5 full
+	subGroups group=counts
+	priority 1.3
+	configurable on
+	dragAndDrop subTracks
+	maxHeightPixels 64:64:11
+	shortLabel Total counts
+	visibility full
+	container multiWig
+	showSubtrackColorOnUi on
+	aggregate transparentOverlay
+        html fantom5.html
+	
+		track TotalCounts_Fwd
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Total counts of CAGE reads forward
+		color 255,0,0
+		parent Total_counts_multiwig
+		bigDataUrl /gbdb/rn6/fantom5/ctssTotalCounts.fwd.bw
+		subGroups category=total strand=forward
+		shortLabel Total counts of CAGE reads (fwd)
+		
+		track TotalCounts_Rev
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Total counts of CAGE reads reverse
+		color 0,0,255
+		parent Total_counts_multiwig
+		bigDataUrl /gbdb/rn6/fantom5/ctssTotalCounts.rev.bw
+		subGroups category=total strand=reverse
+		shortLabel Total counts of CAGE reads (rev)
+	
+	track Max_counts_multiwig
+	dataVersion FANTOM5 phase2.5
+	type bigWig 0 100
+	longLabel Max counts of CAGE reads
+	viewLimits 0:100
+	autoScale off
+	superTrack fantom5 full
+	subGroups group=counts
+	priority 1.4
+	configurable on
+	dragAndDrop subTracks
+	maxHeightPixels 64:64:11
+	shortLabel Max counts
+	visibility full
+	container multiWig
+	showSubtrackColorOnUi on
+	aggregate transparentOverlay
+        html fantom5.html
+	
+		track MaxCounts_Fwd
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Max counts of CAGE reads forward
+		color 255,0,0
+		parent Max_counts_multiwig
+		bigDataUrl /gbdb/rn6/fantom5/ctssMaxCounts.fwd.bw
+		subGroups category=max strand=forward
+		shortLabel Max counts of CAGE reads (fwd)
+		
+		track MaxCounts_Rev
+		dataVersion FANTOM5 phase2.5
+		type bigWig
+		longLabel Max counts of CAGE reads reverse
+		color 0,0,255
+		parent Max_counts_multiwig
+		bigDataUrl /gbdb/rn6/fantom5/ctssMaxCounts.rev.bw
+		subGroups category=max strand=reverse
+		shortLabel Max counts of CAGE reads (rev)
+	
+	track TSS_activity_read_counts
+	dataVersion FANTOM5 phase2.5
+	type bigWig
+	longLabel TSS activity per sample(read counts)
+	priority 2
+	dimensions dimX=sequenceTech dimY=category dimA=strand
+	compositeTrack on
+	superTrack fantom5 full
+	subGroup3 strand Strand forward=forward reverse=reverse
+	subGroup2 category Category cellLine=cellLine fractionation=fractionation primaryCell=primaryCell tissue=tissue
+	shortLabel TSS activity(read counts)
+	visibility hide
+	subGroup1 sequenceTech Sequence_Tech hCAGE=hCAGE LQhCAGE=LQhCAGE
+	showSubtrackColorOnUi off
+	sortOrder category=+ sequenceTech=+
+	boxedCfg on
+        html fantom5.html
+	
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor1_CNhs12070_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11481-119D5
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor1_CNhs12070_11481-119D5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor1.CNhs12070.11481-119D5.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11481-119D5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD1+
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor1_CNhs12070_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11481-119D5
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor1_CNhs12070_11481-119D5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor1.CNhs12070.11481-119D5.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11481-119D5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD1-
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor2_CNhs12071_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11482-119D6
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor2_CNhs12071_11482-119D6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor2.CNhs12071.11482-119D6.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11482-119D6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD2+
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor2_CNhs12071_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11482-119D6
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor2_CNhs12071_11482-119D6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor2.CNhs12071.11482-119D6.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11482-119D6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD2-
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor3_CNhs12072_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11483-119D7
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor3_CNhs12072_11483-119D7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor3.CNhs12072.11483-119D7.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11483-119D7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD3+
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor3_CNhs12072_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11483-119D7
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor3_CNhs12072_11483-119D7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor3.CNhs12072.11483-119D7.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11483-119D7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD3-
+		
+		track RatAorticSmoothMuscleCellsDonor1_CNhs11298_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11300-117B4
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor1_CNhs11298_11300-117B4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11298.11300-117B4.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11300-117B4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1+
+		
+		track RatAorticSmoothMuscleCellsDonor1_CNhs11298_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11300-117B4
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor1_CNhs11298_11300-117B4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11298.11300-117B4.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11300-117B4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1-
+		
+		track RatAorticSmoothMuscleCellsDonor2_CNhs11307_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11377-118A9
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor2_CNhs11307_11377-118A9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11307.11377-118A9.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11377-118A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2+
+		
+		track RatAorticSmoothMuscleCellsDonor2_CNhs11307_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11377-118A9
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor2_CNhs11307_11377-118A9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11307.11377-118A9.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11377-118A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2-
+		
+		track RatAorticSmoothMuscleCellsDonor3_CNhs11315_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11449-118I9
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor3_CNhs11315_11449-118I9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11315.11449-118I9.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11449-118I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3+
+		
+		track RatAorticSmoothMuscleCellsDonor3_CNhs11315_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11449-118I9
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor3_CNhs11315_11449-118I9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11315.11449-118I9.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11449-118I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3-
+		
+		track RatHepatocytesDonor1_CNhs11293_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11295-117A8
+		type bigWig
+		longLabel Rat hepatocytes, donor1_CNhs11293_11295-117A8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor1.CNhs11293.11295-117A8.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11295-117A8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD1+
+		
+		track RatHepatocytesDonor1_CNhs11293_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11295-117A8
+		type bigWig
+		longLabel Rat hepatocytes, donor1_CNhs11293_11295-117A8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor1.CNhs11293.11295-117A8.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11295-117A8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD1-
+		
+		track RatHepatocytesDonor2_CNhs11302_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11372-118A4
+		type bigWig
+		longLabel Rat hepatocytes, donor2_CNhs11302_11372-118A4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor2.CNhs11302.11372-118A4.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11372-118A4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD2+
+		
+		track RatHepatocytesDonor2_CNhs11302_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11372-118A4
+		type bigWig
+		longLabel Rat hepatocytes, donor2_CNhs11302_11372-118A4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor2.CNhs11302.11372-118A4.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11372-118A4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD2-
+		
+		track RatHepatocytesDonor3_CNhs11312_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11444-118I4
+		type bigWig
+		longLabel Rat hepatocytes, donor3_CNhs11312_11444-118I4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor3.CNhs11312.11444-118I4.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11444-118I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD3+
+		
+		track RatHepatocytesDonor3_CNhs11312_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11444-118I4
+		type bigWig
+		longLabel Rat hepatocytes, donor3_CNhs11312_11444-118I4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor3.CNhs11312.11444-118I4.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11444-118I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD3-
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11295_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11296-117A9
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor1_CNhs11295_11296-117A9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11295.11296-117A9.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11296-117A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1+
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11295_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11296-117A9
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor1_CNhs11295_11296-117A9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11295.11296-117A9.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11296-117A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1-
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor2_CNhs11301_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11373-118A5
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor2_CNhs11301_11373-118A5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor2.CNhs11301.11373-118A5.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11373-118A5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD2+
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor2_CNhs11301_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11373-118A5
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor2_CNhs11301_11373-118A5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor2.CNhs11301.11373-118A5.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11373-118A5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD2-
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor3_CNhs11313_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11445-118I5
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor3_CNhs11313_11445-118I5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor3.CNhs11313.11445-118I5.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11445-118I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD3+
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor3_CNhs11313_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11445-118I5
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor3_CNhs11313_11445-118I5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor3.CNhs11313.11445-118I5.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11445-118I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD3-
+		
+		track UniversalRNARatNormalTissuesBiochainPool1_CNhs10614_ctss_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10009-101B8
+		type bigWig
+		longLabel Universal RNA - Rat Normal Tissues Biochain, pool1_CNhs10614_10009-101B8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Universal%20RNA%20-%20Rat%20Normal%20Tissues%20Biochain%2c%20pool1.CNhs10614.10009-101B8.rn6.ctss.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10009-101B8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel UniversalRna+
+		
+		track UniversalRNARatNormalTissuesBiochainPool1_CNhs10614_ctss_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10009-101B8
+		type bigWig
+		longLabel Universal RNA - Rat Normal Tissues Biochain, pool1_CNhs10614_10009-101B8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_read_counts off
+		bigDataUrl /gbdb/rn6/fantom5/Universal%20RNA%20-%20Rat%20Normal%20Tissues%20Biochain%2c%20pool1.CNhs10614.10009-101B8.rn6.ctss.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10009-101B8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel UniversalRna-
+		
+	track TSS_activity_TPM
+	dataVersion FANTOM5 phase2.5
+	type bigWig
+	longLabel TSS activity per sample(TPM)
+	priority 3
+	dimensions dimX=sequenceTech dimY=category dimA=strand
+	compositeTrack on
+	superTrack fantom5 dense
+	subGroup3 strand Strand forward=forward reverse=reverse
+	subGroup2 category Category cellLine=cellLine fractionation=fractionation primaryCell=primaryCell tissue=tissue
+	shortLabel TSS activity(TPM)
+	visibility dense
+	subGroup1 sequenceTech Sequence_Tech hCAGE=hCAGE LQhCAGE=LQhCAGE
+	showSubtrackColorOnUi off
+	sortOrder category=+ sequenceTech=+
+	boxedCfg on
+        html fantom5.html
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor1_CNhs12070_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11481-119D5
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor1_CNhs12070_11481-119D5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor1.CNhs12070.11481-119D5.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11481-119D5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD1+
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor1_CNhs12070_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11481-119D5
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor1_CNhs12070_11481-119D5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor1.CNhs12070.11481-119D5.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11481-119D5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD1-
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor2_CNhs12071_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11482-119D6
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor2_CNhs12071_11482-119D6_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor2.CNhs12071.11482-119D6.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11482-119D6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD2+
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor2_CNhs12071_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11482-119D6
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor2_CNhs12071_11482-119D6_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor2.CNhs12071.11482-119D6.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11482-119D6 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD2-
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor3_CNhs12072_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11483-119D7
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor3_CNhs12072_11483-119D7_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor3.CNhs12072.11483-119D7.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11483-119D7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD3+
+		
+		track RatAorticSmoothMuscleCellsDifferentiatedDonor3_CNhs12072_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11483-119D7
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells - differentiated, donor3_CNhs12072_11483-119D7_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%20-%20differentiated%2c%20donor3.CNhs12072.11483-119D7.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11483-119D7 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcDiffD3-
+		
+		track RatAorticSmoothMuscleCellsDonor1_CNhs11298_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11300-117B4
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor1_CNhs11298_11300-117B4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11298.11300-117B4.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11300-117B4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1+
+		
+		track RatAorticSmoothMuscleCellsDonor1_CNhs11298_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11300-117B4
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor1_CNhs11298_11300-117B4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor1.CNhs11298.11300-117B4.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11300-117B4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD1-
+		
+		track RatAorticSmoothMuscleCellsDonor2_CNhs11307_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11377-118A9
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor2_CNhs11307_11377-118A9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11307.11377-118A9.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11377-118A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2+
+		
+		track RatAorticSmoothMuscleCellsDonor2_CNhs11307_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11377-118A9
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor2_CNhs11307_11377-118A9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor2.CNhs11307.11377-118A9.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11377-118A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD2-
+		
+		track RatAorticSmoothMuscleCellsDonor3_CNhs11315_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11449-118I9
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor3_CNhs11315_11449-118I9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11315.11449-118I9.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11449-118I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3+
+		
+		track RatAorticSmoothMuscleCellsDonor3_CNhs11315_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11449-118I9
+		type bigWig
+		longLabel Rat Aortic Smooth Muscle cells, donor3_CNhs11315_11449-118I9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Aortic%20Smooth%20Muscle%20cells%2c%20donor3.CNhs11315.11449-118I9.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11449-118I9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel AorticSmcD3-
+		
+		track RatHepatocytesDonor1_CNhs11293_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11295-117A8
+		type bigWig
+		longLabel Rat hepatocytes, donor1_CNhs11293_11295-117A8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor1.CNhs11293.11295-117A8.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11295-117A8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD1+
+		
+		track RatHepatocytesDonor1_CNhs11293_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11295-117A8
+		type bigWig
+		longLabel Rat hepatocytes, donor1_CNhs11293_11295-117A8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor1.CNhs11293.11295-117A8.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11295-117A8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD1-
+		
+		track RatHepatocytesDonor2_CNhs11302_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11372-118A4
+		type bigWig
+		longLabel Rat hepatocytes, donor2_CNhs11302_11372-118A4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor2.CNhs11302.11372-118A4.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11372-118A4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD2+
+		
+		track RatHepatocytesDonor2_CNhs11302_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11372-118A4
+		type bigWig
+		longLabel Rat hepatocytes, donor2_CNhs11302_11372-118A4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor2.CNhs11302.11372-118A4.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11372-118A4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD2-
+		
+		track RatHepatocytesDonor3_CNhs11312_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11444-118I4
+		type bigWig
+		longLabel Rat hepatocytes, donor3_CNhs11312_11444-118I4_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor3.CNhs11312.11444-118I4.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11444-118I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD3+
+		
+		track RatHepatocytesDonor3_CNhs11312_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11444-118I4
+		type bigWig
+		longLabel Rat hepatocytes, donor3_CNhs11312_11444-118I4_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20hepatocytes%2c%20donor3.CNhs11312.11444-118I4.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11444-118I4 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel HepatocyteD3-
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11295_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11296-117A9
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor1_CNhs11295_11296-117A9_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11295.11296-117A9.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11296-117A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1+
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor1_CNhs11295_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11296-117A9
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor1_CNhs11295_11296-117A9_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor1.CNhs11295.11296-117A9.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11296-117A9 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD1-
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor2_CNhs11301_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11373-118A5
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor2_CNhs11301_11373-118A5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor2.CNhs11301.11373-118A5.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11373-118A5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD2+
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor2_CNhs11301_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11373-118A5
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor2_CNhs11301_11373-118A5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor2.CNhs11301.11373-118A5.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11373-118A5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD2-
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor3_CNhs11313_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11445-118I5
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor3_CNhs11313_11445-118I5_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor3.CNhs11313.11445-118I5.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=forward
+		metadata ontology_id=11445-118I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD3+
+		
+		track RatMesenchymalStemCellsBoneMarrowDerivedDonor3_CNhs11313_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:11445-118I5
+		type bigWig
+		longLabel Rat Mesenchymal stem cells - bone marrow derived, donor3_CNhs11313_11445-118I5_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Rat%20Mesenchymal%20stem%20cells%20-%20bone%20marrow%20derived%2c%20donor3.CNhs11313.11445-118I5.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=primaryCell strand=reverse
+		metadata ontology_id=11445-118I5 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel MscBoneMarrowD3-
+		
+		track UniversalRNARatNormalTissuesBiochainPool1_CNhs10614_tpm_fwd
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10009-101B8
+		type bigWig
+		longLabel Universal RNA - Rat Normal Tissues Biochain, pool1_CNhs10614_10009-101B8_forward
+		urlLabel FANTOM5 Details:
+		color 255,0,0
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Universal%20RNA%20-%20Rat%20Normal%20Tissues%20Biochain%2c%20pool1.CNhs10614.10009-101B8.rn6.tpm.fwd.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=forward
+		metadata ontology_id=10009-101B8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel UniversalRna+
+		
+		track UniversalRNARatNormalTissuesBiochainPool1_CNhs10614_tpm_rev
+		url http://fantom.gsc.riken.jp/5/sstar/FF:10009-101B8
+		type bigWig
+		longLabel Universal RNA - Rat Normal Tissues Biochain, pool1_CNhs10614_10009-101B8_reverse
+		urlLabel FANTOM5 Details:
+		color 0,0,255
+		parent TSS_activity_TPM on
+		bigDataUrl /gbdb/rn6/fantom5/Universal%20RNA%20-%20Rat%20Normal%20Tissues%20Biochain%2c%20pool1.CNhs10614.10009-101B8.rn6.tpm.rev.bw
+		subGroups sequenceTech=hCAGE category=tissue strand=reverse
+		metadata ontology_id=10009-101B8 sequence_tech=hCAGE
+		maxHeightPixels 100:8:8
+		shortLabel UniversalRna-
+		

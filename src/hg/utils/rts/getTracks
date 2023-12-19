@@ -1,0 +1,14 @@
+
+dbs="hg19 hg38"
+
+for db in $dbs
+do
+    sed '/^ *#/d' ../../htdocs/inc/recTrackSets.$db.tab | tawk '{print $3}' |
+    while read session
+    do
+        HGDB_CONF=/usr/local/apache/cgi-bin/hg.conf /usr/local/apache/cgi-bin/hgTracks "hgS_otherUserName=View&hgS_otherUserSessionName=$session&hgS_doOtherUser=submit&textFont=Bitmap" 2>&1 | grep trackLog  | grep -v position | awk '{print $5}' |   sed 's/:[0-9]/\n/g' | tr -d ',' | sort | tail -n +2 > $db/$session.tracks.txt
+    done
+done
+rm -rf hgt  hgtIdeo  hgtSide
+
+

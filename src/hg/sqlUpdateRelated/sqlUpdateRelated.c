@@ -368,12 +368,12 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	if (firstTime)
 	    firstTime = !firstTime;
 	else
-	    dyStringAppendC(sql, ',');
-	dyStringAppend(sql, field);
+	    sqlDyStringPrintf(sql, ",");
+	sqlDyStringPrintf(sql, "%s", field);
 	}
 
     /* Now generate the values bit */
-    dyStringAppend(sql, ") values (");
+    sqlDyStringPrintf(sql, ") values (");
     firstTime = TRUE;
     for (fieldIx=0; fieldIx < inTable->fieldCount; ++fieldIx)
         {
@@ -394,7 +394,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	if (firstTime)
 	    firstTime = !firstTime;
 	else
-	    dyStringAppendC(sql, ',');
+	    sqlDyStringPrintf(sql, ",");
 	char *rawVal = row[fieldIx];
 	char *uncsvVal = rawVal;
 	if (uncsv)
@@ -404,7 +404,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	dyStringPrintf(sql, "\"%s\"",  escaped);
 	freez(&escaped);
 	}
-    dyStringAppendC(sql, ')');
+    sqlDyStringPrintf(sql, ")");
     verbose(2, "update sql: %s\n", sql->string);
     sqlUpdate(conn, sql->string);
     int mainTableId = sqlLastAutoId(conn);

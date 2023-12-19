@@ -1100,7 +1100,7 @@ DNA *dna;
 int dnaSize;
 char sizeString[16];
 char *oldOrg = NULL;
-struct dyString *ctgDs = newDyString(512);
+struct dyString *ctgDs = dyStringNew(512);
 int modder = 100;  /* How often to print an I'm still alive dot. */
 char *origFaDir = faDir;
 
@@ -1479,7 +1479,7 @@ while (readGbInfo(lf))
     
 
 freez(&oldOrg);
-freeDyString(&ctgDs);
+dyStringFree(&ctgDs);
 lineFileClose(&lf);
 printf(" %d\n", gbCount);
 }

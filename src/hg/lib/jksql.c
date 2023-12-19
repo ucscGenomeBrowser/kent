@@ -419,8 +419,8 @@ struct sqlProfile* sp = sqlProfileGet(profileName, database);
 if (sp == NULL)
     {
     if (profileName == NULL)
-        errAbort("can't find database %s in hg.conf, should have a default named \"db\"",
-                 database);
+        errAbort("can't find mysql connection info for database %s in hg.conf or ~/.hg.conf, should have a default profile named \"db\", so values for at least db.host, "
+                "db.user and db.password. See http://genomewiki.ucsc.edu/index.php/Hg.conf", database);
     else if (sameWord(profileName, "backupcentral"))
         errAbort("can't find profile %s in hg.conf. This error most likely indicates that the "
             "Genome Browser could not connect to MySQL/MariaDB. Either the databases server is not running"
@@ -819,7 +819,9 @@ if (sqlConnMustUseFailover(sc))
     return FALSE;
 
 char query[1024];
-sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(tableName));  
+sqlCkIl(tableNameSafe,tableName)
+//char tableNameSafe[strlen(tableName)+9+1]; sqlCheckIdentifiersList(tableNameSafe, sizeof tableNameSafe, tableName);
+sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", tableNameSafe);  
 struct sqlResult *sr;
 
 // temporarily remove failover connection, we don't want the failover switch here
@@ -926,9 +928,9 @@ static struct slName *sqlListTablesForConn(struct sqlConnection *conn, char *lik
 {
 char query[256];
 if (likeExpr == NULL)
-    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES");
+    sqlSafef(query, sizeof(query), "SHOW TABLES");
 else
-    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES LIKE '%s'", likeExpr);
+    sqlSafef(query, sizeof(query), "SHOW TABLES LIKE '%s'", likeExpr);
 
 struct slName *list = NULL, *el;
 
@@ -1084,6 +1086,16 @@ if (sqlOpenConnections == NULL)
     }
 }
 
+static bool sqlIsUcscServer()
+/* Return TRUE if this is one of our own servers at UCSC */
+{
+// partially copied from hdb.c, but avoids dependendcy on hdb.c
+char *httpHost = getenv("HTTP_HOST");
+if (httpHost==NULL) // this is not running as a CGI, but a command-line program
+    return FALSE;
+return (containsStringNoCase(httpHost, ".ucsc.edu")!=NULL);
+}
+
 static struct sqlConnection *sqlConnRemoteFillIn(struct sqlConnection *sc, 
 					   struct sqlProfile *sp,
                                            char *database, boolean abort, boolean addAsOpen)
@@ -1116,8 +1128,12 @@ mysql_options(conn, MYSQL_OPT_LOCAL_INFILE, NULL);
 // If turned on this can defeat Man-In-The-Middle attacks.
 if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0"))
     {
+    #if !defined(MARIADB_VERSION_ID) && MYSQL_VERSION_ID >= 80000
+    mysql_options(conn, MYSQL_OPT_SSL_MODE, SSL_MODE_REQUIRED);
+    #else
     my_bool flag = TRUE;
     mysql_options(conn, MYSQL_OPT_SSL_VERIFY_SERVER_CERT, &flag);
+    #endif
     }
 
 #if (MYSQL_VERSION_ID >= 50603) // mysql version "5.6.3"
@@ -1145,9 +1161,21 @@ if (mysql_real_connect(
     {
     monitorLeave();
     monitorEnterTime = oldTime;
+
+    char *extraMsg = "";
+    if (sqlIsUcscServer())
+        extraMsg = "We hate this error more than any other and may be already looking into it. You can help us by telling us "
+            "about it, "
+            "the email is genome-www@soe.ucsc.edu. We will fix it ASAP. "
+            "And even if this server is failing right now, usually, one of our other three "
+            "international mirrors is still "
+            "working. The three mirrors are genome.ucsc.edu (US), genome-euro.ucsc.edu (Germany), genome-asia.ucsc.edu "
+            "(Japan). You may not find your custom tracks and saved sessions there, but using another mirror should allow "
+            "continuing your work while we are fixing the problem. ";
+
     if (abort)
-	errAbort("Couldn't connect to database %s on %s as %s.\n%s",
-	    database, sp->host, sp->user, mysql_error(conn));
+	errAbort("Couldn't connect to database %s on %s as %s.\n%s\n%s",
+	    database, sp->host, sp->user, mysql_error(conn), extraMsg);
     else if (sqlParanoid)
 	fprintf(stderr, "Couldn't connect to database %s on %s as %s.  "
 		"mysql: %s  pid=%ld\n",
@@ -1327,6 +1355,9 @@ static boolean sqlConnectIfUnconnected(struct sqlConnection *sc, bool abort)
  * connection object is just tracking the database changes on the main
  * connection, and connects only when really necessary.  */
 {
+if (!sc)
+    return FALSE;
+
 if (sc->conn!=NULL)
     return TRUE;
 char *profName = NULL;
@@ -1415,7 +1446,7 @@ bool sqlConnMustUseFailover(struct sqlConnection *sc)
 {
 // a db that is different between the sqlConnection object and mysql means that we have
 // moved previously to a db that does not exist on the main connection server
-if ((sc->failoverConn != NULL) && differentStringNullOk(sc->db, sc->conn->db))
+if ((sc && sc->failoverConn != NULL) && differentStringNullOk(sc->db, sc->conn->db))
     {
     monitorPrint(sc, "SQL_MAINCONN_DB_INVALID", "%s != %s", sc->db, sc->conn->db);
     return TRUE;
@@ -1454,7 +1485,7 @@ if (monitorFlags & JKSQL_TRACE)
 
 if (startsWith(NOSQLINJ "", query))
     {
-    query += strlen(NOSQLINJ ""); // We know this query has been vetted for sql injection, skip over this tag.
+    query += NOSQLINJ_SIZE; // We know this query has been vetted for sql injection, skip over this tag.
     }
 else
     {
@@ -1660,7 +1691,7 @@ for (table = tableList; table != NULL; table = table->next)
     {
     sqlDyStringPrintf(dy, "%s %s", table->name, how);
     if (table->next != NULL)
-       dyStringAppendC(dy, ',');
+       sqlDyStringPrintf(dy, ",");
     }
 sqlUpdate(sc, dy->string);
 
@@ -1781,7 +1812,9 @@ char *err;
 unsigned int errNo;
 const int tableNotFoundCode = 1146;
 
-sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  
+sqlCkIl(tableSafe,table)
+//char tableSafe[strlen(table)+9+1]; sqlCheckIdentifiersList(tableSafe, sizeof tableSafe, table);
+sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", tableSafe);  
 
 if ((sr = sqlGetResultExt(sc, query, &errNo, &err)) == NULL)
     {
@@ -1847,6 +1880,24 @@ if (changeDb)
     sqlConnChangeDbMainOrFailover(conn, connDb, TRUE);
 freeMem(connDb);
 return (ret!=NULL);
+}
+
+boolean sqlColumnExistsInTablesList(struct sqlConnection *conn, char *tables, char *field)
+/* check if column exists in a list of tables */
+{
+boolean result = FALSE;
+struct slName *tablesList = slNameListFromComma(tables);
+struct slName *table;
+for(table = tablesList; table; table = table->next)
+    {
+    if (sqlColumnExists(conn, table->name, field))
+	{
+	result = TRUE;
+	break;
+	}
+    }
+slFreeList(&tablesList);
+return result;
 }
 
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table)
@@ -2201,7 +2252,6 @@ int sqlRowCount(struct sqlConnection *conn, char *queryTblAndCondition)
 {
 char query[256];
 sqlSafef(query, sizeof(query), "select count(*) from %-s",queryTblAndCondition);  
-// NOSQLINJ since we cannot check the queryTblAndCondition here, the users of this function have been fixed.
 return sqlQuickNum(conn, query);
 }
 
@@ -3803,7 +3853,7 @@ sqlCheckAllowDigitChars(allowed);
 }
 
 /* Currently used 10 times in the code via define sqlCkIl. */
-char *sqlCheckIdentifiersList(char *identifiers)
+char *sqlCheckIdentifiersListExt(char *identifiers)
 /* Check that only valid identifier characters are used in a comma-separated list
  * '.' is allowed also since some code uses it in place of an actual field name.
  * See hgTables/bedList.c::bedSqlFieldsExceptForChrom(). */
@@ -3910,6 +3960,15 @@ if (needText || spaceOk)
 return identifiers;
 }
 
+void sqlCheckIdentifiersList(char* buffer, int bufSize, char *identifiers)
+/* Check that only valid identifier characters are used in a comma-separated list
+ * '.' is allowed also since some code uses it in place of an actual field name.
+ * See hgTables/bedList.c::bedSqlFieldsExceptForChrom().
+ * Save safe output to char array */
+{
+sqlCheckIdentifiersListExt(identifiers);
+safef(buffer, bufSize, NOSQLINJ "%s", identifiers);
+}
 
 char *sqlCheckIdentifier(char *identifier)
 /* Check that only valid identifier characters are used */
@@ -4004,6 +4063,12 @@ while (1)
 return sz;
 }
 
+struct restoreSafeStr
+    {
+    struct restoreSafeStr *next;
+    char *s;
+    int strLen;
+    };
 
 int vaSqlSafefNoAbort(char* buffer, int bufSize, boolean newString, char *format, va_list args)
 /* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
@@ -4020,7 +4085,7 @@ char escPunc = 0x01;  // using char 1 as special char to denote strings needing 
 char *newFormat = NULL;
 int newFormatSize = 2*formatLen + 1;
 if (newString)
-    newFormatSize += strlen(NOSQLINJ "");
+    newFormatSize += NOSQLINJ_SIZE;
 newFormat = needMem(newFormatSize);
 char *nf = newFormat;
 if (newString)
@@ -4028,6 +4093,8 @@ if (newString)
 char *lastPct = NULL;
 int escStringsCount = 0;
 int escStringsSize = 0;
+
+struct restoreSafeStr *restoreSafeStrList=NULL, *restoreSafeStr=NULL;
 
 char c = 0;
 int i = 0;
@@ -4100,6 +4167,24 @@ while (i < formatLen)
 		    { // check identifier
 		    if (!isNegated) // Not a Pre-escaped String
 			sqlCheckIdentifier(s);
+		    else  
+			{
+			if (startsWith(NOSQLINJ, s))
+			    {
+			    // wipe out the prefix by removing from the input string s
+			    int strLen = strlen(s);
+			    memmove(s, s+NOSQLINJ_SIZE, strLen - NOSQLINJ_SIZE + 1);
+			    AllocVar(restoreSafeStr);
+			    restoreSafeStr->s = s;
+			    restoreSafeStr->strLen = strLen;
+			    slAddHead(&restoreSafeStrList, restoreSafeStr);
+			    }
+			else
+			    {
+			    sqlCheckError("Internal Error: Input to %%-s should be created with safe functions.");
+			    // will continue here if non-abort level chosen.
+			    }
+			}
 		    }
 		else
 		    { // check quoted literal
@@ -4119,13 +4204,11 @@ while (i < formatLen)
 			else
 			    {
 			    escStringsSize += strlen(s);
-			    // DEBUG temporary check for signs of double-escaping, can remove later for a minor speedup:
-			    if (strstr(s, "\\\\"))  // this is really 2 backslashes
-				{
-				if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-				    dumpStack("potential sign of double sql-escaping in string [%s]", s);
-				}
 			    }
+			}
+		    else  // quoted -s has no meaning or use, so not allow.
+			{
+			sqlCheckError("quoted -s in format string is not allowed.");
 			}
 		    }
 		}
@@ -4183,6 +4266,14 @@ else
 freeMem(newFormat);
 va_end(orig_args);
 
+// Restore prefixes which were removed from string pointer args with %-s
+for (restoreSafeStr = restoreSafeStrList; restoreSafeStr; restoreSafeStr=restoreSafeStr->next)
+    {
+    memmove(restoreSafeStr->s+NOSQLINJ_SIZE, restoreSafeStr->s, restoreSafeStr->strLen - NOSQLINJ_SIZE + 1);
+    memmove(restoreSafeStr->s, NOSQLINJ, NOSQLINJ_SIZE);
+    }
+slFreeList(&restoreSafeStrList);
+
 return sz;
 
 }
@@ -4220,67 +4311,13 @@ return sz;
 }
 
 
-int vaSqlSafefFrag(char* buffer, int bufSize, char *format, va_list args)
-/* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
- * checking.  The resulting string is always terminated with zero byte.
- * Scans unquoted string parameters for illegal literal sql chars.
- * Escapes quoted string parameters. 
- * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
-{
-int sz = vaSqlSafefNoAbort(buffer, bufSize, FALSE, format, args);
-if ((sz < 0) || (sz >= bufSize))
-    {
-    buffer[bufSize-1] = (char) 0;
-    errAbort("buffer overflow, size %d, format: %s, buffer: '%s'", bufSize, format, buffer);
-    }
-return sz;
-}
-
-int sqlSafefFrag(char* buffer, int bufSize, char *format, ...)
-/* Format string to buffer, vsprintf style, only with buffer overflow
- * checking.  The resulting string is always terminated with zero byte.
- * Scans unquoted string parameters for illegal literal sql chars.
- * Escapes quoted string parameters. 
- * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
-{
-int sz;
-va_list args;
-va_start(args, format);
-sz = vaSqlSafefFrag(buffer, bufSize, format, args);
-va_end(args);
-return sz;
-}
-
-int sqlSafefAppend(char* buffer, int bufSize, char *format, ...)
-/* Append formatted string to buffer, vsprintf style, only with buffer overflow
- * checking.  The resulting string is always terminated with zero byte.
- * Scans unquoted string parameters for illegal literal sql chars.
- * Escapes quoted string parameters. 
- * NOSLQINJ tag is NOT added to beginning since it is assumed to be appended to
- * a properly created sql string. */
-{
-int sz;
-va_list args;
-int len = strlen(buffer);
-if (len >= bufSize)
-    errAbort("sqlSafefAppend() called on string size %d with bufSize %d too small.", len, bufSize);
-va_start(args, format);
-sz = vaSqlSafefFrag(buffer+len, bufSize-len, format, args);
-va_end(args);
-return sz;
-}
-
-
-
 /* --------------------------- */
 
 
-void vaSqlDyStringPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args)
+void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string and isFrag is FALSE. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string. */
 {
 /* attempt to format the string in the current space.  If there
  * is not enough room, increase the buffer size and try again */
@@ -4297,7 +4334,12 @@ while (TRUE)
         dyStringBumpBufSize(ds, ds->bufSize+ds->bufSize);
         avail = ds->bufSize - ds->stringSize;
         }
-    sz = vaSqlSafefNoAbort(ds->string + ds->stringSize, avail, ds->stringSize==0 && !isFrag, format, argscp);
+    if (ds->stringSize > 0 && !startsWith(NOSQLINJ, ds->string))
+	{
+	sqlCheckError("sqlDyPrintf called on non-empty non-safe string.");
+	}
+	
+    sz = vaSqlSafefNoAbort(ds->string + ds->stringSize, avail, ds->stringSize==0, format, argscp);
     va_end(argscp);
 
     /* note that some version return -1 if too small */
@@ -4313,15 +4355,6 @@ while (TRUE)
     }
 }
 
-void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
- * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string.
- * Appends to existing string. */
-{
-vaSqlDyStringPrintfExt(ds, FALSE, format, args);
-}
-
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
@@ -4334,35 +4367,12 @@ vaSqlDyStringPrintf(ds, format, args);
 va_end(args);
 }
 
-void vaSqlDyStringPrintfFrag(struct dyString *ds, char *format, va_list args)
-/* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
- * Strings inside quotes are automatically escaped.
- * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. Appends to existing string. */
-{
-vaSqlDyStringPrintfExt(ds, TRUE, format, args);
-}
-
-void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
-/* Printf to end of dyString after scanning string parameters for illegal sql chars.
- * Strings inside quotes are automatically escaped.
- * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. Appends to existing string. */
-
-{
-va_list args;
-va_start(args, format);
-vaSqlDyStringPrintfFrag(ds, format, args);
-va_end(args);
-}
-
-
 struct dyString *sqlDyStringCreate(char *format, ...)
 /* Create a dyString with a printf style initial content 
  * Adds the NOSQLINJ prefix. */
 {
 int len = strlen(format) * 3;
-struct dyString *ds = newDyString(len);
+struct dyString *ds = dyStringNew(len);
 va_list args;
 va_start(args, format);
 vaSqlDyStringPrintf(ds, format, args);
@@ -4373,7 +4383,8 @@ return ds;
 void sqlDyStringPrintIdList(struct dyString *ds, char *fields)
 /* Append a comma-separated list of field identifiers. Aborts if invalid characters in list. */
 {
-sqlDyStringPrintf(ds, "%-s", sqlCkIl(fields));
+sqlCkIl(fieldsSafe, fields)
+sqlDyStringPrintf(ds, "%-s", fieldsSafe);
 }
 
 

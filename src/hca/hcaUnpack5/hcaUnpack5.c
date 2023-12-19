@@ -9,6 +9,7 @@
 #include "obscure.h"
 #include "sparseMatrix.h"
 #include <hdf5.h>
+#include <hdf5_hl.h>
 
 void usage()
 /* Explain usage and exit. */
@@ -112,7 +113,8 @@ struct vocab
     struct vocab *next;
     char *name;	    /* Column this vocab is associated with */
     int valCount;   /* Number of distinct values */
-    char **stringVals;    /* array of strings */
+    H5T_class_t classt;	/* class of values */
+    union { int *asInt; double *asDouble; char **asString;} val; // array of values
     };
 
 struct metaCol 
@@ -175,17 +177,46 @@ hid_t space = H5Dget_space (hid);
 hsize_t     dims[1];
 H5Sget_simple_extent_dims (space, dims, NULL);
 vocab->valCount = dims[0];
-AllocArray(vocab->stringVals, vocab->valCount);
-
-/* Set us up for zero-terminated UTF8 (or ascii) strings */
-hid_t memtype = cVarString();
-
-/* Read it */
-h5dReadAll(hid, memtype, vocab->stringVals);
-
+hid_t type = H5Dget_type(hid);
+H5T_class_t classt = vocab->classt = H5Tget_class(type);
+switch (classt)
+    {
+    case H5T_INTEGER:
+        {
+        int *buf;
+        AllocArray(buf, vocab->valCount);
+        h5dReadAll(hid, H5T_NATIVE_INT, buf);
+        vocab->val.asInt = buf;
+        break;
+        }
+    case H5T_FLOAT:
+        {
+        double *buf;
+        AllocArray(buf, vocab->valCount);
+        h5dReadAll(hid, H5T_NATIVE_DOUBLE, buf);
+        vocab->val.asDouble = buf;
+        break;
+        }
+    case H5T_STRING:
+        {
+        char **buf;
+        AllocArray(buf, vocab->valCount);
+        h5dReadAll(hid, cVarString(), buf);
+        vocab->val.asString = buf;
+        break;
+        }
+    default:
+        {
+        size_t msgSize = H5LTdtype_to_text(type, NULL, H5LT_DDL, &msgSize);
+        char msg[msgSize];
+        H5LTdtype_to_text(type, msg, H5LT_DDL, &msgSize);
+        errAbort("ERROR: unsupported vocab type: %s\n", msg);
+        break;
+        }
+    }
 /* Clean up */
 H5Sclose(space);
-H5Tclose(memtype);
+H5Tclose(type);
 }
 
 int readCol(struct metaCol *col, hid_t hid, struct hcaUnpack5 *context)
@@ -198,46 +229,35 @@ int size = col->size = dims[0];
 hid_t type = H5Dget_type(hid);
 H5T_class_t classt = col->classt = H5Tget_class(type);
 
-struct vocab *vocab = hashFindVal(context->vocabHash, col->name);
-if (vocab != NULL)
+switch (classt)
     {
-    int *buf;
-    AllocArray(buf, size);
-    col->val.asVocab = buf;
-    h5dReadAll(hid, H5T_NATIVE_INT, buf);
-    }
-else
-    {
-    switch (classt)
+    case H5T_INTEGER:
         {
-	case H5T_INTEGER:
-	    {
-	    int *buf;
-	    AllocArray(buf, size);
-	    col->val.asInt = buf;
-	    h5dReadAll(hid, H5T_NATIVE_INT, buf);
-	    break;
-	    }
-	case H5T_FLOAT:
-	    {
-	    double *buf;
-	    AllocArray(buf, size);
-	    col->val.asDouble = buf;
-	    h5dReadAll(hid, H5T_NATIVE_DOUBLE, buf);
-	    break;
-	    }
-	case H5T_STRING:
-	    {
-	    char **buf;
-	    AllocArray(buf, size);
-	    col->val.asString = buf;
-	    h5dReadAll(hid, cVarString(), buf);
-	    break;
-	    }
-	default:
-	    warn("Skipping type %d", type);
-	    break;
-	}
+        int *buf;
+        AllocArray(buf, size);
+        col->val.asInt = buf;
+        h5dReadAll(hid, H5T_NATIVE_INT, buf);
+        break;
+        }
+    case H5T_FLOAT:
+        {
+        double *buf;
+        AllocArray(buf, size);
+        col->val.asDouble = buf;
+        h5dReadAll(hid, H5T_NATIVE_DOUBLE, buf);
+        break;
+        }
+    case H5T_STRING:
+        {
+        char **buf;
+        AllocArray(buf, size);
+        col->val.asString = buf;
+        h5dReadAll(hid, cVarString(), buf);
+        break;
+        }
+    default:
+        warn("Skipping type %d", type);
+        break;
     }
 
 /* Clean up and go home */
@@ -327,29 +347,60 @@ for (i=0; i<colSize; ++i)
     {
     fprintf(f, "%s", indexCol->val.asString[i]);
     for (col = context->metaList; col != NULL; col = col->next)
-	{
-	struct vocab *vocab = col->vocab;
-	if (vocab != NULL)
-	    fprintf(f, "\t%s", vocab->stringVals[col->val.asVocab[i]]);
-	else 
-	    {
-	    switch (col->classt)
-	        {
-		case H5T_INTEGER:
-		    fprintf(f, "\t%d", col->val.asInt[i]);
-		    break;
-		case H5T_FLOAT:
-		    fprintf(f, "\t%g", col->val.asDouble[i]);
-		    break;
-		case H5T_STRING:
-		    fprintf(f, "\t%s", col->val.asString[i]);
-		    break;
-		default:
-		    internalErr();
-		    break;
-		}
-	    }
-	}
+        {
+        if (col->vocab)
+            {
+            int vocabIx = col->val.asInt[i];
+            if (vocabIx < 0)
+                {
+                // why does this happen? Is this data invalid? Is it unknown?
+                // it's not a read error, see the following comparisons:
+                // cd /hive/data/outside/gtex/V9/snRnaSeq/
+                // h5dump -y -d/obs/__categories/granular GTEx_8_tissues_snRNAseq_immune_atlas_071421.public_obs.h5ad | less -S
+                // clearly an array of tissue-like names? then how come the data contains
+                // indices like -1?
+                // h5dump -d/obs/granular GTEx_8_tissues_snRNAseq_immune_atlas_071421.public_obs.h5ad | less -S
+                // for now just print "unkown val" as a placeholder
+                fprintf(f, "\tunknown value");
+                }
+            else
+                {
+                switch (col->vocab->classt)
+                    {
+                    case H5T_INTEGER:
+                        fprintf(f, "\t%d", col->vocab->val.asInt[vocabIx]);
+                        break;
+                    case H5T_FLOAT:
+                        fprintf(f, "\t%g", col->vocab->val.asDouble[vocabIx]);
+                        break;
+                    case H5T_STRING:
+                        fprintf(f, "\t%s", col->vocab->val.asString[vocabIx]);
+                        break;
+                    default:
+                        internalErr();
+                        break;
+                    }
+                }
+            }
+        else
+            {
+            switch (col->classt)
+                {
+                case H5T_INTEGER:
+                    fprintf(f, "\t%d", col->val.asInt[i]);
+                    break;
+                case H5T_FLOAT:
+                    fprintf(f, "\t%g", col->val.asDouble[i]);
+                    break;
+                case H5T_STRING:
+                    fprintf(f, "\t%s", col->val.asString[i]);
+                    break;
+                default:
+                    internalErr();
+                    break;
+                }
+            }
+        }
     fprintf(f, "\n");
     }
 carefulClose(&f);
@@ -538,7 +589,20 @@ for (vocab = context->vocabList; vocab != NULL; vocab = vocab->next)
     verbose(2, "%s has %d items\n", vocab->name, vocab->valCount);
     int i;
     for (i=0; i<vocab->valCount; ++i)
-        verbose(2, "  %s\n", vocab->stringVals[i]);
+        {
+        switch (vocab->classt)
+            {
+            case H5T_INTEGER:
+                verbose(2, "  %d\n", vocab->val.asInt[i]);
+                break;
+            case H5T_FLOAT:
+                verbose(2, "  %g\n", vocab->val.asDouble[i]);
+                break;
+            default:
+                verbose(2, "  %s\n", vocab->val.asString[i]);
+                break;
+            }
+        }
     }
 
 verbose(2, "And now for looping through the real thingies\n");

@@ -716,8 +716,8 @@ else
  */
 if (qString == NULL)
     {
-    qString = newDyString(50000);
-    tString = newDyString(50000);
+    qString = dyStringNew(50000);
+    tString = dyStringNew(50000);
     }
 clearBlastBlock(bb, qString, tString);
 for (;;)

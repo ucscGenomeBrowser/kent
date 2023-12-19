@@ -35,7 +35,9 @@ struct sqlResult *sr;
 char **row;
 gChromSizes = hashNew(8);
 
-sr = sqlGetResult(conn, NOSQLINJ "SELECT chrom,size FROM chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "SELECT chrom,size FROM chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     unsigned sz = gbParseUnsigned(NULL, row[1]);
@@ -122,8 +124,6 @@ struct hTableInfo* tableInfo;
 char table[64];
 unsigned iRow = 0;
 unsigned rowOffset;
-char accWhere[64];
-char query[512];
 struct sqlResult *sr;
 char **row;
 
@@ -155,13 +155,11 @@ if (tableInfo == NULL)
 else
     {
     rowOffset = (tableInfo->hasBin) ? 1 : 0;
-    // FIXME: might be better as sqlDyString
-    accWhere[0] = '\0';
-    if (select->accPrefix != NULL)
-        sqlSafefFrag(accWhere, sizeof(accWhere), " WHERE qName LIKE '%s%%'",
-              select->accPrefix);
-    sqlSafef(query, sizeof(query), "SELECT * FROM %s%-s", table, accWhere);
-    sr = sqlGetResult(conn, query);
+    struct dyString *query = dyStringNew(1024);
+    sqlDyStringPrintf(query, "SELECT * FROM %s", table);
+    if (select->accPrefix)
+        sqlDyStringPrintf(query, " WHERE qName LIKE '%s%%'", select->accPrefix);
+    sr = sqlGetResult(conn, dyStringContents(query));
     while ((row = sqlNextRow(sr)) != NULL)
         {
         struct psl* psl = pslLoad(row+rowOffset);
@@ -171,6 +169,7 @@ else
         iRow++;
         }
     sqlFreeResult(&sr);
+    dyStringFree(&query);
     }
 gbVerbLeave(3, "chkPslTable %s", table);
 }

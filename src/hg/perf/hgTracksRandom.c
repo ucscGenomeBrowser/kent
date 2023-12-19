@@ -100,7 +100,9 @@ char **row;
 
 ret = newHash(0);
 
-sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = chromInfoLoad(row);
@@ -194,7 +196,7 @@ getMachines(argv[1]);
 
 for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next)
     {
-    dy = newDyString(256);
+    dy = dyStringNew(256);
     dyStringPrintf(dy, "%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d", machinePos->name, 
                    database, chrom, startPos, startPos + windowSize);
     elapsedTime = hgTracksRandom(dy->string);
@@ -204,7 +206,7 @@ for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next
 	}
     else
 	{
-	if (elapsedTime > 5000)
+	if (elapsedTime > 10000 || elapsedTime < 100)
 	    printf("%s %ld <---\n", machinePos->name, elapsedTime);
 	else
 	    printf("%s %ld\n", machinePos->name, elapsedTime);

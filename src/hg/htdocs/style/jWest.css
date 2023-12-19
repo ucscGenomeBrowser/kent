@@ -37,6 +37,11 @@ a.jwAnchor, a.jwAnchor:link, a.jwAnchor:visited,
     text-decoration: none;
 }
 
+a.jwNewsItem {
+    display: inline-block;
+    width: 150px:
+}
+
 div.jwBanner {
     background: #f9f9f9; /* #dddee3; /* jWest: #f4f4eb; */
     padding: 5px;
@@ -198,11 +203,10 @@ div.jwWarningBoxStatic {
 }
 
 .jwSingleLineRightColumn {
-    display: inline-block;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: 425px;
+    width: 600px;
 }
 
 .jwSmallText {
@@ -439,3 +443,4 @@ div.jwFooterCopyright {
 .vertSpacerBelowPosition {
     padding-top: 14px;
 }
+

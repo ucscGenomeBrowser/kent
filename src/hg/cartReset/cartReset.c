@@ -14,34 +14,61 @@
 
 static char *defaultDestination = "../cgi-bin/hgGateway";
 
+boolean problem = FALSE;
+char *destination = NULL;
+
+static void resetLocalStorage() 
+/* the cart is for configuration options that are relevant to a session. We are using more and more localStorage settings, these are
+ * relevant to the particular web browser where the browser runs, e.g. notification settings, maybe one day font sizes and color schemes of the UI.
+ * QA must be able to reset these, too, so do this here now */
+{
+jsInline("localStorage.clear();");
+}
+
 void doMiddle()
 /* cartReset - Reset cart. */
 {
-
+if (problem)
+    {	
+    warn("To stop Open Redirect abuse, only relative URLs are supported. "
+	   "Request for destination=[%s] rejected.\n", destination);
+    }
 cartResetInDb(hUserCookie());
+resetLocalStorage();
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
-struct dyString *headText = newDyString(512);
-char *destination = cgiUsualString("destination", defaultDestination);
-if (strstr(destination, "//"))
-    errAbort("To stop Open Redirect abuse, only relative URLs are supported. "
-	    "Request for destination=[%s] rejected.\n", destination);
+struct dyString *headText = dyStringNew(512);
+destination = cgiUsualString("destination", defaultDestination);
+// Only allow relative URL that does not contain space or quote characters.
+if (strstr(destination, "//") // absolute URL
+   || strchr(destination, '\'') // single quote
+   || strchr(destination, '"') // double quote
+   || strchr(destination, ' ') // space
+   || sameString(destination, "") // empty string
+    )
+    {
+    problem = TRUE;
+    }
 
-char *meta = getCspMetaHeader();  // ContentSecurityPolicy stops XSS js in destination
+char *csp = getCspMetaHeader();  // ContentSecurityPolicy stops XSS js in destination
+dyStringPrintf(headText, "%s",csp);
 
-dyStringPrintf(headText, "%s"
-	       "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">"
-	       "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">"
-	       "<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">"
-	       ,meta,destination);
+if (!problem)
+    {
+    dyStringPrintf(headText, 
+		   "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0;URL=%s\">"
+		   "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">"
+		   "<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">"
+		   ,destination);
+    }
 
 htmShellWithHead("Reset Cart", headText->string, doMiddle, NULL);
 
-freeMem(meta);
+freeMem(csp);
 dyStringFree(&headText);
 
 cgiExitTime("cartReset", enteredMainTime);

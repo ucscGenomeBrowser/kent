@@ -1,0 +1,9 @@
+track gwasSNPs2022-03-08
+shortLabel GWAS Variants
+longLabel  GWAS Variants 2022-03-08 (lifted)
+type vcfTabix
+hapClusterEnabled false
+maxWindowToDraw 3000000
+bigDataUrl /gbdb/hs1/gwasSNPs2022-03-08/chm13v2.0_GWASv1.0rsids_e100_r2022-03-08.vcf.gz
+html html/gwasSNPs2022-03-08.html
+group phenDis

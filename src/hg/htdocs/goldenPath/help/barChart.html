@@ -364,6 +364,196 @@ barChartSampleUrl http://genome.ucsc.edu/goldenPath/help/examples/barChart/examp
    </div>
 </ol>
 
+<h6 id="example5">Example #5</h6>
+<p>
+To help Track Hub Developers adjust the display of tracks we add two settings
+<a href="trackDb/trackDbHub.html#barChartBarMinWidth" target="_blank">barChartBarMinWidth</a> and
+<a href="trackDb/trackDbHub.html#barChartBarMinPadding" target="_blank">barChartBarMinPadding</a>.
+The first sets the minimum pixel width of the bars in the chart to a number of pixels,
+for example <code>barChartBarMinWidth 10</code>. The second sets the minimum pixel width between
+bars to a number of pixels, for example <code>barChartBarMinPadding 5</code>.</p>
+<p>
+Here are two example tracks using these settings on the same source data that can be loaded by
+going to the My Data, Custom Tracks page and pasting the below text to see how the display
+differs.</p>
+<pre>
+browser position chr14:95,081,796-95,436,280
+track type=bigBarChart barChartBarMinPadding=5 name="ex barChartBarMinPadding" description="A bigBarChart file with barChartBarMinPadding" barChartBars="adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/barChart/hg38.gtexTranscripts.bb
+track type=bigBarChart barChartBarMinWidth=20 name="ex barChartBarMinWidth" description="A bigBarChart file with barChartBarMinWidth" barChartBars="adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/barChart/hg38.gtexTranscripts.bb
+</pre>
+<div class="text-center">
+  <img src="../../images/barChartPadWidth_1.png" alt="Example1 of barChartBarMinPadding and barChartBarMinWidth"
+  width="700">
+</div>
+<p> Both tracks have the same data, however, in the bottom track the <code>barChartBarMinWidth 20</code>
+setting triggers wider widths, and the top track has larger padding between bars from the setting
+<code>barChartBarMinPadding 5</code>. As described in the settings entries for 
+<a href="trackDb/trackDbHub.html#barChartBarMinWidth" target="_blank">barChartBarMinWidth</a> and
+<a href="trackDb/trackDbHub.html#barChartBarMinPadding" target="_blank">barChartBarMinPadding</a>
+there is a dynamic calculation dependent on the current window size, the width of the item, and the
+number of bars for the item. So that when zooming in the appearance of the barCharts with these
+settings can be different, at different scales. For instance, in the first image, you can see how
+much impact barChartBarMinWidth has on the second track, as well as the barChartBarMinPadding in the top
+track. But as zoomed in, with the below image, the impact of both of these settings is less noticeable.</p>
+<div class="text-center">
+  <img src="../../images/barChartPadWidth_2.png" alt="Example2 of barChartBarMinPadding and barChartBarMinWidth"
+  width="700">
+</div>
+<h6 id="example6">Example #6</h6>
+<p>
+To help with the selection and exploration of large data sets the new settings
+<a href="trackDb/trackDbHub.html#barChartFacets" target="_blank">barChartFacets</a>,
+<a href="trackDb/trackDbHub.html#barChartStatsUrl" target="_blank">barChartStatsUrl</a>,
+and <a href="trackDb/trackDbHub.html#barChartMerge" target="_blank">barChartMerge</a>
+were introduced where on the details page checkboxes enable slicing data down to smaller
+collections based on metadata.</p>
+<p>The setting <code>barChartFacets &lt;column1,column2,...columnN&gt;</code> turns on the
+faceted selection on the track details and configure page which is useful for
+selecting which bars out of a large number to display by clicking designated checkboxes.
+The setting <code>barChartStatsUrl &lturl&gt</code> associates a table in tab-separated values
+with the barChart, with one line per bar. And the setting <code>barChartMerge on</code>
+enables a merge button inside of the faceted selections. It is particularly useful when
+there are many bars and many facets to condense a related group, such as tissue source.</p>
+<p>
+Below is an example track using these settings on source data for a
+<a href="/cgi-bin/hgTracks?db=hg38&hideTracks=1&tabulaSapiensTissueCellType=pack&tabulaSapiens=show"
+target="_blank">Tabula Sapiens single cell RNA data from many tissues</a> track.  This excerpt
+of settings from that track allows experimenting to see these settings in action, and to be
+loaded by going to the My Data, Custom Tracks page.</p>
+<pre>
+track type=bigBarChart  name="ex Tabula Sapiens" description="A bigBarChart using Tabula Sapiens data to illustrate new Details pages" visibility=pack barChartCategoryUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/tabulaSapiens/bw_edit_tissue_cell_type.categories barChartFacets=tissue,cell_class,cell_type barChartStatsUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/tabulaSapiens/bw_edit_tissue_cell_type.facets barChartMerge=on bigDataUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg38/bbi/tabulaSapiens/tissue_cell_type.bb
+</pre>
+<p>
+Once loaded, click into an item to see the details page, in this case for the gene ACE2
+at the default position in hg38. On the details page, rather than a static bar chart
+image, there is a dynamic interactive selection screen with checkbox facets to narrow down
+the display. Adding <code>barChartMerge on</code> enables the display of the &quot;merge&quot;
+button, and <code>barChartFacets tissue,cell_class,cell_type</code> sources information in
+<code>barChartStatsUrl ...tissue_cell_type.facets</code> to enable the facet options.
+To interact with this example, click the first two &quot;merge&quot; buttons next to
+&quot;tissue&quot; and &quot;cell_class.&quot;</p>
+<div class="text-center">
+  <img src="../../images/barChartFacets1.png" alt="Example1 of Facets on barCharts" width="700">
+</div>
+<p>
+With those two merged selections, then click on the &quot;Macrophage&quot; option to see just
+this one cell type selection.</p>
+<div class="text-center">
+  <img src="../../images/barChartFacets2.png" alt="Example2git l of Facets on barCharts" width="700">
+</div>
+<p>
+By then clicking the &quot;unmerge&quot; button next to &quot;tissue&quot; the single bar
+chart will expand with tissue clusters.</p>
+<div class="text-center">
+  <img src="../../images/barChartFacets3.png" alt="Example3 of Facets on barCharts" width="700">
+</div>
+<p>
+In these ways the new 
+<a href="trackDb/trackDbHub.html#barChartFacets" target="_blank">barChartFacets</a>,
+<a href="trackDb/trackDbHub.html#barChartStatsUrl" target="_blank">barChartStatsUrl</a>,
+and <a href="trackDb/trackDbHub.html#barChartMerge" target="_blank">barChartMerge</a>
+settings allow users
+to explore the barChart data on the individual details page more closely. One can use the facets
+to further select certain types and also click the columns (val/count/cluster) to arrange
+by numerical value or alphabetical name.</p>
+<p>
+Also, if you click the &quot;Return to Genome Browser&quot; link, you will see only these
+selection bars are displayed.</p>
+<div class="text-center">
+  <img src="../../images/barChartFacets4.png" alt="Example4 of Facets on barCharts" width="700">
+</div>
+<p>
+In this image after making the selections browsing ACE2 the &quot;zoom out&quot; button has
+been clicked to also view nearby genes where the expression of these tissue selections for the
+gene PIR is quite noticeably different.</p>
+
+<h6 id="example7">Example #7</h6>
+<p>
+In this example, we will be using command-line tools that were used to create the single-cell tracks
+available on hg38. For more in-depth examples of these tools, take a look at the following
+<a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/makeDb/doc/hg38/gtex.txt#L711"
+target="_blank">makedoc</a> for a real-life example.
+</p>
+<p>
+The <code>matrixClusterColumns</code> command converts a single cell gene expression matrix to a
+cell-type gene expression matrix. It takes a cell-by-cell metadata matrix that refers to the same
+cells as a gene expression matrix and combines the gene expression values for all cells of a given
+type into a single value representing the cell type. It can also be used on other metadata fields to
+produce matrices that show mean or average gene expression levels for a donor, an organ, or any
+other metadata field or combination of fields. The following command uses the
+<a href="/goldenPath/help/examples/barChart/singleCell/exprMatrix.tsv">exprMatrix.tsv</a> and
+<a href="/goldenPath/help/examples/barChart/singleCell/meta.tsv">meta.tsv</a> files to create six
+files: prepMatrix.tsv, prepStats.tsv, TissueCompMatrix.tsv, TissueCompStats.tsv, SexMatrix.tsv, and
+SexStats.tsv.
+</p>
+<pre>
+matrixClusterColumns exprMatrix.tsv meta.tsv \
+    prep prepMatrix.tsv prepStats.tsv \
+    "Tissue Composition" TissueCompMatrix.tsv TissueCompStats.tsv \
+    Sex SexMatrix.tsv SexStats.tsv
+
+Read 5 rows from meta.tsv
+matrix exprMatrix.tsv has 209126 fields
+209126 total columns, 209121 unclustered, 0 misses
+209126 total columns, 209121 unclustered, 0 misses
+209126 total columns, 209121 unclustered, 0 misses
+.
+</pre>
+<p>
+If you are not sure which GENCODE Genes version is best suited for your data, the
+<code>gencodeVersionForGenes</code> command takes a list of gene symbols or gene accessions and
+searches for the version of GENCODE or RefSeq that matches the most genes in the list. Optionally,
+the tool can produce a BED file containing the gene structures for the genes in the list.
+The following command uses the
+<a href="/goldenPath/help/examples/barChart/singleCell/gene.lst">gene.lst</a> and
+<a href="/goldenPath/help/examples/barChart/singleCell/geneSymVerTx.tsv">geneSymVerTx.tsv</a> files
+to create a mapping.bed file that will be used in the next step.
+</p>
+<pre>
+# Figure out gene set
+gencodeVersionForGenes -target=hg38 gene.lst geneSymVerTx.tsv -bed=mapping.bed
+
+examining 23 versions of gencode and refseq
+best is gencodeVM5 as sym on mm10 with 6 of 6 (100%) hits
+on hg38 6 of 6 (100%) hit across versions
+</pre>
+
+<p>
+The <code>matrixToBarChartBed</code> combines an expression matrix and a BED file with gene
+structures (mapping.bed) to make a new BED file (myTissueComp.bed) with a barChart showing gene
+expression that can be viewed on the Genome Browser. The optional argument,
+<code>stats=stats.tsv</code> provides a statistics file and improves the coloring in trackDb.
+The following command uses the
+<a href="/goldenPath/help/examples/barChart/singleCell/TissueCompMatrix.tsv">TissueCompMatrix.tsv</a>,
+<a href="/goldenPath/help/examples/barChart/singleCell/mapping.bed">mapping.bed</a>, and
+<a href="/goldenPath/help/examples/barChart/singleCell/TissueCompStats.tsv">TissueCompStats.tsv</a>
+to create the
+<a href="/goldenPath/help/examples/barChart/singleCell/myTissueComp.bed">myTissueComp.bed</a> file
+that can be viewed on the Genome Browser or converted into a bigBed file so it can be used inside
+of a track hub.
+</p>
+<pre>
+matrixToBarChartBed TissueCompMatrix.tsv mapping.bed myTissueComp.bed -stats=TissueCompStats.tsv
+
+5 genes found, 0 (0.00%) missed
+</pre>
+<p>
+The <a href="/goldenPath/help/examples/barChart/singleCell/simpleBarChartBed.as">
+simpleBarChartBed.as</a> can be used with the <code>bedToBigBed</code> command to create the
+bigBarChart file.
+<pre>
+bedToBigBed myTissueComp.bed hg38.chrom.sizes myTissueComp.bb -type=bed6+3 -as=simpleBarChartBed.as
+pass1 - making usageList (1 chroms): 15 millis
+pass2 - checking and writing primary data (5 records, 9 fields): 1 millis
+</pre>
+<!--
+<p>
+You can then view the bigBarChart custom track with the following track line:
+</p>
+<pre>
+track name="My singleCell barChart" type=bigBarChart bigDataUrl=https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/barChart/singleCell/myTissueComp.bb
+</pre>
+-->
 <h2>Sharing your data with others</h2>
 <p>
 If you would like to share your barChart/bigBarChart data track with a colleague, learn how to create a URL by 

@@ -1,0 +1,95 @@
+track prs
+shortLabel Polygenic Risk Scores
+longLabel Polygenic Risk Scores
+superTrack on
+group phenDis
+type bed 3
+pennantIcon New red ../goldenPath/newsarch.html#102323 "Released Oct. 23, 2023"
+
+        track prsEmerge
+        shortLabel PRS eMERGE
+        longLabel Polygenic Risk Scores from NHGRI Electronic Medical Records and Genomics (eMERGE) project
+        compositeTrack on
+        parent prs
+        visibility dense
+        type bigBed 8 +
+        noScoreFilter on
+        exonNumbers off
+        mouseOver ${effectAllele}: weight ${weight}
+        dataVersion Received from nlennon@broadinstitute.org, July 13 2023
+        html prs
+        skipFields reserved
+        pennantIcon New red ../goldenPath/newsarch.html#102323 "Released Oct. 23, 2023"
+        #maxWindowCoverage 40000000
+        #maxItems 10000
+
+                track prsEmergeAsthma
+                shortLabel PRS-E Asthma
+                longLabel Polygenic Risk Scores eMERGE: Asthma
+                bigDataUrl /gbdb/hg19/prsEmerge/asthma.bb
+                parent prsEmerge pack
+                visibility dense
+
+                track prsAtrialFib
+                shortLabel PRS-E Atrial Fib
+                longLabel Polygenic Risk Scores eMERGE: Atrial Fibrillation
+                bigDataUrl /gbdb/hg19/prsEmerge/atrial_fibrilation.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+
+                #track prsBmi
+                #shortLabel PRS-E BMI
+                #longLabel Polygenic Risk Scores eMERGE: Body Mass Index
+                #bigDataUrl /gbdb/hg19/prsEmerge/bmi.bb
+                #parent prsEmerge pack
+                #type bigBed 8 +
+
+                track prsBrCancer
+                shortLabel PRS-E Breast Cancer
+                longLabel Polygenic Risk Scores eMERGE: Breast Cancer
+                bigDataUrl /gbdb/hg19/prsEmerge/breast_cancer.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+
+                track prsChKidneyDis
+                shortLabel PRS-E Ch Kidney Dis
+                longLabel Polygenic Risk Scores eMERGE: Chronic Kidney Disease
+                bigDataUrl /gbdb/hg19/prsEmerge/ckd.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+
+                track prsCorHeartDis
+                shortLabel PRS-E Cor Heart Dis
+                longLabel Polygenic Risk Scores eMERGE: Coronary Heart Disease
+                bigDataUrl /gbdb/hg19/prsEmerge/coronary_heart_disease.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+
+                track prsHypercholest
+                shortLabel PRS-E Hypercholest.
+                longLabel Polygenic Risk Scores eMERGE: Hypercholesterolemia
+                bigDataUrl /gbdb/hg19/prsEmerge/hypercholesterolemia.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+
+                track prsProstateCancer
+                shortLabel PRS-E Prost. Cancer
+                longLabel Polygenic Risk Scores eMERGE: Prostate Cancer
+                bigDataUrl /gbdb/hg19/prsEmerge/prostate_cancer.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+
+                track prsT1Diabetes
+                shortLabel PRS-E T1 Diabetes
+                longLabel Polygenic Risk Scores eMERGE: T1 Diabetes
+                bigDataUrl /gbdb/hg19/prsEmerge/t1d.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+
+                track prsT2Diabetes
+                shortLabel PRS-E T2 Diabetes
+                longLabel Polygenic Risk Scores eMERGE: T2 Diabetes
+                bigDataUrl /gbdb/hg19/prsEmerge/t2d.bb
+                parent prsEmerge pack
+                type bigBed 8 +
+

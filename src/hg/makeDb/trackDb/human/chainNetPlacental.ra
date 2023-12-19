@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Placental Chain/Net
 longLabel Non-primate Placental Mammal Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species s000=Guinea_pig s001=Guinea_pig s002=Chinchilla s003=Chinese_hamster s004a=Chinese_hamster_CHOv1 s004b=Chinese_hamster_CHOv2 s004c=RegenCHO1 s005a=Kangaroo_rat s005b=Beaver s006=Malayan_flying_lemur s007=Naked_mole-rat s008=Naked_mole-rat s0081=Damara_mole-rat s009=Lesser_Egyptian_jerboa s010=Golden_hamster s011=Prairie_vole s012a=Mouse s012b=Mouse38B s012c=Mouse s013=Mouse s014=Mouse s015=Mouse s016=Mouse s017=Upper_Galilee_mountains_blind_mole_rat s018=Pika s019=Pika s020=Brush-tailed_rat s021=Rabbit s022=Rabbit s023=Prairie_deer_mouse s024a=Rat s024b=RegenRn1 s024c=RegenRn0 s024d=Rat s025=Rat s026=Rat s027=Rat s028=Rat s029=Squirrel s030=Squirrel s031=Tree_shrew s032=Chinese_tree_shrew s033=Panda s034a=Dog s034b=Dog s034c=Dog s034d=Dog s035=Dog s036=Dog s037=Dog s037b=Cat s038=Cat s039=Cat s040=Cat s041=Cat s042=Weddell_seal s043=Ferret s043a=Southern_sea_otter s044=Hawaiian_monk_seal s045=Pacific_walrus s046=Amur_tiger s047=Polar_bear s048=Minke_whale s049=Bison s050=Wild_yak s051a=Cow s051b=Cow s052=Cow s053=Cow s054=Cow s055=Cow s056=Cow s057=Cow s058=Cow s059=Cow s060=Water_buffalo s061=Bactrian_camel s062=Domestic_goat s063=Yangtze_river_dolphin s064=Killer_whale s065a=Sheep s065b=Sheep s065c=Sheep s065d=Sheep s067=Tibetan_antelope s068=Sperm_whale s069=Pig s070=Pig s071=Pig s072=Pig s073=Dolphin s074=Dolphin s075=Alpaca s076=Alpaca s077=Straw_colored_fruit_bat s078=Big_brown_bat s079=Indian_false_vampire s080=Brandt's_myotis_(bat) s081=David's_myotis_(bat) s082=Microbat s083=Microbat s084=Black_flying-fox s085=Parnell's_mustached_bat s086=Megabat s087=Greater_horseshoe_bat s088=Egyptian_rousette s089=Star-nosed_mole s090=Hedgehog s091=Hedgehog s092=Chinese_pangolin s093=Shrew s094=Shrew s095=White_rhinoceros s096a=Horse s096b=Horse s096c=Horse s098=Przewalski_horse s099=Sloth s100=Armadillo s101=Armadillo s102=Armadillo s103=Cape_golden_mole s104=Tenrec s105=Tenrec s106=Cape_elephant_shrew s107=Elephant s108=Elephant s109=Elephant s110=Aardvark s111=Rock_hyrax s112=Manatee
+subGroup2 species Species s000=Guinea_pig s001=Guinea_pig s002=Chinchilla s003=Chinese_hamster s004a=Chinese_hamster_CHOv1 s004b=Chinese_hamster_CHOv2 s004c=RegenCHO1 s005a=Kangaroo_rat s005b=Beaver s006=Malayan_flying_lemur s007=Naked_mole-rat s008=Naked_mole-rat s0081=Damara_mole-rat s009=Lesser_Egyptian_jerboa s010=Golden_hamster s011=Prairie_vole s012a=Mouse s012b=Mouse38B s012c=Mouse s013=Mouse s014=Mouse s015=Mouse s016=Mouse s017=Upper_Galilee_mountains_blind_mole_rat s018=Pika s019=Pika s020=Brush-tailed_rat s021=Rabbit s022=Rabbit s023=Prairie_deer_mouse s024a=Rat s024b=RegenRn1 s024c=RegenRn0 s024d=Rat s025=Rat s026=Rat s027=Rat s028=Rat s029=Squirrel s030=Squirrel s031=Tree_shrew s032=Chinese_tree_shrew s033=Panda s034a=Dog s034b=Dog s034c=Dog s034d=Dog s035=Dog s036=Dog s037a=Dog s037b=Domestic_cat s037c=Cat s038=Cat s039=Cat s040=Cat s041=Cat s042=Weddell_seal s043=Ferret s043a=Southern_sea_otter s044=Hawaiian_monk_seal s045=Pacific_walrus s046=Amur_tiger s047=Polar_bear s048=Minke_whale s049=Bison s050=Wild_yak s051a=Cow s051b=Cow s052=Cow s053=Cow s054=Cow s055=Cow s056=Cow s057=Cow s058=Cow s059=Cow s060=Water_buffalo s061=Bactrian_camel s062=Domestic_goat s063=Yangtze_river_dolphin s064=Killer_whale s065a=Sheep s065b=Sheep s065c=Sheep s065d=Sheep s067=Tibetan_antelope s068=Sperm_whale s069=Pig s070=Pig s071=Pig s072=Pig s073=Dolphin s074=Dolphin s075=Alpaca s076=Alpaca s077=Straw_colored_fruit_bat s078=Big_brown_bat s079=Indian_false_vampire s080=Brandt's_myotis_(bat) s081=David's_myotis_(bat) s082=Microbat s083=Microbat s084=Black_flying-fox s085=Parnell's_mustached_bat s086=Megabat s087=Greater_horseshoe_bat s088=Egyptian_rousette s089=Star-nosed_mole s090=Hedgehog s091=Hedgehog s092=Chinese_pangolin s093=Shrew s094=Shrew s095=White_rhinoceros s096a=Horse s096b=Horse s096c=Horse s098=Przewalski_horse s099=Sloth s100=Armadillo s101=Armadillo s102=Armadillo s103=Cape_golden_mole s104=Tenrec s105=Tenrec s106=Cape_elephant_shrew s107=Elephant s108=Elephant s109a=Asiatic_elephant s109b=Elephant s110=Aardvark s111=Rock_hyrax s112=Manatee
 subGroup3 clade Clade c00=Euarchontoglires c01=Carnivora c02=Cetartiodactyla c03=Chiroptera c04=Laurasiatheria c05=Perissodactyla c06=Xenarthra c07=Afrotheria
 dragAndDrop subTracks
 visibility hide
@@ -429,15 +429,25 @@ priority 8
 
         track chainCanFamPoodle1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=s037 clade=c01
+        subGroups view=chain species=s037a clade=c01
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain canFamPoodle1
         otherDb canFamPoodle1
 
-        track chainFelCat9
+        track chainGCF_018350175.1
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s037b clade=c01
+        shortLabel domestic cat Chain
+        longLabel domestic cat (May 2021 GCF_018350175.1_F.catus_Fca126_mat1.0) Chained Alignments
+        type bigChain GCF_018350175.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_018350175.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_018350175.1Link.bb
+        otherDb GCF_018350175.1
+
+        track chainFelCat9
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=s037c clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain felCat9
@@ -1053,9 +1063,19 @@ priority 8
         type chain loxAfr2
         otherDb loxAfr2
 
+        track chainGCF_024166365.1
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=s109a clade=c07
+        shortLabel Asiatic elephant Chain
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Chained Alignments
+        type bigChain GCF_024166365.1
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_024166365.1.bb
+        linkDataUrl /gbdb/$D/bbi/chainNet/$D.chainGCF_024166365.1Link.bb
+        otherDb GCF_002742125.1
+
         track chainLoxAfr1
         subTrack placentalChainNetViewchain off
-        subGroups view=chain species=s109 clade=c07
+        subGroups view=chain species=s109b clade=c07
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain loxAfr1
@@ -1493,15 +1513,27 @@ priority 8
 
         track netCanFamPoodle1
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=s037 clade=c01
+        subGroups view=net species=s037a clade=c01
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFamPoodle1 chainCanFamPoodle1
         otherDb canFamPoodle1
 
-        track netFelCat9
+        track netGCF_018350175.1
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s037b clade=c01
+        shortLabel domestic cat Net
+        longLabel domestic cat (May 2021 GCF_018350175.1_F.catus_Fca126_mat1.0) Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_018350175.1.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_018350175.1.net.summary.bb
+        speciesOrder GCF_018350175.1
+        speciesLabels GCF_018350175.1="domestic cat"
+        otherDb GCF_018350175.1
+
+        track netFelCat9
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=s037c clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign felCat9 chainFelCat9
@@ -1748,6 +1780,7 @@ priority 8
         bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.bb
         summary /gbdb/$D/bbi/chainNet/$D.GCF_002742125.1.net.summary.bb
         speciesOrder GCF_002742125.1
+        speciesLabels GCF_002742125.1="Rambouillet sheep"
         itemFirstCharCase noChange
 
         track netOviAri4
@@ -2118,9 +2151,21 @@ priority 8
         type netAlign loxAfr2 chainLoxAfr2
         otherDb loxAfr2
 
+        track netGCF_024166365.1
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=s109a clade=c07
+        shortLabel Asiatic elephant Net
+        longLabel Asiatic elephant (Jul. 2022 GCF_024166365.1_mEleMax1_primary_haplotyp) Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.net.bb
+        summary /gbdb/$D/bbi/chainNet/$D.GCF_024166365.1.net.summary.bb
+        speciesOrder GCF_024166365.1
+        speciesLabels GCF_024166365.1="Asiatic elephant"
+        itemFirstCharCase noChange
+
         track netLoxAfr1
         subTrack placentalChainNetViewnet off
-        subGroups view=net species=s109 clade=c07
+        subGroups view=net species=s109b clade=c07
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign loxAfr1 chainLoxAfr1

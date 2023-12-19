@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Cloud Data and Software Resources" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>Cloud Data and Software Resources</h1>
+
+<!-- ========== Introduction  ============================== -->
+<a id="Intro"></a>
+<p>
+The UCSC Genome Browser aims to support researchers operating in the cloud. Topics such as data
+access on the cloud, including details about the <a href="#REST_API">API</a> and Amazon
+<b>s3://genome-browser</b> <a href="#S3">bucket</a>, software installations for
+<a href="#GBiC">cloud computing</a>, and references to helpful tools are discussed on this page.
+</p>
+<h2>Contents</h2>
+
+<h3>Cloud Data</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6">
+      <h6>Amazon S3 </h6>
+      <ul class=gbsNoBullet>
+        <li><a href="#S3">What is the Amazon S3 genome-browser bucket?</a></li>
+        <li><a href="#S3_contents">What specific files are in the s3://genome-browser bucket?</a></li>
+        <li><a href="#S3_downloads">How can one get data from the s3://genome-browser bucket?</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-6">
+      <h6>REST API</h6>
+      <ul class=gbsNoBullet>
+        <li><a href="#REST_API">What is the REST API?</a></li>
+        <li><a href="#REST_API_data">What kind of data can you get from the REST API?</a></li>
+      </ul>
+    </div>
+  </div> 
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6">
+      <h6>Download Server</h6>
+      <ul class=gbsNoBullet>
+        <li><a href="#download">What is the download server and how does one use it?</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-6">
+      <h6>MySQL Server</h6>
+      <ul class=gbsNoBullet>
+        <li><a href="#MySQL">What is the MySQL server and how does one use it?</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h3>Cloud Software</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6">
+      <h6>GBiB/GBiC</h6>
+      <ul class=gbsNoBullet>
+        <li><a href="#GBiC">What are GBiB and GBiC?
+        (Genome Browser in a Box/in the Cloud)</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-6">
+      <h6>Docker</h6>
+      <ul class=gbsNoBullet>
+        <li><a href="#Docker">Do you support Docker?</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h3>Helpful Tools</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6">
+      <h6>Browser Utilities</h6>
+      <ul class=gbsNoBullet>
+        <li><a href="#bigBed">How do I extract data from the bigBed/2bit data formats?</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-6">
+      <h6>Amazon Ecosystem</h6>
+      <ul class=gbsNoBullet>
+        <li><a href="#tag_name">Where can I learn more about Amazon Tools?</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ====Cloud Data Section============================== -->
+
+<a id="S3"></a>
+<h2>What is the Amazon s3://genome-browser bucket?</h2>
+<p>
+S3 stands for Simple Storage Service, and it is the name for cloud storage in Amazon Web Services
+(AWS). The data available through S3 is essentially stored in a folder called a bucket, and
+files are called objects. The s3://genome-browser bucket is a copy of the main data available on our
+UCSC Genome Browser Download website: <a href="https://hgdownload.soe.ucsc.edu/downloads.html"
+target="_blank">https://hgdownload.soe.ucsc.edu/downloads.html</a></p>
+<p>
+By placing our Download server files in an S3 bucket, developers
+working in the cloud can more easily integrate with UCSC data.
+You can learn more about how S3-object-based storage works, and its advantages of being 
+accessible anywhere across the world with low latency and high durability by reviewing
+<a href="https://docs.aws.amazon.com/s3/" target="_blank">Amazon's S3 documentation</a>.</p>
+
+<a id="S3_contents"></a>
+<h2>What specific files are in the s3://genome-browser bucket?</h2>
+<p>
+The data mirrors our <a href="https://hgdownload.soe.ucsc.edu/downloads.html"
+target="_blank">UCSC Genome Browser Download</a> website's main rsync directories:
+<pre>
+UCSC Human Golden Path Downloads             s3://genome-browser/goldenPath
+UCSC Human Genome Browser Gbdb Data Files    s3://genome-browser/gbdb
+UCSC Human Genome Raw Mysql Tables           s3://genome-browser/mysql
+UCSC Human Genome Web Site CGI Binaries      s3://genome-browser/cgi-bin
+UCSC Human Genome Web Site Htdocs            s3://genome-browser/htdocs
+</pre></p>
+<p>
+<ul>
+<li>The <b>goldenPath</b> directory is organized by assembly name, and represents the file
+structure on our Download server, which includes README.txt files. For
+instance, the sequence data for the human hg38 assembly would be found in this location with an
+instructive README.txt: <code>goldenPath/hg38/bigZips/README.txt</code>. The README.txt, also
+available on the <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/README.txt"
+target="_blank">Download website</a>,
+informs that the most recent patch-inclusive sequence is found in
+<code>goldenPath/hg38/bigZips/latest/</code>.</li>
+<li>The <b>gbdb</b> directory, also organized by assembly name, provides access to genome
+browser database files in binary format used by the browser software.
+For instance, the underlying binary indexed sequence data for the hg38 databases used in the
+display in the UCSC Genome Browser would be located in the following location,
+<code>gbdb/hg38/hg38.2bit</code>, matching the file in the 
+<code>goldenPath/hg38/bigZips/latest/</code>
+directory, reflecting how these files are operated on by the UCSC Genome Browser software
+in order to display assembly sequence when browsing.</li>
+<li>The <b>mysql</b> directory, also organized by assembly name, provides access
+to MySQL database tableName.MYD files, and their related
+tableName.MYI index and tableName.frm format files, providing a copy of the tables
+used by the main Browser site.</li>
+<li>The <b>cgi-bin</b> directory is a copy of the software
+run on the main browser site.</li>
+<li>The <b>htdocs</b> directory is a copy of the html pages used on the
+main browser site, such as <code>htdocs/goldenPath/pubs.html</code> which lists our publications.</li>
+</ul></p>
+
+<a id="S3_downloads"></a>
+<h2>How can one get data from the s3://genome-browser bucket?</h2>
+<p>
+Amazon provides an <a target="_blank"
+href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html">AWS
+Command Line Interface (AWS CLI)</a> which includes options such as <a target="_blank"
+href="https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/sync.html">sync</a>.
+Here is an example to download an AWS bucket with CLI: <code>aws s3 sync s3://bucket-name .</code></p>
+<p>
+The data is also available via http at <b>genome-browser.s3-website-us-east-1.amazonaws.com</b>
+where files can be accessed.</p>
+<h3>Examples</h3>
+<p>
+<ul>
+<li>For instance, here is an example of accessing a README file
+in the <code>goldenPath/</code>Downloads directory:<br>
+<a href="http://genome-browser.s3-website-us-east-1.amazonaws.com/goldenPath/hg38/bigZips/README.txt"
+target="_blank">http://genome-browser.s3-website-us-east-1.amazonaws.com/goldenPath/hg38/bigZips/README.txt</a></li>
+<li>And here is an example link that would access the <code>gbdb/</code> binary data directory
+for the human hg38 assembly 2bit file:<br>
+<a href="http://genome-browser.s3-website-us-east-1.amazonaws.com/gbdb/hg38/hg38.2bit"
+target="_blank">http://genome-browser.s3-website-us-east-1.amazonaws.com/gbdb/hg38/hg38.2bit</a></li>
+<li>And here is an example link that would access our
+publications html page from the bucket's <code>htdocs/</code> hypertext document directory:</br>
+<a href="http://genome-browser.s3-website-us-east-1.amazonaws.com/htdocs/goldenPath/pubs.html"
+target="_blank">http://genome-browser.s3-website-us-east-1.amazonaws.com/htdocs/goldenPath/pubs.html</a></li>
+</ul></p>
+
+<!-- ========== What is the REST API? ============================== -->
+<a id="REST_API"></a>
+<h2>What is the REST API?</h2>
+<p>
+The UCSC Genome Browser has a REST API for the programmatic extraction of data.
+REST is an acronym for REpresentational State Transfer and API stands for
+Application Programming Interface, read more on the help page: <a target="_blank"
+href="http://genome.ucsc.edu/goldenPath/help/api.html"> http://genome.ucsc.edu/goldenPath/help/api.html</a></p>
+<p>
+The REST API returns data in JavaScript Object Notation (<a
+href="https://www.w3schools.com/js/js_json_intro.asp" target="_blank">JSON</a>) format, which
+can easily be sent between computers, and used by many different programming languages.</p>
+<p>
+Data can be accessed with this URL: <b>https://api.genome.ucsc.edu/</b> By adding 
+different endpoint functions such as <code>/list/</code> or <code>/getData/</code>
+specific results can be obtained.</p>
+<h3>Examples</h3>
+<p>
+<pre>
+    wget -O- 'https://api.genome.ucsc.edu/list/publicHubs'
+    wget -O- 'https://api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM;start=4321;end=5678'
+</pre></p>
+
+<!-- ========== What kind of data can you get from the REST API?  ============================== -->
+<a id="REST_API_data"></a>
+<h2>What kind of data can you get from the REST API?</h2>
+<p>
+With different endpoint functions such as <code>/list/</code> or
+<code>/getData/</code> URLs can be constructed to pull specific results.
+<table>
+<tr><th>Endpoint function</th><th>Required</th><th>Optional</th></tr>
+<tr><th>/list/publicHubs</th><td>(none)</td><td>(none)</td></tr>
+<tr><th>/list/ucscGenomes</th><td>(none)</td><td>(none)</td></tr>
+<tr><th>/list/hubGenomes</th><td>hubUrl</td><td>(none)</td></tr>
+<tr><th>/list/tracks</th><td>genome or (hubUrl and genome)</td><td>trackLeavesOnly=1</td></tr>
+<tr><th>/list/chromosomes</th><td>genome or (hubUrl and genome)</td><td>track</td></tr>
+<tr><th>/list/schema</th><td>(genome or (hubUrl and genome)) and track</td><td>(none)</td></tr>
+<tr><th>/getData/sequence</th><td>(genome or (hubUrl and genome)) and chrom</td><td>start and
+end</td></tr>
+<tr><th>/getData/track</th><td>(genome or (hubUrl and genome)) and track</td><td>chrom,
+(start and end), maxItemsOutput, jsonOutputArrays</td></tr>
+</table></p>
+<p>
+By reviewing <a href="http://genome.ucsc.edu/goldenPath/help/api.html#list_examples"
+target="_blank">example data access URLs</a> demonstrating of list and getData functions
+and further <a href="http://genome.ucsc.edu/goldenPath/help/api.html#Practical_examples"
+target="_blank">practical examples URLs</a> of extracting specific track data items
+you can learn more about the ways of using the API to extract data.</p>
+
+<!-- ========== What is the Download Server and does one use it? ============================== -->
+<a id="download"></a>
+<h2>What is the Download server and how does one use it?</h2>
+<p>
+The UCSC Genome Browser Download website, <a href="https://hgdownload.soe.ucsc.edu/downloads.html"
+target="_blank">hgdownload.soe.ucsc.edu</a>, is the source of the data
+hosted in the Amazon s3://genome-browser bucket. It can be viewed in a web browser to access
+specific download files, or the data can be copied with rysnc commands.</p>
+<h3>Examples</h3>
+<p>
+For instance, the following <a href="https://en.wikipedia.org/wiki/Rsync" target="_blank">rsync</a>
+command will show you the various rysnc directories available on our Download server:
+<pre>
+$ rsync -a -P rsync://hgdownload.soe.ucsc.edu/ 
+
+genome         UCSC Human Genome Downloads
+sars           UCSC Human Genome SARS Downloads
+htdocs         UCSC Human Genome Web Site Htdocs
+goldenPath     UCSC Human Golden Path Downloads
+cgi-bin        UCSC Human Genome Web Site CGI Binaries x86_64
+cgi-bin-i386   UCSC Human Genome Web Site CGI Binaries i386
+gbdb           UCSC Human Genome Browser Gbdb Config Files
+archives       UCSC Human Genome Browser Archived Config Files
+mysql          UCSC Human Genome Raw Mysql Tables
+gbib           UCSC Genome Browser in a Box
+hubs           UCSC Genome Browser Public Hubs
+</pre>
+<ul>
+<li>For instance, here is an example of accessing a README file
+in the <code>goldenPath/</code>Downloads directory:<br>
+<code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/README.txt ./</code></li>
+<li>And here is an example link that would access the <code>gbdb/</code> binary data directory
+for the human hg38 assembly 2bit file:<br>
+<code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/gbdb/hg38/hg38.2bit ./</code></li>
+<li>And here is an example link that would access our
+publications html page from the bucket's <code>htdocs/</code> hypertext document directory:</br>
+<code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/htdocs/goldenPath/pubs.html ./</code></li>
+</ul></p>
+<p>
+Many of these rsync directories exist to support the Genome Browser in a Cloud (<a target="_blank"
+href="gbic.html">GBiC</a>) and the Genome Browser in a Box (<a target="_blank"
+href="gbib.html">GBiB</a>) software products discussed below.
+Also note that there is a mirror of the download server available in Europe so the above rysnc
+commands can also be pointed to the <code>hgdownload-euro</code> locations.
+<ul><li>For instance here is a command to access data from the Europe location:<br>
+<code>rsync -a -P rsync://hgdownload-euro.soe.ucsc.edu/gbdb/hg38/hg38.2bit ./</code></li>
+</ul>
+
+<!-- ========== What is the MySQL server and how does one use it? ============================== -->
+<a id="MySQL"></a>
+<h2>What is the MySQL server and how does one use it?</h2>
+<p>
+The UCSC Genome Browser uses <a href="https://en.wikipedia.org/wiki/MariaDB"
+target="_blank">MariaDB</a> (fork of MySQL) as the backend database server and maintains
+a public server at <b>genome-mysql.soe.ucsc.edu</b> to allow direct queries.</p>
+<h3>Examples</h3>
+<p>
+<ul>
+<li>For instance, here is an example of accessing the hg38 human assembly database and
+selecting from the table <code>trackDb</code> all the entries in the group (grp) &quot;genes&quot and
+ordering those entries by tableName:<br>
+<code>
+mysql -h genome-mysql.soe.ucsc.edu -u genome -NBe 'select tableName from trackDb where grp = "genes" order by tableName' hg38
+</code></li>
+<li>And here is an example of accessing a specific Transcription Factor Binding Site (TFBS) table
+<code>wgEncodeRegTfbsClusteredV3</code> on the human hg19 assembly
+and selecting entries from a 500 base pair region on chr1:<br>
+<code>
+mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -Ne 'select chrom,chromStart,chromEnd,name,score
+from wgEncodeRegTfbsClusteredV3 where chrom = "chr1" and chromStart > 10000 and chromEnd < 10500;' hg19
+</code></li>
+<li>And here is an example query that will pull all the long non-coding entries (lncRNA) from the
+<code>wgEncodeGencodeBasicV39</code> table on the hg38 genome:<br>
+<code>
+mysql -u genome -h genome-mysql.soe.ucsc.edu hg38 -e 'select g.name,a.transcriptType from wgEncodeGencodeBasicV39 g,
+wgEncodeGencodeAttrsV39 a where (g.name = a.transcriptId) and (a.transcriptType = "lncRNA");'
+</code></li>
+</ul></p>
+<p>
+See the <a target="_blank" href="mysql.html">Downloading Data using MariaDB (MySQL)</a>
+for more information. Also, there is a mirror of the MariaDb server available
+in Europe so commands can also be pointed to the <code>genome-euro-mysql</code> location.
+<ul><li>For instance here is a command to access hg38 data from the Europe location:<br>
+<code>mysql -h genome-mysql-euro.soe.ucsc.edu -u genome -NBe 'show tables' hg38</code></li>
+</ul>
+</p>
+
+
+<!-- ====Cloud Software Section============================== -->
+
+<!-- ========== Genome Browser in a Box/in the Cloud (GBiB/GBiC) ============================== -->
+<a id="GBiC"></a>
+<h2>What are GBiB and GBIC? (Genome Browser in a Box/in the Cloud)</h2>
+<p>
+To replicate, or mirror, the software of the UCSC Genome Browser in
+another location we offer the  Genome Browser in a Cloud (GBiC)
+and the Genome Browser in a Box (GBiB) software products.</p>
+<p>
+The GBiC is an installation script that automates the setup of a UCSC Genome Browser
+mirror including setting up MariaDB and Apache servers. The program 
+downloads and configures MySQL and Apache, and then downloads
+the UCSC Genome Browser software to /usr/local/apache to make a local
+instance of the Browser.</p>
+<p>
+The GBiB is a small virtual machine version of the UCSC Genome Browser
+that can be run on a laptop or desktop computer. It requires an installation
+of a compatible version of the VirtualBox Software, and will then access
+annotation data on demand through the Internet from UCSC as used, or
+selective data can be downloaded for faster access.</p>
+<p>
+The GBiB and GBiC software tools resource the
+<a href="#download">Download server</a> to <code>rsync</code>
+data, as well as in certain circumstances the
+<a href="#MySQL">MySQL server</a> to extract 
+coordinate-specific table data.</p>
+<p>
+See the individual support pages for the <a target="_blank"
+href="gbic.html">GBiC</a> and the <a target="_blank" href="gbib.html">GBiB</a>
+for detailed information about how to install and operate both.
+You can get either the GBiC or the GBiB from the <a target="_blank"
+href='https://genome-store.ucsc.edu/' title=''>UCSC Genome Browser store</a>
+free for non-commercial use.</p>
+
+<!-- ========== Do you support Docker? ============================== -->
+<a id="Docker"></a>
+<h2>Do you support Docker?</h2>
+<p>
+We do support a Dockerfile, that in essence points to the GBiC installation
+script. While we recommend our <a href="#GBiC">GBiC</a> script, we understand many
+people are more familiar with working through Docker and provide
+<a href="mirror.html#docker-installation-instructions" 
+target="_blank">Docker installation instructions</a>.</p>
+<p>
+Please note, similar to how our GBiB and GBiC are available in the
+<a href="https://genome-store.ucsc.edu/" target="_blank">UCSC Genome Browser store</a>,
+where usage of our mirror software is <b>free for non-commercial use</b>.
+Any commercial usage, including through the Docker image,  involves
+a <a href="/license/index.html" target="_blank">license</a>.</p>
+
+<!-- ========== How do I extract data from the bigBed/2bit data formats? ============================== -->
+<a id="bigBed"></a>
+<h2>How do I extract data from the bigBed/2bit data formats?</h2>
+<p>
+A lot of our data is stored in a binary indexed version called bigBed. This format
+saves space and also allows the extraction of information based on the first three fields
+(chrom, chromStart, chromEnd), which define annotation coordinate location.</p>
+<p>
+To pull information out of bigBed files there is a tool called <code>bigBedToBed</code>.
+By running the command by itself you can see the command options. 
+<pre>
+bigBedToBed v1 - Convert from bigBed to ascii bed format.
+usage:
+   bigBedToBed input.bb output.bed
+options:
+   -chrom=chr1 - if set restrict output to given chromosome
+   -start=N - if set, restrict output to only that over start
+   -end=N - if set, restrict output to only that under end
+   -bed=in.bed - restrict output to all regions in a BED file
+   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs
+   -header - output a autoSql-style header (starts with '#').
+</pre></p>
+<p>
+Another similar tool is available to extract data from the binary indexed 2bit sequence
+storage format. The tool <code>twoBitToFa</code> can be given coordinate ranges and the
+DNA can be extracted from the file.</p>
+<h3>Examples</h3>
+<p>
+<ul>
+<li>For instance, here is an example of accessing the hg38 2bit human assembly sequence file
+hosted at the s3 Amazon bucket and extracting a small coordinate range:
+<pre>
+twoBitToFa -seq=chr1 -start=1234500 -end=1234600 http://genome-browser.s3-website-us-east-1.amazonaws.com/gbdb/hg38/hg38.2bit stdout
+>chr1:1234500-1234600
+GCGTCCCTAGGTCAGGCCGTTGAGTTCGAGCTCCGATGGGCCACCTTGAA
+TCCAGGACTGACCGCCCGTGTGTGCACAGTTTGTTCTTGGACGAGGACTC
+</pre></li>
+<li>And here is an example of accessing the ENCODE Candidate Cis-Regulatory Elements (cCREs) bigBed
+file hosted on the Amazon s3 bucket and extracting enhancers in a defined region.
+<pre>
+bigBedToBed -chrom=chr1 -start=190000 -end=200000 http://genome-browser.s3-website-us-east-1.amazonaws.com/gbdb/hg38/encode3/ccre/encodeCcreCombined.bb stdout | head
+chr1 190865 191071 EH38E1310154 179 . 190865 191071 255,205,0 dELS,CTCF-boundd ELS 1.79282201562 enhDE1310154 EH38E1310154 distal enhancer-like signature
+</pre></li>
+</ul></p>
+
+
+<!-- ========== Where can I learn more about Amazon Tools? ============================== -->
+<a id="tag_name"></a>
+<h2>Where can I learn more about Amazon Tools?</h2>
+<p>
+The Amazon Ecosystem comes integrated with a collection of systems such as
+<a target="_blank" href="https://aws.amazon.com/cloudfront/">CloudFront</a>,
+<a target="_blank" href="https://aws.amazon.com/cloudwatch/">CloudWatch</a>,
+<a target="_blank" href="https://aws.amazon.com/rds/">Relational Database Service (RDS)</a>,
+<a target="_blank" href="https://aws.amazon.com/ebs/">Elastic Block Store (EBS)</a>,
+<a target="_blank" href="https://aws.amazon.com/lambda/">Lambda</a>,
+and <a target="_blank" href="https://aws.amazon.com/aurora/">Aurora</a>.
+Amazon Aurora is a MySQL and PostgreSQL-compatible relational database built for the cloud.
+The UCSC Genome Browser's tableName.MYD and tableName.MYI files can be used with Aurora,
+instead of installing MariaDb, however, there may be some services costs in Amazon for
+using Aurora.</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

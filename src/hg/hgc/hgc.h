@@ -47,6 +47,9 @@
 #include "dnaMotif.h"
 #include "togaClick.h"
 
+#include "snp125.h"
+
+
 extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
 extern int winStart, winEnd;    /* Bounds of sequence. */
@@ -508,6 +511,14 @@ void doGtexGeneExpr(struct trackDb *tdb, char *item);
 void doGtexEqtlDetails(struct trackDb *tdb, char *item);
 /* Details of GTEx eQTL item */
 
+void printSnp125Function(struct trackDb *tdb, struct snp125 *snp);
+/* If the user has selected a gene track for functional annotation,
+ * report how this SNP relates to any nearby genes. */
+
+void printSnp153Function(struct trackDb *tdb, struct snp125 *snp);
+/* If the user has selected a gene track for functional annotation,
+ * report how this SNP relates to any nearby genes. */
+
 void doBigDbSnp(struct trackDb *tdb, char *rsId);
 /* Show details for bigDbSnp item. */
 
@@ -523,6 +534,11 @@ void printIframe(struct trackDb *tdb, char *itemName);
 char *getIdInUrl(struct trackDb *tdb, char *itemName);
 /* If we have an idInUrlSql tag, look up itemName in that, else just
  * return itemName. */
+
+void printFieldLabel(char *entry);
+/* print the field label, the first column in the table, as a <td>. Allow a
+ * longer description after a |-char, as some fields are not easy to
+ * understand. */
 
 struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount);
 /* return the extra field names and their values as a list of slPairs */
@@ -577,4 +593,8 @@ void doInteractDetails(struct trackDb *tdb, char *item);
 void doParDetails(struct trackDb *tdb, char *name);
 /* show details of a PAR item. */
 
+
+struct psl *getPslAndSeq(struct trackDb *tdb, char *chromName, struct bigBedInterval *bb, 
+    unsigned seqTypeField, DNA **retSeq, char **retCdsStr);
+/* Read in psl and query sequence out of a bbiInverval on a give chromosome */
 #endif

@@ -305,6 +305,7 @@ struct imgTrack // IMAGEv2: imageBox contains list of displayed imageTracks
     enum trackVisibility vis; // Current visibility of track image
     struct imgSlice *slices;  // Currently there should be four slices for every track:
                               //      data, centerLabel, sideLabel, button
+    boolean linked;           // is this track linked to another track (like squishyPack)
     };
 
 #define IMG_ANYORDER -2

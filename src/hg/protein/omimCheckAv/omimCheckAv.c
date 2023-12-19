@@ -94,7 +94,7 @@ while (row2 != NULL)
 	gotAMatch = FALSE;
 	
 	/* get protein sequence */
-	sqlSafefFrag(condStr, sizeof condStr, "acc='%s'", accession);
+	sqlSafef(condStr, sizeof condStr, "acc='%s'", accession);
 	aaSeq = sqlGetField(UNIPROT_DB_NAME, "protein", "val", condStr);
 	aaLen = strlen(aaSeq);
 

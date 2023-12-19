@@ -175,7 +175,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	dyStringPrintf(dy, "%s\n", w);
 	}
     commit->comment = cloneString(dy->string);
-    freeDyString(&dy);
+    dyStringFree(&dy);
 
     if (commit->merge)
 	{

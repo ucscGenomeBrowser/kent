@@ -1,0 +1,38 @@
+<h2>Description</h2>
+<p>
+This track depicts masked sequence as determined by <a href="
+http://bioinformatics.oxfordjournals.org/content/22/2/134.full" target="_blank">WindowMasker</a> on the
+the 30 May 2022 <em>Monkeypox virus</em>/GCF_014621545.1_ASM1462154v1/GCF_014621545.1 genome assembly.
+The WindowMasker tool is included in the NCBI C++ toolkit. The source code
+for the entire toolkit is available from the NCBI
+<a href="ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools++/CURRENT/" target="_blank">
+FTP site</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+To create this track, WindowMasker was run with the following parameters:
+<pre>
+windowmasker -mk_counts true -input GCF_014621545.1_ASM1462154v1.unmasked.fa -output wm_counts
+windowmasker -ustat wm_counts -sdust true -input GCF_014621545.1_ASM1462154v1.unmasked.fa -output windowmasker.intervals
+perl -wpe 'if (s/^&gt;lcl\|(.*)\n&dollar;//) { &dollar;chr = &dollar;1; } \
+   if (/^(\d+) - (\d+)/) { \
+   &dollar;s=&dollar;1; &dollar;e=&dollar;2+1; s/(\d+) - (\d+)/&dollar;chr\t&dollar;s\t&dollar;e/; 
+   }' windowmasker.intervals &gt; windowmasker.sdust.bed
+</pre>
+The windowmasker.sdust.bed included masking for areas of the
+assembly that are gap.  The file was 'cleaned' to remove those areas
+of masking in gaps, leaving only the sequence masking.  The final
+result covers 18,619 bases in the assembly size 197,209 for
+a percent coverage of % 9.44.
+</p>
+
+<h2>References</h2>
+
+<p>
+Morgulis A, Gertz EM, Sch&auml;ffer AA, Agarwala R.
+<a href="http://bioinformatics.oxfordjournals.org/content/22/2/134.full" target="_blank">
+WindowMasker: window-based masker for sequenced genomes</a>.
+<em>Bioinformatics</em>. 2006 Jan 15;22(2):134-41.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16287941" target="_blank">16287941</a>
+</p>

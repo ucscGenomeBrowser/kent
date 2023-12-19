@@ -1215,16 +1215,21 @@ doAccessionsSeq(conn, taxon, db);
 static void init(struct sqlConnection *conn)
 / * build tables - for the first time * /
 {
+char query[1024];
 if (!sqlTableExists(conn, "vgPrb"))
     {
     initTable(conn, "vgPrb", FALSE);  / * this most important table should never be nuked automatically * /
-    sqlUpdate(conn, NOSQLINJ "create index tName on vgPrb(tName(20));");
-    sqlUpdate(conn, NOSQLINJ "create index seq on vgPrb(seq(40));");
+    sqlSafef(query, sizeof query, "create index tName on vgPrb(tName(20));");
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof query, "create index seq on vgPrb(seq(40));");
+    sqlUpdate(conn, query);
     }
 
 initTable(conn, "vgPrbMap", TRUE);
-sqlUpdate(conn, NOSQLINJ "create index probe on vgPrbMap(probe);");
-sqlUpdate(conn, NOSQLINJ "create index vgPrb on vgPrbMap(vgPrb);");
+sqlSafef(query, sizeof query, "create index probe on vgPrbMap(probe);");
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof query, "create index vgPrb on vgPrbMap(vgPrb);");
+sqlUpdate(conn, query);
 
 initTable(conn, "vgPrbAli", TRUE);
 initTable(conn, "vgPrbAliAll", TRUE);
@@ -1409,6 +1414,7 @@ static void doReMapAli(struct sqlConnection *conn,
       nor even attempted yet, using specified fasta file. */
 {
 char cmd[256];
+char query[1024];
 
 int rc = 0;
 struct dyString *dy = dyStringNew(0);
@@ -1423,7 +1429,8 @@ if (!fileExists(fasta))
 
 if (sqlTableExists(conn, "vgRemapTemp"))
     {
-    sqlUpdate(conn, NOSQLINJ "drop table vgRemapTemp;");
+    sqlSafef(query, sizeof query, "drop table vgRemapTemp;");
+    sqlUpdate(conn, query);
     }
 
 safef(cmd,sizeof(cmd),
@@ -1432,8 +1439,10 @@ safef(cmd,sizeof(cmd),
 verbose(1,"%s\n",cmd); system(cmd);
 
 /* required for mysql 5 longtext for case-insensitive comparisons of blobs */
-sqlUpdate(conn, NOSQLINJ "ALTER table vgRemapTemp modify seq longtext;");
-sqlUpdate(conn, NOSQLINJ "create index seq on vgRemapTemp(seq(40));");
+sqlSafef(query, sizeof query, "ALTER table vgRemapTemp modify seq longtext;");
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof query, "create index seq on vgRemapTemp(seq(40));");
+sqlUpdate(conn, query);
 
 /* get remapped psl probes not yet aligned */
 dyStringClear(dy);
@@ -1453,7 +1462,8 @@ rc = 0;
 rc = sqlSaveQuery(conn, dy->string, "vgPrbReMap.psl", FALSE);
 verbose(1,"Count of Psls found for reMap: %d\n", rc);
 
-sqlUpdate(conn, NOSQLINJ "drop table vgRemapTemp;");
+sqlSafef(query, sizeof query, "drop table vgRemapTemp;");
+sqlUpdate(conn, query);
 
 dyStringFree(&dy);
 

@@ -7,12 +7,14 @@
 
 <h1>bigNarrowPeak Track Format</h1> 
 <p>
-The bigNarrowPeak format stores annotation items that are a single block with a single base peak within that block,  
- much as 
+bigNarrowPeak is a format used to provide called peaks of signal enrichment based on pooled,
+normalized (interpreted) data. The bigNarrowPeak format stores annotation items that are a single
+block with a single base peak within that block, much as 
 <a href="../../FAQ/FAQformat.html#format1">BED</a> files indexed as bigBeds do. A bigNarrowPeak file 
-is a standard six field bed with four additional fields that contain three doubles with scoring information
-and the location of the single base peak. It is the binary version of the <a href="../../FAQ/FAQformat.html#format12"
-target="_blank">ENCODE narrowPeak</a> or point-source peak format.
+is a standard six field bed with four additional fields (BED6+4 format) that contain three doubles
+with scoring information and the location of the single base peak. It is the binary version of the
+<a href="../../FAQ/FAQformat.html#format12" target="_blank">ENCODE narrowPeak</a> or point-source
+peak format.
 </p>
 <p>
 The bigNarrowPeak files are created using the program <code>bedToBigBed</code>, run with the

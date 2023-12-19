@@ -1,0 +1,90 @@
+#############################################################################
+# Illumina Infinium Microarrays - May 2022 - Jairo
+# 
+# Download the data file from illumina
+wget https://webdata.illumina.com/downloads/productfiles/methylationEPIC/infinium-methylationepic-v-1-0-b5-manifest-file-csv.zip
+
+# Unzip the file
+zcat infinium-methylationepic-v-1-0-b5-manifest-file-csv.zip > infinium-methylationepic-v-1-0-b5-manifest-file.csv
+
+# Replace commas with tabs
+sed -i 's/,/\t/g' infinium-methylationepic-v-1-0-b5-manifest-file.csv
+
+# Get necessary fields
+# Fields used
+#   49 - chrom
+#   50 - start
+#   51 - end
+#   1  - Ilumina ID
+#   0  - score (not used)
+#   52 - strand
+#   17 - UCSC_RefGene_Accession
+#   44 - SNP_ID (rsID)
+#   46 - SNP_MinorAlleleFrequency
+#    7 - Infinium_Design_Type
+#    4 - AlleleA_Probset
+#    6 - AlleleB_Probset
+
+cat infinium-methylationepic-v-1-0-b5-manifest-file.csv | awk -F'\t' '{ print $49,$50,$51,$1,0,$52,$17,$44,$46,$7,$4,$6 }' > hg38.EPIC.bed
+
+# Removing lines that have "NA" as the hg38 chrom, start, and end fields
+grep -v "NA" hg38.EPIC.bed > EPIC.hg38
+
+# Remove lines with no data (controls)
+grep -v "^ " EPIC.hg38 > EPIC.hg38.clean
+
+# Sorting the file
+sort -k1,1 -k2,2n EPIC.hg38.clean > EPIC.hg38.final.bed
+
+# Replace spaces with tabs
+sed -i 's/ /\t/g' EPIC.hg38.final.bed 
+
+# Create a list of possible 450K sites
+cat infinium-methylationepic-v-1-0-b5-manifest-file.csv | awk -F'\t' '{ print $1,$24 }' > possible450K.sites
+# Get the list of 450K sites by name
+grep "TRUE" possible450K.sites | awk -F' ' '{ print $1 }' > 450K.only
+# Filter out the sites from the 850K bed file
+grep -f 450K.only EPIC.hg38.final.bed > 450k.final.bed &
+
+# Creating the bigBeds
+bedToBigBed -tab -type=bed6+6 -as=epic.as EPIC.hg38.final.bed hg38.chrom.sizes EPIC.bb
+bedToBigBed -tab -type=bed6+6 -as=450k.as 450k.final.bed hg38.chrom.sizes 450k.bb
+
+# Moving the data into /hive and creating symlinks in /gbdb
+cp EPIC.bb /hive/data/genomes/hg38/bed/illumina/epic850K.bb
+cp 450k.bb /hive/data/genomes/hg38/bed/illumina/illumina450K.bb
+
+ln -s /hive/data/genomes/hg38/bed/illumina/epic850K.bb /gbdb/hg38/bbi/illumina/epic850K.bb
+ln -s /hive/data/genomes/hg38/bed/illumina/illumina450K.bb /gbdb/hg38/bbi/illumina/illumina450K.bb
+
+#############################################################################
+# Illumina CytoSNP-850K Probe array - June 2022 - Jairo
+# 
+wget https://webdata.illumina.com/downloads/productfiles/cytosnp-850k/v1-2/cytosnp-850k-v1-2-ns550-d2-manifest-file-csv.zip
+
+# Unzip the file
+unzip cytosnp-850k-v1-2-ns550-d2-manifest-file-csv.zip 
+
+# Rename
+mv CytoSNP-850Kv1-2_NS550_D2\ CSV.csv cytosnp-850k-hg38.csv
+
+# Removing the header from the csv file
+vi cytosnp-850k-hg38.csv
+
+# Replace commas with tabs
+sed -i 's/,/\t/g' cytosnp-850k-hg38.csv 
+
+# Get necessary fields
+cat cytosnp-850k-hg38.csv | awk -F'\t' -vOFS='\t' '{ print "chr"$10,$11-1,$11,$1,0,$21,$3,$2,$4,$5,$6,$7,$8,$12,$14,$15,$16,$17,$18,$19,$20 }' > cytoSnp.bed 
+
+# Sorting the file
+sort -k1,1 -k2,2n cytoSnp.bed > cytoSnp.bed.sorted
+
+# Create the bigbed
+bedToBigBed -tab -type=bed6+15 -as=../cytoSNP.as cytoSnp.bed.final http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes cytoSnp.bb
+
+# Move the bigBed into /hive and create symlinks to /gbdb
+cp cytoSnp.bb /hive/data/genomes/hg38/bed/cytoSnp/cytoSnp850k.bb
+ln -s /hive/data/genomes/hg38/bed/cytoSnp/cytoSnp850k.bb /gbdb/hg38/bbi/cytoSnp/cytoSnp850k.bb
+
+#############################################################################

@@ -1,0 +1,134 @@
+<h2>Description</h2>
+<p>
+The
+<a target="_blank" href="https://panelapp.genomicsengland.co.uk/#!">Genomics England PanelApp</a>
+tracks show gene panels that are related to human disorders. Originally developed to
+aid interpretation of participant genomes in the
+<a href="https://www.genomicsengland.co.uk/initiatives/100000-genomes-project"
+target="_blank">100,000 Genomes Project</a>, PanelApp is now also being used as the platform for
+achieving consensus on gene panels in the
+<a target="_blank" href="https://www.england.nhs.uk/genomics/nhs-genomic-med-service/">
+NHS Genomic Medicine Service (GMS)</a>.
+As panels in PanelApp are publicly available, they can also be used by other groups
+and projects. Panels are maintained and updated by
+<a target="_blank" href="https://www.genomicsengland.co.uk/">Genomics England</a> curators.
+<p>
+<a href="https://panelapp.genomicsengland.co.uk/panels/entities/" target="_blank">Genes and genomic
+entities</a> (short tandem repeats/STRs and copy number variants/CNVs)
+have been reviewed by experts to enable a community consensus to be reached on which
+genes and genomic entities should appear on a <b>diagnostics grade panel</b> for each disorder.
+A <b>rating system</b> (confidence level 0 - 3) is used to classify the level of evidence
+supporting association with phenotypes covered by the gene panel in question.
+</p>
+<p>
+The available data tracks are: 
+</p>
+
+<ul>
+  <li>
+    <b>Genomics England PanelApp Genes (PanelApp Genes):</b>
+    <br>
+    shows genes with evidence supporting a gene-disease relationship.
+    <p style="color:red">NOTE: Due to a bug in the PanelApp gene API, between 
+       5 and 20% of gene entries are missing as of 11/2/22.</p>
+</li>
+  <br>
+  <li>
+    <b>Genomics England PanelApp STRs (PanelApp STRs):</b>
+    <br>
+    shows short tandem repeats that can be disease-causing when a particular number of repeats is
+    present.</li>
+  <br>
+  <li>
+    <b>Only on hg38: Genomics England PanelApp Regions (PanelApp CNV Regions):</b>
+    <br>
+    shows copy-number variants (region-loss and region-gain) with evidence supporting a gene-disease
+    relationship.</li>
+</ul>
+
+<h2>Display Conventions</h2>
+<p>
+The individual tracks are colored by <b>confidence level:</b>
+
+<ul>
+<li><b><font color="#32CD32">Score 3 (lime green)</font></b> - <b>High level of evidence</b> 
+for this gene-disease association. Demonstrates confidence that this gene should be 
+used for genome interpretation.</li>
+<li><b><font color="#FFBF00">Score 2 (amber)</font></b> - <b>Moderate evidence</b> 
+for this gene-disease association. This gene should not be used for genomic 
+interpretation.</li>
+<li><b><font color="red">Score 0 or 1 (red)</font></b> - <b>Not enough evidence</b> 
+for this gene-disease association. This gene should not be used for 
+genomic interpretation. </li>
+</ul>
+<p>
+Mouseover on items shows the gene name, panel associated, mode of inheritance 
+(if known), phenotypes related to the gene, and confidence level. Tracks can 
+be filtered according to the confidence 
+level of disease association evidence. For more information on 
+the use of this data, see the PanelApp
+<a target="_blank" href="https://panelapp.genomicsengland.co.uk/#!FAQs">FAQs</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a target="_blank" href="/cgi-bin/hgTables">Table Browser</a> or the
+<a target="_blank" href="/cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated analysis, the data may be queried from our
+<a target="_blank" href="/goldenPath/help/api.html">REST API</a>.
+</p>
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/panelApp/" target="_blank">our download server</a>.
+The files for this track are called <tt>genes.bb</tt>, <tt>tandRep.bb</tt> and <tt>cnv.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool
+can also be used to obtain only features within a given range, e.g. 
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/panelApp/genes.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+
+<p>
+Please refer to our
+<a target="_blank" href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
+mailing list archives</a> for questions, or our
+<a target="_blank" href="/FAQ/FAQdownloads.html#downloads36">
+Data Access FAQ</a> for more information.
+</p>
+<p>
+Data is also freely available on the
+<a target="_blank" href="https://panelapp.genomicsengland.co.uk/#!API">PanelApp API</a>.
+</p>
+
+<h2>Updates and archiving of old releases</h2>
+<p>
+This track is updated automatically every week. If you need to access older releases of the data,
+you can download them from our <a href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/panelApp/">archive directory</a> on the download server. To load them into the browser, select a week on the archive directory, copy the link to a file, go to <a href="http://genome.ucsc.edu/cgi-bin/hgCustom">My Data &gt; Custom Tracks</a>, click "Add custom track", paste the link into the box and click "Submit".
+</p>
+
+<h2>Methods</h2>
+<p>
+PanelApp files were reformatted at UCSC to the <a target="_blank"
+href="/goldenPath/help/bigBed.html">bigBed</a> format. The script that updates the track is called 
+<tt>updatePanelApp</tt> and can be found in our <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/panelApp">Github repository</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thank you to Genomics England PanelApp, especially Catherine Snow for technical
+coordination and consultation. Thank you to Beagan Nguy, Christopher Lee, Daniel Schmelter,
+Ana Benet-Pag&egrave;s and Maximilian Haeussler of the Genome Browser team for the creation of the tracks.
+</p>
+
+<h2>Reference</h2>
+<p>
+    Martin AR, Williams E, Foulger RE, Leigh S, Daugherty LC, Niblock O, Leong IUS, Smith KR,
+    Gerasimenko O, Haraldsdottir E <em>et al</em>.
+    <a href="https://www.ncbi.nlm.nih.gov/pubmed/31676867" target="_blank">
+    PanelApp crowdsources expert knowledge to establish consensus diagnostic gene panels</a>.
+    <em>Nat Genet</em>. 2019 Nov;51(11):1560-1565.
+    PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31676867" target="_blank">31676867</a>
+</p>

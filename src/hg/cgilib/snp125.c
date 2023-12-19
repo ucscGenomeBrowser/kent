@@ -259,7 +259,7 @@ char *createString =
 "    weight        int not null\n"
 ")\n";
 
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 sqlDyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);

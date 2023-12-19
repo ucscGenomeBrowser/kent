@@ -189,15 +189,25 @@ else
 dyStringFree(&dyTmp);
 }
 
+void printCopyToClipboardButton(struct dyString *dy, char *iconId, char *targetId) 
+/* print a copy-to-clipboard button with DOM id iconId that copies the node text of targetId */
+{
+dyStringPrintf(dy, "&nbsp;<button title='Copy URL to clipboard' id='%s' data-target='%s'><svg style='width:0.9em' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d='M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z'/></svg>&nbsp;Copy</button>\n", iconId, targetId);
+
+jsOnEventById("click", iconId, "copyToClipboard(event);");
+}
+
 void printShareMessage(struct dyString *dy, char *userName, char *sessionName,
             boolean encode)
 {
 struct dyString *dyTmp = dyStringNew(0);
 addSessionLink(dyTmp, userName, sessionName, encode, TRUE);
 dyStringPrintf(dy,
-    "<p>You can share this session with the following  URL: %s</p>",
+    "<p>You can share this session with the following URL:<br><span id='urlText'>%s</span>&nbsp;",
     dyTmp->string);
-//dyStringFree(&dyTmp);
+
+printCopyToClipboardButton(dy, "copyIcon", "urlText");
+dyStringAppend(dy, "</p>");
 }
 
 char *getSessionLink(char *encUserName, char *encSessionName)
@@ -342,6 +352,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *firstUse = row[2];
     char buf[512];
     boolean inGallery = FALSE;
+    boolean hasDescription = FALSE;
 
     if (shared >=2)
         inGallery = TRUE;
@@ -350,7 +361,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     struct dyString *dy = dyStringNew(1024);
     addSessionLink(dy, encUserName, encSessionName, FALSE, TRUE);
-    printf("<a href=\"%s\">%s</a>", dyStringContents(dy), sessionName);
+    printf("<a href=\"%s\">%s</a>", dyStringContents(dy), htmlEncode(sessionName));
     dyStringFree(&dy);
 
     struct tm firstUseTm;
@@ -383,7 +394,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (gotSettings)
         {
         safef(buf, sizeof(buf), "%s%s", hgsEditPrefix, encSessionName);
-        cgiMakeButton(buf, "details");
+        cgiMakeButton(buf, "view/edit");
+        char *description = getSetting(row[4], "description");
+        if (!isEmpty(description))
+            hasDescription = TRUE;
         }
     else
         printf("unavailable");
@@ -397,12 +411,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
     cgiMakeCheckBoxWithId(buf, shared>0, buf);
-    jsOnEventById("change",buf,"console.log('new status' + this.checked); document.mainForm.submit();");
+    jsOnEventById("change",buf,"document.mainForm.submit();");
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsGalleryPrefix, encSessionName);
     cgiMakeCheckBoxFourWay(buf, inGallery, shared>0, buf, NULL, NULL);
-    jsOnEventById("change", buf, "document.mainForm.submit();");
+    if (hasDescription || inGallery)
+        jsOnEventById("change", buf, "document.mainForm.submit();");
+    else
+        jsOnEventById("change", buf, "warn('Please first use the view/edit option to "
+                "add a description for this session.'); this.checked = false;");
 
     link = getSessionEmailLink(encUserName, encSessionName);
     printf("</td><td align=center>%s</td></tr>", link);
@@ -591,12 +609,12 @@ else
     jsInit();
     }
 
-printf("See the <A HREF=\"../goldenPath/help/hgSessionHelp.html\" "
+printf("<P>See the <A HREF=\"../goldenPath/help/hgSessionHelp.html\" "
        "TARGET=_BLANK>Sessions User's Guide</A> "
        "for more information about this tool. "
        "See the <A HREF=\"../goldenPath/help/sessions.html\" "
        "TARGET=_BLANK>Session Gallery</A> "
-       "for example sessions.<P/>\n");
+       "for example sessions.</P>\n");
 
 showCartLinks();
 
@@ -610,7 +628,7 @@ if (isNotEmpty(userName))
     existingSessionNames = showExistingSessions(userName);
 else if (savedSessionsSupported)
      printf("<P>If you <A HREF=\"%s\">sign in</A>, "
-         "you will also have the option to save named sessions.\n",
+         "you will also have the option to save named sessions.</P>\n",
          wikiLinkUserLoginUrl(cartSessionId(cart)));
 showSavingOptions(userName, existingSessionNames);
 showLoadingOptions(userName, savedSessionsSupported);
@@ -749,6 +767,29 @@ if (cartVis == NULL)
     }
 }
 
+static void outAttachedHubUrls(struct cart *cart, struct dyString *dy)
+/* output the hubUrls for all attached hubs in the cart. */
+{
+struct hubConnectStatus *statusList = hubConnectStatusListFromCart(cart);
+
+if (statusList == NULL)
+    return;
+
+if (dy)
+    dyStringPrintf(dy,"&assumesHub=");
+else
+    printf("assumesHub ");
+for(; statusList; statusList = statusList->next)
+    {
+    if (dy)
+        dyStringPrintf(dy,"%d=%s ", statusList->id, cgiEncode(statusList->hubUrl));
+    else
+        printf("%d=%s ", statusList->id, statusList->hubUrl);
+    }
+if (dy == NULL)
+    printf("\n");
+}
+
 static void outDefaultTracks(struct cart *cart, struct dyString *dy)
 /* Output the default trackDb visibility for all tracks
  * in trackDb if the track is not mentioned in the cart. */
@@ -804,20 +845,33 @@ static int saveCartAsSession(struct sqlConnection *conn, char *encUserName, char
 struct sqlResult *sr = NULL;
 struct dyString *dy = dyStringNew(16 * 1024);
 char **row;
-char *firstUse = "now()";
+char *firstUse = NULL;
 int useCount = INITIAL_USE_COUNT;
-char firstUseBuf[32];
+char *settings = "";
 
-/* If this session already existed, preserve its firstUse and useCount. */
-sqlDyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
+boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
+
+/* If this session already existed, preserve its firstUse, useCount,
+ * and settings (if available). */
+if (gotSettings)
+    sqlDyStringPrintf(dy, "SELECT firstUse, useCount, settings FROM %s "
+                  "WHERE userName = '%s' AND sessionName = '%s';",
+                  namedSessionTable, encUserName, encSessionName);
+else
+    sqlDyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
                   "WHERE userName = '%s' AND sessionName = '%s';",
                   namedSessionTable, encUserName, encSessionName);
 sr = sqlGetResult(conn, dy->string);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    safef(firstUseBuf, sizeof(firstUseBuf), "'%s'", row[0]);
-    firstUse = firstUseBuf;
+    firstUse = cloneString(row[0]);
     useCount = atoi(row[1]) + 1;
+    if (gotSettings)
+        {
+        settings = cloneString(row[2]);
+        if (settings == NULL)
+            settings = "";
+        }
     }
 sqlFreeResult(&sr);
 
@@ -833,22 +887,35 @@ sqlUpdate(conn, dy->string);
 
 dyStringClear(dy);
 sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
-dyStringAppend(dy, "(userName, sessionName, contents, shared, "
-               "firstUse, lastUse, useCount, settings) VALUES (");
-dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
-dyStringAppend(dy, "'");
+sqlDyStringPrintf(dy, "(userName, sessionName, contents, shared, "
+               "firstUse, lastUse, useCount");
+if (gotSettings)
+    sqlDyStringPrintf(dy, ", settings");
+sqlDyStringPrintf(dy, ") VALUES (");
+sqlDyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
+sqlDyStringPrintf(dy, "'");
 cleanHgSessionFromCart(cart);
-struct dyString *encoded = newDyString(4096);
+struct dyString *encoded = dyStringNew(4096);
 cartEncodeState(cart, encoded);
+
+// First output the hubStatus id's for attached trackHubs
+outAttachedHubUrls(cart, encoded);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, encoded);
 
 sqlDyAppendEscaped(dy, encoded->string);
 dyStringFree(&encoded);
-dyStringAppend(dy, "', ");
-dyStringPrintf(dy, "%d, ", sharingLevel);
-dyStringPrintf(dy, "%s, now(), %d, '');", firstUse, useCount);
+sqlDyStringPrintf(dy, "', ");
+sqlDyStringPrintf(dy, "%d, ", sharingLevel);
+if (firstUse)
+    sqlDyStringPrintf(dy, "'%s', ", firstUse);
+else
+    sqlDyStringPrintf(dy, "now(), ");
+sqlDyStringPrintf(dy, "now(), %d", useCount);
+if (gotSettings)
+    sqlDyStringPrintf(dy, ", '%s'", settings);
+sqlDyStringPrintf(dy, ")");
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 
@@ -865,6 +932,9 @@ if (userName == NULL)
     return "Unable to save session -- please log in and try again.";
 struct dyString *dyMessage = dyStringNew(2048);
 char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
+if (isEmpty(sessionName))
+    return "Error: Unable to save a session without a name.  Please add one and try again.";
+
 char *encSessionName = cgiEncodeFull(sessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
 char *encUserName = cgiEncodeFull(userName);
@@ -938,8 +1008,8 @@ if (convertTestResult != 0)
     }
 
 sqlSafef(query, sizeof(query),
-    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
-    encUserName, encSessionName);
+    "select firstUse from %s where userName = \"%s\" and sessionName = \"%s\"",
+    namedSessionTable, encUserName, encSessionName);
 char *firstUse = sqlNeedQuickString(conn, query);
 sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
 char *userIdx = sqlQuickString(conn, query);
@@ -966,8 +1036,8 @@ void thumbnailRemove(char *encUserName, char *encSessionName, struct sqlConnecti
 {
 char query[4096];
 sqlSafef(query, sizeof(query),
-    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
-    encUserName, encSessionName);
+    "select firstUse from %s where userName = \"%s\" and sessionName = \"%s\"",
+    namedSessionTable, encUserName, encSessionName);
 char *firstUse = sqlNeedQuickString(conn, query);
 sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
 char *userIdx = sqlQuickString(conn, query);
@@ -1066,9 +1136,19 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   hgsDoSessionChange, hgsDoSessionChange, 
 		   hgsCancel);
     struct slName *existingSessionNames = getUserSessionNames(encUserName);
-    struct dyString *js = dyPrintCheckExistingSessionJs( existingSessionNames, sessionName);
-    jsOnEventById("click", hgsDoSessionChange, js->string);
-    dyStringFree(&js);
+    struct dyString *checkExistingNameJs = dyPrintCheckExistingSessionJs( existingSessionNames, sessionName);
+    struct dyString *onClickJs = dyStringCreate(
+                    "var pattern = /^\\s*$/;"
+                    "if (document.getElementById(\"detailsGalleryCheckbox\").checked &&"
+                    "   pattern.test(document.getElementById(\"%s\").value)) {"
+                    "       warn('Please add a description to allow this session to be included in the Public Gallery');"
+                    "       event.preventDefault();"
+                    "} else {"
+                    "       %s"
+                    "}", hgsNewSessionDescription, checkExistingNameJs->string);
+    jsOnEventById("click", hgsDoSessionChange, onClickJs->string);
+    dyStringFree(&onClickJs);
+    dyStringFree(&checkExistingNameJs);
 
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
@@ -1106,12 +1186,13 @@ if ((row = sqlNextRow(sr)) != NULL)
         description = replaceChars(description, "\\r", "\r");
         description = replaceChars(description, "\\n", "\n");
         description = replaceChars(description, "\\__ESC__", "\\");
+        char *encDescription = htmlEncode(description);
         dyStringPrintf(dyMessage,
             "Description:<BR>\n"
             "<TEXTAREA NAME=\"%s\" id='%s' ROWS=%d COLS=%d "
             ">%s</TEXTAREA><BR>\n",
             hgsNewSessionDescription, hgsNewSessionDescription, 5, 80,
-            description);
+            encDescription);
 	    jsOnEventById("change"   , hgsNewSessionDescription, highlightAccChanges);
 	    jsOnEventById("keypress" , hgsNewSessionDescription, highlightAccChanges);
         }
@@ -1316,6 +1397,9 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 cleanHgSessionFromCart(cart);
 
 cartDumpHgSession(cart);
+
+// First output the hubStatus id's for attached trackHubs
+outAttachedHubUrls(cart, NULL);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);
@@ -1629,7 +1713,10 @@ char *doReSaveSession(char *userName, char *actionVar)
 if (userName == NULL)
     return "Unable to re-save session -- please log in and try again.";
 struct sqlConnection *conn = hConnectCentral();
-char *sessionName = cloneString(cartString(cart, hgsNewSessionName));
+char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
+if (isEmpty(sessionName))
+    return "Error: Unable to save a session without a name.  Please add one and try again.";
+
 char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 int sharingLevel = getSharingLevel(conn, encUserName, encSessionName);

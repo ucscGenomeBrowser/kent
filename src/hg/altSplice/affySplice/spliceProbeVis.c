@@ -127,10 +127,10 @@ assert(query);
 dyStringClear(query);
 sqlDyStringPrintf(query, "select * from %s where ", tableName);
 for(i = 0; i < event->incCount; i++) 
-    dyStringPrintf(query, "name like '%s' or ", event->incPSets[i]);
+    sqlDyStringPrintf(query, "name like '%s' or ", event->incPSets[i]);
 for(i = 0; i < event->geneCount; i++) 
-    dyStringPrintf(query, "name like '%s' or ", event->genePSets[i]);
-dyStringPrintf(query, "name like '%s' order by name;", skipPSet);
+    sqlDyStringPrintf(query, "name like '%s' or ", event->genePSets[i]);
+sqlDyStringPrintf(query, "name like '%s' order by name;", skipPSet);
 hFreeConn(&conn);
 }
 
@@ -358,7 +358,7 @@ void doMatrixPlot(struct dyString *script,
 /* Print out a matrix plot for a particular table. */
 {
 struct tempName plotFile;
-struct dyString *query = newDyString(256);
+struct dyString *query = dyStringNew(256);
 struct dMatrix *dM = NULL;
 char title[256];
 safef(title, sizeof(title), "%s - %s", altEvent->geneName, type);
@@ -395,10 +395,10 @@ doMatrixPlot(script, skipPSet, "mouseAProbeNormInten", "Probe Intensity", TRUE);
 void doPlots()
 /* Do all the plots. */
 {
-struct dyString *script = newDyString(2048);
-struct dyString *dummy = newDyString(256);
+struct dyString *script = dyStringNew(2048);
+struct dyString *dummy = dyStringNew(256);
 char *skipPSet = cgiUsualString("skipPName", "G7153846@J939317_RC@j_at");
-html = newDyString(1024);
+html = dyStringNew(1024);
 hSetDb("mm5");
 dyStringPrintf(script, "%s", rHeader);
 

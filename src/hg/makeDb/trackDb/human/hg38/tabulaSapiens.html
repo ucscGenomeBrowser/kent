@@ -1,56 +1,110 @@
 <h2>
 Description</h2>
 <p>
+This track shows data from 
+<a href="https://www.biorxiv.org/content/10.1101/2021.07.19.452956v2"
+target="_blank"><em>The Tabula Sapiens: a multiple organ single cell
+transcriptomic atlas of humans</em></a>. The dataset covers ~500,000 cells from
+a total of 24 human tissues and organs from all regions of the body using both 
+droplet-based and plate-based single-cell RNA-sequencing (scRNA-seq). 
+Samples were taken from the human bladder, blood,
+bone marrow, eye, fat, heart, kidney, large intestine, liver, lung, lymph node,
+mammary, muscle, pancreas, prostate, salivary gland, skin, small intestine,
+spleen, thymus, tongue, trachea, uterus, and vasculature. The dataset includes
+264,009 immune cells, 102,580 epithelial cells, 32,701 endothelial cells, and
+81,529 stromal cells. A total of 475 distinct cell types were identified.
 </p>
 
-
 <p>
-The <a href="" target="_blank"></a> subtrack contains
-The <a href="" target="_blank"></a> subtrack 
+This track collection contains two bar chart tracks of RNA expression.
+The first track,
+<a href="hgTrackUi?g=tabulaSapiensTissueCellType" target="_blank">Tabula Tissue Cell</a>
+allows cells to be grouped together and faceted on up to 3 categories: tissue, cell class, and cell
+type. The second track,
+<a href="hgTrackUi?g=tabulaSapiensFullDetails" target="_blank">Tabula Details</a>
+allows cells to be grouped together and faceted on up to 7 categories: tissue,
+cell class, cell type, subtissue, sex, donor, and assay.
 </p>
 
 <p>
-Please see <a
-href="https://tabula-sapiens-portal.ds.czbiohub.org/" target="_blank">tabula-sapiens-portal.ds.czbiohub.org</a> for further interactive displays and additional data. </p>
+Please see 
+<a href="https://tabula-sapiens-portal.ds.czbiohub.org/" target="_blank">tabula-sapiens-portal.ds.czbiohub.org</a> 
+for further interactive displays and additional data. </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-The cell types are colored by which class they belong to according to the following table.
-The coloring algorithm allows cells that show some blended characteristics to show blended
-colors so there will be some color variation within a class. The colors will be purest in
-the <a href="hgTrackUi?g=fetalGeneAtlasCellType">Fetal Cells</a> subtrack, where the bars 
-represent relatively pure cell types. They can give an overview of the cell composition 
-within other categories in other subtracks as well.
+The cell types are colored by which compartment they belong to according to the following table.
+In addition, cells found in the 
+<a href="hgTrackUi?g=tabulaSapiensFullDetails" target="_blank">Tabula Details</a>
+track with less than 100 transcripts will be a lighter shade and less
+concentrated in color to represent a low number of transcripts.
+</p>
 
 <p>
 <table cellpadding='2'>
   <thead><tr>
     <th style="border-bottom: 2px solid;">Color</th>
-    <th style="border-bottom: 2px solid;">Cell classification</th>
+    <th style="border-bottom: 2px solid;">Cell Compartment</th>
   </tr></thead>
-  <tr><td style="background-color: #F01111;"></td><td>immune</td></tr>
-  <tr><td style="background-color: #0099C0;"></td><td>epithelial</td></tr>
-  <tr><td style="background-color: #00C000;"></td><td>endothelial</td></tr>
-  <tr><td style="background-color: #00C000;"></td><td>stromal</td></tr>
-  <tr><td style="background-color: #00C000;"></td><td>germline</td></tr>
+  <tr><td style="background-color: #0000FF;"></td><td>epithelial</td></tr>
+  <tr><td style="background-color: #00D000;"></td><td>endothelial</td></tr>
+  <tr><td style="background-color: #888888;"></td><td>germline</td></tr>
+  <tr><td style="background-color: #FF0000;"></td><td>immune</td></tr>
+  <tr><td style="background-color: #CC00CC;"></td><td>stromal</td></tr>
 </table>
+</p>
 
 <h2>Methods</h2>
-<p>
-<em>et al</em>.
-</p>
-<p>
 
-The cell/gene matrix and cell-level metadata was downloaded from the <a
-href="http://cells.ucsc.edu/?ds=fetal-gene-atlas+all" target="_blank">
-UCSC Cell Browser</a>. The UCSC command line utility matrixClusterColumns,
-matrixToBarChart, and bedToBigBed were used to transform these into a bar chart
-format bigBed file that can be visualized. The coloring was done by defining
-colors for the broad level cell classes and then using another UCSC utility,
-hcaColorCells, to interpolate the colors across all cell types.
-The UCSC utilities can be found on 
-<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
-target="_blank">our download server</a>.</p>
+<h3>All tissues</h3>
+
+<p>
+36 tissue specimens comprising 24 unique tissues and organs were collected from 
+15 human donors (TSP1-15) with a mean age of 51 years. Tissue specimens were collected at
+various hospital locations in the Northern California region and transported on
+ice in less than one hour to preserve cell viability. Single cell suspensions
+from each organ were prepared in tissue expert laboratories at Stanford and
+UCSF. For each tissue, the dissociated cells were sorted using MACS and FACS to
+balance immune, stromal, epithelial, and endothelial cell types.
+</p>
+
+<p>
+Sequencing libraries for all tissues were prepared using 10x 3' v3.1, 10x 5' v2, and
+Smart-seq2 (SS2) protocols for Illumina sequencing. Two 10x reactions per organ were
+loaded with 7,000 cells each with the goal to yield 10,000 QC-passed cells.
+Four 384-well Smartseq2 plates were run per organ. In most organs, one plate
+was used for each compartment (epithelial, endothelial, immune, and stromal),
+however, to capture rare cells, some organ experts allocated cells across the
+four plates differently. 
+Sequencing runs for droplet libraries were loaded onto the NovaSeq S4 flow cell in sets
+of 16 to 20 libraries of approximately 5,000 cells per library with the goal of generating
+50,000 to 75,000 reads per cell. Plate libraries were run in sets of 20 plates on Novaseq
+S4 flow cells to allow generating 1M reads per cell, depending on library quality. 152 10x
+reactions were performed, yielding 454,069 cells passing QC, and 161 smartseq2 plates
+were processed, yielding 27,051 cells passing QC.
+</p>
+
+<p>
+Tissues collected from the same donor were used to study the
+clonal distribution of T cells between tissues, to understand the tissue
+specific mutation rate in B cells, and to analyze the cell cycle state and
+proliferative potential of shared cell types across tissues. RNA splicing
+analysis was also used to characterize cell type specific splicing and its
+variation across individuals.
+</p>
+
+<p>
+For detailed methods and information on donors for each organ or tissue 
+please refer to Quake <em>et al</em>, 2021 or the 
+<a href="https://tabula-sapiens-portal.ds.czbiohub.org/">Tabula Sapiens</a> website.
+</p>
+
+<h2>Errata</h2>
+<p>
+Some cell types, particularly in the intestines, are duplicated due to
+the use of multiple ontologies for the same cell type.  In a future version,
+we plan to pool the data from these duplicates.
+</p>
 
 <h2>Data Access</h2>
 <p>
@@ -64,14 +118,28 @@ list archives</a> for questions, or our <a
 href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more
 information.</p>
 
+<p>
+The cell/gene matrix and cell-level metadata was downloaded from the <a
+href="https://cells.ucsc.edu/?ds=tabula-sapiens" target="_blank">
+UCSC Cell Browser</a>. The UCSC command line utility <code>matrixClusterColumns</code>,
+<code>matrixToBarChart</code>, and <code>bedToBigBed</code> were used to transform these into a bar
+chart format bigBed file that can be visualized.
+The UCSC utilities can be found on
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">our download server</a>.</p>
+
 <h2>Credits</h2>
-<p>Thanks to the many authors who worked on producing and publishing this data set.  
-The data were integrated into the UCSC Genome Browser by Jim Kent and Brittney Wick 
-then reviewed by Jairo Navarro. The UCSC work was paid for by the Chan Zuckerberg Initiative.</p>
+<p>Thanks to the Tabula Sapiens Consortium who worked on producing and publishing this data set.  
+The data were integrated into the UCSC Genome Browser by Jim Kent, Brittney
+Wick, and Rachel Schwartz.</p>
 
 <h2>References</h2>
 <p>
-</p>
-<p>
+The Tabula Sapiens Consortium, Quake SR., <a
+href="https://www.biorxiv.org/content/10.1101/2021.07.19.452956v3"
+target="_blank">The Tabula Sapiens: A Multiple Organ Single Cell
+Transcriptomic Atlas of Humans</a>. <em>bioRxiv</em>. 2021 March 4.; doi:
+<a href="https://doi.org/10.1101/2021.07.19.452956"
+target="_blank">https://doi.org/10.1101/2021.07.19.452956</a>.
 </p>
 

@@ -9,6 +9,7 @@
 #include "errAbort.h"
 #include "htmshell.h"
 #include "web.h"
+#include "dupTrack.h"
 #include "hPrint.h"
 #include "hdb.h"
 #include "hui.h"
@@ -22,6 +23,7 @@
 #include "geoMirror.h"
 #include "trackHub.h"
 #include "versionInfo.h"
+#include "asmAlias.h"
 
 #ifndef GBROWSE
 #include "axtInfo.h"
@@ -132,6 +134,7 @@ static void webStartWrapperDetailedInternal(struct cart *theCart,
 {
 char uiState[256];
 char *scriptName = cgiScriptName();
+char *textOutBufDb = cloneString(textOutBuf);
 boolean isEncode = FALSE;
 if (theCart)
     {
@@ -174,6 +177,13 @@ dnaUtilOpen();
 if (withHttpHeader)
     puts("Content-type:text/html\n");
 
+// If the database name is not already in the title string, add it now
+if (endsWith(scriptName, "hgc") && db != NULL && !stringIn(db, textOutBufDb))
+    {
+    struct dyString *newTitle = dyStringNew(0);
+    dyStringPrintf(newTitle, "%s %s", db, textOutBufDb);
+    textOutBufDb = dyStringCannibalize(&newTitle);
+    }
 if (withHtmlHeader)
     {
     char *newString, *ptr1, *ptr2;
@@ -196,9 +206,9 @@ if (withHtmlHeader)
     printf("\t<TITLE>");
 
     /* we need to take any HTML formatting out of the titlebar string */
-    newString = cloneString(textOutBuf);
+    newString = cloneString(textOutBufDb);
 
-    for(ptr1=newString, ptr2=textOutBuf; *ptr2 ; ptr2++)
+    for(ptr1=newString, ptr2=textOutBufDb; *ptr2 ; ptr2++)
 	{
 	if (*ptr2 == '<')
 	    {
@@ -251,7 +261,7 @@ if (withLogo)
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {
-    webFirstSection(textOutBuf);
+    webFirstSection(textOutBufDb);
     };
 webPushErrHandlers();
 /* set the flag */
@@ -454,6 +464,23 @@ if(!webInTextMode)
     }
 }
 
+void webEndExtra(char *footer)
+/* output the footer of the HTML page with extra footer as desired */
+{
+if(!webInTextMode)
+    {
+    webEndSectionTables();
+#ifndef GBROWSE
+    googleAnalytics();
+#endif /* GBROWSE */
+    jsInlineFinish();
+    if (footer)
+	puts(footer);
+    puts( "</BODY></HTML>");
+    webPopErrHandlers();
+    }
+}
+
 static void webStartGbOptionalBanner(struct cart *cart, char *db, char *title, boolean doBanner, 
                                 boolean hgGateway)
 /* Start HTML with new header and footer design by JWest.  
@@ -607,6 +634,10 @@ char *defaultClade = hClade(genome);
 char *defaultLabel = NULL;
 int numClades = 0;
 
+if (hubConnectIsCurated(trackHubSkipHubName(genome)))
+    defaultClade = hClade(trackHubSkipHubName(genome));
+else
+    defaultClade = hClade(genome);
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
 // get only the clades that have actual active genomes
 char query[4096];
@@ -905,7 +936,7 @@ void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
  */
 {
 boolean gotClade = hGotClade();
-*retDb = cgiOptionalString(dbCgiName);
+*retDb =  cgiOptionalString(dbCgiName);
 if (*retDb == NULL)  // if db is not in URL, but genome is, use it for db 
     *retDb = cgiOptionalString(hgHubGenome);
 
@@ -914,6 +945,7 @@ if (*retDb == NULL)  // if db is not in URL, but genome is, use it for db
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
+*retDb = asmAliasFind(*retDb);
 if (*retDb && hDbExists(*retDb))
     {
     *retGenome = hGenome(*retDb);
@@ -935,6 +967,7 @@ else if (*retClade && gotClade)
 else
     {
     *retDb = cartOptionalString(cart, dbCgiName);
+    *retDb = asmAliasFind(*retDb);
     *retGenome = cartOptionalString(cart, orgCgiName);
     *retClade = cartOptionalString(cart, cladeCgiName);
     /* If there was a db found in the session that determines everything. */
@@ -1211,6 +1244,50 @@ void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
 finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkCellStart);
 }
 
+static struct dyString* getHtdocsSubdir(char *dirName)
+/* return dystring with subdirectory under htDocs, tolerant of missing docRoot */
+{
+struct dyString *fullDirName = NULL;
+char *docRoot = hDocumentRoot();
+if (docRoot != NULL)
+    fullDirName = dyStringCreate("%s/%s", docRoot, dirName);
+else
+    // tolerate missing docRoot (i.e. when running from command line)
+    fullDirName = dyStringCreate("%s", dirName);
+return fullDirName;
+}
+
+char *webCssLink(char *fileName, boolean mustExist)
+/* alternative for webTimeStampedLinkToResource for CSS files: returns a string with a time-stamped
+ * link to a CSS file as a html fragment <link .... >. returns empty string if file does not exist.
+ * errAborts if mustExist is True.
+ * */
+{
+// construct the absolute path to the file on disk
+char *relDir = cfgOptionDefault("browser.styleDir","style");
+struct dyString *absDir = getHtdocsSubdir(relDir);
+struct dyString *absFileName = dyStringCreate("%s/%s", dyStringContents(absDir), fileName);
+
+struct dyString *htmlFrag = NULL;
+if (!fileExists(dyStringContents(absFileName)))
+    {
+    if (mustExist)
+        errAbort("webCssLink: file: %s doesn't exist.\n", dyStringContents(absFileName));
+    else
+        htmlFrag = dyStringNew(0);
+    }
+else
+    {
+    // construct a link with the relative path to the file on the web server
+    long mtime = fileModTime(dyStringContents(absFileName));
+    htmlFrag = dyStringCreate("<link rel='stylesheet' href='../%s/%s?v=%ld' type='text/css'>\n", relDir, fileName, mtime);
+    }
+
+dyStringFree(&absFileName);
+dyStringFree(&absDir);
+return dyStringCannibalize(&htmlFrag);
+}
+
 char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml)
 // If wrapInHtml
 //   returns versioned link embedded in style or script html (free after use).
@@ -1252,6 +1329,7 @@ else if (style)
     dirName = cfgOptionDefault("browser.styleDir","style");
 else if (image)
     dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
+
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
 if (docRoot != NULL)
@@ -1259,6 +1337,7 @@ if (docRoot != NULL)
 else
     // tolerate missing docRoot (i.e. when running from command line)
     fullDirName = dyStringCreate("%s", dirName);
+
 if (!fileExists(dyStringContents(fullDirName)))
     errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist. (host: %s)\n",
              dyStringContents(fullDirName), httpHost);
@@ -1368,7 +1447,7 @@ if(err)
     errAbort("regcomp failed; err: %d", err);
 
 /* Search through oldString with regex, and build up new string in dy */
-struct dyString *dy = newDyString(0);
+struct dyString *dy = dyStringNew(0);
 int offset;
 for(offset = 0; offset < len && !regexec(&re, oldString + offset, ArraySize(match), match, 0); 
     offset += match[0].rm_eo)
@@ -1445,9 +1524,10 @@ if(scriptName)
         if (tdb)
 	    {
 	    struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb); 
+	    char *undupedTrack = dupTrackSkipToSourceName(topLevel->track);
 	    safef(hgTablesOptions, sizeof  hgTablesOptions, 
 		    "../cgi-bin/hgTables?hgta_doMainPage=1&hgta_group=%s&hgta_track=%s&hgta_table=%s&", 
-		    topLevel->grp, topLevel->track, tdb->table);
+		    topLevel->grp, undupedTrack, tdb->table);
 	    menuStr = replaceChars(menuStr, "../cgi-bin/hgTables?", hgTablesOptions);
 	    trackDbFree(&tdb);
 	    }
@@ -1475,7 +1555,7 @@ if(scriptName)
     if (endsWith(scriptName, "hgGenome"))
         {
 	safef(buf, sizeof(buf), "../cgi-bin/hgGenome?%s&hgGenome_doPsOutput=1", uiVars);
-    	dyStringPrintf(viewItems, "<li><a href='%s' id='%s'>%s</a></li>\n", buf, "pdfLink", "PDF/PS");
+    	dyStringPrintf(viewItems, "<li><a href='%s' id='%s'>%s</a></li>\n", buf, "pdfLink", "PDF");
         }
     else
 	{
@@ -1627,6 +1707,7 @@ if (thisNodeStr)   // if geo-mirroring is enabled
 		oldUri, oldDomain );
 	    printf("</div></TD></TR>\n");
 	    jsInlineFinish();
+            cartCheckout(&cart);
             exit(0);
             }
         hDisconnectCentral(&centralConn);

@@ -11,7 +11,7 @@ CREATE TABLE vax004Cons (
     name varchar(255) not null,	# Name of item
     span int unsigned not null,	# each value spans this many bases
     count int unsigned not null,	# number of values in this block
-    offset int unsigned not null,	# offset in File to fetch data
+    `offset` int unsigned not null,	# offset in File to fetch data
     file varchar(255) not null,	# path name to data file, one byte per value
     lowerLimit double not null,	# lowest data value in this block
     dataRange double not null,	# lowerLimit + dataRange = upperLimit

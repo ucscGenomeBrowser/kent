@@ -128,6 +128,9 @@ void htmEnd(FILE *f);
 extern char *htmlStyleUndecoratedLink;
 /* Style that gets rid of underline of links. */
 
+void htmlSetGa4Key(char *key);
+/* Set google analytics 4 key, used when outputting HEAD */
+
 void htmlSetStyle(char *style);
 /* Set document wide style. A favorite style to
  * use for many purposes is htmlStyleUndecoratedLink
@@ -219,6 +222,10 @@ void htmlNoEscape();
 
 /* tell htmlOut to escape special HTML chars '<', '>' */
 void htmlDoEscape();
+
+/* add <html> and <head> tags to tell browsers and chrome in particular not to translate this page. 
+* DNA is recognized as Swedish otherwise and the translate will remove nucleotides */
+void htmlDoNotTranslate();
 
 /* Do not output a http header for error messages. Makes sure that very early
  * errors are not shown back to the user but trigger a 500 error, */

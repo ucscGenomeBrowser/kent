@@ -497,8 +497,9 @@ def naturalHistory(disorderDict):
 
         # Average Age of Death List
         disorderDict[name]["deathList"] = []
-        for ageDeath in item.find("AverageAgeOfDeathList"):
-            disorderDict[name]["deathList"].append(ageDeath.find("Name").text)
+        # removed the following as AverageAgeOfDeath is not in XML anymore, Max, Dec 12 2022
+        #for ageDeath in item.find("AverageAgeOfDeathList"):
+        #    disorderDict[name]["deathList"].append(ageDeath.find("Name").text)
 
         # Inheritance List
         disorderDict[name]["inheritance"] = []

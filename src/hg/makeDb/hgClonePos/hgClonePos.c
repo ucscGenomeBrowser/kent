@@ -36,21 +36,6 @@ errAbort(
 int maxErr = 0;
 int maxWarn = 10;
 
-char *createClonePos = 
-NOSQLINJ "CREATE TABLE clonePos (\n"
-"   name varchar(255) not null,	# Name of clone including version\n"
-"   seqSize int unsigned not null,	# base count not including gaps\n"
-"   phase tinyint unsigned not null,	# htg phase\n"
-"   chrom varchar(255) not null,	# Chromosome name\n"
-"   chromStart int unsigned not null,	# Start in chromosome\n"
-"   chromEnd int unsigned not null,	# End in chromosome\n"
-"   stage char(1) not null,	# F/D/P for finished/draft/predraft\n"
-"   faFile varchar(255) not null,	# File with sequence.\n"
-"             #Indices\n"
-"   INDEX(name(12)),\n"
-"   INDEX(chrom(12),chromStart)\n"
-")\n";
-
 void addCloneInfo(char *glFileName, struct hash *cloneHash, struct clonePos **pCloneList)
 /* Add in clone info from one .gl file. */
 {
@@ -302,7 +287,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct clonePos *clone;
 struct tempName tn;
 FILE *f;
-struct dyString *ds = newDyString(2048);
+struct dyString *ds = dyStringNew(2048);
 
 /* Create tab file from clone list. */
 printf("Creating tab file\n");
@@ -315,8 +300,27 @@ fclose(f);
 /* Create table if it doesn't exist, delete whatever is
  * already in it, and fill it up from tab file. */
 printf("Loading clonePos table\n");
-sqlMaybeMakeTable(conn, "clonePos", createClonePos);
-sqlUpdate(conn, NOSQLINJ "DELETE from clonePos");
+
+char query[1024];
+sqlSafef(query, sizeof query, 
+"CREATE TABLE clonePos (\n"
+"   name varchar(255) not null,	# Name of clone including version\n"
+"   seqSize int unsigned not null,	# base count not including gaps\n"
+"   phase tinyint unsigned not null,	# htg phase\n"
+"   chrom varchar(255) not null,	# Chromosome name\n"
+"   chromStart int unsigned not null,	# Start in chromosome\n"
+"   chromEnd int unsigned not null,	# End in chromosome\n"
+"   stage char(1) not null,	# F/D/P for finished/draft/predraft\n"
+"   faFile varchar(255) not null,	# File with sequence.\n"
+"             #Indices\n"
+"   INDEX(name(12)),\n"
+"   INDEX(chrom(12),chromStart)\n"
+")\n");
+
+sqlMaybeMakeTable(conn, "clonePos", query);
+
+sqlSafef(query, sizeof query, "DELETE from clonePos");
+sqlUpdate(conn, query);
 sqlDyStringPrintf(ds, "LOAD data local infile '%s' into table clonePos", 
     tn.forCgi);
 sqlUpdate(conn, ds->string);

@@ -18,8 +18,9 @@
 #include "chainCart.h"
 #include "hgColors.h"
 #include "hubConnect.h"
-
-
+#include "chromAlias.h"
+#include "hgConfig.h"
+#include "snake.h"
 
 struct cartOptions
     {
@@ -91,16 +92,17 @@ struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
-struct dyString *query = newDyString(1024);
-char *force = "";
-
-if (isSplit)
-    force = "force index (bin)";
+struct dyString *query = dyStringNew(1024);
 
 if (chainId == NULL)
+    {
     sqlDyStringPrintf(query,
-	"select chainId,tStart,tEnd,qStart from %sLink %-s where ",
-	fullName, force);
+	"select chainId,tStart,tEnd,qStart from %sLink ",
+	fullName);
+    if (isSplit)
+	sqlDyStringPrintf(query,"force index (bin) ");
+    sqlDyStringPrintf(query,"where "); 
+    }
 else
     sqlDyStringPrintf(query,
 	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%s and ",
@@ -108,7 +110,7 @@ else
 if (!isSplit)
     sqlDyStringPrintf(query, "tName='%s' and ", chromName);
 hAddBinToQuery(start, end, query);
-dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
+sqlDyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
 sr = sqlGetResult(conn, query->string);
 
 /* Loop through making up simple features and adding them
@@ -130,27 +132,22 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 }
 
-static void chainDraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width,
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw chained features. This loads up the simple features from
- * the chainLink table, calls linkedFeaturesDraw, and then
- * frees the simple features again. */
+static void loadLinks(struct track *tg, int seqStart, int seqEnd,
+        enum trackVisibility vis)
 {
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
 struct lm *lm;
 struct hash *hash;	/* Hash of chain ids. */
+#ifdef OLD
 double scale = ((double)(winEnd - winStart))/width;
+#endif /* OLD */
+
 char fullName[64];
 int start, end, extra;
 struct simpleFeature *lastSf = NULL;
 int maxOverLeft = 0, maxOverRight = 0;
 int overLeft, overRight;
-
-if (tg->items == NULL)		/*Exit Early if nothing to do */
-    return;
-
 void *closure;
 struct sqlClosure sqlClosure;
 struct bbClosure bbClosure;
@@ -165,7 +162,7 @@ if (tg->isBigBed)
         warn("Cannot find linkDataUrl in custom track \"%s\"\n", tg->shortLabel);
         return;
         }
-    struct bbiFile *bbi =  bigBedFileOpen(fileName);
+    struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
     if (bbi == NULL)
         return;
     bbClosure.bbi =  bbi;
@@ -188,8 +185,10 @@ hash = newHash(0);
  * since these would always appear solid. */
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
+#ifdef OLD
     double pixelWidth = (lf->end - lf->start) / scale;
     if (pixelWidth >= 2.5)
+#endif /* OLD */
 	{
 	hashAdd(hash, lf->extra, lf);
 	overRight = lf->end - seqEnd;
@@ -199,6 +198,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 	if (overLeft > maxOverLeft)
 	    maxOverLeft = overLeft;
 	}
+#ifdef OLD
     else
 	{
 	lmAllocVar(lm, sf);
@@ -207,10 +207,11 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 	sf->grayIx = lf->grayIx;
 	lf->components = sf;
 	}
+#endif /* OLD */
     }
 
-/* if some chains are bigger than 3 pixels */
-if (hash->size)
+/* if some chains are actually loaded */
+if (hash->elCount) 
     {
     boolean isSplit = TRUE;
     /* Make up range query. */
@@ -311,19 +312,40 @@ if (hash->size)
 	    }
 	}
     }
-linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-	font, color, vis);
-/* Cleanup time. */
 for (lf = tg->items; lf != NULL; lf = lf->next)
-    lf->components = NULL;
+        {
+	if ((lf) && lf->orientation == -1)
+	    {
+            struct simpleFeature *sf = lf->components;
 
+            for(; sf; sf = sf->next)
+                {
+                int temp;
+
+                temp = sf->qStart;
+                sf->qStart = lf->qSize - sf->qEnd;
+                sf->qEnd = lf->qSize - temp;
+                }
+	    }
+        }
 if (tg->isBigBed)
     bbiFileClose(&bbClosure.bbi);
 else
     hFreeConn(&sqlClosure.conn);
+    }
+void chainDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw chained features. This loads up the simple features from
+ * the chainLink table, calls linkedFeaturesDraw, and then
+ * frees the simple features again. */
+{
 
-lmCleanup(&lm);
-freeHash(&hash);
+if (tg->items == NULL)		/*Exit Early if nothing to do */
+    return;
+
+linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+	font, color, vis);
 }
 
 void bigChainLoadItems(struct track *tg)
@@ -331,6 +353,7 @@ void bigChainLoadItems(struct track *tg)
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
+boolean doSnake = cartOrTdbBoolean(cart, tg->tdb, "doSnake" , FALSE);
 struct linkedFeatures *list = NULL, *lf;
 int qs;
 char *optionChrStr;
@@ -365,6 +388,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     lf = bedMungToLinkedFeatures(&bed, tg->tdb, fieldCount,
         0, 1000, FALSE);
 
+    lf->qSize = sqlUnsigned(bedRow[8]);
+
     if (*bedRow[5] == '-')
 	{
 	lf->orientation = -1;
@@ -378,7 +403,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
     int len = strlen(bedRow[7]) + 32;
     lf->name = needMem(len);
-    safef(lf->name, len, "%s %c %dk", bedRow[7], *bedRow[5], qs/1000);
+    if (!doSnake)
+        safef(lf->name, len, "%s %c %dk", bedRow[7], *bedRow[5], qs/1000);
+    else
+        safef(lf->name, len, "%s", bedRow[7]);
     lf->extra = cloneString(bedRow[3]);
     lf->components = NULL;
     slAddHead(&list, lf);
@@ -396,6 +424,9 @@ else
 tg->items = list;
 
 bbiFileClose(&bbi);
+
+loadLinks(tg, winStart, winEnd, tvFull);
+maybeLoadSnake(tg);
 }
 
 void chainLoadItems(struct track *tg)
@@ -403,6 +434,7 @@ void chainLoadItems(struct track *tg)
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
+boolean doSnake = cartOrTdbBoolean(cart, tg->tdb, "doSnake" , FALSE);
 char *table = tg->table;
 struct chain chain;
 int rowOffset;
@@ -422,7 +454,7 @@ optionChrStr = skipLeadingSpaces(cartUsualStringClosestToHome(cart, tg->tdb,
 
 if (strlen(optionChrStr) > 0 && differentWord("All",optionChrStr))
     {
-    safef(extraWhere, sizeof(extraWhere),
+    sqlSafef(extraWhere, sizeof(extraWhere),
             "qName = \"%s\" and score > %d",optionChrStr,
             chainCart->scoreFilter);
     sr = hRangeQuery(conn, table, chromName, winStart, winEnd,
@@ -432,14 +464,13 @@ else
     {
     if (chainCart->scoreFilter > 0)
         {
-        safef(extraWhere, sizeof(extraWhere),
+        sqlSafef(extraWhere, sizeof(extraWhere),
                 "score > \"%d\"",chainCart->scoreFilter);
         sr = hRangeQuery(conn, table, chromName, winStart, winEnd,
                 extraWhere, &rowOffset);
         }
     else
         {
-        safef(extraWhere, sizeof(extraWhere), " ");
         sr = hRangeQuery(conn, table, chromName, winStart, winEnd,
                 NULL, &rowOffset);
         }
@@ -451,6 +482,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     AllocVar(lf);
     lf->start = lf->tallStart = chain.tStart;
     lf->end = lf->tallEnd = chain.tEnd;
+    lf->qSize = chain.qSize;
     lf->grayIx = maxShade;
     if (chainCart->chainColor == chainColorScoreColors)
 	{
@@ -475,7 +507,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     int len = strlen(chain.qName) + 32;
     lf->name = needMem(len);
-    safef(lf->name, len, "%s %c %dk", chain.qName, chain.qStrand, qs/1000);
+    if (!doSnake)
+        safef(lf->name, len, "%s %c %dk", chain.qName, chain.qStrand, qs/1000);
+    else
+        safef(lf->name, len, "%s", chain.qName);
     safef(buf, sizeof(buf), "%d", chain.id);
     lf->extra = cloneString(buf);
     slAddHead(&list, lf);
@@ -491,7 +526,9 @@ else if ((tg->visibility == tvDense) &&
 else
     slReverse(&list);
 tg->items = list;
+loadLinks(tg, winStart, winEnd, tvFull);
 
+maybeLoadSnake(tg);
 
 /* Clean up. */
 sqlFreeResult(&sr);
@@ -516,9 +553,11 @@ tg->itemColor = chainNoColor;
 tg->color.r = 0;
 tg->color.g = 0;
 tg->color.b = 0;
+tg->color.a = 255;
 tg->altColor.r = 127;
 tg->altColor.g = 127;
 tg->altColor.b = 127;
+tg->altColor.a = 255;
 tg->ixColor = MG_BLACK;
 tg->ixAltColor = MG_GRAY;
 }
@@ -527,7 +566,6 @@ void chainMethods(struct track *tg, struct trackDb *tdb,
 	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
 {
-
 struct cartOptions *chainCart;
 
 AllocVar(chainCart);

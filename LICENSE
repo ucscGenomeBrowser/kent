@@ -1,40 +1,42 @@
 The default license of this repository is the MIT License (copied below), but
 LICENSE files in subdirectories override this default. As a result, the
 majority of the source code falls under the MIT license, however, some parts
-are under two non-commercial licenses (see below). The Genome Browser Web CGI
-programs are under a non-commercial license by UC, the BLAT program suite is
-licensed by Kent Informatics.  Two libraries are bundled for convenience, they 
-can be redistributed under their original open source licenses.
+are under two different non-commercial licenses: These parts are 
+a) the Genome Browser Web CGI programs, are under a non-commercial license by UC
+b) the BLAT program suite, licensed by Kent Informatics and under a different 
+non-commercial license. Their directories are listed below.
 
 As a result, if you are a non-commercial entity, you can use all the source
-code for free. However, if you are commercial, you may need to pay if you want
-to install a web-based Genome Browser locally or use BLAT locally, either 
-as the blat/gfServer/gfClient command line programs or the webBlat GUI 
+code for free. However, if you are commercial, you may need to buy a license if
+you want to install a web-based Genome Browser locally or use BLAT locally,
+either as the blat/gfServer/gfClient command line programs or the webBlat GUI
 running locally on your servers.
  
-This means that all UCSC Genome Browser command-line tools and their required
+All other UCSC Genome Browser command-line tools and their required
 libraries are released under the MIT License. This includes our various file
 format converters, such as bedToBigBed and wigToBigWig, and any tools to create
 files needed for track hubs. They can be redistributed in any way necessary.
 
-In total, the code in this repository is covered by five different licenses:
+The following sections list all licenses and which directories are covered by 
+which one.
 
 FREE Licenses:
 
-1. the default is the MIT license (attached below) 
+1. As described above, the default is the MIT license (attached below) 
   - this includes, for example, all code to read and write the Genome Browser
     file formats, such as bigBed and bigWig, and the command line tools for
     these, bedToBigBed, wigToBigWig and the tagStorm tools and the parasol job
     scheduler.
-  - also, third-party code from open-source projects bundled for convenience,
+  - also, third-party code for reading BAM files bundled for convenience,
     in src/htslib (MIT)
 2. A modified BSD license for src/htslib/cram/, see src/htslib/LICENSE. 
    Copyright (C) 2012-2014 Genome Research Ltd.
-3. Public domain "with attribution" license, see src/optimalLeaf/LICENSE
+3. A public domain "with attribution" license for sorting bigWig files, 
+   see src/optimalLeaf/LICENSE
 
 NON-COMMERCIAL licenses:
 
-4. A non-commercial license from UC for the genome browser website code in 
+4. A non-commercial license from UC for the genome browser interactive web code in 
    the following subdirectories of src/hg/ (see the LICENSE files in these directories):
      cgilib hgApi hgCollection hgFileSearch hgFileUi hgGateway
      hgGene hgGenome hgIntegrator hgPal hgPcr hgPhyloPlace hgPublicSessions
@@ -45,13 +47,16 @@ NON-COMMERCIAL licenses:
    https://genome.ucsc.edu/license/ and http://www.kentinformatics.com/
 
 See https://genome.ucsc.edu/license/ for more details and on how to obtain a license
-for commercial use for the licenses (4) and (5). Commercial users interested in BLAT 
-should contact kent@soe.ucsc.edu for access to other modules including jkOwnLib
-and blat. 
+for commercial use for the case (4) and (5): Commercial users interested in the 
+interactive Genome Browser web software listed under (4) should contact
+genomebrowser@ucsc.edu. Those interested in BLAT, so any code listed under (5),
+should contact kent@soe.ucsc.edu.
 
-The code in src/htslib is distributed under two licenses as noted in the LICENSE
+The code in src/htslib is distributed under a dual license as noted in the LICENSE
 file in that directory.
 
+Mandatory acknowledgements for third party open source libraries that are used but not
+distributed as part of this source tree are provided at https://genome.ucsc.edu/license/
 ---- 
 
 MIT License

@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
+sys.path.append(os.path.join(myBinDir, "../lib"))
+sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
+import argparse
+from pycbio.sys import fileOps
+from gencode.gencodeGenes import GencodeGenes
+
+def parseArgs():
+    desc = """%prog [options] gencodeGp gencodeAttrs gencodeAttrsTbl gencodeTagTbl gencodeTslTbl
+
+Output the gencode attributes table, adding computed columns to attributes
+file.  Output matches:
+
+   kent/src/hg/lib/encode/wgEncodeGencodeAttrs.as
+
+and is sorted by locus to optimize track display speed.  Also outputs
+a tags in the format:
+
+   kent/src/hg/lib/encode/wgEncodeGencodeTag.as
+"""
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("gencodeGp",
+                        help="full GENCODE genePred")
+    parser.add_argument("gencodeAttrs",
+                        help="gencode attributes TSV")
+    parser.add_argument("attrsTbl",
+                        help="""write attributes to this file""")
+    parser.add_argument("tagsTbl",
+                        help="""write tags to this file""")
+    parser.add_argument("tslTbl",
+                        help="""write TSLs to this file""")
+    return parser.parse_args()
+
+
+unused = ""
+
+def emptyIfNone(v):
+    return v if v is not None else v
+
+def toUcscTsl(tsl):
+    if tsl in (None, "", "NA"):
+        return "-1"
+    else:
+        return tsl
+
+def _writeAttrsTblRow(tr, fh):
+    """must match autoSql, which includes unused columns to match old table"""
+    gn = tr.gene
+    fileOps.prRowv(fh, gn.id, gn.name, gn.bioType, unused,
+                   tr.id, tr.name, tr.bioType, unused,
+                   gn.havanaId, tr.havanaId, emptyIfNone(tr.ccdsId), tr.level,
+                   tr.transcriptClass, emptyIfNone(tr.proteinId),
+                   tr.transcriptRank)
+
+def writeAttrsTbl(gencode, fh):
+    for transcript in gencode.getTranscriptsSortById():
+        _writeAttrsTblRow(transcript, fh)
+
+def _writeTslRow(tr, fh):
+    fileOps.prRowv(fh, tr.id, toUcscTsl(tr.transcriptSupportLevel))
+
+def writeTslTbl(gencode, fh):
+    for transcript in gencode.getTranscriptsSortById():
+        _writeTslRow(transcript, fh)
+
+def _writeTagsRows(tr, fh):
+    for tag in sorted(tr.tags):
+        fileOps.prRowv(fh, tr.id, tag)
+
+def writeTagsTbl(gencode, fh):
+    for transcript in gencode.getTranscriptsSortById():
+        _writeTagsRows(transcript, fh)
+
+def gencodeMakeAttrs(opts):
+    gencode = GencodeGenes.loadFromFiles(opts.gencodeGp, opts.gencodeAttrs, onlyExisting=True)
+    with open(opts.attrsTbl, "w") as fh:
+        writeAttrsTbl(gencode, fh)
+    with open(opts.tslTbl, "w") as fh:
+        writeTslTbl(gencode, fh)
+    with open(opts.tagsTbl, "w") as fh:
+        writeTagsTbl(gencode, fh)
+
+
+gencodeMakeAttrs(parseArgs())

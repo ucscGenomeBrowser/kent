@@ -6,9 +6,9 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     annoGrator.o annoGrateWig.o annoGratorQuery.o annoOption.o annoRow.o annoStreamer.o \
     annoStreamBigBed.o annoStreamBigWig.o annoStreamTab.o annoStreamLongTabix.o annoStreamVcf.o \
     apacheLog.o asParse.o aveStats.o axt.o axtAffine.o bamFile.o base64.o \
-    basicBed.o bbiRead.o bbiWrite.o bedTabix.o bigBed.o binRange.o bits.o \
-    blastOut.o blastParse.o boxClump.o boxLump.o bPlusTree.o \
-    bwgCreate.o bwgQuery.o bwgValsOnChrom.o \
+    basicBed.o bbiAlias.o bbiRead.o bbiWrite.o bedTabix.o bigBed.o bigBedCmdSupport.o binRange.o bits.o \
+    blastOut.o blastParse.o boxClump.o boxLump.o bPlusTree.o cacheTwoBit.o \
+    bwgCreate.o bwgQuery.o bwgValsOnChrom.o cacheTwoBit.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o chainToPsl.o \
     cheapcgi.o cirTree.o codebias.o colHash.o common.o correlate.o crTree.o  csv.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o dnaMotif.o dnaseq.o \

@@ -600,7 +600,7 @@ else
     boolean asFile=FALSE;
     boolean convert=FALSE;
     FILE *f = NULL;
-    struct dyString *dy=newDyString(1024);
+    struct dyString *dy=dyStringNew(1024);
     //debug
     //fprintf(stderr,"starting new part (non-multi), dumpMB: \n");
     //dumpMB(b);  //debug
@@ -639,7 +639,7 @@ else
 	    p->fileName=cloneString(uploadedData.forCgi);
 	    f = mustOpen(p->fileName,"w");
 	    mustWrite(f,dy->string,dy->stringSize);
-	    freeDyString(&dy);
+	    dyStringFree(&dy);
 	    }
 	if (asFile)
 	    {
@@ -669,7 +669,7 @@ else
 	p->data=needLargeMem(dy->stringSize+1);
 	memcpy(p->data,dy->string,dy->stringSize);
 	p->data[dy->stringSize] = 0;
-    	freeDyString(&dy);
+    	dyStringFree(&dy);
 	}
     if (f)
 	carefulClose(&f);

@@ -221,7 +221,9 @@ void showConnectInfo(char *db)
 /* Show connection info used by this program. */
 {
 struct sqlConnection *conn = sqlConnect(db);
-char *user = sqlQuickString(conn, NOSQLINJ "select current_user()");
+char query[1024];
+sqlSafef(query, sizeof query, "select current_user()");
+char *user = sqlQuickString(conn, query);
 char *hostinfo = sqlHostInfo(conn);
       verbose(1, "Connecting as %s to database server %s\n", user, hostinfo);
 fprintf(logFile, "Connecting as %s to database server %s\n", user, hostinfo); fflush(logFile);
@@ -883,7 +885,9 @@ void getTestRegion(char *db, char region[256], int regionSize)
  * from the middle of it. */
 {
 struct sqlConnection *conn = sqlConnect(db);
-struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo limit 1");
+char query[1024];
+sqlSafef(query, sizeof query, "select * from chromInfo limit 1");
+struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 struct chromInfo ci;
 int start,end,middle;

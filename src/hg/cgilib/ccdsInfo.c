@@ -235,13 +235,13 @@ case ccdsInfoNull:
     extraWhere[0] = '\0';
     break;
 case ccdsInfoNcbi:
-    safef(extraWhere, sizeof(extraWhere), " and srcDb = 'N'");
+    sqlSafef(extraWhere, sizeof(extraWhere), " and srcDb = 'N'");
     break;
 case ccdsInfoVega:
-    safef(extraWhere, sizeof(extraWhere), " and srcDb = 'H' and mrnaAcc like 'OTT%%'");
+    sqlSafef(extraWhere, sizeof(extraWhere), " and srcDb = 'H' and mrnaAcc like 'OTT%%'");
     break;
 case ccdsInfoEnsembl:
-    safef(extraWhere, sizeof(extraWhere), " and srcDb = 'H' and mrnaAcc not like 'OTT%%'");
+    sqlSafef(extraWhere, sizeof(extraWhere), " and srcDb = 'H' and mrnaAcc not like 'OTT%%'");
     break;
 }
 return extraWhere;

@@ -9,6 +9,7 @@
 #define GENEPRED_H
 
 #include "dnaseq.h"
+#include "basicBed.h"
 #include "bigBed.h"
 #include "nibTwo.h"
 
@@ -92,9 +93,10 @@ struct genePredExt
                                    * requested */
     enum cdsStatus cdsStartStat;  /* Status of cdsStart annotation */
     enum cdsStatus cdsEndStat;    /* Status of cdsEnd annotation */
-    int *exonFrames;              /* List of frame for each exon, or -1
-                                   * if no frame or not known. NULL if not
-                                   * available. */
+    int *exonFrames;              /* Reading frame of the start of the CDS region
+                                   * of the exon, in the direction of transcription
+                                   * (0,1,2), or -1 if there is no CDS region.
+                                   * NULL if not available */
     char *type;
     char *geneName;  
     char *geneName2;
@@ -410,4 +412,6 @@ struct psl *genePredToPsl(struct genePred *gp, int chromSize, int qSize);
 /* Convert a genePred to psl, assuming perfect concordance between target & query.
  * If qSize is 0 then the number of aligned bases will be used as qSize. */
 
+struct genePredExt  *genePredFromBedBigGenePred( char *chrom, struct bed *bed, struct bigBedInterval *bb);
+/* build a genePred from a bigGenePred and a bed file */
 #endif /* GENEPRED_H */

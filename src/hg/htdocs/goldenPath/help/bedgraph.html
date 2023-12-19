@@ -9,15 +9,16 @@
 <p> 
 The bedGraph format allows display of continuous-valued data in track format. This display type is 
 useful for probability scores and transcriptome data.  This track type is similar to the wiggle 
-(WIG) format, but unlike the wiggle format, data exported in the bedGraph format are preserved in 
-their original state. This can be seen on export using the table browser.  For more details on data 
-compression in wiggle tracks see the notes section of the wiggle <a href="wiggle.html" 
-target="_blank">track description page</a>. If you have a very large data set and you would like to 
-keep it on your own server, you should use the <a href="bigWig.html">bigWig</a> data format. In fact,
-an attempt to load a bedGraph custom track over 50,000,000 lines will result in an error message,
-but can be addressed by turning the bedGraph into a bigWig (see <a href="bigWig.html#Ex3">Example 3</a>).
-Note that bedGraph files cannot easily be converted to wiggle files; converting bedGraph to bigWig 
-and using <code>bigWigToWig</code> will return the original bedGraph file.</p>
+(<a href="/goldenPath/help/wiggle.html">WIG</a>) format, but unlike the wiggle format, data exported
+in the bedGraph format are preserved in their original state. This can be seen on export using the
+table browser. For more details on data compression in wiggle tracks see the notes section of the
+wiggle <a href="wiggle.html" target="_blank">track description page</a>. If you have a very large
+data set and you would like to keep it on your own server, you should use the <a href="bigWig.html">
+bigWig</a> data format. In fact, an attempt to load a bedGraph custom track over 50,000,000 lines
+will result in an error message, but can be addressed by turning the bedGraph into a bigWig (see
+<a href="bigWig.html#Ex3">Example 3</a>). Note that bedGraph files cannot easily be converted to
+wiggle files; converting bedGraph to bigWig and using <code>bigWigToWig</code> will return the
+original bedGraph file.</p>
 
 <h2>General Structure</h2>
 <p>

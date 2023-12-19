@@ -268,7 +268,7 @@ hPrintf("\n");
 }
 #endif /* UNUSED */
 
-static void tabBedRowFile(struct bed *bed, struct slName *fieldList, FILE *f)
+static void tabBedRowFile(struct bed *bed, struct slName *fieldList, FILE *f, char outSep)
 /* Print out to a file named fields from bed. */
 {
 struct slName *field;
@@ -277,9 +277,11 @@ for (field = fieldList; field != NULL; field = field->next)
     {
     char *type = field->name;
     if (needTab)
-        fprintf(f, "\t");
+        fprintf(f, "%c", outSep);
     else
         needTab = TRUE;
+    if (outSep == ',')
+        fputc('"', f);
     if (sameString(type, "chrom"))
         fprintf(f, "%s", bed->chrom);
     else if (sameString(type, "chromStart"))
@@ -332,6 +334,8 @@ for (field = fieldList; field != NULL; field = field->next)
 	}
     else
         errAbort("Unrecognized bed field %s", type);
+    if (outSep == ',')
+        fputc('"', f);
     }
 fprintf(f, "\n");
 }
@@ -550,7 +554,7 @@ return bedList;
 }
 
 static void doTabOutBedLike(struct customTrack *ct, char *table,
-	struct sqlConnection *conn, char *fields, FILE *f)
+	struct sqlConnection *conn, char *fields, FILE *f, char outSep)
 /* Print out selected fields from a bed-like custom track.  If fields
  * is NULL, then print out all fields. */
 {
@@ -568,8 +572,10 @@ fprintf(f, "#");
 for (field = chosenFields; field != NULL; field = field->next)
     {
     if (field != chosenFields)
-	fprintf(f, "\t");
+        fprintf(f, "%c", outSep);
+    if (outSep == ',') fputc('"', f);
     fprintf(f, "%s", field->name);
+    if (outSep == ',') fputc('"', f);
     }
 fprintf(f, "\n");
 
@@ -580,7 +586,7 @@ for (region = regionList; region != NULL; region = region->next)
 	region, lm, NULL);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
-	tabBedRowFile(bed, chosenFields, f);
+	tabBedRowFile(bed, chosenFields, f, outSep);
 	++count;
 	}
     lmCleanup(&lm);
@@ -590,7 +596,7 @@ if (count == 0)
 }
 
 void doTabOutCustomTracks(char *db, char *table, struct sqlConnection *conn,
-	char *fields, FILE *f)
+	char *fields, FILE *f, char outSep)
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 {
@@ -603,11 +609,11 @@ if (startsWithWord("makeItems", type) ||
         sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    doTabOutDb(CUSTOM_TRASH, db, ct->dbTableName, table, f, conn, fields);
+    doTabOutDb(CUSTOM_TRASH, db, ct->dbTableName, table, f, conn, fields, outSep);
     hFreeConn(&conn);
     }
 else
-    doTabOutBedLike(ct, table, conn, fields, f);
+    doTabOutBedLike(ct, table, conn, fields, f, outSep);
 }
 
 

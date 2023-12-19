@@ -19,6 +19,7 @@
 #include "hash.h"
 #include "liftOver.h"
 #include "liftOverChain.h"
+#include "errCatch.h"
 
 
 /* CGI Variables */
@@ -72,15 +73,15 @@ struct dbDb *dbList;
 char *fromOrg = hOrganism(chain->fromDb), *toOrg = hOrganism(chain->toDb);
 char *chainString = chainStringVal(chain);
 cgiParagraph(
-    "This tool converts genome coordinates and genome annotation files "
-    "between assemblies.&nbsp;&nbsp;"
-    "The input data can be pasted into the text box or uploaded from a file.&nbsp;&nbsp;"
-    "For more information, please see our "
+    "This tool converts genome coordinates and annotation files "
+    "from the original to the new assembly using an alignment.&nbsp;&nbsp;"
+    "The input regions can be entered into the text box or uploaded as a file.&nbsp;&nbsp;"
+    "For files over 500Mb, use the command-line tool described in our "
     "<a href=\"../goldenPath/help/hgTracksHelp.html#Liftover\">LiftOver documentation</a>."
     "&nbsp;&nbsp;If a pair of assemblies cannot be selected from the pull-down menus,"
-    " a sequential lift may still be possible.&nbsp;&nbsp;"
-    "For example, to lift from mm9 to mm39, lift from Mouse mm9 to mm10 and then from"
-    " mm10 to mm39.&nbsp;&nbsp;"
+    " a sequential lift may still be possible (e.g., mm9 to mm10 to mm39).&nbsp;&nbsp;"
+    "If your desired conversion is still not available, please "
+    "<a href=\"../../contacts.html\">contact us</a>."
     "");
 
 /* create HMTL form */
@@ -128,28 +129,32 @@ cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
 
-cgiParagraph("&nbsp;");
+printf("<br>");
 cgiSimpleTableStart();
 
 cgiSimpleTableRowStart();
 cgiTableField("Minimum ratio of bases that must remap:");
 cgiSimpleTableFieldStart();
 cgiMakeDoubleVar(HGLFT_MINMATCH, (keepSettings) ? minMatch : chain->minMatch,6);
+puts("&nbsp;");
+printInfoIcon("The minimum ratio of basepairs of the input region covered by an alignment. Regions scoring lower than this will not be lifted at all.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
+
 cgiSimpleTableRowStart();
-cgiTableField("<B>BED 4 to BED 6 Options</B>");
+cgiTableField("<B>Regions defined by chrom:start-end (BED 4 to BED 6)</B>");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiTableField("Allow multiple output regions:");
 cgiSimpleTableFieldStart();
 cgiMakeCheckBox(HGLFT_MULTIPLE,multiple);
+puts("&nbsp;");
+printInfoIcon("By default, input regions that map to multiple regions will not be lifted at all. When this option is checked, all targets are output.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -157,6 +162,8 @@ cgiSimpleTableRowStart();
 cgiTableField("&nbsp;&nbsp;Minimum hit size in query:");
 cgiSimpleTableFieldStart();
 cgiMakeIntVar(HGLFT_MINSIZEQ,(keepSettings) ? minSizeQ : chain->minSizeQ,4);
+puts("&nbsp;");
+printInfoIcon("In multiple output mode, repeated regions within longer input regions can lead to artifacts. The 'hit size' filter allows to keep only targets with a certain length.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -164,38 +171,49 @@ cgiSimpleTableRowStart();
 cgiTableField("&nbsp;&nbsp;Minimum chain size in target:");
 cgiSimpleTableFieldStart();
 cgiMakeIntVar(HGLFT_MINCHAINT,(keepSettings) ? minChainT : chain->minChainT,4);
+puts("&nbsp;");
+printInfoIcon("In multiple output mode, keeps only targets lifted through alignments of a certain length. At higher phylogenetic distances (e.g. human/mouse), the filters can be useful to keep all copies of the input regions but remove dozens of new small targets introduced by a repeat/transposon within a longer input region.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("<B>BED 12 Options</B>");
+cgiTableField("<B>Regions with an exon-intron structure (usually transcripts, BED 12)</B>");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("Min ratio of alignment blocks or exons that must map:");
+cgiTableField("Minimum ratio of alignment blocks or exons that must map:");
 cgiSimpleTableFieldStart();
 cgiMakeDoubleVar(HGLFT_MINBLOCKS,(keepSettings) ? minBlocks : chain->minBlocks,6);
+puts("&nbsp;");
+printInfoIcon("The minimum ratio of the number of exons (not their bases) covered by the alignment. Transcripts lower than this will not be output at all. If an exon (range thickStart-thickEnd) is not alignable at all, it will be skipped or, if the option below is checked, lifted it to the closest alignable base.");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("If thickStart/thickEnd is not mapped, use the closest mapped base:");
+cgiTableField("If exon is not mapped, use the closest mapped base:");
 cgiSimpleTableFieldStart();
 cgiMakeCheckBox(HGLFT_FUDGETHICK,(keepSettings) ? fudgeThick : (chain->fudgeThick[0]=='Y'));
+puts("&nbsp;");
+printInfoIcon("If checked, exons that are not covered by an alignment will be lifted to the closest alignable base.");
 cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
 cgiTableRowEnd();
 
 cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
-cgiParagraph("&nbsp;Paste in data below, one position per line. You can use the "
+puts("<p style='margin-left:3px'>Paste in data below, one position per line. You can use the "
         "<a href='../../FAQ/FAQformat.html#format1'>BED format</a> (e.g. \"chr4 100000 100001\", "
         "0-based) or the format of the position box (\"chr4:100,001-100,001\", 1-based). "
-        "See the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a>.\n");
+        "See the <a href='../goldenPath/help/hgTracksHelp.html#Liftover'>documentation</a>.\n"
+        "We do not recommend liftOver for SNPs that have rsIDs. See our "
+        "<a href='/FAQ/FAQreleases.html#snpConversion'>FAQ</a> for more information.</p>\n");
+
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 
@@ -250,7 +268,7 @@ webNewSection("Parameters Used");
 cgiSimpleTableStart();
 
 cgiSimpleTableRowStart();
-cgiTableField("Minimum ratio of bases that must remap:");
+cgiTableField("Minimum ratio of bases that must map:");
 cgiSimpleTableFieldStart();
 printf("%.2f",minMatch);
 cgiTableFieldEnd();
@@ -316,10 +334,11 @@ webNewSection("Command Line Tool");
 cgiParagraph(
 "To lift genome annotations locally on Linux systems, download the "
 "<A HREF=\"https://genome-store.ucsc.edu\">" 
-"<I>liftOver</I></A> executable and the appropriate "
+"<I>LiftOver</I></A> executable and the appropriate "
 "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html#liftover\">"
 "chain file</A>."
-" Run <I>liftOver</I> with no arguments to see the usage message.\n");
+" Run <I>liftOver</I> with no arguments to see the usage message.\n"
+"See the <a href=\"../goldenPath/help/hgTracksHelp.html#Liftover\">LiftOver documentation</a>.");
 }
 
 
@@ -476,93 +495,101 @@ if (lastChain && thisChain && sameString(lastChain, thisChain))
 webMain(choice, multiple, keepSettings, minSizeQ, minChainT, minBlocks, minMatch, fudgeThick);
 liftOverChainFreeList(&chainList);
 
-if (!refreshOnly && userData != NULL && userData[0] != '\0')
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    struct hash *chainHash = newHash(0);
-    char *chainFile;
-    struct tempName oldTn, mappedTn, unmappedTn;
-    FILE *old, *mapped, *unmapped;
-    char *line;
-    int lineSize;
-    char *fromDb, *toDb;
-    int ct = -1, errCt = 0;
-    enum liftOverFileType lft;
-    /* read in user data and save to file */
-    makeTempName(&oldTn, HGLFT, ".user");
-    old = mustOpen(oldTn.forCgi, "w");
-    fputs(userData, old);
-    fputs("\n", old);           /* in case user doesn't end last line */
-    carefulClose(&old);
-    chmod(oldTn.forCgi, 0666);
-
-    /* setup output files -- one for converted lines, the other
-     * for lines that could not be mapped */
-    makeTempName(&mappedTn, HGLFT, ".bed");
-    makeTempName(&unmappedTn, HGLFT, ".err");
-    mapped = mustOpen(mappedTn.forCgi, "w");
-    chmod(mappedTn.forCgi, 0666);
-    unmapped = mustOpen(unmappedTn.forCgi, "w");
-    chmod(unmappedTn.forCgi, 0666);
-
-    fromDb = cgiString(HGLFT_FROMDB_VAR);
-    toDb = cgiString(HGLFT_TODB_VAR);
-    chainFile = liftOverChainFile(fromDb, toDb);
-    if (chainFile == NULL)
-        errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
-                                fromDb, toDb);
-
-    readLiftOverMap(chainFile, chainHash);
-    lft = liftOverSniff(oldTn.forCgi);
-    if (lft == bed)
-	ct = liftOverBed(oldTn.forCgi, chainHash, 
-			minMatch, minBlocks, 0, minSizeQ,
-			minChainT, 0,
-                        fudgeThick, mapped, unmapped, multiple, FALSE, NULL, &errCt);
-    else if (lft == positions)
-	ct = liftOverPositions(oldTn.forCgi, chainHash, 
-			minMatch, minBlocks, 0, minSizeQ,
-			minChainT, 0,
-			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
-    if (ct == -1)
-        /* programming error */
-        errAbort("ERROR: Unsupported data format.\n");
-
-    webNewSection("Results");
-    if (ct > 0)
+    if (!refreshOnly && userData != NULL && userData[0] != '\0')
         {
-        /* some records succesfully converted */
-        cgiParagraph("");
-        printf("Successfully converted %d record", ct);
-        printf("%s: ", ct > 1 ? "s" : "");
-        printf("<A HREF=%s TARGET=_blank>View Conversions</A>\n", mappedTn.forCgi);
-        }
-    if (errCt)
+        struct hash *chainHash = newHash(0);
+        char *chainFile;
+        struct tempName oldTn, mappedTn, unmappedTn;
+        FILE *old, *mapped, *unmapped;
+        char *line;
+        int lineSize;
+        char *fromDb, *toDb;
+        int ct = -1, errCt = 0;
+        enum liftOverFileType lft;
+        /* read in user data and save to file */
+        makeTempName(&oldTn, HGLFT, ".user");
+        old = mustOpen(oldTn.forCgi, "w");
+        fputs(userData, old);
+        fputs("\n", old);           /* in case user doesn't end last line */
+        carefulClose(&old);
+        chmod(oldTn.forCgi, 0666);
+
+        /* setup output files -- one for converted lines, the other
+         * for lines that could not be mapped */
+        makeTempName(&mappedTn, HGLFT, ".bed");
+        makeTempName(&unmappedTn, HGLFT, ".err");
+        mapped = mustOpen(mappedTn.forCgi, "w");
+        chmod(mappedTn.forCgi, 0666);
+        unmapped = mustOpen(unmappedTn.forCgi, "w");
+        chmod(unmappedTn.forCgi, 0666);
+
+        fromDb = cgiString(HGLFT_FROMDB_VAR);
+        toDb = cgiString(HGLFT_TODB_VAR);
+        chainFile = liftOverChainFile(fromDb, toDb);
+        if (chainFile == NULL)
+            errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
+                                    fromDb, toDb);
+
+        readLiftOverMap(chainFile, chainHash);
+        lft = liftOverSniff(oldTn.forCgi);
+        if (lft == bed)
+        ct = liftOverBed(oldTn.forCgi, chainHash, 
+                minMatch, minBlocks, 0, minSizeQ,
+                minChainT, 0,
+                            fudgeThick, mapped, unmapped, multiple, FALSE, NULL, &errCt);
+        else if (lft == positions)
+        ct = liftOverPositions(oldTn.forCgi, chainHash, 
+                minMatch, minBlocks, 0, minSizeQ,
+                minChainT, 0,
+                fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
+        if (ct == -1)
+            /* programming error */
+            errAbort("ERROR: Unsupported data format.\n");
+
+        webNewSection("Results");
+        if (ct > 0)
+            {
+            /* some records succesfully converted */
+            cgiParagraph("");
+            printf("Successfully converted %d record", ct);
+            printf("%s: ", ct > 1 ? "s" : "");
+            printf("<A HREF=%s TARGET=_blank>View Conversions</A>\n", mappedTn.forCgi);
+            }
+        if (errCt)
+            {
+            /* some records not converted */
+            cgiParagraph("");
+            printf("Conversion failed on %d record", errCt);
+            printf("%s. &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
+            printf("<A HREF=%s TARGET=_blank>Display failure file</A>&nbsp; &nbsp;\n",
+                             unmappedTn.forCgi);
+            printf("<A HREF=\"../cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
+            puts("<P>Failed input regions:\n");
+            struct lineFile *errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
+            puts("<BLOCKQUOTE><PRE>\n");
+            while (lineFileNext(errFile, &line, &lineSize))
+                puts(line);
+            lineFileClose(&errFile);
+            puts("</PRE></BLOCKQUOTE>\n");
+            }
+        if ((multiple) && (lft == positions))
         {
-        /* some records not converted */
-        cgiParagraph("");
-        printf("Conversion failed on %d record", errCt);
-        printf("%s. &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
-        printf("<A HREF=%s TARGET=_blank>Display failure file</A>&nbsp; &nbsp;\n",
-                         unmappedTn.forCgi);
-        printf("<A HREF=\"../cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
-        puts("<P>Failed input regions:\n");
-        struct lineFile *errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
         puts("<BLOCKQUOTE><PRE>\n");
-        while (lineFileNext(errFile, &line, &lineSize))
-            puts(line);
-        lineFileClose(&errFile);
+        puts("Note: &quot;multiple&quot; option is not supported for position format.");
         puts("</PRE></BLOCKQUOTE>\n");
         }
-    if ((multiple) && (lft == positions))
-	{
-	puts("<BLOCKQUOTE><PRE>\n");
-	puts("Note: &quot;multiple&quot; option is not supported for position format.");
-	puts("</PRE></BLOCKQUOTE>\n");
-	}
-    webParamsUsed(minMatch, multiple, minSizeQ, minChainT, minBlocks, fudgeThick);
+        webParamsUsed(minMatch, multiple, minSizeQ, minChainT, minBlocks, fudgeThick);
 
-    carefulClose(&unmapped);
+        carefulClose(&unmapped);
+        }
     }
+errCatchEnd(errCatch);
+if (errCatch->gotError || errCatch->gotWarning)
+    warn("%s", errCatch->message->string);
+errCatchFree(&errCatch);
 webDownloads();
 cartWebEnd();
 }

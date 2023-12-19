@@ -954,6 +954,17 @@ spanList 60
 viewLimits -1.5:1.5
 html laminB1Mm9
 
+track vistaEnhancersBb
+shortLabel VISTA Enhancers
+longLabel VISTA Enhancers
+group regulation
+url https://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&organism_id=2&experiment_id=$<experimentId> 
+type bigBed 9 +
+urlLabel View on the VISTA Enhancer Browser
+bigDataUrl /gbdb/mm9/vistaEnhancers/vistaEnhancers.bb
+itemRgb on
+pennantIcon New red ../goldenPath/newsarch.html#120723 "Released Dec. 7, 2023"
+
 track numtSeq
 compositeTrack on
 shortLabel NumtS Sequence

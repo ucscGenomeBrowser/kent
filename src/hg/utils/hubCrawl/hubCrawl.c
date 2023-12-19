@@ -250,14 +250,15 @@ if (genome->settingsHash && (hel = hashLookup(genome->settingsHash, "htmlPath"))
     {
     char *htmlPath = (char *)(hel->val);
     genomeHst->textLength = hubSearchTextLong;
-    char *rawHtml = netReadTextFileIfExists(htmlPath);
+    char *rawHtml = udcFileReadAllIfExists(htmlPath, NULL, 0, NULL);
     genomeHst->text = cleanHubHtml(rawHtml);
     if (isNotEmpty(genomeHst->text))
         hubSearchTextTabOut(genomeHst, searchFp);
     }
 
 /* Write out trackDb search text */
-struct trackDb *tdbList = trackHubTracksForGenome(hub, genome,NULL);
+boolean foundFirstGenome = FALSE;
+struct trackDb *tdbList = trackHubTracksForGenome(hub, genome,NULL, &foundFirstGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
 trackHubPolishTrackNames(hub, tdbList);
@@ -313,7 +314,7 @@ hubSearchTextTabOut(hubHst, searchFp);
 if (hub->descriptionUrl != NULL)
     {
     hubHst->textLength = hubSearchTextLong;
-    char *rawHtml = netReadTextFileIfExists(hub->descriptionUrl);
+    char *rawHtml = udcFileReadAllIfExists(hub->descriptionUrl, NULL, 0, NULL);
     hubHst->text = cleanHubHtml(rawHtml);
     if (isNotEmpty(hubHst->text))
         hubSearchTextTabOut(hubHst, searchFp);

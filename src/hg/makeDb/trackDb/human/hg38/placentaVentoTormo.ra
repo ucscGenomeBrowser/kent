@@ -4,7 +4,6 @@ shortLabel Placenta Vento-Tormo
 longLabel Placenta and decidua cells from from Vento-Tormo et al 2018
 visibility hide
 group singleCell
-pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track placentaVentoTormoCellType10x
     parent placentaVentoTormo

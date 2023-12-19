@@ -1,0 +1,241 @@
+#!/bin/bash
+#TrackQaHelper guides some of the processes for QA.
+#Written by Daniel Schmelter 7/5/19
+
+echo ""
+echo "Welcome to trackQA helper!"
+echo "-------------------------------------------"
+
+# Background familiarity
+echo "Step 0: Familiarization with the track"
+read -p "Do you wish to get a hgTrackUi link and run findLevel (y/n)?" yn0
+if [ "$yn0" != "${yn0#[Yy]}" ] ; then
+   if [ -z "$db" ] ; then
+         read -p "Please input your db: " db
+   fi
+   if [ -z "$trackName" ] ; then
+         read -p "Please input trackName: " trackName
+   fi
+   echo ""
+   echo "Skim the description, try visualization, and config settings: "
+   echo "" 
+   echo "https://hgwdev.gi.ucsc.edu/cgi-bin/hgTrackUi?db=$db&g=$trackName"
+   echo ""
+   echo "Make edits here: "
+   findLevel $db $trackName
+   if [ -z "$htmlPath" ] ; then
+      htmlPath=`findLevel $db $trackName | grep "\.html"`
+      echo "$htmlPath"
+   fi
+fi
+
+echo ""
+# Check MakeDoc 
+echo "Tracks are required to have a makeDoc."
+read -p " Do you wish to check makeDoc (y/n)?" yn01
+if [ "$yn01" != "${yn01#[Yy]}" ] ; then
+   if [ -z "$db" ] ; then
+         read -p "Please input your db: " db
+   fi
+   if [ -z "$trackName" ] ; then
+         read -p "Please input trackName: " trackName
+   fi
+   echo ""
+   echo "Check MakeDoc:"
+   find /cluster/home/dschmelt/kent/src/hg/makeDb/doc -type f -print | xargs grep -li $trackName
+   echo ""
+   echo "If nothing was found above and it's not an otto track, look manually"
+   echo "ls /cluster/home/dschmelt/kent/src/hg/makeDb/doc/$db.txt"
+fi
+
+echo ""
+# Release Log and URL
+echo "Reminder to fill the ticket's release log and URL"
+echo ""
+
+# Check track Description
+#input path of html file, could be automated with findLevel and parsed
+echo "Step 1: Spellcheck and htmlCheck, no output is good (unfortunately)"
+read -p "Do you wish to run spell check on the track HTML (y/n)?" yn #could be condensed into yn7
+if [ "$yn" != "${yn#[Yy]}" ] ; then
+   if [ -z "$htmlPath" ] ; then
+      read -p "Please enter the path of the html file (in trackDb, use findLevel)" htmlPath
+   fi
+   #Spell check, html check
+   aspell check $htmlPath
+   echo "Step 1.1: Spell check completed!"
+   echo ""
+   #echo "Step 1.2: Comensing htmlCheck checkLinks (Caution, known false positive error)"
+   #htmlCheck checkLinks $htmlPath 2>&1 >/dev/null | grep -v 'db\|getaddr\|hgTables'
+   echo ""
+   #echo "Step 1.3: htmlCheck validate, checks tags and tables"
+   #htmlCheck validate $htmlPath 2>&1 >/dev/null | grep -v BODY
+   #echo ""
+   #sleep 1
+   echo "Step 1.4: Checking that there's a Data Access sections"
+   grep -i -A 10 "data access" $htmlPath
+   echo "Read the page and make sure makes sense and isn't missing anything"
+fi
+echo ""
+
+#Run QAgbTracks, Only works on Tables
+read -p "Step 2: Would you like to run qaGbTracks and joinerCheck on the tables (y/n)?" yn5
+if [ "$yn5" != "${yn5#[Yy]}" ] ; then
+   echo "Run qaGbTracks and joinerCheck scripts on the tables"
+   if [ -z "$db" ] ; then
+      read -p "Please input your db" db
+   fi
+   if [ -z "$tableList" ] ; then
+      read -p "Please input your tableList file path: "  tableList
+   fi
+   cd ~/trackQA
+   cat $tableList | while read $table; do echo $tabe; qaGbTracks $db $table $table; done
+   #Review script output
+   echo "Step 2.1: Review script output"
+   echo "Database       Table   Type    Row count       featureBits     Overlap with gap        Errors"
+   cat ~/trackQA/*.summary
+   cat ~/trackQA/*.log | grep -B1 ERROR
+   echo "Apologies for that chaos"
+fi
+echo ""
+
+# Check search
+read -p "Do you want to check hgC and item search (y/n)?" ynC
+if [ "$ynC" != "${ynC#[Yy]}" ] ; then
+   if [ -z "$db" ] ; then
+         read -p "Please input your db: " db
+   fi
+   if [ -z "$trackName" ] ; then
+         read -p "Please input trackName: " trackName
+   fi
+   echo ""
+   echo "Go to the following link, click into an item, try a search"
+   echo ""
+   echo "https://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?db=$db&hideTracks=1&$trackName=pack"
+fi
+echo ""
+
+#check TB schema
+read -p "Step 3: Would you like to check Table schema (y/n)?" yn7
+if [ "$yn7" != "${yn7#[Yy]}" ] ; then
+   if [ -z "$db" ] ; then
+         read -p "Please input your db" db
+   fi
+   if [ -z "$trackName" ] ; then
+         read -p "Please input your trackName from URL: " trackName
+   fi
+   echo "Go to the following link and make sure field descriptions are helpful" 
+   echo "https://hgwdev.soe.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_track=$trackName&hgta_doSchema=describe+table+schema"
+fi
+echo ""
+
+# Test Table Browser too
+echo "Check Table Browser"
+echo ""
+echo "https://hgwdev.soe.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_track=$trackName&hgta_table=$trackName"
+echo ""
+
+#Test Data Integrator and GBIB
+echo "Step 4: Check DI and GBIB"
+
+#Test the API
+read -p "Step 5: Would you like to test the API, note bigGenePred and VCF doesnt work, composites and supers will need subtracks specified (y/n)?" yn6
+if [ "$yn6" != "${yn6#[Yy]}" ] ; then
+   echo "The API only works on barChart, bed, bigBed, bigNarrowPeak,
+   bigWig, chain, genePred, interact, narrowPeak, peptideMapping, 
+   psl, wig"
+   if [ -z "$db" ] ; then
+      read -p "Please input your db: " db
+   fi
+   if [ -z "$trackName" ] ; then
+   read -p "Please enter the track name or g=trackName from the hgTrackUi URL: " trackName
+   fi
+   echo "Go to the following link:"
+   echo "https://api-test.gi.ucsc.edu/getData/track?genome=$db;track=$trackName;maxItemsOutput=5"
+fi
+
+
+#Push Gbdb files to beta
+#Ask and push gbDb files to beta 
+read -p "Step 6.1: Do you need to push any gbDb files to beta (y/n)?" yn2
+if [ "$yn2" != "${yn2#[Yy]}" ] ; then
+   sudo gbdbPush
+   echo ""
+fi
+
+echo ""
+
+#Push to Tables Beta
+#Input Tables
+read -p "Step 6.2: Do you have tables to push to beta (y/n)?" yn3
+if [ "$yn3" != "${yn3#[Yy]}" ] ; then
+   read -p "Please input your db: " db
+   read -p "Please input a file path to your table list: " tableList
+   echo "Thank you. These will now be pushed to beta"
+   bigPush.sh $db $tableList 
+fi
+echo ""
+
+#Make beta
+read -p "Step 6.3: Want to make beta (y/n)?" yn4
+if [ "$yn4" != "${yn4#[Yy]}" ] ; then
+   if [ -z "$db" ] ; then
+         read -p "Please input your db: " db
+   fi
+   echo "Making beta for your db"
+   cd /cluster/home/$USER/kent/src/hg/makeDb/trackDb
+   make beta DBS=$db
+fi
+echo ""
+# Check beta
+echo "Check Beta"
+   if [ -z "$db" ] ; then
+         read -p "Please input your db: " db
+   fi
+   if [ -z "$trackName" ] ; then
+         read -p "Please input trackName: " trackName
+   fi
+   echo ""
+   echo "Skim the description, try visualization, TB, and config settings: "
+echo "https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTrackUi?db=$db&g=$trackName"
+
+#BETA COMPLETED
+echo " If the previous steps are done, then BETA QA is completed!!"
+echo ""
+echo "ADD pennantIcons NOW"
+echo "http://genomewiki.ucsc.edu/genecats/index.php/New_track_checklist#Announce_on_indexNews.2C_newsArch.2C_Genome-announce.2C_FB.2C_Twitter"
+#Check release tags and make public
+echo ""
+echo "Please check and modify release tags for RR release MANUALLY"
+
+echo "Step 7: Prep for RR release"
+read -p "Are the release tags OK and pennantIcon added (y/n)?" yn10
+echo ""
+read -p "Ready to make public (y/n)?" yn9
+if [ "$yn9" != "${yn9#[Yy]}" ] ; then
+   cd /cluster/home/$USER/kent/src/hg/makeDb/trackDb
+   make public DBS=$db
+   if [ -z "$trackName" ] ; then
+      read -p "Please input your trackName from g=trackName URL on hgTrackUi: " trackName
+   fi
+   echo "Check beta public at the following link: "
+   echo ""
+   echo "http://hgwbeta-public.soe.ucsc.edu/cgi-bin/hgTrackUi?db=$db&g=$trackName"
+   echo ""
+fi
+
+echo "Send push request for Tables and/or GbDb files"
+echo ""
+
+echo "Run TrackDb and Friends Push script:"
+ssh qateam@hgwbeta sudo /root/trackDbPush
+echo ""
+
+echo "Check RR release"
+echo "https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$db&g=$trackName"
+
+echo " Announce on Twitter, email, and FB"
+echo "CONGRATS, you are done!"
+##Check download files (after the release?) Broken?
+#echo "Check download files in the cue at this directory: "
+#echo "/usr/local/apache/htdocs-hgdownload/goldenPath/*"

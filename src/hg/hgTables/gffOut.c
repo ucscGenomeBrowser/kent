@@ -340,8 +340,8 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
     
     // convert bed block coordinates to exonStarts, exonEnds
     int i;
-    struct dyString *exonStarts = newDyString(256);
-    struct dyString *exonEnds = newDyString(256);
+    struct dyString *exonStarts = dyStringNew(256);
+    struct dyString *exonEnds = dyStringNew(256);
     for( i = 0 ; i < bed->blockCount; i++ )
 	{
 	int exonStart = bed->chromStart + bed->chromStarts[i];
@@ -448,6 +448,6 @@ for (region = regionList; region != NULL; region = region->next)
     lmCleanup(&lm);
     }
 if (itemCount == 0)
-    hPrintf(NO_RESULTS);
+    explainWhyNoResults(stdout);
 }
 

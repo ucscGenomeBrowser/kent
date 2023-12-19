@@ -1,0 +1,117 @@
+track problematic
+shortLabel Problematic Regions
+longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
+compositeTrack on
+hideEmptySubtracks off
+group map
+visibility hide
+type bigBed 3 +
+
+    track comments
+    shortLabel UCSC Unusual Regions
+    longLabel UCSC unusual regions on assembly structure (manually annotated)
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg19/bbi/problematic/comments.bb
+    visibility dense
+    parent problematic
+    priority 1
+    mouseOverField note
+
+    track encBlacklist
+    shortLabel ENCODE Blacklist
+    longLabel ENCODE Blacklist
+    type bigBed 4
+    bigDataUrl /gbdb/hg19/bbi/problematic/encBlacklist.bb
+    visibility dense
+    parent problematic
+    priority 2
+
+    track getRmNgsDeadZone
+    shortLabel NCBI NGS Dead Zone
+    longLabel NCBI GeT-RM NGS Dead Zone
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/problematic/deadZone.bb
+    visibility dense
+    parent problematic
+    priority 3
+
+    track getRmSangerDeadZone
+    shortLabel NCBI Sanger Dead Zone
+    longLabel NCBI GeT-RM Sanger Dead Zone
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/problematic/sangerDeadZone.bb
+    visibility dense
+    parent problematic
+    priority 4
+
+    track getRmNgsProblemLow
+    shortLabel NCBI NGS Low Stringency
+    longLabel NCBI GeT-RM NGS Problem List, Low Stringency
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/problematic/ngsProblemLow.bb
+    visibility dense
+    parent problematic
+    priority 5
+
+    track getRmNgsProblemHigh
+    shortLabel NCBI NGS High Stringency
+    longLabel NCBI GeT-RM NGS Problem List, High Stringency
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/problematic/ngsProblemHigh.bb
+    visibility dense
+    parent problematic
+    priority 6
+
+    track filterSSE
+    shortLabel GIAB filter SSE
+    longLabel NIST Genome-in-a-bottle: calls with evidence of systematic sequencing errors 
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterSSE.bb
+    visibility dense
+    parent problematic
+    priority 7
+
+    track filterHapNoVar
+    shortLabel GIAB call conflict
+    longLabel NIST Genome-in-a-bottle: HaplotypeCaller makes no call and UnifiedGenotyper makes a variant call
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterHapNoVar.bb
+    visibility dense
+    parent problematic
+    priority 9
+
+    track filterMap
+    shortLabel GIAB quality issue
+    longLabel NIST Genome-in-a-bottle: calls with low mapping quality or high coverage
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterMap.bb
+    visibility dense
+    parent problematic
+    priority 10
+
+    track filterABQD
+    shortLabel GIAB allele imbalance
+    longLabel NIST Genome-in-a-bottle: calls with abnormal allele balance
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterABQD.bb
+    visibility dense
+    parent problematic
+    priority 11
+
+    track filterAlign
+    shortLabel GIAB align problem
+    longLabel NIST Genome-in-a-bottle: calls with evidence of local alignment problems like clipped reads
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterAlign.bb
+    visibility dense
+    parent problematic
+    priority 12
+
+    track filterConflicting
+    shortLabel GIAB genotype conflict
+    longLabel NIST Genome-in-a-bottle: calls with unresolved conflicting genotypes after arbitration
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterConflicting.bb
+    visibility dense
+    parent problematic
+    priority 13

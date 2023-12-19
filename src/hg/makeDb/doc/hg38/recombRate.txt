@@ -1,0 +1,91 @@
+# deCODE and 1000 Genomes recombination rates super track
+# Max, Thu Sep 22 10:23:39 PDT 2022
+cd /hive/data/genomes/hg38/bed/recombRate
+mkdir orig
+zcat orig/aau1043_datas1.gz  | grep -v '^#' | grep -v cMperMb | less | cut -f1-4 > recombPat.bedgraph
+zcat orig/aau1043_datas2.gz  | grep -v '^#' | grep -v cMperMb | less | cut -f1-4 > recombMat.bedgraph
+zcat orig/aau1043_datas3.gz  | grep -v '^#' | grep -v cMperMb | less | cut -f1-4 > recombAvg.bedgraph
+bedGraphToBigWig recombPat.bedgraph ../../chrom.sizes recombPat.bw
+bedGraphToBigWig recombAvg.bedgraph ../../chrom.sizes recombAvg.bw
+bedGraphToBigWig recombMat.bedgraph ../../chrom.sizes recombMat.bw
+
+# crossover events
+zless orig/aau1043_datas4.gz  | grep -v '^#' | grep -v medsnp > events.bed
+bedSort events.bed events.bed
+bedToBigBed events.bed -as=${HOME}/kent/src/hg/makeDb/autoSql/recombEvents.as -tab ../../chrom.sizes events.bb -type=bed4+
+
+# de novo mutations
+less orig/aau1043_datas5.tsv | grep -v \# | grep -v Chr | tawk '{print($1,$2,$2+1, $3">"$4, $5, $6, $7, $8)}' > denovo.bed
+bedSort denovo.bed denovo.bed
+bedToBigBed denovo.bed ../../chrom.sizes recombDenovo.bb -type=bed4+ -as=${HOME}/kent/src/hg/makeDb/autoSql/recombDenovo.as -tab
+
+# 1000 Genomes subtrack 
+# the 1000 genomes map, received makeDocs from poruloh@broadinstitute.org
+# the following makedocs after ---- are NOT from UCSC, they are from Po-Ru:
+-----
+I believe I downloaded the hg19 map from either the HapMap website or the IMPUTE2 website (maybe the same?):
+
+https://ftp.ncbi.nlm.nih.gov/hapmap/recombination/latest/rates/
+https://mathgen.stats.ox.ac.uk/impute/1000GP_Phase3.html
+
+
+### liftOver + post-processing script:
+
+HG19_BED=genetic_map_hg19_withX.bed
+
+# prepare UCSC .bed file with hg19 map data
+zcat genetic_map_hg19_withX.txt.gz | awk -v OFS=$'\t' 'NR>1 {if ($1==23) $1="X"; print "chr"$1,$2-1,$2,"chr"$1","$2","$4}' > $HG19_BED
+
+# lift to hg38
+HG38_BED_RAW=genetic_map_hg38_withX.bed
+HG38_BED_UNMAPPED=genetic_map_hg38_withX.bed.unmapped
+/home/pl88/liftOver/liftOver $HG19_BED /home/pl88/liftOver/hg19ToHg38.over.chain $HG38_BED_RAW $HG38_BED_UNMAPPED
+
+# filter sites that moved to different chromosomes; sort in hg38 order
+HG38_BED_CLEAN=genetic_map_hg38_withX.clean.bed
+sed 's/,/\t/g' $HG38_BED_RAW | awk '$1==$4' | sed 's/X/23/g' | sed 's/chr//g' | cut -f1,3- | sort -k1,1n -k2,2n > $HG38_BED_CLEAN
+
+# for each pair of consecutive hg38 map positions:
+# - if base pair span in hg38 is within 20% of base pair span in hg19, keep relative cM coordinates
+# - else, set recombination rate to default 1cM/Mb (with 1cM cap on cM distance between positions)
+awk '
+BEGIN {prevChr=0; prevPos=0; prevPosHg19=0; prevcM19=0; cM38 = 0;
+print "chr position COMBINED_rate(cM/Mb) Genetic_Map(cM)"}
+{
+chr=$1; pos=$2; posHg19=$4; cM19=$5;
+if (chr==prevChr) {
+  deltaPosRatio = (pos-prevPos) / (posHg19-prevPosHg19);
+  if (0.8 < deltaPosRatio && deltaPosRatio < 1.2) {
+    rate = (cM19-prevcM19) / (pos-prevPos) * 1e6; cM38 += cM19-prevcM19;
+  }
+  else if (-1.2 < deltaPosRatio && deltaPosRatio < -0.8) {
+    rate = (prevcM19-cM19) / (pos-prevPos) * 1e6; cM38 += prevcM19-cM19;
+  }
+  else {
+    cMdiff = (pos-prevPos)*1e-6;
+    if (cMdiff > 1) {
+      print "WARNING_LARGE_CMDIFF",prevChr,prevPos,prevPosHg19,posHg19-prevPosHg19,chr,pos,posHg19,pos-prevPos,(pos-prevPos)/(posHg19-prevPosHg19) > "/dev/stderr";
+      cMdiff = 1;
+    }
+    rate = cMdiff / (pos-prevPos); cM38 += cMdiff;
+    print "BAD",prevChr,prevPos,prevPosHg19,posHg19-prevPosHg19,chr,pos,posHg19,pos-prevPos,(pos-prevPos)/(posHg19-prevPosHg19) > "/dev/stderr";
+  }
+}
+else {
+  rate=0; cM38 = 0;
+}
+printf("%s %d %.10f %.15f\n",chr,pos,rate,cM38);
+prevChr=chr; prevPos=pos; prevPosHg19=posHg19; prevcM19=cM19;
+}' $HG38_BED_CLEAN 2> genetic_map_hg38_withX.BAD.txt | gzip > genetic_map_hg38_withX.txt.gz
+
+rm $HG19_BED $HG38_BED_RAW $HG38_BED_CLEAN $HG38_BED_UNMAPPED
+----
+
+Now the UCSC makedocs, which are very simple:
+
+cd orig
+wget https://storage.googleapis.com/broad-alkesgroup-public/Eagle/downloads/tables/genetic_map_hg38_withX.txt.gz
+cd ..
+less orig/genetic_map_hg38_withX.txt.gz  | grep -v '^\chr' | sed -e 's/^/chr/' | sed -e 's/chr23/chrX/' | awk 'BEGIN {OFS="\t"; prevChr=0; prevPos=0; } {if ($1==prevChr) { print ($1, prevPos, $2, $3); } else { prevPos=0; print ($1, "0", $2, $3) } prevPos = $2; prevChr=$1;}' | less > recomb1000GAvg.bedgraph
+bedSort recomb1000GAvg.bedgraph recomb1000GAvg.bedgraph
+bedGraphToBigWig recomb1000GAvg.bedgraph ../../chrom.sizes recomb1000GAvg.bw

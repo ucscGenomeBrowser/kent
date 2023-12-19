@@ -30,6 +30,7 @@
 #include "chromGraph.h"
 #include "hgConfig.h"
 #include "customTrack.h"
+#include "dupTrack.h"
 #include "dbRIP.h"
 #include "tfbsConsSites.h"
 #include "hapmapSnps.h"
@@ -51,6 +52,7 @@
 #include "botDelay.h"
 #include "customComposite.h"
 #include "hicUi.h"
+#include "decoratorUi.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -170,25 +172,10 @@ void snp125OfferGeneTracksForFunction(struct trackDb *tdb)
 /* Get a list of genePred tracks and make checkboxes to enable hgc's functional
  * annotations. */
 {
-struct sqlConnection *conn = hAllocConn(database);
-struct slName *genePredTables = hTrackTablesOfType(conn, "genePred%%"), *gt;
-if (genePredTables != NULL)
+struct trackDb *geneTdbList = NULL, *gTdb;
+geneTdbList = snp125FetchGeneTracks(database, cart);
+if (geneTdbList)
     {
-    struct trackDb *geneTdbList = NULL, *gTdb;
-    for (gt = genePredTables;  gt != NULL;  gt = gt->next)
-	{
-	gTdb = hashFindVal(trackHash, gt->name);
-	if (gTdb && sameString(gTdb->grp, "genes"))
-	    {
-	    // We are going to overwrite gTdb's next pointer and possibly its priority,
-	    // so make a shallow copy:
-	    gTdb = CloneVar(gTdb);
-	    if (gTdb->parent)
-		gTdb->priority = (gTdb->parent->priority + gTdb->priority/1000);
-	    slAddHead(&geneTdbList, gTdb);
-	    }
-	}
-    slSort(&geneTdbList, trackDbCmp);
     jsBeginCollapsibleSection(cart, tdb->track, "geneTracks",
 			      "Use Gene Tracks for Functional Annotation", FALSE);
     printf("<BR><B>On details page, show function and coding differences relative to: </B>\n");
@@ -227,7 +214,6 @@ if (genePredTables != NULL)
     cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedGeneTracks, numCols);
     jsEndCollapsibleSection();
     }
-hFreeConn(&conn);
 }
 
 #define SNP125_FILTER_COLUMNS 4
@@ -1927,8 +1913,9 @@ printf("<br><b>Label:</b> ");
 labelMakeCheckBox(cart, tdb, "gene", "gene symbol", TRUE);
 labelMakeCheckBox(cart, tdb, "acc", "accession", TRUE);
 struct sqlConnection *conn = hAllocConn(database);
-boolean omimAvail = sqlQuickNum(conn,
-                                NOSQLINJ"select 1 from ncbiRefSeqLink where omimId != 0 limit 1");
+char query[1024];
+sqlSafef(query, sizeof query, "select 1 from ncbiRefSeqLink where omimId != 0 limit 1");
+boolean omimAvail = sqlQuickNum(conn, query);
 if (omimAvail)
     {
     char sym[32];
@@ -3049,7 +3036,8 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
     {
     // Composites *might* have had their top level controls just printed,
     // but almost certainly have additional controls
-    if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
+    boolean isLogo = (trackDbSetting(tdb, "logo") != NULL);
+    if (tdbIsComposite(tdb) && !isLogo)  // for the moment generalizing this to include other containers...
         hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
@@ -3108,7 +3096,7 @@ struct trackDb *tdbParent = tdb->parent;
 
 printf("<b>Track collection: "
            "<img height=12 src='../images/ab_up.gif'>"
-            "<a href='%s?%s=%s&c=%s&g=%s'>%s </b></a>",
+            "<a href='%s?%s=%s&c=%s&g=%s'>%s </a></b>",
             hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
             chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
 printf("<p>");
@@ -3138,11 +3126,11 @@ if (tdbParent->html)
         *end = '\0';
     printf("%s", html);
     printf("<p><i>To view the full description, click "
-                "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</i></a>\n",
+                "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</a></i>\n",
                         hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                         chromosome, cgiEncode(tdbParent->track));
     jsEndCollapsibleSection();
-    printf("</table>"); // required by jsCollapsible
+    printf("</table>\n"); // required by jsCollapsible
     }
 
 // collapsed panel for list of other tracks in the supertrack
@@ -3176,6 +3164,31 @@ jsEndCollapsibleSection();
 printf("</table>"); // required by jsCollapsible
 printf("<hr>");
 printf("</p>");
+}
+
+boolean tdbIsDupable(struct trackDb *tdb)
+/* Return TRUE if a track is duplicatable */
+{
+if (!dupTrackEnabled())
+    return FALSE;
+
+/* Can't handle container tracks yet at least */
+if (!tdbIsDataTrack(tdb))
+    return FALSE;
+/* A few other special case we can't handle */
+if (startsWith("hub_", tdb->track))
+    return FALSE;
+if (startsWith("ct_", tdb->track))
+    return FALSE;
+if (sameString(tdb->track, "hgPcrResult"))
+    return FALSE;
+if (sameString(tdb->track, "ruler"))
+    return FALSE;
+if (sameString(tdb->track, "cutters"))
+    return FALSE;
+if (sameString(tdb->track, "oligoMatch"))
+    return FALSE;
+return TRUE;
 }
 
 void trackUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
@@ -3320,6 +3333,13 @@ if (!ajax)
         grpFreeList(&grps);
         }
 
+    // incoming links from Google searches can go directly to a composite child trackUi page: tell users 
+    // that they're inside a container now and can go back up the hierarchy
+    if (tdbGetComposite(tdb)) {
+        printf("<p>This track is a subtrack of the composite container track \"%s\".<br>", tdb->parent->shortLabel);
+        printf("<a href='hgTrackUi?db=%s&c=%s&g=%s'>Click here</a> to display the \"%s\" container configuration page.", database, chromosome, tdb->parent->track, tdb->parent->shortLabel);
+    }
+
     }
 puts("<BR><BR>");
 
@@ -3336,6 +3356,8 @@ else if (sameString(tdb->type, "halSnake"))
 else if (!startsWith("bigWig", tdb->type) && startsWith("big", tdb->type))
     tdb->canPack = TRUE;
 else if (sameString(tdb->type, "bigNarrowPeak"))
+    tdb->canPack = TRUE;
+else if (sameString(tdb->type, "hic"))
     tdb->canPack = TRUE;
 
 // Don't bother with vis controls for downloadsOnly
@@ -3401,8 +3423,22 @@ if (!tdbIsDownloadsOnly(tdb))
             {
             printf("\n&nbsp;&nbsp;<a href='%s' >Go to Track Collection Builder</a>\n", hgCollectionName());
             }
+	/* Offer to dupe the non-containery tracks including composite and supertrack elements */
+	if (tdbIsDupable(tdb))
+	    {
+	    printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&c=%s&g=%s&hgTrackUi_op=dupe' >Duplicate track</a>\n", 
+		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+		chromosome, cgiEncode(tdb->track));
+	    if (isDupTrack(tdb->track))
+		{
+		/* Offer to undupe */
+		printf("\n&nbsp;&nbsp;<a href='%s?%s=%s&c=%s&g=%s&hgTrackUi_op=undupe' >Remove duplicate</a>\n", 
+		    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+		    chromosome, cgiEncode(tdb->track));
+		}
 
-        }
+	    }
+	}
 
     if (ct)
         {
@@ -3461,6 +3497,19 @@ if (tdbIsDownloadsOnly(tdb))             // Composites without tracks but with f
     filesDownloadUi(database,cart,tdb);  // are tdb->type: downloadsOnly
 else
     specificUi(tdb, tdbList, ct, ajax);
+
+// Decorator UI
+struct slName *decoratorSettings = trackDbSettingsWildMatch(tdb, "decorator.*");
+if (decoratorSettings)
+    {
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
+        htmlHorizontalLine();
+    else
+        printf("<HR ALIGN='bottom' style='position:relative; top:1em;'>");
+    decoratorUi(tdb, cart, decoratorSettings);
+    }
+
 puts("</FORM>");
 
 if (ajax)
@@ -3570,6 +3619,37 @@ return trackDbForPseudoTrack(OLIGO_MATCH_TRACK_NAME,
 	OLIGO_MATCH_TRACK_LABEL, OLIGO_MATCH_TRACK_LONGLABEL, tvHide, TRUE);
 }
 
+static char *handleDupOp(char *track, struct hash *trackHash)
+/* Handle the duplication operation in the URL if any.  Return dupe name if
+ * a dupe has happened. The trackHash is keyed by track name and has 
+ * struct trackDb values. */
+{
+char *newTrack = NULL;
+
+/* Handle duplicate, and possible in the future other operations on tracks. */
+char *opVar = "hgTrackUi_op";
+char *operation = cartUsualString(cart, opVar, NULL);
+if (operation != NULL)
+   {
+   if (sameString(operation, "dupe"))
+       {
+       struct trackDb *tdb = hashFindVal(trackHash, dupTrackSkipToSourceName(track));
+       newTrack = dupTrackInCartAndTrash(track, cart, tdb);
+       }
+   else if (sameString(operation, "undupe"))
+       {
+       newTrack = dupTrackSkipToSourceName(track);
+       undupTrackInCartAndTrash(track, cart);
+       }
+   else
+       {
+       internalErr();
+       }
+   cartRemove(cart, opVar);
+   }
+return newTrack;
+}
+
 void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
@@ -3594,8 +3674,50 @@ track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
 initGenbankTableNames(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
+trackHash = trackHashMakeWithComposites(database,chromosome,&tdbList,FALSE); 
 
-trackHash = trackHashMakeWithComposites(database,chromosome,&tdbList,FALSE);
+/* Handle dup of track related stuff */
+char *dupeName = handleDupOp(track, trackHash);
+if (dupeName != NULL)
+    track = dupeName;
+struct dupTrack *dupList = dupTrackListFromCart(cart);
+char *dupWholeName = NULL;
+boolean isDup = isDupTrack(track);
+if (isDup)
+    {
+    dupWholeName = track;
+    track = dupTrackSkipToSourceName(track);
+    }
+
+
+/* Add in duplicate tracks. */
+struct dupTrack *dup;
+for (dup = dupList; dup != NULL; dup = dup->next)
+    {
+    struct trackDb *sourceTdb = hashFindVal(trackHash, dup->source);
+    if (sourceTdb != NULL)
+	{
+	struct trackDb *dupTdb = dupTdbFrom(sourceTdb, dup);
+        hashAdd(trackHash, dupTdb->track, dupTdb);
+	if (sourceTdb->parent != NULL)
+	    {
+	    struct trackDb *parent = sourceTdb->parent;
+	    // Add to parent here depending on whether composite or something else?
+	    if (tdbIsFolder(parent))
+		{
+		refAdd(&parent->children, dupTdb);
+		}
+	    else
+		{
+		slAddHead(&parent->subtracks, dupTdb);
+		dupTdb = NULL;  /* We use it! */
+		}
+	    }
+	if (dupTdb != NULL)
+	    slAddHead(&tdbList, dupTdb);
+	}
+    }
+
 if (sameWord(track, WIKI_TRACK_TABLE))
     tdb = trackDbForWikiTrack();
 else if (sameWord(track, RULER_TRACK_NAME))
@@ -3632,6 +3754,15 @@ if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
    }
+
+// Do  little more dupe handling - make a tdb for dupe if any 
+if (isDup)
+    {
+    struct dupTrack *dup = dupTrackFindInList(dupList, dupWholeName);
+    tdb = dupTdbFrom(tdb, dup);
+    }
+
+
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html

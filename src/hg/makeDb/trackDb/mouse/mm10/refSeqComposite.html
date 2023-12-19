@@ -1,0 +1,278 @@
+<h2>Description</h2>
+<p>
+The NCBI RefSeq Genes composite track shows $organism protein-coding and non-protein-coding
+genes taken from the NCBI RNA reference sequences collection (RefSeq). All subtracks use
+coordinates provided by RefSeq, except for the <em>UCSC RefSeq</em> track, which UCSC produces by
+realigning the RefSeq RNAs to the genome. This realignment may result in occasional differences
+between the annotation coordinates provided by UCSC and NCBI. See the 
+<a href="#methods">Methods</a> section for more details about how the different tracks were 
+created. </p>
+<p>
+Please visit NCBI's <a href="https://www.ncbi.nlm.nih.gov/projects/RefSeq/update.cgi"
+target="_blank">Feedback for Gene and Reference Sequences (RefSeq)</a> page to make suggestions, 
+submit additions and corrections, or ask for help concerning RefSeq records. </p>
+
+<p>
+For more information on the different gene tracks, see our <a target=_blank 
+href="/FAQ/FAQgenes.html">Genes FAQ</a>.</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+This track is a composite track that contains differing data sets.
+To show only a selected set of subtracks, uncheck the boxes next to the tracks that you wish to 
+hide. <b>Note:</b> Not all subtracts are available on all assemblies. </p>
+
+The possible subtracks include:
+<dl>
+  <dt><em><strong>RefSeq aligned annotations and UCSC alignment of RefSeq annotations
+          </strong></em></dt>
+  <ul>
+    <li>
+    <em>RefSeq All</em> &ndash; all curated and predicted annotations provided by 
+    RefSeq.</li>
+    <li>
+    <em>RefSeq Curated</em> &ndash; subset of <em>RefSeq All</em> that includes only those 
+    annotations whose accessions begin with NM, NR,  NP or YP. <small>(NP and YP are used only for
+    protein-coding genes on the mitochondrion; YP is used for human only.)</small></li>
+    <li>
+    <em>RefSeq Predicted</em> &ndash; subset of RefSeq All that includes those annotations whose 
+    accessions begin with XM or XR.</li>
+    <li>
+    <em>RefSeq Other</em> &ndash; all other annotations produced by the RefSeq group that 
+    do not fit the requirements for inclusion in the <em>RefSeq Curated</em> or the 
+    <em>RefSeq Predicted</em> tracks.</li>
+    <li>
+    <em>RefSeq Alignments</em> &ndash; alignments of RefSeq RNAs to the $organism genome provided
+    by the RefSeq group, following the display conventions for
+<a href="../goldenPath/help/hgTracksHelp.html#PSLDisplay" target="_blank">PSL tracks</a>.</li>
+   <li>
+   <em>RefSeq Diffs</em> &ndash; alignment differences between the $organism reference genome(s) 
+   and RefSeq transcripts. <small>(Track not currently available for every assembly.)</small>
+   </li>
+   <li>
+    <em>UCSC RefSeq</em> &ndash; annotations generated from UCSC's realignment of RNAs with NM 
+    and NR accessions to the $organism genome. This track was previously known as the &quot;RefSeq 
+    Genes&quot; track.</li>
+   <li>
+   <em>RefSeq Select</em> &ndash; Subset of RefSeq Curated, transcripts marked as 
+   part of the RefSeq Select dataset. 
+   A single <em>Select</em> transcript is chosen as representative for each protein-coding gene. 
+   See <a target="_blank" 
+   href="https://www.ncbi.nlm.nih.gov/refseq/refseq_select/">NCBI RefSeq Select</a>. 
+   </li>
+  </ul>
+</dl>
+
+<p>
+The <em>RefSeq All</em>, <em>RefSeq Curated</em>, <em>RefSeq Predicted</em>,
+<em>RefSeq Select</em> and <em>UCSC RefSeq</em> tracks follow the display conventions for
+<a href="../goldenPath/help/hgTracksHelp.html#GeneDisplay"
+target="_blank">gene prediction tracks</a>.
+The color shading indicates the level of review the RefSeq record has undergone:
+predicted (light), provisional (medium), or reviewed (dark), as defined by <a target=_blank href="https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes/?report=objectonly">RefSeq</a>. </p>
+
+<p>
+<table>
+  <thead>
+  <tr>
+    <th style="border-bottom: 2px solid #6678B1;">Color</th>
+    <th style="border-bottom: 2px solid #6678B1;">Level of review</th>
+  </tr>
+  </thead>
+  <tr>
+    <th bgcolor="#0C0C78"></th>
+    <th align="left">Reviewed: the RefSeq record has been reviewed by NCBI staff or by a collaborator. The NCBI review process includes assessing available sequence data and the literature. Some RefSeq records may incorporate expanded sequence and annotation information.</th>
+  </tr>
+  <tr>
+    <th bgcolor="#5050A0"></th>
+    <th align="left">Provisional: the RefSeq record has not yet been subject to individual review. The initial sequence-to-gene association has been established by outside collaborators or NCBI staff.</th>
+  </tr>
+  <tr>
+    <th bgcolor="#8282D2"></th>
+    <th align="left">Predicted: the RefSeq record has not yet been subject to individual review, and some aspect of the RefSeq record is predicted.</th>
+  </tr>
+</table>
+</p>
+
+<p>
+The item labels and codon display properties for features within this track can be configured 
+through the check-box controls at the top of the track description page. To adjust the settings 
+for an individual subtrack, click the wrench icon next to the track name in the subtrack list .</p>
+<ul>   
+  <li>
+  <strong>Label:</strong> By default, items are labeled by gene name. Click the appropriate Label 
+  option to display the accession name or OMIM identifier instead of the gene name, show all or a 
+  subset of these labels including the gene name, OMIM identifier and accession names, or turn off 
+  the label completely.</li>
+  <li>
+  <strong>Codon coloring:</strong> This track has an optional codon coloring feature that 
+  allows users to quickly validate and compare gene predictions. To display codon colors, select the
+  <em>genomic codons</em> option from the <em>Color track by codons</em> pull-down menu. For more 
+  information about this feature, go to the <a href="../goldenPath/help/hgCodonColoring.html" 
+  target="_blank">Coloring Gene Predictions and Annotations by Codon</a> page.</li>
+</ul>
+
+<p>The <em>RefSeq Diffs</em> track contains five different types of inconsistency between the
+reference genome sequence and the RefSeq transcript sequences. The five types of differences are
+as follows:
+<ul>
+  <li>
+   <em>mismatch</em> &ndash; aligned but mismatching bases, plus HGVS g. 
+       to show the genomic change required to match the transcript and HGVS c./n. 
+       to show the transcript change required to match the genome.</li>
+  <li>
+   <em>short gap</em> &ndash; genomic gaps that are too small to be introns (arbitrary cutoff of
+	 &lt; 45 bp), most likely insertions/deletion variants or errors, with HGVS g. and c./n. 
+	showing differences.</li>
+  <li>
+   <em>shift gap</em> &ndash; shortGap items whose placement could be shifted left and/or right on
+	the genome due to repetitive sequence, with HGVS c./n. position range of ambiguous region 
+	in transcript. Here, thin and thick lines are used -- the thin line shows the span of the
+	repetitive sequence, and the thick line shows the rightmost shifted gap.
+       </li>
+  <li>
+   <em>double gap</em> &ndash; genomic gaps that are long enough to be introns but that skip over 
+	transcript sequence (invisible in default setting), with HGVS c./n. deletion.</li>
+  <li>
+   <em>skipped</em> &ndash; sequence at the beginning or end of a transcript that is not aligned to
+       the genome
+       (invisible in default setting), with HGVS c./n. deletion</li>
+
+</ul>
+
+<small><b>HGVS Terminology </b>(Human Genome Variation Society):
+
+g. = genomic sequence ; c. = coding DNA sequence ; n. = non-coding RNA reference sequence.</small>
+</p>
+
+<p>
+When reporting HGVS with RefSeq sequences, to make sure that results from
+research articles can be mapped to the genome unambiguously, 
+please specify the RefSeq annotation release displayed on the transcript's
+Genome Browser details page and also the RefSeq transcript ID with version
+(e.g. NM_012309.4 not NM_012309). 
+</p>
+
+
+<a name="methods"></a>
+<h2>Methods</h2>
+<p>
+Tracks contained in the RefSeq annotation and RefSeq RNA alignment tracks were created at UCSC using 
+data from the NCBI RefSeq project. Data files were downloaded from RefSeq in GFF file format and 
+converted to the genePred and PSL table formats for display in the Genome Browser. Information about
+the NCBI annotation pipeline can be found 
+<a href="https://www.ncbi.nlm.nih.gov/genome/annotation_euk/process/" target="_blank">here</a>.</p>
+
+<p>The RefSeq Diffs track is generated by UCSC using NCBI's RefSeq RNA alignments.</p>
+<p>
+The UCSC RefSeq Genes track is constructed using the same methods as previous RefSeq Genes tracks.
+RefSeq RNAs were aligned against the $organism genome using BLAT. Those with an alignment of
+less than 15% were discarded. When a single RNA aligned in multiple places, the alignment
+having the highest base identity was identified. Only alignments having a base identity
+level within 0.1% of the best and at least 96% base identity with the genomic sequence were
+kept.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data for these tracks can be accessed in multiple ways. It can be explored interactively 
+using the <a href="../cgi-bin/hgTables" target="_blank">Table Browser</a> or 
+<a href="../cgi-bin/hgIntegrator"
+target="_blank">Data Integrator</a>. The tables can also be accessed programmatically through our
+<a href="../../goldenPath/help/mysql.html"
+target="_blank">public MySQL server</a> or downloaded from our
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/$db/database/"
+target="_blank">downloads server</a> for local processing. The previous track versions are available
+in the <a href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/$db/ncbiRefSeq/"
+target="_blank">archives</a> of our downloads server. You can also access any RefSeq table
+entries in JSON format through our <a href="http://genome.ucsc.edu/goldenPath/help/api.html">
+JSON API</a>.</p>
+<p>
+The data in the <em>RefSeq Other</em> and <em>RefSeq Diffs</em> tracks are organized in 
+<a href="../../FAQ/FAQformat.html#format1.5" target="_blank">bigBed</a> file format; more
+information about accessing the information in this bigBed file can be found
+below. The other subtracks are associated with database tables as follows:</p>
+<dl>
+  <dt><a href="../../FAQ/FAQformat.html#format9" target="_blank">genePred</a> format:</dt>
+  <ul>
+    <li>RefSeq All - <tt>ncbiRefSeq</tt></li>
+    <li>RefSeq Curated - <tt>ncbiRefSeqCurated</tt></li>
+    <li>RefSeq Predicted - <tt>ncbiRefSeqPredicted</tt></li>
+    <li>RefSeq Select - <tt>ncbiRefSeqSelect</tt></li>
+    <li>UCSC RefSeq - <tt>refGene</tt></li>
+  </ul>
+  <dt><a href="../../FAQ/FAQformat.html#format2" target="_blank">PSL</a> format:</dt>
+  <ul>	
+    <li>RefSeq Alignments - <tt>ncbiRefSeqPsl</tt></li>
+  </ul>
+</dl>
+<p>
+The first column of each of these tables is &quot;bin&quot;. This column is designed
+to speed up access for display in the Genome Browser, but can be safely ignored in downstream
+analysis. You can read more about the bin indexing system
+<a href="http://genomewiki.ucsc.edu/index.php/Bin_indexing_system" target="_blank">here</a>.</p>
+<p>
+The annotations in the <em>RefSeqOther</em> and <em>RefSeqDiffs</em> tracks are stored in bigBed 
+files, which can be obtained from our downloads server here,
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiRefSeq/ncbiRefSeqOther.bb"
+target="_blank"><tt>ncbiRefSeqOther.bb</tt></a> and 
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb" 
+target="_blank"><tt>ncbiRefSeqDiffs.bb</tt></a>.
+Individual regions or the whole set of genome-wide annotations can be obtained using our tool
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system from the utilities directory linked below. For example, to extract only
+annotations in a given region, you could use the following command:</p>
+<p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiRefSeq/ncbiRefSeqOther.bb
+-chrom=chr16 -start=34990190 -end=36727467 stdout</tt></p>
+<p>
+You can download a GTF format version of the RefSeq All table from the 
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/genes/">GTF downloads directory</a>.
+The genePred format tracks can also be converted to GTF format using the
+<tt>genePredToGtf</tt> utility, available from the
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/"
+target="_blank">utilities directory</a> on the UCSC downloads 
+server. The utility can be run from the command line like so:</p>
+<tt>genePredToGtf $db ncbiRefSeqPredicted ncbiRefSeqPredicted.gtf</tt>
+<p>
+Note that using genePredToGtf in this manner accesses our public MySQL server, and you therefore 
+must set up your hg.conf as described on the MySQL page linked near the beginning of the Data Access
+section.</p>
+<p>
+A file containing the RNA sequences in <a href="http://genetics.bwh.harvard.edu/pph/FASTA.html" 
+target="_blank">FASTA</a> format for all items in the <em>RefSeq All</em>, <em>RefSeq Curated</em>, 
+and <em>RefSeq Predicted</em> tracks can be found on our downloads server
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiRefSeq/seqNcbiRefSeq.rna.fa"
+target="_blank">here</a>.</p>
+<p>
+Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions.</p>
+
+<h2>Credits</h2>
+<p>
+This track was produced at UCSC from data generated by scientists worldwide and curated by the
+NCBI RefSeq project. </p>
+
+<h2>References</h2>
+<p>
+Kent WJ.
+<a href="https://genome.cshlp.org/content/12/4/656.full" target="_blank">BLAT - the BLAST-like 
+alignment tool</a>. <em>Genome Res.</em> 2002 Apr;12(4):656-64.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11932250" target="_blank">11932250</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC187518/" target="_blank">PMC187518</a></p>
+<p>
+Pruitt KD, Brown GR, Hiatt SM, Thibaud-Nissen F, Astashyn A, Ermolaeva O, Farrell CM, Hart J,
+Landrum MJ, McGarvey KM <em>et al</em>.
+<a href="https://academic.oup.com/nar/article/42/D1/D756/1051112/RefSeq-an-update-on-mammalian-
+reference-sequences" target="_blank">RefSeq: an update on mammalian reference sequences</a>.
+<em>Nucleic Acids Res</em>. 2014 Jan;42(Database issue):D756-63.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24259432" target="_blank">24259432</a>; PMC: 
+<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3965018/" target="_blank">PMC3965018</a></p>
+<p>
+Pruitt KD, Tatusova T, Maglott DR.
+<a href="https://academic.oup.com/nar/article/33/suppl_1/D501/2505241/NCBI-Reference-Sequence-
+RefSeq-a-curated-non" target="_blank">
+NCBI Reference Sequence (RefSeq): a curated non-redundant sequence database of genomes, transcripts 
+and proteins</a>.
+<em>Nucleic Acids Res.</em> 2005 Jan 1;33(Database issue):D501-4.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15608248" target="_blank">15608248</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC539979/" target="_blank">PMC539979</a></p>

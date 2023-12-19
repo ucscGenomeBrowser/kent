@@ -1,0 +1,177 @@
+<style>
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    10000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, 0.5 )
+                50% 50%
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+.jstree-anchor {
+    height: auto !important;
+    white-space: normal !important;
+}
+
+.liNoStyle {
+    list-style-type: none;
+}
+
+.showMoreDiv {
+    display: inline;
+}
+
+.headerSpacer {
+    padding-top: 15px;
+}
+
+.rowSpacer {
+    padding-top: 5px;
+}
+
+.ulNoStyle {
+    padding-left: 0;
+}
+
+.selectSpecies {
+    width: 150px;
+}
+
+.selectDb {
+    width: 300px;
+}
+</style>
+
+<div class="container-fluid">
+    <div class="row"> <!-- for some reason this empty row div is necessary to get two columns? -->
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class='gbSectionBanner searchTitle'>Search across the Genome Browser site</div>
+            <div class="headerSpacer"> </div>
+            Search<br>
+            <select name="speciesSelect" id="speciesSelect" class="selectSpecies"></select>
+            &nbsp;
+            <select name="dbSelect" id="dbSelect" class="selectDb"></select>
+            for
+            <div class="rowSpacer">
+                <input size=50 name="searchString" id="searchBarSearchString" type="text" placeholder="bigWig"></input>
+                <input name="searchButton" id="searchBarSearchButton" type="submit" value="Search"></input>
+                <p>Use the tree to hide/show results from only these categories. Hover your mouse over each category for an explanation:</p>
+                <div id="searchCategories" style="overflow-y:auto"> <!-- this will get populated by the javascript later -->
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div id="searchResultsBar" class="gbSectionBanner">Search Results
+                <span id="dbPlaceholder"></span>
+            </div>
+            <div id="searchResults" class="headerSpacer" style="overflow-y:auto">
+            </div>
+        </div>
+    </div> <!-- row -->
+</div> <!-- container-fluid -->
+<div class="container-fluid">
+<div class="help-text gbsPage">
+  <div class="row"></div>
+  <div class="row">
+  <div class="col-md-12">
+    <h2>Using the Genome Browser Search</h2>
+    <!-- <div class="headerSpacer"></div> -->
+    <p>
+    The Genome Browser search page shows matches to words in track data, track
+    names and/or descriptions, help docs, and public hub track names and/or
+    descriptions. Clicking on a match does one of the following:
+    <ul>
+      <li>navigates to the Genome Browser track display at the location of the track item</li>
+      <li>navigates to the help page matching the search term</li>
+      <li>navigates to the configuration page for the track/public hub track</li>
+    </ul>
+    </p>
+    <p>
+    The tree to the left of the search results shows a high-level view of the types of
+    categories a search result belongs to and how many matches is available in each category.
+    The checkboxes in the tree can be used to quickly hide or show all the matches belonging
+    to that category, and in the case of matches to track items, hide or show all of the
+    matches to the subcategories as well.
+    </p>
+
+    <p>
+    Search results belong to one of 5 different categories, UCSC Genes/GENCODE genes, items
+    in tracks, track names, public hub track names, and help documentation. Each category
+    is explained in more detail below.
+    </p>
+
+    <p>
+    All categories show the first 10 hits by default, and can expand up to 500 hits per category. Note that there may be more than 500 relevant hits per category, in which a note will show up as "Show 490 more (out of "X" total)", where X is the total number of hits available.
+    <h3>UCSC Genes/GENCODE Genes</h3>
+    <p>
+    Matches to this category shows matches to transcripts in the knownGene track from the
+    genome browser, if it is available for the current assembly. Along with a link to the
+    genome browser at the locus of the gene, there is also a short description with the
+    search terms bolded to show why the search terms matched this gene. Up to 500 hits to
+    this category can be viewed at once, with only the top 10 most relevant matches being
+    shown by default.
+    </p>
+
+    <p>
+    Note that as not all assemblies have a UCSC Genes/GENCODE Genes track, matches to this
+    category will not be available for all organisms.
+    </p>
+    <h3>Assembly Track Data Items</h3>
+    <p>
+    Matches to this category shows matches to items in tracks that match the search terms.
+    In the result list on the right, each track gets its own section and is collapsible.
+    Only the first 10 matches are shown, although up to 500 can be displayed if there are
+    that many. Note that there may be more than 500 relevant matches but only 500 can be
+    shown on the page at one time.
+    </p>
+
+    <p>
+    The tree on the left can be used to quickly display only hits to tracks of interest. The
+    tree checkboxes can be used to collapse uninteresting track results. Note that tracks are
+    organized by track group (ie Mapping and Sequencing, Genes and Genes Predictions, etc),
+    and then their track database hierarchy (such as composite or super tracks). If a track
+    hub is connected and the hub provider has enabled searching on the hub tracks, they will
+    also be searched and present as a separate group.
+    </p>
+    <h3>Assembly Track Names/Descriptions</h3>
+    <p>
+    This category shows matches to track names and description pages for those tracks hosted
+    at UCSC. Use this category to discover new tracks of interest.
+    </p>
+    <h3>Public Hubs</h3>
+    <p>
+    This category is similar to the above category except limited to "Public Hubs". As public
+    hubs are externally hosted, this data may be out of date with the current state of the hub.
+    Hubs are currently re-indexed weekly. Matches are only shown for the currently connected
+    assembly.
+    </p>
+    <p>
+    Clicks on these results takes one to the track configuration page for the matching hit
+    on the currently connected assembly.
+    </p>
+    <h3>Help Pages</h3>
+    <p>
+    This category shows matches to the various help pages on the site. Clicking on one of these
+    hits takes one to the help page.
+    </p>
+  </div>
+</div>
+</div>

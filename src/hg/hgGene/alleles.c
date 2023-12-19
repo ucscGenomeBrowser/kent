@@ -29,7 +29,7 @@ struct haploExtras *he = haplotypeExtrasDefault(database, 0);
 
 // Need to get genePred struct from geneId
 char where[128];
-sqlSafefFrag(where, sizeof(where),"name = '%s'",geneId);
+sqlSafef(where, sizeof(where),"name = '%s'",geneId);
 struct genePred *gp = genePredReaderLoadQuery(conn,he->geneTable, where);
 if (gp == NULL || gp->cdsStart == gp->cdsEnd)  // Ain't interested in non-protein coding genes
     {

@@ -52,7 +52,7 @@ char *rsId = NULL;
 int count = 0;
 struct hashEl *hel = NULL;
 char *fileName = NULL;
-struct dyString *dy = newDyString(1024);
+struct dyString *dy = dyStringNew(1024);
 
 while ((rsId = hashNextName(&cookie)) != NULL)
     {

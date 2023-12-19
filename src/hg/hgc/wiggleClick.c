@@ -14,6 +14,7 @@
 #include "customTrack.h"
 #include "bigWig.h"
 #include "hdb.h"
+#include "chromAlias.h"
 
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -274,7 +275,7 @@ if (isNotEmpty(maxWinToQuery))
 
 if ((maxWinToQuery == NULL) || (maxWTQ > winEnd-winStart))
     {
-    bbi = bigWigFileOpen(fileName);
+    bbi = bigWigFileOpenAlias(fileName, chromAliasFindAliases);
     bbList = bigWigIntervalQuery(bbi, chrom, winStart, winEnd, lm);
     }
 

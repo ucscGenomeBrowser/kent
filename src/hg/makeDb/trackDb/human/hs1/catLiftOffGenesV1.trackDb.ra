@@ -1,0 +1,16 @@
+track catLiftOffGenesV1
+shortLabel CAT/Liftoff Genes
+longLabel CAT + Liftoff Gene Annotations
+type bigGenePred
+group genes
+itemRgb on
+maxItems 10000000
+maxWindowToDraw 10000000000
+priority 1
+visibility pack
+searchIndex name,name2,txId,geneName,sourceGene,sourceTranscript,alignmentId
+labelFields name,name2,txId,geneName,sourceGene,sourceTranscript,alignmentId
+defaultLabelFields name
+labelSeparator " "
+bigDataUrl /gbdb/hs1/catLiftOffGenesV1/catLiftOffGenesV1.bb
+html html/catLiftOffGenesV1.html

@@ -11,11 +11,10 @@ use File::Basename;
 my $argc = scalar(@ARGV);
 
 if ($argc != 4) {
-  printf STDERR "usage: asmHubChainNet.pl asmId asmId.names.tab queryId hubPath > asmId.chainNet.html\n";
+  printf STDERR "usage: asmHubChainNet.pl asmId ncbiAsmId asmId.names.tab queryId > asmId.chainNet.html\n";
   printf STDERR "where asmId is the assembly identifier,\n";
   printf STDERR "and   asmId.names.tab is naming file for this assembly,\n";
   printf STDERR "and   queryId is the asmId or db of the other organism,\n";
-  printf STDERR "and   hubPath is the path to this assembly directory in .../hubs/.\n";
   exit 255;
 }
 
@@ -23,9 +22,9 @@ if ($argc != 4) {
 my $dbHost = "hgwdev";
 
 my $asmId = shift;
+my $ncbiAsmId = shift;
 my $namesFile = shift;
 my $queryId = shift;
-my $hubUrl = shift;
 
 # if assembly hub, need to find the real full assembly ID
 if ($queryId =~ m/^GC/) {
@@ -35,7 +34,7 @@ if ($queryId =~ m/^GC/) {
   my $d2 = substr($queryId,10,3);
   my $hubBuildDir = "refseqBuild";
   $hubBuildDir = "genbankBuild" if ($gcX eq "GCA");
-  $queryId = `ls -d /hive/data/genomes/asmHubs/$hubBuildDir/$gcX/$d0/$d1/$d2/${gcX}*`;
+  $queryId = `ls -d /hive/data/genomes/asmHubs/$hubBuildDir/$gcX/$d0/$d1/$d2/${queryId}*`;
   chomp $queryId;
   $queryId =~ s#.*/##;
 }

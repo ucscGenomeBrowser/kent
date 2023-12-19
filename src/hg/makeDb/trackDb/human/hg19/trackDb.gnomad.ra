@@ -277,6 +277,7 @@ html gnomad
     type bigBed 9 +
     dataVersion Release 2.1
     html gnomadSv
+    noParentConfig on
 
         track gnomadSvFull
         parent gnomadStructuralVariants on
@@ -295,6 +296,7 @@ html gnomad
         filterLabel.svlen Filter by Variant Size
         mouseOverField _mouseOver
         searchIndex name
+        showCfg on
 
         track gnomadSvNonneuro
         parent gnomadStructuralVariants off
@@ -369,7 +371,7 @@ html gnomad
         url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
         urlLabel View this Gene on the gnomAD browser
         labelFields name,geneName
-        filter._zscore 0
+        filter._zscore -10:10
         filterLabel._zscore Show only items between this Z-score range
         filterByRange._zscore on
         parent gnomadPLI off
@@ -403,7 +405,7 @@ html gnomad
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
         urlLabel View this Transcript on the gnomAD browser
         labelFields name,geneName
-        filter._zscore 0
+        filter._zscore -10:10
         filterLabel._zscore Show only items between this Z-score range
         filterByRange._zscore on
         parent gnomadPLI off
@@ -878,10 +880,11 @@ html gnomad
     parent gnomadSuper
     visibility squish
     dataVersion Release 2.1.1
-    labelFields name,rsId
-    defaultLabelFields name
+    labelFields _displayName,rsId
+    defaultLabelFields _displayName
     sepFields AC_afr
     filterValues.annot pLoF,missense,synonymous,other
+    filterType.annot multiple
     filterValues.FILTER PASS,InbreedingCoeff,RF,AC0
     filterType.FILTER multipleListAnd
     filterValuesDefault.FILTER PASS
@@ -893,7 +896,7 @@ html gnomad
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Genes: $genes; Type: $annot; Tag: $FILTER; Allele Frequency: $AF ($AC/$AN)
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
+    detailsStaticTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
     html gnomadExomesGenomes
 
     track gnomadExomes
@@ -919,7 +922,7 @@ html gnomad
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Genes: $genes; Type: $annot; Tag: $FILTER; Allele Frequency: $AF ($AC/$AN)
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
+    detailsStaticTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
     html gnomadExomesGenomes
 
 searchTable pliByTranscript

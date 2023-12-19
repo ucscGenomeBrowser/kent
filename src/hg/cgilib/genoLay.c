@@ -82,7 +82,10 @@ struct genoLayChrom *genoLayDbChromsExt(struct sqlConnection *conn,
 struct sqlResult *sr;
 char **row;
 struct genoLayChrom *chrom, *chromList = NULL;
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
+
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom,size from chromInfo"); 
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];

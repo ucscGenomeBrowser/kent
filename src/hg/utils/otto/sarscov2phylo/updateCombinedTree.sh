@@ -9,7 +9,7 @@ usage() {
     echo "This assumes that ncbi.latest and cogUk.latest links/directories have been updated."
 }
 
-if [ $# != 3 && $# != 4]; then
+if (( $# != 3 && $# != 4 )); then
   usage
   exit 1
 fi
@@ -34,20 +34,57 @@ mkdir -p $ottoDir/$today
 cd $ottoDir/$today
 
 usherDir=~angie/github/usher
-usher=$usherDir/build/usher
+usher=$usherDir/build/usher-sampled
 matUtils=$usherDir/build/matUtils
+matOptimize=$usherDir/build/matOptimize
 
 if [ ! -s new.masked.vcf.gz ]; then
     $scriptDir/makeNewMaskedVcf.sh $prevDate $today $problematicSitesVcf $baseProtobuf
 fi
 
 if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
-    $scriptDir/usherClusterRun.sh $today
+    # $scriptDir/usherClusterRun.sh $today
+    # Instead of the cluster, use Cheng's blazingly fast new usher-sampled:
+    time $usher \
+        -T 50 -A -e 5 \
+        -i prevRenamed.pb \
+        -v new.masked.vcf.gz \
+        -o merged.pb \
+        --optimization_radius 0 --batch_size_per_process 10 \
+        > usher.addNew.log 2>usher-sampled.stderr
+    # Branch-specific masking
+    time $scriptDir/maskDelta.sh merged.pb merged.deltaMasked.pb
     # Prune samples with too many private mutations and internal branches that are too long.
-    $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.pb \
+    $matUtils extract -i merged.deltaMasked.pb \
         --max-parsimony 20 \
-        --max-branch-length 45 \
-        --max-path-length 100 \
+        --max-branch-length 60 \
+        --max-path-length 175 \
+        -O -o merged.deltaMasked.filtered.pb
+    # matOptimize: used -r 8 -M2 until 2023-05-12, then switched to Cheng's recommended
+    # -m 0.00000001 -M 4 (avoid identical-child-node problem in
+    #  https://github.com/sars-cov-2-variants/lineage-proposals/issues/40)
+    # The -M 4 allowed up to radius 32, and crazy things started happening all while I was
+    # trying to get the tree cleaned up for pango-designation release 1.20 --> lineageTree.
+    # After 2023-05-20, when I found that matOptimize had moved a big chunk of B.1 onto a
+    # B.1.1.7 garbage branch, causing big trouble for lineageTree (23_05_18_updateLineageTreePb.txt).
+    # After that I changed it back to -M 2 for my sanity. If the identical-child thing happens again,
+    # then I'll probably just run matOptimize twice, with a small radius the second time.
+    time $matOptimize \
+        -T 80 -m 0.00000001 -M 2 -S move_log.filtered \
+        -i merged.deltaMasked.filtered.pb \
+        -o gisaidAndPublic.$today.masked.preTrim.pb \
+        >& matOptimize.filtered.log
+
+    # Fix grandparent-reversion nodes that cause some lineages to be incorrectly placed as
+    # sublineages of siblings.
+    $matUtils fix -i gisaidAndPublic.$today.masked.preTrim.pb -c 10 \
+        -o gisaidAndPublic.$today.masked.preTrim.fix.pb
+
+    # Again prune samples with too many private mutations and internal branches that are too long.
+    $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.fix.pb \
+        --max-parsimony 20 \
+        --max-branch-length 60 \
+        --max-path-length 175 \
         -O -o gisaidAndPublic.$today.masked.pb
 fi
 
@@ -75,31 +112,35 @@ echo "$sampleCountComma genomes from GISAID, GenBank, COG-UK and CNCB ($today); 
 time $matUtils annotate -T 50 \
     -l \
     -i gisaidAndPublic.$today.masked.pb \
+    -P $ottoDir/$prevDate/cladeToPath \
     -M $scriptDir/nextstrain.clade-mutations.tsv \
     -D details.nextclade \
     -o gisaidAndPublic.$today.masked.nextclade.pb \
     >& annotate.nextclade
 
 # Add pangolin lineage annotations to protobuf.
-if [ -s $ottoDir/$prevDate/lineageToName ]; then
-    time $matUtils annotate -T 50 \
-        -i gisaidAndPublic.$today.masked.nextclade.pb \
-        -M $scriptDir/pango.clade-mutations.tsv \
-        -c $ottoDir/$prevDate/lineageToName \
-        -f 0.95 \
-        -D details.pango \
-        -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb \
-        >& annotate.pango
-else
-    echo "Can't find $ottoDir/$prevDate/lineageToName for assigning lineages!"
-    exit 1
-fi
+time $matUtils annotate -T 50 \
+    -i gisaidAndPublic.$today.masked.nextclade.pb \
+    -P $ottoDir/$prevDate/lineageToPath \
+    -M $scriptDir/pango.clade-mutations.tsv \
+    -c $ottoDir/$prevDate/lineageToName \
+    -f 0.95 \
+    -D details.pango \
+    -o gisaidAndPublic.$today.masked.nextclade.pangolin.pb \
+    >& annotate.pango
 
 # Replace protobuf with annotated protobuf.
 mv gisaidAndPublic.$today.masked{,.unannotated}.pb
 ln -f gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
 
-# Save clade & lineage annotations for use tomorrow.
+# Save paths and annotations for use tomorrow.
+$matUtils extract -i gisaidAndPublic.$today.masked.pb -C clade-paths
+tail -n+2 clade-paths \
+| grep -E '^[12]' \
+| cut -f 1,3 > cladeToPath
+tail -n+2 clade-paths \
+| grep -E '^[A-Za-z]' \
+| cut -f 1,3 > lineageToPath
 $matUtils summary -i gisaidAndPublic.$today.masked.pb -C sample-clades
 tail -n+2 sample-clades \
 | tawk '{print $2, $1;}' \
@@ -120,7 +161,7 @@ paste <(zcat gisaidAndPublic.$today.metadata.tsv.gz | cut -f 1-9 | head -1) \
     > gisaidAndPublic.$today.metadata.tsv
 join -t$'\t' tmp1 tmp2 \
     >> gisaidAndPublic.$today.metadata.tsv
-gzip -f gisaidAndPublic.$today.metadata.tsv
+pigz -p 8 -f gisaidAndPublic.$today.metadata.tsv
 rm tmp1 tmp2
 
 # EPI_ISL_ ID to public sequence name mapping, so if users upload EPI_ISL IDs for which we have
@@ -128,28 +169,28 @@ rm tmp1 tmp2
 cut -f 1,3 $epiToPublic > epiToPublic.latest
 
 # Update links to latest public+GISAID protobuf and metadata in hgwdev cgi-bin directories
+pigz -p 8 -c samples.$today > samples.$today.gz
 for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
     ln -sf `pwd`/gisaidAndPublic.$today.masked.pb $dir/public.plusGisaid.latest.masked.pb
     ln -sf `pwd`/gisaidAndPublic.$today.metadata.tsv.gz \
         $dir/public.plusGisaid.latest.metadata.tsv.gz
     ln -sf `pwd`/hgPhyloPlace.plusGisaid.description.txt $dir/public.plusGisaid.latest.version.txt
     ln -sf `pwd`/epiToPublic.latest $dir/
+    ln -sf `pwd`/samples.$today.gz $dir/public.plusGisaid.names.gz
 done
 
-# Make Taxodium-formatted protobuf for display
-zcat /hive/data/genomes/wuhCor1/goldenPath/bigZips/genes/ncbiGenes.gtf.gz \
-| grep -v '"ORF1a"' > ncbiGenes.gtf
-zcat /hive/data/genomes/wuhCor1/wuhCor1.fa.gz > wuhCor1.fa
-zcat gisaidAndPublic.$today.metadata.tsv.gz > metadata.tmp.tsv
-time $matUtils extract -i gisaidAndPublic.$today.masked.pb \
-    -f wuhCor1.fa \
-    -g ncbiGenes.gtf \
-    -M metadata.tmp.tsv \
-    --extra-fields pango_lineage_usher \
-    --write-taxodium gisaidAndPublic.$today.masked.taxodium.pb
-rm metadata.tmp.tsv wuhCor1.fa
-gzip -f gisaidAndPublic.$today.masked.taxodium.pb
+# Make Taxonium v2 protobuf for display
+usher_to_taxonium --input gisaidAndPublic.$today.masked.pb \
+    --metadata gisaidAndPublic.$today.metadata.tsv.gz \
+    --genbank ~angie/github/taxonium/taxoniumtools/test_data/hu1.gb \
+    --columns genbank_accession,country,date,pangolin_lineage,pango_lineage_usher \
+    --clade_types=nextstrain,pango \
+    --name_internal_nodes \
+    --title "$today tree with sequences from GISAID, INSDC, COG-UK and CNCB" \
+    --output gisaidAndPublic.$today.masked.taxonium.jsonl.gz \
+    >& utt.log &
 
-$scriptDir/extractPublicTree.sh $today
+$scriptDir/extractPublicTree.sh $today $prevDate
 
-grep skipping annotate*
+set +o pipefail
+grep skipping annotate* | cat

@@ -47,17 +47,18 @@ Mouse-over a target site to show predicted specificity and efficiency scores:<br
 recommend guides with an MIT specificity &gt; 50.</li>
 <li>The efficiency score tries to predict if a guide leads to rather strong or
 weak cleavage. According to <a href="#References">(Haeussler et al. 2016)</a>, the <a
-href="https://portals.broadinstitute.org/gpp/public/analysis-tools/sgrna-design">Doench
-2016 Efficiency score</a> should be used to select the guide with the highest
+href="https://portals.broadinstitute.org/gpp/public/analysis-tools/sgrna-design" target="_blank">
+Doench 2016 Efficiency score</a> should be used to select the guide with the highest
 cleavage efficiency when expressing guides from RNA PolIII Promoters such as
 U6. Scores are given as percentiles, e.g. &quot;70%&quot; means that 70% of mammalian
 guides have a score equal or lower than this guide. The raw score number is
 also shown in parentheses after the percentile.</li>
 <li>The <a
-href="https://www.crisprscan.org/">Moreno-Mateos 2015 Efficiency
+href="https://www.crisprscan.org/" target="_blank">Moreno-Mateos 2015 Efficiency
 score</a> should be used instead of the Doench 2016 score when transcribing the
 guide in vitro with a T7 promoter, e.g. for injections in mouse, zebrafish or
-Xenopus embryos. The Moreno-Mateos score is given in percentiles and the raw value in parentheses, see the note above.</li> </ol>
+Xenopus embryos. The Moreno-Mateos score is given in percentiles and the raw value in parentheses,
+see the note above.</li> </ol>
 </p>
 
 <p>Click onto features to show all scores and predicted off-targets with up to
@@ -67,8 +68,8 @@ the probability that mutations induced by the guide RNA will disrupt the open
 reading frame. The authors recommend out-of-frame scores &gt; 66 to create
 knock-outs with a single guide efficiently.<p>
 
-<p>Off-target sites are sorted by the CFD score (<a href="https://www.nature.com/articles/nbt.3437"
-target="_blank">Doench et al. 2016</a>).
+<p>Off-target sites are sorted by the CFD (Cutting Frequency Determination)
+score (<a href="#References">Doench et al. 2016</a>).
 The higher the CFD score, the more likely there is off-target cleavage at that site.
 Off-targets with a CFD score &lt; 0.023 are not shown on this page, but are available when
 following the link to the external CRISPOR tool.
@@ -117,23 +118,24 @@ aligned to the genome with BWA and scored with MIT Specificity scores using the
 command-line version of crispor.org.  Non-unique guide sequences were skipped.
 Flanking sequences were extracted from the genome and input for Crispor
 efficiency scoring, available from the <a
-href="http://crispor.tefor.net/downloads/">Crispor downloads page</a>, which
+href="http://crispor.tefor.net/downloads/" target="_blank">Crispor downloads page</a>, which
 includes the Doench 2016, Moreno-Mateos 2015 and Bae
 2014 algorithms, among others.</p>
 <p>
 Note that the Doench 2016 scores were updated by
-the Broad institute in 2017 ("Azimuth" update). As a result, earlier versions of
+the Broad institute in 2017 (&quot;Azimuth&quot; update). As a result, earlier versions of
 the track show the old Doench 2016 scores and this version of the track shows new
 Doench 2016 scores. Old and new scores are almost identical, they are
 correlated to 0.99 and for more than 80% of the guides the difference is below 0.02.
 However, for very few guides, the difference can be bigger. In case of doubt, we recommend
-the new scores. Crispor.org can display both scores and many more with the
-"Show all scores" link.</p>
+the new scores. <a href="http://crispor.tefor.net/" target="_blank">Crispor.org</a> can display both
+scores and many more with the &quot;Show all scores&quot; link.</p>
 
 <H2>Data Access</H2>
 <p>
 Positional data can be explored interactively with the 
-<a href="../cgi-bin/hgTables?db=${db}&hgta_track=crisprAllTargets&hgta_regionType=range">Table Browser</a>.
+<a href="../cgi-bin/hgTables?db=${db}&hgta_track=crisprAllTargets&hgta_regionType=range">Table
+Browser</a> or the <a href="/cgi-bin/hgIntegrator?db=${db}">Data Integrator</a>.
 For small programmatic positional queries, the track can be accessed using our 
 <a href="/goldenPath/help/api.html">REST API</a>. For genome-wide data or 
 automated analysis, CRISPR genome annotations can be downloaded from
@@ -168,7 +170,7 @@ Shkumatava A, Teboul L, Kent J <em>et al</em>.
 target="_blank">Evaluation of off-target and on-target scoring algorithms and integration into the
 guide RNA selection tool CRISPOR</a>.
 <em>Genome Biol</em>. 2016 Jul 5;17(1):148.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27380939" target="_blank">27380939</a>; PMC: <a
+PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/27380939/" target="_blank">27380939</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934014/" target="_blank">PMC4934014</a>
 </p>
 
@@ -177,7 +179,7 @@ Bae S, Kweon J, Kim HS, Kim JS.
 <a href="https://www.nature.com/nmeth/journal/v11/n7/full/nmeth.3015.html" target="_blank">
 Microhomology-based choice of Cas9 nuclease target sites</a>.
 <em>Nat Methods</em>. 2014 Jul;11(7):705-6.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24972169" target="_blank">24972169</a>
+PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/24972169/" target="_blank">24972169</a>
 </p>
 
 <p>
@@ -186,7 +188,7 @@ Orchard R <em>et al</em>.
 <a href="https://www.nature.com/articles/nbt.3437" target="_blank">
 Optimized sgRNA design to maximize activity and minimize off-target effects of CRISPR-Cas9</a>.
 <em>Nat Biotechnol</em>. 2016 Feb;34(2):184-91.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26780180" target="_blank">26780180</a>; PMC: <a
+PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/26780180/" target="_blank">26780180</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4744125/" target="_blank">PMC4744125</a>
 </p>
 
@@ -196,7 +198,7 @@ Hsu PD, Scott DA, Weinstein JA, Ran FA, Konermann S, Agarwala V, Li Y, Fine EJ, 
 <a href="https://www.nature.com/nbt/journal/v31/n9/full/nbt.2647.html" target="_blank">
 DNA targeting specificity of RNA-guided Cas9 nucleases</a>.
 <em>Nat Biotechnol</em>. 2013 Sep;31(9):827-32.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23873081" target="_blank">23873081</a>; PMC: <a
+PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/23873081/" target="_blank">23873081</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3969858/" target="_blank">PMC3969858</a>
 </p>
 
@@ -205,6 +207,6 @@ Moreno-Mateos MA, Vejnar CE, Beaudoin JD, Fernandez JP, Mis EK, Khokha MK, Giral
 <a href="https://www.nature.com/nmeth/journal/v12/n10/full/nmeth.3543.html" target="_blank">
 CRISPRscan: designing highly efficient sgRNAs for CRISPR-Cas9 targeting in vivo</a>.
 <em>Nat Methods</em>. 2015 Oct;12(10):982-8.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26322839" target="_blank">26322839</a>; PMC: <a
+PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/26322839/" target="_blank">26322839</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4589495/" target="_blank">PMC4589495</a>
 </p>

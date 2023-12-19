@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "asmEquivalent.h"
 
+#include "hdb.h"
+
 
 
 char *asmEquivalentCommaSepFieldNames = "source,destination,sourceAuthority,destinationAuthority,matchCount,sourceCount,destinationCount";
@@ -63,11 +65,11 @@ void asmEquivalentSaveToDb(struct sqlConnection *conn, struct asmEquivalent *el,
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
-struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',(null),(null),%lld,%lld,%lld)",
+struct dyString *update = dyStringNew(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%d,%d,%lld,%lld,%lld)",
 	tableName,  el->source,  el->destination,  el->sourceAuthority,  el->destinationAuthority,  el->matchCount,  el->sourceCount,  el->destinationCount);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 struct asmEquivalent *asmEquivalentLoad(char **row)
@@ -253,3 +255,49 @@ fputc('}',f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+char *asmEquivalentUcscToNCBI(char *ucscName, char *authority)
+/* check if there is an "authority" equivalent to this UCSC assembly name.
+ *    where 'authority' in this case is either 'refseq' or 'genbank'
+ * No checking of sequence match counts in this first implementation,
+ *    therefore, could be a fuzzy match, and since it is returning only the
+ *    first one, it might not be the best match.  Could add more specifics
+ *    later to get better match.
+ */
+{
+char *ret = NULL;
+if (ucscName == NULL)
+    return ret;
+
+
+struct sqlConnection *conn = hAllocConn("hgFixed");
+if (!conn)
+    return ret;
+
+if (!sqlTableExists(conn, "asmEquivalent"))
+    {
+    hFreeConn(&conn);
+    return ret;
+    }
+
+char buffer[4096];
+
+sqlSafef(buffer, sizeof buffer, "SELECT destination FROM asmEquivalent WHERE sourceAuthority='ucsc' AND destinationAuthority='%s' AND source='%s' LIMIT 1", authority, ucscName);
+char *sqlAnswer = sqlQuickString(conn, buffer);
+hFreeConn(&conn);
+
+/* if there is a result, for example: GCA_000001405.28_GRCh38.p13
+ *    want to return only: GCA_000001405.28
+ */
+if (isNotEmpty(sqlAnswer))
+    {
+    char *words[3];
+    int wordCount = 0;
+    wordCount = chopString(sqlAnswer, "_", words, ArraySize(words));
+    if (3 != wordCount)	/* something wrong with this answer */
+       return ret;
+    safef(buffer, sizeof(buffer), "%s_%s", words[0], words[1]);
+    ret = cloneString(buffer);
+    }
+
+return ret;
+}

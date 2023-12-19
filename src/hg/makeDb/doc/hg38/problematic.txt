@@ -1,0 +1,75 @@
+cd /hive/data/genomes/hg38/bed/problematic/
+# note that the hg19 directory is /hive/data/genomes/hg19/bed/specialRegions/, the track name used to be different
+
+# add the ENCODE blacklist
+wget 'https://github.com/Boyle-Lab/Blacklist/blob/master/lists/hg38-blacklist.v2.bed.gz?raw=true' -O hg38-blacklist.v2.bed.gz
+gunzip hg38-blacklist.v2.bed.gz 
+mkdir bb
+bedSort hg38-blacklist.v2.bed hg38-blacklist.v2.bed
+bedToBigBed hg38-blacklist.v2.bed /hive/data/genomes/hg38/chrom.sizes bb/encBlacklist.bb  -type=bed4 -tab
+
+# bring over the manual comments track, mostly manual work
+cd ../manualComments
+ln -s ../../../../hg19/bed/specialRegions/manualComments
+mv manualComments hg19Comments
+
+cat hg19Comments/manual.bed | cut -f1-4 > hg19.bed
+~/bin/x86_64/liftOver -tab hg19.bed /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz manual.lift.bed unmapped.lift.bed
+# -- manual step! -- fixed up manual.lift.bed manually adding PAR regions
+cat hg19Comments/manual.bed | cut -f4- | sort > annots.tsv
+tabJoin annots.tsv 0 manual.lift.bed 3  > manual.bed
+# -- manual step -- fixed up manual.bed 
+hgsql hg38 -e 'select * from chromInfo' | grep chrUn | cut -f-2 |tawk '{$3=$2; $2=0; $4="unplaced"; $5="ChrUn contains clone contigs that cannot be confidently placed on a specific chromosome."; $6="none"; print}' > chrUn.bed
+
+# fixes
+hgsql hg38 -e 'select * from chromInfo' | grep _fix | cut -f-2 |tawk '{$3=$2; $2=0; $4="fix"; $5="The chr_fix chromosomes, such as chr1_KN538361v1_fix, are fix patches currently available for the hg19 and hg38 assemblies that represent changes to the existing sequence. These are generally error corrections (such as base changes, component replacements/updates, switch point updates or tiling path changes) or assembly improvements (such as extension of sequence into gaps). These fix patch scaffold sequences are given chromosome context through alignments to the corresponding chromosome regions, in the \"Mapping and Sequencing &gt; GRC Patch Release\" track. See also <a href=\"https://genome.ucsc.edu/FAQ/FAQdownloads#downloadFix\" target=_blank>the FAQ</a> for more information."; $6="none"; print}' > chrFix.bed
+
+# alts
+hgsql hg38 -e 'select * from chromInfo' | grep alt | cut -f-2 |tawk '{$3=$2; $2=0; $4="alt"; $5="The chr_alt chromosomes, such as chr5_KI270794v1_alt, are alternative sequences that differ from the reference genome currently available for a few assemblies including danRer11, hg19, and hg38. These are regions of the genome that exhibit sufficient variability to prevent adequate representation by a single sequence. UCSC labels these haplotype sequences by appending "_alt" to their names. These alternative loci scaffolds (such as KI270794.1 in the hg38 assembly, referenced as chr5_KI270794v1_alt in the browser), are mapped to the genome and provide suppemental genomic information on these variable locations. To find the regions these alternate sequences correspond to in the genome you may use the Alt Haplotypes track if one is available. See also <a href=\"https://genome.ucsc.edu/FAQ/FAQdownloads#downloadAlt\" target=_blank>the FAQ</a> for more information."; $6="none"; print}'  > chrAlt.bed
+
+# various other gene clusters
+bigBedToBed /gbdb/hg38/ncbiRefSeq/ncbiRefSeqOther.bb stdout  | less | grep -v pseudo | grep -v "T cell" -i  | grep -v tRNA | grep -v immuno | grep -v constant | grep -v miR | grep -v UGT1A | grep -v PCDHA | grep -v PCDHB | cut -f1-4,18 | tawk '{$5=$5" HGNC ID:"$4" This is a cluster of many very similar genes based on the <b>Genes and Gene Predictions &gt; NCBI RefSeq &gt; RefSeq Other</b> Track"; $4="cluster"; print}' > chrClusters.bed
+
+# put everything together and make trix files
+cat manual.bed chr*.bed | sort -k1,1 -k2,2n | tawk '{desc=$5; desc2=$6; $5="0"; $6="+"; $7=$2; $8=$3; $9="0,0,0"; $10=desc; $11=desc2; print}' > all.bed 
+bedToBigBed all.bed /hive/data/genomes/hg38/chrom.sizes comments.bb -tab -as=manual.as -type=bed9+ -extraIndex=name
+cut -f4,10 all.bed > notes.txt
+ixIxx notes.txt notes.ix notes.ixx
+
+# Tue Apr 11 02:12:18 PDT 2023
+# add the GRC exclude list, from MarkD
+cat ~markd/public_html/browser/grc-bad/GCA_000001405.15_GRCh38_GRC_exclusions.bed | grep -v description > grcExclusions.bed
+bedSort grcExclusions.bed grcExclusions.bed 
+bedToBigBed grcExclusions.bed ../../chrom.sizes bb/grcExclusions.bb -tab -type=bed4
+
+# Add highly reproducible regions (#31122):
+# https://zenodo.org/record/5275189#.ZEhKRezMI-S
+cd /hive/data/genomes/hg38/bed/problematic/
+mkdir highRepro
+
+# The zenodo link has a bunch of links with "?download=1" on the url, copy and paste them
+# into a text file to remove that and then download them
+vim urls.txt
+wget --quiet --input-file=urls.txt
+# all of the beds are just bed3's
+head *.bed
+==> CQ-56.bed <==
+chr1    12857   12904
+chr1    12932   13028
+chr1    13129   13367
+chr1    13520   13633
+...
+
+# so turn those into bigBeds and link everything to /gbdb
+for f in $(ls *.bed); do base=$(basename -s .bed $f); bedSort ${f} ${f}.sorted; bedToBigBed ${f}.sorted../../../chrom.sizes ${base}.bb; done
+# for some reason tabix doesn't like to be run in a for loop from ls, needs find
+for f in $(find . -name "*.vcf.gz"); do tabix --verbosity 3 -p vcf "${f}"; done
+mkdir -p /gbdb/hg38/problematic/highRepro
+ln -s `pwd`/*.bb /gbdb/hg38/problematic/highRepro/
+ln -s `pwd`/*.vcf.gz* /gbdb/hg38/problematic/highRepro/
+
+# turns the beds into one single bed with the overlapped regions:
+for f in $(ls *.bed); do echo $f; n=${f/.bed/}; tawk -v name=${n} '{print $0,name}' $f > ${n}.bed4; done
+cat *.bed4 | sort -k1,1 -k2,2n > highRepro.allRegions
+bedOverlapMerge highRepro.allRegions | tawk '{print $0,0,".",$2,$2,"0,0,0",gensub(/\//, ",", "g",$4)}' > highRepro.merged
+bedToBigBed -type=bed9+1 -tab -as=highRepro.as highRepro.merged ../../../chrom.sizes highRepro.bb

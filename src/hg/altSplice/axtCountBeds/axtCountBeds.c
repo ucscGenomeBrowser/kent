@@ -135,8 +135,8 @@ fprintf(out,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 
 void writeAxt(FILE *out, struct bed *bed, struct binElement *beList, boolean qrnaStyle)
 {
-struct dyString *outSeq = newDyString(bed->chromEnd - bed->chromStart+100);
-struct dyString *outSeqOrtho = newDyString(bed->chromEnd - bed->chromStart+100);
+struct dyString *outSeq = dyStringNew(bed->chromEnd - bed->chromStart+100);
+struct dyString *outSeqOrtho = dyStringNew(bed->chromEnd - bed->chromStart+100);
 int currentStart = bed->chromStart;
 int currentEnd = bed->chromEnd;
 struct binElement *be = NULL;
@@ -328,7 +328,7 @@ else
 sr = sqlGetResult(conn, query);
 out = mustOpen(outFile, "w");
 outputHeader(out);
-axtChromFile = newDyString(strlen(axtFile)+100);
+axtChromFile = dyStringNew(strlen(axtFile)+100);
 if(axtOutName != NULL)
     axtOut = mustOpen(axtOutName, "w");
 if(qrnaOutName != NULL)

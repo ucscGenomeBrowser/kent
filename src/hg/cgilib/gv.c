@@ -106,11 +106,11 @@ void gvSaveToDb(struct sqlConnection *conn, struct gv *el, char *tableName, int 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s',%u)", 
 	tableName,  el->id,  el->name,  el->srcId,  el->baseChangeType,  el->location,  el->coordinateAccuracy);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -286,11 +286,11 @@ void gvPosSaveToDb(struct sqlConnection *conn, struct gvPos *el, char *tableName
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
 	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->strand,  el->label);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -456,11 +456,11 @@ void gvSrcSaveToDb(struct sqlConnection *conn, struct gvSrc *el, char *tableName
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
 	tableName,  el->srcId,  el->src,  el->lsdb);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -611,11 +611,11 @@ void gvAttrSaveToDb(struct sqlConnection *conn, struct gvAttr *el, char *tableNa
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
 	tableName,  el->id,  el->attrType,  el->attrVal);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -770,11 +770,11 @@ void gvLinkSaveToDb(struct sqlConnection *conn, struct gvLink *el, char *tableNa
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s')", 
 	tableName,  el->id,  el->attrType,  el->raKey,  el->acc,  el->displayVal);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 
@@ -937,11 +937,11 @@ void gvAttrLongSaveToDb(struct sqlConnection *conn, struct gvAttrLong *el, char 
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Strings are automatically escaped to allow insertion into the database. */
 {
-struct dyString *update = newDyString(updateSize);
+struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%s)", 
 	tableName,  el->id,  el->attrType,  el->attrVal);
 sqlUpdate(conn, update->string);
-freeDyString(&update);
+dyStringFree(&update);
 }
 
 

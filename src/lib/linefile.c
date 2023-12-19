@@ -642,16 +642,8 @@ while (!gotLf)
 
     if (!gotLf && bytesInBuf == lf->bufSize)
         {
-	if (bufSize >= 512*1024*1024)
-	    {
-	    errAbort("Line too long (more than %d chars) line %d of %s",
-		lf->bufSize, lf->lineIx+1, lf->fileName);
-	    }
-	else
-	    {
-	    lineFileExpandBuf(lf, bufSize*2);
-	    buf = lf->buf;
-	    }
+        lineFileExpandBuf(lf, bufSize*2);
+        buf = lf->buf;
 	}
     }
 
@@ -1291,7 +1283,7 @@ boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,
 /* Extract HTTP response header from lf into hdr, tell if it's
  * "Transfer-Encoding: chunked" or if it has a contentLength. */
 {
-  struct dyString *header = newDyString(1024);
+  struct dyString *header = dyStringNew(1024);
   char *line;
   int lineSize;
 
@@ -1368,7 +1360,7 @@ struct dyString *lineFileSlurpHttpBody(struct lineFile *lf,
 /* Return a dyString that contains the http response body in lf.  Handle
  * chunk-encoding and content-length. */
 {
-  struct dyString *body = newDyString(64*1024);
+  struct dyString *body = dyStringNew(64*1024);
   char *line;
   int lineSize;
 

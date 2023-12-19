@@ -4,13 +4,12 @@ shortLabel Kidney Stewart
 longLabel Kidney single cell data from  Stewart et al 2019
 visibility hide
 group singleCell
-pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
 
     track kidneyStewartCellType
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    url https://cells.ucsc.edu/?ds=kidney-atlas+mature-full&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility pack
     shortLabel Kidney Cells
@@ -31,7 +30,7 @@ pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    url https://cells.ucsc.edu/?ds=kidney-atlas+mature-full&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Broad CT
@@ -53,7 +52,7 @@ pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    url https://cells.ucsc.edu/?ds=kidney-atlas+mature-full&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Compartment
@@ -75,7 +74,7 @@ pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    url https://cells.ucsc.edu/?ds=kidney-atlas+mature-full&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Details
@@ -95,7 +94,7 @@ pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    url https://cells.ucsc.edu/?ds=kidney-atlas+mature-full&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Experiment
@@ -116,7 +115,7 @@ pennantIcon New red ../goldenPath/newsarch.html#111721 "Released Nov. 17, 2021"
     parent kidneyStewart
     html kidneyStewart
     type bigBarChart
-    url https://cells.ucsc.edu/?ds=kidney-atlas+Mature_Full&gene=$$
+    url https://cells.ucsc.edu/?ds=kidney-atlas+mature-full&gene=$$
     urlLabel View on the UCSC Cell Browser:  
     visibility hide
     shortLabel Kidney Project

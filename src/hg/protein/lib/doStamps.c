@@ -218,7 +218,7 @@ tymax	= pbStampPtr->ymax;
 ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
 
-sqlSafefFrag(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
+sqlSafef(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
 answer = sqlGetField(database, "pbAnomLimit", "pctLow", cond_str);
 pctLow    = (double)(atof(answer));
 answer = sqlGetField(database, "pbAnomLimit", "pctHi", cond_str);
@@ -279,7 +279,7 @@ ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
 
 aaChar = aaAlphabet[iTarget];
-sqlSafefFrag(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
+sqlSafef(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
 answer = sqlGetField(database, "pbAnomLimit", "pctLow", cond_str);
 pctLow    = (double)(atof(answer));
 answer = sqlGetField(database, "pbAnomLimit", "pctHi", cond_str);
@@ -708,7 +708,7 @@ boundaryColor = vgFindColorIx(g_vg, 170, 170, 170);
 
 /* draw pI stamp */
 
-sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+sqlSafef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 answer = sqlGetField(database, "pepPi", "count(*)", cond_str);
 
 /* either 0 or multiple rows are not valid */
@@ -739,7 +739,7 @@ else
 if (!hIsGsidServer())
     {
     /* draw Mol Wt stamp */
-    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    sqlSafef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     answer = sqlGetField(database, "pepMwAa", "MolWeight", cond_str);
     if (answer != NULL)
     	{
@@ -776,11 +776,11 @@ if (!proteinInSupportedGenome)
 /* draw exon count stamp */
 if (kgVersion == KG_III)
     {
-    sqlSafefFrag(cond_str, sizeof(cond_str), "qName='%s'", mrnaID);
+    sqlSafef(cond_str, sizeof(cond_str), "qName='%s'", mrnaID);
     }
 else
     {
-    sqlSafefFrag(cond_str, sizeof(cond_str), "qName='%s'", proteinID);
+    sqlSafef(cond_str, sizeof(cond_str), "qName='%s'", proteinID);
     }
 answer = sqlGetField(database, kgProtMapTableName, "blockCount", cond_str);
 if (answer != NULL)
@@ -824,7 +824,7 @@ if (!hIsGsidServer())
     {
 
     /* draw family size stamp */
-    sqlSafefFrag(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    sqlSafef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     answer = sqlGetField(protDbName, "swInterPro", "count(*)", cond_str);
     if (answer != NULL)
     	{

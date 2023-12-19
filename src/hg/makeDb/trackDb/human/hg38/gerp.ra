@@ -1,0 +1,10 @@
+track gerp
+shortLabel GERP Cons. 65 amniotes
+longLabel GERP: 65 amniotes Basewise Conservation by Ensembl
+bigDataUrl /gbdb/hg38/gerp/gerp_conservation_scores.homo_sapiens.GRCh38.bw
+group compGeno
+color 0,0,128
+type bigWig -10 5
+autoScale off
+maxHeightPixels 128:50:20
+visibility hide

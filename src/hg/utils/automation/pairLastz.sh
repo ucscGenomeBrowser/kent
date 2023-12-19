@@ -5,6 +5,8 @@ set -beEu -o pipefail
 export userName="`whoami`"
 
 if [ $# != 4 ]; then
+  printf "ERROR: arg count: %d != 4\n" "$#" 1>&2
+
   printf "usage: pairLastz.sh <target> <query> <tClade> <qClade>
 
 Where target/query is either a UCSC db name, or is an
@@ -105,7 +107,7 @@ function orgName() {
        gcxPath=$(gcPath $asmName)
        asmDir="/hive/data/outside/ncbi/genomes/${gcxPath}/${asmName}"
        asmRpt="${asmDir}/${asmName}_assembly_report.txt"
-       oName=`egrep -i "^# organism name:" ${asmRpt} | tr -d '\r' | sed -e 's/.*(//; s/).*//'`
+       oName=`egrep -m 1 -i "^# organism name:" ${asmRpt} | tr -d '\r' | sed -e 's/.*(//; s/).*//'`
        ;;
      *)
        oName=`hgsql -N -e "select organism from dbDb where name=\"${asmName}\";" hgcentraltest`
@@ -113,6 +115,33 @@ function orgName() {
   esac
   printf "%s" "${oName}"
 }
+
+function orgDate() {
+  export asmName=$1
+  case $asmName in
+     GC[AF]_*)
+       gcxPath=$(gcPath $asmName)
+       asmDir="/hive/data/outside/ncbi/genomes/${gcxPath}/${asmName}"
+       asmRpt="${asmDir}/${asmName}_assembly_report.txt"
+       oDate=`egrep -m 1 -i "^#[[:space:]]*Date:" ${asmRpt} | tr -d '\r' | sed -e 's/.*ate: \+//;'`
+       ;;
+     *)
+       oDate=""
+       ;;
+  esac
+  printf "%s" "${oDate}"
+}
+
+# check if this database is actually a database browser or a promoted
+# hub.  It could have a MySQL database, but it won't have a chromInfo
+function promotedHub() {
+  export db=$1
+}
+
+##############################################################################
+##############################################################################
+### start seconds
+export startT=`date "+%s"`
 
 export target="$1"
 export query="$2"
@@ -152,6 +181,8 @@ export tSwapRbestArgs=""
 export qSwapRbestArgs=""
 export tFullName=""
 export qFullName=""
+export tTdb="xxx"
+export qTdb="xxx"
 
 #  override those specifications if assembly hub
 case $target in
@@ -163,6 +194,7 @@ case $target in
        targetExists="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/trackData"
        targetSizes="/hive/data/genomes/asmHubs/${tGcPath}/${tAsmId}/${tAsmId}.chrom.sizes.txt"
        target2bit="/hive/data/genomes/asmHubs/${tGcPath}/${tAsmId}/${tAsmId}.2bit"
+       tTdb="/hive/data/genomes/asmHubs/allBuild/${tGcPath}/${target}/doTrackDb.bash"
        tRbestArgs="-target2Bit=\"${target2bit}\" \\
 -targetSizes=\"${targetSizes}\""
        tSwapRbestArgs="-query2bit=\"${target2bit}\" \\
@@ -179,6 +211,7 @@ case $query in
        queryExists="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/trackData"
        querySizes="/hive/data/genomes/asmHubs/${qGcPath}/${qAsmId}/${qAsmId}.chrom.sizes.txt"
        query2bit="/hive/data/genomes/asmHubs/${qGcPath}/${qAsmId}/${qAsmId}.2bit"
+       qTdb="/hive/data/genomes/asmHubs/allBuild/${qGcPath}/${query}/doTrackDb.bash"
        qRbestArgs="-query2Bit=\"${query2bit}\" \\
 -querySizes=\"${querySizes}\""
        qSwapRbestArgs="-target2bit=\"${query2bit}\" \\
@@ -227,7 +260,7 @@ if [ -L "${symLink}" ]; then
   doneCount=`echo $doneCount | awk '{printf "%d", $1+1}'`
   primaryDone=1
 else
-  printf "# no symLink: $symLink\n" 1>&2
+  printf "# primaryDone $primaryDone no symLink: $symLink\n" 1>&2
 fi
 
 if [ -L "${swapLink}" ]; then
@@ -249,6 +282,7 @@ fi
 export primaryPartsDone=`ls $buildDir/fb.* 2> /dev/null | wc -l`
 if [ "$primaryPartsDone" -gt 0 ]; then
   primaryDone="$primaryPartsDone"
+  printf "# primaryPartsDone $primaryPartsDone primaryDone $primaryDone\n" 1>&2
 fi
 
 if [ -d "${swapDir}" ]; then
@@ -256,6 +290,7 @@ if [ -d "${swapDir}" ]; then
   printf "# " 1>&2
   ls -ogd "${swapDir}" 1>&2
   if [ "${doneCount}" -ne 2 ]; then
+    printf "# doneCount $doneCount -ne 2 exit 0 since swap in progress\n" 1>&2
     exit 0
   fi
 fi
@@ -264,16 +299,17 @@ if [ "${doneCount}" -eq 2 ]; then
     printf "# all done\n" 1>&2
 fi
 
-
 export tOrgName="$(orgName $target)"
 export qOrgName="$(orgName $query)"
+export tOrgDate="$(orgDate $target)"
+export qOrgDate="$(orgDate $query)"
 export tAsmSize="$(asmSize $target)"
 export qAsmSize="$(asmSize $query)"
 export tSequenceCount="$(seqCount $target)"
 export qSequenceCount="$(seqCount $query)"
 printf "# working: %s\n" "${buildDir}" 1>&2
-printf "# target: $target - $tOrgName - $tClade - $tSequenceCount sequences\n" 1>&2
-printf "#  query: $query - $qOrgName - $qClade - $qSequenceCount sequences\n" 1>&2
+printf "# target: $target - $tOrgName - $tOrgDate - $tClade - $tSequenceCount sequences\n" 1>&2
+printf "#  query: $query - $qOrgName - $qOrgDate - $qClade - $qSequenceCount sequences\n" 1>&2
 LC_NUMERIC=en_US printf "#  sizes: target: %'d - query: %'d\n" "${tAsmSize}" "${qAsmSize}" 1>&2
 
 export seq1Limit="40"
@@ -337,14 +373,14 @@ BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
 # G  -236  -318   100  -330
 # T  -356  -236  -330    90
 
-# TARGET: ${tOrgName} ${Target}
+# TARGET: ${tOrgName} ${tOrgDate} ${target}
 SEQ1_DIR=${target2bit}
 SEQ1_LEN=${targetSizes}
 SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
 SEQ1_LIMIT=${seq1Limit}
 
-# QUERY: ${qOrgName} ${Query}
+# QUERY: ${qOrgName} ${qOrgDate} ${query}
 SEQ2_DIR=${query2bit}
 SEQ2_LEN=${querySizes}
 SEQ2_CHUNK=20000000
@@ -359,14 +395,14 @@ else
 export defString="# ${qOrgName} ${Query} vs. ${tOrgName} ${Target}
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
 
-# TARGET: ${tOrgName} ${Target}
+# TARGET: ${tOrgName} ${tOrgDate} ${target}
 SEQ1_DIR=${target2bit}
 SEQ1_LEN=${targetSizes}
 SEQ1_CHUNK=20000000
 SEQ1_LAP=10000
 SEQ1_LIMIT=${seq1Limit}
 
-# QUERY: ${qOrgName} ${Query}
+# QUERY: ${qOrgName} ${qOrgDate} ${query}
 SEQ2_DIR=${query2bit}
 SEQ2_LEN=${querySizes}
 SEQ2_CHUNK=20000000
@@ -423,6 +459,13 @@ printf "running: time (${buildDir}/run.sh) >> ${buildDir}/do.log 2>&1\n" 1>&2
 
 time (${buildDir}/run.sh) >> ${buildDir}/do.log 2>&1
 
+# rebuild trackDb if possible here
+if [ -x "${tTdb}" ]; then
+   ${tTdb}
+else
+   printf "# do not find tTdb '%s'\n" "${tTdb}" 1>&2
+fi
+
 fi      ###     if [ $primaryDone -eq 0 ]; then
 
 #### print out the makeDoc.txt to this point into buildDir/makeDoc.txt
@@ -472,6 +515,8 @@ printf "# swap into: ${swapDir}\n" 1>&2
 if [ "$swapDone" -eq 0 ]; then
 mkdir ${swapDir}
 
+ln -s ${buildDir}/DEF ${swapDir}/DEF
+
 printf "#!/bin/bash
 
 set -beEu -o pipefail
@@ -507,6 +552,14 @@ chmod +x  ${swapDir}/runSwap.sh
 printf "# running ${swapDir}/runSwap.sh\n" 1>&2
 
 time (${swapDir}/runSwap.sh) >> ${swapDir}/doSwap.log 2>&1
+
+# rebuild trackDb if possible here
+if [ -x "${qTdb}" ]; then
+   ${qTdb}
+else
+   printf "# do not find qTdb '%s'\n" "${qTdb}" 1>&2
+fi
+
 fi      ### if [ "$swapDone" -eq 0 ]; then
 
 ### continue the make doc
@@ -544,6 +597,9 @@ printf "\n######################################################################
 ### show completed makeDoc.txt ####
 cat ${buildDir}/makeDoc.txt
 
+### end seconds
+export endT=`date "+%s"`
+
 export toAddress="$userName"
 export fromAddress="$userName"
 export subject="pair lastz DONE $target $query"
@@ -556,6 +612,18 @@ Subject: $subject
 date >> /tmp/send.txt.$$
 printf "##################################################################\n" >> /tmp/send.txt.$$
 cat ${buildDir}/makeDoc.txt >> /tmp/send.txt.$$
+
+### show elapsed time
+printf "%s\t%s\n" "${endT}" "${startT}" | awk -F$'\t' '{
+seconds=$1-$2
+hours=int(seconds/3600)
+minutes=int((seconds-(hours*3600))/60)
+s=seconds % 60
+printf "### elapsed time: %02dh %02dm %02ds\n\n", hours, minutes, s
+}' >> /tmp/send.txt.$$
+
+date >> /tmp/send.txt.$$
+printf "##################################################################\n" >> /tmp/send.txt.$$
 
 cat /tmp/send.txt.$$ | /usr/sbin/sendmail -t -oi
 

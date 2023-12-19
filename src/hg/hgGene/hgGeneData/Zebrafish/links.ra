@@ -26,6 +26,10 @@ tables ensXRefZfish
 idSql select uniProtId from ensXRefZfish where ensGeneId = '%s'
 priority 10
 
+name alphafold
+tables ensXRefZfish
+idSql select uniProtId from ensXRefZfish where ensGeneId = '%s'
+
 name refSeq
 shortLabel RefSeq
 tables ensXRefZfish
@@ -59,8 +63,8 @@ hide
 name stanfordSource
 hide
 
-name cgap
-hide
+#name cgap
+#hide
 
 name ensembl
 hide 

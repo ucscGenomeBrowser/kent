@@ -1140,4 +1140,935 @@ TMPDIR=/dev/shm
     cat fb.canFam4.chainRBest.CanFam3.txt
     # 2326711360 bases of 2481941580 (93.746%) in intersection
 
+
+##############################################################################
+# canFam3 EVA SNPs (European Variation Archive) (DONE 2022-02-27 - b0b)
+
+# dbSNP no longer does non-human variants
+# new EVA release yesterday !
+# canFam3.1 = GCA_000002285.2
+
+# get files (EVA Release 3)
+cd /hive/data/outside/dogSnps/release3 
+wget https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/GCA_000002285.2_current_ids.vcf.gz
+
+# what is .csi file???? 
+# https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/GCA_000002285.2_current_ids.vcf.gz.csi
+
+# previous:
+#  5655125 evaRsIDs
+#  same number in this release
+
+# from their pages:
+# http://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/README_rs_ids_counts.txt
+#    Unique RS ID counts
+#    GCA_000002285.2_current_ids.vcf.gz	5599185
+#
+# fewer due to multiple mapping of rsIDs
+
+gunzip GCA_000002285.2_current_ids.vcf.gz
+
+# fix chromNames chr01 > chr1
+cat GCA_000002285.2_current_ids.vcf | sed "s/chr0/chr/" > dogSNPs.vcf
+bgzip dogSNPs.vcf
+
+# vcfToBed requires a tabix
+tabix -p vcf dogSNPs.vcf.gz
+
+# make a bed file with 3 useful flags
+vcfToBed dogSNPs.vcf.gz dogSNPs3Flags -fields=VC,SID,RS_VALIDATED
+# VC=Variant Class, SID=Submitter ID,  RS_VALIDATED=validated from dbSNP 
+
+wc -l *bed
+# 5655126 dogSNPs3Flags.bed
+wc -l *vcf
+# 5655174 GCA_000002285.2_current_ids.vcf
+
+# sort file
+bedSort dogSNPs3Flags.bed dogSNPs3Flags.bed
+
+head -2 dogSNPs3Flags.bed
+#chrom  chromStart      chromEnd        name    score   strand  thickStart      thickEnd        itemRgb ref     alt     FILTER  VC      SID     RS_VALIDATED
+#chr1    111     112     rs850979046     0       .       111     112     0,0,0   A       G       .       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY
+
+# drop unnecessary fields:  thickStart      thickEnd        itemRgb 
+cat dogSNPs3Flags.bed \
+  | awk -F"\t" '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$10"\t"$11"\t"$13"\t"$14"\t"$15}' \
+  > evaSnps1.bed
+
+head evaSnps1.bed
+#chrom  chromStart      chromEnd        name    score   strand  ref     alt     VC      SID     RS_VALIDATED
+# chr1    111     112     rs850979046     0       .       A       G       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY
+
+# add "No" to last column where needed (RS_VALIDATED)
+cat evaSnps1.bed \
+  | awk '{if ($11 != "Yes") { print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7"\t"$8"\t"$9"\t"$10"\tNo"; } \
+              else          { print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7"\t"$8"\t"$9"\t"$10"\t"$11; }}' \
+   > evaSnps2.bed 
+   
+head evaSnps2.bed
+#chrom  chromStart      chromEnd        name    score   strand  ref     alt     VC      SID     No
+# chr1    111     112     rs850979046     0       .       A       G       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+
+cat evaSnps2.bed | awk -F"\t" '{print $11}' | sort | uniq -c
+# 4644128 No
+# 1010998 Yes
+
+# replace Sequence Ontology  "SO:" IDs with actual snp types
+cat evaSnps2.bed \
+  | sed "s/SO:0001483/substitution/" \
+  | sed "s/SO:0000159/deletion/" \
+  | sed "s/SO:0000667/insertion/" \
+  | sed "s/SO:0000705/tandemRepeat/" \
+  | sed "s/SO:0002007/multipleNucleotideSubstitution/" \
+  | sed "s/SO:1000032/delins/" > evaSnps3.bed
+
+cat evaSnps3.bed | awk '{print $9}' | sort | uniq -c | sort -nr
+# 4713243 substitution
+#  474379 deletion
+#  467490 insertion
+#       7 tandemRepeat
+#       5 delins
+#       1 multipleNucleotideSubstitution
+#       1 VC
+
+# still has header row (VC)
+
+head evaSnps3.bed
+#chrom  chromStart      chromEnd        name    score   strand  ref     alt     VC      SID     No
+# chr1    111     112     rs850979046     0       .       A       G       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+
+# make bigBed
+bedToBigBed -tab -as=../evaSnp.as -type=bed6+5 -extraIndex=name evaSnps3.bed ../chromInfo.txt evaSnp.bb
+
+# error msg:
+# evaSnpsr.bed is not sorted at line 115.  Please use "sort -k1,1 -k2,2n" or bedSort and try again.
+# ?? but it =looks= sorted there:
+
+# j114 chr1    6189    6189    rs851043138     0       .       T       TAG     insertion       BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+# 115 chr1    6188    6189    rs852166058     0       .       T       G       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+# 116 chr1    6193    6194    rs851187136     0       .       G       A       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      No
+
+bedSort evaSnps3.bed evaSnps4.bed
+
+# trackDb/ra entry:
+cd kent/src/hg/makeDb/trackDb/dog/canFam3/trackDb.ra
+
+# track evaSnp
+# shortLabel EVA SNP Release 3
+# longLabel Short Genetic Variants from European Variant Archive Release 3
+# type bigBed 6 +
+# group varRep
+# visibility pack
+# bigDataUrl /gbdb/canFam3/bbi/evaSnp.bb
+# url https://www.ebi.ac.uk/eva/?variant&accessionID=$$
+
+# adding search in trackDb.ra (thanks jonathan):
+# added the following to dog/canFam3/trackDb.ra
+
+# searchTable evaSnp
+# searchType bigBed
+# searchMethod exact
+# padding 50
+
+# search works:
+
+bedToBigBed -tab -as=evaSnp.as -type=bed6+5 -extraIndex=name evaSnps4.bed chromInfo.txt evaSnp.bb
+# pass1 - making usageList (39 chroms): 1815 millis
+# pass2 - checking and writing primary data (5655125 records, 11 fields): 19207 millis
+# Sorting and writing extra index 0: 4299 millis
+
+bigBedInfo evaSnp.bb
+# version: 4
+# fieldCount: 11
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 1
+# itemCount: 5,655,125
+# primaryDataSize: 78,986,590
+# primaryIndexSize: 365,236
+# zoomLevels: 10
+# chromCount: 39
+# basesCovered: 6,322,774
+# meanDepth (of bases covered): 1.025209
+# minDepth: 1.000000
+# maxDepth: 14.000000
+# std of depth: 0.217172
+
+# copy to active /gbdb directory for track
+cp evaSnp.bb /cluster/data/canFam3/bed/evaSnp/evaSnp.bb
+
+# make gbdb symlink
+cd /gbdb/canFam3/bbi
+ln -s /cluster/data/canFam3/bed/evaSnp/evaSnp.bb evaSnp.bb
+
+# submitters
+cat evaSnps4.bed | awk '{print $10}' | sed -e "s/,/\n/g" | sort | uniq -c | sort -r
+3492428 BROAD_VGB_CANINE_PON_SNP_DISCOVERY
+2458565 BROAD_DBSNP.2005.2.4.16.57
+ 697053 TIGR_1.0
+ 234166 BROAD_VGB_LYMPHOMA_SNP_DISCOVERY
+   4202 DOG_GEN_LAB_1032011
+     94 AMOUCD_MAL_20+TERV_1
+...
+
+cat evaSnps4.bed | awk '{print $10}' | sed -e "s/,/\n/g" | sort | uniq -c | sort -r
+# 52
+
+# 52 different submitters.  most from a few places, mostly the Broad
+
+##############################################################################
+# canFam3 EVA SNPs (European Variation Archive) (DONE 2022-03-21 - b0b)
+# NOTE:  superceded by Lou's pipeline for consistency.
+#   doc'd for multiple assemblies at: evaSnp3.txt
+#
+# adding VAI annotations
+# redoing the track after talking with Lou and standardinzing on data fields after VAI step
+
+# canFam3.1 = GCA_000002285.2
+
+# get files (EVA Release 3)
+cd /hive/data/outside/dogSnps/release3 
+wget https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/GCA_000002285.2_current_ids.vcf.gz
+
+# what is .csi file???? 
+# https://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/GCA_000002285.2_current_ids.vcf.gz.csi
+
+# previous:
+#  5655125 evaRsIDs
+#  same number in this release
+
+# from their pages:
+# http://ftp.ebi.ac.uk/pub/databases/eva/rs_releases/release_3/by_species/canis_lupus_familiaris/GCA_000002285.2/README_rs_ids_counts.txt
+#    Unique RS ID counts
+#    GCA_000002285.2_current_ids.vcf.gz	5599185
+#
+# fewer due to multiple mapping of rsIDs
+
+gunzip GCA_000002285.2_current_ids.vcf.gz
+
+# fix chromNames chr01 > chr1
+cat GCA_000002285.2_current_ids.vcf | sed "s/chr0/chr/" > dogSNPs.vcf
+bgzip dogSNPs.vcf
+
+# vcfToBed requires a tabix
+tabix -p vcf dogSNPs.vcf.gz
+
+# make a bed file with 2 useful flags to match fields agreed w Lou (for his mm39)
+vcfToBed dogSNPs.vcf.gz dogSNPs2Flags -fields=VC,SID
+
+# VC=Variant Class, SID=Submitter ID
+
+wc -l dogSNPs2F*
+# 5655126 dogSNPs2Flags.bed
+
+# from earlier:
+zcat GC*vcf.gz | wc -l
+# 5655174
+# a few extra rows (48) in vcf due to header lines
+zcat GC*vcf.gz | grep "^#" | wc -l
+# 49 
+# accounts for the extra lines (bed has a header line)
+
+# sort file
+sort -k1,1 -k2,2n dogSNPs2Flags.bed > dogSNPs1.bed
+
+head dogSNPs1.bed
+#chrom  chromStart      chromEnd        name    score   strand  thickStart      thickEnd        itemRgb ref     alt     FILTER  VC      SID
+#chr1    111     112     rs850979046     0       .       111     112     0,0,0   A       G       .       SO:0001483      BROAD_VGB_CANINE_PON_SNP_DISCOVERY
+
+# what is FILTER FIELD ??
+cat dogSNPs1.bed | awk '{print $12}' | sort | uniq -c | sort -nr
+# 5655125 .
+#      1 FILTER
+# will remove
+
+
+#------------- ----------- ----------
+
+# process the SO: terms
+# also see stand-alone script soTest3.csh
+
+set soTerms1=( `cat soTerms.txt | awk '{print $1}'` )
+set soTerms2=( `cat soTerms.txt | awk '{print $2}'` )
+
+# echo "bedFile = $bedFile"
+# echo "soTerms1 = $soTerms1"
+# echo "soTerms2 = $soTerms2"
+
+set bedFile=dogSNPs1.bed
+
+# find out if there are any new SO: terms in bedFile
+# make list of all terms used in current file
+set bedTermList=`cat $bedFile | awk '{print $13}' | sort -u | grep -v VC`
+
+# echo "bedTermList = $bedTermList"
+
+set newTerms=""
+set newTermFlag=0
+foreach term ( $bedTermList )
+  # echo $term
+  grep $term soTerms.txt > /dev/null
+  if ( $status ) then
+     set newTerms=`echo $newTerms $term`
+     set newTermFlag=1
+  endif
+end
+
+# echo "newTermFlag = $newTermFlag"
+# echo "newTerms    = $newTerms"
+
+# if new terms, announce and exit
+if ( $newTermFlag == 1 ) then
+  echo "\nfound term(s) not in soTerms.txt file:  $newTerms "
+  echo "look here to add new term(s) file:"
+  foreach new  ( $newTerms )
+    echo "http://www.sequenceontology.org/browser/current_release/term/$new"
+  end
+  echo "stopping\n"
+  exit
+endif
+
+# build sed file to substitute SO: terms in single pass through $bedFile
+set outfile = temp$$
+set numTerms=`echo $soTerms1 | wc -w`
+# echo "numTerms = $numTerms" 
+set i=1
+set command=""
+while ( $i <= $numTerms )
+  set command=`echo $command "sed "\'"s/"$soTerms1[$i]"/"$soTerms2[$i]"/'"" | \\n"`
+  @ i = $i + 1
+end
+# do something with terminal pipe (add cat)
+set command=`echo $command cat`
+echo $command > sedFile
+chmod 700 sedFile
+
+# use sedFile to substitute terms in big file
+cat $bedFile | sedFile > $outfile
+# rm -f sedFile
+
+mv $outfile dogSNPs2.bed
+cat dogSNPs2.bed | awk '{print $13}' | sort | uniq -c | sort -nr | grep -v VC
+
+# 4713243 substitution
+#  474379 deletion
+#  467490 insertion
+#       7 tandem_repeat
+#       5 delins
+#       1 multiple_nucleotide_substitution
+
+head -2 dogSNPs2.bed
+
+#chrom  chromStart chromEnd   name      score strand    thickStart      thickEnd        itemRgb ref     alt     FILTER  VC      SID
+#chr1    111     112  rs850979046        0  .  111 112   0,0,0   A       G       .       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY
+
+# compare vcf with new bed file
+zcat GCA*vcf*.gz | grep -v "^#" | wc -l
+# 5655125
+zcat dog*gz | grep -v "^#" | wc -l
+# 5655125
+
+# diff = changed chr0 -> chr in the dog*vcf.gz
+
+
+#------------- ----------- ----------
+
+# get VAI info for the variants
+# break up into 1M chunks
+
+zcat dogSNPs.vcf.gz | grep "^#" > top.vcf
+  
+zcat dogSNPs.vcf.gz | grep -v "^#" | head -1000000 > dog.1.vcf 
+zcat dogSNPs.vcf.gz | grep -v "^#" | head -2000000 | tail -1000000 > dog.2.vcf 
+zcat dogSNPs.vcf.gz | grep -v "^#" | head -3000000 | tail -1000000 > dog.3.vcf 
+zcat dogSNPs.vcf.gz | grep -v "^#" | head -4000000 | tail -1000000 > dog.4.vcf 
+zcat dogSNPs.vcf.gz | grep -v "^#" | head -5000000 | tail -1000000 > dog.5.vcf 
+zcat dogSNPs.vcf.gz | grep -v "^#" | tail -655125  > dog.6.vcf 
+
+# confirm count was right and no rows missing in last sub-million file
+# top record in .6.vcf:
+zcat dogSNPs.vcf.gz | grep -a3 -b3  rs23801983
+# finds: rs852500901,  bottom record in .5M.vcf as it should
+
+# sort and add header section to all:
+foreach file ( 1 2 3 4 5 6 )
+  cat top.vcf dog.$file.vcf > dog.${file}M.vcf
+  rm dog.$file.vcf
+end
+
+# sort, add header section to all, zip and tabix and run VAI:
+foreach file ( 1 2 3 4 5 6 )
+  echo dog.$file.vcf
+  sort -k1,1 -k2,2n dog.$file.vcf > dog.$file.sorted.vcf
+  cat top.vcf dog.$file.sorted.vcf > dog.${file}M.vcf
+  bgzip dog.${file}M.vcf
+  tabix -p vcf dog.${file}M.vcf.gz
+  nohup vai.pl --genetrack=refGene --variantLimit=2000000 \
+    --hgvsG=off --hgvsCN=off --hgvsP=off \         
+    canFam3  dog.${file}M.vcf.gz > dogVAI.${file}M.tab
+  rm dog.$file.vcf
+  rm dog.$file.sorted.vcf
+end
+
+# dog.1.vcf
+# dog.2.vcf
+# Bad start cookie 58553421 freeing 1ad01458
+# dog.3.vcf
+# dog.4.vcf
+# dog.5.vcf
+# dog.6.vcf
+
+# ???
+# earlier runs complained about sorting chr9 and 10, but that stopped
+# that could explain why chr9 are missing?
+
+# check chroms
+foreach Mfile ( 1M 2M 3M 4M 5M 6M )
+  echo dogVAI.$Mfile.tab
+  echo "total = `cat dogVAI.$Mfile.tab | grep -v "^#" | grep -v Variation | wc -l`"
+  cat dogVAI.$Mfile.tab | grep -v "^#" | grep -v Variation \
+   | awk '{print $2}' | awk -F":" '{print $1}' | sed "s/chr//" | uniq -c 
+  echo
+end
+
+# num chrom
+#
+# dogVAI.1M.tab
+# total = 1003545
+#  278257 1
+#  201889 2
+#  221767 3
+#  197571 4
+#  104061 5
+# 
+# dogVAI.2M.tab
+# total = 667077
+#  153949 10
+#  125894 5
+#  195404 6
+#  183370 7
+#    8460 8
+# 
+# dogVAI.3M.tab
+# total = 1003876
+#   10994 10
+#  155516 11
+#  171019 12
+#  158827 13
+#  129042 14
+#  148097 15
+#  164806 16
+#   65575 17
+# 
+# dogVAI.4M.tab
+# total = 1004320
+#   96116 17
+#  155747 18
+#  128985 19
+#  142248 20
+#  137296 21
+#  133613 22
+#  133426 23
+#   76889 24
+# 
+# dogVAI.5M.tab
+# total = 1003316
+#   62388 24
+#  142397 25
+#  132475 26
+#  125810 27
+#  118120 28
+#   99798 29
+#  108964 30
+#  115047 31
+#   96547 32
+#    1770 33
+# 
+# dogVAI.6M.tab
+# total = 656521
+#   81867 33
+#  122826 34
+#   87030 35
+#   73781 36
+#   86617 37
+#   77114 38
+#  127286 X
+
+# .2M. has too few (600K) 
+##   dogVAI.2M.tab
+##   total = 667077
+# and is missing chr8 (some), 9 and 10 (some?)
+
+# check total number of variants by chrom on chroms in .1M., .2M. and .3M.
+foreach chrom ( 5 6 7 8 9 10 )
+  echo "chr$chrom  `zcat dogSNPs.vcf | grep chr$chrom | wc -l`"
+  echo "      `cat dogVAI.1M.tab dogVAI.2M.tab dogVAI.3M.tab | grep chr$chrom | wc -l`"
+end 
+
+# chrN vcf
+#      vai
+
+# chr5  227782
+#       229955
+# chr6  195105
+#       195404
+# chr7  182655
+#       183370
+# chr8  176807
+#       8460
+# chr9  166162
+#       0
+# chr10  164704
+#       164943
+
+# so it's only chr8 and chr9 missing some
+
+# pull out just those two chroms and process each separately
+foreach chrom ( 8 9 )
+  echo "chr$chrom"
+  zcat dogSNPs.vcf | grep -v "^#" | grep chr$chrom > dog.chr$chrom.vcf
+end
+
+wc -l dog.chr*
+# 176806 dog.chr8.vcf
+# 166161 dog.chr9.vcf
+
+# rerun sort, zip, tabix vai on chr8 and 9
+foreach chrom ( chr8 chr9 )
+  echo dog.$chrom.vcf
+  sort -k1,1 -k2,2n dog.$chrom.vcf > dog.$chrom.sorted.vcf
+  cat top.vcf dog.$chrom.sorted.vcf > dog.$chrom.vcf
+  bgzip dog.$chrom.vcf
+  tabix -p vcf dog.$chrom.vcf.gz
+  nohup vai.pl --genetrack=refGene --variantLimit=2000000 \
+    --hgvsG=off --hgvsCN=off --hgvsP=off \         
+    canFam3  dog.$chrom.vcf.gz > dogVAI.$chrom.tab
+  rm dog.$chrom.sorted.vcf
+end
+
+# compare original dogSNPs.vcf number with result of the chr-specific files
+foreach chrom ( 8 9 )
+  echo "chr$chrom  `zcat dogSNPs.vcf | grep chr$chrom | wc -l`"
+  echo "      `cat dogVAI.chr8.tab dogVAI.chr9.tab | grep chr$chrom | wc -l`"
+end 
+
+# this looks good:
+# 
+# chr8  176807
+#       178750
+# chr9  166162
+#       166773
+
+# now need to trim out chr8,9 from .2M. to avoid dups
+
+og *tab
+# -rw-rw-r-- 1 69411279 Mar 15 14:57 dogVAI.1M.tab
+# -rw-rw-r-- 1 46249858 Mar 15 14:57 dogVAI.2M.tab
+# -rw-rw-r-- 1 69950179 Mar 15 14:58 dogVAI.3M.tab
+# -rw-rw-r-- 1 70175430 Mar 15 14:58 dogVAI.4M.tab
+# -rw-rw-r-- 1 70183534 Mar 15 14:58 dogVAI.5M.tab
+# -rw-rw-r-- 1 45362411 Mar 15 14:59 dogVAI.6M.tab
+# -rw-rw-r-- 1 12316589 Mar 15 15:46 dogVAI.chr8.tab
+# -rw-rw-r-- 1 11640462 Mar 15 15:46 dogVAI.chr9.tab
+
+# remove chr8,9 from .2M.
+egrep -v "chr8|chr9" dogVAI.2M.tab > dogVAI.2M.trim.tab
+mv dogVAI.2M.tab dogVAI.2M.tab.old 
+
+# these should have everything:
+
+og *VAI*tab
+-rw-rw-r-- 1 69411279 Mar 15 14:57 dogVAI.1M.tab
+-rw-rw-r-- 1 69950179 Mar 15 14:58 dogVAI.3M.tab
+-rw-rw-r-- 1 70175430 Mar 15 14:58 dogVAI.4M.tab
+-rw-rw-r-- 1 70183534 Mar 15 14:58 dogVAI.5M.tab
+-rw-rw-r-- 1 45362411 Mar 15 14:59 dogVAI.6M.tab
+-rw-rw-r-- 1 12316589 Mar 15 15:46 dogVAI.chr8.tab
+-rw-rw-r-- 1 11640462 Mar 15 15:46 dogVAI.chr9.tab
+-rw-rw-r-- 1 45672614 Mar 16 17:56 dogVAI.2M.trim.tab
+
+
+# cat *VAI*tab | egrep -v "#|Variation" | awk '{print $2}' | awk -F":" '{print $1}' | sort | uniq -c | sort -k2,2
+# counts all chroms, but not very useful right here
+
+cat *VAI*tab | egrep -v "#|Variation" | wc -l
+# 5675716
+# looks good
+
+# combine all the files more or less in order and then sort on second field (chr)
+cat dogVAI.1M.tab dogVAI.2M.trim.tab dogVAI.chr8.tab dogVAI.chr9.tab dogVAI.3M.tab \
+  dogVAI.4M.tab dogVAI.5M.tab dogVAI.6M.tab | egrep -v "^#|Varia" | sort -k2,2n > dogVAI.tab
+wc -l dogVAI.tab
+# 5675716 dogVAI.tab
+
+# which fields to keep ?
+grep missense dogVAI.tab | head | awk '{print $1"\t"$2"\t"$3"\t"$7"\t"$11}'
+# rs1152388402    chr1:54192143 C missense_variant  I/M
+# rs1152388406    chr3:69456869 T missense_variant  C/F
+# rs1152388411    chr5:42186445 G missense_variant  H/R
+# rs1152388412    chr6:741429   T missense_variant  R/H
+
+# second and third will not be in final bed but might be useful for troubleshooting
+
+#------------- ----------- ----------
+
+# get ready to join bed and tab (vai) files
+
+# sort the dogSNPs2.bed on field 4
+sort -k 4 dogSNPs2.bed > dogSNPs2.rsSorted.bed
+head -3 dogSNPs2.rsSorted.bed
+#chrom  chromStart chromEnd   name      score strand    thickStart      thickEnd       itemRgb  ref     alt     FILTER  VC      SID
+#chr1    54192142   54192143   rs1152388402 0  . 54192142        54192143        0,0,0  G        C       .       substitution    LDG_DI_UGENT_BE_DOG
+#chr2    58622672   58622675   rs1152388403 0  . 58622672        58622675        0,0,0  ACT      CTAGCTAC        .       delins  LDG_DI_UGENT_BE_DOG
+tail -2 dogSNPs2.rsSorted.bed
+#chr37   14758761   14758762   rs9256889 0  .  14758761  14758762        0,0,0   G      A        .       substitution    TIGR_1.0,BROAD_DBSNP.2005.2.4.16.57
+#chr37   14760548   14760548   rs9256890 0  .  14760548  14760548        0,0,0   A      AA       .       insertion       TIGR_1.0
+
+# sort is ok
+
+# big join using VAI.sm (with only fields of interest) 
+# and sorted on rsID
+cat dogVAI.tab | awk '{print $1"\t"$2"\t"$3"\t"$7"\t"$11}' | sort > dogVAI.sm.rsSorted.tab
+head -3 dogVAI.sm.rsSorted.tab
+# rs1152388402    chr1:54192143 C missense_variant  I/M
+# rs1152388403    chr2:58622673-58622675  CTAGCTAC  frameshift_variant    YYWAV...KEAE*(415
+tail -3 dogVAI.sm.rsSorted.tab
+# rs9256888       chr37:14758839 G        intergenic_variant      -
+# rs9256889       chr37:14758762 A        intergenic_variant      -
+
+# sort is ok
+
+# join on rsID field (4 in bed file, 1 in vai file)
+#   and export 
+
+#  man join:
+# -e"." flag replaces missing field with . -- can't get it to work
+# -a1 flag retains items from file 1 even if unpaired
+# -t"\t" flag sets delimeter as tab (never worked)
+# found online
+#  -e : tells what to substitute in case of missing fields. does not work without -o.
+
+# keep 1-11,13,14 from bed (12 is emply FILTER field)
+# keep 2-5 from vai (could have used full VAI and saved the shortening step)
+#    could keep 2,7,11 from orig VAI
+# two fields of VAI*.tab will not be in final bed but might be useful for troubleshooting
+join -1 4 -2 1 -a1 -e "-" -o 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 \
+  1.10 1.11 1.13 1.14 2.2 2.3 2.4 2.5 dogSNPs2.rsSorted.bed dogVAI.sm.rsSorted.tab \ 
+  > join.full.out
+
+# repeat with all fields included -- remove FILTER field and chrN:nnnn and vaiAllele fields later
+join -1 4 -2 1 -a1 -e "-" -o auto dogSNPs2.rsSorted.bed dogVAI.sm.rsSorted.tab \
+  > join.full.out
+
+
+# many alleles do not match btw eva and VAI
+cat join.full.out | awk '{print $11, $16}' | sort | uniq -c | sort -n
+#       1 A AGGCCAAGTCCCCAGTGAAGGAGG
+#       1 A GGC
+#       1 A GTGAAG
+# ...
+#   13258 GA A
+#   14152 CA A
+#   14451 TC C
+#   14880 TA A
+#   15647 AC C
+#   16785 CT T
+#   17796 AG G
+#   18448 TG G
+#  102410 G -
+#  134016 T -
+#  138818 A -
+#  148690 C -
+# 1146149 C C
+# 1148246 G G
+# 1216747 T T
+# 1217747 A A
+
+# rows in that output:
+cat join.full.out | awk '{print $11, $16}' | sort | uniq -c | sort -n | wc -l
+# 31612
+ 
+# will carry on - there are some diffs btw the way EVA and VAI show alleles
+# make a bed file with just the fields in the evaSnp.as
+
+cat join.full.out | awk '{print $2"\t"$3"\t"$4"\t"$1"\t"$5"\t"$6"\t"$7"\t"$8"\t"$9"\t"$10"\t"$11"\t"$13"\t"$14"\t"$17"\t"$18}' \
+  | sort -k1,1 -k2,2n > dogSNPs.wVAI.bed
+
+# it did not like breaking the line with a \ in the mid of print string
+
+head -2 dogSNPs.wVAI.bed
+# chr1    111     112  rs850979046        0  .  111 112   0,0,0   A       G       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      intergenic_variant      -
+# chr1    131     132  rs851217143        0  .  131 132   0,0,0   C       A       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      intergenic_variant      -
+
+tail -2 dogSNPs.wVAI.bed
+# chrX    123869059  123869060  rs852151786  0  . 123869059       123869060       0,0,0  G        A       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      intergenic_variant      -
+# chrX    123869065  123869066  rs850877859  0  . 123869065       123869066       0,0,0  C        A       substitution    BROAD_VGB_CANINE_PON_SNP_DISCOVERY      intergenic_variant      -
+
+cat dogSNPs.wVAI.bed | grep miss | head -2
+# chr1    13734813   13734813   rs852746064  0  . 13734813        13734813        0,0,0  C        CG      insertion       BROAD_VGB_CANINE_PON_SNP_DISCOVERY      missense_variantD/Y
+# chr1    13734814   13734814   rs852366799  0  . 13734814        13734814        0,0,0  G        GC      insertion       BROAD_VGB_CANINE_PON_SNP_DISCOVERY      missense_variantD/Y
+
+cat dogSNPs.wVAI.bed | awk '{print $(NF-1)}' | sort | uniq -c | sort -n
+#       1 stop_retained_variant
+#       2 stop_lost
+#       5 initiator_codon_variant
+#      12 coding_sequence_variant
+#      13 complex_transcript_variant
+#      45 splice_donor_variant
+#      55 splice_acceptor_variant
+#      76 stop_gained
+#      80 inframe_deletion
+#      83 inframe_insertion
+#     194 non_coding_transcript_exon_variant
+#     396 frameshift_variant
+#     525 5_prime_UTR_variant
+#     784 NMD_transcript_variant
+#    1305 splice_region_variant
+#    1349 no_sequence_alteration
+#    2225 3_prime_UTR_variant
+#    3386 missense_variant
+#    4577 synonymous_variant
+#   35932 upstream_gene_variant
+#   37856 downstream_gene_variant
+#  146403 intron_variant
+# 5560422 intergenic_variant
+
+#------------- ----------- ----------
+
+# substitute itemRgb values
+
+# get variant colors
+set bedFile=dogSNPs.wVAI.bed
+
+# build sed file to substitute colors in single pass through $bedFile
+set varClass=`cat variantColors | egrep "255|128" | awk '{print $1}'`
+set varColor=`cat variantColors | egrep "255|128" | awk '{print $2}'`
+set numTerms=`echo $varClass | wc -w`
+echo "numTerms = $numTerms" 
+
+# iterate through var classes and get rgb color for substitution
+set i=1
+while ( $i <= $numTerms )
+  echo "perl -pe "\'"s/(0,0,0)(.*)($varClass[$i])/$varColor[$i]\2\3/"\'" | \\" >> varsedFile
+  @ i = $i + 1
+end
+# terminate last pipe
+echo "cat" >> varsedFile
+
+# substitute itemRgb
+chmod 700 varsedFile
+cat $bedFile | varsedFile > dogSNPs.fin.bed
+
+# check substitution
+cat dogSNPs.fin.bed | awk '{print $9,"\t", $14}' | sort | uniq -c | sort -nr
+# 5560422 0,0,0    intergenic_variant
+#  146403 0,0,0    intron_variant
+#   37856 0,0,0    downstream_gene_variant
+#   35932 0,0,0    upstream_gene_variant
+#    4577 0,128,0          synonymous_variant
+#    3386 255,0,0          missense_variant
+#    2225 0,0,255          3_prime_UTR_variant
+#    1349 0,0,0    no_sequence_alteration
+#    1305 255,0,0          splice_region_variant
+#     784 0,0,0    NMD_transcript_variant
+#     525 0,0,255          5_prime_UTR_variant
+#     396 255,0,0          frameshift_variant
+#     194 0,0,255          non_coding_transcript_exon_variant
+#      83 255,0,0          inframe_insertion
+#      80 255,0,0          inframe_deletion
+#      76 255,0,0          stop_gained
+#      55 255,0,0          splice_acceptor_variant
+#      45 255,0,0          splice_donor_variant
+#      13 0,0,255          complex_transcript_variant
+#      12 255,0,0          coding_sequence_variant
+#       5 255,0,0          initiator_codon_variant
+#       2 255,0,0          stop_lost
+#       1 0,128,0          stop_retained_variant
+
+# check concordance btw EVA and VAI classes
+cat dogSNPs.fin.bed | awk '{print $12,"\t", $14}' | sort | uniq -c | sort -nr
+# 4564905 substitution     intergenic_variant
+#  499731 deletion         intergenic_variant
+#  495782 insertion        intergenic_variant
+#  115427 substitution     intron_variant
+#   30498 substitution     downstream_gene_variant
+#   28906 substitution     upstream_gene_variant
+#   15795 deletion         intron_variant
+#   15176 insertion        intron_variant
+#    4571 substitution     synonymous_variant
+#    3778 deletion         upstream_gene_variant
+#    3713 insertion        downstream_gene_variant
+#    3645 deletion         downstream_gene_variant
+#    3366 substitution     missense_variant
+#    3248 insertion        upstream_gene_variant
+#    1682 substitution     3_prime_UTR_variant
+#    1258 substitution     no_sequence_alteration
+#     860 substitution     splice_region_variant
+#     604 substitution     NMD_transcript_variant
+#     384 substitution     5_prime_UTR_variant
+#     282 insertion        3_prime_UTR_variant
+#     261 deletion         3_prime_UTR_variant
+#     255 deletion         splice_region_variant
+#     196 insertion        frameshift_variant
+#     189 insertion        splice_region_variant
+#     173 deletion         frameshift_variant
+#     168 substitution     non_coding_transcript_exon_variant
+#     117 deletion         NMD_transcript_variant
+#      73 deletion         5_prime_UTR_variant
+#      70 deletion         inframe_deletion
+#      63 insertion        NMD_transcript_variant
+#      63 insertion        5_prime_UTR_variant
+#      62 substitution     stop_gained
+#      59 insertion        inframe_insertion
+#      52 insertion        no_sequence_alteration
+#      38 deletion         no_sequence_alteration
+#      31 substitution     splice_acceptor_variant
+#      27 substitution     splice_donor_variant
+#      26 substitution     frameshift_variant
+#      20 deletion         splice_acceptor_variant
+#      14 substitution     inframe_insertion
+#      14 deletion         non_coding_transcript_exon_variant
+#      13 insertion        missense_variant
+#      12 insertion        non_coding_transcript_exon_variant
+#      12 deletion         splice_donor_variant
+#      10 insertion        stop_gained
+#      10 deletion         inframe_insertion
+#       8 insertion        complex_transcript_variant
+#       6 insertion        splice_donor_variant
+#       6 insertion        inframe_deletion
+#       6 insertion        coding_sequence_variant
+#       6 deletion         missense_variant
+#       6 deletion         coding_sequence_variant
+#       5 tandem_repeat    intron_variant
+#       5 delins   5_prime_UTR_variant
+#       5 deletion         complex_transcript_variant
+#       4 substitution     initiator_codon_variant
+#       4 substitution     inframe_deletion
+#       4 insertion        splice_acceptor_variant
+#       4 deletion         stop_gained
+#       3 tandem_repeat    intergenic_variant
+#       3 insertion        synonymous_variant
+#       3 deletion         synonymous_variant
+#       2 substitution     stop_lost
+#       1 tandem_repeat    splice_region_variant
+#       1 substitution     stop_retained_variant
+#       1 multiple_nucleotide_substitution         no_sequence_alteration
+#       1 multiple_nucleotide_substitution         missense_variant
+#       1 delins   intergenic_variant
+#       1 delins   frameshift_variant
+#       1 deletion         initiator_codon_varia
+
+# intersting.  some classes seem odd:
+#       3 insertion        synonymous_variant
+#       3 deletion         synonymous_variant
+#       6 insertion        inframe_deletion
+#      10 deletion         inframe_insertion
+#      13 insertion        missense_variant
+#      14 substitution     inframe_insertion
+#      26 substitution     frameshift_variant
+#      38 deletion         no_sequence_alteration
+#      52 insertion        no_sequence_alteration
+
+#------------- ----------- ----------
+
+# make bigBed
+bedToBigBed -tab -as=evaSnp.as -type=bed9+6 -extraIndex=name dogSNPs.fin.bed chromInfo.txt evaSnp.bb
+# pass1 - making usageList (39 chroms): 3107 millis
+# pass2 - checking and writing primary data (5795726 records, 15 fields): 30701 millis
+# Sorting and writing extra index 0: 4152 millis
+
+bigBedInfo evaSnp.bb
+# version: 4
+# fieldCount: 15
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 1
+# itemCount: 5,795,726
+# primaryDataSize: 119,152,623
+# primaryIndexSize: 373,584
+# zoomLevels: 10
+# chromCount: 39
+# basesCovered: 6,374,175
+# meanDepth (of bases covered): 1.066073
+# minDepth: 1.000000
+# maxDepth: 45.000000
+# std of depth: 0.527133
+
+# move new file to /gbdb
+cp evaSnp.bb /cluster/data/canFam3/bed/evaSnp/evaSnp.bb
+
+# trackDb/ra entry:
+cd kent/src/hg/makeDb/trackDb/dog/canFam3
+
+# add trackDb rows
+# itemRgb on
+# mouseOver $ucscClass $aaChange
+
+# change trackDb rows
+# type bigBed 9 + 
+
+# change search from padding 50
+# padding 20
+
+# set filters
+# list of ucscClass:
+cat variantColors | grep . | awk '{print $1","}'
+# rearranging to useful order (red first, then blue, then green, then black)
+#
+# missense_variant,
+# frameshift_variant,
+# inframe_deletion,
+# inframe_insertion,
+# initiator_codon_variant,
+# stop_gained,
+# stop_lost,
+# splice_acceptor_variant,
+# splice_donor_variant,
+# splice_region_variant,
+# exon_loss_variant,
+# coding_sequence_variant,
+# 5_prime_UTR_variant,
+# 3_prime_UTR_variant,
+# NMD_transcript_variant,
+# synonymous_variant,
+# stop_retained_variant,
+# complex_transcript_variant,
+# intron_variant,
+# non_coding_transcript_exon_variant,
+# upstream_gene_variant,
+# downstream_gene_variant,
+# intergenic_variant,
+# no_sequence_alteration,
+
+# add new filter lines to trackDb
+# filterValues.varClass (new name for same field -- orig EVA class
+# filterValues.ucscClass missense_variant,frameshift_variant,inframe_deletion,inframe_insertion,initiator_codon_variant,stop_gained,stop_lost,splice_acceptor_variant,splice_donor_variant,splice_region_variant,exon_loss_variant,coding_sequence_variant,5_prime_UTR_variant,3_prime_UTR_variant,NMD_transcript_variant,synonymous_variant,stop_retained_variant,complex_transcript_variant,non_coding_transcript_exon_variant,intron_variant,upstream_gene_variant,downstream_gene_variant,intergenic_variant,no_sequence_alteration,  
+
+# drop old filter lines (no longer using RS_VALIDATED field
+filterValues.valid No,Yes
+
+##############################################################################
+# FANTOM5 refs #21605 (2023-06-09 Gerardo)
+cd /hive/data/outside/
+mkdir fantom5
+cd fantom5
+hubClone -download https://fantom.gsc.riken.jp/5/datahub/hub.txt
+cd /gbdb/canFam3
+mkdir fantom5
+cd fantom5
+# Making symlinks for big files
+for file in $(ls /hive/data/outside/fantom5/riken_f5/canFam3/*.b*) ; do ln -s $file; done
+cd /hive/data/outside/fantom5/riken_f5/canFam3/
+cp trackDb.txt fantom5.ra
+vi fantom5.ra
+# Indented subtracks
+# Changing bigDataUrl
+# Removing non-alpha characters
+cd ~/kent/src/hg/makeDb/trackDb/human/canFam3
+cp /hive/data/outside/fantom5/riken_f5/canFam3/fantom5.ra .
+vi trackDb.ra
+#include fantom5.ra alpha
 ##############################################################################

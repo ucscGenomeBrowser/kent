@@ -31,11 +31,12 @@ struct fileInfo
     bool isDir;		/* True if file is a directory. */
     int statErrno;	/* Result of stat (e.g. bad symlink). */
     time_t lastAccess;  /* Last access time. */
+    time_t creationTime; /* Creation time. */
     char name[1];	/* Allocated at run time. */
     };
 
 struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno, 
-	time_t lastAccess);
+	time_t lastAccess, time_t creationTime);
 /* Return a new fileInfo. */
 
 struct fileInfo *listDirXExt(char *dir, char *pattern, boolean fullPath, boolean ignoreStatFailures);
@@ -167,6 +168,9 @@ void touchFileFromFile(const char *oldFile, const char *newFile);
 
 boolean isDirectory(char *pathName);
 /* Return TRUE if pathName is a directory. */
+
+void mustBeReadableAndRegularFile(char *fileName);
+/* errAbort if fileName is a regular file and readable. */
 
 boolean isRegularFile(char *fileName);
 /* Return TRUE if fileName is a regular file. */

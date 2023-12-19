@@ -112,11 +112,11 @@ idSql select value from knownToTreefam where name = '%s';
 url http://www.treefam.org/family/%s
 priority 10
 
-name cgap
-shortLabel CGAP
-tables cgapAlias kgXref
-idSql select cgapID from cgapAlias,kgXref where kgID = '%s' and geneSymbol = alias;
-priority 10
+#name cgap
+#shortLabel CGAP
+#tables cgapAlias kgXref
+#idSql select cgapID from cgapAlias,kgXref where kgID = '%s' and geneSymbol = alias;
+#priority 10
 
 name ensembl
 shortLabel Ensembl
@@ -176,4 +176,11 @@ shortLabel BioGPS
 tables knownToLocusLink
 idSql select value from knownToLocusLink where name = '%s';
 url http://biogps.org/gene/%s
+priority 10
+
+name alphafold
+shortLabel AlphaFold
+tables kgXref
+idSql select spID from kgXref where kgID = '%s'
+url https://alphafold.ebi.ac.uk/entry/%s
 priority 10

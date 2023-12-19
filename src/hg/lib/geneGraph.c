@@ -554,7 +554,7 @@ ag->vertexCount = usedVertexCount;
 ag->vTypes = AllocArray(vTypes, usedVertexCount);
 ag->vPositions = AllocArray(vPositions, usedVertexCount);
 ag->mrnaRefCount = gg->mrnaRefCount;
-accessionList = newDyString(10*gg->mrnaRefCount);
+accessionList = dyStringNew(10*gg->mrnaRefCount);
 /* Have to print the accessions all out in the same string to conform
    to how the memory is handled later. */
 for(i=0; i<gg->mrnaRefCount; i++)

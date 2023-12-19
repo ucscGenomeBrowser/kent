@@ -15,4 +15,5 @@ table wgEncodeGencodeAttrs
     int level; "GENCODE level: 1 = experimental confirmed, 2 = manual, 3 = automated"
     string transcriptClass; "high level type of transcript"
     string proteinId; "Protein identifier (not loaded on many older versions of GENCODE)"
+    int transcriptRank; "Rank of transcript within the gene, smaller is more preferred"
     )

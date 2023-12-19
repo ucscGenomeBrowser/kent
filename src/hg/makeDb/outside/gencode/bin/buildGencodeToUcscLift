@@ -83,8 +83,10 @@ def writeStdChain(chromName, ucscChrom, nextChainId, fh):
 
 def writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh):
     if ucscChrom.chrom not in chromAliases:
-        raise Exception(f"UCSC chrom {ucscChrom.chrom} not in chromAlias table")
-    if (ucscDbName == "hg19") and (ucscChrom.chrom == "chrM"):
+        #raise Exception(f"UCSC chrom {ucscChrom.chrom} not in chromAlias table")
+        print(f"WARNING: UCSC chrom {ucscChrom.chrom} not in chromAlias table", file=sys.stderr)
+        return nextChainId
+    elif (ucscDbName == "hg19") and (ucscChrom.chrom == "chrM"):
         nextChainId = writeHg19ChrM(nextChainId, fh)
     elif (ucscDbName == "hg19") and (ucscChrom.chrom == "chrMT"):
         # don't create a constant lift for chrM -> chrMT, this is handled by gencodeGxfToGenePred
@@ -93,13 +95,13 @@ def writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh):
     elif isPrimaryChrom(ucscChrom.chrom):
         nextChainId = writeStdChain(ucscChrom.chrom, ucscChrom, nextChainId, fh)
     else:
-        for chromName in chromAliases[ucscChrom.chrom]:
+        for chromName in sorted(chromAliases[ucscChrom.chrom]):
             nextChainId = writeStdChain(chromName, ucscChrom, nextChainId, fh)
     return nextChainId
 
 def writeChains(ucscDbName, chromInfos, chromAliases, fh):
     nextChainId = 1
-    for ucscChrom in chromInfos.values():
+    for ucscChrom in sorted(chromInfos.values()):
         if ucscChrom.chrom not in badChroms:
             nextChainId = writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh)
 

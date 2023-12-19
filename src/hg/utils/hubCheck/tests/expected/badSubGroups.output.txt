@@ -1,0 +1,7 @@
+Found 6 problems:
+subtrack "state1" has a subgroup "bogus" not defined at parent level
+subtrack "state1" has a subgroup "bogus2" not defined at parent level
+warning: missing description page for track: 'state1'
+warning: missing description page for track: 'state2'
+warning: missing description page for track: 'subgroupsComp'
+warning: missing hub overview description page (descriptionUrl setting)

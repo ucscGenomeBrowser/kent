@@ -1403,7 +1403,7 @@ void cdwValidFileUpdateDb(struct sqlConnection *conn, struct cdwValidFile *el, l
 /* Save cdwValidFile as a row to the table specified by tableName, replacing existing record at 
  * id. */
 {
-struct dyString *dy = newDyString(512);
+struct dyString *dy = dyStringNew(512);
 sqlDyStringPrintf(dy, "update cdwValidFile set ");
 // omit id and licensePlate fields - one autoupdates and the other depends on this
 // also omit fileId which also really can't change.
@@ -1433,7 +1433,7 @@ sqlDyStringPrintf(dy, " lane='%s'", el->lane);
 #endif
 sqlDyStringPrintf(dy, " where id=%lld\n", (long long)id);
 sqlUpdate(conn, dy->string);
-freeDyString(&dy);
+dyStringFree(&dy);
 }
 
 char *cdwLookupTag(struct cgiParsedVars *list, char *tag)
@@ -1628,19 +1628,31 @@ return lastPath;
 }
 
 
+void safeCopyFile(char *source, char *dest)
+/* Copy file from source to dest using temp file. Perform move at the end only when the file is complete.
+ * Prevents partial copies. */
+{
+char tempFileName[1024];
+safef(tempFileName, sizeof tempFileName, "%s.tempCdwCopy", dest);
+copyFile(source, tempFileName);
+mustRename(tempFileName, dest);
+}
+
+
 void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean unSymlinkOnly, boolean really)
 /* If unSymlinkOnly is NOT specified, removes all records of file from database and from Unix file system if 
  * the really flag is set.  Otherwise just print some info on the file.
  * Tries to find original submitdir and replace symlink with real file to restore it. */
 {
+
 struct cdwFile *ef = cdwFileFromId(conn, fileId);
 char *path = cdwPathForFileId(conn, fileId);
 verbose(1, "%s id=%u, submitFileName=%s, path=%s\n", 
     unSymlinkOnly ? "unlocking" : "removing", ef->id, ef->submitFileName, path);
+struct cdwSubmit *es = cdwSubmitFromId(conn, ef->submitId);
 if (really)
     {
     char query[1024];
-    struct cdwSubmit *es = cdwSubmitFromId(conn, ef->submitId);
 
     if (!unSymlinkOnly)
 	{
@@ -1654,23 +1666,31 @@ if (really)
 	sqlUpdate(conn, query);
 	}
 
-    char *lastPath = NULL;
-    // skip symlink check if meta or manifest which do not get validated or license plate or symlink
-    if (!((fileId == es->manifestFileId) || (fileId == es->metaFileId)))
-	lastPath = findSubmitSymlink(ef->submitFileName, submitDir, path);
+    }
+
+char *lastPath = NULL;
+// skip symlink check if meta or manifest which do not get validated or license plate or symlink
+if (!((fileId == es->manifestFileId) || (fileId == es->metaFileId)))
+    lastPath = findSubmitSymlink(ef->submitFileName, submitDir, path);
+if (lastPath)
+    {
+    verbose(3, "lastPath=%s path=%s\n", lastPath, path);
+    }
+
+if (really)
+    {
     if (lastPath)
 	{
-	verbose(3, "lastPath=%s path=%s\n", lastPath, path);
-	if (unlink(lastPath) == -1)  // drop about to be invalid symlink
-	    errnoAbort("unlink failure %s", lastPath);
-	copyFile(path, lastPath);
+        // safer copy protection for the symlink across
+	safeCopyFile(path, lastPath);
+
 	touchFileFromFile(path, lastPath);
 	chmod(lastPath, 0664);
 	freeMem(lastPath);
-	}
 
-    if (!unSymlinkOnly)
-	mustRemove(path);
+	if (!unSymlinkOnly)
+	    mustRemove(path);
+	}
     }
 freez(&path);
 cdwFileFree(&ef);

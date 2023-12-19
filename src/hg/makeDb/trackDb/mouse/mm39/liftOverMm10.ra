@@ -1,0 +1,12 @@
+track liftOverMm10
+shortLabel UCSC liftOver mm10
+longLabel UCSC liftOver alignments to mm10
+group map
+visibility hide
+type chain mm10
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb mm10
+chainMinScore 3000
+chainLinearGap medium
+html liftOverMm10

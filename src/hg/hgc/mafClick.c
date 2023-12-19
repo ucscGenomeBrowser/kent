@@ -17,6 +17,7 @@
 #include "hCommon.h"
 #include "hubConnect.h"
 #include "trackHub.h"
+#include "chromAlias.h"
 
 extern boolean issueBotWarning;
 
@@ -158,7 +159,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	char *org;
 	char *revComp = "";
 	char strand = mc->strand;
-	struct dyString *dy = newDyString(512);
+	struct dyString *dy = dyStringNew(512);
 #ifdef REVERSESTRAND
 	if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 	    strand = (strand == '+') ? '-' : '+';
@@ -228,7 +229,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    {
 		    int s = mc->start;
 		    int e = s + mc->rightLen;
-		    struct dyString *dy = newDyString(512);
+		    struct dyString *dy = dyStringNew(512);
 
 		    if (mc->strand == '-')
 			reverseIntRange(&s, &e, mc->srcSize);
@@ -310,8 +311,11 @@ if (haveInserts)
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
 	chrom = chopPrefix(dbOnly);
 
-	if ((org = hOrganism(dbOnly)) == NULL)
-	    org = dbOnly;
+        if ((labelHash == NULL) || ((org = hashFindVal(labelHash, dbOnly)) == NULL))
+            {
+            if ((org = hOrganism(dbOnly)) == NULL)
+                org = dbOnly;
+            }
 
 	if (mc->rightStatus == MAF_INSERT_STATUS)
 	    {
@@ -541,7 +545,7 @@ else
     if (sameString(tdb->type, "bigMaf"))
         {
         char *fileName = trackDbSetting(tdb, "bigDataUrl");
-        struct bbiFile *bbi = bigBedFileOpen(fileName);
+        struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
         mafList = bigMafLoadInRegion(bbi, seqName, winStart, winEnd);
         }
     else

@@ -25,6 +25,7 @@ use vars qw/
     $opt_query2Bit
     $opt_querySizes
     $opt_localTmp
+    $opt_ram
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -69,6 +70,7 @@ options:
     -targetSizes /path/target.chrom.sizes  Full path to target chrom.sizes (fromDb)
     -querySizes  /path/query.chrom.sizes   Full path to query chrom.sizes (toDb)
     -localTmp  /dev/shm  Full path to temporary storage for heavy I/O usage
+    -ram Ng               set -ram=Ng argument to para create command (default 8g)
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -121,6 +123,7 @@ sub checkOptions {
 		      'query2Bit=s',
 		      'querySizes=s',
 		      'localTmp=s',
+		      'ram=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -193,6 +196,10 @@ sub doAlign {
   my $runDir = "$buildDir/run.blat";
   &HgAutomate::mustMkdir($runDir);
 
+  my $ramG = "-ram=8g";
+  if ($opt_ram) {
+     $ramG = "-ram=$opt_ram";
+  }
   my $ooc = "/hive/data/genomes/$tDb/11.ooc";
   if ($opt_ooc) {
     if ($opt_ooc eq 'none') {
@@ -302,7 +309,6 @@ _EOF_
   my $minTpSize = 10000000;
   $tpSize = $minTpSize if ($tpSize < $minTpSize);
 
-  my $paraRun = &HgAutomate::paraRun();
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 # Compute partition (coordinate ranges) for cluster job.  This does
@@ -324,7 +330,11 @@ end
 
 $gensub2 t.lst q.lst gsub jobList
 
-$paraRun
+/parasol/bin/para $ramG make jobList
+/parasol/bin/para check
+/parasol/bin/para time > run.time
+cat run.time
+
 _EOF_
   );
   $bossScript->execute();

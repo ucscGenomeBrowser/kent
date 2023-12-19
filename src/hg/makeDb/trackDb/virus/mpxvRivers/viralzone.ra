@@ -1,0 +1,11 @@
+track viralzoneGenes
+shortLabel Viralzone Transcriptome
+longLabel Viralzone Transcriptome: early=green, intermediate=bleu, late=red
+visibility pack
+itemRgb on
+bigDataUrl  /gbdb/mpxvRivers/viralzoneGenes/viralzone.bb
+type bigBed 9 +
+mouseOverField stage
+group genes
+priority 10
+html html/viralzone

@@ -12,6 +12,7 @@
 #include "trackHub.h"
 #include "lrg.h"
 #include "hui.h"
+#include "chromAlias.h"
 
 INLINE void printStartAndMaybeEnd(uint start, uint end)
 {
@@ -74,7 +75,7 @@ char *urlsStr = trackDbSetting(tdb, "urls");
 struct hash *columnUrls = hashFromString(urlsStr);
 
 // Open BigWig file and get interval list.
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 int bedSize = bbi->definedFieldCount;
 int fieldCount = bbi->fieldCount;
 struct lm *lm = lmInit(0);

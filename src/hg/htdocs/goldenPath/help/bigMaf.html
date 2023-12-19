@@ -9,7 +9,7 @@
 <p>
 The bigMaf format stores multiple alignments in a format compatible with 
 <a href="../../FAQ/FAQformat.html#format5">MAF</a> files, which is then compressed and indexed as a
-bigBed.</p>
+<a href="/goldenPath/help/bigBed.html">bigBed</a>.</p>
 <p>
 The bigMaf files are created using the program <code>bedToBigBed</code>, run with the 
 <code>-as</code> option to pull in a special <a href="http://www.linuxjournal.com/article/5949" 
@@ -25,13 +25,13 @@ do not have access to a web-accessible server and need hosting space for your bi
 see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help
 documentation.</p>
 
-<a name=bigMaf></a>
-<h2>bigMaf file definition</h2>
+<h2 id="bigMaf">bigMaf file definition</h2>
 <p>
 The following autoSql definition is used to specify bigMaf multiple alignment files. This
 definition, contained in the file <a href="examples/bigMaf.as"><em>bigMaf.as</em></a>, is 
 pulled in when the <code>bedToBigBed</code> utility is run with the <code>-as=bigMaf.as</code> 
-option. </p>
+option.</p>
+<h6>bigMaf.as</h6>
 <pre><code>table bedMaf
 "Bed3 with MAF block"
     (
@@ -39,12 +39,69 @@ option. </p>
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     lstring mafBlock;  "MAF block"
-    ) </code></pre>
+    )</code></pre>
+<p>
+An example: <code>bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt
+hg38.chrom.sizes bigMaf.bb</code></p>
+
+<h3 id="frames_summary">Supporting <code>frame</code> and <code>summary</code> definitions</h3>
+<p>
+Alongside the bigMaf file, two other summary and frame bigBeds are created. The
+following autoSql definition is used to create the first file, pointed to online
+with <code>summary &lt;url&gt;</code>, rather than the standard
+<code>bigDataUrl &lt;url&gt;</code> used with bigMaf. The file
+<a href="examples/mafSummary.as"><em>mafSummary.as</em></a>, is pulled in when
+the <code>bedToBigBed</code> utility is run with the <code>-as=mafSummary.as</code>
+option.</p>
+<h6>mafSummary.as</h6>
+<pre><code>table mafSummary
+"Positions and scores for alignment blocks"
+    (
+    string chrom;      "Reference sequence chromosome or scaffold"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string src;        "Sequence name or database of alignment"
+    float  score;      "Floating point score."
+    char[1] leftStatus;  "Gap/break annotation for preceding block"
+    char[1] rightStatus; "Gap/break annotation for following block"
+    )</code></pre>
+<p>
+An example, <code>bedToBigBed -type=bed3+4 -as=mafSummary.as
+-tab bigMafSummary.bed hg38.chrom.sizes bigMafSummary.bb</code>.
+Another tool, <code>hgLoadMafSummary</code> generates the input
+<code>bigMafSummary.bed</code> file.</p>
+<p>
+The following autoSql definition is used to create the second file,
+pointed to online with <code>frames &lt;url&gt;</code>. The file
+<a href="examples/mafFrames.as"><em>mafFrames.as</em></a>, is pulled in when
+the <code>bedToBigBed</code> utility is run with the <code>-as=mafFrames.as</code>
+option.</p>
+<h6>mafFrames.as</h6>
+<pre><code>table mafFrames
+"codon frame assignment for MAF components"
+    (
+    string chrom;      "Reference sequence chromosome or scaffold"
+    uint   chromStart; "Start range in chromosome"
+    uint   chromEnd;   "End range in chromosome"
+    string src;        "Name of sequence source in MAF"
+    ubyte frame;       "frame (0,1,2) for first base(+) or last bast(-)"
+    char[1] strand;    "+ or -"
+    string name;       "Name of gene used to define frame"
+    int    prevFramePos;  "target position of the previous base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous"
+    int    nextFramePos;  "target position of the next base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous"
+    ubyte  isExonStart;  "does this start the CDS portion of an exon?"
+    ubyte  isExonEnd;    "does this end the CDS portion of an exon?"
+    )</code></pre>
+<p>
+An example, <code>bedToBigBed -type=bed3+8 -as=mafFrames.as
+-tab bigMafFrames.txt hg38.chrom.sizes bigMafFrames.bb</code>. Another tool,
+<code>genePredToMafFrames</code> generates the input
+<code>bigMafFrames.txt</code> file.</p>
 <p>
 Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
 25% more RAM than the uncompressed BED input file.</p>
 
-<h2>Creating a bigMaf track</h2>
+<h2 id="steps">Creating a bigMaf track</h2>
 <p>
 To create a bigMaf track, follow these steps:
 <p>
@@ -119,7 +176,7 @@ Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a si
 <a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
 <a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic
 version of the track line will look something like this:</p>
-<pre><code>track type=bigMaf name="My Big MAF" description="A Multiple Alignment" bigDataUrl=http://myorg.edu/mylab/bigMaf.bb</code></pre>
+<pre><code>track type=bigMaf name="My Big MAF" description="A Multiple Alignment" bigDataUrl=http://myorg.edu/mylab/bigMaf.bb summary=http://myorg.edu/mylab/bigMafSummary.bb frames=http://myorg.edu/mylab/bigMafFrames.bb</code></pre>
 <p>
 <strong>Step 9.</strong> 
 Paste the custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom track
@@ -131,7 +188,7 @@ to display the usage message. </p>
 
 <h2>Examples</h2>
 
-<h3>Example #1</h3>
+<h3 id="example1">Example #1</h3>
 <p>
 In this example, you will create a bigMaf custom track using an existing bigMaf file,
 <em>bigMaf.bb</em>, located on the UCSC Genome Browser http server. This file contains data for 
@@ -141,7 +198,7 @@ To create a custom track using this bigMaf file:
 <ol>
   <li>
   Construct a track line that references the file:</p>
-  <pre><code>track type=bigMaf name=&quot;bigMaf Example One&quot; description=&quot;A bigMaf file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb</code></pre>
+  <pre><code>track type=bigMaf name=&quot;bigMaf Example One&quot; description=&quot;A bigMaf file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb summary=http://genome.ucsc.edu/goldenPath/help/examples/bigMafSummary.bb </code></pre>
   <li>
   Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
   page</a> for the human assembly hg38 (Dec. 2013).</li> 
@@ -164,7 +221,7 @@ After this example bigMaf is loaded in the Genome Browser, click into an alignme
 track display. Note that the details page displays information about the individual alignments, 
 similar to that which is available for a standard MAF track.</p>
 
-<h2>Example #2</h2>
+<h3 id="example2">Example #2</h3>
 <p>
 In this example, you will create a bigMaf file from an existing bigMaf input file, 
 <em>bigMaf.txt</em>, located on the UCSC Genome Browser http server.</p>

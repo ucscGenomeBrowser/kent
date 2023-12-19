@@ -1015,5 +1015,97 @@ chainSome $(path1)
     doBlastzChainNet.pl -swap /cluster/data/dm3/bed/blastz.dp3/DEF >& do.log &
     tail -f do.log
     ln -s blastz.dm3.swap /cluster/data/dp3/bed/blastz.dm3
+###########################################################################
+# LASTZ D. pseudoobscura Dp3 vs. D. persimilis DroPer1 (DONE - 2022-11-21 - Gerardo)
 
+# should be able to run this from anywhere, this time it was run from:
+    cd kent/src/hg/utils/automation
+
+  time (~/kent/src/hg/utils/automation/pairLastz.sh \
+	dp3 droPer1 other other) \
+	   > dp3.droPer1_20221121.log 2>&1 &
+  # check the total time
+grep -w real  dp3.droPer1_20221121.log  | tail -1 | sed -e 's/^/    # /;'
+    # real      419m30.782s
+
+    # this command outputs this makeDoc text:
+
+    cat /hive/data/genomes/dp3/bed/lastzDroPer1.2022-11-21/makeDoc.txt
+###########################################################################
+# LASTZ D. pseudoobscura Dp3 vs. D. persimilis DroPer1
+#    (DONE - 2022-11-21 - Gerardo)
+
+    mkdir /hive/data/genomes/dp3/bed/lastzDroPer1.2022-11-21
+    cd /hive/data/genomes/dp3/bed/lastzDroPer1.2022-11-21
+
+    printf '# D. persimilis DroPer1 vs. D. pseudoobscura Dp3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: D. pseudoobscura  dp3
+SEQ1_DIR=/hive/data/genomes/dp3/dp3.2bit
+SEQ1_LEN=/hive/data/genomes/dp3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: D. persimilis  droPer1
+SEQ2_DIR=/hive/data/genomes/droPer1/droPer1.2bit
+SEQ2_LEN=/hive/data/genomes/droPer1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/dp3/bed/lastzDroPer1.2022-11-21
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	328m6.727s
+
+    sed -e 's/^/    # /;' fb.dp3.chainDroPer1Link.txt
+    # 129266273 bases of 134584124 (96.049%) in intersection
+    sed -e 's/^/    # /;' fb.dp3.chainSynDroPer1Link.txt
+    # 114329591 bases of 134584124 (84.950%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        dp3 droPer1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	3m59.362s
+
+    sed -e 's/^/    # /;' fb.dp3.chainRBest.DroPer1.txt
+    # 123131513 bases of 134584124 (91.490%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/droPer1/bed/blastz.dp3.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/dp3/bed/lastzDroPer1.2022-11-21/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	71m46.993s
+
+    sed -e 's/^/    # /;' fb.droPer1.chainDp3Link.txt
+    # 165484841 bases of 175583556 (94.248%) in intersection
+    sed -e 's/^/    # /;' fb.droPer1.chainSynDp3Link.txt
+    # 123700833 bases of 175583556 (70.451%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   droPer1 dp3) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	15m37.284s
+
+    sed -e 's/^/    # /;' fb.droPer1.chainRBest.Dp3.txt
+    # 124103933 bases of 175583556 (70.681%) in intersection
 

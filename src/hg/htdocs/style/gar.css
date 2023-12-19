@@ -1,0 +1,514 @@
+
+#modalWrapper.overlay::before {
+    content: " ";
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background: #000;
+    background: rgba(0,0,0,0.7);
+}
+
+#modalWindow {
+    display: none;
+    z-index: 200;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 460px;
+    height: 80%;
+    overflow: auto;
+    padding: 10px 20px;
+    background: #fff;
+    border: 5px solid #999;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#modalWrapper.overlay #modalWindow {
+    display: block;
+}
+
+/* padding: top right bottom left */
+
+.hideShowButton {
+  text-align: left;
+  background-color: #6688aa;
+  color: #ffff00;
+}
+
+/* CSS equivalent for border=1 in old style html
+ *  declare a table as: <table class='borderOne'>
+*/
+
+.borderOne {
+  border-collapse: collapse;
+  /* table-layout: fixed; */
+  width: 100%;
+}
+
+.borderOne th,
+.borderOne td {
+  border: 1px solid black;
+  word-wrap: anywhere;
+  /* overflow-wrap: anywhere; */
+  overflow: hidden;
+  height: 40px;
+  /* overflow: hidden; */
+}
+
+/* the large table begins life as display none,
+ *   onload will change it to 'table' -- saves time on Edge/Chrome */
+
+.cladeTable {
+  table-layout: fixed;
+  display: none;
+  width: auto;
+  margin: auto;
+}
+
+/* allow content in table header cells to overflow to allow tooltip
+ *  legend display outside the cell
+ */
+.cladeTable thead tr th {
+  overflow: visible;
+}
+
+.gak {
+  display: table-row;
+}
+
+.gar {
+  display: table-row;
+}
+
+.colViewReq,
+.colGViewReq {
+  display: table-cell;
+  /* width: 90px; */
+  width: 10em;
+}
+
+.colComName,
+.colGComName {
+  display: table-cell;
+  /* width: 90px; */
+  width: 10em;
+}
+
+.colSciName,
+.colGSciName {
+  display: table-cell;
+  /* width: 110px; */
+  width: 12em;
+}
+
+.colAsmId,
+.colGAsmId {
+  display: table-cell;
+  /* width: 240px; */
+  width: 240px;
+}
+
+.colAsmSize,
+.colGAsmSize {
+  display: none;
+  /* width: 90px; */
+  width: 10em;
+}
+
+.colAsmSeqCount,
+.colGAsmSeqCount {
+  display: none;
+  /* width: 60px; */
+  width: 8em;
+}
+
+.colScafN50,
+.colGScafN50 {
+  display: none;
+  /* width: 90px; */
+  width: 10em;
+}
+
+.colContigN50,
+.colGContigN50 {
+  display: none;
+  /* width: 90px; */
+  width: 10em;
+}
+
+.colIUCN,
+.colGIUCN {
+  display: none;
+  /* width: 28px; */
+  width: 4em;
+}
+
+.colTaxId,
+.colGTaxId {
+  display: none;
+  /* width: 56px; */
+  width: 7em;
+}
+
+.colAsmDate,
+.colGAsmDate {
+  display: none;
+  /* width: 66px; */
+  width: 8em;
+}
+
+.colBioSample,
+.colGBioSample {
+  display: none;
+  width: 11em;
+}
+
+.colBioProject,
+.colGBioProject {
+  display: none;
+  width: 11em;
+}
+
+.colSubmitter,
+.colGSubmitter {
+  display: none;
+  /* width: 90px; */
+  width: 11em;
+}
+
+.colClade,
+.colGClade {
+  display: none;
+  /* width: 60px; */
+  width: 8em;
+}
+
+/* a box for row count visible/hidden statistics */
+
+.rowCount {
+  position: relative;
+  display: inline-block;
+  float: right;
+  color: #ffff00;
+  background-color: #7799bb;
+  border: 1px solid #000000;
+  margin: 2px 20px 2px 2px;
+  padding: 5px 5px 5px 5px;
+}
+
+/* margin is: top right bottom left */
+/* padding is: top right bottom left */
+/* box-shadow: https://www.w3schools.com/cssref/css3_pr_box-shadow.asp */
+  /* min-width: 160px; */
+/*  box-shadow: 0px 2px 2px 2px rgba(0,0,0,0.2); */
+/*  padding: 5px 5px 5px 5px; */
+
+/* a drop down example from
+ * https://www.w3schools.com/css/tryit.asp?filename=trycss_dropdown_text
+ * the background-color here is the background of the ancher text box
+ *  but it doesn't come through as exactly what is specified here ?
+ */
+.pullDownMenu {
+  position: relative;
+  display: inline-block;
+  float: right;
+  color: black;
+  background-color: #ddd;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  margin: 2px 20px 2px 2px;
+  padding: 5px 5px 5px 5px;
+  text-align: center;
+}
+
+/* for box-shadow:
+ * offset-x | offset-y | blur-radius | spread-radius | color
+ */
+
+.pullDownMenuContent {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  margin-bottom: 0;
+  width: 100%;
+  /* border: 1px solid #00f; */
+}
+/* the background-color here is what is in between the menu items */
+/* but why is there space between the menu items ? */
+/* the padding here affects the spacing to the left of the menu items */
+/* but these are offset to the right from the anchor text above ? */
+/* the margin-left moves them closer to the left edge of the anchor */
+/* a color here doesn't appear to color anything */
+
+.pullDownMenuContent ul {
+  /* color: #ff0000;*/
+  background-color: white;
+  list-style-type: none;
+  background-image: none;
+  margin-left: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  /* padding: 0; */
+  text-align: left;
+}
+
+/* from: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
+ * Example: div span will match all <span> elements that are inside
+ *  a <div> element.  This matches all 'li' inside the 'ul'
+ * color ad background-colore here does nothing
+ * the margin-top trick here sets the spacing between the li items
+ */
+.pullDownMenuContent ul li {
+  list-style-position: outside;
+  overflow: hidden;
+  margin-top: 1px;
+  display: block;
+/*
+  border:1px solit grey;
+*/
+}
+
+/* eliminate stray blank area following last list item */
+/*
+.pullDownMenuContent ul li:last-child {
+  padding 0;
+  background-color: #f00;
+}
+*/
+
+/* these next two rules with the 'opacity' trick, allow the menu items
+ *   to show highlight on as item as the mouse hovers over that item
+ * the color here is the text color in the menu items when highlighted
+ * the background-color here is the background of the text items when they
+ * are highlighted
+ * from: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors
+ul > li will match all <li> elements that are nested directly
+inside a <ul> element.
+
+ */
+.pullDownMenuContent ul > li {
+  color: white;
+  background-color: #57d;
+}
+
+/* this makes the entire item row clickable, including the trailing whitespace,
+ * not just the text part of the label
+ */
+.pullDownMenuContent label {
+  display: block;
+}
+
+/* the color of the text in the menu items when *not* highlighted #112295 */
+/* the color here is the color of the text when it is *not* highlighted */
+.pullDownMenuContent ul:hover > li:not(:hover) {
+  color: black;
+  background-color: #ddd;
+}
+
+.pullDownMenu:hover .pullDownMenuContent {
+  display: block;
+}
+
+.columnCheckList {
+  display: inline-block;
+  float: right;
+  padding: 5px 50px 5px 10px;
+  position: relative;
+}
+
+.columnCheckList .anchor {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 50px 5px 10px;
+  border: 1px solid #ccc;
+  color: #ffff00;
+  background-color: #7799bb;
+}
+
+#assemblyTypeAnchor {
+  text-align: right;
+}
+
+.columnCheckList .anchor:after {
+  position: absolute;
+  content: "";
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  padding: 5px;
+  right: 10px;
+  top: 20%;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+
+.columnCheckList .anchor:active:after {
+  right: 8px;
+  top: 21%;
+}
+
+.columnCheckList ul.columnCheckBox {
+  padding: 2px;
+  display: none;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  position: absolute;
+  left: 0; top: 100%;
+  width: 100%;
+}
+
+.columnCheckList ul.columnCheckBox li {
+  list-style: none;
+}
+
+.columnCheckList.visible .anchor {
+  color: #0094ff;
+  background-color: #7799bb;
+}
+
+.columnCheckList.visible .columnCheckBox {
+  display: block;
+}
+
+#canNotFindDiv {
+  color: white;
+  background-color: #4f6c9f;
+  margin-bottom: 0;
+}
+
+/* no shadow around this button, override pullDownMenuContent */
+#canNotFindDiv .pullDownMenuContent {
+    box-shadow: 0 0 0 #fff;
+}
+
+#specificRequest {
+  color: #000;
+  /* background: #555555;*/
+  background: white;
+}
+
+#specificRequest:hover {
+  /* color: #555555;*/
+  color: white;
+  background: #ea2;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
+
+.cladeTable thead tr th:hover .tooltiptext {
+  visibility: visible;
+}
+
+.cladeTable thead tr th:hover .tooltiptextright {
+  visibility: visible;
+}
+
+.tooltip .tooltiptext {
+  border: 2px solid #000;
+  visibility: hidden;
+  overflow: visible;
+  position: absolute;
+  padding: 2px;
+  z-index: 5;
+  float: left;
+  margin: 0 auto;
+  height: auto;
+  width: 300px;
+  color: black;
+  left: -10px;
+  transform: translate(1px, -110%);
+  top: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
+/* right most two columns have right margins instead of left so as
+ *  not to run off the page to the right
+ */
+
+.tooltip .tooltiptextright {
+  border: 2px solid #000;
+  visibility: hidden;
+  overflow: visible;
+  position: absolute;
+  padding: 2px;
+  z-index: 5;
+  float: right;
+  margin: 0 auto;
+  height: auto;
+  width: 300px;
+  color: black;
+  right: -10px;
+  transform: translate(1px, -110%);
+  top: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
+/* visible/hidden will be controlled by JS on mouseover */
+#col1ToolTip {
+  display: none;
+  position: absolute;
+  z-index: 5000;
+  overflow: visible;
+  visibility: visible;
+  color: #ff0;
+  background: #00f;
+  left: 0;
+  top: 0;
+  border: 2px solid #000;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+  border-radius: 4px;
+}
+
+/* debug trick to mark all elements with a red border */
+/*
+* {
+  outline: 1px solid #f00 !important;
+}
+*/
+
+.iucnCR {
+  background: #e33;
+}
+
+.iucnEN {
+  background: #338;
+}
+
+.iucnEN a:link {
+  color: #c66;
+}
+
+.iucnEN a:visited {
+  color: #6c6;
+}
+
+.iucnEN a:hover {
+  color: #cc6;
+}
+
+.iucnEN a:active {
+  color: #66c;
+}
+
+.iucnVU {
+  background: #8aa;
+}
+
+.iucnNone {
+  background: #ccc;
+}

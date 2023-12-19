@@ -59,8 +59,8 @@ Other programs in the blat suite are:
   format.</li>  
   <li> 
   <a href="#faToTwoBitUsage">faToTwoBit</a> &ndash; converts 
-  <a href="http://genetics.bwh.harvard.edu/pph/FASTA.html" target="_blank">fasta</a> format sequence
-  files to the dense, randomly accessible <a href="../../FAQ/FAQformat.html#format7">.2bit</a> 
+  <a href="https://arep.med.harvard.edu/seqanal/fasta.html" target="_blank">fasta</a> format
+  sequence files to the dense, randomly accessible <a href="/FAQ/FAQformat.html#format7">.2bit</a> 
   format that gfClient can use.</li> 
   <li> 
   <a href="#twoBitToFaUsage">twoBitToFa</a> &ndash; converts from .2bit format back to fasta
@@ -171,6 +171,8 @@ Options:</p>
                        4096 for tile size 10. Default is 1024. Typically needed only with makeOoc. 
                        Also affected by stepSize: when stepSize is halved, repMatch is doubled to 
                        compensate.
+
+-noSimpRepMask         Suppresses simple repeat masking.
 
 -mask=type             Masks out repeats. Alignments won't be started in masked region but may 
                        extend through it in nucleotide searches. Masked areas are ignored entirely 
@@ -347,7 +349,7 @@ Options:</p>
                     dnax - DNA sequence translated in six frames to protein
                     rnax - DNA sequence translated in three frames to protein
 
--prot            Synonymous with -d=prot -q=prot
+-prot            Synonymous with -t=prot -q=prot
 
 -dots=N          Outputs a dot every N query sequences.
 

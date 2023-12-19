@@ -10,6 +10,7 @@
 #include "hgHgvs.h"
 #include "vcf.h"
 #include "linefile.h"
+#include "chromAlias.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -48,6 +49,7 @@ fprintf(f,
 void hgvsToVcf(char *db, char *inFile, char *outFile, boolean doLeftShift)
 /* hgvsToVcf - Convert HGVS terms to VCF tab-separated output. */
 {
+chromAliasSetup(db);
 initGenbankTableNames(db);
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");

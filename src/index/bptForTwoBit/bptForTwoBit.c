@@ -64,6 +64,9 @@ int i;
 for (i=0, tbi=tbf->indexList; i < elCount; ++i, tbi=tbi->next)
     tbiArray[i] = tbi;
 
+// array MUST be sorted 
+qsort(tbiArray, elCount, sizeof(tbiArray[0]), twoBitIndexCmp);
+
 /* Calculate longest name. */
 int maxSize = 0;
 for (tbi = tbf->indexList; tbi != NULL; tbi = tbi->next)

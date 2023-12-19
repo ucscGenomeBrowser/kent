@@ -23,6 +23,7 @@
 #include "botDelay.h"
 #include "grp.h"
 #include "customTrack.h"
+#include "dupTrack.h"
 #include "pipeline.h"
 #include "hgFind.h"
 #include "hgTables.h"
@@ -40,6 +41,7 @@
 #include "trashDir.h"
 #include "genbank.h"
 #include "windowsToAscii.h"
+#include "chromAlias.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -202,9 +204,12 @@ fprintf(f, "# No results");
 if (identifierFileName() != NULL)
     fprintf(f, " matching identifier list");
 if (anyFilter())
-    fprintf(f, " passing filter");
-if (!fullGenomeRegion())
-    fprintf(f, " in given region");
+    fprintf(f, " passing filter. To show all results: return to the table browser, under 'subset','filter' click 'clear'");
+if (!fullGenomeRegion()) {
+    char *region = cartUsualString(cart, "position", "undefined");
+    fprintf(f, " in region '%s'. If you want to show results from the entire genome:\n", region);
+    fprintf(f, "# go back to the table browser and switch the region of interest from 'position:%s' to 'genome'", region);
+}
 if (anyIntersection())
     fprintf(f, " after intersection");
 fprintf(f, ".\n");
@@ -229,6 +234,45 @@ else
     return hgTablesName();
 }
 
+void printDownloadLink(char *typeLabel, char *fileName)
+/* print a link to the file, so the user can download it right here */
+{
+if (fileName==NULL)
+    return;
+char *downPrefix = "";
+if (startsWith("/gbdb", fileName))
+    downPrefix = "https://hgdownload.soe.ucsc.edu";
+
+hPrintf("<B>%s File Download:</B> <A HREF='%s%s'>%s</A>", typeLabel, downPrefix, fileName, fileName);
+}
+
+boolean printTypeHelpDesc(char *type)
+/* print a little link to our help docs given a track type. Return true if file type is a big* file format. */
+{
+boolean isBig = FALSE;
+
+if (startsWith("vcf", type))
+    {
+    hPrintf("See the <A HREF=\"%s\" target=_blank>Variant Call Format specification</A> for  more details<BR>\n",
+            "http://www.1000genomes.org/wiki/analysis/vcf4.0");
+    }
+else if (startsWithWord("bigWig", type))
+    {
+    printf("<BR>The data is stored in the binary "
+           "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
+           "BigWig</A> format.\n");
+    isBig = TRUE;
+    }
+else if (startsWith("big", type))
+    {
+    printf("<BR>The data is stored in the binary "
+           "<A HREF=\"/goldenPath/help/bigBed.html\" TARGET=_BLANK>"
+           "BigBed</A> format.<BR>\n");
+    isBig = TRUE;
+    }
+
+return isBig;
+}
 
 void textOpen()
 /* Start up page in text format. (No need to close this).
@@ -316,7 +360,9 @@ struct sqlResult *sr;
 char **row;
 struct region *region, *regionList = NULL;
 
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom,size from chromInfo");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
@@ -368,7 +414,9 @@ struct sqlResult *sr;
 char **row;
 struct region *list = NULL, *region;
 
-sr = sqlGetResult(conn, NOSQLINJ "select chrom,chromStart,chromEnd,name from encodeRegions order by name desc");
+char query[1024];
+sqlSafef(query, sizeof query, "select chrom,chromStart,chromEnd,name from encodeRegions order by name desc");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
@@ -497,11 +545,11 @@ if (isPositional)
 else
     {
     struct dyString *query = dyStringNew(0);
-    sqlDyStringPrintf(query, "select %-s from %s", sqlCkIl(fields), table);
+    sqlCkIl(fieldsSafe,fields)
+    sqlDyStringPrintf(query, "select %-s from %s", fieldsSafe, table);
     if (extraWhere)
          {
-	 dyStringAppend(query, " where ");
-	 dyStringAppend(query, extraWhere);
+	 sqlDyStringPrintf(query, " where %-s", extraWhere);
 	 }
     sr = sqlGetResult(conn, query->string);
     dyStringFree(&query);
@@ -676,8 +724,9 @@ if (sqlTableExists(conn, "chromInfo"))
     {
     char chromName[64];
     struct hTableInfo *hti;
-    sqlQuickQuery(conn, NOSQLINJ "select chrom from chromInfo limit 1",
-	chromName, sizeof(chromName));
+    char query[1024];
+    sqlSafef(query, sizeof query, "select chrom from chromInfo limit 1");
+    sqlQuickQuery(conn, query, chromName, sizeof(chromName));
     hti = hFindTableInfo(db, chromName, table);
     if (hti != NULL)
 	{
@@ -766,12 +815,23 @@ if (track == NULL)
 return track;
 }
 
+static char *undupedTrackName(struct cart *cart, char *varName)
+/* Return cartString for varName after removing any dup_N_ prefixes */
+{
+char *s = cartOptionalString(cart, varName);
+
+if (s == NULL)
+    return NULL;
+
+return dupTrackSkipToSourceName(s);
+}
+
 struct trackDb *findSelectedTrack(struct trackDb *trackList,
 	struct grp *group, char *varName)
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
 {
-char *name = cartOptionalString(cart, varName);
+char *name = undupedTrackName(cart, varName);
 struct trackDb *track = NULL;
 
 if (name != NULL)
@@ -842,11 +902,11 @@ void addWhereClause(struct dyString *query, boolean *gotWhere)
 {
 if (*gotWhere)
     {
-    dyStringAppend(query, " and ");
+    sqlDyStringPrintf(query, " and ");
     }
 else
     {
-    dyStringAppend(query, " where ");
+    sqlDyStringPrintf(query, " where ");
     *gotWhere = TRUE;
     }
 }
@@ -997,32 +1057,32 @@ return(ret);
 }
 
 void doTabOutDb( char *db, char *dbVarName, char *table, char *tableVarName,
-	FILE *f, struct sqlConnection *conn, char *fields)
+        FILE *f, struct sqlConnection *conn, char *fields, char outSep)
 /* Do tab-separated output on fields of a single table. */
 {
 struct region *regionList = getRegions();
 struct region *region;
 struct hTableInfo *hti = NULL;
-struct dyString *fieldSpec = newDyString(256);
+struct dyString *fieldSpec = dyStringNew(256);
 struct hash *idHash = NULL;
 int outCount = 0;
 boolean isPositional;
 int fieldCount;
 char *idField;
 boolean showItemRgb = FALSE;
-int itemRgbCol = -1;	/*	-1 means not found	*/
+int itemRgbCol = -1;        /*        -1 means not found        */
 boolean printedColumns = FALSE;
 struct trackDb *tdb = findTdbForTable(db, curTrack, table, ctLookupName);
 
 hti = getHti(db, table, conn);
 idField = getIdField(db, curTrack, table, hti);
 
-showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
+showItemRgb=bedItemRgb(tdb);        /* should we expect itemRgb instead of "reserved" */
 
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)
     {
-    dyStringAppend(fieldSpec, sqlCkIl(fields));
+    dyStringAppend(fieldSpec, fields);
     fieldCount = countChars(fields, ',') + 1;
     }
 else
@@ -1039,14 +1099,14 @@ if (idField != NULL)
     {
     idHash = identifierHash(db, table);
     if (idHash != NULL)
-	{
-	identifierFilter = identifierWhereClause(idField, idHash);
-	if (isEmpty(identifierFilter))
-	    {
-	    dyStringAppendC(fieldSpec, ',');
-	    dyStringAppend(fieldSpec, sqlCkId(idField));
-	    }
-	}
+        {
+        identifierFilter = identifierWhereClause(idField, idHash);
+        if (isEmpty(identifierFilter))
+            {
+            dyStringAppendC(fieldSpec, ',');
+            dyStringAppend(fieldSpec, idField);
+            }
+        }
     }
 isPositional = htiIsPositional(hti);
 
@@ -1059,51 +1119,67 @@ for (region = regionList; region != NULL; region = region->next)
     char *filter = filterClause(dbVarName, tableVarName, region->chrom, identifierFilter);
 
     sr = regionQuery(conn, table, fieldSpec->string,
-    	region, isPositional, filter);
+            region, isPositional, filter);
     if (sr == NULL)
-	continue;
+        continue;
 
     /* First time through print column names. */
     if (! printedColumns)
         {
-	// Show only the SQL filter built from filter page options, not identifierFilter,
-	// because identifierFilter can get enormous (like 126kB for 12,500 rsIDs).
-	char *filterNoIds = filterClause(dbVarName, tableVarName, region->chrom, NULL);
-	if (filterNoIds != NULL)
-	    hOrFPrintf(f, "#filter: %s\n", filterNoIds);
-	hOrFPrintf(f, "#");
-	if (showItemRgb)
-	    {
-	    itemRgbCol = itemRgbHeader(f, sr, lastCol);
-	    if (itemRgbCol == -1)
-		showItemRgb = FALSE;	/*  did not find "reserved" */
-	    }
-	else
-	    {
-	    for (colIx = 0; colIx < lastCol; ++colIx)
-		hOrFPrintf(f, "%s\t", sqlFieldName(sr));
-	    hOrFPrintf(f, "%s\n", sqlFieldName(sr));
-	    }
-	printedColumns = TRUE;
-	}
+        // Show only the SQL filter built from filter page options, not identifierFilter,
+        // because identifierFilter can get enormous (like 126kB for 12,500 rsIDs).
+        char *filterNoIds = filterClause(dbVarName, tableVarName, region->chrom, NULL);
+        if (filterNoIds != NULL)
+            hOrFPrintf(f, "#filter: %s\n", filterNoIds+NOSQLINJ_SIZE);
+        hOrFPrintf(f, "#");
+        if (showItemRgb)
+            {
+            itemRgbCol = itemRgbHeader(f, sr, lastCol);
+            if (itemRgbCol == -1)
+                showItemRgb = FALSE;        /*  did not find "reserved" */
+            }
+        else
+            {
+            for (colIx = 0; colIx < lastCol; ++colIx)
+                {
+                if (outSep == ',') hOrFPrintf(f, "\"");
+                hOrFPrintf(f, "%s", sqlFieldName(sr));
+                if (outSep == ',') hOrFPrintf(f, "\"");
+                hOrFPrintf(f, "%c", outSep);
+                }
+            if (outSep == ',') hOrFPrintf(f, "\"");
+            hOrFPrintf(f, "%s", sqlFieldName(sr));
+            if (outSep == ',') hOrFPrintf(f, "\"");
+            hOrFPrintf(f, "\n");
+            }
+        printedColumns = TRUE;
+        }
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	if (idHash == NULL || isNotEmpty(identifierFilter) || hashLookup(idHash, row[fieldCount]))
-	    {
-	    if (showItemRgb)
-		itemRgbDataOut(f, row, lastCol, itemRgbCol);
-	    else
-		{
-		for (colIx = 0; colIx < lastCol; ++colIx)
-		    hOrFPrintf(f, "%s\t", row[colIx]);
-		hOrFPrintf(f, "%s\n", row[lastCol]);
-		}
-	    ++outCount;
-	    }
-	}
+        {
+        if (idHash == NULL || isNotEmpty(identifierFilter) || hashLookup(idHash, row[fieldCount]))
+            {
+            if (showItemRgb)
+                itemRgbDataOut(f, row, lastCol, itemRgbCol);
+            else
+                {
+                for (colIx = 0; colIx < lastCol; ++colIx)
+                    {
+                    if (outSep == ',') hOrFPrintf(f, "\"");
+                    hOrFPrintf(f, "%s", row[colIx]);
+                    if (outSep == ',') hOrFPrintf(f, "\"");
+                    hOrFPrintf(f, "%c", outSep);
+                    }
+                if (outSep == ',') hOrFPrintf(f, "\"");
+                hOrFPrintf(f, "%s", row[lastCol]);
+                if (outSep == ',') hOrFPrintf(f, "\"");
+                hOrFPrintf(f, "\n");
+                }
+            ++outCount;
+            }
+        }
     sqlFreeResult(&sr);
     if (!isPositional)
-        break;	/* No need to iterate across regions in this case. */
+        break;        /* No need to iterate across regions in this case. */
     freez(&filter);
     }
 
@@ -1114,26 +1190,26 @@ hashFree(&idHash);
 }
 
 
-void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
+void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields, char outSep)
 /* Do tab-separated output on fields of a single table. */
 {
 boolean isTabix = FALSE;
 if (isBigBed(database, table, curTrack, ctLookupName))
-    bigBedTabOut(db, table, conn, fields, f);
+    bigBedTabOut(db, table, conn, fields, f, outSep);
 else if (isLongTabixTable(table))
-    longTabixTabOut(db, table, conn, fields, f);
+    longTabixTabOut(db, table, conn, fields, f, outSep);
 else if (isBamTable(table))
-    bamTabOut(db, table, conn, fields, f);
+    bamTabOut(db, table, conn, fields, f, outSep);
 else if (isVcfTable(table, &isTabix))
     vcfTabOut(db, table, conn, fields, f, isTabix);
 else if (isHicTable(table))
-    hicTabOut(db, table, conn, fields, f);
+    hicTabOut(db, table, conn, fields, f, outSep);
 else if (isCustomTrack(table))
     {
-    doTabOutCustomTracks(db, table, conn, fields, f);
+    doTabOutCustomTracks(db, table, conn, fields, f, outSep);
     }
 else
-    doTabOutDb(db, db, table, table, f, conn, fields);
+    doTabOutDb(db, db, table, table, f, conn, fields, outSep);
 }
 
 struct slName *fullTableFields(char *db, char *table)
@@ -1210,10 +1286,11 @@ if (anyIntersection())
     errAbort("Can't do all fields output when intersection is on. "
     "Please go back and select another output type (BED or custom track is good), or clear the intersection.");
 textOpen();
+char sep = sameString(cartUsualString(cart, hgtaOutSep, outTab), outTab) ? '\t' : ',';
 if (sameWord(table, WIKI_TRACK_TABLE))
-    tabOutSelectedFields(wikiDbName(), table, NULL, fullTableFields(wikiDbName(), table));
+    sepOutSelectedFields(wikiDbName(), table, NULL, fullTableFields(wikiDbName(), table), sep);
 else
-    tabOutSelectedFields(database, table, NULL, fullTableFields(database, table));
+    sepOutSelectedFields(database, table, NULL, fullTableFields(database, table), sep);
 }
 
 void ensureVisibility(char *db, char *table, struct trackDb *tdb)
@@ -1275,14 +1352,7 @@ for (region = regionList; region != NULL; region = region->next)
 	safef(posBuf, sizeof(posBuf), "%s:%d-%d",
 		    bed->chrom, start, end);
 	/* Construct browser anchor URL with tracks we're looking at open. */
-        if (doGalaxy())
-            {
-            char *s, *script = hgTracksName();
-            s = strstr(script, "cgi-bin");
-            hPrintf("<A HREF=\"http://%s/%s?db=%s", cgiServerNamePort(), s, database);
-            }
-        else
-	    hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);
+	hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);
 	hPrintf("&position=%s", posBuf);
 	ensureVisibility(database, table, curTrack);
 	if (table2 != NULL)
@@ -1308,7 +1378,8 @@ for (region = regionList; region != NULL; region = region->next)
     lmCleanup(&lm);
     }
 if (count == 0)
-    hPrintf(NO_RESULTS);
+    explainWhyNoResults(stdout);
+
 htmlClose();
 }
 
@@ -1325,23 +1396,24 @@ void doMetaData(struct sqlConnection *conn)
 /* Get meta data for a database. */
 {
 puts("Content-Type:text/plain\n");
-char *query = "";
+char query[1024];
+sqlSafef(query, sizeof query, "%s", ""); 
 if (cartVarExists(cart, hgtaMetaStatus))
     {
     printf("Table status for database %s\n", database);
-    query = NOSQLINJ "SHOW TABLE STATUS";
+    sqlSafef(query, sizeof query, "SHOW TABLE STATUS");
     }
 else if (cartVarExists(cart, hgtaMetaVersion))
     {
-    query = NOSQLINJ "SELECT @@VERSION";
+    sqlSafef(query, sizeof query, "SELECT @@VERSION");
     }
 else if (cartVarExists(cart, hgtaMetaDatabases))
     {
-    query = NOSQLINJ "SHOW DATABASES";
+    sqlSafef(query, sizeof query, "SHOW DATABASES");
     }
 else if (cartVarExists(cart, hgtaMetaTables))
     {
-    query = NOSQLINJ "SHOW TABLES";
+    sqlSafef(query, sizeof query, "SHOW TABLES");
     }
 struct sqlResult *sr;
 char **row;
@@ -1381,7 +1453,7 @@ struct trackDb *track = NULL;
 
 if (!sameString(curGroup->name, "allTables"))
     {
-    trackName = cartString(cart, hgtaTrack);
+    trackName = undupedTrackName(cart, hgtaTrack);
     track = mustFindTrack(trackName, fullTrackList);
     }
 else
@@ -1419,6 +1491,8 @@ if (doGenomeSpace())
     }
 if (doGreat())
     verifyGreatFormat(output);
+if (doGalaxy())
+    verifyGalaxyFormat(output);
 if (sameString(output, outPrimaryTable))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
@@ -1448,7 +1522,9 @@ else if (sameString(output, outGff))
 else if (sameString(output, outHyperlinks))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
-        sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+	{
+        // sendParamsToGalaxy(hgtaDoTopSubmit, "get output");  not supported anymore
+	}
     else
         doOutHyperlinks(table, conn);
     }
@@ -1670,6 +1746,16 @@ char *clade = NULL;
 
 oldVars = hashNew(10);
 
+char *checkDb = cgiOptionalString("db");
+char *checkGenome = cgiOptionalString("org");
+
+if (checkGenome && differentString(checkGenome, "0") && checkDb && sameString(checkDb, "0"))
+    {
+    char *newDb = hDefaultDbForGenome(checkGenome);
+    if (newDb)
+        cgiChangeVar("db", newDb);
+    }
+
 /* Sometimes we output HTML and sometimes plain text; let each outputter
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
@@ -1682,6 +1768,7 @@ if (startsWith(    MULTI_REGION_CHROM, cartUsualString(cart, "position", ""))
 /* Set up global variables. */
 allJoiner = joinerRead("all.joiner");
 getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
+chromAliasSetup(database);
 freezeName = hFreezeFromDb(database);
 
 initGenbankTableNames(database);

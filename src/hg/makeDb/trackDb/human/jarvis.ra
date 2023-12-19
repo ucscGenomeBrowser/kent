@@ -1,0 +1,18 @@
+track jarvis
+parent constraintSuper
+shortLabel JARVIS
+bigDataUrl /gbdb/$D/jarvis/jarvis.bw
+longLabel JARVIS: score to prioritize non-coding regions for disease relevance
+group phenDis
+type bigWig
+viewLimits 0.0:1.0
+visibility dense
+#maxWindowToQuery 500000
+color 150,130,160
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+maxHeightPixels 8:40:128
+yLineMark 0.73
+yLineOnOff on
+html constraintSuper
+priority 1

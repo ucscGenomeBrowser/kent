@@ -20,7 +20,7 @@ PY_SRCS = \
 	py/genbank/procOps.py
 
 # files to compile into lib without compiling
-LIBSRCS = gbCommon.pm gbFtp.pm gbCommon.sh ${PY_SRCS}
+LIBSRCS = gbCommon.pm gbRsync.pm gbFtp.pm gbCommon.sh ${PY_SRCS}
 INSTLIBSRCS = ${LIBSRCS:%=${GB_LIBDIR}/%}
 
 all: ${LIBGENBANK} ${INSTLIBSRCS}
@@ -33,7 +33,7 @@ ${LIBGENBANK}: $(O)
 ${GB_LIBDIR}/%: %
 	@${MKDIR} `dirname $@`
 	cp -f $< $@
-	chmod a-w,a+r $@
+	chmod a+w,a+r $@
 
 clean:
 	rm -f $(O) ${LIBGENBANK} ${INSTLIBSRCS}

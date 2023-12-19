@@ -62,9 +62,9 @@ char where[512];
 char *filter = filterClause(wikiDbName(), WIKI_TRACK_TABLE, region->chrom, NULL);
 
 if (filter)
-    sqlSafefFrag(where, sizeof(where), "db='%s' AND %-s", database, filter);
+    sqlSafef(where, sizeof(where), "db='%s' AND %-s", database, filter);
 else
-    sqlSafefFrag(where, sizeof(where), "db='%s'", database);
+    sqlSafef(where, sizeof(where), "db='%s'", database);
 
 sqlSafef(query, sizeof(query), "select * from %s", WIKI_TRACK_TABLE);
 sr = hRangeQuery(wikiConn, WIKI_TRACK_TABLE, region->chrom,

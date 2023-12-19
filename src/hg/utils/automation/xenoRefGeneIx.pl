@@ -53,36 +53,27 @@ sub processOne($$) {
   my ($nameHash, $someName) = @_;
   if ($someName =~ m/; /) {
     my ($name1, $name2) = split('; ', $someName);
-    $nameHash->{$name1} += 1;
-    $nameHash->{$name2} += 1;
     $nameHash->{lc($name1)} += 1;
     $nameHash->{lc($name2)} += 1;
     my $noSuffix = $name1;
     $noSuffix =~ s/\.[0-9][0-9]*$//;
-    $nameHash->{$noSuffix} += 1;
     $nameHash->{lc($noSuffix)} += 1;
     $noSuffix = $name2;
     $noSuffix =~ s/\.[0-9][0-9]*$//;
-    $nameHash->{$noSuffix} += 1;
     $nameHash->{lc($noSuffix)} += 1;
   } elsif ($someName =~ m/\s/) {
-    $nameHash->{$someName} += 1;
     $nameHash->{lc($someName)} += 1;
     my @names = split('\s+', $someName);
     foreach my $name (@names) {
-      $nameHash->{$name} += 1;
       $nameHash->{lc($name)} += 1;
       my $noSuffix = $name;
       $noSuffix =~ s/\.[0-9][0-9]*$//;
-      $nameHash->{$noSuffix} += 1;
       $nameHash->{lc($noSuffix)} += 1;
     }
   } else {
-    $nameHash->{$someName} += 1;
     $nameHash->{lc($someName)} += 1;
     my $noSuffix = $someName;
     $noSuffix =~ s/\.[0-9][0-9]*$//;
-    $nameHash->{$noSuffix} += 1;
     $nameHash->{lc($noSuffix)} += 1;
   }
 }

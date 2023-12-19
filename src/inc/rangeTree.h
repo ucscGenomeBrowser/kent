@@ -56,6 +56,10 @@ void rangeTreeAddToCoverageDepth(struct rbTree *tree, int start, int end);
  * depth of coverage.  Recover coverage back out by looking at ptToInt(range->val)
  * on tree elements. */
 
+void rangeTreeAddToCoverageList(struct rbTree *tree, int start, int end, void *val);
+/* Add area from start to end to a tree that is being built up to store the
+ * list of items in each range. Recover list by looking at range->val as list head */
+
 boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end);
 /* Return TRUE if start-end overlaps anything in tree */
 

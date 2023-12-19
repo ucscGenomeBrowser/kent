@@ -23,34 +23,6 @@
 char* GB_STATUS_TBL = "gbStatus";
 
 /* sql to create the table */
-static char* createSql =
-NOSQLINJ "create table gbStatus ("
-  "acc char(12) not null primary key,"         /* Genbank accession */
-  "version smallint unsigned not null,"        /* genbank version number */
-  "modDate date not null,"                     /* last modified date */
-  "type enum('EST','mRNA') not null,"	       /* full length or EST */
-  "srcDb enum('GenBank','RefSeq') not null,"   /* source database */
-  "orgCat enum('native','xeno') not null,"     /* Organism category */
-  "gbSeq int unsigned not null,"               /* id in gbSeq table */
-  "numAligns int unsigned not null,"           /* number of alignments */
-  "seqRelease char(8) not null,"               /* release version where
-                                                * sequence was obtained */
-  "seqUpdate char(10) not null,"               /* update where sequence was
-                                                * obtained (date or "full" */
-  "metaRelease char(8) not null,"              /* release version where
-                                                * metadata was obtained */
-  "metaUpdate char(10) not null,"              /* update where metadata was
-                                                * obtained (date or "full") */
-  "extRelease char(8) not null,"               /* release version containing
-                                                * external file */
-  "extUpdate char(10) not null,"               /* update containing external
-                                                * file (date or "full") */
-  "time timestamp not null,"                   /* time entry was inserted,
-                                                * auto-updated by mysql */
-  "unique(gbSeq),"
-  /* Index for selecting ESTs based on first two letters of the accession */
-  "index typeSrcDbAcc2(type, srcDb, acc(2)))";
-
 static char *GB_STAT_ALL_COLS = "acc,version,modDate,type,srcDb,orgCat,"
 "gbSeq,numAligns,seqRelease,seqUpdate,metaRelease,metaUpdate,"
 "extRelease,extUpdate,time";
@@ -80,27 +52,27 @@ len = sqlSafef(query, sizeof(query),
 if ((select & GB_TYPE_MASK) != (GB_MRNA|GB_EST))
     {
     /* type subset */
-    len += sqlSafefFrag(query+len, sizeof(query)-len,
+    len += sqlSafef(query+len, sizeof(query)-len,
                 " WHERE (type='%s')", gbTypeName(select & GB_TYPE_MASK));
     haveWhere = TRUE;
     }
 if ((select & GB_SRC_DB_MASK) != (GB_GENBANK|GB_REFSEQ))
     {
     if (haveWhere)
-        len += sqlSafefFrag(query+len, sizeof(query)-len,
+        len += sqlSafef(query+len, sizeof(query)-len,
                     " AND (srcDb='%s')", gbSrcDbName(select & GB_SRC_DB_MASK));
     else
-        len += sqlSafefFrag(query+len, sizeof(query)-len,
+        len += sqlSafef(query+len, sizeof(query)-len,
                     " WHERE (srcDb='%s')", gbSrcDbName(select & GB_SRC_DB_MASK));
     haveWhere = TRUE;
     }
 if (accPrefix != NULL)
     {
     if (haveWhere)
-        len += sqlSafefFrag(query+len, sizeof(query)-len,
+        len += sqlSafef(query+len, sizeof(query)-len,
                     " AND (acc LIKE '%s%%')", accPrefix);
     else
-        len += sqlSafefFrag(query+len, sizeof(query)-len,
+        len += sqlSafef(query+len, sizeof(query)-len,
                     " WHERE (acc LIKE '%s%%')", accPrefix);
     haveWhere = TRUE;
     }
@@ -169,7 +141,38 @@ statusTbl->extFileUpdate = extFileUpdate;
 statusTbl->verbose = verbose;
 
 if (!sqlTableExists(conn, GB_STATUS_TBL))
-    sqlRemakeTable(conn, GB_STATUS_TBL, createSql);
+    {
+    char query[1024];
+    sqlSafef(query, sizeof query, 
+    "create table gbStatus ("
+    "acc char(12) not null primary key,"         /* Genbank accession */
+    "version smallint unsigned not null,"        /* genbank version number */
+    "modDate date not null,"                     /* last modified date */
+    "type enum('EST','mRNA') not null,"	         /* full length or EST */
+    "srcDb enum('GenBank','RefSeq') not null,"   /* source database */
+    "orgCat enum('native','xeno') not null,"     /* Organism category */
+    "gbSeq int unsigned not null,"               /* id in gbSeq table */
+    "numAligns int unsigned not null,"           /* number of alignments */
+    "seqRelease char(8) not null,"               /* release version where
+						  * sequence was obtained */
+    "seqUpdate char(10) not null,"               /* update where sequence was
+						  * obtained (date or "full" */
+    "metaRelease char(8) not null,"              /* release version where
+						  * metadata was obtained */
+    "metaUpdate char(10) not null,"              /* update where metadata was
+						  * obtained (date or "full") */
+    "extRelease char(8) not null,"               /* release version containing
+						  * external file */
+    "extUpdate char(10) not null,"               /* update containing external
+						  * file (date or "full") */
+    "time timestamp not null,"                   /* time entry was inserted,
+						  * auto-updated by mysql */
+    "unique(gbSeq),"
+    /* Index for selecting ESTs based on first two letters of the accession */
+    "index typeSrcDbAcc2(type, srcDb, acc(2)))");
+
+    sqlRemakeTable(conn, GB_STATUS_TBL, query);
+    }
 else
     loadTable(statusTbl, conn, select, accPrefix, selectFunc, clientData);
 return statusTbl;
@@ -283,19 +286,19 @@ char query[2048];
 int len = 0;
 
 if (status->stateChg & GB_SEQ_CHG)
-    len += sqlSafefFrag(query+len, sizeof(query)-len,
+    len += sqlSafef(query+len, sizeof(query)-len,
                  "version=%d, numAligns=%d, seqRelease='%s', "
                  "seqUpdate='%s', ", status->version, status->numAligns,
                  status->seqRelease, status->seqUpdate);
 
 if (status->stateChg & GB_META_CHG)
-    len += sqlSafefFrag(query+len, sizeof(query)-len,
+    len += sqlSafef(query+len, sizeof(query)-len,
                  "modDate='%s', metaRelease='%s', metaUpdate='%s', ",
                  gbFormatDate(status->modDate),
                  status->metaRelease, status->metaUpdate);
 
 if (status->stateChg & GB_EXT_CHG)
-    len += sqlSafefFrag(query+len, sizeof(query)-len,
+    len += sqlSafef(query+len, sizeof(query)-len,
                  "extRelease='%s', extUpdate='%s', ",
                  status->extRelease, status->extUpdate);
 

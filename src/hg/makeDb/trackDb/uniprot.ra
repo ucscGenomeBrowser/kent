@@ -15,7 +15,6 @@ mouseOverField comments
 urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 itemRgb on
 dataVersion /gbdb/$D/uniprot/version.txt
-html uniprotAlpha
 hideEmptySubtracks on
 
         track unipAliSwissprot

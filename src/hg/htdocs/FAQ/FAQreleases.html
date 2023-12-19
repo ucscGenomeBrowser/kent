@@ -12,6 +12,7 @@
 <ul>
 <li><a href="#release1">List of UCSC genome releases</a></li>
 <li><a href="#release2">Initial assembly release dates</a></li>
+<li><a href="#patches">Patch sequences for human and mouse</a></li>
 <li><a href="#release3">UCSC assemblies</a></li>
 <li><a href="#release4">Comparison of UCSC and NCBI human assemblies</a></li>
 <li><a href="#release13">Looking for a genome assembly not shown in the tree?</a></li>
@@ -20,6 +21,7 @@
 <li><a href="#release6">Frequency of GenBank data updates</a></li>
 <li><a href="#release7">Coordinate changes between assemblies</a></li>
 <li><a href="#release8">Converting positions between assembly versions</a></li>
+<li><a href="#snpConversion">Converting SNPs between assembly versions</a></li>
 <li><a href="#release9">Missing annotation tracks</a></li>
 <li><a href="#release10">What next with the human genome?</a></li>
 <li><a href="#release11">Mouse strain used for mouse genome sequence</a></li>
@@ -46,7 +48,8 @@ two-letter names in a similar gs# format and human assemblies are named hg# for 
     <th>STATUS</th>
   </tr>
   <tr><td><strong>MAMMALS</strong></td><td></td><td></td><td></td><td></td></tr>
-  <tr><td>Human</td><td>hg38</td><td>Dec. 2013</td><td>Genome Reference Consortium GRCh38</td><td>Available</td></tr>
+  <tr><td>Human</td><td>hs1</td><td>Jan. 2022</td><td>T2T Consortium CHM13v2.0</td><td>Available</td></tr>
+  <tr><td></td><td>hg38</td><td>Dec. 2013</td><td>Genome Reference Consortium GRCh38</td><td>Available</td></tr>
   <tr><td></td><td>hg19</td><td>Feb. 2009</td><td>Genome Reference Consortium GRCh37</td><td>Available</td></tr>
   <tr><td></td><td>hg18</td><td>Mar. 2006</td><td>NCBI Build 36.1</td><td>Available</td></tr>
   <tr><td></td><td>hg17</td><td>May 2004</td><td>NCBI Build 35</td><td>Available</td></tr>
@@ -301,6 +304,7 @@ two-letter names in a similar gs# format and human assemblies are named hg# for 
   <tr><td><strong></strong></td><td></td><td></td><td></td><td></td></tr>
   <tr><td><strong>VIRUSES</strong></td><td></td><td></td><td></td><td></td></tr>
   <tr><td>Ebola Virus</td><td>eboVir3</td><td>June 2014</td><td>Sierra Leone 2014 (G3683/KM034562.1)</td><td>Available</td></tr>
+  <tr><td>Monkeypox Virus</td><td>mpxvRivers</td><td>May 2022</td><td>MPXV-M5312_HM12_Rivers (MT903340.1/GCF_014621545.1)</td><td>Available</td></tr>
   <tr><td>SARS-CoV-2</td><td>wuhCor1</td><td>Jan. 2020</td><td>SARS-CoV-2 ASM985889v3</td><td>Available</td></tr>
 </table>
 
@@ -315,6 +319,44 @@ A new assembly release initially consists of the genome sequence and a small set
 annotation tracks. Additional annotation tracks are added as they are obtained or generated. Bulk 
 downloads of the data are typically available in the first week after the assembly is released in 
 the browser.</p> 
+
+<a name="patches"></a>
+<h2>Patch sequences for genome assemblies</h2>
+<h6>Why am I seeing chr_alt or chr_fix chromosomes on the Genome Browser?</h6>
+<p>
+Since the intial <a href="https://www.ncbi.nlm.nih.gov/grc" target="_blank">Genome Reference
+Consortium</a> (GRC) release of the human and mouse genome assemblies, there have been updates to
+these assemblies known as &quot;patches&quot;. Patches are accessioned scaffold sequences that add
+information to the assembly without disrupting the chromosome coordinates. Patches are given
+chromosome context by aligning the sequence to the current assembly. Together the scaffod sequence
+and the alignment define the patch to the genome assembly. The GRC patch releases do not change any
+previously existing sequences; they simply add new sequences for fix patches or alternate haplotypes
+that correspond to specific regions of the main chromosome sequences. For most users, the patches
+are unlikely to make a difference and may complicate the analysis as they can introduce duplication.
+</p>
+<p>
+There are two kinds of GRC patch sequences, <a href="/FAQ/FAQdownloads#downloadAlt"
+target="_blank">chr_alt</a> and <a href="/FAQ/FAQdownloads#downloadFix" target="_blank">chr_fix</a>
+sequences:
+</p>
+<ul>
+  <li><b>Novel patches (alternative haplotypes)</b> -
+    Chromosomal regions of the genome that exhibit sufficient variability to prevent adequate
+    representation by a single sequence. Also referred to as alternate loci. The Genome Browser
+    labels these haplotype sequences by appending &quot;<em>_alt</em>&quot; to their names, i.e.,
+    <em>chr5_KI270794v1_alt</em>.</li>
+  <li><b>Fix patches</b> -
+      Error corrections (addressed by approaches such as base changes, component
+      replacements/updates, switch-point updates or tiling-path changes) or assembly improvements,
+      such as the extension of sequence into gaps. The Genome Browser labels these fix sequences by
+      appending &quot;<em>_fix</em>&quot; to their names, i.e., <em>chr1_KN538361v1_fix</em>.</li>
+</ul>
+<p>
+The <a href="https://genome-blog.gi.ucsc.edu/blog/2019/02/22/patches/" target="_blank">Patching up
+the Genome</a> blog post contains more information on how patch sequences are incorporated into the
+UCSC Genome Browser. For more information about how patch sequences can affects BLAT and isPCR
+results, please refer to the following <a href="/FAQ/FAQblat.html#blat1c" target="_blank">BLAT
+FAQ</a>.</p>
 
 <a name="release3"></a>
 <h2>Data sources - UCSC assemblies</h2>
@@ -406,19 +448,19 @@ These assembly hubs are automatically updated, but not reviewed by UCSC.
 The species tree shows all genomes reviewed by UCSC.</p>
 
 <p>
-If the assembly of interest is not found, you may write in to our mailing
-list 
-(<a href="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</a>) 
-including the <a target="_blank" 
-href="https://www.ncbi.nlm.nih.gov/assembly">NCBI Genbank assembly accession</a> for the requested 
-assembly in the message. These will start
-with either <b>GCA_</b> or <b>GCF_</b>. Our agreement with the genomics community is 
-that we wait until the assembly has been deposited 
-into Genbank at NCBI before we process it. See the <a target="_blank" 
+If the assembly of interest is not found, please visit our
+<a href="/assemblyRequest.html">assembly request page</a>.
+Search that page for your assembly. If there is a &quot;view&quot;
+link you can launch the existing genome browser. Otherwise,
+click the &quot;request&quot; button to fill out a form to
+add your genome of interest. An existing <b>GCA_</b> or <b>GCF_</b>
+identifier must exist, reflecting that the assembly has been deposited
+into Genbank at NCBI, before we can process it. See the <a target="_blank"
 href="https://www.ncbi.nlm.nih.gov/assembly/docs/submission/">
-Assembly Submission Guidelines page</a> at NCBI for directions on their submission process.
+Assembly Submission Guidelines page</a> at NCBI for directions on
+their submission process if your genome needs to be deposited.
 Also, review the <a target="_blank" href="https://bit.ly/UCSC_blog_GenArk"</a>UCSC GenArk Blog posts</a>
-for examples of accessing, using reviewing technical details about GenArk hubs.</p>
+for examples of accessing and reviewing technical details about GenArk hubs.</p>
 
 <p>
 Another option available to all users is to create 
@@ -429,6 +471,10 @@ any assembly. See our <a href="/goldenPath/help/hubQuickStartAssembly.html">
 Quick Start Guide to Assembly Hubs page</a> for additional information and resources. If you
 create an assembly hub, consider sharing it with others as a 
 <a href="/cgi-bin/hgHubConnect">Public Hub</a>.</p>
+
+<p>
+If you would like information about creating a track hub for an existing assembly hub, please refer
+to the following <a href="/FAQ/FAQlink.html#trackHubLoading">FAQ entry</a>.</p>
 
 <a name="release12"></a>
 <h2>Differences between UCSC and NCBI mouse assemblies</h2>
@@ -486,6 +532,72 @@ assembly?</h6>
 <p> 
 See the section on <a href="FAQdownloads.html#download28">converting coordinates</a> for 
 information on assembly migration tools.</p>
+
+<a name="snpConversion"></a>
+<h2>Converting SNPs between assembly versions</h2>
+<h6>How can I convert SNP annotation coordinates between assembly versions?</h6>
+<p>
+While the LiftOver tool exists to convert coordinates between assemblies, <b>it is NOT recommended
+to use LiftOver</b> to convert SNPs between two assembly versions. Using LiftOver to
+convert a very small region, especially a single base SNP, is not always a trivial task as the
+alignment may not get a high enough score to be considered a successful conversion.</p>
+<p>
+The mapping from one genome assembly to the next is automatically generated from sequence alignments
+and is not complete nor perfect, just a best attempt. The stability of rsIDs is why we recommend
+mapping across assemblies using rsIDs first and then falling back to using cross-assembly mappings
+to look up the positions of items that didn't map. When an rsID in hg18 is not found in the hg38
+dbSNP data, that rsID has been withdrawn or replaced by a different rsID. In that case, mapping the
+hg18 position of the disappeared rsID to hg38 and looking for a new rsID at the corresponding
+position may help to find the new rsID.</p>
+<p>
+dbSNP started assigning rsIDs in the 1990s, before the human genome was assembled. At that point,
+SNPs were defined by flanking sequences with the varying base(s) in the middle -- local sequence
+context, with no genomic location because there was no genome. rsIDs are supposed to be stable
+across genome assemblies despite the changing genomic positions. Regardless of the genome assembly
+version, "rs429358" refers to the same polymorphic variant in the 4th exon of the ApoE gene with T
+as the major allele and C as the minor allele. Its genomic position in hg18 is chr19:50103781, and
+its genomic position in hg38 is chr19:44908684.</p>
+<p>
+<b>Instead, the recommended process</b> to convert a SNP's coordinates between assemblies is to use
+a SNP track to search for each rsID on the target genome assembly. For example, after creating a
+list of rsIDs for your conversion, you would then search for each rsID on the target's Genome
+Browser using the dbSNP track for human assemblies (i.e. hg19 or hg38) or the EVA SNP track on mouse
+assemblies (i.e. mm10 or mm39) to perform the conversion.</p>
+<p>To summarize the setps:</p>
+<ol>
+  <li>Create a file of all rsIDs</li>
+  <li>Use the Table Browser to map the file of rsIDs to the other assembly's coordinates</li>
+  <li>Create another file containing any rsIDs that were not mapped by the Table Browser</li>
+  <li>Using the file from the previous step, use the Table Browser to create a BED4 file for the
+      rsIDs that were not mapped by the Table Browser</li>
+  <li>Run LiftOver on the BED4 file to get the new coordinates in the other assembly</li>
+  <li>Use the Data Integrator to map the LiftOver results to new rsIDs where possible</li>
+  <li>Combine the Table Browser rsID-mapped BED4 with the LiftOver/Data Integrator-mapped BED4.
+      Beware duplicates that will cause downstream problems. You will need to decide whether to
+      remove duplicates as unreliable or resolve duplicates</li>
+</ol>
+<h6>How can I convert a large set of SNP annotations?</h6>
+<p>
+For bulk conversions, the <a href="/cgi-bin/hgTables">Table Browser</a> can be used to extract the
+coordinates for the rsIDs on the target assembly. More information about performing batch queries on
+the Table Browser can be found on the following
+<a href="/goldenPath/help/hgTablesHelp.html#BatchQuery">Table Browser help page</a>. An example of
+using the Table Browser to convert SNP between assemblies can be found on a previously answered
+question available on the
+<a href="https://groups.google.com/a/soe.ucsc.edu/g/genome/c/SM0Ae7NMf4k/m/oh4_M8DeAgAJ"
+target="_blank">mailing list archive</a>.
+</p>
+<p>
+If you are using versions dbSNP 153 and above, the data are formatted as bigBed files instead of
+being stored as a MariaDb table. For very large queries, this may cause the Table Browser to timeout
+before the query finishes as dbSNP has grown to include over 700 million variants. If you find that
+your Table Browser query timesout for your list of rsIDs, you can use the
+<code>bigBedNamedItems</code> command-line tool to extract the rsID coordinates directly from the
+bigBed file instead of using the Table Browser. More information and examples using the
+<code>bigBedNamedItems</code> utility can be found on the following
+<a href="FAQdownloads.html#snp">FAQ entry</a>. As a reminder, you can run any Kent command-line tool
+without arguments to get the usage statement.
+</p>
 
 <a name="release9"></a>
 <h2>Missing annotation tracks</h2>

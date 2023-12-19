@@ -31,6 +31,7 @@
 #include "oligoTm.h"
 #include "trackHub.h"
 #include "hubConnect.h"
+#include "obscure.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -184,7 +185,7 @@ sqlDyStringPrintf(dy,
       db);
 if (isNotEmpty(name))
     sqlDyStringPrintf(dy, "and t.name = '%s' ", name);
-dyStringAppend(dy, "order by t.priority");
+sqlDyStringPrintf(dy, "order by t.priority");
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -215,7 +216,7 @@ puts(
 "In-Silico PCR searches a sequence database with a pair of\n"
 "PCR primers, using an indexing strategy for fast performance.\n"
 "See an example\n"
-"<a href='https://youtu.be/U8_QYwmdGYU?feature=player_detailpage&v=8ATcoDTOc0g&list=UUQnUJepyNOw0p8s2otX4RYQ'"
+"<a href='https://youtu.be/U8_QYwmdGYU'"
 "target='_blank'>video</a>\n"
 "on our YouTube channel.\n"
 "\n"
@@ -228,6 +229,7 @@ puts(
 "<B>Min Perfect Match</B> - Number of bases that match exactly on 3' end of primers.  Minimum match size is 15.<BR>\n"
 "<B>Min Good Match</B> - Number of bases on 3' end of primers where at least 2 out of 3 bases match.<BR>\n"
 "<B>Flip Reverse Primer</B> - Invert the sequence order of the reverse primer and complement it.<BR>\n"
+"<B>Append to existing PCR result</B> - Add this PCR result list to the currently existing track of PCR results.<BR>\n"
 "\n"
 "<H3>Output</H3>\n"
 "When successful, the search returns a sequence output file in fasta format \n"
@@ -389,7 +391,7 @@ if (!gotDb)
 
 void doGetPrimers(char *db, char *organism, struct pcrServer *serverList,
 	char *fPrimer, char *rPrimer, int maxSize, int minPerfect, int minGood,
-	boolean flipReverse)
+	boolean flipReverse, boolean appendToResults)
 /* Put up form to get primers. */
 {
 redoDbAndOrgIfNoServer(serverList, &db, &organism);
@@ -406,12 +408,12 @@ printf("<TABLE BORDER=0 WIDTH=\"96%%\" COLS=7><TR>\n");
 printf("%s", "<TD><CENTER>\n");
 printf("Genome:<BR>");
 showGenomes(organism, serverList);
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
 printf("Assembly:<BR>");
 showAssemblies(organism, db, serverList, gotTargetDb);
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
 
 if (gotTargetDb)
     {
@@ -422,7 +424,7 @@ if (gotTargetDb)
 	printf("%s", "<TD><CENTER>\n");
 	printf("Target:<BR>");
 	showTargets(target, targetServerList);
-	printf("%s", "</TD>\n");
+	printf("%s", "</CENTER></TD>\n");
 	}
     else
 	cgiMakeHiddenVar("wp_target", "genome");
@@ -433,17 +435,17 @@ else
 printf("%s", "<TD COLWIDTH=2><CENTER>\n");
 printf("Forward Primer:<BR>");
 cgiMakeTextVar("wp_f", fPrimer, 22);
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER COLWIDTH=2>\n");
 printf(" Reverse Primer:<BR>");
 cgiMakeTextVar("wp_r", rPrimer, 22);
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
 printf("&nbsp;<BR>");
 cgiMakeButton("Submit", "submit");
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
 
 printf("</TR></TABLE><BR>");
 
@@ -451,22 +453,31 @@ printf("<TABLE BORDER=0 WIDTH=\"96%%\" COLS=4><TR>\n");
 printf("%s", "<TD><CENTER>\n");
 printf("Max Product Size: ");
 cgiMakeIntVar("wp_size", maxSize, 5);
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
 printf(" Min Perfect Match: ");
 cgiMakeIntVar("wp_perfect", minPerfect, 2);
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
+
+jsOnEventById("click", "Submit", "if ($('#wp_r').val()==='' || $('#wp_f').val()==='') "\
+        "{ alert('Please specify at least a forward and reverse primer. Both input boxes need to be filled out.'); event.preventDefault(); }");
 
 printf("%s", "<TD><CENTER>\n");
 printf(" Min Good Match: ");
 cgiMakeIntVar("wp_good", minGood, 2);
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
 printf(" Flip Reverse Primer: ");
 cgiMakeCheckBox("wp_flipReverse", flipReverse);
-printf("%s", "</TD>\n");
+printf("%s", "</CENTER></TD>\n");
+
+printf("%s", "<TD><CENTER>\n");
+printf(" Append to existing PCR result: ");
+cgiMakeCheckBox("wp_append", appendToResults);
+printf("%s", "</CENTER></TD>\n");
+
 printf("</TR></TABLE><BR>");
 
 printf("</FORM>\n");
@@ -502,26 +513,68 @@ void writePrimers(struct gfPcrOutput *gpo, char *fileName)
 {
 if (gpo == NULL)
     return;
-FILE *f = mustOpen(fileName, "w");
+FILE *f = mustOpen(fileName, "a");
 fprintf(f, "%s\t%s\n", gpo->fPrimer, gpo->rPrimer);
 carefulClose(&f);
 }
 
-void writePcrResultTrack(struct gfPcrOutput *gpoList, char *db, char *target)
+void writePcrResultTrack(struct gfPcrOutput *gpoList, char *db, char *target, boolean appendToResults)
 /* Write trash files and store their name in a cart variable. */
 {
 char *cartVar = pcrResultCartVar(db);
 struct tempName bedTn, primerTn;
 char buf[2048];
-trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
-trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
-gfPcrOutputWriteAll(gpoList, "psl", NULL, bedTn.forCgi);
-writePrimers(gpoList, primerTn.forCgi);
-if (isNotEmpty(target))
-    safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
+char *pslFile, *txtFile, *cartTarget, *cartResult;
+if ( (cartResult = cartOptionalString(cart, cartVar)) != NULL && appendToResults)
+    {
+    char *pcrFiles[3];
+    chopByWhite(cloneString(cartResult), pcrFiles, 3);
+    pslFile = pcrFiles[0];
+    txtFile = pcrFiles[1];
+    cartTarget = pcrFiles[2];
+    // if the old result is from a saved session, we can't append to it
+    // because we want the session to not change. Copy the old results
+    // into a new file and append these results to it
+    char *sessionDataDir = cfgOption("sessionDataDir");
+    if (sessionDataDir && startsWith(sessionDataDir, pslFile))
+        {
+        trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
+        trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
+        // copy the old to the new
+        copyFile(pslFile, bedTn.forCgi);
+        copyFile(txtFile, primerTn.forCgi);
+        gfPcrOutputWriteAll(gpoList, "psl", NULL, bedTn.forCgi);
+        writePrimers(gpoList, primerTn.forCgi);
+        if (isNotEmpty(target))
+            safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
+        else
+            safef(buf, sizeof(buf), "%s %s", bedTn.forCgi, primerTn.forCgi);
+        cartSetString(cart, cartVar, buf);
+        }
+    else
+        {
+        gfPcrOutputWriteAll(gpoList, "psl", NULL, pslFile);
+        writePrimers(gpoList, txtFile);
+        if (isNotEmpty(target) && isEmpty(cartTarget))
+            {
+            /* User is adding a targetDb search */
+            safef(buf, sizeof(buf), "%s %s %s", pslFile, txtFile, target);
+            cartSetString(cart, cartVar, buf);
+            }
+        }
+    }
 else
-    safef(buf, sizeof(buf), "%s %s", bedTn.forCgi, primerTn.forCgi);
-cartSetString(cart, cartVar, buf);
+    {
+    trashDirFile(&bedTn, "hgPcr", "hgPcr", ".psl");
+    trashDirFile(&primerTn, "hgPcr", "hgPcr", ".txt");
+    gfPcrOutputWriteAll(gpoList, "psl", NULL, bedTn.forCgi);
+    writePrimers(gpoList, primerTn.forCgi);
+    if (isNotEmpty(target))
+        safef(buf, sizeof(buf), "%s %s %s", bedTn.forCgi, primerTn.forCgi, target);
+    else
+        safef(buf, sizeof(buf), "%s %s", bedTn.forCgi, primerTn.forCgi);
+    cartSetString(cart, cartVar, buf);
+    }
 }
 
 static void printHelpLinks(struct gfPcrOutput *gpoList) {
@@ -563,7 +616,7 @@ static void printHelpLinks(struct gfPcrOutput *gpoList) {
 }
 
 void doQuery(struct pcrServer *server, struct gfPcrInput *gpi,
-	     int maxSize, int minPerfect, int minGood)
+	     int maxSize, int minPerfect, int minGood, boolean appendToResults)
 /* Send a query to a genomic assembly PCR server and print the results. */
 {
 struct gfConnection *conn = gfConnect(server->host, server->port,
@@ -584,7 +637,7 @@ if (gpoList != NULL)
     printf("</PRE></TT>");
     
     printHelpLinks(gpoList);
-    writePcrResultTrack(gpoList, server->db, NULL);
+    writePcrResultTrack(gpoList, server->db, NULL, appendToResults);
     }
 else
     {
@@ -595,7 +648,7 @@ gfDisconnect(&conn);
 }
 
 void doTargetQuery(struct targetPcrServer *server, struct gfPcrInput *gpi,
-		   int maxSize, int minPerfect, int minGood)
+		   int maxSize, int minPerfect, int minGood, boolean appendToResults)
 /* Send a query to a non-genomic target PCR server and print the results. */
 {
 struct gfConnection *conn = gfConnect(server->host, server->port, NULL, NULL);
@@ -631,7 +684,7 @@ if (gpoList != NULL)
 	}
 
     printf("</PRE></TT>");
-    writePcrResultTrack(gpoList, server->targetDb->db, server->targetDb->name);
+    writePcrResultTrack(gpoList, server->targetDb->db, server->targetDb->name, appendToResults);
     }
 else
     {
@@ -643,7 +696,7 @@ gfDisconnect(&conn);
 
 boolean doPcr(struct pcrServer *server, struct targetPcrServer *targetServer,
 	char *fPrimer, char *rPrimer, 
-	int maxSize, int minPerfect, int minGood, boolean flipReverse)
+	int maxSize, int minPerfect, int minGood, boolean flipReverse, boolean appendToResults)
 /* Do the PCR, and show results. */
 {
 struct errCatch *errCatch = errCatchNew();
@@ -665,9 +718,9 @@ if (errCatchStart(errCatch))
     gpi->fPrimer = fPrimer;
     gpi->rPrimer = rPrimer;
     if (server != NULL)
-	doQuery(server, gpi, maxSize, minPerfect, minGood);
+	doQuery(server, gpi, maxSize, minPerfect, minGood, appendToResults);
     if (targetServer != NULL)
-	doTargetQuery(targetServer, gpi, maxSize, minPerfect, minGood);
+	doTargetQuery(targetServer, gpi, maxSize, minPerfect, minGood, appendToResults);
     ok = TRUE;
     }
 errCatchEnd(errCatch);
@@ -683,8 +736,9 @@ printf("<B>Reverse:</B> %4.1f C %s<BR>\n", oligoTm(rPrimer, 50.0, 50.0), rPrimer
 printf("</TT>");
 printf("The temperature calculations are done assuming 50 mM salt and 50 nM annealing "
        "oligo concentration.  The code to calculate the melting temp comes from "
-       "<A HREF=\"http://frodo.wi.mit.edu/primer3/input.htm\" target=_blank>"
-       "Primer3</A>.");
+       "<A HREF=\"https://primer3.org/webinterface.html\" target=_blank>"
+       "Primer3</A>, the formula by Rychlik W, Spencer WJ and Rhoads RE NAR 1990, which can "
+       "be activated in Primer3 with PRIMER_TM_FORMULA=0</A>.");
 webNewSection("Help");
 printf("<a href='../FAQ/FAQblat.html#blat1c'>What is chr_alt & chr_fix?</a><BR>");
 printf("<a href='../FAQ/FAQblat.html#blat5'>Replicating in-Silico PCR results on local machine</a>");
@@ -701,6 +755,7 @@ int minGood = 15;
 char *fPrimer = cartUsualString(cart, "wp_f", "");
 char *rPrimer = cartUsualString(cart, "wp_r", "");
 boolean flipReverse = cartUsualBoolean(cart, "wp_flipReverse", FALSE);
+boolean appendToResults = cartUsualBoolean(cart, "wp_append", TRUE);
 struct pcrServer *serverList = getServerList();
 
 getDbAndGenome(cart, &db, &organism, oldVars);
@@ -735,11 +790,11 @@ if (isNotEmpty(fPrimer) && isNotEmpty(rPrimer) &&
     fPrimer = gfPcrMakePrimer(fPrimer);
     rPrimer = gfPcrMakePrimer(rPrimer);
     if (doPcr(server, targetServer, fPrimer, rPrimer,
-	      maxSize, minPerfect, minGood, flipReverse))
+	      maxSize, minPerfect, minGood, flipReverse, appendToResults))
          return;
     }
 doGetPrimers(db, organism, serverList,
-	fPrimer, rPrimer, maxSize, minPerfect, minGood, flipReverse);
+	fPrimer, rPrimer, maxSize, minPerfect, minGood, flipReverse, appendToResults);
 }
 
 void doMiddle(struct cart *theCart)

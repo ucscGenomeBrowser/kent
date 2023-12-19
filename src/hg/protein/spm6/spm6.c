@@ -200,7 +200,7 @@ while (fgets(line, 1000, inf) != NULL)
     sscanf(line, "%s\t%s", proteinName, mrnaName);
 
     priority = 0;
-    sqlSafefFrag(cond_str, sizeof cond_str, "sp='%s'", proteinName);
+    sqlSafef(cond_str, sizeof cond_str, "sp='%s'", proteinName);
     sprintf(proteinsDB, "proteins%s", proteinDataDate);
     pdbID= sqlGetField(proteinsDB, "pdbSP", "pdb", cond_str);
     if (pdbID != NULL)
@@ -208,7 +208,7 @@ while (fgets(line, 1000, inf) != NULL)
 	priority = priority + PDB_YES;
 	}
 	
-    sqlSafefFrag(cond_str, sizeof cond_str, "displayID='%s'", proteinName);
+    sqlSafef(cond_str, sizeof cond_str, "displayID='%s'", proteinName);
     proteinDbSource  = sqlGetField(proteinsDB, "spXref2", "biodatabaseID", cond_str);
     if (proteinDbSource == NULL)
 	{

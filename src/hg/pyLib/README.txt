@@ -1,13 +1,9 @@
 This directory contains Python libraries for genome browser CGIs
-written in Python (e.g. hgGeneGraph). The ideal Python version is 2.7, but
-CentOs is at the time of writing on 2.6 so hgLib.py is avoiding any special 2.7
-features and uses the python2 in the hash bang line, so it will use whatever
-python2 version is available (2.7 on genome-asia/genome-euro and 2.6 on the RR, 
-at the time of writing).
+written in Python (e.g. hgGeneGraph). They were ported to Python 3.
 
-To make the library work on python3, it uses six, which is included, as it is not
-part of the standard library and a short 900+ lines module and also under a public
-domain license.
+The directory contains pymysql, so browser installations do not have install this
+module using pip. pymysql is in the public domain, see pymysql/LICENSE. The version
+bundled here is 1.0.2.
 
 hgLib.py includes various pieces of code ported from kent source hg/lib, like
 the bottleneck client, cart parsing, mysql functions, etc.
