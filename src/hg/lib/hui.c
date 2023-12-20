@@ -9294,7 +9294,7 @@ puts("</svg>");
 puts("</span>");
 if (!mouseOverJsDone)
     {
-    jsInline("newTooltips();\n");
+    jsInline("convertTitleTagsToMouseovers();\n");
     mouseOverJsDone = TRUE;
     }
 }
