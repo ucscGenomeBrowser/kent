@@ -24,6 +24,36 @@
 static char indexFileMagic[] = "genoFind";
 static char indexFileVerison[] = "1.0";
 
+#ifdef DEBUG_CLUMP
+static void dumpClump(struct gfClump *clump, FILE *f)
+/* Print out a clump */
+{
+struct gfSeqSource *target = clump->target;
+char *tName = target->fileName;
+if (tName == NULL) tName = target->seq->name;
+fprintf(f, GFOFFSET_FMT "-" GFOFFSET_FMT "\t%s:" GFOFFSET_FMT "-" GFOFFSET_FMT "\n",
+        clump->qStart, clump->qEnd, tName, clump->tStart, clump->tEnd);
+}
+
+static void dumpClumpList(struct gfClump *clumpList, FILE *f)
+/* Dump list of clumps. */
+{
+struct gfClump *clump;
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    dumpClump(clump, f);
+}
+#endif /* DEBUG_CLUMP */
+
+#ifdef DEBUG_HITS
+static void dumpHits(struct gfHit *hits, FILE *f)
+/* Dump list of hits. */
+{
+for (struct gfHit *hit = hits; hit != NULL; hit = hit->next)
+    fprintf(f, GFOFFSET_FMT " " GFOFFSET_FMT " "  GFOFFSET_FMT "\n",
+            hit->qStart, hit->tStart, hit->diagonal);
+}
+#endif /*  DEBUG_HITS */
+
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
  * server from confused clients. */
@@ -171,7 +201,7 @@ struct genoFindFileHdr
     bool allowOneMismatch;
     bool noSimpRepMask;
     int segSize;
-    int totalSeqSize;
+    gfOffset totalSeqSize;
 
     off_t sourcesOff;     // offset of sequences sources
     off_t listSizesOff;   // offset of listSizes
@@ -237,16 +267,16 @@ if (fileName != NULL)
         fileName = s + 1;
     }
 writeStringSafe(f, fileName);
-mustWrite(f, &ss->start, sizeof(bits32));
-mustWrite(f, &ss->end, sizeof(bits32));
+mustWrite(f, &ss->start, sizeof(gfOffset));
+mustWrite(f, &ss->end, sizeof(gfOffset));
 }
 
 static void genoFindReadSource(FILE *f, struct gfSeqSource *ss)
 /* read a gfSeqSource from file */
 {
 ss->fileName = readString(f);
-mustRead(f, &ss->start, sizeof(bits32));
-mustRead(f, &ss->end, sizeof(bits32));
+mustRead(f, &ss->start, sizeof(gfOffset));
+mustRead(f, &ss->end, sizeof(gfOffset));
 }
 
 static off_t genoFindWriteSources(struct genoFind *gf, FILE *f)
@@ -1017,6 +1047,8 @@ if (stepSize == 0)
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
+    if (!fileExists(fileName))
+        errAbort("Unrecognized genome sequence does not exist %s", fileName);
     if (twoBitIsFile(fileName))
 	{
 	int seqCount;
@@ -1031,10 +1063,10 @@ for (i=0; i<fileCount; ++i)
 	totalSeq += 1;
 	}
     else
-        errAbort("Unrecognized file type %s", fileName);
-    /* Warn if they exceed 4 gig. */
+        errAbort("Unrecognized genome sequence file type %s", fileName);
+    /* Abort if they exceed size, suggest large sequence blat. */
     if (totalBases >= warnAt)
-	errAbort("Exceeding 4 billion bases, sorry gfServer can't handle that.");
+	errAbort("Exceeding 4 billion bases, try large genome gfServer.");
     }
 gfAllocLists(gf);
 gfZeroNonOverused(gf);
@@ -1847,7 +1879,7 @@ int bucketShift = 16;		/* 64k buckets. */
 bits32 bucketSize = (1<<bucketShift);
 int bucketCount = (gf->totalSeqSize >> bucketShift) + 1;
 int nearEnough = (gf->isPep ? gfNearEnough/3 : gfNearEnough);
-bits32 boundary = bucketSize - nearEnough;
+gfOffset boundary = bucketSize - nearEnough;
 int i;
 struct gfHit **buckets = NULL, **pb;
 
@@ -1911,12 +1943,8 @@ clumpList = clumpNear(gf, clumpList, minMatch);
 gfClumpComputeQueryCoverage(clumpList, tileSize);	/* Thanks AG */
 slSort(&clumpList, gfClumpCmpQueryCoverage);
 
-#ifdef DEBUG
-uglyf("Dumping clumps B\n");
-for (clump = clumpList; clump != NULL; clump = clump->next)	/* uglyf */
-    {
-    uglyf(" %lld %lld %s %lld %lld (%d hits)\n", clump->qStart, clump->qEnd, clump->target->seq->name,   clump->tStart, clump->tEnd, clump->hitCount);
-    }
+#ifdef DEBUG_CLUMP
+dumpClumpList(clumpList, stderr);
 #endif /* DEBUG */
 freez(&buckets);
 return clumpList;
@@ -1962,7 +1990,7 @@ for (i=tileSizeMinusOne; i<size; ++i)
 	    tList = gf->lists[bits];
 	    for (j=0; j<listSize; ++j)
 		{
-		int tStart = tList[j];
+		gfOffset tStart = tList[j];
 		if (target == NULL || 
 			(target == findSource(gf, tStart) && tStart >= tMin && tStart < tMax) ) 
 		    {
@@ -2349,25 +2377,6 @@ else
 return hitList;
 }
 
-#ifdef DEBUG
-static void dumpClump(struct gfClump *clump, FILE *f)
-/* Print out a clump */
-{
-struct gfSeqSource *target = clump->target;
-char *tName = target->fileName;
-if (tName == NULL) tName = target->seq->name;
-fprintf(f, "%d-%d\t%s:%d-%d\n", clump->qStart, clump->qEnd, tName, clump->tStart, clump->tEnd);
-}
-
-static void dumpClumpList(struct gfClump *clumpList, FILE *f)
-/* Dump list of clumps. */
-{
-struct gfClump *clump;
-for (clump = clumpList; clump != NULL; clump = clump->next)
-    dumpClump(clump, f);
-}
-#endif /* DEBUG */
-
 struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, 
 	Bits *qMaskBits, int qMaskOffset,
 	struct lm *lm, int *retHitCount)
@@ -2561,6 +2570,7 @@ static void mergeAdd(struct binKeeper *bk, int start, int end, struct gfSeqSourc
 /* Add interval to bin-keeper, merging with any existing overlapping
  * intervals. */
 {
+assert((start >= 0) && (end > start));
 struct binElement *iEl, *iList = binKeeperFind(bk, start, end);
 for (iEl = iList; iEl != NULL; iEl = iEl->next)
     {
@@ -2628,7 +2638,7 @@ for (fTileIx=0; fTileIx<fTileCount; ++fTileIx)
 			    if (rPos < target->end)
 			        {
 				struct binKeeper *bk;
-				int tStart = target->start;
+				gfOffset tStart = target->start;
 				char *tName = target->fileName;
 				if (tName == NULL)
 				    tName = target->seq->name;
