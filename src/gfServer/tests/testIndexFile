@@ -1,6 +1,11 @@
 #!/bin/bash -e
-gfServer=${1:-gfServer}   # first arg is optional name of gfServer program
+if [ $# != 2 ] ; then
+    echo "wrong # args $0 gfServer port" >&2
+    exit 1
+fi
 testName=$(basename $0)
+gfServer=$1
+port=$2
 
 # build index
 gfIdx=output/creaGeno.untrans.gfidx
@@ -9,8 +14,8 @@ mkdir -p output
 $gfServer index $gfIdx input/creaGeno.2bit >/dev/null
 
 # read index
-$gfServer start -indexFile=$gfIdx localhost 17768 -canStop input/creaGeno.2bit >/dev/null &
+$gfServer start -indexFile=$gfIdx localhost ${port} -canStop input/creaGeno.2bit >/dev/null &
 sleep 1
-$gfServer query localhost 17768 input/mCrea.mrna > output/$testName.out
-$gfServer stop localhost 17768 > /dev/null
+$gfServer query localhost ${port} input/mCrea.mrna > output/$testName.out
+$gfServer stop localhost ${port} > /dev/null
 diff -u expected/$testName.out output/$testName.out
