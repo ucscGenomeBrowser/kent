@@ -126,6 +126,7 @@ maxHeightPixels 128:40:8
 viewLimitsMax -3:3
 autoScale on
 priority 10
+dataVersion Release 3.1.2 (October 22, 2021)
 html gnomadV3_1_1
 
     track gnomadPLI
@@ -136,11 +137,12 @@ html gnomadV3_1_1
     group varRep
     type bigBed 12
     labelFields name,geneName
+    dataVersion Release 2.1.1 (March 6, 2019)
     visibility hide
 
         track pliByGene
         shortLabel Gene LoF
-        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI)
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI) v2.1.1
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -158,7 +160,7 @@ html gnomadV3_1_1
 
         track missenseByGene
         shortLabel Gene Missense
-        longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores)
+        longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores) v2.1.1
         type bigBed 12 +
         mouseOverField _mouseOver
         searchIndex name,geneName
@@ -174,7 +176,7 @@ html gnomadV3_1_1
 
         track pliByTranscript
         shortLabel Transcript LoF
-        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI)
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI) v2.1.1
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -191,7 +193,7 @@ html gnomadV3_1_1
 
         track missenseByTranscript
         shortLabel Transcript Missense
-        longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores)
+        longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v2.1.1
         type bigBed 12 +
         mouseOverField _mouseOver
         searchIndex name,geneName
