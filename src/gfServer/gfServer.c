@@ -166,7 +166,7 @@ errAbort(
   "                   have at most maxDnaHits/2 hits.  The filename MUST not include the directory.\n"
   "                   Useful for assemblies with many alternate/patch sequences.\n"
   "   -canStop        If set, a quit message will actually take down the server.\n"
-  "   -indexFile      Index file create by `gfServer index'. Saving index can speed up\n"
+  "   -indexFile      Index file created by `gfServer index'. Saving index can speed up\n"
   "                   gfServer startup by two orders of magnitude.  The parameters must\n"
   "                   exactly match the parameters when the file is written or bad things\n"
   "                   will happen.\n"
