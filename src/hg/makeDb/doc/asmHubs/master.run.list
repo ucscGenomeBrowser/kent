@@ -1334,6 +1334,7 @@
 ./runBuild GCA_917862395.1_iHelSar1.1 invertebrate Heliconius_sara
 ./runBuild GCA_917880025.4_PGI_APHIGO_v101 invertebrate Aphis_gossypii
 ./runBuild GCA_918807975.1_kaAplTurb1.1 invertebrate Aplidium_turbinatum
+./runBuild GCA_921997125.2_C3H_HeJ_v3 mammals Mus_musculus
 ./runBuild GCA_921998555.2_129S1_SvImJ_v3 mammals Mus_musculus
 ./runBuild GCA_922984935.2_mMelMel3.2_paternal_haplotype mammals Meles_meles
 ./runBuild GCA_922990625.1_mMelMel3.1_maternal_haplotype_uncurated mammals Meles_meles
