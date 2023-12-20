@@ -29,6 +29,9 @@ include trackDb.geneHancer.ra
 include clinvar.ra beta,public
 include clinvar.alpha.ra alpha
 
+# Dosage sensitivity map Collins 2022
+include dosageSensitivityCollins2022.ra
+
 # NCBI dbVar
 include trackDb.dbVar.ra
 
