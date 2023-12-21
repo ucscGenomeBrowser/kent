@@ -44,27 +44,27 @@ directTwoBitTest: mkdirs
 		>output/$@.out
 	diff expected/$@.out output/$@.out
 protNibTest: mkdirs
-	./testProtNib ${gfServer} $(shell expr 17768 + ${portOffset})
+	./bin/testProtNib ${gfServer} $(shell expr 17768 + ${portOffset})
 protTwoBitTest: mkdirs
-	./testProtTwoBit ${gfServer} $(shell expr 17770 + ${portOffset})
+	./bin/testProtTwoBit ${gfServer} $(shell expr 17770 + ${portOffset})
 transNibTest: mkdirs
-	./testTransNib ${gfServer} $(shell expr 17772 + ${portOffset})
+	./bin/testTransNib ${gfServer} $(shell expr 17772 + ${portOffset})
 transTwoBitTest: mkdirs
-	./testTransTwoBit ${gfServer} $(shell expr 17774 + ${portOffset})
+	./bin/testTransTwoBit ${gfServer} $(shell expr 17774 + ${portOffset})
 pcrTest: mkdirs
-	./testPcr ${gfServer}
+	./bin/testPcr ${gfServer}
 indexFileTest: mkdirs
-	./testIndexFile ${gfServer}  $(shell expr 17780 + ${portOffset})
+	./bin/testIndexFile ${gfServer}  $(shell expr 17780 + ${portOffset})
 indexFileTransTest: mkdirs
-	./testIndexFileTrans ${gfServer} $(shell expr 17782 + ${portOffset})
+	./bin/testIndexFileTrans ${gfServer} $(shell expr 17782 + ${portOffset})
 dynServerTest: mkdirs
-	./testDynServer ${gfServer}
+	./bin/testDynServer ${gfServer}
 dynServerTransTest: mkdirs
-	./testDynServerTrans ${gfServer}
+	./bin/testDynServerTrans ${gfServer}
 dynServerWithDirTest: mkdirs
-	./testDynServerWithDir ${gfServer}
+	./bin/testDynServerWithDir ${gfServer}
 dynServerPerSeqMaxTest: mkdirs
-	./testDynServerPerSeqMax ${gfServer}
+	./bin/testDynServerPerSeqMax ${gfServer}
 
 ##
 # tests using a huge genome requring 64-bit offsets
@@ -86,13 +86,13 @@ hugeTestTransIdx = ${hugeTestDir}/${hugeAcc}.trans.gfidx
 hugeTests: testHugeUntrans testHugeTrans testHugeProt
 
 testHugeUntrans: mkdirs ${hugeTestUntransIdx}
-	./runHugeTest ${gfServer64} 17790 untrans ${hugeTest2bit} ${hugeTestUntransIdx} input/lungfish.rna.fa $@
+	./bin/runHugeTest ${gfServer64} 17790 untrans ${hugeTest2bit} ${hugeTestUntransIdx} input/lungfish.rna.fa $@
 
 testHugeTrans: mkdirs ${hugeTestTransIdx}
-	./runHugeTest ${gfServer64} 17791 trans ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.rna.fa $@
+	./bin/runHugeTest ${gfServer64} 17791 trans ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.rna.fa $@
 
 testHugeProt: mkdirs ${hugeTestTransIdx}
-	./runHugeTest ${gfServer64} 17792 prot ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.prot.fa $@
+	./bin/runHugeTest ${gfServer64} 17792 prot ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.prot.fa $@
 
 
 # setup for huge tests
