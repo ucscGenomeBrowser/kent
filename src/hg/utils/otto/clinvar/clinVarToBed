@@ -6,12 +6,6 @@ from collections import defaultdict
 from os.path import join, basename, dirname, isfile, abspath, isdir
 from datetime import date, datetime, timedelta
 
-if os.getlogin()!="otto":
-    print("Please do not run this script as a normal user, you will run into all sorts of permission problems.")
-    print("to develop and test, ssh to otto, then run it with doUpdate.sh --alpha to generate the dev-only tracks.")
-    print("When you're done, run doUpdate.sh without the --alpha and commit the change to the kent tree.")
-    sys.exit(1)
-
 dbToUrl = {
     "dbVar": "https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/",
     "UniProtKB (variants)" : "http://www.uniprot.org/uniprot/%s",
@@ -46,6 +40,12 @@ if options.debug:
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.INFO)
+
+if not options.isAlpha and os.getlogin()!="otto":
+    print("Please do not run this script as a normal user, you will run into all sorts of permission problems.")
+    print("to develop and test, ssh to otto, then run it with doUpdate.sh --alpha to generate the dev-only tracks.")
+    print("When you're done, run doUpdate.sh without the --alpha and commit the change to the kent tree.")
+    sys.exit(1)
 
 clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID	PositionVCF	ReferenceAlleleVCF	AlternateAlleleVCF\n"
 # ==== FUNCTIONs =====
@@ -766,7 +766,7 @@ for line in ifh:
 
     molConseq = allToVcf.get(int(alleleId))
     if molConseq is None:
-        logging.debug("%s has no molConseq" % alleleId)
+        #logging.debug("%s has no molConseq" % alleleId)
         noMcCount += 1
         molConseq = ""
 
@@ -985,20 +985,22 @@ for fname in fnames:
         base, db, date, ext = parts
     else:
         base, db, ext = parts
+
+    base = basename(base)
         
     tmpFname = "%s.%s.temp.bb" % (base, db)
-    outFname = "%s/%s.%s.bb" % (bigBedDir, base, db)
 
-    outFname = basename(outFname) # strip the archive/ part, put into current dir
     cmd = "bedToBigBed -extraIndex=_dbVarSsvId -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, tmpFname)
     mustRun(cmd)
 
-    tableName = outFname.split('.')[0] # e.g. clinvarMain
+    finalFname = "%s/%s.%s.bb" % (bigBedDir, base, db)
+    tableName = finalFname.split('.')[0] # e.g. clinvarMain
 
-    tmpFnames.append( (db, tableName, tmpFname, outFname) )
+    tmpFnames.append( (db, tableName, tmpFname, finalFname) )
 
 # make it atomic by renaming the temp files to the final file names at the very end
 for db, tableName, tmpFname, finalFname in tmpFnames:
+    logging.debug("Renaming %s to %s" % (tmpFname, finalFname))
     os.rename(tmpFname, finalFname)
 
 # create the version.txt file
@@ -1008,6 +1010,7 @@ outFname = join(bigBedDir, "version.txt")
 with open(outFname, "w") as ofh:
     ofh.write(versionString)
 
+# put a copy of the files into the archive
 if not options.isAlpha:
     for db, tableName, tmpFname, finalFname in tmpFnames:
         # not doing this anymore, using bigDataUrl now in trackDb
