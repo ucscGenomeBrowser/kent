@@ -26,9 +26,9 @@ testRgb: outputDir
 	diff input/itemRgb.bed output/test_itemRgb.bed
 
 testCompress: outputDir
-	${BINDIR}/${A} -type=bed9 -as=input/itemRgb.as input/itemRgb.bed.gz input/chrom.sizes output/itemRgb.bb 2> /dev/null
-	bigBedToBed output/itemRgb.bb output/test_itemRgb.bed
-	diff input/itemRgb.bed output/test_itemRgb.bed
+	${BINDIR}/${A} -type=bed9 -as=input/itemRgb.as input/itemRgb.bed.gz input/chrom.sizes output/itemRgbGz.bb 2> /dev/null
+	bigBedToBed output/itemRgbGz.bb output/test_itemRgbGz.bed
+	diff input/itemRgb.bed output/test_itemRgbGz.bed
 
 testOddSorted: outputDir
 	-${BINDIR}/${A} -extraIndex=name -type=bed12+16 -tab -as=../../..//hg/lib/gencodeBGP.as input/oddSorted.bed input/hg38.chrom.sizes output/oddSorted.bb

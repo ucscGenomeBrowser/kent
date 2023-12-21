@@ -345,3 +345,96 @@ real	354m14.218s
 user	0m3.158s
 sys	0m3.325s
 ##############################################################################
+# LASTZ Chimp PanTro6 vs. Crab-eating macaque MacFas5
+#    (DONE - 2023-12-11 - gperez2)
+
+    mkdir /hive/data/genomes/panTro6/bed/lastzMacFas5.2023-12-11
+    cd /hive/data/genomes/panTro6/bed/lastzMacFas5.2023-12-11
+
+    printf '# Crab-eating macaque MacFas5 vs. Chimp PanTro6
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Chimp  panTro6
+SEQ1_DIR=/hive/data/genomes/panTro6/panTro6.2bit
+SEQ1_LEN=/hive/data/genomes/panTro6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Crab-eating macaque  macFas5
+SEQ2_DIR=/hive/data/genomes/macFas5/macFas5.2bit
+SEQ2_LEN=/hive/data/genomes/macFas5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/panTro6/bed/lastzMacFas5.2023-12-11
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -verbose=2 `pwd`/DEF -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	93m4.325s
+
+    sed -e 's/^/    # /;' fb.panTro6.chainMacFas5Link.txt
+    # 2482510656 bases of 3018592990 (82.241%) in intersection
+    sed -e 's/^/    # /;' fb.panTro6.chainSynMacFas5Link.txt
+    # 2446198446 bases of 3018592990 (81.038%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+       \
+        panTro6 macFas5) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	113m36.180s
+
+    sed -e 's/^/    # /;' fb.panTro6.chainRBest.MacFas5.txt
+    # 2400158905 bases of 3018592990 (79.513%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/macFas5/bed/blastz.panTro6.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl  -swap -verbose=2 \
+    /hive/data/genomes/panTro6/bed/lastzMacFas5.2023-12-11/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	57m31.785s
+
+    sed -e 's/^/    # /;' fb.macFas5.chainPanTro6Link.txt
+    # 2430179833 bases of 2803866698 (86.672%) in intersection
+    sed -e 's/^/    # /;' fb.macFas5.chainSynPanTro6Link.txt
+    # 2406117748 bases of 2803866698 (85.814%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl  -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+    \
+   macFas5 panTro6) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	106m35.531s
+
+    sed -e 's/^/    # /;' fb.macFas5.chainRBest.PanTro6.txt
+    # 2400398207 bases of 2803866698 (85.610%) in intersection
+
+real	370m48.159s
+user	0m1.744s
+sys	0m1.977s
+##############################################################################

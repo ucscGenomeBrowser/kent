@@ -1,0 +1,43 @@
+track dosageSensitivity
+shortLabel Dosage Sensitivity
+longLabel pHaplo and pTriplo dosage sensitivity map from Collins et al 2022
+visibility hide
+type bigBed 9 + 2
+group phenDis
+itemRgb on
+compositeTrack on
+noParentConfig on
+html dosageSensitivityCollins2022
+pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released Xxx. x, 202x"
+
+    track pHaplo
+    parent dosageSensitivity on
+    shortLabel pHaploinsufficiency
+    longLabel Probability of haploinsufficiency
+    visibility pack
+    type bigBed 9 + 2
+    bigDataUrl /gbdb/$D/bbi/dosageSensitivityCollins2022/pHaploDosageSensitivity.bb
+    mouseOver $name, $ensGene, pHaplo:$pHaplo
+    itemRgb on
+    showCfg on
+    filter.pHaplo 0
+    filterByRange.pHaplo on
+    filterLimits.pHaplo 0:1
+    url https://www.deciphergenomics.org/search?q=$$
+    urlLabel Link to DECIPHER
+
+    track pTriplo
+    parent dosageSensitivity on
+    shortLabel pTriplosensitivity
+    longLabel Probability of triplosensitivity
+    visibility pack
+    type bigBed 9 + 2
+    bigDataUrl /gbdb/$D/bbi/dosageSensitivityCollins2022/pTriploDosageSensitivity.bb
+    mouseOver $name, $ensGene, pTriplo:$pTriplo
+    itemRgb on
+    showCfg on
+    filter.pTriplo 0
+    filterByRange.pTriplo on
+    filterLimits.pTriplo 0:1
+    url https://www.deciphergenomics.org/search?q=$$
+    urlLabel Link to DECIPHER

@@ -1,0 +1,10 @@
+#Lou 12/202/2023
+
+#Download and scp dosage scores from https://zenodo.org/records/6347673
+mkdir /hive/data/outside/collinsHaploTriploScores
+cd /hive/data/outside/collinsHaploTriploScores
+
+wget https://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz
+gunzip hg19ToHg38.over.chain.gz
+
+python ~/kent/src/hg/makeDb/scripts/buildDosageSensitivityCollins.py

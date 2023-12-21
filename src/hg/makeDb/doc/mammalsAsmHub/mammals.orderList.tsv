@@ -30,7 +30,7 @@ GCF_003426925.1_ASM342692v1	Arctic ground squirrel
 GCA_004024585.1_ParHer_v1_BIUU	Asian palm civet
 GCA_024166345.1_mEleMax1_alternate_haplotype	Asiatic elephant (mEleMax1 alternate hap 2022)
 GCF_024166365.1_mEleMax1_primary_haplotype	Asiatic elephant (mEleMax1 primary hap 2022)
-GCA_004024905.1_TapInd_v1_BIUU	Asiatic tapir
+GCA_031878655.1_mTapInd1.hap1	Asiatic tapir (hap1 2023)
 GCF_016077325.2_ASM1607732v2	ass (Dezhou 2021)
 GCF_001305755.1_ASM130575v1	ass (Maral har 2015 refseq)
 GCA_015852515.1_mTacAcu1.alt	Australian echidna (mTacAcu1 alternate hap 2020)
@@ -61,6 +61,7 @@ GCA_022079275.1_mLynRuf1.a	bobcat (Redwood Valley CCGP_SWC_20201006 alternate ha
 GCF_022079265.1_mLynRuf1.p	bobcat (Redwood Valley CCGP_SWC_20201006 primary hap 2022)
 GCA_024803775.1_mThoBot1.0.a	Botta's pocket gopher (bottae MVZ:Mamm:240275 alternate hap 2022)
 GCA_024803745.1_mThoBot1.0.p	Botta's pocket gopher (bottae MVZ:Mamm:240275 primary hap 2022)
+GCA_031878675.1_mThoBot2.hap1	Botta's pocket gopher (hap1 2023)
 GCA_004363515.1_IniGeo_v1_BIUU	boutu
 GCF_000412655.1_ASM41265v1	Brandt's bat
 GCA_004025005.1_TadBra_v1_BIUU	Brazilian free-tailed bat
@@ -68,6 +69,7 @@ GCA_000688575.1_CavAp1.0	Brazilian guinea pig
 GCA_004025025.1_TapTer_v1_BIUU	Brazilian tapir
 GCF_023065955.2_UrsArc2.0	brown bear (v2.0 North America Adak 2023)
 GCF_003584765.2_ASM358476v2	brown bear (GAN/ISIS:MIG12 v2 2018)
+GCA_963455305.1_mPleAur1.1	brown big-eared bat (primary hap 2023)
 GCA_004027775.1_BraVar_v1_BIUU	brown-throated sloth
 GCF_949786415.1_PerEre_H2_v1	cactus mouse (2023)
 GCF_007827085.1_ASM782708v3	California mouse (IS 2022)
@@ -165,6 +167,7 @@ GCF_903992535.2_mArvAmp1.2	Eurasian water vole (v2 2021)
 GCA_903992525.1_mArvAmp1.1_alternate_haplotype	Eurasian water vole (alternate hap 2020)
 GCA_030435785.1_mMusLut2.alt	European mink (alternate hap 2023)
 GCF_030435805.1_mMusLut2.pri	European mink (primary hap 2023 refseq)
+GCA_963455335.1_mMarMar1.1	European pine marten (primary hap 2023)
 GCF_000181275.1_SorAra2.0	European shrew (GB8-d 2012)
 GCA_027595995.1_mSorAra2.alt	European shrew (alternate hap 2023)
 GCF_027595985.1_mSorAra2.pri	European shrew (primary hap 2023)
@@ -235,7 +238,8 @@ GCA_921998555.2_129S1_SvImJ_v3	house mouse (129S1_SvImJ_v3 2022)
 GCA_001624295.1_AKR_J_v1	house mouse AKR_J
 GCA_001624215.1_A_J_v1	house mouse A_J
 GCA_001632525.1_BALB_cJ_v1	house mouse BALB_cJ
-GCA_001632575.1_C3H_HeJ_v1	house mouse C3H_HeJ
+GCA_001632575.1_C3H_HeJ_v1	house mouse (v1 C3H_HeJ 2016)
+GCA_921997125.2_C3H_HeJ_v3	house mouse (v3 C3H_HeJ 2022)
 GCF_000001635.27_GRCm39	house mouse C57BL/6J 2020 GRC
 GCA_001632555.1_C57BL_6NJ_v1	house mouse C57BL_6NJ
 GCA_001624445.1_CAST_EiJ_v1	house mouse CAST_EiJ
@@ -254,6 +258,7 @@ GCA_004026885.1_MegLyr_v1_BIUU	Indian false vampire
 GCF_902729225.1_Ma_sr-lr_union100	Indian flying fox
 GCA_004027635.1_CroInd_v1_BIUU	Indochinese shrew (US011 2019 Broad)
 GCA_004363435.1_PlaMin_v1_BIUU	Indus River dolphin
+GCA_031876335.1_mHipLar1.pri	intermediate roundleaf bat (primary hap 2023)
 GCA_004023805.1_PanOnc_v1_BIUU	jaguar (BS21 2019)
 GCF_028533385.1_Panthera_onca_HiC	jaguar (Sample0147 2023)
 GCF_014898765.1_PumYag	jaguarundi

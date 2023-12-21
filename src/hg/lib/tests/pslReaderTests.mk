@@ -9,6 +9,7 @@ OUT_DIR = output/pslReader
 DB=hg17
 TEST_TBL=pslReaderTest_${USER}
 
+.NOTPARALLEL:  # table is used by multiple tests
 
 test: fileTests tableTests
 

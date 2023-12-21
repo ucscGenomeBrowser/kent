@@ -284,6 +284,7 @@ for (i=0; i<fieldCount; i++)
     else
         {
         printFieldLabel(name);
+        printf("<td>%s</td></tr>\n", val);
         }
     printCount++;
     }

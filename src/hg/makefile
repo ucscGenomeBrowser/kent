@@ -23,17 +23,12 @@ ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
     ENCODE_FILES = encode3/encodeDataWarehouse
 endif
 
+# these should not be included in UTILS_APPLIST or parallel test runs will fail
+TEST_DIRS = lib
 
-TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
-            genePredSingleCover genePredHisto genePredToBed genePredToGtf \
-	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross \
-            mouseStuff mrnaToGene pslCDnaFilter pslDiff pslHisto \
-            pslPartition pslSelect pslStats pslToBed spideyToPsl \
-	    sqlToXml xmlToSql utils
+TEST_EXTRA = cgilib
 
-TEST_EXTRA = cgilib liftOver
-
-BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
+BROKEN_TEST_DIRS =  scaffoldFaToAgp
 
 BAD_DIRS = \
 	altGraph \

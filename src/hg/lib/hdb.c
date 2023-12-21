@@ -3706,7 +3706,7 @@ int rowOffset = 0;
 if (fields == NULL) fields = "*";
 if (hti == NULL)
     {
-    warn("table %s doesn't exist in %s database, or hFindTableInfoDb failed", rootTable, db);
+    warn("hExtendedRangeQuery: table %s doesn't exist in %s database, or hFindTableInfoWithConn failed", rootTable, db);
     }
 else
     {
