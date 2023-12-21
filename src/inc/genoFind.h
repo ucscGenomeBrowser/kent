@@ -1,5 +1,5 @@
 /* genoFind.h - Interface to modules for fast finding of sequence
- * matches. Compile with -DGFSERVER64 defined to get 64bit indexes.
+ * matches. Compile with -DGFSERVER_HUGE defined to get 64-bit indexes.
  */
 /* Copyright 2001-2002 Jim Kent.  All rights reserved. */
 
@@ -65,7 +65,7 @@ enum gfConstants {
     gfPepMaxTileUse = 30000,
 };
 
-#ifdef GFSERVER64
+#ifdef GFSERVER_HUGE
 typedef bits64 gfOffset;  /* offset/size of genome sequences */
 #define GFINDEX_BITS 64
 #define GFOFFSET_FMT "%lld"

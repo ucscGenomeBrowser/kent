@@ -1,6 +1,5 @@
 #!/bin/bash
 set -beEu -o pipefail
-set -x
 if [ $# != 7 ] ; then
     echo "wrong # args $0 gfServer port trans|untrans|prot test2bit testidx queryfa testName" >&2
     exit 1

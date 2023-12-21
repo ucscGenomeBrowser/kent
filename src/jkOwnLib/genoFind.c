@@ -131,7 +131,7 @@ if (gf != NULL)
 }
 
 /* constants for endList */
-#if GFSERVER64
+#if GFSERVER_HUGE
 #define ENDLIST_ENTRY_NUM_PARTS 3  // 48-bits endList entry parts
 #else
 #define ENDLIST_ENTRY_NUM_PARTS 5  // 80-bits endList entry parts
@@ -154,7 +154,7 @@ INLINE void endListSetEntryValues(struct genoFind *gf, int iRow, int iCol,
 {
 endListPart* entry = endListGetEntry(gf, iRow, iCol);
 entry[0] = tileTail;
-#if GFSERVER64
+#if GFSERVER_HUGE
 entry[1] = offset >> 32;
 entry[2] = (offset >> 16) & 0xffff;
 entry[3] = offset & 0xffff;
@@ -173,7 +173,7 @@ return entry[0];
 INLINE gfOffset endListEntryOffset(endListPart *entry)
 /* get endList genome offset */
 {
-#if GFSERVER64
+#if GFSERVER_HUGE
 return ((bits64)entry[1] << 32) | ((bits64)entry[2] << 16) | (bits64)entry[3];
 #else
 return (entry[1] << 16) | entry[2];
@@ -482,7 +482,7 @@ static void genoFindIndexInitHeader(struct genoFindIndex *gfIdx,
 zeroBytes(hdr, sizeof(struct genoFindIndexFileHdr));
 safecpy(hdr->magic, sizeof(hdr->magic), indexFileMagic);
 safecpy(hdr->version, sizeof(hdr->version), indexFileVerison);
-#ifdef GFSERVER64
+#ifdef GFSERVER_HUGE
 hdr->indexAddressSize = 64;
 #else
 hdr->indexAddressSize = 32;
@@ -499,7 +499,7 @@ if (!sameString(hdr->magic, indexFileMagic))
     errAbort("wrong magic string for index file");
 if (!sameString(hdr->version, indexFileVerison))
     errAbort("unsupported version for index file: %s", hdr->version);
-#ifdef GFSERVER64
+#ifdef GFSERVER_HUGE
 if (hdr->indexAddressSize != 64)
     errAbort("compiled for 64-bit index, but not a 64-bit index: %d", hdr->indexAddressSize);
 #else
@@ -796,7 +796,7 @@ return nibSize;
 static bits64 maxTotalBases()
 /* Return maximum bases we can index. */
 {
-#ifdef GFSERVER64
+#ifdef GFSERVER_HUGE
 return 18446744073709551615ULL; // 64-bit index
 #else
 return 4294967295ULL;    // 32-bit index

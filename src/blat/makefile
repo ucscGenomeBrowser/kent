@@ -4,12 +4,12 @@ include ../inc/common.mk
 
 all:
 	${MAKE} build
-	${MAKE} build IDXSIZE=64
+	${MAKE} build IDXSIZE=huge
 
-ifeq (${IDXSIZE},64)
-A = blat64
-CFLAGS += -DGFSERVER64
-preMyLibs += ../lib/$(MACHTYPE)/jkOwnLib64.a
+ifeq (${IDXSIZE},huge)
+A = blatHuge
+CFLAGS += -DGFSERVER_HUGE
+preMyLibs += ../lib/$(MACHTYPE)/jkOwnLibHuge.a
 else
 A = blat
 preMyLibs += ../lib/$(MACHTYPE)/jkOwnLib.a
@@ -19,7 +19,7 @@ build: ${DESTDIR}${BINDIR}/${A}${EXE}
 include $(kentSrc)/inc/userApp.mk
 L += -lm $(SOCKETLIB)
 
-blat64.c: blat.c
+blatHuge.c: blat.c
 	ln -sf $< $@
 
 tags:
@@ -30,8 +30,8 @@ test::
 
 clean::
 	${MAKE} clean_idxsize
-	${MAKE} clean_idxsize IDXSIZE=64
+	${MAKE} clean_idxsize IDXSIZE=huge
 	cd test && ${MAKE} clean
 
 clean_idxsize:
-	rm -fr ${O} blat64.c
+	rm -fr ${O} blatHuge.c

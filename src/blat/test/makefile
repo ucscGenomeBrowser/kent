@@ -46,27 +46,24 @@ tIntronMax:
 huge2bit = /hive/data/genomes/asmHubs/GCF/019/279/795/GCF_019279795.1/GCF_019279795.1.2bit
 hugeInputDir = ../../gfServer/tests/input
 
-hugeTests:
-	echo "Warning: hugeTests not completed" >&2
-	exit 1
-# tHugeUntrans tHugeTrans tHugeProt
+hugeTests: tHugeUntrans tHugeTrans tHugeProt
 
 tHugeUntrans:
 	@mkdir -p hugeUntrans/out
 	blat64 -verbose=0 ${huge2bit} ${hugeInputDir}/lungfish.rna.fa hugeUntrans/out/lungfish.rna.psl
 	pslCheck -verbose=0 hugeUntrans/out/lungfish.rna.psl
-	diff hugeUntrans/expected/lungfish.rna.psl hugeUntrans/out/lungfish.rna.psl
+	diff hugeUntrans/lungfish.rna.psl hugeUntrans/out/lungfish.rna.psl
 
 tHugeTrans:
 	@mkdir -p hugeTrans/out
 	blat64 -verbose=0 -t=dnax -q=rnax ${huge2bit} ${hugeInputDir}/lungfish.rna.fa hugeTrans/out/lungfish.rna.psl
 	pslCheck -verbose=0 hugeTrans/out/lungfish.rna.psl
-	diff hugeTrans/expected/lungfish.rna.psl hugeTrans/out/lungfish.rna.psl
+	diff hugeTrans/lungfish.rna.psl hugeTrans/out/lungfish.rna.psl
 
 tHugeProt:
 	@mkdir -p hugeProt/out
 	blat64 -verbose=0 -t=dnax -q=prot ${huge2bit} ${hugeInputDir}/lungfish.prot.fa hugeProt/out/lungfish.prot.psl
-	diff hugeProt/expected/lungfish.prot.psl hugeProt/out/lungfish.prot.psl
+	diff hugeProt/lungfish.prot.psl hugeProt/out/lungfish.prot.psl
 
 clean::
 	rm -rf */out/

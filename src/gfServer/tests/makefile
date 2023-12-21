@@ -2,19 +2,18 @@ kentSrc = ../..
 include $(kentSrc)/inc/common.mk
 
 # tests get assign different ports so they can run in parallel
-gfServer32 = gfServer
-gfServer64 = gfServer64
-ifeq (${IDXSIZE},64)
-gfServer = ${gfServer64}
+gfServerHuge = gfServerHuge
+ifeq (${IDXSIZE},huge)
+gfServer = ${gfServerHuge}
 portOffset = 1
 else
-gfServer = ${gfServer32}
+gfServer = gfServerHuge
 portOffset = 0
 endif
 
 test::
 	${MAKE} test_idxsize
-	${MAKE} test_idxsize IDXSIZE=64
+	${MAKE} test_idxsize IDXSIZE=huge
 	@echo "Note: to run tests on a 40 gbase genome run: make hugeTests" 
 
 # recursive target based on index size.  Indvidual rules can
@@ -86,21 +85,21 @@ hugeTestTransIdx = ${hugeTestDir}/${hugeAcc}.trans.gfidx
 hugeTests: testHugeUntrans testHugeTrans testHugeProt
 
 testHugeUntrans: mkdirs ${hugeTestUntransIdx}
-	./bin/runHugeTest ${gfServer64} 17790 untrans ${hugeTest2bit} ${hugeTestUntransIdx} input/lungfish.rna.fa $@
+	./bin/runHugeTest ${gfServerHuge} 17790 untrans ${hugeTest2bit} ${hugeTestUntransIdx} input/lungfish.rna.fa $@
 
 testHugeTrans: mkdirs ${hugeTestTransIdx}
-	./bin/runHugeTest ${gfServer64} 17791 trans ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.rna.fa $@
+	./bin/runHugeTest ${gfServerHuge} 17791 trans ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.rna.fa $@
 
 testHugeProt: mkdirs ${hugeTestTransIdx}
-	./bin/runHugeTest ${gfServer64} 17792 prot ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.prot.fa $@
+	./bin/runHugeTest ${gfServerHuge} 17792 prot ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.prot.fa $@
 
 
 # setup for huge tests
 ${hugeTestUntransIdx}: ${hugeTest2bit}
-	${gfServer64} index $@ $<
+	${gfServerHuge} index $@ $<
 
 ${hugeTestTransIdx}: ${hugeTest2bit}
-	${gfServer64} index -trans $@ $<
+	${gfServerHuge} index -trans $@ $<
 
 ${hugeTest2bit}: ${hugeSrc2bit}
 	@mkdir -p $(dir $@)
