@@ -81,12 +81,13 @@ binTest: mkout
 
 
 # testHarness
-testHarness: output/mainTest.o output/simpleTest.o testHarness.o
+testHarness: output/mainTest.o testHarness.o
 	${CC} -o testHarness testHarness.o output/mainTest.o ${MYLIBS} ${MYSQLLIBS} ${L}
 	./testHarness > output/testHarness.out
 	${DIFF} expected/testHarness.out output/testHarness.out
 
 output/mainTest.c: mainTest
+testHarness.o: mainTest
 
 # dbLinkTest:
 dbLinkTest:  output/newTest.o dbLinkTest.o
@@ -95,6 +96,7 @@ dbLinkTest:  output/newTest.o dbLinkTest.o
 	${DIFF} expected/dbLinkTest.out output/dbLinkTest.out
 
 output/newTest.c: newTest
+dbLinkTest.o: newTest
 
 # test of symbolic columns
 
@@ -125,6 +127,7 @@ jsonTest: output/doc.o output/doc2.o jsonTest.o
 
 output/doc.c: doc
 output/doc2.c: doc2
+jsonTest.o: doc doc2
 
 mkout:
 	@${MKDIR} output
