@@ -876,7 +876,7 @@ include hprcChain.ra alpha
 include hprcCoverage97.ra alpha
 
 # other HPRC experiments
-include hprcChainNet.ra alpha
+include hprcChainNet.ra alpha,beta
 
 # the hprcChainNet.ra replaces these two:
 # include hprcChains.ra alpha
