@@ -1,8 +1,8 @@
 track consHprc90way
 compositeTrack on
 shortLabel Multiple Alignment
-longLabel Multiple Alignment & Conservation on 90 human genome assemblies
-subGroup1 view Views align=Multiz_Alignment phyloP=Basewise_Conservation_(phyloP)
+longLabel Multiple Alignment on 90 human genome assemblies
+subGroup1 view Views align=Multiz_Alignment
 dragAndDrop subTracks
 visibility hide
 type bed 4
@@ -49,32 +49,3 @@ html hprc90way
         sGroup_Vietnam_Kinh GCA_018504055.1 GCA_018504085.1
         sGroup_Punjabo_Pakis GCA_018505835.1 GCA_018505845.1
         speciesLabels GCA_018466835.1="HG02257.pat" GCA_018466845.1="HG02257.mat" GCA_018466855.1="HG02559.pat" GCA_018466985.1="HG02559.mat" GCA_018467005.1="HG02486.pat" GCA_018467015.1="HG02486.mat" GCA_018467155.1="HG01891.mat" GCA_018467165.1="HG01891.pat" GCA_018469405.1="HG01258.mat" GCA_018469415.1="HG03516.pat" GCA_018469425.1="HG03516.mat" GCA_018469665.1="HG01123.mat" GCA_018469675.1="HG01258.pat" GCA_018469685.1="HG01361.mat" GCA_018469695.1="HG01123.pat" GCA_018469705.1="HG01361.pat" GCA_018469865.1="HG01358.mat" GCA_018469875.1="HG02622.mat" GCA_018469925.1="HG02622.pat" GCA_018469935.1="HG02717.mat" GCA_018469945.1="HG02630.pat" GCA_018469955.1="HG02630.mat" GCA_018469965.1="HG01358.pat" GCA_018470425.1="HG02717.pat" GCA_018470435.1="HG02572.pat" GCA_018470445.1="HG02572.mat" GCA_018470455.1="HG02886.mat" GCA_018470465.1="HG02886.pat" GCA_018471065.1="HG01175.pat" GCA_018471075.1="HG01106.pat" GCA_018471085.1="HG01175.mat" GCA_018471095.1="HG00741.mat" GCA_018471105.1="HG00741.pat" GCA_018471345.1="HG01106.mat" GCA_018471515.1="HG00438.mat" GCA_018471525.1="HG02148.pat" GCA_018471535.1="HG02148.mat" GCA_018471545.1="HG01952.mat" GCA_018471555.1="HG01952.pat" GCA_018472565.1="HG00673.mat" GCA_018472575.1="HG00621.pat" GCA_018472585.1="HG00673.pat" GCA_018472595.1="HG00438.pat" GCA_018472605.1="HG00621.mat" GCA_018472685.1="HG01071.mat" GCA_018472695.1="HG01928.mat" GCA_018472705.1="HG01928.pat" GCA_018472715.1="HG00735.pat" GCA_018472725.1="HG01071.pat" GCA_018472765.1="HG00735.mat" GCA_018472825.1="HG03579.mat" GCA_018472835.1="HG03579.pat" GCA_018472845.1="HG01978.pat" GCA_018472855.1="HG03453.mat" GCA_018472865.1="HG01978.mat" GCA_018473295.1="HG03540.mat" GCA_018473305.1="HG03453.pat" GCA_018473315.1="HG03540.pat" GCA_018503245.1="HG03486.pat" GCA_018503255.1="NA18906.mat" GCA_018503285.1="NA18906.pat" GCA_018503525.1="HG03486.mat" GCA_018503575.1="HG02818.pat" GCA_018503585.1="HG02818.mat" GCA_018504045.1="HG01243.pat" GCA_018504055.1="HG02080.pat" GCA_018504065.1="HG02723.mat" GCA_018504075.1="HG02723.pat" GCA_018504085.1="HG02080.mat" GCA_018504365.1="HG01109.mat" GCA_018504375.1="HG01243.mat" GCA_018504625.1="NA20129.pat" GCA_018504635.1="NA20129.mat" GCA_018504645.1="HG01109.pat" GCA_018504655.1="NA21309.mat" GCA_018504665.1="NA21309.pat" GCA_018505825.1="HG02109.mat" GCA_018505835.1="HG03492.pat" GCA_018505845.1="HG03492.mat" GCA_018505855.1="HG02055.pat" GCA_018505865.1="HG02109.pat" GCA_018506125.1="HG02055.mat" GCA_018506155.1="HG03098.pat" GCA_018506165.1="HG03098.mat" GCA_018506955.1="HG00733.pat" GCA_018506975.1="HG00733.mat" GCA_018852585.1="HG02145.mat" GCA_018852595.1="HG02145.pat" hs1="T2T-CHM13v2.0"
-
-    # PhyloP conservation
-    track consHprc90wayViewphyloP
-    shortLabel Basewise Conservation (phyloP)
-    view phyloP
-    visibility full
-    subTrack consHprc90way
-    viewLimits -20.0:11.936
-    viewLimitsMax -20:11.936
-
-        track phyloPHprc90way
-        subTrack consHprc90wayViewphyloP
-        subGroups view=phyloP
-        shortLabel phyloP
-        longLabel Basewise Conservation by PhyloP
-        configurable on
-        noInherit on
-        type bigWig -20 11.936
-        bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/phyloP447way/hg38.phyloP447way.bw
-        maxHeightPixels 100:50:11
-        viewLimits -4.5:7.5
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 60,60,140
-        altColor 140,60,60
-        priority 4
-#        logoMaf https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz447way/multiz447way.bigMaf
-
