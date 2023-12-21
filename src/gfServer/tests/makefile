@@ -15,7 +15,7 @@ endif
 test::
 	${MAKE} test_idxsize
 	${MAKE} test_idxsize IDXSIZE=64
-	@echo "Note: to run tests on a 40 gbase genome run: make big64Tests" 
+	@echo "Note: to run tests on a 40 gbase genome run: make hugeTests" 
 
 # recursive target based on index size.  Indvidual rules can
 # be run for debugging

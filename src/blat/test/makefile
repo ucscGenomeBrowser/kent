@@ -7,6 +7,7 @@ endif
 test::
 	${MAKE} test_idxsize
 	${MAKE} test_idxsize IDXSIZE=64
+	@echo "Note: to run tests on a 40 gbase genome run: make hugeTests" 
 
 test_idxsize: tBasic tThrowback tIntronMax
 
@@ -42,5 +43,30 @@ tIntronMax:
 	diff intron50k/expected/test3.psl intron50k/out/test3.psl
 	rm -rf intron50k/out
 
+huge2bit = /hive/data/genomes/asmHubs/GCF/019/279/795/GCF_019279795.1/GCF_019279795.1.2bit
+hugeInputDir = ../../gfServer/tests/input
+
+hugeTests:
+	echo "Warning: hugeTests not completed" >&2
+	exit 1
+# tHugeUntrans tHugeTrans tHugeProt
+
+tHugeUntrans:
+	@mkdir -p hugeUntrans/out
+	blat64 -verbose=0 ${huge2bit} ${hugeInputDir}/lungfish.rna.fa hugeUntrans/out/lungfish.rna.psl
+	pslCheck -verbose=0 hugeUntrans/out/lungfish.rna.psl
+	diff hugeUntrans/expected/lungfish.rna.psl hugeUntrans/out/lungfish.rna.psl
+
+tHugeTrans:
+	@mkdir -p hugeTrans/out
+	blat64 -verbose=0 -t=dnax -q=rnax ${huge2bit} ${hugeInputDir}/lungfish.rna.fa hugeTrans/out/lungfish.rna.psl
+	pslCheck -verbose=0 hugeTrans/out/lungfish.rna.psl
+	diff hugeTrans/expected/lungfish.rna.psl hugeTrans/out/lungfish.rna.psl
+
+tHugeProt:
+	@mkdir -p hugeProt/out
+	blat64 -verbose=0 -t=dnax -q=prot ${huge2bit} ${hugeInputDir}/lungfish.prot.fa hugeProt/out/lungfish.prot.psl
+	diff hugeProt/expected/lungfish.prot.psl hugeProt/out/lungfish.prot.psl
+
 clean::
-	@echo nothing to clean in blat/test/
+	rm -rf */out/
