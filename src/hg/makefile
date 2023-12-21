@@ -307,6 +307,11 @@ clean::	${TEST_DIRS:%=%.clean} ${TEST_EXTRA:%=%.cleanExtra}
 %.cleanExtra:
 	@test -s $*/makefile && (cd $* && ${MAKE} clean) || true
 
+
+# tests tests all use test.chromInfo
+.NOTPARALLEL: checkTableCoords.testAll checkTableCoords.test vcfToHgvs.testAll vcfToHgvs.test
+
+
 testAll: $(APPS:%=%.testAll)
 
 %.testAll:

@@ -5,6 +5,8 @@ include ../../../inc/common.mk
 # this can not be run in parallel due to each test removing and reusing output directories
 .NOTPARALLEL:
 
+.NOTPARALLEL:  # files names are reused by tests
+
 test: test1 test2
 
 test1: outputDir

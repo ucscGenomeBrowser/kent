@@ -109,8 +109,8 @@ symTest: mkout
 
 output/symTest.c: symTest
 
-symColsTest: testSymCols.o output/symTest.o
-	${CC} -o testSymCols testSymCols.o output/symTest.o ${MYLIBS} ${MYSQLLIBS} ${L}
+symColsTest: output/symTest.o
+	${CC} ${ALL_CC_OPTS} -o testSymCols testSymCols.c output/symTest.o ${MYLIBS} ${MYSQLLIBS} ${L}
 	./testSymCols
 	${DIFF} expected/symColsTest.tab output/symColsTest.tab
 	${DIFF} expected/symColsTest.tab output/symColsTestComma.tab
@@ -120,8 +120,8 @@ symColsTest: testSymCols.o output/symTest.o
 testSymCols.o: output/symTest.c
 
 # test of JSON output
-jsonTest: output/doc.o output/doc2.o jsonTest.o
-	${CC} -o jsonTest jsonTest.o output/doc.o output/doc2.o ${MYLIBS} ${MYSQLLIBS} ${L}
+jsonTest: output/doc.o output/doc2.o
+	${CC} ${ALL_CC_OPTS} -o jsonTest jsonTest.c output/doc.o output/doc2.o ${MYLIBS} ${MYSQLLIBS} ${L}
 	./jsonTest >& output/jsonTest.out
 	${DIFF} expected/jsonTest.out output/jsonTest.out
 

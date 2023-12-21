@@ -39,7 +39,7 @@ mkdirs:
 clean:
 	rm -fr output
 	rm -f *.tab
-	${hgsql} test -e 'drop table chromInfo;' > /dev/null 2>&1; true
+	${hgsql} test -e 'drop table if exists chromInfo;'
 
 
 # angie I removed -verbose=2 from the Bad test because it is unstable.
