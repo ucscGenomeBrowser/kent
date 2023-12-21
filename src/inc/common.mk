@@ -532,8 +532,10 @@ PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
 CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
 ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 
+
+CC_PROG_OPTS = ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC}
 %.o: %.c
-	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+	${CC} ${CC_PROG_OPTS}  -o $@ -c $<
 
 # autodetect UCSC installation of node.js:
 ifeq (${NODEBIN},)
