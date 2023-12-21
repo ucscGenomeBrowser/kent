@@ -1,4 +1,5 @@
 #!/bin/bash
+set -beEu -o pipefail
 if [ $# != 2 ] ; then
     echo "wrong # args $0 gfServer port" >&2
     exit 1

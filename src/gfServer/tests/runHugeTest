@@ -1,0 +1,41 @@
+#!/bin/bash
+set -beEu -o pipefail
+set -x
+if [ $# != 7 ] ; then
+    echo "wrong # args $0 gfServer port trans|untrans|prot test2bit testidx queryfa testName" >&2
+    exit 1
+fi
+gfServer=$1
+port=$2
+mode=$3
+test2bit=$4
+testidx=$5
+queryfa=$6
+testName=$7
+
+case "$mode" in
+    untrans)
+        transOpt=""
+        queryOpt="query"
+        clientOpts="-t=dna -q=rna";;
+    trans)
+        transOpt="-trans"
+        queryOpt="transQuery"
+        clientOpts="-t=dnax -q=rnax";;
+    prot)
+        transOpt="-trans"
+        queryOpt="protQuery"
+        clientOpts="-t=dnax -q=prot";;
+    *)
+        echo "Invalid mode '${mode}'" >&2
+        exit 1
+esac
+
+
+$gfServer start ${transOpt} localhost ${port} -canStop -indexFile=${testidx} ${test2bit} > /dev/null 2>&1 &
+sleep 1
+$gfServer ${queryOpt} localhost ${port} ${queryfa} > output/${testName}.out
+gfClient -nohead ${clientOpts} localhost ${port} $(dirname ${test2bit}) ${queryfa} output/${testName}.psl
+$gfServer stop localhost ${port} > /dev/null
+diff -u expected/$testName.out output/$testName.out
+diff -u expected/$testName.psl output/$testName.psl

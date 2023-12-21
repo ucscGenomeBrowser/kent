@@ -2,22 +2,20 @@ kentSrc = ../..
 include $(kentSrc)/inc/common.mk
 
 # tests get assign different ports so they can run in parallel
+gfServer32 = gfServer
+gfServer64 = gfServer64
 ifeq (${IDXSIZE},64)
-gfServer = gfServer64
+gfServer = ${gfServer64}
 portOffset = 1
 else
-gfServer = gfServer
+gfServer = ${gfServer32}
 portOffset = 0
 endif
 
 test::
 	${MAKE} test_idxsize
 	${MAKE} test_idxsize IDXSIZE=64
-
-# expensive test only run manually for now once indexs are deployed on hgwdev,
-# this could be part of the standard run
-testbig64::
-	${MAKE} big64_tests IDXSIZE=64
+	@echo "Note: to run tests on a 40 gbase genome run: make big64Tests" 
 
 # recursive target based on index size.  Indvidual rules can
 # be run for debugging
@@ -68,11 +66,45 @@ dynServerWithDirTest: mkdirs
 dynServerPerSeqMaxTest: mkdirs
 	./testDynServerPerSeqMax ${gfServer}
 
+##
+# tests using a huge genome requring 64-bit offsets
+##
+hugeAcc = GCF_019279795.1
+hugeRelDir = GCF/019/279/795/${hugeAcc}
+hugeSrcRoot = /hive/data/genomes/asmHubs
+hugeSrcDir = ${hugeSrcRoot}/${hugeRelDir}
+hugeSrc2bit = ${hugeSrcDir}/${hugeAcc}.2bit
 
-##
-# tests using a huge genome 64 bit
-##
-big64_tests: build
+hugeTestDir = output/huge/${hugeRelDir}
+hugeTest2bit = ${hugeTestDir}/${hugeAcc}.2bit
+hugeTestUntransIdx = ${hugeTestDir}/${hugeAcc}.untrans.gfidx
+hugeTestTransIdx = ${hugeTestDir}/${hugeAcc}.trans.gfidx
+
+# expensive test only run manually for now once indexs are deployed on hgwdev,
+# this could be part of the standard run
+
+hugeTests: testHugeUntrans testHugeTrans testHugeProt
+
+testHugeUntrans: mkdirs ${hugeTestUntransIdx}
+	./runHugeTest ${gfServer64} 17790 untrans ${hugeTest2bit} ${hugeTestUntransIdx} input/lungfish.rna.fa $@
+
+testHugeTrans: mkdirs ${hugeTestTransIdx}
+	./runHugeTest ${gfServer64} 17791 trans ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.rna.fa $@
+
+testHugeProt: mkdirs ${hugeTestTransIdx}
+	./runHugeTest ${gfServer64} 17792 prot ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.prot.fa $@
+
+
+# setup for huge tests
+${hugeTestUntransIdx}: ${hugeTest2bit}
+	${gfServer64} index $@ $<
+
+${hugeTestTransIdx}: ${hugeTest2bit}
+	${gfServer64} index -trans $@ $<
+
+${hugeTest2bit}: ${hugeSrc2bit}
+	@mkdir -p $(dir $@)
+	ln -sf $< $@
 
 mkdirs:
 	${MKDIR} output

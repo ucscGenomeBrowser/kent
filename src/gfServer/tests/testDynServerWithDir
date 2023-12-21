@@ -1,6 +1,11 @@
 #!/bin/bash -e
-gfServer=${1:-gfServer}   # first arg is optional name of gfServer program
+set -beEu -o pipefail
+if [ $# != 1 ] ; then
+    echo "wrong # args $0 gfServer" >&2
+    exit 1
+fi
 testName=$(basename $0)
+gfServer=$1
 
 # build index
 gfRootDir=output/${testName}_root

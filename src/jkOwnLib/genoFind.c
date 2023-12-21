@@ -24,6 +24,9 @@
 static char indexFileMagic[] = "genoFind";
 static char indexFileVerison[] = "1.0";
 
+#undef DEBUG_CLUMP
+#undef DEBUG_HITS
+
 #ifdef DEBUG_CLUMP
 static void dumpClump(struct gfClump *clump, FILE *f)
 /* Print out a clump */
@@ -38,9 +41,11 @@ fprintf(f, GFOFFSET_FMT "-" GFOFFSET_FMT "\t%s:" GFOFFSET_FMT "-" GFOFFSET_FMT "
 static void dumpClumpList(struct gfClump *clumpList, FILE *f)
 /* Dump list of clumps. */
 {
+fprintf(f, "=== Clumps\n");
 struct gfClump *clump;
 for (clump = clumpList; clump != NULL; clump = clump->next)
     dumpClump(clump, f);
+fflush(f);
 }
 #endif /* DEBUG_CLUMP */
 
@@ -48,9 +53,11 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
 static void dumpHits(struct gfHit *hits, FILE *f)
 /* Dump list of hits. */
 {
+fprintf(f, "=== Hits\n");
 for (struct gfHit *hit = hits; hit != NULL; hit = hit->next)
     fprintf(f, GFOFFSET_FMT " " GFOFFSET_FMT " "  GFOFFSET_FMT "\n",
             hit->qStart, hit->tStart, hit->diagonal);
+fflush(f);
 }
 #endif /*  DEBUG_HITS */
 
@@ -1723,7 +1730,7 @@ static void findClumpBounds(struct gfClump *clump, int tileSize)
 /* Figure out qStart/qEnd tStart/tEnd from hitList */
 {
 struct gfHit *hit;
-int x;
+gfOffset x;
 hit = clump->hitList;
 if (hit == NULL)
     return;
@@ -1883,6 +1890,9 @@ gfOffset boundary = bucketSize - nearEnough;
 int i;
 struct gfHit **buckets = NULL, **pb;
 
+#ifdef DEBUG_HITS
+dumpHits(hitList, stdout);
+#endif
 /* Sort hit list into buckets. */
 AllocArray(buckets, bucketCount);
 for (hit = hitList; hit != NULL; hit = nextHit)
@@ -1944,7 +1954,7 @@ gfClumpComputeQueryCoverage(clumpList, tileSize);	/* Thanks AG */
 slSort(&clumpList, gfClumpCmpQueryCoverage);
 
 #ifdef DEBUG_CLUMP
-dumpClumpList(clumpList, stderr);
+dumpClumpList(clumpList, stdout);
 #endif /* DEBUG */
 freez(&buckets);
 return clumpList;

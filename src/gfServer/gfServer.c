@@ -366,6 +366,7 @@ if (clumpList == NULL)
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     struct gfSeqSource *ss = clump->target;
+    assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
     sprintf(buf, GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%d", 
 	clump->qStart, clump->qEnd, ss->fileName,
 	clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
@@ -414,6 +415,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	int limit = maxTransHits;
 	for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	    {
+            assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
 	    struct gfSeqSource *ss = clump->target;
 	    sprintf(buf, GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%d\t%c\t%d", 
 		clump->qStart, clump->qEnd, ss->fileName,
@@ -469,6 +471,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	    int limit = maxTransHits;
 	    for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 		{
+                assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
 		struct gfSeqSource *ss = clump->target;
 		sprintf(buf, GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%d\t%c\t%d\t%d", 
 		    clump->qStart, clump->qEnd, ss->fileName,
@@ -509,6 +512,7 @@ char buf[256];
 clumpList = gfPcrClumps(gf, fPrimer, fPrimerSize, rPrimer, rPrimerSize, 0, maxDistance);
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
+    assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
     struct gfSeqSource *ss = clump->target;
     safef(buf, sizeof(buf), "%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t+", ss->fileName, 
         clump->tStart, clump->tEnd);
@@ -521,6 +525,7 @@ clumpList = gfPcrClumps(gf, rPrimer, rPrimerSize, fPrimer, fPrimerSize, 0, maxDi
 
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
+    assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
     struct gfSeqSource *ss = clump->target;
     safef(buf, sizeof(buf), "%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t-", ss->fileName, 
         clump->tStart, clump->tEnd);
