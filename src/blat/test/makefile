@@ -26,7 +26,7 @@ tBasic:
 
 
 tThrowback:
-	@mkdir -p output/v29skips
+	@mkdir -p output/v29skips output/throwback
 	${blat} -verbose=0 throwback/target1.fa throwback/query1.fa output/throwback/test.psl
 	pslCheck -verbose=0 output/throwback/test.psl
 	diff throwback/test.psl output/throwback/test.psl
