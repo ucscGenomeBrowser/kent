@@ -23,19 +23,22 @@ mkdirs:
 	@${MKDIR} output ${BIN_DIR}
 
 loaders:
-	rm -f loader
-	ln -s ${CGI_BIN}/loader .
+	ln -sf ${CGI_BIN}/loader .
 
-spDbTest: spDbTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/spDbTest spDbTest.o ${MYLIBS} $L
+spDbTest: ${BIN_DIR}/spDbTest mkdirs
 	${BIN_DIR}/spDbTest sp121210 Q9FFH7 > output/spDbTest
 	${BIN_DIR}/spDbTest sp121210 P29312 >> output/spDbTest
 	diff expected/spDbTest output/spDbTest
 
-hdbTest: hdbTest.o ${MYLIBS} mkdirs
-	${CC} ${COPT} -o ${BIN_DIR}/hdbTest hdbTest.o ${MYLIBS} $L
+${BIN_DIR}/spDbTest: spDbTest.c ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/spDbTest spDbTest.c ${MYLIBS} $L
+
+hdbTest: ${BIN_DIR}/hdbTest mkdirs
 	${BIN_DIR}/hdbTest > output/hdbTest
 	diff expected/hdbTest output/hdbTest
+
+${BIN_DIR}/hdbTest: hdbTest.c ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/hdbTest hdbTest.c ${MYLIBS} $L
 
 genePredTest: ${BIN_DIR}/genePredTester mkdirs
 	${MAKE} -f genePredTests.mk test
@@ -48,7 +51,6 @@ pslReaderTest: ${BIN_DIR}/pslReaderTester mkdirs
 
 customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 	${MAKE} -f customTrackTests.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
-	rm -f loader
 
 hgvsTest: ${BIN_DIR}/hgvsTester mkdirs
 	${MAKE} -f hgvsTests.mk test
