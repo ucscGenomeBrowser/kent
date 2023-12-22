@@ -267,8 +267,8 @@ void pslRecalcBounds(struct psl *psl);
 /* Calculate qStart/qEnd tStart/tEnd at top level to be consistent
  * with blocks. */
 
-void pslRecalcBaseCounts(struct psl *psl);
-/* Update match/mismatch base counts in PSL, assuming everything is a match */
+void pslRecalcMatchCounts(struct psl *psl);
+/* Update the match/mismatch counts in PSL, assuming everything is a match. */
 
 int pslCheck(char *pslDesc, FILE* out, struct psl* psl);
 /* Validate a PSL for consistency.  pslDesc is printed the error messages
