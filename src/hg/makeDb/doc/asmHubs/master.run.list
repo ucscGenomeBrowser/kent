@@ -1557,6 +1557,7 @@
 ./runBuild GCF_000010085.1_ASM1008v1 bacteria Sodalis_glossinidius_str._morsitans
 ./runBuild GCF_000011425.1_ASM1142v1 fungi Aspergillus_nidulans_FGSC_A4
 ./runBuild GCF_000012525.1_ASM1252v1 bacteria Synechococcus_elongatus_PCC_7942__FACHB-805
+./runBuild GCF_000013145.1_ASM1314v1 bacteria Ehrlichia_chaffeensis
 ./runBuild GCF_000018145.1_ASM1814v1 bacteria Dinoroseobacter_shibae_DFL_12__DSM_16493
 ./runBuild GCF_000020025.1_ASM2002v1 bacteria Nostoc_punctiforme_PCC_73102
 ./runBuild GCF_000021325.1_ASM2132v1 bacteria Gluconacetobacter_diazotrophicus_PA1_5
