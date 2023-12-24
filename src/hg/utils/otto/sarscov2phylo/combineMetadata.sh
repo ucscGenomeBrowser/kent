@@ -69,7 +69,7 @@ else
 fi
 wc -l gbToLineage
 if [ -e $ncbiDir/nextclade.full.tsv.gz ]; then
-    zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,2 | sed -re 's/"//g;' | sort -u > gbToNextclade
+    zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,7 | sed -re 's/"//g;' | sort -u > gbToNextclade
 else
     touch gbToNextclade
 fi
@@ -83,7 +83,7 @@ join -t$'\t' -a 1 gb.metadata gbToNextclade \
     >> gisaidAndPublic.$today.metadata.tsv
 # COG-UK metadata:
 if [ -e $cogUkDir/nextclade.full.tsv.gz ]; then
-    zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,2 | sed -re 's/"//g' | sort -u > cogUkToNextclade
+    zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,7 | sed -re 's/"//g' | sort -u > cogUkToNextclade
 else
     touch cogUkToNextclade
 fi
