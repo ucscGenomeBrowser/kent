@@ -74,13 +74,6 @@ time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample_report.jsonl \
 $scriptDir/gbMetadataAddBioSample.pl gb.bioSample.tab ncbi_dataset.tsv \
     > ncbi_dataset.plusBioSample.tsv 2>gbMetadataAddBioSample.log
 
-# Manually patch some GB-to-BioSample associations that somehow got mangled at ENA, until
-# they fix them and the fix percolates through to NCBI...
-grep -vFwf <(cut -f 1 $ottoDir/ncbi.2022-06-25/gbToBioSample.changes.tsv) \
-    ncbi_dataset.plusBioSample.tsv > tmp
-sort tmp $ottoDir/ncbi.2022-06-25/gbToBioSample.patch.tsv > ncbi_dataset.plusBioSample.tsv
-rm tmp
-
 # Make a file for joining collection date with ID:
 tawk '$3 != "" {print $1, $3;}' ncbi_dataset.plusBioSample.tsv \
 | sort > gbToDate
