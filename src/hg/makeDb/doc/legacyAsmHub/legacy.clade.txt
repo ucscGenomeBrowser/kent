@@ -156,12 +156,16 @@ GCA_017976375.1_bCucCan1.pri	birds
 GCA_017976425.1_fToxJac2.pri	fish
 GCA_018139145.1_ASM1813914v1	birds
 GCA_018296145.1_Otsh_v2.0	fish
+GCA_018852605.1_HG002.alt.pat.f1_v2 	primates
+GCA_018852615.1_HG002.pri.mat.f1_v2	primates
 GCA_019393635.1_mDroGli1.pri	mammals
 GCA_020740725.1_bCorHaw1.pri.cur	birds
 GCA_020740795.1_bApuApu2.pri.cur	birds
 GCA_020745735.1_sHemOce1.pat.X.cur.	vertebrate
 GCA_020826845.1_mDicBic1.mat.cur	mammals
 GCA_021462225.2_DD_fGirMul_XY1	fish
+GCA_021950905.1_HG002.pat.cur.20211005	primates
+GCA_021951015.1_HG002.mat.cur.20211005	primates
 GCA_023343835.1_bLagMut1_primary	birds
 GCA_023634085.1_bFalChe1.pri	birds
 GCA_023634155.1_bFalPer1.pri	birds
@@ -234,6 +238,7 @@ GCA_950295315.1_mEriEur2.1	mammals
 GCA_958295425.1_fSolSol10.1	fish
 GCA_963082965.1_fCarCar2.1	fish
 GCA_963259705.1_mMyoDau2.1	mammals
+GCA_963514075.1_fConCon1.1	fish
 GCF_000001405.39_GRCh38.p13	primates
 GCF_000001405.40_GRCh38.p14	primates
 GCF_000001635.26_GRCm38.p6	mammals
