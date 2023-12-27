@@ -39,6 +39,13 @@ beta:: compile
 	rm -f ${CGI_BIN}-beta/loader/$A
 	mv $A${EXE} ${CGI_BIN}-beta/loader/$A
 
+install::
+	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
+	    ${MKDIR} "${DESTDIR}${CGI_BIN}"; \
+	fi
+	rm -f ${DESTDIR}${CGI_BIN}/$A
+	mv $A${EXE} ${DESTDIR}${CGI_BIN}/$A
+
 test::
 	(cd tests && ${MAKE} test) 2> /dev/null
 
