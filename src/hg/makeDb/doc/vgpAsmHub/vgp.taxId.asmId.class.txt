@@ -270,6 +270,7 @@
 143292	GCA_030020945.1_mManPen7.hap2	mammals
 29137	GCA_030020955.1_mDugDug1.hap2	mammals
 575201	GCA_030028035.1_mHipAmp2.hap1	mammals
+1983395	GCA_030028105.1_sMobBir1.hap1	sharks
 29137	GCA_030035585.1_mDugDug1.hap1	mammals
 261503	GCA_030035675.1_rRhiFlo1.hap2	reptiles
 1983395	GCA_030028105.1_sMobBir1.hap1	sharks
@@ -559,6 +560,7 @@
 51337	GCF_020740685.1_mJacJac1.mat.Y.cur	mammals
 134902	GCF_020740725.1_bCorHaw1.pri.cur	birds
 8895	GCF_020740795.1_bApuApu2.pri.cur	birds
+170820	GCF_020745735.1_sHemOce1.pat.X.cur.	sharks
 77932	GCF_020826845.1_mDicBic1.mat.cur	mammals
 208333	GCF_021462225.1_DD_fGirMul_XY1	fish
 64668	GCF_023343835.1_bLagMut1_primary	birds
@@ -590,6 +592,7 @@
 460621	GCF_029931775.1_rEulEur1.hap1	reptiles
 143292	GCF_030020395.1_mManPen7.hap1	mammals
 575201	GCF_030028045.1_mHipAmp2.hap2	mammals
+9978	GCF_030435755.1_mOchPri1.hap1	mammals
 9666	GCF_030435805.1_mMusLut2.pri	mammals
 9361	GCF_030445035.1_mDasNov1.hap2	mammals
 48891	GCF_030490865.1_bPoeAtr1.hap1	birds
@@ -650,3 +653,4 @@
 90069	GCF_958295425.1_fSolSol10.1	fish
 217509	GCF_963082965.1_fCarCar2.1	fish
 98922	GCF_963259705.1_mMyoDau2.1	mammals
+82655	GCF_963514075.1_fConCon1.1	fish

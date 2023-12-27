@@ -4,6 +4,7 @@ GCA_030020305.1_mLoxAfr1.hap1	African savanna elephant (hap1 mLoxAfr1 2023)
 GCA_030867065.1_rAllMis1	American alligator (2023 genbank)
 GCF_030867095.1_rAllMis1	American alligator (2023 refseq)
 GCA_009819775.1_bPhoRub2.pri	American flamingo
+GCF_030435755.1_mOchPri1.hap1	American pika (hap1 2023)
 GCF_018492685.1_fAloSap1.pri	American shad
 GCA_003957555.2_bCalAnn1_v1.p	Anna's hummingbird
 GCA_951216825.1_fEleAnt2.1	Antarctic lanternfish (primary hap 2023)
@@ -75,7 +76,7 @@ GCA_027917425.1_aGasCar1.pri	eastern narrow-mouthed toad (primary haplotype 2023
 GCF_014176215.1_mRouAeg1.p	Egyptian rousette (2020)
 GCF_013358815.1_fEleEle1.pri	electric eel
 GCA_016128335.2_ZJU2.0	emu (v2 ZJU1.0 2023)
-GCA_020745735.1_sHemOce1.pat.X.cur.	epaulette shark (sHemOce1 2021)
+GCF_020745735.1_sHemOce1.pat.X.cur.	epaulette shark (sHemOce1 2021 refseq)
 GCF_009829155.1_mMusErm1.Pri	ermine (2020)
 GCA_922990625.1_mMelMel3.1_maternal_haplotype_uncurated	Eurasian badger (2021)
 GCA_949152265.1_fPhoPho1.1	Eurasian minnow (primary hap 2023)
@@ -86,6 +87,7 @@ GCF_902655055.1_mLutLut1.2	Eurasian river otter (2020)
 GCF_903992535.2_mArvAmp1.2	Eurasian water vole (v2 2021)
 GCA_949319135.1_fSquCep2.1	European chub (primary hap 2023)
 GCF_905171775.1_aRanTem1.1	European common frog
+GCF_963514075.1_fConCon1.1	European conger
 GCF_013347855.1_fAngAng1.pri	European eel
 GCA_949316205.1_fPlaFle2.1	European flounder (primary hap 2023)
 GCA_017639485.1_bPluApr1.pri	European golden plover
@@ -107,7 +109,7 @@ GCF_902459505.1_aGeoSer1.1	Gabon caecilian
 GCA_902459505.2_aGeoSer1.2	Gaboon caecilian (v1.2 2021 genbank)
 GCA_014839755.1_bSylBor1.pri	garden warbler
 GCA_030020385.1_rGavGan2.hap1	Gharial (hap1 2023)
-GCA_030028105.1_sMobBir1.hap1	giant manta (hap0 2023)
+GCA_030028105.1_sMobBir1.hap1	giant manta (hap1 2023)
 GCA_900880675.2_fSpaAur1.2	gilthead seabream (v2 2021)
 GCF_900496995.4_bAquChr1.4	golden eagle (2021)
 GCF_903995435.1_mAcoRus1.1	golden spiny mouse (2020)
