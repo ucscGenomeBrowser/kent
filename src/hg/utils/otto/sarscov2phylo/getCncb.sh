@@ -87,6 +87,7 @@ for acc in $(cat missingGenBaseIds); do
 done > new.accs.fa
 
 cat <(xzcat ../cncb.latest/cncb.nonGenBank.acc.fasta.xz) new.accs.fa \
+| faUniqify stdin stdout \
 | xz -T 20 > cncb.nonGenBank.acc.fasta.new.xz
 mv cncb.nonGenBank.acc.fasta.new.xz cncb.nonGenBank.acc.fasta.xz
 
@@ -104,7 +105,7 @@ if [ -s new.accs.fa ]; then
         --input-dataset $nDataDir \
         --output-fasta nextalign.new.fa.xz \
         --output-tsv nextclade.new.full.tsv.gz  >& nextclade.log
-    zcat nextclade.new.full.tsv.gz | cut -f 1,2 | tail -n+2 >> nextclade.tsv
+    zcat nextclade.new.full.tsv.gz | cut -f 1,7 | tail -n+2 >> nextclade.tsv
     sort -u nextclade.tsv > tmp
     mv tmp nextclade.tsv
     cat nextclade.new.full.tsv.gz >> nextclade.full.tsv.gz

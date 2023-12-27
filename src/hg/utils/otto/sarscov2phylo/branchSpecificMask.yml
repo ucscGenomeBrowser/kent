@@ -108,7 +108,10 @@ BA.2.86:
     # @aviczhl2 pointed out some recurring reversions:
     # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1072
     representative: OY747147.1
-    sites: [ 21610 ]
+    ranges: [ [ 21765, 21770 ] ]  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606
+    sites: [ 21610,
+             21302, 21304, 21305, # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1190
+           ]
     reversions: [ T21711C, C22032T, A22033C, G22034A, A23012G, G26610A ]
 
 BA.4:
@@ -178,9 +181,11 @@ XBB.1.5:
 
 XBC:
     # Inherits nothing!  Should find out its deletions.
+    # Deletion 22289-22294 pointed out in #2405.
     # Cornelius Roemer requested to mask several reversions in
     # https://github.com/cov-lineages/pango-designation/issues/1100#issuecomment-1426502678
     representative: Philippines/PH-VUI-142736/2022
+    ranges: [ [ 22289, 22294 ] ]
     reversions: [ G5584A, T13019C, T22329C, T25000C, C27718T, T28271A ]
 
 XCK:

@@ -98,6 +98,18 @@ if [ -s cncb.removed.acc ]; then
     grep -Fwf cncb.removed.acc prevIdToName | cut -f 2 >> prevNameToRemove
 fi
 
+# If a sequence is in both INSDC and COG-UK, keep the INSDC and remove the COG-UK as dup.
+set +o pipefail
+cut -f 6 $ncbiDir/ncbi_dataset.plusBioSample.tsv \
+| grep ^COG-UK/ \
+| sed -re 's@COG-UK/@@' \
+| grep -Fwf - prevNames \
+| grep -vE '\|[A-Z]{2}[0-9]{6}\.[0-9]+\|' \
+| grep -vE '\|EPI_ISL_[0-9]+\|' \
+| cat \
+    >> prevNameToRemove
+set -o pipefail
+
 # Remove duplicates and withdrawn sequences
 if [ -s prevNameToRemove ]; then
     rm -f prevDedup.pb
@@ -114,7 +126,7 @@ function gbAccCogRenaming {
     # pipeline: one INSDC accession per line of stdin, acc to full name if COG-UK on stdout
     grep -Fwf - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
     | grep COG-UK/ \
-    | tawk '{ if ($4 != "") { print $1, $4 "/" $6 "/" $3 "|" $1 "|" $3; } else { if ($3 != "") { print $1, $6  "/" $3 "|" $1 "|" $3; } else { print $1, $6 "|?"; } } }' \
+    | tawk '{ if ($4 != "") { print $1, $4 "/" $6 "/" $3 "|" $1 "|" $3; } else { if ($3 != "") { print $1, $6  "/" $3 "|" $1 "|" $3; } else { print $1, $6 "|" $1 "|?"; } } }' \
     | sed -re 's@COG-UK/@@g; s/United Kingdom://; s/(\/[0-9]{4})(-[0-9]+)*/\1/; s/ //g;'
 }
 
@@ -206,11 +218,16 @@ zcat $cncbDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
 | join -t$'\t' <(cut -f 2,10 $cncbDir/cncb.metadata.tsv | sort) - \
 | $scriptDir/findRefBackfill.pl > cncb.refBackfill
 cut -f 1 *.refBackfill > refBackfill.ids
+curl -sS $lineageProposalsRecombinants  | tail -n+2 | cut -f 1 \
+| sed -re 's@(England|Northern[ _]?Ireland|Scotland|Wales)/([A-Z0-9_-]+).*@\2@;
+           s/.*(EPI_ISL_[0-9]+|[A-Z]{2}[0-9]+{6}(\.[0-9]+)?).*/\1/;' \
+    > tmp
+grep -Fwf tmp $epiToPublic | cut -f 2 | grep -E '^[A-Z]{2}[0-9]{6}' > tmp2
+sort -u tmp tmp2 > lpRecombinantIds
+rm tmp tmp2
 sort -u ../tooManyEpps.ids ../badBranchSeed.ids dropoutContam.ids refBackfill.ids \
 | grep -vFwf <(tail -n+2 $scriptDir/includeRecombinants.tsv | cut -f 1) \
-| grep -vFwf <(curl -sS $lineageProposalsRecombinants  | tail -n+2 | cut -f 1 \
-               | sed -re 's/.*(EPI_ISL_[0-9]+|[A-Z]{2}[0-9]+{6}(\.[0-9]+)?).*/\1/;
-                          s@(England|Northern[ _]?Ireland|Scotland|Wales)/([A-Z0-9_-]+).*@\2@;') \
+| grep -vFwf lpRecombinantIds \
     > exclude.ids
 
 # Get new GenBank sequences with at least $minReal non-N bases.

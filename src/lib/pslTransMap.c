@@ -60,7 +60,7 @@ static void setPslBoundsCounts(struct psl* psl)
 {
 pslComputeInsertCounts(psl);
 pslRecalcBounds(psl);
-pslRecalcBaseCounts(psl);
+pslRecalcMatchCounts(psl);
 }
 
 static unsigned int roundUpToMultipleOf3(unsigned n) {
