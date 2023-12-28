@@ -81,7 +81,7 @@
 100784	GCA_011004875.1_bBalReg1.pri	birds
 9483	GCA_011078405.1_mCalJac1.mat	primates
 9483	GCA_011100535.1_mCalJac1.pat	primates
-9483	GCA_011100535.2_mCalJac1.2.pat	mammals
+9483	GCA_011100535.2_mCalJac1.2.pat	primates
 9483	GCA_011100555.1_mCalJac1.pat.X	primates
 9337	GCA_011100635.1_mTriVul1.pri	mammals
 9337	GCA_011100645.1_mTriVul1.alt	mammals
@@ -124,8 +124,8 @@
 2700039	GCA_015852565.1_bf_hap-2	invertebrate
 8790	GCA_016128335.1_ZJU1.0	birds
 8790	GCA_016128335.2_ZJU2.0	birds
-9606	GCA_016695395.2_mHomSap3.mat	mammals
-9606	GCA_016700455.2_mHomSap3.pat	mammals
+9606	GCA_016695395.2_mHomSap3.mat	primates
+9606	GCA_016700455.2_mHomSap3.pat	primates
 57068	GCA_016880875.1_bAcaChl1.alt	birds
 57068	GCA_016904835.1_bAcaChl1.pri	birds
 13397	GCA_017639455.1_sCarCar2.alt	sharks
@@ -148,7 +148,7 @@
 390368	GCA_020510965.1_fPhoLeu1.alt	fish
 390368	GCA_020510985.1_fPhoLeu1.pri	fish
 8895	GCA_020740585.1_bApuApu2.alt.cur	birds
-9447	GCA_020740595.1_mLemCat1.alt	mammals
+9447	GCA_020740595.1_mLemCat1.alt	primates
 134902	GCA_020740675.1_bCorHaw1.alt.cur	birds
 51337	GCA_020740715.1_mJacJac1.pat.decon	mammals
 8895	GCA_020740795.1_bApuApu2.pri.cur	birds
@@ -179,9 +179,11 @@
 48850	GCA_023851605.1_mTamTet1.pri	mammals
 48850	GCA_023853755.1_mTamTet1.alt	mammals
 109475	GCA_024140225.1_mSunEtr1.alt.cur	mammals
+9031	GCA_024206055.2_ASM2420605v2	birds
 99487	GCA_024166345.1_mEleMax1_alternate_haplotype	mammals
 246179	GCA_024294585.1_rVipLat1.pri	reptiles
 246179	GCA_024294605.1_rVipLat1.alt	reptiles
+10013	GCA_024803745.1_mThoBot1.0.p	mammals
 48708	GCA_025094165.1_mMesDen1_alternate_haplotype	mammals
 286002	GCA_025201965.1_rGopFla2.pat.asm	reptiles
 48708	GCA_025265405.1_mMesDen1_primary_haplotype	mammals
@@ -195,7 +197,7 @@
 65483	GCA_027172095.1_rPodRaf1.alt	reptiles
 233779	GCA_027382365.2_aSpeBom1.2.alt	amphibians
 310915	GCA_027382375.1_fPanHyp1.alt	fish
-9470	GCA_027406535.1_mNycCou1.alt	mammals
+9470	GCA_027406535.1_mNycCou1.alt	primates
 30427	GCA_027406555.1_bHaeMex1.alt	birds
 9031	GCA_027408205.1_bGalGal5.alt	birds
 9031	GCA_027408225.1_bGalGal5.pri	birds
@@ -308,10 +310,15 @@
 37578	GCA_031468805.1_bMorBas2.hap1	birds
 37578	GCA_031468815.1_bMorBas2.hap2	birds
 175524	GCA_031876335.1_mHipLar1.pri	mammals
+111821	GCA_031877785.1_bStrAlu1.hap2	birds
 111821	GCA_031877795.1_bStrAlu1.hap1	birds
+9802	GCA_031878655.1_mTapInd1.hap1	mammals
+10013	GCA_031878665.1_mThoBot2.hap2	mammals
 10013	GCA_031878675.1_mThoBot2.hap1	mammals
 161624	GCA_031885435.1_bPasSan2.pri	birds
+238119	GCA_031893025.1_aLepFus1.hap1	amphibians
 142480	GCA_032164245.1_rSteOdo2_p1.0	reptiles
+3026461	GCA_033296515.1_rMacSuw1.hap1	reptiles
 3026461	GCA_033349115.1_rMacSuw1.hap2	reptiles
 44489	GCA_033958435.1_ASM3395843v1	reptiles
 8154	GCA_900246225.5_fAstCal1.3	fish
@@ -498,6 +505,7 @@
 39082	GCA_963383665.1_mMusAve1.1_alternate_haplotype	mammals
 61862	GCA_963455305.1_mPleAur1.1	mammals
 29065	GCA_963455335.1_mMarMar1.1	mammals
+8103	GCA_963457625.1_fCycLum2.1	fish
 90074	GCA_963457635.1_fMicVar1.1	fish
 196075	GCA_963457725.1_fSprSpr1.1	fish
 37598	GCA_963513975.1_bFriCoe1.1	birds
@@ -544,7 +552,7 @@
 386614	GCF_010909765.2_sAmbRad1.1.pri	sharks
 7757	GCF_010993605.1_kPetMar1.pri	otherChordates
 8010	GCF_011004845.1_fEsoLuc1.pri	fish
-9483	GCF_011100555.1_mCalJa1.2.pat.X	mammals
+9483	GCF_011100555.1_mCalJa1.2.pat.X	primates
 9337	GCF_011100635.1_mTriVul1.pri	mammals
 61156	GCF_011762505.1_mArvNil1.pat.X	mammals
 9739	GCF_011762595.1_mTurTru1.mat.Y	mammals
@@ -581,7 +589,7 @@
 34773	GCF_018492685.1_fAloSap1.pri	fish
 33562	GCF_019393635.1_mDroGli1.pri	mammals
 75038	GCF_020382885.2_fScaArg1.pri	fish
-9447	GCF_020740605.2_mLemCat1.pri	mammals
+9447	GCF_020740605.2_mLemCat1.pri	primates
 51337	GCF_020740685.1_mJacJac1.mat.Y.cur	mammals
 134902	GCF_020740725.1_bCorHaw1.pri.cur	birds
 8895	GCF_020740795.1_bApuApu2.pri.cur	birds
@@ -602,7 +610,7 @@
 65483	GCF_027172205.1_rPodRaf1.pri	reptiles
 310915	GCF_027358585.1_fPanHyp1.pri	fish
 233779	GCF_027358695.1_aSpeBom1.2.pri	amphibians
-9470	GCF_027406575.1_mNycCou1.pri	mammals
+9470	GCF_027406575.1_mNycCou1.pri	primates
 13676	GCF_027409825.1_fScoJap1.pri	fish
 30427	GCF_027477595.1_bHaeMex1.pri	birds
 2857394	GCF_027579445.1_bAmmNel1.pri	birds
