@@ -14,7 +14,7 @@ filterLabel.score Minimum number of assemblies with arrangement
 
     track hprcInsertsV1
     parent hprcArrV1
-    shortLabel Inserts
+    shortLabel Insertions
     longLabel Deletions in hg38 = Insertion in the HPRC assemblies
     bigDataUrl /gbdb/hg38/hprcArrV1/hprcInsertsV1.bb
     type bigBed 9 +
