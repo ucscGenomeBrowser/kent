@@ -1,9 +1,10 @@
 GCA_009769595.1_bBucAby1.alt	Abyssinian ground-hornbill
 GCA_027172095.1_rPodRaf1.alt	Aeolian wall lizard (La Canna islet rPodRaf1 alternate hap 2022)
-GCA_030014295.1_mLoxAfr1.hap2	African savanna elephant (hap2 mLoxAfr1 2023)
+GCA_030020305.1_mLoxAfr1.hap1	African savanna elephant (hap1 mLoxAfr1 2023)
 GCA_009819805.1_bPhoRub2.alt	American flamingo
 GCA_018492705.1_fAloSap1.alt	American shad (fAloSap1 alternate hap 2021)
 GCA_030435715.1_mOchPri1.hap2	American pika (hap2 mOchPri1 2023)
+GCA_030867065.1_rAllMis1	American alligator (2023 genbank)
 GCA_003957575.1_bCalAnn1_v1.h	Anna's hummingbird
 GCA_951214905.1_fEleAnt2.1_alternate_haplotype	Antarctic lanternfish (alternate hap 2023)
 GCA_946807865.1_fSilAri3.1_alternate_haplotype	Aristotle's catfish (alternate hap 2022)
@@ -20,6 +21,8 @@ GCA_936446605.1_fBarBab1.1_alternate_haplotype	barbel (alternate hap 2022)
 GCA_015227815.3_bHirRus1.alt.v3	Barn swallow (bHirRus1 v3 alternate hap 2021)
 GCA_020826835.1_mDicBic1.pat.decon	black rhinoceros (alternate hap 2021)
 GCA_030490855.1_bPoeAtr1.hap2	black-capped chickadee (hap2 2023)
+GCA_028501385.1_bRisTri1.mat.cur.20221130	black-legged kittiwake (bRisTri1.mat 2023)
+GCA_028021495.1_fLycPai1.hap1	blackbelly eelpout (fLycPai1 haplotype 1 2023)
 GCA_009819715.1_bSylAtr1.alt	blackcap
 GCA_025094165.1_mMesDen1_alternate_haplotype	Blainville's beaked whale (mMesDen1 alternate hap 2022)
 GCA_008658375.2_mBalMus1.alt.v2	Blue whale (JJ_BM4_2016_0621 v2 alternate hap 2020)
@@ -37,7 +40,9 @@ GCA_009819585.1_bMerNub1.alt	carmine bee-eater
 GCA_900634435.1_fCotGob3.1_alternate_haplotype	channel bull blenny
 GCA_024206055.2_ASM2420605v2	chicken (Huxu 2023)
 GCA_027408205.1_bGalGal5.alt	chicken (Cobb bGalGal5 alternate hap 2022)
+GCA_027408225.1_bGalGal5.pri	chicken (Cobb bGalGal5 primary hap 2022)
 GCA_027408255.1_bGalGal4.alt	chicken (Ross bGalGal4 alternate hap 2022)
+GCA_027557775.1_bGalGal4.pri	chicken (Ross bGalGal4 primary hap 2023)
 GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b	chicken (matHap)
 GCF_016700215.1_bGalGal1.pat.whiteleghornlayer.GRCg7w	chicken (patHap)
 GCA_030020945.1_mManPen7.hap2	Chinese pangolin (hap2 mManPen7 2023)
@@ -63,7 +68,7 @@ GCA_030449815.1_bPelCri1.alt	Dalmatian pelican (alternate hap 2023)
 GCA_963242275.1_mMyoDau2.1_alternate_haplotype	Daubenton's bat (alternate hap 2023)
 GCA_900700345.2_fDenClu1.1_alternate_haplotype	denticle herring
 GCA_027887205.1_rMalTer1.hap2	diamondback terrapin (hap2 rMalTer1 2023)
-GCA_030463535.1_fSalBra1.hap2	dorado (hap2 2023)
+GCA_030448965.1_fSalBra1.hap1	dorado (hap1 2023)
 GCA_014839825.1_bDryPub1.alt	Downy woodpecker (bDryPub1 alternate hap 2020)
 GCA_030020955.1_mDugDug1.hap2	dugong (hap2 mDugDug1 2023)
 GCA_011004865.1_bBalReg1.alt	East African grey crowned-crane
@@ -76,6 +81,7 @@ GCA_902685485.1_mSciVul1.1_alternate_haplotype	Eurasian red squirrel (alternate 
 GCA_903992525.1_mArvAmp1.1_alternate_haplotype	Eurasian water vole (alternate hap 2020)
 GCA_907165095.1_bCapEur3.1_alternate_haplotype	Eurasian nightjar (alternate hap 2021)
 GCA_922984935.2_mMelMel3.2_paternal_haplotype	Eurasian badger (v3.2 2022)
+GCA_922990625.1_mMelMel3.1_maternal_haplotype_uncurated	Eurasian badger (2021)
 GCA_949152275.1_fPhoPho1.1_alternate_haplotype	Eurasian minnow (alternate hap 2023)
 GCA_027595995.1_mSorAra2.alt	European shrew (alternate hap 2023)
 GCA_028017845.1_rEmyOrb1.hap2	European pond turtle (hap2 rEmyOrb1 2023)
@@ -93,11 +99,11 @@ GCA_950005115.1_mChiNiv1.1_alternate_haplotype	European snow vole (alternate hap
 GCA_017639475.1_bPluApr1.alt	Eurpoean golden plover (bPluApr1 alternate hap 2021)
 GCA_027579415.1_aBomBom1.alt	fire-bellied toad (aBomBom1 alternate hap 2023)
 GCA_007364235.1_fArcCen1_v1.h	flier cichlid
-GCA_030035675.1_rRhiFlo1.hap2	Florida worm lizard (hap2 rRhiFlo1 2023)
+GCA_030035715.1_rRhiFlo1.hap1	Florida worm lizard (hap1 rRhiFlo1 2023)
 GCA_014839645.1_fXenCan1.alt	freshwater garfish (fXenCan1 alternate hap 2020)
 GCA_902459495.1_aGeoSer1.1_alternate_haplotype	Gaboon caecilian
 GCA_014839765.1_bSylBor1.alt	garden warbler (bSylBor1 alternate hap 2020)
-GCA_030020295.1_rGavGan2.hap2	gharial (hap2 2023)
+GCA_030020385.1_rGavGan2.hap1	Gharial (hap1 2023)
 GCA_030035685.1_sMobBir1.hap2	giant manta (sMobBir1 2023)
 GCA_900880695.1_fSpaAur1.1_alternate_haplotype	gilthead seabream
 GCA_902153765.2_bAquChr1.4_alternate_haplotype	golden eagle (v1.4 alternate hap 2021)
@@ -111,6 +117,7 @@ GCA_017639455.1_sCarCar2.alt	great white shark (alternate hap 2021)
 GCA_004115295.1_mRhiFer1_v1.h	greater horseshoe bat (MPI-CBG alternate hap 2019)
 GCA_901709685.1_fSynAcu1.1_alternate_haplotype	greater pipefish
 GCA_948146095.1_fSynAcu2.1_alternate_haplotype	greater pipefish (v2 alternate haplotype 2023)
+GCA_948146105.1_fSynAcu2.1	greater pipefish (v2 2023 genbank)
 GCA_949358355.1_fHypImm3.1_alternate_haplotype	greater sand-eel (alternate hap 2023)
 GCA_951799415.1_fArgSil1.1_alternate_haplotype	greater argentine (alternate hap 2023)
 GCA_015220195.2_rCheMyd1.alt.v2	green sea turtle (v2 alternate hap 2021)
@@ -120,13 +127,16 @@ GCA_015220155.1_bFalRus1.alt	gyrfalcon (bFalRus1 alternate hap 2020)
 GCA_026419925.1_bHarHar1	Harpy eagle (bHarHar1 alternate hap 2022)
 GCA_020740675.1_bCorHaw1.alt.cur	Hawaiian crow (bCorHaw1 alternate hap 2021)
 GCA_963383665.1_mMusAve1.1_alternate_haplotype	hazel dormouse (alternate hap 2023)
+GCA_030028035.1_mHipAmp2.hap1	hippopotamus (mHipAmp2 hap1 2023)
 GCA_030867165.1_bOpiHoa1.hap2	hoatzin (hap2 2023)
 GCA_015220095.1_fSebUmb1.alt	honeycomb rockfish (fSebUmb1 alternate hap 2020)
-GCA_027789765.1_aDenEbr1.pat	hourglass treefrog (paternal 2023)
+GCA_027789725.1_aDenEbr1.mat	hourglass treefrog (maternal 2023)
 GCA_027406555.1_bHaeMex1.alt	house finch (bHaeMex1 alternate hap 2022)
 GCA_949316305.1_mMusMuc1.1_alternate_haplotype	house mouse (alternate hap 2023)
+GCA_016695395.2_mHomSap3.mat	human (mHomSap3 WGS:JACSEX01 2021)
 GCA_016700455.2_mHomSap3.pat	human (WGS:JACSEW01 2021 alternate hap)
 GCA_027474345.1_bSphHub1.alt	Humboldt's penguin (bSphHub1 alternate hap 2022)
+GCA_003369685.2_UOA_Angus_1	hybrid cattle (Angus x Brahman F1 Angus haplotype 2018)
 GCA_900651595.1_fParRan2.1_alternate_haplotype	Indian glassy fish
 GCA_013368575.1_fMegCyp1.alt	Indo-Pacific tarpon (alternate hap 2020)
 GCA_902148835.1_fSalaFa1.1_alternate_haplotype	jewelled blenny
@@ -159,6 +169,7 @@ GCA_949606865.1_fNotRos5.1_alternate_haplotype	marbled rockcod (alternate hap 20
 GCA_963210275.1_bFalPun1.1_alternate_haplotype	Mauritius kestrel (alternate hap 2023)
 GCA_963243765.1_bPsiEch3.1_alternate_haplotype	Mauritius parakeet (alternate hap 2023)
 GCA_947247025.1_rVipUrs1.1_alternate_haplotype	meadow viper (alternate hap 2022)
+GCA_025201965.1_rGopFla2.pat.asm	Mexican gopher tortoise (WGS:JAMKFD01 2022)
 GCA_902362175.1_fChaCha1.1_alternate_haplotype	milkfish
 GCA_950005055.1_mBalAcu1.1_alternate_haplotype	minke whale (alternate hap 2023)
 GCA_019395325.1_mDroGli1.alt	monito del monte (mDroGli1 alternate hap 2021)
@@ -166,11 +177,13 @@ GCA_009769485.2_bCygOlo1.alt.v2	mute swan (bCygOlo1 v2 alternate hap 2021)
 GCA_027579665.1_bAmmNel1.alt	Nelson's sparrow (bAmmNel1 alternate hap 2023)
 GCA_009651025.1_bCorMon1.alt	New Caledonian crow
 GCA_009762545.1_fNotCel1.alt	New Zealand spotty
+GCA_030445055.1_mDasNov1.hap1	nine-banded armadillo (mDasNov1 hap1 2023)
 GCA_949316245.1_fPunPun2.1_alternate_haplotype	ninespine stickleback (alternate hap 2023)
 GCA_028500835.1_mEreDor1.alt	North American porcupine (mEreDor1 alternate hap 2023)
 GCA_028564815.1_mEubGla1.hap2	North Atlantic right whale (mEubGla1 hap2 2023)
+GCA_028571275.1_mEubGla1.hap1	North Atlantic right whale (hap1 2023)
 GCA_011004835.1_fEsoLuc1.alt	northern pike
-GCA_031468815.1_bMorBas2.hap2	northern gannet (hap2 2023)
+GCA_031468805.1_bMorBas2.hap1	northern gannet (hap1 2023)
 GCA_929447715.1_bAccGen1.1_alternate_haplotype	northern goshawk (bAccGen1 v1 alternate hap 2022)
 GCA_949752845.1_mHypAmp2.1_alternate_haplotype	northern bottlenose whale (alternate hap 2023)
 GCA_951640545.1_mEptNil1.1_alternate_haplotype	northern bat (alternate hap 2023)
@@ -190,15 +203,18 @@ GCA_004115175.2_mOrnAna1.alt.v3	platypus (alternate hap Pmale09 2020)
 GCA_020745805.1_bTheCae1.alt.cur	plumbeous ibis (bTheCae1 alternate hap 2021)
 GCA_949987605.1_fPolPol2.1_alternate_haplotype	pollack (alternate hap 2023)
 GCA_902500245.1_fThaAma1.1_alternate_haplotype	prehistoric monster fish
+GCA_026419985.1_mKogBre1_haplotype_2	pygmy sperm whale (mKogBre1 haplotype 2 2022)
 GCA_008658355.1_bAlcTor1_alternate	razorbill
 GCA_910593805.1_mCerEla1.1_alternate_haplotype	red deer (alternate hap 2021)
 GCA_015220065.1_fPygNat1.alt	red-bellied piranha (fPygNat1 alternate hap 2020)
 GCA_009764505.1_bTauEry1.alt	red-crested turaco
 GCA_015220175.1_bPogPus1.alt	Red-fronted tinkerbird (bPogPus1 alternate hap 2020)
 GCA_009819485.1_bCarCri1.alt	red-legged seriema
+GCA_030936125.1_bGavSte3.hap1	red-throated loon (hap1 2023)
 GCA_030936135.1_bGavSte3.hap2	red-throated loon (hap2 2023 genbank)
 GCA_900700845.2_fErpCal1.1_alternate_haplotype	reedfish
 GCA_900700845.3_fErpCal1.3_alternate_haplotype	reedfish (alternate hap 2021)
+GCA_028017805.1_mBalRic1.hap1	Rice's whale (hap1 2023)
 GCA_028023285.1_mBalRic1.hap2	Rice's whale (hap2 2023 genbank)
 GCA_016880875.1_bAcaChl1.alt	rifleman (bAcaChl1 alternate hap 2021)
 GCA_020740595.1_mLemCat1.alt	ring-tailed lemur (mLemCat1 alternate hap 2021)
@@ -220,6 +236,7 @@ GCA_900651605.1_fBetSpl5.1_alternate_haplotype	Siamese fighting fish
 GCA_900651605.2_fBetSpl5.4_alternate_haplotype	Siamese fighting fish (v5.4 alternate hap 2023)
 GCA_027406535.1_mNycCou1.alt	slow loris (mNycCou1 alternate hap 2022)
 GCA_902713625.2_sScyCan1.2_alternate_haplotype	smaller spotted catshark (alternate hap 2021)
+GCA_029633845.1_fLamInc1.hap1	smalleye Pacific opah (hap1 2023)
 GCA_009764485.1_sPriPec2.alt	smalltooth sawfish
 GCA_949987765.1_mPipPyg2.1_alternate_haplotype	soprano pipistrelle (alternate hap 2023)
 GCA_020801775.1_bPorHoc1.pat.decon	South Island takahe (alternate hap 2021)
@@ -227,6 +244,7 @@ GCA_015220265.1_mChoDid1.alt	southern two-toed sloth (mChoDid1 alternate hap 202
 GCA_023853755.1_mTamTet1.alt	southern tamandua (mTamTet1 alternate hap 2022)
 GCA_910596085.1_fThuMac1.1_alternate_haplotype	southern bluefin tuna (alternate hap 2021)
 GCA_028858625.1_bColStr4.hap2	speckled mousebird (hap2 2023)
+GCA_902713435.2_fAciRut3.2_paternal_haplotype	sterlet (fAciRut3.2 2022)
 GCA_947034905.1_fBarBar1.1_alternate_haplotype	stone loach (alternate hap 2022)
 GCA_027382375.1_fPanHyp1.alt	striped catfish (fPanHyp1 alternate hap 2022)
 GCA_951394445.1_mSteCoe1.1_alternate_haplotype	striped dolphin (alternate hap 2023)
@@ -241,7 +259,7 @@ GCA_010909745.1_sAmbRad1.alt	thorny skate
 GCA_030684295.1_sSteTig4.hap2	tiger shark (hap2 2023)
 GCA_901765105.1_aMicUni1.1_alternate_haplotype	tiny Cayenne caecilian
 GCA_901000745.3_fTakRub1.2_alternate_haplotype	torafugu
-GCA_029633875.1_fHopMal1.hap2	trahira (hap2 2023)
+GCA_029633855.1_fHopMal1.hap1	trahira (hap1 2023)
 GCA_009819845.1_bAytFul2.alt	tufted duck
 GCA_901001175.1_aRhiBiv1.1_alternate_haplotype	two-lined caecilian
 GCA_008692045.1_mPhoSin1.alt	vaquita (alternate hap mPhoSin1 2019)
@@ -261,5 +279,7 @@ GCA_904848175.1_fAcaLat1.1_alternate_haplotype	yellowfin seabream (v.2019 altern
 GCA_914744365.1_fThuAlb1.1_alternate_haplotype	yellowfin tuna (alternate hap 2021)
 GCA_003957525.2_bTaeGut1.4.alt	zebra finch (Black17 v1.4 alternate hap 2021)
 GCA_009859025.1_bTaeGut2.p.v1.alt	zebra finch (alternate hap Blue55  v1 2020)
+GCA_903684855.2_fDreTuH1.2	zebrafish (WGS:CAHPTB02 2020)
+GCA_903684865.1_fDreABH1.1	zebrafish (WGS:CAHPTA01 2020)
 GCA_944039255.1_fDanRer4.1_alternate_haplotype	zebrafish (fDanRer4 alternate hap 2022)
 GCA_900700395.1_fMasArm1.2_alternate_haplotype	zig-zag eel
