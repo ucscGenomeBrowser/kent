@@ -1,4 +1,3 @@
-
 <h2>Description</h2>
 
 <p>
@@ -17,28 +16,31 @@ rearrangements.  There are five tracks in the Rearrangement composite track:
 
 <h2>Display Conventions</h2>
 <p>
-All items are labeled by the number of HPRC assemblies have that rearrangement. The indel tracks have an one or two additional fields that specify how large the indel is in base pairs. 
-For the Insertion and Deletions track there's only one number with "bp" after it.  
-For insertions it is the size of the insertion in hg38.  
-For deletions it is the size of the sequence deleted in hg38.  
-For the Other Rearrangements track, there are two numbers given: the number of unaligning bases in hg38 and the number of unaligning bases in the HPRC assemblies.
+All items are labeled by the number of HPRC assemblies that have the rearrangement. The indel tracks have one or 
+two additional fields that specify how large the indel is in base pairs. 
+For the Insertions and Deletions track there's only one number with "bp" after it.  
+For insertions, it is the size of the insertion in hg38.  
+For deletions, it is the size of the sequence deleted in hg38.  
+For the Other Rearrangements track, there are two numbers given: the number of unaligned 
+bases in hg38 and the number of unaligned bases in the HPRC assemblies.
 <h2>Methods</h2>
 <p>
 All these tracks are built from the <a href='../cgi-bin/hgTrackUi?db=hg38&g=hprcChainNet' target='_blank'>HPRC chains and nets.</a> 
 The actual instructions used to create these tracks are in the files <a href=https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/doc/hg38/hprcRearrange.txt target='_blank'>hprcRearrange.txt</a> and <a href=https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/doc/hg38/hprcInDel.txt target='_blank'>hprcInDel.txt</a>.
 The first step for all the tracks is to find the orthologous sequences in each HPRC assembly for each chromosome in hg38. 
-These sequences are called the query sequences. For each query sequence we select the 
-longest chain to the hg38 sequence.  This is called the orthologus chain. 
+These sequences are called the query sequences. For each query sequence, we select the 
+longest chain to the hg38 sequence.  This is called the orthologous chain. 
 Following are the specific methods for each track.
 <h3>Insertions, Deletions, and Others</h3>
 In each orthologous chain we look for any gaps in either the reference or the query sequence. There are two basic types of gaps. 
 One type is when the gap contains no bases in one of the two sequences, but one or more unaligned bases in the other. 
-These indicate a standard insertion in one sequence, or a deletion in the other. There are also gaps where there are unaligned bases in both sequences. These may be alignment errors, or sites where more than one rearrangement occurred between the two sequences.
+These indicate a standard insertion in one sequence or a deletion in the other. There are also gaps where there are 
+unaligned bases in both sequences. These may be alignment errors or sites where more than one rearrangement occurred between the two sequences.
 This type of gap is in the "Other Rearrangements" track.
 This gap identification is done for each of the HPRC assemblies resulting in a set of indels that are clustered based on exact boundaries of the gap in both sequences.
 This kind of clustering often results in indels that "pile up" with a different number of inserted or deleted bases.
 <h3>Inversions and Duplications</h3>
-For each orthologous chain we look for any other chain between the same query sequence and the sequence in hg38 that overlaps the orthologous chain.
+For each orthologous chain, we look for any other chain between the same query sequence and the sequence in hg38 that overlaps the orthologous chain.
 Each of those overlaps is determined to be either an inversion or a local duplication in the HPRC genome by
 the <b>chainArrange</b> utility.
 This is done for each of the HPRC assemblies resulting in a set of 
