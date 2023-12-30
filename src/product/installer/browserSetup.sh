@@ -689,6 +689,41 @@ function setupCgiOsx ()
     # dbTrash tool needed for trash cleaning
 }
 
+# This should not be needed anymore: hgGeneGraph has moved to Python3 finally. But leaving the code in here
+# anyways, as it should not hurt and some mirrors may have old Python2 code or old CGIs around. 
+# We can remove this section in around 1-2 years when we are sure that no one needs Python2 anymore
+function installPy2MysqlRedhat () {
+    yum install -y python2 mysql-devel python2-devel wget gcc
+    if [ -f /usr/include/mysql/my_config.h ]; then
+	    echo my_config.h found
+    else
+	wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
+    fi
+
+    # this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
+    # somehow the mysql.h does not have the "reconnect" field anymore in Fedora
+    if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
+	echo /usr/include/mysql/mysql.h already has reconnect attribute
+    else
+	sed '/st_mysql_options options;/a    my_bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
+    fi
+
+    # fedora > 34 doesn't have any pip2 package anymore so install it now
+    if ! type "pip2" > /dev/null; then
+	 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+	 python2 get-pip.py
+	 mv /usr/bin/pip /usr/bin/pip2
+
+    fi
+    pip2 install MySQL-python
+   }
+
+# little function that compares two floating point numbers
+# see https://stackoverflow.com/questions/8654051/how-can-i-compare-two-floating-point-numbers-in-bash
+function numCompare () {
+   awk -v n1="$1" -v n2="$2" 'BEGIN {printf (n1<n2?"<":">=") }'
+}
+
 # redhat specific part of mysql and apache installation
 function installRedhat () {
     echo2 
@@ -719,7 +754,7 @@ function installRedhat () {
         echo2
         echo2 Installing Apache and making it start on boot
         waitKey
-        yum -y install httpd
+        yum -y install httpd chkconfig
         # start apache on boot
         chkconfig --level 2345 httpd on
         # there will be an error message that the apache 
@@ -758,8 +793,6 @@ function installRedhat () {
     # centos7 provides only a package called mariadb-server
     # Mysql 8 does not allow copying MYISAM files anymore into the DB. 
     # -> we cannot support Mysql 8 anymore
-    #if yum list mysql-server 2> /dev/null ; then
-       #MYSQLPKG=mysql-server
     if yum list mariadb-server 2> /dev/null ; then
         MYSQLPKG=mariadb-server
     else
@@ -807,31 +840,17 @@ function installRedhat () {
     # So we install python2, the mysql libraries and fix up my_config.h manually
     # This is strange, but I was unable to find a different working solution. MariaDB simply does not have my_config.h
     else
-            yum install -y python2 mysql-devel python2-devel wget gcc
-            if [ -f /usr/include/mysql/my_config.h ]; then
-                    echo my_config.h found
-            else
-                wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
-            fi
-
-	    # this is very strange, but was necessary on Fedora https://github.com/DefectDojo/django-DefectDojo/issues/407
-            # somehow the mysql.h does not have the "reconnect" field anymore in Fedora
-            if grep -q "bool reconnect;" /usr/include/mysql/mysql.h ; then
-                echo /usr/include/mysql/mysql.h already has reconnect attribute
-            else
-                sed '/st_mysql_options options;/a    my_bool reconnect; // added by UCSC Genome browserSetup.sh script' /usr/include/mysql/mysql.h -i.bkp
-            fi
-
-	    # fedora > 34 doesn't have any pip2 package anymore so install it now
-	    if ! type "pip2" > /dev/null; then
-                 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
-		 python2 get-pip.py
-		 mv /usr/bin/pip /usr/bin/pip2
-
+	    if [ `numCompare $VERNUM 9` == "<" ] ; then
+                installPy2MysqlRedhat
+	    else
+	        echo Not install Python2, this Linux does not have it and it should not be needed anymore
 	    fi
-            pip2 install MySQL-python
     fi
 
+    # open port 80 in firewall
+    if [ $VER
+    sudo firewall-cmd --zone=public --permanent --add-service=http
+    sudo firewall-cmd --reload
 }
 
 # OSX specific setup of the installation
@@ -1368,7 +1387,7 @@ function installBrowser ()
     echo '--------------------------------'
     echo UCSC Genome Browser installation
     echo '--------------------------------'
-    echo Detected OS: $OS/$DIST, $VER
+    echo Detected OS: $OS/$DIST, Version $VERNUM, Release: $VER
     echo 
     echo This script will go through three steps:
     echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
@@ -1740,6 +1759,12 @@ function hideSomeTracks
             mysql $db -e 'DELETE from hgFindSpec WHERE searchTable="'$track'"'
         done
     done
+
+    # cannot activate this part, not clear what to do when mirror goes offline or online
+    # now fix up trackDb, remove rows of tracks that this mirror does not have locally
+    #for db in `mysql -NB -e 'show databases' | egrep  'proteome|uniProt|visiGene|go$|hgFixed'`; do 
+            #fixTrackDb $db trackDb; 
+    #done
 }
 
 # only download a set of minimal mysql tables, to make a genome browser that is using the mysql failover mechanism
@@ -2008,6 +2033,16 @@ elif [[ $unameStr == Linux* ]] ; then
                 APACHECONF=/etc/httpd/conf.d/001-browser.conf
                 APACHEUSER=apache
         fi
+    fi
+
+    VERNUM=0
+    # only works on redhats IMHO
+    if [ -f /etc/system-release-cpe ] ; then
+	VERNUM=`cut /etc/system-release-cpe -d: -f5`
+    fi
+    # os-release should work everywhere and has the full version number
+    if [ -f /etc/os-release ] ; then
+	VERNUM=`cat /etc/os-release | grep VERSION_ID | cut -d= -f2 | tr -d '"'`
     fi
 fi
 
