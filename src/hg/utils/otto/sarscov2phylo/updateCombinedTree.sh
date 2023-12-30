@@ -58,7 +58,7 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
     $matUtils extract -i merged.deltaMasked.pb \
         --max-parsimony 20 \
         --max-branch-length 60 \
-        --max-path-length 175 \
+        --max-path-length 225 \
         -O -o merged.deltaMasked.filtered.pb
     # matOptimize: used -r 8 -M2 until 2023-05-12, then switched to Cheng's recommended
     # -m 0.00000001 -M 4 (avoid identical-child-node problem in

@@ -792,13 +792,14 @@ fi
 ###################################################################
 # Ensembl genes
 if [ -s ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb ]; then
+export oldStyle=`bigBedInfo ${buildDir}/trackData/ensGene/bbi/${asmId}.ensGene.bb | grep -c "fieldCount: 12"`
 rm -f ${buildDir}/bbi/${asmId}.ensGene.bb
 ln -s ../trackData/ensGene/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
 rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ix
 rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ixx
 rm -f ${buildDir}/genes/${asmId}.ensGene.*.gtf.gz
 export gtfGz=`ls ${buildDir}/trackData/ensGene/${asmId}.ensGene.*.gtf.gz`
-if [ -s ${gtfGz} ]; then
+if [ -s "${gtfGz}" ]; then
     mkdir -p ${buildDir}/genes
     bName=`basename "${gtfGz}"`
    ln -s ../trackData/ensGene/${bName} ${buildDir}/genes/${bName}
@@ -825,7 +826,23 @@ if [ -s ${buildDir}/trackData/ensGene/version.txt ]; then
 fi
 
 
-printf "track ensGene
+if [ ${oldStyle} -eq 1 ]; then
+  printf "track ensGene
+shortLabel Ensembl genes
+longLabel Ensembl genes %s
+group genes
+priority 40
+visibility pack
+color 150,0,0
+itemRgb on
+type bigBed 12 .
+bigDataUrl bbi/%s.ensGene.bb%s
+searchIndex %s
+baseColorUseCds given
+baseColorDefault genomicCodons
+html html/%s.ensGene\n\n" "${ensVersion}" "${asmId}" "${searchTrix}" "${indexList}" "${asmId}"
+else
+  printf "track ensGene
 shortLabel Ensembl genes
 longLabel Ensembl genes %s
 group genes
@@ -842,6 +859,7 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 labelSeperator \" \"
 html html/%s.ensGene\n\n" "${ensVersion}" "${asmId}" "${searchTrix}" "${indexList}" "${asmId}"
+fi
 
 $scriptDir/asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html "${ensVersion}"
 

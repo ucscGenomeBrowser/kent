@@ -79,6 +79,68 @@
         <em>http://<!--#echo var="HTTP_HOST" --></em> with any questions.</strong></p>
       <!--#endif -->
 
+  <p style="text-align: center;">
+    <input size=50 name="searchString" id="searchBarSearchString" type="text" 
+        placeholder="Search genes, data, help docs and more..."></input>
+    <input name="searchButton" id="searchBarSearchButton" type="submit" value="Search"></input>
+    <script>
+    function searchBarClick() {
+        searchStr = document.getElementById('searchBarSearchString').value;
+        if (searchStr.length > 0) {
+            // helper functions for checking whether a plain chrom name was searched for
+            term = encodeURIComponent(searchStr.replace(/^[\s]*/,'').replace(/[\s]*$/,''));
+            function onSuccess(jqXHR, textStatus) {
+                if (jqXHR.chromName !== null) {
+                    window.location.assign("../cgi-bin/hgTracks?position=" + term );
+                } else {
+                    window.location.assign("../cgi-bin/hgSearch?search=" + term);
+                }
+            }
+            function onFail(jqXHR, textStatus) {
+                window.location.assign("../cgi-bin/hgSearch?search=" + term);
+            }
+
+            // redirect to search disambiguation page if it looks like we didn't enter a regular position:
+            var canonMatch = searchStr.match(canonicalRangeExp)
+            var gbrowserMatch = searchStr.match(gbrowserRangeExp);
+            var lengthMatch = searchStr.match(lengthRangeExp);
+            var bedMatch = searchStr.match(bedRangeExp);
+            var sqlMatch = searchStr.match(sqlRangeExp);
+            var singleMatch = searchStr.match(singleBaseExp);
+            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+
+            // the following encodes the cartJson cmd as a query string, skipping reliance
+            // on hgTracks.js:cart:varsToUrlData()
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+            params.append("cjCmd", '{"getChromName": {"searchTerm": "' + term + '"}}');
+            if (positionMatch === null) {
+                // user may have entered a full chromosome name, check for that asynchronosly:
+                $.ajax({
+                    type: "GET",
+                    url: "../cgi-bin/hgSearch",
+                    data:  params.toString(),
+                    dataType: "json",
+                    trueSuccess: onSuccess,
+                    success: onSuccess,
+                    error: onFail,
+                    cache: true
+                });
+                return false;
+            }
+            
+        }
+    }
+    document.getElementById('searchBarSearchButton').addEventListener('click', searchBarClick);
+    $('#searchBarSearchString').bind('keypress', function(e) {  // binds listener to url field
+        if (e.which === 13) {  // listens for return key
+             e.preventDefault();   // prevents return from also submitting whole form
+             searchBarClick();
+        }
+    });
+    </script>
+  </p>
+
   <div class="row">
     <!-- Tools -->
     <!--#include virtual="ourTools.html"-->

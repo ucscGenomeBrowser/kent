@@ -382,6 +382,8 @@ vcfUseAltSampleNames vcfPhasedTrio
 saturationScore hic
 sGroup_Afrotheria wigMaf bigMaf
 sGroup_African wigMaf bigMaf
+sGroup_Afr_Carib_Barabdos wigMaf
+sGroup_African_SW_USA wigMaf
 sGroup_American wigMaf bigMaf
 sGroup_Artiodactyla bigMaf
 sGroup_Aves wigMaf
@@ -394,6 +396,7 @@ sGroup_Carnivore wigMaf bigMaf
 sGroup_Carnivora wigMaf bigMaf
 sGroup_Cetartiodactyla wigMaf bigMaf
 sGroup_Chiroptera wigMaf bigMaf
+sGroup_Columbia_Medellin wigMaf
 sGroup_CoV_2019 wigMaf
 sGroup_CoV wigMaf
 sGroup_SARS-CoV-2_sequences wigMaf
@@ -405,11 +408,15 @@ sGroup_Dorylaimia wigMaf
 sGroup_Drosophila wigMaf
 sGroup_East_Asian wigMaf bigMaf
 sGroup_Ebola_2014 wigMaf
+sGroup_Esan_Nigeria wigMaf
 sGroup_Euarchontoglires wigMaf bigMaf
 sGroup_fish wigMaf
 sGroup_Fish wigMaf
 sGroup_Gabon wigMaf
+sGroup_Gambian wigMaf
 sGroup_Glires wigMaf bigMaf
+sGroup_HAPMAP wigMaf
+sGroup_Han_SoChina wigMaf
 sGroup_hiv wigMafProt wigMaf
 sGroup_Holometabola wigMaf
 sGroup_Human wigMaf
@@ -418,6 +425,7 @@ sGroup_Mammal wigMaf
 sGroup_mammal wigMaf
 sGroup_Mammals wigMaf bigMaf
 sGroup_Marburg_1987 wigMaf
+sGroup_Mende_Sierra_Leone wigMaf
 sGroup_Metatheria bigMaf
 sGroup_Monotremata bigMaf
 sGroup_Nematocera wigMaf
@@ -436,6 +444,7 @@ sGroup_Percent92 wigMaf
 sGroup_Percent91 wigMaf
 sGroup_Percent90 wigMaf
 sGroup_Percent88 wigMaf
+sGroup_Peru_Lima wigMaf
 sGroup_placental wigMaf
 sGroup_Placental wigMaf
 sGroup_Placental_Mammal wigMaf
@@ -449,6 +458,8 @@ sGroup_Primates_platyrrhini wigMaf bigMaf
 sGroup_Primates_strepsirrhini wigMaf bigMaf
 sGroup_Primates_tarsiidae wigMaf bigMaf
 sGroup_primate wigMaf
+sGroup_Puerto_Rico wigMaf
+sGroup_Punjabo_Pakis wigMaf
 sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
@@ -458,13 +469,16 @@ sGroup_South_Asian wigMaf bigMaf
 sGroup_Spirurina wigMaf
 sGroup_Strongylida wigMaf
 sGroup_Sudan_1976-9 wigMaf
+sGroup_T2T wigMaf
 sGroup_Tylenchina wigMaf
 sGroup_vertebrate wigMaf
 sGroup_Vertebrate wigMaf bigMaf
 sGroup_Vertebrates wigMaf
+sGroup_Vietnam_Kinh wigMaf
 sGroup_Virus wigMaf
 sGroup_worm wigMaf
 sGroup_Xenarthra bigMaf
+sGroup_Yoruba_Nigeria wigMaf
 sGroup_Zaire wigMaf
 sGroup_Zaire(DRC)_1976-7 wigMaf
 *Filter bed narrowPeak broadPeak

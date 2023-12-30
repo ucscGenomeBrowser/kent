@@ -1354,8 +1354,8 @@ psl->tStart = tStart;
 psl->tEnd = tEnd;
 }
 
-void pslRecalcBaseCounts(struct psl *psl)
-/* Update match/mismatch base counts in PSL, assuming everything is a match */
+void pslRecalcMatchCounts(struct psl *psl)
+/* Update the match/mismatch counts in PSL, assuming everything is a match. */
 {
 psl->match = psl->misMatch = psl->repMatch = psl->nCount = 0;
 for (int iBlk = 0; iBlk < psl->blockCount; iBlk++)

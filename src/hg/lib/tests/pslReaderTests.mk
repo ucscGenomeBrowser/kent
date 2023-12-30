@@ -30,6 +30,7 @@ filePslx: mkout
 tableTests: tablePsl tablePslx
 	hgsql -e "drop table if exists ${TEST_TBL}" ${DB}
 
+.NOTPARALLEL: tablePsl tablePslx
 
 tablePsl: mkout
 	hgLoadPsl -verbose=0 -noHistory -table=${TEST_TBL} ${DB} ${IN_DIR}/mrna.psl
@@ -48,3 +49,4 @@ ${OUT_DIR}/mrnaHdr.psl: ${IN_DIR}/mrna.psl mkout
 
 mkout:
 	@${MKDIR} ${OUT_DIR}
+	hgsql -e "drop table if exists ${TEST_TBL}" ${DB}

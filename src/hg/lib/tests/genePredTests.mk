@@ -1,6 +1,8 @@
 # makefile with genePred and genePredReader tests
 include ../../../inc/common.mk
 
+.NOTPARALLEL:  # table is used by multiple tests
+
 BIN_DIR = bin/$(MACHTYPE)
 GENE_PRED_TESTER = ${BIN_DIR}/genePredTester
 EXP_DIR = expected/genePred

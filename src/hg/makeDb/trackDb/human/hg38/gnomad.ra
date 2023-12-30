@@ -216,7 +216,7 @@ type vcfTabix
 showHardyWeinberg on
 configureByPopup off
 maxWindowToDraw 200000
-visibility hide
+visibility dense
 dataVersion Release 4.0.0 (November 1, 2023, (chrY Fix November 16, 2023))
 priority 1
 url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r4&ignore=$$
