@@ -8,7 +8,7 @@ html crisprAll
 itemRgb on
 mouseOverField _mouseOver
 scoreLabel MIT Guide Specificity Score
-bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hs1/crispr/crispr.bb
+bigDataUrl /gbdb/hs1/crispr/crispr.bb
 # details page is not using a mysql table but a tab-sep file
 detailsTabUrls _offset=/gbdb/hs1/crispr/crisprDetails.tab
 url http://crispor.tefor.net/crispor.py?org=$D&pos=$S:${&pam=NGG
