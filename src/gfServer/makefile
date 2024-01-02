@@ -3,7 +3,8 @@ kentSrc = ..
 # use recursive make to compile 32-bit and 64-bit index versions
 # if IDXSIZE=64 is passed in, we get the 64-bit version
 
-all:
+all: compile
+compile::
 	${MAKE} build
 	${MAKE} build IDXSIZE=huge
 
@@ -15,9 +16,10 @@ else
 A = gfServer
 preMyLibs += ../lib/$(MACHTYPE)/jkOwnLib.a
 endif
+# this must be include here, after the above setup but before the build target
+include $(kentSrc)/inc/userApp.mk
 
 build: ${DESTDIR}${BINDIR}/${A}${EXE}
-include $(kentSrc)/inc/userApp.mk
 L += -lm $(SOCKETLIB)
 
 gfServerHuge.c: gfServer.c

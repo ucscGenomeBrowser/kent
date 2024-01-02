@@ -2,7 +2,7 @@ kentSrc = ..
 include ../inc/common.mk
 
 
-all:
+compile::
 	${MAKE} build
 	${MAKE} build IDXSIZE=huge
 
@@ -14,9 +14,10 @@ else
 A = blat
 preMyLibs += ../lib/$(MACHTYPE)/jkOwnLib.a
 endif
+# this must be include here, after the above setup but before the build target
+include $(kentSrc)/inc/userApp.mk
 
 build: ${DESTDIR}${BINDIR}/${A}${EXE}
-include $(kentSrc)/inc/userApp.mk
 L += -lm $(SOCKETLIB)
 
 blatHuge.c: blat.c
