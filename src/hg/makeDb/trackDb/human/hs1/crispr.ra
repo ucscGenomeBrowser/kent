@@ -1,4 +1,4 @@
-track crisprAllTargets
+track crisprHs1
 visibility hide
 shortLabel CRISPR Targets
 longLabel CRISPR/Cas9 -NGG Targets, whole genome
