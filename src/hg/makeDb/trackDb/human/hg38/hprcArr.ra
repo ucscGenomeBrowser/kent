@@ -25,6 +25,7 @@ filterLabel.score Minimum number of assemblies with arrangement
     priority 101
     filter.querySize 1
     maxItems 100000
+    mouseOver Prevalence in HPRC - Ins size in hg38: $label
 
     track hprcDeletionsV1
     parent hprcArrV1
@@ -41,6 +42,7 @@ filterLabel.score Minimum number of assemblies with arrangement
     filter.querySize 1
     filterLabel.querySize Minimum size of insertion in hg38
     maxItems 100000
+    mouseOver Prevalence in HPRC - Del size in hg38: $label
 
     track hprcArrInvBedV1
     parent hprcArrV1 on
@@ -54,6 +56,7 @@ filterLabel.score Minimum number of assemblies with arrangement
     exonArrows off
     priority 103
     maxItems 100000
+    mouseOver Prevalence in HPRC: $label
 
     track hprcArrDupBedV1
     parent hprcArrV1 on
@@ -67,7 +70,8 @@ filterLabel.score Minimum number of assemblies with arrangement
     exonArrows off
     priority 104
     maxItems 100000
-    
+    mouseOver Prevalence in HPRC: $label   
+ 
     track hprcDoubleV1
     parent hprcArrV1
     shortLabel Other Rearrangements
@@ -81,3 +85,4 @@ filterLabel.score Minimum number of assemblies with arrangement
     exonArrows off
     priority 105
     maxItems 100000
+    mouseOver Prevalence in HPRC - unal bp in hg38 - HPRC: $label

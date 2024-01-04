@@ -29,8 +29,12 @@ def bash(cmd):
     rawOutput = subprocess.run(cmd,check=True, shell=True, stdout=subprocess.PIPE, universal_newlines=True)
     return(rawOutput.stdout.split('\n')[0:-1])
 
-#Variable to get the current year
-year=datetime.now().strftime("%Y")
+#Makes a variable for the current year. If the month is January then sets the year to the previous year.
+if datetime.now().strftime("%m")=='01':
+    year=str(int(datetime.now().strftime("%Y"))-1)
+else:
+    year=datetime.now().strftime("%Y")
+
 #Get the last 5 error logs from the RR/euro
 latestLogs=bash("ls /hive/data/inside/wwwstats/RR/"+year+"/hgw1")
 latestLogs_euro=bash("ls /hive/data/inside/wwwstats/euroNode/"+year+"/")

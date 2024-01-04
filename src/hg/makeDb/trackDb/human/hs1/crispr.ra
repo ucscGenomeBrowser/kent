@@ -1,0 +1,19 @@
+track crisprHs1
+visibility hide
+shortLabel CRISPR Targets
+longLabel CRISPR/Cas9 -NGG Targets, whole genome
+group genes
+type bigBed 9 +
+html crisprAll
+itemRgb on
+mouseOverField _mouseOver
+scoreLabel MIT Guide Specificity Score
+bigDataUrl /gbdb/hs1/crispr/crispr.bb
+# details page is not using a mysql table but a tab-sep file
+detailsTabUrls _offset=/gbdb/hs1/crispr/crisprDetails.tab
+url http://crispor.tefor.net/crispor.py?org=$D&pos=$S:${&pam=NGG
+urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
+tableBrowser tbNoGenome
+noGenomeReason This track is too big for whole-genome Table Browser access, it would lead to a timeout in your internet browser. Small regional queries can work, but large regions, such as entire chromosomes, will fail. Please see the CRISPR Track documentation, the section "Data Access", for bulk-download options and remote access via the bedToBigBed tool. API access should always work. Contact us if you encounter difficulties with accessing the data.
+denseCoverage 0
+scoreFilterMax 100
