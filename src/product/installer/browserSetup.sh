@@ -843,14 +843,16 @@ function installRedhat () {
 	    if [ `numCompare $VERNUM 9` == "<" ] ; then
                 installPy2MysqlRedhat
 	    else
-	        echo Not install Python2, this Linux does not have it and it should not be needed anymore
+	        echo2 Not installing Python2, this Linux does not have it and it should not be needed anymore
 	    fi
     fi
 
     # open port 80 in firewall
-    if [ $VER
-    sudo firewall-cmd --zone=public --permanent --add-service=http
-    sudo firewall-cmd --reload
+    if which firewall-cmd ; then
+        echo2 Opening port HTTP/80 in firewall using the command firewall-cmd
+        sudo firewall-cmd --zone=public --permanent --add-service=http
+        sudo firewall-cmd --reload
+    fi
 }
 
 # OSX specific setup of the installation
