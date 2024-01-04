@@ -492,12 +492,11 @@ def hgBotDelay(fraction=1.0):
 
     if millis>botDelayBlock:
         # retry-after time factor 10 is based on the example in the bottleneck help message
+        sys.stderr.write("hgLib.py hogExit\n")
         errAbort("Too many HTTP requests and not enough delay between them. "
         "Your IP has been blocked to keep this website responsive for other users. "
         "Please contact genome-www@soe.ucsc.edu to unblock your IP address. We can also help you obtain the data you need without "
         "web crawling. ", status=429, headers = {"Retry-after" : str(millis / 10)})
-        sys.stderr.write("hgLib.py hogExit\n")
-        sys.exit(0)
 
     if millis>botDelayWarn:
         time.sleep(millis/1000.0)

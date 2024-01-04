@@ -2772,7 +2772,10 @@ static void cartEmptyShellMaybeContent(void (*doMiddle)(struct cart *cart), char
  * put in optional hash oldVars. */
 {
 struct cart *cart = cartAndCookieWithHtml(cookieName, exclude, oldVars, doContentType);
+
 setThemeFromCart(cart);
+googleAnalyticsSetGa4Key();
+
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 cartCheckout(&cart);
 }
