@@ -35,7 +35,7 @@ html hprcVCF
     track hprcDecomposed
     parent hprcVCF
     shortLabel HPRC all variants
-    longLabel HPRC Variants decomposed from hprc-v1.0-mc.grch38.vcfbub.a100k.wave.vcf.gz, no size filtering
+    longLabel HPRC Variants decomposed from hprc-v1.0-mc.grch38.vcfbub.a100k.wave.vcf.gz (Liao et al 2023), no size filtering
     type vcfTabix
     showHardyWeinberg on
     configureByPopup off
