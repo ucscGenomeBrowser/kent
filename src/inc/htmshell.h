@@ -131,6 +131,9 @@ extern char *htmlStyleUndecoratedLink;
 void htmlSetGa4Key(char *key);
 /* Set google analytics 4 key, used when outputting HEAD */
 
+void htmlPrintAnalyticsLink(FILE *f);
+/* print the link to the analytics javascript file in the html header */
+
 void htmlSetStyle(char *style);
 /* Set document wide style. A favorite style to
  * use for many purposes is htmlStyleUndecoratedLink

@@ -174,6 +174,7 @@ if (sameString(cgiUsualString("action",""),"encodeReleaseLog") ||
 /* Preamble. */
 dnaUtilOpen();
 
+
 if (withHttpHeader)
     puts("Content-type:text/html\n");
 
@@ -200,6 +201,8 @@ if (withHtmlHeader)
 	"<HEAD>" "\n"
 	);
     generateCspMetaHeader(stdout);
+    htmlPrintAnalyticsLink(stdout);
+
     printf("\t%s\n", headerText);
     webPragmasEtc();
 
@@ -224,6 +227,7 @@ if (withHtmlHeader)
     webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
+
     printf("</HEAD>\n");
     printBodyTag(stdout);
     htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
