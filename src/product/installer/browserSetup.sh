@@ -46,8 +46,10 @@ CGIBINDIR=$APACHEDIR/cgi-bin
 # directory for temporary files
 TRASHDIR=$APACHEDIR/trash
 
-# mysql data directory 
-# for most genome annotation data
+# Mysql data directory 
+# Yes we only support mariaDB anymore, but the variables will keep their names
+# Below please assume that mariadb is meant when mysql is written.
+# For most genome annotation data
 # (all non-mysql data is stored in /gbdb)
 MYSQLDIR=/var/lib/mysql
 
@@ -788,7 +790,7 @@ function installRedhat () {
        service iptables restart
     fi
     
-    # MYSQL INSTALL ON REDHAT
+    # MARIADB INSTALL ON REDHAT
 
     # centos7 provides only a package called mariadb-server
     # Mysql 8 does not allow copying MYISAM files anymore into the DB. 
@@ -796,7 +798,7 @@ function installRedhat () {
     if yum list mariadb-server 2> /dev/null ; then
         MYSQLPKG=mariadb-server
     else
-        echo2 Cannot find a mysql-server package in the current yum repositories
+        echo2 Cannot find a mariadb-server package in the current yum repositories
         exit 100
     fi
     
