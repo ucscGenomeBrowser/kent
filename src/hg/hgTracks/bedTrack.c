@@ -115,8 +115,10 @@ else if (tg->isBigBed)
 
         slAddHead(&list, bed);
         }
+
     if (filtered)
        labelTrackAsFilteredNumber(tg, filtered);
+
     lmCleanup(&lm);
     }
 else
