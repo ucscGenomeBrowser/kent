@@ -872,7 +872,7 @@ include crossTissueMaps.ra
 include problematic.ra
 
 # Brian's original experiment, April 2022
-include hprcChain.ra alpha,beta
+include hprcChain.ra
 include hprcCoverage97.ra alpha
 
 # other HPRC experiments
@@ -884,7 +884,7 @@ include hprcChainNet.ra alpha,beta
 
 include chainsHprc.ra alpha
 include hprcCoverage.ra alpha
-include trackDb.hprc90way.ra alpha,beta
+include trackDb.hprc90way.ra
 include hprcArr.ra
 include hprcVCF.ra alpha,beta
 include hprcVCFTest.ra alpha
