@@ -821,6 +821,12 @@ void htmlSetGa4Key(char *key)
 analyticsKey = key;
 }
 
+void htmlPrintAnalyticsLink(FILE *f) {
+/* print the link to the analytics javascript file in the html header. (Analytics 4 wants the javascript file referenced in the header) */
+if (analyticsKey)
+    fprintf(f, "<script async src=\"https://www.googletagmanager.com/gtag/js?id=%s\"></script>\n", analyticsKey);
+}
+
 void htmlSetStyleTheme(char *style)
 /* Set theme style. Needs to be called before htmlStart or htmShell. */
 {
@@ -1159,8 +1165,9 @@ if (htmlStyleSheet != NULL)
     fprintf(f,"<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\">\n", htmlStyleSheet);
 if (htmlStyleTheme != NULL)
     fputs(htmlStyleTheme, f);
-if (analyticsKey)
-    fprintf(f, "<script async src=\"https://www.googletagmanager.com/gtag/js?id=%s\"></script>\n", analyticsKey);
+
+
+htmlPrintAnalyticsLink(f);
 
 fputs("</HEAD>\n\n",f);
 printBodyTag(f);
