@@ -145,3 +145,9 @@ idSql select value from knownToMyGene2 where name = '%s'
 url https://mygene2.org/MyGene2/variantsbygene?gene=%s
 priority 10
 
+name orcs
+shortLabel BioGrid ORCS
+tables kgXref hgFixed.refLink
+idSql select hgFixed.refLink.locusLinkId from kgXref,hgFixed.refLink where kgID = '%s' and kgXref.refseq = hgFixed.refLink.mrnaAcc
+url https://orcs.thebiogrid.org/Gene/%s
+priority 12
