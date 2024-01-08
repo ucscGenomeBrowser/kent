@@ -146,7 +146,7 @@ url https://mygene2.org/MyGene2/variantsbygene?gene=%s
 priority 10
 
 name orcs
-shortLabel BioGrid ORCS
+shortLabel BioGrid CRISPR DB
 tables kgXref hgFixed.refLink
 idSql select hgFixed.refLink.locusLinkId from kgXref,hgFixed.refLink where kgID = '%s' and kgXref.refseq = hgFixed.refLink.mrnaAcc
 url https://orcs.thebiogrid.org/Gene/%s
