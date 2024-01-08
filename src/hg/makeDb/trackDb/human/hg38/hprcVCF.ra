@@ -1,14 +1,15 @@
 track hprcVCF
 superTrack on
-shortLabel Short variants
+shortLabel Short Variants
 longLabel Short Variants
 group hprc
 html hprcVCF
+pennantIcon New red ../goldenPath/newsarch.html# "Released Jan. 5, 2024"
 
 
     track hprcVCFDecomposedUnder4
     parent hprcVCF
-    shortLabel HPRC variants <= 3bp
+    shortLabel HPRC Variants <= 3bp
     longLabel HPRC VCF variants filtered for items size <= 3bp
     type vcfTabix
     showHardyWeinberg on
@@ -21,7 +22,7 @@ html hprcVCF
 
     track hprcVCFDecomposedOver3
     parent hprcVCF
-    shortLabel HPRC variants > 3bp
+    shortLabel HPRC Variants > 3bp
     longLabel HPRC VCF variants filtered for items size > 3bp
     type vcfTabix
     showHardyWeinberg on
@@ -34,8 +35,8 @@ html hprcVCF
 
     track hprcDecomposed
     parent hprcVCF
-    shortLabel HPRC all variants
-    longLabel HPRC Variants decomposed from hprc-v1.0-mc.grch38.vcfbub.a100k.wave.vcf.gz (Liao et al 2023), no size filtering
+    shortLabel HPRC All Variants
+    longLabel HPRC variants decomposed from hprc-v1.0-mc.grch38.vcfbub.a100k.wave.vcf.gz (Liao et al 2023), no size filtering
     type vcfTabix
     showHardyWeinberg on
     configureByPopup off

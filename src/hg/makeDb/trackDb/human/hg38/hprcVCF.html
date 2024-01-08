@@ -8,30 +8,41 @@ Minigraph-cactus approach described in the references below.
 
 <p>There are three subtracks in this composite container track:
 <ol>
+    <li>All short variants up to 50bp, without any length filter
     <li>All short variants &lt;= 3 bp long
     <li>All short variants &gt; 3 bp long
-    <li>All short variants up to 50bp, without any length filter
 </ol></p>
 
 <p>
 VCF Decomposition from
-<a href="https://github.com/human-pangenomics/hpp_pangenome_resources/blob/main/hprc-v1.0-mc.md#vcf-decomposition"
->HPRC Pangenome Resources Github</a>:
+<a href="https://github.com/human-pangenomics/hpp_pangenome_resources/tree/74553c422af5521e3d297d6511da0a33fcf3a744?tab=readme-ov-file#vcf-decomposition"
+target="_blank">HPRC Pangenome Resources Github</a>:
 &quot;The Raw VCF files contain a site for each bubble in the graph. Nested bubbles will result in
 overlapping sites. The nesting relationships are denoted with the PS (parent snarl), LV (level) and
 AT (allele traversal) tags and need to be taken into account when interpreting the VCF.
-Alternatively, you can use the &quot;Decomposed VCFs&quot; which have been normalized by using vcfbub to
-&quot;pop&quot; bubbles with alleles larger than 100k and vcfwave to realign each alt allele to the reference
-(script). Note that in order to reproduce the PanGenie analyses from the papers, you should instead
-use the PanGenie HPRC Workflow. This workflow has a CHM13 branch to use when working with that
-reference.&quot;
+Alternatively, you can use the &apos;Decomposed VCFs&apos; which have been normalized by using
+<a href="https://github.com/pangenome/vcfbub" target="_blank">vcfbub</a> to &apos;pop&apos;
+bubbles with alleles larger than 100k and
+<a href="https://github.com/vcflib/vcflib/blob/master/doc/vcfwave.md" target="_blank">vcfwave</a>
+to realign each alt
+(<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/freeze1/minigraph-cactus/wave.mc.grch38.a100k.sh"
+target="_blank">script</a>). Note that in order to reproduce the PanGenie analyses from the papers, you should instead
+use the
+<a href="https://bitbucket.org/jana_ebler/hprc-experiments/src/master/genotyping-experiments/"
+target="_blank">PanGenie HPRC Workflow</a>. This workflow has a
+<a href="https://bitbucket.org/jana_ebler/hprc-experiments/branch/chm13-based-pipeline"
+target="_blank">CHM13 branch</a> to use when working with that reference.
+<p>
+The exact tools and commands used to produce the VCFs are given
+<a href="https://github.com/ComparativeGenomicsToolkit/cactus/blob/master/doc/mc-pangenomes/hprc-v1.1-mc.md"
+target="_blank">here</a>.&quot;</p>
 
 <h2> Display Conventions and Configuration </h2>
 <p>
 The <b>Name</b> of the items are the pair of node labels that denote the site&apos;s location
 in the graph, with the &apos;&gt;&apos; and &apos;&lt;&apos; denoting the forward and reverse
-orientation of the node. Mouseover on items in squish and pack modes shows the items Name and
-Genotypes. Mouseover on items in full mode shows Alleles.
+orientation of the node. Mouseover on items in &quot;squish&quot; and &quot;pack&quot; modes shows the items Name and
+Genotypes. Mouseover on items in &quot;full&quot; mode shows Alleles.
 
 <h2>Methods</h2>
 <p>
