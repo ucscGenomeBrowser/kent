@@ -886,7 +886,7 @@ include chainsHprc.ra alpha
 include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra
 include hprcArr.ra
-include hprcVCF.ra alpha,beta
+include hprcVCF.ra
 include hprcVCFTest.ra alpha
 
 track jaspar2024 override
