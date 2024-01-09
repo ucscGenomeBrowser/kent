@@ -215,7 +215,7 @@ longLabel Genome Aggregation Database (gnomAD) Genome Variants v4.0.0 Pre-Releas
 type vcfTabix
 showHardyWeinberg on
 configureByPopup off
-maxWindowToDraw 200000
+maxWindowCoverage 40000
 visibility dense
 dataVersion Release 4.0.0 (November 1, 2023, (chrY Fix November 16, 2023))
 priority 1
