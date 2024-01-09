@@ -3987,6 +3987,9 @@ var imageV2 = {
             var newJsonRec = newJson.trackDb[id];
             var oldJsonRec = oldJson.trackDb[id];
             
+            // use limitedVis as visibility if set
+            if (newJsonRec.limitedVis !== undefined)
+                newJsonRec.visibility = newJsonRec.limitedVis;
             if (newJsonRec.visibility === 0)  // hidden 'ruler' is in newJson.trackDb!
                 continue;
             if (newJsonRec.type === "remote")
