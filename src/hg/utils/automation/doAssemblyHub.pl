@@ -729,7 +729,12 @@ if [ ! -s \${asmId}.2bit -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
   if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
     ln -s $assemblySource/\${asmId}_assembly_structure .
   fi
-  faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
+  export asmSize=`grep -v "^#" \${asmId}_assembly_report.txt | head | cut -f9 | ave stdin | grep total | awk '{printf "%d", \$NF}'`
+  export longArg=""
+  if [ "\$asmSize" -gt 4294967295 ]; then
+    longArg="-long"
+  fi
+  faToTwoBit \${longArg} \${asmId}_genomic.fna.gz \$asmId.2bit
   twoBitDup \$asmId.2bit > \$asmId.dups.txt
   if [ -s "\$asmId.dups.txt" ]; then
     printf "WARNING duplicate sequences found in \$asmId.2bit\\n" 1>&2
@@ -739,7 +744,7 @@ if [ ! -s \${asmId}.2bit -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
     faSomeRecords -exclude \${asmId}_genomic.fna.dups.gz \\
       \$asmId.remove.dups.list stdout | gzip -c > \${asmId}_genomic.fna.gz
     rm -f \$asmId.2bit
-    faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
+    faToTwoBit \${longArg} \${asmId}_genomic.fna.gz \$asmId.2bit
   fi
   gzip -f \$asmId.dups.txt
   touch -r \${asmId}_genomic.fna.gz \$asmId.2bit
@@ -920,8 +925,13 @@ printf STDERR "partsDone: %d\n", $partsDone;
 
   $bossScript->add(<<_EOF_
 zcat *.agp.gz | gzip > ../\$dbName.agp.gz
-faToTwoBit *.fa.gz ../\$dbName.2bit
-faToTwoBit -noMask *.fa.gz ../\$dbName.unmasked.2bit
+export asmSize=`zgrep -v "^#" ../\$dbName.agp.gz | cut -f3 | ave stdin | grep total | awk '{printf "%d", \$NF}'`
+export longArg=""
+if [ "\$asmSize" -gt 4294967295 ]; then
+  longArg="-long"
+fi
+faToTwoBit \${longArg} *.fa.gz ../\$dbName.2bit
+faToTwoBit \${longArg} -noMask *.fa.gz ../\$dbName.unmasked.2bit
 twoBitDup ../\$dbName.unmasked.2bit > \$asmId.dups.txt
 if [ -s "\$asmId.dups.txt" ]; then
   printf "ERROR: duplicate sequences found in ../\$dbName.unmasked.2bit\\n" 1>&2
@@ -931,8 +941,8 @@ if [ -s "\$asmId.dups.txt" ]; then
   twoBitToFa ../\$dbName.unmasked.dups.2bit stdout | faSomeRecords -exclude \\
     stdin \$asmId.remove.dups.list stdout | gzip -c > \$asmId.noDups.fasta.gz
   rm -f ../\$dbName.2bit ../\$dbName.unmasked.2bit
-  faToTwoBit \$asmId.noDups.fasta.gz ../\$dbName.2bit
-  faToTwoBit -noMask \$asmId.noDups.fasta.gz ../\$dbName.unmasked.2bit
+  faToTwoBit \${longArg} \$asmId.noDups.fasta.gz ../\$dbName.2bit
+  faToTwoBit \${longArg} -noMask \$asmId.noDups.fasta.gz ../\$dbName.unmasked.2bit
 fi
 gzip -f \$asmId.dups.txt
 touch -r ../download/\$asmId.2bit ../\$dbName.2bit
@@ -1571,12 +1581,15 @@ if [ \$asmId.masked.2bit -nt \$asmId.masked.faSize.txt ]; then
     gfServer -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
     gfServer -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
     wait
-    rm \$accessionId.2bit
-    touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
-    touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
   else
-    printf "# genome \$asmId too large at \$size to make blat indexes\\n" 1>&2
+    ln \$asmId.masked.2bit \$accessionId.2bit
+    gfServerHuge -trans index ../../\$accessionId.trans.gfidx \$accessionId.2bit &
+    gfServerHuge -stepSize=5 index ../../\$accessionId.untrans.gfidx \$accessionId.2bit
+    wait
   fi
+  rm \$accessionId.2bit
+  touch -r \$asmId.masked.2bit ../../\$accessionId.trans.gfidx
+  touch -r \$asmId.masked.2bit ../../\$accessionId.untrans.gfidx
 else
   printf "# addMask step previously completed\\n" 1>&2
   exit 0
