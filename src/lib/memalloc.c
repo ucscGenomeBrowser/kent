@@ -15,12 +15,12 @@
 #include "dlist.h"
 
 
-static unsigned long memAlloced;
+static size_t memAlloced = 0;
 
-unsigned long memCheckPoint()
+size_t memCheckPoint()
 /* Return the amount of memory allocated since last called. */
 {
-unsigned long ret = memAlloced;
+size_t ret = memAlloced;
 
 memAlloced = 0;
 
