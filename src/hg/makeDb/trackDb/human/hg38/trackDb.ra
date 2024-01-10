@@ -884,7 +884,7 @@ include hprcChainNet.ra alpha,beta
 
 include chainsHprc.ra alpha
 include hprcCoverage.ra alpha
-include trackDb.hprc90way.ra alpha,beta
+include trackDb.hprc90way.ra
 include hprcArr.ra
 include hprcVCF.ra
 include hprcVCFTest.ra alpha
