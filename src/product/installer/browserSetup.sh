@@ -819,6 +819,7 @@ function installRedhat () {
         fi
             
         # start mysql on boot
+        yum -y install chkconfig
         chkconfig --level 2345 $MYSQLD on 
 
         # make sure that missing values in Mysql insert statements do not trigger errors, #18368: deactivate strict mode
@@ -1385,6 +1386,8 @@ function installBrowser ()
 {
     if [ -f $COMPLETEFLAG ]; then
         echo2 error: the file $COMPLETEFLAG exists. It seems that you have installed the browser already.
+        echo2 If you want to reset the Apache directory, you can run '"rm -rf /usr/local/apache"' and 
+        echo2 then run this script again.
         exit 100
     fi
 
