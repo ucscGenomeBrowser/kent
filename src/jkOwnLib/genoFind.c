@@ -842,7 +842,7 @@ static int gfAllocLists(struct genoFind *gf)
 /* Allocate index lists and set up list pointers. 
  * Returns size of all lists. */
 {
-int count = 0;
+bits64 count = 0;
 int i;
 bits32 *listSizes = gf->listSizes;
 gfOffset **lists = gf->lists;
