@@ -10,19 +10,21 @@ use File::Basename;
 my $argc = scalar(@ARGV);
 
 if ($argc != 2) {
-  printf STDERR "usage: asmHubRmskJoinAlign.pl asmId buildDir > asmId.repeatMasker.html\n";
+  printf STDERR "usage: asmHubRmodelJoinAlign.pl asmId buildDir > asmId.repeatModeler.html\n";
   printf STDERR "where asmId is the assembly identifier,\n";
   printf STDERR "expecting to find buildDir/html/asmId.names.tab naming file for this assembly,\n";
-  printf STDERR "and buildDir/trackData/repeatMasker/asmId.rmsk.class.profile counts of rmsk categories.\n";
+  printf STDERR "and buildDir/trackData/repeatModeler/asmId.rmsk.class.profile counts of rmsk categories.\n";
   exit 255;
 }
 
 my $asmId = shift;
 my $buildDir = shift;
 my $namesFile = "$buildDir/html/$asmId.names.tab";
-my $faSizeFile = "$buildDir/trackData/repeatMasker/faSize.rmsk.txt";
-my $rmskClassProfile = "$buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt";
-my $rmskVersion = "$buildDir/$asmId.repeatMasker.version.txt";
+my $rModelClassProfile = "$buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt";
+my $faSizeFile = "$buildDir/trackData/repeatModeler/faSize.rmsk.txt";
+my $rmskVersion = "$buildDir/trackData/repeatModeler/versionInfo.txt";
+my $rModelVersion = "$buildDir/trackData/repeatModeler/modelerVersion.txt";
+
 my $maskingPercent = "";
 if ( -s "${faSizeFile}" ) {
   $maskingPercent=`grep -w masked "${faSizeFile}" | cut -d' ' -f1`;
@@ -30,13 +32,13 @@ if ( -s "${faSizeFile}" ) {
 }
 
 my $errOut = 0;
-if ( ! -s $rmskClassProfile ) {
-  printf STDERR "ERROR: can not find rmsk class profile file:\n\t'%s'\n", $rmskClassProfile;
+if ( ! -s $rModelClassProfile ) {
+  printf STDERR "ERROR: can not find rmsk class profile file:\n\t'%s'\n", $rModelClassProfile;
   $errOut = 255;
 }
 
 if ( ! -s $namesFile ) {
-  printf STDERR "ERROR: can not find rmsk class profile file:\n\t'%s'\n", $rmskClassProfile;
+  printf STDERR "ERROR: can not find rmsk class profile file:\n\t'%s'\n", $rModelClassProfile;
   $errOut = 255;
 }
 
@@ -56,7 +58,7 @@ chomp $organism;
 print <<_EOF_
 <h2>Description</h2>
 <p>
-This track shows the Repeat Masker annotations on the $assemblyDate $em${organism}$noEm/$asmId genome assembly.
+This track shows the Repeat Masker annotations on the $assemblyDate $em${organism}$noEm/$asmId genome assembly as calculated from a custom library produced by RepeatModeler.
 </p>
 
 <p>
@@ -87,6 +89,13 @@ if ( length($maskingPercent) ) {
   printf "<p><b>Assembly size:</b> %s bases<br>\n", &AsmHub::commify($asmSize);
   printf "<b>Sequence masked:</b> %s bases\n", &AsmHub::commify($maskedBases);
   printf "</p>\n";
+}
+
+if ( -s "$rModelVersion" ) {
+  my $modelerVersion = `cat $rModelVersion`;
+  chomp $modelerVersion;
+  $modelerVersion =~ s/version/version:/;
+  printf "<h2>%s</h2>\n", $modelerVersion;
 }
 
 if ( -s "$rmskVersion" ) {
@@ -259,7 +268,7 @@ The RepeatMasker (<a href="www.repeatmasker.org">www.repeatmasker.org</a>) tool 
 _EOF_
    ;
 
-open (FH, "grep classBed $rmskClassProfile | sed -e 's/^  *//; s#$asmId.rmsk.##; s#classBed/##; s#.bed##;'|sort -rn|") or die "can not grep $rmskClassProfile";
+open (FH, "grep classBed $rModelClassProfile | sed -e 's/^  *//; s#$asmId.rmsk.##; s#classBed/##; s#.bed##;'|sort -rn|") or die "can not grep $rModelClassProfile";
 while (my $line = <FH>) {
   chomp $line;
   my ($count, $class) = split('\s+', $line);
@@ -267,7 +276,7 @@ while (my $line = <FH>) {
 }
 close (FH);
 printf "</ul>\n</p>\n<h2>Detail class profiles</h2>\n<p>\n<ul>\n";
-open (FH, "grep rmskClass $rmskClassProfile | sed -e 's/^  *//; s#rmskClass/##; s#.tab##;'|sort -rn|") or die "can not grep $rmskClassProfile";
+open (FH, "grep rmskClass $rModelClassProfile | sed -e 's/^  *//; s#rmskClass/##; s#.tab##;'|sort -rn|") or die "can not grep $rModelClassProfile";
 while (my $line = <FH>) {
   chomp $line;
   my ($count, $class) = split('\s+', $line);
@@ -326,3 +335,4 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/8994846" target="_blank">8994
 </p>
 _EOF_
    ;
+

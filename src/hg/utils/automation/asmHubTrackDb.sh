@@ -230,7 +230,7 @@ if [ "${newRmsk}" -gt 0 ]; then
   rm -f $buildDir/bbi/${asmId}.rmsk.bb
   rm -f $buildDir/${asmId}.fa.align.tsv.gz
   rm -f $buildDir/${asmId}.fa.join.tsv.gz
-  if [ -s "$buildDir/bbi/${asmId}.rmsk.align.bb" ]; then
+  if [ -s "$buildDir/trackData/repeatMasker/${asmId}.rmsk.align.bb" ]; then
     ln -s ../trackData/repeatMasker/${asmId}.rmsk.align.bb $buildDir/bbi/${asmId}.rmsk.align.bb
     ln -s trackData/repeatMasker/${asmId}.fa.align.tsv.gz $buildDir/${asmId}.fa.align.tsv.gz
   fi
@@ -382,7 +382,84 @@ fi
 
 fi	#	else clause of if [ "${newRmsk}" -gt 0 ]; then
 fi	#	else clause of if [ "${rmskItemCount}" -lt 4 ]
-fi      #       if [ "${newRmsk}" -eq 2 -o "${rmskCount}" -gt 0 ]; then
+fi      #       if [ "${newRmsk}" -gt 0 -o "${rmskCount}" -gt 0 ]; then
+
+# see if there are repeatModeler bb files
+export rModelCount=`(ls $buildDir/trackData/repeatModeler/bbi/${asmId}.rmsk.*.bb 2> /dev/null | wc -l) || true`
+export newRmodel=`(ls $buildDir/trackData/repeatModeler/${asmId}.rmsk.align.bb $buildDir/trackData/repeatModeler/${asmId}.rmsk.bb 2> /dev/null | wc -l) || true`
+
+if [ "${newRmodel}" -gt 0 -o "${rModelCount}" -gt 0 ]; then
+
+if [ ! -s "$buildDir/trackData/repeatModeler/$asmId.sorted.fa.out.gz" ]; then
+  printf "ERROR: can not find trackData/repeatModeler/$asmId.sorted.fa.out.gz\n" 1>&2
+  exit 255
+fi
+
+# see if there are actually rmsk items in the track, this has to be > 3
+export rModelItemCount=`zcat $buildDir/trackData/repeatModeler/$asmId.sorted.fa.out.gz | head | wc -l`
+
+# clean up garbage from previous errors here
+if [ "${rModelItemCount}" -lt 4 ]; then
+  rm -f $buildDir/$asmId.repeatModeler.out.gz
+  rm -f "$buildDir/${asmId}.repeatModeler.version.txt"
+  rm -f $buildDir/bbi/${asmId}.rModel.align.bb
+  rm -f $buildDir/bbi/${asmId}.rModel.bb
+  rm -f $buildDir/${asmId}.fa.rModel.align.tsv.gz
+  rm -f $buildDir/${asmId}.fa.rModel.join.tsv.gz
+  rm -f $buildDir/${asmId}.rModel.customLib.fa.gz
+else
+
+rm -f $buildDir/$asmId.repeatModeler.out.gz
+ln -s trackData/repeatModeler/$asmId.sorted.fa.out.gz $buildDir/$asmId.repeatModeler.out.gz
+if [ -s "$buildDir/trackData/repeatModeler/versionInfo.txt" ]; then
+   rm -f "$buildDir/${asmId}.repeatModeler.version.txt"
+   ln -s trackData/repeatModeler/versionInfo.txt "$buildDir/${asmId}.repeatModeler.version.txt"
+fi
+if [ -s "$buildDir/trackData/repeatModeler/${asmId}-families.fa" ]; then
+   rm -f "$buildDir/${asmId}.rmsk.customLib.fa.gz"
+   cp -p "$buildDir/trackData/repeatModeler/${asmId}-families.fa" "$buildDir/${asmId}.rmsk.customLib.fa"
+   gzip "$buildDir/${asmId}.rmsk.customLib.fa"
+fi
+
+if [ "${newRmodel}" -gt 0 ]; then
+  rm -f $buildDir/bbi/${asmId}.rModel.align.bb
+  rm -f $buildDir/bbi/${asmId}.rModel.bb
+  rm -f $buildDir/${asmId}.fa.rModel.align.tsv.gz
+  rm -f $buildDir/${asmId}.fa.rModel.join.tsv.gz
+  if [ -s "$buildDir/trackData/repeatModeler/${asmId}.rmsk.align.bb" ]; then
+    ln -s ../trackData/repeatModeler/${asmId}.rmsk.align.bb $buildDir/bbi/${asmId}.rModel.align.bb
+    ln -s trackData/repeatModeler/${asmId}.fa.align.tsv.gz $buildDir/${asmId}.fa.rModel.align.tsv.gz
+  fi
+  ln -s ../trackData/repeatModeler/${asmId}.rmsk.bb $buildDir/bbi/${asmId}.rModel.bb
+  ln -s trackData/repeatModeler/${asmId}.sorted.fa.join.tsv.gz $buildDir/${asmId}.fa.rModel.join.tsv.gz
+
+printf "track repeatModeler
+shortLabel RepeatModeler
+longLabel RepeatModeler Repetitive Elements
+type bigRmsk 9 +
+visibility pack
+group varRep
+bigDataUrl bbi/%s.rModel.bb\n" "${asmId}"
+if [ -s "$buildDir/bbi/${asmId}.rModel.align.bb" ]; then
+  printf "xrefDataUrl bbi/%s.rModel.align.bb\n" "${asmId}"
+fi
+printf "maxWindowToDraw 5000000\n"
+export rModelClassProfile="$buildDir/trackData/repeatModeler/$asmId.rmsk.class.profile.txt"
+if [ -s "${rModelClassProfile}" ]; then
+  printf "html html/%s.repeatModeler\n\n" "${asmId}"
+  $scriptDir/asmHubRmodelJoinAlign.pl $asmId $buildDir > $buildDir/html/$asmId.repeatModeler.html
+else
+  printf "\n"
+fi
+
+else	#	else clause of if [ "${newRmodel}" -gt 0 ]
+
+  printf "ERROR: expected new version of rmsk files for RepeatModeler not found\n" 1>&2
+  exit 255
+
+fi	#	else clause of if [ "${newRmodel}" -gt 0 ]; then
+fi	#	else clause of if [ "${rModelItemCount}" -lt 4 ]
+fi      #       if [ "${newRmodel}" -gt 0 -o "${rModelCount}" -gt 0 ]; then
 
 if [ -s ${buildDir}/trackData/simpleRepeat/simpleRepeat.bb ]; then
 rm -f $buildDir/bbi/${asmId}.simpleRepeat.bb
