@@ -11,7 +11,7 @@ lockFname = None
 # switch off insecure SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-fromEmail="genome-www@soe.ucsc.edu"
+fromEmail="qateam@gi.ucsc.edu"
 
 emailTemplate = """Dear UCSC Public Hub author,
 
@@ -138,7 +138,7 @@ def sendEmail(dest, body):
     " send email to dest "
     msg = MIMEText(body)
     msg["From"] = fromEmail
-    msg["To"] = dest+","+fromEmail
+    msg["To"] = dest+","+"browserqa-group@ucsc.edu"
     msg["Subject"] = "Your UCSC public hub is down"
     p = Popen(["/usr/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
     p.communicate(msg.as_bytes())
