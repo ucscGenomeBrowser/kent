@@ -384,6 +384,9 @@ return doWiggle;
 boolean checkIfWiggling(struct cart *cart, struct track *tg)
 /* Check to see if a track should be drawing as a wiggle. */
 {
+if (tg->limitWiggle)
+    return TRUE;
+
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 
 if (!doWiggle)
@@ -11296,6 +11299,12 @@ for (subtrack = trackList; subtrack; subtrack = subtrack->next)
 return ct;
 }
 
+static boolean canWiggle(struct track *tg)
+/* Is this a track type that can wiggle. */
+{
+return tg->isBigBed;
+}
+
 enum trackVisibility limitVisibility(struct track *tg)
 /* Return default visibility limited by number of items and
  * by parent visibility if part of a coposite track.
@@ -11340,21 +11349,36 @@ if (!tg->limitedVisSet)
                 limitVisibility(subtrack);
             }
         }
-    while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+    if (canWiggle(tg))   // if this is a track type that can wiggle, we want to go straight to that rather than reduce visibility
         {
-        if (vis == tvFull && tg->canPack)
-            vis = tvPack;
-        else if (vis == tvPack)
-            vis = tvSquish;
+        while  ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+            {
+            tg->limitWiggle = TRUE;
+            }
+        if ( tg->limitWiggle)   // auto-density coverage is alway tvFull
+            tg->visibility = tg->limitedVis = tvFull;
         else
-            vis = tvDense;
+            tg->limitedVis = vis;
         }
-    tg->height = h;
-    if (tg->limitedVis == tvHide)
-        tg->limitedVis = vis;
     else
-        tg->limitedVis = tvMin(vis,tg->limitedVis);
+        {
+        while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+            {
+            if (vis == tvFull && tg->canPack)
+                vis = tvPack;
+            else if (vis == tvPack)
+                vis = tvSquish;
+            else
+                vis = tvDense;
+            }
 
+        if (tg->limitedVis == tvHide)
+            tg->limitedVis = vis;
+        else
+            tg->limitedVis = tvMin(vis,tg->limitedVis);
+        }
+
+    tg->height = h;
     if (tg->syncChildVisToSelf)
         {
         struct track *subtrack;
@@ -11370,7 +11394,8 @@ if (!tg->limitedVisSet)
         struct track *subtrack;
         for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
             {
-            subtrack->limitedVis = tvMin(subtrack->limitedVis, tg->limitedVis);
+            if ( tg->limitWiggle) // these are always in tvFull
+                subtrack->limitedVis = tvMin(subtrack->limitedVis, tg->limitedVis);
             // But don't prevent subtracks from being further restricted!
             //subtrack->limitedVisSet = tg->limitedVisSet;
             }
