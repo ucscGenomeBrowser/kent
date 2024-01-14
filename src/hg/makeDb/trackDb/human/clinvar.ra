@@ -9,6 +9,7 @@ noParentConfig on
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 scoreLabel ClinVar Star-Rating (0-4)
+dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
 
         track clinvarMain
         parent clinvar

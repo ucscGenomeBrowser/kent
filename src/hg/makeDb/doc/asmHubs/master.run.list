@@ -1065,6 +1065,7 @@
 ./runBuild GCA_028858705.1_bGruAme1.mat birds Grus_americana
 ./runBuild GCA_028858725.1_bColStr4.hap1 birds Colius_striatus
 ./runBuild GCA_028858755.1_bAraAra1.hap1 birds Ara_ararauna
+./runBuild GCA_028885525.1_NHGRI_mPonPyg2-v1.1-hic.freeze_alt primates Pongo_pygmaeus
 ./runBuild GCA_029207655.1_rThaSir1.0.hap2 vertebrate Thamnophis_sirtalis_fitchi
 ./runBuild GCA_029207665.1_rThaSir1.0.hap1 vertebrate Thamnophis_sirtalis_fitchi
 ./runBuild GCA_029207755.1_bChaFas1.0.hap1 birds Chamaea_fasciata

@@ -5495,13 +5495,17 @@ $(document).ready(function()
             let lsKey = "hgTracks_hideTutorial";
             let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
             let hideTutorial = localStorage.getItem(lsKey);
+            let tutMsgKey = "hgTracks_tutMsgCount";
+            let tmp = localStorage.getItem(tutMsgKey), tutMsgCount = 0;
+            if (tmp !== null) {tutMsgCount = parseInt(tmp);}
             // if the user is not logged in and they have not already gone through the
             // tutorial
-            if (!isUserLoggedIn && !hideTutorial) {
+            if (!isUserLoggedIn && !hideTutorial && tutMsgCount < 5) {
                 let msg = "A guided tutorial is available for new users: " +
                     "<button id='showTutorialLink' href=\"#showTutorial\">Start tutorial</button>";
                 notifBoxSetup("hgTracks", "hideTutorial", msg);
                 notifBoxShow("hgTracks", "hideTutorial");
+                localStorage.setItem("hgTracks_tutMsgCount", ++tutMsgCount);
                 $("#showTutorialLink").click(function() {
                     $("#hgTracks_hideTutorialnotifyHide").click();
                     tour.start();
