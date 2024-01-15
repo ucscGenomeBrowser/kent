@@ -34,6 +34,7 @@
 #include "regexHelper.h"
 #include "windowsToAscii.h"
 #include "jsonWrite.h"
+#include "verbose.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -2731,6 +2732,17 @@ if (position != NULL && oldVars != NULL)
     }
 }
 
+static void cartGenericStartup(struct cart *cart) 
+/* generic startup code to initialize settings from the cart when using either -WithHead or -MaybeContent cartShell functions */
+{
+setThemeFromCart(cart);
+googleAnalyticsSetGa4Key();
+
+int verbose = cgiOptionalInt("verbose", -1);
+if (verbose != -1)
+    verboseSetLevel(verbose);
+}
+
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
 	char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page
@@ -2752,8 +2764,7 @@ safef(titlePlus, sizeof(titlePlus), "%s %s %s %s",
                     org ? trackHubSkipHubName(org) : "", db ? db : "",  pos ? pos : "", title);
 popWarnHandler();
 
-setThemeFromCart(cart);
-googleAnalyticsSetGa4Key();
+cartGenericStartup(cart);
 
 htmStartWithHead(stdout, head, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
@@ -2773,8 +2784,7 @@ static void cartEmptyShellMaybeContent(void (*doMiddle)(struct cart *cart), char
 {
 struct cart *cart = cartAndCookieWithHtml(cookieName, exclude, oldVars, doContentType);
 
-setThemeFromCart(cart);
-googleAnalyticsSetGa4Key();
+cartGenericStartup(cart);
 
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 cartCheckout(&cart);
