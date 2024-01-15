@@ -198,29 +198,35 @@ slReverse(&retList);
 vcff->records = retList;
 }
 
-static void filterRecords(struct vcfFile *vcff, struct trackDb *tdb)
-/* If a filter is specified in the cart, remove any records that don't pass filter. */
+static void filterRecords(struct vcfFile *vcff, struct track *tg)
+/* If a filter is specified in the cart, remove any records that don't pass filter. Adapt longLabel if something was filtered. */
 {
+struct trackDb *tdb = tg->tdb;
 double minQual = VCF_DEFAULT_MIN_QUAL;
 struct slName *filterValues = NULL;
 double minFreq = VCF_DEFAULT_MIN_ALLELE_FREQ;
 boolean gotQualFilter = getMinQual(tdb, &minQual);
 boolean gotFilterFilter = getFilterValues(tdb, &filterValues);
 boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq);
-if (! (gotQualFilter || gotFilterFilter || gotMinFreqFilter) )
-    return;
-
-struct vcfRecord *rec, *nextRec, *newList = NULL;
-for (rec = vcff->records;  rec != NULL;  rec = nextRec)
+int filtOut = 0;
+if (gotQualFilter || gotFilterFilter || gotMinFreqFilter) 
     {
-    nextRec = rec->next;
-    if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
-	   (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
-	   (gotMinFreqFilter && minFreqFail(rec, minFreq)) ))
-	slAddHead(&newList, rec);
+    struct vcfRecord *rec, *nextRec, *newList = NULL;
+    for (rec = vcff->records;  rec != NULL;  rec = nextRec)
+        {
+        nextRec = rec->next;
+        if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
+               (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
+               (gotMinFreqFilter && minFreqFail(rec, minFreq)) ))
+            slAddHead(&newList, rec);
+        else 
+            filtOut++;
+        }
+    slReverse(&newList);
+    vcff->records = newList;
     }
-slReverse(&newList);
-vcff->records = newList;
+
+labelTrackAsFilteredNumber(tg, filtOut);
 }
 
 struct pgSnpVcfStartEnd
@@ -2290,7 +2296,7 @@ if (errCatchStart(errCatch))
     vcff = vcfTabixFileAndIndexMayOpen(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
     if (vcff != NULL)
         {
-        filterRecords(vcff, tg->tdb);
+        filterRecords(vcff, tg);
         filterRefOnlyAlleles(vcff, tg->tdb); // remove items that don't differ from reference
 
         // TODO: in multi-region mode, different windows end up with different sets of variants where
@@ -2316,9 +2322,11 @@ errCatchEnd(errCatch);
 if (errCatch->gotError || vcff == NULL)
     {
     if (isNotEmpty(errCatch->message->string))
+        {
         tg->networkErrMsg = cloneString(errCatch->message->string);
         tg->drawItems = bigDrawWarning;
         tg->totalHeight = bigWarnTotalHeight;
+        }
     }
 errCatchFree(&errCatch);
 }
@@ -3039,7 +3047,7 @@ if (errCatchStart(errCatch))
     vcff = vcfTabixFileAndIndexMayOpen(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
     if (vcff != NULL)
 	{
-	filterRecords(vcff, tg->tdb);
+	filterRecords(vcff, tg);
         int vis = tdbVisLimitedByAncestors(cart,tg->tdb,TRUE,TRUE);
 	if (hapClustEnabled && vcff->genotypeCount > 1 &&
 	    (vis == tvPack || vis == tvSquish))
@@ -3113,7 +3121,7 @@ if (errCatchStart(errCatch))
     vcff = vcfFileMayOpen(vcfFile, chromName, winStart, winEnd, vcfMaxErr, -1, TRUE);
     if (vcff != NULL)
 	{
-	filterRecords(vcff, tg->tdb);
+	filterRecords(vcff, tg);
         int vis = tdbVisLimitedByAncestors(cart,tg->tdb,TRUE,TRUE);
 	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (vis == tvPack || vis == tvSquish))
