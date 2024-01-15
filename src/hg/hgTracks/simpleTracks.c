@@ -812,7 +812,12 @@ return tg->lineHeight;
 int maximumTrackItems(struct track *tg)
 /* Return the maximum number of items allowed in track. */
 {
-return trackDbFloatSettingOrDefault(tg->tdb, "maxItems", maxItemsInFullTrack);
+unsigned int maxItems = trackDbFloatSettingOrDefault(tg->tdb, "maxItems", maxItemsInFullTrack);
+
+if (maxItems > maxItemsInFullTrack)
+    maxItems = maxItemsInFullTrack;
+
+return maxItems;
 }
 
 int maximumTrackHeight(struct track *tg)

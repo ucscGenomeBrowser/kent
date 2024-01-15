@@ -29,6 +29,7 @@
 #include "variation.h"
 #include "chromAlias.h"
 #include "instaPort.h"
+#include "hgConfig.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -392,6 +393,22 @@ if (bbi == NULL)
 return bbi;
 }
 
+static unsigned bigBedMaxItems()
+/* Get the maximum number of items to grab from a bigBed file.  Defaults to a million. */
+{
+static boolean set = FALSE;
+static unsigned maxItems = 0;
+
+if (!set)
+    {
+    char *maxItemsStr = cfgOptionDefault("bigBedMaxItems", "1000000");
+
+    maxItems = sqlUnsigned(maxItemsStr);
+    }
+
+return maxItems;
+}
+
 struct bigBedInterval *bigBedSelectRangeExt(struct track *track,
 	char *chrom, int start, int end, struct lm *lm, int maxItems)
 /* Return list of intervals in range. */
@@ -402,9 +419,12 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     struct bbiFile *bbi = fetchBbiForTrack(track);
-    result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems + 1, lm);
-    if (slCount(result) > maxItems)
+    result = bigBedIntervalQuery(bbi, chrom, start, end, bigBedMaxItems() + 1, lm);
+    if (slCount(result) > bigBedMaxItems())
 	{
+        errAbort("Too many items in window to filter.Zoom in or remove filters to view track.");
+
+#ifdef NOTNOW  // we may want to use summary levels if filters are off and folks don't want color
 	track->limitedVis = tvDense;
 	track->limitedVisSet = TRUE;
 	result = NULL;
@@ -424,6 +444,7 @@ if (errCatchStart(errCatch))
 	    }
 	else
 	    freez(&track->summary);
+#endif
 	}
     track->bbiFile = NULL;
     }
