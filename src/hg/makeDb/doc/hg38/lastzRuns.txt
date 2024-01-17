@@ -13907,3 +13907,386 @@ TMPDIR=/dev/shm
     # 2863655887 bases of 3117292070 (91.864%) in intersection
 
 ##############################################################################
+# LASTZ Human Hg38 vs. water buffalo GCF_019923935.1
+#    (DONE - 2023-12-30 - mspeir)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzGCF_019923935.1.2023-12-30
+    cd /hive/data/genomes/hg38/bed/lastzGCF_019923935.1.2023-12-30
+
+    printf '# water buffalo GCF_019923935.1 vs. Human Hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Human  hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: water buffalo 2021-09-10 GCF_019923935.1_NDDB_SH_1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCF_019923935.1.2023-12-30
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_019923935.1_NDDB_SH_1 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	931m33.045s
+
+    sed -e 's/^/    # /;' fb.hg38.chainGCF_019923935.1Link.txt
+    # 1441231401 bases of 3299210039 (43.684%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynGCF_019923935.1Link.txt
+    # 1373195820 bases of 3299210039 (41.622%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.chrom.sizes.txt" \
+        hg38 GCF_019923935.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	329m20.127s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.GCF_019923935.1.txt
+    # 1288371538 bases of 3299210039 (39.051%) in intersection
+
+    ### and for the swap
+# swap into: /hive/data/genomes/asmHubs/allBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/blastz.hg38.swap
+# running /hive/data/genomes/asmHubs/allBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/blastz.hg38.swap/runSwap.sh
++ cd /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1
++ export defaultName=GCF_019923935.1_NDDB_SH_1
++ defaultName=GCF_019923935.1_NDDB_SH_1
++ export asmId=GCF_019923935.1_NDDB_SH_1
++ asmId=GCF_019923935.1_NDDB_SH_1
++ export buildDir=/hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1
++ buildDir=/hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1
++ rm -f GCF_019923935.1_NDDB_SH_1.chromAlias.txt
++ ln -s trackData/chromAlias/GCF_019923935.1_NDDB_SH_1.chromAlias.txt .
++ '[' -s trackData/chromAlias/GCF_019923935.1_NDDB_SH_1.chromAlias.bb ']'
++ rm -f GCF_019923935.1_NDDB_SH_1.chromAlias.bb
++ ln -s trackData/chromAlias/GCF_019923935.1_NDDB_SH_1.chromAlias.bb .
++ /cluster/home/mspeir/kent/src/hg/utils/automation/asmHubTrackDb.sh GCF_019923935.1_NDDB_SH_1 GCF_019923935.1_NDDB_SH_1 /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1
+# no ensGene found
+single chainNet
++ '[' 2 -ne 2 ']'
++ export asmId=GCF_019923935.1_NDDB_SH_1
++ asmId=GCF_019923935.1_NDDB_SH_1
++ export buildDir=/hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1
++ buildDir=/hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1
++ export hubLinks=/hive/data/genomes/asmHubs/hubLinks
++ hubLinks=/hive/data/genomes/asmHubs/hubLinks
++ export accessionId=GCF_019923935.1_NDDB_SH_1
++ accessionId=GCF_019923935.1_NDDB_SH_1
++ case ${asmId} in
+++ echo GCF_019923935.1_NDDB_SH_1
+++ awk -F_ '{printf "%s_%s", $1, $2}'
++ accessionId=GCF_019923935.1
++ export scriptDir=/cluster/home/mspeir/kent/src/hg/utils/automation
++ scriptDir=/cluster/home/mspeir/kent/src/hg/utils/automation
++ mkdir -p /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi
++ mkdir -p /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/liftOver
++ export chainNetPriority=1
++ chainNetPriority=1
++ printf '# asmHubChainNetTrackDb.pl GCF_019923935.1_NDDB_SH_1 /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1\n'
+# asmHubChainNetTrackDb.pl GCF_019923935.1_NDDB_SH_1 /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1
++ for D in '${buildDir}/trackData/lastz.*'
++ targetDb=GCF_019923935.1
+++ basename /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38
++ lastzDir=lastz.hg38
+++ echo lastz.hg38
+++ sed -e 's/lastz.//;'
++ otherDb=hg38
++ OtherDb=Hg38
+++ ls -d /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/download/GCF_019923935.1_NDDB_SH_1_assembly_report.txt
++ asmReport=/hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/download/GCF_019923935.1_NDDB_SH_1_assembly_report.txt
++ overChain=GCF_019923935.1.hg38.over.chain.gz
++ overToChain=GCF_019923935.1ToHg38.over.chain.gz
++ printf 'asmReport: %s\n' /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/download/GCF_019923935.1_NDDB_SH_1_assembly_report.txt
+asmReport: /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/download/GCF_019923935.1_NDDB_SH_1_assembly_report.txt
++ '[' '!' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/download/GCF_019923935.1_NDDB_SH_1_assembly_report.txt ']'
++ '[' '!' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38/axtChain/chainHg38.bb ']'
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainHg38.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainHg38Link.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainSynHg38.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainSynHg38Link.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainRBestHg38.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainRBestHg38Link.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainLiftOverHg38.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainLiftOverHg38Link.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.net.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.net.summary.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.synNet.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.synNet.summary.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.rbestNet.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.rbestNet.summary.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.liftOverNet.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.liftOverNet.summary.bb
++ rm -f /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/liftOver/GCF_019923935.1ToHg38.over.chain.gz
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38/axtChain/GCF_019923935.1.hg38.over.chain.gz ']'
++ ln -s ../trackData/lastz.hg38/axtChain/GCF_019923935.1.hg38.over.chain.gz /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/liftOver/GCF_019923935.1ToHg38.over.chain.gz
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38/axtChain/chainHg38.bb ']'
++ ln -s ../trackData/lastz.hg38/axtChain/chainHg38.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainHg38.bb
++ ln -s ../trackData/lastz.hg38/axtChain/chainHg38Link.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainHg38Link.bb
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38/bigMaf/GCF_019923935.1.hg38.net.bb ']'
++ ln -s ../trackData/lastz.hg38/bigMaf/GCF_019923935.1.hg38.net.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.net.bb
++ ln -s ../trackData/lastz.hg38/bigMaf/GCF_019923935.1.hg38.net.summary.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.net.summary.bb
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38/axtChain/chainSynHg38.bb ']'
++ ln -s ../trackData/lastz.hg38/axtChain/chainSynHg38.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainSynHg38.bb
++ ln -s ../trackData/lastz.hg38/axtChain/chainSynHg38Link.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainSynHg38Link.bb
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38/bigMaf/GCF_019923935.1.hg38.synNet.bb ']'
++ ln -s ../trackData/lastz.hg38/bigMaf/GCF_019923935.1.hg38.synNet.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.synNet.bb
++ ln -s ../trackData/lastz.hg38/bigMaf/GCF_019923935.1.hg38.synNet.summary.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.synNet.summary.bb
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38/axtChain/chainRBestHg38.bb ']'
++ ln -s ../trackData/lastz.hg38/axtChain/chainRBestHg38.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainRBestHg38.bb
++ ln -s ../trackData/lastz.hg38/axtChain/chainRBestHg38Link.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainRBestHg38Link.bb
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38/bigMaf/GCF_019923935.1.hg38.rbestNet.bb ']'
++ ln -s ../trackData/lastz.hg38/bigMaf/GCF_019923935.1.hg38.rbestNet.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.rbestNet.bb
++ ln -s ../trackData/lastz.hg38/bigMaf/GCF_019923935.1.hg38.rbestNet.summary.bb /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.rbestNet.summary.bb
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/lastz.hg38/axtChain/chainLiftOverHg38.bb ']'
++ printf '# there is NO chainLiftOverHg38.bb\n'
+# there is NO chainLiftOverHg38.bb
+++ cut -c1-2
+++ echo hg38
++ otherPrefix=hg
++ '[' hg = GC ']'
+++ hgsql -N -e 'select organism from dbDb where name="hg38"' hgcentraltest
++ organism=Human
+++ hgsql -N -e 'select scientificName from dbDb where name="hg38"' hgcentraltest
++ sciName='Homo sapiens'
+++ hgsql -N -e 'select taxId from dbDb where name="hg38"' hgcentraltest
++ taxId=9606
+++ hgsql -N -e 'select description from dbDb where name="hg38"' hgcentraltest
++ o_date='Dec. 2013 (GRCh38/hg38)'
+++ /cluster/home/mspeir/kent/src/hg/utils/phyloTrees/findScores.pl hg38 GCF_019923935.1
+++ grep matrix
++ matrix='matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91'
+++ echo hg38
+++ cut -c1-2
++ otherPrefix=hg
++ '[' hg = GC ']'
+++ hgsql -N -e 'select organism from dbDb where name="hg38"' hgcentraltest
++ organism=Human
+++ hgsql -N -e 'select scientificName from dbDb where name="hg38"' hgcentraltest
++ sciName='Homo sapiens'
+++ hgsql -N -e 'select taxId from dbDb where name="hg38"' hgcentraltest
++ taxId=9606
+++ hgsql -N -e 'select description from dbDb where name="hg38"' hgcentraltest
++ o_date='Dec. 2013 (GRCh38/hg38)'
+++ /cluster/home/mspeir/kent/src/hg/utils/phyloTrees/findScores.pl hg38 GCF_019923935.1
+++ grep matrix
++ matrix='matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91'
+++ /cluster/home/mspeir/kent/src/hg/utils/phyloTrees/findScores.pl hg38 GCF_019923935.1
+++ grep MinScore
++ minScore='chainMinScore 3000'
+++ /cluster/home/mspeir/kent/src/hg/utils/phyloTrees/findScores.pl hg38 GCF_019923935.1
+++ grep LinearGap
++ linGap='chainLinearGap medium'
++ printf '##############################################################################
+# hg38 - Human - Homo sapiens - taxId: 9606
+##############################################################################
+'
++ printf 'track chainNetHg38
+compositeTrack on
+shortLabel Human Chain/Net
+longLabel Human (Dec. 2013 (GRCh38/hg38)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+'
++ printf 'priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+'
++ '[' 'xmatrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91y' = xy ']'
++ printf 'matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb hg38
+html html/GCF_019923935.1_NDDB_SH_1.chainNet
+
+'
++ printf '    track chainNetHg38Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetHg38
+    spectrum on
+
+        track chainHg38
+        parent chainNetHg38Viewchain
+        subGroups view=chain
+        shortLabel Human Chain
+        longLabel Human (Dec. 2013 (GRCh38/hg38)) Chained Alignments
+        type bigChain hg38
+        bigDataUrl bbi/GCF_019923935.1_NDDB_SH_1.chainHg38.bb
+        linkDataUrl bbi/GCF_019923935.1_NDDB_SH_1.chainHg38Link.bb
+        priority %d
+
+' 1
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainSynHg38.bb ']'
++ printf '        track chainSynHg38
+        parent chainNetHg38Viewchain
+        subGroups view=chain
+        shortLabel Human synChain
+        longLabel Human (Dec. 2013 (GRCh38/hg38)) Syntenic Chained Alignments
+        type bigChain hg38
+        bigDataUrl bbi/GCF_019923935.1_NDDB_SH_1.chainSynHg38.bb
+        linkDataUrl bbi/GCF_019923935.1_NDDB_SH_1.chainSynHg38Link.bb
+        priority %d
+
+' 2
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainRBestHg38.bb ']'
++ printf '        track chainRBestHg38
+        parent chainNetHg38Viewchain
+        subGroups view=chain
+        shortLabel Human rbChain
+        longLabel Human (Dec. 2013 (GRCh38/hg38)) Reciprocal Best Chained Alignments
+        type bigChain hg38
+        bigDataUrl bbi/GCF_019923935.1_NDDB_SH_1.chainRBestHg38.bb
+        linkDataUrl bbi/GCF_019923935.1_NDDB_SH_1.chainRBestHg38Link.bb
+        priority %d
+
+' 3
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.chainLiftOverHg38.bb ']'
++ printf '    track mafNetHg38Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetHg38
+
+        track netHg38
+        parent mafNetHg38Viewnet
+        subGroups view=net
+        shortLabel Human net
+        longLabel Human (Dec. 2013 (GRCh38/hg38)) Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCF_019923935.1_NDDB_SH_1.hg38.net.bb
+        summary bbi/GCF_019923935.1_NDDB_SH_1.hg38.net.summary.bb
+        speciesOrder hg38
+        priority %d
+
+' 4
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.synNet.summary.bb ']'
++ printf '        track synNetHg38
+        parent mafNetHg38Viewnet
+        subGroups view=net
+        shortLabel Human synNet
+        longLabel Human (Dec. 2013 (GRCh38/hg38)) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCF_019923935.1_NDDB_SH_1.hg38.synNet.bb
+        summary bbi/GCF_019923935.1_NDDB_SH_1.hg38.synNet.summary.bb
+        speciesOrder hg38
+        priority %d
+
+' 5
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.rbestNet.summary.bb ']'
++ printf '        track rbestNetHg38
+        parent mafNetHg38Viewnet
+        subGroups view=net
+        shortLabel Human rbestNet
+        longLabel Human (Dec. 2013 (GRCh38/hg38)) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl bbi/GCF_019923935.1_NDDB_SH_1.hg38.rbestNet.bb
+        summary bbi/GCF_019923935.1_NDDB_SH_1.hg38.rbestNet.summary.bb
+        speciesOrder hg38
+        priority %d
+
+' 6
++ '[' -s /hive/data/genomes/asmHubs/refseqBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/bbi/GCF_019923935.1_NDDB_SH_1.hg38.liftOverNet.summary.bb ']'
+##############################################################################
+# LASTZ Human Hg38 vs. water buffalo GCF_019923935.1
+#    (DONE - 2023-12-30 - mspeir)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzGCF_019923935.1.2023-12-30
+    cd /hive/data/genomes/hg38/bed/lastzGCF_019923935.1.2023-12-30
+
+    printf '# water buffalo GCF_019923935.1 vs. Human Hg38
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Human  hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: water buffalo 2021-09-10 GCF_019923935.1_NDDB_SH_1
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg38/bed/lastzGCF_019923935.1.2023-12-30
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_019923935.1_NDDB_SH_1 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real	931m33.045s
+
+    sed -e 's/^/    # /;' fb.hg38.chainGCF_019923935.1Link.txt
+    # 1441231401 bases of 3299210039 (43.684%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynGCF_019923935.1Link.txt
+    # 1373195820 bases of 3299210039 (41.622%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.chrom.sizes.txt" \
+        hg38 GCF_019923935.1) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	329m20.127s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.GCF_019923935.1.txt
+    # 1288371538 bases of 3299210039 (39.051%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/019/923/935/GCF_019923935.1_NDDB_SH_1/trackData/blastz.hg38.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCF_019923935.1_NDDB_SH_1 /hive/data/genomes/hg38/bed/lastzGCF_019923935.1.2023-12-30/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real	205m7.620s
+
+    sed -e 's/^/    # /;' fb.GCF_019923935.1.chainHg38Link.txt
+    # 1334547184 bases of 2622460639 (50.889%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_019923935.1.chainSynHg38Link.txt
+    # 1298033146 bases of 2622460639 (49.497%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/019/923/935/GCF_019923935.1/GCF_019923935.1.chrom.sizes.txt" \
+   GCF_019923935.1 hg38) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real	316m37.285s
+
+    sed -e 's/^/    # /;' fb.GCF_019923935.1.chainRBest.Hg38.txt
+    # 1289247133 bases of 2622460639 (49.162%) in intersection
+
+real	1782m42.747s
+user	0m2.954s
+sys	0m2.951s
+
+##############################################################################
