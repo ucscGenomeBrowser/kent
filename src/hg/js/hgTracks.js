@@ -3860,15 +3860,27 @@ var imageV2 = {
                 suggestBox.init(getDb(),
                             $("#suggestTrack").length > 0,
                             function (item) {
-                                genomePos.set(item.id, getSizeFromCoordinates(item.id));
-                                if ($("#suggestTrack").length && $('#hgFindMatches').length) {
-                                    // Set cart variables to open the hgSuggest gene track and highlight
-                                    // the chosen transcript.  These variables will be submittted by the goButton
-                                    // click handler.
-                                    vis.makeTrackVisible($("#suggestTrack").val());
-                                    cart.addVarsToQueue(["hgFind.matches"],[$('#hgFindMatches').val()]);
+                                if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
+                                        item.id.startsWith("hgc")) {
+                                    if (item.geneSymbol) {
+                                        selectedGene = item.geneSymbol;
+                                        // Overwrite item's long value with symbol after the autocomplete plugin is done:
+                                        window.setTimeout($('#positionInput').val(item.geneSymbol), 0);
+                                    } else {
+                                        selectedGene = item.value;
+                                    }
+                                    window.location.assign(item.id);
+                                } else {
+                                    genomePos.set(item.id, getSizeFromCoordinates(item.id));
+                                    if ($("#suggestTrack").length && $('#hgFindMatches').length) {
+                                        // Set cart variables to open the hgSuggest gene track and highlight
+                                        // the chosen transcript.  These variables will be submittted by the goButton
+                                        // click handler.
+                                        vis.makeTrackVisible($("#suggestTrack").val());
+                                        cart.addVarsToQueue(["hgFind.matches"],[$('#hgFindMatches').val()]);
+                                    }
+                                    $("#goButton").click();
                                 }
-                                $("#goButton").click();
                             },
                             function (position) {
                                 genomePos.set(position, getSizeFromCoordinates(position));

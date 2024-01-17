@@ -6,6 +6,8 @@
 
 ///////////////////////////// Module: autocompleteCat /////////////////////////////
 
+/* jshint esnext: true */
+
 var autocompleteCat = (function() {
     // Customize jQuery UI autocomplete to show item categories and support html markup in labels.
     // Adapted from https://jqueryui.com/autocomplete/#categories and
@@ -35,9 +37,13 @@ var autocompleteCat = (function() {
                  // In order to use HTML markup in the autocomplete, one has to overwrite
                  // autocomplete's _renderItem method using .html instead of .text.
                  // http://forum.jquery.com/topic/using-html-in-autocomplete
+                   let clockIcon = '';
+                   if ($("#positionInput").val().length < 2) {
+                       clockIcon = '<svg xmlns="http://www.w3.org/2000/svg" height=".75em" width=".75em" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg>&nbsp';
+                   }
                    return $("<li></li>")
                        .data("item.autocomplete", item)
-                       .append($("<a></a>").html(item.label))
+                       .append($("<a></a>").html(clockIcon + item.label))
                        .appendTo(ul);
                }
              });
@@ -100,17 +106,41 @@ var autocompleteCat = (function() {
             // a character, this is called with the input value as request.term and an acCallback
             // for this to return the result to autocomplete.
             // See http://api.jqueryui.com/autocomplete/#option-source
-            var results = cache[request.term];
-            if (results) {
-                acCallback(results);
-            } else if (options.baseUrl) {
-                doSearch(request.term, acCallback);
+            if (this.element[0].id === "positionInput" && request.term.length < 2) {
+                let searchStack = window.localStorage.getItem("searchStack");
+                if (request.term.length === 0 && searchStack) {
+                    let searchObj = JSON.parse(searchStack);
+                    let currDb = getDb();
+                    if (currDb in searchObj) {
+                        // sort the results list according to the stack order:
+                        let entries = Object.entries(searchObj[currDb].results);
+                        let stack = searchObj[currDb].stack;
+                        let callbackData = [];
+                        for (let s of stack) {
+                            callbackData.push(searchObj[currDb].results[s]);
+                        }
+                        acCallback(callbackData);
+                    }
+                    return;
+                }
+            } else if (request.term.length >=2) {
+                let results = cache[request.term];
+                if (results) {
+                    acCallback(results);
+                } else if (options.baseUrl) {
+                    doSearch(request.term, acCallback);
+                }
             }
         };
 
         var autoCompleteSelect = function(event, ui) {
             // This is a callback for autocomplete to let us know that the user selected
             // a term from the list.  See http://api.jqueryui.com/autocomplete/#event-select
+            // since we are in an autocomplete don't bother saving the
+            // prefix the user typed in, just keep the geneSymbol itself
+            if (this.id === "positionInput") {
+                addRecentSearch(getDb(), ui.item.geneSymbol, ui.item);
+            }
             options.onSelect(ui.item);
             $input.blur();
         };
@@ -121,7 +151,7 @@ var autocompleteCat = (function() {
 
         $input.autocompleteCat({
             delay: 500,
-            minLength: 2,
+            minLength: 0,
             source: autoCompleteSource,
             select: autoCompleteSelect,
             enterSelectsIdentical: options.enterSelectsIdentical,
