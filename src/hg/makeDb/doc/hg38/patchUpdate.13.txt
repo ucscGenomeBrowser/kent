@@ -892,3 +892,24 @@ _EOF_
 
 
 #############################################################################
+# Update hg38.p13.chromAlias.txt (DONE 2024-01-17 Angie)
+
+    # In MLQ#32874, the user reported that chrUn_KI270752v1 is missing from hg38.p12.chromAlias.txt.
+    # That's because when the hg38.{p11,p12,p13}.chromAlias.txt files were initially created
+    # above ("Correctly versioned hg38.chromAlias.txt files in downloads"),
+    # chrUn_KI270752v1 was omitted because it had been removed from the RefSeq assembly as
+    # contamination.  However, it is confusing for users to have a sequence in the db with no
+    # aliases despite it having Assembly, Ensembl and INSDC aliases.  So add it back.
+    hgsql hg38 -NBe 'select * from chromAlias where chrom = "chrUn_KI270752v1"'
+#HSCHRUN_RANDOM_CTG29    chrUn_KI270752v1        assembly
+#KI270752.1      chrUn_KI270752v1        ensembl,genbank
+    cd /hive/data/genomes/hg38/goldenPath/bigZips
+    echo -e "chrUn_KI270752v1\tHSCHRUN_RANDOM_CTG29\tKI270752.1\t" >> hg38.p13.chromAlias.txt
+    # p13/hg38.p13.chromAlias.txt is a symlink to the one in this directory.
+    # p13/hg38.p13.chromAlias.bb is a file in p13/ .  -- But it already has chrUn_KI270752v1
+    # so it does not need to be updated, great.
+    bigBedToBed -chrom=chrUn_KI270752v1 p13/hg38.p13.chromAlias.bb stdout
+#chrUn_KI270752v1        0       27745   chrUn_KI270752v1        HSCHRUN_RANDOM_CTG29    KI270752.1      KI270752.1
+
+
+#############################################################################
