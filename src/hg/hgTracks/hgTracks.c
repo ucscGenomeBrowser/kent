@@ -11452,7 +11452,9 @@ if (cdsQueryCache != NULL)
 void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
 /* add text to track long label to indicate filter is active. Also add doWiggle/windowsize label. */
 {
-tg->longLabel = labelAsFilteredNumber(tg->longLabel, numOut);
+if (numOut > 0)
+    tg->longLabel = labelAsFilteredNumber(tg->longLabel, numOut);
+
 if (cartOrTdbBoolean(cart, tg->tdb, "doWiggle", FALSE))
     labelTrackAsDensity(tg);
 else if (winTooBigDoWiggle(cart, tg))

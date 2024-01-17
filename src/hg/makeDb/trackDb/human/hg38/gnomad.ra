@@ -215,7 +215,6 @@ longLabel Genome Aggregation Database (gnomAD) Genome Variants v4.0.0 Pre-Releas
 type vcfTabix
 showHardyWeinberg on
 configureByPopup off
-maxWindowCoverage 40000
 visibility dense
 dataVersion Release 4.0.0 (November 1, 2023, (chrY Fix November 16, 2023))
 priority 1
@@ -226,16 +225,20 @@ html gnomadV4.html
     track gnomadGenomesV4
     parent gnomadVariantsV4
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-    shortLabel gnomAD v4 Genomes Variants
+    shortLabel gnomAD4 Genome Vars
     longLabel Genome Aggregation Database (gnomAD) Genomes Variants v4.0.0 Pre-Release
+    #maxWindowCoverage 10000
+    maxWindowToDraw 10000
     visibility pack
 
     track gnomadExomesV4
     parent gnomadVariantsV4
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-    shortLabel gnomAD v4 Exomes Variants
+    shortLabel gnomAD4 Exome Vars
     longLabel Genome Aggregation Database (gnomAD) Exomes Variants v4.0.0 Pre-Release
     visibility pack
+    #maxWindowCoverage 10000
+    maxWindowToDraw 10000
 
 searchTable pliByTranscript
 searchType bigBed
