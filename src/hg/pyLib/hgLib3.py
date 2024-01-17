@@ -52,8 +52,8 @@ botDelayMsecs = 0
 
 # two global variables: the first is the botDelay limit after which the page is slowed down and a warning is shown
 # the second is the limit after which the page is not shown anymore
-botDelayWarn = 800
-botDelayBlock = 1500
+botDelayWarn = 1500
+botDelayBlock = 3000
 
 jksqlTrace = False
 
@@ -533,7 +533,8 @@ def hgBotDelay(fraction=1.0, useBytes=None):
         print("<html><head></head><body>")
         print("<b>Too many HTTP requests and not enough delay between them.</b><p> "
         "Your IP has been blocked to keep this website responsive for other users. "
-        "Please contact genome-www@soe.ucsc.edu to unblock your IP address or solve the captcha below. We can also help you obtain the data you need without "
+        "Please contact genome-www@soe.ucsc.edu to unblock your IP address, especially if you were just browsing our site and are not running a bot,"
+        "or solve the captcha below. We can help you obtain the data you need without "
         "web crawling.<p>")
         showCaptcha()
         print("</html>")
