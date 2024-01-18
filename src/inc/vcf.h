@@ -219,6 +219,11 @@ struct vcfFile *vcfTabixFileAndIndexMayOpen(char *fileOrUrl, char *tbiFileOrUrl,
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
  * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence */
 
+struct vcfFile *vcfTabixFileAndIndexMayOpenExt(char *fileOrUrl, char *tbiFileOrUrl, char *chrom, int start, int end,
+				    int maxErr, int maxRecords, char *abortMessage);
+/* Extension routine for vcfTabixFileAndIndexMayOpen().  Allows caller to specify an
+ * errAbort message if maxRecords is exceeded. */
+
 struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
 				    int maxErr, int maxRecords);
 /* Open a VCF file that has been compressed and indexed by tabix and
