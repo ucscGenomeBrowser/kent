@@ -401,7 +401,7 @@ static unsigned maxItems = 0;
 
 if (!set)
     {
-    char *maxItemsStr = cfgOptionDefault("bigBedMaxItems", "1000000");
+    char *maxItemsStr = cfgOptionDefault("bigBedMaxItems", "10000");
 
     maxItems = sqlUnsigned(maxItemsStr);
     }
