@@ -2018,7 +2018,7 @@ def htmlMiddle():
     showGraphBrowser()
 
 def main():
-    cgiSetup()
+    cgiSetup(bottleneckFraction=2, useBytes=2)
 
     format = getCgiVar("format")
     if format in ["pdf", "svg", "sif", "json"]:

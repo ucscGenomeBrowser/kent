@@ -1249,6 +1249,13 @@ function getDb()
     if (db)
         return db.value;
 
+    if (typeof uiState !== "undefined" && uiState.db)
+        return uiState.db;
+
+    db = document.getElementById("selectAssembly");
+    if (db)
+        return db.selectedOptions[0].value;
+
     return "";
 }
 
@@ -4249,4 +4256,62 @@ function writeToApacheLog(msg) {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", logUrl, true);
     xmlhttp.send();  // sends request and exits this function
+}
+
+function addRecentSearch(db, searchTerm, extra={}) {
+    // Push a searchTerm onto a stack in localStorage to show users their most recent
+    // search terms. If an optional extra argument is supplied (ex: the response from hgSuggest),
+    // save that as well
+    // The searchStack object (note: saved as a string via JSON.stringify in localStorage) keeps
+    // a per database stack of the 5 most recently searched terms, as well as their "result",
+    // which can be an autocomplete object from hgSuggest, something from hgSearch, or just nothing
+    // Example:
+    // var searchStack = {
+    //  hg38: {
+    //   "stack": ["foxp", "flag", "fla"],
+    //   "results: {
+    //     "foxp": {
+    //       "value": "FOXP1 (Homo sap...",
+    //       "id": "chr3:70954708-71583728",
+    //       ...
+    //     },
+    //     "flag": {}, // NOTE: empty object
+    //     "fla": {
+    //       "value": ...,
+    //       "id": ...,
+    //     },
+    //   }
+    // },
+    // mm10: {
+    //  "stack": [...],
+    //  "results": {},
+    // }
+    let searchStack = window.localStorage.getItem("searchStack");
+    let searchObj = {};
+    if (searchStack === null) {
+        searchObj[db] = {"stack": [searchTerm], "results": {}};
+        searchObj[db].results[searchTerm] = extra;
+        window.localStorage.setItem("searchStack", JSON.stringify(searchObj));
+    } else {
+        searchObj = JSON.parse(searchStack);
+        if (db in searchObj) {
+            let searchList = searchObj[db].stack;
+            if (searchList.includes(searchTerm)) {
+                // remove it from wherever it is cause it's going to the front
+                searchList.splice(searchList.indexOf(searchTerm), 1);
+            } else {
+                searchObj[db].results[searchTerm] = extra;
+                if (searchList.length >= 5) {
+                    let toDelete = searchList.pop();
+                    delete searchObj[db].results[toDelete];
+                }
+            }
+            searchList.unshift(searchTerm);
+            searchObj.stack = searchList;
+        } else {
+            searchObj[db] = {"stack": [searchTerm], "results": {}};
+            searchObj[db].results[searchTerm] = extra;
+        }
+        window.localStorage.setItem("searchStack", JSON.stringify(searchObj));
+    }
 }

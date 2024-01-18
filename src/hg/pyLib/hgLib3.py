@@ -52,8 +52,8 @@ botDelayMsecs = 0
 
 # two global variables: the first is the botDelay limit after which the page is slowed down and a warning is shown
 # the second is the limit after which the page is not shown anymore
-botDelayWarn = 800
-botDelayBlock = 1500
+botDelayWarn = 1500
+botDelayBlock = 3000
 
 jksqlTrace = False
 
@@ -97,6 +97,29 @@ def parseConf(fname):
 # cache of hg.conf contents
 hgConf = None
 
+captchaQuestions = {
+        1 : "How many chromosomes do humans have?",
+        2 : "What is the family name of the UCSC Genome Browser's original creator?",
+        3 : "The genome is stored in which type of molecule? It's a three letter acronym.",
+        4 : "RNA encodes for which type of molecule?",
+        5 : "In eukaryotes, transcripts are composed of exons and ...",
+        6 : "What do you call the specific location of a gene on a chromosome?",
+        7 : "A gene is composed of multiple .... ? (hint: starts with trans- and has exons and introns)",
+        8 : "Enter the name of either one of the human sex chromosomes",
+        9 : "This genome browser is hosted by a University named...",
+        }
+
+captchaAnswers = {
+        1 : ["46", "23"],
+        2 : ["kent", "jim"],
+        3 : ["dna"],
+        4 : ["proteins", "amino acids", "aa", "protein"],
+        5 : ["introns"],
+        6 : ["locus"],
+        7 : ["transcripts", "transcript", "isoforms", "proteins"],
+        8 : ["x", "y", "chrx", "chry"],
+        9 : ["ucsc"],
+}
 def parseHgConf():
     """ return hg.conf as dict key:value. """
     global hgConf
@@ -464,12 +487,16 @@ def getBotCheckString(ip, fraction):
         botCheckString = "%s %f" % (ip, fraction)
     return botCheckString
 
-def hgBotDelay(fraction=1.0):
+def hgBotDelay(fraction=1.0, useBytes=None):
     """
     Implement bottleneck delay, get bottleneck server from hg.conf.
     This behaves similar to the function src/hg/lib/botDelay.c:hgBotDelay
     It does not use the hgsid, currently it always uses the IP address.
     Using the hgsid makes little sense. It is more lenient than the C version.
+
+    If useBytes is set, use only the first x bytes of the IP address. This helps
+    block bots that all use similar IP addresses, at the risk of blocking
+    entire institutes.
     """
     global hgConf
     global doWarnBot
@@ -478,6 +505,8 @@ def hgBotDelay(fraction=1.0):
     ip = os.environ.get("REMOTE_ADDR")
     if not ip: # skip if not called from Apache
         return
+    if useBytes is not None and ip.count(".")==3: # do not do this for ip6 addresses
+        ip = ".".join(ip.split(".")[:useBytes])
 
     host = cfgOption("bottleneck.host")
     port = cfgOption("bottleneck.port")
@@ -490,15 +519,28 @@ def hgBotDelay(fraction=1.0):
     debug(1, "Bottleneck delay: %d msecs" % millis)
     botDelayMsecs = millis
 
-    if millis>botDelayBlock:
+    captchaId = int(cgiString("captchaId", 0))
+    if captchaId!=0:
+        captchaAnswer = cgiString("captchaAnswer", "").lower()
+        allowedAnswers = captchaAnswers.get(captchaId, [])
+        if captchaAnswer in allowedAnswers:
+            millis -= 10000
+
+    if millis > (botDelayBlock/fraction):
         # retry-after time factor 10 is based on the example in the bottleneck help message
         sys.stderr.write("hgLib.py hogExit\n")
-        errAbort("Too many HTTP requests and not enough delay between them. "
+        printContentType(status=429, headers={"Retry-after" : str(millis / 200)})
+        print("<html><head></head><body>")
+        print("<b>Too many HTTP requests and not enough delay between them.</b><p> "
         "Your IP has been blocked to keep this website responsive for other users. "
-        "Please contact genome-www@soe.ucsc.edu to unblock your IP address. We can also help you obtain the data you need without "
-        "web crawling. ", status=429, headers = {"Retry-after" : str(millis / 10)})
+        "Please contact genome-www@soe.ucsc.edu to unblock your IP address, especially if you were just browsing our site and are not running a bot,"
+        "or solve the captcha below. We can help you obtain the data you need without "
+        "web crawling.<p>")
+        showCaptcha()
+        print("</html>")
+        sys.exit(0)
 
-    if millis>botDelayWarn:
+    if millis > (botDelayWarn/fraction):
         time.sleep(millis/1000.0)
         doWarnBot = True # = show warning message later in printContentType()
 
@@ -1059,7 +1101,23 @@ def cartString(cart, default=None):
     " Get a string from the cart. For better readability for programmers used to the C code. "
     return cart.get(cart, default)
 
-def cgiSetup():
+def showCaptcha():
+    import random
+    captchaId = random.choice(list(captchaAnswers.keys()))
+    print("Please answer the following question to unblock your IP:")
+    print("<p><b>")
+    print(captchaQuestions[captchaId])
+    print("</b><p>")
+    print('<form action="" method="get">')
+    print('<label for="textInput">Enter answer:</label>')
+
+    print('<input type="text" id="textInput" name="captchaAnswer" required>')
+    print('<input type="hidden" name="captchaId" value="'+str(captchaId)+'">')
+    print('<input type="hidden" name="debug" value="'+cgiString("debug", "0")+'">')
+    print('<input type="hidden" name="gene" value="'+cgiString("gene", "")+'">')
+    print('<input type="submit" value="Submit" />')
+
+def cgiSetup(bottleneckFraction=1.0, useBytes=None):
     """ do the usual browser CGI setup: parse the hg.conf file, parse the CGI
     variables, get the cart, do bottleneck delay. Returns the cart.
 
@@ -1073,7 +1131,7 @@ def cgiSetup():
         global verboseLevel
         verboseLevel = int(cgiString("debug"))
 
-    hgBotDelay()
+    hgBotDelay(fraction=bottleneckFraction, useBytes=useBytes)
 
     cart = cartAndCookieSimple()
     return cart

@@ -1026,7 +1026,7 @@ else
     hOrFPrintf(f, "\n");	/*	itemRgbCol was the last column	*/
 }
 
-static int itemRgbHeader(FILE *f, struct sqlResult *sr, int lastCol)
+static int itemRgbHeader(FILE *f, struct sqlResult *sr, int lastCol, char outSep)
 /*	print out bed header, recognize "reserved" column, return which
  *	column it is, or -1 if not found
  */
@@ -1038,11 +1038,11 @@ for (colIx = 0; colIx < lastCol; ++colIx)
     {
     if (sameWord("reserved",field))
 	{
-	hOrFPrintf(f, "itemRgb\t");
+	hOrFPrintf(f, "itemRgb%c", outSep);
 	ret = colIx;
 	}
     else
-	hOrFPrintf(f, "%s\t", field);
+	hOrFPrintf(f, "%s%c", field, outSep);
     field = sqlFieldName(sr);
     }
 if (sameWord("reserved",field))
@@ -1134,7 +1134,7 @@ for (region = regionList; region != NULL; region = region->next)
         hOrFPrintf(f, "#");
         if (showItemRgb)
             {
-            itemRgbCol = itemRgbHeader(f, sr, lastCol);
+            itemRgbCol = itemRgbHeader(f, sr, lastCol, outSep);
             if (itemRgbCol == -1)
                 showItemRgb = FALSE;        /*  did not find "reserved" */
             }
