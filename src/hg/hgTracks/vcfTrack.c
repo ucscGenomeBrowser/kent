@@ -27,6 +27,7 @@
 #include "udc.h"
 #include "memgfx.h"
 #include "chromAlias.h"
+#include "hgConfig.h"
 
 // Russ Corbett-Detig suggested darker shades for coloring non-synonymous variants green
 Color darkerShadesOfGreenOnWhite[EXPR_DATA_SHADES];
@@ -3012,6 +3013,21 @@ track->itemName = vcfHapClusterTrackName;
 track->mapsSelf = TRUE;
 }
 
+static unsigned vcfMaxItems()
+/* Get the maximum number of items to grab from a vcf file.  Defaults to ten thousand. */
+{
+static boolean set = FALSE;
+static unsigned maxItems = 0;
+
+if (!set)
+    {
+    char *maxItemsStr = cfgOptionDefault("vcfMaxItems", "10000");
+
+    maxItems = sqlUnsigned(maxItemsStr);
+    }
+
+return maxItems;
+}
 
 static void vcfTabixLoadItems(struct track *tg)
 /* Load items in window from VCF file using its tabix index file. */
@@ -3044,7 +3060,8 @@ if (slCount(windows)>1)
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileAndIndexMayOpen(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
+    vcff = vcfTabixFileAndIndexMayOpenExt(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, vcfMaxItems(), 
+        "Too many items in region.Zoom in to view track.");
     if (vcff != NULL)
 	{
 	filterRecords(vcff, tg);

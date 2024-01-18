@@ -394,7 +394,7 @@ return bbi;
 }
 
 static unsigned bigBedMaxItems()
-/* Get the maximum number of items to grab from a bigBed file.  Defaults to a million. */
+/* Get the maximum number of items to grab from a bigBed file.  Defaults to ten thousand . */
 {
 static boolean set = FALSE;
 static unsigned maxItems = 0;

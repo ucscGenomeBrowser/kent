@@ -934,8 +934,8 @@ char *chromBPlus = startsWith("chr", chromB) ? chromB+3 : chromB;
 return sameString(chromAPlus, chromBPlus);
 }
 
-static struct vcfRecord *vcfParseData(struct vcfFile *vcff, char *chrom, int start, int end,
-				      int maxRecords)
+static struct vcfRecord *vcfParseDataExt(struct vcfFile *vcff, char *chrom, int start, int end,
+				      int maxRecords, char *abortMessage)
 // Given a vcfFile into which the header has been parsed, and whose
 // lineFile is positioned at the beginning of a data row, parse and
 // return all data rows (in region, if chrom is non-NULL) from lineFile,
@@ -949,7 +949,12 @@ struct vcfRecord *record;
 while ((record = vcfNextRecord(vcff)) != NULL)
     {
     if (maxRecords >= 0 && recCount >= maxRecords)
-        break;
+        {
+        if (abortMessage != NULL)
+            errAbort("%s",abortMessage);
+        else
+            break;
+        }
     if (chrom == NULL)
 	{
 	slAddHead(&records, record);
@@ -966,8 +971,14 @@ while ((record = vcfNextRecord(vcff)) != NULL)
 	    }
 	}
     }
+printf("records %d\n", recCount);
 slReverse(&records);
 return records;
+}
+
+static struct vcfRecord *vcfParseData(struct vcfFile *vcff, char *chrom, int start, int end, int maxRecords)
+{
+return vcfParseDataExt(vcff, chrom, start, end, maxRecords, NULL);
 }
 
 struct vcfFile *vcfFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
@@ -1030,8 +1041,9 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
 return vcfTabixFileAndIndexMayOpen(fileOrUrl, NULL, chrom, start, end, maxErr, maxRecords);
 }
 
-struct vcfFile *vcfTabixFileAndIndexMayOpen(char *fileOrUrl, char *tbiFileOrUrl, char *chrom, int start, int end,
-				    int maxErr, int maxRecords)
+struct vcfFile *vcfTabixFileAndIndexMayOpenExt(char *fileOrUrl, char *tbiFileOrUrl, char *chrom, int start, int end,
+				    int maxErr, int maxRecords, char *abortMessage)
+
 /* Open a VCF file that has been compressed and indexed by tabix and
  * parse VCF header, or return NULL if unable. tbiFileOrUrl can be NULL.
  * If chrom is non-NULL, seek to the position range and parse all lines in
@@ -1048,11 +1060,17 @@ if (vcff == NULL)
 if (isNotEmpty(chrom) && start != end)
     {
     if (lineFileSetTabixRegion(lf, chrom, start, end))
-        vcff->records = vcfParseData(vcff, NULL, 0, 0, maxRecords);
+        vcff->records = vcfParseDataExt(vcff, NULL, 0, 0, maxRecords, abortMessage);
     lineFileClose(&(vcff->lf)); // file is all read in so we close it
     }
 
 return vcff;
+}
+
+struct vcfFile *vcfTabixFileAndIndexMayOpen(char *fileOrUrl, char *tbiFileOrUrl, char *chrom, int start, int end,
+				    int maxErr, int maxRecords)
+{
+return vcfTabixFileAndIndexMayOpenExt(fileOrUrl, tbiFileOrUrl, chrom, start, end, maxErr, maxRecords, NULL);
 }
 
 int vcfRecordCmp(const void *va, const void *vb)
