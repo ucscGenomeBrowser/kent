@@ -6,6 +6,23 @@
 #ifndef USERDATA_H
 #define USERDATA_H
 
+struct userFiles
+{
+char *userName;
+struct fileInfo *file; // list of files for this user
+};
+
+char *getDataDir(char *userName);
+/* Return the full path to the user specific data directory, can be configured via hg.conf
+ * on hgwdev, this is /data/apache/userdata/userStore/hash/userName/
+ * on the RR, this is /userdata/userStore/hash/userName/ */
+
+struct userFiles *listFilesForUser(char *userName);
+/* Get all the files for a particular user */
+
+long long checkUserQuota(char *userName);
+/* Return the amount of space a user is currently using */
+
 char *storeUserFile(char *userName, char *fileName, void *data, size_t dataSize);
 /* Give a fileName and a data stream, write the data to:
  * userdata/userStore/hashedUserName/userName/fileName

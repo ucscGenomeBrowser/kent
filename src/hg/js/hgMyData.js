@@ -20,13 +20,13 @@ var hubCreate = (function() {
     };
 
     // We can use XMLHttpRequest if necessary or a mirror can't use tus
-    var useTus = tus.isSupported && typeof tusdPort !== 'undefined' && typeof tusdBasePath !== 'undefined';
+    var useTus = tus.isSupported && true;
 
     function getTusdEndpoint() {
         // return the port and basepath of the tusd server
         // NOTE: the port and basepath are specified in hg.conf
-        let currUrl = parseUrl(window.location.href);
-        return "https://hgwdev-chmalee.gi.ucsc.edu" + ":" + tusdPort + "/" + tusdBasePath + "/";
+        //let currUrl = parseUrl(window.location.href);
+        return "https://hgwdev-hubspace.gi.ucsc.edu/files";
     }
 
     function togglePickStateMessage(showMsg = false) {
@@ -208,6 +208,10 @@ var hubCreate = (function() {
 
     function submitPickedFiles() {
         let tusdServer = getTusdEndpoint();
+        let onBeforeRequest = function(req) {
+            let xhr = req.getUnderlyingObject(req);
+            xhr.withCredentials = true;
+        };
         for (let f in uiState.toUpload) {
             file = uiState.toUpload[f];
             if (useTus) {
@@ -217,7 +221,9 @@ var hubCreate = (function() {
                         filename: file.name,
                         fileType: file.type,
                         fileSize: file.size
-                    }
+                    },
+                    onBeforeRequest: onBeforeRequest,
+                    retryDelays: [1000],
                 };
                 // TODO: get the uploadUrl from the tusd server
                 // use a pre-create hook to validate the user

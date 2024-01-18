@@ -30,7 +30,6 @@
 #include "jsHelper.h"
 #include "botDelay.h"
 #include "wikiLink.h"
-#include "userdata.h"
 
 static boolean printSaveList = FALSE; // if this is true, we print to stderr the number of custom tracks saved
 
@@ -706,8 +705,6 @@ if (!customTrackIsBigData(fileName))
 char buf[1024];
 char *cFBin = cartOptionalString(cart, binVar);
 char *cF = cartOptionalString(cart, fileVar);
-char *offset = NULL;
-unsigned long size = 0;
 if (cFBin)
     {
     // cFBin already contains memory offset and size (search for __binary in cheapcgi.c)
@@ -715,45 +712,11 @@ if (cFBin)
     char *split[3];
     int splitCount = chopByWhite(cloneString(cFBin), split, sizeof(split));
     if (splitCount > 2) {errAbort("hgCustom: extra garbage in %s", binVar);}
-    offset = (char *)sqlUnsignedLong(split[0]);
-    size = sqlUnsignedLong(split[1]);
     }
 else
     {
     safef(buf, sizeof(buf),"memory://%s %lu %lu",
 	  fileName, (unsigned long) cF, (unsigned long) strlen(cF));
-    offset = (char *)sqlUnsignedLong(cF);
-    size = (unsigned long)strlen(cF);
-    }
-if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
-    {
-    //dumpStack("prepBigData: fileName = '%s'\n", fileName);
-    //errAbort("prepBigData: fileName = '%s'\n", fileName);
-    // figure out if user is logged in:
-    //   1. if so, save 'fileName', which is really a pointer to memory, to username encoded directory
-    //   2. Turn buf into a web accessible url to this data so it will be parsed
-    //   as a track correctly
-    char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
-    if (userName)
-        {
-        // storeUserFiles returns a URL to a track
-        // after sucessfully saving the data into /userdata
-        char *retFileName = storeUserFile(userName, fileName, offset, size);
-        struct dyString *ret = dyStringNew(0);
-        char *type = NULL;
-        if (endsWith(fileName, ".bam"))
-            type = "bam";
-        else if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed"))
-            type = "bigBed";
-        else if (endsWith(fileName, ".inter.bb") || endsWith(fileName, ".inter.bigBed"))
-            type = "bigInteract";
-        else if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig"))
-            type = "bigWig";
-        if (!type)
-            errAbort("Unable to determine track type from extension: %s", fileName);
-        dyStringPrintf(ret, "track type=%s bigDataUrl=%s", type, retFileName);
-        return dyStringCannibalize(&ret);
-        }
     }
 return cloneString(buf);
 }

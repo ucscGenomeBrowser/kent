@@ -1,0 +1,96 @@
+{
+"Event": {
+"HTTPRequest": {
+"Header": {
+"Accept": [
+"*\/*"
+],
+"Accept-Encoding": [
+"gzip, deflate, br"
+],
+"Accept-Language": [
+"en-US,en;q=0.5"
+],
+"Connection": [
+"Keep-Alive"
+],
+"Content-Length": [
+"10004"
+],
+"Content-Type": [
+"application\/offset+octet-stream"
+],
+"Cookie": [
+"_ga_EGJY1746VM=GS1.1.1707943256.27.0.1707943311.0.0.0; _ga=GA1.1.335386585.1703110328; hguid.genome-test=26137075_KUY2JKAiELSKetV4oPouuuXFnFu9; _ga_RT83HV74PS=GS1.1.1707943273.70.1.1707943914.0.0.0; _ga_1KXQRJXYYY=GS1.1.1706551456.3.0.1706551456.0.0.0; hguid=1736152956_MBoGauSUMzQHWyp37BfI9f0NpyuO; _ga_P5EV0BL192=GS1.1.1707933118.38.0.1707933118.0.0.0; _ga_X4EVCTYJ3E=GS1.1.1705442714.2.1.1705444010.0.0.0; _ga_JYTK4VHQFB=GS1.1.1707239615.5.0.1707239615.0.0.0; _ga_QTHV5R36YZ=GS1.1.1707239615.6.0.1707239615.0.0.0; hguid.hgwbeta=26444215_KhmSytkajKRhXjdy6za02cJXnUP4; _ga_PWFD1NPDNM=GS1.1.1705596833.1.1.1705597341.0.0.0; _ga_G5K9F3K9H2=GS1.1.1706049421.1.0.1706049424.0.0.0; hguid.genome-euro=456620926_1CEBuAmepzYdQGgvmMf1jSobJFtn; wikidb_mw1_UserName=chmalee; wikidb_mw1_UserID=e4548e4e90f3ed8800ada218d63a8cd2; _ga_BWJ4Z4Y66X=GS1.1.1707247503.1.0.1707247508.0.0.0; DEVwikidb_mw1_UserName=chmalee; DEVwikidb_mw1_UserID=e4548e4e90f3ed8800ada218d63a8cd2"
+],
+"Dnt": [
+"1"
+],
+"Host": [
+"hgwdev-hubspace.gi.ucsc.edu"
+],
+"Origin": [
+"https:\/\/hgwdev-chmalee.gi.ucsc.edu"
+],
+"Referer": [
+"https:\/\/hgwdev-chmalee.gi.ucsc.edu\/"
+],
+"Sec-Fetch-Dest": [
+"empty"
+],
+"Sec-Fetch-Mode": [
+"cors"
+],
+"Sec-Fetch-Site": [
+"same-site"
+],
+"Sec-Gpc": [
+"1"
+],
+"Tus-Resumable": [
+"1.0.0"
+],
+"Upload-Offset": [
+"0"
+],
+"User-Agent": [
+"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko\/20100101 Firefox\/120.0"
+],
+"X-Forwarded-For": [
+"2600:1700:5fa5:2550:70f6:e705:9c8f:da0b"
+],
+"X-Forwarded-Host": [
+"hgwdev-hubspace.gi.ucsc.edu"
+],
+"X-Forwarded-Proto": [
+"https"
+],
+"X-Forwarded-Server": [
+"hgwdev-hubspace.gi.ucsc.edu"
+]
+},
+"Method": "PATCH",
+"RemoteAddr": "127.0.0.1:58602",
+"URI": "\/files\/e45c08a3704579e3a57ec4d94f2c69ba"
+},
+"Upload": {
+"ID": "e45c08a3704579e3a57ec4d94f2c69ba",
+"IsFinal": false,
+"IsPartial": false,
+"MetaData": {
+"fileSize": "10004",
+"fileType": "text\/csv",
+"filename": "gnomAD_v3.1.2_(non-cancer)_7-155800188-155800407_2024_01_29_13_02_13.csv"
+},
+"Offset": 10004,
+"PartialUploads": null,
+"Size": 10004,
+"SizeIsDeferred": false,
+"Storage": {
+"Path": "\/hive\/users\/chmalee\/tmp\/userDataDir\/e45c08a3704579e3a57ec4d94f2c69ba",
+"Type": "filestore"
+}
+}
+},
+"Type": "post-finish"
+}

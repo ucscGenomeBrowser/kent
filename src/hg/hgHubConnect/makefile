@@ -14,3 +14,5 @@ include ../../inc/cgi_build_rules.mk
 compile: $O
 	${CC} -o $A${EXE} -g $O ${MYLIBS} ${L}
 
+my:: $O
+	cd hooks && make

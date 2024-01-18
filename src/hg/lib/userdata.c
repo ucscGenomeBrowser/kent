@@ -14,20 +14,21 @@
 #include "cheapcgi.h"
 #include "customFactory.h"
 #include "wikiLink.h"
+#include "userdata.h"
 
 char *getUserName()
 {
 return (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
 }
 
-static char *getDataDir(char *userName)
+char *getDataDir(char *userName)
 /* Return the full path to the user specific data directory, can be configured via hg.conf
  * on hgwdev, this is /data/apache/userdata/userStore/hash/userName/
  * on the RR, this is /userdata/userStore/hash/userName/ */
 {
 char *userDataBaseDir = cfgOption("userDataDir");
 if (!userDataBaseDir  || isEmpty(userDataBaseDir))
-    errAbort("hgCustom: trying to save user file but no userDataDir defined in hg.conf");
+    errAbort("trying to save user file but no userDataDir defined in hg.conf");
 if (userDataBaseDir[0] != '/')
     errAbort("config setting userDataDir must be an absolute path (starting with '/')");
 
@@ -39,6 +40,7 @@ struct dyString *newDataDir = dyStringNew(0);
 dyStringPrintf(newDataDir, "%s/%s/%s/", 
     userDataBaseDir, userPrefix, encUserName);
 
+fprintf(stderr, "userDataDir = '%s'\n", newDataDir->string);
 return dyStringCannibalize(&newDataDir);
 }
 
@@ -54,24 +56,32 @@ void uploadTrack()
 //char *userName = getUserName();
 }
 
-struct userFiles *getUserFiles()
-/* Return the list of:
- *   - Only if logged in:
- *       - custom tracks in saved sessions
- *       - non-public hubs in saved sessions
- *       - any other files stored in the per user directory
- *   - custom tracks in non-saved sessions
- *   - non-public hubs in non-saved sessions
- * Present data as a plain array for a table view */
+struct userFiles *listFilesForUser(char *userName)
+/* Get all the files for a particular user */
 {
-char *userName = getUserName();
-if (userName)
+struct userFiles *userListing;
+AllocVar(userListing);
+char *path = getDataDir(userName);
+struct fileInfo *fiList = listDirX(path,NULL,TRUE);
+userListing->userName = userName;
+userListing->file = fiList;
+return userListing;
+}
+
+long long checkUserQuota(char *userName)
+/* Return the amount of space a user is currently using */
+{
+long long quota = 0;
+struct userFiles *ufList = listFilesForUser(userName);
+struct fileInfo *fi;
+if (ufList)
     {
-    return NULL;
+    for (fi = ufList->file; fi != NULL; fi = fi->next)
+        {
+        quota += fi->size;
+        }
     }
-// throw in the custom tracks that are in the current cart that may not be saved yet
-// throw in the attached hubs that are non-public hubs
-return NULL;
+return quota;
 }
 
 char *storeUserFile(char *userName, char *newFileName, void *data, size_t dataSize)

@@ -1,0 +1,44 @@
+{
+    "Type": "pre-create",
+
+    "Event": {
+        "Upload": {
+            "ID": "5d892c228ec8d0451dfec588697e8930",
+            "Size": 432724,
+            "SizeIsDeferred": false,
+            "Offset": 432724,
+            "MetaData": {
+                "filename": "Screenshot 2023-08-17 at 09.00.40 1.png",
+                "filetype": "image/png"
+            },
+            "IsPartial": false,
+            "IsFinal": false,
+            "PartialUploads": null,
+            "Storage": {
+                 "Type": "filestore",
+                 "Path": "/my/upload/directory/14b1c4c77771671a8479bc0444bbc5ce",
+
+                 "Type": "s3store",
+                 "Bucket": "my-upload-bucket",
+                 "Key": "my-prefix/14b1c4c77771671a8479bc0444bbc5ce"
+            }
+        },
+
+        "HTTPRequest": {
+            "Method": "PATCH",
+            "URI": "/files/5d892c228ec8d0451dfec588697e8930",
+            "RemoteAddr": "127.0.0.1:59395",
+            "Header": {
+                "Host": [
+                    "localhost:8080"
+                ],
+                "Tus-Resumable": [
+                    "1.0.0"
+                ],
+                "User-Agent": [
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/116.0"
+                ]
+            }
+        }
+    }
+}

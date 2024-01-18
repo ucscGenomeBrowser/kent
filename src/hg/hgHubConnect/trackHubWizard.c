@@ -20,12 +20,6 @@
 void doTrackHubWizard()
 /* Offer an upload form so users can upload all their hub files */
 {
-char *tusdBasePath = cfgOption("tusdBasePath");
-char *tusdPort = cfgOption("tusdPort");
-/*
-if (!(tusdPort && tusdBasePath))
-    errAbort("tusd not installed or not running");
-*/
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
@@ -69,22 +63,24 @@ puts("</div>\n"); // row
 puts("<div id='uploadedFilesSection' style=\"display: none\" class='col-md-6 tabSection'>");
 puts("<h4>Your uploaded hubs</h4>");
 webIncludeFile("inc/hgMyData.html");
-//webIncludeResourceFile("../style/gbStatic.css");
 puts("</div>\n");
 puts("</div>\n"); // row
 puts("</div>\n"); // row
 
-jsInlineF("const tusdBasePath=\"%s\";\nconst tusdPort=\"%s\";\n", tusdBasePath, tusdPort);
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
+// get the current files stored for this user
 }
 
 char *prepBigData(struct cart *cart, char *fileName, char *binVar, char *fileVar)
 {
 fprintf(stderr, "prepping bigData for %s\n", fileName);
-//return NULL;
-//if (!customTrackIsBigData(fileName))
-//    return NULL;
+struct hashEl *hel, *helList = hashElListHash(cart->hash);;
+for (hel = helList; hel != NULL; hel = hel->next)
+{
+fprintf(stderr, "cart var '%s': '%s'\n", hel->name, (char *)hel->val);
+}
+fflush(stderr);
 char buf[1024];
 char *retFileName = NULL;
 char *cFBin = cartOptionalString(cart, binVar);
@@ -97,7 +93,7 @@ if (cFBin)
     safef(buf,sizeof(buf),"memory://%s %s", fileName, cFBin);
     char *split[3];
     int splitCount = chopByWhite(cloneString(cFBin), split, sizeof(split));
-    if (splitCount > 2) {errAbort("hgCustom: extra garbage in %s", binVar);}
+    if (splitCount > 2) {errAbort("hgHubConnect: extra garbage in %s", binVar);}
     offset = (char *)sqlUnsignedLong(split[0]);
     size = sqlUnsignedLong(split[1]);
     }
