@@ -5601,14 +5601,14 @@ include covidHgiGwas.ra
 
 track covidMuts
 type bigBed 12 + 
-shortLabel Rare Harmful Vars
+shortLabel COVID Rare Harmful Var
 longLabel Rare variants underlying COVID-19 severity and susceptibility from the COVID Human Genetics Effort
 mouseOver $gene $name $rsId Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
 labelFields gene, name
 defaultLabelFields gene, name
 noScoreFilter on
 priority 2.2
-group varRep
+group phenDis
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
