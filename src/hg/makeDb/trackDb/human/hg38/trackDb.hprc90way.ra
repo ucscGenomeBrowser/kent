@@ -8,6 +8,7 @@ visibility hide
 type bed 4
 group hprc
 html hprc90way
+pennantIcon New red ../goldenPath/newsarch.html#012224 "Released Jan. 22, 2024"
 
     track consHprc90wayViewalign
     shortLabel 90-way

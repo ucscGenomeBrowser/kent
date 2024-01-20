@@ -18,6 +18,7 @@ dimensions dimensionX=subpop dimensionY=sample
 sortOrder subpop=+ population=+ hap=+ sample=+
 configurable on
 html hprcChains
+pennantIcon New red ../goldenPath/newsarch.html#012224 "Released Jan. 22, 2024"
 
     track hprcChainNetViewchain
     shortLabel Chains
