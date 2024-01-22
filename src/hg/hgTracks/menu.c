@@ -417,7 +417,9 @@ appendLinkWithShortcut(&links, buf, "Default Tracks", "defaultTracksMenuLink", "
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);
 appendLinkWithShortcut(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", "Re-order tracks to be in default order", "d o", FALSE, FALSE);
 appendLinkWithOnclick(&links, "#", "Remove all highlights", "cleaerHighlightLink", "Remove all highlights on all genomes", "highlightCurrentPosition('clear'); $('ul.nice-menu li ul').hide();", "h c", FALSE, FALSE);
-appendLinkWithShortcut(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", "Clear user data, e.g. active tracks, track configuration, custom data, ...", "c r", FALSE, FALSE);
+appendLinkWithOnclick(&links, "#", "Highlight here", "highlightHereMenu", "Add a highlight that covers the entire currently shown region, using the default color. Keyboard shortcut memo is 'highlight mark here'", "highlightCurrentPosition('add'); $('ul.nice-menu li ul').hide();", "h m", FALSE, FALSE);
+
+appendLinkWithShortcut(&links, "../cgi-bin/cartReset?skipLs=1", "Reset All User Settings", "cartResetMenuLink", "Clear user data, e.g. active tracks, track configuration, custom data, ...", "c r", FALSE, FALSE);
 
 struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul>\n");
 freeLinksAndConvert(links, viewMenu);

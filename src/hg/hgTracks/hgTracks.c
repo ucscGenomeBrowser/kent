@@ -8444,6 +8444,12 @@ if (isSearchTracksSupported(database,cart))
 
 
 hPrintf("&nbsp;");
+// Not a submit button, because this is not a CGI function, it only calls Javascript function
+hPrintf("<button id='highlightThis' title='Add a highlight that covers the entire region shown<br><i>Keyboard shortcut:</i> h, "
+        "then m'>highlight</button>");
+jsInlineF("$('#highlightThis').click( function(ev) { highlightCurrentPosition('add'); return false; } );");
+
+hPrintf("&nbsp;");
 hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");
 
 hPrintf(" ");
