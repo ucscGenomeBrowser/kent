@@ -894,3 +894,9 @@ filterValues.TFName HOXB13,HNF4A,Zfx,Prdm15,ZNF708,IKZF1,SP1,FOSL2,FOSL1,BHLHE41
 
 track ncbiRefSeq override
 parent refSeqComposite off
+
+track varsInPubs override
+pennantIcon Updated red ../goldenPath/newsarch.html#012324 "Released Jan. 23, 2024"
+
+track avada override
+pennantIcon New red ../goldenPath/newsarch.html#012324 "Released Jan. 23, 2024"
