@@ -11,7 +11,7 @@ type bigBed 9 +
 priority 100
 filter.score 1
 filterLabel.score Minimum number of assemblies with arrangement
-pennantIcon New red ../goldenPath/newsarch.html# "Released Jan. 5, 2024"
+pennantIcon New red ../goldenPath/newsarch.html#012224 "Released Jan. 22, 2024"
 
     track hprcInsertsV1
     parent hprcArrV1

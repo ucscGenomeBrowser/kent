@@ -4,8 +4,7 @@ shortLabel Short Variants
 longLabel Short Variants
 group hprc
 html hprcVCF
-pennantIcon New red ../goldenPath/newsarch.html# "Released Jan. 5, 2024"
-
+pennantIcon New red ../goldenPath/newsarch.html#012224 "Released Jan. 22, 2024"
 
     track hprcVCFDecomposedUnder4
     parent hprcVCF

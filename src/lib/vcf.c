@@ -971,7 +971,6 @@ while ((record = vcfNextRecord(vcff)) != NULL)
 	    }
 	}
     }
-printf("records %d\n", recCount);
 slReverse(&records);
 return records;
 }
