@@ -29,7 +29,7 @@
 	<li class="first"><a id="backToGenomeBrowsder" href="../cgi-bin/hgTracks">Back to Genome Browser</a></li>
 	<li><a id="configureMenuLink" href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
 	<li><a id="trackSearchMenuLink" href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a></li>
-	<li><a id="shortMatchLink" href="../cgi-bin/hgTrackUi?g=oligoMatch">Short exact DNA match</a></li>
+	<li><a id="shortMatchLink" href="../cgi-bin/hgTrackUi?g=oligoMatch&oligoMatch=pack">Short exact DNA match</a></li>
         <!-- OPTIONAL_RECOMMENDED_TRACK_SETS_MENU -->
 	<li><a id="cartResetMenuLink" href="../cgi-bin/cartReset?skipLs=1">Reset All User Settings</a></li>
         </ul>
