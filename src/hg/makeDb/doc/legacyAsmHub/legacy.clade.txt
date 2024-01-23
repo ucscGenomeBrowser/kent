@@ -192,6 +192,8 @@ GCA_028023285.1_mBalRic1.hap2	mammals
 GCA_028500815.1_bRisTri1.patW.cur.20221130	birds
 GCA_028564815.1_mEubGla1.hap2	mammals
 GCA_028858705.1_bGruAme1.mat	birds
+GCA_028858805.1_NHGRI_mPanTro3-v1.1-hic.freeze_alt	primates
+GCA_028885525.1_NHGRI_mPonPyg2-v1.1-hic.freeze_alt	primates
 GCA_029499605.1_aHylSar1.hap1	vertebrate
 GCA_029633865.1_fLamInc1.hap2	fish
 GCA_030028045.1_mHipAmp2.hap2	mammals
@@ -404,6 +406,11 @@ GCF_021218885.1_Marmota_monax_Labrador192_V1.0	mammals
 GCF_021288785.1_ASM2128878v2	mammals
 GCF_022539665.1_CSIRO_AGI_Dcar_v0.2	invertebrate
 GCF_023065955.1_UrsArc1.0	mammals
+GCF_028858775.1_NHGRI_mPanTro3-v1.1-hic.freeze_pri	primates
+GCF_028878055.1_NHGRI_mSymSyn1-v1.1-hic.freeze_pri	primates
+GCF_028885625.1_NHGRI_mPonPyg2-v1.1-hic.freeze_pri	primates
+GCF_028885655.1_NHGRI_mPonAbe1-v1.1-hic.freeze_pri	primates
+GCF_029289425.1_NHGRI_mPanPan1-v1.1-0.1.freeze_pri	primates
 GCF_900094665.1_CAROLI_EIJ_v1.1	mammals
 GCF_900246225.1_fAstCal1.2	fish
 GCF_900324465.1_fAnaTes1.1	fish
