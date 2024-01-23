@@ -2842,7 +2842,9 @@ while (exon != NULL)
     }
 /* Now sort it. */
 slSort(&exonList, exonSlRefCmp);
+
 numExons = slCount(exonList);
+struct genePred *gp = lf->original;
 boolean revStrand = (lf->orientation == -1);
 int eLast = -1;
 int s = -1;
@@ -2855,6 +2857,7 @@ if (lButton)
     picStart += buttonW;
 if (rButton)
     picEnd -= buttonW;
+
 for (ref = exonList; TRUE; )
     {
     exon = ref->val;
@@ -2910,16 +2913,61 @@ for (ref = exonList; TRUE; )
                 strandChar = '-';
             }
 
+            // we still need to show the existing mouseover text
             char* existingText = lf->mouseOver;
             if (isEmpty(existingText))
                 existingText = lf->name;
 
+            // construct a string that tells the user about the codon frame situation of this exon
+            char *frameText = "";
+            if (gp->exonFrames && isExon)
+                {
+                // start/end-phases are in the direction of transcription:
+                // if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
+                // if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame
+                int startPhase = gp->exonFrames[exonIx-1];
+                int endPhase = -1;
+                if (!revStrand) 
+                    endPhase = gp->exonFrames[exonIx];
+                else 
+                    if (exonIx>1)
+                        endPhase = gp->exonFrames[exonIx-2];
+
+                if (gp->exonFrames[exonIx-1]==-1) // UTRs don't have a frame at all
+                    {
+                    frameText = ", untranslated region";
+                    }
+                else
+                    {
+                    //printf("%s %d %d %s_ex_%d_frame_%d<br>", chromName, s, e, gp->name, exonIx, startPhase);
+                    char buf[256];
+                    char *exonNote = "";
+                    if (exonIntronNumber<numExons) // do not do this for the last exon (exonIx is 1-based)
+                        {
+                        //printf("exonIx %d, numExons %d<br>", exonIx, numExons);
+                        ////int nextExonFrame = gp->exonFrames[nextExIx];
+                        //printf("nextExIx %d, nextExonFrame %d, endPhase %d<br>", nextExIx, nextExonFrame, endPhase);
+
+                        if (startPhase==endPhase)
+                            exonNote = " &#8594; in-frame exon";
+                        safef(buf, sizeof(buf), ", start-end codon phase %d-%d%s", startPhase, endPhase, exonNote);
+                        } 
+                    else
+                        {
+                        if (startPhase==0)
+                            exonNote = " &#8594; in-frame exon";
+                        safef(buf, sizeof(buf), ", start codon phase %d%s", startPhase, exonNote);
+                        }
+                    frameText = buf;
+                    }
+                }
+
             if (!isEmpty(existingText))
-                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d", 
-                        existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d%s", 
+                        existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
             else
-                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d", 
-                        strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d%s", 
+                        strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
 
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
