@@ -2323,11 +2323,9 @@ errCatchEnd(errCatch);
 if (errCatch->gotError || vcff == NULL)
     {
     if (isNotEmpty(errCatch->message->string))
-        {
         tg->networkErrMsg = cloneString(errCatch->message->string);
-        tg->drawItems = bigDrawWarning;
-        tg->totalHeight = bigWarnTotalHeight;
-        }
+    tg->drawItems = bigDrawWarning;
+    tg->totalHeight = bigWarnTotalHeight;
     }
 errCatchFree(&errCatch);
 }
