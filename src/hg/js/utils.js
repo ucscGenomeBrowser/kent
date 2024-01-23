@@ -3982,7 +3982,7 @@ function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip) {
     /* Called after 100ms of the mouse being stationary, show a new tooltip
      * if we are over a new mouseover element */
     e = triggeringMouseMoveEv;
-    if (mousedNewItem) {
+    if (mousedNewItem && !(mouseIsOverPopup(e, currTooltip, 0))) {
         mousemoveController.abort();
         hideMouseoverText(currTooltip);
         showMouseoverText(triggeringMouseMoveEv);
