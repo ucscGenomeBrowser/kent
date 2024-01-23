@@ -2896,15 +2896,8 @@ var rightClick = {
                                     }
                                 }
                                 if (name && table) {
-                                    o[rightClick.makeImgTag("magnify.png")+" Zoom to codon"] =
-                                    {   onclick: function(menuItemClicked, menuObject) {
-                                            rightClick.hit(menuItemClicked, menuObject,
-                                                        "zoomCodon",
-                                                        {name: name, table: table});
-                                            return true;}
-                                    };
                                     if (exonNum > 0) {
-                                        o[rightClick.makeImgTag("magnify.png")+" Zoom to exon"] = {
+                                        o[rightClick.makeImgTag("magnify.png")+" Zoom to this exon"] = {
                                             onclick: function(menuItemClicked, menuObject) {
                                                 $.ajax({
                                                         type: "GET",
@@ -2919,7 +2912,14 @@ var rightClick = {
                                                     });
                                                 return true; }
                                         };
-                                        o[rightClick.makeImgTag("magnify.png")+" Choose exon "] =
+                                    o[rightClick.makeImgTag("magnify.png")+" Jump to codon"] =
+                                    {   onclick: function(menuItemClicked, menuObject) {
+                                            rightClick.hit(menuItemClicked, menuObject,
+                                                        "zoomCodon",
+                                                        {name: name, table: table});
+                                            return true;}
+                                    };
+                                        o[rightClick.makeImgTag("magnify.png")+" Jump to exon "] =
                                         {   onclick: function(menuItemClicked, menuObject) {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                             "zoomExon",
