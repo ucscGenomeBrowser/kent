@@ -3939,10 +3939,6 @@ let canShowNewMouseover = true;
 let mousemoveController;
 // The div that moves around the users screen with the visible mouseover text
 let  mouseoverContainer;
-// save the last moused over ele to show when the mouse has stopped moving
-let newTooltipElement;
-// the last time the mouse moved
-//let lastTime = 0;
 
 function tooltipIsVisible() {
     /* Is the tooltip visible on the screen right now? */
@@ -3986,7 +3982,7 @@ function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip) {
     /* Called after 100ms of the mouse being stationary, show a new tooltip
      * if we are over a new mouseover element */
     e = triggeringMouseMoveEv;
-    if (mousedNewItem && !(mouseIsOverPopup(e, currTooltip, 0) || mouseIsOverItem(e, currTooltip, 0))) {
+    if (mousedNewItem) {
         mousemoveController.abort();
         hideMouseoverText(currTooltip);
         showMouseoverText(triggeringMouseMoveEv);
@@ -4054,8 +4050,6 @@ function showMouseoverText(e) {
         // allow the user to mouse over the mouse over, (eg. clicking a link or selecting text)
         document.addEventListener("mousemove", callback, {signal: mousemoveController.signal});
         document.addEventListener("scroll", callback, {signal: mousemoveController.signal});
-    } else {
-        newTooltipElement = referenceElement;
     }
 }
 
