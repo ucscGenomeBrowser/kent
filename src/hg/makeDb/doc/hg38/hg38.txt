@@ -7269,3 +7269,21 @@ ln -s /hive/data/outside/cosmic/hg38/v98/cosmic.bb /gbdb/hg38/cosmic/cosmic.bb
 +------------+------------------------------------+----------+-----------------+
 
 ##############################################################################
+# Affy CytoScan HD track, refs #32856  (2024-01-23 Gerardo)
+cd /hive/data/genomes/hg38/bed/
+mkdir genotypeArrays; cd genotypeArrays
+#The user sent Gerardo a direct email with a shared folder link. Gerardo downloaded the bed files and made them available on dev.
+#The user provided two bed files (https://hgwdev-gperez2.gi.ucsc.edu/~gperez2/mlq/mlq_32791/). Gerardo used the version 2 bed file for the track.
+wget https://hgwdev-gperez2.gi.ucsc.edu/~gperez2/mlq/mlq_32791/CytoScanHD_Accel_Array.na36.bed.zip
+unzip CytoScanHD_Accel_Array.na36.bed.zip
+# Removed header and sorted the file
+grep -v 'track' CytoScanHD_Accel_Array.na36.bed | bedSort stdin stdout > affyCytoScanHD.bed
+bedToBigBed -tab -type=bed12 affyCytoScanHD.bed https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes affyCytoScanHD.bb 
+cd /gbdb/hg38
+mkdir genotypeArrays; cd genotypeArrays
+# Making symlink for big file and raw bed file
+ln -s /hive/data/genomes/hg38/bed/genotypeArrays/affyCytoScanHD.bb
+ln -s /hive/data/genomes/hg38/bed/genotypeArrays/CytoScanHD_Accel_Array.na36.bed.zip
+cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+vi trackDb.ra
+##############################################################################

@@ -772,6 +772,7 @@ type bigBed 4
 visibility hide
 group varRep
 compositeTrack on
+pennantIcon Updated red hgTrackUi?db=hg38&g=genotypeArrays "New Affy CytoScan HD track"
 
     track genetiSureCytoCghSnp
     parent genotypeArrays on
@@ -838,6 +839,17 @@ compositeTrack on
     html genotypeArrays
     priority 6
     noScoreFilter on
+
+    track affyCytoScanHD
+    parent genotypeArrays on
+    shortLabel Affy CytoScan HD
+    longLabel Affymetrix Cytoscan HD GeneChip Array
+    type bigBed 12
+    bigDataUrl /gbdb/hg38/genotypeArrays/affyCytoScanHD.bb
+    visibility pack
+    html genotypeArrays
+    itemRgb on
+    priority 7
 
 searchTable snpArrayIllumina450k
 searchMethod exact
