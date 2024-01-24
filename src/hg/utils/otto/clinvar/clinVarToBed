@@ -911,10 +911,11 @@ for line in ifh:
 
     phenotypeList = ", ".join(phenotypeList.split("|"))
 
-    mouseOverParts = [mouseOverName, "Type: "+allType, "Consequence: "+ molConseq, "Significance: "+clinSign,
+    mouseOverParts = [mouseOverName, "Review Status: "+starRatingHtml,
+            "Type: "+allType, "Consequence: "+ molConseq, "Significance: "+clinSign,
             "Origin: "+origin, "Phenotypes: "+phenotypeList]
     # removed Apr 2020: numberSubmitters+" submitters", "Level: "+asciiStars
-    mouseOver = ", ".join(mouseOverParts)
+    mouseOver = "<br>".join(mouseOverParts)
 
     snpAcc = "rs"+snpAcc # dbSnp links changed in mid/late 2022
 
