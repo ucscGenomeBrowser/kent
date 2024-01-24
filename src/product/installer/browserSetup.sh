@@ -742,7 +742,7 @@ function installRedhat () {
         yum -y install epel-release
     fi
 
-    yum -y install ghostscript rsync ImageMagick R-core curl
+    yum -y install ghostscript rsync ImageMagick R-core curl --allowerasing
 
     # centos 7 does not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
