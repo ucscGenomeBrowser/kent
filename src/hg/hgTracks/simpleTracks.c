@@ -183,6 +183,7 @@ boolean doPliColors = FALSE;
 static boolean scafColorsMade = FALSE;
 
 int maxItemsInFullTrack = 1000;  /* Maximum number of items displayed in full */
+int maxItemsPossible = 10000;   /* Maximum possible value for maxItems */
 int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 
 /* These variables persist from one incarnation of this program to the
@@ -814,8 +815,8 @@ int maximumTrackItems(struct track *tg)
 {
 unsigned int maxItems = trackDbFloatSettingOrDefault(tg->tdb, "maxItems", maxItemsInFullTrack);
 
-if (maxItems > maxItemsInFullTrack)
-    maxItems = maxItemsInFullTrack;
+if (maxItems > maxItemsPossible)
+    maxItems = maxItemsPossible;
 
 return maxItems;
 }
