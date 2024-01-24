@@ -1000,6 +1000,9 @@ function installDebian ()
        touch /tmp/browserSetup.aptGetUpdateDone
     fi
 
+    # the new tzdata package comes up interactive questions, suppress these
+    export DEBIAN_FRONTEND=noninteractive
+
     echo2 Installing ghostscript and imagemagick
     waitKey
     # ghostscript for PDF export
