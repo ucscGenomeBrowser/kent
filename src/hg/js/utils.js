@@ -3030,7 +3030,7 @@ var findTracks = {
         // was already a connected hub, then we don't need to specify anything because it
         // will already be in the cart and we handle the visibility settings like normal.
         // The hubUrl field present in the json indicates this is an unconnected hub
-        if (justClicked && hubUrl !== undefined) {
+        if (justClicked && hubUrl !== undefined && hubUrl.length > 0) {
             var form = $("form[id='searchResults'");
             var newHubInput = document.createElement("input");
             // if we are a subtrack we need to explicitly hide the parent

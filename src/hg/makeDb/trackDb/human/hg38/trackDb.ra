@@ -772,6 +772,7 @@ type bigBed 4
 visibility hide
 group varRep
 compositeTrack on
+pennantIcon Updated red hgTrackUi?db=hg38&g=genotypeArrays "New Affy CytoScan HD track"
 
     track genetiSureCytoCghSnp
     parent genotypeArrays on
@@ -839,6 +840,17 @@ compositeTrack on
     priority 6
     noScoreFilter on
 
+    track affyCytoScanHD
+    parent genotypeArrays on
+    shortLabel Affy CytoScan HD
+    longLabel Affymetrix Cytoscan HD GeneChip Array
+    type bigBed 12
+    bigDataUrl /gbdb/hg38/genotypeArrays/affyCytoScanHD.bb
+    visibility pack
+    html genotypeArrays
+    itemRgb on
+    priority 7
+
 searchTable snpArrayIllumina450k
 searchMethod exact
 searchType bigBed
@@ -894,3 +906,9 @@ filterValues.TFName HOXB13,HNF4A,Zfx,Prdm15,ZNF708,IKZF1,SP1,FOSL2,FOSL1,BHLHE41
 
 track ncbiRefSeq override
 parent refSeqComposite off
+
+track varsInPubs override
+pennantIcon Updated red ../goldenPath/newsarch.html#012324 "Released Jan. 23, 2024"
+
+track avada override
+pennantIcon New red ../goldenPath/newsarch.html#012324 "Released Jan. 23, 2024"
