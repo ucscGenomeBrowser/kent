@@ -1000,6 +1000,9 @@ function installDebian ()
        touch /tmp/browserSetup.aptGetUpdateDone
     fi
 
+    # the new tzdata package comes up interactive questions, suppress these
+    export DEBIAN_FRONTEND=noninteractive
+
     echo2 Installing ghostscript and imagemagick
     waitKey
     # ghostscript for PDF export
@@ -1707,6 +1710,8 @@ function stopMysql
             service mysql stop
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld stop
+    elif [ -f /etc/init.d/mariadb ]; then 
+            service mariadb stop
     elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
             # RHEL 7, etc use systemd instead of SysV
             systemctl stop mariadb
@@ -1725,6 +1730,8 @@ function startMysql
             service mysql start
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld start
+    elif [ -f /etc/init.d/mariadb ]; then 
+            service mariadb start
     elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
             # RHEL 7, etc use systemd instead of SysV
             systemctl start mariadb

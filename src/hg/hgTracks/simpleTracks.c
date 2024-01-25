@@ -2952,7 +2952,7 @@ for (ref = exonList; TRUE; )
 
                         if (startPhase==endPhase)
                             exonNote = " &#8594; in-frame exon";
-                        safef(buf, sizeof(buf), ", start-end codon phase %d-%d%s", startPhase, endPhase, exonNote);
+                        safef(buf, sizeof(buf), ", codon phase: start %d, end %d%s", startPhase, endPhase, exonNote);
                         } 
                     else
                         {
