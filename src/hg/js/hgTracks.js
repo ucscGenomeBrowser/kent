@@ -2912,14 +2912,14 @@ var rightClick = {
                                                     });
                                                 return true; }
                                         };
-                                    o[rightClick.makeImgTag("magnify.png")+" Jump to codon"] =
+                                    o[rightClick.makeImgTag("magnify.png")+" Enter codon to zoom"] =
                                     {   onclick: function(menuItemClicked, menuObject) {
                                             rightClick.hit(menuItemClicked, menuObject,
                                                         "zoomCodon",
                                                         {name: name, table: table});
                                             return true;}
                                     };
-                                        o[rightClick.makeImgTag("magnify.png")+" Jump to exon "] =
+                                        o[rightClick.makeImgTag("magnify.png")+" Enter exon to zoom"] =
                                         {   onclick: function(menuItemClicked, menuObject) {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                             "zoomExon",
