@@ -11170,6 +11170,9 @@ if (issueBotWarning)
     botDelayMessage(ip, botDelayMillis);
     }
 
+// hide the link "Back to Genome Browser" in the "Genome Browser" menu, since we're on the genome browser now
+jsInline("$('#backToBrowserLi').remove();");
+
 char *debugTmp = NULL;
 /* Uncomment this to see parameters for debugging. */
 /* struct dyString *state = NULL; */
