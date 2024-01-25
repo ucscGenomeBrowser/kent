@@ -410,6 +410,7 @@ GCF_028858775.1_NHGRI_mPanTro3-v1.1-hic.freeze_pri	primates
 GCF_028878055.1_NHGRI_mSymSyn1-v1.1-hic.freeze_pri	primates
 GCF_028885625.1_NHGRI_mPonPyg2-v1.1-hic.freeze_pri	primates
 GCF_028885655.1_NHGRI_mPonAbe1-v1.1-hic.freeze_pri	primates
+GCF_029281585.1_NHGRI_mGorGor1-v1.1-0.2.freeze_pri	primates
 GCF_029289425.1_NHGRI_mPanPan1-v1.1-0.1.freeze_pri	primates
 GCF_900094665.1_CAROLI_EIJ_v1.1	mammals
 GCF_900246225.1_fAstCal1.2	fish

@@ -176,7 +176,7 @@ struct hash *hashCds(char *fileName)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[5];
 struct hash *hash = hashNew(16);
-while (lineFileChopTab(lf, row))
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
     {
     char *name = row[0];
     struct cds *cds;
@@ -200,7 +200,7 @@ struct hash *hashGeneNames(char *fileName)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 struct hash *hash = hashNew(16);
-while (lineFileChopTab(lf, row))
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
     {
     char *name = row[0];
     struct geneNames *gn;
@@ -219,7 +219,7 @@ struct hash *hashColors(char *fileName)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[4];
 struct hash *hash = hashNew(16);
-while (lineFileChopTab(lf, row))
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
     {
     char *name = row[0];
     struct rgbColor *color;
