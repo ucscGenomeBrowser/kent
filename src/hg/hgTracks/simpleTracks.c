@@ -856,6 +856,7 @@ if (doWiggle)
         char *words[3];
         words[0] = "bedGraph";
 	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
+        wigCart->windowingFunction = wiggleWindowingMean;
 	tg->wigCartData = (void *) wigCart;
 	}
     return wigTotalHeight(tg, vis);
@@ -4955,6 +4956,22 @@ else
     countsToPixelsDown(counts, pre);
 }
 
+static void summaryToPixels(struct bbiSummaryElement *summary, struct preDrawContainer *pre)
+/* Convert bbiSummaryElement array into a preDrawElement array */
+{
+struct preDrawElement *pe = &pre->preDraw[pre->preDrawZero];
+struct preDrawElement *lastPe = &pe[insideWidth];
+
+for (; pe < lastPe; pe++, summary++)
+    {
+    pe->count = summary->validCount;
+    pe->min = summary->minVal;
+    pe->max = summary->maxVal;
+    pe->sumData = summary->sumData;
+    pe->sumSquares = summary->sumSquares;
+    }
+}
+
 static void genericDrawItemsWiggle(struct track *tg, int seqStart, int seqEnd,
                                        struct hvGfx *hvg, int xOff, int yOff, int width,
                                        MgFont *font, Color color, enum trackVisibility vis)
@@ -4971,10 +4988,15 @@ if (autoScale == NULL)
 char *windowingFunction = cartOptionalStringClosestToHome(cart, tdb, parentLevel, WINDOWINGFUNCTION);
 if (windowingFunction == NULL)
     wigCart->windowingFunction = wiggleWindowingMean;
-unsigned *counts = countOverlaps(tg);
 
-countsToPixels(counts, pre);
-freez(&counts);
+if (tg->summary)
+    summaryToPixels(tg->summary, pre);
+else
+    {
+    unsigned *counts = countOverlaps(tg);
+    countsToPixels(counts, pre);
+    freez(&counts);
+    }
 
 tg->colorShades = shadesOfGray;
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
@@ -11410,7 +11432,12 @@ if (!tg->limitedVisSet)
             tg->limitWiggle = TRUE;
             }
         if ( tg->limitWiggle)   // auto-density coverage is alway tvFull
-            tg->visibility = tg->limitedVis = tvFull;
+            {
+            if (tg->visibility == tvDense)
+                tg->visibility = tg->limitedVis = tvDense;
+            else
+                tg->visibility = tg->limitedVis = tvFull;
+            }
         else
             tg->limitedVis = vis;
         }
