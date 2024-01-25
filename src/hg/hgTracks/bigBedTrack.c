@@ -422,7 +422,7 @@ if (errCatchStart(errCatch))
     result = bigBedIntervalQuery(bbi, chrom, start, end, bigBedMaxItems() + 1, lm);
     if (slCount(result) > bigBedMaxItems())
 	{
-        errAbort("Too many items in window to filter.Zoom in or remove filters to view track.");
+        errAbort("Too many items in window to filter. Zoom in to view track.");
 
 #ifdef NOTNOW  // we may want to use summary levels if filters are off and folks don't want color
 	track->limitedVis = tvDense;
