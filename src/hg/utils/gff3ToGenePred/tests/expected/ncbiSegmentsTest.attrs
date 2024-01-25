@@ -12,18 +12,18 @@ gene31299	Type	gene
 gene31299	Start	114851189
 gene31299	End	114851483
 gene31299	Strand	-
-IGHV1-34	ID	id861887
-IGHV1-34	Parent	gene31299
-IGHV1-34	Dbxref	GeneID:628614,IMGT/GENE-DB:IGHV1-34,MGI:MGI:4439659
-IGHV1-34	gbkey	V_segment
-IGHV1-34	gene	Ighv1-34
-IGHV1-34	standard_name	IGHV1-34
-IGHV1-34	Seqid	NC_000078.6
-IGHV1-34	Source	Curated Genomic
-IGHV1-34	Type	V_gene_segment
-IGHV1-34	Start	114851189
-IGHV1-34	End	114851483
-IGHV1-34	Strand	-
+Ighv1-34	ID	id861887
+Ighv1-34	Parent	gene31299
+Ighv1-34	Dbxref	GeneID:628614,IMGT/GENE-DB:IGHV1-34,MGI:MGI:4439659
+Ighv1-34	gbkey	V_segment
+Ighv1-34	gene	Ighv1-34
+Ighv1-34	standard_name	IGHV1-34
+Ighv1-34	Seqid	NC_000078.6
+Ighv1-34	Source	Curated Genomic
+Ighv1-34	Type	V_gene_segment
+Ighv1-34	Start	114851189
+Ighv1-34	End	114851483
+Ighv1-34	Strand	-
 gene31298	ID	gene31298
 gene31298	Dbxref	GeneID:641247,IMGT/GENE-DB:IGHV1-33,MGI:MGI:4439617
 gene31298	Name	Ighv1-33
@@ -39,18 +39,18 @@ gene31298	Type	pseudogene
 gene31298	Start	114843692
 gene31298	End	114844083
 gene31298	Strand	-
-IGHV1-33	ID	id861884
-IGHV1-33	Parent	gene31298
-IGHV1-33	Dbxref	GeneID:641247,IMGT/GENE-DB:IGHV1-33,MGI:MGI:4439617
-IGHV1-33	gbkey	V_segment
-IGHV1-33	gene	Ighv1-33
-IGHV1-33	standard_name	IGHV1-33
-IGHV1-33	Seqid	NC_000078.6
-IGHV1-33	Source	Curated Genomic
-IGHV1-33	Type	V_gene_segment
-IGHV1-33	Start	114843692
-IGHV1-33	End	114844083
-IGHV1-33	Strand	-
+Ighv1-33	ID	id861884
+Ighv1-33	Parent	gene31298
+Ighv1-33	Dbxref	GeneID:641247,IMGT/GENE-DB:IGHV1-33,MGI:MGI:4439617
+Ighv1-33	gbkey	V_segment
+Ighv1-33	gene	Ighv1-33
+Ighv1-33	standard_name	IGHV1-33
+Ighv1-33	Seqid	NC_000078.6
+Ighv1-33	Source	Curated Genomic
+Ighv1-33	Type	V_gene_segment
+Ighv1-33	Start	114843692
+Ighv1-33	End	114844083
+Ighv1-33	Strand	-
 gene34726	ID	gene34726
 gene34726	Dbxref	GeneID:100101484,IMGT/GENE-DB:TRAC,MGI:MGI:4439838
 gene34726	Name	Trac
@@ -65,18 +65,18 @@ gene34726	Type	gene
 gene34726	Start	54220520
 gene34726	End	54224198
 gene34726	Strand	+
-TRAC	ID	id929550
-TRAC	Parent	gene34726
-TRAC	Dbxref	GeneID:100101484,IMGT/GENE-DB:TRAC,MGI:MGI:4439838
-TRAC	gbkey	C_region
-TRAC	gene	Trac
-TRAC	standard_name	TRAC
-TRAC	Seqid	NC_000080.6
-TRAC	Source	Curated Genomic
-TRAC	Type	C_gene_segment
-TRAC	Start	54220520
-TRAC	End	54224198
-TRAC	Strand	+
+Trac	ID	id929550
+Trac	Parent	gene34726
+Trac	Dbxref	GeneID:100101484,IMGT/GENE-DB:TRAC,MGI:MGI:4439838
+Trac	gbkey	C_region
+Trac	gene	Trac
+Trac	standard_name	TRAC
+Trac	Seqid	NC_000080.6
+Trac	Source	Curated Genomic
+Trac	Type	C_gene_segment
+Trac	Start	54220520
+Trac	End	54224198
+Trac	Strand	+
 gene34725	ID	gene34725
 gene34725	Dbxref	GeneID:100124400,IMGT/GENE-DB:TRAJ1,MGI:MGI:4439841
 gene34725	Name	Traj1
@@ -92,18 +92,18 @@ gene34725	Type	pseudogene
 gene34725	Start	54218813
 gene34725	End	54218842
 gene34725	Strand	+
-TRAJ1	ID	id929548
-TRAJ1	Parent	gene34725
-TRAJ1	Dbxref	GeneID:100124400,IMGT/GENE-DB:TRAJ1,MGI:MGI:4439841
-TRAJ1	gbkey	J_segment
-TRAJ1	gene	Traj1
-TRAJ1	standard_name	TRAJ1
-TRAJ1	Seqid	NC_000080.6
-TRAJ1	Source	Curated Genomic
-TRAJ1	Type	J_gene_segment
-TRAJ1	Start	54218813
-TRAJ1	End	54218842
-TRAJ1	Strand	+
+Traj1	ID	id929548
+Traj1	Parent	gene34725
+Traj1	Dbxref	GeneID:100124400,IMGT/GENE-DB:TRAJ1,MGI:MGI:4439841
+Traj1	gbkey	J_segment
+Traj1	gene	Traj1
+Traj1	standard_name	TRAJ1
+Traj1	Seqid	NC_000080.6
+Traj1	Source	Curated Genomic
+Traj1	Type	J_gene_segment
+Traj1	Start	54218813
+Traj1	End	54218842
+Traj1	Strand	+
 gene46684	ID	gene46684
 gene46684	Dbxref	GeneID:100101484,IMGT/GENE-DB:TRAC,MGI:MGI:4439838
 gene46684	Name	Trac
@@ -118,18 +118,18 @@ gene46684	Type	gene
 gene46684	Start	1657817
 gene46684	End	1661492
 gene46684	Strand	+
-TRAC	ID	id1209742
-TRAC	Parent	gene46684
-TRAC	Dbxref	GeneID:100101484,IMGT/GENE-DB:TRAC,MGI:MGI:4439838
-TRAC	gbkey	C_region
-TRAC	gene	Trac
-TRAC	standard_name	TRAC
-TRAC	Seqid	NT_039614.1
-TRAC	Source	Curated Genomic
-TRAC	Type	C_gene_segment
-TRAC	Start	1657817
-TRAC	End	1661492
-TRAC	Strand	+
+Trac	ID	id1209742
+Trac	Parent	gene46684
+Trac	Dbxref	GeneID:100101484,IMGT/GENE-DB:TRAC,MGI:MGI:4439838
+Trac	gbkey	C_region
+Trac	gene	Trac
+Trac	standard_name	TRAC
+Trac	Seqid	NT_039614.1
+Trac	Source	Curated Genomic
+Trac	Type	C_gene_segment
+Trac	Start	1657817
+Trac	End	1661492
+Trac	Strand	+
 gene46683	ID	gene46683
 gene46683	Dbxref	GeneID:100124400,IMGT/GENE-DB:TRAJ1,MGI:MGI:4439841
 gene46683	Name	Traj1
@@ -145,18 +145,18 @@ gene46683	Type	pseudogene
 gene46683	Start	1656110
 gene46683	End	1656139
 gene46683	Strand	+
-TRAJ1	ID	id1209740
-TRAJ1	Parent	gene46683
-TRAJ1	Dbxref	GeneID:100124400,IMGT/GENE-DB:TRAJ1,MGI:MGI:4439841
-TRAJ1	gbkey	J_segment
-TRAJ1	gene	Traj1
-TRAJ1	standard_name	TRAJ1
-TRAJ1	Seqid	NT_039614.1
-TRAJ1	Source	Curated Genomic
-TRAJ1	Type	J_gene_segment
-TRAJ1	Start	1656110
-TRAJ1	End	1656139
-TRAJ1	Strand	+
+Traj1	ID	id1209740
+Traj1	Parent	gene46683
+Traj1	Dbxref	GeneID:100124400,IMGT/GENE-DB:TRAJ1,MGI:MGI:4439841
+Traj1	gbkey	J_segment
+Traj1	gene	Traj1
+Traj1	standard_name	TRAJ1
+Traj1	Seqid	NT_039614.1
+Traj1	Source	Curated Genomic
+Traj1	Type	J_gene_segment
+Traj1	Start	1656110
+Traj1	End	1656139
+Traj1	Strand	+
 gene54217	ID	gene54217
 gene54217	Dbxref	GeneID:28933,HGNC:HGNC:5737,IMGT/GENE-DB:IGKV1-33
 gene54217	Name	IGKV1-33
@@ -238,18 +238,18 @@ gene56432	Type	gene
 gene56432	Start	233682
 gene56432	End	239174
 gene56432	Strand	-
-IGHG3, encoding membrane bound form	ID	id1817847
-IGHG3, encoding membrane bound form	Parent	gene56432
-IGHG3, encoding membrane bound form	Dbxref	GeneID:3502,HGNC:HGNC:5527,IMGT/GENE-DB:IGHG3,MIM:147120
-IGHG3, encoding membrane bound form	gbkey	C_region
-IGHG3, encoding membrane bound form	gene	IGHG3
-IGHG3, encoding membrane bound form	standard_name	IGHG3, encoding membrane bound form
-IGHG3, encoding membrane bound form	Seqid	NT_187600.1
-IGHG3, encoding membrane bound form	Source	Curated Genomic
-IGHG3, encoding membrane bound form	Type	C_gene_segment
-IGHG3, encoding membrane bound form	Start	233682
-IGHG3, encoding membrane bound form	End	239174
-IGHG3, encoding membrane bound form	Strand	-
+IGHG3	ID	id1817847
+IGHG3	Parent	gene56432
+IGHG3	Dbxref	GeneID:3502,HGNC:HGNC:5527,IMGT/GENE-DB:IGHG3,MIM:147120
+IGHG3	gbkey	C_region
+IGHG3	gene	IGHG3
+IGHG3	standard_name	IGHG3, encoding membrane bound form
+IGHG3	Seqid	NT_187600.1
+IGHG3	Source	Curated Genomic
+IGHG3	Type	C_gene_segment
+IGHG3	Start	233682
+IGHG3	End	239174
+IGHG3	Strand	-
 gene23	ID	gene23
 gene23	Dbxref	GeneID:729759,HGNC:HGNC:31275
 gene23	Name	OR4F29
