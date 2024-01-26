@@ -162,7 +162,7 @@ the repeat.  The interior grayscale shading represents the divergence of the rep
 represents the class of the repeat. Dotted lines above the repeat and extending left or right
 indicate the length of unaligned repeat model sequence and provide context for where a repeat fragment originates in its
 consensus or pHMM model.  If the length of the unaligned sequence
-is large, an iterruption line and bp size is indicated instead of drawing the extension to scale.
+is large, an interruption line and bp size is indicated instead of drawing the extension to scale.
 <br>
 <br>
 <!-- t2tRepeatMasker-full-mode.png -->

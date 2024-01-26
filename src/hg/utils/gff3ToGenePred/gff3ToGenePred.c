@@ -324,7 +324,7 @@ if (isEmpty(name))
 if (isEmpty(name))
     name = getAttrVal(mrna, "Name");
 if (isEmpty(name))
-    name = getAttrVal(mrna, "standard_name");   // RefSeq use this
+    name = getAttrVal(mrna, "Gene");
 if (isEmpty(name))
     name = getAttrVal(mrna, "gene");   // also for RefSeq when no transcript name
 if (isEmpty(name))

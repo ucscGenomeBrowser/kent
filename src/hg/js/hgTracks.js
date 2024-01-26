@@ -2388,10 +2388,10 @@ var rightClick = {
         } else if (cmd === 'zoomCodon' || cmd === 'zoomExon') {
             var num, ajaxCmd, msg;
             if (cmd === 'zoomCodon') {
-                msg = "Please enter the codon number to jump to:";
+                msg = "Please enter the codon number to zoom to:";
                 ajaxCmd = 'codonToPos';
             } else {
-                msg = "Please enter the exon number to jump to:";
+                msg = "Please enter the exon number to zoom to:";
                 ajaxCmd = 'exonToPos';
             }
             rightClick.myPrompt(msg, function(results) {
@@ -2912,14 +2912,14 @@ var rightClick = {
                                                     });
                                                 return true; }
                                         };
-                                    o[rightClick.makeImgTag("magnify.png")+" Jump to codon"] =
+                                    o[rightClick.makeImgTag("magnify.png")+" Enter codon to zoom to..."] =
                                     {   onclick: function(menuItemClicked, menuObject) {
                                             rightClick.hit(menuItemClicked, menuObject,
                                                         "zoomCodon",
                                                         {name: name, table: table});
                                             return true;}
                                     };
-                                        o[rightClick.makeImgTag("magnify.png")+" Jump to exon "] =
+                                        o[rightClick.makeImgTag("magnify.png")+" Enter exon to zoom to..."] =
                                         {   onclick: function(menuItemClicked, menuObject) {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                             "zoomExon",
