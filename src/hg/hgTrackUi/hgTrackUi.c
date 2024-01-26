@@ -3305,7 +3305,6 @@ else
     // set large title font size, but less so for long labels to minimize wrap
     printf("<B style='font-size:%d%%;'>%s%s</B>\n", strlen(tdb->longLabel) > 30 ? 133 : 200,
                 tdb->longLabel, tdbIsSuper(tdb) ? " tracks" : "");
-
     }
 
 
@@ -3341,6 +3340,7 @@ if (!ajax)
     }
 
     }
+
 puts("<BR><BR>");
 
 if (tdbIsSuperTrackChild(tdb))
@@ -3537,6 +3537,10 @@ if (!ct)
     cgiDown(0.7);
     printRelatedTracks(database,trackHash,tdb,cart);
     printDataVersion(database, tdb);
+
+    char *genome = hGenome(database);
+    char *desc = hFreezeDateOpt(database);
+    printf("<b>Assembly:</b> %s %s<br>", genome, desc);
 
     /* Print lift information from trackDb, if any */
     trackDbPrintOrigAssembly(tdb, database);
