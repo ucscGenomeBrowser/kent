@@ -1,10 +1,36 @@
 Style Guide for Python Code
 
-CODE CONVENTIONS
+The browser uses very few Python scripts. Most are one-shot scripts that were used when building a track. We archive 
+them in this repo but do not run them a lot anymore.
 
-Follow the Python coding conventions laid out by the Python Style guide, except for the 
-UCSC Genomics Group specific conventions outlined below. 
-    http://www.python.org/dev/peps/pep-0008/
+CGIs in Python
+
+We have only 1-2 CGI scripts in Python (e.g. hgGeneGraph and hgMirror, which
+runs only on GBIB) and they do not get a lot of usage. However, they do exist
+and the pyLib directory contains hgLib3.py with ports of e.g. the menu,
+bottleneck, cart parsing and cgi argument parsing, often with the same function
+names as their kent C equivalents. So writing CGIs in Python is possible, as 
+long as they are not computationally intensive. We are not using a special Python
+webserver, we are running CGIs so far like we run C programs, this costs us 200 msec
+at startup, but makes management on our web servers much easier. For the two CGIs,
+it's certainly sufficient.
+
+PYTHON VERSIONS
+
+Python2 is not used anymore anywhere, and Python3 is now required. The problem of
+version incompatibility is vexing in Python, even sometimes among the 3.x
+versions. You can usually work around it buy sticking to the basic Python 3.6
+or so features and not using the very advanced features. Testing on a very
+recent Python version can help. hgLib3.py uses one single external package, the
+MySQL library, which comes with it. It should be possible to not 
+
+CALLING C CODE
+
+It's possible to call C library functions directly from Python. But in practice
+we only call C binaries via exec(), because of the memory management issue. If you
+find yourself doing a lot of that, it may be better to write C directly.
+
+CODE CONVENTIONS
 
 INDENTATION AND SPACING
 
@@ -23,11 +49,14 @@ Lines are no more than 100 characters wide.
 
 INTERPRETER DIRECTIVE
 
-The first line of any UCSC Python script should be:
-    #!/usr/bin/env python2.7
+The first line of any Python script should be:
+    #!/usr/bin/env python3
 
-This line will invoke python2.7 found in the user's PATH. It ensures that scripts developed 
+This line will invoke python3 found in the user's PATH. It ensures that scripts developed 
 by UCSC can be distributed and explicitly states which Python version was used to develop the scripts.
+
+The kent repo contains a few Python2.7 scripts. These are mostly archived
+versions of scripts that are not run anymore.
      
 NAMING CONVENTIONS
 
@@ -51,28 +80,6 @@ Abbreviations follow rules in src/README:
     as "chromosome22Annotations" or "chr22Ann." Note the capitalized 'A" after the 22.
 
 
-Packages and Modules
-
-In Python, a package is represented as a directory with an __init__.py file in it, 
-and contains some number of modules, which are represented as files with a .py extension.
-A module may in turn contain any number of related classes and methods. This differs from Java,
-where one file correlates to one class: in Python it is correct to treat one module similar to
-a whole namespace in Java.
-
-In general try to keep modules on the order of 100's of lines.
-
-Internal packages and modules should have short names in mixedCase, with no spaces or underscores.
-A good example of this style is the ucscGb package:
-
-    ucscGb/
-        __init__.py
-        ra.py
-        cv.py
-        ...
-
-    For more information:
-        http://docs.python.org/tutorial/modules.html
-
 Imports
 
 The most correct way to import something in Python is by specifying its containing module:
@@ -88,13 +95,7 @@ The most correct way to import something in Python is by specifying its containi
 
 Imports should follow the structure:
         
-    1. Each import should be on a separate line, unless modules are from the same package:
-        import os
-        import sys
-
-        from ucscGb import ra, track, qa
-       
-    2. Imports should be at the top of the file. Each section should be separated by a blank line:
+    1. Imports should be at the top of the file. Each section should be separated by a blank line:
 
         a. standard library imports
 
@@ -133,11 +134,6 @@ where the name is preceded by double underscores which Python recognizes as priv
 
 COMMENTING
 
-Note: Still working out which automation document tool to use.
-
-Automated documentation is carried out using the Epydoc tool:
-    http://epydoc.sourceforge.net/
-
 Comments should follow the conventions:
 
     1. Every module should have a paragraph at the beginning. Single class modules may 
@@ -146,43 +142,9 @@ Comments should follow the conventions:
     2. Use Python's docstring convention to embed comments, using """triple double quotes""":
        http://www.python.org/dev/peps/pep-0257/
 
-    3. Use Epytext markup language conventions when commenting:
-        http://epydoc.sourceforge.net/epytext.html
-
-    4. Use Epytext field tags to describe specific properties of objects:
-
-        Structure:
-
-            a. Fields must be placed at the end of a docstring.
-
-            b. Each field is distinguished by the following pattern:
-                @tag: body
-                @tag arg: body
-
-            c. All blocks pertaining to a field must have equal indentation
-               greater than or equal to field tag indentation.  
-
-            d. Optional field tags to use:
-
-                i.  @param - Description of parameter to a function
-
-                ii. @return - Description of a function's return value 
-                        
-                def exampleFunction():
-                    """
-                    This paragraph describes the object.
-
-                    @param inputFile: Input file name
-    
-                    @return: This is a description of the function's return value
-                    """ 
-                
-        For more information and supported fields, see:
-            http://epydoc.sourceforge.net/fields.html#fields
-
 TESTING
 
-Testing is carried out using the unittest module in Python:
+Testing can be carried out using the unittest module in Python:
     http://docs.python.org/library/unittest.html
 
 This module allows for self-running scripts, which are self-contained and should provide
