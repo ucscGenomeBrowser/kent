@@ -353,6 +353,7 @@ else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
             (p = strstr(def->description, "\",Version=\"")))
             *p = '\0';
 	slAddHead((isInfo ? &(vcff->infoDefs) : &(vcff->gtFormatDefs)), def);
+        if (isInfo) hashAdd(vcff->infoDefHash, def->key, def);
 	}
     else
 	vcfFileErr(vcff, "##%s line does not match expected pattern /%s/ or /%s/: \"%s\"",
@@ -485,6 +486,9 @@ vcff->lf = lf;
 vcff->fileOrUrl = vcfFileCloneStr(vcff, lf->fileName);
 vcff->maxErr = (maxErr < 0) ? INT_MAX : maxErr;
 
+// keep a hash of the INFO keys
+vcff->infoDefHash = hashNew(0);
+
 struct dyString *dyHeader = dyStringNew(1024);
 char *line = NULL;
 // First, metadata lines beginning with "##":
@@ -581,20 +585,8 @@ for (i = 0;  i < record->filterCount;  i++)
 struct vcfInfoDef *vcfInfoDefForKey(struct vcfFile *vcff, const char *key)
 /* Return infoDef for key, or NULL if it wasn't specified in the header or VCF spec. */
 {
-struct vcfInfoDef *def;
-// I expect there to be fairly few definitions (less than a dozen) so
-// I'm just doing a linear search not hash:
-for (def = vcff->infoDefs;  def != NULL;  def = def->next)
-    {
-    if (sameString(key, def->key))
-	return def;
-    }
-for (def = vcfSpecInfoDefs;  def != NULL;  def = def->next)
-    {
-    if (sameString(key, def->key))
-	return def;
-    }
-return NULL;
+struct vcfInfoDef *def = hashFindVal(vcff->infoDefHash, (char *)key);
+return def;
 }
 
 static enum vcfInfoType typeForInfoKey(struct vcfFile *vcff, const char *key)
