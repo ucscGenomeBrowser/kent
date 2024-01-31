@@ -646,6 +646,10 @@ def runDot(fname, alg, format="png"):
         print("Could not find the command dot or cgi-bin/loader/dot_static<p>")
         printDotErrorHelpAndExit()
 
+    # work around a dot message that clutters our apache logs on some redhats
+    # https://stackoverflow.com/questions/29809462/uncss-error-c-utf-8-not-a-valid-language-tag
+    os.environ["LC_ALL"] = "en_US.utf8"
+
     cmd = [binPath, "-Gdpi=96", "-Gsize=12,5", "-Gratio=fill", "-K"+alg, "-T"+format, fname, "-o",outFname, "-q 2"]
     # create a html map for png format
     if format=="png":

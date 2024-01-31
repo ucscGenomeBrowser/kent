@@ -11138,6 +11138,15 @@ void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
 cart = theCart;
+
+if (isEmpty(cartOptionalString(cart, "pix")) && !sameOk(cgiRequestMethod(NULL), "POST")) // page reload after POST would lose all vars
+{
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("utils.js", NULL);
+    jsInlineF("addPixAndReloadPage();");
+    return;
+}
+
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
     measureTime("Startup (bottleneck delay %d ms, not applied if under %d) ", botDelayMillis, hgBotDelayCurrWarnMs()) ;
