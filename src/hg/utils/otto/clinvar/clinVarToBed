@@ -911,9 +911,15 @@ for line in ifh:
 
     phenotypeList = ", ".join(phenotypeList.split("|"))
 
-    mouseOverParts = [mouseOverName, "Review Status: "+starRatingHtml,
-            "Type: "+allType, "Consequence: "+ molConseq, "Significance: "+clinSign,
-            "Origin: "+origin, "Phenotypes: "+phenotypeList]
+    mouseOverParts = [
+            mouseOverName,
+            "<b>Review Status: </b>"+starRatingHtml,
+            "<b>Type: </b>"+allType,
+            "<b>Consequence: </b>"+ molConseq,
+            "<b>Significance: </b>"+clinSign,
+            "<b>Origin: </b>"+origin,
+            "<b>Phenotypes: </b>"+phenotypeList
+            ]
     # removed Apr 2020: numberSubmitters+" submitters", "Level: "+asciiStars
     mouseOver = "<br>".join(mouseOverParts)
 

@@ -2015,6 +2015,20 @@ function calculateHgTracksWidth()
     return $(window).width() - 20;
 }
 
+function addPixAndReloadPage()
+/* users who do not come in from hgGateway have no pix variable in the URL nor the cart.
+ * This is a rare case, and the solution is brute force: if it happens, set pix, then reload the entire page.
+ * This will only happen once to these users, as afterwards the cookie is set. */
+{
+    var winWidth = calculateHgTracksWidth();
+    var myUrl = window.location.href;
+    var sep = '?';
+    if (myUrl.indexOf('?'!==-1))
+        sep = '&';
+    var newUrl = myUrl+sep+"pix="+winWidth;
+    window.location.href = newUrl;
+}
+
 function hgTracksSetWidth()
 {
     var winWidth = calculateHgTracksWidth();
