@@ -113,5 +113,12 @@ void asmSummaryJsonOutput(struct asmSummary *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct asmSummary *asmSummaryFullText(struct sqlConnection *conn, char *words, long long rowLimit, long long *totalMatch);
+/* perform a FULLTEXT search on the asmSummary table with the list
+ *   of words string (may be only a single word)
+ * return is a list of items found up to rowLimit, or NULL if none found
+ *   also returning totalMatch to understand if it is more than the rowLimit
+ */
+
 #endif /* ASMSUMMARY_H */
 
