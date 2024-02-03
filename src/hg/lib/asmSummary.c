@@ -842,3 +842,17 @@ fputc('}',f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct asmSummary *asmSummaryFullText(struct sqlConnection *conn, char *words, long long rowLimit, long long *totalMatch)
+/* perform a FULLTEXT search on the asmSummary table with the list
+ *   of words string (may be only a single word)
+ * return is a list of items found up to rowLimit, or NULL if none found
+ *   also returning totalMatch to understand if it is more than the rowLimit
+ */
+{
+char query[4096];
+sqlSafef(query, sizeof(query), "SELECT count(*) FROM asmSummary WHERE MATCH (bioproject, biosample, organismName, isolate, asmName, asmSubmitter, annotationProvider, annotationName) AGAINST (\"%s\")", words);
+*totalMatch = (long long) sqlQuickNum(conn, query);
+sqlSafef(query, sizeof(query), "SELECT * FROM asmSummary WHERE MATCH (bioproject, biosample, organismName, isolate, asmName, asmSubmitter, annotationProvider, annotationName) AGAINST (\"%s\") LIMIT %lld", words, rowLimit);
+struct asmSummary *list = asmSummaryLoadByQuery(conn, query);
+return list;
+}

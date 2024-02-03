@@ -76,6 +76,7 @@
 #define argJsonOutputArrays	"jsonOutputArrays"
 #define argCategories "categories"
 #define argSearchTerm "search"
+#define argGenomeSearchTerm "genomeSearch"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c
@@ -90,6 +91,7 @@ extern char *argListFiles[];
 extern char *argGetDataTrack[];
 extern char *argGetDataSequence[];
 extern char *argSearch[];
+extern char *argFindGenome[];
 
 /* maximum number of words expected in PATH_INFO parsing
  *   so far only using 2
@@ -275,5 +277,11 @@ void apiList(char *words[MAX_PATH_INFO]);
 
 void apiSearch(char *words[MAX_PATH_INFO]);
 /* search function */
+
+/* ######################################################################### */
+/*  functions in findGenome.c */
+
+void apiFindGenome(char *words[MAX_PATH_INFO]);
+/* 'findGenome' function */
 
 #endif	/*	 DATAAPH_H	*/
