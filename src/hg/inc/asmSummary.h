@@ -19,8 +19,8 @@ struct asmSummary
     char *biosample;	/* www.ncbi.nlm.nih.gov/biosample/?term=xxx */
     char *wgsMaster;	/* www.ncbi.nlm.nih.gov/nuccore/xxx */
     char *refseqCategory;	/* representative or reference */
-    unsigned *taxId;	/* www.ncbi.nlm.nih.gov/taxonomy/?term=xxx */
-    unsigned *speciesTaxid;	/* www.ncbi.nlm.nih.gov/taxonomy/?term=xxx */
+    unsigned taxId;	/* www.ncbi.nlm.nih.gov/taxonomy/?term=xxx */
+    unsigned speciesTaxid;	/* www.ncbi.nlm.nih.gov/taxonomy/?term=xxx */
     char *organismName;	/* binomial scientific name */
     char *infraspecificName;	/* strain/cultivar/ecotype/breed */
     char *isolate;	/* source of sample */
@@ -38,17 +38,17 @@ struct asmSummary
     char *relationToTypeMaterial;	/* note of assembly relation to sample */
     char *assemblyType;	/* haploid/diploid/haploid-with-alt-loci/alternate-pseudohaplotype */
     char *phyloGroup;	/* bacteria/viral/archaea/fungi/metagenomes/invertebrate/other/vertebrate_other/plant/vertebrate_mammalian/protozoa */
-    long long *genomeSize;	/* total length of all top-level sequences in the primary assembly */
-    long long *genomeSizeUngapped;	/* genome length not counting gaps (gap == 10 or more Ns) */
-    float *gcPercent;	/* GC percent */
-    unsigned short *repliconCount;	/* total number of chromosomes, organelle genomes and plasmids */
-    unsigned *scaffoldCount;	/* number of scaffolds: placed, unlocalzes, unplace, alternate loci and patch */
-    unsigned *contigCount;	/* number of conts in the primary assembly */
+    long long genomeSize;	/* total length of all top-level sequences in the primary assembly */
+    long long genomeSizeUngapped;	/* genome length not counting gaps (gap == 10 or more Ns) */
+    float gcPercent;	/* GC percent */
+    unsigned short repliconCount;	/* total number of chromosomes, organelle genomes and plasmids */
+    unsigned scaffoldCount;	/* number of scaffolds: placed, unlocalzes, unplace, alternate loci and patch */
+    unsigned contigCount;	/* number of conts in the primary assembly */
     char *annotationProvider;	/* the group that provied the annotation on the assembly */
     char *annotationName;	/* the name of the annotation */
     char *annotationDate;	/* annotation date YYYY/MM/DD */
     char *totalGeneCount;	/* total gene count in annotation */
-    unsigned *proteinCodingGeneCount;	/* protein coding gene count in annotation */
+    unsigned proteinCodingGeneCount;	/* protein coding gene count in annotation */
     char *nonCodingGeneCount;	/* non coding gene count in annotation */
     char *pubmedId;	/* comma separated list of PubMed ID(s) */
     };

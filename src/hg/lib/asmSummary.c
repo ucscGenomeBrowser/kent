@@ -22,23 +22,15 @@ ret->bioproject = row[1];
 ret->biosample = row[2];
 ret->wgsMaster = row[3];
 ret->refseqCategory = row[4];
+ret->taxId = 0;
+ret->speciesTaxid = 0;
 if (row[5] != NULL)
     {
-    ret->taxId = needMem(sizeof(*(ret->taxId)));
-    *(ret->taxId) = sqlUnsigned(row[5]);
-    }
-else
-    {
-    ret->taxId = NULL;
+    ret->taxId = sqlUnsigned(row[5]);
     }
 if (row[6] != NULL)
     {
-    ret->speciesTaxid = needMem(sizeof(*(ret->speciesTaxid)));
-    *(ret->speciesTaxid) = sqlUnsigned(row[6]);
-    }
-else
-    {
-    ret->speciesTaxid = NULL;
+    ret->speciesTaxid = sqlUnsigned(row[6]);
     }
 ret->organismName = row[7];
 ret->infraspecificName = row[8];
@@ -57,55 +49,36 @@ ret->excludedFromRefseq = row[20];
 ret->relationToTypeMaterial = row[21];
 ret->assemblyType = row[22];
 ret->phyloGroup = row[23];
+ret->genomeSize = 0;
+ret->genomeSizeUngapped = 0;
+ret->gcPercent = 0.0;
+ret->repliconCount = 0;
+ret->scaffoldCount = 0;
+ret->contigCount = 0;
+ret->proteinCodingGeneCount = 0;
 if (row[24] != NULL)
     {
-    ret->genomeSize = needMem(sizeof(*(ret->genomeSize)));
-    *(ret->genomeSize) = sqlLongLong(row[24]);
-    }
-else
-    {
-    ret->genomeSize = NULL;
+    ret->genomeSize = sqlLongLong(row[24]);
     }
 if (row[25] != NULL)
     {
-    ret->genomeSizeUngapped = needMem(sizeof(*(ret->genomeSizeUngapped)));
-    *(ret->genomeSizeUngapped) = sqlLongLong(row[25]);
-    }
-else
-    {
-    ret->genomeSizeUngapped = NULL;
+    ret->genomeSizeUngapped = sqlLongLong(row[25]);
     }
 if (row[26] != NULL)
     {
-    ret->gcPercent = needMem(sizeof(float));
-    *(ret->gcPercent) = sqlFloat(row[26]);
+    ret->gcPercent = sqlFloat(row[26]);
     }
 if (row[27] != NULL)
     {
-    ret->repliconCount = needMem(sizeof(*(ret->repliconCount)));
-    *(ret->repliconCount) = sqlUnsigned(row[27]);
-    }
-else
-    {
-    ret->repliconCount = NULL;
+    ret->repliconCount = sqlUnsigned(row[27]);
     }
 if (row[28] != NULL)
     {
-    ret->scaffoldCount = needMem(sizeof(*(ret->scaffoldCount)));
-    *(ret->scaffoldCount) = sqlUnsigned(row[28]);
-    }
-else
-    {
-    ret->scaffoldCount = NULL;
+    ret->scaffoldCount = sqlUnsigned(row[28]);
     }
 if (row[29] != NULL)
     {
-    ret->contigCount = needMem(sizeof(*(ret->contigCount)));
-    *(ret->contigCount) = sqlUnsigned(row[29]);
-    }
-else
-    {
-    ret->contigCount = NULL;
+    ret->contigCount = sqlUnsigned(row[29]);
     }
 ret->annotationProvider = row[30];
 ret->annotationName = row[31];
@@ -113,12 +86,7 @@ ret->annotationDate = row[32];
 ret->totalGeneCount = row[33];
 if (row[34] != NULL)
     {
-    ret->proteinCodingGeneCount = needMem(sizeof(*(ret->proteinCodingGeneCount)));
-    *(ret->proteinCodingGeneCount) = sqlUnsigned(row[34]);
-    }
-else
-    {
-    ret->proteinCodingGeneCount = NULL;
+    ret->proteinCodingGeneCount = sqlUnsigned(row[34]);
     }
 ret->nonCodingGeneCount = row[35];
 ret->pubmedId = row[36];
@@ -155,7 +123,7 @@ void asmSummarySaveToDb(struct sqlConnection *conn, struct asmSummary *el, char 
 {
 struct dyString *update = dyStringNew(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s',%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%g,%u,%u,%u,'%s','%s','%s','%s',%u,'%s','%s')", 
-	tableName,  el->assemblyAccession,  el->bioproject,  el->biosample,  el->wgsMaster,  el->refseqCategory,  *(el->taxId),  *(el->speciesTaxid),  el->organismName,  el->infraspecificName,  el->isolate,  el->versionStatus,  el->assemblyLevel,  el->releaseType,  el->genomeRep,  el->seqRelDate,  el->asmName,  el->asmSubmitter,  el->gbrsPairedAsm,  el->pairedAsmComp,  el->ftpPath,  el->excludedFromRefseq,  el->relationToTypeMaterial,  el->assemblyType,  el->phyloGroup,  *(el->genomeSize),  *(el->genomeSizeUngapped),  *(el->gcPercent),  *(el->repliconCount),  *(el->scaffoldCount),  *(el->contigCount),  el->annotationProvider,  el->annotationName,  el->annotationDate,  el->totalGeneCount,  *(el->proteinCodingGeneCount),  el->nonCodingGeneCount,  el->pubmedId);
+	tableName,  el->assemblyAccession,  el->bioproject,  el->biosample,  el->wgsMaster,  el->refseqCategory,  el->taxId,  el->speciesTaxid,  el->organismName,  el->infraspecificName,  el->isolate,  el->versionStatus,  el->assemblyLevel,  el->releaseType,  el->genomeRep,  el->seqRelDate,  el->asmName,  el->asmSubmitter,  el->gbrsPairedAsm,  el->pairedAsmComp,  el->ftpPath,  el->excludedFromRefseq,  el->relationToTypeMaterial,  el->assemblyType,  el->phyloGroup,  el->genomeSize,  el->genomeSizeUngapped,  el->gcPercent,  el->repliconCount,  el->scaffoldCount,  el->contigCount,  el->annotationProvider,  el->annotationName,  el->annotationDate,  el->totalGeneCount,  el->proteinCodingGeneCount,  el->nonCodingGeneCount,  el->pubmedId);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }
@@ -172,23 +140,15 @@ ret->bioproject = cloneString(row[1]);
 ret->biosample = cloneString(row[2]);
 ret->wgsMaster = cloneString(row[3]);
 ret->refseqCategory = cloneString(row[4]);
+ret->taxId = 0;
+ret->speciesTaxid = 0;
 if (row[5] != NULL)
     {
-    ret->taxId = needMem(sizeof(*(ret->taxId)));
-    *(ret->taxId) = sqlUnsigned(row[5]);
-    }
-else
-    {
-    ret->taxId = NULL;
+    ret->taxId = sqlUnsigned(row[5]);
     }
 if (row[6] != NULL)
     {
-    ret->speciesTaxid = needMem(sizeof(*(ret->speciesTaxid)));
-    *(ret->speciesTaxid) = sqlUnsigned(row[6]);
-    }
-else
-    {
-    ret->speciesTaxid = NULL;
+    ret->speciesTaxid = sqlUnsigned(row[6]);
     }
 ret->organismName = cloneString(row[7]);
 ret->infraspecificName = cloneString(row[8]);
@@ -207,55 +167,36 @@ ret->excludedFromRefseq = cloneString(row[20]);
 ret->relationToTypeMaterial = cloneString(row[21]);
 ret->assemblyType = cloneString(row[22]);
 ret->phyloGroup = cloneString(row[23]);
+ret->genomeSize = 0;
+ret->genomeSizeUngapped = 0;
+ret->gcPercent = 0.0;
+ret->repliconCount = 0;
+ret->scaffoldCount = 0;
+ret->contigCount = 0;
+ret->proteinCodingGeneCount = 0;
 if (row[24] != NULL)
     {
-    ret->genomeSize = needMem(sizeof(*(ret->genomeSize)));
-    *(ret->genomeSize) = sqlLongLong(row[24]);
-    }
-else
-    {
-    ret->genomeSize = NULL;
+    ret->genomeSize = sqlLongLong(row[24]);
     }
 if (row[25] != NULL)
     {
-    ret->genomeSizeUngapped = needMem(sizeof(*(ret->genomeSizeUngapped)));
-    *(ret->genomeSizeUngapped) = sqlLongLong(row[25]);
-    }
-else
-    {
-    ret->genomeSizeUngapped = NULL;
+    ret->genomeSizeUngapped = sqlLongLong(row[25]);
     }
 if (row[26] != NULL)
     {
-    ret->gcPercent = needMem(sizeof(float));
-    *(ret->gcPercent) = sqlFloat(row[26]);
+    ret->gcPercent = sqlFloat(row[26]);
     }
 if (row[27] != NULL)
     {
-    ret->repliconCount = needMem(sizeof(*(ret->repliconCount)));
-    *(ret->repliconCount) = sqlUnsigned(row[27]);
-    }
-else
-    {
-    ret->repliconCount = NULL;
+    ret->repliconCount = sqlUnsigned(row[27]);
     }
 if (row[28] != NULL)
     {
-    ret->scaffoldCount = needMem(sizeof(*(ret->scaffoldCount)));
-    *(ret->scaffoldCount) = sqlUnsigned(row[28]);
-    }
-else
-    {
-    ret->scaffoldCount = NULL;
+    ret->scaffoldCount = sqlUnsigned(row[28]);
     }
 if (row[29] != NULL)
     {
-    ret->contigCount = needMem(sizeof(*(ret->contigCount)));
-    *(ret->contigCount) = sqlUnsigned(row[29]);
-    }
-else
-    {
-    ret->contigCount = NULL;
+    ret->contigCount = sqlUnsigned(row[29]);
     }
 ret->annotationProvider = cloneString(row[30]);
 ret->annotationName = cloneString(row[31]);
@@ -263,12 +204,7 @@ ret->annotationDate = cloneString(row[32]);
 ret->totalGeneCount = cloneString(row[33]);
 if (row[34] != NULL)
     {
-    ret->proteinCodingGeneCount = needMem(sizeof(*(ret->proteinCodingGeneCount)));
-    *(ret->proteinCodingGeneCount) = sqlUnsigned(row[34]);
-    }
-else
-    {
-    ret->proteinCodingGeneCount = NULL;
+    ret->proteinCodingGeneCount = sqlUnsigned(row[34]);
     }
 ret->nonCodingGeneCount = cloneString(row[35]);
 ret->pubmedId = cloneString(row[36]);
@@ -325,10 +261,8 @@ ret->bioproject = sqlStringComma(&s);
 ret->biosample = sqlStringComma(&s);
 ret->wgsMaster = sqlStringComma(&s);
 ret->refseqCategory = sqlStringComma(&s);
-ret->taxId = needMem(sizeof(unsigned));
-*(ret->taxId) = sqlUnsignedComma(&s);
-ret->speciesTaxid = needMem(sizeof(unsigned));
-*(ret->speciesTaxid) = sqlUnsignedComma(&s);
+ret->taxId = sqlUnsignedComma(&s);
+ret->speciesTaxid = sqlUnsignedComma(&s);
 ret->organismName = sqlStringComma(&s);
 ret->infraspecificName = sqlStringComma(&s);
 ret->isolate = sqlStringComma(&s);
@@ -346,24 +280,17 @@ ret->excludedFromRefseq = sqlStringComma(&s);
 ret->relationToTypeMaterial = sqlStringComma(&s);
 ret->assemblyType = sqlStringComma(&s);
 ret->phyloGroup = sqlStringComma(&s);
-ret->genomeSize = needMem(sizeof(*(ret->genomeSize)));
-*(ret->genomeSize) = sqlLongLongComma(&s);
-ret->genomeSizeUngapped = needMem(sizeof(*(ret->genomeSizeUngapped)));
-*(ret->genomeSizeUngapped) = sqlLongLongComma(&s);
-ret->gcPercent = needMem(sizeof(*(ret->gcPercent)));
-*(ret->gcPercent) = sqlFloatComma(&s);
-ret->repliconCount = needMem(sizeof(unsigned));
-*(ret->repliconCount) = sqlUnsignedComma(&s);
-ret->scaffoldCount = needMem(sizeof(unsigned));
-*(ret->scaffoldCount) = sqlUnsignedComma(&s);
-ret->contigCount = needMem(sizeof(unsigned));
-*(ret->contigCount) = sqlUnsignedComma(&s);
+ret->genomeSize = sqlLongLongComma(&s);
+ret->genomeSizeUngapped = sqlLongLongComma(&s);
+ret->gcPercent = sqlFloatComma(&s);
+ret->repliconCount = sqlUnsignedComma(&s);
+ret->scaffoldCount = sqlUnsignedComma(&s);
+ret->contigCount = sqlUnsignedComma(&s);
 ret->annotationProvider = sqlStringComma(&s);
 ret->annotationName = sqlStringComma(&s);
 ret->annotationDate = sqlStringComma(&s);
 ret->totalGeneCount = sqlStringComma(&s);
-ret->proteinCodingGeneCount = needMem(sizeof(unsigned));
-*(ret->proteinCodingGeneCount) = sqlUnsignedComma(&s);
+ret->proteinCodingGeneCount = sqlUnsignedComma(&s);
 ret->nonCodingGeneCount = sqlStringComma(&s);
 ret->pubmedId = sqlStringComma(&s);
 *pS = s;
@@ -444,9 +371,9 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->refseqCategory);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", *(el->taxId));
+fprintf(f, "%u", el->taxId);
 fputc(sep,f);
-fprintf(f, "%u", *(el->speciesTaxid));
+fprintf(f, "%u", el->speciesTaxid);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->organismName);
@@ -516,17 +443,17 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->phyloGroup);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%lld", *(el->genomeSize));
+fprintf(f, "%lld", el->genomeSize);
 fputc(sep,f);
-fprintf(f, "%lld", *(el->genomeSizeUngapped));
+fprintf(f, "%lld", el->genomeSizeUngapped);
 fputc(sep,f);
-fprintf(f, "%g", *(el->gcPercent));
+fprintf(f, "%g", el->gcPercent);
 fputc(sep,f);
-fprintf(f, "%u", *(el->repliconCount));
+fprintf(f, "%u", el->repliconCount);
 fputc(sep,f);
-fprintf(f, "%u", *(el->scaffoldCount));
+fprintf(f, "%u", el->scaffoldCount);
 fputc(sep,f);
-fprintf(f, "%u", *(el->contigCount));
+fprintf(f, "%u", el->contigCount);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->annotationProvider);
@@ -544,7 +471,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->totalGeneCount);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", *(el->proteinCodingGeneCount));
+fprintf(f, "%u", el->proteinCodingGeneCount);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->nonCodingGeneCount);
@@ -604,13 +531,13 @@ fputc('"',f);
 fprintf(f,"taxId");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", *(el->taxId));
+fprintf(f, "%u", el->taxId);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"speciesTaxid");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", *(el->speciesTaxid));
+fprintf(f, "%u", el->speciesTaxid);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"organismName");
@@ -752,37 +679,37 @@ fputc('"',f);
 fprintf(f,"genomeSize");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%lld", *(el->genomeSize));
+fprintf(f, "%lld", el->genomeSize);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"genomeSizeUngapped");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%lld", *(el->genomeSizeUngapped));
+fprintf(f, "%lld", el->genomeSizeUngapped);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"gcPercent");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%g", *(el->gcPercent));
+fprintf(f, "%g", el->gcPercent);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"repliconCount");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", *(el->repliconCount));
+fprintf(f, "%u", el->repliconCount);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"scaffoldCount");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", *(el->scaffoldCount));
+fprintf(f, "%u", el->scaffoldCount);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"contigCount");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", *(el->contigCount));
+fprintf(f, "%u", el->contigCount);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"annotationProvider");
@@ -820,7 +747,7 @@ fputc('"',f);
 fprintf(f,"proteinCodingGeneCount");
 fputc('"',f);
 fputc(':',f);
-fprintf(f, "%u", *(el->proteinCodingGeneCount));
+fprintf(f, "%u", el->proteinCodingGeneCount);
 fputc(',',f);
 fputc('"',f);
 fprintf(f,"nonCodingGeneCount");
