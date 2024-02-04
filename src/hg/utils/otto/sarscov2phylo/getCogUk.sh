@@ -54,7 +54,7 @@ zcat cog_metadata.csv.gz \
 # Reuse nextclade assignments for older sequences; compute nextclade assignments for new seqs.
 zcat $ottoDir/cogUk.latest/nextclade.full.tsv.gz > nextclade.full.tsv
 cp $ottoDir/cogUk.latest/nextalign.fa.xz .
-comm -13 <(cut -f 1 nextclade.full.tsv | sort) <(fastaNames cog_all.fasta.xz | sort) \
+comm -13 <(cut -f 2 nextclade.full.tsv | sort) <(fastaNames cog_all.fasta.xz | sort) \
     > seqsForNextclade
 if [ -s seqsForNextclade ]; then
     nDataDir=~angie/github/nextclade/data/sars-cov-2
