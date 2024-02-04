@@ -108,9 +108,9 @@ BA.2.86:
     # @aviczhl2 pointed out some recurring reversions:
     # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1072
     representative: OY747147.1
-    ranges: [ [ 21765, 21770 ] ]  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606
-    sites: [ 21610,
-             21302, 21304, 21305, # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1190
+    ranges: [ [ 21765, 21770 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606
+              [ 21610, 21624 ] ] # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1347
+    sites: [ 21302, 21304, 21305, # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1190
            ]
     reversions: [ T21711C, C22032T, A22033C, G22034A, A23012G, G26610A ]
 
