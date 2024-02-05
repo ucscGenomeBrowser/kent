@@ -20,6 +20,7 @@ struct combinedSummary
 /* will be initialized as this function begins */
 static char *genarkTable = NULL;
 static boolean statsOnly = FALSE;
+static boolean allowAll = FALSE;	/* default only show existing browsers*/
 
 static void startGenomes(struct jsonWrite *jw)
 /* begin the list output */
@@ -209,6 +210,15 @@ if (comboSumary)
 return comboSumary;
 }
 
+static struct asmSummary *checkAsmSummary(struct sqlConnection *conn, char *oneAccession)
+/* check the asmSummary table for the single accession LIKE */
+{
+char query[4096];
+sqlSafef(query, sizeof(query), "SELECT * FROM asmSummary WHERE assemblyAccession LIKE \"%s%%\"", oneAccession);
+struct asmSummary *list = asmSummaryLoadByQuery(conn, query);
+return list;
+}
+
 static int singleWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw)
 /* conn is a connection to hgcentral, searching for one word,
  *   might be a UCSC database or a GenArk hub accession, or just some word.
@@ -223,33 +233,52 @@ int itemCount = 0;
 
 if (startsWith("GC", perhapsAlias))
     {
+    struct asmSummary *asmSumFound = NULL;
+    struct hash *asmSummaryHash = NULL;
+    asmSumFound = checkAsmSummary(conn, perhapsAlias);
+    verbose(0, "# found %d items\n", slCount(asmSumFound));
+    if (asmSumFound)
+        {
+        struct asmSummary *el;
+        asmSummaryHash = newHash(0);
+        for (el = asmSumFound; el != NULL; el = el->next)
+            hashAdd(asmSummaryHash, el->assemblyAccession, (void *)el);
+        }
     char query[4096];
     sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE gcAccession LIKE \"%s%%\"", genarkTable, perhapsAlias);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
-    struct genark *genArkList = NULL;
+    struct combinedSummary *comboOutput = NULL;
     while ((row = sqlNextRow(sr)) != NULL)
         {
         struct genark *genome = genarkLoad(row);
-        slAddHead(&genArkList, genome);
-        }
-    sqlFreeResult(&sr);
-    slReverse(&genArkList);
-    struct combinedSummary *comboOutput = NULL;
-    struct genark *el = NULL;
-    for (el = genArkList;  el != NULL; el = el->next)
-	{
         struct combinedSummary *cs = NULL;
         AllocVar(cs);
-        cs->summary = NULL;
-        cs->genArk = el;
+        cs->genArk = genome;
         cs->dbDb = NULL;
-	char asmSumQuery[4096];
-	sqlSafef(asmSumQuery, sizeof(asmSumQuery), "SELECT * FROM asmSummary WHERE assemblyAccession = \"%s\"", el->gcAccession);
-	struct asmSummary *as = asmSummaryLoadByQuery(conn, asmSumQuery);
-        if (as)
-            cs->summary = as;
+	if (asmSummaryHash)
+	    {
+	    cs->summary = hashFindVal(asmSummaryHash, genome->gcAccession);
+	    if (cs->summary)
+		hashRemove(asmSummaryHash, genome->gcAccession);
+	    }
 	slAddHead(&comboOutput, cs);
+        }
+    sqlFreeResult(&sr);
+    if (allowAll && asmSummaryHash)
+	{
+	/* check if all asmSummaryHash has been used up */
+	struct hashCookie cookie = hashFirst(asmSummaryHash);
+	struct hashEl *hel;
+	while ((hel = hashNext(&cookie)) != NULL)
+            {
+            struct combinedSummary *cs = NULL;
+            AllocVar(cs);
+            cs->genArk = NULL;
+            cs->dbDb = NULL;
+            cs->summary = hel->val;
+            slAddHead(&comboOutput, cs);
+            }
 	}
     if (comboOutput)
 	{
@@ -366,15 +395,26 @@ boolean genArkExists = hTableExists("hgcentraltest", genarkTable);
 if (!genArkExists)
     apiErrAbort(err400, err400Msg, "table hgcentraltest.%s does not exist for /findGenome", genarkTable);
 
-char *statsOnlyArg = cgiOptionalString("statsOnly");
-if (isNotEmpty(statsOnlyArg))
+char *allowAllString = cgiOptionalString(argAllowAll);
+if (isNotEmpty(allowAllString))
     {
-    if (sameString("1", statsOnlyArg))
+    if (sameString("1", allowAllString))
+	allowAll = TRUE;
+    else if (sameString("0", allowAllString))
+	allowAll = FALSE;
+    else
+	apiErrAbort(err400, err400Msg, "unrecognized '%s=%s' argument, can only be =1 or =0", argAllowAll, allowAllString);
+    }
+
+char *statsOnlyString = cgiOptionalString(argStatsOnly);
+if (isNotEmpty(statsOnlyString))
+    {
+    if (sameString("1", statsOnlyString))
 	statsOnly = TRUE;
-    else if (sameString("0", statsOnlyArg))
+    else if (sameString("0", statsOnlyString))
 	statsOnly = FALSE;
     else
-	apiErrAbort(err400, err400Msg, "unrecognized 'statsOnly=%s' argument, can only be =1 or =0", statsOnlyArg);
+	apiErrAbort(err400, err400Msg, "unrecognized '%s=%s' argument, can only be =1 or =0", argStatsOnly, statsOnlyString);
     }
 
 struct sqlConnection *conn = hConnectCentral();
@@ -408,6 +448,8 @@ if (statsOnly)
     }
 
 jsonWriteString(jw, argGenomeSearchTerm, searchString);
+if (allowAll)
+	jsonWriteBoolean(jw, argAllowAll, allowAll);
 
 int itemCount = 0;
 /* save the search string before it is chopped */
