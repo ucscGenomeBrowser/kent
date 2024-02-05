@@ -2023,7 +2023,7 @@ function addPixAndReloadPage()
     var winWidth = calculateHgTracksWidth();
     var myUrl = window.location.href;
     var sep = '?';
-    if (myUrl.indexOf('?'!==-1))
+    if (myUrl.indexOf('?')!==-1)
         sep = '&';
     var newUrl = myUrl+sep+"pix="+winWidth;
     window.location.href = newUrl;
