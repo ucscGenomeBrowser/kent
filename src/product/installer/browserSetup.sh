@@ -6,7 +6,6 @@
 # you can easily debug this script with 'bash -x browserSetup.sh', it 
 # will show all commands then
 
-# keep a log file in browserSetup.log
 exec > >(tee -a "${HOME}/browserSetup.log") 2>&1
 
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
@@ -743,7 +742,7 @@ function installRedhat () {
         yum -y install epel-release
     fi
 
-    yum -y install ghostscript rsync ImageMagick R-core curl initscripts --allowerasing
+    yum -y install ghostscript rsync ImageMagick R-core curl initscripts --allowerasing --nobest
 
     # centos 7 does not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -751,6 +750,11 @@ function installRedhat () {
     else
         yum -y install libpng12
     fi
+    
+    # try to activate the powertools repo. Exists on CentOS and Rocky but not Redhat
+    set -e
+    yum config-manager --set-enabled powertools
+    set +e
     
     # install apache if not installed yet
     if [ ! -f /usr/sbin/httpd ]; then
@@ -1383,6 +1387,32 @@ function mysqlDbSetup ()
     $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg18'
     
     $MYSQL -e "FLUSH PRIVILEGES;"
+}
+
+# set this machine for browser development: install required tools, clone the tree, build it
+function buildTree () 
+{
+   echo2 Installing required linux packages from repositories: Git, GCC, G++, Mysql-client-libs, etc
+   waitKey
+   if [[ "$DIST" == "debian" ]]; then
+      yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
+   elif [[ "$DIST" == "redhat" ]]; then
+      apt-get install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev
+   else 
+      echo Error: Cannot identify linux distribution
+      exit 100
+   fi
+
+   echo2 Cloning kent repo into ~/kent using git with --depth=1
+   waitKey
+   cd ~
+   git clone https://github.com/ucscGenomeBrowser/kent.git --depth=1
+
+   echo2 Now building CGIs from ~/kent to /usr/local/apache/cgi-bin 
+   echo2 Copying JS/HTML/CSS to /usr/local/apache/htdocs
+   waitKey
+   cd ~/kent/src
+   make -j8 cgi-alpha
 }
 
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
@@ -2110,6 +2140,9 @@ elif [ "${1:-}" == "addTools" ]; then
 
 elif [ "${1:-}" == "mysql" ]; then
     mysqlDbSetup
+
+elif [ "${1:-}" == "dev" ]; then
+    buildTree 
 
 else
    echo Unknown command: $1
