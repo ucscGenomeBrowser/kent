@@ -105,7 +105,7 @@ if [ -s new.accs.fa ]; then
         --input-dataset $nDataDir \
         --output-fasta nextalign.new.fa.xz \
         --output-tsv nextclade.new.full.tsv.gz  >& nextclade.log
-    zcat nextclade.new.full.tsv.gz | cut -f 1,7 | tail -n+2 >> nextclade.tsv
+    zcat nextclade.new.full.tsv.gz | cut -f 2,8 | tail -n+2 >> nextclade.tsv
     sort -u nextclade.tsv > tmp
     mv tmp nextclade.tsv
     cat nextclade.new.full.tsv.gz >> nextclade.full.tsv.gz

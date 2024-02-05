@@ -84,7 +84,7 @@ if [ ! -s gisaidAndPublic.$today.masked.pb ]; then
     $matUtils extract -i gisaidAndPublic.$today.masked.preTrim.fix.pb \
         --max-parsimony 20 \
         --max-branch-length 60 \
-        --max-path-length 175 \
+        --max-path-length 225 \
         -O -o gisaidAndPublic.$today.masked.pb
 fi
 
@@ -101,7 +101,7 @@ $scriptDir/combineMetadata.sh $prevDate $today
 
 # version/description files
 cncbDate=$(ls -l $cncbDir | sed -re 's/.*cncb\.([0-9]{4}-[0-9][0-9]-[0-9][0-9]).*/\1/')
-echo "sarscov2phylo release 13-11-20; GISAID, NCBI and COG-UK sequences downloaded $today; CNCB sequences downloaded $cncbDate" \
+echo "sarscov2phylo release 13-11-20; GISAID, NCBI, COG-UK and CNCB sequences downloaded $today" \
     > version.plusGisaid.txt
 sampleCountComma=$(echo $(wc -l < samples.$today) \
                    | sed -re 's/([0-9]+)([0-9]{3})$/\1,\2/; s/([0-9]+)([0-9]{3},[0-9]{3})$/\1,\2/;')
@@ -130,8 +130,7 @@ time $matUtils annotate -T 50 \
     >& annotate.pango
 
 # Replace protobuf with annotated protobuf.
-mv gisaidAndPublic.$today.masked{,.unannotated}.pb
-ln -f gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
+mv gisaidAndPublic.$today.masked.nextclade.pangolin.pb gisaidAndPublic.$today.masked.pb
 
 # Save paths and annotations for use tomorrow.
 $matUtils extract -i gisaidAndPublic.$today.masked.pb -C clade-paths

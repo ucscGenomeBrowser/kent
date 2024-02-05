@@ -93,7 +93,7 @@ export TMPDIR=/dev/shm
 fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | grep -vx pdb | sort -u > gb.names
 zcat ../ncbi.latest/nextclade.full.tsv.gz > nextclade.full.tsv
 cp ../ncbi.latest/nextalign.fa.xz .
-comm -23 gb.names <(cut -f 1 nextclade.full.tsv | sort -u) > nextclade.names
+comm -23 gb.names <(cut -f 2 nextclade.full.tsv | sort -u) > nextclade.names
 if [ -s nextclade.names ]; then
     nDataDir=~angie/github/nextclade/data/sars-cov-2
     outTsv=$(mktemp)
@@ -130,7 +130,7 @@ if [ -e ../ncbi.latest/lineage_report.csv ]; then
     faSomeRecords <(xzcat genbank.fa.xz) pangolin.names stdout \
     | sed -re '/^>/  s/^>([A-Z]{2}[0-9]{6}\.[0-9]+) \|[^,]+/>\1/;' \
         > pangolin.fa
-    pangolin --skip-scorpio pangolin.fa >& pangolin.log
+    pangolin -t 20 --skip-scorpio pangolin.fa >& pangolin.log
     tail -n+2 lineage_report.csv >> linRepYesterday
     mv linRepYesterday lineage_report.csv
     rm -f pangolin.fa

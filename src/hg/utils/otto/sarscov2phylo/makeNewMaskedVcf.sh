@@ -205,16 +205,16 @@ cut -f 1 *.dropoutContam \
 | awk -F\| '{ if ($3 == "") { print $1; } else { print $2; } }' \
     > dropoutContam.ids
 # Also exclude sequences with unbelievably low numbers of mutations given sampling dates.
-zcat $gisaidDir/chunks/nextclade.full.tsv.gz | cut -f 1,10 \
+zcat $gisaidDir/chunks/nextclade.full.tsv.gz | cut -f 2,11 \
 | awk -F\| '{ if ($3 == "") { print $1 "\t" $2; } else { print $2 "\t" $3; } }' \
 | $scriptDir/findRefBackfill.pl > gisaid.refBackfill
-zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
+zcat $ncbiDir/nextclade.full.tsv.gz | cut -f 2,11 | sort \
 | join -t $'\t' <(cut -f 1,3 $ncbiDir/ncbi_dataset.plusBioSample.tsv | sort) - \
 | $scriptDir/findRefBackfill.pl > gb.refBackfill
-zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
+zcat $cogUkDir/nextclade.full.tsv.gz | cut -f 2,11 | sort \
 | join -t $'\t' <(zcat $cogUkDir/cog_metadata.csv.gz | cut -d, -f 1,5 | tr , $'\t' | sort) - \
 | $scriptDir/findRefBackfill.pl > cog.refBackfill
-zcat $cncbDir/nextclade.full.tsv.gz | cut -f 1,10 | sort \
+zcat $cncbDir/nextclade.full.tsv.gz | cut -f 2,11 | sort \
 | join -t$'\t' <(cut -f 2,10 $cncbDir/cncb.metadata.tsv | sort) - \
 | $scriptDir/findRefBackfill.pl > cncb.refBackfill
 cut -f 1 *.refBackfill > refBackfill.ids
