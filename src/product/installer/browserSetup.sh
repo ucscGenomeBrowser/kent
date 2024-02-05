@@ -6,7 +6,8 @@
 # you can easily debug this script with 'bash -x browserSetup.sh', it 
 # will show all commands then
 
-exec > >(tee -a "${HOME}/browserSetup.sh") 2>&1
+# keep a log file in browserSetup.log
+exec > >(tee -a "${HOME}/browserSetup.log") 2>&1
 
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
 
