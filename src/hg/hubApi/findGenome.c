@@ -19,6 +19,7 @@ struct combinedSummary
 
 /* will be initialized as this function begins */
 static char *genarkTable = NULL;
+static boolean statsOnly = FALSE;
 
 static void startGenomes(struct jsonWrite *jw)
 /* begin the list output */
@@ -281,7 +282,70 @@ if (0 == itemCount)	/* not found in genark or ucsc db, check asmSummary */
 	itemCount = outputCombo(jw, comboOutput);
     }
 return itemCount;
-}	/*	static void singleWordSearch(struct sqlConnection *conn, char *searchWord) */
+}	/*	static int singleWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw) */
+
+static void asmSummaryGroup(struct sqlConnection *conn, struct jsonWrite *jw, char *field)
+/* show a grouping count for a field in asmSummary table */
+{
+char query[4096];
+jsonWriteObjectStart(jw, field);
+sqlSafef(query, sizeof(query), "SELECT %s, COUNT(*) FROM asmSummary GROUP by %s", field, field);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (strlen(row[0]) < 1)
+	jsonWriteNumber(jw, "na", sqlLongLong(row[1]));
+    else
+	jsonWriteNumber(jw, row[0], sqlLongLong(row[1]));
+    }
+sqlFreeResult(&sr);
+jsonWriteObjectEnd(jw);
+}
+
+static void doStatsOnly(struct sqlConnection *conn, struct jsonWrite *jw)
+/* only count the items in each database */
+{
+jsonWriteString(jw, "description:", "counting items in tables: asmSummary, genark and dbDb for number of genomes available");
+
+char query[4096];
+sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s", genarkTable);
+long long genArkCount = sqlQuickLongLong(conn, query);
+sqlSafef(query, sizeof(query), "SELECT count(*) FROM asmSummary");
+long long asmSummaryTotal = sqlQuickLongLong(conn, query);
+sqlSafef(query, sizeof(query), "SELECT count(*) FROM dbDb where active=1");
+long long dbDbCount = sqlQuickLongLong(conn, query);
+long long totalCount = genArkCount + asmSummaryTotal + dbDbCount;
+jsonWriteNumber(jw, "totalCount", totalCount);
+jsonWriteObjectStart(jw, "genark");
+jsonWriteString(jw, "TBD:", "the genark table can count GCF vs. GCA and will have a clade category to couint\n");
+jsonWriteNumber(jw, "itemCount", genArkCount);
+jsonWriteObjectEnd(jw);
+jsonWriteObjectStart(jw, "dbDb");
+jsonWriteString(jw, "description:", "the dbDb table is a count of UCSC 'database' browser instances");
+jsonWriteNumber(jw, "itemCount", dbDbCount);
+jsonWriteObjectEnd(jw);
+jsonWriteObjectStart(jw, "asmSummary");
+jsonWriteString(jw, "description:", "the asmSummary is the contents of the NCBI  genbank/refseq assembly_summary.txt information");
+jsonWriteString(jw, "seeAlso:", "https://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/README_assembly_summary.txt");
+jsonWriteNumber(jw, "asmSummaryTotal", asmSummaryTotal);
+asmSummaryGroup(conn, jw, "refseqCategory");
+asmSummaryGroup(conn, jw, "versionStatus");
+asmSummaryGroup(conn, jw, "assemblyLevel");
+asmSummaryGroup(conn, jw, "releaseType");
+asmSummaryGroup(conn, jw, "genomeRep");
+asmSummaryGroup(conn, jw, "pairedAsmComp");
+asmSummaryGroup(conn, jw, "assemblyType");
+asmSummaryGroup(conn, jw, "phyloGroup");
+jsonWriteObjectEnd(jw);
+}
+
+static void elapsedTime(struct jsonWrite *jw)
+{
+long nowTime = clock1000();
+long elapsedTimeMs = nowTime - enteredMainTime;
+jsonWriteNumber(jw, "elapsedTimeMs", elapsedTimeMs);
+}
 
 void apiFindGenome(char *pathString[MAX_PATH_INFO])
 /* 'findGenome' function */
@@ -289,27 +353,60 @@ void apiFindGenome(char *pathString[MAX_PATH_INFO])
 char *searchString = cgiOptionalString(argGenomeSearchTerm);
 char *inputSearchString = cloneString(searchString);
 char *extraArgs = verifyLegalArgs(argFindGenome);
+genarkTable = genarkTableName();
 
 if (extraArgs)
     apiErrAbort(err400, err400Msg, "extraneous arguments found for function /findGenome'%s'", extraArgs);
 
+boolean asmSummaryExists = hTableExists("hgcentraltest", "asmSummary");
+if (!asmSummaryExists)
+    apiErrAbort(err400, err400Msg, "table hgcentraltest.asmSummary does not exist for /findGenome");
+
+boolean genArkExists = hTableExists("hgcentraltest", genarkTable);
+if (!genArkExists)
+    apiErrAbort(err400, err400Msg, "table hgcentraltest.%s does not exist for /findGenome", genarkTable);
+
+char *statsOnlyArg = cgiOptionalString("statsOnly");
+if (isNotEmpty(statsOnlyArg))
+    {
+    if (sameString("1", statsOnlyArg))
+	statsOnly = TRUE;
+    else if (sameString("0", statsOnlyArg))
+	statsOnly = FALSE;
+    else
+	apiErrAbort(err400, err400Msg, "unrecognized 'statsOnly=%s' argument, can only be =1 or =0", statsOnlyArg);
+    }
+
 struct sqlConnection *conn = hConnectCentral();
-genarkTable = genarkTableName();
 
 if (!sqlTableExists(conn, genarkTable))
     apiErrAbort(err500, err500Msg, "missing central.genark table in function /findGenome'%s'", extraArgs);
 
-/* verify number of words in search string is legal */
-int wordCount = chopByWhite(searchString, NULL, 0);
+int wordCount = 0;
 
-if (wordCount < 1)
+if (! statsOnly)
+    {
+    /* verify number of words in search string is legal */
+    wordCount = chopByWhite(searchString, NULL, 0);
+
+    if (wordCount < 1)
     apiErrAbort(err400, err400Msg, "search term '%s' does not contain a word ? for function /findGenome", argGenomeSearchTerm);
-if (wordCount > 5)
+    if (wordCount > 5)
     apiErrAbort(err400, err400Msg, "search term '%s=%s' should not have more than 5 words for function /findGenome", argGenomeSearchTerm, searchString);
+    }
 
 genarkTable = genarkTableName();
 
 struct jsonWrite *jw = apiStartOutput();
+if (statsOnly)
+    {
+    doStatsOnly(conn, jw);
+    elapsedTime(jw);
+    apiFinishOutput(0, NULL, jw);
+    hDisconnectCentral(&conn);
+    return;
+    }
+
 jsonWriteString(jw, argGenomeSearchTerm, searchString);
 
 int itemCount = 0;
@@ -346,6 +443,7 @@ else	/* multiple word search */
 	verbose(0, "# DBG need to search this string '%s' somewhere else\n", pristineSearchString);
     }
 
+elapsedTime(jw);
 if (itemCount)
     apiFinishOutput(0, NULL, jw);
 else

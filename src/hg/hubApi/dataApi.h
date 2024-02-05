@@ -77,6 +77,8 @@
 #define argCategories "categories"
 #define argSearchTerm "search"
 #define argGenomeSearchTerm "genomeSearch"
+#define argAllowAll "allowAll"
+#define argStatsOnly "statsOnly"
 
 /* valid argument listings to verify extraneous arguments
  *  initialized in hubApi.c
