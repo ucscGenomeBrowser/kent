@@ -91,6 +91,27 @@ jsonWriteNumber(jw, "nonCodingGeneCount", (long long)el->nonCodingGeneCount);
 jsonWriteString(jw, "pubmedId", el->pubmedId);
 }
 
+static void setBrowserUrl(struct jsonWrite *jw, char *browserId)
+{
+char* host = getenv("HTTP_HOST");
+char browserUrl[1024];
+if (startsWith("GC", browserId))
+    {
+    if (host)
+        safef(browserUrl, sizeof(browserUrl), "https://%s/h/%s", host, browserId);
+    else
+        safef(browserUrl, sizeof(browserUrl), "https://genome.ucsc.edu/h/%s", browserId);
+    }
+else
+    {
+    if (host)
+        safef(browserUrl, sizeof(browserUrl), "https://%s/cgi-bin/hgTracks?db=%s", host, browserId);
+    else
+        safef(browserUrl, sizeof(browserUrl), "https://genome.ucsc.edu/cgi-bin/hgTracks?db=%s", browserId);
+    }
+jsonWriteString(jw, "browserUrl", browserUrl);
+}
+
 static int outputCombo(struct jsonWrite *jw, struct combinedSummary *summaryList)
 /* may be information from any of the three tables */
 {
@@ -116,6 +137,7 @@ for (el=summaryList; el != NULL; el=el->next)
 	    {
 //            jsonWriteString(jw, "gcAccession", el->genArk->gcAccession);
 	    /* some of these are going to be dups of the asmSummary */
+            setBrowserUrl(jw, el->genArk->gcAccession);
 	    finiGenArk(jw, el->genArk);
 	    sciNameDone = TRUE;
 	    comNameDone = TRUE;
@@ -123,6 +145,7 @@ for (el=summaryList; el != NULL; el=el->next)
 	    }
 	if (el->dbDb)
 	    {
+            setBrowserUrl(jw, el->dbDb->name);
             jsonWriteString(jw, "database", el->dbDb->name);
             jsonWriteString(jw, "description", el->dbDb->description);
             jsonWriteString(jw, "sourceName", el->dbDb->sourceName);
@@ -142,7 +165,7 @@ for (el=summaryList; el != NULL; el=el->next)
 	    }
 	else
 	    jsonWriteObjectStart(jw, el->genArk->gcAccession);
-
+        setBrowserUrl(jw, el->genArk->gcAccession);
 	finiGenArk(jw, el->genArk);
 	if (el->dbDb)
 	    {
@@ -167,6 +190,7 @@ for (el=summaryList; el != NULL; el=el->next)
 	else
 	    jsonWriteObjectStart(jw, el->dbDb->name);
 
+        setBrowserUrl(jw, el->dbDb->name);
 	jsonWriteBoolean(jw, "isUcscDatabase", TRUE);
 	jsonWriteString(jw, "description", el->dbDb->description);
 	jsonWriteString(jw, "sourceName", el->dbDb->sourceName);
@@ -210,13 +234,67 @@ if (comboSumary)
 return comboSumary;
 }
 
-static struct asmSummary *checkAsmSummary(struct sqlConnection *conn, char *oneAccession)
-/* check the asmSummary table for the single accession LIKE */
+static struct asmSummary *checkAsmSummary(struct sqlConnection *conn, char *oneAccession, boolean exactMatch, long long limit)
+/* check the asmSummary table for oneAccession, mayby exact, maybe a limit */
 {
 char query[4096];
-sqlSafef(query, sizeof(query), "SELECT * FROM asmSummary WHERE assemblyAccession LIKE \"%s%%\"", oneAccession);
+if (limit > 0)
+    {
+    if (exactMatch)
+        sqlSafef(query, sizeof(query), "SELECT * FROM asmSummary WHERE assemblyAccession = '%s' LIMIT %lld", oneAccession, limit);
+    else
+        sqlSafef(query, sizeof(query), "SELECT * FROM asmSummary WHERE assemblyAccession LIKE '%s%%' LIMIT %lld", oneAccession, limit);
+    }
+else
+    {
+    if (exactMatch)
+        sqlSafef(query, sizeof(query), "SELECT * FROM asmSummary WHERE assemblyAccession = '%s'", oneAccession);
+    else
+        sqlSafef(query, sizeof(query), "SELECT * FROM asmSummary WHERE assemblyAccession LIKE '%s%%'", oneAccession);
+    }
+
 struct asmSummary *list = asmSummaryLoadByQuery(conn, query);
 return list;
+}
+
+// Field   Type    Null    Key     Default Extra
+// source  varchar(255)    NO      MUL     NULL
+// destination     varchar(255)    NO      MUL     NULL
+// sourceAuthority enum('ensembl','ucsc','genbank','refseq') NO  NULL
+// destinationAuthority    enum('ensembl','ucsc','genbank','refseq')   NO  NULL
+// matchCount      bigint(20)      NO              NULL
+// sourceCount     bigint(20)      NO              NULL
+// destinationCount        bigint(20)      NO              NULL
+
+struct asmSummary *dbDbAsmEquivalent(struct sqlConnection *centConn, char *dbDbName)
+{
+struct asmSummary *itemReturn = NULL;
+struct sqlConnection *conn = hAllocConn("hgFixed");
+char query[4096];
+sqlSafef(query, sizeof(query), "SELECT destination from asmEquivalent WHERE source='%s' AND sourceAuthority='ucsc' AND destinationAuthority='refseq' LIMIT 1", dbDbName);
+char *asmIdFound = NULL;
+char *genBank = NULL;
+char *refSeq = sqlQuickString(conn, query);
+if (refSeq)
+    asmIdFound = refSeq;
+else
+    {
+    sqlSafef(query, sizeof(query), "SELECT destination from asmEquivalent WHERE source='%s' AND sourceAuthority='ucsc' AND destinationAuthority='genbank' LIMIT 1", dbDbName);
+    genBank = sqlQuickString(conn, query);
+    if (genBank)
+	asmIdFound = genBank;
+    }
+if (asmIdFound)
+    {
+    char *words[3];
+    int wordCount = chopString(asmIdFound, "_", words, ArraySize(words));
+    if (wordCount > 2)
+	{
+	safef(query, sizeof(query), "%s_%s", words[0], words[1]);
+        itemReturn = checkAsmSummary(centConn, query, TRUE, 1);
+	}
+    }
+return itemReturn;
 }
 
 static int singleWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw)
@@ -235,8 +313,7 @@ if (startsWith("GC", perhapsAlias))
     {
     struct asmSummary *asmSumFound = NULL;
     struct hash *asmSummaryHash = NULL;
-    asmSumFound = checkAsmSummary(conn, perhapsAlias);
-    verbose(0, "# found %d items\n", slCount(asmSumFound));
+    asmSumFound = checkAsmSummary(conn, perhapsAlias, FALSE, 0);
     if (asmSumFound)
         {
         struct asmSummary *el;
@@ -294,9 +371,11 @@ else
         AllocVar(comboOutput);
         comboOutput->summary = NULL;
         comboOutput->genArk = NULL;
-	/* TBD need to get an equivalent GC accession name for UCSC database */
         struct dbDb *dbDbEntry = hDbDb(perhapsAlias);
         comboOutput->dbDb = dbDbEntry;
+        struct asmSummary *sumList = dbDbAsmEquivalent(conn, perhapsAlias);
+        if (sumList)
+	   comboOutput->summary = sumList;
 	itemCount = outputCombo(jw, comboOutput);
         }
     }	/*	checked genArk and UCSC database */
@@ -335,7 +414,7 @@ jsonWriteObjectEnd(jw);
 static void doStatsOnly(struct sqlConnection *conn, struct jsonWrite *jw)
 /* only count the items in each database */
 {
-jsonWriteString(jw, "description:", "counting items in tables: asmSummary, genark and dbDb for number of genomes available");
+jsonWriteString(jw, "description", "counting items in tables: asmSummary, genark and dbDb for number of genomes available");
 
 char query[4096];
 sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s", genarkTable);
@@ -347,16 +426,16 @@ long long dbDbCount = sqlQuickLongLong(conn, query);
 long long totalCount = genArkCount + asmSummaryTotal + dbDbCount;
 jsonWriteNumber(jw, "totalCount", totalCount);
 jsonWriteObjectStart(jw, "genark");
-jsonWriteString(jw, "TBD:", "the genark table can count GCF vs. GCA and will have a clade category to couint\n");
+jsonWriteString(jw, "TBD", "the genark table can count GCF vs. GCA and will have a clade category to couint\n");
 jsonWriteNumber(jw, "itemCount", genArkCount);
 jsonWriteObjectEnd(jw);
 jsonWriteObjectStart(jw, "dbDb");
-jsonWriteString(jw, "description:", "the dbDb table is a count of UCSC 'database' browser instances");
+jsonWriteString(jw, "description", "the dbDb table is a count of UCSC 'database' browser instances");
 jsonWriteNumber(jw, "itemCount", dbDbCount);
 jsonWriteObjectEnd(jw);
 jsonWriteObjectStart(jw, "asmSummary");
-jsonWriteString(jw, "description:", "the asmSummary is the contents of the NCBI  genbank/refseq assembly_summary.txt information");
-jsonWriteString(jw, "seeAlso:", "https://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/README_assembly_summary.txt");
+jsonWriteString(jw, "description", "the asmSummary is the contents of the NCBI  genbank/refseq assembly_summary.txt information");
+jsonWriteString(jw, "seeAlso", "https://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/README_assembly_summary.txt");
 jsonWriteNumber(jw, "asmSummaryTotal", asmSummaryTotal);
 asmSummaryGroup(conn, jw, "refseqCategory");
 asmSummaryGroup(conn, jw, "versionStatus");
