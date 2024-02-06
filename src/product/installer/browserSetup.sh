@@ -370,6 +370,11 @@ command is one of:
                downloaded on-the-fly from UCSC.
   mirror     - download a full assembly (also see the -t option below).
                After completion, no data is downloaded on-the-fly from UCSC.
+  offline    - put the browser offline, so no more loading of missing tables
+               from UCSC on-the-fly. Much faster, but depending on how much
+               you downloaded, means that you have many fewer tracks available.
+  online     - put the browser online, so any missing files and tracks are
+               loaded on-the-fly from UCSC.
   update     - update the genome browser software and data, updates
                all tables of an assembly, like "mirror"
   cgiUpdate  - update only the genome browser software, not the data. Not 
@@ -381,6 +386,10 @@ command is one of:
                bedSort, ... to /usr/local/bin
                This has to be run after the browser has been installed, other-
                wise these packages may be missing: libpng zlib libmysqlclient
+  dev        - install git/gcc/c++/freetype/etc, clone the kent repo into
+               ~/kent and build the CGIs into /usr/local/apache so you can try
+               them right away. Useful if you want to develop your own track 
+               types.
   mysql      - Patch my.cnf and recreate Mysql users. This can fix
                a broken Mysql server after an update to Mysql 8. 
                
@@ -2147,11 +2156,17 @@ elif [ "${1:-}" == "addTools" ]; then
 elif [ "${1:-}" == "mysql" ]; then
     mysqlDbSetup
 
+elif [ "${1:-}" == "online" ]; then
+    goOnline
+
+elif [ "${1:-}" == "offline" ]; then
+    goOffline
+
 elif [ "${1:-}" == "dev" ]; then
     buildTree 
 
 else
-   echo Unknown command: $1
+   echo Unknown command: ${1:-}
    echo "$HELP_STR"
    exit 100
 fi
