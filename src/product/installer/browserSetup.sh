@@ -1398,12 +1398,12 @@ function mysqlDbSetup ()
 # set this machine for browser development: install required tools, clone the tree, build it
 function buildTree () 
 {
-   echo2 Installing required linux packages from repositories: Git, GCC, G++, Mysql-client-libs, etc
+   echo2 Installing required linux packages from repositories: Git, GCC, G++, Mysql-client-libs, uuid, etc
    waitKey
    if [[ "$DIST" == "debian" ]]; then
-      yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
+      apt-get install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev libfreetype-dev
    elif [[ "$DIST" == "redhat" ]]; then
-      apt-get install make git gcc g++ libpng-dev libmysqlclient-dev uuid-dev
+      yum install -y git vim gcc gcc-c++ make libpng-devel libuuid-devel freetype-devel
    else 
       echo Error: Cannot identify linux distribution
       exit 100
