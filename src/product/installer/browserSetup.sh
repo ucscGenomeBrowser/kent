@@ -1015,19 +1015,25 @@ function installDebian ()
     # r-base-core for the gtex tracks
     # python-mysqldb for hgGeneGraph
     apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core curl gsfonts
-    # python-mysqldb has been removed in newer distros
+    # python-mysqldb has been removed in almost all distros as of 2021
     if apt-cache policy python-mysqldb | grep "Candidate: .none." > /dev/null; then 
 	    echo2 The package python-mysqldb is not available anymore. Working around it
 	    echo2 by installing python2 and MySQL-python with pip2
-            apt-get install --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
-	    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
-	    python2 /tmp/get-pip.py
-            if [ -f /usr/include/mysql/my_config.h ]; then
-                    echo my_config.h found
-            else
-                wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
-            fi
-            pip2 install MySQL-python
+	    if apt-cache policy python2 | grep "Candidate: .none." > /dev/null; then 
+               # Ubuntu >= 21 does not have python2 anymore - hgGeneGraph has been ported, so not an issue anymore
+   	       echo2 Python2 package is not available either for this distro, so not installing Python2 at all.
+	    else
+               # workaround for Ubuntu 16-20 - keeping this section for a few years, just in case
+               apt-get install --assume-yes python2 libmysqlclient-dev python2-dev wget gcc
+    	       curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output /tmp/get-pip.py
+    	       python2 /tmp/get-pip.py
+               if [ -f /usr/include/mysql/my_config.h ]; then
+                   echo my_config.h found
+               else
+                   wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
+               fi
+               pip2 install MySQL-python
+	    fi
     else
 	    apt-get --assume-yes install python-mysqldb
     fi
