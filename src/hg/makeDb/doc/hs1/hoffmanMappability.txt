@@ -1,0 +1,31 @@
+mkdir /hive/data/outside/hoffmanMappability/T2T
+
+wget -r --no-parent https://bismap.hoffmanlab.org/raw/t2tv2/umap/bigwigfiles/
+wget -r --no-parent https://bismap.hoffmanlab.org/raw/t2tv2/umap/bedfiles/
+
+gunzip *.gz
+
+#deleted the first line of each bed file which was a track line "e.g. track name="<type 'type'> k100"description="Single-read mappability with k100-merscolor=%s"
+
+bedToBigBed -type=bed6 -tab k100.merged.T2TV2.bed https://hgdownload.soe.ucsc.edu/goldenPath/hs1/bigZips/hs1.chrom.sizes.txt k100.merged.T2TV2.bb
+bedToBigBed -type=bed6 -tab k150.merged.T2TV2.bed https://hgdownload.soe.ucsc.edu/goldenPath/hs1/bigZips/hs1.chrom.sizes.txt k150.merged.T2TV2.bb
+bedToBigBed -type=bed6 -tab k24.merged.T2TV2.bed https://hgdownload.soe.ucsc.edu/goldenPath/hs1/bigZips/hs1.chrom.sizes.txt k24.merged.T2TV2.bb
+bedToBigBed -type=bed6 -tab k250.merged.T2TV2.bed https://hgdownload.soe.ucsc.edu/goldenPath/hs1/bigZips/hs1.chrom.sizes.txt k250.merged.T2TV2.bb
+bedToBigBed -type=bed6 -tab k36.merged.T2TV2.bed https://hgdownload.soe.ucsc.edu/goldenPath/hs1/bigZips/hs1.chrom.sizes.txt k36.merged.T2TV2.bb
+bedToBigBed -type=bed6 -tab k50.merged.T2TV2.bed https://hgdownload.soe.ucsc.edu/goldenPath/hs1/bigZips/hs1.chrom.sizes.txt k50.merged.T2TV2.bb
+
+mkdir /gbdb/hs1/mappability
+
+ln -s /hive/data/outside/hoffmanMappability/T2T/k100.merged.T2TV2.bb /gbdb/hs1/hoffmanMappability/k100.Unique.Mappability.bb
+ln -s /hive/data/outside/hoffmanMappability/T2T/k150.merged.T2TV2.bb /gbdb/hs1/hoffmanMappability/k150.Unique.Mappability.bb
+ln -s /hive/data/outside/hoffmanMappability/T2T/k24.merged.T2TV2.bb /gbdb/hs1/hoffmanMappability/k24.Unique.Mappability.bb
+ln -s /hive/data/outside/hoffmanMappability/T2T/k250.merged.T2TV2.bb /gbdb/hs1/hoffmanMappability/k250.Unique.Mappability.bb
+ln -s /hive/data/outside/hoffmanMappability/T2T/k36.merged.T2TV2.bb /gbdb/hs1/hoffmanMappability/k36.Unique.Mappability.bb
+ln -s /hive/data/outside/hoffmanMappability/T2T/k50.merged.T2TV2.bb /gbdb/hs1/hoffmanMappability/k50.Unique.Mappability.bb
+
+ln -s /hive/data/outside/hoffmanMappability/T2T/k100.merged.T2TV2.MultiReadMappability.bigWig /gbdb/hs1/hoffmanMappability/k100.Umap.MultiTrackMappability.bw
+ln -s /hive/data/outside/hoffmanMappability/T2T/k150.merged.T2TV2.MultiReadMappability.bigWig /gbdb/hs1/hoffmanMappability/k150.Umap.MultiTrackMappability.bw
+ln -s /hive/data/outside/hoffmanMappability/T2T/k24.merged.T2TV2.MultiReadMappability.bigWig /gbdb/hs1/hoffmanMappability/k24.Umap.MultiTrackMappability.bw
+ln -s /hive/data/outside/hoffmanMappability/T2T/k250.merged.T2TV2.MultiReadMappability.bigWig /gbdb/hs1/hoffmanMappability/k250.Umap.MultiTrackMappability.bw
+ln -s /hive/data/outside/hoffmanMappability/T2T/k36.merged.T2TV2.MultiReadMappability.bigWig /gbdb/hs1/hoffmanMappability/k36.Umap.MultiTrackMappability.bw
+ln -s /hive/data/outside/hoffmanMappability/T2T/k50.merged.T2TV2.MultiReadMappability.bigWig /gbdb/hs1/hoffmanMappability/k50.Umap.MultiTrackMappability.bw

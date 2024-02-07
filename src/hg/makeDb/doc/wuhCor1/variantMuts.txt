@@ -771,3 +771,223 @@ for lineage in BA.2.12.1 BA.2.75 BQ.1 XBB XBB.1.5 XBB.1.16 CH.1.1 XBB.1.9 XBB.2.
 
 EOF
 done
+
+
+#########################################################################
+# Omicron updates - 2024-01-29 - Angie
+
+# For each lineage in XBB.1.5.70, HK.3, BA.2.86, JN.1, do the following:
+
+# *** NOT THIS TIME, just for future reference: ***
+# Download method for a relatively new lineage
+# * Log in on gisaid.org, go to Search tab, select Lineage: <whichever lineage>
+# * If there are more than a couple thousand matching sequences, restrict by date to the earliest
+#   range that gets ~2000 sequences
+# * click checkbox to select all, click Download, leave the checkbox "Replace spaces with
+#   underscores in FASTA header" checked, click Download, rename and xz the downloaded file,
+#   upload file to hgwdev.
+#*** END NOT THIS TIME ***
+
+# At this point, those lineages are all huge and well-established.  Instead, pick a bunch of
+# sequences from the giant lineage polytomy nodes in the latest UShER tree, using a sample-paths
+# file generated from today's tree by matUtils extract.
+today=2024-01-29
+treeDir=/hive/data/outside/otto/sarscov2phylo/$today
+cd $treeDir
+# If sample-paths file has not already been created:
+time ~angie/github/usher/build/matUtils extract -i gisaidAndPublic.$today.masked.pb -c BA.2 \
+    -S sample-paths
+#real    9m24.485s
+
+mkdir /hive/data/genomes/wuhCor1/bed/strains/$today
+cd /hive/data/genomes/wuhCor1/bed/strains/$today
+
+#*** NOT THIS TIME ***
+# unxz the downloaded & uploaded GISAID sequence files
+unxz $lineage.$today.fa.xz
+#*** END NOT THIS TIME ***
+
+cladePaths=$treeDir/clade-paths
+samplePaths=$treeDir/sample-paths
+
+gisaidDir=/hive/users/angie/gisaid
+
+for lineage in XBB.1.5.70 HK.3 BA.2.86 JN.1; do
+    linNode=$(grep ^$lineage$'\t' $cladePaths | cut -f 2)
+    grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:' \
+    | cut -f 1 \
+    | grep \|EPI_ISL_ \
+        > $lineage.fullNames
+    wc -l $lineage.fullNames
+done
+#64 XBB.1.5.70.fullNames
+#151 HK.3.fullNames
+#1 BA.2.86.fullNames
+#1684 JN.1.fullNames
+
+# OK, we need to try again for all but JN.1, allowing another node:
+for lineage in XBB.1.5.70 HK.3 BA.2.86; do
+    linNode=$(grep ^$lineage$'\t' $cladePaths | cut -f 2)
+    grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:[ACGT0-9,]+ node_[0-9]+:' \
+    | cut -f 1 \
+    | grep \|EPI_ISL_ \
+        > $lineage.fullNames
+    wc -l $lineage.fullNames
+done
+#221 XBB.1.5.70.fullNames
+#944 HK.3.fullNames
+#91 BA.2.86.fullNames
+
+# Try allowing one more node for BA.2.86:
+for lineage in BA.2.86; do
+    linNode=$(grep ^$lineage$'\t' $cladePaths | cut -f 2)
+    grep $linNode: $samplePaths | grep -vE $linNode':[ACGT0-9,]+ node_[0-9]+:[ACGT0-9,]+ node_[0-9]+:[ACGT0-9,]+ node_[0-9]+:' \
+    | cut -f 1 \
+    | grep \|EPI_ISL_ \
+        > $lineage.fullNames
+    wc -l $lineage.fullNames
+done
+#549 BA.2.86.fullNames
+
+# Now we have hundreds for each lineage.
+
+# Get FASTA.
+for lineage in XBB.1.5.70 HK.3 BA.2.86 JN.1; do
+    time xzcat $gisaidDir/gisaid_fullNames_$today.fa.xz \
+    | faSomeRecords stdin $lineage.fullNames $lineage.$today.fa
+    faSize $lineage.$today.fa
+done
+#real    15m44.272s
+#6563045 bases (103705 N's 6459340 real 6459340 upper 0 lower) in 221 sequences in 1 files
+#Total size: mean 29697.0 sd 106.1 min 29289 (Brazil/CE-LACENCE-232200557/2023|EPI_ISL_17680974|2023-04-03) max 29847 (USA/CA-HLX-STM-JZKMW6PDA/2023|EPI_ISL_18288754|2023-08-27) median 29726
+#real    17m1.099s
+#28077756 bases (175271 N's 27902485 real 27902485 upper 0 lower) in 944 sequences in 1 files
+#Total size: mean 29743.4 sd 107.2 min 28575 (Spain/MD-HRYC-72304619/2023|EPI_ISL_18098568|2023-08-02) max 29873 (Yunnan/YNCDC-2692/2023|EPI_ISL_18292825|2023-09-06) median 29754
+#real    17m22.534s
+#16279033 bases (276054 N's 16002979 real 16002979 upper 0 lower) in 549 sequences in 1 files
+#Total size: mean 29652.2 sd 217.4 min 27512 (Belgium/LHUB-ULB_81752875/2023|EPI_ISL_18544196|2023-11-17) max 29891 (Sweden/S-1260893029R4/2023|EPI_ISL_18795991|2023-12-04) median 29711
+#real    15m32.348s
+#49988263 bases (568278 N's 49419985 real 49419985 upper 0 lower) in 1684 sequences in 1 files
+#Total size: mean 29684.2 sd 173.2 min 28563 (Malaysia/MKAKB_CL_80975/2023|EPI_ISL_18798545|2023-12-12) max 29875 (Sweden/AB-01_SE100_23CS503157/2023|EPI_ISL_18522860|2023-11-10) median 29721
+
+ln -s ~angie/github/sarscov2lineages .
+# I had previously created this conda environment
+# (same conda env create shown in Kate's section above)
+conda activate slAngie
+
+for lineage in XBB.1.5.70 HK.3 BA.2.86 JN.1; do
+    echo $lineage
+    time ./sarscov2lineages/lineageVariants.params.sh -c 50 -s 0.8 -i 0.7 -v \
+        $lineage.$today.fa sarscov2lineages/NC_045512.fa
+done
+#XBB.1.5.70
+#real    0m27.572s
+#HK.3
+#real    1m18.207s
+#BA.2.86
+#real    0m44.637s
+#JN.1
+#real    2m31.823s
+
+# There are lots of codons, especially in Spike, with multiple nuc substitutions in the same
+# codon.  The script used above translates each nuc mutation independently, so instead of a
+# cumulative codon change it does two or three separate translations.  Find and fix those.
+for f in *_aa.bed; do
+    echo $f
+    cut -f 2 $f | uniq -d
+done
+#BA.2.86.2024-01-29_aa.bed
+#11287
+#22030
+#22576
+#22894
+#23017
+#27381
+#HK.3.2024-01-29_aa.bed
+#22576
+#22894
+#23017
+#27381
+#JN.1.2024-01-29_aa.bed
+#22030
+#22576
+#22894
+#23017
+#27381
+#XBB.1.5.70.2024-01-29_aa.bed
+#22576
+#22894
+#23017
+#27381
+# Checking vs. covariants.org's page for each variant is helpful.
+
+# Uh-oh, BA.2.86 has a complex region where there's a deletion of 1 base (frameshift!) and then
+# later an insertion that should rescue the frameshift:
+#NC_045512.2     22030   22031   S:del_22031
+#NC_045512.2     22030   22033   S:F157S
+#NC_045512.2     22030   22033   S:F157L
+#NC_045512.2     22033   22036   S:R158G
+#NC_045512.2     22034   22035   S:ins_22035
+
+# To really figure out what the amino acid sequence is there, better do a real alignment and
+# translation of S:157-159...
+faFrag -mixed sarscov2lineages/NC_045512.fa 22027 22036 stdout
+#>NC_045512.2:22027-22036
+#GAGTTCAGA
+
+# BA.2.86.2024-01-29.fa.vcf.filtered has 3 substitutions in that range:
+#NC_045512.2     22032   T22032C T       C       .       .       AC=529;AN=539
+#NC_045512.2     22033   C22033A C       A       .       .       AC=528;AN=538
+#NC_045512.2     22034   A22034G A       G       .       .       AC=529;AN=532
+
+# minimap2 has the two balancing frameshift indels:
+#V       NC_045512.2     22030   22031   493     60      t       -       Israel/ICH-741198454/2023|EPI_ISL_18096761|2023-07-31   21990   21990   +
+#V       NC_045512.2     22034   22034   493     60      -       g       Israel/ICH-741198454/2023|EPI_ISL_18096761|2023-07-31   21993   21994   +
+
+faOneRecord BA.2.86.2024-01-29.fa 'Israel/ICH-741198454/2023|EPI_ISL_18096761|2023-07-31' \
+| faFrag -mixed stdin 21987 21996 stdout
+#>Israel/ICH-741198454/2023|EPI_ISL_18096761|2023-07-31:21987-21996
+#GAGTCAGGA
+
+# OK, manually align:
+
+# no indels:
+#GAGTTCAGA
+#    |||
+#GAGTCAGGA
+
+# indels:
+#GAGTTCA-GA
+#GAG-TCAGGA
+
+# OK, so in this case, go with the substitution view over the indel view.
+# GAG,TTC,AGA = E,F,R --> GAG,TCA,GGA --> E,S,G
+# So ignore the del/ins and call it S:F157S and S:R158G.  That's what CoVariants has too, good.
+
+# Double-check that we fixed all the double annotations:
+for f in *_aa.bed; do
+    echo $f
+    cut -f 2 $f | uniq -d
+done
+# Just the file names, good.
+
+
+for lineage in XBB.1.5.70 HK.3 BA.2.86 JN.1; do
+    # Fix reference name, make bigBed, install in /gbdb.  Use Max's names for bigBed files.
+    sed -re 's/NC_045512\.2/NC_045512v2/' $lineage.${today}_nuc.bed \
+        > ${lineage}_nuc.bed
+    sed -re 's/NC_045512\.2/NC_045512v2/' $lineage.${today}_aa.bed \
+        > ${lineage}_prot.bed
+    for suffix in nuc prot; do
+        bedToBigBed -type=bed4 ${lineage}_$suffix.bed /hive/data/genomes/wuhCor1/chrom.sizes \
+            ${lineage}_$suffix.bb
+        ln -sf `pwd`/${lineage}_$suffix.bb /gbdb/wuhCor1/strainMuts/
+    done
+done
+
+conda deactivate
+
+#TODO
+# Now update the variantMuts.ra and .html files.
+
+# See above.

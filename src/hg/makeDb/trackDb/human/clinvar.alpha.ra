@@ -1,4 +1,4 @@
-track clinvar
+track clinvarAlpha
 compositeTrack on
 shortLabel ClinVar Variants ALPHA
 longLabel ClinVar Variants ALPHA
@@ -9,10 +9,10 @@ noParentConfig on
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 scoreLabel ClinVar Star-Rating (0-4)
-dataVersion /gbdb/$D/bbi/clinvar/version.txt
+dataVersion /gbdb/$D/bbi/clinvarAlpha/version.txt
 
-        track clinvarMain
-        parent clinvar
+        track clinvarMainAlpha
+        parent clinvarAlpha
         shortLabel ClinVar SNVs
         longLabel ClinVar Short Variants < 50bp
         visibility hide
@@ -42,8 +42,8 @@ dataVersion /gbdb/$D/bbi/clinvar/version.txt
         searchIndex _dbVarSsvId
         maxWindowCoverage 10000000
 
-        track clinvarCnv
-        parent clinvar
+        track clinvarCnvAlpha
+        parent clinvarAlpha
         shortLabel ClinVar CNVs
         longLabel ClinVar Copy Number Variants >= 50bp
         visibility hide
@@ -71,12 +71,12 @@ dataVersion /gbdb/$D/bbi/clinvar/version.txt
         noScoreFilter on
         searchIndex _dbVarSsvId
 
-        track clinvarSubLolly
-        parent clinvar
+        track clinvarSubLollyAlpha
+        parent clinvarAlpha
         shortLabel ClinVar interp
         longLabel ClinVar SNVs submitted interpretations and evidence
-        bigDataUrl /gbdb/$D/clinvarSubLolly/clinvarSubLolly.bb
-        xrefDataUrl /gbdb/$D/clinvarSubLolly/clinvarSub.bb
+        bigDataUrl /gbdb/$D/clinvarSubLollyAlpha/clinvarSubLolly.bb
+        xrefDataUrl /gbdb/$D/clinvarSubLollyAlph/clinvarSub.bb
         type bigLolly
         group phenDis
         lollySizeField 10
@@ -95,12 +95,12 @@ dataVersion /gbdb/$D/bbi/clinvar/version.txt
         mouseOverField _mouseOver
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/snp/$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 
-searchTable clinvarCnv
+searchTable clinvarCnvAlpha
 searchType bigBed
 searchDescription ClinVar Copy Number Variants 
 termRegex ^[ne]ssv[0-9]+
 
-searchTable clinvarMain
+searchTable clinvarMainAlpha
 searchType bigBed
 searchDescription ClinVar Copy Number Variants
 termRegex ^[ne]ssv[0-9]+

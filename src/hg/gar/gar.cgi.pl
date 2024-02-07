@@ -10,12 +10,19 @@ use URI::Escape;
 
 my $httpRefer = "noReference";
 my $referDomain = "noDomain";
-my $legitimateFrom = 'hclawson@ucsc.edu';
-my $httpReferMustBe = "assemblyRequest.html";
 my $domainMustBe = "ucsc.edu";
-my $sendTo = 'hclawson@ucsc.edu';
-my $Cc = 'clayfischer@ucsc.edu';
-my $bounceAddr = 'hiram@soe.ucsc.edu';
+my $httpReferMustBe = "assemblyRequest.html";
+# obscure the email address from source tree robot scanning
+my $myAddr = 'hclawson at ucsc dot edu';
+$myAddr =~ s/ at /@/;
+$myAddr =~ s/ dot /./;
+my $legitimateFrom = $myAddr;
+my $sendTo = $myAddr;
+my $Cc = $myAddr;
+my $bounceAddr = $myAddr;
+my $genArkRequestGroup = 'genark-request-group at ucsc dot edu';
+$genArkRequestGroup =~ s/ at /@/;
+$genArkRequestGroup =~ s/ dot /./;
 
 if (defined($ENV{'HTTP_REFERER'})) {
   my @a = split('/', $ENV{'HTTP_REFERER'});
@@ -75,6 +82,7 @@ printf "</ul>\n";
 my $DS=`date "+%F %T"`;
 chomp $DS;
 
+
 open (FH, "|/usr/sbin/sendmail -f \"${bounceAddr}\" -t -oi");
 printf FH "To: %s
 Reply-to: %s
@@ -93,17 +101,26 @@ date: '%s'
 
 close (FH);
 
-print "</body></html>\n";
+my $cleanEmail = $incoming{"email"};
+$cleanEmail =~ s/@/ at /;
+$cleanEmail =~ s/\./ dot /g;
 
-__END__
+# and then send the email to the google group with the cleanEmail in text
+open (FH, "|/usr/sbin/sendmail -f \"${bounceAddr}\" -t -oi");
+printf FH "To: %s
+Reply-to: %s
+Return-path: %s
+Subject: gar request: %s
 
-print "<TABLE><TR><TH COLSPAN=2>hgwdev-hiram CGI gar</TH></TR>\n";
+name: '%s'
+email: '%s'
+asmId: '%s'
+betterName: '%s'
+comment: '%s'
 
-foreach $var (sort(keys(%ENV))) {
-    $val = $ENV{$var};
-    $val =~ s|\n|\\n|g;
-    $val =~ s|"|\\"|g;
-    print "<TR><TH>${var}</TH><TD>${val}</TD></TR>\n";
-}
-print "</TABLE>\n";
+date: '%s'
+", $genArkRequestGroup, $legitimateFrom, $legitimateFrom, $incoming{"asmId"}, $incoming{"name"}, $cleanEmail, $incoming{"asmId"}, $incoming{"betterName"}, $incoming{"comment"}, ${DS};
+
+close (FH);
+
 print "</body></html>\n";

@@ -1,0 +1,139 @@
+<h2>Description</h2>
+
+<p>
+This container track represents dosage sensitivity map data from <a target="_blank"
+href="https://europepmc.org/article/MED/35917817">Collins et al 2022</a>. There are
+two tracks, one corresponding to the probability of haploinsufficiency (pHaplo) and 
+one to the probability of triplosensitivity (pTriplo).</p>
+<p>
+Rare copy-number variants (rCNVs) include deletions and duplications that occur 
+infrequently in the global human population and can confer substantial risk for 
+disease. Collins et al aimed to quantify the properties of haploinsufficiency (i.e., 
+deletion intolerance) and triplosensitivity (i.e., duplication intolerance) throughout 
+the human genome by analyzing rCNVs from nearly one million individuals to construct a 
+genome-wide catalog of dosage sensitivity across 54 disorders, which defined 163 dosage 
+sensitive segments associated with at least one disorder. These segments were typically 
+gene-dense and often harbored dominant dosage sensitive driver genes. An ensemble 
+machine learning model was built to predict dosage sensitivity probabilities (pHaplo &amp; 
+pTriplo) for all autosomal genes, which identified 2,987 haploinsufficient and 1,559 
+triplosensitive genes, including 648 that were uniquely triplosensitive.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each of the tracks is displayed with a distinct item (bed track) covering the entire gene locus wherever 
+a score was available. Clicking on an item provides a link to <a target="_blank"
+href="https://www.deciphergenomics.org">DECIPHER</a> which contains the sensitivity scores as well as
+additional information. Mousing over the items will display the gene symbol, the ESNG ID for that gene, 
+and the respective sensitivity score for the track rounded to two decimal places. Filters are 
+also available to specify specific score thresholds to display for each of the tracks.</p>
+
+<h3>Coloring and Interpretation</h3>
+
+<p>
+<p>
+Each of the tracks is colored based on standardized cutoffs for pHaplo and pTriplo as described by the
+authors:</p>
+<p>
+<b>pHaplo</b> scores &ge;0.86 indicate that the average effect sizes of deletions are as strong as 
+the loss-of-function of genes known to be constrained against protein truncating variants (average OR&ge;2.7)
+(<a target="_blank" href="https://europepmc.org/articles/PMC7334197/">Karczewski et al., 2020</a>). 
+pHaplo scores &ge;0.55 indicate an odds ratio &ge;2.</p>
+<p>
+<b>pTriplo</b> scores &ge;0.94 indicate that the average effect sizes of deletions are as strong as
+the loss-of-function of genes known to be constrained against protein truncating variants (average OR&ge;2.7)
+(<a target="_blank" href="https://europepmc.org/articles/PMC7334197/">Karczewski et al., 2020</a>).
+pHaplo scores &ge;0.68 indicate an odds ratio &ge;2.</p>
+<p>
+Applying these cutoffs defined 2,987 haploinsufficient (pHaplo&ge;0.86) and 1,559
+triplosensitive (pTriplo&ge;0.94) genes with rCNV effect sizes comparable to loss-of-function
+of gold-standard PTV-constrained genes.</p>
+<p>
+<p>See below for a summary of the color scheme:</p>
+
+<ul>
+<li><b style="color: rgb(181, 2, 14);">Dark red items</b> - pHaplo &ge; 0.86</li>
+<li><b style="color: rgb(250, 42, 27);">Bright red items</b> - pHaplo &lt; 0.86</li>
+<li><b style="color: rgb(0, 9, 138);">Dark blue items</b> - pTriplo &ge; 0.94</li>
+<li><b style="color: rgb(87, 92, 252);">Bright blue items</b> - pTriplo &lt; 0.94</li>
+</ul>
+
+<h2>Methods</h2>
+
+<p>
+The data were downloaded from <a target="_blank" 
+href="https://zenodo.org/records/6347673">Zenodo</a> which consisted of a 3-column file with
+gene symbols, pHaplo, and pTriplo scores. Since the data were created using
+GENCODEv19 models, the hg19 data was mapped using those coordinates by picking the earliest
+transcription start site of all of the respective gene transcripts and the furthest 
+transcription end site. This leads to some gene boundaries that are not representative of a real
+transcript, but since the data are for gene loci annotations this maximum coverage was used.
+Finally, both scores were rounded to two decimal points for easier interpretation.</p>
+<p>
+For hg38, we attempted to use updated gene positions using a few different datasets since 
+gene symbols have been updated many times since GENCODEv19. A summary of the workflow
+can be seen below, with each subsequent step being used only for genes where mapping failed:</p>
+<ul>
+<li>1. Gene symbols were mapped using MANE1.0. &lt; 2000 items failed mapping here.</li>
+<li>2. Mapping with GENCODEv45 was attempted.</li>
+<li>3. Mapping with GENCODEv20 was attempted. At this point, 448 items were not mapped.</li>
+<li>4. Finally, any missing items were lifted using the hg19 track. 19/448 items failed
+mapping due to their regions having been split from hg19 to hg38.</li></ul>
+
+<p>
+In summary, the hg19 track was mapped using the original GENCODEv19 mappings, and a series
+of steps were taken to map the hg38 gene symbols with updated coordinates. 19/18641 items
+could not be mapped and are missing from the hg38 tracks.</p>
+<p>
+The complete <a target="_blank" 
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/dosageSensitivityCollins.txt">
+makeDoc</a> can be found online. This includes all of the track creation steps.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../hgTables">Table Browser</a>, or
+the <a href="../hgIntegrator">Data Integrator</a>. For automated access, this track, like all
+others, is available via our <a href="../goldenPath/help/api.html">API</a>.  However, for bulk
+processing, it is recommended to download the dataset.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored at UCSC in  bigBed
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/dosageSensitivityCollins2022/" 
+target="_blank">our download server</a>.
+Individual regions or the whole genome annotation can be obtained using our tool 
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features confined to a given range, e.g.,
+<br><br>
+<tt>bigBedToBed -chrom=chr1 -start=100000 -end=100500 http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/dosageSensitivityCollins2022/pHaploDosageSensitivity.bb stdout</tt>
+<br>
+</p>
+
+<p>
+Please refer to our
+<a HREF="../FAQ/FAQdownloads.html#download36" target=_blank>Data Access FAQ</a>
+for more information.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to DECIPHER for their support and assistance with the data. We would also like to 
+thank Anna Benet-Pagès for suggesting and assisting in track development and interpretation.
+</p>
+
+<h2>References</h2>
+
+<p>
+Collins RL, Glessner JT, Porcu E, Lepamets M, Brandon R, Lauricella C, Han L, Morley T, Niestroj LM,
+Ulirsch J <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(22)00788-7" target="_blank">
+A cross-disorder dosage sensitivity map of the human genome</a>.
+<em>Cell</em>. 2022 Aug 4;185(16):3041-3055.e25.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35917817" target="_blank">35917817</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9742861/" target="_blank">PMC9742861</a>
+</p>

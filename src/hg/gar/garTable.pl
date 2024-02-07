@@ -738,7 +738,7 @@ if ( 1 == 0 ) {
 printf "<button id='summaryCountsHideShow' onclick='gar.hideTable(\"summaryCounts\")'>[hide]</button>\n";
 printf "<table class='sortable borderOne' id='summaryCounts'>\n";
 printf "<caption style='text-align:center;'><b>===== summary counts =====</b></caption>\n";
-printf "<thead>\n";
+printf "<thead style='position:sticky; top:0;'>\n";
 printf "<tr>\n";
 printf "<th>number of assemblies</th>\n";
 printf "<th>category of count</th>\n";

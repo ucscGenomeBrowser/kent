@@ -1354,6 +1354,14 @@ psl->tStart = tStart;
 psl->tEnd = tEnd;
 }
 
+void pslRecalcMatchCounts(struct psl *psl)
+/* Update the match/mismatch counts in PSL, assuming everything is a match. */
+{
+psl->match = psl->misMatch = psl->repMatch = psl->nCount = 0;
+for (int iBlk = 0; iBlk < psl->blockCount; iBlk++)
+    psl->match += psl->blockSizes[iBlk];
+}
+    
 struct psl *pslTrimToTargetRange(struct psl *oldPsl, int tMin, int tMax)
 /* Return psl trimmed to fit inside tMin/tMax.  Note this does not
  * update the match/misMatch and related fields. */

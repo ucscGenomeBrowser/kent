@@ -60,8 +60,249 @@ For the full list of our daily code changes head to <a
 href="https://github.com/ucscGenomeBrowser/kent/commits/master"
 target=_blank>our GitHub page</a>.</p>
 
+<!-- ============= 2024 archived news ============= -->
+<a name="2024"></a>
+
+<a name="012324"></a>
+<h2>Jan. 23, 2024 &nbsp;&nbsp; AVADA variants track available for human (hg38)</h2>
+<p>
+We are happy to announce the release of the <a href="/cgi-bin/hgTrackUi?db=hg38&g=avada"
+target="_blank">AVADA variants</a> track for human (GRCh38/hg38). AVADA is a database of variants
+built by machine learning software that analyzes full text research articles to find genes and
+variants that appear relevant for monogenic genetic diagnosis.
+</p>
+<p>
+The Avada Variants track shows the genomic positions of variants in the
+<a href="http://bejerano.stanford.edu/AVADA/" target="_blank">AVADA database</a>. Genomic locations
+of variants are labeled with the variant description in the original text. This is not a
+normalized HGVS string, but the original text as the authors of the study described it. The Pubmed
+ID, gene, and transcript for each variant are shown on the variant's details page, as well as the
+PubMed title, authors, and abstract.
+</p>
+<p>
+Mouse-over the variants to show the gene, variant, first author, year, and title.
+</p>
+<p>
+This data has been lifted from hg19 to hg38. Additional information can be found on the
+<a href="https://doi.org/10.1038/s41436-019-0643-6" target="_blank">AVADA publication</a>. We would
+like to thank Gill Bejerano and Johannes Birgmeier for making the AVADA data available. We would
+also like to thank Maximilian Haeussler and Jairo Navarro for creating and releasing the tracks. 
+</p>
+
+<a name="012224"></a>
+<h2>Jan. 22, 2024 &nbsp;&nbsp; New hg38 HPRC track group and data</h2>
+<p>
+We are proud to announce the release of four new tracks and a new track
+group on hg38 dedicated to the NIH's <a target="_blank"
+href="https://humanpangenome.org/">Human Pangenome Reference Consortium
+(HPRC)</a> data.</p>
+
+<div class="text-center">
+	<img class='text-center' src="../images/HPRCtrackGroup.png" width='80%' alt="New 
+hg38 HPRC track group.">
+</div>
+
+<p>
+No single reference genome such as hg19 or hg38 can accurately represent
+human genetic diversity. The <a target="_blank" 
+href="https://humanpangenome.org/">HPRC's</a> goal is to improve this by sequencing
+thousands of human genomes at high quality and building new tools to
+improve working with them. The <a target="_blank" 
+href="https://www.nature.com/articles/s41586-023-05896-x">first data release</a> 
+from this project consists of 47
+phased, diploid assemblies, more than 99% accurate at the structural and
+base pair levels. We obtained alignments of these new genomes to hg38 from
+the HPRC analysis groups and have created new Genome Browser annotation
+tracks that visualize the differences between the established hg38
+reference and the new 94 pan-genome assemblies. The new tracks are grouped
+into short and structural variants, with the latter further split by type
+(insertion, deletion, inversion, duplication, etc). We plan to update these
+and add other tracks as soon as more HPRC data is released.<br><br></p>
+
+<figure class="text-center">
+<a target="_blank" href="https://genome.ucsc.edu/s/Lou/HPRC">
+<img class='text-center' src="../images/HPRCsession.png" width='80%' alt="hg38 session
+visualizing the new HPRC tracks."></a>
+<figcaption style="font-size:13px">
+Session on hg38 near the MHC region where the reference sequence upstream of HLA-F contains
+an insertion present in only a few of the HPRC populations. Few HPRC and no common dbSNP155
+variants are annotated, further evidencing this is a region on the reference that is likely
+an uncommon insertion in the global population. Click on the image to explore the session
+further.</figcaption>
+</figure>
+
+<p>
+In this first HPRC data release, we are adding four new tracks to this new track group. 
+Details on each of the tracks are as follows:</p>
+
+<h3>Feature and Variation Tracks</h3>
+<p>
+The <a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=hprcVCF">Short Variants 
+container track</a> shows tracks of short nucleotide variants of a few base 
+pairs when aligning HPRC genomes to the hg38 reference assembly using the 
+Minigraph-cactus approach. Short variants have been used in population genetics 
+to investigate population-specific allele frequencies and genetic diversity, and 
+have been used in the association of diseases. The track consists of three subtracks:</p>
+<ul>
+<li><b>HPRC All Variants</b>: HPRC variants decomposed from 
+hprc-v1.0-mc.grch38.vcfbub.a100k.wave.vcf.gz (<a target="_blank" 
+href="https://pubmed.ncbi.nlm.nih.gov/37165242/">Liao et al 2023</a>), no size filtering</li>
+<li><b>HPRC Variants &ge; 3bp</b>: HPRC VCF variants filtered for items size &ge; 3bp</li>
+<li><b>HPRC Variants &gt; 3bp</b>: HPRC VCF variants filtered for items size &gt; 3bp</li></ul>
+
+<p>
+The <a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&c=chr6&g=hprcArrV1">Rearrangements 
+container track</a> shows various rearrangements in the HPRC assemblies with respect 
+to hg38. The types include indels, duplications, inversions, and other more 
+complicated rearrangements.</p>
+<p>
+There are five tracks in the Rearrangement composite track:</p>
+<ul>
+<li><b>Insertions</b>: Deletions in hg38 = Insertion in the HPRC assemblies</li>
+<li><b>Deletions</b>: Insertions in hg38 = Deletion in the HPRC assemblies</li>
+<li><b>Inversions</b>: Inversions with respect to hg38 in HPRC assemblies</li>
+<li><b>Duplications</b>: Duplications with respect to hg38 in HPRC assemblies</li>
+<li><b>Other Rearrangements</b>: Other Rearrangements: Unalignable sequences in both 
+assemblies (inversions, partial transpositions)</li></ul>
+
+<p>
+Many of these features are unique to this dataset, although overlap can be 
+found with other structural variant databases such as DGV. Potential applications of 
+these rearrangements could be data validation for new and existing data and a 
+better understanding of the prevalence of rearrangements in diverse populations, 
+many of which are underrepresented in current clinical and genomic databases.</p>
+
+<h3>Alignment and Conservation tracks</h3>
+<p>
+The <a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&c=chr6&g=hprcChainNet">Chain/Net 
+track</a> shows regions of the human genome that are alignable between the HPRC genomes 
+as well as hg38 and T2T-CHM13. A total of 176 maternal and paternal haplotypes 
+were used in this analysis. The configuration page for this track sorts 
+the haplotypes into 14 subpopulations as follows:</p>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+    <ul>
+      <li>T2T</li>
+      <li>HAPMAP</li>
+      <li>Yoruba Nigeria</li>
+      <li>Esan Nigeria</li>
+      <li>Gambian</li>
+    </ul></div>
+    <div class="col-sm-4">
+    <ul>
+      <li>Mende Sierra Leone</li>
+      <li>Afr Carib Barabdos</li>
+      <li>African SW USA</li>
+      <li>Puerto Rico</li>
+      <li>Peru Lima</li>
+    </ul></div>
+    <div class="col-sm-4">
+    <ul>
+      <li>Columbia Medellin</li>
+      <li>Han SoChina</li>
+      <li>Vietnam Kinh</li>
+      <li>Punjabo Pakis</li>
+    </ul></div>
+  </div>
+</div>
+
+<p>
+The <a target="_blank>" href="/cgi-bin/hgTrackUi?db=hg38&c=chr6&g=consHprc90way">90-way Multiple Alignment track</a> contains multiple alignments of 90 human genomes generated by the Minigraph-Cactus pangenome pipeline, which creates pangenomes directly from whole-genome alignments. This method builds graphs containing all forms of genetic variation while allowing the use of current mapping and genotyping tools. The confirmation page sorts the Maternal and Paternal haplotypes by the same 14 subpopulations described above.
+</p>
+
+<h3>Acknowledgments</h3>
+<p>
+We are always looking for feedback, if you would like to see other HPRC data, or 
+the data presented differently, please contact us at <a 
+href="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</a>. 
+Likewise, if you find this data useful and see potential improvements, we would be interested in hearing from you.
+</p>
+<p>
+We would like to thank the Human Pangenome Reference Consortium for taking on this genomics
+challenge and providing these data. In particular, we would like to thank Benedict Paten, 
+Heng Li and Glenn Hickey
+for their help in putting these Browser tracks together. From our team, we would like to thank
+Max Haeussler, Brian Raney, Mark Diekhans, Hiram Clawson, Gerardo Perez, Jairo Navarro, and
+Lou Nassar for their work in developing, testing, and releasing these tracks.</p>
+
 <!-- ============= 2023 archived news ============= -->
 <a name="2023"></a>
+<a name="120723"></a>
+<h2>Dec. 7, 2023 &nbsp;&nbsp; VISTA Enhancers for human and mouse</h2>
+<p>
+We are excited to announce the release of the VISTA Enhancers tracks for human and mouse genome
+assemblies. These datasets were previously part of the VISTA Enhancers public hub and have now
+been incorporated natively into the Genome Browser to better serve the research community.
+</p>
+<p>
+View the VISTA Enhancer track on the following assemblies:
+</p>
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=vistaEnhancersBb"
+       target="_blank">hg38</a>,
+      <a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=vistaEnhancersBb"
+       target="_blank">hg19</a></li>
+  <li><a href="/cgi-bin/hgTrackUi?db=mm39&position=default&g=vistaEnhancersBb"
+       target="_blank">mm39</a>,
+      <a href="/cgi-bin/hgTrackUi?db=mm10&position=default&g=vistaEnhancersBb"
+       target="_blank">mm10</a>,
+      <a href="/cgi-bin/hgTrackUi?db=mm9&position=default&g=vistaEnhancersBb"
+       target="_blank">mm9</a></li>
+</ul>
+<p>
+The VISTA Enhancers track contains potential enhancers whose activity was experimentally validated
+in transgenic mice. Most of these non-coding elements were selected for testing based on their
+extreme conservation in other vertebrates or epigenomic evidence (ChIP-Seq) of putative enhancer
+marks. The goal of VISTA Enhancers project is to identify distant-acting transcriptional enhancers
+in the human and mouse genomes. More information about can be found on the
+<a href="https://enhancer.lbl.gov/" target="_blank">VISTA Enhancer Browser</a> website.
+<a href="noPageHere.html" style="display:none">invalid link</a>
+</p>
+<p>
+We would like to thank the Lawrence Berkeley National Laboratory and the VISTA Enhancer team for
+providing this data. We would also like to thank Gerardo Perez and Jairo Navarro for the creation
+and release of these tracks.
+</p>
+
+<a name="113023"></a>
+<h2>Nov. 30, 2023 &nbsp;&nbsp; Support for previous RefSeq transcripts while searching on hg38</h2>
+<p>
+Have you ever found a variant in a paper and searched for it on the Genome Browser only 
+to receive an error that the sequence cannot be found? Or perhaps looked up a familiar 
+NM_ identifier and suddenly found no results?</p>
+<p>
+We are pleased to share that we now have support for searching previous RefSeq 
+transcript versions on hg38. This support works for both NM_ accessions 
+and <a target="_blank" href="https://hgvs-nomenclature.org/en/latest/">HGVS</a> 
+searching as demonstrated below:</p>
+
+<p>
+<b>Searching for the latest transcript which always worked:</b>
+<ul>
+<li>
+Sequence search: <a target="_blank" 
+href="../cgi-bin/hgSearch?search=NM_198056.3&db=hg38">NM_198056.3</a></li>
+<li>
+HGVS search: <a target="_blank"
+href="../cgi-bin/hgSearch?search=NM_198056.3%3Ac.1A%3EC&db=hg38">NM_198056.3:c.1A>C</a></li></ul></p>
+<p>
+<b>Searching for a previous version that now works::</b>
+<ul>
+<li>
+Sequence search: <a target="_blank"
+href="../cgi-bin/hgSearch?search=NM_198056.3&db=hg38">NM_198056.2</a></li>
+<li>
+HGVS search: <a target="_blank"
+href="../cgi-bin/hgSearch?search=NM_198056.3%3Ac.1A%3EC&db=hg38">NM_198056.2:c.1A>C</a></li></ul></p>
+
+<p>
+We thank <a target="_blank" href="https://www.ncbi.nlm.nih.gov/">NCBI</a> and Terence 
+Murphy for creating the archive of deprecated transcripts that allows this feature 
+to work. We would also like to thank the users who wrote requesting the feature 
+allowing us to prioritize it effectively. Finally, we would like to thank Chris Lee, 
+Max Haeussler, Gerardo Perez, and Lou Nassar for developing and testing this feature.</p>
 
 <a name="112223"></a>
 <h2>Nov. 22, 2023 &nbsp;&nbsp; CRISPR Targets for Zebrafish (danRer10/danRer11) now available</h2>
@@ -186,23 +427,6 @@ assemblies that contain the EVA SNP release 5 track is below:
   <div class="row">
     <div class="col-sm-4">
     <ul>
-      <li>A. gambiae <a href="../cgi-bin/hgTrackUi?db=anoGam3&g=evaSnp5"
-          target="_blank">(anoGam3)</a></li>
-      <li>C. intestinalis <a href="../cgi-bin/hgTrackUi?db=ci3&g=evaSnp5"
-          target="_blank">(ci3)</a></li>
-      <li>Cat <a href="../cgi-bin/hgTrackUi?db=felCat8&g=evaSnp5"
-          target="_blank">(felCat8)</a>, <a href="../cgi-bin/hgTrackUi?db=felCat9&g=evaSnp5"
-          target="_blank">(felCat9)</a></li>
-      <li>Chicken <a href="../cgi-bin/hgTrackUi?db=galGal4&g=evaSnp5"
-          target="_blank">(galGal4)</a>, <a href="../cgi-bin/hgTrackUi?db=galGal5&g=evaSnp5"
-          target="_blank">(galGal5)</a>, <a href="../cgi-bin/hgTrackUi?db=galGal6&g=evaSnp5"
-          target="_blank">(galGal6)</a></li>
-      <li>Chimp <a href="../cgi-bin/hgTrackUi?db=panTro5&g=evaSnp5"
-          target="_blank">(panTro5)</a></li>
-      <li>Cow <a href="../cgi-bin/hgTrackUi?db=bosTau6&g=evaSnp5"
-          target="_blank">(bosTau6)</a>, <a href="../cgi-bin/hgTrackUi?db=bosTau7&g=evaSnp5"
-          target="_blank">(bosTau7)</a>, <a href="../cgi-bin/hgTrackUi?db=bosTau9&g=evaSnp5"
-          target="_blank">(bosTau9)</a></li>
       <li>Crab-eating macaque <a href="../cgi-bin/hgTrackUi?db=macFas5&g=evaSnp5"
           target="_blank">(macFas5)</a></li>
       <li>D. melanogaster <a href="../cgi-bin/hgTrackUi?db=dm6&g=evaSnp5"
@@ -212,18 +436,6 @@ assemblies that contain the EVA SNP release 5 track is below:
     <ul>
       <li>Dog <a href="../cgi-bin/hgTrackUi?db=canFam3&g=evaSnp5"
           target="_blank">(canFam3)</a></li>
-      <li>Gorilla <a href="../cgi-bin/hgTrackUi?db=gorGor3&g=evaSnp5"
-          target="_blank">(gorGor3)</a>, <a href="../cgi-bin/hgTrackUi?db=gorGor4&g=evaSnp5"
-          target="_blank">(gorGor4)</a></li>
-      <li>Green monkey <a href="../cgi-bin/hgTrackUi?db=chlSab2&g=evaSnp5"
-          target="_blank">(chlSab2)</a></li>
-      <li>Horse <a href="../cgi-bin/hgTrackUi?db=equCab3&g=evaSnp5"
-          target="_blank">(equCab3)</a></li>
-      <li>Marmoset <a href="../cgi-bin/hgTrackUi?db=calJac3&g=evaSnp5"
-          target="_blank">(calJac3)</a></li>
-      <li>Mouse <a href="../cgi-bin/hgTrackUi?db=mm10&g=evaSnp5"
-          target="_blank">(mm10)</a>, <a href="../cgi-bin/hgTrackUi?db=mm39&g=evaSnp5"
-          target="_blank">(mm39)</a></li>
       <li>Nile tilapia <a href="../cgi-bin/hgTrackUi?db=oreNil2&g=evaSnp5"
           target="_blank">(oreNil2)</a></li>
       <li>Orangutan <a href="../cgi-bin/hgTrackUi?db=ponAbe3&g=evaSnp5"
@@ -231,20 +443,6 @@ assemblies that contain the EVA SNP release 5 track is below:
     </ul></div>
     <div class="col-sm-4">
     <ul>
-      <li>Pig <a href="../cgi-bin/hgTrackUi?db=susScr3&g=evaSnp5"
-          target="_blank">(susScr3)</a>, <a href="../cgi-bin/hgTrackUi?db=susScr11&g=evaSnp5"
-          target="_blank">(susScr11)</a></li>
-      <li>Rat <a href="../cgi-bin/hgTrackUi?db=rn5&g=evaSnp5"
-          target="_blank">(rn5)</a>, <a href="../cgi-bin/hgTrackUi?db=rn7&g=evaSnp5"
-          target="_blank">(rn7)</a></li>
-      <li>Rhesus <a href="../cgi-bin/hgTrackUi?db=rheMac8&g=evaSnp5"
-          target="_blank">(rheMac8)</a>, <a href="../cgi-bin/hgTrackUi?db=rheMac10&g=evaSnp5"
-          target="_blank">(rheMac10)</a></li>
-      <li>Sheep <a href="../cgi-bin/hgTrackUi?db=oviAri3&g=evaSnp5"
-          target="_blank">(oviAri3)</a>, <a href="../cgi-bin/hgTrackUi?db=oviAri4&g=evaSnp5"
-          target="_blank">(oviAri4)</a></li>
-      <li>Turkey <a href="../cgi-bin/hgTrackUi?db=melGal5&g=evaSnp5"
-          target="_blank">(melGal5)</a></li>
       <li>Zebra finch <a href="../cgi-bin/hgTrackUi?db=taeGut2&g=evaSnp5"
           target="_blank">(taeGut2)</a></li>
       <li>Zebrafish <a href="../cgi-bin/hgTrackUi?db=danRer7&g=evaSnp5"
@@ -2039,7 +2237,7 @@ on our download server:
 <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/"
 target="_blank">https://hgdownload.gi.ucsc.edu/hubs/GCA/009/914/755/GCA_009914755.4/liftOver/</a></p>
 
-<h3>Acknowledgements</h3>
+<h3>Acknowledgments</h3>
 <p>
 We would like to thank the <a href="https://sites.google.com/ucsc.edu/t2tworkinggroup"
 target="_blank">T2T Consortium</a> for this landmark accomplishment. 
@@ -9593,7 +9791,7 @@ target="_blank">Genetic effects on gene expression across human tissues</a>&quot
 article about these data.</p>
 
 <p>
-Acknowledgements to UCSC Genome Browser engineer, Kate Rosenbloom, for creating these tracks.
+Acknowledgments to UCSC Genome Browser engineer, Kate Rosenbloom, for creating these tracks.
 </p>
 
 <a name="092917"></a>

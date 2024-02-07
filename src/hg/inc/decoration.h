@@ -87,21 +87,6 @@ typedef enum {DECORATION_STYLE_UNKNOWN, DECORATION_STYLE_BLOCK, DECORATION_STYLE
 decorationStyle decorationGetStyle(struct decoration *decoration);
 /* Return the enum value that corresponds to the string in the decoration's style field */
 
-typedef enum {
-    DECORATION_GLYPH_CIRCLE,
-    DECORATION_GLYPH_TRIANGLE,
-    DECORATION_GLYPH_INV_TRIANGLE,
-    DECORATION_GLYPH_SQUARE,
-    DECORATION_GLYPH_DIAMOND,
-    DECORATION_GLYPH_OCTAGON,
-    DECORATION_GLYPH_STAR,
-    DECORATION_GLYPH_PENTAGRAM
-    } decorationGlyphType;
-
-decorationGlyphType decorationGetGlyphType(struct decoration *decoration);
-/* Return the enum glyph type for the decoration, based on the contents of the glyph field.
- * Defaults to DECORATION_GLYPH_CIRCLE if the string is unrecognized. */
-
 int decorationGetParentExtent(struct decoration *decoration, char **chrom, int *start, int *end);
 /* Parse out the chrom:start-end from the "decoratedItem" field of a decoration and return
  * those in the corresponding pointers if they're non-NULL.  The chromosome string must be

@@ -8,6 +8,7 @@ if [ $# -ne 1 ]; then
 fi
 
 export dirPath="${1}"
+export accession=`basename ${dirPath}`
 
 ## verify no broken symlinks
 export srcDir="/hive/data/genomes/asmHubs/${dirPath}"
@@ -51,8 +52,8 @@ export dynaServerDir="/scratch/hubs/${dirPath}"
 ssh qateam@$dynaBlat "mkdir -p ${dynaServerDir}" 2>&1 | grep -v "X11 forwarding request" || true
 printf "# successful mkdir on $dynaBlat\n" 1>&2
 
-printf "rsync --stats -a -L -P ${srcDir}/*.2bit \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
-rsync --stats -a -L -P ${srcDir}/*.2bit "qateam@$dynaBlat:${dynaServerDir}/" \
+printf "rsync --stats -a -L -P ${srcDir}/${accession}.2bit \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
+rsync --stats -a -L -P ${srcDir}/${accession}.2bit "qateam@$dynaBlat:${dynaServerDir}/" \
   2>&1 | grep -v "X11 forwarding request"
 printf "rsync --stats -a -L -P ${srcDir}/*.gfidx \"qateam@$dynaBlat:${dynaServerDir}/\"\n" 1>&2
 rsync --stats -a -L -P ${srcDir}/*.gfidx "qateam@$dynaBlat:${dynaServerDir}/" \

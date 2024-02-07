@@ -6,19 +6,32 @@
 #include "common.h"
 #include "bigBedCmdSupport.h"
 
-void bigBedCmdOutputHeader(struct bbiFile *bbi, FILE *f)
-/* output a header from the autoSql in the file */
+static void outputHeader(struct bbiFile *bbi, FILE *f, char startChar)
+/* output a header from the autoSql in the file, startChar is '#' or 0 to omit  */
 {
 char *asText = bigBedAutoSqlText(bbi);
 if (asText == NULL)
     errAbort("bigBed files does not contain an autoSql schema");
 struct asObject *asObj = asParseText(asText);
-char sep = '#';
+char sep = startChar;
 for (struct asColumn *asCol = asObj->columnList; asCol != NULL; asCol = asCol->next)
     {
-    fputc(sep, f);
+    if (sep != '\0')
+        fputc(sep, f);
     fputs(asCol->name, f);
     sep = '\t';
     }
 fputc('\n', f);
+}
+
+void bigBedCmdOutputHeader(struct bbiFile *bbi, FILE *f)
+/* output a autoSql-style header from the autoSql in the file */
+{
+outputHeader(bbi, f, '#');
+}
+
+void bigBedCmdOutputTsvHeader(struct bbiFile *bbi, FILE *f)
+/* output a TSV-style header from the autoSql in the file */
+{
+outputHeader(bbi, f, '\0');
 }

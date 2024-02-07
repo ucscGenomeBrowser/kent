@@ -2,6 +2,13 @@ kentSrc = ../../..
 
 include ../../../inc/common.mk
 
+# something very odd with the build here.  On the Mac, the COPT of -O -g
+# which comes in from common.mk causes extra directories .dSYM to be
+# made in the destination bin/ directory.  To avoid this, set COPT simply
+# to -O here
+
+COPT = -O
+
 L += ${MYSQLLIBS} -lm -lz
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../lib/${MACHTYPE}/libSpliceGraph.a 

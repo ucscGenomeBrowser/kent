@@ -145,7 +145,7 @@ END
 ##############################################################################
 sub startTable() {
 print <<"END"
-<table class="sortable" style="border: 1px solid black;">
+<table class="sortable" border="1">
 <thead style="position:sticky; top:0;"><tr><th>count</th>
   <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>

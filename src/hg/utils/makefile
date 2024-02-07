@@ -59,7 +59,8 @@ UTILS_APPLIST = \
 	tdbQuery \
 	transMapPslToGenePred \
 	twoBitMask \
-	vcfToBed
+	vcfToBed \
+	fixTrackDb
 
 USER_APP_SCRIPTS = \
 	vai.pl

@@ -419,8 +419,8 @@ struct sqlProfile* sp = sqlProfileGet(profileName, database);
 if (sp == NULL)
     {
     if (profileName == NULL)
-        errAbort("can't find database %s in hg.conf, should have a default named \"db\"",
-                 database);
+        errAbort("can't find mysql connection info for database %s in hg.conf or ~/.hg.conf, should have a default profile named \"db\", so values for at least db.host, "
+                "db.user and db.password. See http://genomewiki.ucsc.edu/index.php/Hg.conf", database);
     else if (sameWord(profileName, "backupcentral"))
         errAbort("can't find profile %s in hg.conf. This error most likely indicates that the "
             "Genome Browser could not connect to MySQL/MariaDB. Either the databases server is not running"
@@ -1086,6 +1086,16 @@ if (sqlOpenConnections == NULL)
     }
 }
 
+static bool sqlIsUcscServer()
+/* Return TRUE if this is one of our own servers at UCSC */
+{
+// partially copied from hdb.c, but avoids dependendcy on hdb.c
+char *httpHost = getenv("HTTP_HOST");
+if (httpHost==NULL) // this is not running as a CGI, but a command-line program
+    return FALSE;
+return (containsStringNoCase(httpHost, ".ucsc.edu")!=NULL);
+}
+
 static struct sqlConnection *sqlConnRemoteFillIn(struct sqlConnection *sc, 
 					   struct sqlProfile *sp,
                                            char *database, boolean abort, boolean addAsOpen)
@@ -1151,9 +1161,21 @@ if (mysql_real_connect(
     {
     monitorLeave();
     monitorEnterTime = oldTime;
+
+    char *extraMsg = "";
+    if (sqlIsUcscServer())
+        extraMsg = "We hate this error more than any other and may be already looking into it. You can help us by telling us "
+            "about it, "
+            "the email is genome-www@soe.ucsc.edu. We will fix it ASAP. "
+            "And even if this server is failing right now, usually, one of our other three "
+            "international mirrors is still "
+            "working. The three mirrors are genome.ucsc.edu (US), genome-euro.ucsc.edu (Germany), genome-asia.ucsc.edu "
+            "(Japan). You may not find your custom tracks and saved sessions there, but using another mirror should allow "
+            "continuing your work while we are fixing the problem. ";
+
     if (abort)
-	errAbort("Couldn't connect to database %s on %s as %s.\n%s",
-	    database, sp->host, sp->user, mysql_error(conn));
+	errAbort("Couldn't connect to database %s on %s as %s.\n%s\n%s",
+	    database, sp->host, sp->user, mysql_error(conn), extraMsg);
     else if (sqlParanoid)
 	fprintf(stderr, "Couldn't connect to database %s on %s as %s.  "
 		"mysql: %s  pid=%ld\n",

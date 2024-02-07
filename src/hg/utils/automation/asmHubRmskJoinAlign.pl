@@ -20,8 +20,14 @@ if ($argc != 2) {
 my $asmId = shift;
 my $buildDir = shift;
 my $namesFile = "$buildDir/html/$asmId.names.tab";
+my $faSizeFile = "$buildDir/trackData/repeatMasker/faSize.rmsk.txt";
 my $rmskClassProfile = "$buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt";
 my $rmskVersion = "$buildDir/$asmId.repeatMasker.version.txt";
+my $maskingPercent = "";
+if ( -s "${faSizeFile}" ) {
+  $maskingPercent=`grep -w masked "${faSizeFile}" | cut -d' ' -f1`;
+  chomp $maskingPercent;
+}
 
 my $errOut = 0;
 if ( ! -s $rmskClassProfile ) {
@@ -71,6 +77,17 @@ Information Research Institute</a> (GIRI).
 Repbase Update is described in Jurka (2000) in the References section below.</p>
 _EOF_
 ;
+
+if ( length($maskingPercent) ) {
+  printf "<h2>Percent masking of sequence: %s</h2>\n", $maskingPercent;
+  my $asmSize=`grep -w bases "${faSizeFile}" | cut -d' ' -f1`;
+  chomp $asmSize;
+  my $maskedBases=`grep -w bases "${faSizeFile}" | cut -d' ' -f9`;
+  chomp $maskedBases;
+  printf "<p><b>Assembly size:</b> %s bases<br>\n", &AsmHub::commify($asmSize);
+  printf "<b>Sequence masked:</b> %s bases\n", &AsmHub::commify($maskedBases);
+  printf "</p>\n";
+}
 
 if ( -s "$rmskVersion" ) {
 

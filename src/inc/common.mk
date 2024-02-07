@@ -44,19 +44,8 @@ ifneq (${CONDA_BUILD},1)
   ifeq (${IS_HGWDEV},no)
     ifeq (${FREETYPELIBS},)
       ifeq ($(UNAME_S),Darwin)
-        ifneq ($(wildcard /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a),)
-          ifneq ($(wildcard /usr/local/opt/bzip2/lib/libbz2.a),)
-            FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a /usr/local/opt/bzip2/lib/libbz2.a
-          else
-            FREETYPELIBS = /usr/local/Cellar/freetype/2.11.0/lib/libfreetype.a -lbz2
-          endif
-        else
-          ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
-            FREETYPELIBS=/opt/local/lib/libfreetype.a /opt/local/lib/libbz2.a /opt/local/lib/libbrotlidec-static.a /opt/local/lib/libbrotlienc-static.a /opt/local/lib/libbrotlicommon-static.a
-          endif
-        endif
-      endif
-      ifeq (${FREETYPELIBS},)
+        FREETYPELIBS =  $(shell freetype-config --libs --static 2> /dev/null )
+      else
         FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
       endif
     endif
@@ -89,11 +78,7 @@ ICONVLIB=
 ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}
 else
-  ifneq ($(wildcard /opt/local/lib/libiconv.a),)
-       ICONVLIB=/opt/local/lib/libiconv.a
-   else
-       ICONVLIB=-liconv
-  endif
+  ICONVLIB=-liconv
 endif
 
 # autodetect UCSC installation of hal:
@@ -133,15 +118,16 @@ endif
 
 
 # libssl: disabled by default
-ifneq (${SSL_DIR}, "/usr/include/openssl")
-  ifneq ($(UNAME_S),Darwin)
-    ifneq ($(wildcard ${SSL_DIR}),)
-      L+=-L${SSL_DIR}/lib
-    endif
-  endif
-    HG_INC+=-I${SSL_DIR}/include
-endif
-# on hgwdev, already using the static library with mysqllient.
+#ifneq (${SSL_DIR}, "/usr/include/openssl")
+  #ifneq ($(UNAME_S),Darwin)
+    #ifneq ($(wildcard ${SSL_DIR}),)
+      #L+=-L${SSL_DIR}/lib
+    #endif
+  #endif
+    #HG_INC+=-I${SSL_DIR}/include
+#endif
+
+# on hgwdev, using the static library with mysqllient.
 ifeq (${IS_HGWDEV},yes)
    L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
@@ -149,73 +135,16 @@ else
    ifeq (${CONDA_BUILD},1)
        L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
    else
-     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@3/3.0.7/lib/libssl.a),)
-         L+=/opt/homebrew/Cellar/openssl@3/3.0.7/lib/libssl.a
-     else
-       ifneq ($(wildcard /opt/local/lib/libssl.a),)
-         L+=/opt/local/lib/libssl.a
-       else
-         ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
-	   L+=/usr/lib/x86_64-linux-gnu/libssl.a
-         else
-           ifneq ($(wildcard /usr/local/opt/openssl/lib/libssl.a),)
-              L+=/usr/local/opt/openssl/lib/libssl.a
-           else
-              L+=-lssl
-           endif
-         endif
-       endif
-     endif
-     ifneq ($(wildcard /opt/homebrew/Cellar/openssl@3/3.0.7/lib/libcrypto.a),)
-         L+=/opt/homebrew/Cellar/openssl@3/3.0.7/lib/libcrypto.a
-     else
-       ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
-          L+=/opt/local/lib/libcrypto.a
-       else
-          ifneq ($(wildcard /usr/local/opt/openssl/lib/libcrypto.a),)
-             L+=/usr/local/opt/openssl/lib/libcrypto.a
-          else
-             L+=-lcrypto
-          endif
-       endif
-     endif
-     ifneq ($(wildcard /opt/homebrew/Cellar/zstd/1.5.2/lib/libzstd.a),)
-          L+=/opt/homebrew/Cellar/zstd/1.5.2/lib/libzstd.a
-     endif
+       L+=-lssl -lcrypto -ldl
    endif
 endif
 
 # autodetect where libm is installed
 ifeq (${MLIB},)
-  ifneq ($(wildcard /usr/lib64/libm.a),)
-      MLIB=-lm
-  endif
-endif
-ifeq (${MLIB},)
   MLIB=-lm
 endif
 
 # autodetect where png is installed
-ifeq (${PNGLIB},)
-  ifneq ($(wildcard /usr/lib64/libpng.a),)
-      PNGLIB=/usr/lib64/libpng.a
-  endif
-endif
-ifeq (${PNGLIB},)
-  ifneq ($(wildcard /usr/lib/libpng.a),)
-      PNGLIB=/usr/lib/libpng.a
-  endif
-endif
-ifeq (${PNGLIB},)
-  ifneq ($(wildcard /opt/local/lib/libpng.a),)
-      PNGLIB=/opt/local/lib/libpng.a
-  endif
-endif
-ifeq (${PNGLIB},)
-  ifneq ($(wildcard /usr/local/lib/libpng.a),)
-      PNGLIB=/usr/local/lib/libpng.a
-  endif
-endif
 ifeq (${PNGLIB},)
       PNGLIB := $(shell libpng-config --ldflags  || true)
 endif
@@ -223,12 +152,8 @@ ifeq (${PNGLIB},)
   PNGLIB=-lpng
 endif
 ifeq (${PNGINCL},)
-  ifneq ($(wildcard /opt/local/include/png.h),)
-      PNGINCL=-I/opt/local/include
-  else
-      PNGINCL := $(shell libpng-config --I_opts  || true)
+  PNGINCL := $(shell libpng-config --I_opts  || true)
 #       $(info using libpng-config to set PNGINCL: ${PNGINCL})
-  endif
 endif
 
 # autodetect where mysql includes and libraries are installed
@@ -239,19 +164,8 @@ ifneq ($(MAKECMDGOALS),clean)
     MYSQLINC=/usr/include/mysql
     MYSQLLIBS=/usr/lib64/libmysqlclient.a /usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -ldl -lz
   endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libmysqlclient.a),)
-	  MYSQLLIBS=/usr/lib/x86_64-linux-gnu/libmysqlclient.a -ldl
-    endif
-  endif
-  # this does *not* work on Mac OSX with the dynamic libraries
-  ifneq ($(UNAME_S),Darwin)
-    ifeq (${MYSQLLIBS},)
-      MYSQLLIBS := $(shell mysql_config --libs || true)
-#        $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
-    endif
-  endif
 
+  # set MYSQL include path
   ifeq (${MYSQLINC},)
     MYSQLINC := $(shell mysql_config --include | sed -e 's/-I//' || true)
 #        $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
@@ -266,86 +180,12 @@ ifneq ($(MAKECMDGOALS),clean)
 	  MYSQLINC=/usr/include/mysql
     endif
   endif
-  ifeq (${MYSQLINC},)
-    ifneq ($(wildcard /opt/local/include/mysql57/mysql/mysql.h),)
-	  MYSQLINC=/opt/local/include/mysql57/mysql
-    endif
-  endif
-  ifeq (${MYSQLINC},)
-    ifneq ($(wildcard /opt/local/include/mysql55/mysql/mysql.h),)
-	  MYSQLINC=/opt/local/include/mysql55/mysql
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.9.4/lib/libmariadbclient.a),)
-         MYSQLLIBS+=/usr/local/Cellar/mariadb/10.9.4/lib/libmariadbclient.a
-    else
-      ifneq ($(wildcard /usr/local/Cellar/mariadb/10.8.3_1/lib/libmariadbclient.a),)
-           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.8.3_1/lib/libmariadbclient.a
-      else
-        ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a),)
-           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.6.4/lib/libmariadbclient.a
-        else
-          ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
-           MYSQLLIBS+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
-	  endif
-        endif
-      endif
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /opt/local/lib/mysql57/mysql/libmysqlclient.a),)
-	  MYSQLLIBS=/opt/local/lib/mysql57/mysql/libmysqlclient.a
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /opt/local/lib/mysql55/mysql/libmysqlclient.a),)
-	  MYSQLLIBS=/opt/local/lib/mysql55/mysql/libmysqlclient.a
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/lib64/mysql/libmysqlclient.a),)
-	  MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.a
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/local/mysql/lib/libmysqlclient.a),)
-	  MYSQLLIBS=/usr/local/mysql/lib/libmysqlclient.a
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/local/mysql/lib/libmysqlclient.a),)
-	  MYSQLLIBS=/usr/local/mysql/lib/libmysqlclient.a
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/lib64/mysql/libmysqlclient.so),)
-	  MYSQLLIBS=/usr/lib64/mysql/libmysqlclient.so
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/lib/libmysqlclient.a),)
-	  MYSQLLIBS=/usr/lib/libmysqlclient.a
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /opt/local/lib/mysql55/mysql/libmysqlclient.a),)
-	  MYSQLLIBS=/opt/local/lib/mysql55/mysql/libmysqlclient.a
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /opt/local/lib/mariadb-10.10/mysql/libmariadbclient.a),)
-        MYSQLLIBS=/opt/local/lib/mariadb-10.10/mysql/libmariadbclient.a
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/local/Cellar/mysql/5.6.19/lib/libmysqlclient.a),)
-	  MYSQLLIBS=/usr/local/Cellar/mysql/5.6.19/lib/libmysqlclient.a
-    endif
-  endif
-  ifeq (${MYSQLLIBS},)
-    ifneq ($(wildcard /usr/local/Cellar/mysql/5.6.16/lib/libmysqlclient.a),)
-	  MYSQLLIBS=/usr/local/Cellar/mysql/5.6.16/lib/libmysqlclient.a
+
+  # this does *not* work on Mac OSX with the dynamic libraries
+  ifneq ($(UNAME_S),Darwin)
+    ifeq (${MYSQLLIBS},)
+      MYSQLLIBS := $(shell mysql_config --libs || true)
+#        $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
     endif
   endif
   ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
@@ -376,40 +216,12 @@ endif
 
 ifeq (${ZLIB},)
   ZLIB=-lz
-  ifneq ($(wildcard /opt/local/lib/libz.a),)
-    ZLIB=/opt/local/lib/libz.a
-  endif
-  ifneq ($(wildcard /usr/lib64/libz.a),)
-    ZLIB=/usr/lib64/libz.a
-  endif
 endif
 
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
 
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
-ifneq ($(wildcard /usr/local/Cellar/mariadb/10.9.4/include/mysql/mysql.h),)
-    HG_INC+=-I/usr/local/Cellar/mariadb/10.9.4/include/mysql
-else
-  ifneq ($(wildcard /usr/local/Cellar/mariadb/10.8.3_1/include/mysql/mysql.h),)
-      HG_INC+=-I/usr/local/Cellar/mariadb/10.8.3_1/include/mysql
-  else
-    ifneq ($(wildcard /usr/local/Cellar/mariadb/10.6.4/include/mysql/mysql.h),)
-      HG_INC+=-I/usr/local/Cellar/mariadb/10.6.4/include/mysql
-    else
-      ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
-        HG_INC+=-I/usr/local/Cellar/mariadb/10.4.12/include/mysql
-      endif
-    endif
-  endif
-endif
-ifneq ($(wildcard /opt/homebrew/Cellar/openssl@3/3.0.7/include/openssl/hmac.h),)
-    HG_INC+=-I/opt/homebrew/Cellar/openssl@3/3.0.7/include
-else
-  ifneq ($(wildcard /usr/local/opt/openssl/include/openssl/hmac.h),)
-    HG_INC+=-I/usr/local/opt/openssl/include
-  endif
-endif
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
@@ -532,8 +344,10 @@ PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
 CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
 ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 
+
+CC_PROG_OPTS = ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC}
 %.o: %.c
-	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+	${CC} ${CC_PROG_OPTS}  -o $@ -c $<
 
 # autodetect UCSC installation of node.js:
 ifeq (${NODEBIN},)

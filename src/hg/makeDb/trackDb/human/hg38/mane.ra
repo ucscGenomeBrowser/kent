@@ -1,7 +1,7 @@
 track mane
 bigDataUrl /gbdb/hg38/mane/mane.bb
 shortLabel MANE
-longLabel NCBI RefSeq and Ensembl transcripts from the MANE Project
+longLabel NCBI RefSeq & Ensembl transcripts from MANE: most relevant transcript for every protein-coding gene gene
 searchIndex name
 searchTrix /gbdb/hg38/mane/mane.ix
 type bigGenePred
@@ -12,6 +12,7 @@ defaultLabelFields geneName2
 maxItems 5000
 itemRgb on
 skipFields cdsStartStat,cdsEndStat,exonFrames,geneType,type
+mouseOver $ncbiId, $name
 urls name2="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" geneName="https://www.ensembl.org/homo_sapiens/Gene/Summary?g=$$&db=core" geneName2="https://www.genecards.org/cgi-bin/carddisp.pl?gene=$$" ensemblProtAcc="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" ncbiId="https://www.ncbi.nlm.nih.gov/nuccore/$$" ncbiProtAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
 dataVersion /gbdb/hg38/mane/README_versions.txt
 

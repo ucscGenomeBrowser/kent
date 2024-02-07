@@ -943,6 +943,8 @@ sub doCleanup {
   $bossScript->add(<<_EOF_
 gzip -f download/{rna.sizes,*.raFile.txt}
 gzip -f process/*.{tab,txt,gp,gff,psl,cds,bed}
+rm -f $asmId.$db.ncbiRefSeqLink.tab
+ln -f -s process/$asmId.$db.ncbiRefSeqLink.tab.gz .
 # Leave this one uncompressed, gbdb links to it:
 gunzip process/ncbiRefSeqVersion.txt.gz
 _EOF_

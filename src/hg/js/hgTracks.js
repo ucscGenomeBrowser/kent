@@ -1014,8 +1014,10 @@ var vis = {
 ////////////////////////////////////////////////////////////
 var dragSelect = {
 
-    hlColorDefault: '#aaedff', // default highlight color, if nothing specified
-    hlColor :       '#aaedff', // current highlight color
+    //hlColorDefault: '#aaedff', // default highlight color, if nothing specified
+    //hlColor :       '#aaedff', // current highlight color
+    hlColor :       '#aac6ff', // current highlight color
+    hlColorDefault: '#aac6ff', // default highlight color, if nothing specified
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
     originalCursor:  null,
     startTime:       null,
@@ -2228,6 +2230,13 @@ var rightClick = {
         // by prompt in IE 7+.   Callback is called if user presses "OK".
         $("body").append("<div id = 'myPrompt'><div id='dialog' title='Basic dialog'><form>" +
                             msg + "<input id='myPromptText' value=''></form>");
+        $('#myPromptText').bind('keypress', function(e) {
+            if (e.which === 13) {  // listens for return key
+                e.preventDefault();   // prevents return from also submitting whole form
+                $("#myPrompt").dialog("close");
+                callback($("#myPromptText").val());
+            }
+        });
         $("#myPrompt").dialog({
                                 modal: true,
                                 closeOnEscape: true,
@@ -2379,10 +2388,10 @@ var rightClick = {
         } else if (cmd === 'zoomCodon' || cmd === 'zoomExon') {
             var num, ajaxCmd, msg;
             if (cmd === 'zoomCodon') {
-                msg = "Please enter the codon number to jump to:";
+                msg = "Please enter the codon number to zoom to:";
                 ajaxCmd = 'codonToPos';
             } else {
-                msg = "Please enter the exon number to jump to:";
+                msg = "Please enter the exon number to zoom to:";
                 ajaxCmd = 'exonToPos';
             }
             rightClick.myPrompt(msg, function(results) {
@@ -2859,7 +2868,8 @@ var rightClick = {
                                         return true;
                                     }
                                 };
-                            if (rightClick.supportZoomCodon && rec.type.indexOf("genePred") !== -1) {
+                            if (rightClick.supportZoomCodon &&
+                                    (rec.type.indexOf("genePred") !== -1 || rec.type.indexOf("bigGenePred") !== -1)) {
                                 // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
                                 var name, table;
                                 var reg = new RegExp("hgg_gene=([^&]+)");
@@ -2886,15 +2896,8 @@ var rightClick = {
                                     }
                                 }
                                 if (name && table) {
-                                    o[rightClick.makeImgTag("magnify.png")+" Zoom to codon"] =
-                                    {   onclick: function(menuItemClicked, menuObject) {
-                                            rightClick.hit(menuItemClicked, menuObject,
-                                                        "zoomCodon",
-                                                        {name: name, table: table});
-                                            return true;}
-                                    };
                                     if (exonNum > 0) {
-                                        o[rightClick.makeImgTag("magnify.png")+" Zoom to exon"] = {
+                                        o[rightClick.makeImgTag("magnify.png")+" Zoom to this exon"] = {
                                             onclick: function(menuItemClicked, menuObject) {
                                                 $.ajax({
                                                         type: "GET",
@@ -2909,7 +2912,14 @@ var rightClick = {
                                                     });
                                                 return true; }
                                         };
-                                        o[rightClick.makeImgTag("magnify.png")+" Choose exon "] =
+                                    o[rightClick.makeImgTag("magnify.png")+" Enter codon to zoom to..."] =
+                                    {   onclick: function(menuItemClicked, menuObject) {
+                                            rightClick.hit(menuItemClicked, menuObject,
+                                                        "zoomCodon",
+                                                        {name: name, table: table});
+                                            return true;}
+                                    };
+                                        o[rightClick.makeImgTag("magnify.png")+" Enter exon to zoom to..."] =
                                         {   onclick: function(menuItemClicked, menuObject) {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                             "zoomExon",
@@ -3396,7 +3406,10 @@ function showRecTrackSetsPopup() {
         var link = $this.attr("href").replace(/position=.*/, 'position=');
         $this.attr("href", link + genomePos.original);
     });
-    $('#recTrackSetsPopup').dialog({width:'650'});
+    let popUp = document.getElementById("recTrackSetsPopup");
+    title = popUp.title;
+    if (title.length === 0 && popUp.getAttribute("originaltitle") !== "") {title = popUp.getAttribute("originaltitle");}
+    $('#recTrackSetsPopup').dialog({width:'650', title: title});
 }
 
 function removeSessionPanel() {
@@ -3847,15 +3860,27 @@ var imageV2 = {
                 suggestBox.init(getDb(),
                             $("#suggestTrack").length > 0,
                             function (item) {
-                                genomePos.set(item.id, getSizeFromCoordinates(item.id));
-                                if ($("#suggestTrack").length && $('#hgFindMatches').length) {
-                                    // Set cart variables to open the hgSuggest gene track and highlight
-                                    // the chosen transcript.  These variables will be submittted by the goButton
-                                    // click handler.
-                                    vis.makeTrackVisible($("#suggestTrack").val());
-                                    cart.addVarsToQueue(["hgFind.matches"],[$('#hgFindMatches').val()]);
+                                if (["helpDocs", "publicHubs", "trackDb"].includes(item.type) ||
+                                        item.id.startsWith("hgc")) {
+                                    if (item.geneSymbol) {
+                                        selectedGene = item.geneSymbol;
+                                        // Overwrite item's long value with symbol after the autocomplete plugin is done:
+                                        window.setTimeout($('#positionInput').val(item.geneSymbol), 0);
+                                    } else {
+                                        selectedGene = item.value;
+                                    }
+                                    window.location.assign(item.id);
+                                } else {
+                                    genomePos.set(item.id, getSizeFromCoordinates(item.id));
+                                    if ($("#suggestTrack").length && $('#hgFindMatches').length) {
+                                        // Set cart variables to open the hgSuggest gene track and highlight
+                                        // the chosen transcript.  These variables will be submittted by the goButton
+                                        // click handler.
+                                        vis.makeTrackVisible($("#suggestTrack").val());
+                                        cart.addVarsToQueue(["hgFind.matches"],[$('#hgFindMatches').val()]);
+                                    }
+                                    $("#goButton").click();
                                 }
-                                $("#goButton").click();
                             },
                             function (position) {
                                 genomePos.set(position, getSizeFromCoordinates(position));
@@ -3974,6 +3999,9 @@ var imageV2 = {
             var newJsonRec = newJson.trackDb[id];
             var oldJsonRec = oldJson.trackDb[id];
             
+            // use limitedVis as visibility if set
+            if (newJsonRec.limitedVis !== undefined)
+                newJsonRec.visibility = newJsonRec.limitedVis;
             if (newJsonRec.visibility === 0)  // hidden 'ruler' is in newJson.trackDb!
                 continue;
             if (newJsonRec.type === "remote")
@@ -5479,13 +5507,17 @@ $(document).ready(function()
             let lsKey = "hgTracks_hideTutorial";
             let isUserLoggedIn = (typeof userLoggedIn !== 'undefined' && userLoggedIn === true);
             let hideTutorial = localStorage.getItem(lsKey);
+            let tutMsgKey = "hgTracks_tutMsgCount";
+            let tmp = localStorage.getItem(tutMsgKey), tutMsgCount = 0;
+            if (tmp !== null) {tutMsgCount = parseInt(tmp);}
             // if the user is not logged in and they have not already gone through the
             // tutorial
-            if (!isUserLoggedIn && !hideTutorial) {
+            if (!isUserLoggedIn && !hideTutorial && tutMsgCount < 5) {
                 let msg = "A guided tutorial is available for new users: " +
                     "<button id='showTutorialLink' href=\"#showTutorial\">Start tutorial</button>";
                 notifBoxSetup("hgTracks", "hideTutorial", msg);
                 notifBoxShow("hgTracks", "hideTutorial");
+                localStorage.setItem("hgTracks_tutMsgCount", ++tutMsgCount);
                 $("#showTutorialLink").click(function() {
                     $("#hgTracks_hideTutorialnotifyHide").click();
                     tour.start();

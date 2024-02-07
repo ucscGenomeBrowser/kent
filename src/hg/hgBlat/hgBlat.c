@@ -1334,6 +1334,7 @@ double expected = genomeSize;
 for (k=1; k<36; k++)
     {
     expected /= alphaBetSize;
+    // set this to .05 to allow 18bp searches on hg38.
     if (expected < .004)
 	break;
     }
@@ -1681,8 +1682,13 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     if (oneSize < minSuggested)
         {
-	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum)", 
-		seq->name, oneSize, minSuggested);
+	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum).<br>"
+                "To search for short sequences in the current browser window, use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track, "
+                "or, if you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
+                "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.<br>"
+                "For primers, you can use our tool <a href='hgPcr?%s=%s'>In-silico PCR</a>. In-silico PCR searches the entire genome or a set of transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
+                "Contact us if none of these options solve the problem. ",
+		seq->name, oneSize, minSuggested, cartSessionVarName(), cartSessionId(cart), cartSessionVarName(), cartSessionId(cart));
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.
 	// minimum possible length = tileSize+stepSize, so mpl=16 for dna stepSize=5, mpl=10 for protein.
@@ -1890,7 +1896,12 @@ printf("<P>For programmatic access, BLAT supports URL queries which return in JS
 
 if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
-           " for best results instead of BLAT.</P>", db);
+           " for best results instead of BLAT. " 
+           "To search for short sequences &lt; 20bp only in the sequence shown on the Genome Browser, "
+           "use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track, "
+           "If you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
+           "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.</p>",
+           db, cartSessionVarName(), cartSessionId(cart));
 puts("</TD></TR></TABLE>\n");
 
 

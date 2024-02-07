@@ -44,6 +44,10 @@ my $dbHost = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $chromSizes = "$HgAutomate::clusterData/\$db/chrom.sizes";
+my $maxSplitSize = 0;	# will be set to maxSeqSize or 1,000,000,000 when split
+my $splitRun = 0;	# normally not, will become true if total genome
+                        # size if more than 4Gb or if single largest sequence
+                        # is more than 1Gb
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -122,6 +126,9 @@ sub checkOptions {
 
 #########################################################################
 # * step: hard mask [workhorse]
+#  the hard masking is always going to happen in the doCpg() step during
+#  setup.  If the incoming sequence is not masked at all, there will be
+#  no hard masking.  If it is masked, it will be hard masked.
 sub doHardMask {
   printf STDERR "# doHardMask: obsolete step, no longer needed\n";
   return 0;
@@ -141,9 +148,88 @@ sub doCpg {
 	"stage, or move aside/remove $runDir/ and run again.\n";
   }
   &HgAutomate::mustMkdir($runDir);
+  my $bossScript;
+
+  if ($splitRun) {
+    my $templateCmd = ("./runCpg.bash " . '$(root1) '
+                . '{check out exists results/$(root1).cpg}');
+    &HgAutomate::makeGsub($runDir, $templateCmd);
+    `touch "$runDir/para_hub_$paraHub"`;
+
+    my $fh = &HgAutomate::mustOpen(">$runDir/runCpg.bash");
+    print $fh <<_EOF_
+#!/bin/bash
+set -beEu -o pipefail
+export partName=\$1
+export part2bit=partFa/\$partName.2bit
+export result=\$2
+twoBitToFa \$part2bit stdout | /hive/data/staging/data/cpgIslandExt/cpglh /dev/stdin > \$result
+_EOF_
+    ;
+    close($fh);
+
+    my $fh = &HgAutomate::mustOpen(">$runDir/oneSplit.bash");
+    print $fh <<_EOF_
+#!/bin/bash
+set -beEu -o pipefail
+export tmpFile=`mktemp -p /dev/shm doCpg.\$\$.XXXXX`
+export chromSizes=$chromSizes
+export fileSpec="\${1}"
+export file=`echo \$fileSpec | cut -d':' -f1`
+export seq=`echo \$fileSpec | cut -d':' -f2`
+export range=`echo \$fileSpec | cut -d':' -f3`
+export start=`echo \$range | cut -d'-' -f1`
+export end=`echo \$range | cut -d'-' -f2`
+export seqSize=`grep -w "\${seq}" \$chromSizes | awk '{print \$2}'`
+
+twoBitToFa \$fileSpec stdout | maskOutFa stdin hard stdout | /hive/data/staging/data/cpgIslandExt/cpglh \\
+   /dev/stdin | sed -e "s/\\t /\\t/g;" > "\${tmpFile}"
+printf "%d\\t%s:%d-%d\\t%d\\t%s\\t%d\\n" "\${start}" "\${seq}"  "\${start}" "\${end}" "\${seqSize}" "\${seq}" "\${seqSize}" \\
+  | liftUp -type=.bed results/\${seq}:\${start}-\${end}.cpg stdin error "\${tmpFile}"
+
+rm -f "\${tmpFile}"
+_EOF_
+    ;
+    close($fh);
 
   my $whatItDoes = "Run /hive/data/staging/data/cpgIslandExt/cpglh on masked sequence.";
-  my $bossScript = newBash HgRemoteScript("$runDir/doCpg.bash", $workhorse,
+  $bossScript = newBash HgRemoteScript("$runDir/doCpg.bash", $workhorse,
+				      $runDir, $whatItDoes);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
+
+  $bossScript->add(<<_EOF_
+export twoBit=\"$maskedSeq\"
+rm -fr parts partFa
+mkdir partFa
+/cluster/bin/scripts/partitionSequence.pl -lstDir parts $maxSplitSize 0 \$twoBit $chromSizes 1000 > part.list
+for L in parts/part*.lst
+do
+  B=`basename \$L | sed -e 's/.lst//;'`
+  sed -e 's/.*.2bit://; s/:0-.*//;' \${L} > \${B}.list
+  twoBitToFa -seqList=\$B.list \${twoBit} stdout | maskOutFa stdin hard stdout \\
+     | faToTwoBit stdin partFa/\$B.t.2bit
+  rm -f \${B}.list
+  twoBitToFa partFa/\$B.t.2bit stdout | faCount stdin | egrep -v \"^total|^#seq\" | awk '\$2-\$7 > 200 { printf \"%s\\n\", \$1}' > \$B.list
+  if [ -s \$B.list ]; then
+    twoBitToFa -seqList=\$B.list partFa/\$B.t.2bit stdout | faToTwoBit stdin partFa/\$B.2bit
+  fi
+  rm -f partFa/\$B.t.2bit \$B.list
+done
+mkdir -p results
+chmod a+x runCpg.bash oneSplit.bash
+grep -v "parts/part" part.list | xargs -L 1 --no-run-if-empty ./oneSplit.bash
+rm -f file.list
+find ./partFa -type f > file.list
+$gensub2 file.list single gsub jobList
+$paraRun
+catDir -r results | sort -k1,1 -k2,2n > cpglh.result
+_EOF_
+  );
+  } else {
+
+  my $whatItDoes = "Run /hive/data/staging/data/cpgIslandExt/cpglh on masked sequence.";
+  $bossScript = newBash HgRemoteScript("$runDir/doCpg.bash", $workhorse,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 export twoBit=\"$maskedSeq\"
@@ -152,6 +238,7 @@ twoBitToFa \$twoBit stdout | maskOutFa stdin hard stdout \\
      > cpglh.result
 _EOF_
   );
+  }
 
   $bossScript->execute();
 } # doCpg
@@ -193,7 +280,7 @@ sub doLoadCpg {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "Loads cpgIsland.bed.";
-  my $bossScript = new HgRemoteScript("$runDir/doLoadCpg.csh", $dbHost,
+  my $bossScript = newBash HgRemoteScript("$runDir/doLoadCpg.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
   if (! -e "$runDir/cpgIsland.bed") {
@@ -201,7 +288,7 @@ sub doLoadCpg {
   }
 
   $bossScript->add(<<_EOF_
-set C=`cut -f1 cpgIsland.bed | sort -u | awk '{print length(\$0)}' | sort -rn | sed -n -e '1,1 p'`
+export C=`cut -f1 cpgIsland.bed | sort -u | awk '{print length(\$0)}' | sort -rn | sed -n -e '1,1 p'`
 sed -e "s/14/\${C}/" \$HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
 hgLoadBed -noLoad -sqlTable=cpgIslandExt.sql -tab $db $tableName cpgIsland.bed
 hgLoadSqlTab $db $tableName cpgIslandExt.sql bed.tab
@@ -218,7 +305,7 @@ sub doCleanup {
   my $runDir = $buildDir;
   my $whatItDoes = "It cleans up or compresses intermediate files.";
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 rm -f bed.tab cpgIslandExt.sql
@@ -253,6 +340,20 @@ $maskedSeq = $opt_maskedSeq ? $opt_maskedSeq :
 $chromSizes = $opt_chromSizes ? $opt_chromSizes :
   "$HgAutomate::clusterData/$db/chrom.sizes";
 $tableName = $opt_tableName ? $opt_tableName : "cpgIslandExt";
+
+my $maxSeqSize=`sort -k2,2nr $chromSizes | head -1 | awk '{printf "%d", \$NF}'`;
+my $totalSeqSize=`ave -col=2 $chromSizes | grep -w total | awk '{printf "%d", \$NF}'`;
+chomp $maxSeqSize;
+chomp $totalSeqSize;
+$maxSplitSize = $maxSeqSize;
+$splitRun = 0;
+#   big genomes are over 4Gb: 4*1024*1024*1024 = 4294967296
+#   or if maxSeqSize over 1Gb
+if ( ($maxSeqSize > 4*1024**3) || ($maxSeqSize > 1024**3) ) {
+   $splitRun = 1;
+   $maxSplitSize = 1000000000;
+}
+printf STDERR "# total genome size %d, max sequence size: %d, splitRun: %s\n", $totalSeqSize, $maxSeqSize, $splitRun ? "TRUE" : "FALSE";
 
 # Do everything.
 $stepper->execute();

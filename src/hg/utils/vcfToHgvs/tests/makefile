@@ -3,6 +3,8 @@ include ${kentSrc}/inc/common.mk
 
 vcfToHgvs = ${DESTBINDIR}/vcfToHgvs
 
+.NOTPARALLEL:  # table is used by multiple tests
+
 test:: loadTestSet PersonalisGroundTruth2017_agree PersonalisGroundTruth2017_disagree stopLoss
 	${MAKE} clean
 

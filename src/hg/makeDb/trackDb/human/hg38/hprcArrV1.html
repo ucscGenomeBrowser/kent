@@ -1,9 +1,96 @@
-<BR><BR>
-Method:
-<BR>Chains between hg38 and each assembly in the HPRC assemblies are examined to find the orthologous sequence in the HPRC assembly. Next any sub-chains from the same sequence that overlap the orthologous sequence are identified.   Each of those overlaps is determined to be either an inversion or a local duplication and output to a two bed files that list the assembly the rearrangement is in.
-<BR><BR>
-Once all those bed files are calculated for each assembly, they are all collected together, with overlapping beds expanded to include all the overlapping beds such that the final set of beds is non-overlapping and contains a list of all the assemblies that contributed to that cluster.  These bed files are labeled "Elements".   There are also wiggle tracks called "Coverage" that count up all the overlapping beds for each cluster.
-<BR><BR>
-There are three sets of elements:  inversions, duplications, and the union of those two.
-<BR><BR>
-Elements are labeled by how many assemblies contributed to that cluster.
+<h2>Description</h2>
+
+<p>
+This track shows various rearrangements in the HPRC assemblies with respect to hg38.   The types include indels, duplications, inversions, and other more complicated 
+rearrangements.  There are five tracks in the Rearrangement composite track:
+
+<ol>
+    <li>Insertions in hg38 with respect to the HPRC genomes
+    <li>Deletions in hg38 with respect to the HPRC genomes
+    <li>Inversion in hg38 with respect to the HPRC genomes
+    <li>Duplications in the HPRC genomes with respect to hg38
+    <li>Other Rearrangements: Unalignable sequences in both genomes (inversions, partial transpositions) 
+</ol>
+
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+All items are labeled by the number of HPRC assemblies that have the rearrangement. The indel tracks have one or 
+two additional fields that specify how large the indel is in base pairs. 
+For the Insertions and Deletions track there's only one number with "bp" after it.  
+For insertions, it is the size of the insertion in hg38.  
+For deletions, it is the size of the sequence deleted in hg38.  
+For the Other Rearrangements track, there are two numbers given: the number of unaligned 
+bases in hg38 and the number of unaligned bases in the HPRC assemblies.
+<h2>Methods</h2>
+<p>
+All these tracks are built from the <a href='../cgi-bin/hgTrackUi?db=hg38&g=hprcChainNet' target='_blank'>HPRC chains and nets.</a> 
+The actual instructions used to create these tracks are in the files <a href=https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/doc/hg38/hprcRearrange.txt target='_blank'>hprcRearrange.txt</a> and <a href=https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/doc/hg38/hprcInDel.txt target='_blank'>hprcInDel.txt</a>.
+The first step for all the tracks is to find the orthologous sequences in each HPRC assembly for each chromosome in hg38. 
+These sequences are called the query sequences. For each query sequence, we select the 
+longest chain to the hg38 sequence.  This is called the orthologous chain. 
+Following are the specific methods for each track.
+<h3>Insertions, Deletions, and Others</h3>
+In each orthologous chain we look for any gaps in either the reference or the query sequence. There are two basic types of gaps. 
+One type is when the gap contains no bases in one of the two sequences, but one or more unaligned bases in the other. 
+These indicate a standard insertion in one sequence or a deletion in the other. There are also gaps where there are 
+unaligned bases in both sequences. These may be alignment errors or sites where more than one rearrangement occurred between the two sequences.
+This type of gap is in the "Other Rearrangements" track.
+This gap identification is done for each of the HPRC assemblies resulting in a set of indels that are clustered based on exact boundaries of the gap in both sequences.
+This kind of clustering often results in indels that "pile up" with a different number of inserted or deleted bases.
+<h3>Inversions and Duplications</h3>
+For each orthologous chain, we look for any other chain between the same query sequence and the sequence in hg38 that overlaps the orthologous chain.
+Each of those overlaps is determined to be either an inversion or a local duplication in the HPRC genome by
+the <b>chainArrange</b> utility.
+This is done for each of the HPRC assemblies resulting in a set of 
+inversion/duplications that are then clustered over all the assemblies. 
+The clustering is by simple overlap such that no cluster overlaps any other and is done
+by the <b>chainArrangeCollect</b> utility.
+
+<h2>References</h2>
+
+<p>
+Wen-Wei Liao, Mobin Asri, Jana Ebler, ...<em>et al</em>, Heng Lin,
+Benedict Paten
+<a href='https://pubmed.ncbi.nlm.nih.gov/37165242/' target='_blank'>
+A draft human pangenome reference</a>.
+<em>Nature</em>. 2023 May;617(7960):312-324.
+PMID: <a href='https://pubmed.ncbi.nlm.nih.gov/37165242/' target='_blank'>37165242</a>;
+PMC: <a href='http://www.ncbi.nlm.nih.gov/pmc/articles/pmc10172123/' target=_blank>PMC1017212</a>;
+DOI: <a href='https://doi.org/10.1038/s41586-023-05896-x' target='_blank'>10.1038/s41586-023-05896-x</a>
+</p>
+
+<p>
+Glenn Hickey, Jean Monlong, Jana Ebler, Adam M Novak, Jordan M Eizenga,
+Yan Gao; Human Pangenome Reference Consortium; Tobias Marschall, Heng Li,
+Benedict Paten
+<a href='https://pubmed.ncbi.nlm.nih.gov/37165083/' target='_blank'>
+Pangenome graph construction from genome alignments with Minigraph-Cactus</a>.
+<em>Nature Biotechnology</em>. 2023 May 10. doi: 10.1038/s41587-023-01793-w.
+PMID: <a href='https://pubmed.ncbi.nlm.nih.gov/37165083/' target='_blank'>37165083</a>;
+DOI: <a href=;https://doi.org/10.1038/s41587-023-01793-w; target='_blank'>10.1038/s41587-023-01793-w</a>
+</p>
+
+<p>
+Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q,
+Xie D, Feng S, Stiller J
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">
+Progressive Cactus is a multiple-genome aligner for the thousand-genome era</a>.
+<em>Nature</em>. 2020 Nov;587(7833):246-251.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">33177663</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7673649/" target="_blank">PMC7673649</a>;
+DOI: <a href="https://doi.org/10.1038/s41586-020-2871-y" target="_blank">10.1038/s41586-020-2871-y</a>
+</p>
+
+<p>
+Paten B, Earl D, Nguyen N, Diekhans M, Zerbino D, Haussler D.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">
+Cactus: Algorithms for genome multiple sequence alignment</a>.
+<em>Genome Res</em>. 2011 Sep;21(9):1512-28.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">21665927</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166836/" target="_blank">PMC3166836</a>;
+DOI: <a href="https://doi.org/10.1101/gr.123356.111" target="_blank">10.1101/gr.123356.111</a>
+</p>
+

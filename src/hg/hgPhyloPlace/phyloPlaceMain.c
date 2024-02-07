@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "cart.h"
+#include "hdb.h"
 #include "knetUdc.h"
 #include "linefile.h"
 #include "options.h"
@@ -53,15 +54,21 @@ if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 knetUdcInstall();
 
+char *realDb = NULL;
 if (isHubTrack(db))
     {
+    realDb = db;
     // Connect to hubs so phyloPlaceSamples doesn't croak later.
     struct cart *cart = cartOfNothing();
     struct slName *supportedDbs = phyloPlaceDbList(cart);
     if (! slNameInList(supportedDbs, db))
         errAbort("Can't find db '%s'", db);
     }
-char *ctFile = phyloPlaceSamples(lf, db, protobuf, TRUE, subtreeSize, 9, &success);
+else if (hDbExists(db))
+    realDb = db;
+else
+    realDb = "hg38";
+char *ctFile = phyloPlaceSamples(lf, realDb, db, protobuf, TRUE, subtreeSize, 9, &success);
 if (ctFile)
     printf("ctFile = %s\n", ctFile);
 else

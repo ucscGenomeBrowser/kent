@@ -94,9 +94,14 @@ slSafeAddHead(&subList, subTextNew("ex:", "exon "));
 slSafeAddHead(&subList, subTextNew("in:", "intron "));
 slSafeAddHead(&subList, subTextNew("|", "-"));
 
-struct sqlConnection *conn = hAllocConn(database);
-
-boolean hasLocus = sqlTableExists(conn, "locusName");
+boolean hasDb = sqlDatabaseExists(database);
+boolean hasLocus = FALSE;
+struct sqlConnection *conn = NULL;
+if (hasDb)
+    {
+    conn = hAllocConn(database);
+    hasLocus = sqlTableExists(conn, "locusName");
+    }
 
 if (coordCount==0)
     puts("Too many off-targets found to display or no off-targets. Please use the Crispor.org link at the top of the page to show all off-targets.\n");
@@ -178,7 +183,8 @@ for (i=0; i<coordCount; i++)
 
     printf("</tr>\n");
     }
-hFreeConn(&conn);
+if (hasDb)
+    hFreeConn(&conn);
 printf("<tr>\n");
 if (coordCount!=0)
     printf("</table>\n");
@@ -284,6 +290,7 @@ for (i=0; i<fieldCount; i++)
     else
         {
         printFieldLabel(name);
+        printf("<td>%s</td></tr>\n", val);
         }
     printCount++;
     }

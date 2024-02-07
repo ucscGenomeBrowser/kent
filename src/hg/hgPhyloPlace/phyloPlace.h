@@ -157,6 +157,9 @@ struct geneInfo
     struct geneInfo *next;
     struct psl *psl;        // Alignment of transcript to genome
     struct dnaSeq *txSeq;   // Transcript sequence
+    struct genbankCds *cds; // CDS (for those few pathogens that have transcript UTRs)
+    int cdsStart;           // genePred cdsStart (genome coord, really cds end if - strand)
+    int cdsEnd;             // genePred cdsEnd (genome coord, really cds start if - strand)
     };
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
@@ -223,7 +226,7 @@ void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneI
 
 struct tempName *writeCustomTracks(char *db, struct tempName *vcfTn, struct usherResults *ur,
                                    struct slName *sampleIds, char *source, int fontHeight,
-                                   struct phyloTree **retSampleTree, int *pStartTime);
+                                   struct phyloTree *sampleTree, int *pStartTime);
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 
 
@@ -258,7 +261,7 @@ void reportTiming(int *pStartTime, char *message);
 boolean hgPhyloPlaceEnabled();
 /* Return TRUE if hgPhyloPlace is enabled in hg.conf and db wuhCor1 exists. */
 
-char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
+char *phyloPlaceSamples(struct lineFile *lf, char *db, char *refName, char *defaultProtobuf,
                         boolean doMeasureTiming, int subtreeSize, int fontHeight,
                         boolean *retSuccess);
 /* Given a lineFile that contains either FASTA, VCF, or a list of sequence names/ids:

@@ -252,13 +252,14 @@ static void linkToDetailsCellPrint(struct column *col, struct genePos *gp,
 char *s = col->cellVal(col, gp, conn);
 fillInKnownPos(gp, conn);
 hPrintf("<TD>");
-hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\">", 
+hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d&%s=%s\">", 
 	cartSidUrlString(cart), 
 	"db", database,
 	"hgg_gene", gp->name,
 	"hgg_chrom", gp->chrom,
 	"hgg_start", gp->start,
-	"hgg_end", gp->end);
+	"hgg_end", gp->end,
+        "hgg_type", genomeSetting("geneTable"));
 if (s == NULL) 
     {
     hPrintf("n/a");

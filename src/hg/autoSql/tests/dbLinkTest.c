@@ -78,7 +78,7 @@ void dropTable(struct sqlConnection *conn)
 /* Drop the test table that was created in setupTable(). */
 {
 char update[256];
-sqlSafef(update, sizeof(update), "drop table %s", testTableName);
+sqlSafef(update, sizeof(update), "drop table if exists %s", testTableName);
 sqlUpdate(conn, update);
 }
 
@@ -309,6 +309,7 @@ void doTests()
 struct sqlConnection *conn = dbConnect();
 testCommaOutputInput();
 testTabOutputInput();
+dropTable(conn);
 setupTable(conn);
 testInsertion(conn, FALSE);
 testInsertion(conn, TRUE);

@@ -19,7 +19,7 @@ dbToUrl = {
 
 # since we're filtering on it, we make sure that we have all molecular consequences in the tdb file
 # if they add a new one, this script must fail and tdb must be updated.
-possMolConseqs = set(["genic downstream transcript variant","no sequence alteration","inframe indel","stop lost","genic upstream transcript variant","initiatior codon variant","inframe insertion","inframe deletion","","splice acceptor variant","splice donor variant","5 prime UTR variant","nonsense","non-coding transcript variant","3 prime UTR variant","frameshift variant","intron variant","synonymous variant","missense variant", ""])
+possMolConseqs = set(["genic downstream transcript variant","no sequence alteration","inframe indel","stop lost","genic upstream transcript variant","initiatior codon variant","inframe insertion","inframe deletion","","splice acceptor variant","splice donor variant","5 prime UTR variant","nonsense","non-coding transcript variant","3 prime UTR variant","frameshift variant","intron variant","synonymous variant","missense variant", "initiator codon variant", ""])
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
 parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed.
@@ -29,7 +29,8 @@ Output goes into the current dir
 Typical input files are at ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/
 """) 
 
-parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+parser.add_option("", "--alpha", dest="isAlpha", action="store_true", help="Default target is /gbdb/{hg19,hg38}/bbi/clinvar. With this option, we use /gbdb/{hg19,hg38}/bbi/clinvarAlpha, the hgwdev only version of the track, see human/clinvarAlpha.ra in trackDb")
 parser.add_option("-a", "--auto", dest="auto", action="store_true", help="download the file from NCBI into the current dir and convert to bigBed")
 parser.add_option("", "--skipDown", dest="skipDownload", action="store_true", help="Only with --auto: don't download again if it's already there, useful when debugging/developing")
 parser.add_option("", "--maxDiff", dest="maxDiff", action="store", type="float", help="look for last month's download file in current dir and accept this much difference, expressed as a ratio. Can only be used with --auto.")
@@ -39,6 +40,12 @@ if options.debug:
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.INFO)
+
+if not options.isAlpha and os.getlogin()!="otto":
+    print("Please do not run this script as a normal user, you will run into all sorts of permission problems.")
+    print("to develop and test, ssh to otto, then run it with doUpdate.sh --alpha to generate the dev-only tracks.")
+    print("When you're done, run doUpdate.sh without the --alpha and commit the change to the kent tree.")
+    sys.exit(1)
 
 clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID	PositionVCF	ReferenceAlleleVCF	AlternateAlleleVCF\n"
 # ==== FUNCTIONs =====
@@ -393,7 +400,7 @@ def compareWithLastMonth(fname, maxDiff):
     percDiff = float(diffCount)/todayCount
     if percDiff > maxDiff:
         logging.info(cmd)
-        diffFname =  abspath(join("archive", "lastDiff.txt"))
+        diffFname =  abspath(join("downloads", "lastDiff.txt"))
         cmd = "diff %s %s --speed-large-files > %s" % (fname, previousFname, diffFname)
         os.system(cmd) # ret code is not 0, as there are differences, so no need to check
         raise Exception("too many differences: %d out of %d lines. Look at the differences n the file %s. If you are OK with them, run '/hive/data/outside/otto/clinvar/doUpdate.sh -nocheck'" % (diffCount, todayCount, diffFname))
@@ -579,31 +586,48 @@ def loadSubmissions(summFname):
     cmd = "hgLoadSqlTab hg38 clinvarSub clinvarSub.sql %s" % (tmpFname)
     assert(os.system(cmd)==0)
 
+def mostCurrentVersionName():
+    " return name of version on FTP site "
+    cmd = 'curl -s https://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_00-latest.xml.gz | zcat | head -n2 | tail -n1'
+    verLine = subprocess.check_output(cmd, shell=True, encoding="utf8")
+    #<ReleaseSet Dated="2023-09-03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Type="full" xsi:noNamespaceSchemaLocation="http://ftp.ncbi.nlm.nih.gov/pub/clinvar/xsd_public/clinvar_public_1.71.xsd">
+    version = verLine.split(" ")[1].split("=")[1].strip('"')
+    return version
+
 def downloadFromNcbi(skipDownload):
-    " download files from NCBI and return triple of filenames "
+    " download files from NCBI and return list of filenames "
     today = date.today().isoformat()
-    outSuffix = "%s." % today
+    downDir = join("downloads", today)
+    try:
+        os.mkdir(downDir)
+    except FileExistsError:
+        pass
+
+    version = mostCurrentVersionName()
+    logging.info("Version on NCBI server is %s" % version)
+    versionFname = join(downDir, "version.txt")
+    open(versionFname, "w").write(version)
 
     baseUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/"
     url = baseUrl+"variant_summary.txt.gz"
-    outFname = "archive/variant_summary.%s.txt.gz" % today
+    outFname = join(downDir, "variant_summary.txt.gz")
     filename = outFname
 
     # get the new variant allele file
     varUrl = baseUrl+"variation_allele.txt.gz"
-    varFname = join(dirname(filename), "variation_allele.%s.txt.gz" % today)
+    varFname = join(downDir, "variation_allele.txt.gz")
 
     # get the new hgvs allele file
     hgvsUrl = baseUrl+"hgvs4variation.txt.gz"
-    hgvsFname = join(dirname(filename), "hgvs4variation.%s.txt.gz" % today)
+    hgvsFname = join(downDir, "hgvs4variation.txt.gz")
 
     # get the summary file
     summUrl = baseUrl+"submission_summary.txt.gz"
-    summFname = join(dirname(filename), "submission_summary.%s.txt.gz" % today)
+    summFname = join(downDir, "submission_summary.txt.gz")
 
     # get the new VCF file
     vcfUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz"
-    vcfFname = join(dirname(filename), "GRCh38.clinvar.%s.vcf.gz" % today)
+    vcfFname = join(downDir, "GRCh38.clinvar.vcf.gz")
 
     if not (isfile(vcfFname)):
         logging.info("Downlading %s to %s" % (vcfUrl, vcfFname))
@@ -619,7 +643,7 @@ def downloadFromNcbi(skipDownload):
         logging.info("Downlading %s to %s" % (summUrl, summFname))
         open(summFname, "wb").write(urllib.request.urlopen(summUrl).read())
 
-    return filename, varFname, hgvsFname, vcfFname, summFname
+    return filename, varFname, hgvsFname, vcfFname, summFname, versionFname
 
 def parseVcf(vcfFname):
     " parse VCF and return as dict alleleId -> (molConseq) "
@@ -659,12 +683,13 @@ if args==[] and not options.auto:
 outSuffix = ""
 
 if options.auto:
-    filename, varFName, hgvsFname, vcfFname, summFname = downloadFromNcbi(options.skipDownload)
+    filename, varFName, hgvsFname, vcfFname, summFname, versionFname = downloadFromNcbi(options.skipDownload)
 else:
     filename = args[0]
     varFname = args[1]
     hgvsFname = args[2]
     vcfFname = args[3]
+    versionFname = args[4]
 
 #allToVar = parseVariationAlleleFile(varFname) # the alleles are now in the hgvs file after a Clinvar change
 allToVcf = parseVcf(vcfFname)
@@ -697,10 +722,10 @@ if (line1 != clinvarExpectHeaders): # test if clinvar has changed their header l
     raise Exception("code needs fixing")
 
 # open out files
-hg19Bed = open("archive/clinvarMain.hg19.%sbed" % outSuffix, "w", encoding="latin1")
-hg38Bed = open("archive/clinvarMain.hg38.%sbed" % outSuffix, "w", encoding="latin1")
-hg19BedCnv = open("archive/clinvarCnv.hg19.%sbed" % outSuffix, "w", encoding="latin1")
-hg38BedCnv = open("archive/clinvarCnv.hg38.%sbed" % outSuffix, "w", encoding="latin1")
+hg19Bed = open("bed/clinvarMain.hg19.%sbed" % outSuffix, "w", encoding="latin1")
+hg38Bed = open("bed/clinvarMain.hg38.%sbed" % outSuffix, "w", encoding="latin1")
+hg19BedCnv = open("bed/clinvarCnv.hg19.%sbed" % outSuffix, "w", encoding="latin1")
+hg38BedCnv = open("bed/clinvarCnv.hg38.%sbed" % outSuffix, "w", encoding="latin1")
 
 longCount = 0
 noAssCount = 0
@@ -741,7 +766,7 @@ for line in ifh:
 
     molConseq = allToVcf.get(int(alleleId))
     if molConseq is None:
-        logging.debug("%s has no molConseq" % alleleId)
+        #logging.debug("%s has no molConseq" % alleleId)
         noMcCount += 1
         molConseq = ""
 
@@ -886,10 +911,17 @@ for line in ifh:
 
     phenotypeList = ", ".join(phenotypeList.split("|"))
 
-    mouseOverParts = [mouseOverName, "Type: "+allType, "Consequence: "+ molConseq, "Significance: "+clinSign,
-            "Origin: "+origin, "Phenotypes: "+phenotypeList]
+    mouseOverParts = [
+            mouseOverName,
+            "<b>Review Status: </b>"+starRatingHtml,
+            "<b>Type: </b>"+allType,
+            "<b>Consequence: </b>"+ molConseq,
+            "<b>Significance: </b>"+clinSign,
+            "<b>Origin: </b>"+origin,
+            "<b>Phenotypes: </b>"+phenotypeList
+            ]
     # removed Apr 2020: numberSubmitters+" submitters", "Level: "+asciiStars
-    mouseOver = ", ".join(mouseOverParts)
+    mouseOver = "<br>".join(mouseOverParts)
 
     snpAcc = "rs"+snpAcc # dbSnp links changed in mid/late 2022
 
@@ -948,6 +980,10 @@ if options.maxDiff:
     for fname in fnames:
         compareWithLastMonth(fname, options.maxDiff)
 
+bigBedDir = "bigBed"
+if options.isAlpha:
+    bigBedDir = "bigBedAlpha"
+
 # convert to bigBed without the date in the fname, like clinvarMain.hg19.bb
 tmpFnames = []
 for fname in fnames:
@@ -956,37 +992,54 @@ for fname in fnames:
         base, db, date, ext = parts
     else:
         base, db, ext = parts
+
+    base = basename(base)
         
-    outFname = "%s.%s.bb" % (base, db)
     tmpFname = "%s.%s.temp.bb" % (base, db)
 
-    outFname = basename(outFname) # strip the archive/ part, put into current dir
     cmd = "bedToBigBed -extraIndex=_dbVarSsvId -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, tmpFname)
     mustRun(cmd)
 
-    tableName = outFname.split('.')[0] # e.g. clinvarMain
+    finalFname = "%s/%s.%s.bb" % (bigBedDir, base, db)
+    tableName = finalFname.split('.')[0] # e.g. clinvarMain
 
-    tmpFnames.append( (db, tableName, tmpFname, outFname) )
+    tmpFnames.append( (db, tableName, tmpFname, finalFname) )
 
 # make it atomic by renaming the temp files to the final file names at the very end
 for db, tableName, tmpFname, finalFname in tmpFnames:
+    logging.debug("Renaming %s to %s" % (tmpFname, finalFname))
     os.rename(tmpFname, finalFname)
 
-# make sure that the "Data last updated" in the table browser is correct
-monYear = date.today().strftime("%Y-%m")
-for db, tableName, tmpFname, finalFname in tmpFnames:
-    gbdbFname = "/gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName)
-    cmd = "hgBbiDbLink %s %s %s" % (db, tableName, gbdbFname)
-    mustRun(cmd)
+# create the version.txt file
+clinvarVersion = open(versionFname).read()
+versionString = "ClinVar Release: %s, converted at UCSC on %s" % (clinvarVersion, date.today().strftime("%Y-%m-%d"))
+outFname = join(bigBedDir, "version.txt")
+with open(outFname, "w") as ofh:
+    ofh.write(versionString)
 
-    # put a copy into the archive
-    outDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, monYear)
-    if not isdir(outDir):
-        os.mkdir(outDir)
-    archiveFname = join(outDir, basename(gbdbFname))
-    logging.info("Creating %s" % archiveFname)
-    cmd = "cp %s %s" % (finalFname, archiveFname)
-    mustRun(cmd)
+# put a copy of the files into the archive
+if not options.isAlpha:
+    for db, tableName, tmpFname, finalFname in tmpFnames:
+        # not doing this anymore, using bigDataUrl now in trackDb
+        #cmd = "hgBbiDbLink %s %s %s" % (db, tableName, gbdbFname)
+        #mustRun(cmd)
+
+        yearMonDay = date.today().strftime("%Y-%m-%d")
+        gbdbFname = "/gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName)
+        # put a copy into the archive
+        outDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, yearMonDay)
+        if not isdir(outDir):
+            os.mkdir(outDir)
+        archiveFname = join(outDir, basename(gbdbFname))
+        logging.info("Creating %s" % archiveFname)
+        cmd = "cp %s %s" % (finalFname, archiveFname)
+        mustRun(cmd)
+
+    # add the version.txt files
+    for db in ["hg38", "hg19"]:
+        archDir = "/usr/local/apache/htdocs-hgdownload/goldenPath/archive/%s/clinvar/%s" % (db, yearMonDay)
+        cmd = "cp %s/version.txt %s" % (bigBedDir, archDir)
+        mustRun(cmd)
 
 loadSubmissions(summFname)
 

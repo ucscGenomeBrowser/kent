@@ -4,11 +4,13 @@
 /* Copyright (C) 2020 The Regents of the University of California */
 
 #include "common.h"
+#include "dnaseq.h"
 #include "errCatch.h"
 #include "hash.h"
 #include "hui.h"
 #include "jsonWrite.h"
 #include "linefile.h"
+#include "obscure.h"
 #include "parsimonyProto.h"
 #include "phyloPlace.h"
 #include "phyloTree.h"
@@ -46,6 +48,13 @@ jsonWriteString(jw, NULL, valA);
 jsonWriteString(jw, NULL, valB);
 jsonWriteListEnd(jw);
 }
+
+static void jsonWriteAppendData(struct jsonWrite *jw, char *data)
+/* Append data to jw->dy, trusting that it will maintain well-formed JSON results. */
+{
+dyStringAppend(jw->dy, data);
+}
+
 
 static void auspiceMetaColoringSarsCov2Nextclade(struct jsonWrite *jw, char *key, char *title)
 /* Write a coloring spec for SARS-CoV-2 Nextstrain clades.  (Non-VoC clades are omitted and
@@ -97,17 +106,27 @@ for (gi = geneInfoList;  gi != NULL;  gi = gi->next)
         int i;
         for (i = 0;  i < gi->psl->blockCount;  i++)
             {
+            int cStart = gi->psl->tStarts[i];
+            int cEnd = gi->psl->tStarts[i] + gi->psl->blockSizes[i];
+            if (cEnd < gi->cdsStart)
+                continue;
+            if (cStart > gi->cdsEnd)
+                break;
+            if (cStart < gi->cdsStart)
+                cStart = gi->cdsStart;
+            if (cEnd > gi->cdsEnd)
+                cEnd = gi->cdsEnd;
             jsonWriteObjectStart(jw, NULL);
-            jsonWriteNumber(jw, "start", gi->psl->tStarts[i]+1);
-            jsonWriteNumber(jw, "end", gi->psl->tStarts[i] + gi->psl->blockSizes[i]);
+            jsonWriteNumber(jw, "start", cStart+1);
+            jsonWriteNumber(jw, "end", cEnd);
             jsonWriteObjectEnd(jw);
             }
         jsonWriteListEnd(jw);
         }
     else
         {
-        jsonWriteNumber(jw, "start", gi->psl->tStart+1);
-        jsonWriteNumber(jw, "end", gi->psl->tEnd);
+        jsonWriteNumber(jw, "start", gi->cdsStart+1);
+        jsonWriteNumber(jw, "end", gi->cdsEnd);
         }
     jsonWriteString(jw, "strand", (pslOrientation(gi->psl) > 0) ? "+" : "-");
     jsonWriteString(jw, "type", "CDS");
@@ -122,6 +141,41 @@ jsonWriteObjectEnd(jw);
 jsonWriteObjectEnd(jw);
 }
 
+//#*** TODO: in v459 or later, remove the organism-specific code.
+static struct slName *getColorFields(char *db, boolean isRsv, boolean isFlu)
+{
+struct slName *colorFields = NULL;
+if (sameString(db, "wuhCor1"))
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "Nextstrain_clade_usher");
+    slNameAddHead(&colorFields, "pango_lineage_usher");
+    slNameAddHead(&colorFields, "Nextstrain_clade");
+    slNameAddHead(&colorFields, "pango_lineage");
+    }
+else if (isRsv)
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "GCC_nextclade");
+    slNameAddHead(&colorFields, "GCC_usher");
+    slNameAddHead(&colorFields, "GCC_assigned_2023-11");
+    slNameAddHead(&colorFields, "goya_nextclade");
+    slNameAddHead(&colorFields, "goya_usher");
+    }
+else if (isFlu)
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "Nextstrain_clade");
+    }
+else
+    {
+    slNameAddHead(&colorFields, "country");
+    slNameAddHead(&colorFields, "Nextstrain_lineage");
+    }
+return colorFields;
+}
+
+//#*** TODO: in v459 or later, remove the organism-specific stuff
 static char *getDefaultColor(struct slName *colorFields)
 /* Pick default color from available color fields from metadata.  Do not free returned string. */
 {
@@ -132,8 +186,8 @@ else if (slNameInList(colorFields, "Nextstrain_lineage"))
     colorDefault = "Nextstrain_lineage";
 else if (slNameInList(colorFields, "Nextstrain_clade"))
     colorDefault = "Nextstrain_clade";
-else if (slNameInList(colorFields, "goya_usher"))
-    colorDefault = "goya_usher";
+else if (slNameInList(colorFields, "GCC_usher"))
+    colorDefault = "GCC_usher";
 else if (colorFields != NULL)
     colorDefault = colorFields->name;
 else
@@ -141,6 +195,7 @@ else
 return colorDefault;
 }
 
+//#*** TODO: in v459 or later, remove the organism-specific stuff
 static void auspiceMetaColorings(struct jsonWrite *jw, char *source, struct slName *colorFields,
                                  char *db)
 /* Write coloring specs for colorFields from metadata, locally added userOrOld, and
@@ -177,12 +232,12 @@ for (col = colorFields;  col != NULL;  col = col->next)
         auspiceMetaColoringCategorical(jw, col->name, "Goya 2020 clade assigned by nextclade");
     else if (sameString(col->name, "goya_usher"))
         auspiceMetaColoringCategorical(jw, col->name, "Goya 2020 clade assigned by UShER");
-    else if (sameString(col->name, "ramaekers_nextclade"))
-        auspiceMetaColoringCategorical(jw, col->name, "Ramaekers 2020 clade assigned by nextclade");
-    else if (sameString(col->name, "ramaekers_usher"))
-        auspiceMetaColoringCategorical(jw, col->name, "Ramaekers 2020 clade assigned by UShER");
-    else if (sameString(col->name, "ramaekers_tableS1"))
-        auspiceMetaColoringCategorical(jw, col->name, "Ramaekers 2020 Table S1 designation");
+    else if (sameString(col->name, "GCC_nextclade"))
+        auspiceMetaColoringCategorical(jw, col->name, "RGCC lineage assigned by nextclade");
+    else if (sameString(col->name, "GCC_usher"))
+        auspiceMetaColoringCategorical(jw, col->name, "RGCC lineage assigned by UShER");
+    else if (sameString(col->name, "GCC_assigned_2023-11"))
+        auspiceMetaColoringCategorical(jw, col->name, "RGCC designated lineage");
     else if (sameString(col->name, "country"))
         auspiceMetaColoringCategorical(jw, col->name, "Country");
     else
@@ -192,8 +247,8 @@ jsonWriteListEnd(jw);
 }
 
 static void writeAuspiceMeta(struct jsonWrite *jw, struct slName *subtreeUserSampleIds, char *source,
-                             char *db, struct slName *colorFields, struct geneInfo *geneInfoList,
-                             uint genomeSize)
+                             char *db, struct geneInfo *geneInfoList,
+                             uint genomeSize, boolean isRsv, boolean isFlu)
 /* Write metadata to configure Auspice display. */
 {
 jsonWriteObjectStart(jw, "meta");
@@ -223,44 +278,58 @@ jsonWriteListStart(jw, "panels");
 jsonWriteString(jw, NULL, "tree");
 jsonWriteString(jw, NULL, "entropy");
 jsonWriteListEnd(jw);
-// Default label & color
-jsonWriteObjectStart(jw, "display_defaults");
-jsonWriteString(jw, "branch_label", "aa mutations");
-jsonWriteString(jw, "color_by", getDefaultColor(colorFields));
-jsonWriteObjectEnd(jw);
-// Colorings: userOrOld, gt and whatever we got from metadata
-auspiceMetaColorings(jw, source, colorFields, db);
-// Filters didn't work when I tried them a long time ago... revisit someday.
-jsonWriteListStart(jw, "filters");
-jsonWriteString(jw, NULL, "userOrOld");
-jsonWriteString(jw, NULL, "country");
-//#*** FIXME: TODO: either pass in along with sampleMetadata, or take from JSON file specified
-//#*** in config, or better yet, compute while building tree object in memory, then write the
-//#*** header object, then write the tree.
-if (sameString(db, "wuhCor1"))
+char *metaJsonFile = phyloPlaceDbSettingPath(db, "auspiceMeta");
+if (isNotEmpty(metaJsonFile) && fileExists(metaJsonFile))
     {
-    jsonWriteString(jw, NULL, "pango_lineage_usher");
-    jsonWriteString(jw, NULL, "pango_lineage");
-    jsonWriteString(jw, NULL, "Nextstrain_clade_usher");
-    jsonWriteString(jw, NULL, "Nextstrain_clade");
-    }
-else if (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db))
-    {
-    jsonWriteString(jw, NULL, "goya_usher");
-    jsonWriteString(jw, NULL, "goya_nextclade");
-    jsonWriteString(jw, NULL, "ramaekers_tableS1");
-    jsonWriteString(jw, NULL, "ramaekers_usher");
-    jsonWriteString(jw, NULL, "ramaekers_nextclade");
-    }
-else if (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db))
-    {
-    jsonWriteString(jw, NULL, "Nextstrain_clade");
+    char *metaJson = NULL;
+    size_t size = 0;
+    readInGulp(metaJsonFile, &metaJson, &size);
+    while (size > 0 && metaJson[size-1] == '\n')
+        metaJson[--size] = '\0';
+    jsonWriteAppendData(jw, ", ");
+    jsonWriteAppendData(jw, metaJson);
+    freeMem(metaJson);
     }
 else
     {
-    jsonWriteString(jw, NULL, "Nextstrain_lineage");
+    // Default label & color
+    struct slName *colorFields = getColorFields(db, isRsv, isFlu);
+    jsonWriteObjectStart(jw, "display_defaults");
+    jsonWriteString(jw, "branch_label", "aa mutations");
+    jsonWriteString(jw, "color_by", getDefaultColor(colorFields));
+    jsonWriteObjectEnd(jw);
+    // Colorings: userOrOld, gt and whatever we got from metadata
+    auspiceMetaColorings(jw, source, colorFields, db);
+    // Filters
+    jsonWriteListStart(jw, "filters");
+    jsonWriteString(jw, NULL, "userOrOld");
+    jsonWriteString(jw, NULL, "country");
+    //#*** TODO: in v459 or later, remove the organism-specific stuff
+    if (sameString(db, "wuhCor1"))
+        {
+        jsonWriteString(jw, NULL, "pango_lineage_usher");
+        jsonWriteString(jw, NULL, "pango_lineage");
+        jsonWriteString(jw, NULL, "Nextstrain_clade_usher");
+        jsonWriteString(jw, NULL, "Nextstrain_clade");
+        }
+    else if (isRsv)
+        {
+        jsonWriteString(jw, NULL, "GCC_usher");
+        jsonWriteString(jw, NULL, "GCC_nextclade");
+        jsonWriteString(jw, NULL, "GCC_assigned_2023-11");
+        jsonWriteString(jw, NULL, "goya_usher");
+        jsonWriteString(jw, NULL, "goya_nextclade");
+        }
+    else if (isFlu)
+        {
+        jsonWriteString(jw, NULL, "Nextstrain_clade");
+        }
+    else
+        {
+        jsonWriteString(jw, NULL, "Nextstrain_lineage");
+        }
+    jsonWriteListEnd(jw);
     }
-jsonWriteListEnd(jw);
 // Annotations for coloring/filtering by base
 writeAuspiceMetaGenomeAnnotations(jw, geneInfoList, genomeSize);
 jsonWriteObjectEnd(jw);
@@ -321,13 +390,13 @@ if (isNotEmpty(*retNClade))
     jsonWriteObjectValue(jw, (isRsv ? "goya_nextclade" : "Nextstrain_clade"), *retNClade);
 *retGClade = (met && met->gClade) ? met->gClade : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retGClade))
-    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_tableS1" : "GISAID_clade"), *retGClade);
+    jsonWriteObjectValue(jw, (isRsv ? "GCC_assigned_2023-11" : "GISAID_clade"), *retGClade);
 *retLineage =  (met && met->lineage) ? met->lineage : isUserSample ? "uploaded sample" : NULL;
 if (isNotEmpty(*retLineage))
     {
     char lineageUrl[1024];
     makeLineageUrl(*retLineage, lineageUrl, sizeof lineageUrl);
-    jsonWriteObjectValueUrl(jw, (isRsv ? "ramaekers_nextclade" : "pango_lineage"),
+    jsonWriteObjectValueUrl(jw, (isRsv ? "GCC_nextclade" : "pango_lineage"),
                             *retLineage, lineageUrl);
     }
 *retNLineage = (met && met->nLineage) ? met->nLineage : isUserSample ? "uploaded sample" : NULL;
@@ -367,7 +436,7 @@ if (isNotEmpty(*retLineageUsher))
     {
     char lineageUrl[1024];
     makeLineageUrl(*retLineageUsher, lineageUrl, sizeof lineageUrl);
-    jsonWriteObjectValueUrl(jw, (isRsv ? "ramaekers_usher" : "pango_lineage_usher"),
+    jsonWriteObjectValueUrl(jw, (isRsv ? "GCC_usher" : "pango_lineage_usher"),
                             *retLineageUsher, lineageUrl);
     }
 char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
@@ -397,15 +466,15 @@ if (userOrOld)
 if (nClade)
     jsonWriteObjectValue(jw, (isRsv ? "goya_nextclade" : "Nextstrain_clade"), nClade);
 if (gClade)
-    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_tableS1" : "GISAID_clade"), gClade);
+    jsonWriteObjectValue(jw, (isRsv ? "GCC_assigned_2023-11" : "GISAID_clade"), gClade);
 if (lineage)
-    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_nextclade" : "pango_lineage"), lineage);
+    jsonWriteObjectValue(jw, (isRsv ? "GCC_nextclade" : "pango_lineage"), lineage);
 if (nLineage)
     jsonWriteObjectValue(jw, "Nextstrain_lineage", lineage);
 if (nCladeUsher)
     jsonWriteObjectValue(jw, (isRsv ? "goya_usher" : "Nextstrain_clade_usher"), nCladeUsher);
 if (lineageUsher)
-    jsonWriteObjectValue(jw, (isRsv ? "ramaekers_usher" : "pango_lineage_usher"), lineageUsher);
+    jsonWriteObjectValue(jw, (isRsv ? "GCC_usher" : "pango_lineage_usher"), lineageUsher);
 }
 
 INLINE char maybeComplement(char base, struct psl *psl)
@@ -425,11 +494,11 @@ struct slName *aaChange = NULL;
 if (codonVpTxList != NULL)
     {
     struct vpTx *vpTx = codonVpTxList;
-    int firstAaStart = vpTx->start.txOffset / 3;
+    int firstAaStart = (vpTx->start.txOffset - gi->cds->start) / 3;
     int codonStart = firstAaStart * 3;
-    int codonOffset = vpTx->start.txOffset - codonStart;
+    int codonOffset = vpTx->start.txOffset - gi->cds->start - codonStart;
     char oldCodon[4];
-    safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + codonStart, 3);
+    safencpy(oldCodon, sizeof oldCodon, gi->txSeq->dna + gi->cds->start + codonStart, 3);
     touppers(oldCodon);
     boolean isRc = (pslOrientation(gi->psl) < 0);
     int codonStartG = isRc ? vpTx->start.gOffset + codonOffset : vpTx->start.gOffset - codonOffset;
@@ -456,11 +525,11 @@ if (codonVpTxList != NULL)
     safecpy(newCodon, sizeof newCodon, oldCodon);
     for (vpTx = codonVpTxList;  vpTx != NULL;  vpTx = vpTx->next)
         {
-        int aaStart = vpTx->start.txOffset / 3;
+        int aaStart = (vpTx->start.txOffset - gi->cds->start) / 3;
         if (aaStart != firstAaStart)
             errAbort("codonVpTxToAaChange: program error: firstAaStart %d != aaStart %d",
                      firstAaStart, aaStart);
-        int codonOffset = vpTx->start.txOffset - codonStart;
+        int codonOffset = vpTx->start.txOffset - gi->cds->start - codonStart;
         // vpTx->txRef[0] is always the reference base, not like singleNucChange parBase,
         // so we can't compare it to expected value as we could for ancMuts above.
         newCodon[codonOffset] = vpTx->txAlt[0];
@@ -480,8 +549,7 @@ return aaChange;
 
 struct slPair *getAaMutations(struct singleNucChange *sncList, struct singleNucChange *ancestorMuts,
                               struct geneInfo *geneInfoList, struct seqWindow *gSeqWin)
-/* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }.
- * Note: this assumes there is no UTR in transcript, only CDS.  True so far for pathogens... */
+/* Given lists of SNVs and genes, return a list of pairs of { gene name, AA change list }. */
 {
 struct slPair *geneChangeList = NULL;
 struct geneInfo *gi;
@@ -499,9 +567,10 @@ for (gi = geneInfoList;  gi != NULL;  gi = gi->next)
             char gAlt[2];
             safef(gAlt, sizeof(gAlt), "%c", snc->newBase);
             struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &gBed3, gAlt, gi->psl, gi->txSeq);
-            if (vpTx->start.region == vpExon)
+            if (vpTx->start.region == vpExon && vpTx->start.txOffset < gi->cds->end &&
+                vpTx->end.txOffset > gi->cds->start)
                 {
-                int aaStart = vpTx->start.txOffset / 3;
+                int aaStart = (vpTx->start.txOffset - gi->cds->start) / 3;
                 // Accumulate vpTxs in the same codon
                 if (aaStart == prevAaStart || prevAaStart == -1)
                     {
@@ -804,7 +873,16 @@ if (bbi)
         gi->psl = genePredToPsl((struct genePred *)gp, refGenome->size, txLen);
         gi->psl->qName = cloneString(gp->name2);
         gi->txSeq = newDnaSeq(seq, txLen, gp->name2);
-        slAddHead(&geneInfoList, gi);
+        gi->cdsStart = gp->cdsStart;
+        gi->cdsEnd = gp->cdsEnd;
+        AllocVar(gi->cds);
+        genePredToCds((struct genePred *)gp, gi->cds);
+        int cdsLen = gi->cds->end - gi->cds->start;
+        // Skip genes with no CDS (like RNA genes) or obviously incomplete/incorrect CDS.
+        if (cdsLen > 0 && (cdsLen % 3) == 0)
+            {
+            slAddHead(&geneInfoList, gi);
+            }
         }
     lmCleanup(&lm);
     bigBedFileClose(&bbi);
@@ -825,41 +903,11 @@ FILE *outF = mustOpen(jsonFile, "w");
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "version", "v2");
-//#*** FIXME: TODO: either pass in along with sampleMetadata, or take from JSON file specified
-//#*** in config, or better yet, compute while building tree object in memory, then write the
-//#*** header object, then write the tree.
-boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db));
-struct slName *colorFields = NULL;
-if (sameString(db, "wuhCor1"))
-    {
-    slNameAddHead(&colorFields, "country");
-    slNameAddHead(&colorFields, "Nextstrain_clade_usher");
-    slNameAddHead(&colorFields, "pango_lineage_usher");
-    slNameAddHead(&colorFields, "Nextstrain_clade");
-    slNameAddHead(&colorFields, "pango_lineage");
-    }
-else if (isRsv)
-    {
-    slNameAddHead(&colorFields, "country");
-    slNameAddHead(&colorFields, "ramaekers_nextclade");
-    slNameAddHead(&colorFields, "ramaekers_usher");
-    slNameAddHead(&colorFields, "ramaekers_tableS1");
-    slNameAddHead(&colorFields, "goya_nextclade");
-    slNameAddHead(&colorFields, "goya_usher");
-    }
-else if (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db))
-    {
-    slNameAddHead(&colorFields, "country");
-    slNameAddHead(&colorFields, "Nextstrain_clade");
-    }
-else
-    {
-    slNameAddHead(&colorFields, "country");
-    slNameAddHead(&colorFields, "Nextstrain_lineage");
-    }
-//#*** END FIXME
-writeAuspiceMeta(jw, sti->subtreeUserSampleIds, source, db, colorFields, geneInfoList,
-                 gSeqWin->end);
+boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db) ||
+                 startsWith("RGCC", db));
+boolean isFlu = (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db));
+writeAuspiceMeta(jw, sti->subtreeUserSampleIds, source, db, geneInfoList,
+                 gSeqWin->end, isRsv, isFlu);
 jsonWriteObjectStart(jw, "tree");
 int nodeNum = 10000; // Auspice.us starting node number for newick -> json
 int depth = 0;

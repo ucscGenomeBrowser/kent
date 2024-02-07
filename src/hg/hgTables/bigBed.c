@@ -27,6 +27,7 @@
 #include "trackHub.h"
 #include "chromAlias.h"
 #include "bPlusTree.h"
+#include "errCatch.h"
 
 
 boolean isBigBed(char *database, char *table, struct trackDb *parent,
@@ -154,6 +155,26 @@ for (iv = ivList; iv != NULL; iv = iv->next)
 lmCleanup(&bbLm);
 }
 
+static struct bptFile *getNameIndexOrDie(struct bbiFile *bbi, int *pFieldIndex)
+/* Return the index on the 'name' field in the passed bbi. errAbort on failure. */
+{
+struct bptFile *bpt = NULL;
+struct errCatch *errCatch = errCatchNew();
+
+if (errCatchStart(errCatch))
+    {
+    bpt = bigBedOpenExtraIndex(bbi, "name", pFieldIndex);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    errAbort("Getting identifiers from whole genome regions requires an index on the name field of the bigBedFile %s", bbi->fileName);
+    }
+errCatchFree(&errCatch);
+
+return bpt;
+}
+
 struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,
 	char *db, char *table, struct region *regionList, struct lm *lm,
 	int *retFieldCount)
@@ -176,19 +197,21 @@ struct bptFile *bpt = NULL;
 struct lm *bbLm = NULL;
 struct bigBedInterval *ivList = NULL;
 if (idHash && isRegionWholeGenome())
+    bpt = getNameIndexOrDie(bbi, &fieldIx);
+
+if (bpt != NULL)
     {
-    bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
-    struct slName *nameList = hashSlNameFromHash(idHash);
+    struct slName *nameList = hashSlNameFromHash(idHash), *name;
     int count = slCount(nameList);
     char *names[count];
     int ii;
-    for (ii=0; ii < count; ii++)
+    for (ii=0, name = nameList; ii < count; ii++, name = name->next)
         {
-        names[ii] = nameList->name;
-        nameList = nameList->next;
+        names[ii] = name->name;
         }
     bbLm = lmInit(0);
     ivList = bigBedMultiNameQuery(bbi, bpt, fieldIx, names, count, bbLm);
+    slNameFreeList(&nameList);
     }
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
@@ -315,7 +338,7 @@ struct bptFile *bpt = NULL;
 int fieldIx;
 
 if (idHash && isRegionWholeGenome())
-    bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+    bpt = getNameIndexOrDie(bbi, &fieldIx);
 
 char *row[bbi->fieldCount];
 char startBuf[16], endBuf[16];

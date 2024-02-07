@@ -35,6 +35,9 @@ int main(int argc, char *argv[])
 {
 enteredMainTime = clock1000();
 measureTime(NULL);
+
+cfgSetMaxMem(); // read hg.conf and set the maxMem if there
+
 issueBotWarning = earlyBotCheck(enteredMainTime, "hgTracks", delayFraction, 0, 0, "html");
 browserName = hBrowserName();
 organization = "UCSC";

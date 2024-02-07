@@ -51,6 +51,7 @@ char *argListFiles[] = { argGenome, argMaxItemsOutput, argFormat, NULL };
 char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argMaxItemsOutput, argJsonOutputArrays, NULL };
 char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, NULL };
 char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
+char *argFindGenome[] = {argGenomeSearchTerm, argJsonOutputArrays, argAllowAll, argStatsOnly,  NULL};
 
 /* Global only to this one source file */
 static struct cart *cart;             /* CGI and other variables */
@@ -970,6 +971,7 @@ apiFunctionHash = hashNew(0);
 hashAdd(apiFunctionHash, "list", &apiList);
 hashAdd(apiFunctionHash, "getData", &apiGetData);
 hashAdd(apiFunctionHash, "search", &apiSearch);
+hashAdd(apiFunctionHash, "findGenome", &apiFindGenome);
 }
 
 static struct hashEl *parsePathInfo(char *pathInfo, char *words[MAX_PATH_INFO])
