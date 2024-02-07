@@ -2598,8 +2598,14 @@ There are no extra options that can appear on the type hic line.
     highest point in the viewing window of any visible tracks in the same
     composite.  Like most graph settings, this is configurable by the user.
     Setting it to "<code>on</code>" in trackDb will default the track to
-    <code>auto-scale to data view</code>.  Setting it to "<code>group</code>"
-    in trackDb will default the track to <code>group auto-scale</code>. The
+    <code>auto-scale to data view</code>. The setting will independently
+    scale its y-axis based on the data within the track. Setting it to
+    "<code>group</code>" in trackDb will default the track to
+    <code>group auto-scale</code>. With this setting, tracks within the same
+    group will share the same y-axis scaling. This means that the maximum and
+    minimum values on the y-axis will be determined based on the data across
+    all tracks within the same group. This can be useful when comparing
+    multiple tracks and wanting to ensure consistency in scaling. The
     default is "<code>off</code>" which will set the track to
     <code>use vertical viewing range setting</code>.</P>
     <P>NOTE: These options can be misleading if a noisy, low signal
