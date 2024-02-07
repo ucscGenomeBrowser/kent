@@ -10,12 +10,14 @@
 "          <a class=\"dropdown-item white-link\" href=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseDataSets\">Data sets</a>\n"
 "        </div>\n"
 "      </li>\n"
+#ifdef OLD
 "      <li class=\"dropdown\">\n"
 "        <a  class=\"dropdown-toggle nav-link white-link\" data-toggle=\"dropdown\" href=\"#\" href=\"#\">Analysis<span class=\"caret\"></span></a>\n"
 "        <div class=\"dropdown-menu\">\n"
 "          <a class=\"dropdown-item white-link\" href=\"../cgi-bin/cdwWebBrowse?cdwCommand=analysisJointPages\">Joint Data Sets</a>\n"
 "        </div>\n"
 "      </li>\n"
+#endif /* OLD */
 "      <li class=\"nav-item\"><a class=\"nav-link white-link\" href=\"../cgi-bin/cdwWebBrowse?cdwCommand=analysisQuery\">Metadata Query</a></li>\n"
 "    </ul>\n"
 "</nav>\n"
