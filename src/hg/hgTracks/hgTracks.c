@@ -11139,7 +11139,9 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
-if (isEmpty(cartOptionalString(cart, "pix")) && !sameOk(cgiRequestMethod(NULL), "POST")) // page reload after POST would lose all vars
+if (isEmpty(cartOptionalString(cart, "pix")) && 
+    !sameOk(cgiRequestMethod(NULL), "POST") && // page reload after POST would lose all vars
+    !cartBoolean(cart, "hgt.trackImgOnly")) // do not do this if we're hgRenderTracks  = no Javascript
 {
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("utils.js", NULL);
