@@ -4364,7 +4364,7 @@ if (startsWith("bigGenePred", type) || startsWith("genePred", type))
     defVal = "on";
 
 boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", defVal), "on");
-return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
+return (withExonNumbers && exonNumbers && (vis==tvSquish || vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
 }
 
@@ -4434,7 +4434,7 @@ if (rButton)
     }
 
 boolean compat = exonNumberMapsCompatible(tg, vis);
-if (vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
+if (vis == tvSquish || vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
     {
     int w = x2-textX;
     if (lButton)
