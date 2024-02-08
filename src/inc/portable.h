@@ -188,5 +188,9 @@ void makeSymLink(char *oldName, char *newName);
 long long freeSpaceOnFileSystem(char *path);
 /* Given a path to a file or directory on a file system,  return free space
  * in bytes. */
+
+void setMemLimit(unsigned long maxMem);
+/* Set the maximum amount of memory that the application can use. */
+
 #endif /* PORTABLE_H */
 

@@ -238,7 +238,7 @@ if (tagsToKeep)
         {
         struct lineFile *lf = lineFileOpen(tagsToKeep, FALSE);
         char *tag;
-        while (lineFileNextRow(lf, &tag, 1))
+        while ( (keepCount < MAX_BED_EXTRA) && lineFileNextRow(lf, &tag, 1))
             tempKeepFields[keepCount++] = cloneString(tag);
         }
     else

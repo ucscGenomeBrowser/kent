@@ -12,7 +12,7 @@ url http://jaspar.genereg.net/search?q=$$&collection=all&tax_group=all&tax_id=al
 urlLabel View on JASPAR:
 filter.score 400
 filterByRange.score 0:1000
-maxItems 100000
+#maxItems 100000
 maxWindowCoverage 15000
 exonArrows on
 spectrum on
