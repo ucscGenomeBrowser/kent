@@ -808,9 +808,45 @@ struct linkedFeatures *lf = (struct linkedFeatures *)item;
 return lf->label;
 }
 
+static int getFieldCount(struct track *track)
+// return the definedFieldCount of the passed track with is assumed to be a bigBed
+{
+struct bbiFile *bbi = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    bbi = fetchBbiForTrack(track);
+    }
+errCatchEnd(errCatch);
+
+if (bbi)
+    return bbi->definedFieldCount;
+
+return 3; // if we can't get the bbi, use the minimum
+}
+
 void bigBedMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[])
 /* Set up bigBed methods. */
 {
-complexBedMethods(track, tdb, TRUE, wordCount, words);
+char *newWords[wordCount];
+
+int ii;
+for(ii=0; ii < wordCount; ii++)
+    newWords[ii] = words[ii];
+
+// let's help the user out and get the definedFieldCount if they didn't specify it on the type line
+if ((wordCount == 1) && sameString(words[0], "bigBed")) 
+    {
+    int fieldCount = getFieldCount(track);
+    if (fieldCount > 4)  // if there are more than four we want to let the user filter by score
+        {
+        char buffer[1024];
+        safef(buffer, sizeof buffer, "%d", fieldCount);
+        newWords[1] = cloneString(buffer);
+        newWords[2] = ".";
+        wordCount = 3;
+        }
+    }
+complexBedMethods(track, tdb, TRUE, wordCount, newWords);
 }
