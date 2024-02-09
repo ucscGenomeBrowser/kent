@@ -3953,6 +3953,8 @@ let canShowNewMouseover = true;
 let mousemoveController;
 // The div that moves around the users screen with the visible mouseover text
 let  mouseoverContainer;
+// the last element that triggered a mouseover event
+let lastMouseoverEle;
 
 function tooltipIsVisible() {
     /* Is the tooltip visible on the screen right now? */
@@ -3992,14 +3994,14 @@ function mouseIsOverItem(ev, ele, fudgeFactor=25) {
     return false;
 }
 
-function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip) {
+function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip, originalEl) {
     /* Called after 100ms of the mouse being stationary, show a new tooltip
-     * if we are over a new mouseover element */
+     * if we are over a new mouseover-able element */
     e = triggeringMouseMoveEv;
     if (mousedNewItem && !(mouseIsOverPopup(e, currTooltip, 0))) {
         mousemoveController.abort();
         hideMouseoverText(currTooltip);
-        showMouseoverText(triggeringMouseMoveEv);
+        showMouseoverText(triggeringMouseMoveEv, originalEl);
     }
 }
 
@@ -4008,7 +4010,7 @@ function mousemoveHelper(e) {
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
-    mousemoveTimer = setTimeout(mousemoveTimerHelper, 100, e, this);
+    mousemoveTimer = setTimeout(mousemoveTimerHelper, 100, e, this, lastMouseoverEle);
     // we are moving the mouse away, hide the tooltip regardless how much time has passed
     if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
         mousemoveController.abort();
@@ -4017,25 +4019,14 @@ function mousemoveHelper(e) {
     }
 }
 
-function showMouseoverText(e) {
-    /* If a tooltip is not visible, show the tooltip text right away.
-     * If a tooltip is visible, see how long it has been since the mouse
-     * stopped moving, and if the mouse has stopped, show a new tootlip
-     * if necessary */
-    e.preventDefault();
-    let referenceElement = e.target;
-    // if a tooltip is not visible, then we can show a new tooltip
-    // if a tooltip is visible, the mousemove event listener code will call
-    // this function
+function showMouseoverText(ev) {
+    /* If a tooltip is not visible, show the tooltip text right away. If a tooltip
+     * is viisble, do nothing as the mousemove event helper will re-call us
+     * after hiding the tooltip that is shown */
+    ev.preventDefault();
+    let referenceElement = lastMouseoverEle;
+
     if (!tooltipIsVisible()) {
-        if (!e.target.getAttribute("mouseoverid")) {
-            // corner case: the side slice and grey control bar slice are weird, the td
-            // container has the title tag, while the img or a element receives the mouseover
-            // event, so we need to go back up the tree to find the mouseoverid for those elems
-            while (referenceElement.parentElement && !referenceElement.getAttribute("mouseoverid")) {
-                referenceElement = referenceElement.parentElement;
-            }
-        }
         let tooltipDivId = "#" + referenceElement.getAttribute("mouseoverid");
         let tooltipDiv = $(tooltipDivId)[0];
         if (!tooltipDiv) {
@@ -4046,7 +4037,7 @@ function showMouseoverText(e) {
         divCpy.childNodes.forEach(function(n) {
             mouseoverContainer.appendChild(n);
         });
-        positionMouseover(e, referenceElement, mouseoverContainer, e.pageX, e.pageY);
+        positionMouseover(ev, referenceElement, mouseoverContainer, ev.pageX, ev.pageY);
         mouseoverContainer.classList.add("isShown");
         mouseoverContainer.style.opacity = "1";
         mouseoverContainer.style.visibility = "visible";
@@ -4071,10 +4062,46 @@ function showMouseover(e) {
     /* Helper function for showing a mouseover. Uses a timeout function to allow
      * user to not immediately see all available tooltips. */
     e.preventDefault();
+
+    // make the mouseover div:
+    let ele1 = e.currentTarget;
+    let text = ele1.getAttribute("mouseoverText");
+    if (ele1.getAttribute("mouseoverId") === null) {
+        if (text.length > 0) {
+            let newEl = document.createElement("span");
+            newEl.style = "max-width: 400px"; // max width of the mouseover text
+            newEl.innerHTML = text;
+
+            let newDiv = document.createElement("div");
+            newDiv.className = "tooltip";
+            newDiv.style.position = "fixed";
+            newDiv.style.display = "inline-block";
+            if (ele1.title) {
+                newDiv.id = replaceReserved(ele1.title);
+                ele1.setAttribute("originalTitle", ele1.title);
+                ele1.title = "";
+            } else {
+                newDiv.id = replaceReserved(text);
+            }
+            if (ele1.coords) {
+                newDiv.id += "_" + ele1.coords.replaceAll(",","_");
+            }
+            ele1.setAttribute("mouseoverid", newDiv.id);
+            newDiv.append(newEl);
+            ele1.parentNode.append(newDiv);
+        } else {
+            // shouldn't show a mouseover for something that doesn't have a mouseoverText attr,
+            // meaning we got here without calling addMouseover(), this should not happen
+            // but catch it to be safe
+            return;
+        }
+    }
+
     // if a tooltip is currently visible, we need to wait for its mousemove
     // event to clear it before we can show this one, ie a user "hovers"
     // this element on their way to mousing over the shown mouseover
     mousedNewItem = true;
+    lastMouseoverEle = ele1;
     if (mouseoverTimer) {
         // user is moving their mouse around, make sure where they stop is what we show
         clearTimeout(mouseoverTimer);
@@ -4112,34 +4139,8 @@ function addMouseover(ele1, text = null, ele2 = null) {
     // create a mouseover element out of text, or, if text is null, use already
     // created ele2 and just show it
     newEl = ele2;
-    if (text !== null) {
-        newEl = document.createElement("span");
-        newEl.style = "max-width: 400px"; // max width of the mouseover text
-        newEl.innerHTML = text;
-    } else {
-        text = ele2.innerHTML;
-        // if newEl was already created (as in on the server side), then
-        // it may have had it's visibility hidden by default for page load purposes
-        newEl.style.display = "inline-block";
-    }
+    ele1.setAttribute("mouseoverText", text);
     if (ele1) {
-        newDiv = document.createElement("div");
-        newDiv.className = "tooltip";
-        newDiv.style.position = "fixed";
-        newDiv.style.display = "inline-block";
-        if (ele1.title) {
-            newDiv.id = replaceReserved(ele1.title);
-            ele1.setAttribute("originalTitle", ele1.title);
-            ele1.title = "";
-        } else {
-            newDiv.id = replaceReserved(text);
-        }
-        if (ele1.coords) {
-            newDiv.id += "_" + ele1.coords.replaceAll(",","_");
-        }
-        ele1.setAttribute("mouseoverid", newDiv.id);
-        newDiv.append(newEl);
-        ele1.parentNode.append(newDiv);
         ele1.addEventListener("mouseover", showMouseover, {capture: true});
     }
 }

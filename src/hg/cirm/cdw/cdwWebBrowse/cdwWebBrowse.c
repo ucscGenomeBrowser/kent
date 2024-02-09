@@ -2061,7 +2061,7 @@ printf("<BR>\n");
 
 /* Print out some pie charts on important fields */
 static char *pieTags[] = 
-    {"lab", "format", "assay", };
+  {"lab", "format", "assay", "species",};
 struct facetField *pieFacetList = facetFieldsFromSqlTable(conn, getCdwTableSetting("cdwFileFacets"), 
 						    pieTags, ArraySize(pieTags), "N/A", NULL, NULL, NULL);
 struct facetField *ff;
@@ -2305,7 +2305,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("SSPsyGene Staging Portal Data Browser v0.62");
+localWebStartWrapper("SSPsyGene Staging Portal");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 jsInlineFinish();
