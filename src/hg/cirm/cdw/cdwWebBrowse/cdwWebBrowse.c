@@ -2016,7 +2016,7 @@ void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
 {
 printf("<table><tr><td>");
-printf("<img src=\"../images/freeStemCell.jpg\" width=%d height=%d>\n", 200, 275);
+printf("<img src=\"../images/sspsygene_data_portal_data_img.jpg\" width=%d height=%d>\n", 200, 275);
 printf("</td><td>");
 
 /* Print sentence with summary of bytes, files, and labs */
