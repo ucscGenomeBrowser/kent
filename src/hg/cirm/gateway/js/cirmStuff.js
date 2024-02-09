@@ -91,15 +91,6 @@ $(document).ready(function() {
     }
 });
 
-// Screw with banner and search box (secure vs not)
-$(document).ready(function() {
-    if (cirmSiteFunctions.isSecureSite()) {
-        $(".cirm-banner").hide();
-        $(".securesite-banner").show();
-        $("#siteSearchBox").hide();
-    }
-});
-
 // Call googleAnalytics
 $(document).ready(function() {
     var analyticsKey = "UA-135185279-1";
