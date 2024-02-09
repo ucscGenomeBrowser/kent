@@ -327,7 +327,7 @@ struct symbolDesc ucscNotesDesc[] =
       "in all projects reporting frequencies." },
     { bdsCommonSome,
       "Variant is \"common\", i.e. has a Minor Allele Frequency of at least 1% "
-      "in some, but not all, projects reporting frequencies." },
+      "in some, but not all, projects reporting frequencies. This is not the same as the Common dbSNP data, which is only comprised of variants from 1000 Genomes Phase 3 that have a MAF >= 1%" },
     { bdsDiffMajor,
       "Different frequency sources have different major alleles "
       "(see table of allele frequencies above)." },
