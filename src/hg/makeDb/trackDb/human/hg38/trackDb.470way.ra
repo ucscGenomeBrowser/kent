@@ -7,6 +7,7 @@ dragAndDrop subTracks
 visibility hide
 type bed 4
 group compGeno
+release alpha,beta
 
     track cons470wayViewalign
     shortLabel Multiz 470-way

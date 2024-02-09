@@ -8,6 +8,7 @@ visibility hide
 type bed 4
 group compGeno
 html cactus447way
+release alpha,beta
 
     track cons447wayViewalign
     shortLabel Multiz 447-way
