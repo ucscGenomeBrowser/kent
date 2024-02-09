@@ -839,13 +839,12 @@ for(ii=0; ii < wordCount; ii++)
 if ((wordCount == 1) && sameString(words[0], "bigBed")) 
     {
     int fieldCount = getFieldCount(track);
-    if (fieldCount > 4)  // if there are more than four we want to let the user filter by score
+    if (fieldCount > 3) 
         {
         char buffer[1024];
         safef(buffer, sizeof buffer, "%d", fieldCount);
         newWords[1] = cloneString(buffer);
-        newWords[2] = ".";
-        wordCount = 3;
+        wordCount = 2;
         }
     }
 complexBedMethods(track, tdb, TRUE, wordCount, newWords);
