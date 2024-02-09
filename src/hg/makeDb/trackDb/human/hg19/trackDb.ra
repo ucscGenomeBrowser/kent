@@ -49,9 +49,13 @@ visibility hide
 
 track decipher override
 pennantIcon snowflake.png https://www.deciphergenomics.org/about/faqs "This track on hg19 has been frozen in its current state and will receive no further updates. The hg38 version of this track is regularly updated to reflect the most recent DECIPHER release."
+longLabel DECIPHER CNVs (not updated anymore - use the hg38 track)
+html decipher.html
 
 track decipherSnvs override
 pennantIcon snowflake.png https://www.deciphergenomics.org/about/faqs "This track on hg19 has been frozen in its current state and will receive no further updates. The hg38 version of this track is regularly updated to reflect the most recent DECIPHER release."
+longLabel DECIPHER SNVs (not updated anymore - use the hg38 track)
+html decipher.html
 
 track patSeq override
 url https://www.lens.org/lens/bio/patseqanalyzer#psa/homo_sapiens/latest/chromosome/$s/${-$}?appInClaims=1
@@ -2425,3 +2429,5 @@ filterValues.TFName TEAD3,ATF3,HOXC12,ZNF768,ZNF667,NR1I3,SRF,ARGFX,PPARG,DLX1,I
 
 track ncbiRefSeq override
 parent refSeqComposite off
+
+

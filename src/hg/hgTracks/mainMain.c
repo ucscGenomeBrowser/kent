@@ -27,6 +27,8 @@
 #include "extTools.h"
 #include "botDelay.h"
 #include "hgConfig.h"
+#include <sys/time.h>
+#include <sys/resource.h>
 
 boolean issueBotWarning;
 long enteredMainTime = 0;
@@ -78,5 +80,12 @@ if (measureTiming)
             clock1000() - enteredMainTime);
     }
 cgiExitTime("hgTracks", enteredMainTime);
+
+// print out some resource usage stats
+struct rusage usage;
+int stat = getrusage(RUSAGE_SELF, &usage);
+if (stat == 0)
+    // if you change this printf, then increment the number after RESOURCE:
+    fprintf(stderr, "RESOURCE: 1 %ld %ld %ld\n",usage.ru_utime.tv_sec,usage.ru_stime.tv_sec, usage.ru_maxrss);
 return 0;
 }

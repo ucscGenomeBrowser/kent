@@ -567,7 +567,7 @@ include trackDb.145way.ra alpha
 
 include trackDb.241wayT.ra alpha
 include trackDb.241way.ra
-include trackDb.447way.ra
+include trackDb.447way.ra alpha,beta
 
 # track multiz145way
 # shortLabel 145way maf
@@ -865,7 +865,7 @@ termRegex cg[0-9]+
 semiShortCircuit 1
 searchPriority 55
 
-include trackDb.470way.ra
+include trackDb.470way.ra alpha,beta
 
 track michaelMaf
 release alpha
