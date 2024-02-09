@@ -761,9 +761,9 @@ function installRedhat () {
     fi
     
     # try to activate the powertools repo. Exists on CentOS and Rocky but not Redhat
-    set -e
-    yum config-manager --set-enabled powertools
-    set +e
+    set +o pipefail
+    yum config-manager --set-enabled powertools || true
+    set -o pipefail
     
     # install apache if not installed yet
     if [ ! -f /usr/sbin/httpd ]; then
