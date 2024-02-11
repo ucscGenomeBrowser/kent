@@ -511,9 +511,9 @@ var hgSearch = (function() {
             var newListObj;
             if (printCount < 500) {
                 if (printCount + 1 > 10) {
-                    newListObj = "<li class='" + title + "_hidden' style='display: none'><a href=\"" + url + "\">" + matchTitle + "</a> - ";
+                    newListObj = "<li class='searchResult " + title + "_hidden' style='display: none'><a href=\"" + url + "\">" + matchTitle + "</a> - ";
                 } else {
-                    newListObj = "<li><a href=\"" + url + "\">" + matchTitle + "</a> - ";
+                    newListObj = "<li class='searchResult'><a href=\"" + url + "\">" + matchTitle + "</a> - ";
                 }
                 printedPos = false;
                 if (!(["helpDocs", "publicHubs", "trackDb"].includes(title))) {
@@ -764,6 +764,7 @@ var hgSearch = (function() {
         // changing the url allows the history to be associated to a specific url
         var urlParts = changeUrl(urlVars);
         $("#searchCategories").jstree(true).refresh(false,true);
+        saveLinkClicks();
         if (doSaveHistory)
             saveHistory(uiState, urlParts);
         changeSearchResultsLabel();
@@ -835,6 +836,84 @@ var hgSearch = (function() {
         window.location = window.location.href.replace(re,"db="+newDb);
     }
 
+    function saveLinkClicks() {
+        // attach the link handlers to save search history
+        document.querySelectorAll(".searchResult>a").forEach(function(i,j,k) {
+            i.addEventListener("click", function(e) {
+                // i is the <a> element, use parent elements and the href
+                // to construct a fake autocomplete option and save it
+                e.preventDefault(); // stops the page from redirecting until this function finishes
+                let callbackData = {};
+                let trackName = i.parentNode.parentNode.parentNode.id.replace(/Results$/,"");
+                let matchList = uiState.positionMatches.find((matches) => matches.name === trackName);
+                let id, match, matchStr = i.childNodes[0].textContent;
+                // switch lookup depending on the different search categories:
+                let decoder = function(str) {
+                    // helper decoder to change the html encoded entities in
+                    // uiState.positionMatches.posName to what is actually rendered
+                    // in matchStr
+                    return $("<textarea/>").html(str).text();
+                };
+                let geneSymbol; // a potentially fake geneSymbol for the autoComplete
+                if (trackName === "trackDb") {
+                    match = matchList.matches.find((elem) => {
+                        let posSplit = elem.posName.split(":");
+                        geneSymbol = decoder(posSplit[1] + " - " + posSplit[2]);
+                        id = "hgTrackUi?db=" + uiState.db + "&g=" + posSplit[0];
+                        return geneSymbol === matchStr;
+                    });
+                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.id = id;
+                    callbackData.geneSymbol = geneSymbol;
+                    callbackData.internalId = "";
+                } else if (trackName === "publicHubs") {
+                    match = matchList.matches.find((elem) => {
+                        let posSplit = elem.posName.split(":");
+                        geneSymbol = decoder(posSplit[4] + " - " + trackHubSkipHubName(posSplit[3]));
+                        id = "hgTrackUi?hubUrl=" + posSplit[0] + ":" + posSplit[1] + "&g=" + posSplit[3] + "&db=" + posSplit[3];
+                        return decoder(posSplit[4]) === matchStr;
+                    });
+                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.id = id;
+                    callbackData.geneSymbol = geneSymbol;
+                    callbackData.internalId = "";
+                } else if (trackName === "helpDocs") {
+                    match = matchList.matches.find((elem) => {
+                        let posSplit = elem.posName.split(":");
+                        geneSymbol = decoder(posSplit[1].replaceAll("_", " "));
+                        return geneSymbol === matchStr;
+                    });
+                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.id = match.position.split(":")[0];
+                    callbackData.geneSymbol = geneSymbol;
+                    callbackData.internalId = "";
+                } else { // regular track item  search result click
+                    match = matchList.matches.find((elem) => {
+                        geneSymbol = elem.posName.replace(/ .*$/,"");
+                        return decoder(elem.posName) === matchStr;
+                    });
+                    callbackData.value = geneSymbol + " " + match.description;
+                    // special case the genbank searches that are supposed to go to hgc
+                    // and not hgTracks
+                    let parentTitle = i.parentNode.parentNode.parentNode.childNodes[2];
+                    if (["all_mrna", "all_est", "xenoMrna", "xenoEst", "intronEst"].includes(trackName) && parentTitle.textContent.includes("Unaligned")) {
+                        id = "hgc?db=" + db + "&g=" + trackName+ "&i=" + match.position + "&c=0&o=0&l=0&r=0" ;
+                    } else {
+                        id = match.position;
+                    }
+                    callbackData.id = id;
+                    callbackData.geneSymbol = geneSymbol;
+                    callbackData.internalId = match.hgFindMatches;
+                }
+                // type for autocomplete select to know where to navigate to
+                callbackData.type = trackName;
+                callbackData.label = callbackData.value;
+                addRecentSearch(db, callbackData.geneSymbol, callbackData);
+                window.location = i.href;
+            });
+        });
+    }
+
     function init() {
         cart.setCgi('hgSearch');
         cart.debug(debugCartJson);
@@ -901,6 +980,8 @@ var hgSearch = (function() {
                         showOrHideResults(e,data.node);
                     }
                 });
+                // Reattach event handlers as necessary:
+                saveLinkClicks();
             });
             saveHistory(cartJson, urlParts, true);
         } else {

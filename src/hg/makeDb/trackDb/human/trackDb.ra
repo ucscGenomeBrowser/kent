@@ -26,8 +26,11 @@ include trackDb.gtex.ra
 include trackDb.geneHancer.ra
 
 # NCBI ClinVar
-include clinvar.ra beta,public
+include clinvar.ra
 include clinvar.alpha.ra alpha
+
+# Dosage sensitivity map Collins 2022
+include dosageSensitivityCollins2022.ra
 
 # NCBI dbVar
 include trackDb.dbVar.ra
@@ -5598,14 +5601,14 @@ include covidHgiGwas.ra
 
 track covidMuts
 type bigBed 12 + 
-shortLabel Rare Harmful Vars
+shortLabel COVID Rare Harmful Var
 longLabel Rare variants underlying COVID-19 severity and susceptibility from the COVID Human Genetics Effort
 mouseOver $gene $name $rsId Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
 labelFields gene, name
 defaultLabelFields gene, name
 noScoreFilter on
 priority 2.2
-group varRep
+group phenDis
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb

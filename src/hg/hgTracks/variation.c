@@ -2885,17 +2885,7 @@ int maxItems = isNotEmpty(maxItemStr) ? atoi(maxItemStr) : 250000;
 bigBedAddLinkedFeaturesFromExt(tg, chromName, winStart, winEnd, freqSourceIx, 0, FALSE, 4, &lfList,
                                maxItems);
 slReverse(&lfList);
-// if the summary is filled in then the number of items in the region is greater than maxItems.
-if (tg->summary != NULL)
-    {
-    // too many items to display
-    tg->drawItems = bigDrawWarning;
-    tg->networkErrMsg = "Too many variants in display (zoom in to see details)";
-    tg->totalHeight = bigWarnTotalHeight;
-    tg->items = NULL;
-    }
-else
-    tg->items = lfList;
+tg->items = lfList;
 }
 
 static Color bigDbSnpColor(struct track *tg, void *item, struct hvGfx *hvg)

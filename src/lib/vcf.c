@@ -353,6 +353,7 @@ else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
             (p = strstr(def->description, "\",Version=\"")))
             *p = '\0';
 	slAddHead((isInfo ? &(vcff->infoDefs) : &(vcff->gtFormatDefs)), def);
+        if (isInfo) hashAdd(vcff->infoDefHash, def->key, def);
 	}
     else
 	vcfFileErr(vcff, "##%s line does not match expected pattern /%s/ or /%s/: \"%s\"",
@@ -485,6 +486,9 @@ vcff->lf = lf;
 vcff->fileOrUrl = vcfFileCloneStr(vcff, lf->fileName);
 vcff->maxErr = (maxErr < 0) ? INT_MAX : maxErr;
 
+// keep a hash of the INFO keys
+vcff->infoDefHash = hashNew(0);
+
 struct dyString *dyHeader = dyStringNew(1024);
 char *line = NULL;
 // First, metadata lines beginning with "##":
@@ -581,20 +585,8 @@ for (i = 0;  i < record->filterCount;  i++)
 struct vcfInfoDef *vcfInfoDefForKey(struct vcfFile *vcff, const char *key)
 /* Return infoDef for key, or NULL if it wasn't specified in the header or VCF spec. */
 {
-struct vcfInfoDef *def;
-// I expect there to be fairly few definitions (less than a dozen) so
-// I'm just doing a linear search not hash:
-for (def = vcff->infoDefs;  def != NULL;  def = def->next)
-    {
-    if (sameString(key, def->key))
-	return def;
-    }
-for (def = vcfSpecInfoDefs;  def != NULL;  def = def->next)
-    {
-    if (sameString(key, def->key))
-	return def;
-    }
-return NULL;
+struct vcfInfoDef *def = hashFindVal(vcff->infoDefHash, (char *)key);
+return def;
 }
 
 static enum vcfInfoType typeForInfoKey(struct vcfFile *vcff, const char *key)
@@ -934,8 +926,8 @@ char *chromBPlus = startsWith("chr", chromB) ? chromB+3 : chromB;
 return sameString(chromAPlus, chromBPlus);
 }
 
-static struct vcfRecord *vcfParseData(struct vcfFile *vcff, char *chrom, int start, int end,
-				      int maxRecords)
+static struct vcfRecord *vcfParseDataExt(struct vcfFile *vcff, char *chrom, int start, int end,
+				      int maxRecords, char *abortMessage)
 // Given a vcfFile into which the header has been parsed, and whose
 // lineFile is positioned at the beginning of a data row, parse and
 // return all data rows (in region, if chrom is non-NULL) from lineFile,
@@ -949,7 +941,12 @@ struct vcfRecord *record;
 while ((record = vcfNextRecord(vcff)) != NULL)
     {
     if (maxRecords >= 0 && recCount >= maxRecords)
-        break;
+        {
+        if (abortMessage != NULL)
+            errAbort("%s",abortMessage);
+        else
+            break;
+        }
     if (chrom == NULL)
 	{
 	slAddHead(&records, record);
@@ -968,6 +965,11 @@ while ((record = vcfNextRecord(vcff)) != NULL)
     }
 slReverse(&records);
 return records;
+}
+
+static struct vcfRecord *vcfParseData(struct vcfFile *vcff, char *chrom, int start, int end, int maxRecords)
+{
+return vcfParseDataExt(vcff, chrom, start, end, maxRecords, NULL);
 }
 
 struct vcfFile *vcfFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
@@ -1030,8 +1032,9 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
 return vcfTabixFileAndIndexMayOpen(fileOrUrl, NULL, chrom, start, end, maxErr, maxRecords);
 }
 
-struct vcfFile *vcfTabixFileAndIndexMayOpen(char *fileOrUrl, char *tbiFileOrUrl, char *chrom, int start, int end,
-				    int maxErr, int maxRecords)
+struct vcfFile *vcfTabixFileAndIndexMayOpenExt(char *fileOrUrl, char *tbiFileOrUrl, char *chrom, int start, int end,
+				    int maxErr, int maxRecords, char *abortMessage)
+
 /* Open a VCF file that has been compressed and indexed by tabix and
  * parse VCF header, or return NULL if unable. tbiFileOrUrl can be NULL.
  * If chrom is non-NULL, seek to the position range and parse all lines in
@@ -1048,11 +1051,17 @@ if (vcff == NULL)
 if (isNotEmpty(chrom) && start != end)
     {
     if (lineFileSetTabixRegion(lf, chrom, start, end))
-        vcff->records = vcfParseData(vcff, NULL, 0, 0, maxRecords);
+        vcff->records = vcfParseDataExt(vcff, NULL, 0, 0, maxRecords, abortMessage);
     lineFileClose(&(vcff->lf)); // file is all read in so we close it
     }
 
 return vcff;
+}
+
+struct vcfFile *vcfTabixFileAndIndexMayOpen(char *fileOrUrl, char *tbiFileOrUrl, char *chrom, int start, int end,
+				    int maxErr, int maxRecords)
+{
+return vcfTabixFileAndIndexMayOpenExt(fileOrUrl, tbiFileOrUrl, chrom, start, end, maxErr, maxRecords, NULL);
 }
 
 int vcfRecordCmp(const void *va, const void *vb)

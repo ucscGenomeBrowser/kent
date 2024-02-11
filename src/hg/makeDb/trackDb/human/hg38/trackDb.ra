@@ -567,7 +567,7 @@ include trackDb.145way.ra alpha
 
 include trackDb.241wayT.ra alpha
 include trackDb.241way.ra
-include trackDb.447way.ra
+include trackDb.447way.ra alpha,beta
 
 # track multiz145way
 # shortLabel 145way maf
@@ -772,6 +772,7 @@ type bigBed 4
 visibility hide
 group varRep
 compositeTrack on
+pennantIcon Updated red hgTrackUi?db=hg38&g=genotypeArrays "New Affy CytoScan HD track"
 
     track genetiSureCytoCghSnp
     parent genotypeArrays on
@@ -839,6 +840,17 @@ compositeTrack on
     priority 6
     noScoreFilter on
 
+    track affyCytoScanHD
+    parent genotypeArrays on
+    shortLabel Affy CytoScan HD
+    longLabel Affymetrix Cytoscan HD GeneChip Array
+    type bigBed 12
+    bigDataUrl /gbdb/hg38/genotypeArrays/affyCytoScanHD.bb
+    visibility pack
+    html genotypeArrays
+    itemRgb on
+    priority 7
+
 searchTable snpArrayIllumina450k
 searchMethod exact
 searchType bigBed
@@ -853,7 +865,7 @@ termRegex cg[0-9]+
 semiShortCircuit 1
 searchPriority 55
 
-include trackDb.470way.ra
+include trackDb.470way.ra alpha,beta
 
 track michaelMaf
 release alpha
@@ -876,7 +888,7 @@ include hprcChain.ra alpha
 include hprcCoverage97.ra alpha
 
 # other HPRC experiments
-include hprcChainNet.ra alpha
+include hprcChainNet.ra
 
 # the hprcChainNet.ra replaces these two:
 # include hprcChains.ra alpha
@@ -884,9 +896,9 @@ include hprcChainNet.ra alpha
 
 include chainsHprc.ra alpha
 include hprcCoverage.ra alpha
-include trackDb.hprc90way.ra alpha
-include hprcArr.ra alpha
-include hprcVCF.ra alpha
+include trackDb.hprc90way.ra
+include hprcArr.ra
+include hprcVCF.ra
 include hprcVCFTest.ra alpha
 
 track jaspar2024 override
@@ -894,3 +906,9 @@ filterValues.TFName HOXB13,HNF4A,Zfx,Prdm15,ZNF708,IKZF1,SP1,FOSL2,FOSL1,BHLHE41
 
 track ncbiRefSeq override
 parent refSeqComposite off
+
+track varsInPubs override
+pennantIcon Updated red ../goldenPath/newsarch.html#012324 "Released Jan. 23, 2024"
+
+track avada override
+pennantIcon New red ../goldenPath/newsarch.html#012324 "Released Jan. 23, 2024"

@@ -8,11 +8,8 @@
 #include "dnautil.h"
 
 // how many extra fields  can we put into the bigBed itself (for filtering, labels, etc):
-#define MAX_BED_EXTRA 100
+#define MAX_BED_EXTRA 1000
 #define bed9Header "#chrom\tchromStart\tchromEnd\tname\tscore\tstrand\tthickStart\tthickEnd\titemRgb\tref\talt\tFILTER"
-
-// hash up all the info tags and their vcfInfoDef structs for faster searching
-struct hash *infoHash = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,8 +20,11 @@ errAbort(
     "    vcfToBed in.vcf outPrefix\n"
     "options:\n"
     "    -fixChromNames If present, prepend 'chr' to chromosome names\n"
-    "    -fields=comma-sep list of tags to include in the bed file, other fields will be placed into\n"
-    "           out.extraFields.tab\n"
+    "    -fields=comma-sep list of tags to include in the bed file, other fields\n"
+    "           will be placed into out.extraFields.tab\n"
+    "    -fieldsIsFile If present, the -fields argument is a file with one tag per\n"
+    "           line to keep. Note only the first word (white space delimited) will\n"
+    "           be kept per line\n"
     "\n"
     "NOTE: Extra VCF tags (that aren't listed in -fields)  get placed into a separate tab\n"
     "file for later indexing.\n"
@@ -35,6 +35,7 @@ errAbort(
 static struct optionSpec options[] = {
     {"fields", OPTION_STRING},
     {"fixChromNames", OPTION_BOOLEAN},
+    {"fieldsIsFile", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -143,7 +144,7 @@ for (i = 0; i < extraFieldCount; i++)
     }
 }
 
-void printHeaders(struct vcfFile *vcff, char **keepFields, int keepCount, FILE *outBed)
+void printHeaders(char **keepFields, int keepCount, FILE *outBed)
 /* Print a comment describing all the fields into outBed */
 {
 int i;
@@ -155,7 +156,7 @@ fprintf(outBed, "\n");
 }
 
 void vcfLinesToBed(struct vcfFile *vcff, char **keepFields, int extraFieldCount,
-                    boolean fixChromNames, FILE *outBed) //, FILE *outExtra)
+                    boolean fixChromNames, boolean fieldsIsFile, FILE *outBed) //, FILE *outExtra)
 /* Turn a VCF line into a bed9+ line */
 {
 struct dyString *name = dyStringNew(0);
@@ -201,7 +202,7 @@ while (lineFileNext(vcff->lf, &line, NULL))
     }
 }
 
-void vcfToBed(char *vcfFileName, char *outPrefix, char *tagsToKeep, boolean fixChromNames)
+void vcfToBed(char *vcfFileName, char *outPrefix, char *tagsToKeep, boolean fixChromNames, boolean fieldsIsFile)
 /* vcfToBed - Convert VCF to BED9+ with optional extra fields.
  * Extra VCF tags get placed into a separate tab file for later indexing. */
 {
@@ -211,7 +212,7 @@ char tbiFile[4096];
 int i;
 int vcfTagCount = 0; // no need for extra file if there's only a few tags
 int keepCount = 0; // count of comma-sep tagsToKeep
-char *keepFields[MAX_BED_EXTRA]; // Max 50 extra fields to put into bigBed, also needed for
+char *keepFields[MAX_BED_EXTRA]; // Max 1000 extra fields to put into bigBed, also needed for
                                  // comment string header
 char *tempKeepFields[MAX_BED_EXTRA]; // allow requesting fields that don't exist, just don't output
 memset(keepFields, 0, MAX_BED_EXTRA);
@@ -233,7 +234,15 @@ else
 
 if (tagsToKeep)
     {
-    keepCount = chopCommas(tagsToKeep, tempKeepFields);
+    if (fieldsIsFile)
+        {
+        struct lineFile *lf = lineFileOpen(tagsToKeep, FALSE);
+        char *tag;
+        while ( (keepCount < MAX_BED_EXTRA) && lineFileNextRow(lf, &tag, 1))
+            tempKeepFields[keepCount++] = cloneString(tag);
+        }
+    else
+        keepCount = chopCommas(tagsToKeep, tempKeepFields);
     if (keepCount > vcfTagCount)
         verbose(2, "Warning: fewer fields in VCF than -fields specification.");
     keepCount = trimMissingTagsFromFieldList(keepFields, tempKeepFields, keepCount, vcff);
@@ -253,8 +262,8 @@ for (i = 0; i < keepCount; i++)
     if (keepFields[i] != NULL)
         verbose(2, "found tag: '%s'\n", keepFields[i]);
 
-printHeaders(vcff, keepFields, keepCount, outBed);
-vcfLinesToBed(vcff, keepFields, keepCount, fixChromNames, outBed);
+printHeaders(keepFields, keepCount, outBed);
+vcfLinesToBed(vcff, keepFields, keepCount, fixChromNames, fieldsIsFile, outBed);
 vcfFileFree(&vcff);
 carefulClose(&outBed);
 }
@@ -267,6 +276,7 @@ if (argc != 3)
     usage();
 char *fields = optionVal("fields", NULL);
 boolean fixChromNames = optionExists("fixChromNames");
-vcfToBed(argv[1],argv[2], fields, fixChromNames);
+boolean fieldsIsFile  = optionExists("fieldsIsFile");
+vcfToBed(argv[1],argv[2], fields, fixChromNames, fieldsIsFile);
 return 0;
 }

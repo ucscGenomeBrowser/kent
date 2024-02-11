@@ -128,6 +128,10 @@ GCF_030620025.1_CSIRO_AGI_Pver_v1	cauliflower coral (Pver-AG016-CSIRO1 2023)
 GCF_021461385.2_iqSchPice1.1	Central American locust (TAMUIC-IGC-003096 2022)
 GCA_004765925.1_PBRC_Esco_1.0	cephalopods E.scolopes (PROMET0715V01 2019)
 GCF_024679095.1_ASM2467909v1	Chinese mitten crab (Jianghai 21 2022)
+GCA_000295675.1_oxytricha_asm_v1.1	ciliates Oxytricha trifallax (JRB310 2012)
+GCA_000711775.1_Oxytricha_MIC_v2.0	ciliates Oxytricha trifallax (JRB310 2014)
+GCA_000295675.2_oxytricha_jrb310_mac_pacbio	ciliates Oxytricha trifallax (JRB310 2020)
+GCA_001297925.1_ASM129792v1	ciliates Oxytricha trifallax (JRB510 2015)
 GCF_014898815.1_ASM1489881v1	citrus red mite (McGregor SS 2020)
 GCF_003672135.1_Obir_v5.4	clonal raider ant
 GCF_905220415.1_ilColCroc2.1	clouded yellow (refseq 2021)
@@ -471,6 +475,7 @@ GCF_013373865.1_ASM1337386v2	pharaoh ant
 GCA_010367685.1_ASM1036768v1	pine wood nematode (USG12 2020)
 GCA_905475405.1_ilSchCost1.1	pinion-streaked snout moth
 GCF_024362695.1_ilPecGoss1.1	pink bollworm (primary hap 2022)
+GCA_947561715.1_kaAscMent1.1	pink sea squirt (2022)
 GCF_029784165.1_ASM2978416v1	pitcher-plant mosquito (HCP4-BCI-WySm-NY-G18 2023)
 GCF_000150275.1_v1.0	placozoans T.adhaerens (Grell-BS-1999 2008)
 GCA_003344405.1_TrispH2_1.0	placozoans Trichoplax sp. H2 (Panama 2018)

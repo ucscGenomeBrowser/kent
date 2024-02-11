@@ -30,7 +30,7 @@ beta::
 alpha::
 	rm -f ${CGI_BIN}/hgBeacon
 	cp -p hgBeacon ${CGI_BIN}/
-	cp testBeacon ${DESTBINDIR}/
+	#cp testBeacon ${DESTBINDIR}/ # causes problems on mirrors: on "cgi-alpha", DESTBINDIR does not exist yet
 lint:
 	pylint -E --rcfile=pylint.rc hgBeacon
 clean::

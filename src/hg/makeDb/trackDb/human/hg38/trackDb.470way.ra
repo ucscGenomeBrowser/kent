@@ -133,7 +133,6 @@ autoScale on
 logo on
 group compGeno
 visibility hide
-release alpha
 
 	track multiz470LogoA
 	shortLabel multiz470LogoA
@@ -143,7 +142,6 @@ release alpha
 	priority 1
 	bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470Logo.A.bw
 	color 255,0,0
-        release alpha
 
 	track multiz470LogoC
 	shortLabel multiz470LogoC
@@ -153,7 +151,6 @@ release alpha
 	priority 2
 	bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470Logo.C.bw
 	color 160, 0,160
-        release alpha
 
 	track multiz470LogoG
 	shortLabel multiz470LogoG
@@ -163,7 +160,6 @@ release alpha
 	priority 3
 	bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470Logo.G.bw
 	color 0, 0,255
-        release alpha
 
 	track multiz470LogoT
 	shortLabel multiz470LogoT
@@ -173,4 +169,3 @@ release alpha
 	priority 4
 	bigDataUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz470way/multiz470Logo.T.bw
 	color  0,255,0
-        release alpha

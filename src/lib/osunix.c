@@ -827,3 +827,16 @@ rts.sysSecs = timevalToSeconds(usage.ru_stime);
 
 return rts;
 }
+
+void setMemLimit(unsigned long maxMem)
+/* Set the maximum amount of memory that the application can use. */
+{
+struct rlimit rlimit;
+
+rlimit.rlim_cur = maxMem;
+rlimit.rlim_max = rlimit.rlim_cur ;
+int val = setrlimit(RLIMIT_AS, &rlimit);
+
+if (val != 0)
+    errnoAbort("Couldn't set maxMem to %ld\n", maxMem);
+}

@@ -26,10 +26,12 @@
 
 <li class="menuparent" id="tools2"><a href="../cgi-bin/hgTracks">Genome Browser</a>
 	<ul style="display: none; visibility: hidden;">
-	<li class="first"><a id="configureMenuLink" href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
+	<li id="backToBrowserLi" class="first"><a id="backToGenomeBrowser" href="../cgi-bin/hgTracks">Back to Genome Browser</a></li>
+	<li><a id="configureMenuLink" href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
 	<li><a id="trackSearchMenuLink" href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a></li>
+	<li><a id="shortMatchLink" href="../cgi-bin/hgTrackUi?g=oligoMatch&oligoMatch=pack">Short Exact DNA Match</a></li>
         <!-- OPTIONAL_RECOMMENDED_TRACK_SETS_MENU -->
-	<li><a id="cartResetMenuLink" href="../cgi-bin/cartReset">Reset All User Settings</a></li>
+	<li><a id="cartResetMenuLink" href="../cgi-bin/cartReset?skipLs=1">Reset All User Settings</a></li>
         </ul>
 </li>
 

@@ -21,7 +21,7 @@ errAbort(
   "   gff3ToGenePred inGff3 outGp\n"
   "options:\n"
   "  -warnAndContinue - on bad genePreds being created, put out warning but continue\n"
-  "  -useName - rather than using 'id' as name, use the 'name' tag\n"
+  "  -useName - use the 'name' tag as the name, if present\n"
   "  -rnaNameAttr=attr - If this attribute exists on an RNA record, use it as the genePred\n"
   "   name column\n"
   "  -geneNameAttr=attr - If this attribute exists on a gene record, use it as the genePred\n"
@@ -296,22 +296,41 @@ if (isGeneWithCdsChildCase(mrna))
 return NULL;
 }
 
+static char* getAttrVal(struct gff3Ann* ann, char *name)
+/* return the single value for name or NULL */
+{
+struct gff3Attr *attr = gff3AnnFindAttr(ann, name);
+if (attr != NULL)
+    return attr->vals->name;
+else
+    return NULL;
+}
+
 static char* getRnaName(struct gff3Ann* mrna)
 /* return the value to use for the genePred name field */
 {
 char *name = NULL;
 if (rnaNameAttr != NULL)
-    {
-    struct gff3Attr *attr = gff3AnnFindAttr(mrna, rnaNameAttr);
-    if (attr != NULL)
-        name = attr->vals->name;
-    }
+    name = getAttrVal(mrna, rnaNameAttr);
 if (isEmpty(name) && refseqHacks)
     name = refSeqHacksFindName(mrna);
+if (isEmpty(name) && useName)
+    name = mrna->name;
+// try other possible fields
 if (isEmpty(name))
-    name = (useName ? mrna->name : mrna->id);
+    name = getAttrVal(mrna, "transcript_id");
 if (isEmpty(name))
-    name = mrna->id;
+    name = getAttrVal(mrna, "transcript_name");
+if (isEmpty(name))
+    name = getAttrVal(mrna, "Name");
+if (isEmpty(name))
+    name = getAttrVal(mrna, "Gene");
+if (isEmpty(name))
+    name = getAttrVal(mrna, "gene");   // also for RefSeq when no transcript name
+if (isEmpty(name))
+    name = getAttrVal(mrna, "gene_name");
+if (isEmpty(name))
+    name = mrna->id; // desperation
 return name;
 }
 

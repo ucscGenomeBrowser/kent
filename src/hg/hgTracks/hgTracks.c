@@ -8444,6 +8444,12 @@ if (isSearchTracksSupported(database,cart))
 
 
 hPrintf("&nbsp;");
+// Not a submit button, because this is not a CGI function, it only calls Javascript function
+hPrintf("<button id='highlightThis' title='Add a highlight that covers the entire region shown<br><i>Keyboard shortcut:</i> h, "
+        "then m'>highlight</button>");
+jsInlineF("$('#highlightThis').click( function(ev) { highlightCurrentPosition('add'); return false; } );");
+
+hPrintf("&nbsp;");
 hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");
 
 hPrintf(" ");
@@ -11132,6 +11138,17 @@ void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
 cart = theCart;
+
+if (isEmpty(cartOptionalString(cart, "pix")) && 
+    !sameOk(cgiRequestMethod(NULL), "POST") && // page reload after POST would lose all vars
+    !cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE)) // do not do this if we're hgRenderTracks  = no Javascript
+{
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("utils.js", NULL);
+    jsInlineF("addPixAndReloadPage();");
+    return;
+}
+
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
     measureTime("Startup (bottleneck delay %d ms, not applied if under %d) ", botDelayMillis, hgBotDelayCurrWarnMs()) ;
@@ -11163,6 +11180,9 @@ if (issueBotWarning)
     char *ip = getenv("REMOTE_ADDR");
     botDelayMessage(ip, botDelayMillis);
     }
+
+// hide the link "Back to Genome Browser" in the "Genome Browser" menu, since we're on the genome browser now
+jsInline("$('#backToBrowserLi').remove();");
 
 char *debugTmp = NULL;
 /* Uncomment this to see parameters for debugging. */
@@ -11450,9 +11470,15 @@ if (cdsQueryCache != NULL)
 }
 
 void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
-/* add text to track long label to indicate filter is active */
+/* add text to track long label to indicate filter is active. Also add doWiggle/windowsize label. */
 {
-tg->longLabel = labelAsFilteredNumber(tg->longLabel, numOut);
+if (numOut > 0)
+    tg->longLabel = labelAsFilteredNumber(tg->longLabel, numOut);
+
+if (cartOrTdbBoolean(cart, tg->tdb, "doWiggle", FALSE))
+    labelTrackAsDensity(tg);
+else if (winTooBigDoWiggle(cart, tg))
+    labelTrackAsDensityWindowSize(tg);
 }
 
 void labelTrackAsFiltered(struct track *tg)
@@ -11498,7 +11524,7 @@ tg->longLabel = labelAddNote(tg->longLabel, "item density shown");
 void labelTrackAsDensityWindowSize(struct track *tg)
 /* Add text to track long label to indicate density mode because window size exceeds some threshold */
 {
-tg->longLabel = labelAddNote(tg->longLabel, "item density shown - zoom in for individual items");
+tg->longLabel = labelAddNote(tg->longLabel, "item density shown - zoom in for individual items or use squish or dense mode");
 }
 
 

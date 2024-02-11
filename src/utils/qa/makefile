@@ -123,6 +123,7 @@ install:
 	cp -p --remove-destination longSessionCartDumps.sh ${SCRIPTS}
 	cp -p --remove-destination makeCytoBandIdeo.csh    ${SCRIPTS}
 	cp -p --remove-destination makeFilledBlockBed.csh  ${SCRIPTS}
+	cp -p --remove-destination makeHub.sh              ${SCRIPTS}
 	cp -p --remove-destination makeTouchCommands.csh   ${SCRIPTS}
 	cp -p --remove-destination makeUniProtFile.csh     ${SCRIPTS}
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
@@ -150,6 +151,7 @@ install:
 	cp -p --remove-destination showProcesslist.csh     ${SCRIPTS}
 	cp -p --remove-destination staticpaths             ${SCRIPTS}
 	cp -p --remove-destination syncAday.csh            ${SCRIPTS}
+	cp -p --remove-destination trackCountsParse        ${SCRIPTS}
 	cp -p --remove-destination trackDbGlobal.csh       ${SCRIPTS}
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.sh        ${SCRIPTS}

@@ -315,6 +315,7 @@ struct track
     struct lollyCartOptions *lollyCart;
     double squishyPackPoint;    /* the value at which we switch to squish mode. */
     char * originalTrack;       /* the name of the original track if this a pseduo-duplicate track used for squishyPack */
+    boolean limitWiggle;       /* TRUE if this track is drawing in coverage mode because of limited visibility */
     };
 
 struct window  // window in multiwindow image

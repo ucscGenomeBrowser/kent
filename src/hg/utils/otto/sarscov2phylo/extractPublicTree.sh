@@ -86,8 +86,7 @@ tail -n+2 clade-paths.public \
 | cut -f 1,3 > lineageToPath.public
 
 
-cncbDate=$(ls -l $cncbDir | sed -re 's/.*cncb\.([0-9]{4}-[0-9][0-9]-[0-9][0-9]).*/\1/')
-echo "sarscov2phylo release 13-11-20; NCBI and COG-UK sequences downloaded $today; CNCB sequences downloaded $cncbDate" \
+echo "sarscov2phylo release 13-11-20; NCBI, COG-UK and CNCB sequences downloaded $today" \
     > version.txt
 
 $matUtils extract -i public-$today.all.masked.pb -u samples.public.$today

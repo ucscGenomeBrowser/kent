@@ -1,6 +1,8 @@
 # makefile with genePred and genePredReader tests
 include ../../../inc/common.mk
 
+.NOTPARALLEL:  # table is used by multiple tests
+
 BIN_DIR = bin/$(MACHTYPE)
 GENE_PRED_TESTER = ${BIN_DIR}/genePredTester
 EXP_DIR = expected/genePred
@@ -8,6 +10,7 @@ OUT_DIR = output/genePred
 DB=hg15
 TEST_TBL=gpTest_${USER}
 
+.NOTPARALLEL:  # table is used by multiple tests
 
 # Data file used by tests:
 #   - refSeq.psl - selected RefSeq  PSLs used to generate genePred, some chosen
@@ -72,7 +75,6 @@ doFileTest: mkout
 # then compare with input file, otherwise, we need an expected file.
 ###
 tableTests: tableMinTest tableIdTest tableIdName2Test tableFrameTest tableFrameStatTest
-	hgsql -e "drop table if exists ${TEST_TBL}" ${DB}
 
 doTableTest = ${MAKE} -f genePredTests.mk doTableTest
 
@@ -251,3 +253,7 @@ doFromGxfTest: mkout
 
 mkout:
 	@${MKDIR} ${OUT_DIR}
+
+clean::
+	@rm -rf ${OUT_DIR}
+	hgsql -e "drop table if exists ${TEST_TBL}" ${DB}

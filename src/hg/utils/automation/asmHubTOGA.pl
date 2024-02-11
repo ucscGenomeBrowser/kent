@@ -173,11 +173,12 @@ target=_blank>github.com/hillerlab/TOGA</a>
 </p>
 
 <p>
-Kirilenko BM, Munegowda C, Osipova E, Jebb D, Sharma V, Blumer M, Morales A,
-Ahmed AW, Kontopoulos DG, Hilgers L, Zoonomia Consortium, Hiller M.
-<a href='https://www.biorxiv.org/content/10.1101/2022.09.08.507143v1'
-target=_blank>TOGA integrates gene annotation with orthology inference
-at scale</a>. <em>bioRxiv preprint September 2022</em>
+Kirilenko BM, Munegowda C, Osipova E, Jebb D, Sharma V, Blumer M, Morales AE,
+Ahmed AW, Kontopoulos DG, Hilgers L, Lindblad-Toh K, Karlsson EK,
+Zoonomia Consortium, Hiller M.
+<a href="https://www.science.org/doi/10.1126/science.abn3107"
+target="_blank">Integrating gene annotation with orthology inference at
+scale</a>. <em>Science</em>, 380(6643), eabn3107, 2023
 </p>
 
 _EOF_

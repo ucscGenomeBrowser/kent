@@ -183,6 +183,7 @@ boolean doPliColors = FALSE;
 static boolean scafColorsMade = FALSE;
 
 int maxItemsInFullTrack = 1000;  /* Maximum number of items displayed in full */
+int maxItemsPossible = 10000;   /* Maximum possible value for maxItems */
 int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 
 /* These variables persist from one incarnation of this program to the
@@ -384,6 +385,9 @@ return doWiggle;
 boolean checkIfWiggling(struct cart *cart, struct track *tg)
 /* Check to see if a track should be drawing as a wiggle. */
 {
+if (tg->limitWiggle)
+    return TRUE;
+
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 
 if (!doWiggle)
@@ -809,7 +813,12 @@ return tg->lineHeight;
 int maximumTrackItems(struct track *tg)
 /* Return the maximum number of items allowed in track. */
 {
-return trackDbFloatSettingOrDefault(tg->tdb, "maxItems", maxItemsInFullTrack);
+unsigned int maxItems = trackDbFloatSettingOrDefault(tg->tdb, "maxItems", maxItemsInFullTrack);
+
+if (maxItems > maxItemsPossible)
+    maxItems = maxItemsPossible;
+
+return maxItems;
 }
 
 int maximumTrackHeight(struct track *tg)
@@ -847,6 +856,7 @@ if (doWiggle)
         char *words[3];
         words[0] = "bedGraph";
 	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
+        wigCart->windowingFunction = wiggleWindowingMean;
 	tg->wigCartData = (void *) wigCart;
 	}
     return wigTotalHeight(tg, vis);
@@ -2834,7 +2844,9 @@ while (exon != NULL)
     }
 /* Now sort it. */
 slSort(&exonList, exonSlRefCmp);
+
 numExons = slCount(exonList);
+struct genePred *gp = lf->original;
 boolean revStrand = (lf->orientation == -1);
 int eLast = -1;
 int s = -1;
@@ -2847,6 +2859,7 @@ if (lButton)
     picStart += buttonW;
 if (rButton)
     picEnd -= buttonW;
+
 for (ref = exonList; TRUE; )
     {
     exon = ref->val;
@@ -2902,16 +2915,61 @@ for (ref = exonList; TRUE; )
                 strandChar = '-';
             }
 
+            // we still need to show the existing mouseover text
             char* existingText = lf->mouseOver;
             if (isEmpty(existingText))
                 existingText = lf->name;
 
+            // construct a string that tells the user about the codon frame situation of this exon
+            char *frameText = "";
+            if (gp->exonFrames && isExon)
+                {
+                // start/end-phases are in the direction of transcription:
+                // if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
+                // if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame
+                int startPhase = gp->exonFrames[exonIx-1];
+                int endPhase = -1;
+                if (!revStrand) 
+                    endPhase = gp->exonFrames[exonIx];
+                else 
+                    if (exonIx>1)
+                        endPhase = gp->exonFrames[exonIx-2];
+
+                if (gp->exonFrames[exonIx-1]==-1) // UTRs don't have a frame at all
+                    {
+                    frameText = ", untranslated region";
+                    }
+                else
+                    {
+                    //printf("%s %d %d %s_ex_%d_frame_%d<br>", chromName, s, e, gp->name, exonIx, startPhase);
+                    char buf[256];
+                    char *exonNote = "";
+                    if (exonIntronNumber<numExons) // do not do this for the last exon (exonIx is 1-based)
+                        {
+                        //printf("exonIx %d, numExons %d<br>", exonIx, numExons);
+                        ////int nextExonFrame = gp->exonFrames[nextExIx];
+                        //printf("nextExIx %d, nextExonFrame %d, endPhase %d<br>", nextExIx, nextExonFrame, endPhase);
+
+                        if (startPhase==endPhase)
+                            exonNote = " &#8594; in-frame exon";
+                        safef(buf, sizeof(buf), ", codon phase: start %d, end %d%s", startPhase, endPhase, exonNote);
+                        } 
+                    else
+                        {
+                        if (startPhase==0)
+                            exonNote = " &#8594; in-frame exon";
+                        safef(buf, sizeof(buf), ", start codon phase %d%s", startPhase, exonNote);
+                        }
+                    frameText = buf;
+                    }
+                }
+
             if (!isEmpty(existingText))
-                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d", 
-                        existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d%s", 
+                        existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
             else
-                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d", 
-                        strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d%s", 
+                        strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
 
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
@@ -4306,7 +4364,7 @@ if (startsWith("bigGenePred", type) || startsWith("genePred", type))
     defVal = "on";
 
 boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", defVal), "on");
-return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
+return (withExonNumbers && exonNumbers && (vis==tvSquish || vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
 }
 
@@ -4376,7 +4434,7 @@ if (rButton)
     }
 
 boolean compat = exonNumberMapsCompatible(tg, vis);
-if (vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
+if (vis == tvSquish || vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
     {
     int w = x2-textX;
     if (lButton)
@@ -4898,6 +4956,22 @@ else
     countsToPixelsDown(counts, pre);
 }
 
+static void summaryToPixels(struct bbiSummaryElement *summary, struct preDrawContainer *pre)
+/* Convert bbiSummaryElement array into a preDrawElement array */
+{
+struct preDrawElement *pe = &pre->preDraw[pre->preDrawZero];
+struct preDrawElement *lastPe = &pe[insideWidth];
+
+for (; pe < lastPe; pe++, summary++)
+    {
+    pe->count = summary->validCount;
+    pe->min = summary->minVal;
+    pe->max = summary->maxVal;
+    pe->sumData = summary->sumData;
+    pe->sumSquares = summary->sumSquares;
+    }
+}
+
 static void genericDrawItemsWiggle(struct track *tg, int seqStart, int seqEnd,
                                        struct hvGfx *hvg, int xOff, int yOff, int width,
                                        MgFont *font, Color color, enum trackVisibility vis)
@@ -4914,10 +4988,15 @@ if (autoScale == NULL)
 char *windowingFunction = cartOptionalStringClosestToHome(cart, tdb, parentLevel, WINDOWINGFUNCTION);
 if (windowingFunction == NULL)
     wigCart->windowingFunction = wiggleWindowingMean;
-unsigned *counts = countOverlaps(tg);
 
-countsToPixels(counts, pre);
-freez(&counts);
+if (tg->summary)
+    summaryToPixels(tg->summary, pre);
+else
+    {
+    unsigned *counts = countOverlaps(tg);
+    countsToPixels(counts, pre);
+    freez(&counts);
+    }
 
 tg->colorShades = shadesOfGray;
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
@@ -11296,6 +11375,12 @@ for (subtrack = trackList; subtrack; subtrack = subtrack->next)
 return ct;
 }
 
+static boolean canWiggle(struct track *tg)
+/* Is this a track type that can wiggle. */
+{
+return tg->isBigBed || startsWith("vcfTabix", tg->tdb->type);
+}
+
 enum trackVisibility limitVisibility(struct track *tg)
 /* Return default visibility limited by number of items and
  * by parent visibility if part of a coposite track.
@@ -11340,21 +11425,41 @@ if (!tg->limitedVisSet)
                 limitVisibility(subtrack);
             }
         }
-    while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+    if (canWiggle(tg))   // if this is a track type that can wiggle, we want to go straight to that rather than reduce visibility
         {
-        if (vis == tvFull && tg->canPack)
-            vis = tvPack;
-        else if (vis == tvPack)
-            vis = tvSquish;
+        while  ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+            {
+            tg->limitWiggle = TRUE;
+            }
+        if ( tg->limitWiggle)   // auto-density coverage is alway tvFull
+            {
+            if (tg->visibility == tvDense)
+                tg->visibility = tg->limitedVis = tvDense;
+            else
+                tg->visibility = tg->limitedVis = tvFull;
+            }
         else
-            vis = tvDense;
+            tg->limitedVis = vis;
         }
-    tg->height = h;
-    if (tg->limitedVis == tvHide)
-        tg->limitedVis = vis;
     else
-        tg->limitedVis = tvMin(vis,tg->limitedVis);
+        {
+        while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+            {
+            if (vis == tvFull && tg->canPack)
+                vis = tvPack;
+            else if (vis == tvPack)
+                vis = tvSquish;
+            else
+                vis = tvDense;
+            }
 
+        if (tg->limitedVis == tvHide)
+            tg->limitedVis = vis;
+        else
+            tg->limitedVis = tvMin(vis,tg->limitedVis);
+        }
+
+    tg->height = h;
     if (tg->syncChildVisToSelf)
         {
         struct track *subtrack;
@@ -11370,7 +11475,8 @@ if (!tg->limitedVisSet)
         struct track *subtrack;
         for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
             {
-            subtrack->limitedVis = tvMin(subtrack->limitedVis, tg->limitedVis);
+            if ( tg->limitWiggle) // these are always in tvFull
+                subtrack->limitedVis = tvMin(subtrack->limitedVis, tg->limitedVis);
             // But don't prevent subtracks from being further restricted!
             //subtrack->limitedVisSet = tg->limitedVisSet;
             }

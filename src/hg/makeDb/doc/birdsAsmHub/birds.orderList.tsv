@@ -74,7 +74,8 @@ GCA_009819605.1_bSteHir1.pri	common tern (2019)
 GCA_009764545.1_bGeoTri1.alt	common yellowthroat (alternate hap 2019)
 GCA_009764595.1_bGeoTri1.pri	common yellowthroat (2019)
 GCF_000708225.1_ASM70822v1	crested ibis
-GCF_000691785.1_ASM69178v1	cuckoo roller
+GCF_000691785.1_ASM69178v1	cuckoo roller (BGI_N330 2014)
+GCA_034619465.1_bLepDis1.hap2	cuckoo roller (hap2 2023)
 GCF_000687375.1_ASM68737v1	Dalmatian pelican
 GCA_030449815.1_bPelCri1.alt	Dalmatian pelican (alternate hap 2023)
 GCA_030463565.1_bPelCri1.pri	Dalmatian pelican (primary hap 2023)
@@ -255,6 +256,7 @@ GCF_000971095.1_AnsCyg_PRJNA183603_v1.0	swan goose (Zhedong 2015)
 GCA_028020675.1_bPodStr1.alt	tawny frogmouth (bPodStr1 alternate hap 2023)
 GCA_028020825.1_bPodStr1.pri	tawny frogmouth (bPodStr1 primary hap 2023)
 GCA_031877795.1_bStrAlu1.hap1	tawny owl (hap1 2023)
+GCA_031877785.1_bStrAlu1.hap2	tawny owl (hap2 2023)
 GCF_000331425.1_PseHum1.0	Tibetan ground-tit
 GCA_023055385.1_bAgeTri1.0.a	tricolored blackbird (1412-34295 alternate hap 2022)
 GCA_023055355.1_bAgeTri1.0.p	tricolored blackbird (1412-34295 primary hap 2022)

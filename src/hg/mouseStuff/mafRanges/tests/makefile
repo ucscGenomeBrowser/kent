@@ -4,7 +4,7 @@ include ../../../../inc/common.mk
 MAFRANGES = ${DESTBINDIR}/mafRanges
 DIFF = diff
 
-test: clean all
+test: all
 
 all:
 	mkdir -p output

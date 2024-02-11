@@ -53,6 +53,20 @@ o - bPlusTree - Create/user B+ Tree indexes, the backbone of
     many databases.
 o - udc - URL Data Cache - code to locally cache remote files.
 
+DEVELOPING FOR THE GENOME BROWSER
+
+To add features to the Genome Browser, you first need to setup your own Genome
+Browser "Mirror", including Apache, MySQL databases, /gbdb data files, HTML and
+Javascript and the C CGI programs.  The easiest way by far is to get a fresh
+Ubuntu/Rocky VM or container and run the GBIC installation script:
+https://genome.ucsc.edu/goldenpath/help/gbic.html
+
+You can use the option "install" to set up a genome browser, the option
+"mirror" to download a small database (e.g. yeast, sacCer3), use hg38 via
+remote loading of the data from UCSC. Use the option "dev" to clone the kent
+repo, install dependencies and build the code into the mirror you just
+installed.
+
 CODE CONVENTIONS
 
 INDENTATION AND SPACING:

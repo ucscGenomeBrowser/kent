@@ -27,6 +27,7 @@
 #include "udc.h"
 #include "memgfx.h"
 #include "chromAlias.h"
+#include "hgConfig.h"
 
 // Russ Corbett-Detig suggested darker shades for coloring non-synonymous variants green
 Color darkerShadesOfGreenOnWhite[EXPR_DATA_SHADES];
@@ -198,29 +199,35 @@ slReverse(&retList);
 vcff->records = retList;
 }
 
-static void filterRecords(struct vcfFile *vcff, struct trackDb *tdb)
-/* If a filter is specified in the cart, remove any records that don't pass filter. */
+static void filterRecords(struct vcfFile *vcff, struct track *tg)
+/* If a filter is specified in the cart, remove any records that don't pass filter. Adapt longLabel if something was filtered. */
 {
+struct trackDb *tdb = tg->tdb;
 double minQual = VCF_DEFAULT_MIN_QUAL;
 struct slName *filterValues = NULL;
 double minFreq = VCF_DEFAULT_MIN_ALLELE_FREQ;
 boolean gotQualFilter = getMinQual(tdb, &minQual);
 boolean gotFilterFilter = getFilterValues(tdb, &filterValues);
 boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq);
-if (! (gotQualFilter || gotFilterFilter || gotMinFreqFilter) )
-    return;
-
-struct vcfRecord *rec, *nextRec, *newList = NULL;
-for (rec = vcff->records;  rec != NULL;  rec = nextRec)
+int filtOut = 0;
+if (gotQualFilter || gotFilterFilter || gotMinFreqFilter) 
     {
-    nextRec = rec->next;
-    if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
-	   (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
-	   (gotMinFreqFilter && minFreqFail(rec, minFreq)) ))
-	slAddHead(&newList, rec);
+    struct vcfRecord *rec, *nextRec, *newList = NULL;
+    for (rec = vcff->records;  rec != NULL;  rec = nextRec)
+        {
+        nextRec = rec->next;
+        if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
+               (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
+               (gotMinFreqFilter && minFreqFail(rec, minFreq)) ))
+            slAddHead(&newList, rec);
+        else 
+            filtOut++;
+        }
+    slReverse(&newList);
+    vcff->records = newList;
     }
-slReverse(&newList);
-vcff->records = newList;
+
+labelTrackAsFilteredNumber(tg, filtOut);
 }
 
 struct pgSnpVcfStartEnd
@@ -2290,7 +2297,7 @@ if (errCatchStart(errCatch))
     vcff = vcfTabixFileAndIndexMayOpen(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
     if (vcff != NULL)
         {
-        filterRecords(vcff, tg->tdb);
+        filterRecords(vcff, tg);
         filterRefOnlyAlleles(vcff, tg->tdb); // remove items that don't differ from reference
 
         // TODO: in multi-region mode, different windows end up with different sets of variants where
@@ -2317,8 +2324,8 @@ if (errCatch->gotError || vcff == NULL)
     {
     if (isNotEmpty(errCatch->message->string))
         tg->networkErrMsg = cloneString(errCatch->message->string);
-        tg->drawItems = bigDrawWarning;
-        tg->totalHeight = bigWarnTotalHeight;
+    tg->drawItems = bigDrawWarning;
+    tg->totalHeight = bigWarnTotalHeight;
     }
 errCatchFree(&errCatch);
 }
@@ -3004,6 +3011,21 @@ track->itemName = vcfHapClusterTrackName;
 track->mapsSelf = TRUE;
 }
 
+static unsigned vcfMaxItems()
+/* Get the maximum number of items to grab from a vcf file.  Defaults to ten thousand. */
+{
+static boolean set = FALSE;
+static unsigned maxItems = 0;
+
+if (!set)
+    {
+    char *maxItemsStr = cfgOptionDefault("vcfMaxItems", "10000");
+
+    maxItems = sqlUnsigned(maxItemsStr);
+    }
+
+return maxItems;
+}
 
 static void vcfTabixLoadItems(struct track *tg)
 /* Load items in window from VCF file using its tabix index file. */
@@ -3036,10 +3058,11 @@ if (slCount(windows)>1)
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileAndIndexMayOpen(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
+    vcff = vcfTabixFileAndIndexMayOpenExt(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, vcfMaxItems(), 
+        "Too many items in region.Zoom in to view track.");
     if (vcff != NULL)
 	{
-	filterRecords(vcff, tg->tdb);
+	filterRecords(vcff, tg);
         int vis = tdbVisLimitedByAncestors(cart,tg->tdb,TRUE,TRUE);
 	if (hapClustEnabled && vcff->genotypeCount > 1 &&
 	    (vis == tvPack || vis == tvSquish))
@@ -3113,7 +3136,7 @@ if (errCatchStart(errCatch))
     vcff = vcfFileMayOpen(vcfFile, chromName, winStart, winEnd, vcfMaxErr, -1, TRUE);
     if (vcff != NULL)
 	{
-	filterRecords(vcff, tg->tdb);
+	filterRecords(vcff, tg);
         int vis = tdbVisLimitedByAncestors(cart,tg->tdb,TRUE,TRUE);
 	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (vis == tvPack || vis == tvSquish))

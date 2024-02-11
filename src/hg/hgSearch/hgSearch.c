@@ -636,7 +636,10 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
         if (!track)
             errAbort("no track for table \"%s\" found via a findSpec", trackName);
         }
-    trackName = cloneString(track->track);
+    if (track)
+        {
+        trackName = cloneString(track->track);
+        }
     trackHubFixName(trackName);
     puts("Content-type:text/html\n");
     puts("<HTML>\n<HEAD>\n");

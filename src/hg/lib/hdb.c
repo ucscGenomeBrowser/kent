@@ -3966,7 +3966,7 @@ static boolean checkedTrust = FALSE;
 static boolean trustTrackDb = TRUE;
 if (!checkedTrust)
     {
-    trustTrackDb = cfgOptionBooleanDefault("trustTrackDb", TRUE);
+    trustTrackDb = cfgOptionBooleanDefault("trustTrackDb", FALSE);
     checkedTrust = TRUE;
     }
 

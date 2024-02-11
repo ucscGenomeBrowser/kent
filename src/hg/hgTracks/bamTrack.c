@@ -988,6 +988,15 @@ void bamWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[])
 /* Set up bamWig methods. */
 {
+struct wigCartOptions *wigCart = track->wigCartData;
+boolean parentLevel = isNameAtParentLevel(tdb,tdb->track);
+
+char *autoScale = cartOptionalStringClosestToHome(cart, tdb, parentLevel, AUTOSCALE);
+if (autoScale == NULL)
+    wigCart->autoScale =  wiggleScaleAuto;
+char *windowingFunction = cartOptionalStringClosestToHome(cart, tdb, parentLevel, WINDOWINGFUNCTION);
+if (windowingFunction == NULL)
+    wigCart->windowingFunction = wiggleWindowingMean;
 bedGraphMethods(track, tdb, wordCount, words);
 track->loadItems = bamWigLoadItems;
 track->preDrawItems = bamWigPreDrawItems;

@@ -345,3 +345,16 @@ char filename[PATH_LEN];
 getConfigFile(filename);
 return fileModTime(filename);
 }
+
+void cfgSetMaxMem()
+/* Check hg.conf for maxMem.  If not set, don't limit memory.  Otherwise
+ * limit memory usage to that number. */
+{
+char *maxMemStr = NULL;
+
+if ((maxMemStr = cfgOption("maxMem")) != NULL)
+    {
+    unsigned long maxMem = atol(maxMemStr);
+    setMemLimit(maxMem);
+    }
+}

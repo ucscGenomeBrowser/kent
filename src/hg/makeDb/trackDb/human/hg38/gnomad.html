@@ -23,13 +23,14 @@ gnomAD v2 data are based on the GRCh37/hg19 assembly. These tracks display the
 GRCh38/hg38 lift-over provided by gnomAD on their downloads site.
 </p>
 
-<p>On hg38 only, a subtrack "Gnomad mutational constraint" captures the
+<p>On hg38 only, a subtrack "Gnomad mutational constraint" aka "Genome
+non-coding constraint of haploinsufficient variation (Gnocchi)" captures the
 depletion of variation caused by purifying natural selection.
 This is similar to negative selection on loss-of-function (LoF) for genes, but
 can be calculated for non-coding regions, too. Briefly, for any 1kbp window in
 the genome, a model based on trinucleotide sequence context, base-level
 methylation, and regional genomic features predicts expected number of mutations,
-and compares this number to the observed number of mutations using a Z-score (see preprint 
+and compares this number to the observed number of mutations using a Z-score (see Chen et al 2024 
 in the Reference section for details). The chrX scores were added as received from the authors, 
 as there are no mutations available for chrX, they are more speculative than the ones on the autosomes.</p>
 
@@ -66,7 +67,7 @@ our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
 target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
 href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
 
-<p>The mutational constraints score was updated in October 2022 from a previous,
+<p>The mutational constraints score ("Gnocchi") was updated in October 2022 from a previous,
 now deprecated, pre-publication version. The old version can be found in our 
 <a href="https://hgdownload.soe.ucsc.edu/goldenPath/archive/hg38/gnomad/">archive
 directory</a> on the download server. It can be loaded by copying the URL into
@@ -98,7 +99,12 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">275
 PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
 </p>
 <p>
-Chen S, Francioli L, Goodrich J, Collins R, Wang Q, Alfoldi J, Watts N, Vittal C, Gauthier L, Poterba T, Wilson M
-<a href="https://www.biorxiv.org/content/10.1101/2022.03.20.485034.abstract" target="_blank">
-A genome-wide mutational constraint map quantified from variation in 76,156 human genomes</a>. <em>Biorxiv 2022</em> 
+Chen S, Francioli LC, Goodrich JK, Collins RL, Kanai M, Wang Q, Alf&#246;ldi J, Watts NA, Vittal C,
+Gauthier LD <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-023-06045-0" target="_blank">
+    A genomic mutational constraint map using variation in 76,156 human genomes</a>.
+<em>Nature</em>. 2024 Jan;625(7993):92-100.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38057664" target="_blank">38057664</a><br>
+(We added the data in 2021, then later referenced the 2022 Biorxiv preprint, in which the track was not called "Gnocchi" yet)
 </p>
+

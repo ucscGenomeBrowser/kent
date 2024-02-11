@@ -74,13 +74,6 @@ time $scriptDir/bioSampleJsonToTab.py ncbi_dataset/data/biosample_report.jsonl \
 $scriptDir/gbMetadataAddBioSample.pl gb.bioSample.tab ncbi_dataset.tsv \
     > ncbi_dataset.plusBioSample.tsv 2>gbMetadataAddBioSample.log
 
-# Manually patch some GB-to-BioSample associations that somehow got mangled at ENA, until
-# they fix them and the fix percolates through to NCBI...
-grep -vFwf <(cut -f 1 $ottoDir/ncbi.2022-06-25/gbToBioSample.changes.tsv) \
-    ncbi_dataset.plusBioSample.tsv > tmp
-sort tmp $ottoDir/ncbi.2022-06-25/gbToBioSample.patch.tsv > ncbi_dataset.plusBioSample.tsv
-rm tmp
-
 # Make a file for joining collection date with ID:
 tawk '$3 != "" {print $1, $3;}' ncbi_dataset.plusBioSample.tsv \
 | sort > gbToDate
@@ -100,7 +93,7 @@ export TMPDIR=/dev/shm
 fastaNames genbank.fa.xz | awk '{print $1;}' | sed -re 's/\|.*//' | grep -vx pdb | sort -u > gb.names
 zcat ../ncbi.latest/nextclade.full.tsv.gz > nextclade.full.tsv
 cp ../ncbi.latest/nextalign.fa.xz .
-comm -23 gb.names <(cut -f 1 nextclade.full.tsv | sort -u) > nextclade.names
+comm -23 gb.names <(cut -f 2 nextclade.full.tsv | sort -u) > nextclade.names
 if [ -s nextclade.names ]; then
     nDataDir=~angie/github/nextclade/data/sars-cov-2
     outTsv=$(mktemp)
@@ -137,7 +130,7 @@ if [ -e ../ncbi.latest/lineage_report.csv ]; then
     faSomeRecords <(xzcat genbank.fa.xz) pangolin.names stdout \
     | sed -re '/^>/  s/^>([A-Z]{2}[0-9]{6}\.[0-9]+) \|[^,]+/>\1/;' \
         > pangolin.fa
-    pangolin --skip-scorpio pangolin.fa >& pangolin.log
+    pangolin -t 20 --skip-scorpio pangolin.fa >& pangolin.log
     tail -n+2 lineage_report.csv >> linRepYesterday
     mv linRepYesterday lineage_report.csv
     rm -f pangolin.fa

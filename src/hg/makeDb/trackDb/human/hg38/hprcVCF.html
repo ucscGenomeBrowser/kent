@@ -1,24 +1,55 @@
 <h2>Description</h2>
 
 <p>
-This track shows short nucleotide variants of a few basepairs when aligning
+This track shows short nucleotide variants of a few base pairs when aligning
 HPRC genomes to the hg38 reference assembly. The alignment was made with the
 Minigraph-cactus approach described in the references below.
 </p>
 
-<p>There are three subtracks in this composite container track:
+<p>There are three subtracks in this superTrack:
 <ol>
+    <li>All short variants up to 50bp, without any length filter
     <li>All short variants &lt;= 3 bp long
     <li>All short variants &gt; 3 bp long
-    <li>All short variants up to 50bp, without any length filter
-</ol>
+</ol></p>
+
+<p>
+VCF Decomposition from
+<a href="https://github.com/human-pangenomics/hpp_pangenome_resources/tree/74553c422af5521e3d297d6511da0a33fcf3a744?tab=readme-ov-file#vcf-decomposition"
+target="_blank">HPRC Pangenome Resources Github</a>:
+&quot;The Raw VCF files contain a site for each bubble in the graph. Nested bubbles will result in
+overlapping sites. The nesting relationships are denoted with the PS (parent snarl), LV (level) and
+AT (allele traversal) tags and need to be taken into account when interpreting the VCF.
+Alternatively, you can use the &apos;Decomposed VCFs&apos; which have been normalized by using
+<a href="https://github.com/pangenome/vcfbub" target="_blank">vcfbub</a> to &apos;pop&apos;
+bubbles with alleles larger than 100k and
+<a href="https://github.com/vcflib/vcflib/blob/master/doc/vcfwave.md" target="_blank">vcfwave</a>
+to realign each alt
+(<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/pangenomes/freeze/freeze1/minigraph-cactus/wave.mc.grch38.a100k.sh"
+target="_blank">script</a>). Note that in order to reproduce the PanGenie analyses from the papers, you should instead
+use the
+<a href="https://bitbucket.org/jana_ebler/hprc-experiments/src/master/genotyping-experiments/"
+target="_blank">PanGenie HPRC Workflow</a>. This workflow has a
+<a href="https://bitbucket.org/jana_ebler/hprc-experiments/branch/chm13-based-pipeline"
+target="_blank">CHM13 branch</a> to use when working with that reference.
+<p>
+The exact tools and commands used to produce the VCFs are given
+<a href="https://github.com/ComparativeGenomicsToolkit/cactus/blob/master/doc/mc-pangenomes/hprc-v1.1-mc.md"
+target="_blank">here</a>.&quot;</p>
+
+<h2> Display Conventions and Configuration </h2>
+<p>
+The <b>Name</b> of the items are the pair of node labels that denote the site&apos;s location
+in the graph, with the &apos;&gt;&apos; and &apos;&lt;&apos; denoting the forward and reverse
+orientation of the node. Mouseover on items in &quot;squish&quot; and &quot;pack&quot; modes shows the items Name and
+Genotypes. Mouseover on items in &quot;full&quot; mode shows Alleles.
 
 <h2>Methods</h2>
 <p>
 The Minigraph-Cactus HPRC v1.0 graph was converted to VCF using vg deconstruct.
 This result was further postprocessed using vcfbub to flatten nested sites then
-vcfwave to normalize by realigning alt alleles to the reference.  All steps are
-described in Hickey et al 2023.  The postprocessing command lines and data can be found on 
+vcfwave to normalize by realigning alt alleles to the reference. All steps are
+described in Hickey et al 2023. The postprocessing command lines and data can be found on
 <a href="https://github.com/human-pangenomics/hpp_pangenome_resources/blob/main/hprc-v1.0-mc.md#vcf-decomposition">Github</a>.
 Finally, the resulting VCF was filtered by length and split into two VCFs using a cutoff of 3bp.
 </p>
@@ -29,16 +60,16 @@ Thanks to Glenn Hickey for providing the HAL file from the HPRC project and for 
 </p>
 
 <h2>References</h2>
-
 <p>
-Wen-Wei Liao, Mobin Asri, Jana Ebler, ...<em>et al</em>, Heng Lin,
-Benedict Paten
-<a href='https://pubmed.ncbi.nlm.nih.gov/37165242/' target='_blank'>
-A draft human pangenome reference</a>.
-<em>Nature</em>. 2023 May;617(7960):312-324.
-PMID: <a href='https://pubmed.ncbi.nlm.nih.gov/37165242/' target='_blank'>37165242</a>;
-PMC: <a href='http://www.ncbi.nlm.nih.gov/pmc/articles/pmc10172123/' target=_blank>PMC1017212</a>;
-DOI: <a href='https://doi.org/10.1038/s41586-023-05896-x' target='_blank'>10.1038/s41586-023-05896-x</a>
+Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q,
+Xie D, Feng S, Stiller J
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">
+Progressive Cactus is a multiple-genome aligner for the thousand-genome era</a>.
+<em>Nature</em>. 2020 Nov;587(7833):246-251.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">33177663</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7673649/" target="_blank">PMC7673649</a>;
+DOI: <a href="https://doi.org/10.1038/s41586-020-2871-y" target="_blank">10.1038/s41586-020-2871-y</a>
 </p>
 
 <p>
@@ -53,18 +84,6 @@ DOI: <a href=;https://doi.org/10.1038/s41587-023-01793-w; target='_blank'>10.103
 </p>
 
 <p>
-Armstrong J, Hickey G, Diekhans M, Fiddes IT, Novak AM, Deran A, Fang Q,
-Xie D, Feng S, Stiller J
-<em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">
-Progressive Cactus is a multiple-genome aligner for the thousand-genome era</a>.
-<em>Nature</em>. 2020 Nov;587(7833):246-251.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33177663" target="_blank">33177663</a>;
-PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7673649/" target="_blank">PMC7673649</a>;
-DOI: <a href="https://doi.org/10.1038/s41586-020-2871-y" target="_blank">10.1038/s41586-020-2871-y</a>
-</p>
-
-<p>
 Paten B, Earl D, Nguyen N, Diekhans M, Zerbino D, Haussler D.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">
 Cactus: Algorithms for genome multiple sequence alignment</a>.
@@ -74,3 +93,13 @@ PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166836/" target="_bl
 DOI: <a href="https://doi.org/10.1101/gr.123356.111" target="_blank">10.1101/gr.123356.111</a>
 </p>
 
+<p>
+Wen-Wei Liao, Mobin Asri, Jana Ebler, ...<em>et al</em>, Heng Lin,
+Benedict Paten
+<a href='https://pubmed.ncbi.nlm.nih.gov/37165242/' target='_blank'>
+A draft human pangenome reference</a>.
+<em>Nature</em>. 2023 May;617(7960):312-324.
+PMID: <a href='https://pubmed.ncbi.nlm.nih.gov/37165242/' target='_blank'>37165242</a>;
+PMC: <a href='http://www.ncbi.nlm.nih.gov/pmc/articles/pmc10172123/' target=_blank>PMC1017212</a>;
+DOI: <a href='https://doi.org/10.1038/s41586-023-05896-x' target='_blank'>10.1038/s41586-023-05896-x</a>
+</p>

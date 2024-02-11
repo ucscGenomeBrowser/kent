@@ -1,7 +1,7 @@
 track hprcArrV1
 compositeTrack on
 shortLabel Rearrangements
-longLabel Rearrangements including indels,inversions, and duplications
+longLabel Rearrangements including indels, inversions, and duplications
 visibility hide 
 group hprc 
 #noInherit on 
@@ -11,11 +11,12 @@ type bigBed 9 +
 priority 100
 filter.score 1
 filterLabel.score Minimum number of assemblies with arrangement
+pennantIcon New red ../goldenPath/newsarch.html#012224 "Released Jan. 22, 2024"
 
     track hprcInsertsV1
     parent hprcArrV1
-    shortLabel Inserts
-    longLabel Deletions in hg38 = Insertion in the HPRC genomes
+    shortLabel Insertions
+    longLabel Deletions in hg38 = Insertion in the HPRC assemblies
     bigDataUrl /gbdb/hg38/hprcArrV1/hprcInsertsV1.bb
     type bigBed 9 +
     itemRgb on
@@ -25,11 +26,12 @@ filterLabel.score Minimum number of assemblies with arrangement
     priority 101
     filter.querySize 1
     maxItems 100000
+    mouseOver Prevalence in HPRC - Ins size in hg38: $label
 
     track hprcDeletionsV1
     parent hprcArrV1
     shortLabel Deletions
-    longLabel  Insertions in hg38 = Deletion in the HPRC genomes
+    longLabel  Insertions in hg38 = Deletion in the HPRC assemblies
     bigDataUrl /gbdb/hg38/hprcArrV1/hprcDeletionsV1.bb
     type bigBed 9 +
     itemRgb on
@@ -41,12 +43,13 @@ filterLabel.score Minimum number of assemblies with arrangement
     filter.querySize 1
     filterLabel.querySize Minimum size of insertion in hg38
     maxItems 100000
+    mouseOver Prevalence in HPRC - Del size in hg38: $label
 
     track hprcArrInvBedV1
     parent hprcArrV1 on
     visibility hide
     shortLabel Inversions
-    longLabel Inversions with respect to hg38 in HPRC Assemblies
+    longLabel Inversions with respect to hg38 in HPRC assemblies
     bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrInvV1.bb
     type bigBed 9 +
     labelFields label
@@ -54,12 +57,13 @@ filterLabel.score Minimum number of assemblies with arrangement
     exonArrows off
     priority 103
     maxItems 100000
+    mouseOver Prevalence in HPRC: $label
 
     track hprcArrDupBedV1
     parent hprcArrV1 on
     visibility hide
     shortLabel Duplications
-    longLabel Duplications with respect to hg38 in HPRC Assemblies
+    longLabel Duplications with respect to hg38 in HPRC assemblies
     bigDataUrl /gbdb/hg38/hprcArrV1/hprcArrDupV1.bb
     type bigBed 9 +
     labelFields label
@@ -67,11 +71,12 @@ filterLabel.score Minimum number of assemblies with arrangement
     exonArrows off
     priority 104
     maxItems 100000
-    
+    mouseOver Prevalence in HPRC: $label   
+ 
     track hprcDoubleV1
     parent hprcArrV1
     shortLabel Other Rearrangements
-    longLabel Other Rearrangements: Unalignable sequences in both genomes (inversions, partial transpositions)
+    longLabel Other Rearrangements: Unalignable sequences in both assemblies (inversions, partial transpositions)
     bigDataUrl /gbdb/hg38/hprcArrV1/hprcDoubleV1.bb
     type bigBed 9 +
     itemRgb on
@@ -81,3 +86,4 @@ filterLabel.score Minimum number of assemblies with arrangement
     exonArrows off
     priority 105
     maxItems 100000
+    mouseOver Prevalence in HPRC - unal bp in hg38 - HPRC: $label
