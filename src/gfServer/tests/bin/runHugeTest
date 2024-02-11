@@ -30,11 +30,17 @@ case "$mode" in
         exit 1
 esac
 
+set -x
 
 $gfServer start ${transOpt} localhost ${port} -canStop -indexFile=${testidx} ${test2bit} > /dev/null 2>&1 &
+gfpid=$!
 sleep 1
 $gfServer ${queryOpt} localhost ${port} ${queryfa} > output/${testName}.out
 gfClient -nohead ${clientOpts} localhost ${port} $(dirname ${test2bit}) ${queryfa} output/${testName}.psl
 $gfServer stop localhost ${port} > /dev/null
+
+# stop didn't always seem to work
+kill -9 $gfpid >& /dev/null || true
+
 diff -u expected/$testName.out output/$testName.out
 diff -u expected/$testName.psl output/$testName.psl

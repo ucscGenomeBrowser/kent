@@ -85,13 +85,13 @@ hugeTestTransIdx = ${hugeTestDir}/${hugeAcc}.trans.gfidx
 hugeTests: testHugeUntrans testHugeTrans testHugeProt
 
 testHugeUntrans: mkdirs ${hugeTestUntransIdx}
-	./bin/runHugeTest ${gfServerHuge} 17790 untrans ${hugeTest2bit} ${hugeTestUntransIdx} input/lungfish.rna.fa $@
+	time -p ./bin/runHugeTest ${gfServerHuge} $(shell expr 17790 + ${portOffset}) untrans ${hugeTest2bit} ${hugeTestUntransIdx} input/lungfish.rna.fa $@
 
 testHugeTrans: mkdirs ${hugeTestTransIdx}
-	./bin/runHugeTest ${gfServerHuge} 17791 trans ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.rna.fa $@
+	time -p ./bin/runHugeTest ${gfServerHuge} $(shell expr 17791 + ${portOffset}) trans ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.rna.fa $@
 
 testHugeProt: mkdirs ${hugeTestTransIdx}
-	./bin/runHugeTest ${gfServerHuge} 17792 prot ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.prot.fa $@
+	time -p ./bin/runHugeTest ${gfServerHuge} $(shell expr 17792 + ${portOffset}) prot ${hugeTest2bit} ${hugeTestTransIdx} input/lungfish.prot.fa $@
 
 
 # setup for huge tests
