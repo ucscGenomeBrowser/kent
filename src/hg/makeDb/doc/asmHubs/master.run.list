@@ -1165,6 +1165,7 @@
 ./runBuild GCA_033349115.1_rMacSuw1.hap2 vertebrate Macrochelys_suwanniensis
 ./runBuild GCA_033958435.1_ASM3395843v1 vertebrate Carettochelys_insculpta
 ./runBuild GCA_034619465.1_bLepDis1.hap2 birds Leptosomus_discolor
+./runBuild GCA_036323735.1_GRCr8 mammals Rattus_norvegicus
 ./runBuild GCA_900006655.3_Susie3 primates Gorilla_gorilla_gorilla
 ./runBuild GCA_900011295.1_ATCC19606_assembly bacteria Acinetobacter_baumannii
 ./runBuild GCA_900036025.1_v1.0 invertebrate Lymnaea_stagnalis
