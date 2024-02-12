@@ -1,0 +1,108 @@
+# add the NCBI RefSeq genes for chrM to the NCBI RefSeq track
+# DONE - Hiram - 2024-02-12
+
+mkdir  /hive/data/genomes/mm39/bed/ncbiRefSeq.2023-04-19/chrMcatchUp
+cd  /hive/data/genomes/mm39/bed/ncbiRefSeq.2023-04-19/chrMcatchUp
+
+# what is the NCBI name for chrM:
+
+grep chrM ../../chromAlias/mm39.chromAlias.txt
+
+# chrM       AY172335.1      MT      NC_005089.1
+
+# extract the gff descriptions from the primary gff file:
+
+zgrep NC_005089.1 ../download/GCF_000001635.27_GRCm39_genomic.gff.gz \
+  | grep -v "^#" > genome.gff.NC_005089.1.tsv
+
+# extract the RefSeqLink data from that gff file:
+
+~/kent/src/hg/makeDb/doc/mm39/gffToLink.pl > to.add.ncbiRefSeqLink.tsv
+
+# obtain the genePred file from the genomic.gff.gz file:
+
+export asmId=GCF_000001635.27_GRCm39
+export downloadDir=/hive/data/genomes/mm39/bed/ncbiRefSeq.2023-04-19/download
+export ncbiGffGz=$downloadDir/${asmId}_genomic.gff.gz
+
+zcat $ncbiGffGz \
+    | sed -re 's/([;\t])SO_type=/\1so_type=/;' \
+      | gff3ToGenePred  -refseqHacks -attrsOut=$asmId.attrs.txt \
+        -unprocessedRootsOut=$asmId.unprocessedRoots.txt stdin raw.$asmId.gp
+
+grep NC_005089.1 raw.$asmId.gp > NC_005089.1.gp
+sed -e 's/NC_005089.1/chrM/g;' NC_005089.1.gp > chrM.gp
+
+# save the existing files in case they are broken during this process:
+hgsql -N -e 'select * from ncbiRefSeq;' mm39 > before.mm39.ncbiRefSeq.tsv
+hgsql -N -e 'select * from ncbiRefSeqCurated;' mm39 > before.mm39.ncbiRefSeqCurated.tsv
+hgsql -N -e 'select * from ncbiRefSeqLink;' mm39 > before.mm39.ncbiRefSeqLink.tsv
+
+# loading the genePred data into two tables:
+
+hgsql -N -e 'select count(*) from ncbiRefSeq;' mm39
+# 134700
+hgsql -e 'LOAD DATA LOCAL INFILE "to.add.chrM.sql.tsv" INTO TABLE ncbiRefSeq;' mm39
+hgsql -N -e 'select count(*) from ncbiRefSeq;' mm39
+# 134737
+
+hgsql -N -e 'select count(*) from ncbiRefSeqCurated;' mm39
+# 55621
+hgsql -e 'LOAD DATA LOCAL INFILE "to.add.chrM.sql.tsv" INTO TABLE ncbiRefSeqCurated;' mm39
+hgsql -N -e 'select count(*) from ncbiRefSeqCurated;' mm39
+# 55658
+
+## and the RefSeqLink data:
+
+hgsql -N -e 'select count(*) from ncbiRefSeqLink;' mm39
+# 134699
+hgsql -e 'LOAD DATA LOCAL INFILE "to.add.ncbiRefSeqLink.tsv" INTO TABLE ncbiRefSeqLink;' mm39
+hgsql -N -e 'select count(*) from ncbiRefSeqLink;' mm39
+# 134736
+
+# check the relationship between the tables:
+
+hgsql -e 'SELECT e.name,e.chrom,j.id,j.name FROM
+  ncbiRefSeq e,
+  ncbiRefSeqLink j
+WHERE e.name = j.id AND e.chrom = "chrM";' mm39
+
++---------+-------+---------+---------+
+| TrnF    | chrM  | TrnF    | TrnF    |
+| mt-Rnr1 | chrM  | mt-Rnr1 | mt-Rnr1 |
+| TrnV    | chrM  | TrnV    | TrnV    |
+| mt-Rnr2 | chrM  | mt-Rnr2 | mt-Rnr2 |
+| TrnL1   | chrM  | TrnL1   | TrnL1   |
+| ND1     | chrM  | ND1     | ND1     |
+| TrnI    | chrM  | TrnI    | TrnI    |
+| TrnQ    | chrM  | TrnQ    | TrnQ    |
+| TrnM    | chrM  | TrnM    | TrnM    |
+| ND2     | chrM  | ND2     | ND2     |
+| TrnW    | chrM  | TrnW    | TrnW    |
+| TrnA    | chrM  | TrnA    | TrnA    |
+| TrnN    | chrM  | TrnN    | TrnN    |
+| TrnC    | chrM  | TrnC    | TrnC    |
+| TrnY    | chrM  | TrnY    | TrnY    |
+| COX1    | chrM  | COX1    | COX1    |
+| TrnS1   | chrM  | TrnS1   | TrnS1   |
+| TrnD    | chrM  | TrnD    | TrnD    |
+| COX2    | chrM  | COX2    | COX2    |
+| TrnK    | chrM  | TrnK    | TrnK    |
+| ATP8    | chrM  | ATP8    | ATP8    |
+| ATP6    | chrM  | ATP6    | ATP6    |
+| COX3    | chrM  | COX3    | COX3    |
+| TrnG    | chrM  | TrnG    | TrnG    |
+| ND3     | chrM  | ND3     | ND3     |
+| TrnR    | chrM  | TrnR    | TrnR    |
+| ND4L    | chrM  | ND4L    | ND4L    |
+| ND4     | chrM  | ND4     | ND4     |
+| TrnH    | chrM  | TrnH    | TrnH    |
+| TrnS2   | chrM  | TrnS2   | TrnS2   |
+| TrnL2   | chrM  | TrnL2   | TrnL2   |
+| ND5     | chrM  | ND5     | ND5     |
+| ND6     | chrM  | ND6     | ND6     |
+| TrnE    | chrM  | TrnE    | TrnE    |
+| CYTB    | chrM  | CYTB    | CYTB    |
+| TrnT    | chrM  | TrnT    | TrnT    |
+| TrnP    | chrM  | TrnP    | TrnP    |
++---------+-------+---------+---------+
