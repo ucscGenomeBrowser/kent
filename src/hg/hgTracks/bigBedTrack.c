@@ -836,7 +836,7 @@ for(ii=0; ii < wordCount; ii++)
     newWords[ii] = words[ii];
 
 // let's help the user out and get the definedFieldCount if they didn't specify it on the type line
-if ((wordCount == 1) && sameString(words[0], "bigBed")) 
+if ((track->tdb->subtracks == NULL) && (wordCount == 1) && sameString(words[0], "bigBed")) 
     {
     int fieldCount = getFieldCount(track);
     if (fieldCount > 3) 
