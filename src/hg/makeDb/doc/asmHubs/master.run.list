@@ -1149,6 +1149,7 @@
 ./runBuild GCA_031021105.1_rEryReg1.hap1 vertebrate Erythrolamprus_reginae
 ./runBuild GCA_031468805.1_bMorBas2.hap1 birds Morus_bassanus
 ./runBuild GCA_031468815.1_bMorBas2.hap2 birds Morus_bassanus
+./runBuild GCA_031835075.1_ASM3183507v1 primates Saguinus_oedipus
 ./runBuild GCA_031876335.1_mHipLar1.pri mammals Hipposideros_larvatus
 ./runBuild GCA_031877785.1_bStrAlu1.hap2 birds Strix_aluco
 ./runBuild GCA_031877795.1_bStrAlu1.hap1 birds Strix_aluco
