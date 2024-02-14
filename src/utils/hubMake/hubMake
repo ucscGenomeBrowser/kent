@@ -1,0 +1,355 @@
+#!/usr/bin/env python3
+
+import logging, sys, optparse, os, json
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile, relpath, abspath, splitext, isdir
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("""usage: %prog [options] <db> - create a track hub for all bigBed/bigWig files under a directory. Creates single-file hub.txt
+            
+    - bigBed/bigWig files in the current directory will be top level tracks
+    - big* files in subdirectories become composites
+    - the part before the first dot is the track base name
+    - if a directory has more than 80% of track base names with both a bigBed and bigWig file, views are activated for this composite
+    - track attributes can be changed using tracks.tsv or tracks.json files, in each top or subdirectory
+    - tracks.tsv must have the first column named 'track'.""")
+
+    #parser.add_option("-d", "--db", dest="db", action="store", help="The assembly, e.g. hg38 or mm10. Required.")
+    parser.add_option("-i", "--inDir", dest="inDir", action="store", help="Input directory where files are stored. Default is current directory")
+    parser.add_option("-o", "--outDir", dest="outDir", action="store", help="Input directory where hub.txt file is created. Default is same as input directory.")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show verbose debug messages")
+    (options, args) = parser.parse_args()
+
+    if len(args)==0:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    return args, options
+
+def parseMetaTsv(fname, meta):
+    " parse a meta.tsv file and return as a dict of trackName -> dict of key->val "
+    headers = None
+    meta = {}
+    logging.debug("Parsing %s as tab-sep" % fname)
+    for line in open(fname):
+        row = line.rstrip("\r\n").split("\t")
+        if headers is None:
+            assert(line.startswith("track\t"))
+            headers = row
+            continue
+
+        assert(len(row)==len(headers))
+        key = row[0]
+
+        rowDict = {}
+        for header, val in zip(headers[1:], row[1:]):
+            rowDict[header] = val
+        #row = {k:v for k,v in zip(headers, fs)}
+        meta[key] = rowDict
+    return meta
+
+def parseMetaJson(fname, meta):
+    " parse a json file and merge it into meta and return "
+    logging.debug("Reading %s as json" % fname)
+    newMeta = json.load(open(fname))
+    meta.update(newMeta)
+    return meta
+
+def parseMeta(inDir):
+    " parse a tab-sep file with headers and return a dict firstField -> dictionary "
+    fname = join(inDir, "tracks.tsv")
+    meta = {}
+    if isfile(fname):
+        meta = parseMetaTsv(fname, meta)
+
+    fname = join(inDir, "tracks.json")
+    if isfile(fname):
+        meta = parseMetaJson(fname, meta)
+
+    return meta
+
+def writeHubGenome(ofh, db, inMeta):
+    " create a hub.txt and genomes.txt file, hub.txt is just a template "
+    meta = inMeta.get("hub", {})
+    ofh.write("hub autoHub\n")
+    ofh.write("shortLabel %s\n" % meta.get("shortLabel", "Auto-generated hub"))
+    ofh.write("longLabel %s\n" % meta.get("longLabel", "Auto-generated hub"))
+    #ofh.write("genomesFile genomes.txt\n")
+    if "descriptionUrl" in meta:
+        ofh.write("descriptionUrl %s\n" % meta["descriptionUrl"])
+    ofh.write("email %s\n" % meta.get("email", "yourEmail@example.com"))
+    ofh.write("useOneFile on\n\n")
+
+    ofh.write("genome %s\n\n" % db)
+    return ofh
+
+def readSubdirs(inDir, subDirs):
+    " given a list of dirs, find those that are composite dirs and those that are supertrack dirs "
+    compDicts, superDicts = {}, {}
+    for subDir in subDirs:
+        subPath = join(inDir, subDir)
+        subSubDirs, subDict = readFnames(subPath)
+        if len(subDict)==0:
+            # no files in this dir
+            continue
+        if len(subSubDirs)==0:
+            compDicts[subDir] = subDict
+        #else:
+            #superDicts[subDir] = subDict
+
+    return compDicts, superDicts
+
+def readDirs(inDir):
+    " recurse down into directories and return containerType -> parentName -> fileBase -> type -> list of absPath "
+    ret = {}
+    subDirs, topFiles = readFnames(inDir)
+    ret["top"] = { None : topFiles } # top-level track files have None as the parent
+
+    compDirs, superDirs = readSubdirs(inDir, subDirs)
+    # superDirs not used yet, no time
+
+    ret["comps"] = compDirs
+    ret["supers"] = superDirs
+
+    return ret
+
+def readFnames(inDir):
+    " return dict with basename -> fileType -> filePath "
+    fnameDict = defaultdict(dict)
+    #tdbDir = abspath(dirname(trackDbPath))
+    subDirs = []
+    for fname in os.listdir(inDir):
+        filePath = join(inDir, fname)
+        if isdir(filePath):
+            subDirs.append(fname)
+            continue
+        baseName, ext = splitext(basename(fname))
+        ext = ext.lower()
+
+        # actually, use the part before the first dot, not the one before the extension, as the track name
+        # this means that a.scaled.bigBed and a.raw.bigWig get paired correctly
+        fileBase = basename(fname).split(".")[0]
+
+        if ext==".bw" or ext==".bigwig":
+            fileType = "bigWig"
+        elif ext==".bb" or ext==".bigbed":
+            fileType = "bigBed"
+        else:
+            logging.debug("file %s is not bigBed nor bigWig, skipping" % fname)
+            continue
+
+        absFname = abspath(filePath)
+        #relFname = relFname(absFname, tdbDir)
+        fnameDict[fileBase].setdefault(fileType, [])
+        #fnameDict[baseName][fileType].setdefault([])
+        fnameDict[fileBase][fileType].append(absFname)
+    return subDirs, fnameDict
+
+def mostFilesArePaired(fnameDict):
+    " check if 80% of the tracks have a pair bigBed+bigWig"
+    pairCount = 0
+    for baseName, typeDict in fnameDict.items():
+        if "bigBed" in typeDict and "bigWig" in typeDict:
+            pairCount += 1
+
+    pairShare = pairCount / len(fnameDict)
+    return ( pairShare > 0.8 )
+
+def writeLn(ofh, spaceCount, line):
+    "write line to ofh, with spaceCount before it "
+    ofh.write("".join([" "]*spaceCount))
+    ofh.write(line)
+    ofh.write("\n")
+
+def writeStanza(ofh, indent, tdb):
+    " write a stanza given a tdb key-val dict "
+    track = tdb["track"]
+
+    shortLabel = tdb.get("shortLabel", track)
+    visibility = tdb.get("visibility", "hide")
+    longLabel  = tdb.get("longLabel", shortLabel)
+
+    trackType = tdb["type"]
+
+    writeLn(ofh, indent, "track %s" % track)
+    writeLn(ofh, indent, "shortLabel %s" % shortLabel)
+    if longLabel:
+        writeLn(ofh, indent, "longLabel %s" % longLabel)
+    if "parent" in tdb:
+        writeLn(ofh, indent, "parent %s" % tdb["parent"])
+    writeLn(ofh, indent, "type %s" % trackType)
+    writeLn(ofh, indent, "visibility %s" % visibility)
+    if "bigDataUrl" in tdb:
+        writeLn(ofh, indent, "bigDataUrl %s" % tdb["bigDataUrl"])
+
+    for key, val in tdb.items():
+        if key in ["track", "shortLabel", "longLabel", "type", "bigDataUrl", "visibility", "parent"]:
+            continue
+        writeLn(ofh, indent, "%s %s" % (key, val))
+
+    ofh.write("\n")
+
+def metaOverride(tdb, meta):
+    " for every key in tdb, check if meta contains a value for that and overwrite it in tdb with that value "
+    if not tdb["track"] in meta:
+        return
+
+    trackMeta = meta[tdb["track"]]
+
+    for key, val in tdb.items():
+        if key in trackMeta:
+            tdb[key] = trackMeta[key]
+
+def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
+    " given a dict with basename -> type -> filenames, write track entries to ofh "
+    global compCount
+
+    fnameDict = dirDict[dirType]
+
+    for parentName, typeDict in fnameDict.items():
+        if parentName is None: # top level tracks
+            subDir = inDir
+        else: # container tracks
+            subDir = join(inDir, parentName)
+        parentMeta = parseMeta(subDir)
+
+        indent = 0
+        parentHasViews = False
+
+        if dirType=="comps":
+            tdb = {
+                    "track" : parentName,
+                    "shortLabel": parentName,
+                    "visibility" : "dense",
+                    "compositeTrack" : "on",
+                    "autoScale" : "group",
+                    "type" : "bed 4"
+                  }
+            metaOverride(tdb, parentMeta)
+
+            parentHasViews = mostFilesArePaired(typeDict)
+
+            if parentHasViews:
+                tdb["subGroup1"] = "view Views PK=Peaks SIG=Signals"
+                logging.info("Container track %s has >80%% of paired files, activating views" % parentName)
+
+            writeStanza(ofh, indent, tdb)
+            indent = 4
+
+            if parentHasViews:
+                tdbViewPeaks = {
+                        "track" : parentName+"ViewPeaks",
+                        "shortLabel" : parentName+" Peaks",
+                        "parent" : parentName,
+                        "view" : "PK",
+                        "visibility" : "dense",
+                        "type" : "bigBed",
+                        "scoreFilter" : "off",
+                        "viewUi" : "on"
+                        }
+                metaOverride(tdbViewPeaks, parentMeta)
+                writeStanza(ofh, indent, tdbViewPeaks)
+
+                tdbViewSig = {
+                        "track" : parentName+"ViewSignal",
+                        "shortLabel" : parentName+" Signal",
+                        "parent" : parentName,
+                        "view" : "SIG",
+                        "visibility" : "dense",
+                        "type" : "bigWig",
+                        "viewUi" : "on"
+                        }
+                metaOverride(tdbViewSig, parentMeta)
+                writeStanza(ofh, indent, tdbViewSig)
+
+        for trackBase, typeFnames in typeDict.items():
+            for fileType, absFnames in typeFnames.items():
+                assert(len(absFnames)==1) # for now, not sure what to do when we get multiple basenames of the same file type
+                absFname = absFnames[0]
+                fileBase = basename(absFname)
+                relFname = relpath(absFname, tdbDir)
+
+                labelSuff = ""
+                if parentHasViews:
+                    if fileType=="bigWig":
+                        labelSuff = " Signal"
+                    elif fileType=="bigBed":
+                        labelSuff = " Peaks"
+                    else:
+                        assert(False) # views and non-bigWig/Bed are not supported yet?
+
+                if parentName is not None:
+                    parentPrefix = parentName+"-"
+                else:
+                    parentPrefix = ""
+
+                tdb = {
+                        "track" : parentPrefix+trackBase+"-"+fileType,
+                        "shortLabel": trackBase+labelSuff,
+                        "longLabel": trackBase+labelSuff,
+                        "visibility" : "dense",
+                        "type" : fileType,
+                        "bigDataUrl" : relFname,
+                      }
+
+                if parentName:
+                    tdb["parent"] = parentName
+
+                if parentHasViews:
+                    if fileType=="bigBed":
+                        tdb["parent"] = parentName+"ViewPeaks"+" on"
+                        tdb["subGroups"] = "view=PK"
+                    else:
+                        tdb["parent"] = parentName+"ViewSignal"+" on"
+                        tdb["subGroups"] = "view=SIG"
+
+                metaOverride(tdb, parentMeta)
+                writeStanza(ofh, indent, tdb)
+
+def makeTrackHub(db, options):
+    """ get writeLn(ofh, indent, d .bb files under dirName and create a trackDb.txt for them"""
+
+    inDir = "."
+    if options.inDir:
+        inDir = options.inDir
+
+    tdbDir = inDir
+    if options.outDir:
+        tdbDir = options.outDir
+
+    #db = args[0]
+
+    dirFiles = readDirs(inDir)
+
+    hubFname = join(tdbDir, "hub.txt")
+    print("Writing %s" % hubFname)
+    ofh = open(hubFname, "w")
+
+    meta = parseMeta(inDir)
+    writeHubGenome(ofh, db, meta)
+
+    writeTdb(inDir, dirFiles, "top", tdbDir, ofh)
+    writeTdb(inDir, dirFiles, "comps", tdbDir, ofh)
+
+    ofh.close()
+
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    makeTrackHub(args[0], options)
+
+    #if options.test:
+        #logging.debug("test is set")
+        #f = open(options.file, "r")
+
+main()
