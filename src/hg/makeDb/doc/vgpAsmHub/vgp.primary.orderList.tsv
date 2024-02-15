@@ -17,6 +17,7 @@ GCF_009819705.1_fHipHip1.pri	Atlantic halibut (refseq)
 GCF_030144855.1_sHypSab1.hap1	Atlantic stingray (hap1 2023 refseq)
 GCF_902167405.1_gadMor3.0	Atlantic cod
 GCF_015852505.1_mTacAcu1.pri	Australian echidna (mTacAcu1 primary hap 2020)
+GCA_002915635.3_AmbMex60DD	axolotl (DD151 2021)
 GCF_017976425.1_fToxJac2.pri	banded archerfish
 GCA_936440315.1_fBarBab1.1	barbel (2022)
 GCA_015227805.3_bHirRus1.pri.v3	barn swallow (bHirRus1 v3 primary hap 2021)
@@ -157,6 +158,7 @@ GCA_949316315.1_mMusMuc1.1	house mouse (primary hap 2023)
 GCF_027477595.1_bHaeMex1.pri	house finch (bHaeMex1 primary hap 2022 refseq)
 GCA_027474245.1_bSphHub1.pri	Humboldt's penguin (bSphHub1 primary hap 2022)
 GCF_003369695.1_UOA_Brahman_1	hybrid cattle (Angus x Brahman F1 Brahman haplotype 2018)
+GCA_026652325.1_ASM2665232v1	Iberian ribbed newt (20211129_DDA 2022)
 GCA_900634625.2_fParRan2.2	Indian glassy fish (v2 2020)
 GCF_013368585.1_fMegCyp1.pri	Indo-Pacific tarpon
 GCA_031876335.1_mHipLar1.pri	intermediate roundleaf bat (primary hap 2023)

@@ -10,6 +10,7 @@ GCF_014858855.1_ASM1485885v1	Asiatic toad (SCDJY-AF-19 2020)
 GCF_030144855.1_sHypSab1.hap1	Atlantic stingray (hap1 2023 refseq)
 GCA_030144785.1_sHypSab1.hap2	Atlantic stingray (hap2 2023)
 GCF_001723895.1_CroPor_comp1	Australian saltwater crocodile
+GCA_002915635.3_AmbMex60DD	axolotl (DD151 2021)
 GCA_026167985.1_rPhrBla1.0.hap1	Blainville's horned lizard (primary hap 2022)
 GCA_026167975.1_rPhrBla1.0.hap2	Blainville's horned lizard (alternate hap 2022)
 GCA_963514005.1_sRajBra1.1	blonde ray (primary hap 2023)
@@ -29,7 +30,8 @@ GCF_963506605.1_rZooViv1.1	common lizard Z.vivipara (primary hap 2023)
 GCF_004329235.1_PodMur_1.0	common wall lizard
 GCA_905171715.1_aBufBuf1.1_alternate_haplotype	common toad (alternate hap 2021)
 GCF_905171765.1_aBufBuf1.1	common toad (primary hap 2021)
-GCF_001185365.1_UNIGE_PanGut_3.0	corn snake
+GCF_029531705.1_CU_Pguttatus_1	corn snake (Columbia U 2023)
+GCF_001185365.1_UNIGE_PanGut_3.0	corn snake (EG266 2020)
 GCA_028390025.1_aPseCor3.hap2	corroboree frog (hap2 2023)
 GCA_951804955.1_rPodCre2.1_alternate_haplotype	Cretan wall lizard (alternate hap 2023)
 GCA_951804945.1_rPodCre2.1	Cretan wall lizard (primary hap 2023)

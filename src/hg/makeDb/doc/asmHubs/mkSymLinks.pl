@@ -108,6 +108,8 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/${accessionId}.repeatMasker.version.txt"`;
   `rm -f "${destDir}/${accessionId}.repeatModeler.version.txt"`;
   `rm -f "${destDir}/${accessionId}.repeatModeler.families.fa.gz"`;
+  `rm -f "${destDir}/${accessionId}.repeatModeler.families.stk.gz"`;
+  `rm -f "${destDir}/${accessionId}.repeatModeler.out.gz"`;
   `rm -f "${destDir}/${accessionId}.repeatModeler.2bit"`;
   `rm -f "${destDir}/${accessionId}.rmod.log.txt"`;
   `rm -f "${destDir}/${accessionId}.userTrackDb.txt"`;
@@ -156,9 +158,11 @@ foreach my $asmId (@orderList) {
   `ln -s "${buildDir}/${asmId}.chromAlias.bb" "${destDir}/${accessionId}.chromAlias.bb"` if (-s "${buildDir}/${asmId}.chromAlias.bb");
    `ln -s "${buildDir}/${asmId}.rmsk.customLib.fa.gz" "${destDir}/${accessionId}.rmsk.customLib.fa.gz"` if (-s "${buildDir}/${asmId}.rmsk.customLib.fa.gz");
   `ln -s "${buildDir}/${asmId}.repeatMasker.out.gz" "${destDir}/${accessionId}.repeatMasker.out.gz"` if (-s "${buildDir}/${asmId}.repeatMasker.out.gz");
+  `ln -s "${buildDir}/${asmId}.repeatModeler.out.gz" "${destDir}/${accessionId}.repeatModeler.out.gz"` if (-s "${buildDir}/${asmId}.repeatModeler.out.gz");
   `ln -s "${buildDir}/${asmId}.repeatMasker.version.txt" "${destDir}/${accessionId}.repeatMasker.version.txt"` if (-s "${buildDir}/${asmId}.repeatMasker.version.txt");
   `ln -s "${buildDir}/${asmId}.repeatModeler.version.txt" "${destDir}/${accessionId}.repeatModeler.version.txt"` if (-s "${buildDir}/${asmId}.repeatModeler.version.txt");
   `ln -s "${buildDir}/${asmId}.repeatModeler.families.fa.gz" "${destDir}/${accessionId}.repeatModeler.families.fa.gz"` if (-s "${buildDir}/${asmId}.repeatModeler.families.fa.gz");
+  `ln -s "${buildDir}/${asmId}.repeatModeler.families.stk.gz" "${destDir}/${accessionId}.repeatModeler.families.stk.gz"` if (-s "${buildDir}/${asmId}.repeatModeler.families.stk.gz");
   `ln -s "${buildDir}/${asmId}.repeatModeler.2bit" "${destDir}/${accessionId}.repeatModeler.2bit"` if (-s "${buildDir}/${asmId}.repeatModeler.2bit");
   `ln -s "${buildDir}/${asmId}.rmod.log.txt" "${destDir}/${accessionId}.rmod.log.txt"` if (-s "${buildDir}/${asmId}.rmod.log.txt");
   `ln -s "${buildDir}/download/${asmId}_assembly_report.txt" "${destDir}/${accessionId}_assembly_report.txt"` if (-s "${buildDir}/download/${asmId}_assembly_report.txt");
