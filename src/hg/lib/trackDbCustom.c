@@ -724,7 +724,7 @@ else if (startsWith("netAlign", type)
 else if(sameWord("bed5FloatScore",       type)
      || sameWord("bed5FloatScoreWithFdr",type))
     {
-    if (bedScoreHasCfgUi(tdb, FALSE)dd )
+    if (bedScoreHasCfgUi(tdb, FALSE) )
         cType = cfgBedScore;
     }
 else if (encodePeakHasCfgUi(tdb))
