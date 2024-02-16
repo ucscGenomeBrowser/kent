@@ -83,6 +83,7 @@ html gnomadV4
     detailsStaticTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
 
     track gnomadV311Test
+    release alpha
     bigDataUrl /hive/data/inside/gnomAD/v3.1.1/2024-02-12/genomes.bb
     parent gnomadVariants
     visibility squish
