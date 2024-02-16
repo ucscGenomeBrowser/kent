@@ -6775,7 +6775,7 @@ return count;
 }
 
 
-boolean bedScoreHasCfgUi(struct trackDb *tdb)
+boolean bedScoreHasCfgUi(struct trackDb *tdb, boolean defaultOff)
 // Confirms that this track has a bedScore Cfg UI
 {
 // Assumes that cfgType == cfgBedScore
@@ -6783,7 +6783,7 @@ if (trackDbSettingClosestToHome(tdb, FILTER_BY))
     return TRUE;
 if (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN))
     return TRUE;
-boolean blocked = FALSE;
+boolean blocked = defaultOff;
 struct trackDbFilter *filterSettings = tdbGetTrackNumFilters( tdb);
 
 if (filterSettings != NULL)
@@ -6796,7 +6796,7 @@ if (filterSettings != NULL)
 
     for (;oneFilter != NULL;oneFilter=oneFilter->next)
         {
-        if (differentString(oneFilter->fieldName,"score")) // scoreFilter is implicit
+        if (defaultOff || differentString(oneFilter->fieldName,"score")) // scoreFilter is implicit
             {                                              // but could be blocked
             one = TRUE;
             break;

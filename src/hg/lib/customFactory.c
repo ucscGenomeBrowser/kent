@@ -4331,8 +4331,11 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		    if (startsWith(LF_BOGUS_FILE_PREFIX, lf->fileName) ||
 			sameString(CT_NO_FILE_NAME, lf->fileName))
 			fileName = "file";
-		    errAbort("Unrecognized format line %d of %s:\n\t%s (note: chrom names are case sensitive, e.g.: correct: 'chr1', incorrect: 'Chr1', incorrect: '1')",
-			lf->lineIx, fileName, emptyForNull(line));
+		    errAbort("Unrecognized format line %d of %s: "
+			     "Please review your track line to ensure you are properly defining "
+			     "the custom track. (A %s data format link containing custom track "
+			     "examples is available at the top of the page.)",
+			lf->lineIx, fileName,emptyForNull(line));
 		    }
 		}
 	    else if (bigDataUrl)
