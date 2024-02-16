@@ -339,7 +339,8 @@ GCF_000956235.1_wasmannia.A_1.0	little fire ant
 GCF_000184785.3_Aflo_1.1	little honeybee
 GCA_024610695.1_qqTetVers1.0.a	longjawed orb weaver (CCGP_RG_IND1 alternate hap 2022)
 GCA_024610705.1_qqTetVers1.0.p	longjawed orb weaver (CCGP_RG_IND1 primary hap 2022)
-GCF_000002765.5_GCA_000002765	malaria parasite P. falciparum (3D7 2016)
+GCA_000002765.3_GCA_000002765	malaria parasite P. falciparum (3D7 2016 genbank)
+GCF_000002765.5_GCA_000002765	malaria parasite P. falciparum (3D7 2016 refseq)
 GCF_000002415.2_ASM241v2	malaria parasite P. vivax (Salvador I 2009)
 GCF_945859705.1_idEpiBalt1.1	marmalade hoverfly (primary hap 2022)
 GCA_012273795.1_ASM1227379v1	masson pine moth

@@ -2,6 +2,7 @@
 ./runBuild GCA_000002305.1_EquCab2.0 mammals Equus_caballus
 ./runBuild GCA_000002595.3_Chlamydomonas_reinhardtii_v5.5 plants Chlamydomonas_reinhardtii
 ./runBuild GCA_000002725.2_ASM272v2 invertebrate Leishmania_major_strain_Friedlin
+./runBuild GCA_000002765.3_GCA_000002765 viral Plasmodium_falciparum_3D7
 ./runBuild GCA_000002875.2_ASM287v2 invertebrate Leishmania_infantum_JPCM5
 ./runBuild GCA_000003205.6_Btau_5.0.1 mammals Bos_taurus
 ./runBuild GCA_000003525.2_BD_ER3_V1 fungi Blastomyces_dermatitidis_ER-3
