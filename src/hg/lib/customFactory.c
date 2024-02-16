@@ -4332,10 +4332,15 @@ while ((line = customPpNextReal(cpp)) != NULL)
 			sameString(CT_NO_FILE_NAME, lf->fileName))
 			fileName = "file";
 		    errAbort("Unrecognized format line %d of %s: "
-			     "Please review your track line to ensure you are properly defining "
-			     "the custom track. (A %s data format link containing custom track "
-			     "examples is available at the top of the page.)",
-			lf->lineIx, fileName,emptyForNull(line));
+			     "If this is a binary file, and the file "
+			     "does not end with one of the common extensions (.bigBed, .bb, .bam, .bw, "
+			     ".cram, .vcf.gz, etc) then you cannot supply the URL alone but also need to "
+			     "specify the file type via a \"track\" line that includes at least the URL and "
+			     "the type and possibly other settings, e.g. color. An example minimal track "
+			     "line is \"track bigDataUrl=<url> type=hic\", which would load a .hic file. "
+			     "For a list of supported file types and more example track lines and all "
+			     "possible track line settings, see the top of the page.",
+			lf->lineIx, fileName);
 		    }
 		}
 	    else if (bigDataUrl)
