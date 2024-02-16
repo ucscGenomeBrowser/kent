@@ -1687,7 +1687,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                 "or, if you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
                 "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.<br>"
                 "For primers, you can use our tool <a href='hgPcr?%s=%s'>In-silico PCR</a>. In-silico PCR searches the entire genome or a set of transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
-                "Contact us if none of these options solve the problem. ",
+                "Contact us if none of these options solve the problem: genome@soe.ucsc.edu",
 		seq->name, oneSize, minSuggested, cartSessionVarName(), cartSessionId(cart), cartSessionVarName(), cartSessionId(cart));
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.
