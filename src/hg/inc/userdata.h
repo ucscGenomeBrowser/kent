@@ -12,10 +12,18 @@ char *userName;
 struct fileInfo *file; // list of files for this user
 };
 
+char *getUserName();
+
 char *getDataDir(char *userName);
 /* Return the full path to the user specific data directory, can be configured via hg.conf
  * on hgwdev, this is /data/apache/userdata/userStore/hash/userName/
  * on the RR, this is /userdata/userStore/hash/userName/ */
+
+char *prefixUserFile(char *userName, char *fname);
+/* Allocate a new string that contains the full per-user path to fname, NULL otherwise */
+
+void removeFileForUser(char *fname, char *userName);
+/* Remove a file for this user if it exists */
 
 struct userFiles *listFilesForUser(char *userName);
 /* Get all the files for a particular user */

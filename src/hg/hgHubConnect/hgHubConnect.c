@@ -1712,7 +1712,7 @@ cartWebEnd();
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubDoHubCheck,
     hgHubCheckUrl, hgHubDoClear, hgHubDoRefresh, hgHubDoDisconnect,hgHubDoRedirect, hgHubDataText, 
-    hgHubConnectRemakeTrackHub, hgHubCreate, NULL};
+    hgHubConnectRemakeTrackHub, hgHubDeleteFile, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -1721,8 +1721,8 @@ long enteredMainTime = clock1000();
 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-if (cgiOptionalString(hgHubCreate))
-    cartEmptyShellNoContent(doCreateHub, hUserCookie(), excludeVars, oldVars);
+if (cgiOptionalString(hgHubDeleteFile))
+    cartEmptyShellNoContent(doRemoveFile, hUserCookie(), excludeVars, oldVars);
 else
     cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgHubConnect", enteredMainTime);

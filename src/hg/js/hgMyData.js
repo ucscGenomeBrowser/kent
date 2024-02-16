@@ -35,6 +35,7 @@ var hubCreate = (function() {
             para.textContent = "No files selected for upload";
             para.classList.add("noFiles");
             uiState.pickedList.prepend(para);
+            removeClearSubmitButtons();
         } else {
             let msg = document.querySelector(".noFiles");
             if (msg) {
@@ -139,79 +140,39 @@ var hubCreate = (function() {
         return progMeter;
     }
 
-
-    function sendFile(file) {
-        // this function can go away once tus is implemented
-        // this is mostly adapted from the mdn example:
-        // https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications#example_uploading_a_user-selected_file
-        // we will still need all the event handlers though
-        const xhr = new XMLHttpRequest();
-        this.progMeter = makeNewProgMeter(file.name);
-        this.xhr = xhr;
-        const endpoint = "../cgi-bin/hgHubConnect";
-        const self = this; // why do we need this?
-        const fd = new FormData();
-
-        this.xhr.upload.addEventListener("progress", (e) => {
-            if (e.lengthComputable) {
-                const pct = Math.round(e.loaded * 100) / e.total;
-                self.progMeter.updateProgress(pct);
-            }
-        }, false);
-
-        // loadend handles abort/error or load events
-        this.xhr.upload.addEventListener("loadend", (e) => {
-            this.progMeter.updateProgress();
-            const canvas = self.progMeter.ctx.canvas;
-            canvas.parentNode.removeChild(canvas);
-            delete uiState.toUpload[file.name];
-            let li = liForFile(file);
-            li.parentNode.removeChild(li);
-            if (Object.keys(uiState.toUpload).length === 0) {
-                removeCancelAllButton();
-            }
-        }, false);
-
-        // for now just treat it like an abort/error
-        this.xhr.upload.addEventListener("timeout", (e) => {
-            progMeter.updateProgress();
-            const canvas = self.progMeter.ctx.canvas;
-            canvas.parentNode.removeChild(canvas);
-        });
-
-        this.xhr.upload.addEventListener("load", (e) => {
-            // TODO:  on load populate the uploaded files side
-            let uploadSection = document.getElementById("uploadedFilesSection");
-            if (uploadSection.style.display === "none") {
-                uploadSection.style.display = "";
-            }
-        });
-
-        // on error keep the file name present and show the error somehow
-        this.xhr.upload.addEventListener("error", (e) => {
-        });
-        this.xhr.upload.addEventListener("abort", (e) => {
-            console.log("request aborted");
-        });
-        this.xhr.upload.addEventListener("timeout", (e) => {
-        });
-
-        // finally we can send the request
-        this.xhr.open("POST", endpoint, true);
-        fd.set("createHub", 1);
-        fd.set("userFile", file);
-        this.xhr.send(fd);
-        uiState.pendingQueue.push([this.xhr,file]);
-
-        addCancelButton(file, this.xhr);
-    }
-
     function submitPickedFiles() {
         let tusdServer = getTusdEndpoint();
+
         let onBeforeRequest = function(req) {
             let xhr = req.getUnderlyingObject(req);
             xhr.withCredentials = true;
         };
+
+        let onSuccess = function(reqFname) {
+            // remove the selected file from the input element and the ul list
+            // FileList is a read only setting, so we have to make
+            // a new one without this reqFname
+            let i;
+            let newFileList = [];
+            for (i = 0; i < uiState.input.files.length; i++) {
+                fname = uiState.input.files[i].name;
+                if (fname !== reqFname) {
+                    newFileList.unshift(uiState.input.files[0]);
+                }
+            }
+            newFileList.reverse();
+            //uiState.input.files = newFileList;
+            // remove the file from the list the user can see
+            let li = document.getElementById(reqFname+"#li");
+            li.parentNode.removeChild(li);
+            // add the file to the data table somehow?
+            removeCancelAllButton();
+        };
+
+        let onError = function(err) {
+            alert(err);
+        };
+
         for (let f in uiState.toUpload) {
             file = uiState.toUpload[f];
             if (useTus) {
@@ -223,6 +184,8 @@ var hubCreate = (function() {
                         fileSize: file.size
                     },
                     onBeforeRequest: onBeforeRequest,
+                    onSuccess: onSuccess(file.name),
+                    onError: onError,
                     retryDelays: [1000],
                 };
                 // TODO: get the uploadUrl from the tusd server
@@ -299,6 +262,61 @@ var hubCreate = (function() {
             togglePickStateMessage(false);
             addClearSubmitButtons();
         }
+    }
+
+    function dataTablePrintSize(data, type, row, meta) {
+        return prettyFileSize(data);
+    }
+
+    function deleteFile(fname) {
+        // Send an async request to hgHubConnect to delete the file
+        // Note that repeated requests, like from a bot, will return 404 as a correct response
+        console.log(`sending delete req for ${fname}`);
+        const xhr = new XMLHttpRequest();
+        const endpoint = "../cgi-bin/hgHubConnect?deleteFile=" + fname;
+        this.xhr = xhr;
+        this.xhr.open("DELETE", endpoint, true);
+        this.xhr.send();
+        // TODO: on the correct return code, delete the row
+    }
+
+    function showExistingFiles(fileList) {
+        // Make the DataTable for each file
+        //$(document).on("draw.dt", function() {alert("table redrawn");});
+        let table = $("#filesTable").DataTable({
+            data: fileList,
+            columnDefs: [{orderable: false, targets: [0,1]}],
+            columns: [
+                {data: "", title: "<input type=\"checkbox\"></input>",
+                    render: function(data, type, row) {
+                        return "<input type=\"checkbox\"></input>";
+                    }
+                },
+                {data: "action", title: "Action",
+                    render: function(data, type, row) {
+                        // TODO: add event handler on delete button
+                        // click to call hgHubDelete file
+                        return "<button class='deleteFileBtn'>Delete</button";
+                    }
+                },
+                {data: "name", title: "File name"},
+                {data: "size", title: "File size", render: dataTablePrintSize},
+                {data: "createTime", title: "Creation Time"},
+            ],
+            order: [[4, 'desc']],
+            initComplete: function(settings, json) {
+                let btns = document.querySelectorAll('.deleteFileBtn');
+                let i;
+                for (i = 0; i < btns.length; i++) {
+                    let fnameNode = btns[i].parentNode.nextElementSibling.childNodes[0];
+                    if (fnameNode.nodeName !== "#text") {continue;}
+                    let fname = fnameNode.nodeValue;
+                    btns[i].addEventListener("click", (e) => {
+                        deleteFile(fname);
+                    });
+                }
+            }
+        });
     }
 
     function checkJsonData(jsonData, callerName) {
@@ -403,6 +421,14 @@ var hubCreate = (function() {
             // TODO: get user name
             // TODO: send a request with username
             // TODO: have tusd respond on server
+            let uploadSection = document.getElementById("uploadedFilesSection");
+            if (uploadSection.style.display === "none") {
+                uploadSection.style.display = "";
+            }
+            if (typeof userFiles !== 'undefined' && typeof userFiles.fileList !== 'undefined' &&
+                    userFiles.fileList.length > 0) { 
+                showExistingFiles(userFiles.fileList);
+            }
             input.addEventListener("change", listPickedFiles);
             // TODO: add event handler for when file is succesful upload
             // TODO: add event handlers for editing defaults, grouping into hub

@@ -11,7 +11,9 @@
 //extern struct cart *cart;	/* This holds cgi and other variables between clicks. */
 
 // the form variable for the track hub wizard
-#define hgHubCreate "createHub"
+#define hgHubDeleteFile "deleteFile"
+void doRemoveFile();
+/* Process the request to remove a file */
 
 void doTrackHubWizard();
 /* Print out the html to allow a user to upload some files from their machine to us */

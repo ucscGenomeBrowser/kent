@@ -16,6 +16,55 @@
 #include "wikiLink.h"
 #include "customTrack.h"
 #include "userdata.h"
+#include "jsonWrite.h"
+
+void doRemoveFile()
+/* Process the request to remove a file */
+{
+char *userName = getUserName();
+if (userName)
+    {
+    char *cgiFileName = cgiOptionalString("deleteFile");
+    char *fileName = prefixUserFile(userName, cgiFileName);
+    if (fileExists(fileName))
+        {
+        fprintf(stderr, "deleting file: '%s'\n", fileName);
+        removeFileForUser(fileName, userName);
+        fprintf(stdout, "Status: 204 No Content\n\n");
+        fflush(stdout);
+        exit(0);
+        }
+    }
+fprintf(stdout, "Status: 404 Not Found\n\n");
+fflush(stdout);
+exit(0);
+}
+
+static void outFilesForUser()
+/* List out the currently stored files for the user and their sizes */
+{
+char *userName = getUserName();
+struct jsonWrite *jw = jsonWriteNew(); // the JSON to return for the client javascript
+jsonWriteObjectStart(jw, NULL);
+if (userName)
+    {
+    struct fileInfo *file;
+    struct userFiles *uf = listFilesForUser(userName);
+    jsonWriteListStart(jw, "fileList");
+    for (file = uf->file; file != NULL; file = file->next)
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "name", file->name);
+        jsonWriteNumber(jw, "size", file->size);
+        jsonWriteDateFromUnix(jw, "createTime", file->creationTime);
+        jsonWriteObjectEnd(jw);
+        }
+    jsonWriteListEnd(jw);
+    }
+jsonWriteObjectEnd(jw);
+jsInlineF("var userFiles = %s;\n", dyStringCannibalize(&jw->dy));
+jsonWriteFree(&jw);
+}
 
 void doTrackHubWizard()
 /* Offer an upload form so users can upload all their hub files */
@@ -29,6 +78,10 @@ jsIncludeFile("hgMyData.js", NULL);
 webIncludeResourceFile("../style/bootstrap.min.css");
 webIncludeResourceFile("../style/gb.css");
 puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");
+puts("<link rel=\"stylesheet\" type=\"text/css\" "
+    "href=\"https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css\">\n");
+puts("<script type=\"text/javascript\" "
+    "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"></script>");
 puts("<div id='hubUpload' class='hubList'>\n");
 
 puts("<div class='row'>\n");
@@ -40,7 +93,7 @@ puts("<p>After choosing files, click \"Create Hub\" to begin uploading the files
 puts("<div class='buttonDiv' id='chooseAndSendFilesRow'>\n");
 puts("<label id='btnForInput' class='button' for=\"uploadedFiles\">Choose files</label>\n");
 puts("</div>\n"); // .buttonDiv
-puts("<div id='fileList'></div>\n");
+puts("<div id='fileList' style=\"clear: right\"></div>\n");
 puts("</div>"); // .tabSection
 puts("</div>\n"); // row
 
@@ -67,60 +120,10 @@ puts("</div>\n");
 puts("</div>\n"); // row
 puts("</div>\n"); // row
 
+outFilesForUser();
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
 // get the current files stored for this user
-}
-
-char *prepBigData(struct cart *cart, char *fileName, char *binVar, char *fileVar)
-{
-fprintf(stderr, "prepping bigData for %s\n", fileName);
-struct hashEl *hel, *helList = hashElListHash(cart->hash);;
-for (hel = helList; hel != NULL; hel = hel->next)
-{
-fprintf(stderr, "cart var '%s': '%s'\n", hel->name, (char *)hel->val);
-}
-fflush(stderr);
-char buf[1024];
-char *retFileName = NULL;
-char *cFBin = cartOptionalString(cart, binVar);
-char *cF = cartOptionalString(cart, fileVar);
-char *offset = NULL;
-unsigned long size = 0;
-if (cFBin)
-    {
-    // cFBin already contains memory offset and size (search for __binary in cheapcgi.c)
-    safef(buf,sizeof(buf),"memory://%s %s", fileName, cFBin);
-    char *split[3];
-    int splitCount = chopByWhite(cloneString(cFBin), split, sizeof(split));
-    if (splitCount > 2) {errAbort("hgHubConnect: extra garbage in %s", binVar);}
-    offset = (char *)sqlUnsignedLong(split[0]);
-    size = sqlUnsignedLong(split[1]);
-    }
-else
-    {
-    safef(buf, sizeof(buf),"memory://%s %lu %lu",
-	  fileName, (unsigned long) cF, (unsigned long) strlen(cF));
-    offset = (char *)sqlUnsignedLong(cF);
-    size = (unsigned long)strlen(cF);
-    }
-if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
-    {
-    //dumpStack("prepBigData: fileName = '%s'\n", fileName);
-    //errAbort("prepBigData: fileName = '%s'\n", fileName);
-    // figure out if user is logged in:
-    //   1. if so, save 'fileName', which is really a pointer to memory, to username encoded directory
-    //   2. Turn buf into a web accessible url to this data so it will be parsed
-    //   as a track correctly
-    char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
-    if (userName)
-        {
-        // storeUserFiles returns a URL to a track
-        // after sucessfully saving the data into /userdata
-        retFileName = storeUserFile(userName, fileName, offset, size);
-        }
-    }
-return retFileName;
 }
 
 #define FILEVAR "userFile__filename"
@@ -140,7 +143,7 @@ fprintf(stderr, "hashEl name: '%s', value: '%s'\n", (char *)hel->name, (char *)h
 */
 fprintf(stderr, "fileName is: %s\n", fileName);
 fflush(stderr);
-char *pathToFile = prepBigData(cart, fileName, FILEVARBIN, FILEVAR);
+char *pathToFile = "tempPath"; //prepBigData(cart, fileName, FILEVARBIN, FILEVAR);
 puts("Content-Type:text/javascript\n");
 printf("{\"status\": \"%s is uploaded to %s\"}\n", cgiOptionalString("userFile__filename"), pathToFile);
 fflush(stdout);

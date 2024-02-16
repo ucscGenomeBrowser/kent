@@ -44,10 +44,24 @@ fprintf(stderr, "userDataDir = '%s'\n", newDataDir->string);
 return dyStringCannibalize(&newDataDir);
 }
 
-void removeTrack()
-/* Removes a custom track for this user */
+char *prefixUserFile(char *userName, char *fname)
+/* Allocate a new string that contains the full per-user path to fname, NULL otherwise */
 {
-//char *userName = getUserName();
+char *pathPrefix = getDataDir(userName);
+if (pathPrefix)
+    return catTwoStrings(pathPrefix, fname);
+else
+    return NULL;
+}
+
+void removeFileForUser(char *fname, char *userName)
+/* Remove a file for this user if it exists */
+{
+// The file to remove must be prefixed by the hg.conf userDataDir
+if (!startsWith(getDataDir(userName), fname))
+    return;
+if (fileExists(fname))
+    mustRemove(fname);
 }
 
 void uploadTrack()
@@ -62,7 +76,7 @@ struct userFiles *listFilesForUser(char *userName)
 struct userFiles *userListing;
 AllocVar(userListing);
 char *path = getDataDir(userName);
-struct fileInfo *fiList = listDirX(path,NULL,TRUE);
+struct fileInfo *fiList = listDirX(path,NULL,FALSE);
 userListing->userName = userName;
 userListing->file = fiList;
 return userListing;
