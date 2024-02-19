@@ -9,9 +9,9 @@ setenv LASTREVIEW2DAY  2024-01-22           # v460 preview2
 setenv preview2Subversion      # empty string unless mistake, otherwise .1 etc
 
 # set these three for final build:  increment NN and copy date from TODAY to LASTWEEK
-setenv BRANCHNN 460                    # increment for new build
-setenv TODAY 2024-01-29                    # v460 final
-setenv LASTWEEK 2024-01-08                 # v459 final
+setenv BRANCHNN 461                    # increment for new build
+setenv TODAY 2024-02-19                    # v461 final
+setenv LASTWEEK 2024-01-29                 # v460 final
 
 setenv baseSubversion                  # empty string unless mistake, otherwise .1 etc (warning: fixed for _base but not _branch)
 

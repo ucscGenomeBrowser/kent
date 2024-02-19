@@ -7,7 +7,6 @@ shortLabel Mappability
 longLabel Single-read and multi-read mappability by Umap
 visibility hide
 html html/mappability.html
-pennantIcon New red ../goldenPath/newsarch.html "Released November 30th 2023"
 
     track umapBigBed
     parent mappability on

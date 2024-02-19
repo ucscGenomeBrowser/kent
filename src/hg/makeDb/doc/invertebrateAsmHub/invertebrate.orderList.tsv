@@ -11,6 +11,7 @@ GCF_943734745.1_idAnoDarlMG_H_01	American malaria mosquito (primary hap 2022)
 GCA_022747625.1_ioHetAmer1.0.a	American ruby spot damselfly (1083.01 alternate hap 2022)
 GCA_022747635.1_ioHetAmer1.0.p	American ruby spot damselfly (1083.01 primary hap 2022)
 GCA_900088365.1_Bl71nemr	amphioxus (2018)
+GCA_035083965.1_klBraLanc5.hap2	amphioxus (hap2 2024)
 GCF_000764305.2_Hazt_2.0.2	amphipods H.azteca (HAZT.00-mixed v2.0.2 2019)
 GCA_001587735.2_Phaw_5.0	amphipods P.hawaiensis (Chicago-F 2018)
 GCF_000143395.1_Attacep1.0	ant A.cephalotes
@@ -335,11 +336,13 @@ GCF_000755165.1_ASM75516v1	Leishmania panamensis (MHOM/PA/94/PSC-1 2014 kinetopl
 GCA_009770625.1_UL_Ltar_1.0	Leishmania tarentolae (Parrot-TarII 2019)
 GCF_001293395.1_ASM129339v1	Leptomonas pyrrhocoris (H10 2015 kinetoplastids)
 GCF_030625045.1_CSIRO_AGI_Agris_v1	lesser wax moth (CSIRO2021 2023)
+GCA_947623445.1_kaClaLepa1.1	light-bulb sea squirt (2022)
 GCF_000956235.1_wasmannia.A_1.0	little fire ant
 GCF_000184785.3_Aflo_1.1	little honeybee
 GCA_024610695.1_qqTetVers1.0.a	longjawed orb weaver (CCGP_RG_IND1 alternate hap 2022)
 GCA_024610705.1_qqTetVers1.0.p	longjawed orb weaver (CCGP_RG_IND1 primary hap 2022)
-GCF_000002765.5_GCA_000002765	malaria parasite P. falciparum (3D7 2016)
+GCA_000002765.3_GCA_000002765	malaria parasite P. falciparum (3D7 2016 genbank)
+GCF_000002765.5_GCA_000002765	malaria parasite P. falciparum (3D7 2016 refseq)
 GCF_000002415.2_ASM241v2	malaria parasite P. vivax (Salvador I 2009)
 GCF_945859705.1_idEpiBalt1.1	marmalade hoverfly (primary hap 2022)
 GCA_012273795.1_ASM1227379v1	masson pine moth
