@@ -2421,7 +2421,6 @@ type bigBed 9 +
 urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/hg19/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
-pennantIcon New red ../goldenPath/newsarch.html#120723 "Released Dec. 7, 2023"
 
 
 track jaspar2024 override

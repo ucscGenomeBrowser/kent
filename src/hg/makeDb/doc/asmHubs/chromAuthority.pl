@@ -46,6 +46,16 @@ if ( ! (($asmLevel =~ m/chromosome/i) || ($asmLevel =~ m/complete/i)) ) {
 my $gbRs = "genbankBuild";
 $gbRs = "refseqBuild" if ($gcX =~ m/GCF/);
 my $buildDir="/hive/data/genomes/asmHubs/$gbRs/$gcX/$d0/$d1/$d2/$asmId";
+my $authorityTxt="$buildDir/chromAuthority.txt";
+
+# is there a manual override in place ?
+if ( -s "$authorityTxt" ) {
+    my $ca = `cat $authorityTxt`;
+    chomp $ca;
+    printf "%s\n", $ca;
+    exit 0;
+}
+
 my $chromAlias = "$buildDir/trackData/chromAlias/$asmId.chromAlias.txt";
 
 if (! -s "$chromAlias") {

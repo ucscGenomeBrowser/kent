@@ -724,7 +724,7 @@ else if (startsWith("netAlign", type)
 else if(sameWord("bed5FloatScore",       type)
      || sameWord("bed5FloatScoreWithFdr",type))
     {
-    if (bedScoreHasCfgUi(tdb))
+    if (bedScoreHasCfgUi(tdb, FALSE) )
         cType = cfgBedScore;
     }
 else if (encodePeakHasCfgUi(tdb))
@@ -745,7 +745,13 @@ else if (startsWith("bed ", type) || startsWith("big", type) || startsWith("bedD
         {
         char *words[3];
         int wordCount = chopLine(cloneString( type), words);
-        if ((  ((wordCount > 1) && (atoi(words[1]) >= 5))
+        if (sameString("bigBed", type) && (wordCount == 1)) // no following words
+            {
+            cType = cfgBedScore;
+	    if (!bedScoreHasCfgUi(tdb, TRUE))
+		cType = cfgNone;
+            }
+        else if ((  ((wordCount > 1) && (atoi(words[1]) >= 5))
             || trackDbSetting(tdb, "scoreMin") != NULL)
         &&  // Historically needed 'bed n .' but encode didn't follow bed n .
             (  (wordCount >= 3)
@@ -753,7 +759,7 @@ else if (startsWith("bed ", type) || startsWith("big", type) || startsWith("bedD
             {
             cType = cfgBedScore;
 
-	    if (!bedScoreHasCfgUi(tdb))
+	    if (!bedScoreHasCfgUi(tdb, FALSE))
 		cType = cfgNone;
 
 	    // FIXME: UGLY SPECIAL CASE should be handled in trackDb!
