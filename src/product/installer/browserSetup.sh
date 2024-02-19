@@ -761,9 +761,21 @@ function installRedhat () {
     fi
     
     # try to activate the powertools repo. Exists on CentOS and Rocky but not Redhat
-    set +o pipefail
-    yum config-manager --set-enabled powertools || true
-    set -o pipefail
+    # this may only be necessary for chkconfig? If so, we probably want to avoid using chkconfig.
+    if grep 'Red Hat' /etc/redhat-release ; then
+        if yum repolist | grep -i codeready ; then
+            echo codeready repo enabled
+        else
+            echo2 This is a RHEL server and the codeready repository is not enabled. 
+            echo2 Please activate it and also the EPEL reposity, then run the browserSetup command again. 
+            exit 1
+        fi
+    else
+        set +o pipefail
+        echo2 Not on RHEL: Enabling the powertools repository
+        yum config-manager --set-enabled powertools || true
+        set -o pipefail
+    fi
     
     # install apache if not installed yet
     if [ ! -f /usr/sbin/httpd ]; then
