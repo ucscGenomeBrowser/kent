@@ -34,8 +34,49 @@ def parseArgs():
         logging.basicConfig(level=logging.INFO)
     return args, options
 
-def parseMetaTsv(fname, meta):
-    " parse a meta.tsv file and return as a dict of trackName -> dict of key->val "
+def errAbort(msg):
+    " print and abort) "
+    logging.error(msg)
+    sys.exit(1)
+
+def parseMetaRa(fname):
+    """parse tracks.ra or tracks.txt and return as a dict of trackName -> dict of key->val """
+    logging.debug("Reading %s as .ra" % fname)
+    trackName = None
+    stanzaData = {}
+    ret = {}
+    for line in open(fname):
+        line = line.strip()
+        if line.startswith("#"):
+            continue
+        if line=="":
+            if len(stanzaData)==0:
+                # double newline
+                continue
+            if trackName is None:
+                errAbort("File %s has a stanza without a track name" % fname)
+            if trackName in ret:
+                errAbort("File %s contains two stanzas with the same track name '%s' " % trackName)
+
+            ret[trackName] = stanzaData
+            stanzaData = {}
+            trackName = None
+            continue
+
+        key, val = line.split(" ", maxsplit=1)
+        if key == "track":
+            trackName = val
+            continue
+        else:
+            stanzaData[key] = val
+
+    if len(stanzaData)!=0:
+        ret[trackName] = stanzaData
+    logging.debug("Got %s from .ra" % str(ret))
+    return ret
+
+def parseMetaTsv(fname):
+    " parse a tracks.tsv file and return as a dict of trackName -> dict of key->val "
     headers = None
     meta = {}
     logging.debug("Parsing %s as tab-sep" % fname)
@@ -56,24 +97,31 @@ def parseMetaTsv(fname, meta):
         meta[key] = rowDict
     return meta
 
-def parseMetaJson(fname, meta):
+def parseMetaJson(fname):
     " parse a json file and merge it into meta and return "
     logging.debug("Reading %s as json" % fname)
     newMeta = json.load(open(fname))
-    meta.update(newMeta)
-    return meta
+    return newMeta
 
 def parseMeta(inDir):
     " parse a tab-sep file with headers and return a dict firstField -> dictionary "
     fname = join(inDir, "tracks.tsv")
     meta = {}
     if isfile(fname):
-        meta = parseMetaTsv(fname, meta)
+        tsvMeta = parseMetaTsv(fname)
+        meta = allMetaOverride(meta, tsvMeta)
 
     fname = join(inDir, "tracks.json")
     if isfile(fname):
-        meta = parseMetaJson(fname, meta)
+        jsonMeta = parseMetaJson(fname)
+        meta = allMetaOverride(meta, jsonMeta)
 
+    fname = join(inDir, "tracks.ra")
+    if isfile(fname):
+        raMeta = parseMetaRa(fname)
+        meta = allMetaOverride(meta, raMeta)
+
+    logging.debug("Got overrides from %s: %s" % (inDir, str(meta)))
     return meta
 
 def writeHubGenome(ofh, db, inMeta):
@@ -174,7 +222,7 @@ def writeStanza(ofh, indent, tdb):
     track = tdb["track"]
 
     shortLabel = tdb.get("shortLabel", track)
-    visibility = tdb.get("visibility", "hide")
+    visibility = tdb.get("visibility", "pack")
     longLabel  = tdb.get("longLabel", shortLabel)
 
     trackType = tdb["type"]
@@ -198,15 +246,31 @@ def writeStanza(ofh, indent, tdb):
     ofh.write("\n")
 
 def metaOverride(tdb, meta):
-    " for every key in tdb, check if meta contains a value for that and overwrite it in tdb with that value "
+    " override track info for one single track, from meta into tdb "
     if not tdb["track"] in meta:
         return
 
     trackMeta = meta[tdb["track"]]
 
-    for key, val in tdb.items():
-        if key in trackMeta:
-            tdb[key] = trackMeta[key]
+    for key, val in trackMeta.items():
+        tdb[key] = trackMeta[key]
+
+def allMetaOverride(tdb, meta):
+    " override track info for all tracks, from meta into tdb "
+    if meta is None:
+        return tdb
+
+    for trackName in meta:
+        trackMeta = meta[trackName]
+        if trackName not in tdb:
+            tdb[trackName] = {}
+
+        trackTdb = tdb[trackName]
+
+        for key, val in trackMeta.items():
+            trackTdb[key] = val
+
+    return tdb
 
 def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
     " given a dict with basename -> type -> filenames, write track entries to ofh "
@@ -219,7 +283,7 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
             subDir = inDir
         else: # container tracks
             subDir = join(inDir, parentName)
-        parentMeta = parseMeta(subDir)
+        parentMeta = parseMeta(inDir)
 
         indent = 0
         parentHasViews = False
@@ -245,6 +309,7 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
             indent = 4
 
             if parentHasViews:
+                groupMeta = parseMeta(subDir)
                 tdbViewPeaks = {
                         "track" : parentName+"ViewPeaks",
                         "shortLabel" : parentName+" Peaks",
@@ -269,6 +334,8 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
                         }
                 metaOverride(tdbViewSig, parentMeta)
                 writeStanza(ofh, indent, tdbViewSig)
+        else:
+                groupMeta = parseMeta(subDir)
 
         for trackBase, typeFnames in typeDict.items():
             for fileType, absFnames in typeFnames.items():
@@ -291,8 +358,9 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
                 else:
                     parentPrefix = ""
 
+                trackName = parentPrefix+trackBase+"-"+fileType
                 tdb = {
-                        "track" : parentPrefix+trackBase+"-"+fileType,
+                        "track" : trackName,
                         "shortLabel": trackBase+labelSuff,
                         "longLabel": trackBase+labelSuff,
                         "visibility" : "dense",
@@ -304,14 +372,25 @@ def writeTdb(inDir, dirDict, dirType, tdbDir, ofh):
                     tdb["parent"] = parentName
 
                 if parentHasViews:
+                    onOff = "on"
+                    if trackName in groupMeta and "visibility" in groupMeta[trackName]:
+                        vis = groupMeta[trackName]["visibility"]
+                        if vis=="hide":
+                            onOff = "off"
+                        del tdb["visibility"]
+
                     if fileType=="bigBed":
-                        tdb["parent"] = parentName+"ViewPeaks"+" on"
+                        tdb["parent"] = parentName+"ViewPeaks"+" "+onOff
                         tdb["subGroups"] = "view=PK"
                     else:
-                        tdb["parent"] = parentName+"ViewSignal"+" on"
+                        tdb["parent"] = parentName+"ViewSignal"+" "+onOff
                         tdb["subGroups"] = "view=SIG"
 
-                metaOverride(tdb, parentMeta)
+                metaOverride(tdb, groupMeta)
+
+                if trackName in groupMeta and "visibility" in groupMeta[trackName]:
+                    del tdb["visibility"]
+
                 writeStanza(ofh, indent, tdb)
 
 def makeTrackHub(db, options):
