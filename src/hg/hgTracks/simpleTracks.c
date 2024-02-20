@@ -4988,6 +4988,7 @@ if (autoScale == NULL)
 char *windowingFunction = cartOptionalStringClosestToHome(cart, tdb, parentLevel, WINDOWINGFUNCTION);
 if (windowingFunction == NULL)
     wigCart->windowingFunction = wiggleWindowingMean;
+wigCart->alwaysZero = TRUE;
 
 if (tg->summary)
     summaryToPixels(tg->summary, pre);

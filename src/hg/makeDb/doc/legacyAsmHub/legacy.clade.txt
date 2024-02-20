@@ -100,6 +100,7 @@ GCA_004024665.1_LemCat_v1_BIUU	primates
 GCA_004024745.1_CatWag_v1_BIUU	mammals
 GCA_004024865.1_RouAeg_v1_BIUU	mammals
 GCA_004024905.1_TapInd_v1_BIUU	mammals
+GCA_004025005.1_TadBra_v1_BIUU	mammals
 GCA_004025105.1_TamTet_v1_BIUU	mammals
 GCA_004026685.1_MonMon_M_v1_BIUU	mammals
 GCA_004026725.1_OnyTor_v1_BIUU	mammals
@@ -113,8 +114,10 @@ GCA_004027675.1_CasCan_v1_BIUU	mammals
 GCA_004027815.1_NycCou_v1_BIUU	primates
 GCA_004027855.1_ChoDid_v1_BIUU	mammals
 GCA_004027935.1_ChrAsi_v1_BIUU	mammals
+GCA_004363495.1_PhoPho_v1_BIUU	mammals
 GCA_004115215.3_mOrnAna1.pri.v3	mammals
 GCA_004115265.2_mRhiFer1_v1.p	mammals
+GCA_004363515.1_IniGeo_v1_BIUU	mammals
 GCA_004365145.1_OryAfe_v1_BIUU	mammals
 GCA_004365275.1_TupTan_v1_BIUU	mammals
 GCA_006229205.1_meerkat_22Aug2017_6uvM2_HiC	mammals
@@ -203,6 +206,7 @@ GCA_030684315.1_sSteTig4.hap1	vertebrate
 GCA_030867065.1_rAllMis1	vertebrate
 GCA_030867095.1_rAllMis1	vertebrate
 GCA_030936135.1_bGavSte3.hap2	birds
+GCA_036323735.1_GRCr8	mammals
 GCA_900006655.3_Susie3	primates
 GCA_900094665.2_CAROLI_EIJ_v1.1	mammals
 GCA_900324465.2_fAnaTes1.2	fish
@@ -326,6 +330,7 @@ GCF_001891065.1_H_comes_QL1_v1	fish
 GCF_002007445.1_ASM200744v2	mammals
 GCF_002021735.1_Okis_V1	fish
 GCF_002093755.1_Dser1.0	invertebrate
+GCF_002099425.1_phaCin_unsw_v4.1	mammals
 GCF_002162155.1_WEW_v2.0	plants
 GCF_002201575.1_ASM220157v1	mammals
 GCF_002263795.1_ARS-UCD1.2	mammals
