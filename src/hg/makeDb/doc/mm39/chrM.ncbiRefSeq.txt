@@ -32,6 +32,9 @@ zcat $ncbiGffGz \
 
 grep NC_005089.1 raw.$asmId.gp > NC_005089.1.gp
 sed -e 's/NC_005089.1/chrM/g;' NC_005089.1.gp > chrM.gp
+hgLoadGenePred -genePredExt mm39 chrMRefSeq chrM.gp
+hgsql -N -e 'select * from chrMRefSeq;' mm39 > to.add.chrM.sql.tsv
+hgsql -e 'drop table chrMRefSeq;' mm39
 
 # save the existing files in case they are broken during this process:
 hgsql -N -e 'select * from ncbiRefSeq;' mm39 > before.mm39.ncbiRefSeq.tsv
