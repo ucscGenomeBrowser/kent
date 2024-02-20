@@ -31,8 +31,6 @@ include toothKrivanek.ra
 include hippocampusAyhan.ra
 include brainDevRegions.ra
 include t2t.ra alpha
-include multiz100Logo.ra alpha
-include multiz30Logo.ra alpha
 
 include gtexEqtlHighConf.ra
 
