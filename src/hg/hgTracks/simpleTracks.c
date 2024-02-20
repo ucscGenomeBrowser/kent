@@ -2922,7 +2922,7 @@ for (ref = exonList; TRUE; )
 
             // construct a string that tells the user about the codon frame situation of this exon
             char *frameText = "";
-            if (gp->exonFrames && isExon)
+            if ((gp != NULL) && gp->exonFrames && isExon)
                 {
                 // start/end-phases are in the direction of transcription:
                 // if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
