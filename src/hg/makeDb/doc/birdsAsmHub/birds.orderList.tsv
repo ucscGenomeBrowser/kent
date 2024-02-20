@@ -106,7 +106,8 @@ GCF_001715985.3_ASM171598v3	golden-collared manakin
 GCA_902153765.2_bAquChr1.4_alternate_haplotype	golden eagle (v1.4 alternate hap 2021)
 GCF_900496995.4_bAquChr1.4	golden eagle (v1.4 2021)
 GCA_003413605.1_Chrysolophus_pictus_GenomeV1.0	golden pheasant
-GCF_000708925.1_ASM70892v1	great cormorant
+GCF_000708925.1_ASM70892v1	great cormorant (BGI_N336 2014)
+GCA_963921805.1_bPhaCar2.1	great cormorant (primary hap 2024)
 GCA_013368595.1_bNycGra1.alt	great potoo (bNycGra1 alternate hap 2020)
 GCA_013368605.1_bNycGra1.pri	great potoo (bNycGra1 primary hap 2020)
 GCF_001522545.3_Parus_major1.1	great tit
@@ -130,6 +131,7 @@ GCA_030867165.1_bOpiHoa1.hap2	hoatzin (hap2 2023)
 GCF_000738735.6_ASM73873v6	hooded crow (v6 S_Up_H32 2022)
 GCA_027406555.1_bHaeMex1.alt	house finch (bHaeMex1 alternate hap 2022)
 GCF_027477595.1_bHaeMex1.pri	house finch (bHaeMex1 primary hap 2022 refseq)
+GCA_036417665.1_bPasDom1.hap1	house sparrow (hap1 2024)
 GCA_027474345.1_bSphHub1.alt	Humboldt's penguin (bSphHub1 alternate hap 2022)
 GCA_027474245.1_bSphHub1.pri	Humboldt's penguin (bSphHub1 primary hap 2022)
 GCA_009936445.2_ASM993644v2	hyacinth macaw (LEKZKR9XQ3 2022)
@@ -147,6 +149,7 @@ GCF_009829145.1_bChiLan1.pri	lance-tailed manakin (2020)
 GCA_009829205.1_bChiLan1.alt	lance-tailed manakin (alternate hap 2020)
 GCA_023634305.1_bFalBia1.alt	lanner falcon (bFalBia1 alternate hap 2022)
 GCF_023638135.1_bFalBia1.pri	lanner falcon (bFalBia1 primary hap 2022 refseq)
+GCA_963932225.1_bLarFus1.1	lesser black-backed gull (primary hap 2024)
 GCA_017639645.1_bFalNau1.mat	lesser kestrel (alternate hap 2021)
 GCF_017639655.2_bFalNau1.pat	lesser kestrel (v2 2021)
 GCF_026119805.1_pur_lepc_1.0	lesser prairie-chicken (F22 2022)
@@ -156,7 +159,8 @@ GCA_003342835.1_rhePen1	lesser rhea (206185 2018)
 GCF_000687185.1_ASM68718v1	little egret
 GCA_023637925.1_DD_ASM_B1a	long-tailed hermit (PSU5 alternate hap 2022)
 GCA_023637945.1_DD_ASM_B1	long-tailed hermit (PSU5 primary hap 2022)
-GCF_000695195.1_ASM69519v1	Macqueen's bustard
+GCF_000695195.1_ASM69519v1	Macqueen's bustard (BGI_N324 2014)
+GCA_036417535.1_bChlMac1.mat	Macqueen's bustard (bChlMac1 2024)
 GCA_017639665.1_bCicMag1.alt	maguari stork (bCicMag1 alternate hap 2021)
 GCA_017639555.1_bCicMag1.pri	maguari stork (bCicMag1 primary hap 2021)
 GCA_008746955.1_CAU_Wild1.0	mallard CAU_Wild1.0
@@ -184,6 +188,7 @@ GCA_031468815.1_bMorBas2.hap2	northern gannet (hap2 2023)
 GCA_929447715.1_bAccGen1.1_alternate_haplotype	northern goshawk (bAccGen1 v1 alternate hap 2022)
 GCA_929443795.2_bAccGen1.2	northern goshawk (bAccGen1 primary hap v2 2022 genbank)
 GCF_929443795.1_bAccGen1.1	northern goshawk (bAccGen1 primary hap v1 2022 refseq)
+GCA_963932015.1_bAnaAcu1.1	northern pintail (primary hap 2024)
 GCA_014706295.1_ASM1470629v1	Obi paradise-crow (lycPyr6 2020)
 GCF_003343035.1_aptRow1	Okarito brown kiwi
 GCA_010365825.1_OtuSun1.0	Oriental scops-owl (oso-nibr-517 2020)
