@@ -4606,7 +4606,7 @@ a haplotype display. For more information on this display, please see the
 <DIV class="vcfPhasedTrio"><span class="types vcfPhasedTrio"></span>
 <div class="format"><code>type vcfPhasedTrio</code></div>
     <P>
-    blah
+There are no extra options that can appear on the type vcfPhasedTrio line.
     </P>
 </DIV>
 
