@@ -74,12 +74,12 @@ Finally, both scores were rounded to two decimal points for easier interpretatio
 For hg38, we attempted to use updated gene positions using a few different datasets since 
 gene symbols have been updated many times since GENCODEv19. A summary of the workflow
 can be seen below, with each subsequent step being used only for genes where mapping failed:</p>
-<ul>
-<li>1. Gene symbols were mapped using MANE1.0. &lt; 2000 items failed mapping here.</li>
-<li>2. Mapping with GENCODEv45 was attempted.</li>
-<li>3. Mapping with GENCODEv20 was attempted. At this point, 448 items were not mapped.</li>
-<li>4. Finally, any missing items were lifted using the hg19 track. 19/448 items failed
-mapping due to their regions having been split from hg19 to hg38.</li></ul>
+<ol>
+<li>Gene symbols were mapped using MANE1.0. &lt; 2000 items failed mapping here.</li>
+<li>Mapping with GENCODEv45 was attempted.</li>
+<li>Mapping with GENCODEv20 was attempted. At this point, 448 items were not mapped.</li>
+<li>Finally, any missing items were lifted using the hg19 track. 19/448 items failed
+    mapping due to their regions having been split from hg19 to hg38.</li></ol>
 
 <p>
 In summary, the hg19 track was mapped using the original GENCODEv19 mappings, and a series
