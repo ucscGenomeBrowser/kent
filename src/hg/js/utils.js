@@ -3994,14 +3994,14 @@ function mouseIsOverItem(ev, ele, fudgeFactor=25) {
     return false;
 }
 
-function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip, originalEl) {
+function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip) {
     /* Called after 100ms of the mouse being stationary, show a new tooltip
      * if we are over a new mouseover-able element */
     e = triggeringMouseMoveEv;
     if (mousedNewItem && !(mouseIsOverPopup(e, currTooltip, 0))) {
         mousemoveController.abort();
         hideMouseoverText(currTooltip);
-        showMouseoverText(triggeringMouseMoveEv, originalEl);
+        showMouseoverText(triggeringMouseMoveEv);
     }
 }
 
@@ -4010,7 +4010,7 @@ function mousemoveHelper(e) {
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
-    mousemoveTimer = setTimeout(mousemoveTimerHelper, 100, e, this, lastMouseoverEle);
+    mousemoveTimer = setTimeout(mousemoveTimerHelper, 100, e, this);
     // we are moving the mouse away, hide the tooltip regardless how much time has passed
     if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
         mousemoveController.abort();
@@ -4136,11 +4136,9 @@ function addMouseover(ele1, text = null, ele2 = null) {
         mouseoverContainer.style.fontSize =  tooltipTextSize + "px";
         document.body.append(mouseoverContainer);
     }
-    // create a mouseover element out of text, or, if text is null, use already
-    // created ele2 and just show it
-    newEl = ele2;
-    ele1.setAttribute("mouseoverText", text);
+
     if (ele1) {
+        ele1.setAttribute("mouseoverText", text);
         ele1.addEventListener("mouseover", showMouseover, {capture: true});
     }
 }

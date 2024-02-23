@@ -57,7 +57,7 @@ struct cdwBedType *cdwBedTypeFind(char *name);
 struct cdwBedType *cdwBedTypeMayFind(char *name);
 /* Return cdwBedType of given name, just return NULL if not found. */
 
-void cdwValidateTagName(char *tag);
+void cdwValidateTagName(char *tag, struct hash *schemaHash);
 /* Make sure that tag is one of the allowed ones. */
 
 struct slPair *cdwFormatList();
