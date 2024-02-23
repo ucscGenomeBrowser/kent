@@ -109,10 +109,14 @@ BA.2.86:
     # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1072
     representative: OY747147.1
     ranges: [ [ 21765, 21770 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606
-              [ 21610, 21624 ] ] # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1347
-    sites: [ 21302, 21304, 21305, # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1190
+              [ 21610, 21624 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1347
+              [ 21625, 21631 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
+              [ 22194, 22196 ] ] # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
+    sites: [ 58, 59,   # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1089
+             13427,    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1313
+             21302, 21304, 21305, # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1190
            ]
-    reversions: [ T21711C, C22032T, A22033C, G22034A, A23012G, G26610A ]
+    reversions: [ T21711C, C22032T, A22033C, G22034A, A22770G, A23012G, G26610A ]
 
 BA.4:
     # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.
