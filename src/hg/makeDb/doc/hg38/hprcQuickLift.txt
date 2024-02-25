@@ -32,4 +32,15 @@ awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n >
 bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab tmp.bigChain.bigLink sizes/$o  bigChain/$o.link.bb
 done
 
+mkdir -p /gbdb/hg38/quickLift
+rm tableData.txt
+for i in bigChain/*.link.bb
+do
+s=`basename $i .link.bb`.bb
+db=`basename $s .bb`
+f=/gbdb/hg38/quickLift/$s
+echo ln -s `pwd`/bigChain/$s $f
+echo "0 hg38 $db $f" | tr ' ' '\t' >> tableData.txt
+done
 
+hgLoadSqlTab hgcentraltest quickLiftChain $HOME/kent/src/hg/lib/quickLiftChain.sql tableData.txt
