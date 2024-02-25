@@ -6775,6 +6775,27 @@ return count;
 }
 
 
+boolean bedHasFilters(struct trackDb *tdb)
+// Does track have filters
+{
+if (trackDbSettingClosestToHome(tdb, FILTER_BY))
+    return TRUE;
+if (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN))
+    return TRUE;
+
+struct trackDbFilter *filterSettings = tdbGetTrackNumFilters( tdb);
+if (filterSettings != NULL)
+    return TRUE;
+filterSettings = tdbGetTrackTextFilters( tdb);
+if (filterSettings != NULL)
+    return TRUE;
+filterSettings = tdbGetTrackFilterByFilters( tdb);
+if (filterSettings != NULL)
+    return TRUE;
+
+return FALSE;
+}
+
 boolean bedScoreHasCfgUi(struct trackDb *tdb)
 // Confirms that this track has a bedScore Cfg UI
 {
