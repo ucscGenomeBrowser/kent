@@ -582,7 +582,7 @@ if(feelingLucky)
        results. */
     else 
 	{
-	cartWebStart(cart, database, "%s (%s) BLAT Results", trackHubSkipHubName(organism), database);
+	cartWebStart(cart, trackHubSkipHubName(database), "%s (%s) BLAT Results", trackHubSkipHubName(organism), trackHubSkipHubName(database));
 	showAliPlaces(pslName, faName, customText, database, qType, tType, organism, FALSE);
 	cartWebEnd();
 	}
@@ -1478,7 +1478,7 @@ boolean isJson= sameWordOk(output, "json");
 boolean isPslRaw= sameWordOk(output, "pslRaw");
 
 if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
-    cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), db);
+    cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), trackHubSkipHubName(db));
 
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))

@@ -30,6 +30,7 @@
 #include "barChartBed.h"
 #include "interact.h"
 #include "hubConnect.h"
+#include "trackHub.h"
 #include "errCatch.h"
 
 static char *nbForNothing(char *val)
@@ -766,11 +767,11 @@ if (curTrackDescribesCurTable())
     if (!isCustomTrack(table) && !hashFindVal(fullTableToTdbHash, table))
         hashAdd(fullTableToTdbHash, table, curTrack);
     htmlOpen("Schema for %s - %s", curTrack->shortLabel, curTrack->longLabel);
-    showSchema(database, curTrack, table);
+    showSchema(trackHubSkipHubName(database), curTrack, table);
     htmlClose();
     }
 else
-    doTableSchema(database, curTable, conn);
+    doTableSchema(trackHubSkipHubName(database), curTable, conn);
 }
 
 struct asObject *asForTableNoTdb(struct sqlConnection *conn, char *table)
