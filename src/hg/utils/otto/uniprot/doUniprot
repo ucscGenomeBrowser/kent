@@ -48,6 +48,8 @@ manualTaxIdDbs = {
 
 # see also covidCheck.sh
 notAutoDbs = [
+# got errors due to short contigs in galGal6, just skipping
+"galGal6",
 # do not run on wuhCor1 - wuhCor1 has a special daily otto job in /hive/data/genomes/wuhCor1/bed/uniprot
 # because UniProt releases SARS-CoV-2 much more often
 "wuhCor1",
@@ -905,10 +907,12 @@ def run(cmd, ignoreErr=False):
     logging.debug(cmd)
     cmd = "set -o pipefail; "+cmd
     ret = os.system(cmd)
-    logging.debug("Running: %s" % (cmd))
+    logging.info("Running: %s" % (cmd))
     if ret!=0 and not ignoreErr:
         logging.error("command returned error: %s" % cmd)
-        sys.exit(1)
+        sys.exit(254)
+    else:
+        logging.debug("command exit code: %d" % ret)
     return ret
 
 def fastaMd5(fname):
@@ -918,7 +922,10 @@ def fastaMd5(fname):
         catCmd = "zcat"
     else:
         catCmd = "cat"
-    cmd = """%s %s | awk 'BEGIN{RS=">"}{print $1"\t"$2;}' | sort -k1,1 | md5sum""" % (catCmd, fname)
+    # first awk strips off any words after the sequence ID
+    # second awk converts fasta to tab sep with first column seqId, second column sequence
+    # (can't believe that former Max came up with this himself)
+    cmd = """%s %s | awk '{print $1}' | awk 'BEGIN{RS=">"}{print $1"\t"$2;}' | sort -k1,1 | md5sum""" % (catCmd, fname)
     proc = subprocess.Popen(cmd, stdout=PIPE, shell=True, encoding="latin1")
     md5 = proc.stdout.readline().split()[0]
     logging.debug("MD5 of %s is %s" % (fname, md5))
@@ -1409,7 +1416,7 @@ def blatProteinsKeepBest(fullFaFname, db, mapFname, stats):
     " blat the proteins directly, only good for small genomes where we don't have any gene models "
     myDir = dirname(__file__)
     cmd = "blat -q=prot -t=dnax /gbdb/{db}/{db}.2bit {inf} stdout -noHead | sort -k10 | pslReps stdin stdout /dev/null " \
-        "-minAli=0.95 -nohead | pslProtCnv > {out}".format(db=db, inf=fullFaFname, out=mapFname, myDir=myDir)
+        "-minAli=0.95 -nohead | {myDir}/pslProtCnv > {out}".format(db=db, inf=fullFaFname, out=mapFname, myDir=myDir)
     stats["minAli"]=0.95
     #nuclFname = mapFname+".nucl"
     # originally used "| {myDir}/pslProtCnv " but tried to get rid of the markd-script dependency 
@@ -1912,10 +1919,14 @@ def downloadUniprot(uprotDir):
         os.makedirs(tmpDir)
 
     # the uniprot FTP server is too slow and too unreliable. Switching to EBI's which has rsync !!
-    #cmd = 'lftp ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/ -e "lcd %s && mirror . --exclude-glob *.dat.gz && exit"' % tmpDir
     count = 0
     while True:
-        cmd = "rsync -av --partial rsync://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/complete/ %s/" % tmpDir
+        #cmd = "rsync -av --partial rsync://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/complete/ %s/" % tmpDir
+        # ftp.uniprot.org (USA,, PIR)
+        # ftp.ebi.ac.uk (UK, EBI)
+        # ftp.expasy.org (Switzerland, SIB)
+
+        cmd = 'lftp ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/ -e "lcd %s && mirror . -P 3 --use-pget-n=4 --exclude-glob *.dat.gz && exit"' % tmpDir
         ret = run(cmd, ignoreErr=True)
         if ret==0:
             break
@@ -2056,7 +2067,8 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
             dbBigBedDir = makeSubDir(bigBedDir, db)
 
             convMapToBigPsl(fullFaFname, mapFname, dbBigBedDir, accToDb, accToMeta, accToMapSource, accToTrans, chromSizesFname, doTrembl)
-            shutil.copy(mapDescFname, mapDir)
+
+            #shutil.copy(mapDescFname, mapDir)
 
             if options.onlyMap:
                 continue
@@ -2464,4 +2476,4 @@ try:
     main()
 except Exception as e:
     logging.error(e, exc_info=True)
-    sys.exit(1)
+    sys.exit(254)

@@ -26,7 +26,8 @@ GCA_000978805.1_ASM97880v1	Antarctic minke whale
 GCA_004026545.1_MorMeg_v1_BIUU	Antillean ghost-faced bat
 GCA_002201775.1_ALER1.0	aoudad
 GCF_000803125.2_CamDro3	Arabian camel (Drom800 2019 refseq)
-GCA_036321535.1_mCamDro1.pat	Arabian camel (paternal hap 2024)
+GCA_036321535.1_mCamDro1.pat	Arabian camel (paternal 2024)
+GCA_036321565.1_mCamDro1.hap2	Arabian camel (hap2 2024)
 GCF_018345385.1_ASM1834538v1	Arctic fox (Blue_001 2021 refseq)
 GCF_003426925.1_ASM342692v1	Arctic ground squirrel
 GCA_004024585.1_ParHer_v1_BIUU	Asian palm civet
@@ -67,6 +68,7 @@ GCA_024803745.1_mThoBot1.0.p	Botta's pocket gopher (bottae MVZ:Mamm:240275 prima
 GCA_031878675.1_mThoBot2.hap1	Botta's pocket gopher (hap1 2023)
 GCA_031878665.1_mThoBot2.hap2	Botta's pocket gopher (hap2 2023)
 GCA_036417435.1_mIniGeo1.hap1	boutu (hap1 2024)
+GCA_036417475.1_mIniGeo1.hap2	boutu (hap2 2024)
 GCF_000412655.1_ASM41265v1	Brandt's bat
 GCA_030848825.1_DD_mTadBra1_pri	Brazilian free-tailed bat (primary hap 2023)
 GCA_000688575.1_CavAp1.0	Brazilian guinea pig
@@ -121,7 +123,7 @@ GCA_903992545.1_mPipPip1.1	common pipistrelle (2020)
 GCA_903992515.1_mPipPip1.1_alternate_haplotype	common pipistrelle (alternate hap 2020)
 GCA_004026625.1_PipPip_v1_BIUU	common pipistrelle (Broad 2019)
 GCF_022682495.1_HLdesRot8A	common vampire bat (HL8 primary hap 2022 refseq)
-GCA_022682495.1_HLdesRot8A	common vampire bat (HL8 primary hap 2022 genbank)
+GCA_022682395.1_HLdesRot8B	common vampire bat (HL8 alternate hap 2022)
 GCF_002940915.2_ASM294091v3	common vampire bat (v3 DRU21DN04 2018)
 GCF_016906955.1_ROS_Pafr_v1	common warthog (WHEZ1 2021)
 GCF_900497805.2_bare-nosed_wombat_genome_assembly	common wombat
@@ -237,7 +239,8 @@ GCA_000164785.2_C_hoffmanni-2.0.1	Hoffmann's two-fingered sloth
 GCA_004027555.1_CraTho_v1_BIUU	hog-nosed bat
 GCF_014824575.3_WHU_Shon_v2.1	Honduran yellow-shouldered bat (v2.1 Veracruz 20B 2020)
 GCF_002863925.1_EquCab3.0	horse (Twilight 2018)
-GCA_036426135.1_mEquCab1.pat	horse (mEquCab1 2024)
+GCA_036418255.1_mEquCab1.mat	horse (maternal 2024)
+GCA_036426135.1_mEquCab1.pat	horse (paternal 2024)
 GCA_949316315.1_mMusMuc1.1	house mouse (primary hap 2023)
 GCA_949316305.1_mMusMuc1.1_alternate_haplotype	house mouse (alternate hap 2023)
 GCA_001624185.1_129S1_SvImJ_v1	house mouse (129S1_SvImJv1 2016)

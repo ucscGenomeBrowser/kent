@@ -170,6 +170,7 @@ GCA_020826845.1_mDicBic1.mat.cur	mammals
 GCA_021462225.2_DD_fGirMul_XY1	fish
 GCA_021950905.1_HG002.pat.cur.20211005	primates
 GCA_021951015.1_HG002.mat.cur.20211005	primates
+GCA_022682495.1_HLdesRot8A	mammals
 GCA_023343835.1_bLagMut1_primary	birds
 GCA_023634085.1_bFalChe1.pri	birds
 GCA_023634155.1_bFalPer1.pri	birds

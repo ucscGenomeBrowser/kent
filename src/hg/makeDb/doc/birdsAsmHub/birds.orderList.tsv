@@ -17,6 +17,7 @@ GCF_015227805.2_bHirRus1.pri.v3	Barn swallow (bHirRus1 v3 primary hap 2021 refse
 GCF_005870125.1_lonStrDom2	Bengalese finch
 GCF_030490865.1_bPoeAtr1.hap1	black-capped chickadee (hap1 2023)
 GCA_030490855.1_bPoeAtr1.hap2	black-capped chickadee (hap2 2023)
+GCA_030820635.1_KIZ_Lrid_1.0	black-headed gull (Kunming 2023)
 GCA_963924245.1_bChrRid1.1	black-headed gull (primary hap 2024)
 GCF_028500815.1_bRisTri1.patW.cur.20221130	black-legged kittiwake (bRisTri1 2023 refseq)
 GCA_028501385.1_bRisTri1.mat.cur.20221130	black-legged kittiwake (bRisTri1.mat 2023)
@@ -132,6 +133,7 @@ GCF_000738735.6_ASM73873v6	hooded crow (v6 S_Up_H32 2022)
 GCA_027406555.1_bHaeMex1.alt	house finch (bHaeMex1 alternate hap 2022)
 GCF_027477595.1_bHaeMex1.pri	house finch (bHaeMex1 primary hap 2022 refseq)
 GCA_036417665.1_bPasDom1.hap1	house sparrow (hap1 2024)
+GCA_036417895.1_bPasDom1.hap2	House sparrow (hap2 2024)
 GCA_027474345.1_bSphHub1.alt	Humboldt's penguin (bSphHub1 alternate hap 2022)
 GCA_027474245.1_bSphHub1.pri	Humboldt's penguin (bSphHub1 primary hap 2022)
 GCA_009936445.2_ASM993644v2	hyacinth macaw (LEKZKR9XQ3 2022)
@@ -160,7 +162,8 @@ GCF_000687185.1_ASM68718v1	little egret
 GCA_023637925.1_DD_ASM_B1a	long-tailed hermit (PSU5 alternate hap 2022)
 GCA_023637945.1_DD_ASM_B1	long-tailed hermit (PSU5 primary hap 2022)
 GCF_000695195.1_ASM69519v1	Macqueen's bustard (BGI_N324 2014)
-GCA_036417535.1_bChlMac1.mat	Macqueen's bustard (bChlMac1 2024)
+GCA_036417535.1_bChlMac1.mat	Macqueen's bustard (maternal 2024)
+GCA_036418225.1_bChlMac1.pat	Macqueen's bustard (paternal 2024)
 GCA_017639665.1_bCicMag1.alt	maguari stork (bCicMag1 alternate hap 2021)
 GCA_017639555.1_bCicMag1.pri	maguari stork (bCicMag1 primary hap 2021)
 GCA_008746955.1_CAU_Wild1.0	mallard CAU_Wild1.0
@@ -180,7 +183,9 @@ GCF_027579445.1_bAmmNel1.pri	Nelson's sparrow (bAmmNel1 primary hap 2023 refseq)
 GCF_009650955.1_bCorMon1.pri	New Caledonian crow (2019)
 GCA_009651025.1_bCorMon1.alt	New Caledonian crow (alternate hap 2019)
 GCA_036013445.1_bCalNic1.hap1	Nicobar pigeon (hap1 2024)
+GCA_036010745.1_bCalNic1.hap2	Nicobar pigeon (hap2 2024)
 GCA_036417845.1_bAptMan1.hap1	North Island brown kiwi (hap1 2024)
+GCA_036417975.1_bAptMan1.hap2	North Island brown kiwi (hap2 2024)
 GCA_008692595.2_Cv_LA_2.0	northern bobwhite
 GCF_000690835.1_ASM69083v1	northern fulmar
 GCA_031468805.1_bMorBas2.hap1	northern gannet (hap1 2023)
@@ -220,7 +225,8 @@ GCA_016880875.1_bAcaChl1.alt	rifleman (bAcaChl1 alternate hap 2021)
 GCA_016904835.1_bAcaChl1.pri	rifleman (bAcaChl1 primary hap 2021)
 GCF_004143745.1_ASM414374v1	ring-necked pheasant
 GCF_000337935.1_Cliv_1.0	rock pigeon (Danish tumbler 2013 BGI)
-GCA_036013475.1_bColLiv1.pat.W	rock pigeon (racing homer 2024)
+GCA_036010775.1_bColLiv1.mat	rock pigeon (racing homer maternal 2024)
+GCA_036013475.1_bColLiv1.pat.W	rock pigeon (racing homer paternal W 2024)
 GCA_023344045.1_bLagMut1_alternate	rock ptarmigan (bLagMut1 alternate hap 2022)
 GCF_023343835.1_bLagMut1_primary	rock ptarmigan (primary hap 2022 refseq)
 GCF_011077185.1_BPBGC_Ojam_1.0	ruddy duck
@@ -270,6 +276,7 @@ GCA_031877795.1_bStrAlu1.hap1	tawny owl (hap1 2023)
 GCA_031877785.1_bStrAlu1.hap2	tawny owl (hap2 2023)
 GCF_000331425.1_PseHum1.0	Tibetan ground-tit
 GCA_036169615.1_bHelExo1.hap1	tourmaline sunangel (hap1 2024)
+GCA_036172335.1_bHelExo1.hap2	tourmaline sunangel (hap2 2024)
 GCA_023055385.1_bAgeTri1.0.a	tricolored blackbird (1412-34295 alternate hap 2022)
 GCA_023055355.1_bAgeTri1.0.p	tricolored blackbird (1412-34295 primary hap 2022)
 GCA_009819845.1_bAytFul2.alt	tufted duck (alternate hap 2019)
@@ -288,6 +295,7 @@ GCA_020745705.1_bHemCom1.pri.cur	whiskered treeswift (bHemCor1 primary hap 2021)
 GCF_015832195.1_Motacilla_alba_V1.0_pri	white wagtail
 GCF_025592945.1_ASM2559294v1	white-collared manakin (Guabito, Panama 608988 2022)
 GCA_036250125.1_bDixPip1.hap1	white-crowned manakin (hap1 2024)
+GCA_036250135.1_bDixPip1.hap2	white-crowned manakin (hap2 2024)
 GCF_003945725.1_ASM394572v1	white-ruffed manakin
 GCF_017590055.1_ASM1759005v1	white-rumped snowfinch
 GCF_000691405.1_ASM69140v1	white-tailed eagle (BGI_N329 2014)
