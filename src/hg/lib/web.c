@@ -182,7 +182,7 @@ if (withHttpHeader)
 if (endsWith(scriptName, "hgc") && db != NULL && !stringIn(db, textOutBufDb))
     {
     struct dyString *newTitle = dyStringNew(0);
-    dyStringPrintf(newTitle, "%s %s", db, textOutBufDb);
+    dyStringPrintf(newTitle, "%s %s", trackHubSkipHubName(db), textOutBufDb);
     textOutBufDb = dyStringCannibalize(&newTitle);
     }
 if (withHtmlHeader)
