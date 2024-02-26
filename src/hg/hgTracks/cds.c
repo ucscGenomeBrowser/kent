@@ -1318,7 +1318,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 
     bool altColor = FALSE;
     unsigned cds5Prime = posStrand ? cdsStart : cdsEnd;
-    int codonIndex = !codonNumbering || !zoomedToCodonNumberLevel ? 0 : 1;
+    int codonIndex = 1;
     for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
 	{
         int exonStart = starts[i];
@@ -1508,8 +1508,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
                 errAbort("%s: Too much dna (%d - %d = %d)<br>\n", lf->name, 
 			 currentEnd, currentStart, currentSize);
 
-            if (codonIndex)
-                sf->codonIndex = codonIndex++;
+            sf->codonIndex = codonIndex++;
             slAddHead(&sfList, sf);
             if(posStrand)
                 currentStart = currentEnd;
@@ -1749,7 +1748,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 {
 char codon[64] = " ";
 Color color = colorAndCodonFromGrayIx(hvg, codon, grayIx, originalColor);
-if (sf->codonIndex && ( e - s >= 3))  // don't put exon numbers on split codons because there isn't space.
+if (zoomedToCodonNumberLevel && sf->codonIndex && ( e - s >= 3))  // don't put exon numbers on split codons because there isn't space.
     safef(codon, sizeof(codon), "%c %d", codon[0], sf->codonIndex);
 /* When we are zoomed out far enough so that multiple bases/codons share the 
  * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)

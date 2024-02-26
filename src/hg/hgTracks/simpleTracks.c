@@ -2971,7 +2971,7 @@ for (ref = exonList; TRUE; )
                 struct simpleFeature *codon;
                 struct dyString *codonDy = dyStringNew(0);
                 int codonS, codonE;
-                if (lf->codons && zoomedToCodonNumberLevel)
+                if (isExon && lf->codons && zoomedToCdsColorLevel)
                     {
                     for (codon = lf->codons; codon != NULL; codon = codon->next)
                         {
@@ -3003,7 +3003,8 @@ for (ref = exonList; TRUE; )
                                     if (!isEmpty(existingText))
                                         dyStringPrintf(codonDy, "%s, ", existingText);
                                     int codonHgvsIx = (codon->codonIndex - 1) * 3;
-                                    dyStringPrintf(codonDy, "c.%d-%d, ", codonHgvsIx + 1, codonHgvsIx + 3);
+                                    if (codonHgvsIx >= 0)
+                                        dyStringPrintf(codonDy, "c.%d-%d, ", codonHgvsIx + 1, codonHgvsIx + 3);
                                     dyStringPrintf(codonDy, "strand %c, %s %d of %d%s",
                                                 strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
