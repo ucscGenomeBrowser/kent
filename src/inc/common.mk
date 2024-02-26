@@ -34,6 +34,34 @@ else
   IS_HGWDEV = no
 endif
 
+# for Darwin (Mac OSX), use static libs when they can be found
+ifeq ($(UNAME_S),Darwin)
+  ifneq ($(wildcard /opt/local/lib/libz.a),)
+    ZLIB = /opt/local/lib/libz.a
+    $(info Darwin ZLIB: ${ZLIB})
+  endif
+  ifneq ($(wildcard /opt/local/lib/libpng.a),)
+    PNGLIB = /opt/local/lib/libpng.a
+    $(info Darwin PNGLIB: ${PNGLIB})
+  endif
+  ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
+    FREETYPELIBS = /opt/local/lib/libfreetype.a
+    $(info Darwin FREETYPELIBS: ${FREETYPELIBS})
+  endif
+  ifneq ($(wildcard /usr/local/opt/openssl@3/lib/libssl.a),)
+    SSLLIB = /usr/local/opt/openssl@3/lib/libssl.a
+    $(info Darwin SSLLIB: ${SSLLIB})
+  endif
+  ifneq ($(wildcard /usr/local/opt/openssl@3/lib/libcrypto.a),)
+    CRYPTOLIB = /usr/local/opt/openssl@3/lib/libcrypto.a
+    $(info Darwin CRYPTOLIB: ${CRYPTOLIB})
+  endif
+  ifneq ($(wildcard /opt/local/lib/libiconv.a),)
+    ICONVLIB = /opt/local/lib/libiconv.a
+    $(info Darwin ICONVLIB: ${ICONVLIB})
+  endif
+endif
+
 # Skip freetype for conda build; not needed for utils, and the Mac build environment has
 # freetype installed but we don't want to use the system libraries because they can be
 # for a newer OSX version than the conda build target, and can be incompatible.
@@ -76,14 +104,12 @@ ifeq (${PTHREADLIB},)
   PTHREADLIB=-lpthread
 endif
 
-# required extra library on Mac OSX
-ICONVLIB=
-
-# pthreads is required
 ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}
 else
-  ICONVLIB=-liconv
+  ifeq (${ICONVLIB},)
+    ICONVLIB=-liconv
+  endif
 endif
 
 # autodetect UCSC installation of hal:
@@ -207,7 +233,15 @@ else
    ifeq (${CONDA_BUILD},1)
        L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
    else
-       L+=-lssl -lcrypto -ldl
+       ifeq (${SSLLIB},)
+          L+ = -lssl
+       endif
+       ifeq (${CRYPTOLIB},)
+          L+ = -lcrypto -ldl
+       endif
+       ifeq (${DLLIB},)
+          L+ = -ldl
+       endif
    endif
 endif
 
