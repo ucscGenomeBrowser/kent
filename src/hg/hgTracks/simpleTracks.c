@@ -2971,7 +2971,7 @@ for (ref = exonList; TRUE; )
                 struct simpleFeature *codon;
                 struct dyString *codonDy = dyStringNew(0);
                 int codonS, codonE;
-                if (lf->codons && lf->codons->codonIndex > 0 && zoomedToCdsColorLevel)
+                if (lf->codons && zoomedToCodonNumberLevel)
                     {
                     for (codon = lf->codons; codon != NULL; codon = codon->next)
                         {
