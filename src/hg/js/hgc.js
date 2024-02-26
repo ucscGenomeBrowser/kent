@@ -216,14 +216,14 @@ function makeHPRCTable() {
         
         // go through and make each link
         asms.split(",").forEach(function(asm) {
-            asmSafe = asm.replaceAll(".","_");
+            asmSafe = asm.replaceAll(".","v");
             let trackTextDiv = document.createElement("div");
             trackTextDiv.append(asmSafe + " display mode:");
             newTblDiv.append(trackTextDiv);
             let trackCtrlDiv = document.createElement("div");
             let defaultVis = "Hide";
             if (typeof chainVis !== "undefined" && asm in chainVis) {defaultVis = chainVis[asm];}
-            makeVisInput(trackCtrlDiv, asmSafe+"SetVis", trackName=asm, defaultVis=defaultVis);
+            makeVisInput(trackCtrlDiv, asmSafe+"SetVis", trackName=asmSafe, defaultVis=defaultVis);
             newTblDiv.append(trackCtrlDiv);
             trackTextDiv.classList.add("gridItem");
             trackCtrlDiv.classList.add("gridItem");

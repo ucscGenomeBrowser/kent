@@ -891,7 +891,7 @@ include hprcChainNet.ra
 # include hprcChains.ra alpha
 # include hprcNets.ra alpha
 
-include chainsHprc.ra alpha
+#include chainsHprc.ra alpha
 include hprcCoverage.ra alpha
 include trackDb.hprc90way.ra
 include hprcArr.ra

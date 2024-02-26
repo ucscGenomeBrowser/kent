@@ -6775,7 +6775,28 @@ return count;
 }
 
 
-boolean bedScoreHasCfgUi(struct trackDb *tdb, boolean defaultOff)
+boolean bedHasFilters(struct trackDb *tdb)
+// Does track have filters
+{
+if (trackDbSettingClosestToHome(tdb, FILTER_BY))
+    return TRUE;
+if (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN))
+    return TRUE;
+
+struct trackDbFilter *filterSettings = tdbGetTrackNumFilters( tdb);
+if (filterSettings != NULL)
+    return TRUE;
+filterSettings = tdbGetTrackTextFilters( tdb);
+if (filterSettings != NULL)
+    return TRUE;
+filterSettings = tdbGetTrackFilterByFilters( tdb);
+if (filterSettings != NULL)
+    return TRUE;
+
+return FALSE;
+}
+
+boolean bedScoreHasCfgUi(struct trackDb *tdb)
 // Confirms that this track has a bedScore Cfg UI
 {
 // Assumes that cfgType == cfgBedScore
@@ -6783,7 +6804,7 @@ if (trackDbSettingClosestToHome(tdb, FILTER_BY))
     return TRUE;
 if (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN))
     return TRUE;
-boolean blocked = defaultOff;
+boolean blocked = FALSE;
 struct trackDbFilter *filterSettings = tdbGetTrackNumFilters( tdb);
 
 if (filterSettings != NULL)
@@ -6796,7 +6817,7 @@ if (filterSettings != NULL)
 
     for (;oneFilter != NULL;oneFilter=oneFilter->next)
         {
-        if (defaultOff || differentString(oneFilter->fieldName,"score")) // scoreFilter is implicit
+        if (differentString(oneFilter->fieldName,"score")) // scoreFilter is implicit
             {                                              // but could be blocked
             one = TRUE;
             break;

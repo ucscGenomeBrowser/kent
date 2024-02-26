@@ -8,7 +8,7 @@ itemRgb on
 compositeTrack on
 noParentConfig on
 html dosageSensitivityCollins2022
-pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released Xxx. x, 202x"
+pennantIcon New red ../goldenPath/newsarch.html#022124 "Released Feb. 21, 2024"
 
     track pHaplo
     parent dosageSensitivity on

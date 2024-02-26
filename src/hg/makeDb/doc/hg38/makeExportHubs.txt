@@ -1,0 +1,16 @@
+cd /cluster/home/braney/kent/src/hg/utils/rts
+
+for j in hg19 hg38
+do 
+    d=hubs/$j
+    mkdir -p $d
+    echo $d
+    for k in $j/*.tracks.txt
+    do 
+        echo $k
+        for i in `cat $k`
+        do 
+            tdbQuery -noCompSub "select * from $j where track='$i' and (type like 'big%' or compositeTrack = 'on')"
+        done | sed 's/$D/$j/g' | grep -v "^db " | grep -v "^filePos " | grep -v "^superTrack " > $d/`basename $k .tracks.txt`
+    done
+done

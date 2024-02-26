@@ -1204,7 +1204,10 @@ void bedFiltCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *ti
 void mrnaCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed);
 /* Put up UI for an mRNA (or EST) track. */
 
-boolean bedScoreHasCfgUi(struct trackDb *tdb, boolean defaultOff);
+boolean bedHasFilters(struct trackDb *tdb);
+// Does track have filters
+
+boolean bedScoreHasCfgUi(struct trackDb *tdb);
 // Confirms that this track has a bedScore Cfg UI
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
