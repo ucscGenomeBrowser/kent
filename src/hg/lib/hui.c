@@ -7083,6 +7083,9 @@ return list;
 void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix)
 /* If there is a labelFields for a bigBed, this routine is called to put up the label options. */
 {
+// composites can't label because they don't have an autoSql
+if (tdbIsComposite(tdb))
+    return;
 if (trackDbSettingClosestToHomeOn(tdb, "linkIdInName"))
     return;
 
