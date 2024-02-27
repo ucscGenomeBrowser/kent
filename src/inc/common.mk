@@ -36,29 +36,37 @@ endif
 
 # for Darwin (Mac OSX), use static libs when they can be found
 ifeq ($(UNAME_S),Darwin)
+  ifneq ($(wildcard /opt/local/include/openssl/ssl.h),)
+    HG_INC += -I/opt/local/include
+  endif
   ifneq ($(wildcard /opt/local/lib/libz.a),)
     ZLIB = /opt/local/lib/libz.a
-    $(info Darwin ZLIB: ${ZLIB})
   endif
   ifneq ($(wildcard /opt/local/lib/libpng.a),)
     PNGLIB = /opt/local/lib/libpng.a
-    $(info Darwin PNGLIB: ${PNGLIB})
   endif
   ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
-    FREETYPELIBS = /opt/local/lib/libfreetype.a
-    $(info Darwin FREETYPELIBS: ${FREETYPELIBS})
+    FREETYPELIBS = /opt/local/lib/libfreetype.a /opt/local/lib/libbz2.a /opt/local/lib/libbrotlidec.a /opt/local/lib/libbrotlicommon.a
   endif
   ifneq ($(wildcard /usr/local/opt/openssl@3/lib/libssl.a),)
     SSLLIB = /usr/local/opt/openssl@3/lib/libssl.a
-    $(info Darwin SSLLIB: ${SSLLIB})
+  else
+    ifneq ($(wildcard /opt/local/libexec/openssl3/lib/libssl.a),)
+      SSLLIB = /opt/local/libexec/openssl3/lib/libssl.a
+    endif
   endif
   ifneq ($(wildcard /usr/local/opt/openssl@3/lib/libcrypto.a),)
     CRYPTOLIB = /usr/local/opt/openssl@3/lib/libcrypto.a
-    $(info Darwin CRYPTOLIB: ${CRYPTOLIB})
+  else
+    ifneq ($(wildcard /opt/local/libexec/openssl3/lib/libcrypto.a),)
+      CRYPTOLIB = /opt/local/libexec/openssl3/lib/libcrypto.a
+    endif
   endif
   ifneq ($(wildcard /opt/local/lib/libiconv.a),)
     ICONVLIB = /opt/local/lib/libiconv.a
-    $(info Darwin ICONVLIB: ${ICONVLIB})
+  endif
+  ifneq ($(wildcard /opt/homebrew/lib/libmysqlclient.a),)
+    MYSQLLIBS = /opt/homebrew/lib/libmysqlclient.a
   endif
 endif
 
@@ -94,7 +102,6 @@ ifneq (${CONDA_BUILD},1)
   HG_INC += ${FREETYPECFLAGS}
   L += ${FREETYPELIBS}
 endif
-
 
 ifeq (${HOSTNAME},cirm-01)
   FULLWARN = yes
@@ -233,14 +240,18 @@ else
    ifeq (${CONDA_BUILD},1)
        L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
    else
-       ifeq (${SSLLIB},)
-          L+ = -lssl
+       ifneq (${SSLLIB},)
+          L+=${SSLLIB}
+       else
+          L+=-lssl
        endif
-       ifeq (${CRYPTOLIB},)
-          L+ = -lcrypto -ldl
+       ifneq (${CRYPTOLIB},)
+          L+=${CRYPTOLIB}
+       else
+          L+=-lcrypto -ldl
        endif
        ifeq (${DLLIB},)
-          L+ = -ldl
+          L+=-ldl
        endif
    endif
 endif
