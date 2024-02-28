@@ -56,6 +56,9 @@ include constraintSuper.ra
 # GenCC
 include genCC.ra
 
+# Prediction scores
+include predictionScoresSuper.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
