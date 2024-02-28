@@ -1,0 +1,74 @@
+# Feb. 8, 2024 - Jeltje van Baren
+#
+# Create custom as file for this bigBed:
+cat << '_EOF_' > AbSplice.as
+table abSplice
+"Bed 9+5 file with Ensembl Gene IDs and ABsplice values per tissue."
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    string ENSGid;     "Ensembl Gene ID"
+    string hugoId;     "hugo Gene ID"
+    float spliceABscore; "AbSplice highest score for this position"
+    lstring maxScore;   "All tissues containing the highest score"
+    lstring tissues;   "All 49 GTEX tissues with ABSplice value (empty if none were provided)" 
+    )
+_EOF_
+
+bedToBigBed -type=bed9+5 -tab -as=AbSplice.as filtered.ab.bed /hive/data/genomes/hg38/chrom.sizes ~/public_html/ABhub/hg38/AbSplice.bb
+exit
+
+# Now do the same for the ai track (needs slightly different dup score filtering)
+sort -k1,1 -k2,2n AbSplice.ai.bed| python3 <(
+    cat << "END"
+import sys
+
+printline = False
+prevcoord = '0'
+prevallele = False
+hiscore = 0
+for line in sys.stdin:
+    fields = line.split('\t')
+    score = float(fields[11])
+    if fields[1] == prevcoord and fields[3] == prevallele:
+        if score > hiscore:
+            hiscore = score
+            printline = line
+    else:
+        if printline:
+            print(printline, end='')
+        printline = line
+        prevcoord = fields[1]
+        prevallele = fields[3]
+        hiscore = score
+print(printline, end='')
+END
+) > filtered.ai.bed
+
+# Create custom as file for this bigBed:
+cat << '_EOF_' > spliceAI.as
+table spliceAI
+"Bed 9+2 file with Ensembl Gene IDs and spliceAI values per coordinate."
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    string ENSGid;     "Ensembl Gene ID"
+    string hugo;	"hugo Gene ID
+    string AIscore;    "delta_score field from AbSplice output"
+    )
+'_EOF_'
+bedToBigBed -type=bed9+2 -tab -as=spliceAI.as filtered.ai.bed /hive/data/genomes/hg38/chrom.sizes ~/public_html/ABhub/hg38/spliceAI.bb
