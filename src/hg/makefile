@@ -227,7 +227,7 @@ UTIL_DIRS = \
 
 APPS = $(UTIL_DIRS) $(UTILS_APPLIST)
 
-all::    cgi utils
+all::    cgi .WAIT utils
 
 hgLib:
 	cd lib && ${MAKE}
