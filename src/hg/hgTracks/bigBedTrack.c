@@ -808,6 +808,7 @@ struct linkedFeatures *lf = (struct linkedFeatures *)item;
 return lf->label;
 }
 
+#ifdef NOTNOW
 static int getFieldCount(struct track *track)
 // return the definedFieldCount of the passed track with is assumed to be a bigBed
 {
@@ -824,6 +825,7 @@ if (bbi)
 
 return 3; // if we can't get the bbi, use the minimum
 }
+#endif
 
 void bigBedMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[])
@@ -835,6 +837,7 @@ int ii;
 for(ii=0; ii < wordCount; ii++)
     newWords[ii] = words[ii];
 
+#ifdef NOTNOW
 // let's help the user out and get the definedFieldCount if they didn't specify it on the type line
 if (!tdbIsSuper(track->tdb) && (track->tdb->subtracks == NULL) && (wordCount == 1) && sameString(words[0], "bigBed"))
     {
@@ -847,5 +850,6 @@ if (!tdbIsSuper(track->tdb) && (track->tdb->subtracks == NULL) && (wordCount == 
         wordCount = 2;
         }
     }
+#endif
 complexBedMethods(track, tdb, TRUE, wordCount, newWords);
 }
