@@ -63,6 +63,7 @@ GCA_008658375.2_mBalMus1.alt.v2	Blue whale (JJ_BM4_2016_0621 v2 alternate hap 20
 GCF_009873245.2_mBalMus1.pri.v3	blue whale (JJ_BM4_2016_0621 v3 primary hap 2020)
 GCA_022079275.1_mLynRuf1.a	bobcat (Redwood Valley CCGP_SWC_20201006 alternate hap 2022)
 GCF_022079265.1_mLynRuf1.p	bobcat (Redwood Valley CCGP_SWC_20201006 primary hap 2022)
+GCA_019903745.2_ULRtarCaribou_2v2	boreal woodland reindeer (boreal CA-31 2023)
 GCA_024803775.1_mThoBot1.0.a	Botta's pocket gopher (bottae MVZ:Mamm:240275 alternate hap 2022)
 GCA_024803745.1_mThoBot1.0.p	Botta's pocket gopher (bottae MVZ:Mamm:240275 primary hap 2022)
 GCA_031878675.1_mThoBot2.hap1	Botta's pocket gopher (hap1 2023)
@@ -405,7 +406,8 @@ GCA_910593805.1_mCerEla1.1_alternate_haplotype	red deer (alternate hap 2021)
 GCF_003160815.1_VulVul2.2	red fox
 GCF_014885135.2_M_Fortis_MF-2015_v1.1	reed vole (MF-2015 2020)
 GCA_963930665.1_mMunRee1.1_alternate_haplotype	Reeves' muntjac (alternate hap 2024)
-GCA_004026565.1_RanTarSib_v1_BIUU	reindeer
+GCA_004026565.1_RanTarSib_v1_BIUU	reindeer (US061 2019)
+GCA_963422255.1_RTA_final	reindeer (2023)
 GCA_028017805.1_mBalRic1.hap1	Rice's whale (hap1 2023)
 GCF_028023285.1_mBalRic1.hap2	Rice's whale (hap2 2023 refseq)
 GCF_900094665.2_CAROLI_EIJ_v1.1	Ryukyu mouse (v2 2017)
