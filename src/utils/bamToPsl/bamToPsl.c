@@ -29,6 +29,8 @@ errAbort(
   "                    - when the same name is identical, assume they are\n"
   "                    - helps speed up the dup check but not thorough\n"
   "   -dots=N          - output progress dot(.) every N alignments processed\n"
+  "   -querySizes=file - two column tab file: 'name size' to fixup the query\n"
+  "                    - sequence sizes since bam does not provide qSize\n"
   "\n"
   "Note: a chromAlias file can be obtained from a UCSC database, e.g.:\n"
   " hgsql -N -e 'select alias,chrom from chromAlias;' hg38 > hg38.chromAlias.tab\n"
@@ -46,6 +48,7 @@ static struct optionSpec options[] = {
    {"allowDups", OPTION_BOOLEAN},
    {"noSequenceVerify", OPTION_BOOLEAN},
    {"dots", OPTION_INT},
+   {"querySizes", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -53,6 +56,8 @@ static int dots = 0;
 static boolean nohead = FALSE;
 static boolean allowDups = FALSE;
 static boolean noSequenceVerify = FALSE;
+static char *querySizes = NULL;	// use chrom.sizes file to set query size
+static struct hash *qSizeHash = NULL;
 
 static struct hash *hashChromAlias(char *fileName)
 /* Read two column file into hash keyed by first column */
@@ -118,6 +123,18 @@ for (;;)
                 if ((hel = hashLookup(chromAlias, psl->tName)) != NULL)
                     psl->tName = cloneString((char *)hel->val); /* memory leak */
                 }
+	    if (qSizeHash)
+		{
+		int brokenSize = psl->qSize;
+		psl->qSize = hashIntVal(qSizeHash, psl->qName);
+		int offset = psl->qSize - brokenSize;
+		/* check to see if negative qStarts need to be fixed */
+		if ((offset > 0) && (psl->strand[0] == '-'))
+		    {
+		    for (int i = 0; i < psl->blockCount; ++i)
+			psl->qStarts[i] += offset;
+		    }
+		}
             pslTabOut(psl, f);  /* no free of this psl data, memory leak */
             pslFree(&psl);
             }
@@ -169,10 +186,15 @@ if (argc != 3)
     usage();
 char *fastaName = optionVal("fasta", NULL);
 char *aliasFile = optionVal("chromAlias", NULL);
+
+querySizes = optionVal("querySizes", NULL);
+
 dots = optionInt("dots", dots);
 nohead = optionExists("nohead");
 allowDups = optionExists("allowDups");
 noSequenceVerify = optionExists("noSequenceVerify");
+if (querySizes != NULL)
+    qSizeHash = loadSizes(querySizes);
 bamToPsl(argv[1], argv[2], fastaName, aliasFile);
 return 0;
 }
