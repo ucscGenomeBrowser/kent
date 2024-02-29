@@ -39,18 +39,6 @@ static struct optionSpec options[] = {
     {NULL, 0},
 };
 
-static struct hash *loadSizes(char *szFile)
-/* load sizes into a hash */
-{
-struct hash *sizes = hashNew(0);
-struct lineFile *lf = lineFileOpen(szFile, TRUE);
-char *row[2];
-while (lineFileNextRowTab(lf, row, 2))
-    hashAddInt(sizes, row[0], sqlSigned(row[1]));
-
-return sizes;
-}
-
 static boolean parseName(char *desc, char *name, int *start, int *end)
 /* parse and validate name into it's parts. Return FALSE if name doesn't
  * contain a subrange specification. */
