@@ -243,6 +243,39 @@ visibility hide
     parent gnomadPLI off
     priority 2
 
+    track pliByTranscriptTest
+    shortLabel TEST Transcript LoF
+    longLabel TEST gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI) v4
+    type bigBed 12 +
+    mouseOverField _mouseOver
+    itemRgb on
+    searchIndex name,geneName
+    bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.new.bb
+    url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
+    urlLabel View this Transcript on the gnomAD browser
+    labelFields name,geneName
+    filter._pli 0:1
+    filterLabel._pli Show only items between this pLI range
+    filterByRange._pli on
+    parent gnomadPLI off
+    priority 2
+
+    track missenseByTranscriptTest
+    shortLabel TEST Transcript Missense
+    longLabel TEST gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v4
+    type bigBed 12 +
+    mouseOverField _mouseOver
+    searchIndex name,geneName
+    bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.new.bb
+    url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
+    urlLabel View this Transcript on the gnomAD browser
+    labelFields name,geneName
+    filter._zscore -20:11
+    filterLabel._zscore Show only items between this Z-score range
+    filterByRange._zscore on
+    parent gnomadPLI off
+    priority 2
+
 track gnomadVariantsV4
 parent gnomadVariants
 compositeTrack on
