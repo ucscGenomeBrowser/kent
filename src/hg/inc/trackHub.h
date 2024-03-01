@@ -79,6 +79,9 @@ struct trackHub *trackHubOpen(char *url, char *hubName);
 /* Open up a track hub from url.  Reads and parses hub.ra and the genomesFile. 
  * The hubName is generally just the asciified ID number. */
 
+struct trackHub *grabHashedHub(char *hubName);
+/* see if a trackHub with this name is in the cache */
+
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName);
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no
  * such genome. */

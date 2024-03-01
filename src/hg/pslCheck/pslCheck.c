@@ -72,19 +72,6 @@ errAbort(
   "   -quiet - no write error message, just filter\n");
 }
 
-static struct hash *loadSizes(char *sizesFile)
-/* load a sizes file */
-{
-struct hash *sizes = hashNew(20);
-struct lineFile *lf = lineFileOpen(sizesFile, TRUE);
-char *cols[2];
-
-while (lineFileNextRowTab(lf, cols, ArraySize(cols)))
-    hashAddInt(sizes, cols[0], sqlUnsigned(cols[1]));
-lineFileClose(&lf);
-return sizes;
-}
-
 static struct hash *loadChromInfoSizes(struct sqlConnection *conn)
 /* chromInfo sizes */
 {
