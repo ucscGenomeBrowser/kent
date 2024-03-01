@@ -35329,3 +35329,27 @@ sys	0m2.691s
 ##############################################################################
 # see /hive/data/inside/gnomAD/v1.1.1/2024-02-20/README
 # for the steps
+##############################################################################
+# BayesDel refs #21605 (2024-02-27 Gerardo)
+cd /hive/data/outside/
+hubClone -download https://hgwdev.gi.ucsc.edu/~jeltje/trackHubs/bayesDel/hub.txt
+cd bayesDelTrack
+#Remove hg19 from file names
+for file in $(ls *.bw); do mv "${file}" "${file/hg19/}"; done
+cd /gbdb/hg19
+mkdir bayesDel
+cd bayesDel
+#Makes symlinks
+for file in $(ls /hive/data/outside/bayesDelTrack/hg19/*.bw) ; do ln -s $file; done
+cd /hive/data/outside/bayesDelTrack/hg19
+cp template.html bayesDel.html
+cp trackDb.txt bayesDel.ra
+vi bayesDel.ra #Indented subtracks and changed bigDataUrl (:%s;hg19;;g)
+#Copies trackDb file and html file
+cp bayesDel* ~/kent/src/hg/makeDb/trackDb/human/hg19
+cd ~/kent/src/hg/makeDb/trackDb/human/
+# Made predictionScoresSuper.ra file to make a superTrack and include bayesDel.ra
+cp hg19/bayesDel.html .
+mv bayesDel.html predictionScoresSuper.html
+vi predictionScoresSuper.html #Edited the text for predictionScoresSuper.html
+##############################################################################
