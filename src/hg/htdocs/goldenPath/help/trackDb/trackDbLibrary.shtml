@@ -2121,9 +2121,10 @@ There are no extra options that can appear on the type hic line.
 </DIV>
 
 <DIV class="refUrl"><span class="types bam"></span>
-<div class="format"><code>refUrl &lt;url&gt;</code></div>
-    <P>See <A HREF="../cram.html">CRAM track format page</A> for a description of how to use this setting.
-
+<div class="format"><code>refUrl &lt;url&gt/%s</code></div>
+Specifies the RefGet reference server from which to retrieve genome sequences
+instead of the default EBI CRAM Reference Registry. The <tt>%s</tt> is 
+replaced the RefGet MD5 checksum that identifies the reference sequence.
 </DIV>
 
 <DIV class="bedNameLabel"><span class="types bed bigBed"></span>
