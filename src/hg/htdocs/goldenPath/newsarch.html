@@ -63,6 +63,42 @@ target=_blank>our GitHub page</a>.</p>
 <!-- ============= 2024 archived news ============= -->
 <a name="2024"></a>
 
+<a name="030124"></a>
+<h2>Mar. 01, 2024 &nbsp;&nbsp; AbSplice Prediction Scores for hg38</h2>
+<p>
+We are happy to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=abSplice" target="_blank">AbSplice scores</a>
+track for the human genome, GRCh38/hg38. AbSplice is a method that predicts aberrant splicing across
+human tissues, as described in <a href="https://doi.org/10.1038/s41588-023-01373-3"
+target="_blank">Wagner, &Ccedil;elik et al., 2023</a>. This track displays precomputed AbSplice
+scores for all possible single-nucleotide variants genome-wide. The scores represent the probability
+that a given variant causes aberrant splicing in a given tissue.</p>
+<p>
+Aberrant splicing is a major cause of genetic disorders but its direct detection in transcriptomes
+is limited to clinically accessible tissues such as skin or body fluids. &Ccedil;elik et al.
+generated an aberrant splicing benchmark dataset, spanning over 8.8 million rare variants in 49
+human tissues from the Genotype-Tissue Expression (GTEx) dataset. The AbSplice score is a
+probability estimate of how likely aberrant splicing of some sort takes place in a given tissue.
+The authors <a href="https://github.com/gagneurlab/absplice?tab=readme-ov-file#output"
+target="_blank">suggest</a> three cutoffs which are represented by color in the track.</p>
+
+<ul>
+  <li><b><font color="#FF0000">High (red)</font></b> - <b>
+    An AbSplice score over 0.2</b> indicates a high likelihood of aberrant splicing in at least one
+    tissue.</li>
+  <li><b><font color="#FF8000">Medium (orange)</font></b> - <b>
+    A score between 0.05 and 0.2 </b> indicates a medium likelihood.</li>
+  <li><b><font color="#0000FF">Low (blue)</font></b> - <b>
+    A score between 0.01 and 0.05 </b> indicates a low likelihood.</li>
+  <li><b>Scores below 0.01 are not displayed.</b></li>
+</ul>
+
+<p>
+We would like to thank Wagner, &Ccedil;elik et al., 2023 for generating and making the data publicly
+available. We would also like to thank Jeltje van Baren and Jairo Navarro for the creation and
+release of these tracks.
+</p>
+
 <a name="022124"></a>
 <h2>Feb. 21, 2024 &nbsp;&nbsp; New DECIPHER Dosage Sensitivity tracks for Human (hg19/hg38)</h2>
 <p>
