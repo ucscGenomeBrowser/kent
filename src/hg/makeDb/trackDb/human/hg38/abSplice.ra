@@ -3,7 +3,7 @@ shortLabel AbSplice Scores
 longLabel Aberrant Splicing Prediction Scores
 type bigBed 9 +
 bigDataUrl /gbdb/hg38/abSplice/AbSplice.bb
-visibility pack
+visibility hide
 itemRgb on
 noScoreFilter on
 group phenDis
