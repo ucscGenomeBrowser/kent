@@ -1178,6 +1178,7 @@
 ./runBuild GCA_033296515.1_rMacSuw1.hap1 vertebrate Macrochelys_suwanniensis
 ./runBuild GCA_033349115.1_rMacSuw1.hap2 vertebrate Macrochelys_suwanniensis
 ./runBuild GCA_033958435.1_ASM3395843v1 vertebrate Carettochelys_insculpta
+./runBuild GCA_034619455.1_bLepDis1.hap1 birds Leptosomus_discolor
 ./runBuild GCA_034619465.1_bLepDis1.hap2 birds Leptosomus_discolor
 ./runBuild GCA_035046495.1_rTilSci1.hap1 vertebrate Tiliqua_scincoides
 ./runBuild GCA_035046505.1_rTilSci1.hap2 vertebrate Tiliqua_scincoides
