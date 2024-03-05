@@ -82,7 +82,13 @@ class GencodeTag(SymEnum):
     readthrough_gene = auto()
     artifactual_duplication = auto()
     overlaps_pseudogene = auto()
-
+    confirm_experimentally = auto()
+    polymorphic_pseudogene_no_stop = auto()
+    annotation_in_progress = auto()
+    fragmented_mixed_strand_locus = auto()
+    Selenoprotein = auto()
+    EnsEMBL_merge_exception = auto()
+    precursor_RNA = auto()
 
 gencodeTagNotFullCds = frozenset([GencodeTag.cds_start_NF,
                                   GencodeTag.cds_end_NF])
