@@ -1,0 +1,3 @@
+1	Transcription activation. {ECO:0000305}.
+2	Host membrane {ECO:0000305}; Single-pass membrane  protein {ECO:0000305}.
+3	Belongs to the IIV-6 006L/238R/313L/468L family.  {ECO:0000305}.
