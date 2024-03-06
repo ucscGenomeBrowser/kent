@@ -708,7 +708,7 @@ if (val == NULL)
 return val;
 }
 
-static struct trackHub *grabHashedHub(char *hubName)
+struct trackHub *grabHashedHub(char *hubName)
 /* see if a trackHub with this name is in the cache */
 {
 if ( trackHubHash == NULL)

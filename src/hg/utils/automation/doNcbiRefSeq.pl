@@ -920,11 +920,23 @@ if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then
    /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$verString/\$db.\$verString.ncbiRefSeq.gtf.gz
 fi
 
-rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes/\$db.ncbiRefSeq.gtf.gz
-mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes
-ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
-    /usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes/\$db.ncbiRefSeq.gtf.gz
-
+export DS=`date "+%%F"`
+export gpDir="/usr/local/apache/htdocs-hgdownload/goldenPath/\$db/bigZips/genes"
+rm -f \$gpDir/\$db.ncbiRefSeq.gtf.gz
+mkdir -p \$gpDir
+ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \$gpDir/\$db.ncbiRefSeq.gtf.gz
+export md5Sum="\$gpDir/md5sum.txt"
+export here=`pwd`
+if [ -s "\$md5Sum" ]; then
+  origSum=`realpath \$md5Sum`
+  bakFile="\${origSum}.\$DS"
+  if [! -s "\$bakFIle" ]; then
+    mv \$origSum \$bakFile
+    cd \$gpDir
+    md5sum *gz > \$origSum
+  fi
+fi
+cd \$here
 featureBits \$db ncbiRefSeq > fb.ncbiRefSeq.\$db.txt 2>&1
 cat fb.ncbiRefSeq.\$db.txt 2>&1
 _EOF_

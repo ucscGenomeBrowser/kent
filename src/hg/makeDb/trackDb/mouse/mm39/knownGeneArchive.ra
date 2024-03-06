@@ -79,3 +79,25 @@ html ../../knownGeneArchive
     intronGap 12
     defaultLinkedTables kgXref
 
+    track knownGeneVM33
+    shortLabel GENCODE VM33
+    longLabel GENCODE VM33
+    priority 5
+    visibility pack
+    type bigGenePred
+    bigDataUrl /gbdb/mm39/gencode/gencodeVM33.bb
+    baseColorDefault genomicCodons
+    group genes
+    isGencode3 on
+    directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+    labelFields geneName,name,geneName2,name2
+    defaultLabelFields geneName
+    itemRgb on
+    externalDb knownGeneVM33
+    maxItems 50000
+    html knownGeneVM33
+    searchIndex name
+    idXref kgAlias kgID alias
+    intronGap 12
+    defaultLinkedTables kgXref
+

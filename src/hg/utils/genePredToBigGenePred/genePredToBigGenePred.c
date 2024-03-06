@@ -16,7 +16,7 @@ errAbort(
   "genePredToBigGenePred - converts genePred or genePredExt to bigGenePred input (bed format with extra fields)\n"
   "usage:\n"
   "  genePredToBigGenePred [-known] [-score=scores] [-geneNames=geneNames] [-colors=colors] file.gp stdout | sort -k1,1 -k2,2n > file.bgpInput\n"
-  "NOTE: to build bigBed:\n"
+  "NOTE: In order to visualize on Genome Browser, the bigGenePred file needs to be converted to a bigBed such as the following:\n"
   "   wget https://genome.ucsc.edu/goldenpath/help/examples/bigGenePred.as\n"
   "   bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as file.bgpInput chrom.sizes output.bb\n"
   "options:\n"

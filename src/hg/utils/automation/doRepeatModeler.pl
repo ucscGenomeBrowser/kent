@@ -253,6 +253,10 @@ rm -fr \${asmId}.fa \${asmId}.n?? ./err/
 if [ -s "\${asmId}-families.stk" ]; then
   gzip \${asmId}-families.stk
 fi
+rm -f ${buildDir}/\${asmId}.repeatModeler.families.stk.gz
+rm -f ${buildDir}/\${asmId}.rmod.log.txt
+ln -s trackData/repeatModeler/\${asmId}-families.stk ${buildDir}/\${asmId}.repeatModeler.families.stk.gz
+ln -s trackData/repeatModeler/\${asmId}-rmod.log ${buildDir}/\${asmId}.rmod.log.txt
 gzip -c "\${asmId}-families.fa" > "${buildDir}/\${asmId}.repeatModeler.families.fa.gz"
 touch -r "\${asmId}-families.fa" "${buildDir}/\${asmId}.repeatModeler.families.fa.gz"
 c=`ls -d RM_* | wc -l`

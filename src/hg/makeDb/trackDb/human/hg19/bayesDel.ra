@@ -20,6 +20,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released, 2024"
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
         shortLabel MaxAF Mutation: A
+        html predictionScoresSuper
         visibility full
         
         track MaxAFmutC
@@ -32,6 +33,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released, 2024"
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
         shortLabel MaxAF Mutation: C
+        html predictionScoresSuper
         visibility full
         
         track MaxAFmutG
@@ -44,6 +46,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released, 2024"
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
         shortLabel MaxAF Mutation: G
+        html predictionScoresSuper
         visibility full
         
         track MaxAFmutT
@@ -56,6 +59,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released, 2024"
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
         shortLabel MaxAF Mutation: T
+        html predictionScoresSuper
         visibility full
         
         track noAFmutA
@@ -68,6 +72,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released, 2024"
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
         shortLabel No MaxAF Mutation: A
+        html predictionScoresSuper
         visibility hide
         
         track noAFmutC
@@ -80,6 +85,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released, 2024"
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
         shortLabel No MaxAF Mutation: C
+        html predictionScoresSuper
         visibility hide
         
         track noAFmutG
@@ -92,6 +98,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released, 2024"
         visibility hide
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
+        html predictionScoresSuper
         shortLabel No MaxAF Mutation: G
         
         track noAFmutT
@@ -104,5 +111,6 @@ pennantIcon New red ../goldenPath/newsarch.html "Released, 2024"
         maxHeightPixels 128:20:8
         windowingFunction mean+whiskers
         shortLabel No MaxAF Mutation: T
+        html predictionScoresSuper
         visibility hide
         

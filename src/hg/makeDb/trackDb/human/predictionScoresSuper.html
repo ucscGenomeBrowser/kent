@@ -6,11 +6,11 @@ scores.</p>
 
 <h3>BayesDel</h3>
 <p>BayesDel is a deleteriousness meta-score for coding and non-coding variants, single nucleotide
-variants, and small insertion / deletions. The range of the score is from -1.29334 to 0.75731.
+variants, and small insertion/deletions. The range of the score is from -1.29334 to 0.75731.
 The higher the score, the more likely the variant is pathogenic.</p>
 
 <p>
-For gene discovery research, a universal cutof value (0.0692655 with MaxAF, -0.0570105 without
+For gene discovery research, a universal cutoff value (0.0692655 with MaxAF, -0.0570105 without
 MaxAF) was obtained by maximizing sensitivity and specificity in classifying ClinVar variants;
 Version 1 (build date 2017-08-24).</p>
 <p>
@@ -22,7 +22,7 @@ of these scores in clinical applications.
 <h2>Display Conventions and Configuration</h2>
 
 <h3>BayesDel</h3>
-<p>There are eight subtracks of this track: four include pre-computed MaxAF-integrated BayesDel
+<p>There are eight subtracks for the BayesDel track: four include pre-computed MaxAF-integrated BayesDel
 scores for missense variants, one for each base. The other four are of the same format, but scores
 are not MaxAF-integrated.</p>
 
@@ -33,7 +33,7 @@ nucleotide mutation. The fourth value, &quot;no mutation&quot;, representing the
 <p><b>Note:</b> There are cases in which a genomic position will have one value missing.
 </p>
 
-<p>When using this track, zoom in until you can see every basepair at the top of the display.
+<p>When using this track, zoom in until you can see every base pair at the top of the display.
 Otherwise, there are several nucleotides per pixel under your mouse cursor and instead of an actual
  score, the tooltip text will show the average score of all nucleotides under the cursor. This is
 indicated by the prefix &quot;~&quot; in the mouseover.
@@ -50,7 +50,7 @@ The number 170824 is the date (2017-08-24) the scores were created. Both sets of
 available in this database, one integrated MaxAF (named BayesDel_170824_addAF) and one without
 (named BayesDel_170824_noAF). Data conversion was performed using
 <a a target="_blank"  href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/bayesDel/hg19">
-custom python scripts</a>.
+custom Python scripts</a>.
 </p>
 
 <h2>Credits</h2>
