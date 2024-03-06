@@ -9465,7 +9465,7 @@ if (!hideControls)
             if (isHubTrack(group->name))
 		{
                 struct trackHub *hub = grabHashedHub(group->name);
-                if (hub)
+                if ((hub != NULL) && (hub->descriptionUrl != NULL))
                     hPrintf("<a href='%s' style='color:#FFF' target=_blank>More Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
 
 		safef(idText, sizeof idText, "%s_disconn", group->name);
