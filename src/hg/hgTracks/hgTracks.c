@@ -6494,7 +6494,7 @@ else if (sameString(type, "encodePeak"))
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
-else if (sameString(type, "bam"))
+else if (sameString(type, "bam") || sameString(type, "cram"))
     {
     tg = trackFromTrackDb(tdb);
     tg->customPt = ct;
