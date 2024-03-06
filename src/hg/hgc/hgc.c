@@ -4826,7 +4826,7 @@ else if (wordCount > 0)
         {
         doGvf(tdb, item);
         }
-    else if (sameString(type, "bam"))
+    else if (sameString(type, "bam") || sameString(type, "cram"))
 	doBamDetails(tdb, item);
     else if ( startsWith("longTabix", type))
 	doLongTabix(tdb, item);
@@ -22219,7 +22219,7 @@ else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
     doBarChartDetails(ct->tdb, item);
 else if (sameWord(type, "bigInteract") || sameWord(type, "interact"))
     doInteractDetails(ct->tdb, item);
-else if (sameWord(type, "bam"))
+else if (sameWord(type, "bam") || sameWord(type, "cram"))
     doBamDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcfTabix") || sameWord(type, "vcfPhasedTrio"))
     doVcfTabixDetails(ct->tdb, itemName);
