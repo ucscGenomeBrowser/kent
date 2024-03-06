@@ -5,7 +5,7 @@
 
 # knownToLocusLink
 #hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from hgFixed.refLink" $db > refToLl.txt
-hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from ncbiRefSeqLink where mrnaAcc != ''" $db > refToLl.txt
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from ncbiRefSeqLink where mrnaAcc != '' and locusLinkId != ''" $db > refToLl.txt
 hgMapToGene -geneTableType=genePred -tempDb=$tempDb $db ncbiRefSeq knownGene knownToLocusLink -lookup=refToLl.txt
 rm refToLl.txt
 
@@ -74,8 +74,12 @@ fi
 
 if test "$hprd_file" != ""
 then
-    wget "$hprd_website/$hprd_tar"
-    tar xvf $hprd_tar
+# Commented out these fetch lines until the hprd.org website returns.  In the meantime,
+# you can copy the files from the previous build (they haven't changed in a while).
+#    wget "$hprd_website/$hprd_tar"
+#    tar xvf $hprd_tar
+    cp ${oldGeneDir}/${hprd_tar} .
+    cp -R `dirname ${oldGeneDir}/${hprd_file}` ./`dirname ${hprd_file}`
     knownToHprd $tempDb $hprd_file
     hgLoadNetDist $genomes/hg19/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
         -sqlRemap="select distinct value, name from knownToHprd"

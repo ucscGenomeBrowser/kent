@@ -230,11 +230,8 @@ RA   Vonder Haar R.A., Allen R.D., Cohen E.A., Nessler C.L., Thomas T.L.;
 RT   "Organization of the sunflower 11S storage protein gene family.";
 RL   Gene 74:433-443(1988).
 CC   -!- FUNCTION: This is a seed storage protein.
-CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
-CC       basic chain derived from a single precursor and linked by a
-CC       disulfide bond.
-CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins)
-CC       family.
+CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
+CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins) family.
 CC   --------------------------------------------------------------------------
 CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
 CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
@@ -305,11 +302,8 @@ RT   acidic and basic peptide chains and identification of a pyroglutamyl
 RT   peptide chain.";
 RL   Plant Cell Physiol. 21:157-167(1980).
 CC   -!- FUNCTION: This is a seed storage protein.
-CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
-CC       basic chain derived from a single precursor and linked by a
-CC       disulfide bond.
-CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins)
-CC       family.
+CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
+CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins) family.
 CC   --------------------------------------------------------------------------
 CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
 CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
@@ -426,15 +420,10 @@ RA   Braun M., Luensdorf H., Bueckmann A.F.;
 RT   "12 alpha-hydroxysteroid dehydrogenase from Clostridium group P,
 RT   strain C 48-50. Production, purification and characterization.";
 RL   Eur. J. Biochem. 196:439-450(1991).
-CC   -!- FUNCTION: Catalyzes the oxidation of the 12-alpha-hydroxyl group
-CC       of bile acids, both in their free and conjugated form. Also acts
-CC       on bile alcohols.
-CC   -!- CATALYTIC ACTIVITY: 3-alpha,7-alpha,12-alpha-trihydroxy-5-beta-
-CC       cholanate + NADP(+) = 3-alpha,7-alpha-dihydroxy-12-oxo-5-beta-
-CC       cholanate + NADPH.
+CC   -!- FUNCTION: Catalyzes the oxidation of the 12-alpha-hydroxyl group of bile acids, both in their free and conjugated form. Also acts on bile alcohols.
+CC   -!- CATALYTIC ACTIVITY: 3-alpha,7-alpha,12-alpha-trihydroxy-5-beta- cholanate + NADP(+) = 3-alpha,7-alpha-dihydroxy-12-oxo-5-beta- cholanate + NADPH.
 CC   -!- SUBUNIT: Homotetramer.
-CC   -!- MISCELLANEOUS: The thermostability of the enzyme is greatly
-CC       increased due to NADP binding.
+CC   -!- MISCELLANEOUS: The thermostability of the enzyme is greatly increased due to NADP binding.
 DR   PIR; S14099; S14099.
 PE   3: Inferred from homology;
 KW   Bile acid catabolism; Direct protein sequencing; NADP; Oxidoreductase.
@@ -569,17 +558,9 @@ RT   "An inventory of 1152 expressed sequence tags obtained by partial
 RT   sequencing of cDNAs from Arabidopsis thaliana.";
 RL   Plant J. 4:1051-1061(1993).
 CC   -!- FUNCTION: This is a seed storage protein.
-CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
-CC       basic chain derived from a single precursor and linked by a
-CC       disulfide bond.
-CC   -!- ALTERNATIVE PRODUCTS:
-CC       Event=Alternative splicing; Named isoforms=1;
-CC         Comment=A number of isoforms are produced. According to EST
-CC         sequences;
-CC       Name=1;
-CC         IsoId=P15455-1; Sequence=Displayed;
-CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins)
-CC       family.
+CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
+CC   -!- ALTERNATIVE PRODUCTS: Event=Alternative splicing; Named isoforms=1; Comment=A number of isoforms are produced. According to EST sequences; Name=1; IsoId=P15455-1; Sequence=Displayed;
+CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins) family.
 CC   --------------------------------------------------------------------------
 CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
 CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
@@ -701,11 +682,8 @@ RT   "An inventory of 1152 expressed sequence tags obtained by partial
 RT   sequencing of cDNAs from Arabidopsis thaliana.";
 RL   Plant J. 4:1051-1061(1993).
 CC   -!- FUNCTION: This is a seed storage protein.
-CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
-CC       basic chain derived from a single precursor and linked by a
-CC       disulfide bond.
-CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins)
-CC       family.
+CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
+CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins) family.
 CC   --------------------------------------------------------------------------
 CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
 CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
@@ -771,17 +749,11 @@ RT   "Expression, cloning, and immunological analysis of buckwheat
 RT   (Fagopyrum esculentum Moench) seed storage proteins.";
 RL   J. Agric. Food Chem. 49:1825-1829(2001).
 CC   -!- FUNCTION: Seed storage protein.
-CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
-CC       basic chain derived from a single precursor and linked by a
-CC       disulfide bond (By similarity).
+CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond (By similarity).
 CC   -!- TISSUE SPECIFICITY: Expressed only in immatures seeds.
-CC   -!- DEVELOPMENTAL STAGE: Expressed between 7 and 28 days after
-CC       pollination.
-CC   -!- MISCELLANEOUS: The sequence of the probable beta chain is highly
-CC       homologous to the N-terminal sequence of BW24KD, a major buckwheat
-CC       allergen.
-CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins)
-CC       family.
+CC   -!- DEVELOPMENTAL STAGE: Expressed between 7 and 28 days after pollination.
+CC   -!- MISCELLANEOUS: The sequence of the probable beta chain is highly homologous to the N-terminal sequence of BW24KD, a major buckwheat allergen.
+CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins) family.
 CC   --------------------------------------------------------------------------
 CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
 CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
@@ -841,14 +813,9 @@ RT   "Expression, cloning, and immunological analysis of buckwheat
 RT   (Fagopyrum esculentum Moench) seed storage proteins.";
 RL   J. Agric. Food Chem. 49:1825-1829(2001).
 CC   -!- FUNCTION: Seed storage protein.
-CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
-CC       basic chain derived from a single precursor and linked by a
-CC       disulfide bond (By similarity).
-CC   -!- MISCELLANEOUS: The sequence of the probable beta chain is highly
-CC       homologous to the N-terminal sequence of BW24KD, a major buckwheat
-CC       allergen.
-CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins)
-CC       family.
+CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond (By similarity).
+CC   -!- MISCELLANEOUS: The sequence of the probable beta chain is highly homologous to the N-terminal sequence of BW24KD, a major buckwheat allergen.
+CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins) family.
 CC   --------------------------------------------------------------------------
 CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
 CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
@@ -911,12 +878,9 @@ RA   Nair A., Adachi T.;
 RT   "Screening and selection of hypoallergenic buckwheat species.";
 RL   ScientificWorldJournal 2:818-826(2002).
 CC   -!- FUNCTION: Seed storage protein.
-CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
-CC       basic chain derived from a single precursor and linked by a
-CC       disulfide bond (By similarity).
+CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond (By similarity).
 CC   -!- ALLERGEN: Causes an allergic reaction in human.
-CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins)
-CC       family.
+CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins) family.
 CC   --------------------------------------------------------------------------
 CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
 CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
@@ -980,14 +944,10 @@ RA   Rout M.K., Chrungoo N.K., Rao K.S.;
 RT   "Amino acid sequence of the basic subunit of 13S globulin of
 RT   buckwheat.";
 RL   Phytochemistry 45:865-867(1997).
-CC   -!- FUNCTION: Seed storage protein with a relatively high level of Lys
-CC       and Met.
-CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
-CC       basic chain derived from a single precursor and linked by a
-CC       disulfide bond (By similarity).
+CC   -!- FUNCTION: Seed storage protein with a relatively high level of Lys and Met.
+CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond (By similarity).
 CC   -!- TISSUE SPECIFICITY: Cotyledons and endosperm protein bodies.
-CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins)
-CC       family.
+CC   -!- SIMILARITY: Belongs to the 11S seed storage protein (globulins) family.
 DR   HSSP; P04776; 1FXZ.
 DR   InterPro; IPR006045; Cupin.
 DR   InterPro; IPR011051; RmlC_like_cupin.

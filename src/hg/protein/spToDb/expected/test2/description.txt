@@ -1,0 +1,18 @@
+Q6GZX4	RecName: Full=Putative transcription factor 001R;
+Q6GZX3	RecName: Full=Uncharacterized protein 002L;
+Q197F8	RecName: Full=Uncharacterized protein 002R;
+Q197F7	RecName: Full=Uncharacterized protein 003L;
+Q6GZX2	RecName: Full=Uncharacterized protein 3R; Flags: Precursor;
+Q6GZX1	RecName: Full=Uncharacterized protein 004R;
+Q197F5	RecName: Full=Uncharacterized protein 005L; Flags: Precursor;
+Q6GZX0	RecName: Full=Uncharacterized protein 005R;
+Q91G88	RecName: Full=Putative KilA-N domain-containing protein 006L;
+Q6GZW9	RecName: Full=Uncharacterized protein 006R;
+Q6GZW8	RecName: Full=Uncharacterized protein 007R;
+Q197F3	RecName: Full=Uncharacterized protein 007R;
+Q197F2	RecName: Full=Uncharacterized protein 008L;
+Q6GZW6	RecName: Full=Putative helicase 009L;          EC=3.6.4.-;
+Q91G85	RecName: Full=Uncharacterized protein 009R; Flags: Precursor;
+Q6GZW5	RecName: Full=Uncharacterized protein 010R;
+Q197E9	RecName: Full=Uncharacterized protein 011L;
+Q6GZW4	RecName: Full=Uncharacterized protein 011R;
