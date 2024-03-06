@@ -1405,7 +1405,7 @@ return hDnaFromSeq(db, chromName, 0, size, dnaLower);
 struct slName *hAllChromNames(char *db)
 /* Get list of all chromosome names in database. */
 {
-if (trackHubDatabase(db))
+if (trackHubDatabase(db) || hubConnectIsCurated(trackHubSkipHubName(db)))
     return trackHubAllChromNames(db);
 struct slName *list = NULL;
 struct sqlConnection *conn = hAllocConn(db);

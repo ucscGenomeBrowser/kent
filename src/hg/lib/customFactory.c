@@ -3066,7 +3066,7 @@ static boolean bamRecognizer(struct customFactory *fac,	struct customPp *cpp, ch
 			     struct customTrack *track)
 /* Return TRUE if looks like we're handling a bam track */
 {
-return (sameType(type, "bam"));
+return (sameType(type, "bam") || sameType(type, "cram"));
 }
 
 static struct customTrack *bamLoader(struct customFactory *fac, struct hash *chromHash,
@@ -4261,7 +4261,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	{
 	if (ctDb == NULL)
 	    ctDb = genomeDb;
-	else if (differentString(ctDb, genomeDb))
+	else if (differentString(ctDb, trackHubSkipHubName(genomeDb)))
 	    errAbort("can't load %s data into %s custom tracks",
 		     ctDb, genomeDb);
 	}
