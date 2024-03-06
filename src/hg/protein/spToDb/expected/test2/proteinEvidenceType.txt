@@ -1,0 +1,2 @@
+3	Inferred from homology
+4	Predicted

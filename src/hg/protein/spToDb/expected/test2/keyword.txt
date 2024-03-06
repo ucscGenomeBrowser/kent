@@ -1,0 +1,14 @@
+1	Activator
+2	Reference proteome
+3	Transcription
+4	Transcription regulation
+5	Host membrane
+6	Membrane
+7	Transmembrane
+8	Transmembrane helix
+9	Signal
+10	Coiled coil
+11	ATP-binding
+12	Helicase
+13	Hydrolase
+14	Nucleotide-binding
