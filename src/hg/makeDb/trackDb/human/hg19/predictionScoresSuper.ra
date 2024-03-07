@@ -7,4 +7,4 @@ group phenDis
 pennantIcon New red ../goldenPath/newsarch.html "Released, 2024"
 
 # bayesDel track
-include hg19/bayesDel.ra
+include bayesDel.ra
