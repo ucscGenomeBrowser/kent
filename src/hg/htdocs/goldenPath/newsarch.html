@@ -63,6 +63,25 @@ target=_blank>our GitHub page</a>.</p>
 <!-- ============= 2024 archived news ============= -->
 <a name="2024"></a>
 
+<a name="030724"></a>
+<h2>Mar. 07, 2024 &nbsp;&nbsp; New Prediction Scores super track and BayesDel track for hg19</h2>
+<p>
+We are happy to announce the new Human Prediction Scores super track for the
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=predictionScoresSuper">GRCh37/hg19</a> assembly. This super
+track currently includes the <a href="/cgi-bin/hgTrackUi?db=hg19&g=bayesDel">BayesDel track</a>,
+which can be used for clinical variant classification research.
+<a href="https://fenglab.chpc.utah.edu/BayesDel/BayesDel.html" target="_blank">BayesDel</a> is a
+deleteriousness meta-score for coding and non-coding variants, single nucleotide variants, and small
+insertion/deletions. The range of the score is from -1.29334 to 0.75731. The higher the score, the
+more likely the variant is pathogenic. There are eight subtracks for the BayesDel track: four
+include pre-computed MaxAF-integrated BayesDel scores for missense variants, one for each base.
+The other four are of the same format, but scores are not MaxAF-integrated.</p>
+<p>
+We would like to thank the
+<a href="https://fenglab.chpc.utah.edu/BayesDel.html" target="_blank">BayesDel team</a> for
+providing precomputed data. We would also like to thank Tiana Pereira, Christopher Lee, Jeltje van
+Baren, Gerardo Perez, and Anna Benet-Pages for their efforts on this release.</p>
+ 
 <a name="030524"></a>
 <h2>Mar. 05, 2024 &nbsp;&nbsp; New JASPAR tracks: Human (hg19/hg38) - Mouse (mm10/mm39)</h2>
 <p>
@@ -86,42 +105,6 @@ Binding site predictions and UCSC tracks were computed by the
 <a href="https://mathelierlab.com/"
 target="_blank">Computational Biology & Gene Regulation group</a>. We would like to thank Jairo
 Navarro and Gerardo Perez at UCSC for building and testing these tracks.</p>
-
-<a name="030124"></a>
-<h2>Mar. 01, 2024 &nbsp;&nbsp; AbSplice Prediction Scores for hg38</h2>
-<p>
-We are happy to announce the release of the
-<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=abSplice" target="_blank">AbSplice scores</a>
-track for the human genome, GRCh38/hg38. AbSplice is a method that predicts aberrant splicing across
-human tissues, as described in <a href="https://doi.org/10.1038/s41588-023-01373-3"
-target="_blank">Wagner, &Ccedil;elik et al., 2023</a>. This track displays precomputed AbSplice
-scores for all possible single-nucleotide variants genome-wide. The scores represent the probability
-that a given variant causes aberrant splicing in a given tissue.</p>
-<p>
-Aberrant splicing is a major cause of genetic disorders but its direct detection in transcriptomes
-is limited to clinically accessible tissues such as skin or body fluids. &Ccedil;elik et al.
-generated an aberrant splicing benchmark dataset, spanning over 8.8 million rare variants in 49
-human tissues from the Genotype-Tissue Expression (GTEx) dataset. The AbSplice score is a
-probability estimate of how likely aberrant splicing of some sort takes place in a given tissue.
-The authors <a href="https://github.com/gagneurlab/absplice?tab=readme-ov-file#output"
-target="_blank">suggest</a> three cutoffs which are represented by color in the track.</p>
-
-<ul>
-  <li><b><font color="#FF0000">High (red)</font></b> - <b>
-    An AbSplice score over 0.2</b> indicates a high likelihood of aberrant splicing in at least one
-    tissue.</li>
-  <li><b><font color="#FF8000">Medium (orange)</font></b> - <b>
-    A score between 0.05 and 0.2 </b> indicates a medium likelihood.</li>
-  <li><b><font color="#0000FF">Low (blue)</font></b> - <b>
-    A score between 0.01 and 0.05 </b> indicates a low likelihood.</li>
-  <li><b>Scores below 0.01 are not displayed.</b></li>
-</ul>
-
-<p>
-We would like to thank Wagner, &Ccedil;elik et al., 2023 for generating and making the data publicly
-available. We would also like to thank Jeltje van Baren and Jairo Navarro for the creation and
-release of these tracks.
-</p>
 
 <a name="030124"></a>
 <h2>Mar. 01, 2024 &nbsp;&nbsp; AbSplice Prediction Scores for hg38</h2>
