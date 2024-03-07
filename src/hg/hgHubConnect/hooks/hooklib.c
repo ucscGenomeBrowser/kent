@@ -18,7 +18,7 @@
 
 void fillOutHttpResponseError()
 {
-fprintf(stderr, "http responde error!\n");
+fprintf(stderr, "http response error!\n");
 }
 
 void fillOutHttpResponseSuccess()

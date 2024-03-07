@@ -111,10 +111,15 @@ else
                 else
                     {
                     // the directory may not exist yet
+                    int oldUmask = 00;
                     if (!isDirectory(dataDir))
                         {
                         fprintf(stderr, "making directory '%s'\n", dataDir);
+                        // the directory needs to be 777, so ignore umask for now
+                        oldUmask = umask(0);
                         makeDirsOnPath(dataDir);
+                        // restore umask
+                        umask(oldUmask);
                         }
                     copyFile(tusFile, newFile);
                     // the files definitely should not be executable!
