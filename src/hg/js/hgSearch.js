@@ -499,7 +499,7 @@ var hgSearch = (function() {
                     }
                     if (match.highlight) {
                         url += url[url.length-1] !== '&' ? '&' : '';
-                        url += "addHighlight=" + match.highlight;
+                        url += "addHighlight=" + encodeURIComponent(match.highlight);
                     }
                 } else {
                     url = "hgc?db=" + db + "&g=" + hgcTitle + "&i=" + match.position + "&c=0&o=0&l=0&r=0" ;
@@ -940,7 +940,7 @@ var hgSearch = (function() {
                 position = match.position;
                 newUrl = "../cgi-bin/hgTracks" + "?db=" + db + "&position=" + position;
                 if (match.highlight) {
-                    newUrl += "&addHighlight=" + match.highlight;
+                    newUrl += "&addHighlight=" + encodeURIComponent(match.highlight);
                 }
                 if (positionMatch.name !== "chromInfo") {
                     newUrl += "&" + positionMatch.name + "=pack";
