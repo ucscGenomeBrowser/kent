@@ -4261,7 +4261,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	{
 	if (ctDb == NULL)
 	    ctDb = genomeDb;
-	else if (differentString(ctDb, trackHubSkipHubName(genomeDb)))
+	else if (differentString(trackHubSkipHubName(ctDb), trackHubSkipHubName(genomeDb)))
 	    errAbort("can't load %s data into %s custom tracks",
 		     ctDb, genomeDb);
 	}
