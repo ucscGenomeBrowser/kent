@@ -18,7 +18,7 @@ errAbort(
   "usage:\n"
   "  pslToBigPsl file.psl stdout | sort -k1,1 -k2,2n > file.bigPslInput\n"
   "options:\n"
-  "  -cds=file.cds\n"
+  "  -cds=file.cds - tab-separated columns with the qName and a GenBank style one-based CDS (e.g. 475..1731, <1..354)\n"
   "  -fa=file.fasta\n"
   "NOTE: to build bigBed:\n"
   "   bedToBigBed -type=bed12+13 -tab -as=bigPsl.as file.bigPslInput chrom.sizes output.bb\n"
