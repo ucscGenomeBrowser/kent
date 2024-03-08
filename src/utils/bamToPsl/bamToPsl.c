@@ -62,7 +62,9 @@ return hash;
 static void convertToPsl(bam1_t *aln, bam_header_t *head, struct hash *chromAlias, FILE *f)
 /* convert one alignment to a psl */
 {
-struct psl *psl = bamToPslUnscored(aln, head);
+// includes hard masked in PSL so that supplementary alignments create PSLs that reflect the
+// entire query
+struct psl *psl = bamToPslUnscored2(aln, head, TRUE);
 if (psl != NULL)
     {
     if (chromAlias)

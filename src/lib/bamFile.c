@@ -716,9 +716,12 @@ while (s < bam->data + bam->data_len)
     }
 }
 
-struct psl *bamToPslUnscored(const bam1_t *bam, const bam_hdr_t *hdr)
+struct psl *bamToPslUnscored2(const bam1_t *bam, const bam_hdr_t *hdr, int inclHardClipped)
 /* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
- * no scoring info) */
+ * no scoring info).  If inclHardClipped is True, the size of the hard-clipped regions
+ * are include in the PSL.  This is required for supplementary alignments to have the
+ * correct query sizes and offsets.
+ */
 {
 const bam1_core_t *core = &bam->core;
 
@@ -772,7 +775,12 @@ for (i = 0;  i < core->n_cigar;  i++)
 	    qPos += n;
 	    qLength += n;
 	    break;
-	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
+	case 'H': // note query bases not stored in record's query sequence ("hard clipping")
+            if (inclHardClipped)
+                {
+                qPos += n;
+                qLength += n;
+                }
 	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
 	    break;
 	default:
@@ -800,5 +808,12 @@ psl->qStarts = qStarts;
 psl->tStarts = tStarts;
 pslComputeInsertCounts(psl);
 return psl;
+}
+
+struct psl *bamToPslUnscored(const bam1_t *bam, const bam_hdr_t *hdr)
+/* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
+ * no scoring info) */
+{
+return bamToPslUnscored2(bam, hdr, FALSE);
 }
 

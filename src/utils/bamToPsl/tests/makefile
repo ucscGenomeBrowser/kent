@@ -14,7 +14,7 @@ test2: mkout
 	${PROG} -nohead input/multimap.sam -fasta=output/$@.fa output/$@.psl
 	diff expected/$@.psl output/$@.psl
 	diff expected/$@.fa output/$@.fa
-	#pslCheck -verbose=0 -querySizes=input/multimap.qsizes output/$@.psl
+	pslCheck -verbose=0 -querySizes=input/multimap.qsizes output/$@.psl
 
 mkout:
 	@mkdir -p output
