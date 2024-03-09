@@ -394,6 +394,7 @@
 ./runBuild GCA_004138255.1_ASM413825v1 plants Ulva_prolifera
 ./runBuild GCA_004150315.1_ASM415031v1 plants Actinidia_eriantha
 ./runBuild GCA_004170445.1_ASM417044v1 plants Arachis_hypogaea
+./runBuild GCA_004302925.2_ASM430292v2 invertebrate Cochliomyia_hominivorax
 ./runBuild GCA_004354385.2_ASM435438v2 invertebrate Drosophila_innubila
 ./runBuild GCA_004359145.1_Mpur_GB-01_v3 fungi Monascus_purpureus
 ./runBuild GCA_004363415.1_EscRob_v1_BIUU mammals Eschrichtius_robustus
