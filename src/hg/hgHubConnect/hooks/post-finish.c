@@ -30,17 +30,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct jsonElement *makeDefaultResponse()
-/* Create the default response json with some fields pre-filled */
-{
-struct hash *defHash = hashNew(8);
-struct jsonElement *response = newJsonObject(defHash);
-// only the HTTP Response object is important to have by default, the other
-// fields will be created as needed
-jsonObjectAdd(response, HTTP_NAME, newJsonObject(hashNew(8)));
-return response;
-}
-
 int postFinish()
 /* post-finish hook for tus daemon. Read JSON encoded hook request from
  * stdin and write a JSON encoded hook to stdout. Writing to stderr
@@ -105,7 +94,7 @@ else
                 // and re-call this hook, for now just exit if the file exists
                 if (fileExists(newFile))
                     {
-                    rejectUpload(response, "file '%s' exists already, not overwriting");
+                    rejectUpload(response, "file '%s' exists already, not overwriting", newFile);
                     exitStatus = 1;
                     }
                 else

@@ -16,6 +16,14 @@
 #include "obscure.h"
 #include "hooklib.h"
 
+char *prettyFileSize(long size)
+/* Return a string representing the size of a file */
+{
+char buf[32];
+sprintWithGreekByte(buf, sizeof(buf), size);
+return cloneString(buf);
+}
+
 void fillOutHttpResponseError()
 {
 fprintf(stderr, "http response error!\n");
@@ -24,6 +32,23 @@ fprintf(stderr, "http response error!\n");
 void fillOutHttpResponseSuccess()
 {
 fprintf(stderr, "http response success!\n");
+}
+
+struct jsonElement *makeDefaultResponse()
+/* Create the default response json with some fields pre-filled */
+{
+struct hash *defHash = hashNew(0);
+struct jsonElement *response = newJsonObject(defHash);
+// only the HTTP Response object is important to have by default, the other
+// fields will be created as needed
+struct jsonElement *httpResponse = newJsonObject(hashNew(0));
+jsonObjectAdd(httpResponse, HTTP_STATUS, newJsonNumber(200)); // default to a successful response 
+jsonObjectAdd(httpResponse, HTTP_BODY, newJsonString(""));
+struct jsonElement *header = newJsonObject(hashNew(0));
+jsonObjectAdd(header, HTTP_CONTENT_TYPE, newJsonString(HTTP_CONTENT_TYPE_STR));
+jsonObjectAdd(httpResponse, HTTP_HEADER, header);
+jsonObjectAdd(response, HTTP_NAME, httpResponse);
+return response;
 }
 
 void rejectUpload(struct jsonElement *response, char *msg, ...)
@@ -39,6 +64,9 @@ va_start(args, msg);
 struct dyString *ds = dyStringNew(0);
 dyStringVaPrintf(ds, msg, args);
 va_end(args);
-jsonObjectAdd(response, ERR_MSG, newJsonString(dyStringCannibalize(&ds)));
+// find the HTTPResponse object and fill it out with msg:
+struct jsonElement *httpResponse = jsonFindNamedField(response, "", HTTP_NAME);
+jsonObjectAdd(httpResponse, HTTP_STATUS, newJsonNumber(500));
+jsonObjectAdd(httpResponse, HTTP_BODY, newJsonString(dyStringCannibalize(&ds)));
 }
 

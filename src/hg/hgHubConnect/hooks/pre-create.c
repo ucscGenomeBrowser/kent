@@ -31,16 +31,6 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-struct jsonElement *makeDefaultResponse()
-/* Create the default response json with some fields pre-filled */
-{
-struct hash *defHash = hashNew(8);
-struct jsonElement *response = newJsonObject(defHash);
-// only the HTTP Response object is important to have by default, the other
-// fields will be created as needed
-jsonObjectAdd(response, HTTP_NAME, newJsonObject(hashNew(8)));
-return response;
-}
 
 int preCreate()
 /* pre-create hook for tus daemon. Read JSON encoded hook request from
@@ -81,17 +71,18 @@ else
         fprintf(stderr, "userName='%s'\n'", userName);
         if (!userName)
             {
-            rejectUpload(response, "not logged in");
+            rejectUpload(response, "You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
             exitStatus = 1;
             }
         else
             {
             long reqFileSize = jsonQueryInt(req, "", "Event.Upload.Size", 0, NULL);
+            char *reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.filename", NULL);
             long currQuota = checkUserQuota(userName);
             long newQuota = currQuota + reqFileSize;
             if (newQuota > MAX_QUOTA)
                 {
-                rejectUpload(response, "file too large, current stored files is %0.2fgb", currQuota / 1000000000.0);
+                rejectUpload(response, "File '%s' is too large, need %s free space but current used space is %s out of %s", reqFileName, prettyFileSize(reqFileSize), prettyFileSize(currQuota), prettyFileSize(MAX_QUOTA));
                 exitStatus = 1;
                 }
             }
@@ -109,7 +100,7 @@ else
     }
 // always print a response no matter what
 jsonPrintToFile(response, NULL, stdout, 0);
-return exitStatus;
+return 0;
 }
 
 int main(int argc, char *argv[])

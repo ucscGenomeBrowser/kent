@@ -14,9 +14,11 @@ function prettyFileSize(num) {
 var hubCreate = (function() {
     let uiState = { // our object for keeping track of the current UI and what to do
         toUpload: {}, // set of file objects keyed by name
-        input: null, // the <input> element for picking files from the users machine
+        input: null, // the hidden input element
         pickedList: null, // the <div> for displaying files in toUpload
-        pendingQueue: [], // our queue of pending [xmlhttprequests, file], kind of like the toUpload object
+        pendingQueue: [], // our queue of pending [tus.Upload, file], kind of like the toUpload object
+        fileList: [], // the files this user has uploaded, initially populated by the server
+                        // on page load, but gets updated as the user uploades/deletes files
     };
 
     // We can use XMLHttpRequest if necessary or a mirror can't use tus
@@ -58,12 +60,28 @@ var hubCreate = (function() {
         return newBtn;
     }
 
+    function createInput() {
+        /* Create a new input element for a file picker */
+        let input = document.createElement("input");
+        //input.style.opacity = 0;
+        //input.style.float = "right";
+        input.multiple = true;
+        input.type = "file";
+        input.id = "hiddenFileInput";
+        input.style = "display: none";
+        input.addEventListener("change", listPickedFiles);
+        return input;
+    }
+
     function requestsPending() {
         /* Return true if requests are still pending, which means it needs to
          * have been sent(). aborted requests are considered done for this purpose */
         for (let [req, f] of uiState.pendingQueue) {
-            if (req.readyState != XMLHttpRequest.DONE && req.readyState != XMLHttpRequest.UNSENT) {
-                return true;
+            if (req._req !== null) {
+                xreq = req._req._xhr;
+                if (xreq.readyState != XMLHttpRequest.DONE && xreq.readyState != XMLHttpRequest.UNSENT) {
+                    return true;
+                }
             }
         }
         return false;
@@ -101,10 +119,12 @@ var hubCreate = (function() {
         let newBtn = newButton("Cancel all");
         newBtn.addEventListener("click", (e) => {
             while (uiState.pendingQueue.length > 0) {
-                let [q, f] = uiState.pendingQueue.pop();
+                let [req, f] = uiState.pendingQueue.pop();
                 // we only need to abort requests that haven't finished yet
-                if (q.readyState != XMLHttpRequest.DONE) {
-                    q.abort();
+                if (req._req !== null) {
+                    if (_req._xhr.readyState != XMLHttpRequest.DONE) {
+                        req.abort(true);
+                    }
                 }
                 let li = liForFile(f);
                 if (li !== null) {
@@ -148,29 +168,33 @@ var hubCreate = (function() {
             xhr.withCredentials = true;
         };
 
-        let onSuccess = function(reqFname) {
+        let onSuccess = function(req) {
             // remove the selected file from the input element and the ul list
             // FileList is a read only setting, so we have to make
-            // a new one without this reqFname
-            let i;
-            let newFileList = [];
-            for (i = 0; i < uiState.input.files.length; i++) {
-                fname = uiState.input.files[i].name;
-                if (fname !== reqFname) {
-                    newFileList.unshift(uiState.input.files[0]);
+            // a new one without this req
+            delete uiState.toUpload[req.name];
+            let i, newReqObj = {};
+            for (i = 0; i < uiState.pendingQueue.length; i++) {
+                fname = uiState.pendingQueue[i][1].name;
+                if (fname === req.name) {
+                    // remove the successful tusUpload off
+                    uiState.pendingQueue.splice(i, 1);
                 }
             }
-            newFileList.reverse();
-            //uiState.input.files = newFileList;
             // remove the file from the list the user can see
-            let li = document.getElementById(reqFname+"#li");
+            let li = document.getElementById(req.name+"#li");
             li.parentNode.removeChild(li);
-            // add the file to the data table somehow?
-            removeCancelAllButton();
+            if (uiState.pendingQueue.length === 0) {
+                removeCancelAllButton();
+            }
+            const d = new Date(req.lastModified);
+            newReqObj = {"createTime": d.toJSON(), "name": req.name, "size": req.size};
+            addNewUploadedFileToTable(newReqObj);
         };
 
         let onError = function(err) {
-            alert(err);
+            removeCancelAllButton();
+            alert(err.originalResponse._xhr.responseText);
         };
 
         for (let f in uiState.toUpload) {
@@ -184,7 +208,7 @@ var hubCreate = (function() {
                         fileSize: file.size
                     },
                     onBeforeRequest: onBeforeRequest,
-                    onSuccess: onSuccess(file.name),
+                    onSuccess: onSuccess.bind(null, file),
                     onError: onError,
                     retryDelays: [1000],
                 };
@@ -192,6 +216,7 @@ var hubCreate = (function() {
                 // use a pre-create hook to validate the user
                 // and get an uploadUrl
                 let tusUpload = new tus.Upload(file, tusOptions);
+                uiState.pendingQueue.push([tusUpload, file]);
                 tusUpload.start();
             } else {
                 // make a new XMLHttpRequest for each file, if tusd-tusclient not supported
@@ -206,7 +231,7 @@ var hubCreate = (function() {
         while (uiState.pickedList.firstChild) {
             uiState.pickedList.removeChild(uiState.pickedList.firstChild);
         }
-        uiState.input.value = "";
+        uiState.input = createInput();
         uiState.toUpload = {};
         togglePickStateMessage(true);
     }
@@ -215,20 +240,20 @@ var hubCreate = (function() {
         let firstBtn = document.getElementById("btnForInput");
         let btnRow = document.getElementById("chooseAndSendFilesRow");
         if (!document.getElementById("clearPicked")) {
-            let newLabel = document.createElement("label");
-            newLabel.classList.add("button");
-            newLabel.id = "clearPicked";
-            newLabel.textContent = "Clear";
-            newLabel.addEventListener("click", clearPickedFiles);
-            btnRow.append(newLabel);
+            let clearBtn = document.createElement("button");
+            clearBtn.classList.add("button");
+            clearBtn.id = "clearPicked";
+            clearBtn.textContent = "Clear";
+            clearBtn.addEventListener("click", clearPickedFiles);
+            btnRow.append(clearBtn);
         }
         if (!document.getElementById("submitPicked")) {
-            newLabel = document.createElement("label");
-            newLabel.id = "submitPicked";
-            newLabel.classList.add("button");
-            newLabel.textContent = "Submit";
-            newLabel.addEventListener("click", submitPickedFiles);
-            btnRow.append(newLabel);
+            submitBtn = document.createElement("button");
+            submitBtn.id = "submitPicked";
+            submitBtn.classList.add("button");
+            submitBtn.textContent = "Submit";
+            submitBtn.addEventListener("click", submitPickedFiles);
+            btnRow.append(submitBtn);
         }
     }
 
@@ -240,13 +265,21 @@ var hubCreate = (function() {
     }
 
     function listPickedFiles() {
+        //uiState.input.click(); // let the user choose files:
         if (uiState.input.files.length === 0) {
-            togglePickStateMessage(true);
-            removeClearSubmitButtons();
+            console.log("not input");
+            return;
+            //togglePickStateMessage(true);
+            //removeClearSubmitButtons();
         } else {
-            let displayList = document.createElement("ul");
-            displayList.classList.add("pickedFiles");
-            uiState.pickedList.appendChild(displayList);
+            let displayList = document.getElementsByClassName("pickedFiles");
+            if (displayList.length === 0) {
+                displayList = document.createElement("ul");
+                displayList.classList.add("pickedFiles");
+                uiState.pickedList.appendChild(displayList);
+            } else {
+                displayList = displayList[0];
+            } 
             for (let file of uiState.input.files ) {
                 if (file.name in uiState.toUpload) { continue; }
                 // create a list for the user to see
@@ -262,61 +295,104 @@ var hubCreate = (function() {
             togglePickStateMessage(false);
             addClearSubmitButtons();
         }
+        // always clear the input element
+        uiState.input = createInput();
     }
 
     function dataTablePrintSize(data, type, row, meta) {
         return prettyFileSize(data);
     }
 
-    function deleteFile(fname) {
+    let pendingDeletes = {};
+    function deleteFile(rowIx, fname) {
         // Send an async request to hgHubConnect to delete the file
         // Note that repeated requests, like from a bot, will return 404 as a correct response
         console.log(`sending delete req for ${fname}`);
-        const xhr = new XMLHttpRequest();
         const endpoint = "../cgi-bin/hgHubConnect?deleteFile=" + fname;
-        this.xhr = xhr;
-        this.xhr.open("DELETE", endpoint, true);
-        this.xhr.send();
-        // TODO: on the correct return code, delete the row
+        if (!(endpoint in pendingDeletes)) {
+            const xhr = new XMLHttpRequest();
+            pendingDeletes[endpoint] = xhr;
+            this.xhr = xhr;
+            this.xhr.open("DELETE", endpoint, true);
+            this.xhr.send();
+            deleteFileFromTable(rowIx, fname);
+            delete pendingDeletes[endpoint];
+        }
     }
 
-    function showExistingFiles(fileList) {
-        // Make the DataTable for each file
-        //$(document).on("draw.dt", function() {alert("table redrawn");});
-        let table = $("#filesTable").DataTable({
-            data: fileList,
-            columnDefs: [{orderable: false, targets: [0,1]}],
-            columns: [
-                {data: "", title: "<input type=\"checkbox\"></input>",
-                    render: function(data, type, row) {
-                        return "<input type=\"checkbox\"></input>";
-                    }
-                },
-                {data: "action", title: "Action",
-                    render: function(data, type, row) {
-                        // TODO: add event handler on delete button
-                        // click to call hgHubDelete file
-                        return "<button class='deleteFileBtn'>Delete</button";
-                    }
-                },
-                {data: "name", title: "File name"},
-                {data: "size", title: "File size", render: dataTablePrintSize},
-                {data: "createTime", title: "Creation Time"},
-            ],
-            order: [[4, 'desc']],
-            initComplete: function(settings, json) {
-                let btns = document.querySelectorAll('.deleteFileBtn');
-                let i;
-                for (i = 0; i < btns.length; i++) {
-                    let fnameNode = btns[i].parentNode.nextElementSibling.childNodes[0];
-                    if (fnameNode.nodeName !== "#text") {continue;}
-                    let fname = fnameNode.nodeValue;
-                    btns[i].addEventListener("click", (e) => {
-                        deleteFile(fname);
-                    });
+    function deleteFileFromTable(rowIx, fname) {
+        // req is an object with properties of an uploaded file, make a new row
+        // for it in the filesTable
+        let table = $("#filesTable").DataTable();
+        let row = table.row((idx, data) => data.name === fname);
+        row.remove().draw();
+    }
+
+    function addNewUploadedFileToTable(req) {
+        // req is an object with properties of an uploaded file, make a new row
+        // for it in the filesTable
+        let table = null;
+        if ($.fn.dataTable.isDataTable("#filesTable")) {
+            table = $("#filesTable").DataTable();
+            let newRow = table.row.add(req).draw();
+        } else {
+            showExistingFiles([req]);
+        }
+    }
+
+    let tableInitOptions = {
+        //columnDefs: [{orderable: false, targets: [0,1]}],
+        columnDefs: [
+            {
+                orderable: false, targets: 0,
+                title: "<input type=\"checkbox\"></input>",
+                render: function(data, type, row) {
+                    return "<input type=\"checkbox\"></input>";
+                }
+            },
+            {
+                orderable: false, targets: 1,
+                data: "action", title: "Action",
+                render: function(data, type, row) {
+                    // TODO: add event handler on delete button
+                    // click to call hgHubDelete file
+                    return "<button class='deleteFileBtn'>Delete</button";
+                }
+            },
+            {
+                targets: 3,
+                render: function(data, type, row) {
+                    return dataTablePrintSize(data);
                 }
             }
-        });
+        ],
+        columns: [
+            {data: "", },
+            {data: "", },
+            {data: "name", title: "File name"},
+            {data: "size", title: "File size", render: dataTablePrintSize},
+            {data: "createTime", title: "Creation Time"},
+        ],
+        order: [[4, 'desc']],
+        drawCallback: function(settings) {
+            let btns = document.querySelectorAll('.deleteFileBtn');
+            let i;
+            for (i = 0; i < btns.length; i++) {
+                let fnameNode = btns[i].parentNode.nextElementSibling.childNodes[0];
+                if (fnameNode.nodeName !== "#text") {continue;}
+                let fname = fnameNode.nodeValue;
+                btns[i].addEventListener("click", (e) => {
+                    deleteFile(i, fname);
+                });
+            }
+        },
+    };
+
+    function showExistingFiles(d) {
+        // Make the DataTable for each file
+        //$(document).on("draw.dt", function() {alert("table redrawn");});
+        tableInitOptions.data = d;
+        let table = $("#filesTable").DataTable(tableInitOptions);
     }
 
     function checkJsonData(jsonData, callerName) {
@@ -366,7 +442,7 @@ var hubCreate = (function() {
             console.log("tus is not supported, falling back to XMLHttpRequest");
         }
         let pickedFiles = document.getElementById("fileList");
-        let input = document.getElementById("uploadedFiles");
+        let inputBtn = document.getElementById("btnForInput");
         if (pickedFiles !== null) {
             // this element should be an empty div upon loading the page
             uiState.pickedList = pickedFiles;
@@ -379,22 +455,10 @@ var hubCreate = (function() {
         } else {
             // TODO: graceful handle of leaving the page and coming back?
         }
-        if (input !== null) {
-            uiState.input = input;
-            uiState.input.style.float = "right";
-            uiState.input.style.opacity = 0;
-            uiState.input.value = "";
-        } else {
-            let parent = document.getElementById("chooseAndSendFilesRow");
-            input = document.createElement("input");
-            input.style.opacity = 0;
-            input.style.float = "right";
-            input.multiple = true;
-            input.id = "uploadedFiles";
-            input.type = "file";
-            uiState.input = input;
-            parent.appendChild(input);
-        }
+        let parent = document.getElementById("chooseAndSendFilesRow");
+        let input = createInput();
+        uiState.input = input;
+        inputBtn.parentNode.appendChild(input);
 
         if (typeof cartJson !== "undefined") {
             if (typeof cartJson.warning !== "undefined") {
@@ -421,15 +485,17 @@ var hubCreate = (function() {
             // TODO: get user name
             // TODO: send a request with username
             // TODO: have tusd respond on server
-            let uploadSection = document.getElementById("uploadedFilesSection");
+            let uploadSection = document.getElementById("chosenFilesSection");
             if (uploadSection.style.display === "none") {
                 uploadSection.style.display = "";
             }
             if (typeof userFiles !== 'undefined' && typeof userFiles.fileList !== 'undefined' &&
                     userFiles.fileList.length > 0) { 
-                showExistingFiles(userFiles.fileList);
+                uiState.fileList= userFiles.fileList;
+                showExistingFiles(uiState.fileList);
             }
-            input.addEventListener("change", listPickedFiles);
+            inputBtn.addEventListener("click", (e) => uiState.input.click());
+            //uiState.input.addEventListener("change", listPickedFiles);
             // TODO: add event handler for when file is succesful upload
             // TODO: add event handlers for editing defaults, grouping into hub
             // TODO: display quota somewhere

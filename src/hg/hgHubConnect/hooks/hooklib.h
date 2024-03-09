@@ -9,12 +9,23 @@
 #define REJECT_SETTING "RejectUpload"
 #define STOP_SETTING "StopUpload"
 #define HTTP_NAME "HTTPResponse"
+#define HTTP_STATUS "StatusCode"
+#define HTTP_BODY "Body"
+#define HTTP_HEADER "Header"
+#define HTTP_CONTENT_TYPE "Content-Type"
+#define HTTP_CONTENT_TYPE_STR "application/json"
 #define MAX_QUOTA_BYTES 1000000000
 #define MAX_QUOTA MAX_QUOTA_BYTES
+
+char *prettyFileSize(long size);
+/* Return a string representing the size of a file */
 
 void fillOutHttpResponseError();
 
 void fillOutHttpResponseSuccess();
+
+struct jsonElement *makeDefaultResponse();
+/* Create the default response json with some fields pre-filled */
 
 void rejectUpload(struct jsonElement *response, char *msg, ...);
 /* Set the keys for stopping an upload */

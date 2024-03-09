@@ -73,7 +73,7 @@ jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 jsIncludeFile("cart.js", NULL);
-jsIncludeFile("tus.min.js", NULL);
+jsIncludeFile("tus.js", NULL);
 jsIncludeFile("hgMyData.js", NULL);
 webIncludeResourceFile("../style/bootstrap.min.css");
 webIncludeResourceFile("../style/gb.css");
@@ -91,7 +91,7 @@ puts("<div class='tabSection'>\n");
 puts("<h4>Create your own hub</h4>\n");
 puts("<p>After choosing files, click \"Create Hub\" to begin uploading the files to our server</p>\n");
 puts("<div class='buttonDiv' id='chooseAndSendFilesRow'>\n");
-puts("<label id='btnForInput' class='button' for=\"uploadedFiles\">Choose files</label>\n");
+puts("<button  id='btnForInput' class='button' for=\"chosenFiles\">Choose files</button>\n");
 puts("</div>\n"); // .buttonDiv
 puts("<div id='fileList' style=\"clear: right\"></div>\n");
 puts("</div>"); // .tabSection
@@ -113,7 +113,7 @@ puts("</div>"); // .tabSection
 puts("</div>\n"); // col-md-6
 puts("</div>\n"); // row
 
-puts("<div id='uploadedFilesSection' style=\"display: none\" class='col-md-6 tabSection'>");
+puts("<div id='chosenFilesSection' style=\"display: none\" class='col-md-6 tabSection'>");
 puts("<h4>Your uploaded hubs</h4>");
 webIncludeFile("inc/hgMyData.html");
 puts("</div>\n");
