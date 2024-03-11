@@ -303,6 +303,14 @@ var hubCreate = (function() {
         return prettyFileSize(data);
     }
 
+    function deleteFileFromTable(rowIx, fname) {
+        // req is an object with properties of an uploaded file, make a new row
+        // for it in the filesTable
+        let table = $("#filesTable").DataTable();
+        let row = table.row((idx, data) => data.name === fname);
+        row.remove().draw();
+    }
+
     let pendingDeletes = {};
     function deleteFile(rowIx, fname) {
         // Send an async request to hgHubConnect to delete the file
@@ -320,12 +328,19 @@ var hubCreate = (function() {
         }
     }
 
-    function deleteFileFromTable(rowIx, fname) {
-        // req is an object with properties of an uploaded file, make a new row
-        // for it in the filesTable
-        let table = $("#filesTable").DataTable();
-        let row = table.row((idx, data) => data.name === fname);
-        row.remove().draw();
+    function viewInGenomeBrowser(rowIx, fname) {
+        // redirect to hgTracks with this track as a custom track
+        bigBedExts = [".bb", ".bigBed"];
+        let i;
+        for (i = 0; i < bigBedExts.length; i++) {
+            if (fname.toLowerCase().endsWith(bigBedExts[i])) {
+                // TODO: tusd should return this location in it's response after
+                // uploading a file and then we can look it up somehow, the cgi can
+                // write the links directly into the html directly for prev uploaded files maybe?
+                window.location.assign("../cgi-bin/hgTracks?db=hg38&hgt.customText=" + "/hive/users/chmalee/tmp/userDataDir/4f/chmalee/" + fname);
+                return false;
+            }
+        }
     }
 
     function addNewUploadedFileToTable(req) {
@@ -356,7 +371,7 @@ var hubCreate = (function() {
                 render: function(data, type, row) {
                     // TODO: add event handler on delete button
                     // click to call hgHubDelete file
-                    return "<button class='deleteFileBtn'>Delete</button";
+                    return "<button class='deleteFileBtn'>Delete</button><button class='viewInBtn'>View In GB</button>";
                 }
             },
             {
@@ -383,6 +398,15 @@ var hubCreate = (function() {
                 let fname = fnameNode.nodeValue;
                 btns[i].addEventListener("click", (e) => {
                     deleteFile(i, fname);
+                });
+            }
+            btns = document.querySelectorAll('.viewInBtn');
+            for (i = 0; i < btns.length; i++) {
+                let fnameNode = btns[i].parentNode.nextElementSibling.childNodes[0];
+                if (fnameNode.nodeName !== "#text") {continue;}
+                let fname = fnameNode.nodeValue;
+                btns[i].addEventListener("click", (e) => {
+                    viewInGenomeBrowser(i, fname);
                 });
             }
         },
