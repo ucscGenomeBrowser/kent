@@ -16,6 +16,7 @@ itemRgb on
 mouseOverField _mouseOver
 bigDataUrl /gbdb/$D/bbi/enigma/BRCAclinDomains.bb
 noScoreFilter on
+html enigma
 
 track BRCAexonWeights
 shortLabel BRCA1/BRCA2 exon weights 1.1.0
@@ -27,6 +28,7 @@ type bigBed 8 + 15
 mouseOverField _mouseOver
 bigDataUrl /gbdb/$D/bbi/enigma/BRCAexonWeights.bb
 noScoreFilter on
+html enigma
 
 track BRCAfunctionalAssays
 shortLabel BRCA1/BRCA2 functional assays 1.1.0
@@ -39,6 +41,7 @@ itemRgb on
 mouseOverField _mouseOver
 bigDataUrl /gbdb/$D/bbi/enigma/BRCAfunctionalAssays.bb
 noScoreFilter on
+html enigma
 
 track BRCAsplicing
 shortLabel BRCA1/BRCA2 splicing 1.1.0
@@ -51,6 +54,7 @@ itemRgb on
 mouseOverField _mouseOver
 bigDataUrl /gbdb/$D/bbi/enigma/BRCAsplicing.bb
 noScoreFilter on
+html enigma
 
 track BRCAmla
 shortLabel BRCA1/BRCA2 likelihood for PP4 and BP5
@@ -63,3 +67,4 @@ itemRgb on
 mouseOverField _mouseOver
 bigDataUrl /gbdb/$D/bbi/enigma/BRCAmfa.bb
 noScoreFilter on
+html enigma
