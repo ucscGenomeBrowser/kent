@@ -11145,7 +11145,8 @@ cart = theCart;
 
 if (isEmpty(cartOptionalString(cart, "pix")) && 
     !sameOk(cgiRequestMethod(NULL), "POST") && // page reload after POST would lose all vars
-    !cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE)) // do not do this if we're hgRenderTracks  = no Javascript
+    !cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE) && // skip if we're hgRenderTracks  = no Javascript
+    !sameOk(cgiUserAgent(), "rtracklayer")) // rtracklayer has no javascript, so skip, see https://github.com/lawremi/rtracklayer/issues/113
 {
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("utils.js", NULL);
