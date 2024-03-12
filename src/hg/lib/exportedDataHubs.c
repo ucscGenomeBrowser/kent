@@ -10,7 +10,7 @@
 
 
 
-char *exportedDataHubsCommaSepFieldNames = "id,path";
+char *exportedDataHubsCommaSepFieldNames = "id,db,label,description,path";
 
 void exportedDataHubsStaticLoad(char **row, struct exportedDataHubs *ret)
 /* Load a row from exportedDataHubs table into ret.  The contents of ret will
@@ -18,7 +18,10 @@ void exportedDataHubsStaticLoad(char **row, struct exportedDataHubs *ret)
 {
 
 ret->id = sqlUnsigned(row[0]);
-ret->path = row[1];
+ret->db = row[1];
+ret->label = row[2];
+ret->description = row[3];
+ret->path = row[4];
 }
 
 struct exportedDataHubs *exportedDataHubsLoad(char **row)
@@ -29,7 +32,10 @@ struct exportedDataHubs *ret;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
-ret->path = cloneString(row[1]);
+ret->db = cloneString(row[1]);
+ret->label = cloneString(row[2]);
+ret->description = cloneString(row[3]);
+ret->path = cloneString(row[4]);
 return ret;
 }
 
@@ -39,7 +45,7 @@ struct exportedDataHubs *exportedDataHubsLoadAll(char *fileName)
 {
 struct exportedDataHubs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -57,7 +63,7 @@ struct exportedDataHubs *exportedDataHubsLoadAllByChar(char *fileName, char chop
 {
 struct exportedDataHubs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -79,6 +85,9 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
+ret->db = sqlStringComma(&s);
+ret->label = sqlStringComma(&s);
+ret->description = sqlStringComma(&s);
 ret->path = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -91,6 +100,9 @@ void exportedDataHubsFree(struct exportedDataHubs **pEl)
 struct exportedDataHubs *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->db);
+freeMem(el->label);
+freeMem(el->description);
 freeMem(el->path);
 freez(pEl);
 }
@@ -112,6 +124,18 @@ void exportedDataHubsOutput(struct exportedDataHubs *el, FILE *f, char sep, char
 /* Print out exportedDataHubs.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->db);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->label);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->description);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->path);

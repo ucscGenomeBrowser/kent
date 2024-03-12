@@ -13,7 +13,7 @@ RENDERA = hgRenderTracks
 COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrack.o bedGraph.o \
 	bedTrack.o  bigBedTrack.o bigRmskTrack.o bigWarn.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
-	coverageTrack.o cytoBandTrack.o cutterTrack.o decorator.o \
+	coverageTrack.o cytoBandTrack.o cutterTrack.o decorator.o exportedDataHubs.o \
 	expRatioTracks.o factorSource.o hgTracks.o interactTrack.o \
 	gencodeTracks.o goldTrack.o gtexTracks.o gtexEqtlClusterTrack.o gvfTrack.o \
 	halSnakeTrack.o lollyTrack.o longRangeTrack.o loweLabTracks.o lrgTrack.o \

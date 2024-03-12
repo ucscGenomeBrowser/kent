@@ -31,6 +31,7 @@
 	<li><a id="trackSearchMenuLink" href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a></li>
 	<li><a id="shortMatchLink" href="../cgi-bin/hgTrackUi?g=oligoMatch&oligoMatch=pack">Short Exact DNA Match</a></li>
         <!-- OPTIONAL_RECOMMENDED_TRACK_SETS_MENU -->
+        <!-- OPTIONAL_EXPORTED_TRACK_DATA_HUBS_MENU -->
 	<li><a id="cartResetMenuLink" href="../cgi-bin/cartReset?skipLs=1">Reset All User Settings</a></li>
         </ul>
 </li>

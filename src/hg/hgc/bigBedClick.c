@@ -14,7 +14,7 @@
 #include "subText.h"
 #include "web.h"
 #include "chromAlias.h"
-#include "instaPort.h"
+#include "quickLift.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -379,11 +379,11 @@ if (start == end)
     ivStart = max(0, start-1);
     ivEnd++;
     }
-char *instaFile = cloneString(trackDbSetting(tdb, "instaPortUrl"));
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
 struct hash *chainHash = NULL;
 struct bigBedInterval *bbList = NULL;
-if (instaFile)
-    bbList = instaIntervals(instaFile, bbi, chrom, ivStart, ivEnd, &chainHash);
+if (quickLiftFile)
+    bbList = quickLiftIntervals(quickLiftFile, bbi, chrom, ivStart, ivEnd, &chainHash);
 else
     bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 
@@ -449,9 +449,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 		bedSize, fileName, bbFieldCount);
 	}
     struct bed *bed = NULL;
-    if (instaFile)
+    if (quickLiftFile)
         {
-        if ((bed = instaBed(bbi, chainHash, bb)) == NULL)
+        if ((bed = quickLiftBed(bbi, chainHash, bb)) == NULL)
             errAbort("can't port %s",fields[3]);
         }
     else

@@ -15,18 +15,18 @@
 #include "bigBed.h"
 #include "bbiFile.h"
 #include "chainNetDbLoad.h"
-#include "instaPort.h"
+#include "quickLift.h"
 
-static char *getLinkFile(char *instaPortFile)
+static char *getLinkFile(char *quickLiftFile)
 /* Construct the file name of the chain link file from the name of a chain file. 
  * That is, change file.bb to file.link.bb */
 {
 char linkBuffer[4096];
 
-if (!endsWith(instaPortFile, ".bb"))
-    errAbort("instaPort file (%s) must end in .bb", instaPortFile);
+if (!endsWith(quickLiftFile, ".bb"))
+    errAbort("quickLift file (%s) must end in .bb", quickLiftFile);
 
-safef(linkBuffer, sizeof linkBuffer, "%s", instaPortFile);
+safef(linkBuffer, sizeof linkBuffer, "%s", quickLiftFile);
 
 // truncate string at ending ".bb"
 int insertOffset = strlen(linkBuffer) - sizeof ".bb" + 1;
@@ -39,14 +39,14 @@ strcpy(insert, ".link.bb");
 return cloneString(linkBuffer);
 }
 
-struct bigBedInterval *instaIntervals(char *instaPortFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
+struct bigBedInterval *quickLiftIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
  * These intervals are NOT YET MAPPED to the current assembly.
  */
 {
-char *linkFileName = getLinkFile(instaPortFile);
+char *linkFileName = getLinkFile(quickLiftFile);
 // need to add some padding to these coordinates
-struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, instaPortFile, linkFileName, chrom, start-100000, end+100000, -1);
+struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, start-100000, end+100000, -1);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = NULL;
 
@@ -85,7 +85,7 @@ for(chain = chainList; chain; chain = chain->next)
 return bbList;
 }
 
-struct bed *instaBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
+struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
 /* Using chains stored in chainHash, port a bigBedInterval from another assembly to a bed
  * on the reference.
  */

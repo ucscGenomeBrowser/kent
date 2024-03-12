@@ -5,7 +5,7 @@
 #ifndef EXPORTEDDATAHUBS_H
 #define EXPORTEDDATAHUBS_H
 
-#define EXPORTEDDATAHUBS_NUM_COLS 2
+#define EXPORTEDDATAHUBS_NUM_COLS 5
 
 extern char *exportedDataHubsCommaSepFieldNames;
 
@@ -14,6 +14,9 @@ struct exportedDataHubs
     {
     struct exportedDataHubs *next;  /* Next in singly linked list. */
     unsigned id;	/*  Auto-incrementing ID */
+    char *db;	/* Native assembly */
+    char *label;	/* Label */
+    char *description;	/* Description */
     char *path;	/* URL to data hub */
     };
 
@@ -60,5 +63,10 @@ void exportedDataHubsOutput(struct exportedDataHubs *el, FILE *f, char sep, char
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+boolean exportedDataHubsEnabled();
+/* Return TRUE if feature is available */
+
+void printExportedDataHubs(char *db);
+/* Fill out exported data hubs popup. */
 #endif /* EXPORTEDDATAHUBS_H */
 
