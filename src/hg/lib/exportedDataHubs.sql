@@ -5,7 +5,10 @@
 
 #registered data hubs for quickLift
 CREATE TABLE exportedDataHubs (
-    id int unsigned not null auto_increment,	# Auto-incrementing ID
+    id int unsigned not null auto_increment,	#  Auto-incrementing ID
+    db varchar(255) not null,	# Native assembly
+    label varchar(255) not null,	# Label
+    description varchar(255) not null,	# Description
     path longblob not null,	# URL to data hub
               #Indices
     PRIMARY KEY(id)

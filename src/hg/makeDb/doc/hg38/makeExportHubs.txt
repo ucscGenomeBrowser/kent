@@ -1,16 +1,39 @@
 cd /cluster/home/braney/kent/src/hg/utils/rts
 
+rm -f exportedHubs.txt
+
 for j in hg19 hg38
 do 
     d=hubs/$j
     mkdir -p $d
     echo $d
-    for k in $j/*.tracks.txt
-    do 
-        echo $k
-        for i in `cat $k`
+    sed '/^ *#/d' ../../htdocs/inc/recTrackSets.$j.tab | tawk '{print $1, $3, $4}' |
+    while IFS=$'\t' read label sessionName description
+    do
+        echo $sessionName
+        ( echo hub hub1
+        echo shortLabel $label
+        echo longLabel $description
+        echo useOneFile on
+        echo email braney@ucsc.com
+        echo
+        echo genome $j
+        echo ) > $d/$sessionName
+        echo -e "0\t$j\t$label\t$description\t/gbdb/$j/exportedHubs/$sessionName" >>  exportedHubs.txt
+        for i in `cat $j/$sessionName".tracks.txt"`
         do 
             tdbQuery -noCompSub "select * from $j where track='$i' and (type like 'big%' or compositeTrack = 'on')"
-        done | sed 's/$D/$j/g' | grep -v "^db " | grep -v "^filePos " | grep -v "^superTrack " > $d/`basename $k .tracks.txt`
+        done | sed "s/\$D/$j/g" | grep -v "^db " | grep -v "^filePos " >> $d/$sessionName
     done
 done
+
+#for i in hubs/*
+#do
+#a=`basename $i`
+#for j in $i/*
+#do
+#echo "0 $a /gbdb/$a/exportedHubs/`basename $j`"
+#done
+#done | tr ' ' '\t' > exportedHubs.txt
+
+hgLoadSqlTab hgcentraltest exportedDataHubs $HOME/kent/src/hg/lib/exportedDataHubs.sql exportedHubs.txt

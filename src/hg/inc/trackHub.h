@@ -70,6 +70,7 @@ struct trackHubGenome
     struct trackHub *trackHub; /* associated track hub */
     unsigned orderKey;   /* the orderKey for changing the order from the order in the file */
     char *chromAuthority;     /* what authority should be used to display sequence names */
+    char *quickLiftChain;     /* if this genome is being quickLifted, this will have the bigChain name to lift with. */
     };
 
 void trackHubClose(struct trackHub **pHub);

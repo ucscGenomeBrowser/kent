@@ -28,7 +28,7 @@
 #include "bigBedLabel.h"
 #include "variation.h"
 #include "chromAlias.h"
-#include "instaPort.h"
+#include "quickLift.h"
 #include "hgConfig.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
@@ -532,10 +532,10 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 struct bigBedInterval *bb, *bbList; 
-char *instaFile = cloneString(trackDbSetting(track->tdb, "instaPortUrl"));
+char *quickLiftFile = cloneString(trackDbSetting(track->tdb, "quickLiftUrl"));
 struct hash *chainHash = NULL;
-if (instaFile)
-    bbList = instaIntervals(instaFile, bbi, chromName, winStart, winEnd, &chainHash);
+if (quickLiftFile)
+    bbList = quickLiftIntervals(quickLiftFile, bbi, chromName, winStart, winEnd, &chainHash);
 else
     bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
 
@@ -616,9 +616,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         if (bigBedFilterInterval(bbi, bedRow, filters))
             {
-            if (instaFile)
+            if (quickLiftFile)
                 {
-                if ((bed = instaBed(bbi, chainHash, bb)) != NULL)
+                if ((bed = quickLiftBed(bbi, chainHash, bb)) != NULL)
                     {
                     bedCopy = cloneBed(bed);
                     lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,

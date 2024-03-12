@@ -3398,6 +3398,14 @@ var popUpHgt = {
     }
 };
 
+// Show the exported data hubs popup
+function showExportedDataHubsPopup() {
+    let popUp = document.getElementById("exportedDataHubsPopup");
+    title = popUp.title;
+    if (title.length === 0 && popUp.getAttribute("originaltitle") !== "") {title = popUp.getAttribute("originaltitle");}
+    $('#exportedDataHubsPopup').dialog({width:'650', title: title});
+}
+
 // Show the recommended track sets popup
 function showRecTrackSetsPopup() {
     // Update links with current position

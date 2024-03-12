@@ -82,6 +82,7 @@
 #include "decorator.h"
 #include "decoratorUi.h"
 #include "mouseOver.h"
+#include "exportedDataHubs.h"
 
 //#include "bed3Sources.h"
 
@@ -10509,6 +10510,8 @@ if (gotExtTools)
     printExtMenuData(chromName);
 if (recTrackSetsEnabled())
     printRecTrackSets();
+if (exportedDataHubsEnabled())
+    printExportedDataHubs(database);
 setupTimeWarning();
 }
 

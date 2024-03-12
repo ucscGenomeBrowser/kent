@@ -83,6 +83,10 @@ void hubConnectStatusFree(struct hubConnectStatus **pHub);
 void hubConnectStatusFreeList(struct hubConnectStatus **pList);
 /* Free a list of dynamically allocated hubConnectStatus's */
 
+struct hubConnectStatus *hubConnectStatusForIdExt(struct sqlConnection *conn, int id, char *replaceDb, char *newDb, char *quickLiftChain);
+/* Given a hub ID return associated status. For quickLifted hubs, replace the db with our current db and
+ * keep track of the quickLiftChain for updating trackDb later.*/
+
 struct hubConnectStatus *hubConnectStatusForId( struct sqlConnection *conn, 
     int id);
 /* Given a hub ID return associated status. */
