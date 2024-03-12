@@ -8,6 +8,7 @@ type bigBed 12
 labelFields name,geneName
 dataVersion Release v4 (November 2023), Release 2.1.1 (March 6, 2019)
 subGroup1 view Views v2=constraintV2 v4=constraintV4
+html gnomadPLI.alpha.html
 visibility hide
 
     track constraintV2
