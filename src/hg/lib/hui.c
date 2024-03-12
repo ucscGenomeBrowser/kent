@@ -6898,8 +6898,15 @@ if (trackDbFilters)
         printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_WILDCARD) ? "SELECTED" : "",  FILTERTEXT_WILDCARD );
         printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_REGEXP) ? "SELECTED" : "",  FILTERTEXT_REGEXP );
         printf("</SELECT>");
+        printf("&nbsp;&nbsp;<button class='buttonClear-%s'>Clear</button>\n", tdb->track);
         printf("</P>");
         }
+        // using jquery id= syntax to make sure that selector works even if trackname has a dot in it
+        jsInlineF("$('[class=\"buttonClear-%s\"]').click( function(ev) { \n"
+                    "$(ev.target).prevAll('input').val('*');\n"
+                    "$(ev.target).prevAll('select').val('%s');\n"
+                    "ev.preventDefault();\n"
+                  "});", tdb->track, FILTERTEXT_WILDCARD);
     }
 
 return count;
