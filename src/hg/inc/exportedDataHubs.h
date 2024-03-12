@@ -63,5 +63,10 @@ void exportedDataHubsOutput(struct exportedDataHubs *el, FILE *f, char sep, char
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+boolean exportedDataHubsEnabled();
+/* Return TRUE if feature is available */
+
+void printExportedDataHubs(char *db);
+/* Fill out exported data hubs popup. */
 #endif /* EXPORTEDDATAHUBS_H */
 
