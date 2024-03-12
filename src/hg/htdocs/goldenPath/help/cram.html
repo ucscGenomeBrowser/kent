@@ -26,9 +26,9 @@ decompression. When a CRAM file is first loaded on a given chromosome, a check f
 in a special browser &quot;cramCache&quot; directory of the specified reference checksum will take 
 place. If the reference sequence information specific for that CRAM for the currently viewed 
 chromosome region does not exist, a message will display about the file not being found along with 
-a note about downloading the reference from the EBI CRAM reference registry if it is available (or 
-from another Refget server using <code>refUrl</code>). A refresh of the page once the download is complete will 
-display the CRAM data as if it were a BAM file.</p>
+a note about downloading the reference from the EBI CRAM reference registry if it is available or
+from another Refget server using the <code>refUrl</code> setting. A refresh of the page once the download is
+complete will display the CRAM data as if it were a BAM file.</p>
 <p>
 The track lines to describe CRAM tracks are identical to track lines for BAM tracks. This includes 
 the <code>type</code> parameter, which is still <code>bam</code> even for CRAM tracks. The only 
@@ -96,13 +96,12 @@ bigDataUrl ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00361/exome_al
 <p>
 For genomes that are not registered in the EBI CRAM Reference Registry,
 the <code>refUrl</code> setting is used to point the browser to
-the appropriate place to find the reference sequence. The <code>refUrl</code>
-takes an argument of the URL of the reference server with a <tt>%s</tt> being 
-replaced the RefGet MD5 checksum that identifies the reference sequence.
+the appropriate place to find the reference sequence. The <code>refUrl</code> setting is used with
+the URL of the reference server, such as <code>refUrl http://university.edu/URL/cramRef/%s</code>
+where the <tt>%s</tt> gets replaced by the RefGet MD5 checksum which identifies the reference
+sequence.</p>
 <p>
-</p> 
-The below example is a hub track stanza using the <code>refUrl</code> 
-option:</p> 
+The example below shows a hub track stanza using the <code>refUrl</code> setting:</p>
 <pre><code>track cramExample
 type bam
 visibility full
