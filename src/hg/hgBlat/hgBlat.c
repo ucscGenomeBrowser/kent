@@ -807,7 +807,12 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    freez(&nameClone);
 	    }
 	}
-    hashAddUnique(hash, seq->name, hash);
+    if (hashLookup(hash, seq->name) != NULL)
+        errAbort("The sequence identifier '%s' is duplicated in the input. "
+                "FASTA sequence identifiers should be unique and they cannot contain spaces. "
+                "You can make them unique by adding a suffix such as _1, _2, ... to the duplicated names, e.g. '%s_1'.", 
+                seq->name, seq->name);
+    hashAdd(hash, seq->name, hash);
     }
 freeHash(&hash);
 }
