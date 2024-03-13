@@ -3588,6 +3588,18 @@ if (startsWith("big", tdb->type))
     {
     char *fileName = trackDbSetting(tdb, "bigDataUrl");
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
+    if (linkFileName == NULL)
+        {
+        char *bigDataUrl = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+        char *dot = strrchr(bigDataUrl, '.');
+        if (dot == NULL)
+            errAbort("No linkDataUrl in track %s", tdb->track);
+        *dot = 0;
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "%s.link.bb", bigDataUrl);
+        linkFileName = buffer;
+        }
+
     chain = chainLoadIdRangeHub(database, fileName, linkFileName, seqName, winStart, winEnd, id);
     }
 else
