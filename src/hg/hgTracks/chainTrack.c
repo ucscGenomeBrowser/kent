@@ -159,12 +159,20 @@ if (tg->isBigBed)
     char *fileName = trackDbSetting(tg->tdb, "linkDataUrl");
     if (fileName == NULL)
         {
-        warn("Cannot find linkDataUrl in custom track \"%s\"\n", tg->shortLabel);
-        return;
+        char buffer[4096];
+
+        char *bigDataUrl = cloneString(trackDbSetting(tg->tdb, "bigDataUrl"));
+        char *dot = strrchr(bigDataUrl, '.');
+        if (dot == NULL)
+            errAbort("No linkDataUrl in track %s", tg->track);
+
+        *dot = 0;
+        safef(buffer, sizeof buffer, "%s.link.bb", bigDataUrl);
+        fileName = buffer;
         }
     struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
     if (bbi == NULL)
-        return;
+        errAbort("cannot open linkDataUrl %s", fileName);
     bbClosure.bbi =  bbi;
     }
 else
