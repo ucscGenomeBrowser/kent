@@ -106,7 +106,7 @@ visibility hide
         mouseOverField _mouseOver
         itemRgb on
         searchIndex name,geneName
-        bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.new.bb
+        bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.v4.bb
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
         urlLabel View this Transcript on the gnomAD browser
         labelFields name,geneName
@@ -123,7 +123,7 @@ visibility hide
         type bigBed 12 +
         mouseOverField _mouseOver
         searchIndex name,geneName
-        bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.new.bb
+        bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.v4.bb
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
         urlLabel View this Transcript on the gnomAD browser
         labelFields name,geneName
