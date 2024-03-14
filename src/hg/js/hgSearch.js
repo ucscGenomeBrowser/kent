@@ -892,7 +892,10 @@ var hgSearch = (function() {
                         geneSymbol = elem.posName.replace(/ .*$/,"");
                         return decoder(elem.posName) === matchStr;
                     });
-                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.value = geneSymbol;
+                    if (typeof match.description !== "undefined") {
+                        callbackData.value += " " + match.description;
+                    }
                     // special case the genbank searches that are supposed to go to hgc
                     // and not hgTracks
                     let parentTitle = i.parentNode.parentNode.parentNode.childNodes[2];
