@@ -1938,7 +1938,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>maxItems &lt;integer&gt;</code></div>
     <P>Maximum number of items to display individually in full or pack or squish mode.  When the maximum is
     exceeded, the track switches to coverage mode.
-    Default: 10,000. For <code>type bigBed</code> tracks, this setting can never 
+    Default: 1000. For <code>type bigBed</code> tracks, this setting can never 
     be larger than the hg.conf setting bigBedMaxItems, which by default is 100,000 at UCSC.
     </P>
     <P>bigBedMaxItems is configured globally for a Genome Browser server and sets an upper limit
