@@ -129,7 +129,7 @@ BA.2.86:
 JN.1:
     # Inherits from BA.2.86
     representative: Denmark/DCGC-661561/2023
-    ranges: [ [ 23009, 23011 ],  # https://github.com/cov-lineages/pango-designation/issues/2510
+    ranges: [ [ 23008, 23011 ],  # https://github.com/cov-lineages/pango-designation/issues/2510
             ]
 
 BA.4:

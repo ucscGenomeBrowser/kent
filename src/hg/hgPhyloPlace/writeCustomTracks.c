@@ -482,10 +482,10 @@ static void writeSubtreeVcf(FILE *f, struct hash *sampleToIx, char *chrom, int c
  * with some samples found in userVcf and the rest found in subtree which has been annotated
  * with single-nucleotide variants. */
 {
-char refBases[chromSize];
-memset(refBases, 0, sizeof refBases);
-char *sampleBases[chromSize];
-memset(sampleBases, 0, sizeof sampleBases);
+char *refBases = NULL;
+AllocArray(refBases, chromSize);
+char **sampleBases = NULL;
+AllocArray(sampleBases, chromSize);
 treeToBaseAlleles(subtree, refBases, sampleBases, sampleToIx, NULL);
 vcfToBaseAlleles(userVcf, refBases, sampleBases, sampleToIx);
 int sampleCount = sampleToIx->elCount;
@@ -493,6 +493,8 @@ baseAllelesToVcf(refBases, sampleBases, chrom, chromSize, sampleCount, f);
 int i;
 for (i = 0;  i < chromSize;  i++)
     freeMem(sampleBases[i]);
+freeMem(sampleBases);
+freeMem(refBases);
 }
 
 static void addSubtreeCustomTracks(FILE *ctF, char *userVcfFile, struct subtreeInfo *subtreeInfoList,

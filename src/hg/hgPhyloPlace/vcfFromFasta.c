@@ -531,8 +531,8 @@ static void pslSnvsToVcfFile(struct psl *psls, struct dnaSeq *ref, struct seqInf
 /* Find single-nucleotide differences between each query sequence and reference, and
  * write out a VCF file with genotype columns for the queries. */
 {
-struct snvInfo *snvsByPos[ref->size];
-memset(snvsByPos, 0, sizeof snvsByPos);
+struct snvInfo **snvsByPos = NULL;
+AllocArray(snvsByPos, ref->size);
 extractSnvs(psls, ref, querySeqs, snvsByPos, maskSites);
 int sampleCount = slCount(querySeqs);
 char *sampleNames[sampleCount];
@@ -541,6 +541,7 @@ int i;
 for (i = 0, qSeq = querySeqs;  i < sampleCount;  i++, qSeq = qSeq->next)
     sampleNames[i] = qSeq->seq->name;
 writeSnvsToVcfFile(snvsByPos, ref, sampleNames, sampleCount, maskSites, vcfFileName);
+freeMem(snvsByPos);
 }
 
 static void analyzeGaps(struct seqInfo *filteredSeqs, struct dnaSeq *refGenome)
