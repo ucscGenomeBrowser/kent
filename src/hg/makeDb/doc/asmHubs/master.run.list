@@ -275,6 +275,7 @@
 ./runBuild GCA_003957575.1_bCalAnn1_v1.h birds Calypte_anna
 ./runBuild GCA_003957885.1_ASM395788v1 plants Manihot_esculenta
 ./runBuild GCA_003990815.1_ASM399081v1 invertebrate Daphnia_magna
+./runBuild GCA_004007595.1_JHU_CGRice_1.0 plants Oryza_sativa
 ./runBuild GCA_004011185.1_bStrHab1_v1.h birds Strigops_habroptila
 ./runBuild GCA_004023785.1_MunMun_v1_BIUU mammals Mungos_mungo
 ./runBuild GCA_004023805.1_PanOnc_v1_BIUU mammals Panthera_onca
