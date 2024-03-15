@@ -166,8 +166,7 @@ dataVersion Release 3.1.2 (October 22, 2021)
 html gnomadV3_1_1
 
 # The missense and pLI contraint tracks
-include gnomad.constraint.alpha.ra alpha,beta
-include gnomad.constraint.public.ra public
+include gnomad.constraint.public.ra
 
 track gnomadVariantsV4
 parent gnomadVariants
