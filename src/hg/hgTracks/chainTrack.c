@@ -340,7 +340,56 @@ if (tg->isBigBed)
     bbiFileClose(&bbClosure.bbi);
 else
     hFreeConn(&sqlClosure.conn);
+}
+
+static void denseChainReverse(struct track *tg, int seqStart, int seqEnd,
+                        struct hvGfx *hvg, int xOff, int yOff, int width,
+                        MgFont *font, Color color, enum trackVisibility vis)
+/* draw a dense chain in a mode that only shows the gaps. */
+{
+hvGfxSetClip(hvgSide, insideX, yOff, insideWidth, tg->height);
+struct slList *item;
+int y = yOff;
+double scale = scaleForWindow(width, seqStart, seqEnd);
+int heightPer = tg->heightPer;
+color = 0x5050ffff;
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    struct linkedFeatures *lf = (struct linkedFeatures *)item;
+    struct simpleFeature *sf = lf->components;
+    unsigned prev = winStart;
+    for (; sf; sf = sf->next)
+        {
+        unsigned s = sf->start;
+        drawScaledBox(hvg, prev, s,  scale, xOff, y, heightPer, color);
+        prev = sf->end;
+        }
+    drawScaledBox(hvg, prev, winEnd,  scale, xOff, y, heightPer, color);
+
     }
+
+color = 0xff5050ff;
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    struct linkedFeatures *lf = (struct linkedFeatures *)item;
+    struct simpleFeature *sf = lf->components;
+
+    mapBoxHgcOrHgGene(hvg, winStart, winEnd, xOff, yOff, insideWidth, heightPer, tg->track,
+                  lf->extra, "Go to hg38", NULL, TRUE, NULL);
+    struct simpleFeature *prev = NULL;
+    for (; sf; sf = sf->next)
+        {
+        unsigned s = sf->start;
+        if (prev)
+            {
+            if (prev->qEnd != sf->qStart)
+                drawScaledBox(hvg, s, s,  scale, xOff, y, heightPer, color);
+            }
+        prev = sf;
+        }
+    }
+}
+
 void chainDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
@@ -352,7 +401,12 @@ void chainDraw(struct track *tg, int seqStart, int seqEnd,
 if (tg->items == NULL)		/*Exit Early if nothing to do */
     return;
 
-linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+char *chainType = trackDbSetting(tg->tdb, "chainType");
+if ((chainType != NULL) && (vis == tvDense) )
+    denseChainReverse(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+	font, color, vis);
+else
+    linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 	font, color, vis);
 }
 
