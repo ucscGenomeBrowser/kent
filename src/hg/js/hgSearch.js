@@ -862,7 +862,13 @@ var hgSearch = (function() {
                         id = "hgTrackUi?db=" + uiState.db + "&g=" + posSplit[0];
                         return geneSymbol === matchStr;
                     });
-                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.label = geneSymbol;
+                    callbackData.value = geneSymbol;
+                    if (typeof match.description !== "undefined") {
+                        callbackData.label += " " + match.description;
+                        // hack to remove the bolding from the item values in the autocomplete
+                        callbackData.value = $("<div>" + match.description + "</div>").text();
+                    }
                     callbackData.id = id;
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = "";
@@ -873,7 +879,13 @@ var hgSearch = (function() {
                         id = "hgTrackUi?hubUrl=" + posSplit[0] + ":" + posSplit[1] + "&g=" + posSplit[3] + "&db=" + posSplit[3];
                         return decoder(posSplit[4]) === matchStr;
                     });
-                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.label = geneSymbol;
+                    callbackData.value = geneSymbol;
+                    if (typeof match.description !== "undefined") {
+                        callbackData.label += " " + match.description;
+                        // hack to remove the bolding from the item values in the autocomplete
+                        callbackData.value = $("<div>" + match.description + "</div>").text();
+                    }
                     callbackData.id = id;
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = "";
@@ -883,7 +895,13 @@ var hgSearch = (function() {
                         geneSymbol = decoder(posSplit[1].replaceAll("_", " "));
                         return geneSymbol === matchStr;
                     });
-                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.label = geneSymbol;
+                    callbackData.value = geneSymbol;
+                    if (typeof match.description !== "undefined") {
+                        callbackData.label += " " + match.description;
+                        // hack to remove the bolding from the item values in the autocomplete
+                        callbackData.value = $("<div>" + match.description + "</div>").text();
+                    }
                     callbackData.id = match.position.split(":")[0];
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = "";
@@ -892,7 +910,13 @@ var hgSearch = (function() {
                         geneSymbol = elem.posName.replace(/ .*$/,"");
                         return decoder(elem.posName) === matchStr;
                     });
-                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.label = geneSymbol;
+                    callbackData.value = geneSymbol;
+                    if (typeof match.description !== "undefined") {
+                        callbackData.label += " " + match.description;
+                        // hack to remove the bolding from the item values in the autocomplete
+                        callbackData.value = $("<div>" + match.description + "</div>").text();
+                    }
                     // special case the genbank searches that are supposed to go to hgc
                     // and not hgTracks
                     let parentTitle = i.parentNode.parentNode.parentNode.childNodes[2];
@@ -907,7 +931,6 @@ var hgSearch = (function() {
                 }
                 // type for autocomplete select to know where to navigate to
                 callbackData.type = trackName;
-                callbackData.label = callbackData.value;
                 addRecentSearch(db, callbackData.geneSymbol, callbackData);
                 window.location = i.href;
             });

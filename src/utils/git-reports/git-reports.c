@@ -108,7 +108,7 @@ struct commit* getCommits()
 {
 int numCommits = 0;
 safef(gitCmd,sizeof(gitCmd), ""
-"validUsers=$(%s); git log %s..%s --name-status --color=never ${validUsers} > commits.tmp"
+"validUsers=$(%s); git log %s..%s --name-status --color=never ${validUsers} --author=jnavarr5> commits.tmp"
 , getUsersCmd, startTag, endTag);
 runShell(gitCmd);
 struct lineFile *lf = lineFileOpen("commits.tmp", TRUE);

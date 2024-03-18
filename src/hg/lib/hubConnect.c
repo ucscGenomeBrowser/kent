@@ -252,6 +252,7 @@ if (row != NULL)
                     genome->name = newDb;
                     hashAdd(hub->trackHub->genomeHash, newDb, genome);
                     genome->quickLiftChain = quickLiftChain;
+                    genome->quickLiftDb = replaceDb;
                     }
                 }
             }
@@ -452,6 +453,45 @@ for(tdb = tdbList; tdb; tdb = tdb->next)
     }
 }
 
+// a string to define trackDb for quickLift chain
+static char *chainTdbString = 
+    "shortLabel chain to %s\n"
+    "longLabel chain to %s\n"
+    "type bigChain %s\n"
+    "chainType reverse\n"
+    "bigDataUrl %s\n";
+
+static struct trackDb *makeQuickLiftChainTdb(struct trackHubGenome *hubGenome,  struct hubConnectStatus *hub)
+// make a trackDb entry for a quickLift chain
+{
+struct trackDb *tdb;
+
+AllocVar(tdb);
+
+char buffer[4096];
+safef(buffer, sizeof buffer, "hub_%d_quickLiftChain", hub->id);
+tdb->table = tdb->track = cloneString(buffer);
+safef(buffer, sizeof buffer, chainTdbString, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftDb, hubGenome->quickLiftChain);
+tdb->settings = cloneString(buffer);
+tdb->settingsHash = trackDbSettingsFromString(tdb, buffer);
+trackDbFieldsFromSettings(tdb);
+tdb->visibility = tvDense;
+
+return tdb;
+}
+
+static struct trackDb *fixForQuickLift(struct trackDb *tdbList, struct trackHubGenome *hubGenome, struct hubConnectStatus *hub)
+// assign a quickLift chain to the tdbList and make a trackDb entry for the chain. 
+{
+assignQuickLift(tdbList, hubGenome->quickLiftChain);
+
+struct trackDb *quickLiftTdb = makeQuickLiftChainTdb(hubGenome, hub);
+quickLiftTdb->grp = tdbList->grp;
+slAddHead(&tdbList, quickLiftTdb);
+
+return tdbList;
+}
+
 struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database, 
     char *trackName, struct trackDb **pTdbList, struct hash *trackHash)
 /* Go find hub for trackName (which will begin with hub_), and load the tracks
@@ -471,7 +511,7 @@ tdbList = trackDbPolishAfterLinkup(tdbList, database);
 //this next line causes warns to print outside of warn box on hgTrackUi
 //trackDbPrioritizeContainerItems(tdbList);
 if (hubGenome->quickLiftChain)
-    assignQuickLift(tdbList, hubGenome->quickLiftChain);
+    tdbList = fixForQuickLift(tdbList, hubGenome, hub);
 trackHubPolishTrackNames(hub->trackHub, tdbList);
 char *fixTrackName = cloneString(trackName);
 trackHubFixName(fixTrackName);
@@ -870,6 +910,9 @@ if (trackHub != NULL)
 
                 struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
 
+                if (cacheTdb && hubGenome->quickLiftChain)
+                    cacheTdb = fixForQuickLift(cacheTdb, hubGenome, hub);
+
                 if (cacheTdb != NULL)
                     return cacheTdb;
                 }
@@ -887,8 +930,8 @@ if (trackHub != NULL)
         if (doCache)
             trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint(), incFiles->string);
 
-        if (hubGenome->quickLiftChain)
-            assignQuickLift(tdbList, hubGenome->quickLiftChain);
+        if (tdbList && hubGenome->quickLiftChain)
+            tdbList = fixForQuickLift(tdbList, hubGenome, hub);
 	}
     }
 return tdbList;

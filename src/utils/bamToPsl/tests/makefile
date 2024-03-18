@@ -9,7 +9,6 @@ test1: mkout
 	${PROG} input/chr9.NM_020469.2.blat.bam output/$@.psl
 	diff expected/$@.psl output/$@.psl
 
-# FIXME: pslCheck call is disable as this produces invalid PSLs.
 test2: mkout
 	${PROG} -nohead input/multimap.sam -fasta=output/$@.fa output/$@.psl
 	diff expected/$@.psl output/$@.psl

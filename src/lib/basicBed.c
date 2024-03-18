@@ -1436,6 +1436,25 @@ return result;
 }
 
 
+static char *getScratchMem(unsigned size)
+// allocate some temporary memory that will never be freed except
+// if it's not big enough.
+{
+static unsigned currentSize = 0;
+static char *currentMem = NULL;
+
+if (size > currentSize)
+    {
+    if (currentMem)
+        freeMem(currentMem);
+
+    currentSize = size;
+    currentMem = needLargeMem(size);
+    }
+
+return currentMem;
+}
+
 void loadAndValidateBedExt(char *row[], int bedFieldCount, int fieldCount, struct lineFile *lf, struct bed * bed, struct asObject *as, boolean isCt,  boolean allow1bpOverlap)
 /* Convert a row of strings to a bed and validate the contents.  Abort with message if invalid data. Optionally validate bedPlus via asObject.
  * If a customTrack, then some errors are tolerated. Possibly allow exons to overlap by one base. */
@@ -1545,10 +1564,16 @@ if (bedFieldCount > 9)
 	lineFileAbort(lf, "Expecting blockCount (%d) to be 1 or more.", bed->blockCount);
     tempArraySize = bed->blockCount;
     }
-int tempBlockSizes[tempArraySize];
-int tempChromStarts[tempArraySize];
-int tempExpIds[tempArraySize];
-float tempExpScores[tempArraySize];
+
+// this memory never gets freed, but tempArraySize can be huge so
+// we can't allocate it off the stack and we don't want to be 
+// allocating and freeing it millions of times on huge beds.
+char *allocatedMem = getScratchMem(3 * tempArraySize * sizeof(int) + tempArraySize * sizeof(float));
+int *tempBlockSizes = (int *)allocatedMem;
+int *tempChromStarts = (int *)&allocatedMem[tempArraySize * sizeof(int)];
+int *tempExpIds = (int *)&allocatedMem[2*tempArraySize * sizeof(int)];
+float *tempExpScores = (float *)&allocatedMem[3*tempArraySize * sizeof(int)];
+
 if (bedFieldCount > 10)
     {
     if (isCt)

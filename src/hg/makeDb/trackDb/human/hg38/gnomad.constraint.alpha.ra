@@ -56,7 +56,7 @@ visibility hide
         priority 2
 
         track pliByTranscript
-        shortLabel Transcript LoF
+        shortLabel Transcript LoF v2
         longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI) v2.1.1
         subGroups view=v2
         type bigBed 12 +
@@ -74,7 +74,7 @@ visibility hide
         priority 2
 
         track missenseByTranscript
-        shortLabel Transcript Missense
+        shortLabel Transcript Missense v2
         longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v2.1.1
         subGroups view=v2
         type bigBed 12 +
@@ -106,7 +106,7 @@ visibility hide
         mouseOverField _mouseOver
         itemRgb on
         searchIndex name,geneName
-        bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.new.bb
+        bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.v4.bb
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
         urlLabel View this Transcript on the gnomAD browser
         labelFields name,geneName
@@ -123,7 +123,7 @@ visibility hide
         type bigBed 12 +
         mouseOverField _mouseOver
         searchIndex name,geneName
-        bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.new.bb
+        bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.v4.bb
         url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r4
         urlLabel View this Transcript on the gnomAD browser
         labelFields name,geneName
