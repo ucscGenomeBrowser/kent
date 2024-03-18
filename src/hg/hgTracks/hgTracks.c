@@ -9717,6 +9717,10 @@ if (newStart < 0)
 else if (newEnd > virtSeqBaseCount)
     offset = virtSeqBaseCount - virtWinEnd;
 
+// at high zoom levels, offset can be very small: make sure that we scroll at least one bp
+if (offset < 1.0)
+    offset = 1.0;
+
 /* Move window. */
 virtWinStart += offset;
 virtWinEnd += offset;
