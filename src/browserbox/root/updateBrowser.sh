@@ -578,5 +578,6 @@ fi
 ln -sf /data/gbdb /gbdb
 
 touch /root/lastUpdateTime.flag
+rm -f /usr/local/apache/trash/registration.txt
 echo - GBiB update done
 cat /etc/issue | tr -s '\n'
