@@ -375,69 +375,61 @@ static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
 {
 *retUserOrOld = isUserSample ? "uploaded sample" : source;
 jsonWriteObjectValue(jw, "userOrOld", *retUserOrOld);
-if (met && met->date)
-    jsonWriteObjectValue(jw, "date", met->date);
-if (met && met->author)
+*retNClade = *retGClade = *retLineage = *retNLineage = *retNCladeUsher = *retLineageUsher = "";
+if (met != NULL)
     {
-    jsonWriteObjectValue(jw, "author", met->author);
-    // Note: Nextstrain adds paper_url and title when available; they also add author and use
-    // a uniquified value (e.g. "author": "Wenjie Tan et al" / "value": "Wenjie Tan et al A")
+    int i;
+    for (i = 0;  i < met->columnCount;  i++)
+        {
+        char *colName = met->columnNames[i];
+        if (sameString(colName, "pangolin_lineage"))
+            {
+            colName = "pango_lineage";
+            if (isNotEmpty(met->columnValues[i]))
+                {
+                char lineageUrl[1024];
+                makeLineageUrl(met->columnValues[i], lineageUrl, sizeof lineageUrl);
+                jsonWriteObjectValueUrl(jw, colName, met->columnValues[i], lineageUrl);
+                }
+            else if (isNotEmpty(met->columnValues[i]))
+                jsonWriteObjectValue(jw, colName, met->columnValues[i]);
+            }
+        else
+            jsonWriteObjectValue(jw, colName, met->columnValues[i]);
+        // Some columns get passed up for aggregation so we can color internal nodes/branches.
+        if (sameString(colName, "Nextstrain_clade") || sameString(colName, "goya_nextclade"))
+            *retNClade = met->columnValues[i];
+        else if (sameString(colName, "GISAID_clade") || sameString(colName, "GCC_assigned_2023-11"))
+            *retGClade = met->columnValues[i];
+        else if (sameString(colName, "pango_lineage") || sameString(colName, "GCC_nextclade"))
+            *retLineage = met->columnValues[i];
+        else if (sameString(colName, "Nextstrain_clade_usher") || sameString(colName, "goya_usher"))
+            *retNCladeUsher = met->columnValues[i];
+        else if (sameString(colName, "pango_lineage_usher") || sameString(colName, "GCC_usher"))
+            *retLineageUsher = met->columnValues[i];
+        }
     }
-struct placementInfo *pi = (isUserSample && name) ? hashFindVal(samplePlacements, name) : NULL;
-
-*retNClade = (met && met->nClade) ? met->nClade : isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retNClade))
-    jsonWriteObjectValue(jw, (isRsv ? "goya_nextclade" : "Nextstrain_clade"), *retNClade);
-*retGClade = (met && met->gClade) ? met->gClade : isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retGClade))
-    jsonWriteObjectValue(jw, (isRsv ? "GCC_assigned_2023-11" : "GISAID_clade"), *retGClade);
-*retLineage =  (met && met->lineage) ? met->lineage : isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retLineage))
+else if (isUserSample)
     {
-    char lineageUrl[1024];
-    makeLineageUrl(*retLineage, lineageUrl, sizeof lineageUrl);
-    jsonWriteObjectValueUrl(jw, (isRsv ? "GCC_nextclade" : "pango_lineage"),
-                            *retLineage, lineageUrl);
-    }
-*retNLineage = (met && met->nLineage) ? met->nLineage : isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retNLineage))
-    {
-    jsonWriteObjectValue(jw, "Nextstrain_lineage", *retNLineage);
-    }
-if (met && met->epiId)
-    jsonWriteObjectValue(jw, "gisaid_epi_isl", met->epiId);
-if (met && met->gbAcc)
-    jsonWriteObjectValue(jw, "genbank_accession", met->gbAcc);
-if (met && met->country)
-    jsonWriteObjectValue(jw, "country", met->country);
-if (met && met->division)
-    jsonWriteObjectValue(jw, "division", met->division);
-if (met && met->location)
-    jsonWriteObjectValue(jw, "location", met->location);
-if (met && met->countryExp)
-    jsonWriteObjectValue(jw, "country_exposure", met->countryExp);
-if (met && met->divExp)
-    jsonWriteObjectValue(jw, "division_exposure", met->divExp);
-if (met && met->origLab)
-    jsonWriteObjectValue(jw, "originating_lab", met->origLab);
-if (met && met->subLab)
-    jsonWriteObjectValue(jw, "submitting_lab", met->subLab);
-if (met && met->region)
-    jsonWriteObjectValue(jw, "region", met->region);
-*retNCladeUsher = (pi && pi->nextClade) ? pi->nextClade :
-                  (met && met->nCladeUsher) ? met->nCladeUsher :
-                  isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retNCladeUsher))
+    struct placementInfo *pi = name ? hashFindVal(samplePlacements, name) : NULL;
+    //#*** Really need to know what columns are present in the absence of met, so we can avoid
+    //#*** writing objects that shouldn't be there for this org.
+    *retNClade = *retGClade = *retLineage = *retNLineage = "uploaded sample";
+    jsonWriteObjectValue(jw, isRsv ? "goya_nextclade" : "Nextstrain_clade", "uploaded sample");
+    jsonWriteObjectValue(jw, isRsv ? "GCC_assigned_2023-11" : "GISAID_clade", "uploaded sample");
+    jsonWriteObjectValue(jw, isRsv ? "GCC_nextclade" : "pango_lineage", "uploaded sample");
+    jsonWriteObjectValue(jw, "Nextstrain_lineage", "uploaded sample");
+    *retNCladeUsher = (pi && pi->nextClade) ? pi->nextClade : "uploaded sample";
     jsonWriteObjectValue(jw, (isRsv ? "goya_usher" : "Nextstrain_clade_usher"), *retNCladeUsher);
-*retLineageUsher = (pi && pi->pangoLineage) ? pi->pangoLineage :
-                   (met && met->lineageUsher) ? met->lineageUsher :
-                   isUserSample ? "uploaded sample" : NULL;
-if (isNotEmpty(*retLineageUsher))
-    {
-    char lineageUrl[1024];
-    makeLineageUrl(*retLineageUsher, lineageUrl, sizeof lineageUrl);
-    jsonWriteObjectValueUrl(jw, (isRsv ? "GCC_usher" : "pango_lineage_usher"),
-                            *retLineageUsher, lineageUrl);
+    *retLineageUsher = (pi && pi->pangoLineage) ? pi->pangoLineage : "uploaded sample";
+    if (isRsv)
+        jsonWriteObjectValue(jw, "GCC_usher", *retLineageUsher);
+    else
+        {
+        char lineageUrl[1024];
+        makeLineageUrl(*retLineageUsher, lineageUrl, sizeof lineageUrl);
+        jsonWriteObjectValueUrl(jw, "pango_lineage_usher", *retLineageUsher, lineageUrl);
+        }
     }
 char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
 if (isNotEmpty(sampleUrl))

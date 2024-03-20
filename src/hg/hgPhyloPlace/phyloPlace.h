@@ -127,28 +127,11 @@ struct usherResults
 
 struct sampleMetadata
 /* Information about a virus sample. */
-    {
-    char *strain;       // Strain name, usually of the form Country/ArbitraryId/YYYY-MM-DD
-    char *epiId;        // GISAID EPI_ISL_[0-9]+ ID
-    char *gbAcc;        // GenBank accession
-    char *date;         // Sample collection date
-    char *author;       // Author(s) to credit
-    char *nClade;       // Nextstrain year-letter clade assigned by nextclade
-    char *gClade;       // GISAID amino acid change clade
-    char *lineage;      // Pango lineage assigned by pangolin
-    char *country;      // Country in which sample was collected
-    char *division;     // Administrative division in which sample was collected (country or state)
-    char *location;     // Location in which sample was collected (city)
-    char *countryExp;   // Country in which host was exposed to virus
-    char *divExp;       // Administrative division in which host was exposed to virus
-    char *origLab;      // Originating lab
-    char *subLab;       // Submitting lab
-    char *region;       // Continent on which sample was collected
-    char *nCladeUsher;  // Nextstrain clade according to annotated tree
-    char *lineageUsher; // Pango lineage according to annotated tree
-    char *authors;      // Sequence submitters/authors
-    char *pubs;         // PubMed ID numbers of publications associated with sequences
-    char *nLineage;     // Nextstrain letter-dot-numbers lineage assigned by nextclade
+{
+    size_t columnCount;    // Number of metadata columns
+    char **columnNames;    // Metadata column names (e.g. date, genbank_accession, pangolin_lineage)
+                           // -- shared by all metadata rows, not allocated for each struct
+    char **columnValues;   // Metadata column values -- allocated for each struct
     };
 
 struct geneInfo

@@ -746,8 +746,8 @@ for (vpn = variantPath;  vpn != NULL;  vpn = vpn->next)
 }
 
 static struct hash *getSampleMetadata(char *metadataFile)
-/* If config.ra defines a metadataFile, load its contents into a hash indexed by EPI ID and return;
- * otherwise return NULL. */
+/* If config.ra defines a metadataFile, load its contents into a hash indexed by name (and INSDC
+ * nucleotide accession sans dot if present) and return the hash; otherwise return NULL. */
 {
 struct hash *sampleMetadata = NULL;
 if (isNotEmpty(metadataFile) && fileExists(metadataFile))
@@ -770,133 +770,38 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
         else
             errAbort("Missing header line from metadataFile %s", metadataFile);
         }
-    int strainIx = stringArrayIx("strain", headerWords, headerWordCount);
-    int epiIdIx = stringArrayIx("gisaid_epi_isl", headerWords, headerWordCount);
+    // Look for genbank_accession in header line so we can index by that as well
     int genbankIx = stringArrayIx("genbank_accession", headerWords, headerWordCount);
-    int dateIx = stringArrayIx("date", headerWords, headerWordCount);
-    int authorIx = stringArrayIx("authors", headerWords, headerWordCount);
-    int nCladeIx = stringArrayIx("Nextstrain_clade", headerWords, headerWordCount);
-    int gCladeIx = stringArrayIx("GISAID_clade", headerWords, headerWordCount);
-    int lineageIx = stringArrayIx("pangolin_lineage", headerWords, headerWordCount);
-    if (lineageIx < 0)
-        lineageIx = stringArrayIx("pango_lineage", headerWords, headerWordCount);
-    int countryIx = stringArrayIx("country", headerWords, headerWordCount);
-    int divisionIx = stringArrayIx("division", headerWords, headerWordCount);
-    int locationIx = stringArrayIx("location", headerWords, headerWordCount);
-    int countryExpIx = stringArrayIx("country_exposure", headerWords, headerWordCount);
-    int divExpIx = stringArrayIx("division_exposure", headerWords, headerWordCount);
-    int origLabIx = stringArrayIx("originating_lab", headerWords, headerWordCount);
-    int subLabIx = stringArrayIx("submitting_lab", headerWords, headerWordCount);
-    int regionIx = stringArrayIx("region", headerWords, headerWordCount);
-    int nCladeUsherIx = stringArrayIx("Nextstrain_clade_usher", headerWords, headerWordCount);
-    int lineageUsherIx = stringArrayIx("pango_lineage_usher", headerWords, headerWordCount);
-    int authorsIx = stringArrayIx("authors", headerWords, headerWordCount);
-    int pubsIx = stringArrayIx("publications", headerWords, headerWordCount);
-    int nLineageIx = stringArrayIx("Nextstrain_lineage", headerWords, headerWordCount);
-    int gnCladeIx = stringArrayIx("goya_nextclade", headerWords, headerWordCount);
-    int rnCladeIx = stringArrayIx("GCC_nextclade", headerWords, headerWordCount);
-    int guCladeIx = stringArrayIx("goya_usher", headerWords, headerWordCount);
-    int ruCladeIx = stringArrayIx("GCC_usher", headerWords, headerWordCount);
-    int rtCladeIx = stringArrayIx("GCC_assigned_2023-11", headerWords, headerWordCount);
     while (lineFileNext(lf, &line, NULL))
         {
-        char *words[headerWordCount];
-        int wordCount = chopTabs(line, words);
-        lineFileExpectWords(lf, headerWordCount, wordCount);
         struct sampleMetadata *met;
         AllocVar(met);
-        if (strainIx >= 0)
-            met->strain = cloneString(words[strainIx]);
-        if (epiIdIx >= 0)
-            met->epiId = cloneString(words[epiIdIx]);
-        if (genbankIx >= 0 && !sameString("?", words[genbankIx]))
-            met->gbAcc = cloneString(words[genbankIx]);
-        if (dateIx >= 0)
-            met->date = cloneString(words[dateIx]);
-        if (authorIx >= 0)
-            met->author = cloneString(words[authorIx]);
-        if (nCladeIx >= 0)
-            met->nClade = cloneString(words[nCladeIx]);
-        if (gCladeIx >= 0)
-            met->gClade = cloneString(words[gCladeIx]);
-        if (lineageIx >= 0)
-            met->lineage = cloneString(words[lineageIx]);
-        if (countryIx >= 0)
-            met->country = cloneString(words[countryIx]);
-        if (divisionIx >= 0)
-            met->division = cloneString(words[divisionIx]);
-        if (locationIx >= 0)
-            met->location = cloneString(words[locationIx]);
-        if (countryExpIx >= 0)
-            met->countryExp = cloneString(words[countryExpIx]);
-        if (divExpIx >= 0)
-            met->divExp = cloneString(words[divExpIx]);
-        if (origLabIx >= 0)
-            met->origLab = cloneString(words[origLabIx]);
-        if (subLabIx >= 0)
-            met->subLab = cloneString(words[subLabIx]);
-        if (regionIx >= 0)
-            met->region = cloneString(words[regionIx]);
-        if (nCladeUsherIx >= 0)
-            met->nCladeUsher = cloneString(words[nCladeUsherIx]);
-        if (lineageUsherIx >= 0)
-            met->lineageUsher = cloneString(words[lineageUsherIx]);
-        if (authorsIx >= 0)
-            met->authors = cloneString(words[authorsIx]);
-        if (pubsIx >= 0)
-            met->pubs = cloneString(words[pubsIx]);
-        if (nLineageIx >= 0)
-            met->nLineage = cloneString(words[nLineageIx]);
-        // For RSV, use lineage for GCC clades and nClade for Goya clades.
-        // This is getting ugly and we really should specify metadata columns in config.ra files.
-        if (gnCladeIx >= 0)
-            met->nClade = cloneString(words[gnCladeIx]);
-        if (rnCladeIx >= 0)
-            met->lineage = cloneString(words[rnCladeIx]);
-        if (guCladeIx >= 0)
-            met->nCladeUsher = cloneString(words[guCladeIx]);
-        if (ruCladeIx >= 0)
-            met->lineageUsher = cloneString(words[ruCladeIx]);
-        // Uglier still, use gClade to store GCC designations because it's left over.
-        if (rtCladeIx >= 0)
-            met->gClade = cloneString(words[rtCladeIx]);
-        // If epiId and/or genbank ID is included, we'll probably be using that to look up items.
-        if (epiIdIx >= 0 && !isEmpty(words[epiIdIx]))
-            hashAdd(sampleMetadata, words[epiIdIx], met);
-        if (genbankIx >= 0 && !isEmpty(words[genbankIx]) && !sameString("?", words[genbankIx]))
+        met->columnCount = headerWordCount;
+        met->columnNames = headerWords;
+        AllocArray(met->columnValues, headerWordCount);
+        char *lineCopy = cloneString(line);
+        int wordCount = chopByChar(lineCopy, '\t', met->columnValues, headerWordCount);
+        lineFileExpectWords(lf, headerWordCount, wordCount);
+        if (genbankIx >= 0 && !isEmpty(met->columnValues[genbankIx]) &&
+            !sameString("?", met->columnValues[genbankIx]))
             {
-            if (strchr(words[genbankIx], '.'))
+            if (strchr(met->columnValues[genbankIx], '.'))
                 {
                 // Index by versionless accession
-                char copy[strlen(words[genbankIx])+1];
-                safecpy(copy, sizeof copy, words[genbankIx]);
+                char copy[strlen(met->columnValues[genbankIx])+1];
+                safecpy(copy, sizeof copy, met->columnValues[genbankIx]);
                 char *dot = strchr(copy, '.');
                 *dot = '\0';
                 hashAdd(sampleMetadata, copy, met);
                 }
             else
-                hashAdd(sampleMetadata, words[genbankIx], met);
+                hashAdd(sampleMetadata, met->columnValues[genbankIx], met);
             }
-        if (strainIx >= 0 && !isEmpty(words[strainIx]))
-            hashAdd(sampleMetadata, words[strainIx], met);
+        hashAdd(sampleMetadata, met->columnValues[0], met);
         }
     lineFileClose(&lf);
     }
 return sampleMetadata;
-}
-
-char *epiIdFromSampleName(char *sampleId)
-/* If an EPI_ISL_# ID is present somewhere in sampleId, extract and return it, otherwise NULL. */
-{
-char *epiId = cloneString(strstr(sampleId, "EPI_ISL_"));
-if (epiId)
-    {
-    char *p = epiId + strlen("EPI_ISL_");
-    while (isdigit(*p))
-        p++;
-    *p = '\0';
-    }
-return epiId;
 }
 
 char *gbIdFromSampleName(char *sampleId)
@@ -921,17 +826,15 @@ struct sampleMetadata *metadataForSample(struct hash *sampleMetadata, char *samp
 struct sampleMetadata *met = NULL;
 if (sampleMetadata == NULL)
     return NULL;
-char *epiId = epiIdFromSampleName(sampleId);
-if (epiId)
-    met = hashFindVal(sampleMetadata, epiId);
+met = hashFindVal(sampleMetadata, sampleId);
+if (met)
+    return met;
 if (!met)
     {
     char *gbId = gbIdFromSampleName(sampleId);
     if (gbId)
         met = hashFindVal(sampleMetadata, gbId);
     }
-if (!met)
-    met = hashFindVal(sampleMetadata, sampleId);
 if (!met && strchr(sampleId, '|'))
     {
     char copy[strlen(sampleId)+1];
@@ -959,7 +862,14 @@ static char *lineageForSample(struct hash *sampleMetadata, char *sampleId)
 char *lineage = NULL;
 struct sampleMetadata *met = metadataForSample(sampleMetadata, sampleId);
 if (met)
-    lineage = met->lineage ? met->lineage : met->nLineage;
+    {
+    int ix;
+    if ((ix = stringArrayIx("pangolin_lineage", met->columnNames, met->columnCount)) >= 0 ||
+        (ix = stringArrayIx("pango_lineage", met->columnNames, met->columnCount)) >= 0 ||
+        (ix = stringArrayIx("Nextstrain_lineage", met->columnNames, met->columnCount)) >= 0 ||
+        (ix = stringArrayIx("GCC_nextclade", met->columnNames, met->columnCount)) >= 0)
+        lineage = met->columnNames[ix];
+    }
 return lineage;
 }
 
