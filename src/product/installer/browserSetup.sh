@@ -1913,6 +1913,8 @@ function updateBlatServers ()
    downloadFile http://$HGDOWNLOAD/admin/hgcentral.sql | $MYSQL hgcentral
    # the blat servers don't have fully qualified dom names in the download data
    $MYSQL hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu");'
+   # just in case that we ever add fully qualified dom names
+   $MYSQL hgcentral -e 'UPDATE blatServers SET host=replace(host,".soe.ucsc.edu.soe.ucsc.edu", ".soe.ucsc.edu");'
 }
 
 function cgiUpdate ()
