@@ -1,19 +1,63 @@
 #############################################################################
 ### Building the GenArk assembly hubs ###
 #############################################################################
+### Requests from the request system:
+
+When a user sends in a request with an accession ID, e.g.: GCF_002776525.5
+the assembly may already exist in some version.  To check if something
+already exists, use just the number part of the ID: 002776525 and
+check the existing listings in the source tree:
+
+    grep 002776525 ~/kent/src/hg/makeDb/doc/*AsmHub/*.tsv
+
+They may be asking for a newer version, or they may be asking for
+a GenBank version when a RefSeq version already exists.  Can decide
+if what we have is better than what they ask for.  True, sometimes they
+may want a specific older version, negotiate that with the user in
+email to see if they would accept a newer version.
+
+When not there, check to see if has been recognized as something
+to build.  Again, just the number, for RefSeq assemblies:
+
+    grep 002776525 /hive/data/outside/ncbi/genomes/reports/newAsm/rs.todo.*
+for Genbank:
+    grep 002776525 /hive/data/outside/ncbi/genomes/reports/newAsm/gb.todo.*
+decide which one is best or most up to date, RefSeq is always first choice.
+Those are the pre-ready to go build commands to be run in the allBuild
+directory:
+
+    cd /hive/data/genomes/asmHubs/allBuild
+    time (./runBuild GCA_002776525.5_ASM277652v5 primates Piliocolobus_tephrosceles) >> GCA_002776525.5.log 2>&1
+
+If it doesn't show up there, check the 'master' listings from NCBI:
+
+   /hive/data/outside/ncbi/genomes/reports/assembly_summary*.txt
+assembly_summary_genbank.txt             assembly_summary_refseq.txt
+assembly_summary_genbank_historical.txt  assembly_summary_refseq_historical.txt
+
+These asssembly_summary*.txt files can also be scanned for scientific names
+if that is all the user supplied.
+
+#############################################################################
 ###
 ###  To build a single hub:
 #############################################################################
 
 0: Given an accession identifier, e.g. GCF_002776525.5
-a. find build command and designated clade
-b. run the build of the hub
-c. add lines to source tree files master.run.list and clade.orderList.tsv
-d. in the source tree run; time (make) > dbg 2>&1 # check for errors
-e. time (make verifyTestDownload) >> test.down.log 2>&1 # check for errors
-f. time (make sendDownload) >> send.down.log 2>&1 # check for errors
-g. time (make verifyDownload) >> verify.down.log 2>&1 # check for errors
-h. verify the browser functions: https://genome.ucsc.edu/h/GCF_002776525.5
+a. find build command and designated clade (see also above discussion)
+b. run the build of the hub (see also above discussion)
+c. add lines to source tree files master.run.list and
+                      doc/<clade>AsmHug/<clade>.orderList.tsv
+d. in the source tree doc/<clade>AsmHub/ directory, running commands:
+e. make symLinks      # prepares staging directory with symlinks to the build
+f. then: time (make) > dbg 2>&1 # check for errors: egrep "miss|err" dbg
+g. time (make verifyTestDownload) >> test.down.log 2>&1 # check for errors
+                                                   # grep check test.down.log
+h. time (make sendDownload) >> send.down.log 2>&1 # check for errors
+                                                  # grep error send.down.log
+i. time (make verifyDownload) >> verify.down.log 2>&1 # check for errors
+                                                  # grep check verify.down.log
+j. verify the browser functions: https://genome.ucsc.edu/h/GCF_002776525.5
 
 ### Details of those steps:
 
