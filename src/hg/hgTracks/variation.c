@@ -3025,18 +3025,25 @@ void bigDbSnpDraw(struct track *tg, int seqStart, int seqEnd,
                   MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
-if (vis == tvDense ||
-    (tg->limitedVisSet && tg->limitedVis == tvDense))
-    {
-    // Sort so that items with the strongest colors appear on top.
-    slSort(&tg->items, lfColorCmp);
-    }
+if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
+    {           
+        bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
+    } 
 else
     {
-    // Sort by position as usual
-    slSort(&tg->items, linkedFeaturesCmp);
+    if (vis == tvDense ||
+        (tg->limitedVisSet && tg->limitedVis == tvDense))
+        {
+        // Sort so that items with the strongest colors appear on top.
+        slSort(&tg->items, lfColorCmp);
+        }
+    else
+        {
+        // Sort by position as usual
+        slSort(&tg->items, linkedFeaturesCmp);
+        }
+    genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
     }
-genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
 void bigDbSnpMethods(struct track *track)
