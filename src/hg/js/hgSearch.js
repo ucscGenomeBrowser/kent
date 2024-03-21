@@ -864,11 +864,6 @@ var hgSearch = (function() {
                     });
                     callbackData.label = geneSymbol;
                     callbackData.value = geneSymbol;
-                    if (typeof match.description !== "undefined") {
-                        callbackData.label += " " + match.description;
-                        // hack to remove the bolding from the item values in the autocomplete
-                        callbackData.value = $("<div>" + match.description + "</div>").text();
-                    }
                     callbackData.id = id;
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = "";
@@ -881,11 +876,6 @@ var hgSearch = (function() {
                     });
                     callbackData.label = geneSymbol;
                     callbackData.value = geneSymbol;
-                    if (typeof match.description !== "undefined") {
-                        callbackData.label += " " + match.description;
-                        // hack to remove the bolding from the item values in the autocomplete
-                        callbackData.value = $("<div>" + match.description + "</div>").text();
-                    }
                     callbackData.id = id;
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = "";
@@ -897,11 +887,6 @@ var hgSearch = (function() {
                     });
                     callbackData.label = geneSymbol;
                     callbackData.value = geneSymbol;
-                    if (typeof match.description !== "undefined") {
-                        callbackData.label += " " + match.description;
-                        // hack to remove the bolding from the item values in the autocomplete
-                        callbackData.value = $("<div>" + match.description + "</div>").text();
-                    }
                     callbackData.id = match.position.split(":")[0];
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = "";
@@ -912,11 +897,6 @@ var hgSearch = (function() {
                     });
                     callbackData.label = geneSymbol;
                     callbackData.value = geneSymbol;
-                    if (typeof match.description !== "undefined") {
-                        callbackData.label += " " + match.description;
-                        // hack to remove the bolding from the item values in the autocomplete
-                        callbackData.value = $("<div>" + match.description + "</div>").text();
-                    }
                     // special case the genbank searches that are supposed to go to hgc
                     // and not hgTracks
                     let parentTitle = i.parentNode.parentNode.parentNode.childNodes[2];
@@ -928,6 +908,12 @@ var hgSearch = (function() {
                     callbackData.id = id;
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = match.hgFindMatches;
+                }
+                // the value text is the same for all the types, and needs this
+                // hack to remove the bolding from the item values in the autocomplete
+                if (match && typeof match.description !== "undefined") {
+                    callbackData.label += " " + match.description;
+                    callbackData.value = $("<div>" + match.description + "</div>").text();
                 }
                 // type for autocomplete select to know where to navigate to
                 callbackData.type = trackName;

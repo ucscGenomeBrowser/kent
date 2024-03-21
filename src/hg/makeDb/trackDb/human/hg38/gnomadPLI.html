@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <P>
 The <b>Genome Aggregation Database (gnomAD) - Predicted Constraint Metrics</b> track set contains
-metrics of pathogenicity per-gene as predicted for gnomAD v2.1.1 and identifies genes subject to
+metrics of pathogenicity per-gene as predicted for gnomAD v2.1.1 or gnomAD v4.0  and identifies genes subject to
 strong selection against various classes of mutation.
 </p>
 
@@ -20,7 +20,7 @@ The metrics include:
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-There are two &quot;groups&quot; of tracks in this set:
+There are two &quot;groups&quot; of tracks in this set, and two gnomAD versions (v2.1.1 and v4.0):
 <ol>
   <li><b>Gene/Transcript LoF Constraint tracks</b>: Predicted constraint metrics at the whole gene
     level or whole transcript level for three different types of variation: missense, synonymous,
@@ -29,6 +29,7 @@ There are two &quot;groups&quot; of tracks in this set:
     metrics for all transcript isoforms. Items on both tracks are shaded according to the pLI score,
     with outlier items shaded in grey.
   <br><img src="../images/gnomAD_LOEUFkey.png"  width='33%'alt="LOEUF score legend"><br>
+    Please note there is no gene-level track available for v4.0.
   <li><b>Gene/Transcript Missense Constraint tracks</b>: The missense constraint tracks are built
     similarly to the LoF constraint tracks, however the items displayed are based on 
     <a href="https://gnomad.broadinstitute.org/help/constraint" target="_blank">missense Z scores</a>.
@@ -49,7 +50,7 @@ based on their Ensembl identifier and/or Gene Name.
 
 <H2>Methods</H2>
 <p>
-Please see the gnomAD browser help page and <a 
+Please see the <a href="https://gnomad.broadinstitute.org/help/constraint">gnomAD browser help page</a> and <a 
 href="https://gnomad.broadinstitute.org/faq">FAQ</a> for further explanation of the topics below.</p>
 
 <h3>Observed and Expected Variant Counts</h3>
@@ -125,7 +126,7 @@ Please see Samocha et al., 2014 and Lek et al., 2016 for further discussion of t
 
 <h3>Transcripts Included</h3>
 <p>
-GENCODE transcripts were filtered according to the following criteria:
+For version 2.1.1 only, the GENCODE transcripts were filtered according to the following criteria:
 <ul>
   <li>Must have methionine at start of coding sequence
   <li>Must have stop codon at end of coding sequence
@@ -135,7 +136,7 @@ GENCODE transcripts were filtered according to the following criteria:
 </ul>
 </p>
 <p>
-The gnomAD gene/transcript data is based on hg19. In order to map transcripts and genes to the hg38 genome the following steps were taken:
+For version v2.1.1, the gnomAD gene/transcript data is based on hg19. In order to map transcripts and genes to the hg38 genome the following steps were taken:
 <ul>
 <li><b>Transcript track:</b> The gnomAD ENST identifiers were attempted to be matched to all GENCODE versions
 between V20 and V44, giving coordinate priorities to the most recent models. In total 74550/80950 
@@ -147,9 +148,13 @@ on gene symbols instead of ENSG identifiers. In total 19567/19704 genes were map
 </ul>
 </p>
 
+<p>
+For version v4.0, the gnomAD transcript data is based on hg38. In order to map the transcripts to hg38, the transcript version numbers in the gnomAD download file were joined with GENCODE V39 and NCBI RefSeq coordinates available at UCSC.
+</p>
 
 <h3>UCSC Track Methods</h3>
-<h4>Gene and Transcript Constraint tracks</h4>
+<h4>Version based on gnomAD v2.1.1</h4>
+<h5>Gene and Transcript Constraint tracks</h5>
 <p>
 Per gene and per transcript data were downloaded from the gnomAD Google Storage bucket:
 <pre>
@@ -160,6 +165,19 @@ These data were then joined to the Gencode set of genes/transcripts available at
 Genome Browser (see previous section) and then transformed into a bigBed 12+5. For the full list of commands used to
 make this track please see the
 <a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomadPLI.txt">makedoc</a>.
+</p>
+
+<h4>Version based on gnomAD v4.0</h4>
+<h5>Gene and Transcript Constraint tracks</h5>
+<p>
+Per gene and per transcript data were downloaded from the gnomAD Google Storage bucket:
+<pre>
+https://storage.googleapis.com/gcp-public-data--gnomad/release/4.0/constraint/gnomad.v4.0.constraint_metrics.tsv
+</pre>
+These data were then joined to the Gencode/NCBI set of genes/transcripts available at the UCSC
+Genome Browser and then transformed into a bigBed 12+5. For the full list of commands used to
+make this track please see the
+<a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomad.txt">makedoc</a>.
 </p>
 
 <h2>Data Access</h2>
