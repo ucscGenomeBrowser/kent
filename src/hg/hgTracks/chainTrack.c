@@ -352,7 +352,7 @@ struct slList *item;
 int y = yOff;
 double scale = scaleForWindow(width, seqStart, seqEnd);
 int heightPer = tg->heightPer;
-color = 0x5050ffff;
+color = hvGfxFindRgb(hvg, &undefinedYellowColor);
 for (item = tg->items; item != NULL; item = item->next)
     {
     struct linkedFeatures *lf = (struct linkedFeatures *)item;
@@ -366,9 +366,10 @@ for (item = tg->items; item != NULL; item = item->next)
         }
     drawScaledBox(hvg, prev, winEnd,  scale, xOff, y, heightPer, color);
 
+    break;
     }
 
-color = 0xff5050ff;
+color = MG_BLACK;
 for (item = tg->items; item != NULL; item = item->next)
     {
     struct linkedFeatures *lf = (struct linkedFeatures *)item;

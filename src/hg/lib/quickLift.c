@@ -71,7 +71,11 @@ for(chain = chainList; chain; chain = chain->next)
         }
 
     // now grab the items 
-    struct bigBedInterval *thisInterval = bigBedIntervalQuery(bbi, chain->qName, qStart, qEnd, 10000, lm);
+    struct bigBedInterval *thisInterval = NULL;
+    if (chain->qStrand == '-')
+        thisInterval = bigBedIntervalQuery(bbi, chain->qName, chain->qSize - qEnd, chain->qSize - qStart,  10000, lm);
+    else
+        thisInterval = bigBedIntervalQuery(bbi, chain->qName, qStart, qEnd, 10000, lm);
     bbList = slCat(thisInterval, bbList);
     
     // for the mapping we're going to use the same chain we queried on to map the items, but we need to swap it
