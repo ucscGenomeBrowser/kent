@@ -366,25 +366,31 @@ static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
                                         struct sampleMetadata *met, boolean isUserSample,
                                         char *source, struct hash *sampleUrls,
                                         struct hash *samplePlacements, boolean isRsv,
-                                        char **retUserOrOld, char **retNClade, char **retGClade,
-                                        char **retLineage, char **retNLineage,
-                                        char **retNCladeUsher, char **retLineageUsher)
+                                        int branchAttrCount, char **branchAttrCols,
+                                        char **branchAttrVals)
 /* Write elements of node_attrs for a sample which may be preexisting and in our metadata hash,
  * or may be a new sample from the user.  Set rets for color categories so parent branches can
  * determine their color categories. */
 {
-*retUserOrOld = isUserSample ? "uploaded sample" : source;
-jsonWriteObjectValue(jw, "userOrOld", *retUserOrOld);
-*retNClade = *retGClade = *retLineage = *retNLineage = *retNCladeUsher = *retLineageUsher = "";
+char *userOrOld = isUserSample ? "uploaded sample" : source;
+jsonWriteObjectValue(jw, "userOrOld", userOrOld);
+int i;
+for (i = 0;  i < branchAttrCount;  i++)
+    branchAttrVals[i] = "";
+if (branchAttrCount > 0 && sameString(branchAttrCols[0], "userOrOld"))
+    branchAttrVals[0] = userOrOld;
 if (met != NULL)
     {
     int i;
     for (i = 0;  i < met->columnCount;  i++)
         {
         char *colName = met->columnNames[i];
+        // Tweak old column name if found
         if (sameString(colName, "pangolin_lineage"))
-            {
             colName = "pango_lineage";
+        // Link out to outbreak.info for Pango lineages
+        if (startsWith("pango_lineage", colName))
+            {
             if (isNotEmpty(met->columnValues[i]))
                 {
                 char lineageUrl[1024];
@@ -396,39 +402,50 @@ if (met != NULL)
             }
         else
             jsonWriteObjectValue(jw, colName, met->columnValues[i]);
-        // Some columns get passed up for aggregation so we can color internal nodes/branches.
-        if (sameString(colName, "Nextstrain_clade") || sameString(colName, "goya_nextclade"))
-            *retNClade = met->columnValues[i];
-        else if (sameString(colName, "GISAID_clade") || sameString(colName, "GCC_assigned_2023-11"))
-            *retGClade = met->columnValues[i];
-        else if (sameString(colName, "pango_lineage") || sameString(colName, "GCC_nextclade"))
-            *retLineage = met->columnValues[i];
-        else if (sameString(colName, "Nextstrain_clade_usher") || sameString(colName, "goya_usher"))
-            *retNCladeUsher = met->columnValues[i];
-        else if (sameString(colName, "pango_lineage_usher") || sameString(colName, "GCC_usher"))
-            *retLineageUsher = met->columnValues[i];
+        // Some columns get passed upwards for aggregation so we can color internal nodes/branches.
+        int j;
+        for (j = 0;  j < branchAttrCount;  j++)
+            {
+            if (sameString(colName, branchAttrCols[j]))
+                {
+                branchAttrVals[j] = met->columnValues[i];
+                break;
+                }
+            }
         }
     }
 else if (isUserSample)
     {
     struct placementInfo *pi = name ? hashFindVal(samplePlacements, name) : NULL;
-    //#*** Really need to know what columns are present in the absence of met, so we can avoid
-    //#*** writing objects that shouldn't be there for this org.
-    *retNClade = *retGClade = *retLineage = *retNLineage = "uploaded sample";
-    jsonWriteObjectValue(jw, isRsv ? "goya_nextclade" : "Nextstrain_clade", "uploaded sample");
-    jsonWriteObjectValue(jw, isRsv ? "GCC_assigned_2023-11" : "GISAID_clade", "uploaded sample");
-    jsonWriteObjectValue(jw, isRsv ? "GCC_nextclade" : "pango_lineage", "uploaded sample");
-    jsonWriteObjectValue(jw, "Nextstrain_lineage", "uploaded sample");
-    *retNCladeUsher = (pi && pi->nextClade) ? pi->nextClade : "uploaded sample";
-    jsonWriteObjectValue(jw, (isRsv ? "goya_usher" : "Nextstrain_clade_usher"), *retNCladeUsher);
-    *retLineageUsher = (pi && pi->pangoLineage) ? pi->pangoLineage : "uploaded sample";
-    if (isRsv)
-        jsonWriteObjectValue(jw, "GCC_usher", *retLineageUsher);
-    else
+    int i;
+    for (i = 0;  i < branchAttrCount;  i++)
         {
-        char lineageUrl[1024];
-        makeLineageUrl(*retLineageUsher, lineageUrl, sizeof lineageUrl);
-        jsonWriteObjectValueUrl(jw, "pango_lineage_usher", *retLineageUsher, lineageUrl);
+        branchAttrVals[i] = "uploaded sample";
+        // Special cases for using placementInfo of user sample for _usher lineage/clade calls
+        // and outbreak.info link for Pango lineage
+        //#*** TODO: think of a way to make this config-driven
+        boolean wroteLink = FALSE;
+        if (pi)
+            {
+            if (pi->nextClade && (sameString(branchAttrCols[i], "Nextstrain_clade_usher") ||
+                                  sameString(branchAttrCols[i], "goya_usher")))
+                branchAttrVals[i] = pi->nextClade;
+            else if (pi->pangoLineage)
+                {
+                if (sameString(branchAttrCols[i], "pango_lineage_usher"))
+                    {
+                    branchAttrVals[i] = pi->pangoLineage;
+                    char lineageUrl[1024];
+                    makeLineageUrl(pi->pangoLineage, lineageUrl, sizeof lineageUrl);
+                    jsonWriteObjectValueUrl(jw, branchAttrCols[i], branchAttrVals[i], lineageUrl);
+                    wroteLink = TRUE;
+                    }
+                else if (sameString(branchAttrCols[i], "GCC_usher"))
+                    branchAttrVals[i] = pi->pangoLineage;
+                }
+            }
+        if (!wroteLink)
+            jsonWriteObjectValue(jw, branchAttrCols[i], branchAttrVals[i]);
         }
     }
 char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
@@ -448,25 +465,17 @@ if (isNotEmpty(sampleUrl))
     }
 }
 
-static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, boolean isRsv, char *userOrOld,
-                                          char *nClade, char *gClade, char *lineage, char *nLineage,
-                                          char *nCladeUsher, char *lineageUsher)
+static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, boolean isRsv,
+                                          int branchAttrCount, char **branchAttrCols,
+                                          char **branchAttrVals)
 /* Write elements of node_attrs for a branch. */
 {
-if (userOrOld)
-    jsonWriteObjectValue(jw, "userOrOld", userOrOld);
-if (nClade)
-    jsonWriteObjectValue(jw, (isRsv ? "goya_nextclade" : "Nextstrain_clade"), nClade);
-if (gClade)
-    jsonWriteObjectValue(jw, (isRsv ? "GCC_assigned_2023-11" : "GISAID_clade"), gClade);
-if (lineage)
-    jsonWriteObjectValue(jw, (isRsv ? "GCC_nextclade" : "pango_lineage"), lineage);
-if (nLineage)
-    jsonWriteObjectValue(jw, "Nextstrain_lineage", lineage);
-if (nCladeUsher)
-    jsonWriteObjectValue(jw, (isRsv ? "goya_usher" : "Nextstrain_clade_usher"), nCladeUsher);
-if (lineageUsher)
-    jsonWriteObjectValue(jw, (isRsv ? "GCC_usher" : "pango_lineage_usher"), lineageUsher);
+int i;
+for (i = 0;  i < branchAttrCount;  i++)
+    {
+    if (isNotEmpty(branchAttrVals[i]))
+        jsonWriteObjectValue(jw, branchAttrCols[i], branchAttrVals[i]);
+    }
 }
 
 INLINE char maybeComplement(char base, struct psl *psl)
@@ -737,9 +746,7 @@ return (maxRunLength > (arraySize >> 1)) ? maxRunVal : NULL;
 
 static void rTreeToAuspiceJson(struct phyloTree *node, int depth, struct auspiceJsonInfo *aji,
                                struct singleNucChange *ancestorMuts, boolean isRsv,
-                               char **retUserOrOld, char **retNClade, char **retGClade,
-                               char **retLineage, char **retNLineage,
-                               char **retNCladeUsher, char **retLineageUsher)
+                               int branchAttrCount, char **branchAttrCols, char **branchAttrVals)
 /* Write Augur/Auspice V2 JSON for tree.  Enclosing object start and end are written by caller. */
 {
 struct singleNucChange *sncList = node->priv;
@@ -766,38 +773,26 @@ if (node->numEdges > 0)
     else
         allMuts = sncList;
     jsonWriteListStart(aji->jw, "children");
-    char *kidUserOrOld[node->numEdges];
-    char *kidNClade[node->numEdges];
-    char *kidGClade[node->numEdges];
-    char *kidLineage[node->numEdges];
-    char *kidNCladeUsher[node->numEdges];
-    char *kidLineageUsher[node->numEdges];
-    char *kidNLineage[node->numEdges];
+    char *kidAttrVals[branchAttrCount][node->numEdges];
     // Step through children in reverse order because nextstrain/Auspice draws upside-down. :)
     int i;
     for (i = node->numEdges - 1;  i >= 0;  i--)
         {
+        char *kidNodeAttrVals[branchAttrCount];
         jsonWriteObjectStart(aji->jw, NULL);
         rTreeToAuspiceJson(node->edges[i], depth, aji, allMuts, isRsv,
-                           &kidUserOrOld[i], &kidNClade[i], &kidGClade[i], &kidLineage[i],
-                           &kidNLineage[i], &kidNCladeUsher[i], &kidLineageUsher[i]);
+                           branchAttrCount, branchAttrCols, kidNodeAttrVals);
         jsonWriteObjectEnd(aji->jw);
+        int j;
+        for (j = 0;  j < branchAttrCount;  j++)
+            kidAttrVals[j][i] = kidNodeAttrVals[j];
         }
     jsonWriteListEnd(aji->jw);
-    if (retUserOrOld)
-        *retUserOrOld = majorityMaybe(kidUserOrOld, node->numEdges);
-    if (retNClade)
-        *retNClade = majorityMaybe(kidNClade, node->numEdges);
-    if (retGClade)
-        *retGClade = majorityMaybe(kidGClade, node->numEdges);
-    if (retLineage)
-        *retLineage = majorityMaybe(kidLineage, node->numEdges);
-    if (retNCladeUsher)
-        *retNCladeUsher = majorityMaybe(kidNCladeUsher, node->numEdges);
-    if (retLineageUsher)
-        *retLineageUsher = majorityMaybe(kidLineageUsher, node->numEdges);
-    if (retNLineage)
-        *retNLineage = majorityMaybe(kidNLineage, node->numEdges);
+    if (branchAttrVals)
+        {
+        for (i = 0;  i < branchAttrCount;  i++)
+            branchAttrVals[i] = majorityMaybe(kidAttrVals[i], node->numEdges);
+        }
     if (ancLast)
         ancLast->next = NULL;
     }
@@ -806,11 +801,9 @@ jsonWriteDouble(aji->jw, "div", depth);
 if (node->numEdges == 0)
     jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample, aji->source, aji->sampleUrls,
                                 aji->samplePlacements, isRsv,
-                                retUserOrOld, retNClade, retGClade, retLineage, retNLineage,
-                                retNCladeUsher, retLineageUsher);
-else if (retUserOrOld && retGClade && retLineage)
-    jsonWriteBranchNodeAttributes(aji->jw, isRsv, *retUserOrOld, *retNClade, *retGClade, *retLineage,
-                                  *retNLineage, *retNCladeUsher, *retLineageUsher);
+                                branchAttrCount, branchAttrCols, branchAttrVals);
+else if (branchAttrVals)
+    jsonWriteBranchNodeAttributes(aji->jw, isRsv, branchAttrCount, branchAttrCols, branchAttrVals);
 jsonWriteObjectEnd(aji->jw);
 }
 
@@ -883,6 +876,28 @@ slReverse(&geneInfoList);
 return geneInfoList;
 }
 
+static int getBranchAttrCols(char *db, char ***retBranchAttrCols)
+/* Alloc an array of metadata column names to use as branch attributes and return count.
+ * There will always be at least 1 (userOrOld / Sample type); others come from config setting. */
+{
+int branchAttrCount = 1;
+struct slName *attrList = NULL, *attr;
+char *branchAttrSetting = phyloPlaceDbSetting(db, "branchAttributes");
+if (isNotEmpty(branchAttrSetting))
+    {
+    attrList = slNameListFromComma(branchAttrSetting);
+    branchAttrCount += slCount(attrList);
+    }
+char **branchAttrCols = NULL;
+AllocArray(branchAttrCols, branchAttrCount);
+branchAttrCols[0] = cloneString("userOrOld");
+int i;
+for (i = 1, attr = attrList;  i < branchAttrCount && attr != NULL;  i++, attr = attr->next)
+    branchAttrCols[i] = cloneString(trimSpaces(attr->name));
+*retBranchAttrCols = branchAttrCols;
+return branchAttrCount;
+}
+
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
                        struct seqWindow *gSeqWin, struct hash *sampleMetadata,
                        struct hash *sampleUrls, struct hash *samplePlacements,
@@ -910,7 +925,11 @@ phyloAddEdge(root, tree);
 tree = root;
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
                                sampleMetadata, sampleUrls, samplePlacements, nodeNum, source };
-rTreeToAuspiceJson(tree, depth, &aji, NULL, isRsv, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+
+char **branchAttrCols = NULL;
+int branchAttrCount = getBranchAttrCols(db, &branchAttrCols);
+rTreeToAuspiceJson(tree, depth, &aji, NULL, isRsv, branchAttrCount, branchAttrCols, NULL);
 jsonWriteObjectEnd(jw); // tree
 jsonWriteObjectEnd(jw); // top-level object
 fputs(jw->dy->string, outF);
