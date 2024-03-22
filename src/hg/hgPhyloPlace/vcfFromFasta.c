@@ -214,17 +214,16 @@ for (psl = psls;  psl != NULL;  psl = nextPsl)
     struct psl *otherPsl = hashFindVal(alignedSeqs, psl->qName);
     if (otherPsl)
         {
-        //#*** Is this ever going to happen?  Maybe if there's a large dup???
-        //#*** Is there any condition under which we would want to try to merge?  (Would expect blat
-        //#*** to have done that)
-        struct dyString *dy = dyStringCreate("Warning: multiple alignments found for sequence %s "
-                                             "(%d-%d and %d-%d).  Skipping alignment of %d-%d",
+        struct dyString *dy = dyStringCreate("Warning: multiple alignments to reference found for "
+                                             "sequence %s (%d-%d and %d-%d).  "
+                                             "Skipping alignment of %d-%d",
                                               psl->qName, otherPsl->qStart, otherPsl->qEnd,
                                               psl->qStart, psl->qEnd, psl->qStart, psl->qEnd);
         slPairAdd(retFailedPsls, dyStringCannibalize(&dy), psl);
         passes = FALSE;
         }
-    hashAdd(alignedSeqs, psl->qName, psl);
+    else
+        hashAdd(alignedSeqs, psl->qName, psl);
     if (passes)
         {
         si = hashFindVal(userSeqsByName, psl->qName);

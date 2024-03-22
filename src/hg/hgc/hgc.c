@@ -267,6 +267,7 @@
 #include "genark.h"
 #include "chromAlias.h"
 #include "dotPlot.h"
+#include "quickLift.h"
 
 static char *rootDir = "hgcData";
 
@@ -9148,12 +9149,30 @@ struct genePred *getGenePredForPositionBigGene(struct trackDb *tdb,  char *geneN
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct bigBedInterval *bb, *bbList = NULL;
+struct hash *chainHash = NULL;
+if (quickLiftFile)
+    bbList = quickLiftIntervals(quickLiftFile, bbi, seqName, winStart, winEnd, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
 struct genePred *gpList = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    struct genePred *gp = (struct genePred *)genePredFromBigGenePred(seqName, bb); 
-    if (sameString(gp->name, geneName))
+    struct genePred *gp = NULL;
+    if (quickLiftFile)
+        {
+        struct bed *bed;
+        if ((bed = quickLiftBed(bbi, chainHash, bb)) != NULL)
+            {
+            struct bed *bedCopy = cloneBed(bed);
+            gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb);
+            }
+        }
+    else
+        gp = (struct genePred *)genePredFromBigGenePred(seqName, bb); 
+
+    if ((gp != NULL) && sameString(gp->name, geneName))
 	slAddHead(&gpList, gp);
     }
 lmCleanup(&lm);

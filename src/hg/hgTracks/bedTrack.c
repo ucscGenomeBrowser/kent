@@ -17,6 +17,7 @@
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
 #include "snake.h"
+#include "quickLift.h"
 
 #define SEQ_DELIM '~'
 
@@ -84,8 +85,15 @@ if (startsWith("bedTabix", tg->tdb->type ) || startsWith("longTabix", tg->tdb->t
 else if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
     struct lm *lm = lmInit(0);
-    struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
     struct bbiFile *bbi = fetchBbiForTrack(tg);
+    char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+    struct hash *chainHash = NULL;
+    struct bigBedInterval *bb, *bbList = NULL;
+    if (quickLiftFile)
+        bbList = quickLiftIntervals(quickLiftFile, bbi, chromName, winStart, winEnd, &chainHash);
+    else
+        bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
+
     char *bedRow[bbi->fieldCount];
     char startBuf[16], endBuf[16];
 
@@ -106,7 +114,13 @@ else if (tg->isBigBed)
             filtered++;
             continue;
             }
-        bed = loader(bedRow);
+        if (quickLiftFile)
+            {
+            if ((bed = quickLiftBed(bbi, chainHash, bb)) == NULL)
+                continue;
+            }
+        else
+            bed = loader(bedRow);
         // FIXME BRANEY: either disable for all tracks with NUM_FIELDS > label field or better,
         // fix how label is stored so it doesn't trash custom bed field
         // BRANEY says: the loader should be returning bed structures which include the label field.
