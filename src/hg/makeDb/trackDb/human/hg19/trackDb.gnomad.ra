@@ -910,8 +910,13 @@ html gnomad
     parent gnomadSuper
     visibility squish
     dataVersion Release 2.1.1
-    labelFields name,rsId
-    defaultLabelFields name
+    labelFields rsId,_displayName
+    defaultLabelFields _displayName
+    skipFields _displayName
+    skipEmptyFields on
+    filterValues.AC_non_cancer Non-Cancer
+    filterValuesDefault.AC_non_cancer Non-Cancer
+    filterType.AC_non_cancer single
     filterValues.annot pLoF,missense,synonymous,other
     filterValues.FILTER PASS,InbreedingCoeff,RF,AC0
     filterType.FILTER multipleListAnd
