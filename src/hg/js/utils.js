@@ -21,12 +21,21 @@ var singleBaseExp =     /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*$/;
 function copyToClipboard(ev) {
     /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
      * The attribute data-target of this element is the ID of the element that contains the text to copy. 
+     * The text is either in the attribute data-copy or the innerText.
      * see C function printCopyToClipboardButton(iconId, targetId);
      * */
      
-    var targetId = ev.target.getAttribute("data-target");
+    ev.preventDefault();
+
+    var buttonEl = ev.target.closest("button"); // user can click SVG or BUTTON element
+
+    var targetId = buttonEl.getAttribute("data-target");
+    if (targetId===null)
+        targetId = ev.target.parentNode.getAttribute("data-target");
     var textEl = document.getElementById(targetId);
-    var text = textEl.innerText;
+    var text = textEl.getAttribute("data-copy");
+    if (text===null)
+        text = textEl.innerText;
 
     var textArea = document.createElement("textarea");
     textArea.value = text;
@@ -39,7 +48,11 @@ function copyToClipboard(ev) {
     textArea.select();
     document.execCommand('copy');
     document.body.removeChild(textArea);
-    ev.target.innerHTML = 'Copied';
+    if (buttonEl.innerHTML.includes("Clipboard"))
+        buttonEl.innerHTML = 'Copied';
+    else
+        buttonEl.innerHTML = 'OK';
+    ev.preventDefault();
 }
 
 function cfgPageOnVisChange(ev) {

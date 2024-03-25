@@ -267,6 +267,7 @@
 #include "genark.h"
 #include "chromAlias.h"
 #include "dotPlot.h"
+#include "quickLift.h"
 
 static char *rootDir = "hgcData";
 
@@ -838,9 +839,9 @@ void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
 if (item != NULL && item[0] != 0)
-    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
+    cartWebStart(cart, database, "%s: %s (%s)", genome, tdb->longLabel, item);
 else
-    cartWebStart(cart, database, "%s", tdb->longLabel);
+    cartWebStart(cart, database, "%s: %s", genome, tdb->longLabel);
 
 // QA noticed that clicking the +- buttons to collapse item detail tables was
 // generating messages in the Apache log if you went directly to an item page
@@ -9148,12 +9149,30 @@ struct genePred *getGenePredForPositionBigGene(struct trackDb *tdb,  char *geneN
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct bigBedInterval *bb, *bbList = NULL;
+struct hash *chainHash = NULL;
+if (quickLiftFile)
+    bbList = quickLiftIntervals(quickLiftFile, bbi, seqName, winStart, winEnd, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
 struct genePred *gpList = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    struct genePred *gp = (struct genePred *)genePredFromBigGenePred(seqName, bb); 
-    if (sameString(gp->name, geneName))
+    struct genePred *gp = NULL;
+    if (quickLiftFile)
+        {
+        struct bed *bed;
+        if ((bed = quickLiftBed(bbi, chainHash, bb)) != NULL)
+            {
+            struct bed *bedCopy = cloneBed(bed);
+            gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb);
+            }
+        }
+    else
+        gp = (struct genePred *)genePredFromBigGenePred(seqName, bb); 
+
+    if ((gp != NULL) && sameString(gp->name, geneName))
 	slAddHead(&gpList, gp);
     }
 lmCleanup(&lm);

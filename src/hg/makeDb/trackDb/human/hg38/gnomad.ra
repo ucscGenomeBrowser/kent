@@ -134,6 +134,9 @@ html gnomadV4
     defaultLabelFields _displayName
     skipFields _displayName
     skipEmptyFields on
+    filterValues.AC_non_cancer Non-Cancer
+    filterValuesDefault.AC_non_cancer Non-Cancer
+    filterType.AC_non_cancer single
     filterValues.annot pLoF,missense,synonymous,other
     filterValuesDefault.annot pLoF,missense,synonymous
     filterValues.FILTER PASS,InbreedingCoeff,RF,AC0,AS_VQSR,indel_stack (chrM only),npg (chrM only)

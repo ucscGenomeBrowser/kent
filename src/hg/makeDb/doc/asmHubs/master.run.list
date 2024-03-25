@@ -1250,6 +1250,7 @@
 ./runBuild GCA_900651595.1_fParRan2.1_alternate_haplotype fish Parambassis_ranga
 ./runBuild GCA_900651605.1_fBetSpl5.1_alternate_haplotype fish Betta_splendens
 ./runBuild GCA_900651605.2_fBetSpl5.4_alternate_haplotype fish Betta_splendens
+./runBuild GCA_900660155.1_ASM90066015v1 invertebrate Hofstenia_miamia
 ./runBuild GCA_900700345.2_fDenClu1.1_alternate_haplotype fish Denticeps_clupeoides
 ./runBuild GCA_900700375.2_fDenClu1.2 fish Denticeps_clupeoides
 ./runBuild GCA_900700395.1_fMasArm1.2_alternate_haplotype fish Mastacembelus_armatus
