@@ -48,10 +48,7 @@ function copyToClipboard(ev) {
     textArea.select();
     document.execCommand('copy');
     document.body.removeChild(textArea);
-    if (buttonEl.innerHTML.includes("Clipboard"))
-        buttonEl.innerHTML = 'Copied';
-    else
-        buttonEl.innerHTML = 'OK';
+    buttonEl.innerHTML = 'Copied';
     ev.preventDefault();
 }
 
