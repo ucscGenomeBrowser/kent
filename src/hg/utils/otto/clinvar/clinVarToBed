@@ -47,7 +47,9 @@ if not options.isAlpha and os.getlogin()!="otto":
     print("When you're done, run doUpdate.sh without the --alpha and commit the change to the kent tree.")
     sys.exit(1)
 
-clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID	PositionVCF	ReferenceAlleleVCF	AlternateAlleleVCF\n"
+#clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID	PositionVCF	ReferenceAlleleVCF	AlternateAlleleVCF\n"
+clinvarExpectHeaders = "#AlleleID|Type|Name|GeneID|GeneSymbol|HGNC_ID|ClinicalSignificance|ClinSigSimple|LastEvaluated|RS# (dbSNP)|nsv/esv (dbVar)|RCVaccession|PhenotypeIDS|PhenotypeList|Origin|OriginSimple|Assembly|ChromosomeAccession|Chromosome|Start|Stop|ReferenceAllele|AlternateAllele|Cytogenetic|ReviewStatus|NumberSubmitters|Guidelines|TestedInGTR|OtherIDs|SubmitterCategories|VariationID|PositionVCF|ReferenceAlleleVCF|AlternateAlleleVCF|SomaticClinicalImpact|SomaticClinicalImpactLastEvaluated|ReviewStatusClinicalImpact|Oncogenicity|OncogenicityLastEvaluated|ReviewStatusOncogenicity".split("|")
+
 # ==== FUNCTIONs =====
 
 # benign = BN, likely benign = LB, conflicting = CF, likely pathogenic= LP, 
@@ -440,7 +442,7 @@ def parseHgvsFile(hgvsFname):
     hg19Hgvs = defaultdict(list)
     hg38Hgvs = defaultdict(list)
     foundHead = False
-    for line in gzip.open(hgvsFname, "rt"):
+    for line in gzip.open(hgvsFname, "rt", encoding="utf8"):
         line = line.rstrip("\n")
         if line==expHead:
             foundHead = True
@@ -537,7 +539,11 @@ def reviewStatusToHtmlStars(reviewStatus):
 
     if revStatus == "nointerpretationforthesinglevariant":
         starCount = 0
+    if revStatus == "noclassificationprovided" or revStatus == "noclassificationsfromunflaggedrecords":
+        starCount = 0
     if revStatus=="criteriaprovided,conflictinginterpretations":
+        starCount = 1
+    if revStatus=="criteriaprovided,conflictingclassifications": # first seen in Mar 2024
         starCount = 1
     if revStatus=="criteriaprovided,multiplesubmitters,noconflicts":
         starCount = 2
@@ -547,6 +553,9 @@ def reviewStatusToHtmlStars(reviewStatus):
         starCount = 4
     if revStatus == "reviewedbyexpertpanel":
         starCount = 3
+
+    if revStatus == "noclassificationforthesinglevariant":
+        starCount = 0
     if "noassertion" in revStatus or revStatus=="-":
         starCount = 0
 
@@ -588,10 +597,10 @@ def loadSubmissions(summFname):
 
 def mostCurrentVersionName():
     " return name of version on FTP site "
-    cmd = 'curl -s https://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_00-latest.xml.gz | zcat | head -n2 | tail -n1'
+    cmd = 'curl -s https://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarVCVRelease_00-latest.xml.gz | zcat | head -n2 | tail -n1'
     verLine = subprocess.check_output(cmd, shell=True, encoding="utf8")
-    #<ReleaseSet Dated="2023-09-03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Type="full" xsi:noNamespaceSchemaLocation="http://ftp.ncbi.nlm.nih.gov/pub/clinvar/xsd_public/clinvar_public_1.71.xsd">
-    version = verLine.split(" ")[1].split("=")[1].strip('"')
+    #<ClinVarVariationRelease xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ftp.ncbi.nlm.nih.gov/pub/clinvar/xsd_public/ClinVar_VCV_2.0.xsd" ReleaseDate="2024-03-06">
+    version = verLine.split(" ")[3].split("=")[1].split('"')[1]
     return version
 
 def downloadFromNcbi(skipDownload):
@@ -675,6 +684,9 @@ def parseVcf(vcfFname):
 
     return ret
 
+def shortenSeq(s):
+    return s[:25]+"..."+s[-25:]
+
 # ----------- MAIN --------------
 if args==[] and not options.auto:
     parser.print_help()
@@ -715,11 +727,12 @@ ifh = gzip.open(filename, "rt", encoding="latin_1")
 
 # check the header
 line1 = ifh.readline()
-if (line1 != clinvarExpectHeaders): # test if clinvar has changed their header line again
+fileHeaders = line1.rstrip().split("\t")
+if (fileHeaders != clinvarExpectHeaders): # test if clinvar has changed their header line again
     logging.error("ClinVar has changed their header line again")
-    logging.error("current header line: %s" % line1.replace("\t","|"))
-    logging.error("expected header line: %s" % clinvarExpectHeaders.replace("\t","|"))
-    raise Exception("code needs fixing")
+    logging.error("current header line: %s" % fileHeaders)
+    logging.error("expected header line: %s" % clinvarExpectHeaders)
+    raise Exception("Sorry. The code will need to be fixed.")
 
 # open out files
 hg19Bed = open("bed/clinvarMain.hg19.%sbed" % outSuffix, "w", encoding="latin1")
@@ -742,7 +755,8 @@ for line in ifh:
     alleleId, allType, name, geneId, geneSymbol, hgncId, clinSign, clinSignSimple, lastEval, snpAcc, dbVarAcc, \
       irvcAcc, phenotypeIds, phenotypeList, origin, originSimple, assembly, chromAcc, chrom, start, end, \
       refAll, varAll, cytogenetic, reviewStatus, numberSubmitters, guidelines, inGtr, otherIds, \
-      submCategories, varId, posVcf, refAllVcf, altAllVcf = row
+      submCategories, varId, posVcf, refAllVcf, altAllVcf, somClinImpact, somClinLastEval, revStatusClinImpact, oncogen, oncogenLastEval, revStatusOncogen = row
+   # SomaticClinicalImpact|SomaticClinicalImpactLastEvaluated|ReviewStatusClinicalImpact|Oncogenicity|OncogenicityLastEvaluated|ReviewStatusOncogenicity
 
     # changed in July 2018 when the "varId" was merged into this table. It used to be 
     # in allToVar
@@ -774,6 +788,8 @@ for line in ifh:
         chrom = "chrUn_KI270742v1"
     elif chromAcc=="NT_167222.1":
         chrom = "chrUn_gl000228"
+    elif chromAcc=='NT_187499.1':
+        chrom = "chrUn_KI270744v1"
     elif chromAcc=="NT_113889.1":
         if assembly=="GRCh37":
             chrom = "chrUn_gl000218"
@@ -925,11 +941,28 @@ for line in ifh:
 
     snpAcc = "rs"+snpAcc # dbSnp links changed in mid/late 2022
 
+    vcfDesc = chrom+":"+posVcf+":"+refAllVcf+">"+altAllVcf
+    if len(vcfDesc)>=255:
+	    refAllVcf = shortenSeq(refAllVcf)
+	    altAllVcf = shortenSeq(altAllVcf)
+	    vcfDesc = chrom+":"+posVcf+":"+refAllVcf+">"+altAllVcf
+
+    somImpactDesc = ""
+    if somClinImpact!="" and somClinImpact!="-":
+	    somImpactDesc = "%s (%s, %s)" % (somClinImpact, somClinLastEval, revStatusClinImpact)
+
+    oncogenDesc = ""
+    if oncogen!="" and oncogen!="-":
+	    oncogenDesc = "%s (%s, %s)" % (oncogen, oncogenLastEval, revStatusOncogen)
+
     row = [chrom, start, end, shortName, str(starCount), strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
         name, clinSign, starRatingHtml, allType, geneStr, molConseq,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
         hgvsTable, "", numberSubmitters, lastEval, guidelines, otherIds, mouseOver,
+	vcfDesc, 
+	somImpactDesc, 
+	oncogenDesc,
         # these fields are the for the filters, not for the display
         pathoCode, originCode, allTypeCode, str(varLen), str(starCount),
         # the variant ID got forgotten in the original bigBed schema, it was only part of the origName field
