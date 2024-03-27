@@ -166,6 +166,7 @@
 ./runBuild GCA_001632555.1_C57BL_6NJ_v1 mammals Mus_musculus
 ./runBuild GCA_001632575.1_C3H_HeJ_v1 mammals Mus_musculus
 ./runBuild GCA_001632615.1_LP_J_v1 mammals Mus_musculus
+./runBuild GCA_001632725.1_ASM163272v1 invertebrate Corbicula_fluminea
 ./runBuild GCA_001651235.1_ASM165123v1 mammals Giraffa_tippelskirchi
 ./runBuild GCA_001660835.1_ASM166083v1 mammals Okapia_johnstoni
 ./runBuild GCA_001662545.1_ASM166254v1 plants Rosa_x_damascena
