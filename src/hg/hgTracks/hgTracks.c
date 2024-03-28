@@ -9038,8 +9038,8 @@ if (!hideControls)
 	}
     hPrintf("</B></SPAN>");
 
-    hPrintf("<span target=_blank title='Show details about this assembly' id='gatewayLink'>"
-            "<a href='hgGateway?hgsid=%s'>Assembly Info</a></span>", cartSessionId(cart));
+    //hPrintf("<span target=_blank title='Show details about this assembly' id='gatewayLink'>"
+            //"<a href='hgGateway?hgsid=%s'>Assembly Info</a></span>", cartSessionId(cart));
 
     printDatabaseInfoHtml(database);
 
