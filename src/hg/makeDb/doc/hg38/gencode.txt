@@ -1349,4 +1349,5 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
     jkmake DBS=hg38 alpha
 
+2024-03-27: re-import track to pick up GENCODE_Primary tag
 #########################################################################
