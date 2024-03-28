@@ -162,19 +162,106 @@ out 3x:</p>
 <h6>How do I create a custom URL to control the visibility of specific tracks?</h6>
 <p>
 You can control the visibility of tracks from the URL with the following parameters, 
-each linked by the "&amp;" sign, similar to position parameters. For more information, please see
-the <a href="../goldenPath/help/customTrack.html#optParams" target ="_blank">optional URL 
-parameters</a> section of the Custom Tracks User's Guide.</p>
+each linked by the "&amp;" sign:
 <ul>
-<li id="hideTracks"><code>hideTracks=1</code> - hides all tracks</li>
-<li><code>&lt;trackName&gt;=hide|dense|pack|full</code> - sets specified track or subtrack to a
-chosen visibility</li>
-<li id="textSize"><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18,
-24, or 34. Default is a textSize of 12.</li>
-<li><code>&lt;trackName&gt;.heightPer=&lt;###&gt;</code> - sets a bigWig track's height to a 
-particular number of pixels (between 20-100)</li>
-<li id="ignoreCookie"><code>ignoreCookie=1</code> - removes pre-existing user settings like track selection, custom
-tracks, and track hubs</li>
+  <li>
+  <code>guidelines=on/off</code> - activate or deactivate the blue guidelines -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&guidelines=off"
+  target="_blank">example link</a> to switch off blue guidelines</li>
+  <li>
+  <code>hgFind.matches=&lt;listOfNames&gt;</code> - highlight features given their names -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&hgFind.matches=ENST00000611156.4,ENST00000538324.2"
+  target="_blank">example link</a> to highlight two transcripts of the ABO gene</li>
+  <li>
+  <code>hgt.reset=1</code> - show only the default tracks -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&hgt.reset=1"
+  target="_blank" >example link</a></li>
+  <li>
+  <code>hgt.toggleRevCmplDisp=1</code> - show the reverse-complement -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&hgt.toggleRevCmplDisp=1"
+  target="_blank">example link</a> to show the reverse-complement of the ABO gene</li>
+  <li>
+  <code>hgt.labelWidth=&lt;number&gt;</code> - set the size of the left-side label area -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&hgt.labelWidth=50"
+  target="_blank">example link</a> to increase the label area to 50 characters</li>
+  <li>
+  <code>hideTracks=1</code> - hide all tracks -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&hideTracks=1"
+  target="_blank">example link</a> to show no tracks at all</li>
+  <li>
+  <code>hideTracks=1&amp;&lt;trackName&gt;=full|dense|pack|hide</code> - hide all tracks and show
+  other tracks -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&hideTracks=1&cytoBand=pack"
+  target="_blank">example link</a> to show only the Chromosome Bands track and nothing else</li>
+  <li>
+  <code>highlight=&lt;db&gt;.&lt;chrom&gt;:&lt;chromStart&gt;-&lt;chromEnd&gt;#&lt;color&gt;|...</code> -
+  highlight one or more regions in a given color on the image. Note that the arguments have to be
+  URL-encoded for Internet browsers, so &quot;:&quot; becomes &quot;%3A&quot;, &quot;#&quot;
+  becomes &quot;%23&quot; and &quot;|&quot; becomes &quot;%7&quot;C. -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&highlight=hg38.chr9%3A133255612-133262185%23AA0000%7Chg38.chr9%3A133269124-133274224%230000FF"
+  target="_blank">example link</a> to highlight two parts of the ABO locus in red and blue.</li>
+  <li>
+  <code>ignoreCookie=1</code> - do not load the user's existing settings saved
+  in the internet browser's UCSC Genome Browser cookie.  This means that the link will show the
+  Genome Browser default
+  settings such as track selections, custom tracks, and track hubs. Any changes
+  you make in this new session will, however, affect the user's settings.  E.g.,
+  if you add a track in this new window, and come back to the genome browser
+  later, the track will still be there. This setting is useful if a website
+  wants to link to the Genome Browser, starting with a "clean slate" but
+  believes the user will come back to the Genome Browser expecting the
+  changes to still be there. </li>
+  <li>
+  <code>ruler=hide</code> - hide the ruler at the top of the browser image -
+  <a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene_imgOrd=2&knownGene=pack&gtexGeneV8=full&gtexGeneV8_imgOrd=1&ruler=hide"
+  target="_blank">example link</a> to hide the ruler</li>
+  <li>
+  <code>oligoMatch=pack&amp;hgt.oligoMatch=&lt;dnaSeq&gt;</code> - switch on the Short Match track and
+  highlight a matching sequence -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr7%3A155796193-155816207&oligoMatch=pack&hgt.oligoMatch=TATAWAR"
+  target="_blank">example link</a> to highlight the TATAWAR motif in the ABO locus</li>
+  <li>
+  <code>pix=&lt;number&gt;</code> - set the width of the image in pixels -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&pix=300"
+  target="_blank">example link</a> to create a 300-pixel wide image</li>
+  <li>
+  <code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18, 24,
+   or 34. Default is a textSize of 12. -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&textSize=18"
+  target="_blank">example link</a> to increase the text font size to 18 pixels</li>
+  <li>
+  <code>&lt;trackName&gt;=full|pack|dense|hide</code> - sets specified track or subtrack to a
+  chosen visibility: full, pack, dense, or hide track -
+  <a href="../../cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&cytoBand=pack"
+  target="_blank">example link</a> to show the
+  Chromosome Bands track set to &quot;pack&quot; and added to your view as saved in your cart.
+  Please note that for this feature to work with
+  custom tracks you must use the unique name and identifier number
+  <code>ct_name_####</code> assigned by our system. You can determine the name for a custom track
+  using the url, <a href = "https://genome.ucsc.edu/cgi-bin/cartDump">
+  https://genome.ucsc.edu/cgi-bin/cartDump</a>.
+  <li>
+  <code>&lt;trackName&gt;_imgOrd=&lt;number&gt;</code> - vertically orders the tracks on the image
+  based on the numbers provided. You need to specify an order for every visible track when using this
+  parameter -
+  <a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene_imgOrd=2&knownGene=pack&gtexGeneV8=full&gtexGeneV8_imgOrd=1"
+  target="_blank">example link</a> to show two show knownGene track being listed second with gtex first</li>
+  <li>
+  <code>&lt;trackName&gt;.heightPer=&lt;number&gt;</code> - sets a bigWig track's height to a
+  particular number of pixels (between 20-100) -
+  <a href="../../cgi-bin/hgTracks?db=hg38&ignoreCookie=1&hideTracks=1&mappability=full&umap24Quantitative.heightPer=100"
+  target="_blank">example link</a> to set umap bigWig track height to 100 pixels
+  </li>
+  <li>
+  <code>&lt;trackName&gt;_hideKids=1</code> - hides a specific super track's individual tracks - <a
+  href="../../cgi-bin/hgTracks?db=hg38&wgEncodeReg_hideKids=1&ignoreCookie=1" target="_blank">
+  example link</a> to hide the Encode Regulation super track</li>
+  <li>
+  <code>&lt;trackName&gt;_sel=1</code> - selects specific subtrack to be 'checked', allowing
+  display - <a href="../../cgi-bin/hgTracks?db=hg38&refSeqComposite=full&refGene_sel=1" target="_blank">example
+  link</a> to select the checkbox for UCSC RefSeq subtrack in the refSeq composite track, allowing
+  display alongside default tracks
+  </li>
 </ul>
 <p>
 For example, you can use the following command to hide every track (hideTracks=1), set the
