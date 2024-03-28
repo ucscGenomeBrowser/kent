@@ -4126,7 +4126,7 @@ function showMouseover(e) {
             // a new one can be shorter because the user expects another one to
             // pop up, but we still need to be conscious that they may be moving
             // the mouse to the tooltip itself. The mousemoveHelper() deals with that
-            mouseoverTimer = setTimeout(showMouseoverText, 100, e);
+            mouseoverTimer = setTimeout(showMouseoverText, 300, e);
         }
     }
 }
