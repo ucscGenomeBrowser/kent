@@ -189,22 +189,182 @@ http://genome.ucsc.edu/s/ExampleUser/TrackHubSession</a></li>
 </a> and
 <a href="hgSessionHelp.html#Create">
 backing up custom data</a>.</p>
-<p>
-If you prefer URL manipulation, it is also possible to add or 
-<a href="../../FAQ/FAQlink.html#hubUrl" target="_blank">share a track hub directly by URL</a> 
-or otherwise <a href="../help/customTrack.html#optParams"
-target="_blank">modify the browser via URL</a>. For example, if you add 
-<strong>hubUrl=[URL]</strong> to your hgTracks URL line, it will add the hub 
-directly into the browser:</p>
+
+
+
+
+<a name="hubUrl"></a>
+<h3>Creating a URL for a Track Hub</h3>
+<p>Hubs can be loaded into the URL using the <code>hubUrl=</code> parameter. This parameter
+takes input similar to the <a href="../cgi-bin/hgHubConnect#unlistedHubs">track hub input box</a>.
+Native UCSC supported genomes can be loaded into the URL using the <code>db=</code> parameter while
+non-natively supported genomes such as assembly hubs or genArk hubs use the <code>genome=</code>
+parameter. URL parameters can be combined by using <code>&amp;</code>.
+</p>
+<p>The following example links to the hg19 genome database and an example track hub using the <code>db=</code> and the <code>hubUrl=</code> parameters:</p>
+<pre><a href=../cgi-bin/hgTracks?db=hg19&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</a></pre>
+
+<p>Track hubs' track visibility can also be changed from the URL parameters. As an example, the
+following link specifies:
 <ul>
-<li><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt">
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt</a></li></ul>
-<p>
-If you are adding an assembly hub with multiple genomes, you can link directly to hgGateway, 
-the assembly selection page and a particular genome:</p>
+<li> the genome database (db=hg38)</li>
+<li> loads a track hub (hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt)</li>
+<li> hides all tracks (hideTracks=1)</li>
+<li> hides the subtrack kids of a particular track (gtexRnaSignalMaleYoung_hideKids=1)</li>
+<li> sets a specific subtrack to be displayed (gtexRnaSignalSRR1311243=full)</li>
+<li> ignores user settings (ignoreCookie=1).</p></li>
+</ul>
+<pre><a href="../cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt&hideTracks=1&gtexRnaSignalMaleYoung_hideKids=1&gtexRnaSignalMaleYoung=full&gtexRnaSignalSRR1311243=full&ignoreCookie=1">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt&hideTracks=1&amp;gtexRnaSignalMaleYoung_hideKids=1&amp;gtexRnaSignalMaleYoung=full&amp;gtexRnaSignalSRR1311243=full&ignoreCookie=1</a></pre>
+
+
+
+<h6>Optional parameters that can be added to the URL:</h6>
 <ul>
-<li><a href="../../cgi-bin/hgGateway?genome=GCF_000699105.1&hubUrl=https://hgdownload.soe.ucsc.edu/hubs/birds/hub.txt">
-http://genome.ucsc.edu/cgi-bin/hgGateway?genome=GCF_000699105.1&hubUrl=https://hgdownload.soe.ucsc.edu/hubs/birds/hub.txt</a></li></ul>
+<li><code>guidelines=on/off</code> - activate or deactivate the blue guidelines</li>  
+<li><code>hgFind.matches=&lt;listOfNames&gt;</code> - highlight features given their names</li>  
+<li><code>hgt.reset=1</code> - show only the default tracks</li>  
+<li><code>hgt.toggleRevCmplDisp=1</code> - show the reverse-complement</li>  
+<li><code>hgt.labelWidth=&lt;number&gt;</code> - set the size of the left-side label area</li>  
+<li><code>hideTracks=1</code> - hide all tracks</li>  
+<li><code>hideTracks=1&amp;&lt;trackName&gt;=full|dense|pack|hide</code> - hide all tracks and show
+other tracks</li>  
+<li><code>highlight=&lt;db&gt;.&lt;chrom&gt;:&lt;chromStart&gt;-&lt;chromEnd&gt;#&lt;color&gt;|...</code></li>
+- highlight one or more regions in a given color on the image. Note that the arguments have to be
+URL-encoded for Internet browsers, so &quot;:&quot; becomes &quot;%3A&quot;, &quot;#&quot;
+becomes &quot;%23&quot; and &quot;|&quot; becomes &quot;%7&quot;C.</li>  
+<li><code>ignoreCookie=1</code> - do not load the user's existing settings saved
+in the internet browser's UCSC Genome Browser cookie.  This means that the link will show the
+Genome Browser default  settings such as track selections, custom tracks, and track hubs. Any
+changes you make in this new session will, however, affect the user's settings. E.g., if you add a
+track in this new window, and come back to the genome browser later, the track will still be there.
+This setting is useful if a website wants to link to the Genome Browser, starting with a "clean
+slate" but believes the user will come back to the Genome Browser expecting the changes to still be
+there.</li>
+<li><code>ruler=hide</code> - hide the ruler at the top of the browser image</li>  
+<li><code>oligoMatch=pack&amp;hgt.oligoMatch=&lt;dnaSeq&gt;</code> - switch on the Short Match track and
+highlight a matching sequence</li>  
+<li><code>pix=&lt;number&gt;</code> - set the width of the image in pixels</li>  
+<li><code>textSize=&lt;number&gt;</code> - set the size of text font</li>  
+<li><code>&lt;trackName&gt;=full|pack|dense|hide</code> - show your current tracks, adding a track
+and set it to full, pack or dense visibility or hide it</li>  
+<li><code>&lt;trackName&gt;_imgOrd=&lt;number&gt;</code> - vertically orders the tracks on the image
+based on the numbers provided. You need to specify an order for every visible track when using this
+parameter</li>  
+<li><code>&lt;trackName&gt;.heightPer=&lt;number&gt;</code> - sets the height of the a bigWig track
+in pixels</li>
+<li><code>&lt;trackName&gt;_hideKids=1</code> - hides a specific super track's individual tracks</li>
+<li><code>&lt;trackName&gt;_sel=1</code> - selects specific subtrack to be 'checked', allowing
+display</li>
+</ul>
+
+<h3>Creating a URL with Multiple Track Hubs</h3>
+<p>
+You can create a URL with multiple Track Hubs using the <code>hubUrl=</code> parameter. URL
+parameters can be combined by using <code>&amp;</code>. For example, using the following track hubs:
+</p>
+<pre>
+<b>ENCODE DNA Trackhub</b>
+https://storage.googleapis.com/gcp.wenglab.org/hubs/dna20/hub.txt
+</pre>
+<pre>
+<b>JASPAR TFBS</b>
+http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hub.txt
+</pre>
+<pre>
+<b>ReMap 2022 Regulatory Atlas</b>
+https://remap.univ-amu.fr/storage/public/hubReMap2022/hub.txt
+</pre>
+<p>
+The combination of the three hubs allows the creation of the following URL that can load the
+three hubs on the Genome Browser.
+</p>
+<pre>
+<a href="/cgi-bin/hgTracks?db=hg38&hubUrl=https://storage.googleapis.com/gcp.wenglab.org/hubs/dna20/hub.txt&hubUrl=http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hub.txt&hubUrl=https://remap.univ-amu.fr/storage/public/hubReMap2022/hub.txt" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hubUrl=https://storage.googleapis.com/gcp.wenglab.org/hubs/dna20/hub.txt&hubUrl=http://expdata.cmmt.ubc.ca/JASPAR/UCSC_tracks/hub.txt&hubUrl=https://remap.univ-amu.fr/storage/public/hubReMap2022/hub.txt</a></pre>
+
+<h3>Creating a URL for an Assembly Hub</h3>
+
+<p>
+The following example links to an assembly hub using the <code>hubUrl=</code> and
+<code>genome=</code> parameters where in the example, <code>genome=araTha1</code>, is the assembly
+name set for <code>genome</code> in the genomes.txt file. URL parameters can be combined by using <code>&amp;</code>.</p>
+<pre><a href=../cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt>https://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</a></pre>
+</p>
+<h6>Additional hub connection parameters</h6>
+<ul>
+<li id="hubClear"><code>hubClear=</code>connects the hub and disconnects other hubs that are in the same directory</li>
+<li id=hgHubConnect><code>hgHubConnect</code>Replacing <code>hgTracks</code> with this parameter connects the hub and redirects the link to the
+<a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect#unlistedHubs" target="_blank">Track Data Hubs</a> page</li>
+<li id="hgHubConnect.remakeTrackHub"><code>hgHubConnect.remakeTrackHub=on</code>
+acts to connect when pointed to /hgHubConnect</li>
+<li id="hgHub_do_firstDb"><code>hgHub_do_firstDb=1</code>
+uses the first database in genomes.txt</li>
+<li id="hgHub_do_redirect"><code>hgHub_do_redirect=on</code>
+redirects the attached hub to the Gateway page</li>
+</ul>
+<h6>Redirecting the URL to the Gateway page</h6>
+<p>
+The following example link connects the hub and redirects the link to the Gateway page to display
+the hub's description html page, which is defined in the genomes.txt by the <code>htmlPath</code>
+setting, by using <code>hgHubConnect</code>, <code>hgHub_do_redirect=on</code>,
+<code>hgHubConnect.remakeTrackHub=on</code>, <code>hgHub_do_firstDb=1</code>, and
+<code>hubUrl</code>.
+</ul>
+<pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt"
+target="_blank">http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&<strong>hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</strong></a></code>
+</pre>
+<p>
+You can also link to the Gateway page to display the hub's description html page by using the
+<code>hgGateway</code> and <code>genome</code> parameters. The following example links the hub to
+the Gateway page:</p>
+<pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt"
+target="_blank"><strong>http://genome.ucsc.edu/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</strong></a> </code></pre>
+<a name="trackHubLoading"></a>
+<h3>Creating a URL for an Assembly Hub with Multiple Track Hubs</h3>
+<p>
+You can create a URL for an assembly hub with track hubs using a combination of the
+<code>hubUrl=</code> and <code>genome=</code> URL parameters. URL parameters can be combined by
+using <code>&amp;</code>.For example, using the following assembly hub and track hubs:
+</p>
+<pre>
+<b>Arabidopsis thaliana assembly hub</b>
+https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/hub.txt
+</pre>
+<pre>
+<b>ReMap 2022 Regulatory Atlas</b>
+https://remap.univ-amu.fr/storage/public/hubReMap2022/hub.txt
+</pre>
+<pre>
+<b>UniBind 2021 Robust hub</b>
+https://unibind.uio.no/static/data/latest/UniBind_hubs_Robust/UCSC/hub.txt
+</pre>
+<p>
+The combination of the three hubs, along with <code>genome=araTha1</code>, allows for the creation of
+the following URL that can load the three hubs on the Genome Browser.
+</p>
+<pre>
+<a href="/cgi-bin/hgTracks?genome=araTha1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/hub.txt&hubUrl=https://remap.univ-amu.fr/storage/public/hubReMap2022/hub.txt&hubUrl=https://unibind.uio.no/static/data/latest/UniBind_hubs_Robust/UCSC/hub.txt" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?genome=araTha1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubPlants/cshl2013/hub.txt&hubUrl=https://remap.univ-amu.fr/storage/public/hubReMap2022/hub.txt&hubUrl=https://unibind.uio.no/static/data/latest/UniBind_hubs_Robust/UCSC/hub.txt</a></pre>
+
+
+<a name="genArkTrackHub"></a>
+<h3>Creating a URL for a GenArk assembly with a track hub</h3>
+<p>
+When creating a track hub for a GenArk assembly, there is no need to do any attaching of the
+assembly hub itself via the <code>hubUrl=</code> URL parameter. GenArk hubs will automatically
+attach themselves if the track hub mentions the GCA_ or GCF_ name identifier of the assembly hub.
+Simply load the track hub on the Genome Browser, and the assembly hub will automatically appear. For
+example, the following <a href="https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGenArkExample/genArkTrackHub/hub.txt"
+target="_blank">example track hub</a> will load an additional track for the pig (GCA_002844635.1)
+GenArk assembly.
+</p>
+<p>
+To create a link to the track hub that references a GenArk assembly, the
+<code>genome=GCA_002844635.1</code> and <code>hubUrl=</code> URL parameters can be used like in the
+following example:
+</p>
+<pre>
+<a href="/cgi-bin/hgTracks?genome=GCA_002844635.1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGenArkExample/genArkTrackHub/hub.txt" target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?genome=GCA_002844635.1&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGenArkExample/genArkTrackHub/hub.txt</a>
+</pre>
+
 <!-- ========== Setting Up Your Own Track Hub ============================== -->
 <a name="Setup"></a>
 <h2>Setting up your own Track Hub</h2>
