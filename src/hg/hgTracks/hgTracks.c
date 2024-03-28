@@ -4921,7 +4921,10 @@ if (theImgBox)
 struct flatTracks *flatTracks = NULL;
 struct flatTracks *flatTrack = NULL;
 
-rulerCds = cartUsualBoolean(cart, BASE_SHOWCODONS, TRUE);
+if (rulerMode != tvFull)
+    {
+    rulerCds = FALSE;
+    }
 
 /* Figure out height of each visible track. */
 pixHeight = gfxBorder;
@@ -9035,8 +9038,8 @@ if (!hideControls)
 	}
     hPrintf("</B></SPAN>");
 
-    //hPrintf("<span target=_blank title='Show details about this assembly' id='gatewayLink'>"
-            //"<a href='hgGateway?hgsid=%s'>Assembly Info</a></span>", cartSessionId(cart));
+    hPrintf("<span target=_blank title='Show details about this assembly' id='gatewayLink'>"
+            "<a href='hgGateway?hgsid=%s'>Assembly Info</a></span>", cartSessionId(cart));
 
     printDatabaseInfoHtml(database);
 
