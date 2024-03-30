@@ -919,6 +919,7 @@
 ./runBuild GCA_023807365.1_ASM2380736v1 primates Macaca_silenus
 ./runBuild GCA_023851605.1_mTamTet1.pri mammals Tamandua_tetradactyla
 ./runBuild GCA_023853755.1_mTamTet1.alt mammals Tamandua_tetradactyla
+./runBuild GCA_023856395.1_Psun_UM_1.1 mammals Phodopus_sungorus
 ./runBuild GCA_023898255.1_ASM2389825v1 primates Nycticebus_bengalensis
 ./runBuild GCA_024140225.1_mSunEtr1.alt.cur mammals Suncus_etruscus
 ./runBuild GCA_024166345.1_mEleMax1_alternate_haplotype mammals Elephas_maximus_indicus
