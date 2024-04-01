@@ -4020,7 +4020,7 @@ function mousemoveHelper(e) {
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
-    mousemoveTimer = setTimeout(mousemoveTimerHelper, 100, e, this);
+    mousemoveTimer = setTimeout(mousemoveTimerHelper, 500, e, this);
     // we are moving the mouse away, hide the tooltip regardless how much time has passed
     if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
         mousemoveController.abort();
