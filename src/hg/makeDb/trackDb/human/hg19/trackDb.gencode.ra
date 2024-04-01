@@ -3,7 +3,6 @@ superTrack on
 group genes
 shortLabel GENCODE Versions
 longLabel Container of all new and previous GENCODE releases
-pennantIcon Updated red ../goldenPath/newsarch.html#021424 "Updated Feb. 14, 2024"
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 # GENCODE genes on alpha only (wrangler: markd)
