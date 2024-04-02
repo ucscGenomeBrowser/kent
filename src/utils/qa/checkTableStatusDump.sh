@@ -14,7 +14,6 @@ check_dumped_date="rr: ${check_dumped_date//-/.}"
 # Get the last TABLE STATUS dump 
 dumped_date="rr: $(ls -1 /hive/data/outside/genbank/var/tblstats/hgnfs1/ | tail -1)" 
 
-# If statement that checks the last TABLE STATUS dump.
 # If the TABLE STATUS dump date does not match the expected date, outputs a message:
 # "The RR TABLE STATUS files have not been recently dumped. The latest RR dump was 2024.03.31."
 if [ "$check_dumped_date"  = "$dumped_date"  ]; then
