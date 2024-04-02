@@ -4005,7 +4005,7 @@ function mouseIsOverItem(ev, ele, fudgeFactor=25) {
 }
 
 function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip) {
-    /* Called after 100ms of the mouse being stationary, show a new tooltip
+    /* Called after 500ms of the mouse being stationary, show a new tooltip
      * if we are over a new mouseover-able element */
     e = triggeringMouseMoveEv;
     if (mousedNewItem && !(mouseIsOverPopup(e, currTooltip, 0))) {
@@ -4031,7 +4031,7 @@ function mousemoveHelper(e) {
 
 function showMouseoverText(ev) {
     /* If a tooltip is not visible, show the tooltip text right away. If a tooltip
-     * is viisble, do nothing as the mousemove event helper will re-call us
+     * is visble, do nothing as the mousemove event helper will re-call us
      * after hiding the tooltip that is shown */
     ev.preventDefault();
     let referenceElement = lastMouseoverEle;
@@ -4116,18 +4116,15 @@ function showMouseover(e) {
         // user is moving their mouse around, make sure where they stop is what we show
         clearTimeout(mouseoverTimer);
     }
+    if (mousemoveTimer) {
+        // user is moving their mouse around and has triggered a potentially triggered
+        // a new pop up, clear the move timeout
+        clearTimeout(mousemoveTimer);
+    }
     // If there is no tooltip present, we want a small but noticeable delay
     // before showing a tooltip
     if (canShowNewMouseover) {
-        if (!tooltipIsVisible()) {
-            mouseoverTimer = setTimeout(showMouseoverText, 500, e);
-        } else {
-            // the user has a tooltip visible already, so our timer for showing
-            // a new one can be shorter because the user expects another one to
-            // pop up, but we still need to be conscious that they may be moving
-            // the mouse to the tooltip itself. The mousemoveHelper() deals with that
-            mouseoverTimer = setTimeout(showMouseoverText, 300, e);
-        }
+        mouseoverTimer = setTimeout(showMouseoverText, 500, e);
     }
 }
 
