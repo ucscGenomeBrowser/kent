@@ -8404,7 +8404,7 @@ static void printSearchHelpLink()
 /* print the little search help link next to the go button */
 {
 char *url = cfgOptionDefault("searchHelpUrl","../goldenPath/help/query.html");
-char *label = cfgOptionDefault("searchHelpLabel", "examples");
+char *label = cfgOptionDefault("searchHelpLabel", "Examples");
 if (!url || isEmpty(url))
     return;
 
@@ -9001,7 +9001,7 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
         freezeName = "Unknown";
-    hPrintf("<span style='font-size:large;'><B>");
+    hPrintf("<span id='assemblyName' style='font-size:large;'><B>");
 
     // for these assemblies, we do not display the year, to save space and reduce clutter
     // Their names must include a "(" character
@@ -9037,6 +9037,9 @@ if (!hideControls)
 	    }
 	}
     hPrintf("</B></SPAN>");
+
+    //hPrintf("<span target=_blank title='Show details about this assembly' id='gatewayLink'>"
+            //"<a href='hgGateway?hgsid=%s'>Assembly Info</a></span>", cartSessionId(cart));
 
     printDatabaseInfoHtml(database);
 
@@ -10831,23 +10834,20 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
+static void chromSizesDownloadLinks(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
+puts("<p>");
 if (! trackHubDatabase(database) || hubConnectIsCurated(trackHubSkipHubName(database)))
     {
     char *db = trackHubSkipHubName(database);
-    cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    puts("Download as file:");
-    cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
+    puts("Download the table below as a text file: ");
     printf("<a href='http%s://%s/goldenPath/%s/bigZips/%s.chrom.sizes' target=_blank>%s.chrom.sizes</a>",
            cgiAppendSForHttps(), hDownloadsServer(), db, db, db);
-    cgiTableFieldEnd();
+    puts("&nbsp;&nbsp;");
+
     if (hasAlias)
 	{
-	cgiSimpleTableFieldStart();
 	/* see if this database has the chromAlias.txt download file */
 	char aliasFile[1024];
         safef(aliasFile, sizeof aliasFile, "http%s://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", cgiAppendSForHttps(), hDownloadsServer(), db, db);
@@ -10859,17 +10859,11 @@ if (! trackHubDatabase(database) || hubConnectIsCurated(trackHubSkipHubName(data
 	    }
 	else
 	    puts("&nbsp");
-	cgiTableFieldEnd();
 	}
-    cgiTableRowEnd();
     }
 else if (hubAliasFile)
     {
-    cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    puts("Download as file:");
-    cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
+    puts("Download the table below as a text file: ");
     if (chromSizesFile)
 	{
         printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</a>", chromSizesFile, trackHubSkipHubName(database));
@@ -10877,8 +10871,6 @@ else if (hubAliasFile)
 	}
     else
         puts("&nbsp");
-    cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
     char *aliasUrl = cloneString(hubAliasFile);
     /* this URL reference needs to be a text file to work as a click in the
      *    html page.  Both files chromAlias.bb and chromAlias.txt exist.
@@ -10886,9 +10878,8 @@ else if (hubAliasFile)
     if (endsWith(hubAliasFile, "chromAlias.bb"))
        aliasUrl = replaceChars(hubAliasFile, "chromAlias.bb", "chromAlias.txt");
     printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasUrl, trackHubSkipHubName(database));
-    cgiTableFieldEnd();
-    cgiTableRowEnd();
     }
+puts("</p>");
 }
 
 void chromInfoPage()
@@ -10937,8 +10928,12 @@ hTextVar("position", addCommasToPos(database, position), 30);
 cgiMakeButton("Submit", "submit");
 puts("<P>");
 
+chromSizesDownloadLinks(hasAlias, aliasFile, chromSizesFile);
+
 hTableStart();
 puts("<thead style='position:sticky; top:0; background-color: white;'>");
+
+
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 puts("Sequence name &nbsp;");
@@ -10949,13 +10944,13 @@ cgiTableFieldEnd();
 if (hTableExists(database, "chromAlias"))
     {
     cgiSimpleTableFieldStart();
-    puts("alias sequence names &nbsp;");
+    puts("Alias sequence names &nbsp;");
     cgiTableFieldEnd();
     }
 else if (hasAlias)
     {
     cgiSimpleTableFieldStart();
-    puts("alias sequence names &nbsp;");
+    puts("Alias sequence names &nbsp;");
     cgiTableFieldEnd();
     }
 cgiTableRowEnd();
@@ -10970,7 +10965,6 @@ else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) 
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(hasAlias, 1000);
-chromSizesDownloadRow(hasAlias, aliasFile, chromSizesFile);
 
 hTableEnd();
 cgiDown(0.9);

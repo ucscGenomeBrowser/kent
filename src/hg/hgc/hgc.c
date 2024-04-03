@@ -839,9 +839,9 @@ void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
 if (item != NULL && item[0] != 0)
-    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
+    cartWebStart(cart, database, "%s: %s (%s)", genome, tdb->longLabel, item);
 else
-    cartWebStart(cart, database, "%s", tdb->longLabel);
+    cartWebStart(cart, database, "%s: %s", genome, tdb->longLabel);
 
 // QA noticed that clicking the +- buttons to collapse item detail tables was
 // generating messages in the Apache log if you went directly to an item page

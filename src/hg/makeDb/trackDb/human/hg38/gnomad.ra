@@ -7,6 +7,7 @@ shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 html gnomadV4
+pennantIcon Updated red ../goldenPath/newsarch.html#032624 "Updated Mar. 26, 2024"
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -134,6 +135,9 @@ html gnomadV4
     defaultLabelFields _displayName
     skipFields _displayName
     skipEmptyFields on
+    filterValues.AC_non_cancer Non-Cancer
+    filterValuesDefault.AC_non_cancer Non-Cancer
+    filterType.AC_non_cancer single
     filterValues.annot pLoF,missense,synonymous,other
     filterValuesDefault.annot pLoF,missense,synonymous
     filterValues.FILTER PASS,InbreedingCoeff,RF,AC0,AS_VQSR,indel_stack (chrM only),npg (chrM only)
@@ -149,6 +153,7 @@ html gnomadV4
     urlLabel View this variant at gnomAD
     detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
+    pennantIcon Updated red ../goldenPath/newsarch.html#032624 "Updated Mar. 26, 2024"
 
 track gnomadConstraint
 parent gnomadVariants on

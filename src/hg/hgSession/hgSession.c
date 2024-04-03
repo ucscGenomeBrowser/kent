@@ -189,10 +189,10 @@ else
 dyStringFree(&dyTmp);
 }
 
-void printCopyToClipboardButton(struct dyString *dy, char *iconId, char *targetId) 
+void printCopyToClipboardButton(struct dyString *dy, char *iconId, char *targetId, char *buttonLabel) 
 /* print a copy-to-clipboard button with DOM id iconId that copies the node text of targetId */
 {
-dyStringPrintf(dy, "&nbsp;<button title='Copy URL to clipboard' id='%s' data-target='%s'><svg style='width:0.9em' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d='M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z'/></svg>&nbsp;Copy</button>\n", iconId, targetId);
+dyStringPrintf(dy, "&nbsp;<button title='Copy URL to clipboard' id='%s' data-target='%s'><svg style='width:0.9em' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d='M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z'/></svg>%s</button>\n", iconId, targetId, buttonLabel);
 
 jsOnEventById("click", iconId, "copyToClipboard(event);");
 }
@@ -206,7 +206,7 @@ dyStringPrintf(dy,
     "<p>You can share this session with the following URL:<br><span id='urlText'>%s</span>&nbsp;",
     dyTmp->string);
 
-printCopyToClipboardButton(dy, "copyIcon", "urlText");
+printCopyToClipboardButton(dy, "copyIcon", "urlText", "&nbsp;Copy to Clipboard");
 dyStringAppend(dy, "</p>");
 }
 
@@ -323,7 +323,9 @@ printf("<H3>My Sessions</H3>\n");
 printf("<div style=\"max-width:1024px\">");
 printf("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border compact\" borderwidth=0>\n");
 printf("<thead><tr>");
-printf("<TH><TD><B>session name (click to load)</B></TD><TD><B>created on</B></TD><td><b>assembly</b></td>"
+printf("<TH><TD><B>session name (click to load)</B></TD>"
+        "<TD><B>created on</B></TD><TD><b>view count</b></TD>"
+        "<td><b>assembly</b></td>"
        "<TD align=center><B>view/edit&nbsp;<BR>details&nbsp;</B></TD>"
        "<TD align=center><B>delete this&nbsp;<BR>session&nbsp;</B></TD>"
        "<TD align=center><B>share with&nbsp;<BR>others?&nbsp;</B></TD>"
@@ -334,14 +336,16 @@ printf("</tr></thead>");
 printf("<tbody>\n");
 
 if (gotSettings)
-    sqlSafef(query, sizeof(query), "SELECT sessionName, shared, firstUse, contents, settings from %s "
+    sqlSafef(query, sizeof(query), "SELECT sessionName, shared, firstUse, useCount, contents, settings from %s "
         "WHERE userName = '%s' ORDER BY sessionName;",
         namedSessionTable, encUserName);
 else
-    sqlSafef(query, sizeof(query), "SELECT sessionName, shared, firstUse, contents from %s "
+    sqlSafef(query, sizeof(query), "SELECT sessionName, shared, firstUse, useCount, contents from %s "
         "WHERE userName = '%s' ORDER BY sessionName;",
         namedSessionTable, encUserName);
 sr = sqlGetResult(conn, query);
+
+int rowIdx = 0;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -359,24 +363,39 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     printf("<TR><TD>&nbsp;&nbsp;</TD><TD>");
 
+    char iconId[256];
+    char linkId[256];
+    safef(linkId, sizeof(linkId), "linkEl-%d", rowIdx);
+    safef(iconId, sizeof(iconId), "iconEl-%d", rowIdx);
+    struct dyString *buttonText = dyStringNew(4096);
+    printCopyToClipboardButton(buttonText, iconId, linkId, "");
+    puts(dyStringCannibalize(&buttonText));
+    puts("&nbsp;");
+
     struct dyString *dy = dyStringNew(1024);
     addSessionLink(dy, encUserName, encSessionName, FALSE, TRUE);
-    printf("<a href=\"%s\">%s</a>", dyStringContents(dy), htmlEncode(sessionName));
+    char *sessionUrl = dyStringContents(dy);
+    printf("<a id='linkEl-%d' data-copy='%s' href=\"%s\">%s</a>", rowIdx, sessionUrl, sessionUrl, htmlEncode(sessionName));
     dyStringFree(&dy);
+    rowIdx++;
 
     struct tm firstUseTm;
     ZeroVar(&firstUseTm);
     strptime(firstUse, "%Y-%m-%d %T", &firstUseTm);
     char *spacePt = strchr(firstUse, ' ');
     if (spacePt != NULL) *spacePt = '\0';
+
+    char *useCount = row[3];
     printf("&nbsp;&nbsp;</TD>"
-            "<TD data-order=\"%ld\"><nobr>%s</nobr>&nbsp;&nbsp;</TD><TD align=center>", mktime(&firstUseTm), firstUse);
+            "<TD data-order=\"%ld\"><nobr>%s</nobr>&nbsp;&nbsp;</TD>"
+            "<TD>%s</TD>"
+            "<TD align='left'>", mktime(&firstUseTm), firstUse, useCount);
 
     char *dbIdx = NULL;
-    if (startsWith("db=", row[3]))
-        dbIdx = row[3]+3;
+    if (startsWith("db=", row[4]))
+        dbIdx = row[4]+3;
     else
-        dbIdx = strstr(row[3], "&db=") + 4;
+        dbIdx = strstr(row[4], "&db=") + 4;
         
     if (dbIdx != NULL)
         {
@@ -386,7 +405,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             db = cloneStringZ(dbIdx, dbEnd-dbIdx);
         else
             db = cloneString(dbIdx);
-        printf("%s</td><td align=center>", db);
+        printf("%s</td><td align='center'>", db);
         }
     else
         printf("n/a</td><td align=center>");
@@ -395,7 +414,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
         safef(buf, sizeof(buf), "%s%s", hgsEditPrefix, encSessionName);
         cgiMakeButton(buf, "view/edit");
-        char *description = getSetting(row[4], "description");
+        char *description = getSetting(row[5], "description");
         if (!isEmpty(description))
             hasDescription = TRUE;
         }

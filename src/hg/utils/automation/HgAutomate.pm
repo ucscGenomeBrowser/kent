@@ -419,6 +419,8 @@ use vars qw( @commonOptionVars @commonOptionSpec );
 
 # Common option defaults:
 my $defaultVerbose = 1;
+my $defaultRamG = "8g";
+my $defaultCpu = 1;
 
 @commonOptionVars = qw(
     $opt_workhorse
@@ -426,6 +428,8 @@ my $defaultVerbose = 1;
     $opt_dbHost
     $opt_bigClusterHub
     $opt_smallClusterHub
+    $opt_ram
+    $opt_cpu
     $opt_priority
     $opt_debug
     $opt_verbose
@@ -437,6 +441,8 @@ my $defaultVerbose = 1;
 		     "dbHost=s",
 		     "bigClusterHub=s",
 		     "smallClusterHub=s",
+		     "ram=s",
+		     "cpu=n",
 		     "priority=n",
 		     "verbose=n",
 		     "debug",
@@ -462,6 +468,14 @@ my %optionHelpText = ( 'workhorse' =>
 '    -smallClusterHub mach Use mach (default: %s) as parasol hub
                           for cluster runs with smallish job counts.
 ',
+		       'ram' =>
+'    -ram Ng               Use -ram=Ng for cluster jobs (default: %s)
+                           e.g. -ram=6g.
+',
+		       'cpu' =>
+'    -cpu N                Use -cpu=N for cluster jobs (default: %s)
+                           e.g. -cpu=4.
+',
 		       'priority' =>
 '    -priority num        Use this priority for parasol jobs.
 ',
@@ -481,6 +495,8 @@ my %optionDefaultDefaults = ( 'workhorse' => 'least loaded',
 			      'priority' => '10',
 			      'bigClusterHub' => 'most available',
 			      'smallClusterHub' => 'most available',
+			      'ram' => $defaultRamG,
+			      'cpu' => $defaultCpu,
 			      'verbose' => $defaultVerbose,
 			    );
 
@@ -596,6 +612,16 @@ sub checkExistsUnlessDebug {
 }
 
 sub paraRun {
+ my $ramG = "-ram=$defaultRamG";
+ my $cpu = "-cpu=$defaultCpu";
+ if (@_) {
+   my ($r, $c) = @_;
+   $ramG = "-ram=$r";
+   $cpu = "-cpu=$c";
+ } else {
+   $ramG = $main::opt_ram ? "-ram=$main::opt_ram" : $ramG;
+   $cpu = $main::opt_cpu ? "-cpu=$main::opt_cpu" : $cpu;
+ }
  my $para = '/parasol/bin/para';
  if ( ! -e "$para" ) {
     # allow PATH to find the para command
@@ -605,6 +631,8 @@ sub paraRun {
  if (defined $main::opt_priority) {
      $pargs .= "-priority=$main::opt_priority";
  }
+ $pargs .= " $ramG $cpu";
+ $pargs =~ s/^ +//;
  return ("$para make $pargs jobList\n" .
 "$para check\n" .
 "$para time > run.time\n" .

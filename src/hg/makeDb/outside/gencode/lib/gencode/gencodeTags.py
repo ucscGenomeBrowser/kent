@@ -89,6 +89,7 @@ class GencodeTag(SymEnum):
     Selenoprotein = auto()
     EnsEMBL_merge_exception = auto()
     precursor_RNA = auto()
+    GENCODE_Primary = auto()
 
 gencodeTagNotFullCds = frozenset([GencodeTag.cds_start_NF,
                                   GencodeTag.cds_end_NF])

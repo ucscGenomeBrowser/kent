@@ -21,12 +21,21 @@ var singleBaseExp =     /^[\s]*([\w._#-]+)[\s]*:[\s]*([0-9,]+)[\s]*$/;
 function copyToClipboard(ev) {
     /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
      * The attribute data-target of this element is the ID of the element that contains the text to copy. 
+     * The text is either in the attribute data-copy or the innerText.
      * see C function printCopyToClipboardButton(iconId, targetId);
      * */
      
-    var targetId = ev.target.getAttribute("data-target");
+    ev.preventDefault();
+
+    var buttonEl = ev.target.closest("button"); // user can click SVG or BUTTON element
+
+    var targetId = buttonEl.getAttribute("data-target");
+    if (targetId===null)
+        targetId = ev.target.parentNode.getAttribute("data-target");
     var textEl = document.getElementById(targetId);
-    var text = textEl.innerText;
+    var text = textEl.getAttribute("data-copy");
+    if (text===null)
+        text = textEl.innerText;
 
     var textArea = document.createElement("textarea");
     textArea.value = text;
@@ -39,7 +48,8 @@ function copyToClipboard(ev) {
     textArea.select();
     document.execCommand('copy');
     document.body.removeChild(textArea);
-    ev.target.innerHTML = 'Copied';
+    buttonEl.innerHTML = 'Copied';
+    ev.preventDefault();
 }
 
 function cfgPageOnVisChange(ev) {
@@ -3995,7 +4005,7 @@ function mouseIsOverItem(ev, ele, fudgeFactor=25) {
 }
 
 function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip) {
-    /* Called after 100ms of the mouse being stationary, show a new tooltip
+    /* Called after 500ms of the mouse being stationary, show a new tooltip
      * if we are over a new mouseover-able element */
     e = triggeringMouseMoveEv;
     if (mousedNewItem && !(mouseIsOverPopup(e, currTooltip, 0))) {
@@ -4010,7 +4020,7 @@ function mousemoveHelper(e) {
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
-    mousemoveTimer = setTimeout(mousemoveTimerHelper, 100, e, this);
+    mousemoveTimer = setTimeout(mousemoveTimerHelper, 500, e, this);
     // we are moving the mouse away, hide the tooltip regardless how much time has passed
     if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
         mousemoveController.abort();
@@ -4021,7 +4031,7 @@ function mousemoveHelper(e) {
 
 function showMouseoverText(ev) {
     /* If a tooltip is not visible, show the tooltip text right away. If a tooltip
-     * is viisble, do nothing as the mousemove event helper will re-call us
+     * is visble, do nothing as the mousemove event helper will re-call us
      * after hiding the tooltip that is shown */
     ev.preventDefault();
     let referenceElement = lastMouseoverEle;
@@ -4106,18 +4116,15 @@ function showMouseover(e) {
         // user is moving their mouse around, make sure where they stop is what we show
         clearTimeout(mouseoverTimer);
     }
+    if (mousemoveTimer) {
+        // user is moving their mouse around and has triggered a potentially triggered
+        // a new pop up, clear the move timeout
+        clearTimeout(mousemoveTimer);
+    }
     // If there is no tooltip present, we want a small but noticeable delay
     // before showing a tooltip
     if (canShowNewMouseover) {
-        if (!tooltipIsVisible()) {
-            mouseoverTimer = setTimeout(showMouseoverText, 500, e);
-        } else {
-            // the user has a tooltip visible already, so our timer for showing
-            // a new one can be shorter because the user expects another one to
-            // pop up, but we still need to be conscious that they may be moving
-            // the mouse to the tooltip itself. The mousemoveHelper() deals with that
-            mouseoverTimer = setTimeout(showMouseoverText, 100, e);
-        }
+        mouseoverTimer = setTimeout(showMouseoverText, 500, e);
     }
 }
 

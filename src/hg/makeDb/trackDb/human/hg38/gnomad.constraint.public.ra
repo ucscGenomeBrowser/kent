@@ -10,6 +10,7 @@ dataVersion Release v4 (November 2023), Release 2.1.1 (March 6, 2019)
 subGroup1 view Views v2=constraintV2 v4=constraintV4
 html gnomadPLI
 visibility hide
+pennantIcon New red ../goldenPath/newsarch.html#032624 "Updated Mar. 26, 2024"
 
     track constraintV2
     parent gnomadPLI off

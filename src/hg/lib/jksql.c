@@ -1164,10 +1164,11 @@ if (mysql_real_connect(
 
     char *extraMsg = "";
     if (sqlIsUcscServer())
-        extraMsg = "We hate this error more than any other and may be already looking into it. You can help us by telling us "
-            "about it, "
-            "the email is genome-www@soe.ucsc.edu. We will fix it ASAP. "
-            "And even if this server is failing right now, usually, one of our other three "
+        extraMsg = "We hate this error more than any other and may be already looking into it.<br> "
+            "If there is no message on https://twitter.com/GenomeBrowser with the time when we expect it to be back: "
+            "You can help us by telling us about the error, "
+            "our email is genome-www@soe.ucsc.edu. We will fix it ASAP.<br> "
+            "And even if this server is failing for a few more hours today, usually, one of our other three "
             "international mirrors is still "
             "working. The three mirrors are genome.ucsc.edu (US), genome-euro.ucsc.edu (Germany), genome-asia.ucsc.edu "
             "(Japan). You may not find your custom tracks and saved sessions there, but using another mirror should allow "

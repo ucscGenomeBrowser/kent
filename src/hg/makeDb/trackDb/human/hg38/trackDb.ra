@@ -902,10 +902,4 @@ include hprcVCFTest.ra alpha
 track ncbiRefSeq override
 parent refSeqComposite off
 
-track varsInPubs override
-pennantIcon Updated red ../goldenPath/newsarch.html#012324 "Released Jan. 23, 2024"
-
-track avada override
-pennantIcon New red ../goldenPath/newsarch.html#012324 "Released Jan. 23, 2024"
-
 include abSplice.ra

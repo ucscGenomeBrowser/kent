@@ -63,28 +63,39 @@ target=_blank>our GitHub page</a>.</p>
 <!-- ============= 2024 archived news ============= -->
 <a name="2024"></a>
 
-<!--
-<a name="032224"></a>
-<h2>Mar. 22, 2024 &nbsp;&nbsp; gnomAD v4 Constraint Metrics for hg38</h2>
+<a name="032624"></a>
+<h2>Mar. 26, 2024 &nbsp;&nbsp; New gnomAD v4 Constraint Metrics (hg38) and gnomAD Non-cancer filter (hg19/hg38)</h2>
 <p>
-We are pleased to announce the release of the gnomAD v4 constraint metrics for human assembly
-hg38/GRCh38. These tracks contain metrics of pathogenicity per-gene as predicted for gnomAD v4.0 and
-identifies genes subject to strong selection against various classes of mutation.</p>
+We are pleased to announce the release of the
+<a href="/cgi-bin/hgTrackUi?&db=hg38&g=gnomadPLI">gnomAD v4 constraint metrics</a> for human
+assembly hg38/GRCh38 and the addition of a non-cancer filter for the
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=gnomadExomes">GRCh37/hg19 Exome Variants v2.1.1</a> and the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadGenomesVariantsV3_1_1">
+hg38/GRCh38 Genome Variants v3.1.1</a> tracks.</p>
 <p>
-There are two new tracks in this update:</p>
+The gnomAD v4 constraint metrics tracks contain metrics of pathogenicity per-gene as predicted for
+gnomAD v4.0 and identify genes subject to strong selection against various classes of mutation.
+The release of the gnomAD v4 constraint metrics consists of two new subtracks in the gnomAD
+Constraint Metrics composite track:</p>
 <ol>
   <li><b>Transcript LoF Constraint track</b>: Predicted constraint metrics at the whole transcript
-    evel for three different types of variation: missense, synonymous, and predicted loss of
+    level for three different types of variation: missense, synonymous, and predicted loss of
     function.</li>
   <li><b>Transcript Missense Constraint track</b>: The missense constraint tracks are built
     similarly to the LoF constraint tracks, however the items displayed are based on missense Z
     scores. All items are colored black, and individual Z scores can be seen on mouseover.
 </ol>
 <p>
+The GRCh37/hg19 Exome Variants v2.1.1 and the hg38/GRCh38 Genome Variants v3.1.1 tracks now have a
+non-cancer filter that allows the option to exclude/include variants from samples of individuals
+who were not ascertained for having cancer in a cancer study. These non-cancer subsets follow the
+new guidelines for clinical variant testing of BRCA1 and BRCA2 genes and are used for the
+assessment of breast cancer patients.</p>
+<p>
 We would like to thank the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome
 Aggregation Database Consortium</a> for making these data available. We would also like to thank
-Chris Lee and Jairo Navarro for the creation and release of these tracks.</p>
--->
+Chris Lee, Ana Benet-Pag&#232;s, Gerardo Perez, and Jairo Navarro for the creation and release of
+these tracks.</p>
 
 <a name="030724"></a>
 <h2>Mar. 07, 2024 &nbsp;&nbsp; New Prediction Scores super track and BayesDel track for hg19</h2>

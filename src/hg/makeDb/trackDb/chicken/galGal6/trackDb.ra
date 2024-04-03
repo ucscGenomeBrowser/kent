@@ -3,6 +3,9 @@ track gold override
 html gold
 visibility hide
 
+track grcIncidentDb override
+url https://www.ncbi.nlm.nih.gov/grc/chicken/issues/$$
+
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap

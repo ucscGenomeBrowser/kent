@@ -34,9 +34,9 @@ mach = $(shell uname -m)
 ##
 #preRelease = no
 preRelease = yes
-#db = hg38
+db = hg38
 #db = hg19
-db = mm39
+#db = mm39
 ifeq (${db},mm10)
     # mm10 lift back was never revewed and released
     grcRefAssembly = GRCm38
