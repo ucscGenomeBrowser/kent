@@ -3447,9 +3447,49 @@ var popUpHgcOrHgGene = {
         }
     },
 
-    uiDialogOk: function (popObj)
-    {   // When popup closes with ok
+    uiDialogOk: function (trackName)
+    {
+        // See popUp.uiDialogOk for a detailed explanation of the below vis-setting
+        // code
+        var rec = hgTracks.trackDb[trackName];
+        var subtrack = tdbIsSubtrack(rec) ? trackName : undefined;  // subtrack vis rules differ
+        var allVars = getAllVars($('#hgcDialog'), subtrack );
+        var changedVars = varHashChanges(allVars,popUpHgcOrHgGene.saveAllVars);
 
+        // special case thses hprc tracks that allow you to turn on different tracks
+        if (trackName.startsWith("hprcDeletions") || trackName.startsWith("hprcInserts") ||
+                trackName.startsWith("hprcArr") || trackName.startsWith("hprcDouble")) {
+            trackName = "chainHprc";
+        }
+        var newVis = changedVars[trackName];
+        // subtracks do not have "hide", thus '[]'
+        var hide = (newVis && (newVis === 'hide' || newVis === '[]'));
+        if ( ! normed($('#imgTbl')) ) { // On findTracks or config page
+            if (objNotEmpty(changedVars))
+                cart.setVarsObj(changedVars);
+        }
+        else {  // On image page
+            if (hide) {
+                if (objNotEmpty(changedVars))
+                    cart.setVarsObj(changedVars);
+                $(document.getElementById('tr_' + trackName)).remove();
+                imageV2.afterImgChange(true);
+                cart.updateSessionPanel();
+            } else {
+                // Keep local state in sync if user changed visibility
+                if (newVis) {
+                    vis.update(trackName, newVis);
+                }
+                if (objNotEmpty(changedVars)) {
+                    var urlData = cart.varsToUrlData(changedVars);
+                    if (imageV2.mapIsUpdateable) {
+                        imageV2.requestImgUpdate(trackName,urlData,"fake");
+                    } else {
+                        window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+                    }
+                }
+            }
+        }
     },
 
     uiDialog: function (response, status)
@@ -3472,6 +3512,11 @@ var popUpHgcOrHgGene = {
 
         $('#hgcDialog').html("<div id='pop' style='font-size:1.1em;'>"+ cleanHtml +"</div>");
         appendNonceJsToPage(nonceJs);
+        // if there is anything on the hgc page that would normally run
+        // on document.ready, run it now
+        hgc.initPage();
+        let subtrack = tdbIsSubtrack(hgTracks.trackDb[popUpHgcOrHgGene.table]) ? popUpHgcOrHgGene.table : "";
+        popUpHgcOrHgGene.saveAllVars = getAllVars( $('#hgcDialog'), subtrack );
 
 
 
@@ -3493,9 +3538,11 @@ var popUpHgcOrHgGene = {
         var popMaxWidth     = (window.innerWidth - (window.innerWidth * 0.1)); // take up 90% of the window
 
         // Create dialog buttons for UI popup
-        var uiDialogButtons = {};
         // this could be more buttons later
+        var uiDialogButtons = {};
         uiDialogButtons.OK = function() {
+            // if there was a form to submit, submit it:
+            popUpHgcOrHgGene.uiDialogOk(popUpHgcOrHgGene.table);
             $(this).dialog("close");
         };
 

@@ -11330,7 +11330,11 @@ if(!trackImgOnly)
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
-    hPrintf("<div id='hgcDialog' style='display: none'></div>\n");
+    if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+        {
+        jsIncludeFile("hgc.js", NULL);
+        hPrintf("<div id='hgcDialog' style='display: none'></div>\n");
+        }
 
     cartFlushHubWarnings();
     }
