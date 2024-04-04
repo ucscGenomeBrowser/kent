@@ -9642,6 +9642,9 @@ puts("</FORM>");
 if (cfgOptionBooleanDefault("showMouseovers", FALSE))
     jsInline("var showMouseovers = true;\n");
 
+if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+    jsInline("var doHgcInPopUp = true;\n");
+
 // TODO GALT nothing to do here.
 pruneRedundantCartVis(trackList);
 if (measureTiming)
@@ -11327,6 +11330,11 @@ if(!trackImgOnly)
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
+    if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+        {
+        jsIncludeFile("hgc.js", NULL);
+        hPrintf("<div id='hgcDialog' style='display: none'></div>\n");
+        }
 
     cartFlushHubWarnings();
     }
