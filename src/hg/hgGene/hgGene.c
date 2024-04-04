@@ -513,16 +513,14 @@ struct section *section;
 for (section = sectionList; section != NULL; section = section->next)
     {
     boolean isOpen = sectionIsOpen(section);
-    char *otherState = (isOpen ? "1" : "0");
     char *indicator = (isOpen ? "-" : "+");
     char *indicatorImg = (isOpen ? "../images/remove.gif" : "../images/add.gif");
     struct dyString *header = dyStringNew(0);
     //keep the following line for future debugging need
     //printf("<br>printing %s section\n", section->name);fflush(stdout);
     dyStringPrintf(header, "<A NAME=\"%s\"></A>", section->name);
-    char *closeVarName = sectionCloseVar(section->name);
-    dyStringPrintf(header, "<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
-    	geneCgi, cartSidUrlString(cart), closeVarName, otherState, section->name, indicatorImg, indicator);
+    dyStringPrintf(header, "<IMG id=\"%sBtn\" src=\"%s\" alt=\"%s\" class=\"bigBlue\">&nbsp;&nbsp;",
+        section->name, indicatorImg, indicator);
     dyStringAppend(header, section->longLabel);
     webNewSection("%s",header->string);
     if (isOpen)
@@ -537,6 +535,29 @@ for (section = sectionList; section != NULL; section = section->next)
 	}
     dyStringFree(&header);
     }
+// add some simple javascript that can do the collapse/expand section buttons
+jsInlineF(""
+"function collapseSection() {\n"
+"    let toCollapse = this.parentNode.nextElementSibling;\n"
+"    let isHidden = toCollapse.style.display === \"none\";\n"
+"    if (isHidden) {\n"
+"        toCollapse.style = \"display: \";\n"
+"        this.src = \"../images/remove.gif\";\n"
+"        this.alt = \"-\";\n"
+"    } else {\n"
+"        this.src = \"../images/add.gif\";\n"
+"        toCollapse.style = \"display: none\";\n"
+"        this.alt = \"+\";\n"
+"    }\n"
+"}\n"
+"\n"
+"let btns = document.querySelectorAll(\"[id$=Btn]\");\n"
+"let i;\n"
+"for (i = 0; i < btns.length; i++) {\n"
+"    btn = btns[i];\n"
+"    btn.addEventListener('click', collapseSection);\n"
+"}\n"
+);
 }
 
 void printTiming(struct section *sectionList)
