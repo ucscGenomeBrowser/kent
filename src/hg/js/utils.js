@@ -4241,7 +4241,7 @@ function convertTitleTagsToMouseovers() {
 
 function parseUrl(url) {
     // turn a url into some of it's components like server, query-string, etc
-    let protocol, serverName, pathInfo, queryString;
+    let protocol, serverName, pathInfo, queryString, queryArgs = {};
     let temp;
     temp = url.split("?");
     if (temp.length > 1)
@@ -4250,7 +4250,13 @@ function parseUrl(url) {
     protocol = temp[0]; // "https:"
     serverName = temp[2]; // "genome-test.gi.ucsc.edu"
     pathInfo = temp.slice(3).join("/"); // "cgi-bin/hgTracks"
-    return {protocol: protocol, serverName: serverName, pathInfo: pathInfo, queryString: queryString};
+    cgi = pathInfo.startsWith("cgi-bin") ? pathInfo.split('/')[1] : "";
+    let i, s = queryString.split('&');
+    for (i = 0; i < s.length; i++) {
+        argVal = s[i].split('=');
+        queryArgs[argVal[0]] = argVal[1];
+    }
+    return {protocol: protocol, serverName: serverName, pathInfo: pathInfo, queryString: queryString, cgi: cgi, queryArgs: queryArgs};
 }
 
 function dumpCart(seconds, skipNotification) {
