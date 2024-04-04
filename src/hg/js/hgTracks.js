@@ -716,9 +716,13 @@ var posting = {
         var done = false;
         // if we clicked on a merged item then show all the items, similar to clicking a
         // dense track to turn it to pack
-        if (this && this.href && this.href.indexOf("i=mergedItem") !== -1) {
-            var id = this.href.slice(this.href.indexOf("&g="));
-            id = id.split(/&[^=]+=/)[1];
+        if (!(this && this.href)) {
+            writeToApacheLog(`no href for mapClk, this = `);
+        }
+        let parsedUrl = parseUrl(this.href);
+        let cgi = parsedUrl.cgi;
+        let id = parsedUrl.queryArgs.g;
+        if (parsedUrl.queryArgs.i === "mergedItem") {
             updateObj={};
             updateObj[id+".doMergeItems"] = 0;
             hgTracks.trackDb[id][id+".doMergeItems"] = 0;
@@ -727,47 +731,31 @@ var posting = {
             return false;
         }
 
-        if (false && imageV2.inPlaceUpdate) {
-            // XXXX experimental and only turned on in larrym's tree.
-            // Use in-place update if the map item just modifies the current position (this is nice
-            // because it's faster and preserves the users relative position in the track image).
-            //
-            // First test handles next/prev item.
-            var str = "/cgi-bin/hgTracks\\?position=([^:]+):(.+)&hgsid=(\\d+)" +
-                                                                    "&(hgt.(next|prev)Item=[^&]+)";
-            var reg = new RegExp(str);
-            var a = reg.exec(this.href);
-            if (a && a[1] && a[1] === hgTracks.chromName) {
-                imageV2.navigateInPlace("position=" + encodeURIComponent(a[1] + ":" + a[2]) + 
-                                                                            "&" + a[4], null, true);
-                done = true;
-            } else {
-                // handle next/prev exon
-                str = "/cgi-bin/hgTracks\\?position=([^:]+):(.+)&hgsid=(\\d+)$";
-                reg = new RegExp(str);
-                a = reg.exec(this.href);
-                if (a && a[1]) {
-                    imageV2.navigateInPlace("position=" + encodeURIComponent(a[1] + ":" + a[2]), 
-                                                                                        null, true);
-                    done = true;
-                } else {
-                    // handle toggle visibility.
-                    // Request may include a track set, so we cannot use requestImgUpdate.
-                    str = "/cgi-bin/hgTracks\\?(position=[^:]+:.+&hgsid=\\d+&([^=]+)=([^&]+))$";
-                    reg = new RegExp(str);
-                    a = reg.exec(this.href);
-                    if (a && a[1]) {
-                        imageV2.navigateInPlace(a[1], null, true);
-                        // imageV2.requestImgUpdate(a[1], a[1] + "=" + a[2], "", a[2]);
-                        done = true;
-                    }
-                }
-            }
-        }
         if (done)
             return false;
-        else
-            return posting.saveSettings(this);
+        else {
+            if (cgi === "hgGene") {
+                id = parsedUrl.queryArgs.hgg_type;
+                popUpHgcOrHgGene.hgc(id, this.href);
+                return false;
+            } else if (cgi === "hgTrackUi") {
+                rec = hgTracks.trackDb[id];
+                if (rec && tdbIsLeaf(rec)) {
+                    popUp.hgTrackUi(id, false);
+                } else {
+                    location.assign(href);
+                }
+            } else if (cgi === "hgc") {
+                if (id.startsWith("multiz")) {
+                    // multiz tracks have a form that lets you change highlighted bases
+                    // that does not play well in a pop up
+                    location.assign(href);
+                    return false;
+                }
+                popUpHgcOrHgGene.hgc(id, this.href);
+                return false;
+            }
+        }
     },
 
     saveSettings: function (obj)
@@ -2515,10 +2503,9 @@ var rightClick = {
                 }
             }
             if (cmd === 'followLink') {
-                // XXXX This is blocked by Safari's popup blocker (without any warning message).
-                location.assign(href);
+                popUpHgcOrHgGene.hgc(rightClick.selectedMenuItem.id, href);
             } else {
-                // Remove hgsid to force a new session (see redmine ticket 1333).
+                // XXXX This is blocked by Safari's popup blocker (without any warning message).
                 href = removeHgsid(href);
                 if ( ! window.open(href) ) {
                     rightClick.windowOpenFailedMsg();
@@ -3394,6 +3381,210 @@ var popUpHgt = {
         // Make 'Cancel' button close dialog
         $('input[name="Cancel"]').click(function() {
             $('#hgTracksDialog').dialog('close');
+        });
+    }
+};
+
+var popUpHgcOrHgGene = {
+
+    whichHgcMethod: "", // either hgc or hgGene or whatever else
+    table: "", // the g= parameter
+    title: "",
+    saveAllVars: null, // when a click brings up hgTrackUi or something else with a form
+    loadingId: null, // the id of the loading overlay
+    href: "", // the link we're populating the pop up with
+
+    cleanup: function ()
+    {  // Clean out the popup box on close
+        if ($('#hgcDialog').html().length > 0 ) {
+            // clear out html after close to prevent problems caused by duplicate html elements
+            $('#hgcDialog').html("");
+            popUpHgcOrHgGene.whichHgcMethod = "";
+            popUpHgcOrHgGene.title = "";
+            popUpHgcOrHgGene.table = "";
+            if (loadingId) {
+                hideLoadingImage(loadingId);
+            }
+        }
+    },
+
+    _uiDialogRequest: function (table, href)
+    { // popup cfg dialog
+        let cgi = parseUrl(href).pathInfo.split('/')[1];
+        popUpHgcOrHgGene.whichHgcMethod = cgi;
+        // the table name gets passed in
+        popUpHgcOrHgGene.table = table;
+        popUpHgcOrHgGene.title  = hgTracks.trackDb[table].shortLabel;
+        popUpHgcOrHgGene.href = href;
+        var rec = hgTracks.trackDb[table];
+        if (popUpHgcOrHgGene.whichHgcMethod === "hgTrackUi" && rec && rec.configureBy) {
+            if (rec.configureBy === 'none')
+                return;
+            else if (rec.configureBy === 'clickThrough') {
+                window.location = cart.addUpdatesToUrl(href);
+                return;
+            }  // default falls through to configureBy popup
+        }
+        loadingId = showLoadingImage("imgTbl");
+        $.ajax({
+                    type: "GET",
+                    url: cart.addUpdatesToUrl(href),
+                    dataType: "html",
+                    trueSuccess: popUpHgcOrHgGene.uiDialog,
+                    success: catchErrorOrDispatch,
+                    error: errorHandler,
+                    loadingId: loadingId,
+                    cache: true
+                });
+    },
+
+    hgc: function (table, url)
+    {   // Launches the popup but shields the ajax with a waitOnFunction
+        if (typeof doHgcInPopUp !== 'undefined' && doHgcInPopUp === true) {
+            waitOnFunction(popUpHgcOrHgGene._uiDialogRequest, table, url);
+        } else {
+            window.location = cart.addUpdatesToUrl(url);
+        }
+    },
+
+    uiDialogOk: function (trackName)
+    {
+        // See popUp.uiDialogOk for a detailed explanation of the below vis-setting
+        // code
+        var rec = hgTracks.trackDb[trackName];
+        var subtrack = tdbIsSubtrack(rec) ? trackName : undefined;  // subtrack vis rules differ
+        var allVars = getAllVars($('#hgcDialog'), subtrack );
+        var changedVars = varHashChanges(allVars,popUpHgcOrHgGene.saveAllVars);
+
+        // special case thses hprc tracks that allow you to turn on different tracks
+        if (trackName.startsWith("hprcDeletions") || trackName.startsWith("hprcInserts") ||
+                trackName.startsWith("hprcArr") || trackName.startsWith("hprcDouble")) {
+            trackName = "chainHprc";
+        }
+        var newVis = changedVars[trackName];
+        // subtracks do not have "hide", thus '[]'
+        var hide = (newVis && (newVis === 'hide' || newVis === '[]'));
+        if ( ! normed($('#imgTbl')) ) { // On findTracks or config page
+            if (objNotEmpty(changedVars))
+                cart.setVarsObj(changedVars);
+        }
+        else {  // On image page
+            if (hide) {
+                if (objNotEmpty(changedVars))
+                    cart.setVarsObj(changedVars);
+                $(document.getElementById('tr_' + trackName)).remove();
+                imageV2.afterImgChange(true);
+                cart.updateSessionPanel();
+            } else {
+                // Keep local state in sync if user changed visibility
+                if (newVis) {
+                    vis.update(trackName, newVis);
+                }
+                if (objNotEmpty(changedVars)) {
+                    var urlData = cart.varsToUrlData(changedVars);
+                    if (imageV2.mapIsUpdateable) {
+                        imageV2.requestImgUpdate(trackName,urlData,"fake");
+                    } else {
+                        window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+                    }
+                }
+            }
+        }
+    },
+
+    uiDialog: function (response, status)
+    {
+    // Take html from hgc/hgGene and put it up as a modal dialog.
+
+        // make sure all links (e.g. help links) open up in a new window
+        //response = response.replace(/<a /ig, "<a target='_blank' ");
+
+        var cleanHtml = response;
+        cleanHtml = stripJsFiles(cleanHtml,false);   // DEBUG msg with true
+        cleanHtml = stripCssFiles(cleanHtml,false);  // DEBUG msg with true
+        var nonceJs = {};
+        cleanHtml = stripCSPAndNonceJs(cleanHtml, false, nonceJs); // DEBUG msg with true
+        cleanHtml = stripMainMenu(cleanHtml, false, nonceJs); // DEBUG msg with true
+
+        // this is dumb but all relative links need to be stripped of _target = blank so we
+        // can jump down the page rather than out to a new tab
+        cleanHtml = cleanHtml.replace(/_target ?= ?["']blank["']/g,"");
+
+        $('#hgcDialog').html("<div id='pop' style='font-size:1.1em;'>"+ cleanHtml +"</div>");
+        appendNonceJsToPage(nonceJs);
+        // if there is anything on the hgc page that would normally run
+        // on document.ready, run it now
+        hgc.initPage();
+        let subtrack = tdbIsSubtrack(hgTracks.trackDb[popUpHgcOrHgGene.table]) ? popUpHgcOrHgGene.table : "";
+        popUpHgcOrHgGene.saveAllVars = getAllVars( $('#hgcDialog'), subtrack );
+
+
+
+        // Strategy for popups with js:
+        // - jsFiles and CSS should not be included in html.  Here they are shluped out.
+        // - The resulting files ought to be loadable dynamically (with getScript()),
+        //   but this was not working nicely with the modal dialog
+        //   Therefore include files must be included with hgc CGI !
+        // - embedded js should not be in the popup box.
+        // - Somethings should be in a popup.ready() function, and this is emulated below,
+        //   as soon as the cleanHtml is added
+        //   Since there are many possible popup cfg dialogs, the ready should be all inclusive.
+
+        // -- popup.ready() -- Here is the place to do things that might otherwise go
+        //                     into a $('#pop').ready() routine!
+
+        // Searching for some semblance of size suitability
+        var popMaxHeight = (window.innerHeight - (window.innerHeight * 0.15)); // make 15% of the bottom of the screen still visible
+        var popMaxWidth     = (window.innerWidth - (window.innerWidth * 0.1)); // take up 90% of the window
+
+        // Create dialog buttons for UI popup
+        // this could be more buttons later
+        var uiDialogButtons = {};
+        uiDialogButtons.OK = function() {
+            // if there was a form to submit, submit it:
+            popUpHgcOrHgGene.uiDialogOk(popUpHgcOrHgGene.table);
+            $(this).dialog("close");
+        };
+
+        $('#hgcDialog').dialog({
+            resizable: true,               // Let scroll vertically
+            height: popMaxHeight,
+            width: popMaxWidth,
+            minHeight: 200,
+            minWidth: 400,
+            modal: true,
+            closeOnEscape: true,
+            autoOpen: false,
+            buttons: uiDialogButtons,
+
+            open: function (event) {
+                // fix popup to a location -- near the top and somewhat centered on the browser image
+                $(event.target).parent().css('position', 'fixed');
+                $(event.target).parent().css('top', '10%');
+                $('#hgcDialog').find('.filterBy,.filterComp').each(
+                    function(i) {  // ddcl.js is dropdown checklist lib support
+                        if ($(this).hasClass('filterComp'))
+                            ddcl.setup(this);
+                        else
+                            ddcl.setup(this, 'noneIsAll');
+                    }
+                );
+            },
+
+            close: function() {
+                popUpHgcOrHgGene.cleanup();
+            }
+        });
+        let titleText = hgTracks.trackDb[popUpHgcOrHgGene.table].shortLabel +
+                " Item Details <a style='font-size: .75em' target='_blank' href='" + popUpHgcOrHgGene.href + "'>" +
+                "Open in new window</a>";
+        $('#hgcDialog').dialog('option' , 'title', titleText);
+        $('#hgcDialog').dialog('open');
+
+        // Customize message based on current mode
+        // Make 'Cancel' button close dialog
+        $('input[name="Cancel"]').click(function() {
+            $('#hgcDialog').dialog('close');
         });
     }
 };

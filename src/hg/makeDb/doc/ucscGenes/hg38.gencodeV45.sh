@@ -1,6 +1,6 @@
 export db=hg38
-export GENCODE_VERSION=V44
-export PREV_GENCODE_VERSION=V43
+export GENCODE_VERSION=V45
+export PREV_GENCODE_VERSION=V44
 screen -S knownGene${GENCODE_VERSION}
 mkdir /hive/data/genomes/$db/bed/gencode$GENCODE_VERSION/build
 cd /hive/data/genomes/$db/bed/gencode$GENCODE_VERSION/build
