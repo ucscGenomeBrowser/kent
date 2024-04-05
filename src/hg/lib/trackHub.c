@@ -54,6 +54,7 @@
 #include "hic.h"
 #include "hui.h"
 #include "chromAlias.h"
+#include "trashDir.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -1413,4 +1414,207 @@ if (relativeUrl != NULL)
         errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
     freez(&bigDataUrl);
     }
+}
+
+static void outHubHeader(FILE *f, char *db)
+// output a track hub header
+{
+fprintf(f,"hub quickLiftHub%s\n\
+shortLabel Quicklift from %s\n\
+longLabel Quicklift from %s\n\
+useOneFile on\n\
+email genome-www@soe.ucsc.edu\n\n", db, db, db);
+fprintf(f,"genome %s\n\n", db);
+}
+
+static char *getHubName(struct cart *cart, char *db)
+// get the name of the hub to use for quickLifted tracks
+{
+struct tempName hubTn;
+char buffer[4096];
+#define quickLiftCartName     "hubQuickLift"
+safef(buffer, sizeof buffer, "%s-%s", quickLiftCartName, db);
+char *hubName = cartOptionalString(cart, buffer);
+int fd = -1;
+
+if ((hubName == NULL) || ((fd = open(hubName, 0)) < 0))
+    {
+    trashDirDateFile(&hubTn, "quickLift", "hub", ".txt");
+    hubName = cloneString(hubTn.forCgi);
+    cartSetString(cart, buffer, hubName);
+    FILE *f = mustOpen(hubName, "a");
+    outHubHeader(f, db);
+    fclose(f);
+    }
+
+if (fd >= 0)
+    close(fd);
+
+cartSetString(cart, "hubUrl", hubName);
+cartSetString(cart, hgHubConnectRemakeTrackHub, hubName);
+return hubName;
+}
+
+static void dumpTdbAndParents(struct dyString *dy, struct trackDb *tdb, struct hash *existHash, struct hash *wantHash)
+/* Put a trackDb entry into a dyString, stepping up the tree for some variables. */
+{
+struct hashCookie cookie = hashFirst(tdb->settingsHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {   
+    if (!hashLookup(existHash, hel->name) && ((wantHash == NULL) || hashLookup(wantHash, hel->name)))    
+        {
+        dyStringPrintf(dy, "%s %s\n", hel->name, (char *)hel->val);
+        hashStore(existHash, hel->name);
+        }
+    }
+
+if (tdb->parent)
+    {
+    struct hash *newWantHash = newHash(4);
+    hashStore(newWantHash, "type"); // right now we only want type from parents
+    dumpTdbAndParents(dy, tdb->parent, existHash, newWantHash);
+    }
+}
+
+static bool subtrackEnabledInTdb(struct trackDb *subTdb)
+/* Return TRUE unless the subtrack was declared with "subTrack ... off". */
+{
+bool enabled = TRUE;
+char *words[2];
+char *setting;
+if ((setting = trackDbLocalSetting(subTdb, "parent")) != NULL)
+    {
+    if (chopLine(cloneString(setting), words) >= 2)
+        if (sameString(words[1], "off"))
+            enabled = FALSE;
+    }
+else
+    return subTdb->visibility != tvHide;
+
+return enabled;
+}
+
+static bool isSubtrackVisible(struct cart *cart, struct trackDb *tdb)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ *  * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+bool enabledInTdb = subtrackEnabledInTdb(tdb);
+char option[1024];
+safef(option, sizeof(option), "%s_sel", tdb->track);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+if (overrideComposite)
+    enabled = TRUE;
+return enabled;
+}       
+            
+        
+static bool isParentVisible(struct cart *cart, struct trackDb *tdb)
+// Are this track's parents visible?
+{
+if (tdb->parent == NULL)
+    return TRUE;
+        
+if (!isParentVisible(cart, tdb->parent))
+    return FALSE;
+        
+char *cartVis = cartOptionalString(cart, tdb->parent->track);
+boolean vis;
+if (cartVis != NULL)
+    vis =  differentString(cartVis, "hide");
+else if (tdbIsSuperTrack(tdb->parent))
+    vis = tdb->parent->isShow;
+else
+    vis = tdb->parent->visibility != tvHide;
+
+return vis;
+}
+
+struct dyString *trackDbString(struct trackDb *tdb)
+/* Convert a trackDb entry into a dyString. */
+{
+struct dyString *dy;
+struct hash *existHash = newHash(5);
+struct hashEl *hel;
+
+hel = hashLookup(tdb->settingsHash, "track");
+if (hel == NULL)
+    errAbort("can't find track variable in tdb");
+
+dy = dyStringNew(200);
+dyStringPrintf(dy, "track %s\n", trackHubSkipHubName((char *)hel->val));
+hashStore(existHash, "track");
+    
+dumpTdbAndParents(dy, tdb, existHash, NULL);
+
+return dy;
+}
+
+static void walkTree(FILE *f, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy)
+/* walk tree looking for visible tracks. */
+{
+for(; tdb; tdb = tdb->next)
+    {
+    if (tdb->subtracks)
+        walkTree(f, cart, tdb->subtracks, visDy);
+    else 
+        {
+        if (!startsWith("big", tdb->type))
+            continue;
+        boolean isVisible = FALSE;
+        if (tdb->parent == NULL)
+            {
+            char *cartVis = cartOptionalString(cart, tdb->track);
+            if (cartVis != NULL)
+                {
+                tdb->visibility = hTvFromString(cartVis);
+                }
+            isVisible =  tdb->visibility != tvHide;
+            }
+        else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
+            {
+            char *cartVis = cartOptionalString(cart, tdb->parent->track);
+            tdb->visibility = hTvFromString(cartVis);
+            isVisible = TRUE;
+            }
+
+        if (isVisible)
+            {
+            dyStringPrintf(visDy, "&%s=%s", tdb->track,hStringFromTv(tdb->visibility));
+            //if (hashLookup(tdb->settingsHash, "customized") == NULL)
+                {
+                hashRemove(tdb->settingsHash, "maxHeightPixels");
+                hashRemove(tdb->settingsHash, "superTrack");
+                hashRemove(tdb->settingsHash, "subGroups");
+                hashRemove(tdb->settingsHash, "polished");
+                hashRemove(tdb->settingsHash, "noInherit");
+                hashRemove(tdb->settingsHash, "group");
+                hashRemove(tdb->settingsHash, "parent");
+                }
+
+            //hashReplace(tdb->settingsHash, "customized", "on");
+
+            struct dyString *dy = trackDbString(tdb);
+
+            fprintf(f, "%s\n", dy->string);
+            }
+        }
+    }
+}
+
+char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy)
+/* Build a track hub using trackDb and the cart. */
+{
+struct trackDb *tdb = hTrackDb(db);
+slSort(&tdb,trackDbCmp);
+char *filename = getHubName(cart, db);
+
+FILE *f = mustOpen(filename, "a");
+chmod(filename, 0666);
+
+walkTree(f, cart, tdb, visDy);
+fclose(f);
+
+return cloneString(filename);
 }

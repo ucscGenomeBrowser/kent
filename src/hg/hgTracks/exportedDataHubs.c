@@ -21,13 +21,6 @@
 #include "trackHub.h"
 #include "exportedDataHubs.h"
 
-boolean exportedDataHubsEnabled()
-/* Return TRUE if feature is available */
-{
-char *cfgEnabled = cfgOption("browser.exportedDataHubs");
-return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) ;
-}
-
 void printExportedDataHubs(char *db)
 /* Fill out exported data hubs popup. */
 {
@@ -38,7 +31,7 @@ hPrintf("<div style='display:none;' id='exportedDataHubsPopup' title='Exported D
 struct sqlConnection *conn = hConnectCentral();
 char **row;
 char query[2048];
-sqlSafef(query, sizeof(query), "select x.id,q.id,x.db,x.label,x.description,x.path,q.path from quickLiftChain q,exportedDataHubs x where q.fromDb=x.db and q.toDb='%s'", trackHubSkipHubName(db));
+sqlSafef(query, sizeof(query), "select x.id,q.id,x.db,x.label,x.description,x.path,q.path from quickLiftChain q,exportedDataHubs x where q.fromDb=x.db and q.toDb='%s' and x.label not like 'Private';", trackHubSkipHubName(db));
 
 hPrintf("<table style=\"border: 1px solid black\">\n");
 struct sqlResult *sr;

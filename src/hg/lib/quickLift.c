@@ -15,6 +15,7 @@
 #include "bigBed.h"
 #include "bbiFile.h"
 #include "chainNetDbLoad.h"
+#include "hdb.h"
 #include "quickLift.h"
 
 static char *getLinkFile(char *quickLiftFile)
@@ -112,4 +113,21 @@ if ((error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL)) 
     //printf("bed %s error:%s<BR>", bed->name, error);
 
 return NULL;
+}
+
+unsigned quickLiftGetChain(char *fromDb, char *toDb)
+/* Return the id from the quickLiftChain table for given assemblies. */
+{
+unsigned ret = 0;
+struct sqlConnection *conn = hConnectCentral();
+char query[2048];
+sqlSafef(query, sizeof(query), "select q.id from quickLiftChain q  where q.fromDb='%s' and q.toDb='%s'", fromDb, toDb);
+char *geneId = sqlQuickString(conn, query);
+
+hDisconnectCentral(&conn);
+
+if (geneId)
+    ret = atoi(geneId);
+
+return ret;
 }

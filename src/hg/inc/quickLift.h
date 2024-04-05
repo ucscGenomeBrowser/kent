@@ -16,4 +16,6 @@ struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct big
  * on the reference.
  */
 
+unsigned quickLiftGetChain(char *fromDb, char *toDb);
+/* Return the id from the quickLiftChain table for given assemblies. */
 #endif
