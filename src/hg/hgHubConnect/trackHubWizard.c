@@ -48,6 +48,9 @@ struct jsonWrite *jw = jsonWriteNew(); // the JSON to return for the client java
 jsonWriteObjectStart(jw, NULL);
 if (userName)
     {
+    // the url for this user:
+    jsonWriteString(jw, "userUrl", webDataDir(userName));
+    // any previously uploaded files
     struct fileInfo *file;
     struct userFiles *uf = listFilesForUser(userName);
     jsonWriteListStart(jw, "fileList");

@@ -44,6 +44,22 @@ fprintf(stderr, "userDataDir = '%s'\n", newDataDir->string);
 return dyStringCannibalize(&newDataDir);
 }
 
+char *webDataDir(char *userName)
+/* Return a web accesible path to the userDataDir, this is different from the full path tusd uses */
+{
+char *retUrl = NULL;
+if (userName)
+    {
+    char *encUserName = cgiEncode(userName);
+    char *userPrefix = md5HexForString(encUserName);
+    userPrefix[2] = '\0';
+    struct dyString *userDirDy = dyStringNew(0);
+    dyStringPrintf(userDirDy, "%s/%s/%s/", HUB_SPACE_URL, userPrefix, encUserName);
+    retUrl = dyStringCannibalize(&userDirDy);
+    }
+return retUrl;
+}
+
 char *prefixUserFile(char *userName, char *fname)
 /* Allocate a new string that contains the full per-user path to fname, NULL otherwise */
 {

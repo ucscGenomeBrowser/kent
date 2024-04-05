@@ -19,6 +19,7 @@ var hubCreate = (function() {
         pendingQueue: [], // our queue of pending [tus.Upload, file], kind of like the toUpload object
         fileList: [], // the files this user has uploaded, initially populated by the server
                         // on page load, but gets updated as the user uploades/deletes files
+        userUrl: "", // the web accesible path where the uploads are stored for this user
     };
 
     // We can use XMLHttpRequest if necessary or a mirror can't use tus
@@ -330,15 +331,17 @@ var hubCreate = (function() {
 
     function viewInGenomeBrowser(rowIx, fname) {
         // redirect to hgTracks with this track as a custom track
-        bigBedExts = [".bb", ".bigBed"];
-        let i;
-        for (i = 0; i < bigBedExts.length; i++) {
-            if (fname.toLowerCase().endsWith(bigBedExts[i])) {
-                // TODO: tusd should return this location in it's response after
-                // uploading a file and then we can look it up somehow, the cgi can
-                // write the links directly into the html directly for prev uploaded files maybe?
-                window.location.assign("../cgi-bin/hgTracks?db=hg38&hgt.customText=" + "/hive/users/chmalee/tmp/userDataDir/4f/chmalee/" + fname);
-                return false;
+        if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
+            bigBedExts = [".bb", ".bigBed"];
+            let i;
+            for (i = 0; i < bigBedExts.length; i++) {
+                if (fname.toLowerCase().endsWith(bigBedExts[i])) {
+                    // TODO: tusd should return this location in it's response after
+                    // uploading a file and then we can look it up somehow, the cgi can
+                    // write the links directly into the html directly for prev uploaded files maybe?
+                    window.location.assign("../cgi-bin/hgTracks?db=hg38&hgt.customText=" + uiState.userUrl + fname);
+                    return false;
+                }
             }
         }
     }
@@ -516,6 +519,7 @@ var hubCreate = (function() {
             if (typeof userFiles !== 'undefined' && typeof userFiles.fileList !== 'undefined' &&
                     userFiles.fileList.length > 0) { 
                 uiState.fileList= userFiles.fileList;
+                uiState.userUrl = userFiles.userUrl;
                 showExistingFiles(uiState.fileList);
             }
             inputBtn.addEventListener("click", (e) => uiState.input.click());

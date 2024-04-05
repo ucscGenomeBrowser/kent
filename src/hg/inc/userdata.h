@@ -14,6 +14,11 @@ struct fileInfo *file; // list of files for this user
 
 char *getUserName();
 
+//TODO: this should probably come from hg.conf:
+#define HUB_SPACE_URL "https://hgwdev.gi.ucsc.edu/hubspace"
+char *webDataDir(char *userName);
+/* Return a web accesible path to the userDataDir, this is different from the full path tusd uses */
+
 char *getDataDir(char *userName);
 /* Return the full path to the user specific data directory, can be configured via hg.conf
  * on hgwdev, this is /data/apache/userdata/userStore/hash/userName/
