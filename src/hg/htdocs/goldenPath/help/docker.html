@@ -14,7 +14,7 @@
 <h6><a href="#dockerUCSCgb">Using Docker Desktop for UCSC Genome Browser</a></h6>
 <h6><a href="#dockerVolume">Create a Docker Volume for Data Persistence</a></h6>
 <h6><a href="#updateGB">Updating the latest UCSC Genome Browser version</a></h6>
-<h6><a href="#hg.conf">Editing hg.conf</a></h6>
+<h6><a href="#hg.conf">Customize your UCSC Genome Browser Docker container</a></h6>
 
 <!-- ========== What is Docker? ============================== -->
 <a id="docker"></a>
@@ -162,7 +162,8 @@ You can run the execute command to list the file inside the running container:
 <pre><code>docker exec ucsc_genomebrowser_volume ls data</code></pre></p>
 
 <a id="updateGB"></a>
-<h2>Updating the latest UCSC Genome Browser version</h2>
+<h2>Updating the latest UCSC Genome Browser software</h2>
+<h3>Access the shell of the Docker container</h3>
 <p>To update to the latest UCSC Genome Browser version, you will need to access the shell
 (command-line interface) of the Docker container running the UCSC Genome Browser. You can run the
 execute command inside a running Docker container with the -it options. The -i or
@@ -172,14 +173,14 @@ allocates a pseudo-TTY and allows for a more interactive experience. The followi
 how to run exec command and the -it options:
 <pre><code>docker exec -it &lt;container_name_or_id&gt; /bin/bash</code></pre></p>
 
-<p>You can then run the following command to update to the latest UCSC Genome Browser version:
-<pre><code> bash root/browserSetup.sh update</code></pre></p>
 
-<p>To update only the Genome Browser software, you can run the following command:
+<h3>Update the Genome Browser software</h3>
+<p>You can then run the following command to update the Genome Browser software:
 <pre><code> bash root/browserSetup.sh cgiUpdate</code></pre></p>
 
+<h2>Customize your UCSC Genome Browser Docker container</h2>
 <a id="hg.conf"></a>
-<h2>Editing hg.conf</h2>
+<h3>Editing hg.conf</h3>
 <p>The hg.conf file is a file that has information on how to connect to MariaDB, the location of
 the other directories and various other settings.</p>
 
@@ -190,4 +191,44 @@ command. The  -t or --tty option allocates a pseudo-TTY and allows for a more in
 experience. You can use any common text editors such as vi, nano, and vim with the execute command
 and the -it options. The following example shows how to edit the hg.conf file using vi:
 <pre><code>docker exec -it &lt;container_name_or_id&gt; vi /usr/local/apache/cgi-bin/hg.conf</code></pre></p>
+
+
+<a id="defaults"></a>
+<h3>Changing the default Genome Browser options</h3>
+<p>
+You can customize your track settings such as fonts, text size, and the default region, set default
+tracks, or attach hubs and make them appear as your default settings. These settings will appear
+every time you open the UCSC Genome Browser graphic display and will also appear after you reset
+all your settings. This can be useful if you want to have hubs attached by default, change the
+default assembly, or change the visibility of tracks.</p>
+<p>
+The first step is to create a <a href="#UsrAcct">Session</a> containing all desired display
+options, hubs, tracks, and default region in your UCSC Genome Browser Docker container.
+Open the shell on your UCSC Genome Browser Docker container. See the
+<a href="#updateGB">Access the shell of the Docker container</a> section of this page. Create a new
+file, 'defaultCart.sql', to make a new MySQL table. Add the following to the defaultCart.sql file:
+<pre>
+#The default cart
+CREATE TABLE defaultCart (
+    contents longblob not null  # cart contents
+);
+</pre>
+<p>
+Drop the existing defaultCart table by running the following query:</p>
+<pre>
+mysql hgcentral -Ne "DROP TABLE defaultCart"
+</pre>
+<p>
+Load the defaultCart.sql file as a table by running the following query:</p>
+<pre>
+mysql hgcentral < defaultCart.sql
+</pre>
+<p>
+Insert your session to the default cart table by using your user name and the session name, which
+was the session saved in the earlier step, and run the following query (add your userName):</p>
+<pre>
+mysql hgcentral -Ne "insert into defaultCart select contents from namedSessionDb where sessionName='nameOfSession' and userName='nameOfUser'"
+</pre>
+</p>
+
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
