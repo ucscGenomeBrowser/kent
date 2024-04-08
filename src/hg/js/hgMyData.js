@@ -332,7 +332,7 @@ var hubCreate = (function() {
     function viewInGenomeBrowser(rowIx, fname) {
         // redirect to hgTracks with this track as a custom track
         if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
-            bigBedExts = [".bb", ".bigBed"];
+            bigBedExts = [".bb", ".bigBed", ".vcf.gz", ".vcf", ".bam", ".bw", ".bigWig"];
             let i;
             for (i = 0; i < bigBedExts.length; i++) {
                 if (fname.toLowerCase().endsWith(bigBedExts[i])) {
