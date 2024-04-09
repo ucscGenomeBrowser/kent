@@ -123,7 +123,7 @@ var hubCreate = (function() {
                 let [req, f] = uiState.pendingQueue.pop();
                 // we only need to abort requests that haven't finished yet
                 if (req._req !== null) {
-                    if (_req._xhr.readyState != XMLHttpRequest.DONE) {
+                    if (req._req._xhr.readyState != XMLHttpRequest.DONE) {
                         req.abort(true);
                     }
                 }
@@ -195,12 +195,21 @@ var hubCreate = (function() {
 
         let onError = function(err) {
             removeCancelAllButton();
-            alert(err.originalResponse._xhr.responseText);
+            if (err.originalResponse !== null) {
+                alert(err.originalResponse._xhr.responseText);
+            } else {
+                alert(err);
+            }
+        };
+
+        let onProgress = function(bytesSent, bytesTotal) {
+            this.updateProgress((bytesSent / bytesTotal) * 100);
         };
 
         for (let f in uiState.toUpload) {
             file = uiState.toUpload[f];
             if (useTus) {
+                let progMeter = makeNewProgMeter(file.name);
                 let tusOptions = {
                     endpoint: tusdServer,
                     metadata: {
@@ -208,6 +217,7 @@ var hubCreate = (function() {
                         fileType: file.type,
                         fileSize: file.size
                     },
+                    onProgress: onProgress.bind(progMeter),
                     onBeforeRequest: onBeforeRequest,
                     onSuccess: onSuccess.bind(null, file),
                     onError: onError,
@@ -335,7 +345,7 @@ var hubCreate = (function() {
             bigBedExts = [".bb", ".bigBed", ".vcf.gz", ".vcf", ".bam", ".bw", ".bigWig"];
             let i;
             for (i = 0; i < bigBedExts.length; i++) {
-                if (fname.toLowerCase().endsWith(bigBedExts[i])) {
+                if (fname.toLowerCase().endsWith(bigBedExts[i].toLowerCase())) {
                     // TODO: tusd should return this location in it's response after
                     // uploading a file and then we can look it up somehow, the cgi can
                     // write the links directly into the html directly for prev uploaded files maybe?
