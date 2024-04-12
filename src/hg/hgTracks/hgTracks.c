@@ -9471,13 +9471,8 @@ if (!hideControls)
             if (isHubTrack(group->name))
 		{
                 struct trackHub *hub = grabHashedHub(group->name);
-
-                // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
-                char *cssStr = "";
-                if ((hub == NULL) || (hub->descriptionUrl == NULL))
-                    cssStr = "visibility: hidden";
-
-                hPrintf("<a href='%s' style='color:#FFF; %s' target=_blank>More Info</a>&nbsp;&nbsp;", hub->descriptionUrl, cssStr);
+                if ((hub != NULL) && (hub->descriptionUrl != NULL))
+                    hPrintf("<a href='%s' style='color:#FFF' target=_blank>More Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
 
 		safef(idText, sizeof idText, "%s_disconn", group->name);
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
@@ -9724,10 +9719,6 @@ if (newStart < 0)
     offset = -virtWinStart;
 else if (newEnd > virtSeqBaseCount)
     offset = virtSeqBaseCount - virtWinEnd;
-
-// at high zoom levels, offset can be very small: make sure that we scroll at least one bp
-if (offset < 1.0)
-    offset = 1.0;
 
 /* Move window. */
 virtWinStart += offset;
