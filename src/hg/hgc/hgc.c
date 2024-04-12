@@ -267,6 +267,7 @@
 #include "genark.h"
 #include "chromAlias.h"
 #include "dotPlot.h"
+#include "quickLift.h"
 
 static char *rootDir = "hgcData";
 
@@ -838,9 +839,9 @@ void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
 if (item != NULL && item[0] != 0)
-    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
+    cartWebStart(cart, database, "%s: %s (%s)", genome, tdb->longLabel, item);
 else
-    cartWebStart(cart, database, "%s", tdb->longLabel);
+    cartWebStart(cart, database, "%s: %s", genome, tdb->longLabel);
 
 // QA noticed that clicking the +- buttons to collapse item detail tables was
 // generating messages in the Apache log if you went directly to an item page
@@ -3588,6 +3589,18 @@ if (startsWith("big", tdb->type))
     {
     char *fileName = trackDbSetting(tdb, "bigDataUrl");
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
+    if (linkFileName == NULL)
+        {
+        char *bigDataUrl = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+        char *dot = strrchr(bigDataUrl, '.');
+        if (dot == NULL)
+            errAbort("No linkDataUrl in track %s", tdb->track);
+        *dot = 0;
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "%s.link.bb", bigDataUrl);
+        linkFileName = buffer;
+        }
+
     chain = chainLoadIdRangeHub(database, fileName, linkFileName, seqName, winStart, winEnd, id);
     }
 else
@@ -4826,7 +4839,7 @@ else if (wordCount > 0)
         {
         doGvf(tdb, item);
         }
-    else if (sameString(type, "bam"))
+    else if (sameString(type, "bam") || sameString(type, "cram"))
 	doBamDetails(tdb, item);
     else if ( startsWith("longTabix", type))
 	doLongTabix(tdb, item);
@@ -4939,7 +4952,7 @@ if (dbIsFound && tbl[0] != 0)
 	hti = hFindTableInfo(database, seqName, rootName);
     }
 char *thisOrg = hOrganism(database);
-cartWebStart(cart, database, "Get DNA in Window (%s/%s)", database, thisOrg);
+cartWebStart(cart, database, "Get DNA in Window (%s/%s)", trackHubSkipHubName(database), trackHubSkipHubName(thisOrg));
 printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
@@ -9136,12 +9149,30 @@ struct genePred *getGenePredForPositionBigGene(struct trackDb *tdb,  char *geneN
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct bigBedInterval *bb, *bbList = NULL;
+struct hash *chainHash = NULL;
+if (quickLiftFile)
+    bbList = quickLiftIntervals(quickLiftFile, bbi, seqName, winStart, winEnd, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
 struct genePred *gpList = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    struct genePred *gp = (struct genePred *)genePredFromBigGenePred(seqName, bb); 
-    if (sameString(gp->name, geneName))
+    struct genePred *gp = NULL;
+    if (quickLiftFile)
+        {
+        struct bed *bed;
+        if ((bed = quickLiftBed(bbi, chainHash, bb)) != NULL)
+            {
+            struct bed *bedCopy = cloneBed(bed);
+            gp =(struct genePred *) genePredFromBedBigGenePred(seqName, bedCopy, bb);
+            }
+        }
+    else
+        gp = (struct genePred *)genePredFromBigGenePred(seqName, bb); 
+
+    if ((gp != NULL) && sameString(gp->name, geneName))
 	slAddHead(&gpList, gp);
     }
 lmCleanup(&lm);
@@ -9600,14 +9631,28 @@ struct bbiFile *bbi;
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct hash *chainHash = NULL;
+struct bigBedInterval *bb, *bbList = NULL;
+if (quickLiftFile)
+    bbList = quickLiftIntervals(quickLiftFile, bbi, seqName, winStart, winEnd, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+
 struct bed *bedList = NULL;
 char *bedRow[32];
 char startBuf[16], endBuf[16];
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    struct bed *bed = bedLoadN(bedRow, 12);
+    struct bed *bed = NULL;
+    if (quickLiftFile)
+        {
+        if ((bed = quickLiftBed(bbi, chainHash, bb)) == NULL)
+            errAbort("can't port %s",bedRow[3]);
+        }
+    else
+        bed = bedLoadN(bedRow, 12);
     if (sameString(bed->name, geneName))
 	slAddHead(&bedList, bed);
     }
@@ -22219,7 +22264,7 @@ else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
     doBarChartDetails(ct->tdb, item);
 else if (sameWord(type, "bigInteract") || sameWord(type, "interact"))
     doInteractDetails(ct->tdb, item);
-else if (sameWord(type, "bam"))
+else if (sameWord(type, "bam") || sameWord(type, "cram"))
     doBamDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcfTabix") || sameWord(type, "vcfPhasedTrio"))
     doVcfTabixDetails(ct->tdb, itemName);

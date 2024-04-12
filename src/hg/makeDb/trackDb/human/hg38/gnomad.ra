@@ -7,6 +7,7 @@ shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 html gnomadV4
+pennantIcon Updated red ../goldenPath/newsarch.html#032624 "Updated Mar. 26, 2024"
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -82,6 +83,42 @@ html gnomadV4
     urlLabel View this variant at gnomAD
     detailsStaticTable Population Frequencies|/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
 
+    track gnomadV311Test
+    release alpha
+    bigDataUrl /hive/data/inside/gnomAD/v3.1.1/2024-02-12/genomes.bb
+    parent gnomadVariants
+    visibility squish
+    shortLabel TEST gnomAD v3.1.1
+    longLabel TEST Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
+    dataVersion Release v3.1.1 (March 20, 2021) and v3.1 chrM Release (November 17, 2020)
+    type bigBed 9 +
+    itemRgb on
+    searchIndex name,_displayName,rsId
+    html gnomadV3_1_1
+    priority 2
+    labelFields rsId,_displayName
+    defaultLabelFields _displayName
+    skipFields _displayName
+    skipEmptyFields on
+    filterValues.AC_non_cancer Non-Cancer
+    filterValuesDefault.AC_non_cancer Non-Cancer
+    filterType.AC_non_cancer single
+    filterValues.annot pLoF,missense,synonymous,other
+    filterValuesDefault.annot pLoF,missense,synonymous
+    filterValues.FILTER PASS,InbreedingCoeff,RF,AC0,AS_VQSR,indel_stack (chrM only),npg (chrM only)
+    filterType.FILTER multipleListAnd
+    filterValuesDefault.FILTER PASS
+    filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,NMD_transcript_variant,coding_sequence_variant,frameshift_variant,incomplete_terminal_codon_variant,inframe_deletion,inframe_insertion,intron_variant,mature_miRNA_variant,missense_variant,non_coding_transcript_exon_variant,non_coding_transcript_variant,protein_altering_variant,splice_acceptor_variant,splice_donor_variant,splice_region_variant,start_lost,start_retained_variant,stop_gained,stop_lost,stop_retained_variant,synonymous_variant,transcript_ablation
+    filterType.variation_type multipleListOr
+    filter.AF 0.0
+    filterLabel.AF Minor Allele Frequency Filter
+    maxItems 50000
+    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
+    url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
+    urlLabel View this variant at gnomAD
+    detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
+    detailsTabUrls _dataOffset=/hive/data/inside/gnomAD/v3.1.1/2024-02-12/gnomad.v3.1.1.details.tab.gz
+
     track gnomadGenomesVariantsV3_1_1
     parent gnomadVariants
     visibility squish
@@ -98,6 +135,9 @@ html gnomadV4
     defaultLabelFields _displayName
     skipFields _displayName
     skipEmptyFields on
+    filterValues.AC_non_cancer Non-Cancer
+    filterValuesDefault.AC_non_cancer Non-Cancer
+    filterType.AC_non_cancer single
     filterValues.annot pLoF,missense,synonymous,other
     filterValuesDefault.annot pLoF,missense,synonymous
     filterValues.FILTER PASS,InbreedingCoeff,RF,AC0,AS_VQSR,indel_stack (chrM only),npg (chrM only)
@@ -113,6 +153,7 @@ html gnomadV4
     urlLabel View this variant at gnomAD
     detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
     detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v3.1.1/gnomad.v3.1.1.details.tab.gz
+    pennantIcon Updated red ../goldenPath/newsarch.html#032624 "Updated Mar. 26, 2024"
 
 track gnomadConstraint
 parent gnomadVariants on
@@ -129,83 +170,8 @@ priority 10
 dataVersion Release 3.1.2 (October 22, 2021)
 html gnomadV3_1_1
 
-track gnomadPLI
-parent gnomadVariants 
-shortLabel gnomAD Constraint Metrics
-longLabel Genome Aggregation Database (gnomAD) Predicted Constraint Metrics (pLI and Z-scores)
-compositeTrack On
-group varRep
-type bigBed 12
-labelFields name,geneName
-dataVersion Release 2.1.1 (March 6, 2019)
-visibility hide
-
-    track pliByGene
-    shortLabel Gene LoF
-    longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI) v2.1.1
-    type bigBed 12 +
-    mouseOverField _mouseOver
-    itemRgb on
-    searchIndex name,geneName
-    bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByGene.bb
-    url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
-    urlLabel View this Gene on the gnomAD browser
-    labelFields name,geneName
-    defaultLabelFields geneName
-    filter._pli 0:1
-    filterLabel._pli Show only items between this pLI range
-    filterByRange._pli on
-    parent gnomadPLI on
-    priority 1
-
-    track missenseByGene
-    shortLabel Gene Missense
-    longLabel gnomAD Predicted Missense Constraint Metrics By Gene (Z-scores) v2.1.1
-    type bigBed 12 +
-    mouseOverField _mouseOver
-    searchIndex name,geneName
-    bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByGene.bb
-    url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
-    urlLabel View this Gene on the gnomAD browser
-    labelFields name,geneName
-    filter._zscore -19:11
-    filterLabel._zscore Show only items between this Z-score range
-    filterByRange._zscore on
-    parent gnomadPLI off
-    priority 2
-
-    track pliByTranscript
-    shortLabel Transcript LoF
-    longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI) v2.1.1
-    type bigBed 12 +
-    mouseOverField _mouseOver
-    itemRgb on
-    searchIndex name,geneName
-    bigDataUrl /gbdb/hg38/gnomAD/pLI/pliByTranscript.bb
-    url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
-    urlLabel View this Transcript on the gnomAD browser
-    labelFields name,geneName
-    filter._pli 0:1
-    filterLabel._pli Show only items between this pLI range
-    filterByRange._pli on
-    parent gnomadPLI off
-    priority 2
-
-    track missenseByTranscript
-    shortLabel Transcript Missense
-    longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v2.1.1
-    type bigBed 12 +
-    mouseOverField _mouseOver
-    searchIndex name,geneName
-    bigDataUrl /gbdb/hg38/gnomAD/pLI/missenseByTranscript.bb
-    url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
-    urlLabel View this Transcript on the gnomAD browser
-    labelFields name,geneName
-    filter._zscore -20:11
-    filterLabel._zscore Show only items between this Z-score range
-    filterByRange._zscore on
-    parent gnomadPLI off
-    priority 2
+# The missense and pLI contraint tracks
+include gnomad.constraint.public.ra
 
 track gnomadVariantsV4
 parent gnomadVariants

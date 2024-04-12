@@ -19,6 +19,7 @@
 #include "extTools.h"
 #include "trackVersion.h"
 #include "chromAlias.h"
+#include "exportedDataHubs.h"
 
 /* list of links to display in a menu */
 /* a link with an empty name is displayed as a horizontal separator line */
@@ -249,6 +250,16 @@ if (recTrackSetsEnabled() && recTrackSetsForDb())
     if (stringIn(recTrackSetsMenuItemId, menuStr))
         jsOnEventById("click", recTrackSetsMenuItemId, "showRecTrackSetsPopup(); return false;");
     }
+if (exportedDataHubsEnabled())
+    {
+    #define exportedDataHubsMenuItemId     "exportedDataHubsMenuItem"
+    struct dyString *menuItemDs = dyStringCreate("<li><a href='#' id='%s'>Exported Data Hubs</a></li>",
+                                       exportedDataHubsMenuItemId);
+    menuStr = replaceChars(menuStr, "<!-- OPTIONAL_EXPORTED_TRACK_DATA_HUBS_MENU -->", 
+                                dyStringCannibalize(&menuItemDs));
+    if (stringIn(exportedDataHubsMenuItemId, menuStr))
+        jsOnEventById("click", exportedDataHubsMenuItemId, "showExportedDataHubsPopup(); return false;");
+    }
 
 // Create top items in view menu
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.psOutput=on", uiVars);
@@ -259,6 +270,9 @@ safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s",
 appendLinkWithShortcut(&links, buf, "DNA", "dnaLink", "Show DNA sequence in view", "v d", FALSE, FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%s&db=%s", cartSessionId(cart), database);
 appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
+
+safef(buf, sizeof(buf), "../cgi-bin/hgTracks?chromInfoPage=&hgsid=%s&db=%s", cartSessionId(cart), database);
+appendLinkWithShortcut(&links, buf, "Chromosome Sizes", "showSizesLink", "Show a table of all chromsomes in this assembly (or scaffolds/contigs) and their sizes.", "v s", FALSE, FALSE);
 
 // add the sendTo menu
 if (fileExists("extTools.ra"))

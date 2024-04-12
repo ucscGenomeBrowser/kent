@@ -9,6 +9,7 @@ use strict;
 use FindBin qw($Bin);
 use lib "$Bin";
 use HgAutomate;
+use AsmHub;
 use HgRemoteScript;
 use HgStepManager;
 
@@ -20,7 +21,6 @@ use vars qw/
     $opt_maskedSeq
     $opt_species
     $opt_utr
-    $opt_ram
     $opt_noDbGenePredCheck
     /;
 
@@ -39,10 +39,11 @@ my $stepper = new HgStepManager(
 my $bigClusterHub = 'ku';
 my $workhorse = 'hgwdev';
 my $dbHost = 'hgwdev';
+my $ram = '6g';
+my $cpu = 1;
 my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $utr = "off";
-my $ramG = "-ram=8g";
 my $noDbGenePredCheck = 1;    # default yes, use -db for genePredCheck
 my $species = "human";
 my $augustusDir = "/hive/data/outside/augustus/augustus-3.3.1";
@@ -68,12 +69,13 @@ options:
                           of default ($maskedSeq).
     -utr                  Obsolete, now is automatic (was: Use augustus arg: --UTR=on, default is --UTR=off)
     -noDbGenePredCheck    do not use -db= on genePredCheck, there is no real db
-    -ram Ng             set -ram=Ng argument to para create command (default 8g)
     -species <name>       name from list: human chicken zebrafish, default: human
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
                                 'bigClusterHub' => $bigClusterHub,
+                                'ram' => $ram,
+                                'cpu' => $cpu,
                                 'workhorse' => $defaultWorkhorse);
   print STDERR "
 Automates UCSC's Augustus track construction for the database \$db.  Steps:
@@ -248,6 +250,7 @@ rm -fr \$tmpDir
 _EOF_
   );
 
+  my $paraRun = &HgAutomate::paraRun($ram, $cpu);
   $whatItDoes = "Run augustus on chunked fasta sequences.";
   $bossScript = newBash HgRemoteScript("$runDir/runAugustus.bash", $paraHub,
 				      $runDir, $whatItDoes);
@@ -268,10 +271,7 @@ done >> jobList
 
 chmod +x runOne
 
-/parasol/bin/para $ramG make jobList
-/parasol/bin/para check
-/parasol/bin/para time > run.time
-cat run.time
+$paraRun
 _EOF_
   );
   $bossScript->execute();
@@ -414,7 +414,6 @@ chomp $secondsStart;
 #$opt_verbose = 3 if ($opt_verbose < 3);
 
 $noDbGenePredCheck = $opt_noDbGenePredCheck ? 0 : $noDbGenePredCheck;
-$ramG = $opt_ram ? $ramG : "-ram=$opt_ram";
 
 # Establish what directory we will work in.
 $buildDir = $opt_buildDir ? $opt_buildDir :
@@ -427,6 +426,18 @@ if ( -s "${augustusConfig}/species/$species/${species}_utr_probs.pbl" ) {
 } else {
   $utr = "off";
 }
+my $maxSeqSize = `twoBitInfo $maskedSeq stdout | sort -k2,2nr | head -1 | awk '{printf "%s", \$NF}'`;
+my $asmSize = `twoBitInfo $maskedSeq stdout | ave -col=2 stdin | grep -w total | awk '{printf "%d", \$NF}'`;
+chomp $maxSeqSize;
+chomp $asmSize;
+#   big genomes are over 4Gb: 4*1024*1024*1024 = 4294967296
+#   or if maxSeqSize over 1Gb
+if ( "$asmSize" > 4*1024**3 || $maxSeqSize > 1024**3 ) {
+  $ram = '16g';
+}
+printf STDERR "# maxSeqSize: %s\n", &AsmHub::commify($maxSeqSize);
+printf STDERR "# asmSize %s\n", &AsmHub::commify($asmSize);
+printf STDERR "# -ram=%s\n", $ram;
 
 # Do everything.
 $stepper->execute();

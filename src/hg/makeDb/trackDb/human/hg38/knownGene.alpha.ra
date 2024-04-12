@@ -1,13 +1,14 @@
 track knownGene
 table knownGene
-shortLabel GENCODE V43
-longLabel GENCODE V43
+shortLabel GENCODE V46
+longLabel GENCODE V46
+#parent knownGeneArchive
 priority 1
+#priority 5
 visibility pack
 type bigGenePred knownGenePep knownGeneMrna
-bigDataUrl /gbdb/hg38/gencode/gencodeV43.bb
+bigDataUrl /gbdb/hg38/gencode/gencodeV46.bb
 downloadUrl.1 "GFF Format" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
-downloadUrl.2 "Another File" https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.knownGene.gtf.gz
 baseColorDefault genomicCodons
 group genes
 isGencode3 on
@@ -15,9 +16,9 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-#externalDb knownGeneV43
+#externalDb knownGeneV46
 maxItems 50000
-html knownGeneV43
+html knownGeneV46
 searchIndex name
 idXref kgAlias kgID alias
 intronGap 12
@@ -35,7 +36,7 @@ semiShortCircuit 1
 termRegex ENST[0-9.]+
 searchPriority 9
 
-track knownGeneOld12
+track knownGeneOldV45
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
@@ -43,7 +44,7 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg12ToKg13
+oldToNew kgV45ToKgV46
 baseColorUseCds given
 baseColorDefault genomicCodons
 
@@ -52,7 +53,7 @@ searchTable knownGene
 searchType knownGeneFast
 shortCircuit 1
 searchPriority 1001
-searchTrix /gbdb/hg38/knownGeneFastV43.ix
+searchTrix /gbdb/hg38/knownGeneFastV46.ix
 searchTrixContext on
 doPage 1
 

@@ -9,6 +9,21 @@ fi
 
 export dirPath="${1}"
 export accession=`basename ${dirPath}`
+# hgdownload1 returns to service 02 April 2024, push to both machines
+export downloadDest1="hgdownload1.soe.ucsc.edu"
+export downloadDest2="hgdownload2.soe.ucsc.edu"
+# 2024-02-06 hgdownload2.gi.ucsc.edu has address 128.114.198.53
+# 2024-04-03
+# host hgdownload1.gi.ucsc.edu
+# Host hgdownload1.gi.ucsc.edu not found: 3(NXDOMAIN)
+# host hgdownload1.soe.ucsc.edu
+# hgdownload1.soe.ucsc.edu has address 128.114.119.163
+
+# host hgdownload2.gi.ucsc.edu
+# hgdownload2.gi.ucsc.edu has address 128.114.198.53
+# host hgdownload2.soe.ucsc.edu
+# hgdownload2.soe.ucsc.edu is an alias for hgdownload2.gi.ucsc.edu.
+# hgdownload2.gi.ucsc.edu has address 128.114.198.53
 
 ## verify no broken symlinks
 export srcDir="/hive/data/genomes/asmHubs/${dirPath}"
@@ -31,8 +46,10 @@ printf "### sending %s\t%s\t##########\n" "`basename ${srcDir}`" "${DS}"
 printf "# srcDir: %s\n" "${srcDir}"
 printf "# destDir: %s\n" "${destDir}"
 
-ssh qateam@hgdownload.soe.ucsc.edu "mkdir -p ${destDir}" 2>&1 | grep -v "X11 forwarding request" || true
-printf "# successful mkdir on hgdownload\n"
+ssh qateam@${downloadDest1} "mkdir -p ${destDir}" 2>&1 | grep -v "X11 forwarding request" || true &
+ssh qateam@${downloadDest2} "mkdir -p ${destDir}" 2>&1 | grep -v "X11 forwarding request" || true
+wait
+printf "# successful mkdir on ${downloadDest1} and ${downloadDest2}\n"
 
 ### 2021-12-20 - out of disk space on dynablat-01
 ### 2022-06-01 new dynamic-01 machine more disk space
@@ -61,15 +78,22 @@ rsync --stats -a -L -P ${srcDir}/*.gfidx "qateam@$dynaBlat:${dynaServerDir}/" \
 
 fi
 
-# the new single file hub genome trackDb file:
-# genomes.txt obsolete now with the single file
-# ssh qateam@hgdownload.soe.ucsc.edu "rm ${destDir}/genomes.txt" 2>&1 | egrep -v "cannot remove|X11 forwarding request" || true
-# ssh qateam@hgdownload.soe.ucsc.edu "rm ${destDir}/html/*.description.html" 2>&1 | grep -v "X11 forwarding request" || true
-printf "rsync --delete --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@hgdownload.soe.ucsc.edu:${destDir}/\"\n" 1>&2
-rsync --delete --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@hgdownload.soe.ucsc.edu:${destDir}/" \
+# the single file hub genome trackDb file:
+
+printf "rsync --delete --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest1}:${destDir}/\"\n" 1>&2
+printf "rsync --delete --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest2}:${destDir}/\"\n" 1>&2
+rsync --delete --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest1}:${destDir}/" \
+  2>&1 | grep -v "X11 forwarding request" &
+rsync --delete --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest2}:${destDir}/" \
   2>&1 | grep -v "X11 forwarding request"
+wait
+
 # the new single file hub genome trackDb file:
-printf "rsync --stats -a -L -P \"${srcDir}/download.hub.txt\" \"qateam@hgdownload.soe.ucsc.edu:${destDir}/hub.txt\"\n" 1>&2
-rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@hgdownload.soe.ucsc.edu:${destDir}/hub.txt" \
+printf "rsync --stats -a -L -P \"${srcDir}/download.hub.txt\" \"qateam@${downloadDest1}:${destDir}/hub.txt\"\n" 1>&2
+printf "rsync --stats -a -L -P \"${srcDir}/download.hub.txt\" \"qateam@${downloadDest2}:${destDir}/hub.txt\"\n" 1>&2
+rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@${downloadDest1}:${destDir}/hub.txt" \
+  2>&1 | grep -v "X11 forwarding request" &
+rsync --stats -a -L -P "${srcDir}/download.hub.txt" "qateam@${downloadDest2}:${destDir}/hub.txt" \
   2>&1 | grep -v "X11 forwarding request"
+wait
 printf "# successful rsync\n"

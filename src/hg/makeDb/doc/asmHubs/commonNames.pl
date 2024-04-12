@@ -24,6 +24,20 @@ while (my $asmId = <FH>) {
   $asmId =~ s/\s+.*//;
   chomp $asmId;
   next if (length($asmId) < 1);
+  my @p = split('_', $asmId, 3);
+  my $accession = "$p[0]_$p[1]";
+  my $asmName = $p[2];
+  my $asmNameAbbrev = $asmName;
+  my $hapX = "";
+  if ($asmNameAbbrev =~ m/hap1|hap2|alternate_haplotype|primary_haplotype/) {
+     $hapX = $asmNameAbbrev;
+     $asmNameAbbrev =~ s/.hap1//;
+     $asmNameAbbrev =~ s/.hap2//;
+     $asmNameAbbrev =~ s/_alternate_haplotype//;
+     $asmNameAbbrev =~ s/_primary_haplotype//;
+     $hapX =~ s/${asmNameAbbrev}.//;
+     $asmNameAbbrev =~ s/_/ /g;
+  }
   my $gcx = substr($asmId, 0, 3);
   my $id0 = substr($asmId, 4, 3);
   my $id1 = substr($asmId, 7, 3);
@@ -42,7 +56,7 @@ while (my $asmId = <FH>) {
   } elsif ($asmType =~ m/principal pseudo/) {
     $asmType = " primary hap";
   } else {
-    $asmType = "";
+    $asmType = " $hapX";
   }
   my $sciName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
   chomp $sciName;
@@ -94,7 +108,7 @@ while (my $asmId = <FH>) {
   chomp $orgName;
   if ($orgName =~ m/kinetoplastids|firmicutes|proteobacteria|high G|enterobacteria|agent of/) {
     $orgName = $sciName;
-  } elsif ($orgName =~ m/bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi/) {
+  } elsif ($orgName =~ m/bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes/) {
     my ($order, undef) = split('\s', $orgName, 2);
     $order = "budding yeast" if ($order =~ m/budding/);
     $order = "smut fungi" if ($order =~ m/smut/);
@@ -105,7 +119,11 @@ while (my $asmId = <FH>) {
     $order = "basidiomycetes" if ($order =~ m/basidiomycete/);
     my @a = split('\s+', $sciName);
     my $lastN = scalar(@a) - 1;
-    $orgName = "$order " . uc(substr($a[0], 0, 1)) . "." . "@a[1..$lastN]";
+    if ($orgName =~ m/eukaryotes/) {
+      $orgName = uc(substr($a[0], 0, 1)) . "." . "@a[1..$lastN]";
+    } else {
+      $orgName = "$order " . uc(substr($a[0], 0, 1)) . "." . "@a[1..$lastN]";
+    }
   } elsif ($orgName eq "viruses") {
     $orgName = `grep -i -m 1 "Organism name:" "${asmRpt}" | tr -d ""`;
     chomp $orgName;
@@ -120,6 +138,8 @@ while (my $asmId = <FH>) {
     $extraStrings =~ s/\?/ /g;
     $extraStrings =~ s/\+//g;
     $extraStrings =~ s/\*//g;
+    $extraStrings =~ s/${asmNameAbbrev} //;
+    $extraStrings =~ s/  / /g;
     my @a = split('\s+', $extraStrings);
     for (my $i = 0; $i < scalar(@a); ++$i) {
         $orgName =~ s/$a[$i]//;

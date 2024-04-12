@@ -533,7 +533,7 @@ time_t timep = bbiUpdateTime(bbi);
 /* Get description of columns, making it up from BED records if need be. */
 struct asObject *as = bigBedAsOrDefault(bbi);
 
-hPrintf("<B>Database:</B> %s", database);
+hPrintf("<B>Database:</B> %s", trackHubSkipHubName(database));
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s ", table);
 printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", firstWordInLine(sqlUnixTimeToDate(&timep, FALSE)));
 

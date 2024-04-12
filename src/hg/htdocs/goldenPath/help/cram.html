@@ -15,7 +15,7 @@ decompress the read information.</p>
 Since CRAM files are more dense than <a href="/goldenPath/help/bam.html">BAM</a> files, many groups
 are switching to the CRAM format to save disk space. For CRAM tracks to load there is an expectation
 that the checksum of the reference sequence used to create the CRAM will be in the CRAM header. A
-file with a matching checksum is also expected to be accessible from the EBI CRAM reference registry
+file with a matching checksum is also expected to be accessible from the EBI RefGet CRAM reference registry
 (see <a href="#refs">References</a> for CRAM resources). Otherwise, users must specify a
 <code>refUrl</code> setting that will point to a server that is offering up the reference sequences
 (see <a href="#example4">Example Four</a>).</p>
@@ -26,9 +26,9 @@ decompression. When a CRAM file is first loaded on a given chromosome, a check f
 in a special browser &quot;cramCache&quot; directory of the specified reference checksum will take 
 place. If the reference sequence information specific for that CRAM for the currently viewed 
 chromosome region does not exist, a message will display about the file not being found along with 
-a note about downloading the reference from the EBI CRAM reference registry if it is available (or 
-from the specified <code>refUrl</code>). A refresh of the page once the download is complete will 
-display the CRAM data as if it were a BAM file.</p>
+a note about downloading the reference from the EBI CRAM reference registry if it is available or
+from another Refget server using the <code>refUrl</code> setting. A refresh of the page once the download is
+complete will display the CRAM data as if it were a BAM file.</p>
 <p>
 The track lines to describe CRAM tracks are identical to track lines for BAM tracks. This includes 
 the <code>type</code> parameter, which is still <code>bam</code> even for CRAM tracks. The only 
@@ -94,10 +94,14 @@ bigDataUrl ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00361/exome_al
 <a name="example4"></a>
 <h2>Example #4</h2>
 <p>
-If users do not register their reference sequence with the EBI CRAM reference registry then there is
-the option to use a <code>refUrl</code> setting to point the browser to the appropriate place to 
-find the reference sequence. The below example is a hub track stanza using the  <code>refUrl</code> 
-option:</p> 
+For genomes that are not registered in the EBI CRAM Reference Registry,
+the <code>refUrl</code> setting is used to point the browser to
+the appropriate place to find the reference sequence. The <code>refUrl</code> setting is used with
+the URL of the reference server, such as <code>refUrl http://university.edu/URL/cramRef/%s</code>
+where the <tt>%s</tt> gets replaced by the RefGet MD5 checksum which identifies the reference
+sequence.</p>
+<p>
+The example below shows a hub track stanza using the <code>refUrl</code> setting:</p>
 <pre><code>track cramExample
 type bam
 visibility full
@@ -121,6 +125,9 @@ Below is a collection of helpful CRAM resources:</p>
   <li>
   <a href="http://www.ebi.ac.uk/ena/software/cram-reference-registry" target="_blank">CRAM reference
   registry</a></li>
+  <li>
+  <a href="https://doi.org/10.1093/bioinformatics/btab524" target="_blank">
+    Refget: standardized access to reference sequences</a>
   <li>
   <a href="http://samtools.github.io/hts-specs/CRAMv3.pdf" target="_blank">CRAM format 
   specification (version 3.0)</a></li>

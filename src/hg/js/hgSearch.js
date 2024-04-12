@@ -457,7 +457,7 @@ var hgSearch = (function() {
         $("[id*='extraInfo']").remove();
     }
 
-    function printMatches(list, matches, title, searchDesc) {
+    function printMatches(list, matches, title, searchDesc, doShowMore) {
         var printCount = 0;
         _.each(matches, function(match, printCount) {
             var position = match.position.split(':');
@@ -499,7 +499,7 @@ var hgSearch = (function() {
                     }
                     if (match.highlight) {
                         url += url[url.length-1] !== '&' ? '&' : '';
-                        url += "addHighlight=" + match.highlight;
+                        url += "addHighlight=" + encodeURIComponent(match.highlight);
                     }
                 } else {
                     url = "hgc?db=" + db + "&g=" + hgcTitle + "&i=" + match.position + "&c=0&o=0&l=0&r=0" ;
@@ -508,24 +508,38 @@ var hgSearch = (function() {
                 //if (match.canonical === true)
                 matchTitle = "<b>" + matchTitle + "</b>";
             }
-            var newListObj;
             if (printCount < 500) {
-                if (printCount + 1 > 10) {
-                    newListObj = "<li class='searchResult " + title + "_hidden' style='display: none'><a href=\"" + url + "\">" + matchTitle + "</a> - ";
-                } else {
-                    newListObj = "<li class='searchResult'><a href=\"" + url + "\">" + matchTitle + "</a> - ";
+                let newListObj = document.createElement("li");
+                let className = "searchResult ";
+                if (doShowMore || printCount + 1 > 10) {
+                    className += title + "_hidden";
+                    if (!doShowMore) {
+                        newListObj.style.display = "none";
+                    }
                 }
+                newListObj.className = className;
+                let a = document.createElement("a");
+                newListObj.appendChild(a);
+                a.href = url;
+                a.innerHTML = matchTitle; // need the bold in the title so use innerHTML here
+                let textStr = " - ";
+
                 printedPos = false;
                 if (!(["helpDocs", "publicHubs", "trackDb"].includes(title))) {
-                    newListObj += match.position;
+                    textStr += match.position;
                     printedPos = true;
                 }
                 if (match.description) {
-                    if (printedPos) {newListObj += " - ";}
-                    newListObj += match.description;
+                    if (printedPos) {textStr += " - ";}
+                    textStr += match.description;
                 }
-                newListObj += "</li>";
-                list.innerHTML += newListObj;
+                newListObj.innerHTML += textStr; // the bolded search term can appear anywhere in
+                                                 // the text string so use innerHTML for now
+                if (list.nodeName === "LI") {
+                    list.parentNode.insertBefore(newListObj, list);
+                } else {
+                    list.appendChild(newListObj);
+                }
                 printCount += 1;
             }
         });
@@ -533,15 +547,29 @@ var hgSearch = (function() {
 
     function showMoreResults() {
         let trackName = this.id.replace(/Results_.*/, "");
-        let isHidden = $("." + trackName + "_hidden")[0].style.display === "none";
+        let isHidden = true;
+        let parentNode; // the li with the control input to hide/show
+        if (this.nodeName === "IMG") {
+            isHidden = this.nextSibling.textContent.startsWith(" Show");
+            parentNode = this.parentNode;
+        } else if (this.nodeName === "A") {
+            isHidden = this.textContent.startsWith(" Show");
+            parentNode = this.parentNode.parentNode;
+        }
         let btnId = this.id.replace(/Link/, "Button");
-        _.each($("." + trackName + "_hidden"), function(hiddenLi) {
-            if (isHidden) {
-                hiddenLi.style = "display:";
-            } else {
-                hiddenLi.style = "display: none";
-            }
-        });
+        let alreadyMadeElems = document.querySelectorAll("." + trackName + "_hidden");
+        if (alreadyMadeElems.length > 0) {
+            _.each(alreadyMadeElems, function(hiddenLi) {
+                if (isHidden) {
+                    hiddenLi.style = "display:";
+                } else {
+                    hiddenLi.style = "display: none";
+                }
+            });
+        } else {
+            // insert more results before parentNode li
+            printMoreResults(trackName, parentNode);
+        }
         let isIconClick = this.nodeName !== "A";
         let linkEl = null;
         if (isIconClick) {linkEl = this.nextSibling.children[0];}
@@ -586,6 +614,17 @@ var hgSearch = (function() {
             }
     }
 
+    function printMoreResults(trackName, nodeAfter) {
+        /* Print the 11-500 result before nodeAfter */
+        let results = uiState.resultHash[trackName];
+        let title = results.name;
+        let searchDesc = results.description;
+        // show the 11-500th elements
+        // after this, only CSS is used to show hide them, since they are part of the
+        // page already
+        printMatches(nodeAfter, results.matches.slice(10), title, searchDesc, true);
+    }
+
     function updateSearchResults(uiState) {
         var parentDiv = $("#searchResults");
         if (uiState && typeof uiState.search !== "undefined") {
@@ -609,42 +648,65 @@ var hgSearch = (function() {
             var categoryCount = 0;
             // Loop through categories of match (public hubs, help docs, a single track, ...
             _.each(uiState.positionMatches, function(categ) {
-                var title = categ.name;
-                var searchDesc = categ.description;
-                var matches = categ.matches;
-                var numMatches = matches.length;
-                var newListObj = document.createElement("li");
-                var idAttr = document.createAttribute("id");
+                let title = categ.name;
+                let searchDesc = categ.description;
+                let matches = categ.matches;
+                let numMatches = matches.length;
+                let newListObj = document.createElement("li");
+                let idAttr = document.createAttribute("id");
                 idAttr.value = title + 'Results';
                 newListObj.setAttributeNode(idAttr);
-                var noLiStyle = document.createAttribute("class");
+                let noLiStyle = document.createAttribute("class");
                 noLiStyle.value = "liNoStyle";
                 newListObj.setAttributeNode(noLiStyle);
-                newListObj.innerHTML += "<input type='hidden' id='" + idAttr.value + categoryCount + "' value='0'>";
-                newListObj.innerHTML += "<img height='18' width='18' id='" + idAttr.value + categoryCount + "_button' src='../images/remove_sm.gif'>";
-                newListObj.innerHTML += "&nbsp;" + searchDesc + ":";
-                //printOneFullMatch(newList, matches[0], title, searchDesc);
+                let inp = document.createElement("input");
+                inp.type = "hidden";
+                inp.id = idAttr.value + categoryCount;
+                inp.value = "0";
+                newListObj.appendChild(inp);
+                let ctrlImg = document.createElement("img");
+                ctrlImg.height = "18";
+                ctrlImg.width = "18";
+                ctrlImg.id = idAttr.value + categoryCount + "_button";
+                ctrlImg.src = "../images/remove_sm.gif";
+                newListObj.appendChild(ctrlImg);
+                let descText = document.createTextNode(searchDesc + ":");
+                newListObj.appendChild(descText);
                 // Now loop through each actual hit on this table and unpack onto list
-                var subList = document.createElement("ul");
-                printMatches(subList, matches, title, searchDesc);
+                let subList = document.createElement("ul");
+                // only print the first 10 at first
+                printMatches(subList, matches.slice(0,10), title, searchDesc, false);
                 if (matches.length > 10) {
-                    idStr = idAttr.value + "_" + categoryCount;
-                    subList.innerHTML += "<li class='liNoStyle'>";
-                    subList.innerHTML += "<input type='hidden' id='" + idStr +  "showMore' value='0'>";
-                    subList.innerHTML += "<img height='18' width='18' id='" + idStr + "_showMoreButton' src='../images/add_sm.gif'>";
+                    let idStr = idAttr.value + "_" + categoryCount;
+                    let showMoreLi = document.createElement("li");
+                    showMoreLi.id = idStr;
+                    showMoreLi.classList.add("liNoStyle");
+                    let showMoreInp = document.createElement("input");
+                    showMoreInp.type = "hidden";
+                    showMoreInp.value = '0';
+                    showMoreInp.id = showMoreLi.id + "showMore";
+                    showMoreLi.appendChild(showMoreInp);
+                    let showMoreImg = document.createElement("img");
+                    showMoreImg.height = "18";
+                    showMoreImg.width = "18";
+                    showMoreImg.id = showMoreLi.id + "_showMoreButton";
+                    showMoreImg.src = "../images/add_sm.gif";
+                    showMoreLi.appendChild(showMoreImg);
+                    let showMoreDiv = document.createElement("div");
+                    showMoreDiv.id = idStr + "_showMoreDiv";
+                    showMoreDiv.classList.add("showMoreDiv");
+                    let showMoreA = document.createElement("a");
+                    showMoreA.id = idStr + "_showMoreLink";
+                    let newText = "";
                     if (matches.length > 500) {
-                        let newText  = "<div class='showMoreDiv' id='" + idStr +"_showMoreDiv'>";
-                        newText += "&nbsp;<a id='"+ idStr + "_showMoreLink'>";
-                        newText += "Show 490 (out of " + (matches.length) + " total) more matches for " + searchDesc;
-                        newText += "</a></div></li>";
-                        subList.innerHTML += newText;
+                        newText = " Show 490 (out of " + (matches.length) + " total) more matches for " + searchDesc;
                     } else {
-                        let newText = "<div class='showMoreDiv' id='" + idStr + "_showMoreDiv'>";
-                        newText += "&nbsp;<a id='"+ idStr + "_showMoreLink'>";
-                        newText += "Show " + (matches.length - 10) + " more matches for " + searchDesc;
-                        newText += "</a></div></li>";
-                        subList.innerHTML += newText;
+                        newText = " Show " + (matches.length - 10) + " more matches for " + searchDesc;
                     }
+                    showMoreA.textContent = newText;
+                    showMoreDiv.appendChild(showMoreA);
+                    showMoreLi.appendChild(showMoreDiv);
+                    subList.appendChild(showMoreLi);
                 }
                 newListObj.append(subList);
                 newList.append(newListObj);
@@ -792,7 +854,7 @@ var hgSearch = (function() {
             $("#searchBarSearchButton").after("<i id='spinner' class='fa fa-spinner fa-spin'></i>");
 
             // redirect to hgBlat if the input looks like a DNA sequence
-            // minimum length=19 so we do not accidentally redirect to hgBlat for a gene identifier 
+            // minimum length=19 so we do not accidentally redirect to hgBlat for a gene identifier
             // like ATG5
             var dnaRe = new RegExp("^(>[^\n\r ]+[\n\r ]+)?(\\s*[actgnACTGN \n\r]{19,}\\s*)$");
             if (dnaRe.test(searchTerm)) {
@@ -862,7 +924,8 @@ var hgSearch = (function() {
                         id = "hgTrackUi?db=" + uiState.db + "&g=" + posSplit[0];
                         return geneSymbol === matchStr;
                     });
-                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.label = geneSymbol;
+                    callbackData.value = geneSymbol;
                     callbackData.id = id;
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = "";
@@ -873,7 +936,8 @@ var hgSearch = (function() {
                         id = "hgTrackUi?hubUrl=" + posSplit[0] + ":" + posSplit[1] + "&g=" + posSplit[3] + "&db=" + posSplit[3];
                         return decoder(posSplit[4]) === matchStr;
                     });
-                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.label = geneSymbol;
+                    callbackData.value = geneSymbol;
                     callbackData.id = id;
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = "";
@@ -883,7 +947,8 @@ var hgSearch = (function() {
                         geneSymbol = decoder(posSplit[1].replaceAll("_", " "));
                         return geneSymbol === matchStr;
                     });
-                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.label = geneSymbol;
+                    callbackData.value = geneSymbol;
                     callbackData.id = match.position.split(":")[0];
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = "";
@@ -892,7 +957,8 @@ var hgSearch = (function() {
                         geneSymbol = elem.posName.replace(/ .*$/,"");
                         return decoder(elem.posName) === matchStr;
                     });
-                    callbackData.value = geneSymbol + " " + match.description;
+                    callbackData.label = geneSymbol;
+                    callbackData.value = geneSymbol;
                     // special case the genbank searches that are supposed to go to hgc
                     // and not hgTracks
                     let parentTitle = i.parentNode.parentNode.parentNode.childNodes[2];
@@ -905,9 +971,14 @@ var hgSearch = (function() {
                     callbackData.geneSymbol = geneSymbol;
                     callbackData.internalId = match.hgFindMatches;
                 }
+                // the value text is the same for all the types, and needs this
+                // hack to remove the bolding from the item values in the autocomplete
+                if (match && typeof match.description !== "undefined") {
+                    callbackData.label += " " + match.description;
+                    callbackData.value = $("<div>" + match.description + "</div>").text();
+                }
                 // type for autocomplete select to know where to navigate to
                 callbackData.type = trackName;
-                callbackData.label = callbackData.value;
                 addRecentSearch(db, callbackData.geneSymbol, callbackData);
                 window.location = i.href;
             });
@@ -940,7 +1011,7 @@ var hgSearch = (function() {
                 position = match.position;
                 newUrl = "../cgi-bin/hgTracks" + "?db=" + db + "&position=" + position;
                 if (match.highlight) {
-                    newUrl += "&addHighlight=" + match.highlight;
+                    newUrl += "&addHighlight=" + encodeURIComponent(match.highlight);
                 }
                 if (positionMatch.name !== "chromInfo") {
                     newUrl += "&" + positionMatch.name + "=pack";

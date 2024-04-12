@@ -62,6 +62,251 @@ target=_blank>our GitHub page</a>.</p>
 
 <!-- ============= 2024 archived news ============= -->
 <a name="2024"></a>
+
+<a name="032624"></a>
+<h2>Mar. 26, 2024 &nbsp;&nbsp; New gnomAD v4 Constraint Metrics (hg38) and gnomAD Non-cancer filter (hg19/hg38)</h2>
+<p>
+We are pleased to announce the release of the
+<a href="/cgi-bin/hgTrackUi?&db=hg38&g=gnomadPLI">gnomAD v4 constraint metrics</a> for human
+assembly hg38/GRCh38 and the addition of a non-cancer filter for the
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=gnomadExomes">GRCh37/hg19 Exome Variants v2.1.1</a> and the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadGenomesVariantsV3_1_1">
+hg38/GRCh38 Genome Variants v3.1.1</a> tracks.</p>
+<p>
+The gnomAD v4 constraint metrics tracks contain metrics of pathogenicity per-gene as predicted for
+gnomAD v4.0 and identify genes subject to strong selection against various classes of mutation.
+The release of the gnomAD v4 constraint metrics consists of two new subtracks in the gnomAD
+Constraint Metrics composite track:</p>
+<ol>
+  <li><b>Transcript LoF Constraint track</b>: Predicted constraint metrics at the whole transcript
+    level for three different types of variation: missense, synonymous, and predicted loss of
+    function.</li>
+  <li><b>Transcript Missense Constraint track</b>: The missense constraint tracks are built
+    similarly to the LoF constraint tracks, however the items displayed are based on missense Z
+    scores. All items are colored black, and individual Z scores can be seen on mouseover.
+</ol>
+<p>
+The GRCh37/hg19 Exome Variants v2.1.1 and the hg38/GRCh38 Genome Variants v3.1.1 tracks now have a
+non-cancer filter that allows the option to exclude/include variants from samples of individuals
+who were not ascertained for having cancer in a cancer study. These non-cancer subsets follow the
+new guidelines for clinical variant testing of BRCA1 and BRCA2 genes and are used for the
+assessment of breast cancer patients.</p>
+<p>
+We would like to thank the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome
+Aggregation Database Consortium</a> for making these data available. We would also like to thank
+Chris Lee, Ana Benet-Pag&#232;s, Gerardo Perez, and Jairo Navarro for the creation and release of
+these tracks.</p>
+
+<a name="030724"></a>
+<h2>Mar. 07, 2024 &nbsp;&nbsp; New Prediction Scores super track and BayesDel track for hg19</h2>
+<p>
+We are happy to announce the new Human Prediction Scores super track for the
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=predictionScoresSuper">GRCh37/hg19</a> assembly. This super
+track currently includes the <a href="/cgi-bin/hgTrackUi?db=hg19&g=bayesDel">BayesDel track</a>,
+which can be used for clinical variant classification research.
+<a href="https://fenglab.chpc.utah.edu/BayesDel/BayesDel.html" target="_blank">BayesDel</a> is a
+deleteriousness meta-score for coding and non-coding variants, single nucleotide variants, and small
+insertion/deletions. The range of the score is from -1.29334 to 0.75731. The higher the score, the
+more likely the variant is pathogenic. There are eight subtracks for the BayesDel track: four
+include pre-computed MaxAF-integrated BayesDel scores for missense variants, one for each base.
+The other four are of the same format, but scores are not MaxAF-integrated.</p>
+<p>
+We would like to thank the
+<a href="https://fenglab.chpc.utah.edu/BayesDel.html" target="_blank">BayesDel team</a> for
+providing precomputed data. We would also like to thank Tiana Pereira, Christopher Lee, Jeltje van
+Baren, Gerardo Perez, and Anna Benet-Pages for their efforts on this release.</p>
+ 
+<a name="030524"></a>
+<h2>Mar. 05, 2024 &nbsp;&nbsp; New JASPAR tracks: Human (hg19/hg38) - Mouse (mm10/mm39)</h2>
+<p>
+We are excited to announce the new JASPAR 2024 tracks for human
+(<a href="/cgi-bin/hgTrackUi?db=hg19&g=jaspar">GRCh37/hg19</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=jaspar">GRCh38/hg38</a>) and
+mouse (<a href="/cgi-bin/hgTrackUi?db=mm39&g=jaspar">GRCm39/mm39</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&g=jaspar">GRCm38/mm10</a>). These tracks represent genome-wide
+predicted binding sites for transcription factors with binding profiles in the
+<a href="https://jaspar.genereg.net/about/" target="_blank">JASPAR CORE collection</a>. JASPAR CORE
+is an open-source database containing a curated, non-redundant set of binding profiles derived from
+collections of experimentally defined transcription factor binding profiles. The JASPAR 2024 update
+expanded the JASPAR CORE collection by 20% (329 added and 72 upgraded profiles). JASPAR continues
+to uphold its core principles (i) providing high-quality TF binding profiles, (ii) fostering open
+access, and (iii) ensuring ease of use, which has been useful for the scientific community in
+studying gene transcription regulation.</p>
+<p>
+The JASPAR database is a joint effort between several labs (please see the latest
+<a href="https://pubmed.ncbi.nlm.nih.gov/37962376/" target="_blank">JASPAR paper</a>).
+Binding site predictions and UCSC tracks were computed by the
+<a href="https://mathelierlab.com/"
+target="_blank">Computational Biology & Gene Regulation group</a>. We would like to thank Jairo
+Navarro and Gerardo Perez at UCSC for building and testing these tracks.</p>
+
+<a name="030124"></a>
+<h2>Mar. 01, 2024 &nbsp;&nbsp; AbSplice Prediction Scores for hg38</h2>
+<p>
+We are happy to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=abSplice" target="_blank">AbSplice scores</a>
+track for the human genome, GRCh38/hg38. AbSplice is a method that predicts aberrant splicing across
+human tissues, as described in <a href="https://doi.org/10.1038/s41588-023-01373-3"
+target="_blank">Wagner, &Ccedil;elik et al., 2023</a>. This track displays precomputed AbSplice
+scores for all possible single-nucleotide variants genome-wide. The scores represent the probability
+that a given variant causes aberrant splicing in a given tissue.</p>
+<p>
+Aberrant splicing is a major cause of genetic disorders but its direct detection in transcriptomes
+is limited to clinically accessible tissues such as skin or body fluids. &Ccedil;elik et al.
+generated an aberrant splicing benchmark dataset, spanning over 8.8 million rare variants in 49
+human tissues from the Genotype-Tissue Expression (GTEx) dataset. The AbSplice score is a
+probability estimate of how likely aberrant splicing of some sort takes place in a given tissue.
+The authors <a href="https://github.com/gagneurlab/absplice?tab=readme-ov-file#output"
+target="_blank">suggest</a> three cutoffs which are represented by color in the track.</p>
+
+<ul>
+  <li><b><font color="#FF0000">High (red)</font></b> - <b>
+    An AbSplice score over 0.2</b> indicates a high likelihood of aberrant splicing in at least one
+    tissue.</li>
+  <li><b><font color="#FF8000">Medium (orange)</font></b> - <b>
+    A score between 0.05 and 0.2 </b> indicates a medium likelihood.</li>
+  <li><b><font color="#0000FF">Low (blue)</font></b> - <b>
+    A score between 0.01 and 0.05 </b> indicates a low likelihood.</li>
+  <li><b>Scores below 0.01 are not displayed.</b></li>
+</ul>
+
+<p>
+We would like to thank Wagner, &Ccedil;elik et al., 2023 for generating and making the data publicly
+available. We would also like to thank Jeltje van Baren and Jairo Navarro for the creation and
+release of these tracks.
+</p>
+
+<a name="022124"></a>
+<h2>Feb. 21, 2024 &nbsp;&nbsp; New DECIPHER Dosage Sensitivity tracks for Human (hg19/hg38)</h2>
+<p>
+We are happy to announce the release of DECIPHER dosage sensitivity tracks for human assemblies,
+<a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=dosageSensitivity"
+target="_blank">GRCh38/hg38</a> and <a href="/cgi-bin/hgTrackUi?db=hg19&c=chr12&g=dosageSensitivity"
+target="_blank">GRCh37/hg19</a>, displaying a cross-disorder dosage sensitivity map of the human
+genome. The two tracks correspond to the probability of haploinsufficiency (pHaplo) and the
+probability of triplosensitivity (pTriplo).</p>
+<p>
+Rare copy-number variants (rCNVs) include deletions and duplications that occur infrequently in the
+global human population and can confer substantial risk for disease.
+<a href="https://europepmc.org/article/MED/35917817" target="_blank">Collins et al</a> aimed to
+quantify the properties of haploinsufficiency (i.e., deletion intolerance) and triplosensitivity
+(i.e., duplication intolerance) throughout the human genome by analyzing rCNVs from nearly one
+million individuals to construct a genome-wide catalog of dosage sensitivity across 54 disorders,
+which defined 163 dosage sensitive segments associated with at least one disorder. These segments
+were typically gene-dense and often harbored dominant dosage sensitive driver genes. An ensemble
+machine learning model was built to predict dosage sensitivity probabilities (pHaplo &amp; pTriplo)
+for all autosomal genes, which identified 2,987 haploinsufficient and 1,559 triplosensitive genes,
+including 648 that were uniquely triplosensitive.
+</p>
+<p>
+We would like to thank Ryan Collins for generating the data. We would also like to
+thank Anna Benet-Pag&egrave;s for suggesting and assisting in track development and interpretation.
+Thank you to Luis Nassar and Jairo Navarro for the creation and release of these tracks.</p>
+
+<a name="021424"></a>
+<h2>Feb. 14, 2024 &nbsp;&nbsp; New GENCODE gene tracks: Human V45 (hg19/hg38) - Mouse VM34
+(mm39)</h2>
+<p>
+We are happy to announce new GENCODE Gene annotation tracks, which correspond
+to <a href="https://www.ensembl.info/2024/01/11/ensembl-111-has-been-released/"
+target="_blank">Ensembl 111</a>, for three assemblies: <a target="_blank"
+href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV45lift37">hg19/GRCh37</a>,
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeV45">hg38/GRCh38</a>,
+and
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=mm39&c=chr12&g=wgEncodeGencodeVM34">mm39/GRCm39</a>.
+<a target="_blank" href="https://www.gencodegenes.org/">GENCODE</a> provides gene annotations with
+high accuracy based on biological evidence and for the benefit of biomedical research and genome
+interpretation. For human, the GENCODE V45 annotations were mapped to hg38/GRCh38 and then back-mapped
+to the hg19/GRCh37 assembly. For all three assemblies, the gene sets contain the
+following tracks:</p>
+<ul>
+  <li>
+      Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>
+      Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>
+      Pseudogenes - all annotations except polymorphic pseudogenes.</li>
+</ul>
+<p>
+The hg38 and mm39 assemblies also include the following track that is not available on hg19:
+</p>
+<ul>
+  <li>
+      PolyA - polyA signals and sites manually annotated on the genome based on transcribed
+      evidence (ESTs and cDNAs) of 3' end of transcripts containing at least 3 A's not matching the
+      genome.</li>
+</ul>
+<p>
+Details on each release can be found on the <a target="_blank"
+href="https://www.gencodegenes.org/">GENCODE site</a>. This includes <a target="_blank"
+href="https://www.gencodegenes.org/human/stats.html">statistics on each release</a>.
+</p>
+<p>
+We would like to thank the <a target="_blank"
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Mark Diekhans and Gerardo Perez for the development and
+release of these tracks.</p>
+
+<a name="021224"></a>
+<h2>Feb. 12, 2024 &nbsp;&nbsp; Variants of Concern SARS-CoV-2 track updated with Omicron
+variants</h2>
+<p>
+We are happy to announce an update to the <a href="/cgi-bin/hgTrackUi?db=wuhCor1&position=default&g=variantMuts"
+target="_blank">Variants of Concern</a> track to include the latest WHO-designated variants of
+concern (VOC). The evolving SARS-CoV-2 virus has been a challenge for everyone, and we are humbled
+to continue providing public data and our high-quality genetics research tools, now updated with the
+latest COVID variant information.</p>
+<p>
+In this update, the following Omicron variants were added to the
+Variants of Concern track:</p>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <ul>
+        <li>BA.2</li>
+        <li>BA.2.12.1</li>
+        <li>BA.2.75</li>
+        <li>BQ.1</li>
+        <li>CH.1.1</li>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <ul>
+        <li>EG.5.1</li>
+        <li>XBB</li>
+        <li>XBB.1.16</li>
+        <li>XBB.1.5</li>
+        <li>XBB.1.9</li>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <ul>
+        <li>XBB.2.3</li>
+        <li>XBB.1.5.70</li>
+        <li>HK.3</li>
+        <li>BA.2.86</li>
+        <li>JN.1</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<p>
+The Variants of Concern track displays amino acid and nucleotide mutations in SARS-CoV-2 variants as
+defined in December 2021 by the
+<a href="https://www.who.int/en/activities/tracking-SARS-CoV-2-variants/"
+target="_blank">World Health Organization (WHO)</a>. Note that the
+<a href="https://www.cdc.gov/coronavirus/2019-ncov/variants/variant-classifications.html"
+target="_blank">Centers for Disease Control (CDC)</a> classification of SARS-CoV-2 variants is
+slightly different than the WHO. Mutations in this track were identified from viral sequences from
+<a href="https://gisaid.org/" target="_blank">GISAID</a>. Variant incidence and geographic
+distribution information is available from links to the <a href="https://outbreak.info/"
+target="_blanK">Outbreak.info</a> web resource on the mutation details pages.</p>
+<p>
+This work is made possible by the open sharing of genetic data by research groups from all over the
+world. We gratefully acknowledge their contributions. We would also like to thank Angie Hinrichs
+and Jairo Navarro for creating and releasing these tracks.</p>
+
 <a name="020824"></a>
 <h2>Feb. 8, 2024 &nbsp;&nbsp; CRISPR Targets for human (T2T CHM13v2.0/hs1) now available</h2>
 <p>

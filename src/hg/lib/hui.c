@@ -6775,6 +6775,27 @@ return count;
 }
 
 
+boolean bedHasFilters(struct trackDb *tdb)
+// Does track have filters
+{
+if (trackDbSettingClosestToHome(tdb, FILTER_BY))
+    return TRUE;
+if (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN))
+    return TRUE;
+
+struct trackDbFilter *filterSettings = tdbGetTrackNumFilters( tdb);
+if (filterSettings != NULL)
+    return TRUE;
+filterSettings = tdbGetTrackTextFilters( tdb);
+if (filterSettings != NULL)
+    return TRUE;
+filterSettings = tdbGetTrackFilterByFilters( tdb);
+if (filterSettings != NULL)
+    return TRUE;
+
+return FALSE;
+}
+
 boolean bedScoreHasCfgUi(struct trackDb *tdb)
 // Confirms that this track has a bedScore Cfg UI
 {
@@ -6877,8 +6898,15 @@ if (trackDbFilters)
         printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_WILDCARD) ? "SELECTED" : "",  FILTERTEXT_WILDCARD );
         printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_REGEXP) ? "SELECTED" : "",  FILTERTEXT_REGEXP );
         printf("</SELECT>");
+        printf("&nbsp;&nbsp;<button class='buttonClear-%s'>Clear</button>\n", tdb->track);
         printf("</P>");
         }
+        // using jquery id= syntax to make sure that selector works even if trackname has a dot in it
+        jsInlineF("$('[class=\"buttonClear-%s\"]').click( function(ev) { \n"
+                    "$(ev.target).prevAll('input').val('*');\n"
+                    "$(ev.target).prevAll('select').val('%s');\n"
+                    "ev.preventDefault();\n"
+                  "});", tdb->track, FILTERTEXT_WILDCARD);
     }
 
 return count;
@@ -7062,6 +7090,9 @@ return list;
 void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix)
 /* If there is a labelFields for a bigBed, this routine is called to put up the label options. */
 {
+// composites can't label because they don't have an autoSql
+if (tdbIsComposite(tdb))
+    return;
 if (trackDbSettingClosestToHomeOn(tdb, "linkIdInName"))
     return;
 
@@ -7075,29 +7106,39 @@ char varName[1024];
 if ((labelList == NULL) || sameString(labelList->name, "none"))
     return;
 
-printf("<B>Label:</B> ");
 struct slPair *thisLabel = labelList;
-for(; thisLabel; thisLabel = thisLabel->next)
+if (thisLabel->next == NULL) // If there's only one option we either show the label or not.
     {
+    printf("<B>Show Label:</B> ");
     safef(varName, sizeof(varName), "%s.label.%s", prefix, thisLabel->name);
-    boolean isDefault = FALSE;
-    if (defaultLabelList == NULL)
-        isDefault = (thisLabel == labelList);
-    else if (sameString(defaultLabelList->name, "none"))
-        isDefault = FALSE;
-    else
-        isDefault = (slPairFind(defaultLabelList, thisLabel->name) != NULL);
-
-    boolean option = cartUsualBoolean(cart, varName, isDefault);
+    boolean option = cartUsualBoolean(cart, varName, TRUE);
     cgiMakeCheckBox(varName, option);
+    }
+else
+    {
+    printf("<B>Label:</B> ");
+    for(; thisLabel; thisLabel = thisLabel->next)
+        {
+        safef(varName, sizeof(varName), "%s.label.%s", prefix, thisLabel->name);
+        boolean isDefault = FALSE;
+        if (defaultLabelList == NULL)
+            isDefault = (thisLabel == labelList);
+        else if (sameString(defaultLabelList->name, "none"))
+            isDefault = FALSE;
+        else
+            isDefault = (slPairFind(defaultLabelList, thisLabel->name) != NULL);
 
-    // find comment for the column listed
-    struct asColumn *col = as->columnList;
-    unsigned num = ptToInt(thisLabel->val);
-    for(; col && num--; col = col->next)
-        ;
-    assert(col);
-    printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
+        boolean option = cartUsualBoolean(cart, varName, isDefault);
+        cgiMakeCheckBox(varName, option);
+
+        // find comment for the column listed
+        struct asColumn *col = as->columnList;
+        unsigned num = ptToInt(thisLabel->val);
+        for(; col && num--; col = col->next)
+            ;
+        assert(col);
+        printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
+        }
     }
 }
 

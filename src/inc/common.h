@@ -1633,4 +1633,7 @@ struct runTimes getTimesInSeconds(void);
 /* get the current clock time since epoch, process user CPU, and system CPU times, all in
  * seconds. */
 
+struct hash *loadSizes(char *sizesFile);
+/* load a sizes file */
+
 #endif /* COMMON_H */

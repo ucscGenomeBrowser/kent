@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 #include "hash.h"
-
+#include "sqlNum.h"
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -3893,4 +3893,17 @@ static char g15buffer[4096];
 sprintf(g15buffer, "%.15g", value);
 
 return cloneString(g15buffer);
+}
+
+struct hash *loadSizes(char *sizesFile)
+/* load a sizes file */
+{
+struct hash *sizes = hashNew(20);
+struct lineFile *lf = lineFileOpen(sizesFile, TRUE);
+char *cols[2];
+
+while (lineFileNextRowTab(lf, cols, ArraySize(cols)))
+    hashAddInt(sizes, cols[0], sqlUnsigned(cols[1]));
+lineFileClose(&lf);
+return sizes;
 }

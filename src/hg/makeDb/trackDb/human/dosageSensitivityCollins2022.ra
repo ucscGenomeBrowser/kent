@@ -8,7 +8,6 @@ itemRgb on
 compositeTrack on
 noParentConfig on
 html dosageSensitivityCollins2022
-pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Released Xxx. x, 202x"
 
     track pHaplo
     parent dosageSensitivity on

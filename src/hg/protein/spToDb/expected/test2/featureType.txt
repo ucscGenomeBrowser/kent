@@ -1,0 +1,26 @@
+1	Putative transcription factor 001R
+2	Uncharacterized protein 002L
+3	Helical
+4	Disordered
+5	Uncharacterized protein 002R
+6	Acidic residues
+7	Uncharacterized protein 003L
+8	Uncharacterized protein 3R
+9	Uncharacterized protein 004R
+10	Polar residues
+11	Uncharacterized protein 005L
+12	Uncharacterized protein 005R
+13	Putative KilA-N domain-containing protein 006L
+14	KilA-N
+15	Uncharacterized protein 006R
+16	Uncharacterized protein 007R
+17	Basic and acidic residues
+18	Uncharacterized protein 008L
+19	Putative helicase 009L
+20	Helicase ATP-binding
+21	Helicase C-terminal
+22	DEAH box
+23	Uncharacterized protein 009R
+24	Uncharacterized protein 010R
+25	Uncharacterized protein 011L
+26	Uncharacterized protein 011R

@@ -34,19 +34,63 @@ else
   IS_HGWDEV = no
 endif
 
+# for Darwin (Mac OSX), use static libs when they can be found
+ifeq ($(UNAME_S),Darwin)
+  ifneq ($(wildcard /opt/local/include/openssl/ssl.h),)
+    HG_INC += -I/opt/local/include
+  endif
+  ifneq ($(wildcard /opt/local/lib/libz.a),)
+    ZLIB = /opt/local/lib/libz.a
+  endif
+  ifneq ($(wildcard /opt/local/lib/libpng.a),)
+    PNGLIB = /opt/local/lib/libpng.a
+  endif
+  ifneq ($(wildcard /opt/local/lib/libfreetype.a),)
+    FREETYPELIBS = /opt/local/lib/libfreetype.a /opt/local/lib/libbz2.a /opt/local/lib/libbrotlidec.a /opt/local/lib/libbrotlicommon.a
+  endif
+  ifneq ($(wildcard /usr/local/opt/openssl@3/lib/libssl.a),)
+    SSLLIB = /usr/local/opt/openssl@3/lib/libssl.a
+  else
+    ifneq ($(wildcard /opt/local/libexec/openssl3/lib/libssl.a),)
+      SSLLIB = /opt/local/libexec/openssl3/lib/libssl.a
+    endif
+  endif
+  ifneq ($(wildcard /usr/local/opt/openssl@3/lib/libcrypto.a),)
+    CRYPTOLIB = /usr/local/opt/openssl@3/lib/libcrypto.a
+  else
+    ifneq ($(wildcard /opt/local/libexec/openssl3/lib/libcrypto.a),)
+      CRYPTOLIB = /opt/local/libexec/openssl3/lib/libcrypto.a
+    endif
+  endif
+  ifneq ($(wildcard /opt/local/lib/libiconv.a),)
+    ICONVLIB = /opt/local/lib/libiconv.a
+  endif
+  ifneq ($(wildcard /opt/homebrew/lib/libmysqlclient.a),)
+    MYSQLLIBS = /opt/homebrew/lib/libmysqlclient.a
+  endif
+endif
+
 # Skip freetype for conda build; not needed for utils, and the Mac build environment has
 # freetype installed but we don't want to use the system libraries because they can be
 # for a newer OSX version than the conda build target, and can be incompatible.
 ifneq (${CONDA_BUILD},1)
   FREETYPECFLAGS = $(shell freetype-config --cflags  2> /dev/null)
+  # Ubuntu does not have freetype-config anymore
+  ifeq (${FREETYPEFLAGS},)
+     FREETYPECFLAGS =  $(shell pkg-config freetype2 --cflags 2> /dev/null )
+  endif
 
-  # we use our static library on dev
+  # use the static library on OSX
   ifeq (${IS_HGWDEV},no)
     ifeq (${FREETYPELIBS},)
       ifeq ($(UNAME_S),Darwin)
         FREETYPELIBS =  $(shell freetype-config --libs --static 2> /dev/null )
       else
         FREETYPELIBS =  $(shell freetype-config --libs 2> /dev/null )
+        # Ubuntu does not have freetype-config anymore
+        ifeq (${FREETYPELIBS},)
+          FREETYPELIBS =  $(shell pkg-config freetype2 --libs 2> /dev/null )
+        endif
       endif
     endif
   endif
@@ -59,10 +103,6 @@ ifneq (${CONDA_BUILD},1)
   L += ${FREETYPELIBS}
 endif
 
-ifeq (${IS_HGWDEV},yes)
-  FULLWARN = yes
-endif
-
 ifeq (${HOSTNAME},cirm-01)
   FULLWARN = yes
 endif
@@ -71,14 +111,12 @@ ifeq (${PTHREADLIB},)
   PTHREADLIB=-lpthread
 endif
 
-# required extra library on Mac OSX
-ICONVLIB=
-
-# pthreads is required
 ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}
 else
-  ICONVLIB=-liconv
+  ifeq (${ICONVLIB},)
+    ICONVLIB=-liconv
+  endif
 endif
 
 # autodetect UCSC installation of hal:
@@ -116,29 +154,6 @@ ifeq (${USE_HIC},1)
     HG_DEFS+=-DUSE_HIC
 endif
 
-
-# libssl: disabled by default
-#ifneq (${SSL_DIR}, "/usr/include/openssl")
-  #ifneq ($(UNAME_S),Darwin)
-    #ifneq ($(wildcard ${SSL_DIR}),)
-      #L+=-L${SSL_DIR}/lib
-    #endif
-  #endif
-    #HG_INC+=-I${SSL_DIR}/include
-#endif
-
-# on hgwdev, using the static library with mysqllient.
-ifeq (${IS_HGWDEV},yes)
-   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
-   L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
-else
-   ifeq (${CONDA_BUILD},1)
-       L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
-   else
-       L+=-lssl -lcrypto -ldl
-   endif
-endif
-
 # autodetect where libm is installed
 ifeq (${MLIB},)
   MLIB=-lm
@@ -159,11 +174,6 @@ endif
 # autodetect where mysql includes and libraries are installed
 # do not need to do this during 'clean' target (this is very slow for 'clean')
 ifneq ($(MAKECMDGOALS),clean)
-  # on hgwdev, use the static library.
-  ifeq (${IS_HGWDEV},yes)
-    MYSQLINC=/usr/include/mysql
-    MYSQLLIBS=/usr/lib64/libmysqlclient.a /usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -ldl -lz
-  endif
 
   # set MYSQL include path
   ifeq (${MYSQLINC},)
@@ -204,9 +214,7 @@ endif
 
 # OK to add -lstdc++ to all MYSQLLIBS just in case it is
 #    MySQL version 5.6 libraries, but no 'librt' on Mac OSX
-ifeq (${IS_HGWDEV},yes)
-  MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib64/librt.a
-else
+ifeq (${IS_HGWDEV},no)
   ifeq ($(UNAME_S),Darwin)
     MYSQLLIBS += -lstdc++
   else
@@ -216,6 +224,36 @@ endif
 
 ifeq (${ZLIB},)
   ZLIB=-lz
+endif
+
+# on hgwdev, use the static libraries
+ifeq (${IS_HGWDEV},yes)
+   FULLWARN = yes
+   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
+   L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
+   PNGLIB=/usr/lib64/libpng.a
+   PNGINCL=-I/usr/include/libpng15
+   MYSQLINC=/usr/include/mysql
+   MYSQLLIBS=/usr/lib64/libmysqlclient.a /usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -ldl -lz
+   MYSQLLIBS += /usr/lib/gcc/x86_64-redhat-linux/4.8.5/libstdc++.a /usr/lib64/librt.a
+else
+   ifeq (${CONDA_BUILD},1)
+       L+=${PREFIX}/lib/libssl.a ${PREFIX}/lib/libcrypto.a -ldl
+   else
+       ifneq (${SSLLIB},)
+          L+=${SSLLIB}
+       else
+          L+=-lssl
+       endif
+       ifneq (${CRYPTOLIB},)
+          L+=${CRYPTOLIB}
+       else
+          L+=-lcrypto -ldl
+       endif
+       ifeq (${DLLIB},)
+          L+=-ldl
+       endif
+   endif
 endif
 
 #global external libraries

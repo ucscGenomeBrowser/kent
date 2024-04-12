@@ -3066,7 +3066,7 @@ static boolean bamRecognizer(struct customFactory *fac,	struct customPp *cpp, ch
 			     struct customTrack *track)
 /* Return TRUE if looks like we're handling a bam track */
 {
-return (sameType(type, "bam"));
+return (sameType(type, "bam") || sameType(type, "cram"));
 }
 
 static struct customTrack *bamLoader(struct customFactory *fac, struct hash *chromHash,
@@ -4261,7 +4261,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	{
 	if (ctDb == NULL)
 	    ctDb = genomeDb;
-	else if (differentString(ctDb, genomeDb))
+	else if (differentString(trackHubSkipHubName(ctDb), trackHubSkipHubName(genomeDb)))
 	    errAbort("can't load %s data into %s custom tracks",
 		     ctDb, genomeDb);
 	}
@@ -4331,8 +4331,16 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		    if (startsWith(LF_BOGUS_FILE_PREFIX, lf->fileName) ||
 			sameString(CT_NO_FILE_NAME, lf->fileName))
 			fileName = "file";
-		    errAbort("Unrecognized format line %d of %s:\n\t%s (note: chrom names are case sensitive, e.g.: correct: 'chr1', incorrect: 'Chr1', incorrect: '1')",
-			lf->lineIx, fileName, emptyForNull(line));
+		    errAbort("Unrecognized format line %d of %s: "
+			     "If this is a binary file, and the file "
+			     "does not end with one of the common extensions (.bigBed, .bb, .bam, .bw, "
+			     ".cram, .vcf.gz, etc) then you cannot supply the URL alone but also need to "
+			     "specify the file type via a \"track\" line that includes at least the URL and "
+			     "the type and possibly other settings, e.g. color. An example minimal track "
+			     "line is \"track bigDataUrl=<url> type=hic\", which would load a .hic file. "
+			     "For a list of supported file types and more example track lines and all "
+			     "possible track line settings, see the top of the page.",
+			lf->lineIx, fileName);
 		    }
 		}
 	    else if (bigDataUrl)

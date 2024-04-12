@@ -1,0 +1,16 @@
+1	EMBL
+2	RefSeq
+3	SwissPalm
+4	GeneID
+5	KEGG
+6	Proteomes
+7	GO
+8	InterPro
+9	Pfam
+10	SMR
+11	OrthoDB
+12	PROSITE
+13	Gene3D
+14	PANTHER
+15	SMART
+16	SUPFAM

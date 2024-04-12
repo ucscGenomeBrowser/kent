@@ -150,7 +150,7 @@ slSort(&dtList, dbTableCmp);
 return dtList;
 }
 
-static void showLinkedTables(struct joiner *joiner, struct dbTable *inList,
+static void showLinkedTables(char *mainDb, char *mainTable, struct joiner *joiner, struct dbTable *inList,
 	char *varPrefix, char *buttonName, char *buttonText)
 /* Print section with list of linked tables and check boxes to turn them
  * on. */
@@ -196,6 +196,11 @@ for (in = inList; in != NULL; in = in->next)
     }
 slSort(&outList, dbTableCmp);
 
+// if the track is knownGeneV32, activate some special filters
+boolean doFilterDbKg = FALSE;
+if (startsWith("knownGeneV", mainTable))
+    doFilterDbKg = TRUE;
+
 /* Print html. */
 if (outList != NULL)
     {
@@ -203,6 +208,17 @@ if (outList != NULL)
     hTableStart();
     for (out = outList; out != NULL; out = out->next)
 	{
+        if (doFilterDbKg) 
+            {
+            // if user selected the knownGeneV32 track...
+            // - do not show the current hg38 knownGene tables
+            if (sameOk(out->db, mainDb))
+                continue;
+            // - only show the tables in knownGeneV32, not knownGeneV35
+            else if (startsWith(out->db, "knownGeneV") && !sameOk(out->db, mainTable))
+                continue;
+            }
+
 	struct sqlConnection *conn = hAllocConn(out->db);
 	struct asObject *asObj = asForTable(conn, out->table);
 	char *var = dbTableVar(varPrefix, out->db, out->table);
@@ -466,7 +482,7 @@ dtList = extraTableList(selFieldLinkedTablePrefix());
 showLinkedFields(dtList);
 dt = dbTableNew(db, table);
 slAddHead(&dtList, dt);
-showLinkedTables(joiner, dtList, selFieldLinkedTablePrefix(),
+showLinkedTables(db, table, joiner, dtList, selFieldLinkedTablePrefix(),
 	hgtaDoSelectFieldsMore, "allow selection from checked tables");
 
 /* clean up. */
@@ -1236,7 +1252,7 @@ dtList = extraTableList(filterLinkedTablePrefix);
 showLinkedFilters(dtList);
 dt = dbTableNew(db, table);
 slAddHead(&dtList, dt);
-showLinkedTables(joiner, dtList, filterLinkedTablePrefix,
+showLinkedTables(db, table, joiner, dtList, filterLinkedTablePrefix,
 	hgtaDoFilterMore, "allow filtering using fields in checked tables");
 
 hPrintf("</FORM>\n");

@@ -28,7 +28,7 @@
 #include "bigBedLabel.h"
 #include "variation.h"
 #include "chromAlias.h"
-#include "instaPort.h"
+#include "quickLift.h"
 #include "hgConfig.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
@@ -532,10 +532,10 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 struct bigBedInterval *bb, *bbList; 
-char *instaFile = cloneString(trackDbSetting(track->tdb, "instaPortUrl"));
+char *quickLiftFile = cloneString(trackDbSetting(track->tdb, "quickLiftUrl"));
 struct hash *chainHash = NULL;
-if (instaFile)
-    bbList = instaIntervals(instaFile, bbi, chromName, winStart, winEnd, &chainHash);
+if (quickLiftFile)
+    bbList = quickLiftIntervals(quickLiftFile, bbi, chromName, winStart, winEnd, &chainHash);
 else
     bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
 
@@ -616,9 +616,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         if (bigBedFilterInterval(bbi, bedRow, filters))
             {
-            if (instaFile)
+            if (quickLiftFile)
                 {
-                if ((bed = instaBed(bbi, chainHash, bb)) != NULL)
+                if ((bed = quickLiftBed(bbi, chainHash, bb)) != NULL)
                     {
                     bedCopy = cloneBed(bed);
                     lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
@@ -808,6 +808,7 @@ struct linkedFeatures *lf = (struct linkedFeatures *)item;
 return lf->label;
 }
 
+#ifdef NOTNOW
 static int getFieldCount(struct track *track)
 // return the definedFieldCount of the passed track with is assumed to be a bigBed
 {
@@ -824,6 +825,7 @@ if (bbi)
 
 return 3; // if we can't get the bbi, use the minimum
 }
+#endif
 
 void bigBedMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[])
@@ -835,8 +837,9 @@ int ii;
 for(ii=0; ii < wordCount; ii++)
     newWords[ii] = words[ii];
 
+#ifdef NOTNOW
 // let's help the user out and get the definedFieldCount if they didn't specify it on the type line
-if ((wordCount == 1) && sameString(words[0], "bigBed")) 
+if (!tdbIsSuper(track->tdb) && (track->tdb->subtracks == NULL) && (wordCount == 1) && sameString(words[0], "bigBed"))
     {
     int fieldCount = getFieldCount(track);
     if (fieldCount > 3) 
@@ -847,5 +850,6 @@ if ((wordCount == 1) && sameString(words[0], "bigBed"))
         wordCount = 2;
         }
     }
+#endif
 complexBedMethods(track, tdb, TRUE, wordCount, newWords);
 }

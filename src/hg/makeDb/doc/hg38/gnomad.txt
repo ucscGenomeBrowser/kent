@@ -257,3 +257,49 @@ do
     tName="${tbl^}"
     hgLoadSqlTab hg38 gnomad${tName}V4 ~/kent/src/hg/lib/bbiChroms.sql genomes.txt
 done
+
+
+##############################################################################
+# Add cancer/non-cancer filter to gnomAD v3.1.1  - Feb 16, 2024 - ChrisL - DONE
+##############################################################################
+# see /hive/data/inside/gnomAD/v3.1.1/2024-02-12/README
+# for the steps
+##############################################################################
+
+##############################################################################
+# Update transcript contraint scores for gnomAD v4  - Mar 1, 2024 - ChrisL - DONE
+##############################################################################
+# The data is not the same as the hg19 version, many less fields, but we mostly threw a lot of them
+# away before anyways. Also this file had both ENST and NM/XM transcripts
+
+# Here are the fields used in the previous version:
+zcat ../../gnomAD.2/constraint/gnomad.v2.1.1.lof_metrics.by_transcript.txt.bgz | head -1 | tawk '{print $76,$77,$78,$65,$66,$1,$2,$4,$5,$6,$34,$13,$14,$15,$33,$18,$21,$22,$25,$26,$27,$28,$29,$30,$31}'
+chromosome  start_position  end_position    gene_id transcript_level    gene    transcript  obs_mis exp_mis oe_mis  mis_z   obs_syn exp_syn oe_syn  syn_z   obs_lof exp_lof pLI oe_lof  oe_syn_lower    oe_syn_upper    oe_mis_lower    oe_mis_upper    oe_lof_lower    oe_lof_upper
+# Right off the bat we will be missing the chrom,start and end
+
+# Get the transcripts to get the coordinates and exon-intron boundaries
+hgsql -Ne "select * from wgEncodeGencodeCompV39" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout | sed -Ee 's/\.[0-9]+//' \
+    | sort -k4 > hg38.gencodeCompV39.bed12
+hgsql -Ne "select * from ncbiRefSeq" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout \
+    | sort -k4 > hg38.refSeq.bed12
+cat hg38.gencodeCompV39.bed12 hg38.refSeq.bed12 | sort -k4 > transcripts.coords
+
+f=gnomad.v4.0.constraint_metrics.tsv
+# I don't think this command will work just copying and pasting like the above will
+tail -n +2 $f \
+    | tawk '{print $1,$2,$24,$25,$27,$32,$37,$38,$40,$45,$12,$13,$17,$15,$42,$43,$29,$30,$20,$21}' \
+    | sort -k2 | join -t $'\t' -1 4 -2 2 transcripts.coords - \
+    | tawk '{for (i=1; i<=12; i++) {printf "%s\t", $i} printf "%s\t%s\t%s\t\t\t", $2, $3, $4; for (i=13; i <= NF; i++) {printf "%s", $i; if (i != NF) {printf "\t"}}; printf "\n"} ' \
+    | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=true
+bedSort pliByTranscript.tab pliByTranscript.tab
+bedSort missenseByTranscript.tab missenseByTranscript.tab
+
+# Copy the old autosql file:
+cp ../../gnomAD.2/constraint/{missense,pli}Metrics.as .
+
+# Turn into a bigBed and link
+sizes=/hive/data/genomes/hg38/chrom.sizes
+bedToBigBed -type=bed12+6 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByTranscript.tab $sizes pliByTranscript.bb
+bedToBigBed -type=bed12+5 -as=missenseMetrics.as -tab -extraIndex=name,geneName missenseByTranscript.tab $sizes missenseByTranscript.bb

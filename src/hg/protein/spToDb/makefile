@@ -11,7 +11,7 @@ spToDb: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/spToDb $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/spToDb${EXE}
 
-test: test1 
+test: test1 test2
 %:	input/%
 	${MKDIR} output/$@
 	${BINDIR}/spToDb input/$@ output/$@

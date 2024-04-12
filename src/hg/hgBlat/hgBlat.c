@@ -582,7 +582,7 @@ if(feelingLucky)
        results. */
     else 
 	{
-	cartWebStart(cart, database, "%s (%s) BLAT Results", trackHubSkipHubName(organism), database);
+	cartWebStart(cart, trackHubSkipHubName(database), "%s (%s) BLAT Results", trackHubSkipHubName(organism), trackHubSkipHubName(database));
 	showAliPlaces(pslName, faName, customText, database, qType, tType, organism, FALSE);
 	cartWebEnd();
 	}
@@ -807,7 +807,12 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    freez(&nameClone);
 	    }
 	}
-    hashAddUnique(hash, seq->name, hash);
+    if (hashLookup(hash, seq->name) != NULL)
+        errAbort("The sequence identifier '%s' is duplicated in the input. "
+                "FASTA sequence identifiers should be unique and they cannot contain spaces. "
+                "You can make them unique by adding a suffix such as _1, _2, ... to the duplicated names, e.g. '%s_1'.", 
+                seq->name, seq->name);
+    hashAdd(hash, seq->name, hash);
     }
 freeHash(&hash);
 }
@@ -1478,7 +1483,7 @@ boolean isJson= sameWordOk(output, "json");
 boolean isPslRaw= sameWordOk(output, "pslRaw");
 
 if (!feelingLucky && !allGenomes && !isJson && !isPslRaw)
-    cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), db);
+    cartWebStart(cart, db, "%s (%s) BLAT Results",  trackHubSkipHubName(organism), trackHubSkipHubName(db));
 
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
@@ -1687,7 +1692,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                 "or, if you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
                 "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.<br>"
                 "For primers, you can use our tool <a href='hgPcr?%s=%s'>In-silico PCR</a>. In-silico PCR searches the entire genome or a set of transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
-                "Contact us if none of these options solve the problem. ",
+                "Contact us if none of these options solve the problem: genome@soe.ucsc.edu",
 		seq->name, oneSize, minSuggested, cartSessionVarName(), cartSessionId(cart), cartSessionVarName(), cartSessionId(cart));
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.

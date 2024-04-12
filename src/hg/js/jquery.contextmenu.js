@@ -206,7 +206,9 @@
             if (typeof showMouseovers !== 'undefined' && showMouseovers) {
                 console.log("right click open, disabling mouseovers");
                 clearTimeout(mouseoverTimer);
-                mousemoveController.abort();
+                if (mousemoveController) {
+                    mousemoveController.abort();
+                }
                 hideMouseoverText(mouseoverContainer);
                 canShowNewMouseover = false;
             }
@@ -274,7 +276,6 @@
 			cmenu.shown = false;
             // re-enable tooltips on contextmenu close
             if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-                console.log("contextmenu close, re-enabling tooltips");
                 canShowNewMouseover = true;
             }
 		}

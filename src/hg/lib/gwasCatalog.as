@@ -20,7 +20,7 @@ table gwasCatalog
     string pValue;     "p-Value"
     string pValueDesc; "p-Value Description"
     string orOrBeta;   "Odds ratio or beta"
-    string ci95;       "95% Confidence Interval"
+    string ci95;       "95 Confidence Interval"
     string platform;   "Platform and [SNPs passing QC]"
     enum(Y,N) cnv;     "Y if Copy Number Variant"
     )

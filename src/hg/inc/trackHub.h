@@ -70,6 +70,8 @@ struct trackHubGenome
     struct trackHub *trackHub; /* associated track hub */
     unsigned orderKey;   /* the orderKey for changing the order from the order in the file */
     char *chromAuthority;     /* what authority should be used to display sequence names */
+    char *quickLiftChain;     /* if this genome is being quickLifted, this will have the bigChain name to lift with. */
+    char *quickLiftDb;        /* if this genome is being quickLifted, this will have the source db name */
     };
 
 void trackHubClose(struct trackHub **pHub);
@@ -78,6 +80,9 @@ void trackHubClose(struct trackHub **pHub);
 struct trackHub *trackHubOpen(char *url, char *hubName);
 /* Open up a track hub from url.  Reads and parses hub.ra and the genomesFile. 
  * The hubName is generally just the asciified ID number. */
+
+struct trackHub *grabHashedHub(char *hubName);
+/* see if a trackHub with this name is in the cache */
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName);
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no
@@ -227,5 +232,8 @@ boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **
 
 struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
 /* Get the genome structure for an undecorated genome name. */
+
+char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy);
+/* Build a track hub using trackDb and the cart. */
 #endif /* TRACKHUB_H */
 

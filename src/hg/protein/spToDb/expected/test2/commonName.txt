@@ -1,0 +1,6 @@
+654924	isolate Goorha
+654924	FV-3
+345201	IIV-3
+345201	Mosquito iridescent virus
+176652	IIV-6
+176652	Chilo iridescent virus

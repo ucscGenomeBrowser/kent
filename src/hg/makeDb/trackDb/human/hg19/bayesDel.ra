@@ -1,0 +1,116 @@
+track bayesDel
+parent predictionScoresSuper
+type bigWig
+longLabel BayesDel - deleteriousness meta-score
+compositeTrack on
+allButtonPair on
+group phenDis
+shortLabel BayesDel
+visibility full
+html predictionScoresSuper
+pennantIcon New red ../goldenPath/newsarch.html#030724 "Released, Mar. 7, 2024"
+
+        track maxAFmutA
+        type bigWig -1.29334 0.75731
+        longLabel BayesDel v1 Score (MaxAF): Mutation is A
+        color 140, 202, 203
+        parent bayesDel on
+        bigDataUrl /gbdb/hg19/bayesDel/MaxAFBayesDelMutA.bw
+        #yLineOnOff on
+        maxHeightPixels 128:20:8
+        windowingFunction mean+whiskers
+        shortLabel MaxAF Mutation: A
+        html predictionScoresSuper
+        visibility full
+        
+        track MaxAFmutC
+        type bigWig -1.29334 0.75731
+        longLabel BayesDel v1 Score (MaxAF): Mutation is C
+        color 120, 193, 194
+        parent bayesDel on
+        bigDataUrl /gbdb/hg19/bayesDel/MaxAFBayesDelMutC.bw
+        #yLineOnOff on
+        maxHeightPixels 128:20:8
+        windowingFunction mean+whiskers
+        shortLabel MaxAF Mutation: C
+        html predictionScoresSuper
+        visibility full
+        
+        track MaxAFmutG
+        type bigWig -1.29334 0.75731
+        longLabel BayesDel v1 Score (MaxAF): Mutation is G
+        color 96, 182, 183
+        parent bayesDel on
+        bigDataUrl /gbdb/hg19/bayesDel/MaxAFBayesDelMutG.bw
+        #yLineOnOff on
+        maxHeightPixels 128:20:8
+        windowingFunction mean+whiskers
+        shortLabel MaxAF Mutation: G
+        html predictionScoresSuper
+        visibility full
+        
+        track MaxAFmutT
+        type bigWig -1.29334 0.75731
+        longLabel BayesDel v1 Score (MaxAF): Mutation is T
+        color 68, 169, 170
+        parent bayesDel on
+        bigDataUrl /gbdb/hg19/bayesDel/MaxAFBayesDelMutT.bw
+        #yLineOnOff on
+        maxHeightPixels 128:20:8
+        windowingFunction mean+whiskers
+        shortLabel MaxAF Mutation: T
+        html predictionScoresSuper
+        visibility full
+        
+        track noAFmutA
+        type bigWig -1.29334 0.75731
+        longLabel BayesDel v1 Score (without MaxAF): Mutation is A
+        color 240, 191, 112
+        parent bayesDel on
+        bigDataUrl /gbdb/hg19/bayesDel/NoAFBayesDelMutA.bw
+        #yLineOnOff on
+        maxHeightPixels 128:20:8
+        windowingFunction mean+whiskers
+        shortLabel No MaxAF Mutation: A
+        html predictionScoresSuper
+        visibility hide
+        
+        track noAFmutC
+        type bigWig -1.29334 0.75731
+        longLabel BayesDel v1 Score (without MaxAF): Mutation is C
+        color 237, 180, 87
+        parent bayesDel on
+        bigDataUrl /gbdb/hg19/bayesDel/NoAFBayesDelMutC.bw
+        #yLineOnOff on
+        maxHeightPixels 128:20:8
+        windowingFunction mean+whiskers
+        shortLabel No MaxAF Mutation: C
+        html predictionScoresSuper
+        visibility hide
+        
+        track noAFmutG
+        type bigWig -1.29334 0.75731
+        longLabel BayesDel v1 Score (without MaxAF): Mutation is G
+        color 234, 167, 57
+        parent bayesDel on
+        bigDataUrl /gbdb/hg19/bayesDel/NoAFBayesDelMutG.bw
+        #yLineOnOff on
+        visibility hide
+        maxHeightPixels 128:20:8
+        windowingFunction mean+whiskers
+        html predictionScoresSuper
+        shortLabel No MaxAF Mutation: G
+        
+        track noAFmutT
+        type bigWig -1.29334 0.75731
+        longLabel BayesDel v1 Score (without MaxAF): Mutation is T
+        color 230, 152, 22
+        parent bayesDel on
+        bigDataUrl /gbdb/hg19/bayesDel/NoAFBayesDelMutT.bw
+        #yLineOnOff on
+        maxHeightPixels 128:20:8
+        windowingFunction mean+whiskers
+        shortLabel No MaxAF Mutation: T
+        html predictionScoresSuper
+        visibility hide
+        

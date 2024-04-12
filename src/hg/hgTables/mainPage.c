@@ -313,8 +313,23 @@ struct trackDb *selTdb = NULL;
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
-    if (track != NULL)
-	tdb = findTdbForTable(database,track,name->name, ctLookupName);
+    if (curTrack != NULL && isHubTrack(curTrack->track))
+        {
+        if (sameString(curTrack->track, name->name))
+            tdb = curTrack;
+        else if (curTrack->subtracks != NULL)
+            {
+            // maybe a subtrack is what we're looking for
+            struct trackDb *sub = subTdbFind(curTrack, name->name);
+            if (sub)
+                tdb = sub;
+            }
+        }
+    else
+        {
+        if (track != NULL)
+            tdb = findTdbForTable(database,track,name->name, ctLookupName);
+        }
     hPrintf("<OPTION VALUE=\"%s\"", name->name);
     // Disable options for related tables that are noGenome -- if a non-positional table
     // is selected then we output its entire contents.

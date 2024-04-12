@@ -3408,4 +3408,29 @@ TMPDIR=/scratch/tmp
     # verify convert functions on genome-test panTro2 to panTro3
     # and file is present on htdocs-hgdownload/goldenPath/panTro2/liftOver
 
-############################################################################
+##############################################################################
+# construct liftOver to panTro5 (DONE - 2024-02-26 - Hiram) 
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro2/bed/blat.panTro5.2024-02-26
+    cd /hive/data/genomes/panTro2/bed/blat.panTro5.2024-02-26
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/panTro2/panTro2.2bit \
+        -targetSizes=/hive/data/genomes/panTro2/chrom.sizes \
+        -query2Bit=/hive/data/genomes/panTro5/panTro5.2bit \
+        -querySizes=/hive/data/genomes/panTro5/chrom.sizes \
+        -ooc=/hive/data/genomes/panTro2/11.ooc \
+         panTro2 panTro5
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/panTro2/panTro2.2bit \
+        -targetSizes=/hive/data/genomes/panTro2/chrom.sizes \
+        -query2Bit=/hive/data/genomes/panTro5/panTro5.2bit \
+        -querySizes=/hive/data/genomes/panTro5/chrom.sizes \
+        -ooc=/hive/data/genomes/panTro2/11.ooc \
+         panTro2 panTro5) > doLiftOverToPanTro5.log 2>&1
+    # real    1599m46.101s
+
+    # see if the liftOver menus function in the browser from panTro2 to panTro5
+
+##############################################################################

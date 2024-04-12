@@ -154,12 +154,27 @@ img {
       </p>
       <p>
         <div style='float:left; margin-right: 10px;'>
-          <iframe width="267" height="150" src="https://www.youtube.com/embed/humQ1NyZOUM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        <!--#if expr="${SERVER_NAME} = /-china/" -->
+            <a href='../../../videos/humQ1NyZOUM.mp4'>
+            <img style="width:267px; height:250px" src=../../images/videoIcon.png></a>
+        <!--#else -->
+        <iframe width="267" height="150" src="https://www.youtube.com/embed/humQ1NyZOUM?rel=0" 
+        frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen></iframe> </p>
+        <p> Visit our <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+        target="_blank">YouTube channel</a> for more videos.
+        <!--#endif -->
         </div>
+
         The <a href='https://www.cdc.gov/amd/training/covid-19-gen-epi-toolkit.html'
                target=_blank>CDC COVID-19 Genomic Epidemiology Toolkit</a>
         now includes a training module for UShER!
+        <!--#if expr="$SERVER_NAME = /-china/" -->
+        Module 3.3 includes a <a href='../videos/humQ1NyZOUM.mp4' target=_blank>video</a>,
+        <!--#else -->
         Module 3.3 includes a <a href='https://youtu.be/humQ1NyZOUM' target=_blank>video</a>,
+        <!--#endif -->
         slides (<a href='https://www.cdc.gov/amd/pdf/slidesets/ToolkitModule_3.3-508C.pdf'
                    target=_blank>PDF</a>),
         and links to more resources.

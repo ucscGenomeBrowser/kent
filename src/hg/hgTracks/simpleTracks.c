@@ -183,7 +183,6 @@ boolean doPliColors = FALSE;
 static boolean scafColorsMade = FALSE;
 
 int maxItemsInFullTrack = 1000;  /* Maximum number of items displayed in full */
-int maxItemsPossible = 10000;   /* Maximum possible value for maxItems */
 int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 
 /* These variables persist from one incarnation of this program to the
@@ -813,6 +812,15 @@ return tg->lineHeight;
 int maximumTrackItems(struct track *tg)
 /* Return the maximum number of items allowed in track. */
 {
+static boolean set = FALSE;
+static unsigned maxItemsPossible = 0;
+
+if (!set)
+    {
+    char *maxItemsPossibleStr = cfgOptionDefault("maxItemsPossible", "100000");
+    maxItemsPossible = sqlUnsigned(maxItemsPossibleStr);
+    }
+
 unsigned int maxItems = trackDbFloatSettingOrDefault(tg->tdb, "maxItems", maxItemsInFullTrack);
 
 if (maxItems > maxItemsPossible)
@@ -2845,6 +2853,7 @@ while (exon != NULL)
 /* Now sort it. */
 slSort(&exonList, exonSlRefCmp);
 
+
 numExons = slCount(exonList);
 struct genePred *gp = lf->original;
 boolean revStrand = (lf->orientation == -1);
@@ -2874,7 +2883,7 @@ for (ref = exonList; TRUE; )
 	e = exon->start;
 	}
     // skip exons and introns that are completely outside the window
-    if (!(s > winEnd) || (e < winStart))
+    if (s <= winEnd && e >= winStart)
 	{
 	int sClp = (s < winStart) ? winStart : s;
 	int eClp = (e > winEnd)   ? winEnd   : e;
@@ -2884,7 +2893,7 @@ for (ref = exonList; TRUE; )
 
         // skip regions entirely outside available picture
         // (accounts for space taken by exon arrows buttons)
-	if (!(sx > picEnd) || (ex < picStart))
+	if (sx <= picEnd && ex >= picStart)
 	    {
 	    // clip it to avail pic
 	    sx = (sx < picStart) ? picStart : sx;
@@ -2922,7 +2931,7 @@ for (ref = exonList; TRUE; )
 
             // construct a string that tells the user about the codon frame situation of this exon
             char *frameText = "";
-            if (gp->exonFrames && isExon)
+            if ((gp != NULL) && gp->exonFrames && isExon)
                 {
                 // start/end-phases are in the direction of transcription:
                 // if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
@@ -2964,23 +2973,74 @@ for (ref = exonList; TRUE; )
                     }
                 }
 
-            if (!isEmpty(existingText))
-                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d%s", 
-                        existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
-            else
-                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d%s", 
-                        strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
-
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
-                // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
-                // prefer a lf->mouseOver over the itemName
-                char *oldMouseOver = lf->mouseOver;
-                lf->mouseOver = NULL;
-		tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
-		    sItem, eItem, sx, y, w, heightPer);
-                // and restore the mouseOver
-                lf->mouseOver = oldMouseOver;
+                // draw mapBoxes for the codons if we are zoomed in far enough
+                struct simpleFeature *codon;
+                struct dyString *codonDy = dyStringNew(0);
+                int codonS, codonE;
+                if (isExon && lf->codons && zoomedToCdsColorLevel)
+                    {
+                    for (codon = lf->codons; codon != NULL; codon = codon->next)
+                        {
+                        codonS = codon->start; codonE = codon->end;
+                        if (codonS <= winEnd && codonE >= winStart)
+                            {
+                            int codonSClp = (codonS < winStart) ? winStart : codonS;
+                            int codonEClp = (codonE > winEnd)   ? winEnd   : codonE;
+
+                            int codonsx = round((codonSClp - winStart)*scale) + insideX;
+                            int codonex = round((codonEClp - winStart)*scale) + insideX;
+
+                            // skip regions entirely outside available picture
+                            // (accounts for space taken by exon arrows buttons)
+                            if (codonsx <= picEnd && codonex >= picStart)
+                                {
+                                // clip it to avail pic
+                                codonsx = (codonsx < picStart) ? picStart : codonsx;
+                                codonex = (codonex > picEnd)   ? picEnd   : codonex;
+
+                                int w = codonex - codonsx;
+                                if (w > 0)
+                                    {
+                                    // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
+                                    // prefer a lf->mouseOver over the itemName
+                                    char *oldMouseOver = lf->mouseOver;
+                                    lf->mouseOver = NULL;
+                                    dyStringClear(codonDy);
+                                    if (!isEmpty(existingText))
+                                        dyStringPrintf(codonDy, "%s, ", existingText);
+                                    int codonHgvsIx = (codon->codonIndex - 1) * 3;
+                                    if (codonHgvsIx >= 0)
+                                        dyStringPrintf(codonDy, "c.%d-%d, ", codonHgvsIx + 1, codonHgvsIx + 3);
+                                    dyStringPrintf(codonDy, "strand %c, %s %d of %d%s",
+                                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
+                                    tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
+                                            sItem, eItem, codonsx, y, w, heightPer);
+                                    // and restore the mouseOver
+                                    lf->mouseOver = oldMouseOver;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                else
+                    {
+                    // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
+                    // prefer a lf->mouseOver over the itemName
+                    if (!isEmpty(existingText))
+                        safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d%s",
+                                existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
+                    else
+                        safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d%s",
+                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
+                    char *oldMouseOver = lf->mouseOver;
+                    lf->mouseOver = NULL;
+                    tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
+                        sItem, eItem, sx, y, w, heightPer);
+                    // and restore the mouseOver
+                    lf->mouseOver = oldMouseOver;
+                    }
 
 		picStart = ex;  // prevent pileups. is this right? add 1? does it work?
 		}
@@ -3004,6 +3064,7 @@ for (ref = exonList; TRUE; )
 	break;
 
     }
+
 slFreeList(&exonList);
 }
 
@@ -4988,6 +5049,7 @@ if (autoScale == NULL)
 char *windowingFunction = cartOptionalStringClosestToHome(cart, tdb, parentLevel, WINDOWINGFUNCTION);
 if (windowingFunction == NULL)
     wigCart->windowingFunction = wiggleWindowingMean;
+wigCart->alwaysZero = TRUE;
 
 if (tg->summary)
     summaryToPixels(tg->summary, pre);

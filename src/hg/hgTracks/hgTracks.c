@@ -82,6 +82,7 @@
 #include "decorator.h"
 #include "decoratorUi.h"
 #include "mouseOver.h"
+#include "exportedDataHubs.h"
 
 //#include "bed3Sources.h"
 
@@ -6494,7 +6495,7 @@ else if (sameString(type, "encodePeak"))
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
-else if (sameString(type, "bam"))
+else if (sameString(type, "bam") || sameString(type, "cram"))
     {
     tg = trackFromTrackDb(tdb);
     tg->customPt = ct;
@@ -8403,7 +8404,7 @@ static void printSearchHelpLink()
 /* print the little search help link next to the go button */
 {
 char *url = cfgOptionDefault("searchHelpUrl","../goldenPath/help/query.html");
-char *label = cfgOptionDefault("searchHelpLabel", "examples");
+char *label = cfgOptionDefault("searchHelpLabel", "Examples");
 if (!url || isEmpty(url))
     return;
 
@@ -9000,7 +9001,7 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
         freezeName = "Unknown";
-    hPrintf("<span style='font-size:large;'><B>");
+    hPrintf("<span id='assemblyName' style='font-size:large;'><B>");
 
     // for these assemblies, we do not display the year, to save space and reduce clutter
     // Their names must include a "(" character
@@ -9036,6 +9037,9 @@ if (!hideControls)
 	    }
 	}
     hPrintf("</B></SPAN>");
+
+    //hPrintf("<span target=_blank title='Show details about this assembly' id='gatewayLink'>"
+            //"<a href='hgGateway?hgsid=%s'>Assembly Info</a></span>", cartSessionId(cart));
 
     printDatabaseInfoHtml(database);
 
@@ -9436,6 +9440,8 @@ if (!hideControls)
 	    cg->rowOpen = TRUE;
             if (group->errMessage)
                 hPrintf("<th align=\"left\" colspan=%d class='redToggleBar'>",MAX_CONTROL_COLUMNS);
+            else if (startsWith("Quicklift", group->label))
+                hPrintf("<th align=\"left\" colspan=%d class='greenToggleBar'>",MAX_CONTROL_COLUMNS);
             else
                 hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
@@ -9464,6 +9470,10 @@ if (!hideControls)
             hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
 		{
+                struct trackHub *hub = grabHashedHub(group->name);
+                if ((hub != NULL) && (hub->descriptionUrl != NULL))
+                    hPrintf("<a href='%s' style='color:#FFF' target=_blank>More Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
+
 		safef(idText, sizeof idText, "%s_disconn", group->name);
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
                     " type=\"button\" value=\"disconnect\">\n", idText);
@@ -9626,6 +9636,9 @@ puts("</FORM>");
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showMouseovers", FALSE))
     jsInline("var showMouseovers = true;\n");
+
+if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+    jsInline("var doHgcInPopUp = true;\n");
 
 // TODO GALT nothing to do here.
 pruneRedundantCartVis(trackList);
@@ -10505,6 +10518,8 @@ if (gotExtTools)
     printExtMenuData(chromName);
 if (recTrackSetsEnabled())
     printRecTrackSets();
+if (exportedDataHubsEnabled())
+    printExportedDataHubs(database);
 setupTimeWarning();
 }
 
@@ -10813,23 +10828,20 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
+static void chromSizesDownloadLinks(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
+puts("<p>");
 if (! trackHubDatabase(database) || hubConnectIsCurated(trackHubSkipHubName(database)))
     {
     char *db = trackHubSkipHubName(database);
-    cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    puts("Download as file:");
-    cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
+    puts("Download the table below as a text file: ");
     printf("<a href='http%s://%s/goldenPath/%s/bigZips/%s.chrom.sizes' target=_blank>%s.chrom.sizes</a>",
            cgiAppendSForHttps(), hDownloadsServer(), db, db, db);
-    cgiTableFieldEnd();
+    puts("&nbsp;&nbsp;");
+
     if (hasAlias)
 	{
-	cgiSimpleTableFieldStart();
 	/* see if this database has the chromAlias.txt download file */
 	char aliasFile[1024];
         safef(aliasFile, sizeof aliasFile, "http%s://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", cgiAppendSForHttps(), hDownloadsServer(), db, db);
@@ -10841,17 +10853,11 @@ if (! trackHubDatabase(database) || hubConnectIsCurated(trackHubSkipHubName(data
 	    }
 	else
 	    puts("&nbsp");
-	cgiTableFieldEnd();
 	}
-    cgiTableRowEnd();
     }
 else if (hubAliasFile)
     {
-    cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    puts("Download as file:");
-    cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
+    puts("Download the table below as a text file: ");
     if (chromSizesFile)
 	{
         printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</a>", chromSizesFile, trackHubSkipHubName(database));
@@ -10859,8 +10865,6 @@ else if (hubAliasFile)
 	}
     else
         puts("&nbsp");
-    cgiTableFieldEnd();
-    cgiSimpleTableFieldStart();
     char *aliasUrl = cloneString(hubAliasFile);
     /* this URL reference needs to be a text file to work as a click in the
      *    html page.  Both files chromAlias.bb and chromAlias.txt exist.
@@ -10868,9 +10872,8 @@ else if (hubAliasFile)
     if (endsWith(hubAliasFile, "chromAlias.bb"))
        aliasUrl = replaceChars(hubAliasFile, "chromAlias.bb", "chromAlias.txt");
     printf("<a href='%s' target=_blank>%s.chromAlias.txt</a>", aliasUrl, trackHubSkipHubName(database));
-    cgiTableFieldEnd();
-    cgiTableRowEnd();
     }
+puts("</p>");
 }
 
 void chromInfoPage()
@@ -10919,8 +10922,12 @@ hTextVar("position", addCommasToPos(database, position), 30);
 cgiMakeButton("Submit", "submit");
 puts("<P>");
 
+chromSizesDownloadLinks(hasAlias, aliasFile, chromSizesFile);
+
 hTableStart();
 puts("<thead style='position:sticky; top:0; background-color: white;'>");
+
+
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 puts("Sequence name &nbsp;");
@@ -10931,13 +10938,13 @@ cgiTableFieldEnd();
 if (hTableExists(database, "chromAlias"))
     {
     cgiSimpleTableFieldStart();
-    puts("alias sequence names &nbsp;");
+    puts("Alias sequence names &nbsp;");
     cgiTableFieldEnd();
     }
 else if (hasAlias)
     {
     cgiSimpleTableFieldStart();
-    puts("alias sequence names &nbsp;");
+    puts("Alias sequence names &nbsp;");
     cgiTableFieldEnd();
     }
 cgiTableRowEnd();
@@ -10952,7 +10959,6 @@ else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) 
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(hasAlias, 1000);
-chromSizesDownloadRow(hasAlias, aliasFile, chromSizesFile);
 
 hTableEnd();
 cgiDown(0.9);
@@ -11141,7 +11147,8 @@ cart = theCart;
 
 if (isEmpty(cartOptionalString(cart, "pix")) && 
     !sameOk(cgiRequestMethod(NULL), "POST") && // page reload after POST would lose all vars
-    !cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE)) // do not do this if we're hgRenderTracks  = no Javascript
+    !cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE) && // skip if we're hgRenderTracks  = no Javascript
+    !sameOk(cgiUserAgent(), "rtracklayer")) // rtracklayer has no javascript, so skip, see https://github.com/lawremi/rtracklayer/issues/113
 {
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("utils.js", NULL);
@@ -11314,6 +11321,11 @@ if(!trackImgOnly)
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
+    if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+        {
+        jsIncludeFile("hgc.js", NULL);
+        hPrintf("<div id='hgcDialog' style='display: none'></div>\n");
+        }
 
     cartFlushHubWarnings();
     }

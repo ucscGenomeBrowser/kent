@@ -379,6 +379,7 @@ for (ix = 0;  ix < props->freqSourceCount;  ix++)
         obs->allele = spdiB->del;
         obs->obsCount = firstObs->totalCount - sumCounts;
         obs->totalCount = firstObs->totalCount;
+        obs->studyVersion = firstObs->studyVersion;
         slAddHead(&props->freqSourceSpdis[ix], spdiB);
         slAddHead(&props->freqSourceObs[ix], obs);
         }
@@ -532,8 +533,8 @@ if (obsList != NULL)
             slReverse(&props->freqSourceSpdis[ix]);
             slReverse(&props->freqSourceObs[ix]);
             }
-        addMissingRefAllele(props, rsId, lm);
         stripOldStudyVersions(props, rsId);
+        addMissingRefAllele(props, rsId, lm);
         checkFreqSourceObs(props, rsId);
         props->biggestSourceIx = biggestSourceIx;
         }

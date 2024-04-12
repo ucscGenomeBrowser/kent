@@ -460,7 +460,7 @@ for (i=0; i<oldHashSize; ++i)
 /* restore original list order */
 hashReverseAllBucketLists(hash);
 
-if (!hash->lm)
+if (! ((hash->lm != NULL) || hash->ownLm))
     freeMem(oldTable);
 hash->numResizes++;
 }
