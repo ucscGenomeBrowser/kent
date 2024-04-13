@@ -128,23 +128,6 @@ visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
-track mgcFullMrna
-shortLabel MGC Genes
-longLabel Mammalian Gene Collection Full ORF mRNAs
-group genes
-visibility hide
-color 0,100,0
-type psl
-baseColorDefault diffCodons
-baseColorUseCds genbank
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
 searchName refGeneAcc
 searchTable refGene
 searchMethod exact
@@ -179,12 +162,28 @@ searchType mrnaKeyword
 searchPriority 15
 grepIndex genbankGrep
 
+track mgcFullMrna
+shortLabel MGC Genes
+longLabel Mammalian Gene Collection Full ORF mRNAs
+group genes
+visibility hide
+color 0,100,0
+type psl
+baseColorDefault diffCodons
+baseColorUseCds genbank
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
 searchTable mgcFullMrna
 searchType psl
 searchPriority 25
 semiShortCircuit 1
 
-# keep adjacent to MGC
 track orfeomeMrna
 shortLabel ORFeome Clones
 longLabel ORFeome Collaboration Gene Clones
