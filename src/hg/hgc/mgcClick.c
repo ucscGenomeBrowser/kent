@@ -104,24 +104,10 @@ void printMgcHomeUrl(struct mgcDb *mgcDb)
 printf("http://%s.nci.nih.gov/", mgcDb->server);
 }
 
-void printMgcUrl(int imageId)
-/* print out an URL to link to the MGC site for a full-length MGC clone */
-{
-struct mgcDb mgcDb = getMgcDb();
-printf("http://%s.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d",
-       mgcDb.server, mgcDb.organism, imageId);
-}
-
 static void printOrderUrl(int gi)
 /* print out an URL to link to the NCBI order CGI for a full-length MGC clone */
 {
 printf("https://www.ncbi.nlm.nih.gov/genome/clone/orderclone.cgi?db=nucleotide&uid=%d", gi);
-}
-
-static void printImageUrl(int imageId)
-/* print out an URL to link to IMAGE database for a clone */
-{
-printf("http://www.imageconsortium.org/IQ/bin/singleCloneQuery?clone_id=%d", imageId);
 }
 
 void printMgcDetailsUrl(char *acc, int start)
@@ -131,12 +117,6 @@ void printMgcDetailsUrl(char *acc, int start)
 // pass zero coordiates for window to indicate this isn't a browser click
 printf("../cgi-bin/hgc?%s&g=mgcGenes&o=%d&i=%s&l=0&r=0&db=%s",
        cartSidUrlString(cart), start, acc, database);
-}
-
-static void printMBLabValidDbUrl(char *acc)
-/* print out an URL to link to Brent lab validation database */
-{
-printf("http://mblab.wustl.edu/cgi-bin/mgc.cgi?acc=%s&action=cloneRpt&alignment=Submit", acc);
 }
 
 struct cloneInfo
@@ -167,23 +147,6 @@ struct cloneInfo
     char *refSeqSumAccv;  // accv for summary, maybe different than best match
     struct geneSimilarities *refSeqs;  // most similar RefSeqs, with name set to acc.version
 };
-
-static boolean isInMBLabValidDb(char *acc)
-/* check if an accession is in the Brent lab validation database */
-{
-boolean inMBLabValidDb = FALSE;
-struct sqlConnection *fconn = sqlMayConnect("hgFixed");
-if ((fconn != NULL) && sqlTableExists(fconn, "mgcMBLabValid"))
-    {
-    char query[64], buf[32];
-    sqlSafef(query, sizeof(query), "select acc from mgcMBLabValid where acc=\"%s\"",
-          acc);
-    if (sqlQuickQuery(fconn, query, buf, sizeof(buf)) != NULL)
-        inMBLabValidDb = TRUE;
-    sqlDisconnect(&fconn);
-    }
-return inMBLabValidDb;
-}
 
 static void cdnaInfoLoad(struct cloneInfo *ci, struct sqlConnection *conn)
 /* Loading clone information from gbCdnaInfoTable relational tables. */
@@ -609,17 +572,6 @@ printf("\" TARGET=_blank>Order %s clone</a>", name);
 webPrintLinkCellEnd();
 }
 
-static void prImageLink(struct cloneInfo *ci)
-/* create link to IMAGE database */
-{
-webPrintLinkTableNewRow();
-webPrintLinkCellStart();
-printf("<a href=\"");
-printImageUrl(ci->imageId);
-printf("\" TARGET=_blank>IMAGE clone %d</a>", ci->imageId);
-webPrintLinkCellEnd();
-}
-
 static void prGenbankLink(struct cloneInfo *ci)
 /* create link to Genbank database */
 {
@@ -689,15 +641,6 @@ webPrintLabelCell("Links");
 if (ci->gi > 0)
     prOrderLink(mgcDb->name, ci);
 
-// link to MGC database
-webPrintLinkTableNewRow();
-webPrintLinkCellStart();
-printf("<a href=\"");
-printMgcUrl(ci->imageId);
-printf("\" TARGET=_blank>%s clone database</a>", mgcDb->name);
-webPrintLinkCellEnd();
-
-prImageLink(ci);
 prGenbankLink(ci);
 if (ci->refSeqAccv != NULL)
     prRefSeqLinks(ci);
@@ -706,16 +649,6 @@ if (sqlTableExists(conn, "ccdsGene"))
 if (sqlTableExists(conn, "knownGene"))
     prUcscGenesLinks(conn, ci);
 
-// Brent lab validation database
-if (isInMBLabValidDb(ci->acc))
-    {
-    webPrintLinkTableNewRow();
-    webPrintLinkCellStart();
-    printf("<a href=\"");
-    printMBLabValidDbUrl(ci->acc);
-    printf("\" TARGET=_blank>Brent Lab Clone Validation</a>");
-    webPrintLinkCellEnd();
-    }
 webPrintLinkTableEnd();
 }
 
@@ -815,8 +748,6 @@ if (ci->gi > 0)
 // http://www.orfeomecollaboration.org/bin/cloneStatus.pl
 #endif
 
-if (ci->imageId > 0)
-    prImageLink(ci);
 prGenbankLink(ci);
 if (ci->refSeqAccv != NULL)
     prRefSeqLinks(ci);

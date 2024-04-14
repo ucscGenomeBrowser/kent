@@ -4005,7 +4005,7 @@ function mouseIsOverItem(ev, ele, fudgeFactor=25) {
 }
 
 function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip) {
-    /* Called after 100ms of the mouse being stationary, show a new tooltip
+    /* Called after 500ms of the mouse being stationary, show a new tooltip
      * if we are over a new mouseover-able element */
     e = triggeringMouseMoveEv;
     if (mousedNewItem && !(mouseIsOverPopup(e, currTooltip, 0))) {
@@ -4020,7 +4020,7 @@ function mousemoveHelper(e) {
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
-    mousemoveTimer = setTimeout(mousemoveTimerHelper, 100, e, this);
+    mousemoveTimer = setTimeout(mousemoveTimerHelper, 500, e, this);
     // we are moving the mouse away, hide the tooltip regardless how much time has passed
     if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
         mousemoveController.abort();
@@ -4031,7 +4031,7 @@ function mousemoveHelper(e) {
 
 function showMouseoverText(ev) {
     /* If a tooltip is not visible, show the tooltip text right away. If a tooltip
-     * is viisble, do nothing as the mousemove event helper will re-call us
+     * is visble, do nothing as the mousemove event helper will re-call us
      * after hiding the tooltip that is shown */
     ev.preventDefault();
     let referenceElement = lastMouseoverEle;
@@ -4116,18 +4116,15 @@ function showMouseover(e) {
         // user is moving their mouse around, make sure where they stop is what we show
         clearTimeout(mouseoverTimer);
     }
+    if (mousemoveTimer) {
+        // user is moving their mouse around and has triggered a potentially triggered
+        // a new pop up, clear the move timeout
+        clearTimeout(mousemoveTimer);
+    }
     // If there is no tooltip present, we want a small but noticeable delay
     // before showing a tooltip
     if (canShowNewMouseover) {
-        if (!tooltipIsVisible()) {
-            mouseoverTimer = setTimeout(showMouseoverText, 500, e);
-        } else {
-            // the user has a tooltip visible already, so our timer for showing
-            // a new one can be shorter because the user expects another one to
-            // pop up, but we still need to be conscious that they may be moving
-            // the mouse to the tooltip itself. The mousemoveHelper() deals with that
-            mouseoverTimer = setTimeout(showMouseoverText, 300, e);
-        }
+        mouseoverTimer = setTimeout(showMouseoverText, 500, e);
     }
 }
 
@@ -4244,7 +4241,7 @@ function convertTitleTagsToMouseovers() {
 
 function parseUrl(url) {
     // turn a url into some of it's components like server, query-string, etc
-    let protocol, serverName, pathInfo, queryString;
+    let protocol, serverName, pathInfo, queryString, queryArgs = {};
     let temp;
     temp = url.split("?");
     if (temp.length > 1)
@@ -4253,7 +4250,13 @@ function parseUrl(url) {
     protocol = temp[0]; // "https:"
     serverName = temp[2]; // "genome-test.gi.ucsc.edu"
     pathInfo = temp.slice(3).join("/"); // "cgi-bin/hgTracks"
-    return {protocol: protocol, serverName: serverName, pathInfo: pathInfo, queryString: queryString};
+    cgi = pathInfo.startsWith("cgi-bin") ? pathInfo.split('/')[1] : "";
+    let i, s = queryString.split('&');
+    for (i = 0; i < s.length; i++) {
+        argVal = s[i].split('=');
+        queryArgs[argVal[0]] = argVal[1];
+    }
+    return {protocol: protocol, serverName: serverName, pathInfo: pathInfo, queryString: queryString, cgi: cgi, queryArgs: queryArgs};
 }
 
 function dumpCart(seconds, skipNotification) {

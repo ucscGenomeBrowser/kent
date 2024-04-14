@@ -6,6 +6,8 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hdb.h"
+#include "hgConfig.h"
 #include "exportedDataHubs.h"
 
 
@@ -145,3 +147,37 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+unsigned registerExportedDataHub(char *db, char *hubUrl)
+/* Add a hub to the exportedDataHubs table. */
+{
+unsigned ret = 0;
+struct sqlConnection *conn = hConnectCentral();
+char query[2048];
+sqlSafef(query, sizeof(query), "select id from exportedDataHubs  where db='%s' and path='%s'", db, hubUrl);
+char *id = sqlQuickString(conn, query);
+
+if (id)
+    ret = atoi(id);
+else
+    {
+    sqlSafef(query, sizeof(query), "insert into exportedDataHubs values(0, '%s', 'Private','Private Label', '%s')", db, hubUrl);
+    sqlUpdate(conn, query);
+
+    // now get the auto-increment id 
+    sqlSafef(query, sizeof(query), "select id from exportedDataHubs  where db='%s' and path='%s'", db, hubUrl);
+    id = sqlQuickString(conn, query);
+    if (id)
+        ret = atoi(id);
+    }
+
+hDisconnectCentral(&conn);
+
+return ret;
+}
+
+boolean exportedDataHubsEnabled()
+/* Return TRUE if feature is available */
+{
+char *cfgEnabled = cfgOption("browser.exportedDataHubs");
+return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) ;
+}

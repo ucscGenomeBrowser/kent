@@ -1,6 +1,6 @@
 export db=hg38
-export GENCODE_VERSION=V45
-export PREV_GENCODE_VERSION=V44
+export GENCODE_VERSION=V46
+export PREV_GENCODE_VERSION=V45
 screen -S knownGene${GENCODE_VERSION}
 mkdir /hive/data/genomes/$db/bed/gencode$GENCODE_VERSION/build
 cd /hive/data/genomes/$db/bed/gencode$GENCODE_VERSION/build
@@ -31,3 +31,7 @@ awk '{print $1}' thatfile | sort > genes.lst
 hgsql hg38 -Ne "select geneSymbol, kgId from kgXref" | sort > ids.txt
 join -t $'\t' genes.lst  ids.txt | tawk '{print $2,$1}' | sort > knownToMyGene2.txt
 hgLoadSqlTab $db knownToMyGene2 ~/kent/src/hg/lib/knownTo.sql knownToMyGene2.txt
+
+# make sure knownGeneOld${PREV_GENCODE_VERSION} is populated with the previous knownGene
+# contents, and that the track and HTML page are updated accordingly.  This step should be
+# obsolete soon.

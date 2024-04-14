@@ -23,6 +23,8 @@
 #include "net.h"
 #include "genark.h"
 #include "trackHub.h"
+#include "quickLift.h"
+#include "exportedDataHubs.h"
 
 
 /* CGI Variables */
@@ -58,6 +60,10 @@ static void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 /* set up page for entering data */
 {
 struct dbDb *dbList;
+boolean askAboutQuickLift = FALSE;
+
+if (exportedDataHubsEnabled())
+    askAboutQuickLift = TRUE;
 
 cartWebStart(cart, database, "Convert %s to New Assembly", fromPos);
 
@@ -74,6 +80,8 @@ cgiTableField("Old Genome: ");
 cgiTableField("Old Assembly: ");
 cgiTableField("New Genome: ");
 cgiTableField("New Assembly: ");
+if (askAboutQuickLift)
+    cgiTableField("QuickLift Tracks: ");
 cgiTableField(" ");
 cgiTableRowEnd();
 
@@ -94,6 +102,14 @@ cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 printAllAssemblyListHtmlParm(liftOver->toDb, dbList, HGLFT_TODB_VAR, TRUE, NULL, NULL);
 cgiTableFieldEnd();
+
+if (askAboutQuickLift)
+    {
+    cgiSimpleTableFieldStart();
+    boolean quickLift = cartUsualBoolean(cart, "doQuickLift", FALSE);
+    cgiMakeCheckBoxWithId("doQuickLift", quickLift, "doQuickLift");
+    cgiTableFieldEnd();
+    }
 
 cgiSimpleTableFieldStart();
 cgiMakeButton(HGLFT_DO_CONVERT, "Submit");
@@ -269,12 +285,31 @@ char *chrom;
 int start, end;
 int origSize;
 struct chain *chainList, *chain;
+struct dyString *visDy = NULL;
 
 cartWebStart(cart, database, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
 	fromPos, toDb->organism, toDb->description);
 if (!hgParseChromRange(database, fromPos, &chrom, &start, &end))
     errAbort("position %s is not in chrom:start-end format", fromPos);
 origSize = end - start;
+
+boolean doQuickLift = cartUsualBoolean(cart, "doQuickLift", FALSE);
+
+unsigned quickChain = 0;
+unsigned quickHub = 0;
+
+if (doQuickLift)
+    {
+    quickChain = quickLiftGetChain(fromDb->name, toDb->name);
+
+    if (quickChain == 0)
+        errAbort("can't find quickChain from %s to %s", fromDb->name, toDb->name);
+
+    visDy = newDyString(1024);
+    char *newHub = trackHubBuild(fromDb->name, cart, visDy);
+    if ((quickHub = registerExportedDataHub(fromDb->name, newHub)) == 0)
+        errAbort("can't register exportedDataHub %s\n", newHub);
+    }
 
 chainList = chainLoadAndTrimIntersecting(fileName, chrom, start, end);
 if (chainList == NULL)
@@ -309,7 +344,11 @@ else
         boolean startedAnchor = FALSE;
         if ((hDbIsActive(toDb->name) && chromSeqExists) || startsWith("hub:",toDb->nibPath))
             {
-	    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
+            if (quickChain)
+                printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&quickLift.%d.%s=%d&hideTracks=1%s\">",
+                   hgTracksName(), toDb->name,  chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain, visDy->string);
+            else
+                printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
 		   hgTracksName(), toDb->name, chain->qName, qStart+1, qEnd);
             startedAnchor = TRUE;
             }
@@ -319,8 +358,12 @@ else
             if (hubUrl)
                 {
                 startedAnchor = TRUE;
-                printf("<A HREF=\"%s?genome=%s&hubUrl=%s&position=%s:%d-%d\">",
-		   hgTracksName(), toDb->name, hubUrl, chain->qName, qStart+1, qEnd);
+                if (quickChain)
+                    printf("<A HREF=\"%s?genome=%s&hubUrl=%s&position=%s:%d-%d&quickLift.%d.%s=%d\">",
+                       hgTracksName(), toDb->name, hubUrl, chain->qName, qStart+1, qEnd, quickHub, toDb->name, quickChain);
+                else
+                    printf("<A HREF=\"%s?genome=%s&hubUrl=%s&position=%s:%d-%d\">",
+                       hgTracksName(), toDb->name, hubUrl, chain->qName, qStart+1, qEnd);
                 }
             }
 	printf("%s:%d-%d",  chain->qName, qStart+1, qEnd);

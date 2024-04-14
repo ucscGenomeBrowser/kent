@@ -7106,29 +7106,39 @@ char varName[1024];
 if ((labelList == NULL) || sameString(labelList->name, "none"))
     return;
 
-printf("<B>Label:</B> ");
 struct slPair *thisLabel = labelList;
-for(; thisLabel; thisLabel = thisLabel->next)
+if (thisLabel->next == NULL) // If there's only one option we either show the label or not.
     {
+    printf("<B>Show Label:</B> ");
     safef(varName, sizeof(varName), "%s.label.%s", prefix, thisLabel->name);
-    boolean isDefault = FALSE;
-    if (defaultLabelList == NULL)
-        isDefault = (thisLabel == labelList);
-    else if (sameString(defaultLabelList->name, "none"))
-        isDefault = FALSE;
-    else
-        isDefault = (slPairFind(defaultLabelList, thisLabel->name) != NULL);
-
-    boolean option = cartUsualBoolean(cart, varName, isDefault);
+    boolean option = cartUsualBoolean(cart, varName, TRUE);
     cgiMakeCheckBox(varName, option);
+    }
+else
+    {
+    printf("<B>Label:</B> ");
+    for(; thisLabel; thisLabel = thisLabel->next)
+        {
+        safef(varName, sizeof(varName), "%s.label.%s", prefix, thisLabel->name);
+        boolean isDefault = FALSE;
+        if (defaultLabelList == NULL)
+            isDefault = (thisLabel == labelList);
+        else if (sameString(defaultLabelList->name, "none"))
+            isDefault = FALSE;
+        else
+            isDefault = (slPairFind(defaultLabelList, thisLabel->name) != NULL);
 
-    // find comment for the column listed
-    struct asColumn *col = as->columnList;
-    unsigned num = ptToInt(thisLabel->val);
-    for(; col && num--; col = col->next)
-        ;
-    assert(col);
-    printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
+        boolean option = cartUsualBoolean(cart, varName, isDefault);
+        cgiMakeCheckBox(varName, option);
+
+        // find comment for the column listed
+        struct asColumn *col = as->columnList;
+        unsigned num = ptToInt(thisLabel->val);
+        for(; col && num--; col = col->next)
+            ;
+        assert(col);
+        printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
+        }
     }
 }
 

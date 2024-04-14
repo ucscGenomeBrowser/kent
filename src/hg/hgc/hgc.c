@@ -9631,14 +9631,28 @@ struct bbiFile *bbi;
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct hash *chainHash = NULL;
+struct bigBedInterval *bb, *bbList = NULL;
+if (quickLiftFile)
+    bbList = quickLiftIntervals(quickLiftFile, bbi, seqName, winStart, winEnd, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+
 struct bed *bedList = NULL;
 char *bedRow[32];
 char startBuf[16], endBuf[16];
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    struct bed *bed = bedLoadN(bedRow, 12);
+    struct bed *bed = NULL;
+    if (quickLiftFile)
+        {
+        if ((bed = quickLiftBed(bbi, chainHash, bb)) == NULL)
+            errAbort("can't port %s",bedRow[3]);
+        }
+    else
+        bed = bedLoadN(bedRow, 12);
     if (sameString(bed->name, geneName))
 	slAddHead(&bedList, bed);
     }

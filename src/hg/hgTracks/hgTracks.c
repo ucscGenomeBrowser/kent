@@ -9440,6 +9440,8 @@ if (!hideControls)
 	    cg->rowOpen = TRUE;
             if (group->errMessage)
                 hPrintf("<th align=\"left\" colspan=%d class='redToggleBar'>",MAX_CONTROL_COLUMNS);
+            else if (startsWith("Quicklift", group->label))
+                hPrintf("<th align=\"left\" colspan=%d class='greenToggleBar'>",MAX_CONTROL_COLUMNS);
             else
                 hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
@@ -9469,13 +9471,8 @@ if (!hideControls)
             if (isHubTrack(group->name))
 		{
                 struct trackHub *hub = grabHashedHub(group->name);
-
-                // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
-                char *cssStr = "";
-                if ((hub == NULL) || (hub->descriptionUrl == NULL))
-                    cssStr = "visibility: hidden";
-
-                hPrintf("<a href='%s' style='color:#FFF; %s' target=_blank>More Info</a>&nbsp;&nbsp;", hub->descriptionUrl, cssStr);
+                if ((hub != NULL) && (hub->descriptionUrl != NULL))
+                    hPrintf("<a href='%s' style='color:#FFF' target=_blank>More Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
 
 		safef(idText, sizeof idText, "%s_disconn", group->name);
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
@@ -9639,6 +9636,9 @@ puts("</FORM>");
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showMouseovers", FALSE))
     jsInline("var showMouseovers = true;\n");
+
+if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+    jsInline("var doHgcInPopUp = true;\n");
 
 // TODO GALT nothing to do here.
 pruneRedundantCartVis(trackList);
@@ -11327,6 +11327,11 @@ if(!trackImgOnly)
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
+    if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+        {
+        jsIncludeFile("hgc.js", NULL);
+        hPrintf("<div id='hgcDialog' style='display: none'></div>\n");
+        }
 
     cartFlushHubWarnings();
     }

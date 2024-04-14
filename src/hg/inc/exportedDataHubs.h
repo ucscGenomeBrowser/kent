@@ -68,5 +68,8 @@ boolean exportedDataHubsEnabled();
 
 void printExportedDataHubs(char *db);
 /* Fill out exported data hubs popup. */
+
+unsigned registerExportedDataHub(char *db, char *hubUrl);
+/* Add a hub to the exportedDataHubs table. */
 #endif /* EXPORTEDDATAHUBS_H */
 

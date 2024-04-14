@@ -26,6 +26,7 @@ errAbort(
   "   -chroms - list all chromosomes and their sizes\n"
   "   -zooms - list all zoom levels and their sizes\n"
   "   -as - get autoSql spec\n"
+  "   -asOut - output only autoSql spec\n"
   "   -extraIndex - list all the extra indexes\n"
   );
 }
@@ -35,6 +36,7 @@ static struct optionSpec options[] = {
    {"chroms", OPTION_BOOLEAN},
    {"zooms", OPTION_BOOLEAN},
    {"as", OPTION_BOOLEAN},
+   {"asOut", OPTION_BOOLEAN},
    {"extraIndex", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -47,10 +49,9 @@ printLongWithCommas(stdout, l);
 printf("\n");
 }
 
-void bigBedInfo(char *fileName)
-/* bigBedInfo - Show information about a bigBed file.. */
+static void bigBedInfoStandard(struct bbiFile *bbi)
+/* output lots information about a bigBed file, standard output for humans */
 {
-struct bbiFile *bbi = bigBedFileOpen(fileName);
 printf("version: %d\n", bbi->version);
 printf("fieldCount: %d\n", bbi->fieldCount);
 printf("hasHeaderExtension: %s\n", (bbi->extensionOffset != 0 ? "yes" : "no"));
@@ -121,6 +122,25 @@ printf("meanDepth (of bases covered): %f\n", meanDepth);
 printf("minDepth: %f\n", sum.minVal);
 printf("maxDepth: %f\n", sum.maxVal);
 printf("std of depth: %f\n", depthStd);
+}
+
+static void bigBedInfoAsOut(struct bbiFile *bbi)
+/* print as schema, if it exists */
+{
+char *asText = bigBedAutoSqlText(bbi);
+if (asText == NULL)
+    errAbort("bigBed does not have an autoSql schema");
+printf("%s", asText);
+}
+
+void bigBedInfo(char *fileName)
+/* bigBedInfo - Show information about a bigBed file.. */
+{
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+if (optionExists("asOut"))
+    bigBedInfoAsOut(bbi);
+else
+    bigBedInfoStandard(bbi);
 }
 
 int main(int argc, char *argv[])

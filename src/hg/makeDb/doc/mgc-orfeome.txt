@@ -1,0 +1,46 @@
+MGC was a project generate full-length, unrestricted mRNA clones for several
+species.  ORFeome was a related project that carried on the work.  The tracks
+for these two projects are generated automatically by the GenBank pipeline
+based on keywords.
+
+This is a summary of assemblies contain the MGC and ORFeome tracks and was
+created just to help combine the tracks into a super track for certain
+assemblies.  Combination with trackDb override didn't work, so
+../../trackDb.mgc-orfeome.ra is used when both are present.
+
+
+| Assembly | MGC | ORF | Super |
+|----------+-----+-----+-------|
+| bosTau2  | Y   |     |       |
+| bosTau3  | Y   |     |       |
+| bosTau4  | Y   |     |       |
+|----------+-----+-----+-------|
+| danRer3  | Y   |     |       |
+| danRer4  | Y   |     |       |
+| danRer5  | Y   | Y   |       |
+| danRer6  | Y   | Y   |       |
+| danRer7  | Y   | Y   |       |
+| danRer10 | Y   | Y   |       |
+|----------+-----+-----+-------|
+| hg16     | Y   |     |       |
+| hg17     | Y   | Y   |       |
+| hg18     | Y   | Y   |       |
+| hg19     | Y   | Y   | Y     |
+| hg38     | Y   | Y   | Y     |
+|----------+-----+-----+-------|
+| mm7      | Y   |     |       |
+| mm8      | Y   |     |       |
+| mm9      | Y   | Y   |       |
+| mm10     | Y   | Y   | Y     |
+|----------+-----+-----+-------|
+| rn3      | Y   |     |       |
+| rn4      | Y   |     |       |
+| rn5      | Y   |     |       |
+| rn6      | Y   |     |       |
+| rn7      | Y   |     |       |
+|----------+-----+-----+-------|
+| xenTro1  | Y   |     |       |
+| xenTro2  | Y   |     |       |
+| xenTro3  | Y   |     |       |
+| xenTro7  | Y   |     |       |
+|----------+-----+-----+-------|

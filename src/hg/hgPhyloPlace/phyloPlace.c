@@ -868,7 +868,7 @@ if (met)
         (ix = stringArrayIx("pango_lineage", met->columnNames, met->columnCount)) >= 0 ||
         (ix = stringArrayIx("Nextstrain_lineage", met->columnNames, met->columnCount)) >= 0 ||
         (ix = stringArrayIx("GCC_nextclade", met->columnNames, met->columnCount)) >= 0)
-        lineage = met->columnNames[ix];
+        lineage = met->columnValues[ix];
     }
 return lineage;
 }

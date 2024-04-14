@@ -7368,3 +7368,13 @@ TMPDIR=/dev/shm
     # 1461710350 bases of 2409685272 (60.660%) in intersection
 
 ##############################################################################
+# hg38.chromAlias.bb was incorrectly built without indexes so it will not
+# work with bedToBigBed 2024-04-08 markd
+
+cd /hive/data/genomes/hg38/goldenPath/bigZips/initial
+mv hg38.chromAlias.bb  hg38.chromAlias.noindexes.bb
+bigBedInfo -asOut hg38.chromAlias.noindexes.bb >hg38.chromAlias.as
+bigBedToBed hg38.chromAlias.noindexes.bb  hg38.chromAlias.bed
+bedToBigBed -tab -type=bed3+ -as=hg38.chromAlias.as hg38.chromAlias.bed -sizesIs2Bit  -extraIndex=ucsc,assembly,ensembl,genbank,refseq hg38.2bit hg38.chromAlias.bb
+
+##############################################################################
