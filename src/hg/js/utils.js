@@ -3991,7 +3991,7 @@ function mouseIsOverPopup(ev, ele, fudgeFactor=25) {
     return false;
 }
 
-function mouseIsOverItem(ev, ele, fudgeFactor=25) {
+function mouseIsOverItem(ev, ele, fudgeFactor=15) {
     /* Is the mouse positioned over the item that triggered the popup? */
     let origName = ele.getAttribute("origItemMouseoverId");
     let origTargetBox = boundingRect($("[mouseoverid='"+origName+"']")[0]);
@@ -4020,6 +4020,7 @@ function mousemoveHelper(e) {
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
+
     mousemoveTimer = setTimeout(mousemoveTimerHelper, 500, e, this);
     // we are moving the mouse away, hide the tooltip regardless how much time has passed
     if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
@@ -4160,7 +4161,14 @@ function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
     $("[title]").each(function(i, a) {
         if (a.title !== undefined && a.title.length > 0) {
-            titleTagToMouseover(a);
+            if (a.title.startsWith("Click to alter the display density") ||
+                    a.title.startsWith("drag select or click to zoom") ||
+                    a.title.startsWith("click & drag to scroll")) {
+                // just remove these tooltips altogether
+                a.title = "";
+            } else {
+                titleTagToMouseover(a);
+            }
         }
     });
 
