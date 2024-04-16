@@ -272,7 +272,7 @@ safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%s&db=%s", cartSessionId(car
 appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
 
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?chromInfoPage=&hgsid=%s&db=%s", cartSessionId(cart), database);
-appendLinkWithShortcut(&links, buf, "Chromosome Sizes", "showSizesLink", "Show a table of all chromsomes in this assembly (or scaffolds/contigs) and their sizes.", "v s", FALSE, FALSE);
+appendLinkWithShortcut(&links, buf, "Chromosomes", "showSizesLink", "Show a table of all chromsomes in this assembly (or scaffolds/contigs) and their sizes.", "v s", FALSE, FALSE);
 
 // add the sendTo menu
 if (fileExists("extTools.ra"))
