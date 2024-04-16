@@ -893,6 +893,7 @@
 ./runBuild GCA_023637925.1_DD_ASM_B1a birds Phaethornis_superciliosus
 ./runBuild GCA_023637945.1_DD_ASM_B1 birds Phaethornis_superciliosus
 ./runBuild GCA_023638135.1_bFalBia1.pri birds Falco_biarmicus
+./runBuild GCA_023653725.1_ASM2365372v1 vertebrate Bungarus_multicinctus
 ./runBuild GCA_023748175.1_ASM2374817v1 primates Hoolock_leuconedys
 ./runBuild GCA_023759835.1_ASM2375983v1 primates Lemur_catta
 ./runBuild GCA_023761135.1_ASM2376113v1 primates Symphalangus_syndactylus
