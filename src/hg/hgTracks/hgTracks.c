@@ -9473,11 +9473,16 @@ if (!hideControls)
                 struct trackHub *hub = grabHashedHub(group->name);
 
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
-                char *cssStr = "";
-                if ((hub == NULL) || (hub->descriptionUrl == NULL))
-                    cssStr = "visibility: hidden";
-
-                hPrintf("<a href='%s' style='color:#FFF; %s' target=_blank>More Info</a>&nbsp;&nbsp;", hub->descriptionUrl, cssStr);
+                if (hub != NULL)
+                    {
+                    if (hub->descriptionUrl == NULL)
+                        hPrintf("<span title='The track hub authors have no provided a descriptionUrl with background "
+                                "information about this track hub' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
+                                "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>&nbsp;&nbsp;");
+                    else
+                        hPrintf("<a title='Documentation about this track hub, provided by the track hub authors (not UCSC)' href='%s' "
+                            "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
+                    }
 
 		safef(idText, sizeof idText, "%s_disconn", group->name);
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
