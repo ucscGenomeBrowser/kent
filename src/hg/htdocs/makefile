@@ -7,10 +7,13 @@ GITUP = ${GIT} pull
 ifeq (${FIND},)
     INSIDEGIT := $(shell git rev-parse --is-inside-work-tree 2>/dev/null)
     ifeq (${INSIDEGIT},true)
-    	FIND = gitFiles
+	FIND = gitFiles
     else
 	FIND = find
     endif
+endif
+ifeq (${HOSTNAME}_${FIND},hgwbeta_find)
+    $(error FIND=find not allowed on hgwbeta)
 endif
 
 # if you need to pick up files not checked-in yet for rsync,
