@@ -1,7 +1,7 @@
 track mane
 bigDataUrl /gbdb/hg38/mane/mane.bb
 shortLabel MANE
-longLabel NCBI RefSeq & Ensembl transcripts from MANE: most relevant transcript for every protein-coding gene
+longLabel MANE Select Plus Clinical: Representative transcript from RefSeq & GENCODE
 searchIndex name
 searchTrix /gbdb/hg38/mane/mane.ix
 type bigGenePred
@@ -18,6 +18,6 @@ dataVersion /gbdb/hg38/mane/README_versions.txt
 
 searchTable mane
 searchType bigBed
-searchDescription NCBI RefSeq and Ensembl transcripts from the MANE Project
+searchDescription MANE Select Plus Clinical: Representative transcript from RefSeq & GENCODE
 searchPriority 1.3
 

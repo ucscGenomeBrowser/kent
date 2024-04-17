@@ -7,7 +7,7 @@ GITUP = ${GIT} pull
 ifeq (${FIND},)
     INSIDEGIT := $(shell git rev-parse --is-inside-work-tree 2>/dev/null)
     ifeq (${INSIDEGIT},true)
-    	FIND = gitFiles
+	FIND = gitFiles
     else
 	FIND = find
     endif
@@ -39,6 +39,7 @@ alpha:
 	${MAKE} doInstall destDir=${DOCUMENTROOT} 
 
 beta:
+	@if [ "${FIND}" = "find" ] ; then echo Error: FIND=find not allow with make beta >& 2 ; exit 1 ; fi
 	${GITUP}
 	cp -p --remove-destination ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
