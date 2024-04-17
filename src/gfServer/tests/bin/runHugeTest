@@ -34,7 +34,7 @@ set -x
 
 $gfServer start ${transOpt} localhost ${port} -canStop -indexFile=${testidx} ${test2bit} > /dev/null 2>&1 &
 gfpid=$!
-sleep 1
+sleep 10
 $gfServer ${queryOpt} localhost ${port} ${queryfa} > output/${testName}.out
 gfClient -nohead ${clientOpts} localhost ${port} $(dirname ${test2bit}) ${queryfa} output/${testName}.psl
 $gfServer stop localhost ${port} > /dev/null
