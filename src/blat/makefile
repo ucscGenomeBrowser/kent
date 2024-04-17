@@ -1,5 +1,5 @@
 kentSrc = ..
-include ../inc/common.mk
+include ${kentSrc}/inc/common.mk
 
 
 compile::
@@ -14,10 +14,12 @@ else
 A = blat
 preMyLibs += ../lib/$(MACHTYPE)/jkOwnLib.a
 endif
+
 # this must be include here, after the above setup but before the build target
 include $(kentSrc)/inc/userApp.mk
 
 build: ${DESTDIR}${BINDIR}/${A}${EXE}
+
 L += -lm $(SOCKETLIB)
 
 blatHuge.c: blat.c
