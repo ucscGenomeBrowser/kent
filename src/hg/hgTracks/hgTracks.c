@@ -244,21 +244,57 @@ const struct trackRef *b = *((struct trackRef **)vb);
 return tgCmpPriority(&a->track, &b->track);
 }
 
+static int makeInt(double input)
+/* make an int out of an input.  Probably should use floor() and such. */
+{
+if (input == 0)
+    return 0;
+if (input < 0)
+   return -1;
+else if (input == 0.0)
+   return 0;
+else
+   return 1;
+}
+
 int gCmpPriority(const void *va, const void *vb)
-/* Compare groups based on priority. */
+/* Compare groups based on priority, paying attention to hub groups */
 {
 const struct group *a = *((struct group **)va);
 const struct group *b = *((struct group **)vb);
 float dif = a->priority - b->priority;
+int iDif = makeInt(dif);
+boolean aIsHub = startsWith("hub_", a->name);
+boolean bIsHub = startsWith("hub_", b->name);
 
-if (dif == 0)
-    return 0;
-if (dif < 0)
-   return -1;
-else if (dif == 0.0)
-   return 0;
-else
-   return 1;
+if (aIsHub)
+    {
+    if (bIsHub)
+        {
+        char *aNullPos = strchr(&a->name[4], '_');
+        char *bNullPos = strchr(&b->name[4], '_');
+        if ((aNullPos != NULL) && (bNullPos != NULL) )
+            *aNullPos = *bNullPos = 0;
+
+        int strDiff = strcmp(a->name, b->name);
+        int ret = 0;
+        if (strDiff == 0)   // same hub
+            ret = iDif;
+        else
+            ret = strDiff;
+
+        if ((aNullPos != NULL) && (bNullPos != NULL) )
+            *aNullPos = *bNullPos = '_';
+
+        return ret;
+        }
+    else
+        return -1;
+    }
+else if (bIsHub)
+    return 1;
+
+return iDif;
 }
 
 void changeTrackVisExclude(struct group *groupList, char *groupTarget, int changeVis, struct hash *excludeHash)
@@ -6873,9 +6909,12 @@ struct hash *hash = newHash(8);
 struct track *track;
 struct trackRef *tr;
 struct grp* grps = hLoadGrps(database);
+struct grp* hubGrps = trackHubGetGrps();
 struct grp *grp;
 float minPriority = 100000; // something really large
 boolean foundMap = FALSE;
+
+grps = slCat(grps, hubGrps);
 
 /* build group objects from database. */
 for (grp = grps; grp != NULL; grp = grp->next)
@@ -9440,6 +9479,8 @@ if (!hideControls)
 	    cg->rowOpen = TRUE;
             if (group->errMessage)
                 hPrintf("<th align=\"left\" colspan=%d class='redToggleBar'>",MAX_CONTROL_COLUMNS);
+            else if (startsWith("Hub", group->label))
+                hPrintf("<th align=\"left\" colspan=%d class='mauveToggleBar'>",MAX_CONTROL_COLUMNS);
             else if (startsWith("Quicklift", group->label))
                 hPrintf("<th align=\"left\" colspan=%d class='greenToggleBar'>",MAX_CONTROL_COLUMNS);
             else

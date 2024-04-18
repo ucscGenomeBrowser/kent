@@ -55,17 +55,64 @@
 #include "hui.h"
 #include "chromAlias.h"
 #include "trashDir.h"
+#include "hgConfig.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
 #endif
 
+struct grp *trackHubGrps = NULL;   // global with grps loaded from track hubs
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
 static struct hash *hubAssemblyUndecoratedHash; // mapping of undecorated assembly name to genome struct
 static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
 static struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 static struct hash *trackHubHash;
+
+static boolean hubsCanAddGroups()
+/* can track hubs have their own groups? */
+{
+static boolean canHubs = FALSE;
+static boolean canHubsSet = FALSE;
+
+if (!canHubsSet)
+    {
+    canHubs = cfgOptionBooleanDefault("trackHubsCanAddGroups", FALSE);
+    canHubsSet = TRUE;
+    }
+
+return canHubs;
+}
+
+static void tdbListAddHubToGroup(char *hubName, struct trackDb *tdbList)
+/* Prepend hub name to  group name for every tdb. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char buffer[4096];
+
+    char *grp = trackDbSetting(tdb, "group");
+    safef(buffer, sizeof buffer, "%s_%s", hubName, grp);
+    tdb->grp = cloneString(buffer);
+    hashReplace(tdb->settingsHash, "group", tdb->grp);
+    }
+}
+
+
+static void grpListAddHubName(struct grp *grpList, struct trackHub *hub)
+/* Add the hub name to the groups defined by a hub. */
+{
+char buffer[4096];
+
+for (; grpList; grpList = grpList->next)
+    {
+    safef(buffer, sizeof buffer, "%s_%s", hub->name, grpList->name);
+    grpList->name = cloneString(buffer);
+    safef(buffer, sizeof buffer, "Hub: %s : %s", hub->shortLabel, grpList->label);
+    grpList->label = cloneString(buffer);
+    }
+}
 
 char *trackHubRelativeUrl(char *hubUrl, char *path)
 /* Return full path (in URL form if it's a remote hub) given
@@ -682,6 +729,17 @@ while ((ra = raNextRecord(lf)) != NULL)
 	    el->groups = trackHubRelativeUrl(url, groups);
 	addAssembly(genome, el, hub);
 	}
+    else
+        {
+	if ((groups != NULL) && hubsCanAddGroups())
+            {
+	    el->groups = trackHubRelativeUrl(url, groups);
+            struct grp *list = readGroupRa(el->groups);
+            grpListAddHubName(list, hub);
+
+            trackHubGrps = slCat(trackHubGrps, list);
+            }
+        }
     el->settingsHash = ra;
     hashAdd(ra, "hubName", hub->shortLabel);
     el->chromAuthority = hashFindVal(ra, "chromAuthority");
@@ -1104,10 +1162,15 @@ validateTracks(hub, genome, tdbList);
 trackDbAddTableField(tdbList);
 if (!isEmpty(hub->name))
     trackHubAddNamePrefix(hub->name, tdbList);
-if (genome->twoBitPath == NULL || *foundFirstGenome)
-    trackHubAddGroupName(hub->name, tdbList);
-else
+
+if ((genome->twoBitPath != NULL) && (*foundFirstGenome == FALSE))
     *foundFirstGenome = TRUE;
+else if (genome->groups != NULL)
+    tdbListAddHubToGroup(hub->name, tdbList);
+else
+    trackHubAddGroupName(hub->name, tdbList);
+
+
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     trackDbFieldsFromSettings(tdb);
@@ -1617,4 +1680,10 @@ walkTree(f, cart, tdb, visDy);
 fclose(f);
 
 return cloneString(filename);
+}
+
+struct grp *trackHubGetGrps()
+/* Get the groups defined by attached track hubs. */
+{
+return trackHubGrps;
 }
