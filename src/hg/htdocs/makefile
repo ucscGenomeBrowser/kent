@@ -12,9 +12,6 @@ ifeq (${FIND},)
 	FIND = find
     endif
 endif
-ifeq (${HOSTNAME}_${FIND},hgwbeta_find)
-    $(error FIND=find not allowed on hgwbeta)
-endif
 
 # if you need to pick up files not checked-in yet for rsync,
 # you can run it like this:
@@ -42,6 +39,7 @@ alpha:
 	${MAKE} doInstall destDir=${DOCUMENTROOT} 
 
 beta:
+	@if [ "${FIND}" = "find" ] ; then echo Error: FIND=find not allowed with make beta >& 2 ; exit 1 ; fi
 	${GITUP}
 	cp -p --remove-destination ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
