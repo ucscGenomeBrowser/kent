@@ -30,6 +30,7 @@ install:
 	cp -p --remove-destination checkGenomeMysql        ${SCRIPTS}
 	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}
 	cp -p --remove-destination checkHTTPS              ${SCRIPTS}
+	cp -p --remove-destination checkHubSearchCronWrapper.py ${SCRIPTS}
 	cp -p --remove-destination checkMachineName.csh    ${SCRIPTS}
 	cp -p --remove-destination checkMetaData.csh       ${SCRIPTS}
 	cp -p --remove-destination checkMetaAday.csh       ${SCRIPTS}
