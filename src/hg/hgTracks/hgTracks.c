@@ -9512,8 +9512,18 @@ if (!hideControls)
             if (isHubTrack(group->name))
 		{
                 struct trackHub *hub = grabHashedHub(group->name);
-                if ((hub != NULL) && (hub->descriptionUrl != NULL))
-                    hPrintf("<a href='%s' style='color:#FFF' target=_blank>More Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
+
+                // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
+                if (hub != NULL)
+                    {
+                    if (hub->descriptionUrl == NULL)
+                        hPrintf("<span title='The track hub authors have no provided a descriptionUrl with background "
+                                "information about this track hub' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
+                                "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>&nbsp;&nbsp;");
+                    else
+                        hPrintf("<a title='Documentation about this track hub, provided by the track hub authors (not UCSC)' href='%s' "
+                            "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
+                    }
 
 		safef(idText, sizeof idText, "%s_disconn", group->name);
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
@@ -9760,6 +9770,12 @@ if (newStart < 0)
     offset = -virtWinStart;
 else if (newEnd > virtSeqBaseCount)
     offset = virtSeqBaseCount - virtWinEnd;
+
+// at high zoom levels, offset can be very small: make sure that we scroll at least one bp
+if (amount > 0 && offset==0)
+    offset = 1;
+if (amount < 0 && offset==0)
+    offset = -1;
 
 /* Move window. */
 virtWinStart += offset;
