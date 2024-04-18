@@ -6903,7 +6903,7 @@ if (trackDbFilters)
         }
         // using jquery id= syntax to make sure that selector works even if trackname has a dot in it
         jsInlineF("$('[class=\"buttonClear-%s\"]').click( function(ev) { \n"
-                    "$(ev.target).prevAll('input').val('*');\n"
+                    "$(ev.target).prevAll('input').val('*').trigger('change');\n"
                     "$(ev.target).prevAll('select').val('%s');\n"
                     "ev.preventDefault();\n"
                   "});", tdb->track, FILTERTEXT_WILDCARD);
