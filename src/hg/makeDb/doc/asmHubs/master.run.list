@@ -1473,6 +1473,7 @@
 ./runBuild GCA_947599735.1_LP_J_v3 mammals Mus_musculus
 ./runBuild GCA_947623445.1_kaClaLepa1.1 invertebrate Clavelina_lepadiformis
 ./runBuild GCA_947650265.1_fSymMel2.1 fish Symphodus_melops
+./runBuild GCA_947686815.1_rPodLil1.2 vertebrate Podarcis_lilfordi
 ./runBuild GCA_948098885.1_ihDrePlat2.1 invertebrate Drepanosiphum_platanoidis
 ./runBuild GCA_948146095.1_fSynAcu2.1_alternate_haplotype fish Syngnathus_acus
 ./runBuild GCA_948146105.1_fSynAcu2.1 fish Syngnathus_acus
