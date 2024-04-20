@@ -444,6 +444,10 @@ def makeBedFields(dbName, firstAnnot, bed, isMut, color, recAnnot):
         color = "0,0,100"
     else:
         bed[3] = firstAnnot.shortFeatType
+
+        #if firstAnnot.shortFeatType=="phos":
+            #color = ""
+
         if firstAnnot.featType in useComment:
             comment = firstAnnot.comment
             # trembl doesn't have comments for chains so make one up
