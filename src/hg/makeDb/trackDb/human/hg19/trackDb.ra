@@ -2340,6 +2340,7 @@ include exomeProbesets.ra
 include reMap.ra
 include fantom5.ra
 include predictionScoresSuper.ra
+include abSplice.ra
 
 track epdNew
 shortLabel EPDnew Promoters
