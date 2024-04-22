@@ -239,7 +239,7 @@ char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy);
 struct grp *trackHubGetGrps();
 /* Get the groups defined by attached track hubs. */
 
-struct grp *trackHubResetGrps();
+void trackHubResetGrps();
 /* Get the groups defined by attached track hubs. */
 
 #endif /* TRACKHUB_H */
