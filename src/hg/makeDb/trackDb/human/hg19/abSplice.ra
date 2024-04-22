@@ -1,0 +1,16 @@
+track AbSplice
+shortLabel AbSplice Scores
+longLabel Aberrant Splicing Prediction Scores
+type bigBed 9 +
+bigDataUrl /gbdb/hg19/abSplice/AbSplice.bb
+visibility hide
+itemRgb on
+noScoreFilter on
+group phenDis
+filterText.maxScore *
+filter.spliceABscore 0.01
+filterLimits.spliceABscore 0.01:1
+filterLabel.spliceABscore Filter by minimum AbSplice score
+filterLabel.maxScore Tissues
+html abSplice.html
+mouseOver change: $name <br> gene: $ENSGid <br> $maxScore
