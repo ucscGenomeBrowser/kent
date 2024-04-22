@@ -4028,12 +4028,20 @@ function mousemoveHelper(e) {
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
-    mousemoveTimer = setTimeout(mousemoveTimerHelper, 500, e, this);
-    // we are moving the mouse away, hide the tooltip regardless how much time has passed
-    if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
+    let isDelayedTooltip = lastMouseoverEle.getAttribute("tooltipDelay");
+    if (isDelayedTooltip !== null && isDelayedTooltip === "delayed") {
+        mousemoveTimer = setTimeout(mousemoveTimerHelper, 3000, e, this);
+        mousedNewItem = true;
         mousemoveController.abort();
         hideMouseoverText(this);
-        return;
+    } else {
+        mousemoveTimer = setTimeout(mousemoveTimerHelper, 500, e, this);
+        // we are moving the mouse away, hide the tooltip regardless how much time has passed
+        if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
+            mousemoveController.abort();
+            hideMouseoverText(this);
+            return;
+        }
     }
 }
 
@@ -4060,6 +4068,15 @@ function showMouseoverText(ev) {
         mouseoverContainer.style.opacity = "1";
         mouseoverContainer.style.visibility = "visible";
         mouseoverContainer.setAttribute("origItemMouseoverId", referenceElement.getAttribute("mouseoverid"));
+
+        // some tooltips are special and have a long delay, make sure the container knows
+        // that too
+        let isDelayed = referenceElement.getAttribute("tooltipDelay");
+        if (isDelayed !== null && isDelayed === "delayed") {
+            mouseoverContainer.setAttribute("isDelayedTooltip", "delayed");
+        } else {
+            mouseoverContainer.setAttribute("isDelayedTooltip", "normal");
+        }
         // Events all get their own unique id but they are tough to keep track of if we
         // want to remove one. We can use the AbortController interface to let the
         // web browser automatically raise a signal when the event is fired and remove
@@ -4084,7 +4101,7 @@ function showMouseover(e) {
     // make the mouseover div:
     let ele1 = e.currentTarget;
     let text = ele1.getAttribute("mouseoverText");
-    if (ele1.getAttribute("mouseoverId") === null) {
+    if (ele1.getAttribute("mouseoverid") === null) {
         if (text.length > 0) {
             let newEl = document.createElement("span");
             newEl.style = "max-width: 400px"; // max width of the mouseover text
@@ -4132,7 +4149,13 @@ function showMouseover(e) {
     // If there is no tooltip present, we want a small but noticeable delay
     // before showing a tooltip
     if (canShowNewMouseover) {
-        mouseoverTimer = setTimeout(showMouseoverText, 500, e);
+        // some tooltips are special and have a longer delay
+        let isDelayedTooltip = ele1.getAttribute("tooltipDelay");
+        if (isDelayedTooltip !== null && isDelayedTooltip === "delayed") {
+            mouseoverTimer = setTimeout(showMouseoverText, 3000, e);
+        } else {
+            mouseoverTimer = setTimeout(showMouseoverText, 500, e);
+        }
     }
 }
 
@@ -4167,9 +4190,14 @@ function titleTagToMouseover(mapEl) {
 function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
     $("[title]").each(function(i, a) {
-        if (a.title.startsWith("click & drag to scroll"))
+        if (a.title !== undefined && a.title.startsWith("click & drag to scroll"))
             a.title = "";
         else if (a.title !== undefined && a.title.length > 0) {
+            if (a.title.startsWith("Click to alter the display density") ||
+                    a.title.startsWith("drag select or click to zoom")) {
+                // these tooltips have a longer delay:
+                a.setAttribute("tooltipDelay", "delayed");
+            }
             titleTagToMouseover(a);
         }
     });
