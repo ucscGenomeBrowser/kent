@@ -1691,5 +1691,5 @@ return trackHubGrps;
 void trackHubResetGrps()
 /* Reset to NULL the groups defined by attached track hubs. */
 {
-trackHubGrps = NULL;
+//trackHubGrps = NULL;
 }
