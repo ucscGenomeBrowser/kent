@@ -241,6 +241,7 @@ GCF_004354385.1_UK_Dinn_1.0	fly D.innubila (TH190305 2019 refseq)
 GCA_004354385.2_ASM435438v2	fly D.innubila (TH190305 2020 genbank)
 GCF_000224215.1_Dkik_2.0	fly D.kikkawai (Baylor 2013)
 GCF_018152535.1_ASM1815253v1	fly D.kikkawai (Stanford 2021)
+GCA_008042735.1_UCB_Dleo_1.0	fly D.leontia (RGN 210-13 2019)
 GCA_008121275.1_UCBerk_Dlow_1.0	fly D.lowei (Jillo6 2019)
 GCF_004382145.1_ASM438214v1	fly D.mauritiana
 GCF_000001215.4_Release_6_plus_ISO1_MT	fly D.melanogaster
@@ -352,6 +353,7 @@ GCA_902829235.1_CLODIP2	mayflies C.dipterum (2020)
 GCF_031216515.1_ASM3121651v1	mayflies N.triangulifer (White Clay Creek 2 clone  2023)
 GCF_905333055.1_ilManJurt1.1	meadow brown (refseq 2021)
 GCF_000347755.3_Ccap_2.1	Mediterranean fruit fly
+GCA_026230145.1_icDioElon1.1	Mediterranean tamarisk beetle (Crete 2022)
 GCF_028554725.1_idZeuCucr1.2	melon fly (PBARC_wt_2022May primary hap 2023)
 GCF_000806345.2_ASM80634v2	melon fly (v2 USDA-PBARC White Pupae T1 2014)
 GCF_028408465.1_idAnaLude1.1	Mexican fruit fly (Willacy primary hap 2023)
