@@ -8040,6 +8040,7 @@ void initTrackList()
 {
 if (!trackList)
     {
+    trackHubResetGrps();
     if (measureTiming)
 	measureTime("Time before getTrackList");
     boolean defaultTracks = cgiVarExists("hgt.reset");

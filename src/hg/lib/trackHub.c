@@ -1687,3 +1687,9 @@ struct grp *trackHubGetGrps()
 {
 return trackHubGrps;
 }
+
+void trackHubResetGrps()
+/* Reset to NULL the groups defined by attached track hubs. */
+{
+trackHubGrps = NULL;
+}
