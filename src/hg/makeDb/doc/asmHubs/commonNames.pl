@@ -108,7 +108,7 @@ while (my $asmId = <FH>) {
   chomp $orgName;
   if ($orgName =~ m/kinetoplastids|firmicutes|proteobacteria|high G|enterobacteria|agent of/) {
     $orgName = $sciName;
-  } elsif ($orgName =~ m/bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes/) {
+  } elsif ($orgName =~ m/bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes|flies/) {
     my ($order, undef) = split('\s', $orgName, 2);
     $order = "budding yeast" if ($order =~ m/budding/);
     $order = "smut fungi" if ($order =~ m/smut/);
@@ -121,6 +121,8 @@ while (my $asmId = <FH>) {
     my $lastN = scalar(@a) - 1;
     if ($orgName =~ m/eukaryotes/) {
       $orgName = uc(substr($a[0], 0, 1)) . "." . "@a[1..$lastN]";
+    } elsif ($orgName =~ m/flies/) {
+      $orgName = "fly " . uc(substr($a[0], 0, 1)) . "." . "@a[1..$lastN]";
     } else {
       $orgName = "$order " . uc(substr($a[0], 0, 1)) . "." . "@a[1..$lastN]";
     }
