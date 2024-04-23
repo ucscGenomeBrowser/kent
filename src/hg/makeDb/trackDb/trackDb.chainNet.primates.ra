@@ -1,3 +1,197 @@
+##############################################################################
+# GCA_029289425.2 - pygmy chimpanzee - Pan paniscus - taxId: 9597 - primates
+##############################################################################
+track chainNetGCA_029289425.2
+compositeTrack on
+shortLabel pygmy chimpanzee Chain/Net
+longLabel pygmy chimpanzee (Jan. 2024 GCA_029289425.2_NHGRI_mPanPan1-v2.0_pri), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 496
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCA_029289425.2
+html chainNet
+
+    track chainNetGCA_029289425.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_029289425.2
+    spectrum on
+
+        track chainGCA_029289425.2
+        parent chainNetGCA_029289425.2Viewchain
+        subGroups view=chain
+        shortLabel pygmy chimpanzee Chain
+        longLabel pygmy chimpanzee (Jan. 2024 GCA_029289425.2_NHGRI_mPanPan1-v2.0_pri) Chained Alignments
+        type bigChain GCA_029289425.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_029289425.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_029289425.2Link.bb
+
+        track chainSynGCA_029289425.2
+        parent chainNetGCA_029289425.2Viewchain
+        subGroups view=chain
+        shortLabel pygmy chimpanzee synChain
+        longLabel pygmy chimpanzee (Jan. 2024 GCA_029289425.2_NHGRI_mPanPan1-v2.0_pri) Syntenic Chained Alignments
+        type bigChain GCA_029289425.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_029289425.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_029289425.2Link.bb
+
+        track chainRBestGCA_029289425.2
+        parent chainNetGCA_029289425.2Viewchain
+        subGroups view=chain
+        shortLabel pygmy chimpanzee rBestChain
+        longLabel pygmy chimpanzee (Jan. 2024 GCA_029289425.2_NHGRI_mPanPan1-v2.0_pri) Reciprocal Best Chained Alignments
+        type bigChain GCA_029289425.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_029289425.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_029289425.2Link.bb
+
+    track mafNetGCA_029289425.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCA_029289425.2
+
+        track netGCA_029289425.2
+        parent mafNetGCA_029289425.2Viewnet
+        subGroups view=net
+        shortLabel pygmy chimpanzee mafNet
+        longLabel pygmy chimpanzee (Jan. 2024 GCA_029289425.2_NHGRI_mPanPan1-v2.0_pri) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_029289425.2.net.bb
+        summary /gbdb/$D/chainNet/$D.GCA_029289425.2.net.summary.bb
+        speciesOrder GCA_029289425.2
+        speciesLabels GCA_029289425.2="pygmy chimpanzee"
+
+        track synNetGCA_029289425.2
+        parent mafNetGCA_029289425.2Viewnet
+        subGroups view=net
+        shortLabel pygmy chimpanzee synNet
+        longLabel pygmy chimpanzee (Jan. 2024 GCA_029289425.2_NHGRI_mPanPan1-v2.0_pri) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_029289425.2.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_029289425.2.synNet.summary.bb
+        speciesOrder GCA_029289425.2
+        speciesLabels GCA_029289425.2="pygmy chimpanzee"
+
+        track rbestNetGCA_029289425.2
+        parent mafNetGCA_029289425.2Viewnet
+        subGroups view=net
+        shortLabel pygmy chimpanzee rBestNet
+        longLabel pygmy chimpanzee (Jan. 2024 GCA_029289425.2_NHGRI_mPanPan1-v2.0_pri) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_029289425.2.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_029289425.2.rbestNet.summary.bb
+        speciesOrder GCA_029289425.2
+        speciesLabels GCA_029289425.2="pygmy chimpanzee"
+
+##############################################################################
+# GCA_028858775.2 - chimpanzee - Pan troglodytes - taxId: 9598 - primates
+##############################################################################
+track chainNetGCA_028858775.2
+compositeTrack on
+shortLabel chimpanzee Chain/Net
+longLabel chimpanzee (Jan. 2024 GCA_028858775.2_NHGRI_mPanTro3-v2.0_pri), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 497
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCA_028858775.2
+html chainNet
+
+    track chainNetGCA_028858775.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_028858775.2
+    spectrum on
+
+        track chainGCA_028858775.2
+        parent chainNetGCA_028858775.2Viewchain
+        subGroups view=chain
+        shortLabel chimpanzee Chain
+        longLabel chimpanzee (Jan. 2024 GCA_028858775.2_NHGRI_mPanTro3-v2.0_pri) Chained Alignments
+        type bigChain GCA_028858775.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_028858775.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_028858775.2Link.bb
+
+        track chainSynGCA_028858775.2
+        parent chainNetGCA_028858775.2Viewchain
+        subGroups view=chain
+        shortLabel chimpanzee synChain
+        longLabel chimpanzee (Jan. 2024 GCA_028858775.2_NHGRI_mPanTro3-v2.0_pri) Syntenic Chained Alignments
+        type bigChain GCA_028858775.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_028858775.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_028858775.2Link.bb
+
+        track chainRBestGCA_028858775.2
+        parent chainNetGCA_028858775.2Viewchain
+        subGroups view=chain
+        shortLabel chimpanzee rBestChain
+        longLabel chimpanzee (Jan. 2024 GCA_028858775.2_NHGRI_mPanTro3-v2.0_pri) Reciprocal Best Chained Alignments
+        type bigChain GCA_028858775.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_028858775.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_028858775.2Link.bb
+
+    track mafNetGCA_028858775.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCA_028858775.2
+
+        track netGCA_028858775.2
+        parent mafNetGCA_028858775.2Viewnet
+        subGroups view=net
+        shortLabel chimpanzee mafNet
+        longLabel chimpanzee (Jan. 2024 GCA_028858775.2_NHGRI_mPanTro3-v2.0_pri) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028858775.2.net.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028858775.2.net.summary.bb
+        speciesOrder GCA_028858775.2
+        speciesLabels GCA_028858775.2="chimpanzee"
+
+        track synNetGCA_028858775.2
+        parent mafNetGCA_028858775.2Viewnet
+        subGroups view=net
+        shortLabel chimpanzee synNet
+        longLabel chimpanzee (Jan. 2024 GCA_028858775.2_NHGRI_mPanTro3-v2.0_pri) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028858775.2.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028858775.2.synNet.summary.bb
+        speciesOrder GCA_028858775.2
+        speciesLabels GCA_028858775.2="chimpanzee"
+
+        track rbestNetGCA_028858775.2
+        parent mafNetGCA_028858775.2Viewnet
+        subGroups view=net
+        shortLabel chimpanzee rBestNet
+        longLabel chimpanzee (Jan. 2024 GCA_028858775.2_NHGRI_mPanTro3-v2.0_pri) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028858775.2.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028858775.2.rbestNet.summary.bb
+        speciesOrder GCA_028858775.2
+        speciesLabels GCA_028858775.2="chimpanzee"
+
 ################################################################
 # panTro6 - chimp - Pan troglodytes - primate - taxId 9598
 ################################################################
@@ -634,6 +828,103 @@ html chainNet
         type netAlign rheMac1 chainRheMac1
         html chainNet
 
+##############################################################################
+# GCA_029281585.2 - western lowland gorilla - Gorilla gorilla gorilla - taxId: 9595 - primates
+##############################################################################
+track chainNetGCA_029281585.2
+compositeTrack on
+shortLabel western lowland gorilla Chain/Net
+longLabel western lowland gorilla (Jan. 2024 GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 220.2
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCA_029281585.2
+html chainNet
+
+    track chainNetGCA_029281585.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_029281585.2
+    spectrum on
+
+        track chainGCA_029281585.2
+        parent chainNetGCA_029281585.2Viewchain
+        subGroups view=chain
+        shortLabel western lowland gorilla Chain
+        longLabel western lowland gorilla (Jan. 2024 GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri) Chained Alignments
+        type bigChain GCA_029281585.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_029281585.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_029281585.2Link.bb
+
+        track chainSynGCA_029281585.2
+        parent chainNetGCA_029281585.2Viewchain
+        subGroups view=chain
+        shortLabel western lowland gorilla synChain
+        longLabel western lowland gorilla (Jan. 2024 GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri) Syntenic Chained Alignments
+        type bigChain GCA_029281585.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_029281585.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_029281585.2Link.bb
+
+        track chainRBestGCA_029281585.2
+        parent chainNetGCA_029281585.2Viewchain
+        subGroups view=chain
+        shortLabel western lowland gorilla rBestChain
+        longLabel western lowland gorilla (Jan. 2024 GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri) Reciprocal Best Chained Alignments
+        type bigChain GCA_029281585.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_029281585.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_029281585.2Link.bb
+
+    track mafNetGCA_029281585.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCA_029281585.2
+
+        track netGCA_029281585.2
+        parent mafNetGCA_029281585.2Viewnet
+        subGroups view=net
+        shortLabel western lowland gorilla mafNet
+        longLabel western lowland gorilla (Jan. 2024 GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_029281585.2.net.bb
+        summary /gbdb/$D/chainNet/$D.GCA_029281585.2.net.summary.bb
+        speciesOrder GCA_029281585.2
+        speciesLabels GCA_029281585.2="western lowland gorilla"
+
+        track synNetGCA_029281585.2
+        parent mafNetGCA_029281585.2Viewnet
+        subGroups view=net
+        shortLabel western lowland gorilla synNet
+        longLabel western lowland gorilla (Jan. 2024 GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_029281585.2.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_029281585.2.synNet.summary.bb
+        speciesOrder GCA_029281585.2
+        speciesLabels GCA_029281585.2="western lowland gorilla"
+
+        track rbestNetGCA_029281585.2
+        parent mafNetGCA_029281585.2Viewnet
+        subGroups view=net
+        shortLabel western lowland gorilla rBestNet
+        longLabel western lowland gorilla (Jan. 2024 GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_029281585.2.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_029281585.2.rbestNet.summary.bb
+        speciesOrder GCA_029281585.2
+        speciesLabels GCA_029281585.2="western lowland gorilla"
+
 ################################################################
 # gorGor6 - Gorilla - Gorilla gorilla - primate
 ################################################################
@@ -951,6 +1242,202 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment net
         type netAlign gorGor1 chainGorGor1
         html chainNet
+
+##############################################################################
+# GCA_028885625.2 - Bornean orangutan - Pongo pygmaeus - taxId: 9600 - primates
+##############################################################################
+track chainNetGCA_028885625.2
+compositeTrack on
+shortLabel Bornean orangutan Chain/Net
+longLabel Bornean orangutan (Jan. 2024 GCA_028885625.2_NHGRI_mPonPyg2-v2.0_pri), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 496
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCA_028885625.2
+html chainNet
+
+    track chainNetGCA_028885625.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_028885625.2
+    spectrum on
+
+        track chainGCA_028885625.2
+        parent chainNetGCA_028885625.2Viewchain
+        subGroups view=chain
+        shortLabel Bornean orangutan Chain
+        longLabel Bornean orangutan (Jan. 2024 GCA_028885625.2_NHGRI_mPonPyg2-v2.0_pri) Chained Alignments
+        type bigChain GCA_028885625.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_028885625.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_028885625.2Link.bb
+
+        track chainSynGCA_028885625.2
+        parent chainNetGCA_028885625.2Viewchain
+        subGroups view=chain
+        shortLabel Bornean orangutan synChain
+        longLabel Bornean orangutan (Jan. 2024 GCA_028885625.2_NHGRI_mPonPyg2-v2.0_pri) Syntenic Chained Alignments
+        type bigChain GCA_028885625.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_028885625.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_028885625.2Link.bb
+
+        track chainRBestGCA_028885625.2
+        parent chainNetGCA_028885625.2Viewchain
+        subGroups view=chain
+        shortLabel Bornean orangutan rBestChain
+        longLabel Bornean orangutan (Jan. 2024 GCA_028885625.2_NHGRI_mPonPyg2-v2.0_pri) Reciprocal Best Chained Alignments
+        type bigChain GCA_028885625.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_028885625.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_028885625.2Link.bb
+
+    track mafNetGCA_028885625.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCA_028885625.2
+
+        track netGCA_028885625.2
+        parent mafNetGCA_028885625.2Viewnet
+        subGroups view=net
+        shortLabel Bornean orangutan mafNet
+        longLabel Bornean orangutan (Jan. 2024 GCA_028885625.2_NHGRI_mPonPyg2-v2.0_pri) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028885625.2.net.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028885625.2.net.summary.bb
+        speciesOrder GCA_028885625.2
+        speciesLabels GCA_028885625.2="Bornean orangutan"
+
+        track synNetGCA_028885625.2
+        parent mafNetGCA_028885625.2Viewnet
+        subGroups view=net
+        shortLabel Bornean orangutan synNet
+        longLabel Bornean orangutan (Jan. 2024 GCA_028885625.2_NHGRI_mPonPyg2-v2.0_pri) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028885625.2.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028885625.2.synNet.summary.bb
+        speciesOrder GCA_028885625.2
+        speciesLabels GCA_028885625.2="Bornean orangutan"
+
+        track rbestNetGCA_028885625.2
+        parent mafNetGCA_028885625.2Viewnet
+        subGroups view=net
+        shortLabel Bornean orangutan rBestNet
+        longLabel Bornean orangutan (Jan. 2024 GCA_028885625.2_NHGRI_mPonPyg2-v2.0_pri) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028885625.2.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028885625.2.rbestNet.summary.bb
+        speciesOrder GCA_028885625.2
+        speciesLabels GCA_028885625.2="Bornean orangutan"
+
+
+##############################################################################
+# GCA_028885655.2 - Sumatran orangutan - Pongo abelii - taxId: 9601 - primates
+##############################################################################
+track chainNetGCA_028885655.2
+compositeTrack on
+shortLabel Sumatran orangutan Chain/Net
+longLabel Sumatran orangutan (Jan. 2024 GCA_028885655.2_NHGRI_mPonAbe1-v2.0_pri), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 497
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCA_028885655.2
+html chainNet
+
+    track chainNetGCA_028885655.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_028885655.2
+    spectrum on
+
+        track chainGCA_028885655.2
+        parent chainNetGCA_028885655.2Viewchain
+        subGroups view=chain
+        shortLabel Sumatran orangutan Chain
+        longLabel Sumatran orangutan (Jan. 2024 GCA_028885655.2_NHGRI_mPonAbe1-v2.0_pri) Chained Alignments
+        type bigChain GCA_028885655.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_028885655.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_028885655.2Link.bb
+
+        track chainSynGCA_028885655.2
+        parent chainNetGCA_028885655.2Viewchain
+        subGroups view=chain
+        shortLabel Sumatran orangutan synChain
+        longLabel Sumatran orangutan (Jan. 2024 GCA_028885655.2_NHGRI_mPonAbe1-v2.0_pri) Syntenic Chained Alignments
+        type bigChain GCA_028885655.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_028885655.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_028885655.2Link.bb
+
+        track chainRBestGCA_028885655.2
+        parent chainNetGCA_028885655.2Viewchain
+        subGroups view=chain
+        shortLabel Sumatran orangutan rBestChain
+        longLabel Sumatran orangutan (Jan. 2024 GCA_028885655.2_NHGRI_mPonAbe1-v2.0_pri) Reciprocal Best Chained Alignments
+        type bigChain GCA_028885655.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_028885655.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_028885655.2Link.bb
+
+    track mafNetGCA_028885655.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCA_028885655.2
+
+        track netGCA_028885655.2
+        parent mafNetGCA_028885655.2Viewnet
+        subGroups view=net
+        shortLabel Sumatran orangutan mafNet
+        longLabel Sumatran orangutan (Jan. 2024 GCA_028885655.2_NHGRI_mPonAbe1-v2.0_pri) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028885655.2.net.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028885655.2.net.summary.bb
+        speciesOrder GCA_028885655.2
+        speciesLabels GCA_028885655.2="Sumatran orangutan"
+
+        track synNetGCA_028885655.2
+        parent mafNetGCA_028885655.2Viewnet
+        subGroups view=net
+        shortLabel Sumatran orangutan synNet
+        longLabel Sumatran orangutan (Jan. 2024 GCA_028885655.2_NHGRI_mPonAbe1-v2.0_pri) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028885655.2.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028885655.2.synNet.summary.bb
+        speciesOrder GCA_028885655.2
+        speciesLabels GCA_028885655.2="Sumatran orangutan"
+
+        track rbestNetGCA_028885655.2
+        parent mafNetGCA_028885655.2Viewnet
+        subGroups view=net
+        shortLabel Sumatran orangutan rBestNet
+        longLabel Sumatran orangutan (Jan. 2024 GCA_028885655.2_NHGRI_mPonAbe1-v2.0_pri) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028885655.2.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028885655.2.rbestNet.summary.bb
+        speciesOrder GCA_028885655.2
+        speciesLabels GCA_028885655.2="Sumatran orangutan"
+
 
 ################################################################
 # ponAbe3 - Bonobo - Pongo pygmaeus abelii - primate - taxId 9601
@@ -2131,6 +2618,398 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment net
         type netAlign proCoq1 chainProCoq1
         html chainNet
+
+##############################################################################
+# GCA_028878055.2 - siamang - Symphalangus syndactylus - taxId: 9590 - primates
+##############################################################################
+track chainNetGCA_028878055.2
+compositeTrack on
+shortLabel siamang Chain/Net
+longLabel siamang (Jan. 2024 GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 260.0
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCA_028878055.2
+html chainNet
+
+    track chainNetGCA_028878055.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCA_028878055.2
+    spectrum on
+
+        track chainGCA_028878055.2
+        parent chainNetGCA_028878055.2Viewchain
+        subGroups view=chain
+        shortLabel siamang Chain
+        longLabel siamang (Jan. 2024 GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri) Chained Alignments
+        type bigChain GCA_028878055.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCA_028878055.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCA_028878055.2Link.bb
+
+        track chainSynGCA_028878055.2
+        parent chainNetGCA_028878055.2Viewchain
+        subGroups view=chain
+        shortLabel siamang synChain
+        longLabel siamang (Jan. 2024 GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri) Syntenic Chained Alignments
+        type bigChain GCA_028878055.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_028878055.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCA_028878055.2Link.bb
+
+        track chainRBestGCA_028878055.2
+        parent chainNetGCA_028878055.2Viewchain
+        subGroups view=chain
+        shortLabel siamang rBestChain
+        longLabel siamang (Jan. 2024 GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri) Reciprocal Best Chained Alignments
+        type bigChain GCA_028878055.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_028878055.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCA_028878055.2Link.bb
+
+    track mafNetGCA_028878055.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCA_028878055.2
+
+        track netGCA_028878055.2
+        parent mafNetGCA_028878055.2Viewnet
+        subGroups view=net
+        shortLabel siamang mafNet
+        longLabel siamang (Jan. 2024 GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028878055.2.net.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028878055.2.net.summary.bb
+        speciesOrder GCA_028878055.2
+        speciesLabels GCA_028878055.2="siamang"
+
+        track synNetGCA_028878055.2
+        parent mafNetGCA_028878055.2Viewnet
+        subGroups view=net
+        shortLabel siamang synNet
+        longLabel siamang (Jan. 2024 GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028878055.2.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028878055.2.synNet.summary.bb
+        speciesOrder GCA_028878055.2
+        speciesLabels GCA_028878055.2="siamang"
+
+        track rbestNetGCA_028878055.2
+        parent mafNetGCA_028878055.2Viewnet
+        subGroups view=net
+        shortLabel siamang rBestNet
+        longLabel siamang (Jan. 2024 GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCA_028878055.2.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCA_028878055.2.rbestNet.summary.bb
+        speciesOrder GCA_028878055.2
+        speciesLabels GCA_028878055.2="siamang"
+
+
+##############################################################################
+# GCF_020740605.2 - Ring-tailed lemur - Lemur catta - taxId: 9447 - primates
+##############################################################################
+track chainNetGCF_020740605.2
+compositeTrack on
+shortLabel Ring-tailed lemur Chain/Net
+longLabel Ring-tailed lemur (Nov. 2021 GCF_020740605.2_mLemCat1.pri), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 260.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCF_020740605.2
+html chainNet
+
+    track chainNetGCF_020740605.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_020740605.2
+    spectrum on
+
+        track chainGCF_020740605.2
+        parent chainNetGCF_020740605.2Viewchain
+        subGroups view=chain
+        shortLabel Ring-tailed lemur Chain
+        longLabel Ring-tailed lemur (Nov. 2021 GCF_020740605.2_mLemCat1.pri) Chained Alignments
+        type bigChain GCF_020740605.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCF_020740605.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCF_020740605.2Link.bb
+
+        track chainSynGCF_020740605.2
+        parent chainNetGCF_020740605.2Viewchain
+        subGroups view=chain
+        shortLabel Ring-tailed lemur synChain
+        longLabel Ring-tailed lemur (Nov. 2021 GCF_020740605.2_mLemCat1.pri) Syntenic Chained Alignments
+        type bigChain GCF_020740605.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCF_020740605.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCF_020740605.2Link.bb
+
+        track chainRBestGCF_020740605.2
+        parent chainNetGCF_020740605.2Viewchain
+        subGroups view=chain
+        shortLabel Ring-tailed lemur rBestChain
+        longLabel Ring-tailed lemur (Nov. 2021 GCF_020740605.2_mLemCat1.pri) Reciprocal Best Chained Alignments
+        type bigChain GCF_020740605.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCF_020740605.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCF_020740605.2Link.bb
+
+    track mafNetGCF_020740605.2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_020740605.2
+
+        track netGCF_020740605.2
+        parent mafNetGCF_020740605.2Viewnet
+        subGroups view=net
+        shortLabel Ring-tailed lemur mafNet
+        longLabel Ring-tailed lemur (Nov. 2021 GCF_020740605.2_mLemCat1.pri) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_020740605.2.net.bb
+        summary /gbdb/$D/chainNet/$D.GCF_020740605.2.net.summary.bb
+        speciesOrder GCF_020740605.2
+        speciesLabels GCF_020740605.2="Ring-tailed lemur"
+
+        track synNetGCF_020740605.2
+        parent mafNetGCF_020740605.2Viewnet
+        subGroups view=net
+        shortLabel Ring-tailed lemur synNet
+        longLabel Ring-tailed lemur (Nov. 2021 GCF_020740605.2_mLemCat1.pri) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_020740605.2.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCF_020740605.2.synNet.summary.bb
+        speciesOrder GCF_020740605.2
+        speciesLabels GCF_020740605.2="Ring-tailed lemur"
+
+        track rbestNetGCF_020740605.2
+        parent mafNetGCF_020740605.2Viewnet
+        subGroups view=net
+        shortLabel Ring-tailed lemur rBestNet
+        longLabel Ring-tailed lemur (Nov. 2021 GCF_020740605.2_mLemCat1.pri) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_020740605.2.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCF_020740605.2.rbestNet.summary.bb
+        speciesOrder GCF_020740605.2
+        speciesLabels GCF_020740605.2="Ring-tailed lemur"
+
+
+##############################################################################
+# GCF_011100555.1 - white-tufted-ear marmoset - Callithrix jacchus - taxId: 9483 - primates
+##############################################################################
+track chainNetGCF_011100555.1
+compositeTrack on
+shortLabel white-tufted-ear marmoset Chain/Net
+longLabel white-tufted-ear marmoset (Apr. 2021 GCF_011100555.1_mCalJa1.2.pat.X), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 260.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCF_011100555.1
+html chainNet
+
+    track chainNetGCF_011100555.1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_011100555.1
+    spectrum on
+
+        track chainGCF_011100555.1
+        parent chainNetGCF_011100555.1Viewchain
+        subGroups view=chain
+        shortLabel white-tufted-ear marmoset Chain
+        longLabel white-tufted-ear marmoset (Apr. 2021 GCF_011100555.1_mCalJa1.2.pat.X) Chained Alignments
+        type bigChain GCF_011100555.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCF_011100555.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCF_011100555.1Link.bb
+
+        track chainSynGCF_011100555.1
+        parent chainNetGCF_011100555.1Viewchain
+        subGroups view=chain
+        shortLabel white-tufted-ear marmoset synChain
+        longLabel white-tufted-ear marmoset (Apr. 2021 GCF_011100555.1_mCalJa1.2.pat.X) Syntenic Chained Alignments
+        type bigChain GCF_011100555.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCF_011100555.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCF_011100555.1Link.bb
+
+        track chainRBestGCF_011100555.1
+        parent chainNetGCF_011100555.1Viewchain
+        subGroups view=chain
+        shortLabel white-tufted-ear marmoset rBestChain
+        longLabel white-tufted-ear marmoset (Apr. 2021 GCF_011100555.1_mCalJa1.2.pat.X) Reciprocal Best Chained Alignments
+        type bigChain GCF_011100555.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCF_011100555.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCF_011100555.1Link.bb
+
+    track mafNetGCF_011100555.1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_011100555.1
+
+        track netGCF_011100555.1
+        parent mafNetGCF_011100555.1Viewnet
+        subGroups view=net
+        shortLabel white-tufted-ear marmoset mafNet
+        longLabel white-tufted-ear marmoset (Apr. 2021 GCF_011100555.1_mCalJa1.2.pat.X) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_011100555.1.net.bb
+        summary /gbdb/$D/chainNet/$D.GCF_011100555.1.net.summary.bb
+        speciesOrder GCF_011100555.1
+        speciesLabels GCF_011100555.1="white-tufted-ear marmoset"
+
+        track synNetGCF_011100555.1
+        parent mafNetGCF_011100555.1Viewnet
+        subGroups view=net
+        shortLabel white-tufted-ear marmoset synNet
+        longLabel white-tufted-ear marmoset (Apr. 2021 GCF_011100555.1_mCalJa1.2.pat.X) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_011100555.1.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCF_011100555.1.synNet.summary.bb
+        speciesOrder GCF_011100555.1
+        speciesLabels GCF_011100555.1="white-tufted-ear marmoset"
+
+        track rbestNetGCF_011100555.1
+        parent mafNetGCF_011100555.1Viewnet
+        subGroups view=net
+        shortLabel white-tufted-ear marmoset rBestNet
+        longLabel white-tufted-ear marmoset (Apr. 2021 GCF_011100555.1_mCalJa1.2.pat.X) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_011100555.1.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCF_011100555.1.rbestNet.summary.bb
+        speciesOrder GCF_011100555.1
+        speciesLabels GCF_011100555.1="white-tufted-ear marmoset"
+
+
+##############################################################################
+# GCF_027406575.1 - slow loris - Nycticebus coucang - taxId: 9470 - primates
+##############################################################################
+track chainNetGCF_027406575.1
+compositeTrack on
+shortLabel slow loris Chain/Net
+longLabel slow loris (Dec. 2022 GCF_027406575.1_mNycCou1.pri), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 260.2
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCF_027406575.1
+html chainNet
+
+    track chainNetGCF_027406575.1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_027406575.1
+    spectrum on
+
+        track chainGCF_027406575.1
+        parent chainNetGCF_027406575.1Viewchain
+        subGroups view=chain
+        shortLabel slow loris Chain
+        longLabel slow loris (Dec. 2022 GCF_027406575.1_mNycCou1.pri) Chained Alignments
+        type bigChain GCF_027406575.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCF_027406575.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCF_027406575.1Link.bb
+
+        track chainSynGCF_027406575.1
+        parent chainNetGCF_027406575.1Viewchain
+        subGroups view=chain
+        shortLabel slow loris synChain
+        longLabel slow loris (Dec. 2022 GCF_027406575.1_mNycCou1.pri) Syntenic Chained Alignments
+        type bigChain GCF_027406575.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCF_027406575.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCF_027406575.1Link.bb
+
+        track chainRBestGCF_027406575.1
+        parent chainNetGCF_027406575.1Viewchain
+        subGroups view=chain
+        shortLabel slow loris rBestChain
+        longLabel slow loris (Dec. 2022 GCF_027406575.1_mNycCou1.pri) Reciprocal Best Chained Alignments
+        type bigChain GCF_027406575.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCF_027406575.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCF_027406575.1Link.bb
+
+    track mafNetGCF_027406575.1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_027406575.1
+
+        track netGCF_027406575.1
+        parent mafNetGCF_027406575.1Viewnet
+        subGroups view=net
+        shortLabel slow loris mafNet
+        longLabel slow loris (Dec. 2022 GCF_027406575.1_mNycCou1.pri) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_027406575.1.net.bb
+        summary /gbdb/$D/chainNet/$D.GCF_027406575.1.net.summary.bb
+        speciesOrder GCF_027406575.1
+        speciesLabels GCF_027406575.1="slow loris"
+
+        track synNetGCF_027406575.1
+        parent mafNetGCF_027406575.1Viewnet
+        subGroups view=net
+        shortLabel slow loris synNet
+        longLabel slow loris (Dec. 2022 GCF_027406575.1_mNycCou1.pri) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_027406575.1.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCF_027406575.1.synNet.summary.bb
+        speciesOrder GCF_027406575.1
+        speciesLabels GCF_027406575.1="slow loris"
+
+        track rbestNetGCF_027406575.1
+        parent mafNetGCF_027406575.1Viewnet
+        subGroups view=net
+        shortLabel slow loris rBestNet
+        longLabel slow loris (Dec. 2022 GCF_027406575.1_mNycCou1.pri) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_027406575.1.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCF_027406575.1.rbestNet.summary.bb
+        speciesOrder GCF_027406575.1
+        speciesLabels GCF_027406575.1="slow loris"
+
 
 ################################################################
 # calJac4 - marmoset - Callithrix jacchus - primate - taxId 9483
