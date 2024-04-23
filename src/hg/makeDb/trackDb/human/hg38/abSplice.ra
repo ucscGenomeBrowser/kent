@@ -1,0 +1,16 @@
+track abSplice
+shortLabel AbSplice Scores
+longLabel Aberrant Splicing Prediction Scores
+type bigBed 9 +
+bigDataUrl /gbdb/hg38/abSplice/AbSplice.bb
+visibility hide
+itemRgb on
+noScoreFilter on
+group phenDis
+filterText.maxScore *
+filter.spliceABscore 0.01
+filterLimits.spliceABscore 0.01:1
+filterLabel.spliceABscore Filter by minimum AbSplice score
+filterLabel.maxScore Tissues
+mouseOver change: $name <br> gene: $ENSGid <br> max score: $spliceABscore in <br> $maxScore
+pennantIcon New red ../goldenPath/newsarch.html#030124 "Released Mar. 01, 2024"
