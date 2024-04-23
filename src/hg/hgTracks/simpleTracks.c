@@ -2641,17 +2641,17 @@ else
     if (isNotLastExon)
         {
         if (startPhase==endPhase)
-            exonNote = " &#8594; in-frame exon";
+            exonNote = ": in-frame exon";
         else
-            exonNote = " &#8594; out-of-frame exon";
+            exonNote = ": out-of-frame exon";
         safef(buf, EXONTEXTLEN, ", codon phase: start %d, end %d%s", startPhase, endPhase, exonNote);
         } 
     else
         {
         if (startPhase==0)
-            exonNote = " &#8594; in-frame exon";
+            exonNote = ": in-frame exon";
         else
-            exonNote = " &#8594; out-of-frame exon";
+            exonNote = ": out-of-frame exon";
         safef(buf, EXONTEXTLEN, ", start codon phase %d%s", startPhase, exonNote);
         }
     }
