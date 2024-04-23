@@ -640,7 +640,14 @@ else  // hyperlink
         printf("<TR><TD> Custom track description: ");
         cgiMakeTextVar( "trackDescription", trackDescription,50);
         printf("</TD></TR>");
-        printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Build a custom track with these results\"></TD></TR>\n");
+        printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Create a stable custom track with these results\">\n");
+        printInfoIcon("The BLAT results below are temporary and will be replaced by your next BLAT search. "
+                "However, when saved as a custom track with the button on the left, BLAT results are stored on our "
+                "servers and can be saved as stable session (View &gt; My Sessions) links that can be shared via email or in manuscripts. "
+                "\n<p>We have never cleaned up the data under stable session links so far. "
+                "To reduce track clutter in your own sessions, you can delete BLAT custom tracks from the main Genome Browser "
+                "view using the little trash icon next to each custom track.</p>");
+        puts("</TD></TR>");
         printf("</TABLE></FORM></DIV>");
         }
 
@@ -1354,7 +1361,7 @@ for (k=1; k<36; k++)
     {
     expected /= alphaBetSize;
     // set this to .05 to allow 18bp searches on hg38.
-    if (expected < .004)
+    if (expected < .19)
 	break;
     }
 return k;
