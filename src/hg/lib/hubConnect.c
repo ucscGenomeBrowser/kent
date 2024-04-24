@@ -1000,9 +1000,14 @@ AllocVar(grp);
 char name[16];
 safef(name, sizeof(name), "hub_%d", hub->id);
 grp->name = cloneString(name);
-char buffer[4096];
-safef(buffer, sizeof buffer, "Hub: %s", hub->shortLabel);
-grp->label = cloneString(buffer);
+if (startsWith("Quick", hub->shortLabel))
+    grp->label = hub->shortLabel;
+else
+    {
+    char buffer[4096];
+    safef(buffer, sizeof buffer, "Hub: %s", hub->shortLabel);
+    grp->label = cloneString(buffer);
+    }
 return grp;
 }
 
