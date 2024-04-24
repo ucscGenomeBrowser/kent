@@ -1,6 +1,6 @@
 /* Align user sequence to the reference genome and write VCF */
 
-/* Copyright (C) 2020 The Regents of the University of California */
+/* Copyright (C) 2020-2024 The Regents of the University of California */
 
 #include "common.h"
 #include "fa.h"
@@ -605,7 +605,7 @@ for (si = filteredSeqs;  si != NULL;  si = si->next)
     }
 }
 
-struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
+struct tempName *vcfFromFasta(struct lineFile *lf, char *org, char *db, struct dnaSeq *refGenome,
                               struct slName **maskSites, struct hash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
@@ -619,12 +619,12 @@ struct slName *sampleIds = NULL;
 struct dnaSeq *allSeqs = faReadAllMixedInLf(lf);
 int minSeqSize = 0, maxSeqSize = 0;
 // Default to SARS-CoV-2 or hMPXV values if setting is missing from config.ra.
-char *minSeqSizeSetting = phyloPlaceDbSetting(db, "minSeqSize");
+char *minSeqSizeSetting = phyloPlaceRefSetting(org, db, "minSeqSize");
 if (isEmpty(minSeqSizeSetting))
     minSeqSize = sameString(db, "wuhCor1") ? 10000 : 100000;
 else
     minSeqSize = atoi(minSeqSizeSetting);
-char *maxSeqSizeSetting = phyloPlaceDbSetting(db, "maxSeqSize");
+char *maxSeqSizeSetting = phyloPlaceRefSetting(org, db, "maxSeqSize");
 if (isEmpty(maxSeqSizeSetting))
     maxSeqSize = sameString(db, "wuhCor1") ? 35000 : 220000;
 else
