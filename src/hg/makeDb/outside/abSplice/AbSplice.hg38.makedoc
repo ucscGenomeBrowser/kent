@@ -1,0 +1,178 @@
+#! /bin/bash
+
+cd /hive/data/genomes/hg38/bed/absplice
+mv AbSplice_DNA_hg38_snvs_high_scores AbSplice_DNA_hg38_snvs_high_scores_v1
+wget 'https://zenodo.org/records/10781457/files/AbSplice_DNA_hg38_snvs_high_scores.zip'
+mv AbSplice_DNA_hg38_snvs_high_scores.zip\?download\=1 AbSplice_DNA_hg38_snvs_high_scores.zip
+unzip AbSplice_DNA_hg38_snvs_high_scores.zip
+
+# Unpacks in per-gene files (gencode v38) in three directories, with score_cutoffs 0.01, 0.05 and 0.2
+# using the lowest cutoff (most files) for this track
+
+# the files have coordinates and gene IDs but not strand info, and I want to add this to the track
+wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gff3.gz
+zcat gencode.v38.annotation.gff3.gz | grep -P '\tgene\t' | cut -f7,9 | sed 's/ID=.*gene_id=//' | \
+	sed 's/\..*gene_name=/\t/' | sed 's/;.*//' > gene.strands
+
+# we have to loop over the files because they have different numbers of columns.
+# the info we want is in the (per-tissue) columns starting with ABSplice_DNA_
+# we want to display the tissue(s) with the highest ABSplice_DNA score on mouseover,
+# and a full table on clicking
+
+/cluster/home/jeltje/miniconda3/bin/python3.11 - << END
+
+import os 
+import csv
+import gzip
+from multiprocessing import Pool
+
+indir='/hive/data/genomes/hg38/bed/absplice/AbSplice_DNA_hg38_snvs_high_scores/score_cutoff=0.01'
+outbase='AbSplice'
+strandfile='gene.strands'
+
+def itemRGB(score):
+    '''Return color based on score'''
+    # https://github.com/gagneurlab/absplice?tab=readme-ov-file#output
+    # score cutoffs should be 0.2, 0.05 and 0.01
+    rgb = '255,255,255' # black
+    # red (high) , orange, blue (low)
+    for cutoff, color in [[0.2, '255,0,0'], [0.05, '255,128,0'], [0.01, '0,0,255']]:
+        if score >= cutoff:
+            return color
+    return rgb
+
+def process_gzipped_file(file_path, outAB, strands):
+  '''Extract AbSplice from one gzipped file'''
+  
+  with gzip.open(file_path, 'rt') as infile:
+    reader = csv.DictReader(infile, delimiter='\t')
+    header = reader.fieldnames
+
+    # Find the indices of columns starting with 'AbSplice_DNA'
+    indices_to_keep = [i for i, col in enumerate(header) if col.startswith('AbSplice_DNA')]
+    header = [column.replace('ABSplice_DNA_', '') for column in header]
+
+    # Open the output files with the csv.writer
+    with open(outAB, 'a') as outfile1:
+    #with open(outAB, 'a', newline='', encoding='utf-8') as outfile1:
+        # Create a csv.writer object with tab as the delimiter
+        ABwriter = csv.writer(outfile1, delimiter='\t')
+
+        # Iterate over rows in the input file and write selected columns to the output file
+        for row in reader:
+            if row['chrom'] == 'chrom':
+                continue
+            # Get the index and value for each column in indices_to_keep
+            all_values = [(header[i], row[header[i]]) for i in indices_to_keep]
+
+            # In this (but not the previous) version of the data, the final value is AbSplice_DNA_max
+            max_value = float(all_values.pop()[1]) # remove from list
+
+            # turn this information into a html table
+            html_table = '<table>'
+            for tvals in all_values:
+                html_table += f'  <tr><td>{tvals[0]}</td><td>{tvals[1]}</td></tr>'
+            html_table += '</table>'
+
+            # Find the top 10% maximum values (first make sure all row entries are floats)
+            all_values = [(x, float(y) if y else 0) for x, y in all_values]
+            if max_value == 0:
+                topValString = 'No tissues with scores > 0'
+            else:
+                threshold = 0.1 * max_value
+                # Filter max_values to include only entries with the top 10% of values
+                max_entries = {column: value for column, value in all_values if value > max_value - threshold}
+
+                # mouseover information
+                topValString = 'Max scores in <br>'
+                topValString += '<br>'.join([f'{column}: {value}' for column, value in max_entries.items()])
+
+            # this will be the item label
+            name = f"{row['ref']}>{row['alt']}"
+
+            # AB coordinates appear to be 1-based
+            startpos = int(row['pos']) -1 
+            [strand, hugo] = strands[row['gene_id']]
+            ABwriter.writerow([row['chrom'], startpos, startpos+1, name, 0, strand, startpos, startpos, itemRGB(max_value), row['gene_id'], hugo, max_value, topValString, html_table])
+
+# Main
+
+# read the strands
+strands = dict()
+with open(strandfile, 'r') as infile:
+    for line in infile:
+        strand, gene, hugo = line.strip().split('\t')
+        strands[gene] = [strand, hugo]
+
+# Do not append to existing files
+ABoutfile = outbase + '.ab.bed'
+if os.path.exists(ABoutfile):
+    os.remove(ABoutfile)
+
+# Get a list of all files in the directory
+gzfiles = [os.path.join(indir, filename) for filename in os.listdir(indir) if filename.endswith(".gz")]
+
+# Parallel process on 8 threads
+with Pool(8) as pool:
+        # Map the process_gzipped_file function to the list of files
+        pool.starmap(process_gzipped_file, [(infile, ABoutfile, strands) for infile in gzfiles])
+END
+
+
+
+# this created AbSplice.ab.bed 
+# duplicates happen when genes overlap, e.g. chr9:136,741,919-136,741,924
+# when this happens we want to display only the higher score
+# sort, then filter for duplicates
+sort -k1,1 -k2,2n AbSplice.ab.bed | /cluster/home/jeltje/miniconda3/bin/python3.11 <(
+    cat << "END"
+import sys
+
+printline = False
+prevcoord = '0'
+prevallele = False
+hiscore = 0
+for line in sys.stdin:
+    fields = line.split('\t')
+    score = float(fields[11])
+    # check if startpos and name (alleles) are identical
+    if fields[1] == prevcoord and fields[3] == prevallele:
+        if score > hiscore:
+            hiscore = score
+            printline = line
+    # if not identical, print the previous line and start over
+    else:
+        if printline:
+            print(printline, end='')
+        printline = line
+        prevcoord = fields[1]
+        prevallele = fields[3]
+        hiscore = score
+print(printline, end='')
+END
+) > filtered.ab.bed
+
+# Create custom as file for this bigBed:
+cat << '_EOF_' > AbSplice.as
+table abSplice
+"Bed 9+5 file with Ensembl Gene IDs and ABsplice values per tissue."
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    string ENSGid;     "Ensembl Gene ID"
+    string hugoId;     "hugo Gene ID"
+    float spliceABscore; "AbSplice highest score for this position"
+    lstring maxScore;   "All tissues containing the highest score"
+    lstring tissues;   "All 49 GTEX tissues with ABSplice value (empty if none were provided)"
+    )
+_EOF_
+
+bedToBigBed -type=bed9+5 -tab -as=AbSplice.as filtered.ab.bed /hive/data/genomes/hg38/chrom.sizes ~/public_html/trackHubs/AbSplice_hub/hg38/AbSplice.bb
+
