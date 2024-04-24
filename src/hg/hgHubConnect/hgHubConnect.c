@@ -1446,7 +1446,7 @@ for(; hub; hub = hub->next)
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-	hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash);
+	hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash, NULL);
 	}
     errCatchEnd(errCatch);
     if (errCatch->gotError)
