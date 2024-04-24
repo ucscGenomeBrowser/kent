@@ -43,8 +43,8 @@ if (fieldNum < 0)
 return fieldNum;
 }
 
-struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field)
-/* Make a filter on this column if the trackDb or cart wants us to. */
+struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field, boolean isHighlight)
+/* Make a filter/highlight on this column if the trackDb or cart wants us to. */
 {
 struct bigBedFilter *ret = NULL;
 char *setting = trackDbSettingClosestToHome(tdb, filter);
@@ -113,12 +113,14 @@ if (setting)
             ret->value1 = min;
             ret->value2 = max;
             }
+        if (isHighlight)
+            ret->isHighlight = TRUE;
         }
     }
 return ret;
 }
 
-struct bigBedFilter *bigBedMakeFilterText(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filterName, char *field)
+struct bigBedFilter *bigBedMakeFilterText(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filterName, char *field, boolean isHighlight)
 /* Add a bigBed filter using a trackDb filterText statement. */
 {
 struct bigBedFilter *filter;
@@ -144,14 +146,38 @@ else
     filter->wildCardString = cloneString(value);
     }
 
+filter->isHighlight = isHighlight;
+
 return filter;
 }
 
-struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices)
+char *getHighlightType(struct cart *cart, struct trackDb *tdb, char *field, char *def)
+{
+char settingString[4096];
+safef(settingString, sizeof settingString, "%s.%s", HIGHLIGHT_TYPE_NAME_LOW, field);
+char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
+if (setting == NULL)
+    {
+    safef(settingString, sizeof settingString, "%s.%s", field, HIGHLIGHT_TYPE_NAME_CAP);
+    setting = cartOrTdbString(cart, tdb, settingString, NULL);
+    }
+if (setting == NULL)
+    {
+    safef(settingString, sizeof settingString, "%s%s", field, HIGHLIGHT_TYPE_NAME_CAP);
+    setting = cartOrTdbString(cart, tdb, settingString, def);
+    }
+return setting;
+}
+
+struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices, boolean isHighlight)
 /* Add a bigBed filter using a trackDb filterBy statement. */
 {
 struct bigBedFilter *filter;
-char *setting = getFilterType(cart, tdb, field,  FILTERBY_DEFAULT);
+char *setting = NULL;
+if (isHighlight)
+    setting = getHighlightType(cart, tdb, field, HIGHLIGHTBY_DEFAULT);
+else
+setting = getFilterType(cart, tdb, field,  FILTERBY_DEFAULT);
 
 AllocVar(filter);
 filter->fieldNum =  getFieldNum(bbi, field);
@@ -160,10 +186,15 @@ if (setting)
     {
     if (sameString(setting, FILTERBY_SINGLE_LIST) 
             || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)
-            || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR))
+            || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR)
+            || sameString(setting, HIGHLIGHTBY_SINGLE_LIST)
+            || sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_OR)
+            || sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_ONLY_OR))
                 filter->comparisonType = COMPARE_HASH_LIST_OR;
     else if (sameString(setting, FILTERBY_MULTIPLE_LIST_AND) 
-            || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND))
+            || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND)
+            || sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_AND)
+            || sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_ONLY_AND))
                 filter->comparisonType = COMPARE_HASH_LIST_AND;
     }
 filter->valueHash = newHash(5);
@@ -172,6 +203,7 @@ filter->numValuesInHash = slCount(choices);
 for(; choices; choices = choices->next)
     hashStore(filter->valueHash, choices->name);
 
+filter->isHighlight = isHighlight;
 return filter;
 }
 
@@ -257,7 +289,7 @@ if ((tdbFilters == NULL) && !trackDbSettingOn(tdb, "noScoreFilter") && (bbi->def
 
 for(; tdbFilters; tdbFilters = tdbFilters->next)
     {
-    if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, tdbFilters->name, NULL, tdbFilters->fieldName)) != NULL)
+    if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, tdbFilters->name, NULL, tdbFilters->fieldName, FALSE)) != NULL)
         slAddHead(&filters, filter);
     }
 
@@ -265,7 +297,7 @@ tdbFilters = tdbGetTrackTextFilters(tdb);
 
 for(; tdbFilters; tdbFilters = tdbFilters->next)
     {
-    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, tdbFilters->name,  tdbFilters->fieldName)) != NULL)
+    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, tdbFilters->name,  tdbFilters->fieldName, FALSE)) != NULL)
         slAddHead(&filters, filter);
     }
 
@@ -275,7 +307,7 @@ for (;filterBy != NULL; filterBy = filterBy->next)
     {
     if (filterBy->slChoices && differentString(filterBy->slChoices->name, "All")) 
         {
-        if ((filter = bigBedMakeFilterBy(cart, bbi, tdb, filterBy->column, filterBy->slChoices)) != NULL)
+        if ((filter = bigBedMakeFilterBy(cart, bbi, tdb, filterBy->column, filterBy->slChoices, FALSE)) != NULL)
             slAddHead(&filters, filter);
         }
     }
@@ -289,6 +321,107 @@ if (isGencode3)
 return filters;
 }
 
+struct bigBedFilter *bigBedBuildHighlights(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb)
+/* Build all the numeric and highlights for a bigBed */
+{
+struct bigBedFilter *highlights = NULL, *highlight;
+struct trackDbFilter *tdbHighlights = tdbGetTrackNumHighlights(tdb);
+
+for(; tdbHighlights; tdbHighlights = tdbHighlights->next)
+    {
+    if ((highlight = bigBedMakeNumberFilter(cart, bbi, tdb, tdbHighlights->name, NULL, tdbHighlights->fieldName, TRUE)) != NULL)
+        slAddHead(&highlights, highlight);
+    }
+
+tdbHighlights = tdbGetTrackTextHighlights(tdb);
+
+for(; tdbHighlights; tdbHighlights = tdbHighlights->next)
+    {
+    if ((highlight = bigBedMakeFilterText(cart, bbi, tdb, tdbHighlights->name,  tdbHighlights->fieldName, TRUE)) != NULL)
+        slAddHead(&highlights, highlight);
+    }
+
+filterBy_t *filterBySet = highlightBySetGet(tdb, cart,NULL);
+filterBy_t *filterBy = filterBySet;
+for (;filterBy != NULL; filterBy = filterBy->next)
+    {
+    if (filterBy->slChoices && differentString(filterBy->slChoices->name, "All"))
+        {
+        if ((highlight = bigBedMakeFilterBy(cart, bbi, tdb, filterBy->column, filterBy->slChoices, TRUE)) != NULL)
+            slAddHead(&highlights, highlight);
+        }
+    }
+
+return highlights;
+}
+
+boolean bigBedFilterOne(struct bigBedFilter *filter, char **bedRow, struct bbiFile *bbi)
+/* Return TRUE if a bedRow passes one filter or is in hgFindMatches */
+{
+if ((bbi->definedFieldCount > 3) && (hgFindMatches != NULL) && 
+    (bedRow[3] != NULL)  && hashLookup(hgFindMatches, bedRow[3]) != NULL)
+    return TRUE;
+
+double val = atof(bedRow[filter->fieldNum]);
+
+switch(filter->comparisonType)
+    {
+    case COMPARE_WILDCARD:
+        if ( !wildMatch(filter->wildCardString, bedRow[filter->fieldNum]))
+            return FALSE;
+        break;
+    case COMPARE_REGEXP:
+        if (regexec(&filter->regEx,bedRow[filter->fieldNum], 0, NULL,0 ) != 0)
+            return FALSE;
+        break;
+    case COMPARE_HASH_LIST_AND:
+    case COMPARE_HASH_LIST_OR:
+        {
+        struct slName *values = commaSepToSlNames(bedRow[filter->fieldNum]);
+        unsigned found = 0;
+        struct hash *seenHash = newHash(3);
+        for(; values; values = values->next)
+            {
+            if (hashLookup(seenHash, values->name))
+                continue;
+            hashStore(seenHash, values->name);
+            if (hashLookup(filter->valueHash, values->name))
+                {
+                found++;
+                if (filter->comparisonType == COMPARE_HASH_LIST_OR) 
+                    break;
+                }
+            }
+        if (filter->comparisonType == COMPARE_HASH_LIST_AND) 
+            {
+            if (found < filter->numValuesInHash)
+                return FALSE;
+            }
+        else if (!found)
+            return FALSE;
+        }
+        break;
+
+    case COMPARE_HASH:
+        if (!hashLookup(filter->valueHash, bedRow[filter->fieldNum]))
+            return FALSE;
+        break;
+    case COMPARE_LESS:
+        if (!(val <= filter->value1))
+            return FALSE;
+        break;
+    case COMPARE_MORE:
+        if (!(val >= filter->value1))
+            return FALSE;
+        break;
+    case COMPARE_BETWEEN:
+        if (!((val >= filter->value1) && (val <= filter->value2)))
+            return FALSE;
+        break;
+    }
+return TRUE;
+}
+
 
 boolean bigBedFilterInterval(struct bbiFile *bbi, char **bedRow, struct bigBedFilter *filters)
 /* Go through a row and filter based on filters.  Return TRUE if all filters are passed. */
@@ -299,65 +432,8 @@ if ((bbi->definedFieldCount > 3) && (hgFindMatches != NULL) &&
 
 struct bigBedFilter *filter;
 for(filter = filters; filter; filter = filter->next)
-    {
-    double val = atof(bedRow[filter->fieldNum]);
-
-    switch(filter->comparisonType)
-        {
-        case COMPARE_WILDCARD:
-            if ( !wildMatch(filter->wildCardString, bedRow[filter->fieldNum]))
-                return FALSE;
-            break;
-        case COMPARE_REGEXP:
-            if (regexec(&filter->regEx,bedRow[filter->fieldNum], 0, NULL,0 ) != 0)
-                return FALSE;
-            break;
-        case COMPARE_HASH_LIST_AND:
-        case COMPARE_HASH_LIST_OR:
-            {
-            struct slName *values = commaSepToSlNames(bedRow[filter->fieldNum]);
-            unsigned found = 0;
-            struct hash *seenHash = newHash(3);
-            for(; values; values = values->next)
-                {
-                if (hashLookup(seenHash, values->name))
-                    continue;
-                hashStore(seenHash, values->name);
-                if (hashLookup(filter->valueHash, values->name))
-                    {
-                    found++;
-                    if (filter->comparisonType == COMPARE_HASH_LIST_OR) 
-                        break;
-                    }
-                }
-            if (filter->comparisonType == COMPARE_HASH_LIST_AND) 
-                {
-                if (found < filter->numValuesInHash)
-                    return FALSE;
-                }
-            else if (!found)
-                return FALSE;
-            }
-            break;
-
-        case COMPARE_HASH:
-            if (!hashLookup(filter->valueHash, bedRow[filter->fieldNum]))
-                return FALSE;
-            break;
-        case COMPARE_LESS:
-            if (!(val <= filter->value1))
-                return FALSE;
-            break;
-        case COMPARE_MORE:
-            if (!(val >= filter->value1))
-                return FALSE;
-            break;
-        case COMPARE_BETWEEN:
-            if (!((val >= filter->value1) && (val <= filter->value2)))
-                return FALSE;
-            break;
-        }
-    }
+    if (!bigBedFilterOne(filter, bedRow, bbi))
+        return FALSE;
 return TRUE;
 }
 
@@ -489,6 +565,23 @@ freeMem(rest);
 return field;
 }
 
+void addHighlightToLinkedFeature(struct linkedFeatures *lf, struct bigBedFilter *highlights, struct bbiFile *bbi, char **bedRow, struct trackDb *tdb)
+/* Fill out the lf->highlightColor if the cart says to highlight this item. The color will
+ * be the 'average' of all the highlight colors specified */
+{
+struct bigBedFilter *highlight;
+char *cartHighlightColor = cartOrTdbString(cart, tdb, HIGHLIGHT_COLOR_CART_VAR, HIGHLIGHT_COLOR_DEFAULT);
+for (highlight = highlights; highlight != NULL; highlight = highlight->next)
+    {
+    if (bigBedFilterOne(highlight, bedRow, bbi))
+        {
+        unsigned rgb = bedParseColor(cartHighlightColor);
+        Color color = bedColorToGfxColor(rgb);
+        lf->highlightColor = color;
+        lf->highlightMode = highlightBackground;
+        }
+    }
+}
 
 void bigBedAddLinkedFeaturesFromExt(struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
@@ -553,6 +646,7 @@ int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
 track->bbiFile = NULL;
 
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
+struct bigBedFilter *highlights = bigBedBuildHighlights(cart, bbi, track->tdb) ;
 if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
    labelTrackAsHideEmpty(track);
 
@@ -633,6 +727,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                     scoreMin, scoreMax, useItemRgb);
                 }
             }
+
+        if (lf && highlights)
+            addHighlightToLinkedFeature(lf, highlights, bbi, bedRow, track->tdb);
 
         if (lf && squishFieldIdx)
             lf->squishyPackVal = atof(restField(bb, squishFieldIdx));

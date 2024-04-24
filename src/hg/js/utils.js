@@ -989,6 +989,12 @@ function getAllVars(obj,subtrackName)
             urlData[name] = val;
         }
     });
+    // special case the highlight color picker
+    $(inp).filter('[id=hgTrackUiHighlightPicker]').each(function(i) {
+        var name = subtrackName + ".highlightColor";
+        var val = $("#hgTrackUiHighlightInput").val();
+        urlData[name] = val;
+    });
     $(sel).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();

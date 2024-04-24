@@ -1002,8 +1002,6 @@ var vis = {
 ////////////////////////////////////////////////////////////
 var dragSelect = {
 
-    //hlColorDefault: '#aaedff', // default highlight color, if nothing specified
-    //hlColor :       '#aaedff', // current highlight color
     hlColor :       '#aac6ff', // current highlight color
     hlColorDefault: '#aac6ff', // default highlight color, if nothing specified
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
@@ -1165,22 +1163,14 @@ var dragSelect = {
                              "<li>Using the keyboard, highlight the current position with <tt>h then m</tt>" +
                              "<li>Clear all highlights with View - Clear Highlights or <tt>h then c</tt>" +
                              "<li>To merely save the color for the next keyboard or right-click &gt; Highlight operations, click 'Save Color' below" +
-                             "</ul></p>" +
-                             "<p>Highlight color: <input type='text' style='width:70px' id='hlColorInput' value='"+dragSelect.loadHlColor()+"'>" +
-                             "&nbsp;&nbsp;<input id='hlColorPicker'>" + 
-                             "&nbsp;&nbsp;<a href='#' id='hlReset'>Reset</a></p>" + 
-                             "<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
+                             "</ul></p>");
+            makeHighlightPicker("hlColor", document.getElementById("dragSelectDialog"), null);
+            document.body.append("<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
                              "<span style='border:solid 1px #DDDDDD; padding:3px;display:inline-block' id='hlNotShowAgainMsg'>Don't show this again and always zoom with shift.<br>" + 
                              "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></p>"+ 
                              "Selected chromosome position: <span id='dragSelectPosition'></span>");
             dragSelectDialog = $("#dragSelectDialog")[0];
             // reset value
-            $('#hlReset').click(function() { 
-                var hlDefault = dragSelect.hlColorDefault;
-                $('#hlColorInput').val(hlDefault);
-                $("#hlColorPicker").spectrum("set", hlDefault);
-                dragSelect.saveHlColor(hlDefault);
-            });
             // allow to click checkbox by clicking on the label
             $('#hlNotShowAgainMsg').click(function() { $('#disableDragHighlight').click();});
             // click "add highlight" when enter is pressed in color input box
@@ -1189,21 +1179,7 @@ var dragSelect = {
                     $(".ui-dialog-buttonset button:nth-child(3)").click();
                 }
             });
-            // activate the color picker
-            var opt = {
-                hideAfterPaletteSelect : true,
-                color : $('#hlColorInput').val(),
-                showPalette: true,
-                showInput: true,
-                preferredFormat: "hex",
-                change: function() { var color = $("#hlColorPicker").spectrum("get"); $('#hlColorInput').val(color); },
-                };
-            $("#hlColorPicker").spectrum(opt);
-            // update the color picker if you change the input box
-            $("#hlColorInput").change(function(){ $("#hlColorPicker").spectrum("set", $('#hlColorInput').val()); });
         }
-
-        $("#hlColorPicker").spectrum("set", $('#hlColorInput').val());
 
         if (hgTracks.windows) {
             var i,len;

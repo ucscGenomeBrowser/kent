@@ -2,6 +2,7 @@
 
 // Don't complain about line break before '||' etc:
 /* jshint -W014 */
+/* jshint esnext: true */
 
 // The 'mat*' functions are designed to support subtrack config by 2D+ matrix of controls
 
@@ -1473,3 +1474,91 @@ function advancedSearchOnChange(controlName) {
 }
 
 
+var hlColor = '#aac6ff';
+var  prevHlColor;
+var  hlColorDefault = '#aac6ff';
+function makeHighlightPicker(inputId, parentEl, trackName) {
+/* Create an input with a color selection field, optionally append the resulting
+ * html to parentEl, if parent is not null */
+    /* Some helper function for keeping track of colors */
+    let saveHlColor = function(hlColor, trackName) {
+        hlColor = hlColor;
+        if (typeof common !== "undefined" && common.track) {
+            // regular hgTrackUi
+            setCartVars([common.track + ".highlightColor"], [hlColor], null, true);
+        } else if (trackName) {
+            // hgTrackUi pop up
+            cart.setVars([trackName + ".highlightColor"], [hlColor], null, false);
+        } else {
+            // hgTracks dragSelect, uses different cart variable
+            cart.setVars(["prevHlColor"], [hlColor], null, false);
+        }
+        prevHlColor = hlColor;
+        return hlColor;
+    };
+
+    let loadHlColor = function() {
+        // load hlColor from prevHlColor in the cart, or use default color, set and return it
+        // color is a 6-char hex string prefixed by #
+        if (prevHlColor) {
+            hlColor = prevHlColor;
+        } else if (cartHighlightColor) {
+            hlColor = cartHighlightColor;
+        } else {
+            hlColor = hlColorDefault;
+        }
+        return hlColor;
+    };
+
+    let colorPickerContainer = document.createElement("p");
+    colorPickerContainer.textContent = "Highlight color:";
+    let inpText = document.createElement("input");
+    inpText.id = inputId + "Input";
+    inpText.value = loadHlColor();
+    inpText.type = "text";
+    inpText.style = "width: 70px";
+    // The actual color picker:
+    let inpSpec = document.createElement("input");
+    inpSpec.id = inputId + "Picker";
+    let inpResetLink  = document.createElement("a");
+    inpResetLink.href = "#";
+    inpResetLink.id = inputId + "Reset";
+    inpResetLink.textContent = "Reset";
+    colorPickerContainer.appendChild(inpText);
+    colorPickerContainer.appendChild(inpSpec);
+    colorPickerContainer.appendChild(inpResetLink);
+
+    if (typeof parentEl !== undefined) {
+        parentEl.appendChild(colorPickerContainer);
+    } else {
+        alert("Must supply parentNode to append color picker");
+        throw new Error();
+    }
+
+    let opt = {
+        hideAfterPaletteSelect: true,
+        color: $(inpSpec).val(),
+        showPalette: true,
+        showInput: true,
+        preferredFormat: "hex",
+        change: function() {
+            let color = $(inpSpec).spectrum("get");
+            $(inpText).val(color);
+            saveHlColor(color, trackName);
+        },
+    };
+    $(inpSpec).spectrum(opt);
+
+    // update the color picker if you change the input box
+    $(inpSpec).change(function() {
+        $(inpSpec).spectrum("set", $(inpSpec).val());
+    });
+    // Restore the default on Reset link click
+    $(inpResetLink).click(function() {
+        let hlDefault = hlColorDefault;
+        $(inpText).val(hlDefault);
+        $(inpSpec).spectrum("set", hlDefault);
+        saveHlColor(hlDefault, trackName);
+    });
+    $(inpSpec).spectrum("set", $(inpText).val());
+}
