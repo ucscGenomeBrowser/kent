@@ -277,7 +277,7 @@ for (group = groupList; group != NULL; group = group->next)
     boolean isOpen = !isCollapsedGroup(group);
     collapseGroupGoodies(isOpen, FALSE, &indicatorImg,
                             &indicator, &otherState);
-    hPrintf("<TR NOWRAP class='blueToggleBar'>");
+    hPrintf("<TR NOWRAP class='nativeToggleBar'>");
     hPrintf("<TH NOWRAP align='left' colspan=3>");
     hPrintf("<table style='width:100%%;'><tr class='noData'><td style='text-align:left;'>");
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);

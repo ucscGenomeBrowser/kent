@@ -69,21 +69,6 @@ static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
 static struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 static struct hash *trackHubHash;
 
-static boolean hubsCanAddGroups()
-/* can track hubs have their own groups? */
-{
-static boolean canHubs = FALSE;
-static boolean canHubsSet = FALSE;
-
-if (!canHubsSet)
-    {
-    canHubs = cfgOptionBooleanDefault("trackHubsCanAddGroups", FALSE);
-    canHubsSet = TRUE;
-    }
-
-return canHubs;
-}
-
 static void tdbListAddHubToGroup(char *hubName, struct trackDb *tdbList)
 /* Prepend hub name to  group name for every tdb. */
 {
@@ -93,26 +78,18 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     char buffer[4096];
 
     char *grp = trackDbSetting(tdb, "group");
-    safef(buffer, sizeof buffer, "%s_%s", hubName, grp);
-    tdb->grp = cloneString(buffer);
+    if (grp == NULL)
+        tdb->grp = cloneString(hubName);
+    else
+        {
+        safef(buffer, sizeof buffer, "%s_%s", hubName, grp);
+        tdb->grp = cloneString(buffer);
+        }
     hashReplace(tdb->settingsHash, "group", tdb->grp);
     }
 }
 
 
-static void grpListAddHubName(struct grp *grpList, struct trackHub *hub)
-/* Add the hub name to the groups defined by a hub. */
-{
-char buffer[4096];
-
-for (; grpList; grpList = grpList->next)
-    {
-    safef(buffer, sizeof buffer, "%s_%s", hub->name, grpList->name);
-    grpList->name = cloneString(buffer);
-    safef(buffer, sizeof buffer, "Hub: %s : %s", hub->shortLabel, grpList->label);
-    grpList->label = cloneString(buffer);
-    }
-}
 
 char *trackHubRelativeUrl(char *hubUrl, char *path)
 /* Return full path (in URL form if it's a remote hub) given
@@ -517,7 +494,7 @@ if ((str = hashFindVal(hash, name)) == NULL)
 return str;
 }
 
-static struct grp *readGroupRa(char *groupFileName)
+struct grp *readGroupRa(char *groupFileName)
 /* Read in the ra file that describes the groups in an assembly hub. */
 {
 if (groupFileName == NULL)
@@ -731,13 +708,9 @@ while ((ra = raNextRecord(lf)) != NULL)
 	}
     else
         {
-	if ((groups != NULL) && hubsCanAddGroups())
+	if (groups != NULL)
             {
 	    el->groups = trackHubRelativeUrl(url, groups);
-            struct grp *list = readGroupRa(el->groups);
-            grpListAddHubName(list, hub);
-
-            trackHubGrps = slCat(trackHubGrps, list);
             }
         }
     el->settingsHash = ra;
@@ -1163,9 +1136,10 @@ trackDbAddTableField(tdbList);
 if (!isEmpty(hub->name))
     trackHubAddNamePrefix(hub->name, tdbList);
 
+boolean hubsCanAddGroups();
 if ((genome->twoBitPath != NULL) && (*foundFirstGenome == FALSE))
     *foundFirstGenome = TRUE;
-else if (genome->groups != NULL)
+else if ((genome->groups != NULL) && hubsCanAddGroups())
     tdbListAddHubToGroup(hub->name, tdbList);
 else
     trackHubAddGroupName(hub->name, tdbList);
@@ -1686,10 +1660,4 @@ struct grp *trackHubGetGrps()
 /* Get the groups defined by attached track hubs. */
 {
 return trackHubGrps;
-}
-
-void trackHubResetGrps()
-/* Reset to NULL the groups defined by attached track hubs. */
-{
-//trackHubGrps = NULL;
 }
