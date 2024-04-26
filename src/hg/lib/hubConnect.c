@@ -28,6 +28,21 @@
 #include "asmAlias.h"
 #include "cheapcgi.h"
 
+boolean hubsCanAddGroups()
+/* can track hubs have their own groups? */
+{
+static boolean canHubs = FALSE;
+static boolean canHubsSet = FALSE;
+
+if (!canHubsSet)
+    {
+    canHubs = cfgOptionBooleanDefault("trackHubsCanAddGroups", FALSE);
+    canHubsSet = TRUE;
+    }
+
+return canHubs;
+}
+
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
 {
@@ -357,6 +372,21 @@ char *ptr1 = strchr(cartName, '.');
 char *ptr2 = strchr(ptr1 + 1, '.');
 
 return sqlUnsigned(ptr2+1);
+}
+
+char *hubNameFromGroupName(char *groupName)
+/* Given something like "hub_123_myWig" return hub_123 */
+{
+char *hubName = cloneString(groupName);
+
+char *ptr1 = hubName;
+ptr1 += 4;
+char *ptr2 = strchr(ptr1, '_');
+
+if (ptr2 != NULL)
+    *ptr2 = 0;
+
+return hubName;
 }
 
 unsigned hubIdFromTrackName(char *trackName)
@@ -878,7 +908,21 @@ else if (tHub != NULL)
 hDisconnectCentral(&conn);
 }
 
-struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boolean *foundFirstGenome, struct hash *trackDbNameHash)
+static void grpListAddHubName(struct grp *grpList, struct trackHub *hub)
+/* Add the hub name to the groups defined by a hub. */
+{
+char buffer[4096];
+
+for (; grpList; grpList = grpList->next)
+    {
+    safef(buffer, sizeof buffer, "%s_%s", hub->name, grpList->name);
+    grpList->name = cloneString(buffer);
+    safef(buffer, sizeof buffer, "Hub: %s : %s", hub->shortLabel, grpList->label);
+    grpList->label = cloneString(buffer);
+    }
+}
+
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boolean *foundFirstGenome, struct hash *trackDbNameHash, struct grp **hubGroups)
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file. Only the first example of a genome gets to 
  * populate groups, the others get a group for the trackHub.  A particular 
@@ -897,6 +941,17 @@ if (trackHub != NULL)
 
     if (hubGenome != NULL)
 	{
+        // add groups
+	if ((hubGenome->groups != NULL) && hubsCanAddGroups())
+            {
+            struct grp *list = readGroupRa(hubGenome->groups);
+            grpListAddHubName(list, hub->trackHub);
+
+            if (hubGroups)
+                *hubGroups = slCat(*hubGroups, list);
+            }
+
+        // now grab tracks
         boolean doCache = trackDbCacheOn();
 
         if (doCache)
@@ -945,7 +1000,14 @@ AllocVar(grp);
 char name[16];
 safef(name, sizeof(name), "hub_%d", hub->id);
 grp->name = cloneString(name);
-grp->label = cloneString(hub->shortLabel);
+if (startsWith("Quick", hub->shortLabel))
+    grp->label = hub->shortLabel;
+else
+    {
+    char buffer[4096];
+    safef(buffer, sizeof buffer, "Hub: %s", hub->shortLabel);
+    grp->label = cloneString(buffer);
+    }
 return grp;
 }
 
@@ -976,7 +1038,7 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
 	    {
-	    struct trackDb *thisList = hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash);
+	    struct trackDb *thisList = hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash, &hubGroups);
 	    tdbList = slCat(tdbList, thisList);
 	    }
         errCatchEnd(errCatch);

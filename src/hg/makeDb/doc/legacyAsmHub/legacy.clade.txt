@@ -208,7 +208,6 @@ GCA_030684315.1_sSteTig4.hap1	vertebrate
 GCA_030867065.1_rAllMis1	vertebrate
 GCA_030867095.1_rAllMis1	vertebrate
 GCA_030936135.1_bGavSte3.hap2	birds
-GCA_036323735.1_GRCr8	mammals
 GCA_900006655.3_Susie3	primates
 GCA_900094665.2_CAROLI_EIJ_v1.1	mammals
 GCA_900324465.2_fAnaTes1.2	fish

@@ -918,6 +918,22 @@ if (endsWith(name, "FilterLimits"))
     return TRUE;
 if (endsWith(name, "FilterText"))
     return TRUE;
+if (startsWith("highlight.", name))
+    return TRUE;
+if (startsWith("highlightValues.", name))
+    return TRUE;
+if (startsWith("highlightValuesDefault.", name))
+    return TRUE;
+if (startsWith("highlightType.", name))
+    return TRUE;
+if (startsWith("highlightLimits.", name))
+    return TRUE;
+if (startsWith("highlightLabel.", name))
+    return TRUE;
+if (startsWith("highlightByRange.", name))
+    return TRUE;
+if (startsWith("highlightText.", name))
+    return TRUE;
 return FALSE;
 }
 
