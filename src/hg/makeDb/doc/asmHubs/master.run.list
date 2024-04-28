@@ -1112,6 +1112,7 @@
 ./runBuild GCA_029215755.1_aSpeHam1.0.hap2 vertebrate Spea_hammondii
 ./runBuild GCA_029215775.1_rAnnSte1.0.hap1 vertebrate Anniella_stebbinsi
 ./runBuild GCA_029215795.1_rAnnSte1.0.hap2 vertebrate Anniella_stebbinsi
+./runBuild GCA_029229535.1_icDioCarn1.1 invertebrate Diorhabda_carinata
 ./runBuild GCA_029281585.2_NHGRI_mGorGor1-v2.0_pri primates Gorilla_gorilla_gorilla
 ./runBuild GCA_029289425.2_NHGRI_mPanPan1-v2.0_pri primates Pan_paniscus
 ./runBuild GCA_029493135.1_aHylSar1.hap2 vertebrate Hyla_sarda

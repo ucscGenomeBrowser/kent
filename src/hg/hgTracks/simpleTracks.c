@@ -4332,7 +4332,7 @@ if (vis != tvDense)
      * drawn so that exons sharing the pixel don't overdraw differences. */
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
 			  qSeq, qOffset, psl, winStart, drawOpt);
-    if (indelShowQueryInsert || indelShowPolyA)
+    if (psl && (indelShowQueryInsert || indelShowPolyA))
 	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
 				 qSeq, qOffset, psl, font, winStart, drawOpt,
 				 indelShowQueryInsert, indelShowPolyA);
