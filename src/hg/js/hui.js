@@ -1475,8 +1475,8 @@ function advancedSearchOnChange(controlName) {
 
 
 var hlColor = '#aac6ff';
-var  prevHlColor;
-var  hlColorDefault = '#aac6ff';
+var prevHlColor;
+var hlColorDefault = '#aac6ff';
 function makeHighlightPicker(inputId, parentEl, trackName) {
 /* Create an input with a color selection field, optionally append the resulting
  * html to parentEl, if parent is not null */
@@ -1500,9 +1500,9 @@ function makeHighlightPicker(inputId, parentEl, trackName) {
     let loadHlColor = function() {
         // load hlColor from prevHlColor in the cart, or use default color, set and return it
         // color is a 6-char hex string prefixed by #
-        if (prevHlColor) {
+        if (typeof prevHlColor !== "undefined" && prevHlColor.length > 0) {
             hlColor = prevHlColor;
-        } else if (cartHighlightColor) {
+        } else if (typeof cartHighlightColor !== "undefined" && cartHighlightColor.length > 0) {
             hlColor = cartHighlightColor;
         } else {
             hlColor = hlColorDefault;
