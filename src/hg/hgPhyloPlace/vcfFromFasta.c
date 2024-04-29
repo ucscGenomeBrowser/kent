@@ -228,9 +228,7 @@ for (psl = psls;  psl != NULL;  psl = nextPsl)
     if (passes)
         {
         si = hashFindVal(userSeqsByName, psl->qName);
-        if (si)
-            si->psl = psl;
-        else
+        if (! si)
             warn("Aligned sequence name '%s' does not match any input sequence name", psl->qName);
         slAddHead(&filteredPsls, psl);
         }
@@ -372,7 +370,8 @@ for (gtIx = 0, qSeq = querySeqs;  qSeq != NULL;  gtIx++, qSeq = qSeq->next)
         break;
 if (!qSeq)
     errAbort("PSL query '%s' not found in input sequences", qName);
-*retGtIx = gtIx;
+if (retGtIx)
+    *retGtIx = gtIx;
 return qSeq;
 }
 
@@ -544,14 +543,15 @@ writeSnvsToVcfFile(snvsByPos, ref, sampleNames, sampleCount, maskSites, vcfFileN
 freeMem(snvsByPos);
 }
 
-static void analyzeGaps(struct seqInfo *filteredSeqs, struct dnaSeq *refGenome)
+static void analyzeGaps(struct psl *filteredAlignments, struct seqInfo *filteredSeqs,
+                        struct dnaSeq *refGenome)
 /* Tally up actual insertions and deletions in each psl; ignore skipped N bases. */
 {
-struct seqInfo *si;
-for (si = filteredSeqs;  si != NULL;  si = si->next)
+struct psl *psl;
+for (psl = filteredAlignments;  psl != NULL;  psl = psl->next)
     {
-    struct psl *psl = si->psl;
-    if (psl && (psl->qBaseInsert || psl->tBaseInsert))
+    struct seqInfo *si = mustFindSeqAndIx(psl->qName, filteredSeqs, NULL);
+    if (psl->qBaseInsert || psl->tBaseInsert)
         {
         struct dyString *dyIns = dyStringNew(0);
         struct dyString *dyDel = dyStringNew(0);
@@ -603,6 +603,12 @@ for (si = filteredSeqs;  si != NULL;  si = si->next)
         si->insRanges = dyStringCannibalize(&dyIns);
         si->delRanges = dyStringCannibalize(&dyDel);
         }
+    si->basesAligned = 0;
+    int i;
+    for (i = 0;  i < psl->blockCount;  i++)
+        si->basesAligned += psl->blockSizes[i];
+    si->tStart = psl->tStart;
+    si->tEnd = psl->tEnd;
     }
 }
 
@@ -626,7 +632,7 @@ if (filteredAlignments)
     struct psl *psl;
     for (psl = filteredAlignments;  psl != NULL;  psl = psl->next)
         slNameAddHead(&sampleIds, psl->qName);
-    analyzeGaps(filteredSeqs, refGenome);
+    analyzeGaps(filteredAlignments, filteredSeqs, refGenome);
     slReverse(&sampleIds);
     reportTiming(pStartTime, "write VCF for uploaded FASTA");
     }
@@ -907,6 +913,9 @@ while ((colCount = lineFileChopTab(lf, row)) > 0)
     parseNextcladeAmbig(row[ambigIx], ref, gtIx, gtCount, snvsByPos);
     parseNextcladeDeletions(row[delIx], si, ref);
     parseNextcladeInsertions(row[insIx], si, ref);
+    si->basesAligned = tEnd - tStart - si->delBases - si->insBases;
+    si->tStart = tStart;
+    si->tEnd = tEnd;
     }
 lineFileClose(&lf);
 return snvsByPos;

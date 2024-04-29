@@ -2004,32 +2004,24 @@ if (seqInfoList)
         printf("</td>");
         if (isFasta)
             {
-            struct psl *psl = si->psl;
-            if (psl)
+            printf("<td class='%s'>%d ", qcClassForLength(si->basesAligned), si->basesAligned);
+            dyStringClear(dy);
+            dyStringPrintf(dy, "aligned to reference bases %d - %d",
+                           si->tStart+1, si->tEnd);
+            printTooltip(dy->string);
+            printf("</td><td class='%s'>%d ",
+                   qcClassForIndel(si->insBases), si->insBases);
+            if (si->insBases)
                 {
-                int aliCount = psl->match + psl->misMatch + psl->repMatch;
-                printf("<td class='%s'>%d ", qcClassForLength(aliCount), aliCount);
-                dyStringClear(dy);
-                dyStringPrintf(dy, "bases %d - %d align to reference bases %d - %d",
-                               psl->qStart+1, psl->qEnd, psl->tStart+1, psl->tEnd);
-                printTooltip(dy->string);
-                printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(si->insBases), si->insBases);
-                if (si->insBases)
-                    {
-                    printTooltip(si->insRanges);
-                    }
-                printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(si->delBases), si->delBases);
-                if (si->delBases)
-                    {
-                    printTooltip(si->delRanges);
-                    }
-                printf("</td>");
+                printTooltip(si->insRanges);
                 }
-            else
-                printf("<td colspan=3 class='%s'> not alignable </td>",
-                       qcClassForLength(0));
+            printf("</td><td class='%s'>%d ",
+                   qcClassForIndel(si->delBases), si->delBases);
+            if (si->delBases)
+                {
+                printTooltip(si->delRanges);
+                }
+            printf("</td>");
             }
         int snvCount = slCount(si->sncList) - alignedAmbigCount;
         printf("<td class='%s'>%d", qcClassForSNVs(snvCount), snvCount);
@@ -2553,19 +2545,12 @@ if (info)
     struct seqInfo *si = hashFindVal(seqInfoHash, sampleId);
     if (si)
         {
-        if (si->psl)
-            {
-            // length
-            fprintf(f, "\t%d", si->seq->size);
-            struct psl *psl = si->psl;
-            // aligned bases, indel counts & ranges
-            int aliCount = psl->match + psl->misMatch + psl->repMatch;
-            fprintf(f, "\t%d\t%d\t%s\t%d\t%s",
-                    aliCount, si->insBases, emptyForNull(si->insRanges),
-                    si->delBases, emptyForNull(si->delRanges));
-            }
-        else
-            fprintf(f, "\tn/a\tn/a\tn/a\tn/a\tn/a\tn/a");
+        // length
+        fprintf(f, "\t%d", si->seq->size);
+        // aligned bases, indel counts & ranges
+        fprintf(f, "\t%d\t%d\t%s\t%d\t%s",
+                si->basesAligned, si->insBases, emptyForNull(si->insRanges),
+                si->delBases, emptyForNull(si->delRanges));
         // SNVs that were masked (Problematic Sites track), not used in placement
         fputc('\t', f);
         struct singleNucChange *snc;

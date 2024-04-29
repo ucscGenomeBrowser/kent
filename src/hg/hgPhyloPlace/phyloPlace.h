@@ -58,7 +58,6 @@ struct seqInfo
 {
     struct seqInfo *next;
     struct dnaSeq *seq;                     // Uploaded sequence
-    struct psl *psl;                        // Alignment to reference (if FASTA uploaded)
     struct singleNucChange *sncList;        // SNVs in seq
     struct singleNucChange *maskedSncList;  // SNVs that were masked (not used for placement)
     struct slRef *maskedReasonsList;        // Reason (from Problematic Sites) for masking each SNV
@@ -70,6 +69,9 @@ struct seqInfo
     char *delRanges;                        // ranges and sequences deleted from reference
     uint insBases;                          // total #bases inserted into reference
     uint delBases;                          // total #bases deleted from reference
+    uint basesAligned;                      // number of bases aligned to reference
+    uint tStart;                            // alignment start in reference
+    uint tEnd;                              // alignment end in reference
 };
 
 struct variantPathNode
