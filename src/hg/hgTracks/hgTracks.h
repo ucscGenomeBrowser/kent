@@ -406,7 +406,7 @@ struct linkedFeatures
     float score;                        /* score for this feature */
     char *name;				/* Accession of query seq. Usually also the label. */
     int orientation;                    /* Orientation. */
-    struct simpleFeature *components;   /* List of component simple features. */
+    struct simpleFeature *components;   /* List of component simple features. Usually exons. */
     struct simpleFeature *codons;       /* If zoomed to CDS or codon level.*/
     boolean useItemRgb;                 /* If true, use rgb from item. */
     void *extra;			/* Extra info that varies with type. */
@@ -1697,6 +1697,10 @@ void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *ite
                 char *filterType);
 /* Filter out items from track->itemList. */
 
+void filterItemsOnNames(struct track *tg);
+/* Only keep items with a name in the .nameFilter cart var. 
+ * Not using filterItems(), because filterItems has no state at all. */
+
 int gCmpPriority(const void *va, const void *vb);
 /* Compare groups based on priority. */
 
@@ -1831,5 +1835,8 @@ Color colorFromSoTerm(enum soTerm term);
 
 void maybeNewFonts(struct hvGfx *hvg);
 /* Check to see if we want to use the alternate font engine (FreeType2). */
+
+Color colorFromCart(struct track *tg, Color color);
+/* Return the RGB color from the cart setting 'colorOverride' or just return color */
 #endif /* HGTRACKS_H */
 
