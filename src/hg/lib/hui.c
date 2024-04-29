@@ -4325,13 +4325,22 @@ void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
 if (filterBySet == NULL)
     return;
 
-#define FILTERBY_HELP_LINK "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
+#define FILTERBY_HELP_LINK "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>Help</A>"
 int count = slCount(filterBySet);
 if (count == 1)
     puts("<TABLE class='trackUiFilterTable'><TR valign='top'>");
 else
-    printf("<B>%s items by:</B> (select multiple categories and items - %s)"
+    printf("<B>%s items by:</B> (select multiple categories and items - %s)&nbsp;&nbsp;<button id='filterResetButton'>Reset filters</button>"
 	   "<TABLE class='trackUiFilterTable'><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
+
+jsInlineF("$(function () { "
+    "$('#filterResetButton').click( "
+       "     function(ev) { ev.preventDefault(); "
+       "     $('.filterBy option[value=\"All\"]').removeAttr(\"selected\");"
+       "     $('.filterBy option[Value=\"All\"]').attr('selected', 'selected');"
+       "     $('.filterBy').dropdownchecklist('refresh'); "
+       " }); "
+"});");
 
 #ifdef ADVANCED_BUTTON
 if (tdbIsBigBed(tdb))
@@ -4345,8 +4354,8 @@ if (tdbIsBigBed(tdb))
     }
 #endif // ADVANCED_BUTTON
 
-
 filterBy_t *filterBy = NULL;
+
 if (cartOptionalString(cart, "ajax") == NULL)
     {
     webIncludeResourceFile("ui.dropdownchecklist.css");
@@ -5990,6 +5999,42 @@ jsInlineF("$(\"input[name='%s']\").click( function() { $('#densGraphOptions').to
     , varName); // XSS FILTER?
 }
 
+void filterNameOption(struct cart *cart, char *name, struct trackDb *tdb)
+/* filter by feature names text input box */
+{
+printf("<DIV><B>Show only transcripts with these accessions:</B> ");
+char varName[1024];
+safef(varName, sizeof(varName), "%s.nameFilter", name);
+
+char *onlyTransStr = cartUsualString(cart, varName, "");
+
+cgiMakeTextVar(varName, onlyTransStr, 60);
+printf("&nbsp;<small>Separate multiple accessions with commas</small>");
+puts("</DIV>\n\n");
+}
+
+void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb)
+/* color picker for overriding track color */
+{
+printf("<DIV><B>Color for all features:</B> ");
+char varName[1024];
+safef(varName, sizeof(varName), "%s.colorOverride", name);
+
+char *colorValue = cartUsualString(cart, varName, "");
+
+cgiMakeTextVar(varName, colorValue, 10);
+puts("&nbsp;<input id='colorPicker'>");
+puts("&nbsp;&nbsp;<span class='link' id='colorReset'>Reset</span>");
+jsInlineF("activateColorPicker('[id=\"%s\"]', '#colorPicker');", varName); // id="xx" is necessary as id contains a dot
+jsInlineF("$('#colorPicker').spectrum('set', '#%s');", colorValue);
+jsInlineF("$('#colorReset').click(function() { "
+    "$('[id=\"%s\"]').val('');"
+    "$('#colorPicker').spectrum('set', '#000000');"
+    "});", varName);
+
+puts("</DIV>\n\n");
+}
+
 void wiggleScaleDropDownJavascript(char *name)
 /* print some js that deactivates the min/max range if autoscaling is activated */
 {
@@ -6967,7 +7012,7 @@ if (trackDbFilters)
         printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_WILDCARD) ? "SELECTED" : "",  FILTERTEXT_WILDCARD );
         printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_REGEXP) ? "SELECTED" : "",  FILTERTEXT_REGEXP );
         printf("</SELECT>");
-        printf("&nbsp;&nbsp;<button class='buttonClear-%s'>Clear</button>\n", tdb->track);
+        printf("&nbsp;&nbsp;<button class='buttonClear-%s'>Reset</button>\n", tdb->track);
         printf("</P>");
         }
         // using jquery id= syntax to make sure that selector works even if trackname has a dot in it
@@ -7806,6 +7851,8 @@ if (highlightBySet != NULL)
     }
 
 squishyPackOption(cart, name, title, tdb);
+filterNameOption(cart, name, tdb);
+colorTrackOption(cart, name, tdb);
 wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 }
