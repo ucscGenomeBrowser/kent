@@ -8,6 +8,7 @@
 #include "dnaseq.h"
 #include "hash.h"
 #include "linefile.h"
+#include "memgfx.h"
 #include "parsimonyProto.h"
 #include "phyloTree.h"
 #include "seqWindow.h"
@@ -244,6 +245,9 @@ char *phyloPlaceRefSettingPath(char *org, char *ref, char *settingName);
 /* Return cgi-bin-relative path to a file named by a setting from
  * hgPhyloPlaceData/<org>/<ref>/reference.ra or old-style hgPhyloPlaceData/<ref>/config.ra,
  * or NULL if not found. */
+
+char *getNextcladePath();
+/* Return hgPhyloPlaceData/nextclade if it exists, else errAbort. Do not free the returned value. */
 
 struct treeChoices *loadTreeChoices(char *org, char *db);
 /* If config specifies a treeChoices file, load it up, else return NULL. */

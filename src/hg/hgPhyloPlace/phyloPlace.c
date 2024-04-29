@@ -307,7 +307,7 @@ else if (abortIfNotFound)
 return NULL;
 }
 
-static char *getNextcladePath()
+char *getNextcladePath()
 /* Return hgPhyloPlaceData/nextclade if it exists, else errAbort. Do not free the returned value. */
 {
 char *nextcladePath = PHYLOPLACE_DATA_DIR "/nextclade";
@@ -1489,10 +1489,12 @@ freeMem(urlBase);
 return dyStringCannibalize(&dy);
 }
 
-static void makeSubtreeDropdown(char *subtreeDropdownName, struct subtreeInfo *subtreeInfoList,
-                                struct tempName **jsonTns)
+static char *makeSubtreeDropdown(struct subtreeInfo *subtreeInfoList, struct tempName **jsonTns)
 /* Let user choose subtree to view */
 {
+static int serial = 0;
+char subtreeDropdownName[128];
+safef(subtreeDropdownName, sizeof subtreeDropdownName, "subtreeSelect%d", serial++);
 int count = slCount(subtreeInfoList);
 char *labels[count];
 char *values[count];
@@ -1509,6 +1511,7 @@ for (ix = 0;  ix < count;  ix++)
     {
     freeMem(labels[ix]);
     }
+return cloneString(subtreeDropdownName);
 }
 
 static void makeSubtreeJumpButton(char *subtreeDropdownName, char *dest, char *destUrlBase,
@@ -1516,6 +1519,7 @@ static void makeSubtreeJumpButton(char *subtreeDropdownName, char *dest, char *d
 /* Make a button with javascript to get a JSON filename from a dropdown element, format a link
  * to dest, and jump to that dest when clicked. */
 {
+static int serial = 0;
 char *mouseover = "view selected subtree with your sequences and other sequences from the "
     "full phylogenetic tree for context";
 struct dyString *js = dyStringCreate("jsonUrl = document.querySelector('select[name=\"%s\"]').value;"
@@ -1523,7 +1527,7 @@ struct dyString *js = dyStringCreate("jsonUrl = document.querySelector('select[n
                                      "          if (ix >= 0) { jsonUrl = jsonUrl.substr(ix+3); } }"
                                      "window.open('%s' + jsonUrl + '%s');",
                                      subtreeDropdownName, skipProtocol, destUrlBase, destUrlParams);
-struct dyString *id = dyStringCreate("jumpTo%s", dest);
+struct dyString *id = dyStringCreate("jumpTo%s_%d", dest, serial++);
 printf("<input type='button' id='%s' value='%s' title='%s' class='fullwidth'>",
        id->string, dest, mouseover);
 jsOnEventById("click", id->string, js->string);
@@ -1559,8 +1563,7 @@ if (nextstrainHost())
 if (nextstrainHost() && microbeTraceHost())
     {
     puts("<td>View subtree</td><td>");
-    char *subtreeDropdownName = "subtreeSelect";
-    makeSubtreeDropdown(subtreeDropdownName, subtreeInfoList, jsonTns);
+    char *subtreeDropdownName = makeSubtreeDropdown(subtreeInfoList, jsonTns);
     puts("</td><td>in</td><td>");
     makeSubtreeJumpButton(subtreeDropdownName, "Nextstrain", nextstrainUrlBase(),
                           NEXTSTRAIN_URL_PARAMS, TRUE);
@@ -3390,6 +3393,11 @@ if (results && results->singleSubtreeInfo)
         db = connectIfHub(cart, dbSetting);
     boolean canDoCustomTracks = (!subtreesOnly &&
                                  (sameString(db, refName) || isNotEmpty(dbSetting)));
+    if (canDoCustomTracks)
+        // Form submits subtree custom tracks to hgTracks
+        printf("<form action='%s' name='resultsForm_%s' method=%s>\n\n",
+               hgTracksName(), db, cartUsualString(cart, "formMethod", "POST"));
+
     makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeInfoForButtons, subtreeSize, isFasta,
                   canDoCustomTracks);
     printf("<p>If you have metadata you wish to display, click a 'view subtree in "
@@ -3529,9 +3537,6 @@ if (results && results->singleSubtreeInfo)
             printf("<p>Added %d subtree custom track%s.</p>\n",
                    subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);
-        // Form submits subtree custom tracks to hgTracks
-        printf("<form action='%s' name='resultsForm_%s' method=%s>\n\n",
-               hgTracksName(), db, cartUsualString(cart, "formMethod", "POST"));
         cartSaveSession(cart);
         cgiMakeHiddenVar("db", db);
         cgiMakeHiddenVar(CT_CUSTOM_TEXT_VAR, ctFile);
