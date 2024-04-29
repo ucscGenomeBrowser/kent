@@ -208,4 +208,8 @@ boolean hubConnectIsCurated(char *db);
 
 boolean hubConnectGetCuratedUrl(char *db, char **hubUrl);
 /* Check to see if this db is a curated hub and if so return its hubUrl */
+
+boolean hubsCanAddGroups();
+/* can track hubs have their own groups? */
+
 #endif /* HUBCONNECT_H */

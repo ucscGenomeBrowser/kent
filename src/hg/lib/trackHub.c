@@ -1136,7 +1136,6 @@ trackDbAddTableField(tdbList);
 if (!isEmpty(hub->name))
     trackHubAddNamePrefix(hub->name, tdbList);
 
-boolean hubsCanAddGroups();
 if ((genome->twoBitPath != NULL) && (*foundFirstGenome == FALSE))
     *foundFirstGenome = TRUE;
 else if ((genome->groups != NULL) && hubsCanAddGroups())
