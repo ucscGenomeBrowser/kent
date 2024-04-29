@@ -106,7 +106,7 @@ if (dfField == -1)
     errAbort("error finding field 'Data_free' in show table status resultset");
 dataFree = sqlLongLong(row[dfField]);
 verbose(1, "%s: Data_length=%lld Data_free=%lld\n\n", table, dataLength, dataFree);
-if ((dataLength / (1024 * 1024 * 1024)) >= squealSize)
+if (((dataLength-dataFree) / (1024 * 1024 * 1024)) >= squealSize)
     {
     char msg[256];
     char cmdLine[256];

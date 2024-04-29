@@ -1179,6 +1179,8 @@ var dragSelect = {
                     $(".ui-dialog-buttonset button:nth-child(3)").click();
                 }
             });
+            // activate the color picker
+            activateColorPicker("#hlColorInput", "#hlColorPicker");
         }
 
         if (hgTracks.windows) {
@@ -1290,14 +1292,6 @@ var dragSelect = {
         });
         $(dragSelectDialog).dialog('open');
         
-        // put the cursor into the input field
-        // we are not doing this for now - default behavior was to zoom when enter was pressed
-        // so people may still expect that "enter" on the dialog will zoom.
-        //var el = $("#hlColorInput")[0];
-        //el.selectionStart = 0;
-        //el.selectionEnd = el.value.length;
-        //el.focus();
-
     },
 
     selectEnd: function (img, selection, event)
