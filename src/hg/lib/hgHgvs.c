@@ -388,7 +388,14 @@ if (pHgvs && *pHgvs)
 
 
 // Gene symbol, maybe punctuation, and a clear "c." position (and possibly change)
-#define pseudoHgvsGeneSympolCDotPosExp "^" geneSymbolExp "[: ]+" hgvsCDotPosExp
+#define pseudoHgvsGeneSymbolCDotPosExp "^" geneSymbolExp "[: ]+" hgvsCDotPosExp
+//      0.....................................................  whole matching string
+//      1...................                                    gene symbol
+//                           2.....                             optional beginning of position exp
+//                                   3.....                     beginning of position exp
+
+// Gene symbol, maybe punctuation, and a clear "n." position (and possibly change)
+#define pseudoHgvsGeneSymbolNDotPosExp "^" geneSymbolExp "[: ]+" hgvsNDotPosExp
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                           2.....                             optional beginning of position exp
@@ -890,6 +897,28 @@ freeMem(seq);
 return base;
 }
 
+static struct hgvsVariant* hgvsPseudoToRealHgvs(regmatch_t  substrs[], char* term, char* db, int geneSymbolIx, char *prefix)
+/* rewrite a pseudo-HGVS with symbol:<hgvs> to a real NM_xxx HGVS */
+{
+int len = substrs[geneSymbolIx].rm_eo - substrs[geneSymbolIx].rm_so;
+char geneSymbol[len+1];
+safencpy(geneSymbol, sizeof(geneSymbol), term, len);
+char *nmAcc = nmForGeneSymbol(db, geneSymbol);
+struct hgvsVariant *hgvs = NULL;
+if (isNotEmpty(nmAcc))
+    {
+    // Make it a real HGVS term with the NM and pass that on to the usual parser.
+    int descStartIx = regexSubstrMatched(substrs[2]) ? 2 : 3;
+    char *description = term + substrs[descStartIx].rm_so;
+    struct dyString *nmTerm = dyStringCreate("%s(%s):%s%s",
+                                             nmAcc, geneSymbol, prefix, description);
+    hgvs = hgvsParseTerm(nmTerm->string);
+    dyStringFree(&nmTerm);
+    freeMem(nmAcc);
+    }
+return hgvs;
+}
+
 struct hgvsVariant *hgvsParsePseudoHgvs(char *db, char *term)
 /* Attempt to parse things that are not strict HGVS, but that people might intend as HGVS:
  * Return a list of struct hgvsVariant that may be what was intended  */
@@ -982,24 +1011,10 @@ else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySi
             }
         }
     }
-else if (regexMatchSubstr(term, pseudoHgvsGeneSympolCDotPosExp, substrs, ArraySize(substrs)))
-    {
-    int len = substrs[geneSymbolIx].rm_eo - substrs[geneSymbolIx].rm_so;
-    char geneSymbol[len+1];
-    safencpy(geneSymbol, sizeof(geneSymbol), term, len);
-    char *nmAcc = nmForGeneSymbol(db, geneSymbol);
-    if (isNotEmpty(nmAcc))
-        {
-        // Make it a real HGVS term with the NM and pass that on to the usual parser.
-        int descStartIx = regexSubstrMatched(substrs[2]) ? 2 : 3;
-        char *description = term + substrs[descStartIx].rm_so;
-        struct dyString *nmTerm = dyStringCreate("%s(%s):c.%s",
-                                                 nmAcc, geneSymbol, description);
-        hgvs = hgvsParseTerm(nmTerm->string);
-        dyStringFree(&nmTerm);
-        freeMem(nmAcc);
-        }
-    }
+else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolCDotPosExp, substrs, ArraySize(substrs)))
+    hgvs = hgvsPseudoToRealHgvs(substrs, term, db, geneSymbolIx, "c.");
+else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolNDotPosExp, substrs, ArraySize(substrs)))
+    hgvs = hgvsPseudoToRealHgvs(substrs, term, db, geneSymbolIx, "n.");
 else if (regexMatchSubstr(term, pseudoHgvsChrGDotExp, substrs, ArraySize(substrs)))
     {
     int chrIx = 1;
