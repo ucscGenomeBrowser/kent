@@ -3565,15 +3565,67 @@ pipelineClose(&pl);
 return cloneString(tnNextcladeOut.forCgi);
 }
 
-static struct slPair *matchSamplesWithReferences(char *nextcladeIndex, struct lineFile *lf,
-                                                 struct slName **retNoMatches, int *pStartTime)
+struct refMatch
+/* A reference sequence that has been matched with some uploaded sequence(s) */
+{
+    struct refMatch *next;
+    char *acc;                  // reference sequence accession
+    char *description;          // readable description of reference
+    char *seqFile;              // file containing uploaded sequence(s) matched to reference
+};
+
+static struct refMatch *refMatchNew(char *acc, char *description, char *seqFile)
+/* Alloc and return a new refMatch. */
+{
+struct refMatch *refMatch = NULL;
+AllocVar(refMatch);
+refMatch->acc = cloneString(acc);
+refMatch->description = cloneString(description);
+refMatch->seqFile = cloneString(seqFile);
+return refMatch;
+}
+
+static int refMatchCmp(const void *va, const void *vb)
+/* Compare two refMatch descriptions. */
+{
+const struct refMatch *a = *((struct refMatch **)va);
+const struct refMatch *b = *((struct refMatch **)vb);
+return strcmp(a->description, b->description);
+}
+
+static void describeRef(char *org, char *ref, struct dyString *dyRefDesc)
+/* Depending on whether name and description are specified in config, overwrite dyRefDesc with
+ * a description of the reference. */
+{
+char *name = phyloPlaceRefSetting(org, ref, "name");
+char *description = phyloPlaceRefSetting(org, ref, "description");
+dyStringClear(dyRefDesc);
+if (isNotEmpty(description))
+    {
+    if (isNotEmpty(name))
+        dyStringPrintf(dyRefDesc, "%s %s (%s)", name, description, ref);
+    else
+        dyStringPrintf(dyRefDesc, "%s %s", ref, description);
+    }
+else
+    {
+    if (isNotEmpty(name))
+        dyStringPrintf(dyRefDesc, "%s (%s)", name, ref);
+    else
+        dyStringAppend(dyRefDesc, ref);
+    }
+}
+
+static struct refMatch *matchSamplesWithReferences(char *org, char *nextcladeIndex,
+                                                   struct lineFile *lf,
+                                                   struct slName **retNoMatches, int *pStartTime)
 /* Save lf's content (in memory from CGI post) to a temporary file so we can run nextclade sort
  * to identify the best reference match for each uploaded sequence in lf.
  * For each reference identified as the best match for at least one sequence, write all sequences
  * for that reference to a different temporary file; return a list of pairs of {reference accession,
  * filename that holds the uploaded sequences matched with that reference}. */
 {
-struct slPair *refFiles = NULL;
+struct refMatch *refFiles = NULL;
 char *uploadedFile = dumpLfToTrashFile(lf);
 reportTiming(pStartTime, "dump uploaded seqs to file");
 
@@ -3596,6 +3648,7 @@ else
 struct slName *noMatches = NULL;
 struct hash *sampleRef = hashNew(0);
 struct hash *refOpenFileHandles = hashNew(0);
+struct dyString *dyRefDesc = dyStringNew(0);
 while (lineFileRow(nlf, row))
     {
     char *sample = row[1];
@@ -3610,11 +3663,15 @@ while (lineFileRow(nlf, row))
             struct tempName tnRefSamples;
             trashDirFile(&tnRefSamples, "ct", "usher_ref_samples", ".txt");
             hashAdd(refOpenFileHandles, ref, mustOpen(tnRefSamples.forCgi, "w"));
-            slPairAdd(&refFiles, ref, cloneString(tnRefSamples.forCgi));
+            describeRef(org, ref, dyRefDesc);
+            slAddHead(&refFiles, refMatchNew(ref, dyRefDesc->string, tnRefSamples.forCgi));
             }
         }
     }
+dyStringFree(&dyRefDesc);
 lineFileClose(&nlf);
+// Sort refFiles alphabetically by description
+slSort(&refFiles, refMatchCmp);
 // Now go through the uploaded seqs again to write them out into separate files per ref.
 FILE *f = mustOpen(uploadedFile, "r");
 char *nameLine = NULL;
@@ -3655,29 +3712,6 @@ reportTiming(pStartTime, "collated refs and samples");
 return refFiles;
 }
 
-static void describeRef(char *org, char *ref, struct dyString *dyRefDesc)
-/* Depending on whether name and description are specified in config, overwrite dyRefDesc with
- * a description of the reference. */
-{
-char *name = phyloPlaceRefSetting(org, ref, "name");
-char *description = phyloPlaceRefSetting(org, ref, "description");
-dyStringClear(dyRefDesc);
-if (isNotEmpty(description))
-    {
-    if (isNotEmpty(name))
-        dyStringPrintf(dyRefDesc, "%s %s (%s)", name, description, ref);
-    else
-        dyStringPrintf(dyRefDesc, "%s %s", ref, description);
-    }
-else
-    {
-    if (isNotEmpty(name))
-        dyStringPrintf(dyRefDesc, "%s (%s)", name, ref);
-    else
-        dyStringAppend(dyRefDesc, ref);
-    }
-}
-
 boolean phyloPlaceSamples(struct lineFile *lf, char *db, char *org, char *defaultProtobuf,
                           boolean doMeasureTiming, int subtreeSize, struct trackLayout *tl,
                           struct cart *cart)
@@ -3706,7 +3740,8 @@ if (isNotEmpty(nextcladeIndex))
         }
     struct slName *noMatches = NULL;
     int startTime = clock1000();
-    struct slPair *refFiles = matchSamplesWithReferences(nextcladeIndex, lf, &noMatches, &startTime);
+    struct refMatch *refFiles = matchSamplesWithReferences(org, nextcladeIndex, lf, &noMatches,
+                                                           &startTime);
     lineFileClose(&lf);
     if (noMatches != NULL)
         {
@@ -3716,16 +3751,14 @@ if (isNotEmpty(nextcladeIndex))
             printf("<li>%s\n", noMatch->name);
         puts("</ul>");
         }
-    struct dyString *dyRefDesc = dyStringNew(0);
-    struct slPair *ref;
+    struct refMatch *ref;
     for (ref = refFiles;  ref != NULL;  ref = ref->next)
         {
         if (ref != refFiles)
             puts("<hr>");
-        describeRef(org, ref->name, dyRefDesc);
-        printf("<h2>Sequence(s) matched reference %s</h2>\n", dyRefDesc->string);
-        struct lineFile *rlf = lineFileOpen(ref->val, TRUE);
-        phyloPlaceSamplesOneRef(rlf, db, org, ref->name, defaultProtobuf,
+        printf("<h2>Sequence(s) matched reference %s</h2>\n", ref->description);
+        struct lineFile *rlf = lineFileOpen(ref->seqFile, TRUE);
+        phyloPlaceSamplesOneRef(rlf, db, org, ref->acc, defaultProtobuf,
                                 doMeasureTiming, subtreeSize, tl, cart, &success);
         }
     puts("<br>");
