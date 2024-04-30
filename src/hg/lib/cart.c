@@ -35,6 +35,7 @@
 #include "windowsToAscii.h"
 #include "jsonWrite.h"
 #include "verbose.h"
+#include "genark.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1395,6 +1396,28 @@ for(; tdb; tdb = tdb->next)
 cartRemove(cart, CART_HAS_DEFAULT_VISIBILITY);
 }
 
+static void fixUpDb(struct cart *cart)
+// we want to load Genark hubs or error out if db is not available
+{
+char *db = cartOptionalString(cart,"db");
+
+if ((db == NULL) || startsWith("hub_", db))
+    return;
+else if (startsWith("GCA_", db) || startsWith("GCF_", db))
+    {
+    char *url = genarkUrl(db);
+
+    if (url != NULL)
+        {
+        cartSetString(cart, "genome", db);
+        cartSetString(cart, "hubUrl", url);
+        cartRemove(cart, "db");
+        }
+    }
+else if (!hDbIsActive(db))
+    errAbort("Can not find database '%s'", db);
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -1437,6 +1460,8 @@ safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
 
 loadCgiOverHash(cart, oldVars);
+
+fixUpDb(cart); // now is the time to see if someone is loading a Genark hub or specified a bad database.
 
 // I think this is the place to justify old and new values
 cartJustify(cart, oldVars);

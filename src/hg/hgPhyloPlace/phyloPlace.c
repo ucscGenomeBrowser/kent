@@ -1,6 +1,6 @@
 /* Place SARS-CoV-2 sequences in phylogenetic tree using usher program. */
 
-/* Copyright (C) 2020-2022 The Regents of the University of California */
+/* Copyright (C) 2020-2024 The Regents of the University of California */
 
 #include "common.h"
 #include "bigBed.h"
@@ -39,102 +39,35 @@ static boolean measureTiming = FALSE;
 int maxGenotypes = 1000;        // Upper limit on number of samples user can upload at once.
 boolean showParsimonyScore = FALSE;
 int minSamplesForOwnTree = 3;  // If user uploads at least this many samples, show tree for them.
+char *leftLabelWidthForLongNames = "55";// Leave plenty of room for tree and long virus strain names
 
 
-struct slName *phyloPlaceDbList(struct cart *cart)
-/* Each subdirectory of PHYLOPLACE_DATA_DIR that contains a config.ra file is a supported data
- * source and might also be a db or track hub name (without the hub_number_ prefix).  Return a
- * list of them, or NULL if none are found. */
+char *phyloPlaceOrgSetting(char *org, char *settingName)
+/* Return cloned setting value if found in hgPhyloPlaceData/<org>/organism.ra or
+ * old-style hgPhyloPlaceData/<org>/config.ra, or NULL if not found. */
 {
-struct slName *dbList = NULL;
-// I was hoping the pattern would be wildMatch'd only against filenames so I could use "config.ra",
-// but both directories and files must match the pattern so must use "*".
-struct slName *dataDirPaths = pathsInDirAndSubdirs(PHYLOPLACE_DATA_DIR, "*");
-struct slName *path;
-for (path = dataDirPaths;  path != NULL;  path = path->next)
+static struct hash *orgHashes = NULL;
+if (orgHashes == NULL)
+    orgHashes = hashNew(0);
+char *orgSkipHub = trackHubSkipHubName(org);
+struct hash *orgHash = hashFindVal(orgHashes, orgSkipHub);
+if (orgHash == NULL)
     {
-    if (endsWith(path->name, "/config.ra"))
+    char raFile[1024];
+    safef(raFile, sizeof raFile, PHYLOPLACE_DATA_DIR "/%s/organism.ra", orgSkipHub);
+    if (fileExists(raFile))
+        orgHash = raReadSingle(raFile);
+    else
         {
-        char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
-        splitPath(path->name, dir, name, extension);
-        if (endsWith(dir, "/"))
-            dir[strlen(dir)-1] = '\0';
-        char *db = strrchr(dir, '/');
-        if (db == NULL)
-            db = dir;
-        else
-            db++;
-        if (hDbExists(db))
-            slNameAddHead(&dbList, db);
-        else
-            {
-            // Not a db -- see if it's a hub that is already connected:
-            struct trackHubGenome *hubGenome = trackHubGetGenomeUndecorated(db);
-            if (hubGenome != NULL)
-                slNameAddHead(&dbList, hubGenome->name);
-            else
-                {
-                // Not connected to session currently.  If the name looks like an NCBI Assembly ID
-                // then try connecting to the corresponding UCSC assembly hub.
-                regmatch_t substrs[5];
-                if (regexMatchSubstr(db, "^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\\.[0-9]$",
-                                     substrs, ArraySize(substrs)))
-                    {
-                    char gcPrefix[4], first3[4], mid3[4], last3[4];
-                    regexSubstringCopy(db, substrs[1], gcPrefix, sizeof gcPrefix);
-                    regexSubstringCopy(db, substrs[2], first3, sizeof first3);
-                    regexSubstringCopy(db, substrs[3], mid3, sizeof mid3);
-                    regexSubstringCopy(db, substrs[4], last3, sizeof last3);
-                    struct dyString *dy = dyStringCreate("https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/"
-                                                         "%s/%s/hub.txt",
-                                                         gcPrefix, first3, mid3, last3, db);
-                    // Use cart variables to pretend user clicked to connect to this hub.
-                    cartSetString(cart, hgHubDataText, dy->string);
-                    cartSetString(cart, hgHubGenome, db);
-                    struct errCatch *errCatch = errCatchNew();
-                    char *hubDb = NULL;
-                    if (errCatchStart(errCatch))
-                        {
-                        hubDb = hubConnectLoadHubs(cart);
-                        }
-                    errCatchEnd(errCatch);
-                    if (hubDb != NULL)
-                        slNameAddHead(&dbList, hubDb);
-                    }
-                else
-                    {
-                    // Doesn't appear to be a hub; count on its config to specify a .2bit file.
-                    slNameAddHead(&dbList, db);
-                    }
-                }
-            }
+        safef(raFile, sizeof raFile, PHYLOPLACE_DATA_DIR "/%s/config.ra", orgSkipHub);
+        if (fileExists(raFile))
+            orgHash = raReadSingle(raFile);
         }
+    if (orgHash == NULL)
+        errAbort("phyloPlaceOrgSetting: can't find organism.ra or config.ra for '%s'", orgSkipHub);
+    hashAdd(orgHashes, orgSkipHub, orgHash);
     }
-// Reverse alphabetical sort to put wuhCor1/SARS-CoV-2 first
-slNameSort(&dbList);
-slReverse(&dbList);
-return dbList;
-}
-
-char *phyloPlaceDbSetting(char *db, char *settingName)
-/* Return a setting from hgPhyloPlaceData/<db>/config.ra or NULL if not found. */
-{
-static struct hash *configHash = NULL;
-static char *configDb = NULL;
-char *dbBase = trackHubSkipHubName(db);
-if (!sameOk(dbBase, configDb))
-    {
-    char configFile[1024];
-    safef(configFile, sizeof configFile, PHYLOPLACE_DATA_DIR "/%s/config.ra", dbBase);
-    if (fileExists(configFile))
-        {
-        configHash = raReadSingle(configFile);
-        configDb = cloneString(dbBase);
-        }
-    }
-if (sameOk(dbBase, configDb))
-    return cloneString(hashFindVal(configHash, settingName));
-return NULL;
+return cloneString(hashFindVal(orgHash, settingName));
 }
 
 // TODO: libify
@@ -143,21 +76,206 @@ INLINE boolean isUrl(char *url)
 return (startsWith("http://", url) || startsWith("https://", url) || startsWith("ftp://", url));
 }
 
-char *phyloPlaceDbSettingPath(char *db, char *settingName)
-/* Return path to a file named by a setting from hgPhyloPlaceData/<db>/config.ra,
- * or NULL if not found.  (Append hgPhyloPlaceData/<db>/ to the beginning of relative path) */
+char *phyloPlaceOrgSettingPath(char *org, char *settingName)
+/* Return cgi-bin-relative path to a file named by a setting for org, or NULL if not found. */
 {
-char *fileName = phyloPlaceDbSetting(db, settingName);
+char *fileName = phyloPlaceOrgSetting(org, settingName);
 if (isNotEmpty(fileName) && fileName[0] != '/' && !isUrl(fileName) && !fileExists(fileName))
     {
     struct dyString *dy = dyStringCreate(PHYLOPLACE_DATA_DIR "/%s/%s",
-                                         trackHubSkipHubName(db), fileName);
+                                         trackHubSkipHubName(org), fileName);
     if (fileExists(dy->string))
         return dyStringCannibalize(&dy);
     else
         return NULL;
     }
 return fileName;
+}
+
+char *phyloPlaceRefSetting(char *org, char *ref, char *settingName)
+/* Return cloned setting value if found in hgPhyloPlaceData/<org>/<ref>/reference.ra or
+ * old-style hgPhyloPlaceData/<ref>/config.ra, or NULL if not found. */
+{
+static struct hash *refHashes = NULL;
+if (refHashes == NULL)
+    refHashes = hashNew(0);
+char *orgSkipHub = trackHubSkipHubName(org);
+char *refSkipHub = trackHubSkipHubName(ref);
+char orgRefKey[strlen(orgSkipHub) + strlen(refSkipHub) + 16];
+safef(orgRefKey, sizeof orgRefKey, "%s|%s", orgSkipHub, refSkipHub);
+struct hash *refHash = hashFindVal(refHashes, orgRefKey);
+if (refHash == NULL)
+    {
+    char raFile[1024];
+    safef(raFile, sizeof raFile, PHYLOPLACE_DATA_DIR "/%s/%s/reference.ra", orgSkipHub, refSkipHub);
+    if (fileExists(raFile))
+        refHash = raReadSingle(raFile);
+    else
+        {
+        safef(raFile, sizeof raFile, PHYLOPLACE_DATA_DIR "/%s/config.ra", refSkipHub);
+        if (fileExists(raFile))
+            refHash = raReadSingle(raFile);
+        }
+    if (refHash == NULL)
+        errAbort("phyloPlaceOrgSetting: can't find "PHYLOPLACE_DATA_DIR"/%s/%s/reference.ra or "
+                 PHYLOPLACE_DATA_DIR"/%s/config.ra", orgSkipHub, refSkipHub, refSkipHub);
+    hashAdd(refHashes, orgRefKey, refHash);
+    }
+return cloneString(hashFindVal(refHash, settingName));
+}
+
+char *phyloPlaceRefSettingPath(char *org, char *ref, char *settingName)
+/* Return cgi-bin-relative path to a file named by a setting from
+ * hgPhyloPlaceData/<org>/<ref>/reference.ra or old-style hgPhyloPlaceData/<ref>/config.ra,
+ * or NULL if not found. */
+{
+char *fileName = phyloPlaceRefSetting(org, ref, settingName);
+if (isNotEmpty(fileName) && fileName[0] != '/' && !isUrl(fileName) && !fileExists(fileName))
+    {
+    struct dyString *dy = dyStringCreate(PHYLOPLACE_DATA_DIR "/%s/%s/%s",
+                                         org, trackHubSkipHubName(ref), fileName);
+    if (fileExists(dy->string))
+        return dyStringCannibalize(&dy);
+    else
+        {
+        dyStringClear(dy);
+        dyStringPrintf(dy, PHYLOPLACE_DATA_DIR "/%s/%s",
+                       trackHubSkipHubName(ref), fileName);
+        if (fileExists(dy->string))
+            return dyStringCannibalize(&dy);
+        else
+            return NULL;
+        }
+    }
+return fileName;
+}
+
+static char *connectIfHub(struct cart *cart, char *db)
+/* If db is an "undecorated" hub name (e.g. GCF_... without the hub_... prefix), then connect to
+ * it if it isn't already connected.  Return the complete hub name (with hub_... prefix) if
+ * connected successfully, or just db otherwise. */
+{
+char *maybeHubDb = db;
+if (! hDbExists(db))
+    {
+    // Not a db -- see if it's a hub that is already connected:
+    struct trackHubGenome *hubGenome = trackHubGetGenomeUndecorated(db);
+    if (hubGenome != NULL)
+        maybeHubDb = hubGenome->name;
+    else
+        {
+        // Not connected to session currently.  If the name looks like an NCBI Assembly ID
+        // then try connecting to the corresponding UCSC assembly hub.
+        regmatch_t substrs[5];
+        if (regexMatchSubstr(db, "^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\\.[0-9]$",
+                             substrs, ArraySize(substrs)))
+            {
+            char gcPrefix[4], first3[4], mid3[4], last3[4];
+            regexSubstringCopy(db, substrs[1], gcPrefix, sizeof gcPrefix);
+            regexSubstringCopy(db, substrs[2], first3, sizeof first3);
+            regexSubstringCopy(db, substrs[3], mid3, sizeof mid3);
+            regexSubstringCopy(db, substrs[4], last3, sizeof last3);
+            struct dyString *dy = dyStringCreate("https://hgdownload.soe.ucsc.edu/hubs/%s/%s/%s/"
+                                                 "%s/%s/hub.txt",
+                                                 gcPrefix, first3, mid3, last3, db);
+            // Use cart variables to pretend user clicked to connect to this hub.
+            cartSetString(cart, hgHubDataText, dy->string);
+            cartSetString(cart, hgHubGenome, db);
+            struct errCatch *errCatch = errCatchNew();
+            char *hubDb = NULL;
+            if (errCatchStart(errCatch))
+                {
+                hubDb = hubConnectLoadHubs(cart);
+                }
+            errCatchEnd(errCatch);
+            if (hubDb != NULL)
+                maybeHubDb = hubDb;
+            }
+        }
+    }
+return maybeHubDb;
+}
+
+static char *finalDirName(char *path)
+/* Clone & return the final directory name from a path to a file. */
+{
+char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
+splitPath(path, dir, name, extension);
+if (endsWith(dir, "/"))
+    dir[strlen(dir)-1] = '\0';
+char *finalDir = strrchr(dir, '/');
+if (finalDir == NULL)
+    finalDir = dir;
+else
+    finalDir++;
+return cloneString(finalDir);
+}
+
+static int labelCmp(const void *va, const void *vb)
+/* Compare two slPairs on their string values -- but treat SARS-CoV-2 as more important. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+if (sameString((char *)(a->val), "SARS-CoV-2"))
+    return -1;
+else if (sameString((char *)(b->val), "SARS-CoV-2"))
+    return 1;
+return strcmp((char *)(a->val), (char *)(b->val));
+}
+
+struct slPair *phyloPlaceOrgList(struct cart *cart)
+/* Each subdirectory of PHYLOPLACE_DATA_DIR that contains an organism.ra file is a collection of
+ * reference sequences that uploaded sequences will be matched against using nextclade sort.
+ * Some of those references might also be dbs or track hub names (without the hub_number_ prefix).
+ * Each subdirectory of PHYLOPLACE_DATA_DIR that contains a config.ra file contains a single
+ * reference which might also be a db or track hub name (without the hub_number_ prefix).
+ * Return a list of {name, label} pairs, SARS-CoV-2 first, combining the two categories. */
+{
+struct slPair *orgList = NULL;
+// I was hoping the pattern would be wildMatch'd only against filenames so I could use "*.ra",
+// but both directories and files must match the pattern, so must use "*".
+struct slName *dataDirPaths = pathsInDirAndSubdirs(PHYLOPLACE_DATA_DIR, "*");
+struct slName *path;
+for (path = dataDirPaths;  path != NULL;  path = path->next)
+    {
+    if (endsWith(path->name, "/organism.ra"))
+        {
+        // Use the directory name as symbol for this collection of reference sequences, get label
+        // and add {symbol, label} to list.
+        char *org = finalDirName(path->name);
+        char *label = phyloPlaceOrgSetting(org, "name");
+        if (isEmpty(label))
+            label = org;
+        char *description = phyloPlaceOrgSetting(org, "description");
+        if (isNotEmpty(description))
+            {
+            struct dyString *dy = dyStringCreate("%s %s", label, description);
+            label = dyStringCannibalize(&dy);
+            }
+        slAddHead(&orgList, slPairNew(org, label));
+        }
+    else if (endsWith(path->name, "/config.ra"))
+        {
+        // Old-style single-reference directory with config.ra instead of organism.ra; get label
+        // from config.ra and add {symbol, label} to list.
+        char *db = finalDirName(path->name);
+        char *label = phyloPlaceRefSetting(db, db, "name");
+        if (isEmpty(label))
+            label = hGenome(db);
+        char *description = phyloPlaceRefSetting(db, db, "description");
+        if (isNotEmpty(description))
+            {
+            struct dyString *dy = dyStringCreate("%s %s", label, description);
+            label = dyStringCannibalize(&dy);
+            }
+        // If it's a hub, use its full hub_... name:
+        char *maybeHubDb = connectIfHub(cart, db);
+        slAddHead(&orgList, slPairNew(maybeHubDb, label));
+        }
+    }
+// Sort by label, putting SARS-CoV-2 first and then others in alphabetical order.
+slSort(&orgList, labelCmp);
+return orgList;
 }
 
 char *getUsherPath(boolean abortIfNotFound)
@@ -189,17 +307,14 @@ else if (abortIfNotFound)
 return NULL;
 }
 
-char *getUsherAssignmentsPath(char *db, boolean abortIfNotFound)
-/* If <db>/config.ra specifies the file for use by usher --load-assignments and the file exists,
- * return the path, else NULL.  Do not free the returned value. */
+char *getNextcladePath()
+/* Return hgPhyloPlaceData/nextclade if it exists, else errAbort. Do not free the returned value. */
 {
-char *usherAssignmentsPath = phyloPlaceDbSettingPath(db, "usherAssignmentsFile");
-if (isNotEmpty(usherAssignmentsPath) && fileExists(usherAssignmentsPath))
-    return usherAssignmentsPath;
-else if (abortIfNotFound)
-    errAbort("Missing usher protobuf file (config setting in "
-             PHYLOPLACE_DATA_DIR "/%s/config.ra = %s",
-             trackHubSkipHubName(db), usherAssignmentsPath);
+char *nextcladePath = PHYLOPLACE_DATA_DIR "/nextclade";
+if (fileExists(nextcladePath))
+    return nextcladePath;
+else
+    errAbort("Missing nextclade executable (expected to be at %s)", nextcladePath);
 return NULL;
 }
 
@@ -214,21 +329,28 @@ boolean isEnabled = (isNotEmpty(cfgSetting) &&
 return (isEnabled && hDbExists("wuhCor1"));
 }
 
-static void addPathIfNecessary(struct dyString *dy, char *db, char *fileName)
-/* If fileName exists, copy it into dy, else try hgPhyloPlaceData/<db>/fileName */
+static void addPathIfNecessary(struct dyString *dy, char *org, char *ref, char *fileName)
+/* If fileName exists, copy it into dy, else try hgPhyloPlaceData/<org>/<ref>/fileName */
 {
 dyStringClear(dy);
 if (fileExists(fileName))
     dyStringAppend(dy, fileName);
 else
-    dyStringPrintf(dy, PHYLOPLACE_DATA_DIR "/%s/%s", trackHubSkipHubName(db), fileName);
+    {
+    dyStringPrintf(dy, PHYLOPLACE_DATA_DIR "/%s/%s/%s", org, trackHubSkipHubName(ref), fileName);
+    if (! fileExists(dy->string))
+        {
+        dyStringClear(dy);
+        dyStringPrintf(dy, PHYLOPLACE_DATA_DIR "/%s/%s", trackHubSkipHubName(ref), fileName);
+        }
+    }
 }
 
-struct treeChoices *loadTreeChoices(char *db)
-/* If <db>/config.ra specifies a treeChoices file, load it up, else return NULL. */
+struct treeChoices *loadTreeChoices(char *org, char *ref)
+/* If config specifies a treeChoices file, load it up, else return NULL. */
 {
 struct treeChoices *treeChoices = NULL;
-char *filename = phyloPlaceDbSettingPath(db, "treeChoices");
+char *filename = phyloPlaceRefSettingPath(org, ref, "treeChoices");
 if (isNotEmpty(filename) && fileExists(filename))
     {
     AllocVar(treeChoices);
@@ -253,13 +375,13 @@ if (isNotEmpty(filename) && fileExists(filename))
             break;
             }
         struct dyString *dy = dyStringNew(0);
-        addPathIfNecessary(dy, db, words[0]);
+        addPathIfNecessary(dy, org, ref, words[0]);
         treeChoices->protobufFiles[treeChoices->count] = cloneString(dy->string);
-        addPathIfNecessary(dy, db, words[1]);
+        addPathIfNecessary(dy, org, ref, words[1]);
         treeChoices->metadataFiles[treeChoices->count] = cloneString(dy->string);
         treeChoices->sources[treeChoices->count] = cloneString(words[2]);
         // Description can be either a file or just some text.
-        addPathIfNecessary(dy, db, words[3]);
+        addPathIfNecessary(dy, org, ref, words[3]);
         if (fileExists(dy->string))
             {
             char *desc = NULL;
@@ -270,12 +392,12 @@ if (isNotEmpty(filename) && fileExists(filename))
             treeChoices->descriptions[treeChoices->count] = cloneString(words[3]);
         if (wordCount > 4)
             {
-            addPathIfNecessary(dy, db, words[4]);
+            addPathIfNecessary(dy, org, ref, words[4]);
             treeChoices->aliasFiles[treeChoices->count] = cloneString(dy->string);
             }
         if (wordCount > 5)
             {
-            addPathIfNecessary(dy, db, words[5]);
+            addPathIfNecessary(dy, org, ref, words[5]);
             treeChoices->sampleNameFiles[treeChoices->count] = cloneString(dy->string);
             }
         treeChoices->count++;
@@ -597,6 +719,42 @@ while ((hel = hashNext(&cookie)) != NULL)
     }
 }
 
+static void beginCollapsibleSpan()
+/* Make a button to expand a section that is hidden by default. */
+{
+static int seqNum = 0;
+char idBase[32];
+safef(idBase, sizeof idBase, "collapsible_%d", seqNum);
+char buttonId[64];
+safef(buttonId, sizeof buttonId, "%s_button", idBase);
+printf("<img height='18' width='18' id='%s' src='../images/add_sm.gif' alt='+' "
+       "title='click to expand'  style='cursor:pointer;'>\n",
+       buttonId);
+jsOnEventByIdF("click", buttonId, "let button = document.getElementById('%s'); "
+               "let container = document.getElementById('%s'); "
+               "if (button && container) {"
+               "    let src = button.getAttribute('src');"
+               "    if (src) {"
+               "        if (src.indexOf('remove') > 0) {"
+               "            container.style.display = 'none';"
+               "            button.setAttribute('src', src.replace('/remove', '/add'));"
+               "        } else {"
+               "            container.style.display = 'block';"
+               "            button.setAttribute('src', src.replace('/add', '/remove'));"
+               "        }"
+               "     }"
+               "     return false;"
+               "} return true;",
+               buttonId, idBase);
+printf("<span id='%s' style='display: none;'>\n", idBase);
+seqNum++;
+}
+
+static void endCollapsibleSpan()
+{
+puts("</span>");
+}
+
 static void displaySampleMuts(struct placementInfo *info, char *refAcc)
 {
 printf("<p>Differences from the reference genome "
@@ -606,6 +764,9 @@ if (info->sampleMuts == NULL)
     printf("(None; identical to reference)");
 else
     {
+    boolean makeCollapsible = (slCount(info->sampleMuts) > 20);
+    if (makeCollapsible)
+        beginCollapsibleSpan();
     struct slName *sln;
     for (sln = info->sampleMuts;  sln != NULL;  sln = sln->next)
         {
@@ -613,8 +774,22 @@ else
             printf(", ");
         printf("%s", sln->name);
         }
+    if (makeCollapsible)
+        endCollapsibleSpan();
     }
 puts("</p>");
+}
+
+static int variantPathCountMuts(struct variantPathNode *variantPath)
+/* Return the total count of mutations along variantPath. */
+{
+int mutCount = 0;
+struct variantPathNode *vpn;
+for (vpn = variantPath;  vpn != NULL;  vpn = vpn->next)
+    {
+    mutCount += slCount(vpn->sncList);
+    }
+return mutCount;
 }
 
 boolean isInternalNodeName(char *nodeName, int minNewNode)
@@ -650,11 +825,17 @@ for (vpn = variantPath;  vpn != NULL;  vpn = vpn->next)
 static void displayVariantPath(struct variantPathNode *variantPath, char *sampleId)
 /* Display mutations on the path to this sample. */
 {
-printf("<p>Mutations along the path from the root of the phylogenetic tree to %s:<br>",
+printf("<p>Mutations along the path from the root of the phylogenetic tree to %s:\n",
        sampleId);
 if (variantPath)
     {
+    boolean makeCollapsible = (variantPathCountMuts(variantPath) > 20);
+    if (makeCollapsible)
+        beginCollapsibleSpan();
+    puts("<br>");
     variantPathPrint(variantPath);
+    if (makeCollapsible)
+        endCollapsibleSpan();
     puts("<br>");
     }
 else
@@ -1308,10 +1489,12 @@ freeMem(urlBase);
 return dyStringCannibalize(&dy);
 }
 
-static void makeSubtreeDropdown(char *subtreeDropdownName, struct subtreeInfo *subtreeInfoList,
-                                struct tempName **jsonTns)
+static char *makeSubtreeDropdown(struct subtreeInfo *subtreeInfoList, struct tempName **jsonTns)
 /* Let user choose subtree to view */
 {
+static int serial = 0;
+char subtreeDropdownName[128];
+safef(subtreeDropdownName, sizeof subtreeDropdownName, "subtreeSelect%d", serial++);
 int count = slCount(subtreeInfoList);
 char *labels[count];
 char *values[count];
@@ -1328,6 +1511,7 @@ for (ix = 0;  ix < count;  ix++)
     {
     freeMem(labels[ix]);
     }
+return cloneString(subtreeDropdownName);
 }
 
 static void makeSubtreeJumpButton(char *subtreeDropdownName, char *dest, char *destUrlBase,
@@ -1335,6 +1519,7 @@ static void makeSubtreeJumpButton(char *subtreeDropdownName, char *dest, char *d
 /* Make a button with javascript to get a JSON filename from a dropdown element, format a link
  * to dest, and jump to that dest when clicked. */
 {
+static int serial = 0;
 char *mouseover = "view selected subtree with your sequences and other sequences from the "
     "full phylogenetic tree for context";
 struct dyString *js = dyStringCreate("jsonUrl = document.querySelector('select[name=\"%s\"]').value;"
@@ -1342,7 +1527,7 @@ struct dyString *js = dyStringCreate("jsonUrl = document.querySelector('select[n
                                      "          if (ix >= 0) { jsonUrl = jsonUrl.substr(ix+3); } }"
                                      "window.open('%s' + jsonUrl + '%s');",
                                      subtreeDropdownName, skipProtocol, destUrlBase, destUrlParams);
-struct dyString *id = dyStringCreate("jumpTo%s", dest);
+struct dyString *id = dyStringCreate("jumpTo%s_%d", dest, serial++);
 printf("<input type='button' id='%s' value='%s' title='%s' class='fullwidth'>",
        id->string, dest, mouseover);
 jsOnEventById("click", id->string, js->string);
@@ -1378,8 +1563,7 @@ if (nextstrainHost())
 if (nextstrainHost() && microbeTraceHost())
     {
     puts("<td>View subtree</td><td>");
-    char *subtreeDropdownName = "subtreeSelect";
-    makeSubtreeDropdown(subtreeDropdownName, subtreeInfoList, jsonTns);
+    char *subtreeDropdownName = makeSubtreeDropdown(subtreeInfoList, jsonTns);
     puts("</td><td>in</td><td>");
     makeSubtreeJumpButton(subtreeDropdownName, "Nextstrain", nextstrainUrlBase(),
                           NEXTSTRAIN_URL_PARAMS, TRUE);
@@ -1551,11 +1735,11 @@ for (i = 0;  i < 4;  i++)
     thresholds[i] = atoi(words[i]);
 }
 
-static void readQcThresholds(char *db)
+static void readQcThresholds(char *org, char *ref)
 /* If config.ra specifies a file with QC thresholds for excellent/good/fair/bad [/fail],
  * parse it and replace the default values in qcThresholds arrays.  */
 {
-char *qcThresholdsFile = phyloPlaceDbSettingPath(db, "qcThresholds");
+char *qcThresholdsFile = phyloPlaceRefSettingPath(org, ref, "qcThresholds");
 if (isNotEmpty(qcThresholdsFile))
     {
     if (fileExists(qcThresholdsFile))
@@ -1820,32 +2004,24 @@ if (seqInfoList)
         printf("</td>");
         if (isFasta)
             {
-            struct psl *psl = si->psl;
-            if (psl)
+            printf("<td class='%s'>%d ", qcClassForLength(si->basesAligned), si->basesAligned);
+            dyStringClear(dy);
+            dyStringPrintf(dy, "aligned to reference bases %d - %d",
+                           si->tStart+1, si->tEnd);
+            printTooltip(dy->string);
+            printf("</td><td class='%s'>%d ",
+                   qcClassForIndel(si->insBases), si->insBases);
+            if (si->insBases)
                 {
-                int aliCount = psl->match + psl->misMatch + psl->repMatch;
-                printf("<td class='%s'>%d ", qcClassForLength(aliCount), aliCount);
-                dyStringClear(dy);
-                dyStringPrintf(dy, "bases %d - %d align to reference bases %d - %d",
-                               psl->qStart+1, psl->qEnd, psl->tStart+1, psl->tEnd);
-                printTooltip(dy->string);
-                printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(si->insBases), si->insBases);
-                if (si->insBases)
-                    {
-                    printTooltip(si->insRanges);
-                    }
-                printf("</td><td class='%s'>%d ",
-                       qcClassForIndel(si->delBases), si->delBases);
-                if (si->delBases)
-                    {
-                    printTooltip(si->delRanges);
-                    }
-                printf("</td>");
+                printTooltip(si->insRanges);
                 }
-            else
-                printf("<td colspan=3 class='%s'> not alignable </td>",
-                       qcClassForLength(0));
+            printf("</td><td class='%s'>%d ",
+                   qcClassForIndel(si->delBases), si->delBases);
+            if (si->delBases)
+                {
+                printTooltip(si->delRanges);
+                }
+            printf("</td>");
             }
         int snvCount = slCount(si->sncList) - alignedAmbigCount;
         printf("<td class='%s'>%d", qcClassForSNVs(snvCount), snvCount);
@@ -2369,19 +2545,12 @@ if (info)
     struct seqInfo *si = hashFindVal(seqInfoHash, sampleId);
     if (si)
         {
-        if (si->psl)
-            {
-            // length
-            fprintf(f, "\t%d", si->seq->size);
-            struct psl *psl = si->psl;
-            // aligned bases, indel counts & ranges
-            int aliCount = psl->match + psl->misMatch + psl->repMatch;
-            fprintf(f, "\t%d\t%d\t%s\t%d\t%s",
-                    aliCount, si->insBases, emptyForNull(si->insRanges),
-                    si->delBases, emptyForNull(si->delRanges));
-            }
-        else
-            fprintf(f, "\tn/a\tn/a\tn/a\tn/a\tn/a\tn/a");
+        // length
+        fprintf(f, "\t%d", si->seq->size);
+        // aligned bases, indel counts & ranges
+        fprintf(f, "\t%d\t%d\t%s\t%d\t%s",
+                si->basesAligned, si->insBases, emptyForNull(si->insRanges),
+                si->delBases, emptyForNull(si->delRanges));
         // SNVs that were masked (Problematic Sites track), not used in placement
         fputc('\t', f);
         struct singleNucChange *snc;
@@ -2551,13 +2720,13 @@ reportTiming(pStartTime, "make subtree zipfile");
 return zipTn;
 }
 
-static struct slName **getProblematicSites(char *db, char *chrom, int chromSize)
+static struct slName **getProblematicSites(char *org, char *ref, char *chrom, int chromSize)
 /* If config.ra specfies maskFile them return array of lists (usually NULL) of reasons that
  * masking is recommended, one per position in genome; otherwise return array of NULLs. */
 {
 struct slName **pSites = NULL;
 AllocArray(pSites, chromSize);
-char *pSitesFile = phyloPlaceDbSettingPath(db, "maskFile");
+char *pSitesFile = phyloPlaceRefSettingPath(org, ref, "maskFile");
 if (isNotEmpty(pSitesFile) && fileExists(pSitesFile))
     {
     struct bbiFile *bbi = bigBedFileOpen(pSitesFile);
@@ -2596,7 +2765,7 @@ struct subtreeInfo *tiB = *(struct subtreeInfo **)pb;
 return slCount(tiB->subtreeUserSampleIds) - slCount(tiA->subtreeUserSampleIds);
 }
 
-static void getProtobufMetadataSource(char *db, struct treeChoices *treeChoices,
+static void getProtobufMetadataSource(struct treeChoices *treeChoices,
                                       char *protobufFile, char **retProtobufPath,
                                       char **retMetadataFile, char **retSource,
                                       char **retAliasFile, char **retSampleNameFile)
@@ -2630,12 +2799,7 @@ if (treeChoices)
     }
 else
     {
-    // Fall back on old settings
-    *retProtobufPath = getUsherAssignmentsPath(db, TRUE);
-    *retMetadataFile = phyloPlaceDbSettingPath(db, "metadataFile");
-    *retSource = "GISAID";
-    *retAliasFile = NULL;
-    *retSampleNameFile = NULL;
+    errAbort("getProtobufMetadataSource: treeChoices is NULL (missing protobufs.tab file?)");
     }
 }
 
@@ -3000,18 +3164,18 @@ if (! pthreadMayCreate(pt, NULL, workerFunction, filename))
 return pt;
 }
 
-static struct dnaSeq *getChromSeq(char *db, char *refName)
-/* Get the reference sequence for refName, using a .2bit file if configured,
- * otherwise hdb lib functions (requires refName happens to be a real db or hub). */
+static struct dnaSeq *getChromSeq(char *org, char *ref, char *db)
+/* Get the reference sequence for ref, using a .2bit file if configured,
+ * otherwise hdb lib functions (requires ref to be the same as db). */
 {
-char *twoBitName = phyloPlaceDbSettingPath(refName, "twoBitFile");
-char *chrom = phyloPlaceDbSetting(refName, "chrom");
+char *twoBitName = phyloPlaceOrgSettingPath(org, "twoBitFile");
 struct dnaSeq *seq = NULL;
 if (isNotEmpty(twoBitName) && fileExists(twoBitName))
     {
+    char *chrom = ref;
     struct slName *seqNames = twoBitSeqNames(twoBitName);
-    if (isEmpty(chrom))
-        chrom = cloneString(seqNames->name);
+    if (!slNameFind(seqNames, chrom))
+        chrom = seqNames->name;
     struct twoBitFile *tbf = twoBitOpen(twoBitName);
     seq = twoBitReadSeqFrag(tbf, chrom, 0, 0);
     // Convert to lower case so genoFind doesn't index it as containing no tiles.
@@ -3019,14 +3183,15 @@ if (isNotEmpty(twoBitName) && fileExists(twoBitName))
     twoBitClose(&tbf);
     slNameFreeList(&seqNames);
     }
-else if (sameString(db, refName))
+else if (sameString(db, ref))
     {
+    char *chrom = phyloPlaceRefSetting(org, ref, "chrom");
     if (isEmpty(chrom))
         chrom = hDefaultChrom(db);
     seq = hChromSeq(db, chrom, 0, hChromSize(db, chrom));
     }
 else
-    errAbort("No twoBitFile or db/hub found for %s", refName);
+    errAbort("No twoBitFile or db/hub found for %s", ref);
 return seq;
 }
 
@@ -3044,9 +3209,10 @@ if (slCount(sampleIds) >= minSamplesForOwnTree)
 return tree;
 }
 
-char *phyloPlaceSamples(struct lineFile *lf, char *db, char *refName, char *defaultProtobuf,
-                        boolean doMeasureTiming, int subtreeSize, int fontHeight,
-                        boolean *retSuccess)
+static void phyloPlaceSamplesOneRef(struct lineFile *lf, char *db, char *org,
+                                    char *refName, char *defaultProtobuf,
+                                    boolean doMeasureTiming, int subtreeSize,
+                                    struct trackLayout *tl, struct cart *cart, boolean *retSuccess)
 /* Given a lineFile that contains either FASTA, VCF, or a list of sequence names/ids:
  * If FASTA/VCF, then prepare VCF for usher; if that goes well then run usher, report results,
  * make custom track files and return the top-level custom track file.
@@ -3055,8 +3221,6 @@ char *phyloPlaceSamples(struct lineFile *lf, char *db, char *refName, char *defa
  * able to get at least some results for the user's input. */
 {
 char *ctFile = NULL;
-if (retSuccess)
-    *retSuccess = FALSE;
 measureTiming = doMeasureTiming;
 int startTime = clock1000();
 struct tempName *vcfTn = NULL;
@@ -3067,14 +3231,14 @@ char *source = NULL;
 char *metadataFile = NULL;
 char *aliasFile = NULL;
 char *sampleNameFile = NULL;
-struct treeChoices *treeChoices = loadTreeChoices(refName);
-getProtobufMetadataSource(refName, treeChoices, defaultProtobuf,
+struct treeChoices *treeChoices = loadTreeChoices(org, refName);
+getProtobufMetadataSource(treeChoices, defaultProtobuf,
                           &protobufPath, &metadataFile, &source, &aliasFile, &sampleNameFile);
 reportTiming(&startTime, "start up and find the tree etc. files");
 struct mutationAnnotatedTree *bigTree = NULL;
 lineFileCarefulNewlines(lf);
-struct dnaSeq *refGenome = getChromSeq(db, refName);
-struct slName **maskSites = getProblematicSites(refName, refGenome->name, refGenome->size);
+struct dnaSeq *refGenome = getChromSeq(org, refName, db);
+struct slName **maskSites = getProblematicSites(org, refName, refGenome->name, refGenome->size);
 //#*** TODO: add CGI param option for this almost-never-needed tweak:
 if (0)
     {
@@ -3093,9 +3257,9 @@ if (lfLooksLikeFasta(lf))
     struct slPair *failedPsls;
     struct hash *treeNames = NULL;
     // We need to check uploaded names in fasta only for original usher, not usher-sampled(-server).
-    if (!serverIsConfigured(refName) && !endsWith(usherPath, "-sampled"))
+    if (!serverIsConfigured(org) && !endsWith(usherPath, "-sampled"))
         treeNames = getTreeNames(sampleNameFile, protobufPath, &bigTree, FALSE, &startTime);
-    vcfTn = vcfFromFasta(lf, refName, refGenome, maskSites, treeNames,
+    vcfTn = vcfFromFasta(lf, org, refName, refGenome, maskSites, treeNames,
                          &sampleIds, &seqInfoList, &failedSeqs, &failedPsls, &startTime);
     if (failedSeqs)
         {
@@ -3135,7 +3299,7 @@ else
 lineFileClose(&lf);
 if (sampleIds == NULL)
     {
-    return ctFile;
+    return;
     }
 
 // Kick off child thread to load metadata simultaneously with running usher or matUtils.
@@ -3145,7 +3309,7 @@ struct usherResults *results = NULL;
 if (vcfTn)
     {
     fflush(stdout);
-    results = runUsher(refName, usherPath, protobufPath, vcfTn->forCgi, subtreeSize, &sampleIds,
+    results = runUsher(org, usherPath, protobufPath, vcfTn->forCgi, subtreeSize, &sampleIds,
                        treeChoices, &startTime);
     }
 else if (subtreesOnly)
@@ -3173,12 +3337,12 @@ if (results && results->singleSubtreeInfo)
     if (retSuccess)
         *retSuccess = TRUE;
     puts("<p></p>");
-    readQcThresholds(refName);
+    readQcThresholds(org, refName);
     int subtreeCount = slCount(results->subtreeInfoList);
     // Sort subtrees by number of user samples (largest first).
     slSort(&results->subtreeInfoList, subTreeInfoUserSampleCmp);
     // Make Nextstrain/auspice JSON file for each subtree.
-    char *bigGenePredFile = phyloPlaceDbSettingPath(refName, "bigGenePredFile");
+    char *bigGenePredFile = phyloPlaceRefSettingPath(org, refName, "bigGenePredFile");
     struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, refGenome);
     struct seqWindow *gSeqWin = memSeqWindowNew(refGenome->name, refGenome->dna);
     struct hash *sampleUrls = hashNew(0);
@@ -3191,7 +3355,7 @@ if (results && results->singleSubtreeInfo)
         char subtreeName[512];
         safef(subtreeName, sizeof(subtreeName), "subtreeAuspice%d", ix+1);
         trashDirFile(jsonTns[ix], "ct", subtreeName, ".json");
-        treeToAuspiceJson(ti, refName, geneInfoList, gSeqWin, sampleMetadata, NULL,
+        treeToAuspiceJson(ti, org, refName, geneInfoList, gSeqWin, sampleMetadata, NULL,
                           results->samplePlacements, jsonTns[ix]->forCgi, source);
         // Add a link for every sample to this subtree, so the single-subtree JSON can
         // link to subtree JSONs
@@ -3203,13 +3367,22 @@ if (results && results->singleSubtreeInfo)
     struct tempName *singleSubtreeJsonTn;
     AllocVar(singleSubtreeJsonTn);
     trashDirFile(singleSubtreeJsonTn, "ct", "singleSubtreeAuspice", ".json");
-    treeToAuspiceJson(results->singleSubtreeInfo, refName, geneInfoList, gSeqWin, sampleMetadata,
+    treeToAuspiceJson(results->singleSubtreeInfo, org, refName, geneInfoList, gSeqWin, sampleMetadata,
                       sampleUrls, results->samplePlacements, singleSubtreeJsonTn->forCgi, source);
     reportTiming(&startTime, "make Auspice JSON");
     struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
     if (subtreeCount > MAX_SUBTREE_BUTTONS)
         subtreeInfoForButtons = NULL;
-    boolean canDoCustomTracks = (!subtreesOnly && sameString(db, refName));
+    char *dbSetting = phyloPlaceRefSetting(org, refName, "db");
+    if (dbSetting)
+        db = connectIfHub(cart, dbSetting);
+    boolean canDoCustomTracks = (!subtreesOnly &&
+                                 (sameString(db, refName) || isNotEmpty(dbSetting)));
+    if (canDoCustomTracks)
+        // Form submits subtree custom tracks to hgTracks
+        printf("<form action='%s' name='resultsForm_%s' method=%s>\n\n",
+               hgTracksName(), db, cartUsualString(cart, "formMethod", "POST"));
+
     makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeInfoForButtons, subtreeSize, isFasta,
                   canDoCustomTracks);
     printf("<p>If you have metadata you wish to display, click a 'view subtree in "
@@ -3240,11 +3413,11 @@ if (results && results->singleSubtreeInfo)
 
         char *singleSubtreeFile = results->singleSubtreeInfo->subtreeTn->forCgi;
         struct phyloTree *sampleTree = uploadedSamplesTree(singleSubtreeFile, sampleIds);
-        if (sameString(db, refName))
+        if (canDoCustomTracks)
             {
             // Make custom tracks for uploaded samples and subtree(s).
-            ctTn = writeCustomTracks(db, vcfTn, results, sampleIds, source, fontHeight,
-                                     sampleTree, &startTime);
+            ctTn = writeCustomTracks(org, refName, db, vcfTn, results, sampleIds, source,
+                                     tl->fontHeight, sampleTree, &startTime);
             }
 
         // Make a sample summary TSV file and accumulate S gene changes
@@ -3301,7 +3474,7 @@ if (results && results->singleSubtreeInfo)
         {
         puts("<ul>");
         // Offer big tree w/new samples for download
-        printf("<li><a href='%s' download>SARS-CoV-2 phylogenetic tree "
+        printf("<li><a href='%s' download>phylogenetic tree "
                "with your samples (Newick file)</a>\n", results->bigTreePlusTn->forHtml);
         printf("<li><a href='%s' download>TSV summary of sequences and placements</a>\n",
                tsvTn->forHtml);
@@ -3349,7 +3522,252 @@ if (results && results->singleSubtreeInfo)
             printf("<p>Added %d subtree custom track%s.</p>\n",
                    subtreeCount, (subtreeCount > 1 ? "s" : ""));
         ctFile = urlFromTn(ctTn);
+        cartSaveSession(cart);
+        cgiMakeHiddenVar("db", db);
+        cgiMakeHiddenVar(CT_CUSTOM_TEXT_VAR, ctFile);
+        if (tl->leftLabelWidthChars < 0 || tl->leftLabelWidthChars == leftLabelWidthDefaultChars)
+            cgiMakeHiddenVar(leftLabelWidthVar, leftLabelWidthForLongNames);
+        cgiMakeButton("submit", "view in Genome Browser");
+        puts("</form>");
         }
     }
-return ctFile;
+}
+
+static char *dumpLfToTrashFile(struct lineFile *lf)
+/* Dump the contents of lf to a trash file (for passing to an executable). Return trash file name. */
+{
+struct tempName tmp;
+trashDirFile(&tmp, "ct", "usher_tmp", ".txt");
+FILE *f = mustOpen(tmp.forCgi, "w");
+char *line;
+int size;
+while (lineFileNext(lf, &line, &size))
+    {
+    fputs(line, f);
+    fputc('\n', f);
+    }
+carefulClose(&f);
+return cloneString(tmp.forCgi);
+}
+
+char *runNextcladeSort(char *seqFile, char *nextcladeIndex)
+/* Run the nextclade sort command on uploaded seqs, return output TSV file name. */
+{
+char *nextcladePath = getNextcladePath();
+struct tempName tnNextcladeOut;
+trashDirFile(&tnNextcladeOut, "ct", "usher_nextclade_sort", ".tsv");
+#define NEXTCLADE_NUM_THREADS "4"
+char *cmd[] = { nextcladePath, "sort", seqFile, "-m", nextcladeIndex,
+                "-j", NEXTCLADE_NUM_THREADS, "-r", tnNextcladeOut.forCgi, NULL };
+char **cmds[] = { cmd, NULL };
+struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, NULL, 0);
+pipelineClose(&pl);
+return cloneString(tnNextcladeOut.forCgi);
+}
+
+struct refMatch
+/* A reference sequence that has been matched with some uploaded sequence(s) */
+{
+    struct refMatch *next;
+    char *acc;                  // reference sequence accession
+    char *description;          // readable description of reference
+    char *seqFile;              // file containing uploaded sequence(s) matched to reference
+};
+
+static struct refMatch *refMatchNew(char *acc, char *description, char *seqFile)
+/* Alloc and return a new refMatch. */
+{
+struct refMatch *refMatch = NULL;
+AllocVar(refMatch);
+refMatch->acc = cloneString(acc);
+refMatch->description = cloneString(description);
+refMatch->seqFile = cloneString(seqFile);
+return refMatch;
+}
+
+static int refMatchCmp(const void *va, const void *vb)
+/* Compare two refMatch descriptions. */
+{
+const struct refMatch *a = *((struct refMatch **)va);
+const struct refMatch *b = *((struct refMatch **)vb);
+return strcmp(a->description, b->description);
+}
+
+static void describeRef(char *org, char *ref, struct dyString *dyRefDesc)
+/* Depending on whether name and description are specified in config, overwrite dyRefDesc with
+ * a description of the reference. */
+{
+char *name = phyloPlaceRefSetting(org, ref, "name");
+char *description = phyloPlaceRefSetting(org, ref, "description");
+dyStringClear(dyRefDesc);
+if (isNotEmpty(description))
+    {
+    if (isNotEmpty(name))
+        dyStringPrintf(dyRefDesc, "%s %s (%s)", name, description, ref);
+    else
+        dyStringPrintf(dyRefDesc, "%s %s", ref, description);
+    }
+else
+    {
+    if (isNotEmpty(name))
+        dyStringPrintf(dyRefDesc, "%s (%s)", name, ref);
+    else
+        dyStringAppend(dyRefDesc, ref);
+    }
+}
+
+static struct refMatch *matchSamplesWithReferences(char *org, char *nextcladeIndex,
+                                                   struct lineFile *lf,
+                                                   struct slName **retNoMatches, int *pStartTime)
+/* Save lf's content (in memory from CGI post) to a temporary file so we can run nextclade sort
+ * to identify the best reference match for each uploaded sequence in lf.
+ * For each reference identified as the best match for at least one sequence, write all sequences
+ * for that reference to a different temporary file; return a list of pairs of {reference accession,
+ * filename that holds the uploaded sequences matched with that reference}. */
+{
+struct refMatch *refFiles = NULL;
+char *uploadedFile = dumpLfToTrashFile(lf);
+reportTiming(pStartTime, "dump uploaded seqs to file");
+
+char *nextcladeOut = runNextcladeSort(uploadedFile, nextcladeIndex);
+reportTiming(pStartTime, "run nextclade sort");
+
+struct lineFile *nlf = lineFileOpen(nextcladeOut, TRUE);
+char *row[5];
+// Check header line... the nextclade guys change output columns frequently
+if (lineFileRow(nlf, row))
+    {
+    if (differentString(row[1], "seqName") || differentString(row[2], "dataset"))
+        errAbort("nextclade sort output header format has changed");
+    }
+else
+    errAbort("nextclade sort output is empty");
+// Build up a hash of sample names to the best matching ref (the first one in the nextclade output
+// file; ignore subsequent matches for the same sample), a list of samples that match no ref, and
+// a hash of ref to open file handle to which we will write the sequences that matched that ref.
+struct slName *noMatches = NULL;
+struct hash *sampleRef = hashNew(0);
+struct hash *refOpenFileHandles = hashNew(0);
+struct dyString *dyRefDesc = dyStringNew(0);
+while (lineFileRow(nlf, row))
+    {
+    char *sample = row[1];
+    char *ref = row[2];
+    if (isEmpty(ref))
+        slNameAddHead(&noMatches, sample);
+    else if (! hashFindVal(sampleRef, sample))
+        {
+        hashAdd(sampleRef, sample, cloneString(ref));
+        if (! hashFindVal(refOpenFileHandles, ref))
+            {
+            struct tempName tnRefSamples;
+            trashDirFile(&tnRefSamples, "ct", "usher_ref_samples", ".txt");
+            hashAdd(refOpenFileHandles, ref, mustOpen(tnRefSamples.forCgi, "w"));
+            describeRef(org, ref, dyRefDesc);
+            slAddHead(&refFiles, refMatchNew(ref, dyRefDesc->string, tnRefSamples.forCgi));
+            }
+        }
+    }
+dyStringFree(&dyRefDesc);
+lineFileClose(&nlf);
+// Sort refFiles alphabetically by description
+slSort(&refFiles, refMatchCmp);
+// Now go through the uploaded seqs again to write them out into separate files per ref.
+FILE *f = mustOpen(uploadedFile, "r");
+char *nameLine = NULL;
+struct dnaSeq *seq = NULL;
+while (faReadMixedNext(f, FALSE, "uploaded_seq", TRUE, &nameLine, &seq))
+    {
+    char *seqName = nameLine;
+    if (nameLine[0] == '>')
+        seqName = trimSpaces(nameLine+1);
+    char *ref = hashFindVal(sampleRef, seqName);
+    if (ref)
+        {
+        FILE *f = hashFindVal(refOpenFileHandles, ref);
+        if (f == NULL)
+            errAbort("matchSamplesWithReferences: can't find file handle for ref '%s' "
+                     "for sample '%s'", ref, seqName);
+        faWriteNext(f, seqName, seq->dna, seq->size);
+        }
+    dnaSeqFree(&seq);
+    }
+carefulClose(&f);
+// Close per-ref file handles
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(refOpenFileHandles);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    carefulClose((FILE **)&(hel->val));
+    }
+
+// Clean up
+hashFree(&refOpenFileHandles);
+freeHashAndVals(&sampleRef);
+unlink(uploadedFile);
+unlink(nextcladeOut);
+if (retNoMatches)
+    *retNoMatches = noMatches;
+reportTiming(pStartTime, "collated refs and samples");
+return refFiles;
+}
+
+boolean phyloPlaceSamples(struct lineFile *lf, char *db, char *org, char *defaultProtobuf,
+                          boolean doMeasureTiming, int subtreeSize, struct trackLayout *tl,
+                          struct cart *cart)
+/* Given a lineFile that contains either FASTA, VCF, or a list of sequence names/ids:
+ * If FASTA/VCF, then prepare VCF for usher; if that goes well then run usher, report results,
+ * make custom track files.
+ * If list of seq names/ids, then attempt to find their full names in the protobuf, run matUtils
+ * to make subtrees, show subtree results.
+ * Return TRUE if we were able to get at least some results for the user's input. */
+{
+boolean success = FALSE;
+char *nextcladeIndex = phyloPlaceOrgSettingPath(org, "nextcladeIndex");
+if (isNotEmpty(nextcladeIndex))
+    {
+    if (! fileExists(nextcladeIndex))
+        errAbort("config for '%s' specifies nextcladeIndex file '%s' but it does not exist",
+                 org, nextcladeIndex);
+    if (! lfLooksLikeFasta(lf))
+        {
+        char *name = phyloPlaceOrgSetting(org, "name");
+        if (isEmpty(name))
+            name = org;
+        char *description = emptyForNull(phyloPlaceOrgSetting(org, "description"));
+        errAbort("Sorry, only fasta input is supported for %s %s",
+                 name, description);
+        }
+    struct slName *noMatches = NULL;
+    int startTime = clock1000();
+    struct refMatch *refFiles = matchSamplesWithReferences(org, nextcladeIndex, lf, &noMatches,
+                                                           &startTime);
+    lineFileClose(&lf);
+    if (noMatches != NULL)
+        {
+        printf("<br>No reference was found for the following sequences:\n<ul>\n");
+        struct slName *noMatch;
+        for (noMatch = noMatches;  noMatch != NULL;  noMatch = noMatch->next)
+            printf("<li>%s\n", noMatch->name);
+        puts("</ul>");
+        }
+    struct refMatch *ref;
+    for (ref = refFiles;  ref != NULL;  ref = ref->next)
+        {
+        if (ref != refFiles)
+            puts("<hr>");
+        printf("<h2>Sequence(s) matched reference %s</h2>\n", ref->description);
+        struct lineFile *rlf = lineFileOpen(ref->seqFile, TRUE);
+        phyloPlaceSamplesOneRef(rlf, db, org, ref->acc, defaultProtobuf,
+                                doMeasureTiming, subtreeSize, tl, cart, &success);
+        }
+    puts("<br>");
+    }
+else
+    {
+    // No nextcladeIndex means this is the old-style single-reference setup (i.e. SARS-CoV-2).
+    phyloPlaceSamplesOneRef(lf, db, org, org, defaultProtobuf, doMeasureTiming, subtreeSize,
+                            tl, cart, &success);
+    }
+return success;
 }
