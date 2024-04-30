@@ -941,6 +941,7 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
     jsonWriteString(jw, "genome", gHubMatch->gcAccession);
     jsonWriteString(jw, "db", gHubMatch->asmName);
     jsonWriteString(jw, "hubUrl", gHubMatch->hubUrl);
+    jsonWriteString(jw, "scientificName", gHubMatch->scientificName);
     // Add a category label for customized autocomplete-with-categories.
     jsonWriteString(jw, "category", "GenArk");
     jsonWriteString(jw, "value", gHubMatch->asmName);
@@ -959,7 +960,8 @@ struct gHubMatch *ret = NULL;
 for (match = matchList; match != NULL; match = match->next)
     {
     // the match contains tab-sep accession, hubUrl, asmName, scientificName, commonName
-    char *hubUrl = catTwoStrings(genarkHubUrl, match->hubUrl);
+    char hubUrl[PATH_LEN+1];
+    safef(hubUrl, sizeof(hubUrl), "%s/%s", genarkHubUrl, match->hubUrl);
     slAddHead(&ret, gHubMatchNew(match->gcAccession, hubUrl, match->asmName, match->scientificName, match->commonName, -1));
     }
 return ret;
