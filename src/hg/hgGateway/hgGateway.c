@@ -29,6 +29,7 @@
 #include "trackHub.h"
 #include "web.h"
 #include "botDelay.h"
+#include "genark.h"
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
@@ -726,7 +727,6 @@ return matchList;
 }
 
 // Assembly hub match:
-
 struct aHubMatch
     // description of an assembly hub db
     {
@@ -746,6 +746,33 @@ match->shortLabel = cloneString(shortLabel);
 match->hubUrl = cloneString(hubUrl);
 match->aDb = cloneString(aDb);
 match->label = cloneString(label);
+return match;
+}
+
+// Genark  hub match:
+struct gHubMatch
+    // description of an genark hub db
+    {
+    struct gHubMatch *next;
+    char *gcAccession;
+    char *hubUrl;
+    char *asmName;
+    char *scientificName;
+    char *commonName;
+    int priority; // reserver for later ranking, currently unused
+    };
+
+static struct gHubMatch *gHubMatchNew(char *acc, char *hubUrl, char *asmName, char *scientificName, char *commonName, int priority)
+/* Allocate and return a description of an assembly hub db. */
+{
+struct gHubMatch *match;
+AllocVar(match);
+match->gcAccession = cloneString(acc);
+match->hubUrl = cloneString(hubUrl);
+match->asmName = cloneString(asmName);
+match->scientificName = cloneString(scientificName);
+match->commonName = cloneString(commonName);
+match->priority = priority;
 return match;
 }
 
@@ -904,6 +931,63 @@ hDisconnectCentral(&conn);
 return aHubMatchList;
 }
 
+static void writeGenarkMatches(struct jsonWrite *jw, struct gHubMatch *gHubMatchList)
+/* Write out JSON for each genark hub that matched the users term */
+{
+struct gHubMatch *gHubMatch;
+for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "genome", gHubMatch->gcAccession);
+    jsonWriteString(jw, "db", gHubMatch->asmName);
+    jsonWriteString(jw, "hubUrl", gHubMatch->hubUrl);
+    // Add a category label for customized autocomplete-with-categories.
+    jsonWriteString(jw, "category", "GenArk");
+    jsonWriteString(jw, "value", gHubMatch->asmName);
+    // Use just the db as label, since shortLabel is included in the category label.
+    jsonWriteStringf(jw, "label", "%s - %s", gHubMatch->commonName, gHubMatch->scientificName);
+    jsonWriteObjectEnd(jw);
+    }
+}
+
+static struct gHubMatch *filterGenarkMatches(char *genarkHubUrl, struct genark *matchList)
+/* Turn the sql results into a struct gHubMatch list */
+{
+struct genark *match;
+struct gHubMatch *ret = NULL;
+
+for (match = matchList; match != NULL; match = match->next)
+    {
+    // the match contains tab-sep accession, hubUrl, asmName, scientificName, commonName
+    char *hubUrl = catTwoStrings(genarkHubUrl, match->hubUrl);
+    slAddHead(&ret, gHubMatchNew(match->gcAccession, hubUrl, match->asmName, match->scientificName, match->commonName, -1));
+    }
+return ret;
+}
+
+static struct gHubMatch *searchGenark(char *term)
+/* Search through the genark table for hubs matches term */
+{
+char *genarkPrefix = cfgOption("genarkHubPrefix");
+if (genarkPrefix == NULL)
+    return NULL;
+
+struct gHubMatch *gHubMatchList = NULL;
+char *genarkTbl = genarkTableName();
+struct sqlConnection *conn = hConnectCentral();
+if (sqlTableExists(conn, genarkTbl))
+    {
+    char query[1024];
+    sqlSafef(query, sizeof(query), "select * from %s where "
+             "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%')",
+             genarkTbl, term, term, term, term);
+    struct genark *matchList = genarkLoadByQuery(conn, query);
+    gHubMatchList = filterGenarkMatches(genarkPrefix, matchList);
+    }
+hDisconnectCentral(&conn);
+return gHubMatchList;
+}
+
 static char *getSearchTermUpperCase()
 /* If we don't have the SEARCH_TERM cgi param, exit with an HTTP Bad Request response.
  * If we do, convert it to upper case for case-insensitive matching and return it. */
@@ -933,6 +1017,7 @@ puts("Content-Type:text/javascript\n");
 setUdcCacheDir();
 struct dbDb *dbDbList = hDbDbList();
 struct dbDbMatch *matchList = searchDbDb(dbDbList, term);
+struct gHubMatch *gHubMatchList = searchGenark(term);
 struct aHubMatch *aHubMatchList = searchPublicHubs(dbDbList, term);
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteListStart(jw, NULL);
@@ -941,6 +1026,8 @@ char *category = aHubMatchList ? "UCSC databases" : NULL;
 struct dbDbMatch *match;
 for (match = matchList;  match != NULL;  match = match->next)
     writeDbDbMatch(jw, match, term, category);
+// Write out genark matches, if any
+writeGenarkMatches(jw, gHubMatchList);
 // Write out assembly hub matches, if any.
 writeAssemblyHubMatches(jw, aHubMatchList);
 jsonWriteListEnd(jw);
