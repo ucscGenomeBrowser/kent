@@ -2046,7 +2046,7 @@ done
     screen -S hg38HgPal
     mkdir /hive/data/genomes/hg38/bed/multiz470way/pal
     cd /hive/data/genomes/hg38/bed/multiz470way/pal
-    cat ../species.list | tr '[ ]' '[\n]' > order.list
+    cat ../species.list.txt | tr '[ ]' '[\n]' > order.list
 
     ### knownCanonical with full CDS
     cd /hive/data/genomes/hg38/bed/multiz470way/pal
