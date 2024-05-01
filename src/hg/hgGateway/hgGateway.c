@@ -981,7 +981,7 @@ if (sqlTableExists(conn, genarkTbl))
     {
     char query[1024];
     sqlSafef(query, sizeof(query), "select * from %s where "
-             "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%') order by commonName",
+             "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%') order by commonName ASC",
              genarkTbl, term, term, term, term);
     struct genark *matchList = genarkLoadByQuery(conn, query);
     gHubMatchList = filterGenarkMatches(genarkPrefix, matchList);
