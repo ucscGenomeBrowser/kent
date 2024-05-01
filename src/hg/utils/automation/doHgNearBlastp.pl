@@ -308,9 +308,9 @@ $cladeEs[$worm][$yeast] = $cladeEs[$yeast][$worm] = 0.01;
 sub calcE {
   # Look up the blastp e parameter (max E-value) by clade distances
   my ($tDb, $qDb) = @_;
-  (my $t = $tDb) =~ s/\d+$//;
+  (my $t = $tDb) =~ s/\d+.*$//;
   defined ($t = $dbToClade{$t}) || die "Can't figure out clade of '$tDb'";
-  (my $q = $qDb) =~ s/\d+$//;
+  (my $q = $qDb) =~ s/\d+.*$//;
   defined ($q = $dbToClade{$q}) || die "Can't figure out clade of '$qDb'";
   my $e = $cladeEs[$t][$q] || die "No e for clades '$t', '$q'";
   return $e;

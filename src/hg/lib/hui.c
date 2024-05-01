@@ -3976,6 +3976,7 @@ return trackDbLabel;
 static filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, struct trackDbFilter *tdbFilter, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
+boolean isHighlight = startsWith("highlightValues.", tdbFilter->name);
 char *field = tdbFilter->fieldName;
 if (isEmpty(tdbFilter->setting))
     errAbort("FilterValues setting of field '%s' must have a value.", tdbFilter->fieldName);
@@ -4000,7 +4001,7 @@ chopUpValues(filterBy);
 if (cart != NULL)
     {
     char suffix[256];
-    safef(suffix, sizeof(suffix), "%s.%s", "filterBy", filterBy->column);
+    safef(suffix, sizeof(suffix), "%s.%s", isHighlight ? "highlightBy" : "filterBy", filterBy->column);
     boolean parentLevel = isNameAtParentLevel(tdb,tdb->track);
     if (cartLookUpVariableClosestToHome(cart,tdb,parentLevel,suffix,&(filterBy->htmlName)))
         {
@@ -4016,7 +4017,7 @@ if (filterBy->slChoices == NULL)  // no settings in cart, initialize from trackD
     }
 
 struct dyString *dy = dyStringNew(128);
-dyStringPrintf(dy, "%s.%s.%s", name, "filterBy", filterBy->column);
+dyStringPrintf(dy, "%s.%s.%s", name, isHighlight ? "highlightBy": "filterBy", filterBy->column);
 filterBy->htmlName = dy->string;
 
 return filterBy;
@@ -4047,6 +4048,12 @@ if (differentString(subName, "highlightBy"))
     struct trackDbFilter *trackDbFilters = tdbGetTrackFilterByFilters( tdb);
     if (trackDbFilters)
         return filterByValues(tdb, cart, trackDbFilters, name);
+    }
+else
+    {
+    struct trackDbFilter *trackDbHighlights = tdbGetTrackHighlightByHighlights(tdb);
+    if (trackDbHighlights)
+        return filterByValues(tdb, cart, trackDbHighlights, name);
     }
 
 filterBy_t *filterBySet = NULL;
@@ -4311,19 +4318,29 @@ return  sameString(setting, FILTERBY_MULTIPLE_LIST_OR) || sameString(setting, FI
 
 void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
 		      filterBy_t *filterBySet, boolean onOneLine,
-		      char *filterTypeTitle, char *selectIdPrefix, char *allLabel, char *prefix)
+		      char *filterTypeTitle, char *selectIdPrefix, char *allLabel, char *prefix, boolean isHighlight)
 // Does the UI for a list of filterBy structure for either filterBy or highlightBy controls
+// isHighlight controls the variable name for the cart
 {
 if (filterBySet == NULL)
     return;
 
-#define FILTERBY_HELP_LINK "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
+#define FILTERBY_HELP_LINK "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>Help</A>"
 int count = slCount(filterBySet);
 if (count == 1)
     puts("<TABLE class='trackUiFilterTable'><TR valign='top'>");
 else
-    printf("<B>%s items by:</B> (select multiple categories and items - %s)"
+    printf("<B>%s items by:</B> (select multiple categories and items - %s)&nbsp;&nbsp;<button id='filterResetButton'>Reset filters</button>"
 	   "<TABLE class='trackUiFilterTable'><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
+
+jsInlineF("$(function () { "
+    "$('#filterResetButton').click( "
+       "     function(ev) { ev.preventDefault(); "
+       "     $('.filterBy option[value=\"All\"]').removeAttr(\"selected\");"
+       "     $('.filterBy option[Value=\"All\"]').attr('selected', 'selected');"
+       "     $('.filterBy').dropdownchecklist('refresh'); "
+       " }); "
+"});");
 
 #ifdef ADVANCED_BUTTON
 if (tdbIsBigBed(tdb))
@@ -4337,8 +4354,8 @@ if (tdbIsBigBed(tdb))
     }
 #endif // ADVANCED_BUTTON
 
-
 filterBy_t *filterBy = NULL;
+
 if (cartOptionalString(cart, "ajax") == NULL)
     {
     webIncludeResourceFile("ui.dropdownchecklist.css");
@@ -4371,13 +4388,26 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
     if (advancedFilter(cart, tdb, setting))
         {
         char cartSettingString[4096];
-        safef(cartSettingString, sizeof cartSettingString, "%s.%s.%s", prefix,FILTER_TYPE_NAME_LOW, filterBy->column);
-        printf("<div ><b>Match if  ");
-        // ADVANCED BUTTON printf("<div class='advanced' style='display:none'><b>Match if  ");
-        cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_AND, sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
-        printf(" all ");
-        cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_OR, sameString(setting, FILTERBY_MULTIPLE_LIST_OR));
-        printf(" one or more match</b></div> ");
+        if (isHighlight)
+            {
+            safef(cartSettingString, sizeof cartSettingString, "%s.%s.%s", prefix,HIGHLIGHT_TYPE_NAME_LOW, filterBy->column);
+            printf("<div ><b>Highlight if  ");
+            // ADVANCED BUTTON printf("<div class='advanced' style='display:none'><b>Match if  ");
+            cgiMakeRadioButton(cartSettingString, HIGHLIGHTBY_MULTIPLE_LIST_AND, sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_AND));
+            printf(" all ");
+            cgiMakeRadioButton(cartSettingString, HIGHLIGHTBY_MULTIPLE_LIST_OR, sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_OR));
+            printf(" one or more match</b></div> ");
+            }
+        else
+            {
+            safef(cartSettingString, sizeof cartSettingString, "%s.%s.%s", prefix,FILTER_TYPE_NAME_LOW, filterBy->column);
+            printf("<div ><b>Match if  ");
+            // ADVANCED BUTTON printf("<div class='advanced' style='display:none'><b>Match if  ");
+            cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_AND, sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
+            printf(" all ");
+            cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_OR, sameString(setting, FILTERBY_MULTIPLE_LIST_OR));
+            printf(" one or more match</b></div> ");
+            }
         }
     puts("</td>");
     }
@@ -4443,14 +4473,14 @@ void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
 		  filterBy_t *filterBySet, boolean onOneLine, char *prefix)
 /* Does the filter UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", "fbc", "All", prefix);
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Filter", "fbc", "All", prefix, FALSE);
 }
 
 void highlightBySetCfgUi(struct cart *cart, struct trackDb *tdb,
-		     filterBy_t *filterBySet, boolean onOneLine, char *prefix)
+		     filterBy_t *filterBySet, boolean onOneLine, char *prefix, boolean isHighlight)
 /* Does the highlight UI for a list of filterBy structure */
 {
-filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "None", prefix);
+filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "None", prefix, TRUE);
 }
 
 #define COLOR_BG_DEFAULT_IX     0
@@ -5969,6 +5999,42 @@ jsInlineF("$(\"input[name='%s']\").click( function() { $('#densGraphOptions').to
     , varName); // XSS FILTER?
 }
 
+void filterNameOption(struct cart *cart, char *name, struct trackDb *tdb)
+/* filter by feature names text input box */
+{
+printf("<DIV><B>Show only transcripts with these accessions:</B> ");
+char varName[1024];
+safef(varName, sizeof(varName), "%s.nameFilter", name);
+
+char *onlyTransStr = cartUsualString(cart, varName, "");
+
+cgiMakeTextVar(varName, onlyTransStr, 60);
+printf("&nbsp;<small>Separate multiple accessions with commas</small>");
+puts("</DIV>\n\n");
+}
+
+void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb)
+/* color picker for overriding track color */
+{
+printf("<DIV><B>Color for all features:</B> ");
+char varName[1024];
+safef(varName, sizeof(varName), "%s.colorOverride", name);
+
+char *colorValue = cartUsualString(cart, varName, "");
+
+cgiMakeTextVar(varName, colorValue, 10);
+puts("&nbsp;<input id='colorPicker'>");
+puts("&nbsp;&nbsp;<span class='link' id='colorReset'>Reset</span>");
+jsInlineF("activateColorPicker('[id=\"%s\"]', '#colorPicker');", varName); // id="xx" is necessary as id contains a dot
+jsInlineF("$('#colorPicker').spectrum('set', '#%s');", colorValue);
+jsInlineF("$('#colorReset').click(function() { "
+    "$('[id=\"%s\"]').val('');"
+    "$('#colorPicker').spectrum('set', '#000000');"
+    "});", varName);
+
+puts("</DIV>\n\n");
+}
+
 void wiggleScaleDropDownJavascript(char *name)
 /* print some js that deactivates the min/max range if autoscaling is activated */
 {
@@ -6590,7 +6656,7 @@ if (max && limitMin
 
 static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened,
                                boolean boxed, boolean parentLevel,char *name, char *title,
-                               char *label, char *scoreName)
+                               char *label, char *scoreName, boolean isHighlight)
 // Shows a score filter control with minimum value and optional range
 {
 char *setting = trackDbSetting(tdb, scoreName);
@@ -6704,6 +6770,41 @@ struct trackDbFilter *tdbGetTrackFilterByFilters( struct trackDb *tdb)
 return tdbGetTrackFilters( tdb, FILTER_VALUES_WILDCARD_LOW, FILTER_VALUES_NAME_LOW, FILTER_VALUES_WILDCARD_CAP, FILTER_VALUES_NAME_CAP);
 }
 
+struct trackDbFilter *tdbGetTrackNumHighlights( struct trackDb *tdb)
+// get the number filters out of trackDb
+{
+return tdbGetTrackFilters( tdb, HIGHLIGHT_NUMBER_WILDCARD_LOW, HIGHLIGHT_NUMBER_NAME_LOW, HIGHLIGHT_NUMBER_WILDCARD_CAP, HIGHLIGHT_NUMBER_NAME_CAP);
+}
+
+struct trackDbFilter *tdbGetTrackTextHighlights( struct trackDb *tdb)
+// get the text filters out of trackDb
+{
+return tdbGetTrackFilters( tdb, HIGHLIGHT_TEXT_WILDCARD_LOW, HIGHLIGHT_TEXT_NAME_LOW, HIGHLIGHT_TEXT_WILDCARD_CAP, HIGHLIGHT_TEXT_NAME_CAP);
+}
+
+struct trackDbFilter *tdbGetTrackHighlightByHighlights( struct trackDb *tdb)
+// get the values filters out of trackDb
+{
+return tdbGetTrackFilters( tdb, HIGHLIGHT_VALUES_WILDCARD_LOW, HIGHLIGHT_VALUES_NAME_LOW, HIGHLIGHT_VALUES_WILDCARD_CAP, HIGHLIGHT_VALUES_NAME_CAP);
+}
+
+char *prevHighlightColor(struct cart *cart, struct trackDb *tdb)
+/* Return the cart string for the highlight color if it has been changed else the default */
+{
+return cartOrTdbString(cart, tdb, HIGHLIGHT_COLOR_CART_VAR, HIGHLIGHT_COLOR_DEFAULT);
+}
+
+void printHighlightColorPicker(struct cart *cart, struct trackDb *tdb)
+{
+jsIncludeFile("ajax.js", NULL);
+jsIncludeFile("hui.js", NULL);
+puts("<br>");
+puts("Choose highlight color:");
+puts("<div id='hgTrackUiColorPicker'></div>");
+jsInlineF("var cartHighlightColor = \"%s\"\n;", prevHighlightColor(cart, tdb));
+jsInlineF("makeHighlightPicker(\"hgTrackUiHighlight\", document.getElementById(\"hgTrackUiColorPicker\"), \"%s\");\n", tdb->track);
+}
+
 int defaultFieldLocation(char *field)
 /* Sometimes we get bigBed filters with field names that are not in the AS file.  
  * Try to guess what the user means. */
@@ -6722,11 +6823,16 @@ return -1;
 }
 
 static int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened,
-                                 boolean boxed, boolean parentLevel,char *name, char *title)
+                                 boolean boxed, boolean parentLevel,char *name, char *title,
+                                 boolean isHighlight)
 // Shows all *Filter style filters.  Note that these are in random order and have no graceful title
 {
 int count = 0;
-struct trackDbFilter *trackDbFilters = tdbGetTrackNumFilters(tdb);
+struct trackDbFilter *trackDbFilters = NULL;
+if (isHighlight)
+    trackDbFilters = tdbGetTrackNumHighlights(tdb);
+else
+    trackDbFilters = tdbGetTrackNumFilters(tdb);
 if (trackDbFilters)
     {
     puts("<BR>");
@@ -6763,7 +6869,9 @@ if (trackDbFilters)
         else
             safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Minimum ", field);
 
-        showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName);
+        if (isHighlight && count == 0)
+            printHighlightColorPicker(cart, tdb);
+        showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isHighlight);
         count++;
         }
     if (as != NULL)
@@ -6852,11 +6960,15 @@ if (setting == NULL)
 return setting;
 }
 
-static int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb)
+static int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean isHighlight)
 /* Show all the text filters for this track. */
 {
 int count = 0;
-struct trackDbFilter *trackDbFilters = tdbGetTrackTextFilters(tdb);
+struct trackDbFilter *trackDbFilters = NULL;
+if (isHighlight)
+    trackDbFilters = tdbGetTrackTextHighlights(tdb);
+else
+    trackDbFilters = tdbGetTrackTextFilters(tdb);
 if (trackDbFilters)
     {
     puts("<BR>");
@@ -6884,8 +6996,10 @@ if (trackDbFilters)
         if (trackDbLabel == NULL)
             trackDbLabel = filter->fieldName;
 
+        if (isHighlight && count == 0)
+            printHighlightColorPicker(cart, tdb);
         count++;
-        printf("<P><B>Filter items in '%s' field:</B> ", trackDbLabel);
+        printf("<P><B>%s items in '%s' field:</B> ", isHighlight ? "Highlight": "Filter", trackDbLabel);
 
         char cgiVar[128];
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,filter->name);
@@ -6898,7 +7012,7 @@ if (trackDbFilters)
         printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_WILDCARD) ? "SELECTED" : "",  FILTERTEXT_WILDCARD );
         printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_REGEXP) ? "SELECTED" : "",  FILTERTEXT_REGEXP );
         printf("</SELECT>");
-        printf("&nbsp;&nbsp;<button class='buttonClear-%s'>Clear</button>\n", tdb->track);
+        printf("&nbsp;&nbsp;<button class='buttonClear-%s'>Reset</button>\n", tdb->track);
         printf("</P>");
         }
         // using jquery id= syntax to make sure that selector works even if trackname has a dot in it
@@ -6932,10 +7046,10 @@ boolean skipScoreFilter = FALSE;
 
 // Numeric filters are first
 boolean isBoxOpened = FALSE;
-if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title) > 0)
+if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title, FALSE) > 0)
     skipScoreFilter = TRUE;
 
-if (textFiltersShowAll(db, cart, tdb))
+if (textFiltersShowAll(db, cart, tdb, FALSE))
     skipScoreFilter = TRUE;
 
 // Add any multi-selects next
@@ -6949,6 +7063,36 @@ if (filterBySet != NULL)
         printf("<BR>"); // if there are no other filters
     filterBySetCfgUi(cart,tdb,filterBySet,TRUE, name);
     filterBySetFree(&filterBySet);
+    skipScoreFilter = TRUE;
+    }
+
+// add any highlights:
+// Numeric highlights are first
+boolean didHighlightSelector = FALSE;
+if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title, TRUE) > 0)
+    {
+    didHighlightSelector = TRUE;
+    skipScoreFilter = TRUE;
+    }
+
+if (textFiltersShowAll(db, cart, tdb, TRUE))
+    {
+    didHighlightSelector = TRUE;
+    skipScoreFilter = TRUE;
+    }
+
+filterBy_t *highlightBySet = highlightBySetGet(tdb,cart,name);
+if (highlightBySet != NULL)
+    {
+    if (!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
+        jsIncludeFile("hui.js",NULL);
+    if (!didHighlightSelector)
+        printHighlightColorPicker(cart, tdb);
+
+    if (!isBoxOpened)   // Note filterBy boxes are not double "boxed",
+        printf("<BR>"); // if there are no other filters
+    highlightBySetCfgUi(cart,tdb,highlightBySet,TRUE, name, TRUE);
+    filterBySetFree(&highlightBySet);
     skipScoreFilter = TRUE;
     }
 
@@ -7503,11 +7647,11 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
 boolean parentLevel = isNameAtParentLevel(tdb,name);
 boolean opened = FALSE;
 showScoreFilter(cart,tdb,&opened,boxed,parentLevel,name,title,
-                "Minimum Signal value",     SIGNAL_FILTER);
+                "Minimum Signal value",     SIGNAL_FILTER, FALSE);
 showScoreFilter(cart,tdb,&opened,boxed,parentLevel,name,title,
-                "Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER);
+                "Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER, FALSE);
 showScoreFilter(cart,tdb,&opened,boxed,parentLevel,name,title,
-                "Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER);
+                "Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER, FALSE);
 
 char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,NULL);//"0:1000");
 if (setting)
@@ -7702,11 +7846,13 @@ filterBy_t *highlightBySet = highlightBySetGet(tdb,cart,name);
 if (highlightBySet != NULL)
     {
     printf("<BR>");
-    highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE, name);
+    highlightBySetCfgUi(cart,tdb,highlightBySet,FALSE, name, TRUE);
     filterBySetFree(&highlightBySet);
     }
 
 squishyPackOption(cart, name, title, tdb);
+filterNameOption(cart, name, tdb);
+colorTrackOption(cart, name, tdb);
 wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 }

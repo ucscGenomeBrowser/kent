@@ -41,9 +41,14 @@ boolean isRc = useStrand && bamIsRc(bam);
 printPosOnChrom(seqName, tStart, tEnd, NULL, FALSE, itemName);
 if (!skipQualityScore)
     printf("<B>Alignment Quality: </B>%d<BR>\n", core->qual);
-printf("<B>CIGAR string: </B><tt>%s</tt> (", bamGetCigar(bam));
-bamShowCigarEnglish(bam);
-printf(")<BR>\n");
+if (core->n_cigar > 50)
+    printf("<B>CIGAR string: </B> Cannot show long CIGAR string, more than 50 operations. Contact us if you need to see the full CIGAR string here.<BR>\n");
+else
+    {
+    printf("<B>CIGAR string: </B><tt>%s</tt> (", bamGetCigar(bam));
+    bamShowCigarEnglish(bam);
+    printf(")<BR>\n");
+    }
 printf("<B>Tags:</B>");
 bamShowTags(bam);
 puts("<BR>");

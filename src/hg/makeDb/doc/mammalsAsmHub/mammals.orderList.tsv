@@ -347,7 +347,8 @@ GCF_003265705.1_ASM326570v1	northern fur seal
 GCA_004027205.1_CteGun_v1_BIUU	northern gundi
 GCA_001685095.1_ETalpinus_0.1	northern mole vole
 GCA_004027795.1_CerCot_v1_BIUU	northern white rhinoceros
-GCA_036323735.1_GRCr8	Norway rat (BN/NHsdMcwi 2024)
+GCA_036323735.1_GRCr8	Norway rat (BN/NHsdMcwi 2024 genbank)
+GCF_036323735.1_GRCr8	Norway rat (BN/NHsdMcwi 2024 refseq)
 GCA_015244455.1_mRatBN7.1_alternate_haplotype	Norway rat BN7 haplotype
 GCF_015227675.2_mRatBN7.2	Norway rat BN7.2
 GCF_000002265.2_Rn_Celera	Norway rat celera
@@ -411,6 +412,7 @@ GCA_004026565.1_RanTarSib_v1_BIUU	reindeer (US061 2019)
 GCA_963422255.1_RTA_final	reindeer (2023)
 GCA_028017805.1_mBalRic1.hap1	Rice's whale (hap1 2023)
 GCF_028023285.1_mBalRic1.hap2	Rice's whale (hap2 2023 refseq)
+GCA_036010255.1_ASM3601025v1	Rickett's big-footed myotis (AB-2021 2024)
 GCF_900094665.2_CAROLI_EIJ_v1.1	Ryukyu mouse (v2 2017)
 GCA_015443085.1_Saanen_v1	Saanen dairy goat
 GCA_949987525.1_mDelDel1.1_alternate_haplotype	saddleback dolphin (alternate hap 2023)

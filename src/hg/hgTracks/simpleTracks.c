@@ -1810,6 +1810,45 @@ if (sameWordOk(glyphStr, GLYPH_STRING_PENTAGRAM))
 return GLYPH_CIRCLE;
 }
 
+void filterItemsOnNames(struct track *tg)
+/* Only keep items with a name in the .nameFilter cart var. 
+ * Not using filterItems(), because filterItems has no state at all. */
+{
+char varName[SMALLBUF];
+safef(varName, sizeof(varName), "%s.nameFilter", tg->tdb->track);
+char *nameFilterStr = cartNonemptyString(cart, varName);
+
+if (nameFilterStr==NULL)
+    return;
+
+struct slName *names = slNameListFromString(nameFilterStr, ',');
+struct hash *nameHash = hashFromSlNameList(names);
+
+struct slList *newList = NULL, *el, *next;
+for (el = tg->items; el != NULL; el = next)
+    {
+    next = el->next;
+    struct linkedFeatures *lf = (struct linkedFeatures*)el;
+    char *name = lf->name;
+    if (name && hashLookup(nameHash, name))
+	slAddHead(&newList, el);
+}
+tg->items = newList;
+
+char *suf = "";
+int nameCount = slCount(names);
+if (nameCount > 1)
+    suf = "s";
+
+char buf[SMALLBUF];
+safef(buf, sizeof(buf), " (manually filtered to show only %d accession%s)", nameCount, suf);
+char *oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings(tg->longLabel, buf);
+freez(&oldLabel);
+
+slFreeList(&names);
+hashFree(&nameHash);
+}
 
 void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item),
                 char *filterType)
@@ -4149,6 +4188,12 @@ lfColors(tg, lf, hvg, &color, &bColor);
 if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
 
+color = colorFromCart(tg, color);
+
+struct genePred *gp = NULL;
+if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
+    gp = (struct genePred *)(lf->original);
+
 boolean baseColorNeedsCodons = (drawOpt == baseColorDrawItemCodons ||
 				drawOpt == baseColorDrawDiffCodons ||
 				drawOpt == baseColorDrawGenomicCodons);
@@ -4161,9 +4206,6 @@ if (psl && baseColorNeedsCodons)
     }
 else if (drawOpt > baseColorDrawOff)
     {
-    struct genePred *gp = NULL;
-    if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
-	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
         lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE));
     }
@@ -4332,7 +4374,7 @@ if (vis != tvDense)
      * drawn so that exons sharing the pixel don't overdraw differences. */
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
 			  qSeq, qOffset, psl, winStart, drawOpt);
-    if (indelShowQueryInsert || indelShowPolyA)
+    if (psl && (indelShowQueryInsert || indelShowPolyA))
 	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
 				 qSeq, qOffset, psl, font, winStart, drawOpt,
 				 indelShowQueryInsert, indelShowPolyA);
@@ -5240,6 +5282,8 @@ void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 withIndividualLabels = TRUE;  // set this back to default just in case someone left it false (I'm looking at you pgSnp)
 
+color = colorFromCart(tg, color);
+
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
 if (vis != tvDense && baseColorCanDraw(tg))
@@ -5276,6 +5320,8 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
                         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
+color = colorFromCart(tg, color);
+
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
@@ -6910,6 +6956,8 @@ else if (!isGencode)
     loadGenePredWithName2(tg);
 else
     loadKnownGencode(tg);
+
+filterItemsOnNames(tg);
 
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);

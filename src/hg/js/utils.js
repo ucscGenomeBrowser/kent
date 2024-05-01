@@ -989,6 +989,12 @@ function getAllVars(obj,subtrackName)
             urlData[name] = val;
         }
     });
+    // special case the highlight color picker
+    $(inp).filter('[id=hgTrackUiHighlightPicker]').each(function(i) {
+        var name = subtrackName + ".highlightColor";
+        var val = $("#hgTrackUiHighlightInput").val();
+        urlData[name] = val;
+    });
     $(sel).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
@@ -4335,3 +4341,23 @@ function addRecentSearch(db, searchTerm, extra={}) {
         window.localStorage.setItem("searchStack", JSON.stringify(searchObj));
     }
 }
+
+function activateColorPicker (inputFieldId, colorPickerId) 
+/* connect a color picker to a text input field with the color hex value */
+{
+    var opt = {
+        hideAfterPaletteSelect : true,
+        color : $(inputFieldId).val(),
+        showPalette: true,
+        showInput: true,
+        showSelectionPalette: true,
+        showInitial: true,
+        preferredFormat: "hex",
+        localStorageKey: "genomebrowser",
+        change: function() { var color = $(colorPickerId).spectrum("get"); $(inputFieldId).val(color); },
+    };
+    $(colorPickerId).spectrum(opt);
+    // update the color picker if you change the input box
+    $(inputFieldId).change(function(){ $(colorPickerId).spectrum("set", $(inputFieldId).val()); });
+}
+

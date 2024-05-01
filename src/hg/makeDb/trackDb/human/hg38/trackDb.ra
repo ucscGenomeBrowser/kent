@@ -902,6 +902,4 @@ include hprcVCFTest.ra alpha
 track ncbiRefSeq override
 parent refSeqComposite off
 
-include abSplice.ra
-
 include ../../trackDb.mgc-orfeome.ra

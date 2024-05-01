@@ -6909,12 +6909,9 @@ struct hash *hash = newHash(8);
 struct track *track;
 struct trackRef *tr;
 struct grp* grps = hLoadGrps(database);
-struct grp* hubGrps = trackHubGetGrps();
 struct grp *grp;
 float minPriority = 100000; // something really large
 boolean foundMap = FALSE;
-
-grps = slCat(grps, hubGrps);
 
 /* build group objects from database. */
 for (grp = grps; grp != NULL; grp = grp->next)
@@ -8040,7 +8037,6 @@ void initTrackList()
 {
 if (!trackList)
     {
-    trackHubResetGrps();
     if (measureTiming)
 	measureTime("Time before getTrackList");
     boolean defaultTracks = cgiVarExists("hgt.reset");
@@ -8527,6 +8523,7 @@ void doTrackForm(char *psOutput, struct tempName *ideoTn)
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
  * ideogram is created.  */
 {
+int disconCount = 0;
 struct group *group;
 struct track *track;
 char *freezeName = NULL;
@@ -9479,13 +9476,13 @@ if (!hideControls)
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
             if (group->errMessage)
-                hPrintf("<th align=\"left\" colspan=%d class='redToggleBar'>",MAX_CONTROL_COLUMNS);
+                hPrintf("<th align=\"left\" colspan=%d class='errorToggleBar'>",MAX_CONTROL_COLUMNS);
             else if (startsWith("Hub", group->label))
-                hPrintf("<th align=\"left\" colspan=%d class='mauveToggleBar'>",MAX_CONTROL_COLUMNS);
+                hPrintf("<th align=\"left\" colspan=%d class='hubToggleBar'>",MAX_CONTROL_COLUMNS);
             else if (startsWith("Quicklift", group->label))
-                hPrintf("<th align=\"left\" colspan=%d class='greenToggleBar'>",MAX_CONTROL_COLUMNS);
+                hPrintf("<th align=\"left\" colspan=%d class='quickToggleBar'>",MAX_CONTROL_COLUMNS);
             else
-                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
+                hPrintf("<th align=\"left\" colspan=%d class='nativeToggleBar'>",MAX_CONTROL_COLUMNS);
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
 
@@ -9512,7 +9509,8 @@ if (!hideControls)
             hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
 		{
-                struct trackHub *hub = grabHashedHub(group->name);
+                char *hubName = hubNameFromGroupName(group->name);
+                struct trackHub *hub = grabHashedHub(hubName);
 
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
                 if (hub != NULL)
@@ -9526,13 +9524,14 @@ if (!hideControls)
                             "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
                     }
 
-		safef(idText, sizeof idText, "%s_disconn", group->name);
+		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
+                disconCount++;
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
                     " type=\"button\" value=\"disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
-		    group->name + strlen(hubTrackPrefix));
+		    hubName + strlen(hubTrackPrefix));
 		}
 
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
@@ -11337,6 +11336,7 @@ if(!trackImgOnly)
     jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
     jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
+    jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
 
 #ifdef LOWELAB

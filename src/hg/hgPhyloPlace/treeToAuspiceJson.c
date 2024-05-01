@@ -1,7 +1,7 @@
 /* Convert a (sub)tree with condensed nodes to JSON for Nextstrain to display, adding in sample
  * mutations, protein changes and metadata. */
 
-/* Copyright (C) 2020 The Regents of the University of California */
+/* Copyright (C) 2020-2024 The Regents of the University of California */
 
 #include "common.h"
 #include "dnaseq.h"
@@ -247,7 +247,7 @@ jsonWriteListEnd(jw);
 }
 
 static void writeAuspiceMeta(struct jsonWrite *jw, struct slName *subtreeUserSampleIds, char *source,
-                             char *db, struct geneInfo *geneInfoList,
+                             char *org, char *db, struct geneInfo *geneInfoList,
                              uint genomeSize, boolean isRsv, boolean isFlu)
 /* Write metadata to configure Auspice display. */
 {
@@ -278,7 +278,7 @@ jsonWriteListStart(jw, "panels");
 jsonWriteString(jw, NULL, "tree");
 jsonWriteString(jw, NULL, "entropy");
 jsonWriteListEnd(jw);
-char *metaJsonFile = phyloPlaceDbSettingPath(db, "auspiceMeta");
+char *metaJsonFile = phyloPlaceRefSettingPath(org, db, "auspiceMeta");
 if (isNotEmpty(metaJsonFile) && fileExists(metaJsonFile))
     {
     char *metaJson = NULL;
@@ -876,13 +876,13 @@ slReverse(&geneInfoList);
 return geneInfoList;
 }
 
-static int getBranchAttrCols(char *db, char ***retBranchAttrCols)
+static int getBranchAttrCols(char *org, char *db, char ***retBranchAttrCols)
 /* Alloc an array of metadata column names to use as branch attributes and return count.
  * There will always be at least 1 (userOrOld / Sample type); others come from config setting. */
 {
 int branchAttrCount = 1;
 struct slName *attrList = NULL, *attr;
-char *branchAttrSetting = phyloPlaceDbSetting(db, "branchAttributes");
+char *branchAttrSetting = phyloPlaceRefSetting(org, db, "branchAttributes");
 if (isNotEmpty(branchAttrSetting))
     {
     attrList = slNameListFromComma(branchAttrSetting);
@@ -898,7 +898,7 @@ for (i = 1, attr = attrList;  i < branchAttrCount && attr != NULL;  i++, attr = 
 return branchAttrCount;
 }
 
-void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct geneInfo *geneInfoList,
+void treeToAuspiceJson(struct subtreeInfo *sti, char *org, char *db, struct geneInfo *geneInfoList,
                        struct seqWindow *gSeqWin, struct hash *sampleMetadata,
                        struct hash *sampleUrls, struct hash *samplePlacements,
                        char *jsonFile, char *source)
@@ -913,7 +913,7 @@ jsonWriteString(jw, "version", "v2");
 boolean isRsv = (stringIn("GCF_000855545", db) || stringIn("GCF_002815475", db) ||
                  startsWith("RGCC", db));
 boolean isFlu = (stringIn("GCF_000865085", db) || stringIn("GCF_001343785", db));
-writeAuspiceMeta(jw, sti->subtreeUserSampleIds, source, db, geneInfoList,
+writeAuspiceMeta(jw, sti->subtreeUserSampleIds, source, org, db, geneInfoList,
                  gSeqWin->end, isRsv, isFlu);
 jsonWriteObjectStart(jw, "tree");
 int nodeNum = 10000; // Auspice.us starting node number for newick -> json
@@ -928,7 +928,7 @@ struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeq
 
 
 char **branchAttrCols = NULL;
-int branchAttrCount = getBranchAttrCols(db, &branchAttrCols);
+int branchAttrCount = getBranchAttrCols(org, db, &branchAttrCols);
 rTreeToAuspiceJson(tree, depth, &aji, NULL, isRsv, branchAttrCount, branchAttrCols, NULL);
 jsonWriteObjectEnd(jw); // tree
 jsonWriteObjectEnd(jw); // top-level object
