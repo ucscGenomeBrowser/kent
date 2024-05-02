@@ -48,7 +48,7 @@ printf "track %sChainNet\n", $targetDb;
 printf "compositeTrack on
 shortLabel Chain/Net
 longLabel Chain and Net alignments to target sequence: %s\n", $targetDb;
-printf "subGroup1 view Views chain=Chains net=Nets\n";
+printf "subGroup1 view Views chain=Chains net=Nets synten=Syntenic rbest=Reciprocal_best liftover=Lift_over\n";
 printf "subGroup2 species Species";
 my $N = 0;
 foreach my $queryDb (@queryList) {
@@ -71,12 +71,33 @@ printf "html html/%s.chainNet\n", $targetDb;
 
 printf "
     track %sChainNetViewchain
-    shortLabel  Chains
+    shortLabel Chains
     view chain
     visibility pack
     subTrack %sChainNet
     spectrum on
-", $targetDb, $targetDb;
+
+    track %sChainNetViewSynTen
+    shortLabel Syntenic
+    view synten
+    visibility pack
+    subTrack %sChainNet
+    spectrum on
+
+    track %sChainNetViewRBest
+    shortLabel Reciprocal best
+    view rbest
+    visibility pack
+    subTrack %sChainNet
+    spectrum on
+
+    track %sChainNetViewLiftOver
+    shortLabel Lift over
+    view liftover
+    visibility pack
+    subTrack %sChainNet
+    spectrum on
+", $targetDb, $targetDb, $targetDb, $targetDb, $targetDb, $targetDb, $targetDb, $targetDb;
 
 $N = 0;
 my $chainNetPriority = 1;
@@ -125,8 +146,8 @@ foreach my $queryDb (@queryList) {
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainSyn${QueryDb}Link.bb`;
   printf "
         track chainSyn%s
-        subTrack %sChainNetViewchain off
-        subGroups view=chain species=s%03d clade=c00
+        subTrack %sChainNetViewSynTen off
+        subGroups view=synten species=s%03d clade=c00
         shortLabel %s synChain
         longLabel %s%s (%s) Syntenic Chained Alignments
         type bigChain %s
@@ -147,8 +168,8 @@ foreach my $queryDb (@queryList) {
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainRBest${QueryDb}Link.bb`;
   printf "
         track chainRBest%s
-        subTrack %sChainNetViewchain off
-        subGroups view=chain species=s%03d clade=c00
+        subTrack %sChainNetViewRBest off
+        subGroups view=rbest species=s%03d clade=c00
         shortLabel %s rbChain
         longLabel %s%s (%s) Reciprocal Best Chained Alignments
         type bigChain %s
@@ -162,11 +183,6 @@ foreach my $queryDb (@queryList) {
 
   }
 
-#    ln -s ../trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}.bb $buildDir/bbi/${asmId}.chainLiftOver$OtherDb.bb
-#    ln -s ../trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}Link.bb $buildDir/bbi/${asmId}.chainLiftOver${OtherDb}Link.bb
-#    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.liftOverNet.bb $buildDir/bbi/${asmId}.$otherDb.liftOverNet.bb
-#    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.liftOverNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
-
   if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/chainLiftOver${QueryDb}.bb" ) {
     `rm -f $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}.bb`;
     `rm -f $buildDir/bbi/$targetDb.chainLiftOver${QueryDb}Link.bb`;
@@ -175,8 +191,8 @@ foreach my $queryDb (@queryList) {
 
   printf "
         track chainLiftOver%s
-        subTrack %sChainNetViewchain off
-        subGroups view=chain species=s%03d clade=c00
+        subTrack %sChainNetViewLiftOver off
+        subGroups view=liftover species=s%03d clade=c00
         shortLabel %s loChain
         longLabel %s%s (%s) Lift Over Chained Alignments
         type bigChain %s
@@ -211,7 +227,6 @@ foreach my $queryDb (@queryList) {
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
   if ( -s "../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb" ) {
-printf STDERR "constructing net.bb links $targetDb $queryDb\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb  $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
   if ( $queryDb !~ m/^GC/ ) {
@@ -238,7 +253,6 @@ printf STDERR "constructing net.bb links $targetDb $queryDb\n";
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
   if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb" ) {
-printf STDERR "constructing synNet.bb links $targetDb $queryDb\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb  $buildDir/bbi/$targetDb.${queryDb}.synNet.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
     printf "
@@ -260,7 +274,6 @@ printf STDERR "constructing synNet.bb links $targetDb $queryDb\n";
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.rbestNet.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.rbestNet.summary.bb`;
   if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.bb" ) {
-printf STDERR "constructing rbestNet.bb links $targetDb $queryDb\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.bb  $buildDir/bbi/$targetDb.${queryDb}.rbestNet.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.rbestNet.summary.bb`;
     printf "
