@@ -14,8 +14,6 @@
 #define HTTP_HEADER "Header"
 #define HTTP_CONTENT_TYPE "Content-Type"
 #define HTTP_CONTENT_TYPE_STR "application/json"
-#define MAX_QUOTA_BYTES 1000000000
-#define MAX_QUOTA MAX_QUOTA_BYTES
 
 char *prettyFileSize(long size);
 /* Return a string representing the size of a file */

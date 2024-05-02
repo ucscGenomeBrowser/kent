@@ -9,13 +9,32 @@
 struct userFiles
 {
 char *userName;
-struct fileInfo *file; // list of files for this user
+struct fileInfo *fileList; // list of files for this user
+};
+
+struct userHubs
+{
+struct userHubs *next;
+char *hubName; // name of this hub
+char *genome; // only one genome allowed per hub for now
+char *userName; // for convenience
+struct userFiles *fileList; // list of files (tracks) in the hub
 };
 
 char *getUserName();
 
 //TODO: this should probably come from hg.conf:
 #define HUB_SPACE_URL "https://hgwdev.gi.ucsc.edu/hubspace"
+
+// the various quota helper variables:
+#define HUB_SPACE_DEFAULT_QUOTA_BYTES 1000000000
+#define HUB_SPACE_DEFAULT_QUOTA HUB_SPACE_DEFAULT_QUOTA_BYTES 
+// for defining the quota in hg.conf
+#define HUB_SPACE_CONF_QUOTA_VAR "hubspace.quota"
+// path to hg.conf file that has a list of hubspace.quota.userName entries
+// for special per user quotas:
+#define HUB_SPACE_QUOTA_LIST_VAR "hubspace.quotaList"
+
 char *webDataDir(char *userName);
 /* Return a web accesible path to the userDataDir, this is different from the full path tusd uses */
 
@@ -30,8 +49,11 @@ char *prefixUserFile(char *userName, char *fname);
 void removeFileForUser(char *fname, char *userName);
 /* Remove a file for this user if it exists */
 
-struct userFiles *listFilesForUser(char *userName);
-/* Get all the files for a particular user */
+struct userHubs *listHubsForUser(char *userName);
+/* Lists the directories for a particular user */
+
+struct userFiles *listFilesForUserHub(char *userName, char *hubName);
+/* Get all the files for a particular hub for a particular user */
 
 long long checkUserQuota(char *userName);
 /* Return the amount of space a user is currently using */

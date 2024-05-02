@@ -44,6 +44,12 @@ fprintf(stderr, "userDataDir = '%s'\n", newDataDir->string);
 return dyStringCannibalize(&newDataDir);
 }
 
+char *getHubDataDir(char *userName, char *hub)
+{
+char *dataDir = getDataDir(userName);
+return catTwoStrings(dataDir, hub);
+}
+
 char *webDataDir(char *userName)
 /* Return a web accesible path to the userDataDir, this is different from the full path tusd uses */
 {
@@ -86,15 +92,39 @@ void uploadTrack()
 //char *userName = getUserName();
 }
 
-struct userFiles *listFilesForUser(char *userName)
-/* Get all the files for a particular user */
+struct userHubs *listHubsForUser(char *userName)
+/* Lists the directories for a particular user */
+{
+struct userHubs *userHubs = NULL;
+char *path = getDataDir(userName);
+struct fileInfo *fi, *fiList = listDirX(path,NULL,FALSE);
+for (fi = fiList; fi != NULL; fi = fi->next)
+    {
+    if (fi->isDir)
+        {
+        struct userHubs *hub;
+        AllocVar(hub);
+        hub->hubName = cloneString(fi->name);
+        hub->userName = cloneString(userName);
+        char hubPath[PATH_LEN];
+        safef(hubPath, sizeof(hubPath), "%s%s", path, fi->name);
+        struct userFiles *hubFileList = listFilesForUserHub(userName, hub->hubName);
+        hub->fileList = hubFileList;
+        slAddHead(&userHubs, hub);
+        }
+    }
+return userHubs;
+}
+
+struct userFiles *listFilesForUserHub(char *userName, char *hubName)
+/* Get all the files for a particular hub for a particular user */
 {
 struct userFiles *userListing;
 AllocVar(userListing);
-char *path = getDataDir(userName);
+char *path = getHubDataDir(userName, hubName);
 struct fileInfo *fiList = listDirX(path,NULL,FALSE);
 userListing->userName = userName;
-userListing->file = fiList;
+userListing->fileList = fiList;
 return userListing;
 }
 
@@ -102,13 +132,17 @@ long long checkUserQuota(char *userName)
 /* Return the amount of space a user is currently using */
 {
 long long quota = 0;
-struct userFiles *ufList = listFilesForUser(userName);
-struct fileInfo *fi;
-if (ufList)
+struct userHubs *hub, *userHubs = listHubsForUser(userName);
+for (hub = userHubs; hub != NULL; hub = hub->next)
     {
-    for (fi = ufList->file; fi != NULL; fi = fi->next)
+    struct userFiles *ufList = listFilesForUserHub(userName, hub->hubName);
+    struct fileInfo *fi;
+    if (ufList)
         {
-        quota += fi->size;
+        for (fi = ufList->fileList; fi != NULL; fi = fi->next)
+            {
+            quota += fi->size;
+            }
         }
     }
 return quota;

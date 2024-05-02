@@ -50,17 +50,23 @@ if (userName)
     {
     // the url for this user:
     jsonWriteString(jw, "userUrl", webDataDir(userName));
-    // any previously uploaded files
-    struct fileInfo *file;
-    struct userFiles *uf = listFilesForUser(userName);
+    struct userHubs *hub, *hubList = listHubsForUser(userName);
+    // unpack hub directories into a flat list of files
     jsonWriteListStart(jw, "fileList");
-    for (file = uf->file; file != NULL; file = file->next)
+    for (hub = hubList; hub != NULL; hub = hub->next)
         {
-        jsonWriteObjectStart(jw, NULL);
-        jsonWriteString(jw, "name", file->name);
-        jsonWriteNumber(jw, "size", file->size);
-        jsonWriteDateFromUnix(jw, "createTime", file->creationTime);
-        jsonWriteObjectEnd(jw);
+        struct fileInfo *file;
+        struct userFiles *uf = listFilesForUserHub(userName, hub->hubName);
+        for (file = uf->fileList; file != NULL; file = file->next)
+            {
+            jsonWriteObjectStart(jw, NULL);
+            jsonWriteString(jw, "name", file->name);
+            jsonWriteNumber(jw, "size", file->size);
+            jsonWriteString(jw, "hub", hub->hubName);
+            jsonWriteString(jw, "genome", hub->genome);
+            jsonWriteDateFromUnix(jw, "createTime", file->creationTime);
+            jsonWriteObjectEnd(jw);
+            }
         }
     jsonWriteListEnd(jw);
     }

@@ -64,8 +64,6 @@ var hubCreate = (function() {
     function createInput() {
         /* Create a new input element for a file picker */
         let input = document.createElement("input");
-        //input.style.opacity = 0;
-        //input.style.float = "right";
         input.multiple = true;
         input.type = "file";
         input.id = "hiddenFileInput";
@@ -162,6 +160,7 @@ var hubCreate = (function() {
     }
 
     function submitPickedFiles() {
+        
         let tusdServer = getTusdEndpoint();
 
         let onBeforeRequest = function(req) {
@@ -275,21 +274,67 @@ var hubCreate = (function() {
         btn.parentNode.removeChild(btn);
     }
 
+    function makeGenomeSelect(formName, fileName) {
+        let genomeInp = document.createElement("select");
+        genomeInp.classList.add("genomePicker");
+        genomeInp.name = `${fileName}#genomeInput`;
+        genomeInp.id = `${fileName}#genomeInput`;
+        genomeInp.form = formName;
+        return genomeInp;
+    }
+
+    function makeTypeSelect(formName, fileName) {
+        let typeInp = document.createElement("select");
+        typeInp.classList.add("typePicker");
+        typeInp.name = `${fileName}#typeInput`;
+        typeInp.id = `${fileName}#typeInput`;
+        let choices = ["hub.txt", "bigBed", "bam", "vcf", "bigWig"];
+        choices.forEach( (e) =>  {
+            let choice = document.createElement("option");
+            choice.id = e;
+            choice.label = e;
+            choice.value = e;
+            typeInp.appendChild(choice);
+        });
+        typeInp.form = formName;
+        return typeInp;
+    }
+
+    function makeHubSelect(formName, fileName) {
+        let hubInp = document.createElement("select");
+        hubInp.classList.add("hubPicker");
+        hubInp.name = `${fileName}#hubInput`;
+        hubInp.id = `${fileName}#hubInput`;
+        hubInp.form = formName;
+    }
+
+    function makeFormControlsForFile(li, formName, fileName) {
+        typeInp = makeTypeSelect(formName, fileName);
+        genomeInp = makeGenomeSelect(formName, fileName);
+        hubInp = makeGenomeSelect(formName, fileName);
+        li.append(typeInp);
+        li.append(genomeInp);
+        li.append(hubInp);
+    }
+
     function listPickedFiles() {
-        //uiState.input.click(); // let the user choose files:
+        // let the user choose files:
         if (uiState.input.files.length === 0) {
             console.log("not input");
             return;
-            //togglePickStateMessage(true);
-            //removeClearSubmitButtons();
         } else {
-            let displayList = document.getElementsByClassName("pickedFiles");
-            if (displayList.length === 0) {
+            let displayList;
+            let displayListForm = document.getElementsByClassName("pickedFilesForm");
+            if (displayListForm.length === 0) {
+                displayListForm = document.createElement("form");
+                displayListForm.id = "displayListForm";
+                displayListForm.classList.add("pickedFilesForm");
                 displayList = document.createElement("ul");
                 displayList.classList.add("pickedFiles");
-                uiState.pickedList.appendChild(displayList);
+                displayListForm.appendChild(displayList);
+                uiState.pickedList.appendChild(displayListForm);
             } else {
-                displayList = displayList[0];
+                displayList = displayListForm[0].firstChild;
             } 
             for (let file of uiState.input.files ) {
                 if (file.name in uiState.toUpload) { continue; }
@@ -298,6 +343,9 @@ var hubCreate = (function() {
                 li.classList.add("pickedFile");
                 li.id = `${file.name}#li`;
                 li.textContent = `File name: ${file.name}, file size: ${prettyFileSize(file.size)}`;
+                // Add the form controls for this file:
+                makeFormControlsForFile(li, "displayListForm", file.name);
+                
                 displayList.appendChild(li);
 
                 // finally add it for us
@@ -340,7 +388,7 @@ var hubCreate = (function() {
     }
 
     function viewInGenomeBrowser(rowIx, fname) {
-        // redirect to hgTracks with this track as a custom track
+        // redirect to hgTracks with this track open in the hub
         if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
             bigBedExts = [".bb", ".bigBed", ".vcf.gz", ".vcf", ".bam", ".bw", ".bigWig"];
             let i;
@@ -382,7 +430,6 @@ var hubCreate = (function() {
                 orderable: false, targets: 1,
                 data: "action", title: "Action",
                 render: function(data, type, row) {
-                    // TODO: add event handler on delete button
                     // click to call hgHubDelete file
                     return "<button class='deleteFileBtn'>Delete</button><button class='viewInBtn'>View In GB</button>";
                 }
@@ -397,11 +444,13 @@ var hubCreate = (function() {
         columns: [
             {data: "", },
             {data: "", },
+            {data: "hub", title: "Hub"},
+            {data: "genome", title: "Genome"},
             {data: "name", title: "File name"},
             {data: "size", title: "File size", render: dataTablePrintSize},
             {data: "createTime", title: "Creation Time"},
         ],
-        order: [[4, 'desc']],
+        order: [[6, 'desc']],
         drawCallback: function(settings) {
             let btns = document.querySelectorAll('.deleteFileBtn');
             let i;
@@ -427,7 +476,6 @@ var hubCreate = (function() {
 
     function showExistingFiles(d) {
         // Make the DataTable for each file
-        //$(document).on("draw.dt", function() {alert("table redrawn");});
         tableInitOptions.data = d;
         let table = $("#filesTable").DataTable(tableInitOptions);
     }
@@ -455,14 +503,6 @@ var hubCreate = (function() {
     function updateStateAndPage(jsonData, doSaveHistory) {
         // Update uiState with new values and update the page.
         _.assign(uiState, jsonData);
-        /*
-        urlVars = {"db": db, "search": uiState.search, "showSearchResults": ""};
-        // changing the url allows the history to be associated to a specific url
-        var urlParts = changeUrl(urlVars);
-        if (doSaveHistory)
-            saveHistory(uiState, urlParts);
-        changeSearchResultsLabel();
-        */
     }
 
     function handleRefreshState(jsonData) {
