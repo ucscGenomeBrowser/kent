@@ -81,15 +81,15 @@ foreach my $qDb ( sort {$queryPrio{$a} <=> $queryPrio{$b}} keys %queryPrio) {
 printf "track %sChainNet\n", $targetDb;
 printf "compositeTrack on
 shortLabel Chain/Net
-longLabel Chain and Net alignments to target sequence: %s\n", $targetDb;
-printf "subGroup1 view Views chain=Chains net=Nets synten=Syntenic rbest=Reciprocal_best liftover=Lift_over\n";
+longLabel Chain alignments to target sequence: %s\n", $targetDb;
+printf "subGroup1 view Views chain=Chains synten=Syntenic rbest=Reciprocal_best liftover=Lift_over align=Alignment\n";
 printf "subGroup2 species Assembly";
 my $N = 0;
 foreach my $queryDb (@queryList) {
   printf " s%03d=%s", $N++, $queryDb;
 }
 printf "\n";
-printf "subGroup3 clade Clade c00=human\n";
+printf "subGroup3 chainType chain_type c00=chain c01=syntenic c02=reciprocal_best c03=lift_over c04=chain_align c05=syntenic_align c06=reciprocal_align c07=lift_over_align\n";
 printf "dragAndDrop subTracks\n";
 printf "visibility hide
 group compGeno
@@ -98,8 +98,8 @@ altColor 255,255,0
 type bed 3
 chainLinearGap loose
 chainMinScore 5000
-dimensions dimensionX=clade dimensionY=species
-sortOrder species=+ view=+ clade=+
+dimensions dimensionX=chainType dimensionY=species
+sortOrder species=+ view=+ chainType=+
 configurable on\n";
 printf "html html/%s.chainNet\n", $targetDb;
 
@@ -162,7 +162,7 @@ foreach my $queryDb (@queryList) {
   printf "
         track chain%s
         subTrack %sChainNetViewchain off
-        subGroups view=chain species=s%03d clade=c00
+        subGroups view=chain species=s%03d chainType=c00
         shortLabel %s Chain
         longLabel %s/%s%s (%s) Chained Alignments
         type bigChain %s
@@ -182,7 +182,7 @@ foreach my $queryDb (@queryList) {
   printf "
         track chainSyn%s
         subTrack %sChainNetViewSynTen off
-        subGroups view=synten species=s%03d clade=c00
+        subGroups view=synten species=s%03d chainType=c01
         shortLabel %s synChain
         longLabel %s/%s%s (%s) Chained Alignments
         type bigChain %s
@@ -204,7 +204,7 @@ foreach my $queryDb (@queryList) {
   printf "
         track chainRBest%s
         subTrack %sChainNetViewRBest off
-        subGroups view=rbest species=s%03d clade=c00
+        subGroups view=rbest species=s%03d chainType=c02
         shortLabel %s rbChain
         longLabel %s/%s%s (%s) Chained Alignments
         type bigChain %s
@@ -227,7 +227,7 @@ foreach my $queryDb (@queryList) {
   printf "
         track chainLiftOver%s
         subTrack %sChainNetViewLiftOver off
-        subGroups view=liftover species=s%03d clade=c00
+        subGroups view=liftover species=s%03d chainType=c03
         shortLabel %s loChain
         longLabel %s/%s%s (%s) Chained Alignments
         type bigChain %s
@@ -246,7 +246,7 @@ foreach my $queryDb (@queryList) {
 printf "
     track %sMafNetViewnet
     shortLabel Nets
-    view net
+    view align
     visibility dense
     subTrack %sChainNet
 ", $targetDb, $targetDb;
@@ -262,7 +262,7 @@ foreach my $queryDb (@queryList) {
   my $queryAsmName = "";
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
-  if ( -s "../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb" ) {
+  if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb" ) {
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.bb  $buildDir/bbi/$targetDb.${queryDb}.net.bb`;
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.net.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.net.summary.bb`;
   if ( $queryDb !~ m/^GC/ ) {
@@ -274,7 +274,7 @@ foreach my $queryDb (@queryList) {
     printf "
         track net%s
         parent %sMafNetViewnet
-        subGroups view=net species=s%03d clade=c00
+        subGroups view=align species=s%03d chainType=c04
         shortLabel %s mafNet
         longLabel %s/%s%s (%s) Chained Alignments
         type bigMaf
@@ -285,7 +285,6 @@ foreach my $queryDb (@queryList) {
         priority %s
 ", $QueryDb, $targetDb, $N, $comName, $comName, $queryDb, $queryAsmName, $queryDate, $targetDb, $queryDb, $targetDb, $queryDb, $queryDb, $targetDb, $queryPrio{$queryDb};
   }
-
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.bb`;
   `rm -f $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
   if ( -s "$buildDir/trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.bb" ) {
@@ -294,7 +293,7 @@ foreach my $queryDb (@queryList) {
     printf "
         track synNet%s
         parent %sMafNetViewnet
-        subGroups view=net species=s%03d clade=c00
+        subGroups view=align species=s%03d chainType=c05
         shortLabel %s synNet
         longLabel %s/%s%s (%s) Chained Alignments
         type bigMaf
@@ -315,7 +314,7 @@ foreach my $queryDb (@queryList) {
     printf "
         track rbestNet%s
         parent %sMafNetViewnet
-        subGroups view=net species=s%03d clade=c00
+        subGroups view=align species=s%03d chainType=c06
         shortLabel %s rbestNet
         longLabel %s/%s%s (%s) Chained Alignments
         type bigMaf
@@ -337,7 +336,7 @@ printf STDERR "constructing liftOverNet links $targetDb $queryDb\n";
     printf "
         track liftOverNet%s
         parent %sMafNetViewnet
-        subGroups view=net species=s%03d clade=c00
+        subGroups view=align species=s%03d chainType=c07
         shortLabel %s liftOverNet
         longLabel %s/%s%s (%s) Chained Alignments
         type bigMaf
