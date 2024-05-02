@@ -556,7 +556,25 @@ if(tg->extraUiData)
     filterBed(tg, &lfList);
 slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
+filterItemsOnNames(tg);
 maybeLoadSnake(tg);   // if we're in snake mode, change the methods
+}
+
+Color colorFromCart(struct track *tg, Color color)
+/* Return the RGB color from the cart setting 'colorOverride' or just return color */
+{
+char varName[128];
+safef(varName, sizeof(varName), "%s.%s", tg->tdb->track, "colorOverride");
+char *hexColorStr = cartOptionalString(cart, varName);
+if (hexColorStr==NULL || isEmpty(hexColorStr))
+    return color;
+if (hexColorStr[0]=='#')
+    hexColorStr++;
+if (strlen(hexColorStr)!=6)
+    return color;
+long rgb = strtol(hexColorStr,NULL,16); // Big and little Endians
+tg->itemColor = NULL;
+return MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
 }
 
 void bedDrawSimpleAt(struct track *tg, void *item,
@@ -590,6 +608,9 @@ else if (tg->colorShades)
     adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
     color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
     }
+
+color = colorFromCart(tg, color);
+
 /*	Keep the item at least 4 pixels wide at all viewpoints */
 if (thickDrawItem && (w < 4))
     {
@@ -643,6 +664,8 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 {
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
+
+color = colorFromCart(tg, color);
 
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {

@@ -989,6 +989,12 @@ function getAllVars(obj,subtrackName)
             urlData[name] = val;
         }
     });
+    // special case the highlight color picker
+    $(inp).filter('[id=hgTrackUiHighlightPicker]').each(function(i) {
+        var name = subtrackName + ".highlightColor";
+        var val = $("#hgTrackUiHighlightInput").val();
+        urlData[name] = val;
+    });
     $(sel).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
@@ -3991,7 +3997,7 @@ function mouseIsOverPopup(ev, ele, fudgeFactor=25) {
     return false;
 }
 
-function mouseIsOverItem(ev, ele, fudgeFactor=15) {
+function mouseIsOverItem(ev, ele, fudgeFactor=25) {
     /* Is the mouse positioned over the item that triggered the popup? */
     let origName = ele.getAttribute("origItemMouseoverId");
     let origTargetBox = boundingRect($("[mouseoverid='"+origName+"']")[0]);
@@ -4020,7 +4026,6 @@ function mousemoveHelper(e) {
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
-
     mousemoveTimer = setTimeout(mousemoveTimerHelper, 500, e, this);
     // we are moving the mouse away, hide the tooltip regardless how much time has passed
     if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
@@ -4161,14 +4166,7 @@ function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
     $("[title]").each(function(i, a) {
         if (a.title !== undefined && a.title.length > 0) {
-            if (a.title.startsWith("Click to alter the display density") ||
-                    a.title.startsWith("drag select or click to zoom") ||
-                    a.title.startsWith("click & drag to scroll")) {
-                // just remove these tooltips altogether
-                a.title = "";
-            } else {
-                titleTagToMouseover(a);
-            }
+            titleTagToMouseover(a);
         }
     });
 
@@ -4343,3 +4341,23 @@ function addRecentSearch(db, searchTerm, extra={}) {
         window.localStorage.setItem("searchStack", JSON.stringify(searchObj));
     }
 }
+
+function activateColorPicker (inputFieldId, colorPickerId) 
+/* connect a color picker to a text input field with the color hex value */
+{
+    var opt = {
+        hideAfterPaletteSelect : true,
+        color : $(inputFieldId).val(),
+        showPalette: true,
+        showInput: true,
+        showSelectionPalette: true,
+        showInitial: true,
+        preferredFormat: "hex",
+        localStorageKey: "genomebrowser",
+        change: function() { var color = $(colorPickerId).spectrum("get"); $(inputFieldId).val(color); },
+    };
+    $(colorPickerId).spectrum(opt);
+    // update the color picker if you change the input box
+    $(inputFieldId).change(function(){ $(colorPickerId).spectrum("set", $(inputFieldId).val()); });
+}
+

@@ -1810,6 +1810,45 @@ if (sameWordOk(glyphStr, GLYPH_STRING_PENTAGRAM))
 return GLYPH_CIRCLE;
 }
 
+void filterItemsOnNames(struct track *tg)
+/* Only keep items with a name in the .nameFilter cart var. 
+ * Not using filterItems(), because filterItems has no state at all. */
+{
+char varName[SMALLBUF];
+safef(varName, sizeof(varName), "%s.nameFilter", tg->tdb->track);
+char *nameFilterStr = cartNonemptyString(cart, varName);
+
+if (nameFilterStr==NULL)
+    return;
+
+struct slName *names = slNameListFromString(nameFilterStr, ',');
+struct hash *nameHash = hashFromSlNameList(names);
+
+struct slList *newList = NULL, *el, *next;
+for (el = tg->items; el != NULL; el = next)
+    {
+    next = el->next;
+    struct linkedFeatures *lf = (struct linkedFeatures*)el;
+    char *name = lf->name;
+    if (name && hashLookup(nameHash, name))
+	slAddHead(&newList, el);
+}
+tg->items = newList;
+
+char *suf = "";
+int nameCount = slCount(names);
+if (nameCount > 1)
+    suf = "s";
+
+char buf[SMALLBUF];
+safef(buf, sizeof(buf), " (manually filtered to show only %d accession%s)", nameCount, suf);
+char *oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings(tg->longLabel, buf);
+freez(&oldLabel);
+
+slFreeList(&names);
+hashFree(&nameHash);
+}
 
 void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item),
                 char *filterType)
@@ -2620,6 +2659,43 @@ if (*pNewWinEnd > virtSeqBaseCount)
 *pNewWinStart = *pNewWinEnd - newWinSize;
 }
 
+#define EXONTEXTLEN 256
+
+static void makeExonFrameText(int exonIntronNumber, int numExons, int startPhase, int endPhase, char *buf) 
+/* Write mouseover text that describes the exon's phase into buf[EXONTEXTLEN].
+
+   Note that start/end-phases are in the direction of transcription:
+   if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
+   if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
+{
+
+if (startPhase==-1) // UTRs don't have a frame at all
+    {
+    safef(buf, EXONTEXTLEN, ", untranslated region");
+    }
+else
+    {
+    char *exonNote = "";
+    boolean isNotLastExon = (exonIntronNumber<numExons);
+    if (isNotLastExon)
+        {
+        if (startPhase==endPhase)
+            exonNote = ": in-frame exon";
+        else
+            exonNote = ": out-of-frame exon";
+        safef(buf, EXONTEXTLEN, ", codon phase: start %d, end %d%s", startPhase, endPhase, exonNote);
+        } 
+    else
+        {
+        if (startPhase==0)
+            exonNote = ": in-frame exon";
+        else
+            exonNote = ": out-of-frame exon";
+        safef(buf, EXONTEXTLEN, ", start codon phase %d%s", startPhase, exonNote);
+        }
+    }
+}
+
 boolean linkedFeaturesNextPrevItem(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next)
 /* Draw a mapBox over the arrow-button on an *item already in the window*. */
 /* Clicking this will do one of several things: */
@@ -2853,7 +2929,6 @@ while (exon != NULL)
 /* Now sort it. */
 slSort(&exonList, exonSlRefCmp);
 
-
 numExons = slCount(exonList);
 struct genePred *gp = lf->original;
 boolean revStrand = (lf->orientation == -1);
@@ -2930,47 +3005,25 @@ for (ref = exonList; TRUE; )
                 existingText = lf->name;
 
             // construct a string that tells the user about the codon frame situation of this exon
-            char *frameText = "";
+            // char *frameText = "";
+            // for coding exons, determine the start and end phase of the exon and an English text describing both:
+            // if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
+            // if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame */
+            int startPhase = -1;
+            int endPhase = -1;
+            char phaseText[EXONTEXTLEN];
+            phaseText[0] = 0;
             if ((gp != NULL) && gp->exonFrames && isExon)
                 {
-                // start/end-phases are in the direction of transcription:
-                // if transcript is on + strand, the start phase is the exonFrame value, and the end phase is the next exonFrame (3' on DNA) value
-                // if transcript is on - strand, the start phase is the previous (=3' on DNA) exonFrame and the end phase is the exonFrame
-                int startPhase = gp->exonFrames[exonIx-1];
-                int endPhase = -1;
+                startPhase = gp->exonFrames[exonIx-1];
+                //printf("start phase is set<br>");
                 if (!revStrand) 
                     endPhase = gp->exonFrames[exonIx];
                 else 
                     if (exonIx>1)
                         endPhase = gp->exonFrames[exonIx-2];
-
-                if (gp->exonFrames[exonIx-1]==-1) // UTRs don't have a frame at all
-                    {
-                    frameText = ", untranslated region";
-                    }
-                else
-                    {
-                    //printf("%s %d %d %s_ex_%d_frame_%d<br>", chromName, s, e, gp->name, exonIx, startPhase);
-                    char buf[256];
-                    char *exonNote = "";
-                    if (exonIntronNumber<numExons) // do not do this for the last exon (exonIx is 1-based)
-                        {
-                        //printf("exonIx %d, numExons %d<br>", exonIx, numExons);
-                        ////int nextExonFrame = gp->exonFrames[nextExIx];
-                        //printf("nextExIx %d, nextExonFrame %d, endPhase %d<br>", nextExIx, nextExonFrame, endPhase);
-
-                        if (startPhase==endPhase)
-                            exonNote = " &#8594; in-frame exon";
-                        safef(buf, sizeof(buf), ", codon phase: start %d, end %d%s", startPhase, endPhase, exonNote);
-                        } 
-                    else
-                        {
-                        if (startPhase==0)
-                            exonNote = " &#8594; in-frame exon";
-                        safef(buf, sizeof(buf), ", start codon phase %d%s", startPhase, exonNote);
-                        }
-                    frameText = buf;
-                    }
+                // construct a string that tells the user about the codon frame situation of this exon
+                makeExonFrameText(exonIntronNumber, numExons, startPhase, endPhase, phaseText);
                 }
 
 	    if (w > 0) // draw exon or intron if width is greater than 0
@@ -3014,7 +3067,7 @@ for (ref = exonList; TRUE; )
                                     if (codonHgvsIx >= 0)
                                         dyStringPrintf(codonDy, "c.%d-%d, ", codonHgvsIx + 1, codonHgvsIx + 3);
                                     dyStringPrintf(codonDy, "strand %c, %s %d of %d%s",
-                                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
+                                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                                     tg->mapItem(tg, hvg, item, codonDy->string, tg->mapItemName(tg, item),
                                             sItem, eItem, codonsx, y, w, heightPer);
                                     // and restore the mouseOver
@@ -3024,16 +3077,17 @@ for (ref = exonList; TRUE; )
                             }
                         }
                     }
+                }
                 else
                     {
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
                     // prefer a lf->mouseOver over the itemName
                     if (!isEmpty(existingText))
                         safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d%s",
-                                existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
+                                existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                     else
                         safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d%s",
-                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, frameText);
+                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                     char *oldMouseOver = lf->mouseOver;
                     lf->mouseOver = NULL;
                     tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
@@ -3041,6 +3095,24 @@ for (ref = exonList; TRUE; )
                     // and restore the mouseOver
                     lf->mouseOver = oldMouseOver;
                     }
+
+	    if (w > 0) // draw exon or intron if width is greater than 0
+		{
+                char *sep = "";
+                if (!isEmpty(existingText))
+                    sep = ", ";
+
+                safef(mouseOverText, sizeof(mouseOverText), "%s%sstrand %c, %s %d of %d%s", 
+                        existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+
+                // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
+                // prefer a lf->mouseOver over the itemName
+                char *oldMouseOver = lf->mouseOver;
+                lf->mouseOver = NULL;
+		tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
+		    sItem, eItem, sx, y, w, heightPer);
+                // and restore the old mouseOver
+                lf->mouseOver = oldMouseOver;
 
 		picStart = ex;  // prevent pileups. is this right? add 1? does it work?
 		}
@@ -4116,6 +4188,12 @@ lfColors(tg, lf, hvg, &color, &bColor);
 if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
 
+color = colorFromCart(tg, color);
+
+struct genePred *gp = NULL;
+if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
+    gp = (struct genePred *)(lf->original);
+
 boolean baseColorNeedsCodons = (drawOpt == baseColorDrawItemCodons ||
 				drawOpt == baseColorDrawDiffCodons ||
 				drawOpt == baseColorDrawGenomicCodons);
@@ -4128,9 +4206,6 @@ if (psl && baseColorNeedsCodons)
     }
 else if (drawOpt > baseColorDrawOff)
     {
-    struct genePred *gp = NULL;
-    if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
-	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
         lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE));
     }
@@ -4190,6 +4265,8 @@ if (!hideArrows)
     }
 
 components = (lf->codons && zoomedToCdsColorLevel) ? lf->codons : lf->components;
+
+
 for (sf = components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
@@ -4297,7 +4374,7 @@ if (vis != tvDense)
      * drawn so that exons sharing the pixel don't overdraw differences. */
     baseColorOverdrawDiff(tg, lf, hvg, xOff, y, scale, heightPer,
 			  qSeq, qOffset, psl, winStart, drawOpt);
-    if (indelShowQueryInsert || indelShowPolyA)
+    if (psl && (indelShowQueryInsert || indelShowPolyA))
 	baseColorOverdrawQInsert(tg, lf, hvg, xOff, y, scale, heightPer,
 				 qSeq, qOffset, psl, font, winStart, drawOpt,
 				 indelShowQueryInsert, indelShowPolyA);
@@ -5205,6 +5282,8 @@ void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 withIndividualLabels = TRUE;  // set this back to default just in case someone left it false (I'm looking at you pgSnp)
 
+color = colorFromCart(tg, color);
+
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
 if (vis != tvDense && baseColorCanDraw(tg))
@@ -5241,6 +5320,8 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
                         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
+color = colorFromCart(tg, color);
+
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
@@ -6875,6 +6956,8 @@ else if (!isGencode)
     loadGenePredWithName2(tg);
 else
     loadKnownGencode(tg);
+
+filterItemsOnNames(tg);
 
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);

@@ -124,6 +124,9 @@ BA.2.86:
                   T2790C, T4321C, G6183A, T9142C, C13339T, A22353C, G22556A, C22577G, T22674C,
                   T22686C, G22688A, T22813G, C22895G, A22896T, A22898G, T22916C, G22917T, A22942T,
                   A23005T, C23075T, G23599T, G23604C, T24378C, T26858C,
+                  # Added 2024-04-15 by request from Cornelius Roemer, doesn't affect currently
+                  # designated recombinants fortunately:
+                  T21941G,
                 ]
 
 JN.1:
@@ -131,6 +134,7 @@ JN.1:
     representative: Denmark/DCGC-661561/2023
     ranges: [ [ 23008, 23011 ],  # https://github.com/cov-lineages/pango-designation/issues/2510
             ]
+    sites: [ 1871 ]          # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1466
 
 BA.4:
     # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.
@@ -196,6 +200,12 @@ XBB.1.5:
     # Don't believe reversions on 27915 once we're as far as XBB.1.*
     representative: England/BRBR-32671539/2022
     reversions: [ T27915G ]
+
+GE.1.2.1:
+    # Inherits from XBB (GE is XBB.2.3.10).
+    # https://github.com/cov-lineages/pango-designation/commit/cb172ab49c31a1a12f774ddf00247e8c8e6985f3
+    representative: Netherlands/NH-RIVM-135739/2023
+    sites: [ 27383, 27384, 27385, 27395, 27431, 27688, 27810, 28218 ]
 
 XBC:
     # Inherits nothing!  Should find out its deletions.

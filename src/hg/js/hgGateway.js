@@ -1487,7 +1487,10 @@ var hgGateway = (function() {
         var taxId = item.taxId || -1;
         var db = item.db;
         var org = item.org;
-        if (item.hubUrl) {
+        if (item.category === "GenArk") {
+            db = item.genome;
+            setHubDb(item.hubUrl, taxId, db, "GenArk", item.scientificName, true);
+        } else if (item.hubUrl) {
             // The autocomplete sends the hub database from hubPublic.dbList,
             // without the hub prefix -- restore the prefix here.
             db = item.hubName + '_' + item.db;

@@ -235,5 +235,8 @@ struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
 
 char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy);
 /* Build a track hub using trackDb and the cart. */
+
+struct grp *readGroupRa(char *groupFileName);
+/* Read in the ra file that describes the groups in an assembly hub. */
 #endif /* TRACKHUB_H */
 

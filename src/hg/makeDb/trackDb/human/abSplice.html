@@ -1,0 +1,75 @@
+<h2>Description</h2>
+<p>
+AbSplice is a method that predicts aberrant splicing across human tissues, as described in Wagner, 
+&Ccedil;elik et al., 2023. This track displays precomputed AbSplice scores for all possible
+single-nucleotide variants genome-wide. The scores represent the probability that a given variant
+causes aberrant splicing in a given tissue.
+<a target="_blank" href="https://github.com/gagneurlab/absplice/tree/master">AbSplice</a> scores
+can be computed from VCF files and are based on quantitative tissue-specific splice site annotations
+(<a target="_blank" href="https://github.com/gagneurlab/splicemap">SpliceMaps</a>).
+While SpliceMaps can be generated for any tissue of interest from a cohort of RNA-seq samples, this 
+track includes 49 tissues available from the 
+<a target="_blank" href="https://www.gtexportal.org/home/samplingSitePage">Genotype-Tissue
+Expression (GTEx) dataset</a>. 
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+The AbSplice score is a probability estimate of how likely aberrant splicing of some sort takes 
+place in a given tissue. The authors <a target="_blank" href="https://github.com/gagneurlab/absplice?tab=readme-ov-file#output"
+>suggest</a> three cutoffs which are represented by color in the track.
+</p>
+
+<ul>
+<li><b><font color="#FF0000">High (red)</font></b> - <b>
+  An AbSplice score over 0.2</b> indicates a high likelihood of aberrant splicing in at least one tissue.</li>
+<li><b><font color="#FF8000">Medium (orange)</font></b> - <b>
+  A score between 0.05 and 0.2 </b> indicates a medium likelihood.</li>
+<li><b><font color="#0000FF">Low (blue)</font></b> - <b>
+  A score between 0.01 and 0.05 </b> indicates a low likelihood.</li>
+<li><b>Scores below 0.01 are not displayed.</b></li>
+</ul>
+<p>
+Mouseover on items shows the gene name, maximum score, and tissues that had this score. Clicking on
+any item brings up a table with scores for all 49 GTEX tissues.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a>, or the
+<a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>. 
+For automated analysis, the data may be queried from our
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a> 
+for questions, or our
+<a href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a> 
+for more information.
+<p>Precomputed AbSplice-DNA scores in all 49 GTEx tissues are available at
+<a target="_blank" href="https://zenodo.org/search?q=AbSplice-DNA&l=list&p=1&s=10&sort=bestmatch">
+Zenodo</a>. 
+
+<h2>Methods</h2>
+<p>
+Data was converted from the files (AbSplice_DNA_ $db _snvs_high_scores.zip) provided by the authors
+at <a href="https://zenodo.org/search?q=AbSplice-DNA&l=list&p=1&s=10&sort=bestmatch"
+target="_blank">zenodo.org</a>. Files in the
+score_cutoff=0.01 directory were concatenated. To convert the data to bigBed format, scores and
+their tissues were selected from the AbSplice_DNA fields and maximum scores, and then calculated
+using a custom Python script, which can be found in the
+<a a target="_blank"  href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/abSplice/">
+makeDoc</a> from our GitHub repository.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Nils Wagner for helpful comments and suggestions.</p>
+
+<h2>References</h2>
+<p>
+Wagner N, &#199;elik MH, H&#246;lzlwimmer FR, Mertes C, Prokisch H, Y&#233;pez VA, Gagneur J.
+<a href="https://doi.org/10.1038/s41588-023-01373-3" target="_blank">
+Aberrant splicing prediction across human tissues</a>.
+<em>Nat Genet</em>. 2023 May;55(5):861-870.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37142848" target="_blank">37142848</a>
+</p>

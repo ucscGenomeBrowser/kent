@@ -103,6 +103,7 @@ char *currentGlyphMode = cartNonemptyString(cart, cartVar);
 if (currentGlyphMode == NULL)
     currentGlyphMode = GLYPH_DISPLAY_DEFAULT; // can pass through trackDbSetting first later for creator config
 cgiMakeDropList(cartVar, menuOpt, 3, currentGlyphMode);
+printf("<br>\n");
 
 char decoratorName[2048];
 safef(decoratorName, sizeof(decoratorName), "%s.decorator.default", tdb->track);

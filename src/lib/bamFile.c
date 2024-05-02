@@ -426,6 +426,7 @@ for (i = 0;  i < core->n_cigar;  i++)
     int n = bamUnpackCigarElement(cigarPacked[i], &op);
     dyStringPrintf(dyCigar, "%d", n);
     dyStringAppendC(dyCigar, op);
+    dyStringAppendC(dyCigar, ' ');
     }
 }
 

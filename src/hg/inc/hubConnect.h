@@ -118,6 +118,9 @@ int hubIdFromCartName(char *trackName);
 unsigned hubIdFromTrackName(char *trackName);
 /* Given something like "hub_123_myWig" return 123 */
 
+char *hubNameFromGroupName(char *groupName);
+/* Given something like "hub_123_myWig" return hub_123 */
+
 void hubConnectAddDescription(char *database, struct trackDb *tdb);
 /* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
  * and store in tdb->html. */
@@ -154,7 +157,7 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub);
 boolean trackHubHasDatabase(struct trackHub *hub, char *database) ;
 /* Return TRUE if hub has contents for database */
 
-struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boolean *foundFirstGenome, struct hash *trackDbNameHash);
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boolean *foundFirstGenome, struct hash *trackDbNameHash, struct grp **hubGroups);
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file. Only the first example of a genome gets to 
  * populate groups, the others get a group for the trackHub.  A particular 
@@ -205,4 +208,8 @@ boolean hubConnectIsCurated(char *db);
 
 boolean hubConnectGetCuratedUrl(char *db, char **hubUrl);
 /* Check to see if this db is a curated hub and if so return its hubUrl */
+
+boolean hubsCanAddGroups();
+/* can track hubs have their own groups? */
+
 #endif /* HUBCONNECT_H */

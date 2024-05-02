@@ -121,9 +121,9 @@ void cartDbSecureId(char *buf, int bufSize, struct cartDb *cartDb)
 /* Return combined string of session id plus sessionKey in buf if turned on.*/
 {
 if (cartDbUseSessionKey() && !sameString(cartDb->sessionKey,""))
-    safef(buf, bufSize, "%d_%s", cartDb->id, cartDb->sessionKey);
+    safef(buf, bufSize, "%u_%s", cartDb->id, cartDb->sessionKey);
 else
-    safef(buf, bufSize, "%d", cartDb->id);
+    safef(buf, bufSize, "%u", cartDb->id);
 }
 
 unsigned int cartDbParseId(char *id, char **pSessionKey)

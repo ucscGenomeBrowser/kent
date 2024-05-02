@@ -1,6 +1,6 @@
 /* Write custom tracks: one per subtree and one with user's uploaded samples. */
 
-/* Copyright (C) 2020 The Regents of the University of California */
+/* Copyright (C) 2020-2024 The Regents of the University of California */
 
 #include "common.h"
 #include "hash.h"
@@ -522,14 +522,15 @@ vcfFileFree(&userVcf);
 reportTiming(pStartTime, "write subtree custom tracks");
 }
 
-struct tempName *writeCustomTracks(char *db, struct tempName *vcfTn, struct usherResults *ur,
+struct tempName *writeCustomTracks(char *org, char *ref, char *db,
+                                   struct tempName *vcfTn, struct usherResults *ur,
                                    struct slName *sampleIds, char *source, int fontHeight,
                                    struct phyloTree *sampleTree, int *pStartTime)
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 {
 char *chrom = hDefaultChrom(db);
 int chromSize = hChromSize(db, chrom);
-char *geneTrack = phyloPlaceDbSetting(db, "geneTrack");
+char *geneTrack = phyloPlaceRefSetting(org, ref, "geneTrack");
 // Default to SARS-CoV-2 or hMPXV values if setting is missing from config.ra.
 if (isEmpty(geneTrack))
     geneTrack = sameString(db, "wuhCor1") ? "ncbiGeneBGP" : "ncbiGene";

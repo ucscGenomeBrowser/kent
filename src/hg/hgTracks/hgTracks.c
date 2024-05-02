@@ -244,21 +244,57 @@ const struct trackRef *b = *((struct trackRef **)vb);
 return tgCmpPriority(&a->track, &b->track);
 }
 
+static int makeInt(double input)
+/* make an int out of an input.  Probably should use floor() and such. */
+{
+if (input == 0)
+    return 0;
+if (input < 0)
+   return -1;
+else if (input == 0.0)
+   return 0;
+else
+   return 1;
+}
+
 int gCmpPriority(const void *va, const void *vb)
-/* Compare groups based on priority. */
+/* Compare groups based on priority, paying attention to hub groups */
 {
 const struct group *a = *((struct group **)va);
 const struct group *b = *((struct group **)vb);
 float dif = a->priority - b->priority;
+int iDif = makeInt(dif);
+boolean aIsHub = startsWith("hub_", a->name);
+boolean bIsHub = startsWith("hub_", b->name);
 
-if (dif == 0)
-    return 0;
-if (dif < 0)
-   return -1;
-else if (dif == 0.0)
-   return 0;
-else
-   return 1;
+if (aIsHub)
+    {
+    if (bIsHub)
+        {
+        char *aNullPos = strchr(&a->name[4], '_');
+        char *bNullPos = strchr(&b->name[4], '_');
+        if ((aNullPos != NULL) && (bNullPos != NULL) )
+            *aNullPos = *bNullPos = 0;
+
+        int strDiff = strcmp(a->name, b->name);
+        int ret = 0;
+        if (strDiff == 0)   // same hub
+            ret = iDif;
+        else
+            ret = strDiff;
+
+        if ((aNullPos != NULL) && (bNullPos != NULL) )
+            *aNullPos = *bNullPos = '_';
+
+        return ret;
+        }
+    else
+        return -1;
+    }
+else if (bIsHub)
+    return 1;
+
+return iDif;
 }
 
 void changeTrackVisExclude(struct group *groupList, char *groupTarget, int changeVis, struct hash *excludeHash)
@@ -8487,6 +8523,7 @@ void doTrackForm(char *psOutput, struct tempName *ideoTn)
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
  * ideogram is created.  */
 {
+int disconCount = 0;
 struct group *group;
 struct track *track;
 char *freezeName = NULL;
@@ -9439,11 +9476,13 @@ if (!hideControls)
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
             if (group->errMessage)
-                hPrintf("<th align=\"left\" colspan=%d class='redToggleBar'>",MAX_CONTROL_COLUMNS);
+                hPrintf("<th align=\"left\" colspan=%d class='errorToggleBar'>",MAX_CONTROL_COLUMNS);
+            else if (startsWith("Hub", group->label))
+                hPrintf("<th align=\"left\" colspan=%d class='hubToggleBar'>",MAX_CONTROL_COLUMNS);
             else if (startsWith("Quicklift", group->label))
-                hPrintf("<th align=\"left\" colspan=%d class='greenToggleBar'>",MAX_CONTROL_COLUMNS);
+                hPrintf("<th align=\"left\" colspan=%d class='quickToggleBar'>",MAX_CONTROL_COLUMNS);
             else
-                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
+                hPrintf("<th align=\"left\" colspan=%d class='nativeToggleBar'>",MAX_CONTROL_COLUMNS);
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
 
@@ -9470,7 +9509,8 @@ if (!hideControls)
             hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
 		{
-                struct trackHub *hub = grabHashedHub(group->name);
+                char *hubName = hubNameFromGroupName(group->name);
+                struct trackHub *hub = grabHashedHub(hubName);
 
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
                 if (hub != NULL)
@@ -9484,13 +9524,14 @@ if (!hideControls)
                             "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
                     }
 
-		safef(idText, sizeof idText, "%s_disconn", group->name);
+		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
+                disconCount++;
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
                     " type=\"button\" value=\"disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
-		    group->name + strlen(hubTrackPrefix));
+		    hubName + strlen(hubTrackPrefix));
 		}
 
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
@@ -11295,6 +11336,7 @@ if(!trackImgOnly)
     jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
     jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
+    jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
 
 #ifdef LOWELAB

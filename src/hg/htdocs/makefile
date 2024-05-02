@@ -39,7 +39,7 @@ alpha:
 	${MAKE} doInstall destDir=${DOCUMENTROOT} 
 
 beta:
-	@if [ "${FIND}" = "find" ] ; then echo Error: FIND=find not allow with make beta >& 2 ; exit 1 ; fi
+	@if [ "${FIND}" = "find" ] ; then echo Error: FIND=find not allowed with make beta >& 2 ; exit 1 ; fi
 	${GITUP}
 	cp -p --remove-destination ${DOCUMENTROOT}/assemblyRequest.html ${DOCUMENTROOT}-beta/assemblyRequest.html
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 

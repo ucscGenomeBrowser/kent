@@ -161,11 +161,13 @@ A:visited IMG { border-width: 0px; padding: 0px; margin: 0px;}
 A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
 
 /* A toggle bar can be seen in hgTracks, under the image groups that can be opened and closed. */
-.greenToggleBar {font-weight: bold; color:#FFFFFF; background-color:#108020; height:28px; width:100%;
+.hubToggleBar {font-weight: bold; color:#FFFFFF; background-color:#536ED3; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap;}
-.redToggleBar {font-weight: bold; color:#FFFFFF; background-color:#ff0000; height:28px; width:100%;
+.quickToggleBar {font-weight: bold; color:#FFFFFF; background-color:#108020; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap;}
-.blueToggleBar {font-weight: bold; color:#FFFFFF; background-color:#536ED3; height:28px; width:100%;
+.errorToggleBar {font-weight: bold; color:#FFFFFF; background-color:#ff0000; height:28px; width:100%;
+                text-align:center; vertical-align:middle; white-space:nowrap;}
+.nativeToggleBar {font-weight: bold; color:#FFFFFF; background-color:#00457c; height:28px; width:100%;
                 text-align:center; vertical-align:middle; white-space:nowrap;}
 .toggleButton  {height: 20px; width: 20px; vertical-align:middle;}
 

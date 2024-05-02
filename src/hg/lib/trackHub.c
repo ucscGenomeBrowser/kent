@@ -55,17 +55,41 @@
 #include "hui.h"
 #include "chromAlias.h"
 #include "trashDir.h"
+#include "hgConfig.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
 #endif
 
+struct grp *trackHubGrps = NULL;   // global with grps loaded from track hubs
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
 static struct hash *hubAssemblyUndecoratedHash; // mapping of undecorated assembly name to genome struct
 static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
 static struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
 static struct hash *trackHubHash;
+
+static void tdbListAddHubToGroup(char *hubName, struct trackDb *tdbList)
+/* Prepend hub name to  group name for every tdb. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char buffer[4096];
+
+    char *grp = trackDbSetting(tdb, "group");
+    if (grp == NULL)
+        tdb->grp = cloneString(hubName);
+    else
+        {
+        safef(buffer, sizeof buffer, "%s_%s", hubName, grp);
+        tdb->grp = cloneString(buffer);
+        }
+    hashReplace(tdb->settingsHash, "group", tdb->grp);
+    }
+}
+
+
 
 char *trackHubRelativeUrl(char *hubUrl, char *path)
 /* Return full path (in URL form if it's a remote hub) given
@@ -470,7 +494,7 @@ if ((str = hashFindVal(hash, name)) == NULL)
 return str;
 }
 
-static struct grp *readGroupRa(char *groupFileName)
+struct grp *readGroupRa(char *groupFileName)
 /* Read in the ra file that describes the groups in an assembly hub. */
 {
 if (groupFileName == NULL)
@@ -682,6 +706,13 @@ while ((ra = raNextRecord(lf)) != NULL)
 	    el->groups = trackHubRelativeUrl(url, groups);
 	addAssembly(genome, el, hub);
 	}
+    else
+        {
+	if (groups != NULL)
+            {
+	    el->groups = trackHubRelativeUrl(url, groups);
+            }
+        }
     el->settingsHash = ra;
     hashAdd(ra, "hubName", hub->shortLabel);
     el->chromAuthority = hashFindVal(ra, "chromAuthority");
@@ -1104,10 +1135,15 @@ validateTracks(hub, genome, tdbList);
 trackDbAddTableField(tdbList);
 if (!isEmpty(hub->name))
     trackHubAddNamePrefix(hub->name, tdbList);
-if (genome->twoBitPath == NULL || *foundFirstGenome)
-    trackHubAddGroupName(hub->name, tdbList);
-else
+
+if ((genome->twoBitPath != NULL) && (*foundFirstGenome == FALSE))
     *foundFirstGenome = TRUE;
+else if ((genome->groups != NULL) && hubsCanAddGroups())
+    tdbListAddHubToGroup(hub->name, tdbList);
+else
+    trackHubAddGroupName(hub->name, tdbList);
+
+
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     trackDbFieldsFromSettings(tdb);
@@ -1617,4 +1653,10 @@ walkTree(f, cart, tdb, visDy);
 fclose(f);
 
 return cloneString(filename);
+}
+
+struct grp *trackHubGetGrps()
+/* Get the groups defined by attached track hubs. */
+{
+return trackHubGrps;
 }

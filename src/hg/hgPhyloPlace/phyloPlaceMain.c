@@ -1,6 +1,6 @@
 /* phyloPlace: place SARS-CoV-2 sequences in phylogenetic tree using add_missing_samples program. */
 
-/* Copyright (C) 2020-2022 The Regents of the University of California */
+/* Copyright (C) 2020-2024 The Regents of the University of California */
 
 #include "common.h"
 #include "cart.h"
@@ -47,7 +47,7 @@ struct lineFile *lf = lineFileOpen(userSeqOrVcf, TRUE);
 char *db = optionVal("db", "wuhCor1");
 char *protobuf = optionVal("protobuf", NULL);
 int subtreeSize = optionInt("subtreeSize", 50);
-boolean success = FALSE;
+struct cart *cart = cartOfNothing();
 
 int timeout = 300;
 if (udcCacheTimeout() < timeout)
@@ -59,19 +59,18 @@ if (isHubTrack(db))
     {
     realDb = db;
     // Connect to hubs so phyloPlaceSamples doesn't croak later.
-    struct cart *cart = cartOfNothing();
-    struct slName *supportedDbs = phyloPlaceDbList(cart);
-    if (! slNameInList(supportedDbs, db))
+    struct slPair *orgLabelList = phyloPlaceOrgList(cart);
+    if (! slPairFind(orgLabelList, db))
         errAbort("Can't find db '%s'", db);
     }
 else if (hDbExists(db))
     realDb = db;
 else
     realDb = "hg38";
-char *ctFile = phyloPlaceSamples(lf, realDb, db, protobuf, TRUE, subtreeSize, 9, &success);
-if (ctFile)
-    printf("ctFile = %s\n", ctFile);
-else
-    printf("no ctFile.\n");
+struct trackLayout tl;
+ZeroVar(&tl);
+tl.fontHeight = 9;
+tl.leftLabelWidthChars = -1;
+boolean success = phyloPlaceSamples(lf, realDb, db, protobuf, TRUE, subtreeSize, &tl, cart);
 return (success == TRUE);
 }
