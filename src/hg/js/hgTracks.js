@@ -756,6 +756,7 @@ var posting = {
                 return false;
             }
         }
+        return posting.saveSettings(this);
     },
 
     saveSettings: function (obj)
