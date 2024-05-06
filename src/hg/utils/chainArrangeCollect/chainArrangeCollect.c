@@ -10,9 +10,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "chainArrangeCollect - collect overlapping beds into a chainArrange.as structure\n"
+  "chainArrangeCollect - collect overlapping beds into a chainArrange.as structure\n. Names are made with prefix.\n"
   "usage:\n"
-  "   chainArrangeCollect input.bed output.bed\n"
+  "   chainArrangeCollect prefix input.bed output.bed\n"
   "note: input beds need to be sorted with bedSort\n"
   "options:\n"
   "   -exact       overlapping blocks must be exactly the same range and score\n"
@@ -27,7 +27,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-static void outBed(FILE *f, struct bed *bed, struct hash *nameHash)
+static void outBed(FILE *f, char *prefix, struct bed *bed, struct hash *nameHash)
 {
 static int count = 0;
 struct slName *names = hashSlNameFromHash(nameHash);
@@ -44,10 +44,10 @@ bed->name = dy->string;
 
 // we're actually not outputting chainArrange structure because the label is coming
 // from an external program currently
-fprintf(f, "%s %d %d arr%d %d + %d %d 0 %s %d\n", bed->chrom, bed->chromStart, bed->chromEnd, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name, sizeQuery);
+fprintf(f, "%s %d %d %s%d.1 %d + %d %d 0 %s %d\n", bed->chrom, bed->chromStart, bed->chromEnd, prefix, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name, sizeQuery);
 }
 
-void chainArrangeCollect(char *inFile, char *outFile)
+void chainArrangeCollect(char *prefix, char *inFile, char *outFile)
 /* chainArrangeCollect - collect overlapping beds into a single bed. */
 {
 struct bed *allBeds = bedLoadAll(inFile);
@@ -63,7 +63,7 @@ if (exact)
         {
         if (differentString(prevBed->chrom, bed->chrom) || (prevBed->chromStart != bed->chromStart) || (prevBed->chromEnd != bed->chromEnd) || (prevBed->score != bed->score))
             {
-            outBed(f, prevBed, nameHash);
+            outBed(f, prefix, prevBed, nameHash);
 
             freeHash(&nameHash);
             nameHash = newHash(0);
@@ -82,7 +82,7 @@ else
         {
         if (differentString(prevBed->chrom, bed->chrom) || (prevBed->chromEnd <= bed->chromStart))
             {
-            outBed(f, prevBed, nameHash);
+            outBed(f, prefix, prevBed, nameHash);
 
             freeHash(&nameHash);
             nameHash = newHash(0);
@@ -95,7 +95,7 @@ else
             prevBed->chromEnd = (bed->chromEnd > prevBed->chromEnd) ?  bed->chromEnd : prevBed->chromEnd;
             }
         }
-    outBed(f, prevBed, nameHash);
+    outBed(f, prefix, prevBed, nameHash);
     }
 }
 
@@ -103,9 +103,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
 exact = optionExists("exact");
-chainArrangeCollect(argv[1], argv[2]);
+chainArrangeCollect(argv[1], argv[2], argv[3]);
 return 0;
 }

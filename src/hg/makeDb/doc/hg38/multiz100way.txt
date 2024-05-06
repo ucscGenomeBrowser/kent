@@ -1836,16 +1836,16 @@ done | tr '[\t]' '[ ]' >> README.txt
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz100way
 
 #############################################################################
-# hgPal downloads (rebuilt knownGene and knownCanonical 2016-06-27 braney)
+# hgPal downloads (rebuilt knownGene and knownCanonical for V41 with knownGeneExt
 
     ssh hgwdev
     screen -S hg38HgPal
-    mkdir /hive/data/genomes/hg38/bed/multiz100way/pal
+    mkdir -p /hive/data/genomes/hg38/bed/multiz100way/pal
     cd /hive/data/genomes/hg38/bed/multiz100way/pal
     cat ../species.list | tr '[ ]' '[\n]' > order.list
 
     export mz=multiz100way
-    export gp=knownGene
+    export gp=knownGeneExt
     export db=hg38
     export I=0
     mkdir exonAA exonNuc
@@ -1872,14 +1872,15 @@ done | tr '[\t]' '[ ]' >> README.txt
     # real    0m9.152s
 
     export mz=multiz100way
-    export gp=knownGene
+    export gp=knownGeneExt
     export db=hg38
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
-    md5sum *.fa.gz > md5sum.txt
+    #md5sum *.fa.gz > md5sum.txt
+    rm -f $pd/$gp.exonAA.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    ln -s `pwd`/md5sum.txt $pd/
+    #ln -s `pwd`/md5sum.txt $pd/
 
     rm -rf exonAA exonNuc
 
@@ -1956,9 +1957,9 @@ done | tr '[\t]' '[ ]' >> README.txt
     done | while read C
     do
 	echo "date"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGeneExt order.list stdout | \
 	    gzip -c > exonNuc/$C.exonNuc.fa.gz "
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGeneExt order.list stdout | \
 	    gzip -c > exonAA/$C.exonAA.fa.gz  "
     done > $gp.$mz.jobs
 

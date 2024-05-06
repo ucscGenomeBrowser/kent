@@ -3751,12 +3751,29 @@ if (isNotEmpty(nextcladeIndex))
             printf("<li>%s\n", noMatch->name);
         puts("</ul>");
         }
+    int refCount = slCount(refFiles);
+    boolean doNav = (refCount > 1);
     struct refMatch *ref;
+    if (doNav)
+        {
+        // Make some navigation links at the top
+        puts("<a name='resultNavTop'></a>");
+        printf("<p>Your uploaded sequences matched %d different reference sequences.  "
+               "Click on these links to jump to the results for each reference.\n",
+               refCount);
+        puts("<ul>");
+        for (ref = refFiles;  ref != NULL;  ref = ref->next)
+            printf("<li><a href='#results_%s'>%s</a>\n", ref->acc, ref->description);
+        puts("</ul></p><hr>");
+        }
     for (ref = refFiles;  ref != NULL;  ref = ref->next)
         {
+        printf("<a name='results_%s'></a>\n", ref->acc);
         if (ref != refFiles)
             puts("<hr>");
-        printf("<h2>Sequence(s) matched reference %s</h2>\n", ref->description);
+        printf("<h2>Sequence(s) matched to reference %s</h2>\n", ref->description);
+        if (doNav)
+            puts("<a href='#resultNavTop'>back to top</a>");
         struct lineFile *rlf = lineFileOpen(ref->seqFile, TRUE);
         phyloPlaceSamplesOneRef(rlf, db, org, ref->acc, defaultProtobuf,
                                 doMeasureTiming, subtreeSize, tl, cart, &success);

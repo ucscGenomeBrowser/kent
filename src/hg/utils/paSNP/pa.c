@@ -142,7 +142,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    errAbort("expected to find underbar on line %d",lf->lineIx);
 	int newExonNum = atoi(exonNumStr + 1);
 	*exonNumStr = 0;
-	char *species = strrchr(pName, '_');
+	char *species = strchr(pName, '_');
 	*species++ = 0;
 	if (species == NULL)
 	    errAbort("expected to find species underbar on line %d",lf->lineIx);
