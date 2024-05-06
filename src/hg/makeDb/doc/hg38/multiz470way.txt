@@ -193,6 +193,10 @@ time (bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 -as=$HOME/kent/src/hg/
             tree508.nh | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl \
               /dev/stdin > hg38.470way.nh
 
+    # this tree already has hg38 at the top, but it is simply too large
+    # to make any kind of image to use in the browser.  Perhaps some kind
+    # of trimmed down image will work.
+
     # using TreeGraph2 tree editor on the Mac, rearrange to get hg38
     # at the top, and attempt to get the others in phylo order:
     /cluster/bin/phast/all_dists hg38.470way.nh | grep hg38 \
@@ -206,7 +210,7 @@ time (bedToBigBed -verbose=2 -itemsPerSlot=4 -type=bed3+1 -as=$HOME/kent/src/hg/
 #       macNem1 0.066302
 #       HLtheGel1       0.066537
 #       HLmacFas6       0.066886
-... tail 
+... tail
 #       HLpseCor1       0.811597
 #       HLmacFul1       0.812234
 #       HLnotEug3       0.815561
@@ -705,7 +709,7 @@ runOne $(root1) {check out exists ../maf/$(root1).maf}
     # real    28m23.045s
 
     time (cat /gbdb/hg38/multiz470way/maf/*.maf \
-        | hgLoadMafSummary -verbose=2 -minSize=470000 \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 hg38 multiz470waySummary stdin)
 #  Created 4568973 summary blocks from 850984320 components and 40625470 mafs from stdin
 #  real    49m52.561s
@@ -800,7 +804,7 @@ mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/hg38/hg38.2bit {check out l
     # -rw-rw-r-- 1 2177747201 Nov  2 18:27 multiz470way.tab
 
     time (cat /gbdb/hg38/multiz470way/maf/*.maf \
-        | hgLoadMafSummary -verbose=2 -minSize=470000 \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 hg38 multiz470waySummary stdin)
 # Created 4568973 summary blocks from 850984320 components and 40655883 mafs from stdin
 # real    59m27.383s
@@ -970,8 +974,8 @@ do
   else
     printf "MISSING: ${ncbiRefSeqGp}\n" 1>&2
   fi
-  
-done 
+
+done
 
 # HLcalAnn5: checked: 14661 failed: 0
 # HLcalPug1: checked: 16472 failed: 0
@@ -1300,94 +1304,60 @@ XXX - running Fri Aug 26 07:39:53 PDT 2022
     # split 470way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
-    mkdir -p /hive/data/genomes/hg38/bed/multiz470way/cons/ss
     mkdir -p /hive/data/genomes/hg38/bed/multiz470way/cons/msa.split
     cd /hive/data/genomes/hg38/bed/multiz470way/cons/msa.split
 
-    cat << '_EOF_' > doSplit.csh
-#!/bin/csh -ef
+    printf '#!/bin/csh -ef
 set c = $1
-set MAF = /hive/data/genomes/hg38/bed/multiz470way/anno/result/$c.maf
+set MAF = /hive/data/genomes/hg38/bed/multiz470way/perChrom/$c.maf
 set WINDOWS = /hive/data/genomes/hg38/bed/multiz470way/cons/ss/$c
-set WC = `cat $MAF | wc -l`
-set NL = `grep "^#" $MAF | wc -l`
+set NL = `grep -m 10 -c -v "^#" $MAF`
 if ( -s $2 ) then
     exit 0
 endif
 if ( -s $2.running ) then
     exit 0
 endif
-
 date >> $2.running
 
 rm -fr $WINDOWS
 mkdir $WINDOWS
 pushd $WINDOWS > /dev/null
-if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin/msa_split \
-    $MAF -i MAF -o SS -r $WINDOWS/$c -w 47000000,0 -I 4700 -B 5000
+if ( $NL > 0 ) then
+/cluster/bin/phast.build/cornellCVS/github.2023-08-29/phast/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
 date >> $2
 rm -f $2.running
-'_EOF_'
-    # << happy emacs
+' > doSplit.csh
+
     chmod +x doSplit.csh
 
-    cat << '_EOF_' > template
     printf '#LOOP
 doSplit.csh $(root1) {check out line+ $(root1).done}
 #ENDLOOP
 ' > template
 
-F_' > doSplit.csh
-#!/bin/csh -ef
-set c = $1
-set MAF = /hive/data/genomes/hg38/bed/multiz470way/anno/result/$c.maf
-set WINDOWS = /hive/data/genomes/hg38/bed/multiz470way/cons/ss/$c
-set WC = `cat $MAF | wc -l`
-set NL = `grep "^#" $MAF | wc -l`
-if ( -s $2 ) then
-    exit 0
-endif
-if ( -s $2.running ) then
-    exit 0
-endif
-
-date >> $2.running
-
-rm -fr $WINDOWS
-mkdir $WINDOWS
-pushd $WINDOWS > /dev/null
-if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin/msa_split \
-    $MAF -i MAF -o SS -r $WINDOWS/$c -w 47000000,0 -I 4700 -B 5000
-endif
-popd > /dev/null
-date >> $2
-rm -f $2.running
-'_EOF_'
-    # << happy emacs
-    chmod +x doSplit.csh
-
-    cat << '_EOF_' > template
-#LOOP
-doSplit.csh $(root1) {check out line+ $(root1).done}
-#ENDLOOP
-
 #	do the easy ones first to see some immediate results
-    ls -1S -r ../../anno/result | sed -e "s/.maf//;" > maf.list
+    mkdir ../ss
+    ls -L1S -r ../../perChrom | sed -e "s/.maf//;" > maf.list
     # all can finish OK at a 64Gb memory limit
     gensub2 maf.list single template jobList
     para -ram=64g create jobList
     para try ... check ... etc
     para push
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:      147099s     218.32m     3.64h    0.15d  0.000 y
-# IO & Wait Time:                  1841s      470.68m     0.51h    0.02d  0.000 y
-# Average job time:                  42s       0.70m     0.01h    0.00d
-# Longest finished job:            1393s      23.22m     0.39h    0.02d
-# Submission to last job:          1468s      24.47m     0.41h    0.02d
+# Completed: 21 of 24 jobs
+# Crashed: 3 jobs
+# CPU time in finished jobs:     338990s    5649.83m    94.16h    3.92d  0.011 y
+# IO & Wait Time:                  1750s      29.17m     0.49h    0.02d  0.000 y
+# Average job time:               16226s     270.43m     4.51h    0.19d
+# Longest finished job:           57710s     961.83m    16.03h    0.67d
+# Submission to last job:        112741s    1879.02m    31.32h    1.30d
+
+    # finished the last 3 manually on hgwdev, consumed on the order of 350Gb of
+    # memory per job to complete and a day running, longest one:
+    # real    1726m45.411s
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -1404,7 +1374,7 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/github.2023-08-29/phast/bin
 set c = $1
 set f = $2
 set len = $3
@@ -1457,7 +1427,7 @@ rm -fr $tmp
 
     ls -1S ../ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
     wc -l ss.list
-    #	1337 ss.list
+    #	786 ss.list
 
     # Create parasol batch and run it
     # run for all species
@@ -1469,15 +1439,16 @@ rm -fr $tmp
 
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     # beware overwhelming the cluster with these fast running high I/O jobs
+    # actually, these did not run very fast at all.  I think the SS chunks
+    # are so very large.
     para -ram=32g create jobList
     para try ... check ...
-    para -maxJob=16 push
-# Completed: 1337 of 1337 jobs
-# CPU time in finished jobs:      17323s     288.72m     4.81h    0.20d  0.001 y
-# IO & Wait Time:                  9727s     162.11m     2.70h    0.11d  0.000 y
-# Average job time:                  20s       0.34m     0.01h    0.00d
-# Longest finished job:              31s       0.52m     0.01h    0.00d
-# Submission to last job:           2470s       3.83m     0.06h    0.00d
+# Completed: 786 of 786 jobs
+# CPU time in finished jobs:    1355449s   22590.82m   376.51h   15.69d  0.043 y
+# IO & Wait Time:                 41654s     694.23m    11.57h    0.48d  0.001 y
+# Average job time:                1777s      29.62m     0.49h    0.02d
+# Longest finished job:            6072s     101.20m     1.69h    0.07d
+# Submission to last job:          8909s     148.48m     2.47h    0.10d
 
     # create Most Conserved track
     cd /hive/data/genomes/hg38/bed/multiz470way/cons/all
@@ -1490,33 +1461,70 @@ do
     done | sort -k1,1 -k2,2n \
     | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
 done > tmpMostConserved.bed
-    # real    0m50.678s
+    # real    3m10.867s
 
-    # -rw-rw-r--   1 101245734 Nov  3 14:20 tmpMostConserved.bed
+    # -rw-rw-r--   1 1051386592 Sep 29 14:33 tmpMostConserved.bed
 
+    # if accidently started on ku, this will not finish
     time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
-        > mostConserved.bed
-    # real    0m24.196s
+        | sort -k1,1 -k2,2n > mostConserved.bed
+    # real    2m57.394s
 
-    # -rw-rw-r--   1 103966297 Nov  3 14:21 mostConserved.bed
+    # -rw-rw-r--   1 1078844107 Sep 29 15:08 mostConserved.bed
 
-    # load into database
+
+    ave -col=5 tmpMostConserved.bed | sed -e 's/^/    #    /;'
+    #    Q1 15.000000
+    #    median 21.000000
+    #    Q3 38.000000
+    #    average 50.608585
+    #    min 7.000000
+    #    max 24036.000000
+    #    count 30434475
+    #    total 1540245720.000000
+    #    standard deviation 150.749045
+
+    ave -col=5 mostConserved.bed  | sed -e 's/^/    #    /;'
+    #    Q1 266.000000
+    #    median 300.000000
+    #    Q3 358.000000
+    #    average 326.997377
+    #    min 190.000000
+    #    max 1000.000000
+    #    count 30434475
+    #    total 9951993506.000000
+    #    standard deviation 83.788961
+
+    # construct bigBed
+    time bedToBigBed -verbose=2 -type=bed5 mostConserved.bed \
+      ../../../../chrom.sizes hg38.phastConsElements470way.bb
+    # pid=196665: VmPeak:     501488 kB
+    # real    1m3.483s
+
+    # load into database for featureBits measures
     ssh hgwdev
     cd /hive/data/genomes/hg38/bed/multiz470way/cons/all
     time hgLoadBed hg38 phastConsElements470way mostConserved.bed
-    #  Read 2949865 elements of size 5 from mostConserved.bed
-    #  real    0m26.263s
+    # Read 30434475 elements of size 5 from mostConserved.bed
+    # real    7m14.992s
 
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     time featureBits hg38 -enrichment knownGene:cds phastConsElements470way
-# knownGene:cds 1.271%, phastConsElements470way 5.795%, both 0.874%, cover 68.73%, enrich 11.86x
-# real    0m21.637s
+# knownGene:cds 1.298%, phastConsElements470way 6.447%, both 0.829%, cover 63.89%, enrich 9.91x
+# real    3m12.554s
+
+XXX - can continue
+ time featureBits hg38 -enrichment ncbiRefSeqCurated:cds phastConsElements470way
+# ncbiRefSeqCurated:cds 1.240%, phastConsElements470way 21.939%, both 0.940%, cover 75.82%, enrich 3.46x
+# real    3m1.125s
 
     # Try for 5% overall cov, and 70% CDS cov
     time featureBits hg38 -enrichment refGene:cds phastConsElements470way
-# refGene:cds 1.225%, phastConsElements470way 5.795%, both 0.863%, cover 70.50%, enrich 12.16x
+# refGene:cds 1.239%, phastConsElements470way 21.939%, both 0.942%, cover 76.00%, enrich 3.46x
+# real    2m48.673s
 
-# real    0m22.260s
+    # do not need this loaded table
+    hgsql -e 'drop table phastConsElements470way;' hg38
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/hg38/bed/multiz470way/cons/all
@@ -1529,18 +1537,18 @@ do
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phastCons470way.wigFix.gz
 done
-    # real    32m29.089s
+    # real    12m9.706s
 
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phastCons470way.wig phastCons470way.wib)
-    #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    15m40.010s
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    # real    6m29.485s
 
     du -hsc *.wi?
     # 2.8G    phastCons470way.wib
-    # 283M    phastCons470way.wig
+    # 429M    phastCons470way.wig
 
     #	encode into a bigWig file:
     #	(warning wigToBigWig process may be too large for memory limits
@@ -1548,29 +1556,35 @@ done
 export sizeG=188743680
 ulimit -d $sizeG
 ulimit -v $sizeG
-    time (zcat downloads/*.wigFix.gz \
-      | wigToBigWig -verbose=2 stdin \
+    # on the 3Tb hgwdev machine, ulimits can be unlimited:
+    ulimit -d -v
+data seg size           (kbytes, -d) unlimited
+virtual memory          (kbytes, -v) unlimited
+
+    zcat downloads/*.wigFix.gz > phastCons470way.wigFix
+
+    time (wigToBigWig -verbose=2 phastCons470way.wigFix \
 	../../../../chrom.sizes phastCons470way.bw) > bigWig.log 2>&1
+XXX - running - Fri Sep 29 17:37:56 PDT 2023
     egrep "VmPeak|real" bigWig.log
-    # pid=37111: VmPeak:    33886864 kB
-    # real    42m13.614s
+    # pid=100251: VmPeak:   32693564 kB
+    # real    19m58.661s
 
-    # -rw-rw-r--   1 7077152013 Nov  6 08:52 phastCons470way.bw
+    # -rw-rw-r--   1 5058143243 Aug 31 09:56 phastCons470way.bw
 
-
-    bigWigInfo phastCons470way.bw
-version: 4
-isCompressed: yes
-isSwapped: 0
-primaryDataSize: 5,097,637,987
-primaryIndexSize: 93,372,648
-zoomLevels: 10
-chromCount: 355
-basesCovered: 2,955,660,600
-mean: 0.128025
-min: 0.000000
-max: 1.000000
-std: 0.247422
+    bigWigInfo phastCons470way.bw | sed -e 's/^/#  /;'
+#  version: 4
+#  isCompressed: yes
+#  isSwapped: 0
+#  primaryDataSize: 3,223,991,525
+#  primaryIndexSize: 142,992,232
+#  zoomLevels: 10
+#  chromCount: 484
+#  basesCovered: 2,982,387,328
+#  mean: 0.087281
+#  min: 0.000000
+#  max: 1.000000
+#  std: 0.247925
 
     #	if you wanted to use the bigWig file, loading bigWig table:
     #   but we don't use the bigWig file
@@ -1587,15 +1601,17 @@ std: 0.247422
     ln -s `pwd`/phastCons470way.wib /gbdb/hg38/multiz470way/phastCons470way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz470way hg38 \
 	phastCons470way phastCons470way.wig
-    #   real    0m32.272s
+    #   real    0m54.430s
 
     time wigTableStats.sh hg38 phastCons470way
 # db.table            min max   mean       count     sumData
-# hg38.phastCons470way     0 1 0.128025 2955660600 3.78397e+08
+# hg38.phastCons470way 0 1 0.0872534 2984208511 2.60382e+08
 #       stdDev viewLimits
-#     0.247422 viewLimits=0:1
-# real    0m13.507s
+#     0.247883 viewLimits=0:1
 
+# real    0m11.395s
+
+XXX ready for histogram
     #  Create histogram to get an overview of all the data
     ssh hgwdev
     cd /hive/data/genomes/hg38/bed/multiz470way/cons/all
@@ -1704,7 +1720,7 @@ rm -f $2.running
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACK ../../4d/all.mod
-    #   BACKGROUND: 0.226533 0.344573 0.178804 0.250090 
+    #   BACKGROUND: 0.226533 0.344573 0.178804 0.250090
 
     grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
     #	0.523
@@ -1712,7 +1728,7 @@ rm -f $2.running
 	../../4d/all.mod 0.523 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.238500 0.261500 0.261500 0.238500 
+    #   BACKGROUND: 0.238500 0.261500 0.261500 0.238500
 
     printf '#!/bin/csh -fe
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin
@@ -1770,13 +1786,13 @@ sleep 4
     para try ... check ...
     para -maxJob=16 push
     para time > run.time
-XXX some of the jobs fail with an error in phyloP
-# Completed: 34708 of 34708 jobs
-# CPU time in finished jobs:     647954s   10799.23m   179.99h    7.50d  0.021 y
-# IO & Wait Time:                 22374s     372.90m     6.22h    0.26d  0.001 y
-# Average job time:                 203s       3.38m     0.06h    0.00d
-# Longest finished job:             349s       5.82m     0.10h    0.00d
-# Submission to last job:          3226s      53.77m     0.90h    0.04d
+# re-computed 2023-09-01
+Completed: 3468 of 3468 jobs
+CPU time in finished jobs:   35658443s  594307.38m  9905.12h  412.71d  1.131 y
+IO & Wait Time:                137088s    2284.81m    38.08h    1.59d  0.004 y
+Average job time:               10322s     172.03m     2.87h    0.12d
+Longest finished job:           16202s     270.03m     4.50h    0.19d
+Submission to last job:         43770s     729.50m    12.16h    0.51d
 
     mkdir downloads
     time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
@@ -1786,6 +1802,7 @@ do
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
         | gzip -c > downloads/${D}.phyloP470way.wigFix.gz
 done
+XXX - running - Sat Sep  2 13:34:35 PDT 2023
     #   real    48m50.219s
 
     du -hsc downloads
@@ -1797,51 +1814,49 @@ done
 	phyloP470way.bw) > bigWig.log 2>&1
 
     egrep "real|VmPeak" bigWig.log
-    # pid=66292: VmPeak:    33751268 kB
-    #  real    43m40.194s
+    # pid=188401: VmPeak:   32712612 kB
+    # real    24m56.303s
 
     bigWigInfo phyloP470way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 8,691,460,678
-# primaryIndexSize: 135,762,716
+# primaryDataSize: 9,159,077,604
+# primaryIndexSize: 143,099,852
 # zoomLevels: 10
-# chromCount: 466
-# basesCovered: 2,828,476,393
-# mean: -0.004698
+# chromCount: 498
+# basesCovered: 2,984,206,801
+# mean: -0.033158
 # min: -20.000000
 # max: 11.936000
-# std: 1.758256
-
+# std: 1.830083
 
     #	encode those files into wiggle data
     time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phyloP470way.wig phyloP470way.wib)
-XXX - running - Mon Aug 29 15:28:59 PDT 2022
 # Converted stdin, upper limit 11.94, lower limit -20.00
-# real    8m32.643s
+# real    8m49.283s
 
-# -rw-rw-r--   1  2828476393 Aug 29 15:37 phyloP470way.wib
-# -rw-rw-r--   1   446336215 Aug 29 15:37 phyloP470way.wig
+# -rw-rw-r--   1  2984206801 Sep  2 15:41 phyloP470way.wib
+# -rw-rw-r--   1   471722385 Sep  2 15:41 phyloP470way.wig
 
     du -hsc *.wi?
-    # 2.7G    phyloP470way.wib
-    # 426M    phyloP470way.wig
+    #  2.8G    phyloP470way.wib
+    #  450M    phyloP470way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP470way.wib /gbdb/hg38/multiz470way/phyloP470way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz470way hg38 \
 	phyloP470way phyloP470way.wig
-    # real    0m51.154s
+    # real    0m58.064s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh hg38 phyloP470way
 # db.table          min   max     mean       count     sumData
-# hg38.phyloP470way -20 11.936 -0.00469849 2828476393 -1.32896e+07
-#      1.75826 viewLimits=-8.79598:8.78658
+# hg38.phyloP470way -20 11.936 -0.0331579 2984206801 -9.89499e+07
+#      1.83008 viewLimits=-9.18357:9.11726
 #       stdDev viewLimits
 
     #	that range is: 20+11.936= 31.936 for hBinSize=0.031936
@@ -1850,56 +1865,63 @@ XXX - running - Mon Aug 29 15:28:59 PDT 2022
     time hgWiggle -doHistogram \
 	-hBinSize=0.031936 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
 	    -db=hg38 phyloP470way > histogram.data 2>&1
-    #   real    1m31.526s
+    #   real    1m56.029s
 
     # xaxis range:
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
 	| sed -e 's/^/# /;'
-# Q1 -9.157730
-# median -2.115840
-# Q3 4.894110
-# average -2.132855
+# Q1 -9.173700
+# median -2.131810
+# Q3 4.910080
+# average -2.136406
 # min -20.000000
 # max 11.936000
-# count 883
-# total -1883.311115
-# standard deviation 8.140902
+# count 882
+# total -1884.310441
+# standard deviation 8.144837
 
     # find out the range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
       | sed -e 's/^/# /;'
-# Q1 0.000014
-# median 0.000064
-# Q3 0.000437
-# average 0.001133
+# Q1 0.000016
+# median 0.000065
+# Q3 0.000449
+# average 0.001135
 # min 0.000000
-# max 0.020000
-# count 883
-# total 1.000052
-# standard deviation 0.003053
+# max 0.019850
+# count 881
+# total 0.999957
+# standard deviation 0.003046
 
     #	create plot of histogram:
-    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
-"/usr/share/fonts/default/Type1/n022004l.pfb"
-set size 1.4, 0.8
-set key left box
+    printf 'set terminal pngcairo size 1200,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "hg38.phyloP470.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
 set grid noxtics
-set grid ytics
-set title " Human hg38 Histogram phyloP470way track"
-set xlabel " phyloP470way score"
-set ylabel " Relative Frequency"
-set y2label " Cumulative Relative Frequency (CRF)"
-set y2range [0:1]
-set y2tics
-set xrange [-5:1.5]
+set grid ytics ls 4
+set y2tics border nomirror out tc rgb "#ffffff"
+set ytics border nomirror out tc rgb "#ffffff"
+set title " Human hg38 Histogram phyloP470way track" tc rgb "#ffffff"
+set xlabel " hg38.phyloP470way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set xrange [-3:2]
 set yrange [0:0.04]
+set y2range [0:1]
 
-plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
-' | gnuplot > histo.png
+plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
 
     # verify it looks sane
-    display histo.png &
+    display hg38.phastCons470.histo.png &
 
 #############################################################################
 # construct download files for 470-way (TBD - 2015-04-15 - Hiram)
@@ -1937,18 +1959,23 @@ done
 
     ######################################################################
     ## compress the maf files
-    cd /hive/data/genomes/hg38/bed/multiz470way/downloads/multiz470way
+
+    mkdir /hive/data/genomes/hg38/bed/multiz470way/goldenPath/multiz470way
+    cd /hive/data/genomes/hg38/bed/multiz470way/goldenPath/multiz470way
     mkdir maf
-    rsync -a -P ../../anno/result/ ./maf/
-    du -hsc maf/
-    # 156G    maf
+    rsync -a -P ../../perChrom/ ./maf/
     cd maf
     time gzip *.maf &
-    # real    135m1.784s
+    # real    3005m34.023s
+    # user    2941m50.404s
+    # sys     48m44.054s
 
-    du -hscL maf ../../anno/result/
-    #  18G     maf
+    du -hscL maf ../../perChrom
+    #	1.2T    maf
+    #	5.8T    ../../perChrom
+    #	7.0T    total
 
+XXX - ready - Tue Aug 30 21:15:12 PDT 2022
     cd maf
     md5sum *.maf.gz *.nh > md5sum.txt
 
@@ -2040,7 +2067,7 @@ done
 
 #############################################################################
 # hgPal downloads (DONE - 2017-11-06 - Hiram)
-#   FASTA from 470-way for knownGene, refGene and knownCanonical
+#FASTA from 470-way for knownGene, refGene, knownCanonical and ncbiRefSeqCurated
 
     ssh hgwdev
     screen -S hg38HgPal
@@ -2066,7 +2093,35 @@ done
       if [ -s $F ]; then
          echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
       fi
-    done | while read C
+    done > chr.list
+
+    printf '#LOOP
+runOne $(path1) {check out exists+ protNuc/$(path1).protNuc.fa.gz}
+#ENDLOOP
+' > template
+
+    printf '#!/bin/bash
+set -beEu -o pipefail
+export db=hg38
+export gp=knownCanonical
+export mz=multiz470way
+export C=$1
+mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout \
+  | gzip -c > protNuc/$C.protNuc.fa.gz &
+mafGene -geneBeds=knownCanonical/$C.known.bed $db $mz knownGene order.list stdout \
+  | gzip -c > protAA/$C.protAA.fa.gz
+wait
+' > runOne
+
+    chmod +x runOne
+
+    gensub2 chr.list single template jobList
+    para -ram=32g create jobList
+
+
+
+
+| while read C
     do
 	echo "date"
 	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
@@ -2365,7 +2420,7 @@ done
     #	BACKGROUND: 0.217500 0.282500 0.282500 0.217500
 
     printf '#!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-470/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2018-03-29/bin
 set f = $1
 set ssFile = $1:t
 set out = $2
@@ -2448,8 +2503,6 @@ done
     time (zcat downloads/*.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/hg38/chrom.sizes \
 	phyloP470way.bw) > bigWig.log 2>&1
-XXX - working - Tue Oct 26 12:43:42 PDT 2021
-
 
     egrep "real|VmPeak" bigWig.log
     # pid=78042: VmPeak:    33938800 kB
@@ -2588,25 +2641,42 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
 # sequence logo
     mkdir /hive/data/genomes/hg38/bed/multiz470way/logo
     cd /hive/data/genomes/hg38/bed/multiz470way/logo
-    mkdir wigs bw 
+    mkdir wigs bw
 
-    ls ../maf/* | awk '{printf "./makeWig.sh %s ../consPhyloP/all/phyloP470way.bw ../../../chrom.sizes\n", $1}' > jobs
+    ls -og ../consPhyloP/all/phyloP470way.bw
+# -rw-rw-r-- 1 10923173111 Aug 28 17:56 ../consPhyloP/all/phyloP470way.bw
 
-    cat << '_EOF_' > makeWig.sh
+    # small ones first
+    ls -1LrS ../perChrom/*.maf > maf.list
+
+    printf '#LOOP
+makeWig.sh $(path1) {check out exists+ bw/$(root1).A.bw}
+#ENDLOOP
+' > template
+
+    # the arguments: -keepAllChromosomes -fixedSummaries
+    # are necessary so that bigWigCat can be used on the results
+
+    printf '
+#!/bin/bash
+
 maf=$1
-scale=$2
-chromSizes=$3
+scale=../consPhyloP/all/phyloP470way.bw
+chromSizes=../../../chrom.sizes
 outRoot=`basename $1 .maf`
 mafCounts -scale=$scale $maf wigs/$outRoot
 for i in A C G T
 do
     wigToBigWig -keepAllChromosomes -fixedSummaries wigs/$outRoot.$i.wig $chromSizes bw/$outRoot.$i.bw
 done
-'_EOF_'
+' > makeWig.sh
 
     chmod +x makeWig.sh
 
-    ssh ku "cd /hive/data/genomes/hg38/bed/multiz470way/logo; para make jobs"
+    gensub2 maf.list single template jobList
+    para -ram=64g create jobList
+    para try
+# there is a problem with mafCounts, it is SegFaulting on almost all of them
 
     for i in A C G T
     do
@@ -2615,8 +2685,8 @@ done
 
     wait
 
-    for i in A C G T
-    do
-        ln -s `pwd`/multiz470Logo.$i.bw /gbdb/hg38/multiz470way/
-    done
+    # send to hgdownload to use from there:
+   scp -p multi*.bw qateam@hgdownload:/mirrordata/goldenPath/hg38/multiz470way/
 
+   # about 5 minutes
+#############################################################################

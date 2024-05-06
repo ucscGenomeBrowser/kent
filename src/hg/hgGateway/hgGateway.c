@@ -943,7 +943,7 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
     jsonWriteString(jw, "hubUrl", gHubMatch->hubUrl);
     jsonWriteString(jw, "scientificName", gHubMatch->scientificName);
     // Add a category label for customized autocomplete-with-categories.
-    jsonWriteString(jw, "category", "GenArk");
+    jsonWriteString(jw, "category", "UCSC GenArk - bulk-annotated assemblies from NCBI Genbank/RefSeq");
     jsonWriteString(jw, "value", gHubMatch->asmName);
     // Use just the db as label, since shortLabel is included in the category label.
     jsonWriteStringf(jw, "label", "%s - %s", gHubMatch->commonName, gHubMatch->scientificName);
@@ -1024,7 +1024,7 @@ struct aHubMatch *aHubMatchList = searchPublicHubs(dbDbList, term);
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteListStart(jw, NULL);
 // Write out JSON for dbDb matches, if any; add category if we found assembly hub matches too.
-char *category = aHubMatchList ? "UCSC databases" : NULL;
+char *category = aHubMatchList ? "UCSC Genome Browser assemblies - annotation tracks curated by UCSC" : NULL;
 struct dbDbMatch *match;
 for (match = matchList;  match != NULL;  match = match->next)
     writeDbDbMatch(jw, match, term, category);

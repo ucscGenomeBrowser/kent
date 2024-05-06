@@ -1683,6 +1683,7 @@
 ./runBuild GCF_000018145.1_ASM1814v1 bacteria Dinoroseobacter_shibae_DFL_12__DSM_16493
 ./runBuild GCF_000020025.1_ASM2002v1 bacteria Nostoc_punctiforme_PCC_73102
 ./runBuild GCF_000021325.1_ASM2132v1 bacteria Gluconacetobacter_diazotrophicus_PA1_5
+./runBuild GCF_000021865.1_ASM2186v1 bacteria Rhodobacter_capsulatus_SB_1003
 ./runBuild GCF_000026365.1_ASM2636v1 fungi Zygosaccharomyces_rouxii
 ./runBuild GCF_000026945.1_ASM2694v1 fungi Candida_dubliniensis_CD36
 ./runBuild GCF_000027005.1_ASM2700v1 fungi Komagataella_phaffii_GS115

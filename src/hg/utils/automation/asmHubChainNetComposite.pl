@@ -42,6 +42,10 @@ if ($asmId =~ m/^GC/) {
 my %queryDates;	# key is asmId, value is assembly date
 my %queryCommonName;	# key is asmId, value is assembly common name
 my %querySubmitter;	# key is asmId, value is assembly submitter
+my %fbStats;	# key is asmId, value is featureBits measure for chains
+my %synStats;	# key is asmId, value is featureBits measure for syntenic
+my %rbStats;	# key is asmId, value is featureBits measure for recip best
+my %loStats;	# key is asmId, value is featureBits measure for lift over
 
 open (TD, "ls -d ${targetBuildDir}/trackData/lastz.*|") or die "can not ls -d ${targetBuildDir}/trackData/lastz.*";
 while (my $accession = <TD>) {
@@ -54,13 +58,49 @@ while (my $accession = <TD>) {
   if ($accession =~ m/^GC/) {
      $qAsmId = "${accession}${qAsmName}";
   }
+  my $Accession = ucfirst($accession);
   $queryDates{$qAsmId} = $qDate;
   my ($qCommonName, undef, $qSubmitter) = &HgAutomate::getAssemblyInfo($dbHost, $qAsmId);
   $queryCommonName{$qAsmId} = $qCommonName;
   $querySubmitter{$qAsmId} = $qSubmitter;
+  my $fbTxt = `ls ${targetBuildDir}/trackData/lastz.${accession}/fb.*chain${Accession}Link.txt 2> /dev/null`;
+  chomp $fbTxt;
+  if ( -s "${fbTxt}" ) {
+    my $fBits = `cut -d' ' -f5 $fbTxt | tr -d '()%'`;
+    chomp $fBits;
+    $fbStats{$qAsmId} = $fBits;
+  } else {
+    $fbStats{$qAsmId} = "n/a";
+  }
+  $fbTxt = `ls ${targetBuildDir}/trackData/lastz.${accession}/fb.*chainSyn${Accession}Link.txt 2> /dev/null`;
+  chomp $fbTxt;
+  if ( -s "${fbTxt}" ) {
+    my $fBits = `cut -d' ' -f5 $fbTxt | tr -d '()%'`;
+    chomp $fBits;
+    $synStats{$qAsmId} = $fBits;
+  } else {
+    $synStats{$qAsmId} = "n/a";
+  }
+  $fbTxt = `ls ${targetBuildDir}/trackData/lastz.${accession}/fb.*chainRBest.${Accession}.txt 2> /dev/null`;
+  chomp $fbTxt;
+  if ( -s "${fbTxt}" ) {
+    my $fBits = `cut -d' ' -f5 $fbTxt | tr -d '()%'`;
+    chomp $fBits;
+    $rbStats{$qAsmId} = $fBits;
+  } else {
+    $rbStats{$qAsmId} = "n/a";
+  }
+  $fbTxt = `ls ${targetBuildDir}/trackData/lastz.${accession}/fb.*chainLiftOver${Accession}Link.txt 2> /dev/null`;
+  chomp $fbTxt;
+  if ( -s "${fbTxt}" ) {
+    my $fBits = `cut -d' ' -f5 $fbTxt | tr -d '()%'`;
+    chomp $fBits;
+    $loStats{$qAsmId} = $fBits;
+  } else {
+    $loStats{$qAsmId} = "n/a";
+  }
 }
 close (TD);
-
 
 my $ncbiAssemblyId = `grep -v "^#" $namesFile | cut -f10`;
 chomp $ncbiAssemblyId;
@@ -86,16 +126,55 @@ Other <em>query</em> genome assemblies aligning to this <em>target</em> genome a
 _EOF_
     ;
 
-foreach my $oAsmId (sort keys %queryDates) {
+my @orderedByFBits;
+foreach my $qDb ( sort {$fbStats{$b} <=> $fbStats{$a}} keys %fbStats) {
+  push @orderedByFBits, $qDb;
+}
+
+foreach my $oAsmId (@orderedByFBits) {
+  my $fbPercent = "";
+  $fbPercent = "% $fbStats{$oAsmId} " if (defined($fbStats{$oAsmId}));
   if ($oAsmId =~ m/^GC/) {
-    printf "<li><a href='https://genome.ucsc.edu/h/%s' target=_blank>%s</a> %s %s %s</li>\n", $oAsmId, $oAsmId, $queryCommonName{$oAsmId}, $queryDates{$oAsmId}, $querySubmitter{$oAsmId};
+    printf "<li>%s<a href='https://genome.ucsc.edu/h/%s' target=_blank>%s</a> %s %s %s</li>\n", $fbPercent, $oAsmId, $oAsmId, $queryCommonName{$oAsmId}, $queryDates{$oAsmId}, $querySubmitter{$oAsmId};
   } else {
-    printf "<li><a href='https://genome.ucsc.edu/cgi-bin/hgTracks?db=%s' target=_blank>%s</a> %s %s %s</li>\n", $oAsmId, $oAsmId, $queryCommonName{$oAsmId}, $queryDates{$oAsmId}, $querySubmitter{$oAsmId};
+    printf "<li>%s<a href='https://genome.ucsc.edu/cgi-bin/hgTracks?db=%s' target=_blank>%s</a> %s %s %s</li>\n", $fbPercent, $oAsmId, $oAsmId, $queryCommonName{$oAsmId}, $queryDates{$oAsmId}, $querySubmitter{$oAsmId};
   }
 }
 
 printf "</ul>
 </p>\n";
+
+printf "<h3>Alignments identity</h3>\n";
+printf "<table border='1'>\n";
+printf "<caption>showing percent identity, how much of the target is matched by the query</caption>\n";
+printf "<thead style='position:sticky; top:0; background-color: white;'><tr>\n";
+printf "<th>chains</th><th>syntenic</th><th>reciprocal<br>best</th><th>lift<br>over</th><th>common<br>name</th><th>assembly</th>\n";
+printf "</tr></thead><tbody>\n";
+foreach my $oAsmId (@orderedByFBits) {
+ printf "<tr>";
+ if (defined($fbStats{$oAsmId})) {
+   printf "<td style='text-align:right;'>%s</td>", $fbStats{$oAsmId};
+ } else {
+   printf "<td style='text-align:right;'>&nbsp;</td>";
+ }
+ if (defined($synStats{$oAsmId})) {
+   printf "<td style='text-align:right;'>%s</td>", $synStats{$oAsmId};
+ } else {
+   printf "<td style='text-align:right;'>&nbsp;</td>";
+ }
+ if (defined($rbStats{$oAsmId})) {
+   printf "<td style='text-align:right;'>%s</td>", $rbStats{$oAsmId};
+ } else {
+   printf "<td style='text-align:right;'>&nbsp;</td>";
+ }
+ if (defined($loStats{$oAsmId})) {
+   printf "<td style='text-align:right;'>%s</td>", $loStats{$oAsmId};
+ } else {
+   printf "<td style='text-align:right;'>&nbsp;</td>";
+ }
+ printf "<td>%s</td><td>%s</td></tr>\n", $queryCommonName{$oAsmId}, $oAsmId;
+}
+printf "</tbody></table>\n";
 
 print <<_EOF_
 <h3>Chain Track</h3>
@@ -103,7 +182,7 @@ print <<_EOF_
 The chain tracks shows alignments of the other genome assemblies to the
 $tGenome/$sciName/$ncbiAssemblyId/$tDate genome using a gap scoring system that allows longer gaps
 than traditional affine gap scoring systems. It can also tolerate gaps in both
-<em>query</em> and <em>target</em> geomes simultaneously. These
+<em>query</em> and <em>target</em> genomes simultaneously. These
 &quot;double-sided&quot; gaps can be caused by local inversions and
 overlapping deletions in both species.
 </p>
@@ -119,17 +198,34 @@ species.  In cases where multiple chains align over a particular region of
 the <em>target</em> genome, the chains with single-lined gaps are often
 due to processed pseudogenes, while chains with double-lined gaps are more
 often due to paralogs and unprocessed pseudogenes.</p>
-<P>
+<p>
 In the &quot;pack&quot; and &quot;full&quot; display
 modes, the individual feature names indicate the chromosome, strand, and
-location (in thousands) of the match for each matching alignment.</P>
-
-<h3>Net Track</h3>
+location (in thousands) of the match for each matching alignment.</p>
 <p>
-The net track shows the alignment of the best <em>query/target</em> chain for
-every part of the <em>target</em> genome. It is useful for
-finding syntenic regions, possibly orthologs, and for studying genome
-rearrangement.</p>
+There could be four different types of chain tracks:
+<ul>
+<li><b>Chains</b> - The first level of chain track showing all potential chains.
+  The other chain tracks are derived from this chain data.</li>
+<li><b>Syntenic</b> - Filtered first level chain showing the corresponding
+  regions between the two genomes in the alignment that have the same
+  order of blocks and direction in the alignment.</li>
+<li><b>Reciprocal best</b> - Filtered first level chain showing the
+  corresponding regions where the best target to query alignment,
+  and the best query to target alignment identify the same regions.</li>
+<li><b>Lift over</b> - filtered first level chain selecting out the
+  best/longest syntenic regions used to translate coordinates from the
+  target genome to the query genome.</li>
+</ul>
+</p>
+
+<h3>Alignment Track</h3>
+<p>
+The alignment track shows the <b>net</b> derived from the chain data in the
+format of a pair-wise side by side alignment.  The net file is converted
+to the <a href='https://genome.ucsc.edu/FAQ/FAQformat.html#format5'
+target=_blank>MAF format</a> for this display.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 <h3>Chain Track</h3>
@@ -142,12 +238,13 @@ To display only the chains of one chromosome in the aligning
 organism, enter the name of that chromosome (e.g. chr4) in box next to:
 Filter by chromosome.</p>
 
-<h2>Net Track</h3>
+<h2>Alignment Track</h3>
 <p>
 At base level in full display mode, this track will show the
 sequence of <em>query</em> as it aligned to <em>target</em>.  When the view is
-too large to show such detail, a graph of the alignment score will be
-shown.
+too large to show such detail, blocks of alignments will show
+corresponding alignments to other chromosomes with colors indicating other
+chromosomes.
 </p>
 
 <h2>Methods</h2>
@@ -163,7 +260,7 @@ was then run over the kd-trees to find the maximally scoring chains of these
 blocks.
 </p>
 
-<h3>Net track</h3>
+<h3>Alignment track</h3>
 <p>
 Chains were derived from lastz alignments, using the methods
 described on the chain tracks description pages, and sorted with the
