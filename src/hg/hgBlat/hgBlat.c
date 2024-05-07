@@ -707,7 +707,8 @@ else  // hyperlink
                 helpText, browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
                 pslName, faName, unhideTrack, icon);
             }
-	printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
+	printf("<A title='Show query sequence, genome hit and sequence alignment' "
+                "HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
 	    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
 	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");

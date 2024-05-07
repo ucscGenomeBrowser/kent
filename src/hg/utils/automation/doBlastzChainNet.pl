@@ -996,6 +996,19 @@ chainPreNet $inclHap $chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
 netChainSubset -verbose=0 noClass.net $chain stdout \\
 | chainStitchId stdin stdout | gzip -c > $tDb.$qDb.over.chain.gz
 
+hgLoadChain -test -noBin -tIndex $tDb chainLiftOver$QDb $tDb.$qDb.over.chain.gz
+wget --no-check-certificate -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
+wget --no-check-certificate -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainLiftOver${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainLiftOver${QDb}.tab $defVars{SEQ1_LEN} chainLiftOver${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainLiftOver${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainLiftOver${QDb}Link.tab $defVars{SEQ1_LEN} chainLiftOver${QDb}Link.bb
+set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bedSingleCover.pl chainLiftOver${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainLiftOver${QDb}Link.txt
+rm -f link.tab chain.tab bigChain.as bigLink.as chainLiftOver${QDb}Link.tab chainLiftOver${QDb}.tab
+
 _EOF_
     );
   my $seq1Dir = $defVars{'SEQ1_DIR'};
