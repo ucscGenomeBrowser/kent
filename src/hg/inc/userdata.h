@@ -55,6 +55,9 @@ struct userHubs *listHubsForUser(char *userName);
 struct userFiles *listFilesForUserHub(char *userName, char *hubName);
 /* Get all the files for a particular hub for a particular user */
 
+long long getMaxUserQuota(char *userName);
+/* Return how much space is allocated for this user or the default */
+
 long long checkUserQuota(char *userName);
 /* Return the amount of space a user is currently using */
 

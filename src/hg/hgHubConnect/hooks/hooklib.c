@@ -70,3 +70,21 @@ jsonObjectAdd(httpResponse, HTTP_STATUS, newJsonNumber(500));
 jsonObjectAdd(httpResponse, HTTP_BODY, newJsonString(dyStringCannibalize(&ds)));
 }
 
+boolean isFileTypeRecognized(char *fileName)
+/* Return true if this file one of our recognized types */
+{
+return FALSE;
+}
+
+boolean isExistingHubForUser(char *userName, char *reqHubName)
+/* Return true if hubName is an existing hub for this user */
+{
+return FALSE;
+}
+
+char *genomeForHub(char *userName, char *reqHubName)
+/* Return the genome associated with reqHubName for user */
+{
+return NULL;
+}
+

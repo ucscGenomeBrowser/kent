@@ -32,6 +32,7 @@
 #include "hubPublic.h"
 #include "wikiLink.h"
 #include "hgHubConnect.h"
+#include "cartJson.h"
 
 static boolean measureTiming;
 
@@ -1710,6 +1711,23 @@ printf("</div>"); // #tabs
 cartWebEnd();
 }
 
+void doAsync()
+/* Execute the async request */
+{
+struct cartJson *cj = cartJsonNew(cart);
+cartJsonRegisterHandler(cj, hgHubDeleteFile, doRemoveFile);
+cartJsonRegisterHandler(cj, hgHubCreateHub, doCreateHub);
+cartJsonExecute(cj);
+}
+
+boolean isAsyncRequest()
+/* Do the CGI arguments indicate this request is async? */
+{
+if (cgiOptionalString(hgHubDeleteFile) || cgiOptionalString(hgHubCreateHub))
+    return TRUE;
+return FALSE;
+}
+
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubDoHubCheck,
     hgHubCheckUrl, hgHubDoClear, hgHubDoRefresh, hgHubDoDisconnect,hgHubDoRedirect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, hgHubDeleteFile, NULL};
@@ -1721,8 +1739,8 @@ long enteredMainTime = clock1000();
 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-if (cgiOptionalString(hgHubDeleteFile))
-    cartEmptyShellNoContent(doRemoveFile, hUserCookie(), excludeVars, oldVars);
+if (isAsyncRequest())
+    doAsync();
 else
     cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgHubConnect", enteredMainTime);

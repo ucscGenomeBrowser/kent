@@ -205,6 +205,41 @@ var hubCreate = (function() {
             this.updateProgress((bytesSent / bytesTotal) * 100);
         };
 
+        let createdHubs = {}; // object of {name, db} objects keyed by file names
+        let allSameHub = true; // by default, for multiple files, put them in the same hub
+        let getOrCreateHub = function(fileName) {
+            let valueStr = document.getElementById(`${fileName}#hubInput`).selectedOptions[0].value;
+            if (valueStr !== "Create New") {
+                return valueStr;
+            }
+            let hubName = "test"; // default to test
+            let db = "hg38";
+            // create a dialog:
+            let dialog = document.createElement("dialog");
+            dialog.id = "hubCreate";
+            let closeBtn = document.createElement("button");
+            closeBtn.textContent = "Create Hub";
+            let cancelBtn = document.createElement("button");
+            cancelBtn.textContent = "Cancel";
+            dialog.appendChild(closeBtn);
+            dialog.appendChild(cancelBtn);
+            document.body.appendChild(dialog);
+
+            // open the dialog in modal mode to block the rest of the page:
+            if (allSameHub)
+                dialog.showModal();
+
+            // on close update the right variables
+            closeBtn.addEventListener("click", () => {
+                createdHubs[fileName] = {"name": hubName, "db": db};
+                dialog.close();
+            });
+            // on cancel do nothing and don't submit:
+            cancelBtn.addEventListener("click", () => {
+                dialog.close();
+            });
+        };
+
         for (let f in uiState.toUpload) {
             file = uiState.toUpload[f];
             if (useTus) {
@@ -213,8 +248,10 @@ var hubCreate = (function() {
                     endpoint: tusdServer,
                     metadata: {
                         filename: file.name,
-                        fileType: file.type,
-                        fileSize: file.size
+                        fileSize: file.size,
+                        fileType: document.getElementById(`${file.name}#typeInput`).selectedOptions[0].value,
+                        hub: getOrCreateHub(file.name),
+                        genome: document.getElementById(`${file.name}#genomeInput`).selectedOptions[0].value,
                     },
                     onProgress: onProgress.bind(progMeter),
                     onBeforeRequest: onBeforeRequest,
@@ -225,9 +262,13 @@ var hubCreate = (function() {
                 // TODO: get the uploadUrl from the tusd server
                 // use a pre-create hook to validate the user
                 // and get an uploadUrl
-                let tusUpload = new tus.Upload(file, tusOptions);
-                uiState.pendingQueue.push([tusUpload, file]);
-                tusUpload.start();
+                if (tusOptions.metadata.hub !== null)  {
+                    let tusUpload = new tus.Upload(file, tusOptions);
+                    uiState.pendingQueue.push([tusUpload, file]);
+                    tusUpload.start();
+                } else {
+                    break; // cancel button was clicked when creating a hub, stop uploads for now
+                }
             } else {
                 // make a new XMLHttpRequest for each file, if tusd-tusclient not supported
                 new sendFile(file);
@@ -280,6 +321,20 @@ var hubCreate = (function() {
         genomeInp.name = `${fileName}#genomeInput`;
         genomeInp.id = `${fileName}#genomeInput`;
         genomeInp.form = formName;
+        let labelChoice = document.createElement("option");
+        labelChoice.label = "Choose Genome";
+        labelChoice.value = "Choose Genome";
+        labelChoice.selected = true;
+        labelChoice.disabled = true;
+        genomeInp.appendChild(labelChoice);
+        let choices = ["Human hg38", "Human T2T", "Human hg19", "Mouse mm39", "Mouse mm10"];
+        choices.forEach( (e) =>  {
+            let choice = document.createElement("option");
+            choice.id = e;
+            choice.label = e;
+            choice.value = e;
+            genomeInp.appendChild(choice);
+        });
         return genomeInp;
     }
 
@@ -288,6 +343,13 @@ var hubCreate = (function() {
         typeInp.classList.add("typePicker");
         typeInp.name = `${fileName}#typeInput`;
         typeInp.id = `${fileName}#typeInput`;
+        typeInp.form = formName;
+        let labelChoice = document.createElement("option");
+        labelChoice.label = "Choose File Type";
+        labelChoice.value = "Choose File Type";
+        labelChoice.selected = true;
+        labelChoice.disabled = true;
+        typeInp.appendChild(labelChoice);
         let choices = ["hub.txt", "bigBed", "bam", "vcf", "bigWig"];
         choices.forEach( (e) =>  {
             let choice = document.createElement("option");
@@ -296,7 +358,6 @@ var hubCreate = (function() {
             choice.value = e;
             typeInp.appendChild(choice);
         });
-        typeInp.form = formName;
         return typeInp;
     }
 
@@ -306,12 +367,27 @@ var hubCreate = (function() {
         hubInp.name = `${fileName}#hubInput`;
         hubInp.id = `${fileName}#hubInput`;
         hubInp.form = formName;
+        let labelChoice = document.createElement("option");
+        labelChoice.label = "Choose Hub";
+        labelChoice.value = "Choose Hub";
+        labelChoice.selected = true;
+        labelChoice.disabled = true;
+        hubInp.appendChild(labelChoice);
+        let choices = ["Create New", "temp"];
+        choices.forEach( (e) =>  {
+            let choice = document.createElement("option");
+            choice.id = e;
+            choice.label = e;
+            choice.value = e;
+            hubInp.appendChild(choice);
+        });
+        return hubInp;
     }
 
     function makeFormControlsForFile(li, formName, fileName) {
         typeInp = makeTypeSelect(formName, fileName);
         genomeInp = makeGenomeSelect(formName, fileName);
-        hubInp = makeGenomeSelect(formName, fileName);
+        hubInp = makeHubSelect(formName, fileName);
         li.append(typeInp);
         li.append(genomeInp);
         li.append(hubInp);

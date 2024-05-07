@@ -17,25 +17,62 @@
 #include "customTrack.h"
 #include "userdata.h"
 #include "jsonWrite.h"
+#include "cartJson.h"
 
-void doRemoveFile()
+void removeOneFile(char *userName, char *cgiFileName)
+/* Remove one single file for userName */
+{
+char *fileName = prefixUserFile(userName, cgiFileName);
+if (fileExists(fileName))
+    {
+    fprintf(stderr, "deleting file: '%s'\n", fileName);
+    removeFileForUser(fileName, userName);
+    fflush(stderr);
+    }
+}
+
+void doRemoveFile(struct cartJson *cj, struct hash *paramHash)
 /* Process the request to remove a file */
 {
 char *userName = getUserName();
 if (userName)
     {
-    char *cgiFileName = cgiOptionalString("deleteFile");
-    char *fileName = prefixUserFile(userName, cgiFileName);
-    if (fileExists(fileName))
+    struct jsonWrite *errors = jsonWriteNew();
+    // verify the argument is present:
+    (void)cartJsonRequiredParam(paramHash, "deleteFile", errors, "doRemoveFile");
+    struct jsonElement *deleteJson = hashFindVal(paramHash, "deleteFile");
+    struct slRef *ele, *deleteList = deleteJson->val.jeList;
+    for (ele = deleteList; ele != NULL; ele = ele->next)
         {
-        fprintf(stderr, "deleting file: '%s'\n", fileName);
-        removeFileForUser(fileName, userName);
-        fprintf(stdout, "Status: 204 No Content\n\n");
-        fflush(stdout);
-        exit(0);
+        struct jsonElement *jsonVal = ele->val;
+        removeOneFile(userName, jsonVal->val.jeString);
         }
+    fprintf(stdout, "Status: 204 No Content\n\n");
+    fflush(stdout);
+    exit(0);
     }
 fprintf(stdout, "Status: 404 Not Found\n\n");
+fflush(stdout);
+exit(0);
+}
+
+void doCreateHub(struct cartJson *cj, struct hash *paramHash)
+/* Make a new hub.txt with the parameters from the JSON request */
+{
+char *userName = getUserName();
+if (userName)
+    {
+    struct jsonWrite *errors = jsonWriteNew();
+    // verify the arguments:
+    (void)cartJsonRequiredParam(paramHash, "createHub", errors, "doCreateHub");
+    // params is an object with everything necessary to create a hub: name and assembly
+    struct hash *params = jsonObjectVal(hashFindVal(paramHash, "createHub"), "createHub");
+    char *db = hashFindVal(params, "db");
+    char *name = hashFindVal(params, "name");
+    fprintf(stderr, "creating hub '%s' for db '%s'\n", name, db);
+    fflush(stderr);
+    }
+fprintf(stderr, "Status: 204 No Content\n\n");
 fflush(stdout);
 exit(0);
 }
@@ -129,31 +166,8 @@ puts("</div>\n");
 puts("</div>\n"); // row
 puts("</div>\n"); // row
 
+// get the current files stored for this user
 outFilesForUser();
 jsInline("$(document).ready(function() {\nhubCreate.init();\n})");
 puts("</div>");
-// get the current files stored for this user
-}
-
-#define FILEVAR "userFile__filename"
-#define FILEVARBIN "userFile__binary"
-void doCreateHub(struct cart *cart)
-/* Called asynchronously when the user has submitted some files, return a json response of where 
- * the files live and the new quota */
-{
-// cheapcgi.c renames form variables as var__filename or var__binary for binary data, why?
-char *fileName = cartOptionalString(cart, FILEVAR);
-/*
-struct hashEl *hel, *helList = hashElListHash(cart->hash);
-for (hel = helList; hel != NULL; hel = hel->next)
-{
-fprintf(stderr, "hashEl name: '%s', value: '%s'\n", (char *)hel->name, (char *)hel->val);
-}
-*/
-fprintf(stderr, "fileName is: %s\n", fileName);
-fflush(stderr);
-char *pathToFile = "tempPath"; //prepBigData(cart, fileName, FILEVARBIN, FILEVAR);
-puts("Content-Type:text/javascript\n");
-printf("{\"status\": \"%s is uploaded to %s\"}\n", cgiOptionalString("userFile__filename"), pathToFile);
-fflush(stdout);
 }

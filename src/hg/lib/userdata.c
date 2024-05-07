@@ -128,6 +128,12 @@ userListing->fileList = fiList;
 return userListing;
 }
 
+long long getMaxUserQuota(char *userName)
+/* Return how much space is allocated for this user or the default */
+{
+return HUB_SPACE_DEFAULT_QUOTA;
+}
+
 long long checkUserQuota(char *userName)
 /* Return the amount of space a user is currently using */
 {

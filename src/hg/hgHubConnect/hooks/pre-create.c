@@ -80,14 +80,34 @@ else
             char *reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.filename", NULL);
             long currQuota = checkUserQuota(userName);
             long newQuota = currQuota + reqFileSize;
-            if (newQuota > MAX_QUOTA)
+            long maxQuota = getMaxUserQuota(userName);
+            if (newQuota > maxQuota)
                 {
-                rejectUpload(response, "File '%s' is too large, need %s free space but current used space is %s out of %s", reqFileName, prettyFileSize(reqFileSize), prettyFileSize(currQuota), prettyFileSize(MAX_QUOTA));
+                rejectUpload(response, "File '%s' is too large, need %s free space but current used space is %s out of %s", reqFileName, prettyFileSize(reqFileSize), prettyFileSize(currQuota), prettyFileSize(maxQuota));
+                exitStatus = 1;
+                }
+            char *reqFileType = jsonQueryString(req, "", "Event.Upload.MetaData.filetype", NULL);
+            if (!isFileTypeRecognized(reqFileType))
+                {
+                rejectUpload(response, "File type '%s' for file '%s' is not accepted at this time", reqFileType, reqFileName);
+                exitStatus = 1;
+                }
+            char *reqHubName = jsonQueryString(req, "", "Event.Upload.MetaData.hub", NULL);
+            if (!isExistingHubForUser(userName, reqHubName))
+                {
+                rejectUpload(response, "Hub name '%s' for file '%s' is not valid, please choose an existing hub or create a new hub", reqFileType, reqFileName);
+                exitStatus = 1;
+                }
+            char *hubGenome = genomeForHub(userName, reqHubName);
+            char *reqGenome = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
+            if (!sameString(hubGenome, reqGenome))
+                {
+                rejectUpload(response, "Genome selection '%s' for hub '%s' is invalid. Please choose the correct genome '%s' for hub '%s'", reqGenome, reqHubName, hubGenome, reqHubName);
                 exitStatus = 1;
                 }
             }
 
-        // we've passed all the checks so we can return that we are safe
+        // we've passed all the checks so we can return that we are good to upload the file
         if (exitStatus == 0)
             fillOutHttpResponseSuccess(response);
         }

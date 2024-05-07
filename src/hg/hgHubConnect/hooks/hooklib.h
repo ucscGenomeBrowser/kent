@@ -15,6 +15,7 @@
 #define HTTP_CONTENT_TYPE "Content-Type"
 #define HTTP_CONTENT_TYPE_STR "application/json"
 
+
 char *prettyFileSize(long size);
 /* Return a string representing the size of a file */
 
@@ -27,5 +28,14 @@ struct jsonElement *makeDefaultResponse();
 
 void rejectUpload(struct jsonElement *response, char *msg, ...);
 /* Set the keys for stopping an upload */
+
+boolean isFileTypeRecognized(char *fileName);
+/* Return true if this file one of our recognized types */
+
+boolean isExistingHubForUser(char *userName, char *reqHubName);
+/* Return true if hubName is an existing hub for this user */
+
+char *genomeForHub(char *userName, char *reqHubName);
+/* Return the genome associated with reqHubName for user */
 
 #endif /* HOOKLIB_H */
