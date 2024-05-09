@@ -97,8 +97,10 @@ printf "asmReport: %s\n" "${asmReport}" 1>&2
 printf "# making chainLiftOver${OtherDb}.bb\n" 1>&2
     ln -s ../trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}.bb $buildDir/bbi/${asmId}.chainLiftOver$OtherDb.bb
     ln -s ../trackData/$lastzDir/axtChain/chainLiftOver${OtherDb}Link.bb $buildDir/bbi/${asmId}.chainLiftOver${OtherDb}Link.bb
-    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.liftOverNet.bb $buildDir/bbi/${asmId}.$otherDb.liftOverNet.bb
-    ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.liftOverNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
+    if [ -s "$buildDir/trackData/$lastzDir/bigMaf/${accessionId}.${otherDb}.liftOverNet.bb" ]; then
+      ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.liftOverNet.bb $buildDir/bbi/${asmId}.$otherDb.liftOverNet.bb
+      ln -s ../trackData/$lastzDir/bigMaf/$accessionId.$otherDb.liftOverNet.summary.bb $buildDir/bbi/${asmId}.$otherDb.liftOverNet.summary.bb
+    fi
   else
 printf "# there is NO chainLiftOver${OtherDb}.bb\n" 1>&2
   fi
