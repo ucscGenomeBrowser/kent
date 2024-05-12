@@ -964,6 +964,8 @@ for (match = matchList; match != NULL; match = match->next)
     safef(hubUrl, sizeof(hubUrl), "%s/%s", genarkHubUrl, match->hubUrl);
     slAddHead(&ret, gHubMatchNew(match->gcAccession, hubUrl, match->asmName, match->scientificName, match->commonName, -1));
     }
+if (ret)
+    slReverse(&ret);
 return ret;
 }
 
@@ -981,7 +983,7 @@ if (sqlTableExists(conn, genarkTbl))
     {
     char query[1024];
     sqlSafef(query, sizeof(query), "select * from %s where "
-             "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%') order by commonName ASC",
+             "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%') order by taxId ASC, commonName DESC",
              genarkTbl, term, term, term, term);
     struct genark *matchList = genarkLoadByQuery(conn, query);
     gHubMatchList = filterGenarkMatches(genarkPrefix, matchList);

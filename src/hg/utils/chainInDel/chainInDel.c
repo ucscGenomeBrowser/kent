@@ -50,7 +50,7 @@ for(chain = chains; chain ; chain = chain->next)
     struct cBlock *cb = chain->blockList;
     for(; cb->next != NULL;  cb = cb->next)
         {
-        fprintf(inDelF,"%s %d %d %s %d\n", chain->tName,
+        fprintf(inDelF,"%s\t%d\t%d\t%s\t%d\n", chain->tName,
             cb->tEnd, cb->next->tStart, label,
             cb->next->qStart - cb->qEnd);
 
