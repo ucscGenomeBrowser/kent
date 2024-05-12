@@ -5,12 +5,33 @@ use warnings;
 
 my $argc = scalar(@ARGV);
 if ($argc < 1) {
-  printf STDERR "usage: featBitsSurvey.pl clade asmId [... asmId ...] > result.html\n";
+ printf STDERR "usage: featBitsSurvey.pl asmId [... asmId ...] > result.html\n";
   exit 255;
 }
 
+my %commonName;	# key is queryDb, value is common name
+
+open (my $CN, "-|", "hgsql -N -e 'select gcAccession,commonName from genark;' hgcentraltest") or die "can not hgsql -N -e 'select gcAccession,commonName from genark;'";
+while (my $line = <$CN>) {
+  chomp $line;
+  my ($gcX, $comName) = split('\t', $line);
+  $comName =~ s/\s\(.*//;
+  $commonName{$gcX} = $comName;
+}
+close ($CN);
+
+open ($CN, "-|", "hgsql -N -e 'select name,organism from dbDb;' hgcentraltest") or die "can not hgsql -N -e 'select name,organism from dbDb;'";
+while (my $line = <$CN>) {
+  chomp $line;
+  my ($gcX, $comName) = split('\t', $line);
+  $comName =~ s/\s\(.*//;
+  $commonName{$gcX} = "$comName/${gcX}";
+}
+close ($CN);
+
+
 printf '<!DOCTYPE HTML>
-<!--#set var="TITLE" value="Primates genomes assembly hubs" -->
+<!--#set var="TITLE" value="featureBits lastz/chain/net" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="$ROOT/inc/gbPageStartHardcoded.html" -->
@@ -30,13 +51,12 @@ sub checkOne($) {
 }
 
 printf "<table class='sortable' border='1' style='background-color:powderblue;'>\n";
-printf "<caption>showing percent identity, how much of the target is matched by the query</caption>\n";
+printf "<caption style='font-size: 20px; background-color: powderblue;'>'featureBits' - showing percent identity, how much of the target is matched by the query</caption>\n";
 printf "<thead style='position:sticky; top:0; background-color: white;'><tr>\n";
-printf "<th>count</th><th>chains</th><th>syntenic</th><th>reciprocal<br>best</th><th>lift<br>over</th><th>target</th><th>query</th><th>group</th>\n";
+printf "<th>count</th><th>chains</th><th>syntenic</th><th>reciprocal<br>best</th><th>lift<br>over</th><th>target</th><th>query</th><th>target</th><th>query</th>\n";
 printf "</tr></thead><tbody>\n";
 
 my $N = 0;
-my $clade = shift;
 while (my $asmId = shift) {
   my @a = split('_', $asmId);
   my $target = sprintf("%s_%s", $a[0], $a[1]);
@@ -67,7 +87,11 @@ while (my $asmId = shift) {
       printf "<td style='text-align:right;'>%s</td>", $synBits;
       printf "<td style='text-align:right;'>%s</td>", $rbBits;
       printf "<td style='text-align:right;'>%s</td>", $loBits;
-      printf "<td>%s</td><td>%s</td><td>%s</td></tr>\n", $target, $query, $clade;
+      my $targetName = "&nbsp;";
+      my $queryName = "&nbsp;";
+      $targetName = $commonName{$target} if (defined($commonName{$target}));
+      $queryName = $commonName{$query} if (defined($commonName{$query}));
+      printf "<td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n", $target, $query, $targetName, $queryName;
     }
     close ($td);
   } else {
