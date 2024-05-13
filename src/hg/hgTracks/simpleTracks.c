@@ -4110,7 +4110,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		innerLine(hvg, x1, midY2, w, color);
 		}
 	    }
-	if (intronGap && (qGap == 0) && (tGap >= intronGap))
+	if ((vis == tvFull || vis == tvPack) && (intronGap && (qGap == 0) && (tGap >= intronGap)))
 	    {
             clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
 			 lf->orientation, bColor, FALSE);

@@ -44,7 +44,7 @@ bed->name = dy->string;
 
 // we're actually not outputting chainArrange structure because the label is coming
 // from an external program currently
-fprintf(f, "%s %d %d %s%d.1 %d + %d %d 0 %s %d\n", bed->chrom, bed->chromStart, bed->chromEnd, prefix, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name, sizeQuery);
+fprintf(f, "%s\t%d\t%d\t%s%d.1\t%d\t+\t%d\t%d\t0\t%s\t%d\n", bed->chrom, bed->chromStart, bed->chromEnd, prefix, count++, bed->score, bed->chromStart, bed->chromEnd, bed->name, sizeQuery);
 }
 
 void chainArrangeCollect(char *prefix, char *inFile, char *outFile)
