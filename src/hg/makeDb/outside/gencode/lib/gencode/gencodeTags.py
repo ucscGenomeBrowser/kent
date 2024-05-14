@@ -91,6 +91,7 @@ class GencodeTag(SymEnum):
     precursor_RNA = auto()
     GENCODE_Primary = auto()
 
+
 gencodeTagNotFullCds = frozenset([GencodeTag.cds_start_NF,
                                   GencodeTag.cds_end_NF])
 gencodeTagNotFullMRna = frozenset([GencodeTag.mRNA_start_NF,

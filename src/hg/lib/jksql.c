@@ -544,10 +544,10 @@ char *val;
 /* there is special code in cheap.cgi to pass these from cgiOption to env */
 
 val = getenv("JKSQL_TRACE");
-if ((val != NULL) && sameString(val, "on"))
+if ((val != NULL) && (sameString(val, "on") || sameString(val, "1")))
     flags |= JKSQL_TRACE;
 val = getenv("JKSQL_PROF");
-if ((val != NULL) && sameString(val, "on"))
+if ((val != NULL) && (sameString(val, "on") || sameString(val, "1")))
     flags |= JKSQL_PROF;
 if (flags != 0)
     sqlMonitorEnable(flags);

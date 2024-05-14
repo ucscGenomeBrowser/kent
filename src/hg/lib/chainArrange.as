@@ -14,4 +14,5 @@ table chainArrange
     lstring source;     "List of assemblies where break occures"
     uint querySize;      "size of item on query side"
     string label;       "label for item"
+    lstring _mouseover;       "mouseOver for item"
     )

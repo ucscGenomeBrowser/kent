@@ -943,7 +943,7 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
     jsonWriteString(jw, "hubUrl", gHubMatch->hubUrl);
     jsonWriteString(jw, "scientificName", gHubMatch->scientificName);
     // Add a category label for customized autocomplete-with-categories.
-    jsonWriteString(jw, "category", "GenArk");
+    jsonWriteString(jw, "category", "UCSC GenArk - bulk-annotated assemblies from NCBI Genbank/RefSeq");
     jsonWriteString(jw, "value", gHubMatch->asmName);
     // Use just the db as label, since shortLabel is included in the category label.
     jsonWriteStringf(jw, "label", "%s - %s", gHubMatch->commonName, gHubMatch->scientificName);
@@ -964,6 +964,8 @@ for (match = matchList; match != NULL; match = match->next)
     safef(hubUrl, sizeof(hubUrl), "%s/%s", genarkHubUrl, match->hubUrl);
     slAddHead(&ret, gHubMatchNew(match->gcAccession, hubUrl, match->asmName, match->scientificName, match->commonName, -1));
     }
+if (ret)
+    slReverse(&ret);
 return ret;
 }
 
@@ -981,7 +983,7 @@ if (sqlTableExists(conn, genarkTbl))
     {
     char query[1024];
     sqlSafef(query, sizeof(query), "select * from %s where "
-             "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%') order by commonName ASC",
+             "(gcAccession like '%%%s%%' or scientificName like '%%%s%%' or commonName like '%%%s%%' or asmName like '%%%s%%') order by taxId ASC, commonName DESC",
              genarkTbl, term, term, term, term);
     struct genark *matchList = genarkLoadByQuery(conn, query);
     gHubMatchList = filterGenarkMatches(genarkPrefix, matchList);
@@ -1024,7 +1026,7 @@ struct aHubMatch *aHubMatchList = searchPublicHubs(dbDbList, term);
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteListStart(jw, NULL);
 // Write out JSON for dbDb matches, if any; add category if we found assembly hub matches too.
-char *category = aHubMatchList ? "UCSC databases" : NULL;
+char *category = aHubMatchList ? "UCSC Genome Browser assemblies - annotation tracks curated by UCSC" : NULL;
 struct dbDbMatch *match;
 for (match = matchList;  match != NULL;  match = match->next)
     writeDbDbMatch(jw, match, term, category);

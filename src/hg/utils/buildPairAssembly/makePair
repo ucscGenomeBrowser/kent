@@ -1,0 +1,85 @@
+#!/bin/sh -ex
+
+pairRefDb=$1
+pairRefSeq=$2
+pairRefDb2bit=$3
+pairQueryDb=$4
+pairQuerySeq=$5
+pairQueryDb2bit=$6
+pairChain=$7
+
+filterChain=$pairRefSeq.$pairQuerySeq.$pairChain
+
+chainFilter -t=$pairRefSeq -q=$pairQuerySeq $pairChain > $filterChain
+
+buildPairAssembly $filterChain $pairRefSeq $pairRefDb2bit $pairQuerySeq $pairQueryDb2bit out.fa query.psl target.psl map.bed
+
+
+rm -rf hub
+mkdir hub
+
+faToTwoBit out.fa hub/buildPair.2bit
+twoBitInfo hub/buildPair.2bit hub/buildPair.sizes.txt
+bedToBigBed  map.bed hub/buildPair.sizes.txt hub/map.bb
+
+axtChain -psl -linearGap=medium query.psl hub/buildPair.2bit $pairQueryDb2bit query.chain
+hgLoadChain -noBin -test hg38 bigChain  query.chain
+sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > query.bigChain
+bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab query.bigChain  hub/buildPair.sizes.txt hub/queryChain.bb
+awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n > bigChain.bigLink
+bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab bigChain.bigLink hub/buildPair.sizes.txt hub/queryChain.link.bb
+
+axtChain -psl -linearGap=medium target.psl hub/buildPair.2bit $pairRefDb2bit target.chain
+hgLoadChain -noBin -test hg38 bigChain  target.chain
+sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' > targetChain.bigChain
+bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab targetChain.bigChain  hub/buildPair.sizes.txt hub/targetChain.bb
+awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n > bigChain.bigLink
+bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab bigChain.bigLink hub/buildPair.sizes.txt hub/targetChain.link.bb
+
+cat << _EOF_ > hub/hub.txt
+hub buildPair
+longLabel buildPair
+email braney@ucsc.edu
+shortLabel buildPair
+useOneFile on
+
+genome buildPair
+defaultPos buildPair:1-2
+organism buildPair
+twoBitPath buildPair.2bit
+
+track map
+type bigBed 9
+bigDataUrl map.bb
+shortLabel map
+longLabel map
+itemRgb on
+
+track queryChain
+type bigChain $pairQueryDb
+bigDataUrl queryChain.bb
+shortLabel queryChain
+longLabel queryChain
+
+track targetChain
+type bigChain $pairRefDb
+bigDataUrl targetChain.bb
+shortLabel targetChain
+longLabel targetChain
+
+track ncbiRefSeqInsta
+searchIndex name
+color 12,12,120
+altColor 120,12,12
+shortLabel RefSeq All
+type bigGenePred
+bigDataUrl  /gbdb/hg38/ncbiRefSeq/ncbiRefSeq.bb
+longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*,
+ NP_* or YP_*)
+baseColorUseCds given
+baseColorDefault genomicCodons
+priority 1
+quickLiftUrl targetChain.bb
+canPack 1
+_EOF_
+
