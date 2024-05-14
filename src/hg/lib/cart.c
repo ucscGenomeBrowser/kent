@@ -1401,7 +1401,7 @@ static void fixUpDb(struct cart *cart)
 {
 char *db = cartOptionalString(cart,"db");
 
-if ((db == NULL) || startsWith("hub_", db))
+if ((db == NULL) || startsWith("hub_", db) || sameString("0", db))
     return;
 else if (startsWith("GCA_", db) || startsWith("GCF_", db))
     {
