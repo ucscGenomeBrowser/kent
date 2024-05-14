@@ -4,7 +4,9 @@ import sys
 import os
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.append(os.path.join(myBinDir, "../lib"))
-sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
+sys.path.append(os.path.expanduser("/hive/groups/browser/pycbio/lib"))
+from pycbio.tsv import TabFileReader
+from pycbio.sys import fileOps
 import argparse
 import pipettor
 import tempfile
@@ -27,6 +29,8 @@ The chains can be generated with buildGencodeToUcscLift
                         help="""print stack trace on all error""")
     parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
                         help="verbose output for debugging")
+    parser.add_argument("--drop", action="append", default=[],
+                        help="drop transcripts with this id, maybe repeated")
     parser.add_argument("--warnAndContinue", dest="warnAndContinue", action="store_true", default=False,
                         help="output warning on invalid GFF3 entries and continue")
     parser.add_argument("--unmapped", dest="unmappedGenePred", action="store", default=None,
@@ -59,28 +63,29 @@ def gxfToGenePred(inGxf, verbose, warnAndContinue):
     return tmpGp
 
 
-def liftToEditChromNames(inGp, verbose, liftFile, outGpFh, unmappedGenePred):
+def liftFilterEditChromNames(inGp, verbose, liftFile, dropIds, outGpFh, unmappedGenePred):
     liftOver = GencodeLiftOver("genePred", liftFile, unmappedGenePred)
-    cnvPipe = pipettor.Pipeline([getEditIdCmd(0), liftOver.getLiftoverCmd(stdout="stdout")], stdin=inGp, stdout=outGpFh)
-    if verbose:
-        print(str(cnvPipe), file=sys.stderr)
-    cnvPipe.wait()
+    with pipettor.Popen([getEditIdCmd(0), liftOver.getLiftoverCmd(stdout="stdout")], stdin=inGp) as fh:
+        for row in TabFileReader(fh):
+            if row[0] not in dropIds:
+                fileOps.prRow(outGpFh, row)
     unmappedInfo = liftOver.getLiftOverUnmappedInfo()
     liftOver.removeTmp()
     unmappedInfo.report()
 
 def copyChrMToChrMT(tmpGp, verbose, outGpFh):
     "special case to handle chrMT added to hg19"
+    outGpFh.flush()
     cpCmd = ("tawk", '$2 == "chrM"{$2 = "chrMT"; print $0}', tmpGp)
     if verbose:
         print(*cpCmd, file=sys.stderr)
     pipettor.run(cpCmd, stdout=outGpFh)
 
-def convert(hgdb, inGxf, liftFile, outGenePred, unmappedGenePred, verbose, warnAndContinue):
+def convert(hgdb, inGxf, liftFile, outGenePred, unmappedGenePred, dropIds, verbose, warnAndContinue):
     # Need to update transcript id if it's for of the PAR hacked ids
     tmpGp = gxfToGenePred(inGxf, verbose, warnAndContinue)
     with open(outGenePred, "w") as outGpFh:
-        liftToEditChromNames(tmpGp, verbose, liftFile, outGpFh, unmappedGenePred)
+        liftFilterEditChromNames(tmpGp, verbose, liftFile, dropIds, outGpFh, unmappedGenePred)
         if hgdb == "hg19":
             copyChrMToChrMT(tmpGp, verbose, outGpFh)
     os.unlink(tmpGp)
@@ -88,7 +93,7 @@ def convert(hgdb, inGxf, liftFile, outGenePred, unmappedGenePred, verbose, warnA
 def gencodeGxfToGenePred(opts):
     try:
         convert(opts.hgdb, opts.inGxf, opts.gencodeToUcscChain, opts.outGenePred, opts.unmappedGenePred,
-                opts.verbose, opts.warnAndContinue)
+                frozenset(opts.drop), opts.verbose, opts.warnAndContinue)
     except LiftError as ex:
         if opts.debug:
             raise

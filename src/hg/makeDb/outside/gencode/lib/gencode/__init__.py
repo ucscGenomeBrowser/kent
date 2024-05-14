@@ -1,3 +1,9 @@
+"""
+Expects git@github.com:diekhans/pycbio.git
+to be checkout in /hive/groups/browser/pycbio
+and /hive/groups/browser/pycbio/lib on
+sys.path
+"""
 import os
 from .gencodeGtfParser import GtfParser
 from .gencodeGff3Parser import Gff3Parser

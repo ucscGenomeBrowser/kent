@@ -160,7 +160,7 @@ class GencodeTranscript(object):
 
     def finish(self):
         "finish construction, sorting into predictable order"
-        self.transcriptLoci.sort(key=lambda l: (l.gp.chrom, l.gp.txStart))
+        self.transcriptLoci.sort(key=lambda loci: (loci.gp.chrom, loci.gp.txStart))
 
     @property
     def transcriptClass(self):
@@ -243,7 +243,7 @@ class GencodeGeneLocus(object):
 
     def finish(self):
         "finish construction, sorting into predictable order"
-        self.transcriptLoci.sort(key=lambda l: (l.gp.chrom, l.gp.txStart))
+        self.transcriptLoci.sort(key=lambda loci: (loci.gp.chrom, loci.gp.txStart))
 
     @property
     def id(self):
@@ -287,7 +287,7 @@ class GencodeGene(object):
     def finish(self):
         "finish construction, sorting into predictable order"
         self.transcripts.sort(key=lambda t: (t.id,))
-        self.geneLoci.sort(key=lambda l: (l.chrom, l.chromStart))
+        self.geneLoci.sort(key=lambda loci: (loci.chrom, loci.chromStart))
 
     def hasCds(self):
         for trans in self.transcripts:

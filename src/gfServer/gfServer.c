@@ -78,12 +78,11 @@ char *genomeDataDir = NULL;
 
 int timeout = 90;  // default timeout in seconds
 
-
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gfServer v %s - Make a server to quickly find where DNA occurs in genome\n"
+  "gfServer v %s - Make a server to quickly find where DNA occurs in genome (%d-bit index)\n"
   "   To set up a server:\n"
   "      gfServer start host port file(s)\n"
   "      where the files are .2bit or .nib format files specified relative to the current directory\n"
@@ -167,13 +166,13 @@ errAbort(
   "                   have at most maxDnaHits/2 hits.  The filename MUST not include the directory.\n"
   "                   Useful for assemblies with many alternate/patch sequences.\n"
   "   -canStop        If set, a quit message will actually take down the server.\n"
-  "   -indexFile      Index file create by `gfServer index'. Saving index can speed up\n"
+  "   -indexFile      Index file created by `gfServer index'. Saving index can speed up\n"
   "                   gfServer startup by two orders of magnitude.  The parameters must\n"
   "                   exactly match the parameters when the file is written or bad things\n"
   "                   will happen.\n"
   "   -timeout=N      Timeout in seconds.\n"
   "                   Default is %d.\n"
-  ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize, timeout
+  ,	gfVersion, GFINDEX_BITS, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize, timeout
   );
 
 }
@@ -238,7 +237,7 @@ logDebug("gf->isPep: %d", gf->isPep);
 logDebug("gf->allowOneMismatch: %d", gf->allowOneMismatch);
 logDebug("gf->noSimpRepMask: %d", gf->noSimpRepMask);
 logDebug("gf->segSize: %d", gf->segSize);
-logDebug("gf->totalSeqSize: %d", gf->totalSeqSize);
+logDebug("gf->totalSeqSize: " GFOFFSET_FMT, gf->totalSeqSize);
 }
 
 void logGenoFindIndex(struct genoFindIndex *gfIdx)
@@ -367,7 +366,8 @@ if (clumpList == NULL)
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     struct gfSeqSource *ss = clump->target;
-    sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d", 
+    assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
+    sprintf(buf, GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%d", 
 	clump->qStart, clump->qEnd, ss->fileName,
 	clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
     errSendString(connectionHandle, buf);
@@ -415,16 +415,17 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	int limit = maxTransHits;
 	for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	    {
+            assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
 	    struct gfSeqSource *ss = clump->target;
-	    sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d\t%c\t%d", 
+	    sprintf(buf, GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%d\t%c\t%d", 
 		clump->qStart, clump->qEnd, ss->fileName,
 		clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
 		strand, frame);
 	    errSendString(connectionHandle, buf);
 	    dyStringClear(dy);
 	    for (hit = clump->hitList; hit != NULL; hit = hit->next)
-	        dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
-	    errSendLongString(connectionHandle, dy->string);
+	        dyStringPrintf(dy, " " GFOFFSET_FMT " " GFOFFSET_FMT, hit->qStart, hit->tStart - ss->start);
+	    netSendLongString(connectionHandle, dy->string);
 	    ++clumpCount;
 	    if (--limit < 0)
 		break;
@@ -470,8 +471,9 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	    int limit = maxTransHits;
 	    for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 		{
+                assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
 		struct gfSeqSource *ss = clump->target;
-		sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d\t%c\t%d\t%d", 
+		sprintf(buf, GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t%d\t%c\t%d\t%d", 
 		    clump->qStart, clump->qEnd, ss->fileName,
 		    clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
 		    strand, qFrame, tFrame);
@@ -479,7 +481,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 		dyStringClear(dy);
 		for (hit = clump->hitList; hit != NULL; hit = hit->next)
 		    {
-		    dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
+		    dyStringPrintf(dy, " " GFOFFSET_FMT " " GFOFFSET_FMT, hit->qStart, hit->tStart - ss->start);
 		    }
 		errSendLongString(connectionHandle, dy->string);
 		++clumpCount;
@@ -510,8 +512,9 @@ char buf[256];
 clumpList = gfPcrClumps(gf, fPrimer, fPrimerSize, rPrimer, rPrimerSize, 0, maxDistance);
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
+    assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
     struct gfSeqSource *ss = clump->target;
-    safef(buf, sizeof(buf), "%s\t%d\t%d\t+", ss->fileName, 
+    safef(buf, sizeof(buf), "%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t+", ss->fileName, 
         clump->tStart, clump->tEnd);
     errSendString(connectionHandle, buf);
     ++clumpCount;
@@ -522,8 +525,9 @@ clumpList = gfPcrClumps(gf, rPrimer, rPrimerSize, fPrimer, fPrimerSize, 0, maxDi
 
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
+    assert((clump->qStart < clump->qEnd) && (clump->tStart < clump->tEnd));
     struct gfSeqSource *ss = clump->target;
-    safef(buf, sizeof(buf), "%s\t%d\t%d\t-", ss->fileName, 
+    safef(buf, sizeof(buf), "%s\t" GFOFFSET_FMT "\t" GFOFFSET_FMT "\t-", ss->fileName, 
         clump->tStart, clump->tEnd);
     errSendString(connectionHandle, buf);
     ++clumpCount;

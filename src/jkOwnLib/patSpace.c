@@ -261,7 +261,7 @@ int startIx = 0;
 int total = 0;
 struct dnaSeq *seq;
 psBits maxPat;
-psBits *listSizes;
+bits32 *listSizes;
 int seedSpaceSize = ps->seedSpaceSize;
 
 maxPat = ps->maxPat = maxPatCount;

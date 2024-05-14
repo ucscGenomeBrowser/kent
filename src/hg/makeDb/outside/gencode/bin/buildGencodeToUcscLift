@@ -5,7 +5,7 @@ import os
 import re
 from collections import defaultdict
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
-sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
+sys.path.append(os.path.expanduser("/hive/groups/browser/pycbio/lib"))
 import argparse
 from pycbio.db import mysqlOps
 from pycbio.hgdata import hgDb
@@ -83,7 +83,7 @@ def writeStdChain(chromName, ucscChrom, nextChainId, fh):
 
 def writeChain(ucscDbName, ucscChrom, chromAliases, nextChainId, fh):
     if ucscChrom.chrom not in chromAliases:
-        #raise Exception(f"UCSC chrom {ucscChrom.chrom} not in chromAlias table")
+        # raise Exception(f"UCSC chrom {ucscChrom.chrom} not in chromAlias table")
         print(f"WARNING: UCSC chrom {ucscChrom.chrom} not in chromAlias table", file=sys.stderr)
         return nextChainId
     elif (ucscDbName == "hg19") and (ucscChrom.chrom == "chrM"):
