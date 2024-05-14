@@ -75,6 +75,7 @@ def liftFilterEditChromNames(inGp, verbose, liftFile, dropIds, outGpFh, unmapped
 
 def copyChrMToChrMT(tmpGp, verbose, outGpFh):
     "special case to handle chrMT added to hg19"
+    outGpFh.flush()
     cpCmd = ("tawk", '$2 == "chrM"{$2 = "chrMT"; print $0}', tmpGp)
     if verbose:
         print(*cpCmd, file=sys.stderr)

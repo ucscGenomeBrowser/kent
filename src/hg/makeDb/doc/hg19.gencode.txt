@@ -1275,3 +1275,49 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
     jkmake alpha DBS=hg19
 
 ##############################################################################
+2024-05-13: import of UCSC GENCODE group processing of GENCODE V46lift38 final release (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+    # set shell variable:
+    pre=""
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV46lift37/hgcImport${pre}
+    pushd /hive/data/genomes/hg19/bed/gencodeV46lift37/hgcImport{pre}
+
+    (time nice make -O -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # Incorrect gene symbol lines in metadata.HNGC where there are only two columns.
+    # Reported and remove locally with
+    cd data/release_46lift37/
+    mv gencode.v46lift37.metadata.HGNC.gz gencode.v46lift37.metadata.HGNC.badrows.gz
+    zcat gencode.v46lift37.metadata.HGNC.badrows.gz | tawk 'NF==3' | pigz -c >gencode.v46lift37.metadata.HGNC.gz
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/bin/gencodeGenerateTrackDbs hg19 46lift37 112 'May 2024'
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+    # edit all.joiner to add ~/tmp/gencodeV46lift37.joiner
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release.
+
+    jkmake DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV46lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV46lift37/hgcImport${pre}
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+      These two complaint are cause by the new PAR id scheme causing a chrY V19 copy to be brought in.
+      This needs to fixed in some way
+      Error: 1 duplicates in hg19.wgEncodeGencodeTranscriptSourceV46lift37.transcriptId including 'ENST00000302805.2'
+      Error: 1 duplicates in hg19.for this release.
+
+
+    # commit all
+    jkmake alpha DBS=hg19
+
+##############################################################################
