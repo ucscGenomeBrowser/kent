@@ -32,11 +32,11 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-#preRelease = no
-preRelease = yes
-db = hg38
+preRelease = no
+#preRelease = yes
+#db = hg38
 #db = hg19
-#db = mm39
+db = mm39
 ifeq (${db},mm10)
     # mm10 lift back was never revewed and released
     grcRefAssembly = GRCm38
@@ -72,6 +72,9 @@ else ifeq (${db},hg19)
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
     isBackmap = yes
+    # caused by change in PAR gencode ids, backmap needs to be made smarted, until then,
+    # just drop old transcipts that gets included
+    dropIdsOpts = --drop=ENST00000302805.2
 else
     $(error unimplement genome database: ${db})
 endif
@@ -294,7 +297,7 @@ ${gencodeToUcscChain}:
 # other tab files, just copy to name following convention to make load rules
 # work
 ifeq (${isBackmap}, yes)
-   metaFilterCmd = ${gencodeBackMapMetadataIds} ${db} ${gencodeTsv} ${targetGencodeTsv}
+   metaFilterCmd = ${gencodeBackMapMetadataIds} ${dropIdsOpts} ${db} ${gencodeTsv} ${targetGencodeTsv}
    metaFilterCmdGz = ${metaFilterCmd}
    metaFilterDepend = ${gencodeTsv} ${targetGencodeTsv}
 else
@@ -352,13 +355,13 @@ ${tableEntrezGeneTab}: ${tableEntrezGeneMeta} ${metaFilterDepend}
 ##
 ${gencodeGp}: ${annotationGff} ${gencodeToUcscChain}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToGenePred} ${db} ${annotationGff} ${gencodeToUcscChain} $@.${tmpExt}
+	${gencodeGxfToGenePred} ${dropIdsOpts} ${db} ${annotationGff} ${gencodeToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 	touch $@
 ${gencodeTsv}: ${annotationGff}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToAttrs} ${transcriptRanksOpt} ${annotationGff} $@.${tmpExt}
+	${gencodeGxfToAttrs} ${dropIdsOpts} ${transcriptRanksOpt} ${annotationGff} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${targetGencodeTsv}:
@@ -369,7 +372,7 @@ ${targetGencodeTsv}:
 
 # check attributes so code can be updated to handle new biotypes
 checkAttrs: ${annotationGff}
-	${gencodeGxfToAttrs} ${transcriptRanksOpt} ${annotationGff} /dev/null
+	${gencodeGxfToAttrs} ${dropIdsOpts} ${transcriptRanksOpt} ${annotationGff} /dev/null
 
 ##
 # load tables

@@ -4,8 +4,8 @@ import sys
 import os
 import argparse
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
-sys.path.extend((os.path.join(myBinDir, "../lib"),
-                os.path.expanduser("~markd/compbio/code/pycbio/lib")))
+sys.path.append(os.path.join(myBinDir, "../lib"))
+sys.path.append(os.path.expanduser("/hive/groups/browser/pycbio/lib"))
 from collections import defaultdict
 from dataclasses import dataclass
 from pycbio.sys import fileOps
@@ -22,6 +22,8 @@ use by other programs."""
                         help="""print stack trace on all error""")
     parser.add_argument("--transcriptRanks",
                         help="""the gencode.v??.transcript_rankings.txt.gz file""")
+    parser.add_argument("--drop", action="append", default=[],
+                        help="drop genes or transcripts with this id, maybe repeated; if dropping a gene, must specify all transcripts")
     parser.add_argument("gencodeGxf",
                         help="""GENCODE GTF or GFF3 file""")
     parser.add_argument("attrsTsv",
@@ -62,8 +64,9 @@ class Transcript:
     tags: set
 
 class GencodeGxfToAttrs(object):
-    def __init__(self, gxfParser, transcriptRanks=None):
+    def __init__(self, gxfParser, dropIds, transcriptRanks=None):
         self.gxfParser = gxfParser
+        self.dropIds = dropIds
         self.recValidator = GxfRecordValidator(sys.stderr)
         self.transcriptRanks = transcriptRanks
         self.errorCnt = 0
@@ -118,7 +121,8 @@ class GencodeGxfToAttrs(object):
             if rec.feature == "gene":
                 self._processGeneRec(rec)
             elif rec.feature == "transcript":
-                self._processTransRec(rec)
+                if rec.attributes.transcript_id not in self.dropIds:
+                    self._processTransRec(rec)
         except ParseException as ex:
             sys.stderr.write("Error: {}: {}\n".format(str(ex), rec))
             self.errorCnt += 1
@@ -172,7 +176,7 @@ def gencodeGxfToAttrs(opts):
         if opts.transcriptRanks is not None:
             transcriptRanks = loadTranscriptRanks(opts.transcriptRanks)
         parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True),
-                                   transcriptRanks)
+                                   dropIds=frozenset(opts.drop), transcriptRanks=transcriptRanks)
         parser.parse()
         with open(opts.attrsTsv, "w") as fh:
             parser.writeAttrsTsv(fh)

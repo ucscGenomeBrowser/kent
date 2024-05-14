@@ -1,0 +1,13 @@
+#!/bin/bash -e
+set -beEu -o pipefail
+if [ $# != 1 ] ; then
+    echo "wrong # args $0 gfServer" >&2
+    exit 1
+fi
+testName=$(basename $0)
+gfServer=$1
+
+$gfServer pcrDirect CCTGAAGGCATCAGTGTACCCCAGGAATGCCCAA CTCATGAGTGGCTCCTAAAGCAGCTGCGTGG input/testPcr.2bit | grep -v seconds > output/$testName.out
+$gfServer pcrDirect tggtgagagggggaaggtttt ggagctctgacatctgggttctg input/testPcr.2bit | grep -v seconds >> output/$testName.out
+$gfServer pcrDirect GGAGCTCTGACATCTGGGTTCTGGA tggtgagagggggaaggttttcttt input/testPcr.2bit | grep -v seconds >> output/$testName.out
+diff -u expected/$testName.out output/$testName.out

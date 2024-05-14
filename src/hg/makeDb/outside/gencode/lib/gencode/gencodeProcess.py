@@ -69,6 +69,6 @@ class GencodeLiftOver(object):
             os.unlink(self.unmappedOutFileTmp)
 
 def getEditIdCmd(column0):
-    """return awk command to edit ids in GTF file"""
+    """return awk command to edit ids in tab file"""
     return ('awk', '-v', 'FS=\\t', '-v', 'OFS=\\t', '-v', 'column={}'.format(column0 + 1),
             '{sub("^ENSTR", "ENST0", $column); sub("^ENSGR", "ENSG0", $column); sub("_PAR_Y", "", $column); print $0}')

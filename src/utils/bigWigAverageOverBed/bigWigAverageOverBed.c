@@ -17,6 +17,7 @@
 char *bedOut = NULL;
 char *statsRa = NULL;
 int sampleAroundCenter = 0;
+boolean tsv = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -38,6 +39,7 @@ errAbort(
   "   -sampleAroundCenter=N - Take sample at region N bases wide centered around bed item, rather\n"
   "                     than the usual sample in the bed item.\n"
   "   -minMax - include two additional columns containing the min and max observed in the area.\n"
+  "   -tsv - include a TSV header for input to other tools.\n"
   );
 }
 
@@ -46,6 +48,7 @@ static struct optionSpec options[] = {
    {"stats", OPTION_STRING},
    {"sampleAroundCenter", OPTION_INT},
    {"minMax", OPTION_BOOLEAN},
+   {"tsv", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -356,6 +359,13 @@ checkUniqueNames(bedList);
 
 struct bbiFile *bbi = bigWigFileOpen(inBw);
 FILE *f = mustOpen(outTab, "w");
+if (tsv)
+    {
+    fprintf(f, "name\tsize\tcovered\tsum\tmean0\tmean");
+    if (minMax)
+        fprintf(f, "\tmin\tmax");
+    fputc('\n', f);
+    }
 FILE *bedF = NULL;
 if (bedOut != NULL)
     bedF = mustOpen(bedOut, "w");
@@ -393,6 +403,7 @@ if (argc != 4)
 bedOut = optionVal("bedOut", bedOut);
 statsRa = optionVal("stats", statsRa);
 sampleAroundCenter = optionInt("sampleAroundCenter", sampleAroundCenter);
+tsv = optionExists("tsv");
 bigWigAverageOverBed(argv[1], argv[2], argv[3]);
 return 0;
 }
