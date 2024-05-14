@@ -1,0 +1,15 @@
+#!/bin/bash
+set -beEu -o pipefail
+if [ $# != 2 ] ; then
+    echo "wrong # args $0 gfServer port" >&2
+    exit 1
+fi
+testName=$(basename $0)
+gfServer=$1
+port=$2
+
+$gfServer start -trans localhost ${port} -canStop input/mCreaGeno.nib input/hCreaGeno.nib > /dev/null 2>&1 &
+sleep 1
+$gfServer protQuery localhost ${port} input/mCrea.pep > output/$testName.out
+$gfServer stop localhost ${port} > /dev/null
+diff -u expected/$testName.out output/$testName.out

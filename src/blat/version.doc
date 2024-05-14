@@ -1,3 +1,7 @@
+39:
+     o (in 38x1) Add blatHuge and gfServerHuge which support genome assemblies greater than
+       four gigabases.  These are separate programs and gfServerHuge must be used to build
+       dynamic indexes.
 38:
      o (in 37x1) Added Dynamic BLAT using virtual memory mapped precreated indexes on disk.
        This allows gfServer to be launched on-demand by xinetd.

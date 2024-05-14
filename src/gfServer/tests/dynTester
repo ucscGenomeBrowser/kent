@@ -19,6 +19,8 @@ def parseArgs():
                         help="enable debug tracing")
     parser.add_argument('--valgrind', action="store_true", default=False,
                         help="run valgrind on gfServer without to valgrind.out")
+    parser.add_argument('--gfServer', default="gfServer",
+                        help="gfServer command to use")
     parser.add_argument('rootDir',
                         help="data root directory")
     parser.add_argument('queryType', choices=("query", "protQuery", "transQuery", "pcr"),
@@ -104,13 +106,13 @@ def netRecieveString(fd):
     buf = readBytes(fd, 1)
     return readBytes(fd, buf[0])
 
-def serverStart(rootDir):
+def serverStart(gfServerCmd, rootDir):
     "start server process"
     # unbuffered is required, as protocol is not line-terminate
     cmd = []
     if valgrind:
         cmd += ["valgrind", "--log-file=valgrind.out"]
-    cmd += ["gfServer"]
+    cmd += [gfServerCmd]
     if debug:
         cmd += ["-log=/dev/stderr", "-debugLog"]
     cmd += ["dynserver", rootDir]
@@ -166,12 +168,12 @@ def infoRequest(gfServer, queryType, genome, genomeDataDir, resultsFh):
     writeBytes(gfServer.stdin, query)
     readResults(gfServer, resultsFh)
 
-def dynTester(rootDir, queryType, genome, genomeDataDir, queryFa, resultsFh):
+def dynTester(gfServerCmd, rootDir, queryType, genome, genomeDataDir, queryFa, resultsFh):
     "run tests"
     seqs = readFastaSeqs(queryFa)
     if len(seqs) == 0:
         raise Exception("no sequences found in {}".format(queryFa))
-    gfServer = serverStart(rootDir)
+    gfServer = serverStart(gfServerCmd, rootDir)
     for seq in seqs:
         if queryType == "pcr":
             pcrRequest(gfServer, genome, genomeDataDir, seq, resultsFh)
@@ -183,6 +185,6 @@ def dynTester(rootDir, queryType, genome, genomeDataDir, queryFa, resultsFh):
 def main():
     args = parseArgs()
     with open(args.resultsOut, "w") as resultsFh:
-        dynTester(args.rootDir, args.queryType, args.genome, args.genomeDataDir, args.queryFa, resultsFh)
+        dynTester(args.gfServer, args.rootDir, args.queryType, args.genome, args.genomeDataDir, args.queryFa, resultsFh)
 
 main()

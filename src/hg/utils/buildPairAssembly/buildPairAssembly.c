@@ -6,6 +6,7 @@
 #include "chain.h"
 #include "twoBit.h"
 #include "dnaseq.h"
+#include "psl.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -57,8 +58,9 @@ struct cBlock *blockList = NULL, *cBlock, *nextBlock;
 struct twoBitFile *q2bit = twoBitOpen(q2bitName);
 struct twoBitFile *t2bit = twoBitOpen(t2bitName);
 FILE *outFa = mustOpen(outFaName, "w");
+FILE *outMap = mustOpen(outMapBed, "w");
 
-fprintf(outFa, ">chr1\n");
+fprintf(outFa, ">buildPair\n");
 
 while ((chain = chainRead(lf)) != NULL)
     {
@@ -89,7 +91,7 @@ for (cBlock = blockList->next; cBlock; cBlock = cBlock->next)
     {
     if (cBlock->qStart < prevBase)
         {
-        printf("qBlock overlap %d %d\n", cBlock->qStart, prevBase);
+        //printf("qBlock overlap %d %d\n", cBlock->qStart, prevBase);
         cBlock->score = 2;
         continue;
         }
@@ -150,6 +152,7 @@ for (cBlock = blockList; cBlock; cBlock = cBlock->next)
     }
 
 slReverse(&linearBlockList);
+
 unsigned startAddress = 0, size;
 for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
     {
@@ -158,21 +161,91 @@ for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
         struct dnaSeq *dna = twoBitReadSeqFrag(t2bit, tSequenceName, linearBlock->tStart, linearBlock->tEnd);
         fprintf(outFa, "%s\n", (char *)dna->dna);
         size = linearBlock->tEnd - linearBlock->tStart;
-        printf("chr1 %d %d %d refOnly %d %d\n", startAddress, startAddress + size, linearBlock->isFlipped, linearBlock->tStart, linearBlock->tEnd);
+        //printf("chr1 %d %d refOnly 0 + %d %d 255,255,0\n", startAddress, startAddress + size, linearBlock->isFlipped, linearBlock->tStart, linearBlock->tEnd);
+        fprintf(outMap,"buildPair %d %d refOnly 0 + %d %d 255,255,0\n", startAddress, startAddress + size, startAddress, startAddress + size);
         }
     else if (linearBlock->tStart == linearBlock->tEnd)
         {
         struct dnaSeq *dna = twoBitReadSeqFrag(q2bit, qSequenceName, linearBlock->qStart, linearBlock->qEnd);
         fprintf(outFa, "%s\n", (char *)dna->dna);
         size = linearBlock->qEnd - linearBlock->qStart;
-        printf("chr1 %d %d %d queryOnly %d %d\n", startAddress, startAddress + size, linearBlock->isFlipped, linearBlock->qStart, linearBlock->qEnd);
+        char strand = linearBlock->isFlipped ? '-' : '+';
+        //printf("chr1 %d %d %d queryOnly %d %d\n", startAddress, startAddress + size, linearBlock->isFlipped, linearBlock->qStart, linearBlock->qEnd);
+        fprintf(outMap,"buildPair %d %d queryOnly 0 %c %d %d 170,255,60\n", startAddress, startAddress + size, strand, startAddress, startAddress + size);
         }
     else
         {
         struct dnaSeq *dna = twoBitReadSeqFrag(t2bit, tSequenceName, linearBlock->tStart, linearBlock->tEnd);
         fprintf(outFa, "%s\n", (char *)dna->dna);
         size = linearBlock->qEnd - linearBlock->qStart;
-        printf("chr1 %d %d %d both %d %d %d %d\n", startAddress, startAddress + size, linearBlock->isFlipped,linearBlock->tStart, linearBlock->tEnd, linearBlock->qStart, linearBlock->qEnd);
+        char strand = linearBlock->isFlipped ? '-' : '+';
+        //printf("chr1 %d %d both 0 %c  %d %d %d %d\n", startAddress, startAddress + size, linearBlock->isFlipped,linearBlock->tStart, linearBlock->tEnd, linearBlock->qStart, linearBlock->qEnd);
+        fprintf(outMap,"buildPair %d %d both 0 %c  %d %d 20,40,140\n", startAddress, startAddress + size, strand,  startAddress, startAddress + size); 
+        }
+    startAddress += size;
+    }
+
+unsigned sumSize = startAddress;
+unsigned tSize = twoBitSeqSize(t2bit, tSequenceName);
+unsigned qSize = twoBitSeqSize(q2bit, qSequenceName);
+printf("qSize %d\n", qSize);
+FILE *outQuery = mustOpen(outQueryPsl, "w");
+FILE *outTarget = mustOpen(outTargetPsl, "w");
+startAddress = 0;
+for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
+    {
+    if (linearBlock->qStart == linearBlock->qEnd)
+        {
+        size = linearBlock->tEnd - linearBlock->tStart;
+        struct psl *psl = pslNew(tSequenceName, tSize, linearBlock->tStart, linearBlock->tEnd,
+            "buildPair", sumSize,  startAddress, startAddress + size,
+            "+", 1, 0);
+        psl->qStarts[0] = linearBlock->tStart;
+        psl->tStarts[0] = startAddress;
+        psl->blockSizes[0] = size;
+        psl->blockCount = 1;
+        pslTabOut(psl, outTarget);
+        }
+    else if (linearBlock->tStart == linearBlock->tEnd)
+        {
+        size = linearBlock->qEnd - linearBlock->qStart;
+        struct psl *psl = pslNew(qSequenceName, qSize, linearBlock->qStart, linearBlock->qEnd,
+            "buildPair", sumSize,  startAddress, startAddress + size,
+            linearBlock->isFlipped ? "-" : "+", 1, 0);
+        if (linearBlock->isFlipped)
+            psl->qStarts[0] = qSize - linearBlock->qEnd;
+        else
+            psl->qStarts[0] = linearBlock->qStart;
+        psl->tStarts[0] = startAddress;
+        psl->blockSizes[0] = size;
+        psl->blockCount = 1;
+        pslTabOut(psl, outQuery);
+        }
+    else
+        {
+        size = linearBlock->qEnd - linearBlock->qStart;
+        struct psl *psl = pslNew(tSequenceName, tSize, linearBlock->tStart, linearBlock->tEnd,
+            "buildPair", sumSize,  startAddress, startAddress + size,
+            "+", 1, 0);
+        psl->qStarts[0] = linearBlock->tStart;
+        psl->tStarts[0] = startAddress;
+        psl->blockSizes[0] = size;
+        psl->blockCount = 1;
+        pslTabOut(psl, outTarget);
+
+        {
+        struct psl *psl = pslNew(qSequenceName, qSize, linearBlock->qStart, linearBlock->qEnd,
+            "buildPair", sumSize,  startAddress, startAddress + size,
+            linearBlock->isFlipped ? "-" : "+", 1, 0);
+        if (linearBlock->isFlipped)
+            psl->qStarts[0] = qSize - linearBlock->qEnd;
+        else
+            psl->qStarts[0] = linearBlock->qStart;
+        psl->tStarts[0] = startAddress;
+        psl->blockSizes[0] = size;
+        psl->blockCount = 1;
+        pslTabOut(psl, outQuery);
+        }
         }
     startAddress += size;
     }

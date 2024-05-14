@@ -1,0 +1,22 @@
+#!/bin/bash -e
+set -beEu -o pipefail
+if [ $# != 2 ] ; then
+    echo "wrong # args $0 gfServer port" >&2
+    exit 1
+fi
+testName=$(basename $0)
+gfServer=$1
+port=$2
+
+# build index
+gfIdx=output/creaGeno.trans.gfidx
+rm -f $gfIdx
+mkdir -p output
+$gfServer index -trans $gfIdx input/creaGeno.2bit >/dev/null
+
+# read index
+$gfServer start -trans -indexFile=$gfIdx localhost ${port} -canStop input/creaGeno.2bit >/dev/null &
+sleep 1
+$gfServer transQuery localhost ${port} input/mCrea.mrna > output/$testName.out
+$gfServer stop localhost ${port} > /dev/null
+diff -u expected/$testName.out output/$testName.out
