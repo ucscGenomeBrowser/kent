@@ -25,11 +25,12 @@ retryDelay=300
 while [[ $((++attempt)) -le $maxAttempts ]]; do
     echo "datasets attempt $attempt"
     if datasets download virus genome taxon 2697049 \
-            --include genome,annotation,biosample \
+            --include genome,biosample \
             --filename ncbi_dataset.zip \
             --no-progressbar \
             --debug \
             >& datasets.log.$attempt; then
+        head -c 10000 datasets.log.$attempt > tmp && mv tmp datasets.log.$attempt
         break;
     else
         echo "FAILED; will try again after $retryDelay seconds"
@@ -138,7 +139,7 @@ else
     splitDir=splitForPangolin
     rm -rf $splitDir
     mkdir $splitDir
-    faSplit about <(xzcat genbank.fa.xz | sed -re '/^>/ s/ .*//;') 30000000 $splitDir/chunk
+    faSplit about <(xzcat genbank.fa.xz | sed -re '/^>/ s/ .*//;') 300000000 $splitDir/chunk
     find $splitDir -name chunk\*.fa \
     | parallel -j 10 "runPangolin {}"
     head -1 $(ls -1 $splitDir/chunk*.csv | head -1) > lineage_report.csv
