@@ -1,5 +1,6 @@
 /* genoFind.h - Interface to modules for fast finding of sequence
- * matches. */
+ * matches. Compile with -DGFSERVER_HUGE defined to get 64-bit indexes.
+ */
 /* Copyright 2001-2002 Jim Kent.  All rights reserved. */
 
 #ifndef GENOFIND_H
@@ -64,13 +65,23 @@ enum gfConstants {
     gfPepMaxTileUse = 30000,
 };
 
+#ifdef GFSERVER_HUGE
+typedef bits64 gfOffset;  /* offset/size of genome sequences */
+#define GFINDEX_BITS 64
+#define GFOFFSET_FMT "%lld"
+#else
+typedef bits32 gfOffset;  /* offset/size of genome sequences */
+#define GFINDEX_BITS 32
+#define GFOFFSET_FMT "%d"
+#endif
+
 struct gfSeqSource
 /* Where a block of sequence comes from. */
     {
     struct gfSeqSource *next;
     char *fileName;	/* Name of file. */
     bioSeq *seq;	/* Sequences.  Usually either this or fileName is NULL. */
-    bits32 start,end;	/* Position within merged sequence. */
+    gfOffset start,end;	/* Position within merged sequence. */
     Bits *maskedBits;	/* If non-null contains repeat-masking info. */
     };
 
@@ -78,9 +89,9 @@ struct gfHit
 /* A genoFind hit. */
    {
    struct gfHit *next;
-   bits32 qStart;		/* Where it hits in query. */
-   bits32 tStart;		/* Where it hits in target. */
-   bits32 diagonal;		/* tStart + qSize - qStart. */
+   gfOffset qStart;		/* Where it hits in query. */
+   gfOffset tStart;		/* Where it hits in target. */
+   gfOffset diagonal;		/* tStart + qSize - qStart. */
    };
 
 /* gfHits are free'd with simple freeMem or slFreeList. */
@@ -94,9 +105,9 @@ struct gfClump
  * sequences). */
     {
     struct gfClump *next;	/* Next clump. */
-    bits32 qStart, qEnd;	/* Position in query. */
+    gfOffset qStart, qEnd;	/* Position in query. */
     struct gfSeqSource *target;	/* Target source sequence. */
-    bits32 tStart, tEnd;	/* Position in target. */
+    gfOffset tStart, tEnd;	/* Position in target. */
     int hitCount;		/* Number of hits. */
     struct gfHit *hitList;	/* List of hits. Not allocated here. */
     int queryCoverage;		/* Number of bases covered in query (thx AG!) */
@@ -108,14 +119,28 @@ void gfClumpFree(struct gfClump **pClump);
 void gfClumpFreeList(struct gfClump **pList);
 /* Free a list of dynamically allocated gfClump's */
 
+typedef bits16 endListPart;  // endList structure (below) is packed into 3 or 5 16-bit values
+
+
 struct genoFind
 /* An index of all K-mers in the genome.  
  * WARNING: MUST MODIFY CODE TO STORE/LOAD INDEX TO FILES IF THIS STRUCTURE IS
  * MODIFIED!!!
+ *
+ * The endList structure in the index is a more complex list for each N-mer.
+ * Each row of endList width is in listSizes.  Each entry packed last few
+ * letters of the tile.  The next two are the offset in the genome.  This
+ * would be a struct but that would take 8 bytes instead of 6, or nearly an
+ * extra gigabyte of RAM for the 32-bit index.
+ * 
+ * The data is packed into an array to optimized. layout and functions are used
+ * to access it.
+ *     index   lastLetters   genomeOffset  entrySize
+ *     32-bit  16-bits       32-bits       48-bits
+ *     64-bit  16-bits       64-bits       80-bits
  */
 {
-    boolean isMapped;                    /* is this a mapped file? */
-    int maxPat;                          /* Max # of times pattern can occur
+    boolean isMapped;                    /* is this a mapped file? */    int maxPat;                          /* Max # of times pattern can occur
                                           * before it is ignored. */
     int minMatch;                        /* Minimum number of tile hits needed
                                           * to trigger a clump hit. */
@@ -127,23 +152,16 @@ struct genoFind
     int sourceCount;			 /* Count of source files. */
     bool isPep;			 	 /* Is a peptide. */
     bool allowOneMismatch;		 /* Allow a single mismatch? */
-    bool noSimpRepMask;			  /* Dis-Allow simple repeat masking. */
+    bool noSimpRepMask;			 /* Dis-Allow simple repeat masking. */
     int segSize;			 /* Index is segmented if non-zero. */
-    bits32 totalSeqSize;		 /* Total size of all sequences. */
+    gfOffset totalSeqSize;		 /* Total size of all sequences. */
     struct gfSeqSource *sources;         /* List of sequence sources. */
     bits32 *listSizes;                   /* Size of list for each N-mer */
     void *allocated;                     /* Storage space for all lists. */
-    bits32 **lists;                      /* A list for each N-mer. Used if
-                                          * isSegmented is false. */
-    bits16 **endLists;                   /* A more complex list for each N-mer.
-                                          * Used if isSegmented is true.
-					  * Values come in groups of threes.
-					  * The first is the packed last few
-					  * letters of the tile.  The next two
-					  * are the offset in the genome.  This
-					  * would be a struct but that would take
-					  * 8 bytes instead of 6, or nearly an
-					  * extra gigabyte of RAM. */
+    gfOffset **lists;                    /* A list for each N-mer. Used if
+                                          * if segSize is zero. */
+    endListPart **endLists;              /* A more complex list for each N-mer.
+                                          * Used if sequence is non-zero. */
     };
 
 
@@ -454,7 +472,7 @@ struct gfClump *gfPcrClumps(struct genoFind *gf,
 
 #define MAXSINGLEPIECESIZE 5000 /* maximum size of a single piece */
 
-#define gfVersion "38x1"	/* Current BLAT version number */
+#define gfVersion "39x1"	/* Current BLAT version number */
 
 #endif /* GENOFIND_H */
 

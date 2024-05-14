@@ -47,25 +47,25 @@ if (!inittedBitsInByte)
     }
 }
 
-Bits *bitAlloc(int bitCount)
+Bits *bitAlloc(bits64 bitCount)
 /* Allocate bits. */
 {
-int byteCount = ((bitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
 return needLargeZeroedMem(byteCount);
 }
 
-Bits *bitRealloc(Bits *b, int bitCount, int newBitCount)
+Bits *bitRealloc(Bits *b, bits64 bitCount, bits64 newBitCount)
 /* Resize a bit array.  If b is null, allocate a new array */
 {
-int byteCount = ((bitCount+7)>>3);
-int newByteCount = ((newBitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
+bits64 newByteCount = ((newBitCount+7)>>3);
 return needLargeZeroedMemResize(b, byteCount, newByteCount);
 }
 
-Bits *bitClone(Bits* orig, int bitCount)
+Bits *bitClone(Bits* orig, bits64 bitCount)
 /* Clone bits. */
 {
-int byteCount = ((bitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
 Bits* bits = needLargeZeroedMem(byteCount);
 memcpy(bits, orig, byteCount);
 return bits;
@@ -77,56 +77,56 @@ void bitFree(Bits **pB)
 freez(pB);
 }
 
-Bits *lmBitAlloc(struct lm *lm,int bitCount)
+Bits *lmBitAlloc(struct lm *lm, bits64 bitCount)
 // Allocate bits.  Must supply local memory.
 {
 assert(lm != NULL);
-int byteCount = ((bitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
 return lmAlloc(lm,byteCount);
 }
 
-Bits *lmBitRealloc(struct lm *lm,Bits *b, int bitCount, int newBitCount)
+Bits *lmBitRealloc(struct lm *lm,Bits *b, bits64 bitCount, bits64 newBitCount)
 // Resize a bit array.  If b is null, allocate a new array.  Must supply local memory.
 {
 assert(lm != NULL);
-int byteCount = ((bitCount+7)>>3);
-int newByteCount = ((newBitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
+bits64 newByteCount = ((newBitCount+7)>>3);
 return lmAllocMoreMem(lm, b ,byteCount, newByteCount);
 }
 
-Bits *lmBitClone(struct lm *lm,Bits* orig, int bitCount)
+Bits *lmBitClone(struct lm *lm,Bits* orig, bits64 bitCount)
 // Clone bits.  Must supply local memory.
 {
 assert(lm != NULL);
-int byteCount = ((bitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
 Bits* bits = lmAlloc(lm,byteCount);
 memcpy(bits, orig, byteCount);
 return bits;
 }
 
-void bitSetOne(Bits *b, int bitIx)
+void bitSetOne(Bits *b, bits64 bitIx)
 /* Set a single bit. */
 {
 b[bitIx>>3] |= oneBit[bitIx&7];
 }
 
-void bitClearOne(Bits *b, int bitIx)
+void bitClearOne(Bits *b, bits64 bitIx)
 /* Clear a single bit. */
 {
 b[bitIx>>3] &= ~oneBit[bitIx&7];
 }
 
-void bitSetRange(Bits *b, int startIx, int bitCount)
+void bitSetRange(Bits *b, bits64 startIx, bits64 bitCount)
 /* Set a range of bits. */
 {
 if (bitCount <= 0)
     return;
-int endIx = (startIx + bitCount - 1);
-int startByte = (startIx>>3);
-int endByte = (endIx>>3);
-int startBits = (startIx&7);
-int endBits = (endIx&7);
-int i;
+bits64 endIx = (startIx + bitCount - 1);
+bits64 startByte = (startIx>>3);
+bits64 endByte = (endIx>>3);
+bits64 startBits = (startIx&7);
+bits64 endBits = (endIx&7);
+bits64 i;
 
 if (startByte == endByte)
     {
@@ -140,24 +140,24 @@ b[endByte] |= rightMask[endBits];
 }
 
 
-boolean bitReadOne(Bits *b, int bitIx)
+boolean bitReadOne(Bits *b, bits64 bitIx)
 /* Read a single bit. */
 {
 return (b[bitIx>>3] & oneBit[bitIx&7]) != 0;
 }
 
-int bitCountRange(Bits *b, int startIx, int bitCount)
+bits64 bitCountRange(Bits *b, bits64 startIx, bits64 bitCount)
 /* Count number of bits set in range. */
 {
 if (bitCount <= 0)
     return 0;
-int endIx = (startIx + bitCount - 1);
-int startByte = (startIx>>3);
-int endByte = (endIx>>3);
-int startBits = (startIx&7);
-int endBits = (endIx&7);
-int i;
-int count = 0;
+bits64 endIx = (startIx + bitCount - 1);
+bits64 startByte = (startIx>>3);
+bits64 endByte = (endIx>>3);
+bits64 startBits = (startIx&7);
+bits64 endBits = (endIx&7);
+bits64 i;
+bits64 count = 0;
 
 if (!inittedBitsInByte)
     bitsInByteInit();
@@ -170,13 +170,13 @@ count += bitsInByte[b[endByte] & rightMask[endBits]];
 return count;
 }
 
-int bitFind(Bits *b, int startIx, boolean val, int bitCount)
+bits64 bitFind(Bits *b, bits64 startIx, boolean val, bits64 bitCount)
 /* Find the index of the the next set bit. */
 {
 unsigned char notByteVal = val ? 0 : 0xff;
-int iBit = startIx;
-int endByte = ((bitCount-1)>>3);
-int iByte;
+bits64 iBit = startIx;
+bits64 endByte = ((bitCount-1)>>3);
+bits64 iByte;
 
 /* scan initial byte */
 while (((iBit & 7) != 0) && (iBit < bitCount))
@@ -205,36 +205,36 @@ while (iBit < bitCount)
  return bitCount;  /* not found */
 }
 
-int bitFindSet(Bits *b, int startIx, int bitCount)
+bits64 bitFindSet(Bits *b, bits64 startIx, bits64 bitCount)
 /* Find the index of the the next set bit. */
 {
 return bitFind(b, startIx, TRUE, bitCount);
 }
 
-int bitFindClear(Bits *b, int startIx, int bitCount)
+bits64 bitFindClear(Bits *b, bits64 startIx, bits64 bitCount)
 /* Find the index of the the next clear bit. */
 {
 return bitFind(b, startIx, FALSE, bitCount);
 }
 
-void bitClear(Bits *b, int bitCount)
+void bitClear(Bits *b, bits64 bitCount)
 /* Clear many bits (possibly up to 7 beyond bitCount). */
 {
-int byteCount = ((bitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
 zeroBytes(b, byteCount);
 }
 
-void bitClearRange(Bits *b, int startIx, int bitCount)
+void bitClearRange(Bits *b, bits64 startIx, bits64 bitCount)
 /* Clear a range of bits. */
 {
 if (bitCount <= 0)
     return;
-int endIx = (startIx + bitCount - 1);
-int startByte = (startIx>>3);
-int endByte = (endIx>>3);
-int startBits = (startIx&7);
-int endBits = (endIx&7);
-int i;
+bits64 endIx = (startIx + bitCount - 1);
+bits64 startByte = (startIx>>3);
+bits64 endByte = (endIx>>3);
+bits64 startBits = (startIx&7);
+bits64 endBits = (endIx&7);
+bits64 i;
 
 if (startByte == endByte)
     {
@@ -247,10 +247,10 @@ for (i = startByte+1; i<endByte; ++i)
 b[endByte] &= ~rightMask[endBits];
 }
 
-void bitAnd(Bits *a, Bits *b, int bitCount)
+void bitAnd(Bits *a, Bits *b, bits64 bitCount)
 /* And two bitmaps.  Put result in a. */
 {
-int byteCount = ((bitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
 while (--byteCount >= 0)
     {
     *a = (*a & *b++);
@@ -258,11 +258,11 @@ while (--byteCount >= 0)
     }
 }
 
-int bitAndCount(Bits *a, Bits *b, int bitCount)
+bits64 bitAndCount(Bits *a, Bits *b, bits64 bitCount)
 // Without altering 2 bitmaps, count the AND bits.
 {
-int byteCount = ((bitCount+7)>>3);
-int count = 0;
+bits64 byteCount = ((bitCount+7)>>3);
+bits64 count = 0;
 if (!inittedBitsInByte)
     bitsInByteInit();
 while (--byteCount >= 0)
@@ -271,10 +271,10 @@ while (--byteCount >= 0)
 return count;
 }
 
-void bitOr(Bits *a, Bits *b, int bitCount)
+void bitOr(Bits *a, Bits *b, bits64 bitCount)
 /* Or two bitmaps.  Put result in a. */
 {
-int byteCount = ((bitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
 while (--byteCount >= 0)
     {
     *a = (*a | *b++);
@@ -282,11 +282,11 @@ while (--byteCount >= 0)
     }
 }
 
-int bitOrCount(Bits *a, Bits *b, int bitCount)
+bits64 bitOrCount(Bits *a, Bits *b, bits64 bitCount)
 // Without altering 2 bitmaps, count the OR'd bits.
 {
-int byteCount = ((bitCount+7)>>3);
-int count = 0;
+bits64 byteCount = ((bitCount+7)>>3);
+bits64 count = 0;
 if (!inittedBitsInByte)
     bitsInByteInit();
 while (--byteCount >= 0)
@@ -295,9 +295,9 @@ while (--byteCount >= 0)
 return count;
 }
 
-void bitXor(Bits *a, Bits *b, int bitCount)
+void bitXor(Bits *a, Bits *b, bits64 bitCount)
 {
-int byteCount = ((bitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
 while (--byteCount >= 0)
     {
     *a = (*a ^ *b++);
@@ -305,11 +305,11 @@ while (--byteCount >= 0)
     }
 }
 
-int bitXorCount(Bits *a, Bits *b, int bitCount)
+bits64 bitXorCount(Bits *a, Bits *b, bits64 bitCount)
 // Without altering 2 bitmaps, count the XOR'd bits.
 {
-int byteCount = ((bitCount+7)>>3);
-int count = 0;
+bits64 byteCount = ((bitCount+7)>>3);
+bits64 count = 0;
 if (!inittedBitsInByte)
     bitsInByteInit();
 while (--byteCount >= 0)
@@ -318,10 +318,10 @@ while (--byteCount >= 0)
 return count;
 }
 
-void bitNot(Bits *a, int bitCount)
+void bitNot(Bits *a, bits64 bitCount)
 /* Flip all bits in a. */
 {
-int byteCount = ((bitCount+7)>>3);
+bits64 byteCount = ((bitCount+7)>>3);
 while (--byteCount >= 0)
     {
     *a = ~*a;
@@ -329,13 +329,13 @@ while (--byteCount >= 0)
     }
 }
 
-void bitReverseRange(Bits *bits, int startIx, int bitCount)
+void bitReverseRange(Bits *bits, bits64 startIx, bits64 bitCount)
 // Reverses bits in range (e.g. 110010 becomes 010011)
 {
 if (bitCount <= 0)
     return;
-int ixA = startIx;
-int ixB = (startIx + bitCount - 1);
+bits64 ixA = startIx;
+bits64 ixB = (startIx + bitCount - 1);
 for ( ;ixA < ixB; ixA++, ixB--)
     {
     boolean bitA = bitReadOne(bits, ixA);
@@ -354,11 +354,11 @@ for ( ;ixA < ixB; ixA++, ixB--)
 }
 
 
-void bitPrint(Bits *a, int startIx, int bitCount, FILE* out)
+void bitPrint(Bits *a, bits64 startIx, bits64 bitCount, FILE* out)
 /* Print part or all of bit map as a string of 0s and 1s.  Mostly useful for
  * debugging */
 {
-int i;
+bits64 i;
 for (i = startIx; i < bitCount; i++)
     {
     if (bitReadOne(a, i))
@@ -369,14 +369,14 @@ for (i = startIx; i < bitCount; i++)
 fputc('\n', out);
 }
 
-void bitsOut(FILE* out, Bits *bits, int startIx, int bitCount, boolean onlyOnes)
+void bitsOut(FILE* out, Bits *bits, bits64 startIx, bits64 bitCount, boolean onlyOnes)
 // Print part or all of bit map as a string of 0s and 1s.
 // If onlyOnes, enclose result in [] and use ' ' instead of '0'.
 {
 if (onlyOnes)
     fputc('[', out);
 
-int ix = startIx;
+bits64 ix = startIx;
 for ( ; ix < bitCount; ix++)
     {
     if (bitReadOne(bits, ix))
@@ -393,7 +393,7 @@ if (onlyOnes)
     fputc(']', out);
 }
 
-Bits *bitsIn(struct lm *lm,char *bitString, int len)
+Bits *bitsIn(struct lm *lm,char *bitString, bits64 len)
 // Returns a bitmap from a string of 1s and 0s.  Any non-zero, non-blank char sets a bit.
 // Returned bitmap is the size of len even if that is longer than the string.
 // Optionally supply local memory.  Note does NOT handle enclosing []s printed with bitsOut().
@@ -407,7 +407,7 @@ if (lm != NULL)
 else
     bits = bitAlloc(len);
 
-int ix = 0;
+bits64 ix = 0;
 for ( ;ix < len && bitString[ix] != '\0'; ix++)
     {
     if (bitString[ix] != '0' && bitString[ix] != ' ')

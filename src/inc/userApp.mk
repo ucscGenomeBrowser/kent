@@ -28,6 +28,7 @@ O = ${A}.o
 objects = ${O} ${extraObjects} ${externObjects}
 
 ${DESTDIR}${BINDIR}/${A}${EXE}: ${DEPLIBS} ${O} ${extraObjects}
+	@mkdir -p $(dir $@)
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} ${objects} ${LINKLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 

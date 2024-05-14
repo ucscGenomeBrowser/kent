@@ -18,9 +18,48 @@
 #include "genoFind.h"
 #include "trans3.h"
 #include "binRange.h"
+#include "portable.h"
+#include <sys/mman.h>
 
 static char indexFileMagic[] = "genoFind";
 static char indexFileVerison[] = "1.0";
+
+#undef DEBUG_CLUMP
+#undef DEBUG_HITS
+
+#ifdef DEBUG_CLUMP
+static void dumpClump(struct gfClump *clump, FILE *f)
+/* Print out a clump */
+{
+struct gfSeqSource *target = clump->target;
+char *tName = target->fileName;
+if (tName == NULL) tName = target->seq->name;
+fprintf(f, GFOFFSET_FMT "-" GFOFFSET_FMT "\t%s:" GFOFFSET_FMT "-" GFOFFSET_FMT "\n",
+        clump->qStart, clump->qEnd, tName, clump->tStart, clump->tEnd);
+}
+
+static void dumpClumpList(struct gfClump *clumpList, FILE *f)
+/* Dump list of clumps. */
+{
+fprintf(f, "=== Clumps\n");
+struct gfClump *clump;
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    dumpClump(clump, f);
+fflush(f);
+}
+#endif /* DEBUG_CLUMP */
+
+#ifdef DEBUG_HITS
+static void dumpHits(struct gfHit *hits, FILE *f)
+/* Dump list of hits. */
+{
+fprintf(f, "=== Hits\n");
+for (struct gfHit *hit = hits; hit != NULL; hit = hit->next)
+    fprintf(f, GFOFFSET_FMT " " GFOFFSET_FMT " "  GFOFFSET_FMT "\n",
+            hit->qStart, hit->tStart, hit->diagonal);
+fflush(f);
+}
+#endif /*  DEBUG_HITS */
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -91,6 +130,56 @@ if (gf != NULL)
     }
 }
 
+/* constants for endList */
+#if GFSERVER_HUGE
+#define ENDLIST_ENTRY_NUM_PARTS 3  // 48-bits endList entry parts
+#else
+#define ENDLIST_ENTRY_NUM_PARTS 5  // 80-bits endList entry parts
+#endif
+
+#define ENDLIST_ENTRY_SIZE (ENDLIST_ENTRY_NUM_PARTS * sizeof(endListPart))
+/* byte size of an entry in endList array */
+
+INLINE endListPart* endListGetEntry(struct genoFind *gf, int iRow, int iCol)
+/* get an entry in the endlist array */
+{
+assert(iCol < gf->listSizes[iRow]);
+bits8 *row = (bits8*)gf->endLists[iRow];
+return (endListPart*)(row + (iCol * ENDLIST_ENTRY_SIZE));
+}
+
+INLINE void endListSetEntryValues(struct genoFind *gf, int iRow, int iCol,
+                                  bits16 tileTail, gfOffset offset)
+/* store values in an endList entry */
+{
+endListPart* entry = endListGetEntry(gf, iRow, iCol);
+entry[0] = tileTail;
+#if GFSERVER_HUGE
+entry[1] = offset >> 32;
+entry[2] = (offset >> 16) & 0xffff;
+entry[3] = offset & 0xffff;
+#else
+entry[1] = offset >> 16;
+entry[2] = offset & 0xffff;
+#endif
+}
+
+INLINE bits16 endListEntryTileTail(endListPart *entry)
+/* get endList tileTail value */
+{
+return entry[0];
+}
+
+INLINE gfOffset endListEntryOffset(endListPart *entry)
+/* get endList genome offset */
+{
+#if GFSERVER_HUGE
+return ((bits64)entry[1] << 32) | ((bits64)entry[2] << 16) | (bits64)entry[3];
+#else
+return (entry[1] << 16) | entry[2];
+#endif
+}
+
 static off_t mustSeekAligned(FILE *f)
 /* seek so that the current offset is 64-bit aligned */
 {
@@ -119,7 +208,7 @@ struct genoFindFileHdr
     bool allowOneMismatch;
     bool noSimpRepMask;
     int segSize;
-    int totalSeqSize;
+    gfOffset totalSeqSize;
 
     off_t sourcesOff;     // offset of sequences sources
     off_t listSizesOff;   // offset of listSizes
@@ -185,16 +274,16 @@ if (fileName != NULL)
         fileName = s + 1;
     }
 writeStringSafe(f, fileName);
-mustWrite(f, &ss->start, sizeof(bits32));
-mustWrite(f, &ss->end, sizeof(bits32));
+mustWrite(f, &ss->start, sizeof(gfOffset));
+mustWrite(f, &ss->end, sizeof(gfOffset));
 }
 
 static void genoFindReadSource(FILE *f, struct gfSeqSource *ss)
 /* read a gfSeqSource from file */
 {
 ss->fileName = readString(f);
-mustRead(f, &ss->start, sizeof(bits32));
-mustRead(f, &ss->end, sizeof(bits32));
+mustRead(f, &ss->start, sizeof(gfOffset));
+mustRead(f, &ss->end, sizeof(gfOffset));
 }
 
 static off_t genoFindWriteSources(struct genoFind *gf, FILE *f)
@@ -241,7 +330,7 @@ int i;
 for (i = 0; i < gf->tileSpaceSize; i++)
     if (gf->listSizes[i] < gf->maxPat)
         count += gf->listSizes[i];
-mustWrite(f, gf->allocated, count*sizeof(bits32));
+mustWrite(f, gf->allocated, count*sizeof(gfOffset));
 return off;
 }
 
@@ -250,7 +339,7 @@ static void genoFindMapLists(void *memMapped, off_t off, struct genoFind *gf)
 {
 gf->allocated = memMapped + off;
 gf->lists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(gf->lists[0]));
-bits32 *cur = gf->allocated;
+gfOffset *cur = gf->allocated;
 size_t count = 0;
 int i;
 for (i = 0; i < gf->tileSpaceSize; i++)
@@ -272,7 +361,7 @@ size_t count = 0;
 int i;
 for (i = 0; i < gf->tileSpaceSize; i++)
     count += gf->listSizes[i];
-mustWrite(f, gf->allocated, 3*count*sizeof(bits16));
+mustWrite(f, gf->allocated, count * ENDLIST_ENTRY_SIZE);
 return off;
 }
 
@@ -280,7 +369,7 @@ static void genoFindMapEndLists(void *memMapped, off_t off, struct genoFind *gf)
 /* maps the endLists into memory */
 {
 gf->endLists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(gf->endLists[0]));
-bits16 *cur = gf->allocated;
+endListPart* cur = gf->allocated;
 size_t count = 0;
 int i;
 for (i = 0; i < gf->tileSpaceSize; i++)
@@ -393,7 +482,11 @@ static void genoFindIndexInitHeader(struct genoFindIndex *gfIdx,
 zeroBytes(hdr, sizeof(struct genoFindIndexFileHdr));
 safecpy(hdr->magic, sizeof(hdr->magic), indexFileMagic);
 safecpy(hdr->version, sizeof(hdr->version), indexFileVerison);
+#ifdef GFSERVER_HUGE
+hdr->indexAddressSize = 64;
+#else
 hdr->indexAddressSize = 32;
+#endif
 hdr->isTrans = gfIdx->isTrans;
 }
 
@@ -406,8 +499,13 @@ if (!sameString(hdr->magic, indexFileMagic))
     errAbort("wrong magic string for index file");
 if (!sameString(hdr->version, indexFileVerison))
     errAbort("unsupported version for index file: %s", hdr->version);
+#ifdef GFSERVER_HUGE
+if (hdr->indexAddressSize != 64)
+    errAbort("compiled for 64-bit index, but not a 64-bit index: %d", hdr->indexAddressSize);
+#else
 if (hdr->indexAddressSize != 32)
-    errAbort("not a 32-bit index: %d", hdr->indexAddressSize);
+    errAbort("compiled for 32-bit index, but not a 32-bit index: %d", hdr->indexAddressSize);
+#endif
 if (hdr->isTrans != gfIdx->isTrans)
     errAbort("index file has isTrans=%d, isTrans=%d requested", hdr->isTrans, gfIdx->isTrans);
 }
@@ -507,7 +605,7 @@ if (gfIdx != NULL)
     }
 }
 
-int gfPowerOf20(int n)
+static int gfPowerOf20(int n)
 /* Return a 20 to the n */
 {
 int res = 20;
@@ -612,7 +710,7 @@ if (!initted)
     }
 }
 
-int gfDnaTile(DNA *dna, int n)
+static int gfDnaTile(DNA *dna, int n)
 /* Make a packed DNA n-mer. */
 {
 int tile = 0;
@@ -627,7 +725,7 @@ for (i=0; i<n; ++i)
 return tile;
 }
 
-int gfPepTile(AA *pep, int n)
+static int gfPepTile(AA *pep, int n)
 /* Make up packed representation of translated protein. */
 {
 int tile = 0;
@@ -670,7 +768,7 @@ for (i=0; i<=lastTile; i += stepSize)
     }
 }
 
-static int gfCountTilesInNib(struct genoFind *gf, int stepSize, char *fileName)
+static long long gfCountTilesInNib(struct genoFind *gf, int stepSize, char *fileName)
 /* Count all tiles in nib file.  Returns nib size. */
 {
 FILE *f;
@@ -695,19 +793,21 @@ fclose(f);
 return nibSize;
 }
 
-long long maxTotalBases()
+static bits64 maxTotalBases()
 /* Return maximum bases we can index. */
 {
-long long maxBases = 1024*1024;
-maxBases *= 4*1024;
-return maxBases;
+#ifdef GFSERVER_HUGE
+return 18446744073709551615ULL; // 64-bit index
+#else
+return 4294967295ULL;    // 32-bit index
+#endif
 }
 
-static long long twoBitCheckTotalSize(struct twoBitFile *tbf)
+static bits64 twoBitCheckTotalSize(struct twoBitFile *tbf)
 /* Return total size of sequence in two bit file.  Squawk and
  * die if it's more than 4 gig. */
 {
-long long totalSize = twoBitTotalSize(tbf);
+bits64 totalSize = twoBitTotalSize(tbf);
 if (totalSize > maxTotalBases())
     errAbort("Sorry, can only index up to %lld bases, %s has %lld",
 	maxTotalBases(),  tbf->fileName, totalSize);
@@ -715,7 +815,7 @@ return totalSize;
 }
 
 static void gfCountTilesInTwoBit(struct genoFind *gf, int stepSize,
-	char *fileName, int *retSeqCount, long long *retBaseCount)
+	char *fileName, int *retSeqCount, bits64 *retBaseCount)
 /* Count all tiles in 2bit file.  Returns number of sequences and
  * total size of sequences in file. */
 {
@@ -723,7 +823,7 @@ struct dnaSeq *seq;
 struct twoBitFile *tbf = twoBitOpen(fileName);
 struct twoBitIndex *index;
 int seqCount = 0;
-long long baseCount = twoBitCheckTotalSize(tbf);
+bits64 baseCount = twoBitCheckTotalSize(tbf);
 
 printf("Counting tiles in %s\n", fileName);
 for (index = tbf->indexList; index != NULL; index = index->next)
@@ -742,23 +842,21 @@ static int gfAllocLists(struct genoFind *gf)
 /* Allocate index lists and set up list pointers. 
  * Returns size of all lists. */
 {
-int oneCount;
-int count = 0;
+bits64 count = 0;
 int i;
 bits32 *listSizes = gf->listSizes;
-bits32 **lists = gf->lists;
-bits32 *allocated = NULL;
-bits32 maxPat = gf->maxPat;
-int size;
+gfOffset **lists = gf->lists;
+gfOffset *allocated = NULL;
+gfOffset maxPat = gf->maxPat;
 int usedCount = 0, overusedCount = 0;
 int tileSpaceSize = gf->tileSpaceSize;
 
 for (i=0; i<tileSpaceSize; ++i)
     {
     /* If pattern is too much used it's no good to us, ignore. */
-    if ((oneCount = listSizes[i]) < maxPat)
+    if (listSizes[i] < maxPat)
         {
-        count += oneCount;
+        count += listSizes[i];
         usedCount += 1;
         }
     else
@@ -767,13 +865,13 @@ for (i=0; i<tileSpaceSize; ++i)
         }
     }
 if (count > 0)
-    gf->allocated = allocated = needHugeMem(count*sizeof(allocated[0]));
+    gf->allocated = allocated = needHugeMem(count*sizeof(gfOffset));
 for (i=0; i<tileSpaceSize; ++i)
     {
-    if ((size = listSizes[i]) < maxPat)
+    if (listSizes[i] < maxPat)
         {
         lists[i] = allocated;
-        allocated += size;
+        allocated += listSizes[i];
         }
     }
 return count;
@@ -786,26 +884,24 @@ static int gfAllocLargeLists(struct genoFind *gf)
 int count = 0;
 int i;
 bits32 *listSizes = gf->listSizes;
-bits16 **endLists = gf->endLists;
-bits16 *allocated = NULL;
-int size;
+endListPart **endLists = gf->endLists;
+endListPart *allocated = NULL;
 int tileSpaceSize = gf->tileSpaceSize;
 
 for (i=0; i<tileSpaceSize; ++i)
     count += listSizes[i];
 if (count > 0)
-    gf->allocated = allocated = needHugeMem(3*count*sizeof(allocated[0]));
+    gf->allocated = allocated = needHugeMem(count * ENDLIST_ENTRY_SIZE);
 for (i=0; i<tileSpaceSize; ++i)
     {
-    size = listSizes[i];
     endLists[i] = allocated;
-    allocated += 3*size;
+    allocated += ENDLIST_ENTRY_SIZE * listSizes[i];
     }
 return count;
 }
 
 
-static void gfAddSeq(struct genoFind *gf, bioSeq *seq, bits32 offset)
+static void gfAddSeq(struct genoFind *gf, bioSeq *seq, gfOffset offset)
 /* Add all N-mers in seq.  Done after gfCountSeq. */
 {
 char *poly = seq->dna;
@@ -816,7 +912,7 @@ int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 int maxPat = gf->maxPat;
 int tile;
 bits32 *listSizes = gf->listSizes;
-bits32 **lists = gf->lists;
+gfOffset **lists = gf->lists;
 
 initNtLookup();
 for (i=0; i<=lastTile; i += stepSize)
@@ -834,7 +930,7 @@ for (i=0; i<=lastTile; i += stepSize)
     }
 }
 
-static void gfAddLargeSeq(struct genoFind *gf, bioSeq *seq, bits32 offset)
+static void gfAddLargeSeq(struct genoFind *gf, bioSeq *seq, gfOffset offset)
 /* Add all N-mers to segmented index.  Done after gfCountSeq. */
 {
 char *poly = seq->dna;
@@ -847,8 +943,6 @@ int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 int tileHead;
 int tileTail;
 bits32 *listSizes = gf->listSizes;
-bits16 **endLists = gf->endLists;
-bits16 *endList;
 int headCount;
 
 initNtLookup();
@@ -858,12 +952,8 @@ for (i=0; i<=lastTile; i += stepSize)
     tileTail = makeTile(poly + tileHeadSize, tileTailSize);
     if (tileHead >= 0 && tileTail >= 0)
         {
-	endList = endLists[tileHead];
 	headCount = listSizes[tileHead]++;
-	endList += headCount * 3;		/* Because have three slots per. */
-	endList[0] = tileTail;
-	endList[1] = (offset >> 16);
-	endList[2] = (offset&0xffff);
+        endListSetEntryValues(gf, i, headCount, tileTail, offset);
 	}
     offset += stepSize;
     poly += stepSize;
@@ -872,7 +962,7 @@ for (i=0; i<=lastTile; i += stepSize)
 
 
 
-static int gfAddTilesInNib(struct genoFind *gf, char *fileName, bits32 offset,
+static int gfAddTilesInNib(struct genoFind *gf, char *fileName, gfOffset offset,
 	int stepSize)
 /* Add all tiles in nib file.  Returns size of nib file. */
 {
@@ -951,10 +1041,10 @@ struct genoFind *gfIndexNibsAndTwoBits(int fileCount, char *fileNames[],
 struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, stepSize,
 	maxPat, oocFile, FALSE, allowOneMismatch, noSimpRepMask);
 int i;
-bits32 offset = 0, nibSize;
+gfOffset offset = 0, nibSize;
 char *fileName;
 struct gfSeqSource *ss;
-long long totalBases = 0, warnAt = maxTotalBases();
+bits64 totalBases = 0, warnAt = maxTotalBases();
 int totalSeq = 0;
 
 if (allowOneMismatch)
@@ -964,10 +1054,12 @@ if (stepSize == 0)
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
+    if (!fileExists(fileName))
+        errAbort("Unrecognized genome sequence does not exist %s", fileName);
     if (twoBitIsFile(fileName))
 	{
 	int seqCount;
-	long long baseCount;
+	bits64 baseCount;
         gfCountTilesInTwoBit(gf, stepSize, fileName, &seqCount, &baseCount);
 	totalBases += baseCount;
 	totalSeq += seqCount;
@@ -978,10 +1070,10 @@ for (i=0; i<fileCount; ++i)
 	totalSeq += 1;
 	}
     else
-        errAbort("Unrecognized file type %s", fileName);
-    /* Warn if they exceed 4 gig. */
+        errAbort("Unrecognized genome sequence file type %s", fileName);
+    /* Abort if they exceed size, suggest large sequence blat. */
     if (totalBases >= warnAt)
-	errAbort("Exceeding 4 billion bases, sorry gfServer can't handle that.");
+	errAbort("Exceeding 4 billion bases, try large genome gfServer.");
     }
 gfAllocLists(gf);
 gfZeroNonOverused(gf);
@@ -1116,7 +1208,7 @@ for (isRc=0; isRc <= 1; ++isRc)
 }
 
 static void transIndexBothStrands(struct dnaSeq *seq, 
-    struct genoFind *transGf[2][3], bits32 offset[2][3],
+    struct genoFind *transGf[2][3], gfOffset offset[2][3],
     int sourceIx, char *fileName)
 /* Add unmasked tiles on both strands of sequence to
  * index.  As a side effect this will reverse-complement seq. */
@@ -1153,11 +1245,11 @@ void gfIndexTransNibsAndTwoBits(struct genoFind *transGf[2][3],
 {
 struct genoFind *gf;
 int i,isRc, frame;
-bits32 offset[2][3];
+gfOffset offset[2][3];
 char *fileName;
 struct dnaSeq *seq;
 int sourceCount = 0;
-long long totalBases = 0, warnAt = maxTotalBases();
+bits64 totalBases = 0, warnAt = maxTotalBases();
 
 if (allowOneMismatch)
     errAbort("Don't currently support allowOneMismatch in gfIndexTransNibsAndTwoBits");
@@ -1273,7 +1365,7 @@ static struct genoFind *gfSmallIndexSeq(struct genoFind *gf, bioSeq *seqList,
 int seqCount = slCount(seqList);
 bioSeq *seq;
 int i;
-bits32 offset = 0;
+gfOffset offset = 0;
 struct gfSeqSource *ss;
 
 if (isPep)
@@ -1309,7 +1401,7 @@ static struct genoFind *gfLargeIndexSeq(struct genoFind *gf, bioSeq *seqList,
 int seqCount = slCount(seqList);
 bioSeq *seq;
 int i;
-bits32 offset = 0;
+gfOffset offset = 0;
 struct gfSeqSource *ss;
 
 for (seq = seqList; seq != NULL; seq = seq->next)
@@ -1375,8 +1467,8 @@ return gf;
 static int bCmpSeqSource(const void *vTarget, const void *vRange)
 /* Compare function for binary search of gfSeqSource. */
 {
-const bits32 *pTarget = vTarget;
-bits32 target = *pTarget;
+const gfOffset *pTarget = vTarget;
+gfOffset target = *pTarget;
 const struct gfSeqSource *ss = vRange;
 
 if (target < ss->start) return -1;
@@ -1384,13 +1476,13 @@ if (target >= ss->end) return 1;
 return 0;
 }
 
-static struct gfSeqSource *findSource(struct genoFind *gf, bits32 targetPos)
+static struct gfSeqSource *findSource(struct genoFind *gf, gfOffset targetPos)
 /* Find source given target position. */
 {
 struct gfSeqSource *ss =  bsearch(&targetPos, gf->sources, gf->sourceCount, 
 	sizeof(gf->sources[0]), bCmpSeqSource);
 if (ss == NULL)
-    errAbort("Couldn't find source for %d", targetPos);
+    errAbort("Couldn't find source for " GFOFFSET_FMT, targetPos);
 return ss;
 }
 
@@ -1423,7 +1515,7 @@ struct gfSeqSource *ss = clump->target;
 char *name = ss->fileName;
 
 if (name == NULL) name = ss->seq->name;
-fprintf(f, "%u-%u %s %u-%u, hits %d\n", 
+fprintf(f, GFOFFSET_FMT "-" GFOFFSET_FMT " %s " GFOFFSET_FMT "-" GFOFFSET_FMT ", hits %d\n", 
 	clump->qStart, clump->qEnd, name,
 	clump->tStart - ss->start, clump->tEnd - ss->start,
 	clump->hitCount);
@@ -1638,7 +1730,7 @@ static void findClumpBounds(struct gfClump *clump, int tileSize)
 /* Figure out qStart/qEnd tStart/tEnd from hitList */
 {
 struct gfHit *hit;
-int x;
+gfOffset x;
 hit = clump->hitList;
 if (hit == NULL)
     return;
@@ -1728,7 +1820,7 @@ static struct gfClump *clumpNear(struct genoFind *gf, struct gfClump *oldClumps,
 struct gfClump *newClumps = NULL, *clump, *nextClump;
 struct gfHit *hit, *nextHit;
 int tileSize = gf->tileSize;
-bits32 lastT;
+gfOffset lastT;
 int nearEnough = (gf->isPep ? gfNearEnough/3 : gfNearEnough);
 
 for (clump = oldClumps; clump != NULL; clump = nextClump)
@@ -1794,10 +1886,13 @@ int bucketShift = 16;		/* 64k buckets. */
 bits32 bucketSize = (1<<bucketShift);
 int bucketCount = (gf->totalSeqSize >> bucketShift) + 1;
 int nearEnough = (gf->isPep ? gfNearEnough/3 : gfNearEnough);
-bits32 boundary = bucketSize - nearEnough;
+gfOffset boundary = bucketSize - nearEnough;
 int i;
 struct gfHit **buckets = NULL, **pb;
 
+#ifdef DEBUG_HITS
+dumpHits(hitList, stdout);
+#endif
 /* Sort hit list into buckets. */
 AllocArray(buckets, bucketCount);
 for (hit = hitList; hit != NULL; hit = nextHit)
@@ -1812,7 +1907,7 @@ for (hit = hitList; hit != NULL; hit = nextHit)
 for (i=0; i<bucketCount; ++i)
     {
     int clumpSize;
-    bits32 maxT;
+    gfOffset maxT;
     struct gfHit *clumpHits;
     pb = buckets + i;
     gfHitSortDiagonal(pb);
@@ -1858,12 +1953,8 @@ clumpList = clumpNear(gf, clumpList, minMatch);
 gfClumpComputeQueryCoverage(clumpList, tileSize);	/* Thanks AG */
 slSort(&clumpList, gfClumpCmpQueryCoverage);
 
-#ifdef DEBUG
-uglyf("Dumping clumps B\n");
-for (clump = clumpList; clump != NULL; clump = clump->next)	/* uglyf */
-    {
-    uglyf(" %d %d %s %d %d (%d hits)\n", clump->qStart, clump->qEnd, clump->target->seq->name,   clump->tStart, clump->tEnd, clump->hitCount);
-    }
+#ifdef DEBUG_CLUMP
+dumpClumpList(clumpList, stdout);
 #endif /* DEBUG */
 freez(&buckets);
 return clumpList;
@@ -1871,21 +1962,21 @@ return clumpList;
 
 
 static struct gfHit *gfFastFindDnaHits(struct genoFind *gf, struct dnaSeq *seq, 
-	Bits *qMaskBits,  int qMaskOffset, struct lm *lm, int *retHitCount,
-	struct gfSeqSource *target, int tMin, int tMax)
+	Bits *qMaskBits,  gfOffset qMaskOffset, struct lm *lm, int *retHitCount,
+	struct gfSeqSource *target, gfOffset tMin, gfOffset tMax)
 /* Find hits associated with one sequence. This is is special fast
  * case for DNA that is in an unsegmented index. */
 {
 struct gfHit *hitList = NULL, *hit;
-int size = seq->size;
+gfOffset size = seq->size;
 int tileSizeMinusOne = gf->tileSize - 1;
 int mask = gf->tileMask;
 DNA *dna = seq->dna;
 int i, j;
-bits32 bits = 0;
-bits32 bVal;
+gfOffset bits = 0;
+gfOffset bVal;
 int listSize;
-bits32 qStart, *tList;
+gfOffset qStart, *tList;
 int hitCount = 0;
 
 for (i=0; i<tileSizeMinusOne; ++i)
@@ -1909,7 +2000,7 @@ for (i=tileSizeMinusOne; i<size; ++i)
 	    tList = gf->lists[bits];
 	    for (j=0; j<listSize; ++j)
 		{
-		int tStart = tList[j];
+		gfOffset tStart = tList[j];
 		if (target == NULL || 
 			(target == findSource(gf, tStart) && tStart >= tMin && tStart < tMax) ) 
 		    {
@@ -1929,8 +2020,8 @@ return hitList;
 }
 
 static struct gfHit *gfStraightFindHits(struct genoFind *gf, aaSeq *seq, 
-	Bits *qMaskBits, int qMaskOffset, struct lm *lm, int *retHitCount,
-	struct gfSeqSource *target, int tMin, int tMax)
+	Bits *qMaskBits, gfOffset qMaskOffset, struct lm *lm, int *retHitCount,
+	struct gfSeqSource *target, gfOffset tMin, gfOffset tMax)
 /* Find hits associated with one sequence in a non-segmented
  * index where hits match exactly. */
 {
@@ -1942,7 +2033,7 @@ char *poly = seq->dna;
 int i, j;
 int tile;
 int listSize;
-bits32 qStart, *tList;
+gfOffset qStart, *tList;
 int hitCount = 0;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
@@ -1961,7 +2052,7 @@ for (i=0; i<=lastStart; ++i)
 	    tList = gf->lists[tile];
 	    for (j=0; j<listSize; ++j)
 		{
-		int tStart = tList[j];
+		gfOffset tStart = tList[j];
 		if (target == NULL || 
 			(target == findSource(gf, tStart) && tStart >= tMin && tStart < tMax) ) 
 		    {
@@ -1994,7 +2085,7 @@ char *poly = seq->dna;
 int i, j;
 int tile;
 int listSize;
-bits32 qStart, *tList;
+gfOffset qStart, *tList;
 int hitCount = 0;
 int varPos, varVal;	/* Variable position. */
 int (*makeTile)(char *poly, int n); 
@@ -2094,8 +2185,8 @@ char *poly = seq->dna;
 int i, j;
 int tileHead, tileTail;
 int listSize;
-bits32 qStart;
-bits16 *endList;
+gfOffset qStart;
+endListPart *endList;
 int hitCount = 0;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
@@ -2116,9 +2207,10 @@ for (i=0; i<=lastStart; ++i)
 	endList = gf->endLists[tileHead];
 	for (j=0; j<listSize; ++j)
 	    {
-	    if (endList[0] == tileTail)
+            endListPart *entry = endListGetEntry(gf, tileHead, j);
+ 	    if (endListEntryTileTail(entry) == tileTail)
 		{
-		int tStart = (endList[1]<<16) + endList[2];
+		int tStart = endListEntryOffset(entry);
 		if (target == NULL || 
 			(target == findSource(gf, tStart) 
 			&& tStart >= tMin && tStart < tMax) ) 
@@ -2155,8 +2247,8 @@ char *poly = seq->dna;
 int i, j;
 int tileHead, tileTail;
 int listSize;
-bits32 qStart;
-bits16 *endList;
+gfOffset qStart;
+endListPart *endList;
 int hitCount = 0;
 int varPos, varVal;	/* Variable position. */
 int (*makeTile)(char *poly, int n); 
@@ -2212,12 +2304,12 @@ for (i=0; i<=lastStart; ++i)
 			{
 			listSize = gf->listSizes[tileHead];
 			qStart = i;
-			endList = gf->endLists[tileHead];
 			for (j=0; j<listSize; ++j)
 			    {
-			    if (endList[0] == tileTail)
+                            endListPart *entry = endListGetEntry(gf, tileHead, j);
+			    if (endListEntryTileTail(entry) == tileTail)
 				{
-				int tStart = (endList[1]<<16) + endList[2];
+				int tStart = endListEntryOffset(entry);
 				if (target == NULL || 
 					(target == findSource(gf, tStart) 
 					&& tStart >= tMin && tStart < tMax) ) 
@@ -2294,25 +2386,6 @@ else
     }
 return hitList;
 }
-
-#ifdef DEBUG
-static void dumpClump(struct gfClump *clump, FILE *f)
-/* Print out a clump */
-{
-struct gfSeqSource *target = clump->target;
-char *tName = target->fileName;
-if (tName == NULL) tName = target->seq->name;
-fprintf(f, "%d-%d\t%s:%d-%d\n", clump->qStart, clump->qEnd, tName, clump->tStart, clump->tEnd);
-}
-
-static void dumpClumpList(struct gfClump *clumpList, FILE *f)
-/* Dump list of clumps. */
-{
-struct gfClump *clump;
-for (clump = clumpList; clump != NULL; clump = clump->next)
-    dumpClump(clump, f);
-}
-#endif /* DEBUG */
 
 struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, 
 	Bits *qMaskBits, int qMaskOffset,
@@ -2507,6 +2580,7 @@ static void mergeAdd(struct binKeeper *bk, int start, int end, struct gfSeqSourc
 /* Add interval to bin-keeper, merging with any existing overlapping
  * intervals. */
 {
+assert((start >= 0) && (end > start));
 struct binElement *iEl, *iList = binKeeperFind(bk, start, end);
 for (iEl = iList; iEl != NULL; iEl = iEl->next)
     {
@@ -2531,8 +2605,8 @@ int fTileCount = fPrimerSize - tileSize;
 int *rTiles, rTile;
 int rTileCount = rPrimerSize - tileSize;
 int fTileIx,rTileIx,fPosIx,rPosIx;
-bits32 *fPosList, fPos, *rPosList, rPos;
-int fPosListSize, rPosListSize;
+gfOffset *fPosList, fPos, *rPosList, rPos;
+gfOffset fPosListSize, rPosListSize;
 struct hash *targetHash = newHash(0);
 
 /* Build up array of all tiles in reverse primer. */
@@ -2574,7 +2648,7 @@ for (fTileIx=0; fTileIx<fTileCount; ++fTileIx)
 			    if (rPos < target->end)
 			        {
 				struct binKeeper *bk;
-				int tStart = target->start;
+				gfOffset tStart = target->start;
 				char *tName = target->fileName;
 				if (tName == NULL)
 				    tName = target->seq->name;
@@ -2693,3 +2767,4 @@ repMatch *= tileSize;
 repMatch /= stepSize;
 return repMatch;
 }
+

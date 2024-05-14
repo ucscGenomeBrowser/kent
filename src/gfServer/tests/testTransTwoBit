@@ -1,6 +1,0 @@
-#!/bin/bash -e
-gfServer start -trans localhost 17768 -canStop input/creaGeno.2bit >/dev/null &
-sleep 1
-gfServer transQuery localhost 17768 input/mCrea.mrna > output/testTransTwoBit.out
-gfServer stop localhost 17768 > /dev/null
-diff -u expected/testTransTwoBit.out output/testTransTwoBit.out

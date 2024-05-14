@@ -1,6 +1,5 @@
 *.o
 *.a
-.gitignore
 *~
 foo
 *.foo
@@ -32,6 +31,7 @@ src/webBlat/webBlat
 
 # test results
 **/tests/output/
+**/test/output/
 src/lib/tests/bin/
 
 # other tests output follow conventions
