@@ -1318,4 +1318,10 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
     # commit all
     jkmake alpha DBS=hg19
 
+2024-05-15 - EBI got a fixed version of gencode.v46lift37.metadata.HGNC.gz,
+which will also have all symbols mapped to HGNC ids.
+
+download 
+  https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_46/GRCh37_mapping/gencode.v46lift37.metadata.HGNC.gz
+to data/release_46lift37/ and rerun the make
 ##############################################################################
