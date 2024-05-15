@@ -1282,15 +1282,16 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
 
     # download, build and load tables
     mkdir -p /hive/data/genomes/hg19/bed/gencodeV46lift37/hgcImport${pre}
-    pushd /hive/data/genomes/hg19/bed/gencodeV46lift37/hgcImport{pre}
+    pushd /hive/data/genomes/hg19/bed/gencodeV46lift37/hgcImport${pre}
 
     (time nice make -O -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
 
     # Incorrect gene symbol lines in metadata.HNGC where there are only two columns.
-    # Reported and remove locally with
+    # These are old symbols that have not been mapped to HGNC ids.  Change table
+    # so they have a blank column
     cd data/release_46lift37/
     mv gencode.v46lift37.metadata.HGNC.gz gencode.v46lift37.metadata.HGNC.badrows.gz
-    zcat gencode.v46lift37.metadata.HGNC.badrows.gz | tawk 'NF==3' | pigz -c >gencode.v46lift37.metadata.HGNC.gz
+    zcat gencode.v46lift37.metadata.HGNC.badrows.gz | tawk 'NF==2{$3=""}{print}' | pigz -c > gencode.v46lift37.metadata.HGNC.gz
 
     # compare tables from previous release to see if number changed makes
     # sense.  Results are in gencode-cmp.tsv
@@ -1311,11 +1312,8 @@ edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
     pushd /hive/data/genomes/hg19/bed/gencodeV46lift37/hgcImport${pre}
     make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
-      These two complaint are cause by the new PAR id scheme causing a chrY V19 copy to be brought in.
-      This needs to fixed in some way
-      Error: 1 duplicates in hg19.wgEncodeGencodeTranscriptSourceV46lift37.transcriptId including 'ENST00000302805.2'
-      Error: 1 duplicates in hg19.for this release.
-
+      These two complaint are cause by the new PAR id scheme causing a chrY
+      V19 copy to be brought in are now fixed by filter and input time.
 
     # commit all
     jkmake alpha DBS=hg19
