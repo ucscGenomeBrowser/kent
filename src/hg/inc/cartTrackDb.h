@@ -25,3 +25,9 @@ boolean cartTrackDbIsNoGenome(char *db, char *table);
 struct slName *cartTrackDbTablesForTrack(char *db, struct trackDb *track, boolean useJoiner);
 /* Return list of all tables associated with track.  If useJoiner, the result can include
  * non-positional tables that are related to track by all.joiner. */
+
+void hashTracksAndGroups(struct cart *cart, char *db);
+/* get the list of tracks available for this assembly, along with their group names
+ * and visibility-ness. Note that this implicitly makes connected hubs show up
+ * in the trackList struct, which means we get item search for connected
+ * hubs for free */

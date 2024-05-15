@@ -16,11 +16,17 @@
 #include "hgFindSpec.h"
 #include "regexHelper.h"
 #include "genbank.h"
-
+#include "cartTrackDb.h"
 
 char *database = NULL;
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
+
+/* Caches for searching */
+extern struct trackDb *hgFindTdbList;
+extern struct grp *hgFindGrpList;
+extern struct hash *hgFindGroupHash;
+extern struct hash *hgFindTrackHash;
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -139,8 +145,10 @@ if (isNotEmpty(termToSearch))
     char *position = cloneString(termToSearch);
     struct dyString *dyWarn = dyStringNew(0);
     startMs = clock1000();
+    hashTracksAndGroups(cart, database);
+    struct searchCategory *allCategories = getAllCategories(cart, database, hgFindGroupHash);
     struct hgPositions *hgp = hgFindSearch(cart, &position, &chrom, &chromStart, &chromEnd,
-                                           "checkHgFindSpec", dyWarn);
+                                           "checkHgFindSpec", dyWarn, allCategories);
     endMs = clock1000();
     if (isNotEmpty(dyWarn->string))
         warn("%s", dyWarn->string);
