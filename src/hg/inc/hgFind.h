@@ -96,7 +96,7 @@ struct hgPositions *hgPositionsFind(char *db, char *query, char *extraCgi,
 
 struct hgPositions *hgFindSearch(struct cart *cart, char **pPosition,
                                  char **retChrom, int *retStart, int *retEnd,
-                                 char *hgAppName, struct dyString *dyWarn);
+                                 char *hgAppName, struct dyString *dyWarn, struct searchCategory *categories);
 /* If *pPosition is a search term, then try to resolve it to genomic position(s).
  * If unable to find a unique position then revert pPosition to lastPosition (or default position).
  * Return a container of matching tables and positions.  Warnings/errors are appended to dyWarn. */
@@ -120,9 +120,6 @@ int cmpCategories(const void *a, const void *b);
 struct trix *openStaticTrix(char *trixName);
 /* Open up a trix file in hgFixed */
 
-/* Caches used by various searching routines */
-extern struct hash *hgFindTrackHash;
-extern struct hash *hgFindGroupHash;
 
 struct searchCategory *makeCategory(struct cart *cart, char *categName, struct searchableTrack *searchTrack, char *db, struct hash *groupHash);
 /* Make a single searchCategory, unless the requested categName is a container
@@ -154,5 +151,10 @@ char *addHighlight(char *db, char *chrom, unsigned start, unsigned end);
 /* Return a string that can be assigned to the cart var addHighlight, to add a yellow highlight
  * at db.chrom:start+1-end for search results. */
 
+void hashTracksAndGroups(struct cart *cart, char *db);
+/* get the list of tracks available for this assembly, along with their group names
+ * and visibility-ness. Note that this implicitly makes connected hubs show up
+ * in the trackList struct, which means we get item search for connected
+ * hubs for free */
 #endif /* HGFIND_H */
 

@@ -439,7 +439,7 @@ char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
 range = trimSpaces(range);
 if (isEmpty(range))
     range = hDefaultPos(database);
-struct hgPositions *hgp = hgFindSearch(cart, &range, NULL, NULL, NULL, getScriptName(), dyWarn);
+struct hgPositions *hgp = hgFindSearch(cart, &range, NULL, NULL, NULL, getScriptName(), dyWarn, NULL);
 cartSetString(cart, hgtaRange, range);
 return hgp;
 }
