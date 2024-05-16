@@ -34,9 +34,11 @@ struct cart *cart;             /* CGI and other variables */
 struct hash *oldVars = NULL;
 boolean measureTiming = FALSE;
 
-/* These globals are for creating the category tree interface */
-struct trackDb *hgFindTdbList = NULL;
-struct grp *hgFindGrpList = NULL;
+/* Caches used by hgFind.c */
+extern struct trackDb *hgFindTdbList;
+extern struct grp *hgFindGrpList;
+extern struct hash *hgFindGroupHash;
+extern struct hash *hgFindTrackHash;
 
 struct dbDbHelper
 /* A struct dbDb with an extra field for whether the assembly is the default */
@@ -86,77 +88,6 @@ hDisconnectCentral(&conn);
 slReverse(&ret);
 return ret;
 }
-
-static struct trackDb *addSupers(struct trackDb *trackList)
-/* Insert supertracks into the hierarchy. */
-{
-struct trackDb *newList = NULL;
-struct trackDb *tdb, *nextTdb;
-struct hash *superHash = newHash(5);
-
-for(tdb = trackList; tdb;  tdb = nextTdb)
-    {
-    nextTdb = tdb->next;
-    if (tdb->parent)
-        {
-        // part of a super track
-        if (hashLookup(superHash, tdb->parent->track) == NULL)
-            {
-            hashStore(superHash, tdb->parent->track);
-
-            slAddHead(&newList, tdb->parent);
-            }
-        slAddTail(&tdb->parent->subtracks, tdb);
-        }
-    else
-        slAddHead(&newList, tdb);
-    }
-slReverse(&newList);
-return newList;
-}
-
-static void hashTdbNames(struct trackDb *tdb, struct hash *trackHash)
-/* Store the track names for lookup, except for knownGene which gets its own special
- * category in the UI */
-{
-struct trackDb *tmp;
-for (tmp = tdb; tmp != NULL; tmp = tmp->next)
-    {
-    if (tmp->subtracks)
-        hashTdbNames(tmp->subtracks, trackHash);
-    if (!sameString(tmp->table, tmp->track))
-        hashAdd(trackHash, tmp->track, tmp);
-    hashAdd(trackHash, tmp->table, tmp);
-    }
-}
-
-void hashTracksAndGroups(struct cart *cart, char *db)
-/* get the list of tracks available for this assembly, along with their group names
- * and visibility-ness. Note that this implicitly makes connected hubs show up
- * in the trackList struct, which means we get item search for connected
- * hubs for free */
-{
-if (hgFindTdbList != NULL && hgFindGrpList != NULL)
-    return;
-
-if (!hgFindTrackHash)
-    hgFindTrackHash = hashNew(0);
-if (!hgFindGroupHash)
-    hgFindGroupHash = hashNew(0);
-cartTrackDbInit(cart, &hgFindTdbList, &hgFindGrpList, FALSE);
-if (!hgFindTdbList)
-    errAbort("Error getting tracks for %s", db);
-if (!hgFindGrpList)
-    errAbort("Error getting groups for %s", db);
-struct trackDb *superList = addSupers(hgFindTdbList);
-hgFindTdbList = superList;
-hashTdbNames(superList, hgFindTrackHash);
-struct grp *g;
-for (g = hgFindGrpList; g != NULL; g = g->next)
-    if (!sameString(g->name, "allTracks") && !sameString(g->name, "allTables"))
-        hashStore(hgFindGroupHash, g->name);
-}
-
 
 struct hgPositions *doQuery(struct jsonWrite *jw, char *db, struct searchCategory *categories, boolean doRedirect, char *searchTerms, boolean measureTiming)
 /* Fire off a query. If the query results in a single position and we came from another CGI,

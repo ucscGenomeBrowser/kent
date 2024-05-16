@@ -9932,7 +9932,7 @@ static boolean resolvePosition(char **pPosition)
 boolean resolved = TRUE;
 struct dyString *dyWarn = dyStringNew(0);
 boolean noShort = (cartOptionalString(cart, "noShort") != NULL);
-hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName(), dyWarn);
+hgp = hgFindSearch(cart, pPosition, &chromName, &winStart, &winEnd, hgTracksName(), dyWarn, NULL);
 displayChromName = chromAliasGetDisplayChrom(database, cart, chromName);
 if (isNotEmpty(dyWarn->string))
     {
