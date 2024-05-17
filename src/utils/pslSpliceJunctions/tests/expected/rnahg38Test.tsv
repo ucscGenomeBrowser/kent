@@ -1,4 +1,4 @@
-qName	qStart	qEnd	qSize	tName	tStart	End	Size	strand	iBlk	tGapIdx	tGapSize	junc5p	junc3p	isCannon
+qName	qStart	qEnd	qSize	tName	tStart	tEnd	tSize	strand	iBlk	tGapIdx	tGapSize	junc5p	junc3p	isCannon
 mm_NM_011041.3	249	259	4334	chr14	36661696	36661963	107043718	+	0	0	267	tg	tc	0
 mm_NM_011041.3	270	271	4334	chr14	36661952	36661977	107043718	+	1	1	25	tc	ct	0
 mm_NM_011041.3	281	334	4334	chr14	36661967	36662093	107043718	+	2	2	126	gg	gg	0

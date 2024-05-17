@@ -125,7 +125,7 @@ slSort(&transPsls, pslCmpTarget);
 
 struct twoBitFile *genomeFh = twoBitOpen(genome2bitFile);
 FILE *juncsTsvFh = mustOpen(junctionsTsv, "w");
-fprintf(juncsTsvFh, "qName\tqStart\tqEnd\tqSize\ttName\ttStart\tEnd\tSize\tstrand\tiBlk\ttGapIdx\ttGapSize\tjunc5p\tjunc3p\tisCannon\n");
+fprintf(juncsTsvFh, "qName\tqStart\tqEnd\tqSize\ttName\ttStart\ttEnd\ttSize\tstrand\tiBlk\ttGapIdx\ttGapSize\tjunc5p\tjunc3p\tisCannon\n");
 
 for (struct psl *transPsl = transPsls; transPsl != NULL; transPsl = transPsl->next)
     processPsl(transPsl, genomeFh, juncsTsvFh);
