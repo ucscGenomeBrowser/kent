@@ -303,3 +303,192 @@ cp ../../gnomAD.2/constraint/{missense,pli}Metrics.as .
 sizes=/hive/data/genomes/hg38/chrom.sizes
 bedToBigBed -type=bed12+6 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByTranscript.tab $sizes pliByTranscript.bb
 bedToBigBed -type=bed12+5 -as=missenseMetrics.as -tab -extraIndex=name,geneName missenseByTranscript.tab $sizes missenseByTranscript.bb
+
+##############################################################################
+# gnomAD v4.1 Update to bigBed - May 02, 2024 - ChrisL
+##############################################################################
+# start a screen as this will take a while
+screen -S gnomADv4
+WORKDIR=/hive/data/inside/gnomAD/v4/v4.1
+cd $WORKDIR
+db="hg38"
+mkdir -p $db/{exomes,genomes}
+
+# get the headers:
+bcftools view -h /hive/data/outside/gnomAD.4/v4.1/genomes/gnomad.genomes.v4.1.sites.chr1.vcf.bgz > gnomad.v4.1.genomes.header
+bcftools view -h /hive/data/outside/gnomAD.4/v4.1/exomes/gnomad.exomes.v4.1.sites.chr1.vcf.bgz > gnomad.v4.1.exomes.header
+
+# Looks like there are INFO field differences between the two files, for some reason
+# there are different populations included for each?
+# The Genomes data has Amish population information, while the exomes data has UK BioBank
+# data and faf95_mid?
+# For the full list of differences, use this command:
+sdiff <(grep -Eo "^##.*=<[^,]+," gnomad.v4.1.genomes.header  | sort) <(grep -Eo "^##.*=<[^,]+," gnomad.v4.1.exomes.header | sort ) | less
+# List out the INFO fields for each set:
+grep -Eo "^##INFO=<ID=[^,]+" gnomad.v4.1.exomes.header | cut -d'=' -f3 > gnomad.v4.1.exomes.infoFields
+grep -Eo "^##INFO=<ID=[^,]+" gnomad.v4.1.genomes.header | cut -d'=' -f3 > gnomad.v4.1.genomes.infoFields
+
+# The VEP field has most of the important information, format:
+bcftools view -h /hive/data/outside/gnomAD.4/v4.1/exomes/gnomad.exomes.v4.1.sites.chr1.vcf.bgz | grep vep | grep -o "Format: .*$" | cut -d' ' -f2- | tr '|' '\t' | tl > gnomad.exomes.v4.1.vep.fields
+bcftools view -h /hive/data/outside/gnomAD.4/v4.1/genomes/gnomad.genomes.v4.1.sites.chr1.vcf.bgz | grep vep | grep -o "Format: .*$" | cut -d' ' -f2- | tr '|' '\t' | tl > gnomad.genomes.v4.1.vep.fields
+# at least the VEP fields are the same
+
+# Use the fields from v3.1.1 as a starting point:
+grep "^fields" ../../v3.1.1/runVcfToBed.sh | cut -d'=' -f2 | tr ',' '\n' | tr -d '"' > v3.1.1.vcfToBed.fieldList
+# check at least those fields are present in both sets:
+for line in $(cat v3.1.1.vcfToBed.fieldList); do grep $line gnomad.v4.1.exomes.infoFields &> /dev/null; if [ $? != 0 ]; then echo "$line not in v4.1 exomes"; fi; done
+popmax not in v4.1 exomes
+AC_popmax not in v4.1 exomes
+AN_popmax not in v4.1 exomes
+AF_popmax not in v4.1 exomes
+AC_ami not in v4.1 exomes
+AN_ami not in v4.1 exomes
+AF_ami not in v4.1 exomes
+nhomalt_ami not in v4.1 exomes
+AC_oth not in v4.1 exomes
+AN_oth not in v4.1 exomes
+AF_oth not in v4.1 exomes
+nhomalt_oth not in v4.1 exomes
+revel_score not in v4.1 exomes
+splice_ai_max_ds not in v4.1 exomes
+splice_ai_consequence not in v4.1 exomes
+primate_ai_score not in v4.1 exomes
+
+for line in $(cat v3.1.1.vcfToBed.fieldList); do grep $line gnomad.v4.1.genomes.infoFields &> /dev/null; if [ $? != 0 ]; then echo "$line not in v4.1 genomes"; fi; done
+
+# So they changed popmax to grpmax, and spliceAI and revel scores:
+grep -i "revel\|splice\|primate" gnomad.v4.1.exomes.infoFields
+revel_max
+spliceai_ds_max
+grep -i "revel\|splice\|primate" gnomad.v4.1.genomes.infoFields
+revel_max
+spliceai_ds_max
+cp v3.1.1.vcfToBed.fieldList v4.1.vcfToBed.exomes.fieldList
+cp v3.1.1.vcfToBed.fieldList v4.1.vcfToBed.genomes.fieldList
+# Make the fixups in vim, including the population information changes: remove ami from exomes, oth to remaining and the revel and splice_ai field changes, add variant_type
+# I used this command fixing up until there was nothing only on the left
+# and no '|' on the right
+sdiff <(sort v4.1.vcfToBed.exomes.fieldList) <(sort gnomad.v4.1.exomes.infoFields) | grep -v "ukb" | less
+
+# Now make two control scripts for specifying fields, see
+# /hive/data/inside/gnomAD/v4/v4.1/runVcfToBed.{exomes,genomes}.sh and
+# /hive/data/inside/gnomAD/v4/v4.1/convertBeds.{exomes,genomes}.sh
+# for more information
+
+# First convert the VCFs to beds:
+#    Need a jobList for parallel to run:
+for c in {1..22} X Y; do
+    echo "./runVcfToBed.exomes.sh /hive/data/outside/gnomAD.4/v4.1/exomes/gnomad.exomes.v4.1.sites.chr$c.vcf.bgz $WORKDIR/$db/exomes/gnomad.v4.1.chr$c.bed"
+done > vcfToBed.jobList
+for c in {1..22} X Y; do
+    echo "./runVcfToBed.genomes.sh /hive/data/outside/gnomAD.4/v4.1/genomes/gnomad.genomes.v4.1.sites.chr$c.vcf.bgz $WORKDIR/$db/genomes/gnomad.v4.1.chr$c.bed"
+done >> vcfToBed.jobList
+parallel --joblog vcfToBed.run.log --jobs 15 :::: vcfToBed.jobList
+
+# Average of 105 minutes per job:
+tail -n +2 /hive/data/inside/gnomAD/v4/v4.1/vcfToBed.run.log | cut -f4 | awk '{sum += $1} END {print (sum/NR) / 60}'
+54.0564
+
+# convert the beds into a smaller bed file + a tab sep file with everything else
+for c in {1..22} X Y; do
+    echo "./convertBeds.exomes.sh $WORKDIR/$db/exomes/gnomad.v4.1.chr$c.bed $WORKDIR/$db/exomes/chr$c.bed"
+done > convertBed.jobList
+for c in {1..22} X Y; do
+    echo "./convertBeds.genomes.sh $WORKDIR/$db/genomes/gnomad.v4.1.chr$c.bed $WORKDIR/$db/genomes/chr$c.bed"
+done >> convertBed.jobList
+time (parallel --joblog convertBed.run.log --jobs 25 :::: convertBed.jobList) &> convertBed.log &
+
+# Now we have one bed file and one external file per chromosome, use bgzip and
+# bedJoinTabOffset to combine them together:
+# Merge all the tab files together:
+mkdir -p joined/{exomes,genomes}
+# First exomes:
+time sort --merge ${WORKDIR}/hg38/exomes/gnomad.*.tab > gnomad.v4.1.exomes.details.pre.tab
+# real    14m24.203s
+# user    2m17.384s
+# sys     10m16.118s
+
+time bgzip -iI gnomad.v4.1.exomes.details.tab.gz.gzi -c gnomad.v4.1.exomes.details.pre.tab > gnomad.v4.1.exomes.details.tab.gz
+# real    62m28.397s
+# user    58m29.676s
+# sys     3m31.012s
+
+# The parallel command changes {} into the input file (example: hg38/exomes/chr1.bed), and
+# {/} to the basename (example: chr1.bed)
+time (ls -1S hg38/exomes/chr*.bed |
+    parallel --joblog join.run.log --max-procs 12 \\
+        bedJoinTabOffset -verbose=2 -bedKey=3 gnomad.v4.1.exomes.details.pre.tab {} joined/exomes/{/}) &> bedJoinTabOffset.log
+# real    155m42.266s
+# user    381m15.009s
+# sys     50m29.407s
+time sort -S 40G --merge joined/exomes/*.bed | grep -v "^#" > gnomad.v4.1.exomes.joined.bed
+# real    6m38.608s
+# user    3m49.595s
+# sys     2m43.676s
+
+# Then genomes:
+time sort --merge ${WORKDIR}/hg38/genomes/gnomad.*.tab > gnomad.v4.1.genomes.details.pre.tab
+# real    48m36.383s
+# user    7m40.632s
+# sys     34m7.595s
+
+# FIELD_FIX_RESTART_MARK
+time bgzip -iI gnomad.v4.1.genomes.details.tab.gz.gzi -c gnomad.v4.1.genomes.details.pre.tab > gnomad.v4.1.genomes.details.tab.gz
+# real    230m19.470s
+# user    216m16.280s
+# sys     11m28.438s
+
+# The parallel command changes {} into the input file (example: hg38/genomes/chr1.bed), and
+# {/} to the basename (example: chr1.bed)
+time (ls -1S hg38/genomes/chr*.bed |
+    parallel --joblog join.run.log --max-procs 12 \\
+        bedJoinTabOffset -verbose=2 -bedKey=3 gnomad.v4.1.genomes.details.pre.tab {} joined/genomes/{/}) &> bedJoinTabOffset.log
+# real    430m5.112s
+# user    1505m15.341s
+# sys     286m35.990s
+
+time sort -S 40G --merge joined/genomes/*.bed | grep -v "^#" > gnomad.v4.1.genomes.joined.bed
+# real    26m31.856s
+# user    14m24.696s
+# sys     9m57.459s
+
+# and lastly turn the merged beds into bigBeds:
+time (bedToBigBed -type=bed9+16 -tab -as=exomes.as -extraIndex=name,rsId,_displayName gnomad.v4.1.exomes.joined.bed /hive/data/genomes/hg38/chrom.sizes exomes.bb) &> bigBed.exomeslog &
+# pass1 - making usageList (24 chroms): 239308 millis
+# pass2 - checking and writing primary data (183717261 records, 25 fields): 1695174 millis
+# Sorting and writing extra index 0: 258529 millis
+# Sorting and writing extra index 1: 172276 millis
+# Sorting and writing extra index 2: 73698 millis
+
+# real    43m44.216s
+# user    40m4.371s
+# sys     1m54.306s
+
+time (bedToBigBed -maxAlloc=250000000000 -type=bed9+16 -tab -as=genomes.as -extraIndex=name,rsId,_displayName gnomad.v4.1.genomes.joined.bed /hive/data/genomes/hg38/chrom.sizes genomes.bb) &> bigBed.genomeslog &
+# pass1 - making usageList (24 chroms): 720685 millis
+# pass2 - checking and writing primary data (759336320 records, 25 fields): 8127679 millis
+# Sorting and writing extra index 0: 1711243 millis
+# Sorting and writing extra index 1: 1627587 millis
+# Sorting and writing extra index 2: 436891 millis
+# 
+# real    227m12.682s
+# user    204m24.791s
+# sys     20m16.421s 
+
+# Make symlinks to /gbdb:
+cd /gbdb/hg38/gnomAD/
+mkdir v4.1
+cd v4.1
+mkdir exomes
+mkdir genomes
+cd $WORKDIR
+ln -s `pwd`/genomes.bb /gbdb/hg38/gnomAD/v4.1/genomes/
+ln -s `pwd`/gnomad.v4.1.genomes.details.tab.gz /gbdb/hg38/gnomAD/v4.1/genomes/
+ln -s `pwd`/gnomad.v4.1.genomes.details.tab.gz.gzi /gbdb/hg38/gnomAD/v4.1/genomes/
+ln -s `pwd`/exomes.bb /gbdb/hg38/gnomAD/v4.1/exomes/
+ln -s `pwd`/gnomad.v4.1.exomes.details.tab.gz /gbdb/hg38/gnomAD/v4.1/exomes/
+ln -s `pwd`/gnomad.v4.1.exomes.details.tab.gz.gzi /gbdb/hg38/gnomAD/v4.1/exomes/
+
+# Woops the conversion script had the wrong header listing, change it up:
+sed -i -e '1,24s/segdup/segdup\tvariant_type\tallele_type/' gnomad.v4.1.genomes.details.pre.tab
+# and then re-do the genomes steps from the FIELD_FIX_RESTART_MARK mark

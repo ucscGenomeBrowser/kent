@@ -34,6 +34,7 @@
 <li><a href="#download28">Converting genome coordinates between assemblies</a></li>
 <li><a href="#download33">Linking gene name with accession number</a></li>
 <li><a href="#download31">Obtaining a list of Known Genes</a></li>
+<li><a href="#JASPARfilter">Filtering for a transcription factor in the JASPAR database</a></li>
 <li><a href="#download16">Repeat-masking data</a></li>
 <li><a href="#download17">Availability of repeat-masked data</a></li>
 <li><a href="#download24">RepeatMasker version differences - UCSC vs. Repeatmasker website</a></li> 
@@ -722,6 +723,71 @@ Data for a specific region or chromosome may be obtained from the Table Browser 
 &quot;Genes and Gene Prediction Tracks&quot; group, the &quot;UCSC Genes&quot; track and the 
 &quot;knownGene&quot; table. Set the position to the region of interest, then click the 
 &quot;get output&quot; button.</p>
+
+<a name="JASPARfilter"></a>
+<h2>Filtering for a transcription factor in the JASPAR database</h2>
+<h6>How do I display only one transcription factor?</h6>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4 text-left">
+      <div class="row">
+        <div class="col-md-12">
+        <p>
+        On the track settings page for the
+        <a href="/cgi-bin/hgTrackUi?db=hg38&position=default&g=jaspar" target="_blank">JASPAR
+        Transcription Factors track</a>, you can filter for a transcription factor
+        using the <em><b>Filter by Transcription factor name</b></em> setting.
+        <p>
+        For example, if you wanted to only display the TEAD1 transcription factor, under
+        &quot;Filter by Transcription factor name&quot; select <em>TEAD1</em>, then click
+        <button>submit</button>.
+        </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 text-center image-column">
+      <img src="/images/jasparSetting.png" height="375" alt="JASPAR Setting">
+    </div>
+  </div>
+</div>
+
+
+<h6>How can I download the data for only one transcription factor using the Table Browser?</h6>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4 text-left">
+      <div class="row">
+        <div class="col-md-12">
+        <p>
+        On the <a hef="/cgi-bin/hgTables" target="_blank">Table Browser</a>, you can
+        <a href="/goldenPath/help/hgTablesHelp.html#Filter" target="_blank">create a filter</a>
+        to limit the output to a set of transcription factors. A summary of the steps is as
+        follows:
+        </p>
+        <ol>
+          <li>Select a human or mouse genome with the JASPAR track, e.g. hg38 or mm10.</li>
+          <li>Select the JASPAR Transcription Factors track.</li>
+          <li>Define the region with the <em>position</em> field. This track is unavailable for
+          genome-wide download as the connection will timeout due to the billions of items in the
+          track.</li>
+          <li>Filter for the transcription factors by clicking <button>create</button>
+            <ul>
+              <li>On the resulting page, create a filter similar to an SQL query:<br>
+              <code>TFName does match [transcription_factor]</code>
+              <br> e.g.
+              <code>TFName does match TEAD1</code></li>
+              <li>Click <button>submit</button></li>
+            </ul></li>
+          <li>Select the <b>output format</b> and then click <button>get output</button></li>
+        </ol>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 text-center image-column">
+      <img src="/images/jasparTB.png" height="475" alt="JASPAR Table Browser">
+    </div>
+  </div>
+</div>
 
 <a name="download16"></a>
 <h2>Repeat-masking data</h2>
