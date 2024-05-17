@@ -12,7 +12,7 @@ filterChain=$pairRefSeq.$pairQuerySeq.$pairChain
 
 chainFilter -t=$pairRefSeq -q=$pairQuerySeq $pairChain > $filterChain
 
-buildPairAssembly $filterChain $pairRefSeq $pairRefDb2bit $pairQuerySeq $pairQueryDb2bit out.fa query.psl target.psl map.bed
+buildPairAssembly $filterChain $pairRefSeq $pairRefDb2bit $pairQuerySeq $pairQueryDb2bit out.fa query.psl target.psl map.bed dup.bed miss.bed
 
 
 rm -rf hub
@@ -20,7 +20,7 @@ mkdir hub
 
 faToTwoBit out.fa hub/buildPair.2bit
 twoBitInfo hub/buildPair.2bit hub/buildPair.sizes.txt
-bedToBigBed  map.bed hub/buildPair.sizes.txt hub/map.bb
+bedToBigBed  -type=bed9+4 map.bed hub/buildPair.sizes.txt hub/map.bb
 
 axtChain -psl -linearGap=medium query.psl hub/buildPair.2bit $pairQueryDb2bit query.chain
 hgLoadChain -noBin -test hg38 bigChain  query.chain
@@ -35,6 +35,16 @@ sed 's/\.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 100
 bedToBigBed -type=bed6+6 -as=$HOME/kent/src/hg/lib/bigChain.as -tab targetChain.bigChain  hub/buildPair.sizes.txt hub/targetChain.bb
 awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n > bigChain.bigLink
 bedToBigBed -type=bed4+1 -as=$HOME/kent/src/hg/lib/bigLink.as -tab bigChain.bigLink hub/buildPair.sizes.txt hub/targetChain.link.bb
+
+chainSwap query.chain swap.query.chain
+chainSwap target.chain swap.target.chain
+awk '{print $1,$2,$3,$7}' dup.bed | liftOver -minMatch=0.001 stdin swap.query.chain tmp foo
+awk '{print $4,$5,$6,$7}' dup.bed | liftOver -minMatch=0.001 stdin swap.target.chain tmp2 foo
+sort tmp tmp2 > tmp3
+bedToBigBed -type=bed4 -tab tmp3 hub/buildPair.sizes.txt hub/dups.bb
+
+bedToBigBed -type=bed4 miss.bed hub/buildPair.sizes.txt hub/mismatch.bb
+
 
 cat << _EOF_ > hub/hub.txt
 hub buildPair
@@ -81,5 +91,16 @@ baseColorDefault genomicCodons
 priority 1
 quickLiftUrl targetChain.bb
 canPack 1
-_EOF_
 
+track dups
+type bigBed 4
+bigDataUrl dups.bb
+shortLabel dups
+longLabel dups
+
+track mismatch
+type bigBed 4
+bigDataUrl mismatch.bb
+shortLabel mismatch
+longLabel mismatch
+_EOF_

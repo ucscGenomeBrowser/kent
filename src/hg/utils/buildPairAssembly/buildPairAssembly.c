@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "buildPairAssembly - From a single coverage chain build a pairwise assembly including all sequence from both query and target\n"
   "usage:\n"
-  "   buildPairAssembly input.chain tSequenceName tSeq.2bit qSequenceName qSeq.2bit out.fa query.psl target.psl map.bed\n"
+  "   buildPairAssembly input.chain tSequenceName tSeq.2bit qSequenceName qSeq.2bit out.fa query.psl target.psl map.bed dup.bed mismatch.bed\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -49,7 +49,28 @@ const struct linearBlock *b = *((struct linearBlock **)vb);
 return a->tStart - b->tStart;
 }
 
-void buildPairAssembly(char *inputChain, char *tSequenceName, char *t2bitName, char *qSequenceName, char *q2bitName, char *outFaName, char *outQueryPsl, char *outTargetPsl, char *outMapBed)
+void outOverlap(FILE *f, char *tSequenceName,char *qSequenceName, struct cBlock *first,  struct cBlock *second, int count)
+{
+printf("first %d %d second %d %d\n", first->tStart, first->tEnd, second->tStart, second->tEnd);
+if (first->tEnd >= second->tEnd)
+    {
+    second->score = 3;
+    fprintf(f, "%s %d %d %s %d %d %d\n",qSequenceName, second->qStart, second->qEnd, tSequenceName, second->tStart, second->tEnd, count);
+    }
+else
+    errAbort("oops");
+
+/*
+first->tEnd = second->tStart;
+
+if (first->tStart == first->tEnd)
+    first->score = 3;
+first->qEnd  = second->qStart;
+*/
+
+}
+
+void buildPairAssembly(char *inputChain, char *tSequenceName, char *t2bitName, char *qSequenceName, char *q2bitName, char *outFaName, char *outQueryPsl, char *outTargetPsl, char *outMapBed, char *outDupBed, char *outMissBed)
 /* buildPairAssembly - From a single coverage chain build a pairwise assembly including all sequence from both query and target. */
 {
 struct lineFile *lf = lineFileOpen(inputChain, TRUE);
@@ -59,6 +80,8 @@ struct twoBitFile *q2bit = twoBitOpen(q2bitName);
 struct twoBitFile *t2bit = twoBitOpen(t2bitName);
 FILE *outFa = mustOpen(outFaName, "w");
 FILE *outMap = mustOpen(outMapBed, "w");
+FILE *outDup = mustOpen(outDupBed, "w");
+FILE *outMiss = mustOpen(outMissBed, "w");
 
 fprintf(outFa, ">buildPair\n");
 
@@ -84,11 +107,40 @@ while ((chain = chainRead(lf)) != NULL)
         }
     }
 
-slSort(&blockList, cBlockCmpQuery);
-unsigned prevBase = blockList->qEnd;
-struct linearBlock *linearBlock;
+slSort(&blockList, cBlockCmpTarget);
+unsigned prevBase = blockList->tEnd;
+//unsigned prevBase = 0;
+boolean firstBlock = TRUE;
+struct cBlock *prevCBlock = NULL;
+int count = 0;
+
 for (cBlock = blockList->next; cBlock; cBlock = cBlock->next)
     {
+    //if (cBlock->score == 2)
+        //continue;
+    if (!firstBlock)
+        {
+        if (cBlock->tStart < prevBase)
+            {
+            outOverlap(outDup, tSequenceName, qSequenceName, prevCBlock, cBlock, count++);
+            //printf("tBlock overlap %d %d\n", cBlock->tStart, prevBase);
+            //cBlock->score = 3;
+            continue;
+            }
+        }
+    else 
+        firstBlock = FALSE;
+    prevBase = cBlock->tEnd;
+    prevCBlock = cBlock;
+    }
+
+slSort(&blockList, cBlockCmpQuery);
+prevBase = blockList->qEnd;
+struct linearBlock *linearBlock;
+for (cBlock = blockList->next; cBlock;  cBlock = cBlock->next)
+    {
+    if (cBlock->score == 3)
+        continue;
     if (cBlock->qStart < prevBase)
         {
         //printf("qBlock overlap %d %d\n", cBlock->qStart, prevBase);
@@ -108,18 +160,15 @@ for (cBlock = blockList->next; cBlock; cBlock = cBlock->next)
     }
 
 slSort(&blockList, cBlockCmpTarget);
+//prevBase = blockList->tEnd;
 prevBase = 0;
 struct linearBlock *linearBlockList = NULL;
-boolean firstBlock = TRUE;
+firstBlock = TRUE;
+prevCBlock = NULL;
 
-for (cBlock = blockList; cBlock; cBlock = cBlock->next)
+for (cBlock = blockList; cBlock;   cBlock = cBlock->next)
     {
-    if (cBlock->tStart < prevBase)
-        {
-        //printf("tBlock overlap %d %d\n", cBlock->tStart, prevBase);
-        continue;
-        }
-    if (cBlock->score == 2)
+    if (cBlock->score >= 2)
         continue;
     if (!firstBlock)
         {
@@ -130,13 +179,14 @@ for (cBlock = blockList; cBlock; cBlock = cBlock->next)
             linearBlock->tEnd = cBlock->tStart;
             slAddHead(&linearBlockList, linearBlock);
             }
+
         if (cBlock->data != NULL)
             {
             struct linearBlock *qInsert = (struct linearBlock *)cBlock->data;
             slAddHead(&linearBlockList, qInsert);
             }
         }
-    else
+    else 
         firstBlock = FALSE;
 
     AllocVar(linearBlock);
@@ -149,20 +199,31 @@ for (cBlock = blockList; cBlock; cBlock = cBlock->next)
     slAddHead(&linearBlockList, linearBlock);
 
     prevBase = cBlock->tEnd;
+    prevCBlock = cBlock;
     }
 
 slReverse(&linearBlockList);
 
+#define BOTH_COLOR       "20,40,140"
+#define INVERT_COLOR       "140,20,140"
+#define REFONLY_COLOR       "255,255,0"
+#define QUERYONLY_COLOR       "170,255,60"
+
 unsigned startAddress = 0, size;
+boolean firstBlockFlipped = linearBlockList->isFlipped;
+char strand;
+char *color;
 for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
     {
+ //   printf("start %d %d\n", linearBlock->tStart, linearBlock->tEnd);
     if (linearBlock->qStart == linearBlock->qEnd)
         {
         struct dnaSeq *dna = twoBitReadSeqFrag(t2bit, tSequenceName, linearBlock->tStart, linearBlock->tEnd);
         fprintf(outFa, "%s\n", (char *)dna->dna);
         size = linearBlock->tEnd - linearBlock->tStart;
         //printf("chr1 %d %d refOnly 0 + %d %d 255,255,0\n", startAddress, startAddress + size, linearBlock->isFlipped, linearBlock->tStart, linearBlock->tEnd);
-        fprintf(outMap,"buildPair %d %d refOnly 0 + %d %d 255,255,0\n", startAddress, startAddress + size, startAddress, startAddress + size);
+        //fprintf(outMap,"buildPair %d %d refOnly 0 + %d %d 255,255,0\n", startAddress, startAddress + size, startAddress, startAddress + size);
+        fprintf(outMap,"buildPair %d %d refOnly 0 + %d %d %s %d %d 0 0\n", startAddress, startAddress + size,  startAddress, startAddress + size, REFONLY_COLOR, linearBlock->tStart, linearBlock->tEnd);
         }
     else if (linearBlock->tStart == linearBlock->tEnd)
         {
@@ -171,16 +232,38 @@ for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
         size = linearBlock->qEnd - linearBlock->qStart;
         char strand = linearBlock->isFlipped ? '-' : '+';
         //printf("chr1 %d %d %d queryOnly %d %d\n", startAddress, startAddress + size, linearBlock->isFlipped, linearBlock->qStart, linearBlock->qEnd);
-        fprintf(outMap,"buildPair %d %d queryOnly 0 %c %d %d 170,255,60\n", startAddress, startAddress + size, strand, startAddress, startAddress + size);
+        //fprintf(outMap,"buildPair %d %d queryOnly 0 %c %d %d 170,255,60\n", startAddress, startAddress + size, strand, startAddress, startAddress + size);
+        fprintf(outMap,"buildPair %d %d queryOnly 0 %c %d %d %s 0 0 %d %d\n", startAddress, startAddress + size, strand, startAddress, startAddress + size, QUERYONLY_COLOR, linearBlock->qStart, linearBlock->qEnd);
         }
     else
         {
         struct dnaSeq *dna = twoBitReadSeqFrag(t2bit, tSequenceName, linearBlock->tStart, linearBlock->tEnd);
         fprintf(outFa, "%s\n", (char *)dna->dna);
+        struct dnaSeq *dna2 = twoBitReadSeqFrag(q2bit, qSequenceName, linearBlock->qStart, linearBlock->qEnd);
         size = linearBlock->qEnd - linearBlock->qStart;
-        char strand = linearBlock->isFlipped ? '-' : '+';
+        if (linearBlock->isFlipped)
+            reverseComplement(dna2->dna, size);
+        int ii;
+        for(ii = 0; ii < size; ii++)
+            {
+            if (toupper(dna->dna[ii]) != toupper(dna2->dna[ii]))
+                fprintf(outMiss, "buildPair %d %d %c->%c\n", startAddress + ii, startAddress + ii + 1, toupper(dna->dna[ii]), toupper(dna2->dna[ii]));
+
+            }
+        if (linearBlock->isFlipped == firstBlockFlipped)
+            {
+            strand = '+';
+            color = BOTH_COLOR;
+            }
+        else
+            {
+            strand = '-';
+            color = INVERT_COLOR;
+            }
+        //char strand = linearBlock->isFlipped ? '-' : '+';
         //printf("chr1 %d %d both 0 %c  %d %d %d %d\n", startAddress, startAddress + size, linearBlock->isFlipped,linearBlock->tStart, linearBlock->tEnd, linearBlock->qStart, linearBlock->qEnd);
-        fprintf(outMap,"buildPair %d %d both 0 %c  %d %d 20,40,140\n", startAddress, startAddress + size, strand,  startAddress, startAddress + size); 
+        //fprintf(outMap,"buildPair %d %d both 0 %c  %d %d 20,40,140\n", startAddress, startAddress + size, strand,  startAddress, startAddress + size); 
+        fprintf(outMap,"buildPair %d %d both 0 %c %d %d %s %d %d %d %d\n", startAddress, startAddress + size, strand, startAddress, startAddress + size, color, linearBlock->tStart, linearBlock->tEnd, linearBlock->qStart, linearBlock->qEnd);
         }
     startAddress += size;
     }
@@ -288,8 +371,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 10)
+if (argc != 12)
     usage();
-buildPairAssembly(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7], argv[8], argv[9]);
+buildPairAssembly(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7], argv[8], argv[9], argv[10], argv[11]);
 return 0;
 }
