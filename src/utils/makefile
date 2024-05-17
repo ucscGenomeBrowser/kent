@@ -87,6 +87,7 @@ UTILS_APPLIST = \
 	pslRc \
 	pslRemoveFrameShifts \
 	pslScore \
+	pslSpliceJunctions \
 	pslSwap \
 	pslToPslx \
 	randomLines \

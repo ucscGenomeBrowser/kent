@@ -4330,11 +4330,11 @@ int count = slCount(filterBySet);
 if (count == 1)
     puts("<TABLE class='trackUiFilterTable'><TR valign='top'>");
 else
-    printf("<B>%s items by:</B> (select multiple categories and items - %s)&nbsp;&nbsp;<button id='filterResetButton'>Reset filters</button>"
+    printf("<B>%s items by:</B> (select multiple categories and items - %s)&nbsp;&nbsp;<button id='filterClearButton'>Clear filters</button>"
 	   "<TABLE class='trackUiFilterTable'><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
 jsInlineF("$(function () { "
-    "$('#filterResetButton').click( "
+    "$('#filterClearButton').click( "
        "     function(ev) { ev.preventDefault(); "
        "     $('.filterBy option[value=\"All\"]').removeAttr(\"selected\");"
        "     $('.filterBy option[Value=\"All\"]').attr('selected', 'selected');"

@@ -52,9 +52,11 @@ To construct an annotation file and display it in the Genome Browser, follow the
 <p>
 <strong>Step 1. Format the data set</strong><br>
 Format your data as a tab-separated file using one of the
-<a href="/FAQ/FAQformat.html" target="_blank">formats supported</a> by the Genome 
-Browser. Annotation data can be in a format designed specifically for the Human Genome Project or
-UCSC Genome Browser, including:
+<a href="/FAQ/FAQformat.html" target="_blank">formats supported</a> by the Genome
+Browser. Chromosome references must be of the form <em>chrN</em> (the parsing of chromosome names
+<em><strong>is</strong></em> case-sensitive). You may include more than one data set in your 
+annotation file; these need not be in the same format. Annotation data can be in a format designed
+specifically for the Human Genome Project or UCSC Genome Browser, including:
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-2">
@@ -110,9 +112,13 @@ UCSC Genome Browser, including:
   </div>
 </div>
 <p>
-Chromosome references must be of the form <em>chrN</em> (the parsing of chromosome names 
-<em><strong>is</strong></em> case-sensitive). You may include more than one data set in your 
-annotation file; these need not be in the same format.</p> 
+<em>
+NOTE: Some annotations need to be hosted remotely in a web-accessible location that support byte-range
+requests to be visualized on the UCSC Genome Browser, such as: bigBed, bigWig, BAM, VCF, etc.
+For examples of how to host your custom track data remotely, please refer to the track hub user
+guide, &quot;<a href="/goldenPath/help/hgTrackHubHelp.html#Hosting" target="_blank">Where to host
+your data?</a>&quot;.</em>
+</p>
 <p>
 <strong>Step 2. Define the Genome Browser display characteristics</strong><br>
 Add one or more optional <a href="#BROWSER">browser lines</a> to the beginning of the data 
@@ -203,7 +209,12 @@ the following methods:</p>
   Enter one or more URLs for custom tracks (one per line) in the data text box. The Genome Browser 
   supports both the HTTP and FTP (passive-only) protocols. Data provided by a URL may need to be
   proceeded by a separate line defining <a href="#TRACK">type=&lt;<em>track_type</em>&gt;</a> required 
-  for some tracks, for example such as &quot;track type=broadPeak&quot;.</li>
+  for some tracks, for example such as &quot;track type=broadPeak&quot;.
+  <br><br>
+  <em>For examples of how to host your custom track data remotely, please refer to the track hub
+  user guide, &quot;<a href="/goldenPath/help/hgTrackHubHelp.html#Hosting" target="_blank">Where to host
+  your data?</a>&quot;.</em>
+  </li>
   <li>
   Click the &quot;Choose File&quot; button directly above the data text box, then choose a custom track 
   file from your local computer.
@@ -709,7 +720,11 @@ The following track line attribute=value pairs are defined in the Genome Browser
   <a href="../help/bigBed.html" target="_blank">bigBed</a>,
   <a href="../help/bigWig.html" target="_blank">bigWig</a> or
   <a href="../help/vcf.html" target="_blank">VCF</a> tracks. This is a required attribute for those 
-  track types. There is no default for this attribute.</li>
+  track types. There is no default for this attribute.
+  <em>For examples of how to host your custom track data remotely, please refer to the track hub
+  user guide, &quot;<a href="/goldenPath/help/hgTrackHubHelp.html#Hosting" target="_blank">Where to host
+  your data?</a>&quot;.</em>
+  </li>
   <li>
   <strong>bigDataIndex=&lt;<em>external_url</em>&gt;</strong>
   <br>
@@ -748,17 +763,29 @@ Be sure that the file permissions allow it to be read by others.</p>
 the Genome Browser</strong>
 <p>
 The easiest way to share custom tracks is through the use of 
-<a href=../help/hgSessionHelp.html>sessions</a>. First, upload your tracks as
-discussed in the <a href="#ADD_CT">Loading a Custom Track into the Genome Browser</a> section. 
-Then create a named session that includes your custom tracks by navigating to the "Sessions"
-page through the "My Data" section in the menu bar. Once there, follow the instructions in the
-<a href=../help/hgSessionHelp.html#Create>Creating a Session</a> section of the Sessions help page.
+<a href=../help/hgSessionHelp.html>sessions</a>.
 Once you have saved your custom track into a named session, you can share that session with others
 by sharing the URL from the &quot;Browser&quot; link or emailing it to them directly by clicking
-the "Email" link.</p>
+the "Email" link. You can create a session with the following steps:</p>
+<ol>
+  <li>
+    Upload your tracks as discussed in the <a href="#ADD_CT">Loading a custom track into the
+    Genome Browser</a> section.</li>
+  <li>
+    Configure the Genome Browser to appear as you wish. These settings will always be restored when
+    the Session URL is accessed.</li>
+  <li>
+    Navigate to the &quot;Sessions&quot; page through the &quot;My Data&quot; section in the menu
+    bar.</li>
+  <li>
+    Create a named session that includes your custom tracks. Detailed instructions for creating a
+    named session can be found on the <a href=../help/hgSessionHelp.html#Create>Creating a
+    session</a> section of the Sessions help page.</li>
+</ol>
 <p>
-Alternatively, you can create a URL. 
-The URL must contain <b>3 pieces of information</b> specific to your annotation data:</p>
+Alternatively, you can create a URL using parameters to specify the assembly, genome position, and
+custom track data. The URL must contain <b>3 pieces of information</b> specific to your annotation
+data:</p>
 <ol>
   <li>
   The <b>species or genome assembly</b> on which your annotation data is based. To automatically display
@@ -1346,14 +1373,18 @@ target="_blank">here</a> to view this track in the Genome Browser.</p>
 <a name="EXAMPLE3b"></a>
 <h3>Simple annotation in bigBed format</h3>
 <p>
-This example shows a simple annotation file containing one data set in the bigBed format. This track
-displays random sized blocks across chr21 in the human genome. The big data formats, such as the 
-bigBed format, can be uploaded using a bigDataUrl that is specified in the track line. For more 
-information on these track line parameters, refer to the <a href="#TRACK">Track Lines</a>
-section. When using bigDataUrls, data is cached and updated every 300 seconds. If you are updating
-your big data tracks with different displays and are not seeing your track changes in the browser,
-you may want to add the <a href="hgTrackHubHelp.html#Debug">udcTimeout</a> parameter to prevent 
-caching of your track data and force a reload.</p> 
+This example shows a simple annotation file containing a single data set in the bigBed format.
+The track displays arbitrarily sized blocks across chr21 in the human genome. The big* data
+formats, such as the bigBed format, can be uploaded using a bigDataUrl that is specified in the
+track line. <em>For more information on these track line parameters, refer to the
+<a href="#TRACK">Track Lines</a> section above.</em>
+Some annotations need to be hosted remotely in a web-accessible location that support byte-range
+requests to be visualized on the UCSC Genome Browser, such as: bigBed, bigWig, BAM, VCF, etc.
+<em>
+For examples of how to host your custom track data remotely, please refer to the track hub user
+guide, &quot;<a href="/goldenPath/help/hgTrackHubHelp.html#Hosting" target="_blank">Where to host
+your data?</a>&quot;.</em>
+</p> 
 <p> 
 You may paste these two lines directly into the &quot;Add Custom Tracks&quot; page to view this
 example in the browser:</p> 
@@ -1363,8 +1394,14 @@ track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataU
 Alternatively, you may also upload just the URL of the bigBed file:</p>
 <pre><code>http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb </code></pre>
 <p>
-This will infer the track type as &quot;bigBed&quot; based on the file extension and set the track 
-name to &quot;bigBedExample&quot;.</p>
+The Genome Browser will attempt to infer the track type as &quot;bigBed&quot; based on the file
+extension and set the track name to &quot;bigBedExample&quot;.</p>
+<p>
+When using bigDataUrls, data is cached and updated every 300 seconds. If you are updating
+your big data tracks with different displays and are not seeing your track changes in the browser,
+you may want to add the <a href="hgTrackHubHelp.html#Debug">udcTimeout</a> parameter to prevent 
+caching of your track data and force a reload.</p> 
+
 
 <a name="EXAMPLE4"></a>
 <h3>Create external links using the 'name' field from the BED file</h3>
@@ -1393,9 +1430,8 @@ target="_blank">here</a> to display this track in the Genome Browser.</p>
 <p>
 The following URL will open up the Genome Browser window to display chr22 of the latest human
 genome assembly and will show the annotation track pointed to by the URL
-http://genome.ucsc.edu/goldenPath/help/test.bed:
-<pre><code
-<a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
+(http://genome.ucsc.edu/goldenPath/help/test.bed):
+<pre><code><a href="../../cgi-bin/hgTracks?org=human&position=chr22&hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
 target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed</a></code></pre>
 <p>
 If a login and password is required to access data loaded through a URL (e.g., via https:

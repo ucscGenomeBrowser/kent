@@ -1487,7 +1487,7 @@ var hgGateway = (function() {
         var taxId = item.taxId || -1;
         var db = item.db;
         var org = item.org;
-        if (item.category.startsWith("UCSC GenArk")) {
+        if (typeof item.category !== "undefined" && item.category.startsWith("UCSC GenArk")) {
             db = item.genome;
             setHubDb(item.hubUrl, taxId, db, "GenArk", item.scientificName, true);
         } else if (item.hubUrl) {

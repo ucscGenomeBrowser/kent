@@ -41,5 +41,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     hPrintf("<tr><td>%s</td><td><A HREF=\"./hgTracks?quickLift.%s.%s=%s&%s=on&hgsid=%s\">%s</A></td><td>%s</td></tr>",row[2], row[0],trackHubSkipHubName(db), row[1], hgHubConnectRemakeTrackHub,cartSessionId(cart),  row[3],row[4]);
     }
 hPrintf("</table>\n");
+hPrintf("</div>\n");
 hDisconnectCentral(&conn);
 }
