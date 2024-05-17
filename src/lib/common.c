@@ -667,7 +667,7 @@ return median;
 }
 
 
-struct slName *newSlName(char *name)
+struct slName *newSlName(const char *name)
 /* Return a new name. */
 {
 struct slName *sn;
@@ -800,7 +800,7 @@ slAddHead(pList, el);
 return el->name;
 }
 
-struct slName *slNameAddHead(struct slName **pList, char *name)
+struct slName *slNameAddHead(struct slName **pList, const char *name)
 /* Add name to start of list and return it. */
 {
 struct slName *el = slNameNew(name);

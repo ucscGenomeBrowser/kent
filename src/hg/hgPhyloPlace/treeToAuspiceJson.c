@@ -362,53 +362,67 @@ else
     safef(lineageUrl, lineageUrlSize, OUTBREAK_INFO_URLBASE "%s", lineage);
 }
 
-static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
-                                        struct sampleMetadata *met, boolean isUserSample,
-                                        char *source, struct hash *sampleUrls,
-                                        struct hash *samplePlacements, boolean isRsv,
+struct auspiceJsonInfo
+/* Collection of a bunch of things used when writing out auspice JSON for a subtree, so the
+ * recursive function doesn't need a dozen args. */
+    {
+    struct jsonWrite *jw;
+    struct slName *subtreeUserSampleIds;  // Subtree node names for user samples (not from big tree)
+    struct geneInfo *geneInfoList;        // Transcript seq & alignment for predicting AA change
+    struct seqWindow *gSeqWin;            // Reference genome seq for predicting AA change
+    struct sampleMetadataStore *sampleMetadata; // Sample metadata for decorating tree
+    struct hash *sampleUrls;              // URLs for samples, if applicable
+    struct hash *samplePlacements;        // Sample placement info e.g. clade/lineage from usher
+    int nodeNum;                          // For generating sequential node ID (in absence of name)
+    char *source;                         // Source of non-user sequences in tree (GISAID or public)
+    };
+
+static void jsonWriteLeafNodeAttributes(struct auspiceJsonInfo *aji, char *name,
+                                        boolean isUserSample, boolean isRsv,
                                         int branchAttrCount, char **branchAttrCols,
                                         char **branchAttrVals)
 /* Write elements of node_attrs for a sample which may be preexisting and in our metadata hash,
  * or may be a new sample from the user.  Set rets for color categories so parent branches can
  * determine their color categories. */
 {
-char *userOrOld = isUserSample ? "uploaded sample" : source;
-jsonWriteObjectValue(jw, "userOrOld", userOrOld);
+char *userOrOld = isUserSample ? "uploaded sample" : aji->source;
+jsonWriteObjectValue(aji->jw, "userOrOld", userOrOld);
 int i;
 for (i = 0;  i < branchAttrCount;  i++)
     branchAttrVals[i] = "";
 if (branchAttrCount > 0 && sameString(branchAttrCols[0], "userOrOld"))
     branchAttrVals[0] = userOrOld;
+char **met = name ? metadataForSample(aji->sampleMetadata, name) : NULL;
 if (met != NULL)
     {
     int i;
-    for (i = 0;  i < met->columnCount;  i++)
+    for (i = 0;  i < aji->sampleMetadata->columnCount;  i++)
         {
-        char *colName = met->columnNames[i];
+        char *colName = aji->sampleMetadata->columnNames[i];
         // Tweak old column name if found
         if (sameString(colName, "pangolin_lineage"))
             colName = "pango_lineage";
         // Link out to outbreak.info for Pango lineages
         if (startsWith("pango_lineage", colName))
             {
-            if (isNotEmpty(met->columnValues[i]))
+            if (isNotEmpty(met[i]))
                 {
                 char lineageUrl[1024];
-                makeLineageUrl(met->columnValues[i], lineageUrl, sizeof lineageUrl);
-                jsonWriteObjectValueUrl(jw, colName, met->columnValues[i], lineageUrl);
+                makeLineageUrl(met[i], lineageUrl, sizeof lineageUrl);
+                jsonWriteObjectValueUrl(aji->jw, colName, met[i], lineageUrl);
                 }
-            else if (isNotEmpty(met->columnValues[i]))
-                jsonWriteObjectValue(jw, colName, met->columnValues[i]);
+            else
+                jsonWriteObjectValue(aji->jw, colName, met[i]);
             }
         else
-            jsonWriteObjectValue(jw, colName, met->columnValues[i]);
+            jsonWriteObjectValue(aji->jw, colName, met[i]);
         // Some columns get passed upwards for aggregation so we can color internal nodes/branches.
         int j;
         for (j = 0;  j < branchAttrCount;  j++)
             {
             if (sameString(colName, branchAttrCols[j]))
                 {
-                branchAttrVals[j] = met->columnValues[i];
+                branchAttrVals[j] = met[i];
                 break;
                 }
             }
@@ -416,7 +430,7 @@ if (met != NULL)
     }
 else if (isUserSample)
     {
-    struct placementInfo *pi = name ? hashFindVal(samplePlacements, name) : NULL;
+    struct placementInfo *pi = name ? hashFindVal(aji->samplePlacements, name) : NULL;
     int i;
     for (i = 0;  i < branchAttrCount;  i++)
         {
@@ -437,7 +451,8 @@ else if (isUserSample)
                     branchAttrVals[i] = pi->pangoLineage;
                     char lineageUrl[1024];
                     makeLineageUrl(pi->pangoLineage, lineageUrl, sizeof lineageUrl);
-                    jsonWriteObjectValueUrl(jw, branchAttrCols[i], branchAttrVals[i], lineageUrl);
+                    jsonWriteObjectValueUrl(aji->jw, branchAttrCols[i], branchAttrVals[i],
+                                            lineageUrl);
                     wroteLink = TRUE;
                     }
                 else if (sameString(branchAttrCols[i], "GCC_usher"))
@@ -445,10 +460,10 @@ else if (isUserSample)
                 }
             }
         if (!wroteLink)
-            jsonWriteObjectValue(jw, branchAttrCols[i], branchAttrVals[i]);
+            jsonWriteObjectValue(aji->jw, branchAttrCols[i], branchAttrVals[i]);
         }
     }
-char *sampleUrl = (sampleUrls && name) ? hashFindVal(sampleUrls, name) : NULL;
+char *sampleUrl = (aji->sampleUrls && name) ? hashFindVal(aji->sampleUrls, name) : NULL;
 if (isNotEmpty(sampleUrl))
     {
     char *p = strstr(sampleUrl, "subtreeAuspice");
@@ -458,10 +473,10 @@ if (isNotEmpty(sampleUrl))
         int num = atoi(subtreeNum);
         char subtreeLabel[1024];
         safef(subtreeLabel, sizeof subtreeLabel, "view subtree %d", num);
-        jsonWriteObjectValueUrl(jw, "subtree", subtreeLabel, sampleUrl);
+        jsonWriteObjectValueUrl(aji->jw, "subtree", subtreeLabel, sampleUrl);
         }
     else
-        jsonWriteObjectValueUrl(jw, "subtree", sampleUrl, sampleUrl);
+        jsonWriteObjectValueUrl(aji->jw, "subtree", sampleUrl, sampleUrl);
     }
 }
 
@@ -689,21 +704,6 @@ if (node->priv != NULL)
     }
 }
 
-struct auspiceJsonInfo
-/* Collection of a bunch of things used when writing out auspice JSON for a subtree, so the
- * recursive function doesn't need a dozen args. */
-    {
-    struct jsonWrite *jw;
-    struct slName *subtreeUserSampleIds;  // Subtree node names for user samples (not from big tree)
-    struct geneInfo *geneInfoList;        // Transcript seq & alignment for predicting AA change
-    struct seqWindow *gSeqWin;            // Reference genome seq for predicting AA change
-    struct hash *sampleMetadata;          // Sample metadata for decorating tree
-    struct hash *sampleUrls;              // URLs for samples, if applicable
-    struct hash *samplePlacements;        // Sample placement info e.g. clade/lineage from usher
-    int nodeNum;                          // For generating sequential node ID (in absence of name)
-    char *source;                         // Source of non-user sequences in tree (GISAID or public)
-    };
-
 static int cmpstringp(const void *p1, const void *p2)
 /* strcmp on pointers to strings, as in 'man qsort' but tolerate NULLs */
 {
@@ -758,7 +758,6 @@ boolean isUserSample = FALSE;
 if (node->ident->name)
     isUserSample = slNameInList(aji->subtreeUserSampleIds, node->ident->name);
 char *name = node->ident->name;
-struct sampleMetadata *met = name ? metadataForSample(aji->sampleMetadata, name) : NULL;
 if (name)
     jsonWriteString(aji->jw, "name", name);
 else
@@ -799,8 +798,7 @@ if (node->numEdges > 0)
 jsonWriteObjectStart(aji->jw, "node_attrs");
 jsonWriteDouble(aji->jw, "div", depth);
 if (node->numEdges == 0)
-    jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample, aji->source, aji->sampleUrls,
-                                aji->samplePlacements, isRsv,
+    jsonWriteLeafNodeAttributes(aji, name, isUserSample, isRsv,
                                 branchAttrCount, branchAttrCols, branchAttrVals);
 else if (branchAttrVals)
     jsonWriteBranchNodeAttributes(aji->jw, isRsv, branchAttrCount, branchAttrCols, branchAttrVals);
@@ -899,7 +897,7 @@ return branchAttrCount;
 }
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *org, char *db, struct geneInfo *geneInfoList,
-                       struct seqWindow *gSeqWin, struct hash *sampleMetadata,
+                       struct seqWindow *gSeqWin, struct sampleMetadataStore *sampleMetadata,
                        struct hash *sampleUrls, struct hash *samplePlacements,
                        char *jsonFile, char *source)
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format

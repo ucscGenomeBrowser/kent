@@ -19,6 +19,7 @@
 #include "iupac.h"
 #include "jsHelper.h"
 #include "linefile.h"
+#include "mmHash.h"
 #include "obscure.h"
 #include "parsimonyProto.h"
 #include "phyloPlace.h"
@@ -926,14 +927,13 @@ for (vpn = variantPath;  vpn != NULL;  vpn = vpn->next)
     }
 }
 
-static struct hash *getSampleMetadata(char *metadataFile)
+static void getSampleMetadataHash(char *metadataFile, struct sampleMetadataStore *sms)
 /* If config.ra defines a metadataFile, load its contents into a hash indexed by name (and INSDC
  * nucleotide accession sans dot if present) and return the hash; otherwise return NULL. */
 {
-struct hash *sampleMetadata = NULL;
 if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     {
-    sampleMetadata = hashNew(0);
+    struct hash *sampleMetadata = hashNew(0);
     struct lineFile *lf = lineFileOpen(metadataFile, TRUE);
     int headerWordCount = 0;
     char **headerWords = NULL;
@@ -944,9 +944,9 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
         if (startsWithWord("strain", line))
             {
             char *headerLine = cloneString(line);
-            headerWordCount = chopString(headerLine, "\t", NULL, 0);
+            headerWordCount = chopByChar(headerLine, '\t', NULL, 0);
             AllocArray(headerWords, headerWordCount);
-            chopString(headerLine, "\t", headerWords, headerWordCount);
+            chopByChar(headerLine, '\t', headerWords, headerWordCount);
             }
         else
             errAbort("Missing header line from metadataFile %s", metadataFile);
@@ -955,32 +955,47 @@ if (isNotEmpty(metadataFile) && fileExists(metadataFile))
     int genbankIx = stringArrayIx("genbank_accession", headerWords, headerWordCount);
     while (lineFileNext(lf, &line, NULL))
         {
-        struct sampleMetadata *met;
-        AllocVar(met);
-        met->columnCount = headerWordCount;
-        met->columnNames = headerWords;
-        AllocArray(met->columnValues, headerWordCount);
+        char **columnValues = NULL;
+        AllocArray(columnValues, headerWordCount);
         char *lineCopy = cloneString(line);
-        int wordCount = chopByChar(lineCopy, '\t', met->columnValues, headerWordCount);
+        int wordCount = chopByChar(lineCopy, '\t', columnValues, headerWordCount);
         lineFileExpectWords(lf, headerWordCount, wordCount);
-        if (genbankIx >= 0 && !isEmpty(met->columnValues[genbankIx]) &&
-            !sameString("?", met->columnValues[genbankIx]))
+        if (genbankIx >= 0 && !isEmpty(columnValues[genbankIx]) &&
+            !sameString("?", columnValues[genbankIx]))
             {
-            if (strchr(met->columnValues[genbankIx], '.'))
+            if (strchr(columnValues[genbankIx], '.'))
                 {
                 // Index by versionless accession
-                char copy[strlen(met->columnValues[genbankIx])+1];
-                safecpy(copy, sizeof copy, met->columnValues[genbankIx]);
+                char copy[strlen(columnValues[genbankIx])+1];
+                safecpy(copy, sizeof copy, columnValues[genbankIx]);
                 char *dot = strchr(copy, '.');
                 *dot = '\0';
-                hashAdd(sampleMetadata, copy, met);
+                hashAdd(sampleMetadata, copy, columnValues);
                 }
             else
-                hashAdd(sampleMetadata, met->columnValues[genbankIx], met);
+                hashAdd(sampleMetadata, columnValues[genbankIx], columnValues);
             }
-        hashAdd(sampleMetadata, met->columnValues[0], met);
+        hashAdd(sampleMetadata, columnValues[0], columnValues);
         }
     lineFileClose(&lf);
+    sms->hash = sampleMetadata;
+    sms->columnCount = headerWordCount;
+    sms->columnNames = headerWords;
+    }
+}
+
+static struct sampleMetadataStore *getSampleMetadata(char *metadataFile)
+/* If config.ra defines a metadataFile, load its contents into a hash indexed by name (and INSDC
+ * nucleotide accession sans dot if present) and return the hash; otherwise return NULL. */
+{
+struct sampleMetadataStore *sampleMetadata = NULL;
+if (isNotEmpty(metadataFile) && fileExists(metadataFile))
+    {
+    AllocVar(sampleMetadata);
+    if (endsWith(metadataFile, ".mmh"))
+        sampleMetadata->mmh = mmHashFromFile(metadataFile);
+    else
+        getSampleMetadataHash(metadataFile, sampleMetadata);
     }
 return sampleMetadata;
 }
@@ -1001,13 +1016,10 @@ if (regexMatchSubstr(sampleId, "^(.*\\|)?([A-Z][A-Z][0-9]{6})", substrs, ArraySi
 return gbId;
 }
 
-struct sampleMetadata *metadataForSample(struct hash *sampleMetadata, char *sampleId)
+static char **metadataForSampleHash(struct hash *sampleMetadata, char *sampleId)
 /* Look up sampleId in sampleMetadata, by accession if sampleId seems to include an accession. */
 {
-struct sampleMetadata *met = NULL;
-if (sampleMetadata == NULL)
-    return NULL;
-met = hashFindVal(sampleMetadata, sampleId);
+char **met = hashFindVal(sampleMetadata, sampleId);
 if (met)
     return met;
 if (!met)
@@ -1021,35 +1033,71 @@ if (!met && strchr(sampleId, '|'))
     char copy[strlen(sampleId)+1];
     safecpy(copy, sizeof copy, sampleId);
     char *words[4];
-    int wordCount = chopString(copy, "|", words, ArraySize(words));
+    int wordCount = chopByChar(copy, '|', words, ArraySize(words));
     if (isNotEmpty(words[0]))
         met = hashFindVal(sampleMetadata, words[0]);
     if (met == NULL && wordCount > 1 && isNotEmpty(words[1]))
         met = hashFindVal(sampleMetadata, words[1]);
     }
-// If it's one of our collapsed node names, dig out the example name and try that.
-if (!met && isdigit(sampleId[0]) && strstr(sampleId, "_from_"))
+return met;
+}
+
+static char **metadataForSampleMmHash(struct sampleMetadataStore *sms, char *sampleId)
+/* Look up sampleId in mmHash and parse string value into struct sampleMetadata, or return NULL if
+ * not found. */
+{
+char **met = NULL;
+const char *metadataLine = mmHashFindVal(sms->mmh, sampleId);
+if (metadataLine)
     {
-    char *eg = strstr(sampleId, "_eg_");
-    if (eg)
-        met = hashFindVal(sampleMetadata, eg+strlen("_eg_"));
+    if (sms->columnNames == NULL)
+        {
+        const char *headerLine = mmHashFindVal(sms->mmh, "strain");
+        if (headerLine == NULL)
+            errAbort("metadataForSampleMmHash: can't find column definitions in file "
+                     "(no line starts with 'strain')");
+        char *headerLineCopy = cloneString(headerLine);
+        sms->columnCount = chopByChar(headerLineCopy, '\t', NULL, 0);
+        AllocArray(sms->columnNames, sms->columnCount);
+        chopByChar(headerLineCopy, '\t', sms->columnNames, sms->columnCount);
+        }
+    char *lineCopy = cloneString(metadataLine);
+    int metWordCount = chopByChar(lineCopy, '\t', NULL, 0);
+    if (metWordCount != sms->columnCount)
+        errAbort("metadataForSampleMmHash: found %lu header columns but %d data columns for '%s'"
+                 " ('%s')",
+                 sms->columnCount, metWordCount, sampleId, metadataLine);
+    AllocArray(met, sms->columnCount);
+    chopByChar(lineCopy, '\t', met, sms->columnCount);
     }
 return met;
 }
 
-static char *lineageForSample(struct hash *sampleMetadata, char *sampleId)
+char **metadataForSample(struct sampleMetadataStore *sampleMetadata, char *sampleId)
+/* Look up sampleId in sampleMetadata, by accession if sampleId seems to include an accession. */
+{
+if (sampleMetadata == NULL)
+    return NULL;
+if (sampleMetadata->hash)
+    return metadataForSampleHash(sampleMetadata->hash, sampleId);
+else
+    return metadataForSampleMmHash(sampleMetadata, sampleId);
+}
+
+
+static char *lineageForSample(struct sampleMetadataStore *sms, char *sampleId)
 /* Look up sampleId's lineage in epiToLineage file. Return NULL if we don't find a match. */
 {
 char *lineage = NULL;
-struct sampleMetadata *met = metadataForSample(sampleMetadata, sampleId);
+char **met = metadataForSample(sms, sampleId);
 if (met)
     {
     int ix;
-    if ((ix = stringArrayIx("pangolin_lineage", met->columnNames, met->columnCount)) >= 0 ||
-        (ix = stringArrayIx("pango_lineage", met->columnNames, met->columnCount)) >= 0 ||
-        (ix = stringArrayIx("Nextstrain_lineage", met->columnNames, met->columnCount)) >= 0 ||
-        (ix = stringArrayIx("GCC_nextclade", met->columnNames, met->columnCount)) >= 0)
-        lineage = met->columnValues[ix];
+    if ((ix = stringArrayIx("pangolin_lineage", sms->columnNames, sms->columnCount)) >= 0 ||
+        (ix = stringArrayIx("pango_lineage", sms->columnNames, sms->columnCount)) >= 0 ||
+        (ix = stringArrayIx("Nextstrain_lineage", sms->columnNames, sms->columnCount)) >= 0 ||
+        (ix = stringArrayIx("GCC_nextclade", sms->columnNames, sms->columnCount)) >= 0)
+        lineage = met[ix];
     }
 return lineage;
 }
@@ -1234,7 +1282,7 @@ dyStringFree(&dy);
 }
 
 static void describeSamplePlacements(struct slName *sampleIds, struct hash *samplePlacements,
-                                     struct phyloTree *subtree, struct hash *sampleMetadata,
+                                     struct phyloTree *subtree,
                                      char *source, char *refAcc, char *db)
 /* Report how each sample fits into the big tree. */
 {
@@ -1351,7 +1399,7 @@ if (ti == NULL)
 return ti;
 }
 
-static void findNearestNeighbors(struct usherResults *results, struct hash *sampleMetadata)
+static void findNearestNeighbors(struct usherResults *results, struct sampleMetadataStore *sms)
 /* For each placed sample, find the nearest neighbor in the subtree and its assigned lineage,
  * and fill in those two fields of placementInfo. */
 {
@@ -1367,7 +1415,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     info->nearestNeighbor = findNearestNeighbor(ti->subtree, info->sampleId,
                                                 results->samplePlacements);
     if (isNotEmpty(info->nearestNeighbor))
-        info->neighborLineage = lineageForSample(sampleMetadata, info->nearestNeighbor);
+        info->neighborLineage = lineageForSample(sms, info->nearestNeighbor);
     }
 }
 
@@ -2110,7 +2158,7 @@ if (seqInfoList)
 }
 
 static void summarizeSubtrees(struct slName *sampleIds, struct usherResults *results,
-                              struct hash *sampleMetadata, struct tempName *jsonTns[],
+                              struct sampleMetadataStore *sms, struct tempName *jsonTns[],
                               char *db, int subtreeSize)
 /* Print a summary table of pasted/uploaded identifiers and subtrees */
 {
@@ -2195,7 +2243,7 @@ for (si = sampleIds;  si != NULL;  si = si->next)
             printf("<td>n/a</td>");
         }
     // pangolin-assigned lineage
-    char *lineage = lineageForSample(sampleMetadata, si->name);
+    char *lineage = lineageForSample(sms, si->name);
     printLineageTd(lineage, "n/a", db);
     // Maybe also #mutations with mouseover to show mutation path?
     printSubtreeTd(results->subtreeInfoList, jsonTns, si->name, subtreeSize);
@@ -2846,7 +2894,7 @@ if (addComponents)
     char *words[4];
     char copy[strlen(fullName)+1];
     safecpy(copy, sizeof copy, fullName);
-    int wordCount = chopString(copy, "|", words, ArraySize(words));
+    int wordCount = chopByChar(copy, '|', words, ArraySize(words));
     if (wordCount == 3)
         {
         // name|ID|date
@@ -2916,9 +2964,9 @@ if (isNotEmpty(aliasFile) && fileExists(aliasFile))
     }
 }
 
-static struct hash *getTreeNames(char *nameFile, char *protobufFile,
-                                 struct mutationAnnotatedTree **pBigTree,
-                                 boolean addComponents, int *pStartTime)
+static struct hash *getTreeNamesHash(char *nameFile, char *protobufFile,
+                                     struct mutationAnnotatedTree **pBigTree,
+                                     boolean addComponents, int *pStartTime)
 /* Make a hash of full names of leaves of bigTree, using nameFile if it exists, otherwise
  * falling back on the bigTree itself, loading it if necessary.  If addComponents, also map
  * components of those names to the full names in case the user gives us partial names/IDs. */
@@ -2946,11 +2994,42 @@ else
     nameHash = hashNew(digitsBaseTwo(nodeCount) + 3);
     rAddLeafNames(bigTree->tree, bigTree->condensedNodes, nameHash, addComponents);
     }
-reportTiming(pStartTime, "get tree names");
 return nameHash;
 }
 
-static char *matchName(struct hash *nameHash, char *name)
+static struct hashOrMmHash *getTreeNames(char *nameFile, char *protobufFile,
+                                         struct mutationAnnotatedTree **pBigTree,
+                                         boolean addComponents, int *pStartTime)
+/* Make a hash of full names of leaves of bigTree, using nameFile if it exists, otherwise
+ * falling back on the bigTree itself, loading it if necessary.  If addComponents, also map
+ * components of those names to the full names in case the user gives us partial names/IDs. */
+{
+struct hashOrMmHash *treeNames = NULL;
+AllocVar(treeNames);
+if (isNotEmpty(nameFile) && fileExists(nameFile) && endsWith(nameFile, ".mmh"))
+    treeNames->mmh = mmHashFromFile(nameFile);
+else
+    treeNames->hash = getTreeNamesHash(nameFile, protobufFile, pBigTree, addComponents, pStartTime);
+
+reportTiming(pStartTime, "get tree names");
+return treeNames;
+}
+
+static const char *hashOrMmHashFindVal(struct hashOrMmHash *homh, char *key)
+/* Look up string value for key in homh; return NULL if not found. */
+{
+const char *val = NULL;
+if (homh)
+    {
+    if (homh->hash)
+        val = hashFindVal(homh->hash, key);
+    else
+        val = mmHashFindVal(homh->mmh, key);
+    }
+return val;
+}
+
+static const char *matchName(struct hashOrMmHash *nameHash, char *name)
 /* Look for a possibly partial name or ID provided by the user in nameHash.  Return the result,
  * possibly NULL.  If the full name doesn't match, try components of the name. */
 {
@@ -2960,7 +3039,7 @@ name = trimSpaces(name);
 // UCSC's tree.
 if (startsWithNoCase("hCoV-19/", name))
     name += strlen("hCoV-19/");
-char *match = hashFindVal(nameHash, name);
+const char *match = hashOrMmHashFindVal(nameHash, name);
 int minWordSize=5;
 if (match == NULL && strchr(name, '|'))
     {
@@ -2968,20 +3047,20 @@ if (match == NULL && strchr(name, '|'))
     char *words[4];
     char copy[strlen(name)+1];
     safecpy(copy, sizeof copy, name);
-    int wordCount = chopString(copy, "|", words, ArraySize(words));
+    int wordCount = chopByChar(copy, '|', words, ArraySize(words));
     if (wordCount == 3)
         {
         // name|ID|date; try ID first.
         if (strlen(words[1]) > minWordSize)
-            match = hashFindVal(nameHash, words[1]);
+            match = hashOrMmHashFindVal(nameHash, words[1]);
         if (match == NULL && strlen(words[0]) > minWordSize)
             {
-            match = hashFindVal(nameHash, words[0]);
+            match = hashOrMmHashFindVal(nameHash, words[0]);
             // Sometimes country/isolate names have spaces... strip out if present.
             if (match == NULL && strchr(words[0], ' '))
                 {
                 stripChar(words[0], ' ');
-                match = hashFindVal(nameHash, words[0]);
+                match = hashOrMmHashFindVal(nameHash, words[0]);
                 }
             }
         }
@@ -2989,7 +3068,7 @@ if (match == NULL && strchr(name, '|'))
         {
         // ID|date
         if (strlen(words[0]) > minWordSize)
-             match = hashFindVal(nameHash, words[0]);
+             match = hashOrMmHashFindVal(nameHash, words[0]);
         }
     }
 else if (match == NULL && strchr(name, ' '))
@@ -3000,12 +3079,12 @@ else if (match == NULL && strchr(name, ' '))
     char copy[strlen(name)+1];
     safecpy(copy, sizeof copy, name);
     stripChar(copy, ' ');
-    match = hashFindVal(nameHash, copy);
+    match = hashOrMmHashFindVal(nameHash, copy);
     }
 return match;
 }
 
-static boolean tallyMatch(char *match, char *term,
+static boolean tallyMatch(const char *match, char *term,
                           struct slName **retMatches, struct slName **retUnmatched)
 /* If match is non-NULL, add result to retMatches and return TRUE, otherwise add term to
  * retUnmatched and return FALSE. */
@@ -3021,7 +3100,7 @@ else
 return foundIt;
 }
 
-static boolean matchIdRange(struct hash *nameHash, char *line,
+static boolean matchIdRange(struct hashOrMmHash *nameHash, char *line,
                             struct slName **retMatches, struct slName **retUnmatched)
 /* If line looks like it might contain a range of IDs, for example EPI_ISL_123-129 from an EPI_SET,
  * then expand the range(s) into individual IDs, look up the IDs, set retMatches and retUnmatched
@@ -3052,7 +3131,7 @@ while (regexMatchSubstr(line, rangeListExp, substrArr, ArraySize(substrArr)))
             for (num = start;  num <= end;  num++)
                 {
                 safef(oneId, sizeof oneId, "%s%d", prefixA, num);
-                char *match = hashFindVal(nameHash, oneId);
+                const char *match = hashOrMmHashFindVal(nameHash, oneId);
                 foundAny |= tallyMatch(match, oneId, retMatches, retUnmatched);
                 }
             }
@@ -3061,7 +3140,7 @@ while (regexMatchSubstr(line, rangeListExp, substrArr, ArraySize(substrArr)))
             // It matched the regex but the prefixes don't match and/or numbers are out of order
             // so we don't know what to do with it -- try matchName just in case.
             char *regMatch = regexSubstringClone(line, substrArr[1]);
-            char *match = matchName(nameHash, regMatch);
+            const char *match = matchName(nameHash, regMatch);
             foundAny |= tallyMatch(match, regMatch, retMatches, retUnmatched);
             }
         }
@@ -3070,7 +3149,7 @@ while (regexMatchSubstr(line, rangeListExp, substrArr, ArraySize(substrArr)))
         // Just one ID
         char oneId[strlen(line)+1];
         safef(oneId, sizeof oneId, "%s%s", prefixA, numberA);
-        char *match = hashFindVal(nameHash, oneId);
+        const char *match = hashOrMmHashFindVal(nameHash, oneId);
         foundAny |= tallyMatch(match, oneId, retMatches, retUnmatched);
         }
     // Skip past this match to see if the line has another range next.
@@ -3079,7 +3158,7 @@ while (regexMatchSubstr(line, rangeListExp, substrArr, ArraySize(substrArr)))
 return foundAny;
 }
 
-static struct slName *readSampleIds(struct lineFile *lf, struct hash *nameHash)
+static struct slName *readSampleIds(struct lineFile *lf, struct hashOrMmHash *nameHash)
 /* Read a file of sample names/IDs from the user; typically these will not be exactly the same
  * as the protobuf's (UCSC protobuf names are typically country/isolate/year|ID|date), so attempt
  * to find component matches if an exact match isn't found. */
@@ -3093,7 +3172,7 @@ while (lineFileNext(lf, &line, NULL))
     char *tab = strchr(line, '\t');
     if (tab)
         *tab = '\0';
-    char *match = matchName(nameHash, line);
+    const char *match = matchName(nameHash, line);
     if (match)
         slNameAddHead(&sampleIds, match);
     else
@@ -3149,7 +3228,7 @@ void *loadMetadataWorker(void *arg)
 {
 char *metadataFile = arg;
 int startTime = clock1000();
-struct hash *sampleMetadata = getSampleMetadata(metadataFile);
+struct sampleMetadataStore *sampleMetadata = getSampleMetadata(metadataFile);
 reportTiming(&startTime, "read sample metadata (in a pthread)");
 return sampleMetadata;
 }
@@ -3255,7 +3334,7 @@ if (lfLooksLikeFasta(lf))
     {
     struct slPair *failedSeqs;
     struct slPair *failedPsls;
-    struct hash *treeNames = NULL;
+    struct hashOrMmHash *treeNames = NULL;
     // We need to check uploaded names in fasta only for original usher, not usher-sampled(-server).
     if (!serverIsConfigured(org) && !endsWith(usherPath, "-sampled"))
         treeNames = getTreeNames(sampleNameFile, protobufPath, &bigTree, FALSE, &startTime);
@@ -3290,9 +3369,13 @@ else if (lfLooksLikeVcf(lf))
 else
     {
     subtreesOnly = TRUE;
-    struct hash *treeNames = getTreeNames(sampleNameFile, protobufPath, &bigTree, TRUE, &startTime);
-    addAliases(treeNames, aliasFile);
-    reportTiming(&startTime, "load sample name aliases");
+    struct hashOrMmHash *treeNames = getTreeNames(sampleNameFile, protobufPath, &bigTree, TRUE,
+                                                  &startTime);
+    if (treeNames && treeNames->hash)
+        {
+        addAliases(treeNames->hash, aliasFile);
+        reportTiming(&startTime, "load sample name aliases");
+        }
     sampleIds = readSampleIds(lf, treeNames);
     reportTiming(&startTime, "look up uploaded sample names");
     }
@@ -3319,7 +3402,7 @@ else if (subtreesOnly)
                                          sampleIds, treeChoices, &startTime);
     }
 
-struct hash *sampleMetadata = NULL;
+struct sampleMetadataStore *sampleMetadata = NULL;
 if (metadataPthread)
     {
     pthreadJoin(metadataPthread, (void **)(&sampleMetadata));
@@ -3458,7 +3541,7 @@ if (results && results->singleSubtreeInfo)
                 struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
                 subtree = phyloPruneToIds(subtree, ti->subtreeUserSampleIds);
                 describeSamplePlacements(ti->subtreeUserSampleIds, results->samplePlacements,
-                                         subtree, sampleMetadata, source, refAcc, refName);
+                                         subtree, source, refAcc, refName);
                 }
             reportTiming(&startTime, "describe placements");
             }
