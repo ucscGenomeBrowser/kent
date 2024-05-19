@@ -12,7 +12,7 @@ filterChain=$pairRefSeq.$pairQuerySeq.$pairChain
 
 chainFilter -t=$pairRefSeq -q=$pairQuerySeq $pairChain > $filterChain
 
-buildPairAssembly $filterChain $pairRefSeq $pairRefDb2bit $pairQuerySeq $pairQueryDb2bit out.fa query.psl target.psl map.bed dup.bed miss.bed
+buildPairAssembly $filterChain $pairRefSeq $pairRefDb2bit $pairQuerySeq $pairQueryDb2bit out.fa query.psl target.psl map.bed dup.bed miss.bed baseTarget.bed baseQuery.bed
 
 
 rm -rf hub
@@ -44,6 +44,19 @@ sort tmp tmp2 > tmp3
 bedToBigBed -type=bed4 -tab tmp3 hub/buildPair.sizes.txt hub/dups.bb
 
 bedToBigBed -type=bed4 miss.bed hub/buildPair.sizes.txt hub/mismatch.bb
+
+bedToBigBed -type=bed4+1 baseTarget.bed hub/buildPair.sizes.txt hub/baseTarget.bb
+
+genome=$pairQueryDb
+gcX="${genome:0:3}"
+d0="${genome:4:3}"
+d1="${genome:7:3}"
+d2="${genome:10:3}"
+
+tmp=`cd /usr/local/apache/htdocs/hubs; echo $gcX/$d0/$d1/$d2/$genome/bbi/*ens*.bb `
+ensGeneBb=https://hgdownload.soe.ucsc.edu/hubs/$tmp
+tmp=`cd /usr/local/apache/htdocs/hubs; echo $gcX/$d0/$d1/$d2/$genome/bbi/*rmsk.bb `
+rmskBb=https://hgdownload.soe.ucsc.edu/hubs/$tmp
 
 
 cat << _EOF_ > hub/hub.txt
@@ -98,9 +111,30 @@ bigDataUrl dups.bb
 shortLabel dups
 longLabel dups
 
+track baseTarget
+type bigBed 4
+bigDataUrl baseTarget.bb
+shortLabel baseTarget
+longLabel baseTarget
+
 track mismatch
 type bigBed 4
 bigDataUrl mismatch.bb
 shortLabel mismatch
 longLabel mismatch
+
+track rmsk
+type bigBed
+shortLabel Query Rmsk
+longLabel Query Rmsk
+bigDataUrl $rmskBb
+quickLiftUrl queryChain.bb
+
+track ensGeneQuery
+type bigGenePred
+shortLabel Query Ensembl
+longLabel Query Ensembl
+bigDataUrl $ensGeneBb
+quickLiftUrl queryChain.bb
+
 _EOF_
