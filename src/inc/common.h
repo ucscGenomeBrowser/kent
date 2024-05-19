@@ -522,7 +522,7 @@ struct slName
     char name[1];               /* Allocated at run time to length of string. */
     };
 
-struct slName *newSlName(char *name);
+struct slName *newSlName(const char *name);
 
 #define slNameNew newSlName
 /* Return a new slName. */
@@ -576,7 +576,7 @@ char *slNameStore(struct slName **pList, char *string);
 /* Put string into list if it's not there already.
  * Return the version of string stored in list. */
 
-struct slName *slNameAddHead(struct slName **pList, char *name);
+struct slName *slNameAddHead(struct slName **pList, const char *name);
 /* Add name to start of list and return it. */
 
 struct slName *slNameAddTail(struct slName **pList, char *name);
@@ -989,7 +989,8 @@ int chopString(char *in, char *sep, char *outArray[], int outSize);
  * outArray.  It returns the number of strings.
  * If you pass in NULL for outArray, it will just
  * return the number of strings that it *would*
- * chop. */
+ * chop.
+ * NOTE: unlike chopByChar, this skips empty words between separators! */
 
 extern char crLfChopper[];
 extern char whiteSpaceChopper[];

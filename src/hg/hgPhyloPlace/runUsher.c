@@ -732,7 +732,7 @@ static void runUsherCommand(char *cmd[], char *stderrFile, int *pStartTime)
 char **cmds[] = { cmd, NULL };
 struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, stderrFile, 0);
 pipelineClose(&pl);
-reportTiming(pStartTime, "run usher");
+reportTiming(pStartTime, "run usher command");
 }
 
 boolean serverIsConfigured(char *org)
@@ -1222,7 +1222,10 @@ if (serverIsConfigured(org))
         {
         success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, TRUE);
         close(serverSocket);
-        reportTiming(pStartTime, "send query");
+        if (success)
+            reportTiming(pStartTime, "send query and get response (successful)");
+        else
+            reportTiming(pStartTime, "send query and get response (failed)");
         }
     carefulClose(&errFile);
     }
@@ -1322,7 +1325,7 @@ struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
 struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
 pipelineClose(&pl);
-reportTiming(pStartTime, "run matUtils");
+reportTiming(pStartTime, "run matUtils command");
 }
 
 static boolean runMatUtilsServer(char *org, char *protobufPath, char *subtreeSizeStr,
@@ -1348,7 +1351,10 @@ if (serverIsConfigured(org))
         {
         success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, FALSE);
         close(serverSocket);
-        reportTiming(pStartTime, "send query");
+        if (success)
+            reportTiming(pStartTime, "send query and get response (successful)");
+        else
+            reportTiming(pStartTime, "send query and get response (failed)");
         }
     carefulClose(&errFile);
     }

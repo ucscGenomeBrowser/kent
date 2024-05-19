@@ -6,6 +6,7 @@
 #include "fa.h"
 #include "genoFind.h"
 #include "iupac.h"
+#include "mmHash.h"
 #include "parsimonyProto.h"
 #include "phyloPlace.h"
 #include "pipeline.h"
@@ -53,7 +54,7 @@ if (strchr(seqName, '(') || strchr(seqName, ')') || strchr(seqName, ':') || strc
     }
 }
 
-static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct hash *treeNames,
+static struct seqInfo *checkSequences(struct dnaSeq *seqs, struct hashOrMmHash *treeNames,
                                       int minSeqSize, int maxSeqSize, struct slPair **retFailedSeqs)
 /* Return a list of sequences that pass basic QC checks (appropriate size etc).
  * If any sequences have names that are already in the tree, add a prefix so usher doesn't
@@ -140,15 +141,24 @@ for (seq = seqs;  seq != NULL;  seq = nextSeq)
             }
         else
             {
-            if (treeNames &&
-                (isInternalNodeName(seq->name, 0) || hashLookup(treeNames, seq->name)))
+            // If non-NULL treeNames was passed in then we're using original usher not usher-sampled
+            // and need to modify uploaded names that are already in the tree, if any.
+            if (treeNames)
                 {
-                // usher will reject any sequence whose name is already in the tree, even a
-                // numeric internal node name.  Add a prefix so usher won't reject sequence.
-                char newName[strlen(seq->name)+32];
-                safef(newName, sizeof newName, "uploaded_%s", seq->name);
-                freeMem(seq->name);
-                seq->name = cloneString(newName);
+                boolean foundInTreeNames = FALSE;
+                if (treeNames->hash)
+                    foundInTreeNames = (hashLookup(treeNames->hash, seq->name) != NULL);
+                else
+                    foundInTreeNames = (mmHashFindVal(treeNames->mmh, seq->name) != NULL);
+                if (foundInTreeNames || isInternalNodeName(seq->name, 0))
+                    {
+                    // usher will reject any sequence whose name is already in the tree, even a
+                    // numeric internal node name.  Add a prefix so usher won't reject sequence.
+                    char newName[strlen(seq->name)+32];
+                    safef(newName, sizeof newName, "uploaded_%s", seq->name);
+                    freeMem(seq->name);
+                    seq->name = cloneString(newName);
+                    }
                 }
             struct seqInfo *si;
             AllocVar(si);
@@ -972,7 +982,7 @@ return tn;
 }
 
 struct tempName *vcfFromFasta(struct lineFile *lf, char *org, char *db, struct dnaSeq *refGenome,
-                              struct slName **maskSites, struct hash *treeNames,
+                              struct slName **maskSites, struct hashOrMmHash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime)

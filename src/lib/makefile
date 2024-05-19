@@ -32,7 +32,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     keys.o knetUdc.o kxTok.o linefile.o lineFileOnBigBed.o localmem.o log.o longTabix.o longToList.o \
     maf.o mafFromAxt.o mafScore.o mailViaPipe.o md5.o \
     matrixMarket.o memalloc.o memgfx.o meta.o metaWig.o mgCircle.o \
-    mgPolygon.o mime.o net.o nib.o nibTwo.o nt4.o numObscure.o \
+    mgPolygon.o mime.o mmHash.o net.o nib.o nibTwo.o nt4.o numObscure.o \
     obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o pairDistance.o \
     paraFetch.o peakCluster.o \
     phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \

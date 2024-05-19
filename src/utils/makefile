@@ -148,6 +148,7 @@ UCSC_APPS = \
 	pslToXa \
 	scrambleFa \
 	subs \
+	tabToMmHash \
 	tableSum \
 	textHist2 \
 	udcCleanup \

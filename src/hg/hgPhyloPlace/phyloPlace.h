@@ -129,13 +129,13 @@ struct usherResults
     struct subtreeInfo *subtreeInfoList; // For each subtree: tree, file, node info etc.
     };
 
-struct sampleMetadata
-/* Information about a virus sample. */
-{
+struct sampleMetadataStore
+/* Storage for sample metadata: hash of array of strings for named columns. */
+    {
+    struct mmHash *mmh;    // Either NULL (if hash is non-NULL) or a memory-mapped hash.
+    struct hash *hash;     // Either NULL (if mmh is non-NULL) or a regular hash.
     size_t columnCount;    // Number of metadata columns
     char **columnNames;    // Metadata column names (e.g. date, genbank_accession, pangolin_lineage)
-                           // -- shared by all metadata rows, not allocated for each struct
-    char **columnValues;   // Metadata column values -- allocated for each struct
     };
 
 struct geneInfo
@@ -149,8 +149,16 @@ struct geneInfo
     int cdsEnd;             // genePred cdsEnd (genome coord, really cds start if - strand)
     };
 
+struct hashOrMmHash
+/* Wrapper for either a regular hash or a memory-mapped hash.  Not using a union because I need
+ * to know which one I have. */
+    {
+    struct mmHash *mmh;     // Either NULL (if hash is non-NULL) or a memory-mapped hash.
+    struct hash *hash;      // Either NULL (if mmh is non-NULL) or a regular hash.
+    };
+
 struct tempName *vcfFromFasta(struct lineFile *lf, char *org, char *db, struct dnaSeq *refGenome,
-                              struct slName **maskSites, struct hash *treeNames,
+                              struct slName **maskSites, struct hashOrMmHash *treeNames,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
                               struct slPair **retFailedSeqs, struct slPair **retFailedPsls,
                               int *pStartTime);
@@ -205,7 +213,7 @@ struct geneInfo *getGeneInfoList(char *bigGenePredFile, struct dnaSeq *refGenome
 /* If config.ra has a source of gene annotations, then return the gene list. */
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *org, char *db, struct geneInfo *geneInfoList,
-                       struct seqWindow *gSeqWin, struct hash *sampleMetadata,
+                       struct seqWindow *gSeqWin, struct sampleMetadataStore *sampleMetadata,
                        struct hash *sampleUrls, struct hash *samplePlacements,
                        char *jsonFile, char *source);
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
@@ -218,8 +226,9 @@ struct tempName *writeCustomTracks(char *org, char *ref, char *db,
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 
 
-struct sampleMetadata *metadataForSample(struct hash *sampleMetadata, char *sampleId);
-/* Look up sampleId in sampleMetadata, by accession if sampleId seems to include an accession. */
+char **metadataForSample(struct sampleMetadataStore *sampleMetadata, char *sampleId);
+/* Look up sampleId in sampleMetadata, by accession if sampleId seems to include an accession.
+ * Return NULL if not found. */
 
 struct phyloTree *phyloPruneToIds(struct phyloTree *node, struct slName *sampleIds);
 /* Prune all descendants of node that have no leaf descendants in sampleIds. */

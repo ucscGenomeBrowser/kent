@@ -15,7 +15,7 @@ pipelineTester = ${BIN_DIR}/pipelineTester
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
-    ${TABIX_TESTS} hacTreeTest testSumDoubles jsonQueryTest
+    ${TABIX_TESTS} hacTreeTest mmHashTest testSumDoubles jsonQueryTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -339,6 +339,17 @@ hacTreeTest: ${hacTreeTester} mkdirs
 ${BIN_DIR}/hacTreeTest: hacTreeTest.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} -o ${BIN_DIR}/hacTreeTest hacTreeTest.o ${MYLIBS} ${L}
+
+# mmHash:
+mmHashTester=${BIN_DIR}/mmHashTest
+mmHashTest: ${mmHashTester} mkdirs
+	${mmHashTester} input/$@.txt output/$@.mmh output/$@.out
+	diff expected/$@.out output/$@.out
+	cmp expected/$@.mmh output/$@.mmh
+
+${BIN_DIR}/mmHashTest: mmHashTest.o ${MYLIBS}
+	${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} -o ${BIN_DIR}/mmHashTest mmHashTest.o ${MYLIBS} ${L}
 
 # udc (not part of the top-level test target at this point):
 udcTest: udcTest.o ${MYLIBS} mkdirs
