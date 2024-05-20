@@ -40,9 +40,10 @@ sshKeyDynablat:
 sshKeyCheck: sshKeyDownload sshKeyDynablat
 	@printf "# ssh keys to hgdownload and dynablat-01 are good\n"
 
-mkGenomes::
+mkGenomes:: symLinks
 	@printf "# starting mkGenomes " 1>&2
 	@date "+%s %F %T" 1>&2
+	@rm -f hasChainNets.txt
 	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
 	rm -f ${destDir}/download.${genomesTxt}.txt
 	cp -p ${destDir}/${genomesTxt}.txt ${destDir}/download.${genomesTxt}.txt
