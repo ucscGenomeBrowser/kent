@@ -495,7 +495,7 @@ if (lf != NULL)
         puts("<p></p>");
         puts("  </div>");
         // Let the user upload something else and try again:
-        inputForm(db);
+        inputForm(org);
         }
     }
 else
@@ -504,7 +504,7 @@ else
          "&quot;try example&quot; button.");
     // Let the user try again:
     puts("  </div>");
-    inputForm(db);
+    inputForm(org);
     }
 puts("</div>\n");
 
