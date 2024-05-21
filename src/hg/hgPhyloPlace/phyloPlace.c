@@ -3158,7 +3158,8 @@ while (regexMatchSubstr(line, rangeListExp, substrArr, ArraySize(substrArr)))
 return foundAny;
 }
 
-static struct slName *readSampleIds(struct lineFile *lf, struct hashOrMmHash *nameHash)
+static struct slName *readSampleIds(struct lineFile *lf, struct hashOrMmHash *nameHash,
+                                    struct slName **retUnmatched)
 /* Read a file of sample names/IDs from the user; typically these will not be exactly the same
  * as the protobuf's (UCSC protobuf names are typically country/isolate/year|ID|date), so attempt
  * to find component matches if an exact match isn't found. */
@@ -3201,6 +3202,18 @@ while (lineFileNext(lf, &line, NULL))
             }
         }
     }
+if (retUnmatched != NULL)
+    *retUnmatched = unmatched;
+else
+    slNameFreeList(&unmatched);
+return sampleIds;
+}
+
+static void reportUnmatched(struct slName *unmatched, boolean foundNone)
+/* Warn the user that some of their names/IDs could not be found in the tree.  If it's a long list,
+ * show only the first handful.  If nothing was unmatched but nothing was found either, warn about
+ * empty input. */
+{
 if (unmatched)
     {
     struct dyString *firstFew = dyStringNew(0);
@@ -3213,14 +3226,12 @@ if (unmatched)
         dyStringAppendSep(firstFew, ", ");
         dyStringPrintf(firstFew, "'%s'", example->name);
         }
-    warn("Unable to find %d of your sequences in the tree, e.g. %s",
+    warn("Unable to find %d of your sequence names/IDs, e.g. %s",
          slCount(unmatched), firstFew->string);
     dyStringFree(&firstFew);
     }
-else if (sampleIds == NULL)
+else if (foundNone)
     warn("Could not find any names in input; empty file uploaded?");
-slNameFreeList(&unmatched);
-return sampleIds;
 }
 
 void *loadMetadataWorker(void *arg)
@@ -3376,7 +3387,10 @@ else
         addAliases(treeNames->hash, aliasFile);
         reportTiming(&startTime, "load sample name aliases");
         }
-    sampleIds = readSampleIds(lf, treeNames);
+    struct slName *unmatched = NULL;
+    sampleIds = readSampleIds(lf, treeNames, &unmatched);
+    reportUnmatched(unmatched, (sampleIds == NULL));
+    slNameFreeList(&unmatched);
     reportTiming(&startTime, "look up uploaded sample names");
     }
 lineFileClose(&lf);
@@ -3389,17 +3403,18 @@ if (sampleIds == NULL)
 pthread_t *metadataPthread = mayStartLoaderPthread(metadataFile, loadMetadataWorker);
 
 struct usherResults *results = NULL;
+char *anchorFile = phyloPlaceRefSettingPath(org, refName, "anchorSamples");
 if (vcfTn)
     {
     fflush(stdout);
     results = runUsher(org, usherPath, protobufPath, vcfTn->forCgi, subtreeSize, &sampleIds,
-                       treeChoices, &startTime);
+                       treeChoices, anchorFile, &startTime);
     }
 else if (subtreesOnly)
     {
     char *matUtilsPath = getMatUtilsPath(TRUE);
-    results = runMatUtilsExtractSubtrees(refName, matUtilsPath, protobufPath, subtreeSize,
-                                         sampleIds, treeChoices, &startTime);
+    results = runMatUtilsExtractSubtrees(org, matUtilsPath, protobufPath, subtreeSize,
+                                         sampleIds, treeChoices, anchorFile, &startTime);
     }
 
 struct sampleMetadataStore *sampleMetadata = NULL;
@@ -3732,7 +3747,7 @@ struct slName *noMatches = NULL;
 struct hash *sampleRef = hashNew(0);
 struct hash *refOpenFileHandles = hashNew(0);
 struct dyString *dyRefDesc = dyStringNew(0);
-while (lineFileRow(nlf, row))
+while (lineFileRowTab(nlf, row))
     {
     char *sample = row[1];
     char *ref = row[2];
@@ -3795,6 +3810,93 @@ reportTiming(pStartTime, "collated refs and samples");
 return refFiles;
 }
 
+static char *dumpNamesToTrashFile(struct slName *nameList)
+/* Write each item in nameList to a trashfile, one per line, and return the trash file name. */
+{
+struct tempName tmp;
+trashDirFile(&tmp, "ct", "usher_tmp", ".txt");
+FILE *f = mustOpen(tmp.forCgi, "w");
+struct slName *sln;
+for (sln = nameList;  sln != NULL;  sln = sln->next)
+    {
+    fputs(sln->name, f);
+    fputc('\n', f);
+    }
+carefulClose(&f);
+return cloneString(tmp.forCgi);
+}
+
+static struct refMatch *matchNamesWithReference(char *org, struct lineFile *lf,
+                                                struct slName **retNoMatches, int *pStartTime)
+/* For each name in lf, find all trees that contain a sample matching that name.  Make a temporary
+ * file per reference with matching sample names from that reference. */
+{
+struct refMatch *refFiles = NULL;
+// We need to search for names in lf in every ref/tree, and the searching code expects a lineFile,
+// but we can't necessarily rewind lf.  So copy lf to trash file that we can read repeatedly.
+char *uploadedFile = dumpLfToTrashFile(lf);
+// Find all subdirectories for org that contain reference.ra files and search uploaded names/IDs
+// in each ref/tree.
+struct hash *unmatchedCounts = hashNew(0);
+int refCount = 0;
+int totalFound = 0;
+struct dyString *dyRefDesc = dyStringNew(0);
+char *orgDir = catThreeStrings(PHYLOPLACE_DATA_DIR, "/", org);
+struct slName *dataDirPaths = pathsInDirAndSubdirs(orgDir, "*");
+struct slName *path;
+for (path = dataDirPaths;  path != NULL;  path = path->next)
+    {
+    if (endsWith(path->name, "/reference.ra"))
+        {
+        char *ref = finalDirName(path->name);
+        char *protobufPath = NULL;
+        char *source = NULL;
+        char *metadataFile = NULL;
+        char *aliasFile = NULL;
+        char *sampleNameFile = NULL;
+        struct treeChoices *treeChoices = loadTreeChoices(org, ref);
+        getProtobufMetadataSource(treeChoices, NULL,
+                              &protobufPath, &metadataFile, &source, &aliasFile, &sampleNameFile);
+        struct mutationAnnotatedTree *bigTree = NULL;
+        struct hashOrMmHash *treeNames = getTreeNames(sampleNameFile, protobufPath, &bigTree, TRUE,
+                                                      pStartTime);
+        struct lineFile *lf2 = lineFileOpen(uploadedFile, TRUE);
+        struct slName *unmatched = NULL;
+        struct slName *sampleIds = readSampleIds(lf2, treeNames, &unmatched);
+        lineFileClose(&lf2);
+        if (sampleIds)
+            {
+            describeRef(org, ref, dyRefDesc);
+            slAddHead(&refFiles,
+                      refMatchNew(ref, dyRefDesc->string, dumpNamesToTrashFile(sampleIds)));
+            totalFound += slCount(sampleIds);
+            }
+        struct slName *id;
+        for (id = unmatched;  id != NULL;  id = id->next)
+            {
+            hashIncInt(unmatchedCounts, id->name);
+            }
+        slNameFreeList(&unmatched);
+        refCount++;
+        }
+    }
+slNameFreeList(&dataDirPaths);
+// Now find ids that were not matched for any ref/tree.
+struct slName *unmatchedInAll = NULL;
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(unmatchedCounts);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (ptToInt(hel->val) == refCount)
+        slNameAddHead(&unmatchedInAll, hel->name);
+    }
+reportUnmatched(unmatchedInAll, (totalFound == 0));
+slNameFreeList(&unmatchedInAll);
+hashFree(&unmatchedCounts);
+reportTiming(pStartTime, "looked up names in all trees");
+return refFiles;
+}
+
 boolean phyloPlaceSamples(struct lineFile *lf, char *db, char *org, char *defaultProtobuf,
                           boolean doMeasureTiming, int subtreeSize, struct trackLayout *tl,
                           struct cart *cart)
@@ -3812,20 +3914,13 @@ if (isNotEmpty(nextcladeIndex))
     if (! fileExists(nextcladeIndex))
         errAbort("config for '%s' specifies nextcladeIndex file '%s' but it does not exist",
                  org, nextcladeIndex);
-    if (! lfLooksLikeFasta(lf))
-        {
-        char *name = phyloPlaceOrgSetting(org, "name");
-        if (isEmpty(name))
-            name = org;
-        char *description = emptyForNull(phyloPlaceOrgSetting(org, "description"));
-        errAbort("Sorry, only fasta input is supported for %s %s",
-                 name, description);
-        }
+    struct refMatch *refFiles = NULL;
     struct slName *noMatches = NULL;
     int startTime = clock1000();
-    struct refMatch *refFiles = matchSamplesWithReferences(org, nextcladeIndex, lf, &noMatches,
-                                                           &startTime);
-    lineFileClose(&lf);
+    if (lfLooksLikeFasta(lf))
+        refFiles = matchSamplesWithReferences(org, nextcladeIndex, lf, &noMatches, &startTime);
+    else
+        refFiles = matchNamesWithReference(org, lf, &noMatches, &startTime);
     if (noMatches != NULL)
         {
         printf("<br>No reference was found for the following sequences:\n<ul>\n");
