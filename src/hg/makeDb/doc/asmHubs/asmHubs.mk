@@ -8,6 +8,12 @@
 # statsName, testStatsName, dataName, testDataName, genomesTxt, hubFile
 # testHubFile, Name and name
 
+# the .PHONY will make sure these targets run even if there happens to be
+#    a file by the same name existing.  These rules don't make these files,
+#    they are just procedures to run.
+
+.PHONY: sanityCheck makeDirs mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
+
 toolsDir=${HOME}/kent/src/hg/makeDb/doc/asmHubs
 htdocsHgDownload=/usr/local/apache/htdocs-hgdownload
 hubsDownload=${htdocsHgDownload}/hubs/${name}
@@ -40,9 +46,14 @@ sshKeyDynablat:
 sshKeyCheck: sshKeyDownload sshKeyDynablat
 	@printf "# ssh keys to hgdownload and dynablat-01 are good\n"
 
+# mkGenomes needs symLinks to run before mkGenomes runs, and then
+# the second symLinks after mkGenomes uses business created by mkGenomes
+
 mkGenomes::
 	@printf "# starting mkGenomes " 1>&2
+	${toolsDir}/mkSymLinks.pl ${orderList}
 	@date "+%s %F %T" 1>&2
+	@rm -f hasChainNets.txt
 	${toolsDir}/mkGenomes.pl dynablat-01 4040 ${orderList} > ${destDir}/${genomesTxt}.txt
 	rm -f ${destDir}/download.${genomesTxt}.txt
 	cp -p ${destDir}/${genomesTxt}.txt ${destDir}/download.${genomesTxt}.txt
