@@ -90,6 +90,15 @@ for(chain = chainList; chain; chain = chain->next)
 return bbList;
 }
 
+void make12(struct bed *bed)
+{
+bed->blockCount = 1;
+bed->blockSizes = needMem(sizeof(int));
+bed->blockSizes[0] = bed->chromEnd - bed->chromStart;
+bed->chromStarts = needMem(sizeof(int));
+bed->chromStarts[0] = 0;
+}
+
 struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
 /* Using chains stored in chainHash, port a bigBedInterval from another assembly to a bed
  * on the reference.
@@ -107,6 +116,9 @@ bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
 struct bed *bed = bedLoadN(bedRow, bbi->definedFieldCount);
 char *error;
+if (bbi->definedFieldCount < 12)
+    make12(bed);
+
 if ((error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL)) == NULL)
     return bed;
 //else

@@ -213,8 +213,8 @@ slReverse(&linearBlockList);
 
 #define BOTH_COLOR       "20,40,140"
 #define INVERT_COLOR       "140,20,140"
-#define REFONLY_COLOR       "255,255,0"
-#define QUERYONLY_COLOR       "170,255,60"
+#define REFONLY_COLOR       "125,125,250"
+#define QUERYONLY_COLOR       "180,125,60"
 
 unsigned startAddress = 0, size;
 boolean firstBlockFlipped = linearBlockList->isFlipped;
@@ -259,13 +259,14 @@ for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
             {
             strand = '+';
             color = BOTH_COLOR;
+            //fprintf(outMap,"buildPair %d %d both 0 %c %d %d %s %d %d %d %d\n", startAddress, startAddress + size, strand, startAddress, startAddress + size, color, linearBlock->tStart, linearBlock->tEnd, linearBlock->qStart, linearBlock->qEnd);
             }
         else
             {
             strand = '-';
             color = INVERT_COLOR;
+            fprintf(outMap,"buildPair %d %d invert 0 %c %d %d %s %d %d %d %d\n", startAddress, startAddress + size, strand, startAddress, startAddress + size, color, linearBlock->tStart, linearBlock->tEnd, linearBlock->qStart, linearBlock->qEnd);
             }
-        fprintf(outMap,"buildPair %d %d both 0 %c %d %d %s %d %d %d %d\n", startAddress, startAddress + size, strand, startAddress, startAddress + size, color, linearBlock->tStart, linearBlock->tEnd, linearBlock->qStart, linearBlock->qEnd);
         }
     startAddress += size;
     }

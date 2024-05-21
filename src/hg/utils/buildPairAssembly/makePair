@@ -57,7 +57,26 @@ tmp=`cd /usr/local/apache/htdocs/hubs; echo $gcX/$d0/$d1/$d2/$genome/bbi/*ens*.b
 ensGeneBb=https://hgdownload.soe.ucsc.edu/hubs/$tmp
 tmp=`cd /usr/local/apache/htdocs/hubs; echo $gcX/$d0/$d1/$d2/$genome/bbi/*rmsk.bb `
 rmskBb=https://hgdownload.soe.ucsc.edu/hubs/$tmp
+tmp=`cd /usr/local/apache/htdocs/hubs; echo $gcX/$d0/$d1/$d2/$genome/bbi/*simpleRepeat.bb `
+simpleBb=https://hgdownload.soe.ucsc.edu/hubs/$tmp
 
+
+cat << _EOF_ > hub/groups.txt
+name map
+label Mapping
+priority 2
+defaultIsClosed 0
+
+name target
+label From $pairRefDb
+priority 3
+defaultIsClosed 0
+
+name query
+label From $pairQueryDb
+priority 3
+defaultIsClosed 0
+_EOF_
 
 cat << _EOF_ > hub/hub.txt
 hub buildPair
@@ -66,29 +85,33 @@ email braney@ucsc.edu
 shortLabel buildPair
 useOneFile on
 
-genome buildPair
-defaultPos buildPair:1-2
-organism buildPair
+genome $pairRefSeq-$pairQuerySeq
+defaultPos buildPair:1-20000
+organism $pairRefDb-$pairQueryDb
 twoBitPath buildPair.2bit
+groups groups.txt
 
 track map
 type bigBed 9
 bigDataUrl map.bb
-shortLabel map
-longLabel map
+shortLabel Origin
+longLabel Origin
 itemRgb on
+group map
 
 track queryChain
 type bigChain $pairQueryDb
 bigDataUrl queryChain.bb
-shortLabel queryChain
-longLabel queryChain
+shortLabel $pairQueryDb Alignment
+longLabel  $pairQueryDb Alignment
+group map
 
 track targetChain
 type bigChain $pairRefDb
 bigDataUrl targetChain.bb
-shortLabel targetChain
-longLabel targetChain
+shortLabel $pairRefDb Alignment
+longLabel  $pairRefDb Alignment
+group map
 
 track ncbiRefSeqInsta
 searchIndex name
@@ -104,12 +127,14 @@ baseColorDefault genomicCodons
 priority 1
 quickLiftUrl targetChain.bb
 canPack 1
+group target
 
-track dups
+track qdups
 type bigBed 4
 bigDataUrl dups.bb
-shortLabel dups
-longLabel dups
+shortLabel $pairQueryDb Dups
+longLabel  $pairQueryDb Dups
+group map
 
 track baseTarget
 type bigBed 4
@@ -120,21 +145,42 @@ longLabel baseTarget
 track mismatch
 type bigBed 4
 bigDataUrl mismatch.bb
-shortLabel mismatch
-longLabel mismatch
+shortLabel Mismatches
+longLabel Mismatches between $pairRefDb and $pairQueryDb
+group map
 
-track rmsk
-type bigBed
-shortLabel Query Rmsk
-longLabel Query Rmsk
+#track trmsk
+#type bigBed 9
+#itemRgb on
+#shortLabel Rmsk
+#longLabel $pairRefDb Rmsk
+#bigDataUrl $rmskBb
+#quickLiftUrl targetChain.bb
+#group target
+
+track qrmsk
+type bigBed 9
+itemRgb on
+shortLabel Rmsk
+longLabel $pairQueryDb Rmsk
 bigDataUrl $rmskBb
 quickLiftUrl queryChain.bb
+group query
+
+track qsimple
+type bigBed 12
+shortLabel simpleRepeat
+longLabel $pairQueryDb simpleRepeat
+bigDataUrl $simpleBb
+quickLiftUrl queryChain.bb
+group query
 
 track ensGeneQuery
 type bigGenePred
-shortLabel Query Ensembl
-longLabel Query Ensembl
+shortLabel Ensembl
+longLabel Ensembl
 bigDataUrl $ensGeneBb
 quickLiftUrl queryChain.bb
+group query
 
 _EOF_
