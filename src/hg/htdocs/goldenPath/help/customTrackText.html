@@ -11,7 +11,7 @@ automatically discarded 48 hours after the last time they are accessed, unless t
 <a href="/goldenPath/help/hgSessionHelp.html#CTs" target="_blank">Session</a>. Optionally, users can
 make custom annotations viewable by others as well. For a more stable option for custom annotations,
 we suggest using <a href="hgTrackHubHelp.html" target="_blank">track hubs</a>. A third, more
-technical, option is to operate a mirror. Custom tracks work well for quickly displaying data, while
+technical option, is to operate a mirror. Custom tracks work well for quickly displaying data, while
 track hubs are more configurable and permanent.</p>
 <p>
 Custom tracks are a wonderful tool for research scientists using the Genome Browser. Because space 
@@ -53,8 +53,7 @@ To construct an annotation file and display it in the Genome Browser, follow the
 <strong>Step 1. Format the data set</strong><br>
 Format your data as a tab-separated file using one of the
 <a href="/FAQ/FAQformat.html" target="_blank">formats supported</a> by the Genome
-Browser. Chromosome references must be of the form <em>chrN</em> (the parsing of chromosome names
-<em><strong>is</strong></em> case-sensitive). You may include more than one data set in your 
+Browser. You may include more than one data set in your
 annotation file; these need not be in the same format. Annotation data can be in a format designed
 specifically for the Human Genome Project or UCSC Genome Browser, including:
 <div class="container">
@@ -416,24 +415,17 @@ table, or mouse over the track name in the track control section. It is not poss
 a subset of the subtracks at this time.</p>
 <p>
 Definition: <strong><em>&lt;track_primary_table_name(s)&gt;</em></strong>. You can find the primary 
-table name by clicking &quot;View Table Schema&quot; from the track's description page, or from the
-Table Browser. It will be listed as the Primary Table. Alternatively, you can mouse-over the track
-label in the Browser and look at the URL the link points to. The part after the g= in the URL is the
-track's primary table name (e.g., for UCSC Genes you will see g=knownGene in the URL. The track 
-primary table is knownGene).</p>
+table name by clicking &quot;Data format description&quot; from the track's description page, or
+from the Table Browser. It will be listed as the Primary Table. Alternatively, you can mouse-over
+the track label in the Browser and look at the URL the link points to. The part after the g= in the
+URL is the track's primary table name (e.g., for UCSC Genes you will see g=knownGene in the URL.
+The track primary table is knownGene).</p>
 <ul>
   <li>
   <strong>position &lt;<em>position</em>&gt;</strong>
   <br>
   Determines the part of the genome that the Genome 
   Browser will initially open to, in chromosome:start-end format.</li>  
-<!--
-  <li>
-  <strong>pix &lt;<em>width</em>&gt;</strong>
-  <br>
-  Sets the Genome Browser window to the specified width in 
-  pixels.</li>
--->
   <li>
   <strong>hide all</strong>
   <br>
@@ -809,8 +801,8 @@ data:</p>
   or without a set of coordinates. Examples of this include: position=chr22,
   position=chr22:15916196-31832390.</li>
   <li>
-  The <b>URL of the annotation file</b> on your web site. This information is of the form
-  <code>hgt.customText=&lt;url&gt;</code> or <code>hgct_customText=&lt;url&gt;</code>,
+  The <b>URL of the annotation file</b> on your web-accessible location. This information is of the
+  form <code>hgt.customText=&lt;url&gt;</code> or <code>hgct_customText=&lt;url&gt;</code>,
   where <em>url</em> points to the annotation file on your website.
   An example of an annotation file URL is <a href="test.bed"
   target="_blank">http://genome.ucsc.edu/goldenPath/help/test.bed</a>.</li>
