@@ -1292,6 +1292,7 @@
 ./runBuild GCA_902148835.1_fSalaFa1.1_alternate_haplotype fish Salarias_fasciatus
 ./runBuild GCA_902153765.1_bAquChr1.2_alternate_haplotype birds Aquila_chrysaetos_chrysaetos
 ./runBuild GCA_902153765.2_bAquChr1.4_alternate_haplotype birds Aquila_chrysaetos_chrysaetos
+./runBuild GCA_902167015.1_Zm-Oh43-REFERENCE-NAM-1.0 plants Zea_mays
 ./runBuild GCA_902167395.1_gadMor3.0_alternate_haplotype fish Gadus_morhua
 ./runBuild GCA_902168055.1_ARATINGA-SOLSTITIALIS-ASSEMBLY-PRJEB33153 birds Aratinga_solstitialis
 ./runBuild GCA_902362175.1_fChaCha1.1_alternate_haplotype fish Chanos_chanos
