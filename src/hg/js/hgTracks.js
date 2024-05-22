@@ -734,11 +734,7 @@ var posting = {
         if (done)
             return false;
         else {
-            // first check if we are allowed to click, we could be in the middle
-            // of a drag select
-            if (posting.blockUseMap === true) {
-                return false;
-            } else if (cgi === "hgGene") {
+            if (cgi === "hgGene") {
                 id = parsedUrl.queryArgs.hgg_type;
                 popUpHgcOrHgGene.hgc(id, this.href);
                 return false;
@@ -758,9 +754,6 @@ var posting = {
                 }
                 popUpHgcOrHgGene.hgc(id, this.href);
                 return false;
-            } else {
-                // must be changing the density of a track, save the settings and post the form:
-                return posting.saveSettings(this);
             }
         }
     },
