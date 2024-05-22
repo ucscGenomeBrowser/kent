@@ -19,5 +19,4 @@ dataVersion /gbdb/hg38/mane/README_versions.txt
 searchTable mane
 searchType bigBed
 searchDescription MANE Select Plus Clinical: Representative transcript from RefSeq & GENCODE
-searchPriority 1.3
-
+searchPriority 1.01
