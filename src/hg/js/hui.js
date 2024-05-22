@@ -1477,7 +1477,7 @@ function advancedSearchOnChange(controlName) {
 var hlColor = '#aac6ff';
 var prevHlColor;
 var hlColorDefault = '#aac6ff';
-function makeHighlightPicker(inputId, parentEl, trackName) {
+function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hlColorDefault) {
 /* Create an input with a color selection field, optionally append the resulting
  * html to parentEl, if parent is not null */
     /* Some helper function for keeping track of colors */
@@ -1485,10 +1485,10 @@ function makeHighlightPicker(inputId, parentEl, trackName) {
         hlColor = hlColor;
         if (typeof common !== "undefined" && common.track) {
             // regular hgTrackUi
-            setCartVars([common.track + ".highlightColor"], [hlColor], null, true);
+            setCartVars([cartVar], [hlColor], null, true);
         } else if (trackName) {
             // hgTrackUi pop up
-            cart.setVars([trackName + ".highlightColor"], [hlColor], null, false);
+            cart.setVars([cartVar], [hlColor], null, false);
         } else {
             // hgTracks dragSelect, uses different cart variable
             cart.setVars(["prevHlColor"], [hlColor], null, false);
@@ -1511,18 +1511,27 @@ function makeHighlightPicker(inputId, parentEl, trackName) {
     };
 
     let colorPickerContainer = document.createElement("p");
-    colorPickerContainer.textContent = "Highlight color:";
+    colorPickerContainer.textContent = typeof label !== "undefined" && label.length > 0 ? label : "Highlight color:";
     let inpText = document.createElement("input");
-    inpText.id = inputId + "Input";
+    // special case the drag select highlight feature because it has special code:
+    if (cartVar === "hlColor") {
+        inpText.id = cartVar + "Input";
+    } else {
+        inpText.id = "colorPicker." + cartVar + "Input";
+    }
     inpText.value = loadHlColor();
     inpText.type = "text";
     inpText.style = "width: 70px";
     // The actual color picker:
     let inpSpec = document.createElement("input");
-    inpSpec.id = inputId + "Picker";
+    if (cartVar === "hlColor") {
+        inpSpec.id = cartVar + "Picker";
+    } else {
+        inpSpec.id = "colorPicker." + cartVar + "Picker";
+    }
     let inpResetLink  = document.createElement("a");
     inpResetLink.href = "#";
-    inpResetLink.id = inputId + "Reset";
+    inpResetLink.id = cartVar + "Reset";
     inpResetLink.textContent = "Reset";
     colorPickerContainer.appendChild(inpText);
     colorPickerContainer.appendChild(inpSpec);
@@ -1534,13 +1543,15 @@ function makeHighlightPicker(inputId, parentEl, trackName) {
         alert("Must supply parentNode to append color picker");
         throw new Error();
     }
-
     let opt = {
         hideAfterPaletteSelect: true,
         color: $(inpSpec).val(),
         showPalette: true,
         showInput: true,
+        showSelectionPalette: true,
+        showInitial: true,
         preferredFormat: "hex",
+        localStorageKey: "genomebrowser",
         change: function() {
             let color = $(inpSpec).spectrum("get");
             $(inpText).val(color);
@@ -1550,8 +1561,9 @@ function makeHighlightPicker(inputId, parentEl, trackName) {
     $(inpSpec).spectrum(opt);
 
     // update the color picker if you change the input box
-    $(inpSpec).change(function() {
-        $(inpSpec).spectrum("set", $(inpSpec).val());
+    $(inpText).change(function() {
+        $(inpSpec).spectrum("set", $(inpText).val());
+        saveHlColor($(inpText).val(), trackName);
     });
     // Restore the default on Reset link click
     $(inpResetLink).click(function() {

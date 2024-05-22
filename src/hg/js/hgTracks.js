@@ -1186,8 +1186,6 @@ var dragSelect = {
                     $(".ui-dialog-buttonset button:nth-child(3)").click();
                 }
             });
-            // activate the color picker
-            activateColorPicker("#hlColorInput", "#hlColorPicker");
         }
 
         if (hgTracks.windows) {
