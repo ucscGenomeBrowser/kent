@@ -726,7 +726,7 @@ dyStringFree(&dyScratch);
 rmdir(outDir);
 }
 
-static void runUsherCommand(char *cmd[], char *stderrFile, int *pStartTime)
+static void runUsherCommand(char *cmd[], char *stderrFile, char *anchorFile, int *pStartTime)
 /* Run the standalone usher command with its stderr output redirected to stderrFile. */
 {
 char **cmds[] = { cmd, NULL };
@@ -1152,7 +1152,7 @@ return socketFd;
 #define EOT 4
 
 static boolean sendQuery(int socketFd, char *cmd[], char *org, struct treeChoices *treeChoices,
-                         FILE *errFile, boolean addNoIgnorePrefix)
+                         FILE *errFile, boolean addNoIgnorePrefix, char *anchorFile)
 /* Send command to socket, read response on socket, return TRUE if we get a successful response. */
 {
 boolean success = FALSE;
@@ -1168,6 +1168,8 @@ for (ix = 0;  cmd[ix] != NULL;  ix++)
 if (addNoIgnorePrefix)
     // Needed when placing uploaded sequences, but not when finding uploaded names
     dyStringPrintf(dyMessage, "--no-ignore-prefix\n"USHER_DEDUP_PREFIX"\n");
+if (isNotEmpty(anchorFile))
+    dyStringPrintf(dyMessage, "--anchor-samples\n%s\n", anchorFile);
 dyStringAppendC(dyMessage, '\n');
 boolean serverError = FALSE;
 int bytesWritten = write(socketFd, dyMessage->string, dyMessage->stringSize);
@@ -1207,7 +1209,7 @@ return success;
 }
 
 static boolean runUsherServer(char *org, char *cmd[], char *stderrFile,
-                              struct treeChoices *treeChoices, int *pStartTime)
+                              struct treeChoices *treeChoices, char *anchorFile, int *pStartTime)
 /* Start the server if necessary, connect to it, send a query, get response and return TRUE if.
  * all goes well. If unsuccessful, write reasons to errFile and return FALSE. */
 {
@@ -1220,7 +1222,7 @@ if (serverIsConfigured(org))
     reportTiming(pStartTime, "get socket");
     if (serverSocket > 0)
         {
-        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, TRUE);
+        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, TRUE, anchorFile);
         close(serverSocket);
         if (success)
             reportTiming(pStartTime, "send query and get response (successful)");
@@ -1236,7 +1238,7 @@ return success;
 
 struct usherResults *runUsher(char *org, char *usherPath, char *usherAssignmentsPath, char *vcfFile,
                               int subtreeSize, struct slName **pUserSampleIds,
-                              struct treeChoices *treeChoices, int *pStartTime)
+                              struct treeChoices *treeChoices, char *anchorFile, int *pStartTime)
 /* Open a pipe from Yatish Turakhia's usher program, save resulting big trees and
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
  * and parse other results out of stderr output.  The usher-sampled version of usher might
@@ -1252,13 +1254,14 @@ char *cmd[] = { usherPath, "-v", vcfFile, "-i", usherAssignmentsPath, "-d", tnOu
                 "-T", USHER_NUM_THREADS,       // Don't pass args from -T onward to server
                 "--optimization_radius", "0",  // Don't pass these to original usher, only -sampled
                 "--no-ignore-prefix", USHER_DEDUP_PREFIX,
+                "--anchor-samples", anchorFile,
                 NULL };
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "usher_stderr", ".txt");
 struct tempName tnServerStderr;
 trashDirFile(&tnServerStderr, "ct", "usher_server_stderr", ".txt");
 char *stderrFile = tnServerStderr.forCgi;
-if (! runUsherServer(org, cmd, tnServerStderr.forCgi, treeChoices, pStartTime))
+if (! runUsherServer(org, cmd, tnServerStderr.forCgi, treeChoices, anchorFile, pStartTime))
     {
     if (!endsWith(usherPath, "-sampled"))
         {
@@ -1267,7 +1270,14 @@ if (! runUsherServer(org, cmd, tnServerStderr.forCgi, treeChoices, pStartTime))
         if (ix > 0)
             cmd[ix] = NULL;
         }
-    runUsherCommand(cmd, tnStderr.forCgi, pStartTime);
+    else if (isEmpty(anchorFile))
+        {
+        // Don't pass --anchor-samples option unless it's configured
+        int ix = stringArrayIx("--anchor-samples", cmd, ArraySize(cmd)-1);
+        if (ix > 0)
+            cmd[ix] = NULL;
+        }
+    runUsherCommand(cmd, tnStderr.forCgi, anchorFile, pStartTime);
     stderrFile = tnStderr.forCgi;
     }
 
@@ -1311,7 +1321,7 @@ for (sample = sampleIds;  sample != NULL;  sample = sample->next)
 
 static void runMatUtilsExtractCommand(char *matUtilsPath, char *protobufPath,
                                       char *subtreeSizeStr, struct tempName *tnSamples,
-                                      struct tempName *tnOutDir, int *pStartTime)
+                                      struct tempName *tnOutDir, char *anchorFile, int *pStartTime)
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
@@ -1319,8 +1329,15 @@ static void runMatUtilsExtractCommand(char *matUtilsPath, char *protobufPath,
 char *cmd[] = { matUtilsPath, "extract", "-i", protobufPath, "-d", tnOutDir->forCgi,
                 "-s", tnSamples->forCgi,
                 "-x", subtreeSizeStr, "-X", SINGLE_SUBTREE_SIZE, "-T", USHER_NUM_THREADS,
-                "--usher-clades-txt", NULL };
+                "--usher-clades-txt", "--usher-anchor-samples", anchorFile, NULL };
 char **cmds[] = { cmd, NULL };
+// Don't pass --usher-anchor-samples option unless it's configured
+if (isEmpty(anchorFile))
+    {
+    int ix = stringArrayIx("--usher-anchor-samples", cmd, ArraySize(cmd)-1);
+    if (ix > 0)
+        cmd[ix] = NULL;
+    }
 struct tempName tnStderr;
 trashDirFile(&tnStderr, "ct", "matUtils_stderr", ".txt");
 struct pipeline *pl = pipelineOpen(cmds, pipelineRead, NULL, tnStderr.forCgi, 0);
@@ -1330,7 +1347,7 @@ reportTiming(pStartTime, "run matUtils command");
 
 static boolean runMatUtilsServer(char *org, char *protobufPath, char *subtreeSizeStr,
                                  struct tempName *tnSamples, struct tempName *tnOutDir,
-                                 struct treeChoices *treeChoices, int *pStartTime)
+                                 struct treeChoices *treeChoices, char *anchorFile, int *pStartTime)
 /* Cheng Ye added a 'matUtils mode' to usher-sampled-server so we can get subtrees super-fast
  * for uploaded sample names too. */
 {
@@ -1349,7 +1366,7 @@ if (serverIsConfigured(org))
     reportTiming(pStartTime, "get socket");
     if (serverSocket > 0)
         {
-        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, FALSE);
+        success = sendQuery(serverSocket, cmd, org, treeChoices, errFile, FALSE, anchorFile);
         close(serverSocket);
         if (success)
             reportTiming(pStartTime, "send query and get response (successful)");
@@ -1363,7 +1380,8 @@ return success;
 
 struct usherResults *runMatUtilsExtractSubtrees(char *org, char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
-                                                struct treeChoices *treeChoices, int *pStartTime)
+                                                struct treeChoices *treeChoices, char *anchorFile,
+                                                int *pStartTime)
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */
@@ -1381,9 +1399,9 @@ carefulClose(&f);
 struct tempName tnOutDir;
 trashDirFile(&tnOutDir, "ct", "matUtils_outdir", ".dir");
 if (! runMatUtilsServer(org, protobufPath, subtreeSizeStr, &tnSamples, &tnOutDir, treeChoices,
-                        pStartTime))
+                        anchorFile, pStartTime))
     runMatUtilsExtractCommand(matUtilsPath, protobufPath, subtreeSizeStr, &tnSamples, &tnOutDir,
-                              pStartTime);
+                              anchorFile, pStartTime);
 addEmptyPlacements(sampleIds, results->samplePlacements);
 struct tempName *singleSubtreeTn = NULL, *subtreeTns[MAX_SUBTREES];
 struct variantPathNode *singleSubtreeMuts = NULL, *subtreeMuts[MAX_SUBTREES];

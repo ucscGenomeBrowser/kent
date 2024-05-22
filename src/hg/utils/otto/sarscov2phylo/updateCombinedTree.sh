@@ -167,6 +167,23 @@ rm tmp1 tmp2
 # public names & IDs, we can match them.
 cut -f 1,3 $epiToPublic > epiToPublic.latest
 
+# Memory-mapped hash tables for metadata and name lookup
+tabToMmHash gisaidAndPublic.$today.metadata.tsv.gz gisaidAndPublic.$today.metadata.mmh
+ln -sf $(pwd)/gisaidAndPublic.$today.metadata.mmh \
+    /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.metadata.mmh
+awk -F\| '{ print $0 "\t" $0;  print $1 "\t" $0; if ($3 != "") { print $2 "\t" $0; } }' \
+    samples.$today \
+| tawk '$1 != "RNA" && $1 !~ /\/RNA\// && $1 !~/^Germany\/Molecular_surveillance_of_SARS/ && \
+        $1 !~ /^Iceland\/SARS-CoV-2_Iceland/' \
+    > nameLookup.tab
+cut -f 1,3 $epiToPublic \
+| subColumn -skipMiss 2 stdin nameLookup.tab tmp.tab
+cat tmp.tab >> nameLookup.tab
+rm tmp.tab
+tabToMmHash nameLookup.tab samples.$today.mmh
+rm nameLookup.tab
+ln -sf $(pwd)/samples.$today.mmh /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.names.mmh
+
 # Update links to latest public+GISAID protobuf and metadata in hgwdev cgi-bin directories
 pigz -p 8 -c samples.$today > samples.$today.gz
 for dir in /usr/local/apache/cgi-bin{-angie,-beta,}/hgPhyloPlaceData/wuhCor1; do
