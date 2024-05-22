@@ -5657,6 +5657,7 @@ noScoreFilter on
 searchTable hgnc
 searchMethod exact
 searchType bigBed
+searchPriority 1.02
 
 include ../refSeqComposite.ra
 

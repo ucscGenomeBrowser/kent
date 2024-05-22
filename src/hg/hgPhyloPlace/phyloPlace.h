@@ -168,7 +168,7 @@ struct tempName *vcfFromFasta(struct lineFile *lf, char *org, char *db, struct d
 
 struct usherResults *runUsher(char *org, char *usherPath, char *usherAssignmentsPath, char *vcfFile,
                               int subtreeSize, struct slName **pUserSampleIds,
-                              struct treeChoices *treeChoices, int *pStartTime);
+                              struct treeChoices *treeChoices, char *anchorFile, int *pStartTime);
 /* Open a pipe from Yatish Turakhia's usher program, save resulting big trees and
  * subtrees to trash files, return list of slRef to struct tempName for the trash files
  * and parse other results out of stderr output.  The usher-sampled version of usher might
@@ -176,7 +176,8 @@ struct usherResults *runUsher(char *org, char *usherPath, char *usherAssignments
 
 struct usherResults *runMatUtilsExtractSubtrees(char *org, char *matUtilsPath, char *protobufPath,
                                                 int subtreeSize, struct slName *sampleIds,
-                                                struct treeChoices *treeChoices, int *pStartTime);
+                                                struct treeChoices *treeChoices, char *anchorFile,
+                                                int *pStartTime);
 /* Open a pipe from Yatish Turakhia and Jakob McBroome's matUtils extract to extract subtrees
  * containing sampleIds, save resulting subtrees to trash files, return subtree results.
  * Caller must ensure that sampleIds are names of leaves in the protobuf tree. */

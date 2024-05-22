@@ -134,7 +134,15 @@ JN.1:
     representative: Denmark/DCGC-661561/2023
     ranges: [ [ 23008, 23011 ],  # https://github.com/cov-lineages/pango-designation/issues/2510
             ]
-    sites: [ 1871 ]          # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1466
+    sites: [ 1871,          # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1466
+             17562,         # very homoplasic (or systematic error?) in JN.1, email from FedeGueli
+           ]
+
+KP.1:
+    # Inherits from JN.1
+    representative: England/CLIMB-CM7YEN1U/2024
+    reversions: [ T17334G        # Reversion of JN.1.11.1 mutation, email from FedeGueli
+                ]
 
 BA.4:
     # BA.4 is placed on the BA.2 branch so it inherits all the BA.2 sites.
