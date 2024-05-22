@@ -1404,7 +1404,9 @@ $(document).ready(function()
 
     // Register tables with drag and drop
     $("table.tableWithDragAndDrop").each(function (ix) {
-        tableDragAndDropRegister(this);
+        if ($(this)[0].id !== "imgTbl") {
+            tableDragAndDropRegister(this);
+        }
     });
 
     // Put navigation links in top corner
