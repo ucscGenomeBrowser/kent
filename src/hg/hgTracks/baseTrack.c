@@ -45,11 +45,8 @@ void drawBaseView(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
 unsigned rulerHeight = mgFontLineHeight(font);
 struct baseRange *rangeList = tg->items, *range;
 unsigned prevBase = seqStart;
-printf("seqStart %d seqEnd %d width %d\n", seqStart, seqEnd, width);
 double scale = (double) insideWidth / (seqEnd - seqStart) ;
 
-//unsigned prevEnd = range->end;
-//struct range *next;
 struct baseRange *newRangeList = NULL;
 
 unsigned start = rangeList->start;
@@ -58,8 +55,6 @@ unsigned qStart = rangeList->qStart;
 unsigned lastQEnd = rangeList->qEnd;
 for(range = rangeList->next; range; range= range->next)
     {
-    //next = range->next;
-
     if (range->start > lastEnd)
         {
         unsigned tmp = range->start - lastEnd;
@@ -76,27 +71,26 @@ for(range = rangeList->next; range; range= range->next)
             start = range->start;
             qStart = range->qStart;
             }
-        //else
-            {
-            lastEnd = range->end;
-            lastQEnd = range->qEnd;
-            }
+        lastEnd = range->end;
+        lastQEnd = range->qEnd;
         }
     }
-            struct baseRange *newRange;
-            AllocVar(newRange);
-            newRange->start = start;
-            newRange->end = lastEnd;
-            newRange->qStart = qStart;
-            newRange->qEnd = lastQEnd;
-            slAddHead(&newRangeList, newRange);
+
+struct baseRange *newRange;
+AllocVar(newRange);
+newRange->start = start;
+newRange->end = lastEnd;
+newRange->qStart = qStart;
+newRange->qEnd = lastQEnd;
+slAddHead(&newRangeList, newRange);
+
 slReverse(&newRangeList);
+
 for(range = newRangeList; range; range= range->next)
     {
     if (range->start > winEnd)
         break;
 
-    //unsigned rangeStart = (range->start < winStart) ? winStart : range->start;
     unsigned rangeStart = (range->start < winStart) ? winStart : range->start;
     if (range->start < winStart)
         {
@@ -106,18 +100,16 @@ for(range = newRangeList; range; range= range->next)
     unsigned rangeEnd = (range->end > winEnd) ? winEnd : range->end;
     unsigned rangeWidth = rangeEnd - rangeStart;
     unsigned rangeScreenWidth = scale * rangeWidth;
-    printf("start %d end %d width %d screenWidth %d scale %g\n", rangeStart, rangeEnd, rangeWidth, rangeScreenWidth, scale);
 
     if (prevBase < rangeStart)
         {
-        printf("box start %d rangeStart %d\n", prevBase, rangeStart);
-        //int x = (prevBase - winStart) * scale + insideX;
-        //int width = (rangeStart - prevBase) * scale;
-        //hvGfxBox(hvg, x, yOff, width, rulerHeight, 0xff333333);
+        int x = (prevBase - winStart) * scale + insideX;
+        int width = (rangeStart - prevBase) * scale;
+        //hvGfxBox(hvg, x, yOff, width, rulerHeight, 0xffFFBF00);
+        hvGfxBox(hvg, x, yOff, width, rulerHeight, 0xff00BFFF);
         }
 
     unsigned rangeQStart = range->qStart;
-    //startBase = rangeStart;
     if (rangeScreenWidth > 50)
     hvGfxDrawRulerBumpText(hvg, insideX + (rangeStart - winStart) * scale, yOff, rulerHeight, rangeScreenWidth, MG_BLACK,
                                font, rangeQStart, rangeWidth, 0, 1);
@@ -129,7 +121,6 @@ static int baseViewHeight(struct track *tg, enum trackVisibility vis)
 {
 MgFont *font = tl.font;
 return mgFontLineHeight(font);
-// hvGfxDrawRulerBumpText
 }
 
 void bigBaseViewMethods(struct track *track, struct trackDb *tdb,

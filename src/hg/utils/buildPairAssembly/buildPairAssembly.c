@@ -83,7 +83,7 @@ FILE *outMap = mustOpen(outMapBed, "w");
 FILE *outDup = mustOpen(outDupBed, "w");
 FILE *outMiss = mustOpen(outMissBed, "w");
 FILE *outBaseTarget = mustOpen(outBaseTargetBed, "w");
-//FILE *outBaseQuery = mustOpen(outBaseQueryBed, "w");
+FILE *outBaseQuery = mustOpen(outBaseQueryBed, "w");
 
 fprintf(outFa, ">buildPair\n");
 
@@ -365,6 +365,38 @@ for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
             startT = linearBlock->tStart;
             }
         endT = linearBlock->tEnd;
+        }
+//totalSize  += size;
+    currentAddress += size;
+    }
+
+startAddress = 0;
+currentAddress = 0;
+totalSize = 0;
+startT = 0;
+endT = 0;
+for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
+    {
+    if (linearBlock->tStart == linearBlock->tEnd)
+        size = linearBlock->qEnd - linearBlock->qStart;
+    else
+        size = linearBlock->tEnd - linearBlock->tStart;
+
+    if ((linearBlock->qStart == linearBlock->qEnd)  || ((endT != 0) && (endT != linearBlock->qStart)))
+        {
+        if (startT != 0)
+            fprintf(outBaseQuery, "buildPair %d %d %d %d\n",startAddress, currentAddress, startT, endT);
+        startT = endT = totalSize = 0;
+        }
+    //else
+    if (linearBlock->qStart != linearBlock->qEnd)
+        {
+        if (startT == 0)
+            {
+            startAddress = currentAddress;
+            startT = linearBlock->qStart;
+            }
+        endT = linearBlock->qEnd;
         }
 //totalSize  += size;
     currentAddress += size;

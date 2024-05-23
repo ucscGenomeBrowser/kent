@@ -14718,6 +14718,11 @@ else if (sameWord(type, "bigRmsk"))
     track->mapsSelf = TRUE;
     bigRmskMethods(track, tdb, wordCount, words);
     }
+else if (sameWord(type, "bigBaseView"))
+    {
+    track->isBigBed = TRUE;
+    bigBaseViewMethods(track, tdb, wordCount, words);
+    }
 else if (sameWord(type, "bigLolly"))
     {
     tdb->canPack = TRUE;

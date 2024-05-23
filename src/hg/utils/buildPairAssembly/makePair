@@ -47,6 +47,8 @@ bedToBigBed -type=bed4 miss.bed hub/buildPair.sizes.txt hub/mismatch.bb
 
 bedToBigBed -type=bed4+1 baseTarget.bed hub/buildPair.sizes.txt hub/baseTarget.bb
 
+bedToBigBed -type=bed4+1 baseQuery.bed hub/buildPair.sizes.txt hub/baseQuery.bb
+
 genome=$pairQueryDb
 gcX="${genome:0:3}"
 d0="${genome:4:3}"
@@ -136,11 +138,21 @@ shortLabel $pairQueryDb Dups
 longLabel  $pairQueryDb Dups
 group map
 
+track baseQuery
+priority 0.1
+type bigBaseView
+bigDataUrl baseQuery.bb
+shortLabel BaseView
+longLabel $pairQueryDb BaseView
+group query
+
 track baseTarget
-type bigBed 4
+priority 0.1
+type bigBaseView
 bigDataUrl baseTarget.bb
-shortLabel baseTarget
-longLabel baseTarget
+shortLabel BaseView
+longLabel $pairRefDb BaseView
+group target
 
 track mismatch
 type bigBed 4
