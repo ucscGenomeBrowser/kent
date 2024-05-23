@@ -611,7 +611,7 @@ help='output a file containing info on default track usage for top 15 most used 
             dbOpt = "db=" + db
             # HGDB_CONF must be set here so that we use default tracks from beta, not dev
             # Dev can contain staged tracks that don't exist on RR, leading to errors later in script
-            cmd = ["cd /usr/local/apache/cgi-bin && HGDB_CONF=$HOME/.hg.conf.beta ./hgTracks " + dbOpt]
+            cmd = ["cd /usr/local/apache/cgi-bin && HGDB_CONF=$HOME/.hg.conf.beta ./hgTracks hgt.trackImgOnly=1" + dbOpt]
             p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             cmdout, cmderr = p.communicate()
             errText = cmderr.decode("ASCII") # Convert binary output into ACSII for processing

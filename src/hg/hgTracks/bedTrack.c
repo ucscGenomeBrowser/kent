@@ -563,7 +563,7 @@ maybeLoadSnake(tg);   // if we're in snake mode, change the methods
 Color colorFromCart(struct track *tg, Color color)
 /* Return the RGB color from the cart setting 'colorOverride' or just return color */
 {
-char varName[128];
+char varName[1024];
 safef(varName, sizeof(varName), "%s.%s", tg->tdb->track, "colorOverride");
 char *hexColorStr = cartOptionalString(cart, varName);
 if (hexColorStr==NULL || isEmpty(hexColorStr))

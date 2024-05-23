@@ -6016,23 +6016,14 @@ puts("</DIV>\n\n");
 void colorTrackOption(struct cart *cart, char *name, struct trackDb *tdb)
 /* color picker for overriding track color */
 {
-printf("<DIV><B>Color for all features:</B> ");
 char varName[1024];
 safef(varName, sizeof(varName), "%s.colorOverride", name);
 
 char *colorValue = cartUsualString(cart, varName, "");
 
-cgiMakeTextVar(varName, colorValue, 10);
-puts("&nbsp;<input id='colorPicker'>");
-puts("&nbsp;&nbsp;<span class='link' id='colorReset'>Reset</span>");
-jsInlineF("activateColorPicker('[id=\"%s\"]', '#colorPicker');", varName); // id="xx" is necessary as id contains a dot
-jsInlineF("$('#colorPicker').spectrum('set', '#%s');", colorValue);
-jsInlineF("$('#colorReset').click(function() { "
-    "$('[id=\"%s\"]').val('');"
-    "$('#colorPicker').spectrum('set', '#000000');"
-    "});", varName);
-
-puts("</DIV>\n\n");
+puts("&nbsp;<div id='colorPicker'>");
+jsInlineF("makeHighlightPicker('%s', document.getElementById('colorPicker'), '%s', 'Color for all features:', '%s');", varName, name, colorValue); // id="xx" is necessary as id contains a dot
+puts("</div>\n\n");
 }
 
 void wiggleScaleDropDownJavascript(char *name)
@@ -6802,7 +6793,7 @@ puts("<br>");
 puts("Choose highlight color:");
 puts("<div id='hgTrackUiColorPicker'></div>");
 jsInlineF("var cartHighlightColor = \"%s\"\n;", prevHighlightColor(cart, tdb));
-jsInlineF("makeHighlightPicker(\"hgTrackUiHighlight\", document.getElementById(\"hgTrackUiColorPicker\"), \"%s\");\n", tdb->track);
+jsInlineF("makeHighlightPicker(\"%s.highlightColor\", document.getElementById(\"hgTrackUiColorPicker\"), \"%s\");\n", tdb->track, tdb->track);
 }
 
 int defaultFieldLocation(char *field)
