@@ -979,7 +979,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOverField"><span class="types bigBed"></span>
+<DIV class="mouseOverField"><span class="types bigBed bigPsl bigChain bigMaf bigNarrowPeak bigGenePred"></span>
     <div class="format">
         <code>mouseOverField &lt;fieldName1&gt;</code><BR>
     </div>
@@ -1001,7 +1001,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOver"><span class="types bigBed"></span>
+<DIV class="mouseOver"><span class="types bigBed bigPsl bigChain bigMaf bigNarrowPeak bigGenePred"></span>
     <div class="format">
         <code>mouseOver &lt;pattern&gt;</code><BR>
     </div>
