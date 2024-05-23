@@ -9516,7 +9516,7 @@ if (!hideControls)
                 if (hub != NULL)
                     {
                     if (hub->descriptionUrl == NULL)
-                        hPrintf("<span title='The track hub authors have no provided a descriptionUrl with background "
+                        hPrintf("<span title='The track hub authors have not provided a descriptionUrl with background "
                                 "information about this track hub' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
                                 "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>&nbsp;&nbsp;");
                     else
