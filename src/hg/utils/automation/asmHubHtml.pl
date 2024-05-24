@@ -99,7 +99,7 @@ while (my $line = <FH>) {
   printf "<td align=\"right\">%s<br>%%&nbsp;%.2f</td>", &AsmHub::commify($gapsN), $NperCent;
   printf "<td align=\"right\">%s<br>%s<br>%%&nbsp;%.2f</td>", &AsmHub::commify($geneCount), &AsmHub::commify($geneBasesCovered), $genePercentCoverage;
   printf "<td><a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a></td>", $asmAccession, $asmAccession;
-  printf "<td><a href=\"ftp://ftp.ncbi.nlm.nih.gov/%s\" target=\"_blank\">%s</a></td>", $ftpName, $asmName;
+  printf "<td><a href=\"https://ftp.ncbi.nlm.nih.gov/%s\" target=\"_blank\">%s</a></td>", $ftpName, $asmName;
   printf "<td>%s</td>", $asmType;
   printf "<td>%s</td>", $asmLevel;
   printf "<td>%s</td></tr>\n", $submitter;

@@ -633,9 +633,9 @@ bigBedInfo \$db.ncbiRefSeq.bb | egrep "^itemCount:|^basesCovered:" \\
     | sed -e 's/,//g' > \$db.ncbiRefSeq.stats.txt
 LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeq %s %'d %s %'d\\n" `cat \$db.ncbiRefSeq.stats.txt` | xargs echo
 ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.ncbiRefSeq.gp \\
-    | sort -u > \$asmId.ncbiRefSeq.ix.txt
-ixIxx \$asmId.ncbiRefSeq.ix.txt \$asmId.ncbiRefSeq.ix{,x}
-rm -f \$asmId.ncbiRefSeq.ix.txt
+    | sort -u > \$db.ncbiRefSeq.ix.txt
+ixIxx \$db.ncbiRefSeq.ix.txt \$db.ncbiRefSeq.ix{,x}
+rm -f \$db.ncbiRefSeq.ix.txt
 
 ### curated only if present
 if [ -s process/\$db.curated.gp ]; then
@@ -648,9 +648,9 @@ if [ -s process/\$db.curated.gp ]; then
     | sed -e 's/,//g' > \$db.ncbiRefSeqCurated.stats.txt
   LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqCurated %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqCurated.stats.txt` | xargs echo
   ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.curated.gp \\
-    | sort -u > \$asmId.ncbiRefSeqCurated.ix.txt
-  ixIxx \$asmId.ncbiRefSeqCurated.ix.txt \$asmId.ncbiRefSeqCurated.ix{,x}
-  rm -f \$asmId.ncbiRefSeqCurated.ix.txt
+    | sort -u > \$db.ncbiRefSeqCurated.ix.txt
+  ixIxx \$db.ncbiRefSeqCurated.ix.txt \$db.ncbiRefSeqCurated.ix{,x}
+  rm -f \$db.ncbiRefSeqCurated.ix.txt
 ### and refseqSelect if exists (a subset of curated)
   if [ -s process/\$db.refseqSelect.curated.gp ]; then
     genePredToBigGenePred process/\$db.refseqSelect.curated.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqSelectCurated.bigGp
@@ -662,9 +662,9 @@ if [ -s process/\$db.curated.gp ]; then
       | sed -e 's/,//g' > \$db.ncbiRefSeqSelectCurated.stats.txt
     LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqSelectCurated %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqSelectCurated.stats.txt` | xargs echo
     ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.refseqSelect.curated.gp \\
-      | sort -u > \$asmId.ncbiRefSeqSelectCurated.ix.txt
-    ixIxx \$asmId.ncbiRefSeqSelectCurated.ix.txt \$asmId.ncbiRefSeqSelectCurated.ix{,x}
-    rm -f \$asmId.ncbiRefSeqSelectCurated.ix.txt
+      | sort -u > \$db.ncbiRefSeqSelectCurated.ix.txt
+    ixIxx \$db.ncbiRefSeqSelectCurated.ix.txt \$db.ncbiRefSeqSelectCurated.ix{,x}
+    rm -f \$db.ncbiRefSeqSelectCurated.ix.txt
   fi
 ### and hgmd if exists (a subset of curated)
   if [ -s process/hgmd.curated.gp ]; then
@@ -677,9 +677,9 @@ if [ -s process/\$db.curated.gp ]; then
       | sed -e 's/,//g' > \$db.ncbiRefSeqHgmd.stats.txt
     LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqHgmd %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqHgmd.stats.txt` | xargs echo
     ~/kent/src/hg/utils/automation/gpToIx.pl process/hgmd.curated.gp \\
-      | sort -u > \$asmId.ncbiRefSeqHgmd.ix.txt
-    ixIxx \$asmId.ncbiRefSeqHgmd.ix.txt \$asmId.ncbiRefSeqHgmd.ix{,x}
-    rm -f \$asmId.ncbiRefSeqHgmd.ix.txt
+      | sort -u > \$db.ncbiRefSeqHgmd.ix.txt
+    ixIxx \$db.ncbiRefSeqHgmd.ix.txt \$db.ncbiRefSeqHgmd.ix{,x}
+    rm -f \$db.ncbiRefSeqHgmd.ix.txt
   fi
 fi
 
@@ -694,9 +694,9 @@ if [ -s process/\$db.predicted.gp ]; then
     | sed -e 's/,//g' > \$db.ncbiRefSeqPredicted.stats.txt
   LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqPredicted %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqPredicted.stats.txt` | xargs echo
   ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.predicted.gp \\
-    | sort -u > \$asmId.ncbiRefSeqPredicted.ix.txt
-  ixIxx \$asmId.ncbiRefSeqPredicted.ix.txt \$asmId.ncbiRefSeqPredicted.ix{,x}
-  rm -f \$asmId.ncbiRefSeqPredicted.ix.txt
+    | sort -u > \$db.ncbiRefSeqPredicted.ix.txt
+  ixIxx \$db.ncbiRefSeqPredicted.ix.txt \$db.ncbiRefSeqPredicted.ix{,x}
+  rm -f \$db.ncbiRefSeqPredicted.ix.txt
 fi
 
 ### all other annotations, not necessarily genes
@@ -806,10 +806,10 @@ printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps
 rm -f \$db.ncbiRefSeq.bigGp \$asmId.exons.bed
 
 pslToBigPsl -fa=download/\$asmId.rna.fa.gz -cds=process/\$asmId.rna.cds \\
-  process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$asmId.bigPsl
+  process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$db.bigPsl
 bedToBigBed -type=bed12+13 -tab -as=bigPsl.as -extraIndex=name \\
-  \$asmId.bigPsl \$db.chrom.sizes \$asmId.bigPsl.bb
-rm -f \$asmId.bigPsl
+  \$db.bigPsl \$db.chrom.sizes \$db.bigPsl.bb
+rm -f \$db.bigPsl
 _EOF_
     );
   } else {	# processing for a database genome
