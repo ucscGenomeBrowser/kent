@@ -180,15 +180,8 @@ def main():
 
     sys.exit(0)
 
+### this construct prevents main() from being parsed and syntax checked
+### before the version_info < 3.6 safety check
+
 if __name__ == "__main__":
   main()
-
-# head -3 /hive/data/genomes/asmHubs/refseqBuild/GCF/029/281/585/GCF_029281585.2_NHGRI_mGorGor1-v2.0_pri/trackData/chromAlias/GCF_029281585.2_NHGRI_mGorGor1-v2.0_pri.chromAlias.txt
-# # refseq        assembly        genbank ncbi    ucsc
-# NC_011120.1     MT              MT      chrM
-# NC_073224.2     chr1_pat_hsa1   CM055446.2      1       chr1
-# [hiram@hgwdev /cluster/home/hiram/kent/src/hg/makeDb/doc/asmHubs] head -3 /hive/data/genomes/asmHubs/refseqBuild/GCF/029/281/585/GCF_029281585.2_NHGRI_mGorGor1-v2.0_pri/trackData/chromAlias/GCF_029281585.2_NHGRI_mGorGor1-v2.0_pri.chromAlias.bed
-# NC_011120.1     0       16412   NC_011120.1     MT              MT      chrM
-# NC_073224.2     0       243847345       NC_073224.2     chr1_pat_hsa1   CM055446.2      1       chr1
-# NC_073227.2     0       215373162       NC_073227.2     chr3_pat_hsa4   CM055449.2      3       chr3
-# 
