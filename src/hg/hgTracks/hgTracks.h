@@ -1670,6 +1670,10 @@ void instaPortMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* instaPort track type methods */
 
+void bigBaseViewMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* bigBaseView track type methods */
+
 void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Lollipop track type methods */

@@ -10,7 +10,7 @@ COPT = -ggdb
 A = hgTracks
 RENDERA = hgRenderTracks
 
-COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrack.o bedGraph.o \
+COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrack.o baseTrack.o bedGraph.o \
 	bedTrack.o  bigBedTrack.o bigRmskTrack.o bigWarn.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o decorator.o exportedDataHubs.o \

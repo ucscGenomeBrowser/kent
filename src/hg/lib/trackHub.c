@@ -995,6 +995,7 @@ else
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
                   startsWithWord("bigLolly", type) ||
+                  startsWithWord("bigBaseView", type) ||
                   startsWithWord("bigRmsk", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
