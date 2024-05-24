@@ -30,7 +30,7 @@ if (length($srcGff) > 10) {
   $srcAsmId = basename($srcGff);
   $srcAsmId =~ s/_genomic.gff.gz//;
   if ($srcAsmId ne $asmId) {
-    $gcfToGcaLiftedText = "RefSeq annotations from $srcAsmId were lifted to this $asmId assembly to provide these gene annotations on this corresponding assembly."
+    $gcfToGcaLiftedText = "RefSeq annotations from <b>$srcAsmId</b> were lifted to this <b>$asmId</b> assembly to provide these gene annotations on this corresponding assembly."
   }
 }
 my $asmIdPath = &AsmHub::asmIdToPath($asmId);
@@ -44,7 +44,7 @@ if ( ! -s $ncbiRefSeqBbi ) {
 my @partNames = split('_', $srcAsmId);
 my $ftpDirPath = sprintf("%s/%s/%s/%s/%s", $partNames[0],
    substr($partNames[1],0,3), substr($partNames[1],3,3),
-   substr($partNames[1],6,3), $asmId);
+   substr($partNames[1],6,3), $srcAsmId);
 
 my $totalBases = `ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
 chomp $totalBases;
@@ -187,7 +187,7 @@ The RefSeq annotation and RefSeq RNA alignment tracks
 were created at UCSC using data from the NCBI RefSeq project. GFF format
 data files were downloaded from the file <b>${srcAsmId}_genomic.gff.gz</b>
 delivered with the NCBI RefSeq genome assemblies at the FTP location:<br>
-<a href='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
+<a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>https://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
 
 $gcfToGcaLiftedText
 
