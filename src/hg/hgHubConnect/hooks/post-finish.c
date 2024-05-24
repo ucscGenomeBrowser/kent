@@ -14,6 +14,9 @@
 #include "errCatch.h"
 #include "obscure.h"
 #include "hooklib.h"
+#include "jksql.h"
+#include "hdb.h"
+#include "hubSpace.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -52,6 +55,15 @@ else
     struct errCatch *errCatch = errCatchNew(0);
     if (errCatchStart(errCatch))
         {
+        // the variables for the row entry for this file, some can be NULL
+        char *userName = NULL;
+        char *fileName = NULL;
+        long long fileSize = 0;
+        char *fileType = NULL;
+        //char *hubNameList = NULL; // allocated in addHubNameToFile(), NULL is ok
+        char *db = NULL;
+        char *location = NULL;
+
         struct lineFile *lf = lineFileStdin(FALSE);
         char *request = lineFileReadAll(lf);
         struct jsonElement *req = jsonParse(request);
@@ -63,42 +75,43 @@ else
             setenv("HTTP_COOKIE", reqCookie, 0);
             }
         fprintf(stderr, "reqCookie='%s'\n", reqCookie);
-        char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+        userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
         fprintf(stderr, "userName='%s'\n'", userName);
         if (!userName)
             {
-            rejectUpload(response, "not logged in");
-            exitStatus = 1;
+            errAbort("not logged in");
             }
         else
             {
-            char *uploadFname = jsonQueryString(req, "", "Event.Upload.MetaData.filename", NULL);
+            fileName = jsonQueryString(req, "", "Event.Upload.MetaData.filename", NULL);
+            fileSize = jsonQueryInt(req, "",  "Event.Upload.Size", 0, NULL);
+            fileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
+            db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
             char *tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
-            if (uploadFname == NULL)
+            if (fileName == NULL)
                 {
-                rejectUpload(response, "No Event.Upload.filename setting");
-                exitStatus = -1;
+                errAbort("No Event.Upload.filename setting");
                 }
             else if (tusFile == NULL)
                 {
-                rejectUpload(response, "No Event.Path setting");
-                exitStatus = -1;
+                errAbort("No Event.Path setting");
                 }
             else
                 {
                 char *tusInfo = catTwoStrings(tusFile, ".info");
                 char *dataDir = getDataDir(userName);
-                char *newFile = catTwoStrings(dataDir, uploadFname);
+                char *newFile = catTwoStrings(dataDir, fileName);
                 fprintf(stderr, "moving %s to %s\n", tusFile, newFile);
                 // TODO: check if file exists or not and let user choose to overwrite
                 // and re-call this hook, for now just exit if the file exists
                 if (fileExists(newFile))
                     {
-                    rejectUpload(response, "file '%s' exists already, not overwriting", newFile);
-                    exitStatus = 1;
+                    errAbort("file '%s' exists already, not overwriting", newFile);
                     }
                 else
                     {
+                    // set our mysql table location:
+                    location = newFile;
                     // the directory may not exist yet
                     int oldUmask = 00;
                     if (!isDirectory(dataDir))
@@ -119,9 +132,34 @@ else
                 }
             }
 
-        // we've passed all the checks so we can return that we are safe
+        // we've passed all the checks so we can write a new or updated row
+        // to the mysql table and return to the client that we were successful
         if (exitStatus == 0)
-            fillOutHttpResponseSuccess(response);
+            {
+            struct hubSpace *row = NULL;
+            AllocVar(row);
+            row->userName = userName;
+            row->fileName = fileName;
+            row->fileSize = fileSize;
+            row->fileType = fileType;
+            row->creationTime = NULL;
+            row->lastModified = NULL;
+            row->hubNameList = NULL;
+            row->db = db;
+            row->location = location;
+            struct sqlConnection *conn = hConnectCentral();
+
+            // now write out row to hubSpace table
+            if (!sqlTableExistsOnMain(conn, "hubSpace"))
+                {
+                errAbort("No hubSpace MySQL table is present. Please send us an email");
+                }
+            struct dyString *sqlUpdateStmt = dyStringNew(0);
+            sqlDyStringPrintf(sqlUpdateStmt, "insert into hubSpace values ('%s', '%s', %llu, '%s', '%s', '', '', '', '%s')", row->userName, row->fileName, row->fileSize, row->fileType, row->db, row->location);
+            fprintf(stderr, "%s\n", sqlUpdateStmt->string);
+            fflush(stderr);
+            sqlUpdate(conn, sqlUpdateStmt->string);
+            }
         }
     if (errCatch->gotError)
         {

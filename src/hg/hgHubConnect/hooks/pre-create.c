@@ -71,8 +71,7 @@ else
         fprintf(stderr, "userName='%s'\n'", userName);
         if (!userName)
             {
-            rejectUpload(response, "You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
-            exitStatus = 1;
+            errAbort("You are not logged in. Please navigate to My Data -> My Sessions and log in or create an account.");
             }
         else
             {
@@ -83,27 +82,17 @@ else
             long maxQuota = getMaxUserQuota(userName);
             if (newQuota > maxQuota)
                 {
-                rejectUpload(response, "File '%s' is too large, need %s free space but current used space is %s out of %s", reqFileName, prettyFileSize(reqFileSize), prettyFileSize(currQuota), prettyFileSize(maxQuota));
-                exitStatus = 1;
+                errAbort("File '%s' is too large, need %s free space but current used space is %s out of %s", reqFileName, prettyFileSize(reqFileSize), prettyFileSize(currQuota), prettyFileSize(maxQuota));
                 }
             char *reqFileType = jsonQueryString(req, "", "Event.Upload.MetaData.filetype", NULL);
             if (!isFileTypeRecognized(reqFileType))
                 {
-                rejectUpload(response, "File type '%s' for file '%s' is not accepted at this time", reqFileType, reqFileName);
-                exitStatus = 1;
+                errAbort("File type '%s' for file '%s' is not accepted at this time", reqFileType, reqFileName);
                 }
-            char *reqHubName = jsonQueryString(req, "", "Event.Upload.MetaData.hub", NULL);
-            if (!isExistingHubForUser(userName, reqHubName))
-                {
-                rejectUpload(response, "Hub name '%s' for file '%s' is not valid, please choose an existing hub or create a new hub", reqFileType, reqFileName);
-                exitStatus = 1;
-                }
-            char *hubGenome = genomeForHub(userName, reqHubName);
             char *reqGenome = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
-            if (!sameString(hubGenome, reqGenome))
+            if (!reqGenome)
                 {
-                rejectUpload(response, "Genome selection '%s' for hub '%s' is invalid. Please choose the correct genome '%s' for hub '%s'", reqGenome, reqHubName, hubGenome, reqHubName);
-                exitStatus = 1;
+                errAbort("Genome selection '%s' for file '%s' is invalid. Please choose the correct genome", reqGenome, reqFileName);
                 }
             }
 
