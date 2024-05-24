@@ -72,7 +72,7 @@ print <<_EOF_
 The NCBI Gene track for the $assemblyDate $em${organism}$noEm/$ncbiAsmId
 genome assembly is constructed from the gff file <b>${ncbiAsmId}_genomic.gff.gz</b>
 supplied with the genome assembly at the FTP location:<br>
-<a href='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
+<a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>https://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
 </p>
 
 _EOF_
@@ -86,7 +86,7 @@ print <<_EOF_
 The Gene model track for the $assemblyDate $em${organism}$noEm/$ncbiAsmId
 genome assembly is constructed from the gff file <b>${ncbiAsmId}_genomic.gff.gz</b>
 supplied with the genome assembly at the FTP location:<br>
-<a href='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
+<a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>https://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
 </p>
 <p>
 The gene models were constructed by the submitter of the assembly to the

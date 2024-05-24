@@ -51,7 +51,7 @@ http://bioinformatics.oxfordjournals.org/content/22/2/134.full" target="_blank">
 the $assemblyDate $em${organism}$noEm/$asmId/$ncbiAssemblyId genome assembly.
 The WindowMasker tool is included in the NCBI C++ toolkit. The source code
 for the entire toolkit is available from the NCBI
-<a href="ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools++/CURRENT/" target="_blank">
+<a href="https://ftp.ncbi.nih.gov/toolbox/ncbi_tools++/CURRENT/" target="_blank">
 FTP site</a>.
 </p>
 
