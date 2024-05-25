@@ -22,7 +22,17 @@ my $accession = "$parts[0]_$parts[1]";
 my $namesFile = shift;
 my $trackDataDir = shift;
 my $ncbiRefSeqBbi = "$trackDataDir/ncbiRefSeq/$asmId.ncbiRefSeq.bb";
-my $asmType = "refseq";
+my $srcGff =  `ls $trackDataDir/ncbiRefSeq/download/*_genomic.gff.gz | head -1`;
+chomp $srcGff;
+my $srcAsmId = $asmId;
+my $gcfToGcaLiftedText = "";
+if (length($srcGff) > 10) {
+  $srcAsmId = basename($srcGff);
+  $srcAsmId =~ s/_genomic.gff.gz//;
+  if ($srcAsmId ne $asmId) {
+    $gcfToGcaLiftedText = "RefSeq annotations from <b>$srcAsmId</b> were lifted to this <b>$asmId</b> assembly to provide these gene annotations on this corresponding assembly."
+  }
+}
 my $asmIdPath = &AsmHub::asmIdToPath($asmId);
 my $downloadGtf = "https://hgdownload.soe.ucsc.edu/hubs/$asmIdPath/$accession/genes/$asmId.ncbiRefSeq.gtf.gz";
 
@@ -31,12 +41,11 @@ if ( ! -s $ncbiRefSeqBbi ) {
   exit 255;
 }
 
-my @partNames = split('_', $asmId);
+my @partNames = split('_', $srcAsmId);
 my $ftpDirPath = sprintf("%s/%s/%s/%s/%s", $partNames[0],
    substr($partNames[1],0,3), substr($partNames[1],3,3),
-   substr($partNames[1],6,3), $asmId);
+   substr($partNames[1],6,3), $srcAsmId);
 
-$asmType = "genbank" if ($partNames[0] =~ m/GCA/);
 my $totalBases = `ave -col=2 $trackDataDir/../${asmId}.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`;
 chomp $totalBases;
 my $geneStats = `cat $trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeq.stats.txt | awk '{printf "%d\\n", \$2}' | xargs echo`;
@@ -176,9 +185,11 @@ icon next to the track name in the subtrack list.
 <p>
 The RefSeq annotation and RefSeq RNA alignment tracks
 were created at UCSC using data from the NCBI RefSeq project. GFF format
-data files were downloaded from the file <b>${asmId}_genomic.gff.gz</b>
+data files were downloaded from the file <b>${srcAsmId}_genomic.gff.gz</b>
 delivered with the NCBI RefSeq genome assemblies at the FTP location:<br>
-<a href='ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
+<a href='https://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/' target='_blank'>https://ftp.ncbi.nlm.nih.gov/genomes/all/$ftpDirPath/</a>
+
+$gcfToGcaLiftedText
 
 The GFF file was converted to the
 genePred and PSL table formats for display in the Genome Browser.

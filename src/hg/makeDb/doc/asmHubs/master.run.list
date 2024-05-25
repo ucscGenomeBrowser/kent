@@ -231,6 +231,7 @@
 ./runBuild GCA_002611025.1_ASM261102v1 viral Bacillus_phage_PfNC7401
 ./runBuild GCA_002735715.1_ASM273571v1 bacteria Janthinobacterium_sp._BJB312
 ./runBuild GCA_002735775.2_ASM273577v2 bacteria Janthinobacterium_sp._BJB1
+./runBuild GCA_002743455.1_CAU_duck1.0 birds Anas_platyrhynchos_platyrhynchos
 ./runBuild GCA_002754865.1_ASM275486v1 primates Callithrix_jacchus
 ./runBuild GCA_002760635.1_GanSi1.6 fungi Ganoderma_sinense_ZZ0214-1
 ./runBuild GCA_002776525.1_ASM277652v1 primates Piliocolobus_tephrosceles

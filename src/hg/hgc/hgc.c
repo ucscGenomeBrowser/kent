@@ -12979,7 +12979,7 @@ if (differentWord(nrl->hgnc, ""))
     else
         {
          printf("<b>HGNC:</b> ");
-         printf("<a href='http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s' target=_blank>", nrl->hgnc);
+         printf("<a href='http://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/%s' target=_blank>", nrl->hgnc);
 
          printf("%s</a><br>\n", nrl->hgnc);
         }

@@ -107,29 +107,29 @@ printf "
     track %sChainNetViewchain
     shortLabel Chains
     view chain
-    visibility pack
-    subTrack %sChainNet
+    visibility dense
+    parent %sChainNet
     spectrum on
 
     track %sChainNetViewSynTen
     shortLabel Syntenic
     view synten
-    visibility pack
-    subTrack %sChainNet
+    visibility hide
+    parent %sChainNet
     spectrum on
 
     track %sChainNetViewRBest
     shortLabel Reciprocal best
     view rbest
-    visibility pack
-    subTrack %sChainNet
+    visibility hide
+    parent %sChainNet
     spectrum on
 
     track %sChainNetViewLiftOver
     shortLabel Lift over
     view liftover
-    visibility pack
-    subTrack %sChainNet
+    visibility hide
+    parent %sChainNet
     spectrum on
 ", $targetDb, $targetDb, $targetDb, $targetDb, $targetDb, $targetDb, $targetDb, $targetDb;
 
@@ -159,9 +159,16 @@ foreach my $queryDb (@queryList) {
   } else {
     ($queryDate, $queryAsmName) = &HgAutomate::hubDateName($queryDb);
   }
-  printf "
+  if (0 == $N) {
+    printf "
         track chain%s
-        subTrack %sChainNetViewchain off
+        parent %sChainNetViewchain on", $QueryDb, $targetDb;
+  } else {
+    printf "
+        track chain%s
+        parent %sChainNetViewchain off", $QueryDb, $targetDb;
+  }
+  printf "
         subGroups view=chain species=s%03d chainType=c00
         shortLabel %s Chain
         longLabel %s/%s%s (%s) Chained Alignments
@@ -171,7 +178,7 @@ foreach my $queryDb (@queryList) {
         otherDb %s
         html html/%s.chainNet
         priority %s
-", $QueryDb, $targetDb, $N, $comName, $comName, $queryDb, $queryAsmName, $queryDate, $queryDb, $targetDb,
+", $N, $comName, $comName, $queryDb, $queryAsmName, $queryDate, $queryDb, $targetDb,
      $QueryDb, $targetDb, $QueryDb, $queryDb, $targetDb, $queryPrio{$queryDb};
 
   if ( -s "$buildDir/trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}.bb" ) {
@@ -181,7 +188,7 @@ foreach my $queryDb (@queryList) {
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainSyn${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainSyn${QueryDb}Link.bb`;
   printf "
         track chainSyn%s
-        subTrack %sChainNetViewSynTen off
+        parent %sChainNetViewSynTen off
         subGroups view=synten species=s%03d chainType=c01
         shortLabel %s synChain
         longLabel %s/%s%s (%s) Chained Alignments
@@ -203,7 +210,7 @@ foreach my $queryDb (@queryList) {
     `ln -s ../trackData/lastz.$queryDb/axtChain/chainRBest${QueryDb}Link.bb  $buildDir/bbi/$targetDb.chainRBest${QueryDb}Link.bb`;
   printf "
         track chainRBest%s
-        subTrack %sChainNetViewRBest off
+        parent %sChainNetViewRBest off
         subGroups view=rbest species=s%03d chainType=c02
         shortLabel %s rbChain
         longLabel %s/%s%s (%s) Chained Alignments
@@ -226,7 +233,7 @@ foreach my $queryDb (@queryList) {
 
   printf "
         track chainLiftOver%s
-        subTrack %sChainNetViewLiftOver off
+        parent %sChainNetViewLiftOver off
         subGroups view=liftover species=s%03d chainType=c03
         shortLabel %s loChain
         longLabel %s/%s%s (%s) Chained Alignments
@@ -247,8 +254,8 @@ printf "
     track %sMafNetViewnet
     shortLabel Nets
     view align
-    visibility dense
-    subTrack %sChainNet
+    visibility hide
+    parent %sChainNet
 ", $targetDb, $targetDb;
 
 $N = 0;
@@ -273,7 +280,7 @@ foreach my $queryDb (@queryList) {
   }
     printf "
         track net%s
-        parent %sMafNetViewnet
+        parent %sMafNetViewnet off
         subGroups view=align species=s%03d chainType=c04
         shortLabel %s mafNet
         longLabel %s/%s%s (%s) Chained Alignments
@@ -292,7 +299,7 @@ foreach my $queryDb (@queryList) {
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.synNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.synNet.summary.bb`;
     printf "
         track synNet%s
-        parent %sMafNetViewnet
+        parent %sMafNetViewnet off
         subGroups view=align species=s%03d chainType=c05
         shortLabel %s synNet
         longLabel %s/%s%s (%s) Chained Alignments
@@ -313,7 +320,7 @@ foreach my $queryDb (@queryList) {
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.rbestNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.rbestNet.summary.bb`;
     printf "
         track rbestNet%s
-        parent %sMafNetViewnet
+        parent %sMafNetViewnet off
         subGroups view=align species=s%03d chainType=c06
         shortLabel %s rbestNet
         longLabel %s/%s%s (%s) Chained Alignments
@@ -335,7 +342,7 @@ printf STDERR "constructing liftOverNet links $targetDb $queryDb\n";
   `ln -s ../trackData/lastz.$queryDb/bigMaf/${targetAcc}.${queryDb}.liftOverNet.summary.bb  $buildDir/bbi/$targetDb.${queryDb}.liftOverNet.summary.bb`;
     printf "
         track liftOverNet%s
-        parent %sMafNetViewnet
+        parent %sMafNetViewnet off
         subGroups view=align species=s%03d chainType=c07
         shortLabel %s liftOverNet
         longLabel %s/%s%s (%s) Chained Alignments
