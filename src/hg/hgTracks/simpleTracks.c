@@ -11572,7 +11572,7 @@ if (!tg->limitedVisSet)
         }
     if (canWiggle(tg))   // if this is a track type that can wiggle, we want to go straight to that rather than reduce visibility
         {
-        while  ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+        if ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
             {
             tg->limitWiggle = TRUE;
             }
