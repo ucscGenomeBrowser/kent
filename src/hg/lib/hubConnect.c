@@ -535,14 +535,8 @@ struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
 if (hubGenome == NULL)
     errAbort("Cannot find genome %s in hub %s", database, hub->hubUrl);
 boolean foundFirstGenome = FALSE;
-struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome, NULL, &foundFirstGenome);
-tdbList = trackDbLinkUpGenerations(tdbList);
-tdbList = trackDbPolishAfterLinkup(tdbList, database);
-//this next line causes warns to print outside of warn box on hgTrackUi
-//trackDbPrioritizeContainerItems(tdbList);
-if (hubGenome->quickLiftChain)
-    tdbList = fixForQuickLift(tdbList, hubGenome, hub);
-trackHubPolishTrackNames(hub->trackHub, tdbList);
+struct hash *trackDbNameHash = newHash(5);
+struct trackDb *tdbList = hubAddTracks(hub, database, &foundFirstGenome, trackDbNameHash, NULL);
 char *fixTrackName = cloneString(trackName);
 trackHubFixName(fixTrackName);
 rAddTrackListToHash(trackHash, tdbList, NULL, FALSE);
