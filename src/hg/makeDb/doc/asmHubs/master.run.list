@@ -8,7 +8,6 @@
 ./runBuild GCA_000003525.2_BD_ER3_V1 fungi Blastomyces_dermatitidis_ER-3
 ./runBuild GCA_000003625.1_OryCun2.0 mammals Oryctolagus_cuniculus
 ./runBuild GCA_000003855.2_BD_SLH14081_V1 fungi Blastomyces_gilchristii_SLH14081
-./runBuild GCA_000005845.2_ASM584v2 bacteria Escherichia_coli_str._K-12_substr._MG1655
 ./runBuild GCA_000006255.1_Postia_placenta_V1.0 fungi Postia_placenta_Mad-698-R
 ./runBuild GCA_000009105.1_ASM910v1 bacteria Neisseria_meningitidis_Z2491
 ./runBuild GCA_000009145.1_ASM914v1 bacteria Nitrosomonas_europaea_ATCC_19718
