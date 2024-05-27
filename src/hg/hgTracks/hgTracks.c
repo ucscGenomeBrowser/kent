@@ -11195,6 +11195,18 @@ jsInlineF("notifBoxSetup(\"hgTracks\", \"%s\", \"%s\");\n", msgId, msg);
 jsInlineF("notifBoxShow(\"hgTracks\", \"%s\");\n", msgId);
 }
 
+static boolean noPixVariableSetAndInteractive(void) 
+{
+/* if the user is a humand and there is no pix variable in the cart, then run a
+ * piece of javascript that determines the screen size and reloads the current
+ * page, with the &pix=xxx variable added and return true. */
+return (isEmpty(cartOptionalString(cart, "pix")) && 
+    !sameOk(cgiRequestMethod(NULL), "POST") && // page reload after POST would lose all vars
+    !cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE) && // skip if we're hgRenderTracks  = no Javascript
+    !cgiWasSpoofed() && // we're not run from the command line
+    !sameOk(cgiUserAgent(), "rtracklayer")); // rtracklayer has no javascript, so skip, see https://github.com/lawremi/rtracklayer/issues/113
+}
+
 extern boolean issueBotWarning;
 
 void doMiddle(struct cart *theCart)
@@ -11202,10 +11214,7 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
-if (isEmpty(cartOptionalString(cart, "pix")) && 
-    !sameOk(cgiRequestMethod(NULL), "POST") && // page reload after POST would lose all vars
-    !cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE) && // skip if we're hgRenderTracks  = no Javascript
-    !sameOk(cgiUserAgent(), "rtracklayer")) // rtracklayer has no javascript, so skip, see https://github.com/lawremi/rtracklayer/issues/113
+if (noPixVariableSetAndInteractive())
 {
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("utils.js", NULL);
