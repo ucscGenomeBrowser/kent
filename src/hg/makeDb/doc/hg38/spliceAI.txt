@@ -1,0 +1,70 @@
+#! /bin/bash
+
+wget https://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_plugins/spliceai_scores.masked.snv.ensembl_mane.grch38.110.vcf.gz -O /hive/data/outside/spliceAi/spliceai_scores.masked.snv.ensembl_mane.grch38.110.vcf.gz
+
+# the vcf does not have a 'chr' prefix, also remember that vcf is 1-based
+# fields are 
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
+# but ID, QUAL, and FILTER are empty
+#INFO looks like this:
+#SpliceAI=G|OR4F5|0.01|0.00|0.00|0.00|-32|49|-40|-31
+##INFO=<ID=SpliceAI,Number=.,Type=String,Description="SpliceAIv1.3 variant annotation. These include delta scores (DS) and delta positions (DP) for acceptor gain (AG), acceptor loss (AL), donor gain (DG), and donor loss (DL). Format: ALLELE|SYMBOL|DS_AG|DS_AL|DS_DG|DS_DL|DP_AG|DP_AL|DP_DG|DP_DL">
+
+cat << '_EOF_' > spliceAI.as
+table spliceAI
+"Bed 9+4 file with Ensembl Gene IDs and ABsplice values per tissue."
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+    float AIscore;       "spliceAI score"
+    string spliceType; "donor_gain, donor_loss, acceptor_gain, or acceptor_loss"
+    string relativePos;   "Relative location of donor or acceptor affected by this variant"
+    lstring gene;      "Gene ID" 
+    )
+_EOF_
+
+infile='/hive/data/outside/spliceAi/spliceai_scores.masked.snv.ensembl_mane.grch38.110.vcf.gz'
+#  note: older versions of python complain about f'' strings
+zcat $infile | python3.11 <(
+    cat << "END"
+import sys, csv
+
+with open('spliceAI.bed', 'w', newline='', encoding='utf-8') as outfile1:
+    AIwriter = csv.writer(outfile1, delimiter='\t')
+
+    atypes = {'acceptor_gain' : '255,0,0', 
+              'acceptor_loss' : '255,128,0', 
+              'donor_gain' : '0,0,255', 
+              'donor_loss' : '212,0,255'}
+    for line in sys.stdin:
+        if line.startswith('#'):
+            continue
+        [chrom, pos, id, ref, alt, qual, filter, info] = line.strip().split('\t')
+        startpos = int(pos) -1
+        # match scores with positions
+        name = info.split('|')[1]
+        scores = [float(s) for s in info.split('|')[2:6]]
+        positions = [int(s) for s in info.split('|')[6:10]]
+        # Iterate over the zipped data
+        for atype, score, position in zip(atypes.keys(), scores, positions):
+            # Check if the score is greater than or equal to 0.02
+            if score >= 0.02:
+                # make clear if position is upstream or downstream
+                if position > 0:
+                    position = '+' + str(position)
+          #      print(f"Type: {atype}, Score: {score}, Position: {position}")
+                AIwriter.writerow(['chr'+chrom, startpos, startpos+1, ref+'>'+alt, 0, '+', startpos, startpos, atypes[atype], score, atype, position, name])
+
+END
+) 
+bedToBigBed -type=bed9+4 -tab -as=spliceAI.as spliceAI.bed /hive/data/genomes/hg38/chrom.sizes ~/public_html/trackHubs/spliceAIhub/hg38/spliceAI.bb
+
+
+
