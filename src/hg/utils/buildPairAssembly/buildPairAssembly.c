@@ -28,9 +28,11 @@ static struct optionSpec options[] = {
 struct linearBlock
 {
 struct linearBlock *next;
+unsigned pStart, pEnd;
 unsigned tStart, tEnd;
 unsigned qStart, qEnd;
 boolean isFlipped;
+unsigned anchor;
 };
 
 int lbCmpQuery(const void *va, const void *vb)
@@ -70,7 +72,7 @@ first->qEnd  = second->qStart;
 
 }
 
-void buildPairAssembly(char *inputChain, char *tSequenceName, char *t2bitName, char *qSequenceName, char *q2bitName, char *outFaName, char *outQueryPsl, char *outTargetPsl, char *outMapBed, char *outDupBed, char *outMissBed, char *outBaseTargetBed, char *outBaseQueryBed)
+void buildPairAssembly(char *inputChain, char *tSequenceName, char *t2bitName, char *qSequenceName, char *q2bitName, char *outFaName, char *outQueryPsl, char *outTargetPsl, char *outMapBed, char *outDupBed, char *outMissBed, char *outBaseTargetBed, char *outBaseQueryBed, char *outSynBlockBed)
 /* buildPairAssembly - From a single coverage chain build a pairwise assembly including all sequence from both query and target. */
 {
 struct lineFile *lf = lineFileOpen(inputChain, TRUE);
@@ -84,7 +86,7 @@ FILE *outDup = mustOpen(outDupBed, "w");
 FILE *outMiss = mustOpen(outMissBed, "w");
 FILE *outBaseTarget = mustOpen(outBaseTargetBed, "w");
 FILE *outBaseQuery = mustOpen(outBaseQueryBed, "w");
-
+FILE *outSynBlock = mustOpen(outSynBlockBed, "w"); 
 fprintf(outFa, ">buildPair\n");
 
 while ((chain = chainRead(lf)) != NULL)
@@ -220,6 +222,7 @@ unsigned startAddress = 0, size;
 boolean firstBlockFlipped = linearBlockList->isFlipped;
 char strand;
 char *color;
+count = 0;
 for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
     {
     if (linearBlock->qStart == linearBlock->qEnd)
@@ -267,9 +270,16 @@ for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
             color = INVERT_COLOR;
             fprintf(outMap,"buildPair %d %d invert 0 %c %d %d %s %d %d %d %d\n", startAddress, startAddress + size, strand, startAddress, startAddress + size, color, linearBlock->tStart, linearBlock->tEnd, linearBlock->qStart, linearBlock->qEnd);
             }
+
+        linearBlock->anchor = ++count;
         }
+    linearBlock->pStart = startAddress;
+    linearBlock->pEnd = startAddress + size;
     startAddress += size;
     }
+
+//for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
+    //printf("%d %d\n", linearBlock->pStart, linearBlock->pEnd);
 
 unsigned sumSize = startAddress;
 unsigned tSize = twoBitSeqSize(t2bit, tSequenceName);
@@ -402,6 +412,48 @@ for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
     currentAddress += size;
     }
 
+slSort(&linearBlockList, lbCmpQuery);
+int isLastFlipped = linearBlockList->isFlipped;
+unsigned lastEnd = linearBlockList->qEnd;
+unsigned lastAnchor;
+startAddress = linearBlockList->pStart;
+count = 0;
+boolean first = TRUE;
+for(linearBlock = linearBlockList; linearBlock; linearBlock = linearBlock->next)
+    {
+    if (linearBlock->anchor)
+        {
+        if (first)
+            {
+            first = FALSE;
+            startAddress = linearBlock->pStart;
+            isLastFlipped = linearBlock->isFlipped;
+            lastEnd = linearBlock->pEnd;
+            lastAnchor = linearBlock->anchor;
+            }
+        else if ((abs(linearBlock->anchor - lastAnchor) != 1  ) || (isLastFlipped != linearBlock->isFlipped))
+            {
+            int signedCount = ++count;
+            if (isLastFlipped)
+                signedCount *= -1;
+            if (startAddress > lastEnd)
+                fprintf(outSynBlock, "buildPair %d %d %d\n",lastEnd, startAddress, signedCount);
+            else
+                fprintf(outSynBlock, "buildPair %d %d %d\n",startAddress, lastEnd, signedCount);
+            startAddress = linearBlock->pStart;
+            }
+        lastEnd = linearBlock->pEnd;
+        lastAnchor = linearBlock->anchor;
+        isLastFlipped = linearBlock->isFlipped;
+        }
+    }
+int signedCount = ++count;
+if (isLastFlipped)
+    signedCount *= -1;
+if (startAddress > lastEnd)
+    fprintf(outSynBlock, "buildPair %d %d %d\n",lastEnd, startAddress, signedCount);
+else
+    fprintf(outSynBlock, "buildPair %d %d %d\n",startAddress, lastEnd, signedCount);
 
 // validate
 slSort(&linearBlockList, lbCmpTarget);
@@ -441,8 +493,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 14)
+if (argc != 15)
     usage();
-buildPairAssembly(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7], argv[8], argv[9], argv[10], argv[11], argv[12], argv[13]);
+buildPairAssembly(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7], argv[8], argv[9], argv[10], argv[11], argv[12], argv[13], argv[14]);
 return 0;
 }

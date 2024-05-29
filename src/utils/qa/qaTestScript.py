@@ -186,7 +186,7 @@ driver.find_element_by_name("hgta_doSummaryStats").click()
 
 # Tests a session with custom tracks, multiRegion, and assembly hub
 cartReset()
-driver.get(machine + "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=brianlee&hgS_otherUserSessionName=Custom_Tracks_AssemblyHub_MultiRegion_TrackCollection_BigWigs")
+driver.get(machine + "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=QAtester&hgS_otherUserSessionName=Custom_Tracks_AssemblyHub_MultiRegion_TrackCollection_BigWigs")
 driver.find_element_by_xpath("//td[@id='td_data_ct_UserTrack_3545']/div[2]/map/area[4]").click()
 driver.find_element_by_link_text("chr1:33719895-33742564").click()
 
@@ -211,7 +211,7 @@ n = driver.find_element_by_id("customTracksMenuLink")
 # hover over element and click
 a.move_to_element(n).click().perform()
 driver.find_element_by_name("hgct_customText").clear()
-driver.find_element_by_name("hgct_customText").send_keys("https://hgwdev-gperez2.gi.ucsc.edu/~gperez2/testing/hgCustom_testing/examples.WITHOUT.FTPS.txt")
+driver.find_element_by_name("hgct_customText").send_keys("https://genecats.gi.ucsc.edu/qa/customTracks/testing/examples.WITHOUT.FTPS.txt")
 driver.find_element_by_name("Submit").click()
 driver.find_element_by_name("submit").click()
 driver.find_element_by_id("p_btn_ct_hicExampleTWO_9382").click()
@@ -250,7 +250,7 @@ n = driver.find_element_by_id("customTracksMenuLink")
 # hover over element and click
 a.move_to_element(n).click().perform()
 driver.find_element_by_name("hgct_customText").clear()
-driver.find_element_by_name("hgct_customText").send_keys("https://hgwdev.gi.ucsc.edu/~brianlee/examples/customTracks/newTypes.txt")
+driver.find_element_by_name("hgct_customText").send_keys("https://genecats.gi.ucsc.edu/qa/customTracks/testing/newTypes.txt")
 driver.find_element_by_name("Submit").click()
 driver.find_element_by_name("submit").click()
 #if 'barChart Example One' in driver.page_source:
@@ -551,17 +551,19 @@ else:
 
 # Tests Mega Hub US 
 cartReset()
-driver.get(machine + "/cgi-bin/hgTracks?db=hg19&measureTiming=1&hubUrl=https://hgwdev.gi.ucsc.edu/~brianlee/hubTesting/manyMulitWigsENCODE/hub.txt")
+driver.get(machine + "/cgi-bin/hgTracks?db=hg19&measureTiming=1&hubUrl=https://genecats.gi.ucsc.edu/qa/hubTesting/exampleHubManyMulit/hub.txt")
 driver.get(machine + "/cgi-bin/hgTracks")
 driver.find_element_by_id("positionInput").clear()
 driver.find_element_by_id("positionInput").send_keys("chr10:69,644,427-69,678,147")
 driver.find_element_by_id("goButton").click()
 time.sleep(3)
 # Tests track hub annotation if it is on the RR   
-if 'hub_336627' in driver.page_source:
-     driver.find_element_by_xpath("//td[@id='td_data_hub_336627_multiWig4']/div[2]/map/area").click()
+if 'hub_5137468' in driver.page_source:
+     driver.find_element_by_xpath("//td[@id='td_data_hub_5137468_multiWig4']/div[2]/map/area").click()
+elif 'hub_24302' in driver.page_source:
+    driver.find_element_by_xpath("//td[@id='td_data_hub_24302_multiWig4']/div[2]/map/area").click()
 else:
-     driver.find_element_by_xpath("//td[@id='td_data_hub_9717_multiWig4']/div[2]/map/area").click()
+     driver.find_element_by_xpath("//td[@id='td_data_hub_37972_multiWig4']/div[2]/map/area").click()
 
 
 # Tests hgBlat All and Monk Seal/Human MYLK Protein

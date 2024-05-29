@@ -47,7 +47,8 @@ GCF_013141755.1_UCI_ANSTEP_V1.0	Asian malaria mosquito
 GCF_000836235.1_Pxut_1.0	Asian swallowtail
 GCF_000836235.2_Pxut_1.1	Asian swallowtail (2015)
 GCA_018104305.1_AalbF3	Asian tiger mosquito (AalbF3 FPA 2021)
-GCF_006496715.1_Aalbo_primary.1	Asian tiger mosquito (Aalbo_primary.1 FPA 2019)
+GCA_006516635.1_Aalbo_alts_of_PRJNA530512	Asian tiger mosquito (Aalbo alternate FPA 2019)
+GCF_006496715.1_Aalbo_primary.1	Asian tiger mosquito (Aalbo primary FPA 2019)
 GCA_001444175.2_A.albopictus_v1.1	Asian tiger mosquito (Foshan BGI 2016)
 GCF_006496715.2_Aalbo_primary.1	Asian tiger mosquito (FPA 2019)
 GCF_001442555.1_ACSNU-2.0	Asiatic honeybee
@@ -294,7 +295,8 @@ GCF_000469605.1_Apis_dorsata_1.3	giant honeybee
 GCF_905220565.1_ilMelCinx1.1	Glanville fritillary (refseq 2021)
 GCF_021130785.1_UT_GWSS_2.1	glassy-winged sharpshooter (AUS2020 2022)
 GCA_019973935.1_Tncv_1.0	golden silk orb-weaver (2021)
-GCA_025091365.1_ASM2509136v1	grape phylloxera (Bord-2020 2022)
+GCA_025091365.1_ASM2509136v1	grape phylloxera (Bord-2020 2022 genbank)
+GCF_025091365.1_ASM2509136v1	grape phylloxera (Bord-2020 2022 refseq)
 GCF_023864345.2_iqSchSeri2.2	grasshoppers S.serialis cubense (TAMUIC-IGC-003099 2022)
 GCA_900036025.1_v1.0	great pond snail (2016)
 GCF_003640425.2_ASM364042v2	greater wax moth (Carbio01_MB 2019 refseq)
@@ -614,6 +616,7 @@ GCA_004367875.1_ASM436787v1	tunicate O.albicans (PointB-2012 2019)
 GCA_000209555.1_ASM20955v1	tunicate O.dioica (2010)
 GCA_004367895.1_ASM436789v1	tunicate O.longicauda (LaJolla-2011 2019)
 GCA_004367855.1_ASM436785v1	tunicate O.vanhoeffeni (WitlessB-2012 2019)
+GCA_017312745.1_Gbim_1.0	two-spotted cricket (white eyes 2021)
 GCF_000239435.1_ASM23943v1	two-spotted spider mite
 GCF_023898315.1_iqSchNite1.1	vagrant locust (TAMUIC-IGC-003100 2022)
 GCF_000224145.3_KH	vase tunicate C.intestinalis (2013)

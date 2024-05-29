@@ -47,7 +47,10 @@ struct bigBedInterval *quickLiftIntervals(char *quickLiftFile, struct bbiFile *b
 {
 char *linkFileName = getLinkFile(quickLiftFile);
 // need to add some padding to these coordinates
-struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, start-100000, end+100000, -1);
+int padStart = start - 100000;
+if (padStart < 0)
+    padStart = 0;
+struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart, end+100000, -1);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = NULL;
 
