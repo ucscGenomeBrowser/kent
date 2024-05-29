@@ -415,7 +415,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#032624 "Updated Mar. 26, 202
 
         track gnomadMissense
         parent gnomadPLI off
-        shortLabel gnomAD Regional Missense Constraint  (ExAc Dataset) 
+        shortLabel gnomAD Regional Missense Constraint  (ExAc Dataset, as on DECIPHER Browser) 
         longLabel gnomAD Predicted Regional Missense Constraint Metrics (O/E scores from ExAc Dataset) v2.1.1
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
         itemRgb on

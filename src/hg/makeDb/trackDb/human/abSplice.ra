@@ -13,5 +13,5 @@ filterLimits.spliceABscore 0.01:1
 filterLabel.spliceABscore Filter by minimum AbSplice score
 filterLabel.maxScore Tissues
 mouseOver change: $name <br> gene: $ENSGid <br> max score: $spliceABscore <br> $maxScore
-pennantIcon New red ../goldenPath/newsarch.html#030124 "Released Apr. 24, 2024"
+pennantIcon New red ../goldenPath/newsarch.html#042524 "Released Apr. 25, 2024"
 html abSplice

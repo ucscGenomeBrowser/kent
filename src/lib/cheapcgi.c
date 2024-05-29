@@ -257,10 +257,13 @@ doUseTempFile = TRUE;
 }
 
 boolean cgiIsOnWeb()
-/* Return TRUE if looks like we're being run as a CGI. */
+/* Return TRUE if looks like we're being run as a CGI. 
+ * You cannot use this in your own CGIs to determine if you're run from the command line, 
+ * as cgiFromCommandLine() will set this parameter.*/
 {
 return getenv("REQUEST_METHOD") != NULL;
 }
+
 
 char *cgiRequestMethod()
 /* Return CGI REQUEST_METHOD (such as 'GET/POST/PUT/DELETE/HEAD') */
@@ -2520,6 +2523,8 @@ for (cv = inputList; cv != NULL; cv = cv->next)
     cgiMakeHiddenVar(cv->name, cv->val);
 }
 
+// flag to keep track if the current process was run from the command line (true) or not (false)
+static boolean wasSpoofed = FALSE;
 
 boolean cgiFromCommandLine(int *pArgc, char *argv[], boolean preferWeb)
 /* Use the command line to set up things as if we were a CGI program.
@@ -2549,6 +2554,9 @@ static char hostLine[512];
 
 if (preferWeb && cgiIsOnWeb())
     return TRUE;	/* No spoofing required! */
+
+wasSpoofed = TRUE;
+
 q += safef(q, queryString + sizeof(queryString) - q,
 	   "%s", "QUERY_STRING=cgiSpoof=on");
 for (i=0; i<argcLeft; )
@@ -2594,6 +2602,12 @@ boolean cgiSpoof(int *pArgc, char *argv[])
  * set up from command line. */
 {
 return cgiFromCommandLine(pArgc, argv, TRUE);
+}
+
+boolean cgiWasSpoofed()
+/* was the CGI run from the command line? */
+{
+    return wasSpoofed;
 }
 
 boolean cgiFromFile(char *fileName)
@@ -2643,6 +2657,7 @@ lineFileClose(&lf);
 for(i=0; i<argc; i++)
     freez(&argv[i]);
 freez(&argv);
+wasSpoofed = TRUE;
 return spoof;
 }
 

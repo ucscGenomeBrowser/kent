@@ -32197,10 +32197,12 @@ csh $bin/getxEqtlLoadTissues.csh UCSC_output >&! loadTissuesV2.log &
 # HGMD (updated 01/25/18 max)
 # HGMD (updated 12/12/20 max)
 # HGMD (updated 08/18/23 max)
+# HGMD (updated 05/28/24 max)
 # got hgmd from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
 # see also the file hg38/hgmd.txt
-# Got it from Georgios.Stamoulis@qiagen.com
-year=2020
+# Got it from Georgios.Stamoulis@qiagen.com, Georgius left
+# Got it from Elias.Hage@qiagen.com
+year=2023
 cd /hive/data/genomes/hg19/bed/hgmd
 cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg19.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
 bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed9+ -as=hgmd.as -tab
@@ -32213,7 +32215,7 @@ python2 /usr/local/apache/cgi-bin/hgBeacon -f hgmd /tmp/temp.bed hgmd
 scp /gbdb/hg19/bbi/hgmd.bb hgdownload:/usr/local/apache/htdocs/gbib/prot/
 # next restrict RefSeq down to HGMD subset
 
-# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019, again Aug 2023
+# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019, again Aug 2023, May 2024
 cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2022-03-16/
 # change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019
 # adding "." so NM_123 doesn't match NM_123123
