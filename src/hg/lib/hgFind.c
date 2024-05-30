@@ -603,7 +603,10 @@ while ((row = sqlNextRow(sr)) != NULL)
         pos->name = cloneString(nameBuf);
         pos->browserName = cloneString(row[0]);
         if (tp->tsr->snippet)
-            pos->description = tp->tsr->snippet;
+            if (!sameString(hgAppName, "hgSearch") && !sameString(hgAppName, "cartJson"))
+                pos->description = htmlTextStripTags(tp->tsr->snippet);
+            else
+                pos->description = tp->tsr->snippet;
         else
             pos->description = cloneString(row[5]);
         pos->canonical = row[6] != NULL;

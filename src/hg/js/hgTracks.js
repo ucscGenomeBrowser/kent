@@ -721,7 +721,10 @@ var posting = {
         }
         let parsedUrl = parseUrl(this.href);
         let cgi = parsedUrl.cgi;
-        let id = parsedUrl.queryArgs.g;
+
+        // for some reason, '-' characters are encoded here? unencode them so lookups into
+        // hgTracks.trackDb will work
+        let id = parsedUrl.queryArgs.g.replace("%2D", "-");
         if (parsedUrl.queryArgs.i === "mergedItem") {
             updateObj={};
             updateObj[id+".doMergeItems"] = 0;
@@ -1172,7 +1175,7 @@ var dragSelect = {
                              "<li>To merely save the color for the next keyboard or right-click &gt; Highlight operations, click 'Save Color' below" +
                              "</ul></p>");
             makeHighlightPicker("hlColor", document.getElementById("dragSelectDialog"), null);
-            document.body.append("<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
+            $("#dragSelectDialog").append("<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
                              "<span style='border:solid 1px #DDDDDD; padding:3px;display:inline-block' id='hlNotShowAgainMsg'>Don't show this again and always zoom with shift.<br>" + 
                              "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></p>"+ 
                              "Selected chromosome position: <span id='dragSelectPosition'></span>");

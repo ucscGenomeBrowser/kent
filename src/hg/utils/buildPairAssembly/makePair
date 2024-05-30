@@ -12,7 +12,7 @@ filterChain=$pairRefSeq.$pairQuerySeq.$pairChain
 
 chainFilter -t=$pairRefSeq -q=$pairQuerySeq $pairChain > $filterChain
 
-buildPairAssembly $filterChain $pairRefSeq $pairRefDb2bit $pairQuerySeq $pairQueryDb2bit out.fa query.psl target.psl map.bed dup.bed miss.bed baseTarget.bed baseQuery.bed
+buildPairAssembly $filterChain $pairRefSeq $pairRefDb2bit $pairQuerySeq $pairQueryDb2bit out.fa query.psl target.psl map.bed dup.bed miss.bed baseTarget.bed baseQuery.bed synBlocks.bed
 
 
 rm -rf hub
@@ -48,6 +48,9 @@ bedToBigBed -type=bed4 miss.bed hub/buildPair.sizes.txt hub/mismatch.bb
 bedToBigBed -type=bed4+1 baseTarget.bed hub/buildPair.sizes.txt hub/baseTarget.bb
 
 bedToBigBed -type=bed4+1 baseQuery.bed hub/buildPair.sizes.txt hub/baseQuery.bb
+
+sort -k1,1 -k2,2n synBlocks.bed > sorted.bed
+bedToBigBed -type=bed4 sorted.bed hub/buildPair.sizes.txt hub/synBlocks.bb
 
 genome=$pairQueryDb
 gcX="${genome:0:3}"
@@ -153,6 +156,14 @@ bigDataUrl baseTarget.bb
 shortLabel BaseView
 longLabel $pairRefDb BaseView
 group target
+
+track synBlocks
+priority 0.1
+type bigBed 4
+bigDataUrl synBlocks.bb
+shortLabel synBlocks
+longLabel Synteny Blocks
+group map
 
 track mismatch
 type bigBed 4
