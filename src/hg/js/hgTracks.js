@@ -721,7 +721,10 @@ var posting = {
         }
         let parsedUrl = parseUrl(this.href);
         let cgi = parsedUrl.cgi;
-        let id = parsedUrl.queryArgs.g;
+
+        // for some reason, '-' characters are encoded here? unencode them so lookups into
+        // hgTracks.trackDb will work
+        let id = parsedUrl.queryArgs.g.replace("%2D", "-");
         if (parsedUrl.queryArgs.i === "mergedItem") {
             updateObj={};
             updateObj[id+".doMergeItems"] = 0;
