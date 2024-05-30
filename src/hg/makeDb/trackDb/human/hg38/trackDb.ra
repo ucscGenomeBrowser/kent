@@ -761,7 +761,7 @@ include dbSnpArchiveHg38.ra
 include affyArchive.ra
 include genePredArchive.ra
 include tgpArchive.ra
-include spliceAi.ra
+#include spliceAi.ra
 
 track genotypeArrays
 shortLabel Array Probesets
