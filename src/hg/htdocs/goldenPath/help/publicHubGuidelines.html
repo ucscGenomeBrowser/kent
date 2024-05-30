@@ -83,6 +83,34 @@ target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
 <h2>Recommended Guidelines</h2>
 <p>These guidelines in the following sections are recommended to improve user experience, but are
    not required to be implemented before the hub is added to our list of Public Hubs.</p>
+
+<h3>Notes on stability</h3>
+<p>
+Keep in mind that users may start rely on your track hub for their work. Obviously, if the
+track hub web server is down or its URL changes, your users have no access to
+the data anymore.  Users may also have stable session links in manuscripts and
+these will all stop working.  We check public track hubs every hour
+automatically and send email notifications after 24h of downtime and will
+remove them if they are offline for several days. But if you tell us about a
+change anytime, ideally before you move the webserver of your track hub, we can
+change the URL in our internal tables which will fix all existing sessions and
+avoids downtime for users. If the track hub is successful or you run into
+performance or storage funding problems after some time, for example if the
+research group is moving institutions, we can also host files at UCSC, just contact us.
+</p>
+
+<p>
+Even if the webserver is stable, on a more subtle level, sudden changes to your hub
+can be a problem for your users. While you can make large changes to the tracks
+anytime, users will find that their analysis does not work anymore from one day
+to the next and if you take away tracks or change options, this can be hard to understand.
+In these cases, you can keep the previous version of the tracks in a different track group,
+e.g. with a suffix such as "V1" or "(previous versions)" track group or give a
+hint in the track long labels where new options are found. There also is the
+"dataVersion" trackDb statement to indicate to users what the version of the
+data used was, in addition to track groups or longLabel statements.
+</p>
+
 <h3>Track organization recommendations</h3>
 <p>
 Related tracks can be grouped in a few different ways, namely <a href="trackDb/trackDbHub.html#superTrack"
