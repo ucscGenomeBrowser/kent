@@ -45,9 +45,9 @@ if (core->n_cigar > 50)
     printf("<B>CIGAR string: </B> Cannot show long CIGAR string, more than 50 operations. Contact us if you need to see the full CIGAR string here.<BR>\n");
 else
     {
-    printf("<B>CIGAR string: </B><tt>%s</tt> (", bamGetCigar(bam));
-    bamShowCigarEnglish(bam);
-    printf(")<BR>\n");
+    printf("<B>CIGAR string: </B><tt>%s</tt>", bamGetCigar(bam));
+    //bamShowCigarEnglish(bam);
+    printf("<BR>\n");
     }
 printf("<B>Tags:</B>");
 bamShowTags(bam);
@@ -61,27 +61,40 @@ if (bamIsRc(bam))
 puts("<BR>");
 struct dnaSeq *genoSeq = hChromSeq(database, seqName, tStart, tEnd);
 char *qSeq = bamGetQuerySequence(bam, FALSE);
-if (isNotEmpty(qSeq) && !sameString(qSeq, "*"))
+if (core->l_qseq > 5000)
+    printf("<B>Alignment not shown, very long sequence</B><BR>\n");
+else
     {
-    char *qSeq = NULL;
-    struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart, useStrand, &qSeq);
-    printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
-	   seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
-    ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
-		     FALSE);
+    if (isNotEmpty(qSeq) && !sameString(qSeq, "*"))
+        {
+        char *qSeq = NULL;
+        struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart, useStrand, &qSeq);
+        printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
+               seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
+        ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
+                         FALSE);
+        }
     }
+
 if (!skipQualityScore && core->l_qseq > 0)
     {
-    printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
-    UBYTE *quals = bamGetQueryQuals(bam, useStrand);
-    int i;
-    for (i = 0;  i < core->l_qseq;  i++)
+    if (core->l_qseq > 5000)
         {
-        if (i > 0 && (i % 24) == 0)
-	    printf("</TR>\n<TR>");
-        printf("<TD>%c<BR>%d</TD>", qSeq[i], quals[i]);
+        printf("<B>Sequence too long to show quality scores</B><BR>\n");
+        } 
+    else
+        {
+        printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
+        UBYTE *quals = bamGetQueryQuals(bam, useStrand);
+        int i;
+        for (i = 0;  i < core->l_qseq;  i++)
+            {
+            if (i > 0 && (i % 24) == 0)
+                printf("</TR>\n<TR>");
+            printf("<TD>%c<BR>%d</TD>", qSeq[i], quals[i]);
+            }
+        printf("</TR></TABLE></TT>\n");
         }
-    printf("</TR></TABLE></TT>\n");
     }
 }
 
