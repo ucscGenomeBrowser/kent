@@ -71,9 +71,20 @@ reverse-complemented before it is outputted or displayed. This is necessary beca
 stores reference coordinates on the positive strand, as required by the BED format. The 
 <code>strand</code> field indicates whether the positions in <code>oChromStarts</code> are listed 
 from the chromosome beginning (+) or end (-).</p>
+
+<p>Since bigPsl is just a bigBed file, in addition to these fields, bigPsl
+files can have any number of additional, extra bigBed fields, as
+long as they are defined after the seqType field. 
+See <a href="bigBed.html#Ex3">Example 3</a> of the bigBed documentation page for 
+sample .as and .bed files. These fields can also be used for custom <a
+href="https://genome-blog.gi.ucsc.edu/blog/2022/06/28/track-hub-settings/">mouseOvers</a>,
+feature filters and coloring options. Contact us if you run into difficulty
+using them.</p>
+
 <p>
-Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
-25% more RAM than the uncompressed BED input file.</p>
+The <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
+25% more RAM than the uncompressed BED input file. The -maxAllow option to bedToBigBed can be
+used to allow the tool to use more than 16GB of RAM.</p>
 
 <h2>Creating a bigPsl track</h2>
 <p>
