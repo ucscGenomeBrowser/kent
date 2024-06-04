@@ -3781,7 +3781,7 @@ compositeTrack on
 
 track lovdComp
 shortLabel LOVD Variants
-longLabel Leiden Open Variation Database Public Variants
+longLabel LOVD: Leiden Open Variation Database Public Variants
 group phenDis
 visibility hide
 compositeTrack on
@@ -3791,7 +3791,7 @@ html lovdComp
 
         track lovdShort
         shortLabel LOVD Variants < 50 bp + ins
-        longLabel Leiden Open Variation Database, short < 50 bp variants and insertions of any length
+        longLabel LOVD: Leiden Open Variation Database, short < 50 bp variants and insertions of any length
         group phenDis
         visibility hide
         urls id="https://varcache.lovd.nl/redirect/$$"
@@ -3802,7 +3802,7 @@ html lovdComp
         track lovdLong
         type bigBed 9 +
         shortLabel LOVD Variants >= 50 bp
-        longLabel Leiden Open Variation Database Public Variants, long >= 50 bp variants
+        longLabel LOVD: Leiden Open Variation Database Public Variants, long >= 50 bp variants
         group phenDis
         visibility hide
         urls id="https://varcache.lovd.nl/redirect/$$"
