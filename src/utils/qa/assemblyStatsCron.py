@@ -278,6 +278,10 @@ bash("cp /hive/users/"+user+"/ErrorLogsOutput/* /hive/users/"+user+"/assemblySta
 if user == 'qateam':
     bash("cat /hive/users/"+user+"/ErrorLogsOutput/results.txt > /usr/local/apache/htdocs-genecats/qa/test-results/usageStats/"+lastMonthFormat)
 
-bash("cat /hive/users/"+user+"/ErrorLogsOutput/results.txt")
+resultsFile = open('/hive/users/'+user+'/ErrorLogsOutput/results.txt','r')
+for line in resultsFile:
+    print(line.rstrip())
+resultsFile.close()
+
 bash("rm /hive/users/"+user+"/ErrorLogs/*")
 bash("rm /hive/users/"+user+"/ErrorLogsOutput/*")

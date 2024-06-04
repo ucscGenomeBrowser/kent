@@ -25,11 +25,49 @@ struct bamTrackData
     boolean foundIt;
     };
 
+#include <htslib/sam.h>
+
+static void getClippedBases(const bam1_t *bam, int clippedBases[4]) 
+/* Function to get the number of soft and hard clipped bases at the start and end of a read,
+ the array will contain [startHardCnt, startSoftCnt, endSoftCnt, endHardCnt] */
+{
+uint32_t *cigar = bam_get_cigar(bam);
+int nCigar = bam->core.n_cigar;
+for (int i = 0; i < 4; i++)
+    clippedBases[i] = 0;
+
+int iCigar = 0;
+
+// start
+if ((iCigar < nCigar) && (bam_cigar_op(cigar[iCigar]) == BAM_CHARD_CLIP))
+    {
+    clippedBases[0] += bam_cigar_oplen(cigar[iCigar]);
+    iCigar++;
+    }
+if ((iCigar < nCigar) && (bam_cigar_op(cigar[iCigar]) == BAM_CSOFT_CLIP))
+    {
+    clippedBases[1] += bam_cigar_oplen(cigar[iCigar]);
+    }
+
+// end
+iCigar = nCigar - 1;
+if ((iCigar >= 0) && (bam_cigar_op(cigar[iCigar]) == BAM_CHARD_CLIP))
+    {
+    clippedBases[3] += bam_cigar_oplen(cigar[iCigar]);
+    iCigar--;
+    }
+if ((iCigar >= 0) && (bam_cigar_op(cigar[iCigar]) == BAM_CSOFT_CLIP))
+    {
+    clippedBases[2] += bam_cigar_oplen(cigar[iCigar]);
+    }
+}
+
 /* Maybe make this an option someday -- for now, I find it too confusing to deal with
  * CIGAR that is anchored to positive strand while showing rc'd sequence.  I think
  * to do it right, we would need to reverse the CIGAR string for display. */
 static boolean useStrand = FALSE;
 static boolean skipQualityScore = FALSE;
+
 static void singleBamDetails(const bam1_t *bam)
 /* Print out the properties of this alignment. */
 {
@@ -49,6 +87,12 @@ else
     //bamShowCigarEnglish(bam);
     printf("<BR>\n");
     }
+
+int clippedBases[4];
+getClippedBases(bam, clippedBases);
+printf("<B>Start clipping:</B> hard: %d  soft: %d</BR>\n", clippedBases[0], clippedBases[1]);
+printf("<B>End clipping:</B> hard: %d  soft: %d</BR> \n", clippedBases[3], clippedBases[2]);
+
 printf("<B>Tags:</B>");
 bamShowTags(bam);
 puts("<BR>");
