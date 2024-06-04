@@ -1,7 +1,7 @@
 track gnomadPLI
 parent gnomadVariants 
 shortLabel gnomAD Constraint Metrics
-longLabel Genome Aggregation Database (gnomAD) Predicted Constraint Metrics (pLI and Z-scores)
+longLabel Genome Aggregation Database (gnomAD) Predicted Constraint Metrics (LOEUF, pLI and Z-scores)
 compositeTrack On
 group varRep
 type bigBed 12
@@ -21,7 +21,7 @@ visibility hide
 
         track pliByGene
         shortLabel Gene LoF
-        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (pLI) v2.1.1
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Gene (LOEUF and pLI) v2.1.1
         subGroups view=v2
         type bigBed 12 +
         mouseOverField _mouseOver
@@ -50,6 +50,7 @@ visibility hide
         urlLabel View this Gene on the gnomAD browser
         labelFields name,geneName
         filter._zscore -19:11
+        itemRgb on
         filterLabel._zscore Show only items between this Z-score range
         filterByRange._zscore on
         parent constraintV2 off
@@ -57,7 +58,7 @@ visibility hide
 
         track pliByTranscript
         shortLabel Transcript LoF v2
-        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI) v2.1.1
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (LOEUF and pLI) v2.1.1
         subGroups view=v2
         type bigBed 12 +
         mouseOverField _mouseOver
@@ -100,7 +101,7 @@ visibility hide
     
         track pliByTranscriptV4
         shortLabel Transcript LoF v4
-        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (pLI) v4
+        longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (LOEUF and pLI) v4
         subGroups view=v4
         type bigBed 12 +
         mouseOverField _mouseOver
