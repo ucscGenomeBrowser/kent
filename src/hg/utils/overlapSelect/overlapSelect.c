@@ -45,6 +45,7 @@ static struct optionSpec optionSpecs[] = {
     {"statsOutputBoth", OPTION_BOOLEAN},
     {"idOutput", OPTION_BOOLEAN},
     {"aggregate", OPTION_BOOLEAN},
+    {"tsv", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -85,6 +86,7 @@ boolean idOutput = FALSE;
 boolean statsOutput = FALSE;
 boolean outputAll = FALSE;
 boolean outputBoth = FALSE;
+boolean tsvOutput = FALSE;
 struct overlapCriteria criteria = {0.0, 1.1, 0.0, 1.1, -1};
 
 enum recordFmt parseFormatSpec(char *fmt)
@@ -345,10 +347,11 @@ if (idOutput)
     }
 if (statsOutput)
     {
+    char *headerStart = tsvOutput ? "" : "#";
     if (useAggregate)
-        fputs("#inId\t" "inOverlap\t" "inOverBases\t" "inBases\n", outFh);
+        fprintf(outFh, "%sinId\t" "inOverlap\t" "inOverBases\t" "inBases\n", headerStart);
     else
-        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\t" "overBases\t" "similarity\t" "inBases\t" "selectBases\n", outFh);
+        fprintf(outFh, "%sinId\t" "selectId\t" "inOverlap\t" "selectOverlap\t" "overBases\t" "similarity\t" "inBases\t" "selectBases\n", headerStart);
     }
 
 if (useAggregate)
@@ -496,6 +499,7 @@ if (mergeOutput)
     selectCaOpts |= chromAnnSaveLines;
     }
 dropFile = optionVal("dropped", NULL);
+tsvOutput = optionExists("tsv");
 
 /* check for options incompatible with aggregate mode */
 if (useAggregate)

@@ -97,3 +97,4 @@ Options:
       with -aggregate, only a single column of inId is written
   -dropped=file  - output rows that were dropped to this file.
   -verbose=n - verbose > 1 prints some details,
+  -tsv - output TSV headers instead of autoSql headers for statistics output. 
