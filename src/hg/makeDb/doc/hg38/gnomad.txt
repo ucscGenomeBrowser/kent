@@ -492,3 +492,49 @@ ln -s `pwd`/gnomad.v4.1.exomes.details.tab.gz.gzi /gbdb/hg38/gnomAD/v4.1/exomes/
 # Woops the conversion script had the wrong header listing, change it up:
 sed -i -e '1,24s/segdup/segdup\tvariant_type\tallele_type/' gnomad.v4.1.genomes.details.pre.tab
 # and then re-do the genomes steps from the FIELD_FIX_RESTART_MARK mark
+
+##############################################################################
+# gnomAD v4.1 Missense and pli by transcript tracks- June 03, 2024 - ChrisL
+##############################################################################
+wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/constraint/gnomad.v4.1.constraint_metrics.tsv
+
+# Get the transcripts to get the coordinates and exon-intron boundaries
+hgsql -Ne "select * from wgEncodeGencodeCompV39" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout | sed -Ee 's/\.[0-9]+//' \
+    | sort -k4 > hg38.gencodeCompV39.bed12
+hgsql -Ne "select * from ncbiRefSeq" hg38 \
+    | cut -f2- | genePredToBed -tab stdin stdout \
+    | sort -k4 > hg38.refSeq.bed12
+cat hg38.gencodeCompV39.bed12 hg38.refSeq.bed12 | sort -k4 > transcripts.coords
+
+f=gnomad.v4.1.constraint_metrics.tsv
+# The order of fields is different between v4.0 and v4.1, figure out the fields we need to extract:
+head -1 ../gnomad.v4.0.constraint_metrics.tsv | tawk '{print $1,$2,$24,$25,$27,$32,$37,$38,$40,$45,$12,$13,$17,$15,$42,$43,$29,$30,$20,$21}' | tr '\t' '\n' > v4.0.wantedFields
+head -1 ../gnomad.v4.0.constraint_metrics.tsv | tr '\t' '\n' | nl > v4.0.fieldOrder
+head -1 $f | tr '\t' '\n' | nl > v4.1.fieldOrder
+grep -Fwf v4.0.wantedFields v4.1.fieldOrder  > v4.1.wantedFields
+for field in $(head -1 ../gnomad.v4.0.constraint_metrics.tsv | tawk '{print $1,$2,$24,$25,$27,$32,$37,$38,$40,$45,$12,$13,$17,$15,$42,$43,$29,$30,$20,$21}' | tr '\t' '\n'); do grep -w $field v4.1.fieldOrder; done | cut -f1 | tr '\n' ',' | tr -d ' '; echo
+# I don't think this command will work just copying and pasting like the above will
+tail -n +2 $f \
+    | tawk '{print $1,$3,$28,$29,$31,$36,$41,$42,$44,$49,$14,$15,$19,$17,$46,$47,$33,$34,$22,$23}' \
+    | sort -k2 | join -t $'\t' -1 4 -2 2 transcripts.coords - \
+    | tawk '{for (i=1; i<=12; i++) {printf "%s\t", $i} printf "%s\t%s\t%s\t\t\t", $2, $3, $4; for (i=13; i <= NF; i++) {printf "%s", $i; if (i != NF) {printf "\t"}}; printf "\n"} ' \
+    | ~/kent/src/hg/makeDb/gnomad/combine.awk -v doTranscripts=true
+bedSort pliByTranscript.tab pliByTranscript.tab
+bedSort missenseByTranscript.tab missenseByTranscript.tab
+
+# Copy the old autosql file:
+cp ../{missense,pli}Metrics.as .
+
+# Turn into a bigBed and link
+sizes=/hive/data/genomes/hg38/chrom.sizes
+bedToBigBed -type=bed12+6 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByTranscript.tab $sizes pliByTranscript.bb
+pass1 - making usageList (376 chroms): 443 millis
+pass2 - checking and writing primary data (168326 records, 18 fields): 3529 millis
+Sorting and writing extra index 0: 91 millis
+Sorting and writing extra index 1: 83 millis
+bedToBigBed -type=bed12+5 -as=missenseMetrics.as -tab -extraIndex=name,geneName missenseByTranscript.tab $sizes missenseByTranscript.bb
+pass1 - making usageList (376 chroms): 505 millis
+pass2 - checking and writing primary data (168326 records, 17 fields): 2841 millis
+Sorting and writing extra index 0: 171 millis
+Sorting and writing extra index 1: 89 millis

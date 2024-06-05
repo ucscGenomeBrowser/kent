@@ -72,14 +72,19 @@ stores reference coordinates on the positive strand, as required by the BED form
 <code>strand</code> field indicates whether the positions in <code>oChromStarts</code> are listed 
 from the chromosome beginning (+) or end (-).</p>
 
-<p><b>Addtional extra fields:</b> Since bigPsl is just a bigBed file, in addition to these fields, bigPsl
-files can have any number of additional, extra bigBed fields, as
-long as they are defined after the seqType field. 
-See <a href="bigBed.html#Ex3">Example 3</a> of the bigBed documentation page for 
-sample .as and .bed files. These fields can also be used for custom <a
-href="https://genome-blog.gi.ucsc.edu/blog/2022/06/28/track-hub-settings/">mouseOvers</a>,
-feature filters and coloring options. Contact us if you run into difficulty
-using them.</p>
+<p><b>Additional fields:</b>
+Since a bigPsl file is a bigBed file, additional fields can be added as bigBed fields. The
+additional bigBed fields are defined after the seqType field of the bigPsl.as file. 
+See <a href="bigBed.html#Ex3">Example 3</a> of the bigBed Track Format page for an example
+on how to create a bigBed file with extra (custom) fields. The additional fields can be used for
+custom
+<a href="https://genome-blog.gi.ucsc.edu/blog/2022/06/28/track-hub-settings/">mouseOvers</a>,
+feature filters, and coloring options. Contact us at
+<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;&#111;&#101;.
+uc&#115;&#99;.
+&#101;&#100;&#117;">
+&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;&#111;&#101;.uc&#115;&#99;.&#101;&#100;&#117;
+</A> if you run into difficulty using them.</p>
 
 <p>
 The <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
