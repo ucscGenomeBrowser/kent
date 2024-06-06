@@ -15,6 +15,9 @@
 #include "customFactory.h"
 #include "wikiLink.h"
 #include "userdata.h"
+#include "jksql.h"
+#include "hdb.h"
+#include "hubSpace.h"
 
 char *getUserName()
 {
@@ -83,13 +86,32 @@ void removeFileForUser(char *fname, char *userName)
 if (!startsWith(getDataDir(userName), fname))
     return;
 if (fileExists(fname))
+    {
+    // delete the actual file
     mustRemove(fname);
+    // delete the table row
+    struct sqlConnection *conn = hConnectCentral();
+    struct dyString *deleteQuery = sqlDyStringCreate("delete from hubSpace where location='%s'", fname);
+    sqlUpdate(conn, dyStringCannibalize(&deleteQuery));
+    }
 }
 
 void uploadTrack()
 /* Saves a new track to the persistent storage for this user */
 {
 //char *userName = getUserName();
+}
+
+struct userFiles *listFilesForUserHub(char *userName, char *hubName)
+/* Get all the files for a particular hub for a particular user */
+{
+struct userFiles *userListing;
+AllocVar(userListing);
+char *path = getHubDataDir(userName, hubName);
+struct fileInfo *fiList = listDirX(path,NULL,FALSE);
+userListing->userName = userName;
+userListing->fileList = fiList;
+return userListing;
 }
 
 struct userHubs *listHubsForUser(char *userName)
@@ -116,16 +138,13 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 return userHubs;
 }
 
-struct userFiles *listFilesForUserHub(char *userName, char *hubName)
-/* Get all the files for a particular hub for a particular user */
+struct hubSpace *listFilesForUser(char *userName)
+/* Return the files the user has uploaded */
 {
-struct userFiles *userListing;
-AllocVar(userListing);
-char *path = getHubDataDir(userName, hubName);
-struct fileInfo *fiList = listDirX(path,NULL,FALSE);
-userListing->userName = userName;
-userListing->fileList = fiList;
-return userListing;
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *query = sqlDyStringCreate("select * from hubSpace where userName='%s' order by creationTime, fileName", userName);
+struct hubSpace *fileList = hubSpaceLoadByQuery(conn, dyStringCannibalize(&query));
+return fileList;
 }
 
 long long getMaxUserQuota(char *userName)
@@ -138,18 +157,10 @@ long long checkUserQuota(char *userName)
 /* Return the amount of space a user is currently using */
 {
 long long quota = 0;
-struct userHubs *hub, *userHubs = listHubsForUser(userName);
-for (hub = userHubs; hub != NULL; hub = hub->next)
+struct hubSpace *hubSpace, *hubSpaceList = listFilesForUser(userName);
+for (hubSpace = hubSpaceList; hubSpace != NULL; hubSpace = hubSpace->next)
     {
-    struct userFiles *ufList = listFilesForUserHub(userName, hub->hubName);
-    struct fileInfo *fi;
-    if (ufList)
-        {
-        for (fi = ufList->fileList; fi != NULL; fi = fi->next)
-            {
-            quota += fi->size;
-            }
-        }
+    quota += hubSpace->fileSize;
     }
 return quota;
 }

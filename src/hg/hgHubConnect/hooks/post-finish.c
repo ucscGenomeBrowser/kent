@@ -17,6 +17,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hubSpace.h"
+#include "md5.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -60,9 +61,10 @@ else
         char *fileName = NULL;
         long long fileSize = 0;
         char *fileType = NULL;
-        //char *hubNameList = NULL; // allocated in addHubNameToFile(), NULL is ok
         char *db = NULL;
         char *location = NULL;
+        char *reqLm = NULL;
+        time_t lastModified;
 
         struct lineFile *lf = lineFileStdin(FALSE);
         char *request = lineFileReadAll(lf);
@@ -83,14 +85,17 @@ else
             }
         else
             {
-            fileName = jsonQueryString(req, "", "Event.Upload.MetaData.filename", NULL);
+            // NOTE: All Upload.MetaData values are strings
+            fileName = jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL);
             fileSize = jsonQueryInt(req, "",  "Event.Upload.Size", 0, NULL);
             fileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
             db = jsonQueryString(req, "", "Event.Upload.MetaData.genome", NULL);
+            reqLm = jsonQueryString(req, "", "Event.Upload.MetaData.lastModified", NULL);
+            lastModified = sqlLongLong(reqLm) / 1000; // yes Javascript dates are in millis
             char *tusFile = jsonQueryString(req, "", "Event.Upload.Storage.Path", NULL);
             if (fileName == NULL)
                 {
-                errAbort("No Event.Upload.filename setting");
+                errAbort("No Event.Upload.fileName setting");
                 }
             else if (tusFile == NULL)
                 {
@@ -142,11 +147,12 @@ else
             row->fileName = fileName;
             row->fileSize = fileSize;
             row->fileType = fileType;
-            row->creationTime = NULL;
-            row->lastModified = NULL;
+            row->creationTime = NULL; // automatically handled by mysql
+            row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
             row->hubNameList = NULL;
             row->db = db;
             row->location = location;
+            row->md5sum = md5HexForFile(row->location);
             struct sqlConnection *conn = hConnectCentral();
 
             // now write out row to hubSpace table
@@ -155,7 +161,10 @@ else
                 errAbort("No hubSpace MySQL table is present. Please send us an email");
                 }
             struct dyString *sqlUpdateStmt = dyStringNew(0);
-            sqlDyStringPrintf(sqlUpdateStmt, "insert into hubSpace values ('%s', '%s', %llu, '%s', '%s', '', '', '', '%s')", row->userName, row->fileName, row->fileSize, row->fileType, row->db, row->location);
+            sqlDyStringPrintf(sqlUpdateStmt, "insert into hubSpace values ('%s', '%s', %llu, "
+                    "'%s', NULL, '%s', '', '%s', '%s', '%s')",
+                    row->userName, row->fileName, row->fileSize, row->fileType,
+                    row->lastModified, row->db, row->location, row->md5sum);
             fprintf(stderr, "%s\n", sqlUpdateStmt->string);
             fflush(stderr);
             sqlUpdate(conn, sqlUpdateStmt->string);

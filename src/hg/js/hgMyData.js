@@ -168,7 +168,7 @@ var hubCreate = (function() {
             xhr.withCredentials = true;
         };
 
-        let onSuccess = function(req) {
+        let onSuccess = function(req, metadata) {
             // remove the selected file from the input element and the ul list
             // FileList is a read only setting, so we have to make
             // a new one without this req
@@ -188,7 +188,14 @@ var hubCreate = (function() {
                 removeCancelAllButton();
             }
             const d = new Date(req.lastModified);
-            newReqObj = {"createTime": d.toJSON(), "name": req.name, "size": req.size};
+            newReqObj = {
+                "createTime": d.toJSON(),
+                "fileName": metadata.fileName,
+                "fileSize": metadata.fileSize,
+                "fileType": metadata.fileType,
+                "genome": metadata.genome,
+                "hub": ""
+            };
             addNewUploadedFileToTable(newReqObj);
         };
 
@@ -209,17 +216,19 @@ var hubCreate = (function() {
             file = uiState.toUpload[f];
             if (useTus) {
                 let progMeter = makeNewProgMeter(file.name);
+                let metadata = {
+                    fileName: file.name,
+                    fileSize: file.size,
+                    fileType: document.getElementById(`${file.name}#typeInput`).selectedOptions[0].value,
+                    genome: document.getElementById(`${file.name}#genomeInput`).selectedOptions[0].value,
+                    lastModified: file.lastModified,
+                };
                 let tusOptions = {
                     endpoint: tusdServer,
-                    metadata: {
-                        filename: file.name,
-                        fileSize: file.size,
-                        fileType: document.getElementById(`${file.name}#typeInput`).selectedOptions[0].value,
-                        genome: document.getElementById(`${file.name}#genomeInput`).selectedOptions[0].value,
-                    },
+                    metadata: metadata,
                     onProgress: onProgress.bind(progMeter),
                     onBeforeRequest: onBeforeRequest,
-                    onSuccess: onSuccess.bind(null, file),
+                    onSuccess: onSuccess.bind(null, file, metadata),
                     onError: onError,
                     retryDelays: null,
                 };
@@ -378,28 +387,24 @@ var hubCreate = (function() {
         // req is an object with properties of an uploaded file, make a new row
         // for it in the filesTable
         let table = $("#filesTable").DataTable();
-        let row = table.row((idx, data) => data.name === fname);
+        let row = table.row((idx, data) => data.fileName === fname);
         row.remove().draw();
     }
 
-    let pendingDeletes = {};
     function deleteFile(rowIx, fname) {
         // Send an async request to hgHubConnect to delete the file
         // Note that repeated requests, like from a bot, will return 404 as a correct response
         console.log(`sending delete req for ${fname}`);
-        const endpoint = "../cgi-bin/hgHubConnect?deleteFile=" + fname;
-        if (!(endpoint in pendingDeletes)) {
-            const xhr = new XMLHttpRequest();
-            pendingDeletes[endpoint] = xhr;
-            this.xhr = xhr;
-            this.xhr.open("DELETE", endpoint, true);
-            this.xhr.send();
-            deleteFileFromTable(rowIx, fname);
-            delete pendingDeletes[endpoint];
-        }
+        cart.setCgi("hgHubConnect");
+        cart.send({deleteFile: {fileNameList: [fname]}});
+        cart.flush();
+        deleteFileFromTable(rowIx, fname);
     }
 
-    function viewInGenomeBrowser(rowIx, fname) {
+    function deleteFileList() {
+    }
+
+    function viewInGenomeBrowser(fname, genome) {
         // redirect to hgTracks with this track open in the hub
         if (typeof uiState.userUrl !== "undefined" && uiState.userUrl.length > 0) {
             bigBedExts = [".bb", ".bigBed", ".vcf.gz", ".vcf", ".bam", ".bw", ".bigWig"];
@@ -409,7 +414,7 @@ var hubCreate = (function() {
                     // TODO: tusd should return this location in it's response after
                     // uploading a file and then we can look it up somehow, the cgi can
                     // write the links directly into the html directly for prev uploaded files maybe?
-                    window.location.assign("../cgi-bin/hgTracks?db=hg38&hgt.customText=" + uiState.userUrl + fname);
+                    window.location.assign("../cgi-bin/hgTracks?db=" + genome + "&hgt.customText=" + uiState.userUrl + fname);
                     return false;
                 }
             }
@@ -456,30 +461,30 @@ var hubCreate = (function() {
         columns: [
             {data: "", },
             {data: "", },
+            {data: "fileName", title: "File name"},
+            {data: "fileSize", title: "File size", render: dataTablePrintSize},
+            {data: "fileType", title: "File type"},
             {data: "genome", title: "Genome"},
-            {data: "name", title: "File name"},
-            {data: "size", title: "File size", render: dataTablePrintSize},
+            {data: "hub", title: "Hubs"},
             {data: "createTime", title: "Creation Time"},
         ],
         order: [[6, 'desc']],
         drawCallback: function(settings) {
-            let btns = document.querySelectorAll('.deleteFileBtn');
-            let i;
-            for (i = 0; i < btns.length; i++) {
-                let fnameNode = btns[i].parentNode.nextElementSibling.childNodes[0];
-                if (fnameNode.nodeName !== "#text") {continue;}
-                let fname = fnameNode.nodeValue;
+            let table = this.DataTable();
+            btns = document.querySelectorAll('.deleteFileBtn');
+            let i, numRows= table.rows().data().length;
+            for (i = 0; i < numRows; i++) {
+                let fname = table.cell(i, 2).data();
                 btns[i].addEventListener("click", (e) => {
                     deleteFile(i, fname);
                 });
             }
             btns = document.querySelectorAll('.viewInBtn');
-            for (i = 0; i < btns.length; i++) {
-                let fnameNode = btns[i].parentNode.nextElementSibling.childNodes[0];
-                if (fnameNode.nodeName !== "#text") {continue;}
-                let fname = fnameNode.nodeValue;
+            for (i = 0; i < numRows; i++) {
+                let fname = table.cell(i, 2).data();
+                let genome = table.cell(i, 5).data();
                 btns[i].addEventListener("click", (e) => {
-                    viewInGenomeBrowser(i, fname);
+                    viewInGenomeBrowser(fname, genome);
                 });
             }
         },
@@ -488,7 +493,7 @@ var hubCreate = (function() {
     function showExistingFiles(d) {
         // Make the DataTable for each file
         tableInitOptions.data = d;
-        let table = $("#filesTable").DataTable(tableInitOptions);
+        $("#filesTable").DataTable(tableInitOptions);
     }
 
     function checkJsonData(jsonData, callerName) {

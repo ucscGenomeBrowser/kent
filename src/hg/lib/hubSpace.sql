@@ -14,6 +14,7 @@ CREATE TABLE hubSpace (
     hubNameList longblob,	# comma separated list of hubs this file is a part of
     db varchar(255) not null,	# genome assembly associated with this file
     location longblob not null,	# file system path or URL to file
+    md5sum varchar(255) not null,	# md5sum of file
               #Indices
     PRIMARY KEY(userName, fileName(25)),
     INDEX(userName),
@@ -22,5 +23,6 @@ CREATE TABLE hubSpace (
     INDEX(db),
     INDEX(location(25)),
     INDEX(creationTime),
-    INDEX(lastModified)
+    INDEX(lastModified),
+    INDEX(md5sum)
 );

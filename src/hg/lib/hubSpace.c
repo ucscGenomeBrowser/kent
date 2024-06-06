@@ -10,7 +10,7 @@
 
 
 
-char *hubSpaceCommaSepFieldNames = "userName,fileName,fileSize,fileType,creationTime,lastModified,hubNameList,db,location";
+char *hubSpaceCommaSepFieldNames = "userName,fileName,fileSize,fileType,creationTime,lastModified,hubNameList,db,location,md5sum";
 
 void hubSpaceStaticLoad(char **row, struct hubSpace *ret)
 /* Load a row from hubSpace table into ret.  The contents of ret will
@@ -26,6 +26,7 @@ ret->lastModified = row[5];
 ret->hubNameList = row[6];
 ret->db = row[7];
 ret->location = row[8];
+ret->md5sum = row[9];
 }
 
 struct hubSpace *hubSpaceLoadByQuery(struct sqlConnection *conn, char *query)
@@ -58,8 +59,8 @@ void hubSpaceSaveToDb(struct sqlConnection *conn, struct hubSpace *el, char *tab
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%lld,'%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->userName,  el->fileName,  el->fileSize,  el->fileType,  el->creationTime,  el->lastModified,  el->hubNameList,  el->db,  el->location);
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%lld,'%s','%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->userName,  el->fileName,  el->fileSize,  el->fileType,  el->creationTime,  el->lastModified,  el->hubNameList,  el->db,  el->location,  el->md5sum);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }
@@ -80,6 +81,7 @@ ret->lastModified = cloneString(row[5]);
 ret->hubNameList = cloneString(row[6]);
 ret->db = cloneString(row[7]);
 ret->location = cloneString(row[8]);
+ret->md5sum = cloneString(row[9]);
 return ret;
 }
 
@@ -89,7 +91,7 @@ struct hubSpace *hubSpaceLoadAll(char *fileName)
 {
 struct hubSpace *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -107,7 +109,7 @@ struct hubSpace *hubSpaceLoadAllByChar(char *fileName, char chopper)
 {
 struct hubSpace *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -137,6 +139,7 @@ ret->lastModified = sqlStringComma(&s);
 ret->hubNameList = sqlStringComma(&s);
 ret->db = sqlStringComma(&s);
 ret->location = sqlStringComma(&s);
+ret->md5sum = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -156,6 +159,7 @@ freeMem(el->lastModified);
 freeMem(el->hubNameList);
 freeMem(el->db);
 freeMem(el->location);
+freeMem(el->md5sum);
 freez(pEl);
 }
 
@@ -207,6 +211,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->location);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->md5sum);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -283,6 +291,14 @@ fputc('"',f);
 fputc(':',f);
 fputc('"',f);
 fprintf(f, "%s", el->location);
+fputc('"',f);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"md5sum");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->md5sum);
 fputc('"',f);
 fputc('}',f);
 }

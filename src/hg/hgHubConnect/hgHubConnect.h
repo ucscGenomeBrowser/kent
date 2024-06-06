@@ -7,6 +7,7 @@
 #define HGHUBCONNECT_H
 
 #include "cart.h"
+#include "cartJson.h"
 
 //extern struct cart *cart;	/* This holds cgi and other variables between clicks. */
 
@@ -14,14 +15,18 @@
 #define hgHubDeleteFile "deleteFile"
 #define hgHubCreateHub "createHub"
 #define hgHubEditHub "editHub"
+#define hgHubMoveFile "moveFile"
 
-void doRemoveFile();
+void doRemoveFile(struct cartJson *cj, struct hash *paramHash);
 /* Process the request to remove a file */
 
-void doCreateHub();
+void doMoveFile(struct cartJson *cj, struct hash *paramHash);
+/* Move a file to a new hub */
+
+void doCreateHub(struct cartJson *cj, struct hash *paramHash);
 /* Make a new hub.txt with the parameters from the JSON request */
 
-void doEditHub();
+void doEditHub(struct cartJson *cj, struct hash *paramHash);
 /* Edit the hub.txt for a hub */
 
 void doTrackHubWizard();

@@ -10,4 +10,5 @@ table hubSpace
     lstring hubNameList; "comma separated list of hubs this file is a part of"
     string db; "genome assembly associated with this file"
     lstring location; "file system path or URL to file"
+    string md5sum; "md5sum of file"
     )

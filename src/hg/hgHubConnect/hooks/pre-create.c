@@ -76,7 +76,7 @@ else
         else
             {
             long reqFileSize = jsonQueryInt(req, "", "Event.Upload.Size", 0, NULL);
-            char *reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.filename", NULL);
+            char *reqFileName = jsonQueryString(req, "", "Event.Upload.MetaData.fileName", NULL);
             long currQuota = checkUserQuota(userName);
             long newQuota = currQuota + reqFileSize;
             long maxQuota = getMaxUserQuota(userName);
@@ -84,7 +84,7 @@ else
                 {
                 errAbort("File '%s' is too large, need %s free space but current used space is %s out of %s", reqFileName, prettyFileSize(reqFileSize), prettyFileSize(currQuota), prettyFileSize(maxQuota));
                 }
-            char *reqFileType = jsonQueryString(req, "", "Event.Upload.MetaData.filetype", NULL);
+            char *reqFileType = jsonQueryString(req, "", "Event.Upload.MetaData.fileType", NULL);
             if (!isFileTypeRecognized(reqFileType))
                 {
                 errAbort("File type '%s' for file '%s' is not accepted at this time", reqFileType, reqFileName);

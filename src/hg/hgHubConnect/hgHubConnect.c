@@ -1623,6 +1623,9 @@ cartWebStart(cart, NULL, "%s", pageTitle);
 
 printIncludes();
 
+// need the hgsid:
+//jsInlineF("var hgsid = \"%s\";\n", cartSessionId(cart));
+
 // this variable is used by hub search and hub validate, initialize here so we don't
 // overwrite it unintentionally depending on which path the CGI takes
 jsInline("trackData = [];\n");
@@ -1711,26 +1714,20 @@ printf("</div>"); // #tabs
 cartWebEnd();
 }
 
-void doAsync()
+void doAsync(struct cart *theCart)
 /* Execute the async request */
 {
+cart = theCart;
 struct cartJson *cj = cartJsonNew(cart);
 cartJsonRegisterHandler(cj, hgHubDeleteFile, doRemoveFile);
 cartJsonRegisterHandler(cj, hgHubCreateHub, doCreateHub);
+cartJsonRegisterHandler(cj, hgHubMoveFile, doMoveFile);
 cartJsonExecute(cj);
-}
-
-boolean isAsyncRequest()
-/* Do the CGI arguments indicate this request is async? */
-{
-if (cgiOptionalString(hgHubDeleteFile) || cgiOptionalString(hgHubCreateHub))
-    return TRUE;
-return FALSE;
 }
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubDoHubCheck,
     hgHubCheckUrl, hgHubDoClear, hgHubDoRefresh, hgHubDoDisconnect,hgHubDoRedirect, hgHubDataText, 
-    hgHubConnectRemakeTrackHub, hgHubDeleteFile, NULL};
+    hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -1739,8 +1736,8 @@ long enteredMainTime = clock1000();
 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-if (isAsyncRequest())
-    doAsync();
+if (cgiOptionalString(CARTJSON_COMMAND))
+    cartEmptyShellNoContent(doAsync, hUserCookie(), excludeVars, oldVars);
 else
     cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgHubConnect", enteredMainTime);

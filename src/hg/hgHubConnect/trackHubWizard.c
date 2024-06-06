@@ -18,6 +18,7 @@
 #include "userdata.h"
 #include "jsonWrite.h"
 #include "cartJson.h"
+#include "hubSpace.h"
 
 void removeOneFile(char *userName, char *cgiFileName)
 /* Remove one single file for userName */
@@ -37,23 +38,39 @@ void doRemoveFile(struct cartJson *cj, struct hash *paramHash)
 char *userName = getUserName();
 if (userName)
     {
-    struct jsonWrite *errors = jsonWriteNew();
-    // verify the argument is present:
-    (void)cartJsonRequiredParam(paramHash, "deleteFile", errors, "doRemoveFile");
-    struct jsonElement *deleteJson = hashFindVal(paramHash, "deleteFile");
+    struct jsonElement *deleteJson = hashFindVal(paramHash, "fileNameList");
+    //struct jsonWrite *errors = jsonWriteNew();
+    // TODO: Check request is well-formed
     struct slRef *ele, *deleteList = deleteJson->val.jeList;
+    jsonWriteListStart(cj->jw, "deletedList");
     for (ele = deleteList; ele != NULL; ele = ele->next)
         {
         struct jsonElement *jsonVal = ele->val;
         removeOneFile(userName, jsonVal->val.jeString);
+        jsonWriteString(cj->jw, NULL, jsonVal->val.jeString);
         }
-    fprintf(stdout, "Status: 204 No Content\n\n");
-    fflush(stdout);
-    exit(0);
+    jsonWriteListEnd(cj->jw);
     }
-fprintf(stdout, "Status: 404 Not Found\n\n");
-fflush(stdout);
-exit(0);
+}
+
+void doMoveFile(struct cartJson *cj, struct hash *paramHash)
+/* Move a file to a new hub */
+{
+}
+
+static void writeHubText(struct trackHub *hub, char *hubDir, char *fileName, boolean makeDir)
+/* Create a hub.txt file, optionally creating the directory holding it */
+{
+int oldUmask = 00;
+oldUmask = umask(0);
+makeDirsOnPath(path);
+// restore umask
+umask(oldUmask);
+// now make the hub.txt with some basic information
+char *hubFile = catTwoStrings(path, "hub.txt");
+maybeTouchFile(hubFile);
+struct dyString *contents = dyStringNew(0);
+dyStringPrintf(contents, "hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n", name, userName, name, name, db);
 }
 
 void doCreateHub(struct cartJson *cj, struct hash *paramHash)
@@ -71,6 +88,17 @@ if (userName)
     char *name = hashFindVal(params, "name");
     fprintf(stderr, "creating hub '%s' for db '%s'\n", name, db);
     fflush(stderr);
+    // check if this hub already exists, must have a directory and hub.txt already:
+    char *path = prefixUserFile(userName, name);
+    if (isDirectory(path))
+        {
+        // can't make a hub that already exists!
+        }
+    else
+        {
+        // good we can make a new directory and stuff a hub.txt in it
+        // the directory needs to be 777, so ignore umask for now
+        }
     }
 fprintf(stderr, "Status: 204 No Content\n\n");
 fflush(stdout);
@@ -87,23 +115,18 @@ if (userName)
     {
     // the url for this user:
     jsonWriteString(jw, "userUrl", webDataDir(userName));
-    struct userHubs *hub, *hubList = listHubsForUser(userName);
-    // unpack hub directories into a flat list of files
     jsonWriteListStart(jw, "fileList");
-    for (hub = hubList; hub != NULL; hub = hub->next)
+    struct hubSpace *file, *fileList = listFilesForUser(userName);
+    for (file = fileList; file != NULL; file = file->next)
         {
-        struct fileInfo *file;
-        struct userFiles *uf = listFilesForUserHub(userName, hub->hubName);
-        for (file = uf->fileList; file != NULL; file = file->next)
-            {
-            jsonWriteObjectStart(jw, NULL);
-            jsonWriteString(jw, "name", file->name);
-            jsonWriteNumber(jw, "size", file->size);
-            jsonWriteString(jw, "hub", hub->hubName);
-            jsonWriteString(jw, "genome", hub->genome);
-            jsonWriteDateFromUnix(jw, "createTime", file->creationTime);
-            jsonWriteObjectEnd(jw);
-            }
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "fileName", file->fileName);
+        jsonWriteNumber(jw, "fileSize", file->fileSize);
+        jsonWriteString(jw, "fileType", file->fileType);
+        jsonWriteString(jw, "hub", "temp");
+        jsonWriteString(jw, "genome", file->db);
+        jsonWriteString(jw, "createTime", file->creationTime);
+        jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
     }

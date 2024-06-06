@@ -860,7 +860,7 @@ if (handler)
 else
     {
     jsonWriteStringf(cj->jw, "error",
-		     "cartJson: unrecognized command '%s'\"", command);
+		     "cartJson: unrecognized command '%s'", command);
     return;
     }
 }

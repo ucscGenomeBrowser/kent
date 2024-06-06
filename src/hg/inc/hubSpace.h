@@ -6,7 +6,7 @@
 #define HUBSPACE_H
 
 #include "jksql.h"
-#define HUBSPACE_NUM_COLS 9
+#define HUBSPACE_NUM_COLS 10
 
 extern char *hubSpaceCommaSepFieldNames;
 
@@ -23,6 +23,7 @@ struct hubSpace
     char *hubNameList;	/* comma separated list of hubs this file is a part of */
     char *db;	/* genome assembly associated with this file */
     char *location;	/* file system path or URL to file */
+    char *md5sum;	/* md5sum of file */
     };
 
 void hubSpaceStaticLoad(char **row, struct hubSpace *ret);
