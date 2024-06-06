@@ -9227,7 +9227,7 @@ if (!hideControls)
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput'"
                         " size='%d'>\n", multiRegionButtonTop ? 51 : 61);
 	hWrites(" ");
-	hButton("goButton", "go");
+	hButton("goButton", "Search");
 
         printSearchHelpLink();
 
