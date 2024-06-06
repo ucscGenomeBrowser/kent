@@ -77,6 +77,3 @@ if [[ "$extraLineages" != "" ]]; then
 fi
 set -o pipefail
 set -x
-
-# Clean up
-nice xz -f new*fa &
