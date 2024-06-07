@@ -864,8 +864,6 @@ termRegex rs[0-9]+
 searchPriority 12.9864
 padding 250
 
-include jaspar.ra
-
 include ../refSeqComposite.ra
 
 track ncbiRefSeqSelect

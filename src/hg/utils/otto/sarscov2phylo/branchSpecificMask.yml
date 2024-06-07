@@ -107,12 +107,14 @@ BA.2.86:
     # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606#issuecomment-1801095482
     # @aviczhl2 pointed out some recurring reversions:
     # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1072
-    representative: OY747147.1
+    representative: Denmark/DCGC-661170/2023
     ranges: [ [ 21294, 21296 ],  # run of muts, makes a mini-JN.1
               [ 21539, 21542 ],  # run of muts, France/...-HCL, makes a mini-JN.1
               [ 21765, 21770 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/606
               [ 21610, 21624 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1347
-              [ 21625, 21631 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
+              [ 21625, 21626 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
+                                 # 21627 taken back out 2024-05-26 by email request from FedeGueli
+              [ 21628, 21631 ],  # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
               [ 22194, 22196 ] ] # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1380
     sites: [ 58, 59,   # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1089
              13427,    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/1313

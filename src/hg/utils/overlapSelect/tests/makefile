@@ -342,7 +342,7 @@ bed_over_NM_015110bedIdOutput: mkout
 # -statsOutput tests
 ###
 statsOutputTests: psl_over_NM_015110gpStatsOutput psl_over_NM_001206bedStatsOutput \
-	bed_over_NM_015110bedStatsOutput
+	bed_over_NM_015110bedStatsOutput bed_over_NM_015110bedStatsTsvOutput
 
 # select psls overlaping NM_015110 with gp and statsOutput
 psl_over_NM_015110gpStatsOutput: mkout
@@ -357,6 +357,11 @@ psl_over_NM_001206bedStatsOutput: mkout
 # select beds overlaping NM_015110 with bed and statsOutput
 bed_over_NM_015110bedStatsOutput: mkout
 	${overlapSelect} -statsOutput input/NM_015110.bed input/mrna.bed output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+# with TSV
+bed_over_NM_015110bedStatsTsvOutput: mkout
+	${overlapSelect} -statsOutput -tsv input/NM_015110.bed input/mrna.bed output/$@.stats
 	${DIFF} expected/$@.stats output/$@.stats
 
 ###

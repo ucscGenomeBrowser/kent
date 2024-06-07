@@ -108,13 +108,19 @@ while (my $asmId = <FH>) {
   chomp $orgName;
   if ($orgName =~ m/kinetoplastids|firmicutes|proteobacteria|high G|enterobacteria|agent of/) {
     $orgName = $sciName;
-  } elsif ($orgName =~ m/bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes|flies|mosquitos|bees|moths|sponges/) {
+  } elsif ($orgName =~ m/bugs|crustaceans|nematodes|flatworm|ascomycete|basidiomycete|budding|microsporidian|smut|fungi|eukaryotes|flies|beetles|mosquitos|bees|moths|sponges|^mites|ticks|^comb|jellies|jellyfishes|chitons|bivalves/) {
     my ($order, undef) = split('\s', $orgName, 2);
     $order = "budding yeast" if ($order =~ m/budding/);
     $order = "smut fungi" if ($order =~ m/smut/);
     $order = "ascomycetes" if ($order =~ m/ascomycete/);
     $order = "crustacean" if ($order =~ m/crustaceans/);
     $order = "mosquito" if ($order =~ m/mosquitos/);
+    $order = "mite/tick" if ($order =~ m/mites/);
+    $order = "comb jelly" if ($order =~ m/comb/);
+    $order = "jellyfish" if ($order =~ m/jellyfishes/);
+    $order = "chiton" if ($order =~ m/chitons/);
+    $order = "bivalve" if ($order =~ m/bivalves/);
+    $order = "beetle" if ($order =~ m/beetles/);
     $order = "bee" if ($order =~ m/bees/);
     $order = "moth" if ($order =~ m/moths/);
     $order = "sponge" if ($order =~ m/sponges/);

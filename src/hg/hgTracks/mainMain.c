@@ -70,7 +70,7 @@ else
     }
 
 // TODO: better place for this ?
-puts("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n");
+puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css\">\n");
 
 if (measureTiming)
     measureTime("Time to write and close cart");

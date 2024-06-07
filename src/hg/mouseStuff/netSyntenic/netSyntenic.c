@@ -310,6 +310,8 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 netSyntenic(argv[1], argv[2]);
-printMem();
+#ifdef __linux__
+    printMem();
+#endif
 return 0;
 }

@@ -1506,7 +1506,10 @@ dyStringFree(&dyMo);
 static void makeNsSingleTreeButton(struct tempName *tn)
 /* Make a button to view single subtree (with all uploaded samples) in Nextstrain. */
 {
-makeNextstrainButton("viewNextstrainSingleSubtree", tn,
+static int serial = 0;
+char buttonId[256];
+safef(buttonId, sizeof buttonId, "viewNextstrainSingleSubtree%d", serial++);
+makeNextstrainButton(buttonId, tn,
                      "view downsampled global tree in Nextstrain",
                      "view one subtree that includes all of your uploaded sequences plus "
                      SINGLE_SUBTREE_SIZE" randomly selected sequences from the global phylogenetic "
@@ -1629,7 +1632,7 @@ if (nextstrainHost() && microbeTraceHost())
         }
     puts("</td>");
     }
-else if (nextstrainHost())
+else if (nextstrainHost() && slCount(subtreeInfoList) <= MAX_SUBTREE_BUTTONS)
     {
     // Nextstrain only: do the old row of subtree buttons
     puts("<td>");
@@ -3468,9 +3471,6 @@ if (results && results->singleSubtreeInfo)
     treeToAuspiceJson(results->singleSubtreeInfo, org, refName, geneInfoList, gSeqWin, sampleMetadata,
                       sampleUrls, results->samplePlacements, singleSubtreeJsonTn->forCgi, source);
     reportTiming(&startTime, "make Auspice JSON");
-    struct subtreeInfo *subtreeInfoForButtons = results->subtreeInfoList;
-    if (subtreeCount > MAX_SUBTREE_BUTTONS)
-        subtreeInfoForButtons = NULL;
     char *dbSetting = phyloPlaceRefSetting(org, refName, "db");
     if (dbSetting)
         db = connectIfHub(cart, dbSetting);
@@ -3481,7 +3481,7 @@ if (results && results->singleSubtreeInfo)
         printf("<form action='%s' name='resultsForm_%s' method=%s>\n\n",
                hgTracksName(), db, cartUsualString(cart, "formMethod", "POST"));
 
-    makeButtonRow(singleSubtreeJsonTn, jsonTns, subtreeInfoForButtons, subtreeSize, isFasta,
+    makeButtonRow(singleSubtreeJsonTn, jsonTns, results->subtreeInfoList, subtreeSize, isFasta,
                   canDoCustomTracks);
     printf("<p>If you have metadata you wish to display, click a 'view subtree in "
            "Nextstrain' button, and then you can drag on a CSV file to "

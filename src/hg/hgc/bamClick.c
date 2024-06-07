@@ -25,11 +25,49 @@ struct bamTrackData
     boolean foundIt;
     };
 
+#include <htslib/sam.h>
+
+static void getClippedBases(const bam1_t *bam, int clippedBases[4]) 
+/* Function to get the number of soft and hard clipped bases at the start and end of a read,
+ the array will contain [startHardCnt, startSoftCnt, endSoftCnt, endHardCnt] */
+{
+uint32_t *cigar = bam_get_cigar(bam);
+int nCigar = bam->core.n_cigar;
+for (int i = 0; i < 4; i++)
+    clippedBases[i] = 0;
+
+int iCigar = 0;
+
+// start
+if ((iCigar < nCigar) && (bam_cigar_op(cigar[iCigar]) == BAM_CHARD_CLIP))
+    {
+    clippedBases[0] += bam_cigar_oplen(cigar[iCigar]);
+    iCigar++;
+    }
+if ((iCigar < nCigar) && (bam_cigar_op(cigar[iCigar]) == BAM_CSOFT_CLIP))
+    {
+    clippedBases[1] += bam_cigar_oplen(cigar[iCigar]);
+    }
+
+// end
+iCigar = nCigar - 1;
+if ((iCigar >= 0) && (bam_cigar_op(cigar[iCigar]) == BAM_CHARD_CLIP))
+    {
+    clippedBases[3] += bam_cigar_oplen(cigar[iCigar]);
+    iCigar--;
+    }
+if ((iCigar >= 0) && (bam_cigar_op(cigar[iCigar]) == BAM_CSOFT_CLIP))
+    {
+    clippedBases[2] += bam_cigar_oplen(cigar[iCigar]);
+    }
+}
+
 /* Maybe make this an option someday -- for now, I find it too confusing to deal with
  * CIGAR that is anchored to positive strand while showing rc'd sequence.  I think
  * to do it right, we would need to reverse the CIGAR string for display. */
 static boolean useStrand = FALSE;
 static boolean skipQualityScore = FALSE;
+
 static void singleBamDetails(const bam1_t *bam)
 /* Print out the properties of this alignment. */
 {
@@ -45,10 +83,16 @@ if (core->n_cigar > 50)
     printf("<B>CIGAR string: </B> Cannot show long CIGAR string, more than 50 operations. Contact us if you need to see the full CIGAR string here.<BR>\n");
 else
     {
-    printf("<B>CIGAR string: </B><tt>%s</tt> (", bamGetCigar(bam));
-    bamShowCigarEnglish(bam);
-    printf(")<BR>\n");
+    printf("<B>CIGAR string: </B><tt>%s</tt>", bamGetCigar(bam));
+    //bamShowCigarEnglish(bam);
+    printf("<BR>\n");
     }
+
+int clippedBases[4];
+getClippedBases(bam, clippedBases);
+printf("<B>Start clipping:</B> hard: %d  soft: %d</BR>\n", clippedBases[0], clippedBases[1]);
+printf("<B>End clipping:</B> hard: %d  soft: %d</BR> \n", clippedBases[3], clippedBases[2]);
+
 printf("<B>Tags:</B>");
 bamShowTags(bam);
 puts("<BR>");
@@ -61,27 +105,40 @@ if (bamIsRc(bam))
 puts("<BR>");
 struct dnaSeq *genoSeq = hChromSeq(database, seqName, tStart, tEnd);
 char *qSeq = bamGetQuerySequence(bam, FALSE);
-if (isNotEmpty(qSeq) && !sameString(qSeq, "*"))
+if (core->l_qseq > 5000)
+    printf("<B>Alignment not shown, very long sequence</B><BR>\n");
+else
     {
-    char *qSeq = NULL;
-    struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart, useStrand, &qSeq);
-    printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
-	   seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
-    ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
-		     FALSE);
+    if (isNotEmpty(qSeq) && !sameString(qSeq, "*"))
+        {
+        char *qSeq = NULL;
+        struct ffAli *ffa = bamToFfAli(bam, genoSeq, tStart, useStrand, &qSeq);
+        printf("<B>Alignment of %s to %s:%d-%d%s:</B><BR>\n", itemName,
+               seqName, tStart+1, tEnd, (isRc ? " (reverse complemented)" : ""));
+        ffShowSideBySide(stdout, ffa, qSeq, 0, genoSeq->dna, tStart, tLength, 0, tLength, 8, isRc,
+                         FALSE);
+        }
     }
+
 if (!skipQualityScore && core->l_qseq > 0)
     {
-    printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
-    UBYTE *quals = bamGetQueryQuals(bam, useStrand);
-    int i;
-    for (i = 0;  i < core->l_qseq;  i++)
+    if (core->l_qseq > 5000)
         {
-        if (i > 0 && (i % 24) == 0)
-	    printf("</TR>\n<TR>");
-        printf("<TD>%c<BR>%d</TD>", qSeq[i], quals[i]);
+        printf("<B>Sequence too long to show quality scores</B><BR>\n");
+        } 
+    else
+        {
+        printf("<B>Sequence quality scores:</B><BR>\n<TT><TABLE><TR>\n");
+        UBYTE *quals = bamGetQueryQuals(bam, useStrand);
+        int i;
+        for (i = 0;  i < core->l_qseq;  i++)
+            {
+            if (i > 0 && (i % 24) == 0)
+                printf("</TR>\n<TR>");
+            printf("<TD>%c<BR>%d</TD>", qSeq[i], quals[i]);
+            }
+        printf("</TR></TABLE></TT>\n");
         }
-    printf("</TR></TABLE></TT>\n");
     }
 }
 
