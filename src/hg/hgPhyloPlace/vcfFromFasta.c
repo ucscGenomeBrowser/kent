@@ -726,7 +726,7 @@ return gtCount;
 
 static void parseNextcladeSubstitutions(char *substStr, struct seqInfo *si, struct dnaSeq *ref,
                                         struct slName **maskSites, int gtIx, int gtCount,
-                                        struct snvInfo **snvsByPos)
+                                        struct snvInfo **snvsByPos, boolean *positionsCalled)
 /* Add genotypes for substitutions; also build up si fields for substs and masked substs */
 {
 int substCount = chopByChar(substStr, ',', NULL, 0);
@@ -739,6 +739,7 @@ for (i = 0;  i < substCount; i++)
     int t = atol(subst+1) - 1;
     char altBase = subst[strlen(subst)-1];
     int gt = addCall(snvsByPos, t, ref->dna[t], tolower(altBase), gtIx, gtCount);
+    positionsCalled[t] = TRUE;
     if (gt > 0)
         {
         struct singleNucChange *snc = sncNew(t, ref->dna[t], '\0', altBase);
@@ -755,7 +756,8 @@ for (i = 0;  i < substCount; i++)
 }
 
 static void parseNextcladeMissing(char *nRangeStr, struct dnaSeq *ref, struct slName **maskSites,
-                                  int gtIx, int gtCount, struct snvInfo **snvsByPos)
+                                  int gtIx, int gtCount, struct snvInfo **snvsByPos,
+                                  boolean *positionsCalled)
 /*  Add no-calls to snvsByPos for ranges of N bases */
 {
 int nRangeCount = chopByChar(nRangeStr, ',', NULL, 0);
@@ -773,12 +775,16 @@ for (i = 0;  i < nRangeCount;  i++)
     int t;
     for (t = nStart;  t < nEnd;  t++)
         if (!maskSites[t])
+            {
             addCall(snvsByPos, t, ref->dna[t], 'n', gtIx, gtCount);
+            positionsCalled[t] = TRUE;
+            }
     }
 }
 
 static void parseNextcladeAmbig(char *ambigStr, struct dnaSeq *ref,
-                                int gtIx, int gtCount, struct snvInfo **snvsByPos)
+                                int gtIx, int gtCount, struct snvInfo **snvsByPos,
+                                boolean *positionsCalled)
 /*  Add calls to snvsByPos for non-N ambiguous bases */
 {
 int ambigCount = chopByChar(ambigStr, ',', NULL, 0);
@@ -798,7 +804,10 @@ for (i = 0;  i < ambigCount;  i++)
         aEnd = atol(p+1);
     int t;
     for (t = aStart;  t < aEnd;  t++)
+        {
         addCall(snvsByPos, t, ref->dna[t], ambig[0], gtIx, gtCount);
+        positionsCalled[t] = TRUE;
+        }
     }
 }
 
@@ -867,6 +876,18 @@ si->insBases = insBases;
 si->insRanges = dyStringCannibalize(&dy);
 }
 
+static void addRefCalls(struct snvInfo **snvsByPos, boolean *positionsCalled, struct dnaSeq *ref,
+                        int gtIx, int gtCount)
+/* Add call for ref allele at any base not already called otherwise. */
+{
+int i;
+for (i = 0;  i < ref->size;  i++)
+    {
+    if (! positionsCalled[i])
+        addCall(snvsByPos, i, ref->dna[i], ref->dna[i], gtIx, gtCount);
+    }
+}
+
 static struct snvInfo **parseNextcladeRun(char *nextcladeOut, struct seqInfo **pFilteredSeqs,
                                           struct dnaSeq *ref, struct slName **maskSites,
                                           struct slPair **retFailedSeqs)
@@ -894,9 +915,12 @@ int ambigIx = stringArrayIx("nonACGTNs", row,  headerColCount);
 if (seqNameIx == -1 || alStartIx == -1 || alEndIx == -1 || substIx == -1 || delIx == -1 ||
     insIx == -1 || nIx == -1 || ambigIx == -1)
     errAbort("nextclade run output header line does not contain all expected columns");
+boolean *positionsCalled = NULL;
+AllocArray(positionsCalled, ref->size);
 int colCount = 0;
 while ((colCount = lineFileChopTab(lf, row)) > 0)
     {
+    zeroBytes(positionsCalled, ref->size * sizeof positionsCalled[0]);
     char *seqName = row[seqNameIx];
     // Nextclade still includes unaligned sequences in its output, just with empty alignment columns
     if (isEmpty(row[alStartIx]))
@@ -909,20 +933,28 @@ while ((colCount = lineFileChopTab(lf, row)) > 0)
     for (t = 0;  t < tStart;  t++)
         {
         if (!maskSites[t])
+            {
             addCall(snvsByPos, t, ref->dna[t], 'n', gtIx, gtCount);
+            positionsCalled[t] = TRUE;
+            }
         }
     int tEnd = atol(row[alEndIx]);
     // Add no-calls for unaligned bases after alignmentEnd
     for (t = tEnd;  t < ref->size;  t++)
         {
         if (!maskSites[t])
+            {
             addCall(snvsByPos, t, ref->dna[t], 'n', gtIx, gtCount);
+            positionsCalled[t] = TRUE;
+            }
         }
-    parseNextcladeSubstitutions(row[substIx], si, ref, maskSites, gtIx, gtCount, snvsByPos);
-    parseNextcladeMissing(row[nIx], ref, maskSites, gtIx, gtCount, snvsByPos);
-    parseNextcladeAmbig(row[ambigIx], ref, gtIx, gtCount, snvsByPos);
+    parseNextcladeSubstitutions(row[substIx], si, ref, maskSites, gtIx, gtCount, snvsByPos,
+                                positionsCalled);
+    parseNextcladeMissing(row[nIx], ref, maskSites, gtIx, gtCount, snvsByPos, positionsCalled);
+    parseNextcladeAmbig(row[ambigIx], ref, gtIx, gtCount, snvsByPos, positionsCalled);
     parseNextcladeDeletions(row[delIx], si, ref);
     parseNextcladeInsertions(row[insIx], si, ref);
+    addRefCalls(snvsByPos, positionsCalled, ref, gtIx, gtCount);
     si->basesAligned = tEnd - tStart - si->delBases - si->insBases;
     si->tStart = tStart;
     si->tEnd = tEnd;

@@ -128,6 +128,10 @@ sub checkOptions {
 # * step: trf [smallClusterHub or workhorse depending on genome size]
 sub doCluster {
   my $runDir = "$buildDir/run.cluster";
+  if (-e "$runDir/jobList" && ! $opt_debug) {
+    die "doCluster looks like this is running or was run before and failed\n" .
+      "check $runDir.\n";
+  }
   &HgAutomate::mustMkdir($runDir);
 
   my $paraHub = $opt_smallClusterHub ? $opt_smallClusterHub :
