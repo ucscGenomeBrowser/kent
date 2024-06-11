@@ -77,7 +77,7 @@ shortLabel Primer3Plus
 longLabel Updated interface of the popular primer designer. Primers flank the nucleotide in the center of the screen.
 url https://dev.primer3plus.com/primer3plus/api/v1/upload
 email server@untergasser.de <mailto:server@untergasser.de>
-maxSize 10000
+maxSize 30000
 param P3P_GB_RETURN_PATH $returnUrl
 param P3P_GB_DB $db
 param P3P_GB_POSITION $position
