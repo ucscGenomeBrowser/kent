@@ -1184,7 +1184,7 @@ if (bytesWritten == dyMessage->stringSize)
             if (startsWith("Tree", line) && endsWith(line, "not found"))
                 {
                 // Tell the server to reload the latest protobufs
-                serverReloadProtobufs(getUsherServerMfifoPath(org), treeChoices);
+                serverReloadProtobufs(org, treeChoices);
                 // Reloading multiple trees takes a while, so fall back on standalone usher(-sampled)
                 serverError = TRUE;
                 // Continue reading output from server.

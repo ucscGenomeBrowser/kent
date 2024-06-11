@@ -188,6 +188,7 @@ https://doi.org/10.1186/s13059-023-03057-x</a>
 END
 
 if ($vgpIndex) {
+  if ( 1 == 0 ) {
   print <<"END";
 <h3>Listings:</h3>&nbsp;&nbsp;<b>(from RepeatModeler masking)</b>
 <p>
@@ -200,6 +201,7 @@ if ($vgpIndex) {
 </ul>
 </p>
 END
+  }
 }
 
 print <<"END";

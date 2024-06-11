@@ -2714,3 +2714,90 @@ real	813m22.700s
 user	0m3.066s
 sys	0m3.274s
 ##############################################################################
+
+# LASTZ Sheep OviAri4 vs. goat GCF_001704415.2
+#    (DONE - 2024-06-07 - lrnassar)
+
+    mkdir /hive/data/genomes/oviAri4/bed/lastzGCF_001704415.2.2024-06-07
+    cd /hive/data/genomes/oviAri4/bed/lastzGCF_001704415.2.2024-06-07
+
+    printf '# goat GCF_001704415.2 vs. Sheep OviAri4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Sheep  oviAri4
+SEQ1_DIR=/hive/data/genomes/oviAri4/oviAri4.2bit
+SEQ1_LEN=/hive/data/genomes/oviAri4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: goat 2016-08-24 GCF_001704415.2_ARS1.2
+SEQ2_DIR=/hive/data/genomes/asmHubs/GCF/001/704/415/GCF_001704415.2/GCF_001704415.2.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/GCF/001/704/415/GCF_001704415.2/GCF_001704415.2.chrom.sizes.txt
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/oviAri4/bed/lastzGCF_001704415.2.2024-06-07
+TMPDIR=/dev/shm
+
+' > DEF
+
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -verbose=2 `pwd`/DEF -syntenicNet \
+       -qAsmId GCF_001704415.2_ARS1.2 -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    grep -w real do.log | sed -e 's/^/    # /;'
+    # real      1322m31.500s
+
+    sed -e 's/^/    # /;' fb.oviAri4.chainGCF_001704415.2Link.txt
+    # 2522278589 bases of 2615516299 (96.435%) in intersection
+    sed -e 's/^/    # /;' fb.oviAri4.chainSynGCF_001704415.2Link.txt
+    # 2482402802 bases of 2615516299 (94.911%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+       \
+      -query2Bit="/hive/data/genomes/asmHubs/GCF/001/704/415/GCF_001704415.2/GCF_001704415.2.2bit" \
+-querySizes="/hive/data/genomes/asmHubs/GCF/001/704/415/GCF_001704415.2/GCF_001704415.2.chrom.sizes.txt" \
+        oviAri4 GCF_001704415.2) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      199m30.609s
+
+    sed -e 's/^/    # /;' fb.oviAri4.chainRBest.GCF_001704415.2.txt
+    # 2477685011 bases of 2615516299 (94.730%) in intersection
+
+    ### and for the swap
+
+    cd /hive/data/genomes/asmHubs/allBuild/GCF/001/704/415/GCF_001704415.2_ARS1.2/trackData/blastz.oviAri4.swap
+
+   time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -trackHub -noDbNameCheck -swap -verbose=2 \
+   -qAsmId GCF_001704415.2_ARS1.2 /hive/data/genomes/oviAri4/bed/lastzGCF_001704415.2.2024-06-07/DEF -swapDir=`pwd` \
+  -syntenicNet -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+    -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+
+    grep -w real swap.log | sed -e 's/^/    # /;'
+    # real      1031m1.896s
+
+    sed -e 's/^/    # /;' fb.GCF_001704415.2.chainOviAri4Link.txt
+    # 2564341511 bases of 2922617086 (87.741%) in intersection
+    sed -e 's/^/    # /;' fb.GCF_001704415.2.chainSynOviAri4Link.txt
+    # 2514390106 bases of 2922617086 (86.032%) in intersection
+\    time (~/kent/src/hg/utils/automation/doRecipBest.pl -trackHub -load -workhorse=hgwdev -buildDir=`pwd` \
+    \
+   -target2bit="/hive/data/genomes/asmHubs/GCF/001/704/415/GCF_001704415.2/GCF_001704415.2.2bit" \
+-targetSizes="/hive/data/genomes/asmHubs/GCF/001/704/415/GCF_001704415.2/GCF_001704415.2.chrom.sizes.txt" \
+   GCF_001704415.2 oviAri4) > rbest.log 2>&1
+
+    grep -w real rbest.log | sed -e 's/^/    # /;'
+    # real      180m47.478s
+
+    sed -e 's/^/    # /;' fb.GCF_001704415.2.chainRBest.OviAri4.txt
+    # 2474132806 bases of 2922617086 (84.655%) in intersection
+
+##############################################################################
+### elapsed time: 45h 34m 01s
+
+Sun Jun  9 08:32:19 PDT 2024
+##################################################################
+
+

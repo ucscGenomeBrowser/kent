@@ -210,3 +210,6 @@ $scriptDir/extractPublicTree.sh $today $prevDate
 
 set +o pipefail
 grep skipping annotate* | cat
+
+# Clean up
+nice xz -f new*fa &

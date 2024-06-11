@@ -3781,7 +3781,7 @@ compositeTrack on
 
 track lovdComp
 shortLabel LOVD Variants
-longLabel Leiden Open Variation Database Public Variants
+longLabel LOVD: Leiden Open Variation Database Public Variants
 group phenDis
 visibility hide
 compositeTrack on
@@ -3791,7 +3791,7 @@ html lovdComp
 
         track lovdShort
         shortLabel LOVD Variants < 50 bp + ins
-        longLabel Leiden Open Variation Database, short < 50 bp variants and insertions of any length
+        longLabel LOVD: Leiden Open Variation Database, short < 50 bp variants and insertions of any length
         group phenDis
         visibility hide
         urls id="https://varcache.lovd.nl/redirect/$$"
@@ -3802,7 +3802,7 @@ html lovdComp
         track lovdLong
         type bigBed 9 +
         shortLabel LOVD Variants >= 50 bp
-        longLabel Leiden Open Variation Database Public Variants, long >= 50 bp variants
+        longLabel LOVD: Leiden Open Variation Database Public Variants, long >= 50 bp variants
         group phenDis
         visibility hide
         urls id="https://varcache.lovd.nl/redirect/$$"
@@ -5600,22 +5600,10 @@ termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
 
-include covidHgiGwas.ra
-
-track covidMuts
-type bigBed 12 + 
-shortLabel COVID Rare Harmful Var
-longLabel Rare variants underlying COVID-19 severity and susceptibility from the COVID Human Genetics Effort
-mouseOver $gene $name $rsId Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
-labelFields gene, name
-defaultLabelFields gene, name
-noScoreFilter on
-priority 2.2
-group phenDis
-color 179,0,0
-visibility hide
-bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
-multiRegionsBedUrl /gbdb/$D/covidMuts/covidMuts.regions.bed
+include covidHgiGwas.ra beta,public
+include covidHgiGwas.alpha.ra alpha
+include covidTracks.ra beta,public
+include covidTracks.alpha.ra alpha
  
 track orphadata
 bigDataUrl /gbdb/$D/bbi/orphanet/orphadata.bb
