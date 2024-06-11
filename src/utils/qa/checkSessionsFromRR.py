@@ -93,9 +93,9 @@ def checkSessionhgw0(session):
     check_hgTracks='// END hgTracks'
     
     try:
-         checkLoad=bash("curl -Ls '"+session+"'")
+         checkLoad=bash("curl -Ls '%s'" % session)
          try:
-              checkLoad=bash("curl -Ls '"+session+"'")
+              checkLoad=bash("curl -Ls '%s'" % session)
               checkLoad=str(checkLoad)[1:-1]
               #If the string to check when hgTracks finishes loading is present then save the session to a variable
               if check_hgTracks in checkLoad:
@@ -106,9 +106,9 @@ def checkSessionhgw0(session):
                   session_path=myDir+session_dir
                   # Uncomment the line below to actually remove the session files
                   #os.system('rm '+session_path)
-         except subprocess.CalledProcessError as e:
+         except subprocess.CalledProcessError:
              sessionLoads='no'
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         sessionLoads='no'
 
     return sessionLoads
@@ -131,7 +131,7 @@ def checkSession(session):
     # List to append session load error
     error_list=[]
     try:
-        checkLoad=bash("curl -Ls '"+session+"'")
+        checkLoad=bash("curl -Ls '%s'" % session)
         checkLoad=str(checkLoad)[1:-1]
         
         #If session contains strings to check if session loaded, set a variable that session loaded
@@ -156,12 +156,12 @@ def checkSession(session):
     #If an error is present in the error list, save the session URL to variable 
     if 'error' in error_list:
         sessionLoad=session
-    else: #If no error is present in the error list, set variable that session loaeded
+    else: #If no error is present in the error list, set variable that session loaded
         sessionLoad='loads'
         session_dir=session.split('genecats.gi.ucsc.edu')[1]
         session_path=myDir+session_dir
         #Uncomment the line below to actually remove the session files
-        #os.system('rm '+session_path)
+        os.system('rm '+session_path)
    
     return sessionLoad
 
@@ -180,10 +180,6 @@ def output_if_file_exists(file_path):
             print()
             print(file.read())
         print("\nErrors that output 'hui::wiggleScaleStringToEnum() - Unknown option' can be ignored.")
-
-#Remove session contents files
-os.system("rm /hive/users/qateam/sessionsFromRR/*")
-
 
 year=datetime.now().strftime("%Y-%m-"+"01")
 
@@ -206,7 +202,6 @@ url_txt='/usr/local/apache/htdocs-genecats/qa/qaCrons/sessionsFromRR/crashedSess
 #Directory to save files for the script 
 myDir='/usr/local/apache/htdocs-genecats'
 
-#num_lines=10000 # Number of random lines to select
 num_lines=10000 # Number of random lines to select
 
 
@@ -216,6 +211,9 @@ random_lines = random_session_lines(monthly_hgcentral_dump, num_lines)
 
 def main(random_lines, server, count, hgw0, hgwbeta, hgwdev, url_txt, myDir):
     """ Gets a number of random of sessions from the RR, if sessions crash on hgwdev/hgwbeta then outputs the crash sessions"""
+    #Remove session contents files
+    os.system("rm /hive/users/qateam/sessionsFromRR/*")
+
     for line in random_lines:
         count=count +1
         session_contents=parseSessions(line)
@@ -240,7 +238,8 @@ def main(random_lines, server, count, hgw0, hgwbeta, hgwdev, url_txt, myDir):
             makeURL(dev_session, url_txt, count)
     output_if_file_exists(url_txt)
 
-main(random_lines, server, count, hgw0, hgwbeta, hgwdev, url_txt, myDir)
+if __name__ == "__main__":
+    sys.exit(main(random_lines, server, count, hgw0, hgwbeta, hgwdev, url_txt, myDir))
 
 # Program Output (Commented out)
 #This cronjob outputs sessions that crash on hgwbeta or hgwdev. The session URLs have '#' in ...session_settings_#.txt which is the random number session tested
