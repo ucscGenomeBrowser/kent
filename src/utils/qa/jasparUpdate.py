@@ -1,4 +1,14 @@
 #!/usr/bin/python3
+"""
+Program to automate the update of the JASPAR tracks for mm10, mm39, hg19, and hg38.
+Builds shared trackDb stanza based on hg38's trackDb and writes to a file (jaspar.ra).
+Downloads all files to the current directory (bigBeds and HTML).
+Creates a file with the steps to complete the update (updateSteps.txt).
+
+Assumptions:
+   * Shared HTML, PFMs, and bigBeds are all obtained from:
+     https://frigg.uio.no/JASPAR/JASPAR_genome_browser_tracks/current/
+"""
 import argparse
 import sys
 import subprocess
@@ -7,6 +17,8 @@ from zipfile import ZipFile
 from urllib.request import urlopen
 from ucscGb.qa.tables import trackUtils
 from ucscGb.qa import qaUtils
+
+
 
 def bash(cmd):
     """Run the cmd in bash subprocess"""
@@ -127,6 +139,24 @@ def buildTrackDb(db):
 
     return newTrackDb
 
+def get_options():
+    '''
+    Parses the command line options
+    '''
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter,
+                                     usage="%(prog)s -e")
+    parser.add_argument('-e', '--execute', action='store_true',
+                        help='Flag to run the program')
+    if len(sys.argv)==1:  # if no arguments are given, print the usage statment
+        parser.print_help(sys.stderr)
+        sys.exit(1)
+
+    options =  parser.parse_args()
+
+    if not options.execute: # if you do not specify the execute flag, print the usage statment
+        parser.print_help(sys.stderr)
+
 def main(args):
     '''
     Program to automate the update of the JASPAR tracks for mm10, mm39, hg19, and hg38.
@@ -135,6 +165,9 @@ def main(args):
        * Shared HTML, PFMs, and bigBeds are all obtained from:
          https://frigg.uio.no/JASPAR/JASPAR_genome_browser_tracks/current/
     '''
+    
+    get_options() # Parse the user's command line arguenments. 
+
     # Setting some definitions
     assemblies= ["hg19", "hg38", "mm10", "mm39"]
     # Any broken links in the script can be fixed below.
