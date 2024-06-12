@@ -2,6 +2,7 @@
 #include "dataApi.h"
 #include "botDelay.h"
 #include "jsHelper.h"
+#include "srcVersion.h"
 
 /*
 +------------------+------------------+------+-----+---------+-------+
@@ -1450,7 +1451,7 @@ hPrintf("<h3>Documentation: <a href='../../goldenPath/help/api.html'>API definit
 if (debug)
     showCartDump();
 
-hPrintf("<h2>Explore hub or database assemblies and tracks</h2>\n");
+hPrintf("<h2>Explore hub or database assemblies and tracks (v%s)</h2>\n", SRC_VERSION);
 
 selectionForm();
 
