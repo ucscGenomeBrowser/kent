@@ -396,6 +396,7 @@ if (errCatchStart(errCatch))
             || startsWithWord("bigPsl", type)
             || startsWithWord("bigChain", type)
             || startsWithWord("bigMaf", type)
+            || startsWithWord("bigRmsk", type)
             || startsWithWord("bigBarChart", type)
             || startsWithWord("bigInteract", type))
         {
@@ -483,7 +484,7 @@ return retVal;
 static void hubSubTracks(struct trackHub *hub, char *db, struct trackDb *tdb,
     struct hash *countTracks,  long chromCount, long itemCount,
     char *chromName, unsigned chromSize, char *genome, char *errorString)
-/* tdb has subtracks, show only subTracks, no details */
+/* tdb has subtracks, show only subTracks, no details, this is RECURSIVE */
 {
 hPrintf("    <li><ul>\n");
 if (debug)
@@ -584,6 +585,7 @@ if (tdb->subtracks)
     struct trackDb *tdbEl = NULL;
     if (debug)
 	hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
+
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
         hPrintf("<li>subtrack: %s of parent: %s : type: '%s' (TBD: sample data)</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
@@ -832,9 +834,7 @@ while ((hel = hashNext(&hc)) != NULL)
 	)
 	continue;	// already output in header
     if (sameWord("trackDb", hel->name))	/* examine the trackDb structure */
-	{
 	hubTrackList(hub, tdb, genome);
-        }
     else
 	hPrintf("    <li><b>%s</b>: %s</li>\n", hel->name, (char *)hel->val);
     if (timeOutReached())
@@ -916,6 +916,8 @@ for ( ; genome; genome = genome->next )
     hubInfo("defaultPos", genome->defaultPos);
     hubInfo("trackDbFile", genome->trackDbFile);
     hubAssemblySettings(hubTop, genome);
+    struct trackDb *tdbList = obtainTdb(genome, NULL);
+    hubTrackList(hubTop, tdbList, genome);
     if (measureTiming)
 	{
 	long thisTime = clock1000();
@@ -1409,6 +1411,8 @@ if (debug)
     hPrintf("<li>urlDropDown: '%s'</li>\n", urlDropDown);
     hPrintf("<li>ucscDb: '%s'</li>\n", ucscDb);
     hPrintf("<li>urlInput: '%s'</li>\n", urlInput);
+    hPrintf("<li>trackLeavesOnly: '%s'</li>\n", trackLeavesOnly ? "TRUE" : "FALSE");
+    hPrintf("<li>jsonOutputArrays: '%s'</li>\n", jsonOutputArrays ? "TRUE" : "FALSE");
     hPrintf("</ul>\n");
     }
 if (isEmpty(otherHubUrl))
@@ -1498,7 +1502,7 @@ for ( hel = hashNext(&cookie); hel; hel = hashNext(&cookie))
 char *trackLeaves = cgiOptionalString("trackLeavesOnly");
 if (isNotEmpty(trackLeaves))
     {
-    if (sameString("1", trackLeaves))
+    if (SETTING_IS_ON(trackLeaves))
 	trackLeavesOnly = TRUE;
     else if (sameString("0", trackLeaves))
 	trackLeavesOnly = FALSE;
@@ -1509,7 +1513,7 @@ if (isNotEmpty(trackLeaves))
 char *jsonArray = cgiOptionalString("jsonOutputArrays");
 if (isNotEmpty(jsonArray))
     {
-    if (sameString("1", jsonArray))
+    if (SETTING_IS_ON(jsonArray))
 	jsonOutputArrays = TRUE;
     else if (sameString("0", jsonArray))
 	jsonOutputArrays = FALSE;
