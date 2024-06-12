@@ -133,10 +133,12 @@ el = newSlName("bigInteract");
 slAddHead(&supportedTypes, el);
 el = newSlName("clonePos");
 slAddHead(&supportedTypes, el);
+el = newSlName("bigDbSnp");
+slAddHead(&supportedTypes, el);
 el = newSlName("bigMaf");
-// slAddHead(&supportedTypes, el);
-// el = newSlName("bigChain");
-// slAddHead(&supportedTypes, el);
+slAddHead(&supportedTypes, el);
+el = newSlName("bigChain");
+slAddHead(&supportedTypes, el);
 slNameSort(&supportedTypes);
 }	/*	static void initSupportedTypes()	*/
 
@@ -394,8 +396,9 @@ if (errCatchStart(errCatch))
             || startsWithWord("bigBed", type)
             || startsWithWord("bigGenePred", type)
             || startsWithWord("bigPsl", type)
-            || startsWithWord("bigChain", type)
+            || startsWithWord("bigDbSnp", type)
             || startsWithWord("bigMaf", type)
+            || startsWithWord("bigChain", type)
             || startsWithWord("bigRmsk", type)
             || startsWithWord("bigBarChart", type)
             || startsWithWord("bigInteract", type))
@@ -539,6 +542,12 @@ if (debug)
     hPrintf("    <li>subtracks for '%s' db: '%s'</li>\n", tdb->track, db);
 if (tdb->subtracks)
     {
+    struct dyString *extraDyFlags = dyStringNew(128);
+    if (debug)
+	dyStringAppend(extraDyFlags, ";debug=1");
+    if (jsonOutputArrays)
+	dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
+    char *extraFlags = dyStringCannibalize(&extraDyFlags);
     struct trackDb *tdbEl = NULL;
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
@@ -549,7 +558,14 @@ if (tdb->subtracks)
 	    if (isSupportedType(tdbEl->type))
 		sampleUrl(hub, db, tdbEl, errorString);
 	    else
-		hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+                if (hub && hub->url)
+		    hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s, genome %s, url %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track, db, hub->url);
+                else
+		    {
+		    char urlReference[2048];
+		    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)</a>\n", urlPrefix, db, tdbEl->track, extraFlags);
+		    hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s%s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track, urlReference);
+		    }
 	    }
 	hashCountTrack(tdbEl, countTracks);
         if (tdbEl->subtracks)
