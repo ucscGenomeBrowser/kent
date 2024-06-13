@@ -70,5 +70,8 @@ void bigChainOutput(struct bigChain *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+int bigChainCmpTarget(const void *va, const void *vb);
+/* Compare to sort based on target position. */
+
 #endif /* BIGCHAIN_H */
 
