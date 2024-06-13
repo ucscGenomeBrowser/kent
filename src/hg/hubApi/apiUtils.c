@@ -351,6 +351,9 @@ if (startsWithWord("bigBarChart", type) ||
     startsWithWord("bigInteract", type) ||
     startsWithWord("bigLolly", type) ||
     startsWithWord("bigRmsk", type) ||
+    startsWithWord("bigDbSnp", type) ||
+    startsWithWord("bigMaf", type) ||
+    startsWithWord("bigChain", type) ||
     startsWithWord("bigPsl", type)
    )
     return TRUE;
