@@ -9,6 +9,7 @@ visibility hide
 group genes
 labelFields geneName2,name,ensemblProtAcc,geneName,ncbiId,ncbiProtAcc,ncbiGene
 defaultLabelFields geneName2
+baseColorDefault genomicCodons
 maxItems 5000
 itemRgb on
 skipFields cdsStartStat,cdsEndStat,exonFrames,geneType,type

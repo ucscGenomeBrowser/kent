@@ -12,6 +12,7 @@ GCF_000164845.4_VicPac3.2	alpaca (v3.2 Carlotta AHFN-0088 2019 Deakin U)
 GCF_001458135.2_marMar	Alpine marmot (2019)
 GCA_031001765.1_BBF_mMolAlv_v1	Alvarez's mastiff bat (A012 2023)
 GCA_037157525.1_mMolAlv2.hap1	Alvarez's mastiff bat (hap1 2024)
+GCA_037176705.1_mMolAlv2.hap2	Alvarez's mastiff bat (hap2 2024)
 GCF_001984765.1_C.can_genome_v1.0	American beaver (Ward 2017 refseq)
 GCF_000754665.1_Bison_UMD1.0	American bison (2014 refseq)
 GCA_024610745.1_mUrsAme1.0.a	American black bear (L20-20 alternate hap 2022)
@@ -48,7 +49,8 @@ GCA_004023785.1_MunMun_v1_BIUU	banded mongoose
 GCF_902806735.1_Bank_vole1_10x	bank vole
 GCF_019054845.1_ASM1905484v1	banner-tailed kangaroo rat
 GCF_032452875.1_ARS-OSU_banteng_1.0	banteng 2023
-GCA_038363145.1_mArtInt1.hap1	bats (hap1 2024)
+GCA_038363145.1_mArtInt1.hap1	bats A.intermedius (hap1 2024)
+GCA_038363225.1_mArtInt1.hap2	bats A.intermedius (hap2 2024)
 GCA_009917745.1_GSC_cook_1.0	beluga whale (Cook Inlet, Alaska, USA DL-CIB17-05 2020)
 GCF_002288925.2_ASM228892v3	beluga whale (GAN/ISIS: 26980492/103006 v3 2019)
 GCF_000308155.1_EptFus1.0	big brown bat (BU_THK_EF1 2012)
@@ -230,6 +232,7 @@ GCA_004025085.1_ThrSwi_v1_BIUU	Greater cane rat
 GCA_004115295.1_mRhiFer1_v1.h	greater horseshoe bat (MPI-CBG alternate hap 2019)
 GCF_004115265.2_mRhiFer1_v1.p	greater horseshoe bat (v2 MPI-CBG 2019)
 GCF_014108235.1_mMyoMyo1.p	greater mouse-eared bat (2020 Bat1K)
+GCA_036850765.1_mSacBil1_pri_phased_curated	greater sac-winged bat (mSacBil1 primary hap 2024)
 GCF_019186645.2_TTU_PhHast_1.1	greater spear-nosed bat (2021 Texas Tech U)
 GCA_004363415.1_EscRob_v1_BIUU	grey whale
 GCA_028021475.1_mEscRob2.alt	grey whale (mEscRob2 alternate hap 2023)
@@ -317,6 +320,7 @@ GCF_014570535.1_YNU_ManJav_2.0	Malayan pangolin YNU ManJav 2.0
 GCA_001651235.1_ASM165123v1	Masai giraffe (MA1 2016 Penn St)
 GCA_004024765.1_ZapHud_v1_BIUU	meadow jumping mouse
 GCA_037038515.1_mMicPen1.hap1	meadow vole (hap1 2024)
+GCA_037039175.1_mMicPen1.hap2	meadow vole (hap2 2024)
 GCF_006229205.1_meerkat_22Aug2017_6uvM2_HiC	meerkat (VVHF042 2019 DNA Zoo refseq)
 GCA_024711525.1_mDipMer1.0.a	Merriam's kangaroo rat (MVZ:Mamm:240054 alternate hap 2022)
 GCA_024711535.1_mDipMer1.0.p	Merriam's kangaroo rat (MVZ:Mamm:240054 primary hap 2022)
@@ -338,6 +342,7 @@ GCF_001595765.1_Mnat.v1	Natal long-fingered bat
 GCF_014824575.2_WHU_Shon_v2.1	neotropical fruit bat
 GCA_004026825.1_HemHyl_v1_BIUU	Nilgiri tahr
 GCA_030445055.1_mDasNov1.hap1	nine-banded armadillo (mDasNov1 hap1 2023)
+GCA_030445055.2_mDasNov1.1.hap1	nine-banded armadillo (mDasNov1 hap1 2023)
 GCF_030445035.1_mDasNov1.hap2	nine-banded armadillo (mDasNov1 hap2 2023)
 GCF_000208655.3_Dasnov3.2	nine-banded armadillo (v3.2 3-136 2012 Baylor)
 GCA_026167925.1_mPerMan1.0.a	North American deer mouse (MVZ:Mamm:240117 alternate hap 2022)
@@ -404,6 +409,7 @@ GCF_000500345.1_Pman_1.0	prairie deer mouse (Baylor 2013)
 GCF_003704035.1_HU_Pman_2.1.3	prairie deer mouse (Harvard 2020)
 GCF_000317375.1_MicOch1.0	prairie vole
 GCA_037038545.1_mRhyNas2.hap1	proboscis bat (hap1 2024)
+GCA_037038555.1_mRhyNas2.hap2	proboscis bat (hap2 2024)
 GCA_021018645.1_ASM2101864v1	pronghorn (PH2016 2021)
 GCF_000696695.1_Burgud	Przewalski's horse (Burgud 2014 refseq)
 GCA_028749965.1_mPumCon1.0.hap2	puma (L17-30 alternate hap 2023)

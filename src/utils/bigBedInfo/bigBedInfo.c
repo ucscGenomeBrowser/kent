@@ -122,6 +122,8 @@ printf("meanDepth (of bases covered): %f\n", meanDepth);
 printf("minDepth: %f\n", sum.minVal);
 printf("maxDepth: %f\n", sum.maxVal);
 printf("std of depth: %f\n", depthStd);
+printf("definedFieldCount: %d\n", bbi->definedFieldCount);
+printf("extraFieldCount: %d\n", (bbi->fieldCount - bbi->definedFieldCount));
 }
 
 static void bigBedInfoAsOut(struct bbiFile *bbi)
