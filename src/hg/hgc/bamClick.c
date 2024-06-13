@@ -84,8 +84,14 @@ if (core->n_cigar > 50)
 else
     {
     printf("<B>CIGAR string: </B><tt>%s</tt>", bamGetCigar(bam));
-    //bamShowCigarEnglish(bam);
     printf("<BR>\n");
+    //bamShowCigarEnglish(bam);
+    printf("<p><B>CIGAR Legend:</B><BR>"
+            "<b>M</b> : alignment match (seq. match or mismatch), <b>I</b> : insert from genome, <b>D</b> : deletion from genome, "
+            "<b>N</b> : skipped from genome, <BR>"
+            "<b>S</b> : soft clipping, <b>H</b> : hard clipping, <b>P</b> : padding, "
+            "<b>=</b> : sequence match, <b>X</b> : sequence mismatch\n");
+    printf("</p>\n");
     }
 
 int clippedBases[4];
@@ -106,7 +112,7 @@ puts("<BR>");
 struct dnaSeq *genoSeq = hChromSeq(database, seqName, tStart, tEnd);
 char *qSeq = bamGetQuerySequence(bam, FALSE);
 if (core->l_qseq > 5000)
-    printf("<B>Alignment not shown, very long sequence</B><BR>\n");
+    printf("<B>Alignment not shown, query sequence is %d bp long &gt; 5000bp</B><BR>\n", core->l_qseq);
 else
     {
     if (isNotEmpty(qSeq) && !sameString(qSeq, "*"))
@@ -124,7 +130,7 @@ if (!skipQualityScore && core->l_qseq > 0)
     {
     if (core->l_qseq > 5000)
         {
-        printf("<B>Sequence too long to show quality scores</B><BR>\n");
+        printf("<B>Sequence quality not shown, query sequence %d bp long &gt; 5000bp</B><BR>\n", core->l_qseq);
         } 
     else
         {
