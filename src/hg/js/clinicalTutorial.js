@@ -46,21 +46,52 @@ var tutorialButtons = {
     }
 };
 
+
+
 // wrap setup in a function to be called only after  document is ready
 function setupSteps()
 {
     tour.addStep({
-        title: '',
-        text: '',
+        title: 'Recommneded Track Sets',
+        text: 'Some text about the recommended track sets',
         attachTo: {
-            element: '#nice-menu-1',
+            element: '#recTrackSetsMenuItem',
             on: 'bottom'
         },
         buttons: [tutorialButtons.next, tutorialButtons.end],
         id: 'navbar',
-        classes: 'dark-background'
-    });
+        classes: 'dark-background',
+        when: {
+            show: () => {
+                const toolsMenu = document.querySelector('#tools2 > ul');
+                toolsMenu.style.display = 'block';
+                toolsMenu.style.visibility = 'visible';
 
+
+                toolsMenu.addEventListener('mouseover', keepMenuVisible);
+                toolsMenu.addEventListener('mouseout', keepMenuVisible);
+
+                function keepMenuVisible() {
+                    toolsMenu.style.display = 'block';
+                    toolsMenu.style.visibility = 'visible';
+                }
+            },
+            hide: () => {
+                const toolsMenu = document.querySelector('#tools2 > ul');
+                toolsMenu.style.display = 'none';
+                toolsMenu.style.visibility = 'hidden';
+
+                toolsMenu.removeEventListener('mouseover', keepMenuVisible);
+                toolsMenu.removeEventListener('mouseout', keepMenuVisible);
+
+                function keepMenuVisible() {
+                    toolsMenu.style.display = 'block';
+                    toolsMenu.style.visibility = 'visible';
+                }
+
+            }
+        }
+    });
 
     tour.addStep({
         title: '',
