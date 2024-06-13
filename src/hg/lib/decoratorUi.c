@@ -70,7 +70,12 @@ char cartVar[2048];
 puts("<p>");
 printf("\n");
 printf("<h3>Decoration settings</h3>\n<p>");
+printf("<p>Decorators are optional sub-annotations shown in addition to the rectangular annotations of this track. "
+        "They can either have the shape of rectangular blocks transparently overlaid or shown beneath features. "
+        "Or they can be glyphs, symbols such as triangles, stars, etc. drawn on top of onto existing annotations. "
+        "See the <a target=_blank href='../goldenPath/help/decorator.html'>decorator documentation page</a>.</p>");
 
+//
 // Consider adding trackDb option to suppress configuration of specific data types.  Would
 // have to be paired with skipping the load of those data types (for pathological cases),
 // but if your decorator has no glyphs, why should we display a config box for them?

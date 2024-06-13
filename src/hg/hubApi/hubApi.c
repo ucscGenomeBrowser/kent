@@ -2,6 +2,7 @@
 #include "dataApi.h"
 #include "botDelay.h"
 #include "jsHelper.h"
+#include "srcVersion.h"
 
 /*
 +------------------+------------------+------+-----+---------+-------+
@@ -133,10 +134,12 @@ el = newSlName("bigInteract");
 slAddHead(&supportedTypes, el);
 el = newSlName("clonePos");
 slAddHead(&supportedTypes, el);
+el = newSlName("bigDbSnp");
+slAddHead(&supportedTypes, el);
 el = newSlName("bigMaf");
-// slAddHead(&supportedTypes, el);
-// el = newSlName("bigChain");
-// slAddHead(&supportedTypes, el);
+slAddHead(&supportedTypes, el);
+el = newSlName("bigChain");
+slAddHead(&supportedTypes, el);
 slNameSort(&supportedTypes);
 }	/*	static void initSupportedTypes()	*/
 
@@ -394,8 +397,10 @@ if (errCatchStart(errCatch))
             || startsWithWord("bigBed", type)
             || startsWithWord("bigGenePred", type)
             || startsWithWord("bigPsl", type)
-            || startsWithWord("bigChain", type)
+            || startsWithWord("bigDbSnp", type)
             || startsWithWord("bigMaf", type)
+            || startsWithWord("bigChain", type)
+            || startsWithWord("bigRmsk", type)
             || startsWithWord("bigBarChart", type)
             || startsWithWord("bigInteract", type))
         {
@@ -483,7 +488,7 @@ return retVal;
 static void hubSubTracks(struct trackHub *hub, char *db, struct trackDb *tdb,
     struct hash *countTracks,  long chromCount, long itemCount,
     char *chromName, unsigned chromSize, char *genome, char *errorString)
-/* tdb has subtracks, show only subTracks, no details */
+/* tdb has subtracks, show only subTracks, no details, this is RECURSIVE */
 {
 hPrintf("    <li><ul>\n");
 if (debug)
@@ -538,6 +543,12 @@ if (debug)
     hPrintf("    <li>subtracks for '%s' db: '%s'</li>\n", tdb->track, db);
 if (tdb->subtracks)
     {
+    struct dyString *extraDyFlags = dyStringNew(128);
+    if (debug)
+	dyStringAppend(extraDyFlags, ";debug=1");
+    if (jsonOutputArrays)
+	dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
+    char *extraFlags = dyStringCannibalize(&extraDyFlags);
     struct trackDb *tdbEl = NULL;
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
@@ -548,7 +559,14 @@ if (tdb->subtracks)
 	    if (isSupportedType(tdbEl->type))
 		sampleUrl(hub, db, tdbEl, errorString);
 	    else
-		hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track);
+                if (hub && hub->url)
+		    hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s, genome %s, url %s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track, db, hub->url);
+                else
+		    {
+		    char urlReference[2048];
+		    safef(urlReference, sizeof(urlReference), " <a href='%s/getData/track?genome=%s;track=%s;maxItemsOutput=5%s' target=_blank>(sample data)</a>\n", urlPrefix, db, tdbEl->track, extraFlags);
+		    hPrintf("<li><b>%s</b>: %s : subtrack of parent: %s%s</li>\n", tdbEl->track, tdbEl->type, tdbEl->parent->track, urlReference);
+		    }
 	    }
 	hashCountTrack(tdbEl, countTracks);
         if (tdbEl->subtracks)
@@ -584,6 +602,7 @@ if (tdb->subtracks)
     struct trackDb *tdbEl = NULL;
     if (debug)
 	hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
+
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
         hPrintf("<li>subtrack: %s of parent: %s : type: '%s' (TBD: sample data)</li>\n", tdbEl->track, tdbEl->parent->track, tdbEl->type);
@@ -832,9 +851,7 @@ while ((hel = hashNext(&hc)) != NULL)
 	)
 	continue;	// already output in header
     if (sameWord("trackDb", hel->name))	/* examine the trackDb structure */
-	{
 	hubTrackList(hub, tdb, genome);
-        }
     else
 	hPrintf("    <li><b>%s</b>: %s</li>\n", hel->name, (char *)hel->val);
     if (timeOutReached())
@@ -916,6 +933,8 @@ for ( ; genome; genome = genome->next )
     hubInfo("defaultPos", genome->defaultPos);
     hubInfo("trackDbFile", genome->trackDbFile);
     hubAssemblySettings(hubTop, genome);
+    struct trackDb *tdbList = obtainTdb(genome, NULL);
+    hubTrackList(hubTop, tdbList, genome);
     if (measureTiming)
 	{
 	long thisTime = clock1000();
@@ -1409,6 +1428,8 @@ if (debug)
     hPrintf("<li>urlDropDown: '%s'</li>\n", urlDropDown);
     hPrintf("<li>ucscDb: '%s'</li>\n", ucscDb);
     hPrintf("<li>urlInput: '%s'</li>\n", urlInput);
+    hPrintf("<li>trackLeavesOnly: '%s'</li>\n", trackLeavesOnly ? "TRUE" : "FALSE");
+    hPrintf("<li>jsonOutputArrays: '%s'</li>\n", jsonOutputArrays ? "TRUE" : "FALSE");
     hPrintf("</ul>\n");
     }
 if (isEmpty(otherHubUrl))
@@ -1430,7 +1451,7 @@ hPrintf("<h3>Documentation: <a href='../../goldenPath/help/api.html'>API definit
 if (debug)
     showCartDump();
 
-hPrintf("<h2>Explore hub or database assemblies and tracks</h2>\n");
+hPrintf("<h2>Explore hub or database assemblies and tracks (v%s)</h2>\n", SRC_VERSION);
 
 selectionForm();
 
@@ -1498,7 +1519,7 @@ for ( hel = hashNext(&cookie); hel; hel = hashNext(&cookie))
 char *trackLeaves = cgiOptionalString("trackLeavesOnly");
 if (isNotEmpty(trackLeaves))
     {
-    if (sameString("1", trackLeaves))
+    if (SETTING_IS_ON(trackLeaves))
 	trackLeavesOnly = TRUE;
     else if (sameString("0", trackLeaves))
 	trackLeavesOnly = FALSE;
@@ -1509,7 +1530,7 @@ if (isNotEmpty(trackLeaves))
 char *jsonArray = cgiOptionalString("jsonOutputArrays");
 if (isNotEmpty(jsonArray))
     {
-    if (sameString("1", jsonArray))
+    if (SETTING_IS_ON(jsonArray))
 	jsonOutputArrays = TRUE;
     else if (sameString("0", jsonArray))
 	jsonOutputArrays = FALSE;

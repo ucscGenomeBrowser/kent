@@ -116,6 +116,7 @@ install:
 	cp -p --remove-destination igtc.csh                ${SCRIPTS}
 	cp -p --remove-destination idHitter.csh            ${SCRIPTS}
 	cp -p --remove-destination imageComp.py            ${SCRIPTS}
+	cp -p --remove-destination jasparUpdate.py         ${SCRIPTS}
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
 	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
 	cp -p --remove-destination kgTables                ${SCRIPTS}

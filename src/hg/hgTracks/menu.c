@@ -267,7 +267,7 @@ appendLink(&links, buf, "PDF", "pdfLink", FALSE);
 safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s",
       hgcNameAndSettings(), winStart, chromName, winStart, winEnd, database);
 //appendLink(&links, buf, "DNA", "dnaLink", FALSE);
-appendLinkWithShortcut(&links, buf, "DNA", "dnaLink", "Show DNA sequence in view", "v d", FALSE, FALSE);
+appendLinkWithShortcut(&links, buf, "DNA Sequence", "dnaLink", "Show DNA sequence in view", "v d", FALSE, FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%s&db=%s", cartSessionId(cart), database);
 appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
 

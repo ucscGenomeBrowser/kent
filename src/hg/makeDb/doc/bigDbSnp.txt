@@ -983,3 +983,14 @@ redoing for 2023-03-26
     # checked errors and warnings, did not see anything concerning.
 
 #############################################################################
+
+H3AFRICA is the dbsnp study with african variants that we want.
+
+https://h3africa.org/
+
+v155 and v156 did not have H3AFRICA.
+
+V156 is still the latest release at this time (2024-06-10)
+
+
+#############################################################################
