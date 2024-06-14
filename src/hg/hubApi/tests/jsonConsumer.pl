@@ -38,6 +38,7 @@ my $debug = 0;
 my $trackLeavesOnly = 0;
 my $measureTiming = 0;
 my $jsonOutputArrays = 0;
+my $revComp = 0;
 my $maxItemsOutput = "";
 ##############################################################################
 
@@ -131,6 +132,7 @@ sub performRestAction($$$) {
 
   $endpoint =~ s#^/##;
   my $url = "$server/$endpoint";
+  my $argSeparator = ";";
 
   if(%{$parameters}) {
     my @params;
@@ -140,11 +142,16 @@ sub performRestAction($$$) {
     }
     my $param_string = join(';', @params);
     $url.= '?'.$param_string;
+  } else {
+    if ($debug || $measureTiming || $jsonOutputArrays || length($maxItemsOutput) ) {
+     $argSeparator = "?";
+   }
   }
-  if ($debug) { $url .= ";debug=1"; }
-  if ($measureTiming) { $url .= ";measureTiming=1"; }
-  if ($jsonOutputArrays) { $url .= ";jsonOutputArrays=1"; }
-  if (length($maxItemsOutput)) { $url .= ";maxItemsOutput=$maxItemsOutput"; }
+  if ($debug) { $url .= "${argSeparator}debug=1"; }
+  if ($measureTiming) { $url .= "${argSeparator}measureTiming=1"; }
+  if ($jsonOutputArrays) { $url .= "${argSeparator}jsonOutputArrays=1"; }
+  if ($revComp) { $url .= "${argSeparator}revComp=1"; }
+  if (length($maxItemsOutput)) { $url .= "${argSeparator}maxItemsOutput=$maxItemsOutput"; }
   printf STDERR "### '%s'\n", $url;
   my $response = $http->get($url, {headers => $headers});
   my $status = $response->{status};
@@ -463,6 +470,7 @@ GetOptions ("hubUrl=s" => \$hubUrl,
     "trackLeavesOnly"    => \$trackLeavesOnly,
     "measureTiming"    => \$measureTiming,
     "jsonOutputArrays"    => \$jsonOutputArrays,
+    "revComp=s"    => \$revComp,
     "maxItemsOutput=s"   => \$maxItemsOutput,
     "serverName=s"           => \$server)
     or die "Error in command line arguments\n";

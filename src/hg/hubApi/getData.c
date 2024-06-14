@@ -796,6 +796,13 @@ static void getSequenceData(char *db, char *hubUrl)
 char *chrom = chrOrAlias(db, hubUrl);
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
+boolean revComp = FALSE;
+char *revCompStr = cgiOptionalString("revComp");
+if (isNotEmpty(revCompStr))
+    {
+    if (SETTING_IS_ON(revCompStr))
+        revComp = TRUE;
+    }
 
 long timeStart = clock1000();
 
@@ -845,6 +852,11 @@ if (chromSeqFileExists(db, chrom))
         jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
 	}
     timeStart = clock1000();
+    if (revComp)
+	{
+	reverseComplement(seq->dna, seq->size);
+	jsonWriteBoolean(jw, "revComp", revComp);
+	}
     jsonWriteString(jw, "dna", seq->dna);
     endTime = clock1000();
     et = endTime - timeStart;
@@ -864,6 +876,13 @@ static void getHubSequenceData(char *hubUrl)
 char *genome = cgiOptionalString("genome");
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
+boolean revComp = FALSE;
+char *revCompStr = cgiOptionalString("revComp");
+if (isNotEmpty(revCompStr))
+    {
+    if (SETTING_IS_ON(revCompStr))
+        revComp = TRUE;
+    }
 
 if (isEmpty(genome))
     apiErrAbort(err400, err400Msg, "missing genome=<name> for endpoint '/getData/sequence'  given hubUrl='%s'", hubUrl);
@@ -929,6 +948,11 @@ if (NULL == seq)
 	apiErrAbort(err400, err400Msg, "can not find sequence for chrom=%s;start=%s;end=%s for endpoint '/getData/sequence?genome=%s;chrom=%s;start=%s;end=%s' give hubUrl='%s'", chrom, start, end, genome, chrom, start, end, hubUrl);
     else
 	apiErrAbort(err400, err400Msg, "can not find sequence for chrom=%s for endpoint '/getData/sequence?genome=%s;chrom=%s' give hubUrl='%s'", chrom, genome, chrom, hubUrl);
+    }
+if (revComp)
+    {
+    reverseComplement(seq->dna, seq->size);
+    jsonWriteBoolean(jw, "revComp", revComp);
     }
 jsonWriteString(jw, "dna", seq->dna);
 apiFinishOutput(0, NULL, jw);

@@ -377,6 +377,9 @@ void setContextSpecificHelp(char *link, char *label);
 char *menuBarAddUiVars(char *oldString, char *cgiPrefix, char *uiVars);
 /* Look for CGI program calls in oldString, and add session vars hgsid to them */
 
+void webIncludeLocalJs();
+/* some mirrors want special JS on their site */
+
 char *menuBar(struct cart *cart, char *db);
 // return HTML for the menu bar (read from a configuration file).
 
