@@ -4194,8 +4194,7 @@ function convertTitleTagsToMouseovers() {
                 (a.title.startsWith("click & drag to scroll") || a.title.startsWith("drag select or click to zoom")))
             a.title = "";
         else if (a.title !== undefined && a.title.length > 0) {
-            if (a.title.startsWith("Click to alter the display density") ||
-                    a.title.startsWith("drag select or click to zoom")) {
+            if (a.title.startsWith("Click to alter the display density")) {
                 // these tooltips have a longer delay:
                 a.setAttribute("tooltipDelay", "delayed");
             }
