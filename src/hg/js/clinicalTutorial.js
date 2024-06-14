@@ -46,13 +46,35 @@ var tutorialButtons = {
     }
 };
 
+// Function to keep the menu visible
+function keepMenuVisible() {
+    const toolsMenu = document.querySelector('#tools2 > ul');
+    toolsMenu.style.display = 'block';
+    toolsMenu.style.visibility = 'visible';
+}
 
+// Function to show the popup
+function showPopup() {
+    const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
+    recTrackSetsPopup.style.display = 'block';
+}
 
-// wrap setup in a function to be called only after  document is ready
-function setupSteps()
-{
+// Function to hide the popup
+function hidePopup() {
+    const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
+    recTrackSetsPopup.style.display = 'none';
+}
+
+// Function to close the popup by clicking the X button
+function closePopup() {
+    const closeButton = document.querySelector('#recTrackSetsPopup .ui-dialog-titlebar-close');
+    if (closeButton) closeButton.click();
+}
+
+// Function to add steps to the tour
+function setupSteps() {
     tour.addStep({
-        title: 'Recommneded Track Sets',
+        title: 'Recommended Track Sets',
         text: 'Some text about the recommended track sets',
         attachTo: {
             element: '#recTrackSetsMenuItem',
@@ -77,14 +99,8 @@ function setupSteps()
                 toolsMenu.style.display = 'block';
                 toolsMenu.style.visibility = 'visible';
 
-
                 toolsMenu.addEventListener('mouseover', keepMenuVisible);
                 toolsMenu.addEventListener('mouseout', keepMenuVisible);
-
-                function keepMenuVisible() {
-                    toolsMenu.style.display = 'block';
-                    toolsMenu.style.visibility = 'visible';
-                }
             },
             hide: () => {
                 const toolsMenu = document.querySelector('#tools2 > ul');
@@ -93,12 +109,6 @@ function setupSteps()
 
                 toolsMenu.removeEventListener('mouseover', keepMenuVisible);
                 toolsMenu.removeEventListener('mouseout', keepMenuVisible);
-
-                function keepMenuVisible() {
-                    toolsMenu.style.display = 'block';
-                    toolsMenu.style.visibility = 'visible';
-                }
-
             }
         }
     });
@@ -115,18 +125,13 @@ function setupSteps()
                 text: 'Back',
                 action: () => {
                     tour.back();
-                    // Hide the popup when going back
-                    const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
-                    recTrackSetsPopup.style.display = 'none';
+                    closePopup();
                 }
             },
             tutorialButtons.next
         ],
         when: {
-            show: () => {
-                const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
-                recTrackSetsPopup.style.display = 'block'; // Ensure the popup is visible
-            }
+            show: showPopup
         }
     });
 
@@ -137,15 +142,15 @@ function setupSteps()
             element: '#recTrackSetsPopup ul li:nth-child(2)',
             on: 'right'
         },
-        buttons: [tutorialButtons.back, tutorialButtons.next],
+        buttons: [
+            tutorialButtons.back,
+            tutorialButtons.next
+        ],
         when: {
-            show: () => {
-                const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
-                recTrackSetsPopup.style.display = 'block'; // Ensure the popup is visible
-            }
+            show: showPopup
         }
     });
-    
+
     tour.addStep({
         title: 'Non-coding SNVs',
         text: 'Investigate functional aspects of non-coding variants.',
@@ -153,15 +158,15 @@ function setupSteps()
             element: '#recTrackSetsPopup ul li:nth-child(3)',
             on: 'right'
         },
-        buttons: [tutorialButtons.back, tutorialButtons.next],
+        buttons: [
+            tutorialButtons.back,
+            tutorialButtons.next
+        ],
         when: {
-            show: () => {
-                const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
-                recTrackSetsPopup.style.display = 'block'; // Ensure the popup is visible
-            }
+            show: showPopup
         }
     });
-    
+
     tour.addStep({
         title: 'Problematic Regions',
         text: 'Evaluate if annotations are on potential low confidence regions due to high homology or other reported concerns.',
@@ -175,18 +180,12 @@ function setupSteps()
                 text: 'Finish',
                 action: () => {
                     tour.complete();
-                    // Hide the popup when going back
-                    const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
-                    recTrackSetsPopup.style.display = 'none';
+                    hidePopup();
                 }
             }
         ],
         when: {
-            show: () => {
-                const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
-                recTrackSetsPopup.style.display = 'block'; // Ensure the popup is visible
-            }
+            show: showPopup
         }
     });
-
 }
