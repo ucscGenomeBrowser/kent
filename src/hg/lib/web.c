@@ -696,7 +696,7 @@ int numGenomes = 0;
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(10); // 2^^10 entries = 1024
 char *selGenome = hGenome(db);
-char *values [1024];
+char *values [4096];
 char *cgiName;
 
 for (cur = dbList; cur != NULL; cur = cur->next)
@@ -1468,6 +1468,19 @@ if(offset < len)
 return dyStringCannibalize(&dy);
 }
 
+void webIncludeLocalJs()
+/* some mirrors want special JS on their site */
+{
+char *addJs = cfgOption("addJs");
+if (addJs)
+    {
+    struct slName *jsList = slNameListFromString(addJs, ',');
+    for(; jsList; jsList = jsList->next)
+        jsIncludeFile(jsList->name, NULL);
+    slNameFreeList(&jsList);
+    }
+}
+
 char *menuBar(struct cart *cart, char *db)
 // Return HTML for the menu bar (read from a configuration file);
 // we fixup internal CGI's to add hgsid's and include the appropriate js and css files.
@@ -1494,6 +1507,8 @@ jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("jquery.plugins.js", NULL);
 jsIncludeFile("utils.js", NULL);
 webIncludeResourceFile("nice_menu.css");
+
+webIncludeLocalJs();
 
 // Read in menu bar html
 safef(buf, sizeof(buf), "%s/%s", docRoot, navBarFile);
