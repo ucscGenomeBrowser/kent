@@ -33,7 +33,7 @@ all:: test0 listFunctions getFunctions listSchema getSequence wigData \
 
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 	list10 list11 list12 list13 list14 list15 list16 list17 list18 list19 \
-	list20 list21 list22 list23 list24 list25
+	list20 list21 list22 list23 list24 list25 list26
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
@@ -251,6 +251,18 @@ list24: setOutput
 list25: setOutput
 	@printf "### $@ '${SERVERNAME}/list/files?genome=ce2;maxItemsOutput=5;format=text'\n"
 	@ curl -L "${SERVERNAME}/list/files?genome=ce2;maxItemsOutput=5;format=text" 2> /dev/null | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/genarkGenomes
+list26: setOutput
+	@printf "### $@ '${SERVERNAME}/list/genarkGenomes?maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -maxItemsOutput=5  -serverName="${SERVERNAME}" -endpoint="/list/genarkGenomes" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/genarkGenomes verify existence of genome GCA_000002765.3
+list27: setOutput
+	@printf "### $@ '${SERVERNAME}/list/genarkGenomes?genome=GCA_000002765.3;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -genome=GCA_000002765.3 -maxItemsOutput=5  -serverName="${SERVERNAME}" -endpoint="/list/genarkGenomes" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ##########################   getData functions  #############################
