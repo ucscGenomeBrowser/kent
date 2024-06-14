@@ -17,13 +17,16 @@ errAbort(
   "usage:\n"
   "   pslToChain pslIn chainOut\n"
   "Options:\n"
+  "   -fixStrand  reverse-complement negative target strand PSLs\n"
   "   -ignore   ignore psl records with negative target strand rather than exiting\n"
   );
 }
 
+boolean fixStrand;
 boolean ignoreError;
 
 static struct optionSpec options[] = {
+   {"fixStrand", OPTION_BOOLEAN},
    {"ignore", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -42,9 +45,12 @@ while ((psl = pslNext(lf) ) != NULL)
     {
     if (psl->strand[1] == '-') 
         {
-        if (ignoreError)
+        if (fixStrand)
+            pslRc(psl);
+        else if (ignoreError)
             continue;
-        errAbort("PSL record on line %d has '-' for target strand which is not allowed.", lf->lineIx);
+        else
+            errAbort("PSL record on line %d has '-' for target strand which is not allowed.", lf->lineIx);
         }
 
     chain.score = pslScore(psl);
@@ -89,6 +95,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+fixStrand = optionExists("fixStrand");
 ignoreError = optionExists("ignore");
 pslToChain(argv[1], argv[2]);
 return 0;
