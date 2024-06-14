@@ -55,20 +55,14 @@ function keepMenuVisible() {
 
 // Function to show the popup
 function showPopup() {
-    const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
-    recTrackSetsPopup.style.display = 'block';
+    const recTrackSetsPopup = document.querySelector('.ui-dialog[aria-labelledby="ui-dialog-title-recTrackSetsPopup"]');
+    if (recTrackSetsPopup) recTrackSetsPopup.style.display = 'block';
 }
 
-// Function to hide the popup
-function hidePopup() {
-    const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
-    recTrackSetsPopup.style.display = 'none';
-}
-
-// Function to close the popup by clicking the X button
+// Function to close the popup
 function closePopup() {
-    const closeButton = document.querySelector('#recTrackSetsPopup .ui-dialog-titlebar-close');
-    if (closeButton) closeButton.click();
+  const popupDialog = document.querySelector('.ui-dialog[aria-labelledby="ui-dialog-title-recTrackSetsPopup"]');
+  if (popupDialog) popupDialog.style.display = 'none';
 }
 
 // Function to add steps to the tour
@@ -180,7 +174,7 @@ function setupSteps() {
                 text: 'Finish',
                 action: () => {
                     tour.complete();
-                    hidePopup();
+                    closePopup();
                 }
             }
         ],
