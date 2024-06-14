@@ -3574,7 +3574,7 @@ var popUpHgcOrHgGene = {
 function showExportedDataHubsPopup() {
     let popUp = document.getElementById("exportedDataHubsPopup");
     title = popUp.title;
-    if (title.length === 0 && popUp.getAttribute("originaltitle") !== "") {title = popUp.getAttribute("originaltitle");}
+    if (title.length === 0 && popUp.getAttribute("mouseovertext") !== "") {title = popUp.getAttribute("mouseovertext");}
     $('#exportedDataHubsPopup').dialog({width:'650', title: title});
 }
 
@@ -3588,7 +3588,7 @@ function showRecTrackSetsPopup() {
     });
     let popUp = document.getElementById("recTrackSetsPopup");
     title = popUp.title;
-    if (title.length === 0 && popUp.getAttribute("originaltitle") !== "") {title = popUp.getAttribute("originaltitle");}
+    if (title.length === 0 && popUp.getAttribute("mouseovertext") !== "") {title = popUp.getAttribute("mouseovertext");}
     $('#recTrackSetsPopup').dialog({width:'650', title: title});
 }
 
