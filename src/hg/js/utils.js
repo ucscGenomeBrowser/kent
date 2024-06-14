@@ -4190,7 +4190,8 @@ function titleTagToMouseover(mapEl) {
 function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
     $("[title]").each(function(i, a) {
-        if (a.title !== undefined && a.title.startsWith("click & drag to scroll"))
+        if (a.title !== undefined &&
+                (a.title.startsWith("click & drag to scroll") || a.title.startsWith("drag select or click to zoom")))
             a.title = "";
         else if (a.title !== undefined && a.title.length > 0) {
             if (a.title.startsWith("Click to alter the display density") ||
