@@ -34,6 +34,7 @@
 #include "cartTrackDb.h"
 #include "chromAlias.h"
 #include "pipeline.h"
+#include "genark.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -85,6 +86,7 @@
  */
 extern char *argListPublicHubs[];
 extern char *argListUcscGenomes[];
+extern char *argListGenarkGenomes[];
 extern char *argListHubGenomes[];
 extern char *argListTracks[];
 extern char *argListChromosomes[];
@@ -210,6 +212,12 @@ struct trackHubGenome *findHubGenome(struct trackHub *hub, char *genome,
 
 struct dbDb *ucscDbDb();
 /* return the dbDb table as an slList */
+
+long long genArkSize();
+/* return the number of rows in genark table */
+
+struct genark *genArkList(char *oneAccession);
+/* return the genark table as an slList, or just the one accession when given */
 
 boolean isSupportedType(char *type);
 /* is given type in the supportedTypes list ? */

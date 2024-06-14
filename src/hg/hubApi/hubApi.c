@@ -44,6 +44,7 @@ struct dyString *downloadUrl = NULL;
 /* valid argument listings to verify extraneous arguments */
 char *argListPublicHubs[] = { NULL };
 char *argListUcscGenomes[] = { NULL };
+char *argListGenarkGenomes[] = { argMaxItemsOutput, argGenome, NULL };
 char *argListHubGenomes[] = { argHubUrl, NULL };
 char *argListTracks[] = { argGenome, argHubUrl, argTrackLeavesOnly, NULL };
 char *argListChromosomes[] = { argGenome, argHubUrl, argTrack, NULL };
