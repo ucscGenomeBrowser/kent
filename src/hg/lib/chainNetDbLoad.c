@@ -255,7 +255,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         chain->qStrand = *bedRow[5];
         chain->qStart = sqlUnsigned(bedRow[9]);
         chain->qEnd = sqlUnsigned(bedRow[10]);
-        chain->score = sqlUnsigned(bedRow[11]);
+        chain->score = atof(bedRow[11]);
         chain->id = chainId;
 
         for (linkBb = linkBbList; linkBb != NULL; linkBb = linkBb->next)

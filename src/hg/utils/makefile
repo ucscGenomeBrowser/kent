@@ -30,6 +30,7 @@ UTILS_APPLIST = \
 	bigMafToMaf \
 	bigPslToPsl \
 	binFromRange \
+	chainToBigChain \
 	chromGraphFromBin \
 	chromGraphToBin \
 	crTreeIndexBed \

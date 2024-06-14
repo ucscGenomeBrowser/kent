@@ -179,3 +179,15 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+
+int bigChainCmpTarget(const void *va, const void *vb)
+/* Compare to sort based on target position. */
+{
+const struct bigChain *a = *((struct bigChain **)va);
+const struct bigChain *b = *((struct bigChain **)vb);
+int dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+return dif;
+}
+
