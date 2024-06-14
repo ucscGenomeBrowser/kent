@@ -72,6 +72,7 @@
 #define argChrom	"chrom"
 #define argStart	"start"
 #define argEnd	"end"
+#define argRevComp	"revComp"
 #define argMaxItemsOutput	"maxItemsOutput"
 #define argFormat	"format"
 #define argJsonOutputArrays	"jsonOutputArrays"

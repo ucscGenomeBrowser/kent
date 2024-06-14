@@ -51,7 +51,7 @@ char *argListChromosomes[] = { argGenome, argHubUrl, argTrack, NULL };
 char *argListSchema[] = { argGenome, argHubUrl, argTrack, NULL };
 char *argListFiles[] = { argGenome, argMaxItemsOutput, argFormat, NULL };
 char *argGetDataTrack[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argMaxItemsOutput, argJsonOutputArrays, NULL };
-char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, NULL };
+char *argGetDataSequence[] = { argGenome, argHubUrl, argTrack, argChrom, argStart, argEnd, argRevComp, NULL };
 char *argSearch[] = {argSearchTerm, argGenome, argHubUrl, argCategories, NULL};
 char *argFindGenome[] = {argGenomeSearchTerm, argJsonOutputArrays, argAllowAll, argStatsOnly,  NULL};
 
