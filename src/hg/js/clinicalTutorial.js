@@ -68,22 +68,29 @@ function closePopup() {
 // Function to add steps to the tour
 function setupSteps() {
     tour.addStep({
+        title: 'Introduction for Clinicians',
+        text: 'This tutorial is for clinicians and is no where near being complete in terms of '+
+              'content but should be fully functioning without any bugs (hopefully). ',
+        buttons: [tutorialButtons.next, tutorialButtons.end],
+        id: 'intro',
+        classes: 'dark-background'
+    });
+    tour.addStep({
         title: 'Recommended Track Sets',
         text: 'Some text about the recommended track sets',
         attachTo: {
             element: '#recTrackSetsMenuItem',
             on: 'bottom'
         },
-        buttons: [
-            {
+        buttons: [ tutorialButtons.back,
+           {
                 text: 'Next',
                 action: function() {
                     const rtsMenuItem = document.querySelector('#tools2 #recTrackSetsMenuItem');
                     rtsMenuItem.click();
                     tour.next();
                 }
-            },
-            tutorialButtons.end
+            }
         ],
         id: 'navbar',
         classes: 'dark-background',
