@@ -373,7 +373,7 @@ int checkHgFindSpec(char *db, char *termToSearch, boolean showSearches,
 boolean gotError = FALSE;
 
 database = db;
-initGenbankTableNames("gbMeta");
+initGenbankTableNames(db);
 
 if (isNotEmpty(termToSearch))
     gotError |= reportSearch(termToSearch);
