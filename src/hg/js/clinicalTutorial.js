@@ -58,7 +58,17 @@ function setupSteps()
             element: '#recTrackSetsMenuItem',
             on: 'bottom'
         },
-        buttons: [tutorialButtons.next, tutorialButtons.end],
+        buttons: [
+            {
+                text: 'Next',
+                action: function() {
+                    const rtsMenuItem = document.querySelector('#tools2 #recTrackSetsMenuItem');
+                    rtsMenuItem.click();
+                    tour.next();
+                }
+            },
+            tutorialButtons.end
+        ],
         id: 'navbar',
         classes: 'dark-background',
         when: {
@@ -94,43 +104,89 @@ function setupSteps()
     });
 
     tour.addStep({
-        title: '',
-        text: 'Some test' +
-              ' with more text',
+        title: 'Clinical SNVs',
+        text: 'Assess potential disease contributions of single nucleotide variants in coding regions.',
         attachTo: {
-            element: '#positionInput',
-            on: 'bottom'
+            element: '#recTrackSetsPopup ul li:nth-child(1)',
+            on: 'right'
         },
-        buttons: [tutorialButtons.back, tutorialButtons.next],
-        id: 'search'
+        buttons: [
+            {
+                text: 'Back',
+                action: () => {
+                    tour.back();
+                    // Hide the popup when going back
+                    const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
+                    recTrackSetsPopup.style.display = 'none';
+                }
+            },
+            tutorialButtons.next
+        ],
+        when: {
+            show: () => {
+                const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
+                recTrackSetsPopup.style.display = 'block'; // Ensure the popup is visible
+            }
+        }
     });
-
 
     tour.addStep({
-        title: 'Further Training and Contact Information',
-        text: 'You can find other guides and training videos on the ' +
-              '<a href="../training/" target="_blank">training page</a>. ' +
-              'You can also search the ' +
-              '<a href="https://groups.google.com/a/soe.ucsc.edu/g/genome" target="_blank">mailing list archive</a> ' +
-              'to find previously answered questions for guidance. ' +
-              '<br><br>' +
-              'If you still have questions after searching the ' +
-              '<a href="/FAQ/" target="_blank">FAQ page</a> or ' +
-              '<a href="/goldenPath/help/hgTracksHelp.html" target="_blank">Genome Browser User Guide</a> ' +
-              'pages, you can email the suitable mailing list for your inquiry from the ' +
-              '<a href="../contacts.html">contact us</a> page. ' +
-              '<br><br>' +
-              'Follow these <a href="/cite.html" target="_blank">citation guidelines</a> when using ' +
-              'the Genome Browser tool suite or data from the UCSC Genome Browser database in a ' +
-              'research work that will be published in a journal or on the Internet. <br><br>' +
-              'In addition to the <a href="/goldenPath/pubs.html" target="_blank">relevant paper</a>, '+
-              'please include a reference to the Genome Browser website in your manuscript: '+
-              '<i>http://genome.ucsc.edu</i>. ',
+        title: 'Clinical CNVs',
+        text: 'Assess potential disease contributions of structural variants in coding regions.',
         attachTo: {
-            element: '#help.menuparent',
-            on: 'bottom'
+            element: '#recTrackSetsPopup ul li:nth-child(2)',
+            on: 'right'
         },
-        buttons: [tutorialButtons.back, tutorialButtons.end],
-        id: 'lastPopUp'
+        buttons: [tutorialButtons.back, tutorialButtons.next],
+        when: {
+            show: () => {
+                const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
+                recTrackSetsPopup.style.display = 'block'; // Ensure the popup is visible
+            }
+        }
     });
+    
+    tour.addStep({
+        title: 'Non-coding SNVs',
+        text: 'Investigate functional aspects of non-coding variants.',
+        attachTo: {
+            element: '#recTrackSetsPopup ul li:nth-child(3)',
+            on: 'right'
+        },
+        buttons: [tutorialButtons.back, tutorialButtons.next],
+        when: {
+            show: () => {
+                const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
+                recTrackSetsPopup.style.display = 'block'; // Ensure the popup is visible
+            }
+        }
+    });
+    
+    tour.addStep({
+        title: 'Problematic Regions',
+        text: 'Evaluate if annotations are on potential low confidence regions due to high homology or other reported concerns.',
+        attachTo: {
+            element: '#recTrackSetsPopup ul li:nth-child(4)',
+            on: 'right'
+        },
+        buttons: [
+            tutorialButtons.back,
+            {
+                text: 'Finish',
+                action: () => {
+                    tour.complete();
+                    // Hide the popup when going back
+                    const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
+                    recTrackSetsPopup.style.display = 'none';
+                }
+            }
+        ],
+        when: {
+            show: () => {
+                const recTrackSetsPopup = document.querySelector('#recTrackSetsPopup');
+                recTrackSetsPopup.style.display = 'block'; // Ensure the popup is visible
+            }
+        }
+    });
+
 }
