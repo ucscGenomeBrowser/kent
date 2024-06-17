@@ -769,7 +769,7 @@ void bamAddBaseAndIndelSettings(struct trackDb *tdb);
 #define ZOOM_3X         "3x"
 #define ZOOM_10X        "10x"
 #define ZOOM_100X       "100x"
-#define ZOOM_BASE       "base"
+#define ZOOM_BASE       "Base"
 
 void zoomRadioButtons(char *var, char *curVal);
 /* Make a list of radio buttons for all zoom options */

@@ -287,19 +287,19 @@ if (withGetButton)
     if (doGalaxy()) /* need form fields here and Galaxy so add step to Galaxy */
         cgiMakeButton(hgtaDoGalaxySelectedFields, "done with selections");
     else
-        cgiMakeButton(hgtaDoPrintSelectedFields, "get output");
+        cgiMakeButton(hgtaDoPrintSelectedFields, "Get output");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoMainPage, "cancel");
+    cgiMakeButton(hgtaDoMainPage, "Cancel");
     hPrintf(" ");
     }
 jsInit();
 cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
 			   setClearAllVar(hgtaDoSetAllFieldPrefix,db,table),
-			   "check all");
+			   "Check all");
 hPrintf(" ");
 cgiMakeOnClickSubmitButton(jsSetVerticalPosition("mainForm"),
 			   setClearAllVar(hgtaDoClearAllFieldPrefix,db,table),
-			   "clear all");
+			   "Clear all");
 cgiDown(0.7); // Extra spacing below the buttons
 }
 
@@ -483,7 +483,7 @@ showLinkedFields(dtList);
 dt = dbTableNew(db, table);
 slAddHead(&dtList, dt);
 showLinkedTables(db, table, joiner, dtList, selFieldLinkedTablePrefix(),
-	hgtaDoSelectFieldsMore, "allow selection from checked tables");
+	hgtaDoSelectFieldsMore, "Allow selection from checked tables");
 
 /* clean up. */
 hPrintf("</FORM>");
@@ -1063,9 +1063,9 @@ if (isWig||isBedGr||isBam||isVcf||isLongTabix||isHic)
 freez(&table);
 hFreeConn(&conn);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoFilterSubmit, "submit");
+cgiMakeButton(hgtaDoFilterSubmit, "Submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "cancel");
+cgiMakeButton(hgtaDoMainPage, "Cancel");
 }
 
 static void filterControlsForTableCt(char *db, char *table)
@@ -1253,7 +1253,7 @@ showLinkedFilters(dtList);
 dt = dbTableNew(db, table);
 slAddHead(&dtList, dt);
 showLinkedTables(db, table, joiner, dtList, filterLinkedTablePrefix,
-	hgtaDoFilterMore, "allow filtering using fields in checked tables");
+	hgtaDoFilterMore, "Allow filtering using fields in checked tables");
 
 hPrintf("</FORM>\n");
 cgiDown(0.9);
