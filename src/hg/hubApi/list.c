@@ -1108,7 +1108,7 @@ else if (sameWord("tracks", words[1]))
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("genome");
     /* allow a GCx genome specified without hubUrl for GenArk genomes */
-    if (isEmpty(hubUrl)  && isNotEmpty(genome) && isGenArk(genome))
+    if (isEmpty(hubUrl) && isNotEmpty(genome) && isGenArk(genome))
 	{
 	hubUrl = genArkHubTxt(genome);
 	}
@@ -1159,7 +1159,7 @@ else if (sameWord("chromosomes", words[1]))
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("genome");
     /* allow a GCx genome specified without hubUrl for GenArk genomes */
-    if (isEmpty(hubUrl)  && isNotEmpty(genome) && isGenArk(genome))
+    if (isEmpty(hubUrl) && isNotEmpty(genome) && isGenArk(genome))
 	{
 	hubUrl = genArkHubTxt(genome);
 	}
@@ -1196,7 +1196,7 @@ else if (sameWord("schema", words[1]))
     char *db = cgiOptionalString("genome");
     char *track = cgiOptionalString("track");
     /* allow a GCx genome specified without hubUrl for GenArk genomes */
-    if (isEmpty(hubUrl)  && isNotEmpty(genome) && isGenArk(genome))
+    if (isEmpty(hubUrl) && isNotEmpty(genome) && isGenArk(genome))
 	{
 	hubUrl = genArkHubTxt(genome);
 	}

@@ -40,7 +40,7 @@ getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
 	test29 test39 test40 test41 test42 test43 test44 test45 test46 test47 \
 	test48 test49 test50 test51 test52 test53 test54 test55 test56 test57 \
-	multiTrack01 multiTrack02 multiTrack03
+	test58 test59 multiTrack01 multiTrack02 multiTrack03
 
 findGenome: findGenome01
 
@@ -492,6 +492,20 @@ test56: setOutput
 test57: setOutput
 	@printf "### $@ ### '${SERVERNAME}/getData/track?track=mrna;genome=ce11;jsonOutputArrays=1;maxItemsOutput=5'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=ce11 -track=mrna -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?genome=GCF_000002985.6&track=assembly
+# without the hubUrl
+# https://hgdownload.soe.ucsc.edu/hubs/GCF/000/002/985/GCF_000002985.6/
+test58: setOutput
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -maxItemsOutput=123 -endpoint="/getData/track" -genome="GCF_000002985.6" -track="assembly" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?genome=GCF_000002985.6&track=assembly
+# with the hubUrl
+# https://hgdownload.soe.ucsc.edu/hubs/GCF/000/002/985/GCF_000002985.6/
+test59: setOutput
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -maxItemsOutput=123 -endpoint="/getData/track" -genome="GCF_000002985.6" -track="assembly" -hubUrl="https://hgdownload.soe.ucsc.edu/hubs/GCF/000/002/985/GCF_000002985.6//hub.txt" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # getData but with multiple tracks
