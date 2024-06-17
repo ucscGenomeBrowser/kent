@@ -5676,18 +5676,4 @@ semiShortCircuit 1
 termRegex [N][MR]_[0-9]{6}[0-9]*\.[0-9]+
 searchPriority 20
 
-track spliceAI
-shortLabel SpliceAI
-longLabel SpliceAI: Splice Variant Prediction Score
-type bigBed 9 +
-group phenDis
-bigDataUrl /gbdb/$D/bbi/spliceAi.bb
-visibility hide
-itemRgb on
-noScoreFilter on
-filterValues.spliceType donor_gain|Donor gain,donor_loss|Donor loss,acceptor_gain|Acceptor gain,acceptor_loss|Acceptor loss
-filterLabel.spliceType Splice type
-filter.AIscore 0.02
-filterLimits.AIscore 0.02:1
-mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b>$spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
-pennantIcon New red ../goldenPath/newsarch.html#053024 "May 30, 2024"
+include spliceAI.ra
