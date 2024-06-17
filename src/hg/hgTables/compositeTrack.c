@@ -182,9 +182,9 @@ hPrintf("If a filter is specified on the main Table Browser page, it will "
 hPrintf("If an intersection is specified on the main page, it will be applied "
 	"to the result of this merge.<P>\n");
 hPrintf("<P>\n");
-cgiMakeButton(hgtaDoSubtrackMergeSubmit, "submit");
+cgiMakeButton(hgtaDoSubtrackMergeSubmit, "Submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "cancel");
+cgiMakeButton(hgtaDoMainPage, "Cancel");
 hPrintf("</FORM>\n");
 htmlClose();
 }
