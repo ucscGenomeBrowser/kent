@@ -4052,7 +4052,9 @@ function showMouseoverText(ev) {
     ev.preventDefault();
     let referenceElement = lastMouseoverEle;
 
-    if (!tooltipIsVisible()) {
+    if (!tooltipIsVisible() &&
+            // wiggle mouseovers have special code, don't use these tooltips for those:
+            (typeof mouseOver === "undefined" || !mouseOver.visible)) {
         let tooltipDivId = "#" + referenceElement.getAttribute("mouseoverid");
         let tooltipDiv = $(tooltipDivId)[0];
         if (!tooltipDiv) {
