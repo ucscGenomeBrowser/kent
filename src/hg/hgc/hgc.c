@@ -7969,7 +7969,9 @@ if (isCustomTrack(aliTable))
     }
 else
     tdb = hashFindVal(trackHash, aliTable);
-
+if (tdb == NULL)
+    errAbort("BUG: bigPsl alignment table '%s' not found", aliTable);
+             
 if (!trackHubDatabase(database))
     conn = hAllocConnTrack(database, tdb);
 

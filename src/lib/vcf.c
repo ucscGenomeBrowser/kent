@@ -636,7 +636,13 @@ for (j = 0;  j < count;  j++)
     }
 // If END is given, use it as chromEnd:
 if (sameString(infoKey, vcfInfoEnd))
-    record->chromEnd = data[0].datInt;
+    {
+    // But check first whether the header defined it as an int because if not, it was stored as str
+    if (type == vcfInfoInteger)
+        record->chromEnd = data[0].datInt;
+    else if (type == vcfInfoString)
+        record->chromEnd = atoi(data[0].datString);
+    }
 *pData = data;
 *pMissingData = missingData;
 return count;
