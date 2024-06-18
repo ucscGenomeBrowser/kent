@@ -11,10 +11,13 @@ learning splicing prediction algorithm that can predict splicing alterations cau
 Such variants may activate nearby cryptic splice sites, leading to abnormal transcript isoforms.
 SpliceAI was developed at Illumina; a 
 <a href="https://spliceailookup.broadinstitute.org" target="_blank">lookup tool</a> 
-is provided by the Broad institute.
+is provided by the Broad institute.<br><br>
+<b>Important</b>: The SpliceAI data on the UCSC Genome Browser is directly from 
+Illumina (See Data Access below). However, since SpliceAI refers to the algorithm, and not the computed dataset, 
+the data on the BROAD server or other sources may have some differences between them.
 </p>
 
-<h2>Display Conventions</h2>
+<h2>Display Conventions and Interpretation</h2>
 <p>
 Variants are colored by their predicted effects:
 <ul>
@@ -27,27 +30,35 @@ Mouseover on items shows the variant, gene name, type of change (donor gain/loss
 location of affected cryptic splice, and spliceAI score. Clicking on any item brings up a table with this
 information.
 </p>
+<p>
+The scores range from 0 to 1 and can be interpreted as the 
+probability of the variant being splice-altering. In the paper, a detailed characterization is 
+provided for 0.2 (high recall), 0.5 (recommended), and 0.8 (high precision) cutoffs.</p>
 
 <h2>Data Access</h2>
-The raw data can be explored interactively with the
-<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> or the
-<a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>.
-For automated analysis, the data may be queried from our
-<a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.<br>
-Please refer to our
-<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
-for questions, or our
-<a href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a>
-for more information.
+These data are not available for download from the Genome Browser. 
+The raw data can be found directly on
+<a target="_blank" href="https://basespace.illumina.com/s/otSPW8hnhaZR">Illumina</a>. 
+See below for a copy of the license restrictions pertaining to these data.
+</p>
+
+<h2>License</h2>
 <p>
-SpliceAI scores for hg38 were obtained in VCF format from 
-<a href="https://ftp.ensembl.org/pub/data_files/homo_sapiens/GRCh38/variation_plugins" target="_blank">the Ensembl ftp site</a>.
+FOR ACADEMIC AND NOT-FOR-PROFIT RESEARCH USE ONLY. The SpliceAI scores are 
+made available by Illumina only for academic or not-for-profit research only. 
+By accessing the SpliceAI data, you acknowledge and agree that you may only 
+use this data for your own personal academic or not-for-profit research only, 
+and not for any other purposes. You may not use this data for any for-profit, 
+clinical, or other commercial purpose without obtaining a commercial license 
+from Illumina, Inc.
 </p>
 
 <h2>Methods</h2>
 <p>
+The data were downloaded from <a 
+target="_blank" href="https://basespace.illumina.com/s/otSPW8hnhaZR">Illumina</a>. 
 The spliceAI scores are represented in the VCF INFO field as 
-<code style="background-color: lightgray;">SpliceAI=G|OR4F5|0.01|0.00|0.00|0.00|-32|49|-40|-31</code> <br>
+<code style="background-color: lightgray;">SpliceAI=G|OR4F5|0.01|0.00|0.00|0.00|-32|49|-40|-31</code> <br><br>
 Here, the pipe-separated fields contain 
 <ul>
 <li>ALT allele</li>
@@ -61,7 +72,11 @@ Here, the pipe-separated fields contain
 <li>Relative location of affected cryptic donor</li>
 <li>Relative location of affected donor</li>
 </ul>
-To create the track we selected only those variants with a score equal to or greater than 0.02.
+Since most of the values are 0 or almost 0, we selected only those variants 
+with a score equal to or greater than 0.02.<br><br>
+The complete processing of this track can be found in the <a target="_blank" 
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/spliceAI/spliceAI.py">
+makedoc</a>.
 </p>
 
 <h2>References</h2>

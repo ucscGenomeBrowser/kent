@@ -4030,7 +4030,7 @@ function mousemoveHelper(e) {
     }
     let isDelayedTooltip = lastMouseoverEle.getAttribute("tooltipDelay");
     if (isDelayedTooltip !== null && isDelayedTooltip === "delayed") {
-        mousemoveTimer = setTimeout(mousemoveTimerHelper, 3000, e, this);
+        mousemoveTimer = setTimeout(mousemoveTimerHelper, 1500, e, this);
         mousedNewItem = true;
         mousemoveController.abort();
         hideMouseoverText(this);
@@ -4052,7 +4052,9 @@ function showMouseoverText(ev) {
     ev.preventDefault();
     let referenceElement = lastMouseoverEle;
 
-    if (!tooltipIsVisible()) {
+    if (!tooltipIsVisible() &&
+            // wiggle mouseovers have special code, don't use these tooltips for those:
+            (typeof mouseOver === "undefined" || !mouseOver.visible)) {
         let tooltipDivId = "#" + referenceElement.getAttribute("mouseoverid");
         let tooltipDiv = $(tooltipDivId)[0];
         if (!tooltipDiv) {
@@ -4152,7 +4154,7 @@ function showMouseover(e) {
         // some tooltips are special and have a longer delay
         let isDelayedTooltip = ele1.getAttribute("tooltipDelay");
         if (isDelayedTooltip !== null && isDelayedTooltip === "delayed") {
-            mouseoverTimer = setTimeout(showMouseoverText, 3000, e);
+            mouseoverTimer = setTimeout(showMouseoverText, 1500, e);
         } else {
             mouseoverTimer = setTimeout(showMouseoverText, 500, e);
         }
@@ -4190,11 +4192,11 @@ function titleTagToMouseover(mapEl) {
 function convertTitleTagsToMouseovers() {
     /* make all the title tags in the document have mouseovers */
     $("[title]").each(function(i, a) {
-        if (a.title !== undefined && a.title.startsWith("click & drag to scroll"))
+        if (a.title !== undefined &&
+                (a.title.startsWith("click & drag to scroll") || a.title.startsWith("drag select or click to zoom")))
             a.title = "";
         else if (a.title !== undefined && a.title.length > 0) {
-            if (a.title.startsWith("Click to alter the display density") ||
-                    a.title.startsWith("drag select or click to zoom")) {
+            if (a.title.startsWith("Click to alter the display density")) {
                 // these tooltips have a longer delay:
                 a.setAttribute("tooltipDelay", "delayed");
             }

@@ -94,6 +94,9 @@ char *genarkUrl(char *accession);
  * otherwise return NULL
  * */
 
+char *genArkHubTxt(char *gcX);
+/* given a GC[AF]_012345678.9 name, return hub.txt URL */
+
 char *genarkTableName();
 /* return the genark table name from the environment, 
  * or hg.conf, or use the default.  Cache the result */

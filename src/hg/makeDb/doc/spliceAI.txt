@@ -1,0 +1,7 @@
+#The data for both hg19 and hg38 were downloaded from illumina here: https://basespace.illumina.com/s/otSPW8hnhaZR
+#Then manually uploaded to dev /hive/data/outside/spliceAi
+#The original build by Jelje of this track using the Ensembl data was adapted - the original build
+#can be found here: ~/kent/src/hg/makeDb/doc/hg38/spliceAI.txt
+#Using a slightly modified version of that build the tracks were build using spliceAI.py:
+
+python3 ~/kent/src/hg/makeDb/scripts/spliceAI/spliceAI.py

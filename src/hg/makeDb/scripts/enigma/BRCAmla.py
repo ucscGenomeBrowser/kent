@@ -13,11 +13,11 @@ def bash(cmd):
 def assignRGBcolorByLR(LR):
     LR = float(LR)
     if LR > 2.08:
-        itemRgb = '255,0,0'
+        itemRgb = '128,64,13' #brown
     elif LR <=0.48:
-        itemRgb = '0,128,0'
+        itemRgb = '252,157,3' #orange
     else:
-        itemRgb = '91,91,91'
+        itemRgb = '91,91,91' #grey
     return(itemRgb)
 
 def assignACMGcode(LR):
@@ -38,7 +38,7 @@ def assignACMGcode(LR):
         ACMGcode = 'BP5 - Benign - Strong'
     elif LR <= 0.00285:
         ACMGcode = 'BP5 - Benign - Very strong'
-    else: 
+    else:
         print("This code did not match: "+str(LR))
         ACMGcode = "Not informative"
     return(ACMGcode)
@@ -81,7 +81,7 @@ outputBedFile = open("/hive/data/inside/enigmaTracksData/outputBedFile.bed",'w')
 #Reiterate through the file matching coordinates now
 for line in rawFileNoHeader:
     line = line.rstrip("\n").split("\t")
-    
+
     geneSymbol = line[0]
     if line[0].startswith("BRCA1"):
         nmAccession = "NM_007294.3"
@@ -89,26 +89,26 @@ for line in rawFileNoHeader:
         nmAccession = "NM_000059.3"
     else:
         print("Error: Line didn't start with BRCA*")
-    
+
     ACMGcode = assignACMGcode(line[10])
     nameToMatch = nmAccession+":"+line[1]
     _mouseOver = "<b>HGVSc:</b> "+nmAccession+":"+line[1]+"<br><b>HGVSp:</b> "+\
         line[2]+"<br><b>Combined LR:</b> "+line[10]+\
         "<br><b>ACMG Code:</b> "+ACMGcode
-        
+
     itemRGB = assignRGBcolorByLR(line[10])
-    
+
     if nameToMatch in vcfVarCoords.keys():
         lineToWrite = ("\t".join(vcfVarCoords[nameToMatch])+"\t"+line[1]+\
                             "\t0\t.\t"+"\t".join(vcfVarCoords[nameToMatch][1:])+\
                             "\t"+itemRGB+"\t"+nmAccession+"\t"+line[0]+"\t"+\
                             ACMGcode+"\t"+"\t".join(line[2:])+"\t"+_mouseOver+"\n")
-            
+
         outputBedFile.write(lineToWrite)
     else:
         print("PROBLEM! A key did not match.")
         print(nameToMatch)
-            
+
 outputBedFile.close()
 rawFileNoHeader.close()
 
@@ -146,11 +146,11 @@ for i in range(65):
         name.append(line1[i])
 n=0
 for i in name[2:]:
-    n+=1 
+    n+=1
     asFileAddition = "   lstring extraField"+str(n)+';\t"'+i+'"\n'
     startOfAsFile = startOfAsFile+asFileAddition
 startOfAsFile = startOfAsFile+"   string _mouseOver;"+'\t"'+'Field only used as mouseOver'+'"\n'
-    
+
 asFileOutput = open("/hive/data/inside/enigmaTracksData/BRCAmla.as","w")
 for line in startOfAsFile.split("\n"):
     if "_mouseOver" in line:

@@ -962,6 +962,12 @@ void apiGetData(char *words[MAX_PATH_INFO])
 /* 'getData' function, words[1] is the subCommand */
 {
 char *hubUrl = cgiOptionalString("hubUrl");
+char *genome = cgiOptionalString("genome");
+/* allow a GCx genome specified without hubUrl for GenArk genomes */
+if (isEmpty(hubUrl) && isNotEmpty(genome) && isGenArk(genome))
+    {
+    hubUrl = genArkHubTxt(genome);
+    }
 if (sameWord("track", words[1]))
     {
     char *extraArgs = verifyLegalArgs(argGetDataTrack);

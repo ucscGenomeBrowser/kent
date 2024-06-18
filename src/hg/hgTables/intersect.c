@@ -280,9 +280,9 @@ else
     hPrintf("(data track %s is not composed of gene records.  Specialized intersection operations are not available.)<P>\n", name);
     }
 
-cgiMakeButton(hgtaDoIntersectSubmit, "submit");
+cgiMakeButton(hgtaDoIntersectSubmit, "Submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "cancel");
+cgiMakeButton(hgtaDoMainPage, "Cancel");
 hPrintf("</FORM>\n");
 
 /* Hidden form - for benefit of javascript. */

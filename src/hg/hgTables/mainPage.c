@@ -117,7 +117,7 @@ struct grp *showGroupField(char *groupVar, char *event, char *groupScript,
 {
 struct grp *group, *groupList = fullGroupList;
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
-hPrintf("<B>group:</B>\n");
+hPrintf("<B>Group:</B>\n");
 hPrintf("<SELECT NAME=%s id='%s'>\n", groupVar, groupVar);
 jsOnEventById(event,groupVar,groupScript);
 for (group = groupList; group != NULL; group = group->next)
@@ -189,7 +189,7 @@ if (sameString(selGroup->name, "allTables"))
 else
     {
     boolean allTracks = sameString(selGroup->name, "allTracks");
-    hPrintf("<B>track:</B>\n");
+    hPrintf("<B>Track:</B>\n");
     hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", trackVar, trackVar);
     jsOnEventById(event, trackVar, trackScript);
     if (allTracks)
@@ -306,7 +306,7 @@ if (!slNameInListUseCase(nameList, selTable))
     selTable = nameList->name;
 
 /* Print out label and drop-down list. */
-hPrintf("<B>table: </B>");
+hPrintf("<B>Table: </B>");
 hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", varName, varName);
 jsOnEventById("change", varName, onChangeTable());
 struct trackDb *selTdb = NULL;
@@ -490,22 +490,22 @@ if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
 hPrintf("</TD></TR>\n");
 }
 
-struct outputType otAllFields = { NULL,	outPrimaryTable,"all fields from selected table", };
+struct outputType otAllFields = { NULL,	outPrimaryTable,"All fields from selected table", };
 struct outputType otSelected =  { NULL, outSelectedFields,
-                                  "selected fields from primary and related tables",  };
-struct outputType otSequence =  { NULL, outSequence,    "sequence", };
+                                  "Selected fields from primary and related tables",  };
+struct outputType otSequence =  { NULL, outSequence,    "Sequence", };
 struct outputType otPal =       { NULL, outPalOptions,
                                   "CDS FASTA alignment from multiple alignment", };
 struct outputType otGff =         { NULL, outGff,         "GTF - gene transfer format &#40;limited&#41;", };
 struct outputType otBed =         { NULL, outBed,         "BED - browser extensible data", };
-struct outputType otCustomTrack = { NULL, outCustomTrack, "custom track", };
-struct outputType otHyperlinks =  { NULL, outHyperlinks,  "hyperlinks to Genome Browser", };
-struct outputType otWigData =     { NULL, outWigData,     "data points", };
-struct outputType otWigBed =      { NULL, outWigBed,      "bed format", };
+struct outputType otCustomTrack = { NULL, outCustomTrack, "Custom track", };
+struct outputType otHyperlinks =  { NULL, outHyperlinks,  "Hyperlinks to Genome Browser", };
+struct outputType otWigData =     { NULL, outWigData,     "Data points", };
+struct outputType otWigBed =      { NULL, outWigBed,      "Bed format", };
 struct outputType otMaf =         { NULL, outMaf,         "MAF - multiple alignment format", };
-struct outputType otChromGraphData =      { NULL, outChromGraphData,       "data points", };
-struct outputType otMicroarrayNames =     { NULL, outMicroarrayNames,     "microarray names", };
-struct outputType otMicroarrayGroupings = { NULL, outMicroarrayGroupings, "microarray groupings", };
+struct outputType otChromGraphData =      { NULL, outChromGraphData,       "Data points", };
+struct outputType otMicroarrayNames =     { NULL, outMicroarrayNames,     "Microarray names", };
+struct outputType otMicroarrayGroupings = { NULL, outMicroarrayGroupings, "Microarray groupings", };
 
 static void showOutputTypeRow(boolean isWig, boolean isBedGr,
     boolean isPositional, boolean isMaf, boolean isChromGraphCt,
@@ -515,7 +515,7 @@ static void showOutputTypeRow(boolean isWig, boolean isBedGr,
 struct outputType *otList = NULL, *otDefault = NULL;
 boolean bedifiedOnly = (anySubtrackMerge(database, curTable) || anyIntersection());
 
-hPrintf("<TR><TD><B>output format:</B>\n");
+hPrintf("<TR><TD><B>Output format:</B>\n");
 
 if (isBedGr)
     {
@@ -657,19 +657,19 @@ printStep(stepNumber++);
 
     if (gotClade)
         {
-        hPrintf("<TR><TD><B>clade:</B>\n");
+        hPrintf("<TR><TD><B>Clade:</B>\n");
         printCladeListHtml(hGenome(database), "change", onChangeClade());
         nbSpaces(3);
-        hPrintf("<B>genome:</B>\n");
+        hPrintf("<B>Genome:</B>\n");
         printGenomeListForCladeHtml(database, "change", onChangeOrg());
         }
     else
         {
-        hPrintf("<TR><TD><B>genome:</B>\n");
+        hPrintf("<TR><TD><B>Genome:</B>\n");
         printGenomeListHtml(database, "change", onChangeOrg());
         }
     nbSpaces(3);
-    hPrintf("<B>assembly:</B>\n");
+    hPrintf("<B>Assembly:</B>\n");
     printAssemblyListHtml(database, "change", onChangeDb());
     hPrintf("</TD></TR>\n");
     }
@@ -712,7 +712,7 @@ printStep(stepNumber++);
         {
         isChromGraphCt = isChromGraph(tdb);
         }
-    cgiMakeButton(hgtaDoSchema, "data format description");
+    cgiMakeButton(hgtaDoSchema, "Data format description");
     hPrintf("</TD></TR>\n");
     }
 
@@ -756,7 +756,7 @@ if (isPositional)
     if (!trackHubDatabase(database))
 	doEncode = sqlTableExists(conn, "encodeRegions");
 
-    hPrintf("<TR><TD><B>region:</B>\n");
+    hPrintf("<TR><TD><B>Region:</B>\n");
 
     /* If regionType not allowed force it to "genome". */
     if ((sameString(regionType, hgtaRegionTypeUserRegions) &&
@@ -779,7 +779,7 @@ if (isPositional)
     else
         {
         makeRegionButton(hgtaRegionTypeGenome, regionType);
-        hPrintf("&nbsp;genome&nbsp;");
+        hPrintf("&nbsp;Genome&nbsp;");
         }
     if (doEncode)
         {
@@ -787,23 +787,23 @@ if (isPositional)
 	hPrintf("&nbsp;ENCODE Pilot regions&nbsp;");
 	}
     makeRegionButton(hgtaRegionTypeRange, regionType);
-    hPrintf("&nbsp;position&nbsp;");
+    hPrintf("&nbsp;Position&nbsp;");
     hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" id='%s' SIZE=26 VALUE=\"%s\">\n",
     	hgtaRange, hgtaRange, range);
     jsOnEventById("focus", hgtaRange, 
 	jsRadioUpdate(hgtaRegionType, "regionType", "range"));
-    cgiMakeButton(hgtaDoLookupPosition, "lookup");
+    cgiMakeButton(hgtaDoLookupPosition, "Lookup");
     hPrintf("&nbsp;");
     if (userRegionsFileName() != NULL)
 	{
 	makeRegionButton(hgtaRegionTypeUserRegions, regionType);
-	hPrintf("&nbsp;defined regions&nbsp;");
-	cgiMakeButton(hgtaDoSetUserRegions, "change");
+	hPrintf("&nbsp;Defined regions&nbsp;");
+	cgiMakeButton(hgtaDoSetUserRegions, "Change");
 	hPrintf("&nbsp;");
-	cgiMakeButton(hgtaDoClearUserRegions, "clear");
+	cgiMakeButton(hgtaDoClearUserRegions, "Clear");
 	}
     else
-	cgiMakeButton(hgtaDoSetUserRegions, "define regions");
+	cgiMakeButton(hgtaDoSetUserRegions, "Define regions");
     hPrintf("</TD></TR>\n");
 
     if (disableGenome) { // no need to check curTrack for NULL, disableGenome can only be set if curTable is set
@@ -829,14 +829,14 @@ else
 /* Select identifiers line (if applicable). */
 if (!isWig && getIdField(database, curTrack, curTable, hti) != NULL)
     {
-    hPrintf("<TR><TD><B>identifiers (names/accessions):</B>\n");
-    cgiMakeButton(hgtaDoPasteIdentifiers, "paste list");
+    hPrintf("<TR><TD><B>Identifiers (names/accessions):</B>\n");
+    cgiMakeButton(hgtaDoPasteIdentifiers, "Paste list");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoUploadIdentifiers, "upload list");
+    cgiMakeButton(hgtaDoUploadIdentifiers, "Upload list");
     if (identifierFileName() != NULL)
         {
 	hPrintf("&nbsp;");
-	cgiMakeButton(hgtaDoClearIdentifiers, "clear list");
+	cgiMakeButton(hgtaDoClearIdentifiers, "Clear list");
 	}
     hPrintf("</TD></TR>\n");
     }
@@ -848,18 +848,18 @@ printStep(stepNumber++);
 
 /* Filter line. */
 {
-hPrintf("<TR><TD><B>filter:</B>\n");
+hPrintf("<TR><TD><B>Filter:</B>\n");
 if (anyFilter())
     {
-    cgiMakeButton(hgtaDoFilterPage, "edit");
+    cgiMakeButton(hgtaDoFilterPage, "Edit");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoClearFilter, "clear");
+    cgiMakeButton(hgtaDoClearFilter, "Clear");
     if (isWig || isBedGr)
 	wigShowFilter(conn);
     }
 else
     {
-    cgiMakeButton(hgtaDoFilterPage, "create");
+    cgiMakeButton(hgtaDoFilterPage, "Create");
     }
 hPrintf("</TD></TR>\n");
 }
@@ -868,16 +868,16 @@ hPrintf("</TD></TR>\n");
 boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack) && !isBam && !isVcf && !isLongTabix && !isHic);
 if (canSubtrackMerge)
     {
-    hPrintf("<TR><TD><B>subtrack merge:</B>\n");
+    hPrintf("<TR><TD><B>Subtrack merge:</B>\n");
     if (anySubtrackMerge(database, curTable))
 	{
-	cgiMakeButton(hgtaDoSubtrackMergePage, "edit");
+	cgiMakeButton(hgtaDoSubtrackMergePage, "Edit");
 	hPrintf(" ");
-	cgiMakeButton(hgtaDoClearSubtrackMerge, "clear");
+	cgiMakeButton(hgtaDoClearSubtrackMerge, "Clear");
 	}
     else
 	{
-	cgiMakeButton(hgtaDoSubtrackMergePage, "create");
+	cgiMakeButton(hgtaDoSubtrackMergePage, "Create");
 	}
     hPrintf("</TD></TR>\n");
     }
@@ -887,17 +887,17 @@ if (isPositional)
     {
     if (anyIntersection())
         {
-	hPrintf("<TR><TD><B>intersection with %s:</B>\n",
+	hPrintf("<TR><TD><B>Intersection with %s:</B>\n",
 		cartString(cart, hgtaIntersectTable));
-	cgiMakeButton(hgtaDoIntersectPage, "edit");
+	cgiMakeButton(hgtaDoIntersectPage, "Edit");
 	hPrintf(" ");
-	cgiMakeButton(hgtaDoClearIntersect, "clear");
+	cgiMakeButton(hgtaDoClearIntersect, "Clear");
         hPrintf("</TD></TR>\n");
 	}
     else if (canIntersect(database, curTable))
         {
-	hPrintf("<TR><TD><B>intersection:</B>\n");
-	cgiMakeButton(hgtaDoIntersectPage, "create");
+	hPrintf("<TR><TD><B>Intersection:</B>\n");
+	cgiMakeButton(hgtaDoIntersectPage, "Create");
         hPrintf("</TD></TR>\n");
 	}
     }
@@ -907,7 +907,7 @@ struct trackDb *tdb = findTdbForTable(database, curTrack, curTable, ctLookupName
 if (correlateTrackTableOK(tdb, curTable))
     {
     char *table2 = cartUsualString(cart, hgtaCorrelateTable, "none");
-    hPrintf("<TR><TD><B>correlation:</B>\n");
+    hPrintf("<TR><TD><B>Correlation:</B>\n");
     if (differentWord(table2, "none") && strlen(table2) && ! isNoGenomeDisabled(database, table2))
         {
         struct grp *groupList = fullGroupList;
@@ -928,8 +928,8 @@ if (correlateTrackTableOK(tdb, curTable))
                 }
 	    slFreeList(&tdbRefList);
             }
-        cgiMakeButton(hgtaDoCorrelatePage, "calculate");
-        cgiMakeButton(hgtaDoClearCorrelate, "clear");
+        cgiMakeButton(hgtaDoCorrelatePage, "Calculate");
+        cgiMakeButton(hgtaDoClearCorrelate, "Clear");
         if (tdb2 && tdb2->shortLabel)
             hPrintf("&nbsp;(with:&nbsp;&nbsp;%s)", tdb2->shortLabel);
 
@@ -945,7 +945,7 @@ if (correlateTrackTableOK(tdb, curTable))
 
         }
     else
-        cgiMakeButton(hgtaDoCorrelatePage, "create");
+        cgiMakeButton(hgtaDoCorrelatePage, "Create");
 
     hPrintf("</TD></TR>\n");
     }
@@ -961,11 +961,11 @@ showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, is
     char *fieldSep = cartUsualString(cart, hgtaOutSep, outTab);
     char *fileName = cartUsualString(cart, hgtaOutFileName, "");
     hPrintf("<TR><TD>\n");
-    hPrintf("<B>output filename:</B>&nbsp;");
+    hPrintf("<B>Output filename:</B>&nbsp;");
     cgiMakeTextVar(hgtaOutFileName, fileName, 29);
     hPrintf("&nbsp;(<span id='excelOutNote' style='display:none'>add .csv extension if opening in Excel, </span>leave blank to keep output in browser)</TD></TR>\n");
     hPrintf("<TR><TD>\n");
-    hPrintf("<B>output field separator:&nbsp;</B>");
+    hPrintf("<B>Output field separator:&nbsp;</B>");
 
     // tab or csv output
     cgiMakeRadioButton(hgtaOutSep, outTab, sameWord(outTab, fieldSep));
@@ -976,13 +976,13 @@ showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt, isPal, is
 
     hPrintf("</TD></TR>\n");
     hPrintf("<TR><TD>\n");
-    hPrintf("<B>file type returned:&nbsp;</B>");
+    hPrintf("<B>File type returned:&nbsp;</B>");
     cgiMakeRadioButton(hgtaCompressType, textOutCompressNone,
         sameWord(textOutCompressNone, compressType));
-    hPrintf("&nbsp;plain text&nbsp;");
+    hPrintf("&nbsp;Plain text&nbsp;");
     cgiMakeRadioButton(hgtaCompressType, textOutCompressGzip,
         sameWord(textOutCompressGzip, compressType));
-    hPrintf("&nbsp;gzip compressed");
+    hPrintf("&nbsp;Gzip compressed");
     hPrintf("</TD></TR>\n");
     }
 
@@ -1024,11 +1024,11 @@ hPrintf("</TABLE>\n");
 		"are not available when a%s has been specified.</I><BR>",
 		canSubtrackMerge ? " subtrack merge or intersection" : "n intersection");
 	}
-    cgiMakeButton(hgtaDoTopSubmit, "get output");
+    cgiMakeButton(hgtaDoTopSubmit, "Get output");
     hPrintf(" ");
     if (isPositional || isWig)
 	{
-	cgiMakeButton(hgtaDoSummaryStats, "summary/statistics");
+	cgiMakeButton(hgtaDoSummaryStats, "Summary/statistics");
 	hPrintf(" ");
 	}
 

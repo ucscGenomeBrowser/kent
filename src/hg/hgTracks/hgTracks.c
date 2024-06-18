@@ -8383,9 +8383,9 @@ boolean isPressed = FALSE;
 if (differentString(virtModeType, "default"))
     isPressed = TRUE;
 char buf[256];
-safef(buf, sizeof buf, "configure %s multi-region display mode", 
+safef(buf, sizeof buf, "Configure %s multi-region display mode", 
                         isPressed ? "or exit" : "");
-hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", buf,
+hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "Multi-region", buf,
             "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
 }
 
@@ -8483,11 +8483,11 @@ if (isSearchTracksSupported(database,cart))
 hPrintf("&nbsp;");
 // Not a submit button, because this is not a CGI function, it only calls Javascript function
 hPrintf("<button id='highlightThis' title='Add a highlight that covers the entire region shown<br><i>Keyboard shortcut:</i> h, "
-        "then m'>highlight</button>");
+        "then m'>Highlight</button>");
 jsInlineF("$('#highlightThis').click( function(ev) { highlightCurrentPosition('add'); return false; } );");
 
 hPrintf("&nbsp;");
-hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");
+hButtonWithMsg("hgt.hideAll", "Hide all","Hide all currently visible tracks - keyboard shortcut: h, then a");
 
 hPrintf(" ");
 hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
@@ -8496,7 +8496,7 @@ hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
 jsOnEventById("click", "ct_add", "document.customTrackForm.submit(); return false;");
 
 hPrintf(" ");
-hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection - keyboard shortcut: c, then f");
+hButtonWithMsg("hgTracksConfigPage", "Configure","Configure image and track selection - keyboard shortcut: c, then f");
 hPrintf(" ");
 
 if (!multiRegionButtonTop)
@@ -8504,13 +8504,13 @@ if (!multiRegionButtonTop)
     printMultiRegionButton();
     hPrintf(" ");
     }
-hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
+hButtonMaybePressed("hgt.toggleRevCmplDisp", "Reverse",
                        revCmplDisp ? "Show forward strand at this location - keyboard shortcut: r, then v"
                                    : "Show reverse strand at this location - keyboard shortcut: r, then v",
                        NULL, revCmplDisp);
 hPrintf(" ");
 
-hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
+hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
 // put the track download interface behind hg.conf control
 if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
@@ -9125,26 +9125,26 @@ if (!hideControls)
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
 #ifndef USE_NAVIGATION_LINKS
-    hWrites("move ");
-    hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left",
+    hWrites("Move ");
+    hButtonWithOnClick("hgt.left3", "<<<", "Move 95% to the left",
                        "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left",
+    hButtonWithOnClick("hgt.left2", " <<", "Move 47.5% to the left",
                        "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left",
+    hButtonWithOnClick("hgt.left1", " < ", "Move 10% to the left",
                        "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right1", " > ", "move 10% to the right",
+    hButtonWithOnClick("hgt.right1", " > ", "Move 10% to the right",
                        "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right2", ">> ", "move 47.5% to the right",
+    hButtonWithOnClick("hgt.right2", ">> ", "Move 47.5% to the right",
                        "return imageV2.navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right",
+    hButtonWithOnClick("hgt.right3", ">>>", "Move 95% to the right",
                        "return imageV2.navigateButtonClick(this);");
-    hWrites(" zoom in ");
+    hWrites(" Zoom in ");
     /* use button maker that determines padding, so we can share constants */
     topButton("hgt.in1", ZOOM_1PT5X);
     topButton("hgt.in2", ZOOM_3X);
     topButton("hgt.in3", ZOOM_10X);
     topButton("hgt.inBase", ZOOM_BASE);
-    hWrites(" zoom out ");
+    hWrites(" Zoom out ");
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
@@ -9379,11 +9379,11 @@ if (!hideControls)
             tl.picWidth, 27);
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
-    hPrintf("<span class='moveButtonText'>move start</span><br>");
-    hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left",
+    hPrintf("<span class='moveButtonText'>Move start</span><br>");
+    hButtonWithOnClick("hgt.dinkLL", " < ", "Move start position to the left",
                        "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right",
+    hButtonWithOnClick("hgt.dinkLR", " > ", "Move start position to the right",
                        "return imageV2.navigateButtonClick(this);");
     hPrintf("</TD>");
     hPrintf("<td width='30'>&nbsp;</td>\n");
@@ -9401,11 +9401,11 @@ if (!hideControls)
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
-    hPrintf("<span class='moveButtonText'>move end</span><br>");
-    hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left",
+    hPrintf("<span class='moveButtonText'>Move end</span><br>");
+    hButtonWithOnClick("hgt.dinkRL", " < ", "Move end position to the left",
                        "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right",
+    hButtonWithOnClick("hgt.dinkRR", " > ", "Move end position to the right",
                        "return imageV2.navigateButtonClick(this);");
     hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
@@ -9443,7 +9443,7 @@ if (!hideControls)
         hPrintf("<table id='trackCtrlTable' border=0 cellspacing=1 cellpadding=1>\n");
         hPrintf("<tr><td align='left'>\n");
 
-        hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups",
+        hButtonWithOnClick("hgt.collapseGroups", "Collapse all", "Collapse all track groups",
                            "return vis.expandAllGroups(false)");
         hPrintf("</td>");
 
@@ -9453,7 +9453,7 @@ if (!hideControls)
         hPrintf("</td>\n");
 
         hPrintf("<td align='right'>");
-        hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups",
+        hButtonWithOnClick("hgt.expandGroups", "Expand all", "Expand all track groups",
                            "return vis.expandAllGroups(true)");
         hPrintf("</td></tr>");
 
@@ -9534,7 +9534,7 @@ if (!hideControls)
 		    hubName + strlen(hubTrackPrefix));
 		}
 
-            hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
+            hPrintf("<input type='submit' name='hgt.refresh' value='Refresh' "
                     "title='Update image with your changes'>\n");
             hPrintf("</td></tr></table></th>\n");
             controlGridEndRow(cg);
@@ -9614,7 +9614,7 @@ if (!hideControls)
     hPrintf("</DIV>\n");
     }
 if (showTrackControls)
-    hButton("hgt.refresh", "refresh");
+    hButton("hgt.refresh", "Refresh");
 
 if (sameString(database, "wuhCor1"))
     {

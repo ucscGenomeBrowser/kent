@@ -17,16 +17,16 @@ varsToConvertToVcf = open('/hive/data/inside/enigmaTracksData/varsToConvert.txt'
 
 def assignRGBcolor(assignedCode):
     if assignedCode == "PS3":
-        itemRgb = '255,0,0' #Red
+        itemRgb = '0,100,120' #Dark blue
     elif assignedCode == "BS3":
-        itemRgb = '0,128,0' #Green
+        itemRgb = '0,200,240' #Light blue
     elif assignedCode == "None":
         itemRgb = '0,0,0' #Black
-    else: 
+    else:
         print("Error, no code match: "+assignedCode)
     return(itemRgb)
 
-itemRgb = '0,128,0' #Green
+#itemRgb = '0,128,0' #Green
 
 for line in rawFileNoHeader:
     line = line.rstrip().split("\t")
@@ -38,7 +38,6 @@ for line in rawFileNoHeader:
         print("ERROR! Missing transcript")
 varsToConvertToVcf.close()
 rawFileNoHeader.close()
-outputVcfFile.close()
 
 bash("hgvsToVcf -noLeftShift hg38 /hive/data/inside/enigmaTracksData/varsToConvert.txt /hive/data/inside/enigmaTracksData/tempVcfFile")
 
@@ -61,7 +60,7 @@ outputBedFile = open("/hive/data/inside/enigmaTracksData/outputBedFile.bed",'w')
 #Reiterate through the file matching coordinates now
 for line in rawFileNoHeader:
     line = line.rstrip("\n").split("\t")
-    
+
     geneSymbol = line[0]
     if line[0].startswith("BRCA1"):
         nmAccession = "NM_007294.4"
@@ -69,26 +68,26 @@ for line in rawFileNoHeader:
         nmAccession = "NM_000059.4"
     else:
         print("Error: Line didn't start with BRCA*")
-    
+
     nameToMatch = nmAccession+":"+line[1]
     _mouseOver = geneSymbol+"<br><b>HGVSc:</b> "+nmAccession+\
         ":"+line[1]+"<br><b>HGVSp:</b> "+line[2]+\
         "<br><b>Assigned code:</b> "+line[3]+\
         "<br><b>Code weight:</b> "+line[4]
-        
+
     itemRGB = assignRGBcolor(line[3])
-            
+
     if nameToMatch in vcfVarCoords.keys():
         lineToWrite = ("\t".join(vcfVarCoords[nameToMatch])+"\t"+line[1]+\
                             "\t0\t.\t"+"\t".join(vcfVarCoords[nameToMatch][1:])+\
                             "\t"+itemRGB+"\t"+nmAccession+"\t"+line[0]+"\t"+\
                             "\t".join(line[2:])+"\t"+_mouseOver+"\n")
-        
+
         outputBedFile.write(lineToWrite)
     else:
         print("PROBLEM! A key did not match.")
         print(nameToMatch)
-            
+
 outputBedFile.close()
 rawFileNoHeader.close()
 
@@ -125,11 +124,11 @@ for i in range(14):
         name.append(line1[i])
 n=0
 for i in name[2:]:
-    n+=1 
+    n+=1
     asFileAddition = "   lstring extraField"+str(n)+';\t"'+i+'"\n'
     startOfAsFile = startOfAsFile+asFileAddition
 startOfAsFile = startOfAsFile+"   string _mouseOver;"+'\t"'+'Field only used as mouseOver'+'"\n'
-    
+
 asFileOutput = open("/hive/data/inside/enigmaTracksData/BRCAfunctionalAssays.as","w")
 for line in startOfAsFile.split("\n"):
     if "_mouseOver" in line:

@@ -33,13 +33,14 @@ all:: test0 listFunctions getFunctions listSchema getSequence wigData \
 
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 	list10 list11 list12 list13 list14 list15 list16 list17 list18 list19 \
-	list20 list21 list22 list23 list24 list25 list26
+	list20 list21 list22 list23 list24 list25 list26 list27 list28 list29 \
+	list30 list31 list32
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
 	test29 test39 test40 test41 test42 test43 test44 test45 test46 test47 \
 	test48 test49 test50 test51 test52 test53 test54 test55 test56 test57 \
-	multiTrack01 multiTrack02 multiTrack03
+	test58 test59 multiTrack01 multiTrack02 multiTrack03
 
 findGenome: findGenome01
 
@@ -265,6 +266,36 @@ list27: setOutput
 	@./jsonConsumer.pl -genome=GCA_000002765.3 -maxItemsOutput=5  -serverName="${SERVERNAME}" -endpoint="/list/genarkGenomes" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;  s#/hubs/.*/hub#/hubs/hub#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# testing /list/tracks?genome=GCA_021951015.1 without hubUrl
+list28: setOutput
+	@printf "### $@ '${SERVERNAME}/list/tracks?genome=GCA_021951015.1'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/tracks" -genome="GCA_021951015.1" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;'  | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/tracks?genome=GCA_021951015.1 with hubUrl
+list29: setOutput
+	@printf "### $@ '${SERVERNAME}/list/tracks?genome=GCA_021951015.1;hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCA/021/951/015/GCA_021951015.1/hub.txt'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/tracks" -genome="GCA_021951015.1" -hubUrl="https://hgdownload.soe.ucsc.edu/hubs/GCA/021/951/015/GCA_021951015.1/hub.txt" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;'  | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes?genome=GCA_021951015.1 without hubUrl
+list30: setOutput
+	@printf "### $@ '${SERVERNAME}/list/chromosomes?genome=GCA_021951015.1'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/chromosomes" -genome="GCA_021951015.1" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;'  | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/chromosomes?genome=GCA_021951015.1 with hubUrl
+list31: setOutput
+	@printf "### $@ '${SERVERNAME}/list/chromosomes?genome=GCA_021951015.1;hubUrl=https://hgdownload.soe.ucsc.edu/hubs/GCA/021/951/015/GCA_021951015.1/hub.txt'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/chromosomes" -genome="GCA_021951015.1" -hubUrl="https://hgdownload.soe.ucsc.edu/hubs/GCA/021/951/015/GCA_021951015.1/hub.txt" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;'  | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /list/schema?genome=GCA_021951015.1;track=cpgIslandExt without hubUrl
+list32: setOutput
+	@printf "### $@ '${SERVERNAME}/list/schema?genome=GCA_021951015.1;track=cpgIslandExt'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/schema" -genome="GCA_021951015.1" -track="cpgIslandExt" 2>&1 | egrep -v "${excludeLines}" | egrep -v "dateTime" | sed -e 's#https://.*/list#/list#;'  | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 ##########################   getData functions  #############################
 # testing /getData/track?genome=ce11&track=gold
 test8: setOutput
@@ -461,6 +492,20 @@ test56: setOutput
 test57: setOutput
 	@printf "### $@ ### '${SERVERNAME}/getData/track?track=mrna;genome=ce11;jsonOutputArrays=1;maxItemsOutput=5'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome=ce11 -track=mrna -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?genome=GCF_000002985.6&track=assembly
+# without the hubUrl
+# https://hgdownload.soe.ucsc.edu/hubs/GCF/000/002/985/GCF_000002985.6/
+test58: setOutput
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -maxItemsOutput=123 -endpoint="/getData/track" -genome="GCF_000002985.6" -track="assembly" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# testing /getData/track?genome=GCF_000002985.6&track=assembly
+# with the hubUrl
+# https://hgdownload.soe.ucsc.edu/hubs/GCF/000/002/985/GCF_000002985.6/
+test59: setOutput
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -maxItemsOutput=123 -endpoint="/getData/track" -genome="GCF_000002985.6" -track="assembly" -hubUrl="https://hgdownload.soe.ucsc.edu/hubs/GCF/000/002/985/GCF_000002985.6//hub.txt" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # getData but with multiple tracks
