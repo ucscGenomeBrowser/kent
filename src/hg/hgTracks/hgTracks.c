@@ -1957,7 +1957,7 @@ else if (sameString(zoomType, ZOOM_10X))
     newWinWidth = winWidth/10;
 else if (sameString(zoomType, ZOOM_100X))
     newWinWidth = winWidth/100;
-else if (sameString(zoomType, ZOOM_BASE))
+else if (sameString(zoomType, ZOOM_BASE) || sameString(zoomType, "base")) // old sessions contain the old zoom type
     newWinWidth = insideWidth/tl.mWidth;
 else
     errAbort("invalid zoom type %s", zoomType);
