@@ -413,7 +413,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (gotSettings)
         {
         safef(buf, sizeof(buf), "%s%s", hgsEditPrefix, encSessionName);
-        cgiMakeButton(buf, "view/edit");
+        cgiMakeButton(buf, "View/edit");
         char *description = getSetting(row[5], "description");
         if (!isEmpty(description))
             hasDescription = TRUE;
@@ -425,7 +425,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
     char command[512];
     safef(command, sizeof(command), confirmDeleteFormat, encSessionName);
-    cgiMakeOnClickSubmitButton(command, buf, "delete");
+    cgiMakeOnClickSubmitButton(command, buf, "Delete");
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
@@ -477,7 +477,7 @@ cgiMakeOnKeypressTextVar(hgsOtherUserSessionName,
 			 cartUsualString(cart, hgsOtherUserSessionName, ""),
 			 20, jsPressOnEnter(hgsDoOtherUser));
 printf("&nbsp;&nbsp;");
-cgiMakeButton(hgsDoOtherUser, "submit");
+cgiMakeButton(hgsDoOtherUser, "Submit");
 printf("</TD></TR>\n");
 printf("<TR><TD colspan=2></TD></TR>\n");
 printf("</TABLE>\n");
@@ -496,7 +496,7 @@ printf("<TR><TD colspan=2>Use settings from a local file:</TD>\n");
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\" id='%s'>\n", hgsLoadLocalFileName,  hgsLoadLocalFileName);
 jsOnEventById("keypress", hgsLoadLocalFileName,"return noSubmitOnEnter(event);");
 printf("&nbsp;&nbsp;");
-cgiMakeButton(hgsDoLoadLocal, "submit");
+cgiMakeButton(hgsDoLoadLocal, "Submit");
 printf("</TD></TR>\n");
 printf("<TR><TD colspan=2></TD></TR>\n");
 
@@ -507,7 +507,7 @@ cgiMakeOnKeypressTextVar(hgsLoadUrlName,
 			 cartUsualString(cart, hgsLoadUrlName, ""),
 			 20, jsPressOnEnter(hgsDoLoadUrl));
 printf("&nbsp;&nbsp;");
-cgiMakeButton(hgsDoLoadUrl, "submit");
+cgiMakeButton(hgsDoLoadUrl, "Submit");
 printf("</TD></TR>\n");
 
 printf("</TABLE>\n");
@@ -568,7 +568,7 @@ if (isNotEmpty(userName))
     if (existingSessionNames)
 	{
         struct dyString *js = dyPrintCheckExistingSessionJs(existingSessionNames, NULL);
-	cgiMakeOnClickSubmitButton(js->string, hgsDoNewSession, "submit");
+	cgiMakeOnClickSubmitButton(js->string, hgsDoNewSession, "Submit");
 	dyStringFree(&js);
 	}
     else
@@ -593,7 +593,7 @@ cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressGzip,
 printf("&nbsp;gzip compressed (ignored if output file is blank)");
 printf("</TD><TD>");
 printf("&nbsp;");
-cgiMakeButton(hgsDoSaveLocal, "submit");
+cgiMakeButton(hgsDoSaveLocal, "Submit");
 printf("</TD></TR>\n");
 printf("<TR><TD></TD><TD colspan=3>(leave file blank to get output in "
        "browser window)</TD></TR>\n");
@@ -604,7 +604,7 @@ printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD colspan=2>");
 printf("back up custom tracks to archive .tar.gz</TD>");
 printf("<TD>");
 printf("&nbsp;");
-cgiMakeButton(hgsShowDownloadPrefix, "submit");
+cgiMakeButton(hgsShowDownloadPrefix, "Submit");
 printf("</TD></TR>\n");
 
 printf("<TR><TD colspan=4></TD></TR>\n");

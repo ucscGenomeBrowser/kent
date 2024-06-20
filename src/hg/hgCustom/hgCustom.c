@@ -728,8 +728,8 @@ printf("view in ");
 // Construct a menu of destination CGIs
 puts(cgiMakeSingleSelectDropList(hgCtNavDest, valsAndLabels, selected, NULL, NULL,
  "change", "var newVal = $('#navSelect').val(); $('#navForm').attr('action', newVal);", NULL, "navSelect"));
-cgiMakeButton("submit", "go to first annotation");
-puts("&nbsp;<input type='submit' name='submit' id='submitGoBack' value='return to current position'>");
+cgiMakeButton("submit", "Go to first annotation");
+puts("&nbsp;<input type='submit' name='submit' id='submitGoBack' value='Return to current position'>");
 jsOnEventByIdF("click", "submitGoBack", "$('#navForm > [name=position]').remove()");
 puts("</FORM>");
 }
@@ -842,7 +842,7 @@ puts("</TD></TR>");
 puts("<TR><TD>");
 printf("<INPUT TYPE=SUBMIT NAME=\"addTracksButton\" ID=\"addTracksButton\" VALUE=\"%s\" "
        "STYLE=\"margin-top: 5px\" >\n",
-       "add custom tracks");
+       "Add custom tracks");
 // This submits mainForm with a hidden input that tells hgCustom to show add tracks page:
 jsOnEventByIdF("click", "addTracksButton", 
 	"var $form = $(\"form[name='mainForm']\"); "
