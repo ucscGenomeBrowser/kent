@@ -449,7 +449,7 @@ printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
 printf("&nbsp;<BR>");
-cgiMakeButton("Submit", "submit");
+cgiMakeButton("Submit", "Submit");
 printf("%s", "</CENTER></TD>\n");
 
 printf("</TR></TABLE><BR>");

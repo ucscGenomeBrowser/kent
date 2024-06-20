@@ -11,6 +11,7 @@
 #include "cart.h"
 #include "dystring.h"
 #include "bedCart.h"
+#include "hgConfig.h"
 
 
 #if defined(NOT_YET)
@@ -23,6 +24,9 @@ boolean bedItemRgb(struct trackDb *tdb)
 {
 char *Default="Off";	/* anything different than this will turn it on */
 char *tdbDefault = (char *)NULL;
+
+if (cfgOptionBooleanDefault("alwaysItemRgb", FALSE))
+    return TRUE;
 
 if (tdb)
     tdbDefault = trackDbSettingClosestToHome(tdb, OPT_ITEM_RGB);

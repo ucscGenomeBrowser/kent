@@ -3,7 +3,7 @@
 set -e -o pipefail
 now=`date -I`
 cd /hive/data/outside/otto/malacards
-wget https://genecardscustomers.blob.core.windows.net/ucsc/UCSC_DiseaseCentric_dump_MC_current.csv -O oldVersions/$now.csv
+wget -q https://genecardscustomers.blob.core.windows.net/ucsc/UCSC_DiseaseCentric_dump_MC_current.csv -O oldVersions/$now.csv
 # copied from ~/kent/src/hg/makeDb/doc/ucscGenes/hg38.ucscGenes16.sh  
 # load malacards table
 hgsql hg38 -e 'drop table malacards; create table malacards (geneSymbol varchar(255), maladySymbol varchar(255), urlSuffix varchar(255), mainName varchar(255), geneScore float, diseaseScore float, isElite bool)'
