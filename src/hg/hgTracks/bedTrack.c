@@ -18,6 +18,7 @@
 #include "bigBedLabel.h"
 #include "snake.h"
 #include "quickLift.h"
+#include "hgConfig.h"
 
 #define SEQ_DELIM '~'
 
@@ -238,7 +239,7 @@ if (fieldCount < 12)
     bed8To12(bed);
 adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
 struct linkedFeatures *lf = lfFromBedExtra(bed, scoreMin, scoreMax);
-if (useItemRgb)
+if (useItemRgb || (fieldCount > 8 && cfgOptionBooleanDefault("alwaysItemRgb", TRUE)))
     {
     lf->useItemRgb = TRUE;
     lf->filterColor=bed->itemRgb;
