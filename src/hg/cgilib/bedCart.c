@@ -11,6 +11,7 @@
 #include "cart.h"
 #include "dystring.h"
 #include "bedCart.h"
+#include "hgConfig.h"
 
 
 #if defined(NOT_YET)
@@ -25,7 +26,18 @@ char *Default="Off";	/* anything different than this will turn it on */
 char *tdbDefault = (char *)NULL;
 
 if (tdb)
+    {
     tdbDefault = trackDbSettingClosestToHome(tdb, OPT_ITEM_RGB);
+
+    // If the hg.conf statement is set on this server to activate the new behavior:
+    // only default to "on" if:
+    // - "color" is not present at all
+    // - itemRgb=off is not set
+    if (cfgOptionBooleanDefault("alwaysItemRgb", FALSE) && 
+            (trackDbSettingClosestToHome(tdb, "color")==NULL) && 
+            !(tdbDefault || sameWord(Default,tdbDefault)))
+        return TRUE;
+    }
 
 if (tdbDefault)
     {

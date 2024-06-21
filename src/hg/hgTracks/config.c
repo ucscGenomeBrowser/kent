@@ -732,6 +732,12 @@ hPrintf("Show exon numbers");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
+hCheckBox("showDinkButtons", cartUsualBoolean(cart, "showDinkButtons", FALSE));
+hPrintf("</TD><TD>");
+hPrintf("Show move left/right limit buttons under image");
+hPrintf("</TD></TR>\n");
+
+hPrintf("<TR><TD>");
 hCheckBox("enableHighlightingDialog", cartUsualBoolean(cart, "enableHighlightingDialog", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Enable highlight with drag-and-select "

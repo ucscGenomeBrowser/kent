@@ -130,7 +130,7 @@ char *hTrackUiForTrack(char *trackName);
 #define PSL_SEQUENCE_DEFAULT	"no"
 
 /******  Some stuff for tables of controls ******/
-#define EXTENDED_DNA_BUTTON "extended case/color options"
+#define EXTENDED_DNA_BUTTON "Extended case/color options"
 
 /* Net track option */
 #define NET_OPT_TOP_ONLY  "netTopOnly"

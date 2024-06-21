@@ -4989,12 +4989,12 @@ else
 
 hgSeqOptionsHtiCart(hti,cart);
 puts("<P>");
-cgiMakeButton("submit", "get DNA");
+cgiMakeButton("submit", "Get DNA");
 if (dbIsFound)
     cgiMakeButton("submit", EXTENDED_DNA_BUTTON);
 puts("</FORM><P>");
 if (dbIsFound)
-    puts("Note: The \"Mask repeats\" option applies only to \"get DNA\", not to \"extended case/color options\". <P>");
+    puts("Note: The \"Mask repeats\" option applies only to \"Get DNA\", not to \"Extended case/color options\". <P>");
 }
 
 boolean dnaIgnoreTrack(char *track)
@@ -5256,7 +5256,7 @@ cgiMakeRadioButton("hgSeq.casing", "upper", caseUpper);
 printf(" Upper ");
 cgiMakeRadioButton("hgSeq.casing", "lower", !caseUpper);
 printf(" Lower ");
-cgiMakeButton("Submit", "submit");
+cgiMakeButton("Submit", "Submit");
 printf("<BR>\n");
 printf("<TABLE BORDER=1>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
@@ -7969,7 +7969,9 @@ if (isCustomTrack(aliTable))
     }
 else
     tdb = hashFindVal(trackHash, aliTable);
-
+if (tdb == NULL)
+    errAbort("BUG: bigPsl alignment table '%s' not found; this maybe causes by `.' in track names", aliTable);
+             
 if (!trackHubDatabase(database))
     conn = hAllocConnTrack(database, tdb);
 

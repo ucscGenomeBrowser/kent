@@ -76,12 +76,12 @@ puts("\n<TABLE WIDTH=\"100%%\">\n");
 
 /* top row -- labels */
 cgiSimpleTableRowStart();
-cgiTableField("Old Genome: ");
-cgiTableField("Old Assembly: ");
-cgiTableField("New Genome: ");
-cgiTableField("New Assembly: ");
+cgiTableField("Old genome: ");
+cgiTableField("Old assembly: ");
+cgiTableField("New genome: ");
+cgiTableField("New assembly: ");
 if (askAboutQuickLift)
-    cgiTableField("QuickLift Tracks: ");
+    cgiTableField("QuickLift tracks: ");
 cgiTableField(" ");
 cgiTableRowEnd();
 

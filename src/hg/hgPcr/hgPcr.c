@@ -438,30 +438,30 @@ else
     cgiMakeHiddenVar("wp_target", "genome");
 
 printf("%s", "<TD COLWIDTH=2><CENTER>\n");
-printf("Forward Primer:<BR>");
+printf("Forward primer:<BR>");
 cgiMakeTextVar("wp_f", fPrimer, 22);
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER COLWIDTH=2>\n");
-printf(" Reverse Primer:<BR>");
+printf(" Reverse primer:<BR>");
 cgiMakeTextVar("wp_r", rPrimer, 22);
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
 printf("&nbsp;<BR>");
-cgiMakeButton("Submit", "submit");
+cgiMakeButton("Submit", "Submit");
 printf("%s", "</CENTER></TD>\n");
 
 printf("</TR></TABLE><BR>");
 
 printf("<TABLE BORDER=0 WIDTH=\"96%%\" COLS=4><TR>\n");
 printf("%s", "<TD><CENTER>\n");
-printf("Max Product Size: ");
+printf("Max product size: ");
 cgiMakeIntVar("wp_size", maxSize, 5);
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Min Perfect Match: ");
+printf(" Min perfect match: ");
 cgiMakeIntVar("wp_perfect", minPerfect, 2);
 printf("%s", "</CENTER></TD>\n");
 
@@ -469,12 +469,12 @@ jsOnEventById("click", "Submit", "if ($('#wp_r').val()==='' || $('#wp_f').val()=
         "{ alert('Please specify at least a forward and reverse primer. Both input boxes need to be filled out.'); event.preventDefault(); }");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Min Good Match: ");
+printf(" Min good match: ");
 cgiMakeIntVar("wp_good", minGood, 2);
 printf("%s", "</CENTER></TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Flip Reverse Primer: ");
+printf(" Flip reverse primer: ");
 cgiMakeCheckBox("wp_flipReverse", flipReverse);
 printf("%s", "</CENTER></TD>\n");
 

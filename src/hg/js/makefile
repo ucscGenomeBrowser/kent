@@ -2,7 +2,7 @@ kentSrc = ../..
 include ../../inc/common.mk
 include install.mk
 
-SUBDIRS= external model react
+SUBDIRS= external model react tutorials
 include subdirs.mk
 
 # UCSC js files must pass jshint
@@ -31,7 +31,7 @@ JQUERY_FILES=${JQUERY_FILES_UNTOUCHED} ${JQUERY_FILES_MODIFIED}
 
 # SYMLINKED files are include in CGIs via a version or timestamped symlink
 #           to force client side updates
-SYMLINKED_FILES=${UCSC_JS_FILES} ${JQUERY_FILES} tutorial.js
+SYMLINKED_FILES=${UCSC_JS_FILES} ${JQUERY_FILES} tutorial.js clinicalTutorial.js
 
 ifdef LOWELAB
     # LOWE lab files should be forced through jshint (but currently aren't)

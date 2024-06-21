@@ -593,8 +593,10 @@ struct downloadResults *resultList = processCtsForDownloadInternals(contents, NU
 
 printf("<H2>Custom Tracks</H2>");
 
-printf("You can backup the custom tracks which you previously uploaded to UCSC Genome Browser servers.<br>"
-    "It will create a single .tar.gz file with custom track data,<br>"
+printf("You can backup the custom tracks that were previously uploaded to the UCSC Genome Browser servers.<br>"
+    "<b>Note:</b> Only plain-text custom tracks uploaded to UCSC will be downloaded. "
+    "The big* data formats custom tracks are not downloaded due to the data hosted externally.<BR><BR>\n"
+    "The download will create a single .tar.gz file with custom track data, "
     "which you can then download to your own machine for use as a backup.<br>"
     "\n");
 
@@ -699,7 +701,7 @@ printf("Total custom track data to backup: %s ", greek);
 
 if (ctCount > 0)
     {
-    cgiMakeButton(hgsMakeDownloadPrefix, "create custom tracks backup archive");
+    cgiMakeButton(hgsMakeDownloadPrefix, "Create custom tracks backup archive");
     }
 
 printf("<br>\n");
