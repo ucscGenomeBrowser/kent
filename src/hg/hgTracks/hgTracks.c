@@ -9375,42 +9375,31 @@ if (!hideControls)
 
     /* note a trick of WIDTH=27 going on here.  The 6,15,6 widths following
      * go along with this trick */
-    hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n",
-            tl.picWidth, 27);
-#ifndef USE_NAVIGATION_LINKS
-    hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
-    hPrintf("<span class='moveButtonText'>Move start</span><br>");
-    hButtonWithOnClick("hgt.dinkLL", " < ", "Move start position to the left",
-                       "return imageV2.navigateButtonClick(this);");
-    hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkLR", " > ", "Move start position to the right",
-                       "return imageV2.navigateButtonClick(this);");
-    hPrintf("</TD>");
-    hPrintf("<td width='30'>&nbsp;</td>\n");
-#endif//ndef USE_NAVIGATION_LINKS
-    hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
-    hWrites("Click on a feature for details. ");
-    hWrites("Shift+click+drag to zoom in. ");
-    hWrites("Click grey side bars for track options. ");
-    hWrites("Drag side bars or labels up or down to reorder tracks. ");
-    hWrites("Drag tracks left or right to new position. ");
-    hWrites("Press \"?\" for keyboard shortcuts. ");
-    hWrites("Use drop-down controls below and press refresh to alter tracks displayed. ");
+    if (cartUsualBoolean(cart, "showDinkButtons", FALSE))
+        {
+        hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n",
+                tl.picWidth, 27);
 
-    hPrintf("</TD>");
-#ifndef USE_NAVIGATION_LINKS
-    hPrintf("<td width='30'>&nbsp;</td>\n");
-    hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
-    hPrintf("<span class='moveButtonText'>Move end</span><br>");
-    hButtonWithOnClick("hgt.dinkRL", " < ", "Move end position to the left",
-                       "return imageV2.navigateButtonClick(this);");
-    hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkRR", " > ", "Move end position to the right",
-                       "return imageV2.navigateButtonClick(this);");
-    hPrintf("</TD>");
-#endif//ndef USE_NAVIGATION_LINKS
-    hPrintf("</TR></TABLE>\n");
+        hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
+        hPrintf("<span class='moveButtonText'>Move start</span><br>");
+        hButtonWithOnClick("hgt.dinkLL", " < ", "Move start position to the left",
+                           "return imageV2.navigateButtonClick(this);");
+        hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
+        hButtonWithOnClick("hgt.dinkLR", " > ", "Move start position to the right",
+                           "return imageV2.navigateButtonClick(this);");
+        hPrintf("</TD>");
+        hPrintf("<td width='30'>&nbsp;</td>\n");
 
+        hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
+        hPrintf("<span class='moveButtonText'>Move end</span><br>");
+        hButtonWithOnClick("hgt.dinkRL", " < ", "Move end position to the left",
+                                  "return imageV2.navigateButtonClick(this);");
+        hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
+        hButtonWithOnClick("hgt.dinkRR", " > ", "Move end position to the right",
+                                  "return imageV2.navigateButtonClick(this);");
+        hPrintf("</TD>");
+        hPrintf("</TR></TABLE>\n");
+        }
 
     if( chromosomeColorsMade )
         {
@@ -9456,6 +9445,10 @@ if (!hideControls)
         hButtonWithOnClick("hgt.expandGroups", "Expand all", "Expand all track groups",
                            "return vis.expandAllGroups(true)");
         hPrintf("</td></tr>");
+
+        // since this is all a huge table (which it shouldn't be), the only way to add whitespace between two rows is to add an empty row
+        // since padding and margin are not allowed on table rows. (One day, we will remove this table)
+        hPrintf("<tr style='height:4px'><td></td></tr>\n");
 
         cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
         struct hash *superHash = hashNew(8);
