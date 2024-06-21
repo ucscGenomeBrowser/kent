@@ -1494,6 +1494,7 @@
 ./runBuild GCA_921998905.2_CBA_J_v3 mammals Mus_musculus
 ./runBuild GCA_921999005.2_CAST_EiJ_v3 mammals Mus_musculus_castaneus
 ./runBuild GCA_921999095.2_JF1_MsJ_v3 mammals Mus_musculus_molossinus
+./runBuild GCA_921999865.2_C57BL_6NJ_v3 mammals Mus_musculus
 ./runBuild GCA_922000895.2_AKR_J_v3 mammals Mus_musculus
 ./runBuild GCA_922984935.2_mMelMel3.2_paternal_haplotype mammals Meles_meles
 ./runBuild GCA_922990625.1_mMelMel3.1_maternal_haplotype_uncurated mammals Meles_meles
