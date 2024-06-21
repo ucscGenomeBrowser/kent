@@ -699,7 +699,7 @@ printf("Total custom track data to backup: %s ", greek);
 
 if (ctCount > 0)
     {
-    cgiMakeButton(hgsMakeDownloadPrefix, "create custom tracks backup archive");
+    cgiMakeButton(hgsMakeDownloadPrefix, "Create custom tracks backup archive");
     }
 
 printf("<br>\n");

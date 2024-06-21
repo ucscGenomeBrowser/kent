@@ -10974,9 +10974,9 @@ cartSaveSession(cart);
 
 puts("Enter a position, or click on a sequence name to view the entire "
      "sequence in the genome browser.<P>");
-puts("position ");
+puts("Position ");
 hTextVar("position", addCommasToPos(database, position), 30);
-cgiMakeButton("Submit", "submit");
+cgiMakeButton("Submit", "Submit");
 puts("<P>");
 
 chromSizesDownloadLinks(hasAlias, aliasFile, chromSizesFile);
