@@ -1182,12 +1182,12 @@ if (metaDbExists)
     }
 
 hPrintf("</table>\n");
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' "
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' "
         "style='font-size:.8em;'>\n", TRACK_SEARCH);
-hPrintf("<input type='button' id='doSTClear2' name='clear' value='clear' class='clear' "
+hPrintf("<input type='button' id='doSTClear2' name='clear' value='Clear' class='clear' "
         "style='font-size:.8em;'>\n");
 jsOnEventById("click", "doSTClear2", "findTracks.clear();");
-hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' "
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' "
         "style='font-size:.8em;'>\n");
 //hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 hPrintf("</div>\n");
