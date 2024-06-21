@@ -68,31 +68,62 @@ function closePopup() {
 // Function to add steps to the tour
 function setupSteps() {
     tour.addStep({
-        title: 'Introduction for Clinicians',
+        title: 'A Brief Introduciton for Clinical Genetists',
         text: 'This tutorial is for clinicians and is no where near being complete in terms of '+
               'content but should be fully functioning without any bugs (hopefully). ',
         buttons: [tutorialButtons.next, tutorialButtons.end],
         id: 'intro',
         classes: 'dark-background'
     });
+
     tour.addStep({
-        title: 'Recommended Track Sets',
-        text: 'Some text about the recommended track sets',
+        title: 'Browsing the Genome',
+        text: 'The search bar allows you to navigate to a region on the genome using ' +
+              '<a href="https://genome-blog.soe.ucsc.edu/blog/2016/12/12/the-ucsc-genome-browser-coordinate-counting-systems/"' +
+              'target="_blank">genome coordinates</a>, <a href="/FAQ/FAQgenes.html#genename" ' +
+              'target="_blank">gene symbols</a>, <a href="https://www.ncbi.nlm.nih.gov/snp/docs/RefSNP_about/#what-is-a-reference-snp" ' +
+              'target="_blank">rsIDs</a>, <a href="http://varnomen.hgvs.org/" ' +
+              'target="_blank">HGVS</a> terms.<br><br> '+
+              'A few example queries are: ' +
+              '<ul>' +
+              '<li>chr1:127140001-127140001</li>' +
+              '<li>SOD1</li>' +
+              '<li>rs2569190</li>' +
+              '<li>NM_198056.3:c.1654G>T</li>' +
+              '</ul>' +
+              'The <a href="/goldenPath/help/query.html" target="_blank">Querying the Genome '+
+              'Browser</a> help page contains other search term examples that are available on '+
+              'the UCSC Genome Browser.',
         attachTo: {
-            element: '#recTrackSetsMenuItem',
+            element: '#positionInput',
             on: 'bottom'
         },
-        buttons: [ tutorialButtons.back,
-           {
-                text: 'Next',
-                action: function() {
-                    const rtsMenuItem = document.querySelector('#tools2 #recTrackSetsMenuItem');
-                    rtsMenuItem.click();
-                    tour.next();
-                }
-            }
-        ],
-        id: 'navbar',
+        buttons: [tutorialButtons['back'], tutorialButtons['next']],
+        id: 'search',
+        classes: 'dark-background'
+    });
+
+    tour.addStep({
+        title: 'Accessing the Recommended Track Sets',
+        text: 'The <b>Recommended Track Sets</b> feature is available under the "Genome Browser" '+
+              'drop-down menu. <br><br>'+
+              'Selecting this option will launch a dialog box offering '+
+              'pre-configured track sets, enabling swapping from one view to another view without '+
+              'changing the current position.'+
+              '<br><br><em>Currently only available on hg38 and hg19.</em>',
+        attachTo: {
+            element: '#recTrackSetsMenuItem',
+            on: 'right'
+        },
+        buttons: [ tutorialButtons.back, {
+                     text: 'Next',
+                     action: function() {
+                         const rtsMenuItem = document.querySelector('#tools2 #recTrackSetsMenuItem');
+                         rtsMenuItem.click();
+                         tour.next();
+                         }
+                  }],
+        id: 'rtsDropDown',
         classes: 'dark-background',
         when: {
             show: () => {
@@ -115,10 +146,13 @@ function setupSteps() {
     });
 
     tour.addStep({
-        title: 'Clinical SNVs',
-        text: 'Assess potential disease contributions of single nucleotide variants in coding regions.',
+        title: 'Pre-configured Track Sets',
+        text: 'Track Sets allow a user to quickly swap out the on-screen annotations they may '+
+              'be looking at for a different set of tracks relevant to specific medical scenarios.'+
+              '<br><br>Track sets are updated  XXXXXXXXXX'+
+              '<br><br><em>This tool is for research use only.</em>',
         attachTo: {
-            element: '#recTrackSetsPopup ul li:nth-child(1)',
+            element: '.ui-dialog[aria-labelledby="ui-dialog-title-recTrackSetsPopup"]',
             on: 'right'
         },
         buttons: [
@@ -129,8 +163,32 @@ function setupSteps() {
                     closePopup();
                 }
             },
-            tutorialButtons.next
+            {
+                text: 'Next',
+                action: () => {
+                    tour.next();
+                    closePopup();
+                }
+            }
         ],
+        id: 'trackSets',
+        classes: 'dark-background',
+        when: {
+            show: showPopup
+        }
+            
+    });
+    /*
+    tour.addStep({
+        title: 'Clinical SNVs',
+        text: 'Assess potential disease contributions of single nucleotide variants in coding regions.',
+        attachTo: {
+            element: '#recTrackSetsPopup ul li:nth-child(1)',
+            on: 'right'
+        },
+        buttons: [ tutorialButtons.back, tutorialButtons.next ],
+        id: 'SNVs',
+        classes: 'dark-background',
         when: {
             show: showPopup
         }
@@ -143,45 +201,33 @@ function setupSteps() {
             element: '#recTrackSetsPopup ul li:nth-child(2)',
             on: 'right'
         },
-        buttons: [
-            tutorialButtons.back,
-            tutorialButtons.next
+        buttons: [ tutorialButtons.back,
+            {
+                text: 'Next',
+                action: () => {
+                    tour.next();
+                    closePopup();
+                }
+            }
         ],
+        id: 'CNVs',
+        classes: 'dark-background',
         when: {
             show: showPopup
         }
     });
+    */
 
     tour.addStep({
-        title: 'Non-coding SNVs',
-        text: 'Investigate functional aspects of non-coding variants.',
-        attachTo: {
-            element: '#recTrackSetsPopup ul li:nth-child(3)',
-            on: 'right'
-        },
-        buttons: [
-            tutorialButtons.back,
-            tutorialButtons.next
-        ],
-        when: {
-            show: showPopup
-        }
-    });
-
-    tour.addStep({
-        title: 'Problematic Regions',
-        text: 'Evaluate if annotations are on potential low confidence regions due to high homology or other reported concerns.',
-        attachTo: {
-            element: '#recTrackSetsPopup ul li:nth-child(4)',
-            on: 'right'
-        },
+        title: 'The final step',
+        text: 'Some text for the final step.',
         buttons: [
             tutorialButtons.back,
             {
                 text: 'Finish',
                 action: () => {
-                    tour.complete();
                     closePopup();
+                    tour.complete();
                 }
             }
         ],
