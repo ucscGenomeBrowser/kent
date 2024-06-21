@@ -25,7 +25,7 @@ boolean bedItemRgb(struct trackDb *tdb)
 char *Default="Off";	/* anything different than this will turn it on */
 char *tdbDefault = (char *)NULL;
 
-if (cfgOptionBooleanDefault("alwaysItemRgb", FALSE))
+if (cfgOptionBooleanDefault("alwaysItemRgb", FALSE) && trackDbSettingClosestToHome(tdb, "color")==NULL)
     return TRUE;
 
 if (tdb)
