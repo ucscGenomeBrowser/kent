@@ -1,5 +1,4 @@
 /* jshint esnext: true */
-/*jslint unused: false */
 /* global Shepherd */
 
 
@@ -236,3 +235,5 @@ function setupSteps() {
         }
     });
 }
+
+setupSteps()
