@@ -8,7 +8,6 @@ superTrack on
 html fantom5.html
 visibility hide
 #subGroup1 group Group peaks=Peaks counts=Counts
-pennantIcon New red ../goldenPath/newsarch.html#071923 "Released July 19, 2023"
 
 	track robustPeaks
 	dataVersion FANTOM5 reprocessed7
