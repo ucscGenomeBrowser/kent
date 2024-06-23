@@ -3979,7 +3979,7 @@ static filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct 
 boolean isHighlight = startsWith("highlightValues.", tdbFilter->name);
 char *field = tdbFilter->fieldName;
 if (isEmpty(tdbFilter->setting))
-    errAbort("FilterValues setting of field '%s' must have a value.", tdbFilter->fieldName);
+    errAbort("track %s: FilterValues setting of field '%s' must have a value.", tdb->track, tdbFilter->fieldName);
 
 char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, tdbFilter->name, tdbFilter->setting);
 
@@ -3991,7 +3991,7 @@ struct asColumn *asCol = asColumnFind(as, field);
 if (asCol != NULL)
     filterBy->title = asCol->comment;
 else
-    errAbort("Building filter on field %s which is not in AS file.", field);
+    errAbort("Track %s: Building filter on field %s which is not in AS file.", tdb->track, field);
 char *trackDbLabel = getLabelSetting(cart, tdb, field);
 if (trackDbLabel)
     filterBy->title = trackDbLabel;
@@ -4028,7 +4028,7 @@ filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackD
 {
 struct asObject *as = asForTdb(NULL, tdb);
 if (as == NULL)
-    errAbort("Unable to get autoSql for %s", name);
+    errAbort("Track %s: Unable to get autoSql for %s", tdb->track, name);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
