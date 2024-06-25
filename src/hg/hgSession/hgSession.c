@@ -206,7 +206,7 @@ dyStringPrintf(dy,
     "<p>You can share this session with the following URL:<br><span id='urlText'>%s</span>&nbsp;",
     dyTmp->string);
 
-printCopyToClipboardButton(dy, "copyIcon", "urlText", "&nbsp;Copy to Clipboard");
+printCopyToClipboardButton(dy, "copyIcon", "urlText", "&nbsp;Copy to clipboard");
 dyStringAppend(dy, "</p>");
 }
 
