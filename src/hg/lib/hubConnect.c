@@ -867,7 +867,7 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub)
 /* set the error message in the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[64 * 1024];
+char query[1024 * 1024];
 struct trackHub *tHub = NULL;
 
 if (hub != NULL)
