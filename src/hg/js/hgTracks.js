@@ -5678,6 +5678,11 @@ $(document).ready(function()
         imageV2.loadRemoteTracks();
         makeItemsByDrag.load();
 
+        if (typeof clinicalTour !== 'undefined') {
+            if (typeof startClinicalOnLoad !== 'undefined' && startClinicalOnLoad){
+                clinicalTour.start();
+            }
+        }
         // show a tutorial page if this is a new user
         if (typeof tour !== 'undefined' && tour) {
             setupSteps();
