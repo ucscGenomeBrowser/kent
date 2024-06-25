@@ -3871,8 +3871,13 @@ function boundingRect(refEl) {
         let currParentOffset = 0, yDiff = 0;
         if (refEl.parentNode.name === "ideoMap") {
             parent = refImg.closest("tr");
-            currParentOffset = parent.getBoundingClientRect().y;
+            parentRect = parent.getBoundingClientRect();
+            currParentOffset = parentRect.y;
             yDiff = y1;
+            // and offset the x coordinate, because we are in a <center> element
+            refX += parentRect.x;
+            refLeft += parentRect.left;
+            refRight += parentRect.x;
         } else if (parent) {
             // how far in y direction we are from the tr start in the original image from the server:
             currParentOffset = parent.getBoundingClientRect().y;
@@ -4002,6 +4007,7 @@ function mouseIsOverPopup(ev, ele, fudgeFactor=25) {
 function mouseIsOverItem(ev, ele, fudgeFactor=25) {
     /* Is the mouse positioned over the item that triggered the popup? */
     let origName = ele.getAttribute("origItemMouseoverId");
+    if (origName === null) {origName = ele.getAttribute("mouseoverid");}
     let origTargetBox = boundingRect($("[mouseoverid='"+origName+"']")[0]);
     let mouseX = ev.clientX;
     let mouseY = ev.clientY;
@@ -4025,21 +4031,47 @@ function mousemoveTimerHelper(triggeringMouseMoveEv, currTooltip) {
 
 function mousemoveHelper(e) {
     /* Helper function for deciding whether to keep a tooltip visible upon a mousemove event */
+
+    // if a tooltip is not visible and we are not currently over the item that triggered
+    // the mouseover, then we want to stop the mouseover event and wait for a new mouseover
+    // event
+    if (!tooltipIsVisible()) {
+        if (!(mouseIsOverItem(e, lastMouseoverEle, 0))) {
+            // we have left the item boundaries, cancel any timers
+            mousemoveController.abort();
+            clearTimeout(mouseoverTimer);
+            clearTimeout(mousemoveTimer);
+        }
+        return;
+    }
+
+    // otherwise, a tooltip is visible or we are over the item that triggered the mouseover
+    // but we have just moved the mouse a little
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
+    // for the currently shown tooltip if any:
+    let currTooltipItem = this.getAttribute("origItemMouseoverId");
+    let currTooltipDelayedSetting = this.getAttribute("isDelayedTooltip");
+    let currTooltipIsDelayed = currTooltipDelayedSetting === "delayed";
+
+    // the tooltip that just triggered a mouseover event (not mousemove!)
     let isDelayedTooltip = lastMouseoverEle.getAttribute("tooltipDelay");
-    if (isDelayedTooltip !== null && isDelayedTooltip === "delayed") {
-        mousemoveTimer = setTimeout(mousemoveTimerHelper, 1500, e, this);
-        mousedNewItem = true;
+
+    // if the currently shown tooltip is a delayed one, hide the tooltip because,
+    // the mouse has moved, regardless how much time has passed
+    if (currTooltipIsDelayed || !(mouseIsOverItem(e, this) || mouseIsOverPopup(e, this))) {
         mousemoveController.abort();
         hideMouseoverText(this);
+    }
+
+    // wait for the mouse to stop moving:
+    if (currTooltipIsDelayed) {
+        mousemoveTimer = setTimeout(mousemoveTimerHelper, 1500, e, this);
+        mousedNewItem = true;
     } else {
         mousemoveTimer = setTimeout(mousemoveTimerHelper, 500, e, this);
-        // we are moving the mouse away, hide the tooltip regardless how much time has passed
         if (!(mouseIsOverPopup(e, this) || mouseIsOverItem(e, this))) {
-            mousemoveController.abort();
-            hideMouseoverText(this);
             return;
         }
     }
@@ -4085,10 +4117,10 @@ function showMouseoverText(ev) {
         // appropriate event
         mousemoveController = new AbortController();
         let callback = mousemoveHelper.bind(mouseoverContainer);
-
         mousedNewItem = false;
         clearTimeout(mouseoverTimer);
         mouseoverTimer = undefined;
+
         // allow the user to mouse over the mouse over, (eg. clicking a link or selecting text)
         document.addEventListener("mousemove", callback, {signal: mousemoveController.signal});
         document.addEventListener("scroll", callback, {signal: mousemoveController.signal});
@@ -4144,13 +4176,20 @@ function showMouseover(e) {
         clearTimeout(mouseoverTimer);
     }
     if (mousemoveTimer) {
-        // user is moving their mouse around and has triggered a potentially triggered
+        // user is moving their mouse around and has potentially triggered
         // a new pop up, clear the move timeout
         clearTimeout(mousemoveTimer);
     }
     // If there is no tooltip present, we want a small but noticeable delay
     // before showing a tooltip
     if (canShowNewMouseover) {
+        // set up the mousemove handlers to prevent showing a tooltip if we have
+        // already moved on from this item by the time the below delay passes:
+        mousemoveController = new AbortController();
+        let callback = mousemoveHelper.bind(mouseoverContainer);
+        document.addEventListener("mousemove", callback, {signal: mousemoveController.signal});
+        document.addEventListener("scroll", callback, {signal: mousemoveController.signal});
+
         // some tooltips are special and have a longer delay
         let isDelayedTooltip = ele1.getAttribute("tooltipDelay");
         if (isDelayedTooltip !== null && isDelayedTooltip === "delayed") {

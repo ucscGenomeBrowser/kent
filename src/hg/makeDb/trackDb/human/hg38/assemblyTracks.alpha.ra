@@ -1,7 +1,7 @@
 track assemblyContainer
 superTrack on
 group map
-shortLabel Assembly Container
+shortLabel Assembly Tracks
 longLabel Assembly identifiers, clones, and markers
 
 track scaffolds
