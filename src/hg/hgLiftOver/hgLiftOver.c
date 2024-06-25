@@ -94,10 +94,10 @@ puts("\n<TABLE WIDTH=\"100%\">\n");
 
 /* top two rows -- genome and assembly menus */
 cgiSimpleTableRowStart();
-cgiTableField("Original Genome: ");
-cgiTableField("Original Assembly: ");
-cgiTableField("New Genome: ");
-cgiTableField("New Assembly: ");
+cgiTableField("Original genome: ");
+cgiTableField("Original assembly: ");
+cgiTableField("New genome: ");
+cgiTableField("New assembly: ");
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
@@ -249,7 +249,7 @@ cgiParagraph("&nbsp;Or upload data from a file (<a href=\"../FAQ/FAQformat.html#
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
-puts("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit File\"></TD>\n");
+puts("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit file\"></TD>\n");
 cgiTableRowEnd();
 cgiTableEnd();
 printf("<input type=\"hidden\" name=\"%s\" value=\"0\">\n",

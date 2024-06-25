@@ -20,9 +20,16 @@ def assignRGBcolor(lineToCheck):
         itemRgb = '117,136,214' #Blue
     elif "RNA" in lineToCheck[5]:
         itemRgb = '146,64,190' #Black
-    else: 
+    else:
         itemRgb = '0,0,0'
     return(itemRgb)
+
+def checkExtraCarrotInPosition(position):
+    if position[len(position)-1] == ">":
+        correctPosition = position[0:len(position)-1]
+    else:
+        correctPosition = position
+    return(correctPosition)
 
 rawFile = open(rawFilePath,'r')
 outputBedFile = open("/hive/data/inside/enigmaTracksData/outputBedFile.bed",'w', encoding='latin-1')
@@ -36,14 +43,14 @@ for line in rawFile:
 #         print(line)
         itemRgb = assignRGBcolor(line)
         NMacc = line[1]
-        
+
         if line[0] == "BRCA1":
             strand = "-"
             chrom = "chr17"
         else:
             strand = "+"
             chrom = "chr13"
-        
+
         if len(line[3].split("c")) > 2:
             firstPos=line[3].split(".")[1].split("-c")[0]
             secondPos=line[3].split("-c.")[1]
@@ -54,7 +61,7 @@ for line in rawFile:
                         chromEnd = str(int(resultsLine.split("position=")[1].split("-")[0].split(":")[1])+5)
                     elif strand == "+":
                         chromStart = str(int(resultsLine.split("position=")[1].split("-")[0].split(":")[1])+4)
-            
+
             queryPosition = bash("curl https://hgwdev.gi.ucsc.edu/cgi-bin/hgSearch?search="+NMacc+"%3Ac"+secondPos)
             for resultsLine in queryPosition.split("\n"):
                 if resultsLine.startswith("<script"):
@@ -79,14 +86,14 @@ for line in rawFile:
                     pos = line[3].split("c.")[1].split("-")[0]
                     adjustment = p.findall(line[3].split("-")[1])
                     adjustment = "-"+adjustment[0]
-            
+
             elif "+" in line[3]: #c.475+1G>
                 pos = line[3].split("c.")[1].split("+")[0]
                 adjustment = p.findall(line[3].split("+")[1])[0]
             else: #c.1
                 pos = line[3].split('c.')[1]
                 adjustment = 0
-                
+
             queryPosition = bash("curl https://hgwdev.gi.ucsc.edu/cgi-bin/hgSearch?search="+NMacc+"%3Ac"+pos)
             for resultsLine in queryPosition.split("\n"):
                 if resultsLine.startswith("<script"):
@@ -97,20 +104,21 @@ for line in rawFile:
                 position = int(position)+int(adjustment)
             chromStart = str(position-1)
             chromEnd = str(position)
-        
+
         varType = line[4].replace('"','')
         ACMGcode = line[5].replace('"','')
         observation = line[6].replace("?","delta").replace('"','')
+        correctedPosition = checkExtraCarrotInPosition(line[3])
         _mouseOver = "<b>Transcript:</b> "+line[1]+"<br><b>Exon:</b> "+line[2]+\
-        "<br><b>Position:</b> "+line[3]+"<br><b>Var Type:</b> "+varType+\
+        "<br><b>Position:</b> "+correctedPosition+"<br><b>Var Type:</b> "+varType+\
         "<br><b>ACMG Code: </b>"+ACMGcode
-        
-        outputBedFile.write(chrom+"\t"+chromStart+"\t"+chromEnd+"\t"+line[3]+"\t0\t"+\
+
+        outputBedFile.write(chrom+"\t"+chromStart+"\t"+chromEnd+"\t"+correctedPosition+"\t0\t"+\
                            strand+"\t"+chromStart+"\t"+chromEnd+"\t"+itemRgb+"\t"+\
                            "\t".join(line[:4])+"\t"+varType+"\t"+\
                             ACMGcode+"\t"+observation+\
                             "\t"+line[7]+"\t"+_mouseOver+"\n")
-            
+
 rawFile.close()
 outputBedFile.close()
 
@@ -135,11 +143,11 @@ line1 = bash("head -1 "+rawFilePath)
 line1 = line1.rstrip("\n").split("\t")
 
 name = []
-for i in range(8): 
+for i in range(8):
     asFileAddition = "   lstring extraField"+str(i)+';\t"'+line1[i]+'"\n'
     startOfAsFile = startOfAsFile+asFileAddition
 startOfAsFile = startOfAsFile+"   string _mouseOver;"+'\t"'+'Field only used as mouseOver'+'"\n'
-    
+
 asFileOutput = open("/hive/data/inside/enigmaTracksData/BRCAsplicing.as","w")
 for line in startOfAsFile.split("\n"):
     if "_mouseOver" in line:

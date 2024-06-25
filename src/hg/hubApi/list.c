@@ -55,6 +55,24 @@ apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
 }
 
+static void genArkJsonData(struct jsonWrite *jw, struct genark *el,
+    int columnCount, char **columnNames)
+/* Print out genark table element in JSON format.
+ * must be same as was stated in the columnName header element
+ */
+{
+int i = 0;
+jsonWriteObjectStart(jw, el->gcAccession);
+i++;
+// redundant: jsonWriteString(jw, NULL, el->gcAccession);
+jsonWriteString(jw, columnNames[i++], el->hubUrl);
+jsonWriteString(jw, columnNames[i++], el->asmName);
+jsonWriteString(jw, columnNames[i++], el->scientificName);
+jsonWriteString(jw, columnNames[i++], el->commonName);
+jsonWriteNumber(jw, columnNames[i++], (long long)el->taxId);
+jsonWriteObjectEnd(jw);
+}
+
 static void dbDbJsonData(struct jsonWrite *jw, struct dbDb *el,
     int columnCount, char **columnNames)
 /* Print out dbDb table element in JSON format.
@@ -110,6 +128,50 @@ for ( el=dbList; el != NULL; el = el->next )
     dbDbJsonData(jw, el, columnCount, columnNames);
     }
 jsonWriteObjectEnd(jw);
+apiFinishOutput(0, NULL, jw);
+hDisconnectCentral(&conn);
+}
+
+static void jsonGenArk()
+/* output the genark.hgcentral SQL table */
+{
+char *extraArgs = verifyLegalArgs(argListGenarkGenomes); /* no extras allowed */
+if (extraArgs)
+    apiErrAbort(err400, err400Msg, "extraneous arguments found for function /list/genark '%s'", extraArgs);
+
+struct sqlConnection *conn = hConnectCentral();
+char *genArkTable = genarkTableName();
+char *dataTime = sqlTableUpdate(conn, genArkTable);
+time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
+replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
+long long genArkCount = genArkSize();
+char *genome = cgiOptionalString("genome");
+struct genark *list = genArkList(genome);
+struct jsonWrite *jw = apiStartOutput();
+if (genome && slCount(list) < 1)
+    apiErrAbort(err404, err404Msg, "genome '%s' not found", genome);
+jsonWriteString(jw, "dataTime", dataTime);
+jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+char *hubPrefix = cfgOption("genarkHubPrefix");
+jsonWriteString(jw, "hubUrlPrefix", hubPrefix);
+freeMem(dataTime);
+char **columnNames = NULL;
+char **columnTypes = NULL;
+int *jsonTypes = NULL;
+int columnCount = tableColumns(conn, genArkTable, &columnNames, &columnTypes,
+    &jsonTypes);
+jsonWriteObjectStart(jw, "genarkGenomes");
+struct genark *el;
+for ( el=list; el != NULL; el = el->next )
+    {
+    genArkJsonData(jw, el, columnCount, columnNames);
+    }
+jsonWriteObjectEnd(jw);
+long long itemCount = slCount(list);
+jsonWriteNumber(jw, "totalAssemblies", genArkCount);
+jsonWriteNumber(jw, "itemsReturned", itemCount);
+if (!genome && (genArkCount > itemCount))
+    jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
 apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
 }
@@ -1000,6 +1062,8 @@ if (sameWord("publicHubs", words[1]))
     jsonPublicHubs();
 else if (sameWord("ucscGenomes", words[1]))
     jsonDbDb();
+else if (sameWord("genarkGenomes", words[1]))
+    jsonGenArk();
 else if (sameWord("hubGenomes", words[1]))
     {
     char *extraArgs = verifyLegalArgs(argListHubGenomes); /* only one allowed */
@@ -1043,6 +1107,11 @@ else if (sameWord("tracks", words[1]))
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("genome");
+    /* allow a GCx genome specified without hubUrl for GenArk genomes */
+    if (isEmpty(hubUrl) && isNotEmpty(genome) && isGenArk(genome))
+	{
+	hubUrl = genArkHubTxt(genome);
+	}
     if (isEmpty(hubUrl) && isNotEmpty(db))
 	{
 	struct sqlConnection *conn = hAllocConnMaybe(db);
@@ -1089,6 +1158,11 @@ else if (sameWord("chromosomes", words[1]))
     char *hubUrl = cgiOptionalString("hubUrl");
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("genome");
+    /* allow a GCx genome specified without hubUrl for GenArk genomes */
+    if (isEmpty(hubUrl) && isNotEmpty(genome) && isGenArk(genome))
+	{
+	hubUrl = genArkHubTxt(genome);
+	}
     if (isEmpty(hubUrl) && isNotEmpty(db))
 	{
 	struct sqlConnection *conn = hAllocConnMaybe(db);
@@ -1121,6 +1195,11 @@ else if (sameWord("schema", words[1]))
     char *genome = cgiOptionalString("genome");
     char *db = cgiOptionalString("genome");
     char *track = cgiOptionalString("track");
+    /* allow a GCx genome specified without hubUrl for GenArk genomes */
+    if (isEmpty(hubUrl) && isNotEmpty(genome) && isGenArk(genome))
+	{
+	hubUrl = genArkHubTxt(genome);
+	}
 
     if (isEmpty(track))
 	apiErrAbort(err400, err400Msg, "missing track=<name> for endpoint '/list/schema'");

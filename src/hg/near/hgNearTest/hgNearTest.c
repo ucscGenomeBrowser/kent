@@ -469,7 +469,7 @@ struct htmlForm *mainForm;
 struct htmlFormVar *dbVar;
 struct slName *db;
 htmlPageSetVar(rootPage, rootForm, "org", org);
-htmlPageSetVar(rootPage, rootForm, "db", NULL);
+htmlPageSetVar(rootPage, rootForm, "db", "0");
 htmlPageSetVar(rootPage, rootForm, searchVarName, "");
 orgPage = htmlPageFromForm(rootPage, rootPage->forms, "submit", "Go");
 if ((mainForm = htmlFormGet(orgPage, "mainForm")) == NULL)

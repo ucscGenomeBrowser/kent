@@ -5,4 +5,4 @@ EMAIL="otto-group@ucsc.edu"
 WORKDIR="/hive/data/outside/otto/geneReviews"
 
 cd $WORKDIR
-./checkGeneReviews.sh $WORKDIR 2>&1 | mail -s "GENEREVIEW Build" $EMAIL
+./checkGeneReviews.sh $WORKDIR 2>&1 | mail -E -s "GENEREVIEW Build" $EMAIL

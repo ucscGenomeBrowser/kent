@@ -1,0 +1,69 @@
+track spliceAI
+compositeTrack on
+shortLabel SpliceAI
+longLabel SpliceAI: Splice Variant Prediction Score
+group phenDis
+visibility hide
+type bigBed 9 +
+tableBrowser off
+pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Xxx Xx, 2024"
+
+    track spliceAIsnvs
+    shortLabel SpliceAI SNVs
+    longLabel SpliceAI SNVs (unmasked)
+    parent spliceAI on
+    tableBrowser off
+    bigDataUrl /gbdb/$D/bbi/spliceAIsnvs.bb
+    visibility pack
+    itemRgb on
+    noScoreFilter on
+    filterValues.spliceType donor_gain|Donor gain,donor_loss|Donor loss,acceptor_gain|Acceptor gain,acceptor_loss|Acceptor loss
+    filterLabel.spliceType Splice type
+    filter.AIscore 0.02
+    filterLimits.AIscore 0.02:1
+    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b>$spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
+
+    track spliceAIindels
+    shortLabel SpliceAI indels
+    longLabel SpliceAI Indels (unmasked)
+    parent spliceAI on
+    tableBrowser off
+    bigDataUrl /gbdb/$D/bbi/spliceAIindels.bb
+    visibility pack
+    itemRgb on
+    noScoreFilter on
+    filterValues.spliceType donor_gain|Donor gain,donor_loss|Donor loss,acceptor_gain|Acceptor gain,acceptor_loss|Acceptor loss
+    filterLabel.spliceType Splice type
+    filter.AIscore 0.02
+    filterLimits.AIscore 0.02:1
+    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b>$spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
+
+    track spliceAIsnvsMasked
+    shortLabel SpliceAI SNVs (masked)
+    longLabel SpliceAI SNVs (masked)
+    parent spliceAI on
+    tableBrowser off
+    bigDataUrl /gbdb/$D/bbi/spliceAIsnvsMasked.bb
+    visibility hide
+    itemRgb on
+    noScoreFilter on
+    filterValues.spliceType donor_gain|Donor gain,donor_loss|Donor loss,acceptor_gain|Acceptor gain,acceptor_loss|Acceptor loss
+    filterLabel.spliceType Splice type
+    filter.AIscore 0.02
+    filterLimits.AIscore 0.02:1
+    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b>$spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore
+
+    track spliceAIindelsMasked
+    shortLabel SpliceAI indels (masked)
+    longLabel SpliceAI Indels (masked)
+    parent spliceAI on
+    tableBrowser off
+    bigDataUrl /gbdb/$D/bbi/spliceAIindelsMasked.bb
+    visibility hide
+    itemRgb on
+    noScoreFilter on
+    filterValues.spliceType donor_gain|Donor gain,donor_loss|Donor loss,acceptor_gain|Acceptor gain,acceptor_loss|Acceptor loss
+    filterLabel.spliceType Splice type
+    filter.AIscore 0.02
+    filterLimits.AIscore 0.02:1
+    mouseOver <b>Change:</b> $name<br><b>Gene:</b> $gene<br><b>Type of change:</b>$spliceType<br><b>Affected splice location:</b> $relativePos<br><b>Score:</b> $AIscore

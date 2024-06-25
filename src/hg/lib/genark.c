@@ -2,6 +2,7 @@
  * generated genark.h and genark.sql.  This module links the database and
  * the RAM representation of objects. */
 
+#include <limits.h>
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
@@ -274,6 +275,27 @@ hDisconnectCentral(&conn);
 return url;
 }
 
+char *genArkHubTxt(char *gcX)
+/* given a GC[AF]_012345678.9 name, return hub.txt URL */
+{
+char hubTxt[PATH_MAX + 1024];
+/* temporary construction of the path */
+char tPath[PATH_MAX + 1024];
+safencpy(tPath, 4, gcX, 3);
+safencpy(tPath+3, 2, "/", 1);
+safencpy(tPath+4, 4, gcX+4, 3);
+safencpy(tPath+7, 2, "/", 1);
+safencpy(tPath+8, 4, gcX+7, 3);
+safencpy(tPath+11, 2, "/", 1);
+safencpy(tPath+12, 4, gcX+10, 3);
+safencpy(tPath+15, 2, "/", 1);
+safecpy(tPath+16, PATH_MAX-16, gcX);
+/* start the result with the genArkHubPrefix, add in tPath and /hub.txt */
+safef(hubTxt, sizeof(hubTxt), "%s/%s/hub.txt", cfgOption("genarkHubPrefix"),
+   tPath);
+return cloneString(hubTxt);  // no need to free this
+}
+
 static char *_genarkTableName = NULL;
 
 char *genarkTableName()
@@ -286,5 +308,3 @@ if (_genarkTableName == NULL)
 
 return _genarkTableName;
 }
-
-

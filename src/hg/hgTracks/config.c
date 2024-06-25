@@ -297,7 +297,7 @@ for (group = groupList; group != NULL; group = group->next)
     safef(idText, sizeof idText, "%s_hideAllBut", group->name);
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" id='%s' VALUE=\"%s\" "
             "title='Hide all tracks in this groups'>",
-	    configHideAll, idText, "hide all");
+	    configHideAll, idText, "Hide all");
     // TODO XSS filter configGroupTarget
     char jsText[256]; 
     // used several times
@@ -308,13 +308,13 @@ for (group = groupList; group != NULL; group = group->next)
     safef(idText, sizeof idText, "%s_showAllBut", group->name);
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" id='%s' VALUE=\"%s\" "
             "title='Show all tracks in this groups'>",
-	    configShowAll, idText, "show all");
+	    configShowAll, idText, "Show all");
     jsOnEventById("click", idText, jsText);
     hPrintf(" ");
     safef(idText, sizeof idText, "%s_defaultBut", group->name);
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" id='%s' VALUE=\"%s\" "
             "title='Show default tracks in this group'>",
-	    configDefaultAll, idText, "default");
+	    configDefaultAll, idText, "Default");
     jsOnEventById("click", idText, jsText);
     hPrintf(" ");
     /* do not want all the submit buttons named the same.  It is
@@ -322,7 +322,7 @@ for (group = groupList; group != NULL; group = group->next)
      */
     char submitName[256];
     safef(submitName, sizeof(submitName), "%sSubmit", group->name);
-    cgiMakeButtonWithMsg(submitName, "submit","Submit your selections and view them in the browser");
+    cgiMakeButtonWithMsg(submitName, "Submit","Submit your selections and view them in the browser");
     hPrintf("</td></tr></table>\n");
     hPrintf("</TH></TR>\n");
 
@@ -585,21 +585,21 @@ cartSaveSession(cart);
 
 hPrintf("<INPUT TYPE=HIDDEN NAME=\"hgTracksConfigPage\" VALUE=\"\">");
 /* do not want all the submit buttons named the same thing, this one is: */
-cgiMakeButton("topSubmit", "submit");
+cgiMakeButton("topSubmit", "Submit");
 
 // 3 column table
 hPrintf("<TABLE style=\"border:0px; \">\n");
-hPrintf("<TR><TD>image width:");
+hPrintf("<TR><TD>Image width:");
 hPrintf("<TD style=\"text-align: right\">");
 hIntVar("pix", tl.picWidth, 4);
 hPrintf("<TD>pixels</TR>");
 
-hPrintf("<TR><TD>label area width:");
+hPrintf("<TR><TD>Label area width:");
 hPrintf("<TD style=\"text-align: right\">");
 hIntVar(leftLabelWidthVar, tl.leftLabelWidthChars, 2);
 hPrintf("<TD>characters<TD></TR>");
 
-hPrintf("<TR><TD>text size:");
+hPrintf("<TR><TD>Text size:");
 hPrintf("<TD style=\"text-align: right\">");
 textSizeDropDown();
 hPrintf("</TD>");
@@ -620,11 +620,11 @@ hPrintf("</TR>");
 
 if (freeTypeOn())
     {
-    hPrintf("<TR><TD>font:");
+    hPrintf("<TR><TD>Font:");
     hPrintf("<TD style=\"text-align: right\">");
     textFontDropDown();
     hPrintf("</TD></TR>");
-    hPrintf("<TR><TD id='textStyleName'>style:");
+    hPrintf("<TR><TD id='textStyleName'>Style:");
     hPrintf("<TD style=\"text-align: right\" id='textStyleDrop' >");
     textStyleDropDown();
     hPrintf("</TR>");
@@ -636,7 +636,7 @@ if (cfgOptionBooleanDefault("showMouseovers", FALSE))
     /* I predict most people will want the browser text size as the tooltip text size
      * but just in case, users can change the value and it will remain independent
      * of the font size by saving to localStorage. */
-    hPrintf("<tr><td>tooltip text size:</td>");
+    hPrintf("<tr><td>Tooltip text size:</td>");
     hPrintf("<td style=\"text-align: right\">");
     static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
     int i;
@@ -732,6 +732,12 @@ hPrintf("Show exon numbers");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
+hCheckBox("showDinkButtons", cartUsualBoolean(cart, "showDinkButtons", FALSE));
+hPrintf("</TD><TD>");
+hPrintf("Show move left/right limit buttons under image");
+hPrintf("</TD></TR>\n");
+
+hPrintf("<TR><TD>");
 hCheckBox("enableHighlightingDialog", cartUsualBoolean(cart, "enableHighlightingDialog", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Enable highlight with drag-and-select "
@@ -760,16 +766,16 @@ if (isSearchTracksSupported(database,cart))
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     hPrintf(" ");
     }
-cgiMakeButtonWithMsg(configHideAll, "hide all","Hide all tracks in this genome assembly");
+cgiMakeButtonWithMsg(configHideAll, "Hide all","Hide all tracks in this genome assembly");
 hPrintf(" ");
-cgiMakeButtonWithMsg(configShowAll, "show all","Show all tracks in this genome assembly");
+cgiMakeButtonWithMsg(configShowAll, "Show all","Show all tracks in this genome assembly");
 hPrintf(" ");
-cgiMakeButtonWithMsg(configDefaultAll, "default","Display only default tracks");
+cgiMakeButtonWithMsg(configDefaultAll, "Default","Display only default tracks");
 hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
-hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups",
+hButtonWithOnClick("hgt.collapseGroups", "Collapse all", "Collapse all track groups",
                    "return vis.expandAllGroups(false)");
 hPrintf(" ");
-hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups",
+hButtonWithOnClick("hgt.expandGroups", "Expand all", "Expand all track groups",
                    "return vis.expandAllGroups(true)");
 hPrintf("<div style='margin-top:.2em; margin-bottom:.9em;'>Control track and group visibility "
         "more selectively below.</div>");

@@ -796,6 +796,13 @@ static void getSequenceData(char *db, char *hubUrl)
 char *chrom = chrOrAlias(db, hubUrl);
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
+boolean revComp = FALSE;
+char *revCompStr = cgiOptionalString("revComp");
+if (isNotEmpty(revCompStr))
+    {
+    if (SETTING_IS_ON(revCompStr))
+        revComp = TRUE;
+    }
 
 long timeStart = clock1000();
 
@@ -845,6 +852,11 @@ if (chromSeqFileExists(db, chrom))
         jsonWriteNumber(jw, "end", (long long)sqlSigned(end));
 	}
     timeStart = clock1000();
+    if (revComp)
+	{
+	reverseComplement(seq->dna, seq->size);
+	jsonWriteBoolean(jw, "revComp", revComp);
+	}
     jsonWriteString(jw, "dna", seq->dna);
     endTime = clock1000();
     et = endTime - timeStart;
@@ -864,6 +876,13 @@ static void getHubSequenceData(char *hubUrl)
 char *genome = cgiOptionalString("genome");
 char *start = cgiOptionalString("start");
 char *end = cgiOptionalString("end");
+boolean revComp = FALSE;
+char *revCompStr = cgiOptionalString("revComp");
+if (isNotEmpty(revCompStr))
+    {
+    if (SETTING_IS_ON(revCompStr))
+        revComp = TRUE;
+    }
 
 if (isEmpty(genome))
     apiErrAbort(err400, err400Msg, "missing genome=<name> for endpoint '/getData/sequence'  given hubUrl='%s'", hubUrl);
@@ -930,6 +949,11 @@ if (NULL == seq)
     else
 	apiErrAbort(err400, err400Msg, "can not find sequence for chrom=%s for endpoint '/getData/sequence?genome=%s;chrom=%s' give hubUrl='%s'", chrom, genome, chrom, hubUrl);
     }
+if (revComp)
+    {
+    reverseComplement(seq->dna, seq->size);
+    jsonWriteBoolean(jw, "revComp", revComp);
+    }
 jsonWriteString(jw, "dna", seq->dna);
 apiFinishOutput(0, NULL, jw);
 }
@@ -938,6 +962,12 @@ void apiGetData(char *words[MAX_PATH_INFO])
 /* 'getData' function, words[1] is the subCommand */
 {
 char *hubUrl = cgiOptionalString("hubUrl");
+char *genome = cgiOptionalString("genome");
+/* allow a GCx genome specified without hubUrl for GenArk genomes */
+if (isEmpty(hubUrl) && isNotEmpty(genome) && isGenArk(genome))
+    {
+    hubUrl = genArkHubTxt(genome);
+    }
 if (sameWord("track", words[1]))
     {
     char *extraArgs = verifyLegalArgs(argGetDataTrack);

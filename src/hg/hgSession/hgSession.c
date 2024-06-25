@@ -206,7 +206,7 @@ dyStringPrintf(dy,
     "<p>You can share this session with the following URL:<br><span id='urlText'>%s</span>&nbsp;",
     dyTmp->string);
 
-printCopyToClipboardButton(dy, "copyIcon", "urlText", "&nbsp;Copy to Clipboard");
+printCopyToClipboardButton(dy, "copyIcon", "urlText", "&nbsp;Copy to clipboard");
 dyStringAppend(dy, "</p>");
 }
 
@@ -323,14 +323,14 @@ printf("<H3>My Sessions</H3>\n");
 printf("<div style=\"max-width:1024px\">");
 printf("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border compact\" borderwidth=0>\n");
 printf("<thead><tr>");
-printf("<TH><TD><B>session name (click to load)</B></TD>"
-        "<TD><B>created on</B></TD><TD><b>view count</b></TD>"
-        "<td><b>assembly</b></td>"
-       "<TD align=center><B>view/edit&nbsp;<BR>details&nbsp;</B></TD>"
-       "<TD align=center><B>delete this&nbsp;<BR>session&nbsp;</B></TD>"
-       "<TD align=center><B>share with&nbsp;<BR>others?&nbsp;</B></TD>"
-       "<td align-center><b>post in&nbsp;<br><a href=\"../cgi-bin/hgPublicSessions?%s\">public listing</a>?</b></td>"
-       "<TD align=center><B>send to<BR>mail</B></TD></TH>",
+printf("<TH><TD><B>Session name (click to load)</B></TD>"
+        "<TD><B>Created on</B></TD><TD><b>View count</b></TD>"
+        "<td><b>Assembly</b></td>"
+       "<TD align=center><B>View/edit&nbsp;<BR>details&nbsp;</B></TD>"
+       "<TD align=center><B>Delete this&nbsp;<BR>session&nbsp;</B></TD>"
+       "<TD align=center><B>Share with&nbsp;<BR>others?&nbsp;</B></TD>"
+       "<td align-center><b>Post in&nbsp;<br><a href=\"../cgi-bin/hgPublicSessions?%s\">public listing</a>?</b></td>"
+       "<TD align=center><B>Send to<BR>mail</B></TD></TH>",
        cartSidUrlString(cart));
 printf("</tr></thead>");
 printf("<tbody>\n");
@@ -413,7 +413,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (gotSettings)
         {
         safef(buf, sizeof(buf), "%s%s", hgsEditPrefix, encSessionName);
-        cgiMakeButton(buf, "view/edit");
+        cgiMakeButton(buf, "View/edit");
         char *description = getSetting(row[5], "description");
         if (!isEmpty(description))
             hasDescription = TRUE;
@@ -425,7 +425,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
     char command[512];
     safef(command, sizeof(command), confirmDeleteFormat, encSessionName);
-    cgiMakeOnClickSubmitButton(command, buf, "delete");
+    cgiMakeOnClickSubmitButton(command, buf, "Delete");
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
@@ -468,16 +468,16 @@ void showOtherUserOptions()
 printf("<TABLE BORDERWIDTH=0>\n");
 printf("<TR><TD colspan=2>"
        "Use settings from another user's saved session:</TD></TR>\n"
-       "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>user: \n");
+       "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>User: \n");
 cgiMakeOnKeypressTextVar(hgsOtherUserName,
 			 cartUsualString(cart, hgsOtherUserName, ""),
 			 20, "return noSubmitOnEnter(event);");
-printf("&nbsp;&nbsp;&nbsp;session name: \n");
+printf("&nbsp;&nbsp;&nbsp;Session name: \n");
 cgiMakeOnKeypressTextVar(hgsOtherUserSessionName,
 			 cartUsualString(cart, hgsOtherUserSessionName, ""),
 			 20, jsPressOnEnter(hgsDoOtherUser));
 printf("&nbsp;&nbsp;");
-cgiMakeButton(hgsDoOtherUser, "submit");
+cgiMakeButton(hgsDoOtherUser, "Submit");
 printf("</TD></TR>\n");
 printf("<TR><TD colspan=2></TD></TR>\n");
 printf("</TABLE>\n");
@@ -496,7 +496,7 @@ printf("<TR><TD colspan=2>Use settings from a local file:</TD>\n");
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\" id='%s'>\n", hgsLoadLocalFileName,  hgsLoadLocalFileName);
 jsOnEventById("keypress", hgsLoadLocalFileName,"return noSubmitOnEnter(event);");
 printf("&nbsp;&nbsp;");
-cgiMakeButton(hgsDoLoadLocal, "submit");
+cgiMakeButton(hgsDoLoadLocal, "Submit");
 printf("</TD></TR>\n");
 printf("<TR><TD colspan=2></TD></TR>\n");
 
@@ -507,7 +507,7 @@ cgiMakeOnKeypressTextVar(hgsLoadUrlName,
 			 cartUsualString(cart, hgsLoadUrlName, ""),
 			 20, jsPressOnEnter(hgsDoLoadUrl));
 printf("&nbsp;&nbsp;");
-cgiMakeButton(hgsDoLoadUrl, "submit");
+cgiMakeButton(hgsDoLoadUrl, "Submit");
 printf("</TD></TR>\n");
 
 printf("</TABLE>\n");
@@ -555,20 +555,20 @@ if (isNotEmpty(userName))
     {
     printf("<TR><TD colspan=4>Save current settings as named session:"
 	   "</TD></TR>\n"
-	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>name:</TD><TD>\n");
+	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>Name:</TD><TD>\n");
     cgiMakeOnKeypressTextVar(hgsNewSessionName,
 			     hubConnectSkipHubPrefix(cartUsualString(cart, "db", "mySession")),
 			     20, jsPressOnEnter(hgsDoNewSession));
     printf("&nbsp;&nbsp;&nbsp;");
     cgiMakeCheckBox(hgsNewSessionShare,
 		    cartUsualBoolean(cart, hgsNewSessionShare, TRUE));
-    printf("allow this session to be loaded by others\n");
+    printf("Allow this session to be loaded by others\n");
     printf("</TD><TD>");
     printf("&nbsp;");
     if (existingSessionNames)
 	{
         struct dyString *js = dyPrintCheckExistingSessionJs(existingSessionNames, NULL);
-	cgiMakeOnClickSubmitButton(js->string, hgsDoNewSession, "submit");
+	cgiMakeOnClickSubmitButton(js->string, hgsDoNewSession, "Submit");
 	dyStringFree(&js);
 	}
     else
@@ -578,12 +578,12 @@ if (isNotEmpty(userName))
     }
 
 printf("<TR><TD colspan=4>Save current settings to a local file:</TD></TR>\n");
-printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>file:</TD><TD>\n");
+printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>File:</TD><TD>\n");
 cgiMakeOnKeypressTextVar(hgsSaveLocalFileName,
 			 cartUsualString(cart, hgsSaveLocalFileName, ""),
 			 20, jsPressOnEnter(hgsDoSaveLocal));
 printf("&nbsp;&nbsp;&nbsp;");
-printf("file type returned: ");
+printf("File type returned: ");
 char *compressType = cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone);
 cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressNone,
 		   differentWord(textOutCompressGzip, compressType));
@@ -593,7 +593,7 @@ cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressGzip,
 printf("&nbsp;gzip compressed (ignored if output file is blank)");
 printf("</TD><TD>");
 printf("&nbsp;");
-cgiMakeButton(hgsDoSaveLocal, "submit");
+cgiMakeButton(hgsDoSaveLocal, "Submit");
 printf("</TD></TR>\n");
 printf("<TR><TD></TD><TD colspan=3>(leave file blank to get output in "
        "browser window)</TD></TR>\n");
@@ -601,10 +601,10 @@ printf("<TR><TD colspan=4></TD></TR>\n");
 
 printf("<TR><TD colspan=4>Save Custom Tracks:</TD></TR>\n");
 printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD colspan=2>");
-printf("back up custom tracks to archive .tar.gz</TD>");
+printf("Back up custom tracks to archive .tar.gz</TD>");
 printf("<TD>");
 printf("&nbsp;");
-cgiMakeButton(hgsShowDownloadPrefix, "submit");
+cgiMakeButton(hgsShowDownloadPrefix, "Submit");
 printf("</TD></TR>\n");
 
 printf("<TR><TD colspan=4></TD></TR>\n");
@@ -1149,8 +1149,8 @@ if ((row = sqlNextRow(sr)) != NULL)
     jsOnEventById("keydown", hgsNewSessionName, highlightAccChanges);
 
     dyStringPrintf(dyMessage,
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT ID=\"%s\" NAME=\"%s\" VALUE=\"accept changes\">"
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"cancel\"> "
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT ID=\"%s\" NAME=\"%s\" VALUE=\"Accept changes\">"
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"Cancel\"> "
 		   "<BR>\n",
 		   hgsDoSessionChange, hgsDoSessionChange, 
 		   hgsCancel);

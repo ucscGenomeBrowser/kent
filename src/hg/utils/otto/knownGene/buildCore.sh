@@ -71,7 +71,12 @@ s/pseudo/255\t51\t255/
 s/problem/254\t0\t0/
 __EOF__
 
-hgsql $db -Ne "select * from wgEncodeGencodeAttrs$GENCODE_VERSION" | tawk '{print $5,$13}' | sed -f colors.sed > colors.txt
+hgsql $db -Ne "select * from wgEncodeGencodeAttrs$GENCODE_VERSION" | tawk '{print $5,$13}' | sed -f colors.sed > colors.preMane
+
+# MANE transcript coloring override (mark MANE Select and Plus Clinical with a different color
+hgsql $db -Ne "select transcriptId from wgEncodeGencodeTag$GENCODE_VERSION where tag = 'MANE_Select' or tag = 'MANE_Plus_Clinical'" > mane.transcripts
+cat colors.preMane | perl -e 'open $fh "<" "mane.transcripts" or die "mane.transcripts missing"; %h = (); while (<$fh>) {chomp; $h{$_}=1;} while (<STDIN>)){ chomp; if (m/^(\S+)) { $s = $_; if (defined $h{$1}) {$s = "$1\t12\t109\t173";}} print "$s\n";' > colors.txt
+
 hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql colors.txt
 
 # knownGenePep
