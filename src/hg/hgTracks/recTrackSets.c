@@ -141,7 +141,7 @@ hPrintf("<ul class='indent'>");
 for (recTrackSet = recTrackSets; recTrackSet != NULL; recTrackSet = recTrackSet->next)
     {
 // TODO: consider libifying hgSession.c:add/getSessionLink() and using that
-    boolean mergeSession = cfgOptionBooleanDefault("mergeRecommended", FALSE);
+    boolean mergeSession = cfgOptionBooleanDefault("mergeRecommended", TRUE);
 
     if (mergeSession)
 #define rtsLoadSessionName  "rtsLoad"
