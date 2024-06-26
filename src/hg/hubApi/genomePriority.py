@@ -185,7 +185,8 @@ def establishPriorities(dbDb, genArk):
 
     totalItemCount = 0
 
-    print(f"### setting priorities, {len(dbDb):4} dbDb genomes, {len(genArk):4} genArk genomes")
+    expectedTotal = len(dbDb) + len(genArk)
+    print(f"### expected total: {expectedTotal:4} = {len(dbDb):4} dbDb genomes + {len(genArk):4} genArk genomes")
     itemCount = 0
     for name, priority in topPriorities.items():
        allPriorities[name] = priority
@@ -303,9 +304,7 @@ def establishPriorities(dbDb, genArk):
     sortByValue = sorted(versionScan.items(), key=lambda x: x[1], reverse=True)
     for key in sortByValue:
         highVersion = highestVersion[key[0]]
-#         if key[0] not in allPriorities:
         if highVersion not in allPriorities:
-#            allPriorities[key[0]] = priorityCounter
             allPriorities[highVersion] = priorityCounter
             priorityCounter += 1
             itemCount += 1
@@ -426,10 +425,8 @@ def main():
     fileOut = open(outFile, 'w')
 
     itemCount = 0
-    # name,scientificName,organism,taxId,sourceName,description
     # Print the dbDb data
     for entry in dbDbItems:
-        # Encode each entry value to UTF-8 before printing
         dbDbName = entry['name']
         if dbDbName in allPriorities:
             priority = allPriorities[dbDbName]
@@ -438,16 +435,8 @@ def main():
 
         clade = dbDbClades.get(entry['name'], "n/a")
 
-        indexString = entry['name']
-        indexString += " " + removeNonAlphanumeric(entry['scientificName'])
-        indexString += " " + removeNonAlphanumeric(entry['organism'])
-        indexString += " " + removeNonAlphanumeric(entry['description'])
-        indexString += " " + removeNonAlphanumeric(entry['sourceName'])
-        indexString += " " + entry['taxId']
-        noDups = eliminateDupWords(indexString)
         descr = f"{entry['sourceName']} {clade} {entry['taxId']} {entry['description']}\n"
         description = re.sub(r'\s+', ' ', descr).strip()
-#        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\t{noDups}\n"
         outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\n"
         fileOut.write(outLine)
         itemCount += 1
@@ -463,17 +452,6 @@ def main():
 
         cleanName = removeNonAlphanumeric(entry['commonName'])
         clade = re.sub(r'\(L\)$', '', entry['clade'])
-        indexString = entry['gcAccession']
-        indexString += " " + removeNonAlphanumeric(entry['scientificName'])
-        indexString += " " + cleanName
-        indexString += " " + clade
-        indexString += " " + removeNonAlphanumeric(entry['asmName'])
-        indexString += " " + entry['taxId']
-        noDups = eliminateDupWords(indexString)
-#        print(priority, entry['gcAccession'], entry['scientificName'], entry['commonName'], entry['taxId'], entry['asmName'], "'" + noDups + "'")
-#        print(priority, entry['gcAccession'], entry['scientificName'], entry['commonName'], entry['taxId'], "'" + noDups + "'")
-#        outLine =f"{priority}\t{entry['gcAccession']}\t{entry['scientificName']}\t{entry['taxId']}\t{entry['commonName']}\t{noDups}\n"
-#        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{entry['asmName']}\t{noDups}\n"
         descr = f"{entry['asmName']} {clade} {entry['taxId']}\n"
         description = re.sub(r'\s+', ' ', descr).strip()
         outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\n"
@@ -481,15 +459,6 @@ def main():
         itemCount += 1
 
     fileOut.close()
-
-#        print(removeNonAlphanumeric(entry['asmName']))
-#        print(removeNonAlphanumeric(entry['commonName']))
-#        gcAccession,scientificName,commonName,taxId,asmName
-
-
-#        cleanString = {k: removeNonAlphanumeric(v) for k, v in entry.items()}
-#        print(cleanString)
-
 
 if __name__ == "__main__":
     main()
