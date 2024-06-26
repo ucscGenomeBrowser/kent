@@ -3,6 +3,7 @@ superTrack on
 group phenDis
 shortLabel COVID Data
 longLabel Container of SARS-CoV-2 data
+cartVersion 4
 
 track covidMuts
 type bigBed 12 +

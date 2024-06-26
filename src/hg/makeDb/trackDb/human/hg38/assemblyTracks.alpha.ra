@@ -3,6 +3,7 @@ superTrack on
 group map
 shortLabel Assembly Tracks
 longLabel Assembly identifiers, clones, and markers
+cartVersion 4
 
 track scaffolds
 shortLabel Scaffolds
