@@ -2974,7 +2974,7 @@ for (ref = exonList; TRUE; )
 	    sx = (sx < picStart) ? picStart : sx;
     	    ex = (ex > picEnd)   ? picEnd   : ex;
 
-	    int w = ex - sx;
+	    int w = ex - sx; // w could be negative, but we'll skip drawing if it is
 
 	    int exonIntronNumber;
 	    char *exonIntronText;
@@ -3029,14 +3029,16 @@ for (ref = exonList; TRUE; )
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
                 // draw mapBoxes for the codons if we are zoomed in far enough
-                struct simpleFeature *codon;
-                struct dyString *codonDy = dyStringNew(0);
-                int codonS, codonE;
                 if (isExon && lf->codons && zoomedToCdsColorLevel)
                     {
+                    struct simpleFeature *codon;
+                    struct dyString *codonDy = dyStringNew(0);
+                    int codonS, codonE;
                     for (codon = lf->codons; codon != NULL; codon = codon->next)
                         {
                         codonS = codon->start; codonE = codon->end;
+                        if (codonS > e || codonE < s)
+                            continue; // only write out mouseovers for codons in the current exon
                         if (codonS <= winEnd && codonE >= winStart)
                             {
                             int codonSClp = (codonS < winStart) ? winStart : codonS;
@@ -3077,45 +3079,28 @@ for (ref = exonList; TRUE; )
                             }
                         }
                     }
-                }
-                else
+                else // either an intron, or else an exon zoomed out too far for codons (or no codons)
                     {
+                    char *sep = "";
+                    if (!isEmpty(existingText))
+                        sep = ", ";
+
+                    safef(mouseOverText, sizeof(mouseOverText), "%s%sstrand %c, %s %d of %d%s",
+                            existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
+
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
                     // prefer a lf->mouseOver over the itemName
-                    if (!isEmpty(existingText))
-                        safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d%s",
-                                existingText, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
-                    else
-                        safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d%s",
-                                strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
                     char *oldMouseOver = lf->mouseOver;
                     lf->mouseOver = NULL;
                     tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
                         sItem, eItem, sx, y, w, heightPer);
-                    // and restore the mouseOver
+                    // and restore the old mouseOver
                     lf->mouseOver = oldMouseOver;
+
+                    picStart = ex;  // prevent pileups. is this right? add 1? does it work?
+                                    // JC: Why do we care about pileups?  First mapbox drawn wins.
                     }
-
-	    if (w > 0) // draw exon or intron if width is greater than 0
-		{
-                char *sep = "";
-                if (!isEmpty(existingText))
-                    sep = ", ";
-
-                safef(mouseOverText, sizeof(mouseOverText), "%s%sstrand %c, %s %d of %d%s", 
-                        existingText, sep, strandChar, exonIntronText, exonIntronNumber, numExonIntrons, phaseText);
-
-                // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 
-                // prefer a lf->mouseOver over the itemName
-                char *oldMouseOver = lf->mouseOver;
-                lf->mouseOver = NULL;
-		tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
-		    sItem, eItem, sx, y, w, heightPer);
-                // and restore the old mouseOver
-                lf->mouseOver = oldMouseOver;
-
-		picStart = ex;  // prevent pileups. is this right? add 1? does it work?
-		}
+                }
 	    }
 	}
 
