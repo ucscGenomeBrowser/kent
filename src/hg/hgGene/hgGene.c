@@ -409,7 +409,6 @@ if (ajaxSection != NULL)
 
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(malaCardsSection(conn, sectionRa), conn, &sectionList);
     addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
 /*if (isRgdGene(conn))
