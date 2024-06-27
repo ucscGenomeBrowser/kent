@@ -236,7 +236,8 @@ type bed 3
         exonNumbers off
         itemRgb on
         parent varsInPubs pack
-        mouseOver Found in ${numPubmedIds} PubMed articles (click for details)
+        urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        mouseOver ${summary} (Found in ${numPubmedIds} PubMed articles)
 
 track caseControl
 compositeTrack on
