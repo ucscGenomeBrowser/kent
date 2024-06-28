@@ -8513,7 +8513,7 @@ hPrintf(" ");
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
 // put the track download interface behind hg.conf control
-if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
+if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
 }
 
