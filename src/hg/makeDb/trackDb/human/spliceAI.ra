@@ -5,6 +5,7 @@ longLabel SpliceAI: Splice Variant Prediction Score
 group phenDis
 type bigBed 9 +
 tableBrowser off
+dataVersion Illumina SpliceAI Score v1.3
 pennantIcon New red ../goldenPath/newsarch.html#XXXXXX "Xxx Xx, 2024"
 
     track spliceAIsnvs
