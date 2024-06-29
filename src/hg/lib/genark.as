@@ -7,5 +7,6 @@ table genark
     string scientificName; "scientific name: Homo sapiens"
     string commonName;  "common name: human"
     int taxId;          "taxon id: 9606"
+    int priority;       "search priority to order hgGateway results"
+    string clade;       "clade group in the GenArk system"
     )
-
