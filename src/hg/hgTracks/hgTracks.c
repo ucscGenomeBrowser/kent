@@ -9521,7 +9521,7 @@ if (!hideControls)
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
                 disconCount++;
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
-                    " type=\"button\" value=\"disconnect\">\n", idText);
+                    " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
