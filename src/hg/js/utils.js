@@ -3847,7 +3847,6 @@ function boundingRect(refEl) {
         let refImg = $("[usemap=#" + refEl.parentNode.name + "]")[0];
         let refImgRect = refImg.getBoundingClientRect();
         let refImgWidth = refImgRect.width;
-        let refImgHeight = refImgRect.height;
         let label = $("[id^=td_side]")[0];
         let btn = $("[id^=td_btn]")[0];
         let labelWidth = 0, btnWidth = 0;
@@ -3859,37 +3858,17 @@ function boundingRect(refEl) {
         if (refEl.parentNode.name !== "ideoMap") {
             imgWidth -= labelWidth - btnWidth;
         }
-        let refImgOffset = refImgRect.y + window.scrollY; // distance from start of image to top of viewport;
+        let refImgOffsetY = refImgRect.y; // distance from start of image to top of viewport, includes any scroll;
         [x1,y1,x2,y2] = refEl.coords.split(",").map(x => parseInt(x));
-        refX = x1; refY = y1;
-        refWidth = x2 - x1; refHeight = y2 - y1;
-        refRight = x2; refLeft = x1;
-        refTop = y1; refBottom = y2;
+        refX = x1 + refImgRect.x;
+        refY = y1 + refImgRect.y;
+        refRight = x2 + refImgRect.left;
+        refLeft = x1 + refImgRect.left;
+        refTop = y1 + refImgOffsetY;
+        refBottom = y2 + refImgOffsetY;
+        refWidth = x2 - x1;
+        refHeight = y2 - y1;
 
-        // now we need to offset our coordinates to the track tr, to account for dragReorder
-        let parent = refEl.closest(".trDraggable");
-        let currParentOffset = 0, yDiff = 0;
-        if (refEl.parentNode.name === "ideoMap") {
-            parent = refImg.closest("tr");
-            parentRect = parent.getBoundingClientRect();
-            currParentOffset = parentRect.y;
-            yDiff = y1;
-            // and offset the x coordinate, because we are in a <center> element
-            refX += parentRect.x;
-            refLeft += parentRect.left;
-            refRight += parentRect.x;
-        } else if (parent) {
-            // how far in y direction we are from the tr start in the original image from the server:
-            currParentOffset = parent.getBoundingClientRect().y;
-            yDiff = y1 - hgTracks.trackDb[parent.id.slice(3)].imgOffsetY;
-            // if track labels are on, then the imgOffsetY will be off by the track label amount
-            if (typeof hgTracks.centerLabelHeight !== 'undefined') {
-                yDiff += hgTracks.centerLabelHeight;
-            }
-        }
-        // account for dragReorder and track labels
-        refTop = currParentOffset + yDiff;
-        refBottom = currParentOffset + yDiff + refHeight;
     } else {
         rect = refEl.getBoundingClientRect();
         refX = rect.x; refY = rect.y;
@@ -4038,15 +4017,18 @@ function mousemoveHelper(e) {
     if (!tooltipIsVisible()) {
         if (!(mouseIsOverItem(e, lastMouseoverEle, 0))) {
             // we have left the item boundaries, cancel any timers
-            mousemoveController.abort();
+            rect = boundingRect(lastMouseoverEle);
             clearTimeout(mouseoverTimer);
             clearTimeout(mousemoveTimer);
+            // we can safely stop listening for mousemove now, because we need a new mouseover event
+            // to start a new mousemove event:
+            mousemoveController.abort();
         }
         return;
     }
 
     // otherwise, a tooltip is visible or we are over the item that triggered the mouseover
-    // but we have just moved the mouse a little
+    // but we have just moved the mouse a little, reset the timer
     if (mousemoveTimer) {
         clearTimeout(mousemoveTimer);
     }
@@ -4063,6 +4045,7 @@ function mousemoveHelper(e) {
     if (currTooltipIsDelayed || !(mouseIsOverItem(e, this) || mouseIsOverPopup(e, this))) {
         mousemoveController.abort();
         hideMouseoverText(this);
+        return;
     }
 
     // wait for the mouse to stop moving:
@@ -4076,6 +4059,11 @@ function mousemoveHelper(e) {
         }
     }
 }
+
+// Add some info text at the bottom of each tooltip:
+const infoText = document.createElement("p");
+infoText.style = "margin-bottom:  0";
+infoText.textContent = "Wiggle mouse or press ESC to close this tooltip";
 
 function showMouseoverText(ev) {
     /* If a tooltip is not visible, show the tooltip text right away. If a tooltip
@@ -4097,6 +4085,7 @@ function showMouseoverText(ev) {
         divCpy.childNodes.forEach(function(n) {
             mouseoverContainer.appendChild(n);
         });
+        mouseoverContainer.appendChild(infoText);
         positionMouseover(ev, referenceElement, mouseoverContainer, ev.pageX, ev.pageY);
         mouseoverContainer.classList.add("isShown");
         mouseoverContainer.style.opacity = "1";
@@ -4115,15 +4104,10 @@ function showMouseoverText(ev) {
         // want to remove one. We can use the AbortController interface to let the
         // web browser automatically raise a signal when the event is fired and remove
         // appropriate event
-        mousemoveController = new AbortController();
         let callback = mousemoveHelper.bind(mouseoverContainer);
         mousedNewItem = false;
         clearTimeout(mouseoverTimer);
         mouseoverTimer = undefined;
-
-        // allow the user to mouse over the mouse over, (eg. clicking a link or selecting text)
-        document.addEventListener("mousemove", callback, {signal: mousemoveController.signal});
-        document.addEventListener("scroll", callback, {signal: mousemoveController.signal});
     }
 }
 
@@ -4185,10 +4169,20 @@ function showMouseover(e) {
     if (canShowNewMouseover) {
         // set up the mousemove handlers to prevent showing a tooltip if we have
         // already moved on from this item by the time the below delay passes:
+        if (mousemoveController) {
+            // a previous mouseover event has fired and it waiting, clear it before
+            // setting up this one
+            mousemoveController.abort();
+        }
         mousemoveController = new AbortController();
         let callback = mousemoveHelper.bind(mouseoverContainer);
         document.addEventListener("mousemove", callback, {signal: mousemoveController.signal});
-        document.addEventListener("scroll", callback, {signal: mousemoveController.signal});
+        document.addEventListener("scroll", function(e) {
+            hideMouseoverText(mouseoverContainer);
+            clearTimeout(mousemoveTimer);
+            mousemoveController.abort();
+            canShowNewMouseover = true;
+        });
 
         // some tooltips are special and have a longer delay
         let isDelayedTooltip = ele1.getAttribute("tooltipDelay");

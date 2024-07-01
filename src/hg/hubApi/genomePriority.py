@@ -64,7 +64,7 @@ def readGenArkData(url):
             "scientificName": row[2],
             "commonName": row[3],
             "taxId": row[4],
-            "clade": row[5],
+            "clade": re.sub(r'\(L\)$', '', row[5]),
         }
         
         utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
@@ -92,16 +92,15 @@ def dbDbCladeList(filePath):
     return returnList
 
 ####################################################################
-def readOrderTsv(clade):
-    returnList = {}
+def extractClade(clade, genArkData):
+    tmpList = {}
+    for item in genArkData:
+        if clade != item['clade']:
+            continue
+        tmpList[item['gcAccession']] = item['commonName']
 
-    homeDir = os.environ.get('HOME')
-    filePath = homeDir + "/kent/src/hg/makeDb/doc/" + clade + "AsmHub/" + clade + ".orderList.tsv"
-
-    with open(filePath, 'r') as file:
-        reader = csv.reader(file, delimiter='\t')
-        for row in reader:
-            returnList[row[0]] = row[1]
+    # return sorted list on the common name, case insensitive
+    returnList = dict(sorted(tmpList.items(), key=lambda item:item[1].lower()))
 
     return returnList
 
@@ -112,7 +111,7 @@ def getFirstWordCaseInsensitive(row):
     return firstWord.lower()  # Convert to lowercase for case-insensitive sorting
 
 ####################################################################
-def processDbDbData(data):
+def processDbDbData(data, clades):
     # Initialize a list to hold the dictionaries
     dataList = []
 
@@ -124,6 +123,7 @@ def processDbDbData(data):
     for row in sortedRows:
         # Split each row into columns
         columns = row.split('\t')
+        clade = clades.get(columns[0], "n/a")
         
         # corresponds with the SELECT statement
         # name,scientificName,organism,taxId,sourceName,description
@@ -135,6 +135,7 @@ def processDbDbData(data):
             "taxId": columns[3],
             "sourceName": columns[4],
             "description": columns[5],
+            "clade": clade,
         }
         
         utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
@@ -187,6 +188,8 @@ def establishPriorities(dbDb, genArk):
 
     expectedTotal = len(dbDb) + len(genArk)
     print(f"### expected total: {expectedTotal:4} = {len(dbDb):4} dbDb genomes + {len(genArk):4} genArk genomes")
+
+    # first priority are the specific manually selected top items
     itemCount = 0
     for name, priority in topPriorities.items():
        allPriorities[name] = priority
@@ -194,8 +197,8 @@ def establishPriorities(dbDb, genArk):
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\ttopPriorities count: {itemCount:4}")
 
-    primateList = readOrderTsv('primates')
-    mammalList = readOrderTsv('mammals')
+    primateList = extractClade('primates', genArk)
+    mammalList = extractClade('mammals', genArk)
 
     versionScan = {}	# key is dbDb name without number version extension,
                         # value is highest version number seen for this bare
@@ -228,22 +231,25 @@ def establishPriorities(dbDb, genArk):
 
     dbDbLen = len(dbDb)
 
+    # second priority are the highest versioned database primates
+    # but not homo sapiens since we already have hg38 in topPriorities
     itemCount = 0
-    # homo sapiens come before anything else
-    for item in dbDb:
-        dbDbName = item['name']
-        if dbDbName not in allPriorities:
-            sciName = item['scientificName']
-            if sciName.lower() == "homo sapiens":
-                allPriorities[dbDbName] = priorityCounter
-                priorityCounter += 1
-                itemCount += 1
+    sortByValue = sorted(versionScan.items(), key=lambda x: x[1], reverse=True)
+    for key in sortByValue:
+        highVersion = highestVersion[key[0]]
+        if highVersion not in allPriorities:
+        # find the element in the dbDb list that matches this highVersion name
+            highDict = next((d for d in dbDb if d.get('name') == highVersion), None)
+            if highDict['clade'] == "primates":
+                if highDict['scientificName'].lower() != "homo sapiens":
+                    allPriorities[highVersion] = priorityCounter
+                    priorityCounter += 1
+                    itemCount += 1
     totalItemCount += itemCount
-    print(f"{totalItemCount:4} - total\tdbDb homo sapiens count: {itemCount:3}")
+    print(f"{totalItemCount:4} - total\tdbDb highest version primates count: {itemCount:4}")
 
     itemCount = 0
-    # and now the GenArk homo sapiens should be lined up here next,
-    #   GCF/RefSeq first
+    # and now the GenArk GCF/RefSeq homo sapiens should be lined up here next
     for item in genArk:
         gcAccession = item['gcAccession']
         if not gcAccession.startswith("GCF_"):
@@ -258,7 +264,7 @@ def establishPriorities(dbDb, genArk):
     print(f"{totalItemCount:4} - total\tgenArk GCF homo sapiens count: {itemCount:4}")
 
     itemCount = 0
-    # and now the GenArk homo sapiens should be lined up here next,
+    # and now the GenArk GCA/GenBank homo sapiens should be lined up here next
     #   GCA/GenBank second
     for item in genArk:
         gcAccession = item['gcAccession']
@@ -298,19 +304,22 @@ def establishPriorities(dbDb, genArk):
             itemCount += 1
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCA primates count: {itemCount:4}")
- 
+
+    # next are the highest versioned database mammals
     itemCount = 0
-    # the highest versions of each unique dbDb name get the top priorities
     sortByValue = sorted(versionScan.items(), key=lambda x: x[1], reverse=True)
     for key in sortByValue:
         highVersion = highestVersion[key[0]]
         if highVersion not in allPriorities:
-            allPriorities[highVersion] = priorityCounter
-            priorityCounter += 1
-            itemCount += 1
+        # find the element in the dbDb list that matches this highVersion name
+            highDict = next((d for d in dbDb if d.get('name') == highVersion), None)
+            if highDict['clade'] == "mammals":
+                allPriorities[highVersion] = priorityCounter
+                priorityCounter += 1
+                itemCount += 1
     totalItemCount += itemCount
-    print(f"{totalItemCount:4} - total\tdbDb highest versions count: {itemCount:4}")
-
+    print(f"{totalItemCount:4} - total\tdbDb highest version mammals count: {itemCount:4}")
+ 
     itemCount = 0
     # the mammals, GCF/RefSeq first
     for asmId, commonName in mammalList.items():
@@ -338,6 +347,18 @@ def establishPriorities(dbDb, genArk):
     print(f"{totalItemCount:4} - total\tgenArk GCA mammals count: {itemCount:4}")
  
     itemCount = 0
+    # the rest of the highest versions of each unique dbDb name
+    sortByValue = sorted(versionScan.items(), key=lambda x: x[1], reverse=True)
+    for key in sortByValue:
+        highVersion = highestVersion[key[0]]
+        if highVersion not in allPriorities:
+            allPriorities[highVersion] = priorityCounter
+            priorityCounter += 1
+            itemCount += 1
+    totalItemCount += itemCount
+    print(f"{totalItemCount:4} - total\tdbDb highest versions count: {itemCount:4}")
+
+    itemCount = 0
     # GCF RefSeq from GenArk next priority
     for item in genArk:
         gcAccession = item['gcAccession']
@@ -364,7 +385,7 @@ def establishPriorities(dbDb, genArk):
     print(f"{totalItemCount:4} - total\tgenArk GCA count: {itemCount:4}")
     
     itemCount = 0
-    # the rest of the names just get incrementing priorities
+    # finally the rest of the database genomes names
     for dbName in sorted(allDbDbNames):
         if dbName not in allPriorities:
             allPriorities[dbName] = priorityCounter
@@ -409,11 +430,11 @@ def main():
     # Ensure stdout and stderr use UTF-8 encoding
     set_utf8_encoding()
 
+    # the correspondence of dbDb names to GenArk clade categories
+    dbDbClades = dbDbCladeList(dbDbNameCladeFile)
     # Get the dbDb.hgcentral table data
     rawData = dbDbData()
-    dbDbItems = processDbDbData(rawData)
-    # and the correspondence of dbDb names to GenArk clade categories
-    dbDbClades = dbDbCladeList(dbDbNameCladeFile)
+    dbDbItems = processDbDbData(rawData, dbDbClades)
 
     # read the GenArk data from hgdownload into a list of dictionaries
     genArkUrl = "https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt"
@@ -433,7 +454,7 @@ def main():
         else:
             print("no priority for ", dbDbName)
 
-        clade = dbDbClades.get(entry['name'], "n/a")
+        clade = entry['clade']
 
         descr = f"{entry['sourceName']} {clade} {entry['taxId']} {entry['description']}\n"
         description = re.sub(r'\s+', ' ', descr).strip()
@@ -451,7 +472,7 @@ def main():
             print("no priority for ", gcAccession)
 
         cleanName = removeNonAlphanumeric(entry['commonName'])
-        clade = re.sub(r'\(L\)$', '', entry['clade'])
+        clade = entry['clade']
         descr = f"{entry['asmName']} {clade} {entry['taxId']}\n"
         description = re.sub(r'\s+', ' ', descr).strip()
         outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\n"

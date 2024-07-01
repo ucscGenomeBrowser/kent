@@ -6,7 +6,7 @@
 #define GENARK_H
 
 #include "jksql.h"
-#define GENARK_NUM_COLS 6
+#define GENARK_NUM_COLS 8
 
 #define defaultGenarkTableName "genark"
 /* Name of table that maintains the names of hubs we'll automatically attach if referenced. */
@@ -27,6 +27,8 @@ struct genark
     char *scientificName;	/* scientific name: Homo sapiens */
     char *commonName;	/* common name: human */
     int taxId;	/* taxon id: 9606 */
+    int priority;	/* search priority to order hgGateway results */
+    char *clade;	/* clade group in the GenArk system */
     };
 
 void genarkStaticLoad(char **row, struct genark *ret);
@@ -100,5 +102,13 @@ char *genArkHubTxt(char *gcX);
 char *genarkTableName();
 /* return the genark table name from the environment, 
  * or hg.conf, or use the default.  Cache the result */
+
+/* temporary function while the genark table is in transistion with
+ * new coluns being added, July 2024.  Allows compatibility with existing
+ * genark table.
+ */
+int genArkColumnCount();
+/* return number of columns in genark table */
+
 #endif /* GENARK_H */
 
