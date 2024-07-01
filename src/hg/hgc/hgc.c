@@ -3764,7 +3764,7 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
                        char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
-boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", FALSE);
+boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", TRUE);
 
 if (doSnake)
     return doSnakeChainClick(tdb, item, otherDb);
@@ -5170,13 +5170,26 @@ boolean forestHasUnderstandableTrack(char *db, struct trackDb *tdb)
 return (rFindUnderstandableTrack(db, tdb) != NULL);
 }
 
+struct trackDb* loadTracks()
+/* load native tracks, cts, userPsl and track Hubs and return tdbList */
+{
+struct trackDb *tdbList = hTrackDb(database);
+struct trackDb *ctdbList = tdbForCustomTracks();
+struct trackDb *utdbList = tdbForUserPsl();
+
+struct grp *pGrpList = NULL;
+struct trackDb *hubList = hubCollectTracks(database, &pGrpList);
+
+ctdbList = slCat(ctdbList, tdbList);
+ctdbList = slCat(ctdbList, hubList);
+tdbList = slCat(utdbList, ctdbList);
+return tdbList;
+}
+
 
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
-struct trackDb *tdbList = hTrackDb(database), *tdb;
-struct trackDb *ctdbList = tdbForCustomTracks();
-struct trackDb *utdbList = tdbForUserPsl();
 boolean revComp  = cartUsualBoolean(cart, "hgSeq.revComp", FALSE);
 boolean maskRep  = cartUsualBoolean(cart, "hgSeq.maskRepeats", FALSE);
 int padding5     = cartUsualInt(cart, "hgSeq.padding5", 0);
@@ -5187,9 +5200,7 @@ char *repMasking = cartUsualString(cart, "hgSeq.repMasking", "");
 boolean caseUpper= FALSE;
 char *pos = NULL;
 
-
-ctdbList = slCat(ctdbList, tdbList);
-tdbList = slCat(utdbList, ctdbList);
+struct trackDb *tdbList = loadTracks();
 
 cartWebStart(cart, database, "Extended DNA Case/Color");
 
@@ -5260,6 +5271,7 @@ cgiMakeButton("Submit", "Submit");
 printf("<BR>\n");
 printf("<TABLE BORDER=1>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
+struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     char *table = tdb->table;
@@ -5811,9 +5823,9 @@ boolean defaultUpper = sameString(cartString(cart, "hgSeq.casing"), "upper");
 int winSize;
 int lineWidth = cartInt(cart, "lineWidth");
 struct rgbColor *colors;
-struct trackDb *tdbList = hTrackDb(database), *tdb;
-struct trackDb *ctdbList = tdbForCustomTracks();
-struct trackDb *utdbList = tdbForUserPsl();
+
+struct trackDb *tdbList = loadTracks();
+
 char *pos = NULL;
 Bits *uBits;	/* Underline bits. */
 Bits *iBits;    /* Italic bits. */
@@ -5827,9 +5839,6 @@ uBits = bitAlloc(winSize);	/* Underline bits. */
 iBits = bitAlloc(winSize);	/* Italic bits. */
 bBits = bitAlloc(winSize);	/* Bold bits. */
 
-ctdbList = slCat(ctdbList, tdbList);
-tdbList = slCat(utdbList, ctdbList);
-
 cartWebStart(cart, database, "Extended DNA Output");
 printf("<PRE><TT>");
 printf(">%s:%d-%d %s\n", seqName, winStart+1, winEnd,
@@ -5841,6 +5850,8 @@ if (defaultUpper)
     touppers(seq->dna);
 
 AllocArray(colors, winSize);
+
+struct trackDb* tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     char *track = tdb->track;

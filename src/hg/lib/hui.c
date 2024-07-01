@@ -5931,7 +5931,7 @@ if (boxed)
 void snakeOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 /* let the user choose to see the track in snake mode */
 {
-if (!cfgOptionBooleanDefault("canSnake", FALSE))
+if (!cfgOptionBooleanDefault("canSnake", TRUE))
     return;
 
 printf("<BR><B>Display data as a rearrangement graph:</B> ");

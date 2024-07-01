@@ -646,8 +646,8 @@ while ((ra = raNextRecord(lf)) != NULL)
     if (hashFindVal(ra, "track"))
         break;
 
-    char *twoBitPath = hashFindVal(ra, "twoBitPath");
-    char *twoBitBptUrl = hashFindVal(ra, "twoBitBptUrl");
+    char *twoBitPath = hReplaceGbdb(hashFindVal(ra, "twoBitPath"));
+    char *twoBitBptUrl = hReplaceGbdb(hashFindVal(ra, "twoBitBptUrl"));
     char *genome, *trackDb;
     if (twoBitPath != NULL)
 	genome = addHubName(hashFindVal(ra, "genome"), hub->name);

@@ -1242,8 +1242,9 @@ hDisconnectCentral(&conn);
 if (!isEmpty(dir))
     {
     char *path = &dir[sizeof hubCuratedPrefix - 1];
-    char url[4096];
-    safef(url, sizeof url, "%s/%s/hub.txt", path, curatedHubPrefix);
+    char urlBuf[4096];
+    safef(urlBuf, sizeof urlBuf, "%s/%s/hub.txt", path, curatedHubPrefix);
+    char *url = hReplaceGbdb(urlBuf);
 
     struct hubConnectStatus *status = getAndSetHubStatus( cart, url, TRUE);
 

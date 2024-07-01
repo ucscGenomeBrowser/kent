@@ -15,7 +15,7 @@ then
 fi
 
 # knownToEnsembl and knownToGencode${GENCODE_VERSION}
-awk '{OFS="\t"} {print $4,$4}' ucscGenes.bed | sort | uniq > knownToEnsembl.tab
+awk '{OFS="\t"} {new=$4;gsub("_.*$","",new);print $4,new}' ucscGenes.bed | sort | uniq > knownToEnsembl.tab
 cp knownToEnsembl.tab knownToGencode${GENCODE_VERSION}.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToEnsembl  $kent/src/hg/lib/knownTo.sql  knownToEnsembl.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToGencode${GENCODE_VERSION}  $kent/src/hg/lib/knownTo.sql  knownToGencode${GENCODE_VERSION}.tab
