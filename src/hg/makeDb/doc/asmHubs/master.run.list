@@ -1655,6 +1655,7 @@
 ./runBuild GCA_963989345.1_bClaHye2.1 birds Clangula_hyemalis
 ./runBuild GCA_963993115.1_fAbrBra2.1 fish Abramis_brama
 ./runBuild GCA_964023405.1_mApoAgr2.1 mammals Apodemus_agrarius
+./runBuild GCA_964188545.1_CAST_EiJ_T2T_v1 mammals Mus_musculus_castaneus
 ./runBuild GCF_000001215.4_Release_6_plus_ISO1_MT invertebrate Drosophila_melanogaster
 ./runBuild GCF_000001405.39_GRCh38.p13 primates Homo_sapiens
 ./runBuild GCF_000001405.40_GRCh38.p14 primates Homo_sapiens
