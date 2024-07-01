@@ -107,6 +107,7 @@ GCF_000457365.1_ASM45736v1	bloodfluke planorb (BB02 2013)
 GCF_947242115.1_xgBioGlab47.1	bloodfluke planorb (primary hap 2022)
 GCF_022605725.1_icAntGran1.3	boll weevil (2022)
 GCF_001039355.2_LinAna2.0	brachiopods L.anatina
+GCA_031213475.1_uoNerLuet1.0	brown algae (2023)
 GCF_905147365.1_ilAriAges1.1	brown argus (refseq 2021)
 GCF_013339695.2_BIME_Rsan_1.4	brown dog tick (v1.4 Rsan-2018 2022)
 GCF_000696795.2_Hhal_2.0	brown marmorated stink bug
@@ -116,6 +117,7 @@ GCF_000757685.1_NilLug1.0	brown planthopper (NLH13 2014)
 GCF_000214255.1_Bter_1.0	buff-tailed bumblebee (2011 BCM)
 GCF_910591885.1_iyBomTerr1.2	buff-tailed bumblebee (2022 Wellcome Sanger)
 GCA_009739505.2_ASM973950v2	bugs A.lucorum (12Hb 2020)
+GCA_031763025.1_ASM3176302v1	bull kelp M.pyrifera (CI_03 2023)
 GCA_963855885.1_ilCoeGlyc1.1	butterfly C.glycerion (2023)
 GCA_905187585.1_ilCyaSemi1.1	butterfly C.semiargus
 GCA_019049475.1_ASM1904947v1	butterfly E.isabella
@@ -352,6 +354,7 @@ GCF_013076305.1_ASM1307630v1	jellyfish R.esculentum (edhc-2017 2020)
 GCF_003227715.2_Hsal_v8.6	Jerdon's jumping ant (DR-91 v8.6 2018)
 GCF_009193385.2_Nvit_psr_1.1	jewel wasp
 GCA_019049465.1_Diul.assembly.v1.1	julia butterfly
+GCA_002205965.3_ASM220596v3	K.alvarezzi red algae (kp 2020)
 GCA_001663935.1_Asyluc0.1	lancelets A.lucayanum (AD20110701 2016)
 GCA_019207075.1_Bb-hap	lancelets B.floridae x B.belcheri (bbbf 2021)
 GCA_015852565.1_bf_hap-2	lancelets B.floridae x B.japonicum (bjbf 2020)
@@ -616,6 +619,7 @@ GCF_002042975.1_ofav_dov_v1	stony coral O.faveolata
 GCF_003704095.1_ASM370409v1	stony coral P.damicornis
 GCF_002571385.2_Stylophora_pistillata_v1.1	stony coral S.pistillata (v1.1 CSM Monaco 2017)
 GCF_026230105.1_icDioSubl1.1	subtropical tamarisk beetle (icDioSubl1.1 primary hap 2022)
+GCA_034768055.1_ILVO_Slat_1.0	sugar kelp S.latissima (South Norwegian Sea WGS_kelp_146 2023)
 GCF_009176525.2_AAFC_CNas_1.1	swede midge
 GCF_029955315.1_icCylForm1.1	sweet potato weevil (icCylForm1 primary hap 2023)
 GCF_001854935.1_ASM185493v1	sweet potato whitefly

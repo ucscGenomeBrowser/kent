@@ -697,8 +697,8 @@ identifier refGeneRetro dependency
 identifier knownGeneRetro dependency
 "Link knownGene to ucscRetroInfo"
     $ucscRetroDb.knownGene.name dupeOk chopAfter=.
-    hg19.ucscRetroInfo4.kgName minCheck=0.96 exclude=noKg chopAfter=.
-    hg19.ucscRetroInfo5.kgName minCheck=0.96 exclude=noKg chopAfter=.
+    #hg19.ucscRetroInfo4.kgName minCheck=0.96 exclude=noKg chopAfter=.
+    #hg19.ucscRetroInfo5.kgName minCheck=0.96 exclude=noKg chopAfter=.
     hg38.ucscRetroInfo9.kgName minCheck=0.96 exclude=noKg chopAfter=.
     mm9.ucscRetroInfo1.kgName minCheck=0.94 exclude=noKg chopAfter=.
 
@@ -9311,15 +9311,15 @@ identifier rdmrGene
     $hg.rdmr.name dupeOk
     $hg.rdmrRaw.gene minCheck=0.95
 
-identifier gadId
-"GAD Gene ID"
-    $hg.kgXref.geneSymbol dupeOk
-    $hg.gad.name minCheck=0.94
+#identifier gadId
+#"GAD Gene ID"
+    #$hg.kgXref.geneSymbol dupeOk
+    #$hg.gad.name minCheck=0.94
 
-identifier gadAllId
-"GAD Gene Symbol in raw input"
-    $hg.kgXref.geneSymbol dupeOk
-    $hg.gadAll.geneSymbol minCheck=0.95
+#identifier gadAllId
+#"GAD Gene Symbol in raw input"
+    #$hg.kgXref.geneSymbol dupeOk
+    #$hg.gadAll.geneSymbol minCheck=0.95
 
 identifier hugeId
 "HuGE Gene ID"
@@ -10955,10 +10955,10 @@ identifier anoEstTclId
     $anoGam.anoEstTcl.name
     $anoGam.anoEstExpressed.name minCheck=0.30
 
-identifier allenBrainGene
-"KG link to Allen Brain Institute: Gene Expression in the Human Cortex"
-    $gbd.kgXref.geneSymbol dupeOk
-    $gbd.allenBrainGene.geneSymbol minCheck=0.95
+#identifier allenBrainGene
+#"KG link to Allen Brain Institute: Gene Expression in the Human Cortex"
+    #$gbd.kgXref.geneSymbol dupeOk
+    #$gbd.allenBrainGene.geneSymbol minCheck=0.95
 
 identifier allenBrainProbe
 "A probe used in the Allen Brain Atlas"
@@ -11073,10 +11073,10 @@ identifier lsSnpPdbProtId
     uniProt.extDbRef.acc dupeOk
     $lsSnpDb.lsSnpPdb.protId
 
-identifier lsSnpPdbKgId
-"lsSnpPdb table protId field"
-    $lsSnpDb.kgXref.spID dupeOk
-    $lsSnpDb.lsSnpPdb.protId minCheck=0.99
+#identifier lsSnpPdbKgId
+#"lsSnpPdb table protId field"
+    #$lsSnpDb.kgXref.spID dupeOk
+    #$lsSnpDb.lsSnpPdb.protId minCheck=0.99
 
 identifier lsSnpPdbPdbId
 "lsSnpPdb table pdbId field"

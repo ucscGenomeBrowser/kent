@@ -1361,8 +1361,8 @@ double expected = genomeSize;
 for (k=1; k<36; k++)
     {
     expected /= alphaBetSize;
-    // set this to .05 to allow 18bp searches on hg38.
-    if (expected < .19)
+    // Set this to .19 to allow 18bp searches on hg18 (no effect on hg38?).
+    if (expected < .004)
 	break;
     }
 return k;

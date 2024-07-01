@@ -3,7 +3,7 @@
 
 
 
-const tour = new Shepherd.Tour({
+const clinicalTour = new Shepherd.Tour({
   defaultStepOptions: {
     cancelIcon: {
       enabled: true
@@ -15,7 +15,7 @@ const tour = new Shepherd.Tour({
 });
 
 // log when a tutorial is started (commented out for now)
-//tour.on('start', function() {
+//clinicalTour.on('start', function() {
 //    writeToApacheLog("clinical start " + getHgsid());
 //});
 
@@ -64,9 +64,9 @@ function closePopup() {
   if (popupDialog) popupDialog.style.display = 'none';
 }
 
-// Function to add steps to the tour
-function setupSteps() {
-    tour.addStep({
+// Function to add steps to the clinicalTour
+function clinicalSteps() {
+    clinicalTour.addStep({
         title: 'A Brief Introduciton for Clinical Genetists',
         text: 'This tutorial is for clinicians and is no where near being complete in terms of '+
               'content but should be fully functioning without any bugs (hopefully). ',
@@ -75,7 +75,7 @@ function setupSteps() {
         classes: 'dark-background'
     });
 
-    tour.addStep({
+    clinicalTour.addStep({
         title: 'Browsing the Genome',
         text: 'The search bar allows you to navigate to a region on the genome using ' +
               '<a href="https://genome-blog.soe.ucsc.edu/blog/2016/12/12/the-ucsc-genome-browser-coordinate-counting-systems/"' +
@@ -102,7 +102,7 @@ function setupSteps() {
         classes: 'dark-background'
     });
 
-    tour.addStep({
+    clinicalTour.addStep({
         title: 'Accessing the Recommended Track Sets',
         text: 'The <b>Recommended Track Sets</b> feature is available under the "Genome Browser" '+
               'drop-down menu. <br><br>'+
@@ -119,7 +119,7 @@ function setupSteps() {
                      action: function() {
                          const rtsMenuItem = document.querySelector('#tools2 #recTrackSetsMenuItem');
                          rtsMenuItem.click();
-                         tour.next();
+                         clinicalTour.next();
                          }
                   }],
         id: 'rtsDropDown',
@@ -144,7 +144,7 @@ function setupSteps() {
         }
     });
 
-    tour.addStep({
+    clinicalTour.addStep({
         title: 'Pre-configured Track Sets',
         text: 'Track Sets allow a user to quickly swap out the on-screen annotations they may '+
               'be looking at for a different set of tracks relevant to specific medical scenarios.'+
@@ -158,14 +158,14 @@ function setupSteps() {
             {
                 text: 'Back',
                 action: () => {
-                    tour.back();
+                    clinicalTour.back();
                     closePopup();
                 }
             },
             {
                 text: 'Next',
                 action: () => {
-                    tour.next();
+                    clinicalTour.next();
                     closePopup();
                 }
             }
@@ -178,7 +178,7 @@ function setupSteps() {
             
     });
     /*
-    tour.addStep({
+    clinicalTour.addStep({
         title: 'Clinical SNVs',
         text: 'Assess potential disease contributions of single nucleotide variants in coding regions.',
         attachTo: {
@@ -193,7 +193,7 @@ function setupSteps() {
         }
     });
 
-    tour.addStep({
+    clinicalTour.addStep({
         title: 'Clinical CNVs',
         text: 'Assess potential disease contributions of structural variants in coding regions.',
         attachTo: {
@@ -204,7 +204,7 @@ function setupSteps() {
             {
                 text: 'Next',
                 action: () => {
-                    tour.next();
+                    clinicalTour.next();
                     closePopup();
                 }
             }
@@ -217,7 +217,7 @@ function setupSteps() {
     });
     */
 
-    tour.addStep({
+    clinicalTour.addStep({
         title: 'The final step',
         text: 'Some text for the final step.',
         buttons: [
@@ -226,7 +226,7 @@ function setupSteps() {
                 text: 'Finish',
                 action: () => {
                     closePopup();
-                    tour.complete();
+                    clinicalTour.complete();
                 }
             }
         ],
@@ -236,4 +236,4 @@ function setupSteps() {
     });
 }
 
-setupSteps()
+clinicalSteps()

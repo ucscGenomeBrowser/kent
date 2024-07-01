@@ -8513,7 +8513,7 @@ hPrintf(" ");
 hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size - keyboard shortcut: r, then s", "hgTracksSetWidth()");
 
 // put the track download interface behind hg.conf control
-if (cfgOptionBooleanDefault("showDownloadUi", FALSE))
+if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
 }
 
@@ -9430,6 +9430,11 @@ if (!hideControls)
         /* Chuck: This is going to be wrapped in a table so that
          * the controls don't wrap around randomly */
         hPrintf("<table id='trackCtrlTable' border=0 cellspacing=1 cellpadding=1>\n");
+
+        // since this is all a huge table (which it shouldn't be), the only way to add whitespace between two rows is to add an empty row
+        // since padding and margin are not allowed on table rows. (One day, we will remove this table)
+        hPrintf("<tr style='height:5px'><td></td></tr>\n");
+
         hPrintf("<tr><td align='left'>\n");
 
         hButtonWithOnClick("hgt.collapseGroups", "Collapse all", "Collapse all track groups",
@@ -9445,10 +9450,6 @@ if (!hideControls)
         hButtonWithOnClick("hgt.expandGroups", "Expand all", "Expand all track groups",
                            "return vis.expandAllGroups(true)");
         hPrintf("</td></tr>");
-
-        // since this is all a huge table (which it shouldn't be), the only way to add whitespace between two rows is to add an empty row
-        // since padding and margin are not allowed on table rows. (One day, we will remove this table)
-        hPrintf("<tr style='height:4px'><td></td></tr>\n");
 
         cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
         struct hash *superHash = hashNew(8);
@@ -9520,7 +9521,7 @@ if (!hideControls)
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
                 disconCount++;
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
-                    " type=\"button\" value=\"disconnect\">\n", idText);
+                    " type=\"button\" value=\"Disconnect\">\n", idText);
 		jsOnEventByIdF("click", idText,
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",

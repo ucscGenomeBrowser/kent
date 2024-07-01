@@ -1424,7 +1424,7 @@ struct cart *cartNew(char *userId, char *sessionId,
  * strings to not include */
 {
 cgiApoptosisSetup();
-if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
+if (cfgOptionBooleanDefault("showEarlyErrors", TRUE))
     errAbortSetDoContentType(TRUE);
 
 if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
