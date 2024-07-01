@@ -3437,7 +3437,7 @@ var popUpHgcOrHgGene = {
         var allVars = getAllVars($('#hgcDialog'), subtrack );
         var changedVars = varHashChanges(allVars,popUpHgcOrHgGene.saveAllVars);
 
-        // special case thses hprc tracks that allow you to turn on different tracks
+        // special case these hprc tracks that allow you to turn on different tracks
         if (trackName.startsWith("hprcDeletions") || trackName.startsWith("hprcInserts") ||
                 trackName.startsWith("hprcArr") || trackName.startsWith("hprcDouble")) {
             trackName = "chainHprc";
@@ -3521,7 +3521,7 @@ var popUpHgcOrHgGene = {
         // Create dialog buttons for UI popup
         // this could be more buttons later
         var uiDialogButtons = {};
-        uiDialogButtons.OK = function() {
+        uiDialogButtons.Close = function() {
             // if there was a form to submit, submit it:
             popUpHgcOrHgGene.uiDialogOk(popUpHgcOrHgGene.table);
             $(this).dialog("close");
@@ -3556,11 +3556,21 @@ var popUpHgcOrHgGene = {
                 popUpHgcOrHgGene.cleanup();
             }
         });
-        let titleText = hgTracks.trackDb[popUpHgcOrHgGene.table].shortLabel +
-                " Item Details <a style='font-size: .75em' target='_blank' href='" + popUpHgcOrHgGene.href + "'>" +
-                "Open in new window</a>";
+        let openIcon = '<a class="dialogNewWindowIcon" target="_blank" href="' + popUpHgcOrHgGene.href + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/> <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/> </svg></a>';
+        let titleText = hgTracks.trackDb[popUpHgcOrHgGene.table].shortLabel + " (Item Details)" + openIcon;
+
         $('#hgcDialog').dialog('option' , 'title', titleText);
         $('#hgcDialog').dialog('open');
+        document.addEventListener('click', e => {
+            // if we clicked outside of the pop up, close the popup:
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            popUpBox = document.getElementById("hgcDialog").parentElement.getBoundingClientRect();
+            if (mouseX < popUpBox.left || mouseX > popUpBox.right ||
+                    mouseY < popUpBox.top || mouseY > popUpBox.bottom) {
+                $("#hgcDialog").dialog("close");
+            }
+        });
 
         // Customize message based on current mode
         // Make 'Cancel' button close dialog
