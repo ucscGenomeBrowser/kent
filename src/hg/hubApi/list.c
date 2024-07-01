@@ -70,6 +70,10 @@ jsonWriteString(jw, columnNames[i++], el->asmName);
 jsonWriteString(jw, columnNames[i++], el->scientificName);
 jsonWriteString(jw, columnNames[i++], el->commonName);
 jsonWriteNumber(jw, columnNames[i++], (long long)el->taxId);
+if (columnCount > 6)
+    jsonWriteNumber(jw, columnNames[i++], (long long)el->priority);
+if (columnCount > 7)
+    jsonWriteString(jw, columnNames[i++], el->clade);
 jsonWriteObjectEnd(jw);
 }
 

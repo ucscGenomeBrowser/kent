@@ -218,13 +218,14 @@ puts(
 "See an example\n"
 "<a href='https://youtu.be/U8_QYwmdGYU'"
 "target='_blank'>video</a>\n"
-"on our YouTube channel.\n"
-"This tool is not guaranteed to find off-target locations for\n"
-"primers, it is optimized for 100% identical matches. For\n"
-"use in primer design consider additional validation with tools such as\n"
+"on our YouTube channel.<br>\n"
+"This tool is not guaranteed to find absolutely all off-target locations,\n"
+"it is optimized for targets with higher identities. For\n"
+"use in primer design, especially in repetitive regions, consider additional validation with tools such as\n"
 "<a target='_blank' href='https://www.ncbi.nlm.nih.gov/tools/primer-blast/'>"
-"primer blast</a>.\n"
-"\n"
+"primer blast</a>.<br>\n"
+"If you are looking for matches to RT-PCR primers, where primers often straddle intron-exon boundaries, change the <b>Target</b> option and select "
+"a gene transcript set.<br>\n"
 "<H3>Configuration Options</H3>\n"
 "<B>Genome and Assembly</B> - The sequence database to search.<BR>\n"
 "<B>Target</B> - If available, choose to query transcribed sequences.<BR>\n" 
@@ -646,7 +647,9 @@ if (gpoList != NULL)
     }
 else
     {
-    printf("No matches to %s %s in %s %s", gpi->fPrimer, gpi->rPrimer, 
+    printf("<p>No matches to %s %s in %s %s.</p>"
+            "<p>To find RT-PCR primers that straddle intron splice sites, go back and change the <b>Target</b> option to a gene transcript set.</p>",
+            gpi->fPrimer, gpi->rPrimer, 
 	   server->genome, server->description);
     }
 gfDisconnect(&conn);
