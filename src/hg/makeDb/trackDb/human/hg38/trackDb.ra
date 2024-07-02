@@ -866,7 +866,8 @@ include hprcVCFTest.ra alpha
 track ncbiRefSeq override
 parent refSeqComposite off
 
-include ../../trackDb.mgc-orfeome.ra
+include ../../trackDb.mgc-orfeome.ra public
+include ../../trackDb.mgc-orfeome.alpha.ra beta,public
 
 include assemblyTracks.alpha.ra alpha
 include assemblyTracks.ra beta,public
