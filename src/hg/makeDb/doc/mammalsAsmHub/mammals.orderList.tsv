@@ -264,6 +264,7 @@ GCA_949316305.1_mMusMuc1.1_alternate_haplotype	house mouse (alternate hap 2023)
 GCA_921998355.2_A_J_v3	house mouse (A_J v3 2022)
 GCA_921997145.2_BALB_cJ_v3	house mouse (BALB_cJ v3 2022)
 GCA_921997125.2_C3H_HeJ_v3	house mouse (C3H_HeJ v3 2022)
+GCA_964188535.1_C57BL_6J_T2T_v1	house mouse (C57BL_6J T2T 2024)
 GCA_921998905.2_CBA_J_v3	house mouse (CBA_J v3 2022)
 GCA_921998315.2_DBA_2J_v3	house mouse (DBA_2J v3 2022)
 GCA_921998635.2_FVB_NJ_v3	house mouse (FVB_NJ v3 2022)
@@ -274,7 +275,6 @@ GCA_949316315.1_mMusMuc1.1	house mouse (primary hap 2023)
 GCF_000001635.27_GRCm39	house mouse C57BL/6J 2020 GRC
 GCA_001632555.1_C57BL_6NJ_v1	house mouse C57BL_6NJ (2016)
 GCA_921999865.2_C57BL_6NJ_v3	house mouse C57BL_6NJ (2022)
-GCA_001624445.1_CAST_EiJ_v1	house mouse CAST_EiJ
 GCA_003369685.2_UOA_Angus_1	hybrid cattle (Angus x Brahman F1 Angus haplotype 2018)
 GCF_003369695.1_UOA_Brahman_1	hybrid cattle (Angus x Brahman F1 Brahman haplotype 2018)
 GCF_014898055.3_MPIMG_talOcc4v2.1	Iberian mole (v2.1 TD23 2020)
@@ -460,7 +460,9 @@ GCA_004027165.1_CteSoc_v1_BIUU	social tuco-tuco
 GCA_949987765.1_mPipPyg2.1_alternate_haplotype	soprano pipistrelle (alternate hap 2023)
 GCA_949987585.1_mPipPyg2.1	soprano pipistrelle (primary hap 2023)
 GCA_004024805.1_XerIna_v1_BIUU	South African ground squirrel
+GCA_001624445.1_CAST_EiJ_v1	Southeastern Asian house mouse (2016)
 GCA_921999005.2_CAST_EiJ_v3	Southeastern Asian house mouse (2022)
+GCA_964188545.1_CAST_EiJ_T2T_v1	Southeastern Asian house mouse (T2T 2024)
 GCF_011800145.1_KU_Mleo_1.0	southern elephant seal
 GCF_903995425.1_mOncTor1.1	southern grasshopper mouse (2020)
 GCF_008632895.1_UCSF_Mcou_1	southern multimammate mouse
