@@ -1173,3 +1173,13 @@ span.gbSessionChanged {
     grid-template-columns: max-content max-content;
     row-gap: 10px;
 }  
+
+.dialogNewWindowIcon {
+    position: absolute;
+    right: 1.4em;
+    top: 50%;
+    width: 19px;
+    margin: -8px 0 0 0;
+    padding: 1px;
+    height: 18px;
+}
