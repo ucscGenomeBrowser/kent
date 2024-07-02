@@ -49,6 +49,13 @@
         toolsMenu.style.display = 'block';
         toolsMenu.style.visibility = 'visible';
     }
+    // Function to keep the menu visible
+    function helpMenuVisible() {
+        const helpMenu = document.querySelector('#help > ul');
+        helpMenu.style.display = 'block';
+        helpMenu.style.visibility = 'visible';
+    }
+
     
     // Function to show the popup
     function showPopup() {
@@ -65,32 +72,31 @@
     // Function to add steps to the clinicalTour
     function clinicalSteps() {
         clinicalTour.addStep({
-            title: 'A Brief Introduciton for Medical Genetists',
-            text: 'This tutorial is for clinicians and is no where near being complete in terms of '+
-                  'content but should be fully functioning without any bugs (hopefully). ',
+            title: 'Clinical Genetics in the UCSC Genome Browser',
+            text: 'This brief tutorial will cover the primary resources used in standard variant '+
+                  'interpretation available to clinical geneticists as per the ACMG/AMP guidelines.'+
+                  '<br><br>'+
+                  'A link to restart this tutorial can always be found at X.',
             buttons: [tutorialButtons.next, tutorialButtons.end],
             id: 'intro',
             classes: 'dark-background'
         });
     
         clinicalTour.addStep({
-            title: 'Browsing the Genome',
+            title: 'Searching for Variants and Items',
             text: 'The search bar allows you to navigate to a region on the genome using ' +
+                  '<a href="http://varnomen.hgvs.org/" target="_blank">HGVS terms</a>, '+
                   '<a href="https://genome-blog.soe.ucsc.edu/blog/2016/12/12/the-ucsc-genome-browser-coordinate-counting-systems/"' +
                   'target="_blank">genome coordinates</a>, <a href="/FAQ/FAQgenes.html#genename" ' +
-                  'target="_blank">gene symbols</a>, <a href="https://www.ncbi.nlm.nih.gov/snp/docs/RefSNP_about/#what-is-a-reference-snp" ' +
-                  'target="_blank">rsIDs</a>, <a href="http://varnomen.hgvs.org/" ' +
-                  'target="_blank">HGVS</a> terms.<br><br> '+
+                  'target="_blank">gene symbols</a>, and specific annotation IDs such as NM '+
+                  'identifiers, rsIDs, and more.'+
+                  '<br><br>'+
                   'A few example queries are: ' +
                   '<ul>' +
-                  '<li>chr1:127140001-127140001</li>' +
-                  '<li>SOD1</li>' +
                   '<li>rs2569190</li>' +
+                  '<li>NM_198056.3</li>' +
                   '<li>NM_198056.3:c.1654G>T</li>' +
-                  '</ul>' +
-                  'The <a href="/goldenPath/help/query.html" target="_blank">Querying the Genome '+
-                  'Browser</a> help page contains other search term examples that are available on '+
-                  'the UCSC Genome Browser.',
+                  '</ul>',
             attachTo: {
                 element: '#positionInput',
                 on: 'bottom'
@@ -102,12 +108,17 @@
     
         clinicalTour.addStep({
             title: 'Accessing the Recommended Track Sets',
-            text: 'The <b>Recommended Track Sets</b> feature is available under the "Genome Browser" '+
-                  'drop-down menu. <br><br>'+
+            text: 'You can use the <b>Recommended Track Sets</b> '+
+                  '(https://www.ncbi.nlm.nih.gov/pubmed/35088925) '+
+                  'feature to asist in configuring your display with relevant annotations used '+
+                  'in variant interpretation. This feature is located under '+
+                  'the "Genome Browser" drop-down menu.'+
+                  '<br><br>'+
                   'Selecting this option will launch a dialog box offering '+
-                  'pre-configured track sets, enabling swapping from one view to another view without '+
-                  'changing the current position.'+
-                  '<br><br><em>Currently only available on hg38 and hg19.</em>',
+                  'pre-configured track sets, enabling swapping from one view to another view '+
+                  'without changing the current position.'+
+                  '<br><br>'+
+                  '<em>Currently only available on hg38 and hg19.</em>',
             attachTo: {
                 element: '#recTrackSetsMenuItem',
                 on: 'right'
@@ -143,11 +154,23 @@
         });
     
         clinicalTour.addStep({
-            title: 'Pre-configured Track Sets',
-            text: 'Track Sets allow a user to quickly swap out the on-screen annotations they may '+
-                  'be looking at for a different set of tracks relevant to specific medical scenarios.'+
-                  '<br><br>Track sets are updated  XXXXXXXXXX'+
-                  '<br><br><em>This tool is for research use only.</em>',
+            title: 'Recommended Track Sets',
+            text: 'Each available track set loads a display curated to the specific theme. '+
+                  'Notably, the <b>Clinical SNVs</b> and <b>Clinical CNVs</b> track sets are '+
+                  'routinely updated to include existing and new annotations available on the '+
+                  'Genome Browser used in variant interpretation according to ACMG/AMP guidelines.'+
+                  '<br><br>'+
+                  '<em>Note: Loading a track set may hide some tracks in your current view.</em>'+
+                  '<br><br>'+
+                  'To use these track sets as your default view, bookmark these links:'+
+                  '<ul>'+
+                  '  <li>Clinical SNVs - <a target="_blank" '+
+                  '   href="/cgi-bin/hgTracks?hgS_otherUserName=View&rtsLoad=Clinical_SNVs_hg38">hg38</a>,'+
+                  '   <a target="_blank" href="/cgi-bin/hgTracks?hgS_otherUserName=View&rtsLoad=SNVs%20Clinical">hg19</a></li>'+
+                  '  <li>Clinical CNVs - <a target="_blank" '+
+                  '   href="/cgi-bin/hgTracks?hgS_otherUserName=View&rtsLoad=Clinical_CNVs_hg38">hg38</a>,'+ 
+                  '   <a target="_blank" href="/cgi-bin/hgTracks?hgS_otherUserName=View&rtsLoad=CNVs%20Clinical">hg19</a></li>'+
+                  '</ul>',
             attachTo: {
                 element: '.ui-dialog[aria-labelledby="ui-dialog-title-recTrackSetsPopup"]',
                 on: 'right'
@@ -175,61 +198,75 @@
             }
                 
         });
-        /*
-        clinicalTour.addStep({
-            title: 'Clinical SNVs',
-            text: 'Assess potential disease contributions of single nucleotide variants in coding regions.',
-            attachTo: {
-                element: '#recTrackSetsPopup ul li:nth-child(1)',
-                on: 'right'
-            },
-            buttons: [ tutorialButtons.back, tutorialButtons.next ],
-            id: 'SNVs',
-            classes: 'dark-background',
-            when: {
-                show: showPopup
-            }
-        });
     
         clinicalTour.addStep({
-            title: 'Clinical CNVs',
-            text: 'Assess potential disease contributions of structural variants in coding regions.',
+            title: 'Additional Resources and Feedback',
+            text: 'If you have any questions or suggestions including annotations '+
+                  'that you feel are missing from a track set or a new track set theme, '+
+                  'please write to us (link to contact page). Also, if you are new to the '+
+                  'UCSC Genome Browser, consider exploring our '+
+                  '<a href="/cgi-bin/hgTracks?startTutorial=true" '+
+                  'target="_blank">basic tutorial</a>.'+
+                  '<br><br>'+
+                  'Lastly, the following features may also be helpful in variant interpretation:'+
+                  '<ul>'+
+                  '  <li><a href="/cgi-bin/hgVai" target="_blank">Variant Annotation Integrator:</a>'+
+                  '       Provides effect prediction and annotation associations for variant calls.</li>'+
+                  '  <li>Tracks display <a href="/goldenPath/help/hgTracksHelp.html#Highlight" '+
+                  '      target="_blank">highlighting</a> can accent specific regions in your '+
+                  '      view.</li>'+
+                  '  <li><a href="/cgi-bin/hgSession" target="_blank">Sessions</a>: Allows you to '+
+                  '      save your own pre-configured displays and create stable links.</li>'+
+                  '  <li><b>Track search:</b> Search through all available annotations for an '+
+                  '      assembly. This is the best way to check if the Genome Browser has '+
+                  '      specific datasets.</li>'+
+                  '</ul>',
             attachTo: {
-                element: '#recTrackSetsPopup ul li:nth-child(2)',
+                element: '#help ul li:nth-child(4)',
                 on: 'right'
             },
-            buttons: [ tutorialButtons.back,
-                {
-                    text: 'Next',
-                    action: () => {
-                        clinicalTour.next();
-                        closePopup();
-                    }
-                }
-            ],
-            id: 'CNVs',
-            classes: 'dark-background',
+            buttons: [ tutorialButtons.back, {
+                           text: 'Finish',
+                           action: () => {
+                               const helpMenu = document.querySelector('#help > ul');
+                               helpMenu.style.display = 'none';
+                               helpMenu.style.visibility = 'hidden';
+                               clinicalTour.complete();
+                           }
+                     }],
             when: {
-                show: showPopup
-            }
-        });
-        */
+                show: () => {
+                    const helpMenu = document.querySelector('#help > ul');
+                    helpMenu.style.display = 'block';
+                    helpMenu.style.visibility = 'visible';
     
-        clinicalTour.addStep({
-            title: 'The final step',
-            text: 'Some text for the final step.',
-            buttons: [
-                tutorialButtons.back,
-                {
-                    text: 'Finish',
-                    action: () => {
-                        closePopup();
-                        clinicalTour.complete();
-                    }
+                    helpMenu.addEventListener('mouseover', helpMenuVisible);
+                    helpMenu.addEventListener('mouseout', helpMenuVisible);
+                    helpMenu.addEventListener('mouseleave', helpMenuVisible);
+                    helpMenu.addEventListener('mousemove', helpMenuVisible);
+                    helpMenu.querySelectorAll('li').forEach(function(item) {
+                        item.addEventListener('mouseover', helpMenuVisible);
+                        item.addEventListener('mouseout', helpMenuVisible);
+                        item.addEventListener('mouseleave', helpMenuVisible);
+                        item.addEventListener('mousemove', helpMenuVisible);
+                    });
+                },
+                hide: () => {
+                    const helpMenu = document.querySelector('#help > ul');
+                    helpMenu.style.display = 'none';
+                    helpMenu.style.visibility = 'hidden';
+    
+                    helpMenu.removeEventListener('mouseover', helpMenuVisible);
+                    helpMenu.removeEventListener('mouseout', helpMenuVisible);
+                    helpMenu.removeEventListener('mouseleave', helpMenuVisible);
+                    helpMenu.removeEventListener('mousemove', helpMenuVisible);
+                    helpMenu.querySelectorAll('li').forEach(function(item) {
+                        item.removeEventListener('mouseover', helpMenuVisible);
+                        item.removeEventListener('mouseout', helpMenuVisible);
+                        item.removeEventListener('mouseleave', helpMenuVisible);
+                        item.removeEventListener('mousemove', helpMenuVisible);
+                    });
                 }
-            ],
-            when: {
-                show: showPopup
             }
         });
     }
