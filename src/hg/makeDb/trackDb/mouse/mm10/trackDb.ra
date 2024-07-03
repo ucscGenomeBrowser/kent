@@ -427,4 +427,5 @@ itemRgb on
 track ncbiRefSeq override
 parent refSeqComposite off
 
-include ../../trackDb.mgc-orfeome.ra
+include ../../trackDb.mgc-orfeome.ra public
+include ../../trackDb.mgc-orfeome.ra alpha,beta
