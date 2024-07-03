@@ -310,25 +310,30 @@ hDisconnectCentral(&conn);
 return url;
 }
 
-char *genArkHubTxt(char *gcX)
-/* given a GC[AF]_012345678.9 name, return hub.txt URL */
+char *genArkPath(char *genome)
+/* given a GenArk hub genome name, e.g. GCA_021951015.1 return the path:
+ *               GCA/021/951/015
+ * prefix that with desired server URL: https://hgdownload.soe.ucsc.edu/hubs/
+ *   if desired.  Or suffix add /hub.txt to get the hub.txt URL
+ *   The path returned does not depend upon this GCx_ naming scheme,
+ *   it simply uses the hub URL as returned from genarkUrl(genome) and
+ *   returns the middle part without the https://... prefix
+ */
 {
-char hubTxt[PATH_MAX + 1024];
-/* temporary construction of the path */
-char tPath[PATH_MAX + 1024];
-safencpy(tPath, 4, gcX, 3);
-safencpy(tPath+3, 2, "/", 1);
-safencpy(tPath+4, 4, gcX+4, 3);
-safencpy(tPath+7, 2, "/", 1);
-safencpy(tPath+8, 4, gcX+7, 3);
-safencpy(tPath+11, 2, "/", 1);
-safencpy(tPath+12, 4, gcX+10, 3);
-safencpy(tPath+15, 2, "/", 1);
-safecpy(tPath+16, PATH_MAX-16, gcX);
-/* start the result with the genArkHubPrefix, add in tPath and /hub.txt */
-safef(hubTxt, sizeof(hubTxt), "%s/%s/hub.txt", cfgOption("genarkHubPrefix"),
-   tPath);
-return cloneString(hubTxt);  // no need to free this
+if (isEmpty(genome))
+    return NULL;
+
+char *url = genarkUrl(genome);
+if (isEmpty(url))
+    return NULL;
+char *genarkPrefix = cfgOption("genarkHubPrefix");
+stripString(url, genarkPrefix);
+stripString(url, "/hub.txt");
+stripString(url, genome);
+/* remove the trailing / */
+trimLastChar(url);
+/* the ++url skips the leading / character*/
+return cloneString(++url);
 }
 
 static char *_genarkTableName = NULL;
@@ -364,4 +369,17 @@ sqlSafef(query, sizeof query, "SELECT count(*) FROM information_schema.columns W
 colCount = sqlQuickNum(conn, query);
 hDisconnectCentral(&conn);
 return colCount;
+}
+
+boolean isGenArk(char *genome)
+/* given a genome name, see if it is in the genark table to determine
+ *  yes/no this is a genark genome assembly
+ */
+{
+if (isEmpty(genome))
+    return FALSE;
+char *url = genarkUrl(genome);
+if (isEmpty(url))
+    return FALSE;
+return TRUE;
 }

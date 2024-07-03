@@ -526,8 +526,8 @@ include knownGene.alpha.ra alpha
 include trackDb.100way.ra 
 include trackDb.145way.ra alpha
 
-include trackDb.241wayT.ra alpha
-include trackDb.241way.ra
+include trackDb.241way.alpha.ra alpha
+include trackDb.241way.ra beta,public
 include trackDb.447way.ra
 
 # track multiz145way
@@ -866,7 +866,8 @@ include hprcVCFTest.ra alpha
 track ncbiRefSeq override
 parent refSeqComposite off
 
-include ../../trackDb.mgc-orfeome.ra
+include ../../trackDb.mgc-orfeome.ra public
+include ../../trackDb.mgc-orfeome.alpha.ra beta,public
 
 include assemblyTracks.alpha.ra alpha
 include assemblyTracks.ra beta,public
