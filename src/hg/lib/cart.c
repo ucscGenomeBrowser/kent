@@ -1403,7 +1403,7 @@ char *db = cartOptionalString(cart,"db");
 
 if ((db == NULL) || startsWith("hub_", db) || sameString("0", db))
     return;
-else if (startsWith("GCA_", db) || startsWith("GCF_", db))
+else
     {
     char *url = genarkUrl(db);
 
@@ -1413,9 +1413,9 @@ else if (startsWith("GCA_", db) || startsWith("GCF_", db))
         cartSetString(cart, "hubUrl", url);
         cartRemove(cart, "db");
         }
+    else if (!hDbIsActive(db))
+	errAbort("Can not find database '%s'", db);
     }
-else if (!hDbIsActive(db))
-    errAbort("Can not find database '%s'", db);
 }
 
 struct cart *cartNew(char *userId, char *sessionId,

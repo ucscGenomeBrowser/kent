@@ -834,30 +834,29 @@ text document that defines the track groups under the primary genome browser ima
 example using the
 <a href="https://epd.expasy.org/epd/ucsc/epdHub/epdHub.txt" target="_blank">EPD Viewer Hub</a>,
 here is how the track hub displays without the groups setting:</p>
-        <img  width="95%" height="120px" src="../../images/epdHubEx.png">
+<div class="text-center">
+        <img class='text-center' width="95%" src="../../images/epdHubEx.png">
+</div>
 
 <p>Groups such as Histone, CAGE, RAMPAGE, and Fantom5 groups can be added. The text document that
 defines the track groups can be named  groups.txt and specifies the groups such as the following:
 </p>
 <pre><code>name histone
 label Histone
-priority 1
-defaultIsClosed 0 </code></pre>
+priority 1 </code></pre>
 
 <pre><code>name cage
 label CAGE
-priority 2
-defaultIsClosed 0 </code></pre>
+priority 2 </code></pre>
 
 <pre><code>name rampage
 label RAMPAGE
-priority 3
-defaultIsClosed 0  </code></pre>
+priority 3 </code></pre>
 
 <pre><code>name fantom5
 label Fantom5
 priority 4
-defaultIsClosed 0</code></pre>
+defaultIsClosed 1</code></pre>
 
 <ul>
    <li>The <b>name</b> is used in the trackDb.txt track definition group, to assign a particular track to
@@ -891,8 +890,9 @@ groups groups.txt</code></pre>
 
 <p>Attaching the EPD Viewer Hub with these group settings will then display the tracks within
 the groups:</p>
-        <img  width="95%" height="350px" src="../../images/epdHubGroups.png">
-
+<div class="text-center">
+        <img class='text-center' width="95%" src="../../images/epdHub_Groups.png">
+</div>
 
 <!-- ========== Debugging and Updating Track Hubs ============================== -->
 <a name="Debug"></a>

@@ -5,6 +5,7 @@ shortLabel MGC/ORFeome Genes
 longLabel MGC/ORFeome Full ORF mRNA Clones
 superTrack on
 group genes
+cartVersion 4
 visibility hide
 
     track mgcFullMrna

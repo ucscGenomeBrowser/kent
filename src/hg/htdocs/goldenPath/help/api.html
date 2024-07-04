@@ -9,6 +9,7 @@
 
 <h2>Contents</h2>
 
+<h6><a href="#alternatives">Why you may not want to use this API</a></h6>
 <h6><a href="#REST">What is REST?</a></h6>
 <h6><a href="#Intro">What is JSON output data?</a></h6>
 <h6><a href="#Access">What is the access URL?</a></h6>
@@ -24,21 +25,42 @@
 <h6><a href="#Error_examples">Error return examples</a></h6>
 <h6><a href="#Practical_examples">Practical examples</a></h6>
 
+<!-- ========== Do not use this API ============================== -->
+<h2 id='alternatives'>Why you may not want to use this API</h2>
+<p>
+Genomic data is not tiny, and usually computational biologists need all the
+data for their analyses.  Web APIs as a technology were made for grabbing
+rather small pieces of data, often from Javascript.  This means that Web APIs
+may not be the best way to get our data. For this reason, we also provide all
+our data through our 
+<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> for custom 
+exports and reports as tab-separated files and can be
+joined with other tables. For tracks that are stored in MySQL, our
+MySQL/MariaDB server is
+<a href="https://genome.ucsc.edu/goldenPath/help/mysql.html">publicly
+accessible</a>. Also, dumps of SQL-stored tracks 
+as well as tracks in binary file formats can be found on our 
+<a href="https://hgdownload.soe.ucsc.edu/">download server</a>. All binary
+files on the download server (bigBed, bigWig and derivatives like bigPsl, bigChain, etc) can even be
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#gbdb">streamed over
+HTTP</a>. All these options are faster for bulk downloads and often easier to
+parse from scripting languages.
+</p>
+<p>If however you write Javascript clients or just need a few features given a
+range or you like APIs for other reasons, then the endpoints documented on this
+page may solve your problem. If you are missing an option or endpoint below for
+your use case, let us know. 
+</p>
+
 <!-- ========== What is REST? ============================== -->
 <a id="REST"></a>
-<h2>What is REST?</h2>
+<h2>What are REST and JSON?</h2>
 <p>
 REST is an acronym for REpresentational State Transfer. It states architectural guidelines for how 
 an API will operate. See also: <a target="_blank" href="https://restfulapi.net/">Principles
-of REST</a>
-</p>
-
-<!-- ========== What is JSON data? ============================== -->
-<a id="Intro"></a>
-<h2>What is JSON output data?</h2>
-<p>
-The REST API returns data in JSON format. JSON data is a data transfer 
-syntax from a data provider to a data consumer.
+of REST</a>.
+Like most APIs, ours returns data in JSON format. JSON data is a data transfer 
+syntax almost identical to the Javascript object and array syntax.
 See also: <a href="https://www.w3schools.com/js/js_json_intro.asp"
 target=_blank>JSON Introduction</a>
 </p>
@@ -124,6 +146,8 @@ target=_blank>UCSC browser coordinate counting systems</a></li>
 retrieval (start and end required together). See also: <a
  href='https://genome-blog.gi.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/'
 target=_blank>UCSC browser coordinate counting systems</a></li>
+<li>revComp=1 - return reverse complement of sequence data (chrom, start, and end required
+ together)</li>
 <li>maxItemsOutput=1000 - limit number of items to output, default: 1,000, maximum limit:
 1,000,000 (use <em>-1</em> to get maximum output)</li>
 <li>trackLeavesOnly=1 - on <em>/list/tracks</em> function, only show tracks, do not show
@@ -164,8 +188,8 @@ https://api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM
 <tr><th>/list/tracks</th><td>genome or (hubUrl and genome)</td><td>trackLeavesOnly=1</td></tr>
 <tr><th>/list/chromosomes</th><td>genome or (hubUrl and genome)</td><td>track</td></tr>
 <tr><th>/list/schema</th><td>(genome or (hubUrl and genome)) and track</td><td>(none)</td></tr>
-<tr><th>/getData/sequence</th><td>(genome or (hubUrl and genome)) and chrom</td><td>start and
-end</td></tr>
+<tr><th>/getData/sequence</th><td>(genome or (hubUrl and genome)) and chrom</td><td>start, end, and
+revComp=1</td></tr>
 <tr><th>/getData/track</th><td>(genome or (hubUrl and genome)) and track</td><td>chrom,
 (start and end), maxItemsOutput, jsonOutputArrays</td></tr>
 <tr><th>/search</th><td>search and genome</td><td>categories=helpDocs,
@@ -183,6 +207,7 @@ a <b>hubUrl</b> to refer to a UCSC Genome Browser assembly.
 Using the <b>chrom=&lt;name&gt;</b> parameter will limit the request
 to the single specified chromosome.  To limit the request to a specific
 position, both <b>start=4321</b> and <b>end=5678</b> must be given together.
+Using the <b>revComp=1</b> parameter returns the reverse complement.
 </p>
 <p>
 The <b>/list/files</b> endpoint only works for UCSC hosted genome assemblies,
@@ -294,6 +319,9 @@ target=_blank>Get DNA sequence from specified chromosome in UCSC database genome
 <li><a href='https://api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM;start=4321;end=5678'
 target=_blank>Get DNA sequence from specified chromosome and start,end coordinates in UCSC database genome</a> -
 <br><b>api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM;start=4321;end=5678</b></li>
+<li><a href='https://api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM;start=4321;end=5678;revComp=1'
+target=_blank>Get the reverse complement of the DNA sequence from specified chromosome and start,end coordinates in UCSC database genome</a> -
+<br><b>api.genome.ucsc.edu/getData/sequence?genome=hg38;chrom=chrM;start=4321;end=5678;revComp=1</b></li>
 <li><a href='https://api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=mm10;chrom=chrM;start=4321;end=5678'
 target=_blank>Get DNA sequence from a track hub where 'genome' is a UCSC database</a> -
 <br><b>api.genome.ucsc.edu/getData/sequence?hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt;genome=mm10;chrom=chrM;start=4321;end=5678</b></li>
