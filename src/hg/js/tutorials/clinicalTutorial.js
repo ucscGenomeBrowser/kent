@@ -165,11 +165,11 @@
                   'To use these track sets as your default view, bookmark these links:'+
                   '<ul>'+
                   '  <li>Clinical SNVs - <a target="_blank" '+
-                  '   href="/cgi-bin/hgTracks?hgS_otherUserName=View&rtsLoad=Clinical_SNVs_hg38">hg38</a>,'+
-                  '   <a target="_blank" href="/cgi-bin/hgTracks?hgS_otherUserName=View&rtsLoad=SNVs%20Clinical">hg19</a></li>'+
+                  '   href="/cgi-bin/hgTracks?db=hg38&hgS_otherUserName=View&rtsLoad=Clinical_SNVs_hg38">hg38</a>,'+
+                  '   <a target="_blank" href="/cgi-bin/hgTracks?db=hg19&hgS_otherUserName=View&rtsLoad=SNVs%20Clinical">hg19</a></li>'+
                   '  <li>Clinical CNVs - <a target="_blank" '+
-                  '   href="/cgi-bin/hgTracks?hgS_otherUserName=View&rtsLoad=Clinical_CNVs_hg38">hg38</a>,'+ 
-                  '   <a target="_blank" href="/cgi-bin/hgTracks?hgS_otherUserName=View&rtsLoad=CNVs%20Clinical">hg19</a></li>'+
+                  '   href="/cgi-bin/hgTracks?db=hg38&hgS_otherUserName=View&rtsLoad=Clinical_CNVs_hg38">hg38</a>,'+ 
+                  '   <a target="_blank" href="/cgi-bin/hgTracks?db=hg19&hgS_otherUserName=View&rtsLoad=CNVs%20Clinical">hg19</a></li>'+
                   '</ul>',
             attachTo: {
                 element: '.ui-dialog[aria-labelledby="ui-dialog-title-recTrackSetsPopup"]',
@@ -210,14 +210,15 @@
                   '<br><br>'+
                   'Lastly, the following features may also be helpful in variant interpretation:'+
                   '<ul>'+
-                  '  <li><a href="/cgi-bin/hgVai" target="_blank">Variant Annotation Integrator:</a>'+
+                  '  <li><a href="/cgi-bin/hgVai" target="_blank">Variant Annotation Integrator</a>:'+
                   '       Provides effect prediction and annotation associations for variant calls.</li>'+
                   '  <li>Tracks display <a href="/goldenPath/help/hgTracksHelp.html#Highlight" '+
                   '      target="_blank">highlighting</a> can accent specific regions in your '+
                   '      view.</li>'+
                   '  <li><a href="/cgi-bin/hgSession" target="_blank">Sessions</a>: Allows you to '+
                   '      save your own pre-configured displays and create stable links.</li>'+
-                  '  <li><b>Track search:</b> Search through all available annotations for an '+
+                  '  <li><a href="/cgi-bin/hgTracks?hgt_tSearch=track+search" target="_blank">Track'+
+                  '      search</a>: Search through all available annotations for an '+
                   '      assembly. This is the best way to check if the Genome Browser has '+
                   '      specific datasets.</li>'+
                   '</ul>',
