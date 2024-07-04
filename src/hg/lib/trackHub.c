@@ -511,7 +511,10 @@ while ((ra = raNextRecord(lf)) != NULL)
     grp->name = cloneString(getRequiredGrpSetting(ra, "name", lf));
     grp->label = cloneString(getRequiredGrpSetting(ra, "label", lf));
     grp->priority = atof(getRequiredGrpSetting(ra, "priority", lf));
-    grp->defaultIsClosed = sqlUnsigned(getRequiredGrpSetting(ra,"defaultIsClosed",lf));
+    char *str;
+    str = hashFindVal(ra, "defaultIsClosed");
+    if ((str != NULL) && (sameString("on",str) || sameString("1", str)))
+        grp->defaultIsClosed = 1;
     hashFree(&ra);
     }
 if (list)
@@ -646,8 +649,8 @@ while ((ra = raNextRecord(lf)) != NULL)
     if (hashFindVal(ra, "track"))
         break;
 
-    char *twoBitPath = hashFindVal(ra, "twoBitPath");
-    char *twoBitBptUrl = hashFindVal(ra, "twoBitBptUrl");
+    char *twoBitPath = hReplaceGbdb(hashFindVal(ra, "twoBitPath"));
+    char *twoBitBptUrl = hReplaceGbdb(hashFindVal(ra, "twoBitBptUrl"));
     char *genome, *trackDb;
     if (twoBitPath != NULL)
 	genome = addHubName(hashFindVal(ra, "genome"), hub->name);

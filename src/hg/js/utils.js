@@ -4060,11 +4060,6 @@ function mousemoveHelper(e) {
     }
 }
 
-// Add some info text at the bottom of each tooltip:
-const infoText = document.createElement("p");
-infoText.style = "margin-bottom:  0";
-infoText.textContent = "Wiggle mouse or press ESC to close this tooltip";
-
 function showMouseoverText(ev) {
     /* If a tooltip is not visible, show the tooltip text right away. If a tooltip
      * is visble, do nothing as the mousemove event helper will re-call us
@@ -4085,7 +4080,6 @@ function showMouseoverText(ev) {
         divCpy.childNodes.forEach(function(n) {
             mouseoverContainer.appendChild(n);
         });
-        mouseoverContainer.appendChild(infoText);
         positionMouseover(ev, referenceElement, mouseoverContainer, ev.pageX, ev.pageY);
         mouseoverContainer.classList.add("isShown");
         mouseoverContainer.style.opacity = "1";
