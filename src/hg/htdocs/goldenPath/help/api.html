@@ -28,28 +28,54 @@
 <!-- ========== Do not use this API ============================== -->
 <h2 id='alternatives'>Why you may not want to use this API</h2>
 <p>
-Genomic data is not tiny, and usually computational biologists need all the
-data for their analyses.  Web APIs as a technology were made for grabbing
-rather small pieces of data, often from Javascript.  This means that Web APIs
-may not be the best way to get our data. For this reason, we also provide all
-our data through our
-<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a> for custom
-exports and reports as tab-separated files and can be
-joined with other tables. For tracks that are stored in MySQL, our
-MySQL/MariaDB server is
-<a href="https://genome.ucsc.edu/goldenPath/help/mysql.html">publicly
-accessible</a>. Also, dumps of SQL-stored tracks
-as well as tracks in binary file formats can be found on our
-<a href="https://hgdownload.soe.ucsc.edu/">download server</a>. All binary
-files on the download server (bigBed, bigWig and derivatives like bigPsl, bigChain, etc) can even be
-<a href="https://hgdownload.soe.ucsc.edu/downloads.html#gbdb">streamed over
-HTTP</a>. All these options are faster for bulk downloads and often easier to
-parse from scripting languages.
+Genomic data is considerably large, and computational biologists generally need all the
+data that is available for their analyses. Web APIs, as a technology, were designed for retrieving
+relatively small pieces of data, often from Javascript. Consequently, Web APIs
+may not be the best way to get data from the UCSC Genome Browser.</p>
+<p>
+For this reason, we also provide alternative methods to access our data:
+<ul>
+  <li>
+    The <a href="https://genome.ucsc.edu/cgi-bin/hgTables" target="_blank">Table Browser</a> for
+    custom exports and reports as tab-separated files and can be joined with other tables.
+  <li>
+    For tracks that are stored in MySQL, our MySQL/MariaDB server is
+    <a href="https://genome.ucsc.edu/goldenPath/help/mysql.html" target="_blank">publicly
+    accessible</a>.
+  <li>
+    Dumps of SQL-stored tracks, as well as tracks in binary file formats, can be found on our
+    <a href="https://hgdownload.soe.ucsc.edu/" target="_blank">download server</a>.
+  <li>
+    All binary files on the download server (bigBed, bigWig and derivatives like bigPsl, bigChain,
+    etc) can even be <a href="https://hgdownload.soe.ucsc.edu/downloads.html#gbdb"
+    target="_blank">streamed over HTTP</a>.
+</ul>
+<p>
+All these options offer faster bulk downloads and are often easier to parse from scripting
+languages. If, however, you write Javascript clients or need only a few features within a given
+range, then the endpoints documented on this page may address your needs. If you require an
+option or endpoint not listed below for your specific use case, <a href="/contact.html"
+target="_blank">contact us</a> and we can try and implement the feature.
 </p>
-<p>If however you write Javascript clients or just need a few features given a
-range or you like APIs for other reasons, then the endpoints documented on this
-page may solve your problem. If you are missing an option or endpoint below for
-your use case, let us know.
+<h3>Conditions of use</h3>
+<ul>
+  <li>
+  Avoid excessive or heavy queries that may impact the server performance. Inappropriate query use
+  will result in a restriction of access. </li>
+  <li>
+  We generally recommend a maximum of one hit every second, but there is no strict limit on queries
+  using the API. A botDelay system is in place to avoid overloads onto the system.
+  <li>
+  If you begin to notice a significant delay between requests, adjust your code or try an
+  alternative method to retrieve our data. 
+  </li>
+</ul>
+<p>
+For more details about the Conditions of Use, please refer to the following page,
+<a href="/conditions.html" target="_blank">Genome Browser Conditions of Use</a>.
+If you plan to execute a query that you think may be excessive, <a href="/contact.html"
+target="_blank">contact UCSC</a> first to avoid the possibility of temporarily restricting your
+access to the REST API.
 </p>
 
 <!-- ========== What is REST? ============================== -->
