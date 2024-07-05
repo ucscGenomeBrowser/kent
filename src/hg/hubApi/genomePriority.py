@@ -45,6 +45,132 @@ def dbDbData():
     return result.stdout.decode('latin-1')
 
 ####################################################################
+def readCommonNames(ncbiType):
+    commonNames = {}
+
+    filePath = "/hive/data/outside/ncbi/genomes/reports/" + ncbiType + "/allAssemblies.commonNames.tsv"
+
+    with open(filePath, 'r', encoding='utf-8') as file:
+        reader = csv.reader(file, delimiter='\t')
+        for row in reader:
+            commonNames[row[1]] = row[3]
+
+    return commonNames
+
+####################################################################
+"""
+     header definitions from assembly_summary_refseq.txt
+
+     1  #assembly_accession 20  ftp_path
+     2  bioproject          21  excluded_from_refseq
+     3  biosample           22  relation_to_type_material
+     4  wgs_master          23  asm_not_live_date
+     5  refseq_category     24  assembly_type
+     6  taxid               25  group
+     7  species_taxid       26  genome_size
+     8  organism_name       27  genome_size_ungapped
+     9  infraspecific_name  28  gc_percent
+    10  isolate             29  replicon_count
+    11  version_status      30  scaffold_count
+    12  assembly_level      31  contig_count
+    13  release_type        32  annotation_provider
+    14  genome_rep          33  annotation_name
+    15  seq_rel_date        34  annotation_date
+    16  asm_name            35  total_gene_count
+    17  asm_submitter       36  protein_coding_gene_count
+    18  gbrs_paired_asm     37  non_coding_gene_count
+    19  paired_asm_comp     38  pubmed_id
+
+Would be good to verify this in the readAsmSummary to make sure it
+hasn't changed.
+
+   2175 archaea
+ 360585 bacteria
+    607 fungi
+    414 invertebrate
+    184 plant
+     96 protozoa
+    231 vertebrate_mammalian
+    405 vertebrate_other
+  14992 viral
+
+
+"""
+
+def readAsmSummary(suffix, prioExists, comNames):
+    # read one of the NCBI files from
+    # /hive/data/outside/ncbi/genomes/reports/assembly_summary_{suffix}
+    # Initialize a list to hold the dictionaries
+    dataList = []
+    keys = [
+"vertebrate_mammalian",
+"vertebrate_other",
+"invertebrate",
+"plant",
+"fungi",
+"protozoa",
+"viral",
+"bacteria",
+"archaea",
+    ]
+    values = [
+'1',
+'2',
+'3',
+'4',
+'5',
+'6',
+'7',
+'8',
+'0',
+    ]
+    cladePrio = dict(zip(keys, values))
+
+    filePath = "/hive/data/outside/ncbi/genomes/reports/assembly_summary_" + suffix
+
+    with open(filePath, 'r', encoding='utf-8') as file:
+        reader = csv.reader(file, delimiter='\t')
+        for row in reader:
+            if len(row) < 1:
+               continue
+            if row[0].startswith('#'):
+               continue
+            if row[0] in prioExists:
+               continue
+            if len(row) != 38:
+                print(f"ERROR: incorrect number of fields in {file}")
+                sys.exit(1)
+            gcAccession = row[0]
+            strain = re.sub(r'breed=', '', row[8])
+            s0 = re.sub(r'cultivar=', '', strain)
+            strain = re.sub(r'ecotype=', '', s0)
+            s0 = re.sub(r'strain=', '', strain)
+            strain = re.sub(r'na', '', s0)
+            year = re.sub(r'/.*', '', row[14])
+            asmSubmitter = row[16]
+            asmType = row[23]
+#            commonName = row[7]
+            commonName = "n/a"
+            if gcAccession in comNames:
+                commonName = comNames[gcAccession]
+            dataDict = {
+                "gcAccession": gcAccession,
+                "asmName": row[15],
+                "scientificName": row[7],
+                "commonName": commonName,
+                "taxId": row[5],
+                "clade": row[24],	# almost like GenArk clades
+                "other": asmSubmitter + " " + strain + " " + asmType + " " + year,
+                "sortOrder": cladePrio[row[24]]
+            }
+
+            utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
+            # Append the dictionary to the list
+            dataList.append(utf8Encoded)
+    
+    return sorted(dataList, key=lambda x: x['sortOrder'])
+
+####################################################################
 ### given a URL to hgdownload file: /hubs/UCSC_GI.assemblyHubList.txt
 def readGenArkData(url):
     # Initialize a list to hold the dictionaries
@@ -442,9 +568,17 @@ def main():
 
     establishPriorities(dbDbItems, genArkItems)
 
+    refSeqCommonNames = readCommonNames("refseq")
+    print("# refseq common names: ", len(refSeqCommonNames))
+
+    refSeqList = readAsmSummary("refseq.txt", allPriorities, refSeqCommonNames)
+
+    print("# refSeq assemblies: ", len(refSeqList))
+
     outFile = "genomePriority.tsv"
     fileOut = open(outFile, 'w')
 
+    totalItemCount = 0
     itemCount = 0
     # Print the dbDb data
     for entry in dbDbItems:
@@ -456,11 +590,14 @@ def main():
 
         clade = entry['clade']
 
-        descr = f"{entry['sourceName']} {clade} {entry['taxId']} {entry['description']}\n"
+        descr = f"{entry['sourceName']} {clade} {entry['description']}\n"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\n"
+        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\t1\n"
         fileOut.write(outLine)
         itemCount += 1
+
+    totalItemCount += itemCount
+    print(f"{totalItemCount:4} - total\tdbDb count: {itemCount:4}")
 
     itemCount = 0
     # Print the GenArk data
@@ -473,13 +610,46 @@ def main():
 
         cleanName = removeNonAlphanumeric(entry['commonName'])
         clade = entry['clade']
-        descr = f"{entry['asmName']} {clade} {entry['taxId']}\n"
+        descr = f"{entry['asmName']} {clade}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\n"
+        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\t1\n"
         fileOut.write(outLine)
         itemCount += 1
+
+    totalItemCount += itemCount
+    print(f"{totalItemCount:4} - total\tgenArk count: {itemCount:4}")
+
+    itemCount = 0
+    incrementPriority = len(allPriorities)
+    print("# incrementing priorities from: ", incrementPriority)
+    # Print the dbDb data
+    for entry in refSeqList:
+        gcAccession = entry['gcAccession']
+        commonName = entry['commonName']
+        scientificName = entry['scientificName']
+        descr = f"{entry['other']} {entry['clade']}"
+        description = re.sub(r'\s+', ' ', descr).strip()
+        outLine = f"{entry['gcAccession']}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\n"
+        fileOut.write(outLine)
+        incrementPriority += 1
+        itemCount += 1
+
+    totalItemCount += itemCount
+    print(f"{totalItemCount:4} - total\trefSeq count: {itemCount:4}")
+
+# def removeNonAlphanumeric(s):
 
     fileOut.close()
 
 if __name__ == "__main__":
     main()
+
+"""
+                "gcAccession": row[0],
+                "asmName": row[15],
+                "scientificName": row[7],
+                "commonName": row[3],
+                "taxId": row[5],
+                "clade": row[24],	# almost like GenArk clades
+                "other": asmSubmitter + " " + strain + " " + asmType,
+"""
