@@ -141,7 +141,7 @@ html gnomadV4.1
     filter.AF 0.0
     filterLabel.AF Minor Allele Frequency Filter
     maxItems 50000
-    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Total Allele Frequency: ${AF} (${AC}/${AN}) Genes: $genes; Annotation: $annot; Population Max AF: ${grpmax}; Number Homozygous Individuals: ${nhomalt}; Number Homozygous Individuals in XX samples (chrX and chrY only): ${nhomaltX}; Number Hemizygous Individuals (chrX and chrY only): ${nhemi}
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)<br> <b>TotalAF</b>: ${AF} (${AC}/${AN})<br> <b>Genes</b>: $genes<br> <b>Annotation</b>: $annot<br> <b>FILTER</b>: ${FILTER}<br> <b>PopMaxAF</b>: ${grpmax}<br> <b>Homozygous Individuals</b>: ${nhomalt}<br> <b>Homozygous Individuals in XX samples (chrX and chrY only)</b>: ${nhomaltX}<br> <b>Hemizygous Individuals (chrX and chrY only)</b>: ${nhemi}
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r4
     urlLabel View this variant at gnomAD
     detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
@@ -173,7 +173,7 @@ html gnomadV4.1
     filter.AF 0.0
     filterLabel.AF Minor Allele Frequency Filter
     maxItems 50000
-    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); Total Allele Frequency: ${AF} (${AC}/${AN}) Genes: $genes; Annotation: $annot; Population Max AF: ${grpmax}; Number Homozygous Individuals: ${nhomalt}; Number Homozygous Individuals in XX samples (chrX and chrY only): ${nhomaltX}; Number Hemizygous Individuals (chrX and chrY only): ${nhemi}
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)<br> <b>TotalAF</b>: ${AF} (${AC}/${AN})<br> <b>Genes</b>: $genes<br> <b>Annotation</b>: $annot<br> <b>FILTER</b>: ${FILTER}<br> <b>PopMaxAF</b>: ${grpmax}<br> <b>Homozygous Individuals</b>: ${nhomalt}<br> <b>Homozygous Individuals in XX samples (chrX and chrY only)</b>: ${nhomaltX}<br> <b>Hemizygous Individuals (chrX and chrY only)</b>: ${nhemi}
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r4
     urlLabel View this variant at gnomAD
     detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
