@@ -239,7 +239,7 @@ searchName gnomadGenomesVariantsV3_1_1_displayName
 searchTable gnomadGenomesVariantsV3_1_1
 searchType bigBed
 searchDescription Genome Aggregation Database (gnomAD) Genome Variants v3.1.1
-termRegex ^chr([1-9][0-9]?|[XYM]):[0-9]+-[0-9]+-*
+termRegex ^chr([1-9][0-9]?|[XYM])-[0-9]+-.*
 
 searchName gnomadGenomesVariantsV3_1_1_rsId
 searchTable gnomadGenomesVariantsV3_1_1
@@ -255,7 +255,7 @@ searchName gnomadGenomesVariantsV4_1_displayName
 searchTable gnomadGenomesVariantsV4_1
 searchType bigBed
 searchDescription Genome Aggregation Database (gnomAD) Genome Variants v4.1
-termRegex ^chr([1-9][0-9]?|[XYM]):[0-9]+-[0-9]+-*
+termRegex ^chr([1-9][0-9]?|[XYM])-[0-9]+-.*
 
 searchName gnomadGenomesVariantsV4_1_rsId
 searchTable gnomadGenomesVariantsV4_1
@@ -266,3 +266,19 @@ termRegex ^rs*
 searchTable gnomadGenomesVariantsV4_1_name
 searchType bigBed
 searchDescription Genome Aggregation Database (gnomAD) Genome Variants v4.1
+
+searchName gnomadExomesVariantsV4_1_displayName
+searchTable gnomadExomesVariantsV4_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Exomes Variants v4.1
+termRegex ^chr([1-9][0-9]?|[XYM])-[0-9]+-.*
+
+searchName gnomadExomesVariantsV4_1_rsId
+searchTable gnomadExomesVariantsV4_1
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Exomes Variants v4.1
+termRegex ^rs*
+
+searchTable gnomadExomesVariantsV4_1_name
+searchType bigBed
+searchDescription Genome Aggregation Database (gnomAD) Exomes Variants v4.1
