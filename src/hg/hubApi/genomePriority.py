@@ -45,6 +45,34 @@ def dbDbData():
     return result.stdout.decode('latin-1')
 
 ####################################################################
+def readAsmIdClade():
+    asmIdClade = {}
+
+    filePath = "/hive/data/outside/ncbi/genomes/reports/newAsm/asmId.clade.tsv"
+
+    with open(filePath, 'r', encoding='utf-8') as file:
+        reader = csv.reader(file, delimiter='\t')
+        for row in reader:
+            asmIdClade[row[0]] = row[1]
+
+    return asmIdClade
+
+####################################################################
+def allCommonNames():
+    commonNames = {}
+
+    filePath = "/hive/data/outside/ncbi/genomes/reports/allCommonNames/asmId.commonName.all.txt"
+
+    with open(filePath, 'r', encoding='utf-8') as file:
+        reader = csv.reader(file, delimiter='\t')
+        for row in reader:
+            asmId = row[0]
+            gcAcc = asmId.split('_')[0] + "_" + asmId.split('_')[1]
+            commonNames[gcAcc] = row[1]
+
+    return commonNames
+
+####################################################################
 def readCommonNames(ncbiType):
     commonNames = {}
 
@@ -97,32 +125,46 @@ hasn't changed.
 
 """
 
-def readAsmSummary(suffix, prioExists, comNames):
+def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
     # read one of the NCBI files from
     # /hive/data/outside/ncbi/genomes/reports/assembly_summary_{suffix}
     # Initialize a list to hold the dictionaries
     dataList = []
     keys = [
+"primates",
+"mammals",
 "vertebrate_mammalian",
+"birds",
+"fish",
+"vertebrate",
 "vertebrate_other",
 "invertebrate",
-"plant",
+"plants",
 "fungi",
 "protozoa",
 "viral",
 "bacteria",
 "archaea",
+"other",
+"metagenomes",
     ]
     values = [
-'1',
-'2',
-'3',
-'4',
-'5',
-'6',
-'7',
-'8',
-'0',
+'01',
+'02',
+'03',
+'04',
+'05',
+'06',
+'07',
+'08',
+'09',
+'10',
+'11',
+'12',
+'13',
+'14',
+'15',
+'16',
     ]
     cladePrio = dict(zip(keys, values))
 
@@ -147,21 +189,31 @@ def readAsmSummary(suffix, prioExists, comNames):
             s0 = re.sub(r'strain=', '', strain)
             strain = re.sub(r'na', '', s0)
             year = re.sub(r'/.*', '', row[14])
+            asmName = row[15]
+            asmId = gcAccession + "_" + asmName
             asmSubmitter = row[16]
             asmType = row[23]
 #            commonName = row[7]
             commonName = "n/a"
             if gcAccession in comNames:
                 commonName = comNames[gcAccession]
+            clade = row[24]	# almost like GenArk clades
+            if asmId in asmIdClade:	# specific GenArk clade
+                clade = asmIdClade[asmId]
+            if clade == "plant":
+                clade = "plants"
+            if clade not in cladePrio:
+                print("missing clade ", clade, " in cladePrio")
+                sys.exit(-1)
             dataDict = {
                 "gcAccession": gcAccession,
-                "asmName": row[15],
+                "asmName": asmName,
                 "scientificName": row[7],
                 "commonName": commonName,
                 "taxId": row[5],
-                "clade": row[24],	# almost like GenArk clades
+                "clade": clade,
                 "other": asmSubmitter + " " + strain + " " + asmType + " " + year,
-                "sortOrder": cladePrio[row[24]]
+                "sortOrder": cladePrio[clade],
             }
 
             utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
@@ -568,12 +620,23 @@ def main():
 
     establishPriorities(dbDbItems, genArkItems)
 
-    refSeqCommonNames = readCommonNames("refseq")
-    print("# refseq common names: ", len(refSeqCommonNames))
+    asmIdClade = readAsmIdClade()
+    commonNames = allCommonNames()
+    print("# all common names: ", len(commonNames))
+#    genBankCommonNames = readCommonNames("genbank")
+#    print("# genBank common names: ", len(genBankCommonNames))
 
-    refSeqList = readAsmSummary("refseq.txt", allPriorities, refSeqCommonNames)
-
+    refSeqList = readAsmSummary("refseq.txt", allPriorities, commonNames, asmIdClade)
     print("# refSeq assemblies: ", len(refSeqList))
+    genBankList = readAsmSummary("genbank.txt", allPriorities, commonNames, asmIdClade)
+    print("# genBank assemblies: ", len(genBankList))
+
+    refSeqGenBankList = refSeqList + genBankList
+    print("# refSeq + genBank assemblies: ", len(refSeqGenBankList))
+
+    refSeqGenBankSorted =  sorted(refSeqGenBankList, key=lambda x: x['sortOrder'])
+    print("# sorted refSeq + genBank assemblies: ", len(refSeqGenBankSorted))
+
 
     outFile = "genomePriority.tsv"
     fileOut = open(outFile, 'w')
@@ -590,9 +653,9 @@ def main():
 
         clade = entry['clade']
 
-        descr = f"{entry['sourceName']} {clade} {entry['description']}\n"
+        descr = f"{entry['sourceName']} {entry['description']}\n"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\t1\n"
+        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -610,34 +673,34 @@ def main():
 
         cleanName = removeNonAlphanumeric(entry['commonName'])
         clade = entry['clade']
-        descr = f"{entry['asmName']} {clade}"
+        descr = f"{entry['asmName']}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{description}\t1\n"
+        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\n"
         fileOut.write(outLine)
         itemCount += 1
 
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk count: {itemCount:4}")
 
-    itemCount = 0
     incrementPriority = len(allPriorities)
     print("# incrementing priorities from: ", incrementPriority)
-    # Print the dbDb data
-    for entry in refSeqList:
+
+    itemCount = 0
+    # Print the refSeq data
+    for entry in refSeqGenBankSorted:
         gcAccession = entry['gcAccession']
         commonName = entry['commonName']
         scientificName = entry['scientificName']
-        descr = f"{entry['other']} {entry['clade']}"
+        clade = entry['clade']
+        descr = f"{entry['other']}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{entry['gcAccession']}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\n"
+        outLine = f"{entry['gcAccession']}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\n"
         fileOut.write(outLine)
         incrementPriority += 1
         itemCount += 1
 
     totalItemCount += itemCount
-    print(f"{totalItemCount:4} - total\trefSeq count: {itemCount:4}")
-
-# def removeNonAlphanumeric(s):
+    print(f"{totalItemCount:4} - total\trefSeq + genbank count: {itemCount:4}")
 
     fileOut.close()
 
