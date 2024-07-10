@@ -21,6 +21,13 @@ allPriorities = {}
 
 priorityCounter = len(topPriorities) + 1
 
+# key is clade, value is priority, will be initialized
+# by initCladePriority() function
+cladePrio = {}
+
+####################################################################
+### this is kinda like an environment setting, it gets everything
+### into a UTF-8 reading mode
 ####################################################################
 def set_utf8_encoding():
     """
@@ -31,6 +38,8 @@ def set_utf8_encoding():
     if sys.stderr.encoding != 'utf-8':
         sys.stderr = open(sys.stderr.fileno(), mode='w', encoding='utf-8', buffering=1)
 
+####################################################################
+### reading hgcentral.dbDb table
 ####################################################################
 def dbDbData():
     # Run the MySQL command and capture the output as bytes
@@ -45,6 +54,10 @@ def dbDbData():
     return result.stdout.decode('latin-1')
 
 ####################################################################
+### this clade file is setup via weekly cron jobs
+### 05 00 * * 3 /hive/data/outside/ncbi/genomes/cronUpdates/ncbiRsync.sh GCA
+### 05 00 * * 6 /hive/data/outside/ncbi/genomes/cronUpdates/ncbiRsync.sh GCF
+####################################################################
 def readAsmIdClade():
     asmIdClade = {}
 
@@ -58,6 +71,8 @@ def readAsmIdClade():
     return asmIdClade
 
 ####################################################################
+### this common name file is setup weekly via a cron job
+####################################################################
 def allCommonNames():
     commonNames = {}
 
@@ -69,19 +84,6 @@ def allCommonNames():
             asmId = row[0]
             gcAcc = asmId.split('_')[0] + "_" + asmId.split('_')[1]
             commonNames[gcAcc] = row[1]
-
-    return commonNames
-
-####################################################################
-def readCommonNames(ncbiType):
-    commonNames = {}
-
-    filePath = "/hive/data/outside/ncbi/genomes/reports/" + ncbiType + "/allAssemblies.commonNames.tsv"
-
-    with open(filePath, 'r', encoding='utf-8') as file:
-        reader = csv.reader(file, delimiter='\t')
-        for row in reader:
-            commonNames[row[1]] = row[3]
 
     return commonNames
 
@@ -125,11 +127,13 @@ hasn't changed.
 
 """
 
-def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
-    # read one of the NCBI files from
-    # /hive/data/outside/ncbi/genomes/reports/assembly_summary_{suffix}
-    # Initialize a list to hold the dictionaries
-    dataList = []
+####################################################################
+### the various listings are ordered by these clade priorities to get
+### primates first, mammals second, and so on
+####################################################################
+def initCladePriority():
+    global cladePrio
+
     keys = [
 "primates",
 "mammals",
@@ -147,6 +151,7 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
 "archaea",
 "other",
 "metagenomes",
+"n/a",
     ]
     values = [
 '01',
@@ -165,8 +170,29 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
 '14',
 '15',
 '16',
+'17',
     ]
     cladePrio = dict(zip(keys, values))
+
+####################################################################
+### given clade c, return priority from cladePrio
+####################################################################
+def cladePriority(c):
+    global cladePrio
+    if c not in cladePrio:
+        print(f"ERROR: missing clade {c} in cladePrio")
+        sys.exit(255)
+
+    return cladePrio[c]
+
+####################################################################
+### read one of the NCBI files from
+### /hive/data/outside/ncbi/genomes/reports/assembly_summary_{suffix}
+####################################################################
+def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
+
+    # Initialize a list to hold the dictionaries
+    dataList = []
 
     filePath = "/hive/data/outside/ncbi/genomes/reports/assembly_summary_" + suffix
 
@@ -181,7 +207,7 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
                continue
             if len(row) != 38:
                 print(f"ERROR: incorrect number of fields in {file}")
-                sys.exit(1)
+                sys.exit(255)
             gcAccession = row[0]
             strain = re.sub(r'breed=', '', row[8])
             s0 = re.sub(r'cultivar=', '', strain)
@@ -193,7 +219,6 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
             asmId = gcAccession + "_" + asmName
             asmSubmitter = row[16]
             asmType = row[23]
-#            commonName = row[7]
             commonName = "n/a"
             if gcAccession in comNames:
                 commonName = comNames[gcAccession]
@@ -202,9 +227,8 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
                 clade = asmIdClade[asmId]
             if clade == "plant":
                 clade = "plants"
-            if clade not in cladePrio:
-                print("missing clade ", clade, " in cladePrio")
-                sys.exit(-1)
+            cladeP = cladePriority(clade)
+
             dataDict = {
                 "gcAccession": gcAccession,
                 "asmName": asmName,
@@ -213,7 +237,7 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
                 "taxId": row[5],
                 "clade": clade,
                 "other": asmSubmitter + " " + strain + " " + asmType + " " + year,
-                "sortOrder": cladePrio[clade],
+                "sortOrder": cladeP,
             }
 
             utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
@@ -224,6 +248,8 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
 
 ####################################################################
 ### given a URL to hgdownload file: /hubs/UCSC_GI.assemblyHubList.txt
+### this sets up the GenArk listing
+####################################################################
 def readGenArkData(url):
     # Initialize a list to hold the dictionaries
     dataList = []
@@ -233,16 +259,20 @@ def readGenArkData(url):
     fileContent = response.text
     fileIo = StringIO(fileContent)
     reader = csv.reader(fileIo, delimiter='\t')
+
     for row in reader:
         if row and row[0].startswith('#'):
             continue
+        clade = re.sub(r'\(L\)$', '', row[5])
+        cladeP = cladePriority(clade)
         dataDict = {
             "gcAccession": row[0],
             "asmName": row[1],
             "scientificName": row[2],
             "commonName": row[3],
             "taxId": row[4],
-            "clade": re.sub(r'\(L\)$', '', row[5]),
+            "clade": clade,
+            "sortOrder": cladeP,
         }
         
         utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
@@ -251,9 +281,12 @@ def readGenArkData(url):
 
     # reset the list so that accessions such as GCF_000001405.40
     # come before GCF_000001405.39
-    dataList.reverse()
-    return dataList
+#    dataList.reverse()
+#    return dataList
+    return sorted(dataList, key=lambda x: x['sortOrder'])
 
+####################################################################
+### a manually maintained clade listing for UCSC dbDb assemblies
 ####################################################################
 def dbDbCladeList(filePath):
     returnList = {}
@@ -270,6 +303,8 @@ def dbDbCladeList(filePath):
     return returnList
 
 ####################################################################
+### out of the genArkData list, extract the given clade
+####################################################################
 def extractClade(clade, genArkData):
     tmpList = {}
     for item in genArkData:
@@ -283,11 +318,14 @@ def extractClade(clade, genArkData):
     return returnList
 
 ####################################################################
-# Define a key function for sorting by the first word, case insensitive
+### Define a key function for sorting by the first word, case insensitive
+####################################################################
 def getFirstWordCaseInsensitive(row):
     firstWord = row.split('\t')[0]  # Extract the first word
     return firstWord.lower()  # Convert to lowercase for case-insensitive sorting
 
+####################################################################
+### process the hgcentral.dbDb data into a dictionary
 ####################################################################
 def processDbDbData(data, clades):
     # Initialize a list to hold the dictionaries
@@ -302,6 +340,7 @@ def processDbDbData(data, clades):
         # Split each row into columns
         columns = row.split('\t')
         clade = clades.get(columns[0], "n/a")
+        cladeP = cladePriority(clade)
         
         # corresponds with the SELECT statement
         # name,scientificName,organism,taxId,sourceName,description
@@ -314,16 +353,19 @@ def processDbDbData(data, clades):
             "sourceName": columns[4],
             "description": columns[5],
             "clade": clade,
+            "sortOrder": cladeP,
         }
         
         utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
         # Append the dictionary to the list
         dataList.append(utf8Encoded)
     
-    return dataList
+    return sorted(dataList, key=lambda x: x['sortOrder'])
 
 ####################################################################
-# Function to remove non-alphanumeric characters
+### Function to remove non-alphanumeric characters
+### cleans up names to make them better indexing words
+####################################################################
 def removeNonAlphanumeric(s):
     # Ensure string type
     if isinstance(s, str):
@@ -356,6 +398,8 @@ def eliminateDupWords(s):
     # Join the words back into a single string
     return ' '.join(resultWords)
 
+####################################################################
+### for the genArk set, establish some ad-hoc priorities
 ####################################################################
 def establishPriorities(dbDb, genArk):
     global topPriorities
@@ -563,6 +607,17 @@ def establishPriorities(dbDb, genArk):
     print(f"{totalItemCount:4} - total\tgenArk GCA count: {itemCount:4}")
     
     itemCount = 0
+    for entry in dbDb:
+        dbName = entry['name']
+        if dbName not in allPriorities:
+            allPriorities[dbName] = priorityCounter
+            priorityCounter += 1
+            itemCount += 1
+    totalItemCount += itemCount
+    print(f"{totalItemCount:4} - total\tthe rest of dbDb count: {itemCount:4}")
+
+def notUsed():
+    itemCount = 0
     # finally the rest of the database genomes names
     for dbName in sorted(allDbDbNames):
         if dbName not in allPriorities:
@@ -572,17 +627,21 @@ def establishPriorities(dbDb, genArk):
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tthe rest of dbDb count: {itemCount:4}")
 
+
+
 ####################################################################
 """
 table load procedure:
 
   hgsql -e 'DROP TABLE IF EXISTS genomePriority;' hgcentraltest
-  hgsql hgcentraltest < genomePriority.sql
+  hgsql hgcentraltest < ../lib/genomePriority.sql
   hgsql -e 'LOAD DATA LOCAL INFILE "genomePriority.tsv" INTO
 TABLE genomePriority;' hgcentraltest
   hgsql -e 'ALTER TABLE genomePriority
 ADD FULLTEXT INDEX gdIx
-(name, commonName, scientificName, description);' hgcentraltest
+(name, commonName, scientificName, clade, description);' \
+  hgcentraltest
+
 """
 ####################################################################
 
@@ -601,12 +660,14 @@ def main():
         print("    UCSC_GI.assemblyHubList.txt from hgdownload.")
         print("Writing an output file genomePriority.tsv to be loaded into")
         print("    genomePriority.hgcentral.  See notes in this script for load procedure.")
-        sys.exit(-1)
-
-    dbDbNameCladeFile = sys.argv[1]
+        sys.exit(255)
 
     # Ensure stdout and stderr use UTF-8 encoding
     set_utf8_encoding()
+
+    initCladePriority()
+
+    dbDbNameCladeFile = sys.argv[1]
 
     # the correspondence of dbDb names to GenArk clade categories
     dbDbClades = dbDbCladeList(dbDbNameCladeFile)
@@ -623,8 +684,6 @@ def main():
     asmIdClade = readAsmIdClade()
     commonNames = allCommonNames()
     print("# all common names: ", len(commonNames))
-#    genBankCommonNames = readCommonNames("genbank")
-#    print("# genBank common names: ", len(genBankCommonNames))
 
     refSeqList = readAsmSummary("refseq.txt", allPriorities, commonNames, asmIdClade)
     print("# refSeq assemblies: ", len(refSeqList))
@@ -686,7 +745,7 @@ def main():
     print("# incrementing priorities from: ", incrementPriority)
 
     itemCount = 0
-    # Print the refSeq data
+    # Print the refSeq/genBank data
     for entry in refSeqGenBankSorted:
         gcAccession = entry['gcAccession']
         commonName = entry['commonName']
