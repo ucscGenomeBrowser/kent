@@ -16,7 +16,7 @@ topPriorities = {
     'hs1': 3,
 }
 
-### key will be dbDb name, value will be priority number
+### key will be dbDb/GCx name, value will be priority number
 allPriorities = {}
 
 priorityCounter = len(topPriorities) + 1
@@ -569,14 +569,19 @@ def establishPriorities(dbDb, genArk):
     print(f"{totalItemCount:4} - total\tgenArk GCA mammals count: {itemCount:4}")
  
     itemCount = 0
-    # the rest of the highest versions of each unique dbDb name
-    sortByValue = sorted(versionScan.items(), key=lambda x: x[1], reverse=True)
-    for key in sortByValue:
-        highVersion = highestVersion[key[0]]
-        if highVersion not in allPriorities:
-            allPriorities[highVersion] = priorityCounter
-            priorityCounter += 1
-            itemCount += 1
+    # dbDb is in cladeOrder, process in that order, find highest versions
+    for item in dbDb:
+        dbDbName = item['name']
+        if dbDbName not in allPriorities:
+            splitMatch = re.match("([a-zA-Z]+)(\d+)", dbDbName)
+            if splitMatch:
+                noVersion = splitMatch.group(1)
+                version = allDbDbNames[dbDbName]
+                highVersion = versionScan[noVersion]
+                if highVersion == version:
+                    allPriorities[dbDbName] = priorityCounter
+                    priorityCounter += 1
+                    itemCount += 1
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tdbDb highest versions count: {itemCount:4}")
 
@@ -630,6 +635,7 @@ def notUsed():
 
 
 ####################################################################
+
 """
 table load procedure:
 
@@ -643,7 +649,6 @@ ADD FULLTEXT INDEX gdIx
   hgcentraltest
 
 """
-####################################################################
 
 ####################################################################
 def main():
@@ -709,6 +714,7 @@ def main():
             priority = allPriorities[dbDbName]
         else:
             print("no priority for ", dbDbName)
+            sys.exit(255)
 
         clade = entry['clade']
 
@@ -729,6 +735,7 @@ def main():
             priority = allPriorities[gcAccession]
         else:
             print("no priority for ", gcAccession)
+            sys.exit(255)
 
         cleanName = removeNonAlphanumeric(entry['commonName'])
         clade = entry['clade']
