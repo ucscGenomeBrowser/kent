@@ -621,19 +621,6 @@ def establishPriorities(dbDb, genArk):
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tthe rest of dbDb count: {itemCount:4}")
 
-def notUsed():
-    itemCount = 0
-    # finally the rest of the database genomes names
-    for dbName in sorted(allDbDbNames):
-        if dbName not in allPriorities:
-            allPriorities[dbName] = priorityCounter
-            priorityCounter += 1
-            itemCount += 1
-    totalItemCount += itemCount
-    print(f"{totalItemCount:4} - total\tthe rest of dbDb count: {itemCount:4}")
-
-
-
 ####################################################################
 
 """
@@ -748,7 +735,7 @@ def main():
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk count: {itemCount:4}")
 
-    incrementPriority = len(allPriorities)
+    incrementPriority = len(allPriorities) + 1
     print("# incrementing priorities from: ", incrementPriority)
 
     itemCount = 0
