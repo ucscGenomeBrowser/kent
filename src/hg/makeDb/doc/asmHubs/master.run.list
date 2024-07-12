@@ -1272,6 +1272,7 @@
 ./runBuild GCA_037176775.1_rAnoSag1.pat vertebrate Anolis_sagrei
 ./runBuild GCA_037306005.1_aRhiDor1.hap1 vertebrate Rhinophrynus_dorsalis
 ./runBuild GCA_037306015.1_aRhiDor1.hap2 vertebrate Rhinophrynus_dorsalis
+./runBuild GCA_037783105.1_ASM3778310v1 invertebrate Bactrocera_zonata
 ./runBuild GCA_037950955.1_bSarPap1.hap2 birds Sarcoramphus_papa
 ./runBuild GCA_037962945.1_bSarPap1.hap1 birds Sarcoramphus_papa
 ./runBuild GCA_038021265.1_fCypVen1.hap1 fish Cyprinella_venusta
