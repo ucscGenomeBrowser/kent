@@ -440,7 +440,7 @@ def establishPriorities(dbDb, genArk):
             allDbDbNames[dbDbName] = splitMatch.group(2)
             itemCount += 1
             if splitMatch.group(1) in versionScan:
-                if splitMatch.group(2) > versionScan[splitMatch.group(1)]:
+                if float(splitMatch.group(2)) > float(versionScan[splitMatch.group(1)]):
                     versionScan[splitMatch.group(1)] = splitMatch.group(2)
                     highestVersion[splitMatch.group(1)] = dbDbName
             else:
