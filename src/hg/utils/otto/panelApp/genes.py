@@ -59,6 +59,7 @@ def downloadPanels():
         logging.debug("Getting %s" % url)
         resp = requests.get(url)
         res  = resp.json()
+
         panelInfos[panelId] = res
         if onlyOne:
             break
@@ -66,7 +67,12 @@ def downloadPanels():
     return panelInfos
 
 def getGeneSymbols():
-    panelInfos = downloadPanels()
+    try:
+        panelInfos = downloadPanels()
+    except requests.exceptions.JSONDecodeError:
+        time.sleep(30)
+        panelInfos = downloadPanels()
+
     syms = set()
     for panelInfo in panelInfos.values():
         for gene in panelInfo["genes"]:
