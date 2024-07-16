@@ -2869,7 +2869,8 @@ static struct customTrack *bigBedLoader(struct customFactory *fac,
 {
 /* Not much to this.  A bigBed has nothing here but a track line. */
 struct hash *settings = track->tdb->settingsHash;
-addSpecialSettings(settings);
+if (sameString(track->tdb->type, "bigPsl"))
+    addSpecialSettings(settings);
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 checkAllowedBigDataUrlProtocols(bigDataUrl);

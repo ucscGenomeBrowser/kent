@@ -90,21 +90,21 @@ bash("echo db$'\\t'dbUse >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('sort /hive/users/'+user+'/ErrorLogsOutput/dbCounts.tsv -rnk2 > /hive/users/'+user+'/ErrorLogsOutput/dbCounts.tsv.sorted')
-bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/dbCounts.tsv.sorted | ~markd/bin/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/dbCounts.tsv.sorted | /cluster/home/lrnassar/temp/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo "List of default track usage for hg38, sorted by how many users are turning off the track:" >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash("echo db$'\\t'trackUse$'\\t'% using$'\\t'% turning off$'\\t'trackName >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
-bash('grep ^hg38 /hive/users/'+user+'/ErrorLogsOutput/defaultCounts.tsv | grep -v "MarkH3k27ac" | sort -nrk 5 | awk -v OFS="\\t" \'{ print $1,$3,$4,$5,$2 }\' | head -n 15 | ~markd/bin/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('grep ^hg38 /hive/users/'+user+'/ErrorLogsOutput/defaultCounts.tsv | grep -v "MarkH3k27ac" | sort -nrk 5 | awk -v OFS="\\t" \'{ print $1,$3,$4,$5,$2 }\' | head -n 15 | /cluster/home/lrnassar/temp/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo "List of default track usage for hg19, sorted by how many users are turning off the track:" >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash("echo db$'\\t'trackUse$'\\t'% using$'\\t'% turning off$'\\t'trackName >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
-bash('grep ^hg19 /hive/users/'+user+'/ErrorLogsOutput/defaultCounts.tsv | grep -v "MarkH3k27ac" | sort -nrk 5 | awk -v OFS="\\t" \'{ print $1,$3,$4,$5,$2 }\' | head -n 15| ~markd/bin/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('grep ^hg19 /hive/users/'+user+'/ErrorLogsOutput/defaultCounts.tsv | grep -v "MarkH3k27ac" | sort -nrk 5 | awk -v OFS="\\t" \'{ print $1,$3,$4,$5,$2 }\' | head -n 15| /cluster/home/lrnassar/temp/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo List of non-default track usage: >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
@@ -113,7 +113,7 @@ bash('echo ---------------------------------------------------------------------
 
 bash('sort /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv -rnk3 > /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted')
 bash('cat /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted | grep -v -f /hive/users/'+user+'/ErrorLogsOutput/defaults.txt > /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted.noDefaults')
-bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted.noDefaults | awk -v OFS="\\t" \'{ print $1,$3,$2 }\' | ~markd/bin/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/trackCounts.tsv.sorted.noDefaults | awk -v OFS="\\t" \'{ print $1,$3,$2 }\' | /cluster/home/lrnassar/temp/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo "List of public hub usage (only most used track represented):" >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
@@ -136,14 +136,14 @@ for key, value in results.items():
     file2.write(value[0]+"\t"+value[1]+"\t"+value[2]+"\t"+value[3]+"\n")
 file2.close()
 
-bash('cat /hive/users/'+user+'/ErrorLogsOutput/filteredHubs.txt | awk -F "\\t" -v OFS="\\t" \'{ print $2,$4,$3,$1 }\' | ~markd/bin/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('cat /hive/users/'+user+'/ErrorLogsOutput/filteredHubs.txt | awk -F "\\t" -v OFS="\\t" \'{ print $2,$4,$3,$1 }\' | /cluster/home/lrnassar/temp/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo List of public hub track usage overall: >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash("echo db$'\\t'trackUse$'\\t'track$'\\t'pubHub >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
-bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/trackCountsHubs.tsv.sorted | awk -F "\\t" -v OFS="\\t" \'{ print $2,$4,$3,$1 }\' | ~markd/bin/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('head -n 15 /hive/users/'+user+'/ErrorLogsOutput/trackCountsHubs.tsv.sorted | awk -F "\\t" -v OFS="\\t" \'{ print $2,$4,$3,$1 }\' | /cluster/home/lrnassar/temp/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 #Query hubPublic and hubStats in order to filter out public hubs then sort out the IDs
 bash('/cluster/bin/x86_64/hgsql -h genome-centdb -e "select hubUrl from hubPublic" hgcentral > /hive/users/'+user+'/ErrorLogsOutput/hubPublicHubUrl.txt')
@@ -265,7 +265,7 @@ bash('echo "List of hub uses that are not public hubs. Some public hubs sneak in
 bash("echo db$'\\t'machine$'\\t'trackUse$'\\t'shortLabel$'\\t'hubUrl >> /hive/users/"+user+"/ErrorLogsOutput/results.txt")
 bash('echo -------------------------------------------------------------------------------------- >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
-bash('cat /hive/users/'+user+'/ErrorLogsOutput/hubsNotPublic.txt | ~markd/bin/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
+bash('cat /hive/users/'+user+'/ErrorLogsOutput/hubsNotPublic.txt | /cluster/home/lrnassar/temp/tabFmt >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
 bash('echo >> /hive/users/'+user+'/ErrorLogsOutput/results.txt')
