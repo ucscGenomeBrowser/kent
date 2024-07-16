@@ -859,7 +859,8 @@ div.warnDialog .ui-dialog-title { font-weight: bold; color: #000000; }
 div.warnDialog .ui-dialog-content { background-color: #FFFEE8; font-size: 1em; }
 div.warnDialog .ui-dialog-buttonpane { border-width: 0; text-align: center; }
 div.warnDialog .ui-dialog-buttonset { width: 100%; display: inline-block; }
-#recTrackSetsPopup { font-size: 0.95em; }
+/* #recTrackSetsPopup { font-size: 0.95em; } */
+body > div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable * { font-size: 14px; }
 
 .centeredImage
 {
