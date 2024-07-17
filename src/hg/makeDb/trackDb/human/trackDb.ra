@@ -5586,8 +5586,6 @@ searchMethod exact
 searchType bigBed
 searchPriority 1.02
 
-include ../refSeqComposite.ra
-
 track ncbiRefSeqSelect
 parent refSeqComposite off
 priority 8
