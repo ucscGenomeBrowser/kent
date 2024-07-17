@@ -76,14 +76,18 @@
             text: 'This brief tutorial will cover the primary resources used in standard variant '+
                   'interpretation available to clinical geneticists as per the ACMG/AMP guidelines.'+
                   '<br><br>'+
-                  'A link to restart this tutorial can always be found at X.',
+                  'A link to restart this tutorial is available below:'+
+                  '<br>'+
+                  '<em>'+
+                  '<a href="/cgi-bin/hgTracks?startClinical=true" style="font-size: 14px" '+
+                  'target="_blank">https://genome.ucsc.edu/cgi-bin/hgTracks?startClinical=true</a></em>',
             buttons: [tutorialButtons.next, tutorialButtons.end],
             id: 'intro',
             classes: 'dark-background'
         });
     
         clinicalTour.addStep({
-            title: 'Searching for Variants and Items',
+            title: 'Searching for Variants and other Queries',
             text: 'The search bar allows you to navigate to a region on the genome using ' +
                   '<a href="http://varnomen.hgvs.org/" target="_blank">HGVS terms</a>, '+
                   '<a href="https://genome-blog.soe.ucsc.edu/blog/2016/12/12/the-ucsc-genome-browser-coordinate-counting-systems/"' +
@@ -108,11 +112,11 @@
     
         clinicalTour.addStep({
             title: 'Accessing the Recommended Track Sets',
-            text: 'You can use the <b>Recommended Track Sets</b> '+
-                  '(https://www.ncbi.nlm.nih.gov/pubmed/35088925) '+
-                  'feature to asist in configuring your display with relevant annotations used '+
-                  'in variant interpretation. This feature is located under '+
-                  'the "Genome Browser" drop-down menu.'+
+            text: 'Located under the "Genome Browser" drop-down menu, the <b>Recommended Track '+
+                  'Sets</b> feature can assist in configuring the display with relevant '+
+                  'annotations for variant interpretation. '+
+                  '<a href="https://www.ncbi.nlm.nih.gov/pubmed/35088925" '+
+                  'target="_blank">[publication]</a>'+
                   '<br><br>'+
                   'Selecting this option will launch a dialog box offering '+
                   'pre-configured track sets, enabling swapping from one view to another view '+
@@ -154,13 +158,14 @@
         });
     
         clinicalTour.addStep({
-            title: 'Recommended Track Sets',
-            text: 'Each available track set loads a display curated to the specific theme. '+
-                  'Notably, the <b>Clinical SNVs</b> and <b>Clinical CNVs</b> track sets are '+
+            title: 'Display Annotations for a Specific Scenario',
+            text: 
+                  '<em>Note: Loading a track set may hide some tracks in your current view.</em>'+
+                  '<br><br>'+
+                  'Each available track set loads a display curated to the specific theme. '+
+                  'The <b>Clinical SNVs</b> and <b>Clinical CNVs</b> track sets are '+
                   'routinely updated to include existing and new annotations available on the '+
                   'Genome Browser used in variant interpretation according to ACMG/AMP guidelines.'+
-                  '<br><br>'+
-                  '<em>Note: Loading a track set may hide some tracks in your current view.</em>'+
                   '<br><br>'+
                   'To use these track sets as your default view, bookmark these links:'+
                   '<ul>'+
@@ -203,7 +208,8 @@
             title: 'Additional Resources and Feedback',
             text: 'If you have any questions or suggestions including annotations '+
                   'that you feel are missing from a track set or a new track set theme, '+
-                  'please write to us (link to contact page). Also, if you are new to the '+
+                  '<a href="/contacts.html" target="_blank">please write to us</a>. '+
+                  'Also, if you are new to the '+
                   'UCSC Genome Browser, consider exploring our '+
                   '<a href="/cgi-bin/hgTracks?startTutorial=true" '+
                   'target="_blank">basic tutorial</a>.'+
