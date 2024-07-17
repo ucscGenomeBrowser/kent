@@ -2848,6 +2848,20 @@ static boolean bigBedRecognizer(struct customFactory *fac,
 return (sameType(type, "bigBed"));
 }
 
+static void addSpecialSettings(struct hash *hash)
+/* Add special settings to bigPsl custom track if none of them
+ * are already set. */
+{
+if (!(hashLookup(hash, "showDiffBasesAllScales") ||
+      hashLookup(hash, "baseColorUseSequence") ||
+      hashLookup(hash, "baseColorDefault")))
+    {
+    hashAdd(hash, "showDiffBasesAllScales", ".");
+    hashAdd(hash, "baseColorUseSequence", "lfExtra");
+    hashAdd(hash, "baseColorDefault", "diffBases");
+    }
+}
+
 static struct customTrack *bigBedLoader(struct customFactory *fac,
 	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
@@ -2855,6 +2869,8 @@ static struct customTrack *bigBedLoader(struct customFactory *fac,
 {
 /* Not much to this.  A bigBed has nothing here but a track line. */
 struct hash *settings = track->tdb->settingsHash;
+if (sameString(track->tdb->type, "bigPsl"))
+    addSpecialSettings(settings);
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 checkAllowedBigDataUrlProtocols(bigDataUrl);

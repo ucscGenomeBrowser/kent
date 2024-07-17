@@ -1,7 +1,14 @@
 <h2>Description</h2>
 <p>
-The gnomAD v4 and v4.1 tracks shows variants from 807,162 individuals, including 730,947 exomes and 76,215 genomes. This release includes the 76,156 genomes from the gnomAD v3.1.2 release as well as new exome data from 416,555 UK Biobank individuals. For more detailed information on gnomAD v4, see the related <a target="_blank"
-href="https://gnomad.broadinstitute.org/news/2023-11-gnomad-v4-0/">blog post</a>. Both the v4 and v4.1 tracks contain data on the same genomes and exomes, the only difference is the v4.1 track contains updates from gnomAD's v4.1 update release which allowed us to make the track into a bigBed format which offers more configuration and display options. Otherwise the underlying data should be the same.
+With the new gnomAD v4.1 data release, the v4 Pre-Release track has been replaced with the new
+gnomAD v4.1 track. The v4.1 release includes a fix for the allele number
+<a target="_blank"
+href="https://gnomad.broadinstitute.org/news/2024-04-gnomad-v4-1/">
+issue</a>. The v4.1 track shows variants from 807,162 individuals, including 730,947
+exomes and 76,215 genomes. This includes the 76,156 genomes from the gnomAD v3.1.2 release as well
+as new exome data from 416,555 UK Biobank individuals. For more detailed information on gnomAD
+v4.1, see the related <a target="_blank"
+href="https://gnomad.broadinstitute.org/news/2024-04-gnomad-v4-1/">blog post</a>.
 
 <p>
 The gnomAD v3.1 track shows variants from 76,156 whole genomes (and no exomes), all mapped to the
@@ -75,21 +82,24 @@ More details on the Variant type(s) can be found on the <a target="_blank"
 href="http://www.sequenceontology.org/so_wiki/index.php/Category:SO:SOFA">Sequence Ontology page</a>.</p>
 
 <h2>Display Conventions and Configuration</h2>
-<h3>gnomAD v4</h3>
+<h3>gnomAD v4.1</h3>
 <p>
-The gnomaD v4.1 track follows the same conventions as the v3.1.1 and v3.1 track, described below.
-</p>
-
-<p>
-The gnomAD v4 track follows the standard display and configuration options available for
-<a href="/goldenPath/help/hgVcfTrackHelp.html">VCF tracks</a>, briefly explained below.
+The gnomaD v4.1 track follows the same conventions as the v3.1.1 and v3.1 track. By default, a
+maximum of 100,000 variants can be displayed at a time (before applying the filters) using <button
+type="button">squish</button> or <button type="button">pack</button> mode before the track switches
+to dense coverage mode.</p>
+<p>Mouse hover on an item will display the following details about each variant:
 </p>
 <ul>
-  <li>In <button type="button">dense</button> mode, a vertical line is drawn at the position of
-    each variant.</li>
-  <li>In <button type="button">pack</button> mode, &quot;ref&quot; and &quot;alt&quot; alleles are
-    displayed to the left of a vertical line with colored portions corresponding to allele counts.
-    Hovering the mouse pointer over a variant pops up a display of alleles and counts.</li>
+  <li>Position</li>
+  <li>Total Allele Frequency (TotalAF)</li>
+  <li>Genes</li>
+  <li>Annotation</li>
+  <li>FILTER tags from VCF (FILTER)</li>
+  <li>Population with maximum AF (PopMaxAF)</li>
+  <li>Homozygous Individuals</li>
+  <li>Homozygous Individuals in XX samples (chrX and chrY only)</li>
+  <li>Hemizygous Individuals (chrX and chrY only)</li>
 </ul>
 <h3>gnomAD v3.1.1</h3>
 <p>
@@ -204,10 +214,10 @@ types have been filtered out, but are still viewable in the gnomAD browser:
 </p>
 
 <p>
-For the full steps used to create the track at UCSC, please see the section
-denoted &quot;gnomAD v3.1 update&quot; in the <a
+For the full steps used to create the gnomAD tracks at UCSC, please see the
+<a
 href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg38/gnomad.txt"
-target="_blank">hg38 makedoc</a>.
+target="_blank">hg38 gnomad makedoc</a>.
 </p>
 
 <a name="dataAccess">
@@ -221,21 +231,22 @@ href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are st
 can be downloaded from our <a
 href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
 to the conditions set forth by the gnomAD consortium (see below). Variant VCFs can be found in the
-vcf/ subdirectory. The
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v3.1/variants/">v3.1</a> and
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v3.1.1/">v3.1.1</a> variants can
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/vcf/">vcf</a>
+subdirectory. The
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v3.1/variants/">v3.1</a>,
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v3.1.1/">v3.1.1</a>, and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v4.1/">v4.1</a> variants can
 be found in a special directory as they have been transformed from the underlying VCF.</p>
 
 <p>
 For the v3.1.1 and v4.1 variants in particular, the underlying bigBed only contains enough information
 necessary to use the track in the browser. The extra data like VEP annotations and CADD scores are
-available in the <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v3.1.1/">same directory</a>
-as the bigBed but in the files <em>gnomad.v3.1.1.details.tab.gz</em> and
-<em>gnomad.v3.1.1.details.tab.gz.gzi</em>. The gnomad.v3.1.1.details.tab.gz contains the gzip
-compressed extra data in JSON format, and the .gzi file is available to speed searching of
-this data. Each variant has an associated md5sum in the name field of the bigBed which can be
-used along with the _dataOffset and _dataLen fields to get the associated external data, as show
-below:
+available in the <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/v4.1/">same directory</a>
+as the bigBed but in the files <em>details.tab.gz</em> and <em>details.tab.gz.gzi</em>. The
+details.tab.gz contains the gzip compressed extra data in JSON format, and the .gzi file is
+available to speed searching of this data. Each variant has an associated md5sum in the name field
+of the bigBed which can be used along with the _dataOffset and _dataLen fields to get the
+associated external data, as show below:
 <pre>
 # find item of interest:
 bigBedToBed genomes.bb stdout | head -4 | tail -1

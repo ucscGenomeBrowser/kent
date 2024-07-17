@@ -735,30 +735,6 @@ if (hubGenome->settingsHash)
     }
 }
 
-char *genArkPath(char *genome)
-/* given a GenArk hub genome name, e.g. GCA_021951015.1 return the path:
- *               GCA/021/951/015/GCA_021951015.1
- * prefix that with desired server URL: https://hgdownload.soe.ucsc.edu/hubs/
- *   if desired.  Or suffix add /hub.txt to get the hub.txt URL
- *
- *   already been proven that genome is a GCx_ name prefix before calling
- */
-{
-struct dyString *genArkPath = dyStringNew(0);
-
-char tmpBuf[4];
-safencpy(tmpBuf, sizeof(tmpBuf), genome, 3);
-dyStringPrintf(genArkPath, "%s/", tmpBuf);
-safencpy(tmpBuf, sizeof(tmpBuf), genome+4, 3);
-dyStringPrintf(genArkPath, "%s/", tmpBuf);
-safencpy(tmpBuf, sizeof(tmpBuf), genome+7, 3);
-dyStringPrintf(genArkPath, "%s/", tmpBuf);
-safencpy(tmpBuf, sizeof(tmpBuf), genome+10, 3);
-dyStringPrintf(genArkPath, "%s", tmpBuf);
-
-return dyStringCannibalize(&genArkPath);
-}
-
 static struct dyString *textOutput = NULL;
 
 void textLineOut(char *lineOut)

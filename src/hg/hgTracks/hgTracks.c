@@ -6964,6 +6964,7 @@ for(; grpList; grpList = grpList->next)
     group->label = cloneString(grpList->label);
     group->defaultPriority = group->priority = priority;
     group->errMessage = grpList->errMessage;
+    group->defaultIsClosed = grpList->defaultIsClosed;
     priority += priorityInc;
     slAddHead(&list, group);
     hashAdd(hash, group->name, group);
@@ -8518,6 +8519,18 @@ if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
 }
 
 
+static void printAliases(char *name)
+/* Print out the aliases for this sequence. */
+{
+struct slName *names = chromAliasFindAliases(name);
+
+printf("<div id='aliases'><a title='");
+for(;names; names = names->next)
+    printf("%s;",names->name);
+printf("'>Aliases</a></div>");
+}
+
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -9230,6 +9243,7 @@ if (!hideControls)
 	hButton("goButton", "Search");
 
         printSearchHelpLink();
+        printAliases(displayChromName);
 
         printPatchNote();
 

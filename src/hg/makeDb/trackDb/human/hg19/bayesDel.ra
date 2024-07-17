@@ -8,7 +8,6 @@ group phenDis
 shortLabel BayesDel
 visibility full
 html predictionScoresSuper
-pennantIcon New red ../goldenPath/newsarch.html#030724 "Released, Mar. 7, 2024"
 
         track maxAFmutA
         type bigWig -1.29334 0.75731

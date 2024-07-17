@@ -65,6 +65,45 @@ target=_blank>our GitHub page</a>.</p>
 <!-- ============= 2024 archived news ============= -->
 <a name="2024"></a>
 
+<a name="071224"></a>
+<h2>Jul. 12, 2024 &nbsp;&nbsp; First update to hg19's UCSC Genes track since 2013</h2>
+<p>
+The UCSC Genome Browser is getting ready to update hg19's UCSC Genes dataset for the first time
+since 2013. In this update, the UCSC Genes track will now use GENCODE v45 gene models lifted to hg19
+and replace the old UCSC transcript IDs with the official GENCODE IDs.
+</p>
+<p>
+The anticipated release date for this update is July 31, 2024.</p>
+
+<p>
+As an example of what to expect, here are some GENCODE IDs that will replace the UCSC IDs in the
+update:</p>
+
+<pre>
+oldId      newId
+uc003qfo.3 ENST00000341911.10_8
+uc003jsk.2 ENST00000462279.5_3
+uc003umk.1 ENST00000318238.9_6
+uc003gzi.3 ENST00000682860.1_2
+uc011dpu.2 ENST00000375023.3_6
+uc021raj.2 ENST00000258149.11_6
+uc002fxp.3 ENST00000341657.9_12
+uc010xhp.1 ENST00000429344.7_6
+uc003zze.3 ENST00000242285.11_9</pre>
+
+<p>
+For each transcript ID, the _# portion is part of the
+<a href="https://github.com/diekhans/gencode-backmap?tab=readme-ov-file#identification"
+target="_blank">official hg19 backmap ID</a>, so they are not confused with the gene/transcript they
+are derived from in hg38. Between hg38 and hg19, the two IDs are not always in the same sequence and
+may not be a one-to-one mapping.
+</p>
+<p>
+With this update, we will also be freezing the previous 2013 knownGene release in a separate
+archive track. Once new GENCODE versions are available, the previous track will then be added to the
+archive for future reproducibility. More information about the knownGene archive will be available
+once the update is released.</p>
+
 <a name="060724"></a>
 <h2>June 7, 2024 &nbsp;&nbsp; New GENCODE gene tracks: Human V46 (hg19/hg38) - Mouse M35
 (mm39)</h2>
