@@ -226,6 +226,19 @@ type bed 3
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
 
+        track pubtator
+        shortLabel PubTator rsIDs
+        longLabel dbSNP Variants extracted by PubTator3
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /gbdb/$D/pubs2/pubtatorDbSnp.bb
+        noScoreFilter on
+        exonNumbers off
+        itemRgb on
+        parent varsInPubs pack
+        urls pubmedIds="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        mouseOver ${summary} (Found in ${numPubmedIds} PubMed articles)
+
 track caseControl
 compositeTrack on
 shortLabel Case Control

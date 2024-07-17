@@ -147,6 +147,18 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+int grpCmpPriorityLabel(const void *va, const void *vb)
+/* Compare to sort based on priority and label. */
+{
+const struct grp *a = *((struct grp **)va);
+const struct grp *b = *((struct grp **)vb);
+double dif = a->priority - b->priority;
+if (dif < 0) return -1;
+if (dif > 0) return 1;
+
+return strcasecmp(a->label, b->label);
+}
+
 int grpCmpPriority(const void *va, const void *vb)
 /* Compare to sort based on priority. */
 {

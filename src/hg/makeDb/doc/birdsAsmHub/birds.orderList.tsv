@@ -10,7 +10,8 @@ GCA_009819805.1_bPhoRub2.alt	American flamingo (alternate hap 2019)
 GCA_003957575.1_bCalAnn1_v1.h	Anna's hummingbird (alternate hap BGI_N300 2018)
 GCF_003957555.1_bCalAnn1_v1.p	Anna's hummingbird (BGI_N300 2019 refseq)
 GCF_000737465.1_Haliaeetus_leucocephalus-4.0	bald eagle
-GCA_036971685.1_bPatFas1.hap2	band-tailed pigeon (hap2 2024)
+GCA_036971685.1_bPatFas1.hap2	band-tailed pigeon (hap2 2024 genbank)
+GCF_036971685.1_bPatFas1.hap2	band-tailed pigeon (hap2 2024 refseq)
 GCF_000703405.1_ASM70340v1	bar-tailed trogon
 GCF_018691265.1_T.alba_DEE_v4.0	barn owl (U. Lausanne 2021)
 GCA_015227815.3_bHirRus1.alt.v3	Barn swallow (bHirRus1 v3 alternate hap 2021)
@@ -193,13 +194,15 @@ GCA_963243765.1_bPsiEch3.1_alternate_haplotype	Mauritius parakeet (alternate hap
 GCA_963264785.1_bPsiEch3.1	Mauritius parakeet (primary hap 2023)
 GCF_000277835.1_GeoFor_1.0	medium ground-finch
 GCA_017639245.1_MMon_1.0	monk parakeet
+GCF_038088225.1_pur_monq_1.0	Montezuma quail (F1298 2024)
 GCA_009769485.2_bCygOlo1.alt.v2	mute swan (bCygOlo1 v2 alternate hap 2021)
 GCF_009769625.2_bCygOlo1.pri.v2	mute swan (bCygOlo1 v2 primary hap 2021)
 GCA_027579665.1_bAmmNel1.alt	Nelson's sparrow (bAmmNel1 alternate hap 2023)
 GCF_027579445.1_bAmmNel1.pri	Nelson's sparrow (bAmmNel1 primary hap 2023 refseq)
 GCF_009650955.1_bCorMon1.pri	New Caledonian crow (2019)
 GCA_009651025.1_bCorMon1.alt	New Caledonian crow (alternate hap 2019)
-GCA_036013445.1_bCalNic1.hap1	Nicobar pigeon (hap1 2024)
+GCA_036013445.1_bCalNic1.hap1	Nicobar pigeon (hap1 2024 genbank)
+GCF_036013445.1_bCalNic1.hap1	Nicobar pigeon (hap1 2024 refseq)
 GCA_036010745.1_bCalNic1.hap2	Nicobar pigeon (hap2 2024)
 GCF_034315485.1_CSIRO_AGI_Poc_V1	night parrot (Australia 2023)
 GCA_036417845.1_bAptMan1.hap1	North Island brown kiwi (hap1 2024)

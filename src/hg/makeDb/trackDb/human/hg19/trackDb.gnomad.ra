@@ -4,7 +4,6 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants, Coverage, and Constraint
 group varRep
 html gnomad
-pennantIcon Updated red ../goldenPath/newsarch.html#032624 "Updated Mar. 26, 2024"
 
     track gnomadCoverage
     compositeTrack on
@@ -932,7 +931,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#032624 "Updated Mar. 26, 202
     urlLabel View this variant at gnomAD
     detailsStaticTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
     html gnomadExomesGenomes
-    pennantIcon Updated red ../goldenPath/newsarch.html#032624 "Updated Mar. 26, 2024"
 
 searchTable pliByTranscript
 searchType bigBed

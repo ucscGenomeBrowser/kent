@@ -125,12 +125,24 @@ driver.find_element_by_xpath("//td[@id='td_data_knownGene']/div[2]/map/area[5]")
 driver.get(machine + "/cgi-bin/hgTracks?db=mm10")
 driver.find_element_by_xpath("//td[@id='td_data_knownGene']/div[2]/map/area[5]").click()
 
-# Tests multi-region for hg38
+# Tests if click_and_drag opens a second window
 cartReset()
 driver.get(machine + "/cgi-bin/hgTracks?db=hg38")
 driver.find_element_by_id("positionInput").clear()
 driver.find_element_by_id("positionInput").send_keys("chr7 192500 727300")
 driver.find_element_by_id("goButton").click()
+element_to_click_and_drag = driver.find_element_by_xpath('//table[2]/tbody')
+actions = ActionChains(driver)
+actions.key_down(Keys.SHIFT).click_and_hold(element_to_click_and_drag).move_by_offset(100, 0).release().key_up(Keys.SHIFT).perform()
+time.sleep(3)
+if len(driver.window_handles) > 1:
+    print("A second window has opened.")
+    driver.quit()
+    sys.exit()
+driver.find_element_by_xpath("//*/text()[normalize-space(.)='Cancel']/parent::*").click()
+time.sleep(3)
+
+# Tests multi-region for hg38
 driver.find_element_by_name("hgTracksConfigMultiRegionPage").click()
 driver.find_element_by_xpath("(//input[@id='virtModeType'])[4]").click()
 driver.find_element_by_id("multiRegionsBedInput").send_keys("chr7    192570  260772  NM_020223.4\nchr7    290169  291488  NM_001374838.1\nchr7    497257  519846  NM_033023.5\nchr7    549197  727281  NM_001164760.2")
@@ -591,4 +603,5 @@ driver.get(machine + "/cgi-bin/hgTracks?position=chr2:25,485,759-25,487,667&igno
 driver.find_element_by_id("goButton").click()
 
 # Closes the current window on which Selenium is running
-driver.close()
+driver.quit()
+sys.exit()

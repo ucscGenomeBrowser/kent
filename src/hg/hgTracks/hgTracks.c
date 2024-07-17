@@ -6964,6 +6964,7 @@ for(; grpList; grpList = grpList->next)
     group->label = cloneString(grpList->label);
     group->defaultPriority = group->priority = priority;
     group->errMessage = grpList->errMessage;
+    group->defaultIsClosed = grpList->defaultIsClosed;
     priority += priorityInc;
     slAddHead(&list, group);
     hashAdd(hash, group->name, group);
