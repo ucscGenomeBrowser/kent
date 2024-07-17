@@ -833,7 +833,10 @@ int maximumTrackHeight(struct track *tg)
 /* Return the maximum track height allowed in pixels. */
 {
 int maxItems = maximumTrackItems(tg);
-return maxItems * tl.fontHeight;
+int height = maxItems * tl.fontHeight;
+if (height > 31000)
+    height = 31000;
+return height;
 }
 
 static int maxItemsToOverflow(struct track *tg)
