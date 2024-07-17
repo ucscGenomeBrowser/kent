@@ -4,6 +4,7 @@ shortLabel OMIM
 longLabel Online Mendelian Inheritance in Man
 group phenDis
 priority 1
+cartVersion 5
 
     track omimLocation
     priority 3
