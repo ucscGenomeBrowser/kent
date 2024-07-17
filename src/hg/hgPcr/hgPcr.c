@@ -32,6 +32,7 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "obscure.h"
+#include "chromAlias.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -631,6 +632,13 @@ struct gfPcrOutput *gpoList =
     gfPcrViaNet(conn, server->seqDir, gpi,
 		maxSize, minPerfect, minGood);
 
+// translate native names to chromAuthority names
+struct gfPcrOutput *gpo;
+for(gpo = gpoList ; gpo; gpo = gpo->next)
+    {
+    char *displayChromName = cloneString(chromAliasGetDisplayChrom(server->db, cart, gpo->seqName));
+    gpo->seqName = displayChromName;
+    }
 
 if (gpoList != NULL)
     {
@@ -767,6 +775,7 @@ boolean appendToResults = cartUsualBoolean(cart, "wp_append", TRUE);
 struct pcrServer *serverList = getServerList();
 
 getDbAndGenome(cart, &db, &organism, oldVars);
+chromAliasSetup(db);
 
 /* Get variables. */
 maxSize = cartUsualInt(cart, "wp_size", maxSize);

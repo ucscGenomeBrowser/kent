@@ -33,6 +33,7 @@
 #include "chromInfo.h"
 #include "net.h"
 #include "fuzzyFind.h"
+#include "chromAlias.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -718,8 +719,9 @@ else  // hyperlink
 	printf(" %5d %5d %5d %5d   %5.1f%%  ",
 	    pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
-	printf("%s",psl->tName);
-	spaceOut(stdout, maxTChromNameSize - strlen(psl->tName));
+        char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
+	printf("%s",displayChromName);
+	spaceOut(stdout, maxTChromNameSize - strlen(displayChromName));
 	printf("  %-2s  %9d %9d %6d",
 	    psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
@@ -2157,6 +2159,7 @@ orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
 if (orgChange)
     cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
 getDbAndGenome(cart, &db, &organism, oldVars);
+chromAliasSetup(db);
 char *oldDb = cloneString(db);
 
 // n.b. this changes to default db if db doesn't have BLAT
