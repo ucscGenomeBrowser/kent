@@ -765,7 +765,7 @@ typedef enum {
     GLYPH_PENTAGRAM
     } glyphType;
 
-void drawScalledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
+void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
                       int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor);
 /* Draw a glyph as a circle/polygon.  If filled, draw as with fillColor,
  * which may have transparency.

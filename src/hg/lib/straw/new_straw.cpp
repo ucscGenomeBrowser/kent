@@ -31,11 +31,15 @@
 #include <utility>
 #include <vector>
 #include <streambuf>
-#include <curl/curl.h>
+//#include <curl/curl.h>
 #include <iterator>
 #include <algorithm>
 #include "zlib.h"
-#include "straw.h"
+//#include "straw.h"
+#include "new_straw.h"
+extern "C" {
+#include "../../inc/fakeCurl.h"
+}
 
 using namespace std;
 
@@ -144,8 +148,9 @@ static CURL *initCURL(const char *url) {
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_USERAGENT, "straw");
     } else {
-        cerr << "Unable to initialize curl " << endl;
-        exit(2);
+        throw strawException("Unable to initialize curl");
+        //cerr << "Unable to initialize curl " << endl;
+        //exit(2);
     }
     return curl;
 }
@@ -162,14 +167,16 @@ public:
             isHttp = true;
             curl = initCURL(fileName.c_str());
             if (!curl) {
-                cerr << "URL " << fileName << " cannot be opened for reading" << endl;
-                exit(3);
+                throw strawException("URL " + fileName + " cannot be opened for reading");
+                //cerr << "URL " << fileName << " cannot be opened for reading" << endl;
+                //exit(3);
             }
         } else {
             fin.open(fileName, fstream::in | fstream::binary);
             if (!fin) {
-                cerr << "File " << fileName << " cannot be opened for reading" << endl;
-                exit(4);
+                throw strawException("File " + fileName + " cannot be opened for reading");
+                //cerr << "File " << fileName << " cannot be opened for reading" << endl;
+                //exit(4);
             }
         }
     }
@@ -205,17 +212,23 @@ char *readCompressedBytesFromFile(const string &fileName, indexEntry idx) {
 // reads the header, storing the positions of the normalization vectors and returning the masterIndexPosition pointer
 map<string, chromosome> readHeader(istream &fin, int64_t &masterIndexPosition, string &genomeID,
                                    int32_t &numChromosomes, int32_t &version, int64_t &nviPosition,
-                                   int64_t &nviLength) {
+                                   int64_t &nviLength, vector<string> &attributes) {
     map<string, chromosome> chromosomeMap;
     if (!readMagicString(fin)) {
-        cerr << "Hi-C magic string is missing, does not appear to be a hic file" << endl;
+        throw strawException("Hi-C magic string is missing, does not appear to be a hic file");
+        // Not sure why this function was trying to continue after this failure (the next step is
+        // reading resolutions from the file, which clearly isn't going to work).
+        //cerr << "Hi-C magic string is missing, does not appear to be a hic file" << endl;
         masterIndexPosition = -1;
         return chromosomeMap;
     }
 
     version = readInt32FromFile(fin);
     if (version < 6) {
-        cerr << "Version " << version << " no longer supported" << endl;
+        throw strawException("Version " + to_string(version) + " no longer supported");
+        // Not sure why this function was trying to continue after this failure (the next step is
+        // reading resolutions from the file, which clearly isn't going to work).
+        //cerr << "Version " << version << " no longer supported" << endl;
         masterIndexPosition = -1;
         return chromosomeMap;
     }
@@ -229,11 +242,13 @@ map<string, chromosome> readHeader(istream &fin, int64_t &masterIndexPosition, s
 
     int32_t nattributes = readInt32FromFile(fin);
 
-    // reading and ignoring attribute-value dictionary
+    // reading attribute-value dictionary
     for (int i = 0; i < nattributes; i++) {
         string key, value;
         getline(fin, key, '\0');
         getline(fin, value, '\0');
+        attributes.insert(attributes.end(), key);
+        attributes.insert(attributes.end(), value);
     }
 
     numChromosomes = readInt32FromFile(fin);
@@ -1441,6 +1456,7 @@ public:
     vector<int32_t> resolutions;
     static int64_t totalFileSize;
     string fileName;
+    vector<string> attributes;
 
     static size_t hdf(char *b, size_t size, size_t nitems, void *userdata) {
         size_t numbytes = size * nitems;
@@ -1480,7 +1496,7 @@ public:
             char *buffer = getData(curl, 0, 100000);
             memstream bufin(buffer, 100000);
             chromosomeMap = readHeader(bufin, master, genomeID, numChromosomes,
-                                       version, nviPosition, nviLength);
+                                       version, nviPosition, nviLength, attributes);
             resolutions = readResolutionsFromHeader(bufin);
             curl_easy_cleanup(curl);
             delete buffer;
@@ -1488,11 +1504,12 @@ public:
             ifstream fin;
             fin.open(fileName, fstream::in | fstream::binary);
             if (!fin) {
-                cerr << "File " << fileName << " cannot be opened for reading" << endl;
-                exit(6);
+                throw strawException("File " + fileName + " cannot be opened for reading");
+                //cerr << "File " << fileName << " cannot be opened for reading" << endl;
+                //exit(6);
             }
             chromosomeMap = readHeader(fin, master, genomeID, numChromosomes,
-                                       version, nviPosition, nviLength);
+                                       version, nviPosition, nviLength, attributes);
             resolutions = readResolutionsFromHeader(fin);
             fin.close();
         }
@@ -1539,8 +1556,9 @@ void parsePositions(const string &chrLoc, string &chrom, int64_t &pos1, int64_t 
     stringstream ss(chrLoc);
     getline(ss, chrom, ':');
     if (map.count(chrom) == 0) {
-        cerr << "chromosome " << chrom << " not found in the file." << endl;
-        exit(7);
+        throw strawException("chromosome " + chrom + " not found in the file.");
+        //cerr << "chromosome " << chrom << " not found in the file." << endl;
+        //exit(7);
     }
 
     if (getline(ss, x, ':') && getline(ss, y, ':')) {
@@ -1640,4 +1658,37 @@ int64_t getNumRecordsForChromosomes(const string &fileName, int32_t binsize, boo
         cout << totalNumRecords*12/1000/1000/1000 << " GB" << endl;
     }
     return 0;
+}
+
+void getHeaderFields(const string &filename, string &genome, vector<string> &chromNames, vector<int> &chromSizes,
+        vector<int> &bpResolutions, vector<int> &fragResolutions, vector<string> &attributes)
+/* Fill in the provided fields with information from the header of the hic file in the supplied filename.
+ * fragResolutions is left empty for now, as we're not making use of it. */
+{
+    HiCFile *hiCFile = new HiCFile(filename);
+
+    genome.assign(hiCFile->getGenomeID());
+
+    vector<chromosome> chromList = hiCFile->getChromosomes();
+    vector<string> myChromNames;
+    myChromNames.reserve(chromList.size());
+    vector<int> myChromSizes;
+    myChromSizes.reserve(chromList.size());
+    for(int32_t i = 0; i < chromList.size(); i++){
+        myChromNames.push_back(chromList[i].name);
+        myChromSizes.push_back(chromList[i].length);
+    }
+    chromNames = myChromNames;
+    chromSizes = myChromSizes;
+
+    vector<int> myBpResolutions;
+    myBpResolutions.reserve(hiCFile->resolutions.size());
+    for(int32_t i = 0; i < hiCFile->resolutions.size(); i++){
+        myBpResolutions.push_back(hiCFile->resolutions[i]);
+    }
+    bpResolutions = myBpResolutions;
+
+    attributes = hiCFile->attributes;
+
+    // Ignoring fragment resolutions for now, since they're never being used here
 }

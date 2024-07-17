@@ -109,4 +109,19 @@ int64_t getNumRecordsForFile(const std::string& filename, int32_t binsize, bool 
 
 int64_t getNumRecordsForChromosomes(const std::string& filename, int32_t binsize, bool interOnly);
 
+/* Added at UCSC */
+void getHeaderFields(const std::string &filename, std::string &genome, std::vector<std::string> &chromNames,
+        std::vector<int> &chromSizes, std::vector<int> &bpResolutions, std::vector<int> &fragResolutions,
+        std::vector<std::string> &attributes);
+/* Fill in the provided fields with information from the header of the hic file in the supplied filename.
+ * fragResolutions is left empty for now, as we're not making use of it. */
+
+class strawException : public std::runtime_error {
+/* Simple exception wrapper class */
+    public:
+    strawException(const std::string& error):
+        std::runtime_error(error) {
+    }
+};
+
 #endif

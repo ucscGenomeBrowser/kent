@@ -156,7 +156,7 @@ double dif = a->priority - b->priority;
 if (dif < 0) return -1;
 if (dif > 0) return 1;
 
-return strcmp(a->label, b->label);
+return strcasecmp(a->label, b->label);
 }
 
 int grpCmpPriority(const void *va, const void *vb)
