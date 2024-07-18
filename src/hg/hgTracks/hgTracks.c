@@ -9514,7 +9514,10 @@ if (!hideControls)
                                 "information about this track hub' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
                                 "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>&nbsp;&nbsp;");
                     else
-                        hPrintf("<a title='Documentation about this track hub, provided by the track hub authors (not UCSC)' href='%s' "
+                        hPrintf("<a title='Documentation about this track hub, provided by the track hub authors (not UCSC). ");
+                        if (hub->email)
+                            hPrintf("The authors can be reached at %s", hub->email);
+                        hPrintf("' href='%s' "
                             "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
                     }
 
