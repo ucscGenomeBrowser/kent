@@ -4876,6 +4876,8 @@ include phastBias.ra
 include omim.ra beta,public
 include omim.alpha.ra alpha
 
+include ../refSeqComposite.ra
+
 searchName decipherId
 searchTable decipher
 termRegex [0-9]+

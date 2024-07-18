@@ -15,7 +15,7 @@ dbPrefixUrls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$"
 dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer="ZFIN" mm="MGI" xenTro="XenBase"
 
         track ncbiRefSeq
-        parent refSeqComposite on
+        parent refSeqComposite off
         color 12,12,120
         shortLabel RefSeq All
         longLabel NCBI RefSeq genes, curated and predicted (NM_*, XM_*, NR_*, XR_*, NP_*, YP_*)
@@ -105,6 +105,18 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         type genePred
         shortLabel RefSeq HGMD
         longLabel NCBI RefSeq HGMD subset: transcripts with clinical variants in HGMD
+        trackHandler ncbiRefSeq
+        idXref ncbiRefSeqLink mrnaAcc name
+        color 20,20,160
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+
+        track ncbiRefSeqSelect
+        parent refSeqComposite off
+        priority 8
+        type genePred
+        shortLabel RefSeq Select
+        longLabel NCBI RefSeq Select: One representative transcript per protein-coding gene
         trackHandler ncbiRefSeq
         idXref ncbiRefSeqLink mrnaAcc name
         color 20,20,160
