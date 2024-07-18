@@ -326,7 +326,7 @@ def expMatrixToBarchartBed(options):
     # Run Max's indexing script: TODO: add verbose options
     indexedBedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
     cmd = "bedJoinTabOffset " + options.matrixFile.name + " " + bedFile.name + " " + indexedBedFile.name
-    if not options.verbose: cmd += " &>/dev/null"
+    if not options.verbose: cmd += " 2>&1 >/dev/null"
     os.system(cmd)
 
     # Prepend the bed info to the start of the file.

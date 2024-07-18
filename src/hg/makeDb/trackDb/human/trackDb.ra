@@ -4876,6 +4876,8 @@ include phastBias.ra
 include omim.ra beta,public
 include omim.alpha.ra alpha
 
+include ../refSeqComposite.ra
+
 searchName decipherId
 searchTable decipher
 termRegex [0-9]+
@@ -5585,5 +5587,35 @@ searchTable hgnc
 searchMethod exact
 searchType bigBed
 searchPriority 1.02
+
+track ncbiRefSeqSelect
+parent refSeqComposite off
+priority 8
+type genePred
+shortLabel RefSeq Select and MANE
+longLabel NCBI RefSeq Select and MANE subset: A single representative transcript
+trackHandler ncbiRefSeq
+idXref ncbiRefSeqLink mrnaAcc name
+color 20,20,160
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+track ncbiRefSeqHistorical
+parent refSeqComposite off
+priority 10000
+type genePred
+shortLabel RefSeq Historical
+longLabel NCBI RefSeq Historical Transcript Versions
+color 12,12,120
+idXref ncbiRefSeqLinkHistorical mrnaAcc name
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchTable ncbiRefSeqHistorical
+searchMethod exact
+searchType genePred
+semiShortCircuit 1
+termRegex [N][MR]_[0-9]{6}[0-9]*\.[0-9]+
+searchPriority 20
 
 include spliceAI.ra
