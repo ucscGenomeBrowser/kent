@@ -11208,6 +11208,12 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
+measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
+
+if (measureTiming)
+    measureTime("Got cart: %d elements, userId=%s (=cookie), sessionId=%s", theCart->hash->elCount,
+	    theCart->userId, theCart->sessionId);
+
 if (noPixVariableSetAndInteractive())
 {
     jsIncludeFile("jquery.js", NULL);
@@ -11216,7 +11222,6 @@ if (noPixVariableSetAndInteractive())
     return;
 }
 
-measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
     measureTime("Startup (bottleneck delay %d ms, not applied if under %d) ", botDelayMillis, hgBotDelayCurrWarnMs()) ;
 
@@ -11254,10 +11259,6 @@ jsInline("$('#backToBrowserLi').remove();");
 char *debugTmp = NULL;
 /* Uncomment this to see parameters for debugging. */
 /* struct dyString *state = NULL; */
-/* Initialize layout and database. */
-if (measureTiming)
-    measureTime("Get cart of %d for user:%s session:%s", theCart->hash->elCount,
-	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
