@@ -3707,42 +3707,6 @@ group expression
 
 track eponine override
 
-track omimLocation
-shortLabel OMIM Cyto Loci
-longLabel OMIM Cytogenetic Loci Phenotypes - Gene Unknown
-group phenDis
-visibility hide
-color 0, 80, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-tableBrowser noGenome
-noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
-
-track omimGene2
-shortLabel OMIM Genes
-longLabel OMIM Gene Phenotypes - Dark Green Can Be Disease-causing
-group phenDis
-visibility dense
-color 0, 80, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim2gene
-noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
-
-track omimAvSnp
-shortLabel OMIM Alleles
-longLabel OMIM Allelic Variant Phenotypes
-group phenDis
-visibility hide
-color 0, 80, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-tableBrowser noGenome omimAv omimAvRepl
-noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
-
 track cosmic
 shortLabel COSMIC
 longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
@@ -4370,44 +4334,6 @@ xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
 termRegex AC[0-9]{6}
 searchPriority 52
 
-searchName omimAvSnpAcc
-searchTable omimAvSnp
-searchMethod exact
-searchType bed
-shortCircuit 1
-semiShortCircuit 1
-termRegex ([0-9]{6})\.([0-9]{4})
-searchPriority 10
-padding 50
-
-searchName omimGene2Acc
-searchTable omimGene2
-searchMethod exact
-searchType bed
-shortCircuit 1
-semiShortCircuit 1
-termRegex ([0-9]{6})
-searchPriority 10
-#release beta,public
-
-#searchName omimGene2AccBb
-#searchTable omimGene2bb
-#searchMethod exact
-#searchType bigBed
-#shortCircuit 1
-#semiShortCircuit 1
-#termRegex ([0-9]{6})
-#searchPriority 10
-#release alpha
-
-searchName omimGeneLocAcc
-searchTable omimLocation
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex ([0-9]{6})
-searchPriority 10
-
 track fox2ClipSeqComp
 compositeTrack on
 shortLabel FOX2 CLIP-seq
@@ -4946,6 +4872,11 @@ pennantIcon snowflake.png /goldenPath/newsarch.html#093020b "ClinGen CNV data ar
         subGroups view=dose class=path level=cur
 
 include phastBias.ra
+
+include omim.ra beta,public
+include omim.alpha.ra alpha
+
+include ../refSeqComposite.ra
 
 searchName decipherId
 searchTable decipher
@@ -5656,8 +5587,6 @@ searchTable hgnc
 searchMethod exact
 searchType bigBed
 searchPriority 1.02
-
-include ../refSeqComposite.ra
 
 track ncbiRefSeqSelect
 parent refSeqComposite off
