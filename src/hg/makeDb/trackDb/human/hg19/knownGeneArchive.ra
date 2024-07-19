@@ -1,8 +1,8 @@
 
 track knownGeneArchive
 superTrack on
-shortLabel knownGene Archive
-longLabel knownGene Archive
+shortLabel UCSC Genes Archive
+longLabel Previous versions of UCSC Genes (knownGene)
 group genes
 type bed 6 +
 html ../../knownGeneArchive
@@ -10,8 +10,8 @@ html ../../knownGeneArchive
 
     track knownGeneKent
     #table knownGene
-    shortLabel Kentian Build
-    longLabel Kentian Build
+    shortLabel UCSC Genes 2013
+    longLabel Legacy UCSC Genes track (knownGene) from 2013
     parent knownGeneArchive
     priority 1
     visibility pack
