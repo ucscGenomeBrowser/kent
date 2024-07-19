@@ -1210,7 +1210,7 @@ void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
-char buf[256];
+char buf[4096];
 if (tdbIsCompositeChild(curGroup->tdb))
     safef(buf, sizeof(buf),"Click to alter the display density of %s and similar subtracks",
           curGroup->shortLabel);
