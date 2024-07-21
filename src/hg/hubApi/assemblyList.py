@@ -640,35 +640,21 @@ def establishPriorities(dbDb, genArk):
 
 ####################################################################
 
-"""
-table load procedure:
-
-  hgsql -e 'DROP TABLE IF EXISTS genomePriority;' hgcentraltest
-  hgsql hgcentraltest < ../lib/genomePriority.sql
-  hgsql -e 'LOAD DATA LOCAL INFILE "genomePriority.tsv" INTO
-TABLE genomePriority;' hgcentraltest
-  hgsql -e 'ALTER TABLE genomePriority
-ADD FULLTEXT INDEX gdIx
-(name, commonName, scientificName, clade, description);' \
-  hgcentraltest
-
-"""
-
-####################################################################
 def main():
     global priorityCounter
     global allPriorities
 
     if len(sys.argv) != 2:
-        print("genomePriority.py - prepare genomePriority.tsv file from")
+        print("assemblyList.py - prepare assemblyList.tsv file from")
         print("    dbDb.hgcentral and UCSC_GI.assemblyHubList.txt file.\n")
-        print("Usage: genomePriority.py dbDb.name.clade.tsv\n")
+        print("Usage: assemblyList.py dbDb.name.clade.tsv\n")
         print("the dbDb.name.clade.tsv file is a manually curated file to relate")
         print("    UCSC database names to GenArk clades, in source tree hubApi/")
         print("This script is going to read the dbDb.hgcentral table, and the file")
         print("    UCSC_GI.assemblyHubList.txt from hgdownload.")
-        print("Writing an output file genomePriority.tsv to be loaded into")
-        print("    genomePriority.hgcentral.  See notes in this script for load procedure.")
+        print("Writing an output file assemblyList.tsv to be loaded into")
+        print("    assemblyList.hgcentral.  The output file needs to be sorted")
+        print("    sort -k2,2n assemblyList.tsv before table load.")
         sys.exit(255)
 
     # Ensure stdout and stderr use UTF-8 encoding
@@ -706,7 +692,7 @@ def main():
     print("# sorted refSeq + genBank assemblies: ", len(refSeqGenBankSorted))
 
 
-    outFile = "genomePriority.tsv"
+    outFile = "assemblyList.tsv"
     fileOut = open(outFile, 'w')
 
     totalItemCount = 0
@@ -722,7 +708,7 @@ def main():
 
         clade = entry['clade']
 
-        descr = f"{entry['sourceName']} {entry['description']}\n"
+        descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']}\n"
         description = re.sub(r'\s+', ' ', descr).strip()
         outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\n"
         fileOut.write(outLine)
@@ -744,7 +730,7 @@ def main():
         hubPath = genarkPath(gcAccession)
         cleanName = removeNonAlphanumeric(entry['commonName'])
         clade = entry['clade']
-        descr = f"{entry['asmName']}"
+        descr = f"{entry['asmName']} {entry['taxId']}"
         description = re.sub(r'\s+', ' ', descr).strip()
         outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\n"
         fileOut.write(outLine)
@@ -764,7 +750,7 @@ def main():
         scientificName = entry['scientificName']
         asmName = entry['asmName']
         clade = entry['clade']
-        descr = f"{asmName} {entry['other']}"
+        descr = f"{asmName} {entry['taxId']} {entry['other']}"
         description = re.sub(r'\s+', ' ', descr).strip()
         outLine = f"{entry['gcAccession']}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\n"
         fileOut.write(outLine)
