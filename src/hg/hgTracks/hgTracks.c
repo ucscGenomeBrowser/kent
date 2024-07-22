@@ -8519,6 +8519,7 @@ if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
 }
 
 
+#ifdef NOTNOW
 static void printAliases(char *name)
 /* Print out the aliases for this sequence. */
 {
@@ -8529,6 +8530,7 @@ for(;names; names = names->next)
     printf("%s;",names->name);
 printf("'>Aliases</a></div>");
 }
+#endif
 
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -9243,7 +9245,7 @@ if (!hideControls)
 	hButton("goButton", "Search");
 
         printSearchHelpLink();
-        printAliases(displayChromName);
+        // printAliases(displayChromName);
 
         printPatchNote();
 

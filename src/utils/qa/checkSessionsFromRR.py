@@ -160,8 +160,6 @@ def checkSession(session):
         sessionLoad='loads'
         session_dir=session.split('genecats.gi.ucsc.edu')[1]
         session_path=myDir+session_dir
-        #Uncomment the line below to actually remove the session files
-        os.system('rm '+session_path)
    
     return sessionLoad
 
