@@ -213,9 +213,9 @@ return serverList;
 void doHelp()
 /* Print up help page */
 {
-puts(
-"In-Silico PCR searches a sequence database with a pair of\n"
-"PCR primers, using an indexing strategy for fast performance.\n"
+printf(
+"In-Silico PCR V%s searches a sequence database with a pair of\n"
+"PCR primers, using the BLAT index for fast performance.\n"
 "See an example\n"
 "<a href='https://youtu.be/U8_QYwmdGYU'"
 "target='_blank'>video</a>\n"
@@ -258,7 +258,7 @@ puts(
 "aagcactttgctctcagctccacGCAGCTGCTTTAGGAGCCACTCATGaG\n"
 "</PRE></TT>\n"
 "The + between the coordinates in the fasta header indicates \n"
-"this is on the positive strand.  \n"
+"this is on the positive strand.  \n", gfVersion
 );
 }
 
