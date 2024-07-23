@@ -21,6 +21,7 @@ errAbort(
   "  -cds=file.cds - tab-separated columns with the qName and a GenBank style one-based CDS (e.g. 475..1731, <1..354)\n"
   "  -fa=file.fasta\n"
   "NOTE: to build bigBed:\n"
+  "   wget https://genome.ucsc.edu/goldenPath/help/examples/bigPsl.as\n"
   "   bedToBigBed -type=bed12+13 -tab -as=bigPsl.as file.bigPslInput chrom.sizes output.bb\n"
   );
 }
