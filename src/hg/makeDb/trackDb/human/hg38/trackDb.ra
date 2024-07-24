@@ -23,8 +23,7 @@ include ileumWang.ra
 include colonWang.ra
 include rectumWang.ra
 include placentaVentoTormo.ra 
-include singleCellMerged.ra beta,public
-include singleCellMerged.alpha.ra alpha
+include singleCellMerged.ra
 #include lungMadissoon.ra
 #include spleenMadissoon.ra
 include tabulaSapiens.ra
@@ -866,8 +865,6 @@ include hprcVCFTest.ra alpha
 track ncbiRefSeq override
 parent refSeqComposite off
 
-include ../../trackDb.mgc-orfeome.ra public
-include ../../trackDb.mgc-orfeome.alpha.ra alpha,beta
+include ../../trackDb.mgc-orfeome.ra
 
-include assemblyTracks.alpha.ra alpha
-include assemblyTracks.ra beta,public
+include assemblyTracks.ra

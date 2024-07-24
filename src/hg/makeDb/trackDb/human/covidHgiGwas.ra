@@ -2,8 +2,7 @@ track covidHgiGwasR4Pval
 shortLabel COVID GWAS v4
 longLabel COVID risk variants from GWAS meta-analyses by the COVID-19 Host Genetics Initiative (Rel 4, Oct 2020)
 compositeTrack on
-group varRep
-visibility hide
+superTrack covid pack
 autoScale on
 maxHeightPixels 48:75:128
 type bigLolly 9 +
@@ -57,8 +56,7 @@ track covidHgiGwas
 shortLabel COVID GWAS v3
 longLabel GWAS meta-analyses from the COVID-19 Host Genetics Initiative
 compositeTrack on
-group varRep
-visibility hide
+superTrack covid hide
 autoScale on
 maxHeightPixels 48:75:128
 type bigLolly 9 +
