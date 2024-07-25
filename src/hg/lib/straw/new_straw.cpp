@@ -43,6 +43,12 @@ extern "C" {
 
 using namespace std;
 
+
+// Added UCSC: Dirty hack, but it's hard to quickly extract a list of available normalization options.
+// This gets populated by readFooter and readFooterURL, so you have to make a quick dummy data request
+// with straw() to set it up (e.g. to the first listed chromosome for a 1 bp window).
+set<string> globalNormOptions;
+
 /*
   Straw: fast C++ implementation of dump. Not as fully featured as the
   Java version. Reads the .hic file, finds the appropriate matrix and slice
@@ -82,10 +88,14 @@ char *getData(CURL *curl, int64_t position, int64_t chunksize) {
     oss << position << "-" << position + chunksize;
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *) &chunk);
     curl_easy_setopt(curl, CURLOPT_RANGE, oss.str().c_str());
+    // Setting FAILONERROR because otherwise this library has a bad habit of assuming data exists
+    // and parsing what it gets back, regardless of whether it has run off the end of the file.
+    curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK) {
-        fprintf(stderr, "curl_easy_perform() failed: %s\n",
-                curl_easy_strerror(res));
+        throw strawException("curl_easy_perform() failed: " + string(curl_easy_strerror(res)));
+        //fprintf(stderr, "curl_easy_perform() failed: %s\n",
+        //        curl_easy_strerror(res));
     }
 
     return chunk.memory;
@@ -147,6 +157,7 @@ static CURL *initCURL(const char *url) {
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_USERAGENT, "straw");
+        curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
     } else {
         throw strawException("Unable to initialize curl");
         //cerr << "Unable to initialize curl " << endl;
@@ -520,6 +531,10 @@ bool readFooterURL(CURL *curl, int64_t master, int32_t version, int32_t c1, int3
     memstream fin3(buffer, 100);
 
     int32_t nExpectedValues = readInt32FromFile(fin3);
+    if (fin3.bad() || fin3.fail())
+    {
+        throw strawException("Unable to read expected values from file - it might be truncated early");
+    }
     currentPointer += 4;
     delete buffer;
     for (int i = 0; i < nExpectedValues; i++) {
@@ -569,6 +584,10 @@ bool readFooterURL(CURL *curl, int64_t master, int32_t version, int32_t c1, int3
     buffer = getData(curl, currentPointer, 100);
     memstream fin6(buffer, 100);
     nExpectedValues = readInt32FromFile(fin6);
+    if (fin6.bad() || fin6.fail())
+    {
+        throw strawException("Unable to read normalized expected values from file - it might be truncated early");
+    }
     currentPointer += 4;
     delete buffer;
     for (int i = 0; i < nExpectedValues; i++) {
@@ -616,6 +635,10 @@ bool readFooterURL(CURL *curl, int64_t master, int32_t version, int32_t c1, int3
     buffer = getData(curl, currentPointer, 100);
     memstream fin9(buffer, 100);
     nEntries = readInt32FromFile(fin9);
+    if (fin9.bad() || fin9.fail())
+    {
+        throw strawException("Unable to read normalization vectors from file - it might be truncated early");
+    }
     currentPointer += 4;
     delete buffer;
 
@@ -625,9 +648,15 @@ bool readFooterURL(CURL *curl, int64_t master, int32_t version, int32_t c1, int3
     buffer = getData(curl, currentPointer, bufferSize2);
     memstream fin10(buffer, bufferSize2);
 
+    // added UCSC
+    globalNormOptions.clear();
+
     for (int i = 0; i < nEntries; i++) {
         string normtype;
         currentPointer += readStringFromURL(fin10, normtype);
+
+        // added UCSC
+        globalNormOptions.insert(normtype);
 
         int32_t chrIdx = readInt32FromFile(fin10);
         currentPointer += 4;
@@ -704,6 +733,10 @@ bool readFooter(istream &fin, int64_t master, int32_t version, int32_t c1, int32
     // read in and ignore expected value maps; don't store; reading these to
     // get to norm vector index
     int32_t nExpectedValues = readInt32FromFile(fin);
+    if (fin.bad() || fin.fail())
+    {
+        throw strawException("Unable to read expected values from file - it might be truncated early");
+    }
     for (int i = 0; i < nExpectedValues; i++) {
         string unit0;
         getline(fin, unit0, '\0'); //unit
@@ -731,12 +764,16 @@ bool readFooter(istream &fin, int64_t master, int32_t version, int32_t c1, int32
     }
 
     nExpectedValues = readInt32FromFile(fin);
+    if (fin.bad() || fin.fail())
+    {
+        throw strawException("Unable to read normalized expected values from file - it might be truncated early");
+    }
+
     for (int i = 0; i < nExpectedValues; i++) {
         string nType, unit0;
         getline(fin, nType, '\0'); //typeString
         getline(fin, unit0, '\0'); //unit
         int32_t binSize = readInt32FromFile(fin);
-
         int64_t nValues;
         if (version > 8) {
             nValues = readInt64FromFile(fin);
@@ -760,6 +797,14 @@ bool readFooter(istream &fin, int64_t master, int32_t version, int32_t c1, int32
     nEntries = readInt32FromFile(fin);
     bool found1 = false;
     bool found2 = false;
+
+    // added UCSC
+    globalNormOptions.clear();
+    if (fin.bad() || fin.fail())
+    {
+        throw strawException("Unable to read normalization vectors from file - it might be truncated early");
+    }
+
     for (int i = 0; i < nEntries; i++) {
         string normtype;
         getline(fin, normtype, '\0'); //normalization type
@@ -774,6 +819,9 @@ bool readFooter(istream &fin, int64_t master, int32_t version, int32_t c1, int32
         } else {
             sizeInBytes = (int64_t) readInt32FromFile(fin);
         }
+
+        // added UCSC
+        globalNormOptions.insert(normtype);
 
         if (chrIdx == c1 && normtype == norm && unit1 == unit && resolution1 == resolution) {
             c1NormEntry.position = filePosition;
@@ -1293,6 +1341,10 @@ public:
 
     static vector<double> readNormalizationVectorFromFooter(indexEntry cNormEntry, int32_t &version,
                                                             const string &fileName) {
+        if (cNormEntry.size == 0) {
+            // no normalization entries in this file.  Bow out now and avoid an allocation error
+            throw strawException("Trying to retrieve other normalization options, but none exist");
+        }
         char *buffer = readCompressedBytesFromFile(fileName, cNormEntry);
         memstream bufferin(buffer, cNormEntry.size);
         vector<double> cNorm = readNormalizationVector(bufferin, version);
@@ -1483,6 +1535,7 @@ public:
     static CURL *oneTimeInitCURL(const char *url) {
         CURL *curl = initCURL(url);
         curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, hdf);
+        curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
         return curl;
     }
 
@@ -1691,4 +1744,12 @@ void getHeaderFields(const string &filename, string &genome, vector<string> &chr
     attributes = hiCFile->attributes;
 
     // Ignoring fragment resolutions for now, since they're never being used here
+}
+
+set<string> getNormOptions()
+/* Return the set of normalization options that have been encountered through footer parsing.
+ * The result will be empty unless at least one straw() request has been made.
+ */
+{
+    return globalNormOptions;
 }
