@@ -35,14 +35,15 @@ char *hicLoadHeader(char *filename, struct hicMeta **header, char *ucscAssembly)
  * an error message that explains why the retrieval failed. */
 {
 char *genome;
-char **chromosomes, **bpResolutions, **attributes;
-int *chromSizes, nChroms, nBpRes, nAttributes;
+char **chromosomes, **bpResolutions, **attributes, **normOptions;
+int *chromSizes, nChroms, nBpRes, nAttributes, nNormOptions;
 
 Straw *newStraw = NULL;
 char *errMsg = cStrawOpen(filename, &newStraw);
 if (errMsg != NULL)
     return errMsg;
-errMsg = cStrawHeader(newStraw, &genome, &chromosomes, &chromSizes, &nChroms, &bpResolutions, &nBpRes, NULL, NULL, &attributes, &nAttributes);
+errMsg = cStrawHeader(newStraw, &genome, &chromosomes, &chromSizes, &nChroms, &bpResolutions,
+        &nBpRes, NULL, NULL, &attributes, &nAttributes, &normOptions, &nNormOptions);
 if (errMsg != NULL)
     return errMsg;
 
@@ -60,6 +61,8 @@ newMeta->ucscAssembly = cloneString(ucscAssembly);
 newMeta->filename = cloneString(filename);
 newMeta->attributes = attributes;
 newMeta->nAttributes = nAttributes;
+newMeta->normOptions = normOptions;
+newMeta->nNormOptions = nNormOptions;
 
 *header = newMeta;
 
