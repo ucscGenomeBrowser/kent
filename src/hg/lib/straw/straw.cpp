@@ -36,7 +36,7 @@
 #include <algorithm>
 #include "zlib.h"
 //#include "straw.h"
-#include "new_straw.h"
+#include "straw.h"
 extern "C" {
 #include "../../inc/fakeCurl.h"
 }

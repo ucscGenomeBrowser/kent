@@ -9,7 +9,7 @@
 #include <vector>
 #include <streambuf>
 #include "zlib.h"
-#include "new_straw.h"
+#include "straw.h"
 using namespace std;
 
 // Supplementary functions for invoking Straw in C
