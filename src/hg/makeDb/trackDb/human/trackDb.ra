@@ -5585,6 +5585,7 @@ searchTable hgnc
 searchMethod exact
 searchType bigBed
 searchPriority 1.02
+shortCircuit 1
 
 track ncbiRefSeqSelect
 parent refSeqComposite off

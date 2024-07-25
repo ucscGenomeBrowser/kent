@@ -159,8 +159,7 @@ static boolean nonTrackCateg(struct searchCategory *categ)
 {
 if (sameString("publicHubs", categ->id) ||
         sameString("helpDocs", categ->id) ||
-        startsWith("trackDb", categ->id) ||
-        sameString("knownGene", categ->id))
+        startsWith("trackDb", categ->id))
     return TRUE;
 return FALSE;
 }

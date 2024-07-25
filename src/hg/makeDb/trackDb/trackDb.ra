@@ -2428,7 +2428,7 @@ searchPriority 50
 
 searchTable knownGene
 searchType knownGene
-searchPriority 1
+searchPriority 1002
 
 searchTable pseudoYaleEncode
 searchType genePred

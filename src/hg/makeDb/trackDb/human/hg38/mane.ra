@@ -21,3 +21,4 @@ searchTable mane
 searchType bigBed
 searchDescription MANE Select Plus Clinical: Representative transcript from RefSeq & GENCODE
 searchPriority 1.01
+shortCircuit 1
