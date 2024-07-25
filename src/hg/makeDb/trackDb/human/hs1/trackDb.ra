@@ -13,3 +13,5 @@ include liftJkAll.ra alpha
 include hoffmanMappability.ra
 
 include crispr.ra
+
+include hs1PrimateChainNet.ra
