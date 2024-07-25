@@ -14,4 +14,4 @@ include hoffmanMappability.ra
 
 include crispr.ra
 
-include hs1PrimateChainNet.ra
+include primateChainNet.ra
