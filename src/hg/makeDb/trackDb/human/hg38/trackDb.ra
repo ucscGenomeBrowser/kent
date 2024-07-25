@@ -525,8 +525,7 @@ include knownGene.alpha.ra alpha
 include trackDb.100way.ra 
 include trackDb.145way.ra alpha
 
-include trackDb.241way.alpha.ra alpha
-include trackDb.241way.ra beta,public
+include trackDb.241way.ra
 include trackDb.447way.ra
 
 # track multiz145way
