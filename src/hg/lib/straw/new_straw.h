@@ -124,4 +124,9 @@ class strawException : public std::runtime_error {
     }
 };
 
+std::set<std::string> getNormOptions();
+/* Return the set of normalization options that have been encountered through footer parsing.
+ * The result will be empty unless at least one straw() request has been made.
+ */
+
 #endif

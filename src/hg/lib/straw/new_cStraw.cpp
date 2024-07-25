@@ -26,6 +26,7 @@ struct Straw {
     int nFragRes;
     vector<string> attributes;
     int nAttributes;
+    set<string> normOptions;
 };
 
 
@@ -37,9 +38,8 @@ extern "C" char *cStrawOpen(char *fname, Straw **p)
 
     (*p)->fileName = new string(fname);
     (*p)->genome = new string();
-    string genome;
     try {
-        getHeaderFields(fname, genome, (*p)->chromNames, (*p)->chromSizes, (*p)->bpResolutions,
+        getHeaderFields(fname, *((*p)->genome), (*p)->chromNames, (*p)->chromSizes, (*p)->bpResolutions,
                 (*p)->fragResolutions, (*p)->attributes);
     } catch (strawException& err) {
       char *errMsg = (char*) calloc((size_t) strlen(err.what())+1, sizeof(char));
@@ -48,16 +48,49 @@ extern "C" char *cStrawOpen(char *fname, Straw **p)
       *p = NULL;
       return errMsg;
     }
-    (*p)->genome->assign(genome);
     (*p)->nChroms = (*p)->chromNames.size();
     (*p)->nBpRes = (*p)->bpResolutions.size();
     (*p)->nFragRes = (*p)->fragResolutions.size();
     (*p)->nAttributes = (*p)->attributes.size();
-    if ((*p)->nBpRes > 0)
-        return NULL;
-    char *errString = (char*) malloc (strlen("Unable to retrieve header data from file") + 1);
-    strcpy(errString, "Unable to retrieve header data from file");
-    return errString;
+
+    // I seem to recall situations where getHeaderFields doesn't throw an error, but the data are
+    // bad regardless (e.g. when the structure of a header changed between .hic versions).  This
+    // should help catch those.
+    if ((*p)->nBpRes == 0)
+    {
+        char *errString = (char*) malloc (strlen("Unable to retrieve header data from file") + 1);
+        strcpy(errString, "Unable to retrieve header data from file");
+        return errString;
+    }
+
+    // Time to get the normalization options.  As a hack, we get these by making a dummy data request,
+    // having that set up a global variable with the options seen, then retrieving that.  This will
+    // miss situations where different normalization options are available at different resolutions.
+    // That is a thing that can happen, but I haven't tested the performace hit of running through every
+    // available resolution for the possible options just yet (let alone restructuring the browser side
+    // of the code to support that kind of dependency).  In the interim, this method is still better
+    // than the previous strategy of hard-coding in options that sometimes aren't available (and missing
+    // ones that are).
+ 
+    vector<contactRecord> strawRecords;
+    try {
+        // using chrom[1] because [0] is always "All", which doesn't seem to play well because it
+        // may have a different set of resolution options
+        string chrPos = (*p)->chromNames[1] + ":1:1";
+        // Intentionally feed straw an empty normalization option.  This will cause an error (which we trap),
+        // but it's the easiest way to make the library load and compare the available options (the library
+        // short-circuits out early if "NONE" is provided).
+        strawRecords = straw("observed", "", string(fname),
+            chrPos, chrPos, "BP", (*p)->bpResolutions[0]);
+    } catch (strawException& err) {
+        // Do nothing - we're intentionally feeding it a bad norm option just so it'll go through the list
+        // and realize it can't find it, populating a list along the way.
+    }
+
+    // Now the list that getNormOptions() depends on should be populated
+    (*p)->normOptions = getNormOptions();
+
+    return NULL;
 }
 
 extern "C" void cStrawClose(Straw **hicFile)
@@ -71,6 +104,7 @@ extern "C" void cStrawClose(Straw **hicFile)
         (*hicFile)->bpResolutions.clear();
         (*hicFile)->fragResolutions.clear();
         (*hicFile)->attributes.clear();
+        (*hicFile)->normOptions.clear();
     }
     free(*hicFile);
     *hicFile = NULL;
@@ -78,7 +112,7 @@ extern "C" void cStrawClose(Straw **hicFile)
 
 extern "C" char *cStraw (Straw *hicFile, char *norm, int binsize, char *chr1loc, char *chr2loc, char *unit, int **xActual, int **yActual, double **counts, int *numRecords)
 /* Wrapper function to retrieve a data chunk from a .hic file, for use by C libraries.
- * norm is one of NONE/VC/VC_SQRT/KR.
+ * norm is probably one of NONE/VC/VC_SQRT/KR/SCALE, but it depends on the file.
  * binsize is one of the supported bin sizes as determined by cStrawHeader.
  * chr1loc and chr2loc are the two positions to retrieve interaction data for, specified as chr:start-end.
  * unit is one of BP/FRAG.
@@ -114,10 +148,14 @@ extern "C" char *cStraw (Straw *hicFile, char *norm, int binsize, char *chr1loc,
 }
 
 
-extern "C" char *cStrawHeader (Straw *hicFile, char **genome, char ***chromNames, int **chromSizes, int *nChroms, char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes, char ***attributes, int *nAttributes)
+extern "C" char *cStrawHeader (Straw *hicFile, char **genome, char ***chromNames, int **chromSizes, int *nChroms,
+        char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes, char ***attributes,
+        int *nAttributes, char ***normOptions, int* nNormOptions)
 /* Wrapper function to retrieve header fields from a .hic file, for use by C libraries.
  * This retrieves the assembly name, list of chromosome names, list of available binsize resolutions,
- * and list of available fragment resolutions in the specific .hic file.
+ * the list of available fragment resolutions in the specific .hic file, and a list of available
+ * normalization options.  Technically the normalization options are supposed to be resolution-specific,
+ * but we're not ready for a redesign in that direction just yet.
  * The function returns NULL unless an error was encountered, in which case the return value points
  * to a character string explaining the error. */
 {
@@ -160,12 +198,12 @@ extern "C" char *cStrawHeader (Straw *hicFile, char **genome, char ***chromNames
             strcpy((*bpResolutions)[i], to_string(hicFile->bpResolutions[i]).c_str());
         }
     }
-    // skipping fragment stuff for now
+    // skipping fragment stuff for now; we don't use it
     if (nFragRes != NULL && false)
     {
         *nFragRes = hicFile->nFragRes;
     }
-    // skipping fragment stuff for now
+    // skipping fragment stuff for now; we don't use it
     if (fragResolutions != NULL && false)
     {
         *fragResolutions = (char**) calloc((size_t) hicFile->fragResolutions.size(), sizeof(char*));
@@ -186,6 +224,23 @@ extern "C" char *cStrawHeader (Straw *hicFile, char **genome, char ***chromNames
         {
             (*attributes)[i] = (char*) malloc((hicFile->attributes[i].length()+1)*sizeof(char));
             strcpy((*attributes)[i], hicFile->attributes[i].c_str());
+        }
+    }
+    if (nNormOptions != NULL)
+    {
+        // Include one extra for "NONE", which doesn't appear in normOptions
+        *nNormOptions = hicFile->normOptions.size()+1;
+    }
+    if (normOptions != NULL)
+    {
+        *normOptions = (char**) calloc((size_t) hicFile->normOptions.size()+1, sizeof(char*));
+        (*normOptions)[0] = (char*) "NONE";
+        int i = 1;
+        std::set<string>::iterator it = hicFile->normOptions.begin();
+        for (; it != hicFile->normOptions.end(); it++, i++)
+        {
+            (*normOptions)[i] = (char*) malloc(((*it).length()+1)*sizeof(char));
+            strcpy((*normOptions)[i], (*it).c_str());
         }
     }
     return NULL;
