@@ -1,7 +1,7 @@
 track hs1PrimateChainNet
 compositeTrack on
-shortLabel Primates Chain/Net
-longLabel Primates chain alignments to target sequence: hs1
+shortLabel Primate Chain/Net
+longLabel Primate chain alignments to target sequence: hs1
 subGroup1 view Views chain=Chains synten=Syntenic rbest=Reciprocal_best align=Alignment
 subGroup2 species Assembly s001=chimpanzee s002=pygmy_chimpanzee s003=western_lowland_gorilla s004=Sumatran_orangutan s005=Bornean_orangutan s006=siamang s007=white-tufted-ear_marmoset s008=ring-tailed_lemur s009=slow_loris
 subGroup3 chainType chain_type c00=chain c01=syntenic c02=reciprocal_best c03=lift_over c04=chain_align c05=syntenic_align c06=reciprocal_align
