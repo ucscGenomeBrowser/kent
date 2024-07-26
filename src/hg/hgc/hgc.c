@@ -6527,10 +6527,11 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE) // Only anchor if small enough 
 		hgcAnchorWindow(hgcCommand, qName, psl->tStart, psl->tEnd, otherString, psl->tName);
+            char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d",
 		   psl->match + psl->misMatch + psl->repMatch,
 		   100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-		   skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
+		   skipChr(displayChromName), psl->strand, psl->tStart + 1, psl->tEnd,
 		   psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE)
 	        printf("</A>");
@@ -7805,14 +7806,15 @@ if (restrictToWindow)
     }
 
 /* Write body heading info. */
+char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
 fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
-	psl->qName, psl->tName, partTStart+1, partTEnd);
+	psl->qName, displayChromName, partTStart+1, partTEnd);
 fprintf(body, "Click on links in the frame to the left to navigate through "
 	"the alignment.\n");
 
 blockCount = ffShAliPart(body, ffAli, wholePsl->qName,
                          rna + rnaStart, rnaEnd - rnaStart, rnaStart,
-			 dnaSeq->name, dnaSeq->dna, dnaSeq->size,
+			 displayChromName, dnaSeq->dna, dnaSeq->size,
 			 wholeTStart, 8, FALSE, isRc,
 			 FALSE, TRUE, TRUE, TRUE, TRUE,
                          cdsS, cdsE, partTStart, partTEnd);
@@ -7849,7 +7851,8 @@ if (qName == NULL)
 htmStartDirDepth(index, qName, 2);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
-fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(database), psl->tName);
+char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
+fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(database), displayChromName);
 for (i=1; i<=blockCount; ++i)
     {
     fprintf(index, "<A HREF=\"../%s#%d\" TARGET=\"body\">block%d</A><BR>\n",

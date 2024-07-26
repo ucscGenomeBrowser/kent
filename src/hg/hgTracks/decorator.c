@@ -1248,7 +1248,7 @@ void drawGlyphDecoration(struct decoration *d, struct hvGfx *hvg, double scale, 
 glyphType glyph = parseGlyphType(d->glyph);
 Color outlineColor = bedColorToGfxColor(d->color);
 Color fillColor = bedColorToGfxColor(bedParseColor(d->fillColor));
-drawScalledGlyph(hvg, d->chromStart, d->chromEnd, scale, xOff, y,
+drawScaledGlyph(hvg, d->chromStart, d->chromEnd, scale, xOff, y,
                  heightPer, glyph, filled, outlineColor, fillColor);
 
 }

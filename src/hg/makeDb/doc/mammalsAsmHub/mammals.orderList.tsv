@@ -232,13 +232,14 @@ GCA_004025085.1_ThrSwi_v1_BIUU	Greater cane rat
 GCA_004115295.1_mRhiFer1_v1.h	greater horseshoe bat (MPI-CBG alternate hap 2019)
 GCF_004115265.2_mRhiFer1_v1.p	greater horseshoe bat (v2 MPI-CBG 2019)
 GCF_014108235.1_mMyoMyo1.p	greater mouse-eared bat (2020 Bat1K)
-GCA_036850765.1_mSacBil1_pri_phased_curated	greater sac-winged bat (mSacBil1 primary hap 2024)
+GCF_036850765.1_mSacBil1_pri_phased_curated	greater sac-winged bat (primary hap 2024 refseq)
 GCF_019186645.2_TTU_PhHast_1.1	greater spear-nosed bat (2021 Texas Tech U)
 GCA_004363415.1_EscRob_v1_BIUU	grey whale
 GCA_028021475.1_mEscRob2.alt	grey whale (mEscRob2 alternate hap 2023)
 GCA_028021215.1_mEscRob2.pri	grey whale (mEscRob2 primary hap 2023)
 GCA_004026765.1_MicHir_v1_BIUU	hairy big-eared bat (US037 2019 Broad)
-GCA_963924675.1_mPhoPho1.1	harbor porpoise (primary hap 2024)
+GCA_963924675.1_mPhoPho1.1	harbor porpoise (primary hap 2024 genbank)
+GCF_963924675.1_mPhoPho1.1	harbor porpoise (primary hap 2024 refseq)
 GCF_004348235.1_GSC_HSeal_1.0	harbor seal
 GCF_002201575.2_ASM220157v2	Hawaiian monk seal (2021 Johns Hopkins U)
 GCA_004027005.1_MusAve_v1_BIUU	hazel dormouse
@@ -305,7 +306,7 @@ GCF_020740685.1_mJacJac1.mat.Y.cur	lesser Egyptian jerboa (2021)
 GCA_020740715.1_mJacJac1.pat.decon	lesser Egyptian jerboa (alternate hap 2021)
 GCF_000280705.1_JacJac1.0	lesser Egyptian jerboa (JJ0015 2012 refseq)
 GCA_002007465.1_ASM200746v1	lesser panda
-GCA_036850995.1_mSacLep1_pri_phased_curated	lesser sac-winged bat (mSacLep1 primary hap 2024)
+GCF_036850995.1_mSacLep1_pri_phased_curated	lesser sac-winged bat (primary hap 2024 refseq)
 GCF_018350215.1_P.leo_Ple1_pat1.1	lion
 GCF_000147115.1_Myoluc2.0	little brown bat
 GCA_024363435.1_mPerLon1.0.a	little pocket mouse (longimembris alternate hap 2022)
@@ -432,6 +433,7 @@ GCA_910593805.1_mCerEla1.1_alternate_haplotype	red deer (alternate hap 2021)
 GCF_003160815.1_VulVul2.2	red fox
 GCF_014885135.2_M_Fortis_MF-2015_v1.1	reed vole (MF-2015 2020)
 GCA_963930665.1_mMunRee1.1_alternate_haplotype	Reeves' muntjac (alternate hap 2024)
+GCF_963930625.1_mMunRee1.1	Reeves' muntjac (primary hap 2024)
 GCA_963422255.1_RTA_final	reindeer (2023)
 GCA_004026565.1_RanTarSib_v1_BIUU	reindeer (US061 2019)
 GCA_028017805.1_mBalRic1.hap1	Rice's whale (hap1 2023)

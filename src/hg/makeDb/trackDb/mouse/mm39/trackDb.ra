@@ -48,5 +48,4 @@ urlLabel View on the VISTA Enhancer Browser
 bigDataUrl /gbdb/mm39/vistaEnhancers/vistaEnhancers.bb
 itemRgb on
 
-track ncbiRefSeq override
-parent refSeqComposite off
+include ../refSeqComposite.mm10.mm39.ra

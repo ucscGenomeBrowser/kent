@@ -2947,7 +2947,6 @@ for (tbl = tblList; tbl != NULL; tbl = tbl->next)
             "%s.searchTable=%s.tableName or "
             "%s.searchName=%s.tableName or "
             "%s.searchTable = concat('all_', %s.tableName) "
-            "where searchTable !='knownGene' and searchName != 'knownGene' "
             "order by priority,shortLabel",
             findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName, findSpecName, tdbName);
         struct sqlResult *sr = sqlGetResult(conn, query);
@@ -3145,9 +3144,20 @@ else if (hashLookup(groupHash, categName) != NULL)
 else
     {
     // must be a track, ret will contain subtracks if necessary
-    struct trackDb *tdb = hashFindVal(hgFindTrackHash, categName);
-    if (tdb)
-        ret = makeCategoryForTrack(tdb, searchTrack);
+    // sometimes duplicate tracks point to the same (eg knownGeneAlpha and knownGene)
+    // this shouldn't happen anymore due to cartTrackDb.c:hashTdbNames() changes, but
+    // just in case it pops up again this code will stay
+    struct hashEl *hel = hashLookup(hgFindTrackHash, categName);
+    while (hel != NULL)
+        {
+        struct trackDb *tdb = hel->val;
+        if (tdb)
+            {
+            struct searchCategory *temp = makeCategoryForTrack(tdb, searchTrack);
+            slAddHead(&ret, temp);
+            }
+        hel = hashLookupNext(hel);
+        }
     }
 return ret;
 }
@@ -3156,9 +3166,6 @@ struct searchCategory *getCategsForNonDb(struct cart *cart, char *db, struct has
 /* Return the default categories for all databases */
 {
 struct searchCategory *ret = NULL;
-struct searchCategory *kgCategory = makeCategory(cart, "knownGene", NULL, db, groupHash);
-if (kgCategory)
-    slAddHead(&ret, kgCategory);
 struct searchCategory *helpDocCategory = makeCategory(cart, "helpDocs", NULL, db, groupHash);
 if (helpDocCategory)
     slAddHead(&ret, helpDocCategory);
@@ -3470,7 +3477,7 @@ if (!(multiTerm) || (multiTerm && !foundIt))
     {
     for (hfs = longList; hfs != NULL; hfs = hfs->next)
         {
-        if (hashFindVal(foundSpecHash, hfs->searchTable) != NULL && !sameString(hfs->searchTable, "knownGene"))
+        if (hashFindVal(foundSpecHash, hfs->searchTable) != NULL)
             continue;
         foundIt |= hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0, 0, multiTerm, measureTiming);
         }

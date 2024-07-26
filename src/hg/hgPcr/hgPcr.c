@@ -32,6 +32,7 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "obscure.h"
+#include "chromAlias.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -212,9 +213,9 @@ return serverList;
 void doHelp()
 /* Print up help page */
 {
-puts(
-"In-Silico PCR searches a sequence database with a pair of\n"
-"PCR primers, using an indexing strategy for fast performance.\n"
+printf(
+"In-Silico PCR V%s searches a sequence database with a pair of\n"
+"PCR primers, using the BLAT index for fast performance.\n"
 "See an example\n"
 "<a href='https://youtu.be/U8_QYwmdGYU'"
 "target='_blank'>video</a>\n"
@@ -257,7 +258,7 @@ puts(
 "aagcactttgctctcagctccacGCAGCTGCTTTAGGAGCCACTCATGaG\n"
 "</PRE></TT>\n"
 "The + between the coordinates in the fasta header indicates \n"
-"this is on the positive strand.  \n"
+"this is on the positive strand.  \n", gfVersion
 );
 }
 
@@ -631,6 +632,13 @@ struct gfPcrOutput *gpoList =
     gfPcrViaNet(conn, server->seqDir, gpi,
 		maxSize, minPerfect, minGood);
 
+// translate native names to chromAuthority names
+struct gfPcrOutput *gpo;
+for(gpo = gpoList ; gpo; gpo = gpo->next)
+    {
+    char *displayChromName = cloneString(chromAliasGetDisplayChrom(server->db, cart, gpo->seqName));
+    gpo->seqName = displayChromName;
+    }
 
 if (gpoList != NULL)
     {
@@ -767,6 +775,7 @@ boolean appendToResults = cartUsualBoolean(cart, "wp_append", TRUE);
 struct pcrServer *serverList = getServerList();
 
 getDbAndGenome(cart, &db, &organism, oldVars);
+chromAliasSetup(db);
 
 /* Get variables. */
 maxSize = cartUsualInt(cart, "wp_size", maxSize);

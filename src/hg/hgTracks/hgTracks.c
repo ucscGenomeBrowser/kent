@@ -6964,6 +6964,7 @@ for(; grpList; grpList = grpList->next)
     group->label = cloneString(grpList->label);
     group->defaultPriority = group->priority = priority;
     group->errMessage = grpList->errMessage;
+    group->defaultIsClosed = grpList->defaultIsClosed;
     priority += priorityInc;
     slAddHead(&list, group);
     hashAdd(hash, group->name, group);
@@ -8518,6 +8519,20 @@ if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
 }
 
 
+#ifdef NOTNOW
+static void printAliases(char *name)
+/* Print out the aliases for this sequence. */
+{
+struct slName *names = chromAliasFindAliases(name);
+
+printf("<div id='aliases'><a title='");
+for(;names; names = names->next)
+    printf("%s;",names->name);
+printf("'>Aliases</a></div>");
+}
+#endif
+
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -9230,6 +9245,7 @@ if (!hideControls)
 	hButton("goButton", "Search");
 
         printSearchHelpLink();
+        // printAliases(displayChromName);
 
         printPatchNote();
 
@@ -9514,7 +9530,10 @@ if (!hideControls)
                                 "information about this track hub' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
                                 "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>&nbsp;&nbsp;");
                     else
-                        hPrintf("<a title='Documentation about this track hub, provided by the track hub authors (not UCSC)' href='%s' "
+                        hPrintf("<a title='Documentation about this track hub, provided by the track hub authors (not UCSC). ");
+                        if (hub->email)
+                            hPrintf("The authors can be reached at %s", hub->email);
+                        hPrintf("' href='%s' "
                             "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
                     }
 
@@ -11208,6 +11227,12 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
+measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
+
+if (measureTiming)
+    measureTime("Got cart: %d elements, userId=%s (=cookie), sessionId=%s", theCart->hash->elCount,
+	    theCart->userId, theCart->sessionId);
+
 if (noPixVariableSetAndInteractive())
 {
     jsIncludeFile("jquery.js", NULL);
@@ -11216,7 +11241,6 @@ if (noPixVariableSetAndInteractive())
     return;
 }
 
-measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
     measureTime("Startup (bottleneck delay %d ms, not applied if under %d) ", botDelayMillis, hgBotDelayCurrWarnMs()) ;
 
@@ -11254,10 +11278,6 @@ jsInline("$('#backToBrowserLi').remove();");
 char *debugTmp = NULL;
 /* Uncomment this to see parameters for debugging. */
 /* struct dyString *state = NULL; */
-/* Initialize layout and database. */
-if (measureTiming)
-    measureTime("Get cart of %d for user:%s session:%s", theCart->hash->elCount,
-	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */

@@ -1004,3 +1004,99 @@ html chainNet
         speciesOrder GCA_018873775.2
         speciesLabels GCA_018873775.2="human"
 
+##############################################################################
+# GCF_003121395.1 - water buffalo - Bubalus bubalis - taxId: 89462 - mammals
+##############################################################################
+track chainNetGCF_003121395.1
+compositeTrack on
+shortLabel water buffalo Chain/Net
+longLabel water buffalo (May 2018 GCF_003121395.1_ASM312139v1), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCF_003121395.1
+html chainNet
+
+    track chainNetGCF_003121395.1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_003121395.1
+    spectrum on
+
+        track chainGCF_003121395.1
+        parent chainNetGCF_003121395.1Viewchain
+        subGroups view=chain
+        shortLabel water buffalo Chain
+        longLabel water buffalo (May 2018 GCF_003121395.1_ASM312139v1) Chained Alignments
+        type bigChain GCF_003121395.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCF_003121395.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCF_003121395.1Link.bb
+
+        track chainSynGCF_003121395.1
+        parent chainNetGCF_003121395.1Viewchain
+        subGroups view=chain
+        shortLabel water buffalo synChain
+        longLabel water buffalo (May 2018 GCF_003121395.1_ASM312139v1) Syntenic Chained Alignments
+        type bigChain GCF_003121395.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainSynGCF_003121395.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainSynGCF_003121395.1Link.bb
+
+        track chainRBestGCF_003121395.1
+        parent chainNetGCF_003121395.1Viewchain
+        subGroups view=chain
+        shortLabel water buffalo rBestChain
+        longLabel water buffalo (May 2018 GCF_003121395.1_ASM312139v1) Reciprocal Best Chained Alignments
+        type bigChain GCF_003121395.1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainRBestGCF_003121395.1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainRBestGCF_003121395.1Link.bb
+
+    track mafNetGCF_003121395.1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetGCF_003121395.1
+
+        track netGCF_003121395.1
+        parent mafNetGCF_003121395.1Viewnet
+        subGroups view=net
+        shortLabel water buffalo mafNet
+        longLabel water buffalo (May 2018 GCF_003121395.1_ASM312139v1) mafNet Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_003121395.1.net.bb
+        summary /gbdb/$D/chainNet/$D.GCF_003121395.1.net.summary.bb
+        speciesOrder GCF_003121395.1
+        speciesLabels GCF_003121395.1="water buffalo"
+
+        track synNetGCF_003121395.1
+        parent mafNetGCF_003121395.1Viewnet
+        subGroups view=net
+        shortLabel water buffalo synNet
+        longLabel water buffalo (May 2018 GCF_003121395.1_ASM312139v1) Syntenic Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_003121395.1.synNet.bb
+        summary /gbdb/$D/chainNet/$D.GCF_003121395.1.synNet.summary.bb
+        speciesOrder GCF_003121395.1
+        speciesLabels GCF_003121395.1="water buffalo"
+
+        track rbestNetGCF_003121395.1
+        parent mafNetGCF_003121395.1Viewnet
+        subGroups view=net
+        shortLabel water buffalo rBestNet
+        longLabel water buffalo (May 2018 GCF_003121395.1_ASM312139v1) Reciprocal Best Net Alignment
+        type bigMaf
+        bigDataUrl /gbdb/$D/chainNet/$D.GCF_003121395.1.rbestNet.bb
+        summary /gbdb/$D/chainNet/$D.GCF_003121395.1.rbestNet.summary.bb
+        speciesOrder GCF_003121395.1
+        speciesLabels GCF_003121395.1="crab-eating macaque"

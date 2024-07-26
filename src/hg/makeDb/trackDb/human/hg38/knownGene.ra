@@ -49,7 +49,7 @@ baseColorDefault genomicCodons
 
 searchName knownGeneFast
 searchTable knownGene
-searchType knownGeneFast
+searchType knownGene
 shortCircuit 1
 searchPriority 1001
 searchTrix /gbdb/hg38/knownGeneFastV46.ix
