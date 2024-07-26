@@ -67,7 +67,7 @@ while (my $line = <FH>) {
     <th>%s</th>
     <th style='text-align:left;'>%s</th>\n", ++$count, $comName, $clade, $sciName;
   if ($asmName =~ m/^[a-z]/) {
-    my $descr = `hgsql -N -e 'select description from dbDb where name="$asmName";' hgcentraltest`;
+    my $descr = `hgsql -N -e 'select description from dbDb where name="$asmName";' hgcentral`;
     chomp $descr;
     printf "    <th style='text-align:left;'><a href='/cgi-bin/hgTracks?db=%s' target=_blank>%s</a></th>\n", $asmName, $descr;
   } else {
