@@ -21,7 +21,7 @@ intronGap 12
 defaultLinkedTables kgXref
 squishyPackPoint 1
 squishyPackField rank
-squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCO
+squishyPackLabel Number of transcripts shown at full height (ranked by <A href="#squishyPack">GENCODE transcript ranking</A>)
 
 searchName knownGeneAcc
 searchTable knownGene
