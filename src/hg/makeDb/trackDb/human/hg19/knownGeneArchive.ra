@@ -1,10 +1,11 @@
 
 track knownGeneArchive
 superTrack on
-shortLabel UCSC Genes Archive
-longLabel Previous versions of UCSC Genes (knownGene)
+shortLabel GENCODE/UCSC Genes Archive
+longLabel Previous versions of GENCODE/UCSC Genes (knownGene)
 group genes
 type bed 6 +
+priority 3
 html ../../knownGeneArchive
 
 
