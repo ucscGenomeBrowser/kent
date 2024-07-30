@@ -13,7 +13,7 @@ GCA_022747625.1_ioHetAmer1.0.a	American ruby spot damselfly (1083.01 alternate h
 GCA_022747635.1_ioHetAmer1.0.p	American ruby spot damselfly (1083.01 primary hap 2022)
 GCA_900088365.1_Bl71nemr	amphioxus (2018)
 GCA_035149815.1_klBraLanc5.hap1	amphioxus (hap1 2024)
-GCA_035083965.1_klBraLanc5.hap2	amphioxus (hap2 2024)
+GCF_035083965.1_klBraLanc5.hap2	amphioxus (hap2 2024 refseq)
 GCF_000764305.2_Hazt_2.0.2	amphipods H.azteca (HAZT.00-mixed v2.0.2 2019)
 GCA_001587735.2_Phaw_5.0	amphipods P.hawaiensis (Chicago-F 2018)
 GCF_000143395.1_Attacep1.0	ant A.cephalotes
@@ -83,6 +83,8 @@ GCF_026283585.1_UHH_iyHylVolc1.0_haploid	bee H.volcanicus (JK05 2022)
 GCF_011865705.1_USU_MGEN_1.2	bee M.genalis
 GCA_011316535.1_NJAU_Sexi_v1	beet armyworm
 GCF_025399875.1_Caltech_Dcor_3.1	beetle D.coriaria (IRGN ID8LTWV9N9 2023)
+GCF_040115645.1_ASM4011564v1	beetle E.fornicatus (EFF26 2024)
+GCF_039881205.1_ESF131.1	beetle E.similis (ESF13 2024)
 GCF_914767665.1_icHarAxyr1.1	beetle H.axyridis
 GCF_001412225.1_Nicve_v1.0	beetle N.vespilloides
 GCF_000648695.1_Otau_2.0	beetle O.taurus

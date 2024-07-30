@@ -17,7 +17,7 @@ Straw *cStrawClose (Straw **hicFile);
 
 char* cStraw (Straw *hicFile, char *norm, int binsize, char *chr1loc, char *chr2loc, char *unit, int **xActual, int **yActual, double **counts, int *numRecords);
 /* Wrapper function to retrieve a data chunk from a .hic file, for use by C libraries.
- * norm is one of NONE/VC/VC_SQRT/KR.
+ * norm is probably one of NONE/VC/VC_SQRT/KR/SCALE, but it depends on the file.
  * binsize is one of the supported bin sizes as determined by cStrawHeader.
  * chr1loc and chr2loc are the two positions to retrieve interaction data for, specified as chr:start-end.
  * unit is one of BP/FRAG.
@@ -26,10 +26,14 @@ char* cStraw (Straw *hicFile, char *norm, int binsize, char *chr1loc, char *chr2
  * The function returns NULL unless an error was encountered, in which case the return value points
  * to a character string explaining the error. */
 
-char* cStrawHeader (Straw *hicFile, char **genome, char ***chromNames, int **chromSizes, int *nChroms, char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes, char ***attributes, int *nAttributes);
+char* cStrawHeader (Straw *hicFile, char **genome, char ***chromNames, int **chromSizes, int *nChroms,
+        char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes,
+        char ***attributes, int *nAttributes, char ***normOptions, int *nNormOptions);
 /* Wrapper function to retrieve header fields from a .hic file, for use by C libraries.
  * This retrieves the assembly name, list of chromosome names, list of available binsize resolutions,
- * and list of available fragment resolutions in the specific .hic file.
+ * the list of available fragment resolutions in the specific .hic file, and a list of available
+ * normalization options.  Technically the normalization options are supposed to be resolution-specific,
+ * but we're not ready for a redesign in that direction just yet.
  * The function returns NULL unless an error was encountered, in which case the return value points
  * to a character string explaining the error. */
 #endif
