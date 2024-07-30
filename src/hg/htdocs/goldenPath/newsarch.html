@@ -66,6 +66,72 @@ credits page</a> for acknowledgments of the data we host.</p>
 <!-- ============= 2024 archived news ============= -->
 <a name="2024"></a>
 
+<a name="073124"></a>
+<h2>Jul. 31, 2024 &nbsp;&nbsp; GENCODE &quot;KnownGene&quot; v45lift37 release for human (hg19)</h2>
+<p>
+We are excited to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=knownGene" target="_blank">GENCODE
+&quot;KnownGene&quot; v45lift37</a> gene track for hg19. With this release, the previous 2013 UCSC
+Genes track will be frozen and made available in the
+<a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=knownGeneArchive"
+target="_blank">GENCODE/UCSC Genes Archive</a> superTrack for reproducibility.
+As new GENCODE tracks are made available, previous versions will also be available in the archive.
+Beginning with this update, the &quot;KnownGene&quot; track will use GENCODE v45 gene models
+lifted to hg19, which replaces the old UCSC transcript IDs with the official GENCODE IDs.
+</p>
+<p>
+The following is an example of some GENCODE IDs that will replace the UCSC IDs in the update:
+</p>
+<pre>
+oldId      newId
+uc003qfo.3 ENST00000341911.10_8
+uc003jsk.2 ENST00000462279.5_3
+uc003umk.1 ENST00000318238.9_6
+uc003gzi.3 ENST00000682860.1_2
+uc011dpu.2 ENST00000375023.3_6
+uc021raj.2 ENST00000258149.11_6
+uc002fxp.3 ENST00000341657.9_12
+uc010xhp.1 ENST00000429344.7_6
+uc003zze.3 ENST00000242285.11_9</pre>
+<p>
+For each transcript ID, the _# portion is part of the
+<a href="https://github.com/diekhans/gencode-backmap?tab=readme-ov-file#identification"
+target="_blank">official hg19 backmap ID</a>, so they are not confused with the gene/transcript they
+are derived from in hg38. Between hg38 and hg19, the two IDs are not always in the same sequence and
+may not be a one-to-one mapping.
+</p>
+<p>
+The GENCODE
+&quot;KnownGene&quot; V45lift37 gene track is built using a UCSC pipeline (KnownGene) and the
+GENCODE comprehensive gene set to generate high-quality manual annotations merged with
+evidence-based automated annotations. The GENCODE &quot;KnownGene&quot; tracks are our default gene
+tracks, which have extensive associations to external sources. This allows for additional metadata
+on every item as well as external links. The track description pages contain options for configuring
+the display, such as showing non-coding genes, splice variants, and pseudogenes.
+</p>
+<p>
+Below is a summary of the contents found in the GENCODE v45 release.
+For more details visit the <a target="_blank"
+href="https://www.gencodegenes.org/human/stats_45.html">GENCODE site</a>.
+</p>
+<table class="stdTbl">
+<tbody><tr><th colspan="4">GENCODE v45 Release Stats</th></tr>
+<tr align="left"><th>Genes</th><th>Observed</th><th>Transcripts</th><th>Observed</th></tr>
+<tr align="left"><td>Protein-coding genes</td><td>19,395</td><td>Protein-coding transcripts</td><td>89,110</td></tr>
+<tr align="left"><td>Long non-coding RNA genes</td><td>20,424</td><td><font size="-1">- full length protein-coding</font></td><td>64,028</td></tr>
+<tr align="left"><td>Small non-coding RNA genes</td><td>7,565</td><td><font size="-1">- partial length protein-coding</font></td><td>25,082</td></tr>
+<tr align="left"><td>Pseudogenes</td><td>14,719</td><td>Nonsense mediated decay transcripts</td><td>21,427</td></tr>
+<tr align="left"><td>Immunoglobulin/T-cell receptor gene segments</td><td>648</td><td>Long non-coding RNA loci transcripts</td><td>59,719</td></tr>
+<tr align="left"><td>Total No of distinct translations</td><td>65,357</td><td>Genes that have more than one distinct translations</td><td>13,600</td></tr>
+</tbody></table>
+</p>
+<p>
+We would like to thank the <a target="_blank"
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Brian Raney, Mark Diekhans, and Jairo Navarro for the
+development and release of these tracks.
+</p>
+
 <a name="072524"></a>
 <h2>Jul. 25, 2024 &nbsp;&nbsp; EVA SNP release 6 for 37 assemblies</h2>
 <p>
