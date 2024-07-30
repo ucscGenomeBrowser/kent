@@ -332,8 +332,6 @@ void printMainPageIncludes()
 {
 webIncludeResourceFile("gb.css");
 webIncludeResourceFile("gbStatic.css");
-webIncludeResourceFile("spectrum.min.css");
-webIncludeResourceFile("hgGtexTrackSettings.css");
 puts("<link rel='stylesheet' href='https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'>");
 puts("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css' />");
 puts("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js'></script>");
