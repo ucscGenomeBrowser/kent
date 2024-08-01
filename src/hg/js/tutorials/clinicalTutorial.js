@@ -237,10 +237,11 @@
                   'Lastly, the following features may also be helpful in variant interpretation:'+
                   '<ul>'+
                   '  <li><a href="/cgi-bin/hgVai" target="_blank">Variant Annotation Integrator</a>:'+
-                  '       Provides effect prediction and annotation associations for variant calls.</li>'+
-                  '  <li>Tracks display <a href="/goldenPath/help/hgTracksHelp.html#Highlight" '+
-                  '      target="_blank">highlighting</a> can accent specific regions in your '+
-                  '      view.</li>'+
+                  '      Provides effect prediction and annotation associations for '+
+                  '      variant calls.</li>'+
+                  '  <li>Our <a href="/goldenPath/help/hgTracksHelp.html#Highlight" '+
+                  '      target="_blank">highlight</a> feature can accentuate specific regions '+
+                  '      in your view.</li>'+
                   '  <li><a href="/cgi-bin/hgSession" target="_blank">Sessions</a>: Allows you to '+
                   '      save your own pre-configured displays and create stable links.</li>'+
                   '  <li><a href="/cgi-bin/hgTracks?hgt_tSearch=track+search" target="_blank">Track'+
