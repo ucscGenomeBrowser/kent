@@ -13,15 +13,17 @@
   <div class="row">
     <div class="col-sm-3">
       <ul>
+        <li><a href="#2023">2023 News</a></li>
+        <li><a href="#2022">2022 News</a></li>
         <li><a href="#2021">2021 News</a></li>
         <li><a href="#2020">2020 News</a></li>
         <li><a href="#2019">2019 News</a></li>
         <li><a href="#2018">2018 News</a></li>
-        <li><a href="#2017">2017 News</a></li>
       </ul>
     </div>
     <div class="col-sm-3">
       <ul>
+        <li><a href="#2017">2017 News</a></li>
         <li><a href="#2016">2016 News</a></li>
         <li><a href="#2015">2015 News</a></li>
         <li><a href="#2014">2014 News</a></li>
@@ -55,13 +57,217 @@
 email list. We send around one short announcement email every two weeks.</p>
 
 <p>Smaller software changes are not announced here.  A summary of the three-weekly release changes can be 
-<a target=_blank href="https://genecats.gi.ucsc.edu/builds/versions.html">here</a>. 
-For the full list of our daily code changes head to <a
+found <a target=_blank href="https://genecats.gi.ucsc.edu/builds/versions.html">here</a>. 
+For the full list of our daily code changes head to our <a
 href="https://github.com/ucscGenomeBrowser/kent/commits/master"
-target=_blank>our GitHub page</a>.</p>
+target=_blank>GitHub page</a>. Lastly, see our <a href="credits.html" target="_blank">
+credits page</a> for acknowledgments of the data we host.</p>
 
 <!-- ============= 2024 archived news ============= -->
 <a name="2024"></a>
+
+<a name="073124"></a>
+<h2>Jul. 31, 2024 &nbsp;&nbsp; GENCODE &quot;KnownGene&quot; v45lift37 release for human (hg19)</h2>
+<p>
+We are excited to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=knownGene" target="_blank">GENCODE
+&quot;KnownGene&quot; v45lift37</a> gene track for hg19. With this release, the previous 2013 UCSC
+Genes track will be frozen and made available in the
+<a href="/cgi-bin/hgTrackUi?db=hg19&position=default&g=knownGeneArchive"
+target="_blank">GENCODE/UCSC Genes Archive</a> superTrack for reproducibility.
+As new GENCODE tracks are made available, previous versions will also be available in the archive.
+Beginning with this update, the &quot;KnownGene&quot; track will use GENCODE v45 gene models
+lifted to hg19, which replaces the old UCSC transcript IDs with the official GENCODE IDs.
+</p>
+<p>
+The following is an example of some GENCODE IDs that will replace the UCSC IDs in the update:
+</p>
+<pre>
+oldId      newId
+uc003qfo.3 ENST00000341911.10_8
+uc003jsk.2 ENST00000462279.5_3
+uc003umk.1 ENST00000318238.9_6
+uc003gzi.3 ENST00000682860.1_2
+uc011dpu.2 ENST00000375023.3_6
+uc021raj.2 ENST00000258149.11_6
+uc002fxp.3 ENST00000341657.9_12
+uc010xhp.1 ENST00000429344.7_6
+uc003zze.3 ENST00000242285.11_9</pre>
+<p>
+For each transcript ID, the _# portion is part of the
+<a href="https://github.com/diekhans/gencode-backmap?tab=readme-ov-file#identification"
+target="_blank">official hg19 backmap ID</a>, so they are not confused with the gene/transcript they
+are derived from in hg38. Between hg38 and hg19, the two IDs are not always in the same sequence and
+may not be a one-to-one mapping.
+</p>
+<p>
+The GENCODE
+&quot;KnownGene&quot; V45lift37 gene track is built using a UCSC pipeline (KnownGene) and the
+GENCODE comprehensive gene set to generate high-quality manual annotations merged with
+evidence-based automated annotations. The GENCODE &quot;KnownGene&quot; tracks are our default gene
+tracks, which have extensive associations to external sources. This allows for additional metadata
+on every item as well as external links. The track description pages contain options for configuring
+the display, such as showing non-coding genes, splice variants, and pseudogenes.
+</p>
+<p>
+Below is a summary of the contents found in the GENCODE v45 release.
+For more details visit the <a target="_blank"
+href="https://www.gencodegenes.org/human/stats_45.html">GENCODE site</a>.
+</p>
+<table class="stdTbl">
+<tbody><tr><th colspan="4">GENCODE v45 Release Stats</th></tr>
+<tr align="left"><th>Genes</th><th>Observed</th><th>Transcripts</th><th>Observed</th></tr>
+<tr align="left"><td>Protein-coding genes</td><td>19,395</td><td>Protein-coding transcripts</td><td>89,110</td></tr>
+<tr align="left"><td>Long non-coding RNA genes</td><td>20,424</td><td><font size="-1">- full length protein-coding</font></td><td>64,028</td></tr>
+<tr align="left"><td>Small non-coding RNA genes</td><td>7,565</td><td><font size="-1">- partial length protein-coding</font></td><td>25,082</td></tr>
+<tr align="left"><td>Pseudogenes</td><td>14,719</td><td>Nonsense mediated decay transcripts</td><td>21,427</td></tr>
+<tr align="left"><td>Immunoglobulin/T-cell receptor gene segments</td><td>648</td><td>Long non-coding RNA loci transcripts</td><td>59,719</td></tr>
+<tr align="left"><td>Total No of distinct translations</td><td>65,357</td><td>Genes that have more than one distinct translations</td><td>13,600</td></tr>
+</tbody></table>
+</p>
+<p>
+We would like to thank the <a target="_blank"
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Brian Raney, Mark Diekhans, and Jairo Navarro for the
+development and release of these tracks.
+</p>
+
+<a name="072524"></a>
+<h2>Jul. 25, 2024 &nbsp;&nbsp; EVA SNP release 6 for 37 assemblies</h2>
+<p>
+We are pleased to announce the release of the EVA SNP release 6 track for 37 assemblies. These
+tracks contain mappings of single nucleotide variants and small insertions and deletions (indels)
+&mdash; collectively Simple Nucleotide Variants (SNVs) &mdash; from the European Variation Archive
+(<a href="https://www.ebi.ac.uk/eva/" target="_blank">EVA</a>) Release 6. The full list of
+assemblies that contain the EVA SNP release 6 track is below:</p>
+<p>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+    <ul>
+      <li>A. gambiae <a href="../cgi-bin/hgTrackUi?db=anoGam3&g=evaSnp6"
+      target="_blank">(anoGam3)</a></li>
+      <li>C. intestinalis <a href="../cgi-bin/hgTrackUi?db=ci3&g=evaSnp6"
+      target="_blank">(ci3)</a></li>
+      <li>Bison <a href="../cgi-bin/hgTrackUi?db=bisBis1&g=evaSnp6"
+      target="_blank">(ci3)</a></li>
+      <li>Cat <a href="../cgi-bin/hgTrackUi?db=felCat8&g=evaSnp6"
+        target="_blank">(felCat8)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=felCat9&g=evaSnp6"
+        target="_blank">(felCat9)</a></li>
+      <li>Chicken <a href="../cgi-bin/hgTrackUi?db=galGal4&g=evaSnp6"
+        target="_blank">(galGal4)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=galGal5&g=evaSnp6"
+        target="_blank">(galGal5)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=galGal6&g=evaSnp6"
+        target="_blank">(galGal6)</a></li>
+      <li>Chimp <a href="../cgi-bin/hgTrackUi?db=panTro4&g=evaSnp6"
+      target="_blank">(panTro4)</a>,
+      <a href="../cgi-bin/hgTrackUi?db=panTro5&g=evaSnp6"
+      target="_blank">(panTro5)</a></li></li>
+      <li>Cow <a href="../cgi-bin/hgTrackUi?db=bosTau7&g=evaSnp6"
+        target="_blank">(bosTau7)</a>
+      <li>Crab-eating macaque <a href="../cgi-bin/hgTrackUi?db=macFas5&g=evaSnp6"
+      target="_blank">(macFas5)</a></li>
+      <li>D. melanogaster <a href="../cgi-bin/hgTrackUi?db=dm6&g=evaSnp6"
+      target="_blank">(dm6)</a></li>
+    </ul></div>
+    <div class="col-sm-4">
+      <ul>
+      <li>Dog <a href="../cgi-bin/hgTrackUi?db=canFam3&g=evaSnp6"
+      target="_blank">(canFam3)</a></li>
+      <li>Gorilla <a href="../cgi-bin/hgTrackUi?db=gorGor3&g=evaSnp6"
+        target="_blank">(gorGor3)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=gorGor4&g=evaSnp6"
+        target="_blank">(gorGor4)</a></li>
+      <li>Green monkey <a href="../cgi-bin/hgTrackUi?db=chlSab2&g=evaSnp6"
+      target="_blank">(chlSab2)</a></li>
+      <li>Horse <a href="../cgi-bin/hgTrackUi?db=equCab3&g=evaSnp6"
+      target="_blank">(equCab3)</a></li>
+      <li>Marmoset <a href="../cgi-bin/hgTrackUi?db=calJac3&g=evaSnp6"
+      target="_blank">(calJac3)</a></li>
+      <li>Mouse <a href="../cgi-bin/hgTrackUi?db=mm10&g=evaSnp6"
+      target="_blank">(mm10)</a>,
+      <a href="../cgi-bin/hgTrackUi?db=mm39&g=evaSnp6"
+      target="_blank">(mm39)</a></li>
+      <li>Nile tilapia <a href="../cgi-bin/hgTrackUi?db=oreNil2&g=evaSnp6"
+      target="_blank">(oreNil2)</a></li>
+      <li>Orangutan <a href="../cgi-bin/hgTrackUi?db=ponAbe3&g=evaSnp6"
+      target="_blank">(ponAbe3)</a></li>
+    </ul></div>
+    <div class="col-sm-4">
+      <ul>
+      <li>Pig <a href="../cgi-bin/hgTrackUi?db=susScr11&g=evaSnp6"
+        target="_blank">(susScr11)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=susScr3&g=evaSnp6"
+        target="_blank">(susScr3)</a></li>
+      <li>Rat <a href="../cgi-bin/hgTrackUi?db=rn5&g=evaSnp6"
+        target="_blank">(rn5)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=rn7&g=evaSnp6"
+        target="_blank">(rn7)</a></li>
+      <li>Rhesus <a href="../cgi-bin/hgTrackUi?db=rheMac10&g=evaSnp6"
+        target="_blank">(rheMac10)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=rheMac8&g=evaSnp6"
+        target="_blank">(rheMac8)</a></li>
+      <li>S. cerevisiae <a href="../cgi-bin/hgTrackUi?db=sacCer3&g=evaSnp6"
+      target="_blank">(ponAbe3)</a></li>
+      <li>Sheep <a href="../cgi-bin/hgTrackUi?db=oviAri3&g=evaSnp6"
+        target="_blank">(oviAri3)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=oviAri4&g=evaSnp6"
+        target="_blank">(oviAri4)</a></li>
+      <li>Turkey <a href="../cgi-bin/hgTrackUi?db=melGal5&g=evaSnp6"
+      target="_blank">(melGal5)</a></li>
+      <li>Zebra finch <a href="../cgi-bin/hgTrackUi?db=taeGut2&g=evaSnp6"
+      target="_blank">(taeGut2)</a></li>
+      <li>Zebrafish <a href="../cgi-bin/hgTrackUi?db=danRer7&g=evaSnp6"
+        target="_blank">(danRer7)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=danRer10&g=evaSnp6"
+        target="_blank">(danRer10)</a>,
+        <a href="../cgi-bin/hgTrackUi?db=danRer11&g=evaSnp6"
+        target="_blank">(danRer11)</a></li>
+    </ul></div>
+  </div>
+</div></p>
+
+<p>
+These variants are classified by EVA into one of the following <a target="_blank"
+href="http://www.sequenceontology.org/">sequence ontology</a> terms:
+</p>
+<ul>
+  <li> <b>substitution</b> &mdash;
+       A single nucleotide in the reference is replaced by another, alternate allele
+  <li> <b>deletion</b> &mdash;
+       One or more nucleotides is deleted.  The representation in the database is to
+       display one additional nucleotide in both the Reference field (Ref) and the
+       Alternate Allele field (Alt).  E.g. a variant that is a deletion of an A
+       maybe be represented as Ref = GA and Alt = G.
+  <li> <b>insertion</b> &mdash;
+       One or more nucleotides is inserted.  The representation in the database is to
+       display one additional nucleotide in both the Reference field (Ref) and the
+       Alternate Allele field (Alt).  E.g. a variant that is an insertion of a T maybe
+       be represented as Ref = G and Alt = GT
+  <li> <b>delins</b> &mdash;
+       Similar to tandemRepeat, in that the runs of Ref and Alt Alleles are of
+       different length, except that there is more than one type of nucleotide,
+       e.g., Ref = CCAAAAACAAAAACA, Alt = ACAAAAAC.
+  <li> <b>multipleNucleotideVariant</b> &mdash;
+       More than one nucleotide is substituted by an equal number of different
+       nucleotides, e.g.,  Ref = AA, Alt = GC.
+  <li> <b>sequence alteration</b> &mdash;
+       A parent term meant to signify a deviation from another sequence. Can be
+       assigned to variants that have not been characterized yet.
+</ul>
+<p>
+The variants have also been annotated with our <a href="/cgi-bin/hgVai" target="_blank">Variant
+Annotation Integrator</a> tool with functional classes such as synonymous variant, 
+missense variant, stop gained, etc. For additional details on the track colors, 
+as well as the filters and metadata on each variant, see the track description page.</p>
+
+<p>
+We would like to thank the <a href="https://www.ebi.ac.uk/eva/" target="_blank">European Variation
+Archive</a> making this data publically available. We would also like to thank Luis Nassar, Chris Lee, 
+and Angie Hinrichs for the creation and release of these tracks.
+</p>
 
 <a name="071224"></a>
 <h2>Jul. 12, 2024 &nbsp;&nbsp; First update to hg19's UCSC Genes track since 2013</h2>
@@ -71,8 +277,7 @@ since 2013. In this update, the UCSC Genes track will now use GENCODE v45 gene m
 and replace the old UCSC transcript IDs with the official GENCODE IDs.
 </p>
 <p>
-The anticipated released
-date for this update is July 31, 2024.</p>
+The anticipated release date for this update is July 31, 2024.</p>
 
 <p>
 As an example of what to expect, here are some GENCODE IDs that will replace the UCSC IDs in the
@@ -91,9 +296,11 @@ uc010xhp.1 ENST00000429344.7_6
 uc003zze.3 ENST00000242285.11_9</pre>
 
 <p>
-For each transcript ID, the _# portion is part of the official hg19 backmap ID, so they are not
-confused with the gene/transcript they are derived from in hg38. Between hg38 and hg19, the two IDs
-are not always in the same sequence and may not be a one-to-one mapping.
+For each transcript ID, the _# portion is part of the
+<a href="https://github.com/diekhans/gencode-backmap?tab=readme-ov-file#identification"
+target="_blank">official hg19 backmap ID</a>, so they are not confused with the gene/transcript they
+are derived from in hg38. Between hg38 and hg19, the two IDs are not always in the same sequence and
+may not be a one-to-one mapping.
 </p>
 <p>
 With this update, we will also be freezing the previous 2013 knownGene release in a separate

@@ -9,7 +9,7 @@ import csv
 import requests
 from io import StringIO
 
-# special top priorities 
+# special top priorities
 topPriorities = {
     'hg38': 1,
     'mm39': 2,
@@ -243,7 +243,7 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
             utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
             # Append the dictionary to the list
             dataList.append(utf8Encoded)
-    
+
     return sorted(dataList, key=lambda x: x['sortOrder'])
 
 ####################################################################
@@ -274,7 +274,7 @@ def readGenArkData(url):
             "clade": clade,
             "sortOrder": cladeP,
         }
-        
+
         utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
         # Append the dictionary to the list
         dataList.append(utf8Encoded)
@@ -335,13 +335,13 @@ def processDbDbData(data, clades):
     rows = data.strip().split('\n')
     # reverse the rows so that names such as hg19 come before hg18
     sortedRows = sorted(rows, key=getFirstWordCaseInsensitive, reverse=True)
-    
+
     for row in sortedRows:
         # Split each row into columns
         columns = row.split('\t')
         clade = clades.get(columns[0], "n/a")
         cladeP = cladePriority(clade)
-        
+
         # corresponds with the SELECT statement
         # name,scientificName,organism,taxId,sourceName,description
         # Create a dictionary for each row
@@ -355,11 +355,11 @@ def processDbDbData(data, clades):
             "clade": clade,
             "sortOrder": cladeP,
         }
-        
+
         utf8Encoded= {k: v.encode('utf-8', 'ignore').decode('utf-8') if isinstance(v, str) else v for k, v in dataDict.items()}
         # Append the dictionary to the list
         dataList.append(utf8Encoded)
-    
+
     return sorted(dataList, key=lambda x: x['sortOrder'])
 
 ####################################################################
@@ -388,7 +388,7 @@ def eliminateDupWords(s):
     for word in words:
         # Convert word to lowercase for case-insensitive comparison
         lowerWord = word.lower()
-    
+
         # Check if the lowercase version of the word has been seen before
         if lowerWord not in seenWords:
             # If not seen, add it to the result list and mark as seen
@@ -397,6 +397,23 @@ def eliminateDupWords(s):
 
     # Join the words back into a single string
     return ' '.join(resultWords)
+
+####################################################################
+### given a genark accession, return pathname to hub.txt
+###  given:   GCA_000001905.1
+###  returns: GCA/000/001/905/GCA_000001905.1/hub.txt
+####################################################################
+def genarkPath(gcAccession):
+    # Extract the prefix and the numeric part
+    prefix, numPart = gcAccession.split('_')
+
+    # Break the numeric part into chunks of three digits
+    parts = [numPart[i:i+3] for i in range(0, len(numPart), 3)]
+
+    # Join the parts to form the path
+    path = f"{prefix}/{parts[0]}/{parts[1]}/{parts[2]}/{gcAccession}/hub.txt"
+
+    return path
 
 ####################################################################
 ### for the genArk set, establish some ad-hoc priorities
@@ -541,7 +558,7 @@ def establishPriorities(dbDb, genArk):
                 itemCount += 1
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tdbDb highest version mammals count: {itemCount:4}")
- 
+
     itemCount = 0
     # the mammals, GCF/RefSeq first
     for asmId, commonName in mammalList.items():
@@ -567,7 +584,7 @@ def establishPriorities(dbDb, genArk):
             itemCount += 1
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCA mammals count: {itemCount:4}")
- 
+
     itemCount = 0
     # dbDb is in cladeOrder, process in that order, find highest versions
     for item in dbDb:
@@ -597,7 +614,7 @@ def establishPriorities(dbDb, genArk):
             itemCount += 1
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCF count: {itemCount:4}")
-    
+
     itemCount = 0
     # GCA GenBank from GenArk next priority
     for item in genArk:
@@ -610,7 +627,7 @@ def establishPriorities(dbDb, genArk):
             itemCount += 1
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCA count: {itemCount:4}")
-    
+
     itemCount = 0
     for entry in dbDb:
         dbName = entry['name']
@@ -707,7 +724,7 @@ def main():
 
         descr = f"{entry['sourceName']} {entry['description']}\n"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\n"
+        outLine =f"{entry['name']}\t{priority}\t{entry['organism']}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -724,11 +741,12 @@ def main():
             print("no priority for ", gcAccession)
             sys.exit(255)
 
+        hubPath = genarkPath(gcAccession)
         cleanName = removeNonAlphanumeric(entry['commonName'])
         clade = entry['clade']
         descr = f"{entry['asmName']}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\n"
+        outLine = f"{entry['gcAccession']}\t{priority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t{hubPath}\n"
         fileOut.write(outLine)
         itemCount += 1
 
@@ -744,10 +762,11 @@ def main():
         gcAccession = entry['gcAccession']
         commonName = entry['commonName']
         scientificName = entry['scientificName']
+        asmName = entry['asmName']
         clade = entry['clade']
-        descr = f"{entry['other']}"
+        descr = f"{asmName} {entry['other']}"
         description = re.sub(r'\s+', ' ', descr).strip()
-        outLine = f"{entry['gcAccession']}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\n"
+        outLine = f"{entry['gcAccession']}\t{incrementPriority}\t{entry['commonName'].encode('ascii', 'ignore').decode('ascii')}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description.encode('ascii', 'ignore').decode('ascii')}\t0\t\n"
         fileOut.write(outLine)
         incrementPriority += 1
         itemCount += 1
@@ -759,13 +778,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-"""
-                "gcAccession": row[0],
-                "asmName": row[15],
-                "scientificName": row[7],
-                "commonName": row[3],
-                "taxId": row[5],
-                "clade": row[24],	# almost like GenArk clades
-                "other": asmSubmitter + " " + strain + " " + asmType,
-"""

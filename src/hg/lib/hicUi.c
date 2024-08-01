@@ -26,10 +26,10 @@ safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_NORMALIZATION);
 char *selected = cartNonemptyString(cart, cartVar);
 if (selected == NULL)
     selected = trackDbSetting(tdb, HIC_TDB_NORMALIZATION);
-char *menu[] = {"NONE", "VC", "VC_SQRT", "KR"};
+char **menu = meta->normOptions;
 int i;
 char *result = menu[0];
-for (i=1; i<4; i++)
+for (i=1; i<meta->nNormOptions; i++)
     {
     if (sameWordOk(selected, menu[i]))
         result = menu[i];
@@ -41,9 +41,9 @@ void hicUiNormalizationDropDown(struct cart *cart, struct trackDb *tdb, struct h
 {
 char cartVar[1024];
 char* selected = hicUiFetchNormalization(cart, tdb, meta);
-char *menu[] = {"NONE", "VC", "VC_SQRT", "KR"};
+char **menu = meta->normOptions;
 safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_NORMALIZATION);
-cgiMakeDropList(cartVar, menu, 4, selected);
+cgiMakeDropList(cartVar, menu, meta->nNormOptions, selected);
 }
 
 void hicUiNormalizationMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)

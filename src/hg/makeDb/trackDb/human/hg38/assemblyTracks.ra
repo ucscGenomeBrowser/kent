@@ -1,8 +1,14 @@
+track assemblyContainer
+superTrack on
+group map
+shortLabel Assembly Tracks
+longLabel Assembly identifiers, clones, and markers
+cartVersion 4
+
 track scaffolds
 shortLabel Scaffolds
 longLabel GRCh38 Defined Scaffold Identifiers
-group map
-visibility hide
+superTrack assemblyContainer pack
 color 0,0,0
 type bed 4 .
 
@@ -13,18 +19,10 @@ shortCircuit 1
 termRegex [1-9HMXY][0-9A-Z_]*
 searchPriority 18
 
-track stsMap override
-visibility hide
-
-track fishClones override
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
-
 track ctgPos2
 shortLabel GRC Contigs
 longLabel Genome Reference Consortium Contigs
-group map
-visibility hide
+superTrack assemblyContainer pack
 type ctgPos
 url https://www.ncbi.nlm.nih.gov/nuccore/$$
 chromosomes chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chrX,chrY
@@ -35,3 +33,14 @@ shortCircuit 1
 termRegex [GK][LI][028][0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s%%'
 searchPriority 5
+
+track stsMap override
+superTrack assemblyContainer pack
+
+track traceClone override
+superTrack assemblyContainer pack
+
+track fishClones override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+superTrack assemblyContainer pack

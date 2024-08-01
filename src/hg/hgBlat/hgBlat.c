@@ -33,6 +33,7 @@
 #include "chromInfo.h"
 #include "net.h"
 #include "fuzzyFind.h"
+#include "chromAlias.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -718,8 +719,9 @@ else  // hyperlink
 	printf(" %5d %5d %5d %5d   %5.1f%%  ",
 	    pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
-	printf("%s",psl->tName);
-	spaceOut(stdout, maxTChromNameSize - strlen(psl->tName));
+        char *displayChromName = chromAliasGetDisplayChrom(database, cart, psl->tName);
+	printf("%s",displayChromName);
+	spaceOut(stdout, maxTChromNameSize - strlen(displayChromName));
 	printf("  %-2s  %9d %9d %6d",
 	    psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
@@ -1709,12 +1711,14 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     if (oneSize < minSuggested)
         {
-	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum).<br>"
-                "To search for short sequences in the current browser window, use our <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track, "
-                "or, if you are using the command line and want to search the entire genome, our command line tool <tt>findMotifs</tt>, from the "
-                "<a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>.<br>"
-                "For primers, you can use our tool <a href='hgPcr?%s=%s'>In-silico PCR</a>. In-silico PCR searches the entire genome or a set of transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
-                "Contact us if none of these options solve the problem: genome@soe.ucsc.edu",
+	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum).<br><br>"
+                "To search for short sequences in the browser window, use the <a href='hgTrackUi?%s=%s&g=oligoMatch&oligoMatch=pack'>Short Sequence Match</a> track. "
+                "You can also use our commandline tool <tt>findMotifs</tt> "
+                "(see <a target=_blank href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'>utilities download page</a>) to "
+                "search for sequences on the entire genome.<br><br>"
+                "For primers, you can use the <a href='hgPcr?%s=%s'>In-silico PCR</a> tool. In-silico PCR can search the entire genome or a set of "
+                "transcripts. In the latter case, it can find matches that straddle exon/intron boundaries.<br><br>"
+                "Contact us for additional help using BLAT or its related tools: genome@soe.ucsc.edu",
 		seq->name, oneSize, minSuggested, cartSessionVarName(), cartSessionId(cart), cartSessionVarName(), cartSessionId(cart));
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.
@@ -2157,6 +2161,7 @@ orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
 if (orgChange)
     cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
 getDbAndGenome(cart, &db, &organism, oldVars);
+chromAliasSetup(db);
 char *oldDb = cloneString(db);
 
 // n.b. this changes to default db if db doesn't have BLAT
