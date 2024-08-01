@@ -43,17 +43,51 @@
         }
     };
     
-    // Function to keep the menu visible
-    function keepMenuVisible() {
-        const toolsMenu = document.querySelector('#tools2 > ul');
-        toolsMenu.style.display = 'block';
-        toolsMenu.style.visibility = 'visible';
+    // Function to keep menus visible using a selector
+    function keepMenuVisible(selector) {
+        const menu = document.querySelector(selector);
+        menu.style.display = 'block';
+        menu.style.visibility = 'visible';
+
+        const makeVisible = () => {
+            menu.style.display = 'block';
+            menu.style.visibility = 'visible';
+        };
+
+        menu.addEventListener('mouseover', makeVisible);
+        menu.addEventListener('mouseout', makeVisible);
+        menu.addEventListener('mouseleave', makeVisible);
+        menu.addEventListener('mousemove', makeVisible);
+
+        menu.querySelectorAll('li').forEach(function(item) {
+           item.addEventListener('mouseover', makeVisible);
+           item.addEventListener('mouseout', makeVisible);
+           item.addEventListener('mouseleave', makeVisible);
+           item.addEventListener('mousemove', makeVisible);
+        });
     }
-    // Function to keep the menu visible
-    function helpMenuVisible() {
-        const helpMenu = document.querySelector('#help > ul');
-        helpMenu.style.display = 'block';
-        helpMenu.style.visibility = 'visible';
+    // Function to hide the menu
+    function hideMenu(selector) {
+        const menu = document.querySelector(selector);
+        menu.style.display = 'none';
+        menu.style.visibility = 'hidden';
+
+        const hideVisible = () => {
+            menu.style.display = 'none';
+            menu.style.visibility = 'hidden';
+        };
+
+        menu.removeEventListener('mouseover', hideVisible);
+        menu.removeEventListener('mouseout', hideVisible);
+        menu.removeEventListener('mouseleave', hideVisible);
+        menu.removeEventListener('mousemove', hideVisible);
+
+        menu.querySelectorAll('li').forEach(function(item) {
+           item.removeEventListener('mouseover', hideVisible);
+           item.removeEventListener('mouseout', hideVisible);
+           item.removeEventListener('mouseleave', hideVisible);
+           item.removeEventListener('mousemove', hideVisible);
+        });
     }
 
     
@@ -138,22 +172,8 @@
             id: 'rtsDropDown',
             classes: 'dark-background',
             when: {
-                show: () => {
-                    const toolsMenu = document.querySelector('#tools2 > ul');
-                    toolsMenu.style.display = 'block';
-                    toolsMenu.style.visibility = 'visible';
-    
-                    toolsMenu.addEventListener('mouseover', keepMenuVisible);
-                    toolsMenu.addEventListener('mouseout', keepMenuVisible);
-                },
-                hide: () => {
-                    const toolsMenu = document.querySelector('#tools2 > ul');
-                    toolsMenu.style.display = 'none';
-                    toolsMenu.style.visibility = 'hidden';
-    
-                    toolsMenu.removeEventListener('mouseover', keepMenuVisible);
-                    toolsMenu.removeEventListener('mouseout', keepMenuVisible);
-                }
+                show: () => keepMenuVisible('#tools2 > ul'),
+                hide: () => hideMenu('#tools2 > ul')
             }
         });
     
@@ -242,38 +262,8 @@
                            }
                      }],
             when: {
-                show: () => {
-                    const helpMenu = document.querySelector('#help > ul');
-                    helpMenu.style.display = 'block';
-                    helpMenu.style.visibility = 'visible';
-    
-                    helpMenu.addEventListener('mouseover', helpMenuVisible);
-                    helpMenu.addEventListener('mouseout', helpMenuVisible);
-                    helpMenu.addEventListener('mouseleave', helpMenuVisible);
-                    helpMenu.addEventListener('mousemove', helpMenuVisible);
-                    helpMenu.querySelectorAll('li').forEach(function(item) {
-                        item.addEventListener('mouseover', helpMenuVisible);
-                        item.addEventListener('mouseout', helpMenuVisible);
-                        item.addEventListener('mouseleave', helpMenuVisible);
-                        item.addEventListener('mousemove', helpMenuVisible);
-                    });
-                },
-                hide: () => {
-                    const helpMenu = document.querySelector('#help > ul');
-                    helpMenu.style.display = 'none';
-                    helpMenu.style.visibility = 'hidden';
-    
-                    helpMenu.removeEventListener('mouseover', helpMenuVisible);
-                    helpMenu.removeEventListener('mouseout', helpMenuVisible);
-                    helpMenu.removeEventListener('mouseleave', helpMenuVisible);
-                    helpMenu.removeEventListener('mousemove', helpMenuVisible);
-                    helpMenu.querySelectorAll('li').forEach(function(item) {
-                        item.removeEventListener('mouseover', helpMenuVisible);
-                        item.removeEventListener('mouseout', helpMenuVisible);
-                        item.removeEventListener('mouseleave', helpMenuVisible);
-                        item.removeEventListener('mousemove', helpMenuVisible);
-                    });
-                }
+                show: () => keepMenuVisible('#help > ul'),
+                hide: () => hideMenu('#help > ul')
             }
         });
     }
