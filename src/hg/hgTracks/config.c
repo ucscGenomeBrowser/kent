@@ -751,7 +751,7 @@ if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE))
     // go to hgTracks
     hPrintf("<tr><td>");
     hCheckBox("doHgcInPopUp", cartUsualBoolean(cart, "doHgcInPopUp", TRUE));
-    hPrintf("<td>Item clicks open in pop-up</td></tr>\n");
+    hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
     }
 
 hTableEnd();
