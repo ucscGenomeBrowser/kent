@@ -67,9 +67,17 @@ while (my $line = <FH>) {
     <th>%s</th>
     <th style='text-align:left;'>%s</th>\n", ++$count, $comName, $clade, $sciName;
   if ($asmName =~ m/^[a-z]/) {
-    my $descr = `hgsql -h genome-centdb -Ne 'select description from dbDb where name="$asmName";' hgcentral`;
-    chomp $descr;
-    printf "    <th style='text-align:left;'><a href='/cgi-bin/hgTracks?db=%s' target=_blank>%s</a></th>\n", $asmName, $descr;
+    my $active = `hgsql -h genome-centdb -Ne 'select active from dbDb where name="$asmName";' hgcentral`;
+    chomp($active);
+    if ($active eq '1') {
+      my $descr = `hgsql -h genome-centdb -Ne 'select description from dbDb where name="$asmName";' hgcentral`;
+      chomp $descr;
+      printf "    <th style='text-align:left;'><a href='/cgi-bin/hgTracks?db=%s' target=_blank>%s</a></th>\n", $asmName, $descr;
+    } else {
+      my $descr = `hgsql -Ne 'select description from dbDb where name="$asmName";' hgcentraltest`;
+      chomp $descr;
+      printf "    <th style='text-align:left;'>%s</th>\n", $descr;
+    }
   } else {
     if (defined($hillerData{$asmName})) {
       my ($source, $GCx) = split(";", $hillerData{$asmName});

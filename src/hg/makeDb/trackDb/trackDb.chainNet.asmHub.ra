@@ -1009,6 +1009,7 @@ html chainNet
 ##############################################################################
 track chainNetGCF_003121395.1
 compositeTrack on
+release alpha
 shortLabel water buffalo Chain/Net
 longLabel water buffalo (May 2018 GCF_003121395.1_ASM312139v1), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
