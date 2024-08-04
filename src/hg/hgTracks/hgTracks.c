@@ -5157,7 +5157,9 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 // fill out track->prevTrack, and check for maxSafeHeight
 boolean safeHeight = TRUE;
 /* firefox on Linux worked almost up to 34,000 at the default 620 width */
-#define maxSafeHeight   32000
+/* More recent hardware/browsers may be able to handle more - we had a success with an 8192x64891 image */
+#define MAXSAFEHEIGHT "maxTrackImageHeightPx"
+int maxSafeHeight = atoi(cfgOptionDefault(MAXSAFEHEIGHT, "32000"));
 struct track *prevTrack = NULL;
 for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatTrack->next)
     {
