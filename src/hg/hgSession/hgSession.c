@@ -511,6 +511,12 @@ cgiMakeButton(hgsDoLoadUrl, "Submit");
 printf("</TD></TR>\n");
 
 printf("</TABLE>\n");
+
+printf("<P></P>\n");
+printf("Please note: the above URL option is <em>not</em> for loading track hubs or assembly hubs.\n");
+printf("To load those data resources into the browser, please visit the <a href=\"../cgi-bin/hgHubConnect\"\n");
+printf("target=\"_blank\">Track Hubs</a> listing page, click the \"Connected Hubs\" tab, and enter the hub URL there.\n");
+
 printf("<P></P>\n");
 }
 
@@ -1441,6 +1447,8 @@ if (fromUrl)
 		 "of a file that contains "
 		 "previously saved browser settings, and then click "
 		 "\"submit\" again.");
+    if (!startsWith("http://",url) && !startsWith("https://",url) && !startsWith("ftp://",url))
+        errAbort("Unsupported protocol for loading a file via URL.  Please use http, https, or ftp");
     lf = netLineFileOpen(url);
     dyStringPrintf(dyMessage, "Loaded settings from URL %s .  %s %s",
 		   url, getUrlLink(url), getUrlEmailLink(url));
