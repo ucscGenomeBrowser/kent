@@ -680,7 +680,7 @@ var hgSearch = (function() {
                     let idStr = idAttr.value + "_" + categoryCount;
                     let showMoreLi = document.createElement("li");
                     showMoreLi.id = idStr;
-                    showMoreLi.classList.add("liNoStyle");
+                    showMoreLi.classList.add("liNoStyle","searchResult");
                     let showMoreInp = document.createElement("input");
                     showMoreInp.type = "hidden";
                     showMoreInp.value = '0';
