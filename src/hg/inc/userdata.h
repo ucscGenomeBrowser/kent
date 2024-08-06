@@ -22,6 +22,10 @@ struct userFiles *fileList; // list of files (tracks) in the hub
 };
 
 char *getUserName();
+/* Query the right system for the users name */
+
+char *emailForUserName(char *userName);
+/* Fetch the email for this user from gbMembers hgcentral table */
 
 //TODO: this should probably come from hg.conf:
 #define HUB_SPACE_URL "https://hgwdev.gi.ucsc.edu/hubspace"

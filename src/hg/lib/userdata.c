@@ -20,8 +20,20 @@
 #include "hubSpace.h"
 
 char *getUserName()
+/* Query the right system for the users name */
 {
 return (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+}
+
+char *emailForUserName(char *userName)
+/* Fetch the email for this user from gbMembers hgcentral table */
+{
+struct sqlConnection *sc = hConnectCentral();
+struct dyString *query = sqlDyStringCreate("select email from gbMembers where userName = '%s'", userName);
+char *email = sqlQuickString(sc, dyStringCannibalize(&query));
+hDisconnectCentral(&sc);
+// this should be freeMem'd:
+return email;
 }
 
 char *getDataDir(char *userName)

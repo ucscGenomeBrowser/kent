@@ -19,6 +19,7 @@
 #include "jsonWrite.h"
 #include "cartJson.h"
 #include "hubSpace.h"
+#include "hubConnect.h"
 
 void removeOneFile(char *userName, char *cgiFileName)
 /* Remove one single file for userName */
@@ -58,7 +59,7 @@ void doMoveFile(struct cartJson *cj, struct hash *paramHash)
 {
 }
 
-static void writeHubText(struct trackHub *hub, char *hubDir, char *fileName, boolean makeDir)
+static void writeHubText(char *path, char *userName, char *hubName, char *db)
 /* Create a hub.txt file, optionally creating the directory holding it */
 {
 int oldUmask = 00;
@@ -67,10 +68,11 @@ makeDirsOnPath(path);
 // restore umask
 umask(oldUmask);
 // now make the hub.txt with some basic information
-char *hubFile = catTwoStrings(path, "hub.txt");
-maybeTouchFile(hubFile);
-struct dyString *contents = dyStringNew(0);
-dyStringPrintf(contents, "hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n", name, userName, name, name, db);
+char *hubFile = catTwoStrings(path, "/hub.txt");
+FILE *f = mustOpen(hubFile, "w");
+fprintf(stderr, "would write \"hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n\" to %s", hubName, emailForUserName(userName), hubName, hubName, db, hubFile);
+//fprintf(f, "hub %s\nemail %s\nshortLabel %s\nlongLabel %s\nuseOneFile on\n\ngenome %s\n\n", hubName, emailForUserName(userName), hubName, hubName, db);
+carefulClose(&f);
 }
 
 void doCreateHub(struct cartJson *cj, struct hash *paramHash)
@@ -82,10 +84,9 @@ if (userName)
     struct jsonWrite *errors = jsonWriteNew();
     // verify the arguments:
     (void)cartJsonRequiredParam(paramHash, "createHub", errors, "doCreateHub");
-    // params is an object with everything necessary to create a hub: name and assembly
-    struct hash *params = jsonObjectVal(hashFindVal(paramHash, "createHub"), "createHub");
-    char *db = hashFindVal(params, "db");
-    char *name = hashFindVal(params, "name");
+    // paramHash is an object with everything necessary to create a hub: name and assembly
+    char *db = jsonStringVal(hashFindVal(paramHash, "db"), "db");
+    char *name = jsonStringVal(hashFindVal(paramHash, "name"), "name");
     fprintf(stderr, "creating hub '%s' for db '%s'\n", name, db);
     fflush(stderr);
     // check if this hub already exists, must have a directory and hub.txt already:
@@ -98,6 +99,7 @@ if (userName)
         {
         // good we can make a new directory and stuff a hub.txt in it
         // the directory needs to be 777, so ignore umask for now
+        writeHubText(path, userName, name, db);
         }
     }
 fprintf(stderr, "Status: 204 No Content\n\n");
