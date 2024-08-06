@@ -1,3 +1,10 @@
+track covid
+superTrack on
+group phenDis
+shortLabel COVID Data
+longLabel Container of SARS-CoV-2 data
+cartVersion 4
+
 track covidMuts
 type bigBed 12 +
 shortLabel COVID Rare Harmful Var
@@ -7,8 +14,7 @@ labelFields gene, name
 defaultLabelFields gene, name
 noScoreFilter on
 priority 2.2
-group phenDis
 color 179,0,0
-visibility hide
+superTrack covid pack
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
 multiRegionsBedUrl /gbdb/$D/covidMuts/covidMuts.regions.bed

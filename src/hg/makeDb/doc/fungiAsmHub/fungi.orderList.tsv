@@ -427,6 +427,7 @@ GCF_030864355.1_ASM3086435v1	basidiomycetes C.cavernicola (HIS019  2023)
 GCA_016772295.1_ASM1677229v1	basidiomycetes C.cinerea (A43mut B43mut pab1-1 #326 2021)
 GCF_000182895.1_CC3	basidiomycetes C.cinerea (CC3 okayama7#130 2010)
 GCF_036417295.1_ASM3641729v1	basidiomycetes C.decagattii (7685027 2024)
+GCF_001720195.1_ASM172019v2	basidiomycetes C.depauperatus (CBS 7841 2024)
 GCF_002954075.1_C._deuterogattii_R265_chr	basidiomycetes C.deuterogattii (R265 2018)
 GCF_000185945.1_ASM18594v1	basidiomycetes C.gattii WM276
 GCF_003144195.1_Cersp1	basidiomycetes C.guamensis
@@ -460,6 +461,8 @@ GCF_000512585.1_Cryp_best_CBS10118_V1	basidiomycetes K.bestiolae CBS 10118
 GCF_036426115.1_ASM3642611v1	basidiomycetes K.botswanensis (CBS 12716 2024)
 GCF_000512565.2_ASM51256v3	basidiomycetes K.dejecticola (CBS 10117 2024)
 GCF_000512565.1_Cryp_deje_CBS10117_V1	basidiomycetes K.dejecticola CBS 10117
+GCF_036810415.1_ASM3681041v1	basidiomycetes K.dendrophila (CBS 6074 2024)
+GCF_036810445.1_ASM3681044v1	basidiomycetes K.europaea (PYCC6329 2024)
 GCF_002102565.1_Kocim1	basidiomycetes K.imperatae
 GCF_000507465.2_ASM50746v4	basidiomycetes K.mangroviensis (CBS 8507 2024)
 GCF_000507465.1_Kwon_mang_CBS8507_V2	basidiomycetes K.mangroviensis CBS 8507

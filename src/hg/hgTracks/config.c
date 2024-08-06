@@ -743,6 +743,17 @@ hPrintf("</TD><TD>");
 hPrintf("Enable highlight with drag-and-select "
         "(if unchecked, drag-and-select always zooms to selection)");
 hPrintf("</TD></TR>\n");
+
+// check if we can do hgc pages in a pop up before putting up the user control
+if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE))
+    {
+    // put a checkbox, on by default, to control whether item clicks stay on hgTracks or
+    // go to hgTracks
+    hPrintf("<tr><td>");
+    hCheckBox("doHgcInPopUp", cartUsualBoolean(cart, "doHgcInPopUp", TRUE));
+    hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
+    }
+
 hTableEnd();
 
 

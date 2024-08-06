@@ -121,7 +121,8 @@ html gnomadV4.1
     longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants v4.1
     type bigBed 9 +
     configureByPopup off
-    maxWindowToDraw 200000
+    maxWindowCoverage 200000
+    maxItems 50000
     dataVersion Release v4.1 (April 19, 2024)
     html gnomadV4.1
     priority 1
@@ -152,7 +153,6 @@ html gnomadV4.1
         filterType.variation_type multipleListOr
         filter.AF 0.0
         filterLabel.AF Minor Allele Frequency Filter
-        maxItems 50000
         mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)<br> <b>TotalAF</b>: ${AF} (${AC}/${AN})<br> <b>Genes</b>: $genes<br> <b>Annotation</b>: $annot<br> <b>FILTER</b>: ${FILTER}<br> <b>PopMaxAF</b>: ${grpmax}<br> <b>Homozygous Individuals</b>: ${nhomalt}<br> <b>Hemizygous Individuals (only in chrX & chrY)</b>: ${nhemi}
         url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r4
         urlLabel View this variant at gnomAD
@@ -184,7 +184,6 @@ html gnomadV4.1
         filterType.variation_type multipleListOr
         filter.AF 0.0
         filterLabel.AF Minor Allele Frequency Filter
-        maxItems 50000
         mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)<br> <b>TotalAF</b>: ${AF} (${AC}/${AN})<br> <b>Genes</b>: $genes<br> <b>Annotation</b>: $annot<br> <b>FILTER</b>: ${FILTER}<br> <b>PopMaxAF</b>: ${grpmax}<br> <b>Homozygous Individuals</b>: ${nhomalt}<br> <b>Hemizygous Individuals (only in chrX & chrY)</b>: ${nhemi}
         url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r4
         urlLabel View this variant at gnomAD
@@ -205,39 +204,6 @@ autoScale on
 priority 10
 dataVersion Release 3.1.2 (October 22, 2021)
 html gnomadV4.1
-
-track gnomadVariantsV4
-parent gnomadVariants
-compositeTrack on
-shortLabel gnomAD v4 Pre-Release
-longLabel Genome Aggregation Database (gnomAD) Genome Variants v4.0.0 Pre-Release
-type vcfTabix
-showHardyWeinberg on
-configureByPopup off
-visibility dense
-dataVersion Release 4.0.0 (November 1, 2023, (chrY Fix November 16, 2023))
-priority 1
-url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r4&ignore=$$
-urlLabel gnomAD:
-html gnomadV4.1
-
-    track gnomadGenomesV4
-    parent gnomadVariantsV4
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-    shortLabel gnomAD4 Genome Vars
-    longLabel Genome Aggregation Database (gnomAD) Genomes Variants v4.0.0 Pre-Release
-    maxWindowCoverage 1000
-    maxWindowToDraw 10000
-    visibility pack
-
-    track gnomadExomesV4
-    parent gnomadVariantsV4
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-    shortLabel gnomAD4 Exome Vars
-    longLabel Genome Aggregation Database (gnomAD) Exomes Variants v4.0.0 Pre-Release
-    visibility pack
-    maxWindowCoverage 1000
-    maxWindowToDraw 10000
 
 searchTable pliByTranscript
 searchType bigBed

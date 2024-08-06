@@ -24,6 +24,7 @@ CURL *curl_easy_init(void)
     new->writeBuffer = NULL;
     new->WriteFunction = NULL;
     new->HeaderFunction = NULL;
+    new->failonerror = 0;
     return new;
 }
 
@@ -86,6 +87,9 @@ CURLcode curl_easy_setopt(CURL *curl, CURLoption option, ...)
         case CURLOPT_HEADERFUNCTION:
             curl->HeaderFunction = va_arg(args, curl_write_callback);
             break;
+        case CURLOPT_FAILONERROR:
+            curl->failonerror = 1;
+            break;
         default:
             errAbort("Unexpected curl option supplied to fakeCurl"); 
     }
@@ -119,12 +123,33 @@ CURLcode curl_easy_perform(CURL *curl)
             end = atol(end_pos+1);
     }
 
-    // If there's a header function, fake up a Content-Range string for it to parse using the range
-    // and file size.
+    if (end >= fileSize)
+        end = fileSize-1;
+
+    char headerbuf[4096];
+
+    if (start < 0 || start >= fileSize)
+    {
+        // We need to gin up a 416 error response here and abort if FAILONERROR is set.
+        // Otherwise our next step is udcSeek, which will just attempt an lseek
+        // and then errAbort when the requested range isn't within the file bounds.
+        safef(headerbuf, sizeof(headerbuf),
+                "HTTP/1.1 416 Requested Range Not Satisfiable\nContent-Range: bytes */%ld", fileSize);
+        if (curl->HeaderFunction != NULL)
+        {
+            char buf[4096];
+            curl->HeaderFunction(buf, strlen(buf), 1, NULL);
+        }
+        if (curl->failonerror)
+            return CURLE_NOTOK;
+        return CURLE_OK;
+    }
+
+    // Fake up a Content-Range string in a header in case there's a header function to call.
+    safef(headerbuf, sizeof(headerbuf), "Content-Range: bytes %ld-%ld/%ld", start, end, fileSize);
     if (curl->HeaderFunction != NULL)
     {
         char buf[4096];
-        safef(buf, sizeof(buf), "Content-Range: bytes %ld-%ld/%ld", start, end, fileSize);
         curl->HeaderFunction(buf, strlen(buf), 1, NULL);
     }
 

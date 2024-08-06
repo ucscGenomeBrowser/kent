@@ -54,6 +54,8 @@ static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
 {
 if (format != NULL) {
+    // vfprintf() cannot be called twice in a row without a va_end/va_start
+    // so this must be an if/else situation
     if (doContentType)
         {
         puts("Content-type: text/html\n");
@@ -62,11 +64,13 @@ if (format != NULL) {
         fprintf(stdout, "\n");
         fflush(stdout);
         }
-
-    fflush(stdout);
-    vfprintf(stderr, format, args);
-    fprintf(stderr, "\n");
-    fflush(stderr);
+    else
+        {
+        fflush(stdout);
+        vfprintf(stderr, format, args);
+        fprintf(stderr, "\n");
+        fflush(stderr);
+        }
     }
 }
 

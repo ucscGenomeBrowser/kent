@@ -5544,10 +5544,8 @@ termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
 
-include covidHgiGwas.ra beta,public
-include covidHgiGwas.alpha.ra alpha
-include covidTracks.ra beta,public
-include covidTracks.alpha.ra alpha
+include covidHgiGwas.ra
+include covidTracks.ra
  
 track orphadata
 bigDataUrl /gbdb/$D/bbi/orphanet/orphadata.bb
@@ -5587,6 +5585,7 @@ searchTable hgnc
 searchMethod exact
 searchType bigBed
 searchPriority 1.02
+shortCircuit 1
 
 track ncbiRefSeqSelect
 parent refSeqComposite off

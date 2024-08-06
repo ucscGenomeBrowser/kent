@@ -5157,7 +5157,9 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 // fill out track->prevTrack, and check for maxSafeHeight
 boolean safeHeight = TRUE;
 /* firefox on Linux worked almost up to 34,000 at the default 620 width */
-#define maxSafeHeight   32000
+/* More recent hardware/browsers may be able to handle more - we had a success with an 8192x64891 image */
+#define MAXSAFEHEIGHT "maxTrackImageHeightPx"
+int maxSafeHeight = atoi(cfgOptionDefault(MAXSAFEHEIGHT, "32000"));
 struct track *prevTrack = NULL;
 for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatTrack->next)
     {
@@ -9701,7 +9703,8 @@ puts("</FORM>");
 if (cfgOptionBooleanDefault("showMouseovers", FALSE))
     jsInline("var showMouseovers = true;\n");
 
-if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+// if the configure page allows hgc popups tell the javascript about it
+if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE) && cartUsualBoolean(cart, "doHgcInPopUp", TRUE))
     jsInline("var doHgcInPopUp = true;\n");
 
 // TODO GALT nothing to do here.
@@ -11383,6 +11386,7 @@ if(!trackImgOnly)
             puts("<script src=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/js/shepherd.min.js\"></script>");
             puts("<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/shepherd.js@11.0.1/dist/css/shepherd.css\"/>");
             jsIncludeFile("tutorial.js",NULL);
+            jsIncludeFile("clinicalTutorial.js",NULL);
             // if the user is logged in, we won't show the notification
             // that a tutorial is available, just leave the link in the
             // blue bar under "Help"
@@ -11397,12 +11401,16 @@ if(!trackImgOnly)
                 {
                 jsInline("var startTutorialOnLoad = true;");
                 }
+            if (sameOk(cgiOptionalString("startClinical"), "true"))
+                {
+                jsInline("var startClinicalOnLoad = true;");
+                }
             }
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
-    if (cfgOptionBooleanDefault("doHgcInPopUp", FALSE))
+    if (cfgOptionBooleanDefault("canDoHgcInPopUp", FALSE))
         {
         jsIncludeFile("hgc.js", NULL);
         hPrintf("<div id='hgcDialog' style='display: none'></div>\n");

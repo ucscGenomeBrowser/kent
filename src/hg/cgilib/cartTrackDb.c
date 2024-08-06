@@ -543,9 +543,7 @@ for (tmp = tdb; tmp != NULL; tmp = tmp->next)
     {
     if (tmp->subtracks)
         hashTdbNames(tmp->subtracks, trackHash);
-    if (!sameString(tmp->table, tmp->track))
-        hashAdd(trackHash, tmp->track, tmp);
-    hashAdd(trackHash, tmp->table, tmp);
+    hashAdd(trackHash, tmp->track, tmp);
     }
 }
 

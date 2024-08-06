@@ -14,6 +14,8 @@ if ($argc != 3) {
   printf STDERR "usage: asmHubChainNet.pl asmId ncbiAsmId asmId.names.tab > asmId.chainNet.html\n";
   printf STDERR "where asmId is the assembly identifier,\n";
   printf STDERR "and   asmId.names.tab is naming file for this assembly,\n";
+  printf STDERR "for UCSC database assemblies, use the third argument asmId.names.tab\n";
+  printf STDERR "   as the Scientific_name for the organism.\n";
   exit 255;
 }
 
@@ -102,11 +104,19 @@ while (my $accession = <TD>) {
 }
 close (TD);
 
-my $ncbiAssemblyId = `grep -v "^#" $namesFile | cut -f10`;
-chomp $ncbiAssemblyId;
+my $ncbiAssemblyId = $ncbiAsmId;
 
-my $sciName = `grep -v "^#" $namesFile | cut -f5`;
-chomp $sciName;
+if ( -s "${namesFile}" ) {
+  $ncbiAssemblyId = `grep -v "^#" $namesFile | cut -f10`;
+  chomp $ncbiAssemblyId;
+}
+
+my $sciName = ${namesFile};
+
+if ( -s "${namesFile}" ) {
+  my $sciName = `grep -v "^#" $namesFile | cut -f5`;
+  chomp $sciName;
+}
 
 my ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $asmId);
 

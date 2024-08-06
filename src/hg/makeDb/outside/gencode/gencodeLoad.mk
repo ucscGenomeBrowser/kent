@@ -32,41 +32,40 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-preRelease = no
-#preRelease = yes
+preRelease = yes
+#preRelease = no
 #db = hg38
-db = hg19
-#db = mm39
-ifeq (${db},mm10)
-    # mm10 lift back was never revewed and released
-    grcRefAssembly = GRCm38
-    verBase = M25
-    prevVer = M24
-    backmapTargetVer = M25
+#db = hg19
+db = mm39
+ifeq (${db},mm39)
+    ver = M36
+    prevVer = M35
+else ifeq (${db},hg38)
+    ver = 47
+    prevVer = 46
+else ifeq (${db},hg19)
+    verBase = 47
+    prevVerBase = 46
     ver = ${verBase}lift37
-    gencodeOrg = Gencode_mouse
-    ftpReleaseSubdir = release_${verBase}/GRCm38_mapping
-    annGffTypeName = chr_patch_hapl_scaff.annotation
-    isBackmap = yes
-else ifeq (${db},mm39)
+else
+    $(error unimplement genome database: ${db})
+endif
+# END EDIT THESE EACH RELEASE
+
+ifeq (${db},mm39)
     grcRefAssembly = GRCm39
-    ver = M35
-    prevVer = M34
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 46
-    prevVer = 44
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 46
-    prevVer = 45lift37
     ver = ${verBase}lift37
+    prevVer = ${prevVerBase}lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
     gencodeOrg = Gencode_human
@@ -78,8 +77,6 @@ else ifeq (${db},hg19)
 else
     $(error unimplement genome database: ${db})
 endif
-# END EDIT THESE EACH RELEASE
-
 
 ifeq (${preRelease},yes)
     # pre-release

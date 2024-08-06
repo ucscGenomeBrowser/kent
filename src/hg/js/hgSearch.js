@@ -670,7 +670,7 @@ var hgSearch = (function() {
                 ctrlImg.id = idAttr.value + categoryCount + "_button";
                 ctrlImg.src = "../images/remove_sm.gif";
                 newListObj.appendChild(ctrlImg);
-                let descText = document.createTextNode(searchDesc + ":");
+                let descText = document.createTextNode(" " + searchDesc + ":");
                 newListObj.appendChild(descText);
                 // Now loop through each actual hit on this table and unpack onto list
                 let subList = document.createElement("ul");
@@ -680,7 +680,7 @@ var hgSearch = (function() {
                     let idStr = idAttr.value + "_" + categoryCount;
                     let showMoreLi = document.createElement("li");
                     showMoreLi.id = idStr;
-                    showMoreLi.classList.add("liNoStyle");
+                    showMoreLi.classList.add("liNoStyle","searchResult");
                     let showMoreInp = document.createElement("input");
                     showMoreInp.type = "hidden";
                     showMoreInp.value = '0';
