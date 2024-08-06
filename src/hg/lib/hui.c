@@ -672,10 +672,11 @@ void setUdcOptions(struct cart *cart)
 setUdcTimeout(cart);
 
 char *prots = cfgOption("resolvProts");
+char *prefix = cfgOption("resolvPrefix");
 char *cmd = cfgOption("resolvCmd");
 
-if (prots && cmd)
-        udcSetResolver(prots, cmd);
+if ((prots && cmd) || (prefix && cmd))
+        udcSetResolver(prots, prefix, cmd);
 }
 
 

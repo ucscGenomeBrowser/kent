@@ -171,26 +171,37 @@ static int cacheTimeout = 0;
 
 #define MAX_SKIP_TO_SAVE_RECONNECT (udcMaxBytesPerRemoteFetch / 2)
 
-/* pseudo-URLs with this prefix (e.g. "s3://" get run through a command to get resolved to real HTTPS URLs) */
+/* pseudo-URLs with this protocol (e.g. "s3://" get run through a command to get resolved to real HTTPS URLs) */
 struct slName *resolvProts = NULL;
+/* pseudo-URLs that start with this prefix (e.g. "https://myserver.okta.com" get run through a command to get resolved to real HTTPS URLs) */
+static char *resolvPrefix = NULL;
+/* this command will get run if either the prefix or the protocol matches */
 static char *resolvCmd = NULL;
 
 bool udcIsResolvable(char *url) 
 /* check if third-party protocol resolving (e.g. for "s3://") is enabled and if the url starts with a protocol handled by the resolver */
 {
-if (!resolvProts || !resolvCmd)
+if (!resolvCmd)
     return FALSE;
 
 char *colon = strchr(url, ':');
 if (!colon)
     return FALSE;
 
-int colonPos = colon - url;
-char *protocol = cloneStringZ(url, colonPos);
-bool isFound = (slNameFind(resolvProts, protocol) != NULL);
+bool isFound = FALSE;
+
+if (resolvPrefix && startsWithNoCase(resolvPrefix, url))
+    isFound = TRUE;
+else
+    {
+    int colonPos = colon - url;
+    char *protocol = cloneStringZ(url, colonPos);
+    isFound = (protocol && resolvProts && slNameFind(resolvProts, protocol) != NULL);
+    freez(&protocol);
+    }
+
 if (isFound)
     verbose(4, "Check: URL %s has special protocol://, will need resolving\n", url);
-freez(&protocol);
 return isFound;
 }
 
@@ -462,10 +473,11 @@ return TRUE;
 static char *defaultDir = "/tmp/udcCache";
 static bool udcInitialized = FALSE;
 
-void udcSetResolver(char *prots, char *cmd)
+void udcSetResolver(char *prots, char *prefix, char *cmd)
 /* Set protocols and local wrapper program to resolve s3:// and similar URLs to HTTPS */
 {
     resolvProts = slNameListFromString(cloneString(prots), ',');
+    resolvPrefix = trimSpaces(cloneString(prefix));
     resolvCmd = trimSpaces(cloneString(cmd));
 }
 
