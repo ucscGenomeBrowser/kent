@@ -209,7 +209,8 @@ track gnomadStructuralVariants
 parent gnomadVariants on
 bigDataUrl /gbdb/hg38/gnomAD/v4/structuralVariants/gnomad.v4.1.sv.non_neuro_controls.sites.bb
 shortLabel gnomAD Structural Variants
-longLabel Genome Aggregation Database (gnomAD) - Structural Variants
+longLabel Genome Aggregation Database (gnomAD) - Structural Variants v4
+dataVersion Release 4.0 (November 01, 2023)
 type bigBed 9 +
 itemRgb on
 visibility dense
