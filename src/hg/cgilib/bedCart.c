@@ -35,7 +35,7 @@ if (tdb)
     // - itemRgb=off is not set
     if (cfgOptionBooleanDefault("alwaysItemRgb", FALSE) && 
             (trackDbSettingClosestToHome(tdb, "color")==NULL) && 
-            !sameOk(Default,tdbDefault))
+            !sameWordOk(Default,tdbDefault))
         return TRUE;
     }
 
