@@ -12,6 +12,8 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
+#undef BIGNUM
+#define BIGNUM 0x7fffffff	/* larger than the standard size BIGNUM */
 
 int maxGap = 100;
 int maxChain = BIGNUM;
