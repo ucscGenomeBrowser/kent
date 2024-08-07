@@ -71,7 +71,10 @@ def downloadTandReps():
         #hgnc_date_symbol_changed = gene_data['hgnc_date_symbol_changed']
         hgnc_id = gene_data['hgnc_id']
         hgnc_symbol = gene_data['hgnc_symbol']
-        omim_gene = ' '.join(gene_data['omim_gene'])
+        if str(gene_data['omim_gene']) == "None":
+            omim_gene = "None"
+        else:
+            omim_gene = ' '.join(gene_data['omim_gene'])
         grch37_coordinates = res[count]['grch37_coordinates']
         if grch37_coordinates == None:
             coordinates = gene_data['ensembl_genes']['GRch37']['82']['location'] 
