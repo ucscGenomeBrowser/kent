@@ -524,3 +524,59 @@ pass1 - making usageList (376 chroms): 505 millis
 pass2 - checking and writing primary data (168326 records, 17 fields): 2841 millis
 Sorting and writing extra index 0: 171 millis
 Sorting and writing extra index 1: 89 millis
+##############################################################################
+# gnomAD Structural Variants v4 - Gerardo
+# Redmine #33823
+
+    cd /hive/data/outside/gnomAD.4/sv
+    wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/genome_sv/gnomad.v4.1.sv.sites.bed.gz
+    wget https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/genome_sv/gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz
+    #Used the gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz file to build the track since it has
+    #additional annotations of frequencies among non_neuro samples, and non_control samples and the
+    #two bed files have the same records.
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | tawk '{print $1, $2, $3, $4, $26, $29, $27, $28, $30, $31, $32, $33, $34, $39, $41, $44, $45, $47, $48, $49, $52, $53}'  > $out.bed4Plus; done
+    # variant types:
+
+    zcat  gnomad.v4.1.sv.non_neuro_controls.sites.bed.gz | cut -f45 | sort | uniq -c
+     356035 BND
+        721 CNV
+      15189 CPX
+         99 CTX
+    1206278 DEL
+     269326 DUP
+     304645 INS
+       2193 INV
+          1 SVTYPE
+
+    # add colors based on gnomad website and get in to proper bed9+
+    cp /hive/data/outside/gnomAD.2/structuralVariants/gnomadSvToUcsc.awk .
+    #Modified the gnomadSvToUcsc.awk script and named it gnomadSvToUcsc_mod.awk to get the following
+    #fields:
+      #Allele Count for Non-neuro (field #627)
+      #Allele Number for Non-neuro (field #626)
+      #Allele Frequency for Non-neuro (field #628)
+      #Number of heterozygous variant carriers for Non-neuro (field #631)
+      #Number of homozygous alternate variant carriers for Non-neuro fiedl (field #632)
+      #Allele Count Controls (field #803)
+      #Allele Number Controls (field #802)
+      #Allele Frequency Controls (field #804)
+      #Number of heterozygous variant carriers for Controls (field #807)
+      #Number of homozygous alternate variant carriers for Controls (fiedl #808)
+
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed4Plus; do out=${f/.bed4Plus/}; bedClip -truncate $f /hive/data/genomes/hg38/chrom.sizes stdout | ./gnomadSvToUcsc_mod.awk | sort -k1,1 -k2,2n > $out.bed9Plus; done
+
+    cp /hive/data/outside/gnomAD.2/structuralVariants/gnomadSv.as .
+    #Modified the gnomadSv.as file to include the non_neuro samples, and the control samples, and
+    #named the file gnomadSvMod.as 
+    for f in gnomad.v4.1.sv.non_neuro_controls.sites.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+19 -as=gnomadSvMod.as -extraIndex=name $f /hive/data/genomes/hg38/chrom.sizes $out.bb; done
+    cd /gbdb/hg38/gnomAD/v4
+    mkdir structuralVariants; cd structuralVariants
+    cp -s /hive/data/outside/gnomAD.4/sv/gnomad.v4.1.sv.non_neuro_controls.sites.bb .
+    cd ~/kent/src/hg/makeDb/trackDb/human/hg38
+    cp gnomad.alpha.ra gnomadSV.alpha.ra
+    #Copied the gnomadSvFull track stanza from ~/kent/src/hg/makeDb/trackDb/human/hg19/trackDb.gnomad.ra
+    # Added filters for non-neurological and control Allele Frequencies  
+    cp ../hg19/gnomadSv.html .
+    #Updated the gnomadSv.html
+    
+##############################################################################
