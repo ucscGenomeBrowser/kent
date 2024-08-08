@@ -1369,7 +1369,7 @@ find problems in the Genome Browser that are not actual problems:
 * The Genome Browser draws remote genome annotation files that are streamed on
   the fly through https.
   This means that parts of these files appear in our user interface. Various
-  features of custom tracks and track hubs specifically reference external html
+  features of custom tracks and track hubs specifically reference external 
   file via URLs that the user can define and we place no restrictions on these URLs
   for various reasons. These features
   predate the introduction of CORS to the internet protocols by at least five
