@@ -1885,8 +1885,8 @@ file via URLs that the user can define and we place no restrictions on these URL
 for various reasons. These features
 predate the introduction of CORS to the internet protocols by at least five
 years, and the servers from where these files are loaded by the Genome Browser
-do not need to specifcally allow the requests. As a result, this is not a security
-exploit but an intentional feature, similar to a webservice that check files entered via a
+do not need to specifically allow the requests. As a result, this is not a security
+exploit but an intentional feature, similar to a webservice that checks files entered via a
 URL (e.g. a robots.txt analyzer) that then show the content of the URLs on their web pages.
 Security scanners will find these features and flag them as SSRF exploits
 (Server-side request forgery), but they are a result of our features and not
@@ -1898,9 +1898,10 @@ and anything that the Genome Browser can access may be displayable by any
 Genome Browser user. For example, if you restrict internal files to access from only the
 Genome Browser IP address, as with most other servers without dedicated security layers,
 assume that these can be accessed by anyone who is using the browser.</li>
-<li>On both our webservers at UCSC and your own internal mirror, even though the
-data from external URLs is shown, and even HTML tags are interpreted, Javascript in them is not executed.
-We use CSP and a nounce to this end. CSP/nounce is a system that many
+<li>On our webservers at UCSC and your own internal mirror, even though the
+data from external URLs is shown, and even though the HTML tags are interpreted, Javascript in these pages is not executed,
+so an XSS exploit is not possible through these.
+We use CSP and a nounce to block Javascript in these pages. CSP/nounce is a system that many
 security scanners do not recognize. You can disregard XSS warnings from the
 security scanners, and refer your IT department to our CSP declarations in
 the HTML headers, unless you can think that you found a case where it is possible to get
