@@ -4940,7 +4940,7 @@ var mouseOver = {
     {
       if (! newJson ) { return; }
       var trackDb = null;
-      for (id in newJson.trackDb) {
+      for ( var id in newJson.trackDb ) {
          if (id === trackName) {
             trackDb = newJson.trackDb[id];
             break;

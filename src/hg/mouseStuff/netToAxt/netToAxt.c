@@ -14,6 +14,8 @@
 #include "axt.h"
 #include "nibTwo.h"
 
+#undef BIGNUM
+#define BIGNUM 0x7fffffff	/* larger than the standard size BIGNUM */
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;

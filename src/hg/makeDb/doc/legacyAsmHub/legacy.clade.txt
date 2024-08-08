@@ -133,6 +133,7 @@ GCA_009769545.1_fCycLum1.pri	fish
 GCA_009769625.1_bCygOlo1.pri	birds
 GCA_009806435.2_UM_NZW_1.0	mammals
 GCA_009819505.1_bCatUst1.alt	birds
+GCA_009819655.1_bSylAtr1.pri	birds
 GCA_009819705.1_fHipHip1.pri	fish
 GCA_009829125.1_fPerMag1.pri	fish
 GCA_009873245.2_mBalMus1.v2	mammals
@@ -199,9 +200,12 @@ GCA_028390025.1_aPseCor3.hap2	vertebrate
 GCA_028500815.1_bRisTri1.patW.cur.20221130	birds
 GCA_028564815.1_mEubGla1.hap2	mammals
 GCA_028858705.1_bGruAme1.mat	birds
+GCA_028878055.2_NHGRI_mSymSyn1-v2.0_pri	primates
 GCA_028858805.1_NHGRI_mPanTro3-v1.1-hic.freeze_alt	primates
 GCA_028885525.1_NHGRI_mPonPyg2-v1.1-hic.freeze_alt	primates
+GCA_029207755.1_bChaFas1.0.hap1	birds
 GCA_029499605.1_aHylSar1.hap1	vertebrate
+GCA_029633855.1_fHopMal1.hap1	fish
 GCA_029633865.1_fLamInc1.hap2	fish
 GCA_030028045.1_mHipAmp2.hap2	mammals
 GCA_030144855.1_sHypSab1.hap1	vertebrate
@@ -210,6 +214,10 @@ GCA_030684315.1_sSteTig4.hap1	vertebrate
 GCA_030867065.1_rAllMis1	vertebrate
 GCA_030867095.1_rAllMis1	vertebrate
 GCA_030936135.1_bGavSte3.hap2	birds
+GCA_035083965.1_klBraLanc5.hap2	invertebrate
+GCA_036850765.1_mSacBil1_pri_phased_curated	mammals
+GCA_036850995.1_mSacLep1_pri_phased_curated	mammals
+GCA_038363095.1_mArtLit.hap1	mammals
 GCA_900006655.3_Susie3	primates
 GCA_900094665.2_CAROLI_EIJ_v1.1	mammals
 GCA_900324465.2_fAnaTes1.2	fish
@@ -416,6 +424,7 @@ GCF_022539665.1_CSIRO_AGI_Dcar_v0.2	invertebrate
 GCF_023065955.1_UrsArc1.0	mammals
 GCF_028858775.1_NHGRI_mPanTro3-v1.1-hic.freeze_pri	primates
 GCF_028878055.1_NHGRI_mSymSyn1-v1.1-hic.freeze_pri	primates
+GCF_028878055.2_NHGRI_mSymSyn1-v2.0_pri	primates
 GCF_028885625.1_NHGRI_mPonPyg2-v1.1-hic.freeze_pri	primates
 GCF_028885655.1_NHGRI_mPonAbe1-v1.1-hic.freeze_pri	primates
 GCF_029281585.1_NHGRI_mGorGor1-v1.1-0.2.freeze_pri	primates
