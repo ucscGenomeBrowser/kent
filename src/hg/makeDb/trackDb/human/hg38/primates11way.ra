@@ -1,0 +1,90 @@
+# include primates11way.ra alpha
+
+track primates11way
+type bed 4
+superTrack on show
+shortLabel 11 primates
+longLabel 11 primates multiple alignment, cactus and multiz comparison
+html primates11way
+
+### multiz11way hg38 ###
+
+track multiz11cons
+parent primates11way
+compositeTrack on
+shortLabel Multiz 11-way
+longLabel Multiz Alignment on 11 primate species
+subGroup1 view Views align=Multiz_Alignments
+dragAndDrop subTracks
+visibility full
+type bed 4
+group compGeno
+html primates11way
+
+    track multiz11wayViewalign
+    shortLabel Multiz 11-way
+    view align
+    visibility full
+    viewUi on
+    subTrack multiz11cons
+
+        track multiz11way
+        subTrack multiz11wayViewalign
+        shortLabel Multiz 11-way
+        longLabel Multiz Alignment on 11 primate species
+        subGroups view=align
+        noInherit on
+        type bigMaf
+        itemFirstCharCase noChange
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        speciesGroups Primates
+        viewUi on
+        treeImage html/hg38_11way.png
+        bigDataUrl /gbdb/hg38/multiz11way/hg38.multiz11way.bb
+        summary /gbdb/hg38/multiz11way/hg38.multiz11way.summary.bb
+        speciesCodonDefault hg38
+        sGroup_Primates hs1 GCA_029289425.2 GCA_028858775.2 GCA_029281585.2 GCA_028885655.2 GCA_028885625.2 GCA_028878055.2 GCF_011100555.1 GCF_020740605.2 GCF_027406575.1
+        speciesLabels GCF_020740605.2="ring-tailed lemur" GCF_027406575.1="slow loris" GCA_029281585.2="western lowland gorilla" GCA_029289425.2="pygmy chimpanzee" GCA_028858775.2="chimpanzee" GCA_028885655.2="Sumatran orangutan" GCA_028885625.2="Bornean orangutan" GCF_011100555.1="white-tufted-ear marmoset" GCA_028878055.2="siamang" hg38="human/hg38" hs1="T2T CHM13v2.0"
+
+### cactus11way hg38 ###
+
+track cactus11cons
+parent primates11way
+compositeTrack on
+shortLabel Cactus 11-way
+longLabel Cactus Alignment on 11 primate species
+subGroup1 view Views align=Cactus_Alignments
+dragAndDrop subTracks
+visibility full
+type bed 4
+group compGeno
+html primates11way
+
+    track cactus11wayViewalign
+    shortLabel Cactus 11-way
+    view align
+    visibility full
+    viewUi on
+    subTrack cactus11cons
+
+        track cactus11way
+        subTrack cactus11wayViewalign
+        shortLabel Cactus 11-way
+        longLabel Cactus Alignment on 11 primate species
+        subGroups view=align
+        noInherit on
+        type bigMaf
+        itemFirstCharCase noChange
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        speciesGroups Primates
+        viewUi on
+        treeImage html/hg38_11way.png
+        bigDataUrl /gbdb/hg38/cactus11way/hg38.cactus11way.bb
+        summary /gbdb/hg38/cactus11way/hg38.cactus11way.summary.bb
+        speciesCodonDefault hg38
+        sGroup_Primates hs1 GCA_029289425.2 GCA_028858775.2 GCA_029281585.2 GCA_028885655.2 GCA_028885625.2 GCA_028878055.2 GCF_011100555.1 GCF_020740605.2 GCF_027406575.1
+        speciesLabels GCF_020740605.2="ring-tailed lemur" GCF_027406575.1="slow loris" GCA_029281585.2="western lowland gorilla" GCA_029289425.2="pygmy chimpanzee" GCA_028858775.2="chimpanzee" GCA_028885655.2="Sumatran orangutan" GCA_028885625.2="Bornean orangutan" GCF_011100555.1="white-tufted-ear marmoset" GCA_028878055.2="siamang" hg38="human/GRCh38.p14" hs1="T2T CHM13v2.0" hg38="human/hg38" hs1="T2T CHM13v2.0/hs1"

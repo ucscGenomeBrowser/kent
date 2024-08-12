@@ -14,6 +14,7 @@
 #include "featureBits.h"
 #include "axt.h"
 #include "htmshell.h"
+#include "inttypes.h"
 
 
 /* Command line overridable variables. */
@@ -264,7 +265,7 @@ fbOrTableBits(database, maskBits, "xenoMrna:exon:12", chrom, chromSize, conn);
 fbOrTableBits(database, maskBits, "intronEst:exon:12", chrom, chromSize, conn);
 fbOrTableBits(database, maskBits, "anyMrnaCov", chrom, chromSize, conn);
 fbOrTableBits(database, maskBits, "rmsk", chrom, chromSize, conn);
-printf("%s: %lld bits masked\n", chrom, bitCountRange(maskBits, 0, chromSize));
+printf("%s: %" PRId64 " bits masked\n", chrom, bitCountRange(maskBits, 0, chromSize));
 }
 
 void axtSetBits(struct axt *axt, int chromSize, Bits *aliBits, Bits *matchBits)
