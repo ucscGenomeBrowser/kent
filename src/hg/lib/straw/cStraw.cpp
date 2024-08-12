@@ -10,6 +10,10 @@
 #include <streambuf>
 #include "zlib.h"
 #include "straw.h"
+
+extern "C" {
+#include "hReplaceGbdb.h"
+}
 using namespace std;
 
 // Supplementary functions for invoking Straw in C
@@ -36,16 +40,18 @@ extern "C" char *cStrawOpen(char *fname, Straw **p)
 {
     *p = (Straw*) calloc (1, sizeof(struct Straw));
 
-    (*p)->fileName = new string(fname);
+    char *repFname = hReplaceGbdb(fname);
+    (*p)->fileName = new string(repFname);
     (*p)->genome = new string();
     try {
-        getHeaderFields(fname, *((*p)->genome), (*p)->chromNames, (*p)->chromSizes, (*p)->bpResolutions,
+        getHeaderFields(repFname, *((*p)->genome), (*p)->chromNames, (*p)->chromSizes, (*p)->bpResolutions,
                 (*p)->fragResolutions, (*p)->attributes);
     } catch (strawException& err) {
       char *errMsg = (char*) calloc((size_t) strlen(err.what())+1, sizeof(char));
       strcpy(errMsg, err.what());
       free(*p);
       *p = NULL;
+      free(repFname);
       return errMsg;
     }
     (*p)->nChroms = (*p)->chromNames.size();
@@ -60,6 +66,7 @@ extern "C" char *cStrawOpen(char *fname, Straw **p)
     {
         char *errString = (char*) malloc (strlen("Unable to retrieve header data from file") + 1);
         strcpy(errString, "Unable to retrieve header data from file");
+        free(repFname);
         return errString;
     }
 
@@ -80,7 +87,7 @@ extern "C" char *cStrawOpen(char *fname, Straw **p)
         // Intentionally feed straw an empty normalization option.  This will cause an error (which we trap),
         // but it's the easiest way to make the library load and compare the available options (the library
         // short-circuits out early if "NONE" is provided).
-        strawRecords = straw("observed", "", string(fname),
+        strawRecords = straw("observed", "", string(repFname),
             chrPos, chrPos, "BP", (*p)->bpResolutions[0]);
     } catch (strawException& err) {
         // Do nothing - we're intentionally feeding it a bad norm option just so it'll go through the list
@@ -90,6 +97,7 @@ extern "C" char *cStrawOpen(char *fname, Straw **p)
     // Now the list that getNormOptions() depends on should be populated
     (*p)->normOptions = getNormOptions();
 
+    free(repFname);
     return NULL;
 }
 
