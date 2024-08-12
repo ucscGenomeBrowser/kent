@@ -898,6 +898,10 @@ if (isPositional)
         {
 	hPrintf("<TR><TD><B>Intersection:</B>\n");
 	cgiMakeButton(hgtaDoIntersectPage, "Create");
+        hPrintf("<P style='margin-top:3px; margin-bottom:0px; padding:0px'>");
+        hPrintf("This intersection only outputs fields from the table selected under \"Select Dataset\" above.<BR>");
+        hPrintf("If you want to intersect two tracks and output fields from both, e.g. to show with Chip-seq peak overlaps which enhancer, then use our <a href='hgIntegrator'>Data Integrator</a>.");
+        hPrintf("</P>");
         hPrintf("</TD></TR>\n");
 	}
     }
