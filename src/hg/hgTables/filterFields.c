@@ -1030,7 +1030,7 @@ else
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr||isBam||isVcf||isLongTabix||isHic))
+if (!(isWig||isBedGr||isBb||isBam||isVcf||isLongTabix||isHic))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
