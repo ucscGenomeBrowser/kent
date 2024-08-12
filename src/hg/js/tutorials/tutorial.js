@@ -169,13 +169,16 @@ function setupSteps()
               '<a href="/goldenPath/help/hgTracksHelp.html#TRACK_CONT" target="_blank">dense, squish, '+
               'pack, and full</a>.'+
               '<br><br>' +
+              '<em>For most data types, pack display is the recommended visibility as it provides '+
+              'the best balance of information and space.</em>'+
+              '<br><br>' +
               'After changing the display mode of a track, the change will not be applied ' +
               'until after you refresh the page. You could either refresh the page manually ' +
               'using your web browser or you can click <button>refresh</button> on any of the ' +
               'track groups.',
         attachTo: {
-            element: function() {return $("input[name='hgt\.refresh']").slice(0)[0];},
-            on: 'bottom'
+            element: 'td.trackLabelTd select[name="ruler"]',
+            on: 'right',
         },
         buttons: [tutorialButtons['back'], tutorialButtons['next']],
         id: 'refresh'
