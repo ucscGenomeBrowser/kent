@@ -35,7 +35,6 @@
 #include <iterator>
 #include <algorithm>
 #include "zlib.h"
-//#include "straw.h"
 #include "straw.h"
 extern "C" {
 #include "../../inc/fakeCurl.h"

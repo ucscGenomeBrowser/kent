@@ -218,7 +218,13 @@ char *hReplaceGbdbLocal(char* fileName);
 
 char *hReplaceGbdb(char* fileName);
 /* clone and change a filename that can be located in /gbdb to somewhere else
- * according to hg.conf's "gbdbLoc1" and "gbdbLoc2". Result has to be freed. */
+ * according to hg.conf's "gbdbLoc1" and "gbdbLoc2". Result has to be freed.
+ *
+ * NB: This header is duplicated in hg/lib/straw/hReplaceGbdb.h so that it can be used
+ * in cStraw.cpp without wrestling with warnings about converting string data types
+ * in included library headers.  If this function signature changes, it will also need
+ * to be changed there.
+ * */
 
 char *hReplaceGbdbSeqDir(char *path, char *db);
 /* similar to hReplaceGbdb, but accepts a nib or 2bit "directory" (basename) under
