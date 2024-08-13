@@ -7,6 +7,7 @@
 #include "genark.h"
 #include "asmAlias.h"
 #include "asmSummary.h"
+#include "assemblyList.h"
 
 struct combinedSummary
 /* may have information from any of:  asmSummary, genark or dbDb */
@@ -19,6 +20,7 @@ struct combinedSummary
 
 /* will be initialized as this function begins */
 static char *genarkTable = NULL;
+static char *asmListTable = NULL;
 static boolean statsOnly = FALSE;
 static boolean allowAll = FALSE;	/* default only show existing browsers*/
 
@@ -297,100 +299,96 @@ if (asmIdFound)
 return itemReturn;
 }
 
-static int singleWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw)
-/* conn is a connection to hgcentral, searching for one word,
- *   might be a UCSC database or a GenArk hub accession, or just some word.
- */
+static int sqlJsonOut(struct jsonWrite *jw, struct sqlResult *sr)
+/* given a sqlResult, walk through the rows and output the json */
 {
-/* the input word might be a database alias
- * asmAliasFind returns the searchWord if no alias found
- */
-char *perhapsAlias = asmAliasFind(searchWord);
-
 int itemCount = 0;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct assemblyList *el = assemblyListLoadWithNull(row);
+    jsonWriteObjectStart(jw, el->name);
+//    jsonWriteString(jw, "name", el->name);
+    jsonWriteNumber(jw, "priority", (long long)el->priority);
+    jsonWriteString(jw, "commonName", el->commonName);
+    jsonWriteString(jw, "scientificName", el->scientificName);
+    jsonWriteNumber(jw, "taxId", (long long)el->taxId);
+    jsonWriteString(jw, "clade", el->clade);
+    jsonWriteString(jw, "description", el->description);
+    if (1 == *el->browserExists)
+	jsonWriteBoolean(jw, "browserExists", TRUE);
+    else
+	jsonWriteBoolean(jw, "browserExists", FALSE);
+    if (isEmpty(el->hubUrl))
+        jsonWriteString(jw, "hubUrl", NULL);
+    else
+        jsonWriteString(jw, "hubUrl", el->hubUrl);
+    jsonWriteObjectEnd(jw);
+    ++itemCount;
+    }
+return (itemCount);
+}
 
-if (startsWith("GC", perhapsAlias))
+static long long multipleWordSearch(struct sqlConnection *conn, char **words, int wordCount, struct jsonWrite *jw, long long *totalMatchCount)
+/* perform search on multiple words, prepare json and return number of matches */
+{
+long long itemCount = 0;
+*totalMatchCount = 0;
+if (wordCount < 0)
+    return itemCount;
+
+/* get the words[] into a single string */
+struct dyString *queryDy = dyStringNew(128);
+dyStringPrintf(queryDy, "%s", words[0]);
+for (int i = 1; i < wordCount; ++i)
+    dyStringPrintf(queryDy, " %s", words[i]);
+
+char query[4096];
+sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE);", asmListTable, queryDy->string);
+long long matchCount = sqlQuickLongLong(conn, query);
+if (matchCount > 0)
     {
-    struct asmSummary *asmSumFound = NULL;
-    struct hash *asmSummaryHash = NULL;
-    asmSumFound = checkAsmSummary(conn, perhapsAlias, FALSE, 0);
-    if (asmSumFound)
-        {
-        struct asmSummary *el;
-        asmSummaryHash = newHash(0);
-        for (el = asmSumFound; el != NULL; el = el->next)
-            hashAdd(asmSummaryHash, el->assemblyAccession, (void *)el);
-        }
-    char query[4096];
-    sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE gcAccession LIKE \"%s%%\"", genarkTable, perhapsAlias);
+    verbose(1, "DBG: matchCount: %lld from search '%s'\n", matchCount, query);
+    *totalMatchCount = matchCount;
+    sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE) ORDER BY priority LIMIT %d;", asmListTable, queryDy->string, maxItemsOutput);
     struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-    struct combinedSummary *comboOutput = NULL;
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        struct genark *genome = genarkLoad(row);
-        struct combinedSummary *cs = NULL;
-        AllocVar(cs);
-        cs->genArk = genome;
-        cs->dbDb = NULL;
-	if (asmSummaryHash)
-	    {
-	    cs->summary = hashFindVal(asmSummaryHash, genome->gcAccession);
-	    if (cs->summary)
-		hashRemove(asmSummaryHash, genome->gcAccession);
-	    }
-	slAddHead(&comboOutput, cs);
-        }
+    itemCount = sqlJsonOut(jw, sr);
+    verbose(1, "DBG: itemCount: %lld from search '%s'\n", itemCount, query);
     sqlFreeResult(&sr);
-    if (allowAll && asmSummaryHash)
-	{
-	/* check if all asmSummaryHash has been used up */
-	struct hashCookie cookie = hashFirst(asmSummaryHash);
-	struct hashEl *hel;
-	while ((hel = hashNext(&cookie)) != NULL)
-            {
-            struct combinedSummary *cs = NULL;
-            AllocVar(cs);
-            cs->genArk = NULL;
-            cs->dbDb = NULL;
-            cs->summary = hel->val;
-            slAddHead(&comboOutput, cs);
-            }
-	}
-    if (comboOutput)
-	{
-	slReverse(&comboOutput);
-	itemCount = outputCombo(jw, comboOutput);
-	}
-    }	/*	if (startsWith("GC", perhapsAlias))	*/
-else
-    {	/* not a GC genArk name, perhaps a UCSC database */
-    if (hDbIsActive(perhapsAlias))
-        {
-	struct combinedSummary *comboOutput = NULL;
-        AllocVar(comboOutput);
-        comboOutput->summary = NULL;
-        comboOutput->genArk = NULL;
-        struct dbDb *dbDbEntry = hDbDb(perhapsAlias);
-        comboOutput->dbDb = dbDbEntry;
-        struct asmSummary *sumList = dbDbAsmEquivalent(conn, perhapsAlias);
-        if (sumList)
-	   comboOutput->summary = sumList;
-	itemCount = outputCombo(jw, comboOutput);
-        }
-    }	/*	checked genArk and UCSC database */
-if (0 == itemCount)	/* not found in genark or ucsc db, check asmSummary */
-    {
-    long long totalMatch = 0;
-    /* no more than 100 items result please */
-    struct asmSummary *summaryList = asmSummaryFullText(conn, perhapsAlias, (long long) 100, &totalMatch);
-    /* now check the genark table to see if there are any of those */
-    struct combinedSummary *comboOutput = checkForGenArk(conn, summaryList);
-    if (comboOutput)
-	itemCount = outputCombo(jw, comboOutput);
     }
 return itemCount;
-}	/*	static int singleWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw) */
+}
+
+static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw, long long *totalMatchCount)
+/* perform search on a single word, prepare json and return number of matches
+ *   and number of potential matches totalMatchCount
+ */
+{
+char query[4096];
+int itemCount = 0;
+*totalMatchCount = 0;
+
+sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE);", asmListTable, searchWord);
+long long matchCount = sqlQuickLongLong(conn, query);
+boolean prefixSearch = FALSE;
+if (matchCount < 1)	/* no match, add the * wild card match to make a prefix match */
+    {
+    sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s*' IN BOOLEAN MODE);", asmListTable, searchWord);
+    matchCount = sqlQuickLongLong(conn, query);
+    if (matchCount > 0)
+	prefixSearch = TRUE;
+    }
+if (matchCount < 1)
+    return itemCount;
+*totalMatchCount = matchCount;
+
+sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s%s' IN BOOLEAN MODE) ORDER BY priority LIMIT %d;", asmListTable, searchWord, prefixSearch ? "*" : "", maxItemsOutput);
+struct sqlResult *sr = sqlGetResult(conn, query);
+itemCount = sqlJsonOut(jw, sr);
+sqlFreeResult(&sr);
+
+return itemCount;
+}	/*	static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw) */
 
 static void asmSummaryGroup(struct sqlConnection *conn, struct jsonWrite *jw, char *field)
 /* show a grouping count for a field in asmSummary table */
@@ -462,9 +460,14 @@ char *searchString = cgiOptionalString(argGenomeSearchTerm);
 char *inputSearchString = cloneString(searchString);
 char *extraArgs = verifyLegalArgs(argFindGenome);
 genarkTable = genarkTableName();
+asmListTable = assemblyListTableName();
 
 if (extraArgs)
     apiErrAbort(err400, err400Msg, "extraneous arguments found for function /findGenome'%s'", extraArgs);
+
+boolean asmListExists = hTableExists("hgcentraltest", asmListTable);
+if (!asmListExists)
+    apiErrAbort(err400, err400Msg, "table hgcentraltest.assemblyList does not exist for /findGenome");
 
 boolean asmSummaryExists = hTableExists("hgcentraltest", "asmSummary");
 if (!asmSummaryExists)
@@ -498,8 +501,8 @@ if (isNotEmpty(statsOnlyString))
 
 struct sqlConnection *conn = hConnectCentral();
 
-if (!sqlTableExists(conn, genarkTable))
-    apiErrAbort(err500, err500Msg, "missing central.genark table in function /findGenome'%s'", extraArgs);
+if (!sqlTableExists(conn, asmListTable))
+    apiErrAbort(err500, err500Msg, "missing central.assemblyList table in function /findGenome'%s'", extraArgs);
 
 int wordCount = 0;
 
@@ -513,8 +516,6 @@ if (! statsOnly)
     if (wordCount > 5)
     apiErrAbort(err400, err400Msg, "search term '%s=%s' should not have more than 5 words for function /findGenome", argGenomeSearchTerm, searchString);
     }
-
-genarkTable = genarkTableName();
 
 struct jsonWrite *jw = apiStartOutput();
 if (statsOnly)
@@ -530,7 +531,8 @@ jsonWriteString(jw, argGenomeSearchTerm, searchString);
 if (allowAll)
 	jsonWriteBoolean(jw, argAllowAll, allowAll);
 
-int itemCount = 0;
+long long itemCount = 0;
+long long totalMatchCount = 0;
 /* save the search string before it is chopped */
 char *pristineSearchString = cloneString(searchString);
 
@@ -538,15 +540,23 @@ char **words;
 AllocArray(words, wordCount);
 (void) chopByWhite(searchString, words, wordCount);
 if (1 == wordCount)
-    {
-    itemCount = singleWordSearch(conn, words[0], jw);
-    if (itemCount)
-	jsonWriteNumber(jw, "itemCount", itemCount);
-    else
-	verbose(0, "# DBG need to search this word %s somewhere else\n", words[0]);
-    }
+    itemCount = oneWordSearch(conn, words[0], jw, &totalMatchCount);
 else	/* multiple word search */
+/* rules about what can be in the search string:
+ *  + sign before a word indicates the word must be in the result
+ *  - sign before a word indicates it must not be in the result
+ *  * at end of word makes the word be a prefix search
+ *  "double quotes" to group words together as a phrase to match exactly
+ *  < or > adjust the words contribution to the relevance value
+ *          >moreImportant  <lessImportant
+ *  ~ negates the word's contribution to the relevance value without
+ *    excluding it from the results
+ *  (parens clauses) to groups words together for more complex queries
+ *  | OR operator 'thisWord | otherWord'
+ */
     {
+    itemCount = multipleWordSearch(conn, words, wordCount, jw, &totalMatchCount);
+    if ( 1 == 0 ) {
     long long totalMatch = 0;
     /* no more than 100 items result please */
     struct asmSummary *summaryList = asmSummaryFullText(conn, pristineSearchString, (long long) 100, &totalMatch);
@@ -562,11 +572,18 @@ else	/* multiple word search */
 	}
     else
 	verbose(0, "# DBG need to search this string '%s' somewhere else\n", pristineSearchString);
+    }	/*	if ( 1 == 0 )	*/
     }
 
 elapsedTime(jw);
 if (itemCount)
+    {
+    jsonWriteNumber(jw, "itemCount", itemCount);
+    jsonWriteNumber(jw, "totalMatchCount", totalMatchCount);
+    if (totalMatchCount > itemCount)
+	jsonWriteBoolean(jw, "maxItemsLimit", TRUE);
     apiFinishOutput(0, NULL, jw);
+    }
 else
     apiErrAbort(err400, err400Msg, "no genomes found matching search term %s='%s' for endpoint: /findGenome", argGenomeSearchTerm, inputSearchString);
 
