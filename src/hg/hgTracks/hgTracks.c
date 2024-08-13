@@ -9528,17 +9528,24 @@ if (!hideControls)
                 if (hub != NULL)
                     {
                     if (hub->descriptionUrl == NULL)
-                        hPrintf("<span title='The track hub authors have not provided a descriptionUrl with background "
-                                "information about this track hub' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
-                                "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>&nbsp;&nbsp;");
+                        {
+                        hPrintf("<a title='The track hub authors have not provided a descriptionUrl with background "
+                                "information about this track hub. ");
+                        if (hub->email)
+                            hPrintf("The authors can be reached at %s. ", hub->email);
+                        hPrintf("This link leads to our documentation page about the descriptionUrl statement in hub.txt. ");
+                        hPrintf("' href='../goldenPath/help/hgTrackHubHelp.html#hub.txt' "
+                                "style='color:#FFF; font-size: 13px;' target=_blank>No Info</a>");
+                        }
                     else
                         {
                         hPrintf("<a title='Link to documentation about this track hub, provided by the track hub authors (not UCSC). ");
                         if (hub->email)
                             hPrintf("The authors can be reached at %s", hub->email);
                         hPrintf("' href='%s' "
-                            "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>&nbsp;&nbsp;", hub->descriptionUrl);
+                            "style='color:#FFF; font-size: 13px;' target=_blank>Info</a>", hub->descriptionUrl);
                         }
+                    hPrintf("&nbsp;&nbsp;");
                     }
 
 		safef(idText, sizeof idText, "%s_%d_disconn", hubName, disconCount);
